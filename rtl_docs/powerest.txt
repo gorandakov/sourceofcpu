@@ -1,0 +1,68 @@
+
+0.050uW
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+pShort=0.3uW*transistors switching (50% rate)
+
+comparators rs int 10*6*7*2*120+15*6*2*120=122k tran
+0.036W per core
+
+rs int 3buf:
+2*64*(19+13*2)*2*10=1.7M
+0.033W
+
+avx 3buf:
+2*256*(6+7+2*4)*3*10=4.8M
+0.1W
+
+
+comparators L1D$
+2*16*32*8*6*4=196k
+0.058W
+
+tri buf L1D$
+1024*8*10*10=0.82M
+.24W
+
+
+mult avx 4000*20*10*8=6.4M
+1.9W
+
+
+avx 3buf regfile: 
+3*256*(14*2+6)*10*10=2.6M
+0.7W (but only 1/2 used so 0.35W)
+
+
+
+usage(avx)=3W
+usage(noAvx)=1.6W
+usage(avx 1 fma/mul)=2.15W
+
+add 0.2W wire cap:
+usage(avx)=3.2W
+usage(noAvx)=1.8W
+usage(avx 1 fma/mul)=2.35W
+
+adding 0.2 for other cam/datapath:
+
+usage(avx)=3.4W
+usage(noAvx)=2W
+usage(avx 1 fma/mul)=2.55W
+
+
+
