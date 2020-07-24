@@ -292,7 +292,7 @@ module sagu(
   assign pageFault_t=(addrNext[13]) ? (fault_tlb | ({2{mOp_split}} & fault_tlb_next)) & {2{tlb_hit}} : fault_tlb & {2{tlb_hit}};
   assign pageFault=(pageFault_t_reg!=0) | fault_cann_reg && read_clkEn_reg2|mex_en_reg2 && ~bus_hold_reg2;
   assign fault_cann=~cout_secq;
-  assign faultNo=fault_cann_reg | (pageFault_t_reg!=0) ? {6'd11,1'b0,2'd1} : {6'd0,1'b0,2'd2};
+  assign faultNo=fault_cann_reg | (pageFault_t_reg!=0) && ~bus_hold_reg2 ? {6'd11,1'b0,2'd1} : {6'd0,1'b0,2'd2};
   assign faultCode={3'b0,fault_cann_reg,pageFault_t_reg[1],1'b0,pageFault_t_reg[0],1'b0};
 
   assign mOp_addrMain={addrTlb[30:0],addrMain[12:0]};

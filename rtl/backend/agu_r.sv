@@ -312,7 +312,7 @@ module agu_r(
   assign pageFault_t=(page_carry) ? (fault_tlb | ({2{mOp_split}} & fault_tlb_next)) & {2{tlb_hit}} : fault_tlb & {2{tlb_hit}};
   assign pageFault=(pageFault_t_reg!=0) | fault_cann_reg && mOp_en_reg && ~bus_hold_reg;
   assign fault_cann=1'b0;
-  assign faultNo=fault_cann_reg | (pageFault_t_reg!=0) ? {6'd11,1'b0,2'd1} : {6'd0,1'b0,2'd2};
+  assign faultNo=fault_cann_reg | (pageFault_t_reg!=0) && ~bus_hold_reg ? {6'd11,1'b0,2'd1} : {6'd0,1'b0,2'd2};
   assign faultCode={3'b0,fault_cann_reg,pageFault_t_reg[1],2'b0,pageFault_t_reg[0]};
   
   assign fault_tlb={mflags[`mflags_cpl]==2'd3 && tlb_data[`dtlbData_sys], ~tlb_data[`dtlbData_na]}; 
