@@ -5,12 +5,7 @@
 #include "Vagu_block_sagu.h"
 #include "Vagu_block__Syms.h"
 
-
-//--------------------
-// STATIC VARIABLES
-
-
-//--------------------
+//==========
 
 VL_CTOR_IMP(Vagu_block_sagu) {
     VL_CELL(__PVT__tlb_mod, Vagu_block_dtlb);
@@ -26,9 +21,6 @@ void Vagu_block_sagu::__Vconfigure(Vagu_block__Syms* vlSymsp, bool first) {
 
 Vagu_block_sagu::~Vagu_block_sagu() {
 }
-
-//--------------------
-// Internal Methods
 
 void Vagu_block_sagu::_settle__TOP__agu_block__DOT__Wagu_mod__1(Vagu_block__Syms* __restrict vlSymsp) {
     VL_DEBUG_IF(VL_DBG_MSGF("+        Vagu_block_sagu::_settle__TOP__agu_block__DOT__Wagu_mod__1\n"); );
@@ -354,7 +346,7 @@ void Vagu_block_sagu::_settle__TOP__agu_block__DOT__Wagu_mod__21(Vagu_block__Sym
     VL_DEBUG_IF(VL_DBG_MSGF("+        Vagu_block_sagu::_settle__TOP__agu_block__DOT__Wagu_mod__21\n"); );
     Vagu_block* __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
     // Body
-    this->mOp_split__out__en8 = ((5U == (IData)(this->__PVT__opsize)) 
+    this->mOp_split__out__en7 = ((5U == (IData)(this->__PVT__opsize)) 
                                  | (6U == (IData)(this->__PVT__opsize)));
 }
 
@@ -3290,138 +3282,135 @@ void Vagu_block_sagu::_settle__TOP__agu_block__DOT__Wagu_mod__67(Vagu_block__Sym
     VL_DEBUG_IF(VL_DBG_MSGF("+        Vagu_block_sagu::_settle__TOP__agu_block__DOT__Wagu_mod__67\n"); );
     Vagu_block* __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
     // Body
-    this->addrNext__out10 = (((((((((((((((((((((((
-                                                   ((((1U 
-                                                       & ((IData)(this->nextCAddr_mod__DOT__out__out__out0) 
-                                                          & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr))) 
-                                                      | (1U 
-                                                         & ((IData)(this->nextCAddr_mod__DOT__out__out__out1) 
-                                                            & (~ 
-                                                               (0x1fffU 
-                                                                & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr)))))) 
-                                                     | (2U 
-                                                        & ((IData)(this->nextCAddr_mod__DOT__out__out__out2) 
-                                                           & (0x80U 
-                                                              ^ 
-                                                              (0x1ffeU 
+    this->addrNext__out9 = ((((((((((((((((((((((((
+                                                   (((1U 
+                                                      & ((IData)(this->nextCAddr_mod__DOT__out__out__out0) 
+                                                         & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr))) 
+                                                     | (1U 
+                                                        & ((IData)(this->nextCAddr_mod__DOT__out__out__out1) 
+                                                           & (~ 
+                                                              (0x1fffU 
                                                                & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr)))))) 
                                                     | (2U 
-                                                       & ((IData)(this->nextCAddr_mod__DOT__out__out__out3) 
-                                                          & ((IData)(0x80U) 
-                                                             ^ ~ 
-                                                             (0x1fffU 
+                                                       & ((IData)(this->nextCAddr_mod__DOT__out__out__out2) 
+                                                          & (0x80U 
+                                                             ^ 
+                                                             (0x1ffeU 
                                                               & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr)))))) 
-                                                   | (4U 
-                                                      & ((IData)(this->nextCAddr_mod__DOT__out__out__out4) 
-                                                         & (0x80U 
-                                                            ^ 
-                                                            (0x1ffcU 
+                                                   | (2U 
+                                                      & ((IData)(this->nextCAddr_mod__DOT__out__out__out3) 
+                                                         & ((IData)(0x80U) 
+                                                            ^ ~ 
+                                                            (0x1fffU 
                                                              & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr)))))) 
                                                   | (4U 
-                                                     & ((IData)(this->nextCAddr_mod__DOT__out__out__out5) 
-                                                        & ((IData)(0x80U) 
-                                                           ^ ~ 
-                                                           (0x1fffU 
+                                                     & ((IData)(this->nextCAddr_mod__DOT__out__out__out4) 
+                                                        & (0x80U 
+                                                           ^ 
+                                                           (0x1ffcU 
                                                             & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr)))))) 
-                                                 | (8U 
-                                                    & ((IData)(this->nextCAddr_mod__DOT__out__out__out6) 
-                                                       & (0x80U 
-                                                          ^ 
-                                                          (0x1ff8U 
+                                                 | (4U 
+                                                    & ((IData)(this->nextCAddr_mod__DOT__out__out__out5) 
+                                                       & ((IData)(0x80U) 
+                                                          ^ ~ 
+                                                          (0x1fffU 
                                                            & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr)))))) 
                                                 | (8U 
-                                                   & ((IData)(this->nextCAddr_mod__DOT__out__out__out7) 
-                                                      & ((IData)(0x80U) 
-                                                         ^ ~ 
-                                                         (0x1fffU 
+                                                   & ((IData)(this->nextCAddr_mod__DOT__out__out__out6) 
+                                                      & (0x80U 
+                                                         ^ 
+                                                         (0x1ff8U 
                                                           & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr)))))) 
-                                               | (0x10U 
-                                                  & ((IData)(this->nextCAddr_mod__DOT__out__out__out8) 
-                                                     & (0x80U 
-                                                        ^ 
-                                                        (0x1ff0U 
+                                               | (8U 
+                                                  & ((IData)(this->nextCAddr_mod__DOT__out__out__out7) 
+                                                     & ((IData)(0x80U) 
+                                                        ^ ~ 
+                                                        (0x1fffU 
                                                          & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr)))))) 
                                               | (0x10U 
-                                                 & ((IData)(this->nextCAddr_mod__DOT__out__out__out9) 
-                                                    & ((IData)(0x80U) 
-                                                       ^ ~ 
-                                                       (0x1fffU 
+                                                 & ((IData)(this->nextCAddr_mod__DOT__out__out__out8) 
+                                                    & (0x80U 
+                                                       ^ 
+                                                       (0x1ff0U 
                                                         & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr)))))) 
-                                             | (0x20U 
-                                                & ((IData)(this->nextCAddr_mod__DOT__out__out__out10) 
-                                                   & (0x80U 
-                                                      ^ 
-                                                      (0x1fe0U 
-                                                       & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr)))))) 
-                                            | (0x20U 
-                                               & ((IData)(this->nextCAddr_mod__DOT__out__out__out11) 
-                                                  & ((IData)(0x80U) 
-                                                     ^ ~ 
-                                                     (0x1fffU 
-                                                      & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr)))))) 
-                                           | (0x40U 
-                                              & ((IData)(this->nextCAddr_mod__DOT__out__out__out12) 
-                                                 & (0x80U 
-                                                    ^ 
-                                                    (0x1fc0U 
-                                                     & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr)))))) 
-                                          | (0x40U 
-                                             & ((IData)(this->nextCAddr_mod__DOT__out__out__out13) 
-                                                & ((IData)(0x80U) 
-                                                   ^ ~ 
-                                                   (0x1fffU 
-                                                    & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr)))))) 
-                                         | (0x80U & 
-                                            ((IData)(this->nextCAddr_mod__DOT__out__out__out14) 
-                                             & (0x80U 
-                                                ^ (0x1f80U 
-                                                   & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr)))))) 
-                                        | (0x80U & 
-                                           ((IData)(this->nextCAddr_mod__DOT__out__out__out15) 
-                                            & ((IData)(0x80U) 
-                                               ^ ~ 
-                                               (0x1fffU 
-                                                & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr)))))) 
-                                       | (0x100U & 
-                                          ((IData)(this->nextCAddr_mod__DOT__out__out__out16) 
-                                           & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr)))) 
-                                      | (0x100U & ((IData)(this->nextCAddr_mod__DOT__out__out__out17) 
+                                             | (0x10U 
+                                                & ((IData)(this->nextCAddr_mod__DOT__out__out__out9) 
                                                    & ((IData)(0x80U) 
                                                       ^ ~ 
                                                       (0x1fffU 
                                                        & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr)))))) 
-                                     | (0x200U & ((IData)(this->nextCAddr_mod__DOT__out__out__out18) 
-                                                  & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr)))) 
-                                    | (0x200U & ((IData)(this->nextCAddr_mod__DOT__out__out__out19) 
+                                            | (0x20U 
+                                               & ((IData)(this->nextCAddr_mod__DOT__out__out__out10) 
+                                                  & (0x80U 
+                                                     ^ 
+                                                     (0x1fe0U 
+                                                      & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr)))))) 
+                                           | (0x20U 
+                                              & ((IData)(this->nextCAddr_mod__DOT__out__out__out11) 
                                                  & ((IData)(0x80U) 
                                                     ^ ~ 
                                                     (0x1fffU 
                                                      & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr)))))) 
-                                   | (0x400U & ((IData)(this->nextCAddr_mod__DOT__out__out__out20) 
-                                                & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr)))) 
-                                  | (0x400U & ((IData)(this->nextCAddr_mod__DOT__out__out__out21) 
-                                               & ((IData)(0x80U) 
-                                                  ^ ~ 
-                                                  (0x1fffU 
-                                                   & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr)))))) 
-                                 | (0x800U & ((IData)(this->nextCAddr_mod__DOT__out__out__out22) 
-                                              & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr)))) 
-                                | (0x800U & ((IData)(this->nextCAddr_mod__DOT__out__out__out23) 
+                                          | (0x40U 
+                                             & ((IData)(this->nextCAddr_mod__DOT__out__out__out12) 
+                                                & (0x80U 
+                                                   ^ 
+                                                   (0x1fc0U 
+                                                    & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr)))))) 
+                                         | (0x40U & 
+                                            ((IData)(this->nextCAddr_mod__DOT__out__out__out13) 
                                              & ((IData)(0x80U) 
                                                 ^ ~ 
                                                 (0x1fffU 
                                                  & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr)))))) 
-                               | (0x1000U & ((IData)(this->nextCAddr_mod__DOT__out__out__out24) 
+                                        | (0x80U & 
+                                           ((IData)(this->nextCAddr_mod__DOT__out__out__out14) 
+                                            & (0x80U 
+                                               ^ (0x1f80U 
+                                                  & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr)))))) 
+                                       | (0x80U & ((IData)(this->nextCAddr_mod__DOT__out__out__out15) 
+                                                   & ((IData)(0x80U) 
+                                                      ^ ~ 
+                                                      (0x1fffU 
+                                                       & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr)))))) 
+                                      | (0x100U & ((IData)(this->nextCAddr_mod__DOT__out__out__out16) 
+                                                   & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr)))) 
+                                     | (0x100U & ((IData)(this->nextCAddr_mod__DOT__out__out__out17) 
+                                                  & ((IData)(0x80U) 
+                                                     ^ ~ 
+                                                     (0x1fffU 
+                                                      & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr)))))) 
+                                    | (0x200U & ((IData)(this->nextCAddr_mod__DOT__out__out__out18) 
+                                                 & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr)))) 
+                                   | (0x200U & ((IData)(this->nextCAddr_mod__DOT__out__out__out19) 
+                                                & ((IData)(0x80U) 
+                                                   ^ ~ 
+                                                   (0x1fffU 
+                                                    & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr)))))) 
+                                  | (0x400U & ((IData)(this->nextCAddr_mod__DOT__out__out__out20) 
+                                               & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr)))) 
+                                 | (0x400U & ((IData)(this->nextCAddr_mod__DOT__out__out__out21) 
+                                              & ((IData)(0x80U) 
+                                                 ^ ~ 
+                                                 (0x1fffU 
+                                                  & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr)))))) 
+                                | (0x800U & ((IData)(this->nextCAddr_mod__DOT__out__out__out22) 
                                              & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr)))) 
-                              | (0x1000U & ((IData)(this->nextCAddr_mod__DOT__out__out__out25) 
+                               | (0x800U & ((IData)(this->nextCAddr_mod__DOT__out__out__out23) 
                                             & ((IData)(0x80U) 
                                                ^ ~ 
                                                (0x1fffU 
                                                 & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr)))))) 
-                             | (0x2000U & ((IData)(this->nextCAddr_mod__DOT__out__out__out27) 
+                              | (0x1000U & ((IData)(this->nextCAddr_mod__DOT__out__out__out24) 
+                                            & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr)))) 
+                             | (0x1000U & ((IData)(this->nextCAddr_mod__DOT__out__out__out25) 
                                            & ((IData)(0x80U) 
                                               ^ ~ (0x1fffU 
-                                                   & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr))))));
+                                                   & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr)))))) 
+                            | (0x2000U & ((IData)(this->nextCAddr_mod__DOT__out__out__out27) 
+                                          & ((IData)(0x80U) 
+                                             ^ ~ (0x1fffU 
+                                                  & (IData)(vlTOPp->agu_block__DOT__p4_cmplxAddr))))));
 }
 
 void Vagu_block_sagu::_settle__TOP__agu_block__DOT__Wagu_mod__69(Vagu_block__Syms* __restrict vlSymsp) {
@@ -3440,7 +3429,7 @@ void Vagu_block_sagu::_settle__TOP__agu_block__DOT__Wagu_mod__71(Vagu_block__Sym
     VL_DEBUG_IF(VL_DBG_MSGF("+        Vagu_block_sagu::_settle__TOP__agu_block__DOT__Wagu_mod__71\n"); );
     Vagu_block* __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
     // Body
-    this->__PVT__addrNext = ((IData)(this->addrNext__out10) 
+    this->__PVT__addrNext = ((IData)(this->addrNext__out9) 
                              & (IData)(this->__pinNumber3__en0));
 }
 
@@ -3538,1431 +3527,6 @@ VL_INLINE_OPT void Vagu_block_sagu::_combo__TOP__agu_block__DOT__Wagu_mod__81(Va
     vlSymsp->TOP__agu_block__DOT__Wagu2_mod.__PVT__rcn_mask 
         = ((2U & ((~ (IData)(vlTOPp->except)) << 1U)) 
            | (1U & (~ (IData)(vlTOPp->except))));
-}
-
-VL_INLINE_OPT void Vagu_block_sagu::_combo__TOP__agu_block__DOT__Wagu_mod__82(Vagu_block__Syms* __restrict vlSymsp) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+        Vagu_block_sagu::_combo__TOP__agu_block__DOT__Wagu_mod__82\n"); );
-    Vagu_block* __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
-    // Body
-    this->tlbMiss = ((((IData)(this->__PVT__read_clkEn_reg) 
-                       & (~ (IData)(__PVT__tlb_mod->read_hit))) 
-                      & (IData)(this->__PVT__cout_secq)) 
-                     & (~ (IData)(vlTOPp->except)));
-    vlSymsp->TOP__agu_block__DOT__Wagu2_mod.tlbMiss 
-        = ((((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod.__PVT__read_clkEn_reg) 
-             & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.read_hit))) 
-            & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod.__PVT__cout_secq)) 
-           & (~ (IData)(vlTOPp->except)));
-    vlSymsp->TOP__agu_block__DOT__aadd5.out__out__out2 
-        = ((VL_ULL(0xfffffffffff) & vlSymsp->TOP__agu_block__DOT__aadd5.out__out__out2) 
-           | ((QData)((IData)(((IData)(vlTOPp->agu_block__DOT__p5_mex_en)
-                                ? 0U : (0xfffffU & (IData)(
-                                                           (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__ptr 
-                                                            >> 0x2cU)))))) 
-              << 0x2cU));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__out0 
-        = ((VL_ULL(0xffffffffffe) & vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__out0) 
-           | (IData)((IData)((1U & ((IData)(vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X) 
-                                    & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en0 
-        = (QData)((IData)((1U & ((IData)(vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X) 
-                                 & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en))))));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en1 
-        = (QData)((IData)((1U & ((IData)(vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX) 
-                                 & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en))))));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en2 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 1U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 1U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en3 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 1U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 1U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en4 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 2U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 2U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en5 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 2U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 2U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en6 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 3U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 3U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en7 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 3U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 3U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en8 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 4U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 4U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en9 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 4U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 4U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en10 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 5U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 5U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en11 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 5U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 5U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en12 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 6U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 6U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en13 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 6U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 6U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en14 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 7U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 7U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en15 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 7U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 7U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en16 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 8U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 8U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en17 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 8U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 8U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en18 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 9U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 9U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en19 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 9U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 9U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en20 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 0xaU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0xaU));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en21 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 0xaU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0xaU));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en22 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 0xbU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0xbU));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en23 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 0xbU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0xbU));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en24 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 0xcU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0xcU));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en25 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 0xcU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0xcU));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en26 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 0xdU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0xdU));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en27 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 0xdU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0xdU));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en28 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 0xeU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0xeU));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en29 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 0xeU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0xeU));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en30 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 0xfU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0xfU));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en31 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 0xfU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0xfU));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en32 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 0x10U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x10U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en33 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x10U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x10U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en34 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 0x11U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x11U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en35 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x11U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x11U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en36 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 0x12U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x12U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en37 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x12U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x12U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en38 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 0x13U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x13U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en39 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x13U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x13U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en40 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 0x14U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x14U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en41 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x14U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x14U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en42 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 0x15U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x15U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en43 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x15U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x15U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en44 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 0x16U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x16U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en45 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x16U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x16U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en46 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 0x17U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x17U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en47 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x17U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x17U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en48 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 0x18U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x18U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en49 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x18U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x18U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en50 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 0x19U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x19U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en51 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x19U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x19U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en52 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 0x1aU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x1aU));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en53 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x1aU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x1aU));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en54 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 0x1bU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x1bU));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en55 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x1bU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x1bU));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en56 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 0x1cU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x1cU));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en57 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x1cU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x1cU));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en58 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 0x1dU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x1dU));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en59 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x1dU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x1dU));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en60 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 0x1eU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x1eU));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en61 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x1eU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x1eU));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en62 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 0x1fU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x1fU));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en63 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x1fU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x1fU));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en64 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 0x20U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x20U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en65 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x20U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x20U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en66 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 0x21U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x21U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en67 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x21U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x21U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en68 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 0x22U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x22U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en69 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x22U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x22U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en70 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 0x23U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x23U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en71 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x23U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x23U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en72 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 0x24U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x24U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en73 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x24U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x24U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en74 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 0x25U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x25U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en75 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x25U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x25U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en76 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 0x26U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x26U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en77 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x26U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x26U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en78 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 0x27U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x27U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en79 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x27U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x27U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en80 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 0x28U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x28U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en81 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x28U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x28U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en82 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 0x29U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x29U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en83 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x29U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x29U));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en84 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 0x2aU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x2aU));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en85 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x2aU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x2aU));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en86 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__X 
-                                                                 >> 0x2bU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x2bU));
-    vlSymsp->TOP__agu_block__DOT__aadd5.add_mod__DOT__out__out__en87 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd5.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x2bU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p5_mex_en)))))) 
-                                    << 0x2bU));
-    vlSymsp->TOP__agu_block__DOT__aadd4.out__out__out2 
-        = ((VL_ULL(0xfffffffffff) & vlSymsp->TOP__agu_block__DOT__aadd4.out__out__out2) 
-           | ((QData)((IData)(((IData)(vlTOPp->agu_block__DOT__p4_mex_en)
-                                ? 0U : (0xfffffU & (IData)(
-                                                           (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__ptr 
-                                                            >> 0x2cU)))))) 
-              << 0x2cU));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__out0 
-        = ((VL_ULL(0xffffffffffe) & vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__out0) 
-           | (IData)((IData)((1U & ((IData)(vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X) 
-                                    & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en0 
-        = (QData)((IData)((1U & ((IData)(vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X) 
-                                 & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en))))));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en1 
-        = (QData)((IData)((1U & ((IData)(vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX) 
-                                 & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en))))));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en2 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 1U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 1U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en3 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 1U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 1U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en4 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 2U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 2U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en5 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 2U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 2U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en6 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 3U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 3U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en7 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 3U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 3U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en8 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 4U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 4U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en9 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 4U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 4U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en10 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 5U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 5U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en11 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 5U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 5U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en12 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 6U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 6U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en13 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 6U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 6U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en14 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 7U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 7U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en15 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 7U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 7U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en16 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 8U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 8U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en17 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 8U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 8U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en18 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 9U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 9U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en19 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 9U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 9U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en20 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 0xaU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0xaU));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en21 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 0xaU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0xaU));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en22 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 0xbU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0xbU));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en23 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 0xbU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0xbU));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en24 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 0xcU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0xcU));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en25 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 0xcU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0xcU));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en26 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 0xdU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0xdU));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en27 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 0xdU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0xdU));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en28 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 0xeU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0xeU));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en29 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 0xeU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0xeU));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en30 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 0xfU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0xfU));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en31 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 0xfU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0xfU));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en32 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 0x10U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x10U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en33 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x10U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x10U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en34 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 0x11U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x11U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en35 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x11U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x11U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en36 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 0x12U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x12U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en37 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x12U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x12U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en38 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 0x13U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x13U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en39 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x13U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x13U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en40 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 0x14U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x14U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en41 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x14U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x14U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en42 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 0x15U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x15U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en43 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x15U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x15U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en44 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 0x16U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x16U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en45 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x16U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x16U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en46 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 0x17U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x17U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en47 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x17U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x17U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en48 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 0x18U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x18U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en49 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x18U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x18U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en50 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 0x19U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x19U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en51 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x19U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x19U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en52 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 0x1aU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x1aU));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en53 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x1aU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x1aU));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en54 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 0x1bU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x1bU));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en55 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x1bU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x1bU));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en56 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 0x1cU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x1cU));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en57 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x1cU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x1cU));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en58 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 0x1dU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x1dU));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en59 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x1dU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x1dU));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en60 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 0x1eU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x1eU));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en61 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x1eU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x1eU));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en62 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 0x1fU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x1fU));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en63 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x1fU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x1fU));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en64 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 0x20U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x20U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en65 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x20U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x20U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en66 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 0x21U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x21U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en67 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x21U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x21U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en68 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 0x22U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x22U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en69 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x22U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x22U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en70 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 0x23U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x23U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en71 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x23U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x23U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en72 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 0x24U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x24U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en73 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x24U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x24U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en74 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 0x25U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x25U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en75 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x25U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x25U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en76 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 0x26U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x26U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en77 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x26U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x26U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en78 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 0x27U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x27U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en79 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x27U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x27U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en80 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 0x28U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x28U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en81 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x28U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x28U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en82 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 0x29U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x29U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en83 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x29U)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x29U));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en84 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 0x2aU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x2aU));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en85 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x2aU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x2aU));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en86 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__X 
-                                                                 >> 0x2bU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x2bU));
-    vlSymsp->TOP__agu_block__DOT__aadd4.add_mod__DOT__out__out__en87 
-        = (VL_ULL(0xfffffffffff) & ((QData)((IData)(
-                                                    (1U 
-                                                     & ((IData)(
-                                                                (vlSymsp->TOP__agu_block__DOT__aadd4.__PVT__add_mod__DOT__nX 
-                                                                 >> 0x2bU)) 
-                                                        & (~ (IData)(vlTOPp->agu_block__DOT__p4_mex_en)))))) 
-                                    << 0x2bU));
 }
 
 void Vagu_block_sagu::_settle__TOP__agu_block__DOT__Wagu2_mod__4(Vagu_block__Syms* __restrict vlSymsp) {
@@ -7758,138 +6322,135 @@ void Vagu_block_sagu::_settle__TOP__agu_block__DOT__Wagu2_mod__68(Vagu_block__Sy
     VL_DEBUG_IF(VL_DBG_MSGF("+        Vagu_block_sagu::_settle__TOP__agu_block__DOT__Wagu2_mod__68\n"); );
     Vagu_block* __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
     // Body
-    this->addrNext__out10 = (((((((((((((((((((((((
-                                                   ((((1U 
-                                                       & ((IData)(this->nextCAddr_mod__DOT__out__out__out0) 
-                                                          & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr))) 
-                                                      | (1U 
-                                                         & ((IData)(this->nextCAddr_mod__DOT__out__out__out1) 
-                                                            & (~ 
-                                                               (0x1fffU 
-                                                                & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr)))))) 
-                                                     | (2U 
-                                                        & ((IData)(this->nextCAddr_mod__DOT__out__out__out2) 
-                                                           & (0x80U 
-                                                              ^ 
-                                                              (0x1ffeU 
+    this->addrNext__out9 = ((((((((((((((((((((((((
+                                                   (((1U 
+                                                      & ((IData)(this->nextCAddr_mod__DOT__out__out__out0) 
+                                                         & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr))) 
+                                                     | (1U 
+                                                        & ((IData)(this->nextCAddr_mod__DOT__out__out__out1) 
+                                                           & (~ 
+                                                              (0x1fffU 
                                                                & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr)))))) 
                                                     | (2U 
-                                                       & ((IData)(this->nextCAddr_mod__DOT__out__out__out3) 
-                                                          & ((IData)(0x80U) 
-                                                             ^ ~ 
-                                                             (0x1fffU 
+                                                       & ((IData)(this->nextCAddr_mod__DOT__out__out__out2) 
+                                                          & (0x80U 
+                                                             ^ 
+                                                             (0x1ffeU 
                                                               & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr)))))) 
-                                                   | (4U 
-                                                      & ((IData)(this->nextCAddr_mod__DOT__out__out__out4) 
-                                                         & (0x80U 
-                                                            ^ 
-                                                            (0x1ffcU 
+                                                   | (2U 
+                                                      & ((IData)(this->nextCAddr_mod__DOT__out__out__out3) 
+                                                         & ((IData)(0x80U) 
+                                                            ^ ~ 
+                                                            (0x1fffU 
                                                              & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr)))))) 
                                                   | (4U 
-                                                     & ((IData)(this->nextCAddr_mod__DOT__out__out__out5) 
-                                                        & ((IData)(0x80U) 
-                                                           ^ ~ 
-                                                           (0x1fffU 
+                                                     & ((IData)(this->nextCAddr_mod__DOT__out__out__out4) 
+                                                        & (0x80U 
+                                                           ^ 
+                                                           (0x1ffcU 
                                                             & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr)))))) 
-                                                 | (8U 
-                                                    & ((IData)(this->nextCAddr_mod__DOT__out__out__out6) 
-                                                       & (0x80U 
-                                                          ^ 
-                                                          (0x1ff8U 
+                                                 | (4U 
+                                                    & ((IData)(this->nextCAddr_mod__DOT__out__out__out5) 
+                                                       & ((IData)(0x80U) 
+                                                          ^ ~ 
+                                                          (0x1fffU 
                                                            & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr)))))) 
                                                 | (8U 
-                                                   & ((IData)(this->nextCAddr_mod__DOT__out__out__out7) 
-                                                      & ((IData)(0x80U) 
-                                                         ^ ~ 
-                                                         (0x1fffU 
+                                                   & ((IData)(this->nextCAddr_mod__DOT__out__out__out6) 
+                                                      & (0x80U 
+                                                         ^ 
+                                                         (0x1ff8U 
                                                           & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr)))))) 
-                                               | (0x10U 
-                                                  & ((IData)(this->nextCAddr_mod__DOT__out__out__out8) 
-                                                     & (0x80U 
-                                                        ^ 
-                                                        (0x1ff0U 
+                                               | (8U 
+                                                  & ((IData)(this->nextCAddr_mod__DOT__out__out__out7) 
+                                                     & ((IData)(0x80U) 
+                                                        ^ ~ 
+                                                        (0x1fffU 
                                                          & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr)))))) 
                                               | (0x10U 
-                                                 & ((IData)(this->nextCAddr_mod__DOT__out__out__out9) 
-                                                    & ((IData)(0x80U) 
-                                                       ^ ~ 
-                                                       (0x1fffU 
+                                                 & ((IData)(this->nextCAddr_mod__DOT__out__out__out8) 
+                                                    & (0x80U 
+                                                       ^ 
+                                                       (0x1ff0U 
                                                         & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr)))))) 
-                                             | (0x20U 
-                                                & ((IData)(this->nextCAddr_mod__DOT__out__out__out10) 
-                                                   & (0x80U 
-                                                      ^ 
-                                                      (0x1fe0U 
-                                                       & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr)))))) 
-                                            | (0x20U 
-                                               & ((IData)(this->nextCAddr_mod__DOT__out__out__out11) 
-                                                  & ((IData)(0x80U) 
-                                                     ^ ~ 
-                                                     (0x1fffU 
-                                                      & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr)))))) 
-                                           | (0x40U 
-                                              & ((IData)(this->nextCAddr_mod__DOT__out__out__out12) 
-                                                 & (0x80U 
-                                                    ^ 
-                                                    (0x1fc0U 
-                                                     & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr)))))) 
-                                          | (0x40U 
-                                             & ((IData)(this->nextCAddr_mod__DOT__out__out__out13) 
-                                                & ((IData)(0x80U) 
-                                                   ^ ~ 
-                                                   (0x1fffU 
-                                                    & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr)))))) 
-                                         | (0x80U & 
-                                            ((IData)(this->nextCAddr_mod__DOT__out__out__out14) 
-                                             & (0x80U 
-                                                ^ (0x1f80U 
-                                                   & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr)))))) 
-                                        | (0x80U & 
-                                           ((IData)(this->nextCAddr_mod__DOT__out__out__out15) 
-                                            & ((IData)(0x80U) 
-                                               ^ ~ 
-                                               (0x1fffU 
-                                                & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr)))))) 
-                                       | (0x100U & 
-                                          ((IData)(this->nextCAddr_mod__DOT__out__out__out16) 
-                                           & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr)))) 
-                                      | (0x100U & ((IData)(this->nextCAddr_mod__DOT__out__out__out17) 
+                                             | (0x10U 
+                                                & ((IData)(this->nextCAddr_mod__DOT__out__out__out9) 
                                                    & ((IData)(0x80U) 
                                                       ^ ~ 
                                                       (0x1fffU 
                                                        & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr)))))) 
-                                     | (0x200U & ((IData)(this->nextCAddr_mod__DOT__out__out__out18) 
-                                                  & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr)))) 
-                                    | (0x200U & ((IData)(this->nextCAddr_mod__DOT__out__out__out19) 
+                                            | (0x20U 
+                                               & ((IData)(this->nextCAddr_mod__DOT__out__out__out10) 
+                                                  & (0x80U 
+                                                     ^ 
+                                                     (0x1fe0U 
+                                                      & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr)))))) 
+                                           | (0x20U 
+                                              & ((IData)(this->nextCAddr_mod__DOT__out__out__out11) 
                                                  & ((IData)(0x80U) 
                                                     ^ ~ 
                                                     (0x1fffU 
                                                      & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr)))))) 
-                                   | (0x400U & ((IData)(this->nextCAddr_mod__DOT__out__out__out20) 
-                                                & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr)))) 
-                                  | (0x400U & ((IData)(this->nextCAddr_mod__DOT__out__out__out21) 
-                                               & ((IData)(0x80U) 
-                                                  ^ ~ 
-                                                  (0x1fffU 
-                                                   & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr)))))) 
-                                 | (0x800U & ((IData)(this->nextCAddr_mod__DOT__out__out__out22) 
-                                              & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr)))) 
-                                | (0x800U & ((IData)(this->nextCAddr_mod__DOT__out__out__out23) 
+                                          | (0x40U 
+                                             & ((IData)(this->nextCAddr_mod__DOT__out__out__out12) 
+                                                & (0x80U 
+                                                   ^ 
+                                                   (0x1fc0U 
+                                                    & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr)))))) 
+                                         | (0x40U & 
+                                            ((IData)(this->nextCAddr_mod__DOT__out__out__out13) 
                                              & ((IData)(0x80U) 
                                                 ^ ~ 
                                                 (0x1fffU 
                                                  & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr)))))) 
-                               | (0x1000U & ((IData)(this->nextCAddr_mod__DOT__out__out__out24) 
+                                        | (0x80U & 
+                                           ((IData)(this->nextCAddr_mod__DOT__out__out__out14) 
+                                            & (0x80U 
+                                               ^ (0x1f80U 
+                                                  & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr)))))) 
+                                       | (0x80U & ((IData)(this->nextCAddr_mod__DOT__out__out__out15) 
+                                                   & ((IData)(0x80U) 
+                                                      ^ ~ 
+                                                      (0x1fffU 
+                                                       & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr)))))) 
+                                      | (0x100U & ((IData)(this->nextCAddr_mod__DOT__out__out__out16) 
+                                                   & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr)))) 
+                                     | (0x100U & ((IData)(this->nextCAddr_mod__DOT__out__out__out17) 
+                                                  & ((IData)(0x80U) 
+                                                     ^ ~ 
+                                                     (0x1fffU 
+                                                      & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr)))))) 
+                                    | (0x200U & ((IData)(this->nextCAddr_mod__DOT__out__out__out18) 
+                                                 & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr)))) 
+                                   | (0x200U & ((IData)(this->nextCAddr_mod__DOT__out__out__out19) 
+                                                & ((IData)(0x80U) 
+                                                   ^ ~ 
+                                                   (0x1fffU 
+                                                    & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr)))))) 
+                                  | (0x400U & ((IData)(this->nextCAddr_mod__DOT__out__out__out20) 
+                                               & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr)))) 
+                                 | (0x400U & ((IData)(this->nextCAddr_mod__DOT__out__out__out21) 
+                                              & ((IData)(0x80U) 
+                                                 ^ ~ 
+                                                 (0x1fffU 
+                                                  & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr)))))) 
+                                | (0x800U & ((IData)(this->nextCAddr_mod__DOT__out__out__out22) 
                                              & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr)))) 
-                              | (0x1000U & ((IData)(this->nextCAddr_mod__DOT__out__out__out25) 
+                               | (0x800U & ((IData)(this->nextCAddr_mod__DOT__out__out__out23) 
                                             & ((IData)(0x80U) 
                                                ^ ~ 
                                                (0x1fffU 
                                                 & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr)))))) 
-                             | (0x2000U & ((IData)(this->nextCAddr_mod__DOT__out__out__out27) 
+                              | (0x1000U & ((IData)(this->nextCAddr_mod__DOT__out__out__out24) 
+                                            & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr)))) 
+                             | (0x1000U & ((IData)(this->nextCAddr_mod__DOT__out__out__out25) 
                                            & ((IData)(0x80U) 
                                               ^ ~ (0x1fffU 
-                                                   & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr))))));
+                                                   & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr)))))) 
+                            | (0x2000U & ((IData)(this->nextCAddr_mod__DOT__out__out__out27) 
+                                          & ((IData)(0x80U) 
+                                             ^ ~ (0x1fffU 
+                                                  & (IData)(vlTOPp->agu_block__DOT__p5_cmplxAddr))))));
 }
 
 void Vagu_block_sagu::_settle__TOP__agu_block__DOT__Wagu2_mod__74(Vagu_block__Syms* __restrict vlSymsp) {
@@ -8056,8 +6617,8 @@ void Vagu_block_sagu::_ctor_var_reset() {
     __pinNumber3__en0 = 0;
     mOp_split__out = VL_RAND_RESET_I(1);
     mOp_split__en = VL_RAND_RESET_I(1);
-    mOp_split__out__en8 = 0;
-    addrNext__out10 = 0;
+    mOp_split__out__en7 = 0;
+    addrNext__out9 = 0;
     __PVT__nextCAddr_mod__DOT__P1 = VL_RAND_RESET_I(14);
     __PVT__nextCAddr_mod__DOT__G1 = VL_RAND_RESET_I(14);
     __PVT__nextCAddr_mod__DOT__nP2 = VL_RAND_RESET_I(14);

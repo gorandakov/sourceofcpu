@@ -435,6 +435,7 @@ void sched(Vfun_lsq *top, int exc) {
         top->pause_agu=0;
     }
     top->eval();
+    __sync_synchronize();
 
     //bhold=top->insert_isData;
 
@@ -737,6 +738,7 @@ bool get_check_ret(Vfun_lsq *top,bool &retire,unsigned &exc) {
     if (/*$*/top->doRetire_d) {
        top->mem_II_upper_in=ret_II;
        top->eval();
+       __sync_synchronize();
     }
     if (was_ret & ~top->mem_II_bits_ret) ret=true;
     /*$*/top->doRetire_d=0;
@@ -769,7 +771,8 @@ bool get_check_ret(Vfun_lsq *top,bool &retire,unsigned &exc) {
     }
     top->has_xbreak=top->xbreak!=0;
     top->eval();
-    if (!reqs[ret_point][0].en || exc==9) {exc=exc; was_ret=0; return ret;}
+    __sync_synchronize();
+ if (!reqs[ret_point][0].en || exc==9) {exc=exc; was_ret=0; return ret;}
     if (ret_II!=(reqs[ret_point][0].II>>4)) {
        ret_II++;
        if (ret_II>47) ret_II=0;
@@ -903,6 +906,7 @@ bool get_check(Vfun_lsq *top, int exc) {
     bool ret=false,err=false;
     static unsigned LS_pos0,LS_pos1;
     int bytes1;
+    bool stall=top->pause_agu;
 
     if (!fwd_en1[1] || exc) goto do_fwd_en2;
     extract_e(fwd_data1[1],lsaddr_flag,val);
@@ -1147,7 +1151,7 @@ nowrite:
         fwd_data2[n+1][5]=fwd_data2[n][5];
     }
 
-    fwd_en1[0]=top->wb0_en && !exc;
+    fwd_en1[0]=top->wb0_en && !exc && !stall;
     extract_e(top->wb0_adata,lsaddr_II,ii);
     for(n=0;n<64;n++) {
         for(n2=0;n2<6;n2++) {
@@ -1158,7 +1162,7 @@ nowrite:
     }
 out1:
     if (n!=64) fwd_LSQ1[0]=reqs[n][n2].LSQ;
-    else if (top->wb0_en && !exc) {
+    else if (top->wb0_en && !exc && !stall) {
 	printf("WB0.64 %lx\n\n",ii);
 	ret=true;
     }
@@ -1166,7 +1170,7 @@ out1:
     for(n=0;n<5;n=n+1) fwd_ddata1[0][n]=top->wb0_data[n];
     fwd_banks1[0]=top->wb0_brdbanks;
 
-    fwd_en2[0]=top->wb1_en && !exc;
+    fwd_en2[0]=top->wb1_en && !exc && !stall;
     extract_e(top->wb1_adata,lsaddr_II,ii);
     for(n=0;n<64;n++) {
         for(n2=0;n2<6;n2++) {
@@ -1177,7 +1181,7 @@ out1:
     }
 out2:
     if (n!=64) fwd_LSQ2[0]=reqs[n][n2].LSQ;
-    else if (top->wb1_en && !exc) {
+    else if (top->wb1_en && !exc && !stall) {
 	printf("WB1.64 %lx\n",ii);
 	ret=true;
     }
@@ -1446,6 +1450,7 @@ bool dmigen::gen_bndl(lsreq reqZ[6],Vfun_lsq *top,bool no_alloc) {
     //reqZ[n].reg_no=n; 
     top->II_upper=II;
     top->eval();
+    __sync_synchronize();
     if (top->doStall_LSQ || top->doStall_LDQ || top->doStall_STQ || II==top->mem_II_upper) {
 	WQ-=cnt_st;
 	if (WQ>239) WQ+=240;//unsigned magic
@@ -1668,6 +1673,8 @@ int main(int argc, char *argv[]) {
         top->eval();
         top->clk=1;
         top->eval();
+        __sync_synchronize();
+
         if (!initcount) {
 	   err=false;
 	   sched(top,exc);

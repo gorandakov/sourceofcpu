@@ -5,12 +5,7 @@
 #include "Vagu_block_lru_single0__I1.h"
 #include "Vagu_block__Syms.h"
 
-
-//--------------------
-// STATIC VARIABLES
-
-
-//--------------------
+//==========
 
 VL_CTOR_IMP(Vagu_block_lru_single0__I1) {
     // Reset internal values
@@ -25,9 +20,6 @@ void Vagu_block_lru_single0__I1::__Vconfigure(Vagu_block__Syms* vlSymsp, bool fi
 
 Vagu_block_lru_single0__I1::~Vagu_block_lru_single0__I1() {
 }
-
-//--------------------
-// Internal Methods
 
 void Vagu_block_lru_single0__I1::_settle__TOP__agu_block__DOT__Wagu_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod__1(Vagu_block__Syms* __restrict vlSymsp) {
     VL_DEBUG_IF(VL_DBG_MSGF("+              Vagu_block_lru_single0__I1::_settle__TOP__agu_block__DOT__Wagu_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod__1\n"); );
@@ -912,6 +904,2544 @@ void Vagu_block_lru_single0__I1::_settle__TOP__agu_block__DOT__Wagu2_mod__tlb_mo
                           | (IData)(this->newLRU__out__en3)) 
                          | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
                              ? 7U : 0U)) | (IData)(this->newLRU__out__en5));
+}
+
+VL_INLINE_OPT void Vagu_block_lru_single0__I1::_sequent__TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod__769(Vagu_block__Syms* __restrict vlSymsp) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+              Vagu_block_lru_single0__I1::_sequent__TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod__769\n"); );
+    Vagu_block* __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
+    // Body
+    this->newLRU__out__en3 = ((((~ ((IData)(this->__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                                    >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                               & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                               ? (IData)(this->__pinNumber2__en0)
+                               : 0U);
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__out__en3 
+        = ((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                 >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+            & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+            ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.__pinNumber2__en0)
+            : 0U);
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((6U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((7U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((0U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__6__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((1U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__6__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((2U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__6__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((3U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__6__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((0U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((1U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((2U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((3U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((4U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((5U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((0U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__4__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((1U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__4__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((2U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__4__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((3U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__4__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((4U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__4__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((5U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__4__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((6U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__4__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((7U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__4__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((0U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((1U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((2U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((3U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((4U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((5U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((6U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((7U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((0U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__2__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((1U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__2__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((2U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__2__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((3U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__2__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((4U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__2__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((5U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__2__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((6U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__2__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((7U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__2__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((0U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((1U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((2U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((3U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((4U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((5U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en5));
+    this->newLRU__en = ((((((((6U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)) 
+                              & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                             & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                             ? 7U : 0U) | (IData)(this->newLRU__out__en2)) 
+                          | (IData)(this->newLRU__out__en3)) 
+                         | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                             ? 7U : 0U)) | (IData)(this->newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((7U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__out17 
+        = ((0xfffff8U & vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__out17) 
+           | ((((((((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.__PVT__hitAfter) 
+                    & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                   & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                   ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)
+                   : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en2)) 
+                | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                          >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                     & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                     ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                    & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)) 
+                                   | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                      & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru))))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)))) 
+                           | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                    & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru) 
+                                           >> 1U)) 
+                                       << 1U)))) | 
+                          (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                 & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)))) 
+                         | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                  & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru) 
+                                         >> 2U)) << 2U)))) 
+                        & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.__pinNumber2__en0))
+                     : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en3))) 
+               | (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                    ? 1U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                                   ? 7U : 0U))) | (
+                                                   ((1U 
+                                                     & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                                                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))))
+                                                     ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)
+                                                     : 0U) 
+                                                   & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en5))));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__out18 
+        = ((0xffffc7U & vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__out18) 
+           | (((((((((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.__PVT__hitAfter) 
+                     & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                    & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                    ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)
+                    : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en2)) 
+                 | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                           >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                      & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                      ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)) 
+                                    | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                       & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru))))) 
+                             | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                      & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                     & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru) 
+                                            >> 1U)) 
+                                        << 1U)))) | 
+                           (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                  & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)))) 
+                          | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                   & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru) 
+                                          >> 2U)) << 2U)))) 
+                         & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.__pinNumber2__en0))
+                      : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en3))) 
+                | (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                     ? 1U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                                    ? 7U : 0U))) | 
+               (((1U & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))))
+                  ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)
+                  : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en5))) 
+              << 3U));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__out19 
+        = ((0xfffe3fU & vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__out19) 
+           | (((((((((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.__PVT__hitAfter) 
+                     & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                    & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                    ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)
+                    : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en2)) 
+                 | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                           >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                      & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                      ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)) 
+                                    | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                       & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru))))) 
+                             | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                      & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                     & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru) 
+                                            >> 1U)) 
+                                        << 1U)))) | 
+                           (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                  & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)))) 
+                          | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                   & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru) 
+                                          >> 2U)) << 2U)))) 
+                         & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.__pinNumber2__en0))
+                      : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en3))) 
+                | (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                     ? 1U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                                    ? 7U : 0U))) | 
+               (((1U & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))))
+                  ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)
+                  : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en5))) 
+              << 6U));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__out20 
+        = ((0xfff1ffU & vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__out20) 
+           | (((((((((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.__PVT__hitAfter) 
+                     & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                    & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                    ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)
+                    : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en2)) 
+                 | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                           >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                      & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                      ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)) 
+                                    | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                       & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru))))) 
+                             | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                      & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                     & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru) 
+                                            >> 1U)) 
+                                        << 1U)))) | 
+                           (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                  & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)))) 
+                          | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                   & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru) 
+                                          >> 2U)) << 2U)))) 
+                         & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.__pinNumber2__en0))
+                      : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en3))) 
+                | (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                     ? 1U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                                    ? 7U : 0U))) | 
+               (((1U & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))))
+                  ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)
+                  : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en5))) 
+              << 9U));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__out21 
+        = ((0xff8fffU & vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__out21) 
+           | (((((((((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.__PVT__hitAfter) 
+                     & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                    & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                    ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)
+                    : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en2)) 
+                 | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                           >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                      & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                      ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)) 
+                                    | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                       & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru))))) 
+                             | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                      & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                     & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru) 
+                                            >> 1U)) 
+                                        << 1U)))) | 
+                           (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                  & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)))) 
+                          | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                   & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru) 
+                                          >> 2U)) << 2U)))) 
+                         & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.__pinNumber2__en0))
+                      : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en3))) 
+                | (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                     ? 1U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                                    ? 7U : 0U))) | 
+               (((1U & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))))
+                  ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)
+                  : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en5))) 
+              << 0xcU));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__out22 
+        = ((0xfc7fffU & vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__out22) 
+           | (((((((((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.__PVT__hitAfter) 
+                     & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                    & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                    ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)
+                    : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en2)) 
+                 | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                           >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                      & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                      ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)) 
+                                    | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                       & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru))))) 
+                             | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                      & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                     & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru) 
+                                            >> 1U)) 
+                                        << 1U)))) | 
+                           (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                  & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)))) 
+                          | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                   & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru) 
+                                          >> 2U)) << 2U)))) 
+                         & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.__pinNumber2__en0))
+                      : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en3))) 
+                | (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                     ? 1U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                                    ? 7U : 0U))) | 
+               (((1U & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))))
+                  ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)
+                  : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en5))) 
+              << 0xfU));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__out23 
+        = ((0xe3ffffU & vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__out23) 
+           | (((((((((IData)(this->__PVT__hitAfter) 
+                     & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                    & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                    ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)
+                    : 0U) & (IData)(this->newLRU__out__en2)) 
+                 | (((((~ ((IData)(this->__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                           >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                      & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                      ? ((((((1U & (((IData)(this->adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)) 
+                                    | ((IData)(this->adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                       & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru))))) 
+                             | (2U & ((IData)(this->adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                      & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)))) 
+                            | (2U & ((IData)(this->adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                     & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru) 
+                                            >> 1U)) 
+                                        << 1U)))) | 
+                           (4U & ((IData)(this->adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                  & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)))) 
+                          | (4U & ((IData)(this->adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                   & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru) 
+                                          >> 2U)) << 2U)))) 
+                         & (IData)(this->__pinNumber2__en0))
+                      : 0U) & (IData)(this->newLRU__out__en3))) 
+                | (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                     ? 1U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                                    ? 7U : 0U))) | 
+               (((1U & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))))
+                  ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)
+                  : 0U) & (IData)(this->newLRU__out__en5))) 
+              << 0x12U));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__out24 
+        = ((0x1fffffU & vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__out24) 
+           | (((((((((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.__PVT__hitAfter) 
+                     & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                    & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                    ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)
+                    : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__out__en2)) 
+                 | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                           >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                      & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                      ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)) 
+                                    | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                       & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru))))) 
+                             | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                      & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                     & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru) 
+                                            >> 1U)) 
+                                        << 1U)))) | 
+                           (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                  & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)))) 
+                          | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                   & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru) 
+                                          >> 2U)) << 2U)))) 
+                         & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.__pinNumber2__en0))
+                      : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__out__en3))) 
+                | (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                     ? 1U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                                    ? 7U : 0U))) | 
+               (((1U & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))))
+                  ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)
+                  : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__out__en5))) 
+              << 0x15U));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__3__KET____DOT__lru_mod__DOT__newLRUa__out17 
+        = ((0xfffff8U & vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__3__KET____DOT__lru_mod__DOT__newLRUa__out17) 
+           | ((((((((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.__PVT__hitAfter) 
+                    & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                   & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                   ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)
+                   : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en2)) 
+                | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                          >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                     & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                     ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                    & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)) 
+                                   | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                      & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru))))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)))) 
+                           | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                    & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru) 
+                                           >> 1U)) 
+                                       << 1U)))) | 
+                          (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                 & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)))) 
+                         | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                  & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru) 
+                                         >> 2U)) << 2U)))) 
+                        & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.__pinNumber2__en0))
+                     : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en3))) 
+               | (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                    ? 3U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                                   ? 7U : 0U))) | (
+                                                   ((1U 
+                                                     & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                                                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))))
+                                                     ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)
+                                                     : 0U) 
+                                                   & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en5))));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__3__KET____DOT__lru_mod__DOT__newLRUa__out18 
+        = ((0xffffc7U & vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__3__KET____DOT__lru_mod__DOT__newLRUa__out18) 
+           | (((((((((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.__PVT__hitAfter) 
+                     & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                    & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                    ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)
+                    : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en2)) 
+                 | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                           >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                      & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                      ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)) 
+                                    | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                       & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru))))) 
+                             | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                      & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                     & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru) 
+                                            >> 1U)) 
+                                        << 1U)))) | 
+                           (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                  & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)))) 
+                          | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                   & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru) 
+                                          >> 2U)) << 2U)))) 
+                         & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.__pinNumber2__en0))
+                      : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en3))) 
+                | (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                     ? 3U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                                    ? 7U : 0U))) | 
+               (((1U & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))))
+                  ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)
+                  : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en5))) 
+              << 3U));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__3__KET____DOT__lru_mod__DOT__newLRUa__out19 
+        = ((0xfffe3fU & vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__3__KET____DOT__lru_mod__DOT__newLRUa__out19) 
+           | (((((((((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.__PVT__hitAfter) 
+                     & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                    & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                    ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)
+                    : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en2)) 
+                 | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                           >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                      & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                      ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)) 
+                                    | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                       & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru))))) 
+                             | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                      & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                     & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru) 
+                                            >> 1U)) 
+                                        << 1U)))) | 
+                           (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                  & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)))) 
+                          | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                   & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru) 
+                                          >> 2U)) << 2U)))) 
+                         & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.__pinNumber2__en0))
+                      : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en3))) 
+                | (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                     ? 3U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                                    ? 7U : 0U))) | 
+               (((1U & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))))
+                  ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)
+                  : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en5))) 
+              << 6U));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__3__KET____DOT__lru_mod__DOT__newLRUa__out20 
+        = ((0xfff1ffU & vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__3__KET____DOT__lru_mod__DOT__newLRUa__out20) 
+           | (((((((((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.__PVT__hitAfter) 
+                     & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                    & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                    ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)
+                    : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en2)) 
+                 | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                           >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                      & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                      ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)) 
+                                    | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                       & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru))))) 
+                             | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                      & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                     & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru) 
+                                            >> 1U)) 
+                                        << 1U)))) | 
+                           (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                  & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)))) 
+                          | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                   & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru) 
+                                          >> 2U)) << 2U)))) 
+                         & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.__pinNumber2__en0))
+                      : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en3))) 
+                | (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                     ? 3U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                                    ? 7U : 0U))) | 
+               (((1U & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))))
+                  ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)
+                  : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en5))) 
+              << 9U));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__3__KET____DOT__lru_mod__DOT__newLRUa__out21 
+        = ((0xff8fffU & vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__3__KET____DOT__lru_mod__DOT__newLRUa__out21) 
+           | (((((((((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.__PVT__hitAfter) 
+                     & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                    & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                    ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)
+                    : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en2)) 
+                 | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                           >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                      & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                      ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)) 
+                                    | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                       & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru))))) 
+                             | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                      & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                     & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru) 
+                                            >> 1U)) 
+                                        << 1U)))) | 
+                           (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                  & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)))) 
+                          | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                   & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru) 
+                                          >> 2U)) << 2U)))) 
+                         & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.__pinNumber2__en0))
+                      : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en3))) 
+                | (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                     ? 3U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                                    ? 7U : 0U))) | 
+               (((1U & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))))
+                  ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)
+                  : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en5))) 
+              << 0xcU));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__3__KET____DOT__lru_mod__DOT__newLRUa__out22 
+        = ((0xfc7fffU & vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__3__KET____DOT__lru_mod__DOT__newLRUa__out22) 
+           | (((((((((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.__PVT__hitAfter) 
+                     & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                    & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                    ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)
+                    : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en2)) 
+                 | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                           >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                      & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                      ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)) 
+                                    | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                       & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru))))) 
+                             | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                      & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                     & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru) 
+                                            >> 1U)) 
+                                        << 1U)))) | 
+                           (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                  & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)))) 
+                          | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                   & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru) 
+                                          >> 2U)) << 2U)))) 
+                         & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.__pinNumber2__en0))
+                      : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en3))) 
+                | (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                     ? 3U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                                    ? 7U : 0U))) | 
+               (((1U & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))))
+                  ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)
+                  : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en5))) 
+              << 0xfU));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__6__KET____DOT__lru_mod__DOT__newLRUa__out21 
+        = ((0xff8fffU & vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__6__KET____DOT__lru_mod__DOT__newLRUa__out21) 
+           | (((((((((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.__PVT__hitAfter) 
+                     & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                    & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                    ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__6__KET____DOT__lru_mod__lru)
+                    : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en2)) 
+                 | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                           >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                      & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                      ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__6__KET____DOT__lru_mod__lru)) 
+                                    | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                       & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__6__KET____DOT__lru_mod__lru))))) 
+                             | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                      & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__6__KET____DOT__lru_mod__lru)))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                     & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__6__KET____DOT__lru_mod__lru) 
+                                            >> 1U)) 
+                                        << 1U)))) | 
+                           (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                  & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__6__KET____DOT__lru_mod__lru)))) 
+                          | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                   & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__6__KET____DOT__lru_mod__lru) 
+                                          >> 2U)) << 2U)))) 
+                         & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.__pinNumber2__en0))
+                      : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en3))) 
+                | (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                     ? 6U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                                    ? 7U : 0U))) | 
+               (((1U & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))))
+                  ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__6__KET____DOT__lru_mod__lru)
+                  : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en5))) 
+              << 0xcU));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__6__KET____DOT__lru_mod__DOT__newLRUa__out22 
+        = ((0xfc7fffU & vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__6__KET____DOT__lru_mod__DOT__newLRUa__out22) 
+           | (((((((((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.__PVT__hitAfter) 
+                     & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                    & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                    ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__6__KET____DOT__lru_mod__lru)
+                    : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en2)) 
+                 | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                           >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                      & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                      ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__6__KET____DOT__lru_mod__lru)) 
+                                    | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                       & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__6__KET____DOT__lru_mod__lru))))) 
+                             | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                      & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__6__KET____DOT__lru_mod__lru)))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                     & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__6__KET____DOT__lru_mod__lru) 
+                                            >> 1U)) 
+                                        << 1U)))) | 
+                           (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                  & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__6__KET____DOT__lru_mod__lru)))) 
+                          | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                   & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__6__KET____DOT__lru_mod__lru) 
+                                          >> 2U)) << 2U)))) 
+                         & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.__pinNumber2__en0))
+                      : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en3))) 
+                | (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                     ? 6U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                                    ? 7U : 0U))) | 
+               (((1U & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))))
+                  ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__6__KET____DOT__lru_mod__lru)
+                  : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en5))) 
+              << 0xfU));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__7__KET____DOT__lru_mod__DOT__newLRUa__out17 
+        = ((0xfffff8U & vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__7__KET____DOT__lru_mod__DOT__newLRUa__out17) 
+           | ((((((((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.__PVT__hitAfter) 
+                    & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                   & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                   ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)
+                   : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en2)) 
+                | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                          >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                     & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                     ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                    & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)) 
+                                   | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                      & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru))))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)))) 
+                           | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                    & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru) 
+                                           >> 1U)) 
+                                       << 1U)))) | 
+                          (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                 & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)))) 
+                         | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                  & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru) 
+                                         >> 2U)) << 2U)))) 
+                        & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.__pinNumber2__en0))
+                     : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en3))) 
+               | (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                    ? 7U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                                   ? 7U : 0U))) | (
+                                                   ((1U 
+                                                     & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                                                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))))
+                                                     ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)
+                                                     : 0U) 
+                                                   & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en5))));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__7__KET____DOT__lru_mod__DOT__newLRUa__out18 
+        = ((0xffffc7U & vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__7__KET____DOT__lru_mod__DOT__newLRUa__out18) 
+           | (((((((((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.__PVT__hitAfter) 
+                     & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                    & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                    ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)
+                    : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en2)) 
+                 | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                           >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                      & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                      ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)) 
+                                    | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                       & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru))))) 
+                             | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                      & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                     & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru) 
+                                            >> 1U)) 
+                                        << 1U)))) | 
+                           (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                  & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)))) 
+                          | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                   & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru) 
+                                          >> 2U)) << 2U)))) 
+                         & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.__pinNumber2__en0))
+                      : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en3))) 
+                | (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                     ? 7U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                                    ? 7U : 0U))) | 
+               (((1U & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))))
+                  ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)
+                  : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en5))) 
+              << 3U));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__7__KET____DOT__lru_mod__DOT__newLRUa__out19 
+        = ((0xfffe3fU & vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__7__KET____DOT__lru_mod__DOT__newLRUa__out19) 
+           | (((((((((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.__PVT__hitAfter) 
+                     & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                    & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                    ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)
+                    : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en2)) 
+                 | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                           >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                      & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                      ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)) 
+                                    | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                       & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru))))) 
+                             | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                      & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                     & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru) 
+                                            >> 1U)) 
+                                        << 1U)))) | 
+                           (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                  & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)))) 
+                          | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                   & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru) 
+                                          >> 2U)) << 2U)))) 
+                         & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.__pinNumber2__en0))
+                      : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en3))) 
+                | (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                     ? 7U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                                    ? 7U : 0U))) | 
+               (((1U & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))))
+                  ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)
+                  : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en5))) 
+              << 6U));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__7__KET____DOT__lru_mod__DOT__newLRUa__out20 
+        = ((0xfff1ffU & vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__7__KET____DOT__lru_mod__DOT__newLRUa__out20) 
+           | (((((((((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.__PVT__hitAfter) 
+                     & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                    & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                    ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)
+                    : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en2)) 
+                 | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                           >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                      & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                      ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)) 
+                                    | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                       & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru))))) 
+                             | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                      & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                     & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru) 
+                                            >> 1U)) 
+                                        << 1U)))) | 
+                           (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                  & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)))) 
+                          | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                   & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru) 
+                                          >> 2U)) << 2U)))) 
+                         & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.__pinNumber2__en0))
+                      : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en3))) 
+                | (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                     ? 7U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                                    ? 7U : 0U))) | 
+               (((1U & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))))
+                  ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)
+                  : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en5))) 
+              << 9U));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__7__KET____DOT__lru_mod__DOT__newLRUa__out23 
+        = ((0xe3ffffU & vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__7__KET____DOT__lru_mod__DOT__newLRUa__out23) 
+           | (((((((((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.__PVT__hitAfter) 
+                     & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                    & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                    ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)
+                    : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.newLRU__out__en2)) 
+                 | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                           >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                      & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                      ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)) 
+                                    | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                       & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru))))) 
+                             | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                      & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                     & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru) 
+                                            >> 1U)) 
+                                        << 1U)))) | 
+                           (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                  & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)))) 
+                          | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                   & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru) 
+                                          >> 2U)) << 2U)))) 
+                         & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.__pinNumber2__en0))
+                      : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.newLRU__out__en3))) 
+                | (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                     ? 7U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                                    ? 7U : 0U))) | 
+               (((1U & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))))
+                  ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)
+                  : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.newLRU__out__en5))) 
+              << 0x12U));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__7__KET____DOT__lru_mod__DOT__newLRUa__out24 
+        = ((0x1fffffU & vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__7__KET____DOT__lru_mod__DOT__newLRUa__out24) 
+           | (((((((((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.__PVT__hitAfter) 
+                     & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                    & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                    ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)
+                    : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__out__en2)) 
+                 | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                           >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))) 
+                      & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                      ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)) 
+                                    | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                       & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru))))) 
+                             | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                      & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                     & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru) 
+                                            >> 1U)) 
+                                        << 1U)))) | 
+                           (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                  & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)))) 
+                          | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                   & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru) 
+                                          >> 2U)) << 2U)))) 
+                         & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.__pinNumber2__en0))
+                      : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__out__en3))) 
+                | (((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                     ? 7U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)
+                                    ? 7U : 0U))) | 
+               (((1U & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init))))
+                  ? (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)
+                  : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__out__en5))) 
+              << 0x15U));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((0U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((1U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((2U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((3U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((0U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__6__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((1U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__6__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((2U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__6__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((3U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__6__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((0U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((1U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((2U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((3U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((4U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((5U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((0U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__4__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((1U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__4__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((2U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__4__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((3U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__4__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((4U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__4__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((5U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__4__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((0U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((1U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((2U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((3U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__3__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((0U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__2__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((1U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__2__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((2U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__2__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((3U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__2__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((0U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((1U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((2U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((3U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((4U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((5U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__0__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((0U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__0__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__0__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__0__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__0__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((1U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__0__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__0__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__0__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__0__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((2U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__0__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__0__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__0__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__0__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((3U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__0__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__0__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__0__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__0__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((4U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__0__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__0__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__0__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__0__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__en 
+        = ((((((((5U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__lru)) 
+                 & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                ? 7U : 0U) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__0__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en2)) 
+             | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__0__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en3)) 
+            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                ? 7U : 0U)) | (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__0__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en5));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__en 
+        = (0xffffffU & ((((((((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__en) 
+                              | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__en) 
+                                 << 3U)) | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__en) 
+                                            << 6U)) 
+                            | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__en) 
+                               << 9U)) | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__en) 
+                                          << 0xcU)) 
+                          | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__en) 
+                             << 0xfU)) | ((IData)(this->newLRU__en) 
+                                          << 0x12U)) 
+                        | ((IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__en) 
+                           << 0x15U)));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__out17 
+        = ((0xfffff8U & vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__out17) 
+           | ((((((((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.__PVT__hitAfter) 
+                    & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                   & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                   ? (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)
+                   : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en2)) 
+                | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                          >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                     & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                     ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                    & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)) 
+                                   | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                      & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru))))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)))) 
+                           | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                    & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru) 
+                                           >> 1U)) 
+                                       << 1U)))) | 
+                          (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                 & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)))) 
+                         | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                  & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru) 
+                                         >> 2U)) << 2U)))) 
+                        & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.__pinNumber2__en0))
+                     : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en3))) 
+               | (((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                    ? 1U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                                   ? 7U : 0U))) | (
+                                                   ((1U 
+                                                     & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                                                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))))
+                                                     ? (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)
+                                                     : 0U) 
+                                                   & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en5))));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__out18 
+        = ((0xffffc7U & vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__out18) 
+           | (((((((((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.__PVT__hitAfter) 
+                     & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                    & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                    ? (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)
+                    : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en2)) 
+                 | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                           >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                      & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                      ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)) 
+                                    | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                       & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru))))) 
+                             | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                      & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                     & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru) 
+                                            >> 1U)) 
+                                        << 1U)))) | 
+                           (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                  & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)))) 
+                          | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                   & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru) 
+                                          >> 2U)) << 2U)))) 
+                         & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.__pinNumber2__en0))
+                      : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en3))) 
+                | (((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                     ? 1U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                                    ? 7U : 0U))) | 
+               (((1U & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))))
+                  ? (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)
+                  : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en5))) 
+              << 3U));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__out19 
+        = ((0xfffe3fU & vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__out19) 
+           | (((((((((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.__PVT__hitAfter) 
+                     & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                    & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                    ? (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)
+                    : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en2)) 
+                 | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                           >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                      & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                      ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)) 
+                                    | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                       & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru))))) 
+                             | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                      & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                     & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru) 
+                                            >> 1U)) 
+                                        << 1U)))) | 
+                           (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                  & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)))) 
+                          | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                   & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru) 
+                                          >> 2U)) << 2U)))) 
+                         & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.__pinNumber2__en0))
+                      : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en3))) 
+                | (((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                     ? 1U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                                    ? 7U : 0U))) | 
+               (((1U & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))))
+                  ? (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)
+                  : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en5))) 
+              << 6U));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__out20 
+        = ((0xfff1ffU & vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__out20) 
+           | (((((((((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.__PVT__hitAfter) 
+                     & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                    & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                    ? (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)
+                    : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en2)) 
+                 | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                           >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                      & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                      ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)) 
+                                    | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                       & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru))))) 
+                             | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                      & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                     & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru) 
+                                            >> 1U)) 
+                                        << 1U)))) | 
+                           (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                  & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)))) 
+                          | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                   & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru) 
+                                          >> 2U)) << 2U)))) 
+                         & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.__pinNumber2__en0))
+                      : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en3))) 
+                | (((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                     ? 1U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                                    ? 7U : 0U))) | 
+               (((1U & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))))
+                  ? (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)
+                  : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en5))) 
+              << 9U));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__out21 
+        = ((0xff8fffU & vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__out21) 
+           | (((((((((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.__PVT__hitAfter) 
+                     & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                    & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                    ? (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)
+                    : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en2)) 
+                 | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                           >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                      & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                      ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)) 
+                                    | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                       & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru))))) 
+                             | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                      & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                     & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru) 
+                                            >> 1U)) 
+                                        << 1U)))) | 
+                           (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                  & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)))) 
+                          | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                   & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru) 
+                                          >> 2U)) << 2U)))) 
+                         & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.__pinNumber2__en0))
+                      : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en3))) 
+                | (((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                     ? 1U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                                    ? 7U : 0U))) | 
+               (((1U & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))))
+                  ? (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)
+                  : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en5))) 
+              << 0xcU));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__out22 
+        = ((0xfc7fffU & vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__out22) 
+           | (((((((((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.__PVT__hitAfter) 
+                     & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                    & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                    ? (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)
+                    : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en2)) 
+                 | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                           >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                      & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                      ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)) 
+                                    | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                       & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru))))) 
+                             | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                      & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                     & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru) 
+                                            >> 1U)) 
+                                        << 1U)))) | 
+                           (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                  & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)))) 
+                          | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                   & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru) 
+                                          >> 2U)) << 2U)))) 
+                         & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.__pinNumber2__en0))
+                      : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en3))) 
+                | (((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                     ? 1U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                                    ? 7U : 0U))) | 
+               (((1U & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))))
+                  ? (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)
+                  : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en5))) 
+              << 0xfU));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__out23 
+        = ((0xe3ffffU & vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__out23) 
+           | (((((((((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.__PVT__hitAfter) 
+                     & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                    & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                    ? (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)
+                    : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.newLRU__out__en2)) 
+                 | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                           >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                      & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                      ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)) 
+                                    | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                       & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru))))) 
+                             | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                      & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                     & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru) 
+                                            >> 1U)) 
+                                        << 1U)))) | 
+                           (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                  & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)))) 
+                          | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                   & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru) 
+                                          >> 2U)) << 2U)))) 
+                         & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.__pinNumber2__en0))
+                      : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.newLRU__out__en3))) 
+                | (((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                     ? 1U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                                    ? 7U : 0U))) | 
+               (((1U & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))))
+                  ? (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)
+                  : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.newLRU__out__en5))) 
+              << 0x12U));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__out24 
+        = ((0x1fffffU & vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__out24) 
+           | (((((((((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.__PVT__hitAfter) 
+                     & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                    & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                    ? (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)
+                    : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__out__en2)) 
+                 | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                           >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                      & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                      ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)) 
+                                    | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                       & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru))))) 
+                             | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                      & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                     & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru) 
+                                            >> 1U)) 
+                                        << 1U)))) | 
+                           (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                  & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)))) 
+                          | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                   & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru) 
+                                          >> 2U)) << 2U)))) 
+                         & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.__pinNumber2__en0))
+                      : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__out__en3))) 
+                | (((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                     ? 1U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                                    ? 7U : 0U))) | 
+               (((1U & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))))
+                  ? (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__1__KET____DOT__lru_mod__lru)
+                  : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__out__en5))) 
+              << 0x15U));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__4__KET____DOT__lru_mod__DOT__newLRUa__out17 
+        = ((0xfffff8U & vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__4__KET____DOT__lru_mod__DOT__newLRUa__out17) 
+           | ((((((((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.__PVT__hitAfter) 
+                    & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                   & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                   ? (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__4__KET____DOT__lru_mod__lru)
+                   : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en2)) 
+                | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                          >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                     & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                     ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                    & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__4__KET____DOT__lru_mod__lru)) 
+                                   | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                      & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__4__KET____DOT__lru_mod__lru))))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__4__KET____DOT__lru_mod__lru)))) 
+                           | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                    & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__4__KET____DOT__lru_mod__lru) 
+                                           >> 1U)) 
+                                       << 1U)))) | 
+                          (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                 & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__4__KET____DOT__lru_mod__lru)))) 
+                         | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                  & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__4__KET____DOT__lru_mod__lru) 
+                                         >> 2U)) << 2U)))) 
+                        & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.__pinNumber2__en0))
+                     : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en3))) 
+               | (((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                    ? 4U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                                   ? 7U : 0U))) | (
+                                                   ((1U 
+                                                     & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                                                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))))
+                                                     ? (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__4__KET____DOT__lru_mod__lru)
+                                                     : 0U) 
+                                                   & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en5))));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__4__KET____DOT__lru_mod__DOT__newLRUa__out18 
+        = ((0xffffc7U & vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__4__KET____DOT__lru_mod__DOT__newLRUa__out18) 
+           | (((((((((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.__PVT__hitAfter) 
+                     & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                    & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                    ? (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__4__KET____DOT__lru_mod__lru)
+                    : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en2)) 
+                 | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                           >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                      & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                      ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__4__KET____DOT__lru_mod__lru)) 
+                                    | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                       & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__4__KET____DOT__lru_mod__lru))))) 
+                             | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                      & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__4__KET____DOT__lru_mod__lru)))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                     & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__4__KET____DOT__lru_mod__lru) 
+                                            >> 1U)) 
+                                        << 1U)))) | 
+                           (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                  & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__4__KET____DOT__lru_mod__lru)))) 
+                          | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                   & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__4__KET____DOT__lru_mod__lru) 
+                                          >> 2U)) << 2U)))) 
+                         & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.__pinNumber2__en0))
+                      : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en3))) 
+                | (((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                     ? 4U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                                    ? 7U : 0U))) | 
+               (((1U & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))))
+                  ? (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__4__KET____DOT__lru_mod__lru)
+                  : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__4__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en5))) 
+              << 3U));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__5__KET____DOT__lru_mod__DOT__newLRUa__out19 
+        = ((0xfffe3fU & vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__5__KET____DOT__lru_mod__DOT__newLRUa__out19) 
+           | (((((((((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.__PVT__hitAfter) 
+                     & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                    & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                    ? (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru)
+                    : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en2)) 
+                 | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                           >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                      & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                      ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru)) 
+                                    | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                       & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru))))) 
+                             | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                      & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru)))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                     & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru) 
+                                            >> 1U)) 
+                                        << 1U)))) | 
+                           (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                  & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru)))) 
+                          | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                   & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru) 
+                                          >> 2U)) << 2U)))) 
+                         & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.__pinNumber2__en0))
+                      : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en3))) 
+                | (((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                     ? 5U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                                    ? 7U : 0U))) | 
+               (((1U & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))))
+                  ? (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru)
+                  : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__out__en5))) 
+              << 6U));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__5__KET____DOT__lru_mod__DOT__newLRUa__out20 
+        = ((0xfff1ffU & vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__5__KET____DOT__lru_mod__DOT__newLRUa__out20) 
+           | (((((((((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.__PVT__hitAfter) 
+                     & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                    & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                    ? (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru)
+                    : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en2)) 
+                 | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                           >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                      & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                      ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru)) 
+                                    | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                       & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru))))) 
+                             | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                      & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru)))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                     & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru) 
+                                            >> 1U)) 
+                                        << 1U)))) | 
+                           (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                  & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru)))) 
+                          | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                   & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru) 
+                                          >> 2U)) << 2U)))) 
+                         & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.__pinNumber2__en0))
+                      : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en3))) 
+                | (((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                     ? 5U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                                    ? 7U : 0U))) | 
+               (((1U & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))))
+                  ? (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru)
+                  : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__out__en5))) 
+              << 9U));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__5__KET____DOT__lru_mod__DOT__newLRUa__out21 
+        = ((0xff8fffU & vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__5__KET____DOT__lru_mod__DOT__newLRUa__out21) 
+           | (((((((((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.__PVT__hitAfter) 
+                     & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                    & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                    ? (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru)
+                    : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en2)) 
+                 | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                           >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                      & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                      ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru)) 
+                                    | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                       & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru))))) 
+                             | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                      & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru)))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                     & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru) 
+                                            >> 1U)) 
+                                        << 1U)))) | 
+                           (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                  & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru)))) 
+                          | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                   & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru) 
+                                          >> 2U)) << 2U)))) 
+                         & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.__pinNumber2__en0))
+                      : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en3))) 
+                | (((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                     ? 5U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                                    ? 7U : 0U))) | 
+               (((1U & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))))
+                  ? (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru)
+                  : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__out__en5))) 
+              << 0xcU));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__5__KET____DOT__lru_mod__DOT__newLRUa__out22 
+        = ((0xfc7fffU & vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__5__KET____DOT__lru_mod__DOT__newLRUa__out22) 
+           | (((((((((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.__PVT__hitAfter) 
+                     & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                    & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                    ? (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru)
+                    : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en2)) 
+                 | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                           >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                      & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                      ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru)) 
+                                    | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                       & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru))))) 
+                             | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                      & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru)))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                     & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru) 
+                                            >> 1U)) 
+                                        << 1U)))) | 
+                           (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                  & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru)))) 
+                          | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                   & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru) 
+                                          >> 2U)) << 2U)))) 
+                         & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.__pinNumber2__en0))
+                      : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en3))) 
+                | (((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                     ? 5U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                                    ? 7U : 0U))) | 
+               (((1U & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))))
+                  ? (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__5__KET____DOT__lru_mod__lru)
+                  : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__out__en5))) 
+              << 0xfU));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__6__KET____DOT__lru_mod__DOT__newLRUa__out23 
+        = ((0xe3ffffU & vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__6__KET____DOT__lru_mod__DOT__newLRUa__out23) 
+           | (((((((((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.__PVT__hitAfter) 
+                     & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                    & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                    ? (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__6__KET____DOT__lru_mod__lru)
+                    : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.newLRU__out__en2)) 
+                 | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                           >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                      & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                      ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__6__KET____DOT__lru_mod__lru)) 
+                                    | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                       & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__6__KET____DOT__lru_mod__lru))))) 
+                             | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                      & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__6__KET____DOT__lru_mod__lru)))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                     & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__6__KET____DOT__lru_mod__lru) 
+                                            >> 1U)) 
+                                        << 1U)))) | 
+                           (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                  & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__6__KET____DOT__lru_mod__lru)))) 
+                          | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                   & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__6__KET____DOT__lru_mod__lru) 
+                                          >> 2U)) << 2U)))) 
+                         & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.__pinNumber2__en0))
+                      : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.newLRU__out__en3))) 
+                | (((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                     ? 6U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                                    ? 7U : 0U))) | 
+               (((1U & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))))
+                  ? (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__6__KET____DOT__lru_mod__lru)
+                  : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.newLRU__out__en5))) 
+              << 0x12U));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__6__KET____DOT__lru_mod__DOT__newLRUa__out24 
+        = ((0x1fffffU & vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__6__KET____DOT__lru_mod__DOT__newLRUa__out24) 
+           | (((((((((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.__PVT__hitAfter) 
+                     & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                    & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                    ? (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__6__KET____DOT__lru_mod__lru)
+                    : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__out__en2)) 
+                 | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                           >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                      & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                      ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__6__KET____DOT__lru_mod__lru)) 
+                                    | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                       & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__6__KET____DOT__lru_mod__lru))))) 
+                             | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                      & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__6__KET____DOT__lru_mod__lru)))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                     & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__6__KET____DOT__lru_mod__lru) 
+                                            >> 1U)) 
+                                        << 1U)))) | 
+                           (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                  & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__6__KET____DOT__lru_mod__lru)))) 
+                          | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                   & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__6__KET____DOT__lru_mod__lru) 
+                                          >> 2U)) << 2U)))) 
+                         & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.__pinNumber2__en0))
+                      : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__out__en3))) 
+                | (((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                     ? 6U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                                    ? 7U : 0U))) | 
+               (((1U & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))))
+                  ? (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__6__KET____DOT__lru_mod__lru)
+                  : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__out__en5))) 
+              << 0x15U));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__7__KET____DOT__lru_mod__DOT__newLRUa__out17 
+        = ((0xfffff8U & vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__7__KET____DOT__lru_mod__DOT__newLRUa__out17) 
+           | ((((((((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.__PVT__hitAfter) 
+                    & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                   & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                   ? (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)
+                   : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en2)) 
+                | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                          >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                     & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                     ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                    & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)) 
+                                   | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                      & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru))))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)))) 
+                           | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                    & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru) 
+                                           >> 1U)) 
+                                       << 1U)))) | 
+                          (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                 & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)))) 
+                         | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                  & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru) 
+                                         >> 2U)) << 2U)))) 
+                        & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.__pinNumber2__en0))
+                     : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en3))) 
+               | (((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                    ? 7U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                                   ? 7U : 0U))) | (
+                                                   ((1U 
+                                                     & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                                                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))))
+                                                     ? (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)
+                                                     : 0U) 
+                                                   & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__out__en5))));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__7__KET____DOT__lru_mod__DOT__newLRUa__out18 
+        = ((0xffffc7U & vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__7__KET____DOT__lru_mod__DOT__newLRUa__out18) 
+           | (((((((((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.__PVT__hitAfter) 
+                     & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                    & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                    ? (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)
+                    : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en2)) 
+                 | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                           >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                      & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                      ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)) 
+                                    | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                       & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru))))) 
+                             | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                      & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                     & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru) 
+                                            >> 1U)) 
+                                        << 1U)))) | 
+                           (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                  & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)))) 
+                          | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                   & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru) 
+                                          >> 2U)) << 2U)))) 
+                         & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.__pinNumber2__en0))
+                      : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en3))) 
+                | (((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                     ? 7U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                                    ? 7U : 0U))) | 
+               (((1U & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))))
+                  ? (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)
+                  : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__out__en5))) 
+              << 3U));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__7__KET____DOT__lru_mod__DOT__newLRUa__out23 
+        = ((0xe3ffffU & vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__7__KET____DOT__lru_mod__DOT__newLRUa__out23) 
+           | (((((((((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.__PVT__hitAfter) 
+                     & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                    & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                    ? (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)
+                    : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.newLRU__out__en2)) 
+                 | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                           >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                      & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                      ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)) 
+                                    | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                       & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru))))) 
+                             | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                      & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                     & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru) 
+                                            >> 1U)) 
+                                        << 1U)))) | 
+                           (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                  & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)))) 
+                          | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                   & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru) 
+                                          >> 2U)) << 2U)))) 
+                         & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.__pinNumber2__en0))
+                      : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.newLRU__out__en3))) 
+                | (((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                     ? 7U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                                    ? 7U : 0U))) | 
+               (((1U & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))))
+                  ? (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)
+                  : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.newLRU__out__en5))) 
+              << 0x12U));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__7__KET____DOT__lru_mod__DOT__newLRUa__out24 
+        = ((0x1fffffU & vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__7__KET____DOT__lru_mod__DOT__newLRUa__out24) 
+           | (((((((((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.__PVT__hitAfter) 
+                     & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                    & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                    ? (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)
+                    : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__out__en2)) 
+                 | (((((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.__PVT__adders_gen__DOT__cmp_mod__DOT__C) 
+                           >> 2U)) & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))) 
+                      & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en))
+                      ? ((((((1U & (((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out0) 
+                                     & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)) 
+                                    | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out1) 
+                                       & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru))))) 
+                             | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out2) 
+                                      & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)))) 
+                            | (2U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out3) 
+                                     & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru) 
+                                            >> 1U)) 
+                                        << 1U)))) | 
+                           (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out4) 
+                                  & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)))) 
+                          | (4U & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.adders_gen__DOT__inc_mod__DOT__out__out__out5) 
+                                   & ((~ ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru) 
+                                          >> 2U)) << 2U)))) 
+                         & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.__pinNumber2__en0))
+                      : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__out__en3))) 
+                | (((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                     ? 7U : 0U) & ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)
+                                    ? 7U : 0U))) | 
+               (((1U & ((~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__en)) 
+                        & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init))))
+                  ? (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__7__KET____DOT__lru_mod__lru)
+                  : 0U) & (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__out__en5))) 
+              << 0x15U));
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRU__out__en8 
+        = (((0U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)))
+            ? (7U & vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__en)
+            : 0U);
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRU__out__en9 
+        = (((1U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 3U)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRU__out__en10 
+        = (((2U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 6U)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRU__out__en11 
+        = (((3U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 9U)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRU__out__en12 
+        = (((4U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 0xcU)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRU__out__en13 
+        = (((5U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 0xfU)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRU__out__en14 
+        = (((6U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 0x12U)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRU__out__en15 
+        = (((7U == (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__Wagu2_mod__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 0x15U)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__0__KET____DOT__lru_mod__DOT__newLRUa__en 
+        = (0xffffffU & ((((((((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__0__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__en) 
+                              | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__0__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__en) 
+                                 << 3U)) | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__0__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__en) 
+                                            << 6U)) 
+                            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__0__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__en) 
+                               << 9U)) | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__0__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__en) 
+                                          << 0xcU)) 
+                          | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__0__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__en) 
+                             << 0xfU)) | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__0__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.newLRU__en) 
+                                          << 0x12U)) 
+                        | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__0__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__en) 
+                           << 0x15U)));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__en 
+        = (0xffffffU & ((((((((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__en) 
+                              | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__en) 
+                                 << 3U)) | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__en) 
+                                            << 6U)) 
+                            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__en) 
+                               << 9U)) | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__en) 
+                                          << 0xcU)) 
+                          | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__en) 
+                             << 0xfU)) | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.newLRU__en) 
+                                          << 0x12U)) 
+                        | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__en) 
+                           << 0x15U)));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__2__KET____DOT__lru_mod__DOT__newLRUa__en 
+        = (0xffffffU & ((((((((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__en) 
+                              | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__en) 
+                                 << 3U)) | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__en) 
+                                            << 6U)) 
+                            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__en) 
+                               << 9U)) | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__en) 
+                                          << 0xcU)) 
+                          | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__en) 
+                             << 0xfU)) | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.newLRU__en) 
+                                          << 0x12U)) 
+                        | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__2__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__en) 
+                           << 0x15U)));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__3__KET____DOT__lru_mod__DOT__newLRUa__en 
+        = (0xffffffU & ((((((((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__en) 
+                              | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__en) 
+                                 << 3U)) | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__en) 
+                                            << 6U)) 
+                            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__en) 
+                               << 9U)) | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__en) 
+                                          << 0xcU)) 
+                          | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__en) 
+                             << 0xfU)) | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.newLRU__en) 
+                                          << 0x12U)) 
+                        | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__3__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__en) 
+                           << 0x15U)));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__5__KET____DOT__lru_mod__DOT__newLRUa__en 
+        = (0xffffffU & ((((((((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__en) 
+                              | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__en) 
+                                 << 3U)) | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__en) 
+                                            << 6U)) 
+                            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__en) 
+                               << 9U)) | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__en) 
+                                          << 0xcU)) 
+                          | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__en) 
+                             << 0xfU)) | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.newLRU__en) 
+                                          << 0x12U)) 
+                        | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__5__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__en) 
+                           << 0x15U)));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__6__KET____DOT__lru_mod__DOT__newLRUa__en 
+        = (0xffffffU & ((((((((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__en) 
+                              | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__en) 
+                                 << 3U)) | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__en) 
+                                            << 6U)) 
+                            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__en) 
+                               << 9U)) | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__en) 
+                                          << 0xcU)) 
+                          | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__en) 
+                             << 0xfU)) | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.newLRU__en) 
+                                          << 0x12U)) 
+                        | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__6__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__en) 
+                           << 0x15U)));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__7__KET____DOT__lru_mod__DOT__newLRUa__en 
+        = (0xffffffU & ((((((((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod.newLRU__en) 
+                              | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__1__KET____DOT__lru_mod.newLRU__en) 
+                                 << 3U)) | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__2__KET____DOT__lru_mod.newLRU__en) 
+                                            << 6U)) 
+                            | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__3__KET____DOT__lru_mod.newLRU__en) 
+                               << 9U)) | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__4__KET____DOT__lru_mod.newLRU__en) 
+                                          << 0xcU)) 
+                          | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__5__KET____DOT__lru_mod.newLRU__en) 
+                             << 0xfU)) | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod.newLRU__en) 
+                                          << 0x12U)) 
+                        | ((IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__7__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod.newLRU__en) 
+                           << 0x15U)));
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__0__KET____DOT__lru_mod__DOT__newLRU__out__en8 
+        = (((0U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__0__KET____DOT__lru_mod__DOT__newLRUa__en)
+            : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__0__KET____DOT__lru_mod__DOT__newLRU__out__en9 
+        = (((1U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__0__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 3U)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__0__KET____DOT__lru_mod__DOT__newLRU__out__en10 
+        = (((2U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__0__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 6U)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__0__KET____DOT__lru_mod__DOT__newLRU__out__en11 
+        = (((3U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__0__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 9U)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRU__out__en8 
+        = (((0U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__en)
+            : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRU__out__en9 
+        = (((1U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 3U)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRU__out__en14 
+        = (((6U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 0x12U)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRU__out__en15 
+        = (((7U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__1__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 0x15U)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__2__KET____DOT__lru_mod__DOT__newLRU__out__en8 
+        = (((0U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__2__KET____DOT__lru_mod__DOT__newLRUa__en)
+            : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__2__KET____DOT__lru_mod__DOT__newLRU__out__en9 
+        = (((1U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__2__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 3U)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__2__KET____DOT__lru_mod__DOT__newLRU__out__en10 
+        = (((2U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__2__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 6U)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__2__KET____DOT__lru_mod__DOT__newLRU__out__en11 
+        = (((3U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__2__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 9U)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__2__KET____DOT__lru_mod__DOT__newLRU__out__en12 
+        = (((4U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__2__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 0xcU)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__2__KET____DOT__lru_mod__DOT__newLRU__out__en13 
+        = (((5U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__2__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 0xfU)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__2__KET____DOT__lru_mod__DOT__newLRU__out__en14 
+        = (((6U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__2__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 0x12U)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__2__KET____DOT__lru_mod__DOT__newLRU__out__en15 
+        = (((7U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__2__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 0x15U)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__3__KET____DOT__lru_mod__DOT__newLRU__out__en8 
+        = (((0U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__3__KET____DOT__lru_mod__DOT__newLRUa__en)
+            : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__3__KET____DOT__lru_mod__DOT__newLRU__out__en9 
+        = (((1U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__3__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 3U)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__3__KET____DOT__lru_mod__DOT__newLRU__out__en10 
+        = (((2U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__3__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 6U)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__3__KET____DOT__lru_mod__DOT__newLRU__out__en11 
+        = (((3U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__3__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 9U)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__3__KET____DOT__lru_mod__DOT__newLRU__out__en12 
+        = (((4U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__3__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 0xcU)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__3__KET____DOT__lru_mod__DOT__newLRU__out__en13 
+        = (((5U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__3__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 0xfU)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__3__KET____DOT__lru_mod__DOT__newLRU__out__en14 
+        = (((6U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__3__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 0x12U)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__3__KET____DOT__lru_mod__DOT__newLRU__out__en15 
+        = (((7U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__3__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 0x15U)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__5__KET____DOT__lru_mod__DOT__newLRU__out__en8 
+        = (((0U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__5__KET____DOT__lru_mod__DOT__newLRUa__en)
+            : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__5__KET____DOT__lru_mod__DOT__newLRU__out__en9 
+        = (((1U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__5__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 3U)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__5__KET____DOT__lru_mod__DOT__newLRU__out__en10 
+        = (((2U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__5__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 6U)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__5__KET____DOT__lru_mod__DOT__newLRU__out__en11 
+        = (((3U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__5__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 9U)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__5__KET____DOT__lru_mod__DOT__newLRU__out__en12 
+        = (((4U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__5__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 0xcU)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__5__KET____DOT__lru_mod__DOT__newLRU__out__en13 
+        = (((5U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__5__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 0xfU)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__5__KET____DOT__lru_mod__DOT__newLRU__out__en14 
+        = (((6U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__5__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 0x12U)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__5__KET____DOT__lru_mod__DOT__newLRU__out__en15 
+        = (((7U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__5__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 0x15U)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__6__KET____DOT__lru_mod__DOT__newLRU__out__en8 
+        = (((0U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__6__KET____DOT__lru_mod__DOT__newLRUa__en)
+            : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__6__KET____DOT__lru_mod__DOT__newLRU__out__en9 
+        = (((1U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__6__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 3U)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__6__KET____DOT__lru_mod__DOT__newLRU__out__en10 
+        = (((2U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__6__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 6U)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__6__KET____DOT__lru_mod__DOT__newLRU__out__en11 
+        = (((3U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__6__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 9U)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__6__KET____DOT__lru_mod__DOT__newLRU__out__en12 
+        = (((4U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__6__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 0xcU)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__6__KET____DOT__lru_mod__DOT__newLRU__out__en13 
+        = (((5U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__6__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 0xfU)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__6__KET____DOT__lru_mod__DOT__newLRU__out__en14 
+        = (((6U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__6__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 0x12U)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__6__KET____DOT__lru_mod__DOT__newLRU__out__en15 
+        = (((7U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__6__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 0x15U)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__7__KET____DOT__lru_mod__DOT__newLRU__out__en8 
+        = (((0U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__7__KET____DOT__lru_mod__DOT__newLRUa__en)
+            : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__7__KET____DOT__lru_mod__DOT__newLRU__out__en9 
+        = (((1U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__7__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 3U)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__7__KET____DOT__lru_mod__DOT__newLRU__out__en10 
+        = (((2U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__7__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 6U)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__7__KET____DOT__lru_mod__DOT__newLRU__out__en11 
+        = (((3U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__7__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 9U)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__7__KET____DOT__lru_mod__DOT__newLRU__out__en12 
+        = (((4U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__7__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 0xcU)) : 0U);
+    vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__7__KET____DOT__lru_mod__DOT__newLRU__out__en13 
+        = (((5U == (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__Vcellinp__ways_gen__BRA__0__KET____DOT__lru_mod__hitLRU)) 
+            & (~ (IData)(vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.__PVT__init)))
+            ? (7U & (vlSymsp->TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod.ways_gen__BRA__7__KET____DOT__lru_mod__DOT__newLRUa__en 
+                     >> 0xfU)) : 0U);
 }
 
 void Vagu_block_lru_single0__I1::_settle__TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod__290(Vagu_block__Syms* __restrict vlSymsp) {

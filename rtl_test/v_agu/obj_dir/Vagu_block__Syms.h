@@ -4,8 +4,8 @@
 // Internal details; most calling programs do not need this header,
 // unless using verilator public meta comments.
 
-#ifndef _Vagu_block__Syms_H_
-#define _Vagu_block__Syms_H_
+#ifndef _VAGU_BLOCK__SYMS_H_
+#define _VAGU_BLOCK__SYMS_H_  // guard
 
 #include "verilated_heavy.h"
 
@@ -441,6 +441,6 @@ class Vagu_block__Syms : public VerilatedSyms {
     // METHODS
     inline const char* name() { return __Vm_namep; }
     
-} VL_ATTR_ALIGNED(64);
+} VL_ATTR_ALIGNED(VL_CACHE_LINE_BYTES);
 
 #endif  // guard

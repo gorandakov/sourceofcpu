@@ -2,11 +2,13 @@
 // DESCRIPTION: Verilator output: Design internal header
 // See Vagu_block.h for the primary calling header
 
-#ifndef _Vagu_block_lru_single0__I1_H_
-#define _Vagu_block_lru_single0__I1_H_
+#ifndef _VAGU_BLOCK_LRU_SINGLE0__I1_H_
+#define _VAGU_BLOCK_LRU_SINGLE0__I1_H_  // guard
 
 #include "verilated_heavy.h"
 #include "verilated_threads.h"
+
+//==========
 
 class Vagu_block__Syms;
 
@@ -16,7 +18,7 @@ VL_MODULE(Vagu_block_lru_single0__I1) {
   public:
     
     // PORTS
-    // Begin mtask footprint all: 7 9 14 15 17 27 29 30 31 32 33 34 35 37 
+    // Begin mtask footprint all: 11 25 27 31 32 33 35 36 37 
     VL_OUT8(newLRU__en,2,0);
     // Begin mtask footprint all: 
     VL_IN8(__PVT__lru,2,0);
@@ -27,43 +29,41 @@ VL_MODULE(Vagu_block_lru_single0__I1) {
     VL_OUT8(newLRU__out,2,0);
     
     // LOCAL SIGNALS
-    // Begin mtask footprint all: 1 7 14 15 16 18 19 25 27 
-    VL_SIG8(__PVT__adders_gen__DOT__inc_mod__DOT__nP1,2,0);
-    VL_SIG8(__PVT__adders_gen__DOT__inc_mod__DOT__P2,2,0);
-    // Begin mtask footprint all: 1 7 14 15 16 18 19 27 
-    VL_SIG8(__PVT__adders_gen__DOT__cmp_mod__DOT__P1,2,0);
-    VL_SIG8(__PVT__adders_gen__DOT__cmp_mod__DOT__G1,2,0);
-    // Begin mtask footprint all: 7 14 15 16 27 
-    VL_SIG8(__PVT__adders_gen__DOT__cmp_mod__DOT__nP2,2,0);
-    VL_SIG8(__PVT__adders_gen__DOT__cmp_mod__DOT__nG2,2,0);
-    // Begin mtask footprint all: 7 14 15 16 17 27 30 33 
-    VL_SIG8(__PVT__hitAfter,0,0);
-    // Begin mtask footprint all: 7 14 15 16 17 27 29 30 33 34 
-    VL_SIG8(__PVT__adders_gen__DOT__cmp_mod__DOT__C,2,0);
+    // Begin mtask footprint all: 1 16 17 18 23 24 26 
+    CData/*2:0*/ __PVT__adders_gen__DOT__cmp_mod__DOT__P1;
+    CData/*2:0*/ __PVT__adders_gen__DOT__cmp_mod__DOT__G1;
+    CData/*2:0*/ __PVT__adders_gen__DOT__cmp_mod__DOT__nP2;
+    CData/*2:0*/ __PVT__adders_gen__DOT__cmp_mod__DOT__nG2;
+    // Begin mtask footprint all: 1 11 16 17 18 24 26 
+    CData/*2:0*/ __PVT__adders_gen__DOT__inc_mod__DOT__nP1;
+    CData/*2:0*/ __PVT__adders_gen__DOT__inc_mod__DOT__P2;
+    // Begin mtask footprint all: 1 11 16 17 18 23 24 25 26 27 32 33 35 
+    CData/*2:0*/ __PVT__adders_gen__DOT__cmp_mod__DOT__C;
+    // Begin mtask footprint all: 11 16 17 18 23 24 25 26 27 32 33 35 
+    CData/*0:0*/ __PVT__hitAfter;
     
     // LOCAL VARIABLES
-    // Begin mtask footprint all: 7 14 15 16 17 18 19 26 27 29 30 33 34 
-    VL_SIG8(newLRU__out__en5,2,0);
-    // Begin mtask footprint all: 7 14 15 16 17 27 29 30 33 34 
-    VL_SIG8(__pinNumber2__en0,2,0);
-    VL_SIG8(newLRU__out__en2,2,0);
-    VL_SIG8(newLRU__out__en3,2,0);
-    // Begin mtask footprint all: 7 14 15 16 17 25 27 30 33 
-    VL_SIG8(adders_gen__DOT__inc_mod__DOT__out__out__out2,2,0);
-    VL_SIG8(adders_gen__DOT__inc_mod__DOT__out__out__out3,2,0);
-    VL_SIG8(adders_gen__DOT__inc_mod__DOT__out__out__out4,2,0);
-    VL_SIG8(adders_gen__DOT__inc_mod__DOT__out__out__out5,2,0);
-    // Begin mtask footprint all: 7 14 15 16 17 26 27 30 33 
-    VL_SIG8(adders_gen__DOT__inc_mod__DOT__out__out__out1,2,0);
-    // Begin mtask footprint all: 7 17 30 33 
-    VL_SIG8(adders_gen__DOT__inc_mod__DOT__out__out__out0,2,0);
+    // Begin mtask footprint all: 11 27 32 33 35 
+    CData/*2:0*/ adders_gen__DOT__inc_mod__DOT__out__out__out0;
+    // Begin mtask footprint all: 11 18 23 26 27 32 33 35 
+    CData/*2:0*/ adders_gen__DOT__inc_mod__DOT__out__out__out1;
+    // Begin mtask footprint all: 11 18 25 26 27 32 33 35 
+    CData/*2:0*/ newLRU__out__en3;
+    // Begin mtask footprint all: 1 11 16 17 18 23 24 25 26 27 32 33 35 
+    CData/*2:0*/ newLRU__out__en5;
+    // Begin mtask footprint all: 11 16 17 18 23 24 25 26 27 32 33 35 
+    CData/*2:0*/ __pinNumber2__en0;
+    CData/*2:0*/ newLRU__out__en2;
+    // Begin mtask footprint all: 11 16 17 18 24 26 27 32 33 35 
+    CData/*2:0*/ adders_gen__DOT__inc_mod__DOT__out__out__out2;
+    CData/*2:0*/ adders_gen__DOT__inc_mod__DOT__out__out__out3;
+    CData/*2:0*/ adders_gen__DOT__inc_mod__DOT__out__out__out4;
+    CData/*2:0*/ adders_gen__DOT__inc_mod__DOT__out__out__out5;
     
     // INTERNAL VARIABLES
   private:
     Vagu_block__Syms* __VlSymsp;  // Symbol table
   public:
-    
-    // PARAMETERS
     
     // CONSTRUCTORS
   private:
@@ -72,13 +72,12 @@ VL_MODULE(Vagu_block_lru_single0__I1) {
     Vagu_block_lru_single0__I1(const char* name = "TOP");
     ~Vagu_block_lru_single0__I1();
     
-    // API METHODS
-    
     // INTERNAL METHODS
     void __Vconfigure(Vagu_block__Syms* symsp, bool first);
   private:
     void _ctor_var_reset() VL_ATTR_COLD;
   public:
+    void _sequent__TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__6__KET____DOT__lru_mod__769(Vagu_block__Syms* __restrict vlSymsp);
     void _settle__TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod__123(Vagu_block__Syms* __restrict vlSymsp) VL_ATTR_COLD;
     void _settle__TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod__171(Vagu_block__Syms* __restrict vlSymsp) VL_ATTR_COLD;
     void _settle__TOP__agu_block__DOT__Wagu2_mod__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__0__KET____DOT__lru_mod__195(Vagu_block__Syms* __restrict vlSymsp) VL_ATTR_COLD;
@@ -314,6 +313,9 @@ VL_MODULE(Vagu_block_lru_single0__I1) {
     void _settle__TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod__318(Vagu_block__Syms* __restrict vlSymsp) VL_ATTR_COLD;
     void _settle__TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod__672(Vagu_block__Syms* __restrict vlSymsp) VL_ATTR_COLD;
     void _settle__TOP__agu_block__DOT__rec_agu_mod__DOT__tlb_mod__ways_gen__BRA__1__KET____DOT__lru_mod__DOT__lru_gen__BRA__7__KET____DOT__lru_mod__768(Vagu_block__Syms* __restrict vlSymsp) VL_ATTR_COLD;
-} VL_ATTR_ALIGNED(128);
+} VL_ATTR_ALIGNED(VL_CACHE_LINE_BYTES);
 
-#endif // guard
+//----------
+
+
+#endif  // guard

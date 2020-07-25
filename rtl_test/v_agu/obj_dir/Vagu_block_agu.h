@@ -2,14 +2,17 @@
 // DESCRIPTION: Verilator output: Design internal header
 // See Vagu_block.h for the primary calling header
 
-#ifndef _Vagu_block_agu_H_
-#define _Vagu_block_agu_H_
+#ifndef _VAGU_BLOCK_AGU_H_
+#define _VAGU_BLOCK_AGU_H_  // guard
 
 #include "verilated_heavy.h"
 #include "verilated_threads.h"
 
+//==========
+
 class Vagu_block__Syms;
 class Vagu_block_dtlb;
+
 
 //----------
 
@@ -19,9 +22,9 @@ VL_MODULE(Vagu_block_agu) {
     Vagu_block_dtlb* __PVT__tlb_mod;
     
     // PORTS
-    // Begin mtask footprint all: 1 24 
+    // Begin mtask footprint all: 3 24 
     VL_OUT8(conflict,0,0);
-    // Begin mtask footprint all: 9 24 
+    // Begin mtask footprint all: 28 
     VL_OUT8(faultCode,7,0);
     // Begin mtask footprint all: 
     VL_IN64(cmplxAddr,63,0);
@@ -89,168 +92,165 @@ VL_MODULE(Vagu_block_agu) {
     VL_OUT8(mOp_split__out,0,0);
     VL_OUT8(mOp_split__en,0,0);
     VL_IN8(clk,0,0);
-    // Begin mtask footprint all: 9 36 
+    // Begin mtask footprint all: 37 
     VL_OUT(mOp_banks,31,0);
-    // Begin mtask footprint all: 29 36 
+    // Begin mtask footprint all: 10 37 
     VL_OUT(mOp_rsBanks,31,0);
     
     // LOCAL SIGNALS
-    // Begin mtask footprint all: 1 2 3 5 9 14 18 19 
-    VL_SIG64(__PVT__addrTlb,51,0);
-    // Begin mtask footprint all: 1 3 5 18 
-    VL_SIG(__PVT__sproc,23,0);
-    // Begin mtask footprint all: 1 3 5 
-    VL_SIG(__PVT__proc,23,0);
-    // Begin mtask footprint all: 1 3 
-    VL_SIG(__PVT__pproc,23,0);
-    VL_SIG(__PVT__vproc,23,0);
-    // Begin mtask footprint all: 1 
-    VL_SIG8(__PVT__mOp_type_reg,1,0);
-    // Begin mtask footprint all: 1 24 
-    VL_SIG8(__PVT__bus_hold_reg,0,0);
-    // Begin mtask footprint all: 1 7 24 
-    VL_SIG8(__PVT__except_reg,0,0);
-    // Begin mtask footprint all: 1 9 24 
-    VL_SIG8(__PVT__bus_hold_reg2,0,0);
-    VL_SIG8(__PVT__lsflag_reg,0,0);
-    VL_SIG8(__PVT__fault_cann_reg,0,0);
-    // Begin mtask footprint all: 9 16 24 
-    VL_SIG16(__PVT__LSQ_no_reg,8,0);
-    VL_SIG16(__PVT__II_no_reg,9,0);
-    VL_SIG8(__PVT__WQ_no_reg,7,0);
-    // Begin mtask footprint all: 16 24 38 
-    VL_SIG16(__PVT__regno_reg,8,0);
-    // Begin mtask footprint all: 3 4 9 24 
-    VL_SIG16(__PVT__op_reg,12,0);
-    // Begin mtask footprint all: 1 2 9 24 
-    VL_SIG8(__PVT__read_clkEn_reg2,0,0);
-    // Begin mtask footprint all: 2 9 24 
-    VL_SIG8(__PVT__pageFault_t_reg,1,0);
-    // Begin mtask footprint all: 1 2 3 7 9 24 
-    VL_SIG8(__PVT__cout_secq,0,0);
-    // Begin mtask footprint all: 1 2 
-    VL_SIG(__PVT__bit_confl_reg,31,0);
-    // Begin mtask footprint all: 2 36 
-    VL_SIG(__PVT__bit_confl,31,0);
-    // Begin mtask footprint all: 6 29 36 
-    VL_SIG(__PVT__banks0,31,0);
-    // Begin mtask footprint all: 1 2 3 19 29 36 
-    VL_SIG8(__PVT__read_clkEn_reg,0,0);
-    // Begin mtask footprint all: 1 2 29 
-    VL_SIG8(__PVT__rcn_mask,1,0);
-    // Begin mtask footprint all: 2 8 29 38 
-    VL_SIG16(__PVT__addrNext,13,0);
-    // Begin mtask footprint all: 8 26 
-    VL_SIG16(__PVT__nextCAddr_mod__DOT__P1,13,0);
-    VL_SIG16(__PVT__nextCAddr_mod__DOT__G1,13,0);
-    VL_SIG16(__PVT__nextCAddr_mod__DOT__nP2,13,0);
-    VL_SIG16(__PVT__nextCAddr_mod__DOT__nG2,13,0);
-    VL_SIG16(__PVT__nextCAddr_mod__DOT__P3,13,0);
-    VL_SIG16(__PVT__nextCAddr_mod__DOT__G3,13,0);
-    VL_SIG16(__PVT__nextCAddr_mod__DOT__nG4,13,0);
-    VL_SIG16(__PVT__nextCAddr_mod__DOT__nC1,13,0);
-    // Begin mtask footprint all: 7 8 
-    VL_SIG16(__PVT__rng_mod__DOT__sh_mod__DOT__bits_med,15,0);
-    VL_SIG8(__PVT__rng_mod__DOT__bits,7,0);
-    VL_SIG8(__PVT__rng_mod__DOT__cmpLow_mod__DOT__nP0,7,0);
-    VL_SIG8(__PVT__rng_mod__DOT__cmpLow_mod__DOT__nG0,7,0);
-    VL_SIG8(__PVT__rng_mod__DOT__cmpLow_mod__DOT__P1,7,0);
-    VL_SIG8(__PVT__rng_mod__DOT__cmpLow_mod__DOT__G1,7,0);
-    VL_SIG8(__PVT__rng_mod__DOT__cmpLow_mod__DOT__nP2,7,0);
-    VL_SIG8(__PVT__rng_mod__DOT__cmpLow_mod__DOT__nG2,7,0);
-    VL_SIG8(__PVT__rng_mod__DOT__cmpLow_mod__DOT__P3,7,0);
-    VL_SIG8(__PVT__rng_mod__DOT__cmpLow_mod__DOT__G3,7,0);
-    VL_SIG8(__PVT__rng_mod__DOT__cmpHio_mod__DOT__nP0,7,0);
-    VL_SIG8(__PVT__rng_mod__DOT__cmpHio_mod__DOT__nG0,7,0);
-    VL_SIG8(__PVT__rng_mod__DOT__cmpHio_mod__DOT__P1,7,0);
-    VL_SIG8(__PVT__rng_mod__DOT__cmpHio_mod__DOT__G1,7,0);
-    VL_SIG8(__PVT__rng_mod__DOT__cmpHio_mod__DOT__nP2,7,0);
-    VL_SIG8(__PVT__rng_mod__DOT__cmpHio_mod__DOT__nG2,7,0);
-    VL_SIG8(__PVT__rng_mod__DOT__cmpHio_mod__DOT__P3,7,0);
-    VL_SIG8(__PVT__rng_mod__DOT__cmpHio_mod__DOT__G3,7,0);
-    // Begin mtask footprint all: 7 8 9 
-    VL_SIG8(__PVT__rng_mod__DOT__cmpLow_mod__DOT__nC,7,0);
-    VL_SIG8(__PVT__rng_mod__DOT__cmpHio_mod__DOT__nC,7,0);
-    // Begin mtask footprint all: 2 9 29 
-    VL_SIG8(__PVT__fault_tlb,1,0);
-    // Begin mtask footprint all: 2 8 9 16 29 
-    VL_SIG64(__PVT__mflags,63,0);
-    // Begin mtask footprint all: 2 8 16 
-    VL_SIG8(__PVT__split,0,0);
-    // Begin mtask footprint all: 3 6 8 16 
-    VL_SIG8(__PVT__opsize,2,0);
+    // Begin mtask footprint all: 9 10 14 37 
+    IData/*31:0*/ __PVT__banks0;
+    // Begin mtask footprint all: 3 10 37 
+    IData/*31:0*/ __PVT__bit_confl;
+    // Begin mtask footprint all: 1 3 4 10 37 
+    CData/*0:0*/ __PVT__read_clkEn_reg;
+    // Begin mtask footprint all: 1 3 10 
+    CData/*1:0*/ __PVT__rcn_mask;
+    // Begin mtask footprint all: 3 4 7 
+    CData/*0:0*/ __PVT__cout_secq;
+    // Begin mtask footprint all: 7 
+    SData/*15:0*/ __PVT__rng_mod__DOT__sh_mod__DOT__bits_med;
+    CData/*7:0*/ __PVT__rng_mod__DOT__bits;
+    CData/*7:0*/ __PVT__rng_mod__DOT__cmpLow_mod__DOT__nP0;
+    CData/*7:0*/ __PVT__rng_mod__DOT__cmpLow_mod__DOT__nG0;
+    CData/*7:0*/ __PVT__rng_mod__DOT__cmpLow_mod__DOT__P1;
+    CData/*7:0*/ __PVT__rng_mod__DOT__cmpLow_mod__DOT__G1;
+    CData/*7:0*/ __PVT__rng_mod__DOT__cmpLow_mod__DOT__nP2;
+    CData/*7:0*/ __PVT__rng_mod__DOT__cmpLow_mod__DOT__nG2;
+    CData/*7:0*/ __PVT__rng_mod__DOT__cmpLow_mod__DOT__P3;
+    CData/*7:0*/ __PVT__rng_mod__DOT__cmpLow_mod__DOT__G3;
+    CData/*7:0*/ __PVT__rng_mod__DOT__cmpLow_mod__DOT__nC;
+    CData/*7:0*/ __PVT__rng_mod__DOT__cmpHio_mod__DOT__nP0;
+    CData/*7:0*/ __PVT__rng_mod__DOT__cmpHio_mod__DOT__nG0;
+    CData/*7:0*/ __PVT__rng_mod__DOT__cmpHio_mod__DOT__P1;
+    CData/*7:0*/ __PVT__rng_mod__DOT__cmpHio_mod__DOT__G1;
+    CData/*7:0*/ __PVT__rng_mod__DOT__cmpHio_mod__DOT__nP2;
+    CData/*7:0*/ __PVT__rng_mod__DOT__cmpHio_mod__DOT__nG2;
+    CData/*7:0*/ __PVT__rng_mod__DOT__cmpHio_mod__DOT__P3;
+    CData/*7:0*/ __PVT__rng_mod__DOT__cmpHio_mod__DOT__G3;
+    CData/*7:0*/ __PVT__rng_mod__DOT__cmpHio_mod__DOT__nC;
+    // Begin mtask footprint all: 1 7 
+    CData/*0:0*/ __PVT__except_reg;
+    // Begin mtask footprint all: 1 4 24 28 
+    QData/*51:0*/ __PVT__addrTlb;
+    // Begin mtask footprint all: 1 2 4 
+    IData/*23:0*/ __PVT__pproc;
+    IData/*23:0*/ __PVT__vproc;
+    // Begin mtask footprint all: 1 4 
+    IData/*23:0*/ __PVT__sproc;
+    // Begin mtask footprint all: 4 
+    IData/*23:0*/ __PVT__proc;
+    // Begin mtask footprint all: 3 
+    IData/*31:0*/ __PVT__bit_confl_reg;
+    CData/*1:0*/ __PVT__mOp_type_reg;
+    // Begin mtask footprint all: 3 24 
+    CData/*0:0*/ __PVT__bus_hold_reg;
+    // Begin mtask footprint all: 3 28 
+    CData/*0:0*/ __PVT__read_clkEn_reg2;
+    CData/*0:0*/ __PVT__bus_hold_reg2;
+    CData/*0:0*/ __PVT__fault_cann_reg;
+    // Begin mtask footprint all: 3 11 28 
+    CData/*1:0*/ __PVT__fault_tlb;
+    // Begin mtask footprint all: 3 11 14 28 
+    SData/*13:0*/ __PVT__addrNext;
+    // Begin mtask footprint all: 3 14 15 28 
+    CData/*1:0*/ __PVT__pageFault_t_reg;
+    // Begin mtask footprint all: 2 3 11 14 28 
+    QData/*63:0*/ __PVT__mflags;
+    // Begin mtask footprint all: 2 3 14 
+    CData/*0:0*/ __PVT__split;
+    // Begin mtask footprint all: 14 
+    SData/*13:0*/ __PVT__nextCAddr_mod__DOT__P1;
+    SData/*13:0*/ __PVT__nextCAddr_mod__DOT__G1;
+    SData/*13:0*/ __PVT__nextCAddr_mod__DOT__nP2;
+    SData/*13:0*/ __PVT__nextCAddr_mod__DOT__nG2;
+    SData/*13:0*/ __PVT__nextCAddr_mod__DOT__P3;
+    SData/*13:0*/ __PVT__nextCAddr_mod__DOT__G3;
+    SData/*13:0*/ __PVT__nextCAddr_mod__DOT__nG4;
+    SData/*13:0*/ __PVT__nextCAddr_mod__DOT__nC1;
+    // Begin mtask footprint all: 2 28 
+    SData/*8:0*/ __PVT__regno_reg;
+    SData/*8:0*/ __PVT__LSQ_no_reg;
+    SData/*9:0*/ __PVT__II_no_reg;
+    CData/*7:0*/ __PVT__WQ_no_reg;
+    CData/*0:0*/ __PVT__lsflag_reg;
+    // Begin mtask footprint all: 2 4 5 28 
+    SData/*12:0*/ __PVT__op_reg;
+    // Begin mtask footprint all: 2 4 9 14 28 
+    CData/*2:0*/ __PVT__opsize;
     
     // LOCAL VARIABLES
-    // Begin mtask footprint all: 8 26 29 
-    VL_SIG16(addrNext__out23,13,0);
-    // Begin mtask footprint all: 8 26 
-    VL_SIG16(nextCAddr_mod__DOT__out__out__out0,13,0);
-    VL_SIG16(nextCAddr_mod__DOT__out__out__out1,13,0);
-    VL_SIG16(nextCAddr_mod__DOT__out__out__out2,13,0);
-    VL_SIG16(nextCAddr_mod__DOT__out__out__out3,13,0);
-    VL_SIG16(nextCAddr_mod__DOT__out__out__out4,13,0);
-    VL_SIG16(nextCAddr_mod__DOT__out__out__out5,13,0);
-    VL_SIG16(nextCAddr_mod__DOT__out__out__out6,13,0);
-    VL_SIG16(nextCAddr_mod__DOT__out__out__out7,13,0);
-    VL_SIG16(nextCAddr_mod__DOT__out__out__out8,13,0);
-    VL_SIG16(nextCAddr_mod__DOT__out__out__out9,13,0);
-    VL_SIG16(nextCAddr_mod__DOT__out__out__out10,13,0);
-    VL_SIG16(nextCAddr_mod__DOT__out__out__out11,13,0);
-    VL_SIG16(nextCAddr_mod__DOT__out__out__out12,13,0);
-    VL_SIG16(nextCAddr_mod__DOT__out__out__out13,13,0);
-    VL_SIG16(nextCAddr_mod__DOT__out__out__out14,13,0);
-    VL_SIG16(nextCAddr_mod__DOT__out__out__out15,13,0);
-    VL_SIG16(nextCAddr_mod__DOT__out__out__out16,13,0);
-    VL_SIG16(nextCAddr_mod__DOT__out__out__out17,13,0);
-    VL_SIG16(nextCAddr_mod__DOT__out__out__out18,13,0);
-    VL_SIG16(nextCAddr_mod__DOT__out__out__out19,13,0);
-    VL_SIG16(nextCAddr_mod__DOT__out__out__out20,13,0);
-    VL_SIG16(nextCAddr_mod__DOT__out__out__out21,13,0);
-    VL_SIG16(nextCAddr_mod__DOT__out__out__out22,13,0);
-    VL_SIG16(nextCAddr_mod__DOT__out__out__out23,13,0);
-    VL_SIG16(nextCAddr_mod__DOT__out__out__out24,13,0);
-    VL_SIG16(nextCAddr_mod__DOT__out__out__out25,13,0);
-    VL_SIG16(nextCAddr_mod__DOT__out__out__out26,13,0);
-    VL_SIG16(nextCAddr_mod__DOT__out__out__out27,13,0);
-    // Begin mtask footprint all: 7 8 
-    VL_SIG16(rng_mod__DOT__sh_mod__DOT__bits_med__en,15,0);
-    VL_SIG8(rng_mod__DOT__sh_mod__DOT__bits_out__out__en0,7,0);
-    VL_SIG8(rng_mod__DOT__sh_mod__DOT__bits_out__out__en1,7,0);
-    VL_SIG8(rng_mod__DOT__sh_mod__DOT__bits_out__out__en2,7,0);
-    VL_SIG8(rng_mod__DOT__sh_mod__DOT__bits_out__out__en3,7,0);
-    VL_SIG8(rng_mod__DOT__sh_mod__DOT__bits_out__out__en4,7,0);
-    VL_SIG8(rng_mod__DOT__sh_mod__DOT__bits_out__out__en5,7,0);
-    VL_SIG8(rng_mod__DOT__sh_mod__DOT__bits_out__out__en6,7,0);
-    VL_SIG8(rng_mod__DOT__sh_mod__DOT__bits_out__out__en7,7,0);
-    // Begin mtask footprint all: 8 16 
-    VL_SIG8(mOp_split__out__en15,0,0);
-    // Begin mtask footprint all: 8 16 38 
-    VL_SIG64(mOp_addrEven__out__en3,35,0);
-    VL_SIG64(mOp_addrOdd__out__en8,35,0);
-    // Begin mtask footprint all: 8 16 29 
-    VL_SIG16(__pinNumber3__en0,13,0);
-    // Begin mtask footprint all: 8 29 38 
-    VL_SIG64(mOp_addrEven__out__out3,35,0);
-    VL_SIG64(mOp_addrEven__out__en5,35,0);
-    VL_SIG64(mOp_addrEven__out__en6,35,0);
-    VL_SIG64(mOp_addrOdd__out__out8,35,0);
-    VL_SIG64(mOp_addrOdd__out__en9,35,0);
-    VL_SIG64(mOp_addrOdd__out__en10,35,0);
-    // Begin mtask footprint all: 29 38 
-    VL_SIG64(mOp_addrEven__out__out5,35,0);
-    VL_SIG64(mOp_addrEven__out__out6,35,0);
-    VL_SIG64(mOp_addrOdd__out__out9,35,0);
-    VL_SIG64(mOp_addrOdd__out__out10,35,0);
-    // Begin mtask footprint all: 24 38 
-    VL_SIG64(mOp_addrEven__out__out4,35,0);
-    VL_SIG64(mOp_addrOdd__out__out7,35,0);
+    // Begin mtask footprint all: 2 28 
+    CData/*0:0*/ mOp_split__out__en16;
+    // Begin mtask footprint all: 11 28 
+    QData/*35:0*/ mOp_addrEven__out__out6;
+    QData/*35:0*/ mOp_addrEven__out__out7;
+    // Begin mtask footprint all: 11 14 28 
+    QData/*35:0*/ mOp_addrEven__out__out4;
+    QData/*35:0*/ mOp_addrEven__out__en6;
+    QData/*35:0*/ mOp_addrEven__out__en7;
+    // Begin mtask footprint all: 11 14 28 29 
+    QData/*35:0*/ mOp_addrOdd__out__out9;
+    QData/*35:0*/ mOp_addrOdd__out__en10;
+    QData/*35:0*/ mOp_addrOdd__out__en11;
+    // Begin mtask footprint all: 11 28 29 
+    QData/*35:0*/ mOp_addrOdd__out__out10;
+    QData/*35:0*/ mOp_addrOdd__out__out11;
+    // Begin mtask footprint all: 14 28 29 
+    QData/*35:0*/ mOp_addrOdd__out__en9;
+    // Begin mtask footprint all: 14 15 28 29 
+    QData/*35:0*/ mOp_addrOdd__out__out8;
+    // Begin mtask footprint all: 14 15 28 
+    QData/*35:0*/ mOp_addrEven__out__out5;
+    // Begin mtask footprint all: 14 28 
+    QData/*35:0*/ mOp_addrEven__out__en4;
+    // Begin mtask footprint all: 11 14 
+    SData/*13:0*/ __pinNumber3__en0;
+    SData/*13:0*/ addrNext__out24;
+    // Begin mtask footprint all: 14 
+    SData/*13:0*/ nextCAddr_mod__DOT__out__out__out0;
+    SData/*13:0*/ nextCAddr_mod__DOT__out__out__out1;
+    SData/*13:0*/ nextCAddr_mod__DOT__out__out__out2;
+    SData/*13:0*/ nextCAddr_mod__DOT__out__out__out3;
+    SData/*13:0*/ nextCAddr_mod__DOT__out__out__out4;
+    SData/*13:0*/ nextCAddr_mod__DOT__out__out__out5;
+    SData/*13:0*/ nextCAddr_mod__DOT__out__out__out6;
+    SData/*13:0*/ nextCAddr_mod__DOT__out__out__out7;
+    SData/*13:0*/ nextCAddr_mod__DOT__out__out__out8;
+    SData/*13:0*/ nextCAddr_mod__DOT__out__out__out9;
+    SData/*13:0*/ nextCAddr_mod__DOT__out__out__out10;
+    SData/*13:0*/ nextCAddr_mod__DOT__out__out__out11;
+    SData/*13:0*/ nextCAddr_mod__DOT__out__out__out12;
+    SData/*13:0*/ nextCAddr_mod__DOT__out__out__out13;
+    SData/*13:0*/ nextCAddr_mod__DOT__out__out__out14;
+    SData/*13:0*/ nextCAddr_mod__DOT__out__out__out15;
+    SData/*13:0*/ nextCAddr_mod__DOT__out__out__out16;
+    SData/*13:0*/ nextCAddr_mod__DOT__out__out__out17;
+    SData/*13:0*/ nextCAddr_mod__DOT__out__out__out18;
+    SData/*13:0*/ nextCAddr_mod__DOT__out__out__out19;
+    SData/*13:0*/ nextCAddr_mod__DOT__out__out__out20;
+    SData/*13:0*/ nextCAddr_mod__DOT__out__out__out21;
+    SData/*13:0*/ nextCAddr_mod__DOT__out__out__out22;
+    SData/*13:0*/ nextCAddr_mod__DOT__out__out__out23;
+    SData/*13:0*/ nextCAddr_mod__DOT__out__out__out24;
+    SData/*13:0*/ nextCAddr_mod__DOT__out__out__out25;
+    SData/*13:0*/ nextCAddr_mod__DOT__out__out__out26;
+    SData/*13:0*/ nextCAddr_mod__DOT__out__out__out27;
+    // Begin mtask footprint all: 7 
+    SData/*15:0*/ rng_mod__DOT__sh_mod__DOT__bits_med__en;
+    CData/*7:0*/ rng_mod__DOT__sh_mod__DOT__bits_out__out__en0;
+    CData/*7:0*/ rng_mod__DOT__sh_mod__DOT__bits_out__out__en1;
+    CData/*7:0*/ rng_mod__DOT__sh_mod__DOT__bits_out__out__en2;
+    CData/*7:0*/ rng_mod__DOT__sh_mod__DOT__bits_out__out__en3;
+    CData/*7:0*/ rng_mod__DOT__sh_mod__DOT__bits_out__out__en4;
+    CData/*7:0*/ rng_mod__DOT__sh_mod__DOT__bits_out__out__en5;
+    CData/*7:0*/ rng_mod__DOT__sh_mod__DOT__bits_out__out__en6;
+    CData/*7:0*/ rng_mod__DOT__sh_mod__DOT__bits_out__out__en7;
     
     // INTERNAL VARIABLES
   private:
     Vagu_block__Syms* __VlSymsp;  // Symbol table
   public:
-    
-    // PARAMETERS
     
     // CONSTRUCTORS
   private:
@@ -259,16 +259,11 @@ VL_MODULE(Vagu_block_agu) {
     Vagu_block_agu(const char* name = "TOP");
     ~Vagu_block_agu();
     
-    // API METHODS
-    
     // INTERNAL METHODS
     void __Vconfigure(Vagu_block__Syms* symsp, bool first);
-    void _combo__TOP__agu_block__DOT__agu0__91(Vagu_block__Syms* __restrict vlSymsp);
   private:
     void _ctor_var_reset() VL_ATTR_COLD;
   public:
-    void _sequent__TOP__agu_block__DOT__agu0__89(Vagu_block__Syms* __restrict vlSymsp);
-    void _sequent__TOP__agu_block__DOT__agu0__90(Vagu_block__Syms* __restrict vlSymsp);
     void _settle__TOP__agu_block__DOT__agu0__1(Vagu_block__Syms* __restrict vlSymsp) VL_ATTR_COLD;
     void _settle__TOP__agu_block__DOT__agu0__11(Vagu_block__Syms* __restrict vlSymsp) VL_ATTR_COLD;
     void _settle__TOP__agu_block__DOT__agu0__13(Vagu_block__Syms* __restrict vlSymsp) VL_ATTR_COLD;
@@ -310,7 +305,7 @@ VL_MODULE(Vagu_block_agu) {
     void _settle__TOP__agu_block__DOT__agu0__79(Vagu_block__Syms* __restrict vlSymsp) VL_ATTR_COLD;
     void _settle__TOP__agu_block__DOT__agu0__81(Vagu_block__Syms* __restrict vlSymsp) VL_ATTR_COLD;
     void _settle__TOP__agu_block__DOT__agu0__83(Vagu_block__Syms* __restrict vlSymsp) VL_ATTR_COLD;
-    void _settle__TOP__agu_block__DOT__agu0__85(Vagu_block__Syms* __restrict vlSymsp) VL_ATTR_COLD;
+    void _settle__TOP__agu_block__DOT__agu0__85(Vagu_block__Syms* __restrict vlSymsp);
     void _settle__TOP__agu_block__DOT__agu0__87(Vagu_block__Syms* __restrict vlSymsp) VL_ATTR_COLD;
     void _settle__TOP__agu_block__DOT__agu0__9(Vagu_block__Syms* __restrict vlSymsp) VL_ATTR_COLD;
     void _settle__TOP__agu_block__DOT__agu2__10(Vagu_block__Syms* __restrict vlSymsp) VL_ATTR_COLD;
@@ -335,6 +330,9 @@ VL_MODULE(Vagu_block_agu) {
     void _settle__TOP__agu_block__DOT__agu2__82(Vagu_block__Syms* __restrict vlSymsp) VL_ATTR_COLD;
     void _settle__TOP__agu_block__DOT__agu2__84(Vagu_block__Syms* __restrict vlSymsp) VL_ATTR_COLD;
     void _settle__TOP__agu_block__DOT__agu2__86(Vagu_block__Syms* __restrict vlSymsp) VL_ATTR_COLD;
-} VL_ATTR_ALIGNED(128);
+} VL_ATTR_ALIGNED(VL_CACHE_LINE_BYTES);
 
-#endif // guard
+//----------
+
+
+#endif  // guard
