@@ -11,7 +11,7 @@
 #define set64i(a,b) a[0]=b;a[1]=b>>32;a[2]=0;
 #define elem(A) top->mem_II_bits_##A
 
-#define def_seed 0xbaba1a9a6868
+unsigned long def_seed;
 
 struct lsent {
     unsigned short op;
@@ -1640,7 +1640,40 @@ int main(int argc, char *argv[]) {
     static unsigned short rng_perm[]={perm_io,perm_normal,perm_glob,perm_sys};
     unsigned long bndl=0;
     bool err,retired;
+    int pid;
 
+    if (argc==1) {
+        FILE *f=fopen("~/lsq_req_seed","r");
+	if (f==NULL) f=fopen2("/dev/random","r");
+	if (f==NULL) exit(2);
+	fread((void *) &def_seed,8,1,f);
+	fclose(f);
+	goto _begin;
+    } else {
+        if (!strcmp(argv[1],"-multi")) exit(2);
+        FILE *f=fopen("~/dev/random","r");
+	if (f==NULL) exit(2);
+        FILE *f2=fopen("~/lsq_req_seed","w");
+	if (f2==NULL) exit(2);
+	fread((void *) &def_seed,8,1,f);
+	fwrite((void *) &def_seed,8,1,f);
+	while (pid=fork()) {
+	    int status;
+	    if (pid<0) exit(4);
+	    wait(&status);
+	    if (!WIFEXITED(status)) exit(3);
+	    if (WEXITSTATUS(status)==0) {
+	        fread((void *) &def_seed,8,1,f);
+	        fwrite((void *) &def_seed,8,1,f);
+	    } else {
+	        exit(WEXITSTATUS(status));
+	    }
+	}
+	execl(argv[0],argv[0],(char *) NULL);
+	exit(5);
+    }
+
+_begin:
     std::mt19937 rndgen(def_seed); 
     std::uniform_int_distribution<unsigned> dist(0,1000);
 
@@ -1673,7 +1706,6 @@ int main(int argc, char *argv[]) {
         top->eval();
         top->clk=1;
         top->eval();
-        __sync_synchronize();
 
         if (!initcount) {
 	   err=false;
