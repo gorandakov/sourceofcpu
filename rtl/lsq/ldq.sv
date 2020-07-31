@@ -50,8 +50,8 @@ module ldq_buf(
   except,
   except_thread,
   aStall,
-  newAddrE0,newAddrO0,newBanks0,newBlow0,newII0,newIsOH0,newIsEH0,newIsOL0,newIsEL0,newEn0,newThr0,
-  newAddrE1,newAddrO1,newBanks1,newBlow1,newII1,newIsOH1,newIsEH1,newIsOL1,newIsEL1,newEn1,newThr1,
+  newAddrE0,newAddrO0,newBanks0,newBlow0,newII0,newIsOH0,newIsEH0,newIsOL0,newIsEL0,newEn0,newThr0,newChk0,
+  newAddrE1,newAddrO1,newBanks1,newBlow1,newII1,newIsOH1,newIsEH1,newIsOL1,newIsEL1,newEn1,newThr1,newChk1,
   chkAddrE0,chkAddrO0,chkBanks0,chkBlow0, chkIsOH0,chkIsEH0,chkIsOL0,chkIsEL0,chkEn0,chkMask0,
   chkAddrE1,chkAddrO1,chkBanks1,chkBlow1, chkIsOH1,chkIsEH1,chkIsOL1,chkIsEL1,chkEn1,chkMask1,
   chkAddrE2,chkAddrO2,chkBanks2,chkBlow2, chkIsOH2,chkIsEH2,chkIsOL2,chkIsEL2,chkEn2,chkMask2,
@@ -80,6 +80,7 @@ module ldq_buf(
   input newIsOH0,newIsEH0,newIsOL0,newIsEL0;
   input newEn0;
   input newThr0;
+  input newChk0;
   input [PADDR_WIDTH-9:0] newAddrE1;
   input [PADDR_WIDTH-9:0] newAddrO1;
   input [31:0] newBanks1;
@@ -88,6 +89,7 @@ module ldq_buf(
   input newIsOH1,newIsEH1,newIsOL1,newIsEL1;
   input newEn1;
   input newThr1;
+  input newChk1;
   input [PADDR_WIDTH-9:0] chkAddrE0;
   input [PADDR_WIDTH-9:0] chkAddrO0;
   input [31:0] chkBanks0;
@@ -238,7 +240,7 @@ module ldq_buf(
           isEL<=newIsEL0;
          // sFetch<=newSFetch0;
           thread<=newThr0;
-          confl<=1'b0;
+          confl<=newChk0;
           confl_smp<=1'b0;
           bank_low<=newBlow0;
       end else if (newEn1) begin
@@ -253,7 +255,7 @@ module ldq_buf(
           isEL<=newIsEL1;
          // sFetch<=newSFetch1;
           thread<=newThr1;
-          confl<=1'b0;
+          confl<=newChk1;
           confl_smp<=1'b0;
           bank_low<=newBlow1;
       end else begin
@@ -552,8 +554,108 @@ module ldq_array(
   wire [BUF_COUNT-1:0] freeConflSmp0_buf;
   wire [BUF_COUNT-1:0] freeConflSmp1_buf;
 
+  wire [3:0] chk0BankL;
+  wire [3:0] chk0BankH;
+  wire [3:0] chk0MatchE;
+  wire [3:0] chk0MatchO;
+
+  wire chkMatch0;
+ 
+  wire [3:0] chk1BankL;
+  wire [3:0] chk1BankH;
+  wire [3:0] chk1MatchE;
+  wire [3:0] chk1MatchO;
+
+  wire chkMatch1;
+
+  wire [3:0]   chkIsOH={chkIsOH3,chkIsOH2,chkIsOH1,chkIsOH0};
+  wire [3:0]   chkIsOL={chkIsOL3,chkIsOL2,chkIsOL1,chkIsOL0};
+  wire [3:0]   chkIsEH={chkIsEH3,chkIsEH2,chkIsEH1,chkIsEH0};
+  wire [3:0]   chkIsEL={chkIsEL3,chkIsEL2,chkIsEL1,chkIsEL0};
+  
+  wire [3:0] chk1Match;
+  wire [3:0] chk0Match;
+  
+  wire [3:0] chkBlow[3:0];
+
+  assign chk0BankL[0]= (newBanks0[15:0]&chkBanks0[15:0])!=0;
+  assign chk0BankH[0]= (newBanks0[31:16]&chkBanks0[31:16])!=0;
+  assign chk0MatchE[0]=chkAddrE0==newAddrE0;   
+  assign chk0MatchO[0]=chkAddrO0==newAddrO0;   
+
+  assign chk0BankL[1]= (newBanks0[15:0]&chkBanks1[15:0])!=0;
+  assign chk0BankH[1]=(newBanks0[31:16]&chkBanks1[31:16])!= 0;
+  assign chk0MatchE[1]=chkAddrE1==newAddrE0;   
+  assign chk0MatchO[1]=chkAddrO1==newAddrO0;   
+
+  assign chk0BankL[2]=(newBanks0[15:0]&chkBanks2[15:0])!=0;
+  assign chk0BankH[2]=(newBanks0[31:16]&chkBanks2[31:16])!=0;
+  assign chk0MatchE[2]=chkAddrE2==newAddrE0;   
+  assign chk0MatchO[2]=chkAddrO2==newAddrO0;   
+
+  assign chk0BankL[3]=|newBanks0[15:0];
+  assign chk0BankH[3]=|newBanks0[31:16];
+  assign chk0MatchE[3]=chkAddrE3==newAddrE0;   
+  assign chk0MatchO[3]=chkAddrO3==newAddrO0;  
+
+  assign chkBlow[0]=chkBlow0; 
+  assign chkBlow[1]=chkBlow1; 
+  assign chkBlow[2]=chkBlow2; 
+  assign chkBlow[3]=4'hf; 
+  
+  assign chkMatch0=
+    chk0Match[0]&chkEn0 ||
+    chk0Match[1]&chkEn1 ||
+    chk0Match[2]&chkEn2 ||
+    chk0Match[3]&chkEn3;
+
+  assign chk1BankL[0]= (newBanks1[15:0]&chkBanks0[15:0])!=0;
+  assign chk1BankH[0]= (newBanks1[31:16]&chkBanks0[31:16])!=0;
+  assign chk1MatchE[0]=chkAddrE0==newAddrE1;   
+  assign chk1MatchO[0]=chkAddrO0==newAddrO1;   
+
+  assign chk1BankL[1]= (newBanks1[15:0]&chkBanks1[15:0])!=0;
+  assign chk1BankH[1]=(newBanks1[31:16]&chkBanks1[31:16])!= 0;
+  assign chk1MatchE[1]=chkAddrE1==newAddrE1;   
+  assign chk1MatchO[1]=chkAddrO1==newAddrO1;   
+
+  assign chk1BankL[2]=(newBanks1[15:0]&chkBanks2[15:0])!=0;
+  assign chk1BankH[2]=(newBanks1[31:16]&chkBanks2[31:16])!=0;
+  assign chk1MatchE[2]=chkAddrE2==newAddrE1;   
+  assign chk1MatchO[2]=chkAddrO2==newAddrO1;   
+
+  assign chk1BankL[3]=|newBanks1[15:0];
+  assign chk1BankH[3]=|newBanks1[31:16];
+  assign chk1MatchE[3]=chkAddrE3==newAddrE1;   
+  assign chk1MatchO[3]=chkAddrO3==newAddrO1;  
+
+  assign chkMatch1=
+    chk1Match[0]&chkEn0 ||
+    chk1Match[1]&chkEn1 ||
+    chk1Match[2]&chkEn2 ||
+    chk1Match[3]&chkEn3;
+
 
   generate
+      genvar k;
+      for(k=0;k<4;k=k+1) begin : chk_gen
+          ldq_chk_confl chk0_mod(
+          newIsOH0,newIsEH0,newIsOL0,newIsEL0,
+          chkIsOH[k],chkIsEH[k],chkIsOL[k],chkIsEL[k],
+          chk0MatchE[k],chk0MatchO[k],
+          chk0BankL[k],chk0BankH[k],
+          newBlow0,chkBlow[k],
+          chk0Match[k]
+          );
+          ldq_chk_confl chk1_mod(
+          newIsOH1,newIsEH1,newIsOL1,newIsEL1,
+          chkIsOH[k],chkIsEH[k],chkIsOL[k],chkIsEL[k],
+          chk1MatchE[k],chk1MatchO[k],
+          chk1BankL[k],chk1BankH[k],
+          newBlow1,chkBlow[k],
+          chk1Match[k]
+          );
+      end
       genvar p;
       for(p=0;p<BUF_COUNT;p=p+1) begin : buf_gen
           ldq_buf buf_mod(
@@ -561,8 +663,8 @@ module ldq_array(
           rst,
           except,
           except_thread,aStall,
-          newAddrE0,newAddrO0,newBanks0,newBlow0,newII0,newIsOH0,newIsEH0,newIsOL0,newIsEL0,newEn0_buf[p],newThr0,
-          newAddrE1,newAddrO1,newBanks1,newBlow1,newII1,newIsOH1,newIsEH1,newIsOL1,newIsEL1,newEn1_buf[p],newThr1,
+          newAddrE0,newAddrO0,newBanks0,newBlow0,newII0,newIsOH0,newIsEH0,newIsOL0,newIsEL0,newEn0_buf[p],newThr0,chkMatch0,
+          newAddrE1,newAddrO1,newBanks1,newBlow1,newII1,newIsOH1,newIsEH1,newIsOL1,newIsEL1,newEn1_buf[p],newThr1,chkMatch1,
           chkAddrE0,chkAddrO0,chkBanks0,chkBlow0, chkIsOH0,chkIsEH0,chkIsOL0,chkIsEL0,chkEn0,chkMask0,
           chkAddrE1,chkAddrO1,chkBanks1,chkBlow1, chkIsOH1,chkIsEH1,chkIsOL1,chkIsEL1,chkEn1,chkMask1,
           chkAddrE2,chkAddrO2,chkBanks2,chkBlow2, chkIsOH2,chkIsEH2,chkIsOL2,chkIsEL2,chkEn2,chkMask2,

@@ -805,6 +805,7 @@ module lsq_req(
   
   wire [5:0] readB_flip;
   wire [5:0] readB_enItem;
+  wire [5:0] readB_ldconfl2;
   wire readB_rdy;
   reg readA_rdy_reg;
   
@@ -896,7 +897,7 @@ module lsq_req(
     read2B_enOut,
     read1B_enOut,
     read0B_enOut}=up_to_first_zero(read_dataY[`lsqpend_retire] & {6{enableB&(read_dataY[`lsqpend_odd_rnd_partial]~^flipB)}} &
-    ((readB_flip ^~ {6{flipB}})|~readB_enItem)) & readB_enItem & ~read_dataY[`lsqpend_pconfl]; 
+    ((readB_flip ^~ {6{flipB}})|~readB_enItem|read_dataY[`lsqpend_pconfl])) & readB_enItem & ~read_dataY[`lsqpend_pconfl]; 
     
   assign readA_enItemP=up_to_first_zero((readA_flip ^~ {6{flipA}})&readA_enItem&{6{enableA}});
   assign {read5A_enOut,read4A_enOut,read3A_enOut,read2A_enOut,read1A_enOut,read0A_enOut}=readA_enItemP;
