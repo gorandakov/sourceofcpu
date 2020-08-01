@@ -506,7 +506,7 @@ module smallInstr_decoder(
 	  assign useRs=(|trien[p*8+:8]) ? kuseRs : 1'bz;
 	  assign rAlloc=(|trien[p*8+:8]) ? krAlloc : 1'bz;
 	  assign useBConst=(|trien[p*8+:8]) ? kuseBConst : 1'bz;
-	  assign thisSpecLoad=(|trien[p*8+:8]) ? kthisSpecLoad : 1'bz;
+//	  assign thisSpecLoad=(|trien[p*8+:8]) ? kthisSpecLoad : 1'bz;
 	  assign isIPRel=(|trien[p*8+:8]) ? kisIPRel : 1'bz;
 	  assign flags_use=(|trien[p*8+:8]) ? kflags_use : 1'bz;
 	  assign flags_write=(|trien[p*8+:8]) ? kflags_write : 1'bz;
@@ -541,7 +541,7 @@ module smallInstr_decoder(
   assign useRs=(~|trien) ? 1'b0 : 1'bz;
   assign rAlloc=(~|trien) ? 1'b0 : 1'bz;
   assign useBConst=(~|trien) ? 1'b0 : 1'bz;
-  assign thisSpecLoad=(~|trien) ? 1'b0 : 1'bz;
+//  assign thisSpecLoad=(~|trien) ? 1'b0 : 1'bz;
   assign isIPRel=(~|trien) ? 1'b0 : 1'bz;
   assign flags_use=(~|trien) ? 1'b0 : 1'bz;
   assign flags_write=(~|trien) ? 1'b0 : 1'bz;
@@ -552,6 +552,10 @@ module smallInstr_decoder(
   assign port=(~|trien) ? PORT_LOAD : 4'bz;
   assign jumpType=(~|trien) ? 5'b10000 : 5'bz;
   assign operation=(~|trien) ? 13'hff : 13'bz;
+  
+  assign thisSpecLoad=isBaseSpecLoad | isBaseIndexSpecLoad | (~opcode_main[0] &&
+    opcode_main[7:1]==7'b1011000 && ~instr[10] && instr[15:12]==REG_SP && 
+    (magic[1:0]!=2'b01 || ~instr[16]));
  
   always @(posedge clk) begin
     if (rst) fpu_reor<=32'b111110101100011010001000;

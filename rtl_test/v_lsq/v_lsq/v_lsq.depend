@@ -1,10 +1,13 @@
 # depslib dependency file v1.0
-1595844349 source:/home/goran/heptane2/rtl_test/v_lsq/agu.cpp
+1596278454 source:/home/goran/heptane2/rtl_test/v_lsq/agu.cpp
 	<cstdio>
 	<cstdlib>
 	<random>
 	"Vfun_lsq.h"
 	"verilated.h"
+	<sys/types.h>
+	<sys/wait.h>
+	<string.h>
 	"../inc/struct.h"
 	"../inc/extract.h"
 	"../inc/csrss_no.h"
@@ -31,7 +34,7 @@
 	<unistd.h>
 	"Windows.h"
 
-1596116736 /home/goran/heptane2/rtl_test/v_lsq/obj_dir/Vfun_lsq.h
+1596277104 /home/goran/heptane2/rtl_test/v_lsq/obj_dir/Vfun_lsq.h
 	"verilated_heavy.h"
 	"verilated_threads.h"
 

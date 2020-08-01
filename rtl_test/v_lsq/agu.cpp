@@ -3,6 +3,9 @@
 #include <random>
 #include "Vfun_lsq.h"
 #include "verilated.h"
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <string.h>
 #include "../inc/struct.h"
 #include "../inc/extract.h"
 #include "../inc/csrss_no.h"
@@ -1643,20 +1646,21 @@ int main(int argc, char *argv[]) {
     int pid;
 
     if (argc==1) {
-        FILE *f=fopen("~/lsq_req_seed","r");
-	if (f==NULL) f=fopen2("/dev/random","r");
+        FILE *f=fopen("/home/goran/lsq_req_seed","r");
+	if (f==NULL) f=fopen("/dev/random","r");
 	if (f==NULL) exit(2);
 	fread((void *) &def_seed,8,1,f);
 	fclose(f);
 	goto _begin;
     } else {
-        if (!strcmp(argv[1],"-multi")) exit(2);
-        FILE *f=fopen("~/dev/random","r");
+        if (strcmp(argv[1],"-multi")) exit(2);
+        FILE *f=fopen("/dev/random","r");
 	if (f==NULL) exit(2);
-        FILE *f2=fopen("~/lsq_req_seed","w");
+        FILE *f2=fopen("/home/goran/lsq_req_seed","w");
 	if (f2==NULL) exit(2);
 	fread((void *) &def_seed,8,1,f);
-	fwrite((void *) &def_seed,8,1,f);
+	fwrite((void *) &def_seed,8,1,f2);
+	fflush(f2);
 	while (pid=fork()) {
 	    int status;
 	    if (pid<0) exit(4);
@@ -1664,7 +1668,9 @@ int main(int argc, char *argv[]) {
 	    if (!WIFEXITED(status)) exit(3);
 	    if (WEXITSTATUS(status)==0) {
 	        fread((void *) &def_seed,8,1,f);
-	        fwrite((void *) &def_seed,8,1,f);
+	        rewind(f2);
+	        fwrite((void *) &def_seed,8,1,f2);
+	        fflush(f2);
 	    } else {
 	        exit(WEXITSTATUS(status));
 	    }
@@ -1740,6 +1746,7 @@ _begin:
         }
         if (initcount) initcount--;
         cyc++;
+        if (cyc>1000000) exit(0);
     }
 
 }

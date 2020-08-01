@@ -693,8 +693,8 @@ module storq_p1(
   always @(posedge clk) begin
     if (std_hasB0 && &std_mOpB) $display("XX");
     if (rst) lStFirst_pause<=1'b0;
-    else if (~lDoStall) lStFirst_pause<=1'b0;
-    else lStFirst_pause<=lStFirst_pause|~lStFirst;
+    else if (~lDoStall && ~lStall) lStFirst_pause<=1'b0;
+    else lStFirst_pause<=lStFirst_pause||~lStFirst&~lStall;
     if (rst) peek_aStall<=1'b1;
     else if ((~lStall & ~lDoStall || peek_aStall) && new_enP_reg2) 
         peek_aStall<=1'b0;
