@@ -709,7 +709,7 @@ module ldq(
   chk5_dataA,chk5_enA,
   chk_data_shr,
   chk_en,chk_enP,
-  confl,confl_smp,
+  confl,confl_smp,conflX,
   expun_addr,expun_en
   );
 
@@ -762,6 +762,7 @@ module ldq(
   input chk_en,chk_enP;
   output [5:0] confl;
   output [5:0] confl_smp;
+  output [5:0] conflX;
   input [PADDR_WIDTH-8:0] expun_addr;
   input expun_en;
 
@@ -900,6 +901,10 @@ module ldq(
             if (p!=0) assign confl[p]=(chkbits_reg[l][p] && chkbits_reg[l][p-1:0]==0) ? conflP[l]|confl_X_reg[p] : 1'bz;
             else assign confl[p]=(chkbits_reg[l][p]) ? conflP[l]|confl_X_reg[p] : 1'bz;
             if (p!=0) assign confl[p]=(chkbits_reg[l][p] && chkbits_reg[l][p-1:0]!=0) ? conflP[l+3]|confl_X_reg[p] : 1'bz;
+            
+            if (p!=0) assign conflX[p]=(chkbits_reg[l][p] && chkbits_reg[l][p-1:0]==0) ? confl_X_reg[p] : 1'bz;
+            else assign conflX[p]=(chkbits_reg[l][p]) ? confl_X_reg[p] : 1'bz;
+            if (p!=0) assign conflX[p]=(chkbits_reg[l][p] && chkbits_reg[l][p-1:0]!=0) ? confl_X_reg[p] : 1'bz;
             
             if (p!=0) assign confl_smp[p]=(chkbits_reg[l][p] && chkbits_reg[l][p-1:0]==0) ? confl_smpP[l] : 1'bz;
             else assign confl_smp[p]=(chkbits_reg[l][p]) ? confl_smpP[l] : 1'bz;

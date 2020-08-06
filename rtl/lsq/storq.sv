@@ -1002,6 +1002,8 @@ module storq(
   ret_data_shr,
   ret_mask,
   ret_retire,
+  
+  LDQmask,
 
   new_conflictx,
   new_conflicty,
@@ -1079,6 +1081,8 @@ module storq(
   input [SDATA_WIDTH-1:0] ret_data_shr;
   input [9:0] ret_mask;
   input ret_retire;
+  
+  output [5:0] LDQmask;
   
   output [3*BUF_COUNT-1:0] new_conflictx;
   output [3*BUF_COUNT-1:0] new_conflicty;
@@ -1286,6 +1290,7 @@ module storq(
 
   reg confl_waited;
   reg [5:0] new_c_mask;
+  reg [5:0] new_c_confl; 
  // wire lDoStall_Aq;
  // wire lDoStall_Bq;
  // wire lDoStall_Aq0;
@@ -1404,7 +1409,8 @@ module storq(
 	assign wrt_indexA[2]=(new_data_shr[`lsqshare_wrt2]==t) ? t[2:0] : 3'BZ;
         //assign conflict_first=(confl_first[t]) ? new_conflict_reg[t] : {3*BUF_COUNT{1'BZ}};
         //assign conflict_last=(confl_last[t]) ? new_conflict_reg[t] : {3*BUF_COUNT{1'BZ}};
-        assign new_confl[t]=(|new_conflict[t]) || (|new_conflict_ex[t]);
+        assign new_confl[t]=((|new_conflict[t]) || (|new_conflict_ex[t])) && new_c_confl[t]|new_c_mask[t];
+        assign LDQmask[t]=new_c_confl[t]|new_c_mask[t];
    //     assign lstep1_multi[0]=(confl_first[t] &  new_conflict_has1r[t]) ? 0!=(~new_conflict1r[t]&new_conflict1_reg[t]) : 1'bz;
    //     assign lstep1_multi[0]=(confl_first[t] & ~new_conflict_has1r[t]) ? 0!=(~new_conflict2r[t]&new_conflict2_reg[t]) : 1'bz;
    //     assign lstep1_multi[1]=(confl_last[t] &  new_conflict_has1r[t]) ? 0!=(~new_conflict1r[t]&new_conflict1_reg[t]) : 1'bz;
@@ -1844,9 +1850,18 @@ module storq(
     end*/
     if (rst|except) begin
         new_c_mask=6'h3f;
+        new_c_confl=6'h0;
     end else if (~aStall && ~aDoStall) begin
-        if (new_en_reg) new_c_mask=6'h3f;
-        else begin
+        if (new_en_reg) begin 
+            new_c_mask=6'h3f;
+            new_c_confl=6'h0;
+        end else begin
+            new_c_confl[0]=new_c_confl[0] || new_confl[0] & new_c_mask[0];
+            new_c_confl[1]=new_c_confl[1] || new_confl[1] & new_c_mask[1];
+            new_c_confl[2]=new_c_confl[2] || new_confl[2] & new_c_mask[2];
+            new_c_confl[3]=new_c_confl[3] || new_confl[3] & new_c_mask[3];
+            new_c_confl[4]=new_c_confl[4] || new_confl[4] & new_c_mask[4];
+            new_c_confl[5]=new_c_confl[5] || new_confl[5] & new_c_mask[5];
             new_c_mask[0]=new_c_mask[0] && ~new_enA_reg[0];
             new_c_mask[1]=new_c_mask[1] && ~new_enA_reg[1];
             new_c_mask[2]=new_c_mask[2] && ~new_enA_reg[2];

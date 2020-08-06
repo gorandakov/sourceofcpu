@@ -764,7 +764,7 @@ bool get_check_ret(Vfun_lsq *top,bool &retire,unsigned &exc) {
     unsigned n1;
     for(x=0;x<6;x++) if (!reqs[ret_point][0].en) break;
     top->xbreak=~(top->mem_II_bits_ret&top->mem_II_bits_fine);
-    for(n=0;n<x;n++) if (!(reqs[ret_point][n].op&1) && reqs[ret_point][n].sched>1)
+    for(n=0;n<x;n++) if (!(reqs[ret_point][n].op&1) && reqs[ret_point][n].sched==2)
 	    top->xbreak&=~(1<<n);
     top->xbreak|=((top->xbreak<<1)|(top->xbreak<<2)|(top->xbreak<<3)|(top->xbreak<<4)|
 	(top->xbreak<<5)|(top->xbreak<<6)|(top->xbreak<<7)|(top->xbreak<<8)|(top->xbreak<<9));

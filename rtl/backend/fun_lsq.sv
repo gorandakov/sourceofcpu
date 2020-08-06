@@ -244,6 +244,7 @@ module fun_lsq(
   wire [9:0] wret_II1;
   wire wret_en1;
   */
+  wire [5:0] LDQ_mask;
   wire new_en_reg2;
   wire new_enP_reg2;
   wire p1_peek_aStall;
@@ -317,6 +318,8 @@ module fun_lsq(
   .ret_mask(xbreak),
   .ret_retire(doRetire_d),
 
+  .LDQmask(LDQ_mask),
+  
   .new_conflictx(new_conflictx),
   .new_conflicty(new_conflicty),
   .m_mask(m_mask),
@@ -391,6 +394,7 @@ module fun_lsq(
   wire stall_LDQ;
   wire [5:0] LDQ_ldconfl;
   wire [5:0] LDQ_insconfl;
+  wire [5:0] LDQ_ldconflX;
   wire [`lsqxcept_width-2:0] ret_xdata[5:0];
   wire [5:0] ret_xenab;
   wire [5:0] ret_xldconfl;
@@ -440,6 +444,7 @@ module fun_lsq(
   .chk_enP(LSQ_rdy_AP),
   .confl(LDQ_ldconfl),
   .confl_smp(LDQ_insconfl),
+  .conflX(LDQ_ldconflX),
   .expun_addr(MSI_exp_addr),
   .expun_en(MSI_en)
   );
@@ -466,7 +471,7 @@ module fun_lsq(
   .read4A_data(LSQ_dataA4),.read4A_enOut(LSQ_enA[4]),
   .read5A_data(LSQ_dataA5),.read5A_enOut(LSQ_enA[5]),
   
-  .readA_conflIn_l(LDQ_ldconfl),
+  .readA_conflIn_l((LDQ_ldconfl&LDQ_mask)|LDQ_ldconflX),
   .readA_conflInMSI(LDQ_insconfl),
   //.readA_conflIn_s(STQ_confl), //purpose??
 
