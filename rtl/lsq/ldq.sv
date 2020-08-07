@@ -915,6 +915,7 @@ module ldq(
             if (p) assign chk_ret[l+3]=(chkbits_reg[l][p] && chkbits_reg[l][p-1:0]) ? ret_mask[II_save[p][3:0]] : 10'bz;*/
         end
         assign confl[p]=(chkbits_reg[0][p] || chkbits_reg[1][p] || chkbits_reg[2][p]) ? 1'bz : 1'b0; 
+        assign conflX[p]=(chkbits_reg[0][p] || chkbits_reg[1][p] || chkbits_reg[2][p]) ? 1'bz : 1'b0; 
         assign confl_smp[p]=(chkbits_reg[0][p] || chkbits_reg[1][p] || chkbits_reg[2][p]) ? 1'bz : 1'b0; 
     end
   endgenerate
@@ -1047,6 +1048,13 @@ module ldq(
     end else if (~init) begin
         expun_addr_reg<=expun_addr;
         expun_en_reg<=expun_en;
+        chk_enP_reg<=chk_enP;
+        chk_en_reg<=chk_en;
+        chk_enA_reg<=chk_enA;
+	confl_X_reg<=confl_X;
+        chkbits_reg[0]<=chkbits[0]; //no tim cook
+        chkbits_reg[1]<=chkbits[1];
+        chkbits_reg[2]<=chkbits[2];
     end
   end
 endmodule

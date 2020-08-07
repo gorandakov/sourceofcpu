@@ -384,6 +384,27 @@ module missQ(
   output do_bus_hold;
   output reg do_unlock;
   output nowfl;
+  
+  input [2:0] WB_fwd;
+
+  input mOpW_en;
+  input mOpW_thread;
+  input [PADDR_WIDTH-1:8] mOpW_addrEven;
+  input [PADDR_WIDTH-1:8] mOpW_addrOdd;
+  input [4:0] mOpW_sz;
+  input mOpW_st;
+  input [BANK_COUNT-1:0] mOpW_banks;
+  input [4:0] mOpW_bank0;
+  input mOpW_odd;
+  input [1:0] mOpW_addr_low;
+  input mOpW_split;
+  input [REG_WIDTH-1:0] mOpW_register;
+  input [1:0] mOpW_type;
+  input [1:0] mOpW_clHit;
+  input [8:0] mOpW_LSQ;
+  input [9:0] mOpW_II;
+  input [7:0] mOpW_WQ;
+  input mOpW_lsflag;
 
   input miss0;
   input mOp0_en;
