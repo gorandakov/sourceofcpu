@@ -410,35 +410,35 @@ module storq_buf(
   assign ret_hit=II[9:4]==ret_II && (ret_mask & II_mask)!=0 && ret_en;
 
   assign newII_chk=newII_upper==II[9:4] && ~free1;
-  assign chkBMatchE[0]=chkBAddrE0[19:0]==baddrE[19:0];   
-  assign chkBMatchO[0]=chkBAddrO0[19:0]==baddrO[19:0];   
+  assign chkBMatchE[0]=chkBAddrE0==baddrE;   
+  assign chkBMatchO[0]=chkBAddrO0==baddrO;   
 
-  assign chkBMatchE[1]=chkBAddrE1[19:0]==baddrE[19:0];   
-  assign chkBMatchO[1]=chkBAddrO1[19:0]==baddrO[19:0];   
+  assign chkBMatchE[1]=chkBAddrE1==baddrE;   
+  assign chkBMatchO[1]=chkBAddrO1==baddrO;   
 
-  assign chkBMatchE[2]=chkBAddrE2[19:0]==baddrE[19:0];   
-  assign chkBMatchO[2]=chkBAddrO2[19:0]==baddrO[19:0];   
+  assign chkBMatchE[2]=chkBAddrE2==baddrE;   
+  assign chkBMatchO[2]=chkBAddrO2==baddrO;   
 
-  assign chkBMatchE[3]=chkBAddrE3[19:0]==baddrE[19:0];   
-  assign chkBMatchO[3]=chkBAddrO3[19:0]==baddrO[19:0];   
+  assign chkBMatchE[3]=chkBAddrE3==baddrE;   
+  assign chkBMatchO[3]=chkBAddrO3==baddrO;   
   
-  assign chkMatchE[0]=chkAddrE0[19:0]==baddrE[19:0];   
-  assign chkMatchO[0]=chkAddrO0[19:0]==baddrO[19:0];   
+  assign chkMatchE[0]=chkAddrE0==baddrE;   
+  assign chkMatchO[0]=chkAddrO0==baddrO;   
 
-  assign chkMatchE[1]=chkAddrE1[19:0]==baddrE[19:0];   
-  assign chkMatchO[1]=chkAddrO1[19:0]==baddrO[19:0];   
+  assign chkMatchE[1]=chkAddrE1==baddrE;   
+  assign chkMatchO[1]=chkAddrO1==baddrO;   
 
-  assign chkMatchE[2]=chkAddrE2[19:0]==baddrE[19:0];   
-  assign chkMatchO[2]=chkAddrO2[19:0]==baddrO[19:0];   
+  assign chkMatchE[2]=chkAddrE2==baddrE;   
+  assign chkMatchO[2]=chkAddrO2==baddrO;   
 
-  assign chkMatchE[3]=chkAddrE3[19:0]==baddrE[19:0];   
-  assign chkMatchO[3]=chkAddrO3[19:0]==baddrO[19:0];   
+  assign chkMatchE[3]=chkAddrE3==baddrE;   
+  assign chkMatchO[3]=chkAddrO3==baddrO;   
 
-  assign chkMatchE[4]=chkAddrE4[19:0]==baddrE[19:0];   
-  assign chkMatchO[4]=chkAddrO4[19:0]==baddrO[19:0];   
+  assign chkMatchE[4]=chkAddrE4==baddrE;   
+  assign chkMatchO[4]=chkAddrO4==baddrO;   
 
-  assign chkMatchE[5]=chkAddrE5[19:0]==baddrE[19:0];   
-  assign chkMatchO[5]=chkAddrO5[19:0]==baddrO[19:0];   
+  assign chkMatchE[5]=chkAddrE5==baddrE;   
+  assign chkMatchO[5]=chkAddrO5==baddrO;   
 
   assign chkMatchE[6]=chkAddrE6==addrE;   
   assign chkMatchO[6]=chkAddrO6==addrO;   
@@ -2041,6 +2041,11 @@ module storq(
     end else begin
         new_conflict1_acc<=new_conflict1_acc|{nChNextB};
         new_conflict2_acc<=new_conflict2_acc|{nChNextA[2],nChNextA[1],nChNextA[0]};
+        for(b=0;b<6;b=b+1) begin
+            if (~new_en_mask[b] & new_enA_reg[b]) begin
+                new_dataA_chk_reg[b]<=new_dataA_chk[b];//move to other block??
+           end
+        end
     end
 
 

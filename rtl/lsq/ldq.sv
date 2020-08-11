@@ -864,8 +864,8 @@ module ldq(
         .except_thread(except_thread),
         .newEn0(newI_mask[k]&newI_en&~stall&~doStall),.newEn1(newI_mask[k+3]&newI_en&~stall&~doStall),
         .newThread(newI_thr),
-        .freeEn0(cnt_chk[k][1] & chk_en),
-        .freeEn1(cnt_chk[k][2] & chk_en),.freeThread(1'b0),
+        .freeEn0(cnt_chk[k][1] & chk_en & ~aStall),
+        .freeEn1(cnt_chk[k][2] & chk_en & ~aStall),.freeThread(1'b0),
         .stall(stall),
         .doStall(doStall_rs[k])
         );
@@ -944,9 +944,9 @@ module ldq(
   assign chkL1_en=(chk_data_shr[`lsqshare_wrt1]==3'd7) ? 1'B0 : 1'bz; 
   assign chkL2_en=(chk_data_shr[`lsqshare_wrt2]==3'd7) ? 1'B0 : 1'bz; 
  
-  assign chkL0_mask=(chk_data_shr[`lsqshare_wrt0]==3'd7) ? 6'B0 : 6'bz; 
-  assign chkL1_mask=(chk_data_shr[`lsqshare_wrt1]==3'd7) ? 6'B0 : 6'bz; 
-  assign chkL2_mask=(chk_data_shr[`lsqshare_wrt2]==3'd7) ? 6'B0 : 6'bz; 
+  assign chkL0_mask=(chk_data_shr[`lsqshare_wrt0]==3'd7) ? 6'B111111 : 6'bz; 
+  assign chkL1_mask=(chk_data_shr[`lsqshare_wrt1]==3'd7) ? 6'B111111 : 6'bz; 
+  assign chkL2_mask=(chk_data_shr[`lsqshare_wrt2]==3'd7) ? 6'B111111 : 6'bz; 
 
   assign new3_reg_low=new_data[3][`lsaddr_reg_low];
 
