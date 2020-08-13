@@ -56,8 +56,8 @@ module ldq_buf(
   chkAddrE1,chkAddrO1,chkBanks1,chkBlow1, chkIsOH1,chkIsEH1,chkIsOL1,chkIsEL1,chkEn1,chkMask1,
   chkAddrE2,chkAddrO2,chkBanks2,chkBlow2, chkIsOH2,chkIsEH2,chkIsOL2,chkIsEL2,chkEn2,chkMask2,
   chkAddrE3,chkAddrO3,chkIsOH3,chkIsEH3,chkIsOL3,chkIsEL3,chkEn3,
-  freeII0,freeMask0,freeEn0,freeConfl0,freeConflSmp0,
-  freeII1,freeMask1,freeEn1,freeConfl1,freeConflSmp1,
+  freeII0,freeMask0,freeEnX0,freeEn0,freeConfl0,freeConflSmp0,
+  freeII1,freeMask1,freeEnX1,freeEn1,freeConfl1,freeConflSmp1,
   free
   );
   localparam PADDR_WIDTH=44;
@@ -118,11 +118,13 @@ module ldq_buf(
 
   input [II_WIDTH-1:0] freeII0;
   input [5:0] freeMask0;
+  input freeEnX0;
   input freeEn0;
   output freeConfl0;
   output freeConflSmp0;
   input [II_WIDTH-1:0] freeII1;
   input [5:0] freeMask1;
+  input freeEnX1;
   input freeEn1;
   output freeConfl1;
   output freeConflSmp1;
@@ -259,8 +261,8 @@ module ldq_buf(
           confl_smp<=1'b0;
           bank_low<=newBlow1;
       end else begin
-          if (freeEn0 && freeII0==II && ~aStall) free<=1'b1;
-          if (freeEn1 && freeII1==II && ~aStall) free<=1'b1;
+          if (freeEnX0 && freeII0==II && ~aStall) free<=1'b1;
+          if (freeEnX1 && freeII1==II && ~aStall) free<=1'b1;
           confl<=confl || chkMatch0 || chkMatch1 || chkMatch2 || chkMatch3;
           confl_smp<=confl_smp | chkMatch3;
       end
@@ -469,8 +471,8 @@ module ldq_array(
   chkAddrE1,chkAddrO1,chkBanks1,chkBlow1, chkIsOH1,chkIsEH1,chkIsOL1,chkIsEL1,chkEn1,chkMask1,
   chkAddrE2,chkAddrO2,chkBanks2,chkBlow2, chkIsOH2,chkIsEH2,chkIsOL2,chkIsEL2,chkEn2,chkMask2,
   chkAddrE3,chkAddrO3, chkIsOH3,chkIsEH3,chkIsOL3,chkIsEL3,chkEn3,
-  freeII0,freeMask0,freeEn0,freeConfl0,freeConflSmp0,
-  freeII1,freeMask1,freeEn1,freeConfl1,freeConflSmp1,
+  freeII0,freeMask0,freeEnX0,freeEn0,freeConfl0,freeConflSmp0,
+  freeII1,freeMask1,freeEnX1,freeEn1,freeConfl1,freeConflSmp1,
   free
   );
  
@@ -535,11 +537,13 @@ module ldq_array(
   input [II_WIDTH-1:0] freeII0;
   input [5:0] freeMask0;
   input freeEn0;
+  input freeEnX0;
   output freeConfl0;
   output freeConflSmp0;
   input [II_WIDTH-1:0] freeII1;
   input [5:0] freeMask1;
   input freeEn1;
+  input freeEnX1;
   output freeConfl1;
   output freeConflSmp1;
 
@@ -669,8 +673,8 @@ module ldq_array(
           chkAddrE1,chkAddrO1,chkBanks1,chkBlow1, chkIsOH1,chkIsEH1,chkIsOL1,chkIsEL1,chkEn1,chkMask1,
           chkAddrE2,chkAddrO2,chkBanks2,chkBlow2, chkIsOH2,chkIsEH2,chkIsOL2,chkIsEL2,chkEn2,chkMask2,
           chkAddrE3,chkAddrO3, chkIsOH3,chkIsEH3,chkIsOL3,chkIsEL3,chkEn3,
-          freeII0,freeMask0,freeEn0,freeConfl0_buf[p],freeConflSmp0_buf[p],
-          freeII1,freeMask1,freeEn1,freeConfl1_buf[p],freeConflSmp1_buf[p],
+          freeII0,freeMask0,freeEnX0,freeEn0,freeConfl0_buf[p],freeConflSmp0_buf[p],
+          freeII1,freeMask1,freeEnX1,freeEn1,freeConfl1_buf[p],freeConflSmp1_buf[p],
           free[p]
           );
       end
@@ -851,8 +855,10 @@ module ldq(
         .chkAddrE3(expun_addr_reg[44-8:1]),.chkAddrO3(expun_addr_reg[44-8:1]), 
 	   .chkIsOH3(expun_addr_reg[0]),.chkIsEH3(~expun_addr_reg[0]),
 	   .chkIsOL3(expun_addr_reg[0]),.chkIsEL3(~expun_addr_reg[0]),.chkEn3(expun_en_reg),
-        .freeII0(chk_II[k]),.freeMask0(chk_mask[k]),.freeEn0(cnt_chk[k][1] & chk_enP_reg),.freeConfl0(conflP[k]),.freeConflSmp0(confl_smpP[k]),
-        .freeII1(chk_II[k+3]),.freeMask1(chk_mask[k+3]),.freeEn1(cnt_chk[k][2] & chk_enP_reg),.freeConfl1(conflP[k+3]),.freeConflSmp1(confl_smpP[k+3]),
+        .freeII0(chk_II[k]),.freeMask0(chk_mask[k]),.freeEnX0(cnt_chk[k][1] & chk_en_reg & ~aStall),
+	.freeEn0(cnt_chk[k][1] & chk_enP_reg),.freeConfl0(conflP[k]),.freeConflSmp0(confl_smpP[k]),
+        .freeII1(chk_II[k+3]),.freeMask1(chk_mask[k+3]),.freeEnX1(cnt_chk[k][2] & chk_en_reg & ~aStall),
+	.freeEn1(cnt_chk[k][2] & chk_enP_reg),.freeConfl1(conflP[k+3]),.freeConflSmp1(confl_smpP[k+3]),
         .free()
         );
         popcnt10_or_more cpop_mod({4'b0,chkbits_reg[k]},cnt_chk[k]);
@@ -1045,7 +1051,7 @@ module ldq(
         chk_en_reg<=chk_en;
         chk_enA_reg<=chk_enA;
 	confl_X_reg<=confl_X;
-    end else if (~init) begin
+    end else if (~init && ~chk_en) begin
         expun_addr_reg<=expun_addr;
         expun_en_reg<=expun_en;
         chk_enP_reg<=chk_enP;
