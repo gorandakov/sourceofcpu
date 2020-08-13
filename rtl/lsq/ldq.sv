@@ -1052,6 +1052,9 @@ module ldq(
         chk_en_reg<=chk_en;
         chk_enA_reg<=chk_enA;
 	confl_X_reg<=confl_X;
+        for(u=0;u<6;u=u+1) begin
+            II_save[u]<=chk_dataA[u][`lsaddr_II];
+        end
         chkbits_reg[0]<=chkbits[0]; //no tim cook
         chkbits_reg[1]<=chkbits[1];
         chkbits_reg[2]<=chkbits[2];
