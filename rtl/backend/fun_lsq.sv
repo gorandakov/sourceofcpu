@@ -471,7 +471,7 @@ module fun_lsq(
   .read4A_data(LSQ_dataA4),.read4A_enOut(LSQ_enA[4]),
   .read5A_data(LSQ_dataA5),.read5A_enOut(LSQ_enA[5]),
   
-  .readA_conflIn_l((LDQ_ldconfl&LDQ_mask)|LDQ_ldconflX),
+  .readA_conflIn_l(LDQ_ldconfl),
   .readA_conflInMSI(LDQ_insconfl),
   //.readA_conflIn_s(STQ_confl), //purpose??
 
