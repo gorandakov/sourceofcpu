@@ -923,8 +923,8 @@ module lsq_req(
  
   assign readA_clkEn0=(readA_flip[0]&readA_enItem[0])==flipA && enableA;
  
-  assign doStall=validA[write_addr_shr[4:0]] || validB[write_addr_shr[4:0]] ||
-    validA_next[write_addr_shr[4:0]] || validB_next[write_addr_shr[4:0]];
+  assign doStall=validA[write_addr_shr[4:0]] || validB[write_addr_shr[5:0]] ||
+    validA_next[write_addr_shr[4:0]] || validB_next[write_addr_shr[5:0]];
   
   assign doRsPause[0]=write4_wen_REGA|write4_wen_REGB|write4_wen_REGC;
   assign doRsPause[1]=write5_wen_REGA|write5_wen_REGB|write5_wen_REGC;
@@ -1023,12 +1023,12 @@ module lsq_req(
   read5A_data,
 
 
-  init ? {initCount,3'd0} : write0_addr[7:0],write0_data|{DATA_WIDTH{init}},rsEn0 || init,
-  init ? {initCount,3'd1} : write1_addr[7:0],write1_data|{DATA_WIDTH{init}},rsEn1 || init,
-  init ? {initCount,3'd2} : write2_addr[7:0],write2_data|{DATA_WIDTH{init}},rsEn2 || init,
-  init ? {initCount,3'd3} : write3_addr[7:0],write3_data|{DATA_WIDTH{init}},rsEn3 || init,
-  init ? {initCount,3'd4} : write4_addr[7:0],write4_data|{DATA_WIDTH{init}},write4_wen ||init,
-  init ? {initCount,3'd5} : write5_addr[7:0],write5_data|{DATA_WIDTH{init}},write5_wen ||init,
+  init ? {initCount[4:0],3'd0} : write0_addr[7:0],write0_data|{DATA_WIDTH{init}},rsEn0 || init,
+  init ? {initCount[4:0],3'd1} : write1_addr[7:0],write1_data|{DATA_WIDTH{init}},rsEn1 || init,
+  init ? {initCount[4:0],3'd2} : write2_addr[7:0],write2_data|{DATA_WIDTH{init}},rsEn2 || init,
+  init ? {initCount[4:0],3'd3} : write3_addr[7:0],write3_data|{DATA_WIDTH{init}},rsEn3 || init,
+  init ? {initCount[4:0],3'd4} : write4_addr[7:0],write4_data|{DATA_WIDTH{init}},write4_wen ||init,
+  init ? {initCount[4:0],3'd5} : write5_addr[7:0],write5_data|{DATA_WIDTH{init}},write5_wen ||init,
   write_addr_shr[4:0],{DATA_WIDTH{~write_addr_shr[5]}},write_wen_shr&~doStall&~stall&~init&~except
   );
 
@@ -1061,7 +1061,7 @@ module lsq_req(
   readB_clkEn | reenabB,
   readB_addr_d,
   read_dataY,
-  init ? initCount : readA_addr_reg,
+  init ? initCount[5:0] : {flipA_reg,readA_addr_reg},
   write_dataY|{YDATA_WIDTH{init}},
   readA_clkEn_reg||readA_clkEn0_reg||init,
   write_addr_shr[5:0],{YDATA_WIDTH{~write_addr_shr[5]}},write_wen_shr&~doStall&~stall&~init&~except
@@ -1073,7 +1073,7 @@ module lsq_req(
   readA_clkEn | reenabA,
   readA_addr_d,
   read_data_shr_ram,
-  init ? initCount : write_addr_shr[4:0],
+  init ? initCount[4:0] : write_addr_shr[4:0],
   write_data_shr|{SDATA_WIDTH{init}},
   write_wen_shr&~doStall&~stall&~except||init
   );

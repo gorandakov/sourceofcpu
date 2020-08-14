@@ -52,7 +52,45 @@ module missQ_data_ram(
   write_wen
   );
 
-  localparam DATA_WIDTH=3*128+8+4+1;
+  localparam DATA_WIDTH=2*128;
+  localparam ADDR_WIDTH=4;
+  localparam ADDR_COUNT=16;
+
+  input clk;
+  input rst;
+  input read_clkEn;
+  input [ADDR_WIDTH-1:0] read_addr;
+  output [DATA_WIDTH-1:0] read_data;
+  input [ADDR_WIDTH-1:0] write_addr;
+  input [DATA_WIDTH-1:0] write_data;
+  input write_wen;
+
+  reg [DATA_WIDTH-1:0] ram [ADDR_COUNT-1:0];
+  reg [ADDR_WIDTH-1:0] read_addr_reg;
+  
+  assign read_data=ram[read_addr_reg];
+
+  always @(posedge clk)
+    begin
+      if (rst) read_addr_reg<={ADDR_WIDTH{1'b0}};
+      else if (read_clkEn) read_addr_reg<=read_addr;
+      if (write_wen) ram[write_addr]<=write_data;
+    end
+
+endmodule
+
+module missQ_datax_ram(
+  clk,
+  rst,
+  read_clkEn,
+  read_addr,
+  read_data,
+  write_addr,
+  write_data,
+  write_wen
+  );
+
+  localparam DATA_WIDTH=2*128+16+10;
   localparam ADDR_WIDTH=4;
   localparam ADDR_COUNT=16;
 
@@ -94,6 +132,8 @@ module missQ(
   do_unlock,
   nowfl,
   WB_fwd,
+  mOpW_brdread,
+  mOpW_data,
   mOpW_en,
   mOpW_thread,
   mOpW_addrEven,
@@ -148,6 +188,7 @@ module missQ(
   mOp0_II_o,
   mOp0_WQ_o,
   mOp0_lsflag_o,
+  mOp0_lsfwd_o,
   miss1,
   mOp1_en,
   mOp1_thread,
@@ -184,6 +225,7 @@ module missQ(
   mOp1_II_o,
   mOp1_WQ_o,
   mOp1_lsflag_o,
+  mOp1_lsfwd_o,
   miss2,
   mOp2_en,
   mOp2_thread,
@@ -220,6 +262,9 @@ module missQ(
   mOp2_II_o,
   mOp2_WQ_o,
   mOp2_lsflag_o,
+  mOp2_lsfwd_o,
+  mOp2_data_o,
+  mOp2_brdread_o,
   miss3,
   mOp3_en,
   mOp3_thread,
@@ -372,7 +417,8 @@ module missQ(
   localparam INDEX_WIDTH=7;
   localparam BANK_COUNT=32;
   localparam REG_WIDTH=9;
-  localparam DDATA_WIDTH=3*128+8+4+1;
+  localparam DDATA_WIDTH=2*128;
+  localparam DXDATA_WIDTH=2*128+16+10;
  
   input clk;
   input rst;
@@ -386,6 +432,8 @@ module missQ(
   output nowfl;
   
   input [2:0] WB_fwd;
+  input [4:0] mOpW_brdread;
+  input [127+8:0] mOpW_data;
 
   input mOpW_en;
   input mOpW_thread;
@@ -443,6 +491,7 @@ module missQ(
   output [9:0] mOp0_II_o;
   output [7:0] mOp0_WQ_o;
   output mOp0_lsflag_o;
+  output mOp0_lsfwd_o;
 
   input miss1;
   input mOp1_en;
@@ -481,6 +530,7 @@ module missQ(
   output [9:0] mOp1_II_o;
   output [7:0] mOp1_WQ_o;
   output mOp1_lsflag_o;
+  output mOp1_lsfwd_o;
 
   input miss2;
   input mOp2_en;
@@ -519,6 +569,9 @@ module missQ(
   output [9:0] mOp2_II_o;
   output [7:0] mOp2_WQ_o;
   output mOp2_lsflag_o;
+  output mOp2_lsfwd_o;
+  input [135:0] mOp2_data;
+  input [4:0] mOp2_brdread;
 
   input miss3;
   input mOp3_en;
@@ -704,6 +757,8 @@ module missQ(
   wire [DATA_WIDTH-1:0] read_dataC;
   wire [DDATA_WIDTH-1:0] read_ddata;
   wire [DDATA_WIDTH-1:0] write_ddata;
+  wire [DXDATA_WIDTH-1:0] read_dxdata;
+  wire [DXDATA_WIDTH-1:0] write_dxdata;
   
   
   reg [5:0] confl_mask;
@@ -725,6 +780,7 @@ module missQ(
   reg [9:0] mOp0_II_reg[3:1];
   reg [7:0] mOp0_WQ_reg[3:1];
   reg mOp0_lsflag_reg[3:1];
+  reg mOp0_lsfwd_reg[3:1];
 
   reg mOp1_thread_reg[3:1];
   reg [PADDR_WIDTH-1:8] mOp1_addrEven_reg[3:1];
@@ -743,6 +799,7 @@ module missQ(
   reg [9:0] mOp1_II_reg[3:1];
   reg [7:0] mOp1_WQ_reg[3:1];
   reg mOp1_lsflag_reg[3:1];
+  reg mOp1_lsfwd_reg[3:1];
 
   reg mOp2_thread_reg[3:1];
   reg [PADDR_WIDTH-1:8] mOp2_addrEven_reg[3:1];
@@ -761,6 +818,9 @@ module missQ(
   reg [9:0] mOp2_II_reg[3:1];
   reg [7:0] mOp2_WQ_reg[3:1];
   reg mOp2_lsflag_reg[3:1];
+  reg mOp2_lsfwd_reg[3:1];
+  reg [127+8:0] mOp2_data_reg[3:1];
+  reg [4:0] mOp3_brdread_reg[3:1];
 
   reg mOp3_thread_reg[3:1];
   reg [PADDR_WIDTH-1:8] mOp3_addrEven_reg[3:1];
@@ -902,8 +962,9 @@ module missQ(
   assign write_dataA={miss1&~thrreginh[3][1],miss0&~thrreginh[3][0],write_mop[1],write_mop[0]}&{DATA_WIDTH{~init}};
   assign write_dataB={miss3&~thrreginh[3][3],miss2&~thrreginh[3][2],write_mop[3],write_mop[2]}&{DATA_WIDTH{~init}};
   assign write_dataC={miss5&~thrreginh[3][5],miss4&~thrreginh[3][4],write_mop[5],write_mop[4]}&{DATA_WIDTH{~init}};
-  assign write_ddata={mOp5_data_reg[3][159:32],mOp4_data_reg[3][159:32],mOp3_data_reg[3],mOp3_brdbanks_reg[3]}
-    &{DDATA_WIDTH{~init}};
+  assign write_ddata={mOp5_data_reg[3][159:32],mOp4_data_reg[3][159:32]}&{DDATA_WIDTH{~init}};
+  assign write_dxdata={mOp3_data_reg[3],mOp3_brdbanks_reg[3],mOp2_data_reg[3],mOp2_brdbanks_reg[3]}
+    &{DXDATA_WIDTH{~init}};
   
   assign wen=miss0&~thrreginh[3][0]||miss1&~thrreginh[3][1]||miss2&~thrreginh[3][2]||
       miss3&~thrreginh[3][3]||miss4&~thrreginh[3][4]||miss5&~thrreginh[3][5];
@@ -986,6 +1047,7 @@ module missQ(
   assign mOp0_lsflag_o=now_flushing_reg2 & ~WB_fwd[0] ?   read_mop[0][`mOp1_lsf] : 1'bz; 
   assign mOp0_lsflag_o=~now_flushing_reg2 & ~WB_fwd[0] ? mOp0_lsflag : 1'bz; 
   assign mOp0_lsflag_o=WB_fwd[0] ? mOpW_lsflag_o : 1'bz;
+  assign mOp0_lsfwd_o=now_flushing_reg2 ?    read_mop[0][`mOp1_lsfwd] :  WB_fwd[0];
 
   assign mOp1_thread_o=now_flushing_reg2 && ~WB_fwd[1] ?   read_mop[1][`mOp1_thr] : 1'bz;
   assign mOp1_thread_o=~now_flushing_reg2 && ~WB_fwd[1] ? mOp1_thread : 1'bz;
@@ -1045,6 +1107,7 @@ module missQ(
   assign mOp1_lsflag_o=now_flushing_reg2 & ~WB_fwd[1] ?   read_mop[1][`mOp1_lsf] : 1'bz; 
   assign mOp1_lsflag_o=~now_flushing_reg2 & ~WB_fwd[1] ? mOp1_lsflag : 1'bz; 
   assign mOp1_lsflag_o=WB_fwd[1] ? mOpW_lsflag_o : 1'bz;
+  assign mOp1_lsfwd_o=now_flushing_reg2 ?    read_mop[1][`mOp1_lsfwd] : WB_fwd[1];
 
   assign mOp2_thread_o=now_flushing_reg2 && ~WB_fwd[2] ?   read_mop[2][`mOp1_thr] : 1'bz;
   assign mOp2_thread_o=~now_flushing_reg2 && ~WB_fwd[2] ? mOp2_thread : 1'bz;
@@ -1104,6 +1167,9 @@ module missQ(
   assign mOp2_lsflag_o=now_flushing_reg2 & ~WB_fwd[2] ?   read_mop[2][`mOp1_lsf] : 1'bz; 
   assign mOp2_lsflag_o=~now_flushing_reg2 & ~WB_fwd[2] ? mOp2_lsflag : 1'bz; 
   assign mOp2_lsflag_o=WB_fwd[2] ? mOpW_lsflag_o : 1'bz;
+  assign mOp2_lsfwd_o=now_flushing_reg2 ?    read_mop[2][`mOp1_lsfwd] : WB_fwd[2];
+  assign mOp2_data_o=now_flushing_reg2 ?     read_dxdata[127+8+5:5] : mOpW_data;
+  assign mOp2_brdread_o=now_flushing_reg2 ? read_dxdata[4:0] : mOpW_brdread;
 
 
 
@@ -1140,8 +1206,8 @@ module missQ(
   assign mOp3_WQ_o=now_flushing_reg2 ?       read_mop[3][`mOp1_WQ] : mOp3_WQ;
   assign mOp3_lsflag_o=now_flushing_reg2 ?   read_mop[3][`mOp1_lsf] : mOp3_lsflag;
   assign mOp3_lsfwd_o=now_flushing_reg2 ?    read_mop[3][`mOp1_lsfwd] : mOp3_lsfwd;
-  assign mOp3_data_o=now_flushing_reg2 ?     read_ddata[127+8+5:5] : mOp3_data;
-  assign mOp3_brdbanks_o=now_flushing_reg2 ? read_ddata[4:0] : mOp3_brdbanks;
+  assign mOp3_data_o=now_flushing_reg2 ?     read_dxdata[141+127+8+5:141+5] : mOp3_data;
+  assign mOp3_brdbanks_o=now_flushing_reg2 ? read_dxdata[141+4:141] : mOp3_brdbanks;
 
 //  assign mOp4_thread=now_flushing_reg2 ?   read_mop[4][`mOp1_thr] : 1'bz;
   assign mOp4_addrEven_o=now_flushing_reg2 ? read_mop[4][`mOp1_addrEven] : 36'bz; 
@@ -1226,7 +1292,7 @@ module missQ(
   assign write_mop[0][`mOp1_II]=      mOp0_II_reg[3];
   assign write_mop[0][`mOp1_WQ]=      mOp0_WQ_reg[3];
   assign write_mop[0][`mOp1_lsf]=     mOp0_lsflag_reg[3];
-  assign write_mop[0][`mOp1_lsfwd]=   1'b0;
+  assign write_mop[0][`mOp1_lsfwd]=   mOp0_lsfwd_reg[3];
 
   assign write_mop[1][`mOp1_thr]=     mOp1_thread_reg[3];
   assign write_mop[1][`mOp1_addrEven]=mOp1_addrEven_reg[3];
@@ -1245,7 +1311,7 @@ module missQ(
   assign write_mop[1][`mOp1_II]=      mOp1_II_reg[3];
   assign write_mop[1][`mOp1_WQ]=      mOp1_WQ_reg[3];
   assign write_mop[1][`mOp1_lsf]=     mOp1_lsflag_reg[3];
-  assign write_mop[1][`mOp1_lsfwd]=   1'b0;
+  assign write_mop[1][`mOp1_lsfwd]=   mOp1_lsfwd_reg[3];
 
   assign write_mop[2][`mOp1_thr]=     mOp2_thread_reg[3];
   assign write_mop[2][`mOp1_addrEven]=mOp2_addrEven_reg[3];
@@ -1264,7 +1330,7 @@ module missQ(
   assign write_mop[2][`mOp1_II]=      mOp2_II_reg[3];
   assign write_mop[2][`mOp1_WQ]=      mOp2_WQ_reg[3];
   assign write_mop[2][`mOp1_lsf]=     mOp2_lsflag_reg[3];
-  assign write_mop[2][`mOp1_lsfwd]=   1'b0;
+  assign write_mop[2][`mOp1_lsfwd]=   mOp2_lsfwd_reg[3];
 
   assign write_mop[3][`mOp1_thr]=     mOp3_thread_reg[3];
   assign write_mop[3][`mOp1_addrEven]=mOp3_addrEven_reg[3];
@@ -1481,6 +1547,17 @@ module missQ(
   read_ddata,
   init ? initCount : write_addr,
   write_ddata,
+  wen|init
+  );
+
+  missQ_datax_ram ramXD_mod(
+  clk,
+  rst,
+  doStep|begin_flush_reg2,
+  read_addr_d,
+  read_dxdata,
+  init ? initCount : write_addr,
+  write_dxdata,
   wen|init
   );
 
@@ -1773,6 +1850,7 @@ module missQ(
                   mOp0_II_reg[r]<=10'b0;
                   mOp0_WQ_reg[r]<=8'b0;
                   mOp0_lsflag_reg[r]<=1'b0;
+		  mOp0_lsfwd_reg[r]<=1'b0;
 
                   mOp1_thread_reg[r]<=1'b0; 
                   mOp1_addrEven_reg[r]<={PADDR_WIDTH-8{1'B0}};
@@ -1790,6 +1868,7 @@ module missQ(
                   mOp1_II_reg[r]<=10'b0;
                   mOp1_WQ_reg[r]<=8'b0;
                   mOp1_lsflag_reg[r]<=1'b0;
+		  mOp1_lsfwd_reg[r]<=1'b0;
                   
                   mOp2_thread_reg[r]<=1'b0; 
                   mOp2_addrEven_reg[r]<={PADDR_WIDTH-8{1'B0}};
@@ -1807,6 +1886,9 @@ module missQ(
                   mOp2_II_reg[r]<=10'b0;
                   mOp2_WQ_reg[r]<=8'b0;
                   mOp2_lsflag_reg[r]<=1'b0;
+		  mOp2_lsfwd_reg[r]<=1'b0;
+                  mOp2_data_reg[r]<={8'b0,128'b0};
+		  mOp2_brdread_reg[r]<=5'b0;
                   
                   mOp3_thread_reg[r]<=1'b0; 
                   mOp3_addrEven_reg[r]<={PADDR_WIDTH-8{1'B0}};
@@ -1878,6 +1960,7 @@ module missQ(
               mOp0_II_reg[1]<=mOp0_II_o;
               mOp0_WQ_reg[1]<=mOp0_WQ_o;
               mOp0_lsflag_reg[1]<=mOp0_lsflag_o;
+              mOp0_lsfwd_reg[1]<=mOp0_lsfwd_o;
 
               thrreginh[1][1]<=1'b0;
 	      mOp1_thread_reg[1]<=mOp1_thread_o;
@@ -1896,6 +1979,7 @@ module missQ(
               mOp1_II_reg[1]<=mOp1_II_o;
               mOp1_WQ_reg[1]<=mOp1_WQ_o;
               mOp1_lsflag_reg[1]<=mOp1_lsflag_o;
+              mOp1_lsfwd_reg[1]<=mOp1_lsfwd_o;
 
               thrreginh[1][2]<=1'b0;
 	      mOp2_thread_reg[1]<=mOp2_thread_o;
@@ -1914,6 +1998,9 @@ module missQ(
               mOp2_II_reg[1]<=mOp2_II_o;
               mOp2_WQ_reg[1]<=mOp2_WQ_o;
               mOp2_lsflag_reg[1]<=mOp2_lsflag_o;
+              mOp2_lsfwd_reg[1]<=mOp2_lsfwd_o;
+              mOp3_data_reg[1]<=mOp2_data_o;
+              mOp3_brdread_reg[1]<=mOp2_brdread_o;
               
               thrreginh[1][3]<=1'b0;
 	      mOp3_thread_reg[1]<=mOp3_thread_o;
@@ -1985,6 +2072,7 @@ module missQ(
                   mOp0_II_reg[r]<=mOp0_II_reg[r-1];
                   mOp0_WQ_reg[r]<=mOp0_WQ_reg[r-1];
                   mOp0_lsflag_reg[r]<=mOp0_lsflag_reg[r-1];
+                  mOp0_lsfwd_reg[r]<=mOp0_lsfwd_reg[r-1];
 
                   thrreginh[r][1]<=thrreginh[r-1][1] || except;
 	          mOp1_thread_reg[r]<=mOp1_thread_reg[r-1];
@@ -2003,6 +2091,7 @@ module missQ(
                   mOp1_II_reg[r]<=mOp1_II_reg[r-1];
                   mOp1_WQ_reg[r]<=mOp1_WQ_reg[r-1];
                   mOp1_lsflag_reg[r]<=mOp1_lsflag_reg[r-1];
+                  mOp1_lsfwd_reg[r]<=mOp1_lsfwd_reg[r-1];
 
                   thrreginh[r][2]<=thrreginh[r-1][2] || except;
 	          mOp2_thread_reg[r]<=mOp2_thread_reg[r-1];
@@ -2021,6 +2110,9 @@ module missQ(
                   mOp2_II_reg[r]<=mOp2_II_reg[r-1];
                   mOp2_WQ_reg[r]<=mOp2_WQ_reg[r-1];
                   mOp2_lsflag_reg[r]<=mOp2_lsflag_reg[r-1];
+                  mOp2_lsfwd_reg[r]<=mOp2_lsfwd_reg[r-1];
+                  mOp2_data_reg[r]<=mOp2_data_reg[r-1];
+                  mOp2_brdread_reg[r]<=mOp2_brdread_reg[r-1];
                   
                   thrreginh[r][3]<=thrreginh[r-1][3] || (except && mOp3_register_reg[r-1]!=9'h1fc);
 	          mOp3_thread_reg[r]<=mOp3_thread_reg[r-1];
