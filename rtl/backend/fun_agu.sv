@@ -119,6 +119,7 @@ module agu_block(
   mOpY5_type_o,
   mOpY5_II_o,
   lso_adata,lso_xdataA,lso_data,lso_bnkread,
+  lso2_adata,lso2_xdataA,lso2_data,lso2_bnkread,lso2_wb_en,
   p0_adata,p0_banks,p0_LSQ,p0_en,p0_rsEn,p0_secq,p0_ret,p0_repl,
   p1_adata,p1_banks,p1_LSQ,p1_en,p1_rsEn,p1_secq,p1_ret,p1_repl,
   p2_adata,p2_banks,p2_LSQ,p2_en,p2_rsEn,p2_secq,p2_ret,p2_repl,
@@ -329,6 +330,11 @@ module agu_block(
   input [`lsfxdata_width-1:0] lso_xdataA;
   input [127+8:0] lso_data;
   input [3+1:0]   lso_bnkread;
+  input [`lsaddr_width-1:0] lso2_adata;
+  input [`lsfxdata_width-1:0] lso2_xdataA;
+  input [127+8:0] lso2_data;
+  input [3+1:0]   lso2_bnkread;
+  input [2:0] lso2_wb_en;
   output [`lsaddr_width-1:0] p0_adata;
   output [31:0]p0_banks;
   output [8:0] p0_LSQ;
@@ -1617,6 +1623,8 @@ module agu_block(
   p0_pageFault,
   p0_faultCode,
   p0_faultNo,
+  lso2_wb_en[0],
+  lso2_adata[`lsaddr_banks],
   mOp0_register,
   mOp0_type,
   mOp0_LSQ,
@@ -1683,6 +1691,8 @@ module agu_block(
   p1_pageFault,
   p1_faultCode,
   p1_faultNo,
+  lso2_wb_en[1],
+  lso2_adata[`lsaddr_banks],
   mOp1_register,
   mOp1_type,
   mOp1_LSQ,
@@ -1749,6 +1759,8 @@ module agu_block(
   p2_pageFault,
   p2_faultCode,
   p2_faultNo,
+  lso2_wb_en[2],
+  lso2_adata[`lsaddr_banks],
   mOp2_register,
   mOp2_type,
   mOp2_LSQ,
@@ -2010,6 +2022,26 @@ module agu_block(
   miss_holds_agu,
   miss_unlock,
   now_flushing,
+  lso2_wb_en,
+  lso2_brdbanks,
+  lso2_data,
+  |lso2_wb_en,
+  1'b0,
+  lso2_adata[`lsaddr_addrE],
+  lso2_adata[`lsaddr_addrO],
+  lso2_adata[`lsaddr_sz],
+  1'b0,
+  lso2_adata[`lsaddr_banks],
+  lso2_adata[`lsaddr_bank0],
+  lso2_adata[`lsaddr_odd],
+  lso2_adata[`lsaddr_addr_low],
+  lso2_adata[`lsaddr_split],
+  {lso2_adata[`lsaddr_reg_hi],lso2_adata[`lsaddr_reg_low]},
+  lso2_adata[`lsaddr_type],
+  lso2_adata[`lsaddr_LSQ],
+  lso2_adata[`lsaddr_II],
+  lso2_adata[`lsaddr_WQ],
+  lso2_adata[`lsaddr_lsflag],
   miss0,
   mOp0_en,
   1'b0,
@@ -2046,6 +2078,9 @@ module agu_block(
   mOpX0_II,
   mOpX0_WQ,
   mOpX0_lsflag,
+  mOpX0_lsfwd,
+  mOpX0_brdread,
+  mOpX0_data,
   miss1,
   mOp1_en,
   1'b0,
@@ -2082,6 +2117,9 @@ module agu_block(
   mOpX1_II,
   mOpX1_WQ,
   mOpX1_lsflag,
+  mOpX1_lsfwd,
+  mOpX1_brdread,
+  mOpX1_data,
   miss2,
   mOp2_en,
   1'b0,
@@ -2118,6 +2156,9 @@ module agu_block(
   mOpX2_II,
   mOpX2_WQ,
   mOpX2_lsflag,
+  mOpX2_lsfwd,
+  mOpX2_brdread,
+  mOpX2_data,
   miss3,
   mOp3_en,
   1'b0,
