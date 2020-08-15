@@ -120,9 +120,9 @@ module agu_block(
   mOpY5_II_o,
   lso_adata,lso_xdataA,lso_data,lso_bnkread,
   lso2_adata,lso2_xdataA,lso2_data,lso2_bnkread,lso2_wb_en,
-  p0_adata,p0_banks,p0_LSQ,p0_en,p0_rsEn,p0_secq,p0_ret,p0_repl,
-  p1_adata,p1_banks,p1_LSQ,p1_en,p1_rsEn,p1_secq,p1_ret,p1_repl,
-  p2_adata,p2_banks,p2_LSQ,p2_en,p2_rsEn,p2_secq,p2_ret,p2_repl,
+  p0_adata,p0_banks,p0_LSQ,p0_en,p0_rsEn,p0_secq,p0_ret,p0_repl,p0_lsfwd,
+  p1_adata,p1_banks,p1_LSQ,p1_en,p1_rsEn,p1_secq,p1_ret,p1_repl,p1_lsfwd,
+  p2_adata,p2_banks,p2_LSQ,p2_en,p2_rsEn,p2_secq,p2_ret,p2_repl,p2_lsfwd,p2_data,p2_brdbanks,
   p3_adata,p3_banks,p3_LSQ,p3_en,p3_rsEn,p3_ioEn,p3_io_ack,p3_ret,p3_data,p3_brdbanks,p3_repl,p3_lsfwd,
   p4_adata,p4_LSQ,p4_en,p4_secq,p4_ret,
   p5_adata,p5_LSQ,p5_en,p5_secq,p5_ret,
@@ -343,6 +343,7 @@ module agu_block(
   output       p0_secq;
   output [12:0]p0_ret;
   output       p0_repl;
+  output       p0_lsfwd;
   output [`lsaddr_width-1:0] p1_adata;
   output [31:0]p1_banks;
   output [8:0] p1_LSQ;
@@ -351,6 +352,7 @@ module agu_block(
   output       p1_secq;
   output [12:0]p1_ret;
   output       p1_repl;
+  output       p1_lsfwd;
   output [`lsaddr_width-1:0] p2_adata;
   output [31:0]p2_banks;
   output [8:0] p2_LSQ;
@@ -359,6 +361,9 @@ module agu_block(
   output       p2_secq;
   output [12:0]p2_ret;
   output       p2_repl;
+  output       p2_lsfwd;
+  output[127+8:0]p2_data;
+  output [4:0] p2_brdbanks;
   output [`lsaddr_width-1:0] p3_adata;
   output [31:0]p3_banks;
   output [8:0] p3_LSQ;
@@ -367,8 +372,8 @@ module agu_block(
   output       p3_ioEn;
   input        p3_io_ack;
   output [12:0]p3_ret;
-  output[127:0]p3_data;
-  output [3:0] p3_brdbanks;
+  output[127+8:0]p3_data;
+  output [4:0] p3_brdbanks;
   output       p3_repl;
   output       p3_lsfwd;
   output [`lsaddr_width-1:0] p4_adata;
@@ -855,6 +860,7 @@ module agu_block(
   wire [9:0]  mOpX0_II;
   wire [7:0]  mOpX0_WQ;
   wire        mOpX0_lsflag;
+  wire        mOpX0_lsfwd;
   reg mOpX0_lsflag_reg, mOpX0_lsflag_reg2, mOpX0_lsflag_reg3;
   reg mOpX0_en_reg,     mOpX0_en_reg2,     mOpX0_en_reg3;
   reg mOp0_rsEn_reg,mOp1_rsEn_reg,mOp2_rsEn_reg,mOp3_rsEn_reg;
@@ -911,6 +917,7 @@ module agu_block(
   wire [9:0]  mOpX1_II;
   wire [7:0]  mOpX1_WQ;
   wire        mOpX1_lsflag;
+  wire        mOpX1_lsfwd;
   reg mOpX1_lsflag_reg, mOpX1_lsflag_reg2, mOpX1_lsflag_reg3;
   reg mOpX1_en_reg,     mOpX1_en_reg2,     mOpX1_en_reg3;
   reg [1:0] mOpX1_type_reg;
@@ -965,6 +972,7 @@ module agu_block(
   wire [9:0]  mOpX2_II;
   wire [7:0]  mOpX2_WQ;
   wire        mOpX2_lsflag;
+  wire        mOpX2_lsfwd;
   reg mOpX2_lsflag_reg, mOpX2_lsflag_reg2, mOpX2_lsflag_reg3;
   reg mOpX2_en_reg,     mOpX2_en_reg2,     mOpX2_en_reg3;
   reg [1:0] mOpX2_type_reg;
@@ -1184,6 +1192,12 @@ module agu_block(
   wire [127+8:0] mOp3_data;
   wire [4:0] mOpX3_brdread;
   wire [127+8:0] mOpX3_data;
+  wire [4:0] mOpX2_brdread;
+  wire [127+8:0] mOpX2_data;
+  reg [4:0] mOpX3_brdread_reg;
+  reg [127+8:0] mOpX3_data_reg;
+  reg [4:0] mOpX2_brdread_reg;
+  reg [127+8:0] mOpX2_data_reg;
 
   reg all_clear,all_clear_pre;
 
@@ -2023,7 +2037,7 @@ module agu_block(
   miss_unlock,
   now_flushing,
   lso2_wb_en,
-  lso2_brdbanks,
+  lso2_bnkread,
   lso2_data,
   |lso2_wb_en,
   1'b0,
@@ -2034,14 +2048,14 @@ module agu_block(
   lso2_adata[`lsaddr_banks],
   lso2_adata[`lsaddr_bank0],
   lso2_adata[`lsaddr_odd],
-  lso2_adata[`lsaddr_addr_low],
+  lso2_adata[`lsaddr_low],
   lso2_adata[`lsaddr_split],
   {lso2_adata[`lsaddr_reg_hi],lso2_adata[`lsaddr_reg_low]},
-  lso2_adata[`lsaddr_type],
-  lso2_adata[`lsaddr_LSQ],
+  lso2_adata[`lsaddr_mtype],
+  9'b0,//lso2_adata[`lsaddr_LSQ],
   lso2_adata[`lsaddr_II],
   lso2_adata[`lsaddr_WQ],
-  lso2_adata[`lsaddr_lsflag],
+  lso2_adata[`lsaddr_flag],
   miss0,
   mOp0_en,
   1'b0,
@@ -2153,8 +2167,8 @@ module agu_block(
   mOpX2_WQ,
   mOpX2_lsflag,
   mOpX2_lsfwd,
-  mOpX2_brdread,
   mOpX2_data,
+  mOpX2_brdread,
   miss3,
   mOp3_en,
   1'b0,
@@ -2353,6 +2367,7 @@ module agu_block(
   assign p0_LSQ=mOpX0_LSQ_reg;
   assign p0_ret={p0_faultCode[3:0],p0_faultNo};
   assign p0_secq=mOp0_sec_reg;
+  assign p0_lsfwd=mOpX0_lsfwd;
 
   assign p1_adata[`lsaddr_addrE]=mOpX1_addrEven_reg;
   assign p1_adata[`lsaddr_addrO]=mOpX1_addrOdd_reg;
@@ -2386,6 +2401,7 @@ module agu_block(
   assign p1_LSQ=mOpX1_LSQ_reg;
   assign p1_ret={p1_faultCode[3:0],p1_faultNo};
   assign p1_secq=mOp1_sec_reg;
+  assign p1_lsfwd=mOpX1_lsfwd;
 
   assign p2_adata[`lsaddr_addrE]=mOpX2_addrEven_reg;
   assign p2_adata[`lsaddr_addrO]=mOpX2_addrOdd_reg;
@@ -2419,6 +2435,9 @@ module agu_block(
   assign p2_LSQ=mOpX2_LSQ_reg;
   assign p2_ret={p2_faultCode[3:0],p2_faultNo};
   assign p2_secq=mOp2_sec_reg;
+  assign p2_lsfwd=mOpX2_lsfwd;
+  assign p2_data=mOpX2_data_reg;
+  assign p2_brdbanks=mOpX2_brdread_reg;
 
   assign p3_adata[`lsaddr_addrE]=mOpX3_addrEven_reg;
   assign p3_adata[`lsaddr_addrO]=mOpX3_addrOdd_reg;
@@ -2451,7 +2470,9 @@ module agu_block(
   assign p3_en=mOpX3_en_reg;
   assign p3_LSQ=mOpX3_LSQ_reg;
   assign p3_lsfwd=mOpX3_lsfwd;
+  assign p3_data=mOpX3_data_reg;
   assign p3_ret={p3_faultCode[3:0],p3_faultNo};
+  assign p3_brdbanks=mOpX3_brdread_reg;
 
   assign p4_adata[`lsaddr_addrE]=mOpX4_addrEven_reg;
   assign p4_adata[`lsaddr_addrO]=mOpX4_addrOdd_reg;
@@ -2705,6 +2726,8 @@ module agu_block(
       mOpX2_LSQ_reg<=mOpX2_LSQ;
       mOpX2_II_reg<=mOpX2_II;
       mOpX2_WQ_reg<=mOpX2_WQ;
+      mOpX2_brdread_reg<=mOpX2_brdread;
+      mOpX2_data_reg<=mOpX2_data;
 
       mOpX3_addrEven_reg<=mOpX3_addrEven;
       mOpX3_addrOdd_reg<=mOpX3_addrOdd;
@@ -2721,6 +2744,8 @@ module agu_block(
       mOpX3_LSQ_reg<=mOpX3_LSQ;
       mOpX3_II_reg<=mOpX3_II;
       mOpX3_WQ_reg<=mOpX3_WQ;
+      mOpX3_brdread_reg<=mOpX3_brdread;
+      mOpX3_data_reg<=mOpX3_data;
 
       mOpX4_en_reg<=mOpX4_en & ~except;
       mOpX4_addrEven_reg<=mOpX4_addrEven;

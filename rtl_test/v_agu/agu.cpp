@@ -967,14 +967,14 @@ bool lsreq::chk(dmigen &gen,unsigned mop[],unsigned short lsq,unsigned short rep
     bool split=((vaddr&0x7f)+bytes-HUG)>=0x80;
     unsigned long val,phys=gen.get_phys(vaddr),phys2=gen.get_phys(vaddr+bytes-HUG);
     extract_e(mop,lsaddr_WQ,val);
-    if (val!=WQ && (op&1)) return false;
+    if (val!=WQ && (op&1)) { printf("WQ\n"); return false; }
     extract_e(mop,lsaddr_II,val);
     if (val!=II) {
         printf("II\n");
         return false; 
     }
     //extract_e(mop,lsaddr_LSQ,val);
-    if (lsq!=LSQ) return false;
+    if (lsq!=LSQ) { printf("LSQ\n"); return false; }
     if (repl && !discarded && !(op&1)) *err=1;
     if (discarded && !repl && !(op&1)) *err=1;
     if ((!sys_kmode && kmode)||oor) {
@@ -986,16 +986,17 @@ bool lsreq::chk(dmigen &gen,unsigned mop[],unsigned short lsq,unsigned short rep
 	   *err=1;
 	}
     }
+    if (*err) printf("EX\n");
     extract_e(mop,lsaddr_addrE,val);
-    if ((!odd) && val!=(phys>>8) && (ret&3)!=1) *err=1;
-    if (odd && split && val!=(phys2>>8) && (ret&3)!=1) *err=1;
+    if ((!odd) && val!=(phys>>8) && (ret&3)!=1)  { printf("AE\n");*err=1;}
+    if (odd && split && val!=(phys2>>8) && (ret&3)!=1) { printf("AE\n");*err=1;}
     extract_e(mop,lsaddr_addrO,val);
-    if (odd && val!=(phys>>8) && (ret&3)!=1) *err=1;
-    if ((!odd) && split && val!=(phys2>>8) && (ret&3)!=1) *err=1;
+    if (odd && val!=(phys>>8) && (ret&3)!=1) { printf("AO\n"); *err=1; }
+    if ((!odd) && split && val!=(phys2>>8) && (ret&3)!=1) { printf("AO\n"); *err=1; }
     extract_e(mop,lsaddr_low,val);
-    if (val!=(phys&3)) *err=1;
+    if (val!=(phys&3)) { printf("Al\n"); *err=1; }
     extract_e(mop,lsaddr_bank0,val);
-    if (val!=((phys>>2)&0x1f)) *err=1;
+    if (val!=((phys>>2)&0x1f)) { printf("Ab0\n"); *err=1; }
     unsigned banks=0;
     banks|=1u<<((phys>>2)&0x1f);
     if ((phys&0x3)+bytes>4) 
@@ -1007,7 +1008,7 @@ bool lsreq::chk(dmigen &gen,unsigned mop[],unsigned short lsq,unsigned short rep
     if ((phys&0x3)+bytes>16) 
         banks|=1u<<(((phys>>2)+4)&0x1f);
     extract_e(mop,lsaddr_banks,val);
-    if (val!=banks) *err=1;
+    if (val!=banks) { printf("BNK\n"); *err=1; }
     return true;
 }
 
@@ -1499,7 +1500,8 @@ int main(int argc, char *argv[]) {
     Vagu_block *top=new Vagu_block();
     Verilated::assertOn(false);
     int initcount=512;
-    long int cyc=0;
+    long int cyc0=0;
+    int stall_cnt=0;
     int exc=0;
     unsigned short perm_normal=(1<<(page_na));
     unsigned short perm_io=(1<<(page_na))|(1<<(page_nc))|0x2000;
@@ -1564,7 +1566,7 @@ int main(int argc, char *argv[]) {
 	    if (dist(rndgen)==0 && !exc) {
 	       exc=10;
 	       top->except=1;
-	       printf("excpt %i\n",cyc);
+	       printf("excpt %i\n",cyc0);
 	       do_discard();
 	       top->excpt_in_km=lrand48()&1;
 	       top->excpt_gate=1;
@@ -1583,7 +1585,13 @@ int main(int argc, char *argv[]) {
             if (exc==9) {
 //		do_discard();
 	    }
-            if (sched(top,err2,exc)) bndl++;
+            if (sched(top,err2,exc))  { bndl++; stall_cnt=0; } 
+	    else {
+	        if((++stall_cnt)>=20000)  {
+		    err2=true;
+		    printf("bndl error 20000\n");
+		}
+	    }
             sched_cl(top,false,exc);
 	    sched_MSI(top,err2);
         }
@@ -1610,18 +1618,18 @@ int main(int argc, char *argv[]) {
         top->eval();
         if (!initcount) {
             if (get_check(top,exc) || err2) {
-                printf("error @%u\n",cyc);
+                printf("error @%u\n",cyc0);
                 sleep(1);
 		exit(1);
             }
-            if ((cyc%10000)==0) {
-                printf("cycle %i,%lu\n",cyc,bndl);
+            if ((cyc0%10000)==0) {
+                printf("cycle %i,%lu\n",cyc0,bndl);
             }
             sched_cl(top,!false,exc);
 	    if (exc) exc--;
         }
         if (initcount) initcount--;
-        cyc++;
+        cyc0++;
     }
 
 }

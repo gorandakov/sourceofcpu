@@ -1351,6 +1351,8 @@ module backend(
   reg [5:0] FUS_alu_reg6[5:0];
   reg [2:0] ex_alu_reg6[5:0];
   reg [5:0] enS_alu_reg6;
+  
+  wire [1:0] dalt;
 /*  reg [5:0] FUX_alu_reg;
   reg [2:0] exx_alu_reg;
   reg [5:0] FUX_alu_reg2;
@@ -5754,21 +5756,6 @@ module backend(
   .res(FUCVT1),
   .alt(nDataAlt[2][1])
 );
-  ifconv_mod g2fp_mod(
-  .clk(clk),
-  .rst(rst),
-  .clkEn(~(|fxFRT_alten_reg[2])),
-  .A(fxDataB[3*2+2]),
-  .en(outOp_reg[3*2+2][11] && (&outEn_reg[3*2+2][1:0]) && (outOp_reg[3*2+2][7:0]==`op_cvtD ||
-    outOp_reg[3*2+2][7:0]==`op_cvtE ||outOp_reg[3*2+2][7:0]==`op_cvtS)),
-  .toDBL(outOp_reg[3*2+2][7:0]!=`op_cvtE && outOp_reg[3*2+2][7:0]!=`op_cvtS),
-  .toEXT(outOp_reg[3*2+2][7:0]==`op_cvtE),
-  .toSNG(outOp_reg[3*2+2][7:0]==`op_cvtS),
-  .isS(outOp_reg[3*2+2][10]),
-  .res(FUCVT2),
-  .rtyp(FUTYPE),
-  .alt(nDataAlt[2][2])
-  );
 
   assign nDataAlt[0]=3'b111;
   assign nDataAlt[1]=3'b111;
@@ -5851,8 +5838,56 @@ module backend(
   assign fxFRT_sgnB=fxFRT_dblH ? rtDataB_reg[SIMD_WIDTH+64] : 1'bz;
   assign fxFRT_sgnB=fxFRT_sngl ? rtDataB_reg[31] : 1'bz;
   assign fxFRT_sgnB=fxFRT_ext ? rtDataB_reg[31] : 1'bz;
- 
 
+  fu_alu alu_ALIGNED(
+  .clk(clk),
+  .rst(rst),
+  .except(except),
+  .u1_A(outDataA[0+1]),.u1_B(outDataB[0+1]),.u1_S(outDataS[0+1]),.u1_op(outOp[0+1]),
+  .u1_ret(FUS_alu[0]),.u1_rten(enS_alu[0]),.u1_clkEn(outEn[0+1][0]&outEn[0+1][1]),
+    .u1_A_fufwd(fuFwdA[0+1]),.u1_A_fuufwd(fuuFwdA[0+1]),
+    .u1_B_fufwd(fuFwdB[0+1]),.u1_B_fuufwd(fuuFwdB[0+1]),
+    .u1_S_fufwd(fuFwdS[0+1]),.u1_S_fuufwd(fuuFwdS[0+1]),
+  .u2_A(outDataA[0+2]),.u2_B(outDataB[0+2]),.u2_S(outDataS[0+2]),.u2_op(outOp[0+2]),
+  .u2_ret(FUS_alu[1]),.u2_rten(enS_alu[1]),.u2_clkEn(outEn[0+2][0]&outEn[0+2][1]),
+    .u2_A_fufwd(fuFwdA[0+2]),.u2_A_fuufwd(fuuFwdA[0+2]),
+    .u2_B_fufwd(fuFwdB[0+2]),.u2_B_fuufwd(fuuFwdB[0+2]),
+    .u2_S_fufwd(fuFwdS[0+2]),.u2_S_fuufwd(fuuFwdS[0+2]),
+  .u3_A(outDataA[3+1]),.u3_B(outDataB[3+1]),.u3_S(outDataS[3+1]),.u3_op(outOp[3+1]),
+  .u3_ret(FUS_alu[2]),.u3_rten(enS_alu[2]),.u3_clkEn(outEn[3+1][0]&outEn[3+1][1]),
+    .u3_A_fufwd(fuFwdA[3+1]),.u3_A_fuufwd(fuuFwdA[3+1]),
+    .u3_B_fufwd(fuFwdB[3+1]),.u3_B_fuufwd(fuuFwdB[3+1]),
+    .u3_S_fufwd(fuFwdS[3+1]),.u3_S_fuufwd(fuuFwdS[3+1]),
+  .u4_A(outDataA[3+2]),.u4_B(outDataB[3+2]),.u4_S(outDataS[3+2]),.u4_op(outOp[3+2]),
+  .u4_ret(FUS_alu[3]),.u4_rten(enS_alu[3]),.u4_clkEn(outEn[3+2][0]&outEn[3+2][1]),
+    .u4_A_fufwd(fuFwdA[3+2]),.u4_A_fuufwd(fuuFwdA[3+2]),
+    .u4_B_fufwd(fuFwdB[3+2]),.u4_B_fuufwd(fuuFwdB[3+2]),
+    .u4_S_fufwd(fuFwdS[3+2]),.u4_S_fuufwd(fuuFwdS[3+2]),
+  .u5_A(outDataA[6+1]),.u5_B(outDataB[6+1]),.u5_S(outDataS[6+1]),.u5_nDataAlt(nDataAlt_reg[2][1]).u5_op(outOp[6+1]),
+  .u5_ret(FUS_alu[4]),.u5_rten(enS_alu[4]),.u5_clkEn(outEn[6+1][0]&outEn[6+1][1]),
+    .u5_A_fufwd(fuFwdA[6+1]),.u5_A_fuufwd(fuuFwdA[6+1]),
+    .u5_B_fufwd(fuFwdB[6+1]),.u5_B_fuufwd(fuuFwdB[6+1]),
+    .u5_S_fufwd(fuFwdS[6+1]),.u5_S_fuufwd(fuuFwdS[6+1]),
+  .u6_A(outDataA[6+2]),.u6_B(outDataB[6+2]),.u6_S(outDataS[6+2]),.u6_op(outOp[6+2]),
+  .u6_ret(FUS_alu[4]),.u6_rten(enS_alu[4]),.u6_clkEn(outEn[6+2][0]&outEn[6+2][1]),
+    .u6_A_fufwd(fuFwdA[6+2]),.u6_A_fuufwd(fuuFwdA[6+2]),
+    .u6_B_fufwd(fuFwdB[6+2]),.u6_B_fuufwd(fuuFwdB[6+2]),
+    .u6_S_fufwd(fuFwdS[6+2]),.u6_S_fuufwd(fuuFwdS[6+2]),
+  .FU0(FU[0]), .FU1(FU[1]),  .FU2(FU[2]),  .FU3(FU[3]),
+  .FU4(FU[4]), .FU5(FU[5]),  .FU6(FU[6]),  .FU7(FU[7]),
+  .FU8(FU[8]), .FU9(FU[9]),
+  .FUS1(FUS1),  .FUS2(FUS2),  .FUS3(FUS3),
+  .FUS4(FUS4), .FUS5(FUS5),  .FUS6(FUS6),  .FUS7(FUS7),
+  .FUS8(FUS8),.FUS9(FUS9),
+  .fxFRT_alten_reg(fxFRT_alten_reg[2]),
+  .fcvtout({FUTYPE,FUCVT2}), //might need less than 6 regs due to internal regs
+  .DataAlt(dalt),
+  .FUCVTIN(FUCVT1[63:0])
+  ); 
+
+  assign nDataAlt[2][2]=~dalt[1];
+  assign nDataAlt[2][0]=~dalt[0];
+  
   dmisscam mcam_mod(
   .clk(clk),
   .rst(rst),
@@ -6246,15 +6281,7 @@ dcache1 L1D_mod(
   
   
     
-  assign FU[4]=FU_alu[0];
-  assign FU[5]=FU_alu[1];
-  assign FU[6]=FU_alu[2];
-  assign FU[7]=FU_alu[3];
-  assign FU[8]=FU_alu[4];
-  assign FU[9]=FU_alu[5];
 
-  assign FU_alu[2]=~nDataAlt_reg[2][0] ? FUMUL : {DATA_WIDTH{1'BZ}};
-  assign FU_alu[2]=~nDataAlt_reg[2][1] ? FUCVT1 : {DATA_WIDTH{1'BZ}};
 //  assign FU0=dc_rdataA[0][63:0];
 //  assign FU1=dc_rdataA[1][63:0];
 //  assign FU2=dc_rdataA[2][63:0];

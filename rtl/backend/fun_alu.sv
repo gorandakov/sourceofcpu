@@ -31,7 +31,8 @@ module fu_alu(
   FUS8,FUS9,
   fxFRT_alten_reg,
   fcvtout,
-  DataAlt
+  DataAlt,
+  FUCVTIN
   );
 
   input clk;
@@ -148,6 +149,7 @@ module fu_alu(
 
   output [83:0] fcvtout;
   output [1:0] DataAlt;
+  input [63:0] FUCVTIN;
 
   reg [1:0] nDataAlt;
   reg [1:0] nDataAlt_reg;
@@ -631,6 +633,8 @@ module fu_alu(
   assign fcvtout={FUCVT2_0[81:66],FUTYPE_0,FUCVT2_0[65:0]};
  
   assign FU6=(~&nDataAlt) ? {1'b0,FUMUL} : 65'bz;
+  assign FU6=(~u5_nDataAlt) ? {1'b0,FUCVTIN} : 65'bz;
+  
   assign u5_ret=(~u5_nDataAlt_reg|(~nDataAlt_reg[1])) ? {6'b0,1'b0,2'd2} : 
     9'bz; 
   assign u5_ret=u5_nDataAlt_reg&~nDataAlt_reg[0] ? {MULFL,~u6_op_reg4[12],
