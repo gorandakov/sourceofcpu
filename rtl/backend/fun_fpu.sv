@@ -11,14 +11,12 @@ module fun_fpu(
   u2_A,u2_B,u2_Ax,u2_Bx,u2_en,u2_op,
   u2_fufwd_A,u2_fuufwd_A,u2_fufwd_B,u2_fuufwd_B,
   u2_ret,
-  u3_A,u3_B,u3_Ax,u3_Bx,u3_en,u3_op,
-  u3_fufwd_A,u3_fuufwd_A,u3_fufwd_B,u3_fuufwd_B,
-  u3_xdata,u3_xdata_en,u3_xdata_ret,
-  u3_ret,
   FUF0,FUF1,FUF2,
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
-  FUF9
+  FUF9,
+  ALTDATA0,ALTDATA1,
+  ALT_INP
   );
   parameter [1:0] INDEX=2'd0;
   parameter [0:0] H=1'b0;
@@ -50,32 +48,20 @@ module fun_fpu(
   input [3:0] u2_fuufwd_B;
   output [13:0] u2_ret;
  
-  input [67:0] u3_A;
-  input [67:0] u3_B;
-  input [15:0] u3_Ax;
-  input [15:0] u3_Bx;
-  input [3:0] u3_en;
-  input [12:0] u3_op;
-  input [3:0] u3_fufwd_A;
-  input [3:0] u3_fuufwd_A;
-  input [3:0] u3_fufwd_B;
-  input [3:0] u3_fuufwd_B;
-  input [67:0] u3_xdata;
-  input u3_xdata_en;
-  input [13:0] u3_xdata_ret;
-  output [13:0] u3_ret;
-  output [5:0] u3_flg;
 
   input [67:0] FUF0;
   input [67:0] FUF1;
   input [67:0] FUF2;
   input [67:0] FUF3;
-  input [67:0] FUF4;
-  input [67:0] FUF5;
-  input [67:0] FUF6;
-  input [67:0] FUF7;
-  input [67:0] FUF8;
-  input [67:0] FUF9;
+  inout [67:0] FUF4;
+  inout [67:0] FUF5;
+  inout [67:0] FUF6;
+  inout [67:0] FUF7;
+  inout [67:0] FUF8;
+  inout [67:0] FUF9;
+  input [1:0] ALT_INP;
+  input [67:0] ALTDATA0;
+  input [67:0] ALTDATA1;
 
   reg  gxFADD_hi;
   reg  gxFADD_en;
@@ -144,6 +130,8 @@ module fun_fpu(
   //wire [15:0] u1_Bx=u1_BH[15:0];
   //wire [15:0] u2_Bx=u2_BH[15:0];
   integer k;
+
+  reg [1:0] ALT_INP_reg;
 
   rs_write_forward #(68) u1_A_fwd(
   clk,rst,
@@ -326,8 +314,89 @@ module fun_fpu(
   .A(fxDataAXL_reg[1]),.B(gxDataBXL_reg[0]),
   .res(FOOF[1]));
  
-  assign gxDataBFL[1]=uu_B1;
-  assign gxDataBFL[0]=uu_B2;
+  s_fadd faddx1LL(
+  .clk(clk),
+  .rst(rst),
+  .A({fxDataAXL_reg[0][32:0]}),
+  .B({gxDataBXL_reg[1][32:0]}),
+  .isSub(fxFADD_sub[H]),
+  .isRSub(1'b0),
+  .invExcpt(fpcsr[`csrfpu_inv_excpt]),
+  .rmode(fpcsr[`csrfpu_rmode]),
+  .en(fxFADD_sin),
+  .logic_en(fxFADD_lo),
+  .logic_sel(fxFADD_loSel),
+  .copyA(fxFADD_copySA[0+2*H]),
+  .res(FOOF[2*m+0][32:0])
+  );
+
+  s_fadd faddx1LH(
+  .clk(clk),
+  .rst(rst),
+  .A({fxDataAXL_reg[0][65:33]}),
+  .B({gxDataBXL_reg[1][65:33]}),
+  .isSub(fxFADD_sub[H]),
+  .isRSub(1'b0),
+  .invExcpt(fpcsr[`csrfpu_inv_excpt]),
+  .rmode(fpcsr[`csrfpu_rmode]),
+  .en(fxFADD_sin),
+  .logic_en(fxFADD_lo),
+  .logic_sel(fxFADD_loSel),
+  .copyA(fxFADD_copySA[1+2*H]),
+  .res(FOOF[2*m+0][65:33])
+  );
+  
+  
+  fpumuls fcaddx2LL_mod(
+  .clk(clk),
+  .rst(rst),
+  .A({fxDataAXL_reg[1][32:0]}),
+  .B({gxDataBXL_reg[0][32:0]}),
+  .copyA(fxFCADD_copyASN[0+2*H]),
+  .en(fxFCADD_sn),
+  .rmode(fpcsr[`csrfpu_rmode]),
+  .res(FOOFL[1][32:0]),
+  .raise(fxFCADD_raise_s[0+2*H]),
+  .fpcsr(fpcsr[31:0])
+  );
+
+  fpumuls fcaddx2LH_mod(
+  .clk(clk),
+  .rst(rst),
+  .A({fxDataAXL_reg[1][65:33]}),
+  .B({gxDataBXL_reg[0][65:33]}),
+  .copyA(fxFCADD_copyASN[1+2*H]),
+  .en(fxFCADD_sn),
+  .rmode(fpcsr[`csrfpu_rmode]),
+  .res(FOOFL[1][65:33]),
+  .raise(fxFCADD_raise_s[1+2*H]),
+  .fpcsr(fpcsr[31:0])
+  );
+
+  generate
+      if (H) assign gxDataBFL[1]=u1_op_reg[9] ? u1_Bx : uu_B1;
+      else assign gxDataBFL[1]=u1_op_reg[8] ? u1_Bx : uu_B1;
+      if (H) assign gxDataBFL[0]=u2_op_reg[9] ? u2_Bx : uu_B2;
+      else assign gxDataBFL[0]=u2_op_reg[8] ? u2_Bx : uu_B2;
+      if (INDEX=0) begin
+	      assign FUF4=FOOF_reg[0];
+	      assign FUF7=FOOF_reg[1];
+      end
+      if (INDEX=1) begin
+	      assign FUF5=FOOF_reg[0];
+	      assign FUF8=FOOF_reg[1];
+      end
+      if (INDEX=2) begin
+	      assign FUF6=|ALT_INP_reg ? {SIMD_WIDTH{1'BZ}} : FOOF_reg[0];
+	      assign FUF6=ALT_INP_reg[0] ? ALTDATA0 : {SIMD_WIDTH{1'BZ}};
+	      assign FUF6=ALT_INP_reg[1] ? ALTDATA1 : {SIMD_WIDTH{1'BZ}};
+	      FUF9=FOOF_reg[1];
+      end
+  endgenerate
+
+//  if (m!=2) assign FUFL[4+m]=FOOFL_reg[2*m+0];
+//  else assign FUFL[4+m]=fxFRT_alten_reg5[2]||~nDataAlt_reg5[2][2] ? {SIMD_WIDTH{1'BZ}} : FOOFL_reg[2*m+0];
+//  assign FUFL[7+m]=FOOFL_reg[2*m+1];
 
   always @(negedge clk) begin
     if (rst) begin
@@ -469,5 +538,8 @@ module fun_fpu(
     end
   end
 
+  always @(posedge clk) begin
+      ALT_INP_reg<=ALT_INP;
+  end
 
 endmodule
