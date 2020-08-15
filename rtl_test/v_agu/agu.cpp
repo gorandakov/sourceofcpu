@@ -566,6 +566,7 @@ bool sched(Vagu_block *top, bool &err2, int exc) {
     static std::mt19937 rndgen(def_seed); 
     static std::uniform_int_distribution<unsigned> dist192(0,191);
     static std::uniform_int_distribution<unsigned> dist64(0,63);
+    static unsigned wb[3]={0,0,0},wb2[3]={0,0,0};
 
     stall2=stall1;
     stall1=stall0||exc;
@@ -584,6 +585,17 @@ bool sched(Vagu_block *top, bool &err2, int exc) {
         for(n=0;n<3;n++) que_en4[n]=false;
         for(n=0;n<3;n++) que_en5[n]=false;
         sch_init=0;
+    }
+    wb[2]=wb[1];
+    wb[1]=wb[0];
+    wb2[2]=wb2[1];
+    wb2[1]=wb2[0];
+    if (!stall) {
+        wb[0]=lrand48()&1;
+	wb2[0]=lrand48()%3+1;
+    } else {
+	wb[0]=0;
+	wb2[0]=0;
     }
     for(n=0;n<6;n++) if (reqs[gen.POS][n].en) break;
     if (n==6 && !exc) {
@@ -1117,7 +1129,7 @@ bool get_check(Vagu_block *top, int exc) {
     FU3Reg[0]=0;
 
     LSQ=top->p0_LSQ;
-    if ((!top->p0_en) && !(top->p0_ret&0x3==1)) goto label_p1;
+    if ((!top->p0_en && !(top->p0_rsEn && top->p0_lsfwd)) && !(top->p0_ret&0x3==1)) goto label_p1;
     if (exc==10) goto label_p1;
     for(n=0;n<32;n++) {
         if (reqs[n][0].en && reqs[n][0].LSQ==LSQ && (reqs[n][0].sched==1
@@ -1132,7 +1144,10 @@ bool get_check(Vagu_block *top, int exc) {
     err[n2]=n==32;
     if (n<32 && reqs[n][n2].chk(gen,top->p0_adata,top->p0_LSQ,top->p0_repl,top->p0_ret,
 	&err[n2]) && !err[n2]) {
-        if ((dist(rndgen)||(top->p0_ret&3)==1) && reqs[n][n2].sched==1) {
+        if (reqs[n][n2].flag && reqs[n][n2].sched==1) {
+	    reqs[n][n2].flag=0;
+	    FU0Hit[0]=0;
+	} else if ((dist(rndgen)||(top->p0_ret&3)==1) && reqs[n][n2].sched==1) {
           reqs[n][n2].en=0;
           FU0Hit[0]=1;
         } else {
@@ -1149,7 +1164,7 @@ bool get_check(Vagu_block *top, int exc) {
     ret|=err[n2];
     label_p1:
     LSQ=top->p1_LSQ;
-    if ((!top->p1_en) && !(top->p1_ret&0x3==1)) goto label_p2;
+    if ((!top->p1_en && !(top->p1_rsEn && top->p1_lsfwd)) && !(top->p1_ret&0x3==1)) goto label_p2;
     if (exc==10) goto label_p2;
     for(n=0;n<32;n++) {
         if (reqs[n][1].en && reqs[n][1].LSQ==LSQ && (reqs[n][1].sched==1
@@ -1164,7 +1179,10 @@ bool get_check(Vagu_block *top, int exc) {
     err[n2]=n==32;
     if (n<32 && reqs[n][n2].chk(gen,top->p1_adata,top->p1_LSQ,top->p1_repl,top->p1_ret,
 	&err[n2]) && !err[n2]) {
-        if ((dist(rndgen)||(top->p1_ret&3)==1) && reqs[n][n2].sched==1) {
+        if (reqs[n][n2].flag && reqs[n][n2].sched==1) {
+	    reqs[n][n2].flag=0;
+	    FU1Hit[0]=0;
+	} else if ((dist(rndgen)||(top->p1_ret&3)==1) && reqs[n][n2].sched==1) {
           reqs[n][n2].en=0;
           FU1Hit[0]=1;
         } else {
@@ -1181,7 +1199,7 @@ bool get_check(Vagu_block *top, int exc) {
     ret|=err[n2];
     label_p2:
     LSQ=top->p2_LSQ;
-    if ((!top->p2_en) && !(top->p2_ret&0x3==1)) goto label_p3;
+    if ((!top->p2_en && !(top->p2_rsEn && top->p2_lsfwd)) && !(top->p2_ret&0x3==1)) goto label_p3;
     if (exc==10) goto label_p3;
     for(n=0;n<32;n++) {
         if (reqs[n][2].en && reqs[n][2].LSQ==LSQ && (reqs[n][2].sched==1
@@ -1196,7 +1214,10 @@ bool get_check(Vagu_block *top, int exc) {
     err[n2]=n==32;
     if (n<32 && reqs[n][n2].chk(gen,top->p2_adata,top->p2_LSQ,top->p2_repl,top->p2_ret,
 	&err[n2]) && !err[n2]) {
-        if ((dist(rndgen)||(top->p2_ret&3)==1) && reqs[n][n2].sched==1) {
+        if (reqs[n][n2].flag && reqs[n][n2].sched==1) {
+	    reqs[n][n2].flag=0;
+	    FU2Hit[0]=0;
+	} else if ((dist(rndgen)||(top->p2_ret&3)==1) && reqs[n][n2].sched==1) {
           reqs[n][n2].en=0;
           FU2Hit[0]=1;
         } else {
