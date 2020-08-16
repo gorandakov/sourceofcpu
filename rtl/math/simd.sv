@@ -37,7 +37,7 @@ module add_sat(
 
 endmodule
 
-module simd_sasquach_simpl(
+module simd_socialiste_simpl(
   clk,
   rst,
   operation,
@@ -87,7 +87,7 @@ module simd_sasquach_simpl(
 endmodule
 
 
-module simd_sasquach(
+module simd_socialiste(
   clk,
   rst,
   operation,

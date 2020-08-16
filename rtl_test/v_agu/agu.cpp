@@ -244,6 +244,7 @@ class lsreq {
     bool en;
     char sched;
     bool discarded,kmode,sys_kmode;
+    bool flag,flag2;
     bool oor;
     bool chk(dmigen &gen,unsigned mop[],unsigned short lsq,
       unsigned short repl,unsigned short ret,bool *err);
@@ -350,6 +351,18 @@ void dmigen::gen_bndl(lsreq reqs[6]) {
     reqs[3].oor=0;
     reqs[4].oor=0;
     reqs[5].oor=0;
+    reqs[0].flag=lrand48()%1;
+    reqs[1].flag=lrand48()%1;
+    reqs[2].flag=lrand48()%1;
+    reqs[3].flag=lrand48()%1;
+    reqs[4].flag=lrand48()%1;
+    reqs[5].flag=lrand48()%1;
+    reqs[0].flag2=reqs[0].flag;
+    reqs[1].flag2=reqs[1].flag;
+    reqs[2].flag2=reqs[2].flag;
+    reqs[3].flag2=reqs[3].flag;
+    reqs[4].flag2=reqs[4].flag;
+    reqs[5].flag2=reqs[5].flag;
     for(n=0;n<rng_cnt;n++)
         map_size+=rng_size[n];
     for(n=0;n<cnt;n++) {
@@ -728,6 +741,57 @@ bool sched(Vagu_block *top, bool &err2, int exc) {
     top->u5_LSQ_no=reqs[ind&0x1f][ind>>5].LSQ;
     reqs[ind&0x1f][ind>>5].sched=1;
     no_6:
+    if (!wb[2]) goto label_wb2;
+    found=0;
+    top->lso_xdataA=0;
+    while (!found) {
+        ind=dist192(rndgen);
+        if (reqs[ind&0x1f][ind>>5].en && (reqs[ind&0x1f][ind>>5].sched)&&
+            !(reqs[ind&0x1f][ind>>5].op&1)&&(reqs[ind&0x1f][ind>>5].flag2)&&
+	    !(reqs[ind&0x1f][ind>>5].flag))
+            found=1;
+        if (dist192(rndgen)==0) {
+            top->u5_clkEn=0;
+            goto label_wb2;
+        }
+    }
+    reqs[ind&0x1f][ind>>5].poke(gen,top->lso_adata);
+    top->lso_xdataA=1<<(lsfxdata_has);
+    top->lso_bnkread=0x1f;
+    top->lso_data[0]=0x11111111;
+    top->lso_data[1]=0x22222222;
+    top->lso_data[2]=0x33333333;
+    top->lso_data[3]=0x44444444;
+    top->lso_data[4]=0xea;
+    
+
+
+    label_wb2:
+    top->lso2_xdataA=0;//not
+    top->lso2_wb_en=0;//not
+    if (!wb2[2]) goto label_wb2_out;
+    while (!found) {
+        ind=dist192(rndgen);
+        if (reqs[ind&0x1f][ind>>5].en && (reqs[ind&0x1f][ind>>5].sched)&&
+            !(reqs[ind&0x1f][ind>>5].op&1)&&(reqs[ind&0x1f][ind>>5].flag2)&&
+	    !(reqs[ind&0x1f][ind>>5].flag))
+            found=1;
+        if (dist192(rndgen)==0) {
+            top->u5_clkEn=0;
+            goto label_wb2_out;
+        }
+    }
+    reqs[ind&0x1f][ind>>5].poke(gen,top->lso2_adata);
+    top->lso2_xdataA=1<<(lsfxdata_has);
+    top->lso2_bnkread=0x1f;
+    top->lso2_data[0]=0xa1a1a1a1;
+    top->lso2_data[1]=0xb2b2b2b2;
+    top->lso2_data[2]=0xc3c3c3c3;
+    top->lso2_data[3]=0xd4d4d4d4;
+    top->lso2_data[4]=0xea;
+    top->lso2_wb_en=1<<((ind>>5)%3);
+
+    label_wb2_out:
     top->mOpY4_en=que_en4[1];
     extract_e(que_data4[1],lsaddr_addrE,val);
     top->mOpY4_addrEven=val;
