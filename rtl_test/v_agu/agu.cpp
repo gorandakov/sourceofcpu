@@ -3,6 +3,9 @@
 #include <random>
 #include "Vagu_block.h"
 #include "verilated.h"
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <string.h>
 #include "../inc/struct.h"
 #include "../inc/extract.h"
 #include "../inc/csrss_no.h"
@@ -12,7 +15,7 @@
 
 #define HUG 1
 
-#define def_seed 0xbbea1735baad
+unsigned long def_seed;
 struct lsent {
     unsigned short op;
     unsigned short sh;
@@ -644,6 +647,7 @@ bool sched(Vagu_block *top, bool &err2, int exc) {
     top->u1_LSQ_no=reqs[ind>>1][3*(ind&1)].LSQ;
     top->u1_WQ_no=reqs[ind>>1][3*(ind&1)].WQ;
     top->u1_II_no=reqs[ind>>1][3*(ind&1)].II;
+    top->u1_lsflag=reqs[ind>>1][3*(ind&1)].flag;
     reqs[ind>>1][3*(ind&1)].sched=1;
     no_2:
     found=0;
@@ -667,6 +671,7 @@ bool sched(Vagu_block *top, bool &err2, int exc) {
     top->u2_LSQ_no=reqs[ind>>1][3*(ind&1)+1].LSQ;
     top->u2_WQ_no=reqs[ind>>1][3*(ind&1)+1].WQ;
     top->u2_II_no=reqs[ind>>1][3*(ind&1)+1].II;
+    top->u2_lsflag=reqs[ind>>1][3*(ind&1)+1].flag;
     reqs[ind>>1][3*(ind&1)+1].sched=1;
     no_3:
     found=0;
@@ -690,6 +695,7 @@ bool sched(Vagu_block *top, bool &err2, int exc) {
     top->u3_LSQ_no=reqs[ind>>1][3*(ind&1)+2].LSQ;
     top->u3_WQ_no=reqs[ind>>1][3*(ind&1)+2].WQ;
     top->u3_II_no=reqs[ind>>1][3*(ind&1)+2].II;
+    top->u3_lsflag=reqs[ind>>1][3*(ind&1)+2].flag;
     reqs[ind>>1][3*(ind&1)+2].sched=1;
     no_4:
     top->u4_clkEn=0;
@@ -751,7 +757,7 @@ bool sched(Vagu_block *top, bool &err2, int exc) {
 	    !(reqs[ind&0x1f][ind>>5].flag))
             found=1;
         if (dist192(rndgen)==0) {
-            top->u5_clkEn=0;
+            //top->u5_clkEn=0;
             goto label_wb2;
         }
     }
@@ -769,6 +775,7 @@ bool sched(Vagu_block *top, bool &err2, int exc) {
     label_wb2:
     top->lso2_xdataA=0;//not
     top->lso2_wb_en=0;//not
+    found=0;
     if (!wb2[2]) goto label_wb2_out;
     while (!found) {
         ind=dist192(rndgen);
@@ -777,7 +784,7 @@ bool sched(Vagu_block *top, bool &err2, int exc) {
 	    !(reqs[ind&0x1f][ind>>5].flag))
             found=1;
         if (dist192(rndgen)==0) {
-            top->u5_clkEn=0;
+            //top->u5_clkEn=0;
             goto label_wb2_out;
         }
     }
@@ -1052,9 +1059,12 @@ bool lsreq::chk(dmigen &gen,unsigned mop[],unsigned short lsq,unsigned short rep
     //extract_e(mop,lsaddr_LSQ,val);
     if (lsq!=LSQ) { printf("LSQ\n"); return false; }
     if (repl && !discarded && !(op&1)) *err=1;
-    if (discarded && !repl && !(op&1)) *err=1;
+  //  if (discarded && !repl && !(op&1)) *err=1;
     if ((!sys_kmode && kmode)||oor) {
-        if ((ret&3)!=1) *err=1;
+        if ((ret&3)!=1) { 
+	    *err=1;
+            printf("<EX> %i,%i,%i\n",sys_kmode,kmode,oor);
+	}
     } else {
         if ((ret&3)==1) {
            printf("<cann> %lx\n",vaddr);
@@ -1100,6 +1110,7 @@ void lsreq::poke(dmigen gen, unsigned mop[]) {
     deposit_e(mop,lsaddr_odd,(vaddr>>7)&1);
     deposit_e(mop,lsaddr_split,(vaddr>>8)!=((vaddr+bytes-HUG)>>8));
     deposit_e(mop,lsaddr_sz,(op>>1)&0x1f);
+    deposit_e(mop,lsaddr_flag,flag);
     unsigned banks=0;
     banks|=1u<<((addr>>2)&0x1f);
     if ((addr&0x3)+bytes>4) 
@@ -1123,7 +1134,7 @@ void lsreq::poke(dmigen gen, unsigned mop[]) {
 bool get_check(Vagu_block *top, int exc) {
     bool err[6];
     unsigned LSQ;
-    unsigned long val;
+    unsigned long val,flg;
     unsigned vals[7];
     unsigned n,n2=0;
     static bool FU0Hit[3],FU1Hit[3],FU2Hit[3],FU3Hit[3];
@@ -1192,21 +1203,24 @@ bool get_check(Vagu_block *top, int exc) {
     FU3Hit[0]=0;
     FU3Reg[0]=0;
 
-    LSQ=top->p0_LSQ;
-    if ((!top->p0_en && !(top->p0_rsEn && top->p0_lsfwd)) && !(top->p0_ret&0x3==1)) goto label_p1;
+     extract_e(top->p0_adata,lsaddr_II,val);
+     extract_e(top->p0_adata,lsaddr_flag,flg);
+     LSQ=top->p0_LSQ;
+    if ((!top->p0_en && !(top->p0_rsEn && flg)) && !(top->p0_ret&0x3==1)) goto label_p1;
     if (exc==10) goto label_p1;
     for(n=0;n<32;n++) {
-        if (reqs[n][0].en && reqs[n][0].LSQ==LSQ && (reqs[n][0].sched==1
+        if (reqs[n][0].en && reqs[n][0].II==val && (reqs[n][0].sched==1
 	    ||reqs[n][0].sched==2||reqs[n][0].sched==7) &&!(reqs[n][0].op&0x1)) {
             n2=0; break;
         }
-        if (reqs[n][3].en && reqs[n][3].LSQ==LSQ && (reqs[n][3].sched==1
+        if (reqs[n][3].en && reqs[n][3].II==val && (reqs[n][3].sched==1
 	    || reqs[n][3].sched==2||reqs[n][3].sched==7)&&!(reqs[n][3].op&0x1)) {
             n2=3; break;
         }
     }
     err[n2]=n==32;
-    if (n<32 && reqs[n][n2].chk(gen,top->p0_adata,top->p0_LSQ,top->p0_repl,top->p0_ret,
+    if (n!=32) LSQ=reqs[n][n2].LSQ;
+    if (n<32 && reqs[n][n2].chk(gen,top->p0_adata,LSQ,top->p0_repl,top->p0_ret,
 	&err[n2]) && !err[n2]) {
         if (reqs[n][n2].flag && reqs[n][n2].sched==1) {
 	    reqs[n][n2].flag=0;
@@ -1227,21 +1241,24 @@ bool get_check(Vagu_block *top, int exc) {
     //printf("Reg0: LSQ %x\n",LSQ);
     ret|=err[n2];
     label_p1:
-    LSQ=top->p1_LSQ;
-    if ((!top->p1_en && !(top->p1_rsEn && top->p1_lsfwd)) && !(top->p1_ret&0x3==1)) goto label_p2;
+     LSQ=top->p1_LSQ;
+     extract_e(top->p1_adata,lsaddr_II,val);
+     extract_e(top->p1_adata,lsaddr_flag,flg);
+    if ((!top->p1_en && !(top->p1_rsEn && flg)) && !(top->p1_ret&0x3==1)) goto label_p2;
     if (exc==10) goto label_p2;
     for(n=0;n<32;n++) {
-        if (reqs[n][1].en && reqs[n][1].LSQ==LSQ && (reqs[n][1].sched==1
+        if (reqs[n][1].en && reqs[n][1].II==val && (reqs[n][1].sched==1
 	    || reqs[n][1].sched==2||reqs[n][1].sched==7)&&!(reqs[n][1].op&0x1)) {
             n2=1; break;
         }
-        if (reqs[n][4].en && reqs[n][4].LSQ==LSQ && (reqs[n][4].sched==1
+        if (reqs[n][4].en && reqs[n][4].II==val && (reqs[n][4].sched==1
 	    || reqs[n][4].sched==2||reqs[n][4].sched==7)&&!(reqs[n][4].op&0x1)) {
             n2=4; break;
         }
     }
     err[n2]=n==32;
-    if (n<32 && reqs[n][n2].chk(gen,top->p1_adata,top->p1_LSQ,top->p1_repl,top->p1_ret,
+    if (n!=32) LSQ=reqs[n][n2].LSQ;
+    if (n<32 && reqs[n][n2].chk(gen,top->p1_adata,LSQ,top->p1_repl,top->p1_ret,
 	&err[n2]) && !err[n2]) {
         if (reqs[n][n2].flag && reqs[n][n2].sched==1) {
 	    reqs[n][n2].flag=0;
@@ -1262,21 +1279,24 @@ bool get_check(Vagu_block *top, int exc) {
     //printf("Reg1: LSQ %x\n",LSQ);
     ret|=err[n2];
     label_p2:
-    LSQ=top->p2_LSQ;
-    if ((!top->p2_en && !(top->p2_rsEn && top->p2_lsfwd)) && !(top->p2_ret&0x3==1)) goto label_p3;
+     LSQ=top->p2_LSQ;
+    extract_e(top->p2_adata,lsaddr_II,val);
+     extract_e(top->p2_adata,lsaddr_flag,flg);
+    if ((!top->p2_en && !(top->p2_rsEn && flg)) && !(top->p2_ret&0x3==1)) goto label_p3;
     if (exc==10) goto label_p3;
     for(n=0;n<32;n++) {
-        if (reqs[n][2].en && reqs[n][2].LSQ==LSQ && (reqs[n][2].sched==1
+        if (reqs[n][2].en && reqs[n][2].II==val && (reqs[n][2].sched==1
 	    || reqs[n][2].sched==2||reqs[n][2].sched==7)&&!(reqs[n][2].op&0x1)) {
             n2=2; break;
         }
-        if (reqs[n][5].en && reqs[n][5].LSQ==LSQ && (reqs[n][5].sched==1
+        if (reqs[n][5].en && reqs[n][5].II==val && (reqs[n][5].sched==1
 	    || reqs[n][5].sched==2||reqs[n][5].sched==7)&&!(reqs[n][5].op&0x1)) {
             n2=5; break;
         }
     }
     err[n2]=n==32;
-    if (n<32 && reqs[n][n2].chk(gen,top->p2_adata,top->p2_LSQ,top->p2_repl,top->p2_ret,
+    if (n!=32) LSQ=reqs[n][n2].LSQ;
+    if (n<32 && reqs[n][n2].chk(gen,top->p2_adata,LSQ,top->p2_repl,top->p2_ret,
 	&err[n2]) && !err[n2]) {
         if (reqs[n][n2].flag && reqs[n][n2].sched==1) {
 	    reqs[n][n2].flag=0;
@@ -1297,40 +1317,44 @@ bool get_check(Vagu_block *top, int exc) {
     //printf("Reg2: LSQ %x\n",LSQ);
     ret|=err[n2];
     label_p3:
-    LSQ=top->p3_LSQ;
-    if ((!top->p3_en)  && !(top->p3_ret&0x3==1)) goto label_Y4;
+     LSQ=top->p3_LSQ;
+     extract_e(top->p3_adata,lsaddr_II,val);
+     extract_e(top->p3_adata,lsaddr_flag,flg);
+    if ((!top->p3_en) && !(top->p3_rsEn && flg) && !(top->p3_ret&0x3==1)) goto label_Y4;
     if (exc==10) goto label_Y4;
-    extract_e(top->p3_adata,lsaddr_reg_low,val);
-    if (val>8) goto label_Y4;
+    extract_e(top->p3_adata,lsaddr_reg_low,flg);
+    if (flg>8) goto label_Y4;
+     extract_e(top->p3_adata,lsaddr_flag,flg);
     //printf("match p3\n");
     for(n=0;n<32;n++) {
-        if (reqs[n][0].en && reqs[n][0].LSQ==LSQ && (reqs[n][0].sched==1
+        if (reqs[n][0].en && reqs[n][0].II==val && (reqs[n][0].sched==1
 	    || reqs[n][0].sched==2||reqs[n][0].sched==7)&&!(reqs[n][0].op&0x1)) {
             n2=0; break;
         }
-        if (reqs[n][1].en && reqs[n][1].LSQ==LSQ && (reqs[n][1].sched==1
+        if (reqs[n][1].en && reqs[n][1].II==val && (reqs[n][1].sched==1
 	    || reqs[n][1].sched==2||reqs[n][1].sched==7)&&!(reqs[n][1].op&0x1)) {
             n2=1; break;
         }
-        if (reqs[n][2].en && reqs[n][2].LSQ==LSQ && (reqs[n][2].sched==1
+        if (reqs[n][2].en && reqs[n][2].II==val && (reqs[n][2].sched==1
 	    || reqs[n][2].sched==2||reqs[n][2].sched==7)&&!(reqs[n][2].op&0x1)) {
             n2=2; break;
         }
-        if (reqs[n][3].en && reqs[n][3].LSQ==LSQ && (reqs[n][3].sched==1
+        if (reqs[n][3].en && reqs[n][3].II==val && (reqs[n][3].sched==1
 	    || reqs[n][3].sched==2||reqs[n][3].sched==7)&&!(reqs[n][3].op&0x1)) {
             n2=3; break;
         }
-        if (reqs[n][4].en && reqs[n][4].LSQ==LSQ && (reqs[n][4].sched==1
+        if (reqs[n][4].en && reqs[n][4].II==val && (reqs[n][4].sched==1
 	    || reqs[n][4].sched==2||reqs[n][4].sched==7)&&!(reqs[n][4].op&0x1)) {
             n2=4; break;
         }
-        if (reqs[n][5].en && reqs[n][5].LSQ==LSQ && (reqs[n][5].sched==1
+        if (reqs[n][5].en && reqs[n][5].II==val && (reqs[n][5].sched==1
 	    || reqs[n][5].sched==2||reqs[n][5].sched==7)&&!(reqs[n][5].op&0x1)) {
             n2=5; break;
         }
     }
+    if (n!=32) LSQ=reqs[n][n2].LSQ;
     err[n2]=n==32;
-    if (n<32 && reqs[n][n2].chk(gen,top->p3_adata,top->p3_LSQ,top->p3_repl,top->p3_ret,
+    if (n<32 && reqs[n][n2].chk(gen,top->p3_adata,LSQ,top->p3_repl,top->p3_ret,
 	&err[n2]) && !err[n2]) {
         if ((dist(rndgen)||(top->p3_ret&3))==1 && reqs[n][n2].sched==1) {
           reqs[n][n2].en=0;
@@ -1599,6 +1623,44 @@ int main(int argc, char *argv[]) {
     bool err2;
     std::mt19937 rndgen(def_seed); 
     std::uniform_int_distribution<unsigned> dist(0,1000);
+    
+    int pid;
+
+    if (argc==1) {
+        FILE *f=fopen("/home/goran/mcu_req_seed","r");
+	if (f==NULL) f=fopen("/dev/random","r");
+	if (f==NULL) exit(2);
+	fread((void *) &def_seed,8,1,f);
+	fclose(f);
+	goto _begin;
+    } else {
+        if (strcmp(argv[1],"-multi")) exit(2);
+        FILE *f=fopen("/dev/random","r");
+	if (f==NULL) exit(2);
+        FILE *f2=fopen("/home/goran/mcu_req_seed","w");
+	if (f2==NULL) exit(2);
+	fread((void *) &def_seed,8,1,f);
+	fwrite((void *) &def_seed,8,1,f2);
+	fflush(f2);
+	while (pid=fork()) {
+	    int status;
+	    if (pid<0) exit(4);
+	    wait(&status);
+	    if (!WIFEXITED(status)) exit(3);
+	    if (WEXITSTATUS(status)==0) {
+	        fread((void *) &def_seed,8,1,f);
+	        rewind(f2);
+	        fwrite((void *) &def_seed,8,1,f2);
+	        fflush(f2);
+	    } else {
+	        exit(WEXITSTATUS(status));
+	    }
+	}
+	execl(argv[0],argv[0],(char *) NULL);
+	exit(5);
+    }
+
+_begin:
 
     srand48(def_seed);
     //rndgen.seed();
@@ -1715,6 +1777,7 @@ int main(int argc, char *argv[]) {
         }
         if (initcount) initcount--;
         cyc0++;
+        if (cyc0>1000000) exit(0);
     }
 
 }
