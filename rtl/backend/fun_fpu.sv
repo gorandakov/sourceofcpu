@@ -217,7 +217,7 @@ module fun_fpu(
   .fpcsr(fpcsr[31:0]),
   .rmode(fpcsr[`csrfpu_rmode]),
   .copyA(fxFADD_copyA[H]),
-  .en(H? fxFADD_dbl&~xdata_en_reg2:fxFADD_dblext&~xdata_en_reg2),
+  .en(H? fxFADD_dbl:fxFADD_dblext),
   .res(FOOF[0]),
   .res_hi(FOOFH[0])
   );
@@ -226,7 +226,7 @@ module fun_fpu(
   fperm fperm1H_mod(
   .clk(clk),
   .rst(rst),
-  .en(~(H? fxFADD_dbl:fxFADD_dblext)&~fxFADD_sin&~fxFADD_pcmp&~xdata_en_reg2),
+  .en(~(H? fxFADD_dbl:fxFADD_dblext)&~fxFADD_sin&~fxFADD_pcmp),
   .copyA(H? fxFADD_com==2'b01 : ~fxFADD_com[0]),
   .swpSngl(fxFADD_pswp),
   .dupSngl(fxFADD_dupl),
@@ -244,8 +244,8 @@ module fun_fpu(
   .ord(gxFADD_ord),.invExcpt(fpcsr[`csrfpu_inv_excpt]),
   .isExt(H ? 1'b0: gxFADD_ext),.isDbl(gxFADD_dbl),.isSng(H? gxFADD_sn:gxFADD_sin),
   .afm(1'b0),.flags(FOOSH),
-  .paired(gxFADD_pkdS&~xdata_en_reg2),
-  .vec(gxFADD_pkdD&~xdata_en_reg2),
+  .paired(gxFADD_pkdS),
+  .vec(gxFADD_pkdD),
   .jumpType(5'b0),
   .cmod(outOp_reg3[1][1:0]),
   .res_pkd(FOOF[0])
