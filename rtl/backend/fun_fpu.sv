@@ -372,9 +372,9 @@ module fun_fpu(
   );
 
   generate
-      if (H) assign gxDataBFL[1]=u1_op_reg[9] ? {uu_B1[68+15:68],u1_Bx} : uu_B1;
+      if (H) assign gxDataBFL[1]=u1_op_reg[9] ? u1_Bx : uu_B1;
       else assign gxDataBFL[1]=u1_op_reg[8] ? {uu_B1[68+15:68],u1_Bx} : uu_B1;
-      if (H) assign gxDataBFL[0]=u2_op_reg[9] ? {uu_B2[68+15:68],u2_Bx} : uu_B2;
+      if (H) assign gxDataBFL[0]=u2_op_reg[9] ? u2_Bx : uu_B2;
       else assign gxDataBFL[0]=u2_op_reg[8] ? {uu_B2[68+15:68],u2_Bx} : uu_B2;
       if (INDEX=0) begin
 	      assign FUF4=FOOF_reg[0];
@@ -525,6 +525,18 @@ module fun_fpu(
 
   always @(posedge clk) begin
       ALT_INP_reg<=ALT_INP;
+      gxFADD_en=u1_op[0] && u1_clkEn && u1_op[7:0]==`fop_cmpDH || u1_op[7:0]==`fop_cmpDL || u1_op[7:0]==`fop_cmpE || u1_op[7:0]==`fop_cmpS;
+      gxFADD_ord=u1_op[10];
+      gxFADD_hi=u1_op[7:0]==`fop_cmpDH;
+      gxFADD_ext=u1_op[7:0]==`fop_cmpE;
+      gxFADD_dbl=u1_op[7:0]==`fop_cmpDH || u1_op[7:0]==`fop_cmpDL;
+      gxFADD_sn=~gxFADD_ext & ~gxFADD_dbl;
+      gxFADD_sin=~gxFADD_dbl; 
+      gxFADD_pkdS<={u1_op[7:2],2'b0}==`fop_pcmplt && u1_op[10];
+      gxFADD_pkdD<={u1_op[7:2],2'b0}==`fop_pcmplt && ~u1_op[10];
+      gxFADD_en_reg[k]<=gxFADD_en[k];
+      gxFADD_en_reg2[k]<=gxFADD_en_reg[k];
+
   end
 
 endmodule
