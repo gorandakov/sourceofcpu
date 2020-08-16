@@ -1314,11 +1314,11 @@ module backend(
   wire [9:0][SIMD_WIDTH-1:0] FUVH;
   wire [9:0][SIMD_WIDTH-1:0] FUVL;
   wire [9:0][SIMD_WIDTH-1:0] FUFH;
-  wire [9:0][SIMD_WIDTH-1:0] FUFL;
+  wire [9:0][16+SIMD_WIDTH-1:0] FUFL;
   wire [5:0][SIMD_WIDTH-1:0] FOOFH;
-  wire [5:0][SIMD_WIDTH-1:0] FOOFL;
+  wire [5:0][16+SIMD_WIDTH-1:0] FOOFL;
   reg [SIMD_WIDTH-1:0] FOOFH_reg[5:0];
-  reg [SIMD_WIDTH-1:0] FOOFL_reg[5:0];
+  reg [16+SIMD_WIDTH-1:0] FOOFL_reg[5:0];
 //  wire [9:0][SIMD_WIDTH-1:0] FUFUH;
 //  wire [9:0][SIMD_WIDTH-1:0] FUFUL;
   wire [2:0][5:0] FOOSH;
@@ -1411,15 +1411,11 @@ module backend(
   reg [SIMD_WIDTH-1:0] FUVH_reg[9:0];
   reg [SIMD_WIDTH-1:0] FUVL_reg[9:0];
   reg [SIMD_WIDTH-1:0] FUFH_reg[9:0];
-  reg [SIMD_WIDTH-1:0] FUFL_reg[9:0];
-  reg [SIMD_WIDTH-1:0] FUFUH_reg[9:0];
-  reg [SIMD_WIDTH-1:0] FUFUL_reg[9:0];
+  reg [16+SIMD_WIDTH-1:0] FUFL_reg[9:0];
   reg [SIMD_WIDTH-1:0] FUVH_reg2[9:0];
   reg [SIMD_WIDTH-1:0] FUVL_reg2[9:0];
   reg [SIMD_WIDTH-1:0] FUFH_reg2[9:0];
-  reg [SIMD_WIDTH-1:0] FUFL_reg2[9:0];
-  reg [SIMD_WIDTH-1:0] FUFUH_reg2[9:0];
-  reg [SIMD_WIDTH-1:0] FUFUL_reg2[9:0];
+  reg [16+SIMD_WIDTH-1:0] FUFL_reg2[9:0];
 
   reg [5:0] FUS1_reg;
   reg [5:0] FUS2_reg;
@@ -1470,30 +1466,22 @@ module backend(
   wire [8:0][SIMD_WIDTH-1:0] dataAVH;
   wire [8:0][SIMD_WIDTH-1:0] dataAVL;
   wire [8:0][SIMD_WIDTH-1:0] dataAFH;
-  wire [8:0][SIMD_WIDTH-1:0] dataAFL;
-  wire [8:0][SIMD_WIDTH-1:0] dataAFHU;
-  wire [8:0][SIMD_WIDTH-1:0] dataAFLU;
+  wire [8:0][16+SIMD_WIDTH-1:0] dataAFL;
 
   wire [8:0][SIMD_WIDTH-1:0] dataBVH;
-  wire [8:0][SIMD_WIDTH-1:0] dataBVL;
+  wire [8:0][16+SIMD_WIDTH-1:0] dataBVL;
   wire [8:0][SIMD_WIDTH-1:0] dataBFH;
-  wire [8:0][SIMD_WIDTH-1:0] dataBFL;
-  wire [8:0][SIMD_WIDTH-1:0] dataBFHU;
-  wire [8:0][SIMD_WIDTH-1:0] dataBFLU;
+  wire [8:0][16+SIMD_WIDTH-1:0] dataBFL;
 
   wire [2:0][SIMD_WIDTH-1:0] WdataAVH;
   wire [2:0][SIMD_WIDTH-1:0] WdataAVL;
   wire [2:0][SIMD_WIDTH-1:0] WdataAFH;
-  wire [2:0][SIMD_WIDTH-1:0] WdataAFL;
-  wire [2:0][SIMD_WIDTH-1:0] WdataAFHU;
-  wire [2:0][SIMD_WIDTH-1:0] WdataAFLU;
+  wire [2:0][16+SIMD_WIDTH-1:0] WdataAFL;
 
   wire [2:0][SIMD_WIDTH-1:0] WdataBVH;
   wire [2:0][SIMD_WIDTH-1:0] WdataBVL;
   wire [2:0][SIMD_WIDTH-1:0] WdataBFH;
-  wire [2:0][SIMD_WIDTH-1:0] WdataBFL;
-  wire [2:0][SIMD_WIDTH-1:0] WdataBFHU;
-  wire [2:0][SIMD_WIDTH-1:0] WdataBFLU;
+  wire [2:0][16+SIMD_WIDTH-1:0] WdataBFL;
 
   wire [8:0][DATA_WIDTH-1:0] ret_dataA;
   wire [8:0][DATA_WIDTH-1:0] ret_dataB;
@@ -1501,16 +1489,12 @@ module backend(
   wire [8:0][SIMD_WIDTH-1:0] ret_dataAVH;
   wire [8:0][SIMD_WIDTH-1:0] ret_dataAVL;
   wire [8:0][SIMD_WIDTH-1:0] ret_dataAFH;
-  wire [8:0][SIMD_WIDTH-1:0] ret_dataAFL;
-  wire [8:0][SIMD_WIDTH-1:0] ret_dataAFHU;
-  wire [8:0][SIMD_WIDTH-1:0] ret_dataAFLU;
+  wire [8:0][16+SIMD_WIDTH-1:0] ret_dataAFL;
 
   wire [8:0][SIMD_WIDTH-1:0] ret_dataBVH;
   wire [8:0][SIMD_WIDTH-1:0] ret_dataBVL;
   wire [8:0][SIMD_WIDTH-1:0] ret_dataBFH;
-  wire [8:0][SIMD_WIDTH-1:0] ret_dataBFL;
-  wire [8:0][SIMD_WIDTH-1:0] ret_dataBFHU;
-  wire [8:0][SIMD_WIDTH-1:0] ret_dataBFLU;
+  wire [8:0][16+SIMD_WIDTH-1:0] ret_dataBFL;
 
   wire [8:0] depA;
   wire [8:0] depB;
@@ -1550,12 +1534,8 @@ module backend(
   wire [5:0][SIMD_WIDTH-1:0] outDataBVL;
   wire [5:0][SIMD_WIDTH-1:0] outDataAFH;
   wire [5:0][SIMD_WIDTH-1:0] outDataBFH;
-  wire [5:0][SIMD_WIDTH-1:0] outDataAFL;
-  wire [5:0][SIMD_WIDTH-1:0] outDataBFL;
-  wire [5:0][SIMD_WIDTH-1:0] outDataAFHU;
-  wire [5:0][SIMD_WIDTH-1:0] outDataBFHU;
-  wire [5:0][SIMD_WIDTH-1:0] outDataAFLU;
-  wire [5:0][SIMD_WIDTH-1:0] outDataBFLU;
+  wire [5:0][16+SIMD_WIDTH-1:0] outDataAFL;
+  wire [5:0][16+SIMD_WIDTH-1:0] outDataBFL;
   wire [2:0][32:0] outDataC;
   wire [8:0][5:0] outDataS;
   wire [8:0][REG_WIDTH-1:0] outReg;
@@ -1658,7 +1638,7 @@ module backend(
   wire [1:0][SIMD_WIDTH-1:0] WDoutDataVH;
   wire [1:0][SIMD_WIDTH-1:0] WDoutDataVL;
   wire [1:0][SIMD_WIDTH-1:0] WDoutDataFH;
-  wire [1:0][SIMD_WIDTH-1:0] WDoutDataFL;
+  wire [1:0][16+SIMD_WIDTH-1:0] WDoutDataFL;
   
   wire [1:0][DATA_WIDTH-1:0] WDfxData;
   reg  [DATA_WIDTH-1:0] WDfxData_reg[1:0];
@@ -1667,7 +1647,7 @@ module backend(
   wire [1:0][SIMD_WIDTH-1:0] WDfxDataVH;
   wire [1:0][SIMD_WIDTH-1:0] WDfxDataVL;
   wire [1:0][SIMD_WIDTH-1:0] WDfxDataFH;
-  wire [1:0][SIMD_WIDTH-1:0] WDfxDataFL;
+  wire [1:0][16+SIMD_WIDTH-1:0] WDfxDataFL;
   wire [1:0][OPERATION_WIDTH-1:0] WDfxOp;
   wire [1:0][9:0] WDfxII;
   reg [9:0] WDfxII_reg[1:0];
@@ -1842,17 +1822,17 @@ module backend(
   reg  [SIMD_WIDTH-1:0] fxDataAXH_reg[5:0];
   reg  [SIMD_WIDTH-1:0] fxDataAFH_REG[5:0];
   wire [5:0][SIMD_WIDTH-1:0] fxDataBFH;
-  wire [5:0][SIMD_WIDTH-1:0] fxDataAFL;
-  reg  [SIMD_WIDTH-1:0] fxDataAFL_reg[5:0];
-  reg  [SIMD_WIDTH-1:0] fxDataAXL_reg[5:0];
-  reg  [SIMD_WIDTH-1:0] fxDataAFL_REG[5:0];
-  wire [5:0][SIMD_WIDTH-1:0] fxDataBFL;
+  wire [5:0][16+SIMD_WIDTH-1:0] fxDataAFL;
+  reg  [16+SIMD_WIDTH-1:0] fxDataAFL_reg[5:0];
+  reg  [16+SIMD_WIDTH-1:0] fxDataAXL_reg[5:0];
+  reg  [16+SIMD_WIDTH-1:0] fxDataAFL_REG[5:0];
+  wire [5:0][16+SIMD_WIDTH-1:0] fxDataBFL;
   wire [5:0][SIMD_WIDTH-1:0] gxDataBFH;
   reg  [SIMD_WIDTH-1:0] gxDataBFH_reg[5:0];
   reg  [SIMD_WIDTH-1:0] gxDataBXH_reg[5:0];
-  wire [5:0][SIMD_WIDTH-1:0] gxDataBFL;
-  reg  [SIMD_WIDTH-1:0] gxDataBFL_reg[5:0];
-  reg  [SIMD_WIDTH-1:0] gxDataBXL_reg[5:0];
+  wire [5:0][16+SIMD_WIDTH-1:0] gxDataBFL;
+  reg  [16+SIMD_WIDTH-1:0] gxDataBFL_reg[5:0];
+  reg  [16+SIMD_WIDTH-1:0] gxDataBXL_reg[5:0];
   wire [8:0][5:0] fxDataS;
   
   wire [2:0][32:0] fxDataC;
@@ -3275,7 +3255,7 @@ module backend(
   );
 
 
-  regfile #(SIMD_WIDTH) regAFL_mod(
+  regfile #(16+SIMD_WIDTH) regAFL_mod(
   .clk(clk),
   .rst(rst),
   .read_clkEn(~doStall),
@@ -3313,15 +3293,15 @@ module backend(
   .read7_constEn(~rs_rA_useF_reg2[7]),
   .read8_constEn(~rs_rA_useF_reg2[8]),
 
-  .read0_const(is_rndE(rs_operation_reg2[0]) ? fpE_one[67:0] : fpD_one),
-  .read1_const(is_rndE(rs_operation_reg2[1]) ? fpE_one[67:0] : fpD_one),
-  .read2_const(is_rndE(rs_operation_reg2[2]) ? fpE_one[67:0] : fpD_one),
-  .read3_const(is_rndE(rs_operation_reg2[3]) ? fpE_one[67:0] : fpD_one),
-  .read4_const(is_rndE(rs_operation_reg2[4]) ? fpE_one[67:0] : fpD_one),
-  .read5_const(is_rndE(rs_operation_reg2[5]) ? fpE_one[67:0] : fpD_one),
-  .read6_const(is_rndE(rs_operation_reg2[6]) ? fpE_one[67:0] : fpD_one),
-  .read7_const(is_rndE(rs_operation_reg2[7]) ? fpE_one[67:0] : fpD_one),
-  .read8_const(is_rndE(rs_operation_reg2[8]) ? fpE_one[67:0] : fpD_one),
+  .read0_const(is_rndE(rs_operation_reg2[0]) ? fpE_one : {16'b0,fpD_one}),
+  .read1_const(is_rndE(rs_operation_reg2[1]) ? fpE_one : {16'b0,fpD_one}),
+  .read2_const(is_rndE(rs_operation_reg2[2]) ? fpE_one : {16'b0,fpD_one}),
+  .read3_const(is_rndE(rs_operation_reg2[3]) ? fpE_one : {16'b0,fpD_one}),
+  .read4_const(is_rndE(rs_operation_reg2[4]) ? fpE_one : {16'b0,fpD_one}),
+  .read5_const(is_rndE(rs_operation_reg2[5]) ? fpE_one : {16'b0,fpD_one}),
+  .read6_const(is_rndE(rs_operation_reg2[6]) ? fpE_one : {16'b0,fpD_one}),
+  .read7_const(is_rndE(rs_operation_reg2[7]) ? fpE_one : {16'b0,fpD_one}),
+  .read8_const(is_rndE(rs_operation_reg2[8]) ? fpE_one : {16'b0,fpD_one}),
 
 
   .retireRead0_addr(retire0_rF_reg2),.retireRead0_data(ret_dataAFL[0]),
@@ -3651,7 +3631,7 @@ module backend(
   .write9_addr_reg(FUreg_reg3[9]),.write9_data_reg(FUVH_reg[9]),.write9_wen_reg(FUwen_reg3[9])
   );
 
-  regfile #(SIMD_WIDTH) regBVL_mod(
+  regfile #(16+SIMD_WIDTH) regBVL_mod(
   .clk(clk),
   .rst(rst),
   .read_clkEn(~doStall),
@@ -3689,15 +3669,15 @@ module backend(
   .read7_constEn(~rs_rB_useF_reg[7]),
   .read8_constEn(~rs_rB_useF_reg[8]),
 
-  .read0_const({SIMD_WIDTH{1'B0}}),
-  .read1_const({SIMD_WIDTH{1'B0}}),
-  .read2_const({SIMD_WIDTH{1'B0}}),
-  .read3_const({SIMD_WIDTH{1'B0}}),
-  .read4_const({SIMD_WIDTH{1'B0}}),
-  .read5_const({SIMD_WIDTH{1'B0}}),
-  .read6_const({SIMD_WIDTH{1'B0}}),
-  .read7_const({SIMD_WIDTH{1'B0}}),
-  .read8_const({SIMD_WIDTH{1'B0}}),
+  .read0_const({16+SIMD_WIDTH{1'B0}}),
+  .read1_const({16+SIMD_WIDTH{1'B0}}),
+  .read2_const({16+SIMD_WIDTH{1'B0}}),
+  .read3_const({16+SIMD_WIDTH{1'B0}}),
+  .read4_const({16+SIMD_WIDTH{1'B0}}),
+  .read5_const({16+SIMD_WIDTH{1'B0}}),
+  .read6_const({16+SIMD_WIDTH{1'B0}}),
+  .read7_const({16+SIMD_WIDTH{1'B0}}),
+  .read8_const({16+SIMD_WIDTH{1'B0}}),
 
   .retireRead0_addr(retire0_rF_reg),.retireRead0_data(ret_dataBVL[0]),
   .retireRead1_addr(retire1_rF_reg),.retireRead1_data(ret_dataBVL[1]),
@@ -4207,7 +4187,7 @@ module backend(
   .write_thread(1'b0)
   );
 
-  rrf #(SIMD_WIDTH,1) rrfAFL_mod(
+  rrf #(16+SIMD_WIDTH,1) rrfAFL_mod(
   .clk(clk),
   .rst(rst),
   .read_clkEn(~doStall),
@@ -4348,7 +4328,7 @@ module backend(
   .write_thread(1'b0)
   );
 
-  rrf #(SIMD_WIDTH,1) rrfBFL_mod(
+  rrf #(16+SIMD_WIDTH,1) rrfBFL_mod(
   .clk(clk),
   .rst(rst),
   .read_clkEn(~doStall),
@@ -5534,7 +5514,7 @@ module backend(
           .FU9(FUFH[9]),.FU9_reg(FUFH_reg[9])
           );
         
-          rs_write_forward #(SIMD_WIDTH) fwdDBFL_mod(
+          rs_write_forward #(16+SIMD_WIDTH) fwdDBFL_mod(
           .clk(clk),
           .rst(rst),
           .oldData(WDoutDataFL[n]),
@@ -8193,13 +8173,13 @@ dcache1 L1D_mod(
 	      FUVH_reg[f]<={SIMD_WIDTH{1'B0}};
 	      FUVL_reg[f]<={SIMD_WIDTH{1'B0}};
 	      FUFH_reg[f]<={SIMD_WIDTH{1'B0}};
-	      FUFL_reg[f]<={SIMD_WIDTH{1'B0}};
+	      FUFL_reg[f]<={16+SIMD_WIDTH{1'B0}};
 	//      FUFUH_reg[f]<={SIMD_WIDTH{1'B0}};
 	//      FUFUL_reg[f]<={SIMD_WIDTH{1'B0}};
 	      FUVH_reg2[f]<={SIMD_WIDTH{1'B0}};
 	      FUVL_reg2[f]<={SIMD_WIDTH{1'B0}};
 	      FUFH_reg2[f]<={SIMD_WIDTH{1'B0}};
-	      FUFL_reg2[f]<={SIMD_WIDTH{1'B0}};
+	      FUFL_reg2[f]<={16+SIMD_WIDTH{1'B0}};
 	//      FUFUH_reg2[f]<={SIMD_WIDTH{1'B0}};
 	//      FUFUL_reg2[f]<={SIMD_WIDTH{1'B0}};
 	      if (f<=8) begin
@@ -8810,15 +8790,15 @@ dcache1 L1D_mod(
 	  fxFCADD_rndS<=3'b0;
           for (k=0;k<6;k=k+1) begin
 	      fxDataAFH_reg[k]<={SIMD_WIDTH{1'B0}};
-	      fxDataAFL_reg[k]<={SIMD_WIDTH{1'B0}};
+	      fxDataAFL_reg[k]<={16+SIMD_WIDTH{1'B0}};
 	      gxDataBFH_reg[k]<={SIMD_WIDTH{1'B0}};
-	      gxDataBFL_reg[k]<={SIMD_WIDTH{1'B0}};
+	      gxDataBFL_reg[k]<={16+SIMD_WIDTH{1'B0}};
 	      fxDataAFH_REG[k]<={SIMD_WIDTH{1'B0}};
-	      fxDataAFL_REG[k]<={SIMD_WIDTH{1'B0}};
+	      fxDataAFL_REG[k]<={16+SIMD_WIDTH{1'B0}};
 	      fxDataAXH_reg[k]<={SIMD_WIDTH{1'B0}};
-	      fxDataAXL_reg[k]<={SIMD_WIDTH{1'B0}};
+	      fxDataAXL_reg[k]<={16+SIMD_WIDTH{1'B0}};
 	      gxDataBXH_reg[k]<={SIMD_WIDTH{1'B0}};
-	      gxDataBXL_reg[k]<={SIMD_WIDTH{1'B0}};
+	      gxDataBXL_reg[k]<={16+SIMD_WIDTH{1'B0}};
 	  end
     end else begin
           for (k=0;k<3;k=k+1) begin
