@@ -37,59 +37,11 @@ module add_sat(
 
 endmodule
 
-module simd_socialiste_simpl(
-  clk,
-  rst,
-  operation,
-  A,
-  B,
-  res
-  );
-  input clk;
-  input rst;
-  input [12:0] operation;
-  input [63:0] A;
-  input [63:0] B;
-  output [63:0] res;
-  
-  wire [63:0] resD;
-  wire is_sub=operation[5:0]==`simd_psub;
-  wire is_add_sub=operation[5:0]==`simd_padd || operation[5:0]==`simd_psub;
-
-  assign resD=(operation[7:0]==`simd_pand) ? A&B : 64'bz;
-  assign resD=(operation[7:0]==`simd_por) ? A|B : 64'bz;
-  assign resD=(operation[7:0]==`simd_pxor) ? A^B : 64'bz;
-  assign resD=(operation[7:0]==`simd_pnand) ? A&~B : 64'bz;
-  assign resD=(operation[7:0]==`simd_pnor) ? ~(A|B) : 64'bz;
-  assign resD=(operation[7:0]==`simd_pnxor) ? ~(A^B) : 64'bz;
-  assign resD=(operation[7:0]==`simd_pnot) ? ~B : 64'bz;
-  assign resD=(operation[7:0]==`simd_pmov) ? B : 64'bz;
-  assign resD=((operation[7:3]==5'b10) || (is_add_sub && operation[7:6]!=2'd3)) ? 
-    64'bz : 64'b0;
-
-  assign res=(~is_add_sub || operation[7:6]!=2'd3) ? resD : 64'bz;
-
-  generate
-      genvar d;
-      for(d=0;d<8;d=d+1) begin
-          addsub_alu #(8) add8_mod(A[d*8+:8],B[d*8+:8],resD[d*8+:8],is_sub,is_add_sub&&operation[7:6]==2'd0,4'hf,,,,,);
-          if (d<4) begin
-              addsub_alu #(16) add16_mod(A[d*16+:16],B[d*16+:16],resD[d*16+:16],is_sub,is_add_sub&&operation[7:6]==2'd1,4'hf,,,,,);
-          end
-          if (d<2) begin
-              addsub_alu #(32) add32_mod(A[d*32+:32],B[d*32+:32],resD[d*32+:32],is_sub,is_add_sub&&operation[7:6]==2'd2,4'hf,,,,,);
-          end
-          if (d<1) begin
-              addsub_alu #(64) add64_mod(A[d*64+:64],B[d*64+:64],res[d*64+:64],is_sub,is_add_sub&&operation[7:6]==2'd3,4'hf,,,,,);
-          end
-      end
-  endgenerate
-endmodule
-
 
 module simd_socialiste(
   clk,
   rst,
+  en,
   operation,
   A,
   B,
@@ -97,10 +49,11 @@ module simd_socialiste(
   );
   input clk;
   input rst;
+  input en;
   input [12:0] operation;
-  input [63:0] A;
-  input [63:0] B;
-  output [63:0] res;
+  input [67:0] A;
+  input [67:0] B;
+  output [67:0] res;
   reg out8,out16,out32,out64,outL;
   wire [4:1][63:0] resD;
   reg  [4:1][63:0] resD_reg;
@@ -110,13 +63,31 @@ module simd_socialiste(
   reg[63:0] B_reg;
   reg [63:0] resL;
   reg [12:0] operation_reg;
+  reg shSH_reg;
+  wire shSH;
+  reg [63:0] resSH_reg;
+  wire [63:0] resSH;
+  reg en_reg;
+  reg en_reg2;
 
-  assign res=out8 ? resD_reg[1] : 64'bz;
-  assign res=out16 ? resD_reg[2] : 64'bz;
-  assign res=out32 ? resD_reg[3] : 64'bz;
-  assign res=out64 ? resD_reg[4] : 64'bz;
-  assign res=outL ? resL : 64'bz;
+  assign resh=out8&~outL&~shSH_reg ? resD_reg[1] : 64'bz;
+  assign resh=out16&~outL&~shSH_reg ? resD_reg[2] : 64'bz;
+  assign resh=out32&~outL&~shSH_reg ? resD_reg[3] : 64'bz;
+  assign resh=out64&outL&~shSH_reg ? resD_reg[4] : 64'bz;
+  assign resh=outL&~shSH_reg ? resL : 64'bz;
+  assign resh=shSH_reg ? resSH_reg : 64'bz; 
+  
+  simd_sasquach_shift sh_mod(
+  clk,
+  rst,
+  operation,
+  {A[64:33],A[31:0]},
+  {B[64:33],B[31:0]},
+  resSH,
+  shSH
+  );
 
+  assign res=en_reg2 ? {`ptype_int,1'b0,resh[63:32],1'b0,resh[31:0]} : 68'bz;
   generate
       genvar d;
       for(d=0;d<8;d=d+1) begin
@@ -134,8 +105,8 @@ module simd_socialiste(
       end
   endgenerate
   always @(negedge clk) begin
-      A_reg<=A;
-      B_reg<=B;
+      A_reg<={A[64:33],A[31:0]};
+      B_reg<={B[64:33],B[31:0]};
       is_sign<=operation[5:0]==`simd_paddsats ||operation[5:0]==`simd_psubsats||operation[5:0]==`simd_pmins||
         operation[5:0]==`simd_pmaxs;
       is_sat<=operation[5:0]==`simd_paddsats || operation[5:0]==`simd_psubsats ||operation[5:0]==`simd_paddsat||
@@ -159,6 +130,15 @@ module simd_socialiste(
       out32<=operation_reg[7:6]==2'd1;
       out64<=operation_reg[7:6]==2'd3;
       outL<=1'b1;
+      shSH_reg<=shSH;
+      resSH_reg<=resSH;
+      if (rst) begin
+	  en_reg<=1'b0;
+	  en_reg2<=1'b0;
+      end else begin
+          en_reg<=en;
+          en_reg2<=en_reg;
+      end
       case(operation_reg[7:0])
       `simd_pand: resL<=A_reg & B_reg;
       `simd_por: resL<=A_reg | B_reg;
@@ -180,7 +160,8 @@ module simd_sasquach_shift(
   operation,
   A,
   B,
-  res
+  res,
+  sh
   );
   input clk;
   input rst;
@@ -188,6 +169,7 @@ module simd_sasquach_shift(
   input [63:0] A;
   input [63:0] B;
   output [63:0] res;
+  output reg sh;
   reg dir;
   wire [63:0] shf8;
   wire [63:0] shf16;
@@ -206,7 +188,7 @@ module simd_sasquach_shift(
       end
   endgenerate
 
-  assign res=operation[5:0]==`simd_sar || operation[5:0]==`simd_shr || operation[5:0]==`simd_shl;
+  assign res=operation_reg[7:6]!=2'b0 ? shf16 : shf8;
 
   always @(negedge clk) begin
       A_reg<=A;
@@ -215,6 +197,7 @@ module simd_sasquach_shift(
       fill16<={4{operation[5:0]==`simd_sar}} & {A[63],A[47],A[31],A[15]};
       fill8<={8{operation[5:0]==`simd_sar}} & {A[63],A[55],A[47],A[39],A[31],A[23],A[15],A[7]};
       shf<=operation[6] ? shf16 : shf8;
+      sh<=operation[5:0]==`simd_sar || operation[5:0]==`simd_shr || operation[5:0]==`simd_shl;
   end
 endmodule
 
