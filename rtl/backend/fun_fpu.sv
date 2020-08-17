@@ -226,7 +226,7 @@ module fun_fpu(
   fperm fperm1H_mod(
   .clk(clk),
   .rst(rst),
-  .en(~(H? fxFADD_dbl:fxFADD_dblext)&~fxFADD_sin&~fxFADD_pcmp),
+  .en(~(H? fxFADD_dbl:fxFADD_dblext)&~fxFADD_sin&~fxFADD_pcmp&~fxFADD_int),
   .copyA(H? fxFADD_com==2'b01 : ~fxFADD_com[0]),
   .swpSngl(fxFADD_pswp),
   .dupSngl(fxFADD_dupl),
@@ -249,6 +249,16 @@ module fun_fpu(
   .jumpType(5'b0),
   .cmod(outOp_reg3[1][1:0]),
   .res_pkd(FOOF[0])
+  );
+
+  simd_socialiste int_mod(
+  .clk(clk),
+  .rst(rst),
+  .en(fxFADD_int),
+  .operation(u1_op_reg),
+  .A(uu_A1),
+  .B(uu_B1),
+  .res(FOOF[0])
   );
 
   //assign FOOS=gxFADD_hi ? FOOSH[m] : FOOSL[m];
