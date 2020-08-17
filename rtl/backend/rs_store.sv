@@ -543,21 +543,28 @@ module rs_s(
   newDataA0,newDataB0,newDataC0,newRegA0,newRegB0,newANeeded0,newBNeeded0,newOpA0,
     newOpB0,newPort0,newInstrIndexA0,newInstrIndexB0,newLSQA0,newLSQB0,newEnA0,newEnB0,
     rsAlloc0,newGazumpA0,newGazumpB0,newFunitA0,newFunitB0,newWQA0,newWQB0,newLSFlag0,
+    newAttr0,
   newDataA1,newDataB1,newDataC1,newRegA1,newRegB1,newANeeded1,newBNeeded1,newOpA1,
     newOpB1,newPort1,newInstrIndexA1,newInstrIndexB1,newLSQA1,newLSQB1,newEnA1,newEnB1,
     rsAlloc1,newGazumpA1,newGazumpB1,newFunitA1,newFunitB1,newWQA1,newWQB1,newLSFlag1,
+    newAttr1,
   newDataA2,newDataB2,newDataC2,newRegA2,newRegB2,newANeeded2,newBNeeded2,newOpA2,
     newOpB2,newPort2,newInstrIndexA2,newInstrIndexB2,newLSQA2,newLSQB2,newEnA2,newEnB2,
     rsAlloc2,newGazumpA2,newGazumpB2,newFunitA2,newFunitB2,newWQA2,newWQB2,newLSFlag2,
+    newAttr2,
 // wires to get values out of buffer
   outDataA0,outDataB0,outDataC0,outOp0,outInstrIndex0,outFuFwdA0,outFuFwdB0,
     outFuuFwdA0,outFuuFwdB0,outLSQ0,outDataEn0,outThread0,outWQ0,outLSFlag0,//agu
+    outAttr0,
   outDataB1,outOp1,outInstrIndex1,outFuFwdB1,outFuuFwdB1,
     outLSQ1,outDataEn1,outThread1,outWQ1,//data
+    outAttr1,
   outDataA2,outDataB2,outDataC2,outOp2,outInstrIndex2,outFuFwdA2,outFuFwdB2,
     outFuuFwdA2,outFuuFwdB2,outLSQ2,outDataEn2,outThread2,outWQ2,outLSFlag2,//agu
+    outAttr2,
   outDataA3,outOp3,outInstrIndex3,outFuFwdA3,outFuuFwdA3,
     outLSQ3,outDataEn3,outThread3,outWQ3,//data
+    outAttr3,
 // wires from functional units  
   FU0,FUreg0,FUwen0,
   FU1,FUreg1,FUwen1,
@@ -599,6 +606,7 @@ module rs_s(
   localparam II_WIDTH=10;  
   localparam FN_WIDTH=10;
   localparam WQ_WIDTH=8;
+  localparam ATTR_WIDTH=4;
 
   input clk;
   input dataRst;
@@ -637,6 +645,7 @@ module rs_s(
   input [WQ_WIDTH-1:0] newWQA0;
   input [WQ_WIDTH-1:0] newWQB0;
   input newLSFlag0;
+  input [ATTR_WIDTH-1:0] newAttr0;
 
   input [DATA_WIDTH-1:0]       newDataA1;
   input [DATA_WIDTH-1:0]       newDataB1;
@@ -662,6 +671,7 @@ module rs_s(
   input [WQ_WIDTH-1:0] newWQA1;
   input [WQ_WIDTH-1:0] newWQB1;
   input newLSFlag1;
+  input [ATTR_WIDTH-1:0] newAttr1;
 
   input [DATA_WIDTH-1:0]       newDataA2;
   input [DATA_WIDTH-1:0]       newDataB2;
@@ -687,6 +697,7 @@ module rs_s(
   input [WQ_WIDTH-1:0] newWQA2;
   input [WQ_WIDTH-1:0] newWQB2;
   input newLSFlag2;
+  input [ATTR_WIDTH-1:0] newAttr2;
 
   output wire [DATA_WIDTH-1:0]       outDataA0;//base
   output wire [DATA_WIDTH-1:0]       outDataB0;
@@ -702,6 +713,7 @@ module rs_s(
   output outThread0;
   output [WQ_WIDTH-1:0] outWQ0;
   output outLSFlag0;
+  output [ATTR_WIDTH-1:0] outAttr0;
 
   output wire [DATA_WIDTH-1:0]       outDataB1;
   output wire [OPERATION_WIDTH-1:0]   outOp1;
@@ -712,6 +724,7 @@ module rs_s(
   output [3:0] outDataEn1;
   output outThread1;
   output [WQ_WIDTH-1:0] outWQ1;
+  output [ATTR_WIDTH-1:0] outAttr1;
 
   output wire [DATA_WIDTH-1:0]       outDataA2;
   output wire [DATA_WIDTH-1:0]       outDataB2;//base
@@ -727,6 +740,7 @@ module rs_s(
   output outThread2;
   output [WQ_WIDTH-1:0] outWQ2;
   output outLSFlag2;
+  output [ATTR_WIDTH-1:0] outAttr2;
 
   output wire [DATA_WIDTH-1:0]       outDataA3;
   output wire [OPERATION_WIDTH-1:0]   outOp3;
@@ -737,6 +751,7 @@ module rs_s(
   output [3:0] outDataEn3;
   output outThread3;
   output [WQ_WIDTH-1:0] outWQ3;
+  output [ATTR_WIDTH-1:0] outAttr3;
 
   //functional units inputs/outputs
   input [DATA_WIDTH-1:0] FU0;
@@ -1179,6 +1194,28 @@ module rs_s(
   
   outRsSelect[2],outBank[2],rsFound[2],outInstrIndex2,
   outRsSelect[3],outBank[3],rsFound[3],outInstrIndex3,
+  32'b0,4'b0,1'b0,
+  );
+
+  rs_nonWakeUp_array #(OPERATION_WIDTH) attrA_mod(
+  clk,dataRst,stall|doStall,
+  newRsSelect0,newAttrA0,
+  newRsSelect1,newAttrA1,
+  newRsSelect2,newAttrA2,
+  
+  outRsSelect[0],outBank[0],rsFound[0],outAttr0,
+  outRsSelect[1],outBank[1],rsFound[1],outAttr1,
+  32'b0,4'b0,1'b0,
+  );
+
+  rs_nonWakeUp_array #(OPERATION_WIDTH) attrB_mod(
+  clk,dataRst,stall|doStall,
+  newRsSelect0,newAttrB0,
+  newRsSelect1,newAttrB1,
+  newRsSelect2,newAttrB2,
+  
+  outRsSelect[2],outBank[2],rsFound[2],outAttr2,
+  outRsSelect[3],outBank[3],rsFound[3],outAttr3,
   32'b0,4'b0,1'b0,
   );
 
