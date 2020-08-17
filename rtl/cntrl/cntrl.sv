@@ -677,7 +677,9 @@ module cntrl_find_outcome(
       assign jump1_here[k]=jump1Pos==k;
       wire [9:0] flag_last;
       wire flag_has;
+      /* verilator lint_off WIDTH */
       if (k>0) bit_find_last_bit #(10) lastfl_mod({10'b0,flagSet[k-1:0]},flag_last,flag_has);
+      /* verilator lint_on WIDTH */
       if (k>0) assign lfl=xbreak[k] ? flag_last : 10'bz;
       else assign lfl=xbreak[k] ? 10'b0 : 10'bz;
       if (k>0) assign lfl_has=xbreak[k] ? flag_has : 1'bz;
@@ -708,9 +710,9 @@ module cntrl_find_outcome(
           assign ret_prevV[j][k]=ret_prev[j][k] && isVec[j] && isVec[k];
           assign ret_prevF[j][k]=ret_prev[j][k] && isFPU[j] && isFPU[k];
           
-	  assign retireG[j]=reteq ? ~xbreak[k]  && !ret_prevG[k] && isGen[k] : 1'bz; 
-          assign retireV[j]=reteq ? ~xbreak[k]  && !ret_prevV[k] && isVec[k] : 1'bz; 
-          assign retireF[j]=reteq ? ~xbreak[k]  && !ret_prevF[k] && isFPU[k] : 1'bz; 
+	  assign retireG[j]=reteq ? ~xbreak[k]  && ret_prevG[k]==0 && isGen[k] : 1'bz; 
+          assign retireV[j]=reteq ? ~xbreak[k]  && ret_prevV[k]==0 && isVec[k] : 1'bz; 
+          assign retireF[j]=reteq ? ~xbreak[k]  && ret_prevF[k]==0 && isFPU[k] : 1'bz; 
 
           assign rTe[j]=reteq ? rT[k] : 6'bz;
 
@@ -819,8 +821,8 @@ module cntrl_find_outcome(
   assign jump0_in=has_xbreak0 ? 1'bz : jump0Pos!=4'hf;
   assign jump1_in=has_xbreak0 ? 1'bz : jump1Pos!=4'hf;
 
-  assign break_prejmp_ntick=(~has_break) ? !afterTick && !tk_after : 1'bz;
-  assign break_prejmp_tick=(~has_break) ? afterTick && !tk_after : 1'bz;
+  assign break_prejmp_ntick=(~has_break) ? afterTick==0 && tk_after==0 : 1'bz;
+  assign break_prejmp_tick=(~has_break) ? afterTick!=0 && tk_after==0 : 1'bz;
 
   assign retire_rF[0]=retire0_rF;
   assign retire_rF[1]=retire1_rF;
@@ -854,11 +856,11 @@ module cntrl_find_outcome(
   
   assign update_btb_addr_j1[12:11]=jump1JmpInd;
   assign update_btb_addr_j1[2:0]=jump1BtbWay;
-  assign update_btb_addr_j1[10:3]=jupd1_IP[13:4];
+  assign update_btb_addr_j1[10:3]=jupd1_IP[11:4];
   
   assign update_btb_addr_j0[12:11]=jump0JmpInd;
-  assign update_btb_addr_j0[0]=jump0BtbWay;
-  assign update_btb_addr_j0[10:1]=jupd0_IP[13:4];
+  assign update_btb_addr_j0[2:0]=jump0BtbWay;
+  assign update_btb_addr_j0[10:3]=jupd0_IP[11:4];
   
   assign excpt_handlerIP=archReg_xcpt_handlerIP[retire_thread_reg];
       
@@ -875,7 +877,7 @@ module cntrl_find_outcome(
   assign exceptIP_d=(break_jump1 & jump1_taken) ? jump1IP : 47'bz;
   assign exceptIP_d=(break_jump0 & ~jump0_taken) ? breakIP : 47'bz;
   assign exceptIP_d=(break_jump1 & ~jump1_taken) ? breakIP : 47'bz;
-  assign exceptIP_d=(break_exceptn) ? {excpt_handlerIP[46:12],excpt_code,6'b0} : 47'bz;
+  assign exceptIP_d=(break_exceptn) ? {excpt_handlerIP[46:11],excpt_code[5:0],5'b0} : 47'bz;
   assign exceptIP_d=(break_replay) ? breakIP : 47'bz;
   assign exceptIP_d=(break_pending | ~has_break) ? 47'b0 : 47'bz;
 
@@ -886,8 +888,7 @@ module cntrl_find_outcome(
   assign csrss_en_d=(break_jump1) ? jump1Type==5'b11001 && has_some && ~mem_II_stall : 1'bz;
   assign csrss_en_d=(break_exceptn) ? has_some & ~mem_II_stall : 1'bz;
   assign csrss_en_d=(~break_jump0 & ~break_jump1 & ~break_exceptn) ? 1'b0 : 1'bz;
-  assign csrss_data_d=(break_exceptn) ? breakIP : indir_IP;
-
+  assign csrss_data_d=(break_exceptn) ? {mflags[1:0]!=2'b11,mflags[2],is_after_spec,13'b0,breakIP,1'b0} : indir_IP;
   assign baseIP_d=(jump0_in & jump0_taken &~break_exceptn &~break_replay) ? jump0IP : 47'bz;
   assign baseIP_d=(jump1_in & jump1_taken &~break_exceptn &~break_replay) ? jump1IP : 47'bz;
   assign baseIP_d=(break_exceptn) ? excpt_handlerIP : 47'bz;
