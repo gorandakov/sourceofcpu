@@ -87,7 +87,8 @@ module bob_addr(
   reg [47:0] teh_thr;
   reg [47:0] retire_first_reg;
   wire [47:0] retire_new;
-
+  wire last_ret;
+  
   integer k;
 
   generate
@@ -170,8 +171,8 @@ module bob_addr(
             availN=availN|retire_first_reg;
             retire_first_reg<=retire_first;
         end else if (~hasRetire&new_en&~stall&~doStall) begin
-            retire_first_reg<=32'b0;//retire_new;
-        end else if (!retire_first_reg) begin
+            retire_first_reg<=48'b0;//retire_new;
+        end else if (retire_first_reg==0) begin
             retire_first_reg<=retire_first;
         end
                 
@@ -182,7 +183,7 @@ module bob_addr(
         end
         
         if (new_en && ~stall && ~doStall) teh_thr[new_addr]<=new_thread;
-        if (last_ret||~retire_has&availOnP&!retire_first_reg) begin
+        if (last_ret||~retire_has&availOnP&(retire_first_reg==0)) begin
             availOnP<=1'b0;
             availN=availP;
             retire_first_reg<=retire_first_alt;
@@ -195,8 +196,8 @@ module bob_addr(
                 availN[k]=1'b1;
                 availP[k]=1'b1;
             end
-            if ((~last_ret &&except_thread==(retire_first&teh_thr!=0))
-              || (last_ret &&except_thread==(retire_first_alt&teh_thr!=0))) retire_first_reg<=32'b0;
+            if ((~last_ret &&except_thread==((retire_first&teh_thr)!=0))
+              || (last_ret &&except_thread==((retire_first_alt&teh_thr)!=0))) retire_first_reg<=48'b0;
         end
     end
   end

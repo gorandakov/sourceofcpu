@@ -156,7 +156,7 @@ module cntrl_get_retcnt(
   popcnt3 cpop2_mod({reten[8],reten[5],reten[2]},cpop2);
   
   assign retcnt[0]=cpop0[0] & cpop1[0] & cpop2[0];
-  assign retcnt[1]=cpop0[1] | cpop1[1] | cpop2[1] && !cpop0[3:2] && !cpop1[3:2] && !cpop2[3:2];
+  assign retcnt[1]=cpop0[1] | cpop1[1] | cpop2[1] && cpop0[3:2]==0 && cpop1[3:2]==0 && cpop2[3:2]==0;
   assign retcnt[2]=cpop0[2] | cpop1[2] | cpop2[2] && !cpop0[3] && !cpop1[3] && !cpop2[3];
   assign retcnt[3]=cpop0[3] | cpop1[3] | cpop2[3];
   
@@ -650,7 +650,8 @@ module cntrl_find_outcome(
   wire flag_has;
   wire [9:0] lfl;
   wire lfl_has;
- 
+  wire has_someX;
+
   wire [15:0] csrss_no_d;
   wire csrss_thread_d;
   wire csrss_en_d;
@@ -764,6 +765,7 @@ module cntrl_find_outcome(
       .jumpMisPred(jump1_misPred[k]),
       .jumpTaken(jump1_taken),
       .flagOut(jump1_flags),
+      .flagOutN(),
       .flags0(ret_data[0][`except_flags]),
       .flags1(ret_data[1][`except_flags]),      
       .flags2(ret_data[2][`except_flags]),
