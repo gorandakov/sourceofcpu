@@ -107,7 +107,9 @@
 `define bob_frr 512:504
 `define bob_jump0Mask 516:513
 `define bob_jump1Mask 520:517
-`define bob_width 521
+`define bob_aspl 530:521
+`define bob_attr 534:531
+`define bob_width 535
 
 
 `define bobJmp_satCount 1:0

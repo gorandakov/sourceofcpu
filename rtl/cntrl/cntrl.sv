@@ -274,51 +274,62 @@ module cntrl_find_outcome(
   input [12:0] instr0_IPOff;
   input [2:0] instr0_magic;
   input instr0_last;
+  input instr0_after_spec;
   input instr1_en;
   input instr1_wren;  
   input [12:0] instr1_IPOff;
   input [2:0] instr1_magic;
   input instr1_last;
+  input instr1_after_spec;
   input instr2_en;
   input instr2_wren;  
   input [12:0] instr2_IPOff;
   input [2:0] instr2_magic;
   input instr2_last;
+  input instr2_after_spec;
   input instr3_en;
   input instr3_wren;  
   input [12:0] instr3_IPOff;
   input [2:0] instr3_magic;
   input instr3_last;
+  input instr3_after_spec;
   input instr4_en;
   input instr4_wren;  
   input [12:0] instr4_IPOff;
   input [2:0] instr4_magic;
   input instr4_last;
+  input instr4_after_spec;
   input instr5_en;
   input instr5_wren;  
   input [12:0] instr5_IPOff;
   input [2:0] instr5_magic;
   input instr5_last;
+  input instr5_after_spec;
   input instr6_en;
   input instr6_wren;  
   input [12:0] instr6_IPOff;
   input [2:0] instr6_magic;
   input instr6_last;
+  input instr6_after_spec;
   input instr7_en;
   input instr7_wren;  
   input [12:0] instr7_IPOff;
   input [2:0] instr7_magic;
   input instr7_last;
+  input instr7_after_spec;
   input instr8_en;
   input instr8_wren;  
   input [12:0] instr8_IPOff;
   input [2:0] instr8_magic;
   input instr8_last;
+  input instr8_after_spec;
   input instr9_en;
   input instr9_wren;  
   input [12:0] instr9_IPOff;
   input [2:0] instr9_magic;
   input instr9_last;
+  input instr9_after_spec;
+  input [3:0] instr_attr;
 
   input [5:0] instr0_rT;
   input instr0_gen;
@@ -605,6 +616,8 @@ module cntrl_find_outcome(
   wire i_has_indir;
   wire [46:0] takenIP;
 
+  wire [3:0] bob_attr;
+
   reg [5:0] initcount;
   wire [5:0] initcount_d;
   reg init;
@@ -636,6 +649,8 @@ module cntrl_find_outcome(
   wire [9:0] rvec;
   wire [9:0] last_instr;
 
+  wire is_after_spec;
+  wire [9:0] rd_after_spec;
   reg [46:0] baseIP;
   wire [46:0] baseIP_d;
   
@@ -787,7 +802,8 @@ module cntrl_find_outcome(
 
       assign breakIP=break_[k] ? nextIP[k] : 47'bz;
       assign lastIP=break_[k] ? last_instr[k] : 1'bz;
- 
+      assign is_after_spec=break_[k] ? rd_after_spec[k] : 1'bz;
+
       cntrl_get_IP newIP_mod(
       .baseIP(from_IP),
       .srcIPOff(IPOff[k]),
@@ -888,7 +904,7 @@ module cntrl_find_outcome(
   assign csrss_en_d=(break_jump1) ? jump1Type==5'b11001 && has_some && ~mem_II_stall : 1'bz;
   assign csrss_en_d=(break_exceptn) ? has_some & ~mem_II_stall : 1'bz;
   assign csrss_en_d=(~break_jump0 & ~break_jump1 & ~break_exceptn) ? 1'b0 : 1'bz;
-  assign csrss_data_d=(break_exceptn) ? {mflags[1:0]!=2'b11,mflags[2],is_after_spec,13'b0,breakIP,1'b0} : indir_IP;
+  assign csrss_data_d=(break_exceptn) ? {attr[0],attr[1],is_after_spec,attr[3],12'b0,breakIP,1'b0} : indir_IP;
   assign baseIP_d=(jump0_in & jump0_taken &~break_exceptn &~break_replay) ? jump0IP : 47'bz;
   assign baseIP_d=(jump1_in & jump1_taken &~break_exceptn &~break_replay) ? jump1IP : 47'bz;
   assign baseIP_d=(break_exceptn) ? excpt_handlerIP : 47'bz;
@@ -926,6 +942,9 @@ module cntrl_find_outcome(
   assign bob_wdata[`bob_frr]=iret_clr;
   assign retclrP=bob_rdata[`bob_frr];
 
+  assign bob_wdata[`bob_aspl]={instr9_after_spec,instr8_after_spec,instr7_after_spec,
+     instr6_after_spec,instr5_after_spec,instr4_after_spec,instr3_after_spec,
+     instr2_after_spec,instr1_after_spec,instr0_after_spec};
   assign bob_wdata[`bob_regs]={instr9_rT|{6{~instr9_wren}},instr8_rT|{6{~instr8_wren}},
          instr7_rT|{6{~instr7_wren}},instr6_rT|{6{~instr6_wren}},instr5_rT|{6{~instr5_wren}},
 	 instr4_rT|{6{~instr4_wren}},instr3_rT|{6{~instr3_wren}},instr2_rT|{6{~instr2_wren}},
@@ -935,6 +954,10 @@ module cntrl_find_outcome(
   
   assign bob_wdata[`bob_freeregs]={iret8_rF,iret7_rF,iret6_rF,iret5_rF,
 	  iret4_rF,iret3_rF,iret2_rF,iret1_rF,iret0_rF};
+  assign rd_after_spec=bob_rdata[rd_aspl];
+  assign bob_wdata[`bob_attr]=instr_attr;
+  assign attr=bob_rdata[`bob_attr];
+
   assign {retire8_rF[8:4],retire7_rF[8:4],retire6_rF[8:4],retire5_rF[8:4],
 	  retire4_rF[8:4],retire3_rF[8:4],retire2_rF[8:4],retire1_rF[8:4],retire0_rF[8:4]}=
 	  bob_rdata[`bob_freeregs];
