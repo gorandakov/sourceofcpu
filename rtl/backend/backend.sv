@@ -5243,21 +5243,21 @@ module backend(
   .mOpY4_bgn_b_o(dc_wrBGN_BNK[0]),
   .mOpY4_end_b_o(dc_wrEND_BNK[0]),
   .mOpY4_odd_o(dc_odd_wr[0]),
-  mOpY4_addr_low_o,
+  .mOpY4_addr_low_o(),
   .mOpY4_split_o(dc_split_wr[0]),
 //  mOpY4_clHit_o,
   .mOpY4_data_o(dc_wdata[0]),
   .mOpY4_type_o(),
   .mOpY4_II_o(),
   miss5,
-  mOpY5_en,
-  mOpY5_hit,
-  mOpY5_dupl,//write to a non-exclusive cl
+  .mOpY5_en(st1_en),
+  .mOpY5_hit(dc_wrHit[1]),
+  .mOpY5_dupl(dc_wrDuplCl[1]),//write to a non-exclusive cl
   //mOp4_thread,
   .mOpY5_addrEven(st0_adata[`lsaddr_addrE]),
   .mOpY5_addrOdd(st0_adata[`lsaddr_addrO]),
   .mOpY5_sz(st0_adata[`lsaddr_sz]),
-  mOpY5_first,
+  .mOpY5_first(1'b0),
   .mOpY5_banks(st1_adata[`lsaddr_banks]),//?? st1_banks?
   .mOpY5_bank0(st1_adata[`lsaddr_bank0]),
   .mOpY5_bank1(st1_bank1),
@@ -5266,27 +5266,27 @@ module backend(
   .mOpY5_odd(st1_adata[`lsaddr_odd]),
   .mOpY5_addr_low(st1_adata[`lsaddr_low]),
   .mOpY5_split(st1_adata[`lsaddr_split]),
-  mOpY5_clHit,
+  .mOpY5_clHit(dc_wrHitCl[1]),
   .mOpY5_data(st1_data),
   .mOpY5_type(st1_adata[`lsaddr_mtype]),
   .mOpY5_II(st1_adata[`lsaddr_II]),
-  mOpY5_en_o,
-  //mOp4_thread,
-  mOpY5_addrEven_o,
-  mOpY5_addrOdd_o,
-  mOpY5_sz_o,
-  mOpY5_first_o,
-  mOpY5_banks_o,
-  mOpY5_bank0_o,
-  mOpY5_bank1_o,
-  mOpY5_bgn_b_o,
-  mOpY5_end_b_o,
-  mOpY5_odd_o,
-  mOpY5_addr_low_o,
-  mOpY5_split_o,
-  mOpY5_data_o,
-  mOpY5_type_o,
-  mOpY5_II_o,
+  .mOpY5_en_o(dc_wrEn[1]),
+  .mOpY5_addrEven_o(dc_wrAddrE[1]),
+  .mOpY5_addrOdd_o(dc_wrAddrO[1]),
+  .mOpY5_sz_o(),
+  .mOpY5_first_o(),
+  .mOpY5_banks_o(dc_wrBanks[1]),
+  .mOpY5_bank0_o(dc_wrBegin[1]),
+  .mOpY5_bank1_o(dc_wrEnd[1]),
+  .mOpY5_bgn_b_o(dc_wrBGN_BNK[1]),
+  .mOpY5_end_b_o(dc_wrEND_BNK[1]),
+  .mOpY5_odd_o(dc_odd_wr[1]),
+  .mOpY5_addr_low_o(),
+  .mOpY5_split_o(dc_split_wr[1]),
+//  mOpY5_clHit_o,
+  .mOpY5_data_o(dc_wdata[1]),
+  .mOpY5_type_o(),
+  .mOpY5_II_o(),
   .lso_adata(lso_adata),.lso_xdataA(lso_en<<11),.lso_data(lso_data),.lso_bnkread(lso_bnkread),
   .lso2_adata(lso2_adata),.lso2_xdataA(lso2_en<<11),.lso2_data(lso2_data),.lso2_bnkread(lso2_bnkread),
   .lso2_wb_en({lso2_en && (lso2_adata[`lsaddr_reg_low]==2 || lso2_adata[`lsaddr_reg_low]==5 || lso2_adata[`lsaddr_reg_low]==8 ),
@@ -5302,41 +5302,41 @@ module backend(
     .p3_en(dc_rdEn[3]),.p3_rsEn(dc_rsEn[3]),p3_ioEn,p3_io_ack,p3_ret,p3_data,p3_brdbanks,p3_repl,p3_lsfwd,
   .p4_adata(lsr_wr_data[4]),.p4_LSQ(),p4_en,p4_secq,p4_ret,
   .p5_adata(lsr_wr_data[5]),.p5_LSQ(),p5_en,p5_secq,p5_ret,
-  FU0Hit,FU1Hit,FU2Hit,FU3Hit,
-  FU0,FU1,FU2,FU3,FU4,FU5,FU6,FU7,FU8,FU9,
-  FUreg3_reg,dc_rdataA,
+  .FU0Hit(FU0Hit),.FU1Hit(FU1Hit),.FU2Hit(FU2Hit),.FU3Hit(FU3Hit),
+  .FU0(FU[0]),.FU1(FU[1]),.FU2(FU[2]),.FU3(FU[3]),.FU4(FU[4]),.FU5(FU[5]),.FU6(FU[6]),.FU7(FU[7]),.FU8(FU[8]),.FU9(FU[9]),
+  .FUreg3_reg(FUreg_reg5[3]),.dc_rdataA(dc_rdataA[3]),//is it really reg5?
   msi_exp_addr,msi_en,msi_out_clear,//msi_out_clear=can do msi en
-  csrss_en,csrss_addr,csrss_data,
+  .csrss_en(csrss_en).csrss_addr(csrss_addr).csrss_data(csrss_data)
   alt_bus_hold,
   alt_bus_addr,
-  req_addr,req_tlbEn,
-  bus_tlb_data,bus_tlb_en,
-  reqBus_en,
-  reqBus_addr,
-  reqBus_req,
-  reqBus_want_excl,
-  reqBus_dupl,
-  reqBus_io,
-  reqBus_sz,
-  reqBus_low,
-  reqBus_bank0,
-  insert_isData,
-  insBus_req,
-  wr0_hit,
-  wr0_addrE,wr0_addrO,
-  wr0_banks,
-  wr0_begin,wr0_end,
-  wr0_bgn_ben,wr0_end_ben,
-  wr0_odd,wr0_split,
-  wr0_data,
-  wr1_hit,
-  wr1_addrE,wr1_addrO,
-  wr1_banks,
-  wr1_begin,wr1_end,
-  wr1_bgn_ben,wr1_end_ben,
-  wr1_odd,wr1_split,
-  wr1_data,
-  wrStall
+  .req_addr(req_addr).req_tlbEn(req_tlbEn)
+  .bus_tlb_data(bus_tlb_data).bus_tlb_en(bus_tlb_en)
+  .reqBus_en(reqBus_en)
+  .reqBus_addr(reqBus_addr)
+  .reqBus_req(reqBus_req)
+  .reqBus_want_excl(reqBus_want_excl)
+  .reqBus_dupl(reqBus_dupl)
+  .reqBus_io(reqBus_io)
+  .reqBus_sz(reqBus_sz)
+  .reqBus_low(reqBus_low)
+  .reqBus_bank0(reqBus_bank0)
+  .insert_isData(insert_isData)
+  .insBus_req(insBus_req)
+  .wr0_hit(wr0_hit)
+  .wr0_addrE(wr0_addrE).wr0_addrO(wr0_addrO)
+  .wr0_banks(wr0_banks)
+  .wr0_begin(wr0_begin).wr0_end(wr0_end)
+  .wr0_bgn_ben(wr0_bgn_ben).wr0_end_ben(wr0_end_ben)
+  .wr0_odd(wr0_odd).wr0_split(wr0_split)
+  .wr0_data(wr0_data)
+  .wr1_hit(wr1_hit)
+  .wr1_addrE(wr1_addrE).wr1_addrO(wr1_addrO)
+  .wr1_banks(wr1_banks)
+  .wr1_begin(wr1_begin).wr1_end(wr1_end)
+  .wr1_bgn_ben(wr1_bgn_ben).wr1_end_ben(wr1_end_ben)
+  .wr1_odd(wr1_odd).wr1_split(wr1_split)
+  .wr1_data(wr1_data)
+  .wrStall(wrStall)
   );
  
   fun_lsq LSQ_grouped(
