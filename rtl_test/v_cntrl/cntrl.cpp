@@ -81,19 +81,51 @@ void gen_bndl(insn reqs[10],int exc,unsigned long &IP) {
 	    reqs[n].jtype=lrand48()%16;
 	    reqs[n].IP=IP;
 	    do {
-		reqs[n].target=lrand48()&0xfffffffe;
+		reqs[n].target=lrand48()&0xffffffffffe|((lrand48()&0xfffff)<<44);
 	    } while ((reqs[n].target&0x1e)==0x1e);
 	    reqs[n].after_tick=(has_tick && n>=tick);
 	    reqs[n].IPoff=IPoff;
 	    reqs[n].len=(lrand48()%10+1)<<1;
 	    IP+=len;
 	    IPoff+=len;
-	    if (has_tick && n==(tick-1)) {
+	    if (!tkn0 && IPoff>255) {
+		tick=n+1;
+		has_tick=1;
+	    }
+	    if (tkn0) {
+		IP=reqs[n].target;
 		IPoff=0;
+		has_tick=0;
 	    }
 	} else if (jcnt&&n==jpos1) {
+	    reqs[n].is_jump=1;
+	    reqs[n].is_tkn=tkn1;
+	    reqs[n].is_indir=lrand48()%2;
+	    if (!tkn1) reqs[n].is_indir=0;
+	    reqs[n].is_setcsr=lrand48()%2;
+	    if (!tkn1) reqs[n].is_setcsr=0;
+	    reqs[n].jtype=lrand48()%16;
+	    reqs[n].IP=IP;
+	    do {
+		reqs[n].target=lrand48()&0xffffffffffe|((lrand48()&0xfffff)<<44);
+	    } while ((reqs[n].target&0x1e)==0x1e);
+	    reqs[n].after_tick=(has_tick && n>=tick);
+	    reqs[n].IPoff=IPoff;
+	    reqs[n].len=(lrand48()%10+1)<<1;
+	    IP+=len;
+	    IPoff+=len;
+	    if (!tkn1 && IPoff>255) {
+		tick=n+1;
+		has_tick=1;
+	    }
+	    if (tkn1) {
+		IP=reqs[n].target;
+		IPoff=0;
+		has_tick=0;
+	    }
 	}
     }
+    if (IPoff>255) IPoff-=256;
 }
 
 int main(int argc, char *argv[]) {
