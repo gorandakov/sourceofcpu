@@ -103,7 +103,7 @@ module cntrl_get_IP(
   nextIP
   );
   input [42:0] baseIP;
-  input [12:0] srcIPOff;
+  input [8:0] srcIPOff;
   input [2:0] magicO;
   input last;
   input excpt;
@@ -112,7 +112,7 @@ module cntrl_get_IP(
   wire [4:0] par0;
   wire [4:0] par1;
   
-  adder #(43-4) last_add(baseIP[42:4],{30'b0,srcIPOff[12:4]},nextIP[42:4],last&~excpt,1'b1,,,,);
+  adder #(43-4) last_add(baseIP[42:4],{34'b0,srcIPOff[8:4]},nextIP[42:4],last&~excpt,1'b1,,,,);
   adder_CSA #(4) csa_mod(baseIP[3:0],srcIPOff[3:0],~{1'b0,magicO},par0,par1);
   adder #(4) nlast_add_small(par0[3:0],par1[3:0],nextIP[3:0],1'b1,excpt,,,,);
 
@@ -128,13 +128,13 @@ module cntrl_get_shortIP(
   jupd1_IP, jupd1_en
   );
   input [19:0] baseIP;
-  input [12:0] srcIPOff;
+  input [8:0] srcIPOff;
   output [19:0] jupd0_IP;
   input jupd0_en;
   output [19:0] jupd1_IP;
   input jupd1_en;
 
-  adder2o #(20-4) last_add(baseIP[19:4],{7'b0,srcIPOff[12:4]},jupd0_IP[19:4],jupd1_IP[19:4],1'b0,jupd0_en,jupd1_en,,,,);
+  adder2o #(20-4) last_add(baseIP[19:4],{11'b0,srcIPOff[8:4]},jupd0_IP[19:4],jupd1_IP[19:4],1'b0,jupd0_en,jupd1_en,,,,);
 
   assign jupd0_IP[3:0]=jupd0_en ? srcIPOff[3:0] : 4'bz;
   assign jupd1_IP[3:0]=jupd1_en ? srcIPOff[3:0] : 4'bz;
@@ -272,61 +272,61 @@ module cntrl_find_outcome(
   output wire [5:0] new_addr;
   input instr0_en;
   input instr0_wren;  
-  input [12:0] instr0_IPOff;
+  input [8:0] instr0_IPOff;
   input [2:0] instr0_magic;
   input instr0_last;
   input instr0_after_spec;
   input instr1_en;
   input instr1_wren;  
-  input [12:0] instr1_IPOff;
+  input [8:0] instr1_IPOff;
   input [2:0] instr1_magic;
   input instr1_last;
   input instr1_after_spec;
   input instr2_en;
   input instr2_wren;  
-  input [12:0] instr2_IPOff;
+  input [8:0] instr2_IPOff;
   input [2:0] instr2_magic;
   input instr2_last;
   input instr2_after_spec;
   input instr3_en;
   input instr3_wren;  
-  input [12:0] instr3_IPOff;
+  input [8:0] instr3_IPOff;
   input [2:0] instr3_magic;
   input instr3_last;
   input instr3_after_spec;
   input instr4_en;
   input instr4_wren;  
-  input [12:0] instr4_IPOff;
+  input [8:0] instr4_IPOff;
   input [2:0] instr4_magic;
   input instr4_last;
   input instr4_after_spec;
   input instr5_en;
   input instr5_wren;  
-  input [12:0] instr5_IPOff;
+  input [8:0] instr5_IPOff;
   input [2:0] instr5_magic;
   input instr5_last;
   input instr5_after_spec;
   input instr6_en;
   input instr6_wren;  
-  input [12:0] instr6_IPOff;
+  input [8:0] instr6_IPOff;
   input [2:0] instr6_magic;
   input instr6_last;
   input instr6_after_spec;
   input instr7_en;
   input instr7_wren;  
-  input [12:0] instr7_IPOff;
+  input [8:0] instr7_IPOff;
   input [2:0] instr7_magic;
   input instr7_last;
   input instr7_after_spec;
   input instr8_en;
   input instr8_wren;  
-  input [12:0] instr8_IPOff;
+  input [8:0] instr8_IPOff;
   input [2:0] instr8_magic;
   input instr8_last;
   input instr8_after_spec;
   input instr9_en;
   input instr9_wren;  
-  input [12:0] instr9_IPOff;
+  input [8:0] instr9_IPOff;
   input [2:0] instr9_magic;
   input instr9_last;
   input instr9_after_spec;
@@ -550,7 +550,7 @@ module cntrl_find_outcome(
   wire [BOB_WIDTH-1:0] bob_wdata;
   wire [BOB_WIDTH-1:0] bob_rdata;
   
-  wire [9:0][12:0] IPOff;
+  wire [9:0][8:0] IPOff;
   wire [9:0][2:0] magicO;
   wire [8:0] retireG;
   wire [8:0] retireV;
