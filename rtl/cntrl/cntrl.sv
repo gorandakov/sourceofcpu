@@ -202,8 +202,8 @@ module cntrl_find_outcome(
   iret0_rF,iret1_rF,iret2_rF,iret3_rF,iret4_rF,
   iret5_rF,iret6_rF,iret7_rF,iret8_rF,
   iret_clr,
-  ijump0Type,ijump0Off,ijump0IP,ijump0Mask,
-  ijump1Type,ijump1Off,ijump1IP,ijump1Mask,
+  ijump0Type,ijump0Off,ijump0IP,ijump0BND,ijump0Mask,
+  ijump1Type,ijump1Off,ijump1IP,ijump1BND,ijump1Mask,
   ijump0BtbWay,ijump0JmpInd,ijump0GHT,
   ijump1BtbWay,ijump1JmpInd,ijump1GHT,
   ijump0SC,ijump0Miss,ijump0BtbOnly,
@@ -255,7 +255,7 @@ module cntrl_find_outcome(
   output doStall;
   
   output reg except;
-  output reg [42:0] exceptIP;
+  output reg [62:0] exceptIP;
   output reg except_thread;
   output reg except_both;
   output reg except_due_jump;
@@ -388,10 +388,12 @@ module cntrl_find_outcome(
   input [4:0] ijump0Type;
   input [3:0] ijump0Off;
   input [42:0] ijump0IP;
+  input [19:0] ijump0BND;
   input [3:0] ijump0Mask;
   input [4:0] ijump1Type;
   input [3:0] ijump1Off;
   input [42:0] ijump1IP;
+  input [19:0] ijump1BND;
   input [3:0] ijump1Mask;
   input [2:0] ijump0BtbWay;
   input [1:0] ijump0JmpInd;
@@ -596,7 +598,7 @@ module cntrl_find_outcome(
   wire retire_thread;
   reg retire_thread_reg;
 
-  wire [42:0] exceptIP_d;
+  wire [62:0] exceptIP_d;
   wire except_thread_d=retire_thread_reg;
   wire except_both_d=both_threads;
   wire except_d;
@@ -652,8 +654,8 @@ module cntrl_find_outcome(
 
   wire is_after_spec;
   wire [9:0] rd_after_spec;
-  reg [42:0] baseIP;
-  wire [42:0] baseIP_d;
+  reg [62:0] baseIP;
+  wire [62:0] baseIP_d;
   
   wire [8:0] retclrP;
 
@@ -667,6 +669,9 @@ module cntrl_find_outcome(
   wire [9:0] lfl;
   wire lfl_has;
   wire has_someX;
+
+  wire [19:0] jump0BND;
+  wire [19:0] jump1BND;
 
   wire [15:0] csrss_no_d;
   wire csrss_thread_d;
@@ -890,13 +895,13 @@ module cntrl_find_outcome(
   assign ret_prevV[9]=10'b0;
   assign ret_prevF[9]=10'b0;
 //warning: trace not yet handled
-  assign exceptIP_d=(break_jump0 & jump0_taken) ? jump0IP : 43'bz;
-  assign exceptIP_d=(break_jump1 & jump1_taken) ? jump1IP : 43'bz;
-  assign exceptIP_d=(break_jump0 & ~jump0_taken) ? breakIP : 43'bz;
-  assign exceptIP_d=(break_jump1 & ~jump1_taken) ? breakIP : 43'bz;
-  assign exceptIP_d=(break_exceptn) ? {excpt_handlerIP[42:11],excpt_code[5:0],5'b0} : 43'bz;
-  assign exceptIP_d=(break_replay) ? breakIP : 43'bz;
-  assign exceptIP_d=(break_pending | ~has_break) ? 43'b0 : 43'bz;
+  assign exceptIP_d=(break_jump0 & jump0_taken) ? {jump0BND,jump0IP} : 63'bz;
+  assign exceptIP_d=(break_jump1 & jump1_taken) ? {jump1BND,jump1IP} : 63'bz;
+  assign exceptIP_d=(break_jump0 & ~jump0_taken) ? {baseIP[62:43],breakIP} : 63'bz;
+  assign exceptIP_d=(break_jump1 & ~jump1_taken) ? {baseIP[62:43],breakIP} : 63'bz;
+  assign exceptIP_d=(break_exceptn) ? {baseIP[62:43],excpt_handlerIP[42:11],excpt_code[5:0],5'b0} : 63'bz;
+  assign exceptIP_d=(break_replay) ? {baseIP[62:43],breakIP} : 63'bz;
+  assign exceptIP_d=(break_pending | ~has_break) ? 63'b0 : 63'bz;
 
   assign csrss_no_d=(break_jump0) ? jump0IP[15:0] : 16'bz;
   assign csrss_no_d=(break_jump1) ? jump1IP[15:0] : 16'bz;
@@ -906,15 +911,17 @@ module cntrl_find_outcome(
   assign csrss_en_d=(break_exceptn) ? has_some & ~mem_II_stall : 1'bz;
   assign csrss_en_d=(~break_jump0 & ~break_jump1 & ~break_exceptn) ? 1'b0 : 1'bz;
   assign csrss_data_d=(break_exceptn) ? {attr[0],attr[1],is_after_spec,attr[3],12'b0,4'b0,breakIP,1'b0} : indir_IP;
-  assign baseIP_d=(jump0_in & jump0_taken &~break_exceptn &~break_replay) ? jump0IP : 43'bz;
-  assign baseIP_d=(jump1_in & jump1_taken &~break_exceptn &~break_replay) ? jump1IP : 43'bz;
-  assign baseIP_d=(break_exceptn) ? excpt_handlerIP : 43'bz;
+  assign baseIP_d=(jump0_in & jump0_taken &~break_exceptn &~break_replay) ? {jump0BND,jump0IP} : 64'bz;
+  assign baseIP_d=(jump1_in & jump1_taken &~break_exceptn &~break_replay) ? {jump1BND,jump1IP} : 63'bz;
+  assign baseIP_d=(break_exceptn) ? {baseIP[62:43],excpt_handlerIP} : 63'bz;
   assign baseIP_d=break_replay || ~(jump0_in&jump0_taken) & ~(jump1_in&jump1_taken) & (break_jump0||
-      break_jump1) ? breakIP : 43'bz;
+      break_jump1) ? {baseIP[62:43],breakIP} : 63'bz;
   assign baseIP_d=break_prejmp_ntick & ~(jump0_in&jump0_taken) & ~(jump1_in&jump1_taken) 
-      & ~break_jump0 & ~break_jump1 & ~break_exceptn & ~break_replay ? baseIP : 43'bz;
-  assign baseIP_d[11:0]=break_prejmp_tick & ~(jump0_in&jump0_taken) & ~(jump1_in&jump1_taken)  
-      & ~break_jump0 & ~break_jump1 & ~break_exceptn & ~break_replay ? baseIP[11:0] : 12'bz;
+      & ~break_jump0 & ~break_jump1 & ~break_exceptn & ~break_replay ? baseIP : 63'bz;
+  assign baseIP_d[7:0]=break_prejmp_tick & ~(jump0_in&jump0_taken) & ~(jump1_in&jump1_taken)  
+      & ~break_jump0 & ~break_jump1 & ~break_exceptn & ~break_replay ? baseIP[7:0] : 8'bz;
+  assign baseIP_d[63:44]=break_prejmp_tick & ~(jump0_in&jump0_taken) & ~(jump1_in&jump1_taken)  
+      & ~break_jump0 & ~break_jump1 & ~break_exceptn & ~break_replay ? baseIP[62:43] : 20'bz;
 
   assign jump0_taken=(jump0Pos==4'hf) ? 1'b0 : 1'bz;
   assign jump0_flags=(jump0Pos==4'hf) ? 6'b0 : 6'bz;
@@ -995,6 +1002,10 @@ module cntrl_find_outcome(
   assign bob_wdata[`bob_jump1Type]=ijump1Type;
   assign jump1Type=bob_rdata[`bob_jump1Type];
   assign bob_wdata[`bob_jump0Pos]=~ijump0Off;
+  assign bob_wdata[`bob_mpr0_bnd]=~ijump0BND;
+  assign bob_wdata[`bob_mpr1_bnd]=~ijump1BND;
+  assign jump0BND=~bob_rdata[`bob_mpr0_bnd];
+  assign jump1BND=~bob_rdata[`bob_mpr1_bnd];
   assign jump0Pos=~bob_rdata[`bob_jump0Pos];
   assign bob_wdata[`bob_jump1Pos]=~ijump1Off;
   assign jump1Pos=~bob_rdata[`bob_jump1Pos];
@@ -1145,7 +1156,7 @@ module cntrl_find_outcome(
 
   adder_inc #(6) initAdd_mod(initcount,initcount_d,1'b1,);
   
-  adder_inc #(43-12) baseAdd_mod(baseIP[42:12],baseIP_d[42:12],break_prejmp_tick & ~(jump0_in&jump0_taken) & 
+  adder_inc #(43-8) baseAdd_mod(baseIP[42:8],baseIP_d[42:8],break_prejmp_tick & ~(jump0_in&jump0_taken) & 
      ~(jump1_in&jump1_taken) & ~break_exceptn,);
 
   bit_find_first_bit #(10) break_mod(~(done|fpudone)|jump0_misPred|jump1_misPred,break_,has_break);
