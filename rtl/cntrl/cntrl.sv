@@ -266,7 +266,7 @@ module cntrl_find_outcome(
   output reg [15:0] csrss_no;
   output reg csrss_thread;
   output reg csrss_en;
-  output reg [63:0] csrss_data;
+  output reg [6_4:0] csrss_data;
   input new_en;
   input new_thread;
   output wire [5:0] new_addr;
@@ -915,7 +915,7 @@ module cntrl_find_outcome(
   assign csrss_en_d=(break_exceptn) ? has_some & ~mem_II_stall : 1'bz;
   assign csrss_en_d=(~break_jump0 & ~break_jump1 & ~break_exceptn) ? 1'b0 : 1'bz;
   assign csrss_data_d=(break_exceptn) ? {1'b0,attr[0],attr[1],is_after_spec,attr[3],12'b0,4'b0,breakIP,1'b0} : indir_IP;
-  assign baseIP_d=(jump0_in & jump0_taken &~break_exceptn &~break_replay) ? {jump0BND,jump0IP} : 64'bz;
+  assign baseIP_d=(jump0_in & jump0_taken &~break_exceptn &~break_replay) ? {jump0BND,jump0IP} : 6_3'bz;
   assign baseIP_d=(jump1_in & jump1_taken &~break_exceptn &~break_replay) ? {jump1BND,jump1IP} : 63'bz;
   assign baseIP_d=(break_exceptn) ? {baseIP[62:43],excpt_handlerIP} : 63'bz;
   assign baseIP_d=break_replay || ~(jump0_in&jump0_taken) & ~(jump1_in&jump1_taken) & (break_jump0||
@@ -924,7 +924,7 @@ module cntrl_find_outcome(
       & ~break_jump0 & ~break_jump1 & ~break_exceptn & ~break_replay ? baseIP : 63'bz;
   assign baseIP_d[7:0]=break_prejmp_tick & ~(jump0_in&jump0_taken) & ~(jump1_in&jump1_taken)  
       & ~break_jump0 & ~break_jump1 & ~break_exceptn & ~break_replay ? baseIP[7:0] : 8'bz;
-  assign baseIP_d[63:44]=break_prejmp_tick & ~(jump0_in&jump0_taken) & ~(jump1_in&jump1_taken)  
+  assign baseIP_d[62:43]=break_prejmp_tick & ~(jump0_in&jump0_taken) & ~(jump1_in&jump1_taken)  
       & ~break_jump0 & ~break_jump1 & ~break_exceptn & ~break_replay ? baseIP[62:43] : 20'bz;
 
   assign jump0_taken=(jump0Pos==4'hf) ? 1'b0 : 1'bz;
@@ -1241,7 +1241,7 @@ module cntrl_find_outcome(
 	  jupdt1_en<=1'b0;
 	  jupd1_ght_en<=1'b0;
 
-	  exceptIP<=43'b0;
+	  exceptIP<=63'b0;
 	  except_thread<=1'b0;
 	  except_both<=1'b0;
 	  except<=1'b0;
@@ -1254,9 +1254,9 @@ module cntrl_find_outcome(
           csrss_no<=16'b0;
           csrss_thread<=1'b0;
           csrss_en<=1'b0;
-          csrss_data<=64'b0;
+          csrss_data<=65'b0;
 
-	  baseIP<=43'b0;
+	  baseIP<=63'b0;
 
           retire_addr_reg<=6'd0;
 	  
