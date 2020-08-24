@@ -33,6 +33,9 @@ struct insn {
   unsigned char fl_wr;
   unsigned char flag;
   unsigned char len;
+  unsigned char is_setcsr;
+  unsigned char is_tkn;
+  unsigned char jtype;
   unsigned char en;
   unsigned long target;
   unsigned long IP;
@@ -42,8 +45,9 @@ insn reqs[48][10]={};
 int ii_upper;
 int ii_ret;
 
-void gen_bndl(insn reqs[10],int exc) {
+void gen_bndl(insn reqs[10],int exc,unsigned long &IP) {
     if (exc) return;
+    memset((char *) reqs,0,10*sizeof reqs[0]);
     int cnt=lrand48()%10+1;
     int jcnt;
     if (cnt!=10) jcnt=lrand48() % 3;
@@ -55,8 +59,40 @@ void gen_bndl(insn reqs[10],int exc) {
     } while (jpos1==jpos0);
     int n;
     int regs_used=0;
+    int tkn=0;
+    if (jcnt==2) tkn=lrand48()%2;
+    int jalu0=lrand48()%2;
+    if (cnt==10 && jcnt<2) jalu0=0;
+    int jalu1=lrand48()%2;
+    if (cnt==10 && jalu0) jalu1=0;
+    int tkn0,tkn1;
+    tkn0=lrand48()%2;
+    if (tkn0) tkn1=0;
+    else tkn1=lrand48()%2;
     for(n=0;n<cnt;n++) {
 	reqs[n].en=1;
+	if (jcnt&&n==jpos0) {
+	    reqs[n].is_jump=1;
+	    reqs[n].is_tkn=tkn0;
+	    reqs[n].is_indir=lrand48()%2;
+	    if (!tkn0) reqs[n].is_indir=0;
+	    reqs[n].is_setcsr=lrand48()%2;
+	    if (!tkn0) reqs[n].is_setcsr=0;
+	    reqs[n].jtype=lrand48()%16;
+	    reqs[n].IP=IP;
+	    do {
+		reqs[n].target=lrand48()&0xfffffffe;
+	    } while ((reqs[n].target&0x1e)==0x1e);
+	    reqs[n].after_tick=(has_tick && n>=tick);
+	    reqs[n].IPoff=IPoff;
+	    reqs[n].len=(lrand48()%10+1)<<1;
+	    IP+=len;
+	    IPoff+=len;
+	    if (has_tick && n==(tick-1)) {
+		IPoff=0;
+	    }
+	} else if (jcnt&&n==jpos1) {
+	}
     }
 }
 
