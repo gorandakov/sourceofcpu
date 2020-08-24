@@ -75,7 +75,9 @@
 `define page16_global 126
 `define page16_huge 127
 
-`define bob_ipOff0_9 129:0
+`define bob_ipOff0_9 89:0
+`define bob_mpr0_bnd 109:90
+`define bob_mpr1_bnd 129:110
 `define bob_ret0_8 165:130
 `define bob_jump0Type 170:166
 `define bob_jump1Type 175:171
