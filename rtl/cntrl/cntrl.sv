@@ -676,7 +676,7 @@ module cntrl_find_outcome(
   wire [15:0] csrss_no_d;
   wire csrss_thread_d;
   wire csrss_en_d;
-  wire [63:0] csrss_data_d;
+  wire [64:0] csrss_data_d;
 
   reg [42:0] archReg_xcpt_retIP		[1:0];
   reg [42:0] archReg_xcpt_handlerIP	[1:0];
@@ -721,7 +721,7 @@ module cntrl_find_outcome(
       if (k<9) assign flags_d=xbreak0[k+1] ? nextFlags[k] : 6'bz; 
       else assign flags_d=has_xbreak0 ? 6'bz : nextFlags[9];
 
-      assign afterTick[k]=IPOff[k][12];
+      assign afterTick[k]=IPOff[k][8];
      
       wire [8:0] flE; 
       for(j=0;j<9;j=j+1) begin : ret_gen
@@ -802,9 +802,9 @@ module cntrl_find_outcome(
       );
 
       wire [42:0] from_IP;
-      assign from_IP=(~tk_after[k]) ? baseIP : 43'bz;
-      assign from_IP=(tk_after[k] & jump0Pred) ? jump0IP : 43'bz;
-      assign from_IP=(tk_after[k] & jump1Pred) ? jump1IP : 43'bz;
+      assign from_IP=(~tk_after[k]) ? baseIP[42:0] : 43'bz;
+      assign from_IP=(tk_after[k] & jump0Pred) ? jump0IP[42:0] : 43'bz;
+      assign from_IP=(tk_after[k] & jump1Pred) ? jump1IP[42:0] : 43'bz;
 
       assign breakIP=break_[k] ? nextIP[k] : 43'bz;
       assign lastIP=break_[k] ? last_instr[k] : 1'bz;
@@ -914,7 +914,7 @@ module cntrl_find_outcome(
   assign csrss_en_d=(break_jump1) ? jump1Type==5'b11001 && has_some && ~mem_II_stall : 1'bz;
   assign csrss_en_d=(break_exceptn) ? has_some & ~mem_II_stall : 1'bz;
   assign csrss_en_d=(~break_jump0 & ~break_jump1 & ~break_exceptn) ? 1'b0 : 1'bz;
-  assign csrss_data_d=(break_exceptn) ? {attr[0],attr[1],is_after_spec,attr[3],12'b0,4'b0,breakIP,1'b0} : indir_IP;
+  assign csrss_data_d=(break_exceptn) ? {1'b0,attr[0],attr[1],is_after_spec,attr[3],12'b0,4'b0,breakIP,1'b0} : indir_IP;
   assign baseIP_d=(jump0_in & jump0_taken &~break_exceptn &~break_replay) ? {jump0BND,jump0IP} : 64'bz;
   assign baseIP_d=(jump1_in & jump1_taken &~break_exceptn &~break_replay) ? {jump1BND,jump1IP} : 63'bz;
   assign baseIP_d=(break_exceptn) ? {baseIP[62:43],excpt_handlerIP} : 63'bz;
