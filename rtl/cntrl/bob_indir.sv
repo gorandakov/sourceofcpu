@@ -13,7 +13,7 @@ module BOBind_ram(
   );
 
   parameter ADDR_WIDTH=`bob_addr_width;
-  parameter DATA_WIDTH=64;
+  parameter DATA_WIDTH=65;
   parameter ADDR_COUNT=`bob_count;
 
   input clk;
@@ -101,7 +101,7 @@ module BOBind(
   );
 
   parameter ADDR_WIDTH=`bob_addr_width;
-  parameter DATA_WIDTH=64;
+  parameter DATA_WIDTH=65;
   parameter ADDR_COUNT=`bob_count;
 
   input clk;

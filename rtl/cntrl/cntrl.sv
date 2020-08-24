@@ -498,7 +498,7 @@ module cntrl_find_outcome(
   input [9:0] 			ret5_addr;
   input [RET_WIDTH-1:0] 	ret5_data;
   input 			ret5_wen;
-  input [63:0]			ret5_IP;
+  input [64:0]			ret5_IP;
   input				ret5_IP_en;
   input [9:0] 			ret6_addr;
   input [RET_WIDTH-1:0] 	ret6_data;
@@ -613,7 +613,7 @@ module cntrl_find_outcome(
   wire [5:0] retire_addr;
   reg  [5:0] retire_addr_reg;
 
-  wire [63:0] indir_IP;
+  wire [64:0] indir_IP;
   wire indir_ready;
   wire has_indir;
   wire i_has_indir;
@@ -897,8 +897,12 @@ module cntrl_find_outcome(
 //warning: trace not yet handled
   assign exceptIP_d=(break_jump0 & jump0_taken) ? {jump0BND,jump0IP} : 63'bz;
   assign exceptIP_d=(break_jump1 & jump1_taken) ? {jump1BND,jump1IP} : 63'bz;
-  assign exceptIP_d=(break_jump0 & ~jump0_taken) ? {baseIP[62:43],breakIP} : 63'bz;
-  assign exceptIP_d=(break_jump1 & ~jump1_taken) ? {baseIP[62:43],breakIP} : 63'bz;
+  assign exceptIP_d=(break_jump0 && ~jump0_taken && !(jump0Type[4] && jump0Type[2:0]==3'd1)) ? {baseIP[62:43],breakIP} : 63'bz;
+  assign exceptIP_d=(break_jump1 & ~jump1_taken && !(jump1Type[4] && jump1Type[2:0]==3'd1)) ? {baseIP[62:43],breakIP} : 63'bz;
+  assign exceptIP_d=(break_jump0 && ~jump0_taken && (jump0Type==5'h11)) ? indir_IP[63:1] : 63'bz;
+  assign exceptIP_d=(break_jump1 & ~jump1_taken && (jump1Type==5'h11)) ? indir_IP[63:1] : 63'bz;
+  assign exceptIP_d=(break_jump0 && ~jump0_taken && (jump0Type==5'h19)) ? {baseIP[62:43],indir_IP[43:1]} : 63'bz;
+  assign exceptIP_d=(break_jump1 & ~jump1_taken && (jump1Type==5'h19)) ? {baseIP[62:43],indir_IP[43:1]} : 63'bz;
   assign exceptIP_d=(break_exceptn) ? {baseIP[62:43],excpt_handlerIP[42:11],excpt_code[5:0],5'b0} : 63'bz;
   assign exceptIP_d=(break_replay) ? {baseIP[62:43],breakIP} : 63'bz;
   assign exceptIP_d=(break_pending | ~has_break) ? 63'b0 : 63'bz;
@@ -1055,7 +1059,7 @@ module cntrl_find_outcome(
   assign i_has_indir=(ijump0Type[4] && ijump0Type[2:0]==3'b001 && ijump0Off!=4'hf) ||
     (ijump1Type[4] && ijump1Type[2:0]==3'b001 && ijump1Off!=4'hf);
 
-  assign indirMismatch=takenIP!=indir_IP[43:1] && has_indir && indir_ready;
+  assign indirMismatch=(takenIP!=indir_IP[43:1] || ~indir_IP[64]) && has_indir && indir_ready;
 
   assign except_d=has_break && ~break_pending && has_some && ~init && indir_ready|~has_indir;
   
@@ -1144,7 +1148,7 @@ module cntrl_find_outcome(
   .read_data(indir_IP),
   .read_ready(indir_ready),
   .write_addr(init ? initcount : ret5_addr[9:4]),
-  .write_data(ret5_IP & {64{~init}}),
+  .write_data(ret5_IP & {65{~init}}),
   .write_wen(ret5_wen & ret5_IP_en || init),
   .writeI_addr(init ? initcount : new_addr),
   .writeI_ready(~i_has_indir|init),
