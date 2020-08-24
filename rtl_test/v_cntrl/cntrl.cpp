@@ -42,6 +42,24 @@ insn reqs[48][10]={};
 int ii_upper;
 int ii_ret;
 
+void gen_bndl(insn reqs[10],int exc) {
+    if (exc) return;
+    int cnt=lrand48()%10+1;
+    int jcnt;
+    if (cnt!=10) jcnt=lrand48() % 3;
+    else jcnt=lrand48()%2+1;
+    int jpos0=lrand48()%cnt;
+    int jpos1;
+    if (jcnt==2) do {
+        jpos1=lrand48()%cnt;
+    } while (jpos1==jpos0);
+    int n;
+    int regs_used=0;
+    for(n=0;n<cnt;n++) {
+	reqs[n].en=1;
+    }
+}
+
 int main(int argc, char *argv[]) {
     Verilated::commandArgs(argc, argv);
     Vagu_block *top=new Vagu_block();
