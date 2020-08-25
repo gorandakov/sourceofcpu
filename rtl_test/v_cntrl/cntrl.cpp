@@ -33,6 +33,7 @@ struct insn {
   unsigned char is_indir;
   unsigned char fl_wr;
   unsigned char flag;
+  unsigned char flag_in;
   unsigned char len;
   unsigned char is_setcsr;
   unsigned char is_tkn;
@@ -47,7 +48,7 @@ insn reqs[48][10]={};
 int ii_upper;
 int ii_ret;
 
-void gen_bndl(insn reqs[10],int exc,unsigned long &IP) {
+void gen_bndl(insn reqs[10],int exc,unsigned long &baseIP,unsigned int &IPoff,unsigned char &flg) {
     if (exc) return;
     memset((char *) reqs,0,10*sizeof reqs[0]);
     int cnt=lrand48()%10+1;
@@ -72,8 +73,12 @@ void gen_bndl(insn reqs[10],int exc,unsigned long &IP) {
     if (tkn0) tkn1=0;
     else tkn1=lrand48()%2;
     int rno;
+    int tick=0;
+    int has_tick=0;
+    unsigned long IP=baseIP+IPoff;
     for(n=0;n<cnt;n++) {
 	reqs[n].en=1;
+	reqs[n].flag_in=flg;
 	if (jcnt&&n==jpos0) {
 	    reqs[n].is_jump=1;
 	    reqs[n].is_tkn=tkn0;
@@ -86,7 +91,7 @@ void gen_bndl(insn reqs[10],int exc,unsigned long &IP) {
 	    do {
 		reqs[n].target=lrand48()&0xffffffffffe|((lrand48()&0xfffff)<<44);
 	    } while ((reqs[n].target&0x1e)==0x1e);
-	    reqs[n].after_tick=(has_tick && n>=tick);
+//	    reqs[n].after_tick=(has_tick && n>=tick);
 	    reqs[n].IPoff=IPoff;
 	    reqs[n].len=(lrand48()%10+1)<<1;
 	    IP+=len;
@@ -97,6 +102,7 @@ void gen_bndl(insn reqs[10],int exc,unsigned long &IP) {
 	    }
 	    if (tkn0) {
 		IP=reqs[n].target;
+		baseIP=IP;
 		IPoff=0;
 		has_tick=0;
 	    }
@@ -112,7 +118,7 @@ void gen_bndl(insn reqs[10],int exc,unsigned long &IP) {
 	    do {
 		reqs[n].target=lrand48()&0xffffffffffe|((lrand48()&0xfffff)<<44);
 	    } while ((reqs[n].target&0x1e)==0x1e);
-	    reqs[n].after_tick=(has_tick && n>=tick);
+//	    reqs[n].after_tick=(has_tick && n>=tick);
 	    reqs[n].IPoff=IPoff;
 	    reqs[n].len=(lrand48()%10+1)<<1;
 	    IP+=len;
@@ -123,6 +129,7 @@ void gen_bndl(insn reqs[10],int exc,unsigned long &IP) {
 	    }
 	    if (tkn1) {
 		IP=reqs[n].target;
+		baseIP=IP;
 		IPoff=0;
 		has_tick=0;
 	    }
@@ -156,7 +163,10 @@ void gen_bndl(insn reqs[10],int exc,unsigned long &IP) {
 	    reqs[n].rT_enF=!reqs[n].rT_en;
 	    regs_used|=1<<rno;
 	    reqs[n].fl_wr=lrand48()&1;
-	    if (reqs[n].fl_wr) reqs[n].flag=lrand48()&0x3f;
+	    if (reqs[n].fl_wr) {
+		reqs[n].flag=lrand48()&0x3f;
+		flg=reqs[n].flag;
+	    }
 	    if (reqs[n].fl_wr && !(lrand48()%13)) {
 		reqs[n].rT_en=0;
 		reqs[n].rT_enF=0;
@@ -173,7 +183,10 @@ void gen_bndl(insn reqs[10],int exc,unsigned long &IP) {
 	    }
 	}
     }
-    if (IPoff>255) IPoff-=256;
+    if (IPoff>255) {
+	IPoff-=256;
+	baseIP+=256;
+    }
 }
 
 int main(int argc, char *argv[]) {
