@@ -26,6 +26,7 @@ struct insn {
   unsigned char is_ldconfl;
   unsigned char is_smpconfl;
   unsigned char is_ldexc;
+  unsigned char is_ldpass;
   unsigned char is_exc;
   unsigned char exc_vec;
   unsigned char is_jump;
@@ -37,6 +38,7 @@ struct insn {
   unsigned char is_tkn;
   unsigned char jtype;
   unsigned char en;
+  unsigned short rT_reg;
   unsigned long target;
   unsigned long IP;
 };
@@ -69,6 +71,7 @@ void gen_bndl(insn reqs[10],int exc,unsigned long &IP) {
     tkn0=lrand48()%2;
     if (tkn0) tkn1=0;
     else tkn1=lrand48()%2;
+    int rno;
     for(n=0;n<cnt;n++) {
 	reqs[n].en=1;
 	if (jcnt&&n==jpos0) {
@@ -123,6 +126,32 @@ void gen_bndl(insn reqs[10],int exc,unsigned long &IP) {
 		IPoff=0;
 		has_tick=0;
 	    }
+	} else {
+	    do {
+		rno=lrand48()%9;
+	    } while (!((regs_used>>rno)&1));
+	    reqs[n].rT_reg=((lrand48()&0x1f)<<4) | rno;
+	    reqs[n].rT=lrand48()&0x1f;
+	    switch(lrand48()%3) {
+		case 1: if (st_cnt<3 && lscnt<6) goto do_store;
+		case 0: if (lscnt<6) goto do_load;
+		case 2: goto do_alu;
+	    }
+            do_store:
+	    reqs[n].is_load=1;
+	    reqs[n].is_ldexc=!(lrand48()%43);
+	    goto do_end;
+            do_load:
+	    reqs[n].is_load=1;
+	    reqs[n].is_ldexc=!(lrand48()%43);
+	    reqs[n].is_ldconfl=!(lrand48()%43);
+	    reqs[n].is_smpconfl=!(lrand48()%43);
+	    reqs[n].is_ldpass=!(lrand48()%43);
+	    reqs[n].rT_en=lrand48()&1;
+	    reqs[n].rT_enF=!reqs[n].rT_en;
+	    goto do_end;
+            do_alu:
+            do_end:
 	}
     }
     if (IPoff>255) IPoff-=256;
