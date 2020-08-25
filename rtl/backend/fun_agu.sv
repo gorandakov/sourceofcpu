@@ -16,31 +16,31 @@ module agu_block(
   u1_index_fufwd,u1_index_fuufwd,
   u1_op,u1_reg,
   u1_LSQ_no,u1_II_no,u1_WQ_no,
-  u1_lsflag,u1_clkEn,
+  u1_lsflag,u1_clkEn,u1_attr,
   u2_base,u2_index,u2_const,
   u2_base_fufwd,u2_base_fuufwd,
   u2_index_fufwd,u2_index_fuufwd,
   u2_op,u2_reg,
   u2_LSQ_no,u2_II_no,u2_WQ_no,
-  u2_lsflag,u2_clkEn,
+  u2_lsflag,u2_clkEn,u2_attr,
   u3_base,u3_index,u3_const,
   u3_base_fufwd,u3_base_fuufwd,
   u3_index_fufwd,u3_index_fuufwd,
   u3_op,u3_reg,
   u3_LSQ_no,u3_II_no,u3_WQ_no,
-  u3_lsflag,u3_clkEn,
+  u3_lsflag,u3_clkEn,u3_attr,
   u4_base,u4_index,u4_const,
   u4_base_fufwd,u4_base_fuufwd,
   u4_index_fufwd,u4_index_fuufwd,
   u4_op,u4_reg,
   u4_LSQ_no,u4_II_no,u4_WQ_no,
-  u4_lsflag,u4_clkEn,
+  u4_lsflag,u4_clkEn,u4_attr,
   u5_base,u5_index,u5_const,
   u5_base_fufwd,u5_base_fuufwd,
   u5_index_fufwd,u5_index_fuufwd,
   u5_op,u5_reg,
   u5_LSQ_no,u5_II_no,u5_WQ_no,
-  u5_lsflag,u5_clkEn,
+  u5_lsflag,u5_clkEn,u5_attr,
   mOp0_clHit,mOp1_clHit,mOp2_clHit,mOp3_clHit,
   miss4,
   mOpY4_en,
@@ -189,6 +189,7 @@ module agu_block(
   input [7:0]  u1_WQ_no;
   input        u1_lsflag;
   input        u1_clkEn;
+  input [3:0]  u1_attr;
   input [64:0] u2_base;
   input [64:0] u2_index;
   input [32:0] u2_const;
@@ -203,6 +204,7 @@ module agu_block(
   input [7:0]  u2_WQ_no;
   input        u2_lsflag;
   input        u2_clkEn;
+  input [3:0]  u2_attr;
   input [64:0] u3_base;
   input [64:0] u3_index;
   input [32:0] u3_const;
@@ -217,6 +219,7 @@ module agu_block(
   input [7:0]  u3_WQ_no;
   input        u3_lsflag;
   input        u3_clkEn;
+  input [3:0]  u3_attr;
   input [64:0] u4_base;
   input [64:0] u4_index;
   input [32:0] u4_const;
@@ -231,6 +234,7 @@ module agu_block(
   input [7:0]  u4_WQ_no;
   input        u4_lsflag;
   input        u4_clkEn;
+  input [3:0]  u4_attr;
   input [64:0] u5_base;
   input [64:0] u5_index;
   input [32:0] u5_const;
@@ -245,6 +249,7 @@ module agu_block(
   input [7:0]  u5_WQ_no;
   input        u5_lsflag;
   input        u5_clkEn;
+  input [3:0]  u5_attr;
   input [1:0] mOp0_clHit;
   input [1:0] mOp1_clHit;
   input [1:0] mOp2_clHit;
@@ -1411,13 +1416,12 @@ module agu_block(
   .clk(clk),
   .rst(rst),
   .except(except),
-  .except_gate(excpt_gate),
-  .except_in_vm(excpt_in_vm),
-  .except_in_km(excpt_in_km),
+  .attr(u4_attr_reg),
   .read_clkEn(u4_clkEn_reg),
   .doStall(),
   .bus_hold(wt_pause_agu_reg), 
   .mex_addr(p4_mex_addr),
+  .mex_attr(p4_mex_attr),
   .mex_en(p4_mex_en),
  // .mex_ptrdiff(p4_ptrdiff),
   .op(p4_mex_en ? {7'b0,p4_mex_sz,1'b1} : u4_op_reg),
@@ -1438,6 +1442,7 @@ module agu_block(
   .mOp_LSQ(mOp4_LSQ),
   .mOp_II(mOp4_II),
   .mOp_WQ(mOp4_WQ),
+  .mOp_attr(mOp4_attr),
   .mOp_addrEven(mOpX4_addrEven),
   .mOp_addrOdd(mOpX4_addrOdd),
   .mOp_addrMain(mOp4_addrMain),
@@ -1473,13 +1478,12 @@ module agu_block(
   .clk(clk),
   .rst(rst),
   .except(except),
-  .except_gate(excpt_gate),
-  .except_in_vm(excpt_in_vm),
-  .except_in_km(excpt_in_km),
+  .attr(u5_attr_reg),
   .read_clkEn(u5_clkEn_reg),
   .doStall(),
   .bus_hold(wt_pause_agu_reg), 
   .mex_addr(p5_mex_addr),
+  .mex_attr(p5_mex_attr),
   .mex_en(p5_mex_en),
   .op(p5_mex_en ? {7'b0,p5_mex_sz,1'b1} : u5_op_reg),
   .shiftSize(u5_sh_reg),
@@ -1499,6 +1503,7 @@ module agu_block(
   .mOp_LSQ(mOp5_LSQ),
   .mOp_II(mOp5_II),
   .mOp_WQ(mOp5_WQ),
+  .mOp_attr(mOp5_attr),
   .mOp_addrEven(mOpX5_addrEven),
   .mOp_addrOdd(mOpX5_addrOdd),
   .mOp_addrMain(mOp5_addrMain),
@@ -1551,6 +1556,7 @@ module agu_block(
   mOp4_LSQ,
   mOp4_II,
   mOp4_WQ,
+  mOp4_attr,
   mOp4_lsflag,
   mOpX4_en,
   ,
@@ -1580,6 +1586,7 @@ module agu_block(
   mOp5_LSQ,
   mOp5_II,
   mOp5_WQ,
+  mOp5_attr,
   mOp5_lsflag,
   mOpX5_en,
   mOpX5_thread,
@@ -1598,9 +1605,11 @@ module agu_block(
   p4_mex_addr,
   p4_mex_sz,
   p4_mex_en,
+  p4_mex_attr,
   p5_mex_addr,
   p5_mex_sz,
   p5_mex_en,
+  p5_mex_attr,
   Em_tlb_req_en,
   Em_tlb_req_addr,
   Em_tlb_req_ack
@@ -1611,9 +1620,7 @@ module agu_block(
   clk,
   rst,
   except,
-  excpt_gate,
-  excpt_in_vm,
-  excpt_in_km,  
+  u1_attr_reg,
   u1_clkEn_reg,
   ,
   bus_holds_agu_reg|miss_holds_agu_reg,
@@ -1644,6 +1651,7 @@ module agu_block(
   mOp0_LSQ,
   mOp0_II,
   mOp0_WQ,
+  mOp0_attr,
   mOp0_addrEven,
   mOp0_addrOdd,
   mOp0_addrMain,
@@ -1679,9 +1687,7 @@ module agu_block(
   clk,
   rst,
   except,
-  excpt_gate,
-  excpt_in_vm,
-  excpt_in_km,  
+  u2_attr_reg,
   u2_clkEn_reg,
   ,
   bus_holds_agu_reg|miss_holds_agu_reg,
@@ -1712,6 +1718,7 @@ module agu_block(
   mOp1_LSQ,
   mOp1_II,
   mOp1_WQ,
+  mOp1_attr,
   mOp1_addrEven,
   mOp1_addrOdd,
   mOp1_addrMain,
@@ -1747,9 +1754,7 @@ module agu_block(
   clk,
   rst,
   except,
-  excpt_gate,
-  excpt_in_vm,
-  excpt_in_km,  
+  u3_attr_reg,
   u3_clkEn_reg,
   ,
   bus_holds_agu_reg|miss_holds_agu_reg,
@@ -1780,6 +1785,7 @@ module agu_block(
   mOp2_LSQ,
   mOp2_II,
   mOp2_WQ,
+  mOp2_attr,
   mOp2_addrEven,
   mOp2_addrOdd,
   mOp2_addrMain,
@@ -1831,6 +1837,7 @@ module agu_block(
   .mOp0_type(mOp0_type),
   .mOp0_II(mOp0_II),
   .mOp0_WQ(mOp0_WQ),
+  .mOp0_attr(mOp0_attr),
   .conflict1(p1_conflict | p1_tlbmiss_reg),
   .mOp1_lsflag(mOp1_lsflag),
   .mOp1_thread(1'b0),
@@ -1844,6 +1851,7 @@ module agu_block(
   .mOp1_type(mOp1_type),
   .mOp1_II(mOp1_II),
   .mOp1_WQ(mOp1_WQ),
+  .mOp1_attr(mOp1_attr),
   .conflict2(p2_conflict | p2_tlbmiss_reg),
   .mOp2_lsflag(mOp2_lsflag),
   .mOp2_thread(1'b0),
@@ -1857,6 +1865,7 @@ module agu_block(
   .mOp2_type(mOp2_type),
   .mOp2_II(mOp2_II),
   .mOp2_WQ(mOp2_WQ),
+  .mOp2_attr(mOp2_attr),
   .conflict3(lso_xdataA_reg[`lsfxdata_has]), //store to load forwarding
 //  .mOp3_lsflag(lso_adata[`lsaddr_flag]),
   .mOp3_addrEven(lso_adata[`lsaddr_addrE]),
@@ -1889,6 +1898,7 @@ module agu_block(
   .mOpR_LSQ(rec_LSQ),
   .mOpR_II(rec_II),
   .mOpR_WQ(rec_WQ),
+  .mOpR_attr(rec_attr),
   .mOpR_type(rec_type),
   .mOpR_thread(),
   .mOpR_bread(rec_brdbnk),
@@ -1899,9 +1909,6 @@ module agu_block(
   .clk(clk),
   .rst(rst),
   .except(except),
-  .except_gate(excpt_gate),
-  .except_in_vm(excpt_in_vm),
-  .except_in_km(excpt_in_km),  
   .doStall(rec_stall),
   .bus_hold(bus_holds_agu_reg2|miss_holds_agu_reg2),
   .pause_miss(miss_pause_agu),
@@ -1925,6 +1932,7 @@ module agu_block(
   .mOp0_type(rec_type),
   .mOp0_II(rec_II),
   .mOp0_WQ(rec_WQ),
+  .mOp0_attr(rec_attr),
   .mOp0_lsflag(rec_lsflag),
  
   .reqtlb_addr(Em_tlb_req_addr),
