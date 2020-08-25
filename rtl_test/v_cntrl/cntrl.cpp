@@ -77,10 +77,10 @@ void gen_bndl(insn reqs[10],int exc,unsigned long &IP) {
 	if (jcnt&&n==jpos0) {
 	    reqs[n].is_jump=1;
 	    reqs[n].is_tkn=tkn0;
-	    reqs[n].is_indir=lrand48()%2;
-	    if (!tkn0) reqs[n].is_indir=0;
-	    reqs[n].is_setcsr=lrand48()%2;
-	    if (!tkn0) reqs[n].is_setcsr=0;
+	    reqs[n].is_indir=(lrand48()%2)&jalu0;
+	    if (!tkn0 || (jcnt<2 && cnt==10) reqs[n].is_indir=0;
+	    reqs[n].is_setcsr=(lrand48()%2)&jalu0;
+	    if (!tkn0 || reqs[n].is_indir) reqs[n].is_setcsr=0;
 	    reqs[n].jtype=lrand48()%16;
 	    reqs[n].IP=IP;
 	    do {
@@ -103,10 +103,10 @@ void gen_bndl(insn reqs[10],int exc,unsigned long &IP) {
 	} else if (jcnt&&n==jpos1) {
 	    reqs[n].is_jump=1;
 	    reqs[n].is_tkn=tkn1;
-	    reqs[n].is_indir=lrand48()%2;
-	    if (!tkn1) reqs[n].is_indir=0;
-	    reqs[n].is_setcsr=lrand48()%2;
-	    if (!tkn1) reqs[n].is_setcsr=0;
+	    reqs[n].is_indir=(lrand48()%2)&jalu1;
+	    if (!tkn1 || (jalu0 && cnt==10) ) reqs[n].is_indir=0;
+	    if (!reqs[n].is_indir) reqs[n].is_setcsr=(lrand48()%2)&jalu1;
+	    if (!tkn1 || reqs[n].is_indir) reqs[n].is_setcsr=0;
 	    reqs[n].jtype=lrand48()%16;
 	    reqs[n].IP=IP;
 	    do {
@@ -149,9 +149,28 @@ void gen_bndl(insn reqs[10],int exc,unsigned long &IP) {
 	    reqs[n].is_ldpass=!(lrand48()%43);
 	    reqs[n].rT_en=lrand48()&1;
 	    reqs[n].rT_enF=!reqs[n].rT_en;
+	    regs_used|=1<<rno;
 	    goto do_end;
             do_alu:
+	    reqs[n].rT_en=lrand48()&1;
+	    reqs[n].rT_enF=!reqs[n].rT_en;
+	    regs_used|=1<<rno;
+	    reqs[n].fl_wr=lrand48()&1;
+	    if (reqs[n].fl_wr) reqs[n].flag=lrand48()&0x3f;
+	    if (reqs[n].fl_wr && !(lrand48()%13)) {
+		reqs[n].rT_en=0;
+		reqs[n].rT_enF=0;
+	    }
             do_end:
+	    reqs[n].after_tick=(has_tick && n>=tick);
+	    reqs[n].IPoff=IPoff;
+	    reqs[n].len=(lrand48()%10+1)<<1;
+	    IP+=len;
+	    IPoff+=len;
+	    if (IPoff>255) {
+		tick=n+1;
+		has_tick=1;
+	    }
 	}
     }
     if (IPoff>255) IPoff-=256;
