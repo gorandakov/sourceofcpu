@@ -93,7 +93,7 @@ void gen_bndl(insn reqs[10],int exc,unsigned long &baseIP,unsigned int &IPoff,un
 	    } while ((reqs[n].target&0x1e)==0x1e);
 //	    reqs[n].after_tick=(has_tick && n>=tick);
 	    reqs[n].IPoff=IPoff;
-	    reqs[n].len=(lrand48()%10+1)<<1;
+	    reqs[n].len=(lrand48()%5+1)<<1;
 	    IP+=len;
 	    IPoff+=len;
 	    if (!tkn0 && IPoff>255) {
@@ -120,7 +120,7 @@ void gen_bndl(insn reqs[10],int exc,unsigned long &baseIP,unsigned int &IPoff,un
 	    } while ((reqs[n].target&0x1e)==0x1e);
 //	    reqs[n].after_tick=(has_tick && n>=tick);
 	    reqs[n].IPoff=IPoff;
-	    reqs[n].len=(lrand48()%10+1)<<1;
+	    reqs[n].len=(lrand48()%5+1)<<1;
 	    IP+=len;
 	    IPoff+=len;
 	    if (!tkn1 && IPoff>255) {
@@ -174,7 +174,7 @@ void gen_bndl(insn reqs[10],int exc,unsigned long &baseIP,unsigned int &IPoff,un
             do_end:
 	    reqs[n].after_tick=(has_tick && n>=tick);
 	    reqs[n].IPoff=IPoff;
-	    reqs[n].len=(lrand48()%10+1)<<1;
+	    reqs[n].len=(lrand48()%5+1)<<1;
 	    IP+=len;
 	    IPoff+=len;
 	    if (IPoff>255) {
@@ -189,9 +189,97 @@ void gen_bndl(insn reqs[10],int exc,unsigned long &baseIP,unsigned int &IPoff,un
     }
 }
 
+void sched(Vcntrl_find_outcome *top, int &err, bool exc) {
+    unsigned II_upper=0;
+    if (top->doStall) return;
+    top->new_en=1;
+    top->new_thread=0;
+    top->new_addr=II_upper;
+    top->instr0_en=reqs[II_upper][0].en && reqs[II_upper][0].rT_en | 
+	    reqs[II_upper][0].rT_enF | reqs[II_upper][0].fl_wr |
+	    reqs[II_upper][0].is_indir | reqs[II_upper][0].is_setcsr;
+    top->instr0_wren=reqs[II_upper][0].rT_en || reqs[II_upper][0].rT_enF;
+    top->instr0_IPOff=reqs[II_upper][0].IPoff+reqs[II_upper][0].len;
+    top->instr0_magic=reqs[II_upper][0].len;
+    top->instr0_last=reqs[II_upper][0].en && !reqs[II_upper][0].en;
+    //top->instr0_after_spec=
+    top->instr1_en=reqs[II_upper][1].en && reqs[II_upper][1].rT_en | 
+	    reqs[II_upper][1].rT_enF | reqs[II_upper][1].fl_wr |
+	    reqs[II_upper][1].is_indir | reqs[II_upper][1].is_setcsr;
+    top->instr1_wren=reqs[II_upper][1].rT_en || reqs[II_upper][1].rT_enF;
+    top->instr1_IPOff=reqs[II_upper][1].IPoff+reqs[II_upper][1].len;
+    top->instr1_magic=reqs[II_upper][1].len;
+    top->instr1_last=reqs[II_upper][1].en && !reqs[II_upper][1].en;
+    //top->instr1_after_spec=
+    top->instr2_en=reqs[II_upper][2].en && reqs[II_upper][2].rT_en | 
+	    reqs[II_upper][2].rT_enF | reqs[II_upper][2].fl_wr |
+	    reqs[II_upper][2].is_indir | reqs[II_upper][2].is_setcsr;
+    top->instr2_wren=reqs[II_upper][2].rT_en || reqs[II_upper][2].rT_enF;
+    top->instr2_IPOff=reqs[II_upper][2].IPoff+reqs[II_upper][2].len;
+    top->instr2_magic=reqs[II_upper][2].len;
+    top->instr2_last=reqs[II_upper][2].en && !reqs[II_upper][2].en;
+    //top->instr2_after_spec=
+    top->instr3_en=reqs[II_upper][3].en && reqs[II_upper][3].rT_en | 
+	    reqs[II_upper][3].rT_enF | reqs[II_upper][3].fl_wr |
+	    reqs[II_upper][3].is_indir | reqs[II_upper][3].is_setcsr;
+    top->instr3_wren=reqs[II_upper][3].rT_en || reqs[II_upper][3].rT_enF;
+    top->instr3_IPOff=reqs[II_upper][3].IPoff+reqs[II_upper][3].len;
+    top->instr3_magic=reqs[II_upper][3].len;
+    top->instr3_last=reqs[II_upper][3].en && !reqs[II_upper][3].en;
+    //top->instr3_after_spec=
+    top->instr4_en=reqs[II_upper][4].en && reqs[II_upper][4].rT_en | 
+	    reqs[II_upper][4].rT_enF | reqs[II_upper][4].fl_wr |
+	    reqs[II_upper][4].is_indir | reqs[II_upper][4].is_setcsr;
+    top->instr4_wren=reqs[II_upper][4].rT_en || reqs[II_upper][4].rT_enF;
+    top->instr4_IPOff=reqs[II_upper][4].IPoff+reqs[II_upper][4].len;
+    top->instr4_magic=reqs[II_upper][4].len;
+    top->instr4_last=reqs[II_upper][4].en && !reqs[II_upper][4].en;
+    //top->instr4_after_spec=
+    top->instr5_en=reqs[II_upper][5].en && reqs[II_upper][5].rT_en | 
+	    reqs[II_upper][5].rT_enF | reqs[II_upper][5].fl_wr |
+	    reqs[II_upper][5].is_indir | reqs[II_upper][5].is_setcsr;
+    top->instr5_wren=reqs[II_upper][5].rT_en || reqs[II_upper][5].rT_enF;
+    top->instr5_IPOff=reqs[II_upper][5].IPoff+reqs[II_upper][5].len;
+    top->instr5_magic=reqs[II_upper][5].len;
+    top->instr5_last=reqs[II_upper][5].en && !reqs[II_upper][5].en;
+    //top->instr5_after_spec=
+    top->instr6_en=reqs[II_upper][6].en && reqs[II_upper][6].rT_en | 
+	    reqs[II_upper][6].rT_enF | reqs[II_upper][6].fl_wr |
+	    reqs[II_upper][6].is_indir | reqs[II_upper][6].is_setcsr;
+    top->instr6_wren=reqs[II_upper][6].rT_en || reqs[II_upper][6].rT_enF;
+    top->instr6_IPOff=reqs[II_upper][6].IPoff+reqs[II_upper][6].len;
+    top->instr6_magic=reqs[II_upper][6].len;
+    top->instr6_last=reqs[II_upper][6].en && !reqs[II_upper][6].en;
+    //top->instr6_after_spec=
+    top->instr7_en=reqs[II_upper][7].en && reqs[II_upper][7].rT_en | 
+	    reqs[II_upper][7].rT_enF | reqs[II_upper][7].fl_wr |
+	    reqs[II_upper][7].is_indir | reqs[II_upper][7].is_setcsr;
+    top->instr7_wren=reqs[II_upper][7].rT_en || reqs[II_upper][7].rT_enF;
+    top->instr7_IPOff=reqs[II_upper][7].IPoff+reqs[II_upper][7].len;
+    top->instr7_magic=reqs[II_upper][7].len;
+    top->instr7_last=reqs[II_upper][7].en && !reqs[II_upper][7].en;
+    //top->instr7_after_spec=
+    top->instr8_en=reqs[II_upper][8].en && reqs[II_upper][8].rT_en | 
+	    reqs[II_upper][8].rT_enF | reqs[II_upper][8].fl_wr |
+	    reqs[II_upper][8].is_indir | reqs[II_upper][8].is_setcsr;
+    top->instr8_wren=reqs[II_upper][8].rT_en || reqs[II_upper][8].rT_enF;
+    top->instr8_IPOff=reqs[II_upper][8].IPoff+reqs[II_upper][8].len;
+    top->instr8_magic=reqs[II_upper][8].len;
+    top->instr8_last=reqs[II_upper][8].en && !reqs[II_upper][8].en;
+    //top->instr8_after_spec=
+    top->instr9_en=reqs[II_upper][9].en && reqs[II_upper][9].rT_en | 
+	    reqs[II_upper][9].rT_enF | reqs[II_upper][9].fl_wr |
+	    reqs[II_upper][9].is_indir | reqs[II_upper][9].is_setcsr;
+    top->instr9_wren=reqs[II_upper][9].rT_en || reqs[II_upper][9].rT_enF;
+    top->instr9_IPOff=reqs[II_upper][9].IPoff+reqs[II_upper][9].len;
+    top->instr9_magic=reqs[II_upper][9].len;
+    top->instr9_last=reqs[II_upper][9].en && !reqs[II_upper][9].en;
+    //top->instr9_after_spec=
+}
+
 int main(int argc, char *argv[]) {
     Verilated::commandArgs(argc, argv);
-    Vagu_block *top=new Vagu_block();
+    Vcntrl_find_outcome *top=new Vcntrl_find_outcome();
     Verilated::assertOn(false);
     int initcount=512;
     long int cyc0=0;
