@@ -37,7 +37,9 @@ struct insn {
   unsigned char len;
   unsigned char is_setcsr;
   unsigned char is_tkn;
+  unsigned char is_aspc;
   unsigned char jtype;
+  unsigned char sched;
   unsigned char en;
   unsigned short rT_reg;
   unsigned long target;
@@ -171,6 +173,7 @@ void gen_bndl(insn reqs[10],int exc,unsigned long &baseIP,unsigned int &IPoff,un
 		reqs[n].rT_en=0;
 		reqs[n].rT_enF=0;
 	    }
+	    reqs[n].is_aspc=lrand48()&1;
             do_end:
 	    reqs[n].after_tick=(has_tick && n>=tick);
 	    reqs[n].IPoff=IPoff;
@@ -190,9 +193,9 @@ void gen_bndl(insn reqs[10],int exc,unsigned long &baseIP,unsigned int &IPoff,un
 }
 
 void sched(Vcntrl_find_outcome *top, int &err, bool exc) {
-    unsigned II_upper=0;
-    if (top->doStall) return;
-    top->new_en=1;
+    static unsigned II_upper=0;
+    unsigned n;
+    top->new_en=reqs[II_upper][0].en;
     top->new_thread=0;
     top->new_addr=II_upper;
     top->instr0_en=reqs[II_upper][0].en && reqs[II_upper][0].rT_en | 
@@ -202,7 +205,7 @@ void sched(Vcntrl_find_outcome *top, int &err, bool exc) {
     top->instr0_IPOff=reqs[II_upper][0].IPoff+reqs[II_upper][0].len;
     top->instr0_magic=reqs[II_upper][0].len;
     top->instr0_last=reqs[II_upper][0].en && !reqs[II_upper][0].en;
-    //top->instr0_after_spec=
+    top->instr0_after_spec=reqs[II_upper][0].is_aspc;
     top->instr1_en=reqs[II_upper][1].en && reqs[II_upper][1].rT_en | 
 	    reqs[II_upper][1].rT_enF | reqs[II_upper][1].fl_wr |
 	    reqs[II_upper][1].is_indir | reqs[II_upper][1].is_setcsr;
@@ -210,7 +213,7 @@ void sched(Vcntrl_find_outcome *top, int &err, bool exc) {
     top->instr1_IPOff=reqs[II_upper][1].IPoff+reqs[II_upper][1].len;
     top->instr1_magic=reqs[II_upper][1].len;
     top->instr1_last=reqs[II_upper][1].en && !reqs[II_upper][1].en;
-    //top->instr1_after_spec=
+    top->instr1_after_spec=reqs[II_upper][1].is_aspc;
     top->instr2_en=reqs[II_upper][2].en && reqs[II_upper][2].rT_en | 
 	    reqs[II_upper][2].rT_enF | reqs[II_upper][2].fl_wr |
 	    reqs[II_upper][2].is_indir | reqs[II_upper][2].is_setcsr;
@@ -218,7 +221,7 @@ void sched(Vcntrl_find_outcome *top, int &err, bool exc) {
     top->instr2_IPOff=reqs[II_upper][2].IPoff+reqs[II_upper][2].len;
     top->instr2_magic=reqs[II_upper][2].len;
     top->instr2_last=reqs[II_upper][2].en && !reqs[II_upper][2].en;
-    //top->instr2_after_spec=
+    top->instr2_after_spec=reqs[II_upper][2].is_aspc;
     top->instr3_en=reqs[II_upper][3].en && reqs[II_upper][3].rT_en | 
 	    reqs[II_upper][3].rT_enF | reqs[II_upper][3].fl_wr |
 	    reqs[II_upper][3].is_indir | reqs[II_upper][3].is_setcsr;
@@ -226,7 +229,7 @@ void sched(Vcntrl_find_outcome *top, int &err, bool exc) {
     top->instr3_IPOff=reqs[II_upper][3].IPoff+reqs[II_upper][3].len;
     top->instr3_magic=reqs[II_upper][3].len;
     top->instr3_last=reqs[II_upper][3].en && !reqs[II_upper][3].en;
-    //top->instr3_after_spec=
+    top->instr3_after_spec=reqs[II_upper][3].is_aspc;
     top->instr4_en=reqs[II_upper][4].en && reqs[II_upper][4].rT_en | 
 	    reqs[II_upper][4].rT_enF | reqs[II_upper][4].fl_wr |
 	    reqs[II_upper][4].is_indir | reqs[II_upper][4].is_setcsr;
@@ -234,7 +237,7 @@ void sched(Vcntrl_find_outcome *top, int &err, bool exc) {
     top->instr4_IPOff=reqs[II_upper][4].IPoff+reqs[II_upper][4].len;
     top->instr4_magic=reqs[II_upper][4].len;
     top->instr4_last=reqs[II_upper][4].en && !reqs[II_upper][4].en;
-    //top->instr4_after_spec=
+    top->instr4_after_spec=reqs[II_upper][4].is_aspc;
     top->instr5_en=reqs[II_upper][5].en && reqs[II_upper][5].rT_en | 
 	    reqs[II_upper][5].rT_enF | reqs[II_upper][5].fl_wr |
 	    reqs[II_upper][5].is_indir | reqs[II_upper][5].is_setcsr;
@@ -242,7 +245,7 @@ void sched(Vcntrl_find_outcome *top, int &err, bool exc) {
     top->instr5_IPOff=reqs[II_upper][5].IPoff+reqs[II_upper][5].len;
     top->instr5_magic=reqs[II_upper][5].len;
     top->instr5_last=reqs[II_upper][5].en && !reqs[II_upper][5].en;
-    //top->instr5_after_spec=
+    top->instr5_after_spec=reqs[II_upper][5].is_aspc;
     top->instr6_en=reqs[II_upper][6].en && reqs[II_upper][6].rT_en | 
 	    reqs[II_upper][6].rT_enF | reqs[II_upper][6].fl_wr |
 	    reqs[II_upper][6].is_indir | reqs[II_upper][6].is_setcsr;
@@ -250,7 +253,7 @@ void sched(Vcntrl_find_outcome *top, int &err, bool exc) {
     top->instr6_IPOff=reqs[II_upper][6].IPoff+reqs[II_upper][6].len;
     top->instr6_magic=reqs[II_upper][6].len;
     top->instr6_last=reqs[II_upper][6].en && !reqs[II_upper][6].en;
-    //top->instr6_after_spec=
+    top->instr6_after_spec=reqs[II_upper][6].is_aspc;
     top->instr7_en=reqs[II_upper][7].en && reqs[II_upper][7].rT_en | 
 	    reqs[II_upper][7].rT_enF | reqs[II_upper][7].fl_wr |
 	    reqs[II_upper][7].is_indir | reqs[II_upper][7].is_setcsr;
@@ -258,7 +261,7 @@ void sched(Vcntrl_find_outcome *top, int &err, bool exc) {
     top->instr7_IPOff=reqs[II_upper][7].IPoff+reqs[II_upper][7].len;
     top->instr7_magic=reqs[II_upper][7].len;
     top->instr7_last=reqs[II_upper][7].en && !reqs[II_upper][7].en;
-    //top->instr7_after_spec=
+    top->instr7_after_spec=reqs[II_upper][7].is_aspc;
     top->instr8_en=reqs[II_upper][8].en && reqs[II_upper][8].rT_en | 
 	    reqs[II_upper][8].rT_enF | reqs[II_upper][8].fl_wr |
 	    reqs[II_upper][8].is_indir | reqs[II_upper][8].is_setcsr;
@@ -266,7 +269,7 @@ void sched(Vcntrl_find_outcome *top, int &err, bool exc) {
     top->instr8_IPOff=reqs[II_upper][8].IPoff+reqs[II_upper][8].len;
     top->instr8_magic=reqs[II_upper][8].len;
     top->instr8_last=reqs[II_upper][8].en && !reqs[II_upper][8].en;
-    //top->instr8_after_spec=
+    top->instr8_after_spec=reqs[II_upper][8].is_aspc;
     top->instr9_en=reqs[II_upper][9].en && reqs[II_upper][9].rT_en | 
 	    reqs[II_upper][9].rT_enF | reqs[II_upper][9].fl_wr |
 	    reqs[II_upper][9].is_indir | reqs[II_upper][9].is_setcsr;
@@ -274,7 +277,72 @@ void sched(Vcntrl_find_outcome *top, int &err, bool exc) {
     top->instr9_IPOff=reqs[II_upper][9].IPoff+reqs[II_upper][9].len;
     top->instr9_magic=reqs[II_upper][9].len;
     top->instr9_last=reqs[II_upper][9].en && !reqs[II_upper][9].en;
-    //top->instr9_after_spec=
+    top->instr9_after_spec=reqs[II_upper][9].is_aspc;
+    
+    top->instr0_rT=reqs[II_upper][0].rT;
+    top->instr1_rT=reqs[II_upper][1].rT;
+    top->instr2_rT=reqs[II_upper][2].rT;
+    top->instr3_rT=reqs[II_upper][3].rT;
+    top->instr4_rT=reqs[II_upper][4].rT;
+    top->instr5_rT=reqs[II_upper][5].rT;
+    top->instr6_rT=reqs[II_upper][6].rT;
+    top->instr7_rT=reqs[II_upper][7].rT;
+    top->instr8_rT=reqs[II_upper][8].rT;
+    top->instr9_rT=reqs[II_upper][9].rT;
+    
+    top->instr0_gen=reqs[II_upper][0].rT_en;
+    top->instr1_gen=reqs[II_upper][1].rT_en;
+    top->instr2_gen=reqs[II_upper][2].rT_en;
+    top->instr3_gen=reqs[II_upper][3].rT_en;
+    top->instr4_gen=reqs[II_upper][4].rT_en;
+    top->instr5_gen=reqs[II_upper][5].rT_en;
+    top->instr6_gen=reqs[II_upper][6].rT_en;
+    top->instr7_gen=reqs[II_upper][7].rT_en;
+    top->instr8_gen=reqs[II_upper][8].rT_en;
+    top->instr9_gen=reqs[II_upper][9].rT_en;
+   
+    top->instr0_vec=reqs[II_upper][0].rT_enF; 
+    top->instr1_vec=reqs[II_upper][1].rT_enF; 
+    top->instr2_vec=reqs[II_upper][2].rT_enF; 
+    top->instr3_vec=reqs[II_upper][3].rT_enF; 
+    top->instr4_vec=reqs[II_upper][4].rT_enF; 
+    top->instr5_vec=reqs[II_upper][5].rT_enF; 
+    top->instr6_vec=reqs[II_upper][6].rT_enF; 
+    top->instr7_vec=reqs[II_upper][7].rT_enF; 
+    top->instr8_vec=reqs[II_upper][8].rT_enF; 
+    top->instr9_vec=reqs[II_upper][9].rT_enF; 
+    top->iret0=0xf; 
+    top->iret1=0xf; 
+    top->iret2=0xf; 
+    top->iret3=0xf; 
+    top->iret4=0xf; 
+    top->iret5=0xf; 
+    top->iret6=0xf; 
+    top->iret7=0xf; 
+    top->iret8=0xf; 
+    top->iret9=0xf; 
+    for(n=0;n<10;n++) {
+        if (reqs[II_upper][n].rT_en||reqs[II_upper][n].rT_enF||
+        reqs[II_upper][n].fl_wr||reqs[II_upper][n].is_indir||
+        reqs[II_upper][n].is_setcsr) {
+            switch (reqs[II_upper][n].rT_reg&0xf) {
+                case 0: top->iret0=n; top->iret0_rF=reqs[II_upper][n].rT_reg; break;
+                case 1: top->iret1=n; top->iret1_rF=reqs[II_upper][n].rT_reg; break;
+                case 2: top->iret2=n; top->iret2_rF=reqs[II_upper][n].rT_reg; break;
+                case 3: top->iret3=n; top->iret3_rF=reqs[II_upper][n].rT_reg; break;
+                case 4: top->iret4=n; top->iret4_rF=reqs[II_upper][n].rT_reg; break;
+                case 5: top->iret5=n; top->iret5_rF=reqs[II_upper][n].rT_reg; break;
+                case 6: top->iret6=n; top->iret6_rF=reqs[II_upper][n].rT_reg; break;
+                case 7: top->iret7=n; top->iret7_rF=reqs[II_upper][n].rT_reg; break;
+                case 8: top->iret8=n; top->iret8_rF=reqs[II_upper][n].rT_reg; break;
+                case 9: top->iret9=n; top->iret9_rF=reqs[II_upper][n].rT_reg; break;
+            }
+        }
+    }
+    if (top->doStall) return;
+    II_upper++;
+    for(n=0;n<10;n++) reqs[II_upper][n].sched++;
+    if (II_upper>47) II_upper=0;
 }
 
 int main(int argc, char *argv[]) {
