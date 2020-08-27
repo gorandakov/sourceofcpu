@@ -88,7 +88,7 @@ void gen_bndl(insn reqs[10],int exc,unsigned long &baseIP,unsigned int &IPoff,un
 	    if (!tkn0 || (jcnt<2 && cnt==10) reqs[n].is_indir=0;
 	    reqs[n].is_setcsr=(lrand48()%2)&jalu0;
 	    if (!tkn0 || reqs[n].is_indir) reqs[n].is_setcsr=0;
-	    reqs[n].jtype=lrand48()%16;
+	    reqs[n].jtype=lrand48()%17;
 	    reqs[n].IP=IP;
 	    do {
 		reqs[n].target=lrand48()&0xffffffffffe|((lrand48()&0xfffff)<<44);
@@ -115,7 +115,7 @@ void gen_bndl(insn reqs[10],int exc,unsigned long &baseIP,unsigned int &IPoff,un
 	    if (!tkn1 || (jalu0 && cnt==10) ) reqs[n].is_indir=0;
 	    if (!reqs[n].is_indir) reqs[n].is_setcsr=(lrand48()%2)&jalu1;
 	    if (!tkn1 || reqs[n].is_indir) reqs[n].is_setcsr=0;
-	    reqs[n].jtype=lrand48()%16;
+	    reqs[n].jtype=lrand48()%17;
 	    reqs[n].IP=IP;
 	    do {
 		reqs[n].target=lrand48()&0xffffffffffe|((lrand48()&0xfffff)<<44);
@@ -339,6 +339,31 @@ void sched(Vcntrl_find_outcome *top, int &err, bool exc) {
             }
         }
     }
+    top->ijump0Off=0xf;
+    top->ijump1Off=0xf;
+    for(n=0;n<10;n++) {
+        if (reqs[II_upper][n].is_jmp) {
+            if (top->ijump0Off==0xf) {
+                top->ijump0Off=n;
+                top->ijump0Type=reqs[II_upper][n].jtype;
+                if (reqs[II_upper][n].is_indir)  top->ijump0Type=0x11;
+                if (reqs[II_upper][n].is_setcsr) top->ijump0Type=0x19;
+                top->ijump0JmpInd=n&0x3;
+                top->ijump0Mask=(0xf<<(n&0x3))&0xf;
+                top->ijump0IP=reqs[II_upper][n].target&0xfffffffffff;
+                top->ijump0BND=reqs[II_upper][n].target>>44;
+            } else {
+                top->ijump1Off=n;
+                top->ijump1Type=reqs[II_upper][n].jtype;
+                if (reqs[II_upper][n].is_indir)  top->ijump1Type=0x11;
+                if (reqs[II_upper][n].is_setcsr) top->ijump1Type=0x19;
+                top->ijump1JmpInd=n&0x3;
+                top->ijump1Mask=(0xf<<(n&0x3))&0xf;
+                top->ijump1IP=reqs[II_upper][n].target&0xfffffffffff;
+                top->ijump1BND=reqs[II_upper][n].target>>44;
+            }
+        }
+    }    
     if (top->doStall) return;
     II_upper++;
     for(n=0;n<10;n++) reqs[II_upper][n].sched++;
