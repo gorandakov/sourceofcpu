@@ -378,29 +378,91 @@ void sched(Vcntrl_find_outcome *top, int &err, bool exc) {
 }
 
 void sched_ret(Vcntrl_find_outcome *top, int &err, bool exc) {
-    int n,ii;
+    int n,ii,rdat;
+    int k=0;
+    top->ret0_addr=0;
+    top->ret0_wen=0;
+    top->ret0_data=0;
+    top->ret1_addr=0;
+    top->ret1_wen=0;
+    top->ret1_data=0;
+    top->ret2_addr=0;
+    top->ret2_wen=0;
+    top->ret2_data=0;
+    top->ret3_addr=0;
+    top->ret3_wen=0;
+    top->ret3_data=0;
+    top->ret4_addr=0;
+    top->ret4_wen=0;
+    top->ret4_data=0;
+    top->ret5_addr=0;
+    top->ret5_wen=0;
+    top->ret5_data=0;
+    top->ret5_IP=0;
+    top->ret5_IP_wen=0;
+    seek:
+    for(k=0;k<8 && k!=5 && !(lrand48()%11);k++) {
     do {
         ii=lrand48()%48;
         n=lrand48()%10;
     } while(!(reqs[ii][n].en && reqs[ii][n].sched==1) && !(lrand48()%43));
     if (reqs[ii][n].en && reqs[ii][n].sched==1) {
-        int k;
+        int k2=k;
         if (reqs[ii][n].is_indir || reqs[ii][n].is_setcsr) k==5;
-        else k=reqs[ii][n].rT_reg%3+3*(lrand48()%1);
+        if (reqn[ii][n].is_load && !reqs[ii][n].is_ldpass) goto seek;
+        if (reqs[ii][n].is_ldpass) k=6;
+        rdat=2;
+        if (reqs[ii][n].fl_wr) rdat|=4|(reqs[ii][n].flag<<3);
+        if (reqs[ii][n].is_exc) rdat=1|(reqs[ii][n].exc<<3);
+        
+     //   else k=reqs[ii][n].rT_reg%3+3*(lrand48()%1);
         switch (k) {
             case 0:
+            top->ret0_addr=(ii<<4)|n;
+            top->ret0_wen=1;
+            top->ret0_data=rdat;
             break;
             case 1:
+            top->ret1_addr=(ii<<4)|n;
+            top->ret1_wen=1;
+            top->ret1_data=rdat;
             break;
             case 2:
+            top->ret2_addr=(ii<<4)|n;
+            top->ret2_wen=1;
+            top->ret2_data=rdat;
             break;
             case 3:
+            top->ret3_addr=(ii<<4)|n;
+            top->ret3_wen=1;
+            top->ret3_data=rdat;
             break;
             case 4:
+            top->ret4_addr=(ii<<4)|n;
+            top->ret4_wen=1;
+            top->ret4_data=rdat;
             break;
             case 5:
+            top->ret5_addr=(ii<<4)|n;
+            top->ret5_wen=1;
+            top->ret5_data=rdat;
+            top->ret5_IP=reqs[ii][n].target;
+            top->ret5_IP_wen=reqs[ii][n].is_indir|reqs[ii][n].is_setcsr;
+            break;
+            case 6:
+            if (!ret6_wen) {
+                top->ret6_addr=(ii<<4)|n;
+                top->ret6_wen=1;
+                top->ret6_data=rdat;
+                break;
+            }
+            case 7:
+            top->ret7_addr=(ii<<4)|n;
+            top->ret7_wen=1;
+            top->ret7_data=rdat;
             break;
         }
+    }
     }
 }
 
