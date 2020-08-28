@@ -326,28 +326,21 @@ void sched(Vcntrl_find_outcome *top, int &err, bool exc) {
         reqs[II_upper][n].fl_wr||reqs[II_upper][n].is_indir||
         reqs[II_upper][n].is_setcsr) {
             switch (reqs[II_upper][n].rT_reg&0xf) {
-                case 0: top->iret0=n; top->iret0_rF=reqs[II_upper][n].rT_reg>>4; break;
-                case 1: top->iret1=n; top->iret1_rF=reqs[II_upper][n].rT_reg>>4; break;
-                case 2: top->iret2=n; top->iret2_rF=reqs[II_upper][n].rT_reg>>4; break;
-                case 3: top->iret3=n; top->iret3_rF=reqs[II_upper][n].rT_reg>>4; break;
-                case 4: top->iret4=n; top->iret4_rF=reqs[II_upper][n].rT_reg>>4; break;
-                case 5: top->iret5=n; top->iret5_rF=reqs[II_upper][n].rT_reg>>4; break;
-                case 6: top->iret6=n; top->iret6_rF=reqs[II_upper][n].rT_reg>>4; break;
-                case 7: top->iret7=n; top->iret7_rF=reqs[II_upper][n].rT_reg>>4; break;
-                case 8: top->iret8=n; top->iret8_rF=reqs[II_upper][n].rT_reg>>4; break;
-                case 9: top->iret9=n; top->iret9_rF=reqs[II_upper][n].rT_reg>>4; break;
+                case 0: top->iret0=n; top->iret0_rF=reqs[II_upper][n].rT_reg; break;
+                case 1: top->iret1=n; top->iret1_rF=reqs[II_upper][n].rT_reg; break;
+                case 2: top->iret2=n; top->iret2_rF=reqs[II_upper][n].rT_reg; break;
+                case 3: top->iret3=n; top->iret3_rF=reqs[II_upper][n].rT_reg; break;
+                case 4: top->iret4=n; top->iret4_rF=reqs[II_upper][n].rT_reg; break;
+                case 5: top->iret5=n; top->iret5_rF=reqs[II_upper][n].rT_reg; break;
+                case 6: top->iret6=n; top->iret6_rF=reqs[II_upper][n].rT_reg; break;
+                case 7: top->iret7=n; top->iret7_rF=reqs[II_upper][n].rT_reg; break;
+                case 8: top->iret8=n; top->iret8_rF=reqs[II_upper][n].rT_reg; break;
+                case 9: top->iret9=n; top->iret9_rF=reqs[II_upper][n].rT_reg; break;
             }
-        }
-    }
-    for(n=0;n<10;n++) {
-        if (reqs[II_upper][n].is_tkn) {
-            top->itk_after=(0x3ff<<(n+1))&0x3ff;
-            break;
         }
     }
     top->ijump0Off=0xf;
     top->ijump1Off=0xf;
-    top->flTE=0x9;
     for(n=0;n<10;n++) {
         if (reqs[II_upper][n].is_jmp) {
             if (top->ijump0Off==0xf) {
@@ -375,33 +368,6 @@ void sched(Vcntrl_find_outcome *top, int &err, bool exc) {
     II_upper++;
     for(n=0;n<10;n++) reqs[II_upper][n].sched++;
     if (II_upper>47) II_upper=0;
-}
-
-void sched_ret(Vcntrl_find_outcome *top, int &err, bool exc) {
-    int n,ii;
-    do {
-        ii=lrand48()%48;
-        n=lrand48()%10;
-    } while(!(reqs[ii][n].en && reqs[ii][n].sched==1) && !(lrand48()%43));
-    if (reqs[ii][n].en && reqs[ii][n].sched==1) {
-        int k;
-        if (reqs[ii][n].is_indir || reqs[ii][n].is_setcsr) k==5;
-        else k=reqs[ii][n].rT_reg%3+3*(lrand48()%1);
-        switch (k) {
-            case 0:
-            break;
-            case 1:
-            break;
-            case 2:
-            break;
-            case 3:
-            break;
-            case 4:
-            break;
-            case 5:
-            break;
-        }
-    }
 }
 
 int main(int argc, char *argv[]) {
