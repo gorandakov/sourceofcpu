@@ -377,34 +377,6 @@ void sched(Vcntrl_find_outcome *top, int &err, bool exc) {
     if (II_upper>47) II_upper=0;
 }
 
-void sched_load(Vcntrl_find_outcome *top, int &err, bool exc) {
-    static unsigned ii=0;
-    int k;
-    top->mem_II_upper=ii;
-    top->mem_II_bits_ldconfl=0;
-    top->mem_II_bits_smpconfl=0;
-    top->mem_II_bits_except=0;
-    top->mem_II_bits_fine=0;
-    top->mem_II_bits_ret=0;
-    for(k=0;k<10;k++) {
-        if (reqs[ii][k].is_ldpass || !reqs[ii][k].is_load) continue;
-        if (reqs[ii][k].is_ldconfl) top->mem_II_bits_ldconfl|=1<<k;
-        if (reqs[ii][k].is_smpconfl) top->mem_II_bits_smpconfl|=1<<k;
-        if (reqs[ii][k].is_ldexc) top->mem_II_bits_except|=1<<k;
-        if (!reqs[ii][k].is_ldconfl && !reqs[ii][k].is_smpconfl && !reqs[ii][k].is_ldexc) 
-        top->mem_II_bits_fine|=1<<k;
-        top->mem_II_bits_ret|=1<<k;
-    }
-    top->eval();
-    if (top->doRetire_d) {
-        for(k=0;k<10;k++) {
-            reqs[ii][k].en=0;
-        }
-        ii++;
-        if (ii>47) ii=0;
-    }
-}
-
 void sched_ret(Vcntrl_find_outcome *top, int &err, bool exc) {
     int n,ii,rdat;
     int k=0;
@@ -429,7 +401,7 @@ void sched_ret(Vcntrl_find_outcome *top, int &err, bool exc) {
     top->ret5_IP=0;
     top->ret5_IP_wen=0;
     seek:
-    for(k=0;k<8 && k!=6 && !(lrand48()%11);k++) {
+    for(k=0;k<8 && k!=5 && !(lrand48()%11);k++) {
     do {
         ii=lrand48()%48;
         n=lrand48()%10;
@@ -482,7 +454,6 @@ void sched_ret(Vcntrl_find_outcome *top, int &err, bool exc) {
                 top->ret6_addr=(ii<<4)|n;
                 top->ret6_wen=1;
                 top->ret6_data=rdat;
-                k=k2;
                 break;
             }
             case 7:
