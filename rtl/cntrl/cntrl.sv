@@ -234,6 +234,7 @@ module cntrl_find_outcome(
   ret4_addr,ret4_data,ret4_wen,
   ret5_addr,ret5_data,ret5_wen,ret5_IP,ret5_IP_en,
   ret6_addr,ret6_data,ret6_wen,
+  ret7_addr,ret7_data,ret7_wen,
   mem_II_upper,
   mem_II_upper_out,
   mem_II_bits_fine,
@@ -503,6 +504,9 @@ module cntrl_find_outcome(
   input [9:0] 			ret6_addr;
   input [RET_WIDTH-1:0] 	ret6_data;
   input 			ret6_wen;
+  input [9:0] 			ret7_addr;
+  input [RET_WIDTH-1:0] 	ret7_data;
+  input 			ret7_wen;
 
   input [5:0] mem_II_upper;
   output [5:0] mem_II_upper_out;
@@ -1126,6 +1130,7 @@ module cntrl_find_outcome(
   .write4_addr(ret4_addr),.write4_data(ret4_data),.write4_wen(ret4_wen),
   .write5_addr(ret5_addr),.write5_data(ret5_data),.write5_wen(ret5_wen),
   .write6_addr(ret6_addr),.write6_data(ret6_data),.write6_wen(ret6_wen),
+  .write7_addr(ret7_addr),.write7_data(ret7_data),.write7_wen(ret7_wen),
   
   .writeInit_addr(init ? initcount : new_addr),.writeInit_wen((new_en && ~stall && ~doStall)|init),
   .writeInit_data0({11'b0,instr0_en|init ? 2'd0 : 2'd2}),
