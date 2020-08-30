@@ -5659,6 +5659,7 @@ dcache1 L1D_mod(
   .ret5_addr(outII_reg8[8]),.ret5_data({fexcpt2_no[2]}),.ret5_wen((enS_alu_reg6[5]||outEn_reg8[8][3:2])&~outOp_reg8[8][11]),
     .ret5_IP(FU_reg[9]),.ret5_IP_en(alu_jupdate),
   .ret6_addr(dc_II_reg3[3]),.ret6_data({4'b0,6'b0,3'd2}),.ret6_wen(FU3Hit & dc_lsfwd3_reg3),
+  .ret7_addr(dc_II_reg3[3]),.ret7_data({4'b0,6'b0,3'd2}),.ret7_wen(FUXHit & dc_lsfwd3_reg3),
   .mem_II_upper(retM_II0),
   .mem_II_upper_out(retM_II),
   .mem_II_bits_fine(retM_fine),
