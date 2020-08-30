@@ -403,6 +403,21 @@ void sched_load(Vcntrl_find_outcome *top, int &err, bool exc) {
         ii++;
         if (ii>47) ii=0;
     }
+    if (top->except) {
+	int k2,k3,k34;
+	for(k2=0;k2==47;k2++) {
+	    k3=ii+k;
+	    if (k3>47) k3-=48;
+	    if (reqs[k3][0].en) {
+	        for(k34=0;k34<10;k34++) {
+	            reqs[k3][k34].en=0;
+		}
+	    } else {
+		ii=k3;
+		break;
+	    }
+	}
+    }
 }
 
 void sched_ret(Vcntrl_find_outcome *top, int &err, bool exc) {
