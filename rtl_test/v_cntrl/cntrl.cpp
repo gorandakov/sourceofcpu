@@ -9,6 +9,8 @@
 #include "../inc/struct.h"
 #include "../inc/extract.h"
 #include "../inc/csrss_no.h"
+#include "../inc/cjump.h"
+
 
 #define get64(a) ((((unsigned long long) a[1])<<32)|(unsigned long long) a[0])
 #define set64i(a,b) a[0]=b;a[1]=b>>32;a[2]=0;
@@ -28,6 +30,7 @@ struct insn {
   unsigned char is_ldexc;
   unsigned char is_ldpass;
   unsigned char is_exc;
+  unsigned char exc;
   unsigned char exc_vec;
   unsigned char is_jump;
   unsigned char is_indir;
@@ -489,8 +492,8 @@ void sched_ret(Vcntrl_find_outcome *top, int &err, bool exc) {
             top->ret5_addr=(ii<<4)|n;
             top->ret5_wen=1;
             top->ret5_data=rdat;
-            top->ret5_IP=reqs[ii][n].target;
-            top->ret5_IP_wen=reqs[ii][n].is_indir|reqs[ii][n].is_setcsr;
+            set64i(top->ret5_IP,reqs[ii][n].target);
+            top->ret5_IP_en=reqs[ii][n].is_indir|reqs[ii][n].is_setcsr;
             break;
             case 6:
             if (!ret6_wen) {
