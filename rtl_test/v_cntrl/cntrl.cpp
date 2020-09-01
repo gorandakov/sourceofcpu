@@ -30,7 +30,6 @@ struct insn {
   unsigned char is_ldexc;
   unsigned char is_ldpass;
   unsigned char is_exc;
-  unsigned char exc;
   unsigned char exc_vec;
   unsigned char is_jump;
   unsigned char is_indir;
@@ -52,6 +51,11 @@ struct insn {
 insn reqs[48][10]={};
 int ii_upper;
 int ii_ret;
+struct str_exc {
+    unsigned long long target;
+    bool is_exc;
+};
+str_exc req_ex[48];
 
 void gen_bndl(insn reqs[10],int exc,unsigned long &baseIP,unsigned int &IPoff,unsigned char &flg) {
     if (exc) return;
@@ -459,7 +463,7 @@ void sched_ret(Vcntrl_find_outcome *top, int &err, bool exc) {
         if (reqs[ii][n].is_ldpass) k=6;
         rdat=2;
         if (reqs[ii][n].fl_wr) rdat|=4|(reqs[ii][n].flag<<3);
-        if (reqs[ii][n].is_exc) rdat=1|(reqs[ii][n].exc<<3);
+        if (reqs[ii][n].is_exc) rdat=1|(reqs[ii][n].exc_vec<<3);
         
      //   else k=reqs[ii][n].rT_reg%3+3*(lrand48()%1);
         switch (k) {
