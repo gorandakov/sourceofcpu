@@ -39,6 +39,7 @@ struct insn {
   unsigned char len;
   unsigned char is_setcsr;
   unsigned char is_tkn;
+  unsigned char is_mispr;
   unsigned char is_aspc;
   unsigned char jtype;
   unsigned char sched;
@@ -57,7 +58,7 @@ struct str_exc {
 };
 str_exc req_ex[48];
 
-void gen_bndl(insn reqs[10],int exc,unsigned long &baseIP,unsigned int &IPoff,unsigned char &flg) {
+void gen_bndl(insn reqs[10],&str_exc req_ex,int exc,unsigned long &baseIP,unsigned int &IPoff,unsigned char &flg) {
     if (exc) return;
     memset((char *) reqs,0,10*sizeof reqs[0]);
     int cnt=lrand48()%10+1;
@@ -101,6 +102,8 @@ void gen_bndl(insn reqs[10],int exc,unsigned long &baseIP,unsigned int &IPoff,un
 		reqs[n].target=lrand48()&0xffffffffffe|((lrand48()&0xfffff)<<44);
 	    } while ((reqs[n].target&0x1e)==0x1e);
 //	    reqs[n].after_tick=(has_tick && n>=tick);
+
+	    reqs[n].xtarget=reqs[n].target;
 	    reqs[n].IPoff=IPoff;
 	    reqs[n].len=(lrand48()%5+1)<<1;
 	    IP+=len;
@@ -115,6 +118,18 @@ void gen_bndl(insn reqs[10],int exc,unsigned long &baseIP,unsigned int &IPoff,un
 		IPoff=0;
 		has_tick=0;
 	    }
+	    if ((tkn0!=cjump(reqs[n].jtype,reqs[n].flags_in)) ||
+	        (reqs[n].is_indir && !(lrand48()%53))) {
+		reqs[n].is_mispr=1;
+		if (tkn0) req_ex.target=reqs[n].IP+reqs[n].len;
+		else req_ex.target=reqs[n].target;
+		if (reqs[n].is_indir) {
+		    reqs[n].xtarget=lrand48()&0xffffffffffe|((lrand48()&0xfffff)<<44);
+		    //need jcsr handling
+		    req_ex.target=reqs[n].xtarget;
+		}
+		req_ex.is_exc=1;
+	    }
 	} else if (jcnt&&n==jpos1) {
 	    reqs[n].is_jump=1;
 	    reqs[n].is_tkn=tkn1;
@@ -128,6 +143,8 @@ void gen_bndl(insn reqs[10],int exc,unsigned long &baseIP,unsigned int &IPoff,un
 		reqs[n].target=lrand48()&0xffffffffffe|((lrand48()&0xfffff)<<44);
 	    } while ((reqs[n].target&0x1e)==0x1e);
 //	    reqs[n].after_tick=(has_tick && n>=tick);
+	    
+	    reqs[n].xtarget=reqs[n].target;
 	    reqs[n].IPoff=IPoff;
 	    reqs[n].len=(lrand48()%5+1)<<1;
 	    IP+=len;
@@ -141,6 +158,17 @@ void gen_bndl(insn reqs[10],int exc,unsigned long &baseIP,unsigned int &IPoff,un
 		baseIP=IP;
 		IPoff=0;
 		has_tick=0;
+	    }
+	    if ((!req_ex.is_exc) && ( (tkn1!=cjump(reqs[n].jtype,reqs[n].flags_in)) ||
+	        (reqs[n].is_indir && !(lrand48()%53)))) {
+		reqs[n].is_mispr=1;
+		if (tkn0) req_ex.target=reqs[n].IP+reqs[n].len;
+		else req_ex.target=reqs[n].target;
+		if (reqs[n].is_indir) {
+		    reqs[n].xtarget=lrand48()&0xffffffffffe|((lrand48()&0xfffff)<<44);
+		    req_ex.target=reqs[n].xtarget;
+		}
+		req_ex.is_exc=1;
 	    }
 	} else {
 	    do {
