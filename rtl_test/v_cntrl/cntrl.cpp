@@ -33,6 +33,7 @@ struct insn {
   unsigned char exc_vec;
   unsigned char is_jump;
   unsigned char is_indir;
+  unsigned char is_csrjump;
   unsigned char fl_wr;
   unsigned char flag;
   unsigned char flag_in;
@@ -45,7 +46,9 @@ struct insn {
   unsigned char sched;
   unsigned char en;
   unsigned short rT_reg;
+  unsigned short IPoff;
   unsigned long target;
+  unsigned long xtarget;
   unsigned long IP;
 };
 
@@ -355,7 +358,6 @@ void sched(Vcntrl_find_outcome *top, int &err, bool exc) {
     top->iret6=0xf; 
     top->iret7=0xf; 
     top->iret8=0xf; 
-    top->iret9=0xf; 
     for(n=0;n<10;n++) {
         if (reqs[II_upper][n].rT_en||reqs[II_upper][n].rT_enF||
         reqs[II_upper][n].fl_wr||reqs[II_upper][n].is_indir||
@@ -370,7 +372,6 @@ void sched(Vcntrl_find_outcome *top, int &err, bool exc) {
                 case 6: top->iret6=n; top->iret6_rF=reqs[II_upper][n].rT_reg>>4; break;
                 case 7: top->iret7=n; top->iret7_rF=reqs[II_upper][n].rT_reg>>4; break;
                 case 8: top->iret8=n; top->iret8_rF=reqs[II_upper][n].rT_reg>>4; break;
-                case 9: top->iret9=n; top->iret9_rF=reqs[II_upper][n].rT_reg>>4; break;
             }
         }
     }
@@ -384,7 +385,7 @@ void sched(Vcntrl_find_outcome *top, int &err, bool exc) {
     top->ijump1Off=0xf;
     top->flTE=0x9;
     for(n=0;n<10;n++) {
-        if (reqs[II_upper][n].is_jmp) {
+        if (reqs[II_upper][n].is_jump) {
             if (top->ijump0Off==0xf) {
                 top->ijump0Off=n;
                 top->ijump0Type=reqs[II_upper][n].jtype;
@@ -417,14 +418,14 @@ void sched_load(Vcntrl_find_outcome *top, int &err, bool exc) {
     int k;
     top->mem_II_upper=ii;
     top->mem_II_bits_ldconfl=0;
-    top->mem_II_bits_smpconfl=0;
+    //top->mem_II_bits_smpconfl=0;
     top->mem_II_bits_except=0;
     top->mem_II_bits_fine=0;
     top->mem_II_bits_ret=0;
     for(k=0;k<10;k++) {
         if (reqs[ii][k].is_ldpass || !reqs[ii][k].is_load) continue;
         if (reqs[ii][k].is_ldconfl) top->mem_II_bits_ldconfl|=1<<k;
-        if (reqs[ii][k].is_smpconfl) top->mem_II_bits_smpconfl|=1<<k;
+        //if (reqs[ii][k].is_smpconfl) top->mem_II_bits_smpconfl|=1<<k;
         if (reqs[ii][k].is_ldexc) top->mem_II_bits_except|=1<<k;
         if (!reqs[ii][k].is_ldconfl && !reqs[ii][k].is_smpconfl && !reqs[ii][k].is_ldexc) 
         top->mem_II_bits_fine|=1<<k;
@@ -476,8 +477,8 @@ void sched_ret(Vcntrl_find_outcome *top, int &err, bool exc) {
     top->ret5_addr=0;
     top->ret5_wen=0;
     top->ret5_data=0;
-    top->ret5_IP=0;
-    top->ret5_IP_wen=0;
+    set64i(top->ret5_IP,0);
+    top->ret5_IP_en=0;
     seek:
     for(k=0;k<8 && k!=6 && !(lrand48()%11);k++) {
     do {
@@ -487,12 +488,15 @@ void sched_ret(Vcntrl_find_outcome *top, int &err, bool exc) {
     if (reqs[ii][n].en && reqs[ii][n].sched==1) {
         int k2=k;
         if (reqs[ii][n].is_indir || reqs[ii][n].is_setcsr) k==5;
-        if (reqn[ii][n].is_load && !reqs[ii][n].is_ldpass) goto seek;
-        if (reqs[ii][n].is_ldpass) k=6;
-        rdat=2;
-        if (reqs[ii][n].fl_wr) rdat|=4|(reqs[ii][n].flag<<3);
-        if (reqs[ii][n].is_exc) rdat=1|(reqs[ii][n].exc_vec<<3);
-        
+        if (reqs[ii][n].is_load && !reqs[ii][n].is_ldpass) goto seek;
+        if (reqs[ii][n].is_ldpass) { //
+            k=6;
+	    rdat=reqs[ii][n].is_smpconfl ? 2049+11*8 : 2;
+	} else {
+	    rdat=2;
+            if (reqs[ii][n].fl_wr) rdat|=4|(reqs[ii][n].flag<<3);
+            if (reqs[ii][n].is_exc) rdat=1|(reqs[ii][n].exc_vec<<3);
+	} 
      //   else k=reqs[ii][n].rT_reg%3+3*(lrand48()%1);
         switch (k) {
             case 0:
@@ -528,7 +532,7 @@ void sched_ret(Vcntrl_find_outcome *top, int &err, bool exc) {
             top->ret5_IP_en=reqs[ii][n].is_indir|reqs[ii][n].is_setcsr;
             break;
             case 6:
-            if (!ret6_wen) {
+            if (!top->ret6_wen) {
                 top->ret6_addr=(ii<<4)|n;
                 top->ret6_wen=1;
                 top->ret6_data=rdat;
