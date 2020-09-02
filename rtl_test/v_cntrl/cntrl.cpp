@@ -33,7 +33,7 @@ struct insn {
   unsigned char exc_vec;
   unsigned char is_jump;
   unsigned char is_indir;
-  unsigned char is_csrjump;
+  unsigned char is_jcsr;
   unsigned char fl_wr;
   unsigned char flag;
   unsigned char flag_in;
@@ -99,6 +99,7 @@ void gen_bndl(insn reqs[10],&str_exc req_ex,int exc,unsigned long &baseIP,unsign
 	    if (!tkn0 || (jcnt<2 && cnt==10) reqs[n].is_indir=0;
 	    reqs[n].is_setcsr=(lrand48()%2)&jalu0;
 	    if (!tkn0 || reqs[n].is_indir) reqs[n].is_setcsr=0;
+	    if (reqs[n].is_indir) reqs[n].is_jcsr=!(lrand48()%3);
 	    reqs[n].jtype=lrand48()%17;
 	    reqs[n].IP=IP;
 	    do {
@@ -109,8 +110,8 @@ void gen_bndl(insn reqs[10],&str_exc req_ex,int exc,unsigned long &baseIP,unsign
 	    reqs[n].xtarget=reqs[n].target;
 	    reqs[n].IPoff=IPoff;
 	    reqs[n].len=(lrand48()%5+1)<<1;
-	    IP+=len;
-	    IPoff+=len;
+	    IP+=reqs[n].len;
+	    IPoff+=reqs[n].len;
 	    if (!tkn0 && IPoff>255) {
 		tick=n+1;
 		has_tick=1;
@@ -128,7 +129,8 @@ void gen_bndl(insn reqs[10],&str_exc req_ex,int exc,unsigned long &baseIP,unsign
 		else req_ex.target=reqs[n].target;
 		if (reqs[n].is_indir) {
 		    reqs[n].xtarget=lrand48()&0xffffffffffe|((lrand48()&0xfffff)<<44);
-		    //need jcsr handling
+		    if (reqs[n].is_jcsr) reqs[n].xtarget=(reqs[n].xtarget&0xfffffffffff)|
+		    (reqs[n].IP&0xfffff00000000000);
 		    req_ex.target=reqs[n].xtarget;
 		}
 		req_ex.is_exc=1;
@@ -140,6 +142,7 @@ void gen_bndl(insn reqs[10],&str_exc req_ex,int exc,unsigned long &baseIP,unsign
 	    if (!tkn1 || (jalu0 && cnt==10) ) reqs[n].is_indir=0;
 	    if (!reqs[n].is_indir) reqs[n].is_setcsr=(lrand48()%2)&jalu1;
 	    if (!tkn1 || reqs[n].is_indir) reqs[n].is_setcsr=0;
+	    if (reqs[n].is_indir) reqs[n].is_jcsr=!(lrand48()%3);
 	    reqs[n].jtype=lrand48()%17;
 	    reqs[n].IP=IP;
 	    do {
@@ -169,6 +172,8 @@ void gen_bndl(insn reqs[10],&str_exc req_ex,int exc,unsigned long &baseIP,unsign
 		else req_ex.target=reqs[n].target;
 		if (reqs[n].is_indir) {
 		    reqs[n].xtarget=lrand48()&0xffffffffffe|((lrand48()&0xfffff)<<44);
+		    if (reqs[n].is_jcsr) reqs[n].xtarget=(reqs[n].xtarget&0xfffffffffff)|
+		    (reqs[n].IP&0xfffff00000000000);
 		    req_ex.target=reqs[n].xtarget;
 		}
 		req_ex.is_exc=1;
