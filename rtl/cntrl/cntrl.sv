@@ -1,4 +1,4 @@
-`include "../struct.sv"
+`include "../../rtl/struct.sv"
 `include "../csrss_no.sv"
 
 module cntrl_jump_upto(
