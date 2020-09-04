@@ -53,8 +53,8 @@ struct insn {
 };
 
 insn reqs[48][10]={};
-int ii_upper;
-int ii_ret;
+int II_upper=0;
+int II_ret=0;
 struct str_exc {
     unsigned long long target;
     bool is_exc;
@@ -236,7 +236,7 @@ void gen_bndl(insn reqs[10],&str_exc req_ex,int exc,unsigned long &baseIP,unsign
 }
 
 void sched(Vcntrl_find_outcome *top, int &err, bool exc) {
-    static unsigned II_upper=0;
+    //II_upper global used
     unsigned n;
     top->new_en=reqs[II_upper][0].en;
     top->new_thread=0;
@@ -553,6 +553,42 @@ void sched_ret(Vcntrl_find_outcome *top, int &err, bool exc) {
     }
     }
 }
+
+void do_checkup(Vcntrl_find_outcome *top, int &err, bool exc) {
+    //II_ret global used
+    unsigned n;
+    if (top->doRetire_d) for(n=0;n<10;n++) {
+	if ((top->xbreak>>n)&1) {
+	    if (reqs[II_ret][n].is_mispr || reqs[II_ret][n].is_exc) {
+		err=true;
+	    }
+	    if (II_ret==top->mem_II_upper_out && ((top->mem_II_bits_ret>>n)&1)
+	    && !((top->mem_II_bits_fine>>n)&1)) {
+	        err=true;
+	    }
+	} else {
+	    if (reqs[II_ret][n].is_mispr || reqs[II_ret][n].is_exc) {
+		goto success;
+	    }
+	    if (II_ret==top->mem_II_upper_out && ((top->mem_II_bits_ret>>n)&1)
+	    && !((top->mem_II_bits_fine>>n)&1)) {
+	        goto success;
+	    }
+	    if (!reqs[II_ret][n].en) goto success;
+	    err=true;
+	}
+    }
+    success:
+    if (top->doRetire_d) {
+	II_ret++;
+        if (II_ret>47) II_ret=0;
+    }
+
+    if (top->except) {
+    }
+    
+}
+
 
 int main(int argc, char *argv[]) {
     Verilated::commandArgs(argc, argv);
