@@ -558,6 +558,7 @@ void sched_ret(Vcntrl_find_outcome *top, int &err, bool exc) {
 void do_checkup(Vcntrl_find_outcome *top, int &err, bool exc) {
     //II_ret global used
     unsigned n;
+    static unsigned II_old;
     if (top->doRetire_d) for(n=0;n<10;n++) {
 	if ((top->xbreak>>n)&1) {
 	    if (reqs[II_ret][n].is_mispr || reqs[II_ret][n].is_exc) {
@@ -597,11 +598,16 @@ void do_checkup(Vcntrl_find_outcome *top, int &err, bool exc) {
 	    req_ex.is_exc=1;
 	}
 
+	II_old=II_ret;
+
 	II_ret++;
         if (II_ret>47) II_ret=0;
     }
 
     if (top->except) {
+	if (!req_ex[II_old].is_exc) err2=true;
+	if ((req_ex[II_old].is_exc==2)!=top->except_set_flags) err2=true;
+	if (top->exceptIP!=((req_ex[II_old].target&0xfffffffffff)>>1)) err2=true;
     }
     
 }
