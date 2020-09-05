@@ -60,6 +60,7 @@ struct str_exc {
     bool is_exc;
 };
 str_exc req_ex[48];
+unsigned long exc_addr=0xd0c06000;
 
 void gen_bndl(insn reqs[10],&str_exc req_ex,int exc,unsigned long &baseIP,unsigned int &IPoff,unsigned char &flg) {
     if (exc) return;
@@ -580,6 +581,22 @@ void do_checkup(Vcntrl_find_outcome *top, int &err, bool exc) {
     }
     success:
     if (top->doRetire_d) {
+	if (reqs[II_ret][n].is_mispred) {
+	    req_ex[II_ret].target=reqs[II_ret][n].is_tkn ? reqs[II_ret][n].IP+reqs[II_ret][n].len :
+	    reqs[II_ret][n].target;
+	    if (reqs[II_ret][n].is_indir) req_ex[II_ret].target=reqs[II_ret][n].xtarget;
+	    req_ex[II_ret].is_exc=1;
+	} else if (reqs[II_ret][n].is_jmp) {
+	    req_ex[II_ret].is_exc=0;
+	} else if (reqs[II_ret][n].is_exc) {
+	} else if (reqs[II_ret][n].is_ldconfl) {
+	    req_ex[II_ret].target=reqs[II_ret][n].IP;
+	    req_ex.is_exc=2;
+	} else if (reqs[II_ret][n].is_smpconfl) {
+	    req_ex[II_ret].target=reqs[II_ret][n].IP;
+	    req_ex.is_exc=1;
+	}
+
 	II_ret++;
         if (II_ret>47) II_ret=0;
     }
