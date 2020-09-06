@@ -58,6 +58,7 @@ int II_ret=0;
 struct str_exc {
     unsigned long long target;
     bool is_exc;
+    bool is_djm;
 };
 str_exc req_ex[48];
 unsigned long exc_addr=0xd0c06000;
@@ -222,8 +223,8 @@ void gen_bndl(insn reqs[10],&str_exc req_ex,int exc,unsigned long &baseIP,unsign
 	    reqs[n].after_tick=(has_tick && n>=tick);
 	    reqs[n].IPoff=IPoff;
 	    reqs[n].len=(lrand48()%5+1)<<1;
-	    IP+=len;
-	    IPoff+=len;
+	    IP+=reqs[n].len;
+	    IPoff+=reqs[n].len;
 	    if (IPoff>255) {
 		tick=n+1;
 		has_tick=1;
@@ -236,7 +237,7 @@ void gen_bndl(insn reqs[10],&str_exc req_ex,int exc,unsigned long &baseIP,unsign
     }
 }
 
-void sched(Vcntrl_find_outcome *top, int &err, bool exc) {
+bool sched(Vcntrl_find_outcome *top, int &err, bool exc) {
     //II_upper global used
     unsigned n;
     top->new_en=reqs[II_upper][0].en;
@@ -413,10 +414,11 @@ void sched(Vcntrl_find_outcome *top, int &err, bool exc) {
             }
         }
     }    
-    if (top->doStall) return;
+    if (top->doStall) return false;
     II_upper++;
     for(n=0;n<10;n++) reqs[II_upper][n].sched++;
     if (II_upper>47) II_upper=0;
+    return true;
 }
 
 void sched_load(Vcntrl_find_outcome *top, int &err, bool exc) {
@@ -582,20 +584,23 @@ void do_checkup(Vcntrl_find_outcome *top, int &err, bool exc) {
     }
     success:
     if (top->doRetire_d) {
-	if (reqs[II_ret][n].is_mispred) {
+	req_ex[II_ret].is_djm=0;
+	if (reqs[II_ret][n].is_mispr) {
 	    req_ex[II_ret].target=reqs[II_ret][n].is_tkn ? reqs[II_ret][n].IP+reqs[II_ret][n].len :
 	    reqs[II_ret][n].target;
 	    if (reqs[II_ret][n].is_indir) req_ex[II_ret].target=reqs[II_ret][n].xtarget;
 	    req_ex[II_ret].is_exc=1;
-	} else if (reqs[II_ret][n].is_jmp) {
+	    req_ex[II_ret].is_djm=1;
+	} else if (reqs[II_ret][n].is_jump) {
 	    req_ex[II_ret].is_exc=0;
+	    req_ex[II_ret].is_djm=1;
 	} else if (reqs[II_ret][n].is_exc) {
 	} else if (reqs[II_ret][n].is_ldconfl) {
 	    req_ex[II_ret].target=reqs[II_ret][n].IP;
-	    req_ex.is_exc=2;
+	    req_ex[II_ret].is_exc=2;
 	} else if (reqs[II_ret][n].is_smpconfl) {
 	    req_ex[II_ret].target=reqs[II_ret][n].IP;
-	    req_ex.is_exc=1;
+	    req_ex[II_ret].is_exc=1;
 	}
 
 	II_old=II_ret;
@@ -605,9 +610,14 @@ void do_checkup(Vcntrl_find_outcome *top, int &err, bool exc) {
     }
 
     if (top->except) {
-	if (!req_ex[II_old].is_exc) err2=true;
-	if ((req_ex[II_old].is_exc==2)!=top->except_set_flags) err2=true;
-	if (top->exceptIP!=((req_ex[II_old].target&0xfffffffffff)>>1)) err2=true;
+	if (!req_ex[II_old].is_exc) err=true;
+	if ((req_ex[II_old].is_exc==2)!=top->except_set_instr_flag) err=true;
+	if (top->exceptIP!=(req_ex[II_old].target>>1)) err=true;
+	if (req_ex[II_old].is_djm!=top->except_due_jump) err=true;
+    }
+
+    if (top->doRetire) {
+	    //check jumps
     }
     
 }
@@ -622,7 +632,7 @@ int main(int argc, char *argv[]) {
     int stall_cnt=0;
     int exc=0;
     unsigned long bndl=0;
-    bool err2;
+    int err2;
     
     int pid;
 
@@ -685,9 +695,12 @@ _begin:
 		}
 	    }
         }
-        top->eval();
+        sched_load(top,err2,exc);
+        sched_ret(top,err2,exc);
+	top->eval();
         if (!initcount) {
-            if (get_check(top,exc) || err2) {
+            do_checkup(top,err2,exc);
+	    if (err2) {
                 printf("error @%u\n",cyc0);
                 sleep(1);
 		exit(1);
