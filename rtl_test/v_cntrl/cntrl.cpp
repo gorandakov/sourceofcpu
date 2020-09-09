@@ -239,6 +239,17 @@ void gen_bndl(insn reqs[10],str_exc &req_ex,int exc,unsigned long &baseIP,unsign
     }
 }
 
+void init_csr(int n,unsigned addr, unsigned long val,bool isptr) {
+    memset((char *) &reqs[n][0],0,sizeof reqs[n]);
+    reqs[n][0].is_jump=1;
+    reqs[n][0].en=1;
+    reqs[n][0].is_setcsr=1;
+    //reqs[n][0].is_indir=1;
+    reqs[n][0].jtype=0x19;
+    reqs[n][0].target=addr;
+    reqs[n][0].xtarget=val;
+}
+
 bool sched(Vcntrl_find_outcome *top, int &err, bool exc) {
     //II_upper global used
     unsigned n;
