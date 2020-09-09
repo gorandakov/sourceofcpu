@@ -63,7 +63,7 @@ struct str_exc {
 str_exc req_ex[48];
 unsigned long exc_addr=0xd0c06000;
 
-void gen_bndl(insn reqs[10],&str_exc req_ex,int exc,unsigned long &baseIP,unsigned int &IPoff,unsigned char &flg) {
+void gen_bndl(insn reqs[10],str_exc &req_ex,int exc,unsigned long &baseIP,unsigned int &IPoff,unsigned char &flg) {
     if (exc) return;
     memset((char *) reqs,0,10*sizeof reqs[0]);
     int cnt=lrand48()%10+1;
@@ -90,6 +90,8 @@ void gen_bndl(insn reqs[10],&str_exc req_ex,int exc,unsigned long &baseIP,unsign
     int rno;
     int tick=0;
     int has_tick=0;
+    int lscnt=0;
+    int st_cnt=0;
     unsigned long IP=baseIP+IPoff;
     for(n=0;n<cnt;n++) {
 	reqs[n].en=1;
@@ -98,7 +100,7 @@ void gen_bndl(insn reqs[10],&str_exc req_ex,int exc,unsigned long &baseIP,unsign
 	    reqs[n].is_jump=1;
 	    reqs[n].is_tkn=tkn0;
 	    reqs[n].is_indir=(lrand48()%2)&jalu0;
-	    if (!tkn0 || (jcnt<2 && cnt==10) reqs[n].is_indir=0;
+	    if (!tkn0 || (jcnt<2 && cnt==10)) reqs[n].is_indir=0;
 	    reqs[n].is_setcsr=(lrand48()%2)&jalu0;
 	    if (!tkn0 || reqs[n].is_indir) reqs[n].is_setcsr=0;
 	    if (reqs[n].is_indir) reqs[n].is_jcsr=!(lrand48()%3);
@@ -124,7 +126,7 @@ void gen_bndl(insn reqs[10],&str_exc req_ex,int exc,unsigned long &baseIP,unsign
 		IPoff=0;
 		has_tick=0;
 	    }
-	    if ((tkn0!=cjump(reqs[n].jtype,reqs[n].flags_in)) ||
+	    if ((tkn0!=cjump(reqs[n].jtype,reqs[n].flag_in)) ||
 	        (reqs[n].is_indir && !(lrand48()%53))) {
 		reqs[n].is_mispr=1;
 		if (tkn0) req_ex.target=reqs[n].IP+reqs[n].len;
@@ -155,8 +157,8 @@ void gen_bndl(insn reqs[10],&str_exc req_ex,int exc,unsigned long &baseIP,unsign
 	    reqs[n].xtarget=reqs[n].target;
 	    reqs[n].IPoff=IPoff;
 	    reqs[n].len=(lrand48()%5+1)<<1;
-	    IP+=len;
-	    IPoff+=len;
+	    IP+=reqs[n].len;
+	    IPoff+=reqs[n].len;
 	    if (!tkn1 && IPoff>255) {
 		tick=n+1;
 		has_tick=1;
@@ -167,7 +169,7 @@ void gen_bndl(insn reqs[10],&str_exc req_ex,int exc,unsigned long &baseIP,unsign
 		IPoff=0;
 		has_tick=0;
 	    }
-	    if ((!req_ex.is_exc) && ( (tkn1!=cjump(reqs[n].jtype,reqs[n].flags_in)) ||
+	    if ((!req_ex.is_exc) && ( (tkn1!=cjump(reqs[n].jtype,reqs[n].flag_in)) ||
 	        (reqs[n].is_indir && !(lrand48()%53)))) {
 		reqs[n].is_mispr=1;
 		if (tkn0) req_ex.target=reqs[n].IP+reqs[n].len;
@@ -220,7 +222,7 @@ void gen_bndl(insn reqs[10],&str_exc req_ex,int exc,unsigned long &baseIP,unsign
 	    }
 	    reqs[n].is_aspc=lrand48()&1;
             do_end:
-	    reqs[n].after_tick=(has_tick && n>=tick);
+	    //reqs[n].after_tick=(has_tick && n>=tick);
 	    reqs[n].IPoff=IPoff;
 	    reqs[n].len=(lrand48()%5+1)<<1;
 	    IP+=reqs[n].len;
