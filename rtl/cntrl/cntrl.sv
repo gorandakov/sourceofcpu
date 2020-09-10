@@ -396,10 +396,10 @@ module cntrl_find_outcome(
   input [42:0] ijump1IP;
   input [19:0] ijump1BND;
   input [3:0] ijump1Mask;
-  input [2:0] ijump0BtbWay;
+  input       ijump0BtbWay;
   input [1:0] ijump0JmpInd;
   input [7:0] ijump0GHT;
-  input [2:0] ijump1BtbWay;
+  input       ijump1BtbWay;
   input [1:0] ijump1JmpInd;
   input [7:0] ijump1GHT;
   input [1:0] ijump0SC;
@@ -570,10 +570,10 @@ module cntrl_find_outcome(
   wire [3:0] jump1Pos;
   wire [42:0] jump1IP;
   
-  wire [2:0] jump0BtbWay;
+  wire       jump0BtbWay;
   wire [1:0] jump0JmpInd;
   wire [7:0] jump0GHT;
-  wire [2:0] jump1BtbWay;
+  wire       jump1BtbWay;
   wire [1:0] jump1JmpInd;
   wire [7:0] jump1GHT;
   wire [1:0] jump0SC;
@@ -881,12 +881,12 @@ module cntrl_find_outcome(
   assign update_ght_addr_j1[5:0]=jupd1_IP[9:4];
   
   assign update_btb_addr_j1[12:11]=jump1JmpInd;
-  assign update_btb_addr_j1[2:0]=jump1BtbWay;
-  assign update_btb_addr_j1[10:3]=jupd1_IP[11:4];
+  assign update_btb_addr_j1[0]=jump1BtbWay;
+  assign update_btb_addr_j1[10:1]=jupd1_IP[13:4];
   
   assign update_btb_addr_j0[12:11]=jump0JmpInd;
-  assign update_btb_addr_j0[2:0]=jump0BtbWay;
-  assign update_btb_addr_j0[10:3]=jupd0_IP[11:4];
+  assign update_btb_addr_j0[0]=  jump0BtbWay;
+  assign update_btb_addr_j0[10:1]=jupd0_IP[13:4];
   
   assign excpt_handlerIP=archReg_xcpt_handlerIP[retire_thread_reg];
       

@@ -110,8 +110,12 @@ void gen_bndl(insn reqs[10],str_exc &req_ex,int exc,unsigned long &baseIP,unsign
 		reqs[n].target=lrand48()&0xffffffffffe|((lrand48()&0xfffff)<<44);
 	    } while ((reqs[n].target&0x1e)==0x1e);
 //	    reqs[n].after_tick=(has_tick && n>=tick);
-
 	    reqs[n].xtarget=reqs[n].target;
+            if (reqs[n].is_setcsr) {
+		reqs[n].target=lrand48()%65471+38;
+		reqs[n].xtarget=lrand48();
+	    }
+
 	    reqs[n].IPoff=IPoff;
 	    reqs[n].len=(lrand48()%5+1)<<1;
 	    IP+=reqs[n].len;
@@ -153,8 +157,11 @@ void gen_bndl(insn reqs[10],str_exc &req_ex,int exc,unsigned long &baseIP,unsign
 		reqs[n].target=lrand48()&0xffffffffffe|((lrand48()&0xfffff)<<44);
 	    } while ((reqs[n].target&0x1e)==0x1e);
 //	    reqs[n].after_tick=(has_tick && n>=tick);
-	    
 	    reqs[n].xtarget=reqs[n].target;
+            if (reqs[n].is_setcsr) {
+		reqs[n].target=lrand48()%65471+38;
+		reqs[n].xtarget=lrand48();
+	    }
 	    reqs[n].IPoff=IPoff;
 	    reqs[n].len=(lrand48()%5+1)<<1;
 	    IP+=reqs[n].len;
@@ -428,8 +435,8 @@ bool sched(Vcntrl_find_outcome *top, int &err, bool exc) {
         }
     }    
     if (top->doStall) return false;
-    II_upper++;
     for(n=0;n<10;n++) reqs[II_upper][n].sched++;
+    II_upper++;
     if (II_upper>47) II_upper=0;
     return true;
 }
@@ -632,7 +639,20 @@ void do_checkup(Vcntrl_find_outcome *top, int &err, bool exc) {
     if (top->doRetire) {
 	    //check jumps
     }
+
+    exc=top->except;
+
+    if (top->except) {
+	int a,b;
+        for(a=0;a<48;a++)
+	    for(b=0;b<10;b++) 
+	        reqs[a][b].en=0;	    
+	II_ret=II_upper;
+    }
     
+}
+
+void get_check_jupd() {
 }
 
 
@@ -646,9 +666,12 @@ int main(int argc, char *argv[]) {
     int exc=0;
     unsigned long bndl=0;
     int err2;
-    
+    unsigned setcsr_count=1;
+    unsigned setcsr_count2=1;
     int pid;
-
+    unsigned long baseIP;
+    unsigned IPoff;
+    unsigned char flg;
     if (argc==1) {
         FILE *f=fopen("/home/goran/ctl_req_seed","r");
 	if (f==NULL) f=fopen("/dev/random","r");
@@ -721,7 +744,17 @@ _begin:
             if ((cyc0%10000)==0) {
                 printf("cycle %i,%lu\n",cyc0,bndl);
             }
-	    if (exc) exc--;
+	    //if (exc) exc--;
+	    if (setcsr_count==0) {
+                gen_bndl(reqs[II_upper],req_ex[II_upper],exc,baseIP,IPoff,flg);
+	    } else {
+		if (setcsr_count==setcsr_count2) {
+		    init_csr(0,csr_excIP,exc_addr,1);
+		    setcsr_count2--;
+		} else {
+	            if (exc) setcsr_count--;
+		}
+	    }
         }
         if (initcount) initcount--;
         cyc0++;

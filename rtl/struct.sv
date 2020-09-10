@@ -98,20 +98,20 @@
 `define bob_j1GHT 472:465
 `define bob_j0Ind 474:473
 `define bob_j1Ind 476:475
-`define bob_j0Way 479:477
-`define bob_j1Way 482:480
-`define bob_j0sc 484:483
-`define bob_j1sc 486:485
-`define bob_j0BtbOnly 487
-`define bob_j1BtbOnly 488
-`define bob_j0Miss 489
-`define bob_j1Miss 490
-`define bob_frr 499:491
-`define bob_jump0Mask 503:500
-`define bob_jump1Mask 507:504
-`define bob_aspl 517:508
-`define bob_attr 521:518
-`define bob_width 522
+`define bob_j0Way 477:477
+`define bob_j1Way 478:478
+`define bob_j0sc 480:479
+`define bob_j1sc 482:481
+`define bob_j0BtbOnly 483
+`define bob_j1BtbOnly 484
+`define bob_j0Miss 485
+`define bob_j1Miss 486
+`define bob_frr 495:487
+`define bob_jump0Mask 499:496
+`define bob_jump1Mask 503:500
+`define bob_aspl 513:504
+`define bob_attr 517:514
+`define bob_width 518
 
 
 `define bobJmp_satCount 1:0
