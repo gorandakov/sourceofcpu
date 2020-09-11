@@ -27,10 +27,13 @@ voud alu_req::exc() {
         long long int A1=A,B1=B,res1;
         unsigned __int128 one=0x8000000000000000ull;
         unsigned long long ptr=A_p ? A : B;
+	res_p=0;
+	bool no_O=false;
         switch(op&0xff) {
             case 0:
             res0=((unsigned __int128)  A)+(unsigned __int128) B;
             if (A_p && B_p) excpt=11;
+addie:
 	    if (A_p || B_p) {
 		res1=res=res0&0xfffffffffff;
 		unsigned long low,hi;
@@ -73,8 +76,10 @@ voud alu_req::exc() {
 		res_p=0;
 	    }
             flg64(res0);
-            flags|=((A1>0&&B1>0&&res1<0) || (A1<0&&B1<0&&res1>0))<<4;
-            flags|=(((A&0xf)+(B&0xf))&0x10)>>1;
+            if (!no_O) {
+		flags|=((A1>0&&B1>0&&res1<0) || (A1<0&&B1<0&&res1>0))<<4;
+                flags|=(((A&0xf)+(B&0xf))&0x10)>>1;
+	    }
             break;
             
             case 1:
@@ -87,7 +92,11 @@ voud alu_req::exc() {
 
             case 4:
             res0=((unsigned __int128) A)+((unsigned __int128)~B)+(one>>63);
+	    if (A_p && !B_p) goto addie; 
             res1=res=res0;
+	    if (A_p && B_p) res&=0xfffffffffff;
+	    if (~A_p && B_p) excpt=11;
+	    res_p=0;
             flg64(res0^(one<<1));
             
             flags|=((A1>=0&&B1<0&&res1<0) || (A1<0&&B1>0&&res1>0))<<4;
@@ -104,6 +113,7 @@ voud alu_req::exc() {
 
             case 8:
             res0=A&B;
+	    if (A_p && !B_p) { no_O=true; goto addie; }
             res1=res=res0;
             flg64(res0);
             break;
@@ -116,6 +126,7 @@ voud alu_req::exc() {
 
             case 12:
             res0=A|B;
+	    if (A_p && !B_p) { no_O=true; goto addie; }
             res1=res=res0;
             flg64(res0);
             break;
@@ -176,6 +187,7 @@ voud alu_req::exc() {
  
             case 32:
             res=B;
+	    res_p=B_p;
             flags=flags_in;
             break;
 
@@ -234,14 +246,15 @@ voud alu_req::exc() {
 
             case 48:
             case 49:
-            op|=rand()&0x700;
+            //op|=rand()&0x700;
             res=testj(((op&0x700)>>7)|(op&0x1)) ? B : A;
+            res_p=testj(((op&0x700)>>7)|(op&0x1)) ? B_p : A_p;
             flags=flags_in;
             break;
             
             case 50:
             case 51:
-            op|=rand()&0x700;
+            //op|=rand()&0x700;
             res=testj(((op&0x700)>>7)|(op&0x1)) ? B0x : A0x;
             flags=flags_in;
             break;
@@ -249,14 +262,14 @@ voud alu_req::exc() {
             
             case 52:
             case 53:
-            op|=rand()&0x700;
+            //op|=rand()&0x700;
             res=0;
             flags=testj(((op&0x700)>>7)|(op&0x1)) ? A&0x3f : flags_in;
             break;
 
             case 54:
             case 55:
-            op|=rand()&0x700;
+            //op|=rand()&0x700;
             res=testj(((op&0x700)>>7)|(op&0x1));
             flags=flags_in;
             break;
@@ -289,6 +302,7 @@ voud alu_req::exc() {
         res0x=(unsigned long) Au * (unsigned long) Bu;
         res0=A0*B0;
         resS=AS*BS;
+	res_p=false;
         switch(op&0xff) {
             case 1:
             res=res0x;
