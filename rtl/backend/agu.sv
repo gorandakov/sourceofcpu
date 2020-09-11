@@ -40,6 +40,7 @@ module agu(
   mOp_LSQ,
   mOp_II,
   mOp_WQ,
+  mOp_attr,
   mOp_addrEven,
   mOp_addrOdd,
   mOp_addrMain,
@@ -114,6 +115,7 @@ module agu(
   output [8:0] mOp_LSQ;
   output [9:0] mOp_II;
   output [7:0] mOp_WQ;
+  output [3:0] mOp_attr;
   output [PADDR_WIDTH-1:8] mOp_addrEven;
   output [PADDR_WIDTH-1:8] mOp_addrOdd;
   output [43:0] mOp_addrMain;
@@ -249,6 +251,8 @@ module agu(
   reg [1:0] pageFault_t_reg; 
   wire fault_cann;
   reg fault_cann_reg;
+ 
+  reg [3:0] attr_reg;
   
   generate
       genvar p,q;
@@ -378,6 +382,8 @@ module agu(
   
   assign mOp_WQ=WQ_no_reg;
   
+  assign mOp_attr=attr_reg;
+  
   assign tlb_clkEn=read_clkEn_reg;
   
   assign doStall=1'b0;
@@ -499,6 +505,7 @@ module agu(
               LSQ_no_reg<=9'b0;
               II_no_reg<=10'b0;
               WQ_no_reg<=8'b0;
+	      attr_reg<=4'b0;
               thread_reg<=1'b0;
               thread_reg2<=1'b0;
               lsflag_reg<=1'b0;
@@ -512,6 +519,7 @@ module agu(
               LSQ_no_reg<=LSQ_no;
               II_no_reg<=II_no;
               WQ_no_reg<=WQ_no;
+	      attr_reg<=attr;
               thread_reg<=thread;
               thread_reg2<=thread_reg;
               lsflag_reg<=lsflag;

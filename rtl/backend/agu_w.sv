@@ -5,13 +5,12 @@ module sagu(
   clk,
   rst,
   except,
-  except_gate,
-  except_in_vm,
-  except_in_km,
+  attr,
   read_clkEn,
   doStall,
   bus_hold,
   mex_addr,
+  mex_attr,
   mex_en,
   op,
   shiftSize,
@@ -33,6 +32,7 @@ module sagu(
   mOp_LSQ,
   mOp_II,
   mOp_WQ,
+  mOp_attr,
   mOp_addrEven,
   mOp_addrOdd,
   mOp_addrMain,
@@ -74,13 +74,12 @@ module sagu(
   input clk;
   input rst;
   input except;
-  input except_gate;
-  input except_in_vm;
-  input except_in_km;
+  input [3:0] attr;
   input read_clkEn;
   output doStall;
   input bus_hold;
   input [43:0] mex_addr;
+  input [3:0] mex_attr;
   input mex_en;
   input [OPERATION_WIDTH-1:0] op;
   input [3:0] shiftSize;
@@ -179,7 +178,7 @@ module sagu(
   wire tlb_clkEn;
   wire tlb_hit;
 
-  
+  wire [3:0] attr2; 
 
   reg read_clkEn_reg;
   reg read_clkEn_reg2;
@@ -223,6 +222,8 @@ module sagu(
   wire cout_secq;
   wire fault_cann;
   reg fault_cann_reg;
+
+  reg [3:0] attr2_reg;
 
   wire [4:0] lastSz;
 
@@ -271,7 +272,8 @@ module sagu(
   assign all_banks=banks0;
 
 
-  
+
+  assign attr2=mex_en ? mex_attr : attr;  
   
   assign mOp_addrEven[12:8]=addrMain[7] ? addrNext[12:8] : addrMain[12:8];
   assign mOp_addrOdd[12:8]=addrMain[7] ? addrMain[12:8] : addrNext[12:8];
@@ -319,6 +321,8 @@ module sagu(
   assign mOp_II=II_no_reg;
   
   assign mOp_WQ=WQ_no_reg;
+
+  assign mOp_attr=attr2_reg;
   
   assign tlb_clkEn=read_clkEn_reg|mex_en_reg;
   
@@ -448,6 +452,7 @@ module sagu(
               LSQ_no_reg<=9'b0;
               II_no_reg<=10'b0;
               WQ_no_reg<=8'b0;
+	      attr2_reg<=4'b0;
               thread_reg<=1'b0;
               lsflag_reg<=1'b0;
 	    end
@@ -460,6 +465,7 @@ module sagu(
               LSQ_no_reg<=LSQ_no;
               II_no_reg<=II_no;
               WQ_no_reg<=WQ_no;
+	      attr2_reg<=attr2;
               thread_reg<=thread;
               lsflag_reg<=lsflag;
 	    end
@@ -502,29 +508,27 @@ module sagu(
            `csr_vmpage: vproc<=csrss_data[63:40];
            `csr_mflags: mflags<=csrss_data;
               endcase
-	      if (except && except_gate && ~except_in_vm) begin
+	      if (~attr2[`attr_vm]) begin
 		  proc<=pproc;
 		  sproc<=0;
 	      end
-	      if (except && except_gate && except_in_vm) begin
+	      if (attr2[`attr_vm]) begin
 		  proc<=vproc;
 		  sproc<=pproc^1;
 	      end
-	      if (except && except_gate) begin
-		  mflags[`mflags_cpl]<=except_in_km ? 2'b0 : 2'b11;
-	      end
+	      mflags[`mflags_cpl]<=attr2[`attr_km] ? 2'b0 : 2'b11;
+	      mflags[`mflags_sec]<=attr2[`attr_sec];//muha-sranks
           end else begin
-	      if (except && except_gate && ~except_in_vm) begin
+	      if (~attr2[`attr_vm]) begin
 		  proc<=pproc;
 		  sproc<=0;
 	      end
-	      if (except && except_gate && except_in_vm) begin
+	      if (attr2[`attr_vm]) begin
 		  proc<=vproc;
 		  sproc<=pproc^1;
 	      end
-	      if (except && except_gate) begin
-		  mflags[`mflags_cpl]<=except_in_km ? 2'b0 : 2'b11;
-	      end
+	      mflags[`mflags_cpl]<=attr2[`attr_km] ? 2'b0 : 2'b11;
+	      mflags[`mflags_sec]<=attr2[`attr_sec];
 	  end
     end
    

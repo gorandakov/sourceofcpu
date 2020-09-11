@@ -4,9 +4,6 @@ module agu_r(
   clk,
   rst,
   except,
-  except_gate,
-  except_in_vm,
-  except_in_km,
   doStall,
   bus_hold,
   pause_miss,
@@ -31,6 +28,7 @@ module agu_r(
   mOp0_LSQ,
   mOp0_II,
   mOp0_WQ,
+  mOp0_attr,
   reqtlb_en,
   reqtlb_addr,
   reqtlb_ack,
@@ -114,6 +112,7 @@ module agu_r(
   input [8:0] mOp0_LSQ;
   input [9:0] mOp0_II;
   input [7:0] mOp0_WQ;
+  input [3:0] mOp0_attr;
   input reqtlb_en;
   input [29:0] reqtlb_addr;
   output reqtlb_ack;
@@ -191,6 +190,7 @@ module agu_r(
   reg [8:0] mOp0_LSQ_reg;
   reg [9:0] mOp0_II_reg;
   reg [7:0] mOp0_WQ_reg;
+  reg [3:0] mOp0_attr_reg;
   reg [PADDR_WIDTH-9:0] mOp0_addrEven_reg;
   reg [PADDR_WIDTH-9:0] mOp0_addrOdd_reg;
   reg mOp0_lsfwd_reg;
@@ -494,6 +494,7 @@ module agu_r(
 	  mOp0_LSQ_reg<=9'b0;
 	  mOp0_II_reg<=10'b0;
 	  mOp0_WQ_reg<=8'b0;
+	  mOp0_attr_reg<=8'b0;
           mOp0_addrEven_reg<=36'b0;
           mOp0_addrOdd_reg<=36'b0;
           mOp0_lsfwd_reg<=1'b0;
@@ -520,6 +521,7 @@ module agu_r(
 	      mOp0_LSQ_reg<=mOp0_LSQ;
 	      mOp0_II_reg<=mOp0_II;
 	      mOp0_WQ_reg<=mOp0_WQ;
+	      mOp0_attr_reg<=mOp0_WQ;
               mOp0_addrEven_reg<=mOp0_addrEven;
               mOp0_addrOdd_reg<=mOp0_addrOdd;
               mOp0_lsfwd_reg<=mOp0_lsfwd;
@@ -527,6 +529,16 @@ module agu_r(
               mOp0_addr_low_reg<=mOp0_addr_low;
               mOp0_bread_reg<=mOp0_bread;
               mOp0_data_reg<=mOp0_data;
+	      if (~mOp0_attr[`attr_vm]) begin
+		  proc<=pproc;
+		  sproc<=0;
+	      end
+	      if (mOp0_attr[`attr_vm]) begin
+		  proc<=vproc;
+		  sproc<=pproc^1;
+	      end
+	      mflags[`mflags_cpl]<=mOp0_attr[`attr_km] ? 2'b0 : 2'b11;
+	      mflags[`mflags_sec]<=mOp0_attr[`attr_sec];//muha-srankk
           end
       end 
       if (rst) begin
@@ -650,29 +662,6 @@ module agu_r(
            `csr_vmpage: vproc<=csrss_data[63:40];
            `csr_mflags: mflags<=csrss_data;
               endcase
-	      if (except && except_gate && ~except_in_vm) begin
-		  proc<=pproc;
-		  sproc<=0;
-	      end
-	      if (except && except_gate && except_in_vm) begin
-		  proc<=vproc;
-		  sproc<=pproc^1;
-	      end
-	      if (except && except_gate) begin
-		  mflags[`mflags_cpl]<=except_in_km ? 2'b0 : 2'b11;
-	      end
-         end else begin
-	      if (except && except_gate && ~except_in_vm) begin
-		  proc<=pproc;
-		  sproc<=0;
-	      end
-	      if (except && except_gate && except_in_vm) begin
-		  proc<=vproc;
-		  sproc<=pproc^1;
-	      end
-	      if (except && except_gate) begin
-		  mflags[`mflags_cpl]<=except_in_km ? 2'b0 : 2'b11;
-	      end
 	 end
       if (rst) tlb_way_reg<=3'd0;
       else if (tlb_clkEn) tlb_way_reg<=tlb_way;
