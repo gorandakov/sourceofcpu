@@ -521,7 +521,7 @@ module agu_r(
 	      mOp0_LSQ_reg<=mOp0_LSQ;
 	      mOp0_II_reg<=mOp0_II;
 	      mOp0_WQ_reg<=mOp0_WQ;
-	      mOp0_attr_reg<=mOp0_WQ;
+	      mOp0_attr_reg<=mOp0_attr;
               mOp0_addrEven_reg<=mOp0_addrEven;
               mOp0_addrOdd_reg<=mOp0_addrOdd;
               mOp0_lsfwd_reg<=mOp0_lsfwd;
@@ -561,18 +561,21 @@ module agu_r(
 	  else tlb_is_inv_reg<=tlb_is_inv|tlb_is_inv_reg;
           if (reqtlb_en) begin
               if (!tlb_proceed) begin
-                  addrMain_tlb<={proc[20:0],reqtlb_addr,14'b0};
+                  addrMain_tlb<={reqtlb_attr[`attr_vm] ? vproc[20:0] : pproc[20:0] ,reqtlb_addr,14'b0};
+		  addrMain_attr<=reqtlb_attr;
 
                   tlb_proceed<=1'b1;
                   tlb_is_code<=1'b0;
                   reqtlb_next<=1'b1;
                   tlb_in_flight<=1'b1;
               end else begin
-                  addrSupp_tlb<={proc[20:0],reqtlb_addr,14'b0};
+                  addrSupp_tlb<={reqtlb_attr[`attr_vm] ? vproc[20:0] : pproc[20:0],reqtlb_addr,14'b0};
+		  addrSupp_attr<=reqtlb_attr;
                   tlb_save<=1'b1;
               end
           end else if (new_miss & !tlb_proceed) begin
                   addrMain_tlb<={proc[20:0],mOp0_addrMain_reg};
+		  addrMain_attr<=mOp0_attr_reg;
                   tlb_proceed<=1'b1;
                   tlb_is_code<=1'b0;
                   tlb_is_inv<=mOp0_invtlb_reg;
@@ -581,13 +584,15 @@ module agu_r(
           end
           if (reqC_tlbEn) begin
               if (!tlb_proceed & ~reqtlb_en) begin
-                  addrMain_tlb<={proc[20:0],reqC_addr,13'b0};
+                  addrMain_tlb<={reqC_tlbAttr[`attr_vm] ? vproc[20:0] : pproc[20:0],reqC_addr,13'b0};
+		  addrMain_attr<=reqC_tlbAttr;
                   tlb_proceed<=1'b1;
                   tlb_is_code<=1'b1;
                   reqtlb_next<=1'b0;
                   tlb_in_flight<=1'b1;
               end else begin
-                  addrSupp2_tlb<={proc[20:0],reqC_addr,13'b0};
+                  addrSupp2_tlb<={reqC_tlbAttr[`attr_vm] ? vproc[20:0] : pproc[20:0],reqC_addr,13'b0};
+		  addrSupp2_attr<=reqC_tlbAttr;
                   tlb_save2<=1'b1;
                   tlb_is_code<=1'b0;
               end
