@@ -6,9 +6,10 @@ module agu(
   clk,
   rst,
   except,
-  except_gate,
-  except_in_vm,
-  except_in_km,
+ // except_gate,
+ // except_in_vm,
+//  except_in_km,
+  attr,
   read_clkEn,
   doStall,
   bus_hold,
@@ -82,9 +83,7 @@ module agu(
   input clk;
   input rst;
   input except;
-  input except_gate;
-  input except_in_vm;
-  input except_in_km;
+  input [3:0] attr;
   input read_clkEn;
   output doStall;
   input bus_hold;
@@ -554,29 +553,27 @@ module agu(
            `csr_vmpage: vproc<=csrss_data[63:40];
            `csr_mflags: mflags<=csrss_data;
               endcase
-	      if (except && except_gate && ~except_in_vm) begin
+	      if (~attr[`attr_vm]) begin
 		  proc<=pproc;
 		  sproc<=0;
 	      end
-	      if (except && except_gate && except_in_vm) begin
+	      if (attr[`attr_vm]) begin
 		  proc<=vproc;
 		  sproc<=pproc^1;
 	      end
-	      if (except && except_gate) begin
-		  mflags[`mflags_cpl]<=except_in_km ? 2'b0 : 2'b11;
-	      end
+	      mflags[`mflags_cpl]<=attr[`attr_km] ? 2'b0 : 2'b11;
+	      mflags[`mflags_sec]<=attr[`attr_sec];
           end else begin
-	      if (except && except_gate && ~except_in_vm) begin
+	      if (~attr[`attr_vm]) begin
 		  proc<=pproc;
 		  sproc<=0;
 	      end
-	      if (except && except_gate && except_in_vm) begin
+	      if (attr[`attr_vm]) begin
 		  proc<=vproc;
 		  sproc<=pproc^1;
 	      end
-	      if (except && except_gate) begin
-		  mflags[`mflags_cpl]<=except_in_km ? 2'b0 : 2'b11;
-	      end
+	      mflags[`mflags_cpl]<=attr[`attr_km] ? 2'b0 : 2'b11;
+	      mflags[`mflags_sec]<=attr[`attr_sec];//muha-srankk
           end
 	  
     end

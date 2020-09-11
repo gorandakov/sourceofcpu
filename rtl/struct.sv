@@ -113,6 +113,9 @@
 `define bob_attr 517:514
 `define bob_width 518
 
+`define attr_km 0
+`define attr_vm 1
+`define attr_sec 3
 
 `define bobJmp_satCount 1:0
 `define bobJmp_hist 7:2
