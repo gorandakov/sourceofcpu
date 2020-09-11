@@ -1604,14 +1604,15 @@ module agu_block(
   mOpX5_lsflag,
   p4_mex_addr,
   p4_mex_sz,
-  p4_mex_en,
   p4_mex_attr,
+  p4_mex_en,
   p5_mex_addr,
   p5_mex_sz,
-  p5_mex_en,
   p5_mex_attr,
+  p5_mex_en,
   Em_tlb_req_en,
   Em_tlb_req_addr,
+  EM_tlb_req_attr,
   Em_tlb_req_ack
   );
           

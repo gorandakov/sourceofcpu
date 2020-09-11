@@ -60,6 +60,7 @@ module wtmiss(
   mOp0_LSQ,
   mOp0_II,
   mOp0_WQ,
+  mOp0_attr,
   mOp0_lsflag,
   mOp0_en_o,
   mOp0_thread_o,
@@ -89,6 +90,7 @@ module wtmiss(
   mOp1_LSQ,
   mOp1_II,
   mOp1_WQ,
+  mOp1_attr,
   mOp1_lsflag,
   mOp1_en_o,
   mOp1_thread_o,
@@ -106,12 +108,15 @@ module wtmiss(
   mOp1_lsflag_o,
   mEx0_addr,
   mEx0_sz,
+  mEx0_attr,
   mEx0_en,
   mEx1_addr,
   mEx1_sz,
+  mEx1_attr,
   mEx1_en,
   tlbreq_en,
   tlbreq_addr,
+  tlbreq_attr,
   tlbreq_ack
   );
 
@@ -150,6 +155,7 @@ module wtmiss(
   input [8:0] mOp0_LSQ;
   input [9:0] mOp0_II;
   input [7:0] mOp0_WQ;
+  input [3:0] mOp0_attr;
   input mOp0_lsflag;
 
   output mOp0_en_o;
@@ -181,6 +187,7 @@ module wtmiss(
   input [8:0] mOp1_LSQ;
   input [9:0] mOp1_II;
   input [7:0] mOp1_WQ;
+  input [3:0] mOp1_attr;
   input mOp1_lsflag;
   
   output mOp1_en_o;
@@ -199,12 +206,15 @@ module wtmiss(
   
   output [VADDR_WIDTH-1:0] mEx0_addr;
   output [4:0] mEx0_sz;
+  output [3:0] mEx0_attr;
   output mEx0_en;
   output [VADDR_WIDTH-1:0] mEx1_addr;
   output [4:0] mEx1_sz;
+  output [3:0] mEx1_attr;
   output mEx1_en;
   output tlbreq_en;
   output [VADDR_WIDTH-15:0] tlbreq_addr;
+  output [3:0] tlbreq_attr;
   input tlbreq_ack;
 
   wire [VADDR_WIDTH-1:0] RaddrMain[1:0];
@@ -240,6 +250,8 @@ module wtmiss(
   reg [1:0] inIt_cnt;
   wire [1:0] inIt_cnt_d;
   reg [1:0] read_addr_reg;
+  wire [3:0] mOp0_attr_o;
+  wire [3:0] mOp1_attr_o;
 
   wtmiss_ram ramA_mod(
   .clk(clk),
@@ -271,6 +283,7 @@ module wtmiss(
  
   assign mOp0_thread_o=(enOut_reg|enOutNull) ?   read_mop_reg[0][`mOp2_thread] : mOp0_thread;
   assign mOp0_sz_o=(enOut_reg|enOutNull) ?       read_mop_reg[0][`mOp2_sz] : mOp0_sz;
+  assign mOp0_attr_o=(enOut_reg|enOutNull) ?       read_mop_reg[0][`mOp2_attr] : mOp0_attr;
   assign mOp0_odd_o=(enOut_reg|enOutNull) ?      read_mop_reg[0][`mOp2_odd] : mOp0_odd;
   assign mOp0_addr_low_o=(enOut_reg|enOutNull) ? read_mop_reg[0][`mOp2_addr_low] : mOp0_addr_low;
   //assign mOp0_st=(enOut_reg|enOutNull) ?       read_mop_reg[0][`mOp2_st] : 1'bz;
@@ -292,6 +305,7 @@ module wtmiss(
  
   assign mOp1_thread_o=(enOut_reg|enOutNull) ?   read_mop_reg[1][`mOp2_thread] : mOp1_thread;
   assign mOp1_sz_o=(enOut_reg|enOutNull) ?       read_mop_reg[1][`mOp2_sz] : mOp1_sz;
+  assign mOp1_attr_o=(enOut_reg|enOutNull) ?       read_mop_reg[1][`mOp2_attr] : mOp1_attr;
   assign mOp1_odd_o=(enOut_reg|enOutNull) ?      read_mop_reg[1][`mOp2_odd] : mOp1_odd;
   assign mOp1_addr_low_o=(enOut_reg|enOutNull) ? read_mop_reg[1][`mOp2_addr_low] : mOp1_addr_low;
  // assign mOp1_st=(enOut_reg|enOutNull) ?       read_mop_reg[1][`mOp_st] : 1'bz;
@@ -315,10 +329,13 @@ module wtmiss(
   assign RaddrMain[1]=read_mop[1][`mOp2_addrMain]; 
   assign mEx0_sz=read_mop[0][`mOp2_sz];
   assign mEx1_sz=read_mop[1][`mOp2_sz];//CA
+  assign mEx0_attr=read_mop[0][`mOp2_attr];
+  assign mEx1_attr=read_mop[1][`mOp2_attr];
   
   assign write_mop[0][`mOp2_addrMain]=mOp0_addrMain;
 //  assign write_mop[0][`mOp_reg]=     9'b0_o;//mOp0_regNo;
   assign write_mop[0][`mOp2_sz]=      mOp0_sz_o;
+  assign write_mop[0][`mOp2_attr]=      mOp0_attr_o;
   assign write_mop[0][`mOp2_odd]=     mOp0_odd_o;
   assign write_mop[0][`mOp2_addr_low]=mOp0_addr_low_o;
 //  assign write_mop[0][`mOp_st]=      1'b0_o;
@@ -336,6 +353,7 @@ module wtmiss(
   assign write_mop[1][`mOp2_addrMain]=mOp1_addrMain;
 //  assign write_mop[1][`mOp_reg]=     9'b0;//mOp1_regNo;
   assign write_mop[1][`mOp2_sz]=      mOp1_sz_o;
+  assign write_mop[1][`mOp2_attr]=      mOp1_attr_o;
   assign write_mop[1][`mOp2_odd]=     mOp1_odd_o;
   assign write_mop[1][`mOp2_addr_low]=mOp1_addr_low_o;
 //  assign write_mop[1][`mOp_st]=      1'b0;
@@ -359,6 +377,7 @@ module wtmiss(
 
   assign tlbreq_addr=pause[0] ? RaddrMain[0][43:14] : RaddrMain[1][43:14];
   assign tlbreq_en=enOut && (pause[0] && ~rdm_xdone[0]) | (pause==2'b10 & ~rdm_xdone[1]);
+  assign tlbreq_attr=pause[0] ? read_mop[0][`mOp2_attr] : read_mop[1][`mOp2_attr];
 
   always @(posedge clk) begin
 
