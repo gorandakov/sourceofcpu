@@ -31,8 +31,10 @@ module agu_r(
   mOp0_attr,
   reqtlb_en,
   reqtlb_addr,
+  reqtlb_attr,
   reqtlb_ack,
   reqC_addr,
+  reqC_attr,
   reqC_tlbEn,
   busC_tlb_data,
   busC_tlb_en,
@@ -115,8 +117,10 @@ module agu_r(
   input [3:0] mOp0_attr;
   input reqtlb_en;
   input [29:0] reqtlb_addr;
+  input [3:0] reqtlb_attr;
   output reqtlb_ack;
   input [30:0] reqC_addr;
+  input [3:0] reqC_attr;
   input reqC_tlbEn;
   output [`ctlbData_width-1:0] busC_tlb_data;
   output busC_tlb_en;
@@ -176,6 +180,9 @@ module agu_r(
   reg [VADDR_WIDTH:0] addrMain_tlb;
   reg [VADDR_WIDTH:0] addrSupp_tlb;
   reg [VADDR_WIDTH:0] addrSupp2_tlb;
+  reg [3:0] addrMain_attr;
+  reg [3:0] addrSupp_attr;
+  reg [3:0] addrSupp2_attr;
 //  reg [VADDR_WIDTH-1:0] addrMain_tlb_reg;
   reg tlb_save;
   reg tlb_save2;
@@ -377,13 +384,12 @@ module agu_r(
   .clk(clk),
   .rst(rst),
   .except(except),
-  .excpt_gate(except_gate),
-  .excpt_in_vm(except_in_vm),
   .bus_hold(bus_hold),
   .req_bus(req_bus),
   .new_en(tlb_in_flight),
   .new_can(req_can),
   .new_addr({addrMain_tlb[47:14],addrMain_tlb[13]&tlb_is_code,13'b0}),
+  .new_attr(addrMain_attr),
   .new_indir(1'b0),
   .new_inv(tlb_is_inv),
   .new_permReq(tlb_is_code),
@@ -429,7 +435,7 @@ module agu_r(
   .read_clkEn(tlb_clkEn&~tlb_proceed),
   .sec_wren(1'b1),
   .addr(addrMain_tlb[64:13]),
-  .sproc(sproc[20:0]),
+  .sproc(addrMain_attr[`attr_vm] ? pproc[20:0]^21'd1: sproc[20:0]),
   .read_data(tlb_data),
   .read_data_next(tlb_data_next),
   .read_way(tlb_way),
@@ -584,15 +590,15 @@ module agu_r(
           end
           if (reqC_tlbEn) begin
               if (!tlb_proceed & ~reqtlb_en) begin
-                  addrMain_tlb<={reqC_tlbAttr[`attr_vm] ? vproc[20:0] : pproc[20:0],reqC_addr,13'b0};
-		  addrMain_attr<=reqC_tlbAttr;
+                  addrMain_tlb<={reqC_attr[`attr_vm] ? vproc[20:0] : pproc[20:0],reqC_addr,13'b0};
+		  addrMain_attr<=reqC_attr;
                   tlb_proceed<=1'b1;
                   tlb_is_code<=1'b1;
                   reqtlb_next<=1'b0;
                   tlb_in_flight<=1'b1;
               end else begin
-                  addrSupp2_tlb<={reqC_tlbAttr[`attr_vm] ? vproc[20:0] : pproc[20:0],reqC_addr,13'b0};
-		  addrSupp2_attr<=reqC_tlbAttr;
+                  addrSupp2_tlb<={reqC_attr[`attr_vm] ? vproc[20:0] : pproc[20:0],reqC_addr,13'b0};
+		  addrSupp2_attr<=reqC_attr;
                   tlb_save2<=1'b1;
                   tlb_is_code<=1'b0;
               end
@@ -602,13 +608,14 @@ module agu_r(
 	      $display("dud<");
               if (!tlb_save && !tlb_save2) begin
                   addrMain_tlb<={proc[20:0],mOp0_addrMain_reg};
-                  //if (!tlb_in_flight) 
-                  tlb_proceed<=1'b0;
+                  addrMain_attr<=mOp0_attr_reg;
+		  tlb_proceed<=1'b0;
                   tlb_in_flight<=1'b0;
                   tlb_is_inv<=1'b0;
 		  reqtlb_next<=1'b0;
               end else if (tlb_save) begin
                   addrMain_tlb<=addrSupp_tlb;
+                  addrMain_attr<=addrSupp_attr;
                   tlb_proceed<=1'b1;
                   tlb_save<=1'b0;
                   tlb_is_code<=1'b0;
@@ -618,6 +625,7 @@ module agu_r(
 		  tlb_is_inv<=1'b0;
               end else begin
                   addrMain_tlb<=addrSupp2_tlb;
+                  addrMain_attr<=addrSupp2_attr;
                   tlb_proceed<=1'b1;
                   tlb_save2<=1'b0;
                   tlb_is_code<=1'b1;
