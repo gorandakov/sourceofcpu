@@ -133,7 +133,7 @@ module agu_block(
   csrss_en,csrss_addr,csrss_data,
   alt_bus_hold,
   alt_bus_addr,
-  req_addr,req_tlbEn,
+  req_addr,req_tlbAttr,req_tlbEn,
   bus_tlb_data,bus_tlb_en,
   reqBus_en,
   reqBus_addr,
@@ -418,6 +418,7 @@ module agu_block(
   input [36:0] alt_bus_addr;
 
   input [30:0] req_addr;
+  input [3:0] req_tlbAttr;
   input req_tlbEn;
   output [`ctlbData_width-1:0] bus_tlb_data;
   output bus_tlb_en;
@@ -653,6 +654,7 @@ module agu_block(
 
   wire Em_tlb_req_en;
   wire [43-14:0] Em_tlb_req_addr;
+  wire [3:0] Em_tlb_attr;
   wire Em_tlb_req_ack;
   
   reg [`lsfxdata_width-1:0] lso_xdataA_reg;
@@ -1937,9 +1939,11 @@ module agu_block(
   .mOp0_lsflag(rec_lsflag),
  
   .reqtlb_addr(Em_tlb_req_addr),
+  .reqtlb_attr(Em_tlb_attr),
   .reqtlb_en(Em_tlb_req_en),
   .reqtlb_ack(Em_tlb_req_ack), 
   .reqC_addr(req_addr),
+  .reqC_tlbAttr(req_tlbAttr),
   .reqC_tlbEn(req_tlbEn),
   .busC_tlb_data(bus_tlb_data),
   .busC_tlb_en(bus_tlb_en),
