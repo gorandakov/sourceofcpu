@@ -8,13 +8,12 @@ module pager(
   clk,
   rst,
   except,
-  excpt_gate,
-  excpt_in_vm,
   bus_hold,
   req_bus,
   new_en,
   new_can,
   new_addr,
+  new_attr,
   new_indir,
   new_inv,
   new_permReq,
@@ -62,13 +61,12 @@ module pager(
   input clk;
   input rst;
   input except;
-  input excpt_gate;
-  input excpt_in_vm;
   input bus_hold;
   output req_bus;
   input new_en;
   output reg new_can;
   input [47:0] new_addr;
+  input [3:0] new_attr;
   input new_indir;
   input new_inv;
   input [PERM_WIDTH-1:0] new_permReq;
@@ -291,10 +289,10 @@ module pager(
          // new_can<=1'b0;
 	  $display("<new>");
           if (new_permReq[`permreq_code]) begin
-              if (mflags[`mflags_vm]) ptr<={12'b0,VPTR[new_addr[43]][38:0],13'b0};
+              if (new_attr[`attr_vm]) ptr<={12'b0,VPTR[new_addr[43]][38:0],13'b0};
               else ptr<={12'b0,PTR[new_addr[43]][38:0],13'b0};
           end else begin
-              ptr<= mflags[`mflags_vm]? {12'b0,VPTR[new_addr[43]][38:0],13'b0} : 
+              ptr<= new_attr[`attr_vm]? {12'b0,VPTR[new_addr[43]][38:0],13'b0} : 
 		      {12'b0,PTR[new_addr[43]][38:0],13'b0};
           end
 	  //up to horo
@@ -432,13 +430,6 @@ module pager(
           if (csrss_no==`csr_vmpage0) begin 
               VPTR[0]<=csrss_data;
           end
-	  if (except && excpt_gate && excpt_in_vm) begin
-	      mflags[`mflags_vm]<=1'b1;
-	      SPTR<=PTR[1]^{23'b0,1'b1,40'b0};//asid xor 0x1
-	  end else if (except && excpt_gate) begin
-	      mflags[`mflags_vm]<=1'b0;
-	      SPTR<=0;
-	  end
       end 
       
   end
