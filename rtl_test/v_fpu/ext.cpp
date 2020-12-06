@@ -31,8 +31,9 @@ void req::opADDx (int rmode) {
       tail=expB!=0;
   } else {
       unsigned __int128 mant=mantA<<63<<1;
-      mant+=mantB<<1<<(63-expA+expB);
-      if (!(mant>>63>>1>>63)) {
+      if (sigA==sigB) mant+=mantB<<1<<(63-expA+expB);
+      else mant-=mantB<<1<<(63-expA+expB);
+      if (!(mant>>63>>1>>63) && sigA==sigB) {
 	  mant>>=1;
 	  mant|=0x8000000000000000;
 	  expA++;
