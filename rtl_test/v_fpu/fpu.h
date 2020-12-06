@@ -32,4 +32,5 @@ struct req {
  * extended: extra exponent same as double, Ah=sign and exponent
  * "native" denormals are treated as zero
  * */
+int rndfunc(bool last,bool rbit,bool tail,bool sgn, int rmod);
 

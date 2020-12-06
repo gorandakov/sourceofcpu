@@ -99,3 +99,24 @@ struct req {
  * "native" denormals are treated as zero
  * */
 
+int rndfunc(bool last,bool rbit,bool tail,bool sgn, int rmod) {
+  switch (rmod) {
+      case 0:
+      return 0;
+      case 1:
+      return rbit;
+      case 2:
+      return rbit && (tail || last);
+      case 3:
+      return sgn ? 0 : rbit||tail;
+      case 4:
+      return (!sgn) ? 0 : rbit||tail;
+      case 5:
+      return sgn ? 0 : rbit;
+      case 6:
+      return (!sgn) ? 0 : rbit;
+      default:
+      printf("rndfunc error\n");
+      exit(10);
+  }
+}
