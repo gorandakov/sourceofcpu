@@ -23,6 +23,14 @@ void req::opADDd (int iA,int iB, int iRes, int rmode) {
       sigA=sigB;
       sigB=swp;
   }
+
+  unsigned tail=0;
+  if ((expA-expB)>54) {
+      tail=expB!=0;
+  } else {
+      unsigned __int128 mant=mantA<<63<<1;
+      mant+=mantB<<1<<(63-expA+expB);
+  }
 }
 
 void req::opSUBd (int iA,int iB, int iRes, int rmode) {
