@@ -25,11 +25,20 @@ void req::opADDd (int iA,int iB, int iRes, int rmode) {
   }
 
   unsigned tail=0;
+  unsigned rbit=0;
+  unsigned lbit=0;
   if ((expA-expB)>54) {
       tail=expB!=0;
   } else {
       unsigned __int128 mant=mantA<<63<<1;
       mant+=mantB<<1<<(63-expA+expB);
+      if (mant>>63>>1>>53) {
+	  mant<<=1;
+	  expA++;
+      }
+      lbit=(mant>>63>>1)&1;
+      rbit=(mant>>63)&1;
+      tail=((unsigned long) mant<<1)!=0;
   }
 }
 
