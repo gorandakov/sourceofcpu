@@ -42,6 +42,15 @@ void req::opADDx (int rmode) {
       rbit=(mant>>63)&1;
       tail=((unsigned long) mant<<1)!=0;
   }
+  mant=mant>>63>>1;
+  if (rndfunc(last,rbit,tail,sigA,rmode)) {
+      mant++;
+      if (!(mant>>63)) {
+	  mant>>=1;
+	  mant|=0x8000000000000000;
+	  expA++;
+      }
+  }
 }
 
 void req::opSUBd (int iA,int iB, int iRes, int rmode) {
