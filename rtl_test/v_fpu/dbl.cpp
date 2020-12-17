@@ -161,6 +161,24 @@ void req::oprSUBd(int iA,int iB, int iRes, int rmode) {
 }
 
 void req::opMULd (int iA,int iB, int iRes, int rmode) {
+  unsigned expA=((A[iA]>>52)&0x7ff)|((Ax[iA]&2)<<10);
+  unsigned expB=((B[iB]>>52)&0x7ff)|((Bx[iB]&2)<<10);
+
+  unsigned long mantA=(A[iA]&0xfffffffffffff)|0x80000000000000;
+  unsigned long mantB=(B[iB]&0xfffffffffffff)|0x80000000000000;
+
+  unsigned sigA=!(A[iA]>>63);
+  unsigned sigB=B[iB]>>63;
+
+  int exp=expA+expB-0x7ff;
+
+  unsigned __int128 prod=mantA*mantB;
+  if ((prod>>53>>52)&1) {
+      exp++;
+  } else {
+      prod<<=1;
+  }
+
 }
 
 void req::opPERMd (int iAB,int iB, int iRes, int swp,int cpy) {
@@ -174,6 +192,9 @@ void req::opPERMd (int iAB,int iB, int iRes, int swp,int cpy) {
       AB=(AB>>32)|((AB&0xffffffff00000000));
       ABx=(AB&1)|((AB&1)<<1);
   }
+  res[iRes]=AB;
+  resx[iRes]=ABx;
+  resh=0;
 }
 
 
