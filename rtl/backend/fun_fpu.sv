@@ -251,16 +251,6 @@ module fun_fpu(
   .res_pkd(FOOF[0])
   );
 
-  simd_socialiste int_mod(
-  .clk(clk),
-  .rst(rst),
-  .en(fxFADD_int),
-  .operation(u1_op_reg),
-  .A(uu_A1),
-  .B(uu_B1),
-  .res(FOOF[0])
-  );
-
   //assign FOOS=gxFADD_hi ? FOOSH[m] : FOOSL[m];
 
   assign fraise2[m]=fxFCADD_sn_reg5[m] ?
@@ -322,65 +312,6 @@ module fun_fpu(
   .A(fxDataAXL_reg[1]),.B(gxDataBXL_reg[0]),
   .res(FOOF[1]));
  
-  s_fadd faddx1LL(
-  .clk(clk),
-  .rst(rst),
-  .A({fxDataAXL_reg[0][32:0]}),
-  .B({gxDataBXL_reg[1][32:0]}),
-  .isSub(fxFADD_sub[H]),
-  .isRSub(1'b0),
-  .invExcpt(fpcsr[`csrfpu_inv_excpt]),
-  .rmode(fpcsr[`csrfpu_rmode]),
-  .en(fxFADD_sin),
-  .logic_en(fxFADD_lo),
-  .logic_sel(fxFADD_loSel),
-  .copyA(fxFADD_copySA[0+2*H]),
-  .res(FOOF[2*m+0][32:0])
-  );
-
-  s_fadd faddx1LH(
-  .clk(clk),
-  .rst(rst),
-  .A({fxDataAXL_reg[0][65:33]}),
-  .B({gxDataBXL_reg[1][65:33]}),
-  .isSub(fxFADD_sub[H]),
-  .isRSub(1'b0),
-  .invExcpt(fpcsr[`csrfpu_inv_excpt]),
-  .rmode(fpcsr[`csrfpu_rmode]),
-  .en(fxFADD_sin),
-  .logic_en(fxFADD_lo),
-  .logic_sel(fxFADD_loSel),
-  .copyA(fxFADD_copySA[1+2*H]),
-  .res(FOOF[2*m+0][65:33])
-  );
-  
-  
-  fpumuls fcaddx2LL_mod(
-  .clk(clk),
-  .rst(rst),
-  .A({fxDataAXL_reg[1][32:0]}),
-  .B({gxDataBXL_reg[0][32:0]}),
-  .copyA(fxFCADD_copyASN[0+2*H]),
-  .en(fxFCADD_sn),
-  .rmode(fpcsr[`csrfpu_rmode]),
-  .res(FOOFL[1][32:0]),
-  .raise(fxFCADD_raise_s[0+2*H]),
-  .fpcsr(fpcsr[31:0])
-  );
-
-  fpumuls fcaddx2LH_mod(
-  .clk(clk),
-  .rst(rst),
-  .A({fxDataAXL_reg[1][65:33]}),
-  .B({gxDataBXL_reg[0][65:33]}),
-  .copyA(fxFCADD_copyASN[1+2*H]),
-  .en(fxFCADD_sn),
-  .rmode(fpcsr[`csrfpu_rmode]),
-  .res(FOOFL[1][65:33]),
-  .raise(fxFCADD_raise_s[1+2*H]),
-  .fpcsr(fpcsr[31:0])
-  );
-
   generate
       if (H) assign gxDataBFL[1]=u1_op_reg[9] ? u1_Bx : uu_B1;
       else assign gxDataBFL[1]=u1_op_reg[8] ? {uu_B1[68+15:68],u1_Bx} : uu_B1;
