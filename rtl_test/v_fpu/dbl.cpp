@@ -163,4 +163,17 @@ void req::oprSUBd(int iA,int iB, int iRes, int rmode) {
 void req::opMULd (int iA,int iB, int iRes, int rmode) {
 }
 
+void req::opPERMd (int iAB,int iB, int iRes, int swp,int cpy) {
+  unsigned long AB=iAB ? B[iB] : A[iB];
+  unsigned ABx=iAB ? Bx[iB] : Ax[iB];
+  if (swp) {
+      AB=(AB>>32)|((AB&0xffffffff)<<32);
+      ABx=(AB>>1)|((AB&1)<<1);
+  }
+  if (cpy) {
+      AB=(AB>>32)|((AB&0xffffffff00000000));
+      ABx=(AB&1)|((AB&1)<<1);
+  }
+}
+
 
