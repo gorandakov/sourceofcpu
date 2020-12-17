@@ -51,15 +51,15 @@ void req::opADDx (int rmode) {
 	  expA++;
       }
   }
+  res[0]=mant;
+  resh=(expA&0x7fff)|(sigA<<15);
+  resx[0]=(expA&0x8000)>>14;
 }
 
-void req::opSUBd (int iA,int iB, int iRes, int rmode) {
+void req::opSUBx (int rmode) {
 }
 
-void req::oprSUBd(int iA,int iB, int iRes, int rmode) {
-}
-
-void req::opMULd (int iA,int iB, int iRes, int rmode) {
+void req::opMULx (int rmode) {
 }
 
 
