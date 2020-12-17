@@ -91,6 +91,7 @@ struct req {
   void opADDx(int rmode);
   void opSUBx(int rmode);
   void opMULx(int rmode);
+  void opPERMd (int iAB,int iB, int iRes, int swp, int cpy);
 };
 /*
  * double: extra exponent bit Ax[iA]>>1 (comes before last)
