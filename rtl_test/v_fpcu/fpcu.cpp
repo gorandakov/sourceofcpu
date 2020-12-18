@@ -136,14 +136,37 @@ int rndfunc(bool last,bool rbit,bool tail,bool sgn, int rmod) {
 
 req reqs[32][10]={};
 
-void gen_reqs(int row) {
+void creat_reqs(int row,unsigned fpcsr) {
   int n;
   int op;
   for(n=0;n<3;n++) {
       op=OPS_ADD[lrand48()%(sizeof OPS_ADD/sizeof OPS_ADD[0])];
       if (reqs[row][4+n].en) goto do_mul;
+      reqs[row][4+n].en=1;
+      reqs[row][4+n].res[0]=reqs[row][4+n].A[0];
+      reqs[row][4+n].res[1]=reqs[row][4+n].A[1];
+      reqs[row][4+n].resx[0]=reqs[row][4+n].Ax[0];
+      reqs[row][4+n].resx[1]=reqs[row][4+n].Ax[1];
+      reqs[row][4+n].resh=reqs[row][4+n].Ah;
       switch (op) {
+	  case fop_addDL:
+	  op|=0x100&lrand48();
+	  reqs[row][4+n].opADDd(0,(op&0x100)!=0,0,(fpcsr>>22)&7);
+	  break;
+	  case fop_subDL:
+	  op|=0x100&lrand48();
+	  reqs[row][4+n].opSUBd(0,(op&0x100)!=0,0,(fpcsr>>22)&7);
+	  break;
+	  case fop_addDH:
+	  op|=0x200&lrand48();
+	  reqs[row][4+n].opADDd(1,(op&0x200)==0,1,(fpcsr>>22)&7);
+	  break;
+	  case fop_subDH:
+	  op|=0x200&lrand48();
+	  reqs[row][4+n].opSUBd(1,(op&0x200)==0,1,(fpcsr>>22)&7);
+	  break;
       }
+      reqs[row][4+n].op=op;
 do_mul:
       if (n!=2) op=OPS_MUL_no2[lrand48()%(sizeof OPS_MUL_no2/sizeof OPS_MUL_no2[0])];
       else op=OPS_MUL[lrand48()%(sizeof OPS_MUL/sizeof OPS_MUL[0])];
