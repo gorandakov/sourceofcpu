@@ -133,3 +133,24 @@ int rndfunc(bool last,bool rbit,bool tail,bool sgn, int rmod) {
       exit(10);
   }
 }
+
+req reqs[32][10]={};
+
+void gen_reqs(int row) {
+  int n;
+  int op;
+  for(n=0;n<3;n++) {
+      op=OPS_ADD[lrand48()%(sizeof OPS_ADD/sizeof OPS_ADD[0])];
+      if (reqs[row][4+n].en) goto do_mul;
+      switch (op) {
+      }
+do_mul:
+      if (n!=2) op=OPS_MUL_no2[lrand48()%(sizeof OPS_MUL_no2/sizeof OPS_MUL_no2[0])];
+      else op=OPS_MUL[lrand48()%(sizeof OPS_MUL/sizeof OPS_MUL[0])];
+      if (reqs[row][7+n].en) goto after_mul;
+      switch (op) {
+      }
+after_mul:
+  }
+}
+
