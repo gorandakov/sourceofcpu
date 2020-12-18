@@ -30,6 +30,25 @@ void req::opADDd (int iA,int iB, int iRes, int rmode) {
       resh=0;
       return;
   }
+  if (expA==0xffe && expB==0xFFe && sigA!=sigB) {
+      res[iRes]=0x7ff0000000000000;
+      resx[iRes]=0x2;
+      resh=0;
+      return;
+  }
+  if (expB==0x7fe) {
+      res[iRes]=B[iB]&0xfff0000000000000;
+      resx[iRes]=Bx[iB];
+      resh=0;
+      return;
+  }
+
+  if (expA==0x7fe) {
+      res[iRes]=A[iA]&0xfff0000000000000;
+      resx[iRes]=Ax[iA];
+      resh=0;
+      return;
+  }
   if (expB>expA) {
       unsigned long swp;
       swp=expA;
