@@ -110,6 +110,52 @@ void req::opSUBd (int iA,int iB, int iRes, int rmode) {
   unsigned sigA=A[iA]>>63;
   unsigned sigB=!(B[iB]>>63);
 
+  if (!expA && !expB) {
+      res[iRes]=0;
+      resx[iRes]=0;
+      resh=0;
+      return;
+  }
+  if (!expA) {
+      res[iRes]=B[iB];
+      resx[iRes]=Bx[iB];
+      resh=0;
+      return;
+  }
+
+  if (!expB) {
+      res[iRes]=A[iA];
+      resx[iRes]=Ax[iA];
+      resh=0;
+      return;
+  }
+  if (expA==0xffe && expB==0xFFe && sigA!=sigB) {
+      res[iRes]=0x7ff0000000000000;
+      resx[iRes]=0x2;
+      resh=0;
+      return;
+  }
+  if (expB==0xffe) {
+      res[iRes]=B[iB]&0xfff0000000000000;
+      resx[iRes]=Bx[iB];
+      resh=0;
+      return;
+  }
+
+  if (expA==0xffe) {
+      res[iRes]=A[iA]&0xfff0000000000000;
+      resx[iRes]=Ax[iA];
+      resh=0;
+      return;
+  }
+
+  if (expA==0xfff || expB==0xfff) {
+      res[iRes]=0x7ff0000000000000;
+      resx[iRes]=0x2;
+      resh=0;
+      return;
+  }
+
   if (expB>expA) {
       unsigned long swp;
       swp=expA;
