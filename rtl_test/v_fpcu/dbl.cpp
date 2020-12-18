@@ -102,11 +102,19 @@ void req::opADDd (int iA,int iB, int iRes, int rmode) {
       }
   }
 
+  if (extA<=(0x400)) {
+      exc|=EX_DENOR_STD;
+  }
   if (extA<(0x400-51)) {
       extA=0;
       exc|=EX_DENOR_STD;
   }
 
+  if (extA>=0xffe) {
+      extA=0xffe;
+      if (sigA) exc|=EX_OVER;
+      if (!sigA) exc|=EX_UNDER;
+  }
   if (extA>0xbfe) {
       extA=0xffe;
       if (sigA) exc|=EX_OVER_STD;
@@ -217,11 +225,19 @@ void req::opSUBd (int iA,int iB, int iRes, int rmode) {
       }
   }
   
+  if (extA<=(0x400)) {
+      exc|=EX_DENOR_STD;
+  }
   if (extA<(0x400-51)) {
       extA=0;
       exc|=EX_DENOR_STD;
   }
 
+  if (extA>=0xffe) {
+      extA=0xffe;
+      if (sigA) exc|=EX_OVER;
+      if (!sigA) exc|=EX_UNDER;
+  }
   if (extA>0xbfe) {
       extA=0xffe;
       if (sigA) exc|=EX_OVER_STD;
@@ -267,11 +283,19 @@ void req::opMULd (int iA,int iB, int iRes, int rmode) {
       }
   }
   
+  if (ext<=(0x400)) {
+      exc|=EX_DENOR_STD;
+  }
   if (ext<(0x400-51)) {
       ext=0;
       exc|=EX_DENOR_STD;
   }
 
+  if (ext>=0xffe) {
+      ext=0xffe;
+      if (sigA) exc|=EX_OVER;
+      if (!sigA) exc|=EX_UNDER;
+  }
   if (ext>0xbfe) {
       ext=0xffe;
       if (sigA) exc|=EX_OVER_STD;
