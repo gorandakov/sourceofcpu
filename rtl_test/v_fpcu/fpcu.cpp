@@ -1,6 +1,18 @@
 #define PARAM_H 0
 #define PARAM_I 2
 
+#define EX_INVD 1
+#define EX_UNDER 0x2
+#define EX_UNDER_STD 0x4
+#define EX_OVER 0x8
+#define EX_OVER_STD 0x10
+#define EX_INEX 0x20
+#define EX_INEX_STD 0x40
+#define EX_DENOR 0x80
+#define EX_DENOR_STD 0x100
+#define EX_LOGC_CONS 0x200
+#define EX_LOGC_PROD 0x400
+
 
 unsigned short OPS_ADD[]={
   fop_addDH,
