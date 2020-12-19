@@ -177,10 +177,3 @@ after_mul:
   }
 }
 
-bool fpcu_poke(Vblock_compute * top,int row) {
-}
-
-bool fpcu_peek(Vblock_compute * top,int row) {
-}
-
-
