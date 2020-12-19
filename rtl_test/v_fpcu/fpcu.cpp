@@ -165,6 +165,32 @@ void creat_reqs(int row,unsigned fpcsr) {
 	  op|=0x200&lrand48();
 	  reqs[row][4+n].opSUBd(1,(op&0x200)==0,1,(fpcsr>>22)&7);
 	  break;
+	  case fop_permDS:
+	  op|=0x1700&lrand48();
+	  reqs[row][4+n].opPERMd(0,(op&0x100)!=0,0,(op&0x400)!=0,(op&0x1000)!=0);
+	  reqs[row][4+n].opPERMd(1,(op&0x200)==0,1,(op&0x400)!=0,(op&0x1000)!=0);
+	  break;
+	  case fop_addDP:
+	  op|=0x1300&lrand48();
+	  if (op&0x1000) opSWP();
+	  reqs[row][4+n].opADDd(0,(op&0x100)!=0,0,(fpcsr>>22)&7);
+	  reqs[row][4+n].opADDd(1,(op&0x200)==0,1,(fpcsr>>22)&7);
+	  if (op&0x1000) opUnSWP();
+	  break;
+	  case fop_subDP:
+	  op|=0x1300&lrand48();
+	  if (op&0x1000) opSWP();
+	  reqs[row][4+n].opSUBd(0,(op&0x100)!=0,0,(fpcsr>>22)&7);
+	  reqs[row][4+n].opSUBd(1,(op&0x200)==0,1,(fpcsr>>22)&7);
+	  if (op&0x1000) opUnSWP();
+	  break;
+	  case fop_addsubDP:
+	  op|=0x1300&lrand48();
+	  if (op&0x1000) opSWP();
+	  reqs[row][4+n].opSUBd(0,(op&0x100)!=0,0,(fpcsr>>22)&7);
+	  reqs[row][4+n].opADDd(1,(op&0x200)==0,1,(fpcsr>>22)&7);
+	  if (op&0x1000) opUnSWP();
+	  break;
       }
       reqs[row][4+n].op=op;
 do_mul:
