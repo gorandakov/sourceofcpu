@@ -217,6 +217,8 @@ module fun_fpu(
   .fpcsr(fpcsr[31:0]),
   .rmode(fpcsr[`csrfpu_rmode]),
   .copyA(fxFADD_copyA[H]),
+  .logic_en(fxFADD_lo),
+  .logic_sel(fxFADD_loSel),
   .en(H? fxFADD_dbl:fxFADD_dblext),
   .res(FOOF[0]),
   .res_hi(FOOFH[0])
@@ -389,8 +391,9 @@ module fun_fpu(
                 u1_op_reg[7:0]==`fop_subDL ||
 	        u1_op_reg[7:0]==`fop_subDH ||
                 u1_op_reg[7:0]==`fop_subDP ||
-                u1_op_reg[7:0]==`fop_addsubDP;
-              fxFADD_ext=u1_op_reg[7:0]==`fop_addEE ||
+                u1_op_reg[7:0]==`fop_addsubDP ||
+                {u1_op_reg[7:2],2'b0}==`fop_logic;
+             fxFADD_ext=u1_op_reg[7:0]==`fop_addEE ||
                 u1_op_reg[7:0]==`fop_subEE;
               fxFADD_dblext=fxFADD_dbl[k]||fxFADD_ext[k];
 	      fxFADD_sub[0]=u1_op_reg[7:0]==`fop_subDL ||
@@ -398,10 +401,11 @@ module fun_fpu(
                 u1_op_reg[7:0]==`fop_subDP ||
 	        u1_op_reg[7:0]==`fop_subEE ||
 		u1_op_reg[7:0]==`fop_subS ||
-		u1_op_reg[7:0]==`fop_subSP;
-	      fxFADD_sub[1]=fxFADD_sub[0] || 
+		u1_op_reg[7:0]==`fop_subSP ||
 		u1_op_reg[7:0]==`fop_addsubDP;
-	      fxFADD_rsub=fxFADD_sub[2*k+1] && u1_op_reg[12];
+	      fxFADD_sub[1]=fxFADD_sub[0] || 
+		u1_op_reg[7:0]!=`fop_addsubDP;
+	      fxFADD_rsub=fxFADD_sub[0] && u1_op_reg[12];
 	      fxFADD_copyA[1]=u1_op_reg[7:0]==`fop_addDL ||
                 u1_op_reg[7:0]==`fop_subDL;
 	      fxFADD_copyA[0]=u1_op_reg[7:0]==`fop_addDH ||
@@ -428,8 +432,7 @@ module fun_fpu(
 	        u2_op_reg[7:0]==`fop_rndDSP;
 
 	      fxFADD_sin=u1_op_reg[7:0]==`fop_addS || u1_op_reg[7:0]==`fop_addSP ||
-                  u1_op_reg[7:0]==`fop_subS || u1_op_reg[7:0]==`fop_subSP ||
-		  {u1_op_reg[7:2],2'b0}==`fop_logic;
+                  u1_op_reg[7:0]==`fop_subS || u1_op_reg[7:0]==`fop_subSP;
               fxFADD_copySA=(u1_op_reg==`fop_addSP || u1_op_reg[7:0]==`fop_subSP ||
 	          {u1_op_reg[7:2],2'b0}==`fop_logic) ?
 		  {u1_op_reg[10],3'b0}:{2'b11,u1_op_reg[10],1'b0}; 
