@@ -15,6 +15,8 @@ module fadd(
   rmode,
   en,
   copyA,
+  logic_en,
+  logic_sel,
   res,
   res_hi
   );
@@ -39,6 +41,8 @@ module fadd(
   input [2:0] rmode;
   input en;
   input copyA;
+  input logic_en;
+  input [1:0] logic_sel;
   output [67:0] res;
   output [15:0] res_hi;
 //need to set bit 53 to one if isDBL; not yet done
@@ -170,6 +174,8 @@ module fadd(
   wire B_zero,B_infty,B_nan;
   wire spec_snan,spec_qnan,spec_pinf,spec_ninf,spec_A,spec_B;
   reg spec_snan_reg,spec_qnan_reg,spec_pinf_reg,spec_ninf_reg,spec_A_reg,spec_B_reg;
+  wire [3:0] spec_logic;
+  reg [3:0] spec_logic_reg;
   reg spec_any;
   wire [80:0] res_spec;
   reg [80:0] A_reg;
@@ -203,6 +209,11 @@ module fadd(
   assign spec_ninf=(A_infty && A_s && ~B_infty|B_s && ~copyA) || (B_infty && B_s && ~A_infty|A_s && ~copyA);
   assign spec_A=(B_zero && ~A_zero|~A_s|B_s && ~A_nan && ~A_infty)||copyA;
   assign spec_B=(A_zero && ~B_zero|(~B_s&A_s) && ~B_nan && ~B_infty)&&~copyA;
+  assign spec_logic[0]=logic_en && logic_sel==2'd0 && ~copyA;
+  assign spec_logic[1]=logic_en && logic_sel==2'd1 && ~copyA;
+  assign spec_logic[2]=logic_en && logic_sel==2'd2 && ~copyA;
+  assign spec_logic[3]=logic_en && logic_sel==2'd3 && ~copyA;
+ 
  
   assign opA=a_more ?  fracxfrm1(A[63:0],isDBL) : 64'bz;
   assign opB=(sxor & a_more) ?  ~fracxfrm1(B[63:0],isDBL) : 64'bz;
@@ -276,6 +287,10 @@ module fadd(
   assign res_spec=(spec_qnan_reg & isDBL_reg) ? {17'h1ffff,64'hfff8000000000001} : 81'bz;
   assign res_spec=(spec_pinf_reg & isDBL_reg) ? {17'h1efff,64'h7fe0000000000000} : 81'bz;
   assign res_spec=(spec_ninf_reg & isDBL_reg) ? {17'h1ffff,64'hffe0000000000000} : 81'bz;
+  assign res_spec=spec_logic_reg[0] ? A_reg&B_reg : 33'bz;
+  assign res_spec=spec_logic_reg[1] ? A_reg|B_reg : 33'bz;
+  assign res_spec=spec_logic_reg[2] ? A_reg^B_reg : 33'bz;
+  assign res_spec=spec_logic_reg[3] ? A_reg&~B_reg : 33'bz;
   assign res_spec=spec_any ?  81'bz :  81'b0;
 
   assign renor_round=rndpath_reg && !(opB_reg || isrnd_zero ||(isrnd_even && resSR1_reg[0])) &&
@@ -571,7 +586,8 @@ module fadd(
 	  spec_ninf_reg<=spec_ninf;
 	  spec_A_reg<=spec_A;
 	  spec_B_reg<=spec_B;
-          spec_any<=|{spec_snan,spec_qnan,spec_pinf,spec_ninf,spec_A,spec_B};
+          spec_any<=|{spec_snan,spec_qnan,spec_pinf,spec_ninf,spec_A,spec_B,spec_logic};
+	  spec_logic_reg<=spec_logic;
           A_reg<=copyA ? {A_alt[64],16'b0,A_alt[63:0]} : A;
           B_reg<=B;
 	  en_reg<=en;
