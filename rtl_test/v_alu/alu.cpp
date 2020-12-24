@@ -111,10 +111,53 @@ void req::gen(bool alt_, bool mul_, bool can_shift, req *prev1) {
             case 0:
             res0=((unsigned __int128)  A)+(unsigned __int128) B;
             if (A_p && B_p) excpt=11;
-            res1=res=res0;
+addie:
+	    if (A_p || B_p) {
+		res1=res=res0&0xfffffffffff;
+		unsigned long low,hi;
+		ptr p;
+		p.val=ptr;
+		if (!p.get_bounds(low,hi)) {
+		    exc=11;
+		    break;
+		}
+		if (res1>hi || res1<low) {
+		    unsigned exp=p>>59;
+		    if (((p.val>>52)&0x7f)<((p.val>>45)&0x7f)) {
+			unsigned long masq=(0xfffffffe000<<exp)&0xfffffffffff;
+			if ((res1&masq)!=(ptr&masq)) {
+			    excpt=11;
+			} else {
+			    res&=~(1<<44);
+			}
+		    } else if ((p.val>>44)&1) {
+			unsigned long masq=(0xfffffffe000<<exp)&0xfffffffffff;
+			unsigned long delta=0x2000<<exp;
+			if ((res1&masq)!=(ptr&masq) && (res1&masq)!=((ptr+delta)&masq) ) {
+			    excpt=11;
+			} else if ((res1&masq)!=(ptr&masq)) {
+		            res^=1<<44;
+			}
+		    } else {
+			unsigned long masq=(0xfffffffe000<<exp)&0xfffffffffff;
+			unsigned long delta=0x2000<<exp;
+			if ((res1&masq)!=(ptr&masq) && (res1&masq)!=((ptr-delta)&masq) ) {
+			    excpt=11;
+			} else if ((res1&masq)!=(ptr&masq)) {
+		            res^=1<<44;
+			}
+		    }
+		}
+		res_p=1;
+	    } else {
+                res1=res=res0;
+		res_p=0;
+	    }
             flg64(res0);
-            flags|=((A1>0&&B1>0&&res1<0) || (A1<0&&B1<0&&res1>0))<<4;
-            flags|=(((A&0xf)+(B&0xf))&0x10)>>1;
+            if (!no_O) {
+		flags|=((A1>0&&B1>0&&res1<0) || (A1<0&&B1<0&&res1>0))<<4;
+                flags|=(((A&0xf)+(B&0xf))&0x10)>>1;
+	    }
             break;
             
             case 1:
@@ -127,7 +170,11 @@ void req::gen(bool alt_, bool mul_, bool can_shift, req *prev1) {
 
             case 4:
             res0=((unsigned __int128) A)+((unsigned __int128)~B)+(one>>63);
+	    if (A_p && !B_p) goto addie; 
             res1=res=res0;
+	    if (A_p && B_p) res&=0xfffffffffff;
+	    if (~A_p && B_p) excpt=11;
+	    res_p=0;
             flg64(res0^(one<<1));
             
             flags|=((A1>=0&&B1<0&&res1<0) || (A1<0&&B1>0&&res1>0))<<4;
@@ -144,6 +191,7 @@ void req::gen(bool alt_, bool mul_, bool can_shift, req *prev1) {
 
             case 8:
             res0=A&B;
+	    if (A_p && !B_p) { no_O=true; goto addie; }
             res1=res=res0;
             flg64(res0);
             break;
@@ -156,6 +204,7 @@ void req::gen(bool alt_, bool mul_, bool can_shift, req *prev1) {
 
             case 12:
             res0=A|B;
+	    if (A_p && !B_p) { no_O=true; goto addie; }
             res1=res=res0;
             flg64(res0);
             break;
