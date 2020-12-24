@@ -2,6 +2,7 @@
 #include <cfenv>
 #include "Vfu_alu.h"
 #include "verilated.h"
+#include "../inc/ptr.h"
 
 #define get64(a) ((((unsigned long long) a[1])<<32)|(unsigned long long) a[0])
 #define set64i(a,b) a[0]=b;a[1]=b>>32;a[2]=0;
@@ -106,7 +107,8 @@ void req::gen(bool alt_, bool mul_, bool can_shift, req *prev1) {
         unsigned A0x=A,B0x=B;
         long long int A1=A,B1=B,res1;
         unsigned __int128 one=0x8000000000000000ull;
-        unsigned long long ptr=A_p ? A : B;
+        unsigned long long pttr=A_p ? A : B;
+	bool no_O=false;
         switch(op&0xff) {
             case 0:
             res0=((unsigned __int128)  A)+(unsigned __int128) B;
@@ -116,35 +118,35 @@ addie:
 		res1=res=res0&0xfffffffffff;
 		unsigned long low,hi;
 		ptr p;
-		p.val=ptr;
+		p.val=pttr;
 		if (!p.get_bounds(low,hi)) {
-		    exc=11;
+		    excpt=11;
 		    break;
 		}
 		if (res1>hi || res1<low) {
-		    unsigned exp=p>>59;
+		    unsigned exp=p.val>>59;
 		    if (((p.val>>52)&0x7f)<((p.val>>45)&0x7f)) {
 			unsigned long masq=(0xfffffffe000<<exp)&0xfffffffffff;
-			if ((res1&masq)!=(ptr&masq)) {
+			if ((res1&masq)!=(pttr&masq)) {
 			    excpt=11;
 			} else {
-			    res&=~(1<<44);
+			    res&=~(1ul<<44);
 			}
 		    } else if ((p.val>>44)&1) {
 			unsigned long masq=(0xfffffffe000<<exp)&0xfffffffffff;
 			unsigned long delta=0x2000<<exp;
-			if ((res1&masq)!=(ptr&masq) && (res1&masq)!=((ptr+delta)&masq) ) {
+			if ((res1&masq)!=(pttr&masq) && (res1&masq)!=((pttr+delta)&masq) ) {
 			    excpt=11;
-			} else if ((res1&masq)!=(ptr&masq)) {
-		            res^=1<<44;
+			} else if ((res1&masq)!=(pttr&masq)) {
+		            res^=1ul<<44;
 			}
 		    } else {
 			unsigned long masq=(0xfffffffe000<<exp)&0xfffffffffff;
 			unsigned long delta=0x2000<<exp;
-			if ((res1&masq)!=(ptr&masq) && (res1&masq)!=((ptr-delta)&masq) ) {
+			if ((res1&masq)!=(pttr&masq) && (res1&masq)!=((pttr-delta)&masq) ) {
 			    excpt=11;
-			} else if ((res1&masq)!=(ptr&masq)) {
-		            res^=1<<44;
+			} else if ((res1&masq)!=(pttr&masq)) {
+		            res^=1ul<<44;
 			}
 		    }
 		}
@@ -616,37 +618,37 @@ bool get_check(Vfu_alu *top, req *reqs) {
     static unsigned num_s[3];
 
     if (reqs[4].en && !(get64(top->FU4)==reqs[4].res)) { 
-        printf(,"FU4 error;op=%i:%i;res=%llx:%llx\n",
+        printf("FU4 error;op=%i:%i;res=%llx:%llx\n",
         top->fu_alu__DOT__u1_op_reg,reqs[4].op,
         get64(top->FU4),reqs[4].res);
         rtn=false; 
     }
     if (reqs[5].en && !(get64(top->FU5)==reqs[5].res)) { 
-        printf(,"FU5 error;op=%i:%i;res=%llx:%llx\n",
+        printf("FU5 error;op=%i:%i;res=%llx:%llx\n",
         top->fu_alu__DOT__u3_op_reg,reqs[5].op,
         get64(top->FU5),reqs[5].res);
         rtn=false; 
     }
     if (reqs[6].en && !(get64(top->FU6)==reqs[6].res))  {
-        printf(,"FU6 error;op=%i:%i;res=%llx:%llx\n",
+        printf("FU6 error;op=%i:%i;res=%llx:%llx\n",
         top->fu_alu__DOT__u5_op_reg,reqs[6].op,
         get64(top->FU6),reqs[6].res);
         rtn=false; 
     }
     if (reqs[7].en && !(get64(top->FU7)==reqs[7].res))  {
-        printf(,"FU7 error;op=%i:%i;res=%llx:%llx\n",
+        printf("FU7 error;op=%i:%i;res=%llx:%llx\n",
         top->fu_alu__DOT__u2_op_reg,reqs[7].op,
         get64(top->FU7),reqs[7].res);
         rtn=false; 
     }
     if (reqs[8].en && !(get64(top->FU8)==reqs[8].res))  {
-        printf(,"FU8 error;op=%i:%i;res=%llx:%llx\n",
+        printf("FU8 error;op=%i:%i;res=%llx:%llx\n",
         top->fu_alu__DOT__u4_op_reg,reqs[8].op,
         get64(top->FU8),reqs[8].res);
         rtn=false; 
     }
     if (reqs[9].en && !reqs[9].mul && !(get64(top->FU9)==reqs[9].res))  {
-        printf(,"FU9 error;op=%i:%i;res=%llx:%llx\n",
+        printf("FU9 error;op=%i:%i;res=%llx:%llx\n",
         top->fu_alu__DOT__u6_op_reg,reqs[9].op,
         get64(top->FU9),reqs[9].res);
         rtn=false; 
@@ -654,42 +656,42 @@ bool get_check(Vfu_alu *top, req *reqs) {
 
     if (reqs[14].en && !((top->u1_ret>>3)==reqs[14].flags || 
         !(top->u1_ret&0x4))) {
-        printf(,"ret4 error;op=%i;ret=%x:%x\n",
+        printf("ret4 error;op=%i;ret=%x:%x\n",
         reqs[14].op,
         top->u1_ret*2,reqs[14].flags);
         rtn=false; 
     }
     if (reqs[15].en && !((top->u3_ret>>3)==reqs[15].flags || 
         !(top->u3_ret&0x4))) {
-        printf(,"ret5 error;op=%i;ret=%x:%x\n",
+        printf("ret5 error;op=%i;ret=%x:%x\n",
         reqs[15].op,
         top->u3_ret*2,reqs[15].flags);
         rtn=false; 
     }
     if ((reqs[16].en || reqs[16].alt) && !((top->u5_ret>>3)==reqs[16].flags || 
         !(top->u5_ret&0x4))) {
-        printf(,"ret6 error;op=%i;ret=%x:%x\n",
+        printf("ret6 error;op=%i;ret=%x:%x\n",
         reqs[16].op,
         top->u5_ret*2,reqs[16].flags);
         rtn=false; 
     }
     if (reqs[17].en && !((top->u2_ret>>3)==reqs[17].flags || 
         !(top->u2_ret&0x4))) {
-        printf(,"ret7 error;op=%i;ret=%x:%x\n",
+        printf("ret7 error;op=%i;ret=%x:%x\n",
         reqs[17].op,
         top->u2_ret*2,reqs[17].flags);
         rtn=false; 
     }
     if (reqs[18].en && !((top->u4_ret>>3)==reqs[18].flags || 
         !(top->u4_ret&0x4))) {
-        printf(,"ret8 error;op=%i;ret=%x:%x\n",
+        printf("ret8 error;op=%i;ret=%x:%x\n",
         reqs[18].op,
         top->u4_ret*2,reqs[18].flags);
         rtn=false; 
     }
     if (reqs[19].en && !reqs[19].mul && !((top->u6_ret>>3)==reqs[19].flags || 
         !(top->u6_ret&0x4))) {
-        printf(,"ret9 error;op=%i;ret=%x:%x\n",
+        printf("ret9 error;op=%i;ret=%x:%x\n",
         reqs[19].op,
         top->u6_ret*2,reqs[19].flags);
         rtn=false; 
@@ -698,7 +700,7 @@ bool get_check(Vfu_alu *top, req *reqs) {
     if (reqs[6].alt) {
         if ((reqs[6].op&0xff)<12) {
             if (!(get64(top->FU6)==reqs[6].res))  {
-                printf(,"FU6-M error;op=%i:%i;res=%llx:%llx\n",
+                printf("FU6-M error;op=%i:%i;res=%llx:%llx\n",
                 top->fu_alu__DOT__u5_op_reg&0xff,reqs[6].op&0xff,
                 get64(top->FU6),reqs[6].res);
                 rtn=false; 
@@ -706,7 +708,7 @@ bool get_check(Vfu_alu *top, req *reqs) {
         } else {
             if (reqs[6].num[0]!=num_s[0] || reqs[6].num[1]!=num_s[1] ||
                 reqs[6].num[2]!=num_s[2]) {
-                printf(,"FU6-MC error;op=%i:%i;res=%llx:%llx\n",
+                printf("FU6-MC error;op=%i:%i;res=%llx:%llx\n",
                 top->fu_alu__DOT__u5_op_reg&0x4ff,reqs[6].op&0x4ff,
                 get64(top->FU6),reqs[6].res);
                 rtn=false; 
@@ -821,7 +823,7 @@ int main(int argc, char *argv[]) {
         if (!initcount) {
             cyc=cyc+1;
             if (!get_check(top,reqs[1])) {
-                printf(,"error @%i\n",cyc);
+                printf("error @%i\n",cyc);
                 sleep(1);
             }
             if ((cyc%10000)==0) {
