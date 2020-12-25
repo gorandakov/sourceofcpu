@@ -1,5 +1,5 @@
 `timescale 10ps/1ps
-`include "/home/goran/heptane2/rtl/config.sv"
+`include "/home/gorar/heptane2/rtl/config.sv"
 
 `define b3i
 

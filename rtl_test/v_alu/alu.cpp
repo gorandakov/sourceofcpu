@@ -115,7 +115,7 @@ void req::gen(bool alt_, bool mul_, bool can_shift, req *prev1) {
             if (A_p && B_p) excpt=11;
 addie:
 	    if (A_p || B_p) {
-		res1=res=res0&0xfffffffffff;
+		res1=(res=res0)&0xfffffffffff;
 		unsigned long low,hi;
 		ptr p;
 		p.val=pttr;
@@ -630,15 +630,15 @@ bool get_check(Vfu_alu *top, req *reqs) {
         rtn=false; 
     }
     if (reqs[6].en && !(get64(top->FU6)==reqs[6].res))  {
-        printf("FU6 error;op=%i:%i;res=%llx:%llx\n",
+        printf("FU6 error;op=%i:%i;res=%llx:%llx;%i:%i:%i\n",
         top->fu_alu__DOT__u5_op_reg,reqs[6].op,
-        get64(top->FU6),reqs[6].res);
+        get64(top->FU6),reqs[6].res,reqs[6].A_p,reqs[6].B_p,reqs[6].res_p);
         rtn=false; 
     }
     if (reqs[7].en && !(get64(top->FU7)==reqs[7].res))  {
-        printf("FU7 error;op=%i:%i;res=%llx:%llx\n",
+        printf("FU7 error;op=%i:%i;res=%llx:%llx\n;%i:%i:%i",
         top->fu_alu__DOT__u2_op_reg,reqs[7].op,
-        get64(top->FU7),reqs[7].res);
+        get64(top->FU7),reqs[7].res,reqs[7].A_p,reqs[7].B_p,reqs[7].res_p);
         rtn=false; 
     }
     if (reqs[8].en && !(get64(top->FU8)==reqs[8].res))  {
