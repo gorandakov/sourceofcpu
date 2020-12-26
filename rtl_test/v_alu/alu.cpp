@@ -5,7 +5,7 @@
 #include "../inc/ptr.h"
 
 #define get64(a) ((((unsigned long long) a[1])<<32)|(unsigned long long) a[0])
-#define set64i(a,b) a[0]=b;a[1]=b>>32;a[2]=0;
+#define set64i(a,b,c) a[0]=b;a[1]=b>>32;a[2]=c;
 
 unsigned short OPS_REGL[]={0,1,4,5,8,9,12,13,16,17,32|4096,33|4096,34|4096,
 35|4096,36|4096,37|4096,39|4096,40|4096,41|4096,42|4096,43|4096,48|4096,49|4096,
@@ -172,7 +172,11 @@ addie:
 
             case 4:
             res0=((unsigned __int128) A)+((unsigned __int128)~B)+(one>>63);
-	    if (A_p && !B_p) goto addie; 
+	    if (A_p && !B_p) {
+                res0=(((unsigned __int128) A)+(((unsigned __int128)~B)+(one>>63))&0xffffffffffful)|
+		((unsigned __int128) A&0xfffff00000000000ul);
+		goto addie; 
+	    }
             res1=res=res0;
 	    if (A_p && B_p) res&=0xfffffffffff;
 	    if (~A_p && B_p) excpt=11;
@@ -522,8 +526,8 @@ void gen_reqs(req *reqs,bool simp=false) {
 }
 
 void req_set(Vfu_alu *mod,req reqs[10]) {
-    set64i(mod->u1_A,reqs[4].A);
-    set64i(mod->u1_B,reqs[4].B);
+    set64i(mod->u1_A,reqs[4].A,reqs[4].A_p);
+    set64i(mod->u1_B,reqs[4].B,reqs[4].B_p);
     mod->u1_S=reqs[4].flags_in;
     mod->u1_op=reqs[4].op;
     mod->u1_clkEn=reqs[4].en;
@@ -534,8 +538,8 @@ void req_set(Vfu_alu *mod,req reqs[10]) {
     mod->u1_S_fufwd=reqs[4].fuFl();
     mod->u1_S_fuufwd=reqs[4].fuuFl();
 
-    set64i(mod->u3_A,reqs[5].A);
-    set64i(mod->u3_B,reqs[5].B);
+    set64i(mod->u3_A,reqs[5].A,reqs[5].A_p);
+    set64i(mod->u3_B,reqs[5].B,reqs[5].B_p);
     mod->u3_S=reqs[5].flags_in;
     mod->u3_op=reqs[5].op;
     mod->u3_clkEn=reqs[5].en;
@@ -546,8 +550,8 @@ void req_set(Vfu_alu *mod,req reqs[10]) {
     mod->u3_S_fufwd=reqs[5].fuFl();
     mod->u3_S_fuufwd=reqs[5].fuuFl();
 
-    set64i(mod->u5_A,reqs[6].A);
-    set64i(mod->u5_B,reqs[6].B);
+    set64i(mod->u5_A,reqs[6].A,reqs[6].A_p);
+    set64i(mod->u5_B,reqs[6].B,reqs[6].B_p);
     mod->u5_S=reqs[6].flags_in;
     mod->u5_op=reqs[6].op;
     mod->u5_clkEn=reqs[6].en && !reqs[6].alt;
@@ -559,8 +563,8 @@ void req_set(Vfu_alu *mod,req reqs[10]) {
     mod->u5_S_fuufwd=reqs[6].fuuFl();
     mod->u5_nDataAlt=1;
 
-    set64i(mod->u2_A,reqs[7].A);
-    set64i(mod->u2_B,reqs[7].B);
+    set64i(mod->u2_A,reqs[7].A,reqs[7].A_p);
+    set64i(mod->u2_B,reqs[7].B,reqs[7].B_p);
     mod->u2_S=reqs[7].flags_in;
     mod->u2_op=reqs[7].op;
     mod->u2_clkEn=reqs[7].en;
@@ -571,8 +575,8 @@ void req_set(Vfu_alu *mod,req reqs[10]) {
     mod->u2_S_fufwd=reqs[7].fuFl();
     mod->u2_S_fuufwd=reqs[7].fuuFl();
 
-    set64i(mod->u4_A,reqs[8].A);
-    set64i(mod->u4_B,reqs[8].B);
+    set64i(mod->u4_A,reqs[8].A,reqs[8].A_p);
+    set64i(mod->u4_B,reqs[8].B,reqs[8].B_p);
     mod->u4_S=reqs[8].flags_in;
     mod->u4_op=reqs[8].op;
     mod->u4_clkEn=reqs[8].en;
@@ -583,8 +587,8 @@ void req_set(Vfu_alu *mod,req reqs[10]) {
     mod->u4_S_fufwd=reqs[8].fuFl();
     mod->u4_S_fuufwd=reqs[8].fuuFl();
 
-    set64i(mod->u6_A,reqs[9].A);
-    set64i(mod->u6_B,reqs[9].B);
+    set64i(mod->u6_A,reqs[9].A,reqs[9].A_p);
+    set64i(mod->u6_B,reqs[9].B,reqs[9].B_p);
     mod->u6_S=reqs[9].flags_in;
     mod->u6_op=reqs[9].op;
     mod->u6_clkEn=reqs[9].en;
@@ -602,10 +606,10 @@ void req_set(Vfu_alu *mod,req reqs[10]) {
     mod->FUS8=reqs[28].flags;
     mod->FUS9=reqs[29].flags;
 
-    set64i(mod->FU0,reqs[10].res);
-    set64i(mod->FU1,reqs[11].res);
-    set64i(mod->FU2,reqs[12].res);
-    set64i(mod->FU3,reqs[13].res);
+    set64i(mod->FU0,reqs[10].res,reqs[10].res_p);
+    set64i(mod->FU1,reqs[11].res,reqs[11].res_p);
+    set64i(mod->FU2,reqs[12].res,reqs[12].res_p);
+    set64i(mod->FU3,reqs[13].res,reqs[13].res_p);
 
    /* if (reqs[16].alt) mod->FU6=reqs[6].res;
     else mod->FU6=0xbaadf00dbaadf00dull;
