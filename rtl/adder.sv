@@ -849,6 +849,9 @@ module addsub_alu(a,b,out,sub,en,ben,cout,cout4,cout32,cout_sec,ndiff);
     
   endgenerate
   
+  always @(*) begin
+      $display(en,":",ben[1]," XX ",exbits," YY ",out[63:44]," t ",{a[64],b[64]});
+  end 
      
 endmodule
 
