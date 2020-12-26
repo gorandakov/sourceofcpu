@@ -621,37 +621,37 @@ bool get_check(Vfu_alu *top, req *reqs) {
     bool rtn=true;
     static unsigned num_s[3];
 
-    if (reqs[4].en && !(get64(top->FU4)==reqs[4].res)) { 
-        printf("FU4 error;op=%i:%i;res=%llx:%llx\n",
+    if (reqs[4].en && !(get64(top->FU4)==reqs[4].res) && reqs[4].excpt!=11) { 
+        printf("FU4 error;op=%i:%i;res=%llx:%llx;%i:%i:%i\n",
         top->fu_alu__DOT__u1_op_reg,reqs[4].op,
-        get64(top->FU4),reqs[4].res);
+        get64(top->FU4),reqs[4].res,reqs[4].A_p,reqs[4].B_p,reqs[4].res_p);
         rtn=false; 
     }
-    if (reqs[5].en && !(get64(top->FU5)==reqs[5].res)) { 
+    if (reqs[5].en && !(get64(top->FU5)==reqs[5].res) && reqs[5].excpt!=11) { 
         printf("FU5 error;op=%i:%i;res=%llx:%llx\n",
         top->fu_alu__DOT__u3_op_reg,reqs[5].op,
         get64(top->FU5),reqs[5].res);
         rtn=false; 
     }
-    if (reqs[6].en && !(get64(top->FU6)==reqs[6].res))  {
+    if (reqs[6].en && !(get64(top->FU6)==reqs[6].res) && reqs[6].excpt!=11)  {
         printf("FU6 error;op=%i:%i;res=%llx:%llx;%i:%i:%i\n",
         top->fu_alu__DOT__u5_op_reg,reqs[6].op,
         get64(top->FU6),reqs[6].res,reqs[6].A_p,reqs[6].B_p,reqs[6].res_p);
         rtn=false; 
     }
-    if (reqs[7].en && !(get64(top->FU7)==reqs[7].res))  {
+    if (reqs[7].en && !(get64(top->FU7)==reqs[7].res) && reqs[7].excpt!=11)  {
         printf("FU7 error;op=%i:%i;res=%llx:%llx\n;%i:%i:%i",
         top->fu_alu__DOT__u2_op_reg,reqs[7].op,
         get64(top->FU7),reqs[7].res,reqs[7].A_p,reqs[7].B_p,reqs[7].res_p);
         rtn=false; 
     }
-    if (reqs[8].en && !(get64(top->FU8)==reqs[8].res))  {
+    if (reqs[8].en && !(get64(top->FU8)==reqs[8].res) && reqs[8].excpt!=11)  {
         printf("FU8 error;op=%i:%i;res=%llx:%llx\n",
         top->fu_alu__DOT__u4_op_reg,reqs[8].op,
         get64(top->FU8),reqs[8].res);
         rtn=false; 
     }
-    if (reqs[9].en && !reqs[9].mul && !(get64(top->FU9)==reqs[9].res))  {
+    if (reqs[9].en && !reqs[9].mul && !(get64(top->FU9)==reqs[9].res) && reqs[9].excpt!=11)  {
         printf("FU9 error;op=%i:%i;res=%llx:%llx\n",
         top->fu_alu__DOT__u6_op_reg,reqs[9].op,
         get64(top->FU9),reqs[9].res);
