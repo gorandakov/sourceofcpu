@@ -198,6 +198,7 @@ addie:
             case 8:
             res0=A&B;
 	    if (A_p && !B_p) { no_O=true; goto addie; }
+	    if (A_p || B_p) excpt=11;
             res1=res=res0;
             flg64(res0);
             break;
@@ -211,6 +212,7 @@ addie:
             case 12:
             res0=A|B;
 	    if (A_p && !B_p) { no_O=true; goto addie; }
+	    if (A_p || B_p) excpt=11;
             res1=res=res0;
             flg64(res0);
             break;
@@ -223,6 +225,7 @@ addie:
 
             case 16:
             res0=A^B;
+	    if (A_p || B_p) excpt=11;
             res1=res=res0;
             flg64(res0);
             break;
@@ -331,6 +334,7 @@ addie:
             case 49:
             op|=rand()&0x700;
             res=testj(((op&0x700)>>7)|(op&0x1)) ? B : A;
+            res_p=testj(((op&0x700)>>7)|(op&0x1)) ? B_p : A_p;
             flags=flags_in;
             break;
             
@@ -659,42 +663,42 @@ bool get_check(Vfu_alu *top, req *reqs) {
     }
 
     if (reqs[14].en && (!((top->u1_ret>>3)==reqs[14].flags || 
-        !(top->u1_ret&0x4)) || ((top->u1_ret&3)!=1)!=(reqs[14].excpt==11))) {
+        !(top->u1_ret&0x4) || reqs[14].excpt==11) || ((top->u1_ret&3)==1)!=(reqs[14].excpt==11))) {
         printf("ret4 error;op=%i;ret=%x:%x\n",
         reqs[14].op,
         top->u1_ret*2,reqs[14].flags);
         rtn=false; 
     }
     if (reqs[15].en && (!((top->u3_ret>>3)==reqs[15].flags || 
-        !(top->u3_ret&0x4)) || ((top->u3_ret&3)!=1)!=(reqs[15].excpt==11))) {
+        !(top->u3_ret&0x4) || reqs[15].excpt==11) || ((top->u3_ret&3)==1)!=(reqs[15].excpt==11))) {
         printf("ret5 error;op=%i;ret=%x:%x\n",
         reqs[15].op,
         top->u3_ret*2,reqs[15].flags);
         rtn=false; 
     }
     if ((reqs[16].en || reqs[16].alt) && (!((top->u5_ret>>3)==reqs[16].flags || 
-        !(top->u5_ret&0x4)) || ((top->u5_ret&3)!=1)!=(reqs[16].excpt==11))) {
+        !(top->u5_ret&0x4) || reqs[16].excpt==11) || ((top->u5_ret&3)==1)!=(reqs[16].excpt==11))) {
         printf("ret6 error;op=%i;ret=%x:%x\n",
         reqs[16].op,
         top->u5_ret*2,reqs[16].flags);
         rtn=false; 
     }
     if (reqs[17].en && (!((top->u2_ret>>3)==reqs[17].flags || 
-        !(top->u2_ret&0x4)) || ((top->u2_ret&3)!=1)!=(reqs[17].excpt==11))) {
+        !(top->u2_ret&0x4) || reqs[17].excpt==11) || ((top->u2_ret&3)==1)!=(reqs[17].excpt==11))) {
         printf("ret7 error;op=%i;ret=%x:%x\n",
         reqs[17].op,
         top->u2_ret*2,reqs[17].flags);
         rtn=false; 
     }
     if (reqs[18].en && (!((top->u4_ret>>3)==reqs[18].flags || 
-        !(top->u4_ret&0x4)) || ((top->u4_ret&3)!=1)!=(reqs[18].excpt==11))) {
+        !(top->u4_ret&0x4) || reqs[18].excpt==11) || ((top->u4_ret&3)==1)!=(reqs[18].excpt==11))) {
         printf("ret8 error;op=%i;ret=%x:%x\n",
         reqs[18].op,
         top->u4_ret*2,reqs[18].flags);
         rtn=false; 
     }
     if (reqs[19].en && (!reqs[19].mul && !((top->u6_ret>>3)==reqs[19].flags || 
-        !(top->u6_ret&0x4)) || ((top->u6_ret&3)!=1)!=(reqs[19].excpt==11))) {
+        !(top->u6_ret&0x4) || reqs[19].excpt==11) || ((top->u6_ret&3)==1)!=(reqs[19].excpt==11))) {
         printf("ret9 error;op=%i;ret=%x:%x\n",
         reqs[19].op,
         top->u6_ret*2,reqs[19].flags);
