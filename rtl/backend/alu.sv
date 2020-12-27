@@ -469,7 +469,7 @@ module alu(clk,rst,except,except_thread,thread,operation,dataEn,nDataAlt,retData
           if (add_en) cin_seq_reg<=cin_seq[0];
           else if (operation[7:0]==`op_and64)
               cin_seq_reg<=cin_seq[1];
-          else cin_seq_reg<=cin_seq[2];
+          else cin_seq_reg<=cin_seq[2]|cmov_en;
 
           is_ptr_reg<=is_ptr;       
 
