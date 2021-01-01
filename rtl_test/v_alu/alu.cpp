@@ -678,9 +678,18 @@ bool get_check(Vfu_alu *top, req *reqs) {
     }
     if ((reqs[16].en || reqs[16].alt) && (!((top->u5_ret>>3)==reqs[16].flags || 
         !(top->u5_ret&0x4) || reqs[16].excpt==11) || ((top->u5_ret&3)==1)!=(reqs[16].excpt==11))) {
-        printf("ret6 error;op=%i;ret=%x:%x\n",
+        printf("ret6 error;op=%i;ret=%x:%x;ex=%i\n",
         reqs[16].op,
-        top->u5_ret*2,reqs[16].flags);
+        top->u5_ret*2,reqs[16].flags,
+	((top->u5_ret&3)==1)!=(reqs[16].excpt==11));
+	if (((top->u5_ret&3)==1)!=(reqs[16].excpt==11)) {
+	    printf("A=%lx,B=%lx,A_p=%i,B_p=%i,soft=%i\n",
+		reqs[16].A,
+		reqs[16].B,
+		reqs[16].A_p,
+		reqs[16].B_p,
+		reqs[16].excpt);
+	}
         rtn=false; 
     }
     if (reqs[17].en && (!((top->u2_ret>>3)==reqs[17].flags || 
