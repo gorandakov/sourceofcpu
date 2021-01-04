@@ -353,8 +353,8 @@ module alu(clk,rst,except,except_thread,thread,operation,dataEn,nDataAlt,retData
     && cin_seq_reg|~is_ptr_reg ? flags_COASZP : 6'bz;
   assign retData[`except_flags]=nDataAlt_reg && ~shift_en_reg|NOSHIFT 
     && ~cin_seq_reg && is_ptr_reg ? 6'd11 : 6'bz;
-  assign retData[`except_status]=nDataAlt_reg && cin_seq_reg|~is_ptr_reg ? 2'd2 : 2'bz; //done
-  assign retData[`except_status]=nDataAlt_reg && ~cin_seq_reg & is_ptr_reg ? 2'd1 : 2'bz; //done
+  assign retData[`except_status]=nDataAlt_reg && cin_seq_reg|~is_ptr_reg && (~val2_sign64||val1_sign64||retOp[7:0]!=`op_sub64) ? 2'd2 : 2'bz; //done
+  assign retData[`except_status]=nDataAlt_reg && (~cin_seq_reg & is_ptr_reg || val2_sign64 & ~val1_sign64 & (retOp[7:0]==`op_sub64)) ? 2'd1 : 2'bz; //done
   assign retData[`except_setsFlags]=nDataAlt_reg ? isFlags_reg&dataEn_reg : 1'bz;
   
   assign retEn=nDataAlt_reg ? dataEn_reg & ~retOp[11] &~thrinh_reg : 1'bz; 
