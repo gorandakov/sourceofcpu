@@ -180,7 +180,9 @@ addie:
 	    }
             res1=res=res0;
 	    if (A_p && B_p) {
-		res1=res=res0=(((unsigned __int128) A&0xfffffffffff)+(((unsigned __int128)~B)+(one>>63))&0xffffffffffful);
+		res1=res=
+	        res0=(((unsigned __int128) A&0xfffffffffff)+(((unsigned __int128)~B)&0xffffffffffful))+(one>>63);
+		res1=res=res0&0xfffffffffff;
 	    }
 	    if (!A_p && B_p) excpt=11;
 	    res_p=0;
@@ -188,6 +190,8 @@ addie:
 	    else flgPTR(res0^(one>>19));
             
             if (!(A_p && B_p)) flags|=((A1>=0&&B1<0&&res1<0) || (A1<0&&B1>0&&res1>0))<<4;
+            if ((A_p && B_p)) flags|=((!(A1&0x80000000000)&&(B1&0x80000000000)&&(res1&0x80000000000)) || 
+		((A1&0x80000000000)&&!(B1&0x80000000000)&&!(res1&0x80000000000)))<<4;
             flags|=(((A&0xf)-(B&0xf))&0x10)>>1;
             break;
             
@@ -462,7 +466,7 @@ void req::flg64(__int128 r) {
       ((r&0x20)>>5)^((r&0x40)>>6)^((r&0x80)>>7));
 }
 void req::flgPTR(__int128 r) {
-    flags=((r>>49)&0x20)|((r>>41)&0x4)|(((unsigned long long) r==0)<<1)|
+    flags=((r>>39)&0x20)|((r>>41)&0x4)|(((unsigned long long) r==0)<<1)|
       (1^(r&0x1)^((r&0x2)>>1)^((r&0x4)>>2)^((r&0x8)>>3)^((r&0x10)>>4)^
       ((r&0x20)>>5)^((r&0x40)>>6)^((r&0x80)>>7));
 }
@@ -684,6 +688,14 @@ bool get_check(Vfu_alu *top, req *reqs) {
         reqs[15].op,
         top->u3_ret*2,reqs[15].flags);
         rtn=false; 
+	if (((top->u3_ret&3)==1)!=(reqs[15].excpt==11) || 1) {
+	    printf("A=%lx,B=%lx,A_p=%i,B_p=%i,soft=%i\n",
+		reqs[15].A,
+		reqs[15].B,
+		reqs[15].A_p,
+		reqs[15].B_p,
+		reqs[15].excpt);
+	}
     }
     if ((reqs[16].en || reqs[16].alt) && (!((top->u5_ret>>3)==reqs[16].flags || 
         !(top->u5_ret&0x4) || reqs[16].excpt==11) || ((top->u5_ret&3)==1)!=(reqs[16].excpt==11))) {
@@ -692,7 +704,7 @@ bool get_check(Vfu_alu *top, req *reqs) {
         top->u5_ret*2,reqs[16].flags,
 	((top->u5_ret&3)==1)!=(reqs[16].excpt==11),
 	reqs[16].res);
-	if (((top->u5_ret&3)==1)!=(reqs[16].excpt==11)) {
+	if (((top->u5_ret&3)==1)!=(reqs[16].excpt==11) ||1) {
 	    printf("A=%lx,B=%lx,A_p=%i,B_p=%i,soft=%i\n",
 		reqs[16].A,
 		reqs[16].B,

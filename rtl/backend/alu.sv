@@ -142,6 +142,7 @@ module alu(clk,rst,except,except_thread,thread,operation,dataEn,nDataAlt,retData
   wire [63:0] ptr;
   reg [63:0] ptr_reg;
   reg is_ptr_reg;
+  reg is_ptr_sub;
 
   assign reg8flg=operation[10:8];
   assign smallOP=operation[7:0];
@@ -304,12 +305,12 @@ module alu(clk,rst,except,except_thread,thread,operation,dataEn,nDataAlt,retData
   assign flagSub8_OF=( ~flag8_SF) ? val1_sign8 & ~val2_sign8 : ~val1_sign8 & val2_sign8; 
    
 // flag assignment mux
-  assign flags_COASZP=((retOp==`op_add64) && isFlags_reg) ? {carryAdd64_reg,flagAdd64_OF,carryAdd4LL_reg,valRes_reg[63],flag64_ZF,flag8_PF} : 6'bz;
+  assign flags_COASZP=((retOp==`op_add64) && isFlags_reg) ? {carryAdd64_reg&~is_ptr_reg,flagAdd64_OF,carryAdd4LL_reg,valRes_reg[63],flag64_ZF,flag8_PF} : 6'bz;
   assign flags_COASZP=((retOp==`op_add32) && isFlags_reg) ? {carryAdd32_reg,flagAdd32_OF,carryAdd4LL_reg,valRes_reg[31],flag32_ZF,flag8_PF} : 6'bz;
   assign flags_COASZP=((retOp==`op_add16) && isFlags_reg) ? {carryAdd16_reg,flagAdd16_OF,carryAdd4LL_reg,valRes_reg[15],flag16_ZF,flag8_PF} : 6'bz;
   assign flags_COASZP=((retOp[7:0]==`op_add8 && ~retOp[11]) && isFlags_reg) ? {flagAdd8_CF,flagAdd8_OF,flagAdd8_AF,flag8_SF,flag8_ZF,flag8_PF} : 6'bz;
   
-  assign flags_COASZP=((retOp==`op_sub64) && isFlags_reg) ? {is_ptr_sub ? ~carryAdd44_reg : ~carryAdd64_reg,is_ptr_sub ? flagSub44_OF : flagSub64_OF,
+  assign flags_COASZP=((retOp==`op_sub64) && isFlags_reg) ? {is_ptr_sub ? ~carryAdd44_reg : ~carryAdd64_reg & ~is_ptr_reg,is_ptr_sub ? flagSub44_OF : flagSub64_OF,
 	  ~carryAdd4LL_reg,is_ptr_sub ? valRes_reg[43] : valRes_reg[63],flag64_ZF,flag8_PF} : 6'bz;
   assign flags_COASZP=((retOp==`op_sub32) && isFlags_reg) ? {~carryAdd32_reg,flagSub32_OF,~carryAdd4LL_reg,valRes_reg[31],flag32_ZF,flag8_PF} : 6'bz;
   assign flags_COASZP=((retOp==`op_sub16) && isFlags_reg) ? {~carryAdd16_reg,flagSub16_OF,~carryAdd4LL_reg,valRes_reg[15],flag16_ZF,flag8_PF} : 6'bz;
@@ -391,6 +392,7 @@ module alu(clk,rst,except,except_thread,thread,operation,dataEn,nDataAlt,retData
           isFlags_reg<=1'b1;
           retOp<={OPERATION_WIDTH{1'b0}};
 
+          carryAdd44_reg<=1'b0;
           carryAdd64_reg<=1'b0;
           carryAdd32_reg<=1'b0;
           carryAdd16_reg<=1'b0;
@@ -442,6 +444,7 @@ module alu(clk,rst,except,except_thread,thread,operation,dataEn,nDataAlt,retData
           retOp<=operation;
 
           carryAdd64_reg<=carryAdd64;
+          carryAdd44_reg<=carryAdd44;
           carryAdd32_reg<=carryAdd32;
           carryAdd16_reg<=carryAdd16;
           carryAdd4LL_reg <=carryAdd4LL;

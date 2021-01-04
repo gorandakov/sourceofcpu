@@ -60,4 +60,6 @@
 `define csrfpu_rmodeE 27:25
 `define csrfpu_clip_IEEE 28
 `define csrfpu_daz 29
+`define csrfpu_ext_BIAS 63:48
+`define csrfpu_dbl_BIAS 47:36
 
