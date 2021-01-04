@@ -553,17 +553,17 @@ module fu_alu(
 
   alu alu0(clk,rst,except,1'b0,1'b0,u1_op_reg,u1_clkEn_reg,1'b1,
     u1_ret,u1_rten,uu_A1,uu_B1,uu_S1,FU4);
-  alu #(1'b1)  alu1(clk,rst,except,1'b0,1'b0,u2_op_reg,u2_clkEn_reg,1'b1,
+  alu #(1'b0)  alu1(clk,rst,except,1'b0,1'b0,u2_op_reg,u2_clkEn_reg,1'b1,
     u2_ret,u2_rten,uu_A2,uu_B2,uu_S2,FU7);
   
   alu alu2(clk,rst,except,1'b0,1'b0,u3_op_reg,u3_clkEn_reg,1'b1,
     u3_ret,u3_rten,uu_A3,uu_B3,uu_S3,FU5);
-  alu #(1'b1)  alu3(clk,rst,except,1'b0,1'b0,u4_op_reg,u4_clkEn_reg,1'b1,
+  alu #(1'b0)  alu3(clk,rst,except,1'b0,1'b0,u4_op_reg,u4_clkEn_reg,1'b1,
     u4_ret,u4_rten,uu_A4,uu_B4,uu_S4,FU8);
   
   alu alu4(clk,rst,except,1'b0,1'b0,u5_op_reg,u5_clkEn_reg,u5_nDataAlt&&(&nDataAlt),
     u5_ret,u5_rten,uu_A5,uu_B5,uu_S5,FU6);
-  alu #(1'b1)  alu5(clk,rst,except,1'b0,1'b0,u6_op_reg,u6_clkEn_reg,1'b1,
+  alu #(1'b0)  alu5(clk,rst,except,1'b0,1'b0,u6_op_reg,u6_clkEn_reg,1'b1,
     u6_ret,u6_rten,uu_A6,uu_B6,uu_S6,FU9);
   
   alu_shift sh2_alu(

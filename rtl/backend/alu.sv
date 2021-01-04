@@ -75,6 +75,7 @@ module alu(clk,rst,except,except_thread,thread,operation,dataEn,nDataAlt,retData
         
   
   reg val1_sign44;
+  reg val1_sign65;
   reg val1_sign64;
   reg val1_sign32;
   reg val1_sign16;
@@ -82,6 +83,7 @@ module alu(clk,rst,except,except_thread,thread,operation,dataEn,nDataAlt,retData
 
           
   reg val2_sign64;
+  reg val2_sign65;
   reg val2_sign44;
   reg val2_sign32;
   reg val2_sign16;
@@ -350,11 +352,11 @@ module alu(clk,rst,except,except_thread,thread,operation,dataEn,nDataAlt,retData
   //other stuff
   
   assign retData[`except_flags]=nDataAlt_reg && ~shift_en_reg|NOSHIFT 
-    && cin_seq_reg|~is_ptr_reg ? flags_COASZP : 6'bz;
+    && cin_seq_reg|~is_ptr_reg && (~val2_sign65||val1_sign65||retOp[7:0]!=`op_sub64)  ? flags_COASZP : 6'bz;
   assign retData[`except_flags]=nDataAlt_reg && ~shift_en_reg|NOSHIFT 
-    && ~cin_seq_reg && is_ptr_reg ? 6'd11 : 6'bz;
-  assign retData[`except_status]=nDataAlt_reg && cin_seq_reg|~is_ptr_reg && (~val2_sign64||val1_sign64||retOp[7:0]!=`op_sub64) ? 2'd2 : 2'bz; //done
-  assign retData[`except_status]=nDataAlt_reg && (~cin_seq_reg & is_ptr_reg || val2_sign64 & ~val1_sign64 & (retOp[7:0]==`op_sub64)) ? 2'd1 : 2'bz; //done
+    && (~cin_seq_reg & is_ptr_reg || val2_sign65 & ~val1_sign65 & (retOp[7:0]==`op_sub64)) ? 6'd11 : 6'bz;
+  assign retData[`except_status]=nDataAlt_reg && cin_seq_reg|~is_ptr_reg && (~val2_sign65||val1_sign65||retOp[7:0]!=`op_sub64) ? 2'd2 : 2'bz; //done
+  assign retData[`except_status]=nDataAlt_reg && (~cin_seq_reg & is_ptr_reg || val2_sign65 & ~val1_sign65 & (retOp[7:0]==`op_sub64)) ? 2'd1 : 2'bz; //done
   assign retData[`except_setsFlags]=nDataAlt_reg ? isFlags_reg&dataEn_reg : 1'bz;
   
   assign retEn=nDataAlt_reg ? dataEn_reg & ~retOp[11] &~thrinh_reg : 1'bz; 
@@ -406,6 +408,7 @@ module alu(clk,rst,except,except_thread,thread,operation,dataEn,nDataAlt,retData
           carryAdd4HH_reg <=1'b0;
         
       
+          val1_sign65<=1'b0;
           val1_sign64<=1'b0;
           val1_sign44<=1'b0;
           val1_sign32<=1'b0;
@@ -413,6 +416,7 @@ module alu(clk,rst,except,except_thread,thread,operation,dataEn,nDataAlt,retData
           val1_sign8<=1'b0;
 
           val2_sign44<=1'b0;
+          val2_sign65<=1'b0;
           val2_sign64<=1'b0;
           val2_sign32<=1'b0;
           val2_sign16<=1'b0;
@@ -457,6 +461,7 @@ module alu(clk,rst,except,except_thread,thread,operation,dataEn,nDataAlt,retData
           carryAdd8HH_reg <=carryAdd8HH;
         
 
+          val1_sign65<=val1[64];
           val1_sign44<=val1[43];
           val1_sign64<=val1[63];
           val1_sign32<=val1[31];
@@ -464,6 +469,7 @@ module alu(clk,rst,except,except_thread,thread,operation,dataEn,nDataAlt,retData
           val1_sign8<=operation[9] ? val1[15] : val1[7];
 
           val2_sign44<=val2[43];
+          val2_sign65<=val2[64];
           val2_sign64<=val2[63];
           val2_sign32<=val2[31];
           val2_sign16<=val2[15];

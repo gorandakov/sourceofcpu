@@ -680,6 +680,14 @@ bool get_check(Vfu_alu *top, req *reqs) {
         printf("ret4 error;op=%i;ret=%x:%x\n",
         reqs[14].op,
         top->u1_ret*2,reqs[14].flags);
+	if (((top->u1_ret&3)==1)!=(reqs[14].excpt==11) || 1) {
+	    printf("A=%lx,B=%lx,A_p=%i,B_p=%i,soft=%i\n",
+		reqs[14].A,
+		reqs[14].B,
+		reqs[14].A_p,
+		reqs[14].B_p,
+		reqs[14].excpt);
+	}
         rtn=false; 
     }
     if (reqs[15].en && (!((top->u3_ret>>3)==reqs[15].flags || 
