@@ -179,11 +179,13 @@ addie:
 		goto addie; 
 	    }
             res1=res=res0;
-	    if (A_p && B_p) res1=res=res0&=0xfffffffffff;
+	    if (A_p && B_p) {
+		res1=res=res0=(((unsigned __int128) A&0xfffffffffff)+(((unsigned __int128)~B)+(one>>63))&0xffffffffffful);
+	    }
 	    if (!A_p && B_p) excpt=11;
 	    res_p=0;
             if (!(A_p && B_p)) flg64(res0^(one<<1));
-	    else flgPTR(res0);
+	    else flgPTR(res0^(one>>19));
             
             if (!(A_p && B_p)) flags|=((A1>=0&&B1<0&&res1<0) || (A1<0&&B1>0&&res1>0))<<4;
             flags|=(((A&0xf)-(B&0xf))&0x10)>>1;
