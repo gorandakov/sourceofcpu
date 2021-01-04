@@ -623,7 +623,7 @@ endmodule
 
 
 
-module addsub_alu(a,b,out,sub,en,ben,cout,cout4,cout32,cout_sec,ndiff);
+module addsub_alu(a,b,out,sub,en,ben,cout,cout4,cout32,cout_sec,ndiff,cout44);
   parameter WIDTH=64;
   input [64:0] a;
   input [64:0] b;
@@ -636,6 +636,7 @@ module addsub_alu(a,b,out,sub,en,ben,cout,cout4,cout32,cout_sec,ndiff);
   output cout32;
   output [2:0] cout_sec;
   output ndiff;
+  output cout44;
   
 
   wire [WIDTH-1:0] nP0;
@@ -840,6 +841,8 @@ module addsub_alu(a,b,out,sub,en,ben,cout,cout4,cout32,cout_sec,ndiff);
 */
     if (WIDTH>=32) assign cout32=C[31];
     else assign cout32=1'b0;
+    if (WIDTH>=44) assign cout44=C[43];
+    else assign cout44=1'b0;
 	
 	if (1)
 	  begin

@@ -44,6 +44,7 @@ module alu(clk,rst,except,except_thread,thread,operation,dataEn,nDataAlt,retData
   reg flagAdd8_AF;
 
   
+  wire carryAdd44;
   wire carryAdd64;
   wire carryAdd32;
   wire carryAdd16;
@@ -59,6 +60,7 @@ module alu(clk,rst,except,except_thread,thread,operation,dataEn,nDataAlt,retData
   
   
   
+  reg carryAdd44_reg;
   reg carryAdd64_reg;
   reg carryAdd32_reg;
   reg carryAdd16_reg;
@@ -72,6 +74,7 @@ module alu(clk,rst,except,except_thread,thread,operation,dataEn,nDataAlt,retData
   reg carryAdd4HH_reg;
         
   
+  reg val1_sign44;
   reg val1_sign64;
   reg val1_sign32;
   reg val1_sign16;
@@ -79,6 +82,7 @@ module alu(clk,rst,except,except_thread,thread,operation,dataEn,nDataAlt,retData
 
           
   reg val2_sign64;
+  reg val2_sign44;
   reg val2_sign32;
   reg val2_sign16;
   reg val2_sign8;
@@ -89,6 +93,7 @@ module alu(clk,rst,except,except_thread,thread,operation,dataEn,nDataAlt,retData
   wire flagAdd8_OF;
           
   wire flagSub64_OF;
+  wire flagSub44_OF;
   wire flagSub32_OF;
   wire flagSub16_OF;
   wire flagSub8_OF;
@@ -272,7 +277,8 @@ module alu(clk,rst,except,except_thread,thread,operation,dataEn,nDataAlt,retData
     .cout4(carryAdd4LL),
     .cout32(carryAdd32),
     .cout_sec(cin_seq),
-    .ndiff()
+    .ndiff(),
+    .cout44(carryAdd44)
     );
 
   except_jump_cmp jcmp_mod (valS,jumpType,doJmp);
@@ -291,6 +297,7 @@ module alu(clk,rst,except,except_thread,thread,operation,dataEn,nDataAlt,retData
   assign flagAdd16_OF=val1_sign16 & val2_sign16 & ~valRes_reg[15] | ~val1_sign16 & ~val2_sign16 & valRes_reg[15];  
   assign flagAdd8_OF=( ~flag8_SF) ? val1_sign8 & val2_sign8  : ~val1_sign8 & ~val2_sign8;  
 
+  assign flagSub44_OF=val1_sign44 & ~val2_sign44 & ~valRes_reg[43] | ~val1_sign44 & val2_sign44 & valRes_reg[43];  
   assign flagSub64_OF=val1_sign64 & ~val2_sign64 & ~valRes_reg[63] | ~val1_sign64 & val2_sign64 & valRes_reg[63];  
   assign flagSub32_OF=val1_sign32 & ~val2_sign32 & ~valRes_reg[31] | ~val1_sign32 & val2_sign32 & valRes_reg[31];  
   assign flagSub16_OF=val1_sign16 & ~val2_sign16 & ~valRes_reg[15] | ~val1_sign16 & val2_sign16 & valRes_reg[15];  
@@ -302,7 +309,8 @@ module alu(clk,rst,except,except_thread,thread,operation,dataEn,nDataAlt,retData
   assign flags_COASZP=((retOp==`op_add16) && isFlags_reg) ? {carryAdd16_reg,flagAdd16_OF,carryAdd4LL_reg,valRes_reg[15],flag16_ZF,flag8_PF} : 6'bz;
   assign flags_COASZP=((retOp[7:0]==`op_add8 && ~retOp[11]) && isFlags_reg) ? {flagAdd8_CF,flagAdd8_OF,flagAdd8_AF,flag8_SF,flag8_ZF,flag8_PF} : 6'bz;
   
-  assign flags_COASZP=((retOp==`op_sub64) && isFlags_reg) ? {~carryAdd64_reg,flagSub64_OF,~carryAdd4LL_reg,valRes_reg[63],flag64_ZF,flag8_PF} : 6'bz;
+  assign flags_COASZP=((retOp==`op_sub64) && isFlags_reg) ? {is_ptr_sub ? ~carryAdd44_reg : ~carryAdd64_reg,is_ptr_sub ? flagSub44_OF : flagSub64_OF,
+	  ~carryAdd4LL_reg,is_ptr_sub ? valRes_reg[43] : valRes_reg[63],flag64_ZF,flag8_PF} : 6'bz;
   assign flags_COASZP=((retOp==`op_sub32) && isFlags_reg) ? {~carryAdd32_reg,flagSub32_OF,~carryAdd4LL_reg,valRes_reg[31],flag32_ZF,flag8_PF} : 6'bz;
   assign flags_COASZP=((retOp==`op_sub16) && isFlags_reg) ? {~carryAdd16_reg,flagSub16_OF,~carryAdd4LL_reg,valRes_reg[15],flag16_ZF,flag8_PF} : 6'bz;
   assign flags_COASZP=((retOp[7:0]==`op_sub8 && ~retOp[11]) && isFlags_reg) ? {flagAdd8_CF,flagSub8_OF,flagAdd8_AF,flag8_SF,flag8_ZF,flag8_PF} : 6'bz;
@@ -397,10 +405,12 @@ module alu(clk,rst,except,except_thread,thread,operation,dataEn,nDataAlt,retData
         
       
           val1_sign64<=1'b0;
+          val1_sign44<=1'b0;
           val1_sign32<=1'b0;
           val1_sign16<=1'b0;
           val1_sign8<=1'b0;
 
+          val2_sign44<=1'b0;
           val2_sign64<=1'b0;
           val2_sign32<=1'b0;
           val2_sign16<=1'b0;
@@ -422,6 +432,7 @@ module alu(clk,rst,except,except_thread,thread,operation,dataEn,nDataAlt,retData
           except_thread_reg<=1'b0;
           cin_seq_reg<=1'b0;
           is_ptr_reg<=1'b0;
+	  is_ptr_sub<=1'b0;
         end
       else
         begin
@@ -443,11 +454,13 @@ module alu(clk,rst,except,except_thread,thread,operation,dataEn,nDataAlt,retData
           carryAdd8HH_reg <=carryAdd8HH;
         
 
+          val1_sign44<=val1[43];
           val1_sign64<=val1[63];
           val1_sign32<=val1[31];
           val1_sign16<=val1[15];
           val1_sign8<=operation[9] ? val1[15] : val1[7];
 
+          val2_sign44<=val2[43];
           val2_sign64<=val2[63];
           val2_sign32<=val2[31];
           val2_sign16<=val2[15];
@@ -472,6 +485,7 @@ module alu(clk,rst,except,except_thread,thread,operation,dataEn,nDataAlt,retData
           else cin_seq_reg<=cin_seq[2]|cmov_en;
 
           is_ptr_reg<=is_ptr;       
+          is_ptr_sub<=val1[64]&val2[64]&is_sub;
 
           assert(valRes1==valRes1);
           assert(valRes2==valRes2);
