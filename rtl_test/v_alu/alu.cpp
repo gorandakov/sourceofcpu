@@ -178,12 +178,13 @@ addie:
 		goto addie; 
 	    }
             res1=res=res0;
-	    if (A_p && B_p) res&=0xfffffffffff;
-	    if (~A_p && B_p) excpt=11;
+	    if (A_p && B_p) res1=res=res0&=0xfffffffffff;
+	    if (!A_p && B_p) excpt=11;
 	    res_p=0;
-            flg64(res0^(one<<1));
+            if (!(A_p && B_p)) flg64(res0^(one<<1));
+	    else flg64(res0);
             
-            flags|=((A1>=0&&B1<0&&res1<0) || (A1<0&&B1>0&&res1>0))<<4;
+            if (!(A_p && B_p)) flags|=((A1>=0&&B1<0&&res1<0) || (A1<0&&B1>0&&res1>0))<<4;
             flags|=(((A&0xf)-(B&0xf))&0x10)>>1;
             break;
             
@@ -678,10 +679,11 @@ bool get_check(Vfu_alu *top, req *reqs) {
     }
     if ((reqs[16].en || reqs[16].alt) && (!((top->u5_ret>>3)==reqs[16].flags || 
         !(top->u5_ret&0x4) || reqs[16].excpt==11) || ((top->u5_ret&3)==1)!=(reqs[16].excpt==11))) {
-        printf("ret6 error;op=%i;ret=%x:%x;ex=%i\n",
+        printf("ret6 error;op=%i;ret=%x:%x;ex=%i;res=%llx\n",
         reqs[16].op,
         top->u5_ret*2,reqs[16].flags,
-	((top->u5_ret&3)==1)!=(reqs[16].excpt==11));
+	((top->u5_ret&3)==1)!=(reqs[16].excpt==11),
+	reqs[16].res);
 	if (((top->u5_ret&3)==1)!=(reqs[16].excpt==11)) {
 	    printf("A=%lx,B=%lx,A_p=%i,B_p=%i,soft=%i\n",
 		reqs[16].A,
