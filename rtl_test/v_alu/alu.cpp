@@ -33,6 +33,7 @@ class req {
     unsigned en;
     unsigned num[3];
     void gen(bool alt_, bool mul_, bool can_shift, req *prev1=NULL);
+    void flgPTR(__int128 r);
     void flg64(__int128 r);
     void flg32(__int128 r);
     void flgM64(unsigned long long r, bool big=0);
@@ -182,7 +183,7 @@ addie:
 	    if (!A_p && B_p) excpt=11;
 	    res_p=0;
             if (!(A_p && B_p)) flg64(res0^(one<<1));
-	    else flg64(res0);
+	    else flgPTR(res0);
             
             if (!(A_p && B_p)) flags|=((A1>=0&&B1<0&&res1<0) || (A1<0&&B1>0&&res1>0))<<4;
             flags|=(((A&0xf)-(B&0xf))&0x10)>>1;
@@ -455,6 +456,11 @@ addie:
 
 void req::flg64(__int128 r) {
     flags=((r>>59)&0x20)|((r>>61)&0x4)|(((unsigned long long) r==0)<<1)|
+      (1^(r&0x1)^((r&0x2)>>1)^((r&0x4)>>2)^((r&0x8)>>3)^((r&0x10)>>4)^
+      ((r&0x20)>>5)^((r&0x40)>>6)^((r&0x80)>>7));
+}
+void req::flgPTR(__int128 r) {
+    flags=((r>>49)&0x20)|((r>>41)&0x4)|(((unsigned long long) r==0)<<1)|
       (1^(r&0x1)^((r&0x2)>>1)^((r&0x4)>>2)^((r&0x8)>>3)^((r&0x10)>>4)^
       ((r&0x20)>>5)^((r&0x40)>>6)^((r&0x80)>>7));
 }
