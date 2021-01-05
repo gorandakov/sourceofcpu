@@ -136,6 +136,7 @@ module alu(clk,rst,except,except_thread,thread,operation,dataEn,nDataAlt,retData
   reg except_thread_reg;
   wire logic_en,spec1_en,spec2_en;
   wire cmov_en;
+  reg logic_en_reg;
 
   wire [2:0] cin_seq;
   reg cin_seq_reg;
@@ -161,9 +162,9 @@ module alu(clk,rst,except,except_thread,thread,operation,dataEn,nDataAlt,retData
   assign val1One[2]=|val1[31:16];
   assign val1One[3]=|val1[63:32];
   
-  assign val_or=val1[63:0]|val2[63:0];
-  assign val_xor=val1[63:0]^val2[63:0];
-  assign val_and=val1[63:0]&val2[63:0];
+  assign val_or={is_ptr ? ptr[63:44] : val1[63:44]|val2[63:44],val1[43:0]|val2[43:0]};
+  assign val_xor={is_ptr ? ptr[63:44] : val1[63:44]^val2[63:44],val1[43:0]^val2[43:0]};
+  assign val_and={is_ptr ? ptr[63:44] : val1[63:44]&val2[63:44],val1[43:0]&val2[43:0]};
   
   assign valRes=(add_en||shift_en&~NOSHIFT||~nDataAlt) ? 65'bz : {is_ptr,valRes2};
   assign valRes2[63:0]=(operation[11] || ~nDataAlt) ? 64'b0: 64'bz;
@@ -352,11 +353,15 @@ module alu(clk,rst,except,except_thread,thread,operation,dataEn,nDataAlt,retData
   //other stuff
   
   assign retData[`except_flags]=nDataAlt_reg && ~shift_en_reg|NOSHIFT 
-    && cin_seq_reg|~is_ptr_reg && (~val2_sign65||val1_sign65||retOp[7:0]!=`op_sub64)  ? flags_COASZP : 6'bz;
+    && cin_seq_reg|~is_ptr_reg && (~val2_sign65||val1_sign65||retOp[7:0]!=`op_sub64) &&
+    (!val1_sign65 || !val2_sign65 || !logic_en_reg)  ? flags_COASZP : 6'bz;
   assign retData[`except_flags]=nDataAlt_reg && ~shift_en_reg|NOSHIFT 
-    && (~cin_seq_reg & is_ptr_reg || val2_sign65 & ~val1_sign65 & (retOp[7:0]==`op_sub64)) ? 6'd11 : 6'bz;
-  assign retData[`except_status]=nDataAlt_reg && cin_seq_reg|~is_ptr_reg && (~val2_sign65||val1_sign65||retOp[7:0]!=`op_sub64) ? 2'd2 : 2'bz; //done
-  assign retData[`except_status]=nDataAlt_reg && (~cin_seq_reg & is_ptr_reg || val2_sign65 & ~val1_sign65 & (retOp[7:0]==`op_sub64)) ? 2'd1 : 2'bz; //done
+    && (~cin_seq_reg & is_ptr_reg || val2_sign65 & ~val1_sign65 & (retOp[7:0]==`op_sub64)
+    || val2_sign65 & val1_sign65 & logic_en_reg) ? 6'd11 : 6'bz;
+  assign retData[`except_status]=nDataAlt_reg && cin_seq_reg|~is_ptr_reg && (~val2_sign65||val1_sign65||retOp[7:0]!=`op_sub64) &&
+    (!val1_sign65 || !val2_sign65 || !logic_en_reg) ? 2'd2 : 2'bz; //done
+  assign retData[`except_status]=nDataAlt_reg && (~cin_seq_reg & is_ptr_reg || val2_sign65 & ~val1_sign65 & (retOp[7:0]==`op_sub64)
+    || val2_sign65 & val1_sign65 & logic_en_reg) ? 2'd1 : 2'bz; //done
   assign retData[`except_setsFlags]=nDataAlt_reg ? isFlags_reg&dataEn_reg : 1'bz;
   
   assign retEn=nDataAlt_reg ? dataEn_reg & ~retOp[11] &~thrinh_reg : 1'bz; 
@@ -439,6 +444,7 @@ module alu(clk,rst,except,except_thread,thread,operation,dataEn,nDataAlt,retData
           cin_seq_reg<=1'b0;
           is_ptr_reg<=1'b0;
 	  is_ptr_sub<=1'b0;
+	  logic_en_reg<=1'b0;
         end
       else
         begin
@@ -490,11 +496,13 @@ module alu(clk,rst,except,except_thread,thread,operation,dataEn,nDataAlt,retData
 
           if (add_en) cin_seq_reg<=cin_seq[0];
           else if (operation[7:0]==`op_and64)
-              cin_seq_reg<=cin_seq[1];
-          else cin_seq_reg<=cin_seq[2]|cmov_en;
+              cin_seq_reg<=cin_seq[2];
+          else cin_seq_reg<=cin_seq[1]|cmov_en;
 
           is_ptr_reg<=is_ptr;       
           is_ptr_sub<=val1[64]&val2[64]&is_sub;
+
+	  logic_en_reg<=logic_en;
 
           assert(valRes1==valRes1);
           assert(valRes2==valRes2);

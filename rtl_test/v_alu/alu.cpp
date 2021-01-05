@@ -204,9 +204,18 @@ addie:
             break;
 
             case 8:
-            res0=A&B;
-	    if (A_p && !B_p) { no_O=true; goto addie; }
-	    if (A_p || B_p) excpt=11;
+            res1=res=res0=A&B;
+	    if (A_p && B_p) excpt=11;
+	    if (A_p && ~B_p) { 
+		no_O=true; 
+                res1=res=res0=A&(B|0xfffff00000000000);
+		goto addie; 
+	    }
+	    if (~A_p && B_p) { 
+		no_O=true; 
+                res1=res=res0=B&(A|0xfffff00000000000);
+		goto addie; 
+	    }
             res1=res=res0;
             flg64(res0);
             break;
@@ -218,9 +227,18 @@ addie:
             break;
 
             case 12:
-            res0=A|B;
-	    if (A_p && !B_p) { no_O=true; goto addie; }
-	    if (A_p || B_p) excpt=11;
+            res1=res=res0=A|B;
+	    if (A_p && B_p) excpt=11;
+	    if (A_p && ~B_p) { 
+		no_O=true; 
+                res1=res=res0=A|(B&0xfffffffffff);
+		goto addie; 
+	    }
+	    if (~A_p && B_p) { 
+		no_O=true; 
+                res1=res=res0=B|(A&0xfffffffffff);
+		goto addie; 
+	    }
             res1=res=res0;
             flg64(res0);
             break;
@@ -232,8 +250,18 @@ addie:
             break;
 
             case 16:
-            res0=A^B;
-	    if (A_p || B_p) excpt=11;
+            res1=res=res0=A^B;
+	    if (A_p && B_p) excpt=11;
+	    if (A_p && ~B_p) { 
+		no_O=true; 
+                res1=res=res0=A^(B&0xfffffffffff);
+		goto addie; 
+	    }
+	    if (~A_p && B_p) { 
+		no_O=true; 
+                res1=res=res0=B^(A&0xfffffffffff);
+		goto addie; 
+	    }
             res1=res=res0;
             flg64(res0);
             break;

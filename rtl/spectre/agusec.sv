@@ -4,8 +4,8 @@ module agusec_check_upper3(
   input [63:0] ptr,
   input [39:0] A,
   input [39:0] B,
-  output [1:0] pos_ack,
-  output [1:0] neg_ack,
+  output [2:0] pos_ack,
+  output [2:0] neg_ack,
   output [1:0] pos_flip,
   output [1:0] neg_flip,
   output nhi_less
@@ -40,8 +40,10 @@ module agusec_check_upper3(
 
   assign pos_ack[1]=(do_pos && ~on_hi && diff|hiff) || max ; //c==1
   assign pos_ack[0]=do_pos || do_pos2 & ~on_hi & (diff||hiff) || max; //c==0
+  assign pos_ack[2]=do_pos;
   assign neg_ack[0]=do_neg && on_hi && diff; //c==0
   assign neg_ack[1]=do_neg || (do_neg2|do_neg1) & on_hi & diff; //c==1
+  assign neg_ack[2]=do_neg;
 
   assign pos_flip[0]=do_pos2 & ~do_pos & ~on_hi & diff ||
     do_pos & ~on_hi & hiff;
