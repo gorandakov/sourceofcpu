@@ -3,7 +3,7 @@
 class ptr {
 	public:
     unsigned long val;
-    bool get_bounds(unsigned long &low,unsigned long &hi,bool no_O) {
+    bool get_bounds(unsigned long &low,unsigned long &hi,bool no_O,ptr ptr2) {
 	unsigned exp=val>>59;
 	bool eqn=((val>>52)&0x7f)<((val>>45)&0x7f);
         unsigned long masque=eqn ? 0xfffffffffff : 0x1fffffffffff;	
@@ -24,7 +24,7 @@ class ptr {
 	    hiA=((0x1fffffffffc0<<exp)&
 	    (masque|0x1fff)&valH)|((64ul<<exp)-1);
 	}
-	return (val&masque)<=hiA && (val&masque)>=lowA;
+	return (ptr2.val&masque)<=hiA && (ptr2.val&masque)>=lowA;
     }
     void set_bounds(unsigned long low,unsigned long hi) {
         unsigned long exp=31;

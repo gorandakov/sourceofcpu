@@ -25,19 +25,19 @@ module agusec_check_upper3(
   wire hiff=~AGU && &ptr[`ptr_hi];
   wire max=&exp;
 
-  assign posx[3]=~&exp[4:3];
-  assign posx[2]=~exp[4];
+  assign posx[3]=&exp[4:3];
+  assign posx[2]=exp[4];
   assign posx[1]=~|exp[4:3];
   assign posx[0]=1'b0;
   
-  assign msk[0]=~|exp[2:0];
-  assign msk[1]=~|exp[2:1];
-  assign msk[2]=~exp[2]&&~&exp[1:0];
-  assign msk[3]=~exp[2];
-  assign msk[4]=~exp[2]||~|exp[1:0];
-  assign msk[5]=~exp[2]||~exp[1];
-  assign msk[6]=~exp[2]||~&exp[1:0];
-  assign msk[7]=~&exp[2:0];
+  assign msk[0]=&exp[2:0];
+  assign msk[1]=~&exp[2:0];
+  assign msk[2]=exp[2:1]==2'b10 || exp[1:0]==2'b0;
+  assign msk[3]=exp[2:0]==3'b100 || ~exp[2];
+  assign msk[4]=~exp[2];
+  assign msk[5]=~exp[2]&&exp[1:0]!=2'b1;
+  assign msk[6]=~exp[2]&&~^exp[1:0];
+  assign msk[7]=~|exp[2:0];
 
   assign pos_ack[1]=(do_pos && ~on_hi && diff|hiff) || max ; //c==1
   assign pos_ack[0]=do_pos || do_pos2 & ~on_hi & (diff||hiff) || max; //c==0
@@ -84,10 +84,10 @@ module agusec_check_upper3(
         assign xpos0[p]= p!=exp[4:3] ||  ~|(O[p*8+8+:8]&msk);
         assign xpos2[p]= p!=exp[4:3] ||  ~|(O[p*8+9+:8]&msk);
         assign xpos3[p]= p!=exp[4:3] ||  ~|(O[p*8+1+:8]&msk);
-        assign xneg3[p]= p!=exp[4:3] ||  &(X[p*8+1+:8]|msk);
-        assign xneg0[p]= p!=exp[4:3] ||  &(X[p*8+8+:8]|msk);
-        assign xneg1[p]= p!=exp[4:3] ||  &(And[p*8+8+:8]|msk);
-        assign xneg2[p]= p!=exp[4:3] ||  &(X[p*8+9+:8]|msk);
+        assign xneg3[p]= p!=exp[4:3] ||  &(X[p*8+1+:8]|~msk);
+        assign xneg0[p]= p!=exp[4:3] ||  &(X[p*8+8+:8]|~msk);
+        assign xneg1[p]= p!=exp[4:3] ||  &(And[p*8+8+:8]|~msk);
+        assign xneg2[p]= p!=exp[4:3] ||  &(X[p*8+9+:8]|~msk);
     end
     assign do_pos=&pos0 && &xpos0;
     assign do_pos2=&pos2 && &xpos2;

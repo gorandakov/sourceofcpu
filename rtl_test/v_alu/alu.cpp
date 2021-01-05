@@ -120,10 +120,11 @@ addie:
 	    if (A_p || B_p) {
 		res1=(res=res0)&0xfffffffffff;
 		unsigned long low,hi;
-		ptr p;
+		ptr p,p2;
 		p.val=pttr;
+		p2.val=res;
 
-		if (!p.get_bounds(low,hi,no_O)) {
+		if (!p.get_bounds(low,hi,no_O,p2)) {
 		    excpt=11;
 		    break;
 		}
