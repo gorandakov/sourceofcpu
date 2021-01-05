@@ -502,7 +502,8 @@ module alu(clk,rst,except,except_thread,thread,operation,dataEn,nDataAlt,retData
           is_ptr_reg<=is_ptr;       
           is_ptr_sub<=val1[64]&val2[64]&is_sub;
 
-	  logic_en_reg<=logic_en;
+	  logic_en_reg<=(operation[7:0]==`op_and64) || (operation[7:0]==`op_or64) || (operation[7:0]==`op_xor64);
+	  //$display("LL ",logic_en_reg," ",val1_sign65," ",val2_sign65);
 
           assert(valRes1==valRes1);
           assert(valRes2==valRes2);

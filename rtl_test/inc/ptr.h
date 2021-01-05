@@ -7,14 +7,14 @@ class ptr {
 	unsigned exp=val>>59;
 	bool eqn=((val>>52)&0x7f)<((val>>45)&0x7f);
         unsigned long masque=eqn ? 0xfffffffffff : 0x1fffffffffff;	
-	unsigned long valL=(((val>>44)&1) || eqn) ? val&masque : ((val&0xfffffffffff)-(1ul<<(exp+13)));
+	unsigned long valL=(((val>>44)&1) || eqn) ? val&0xfffffffffff : ((val&0xfffffffffff)-(1ul<<(exp+13)));
 	unsigned long valH=(!((val>>44)&1) || eqn) ? val&masque : ((val&0xfffffffffff)+(1ul<<(exp+13)));
-	low=(((val>>52)&0x7f)<<(exp+6))|((0x1fffffffe000<<exp)&
-	masque&valL);
+	low=(((val>>52)&0x7f)<<(exp+6))|((0xfffffffe000<<exp)&
+	0xfffffffffff&valL);
 	hi=(((val>>45)&0x7f)<<(exp+6))|((0x1fffffffe000<<exp)&
 	masque&valH);
-	unsigned long lowA=(0x0ul<<(exp+6))|((0x1fffffffe000<<exp)&
-	masque&valL);
+	unsigned long lowA=(0x0ul<<(exp+6))|((0xfffffffe000<<exp)&
+	0xfffffffffff&valL);
 	unsigned long hiA=(0x7ful<<(exp+6))|((0x1fffffffe000<<exp)&
 	masque&valH);
 	return (val&masque)<=hiA && (val&masque)>=lowA;

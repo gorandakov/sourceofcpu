@@ -79,7 +79,7 @@ void req::gen(bool alt_, bool mul_, bool can_shift, req *prev1) {
         A=prev1[which].res;
         A_p=prev1[which].res_p;
         depA=which-10;
-        if (!prev1[which].en || prev1[which].mul) depA=15;
+        if (!prev1[which].en || prev1[which].mul || prev1[which].excpt==11) depA=15;
     }
     if ((rand()&0x3f) || (!prev1)) {
     B=(rand()&0x1fffffull) | ((rand()&0x1fffffull)<<21) | 
@@ -90,7 +90,7 @@ void req::gen(bool alt_, bool mul_, bool can_shift, req *prev1) {
         B=prev1[which].res;
         B_p=prev1[which].res_p;
         depB=which-10;
-        if (!prev1[which].en || prev1[which].mul) depB=15;
+        if (!prev1[which].en || prev1[which].mul || prev1[which].excpt==11) depB=15;
     }
     if ((rand()&0x3f) || (!prev1)) {
        flags_in=rand()&0x3f;
@@ -100,7 +100,7 @@ void req::gen(bool alt_, bool mul_, bool can_shift, req *prev1) {
         which=which>=6 ? which-2 : which-6;
         flags_in=prev1[which+20].flags;
         depS=which;
-        if (!prev1[which+20].en || prev1[which+20].mul) depS=15;
+        if (!prev1[which+20].en || prev1[which+20].mul || prev1[which+20].excpt==11) depS=15;
     }
     if (!alt && !mul) {
         __int128 res0;
@@ -206,12 +206,12 @@ addie:
             case 8:
             res1=res=res0=A&B;
 	    if (A_p && B_p) excpt=11;
-	    if (A_p && ~B_p) { 
+	    if (A_p && !B_p) { 
 		no_O=true; 
                 res1=res=res0=A&(B|0xfffff00000000000);
 		goto addie; 
 	    }
-	    if (~A_p && B_p) { 
+	    if (!A_p && B_p) { 
 		no_O=true; 
                 res1=res=res0=B&(A|0xfffff00000000000);
 		goto addie; 
@@ -229,12 +229,12 @@ addie:
             case 12:
             res1=res=res0=A|B;
 	    if (A_p && B_p) excpt=11;
-	    if (A_p && ~B_p) { 
+	    if (A_p && !B_p) { 
 		no_O=true; 
                 res1=res=res0=A|(B&0xfffffffffff);
 		goto addie; 
 	    }
-	    if (~A_p && B_p) { 
+	    if (!A_p && B_p) { 
 		no_O=true; 
                 res1=res=res0=B|(A&0xfffffffffff);
 		goto addie; 
@@ -252,12 +252,12 @@ addie:
             case 16:
             res1=res=res0=A^B;
 	    if (A_p && B_p) excpt=11;
-	    if (A_p && ~B_p) { 
+	    if (A_p && !B_p) { 
 		no_O=true; 
                 res1=res=res0=A^(B&0xfffffffffff);
 		goto addie; 
 	    }
-	    if (~A_p && B_p) { 
+	    if (!A_p && B_p) { 
 		no_O=true; 
                 res1=res=res0=B^(A&0xfffffffffff);
 		goto addie; 
