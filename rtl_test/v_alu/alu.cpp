@@ -114,13 +114,16 @@ void req::gen(bool alt_, bool mul_, bool can_shift, req *prev1) {
             case 0:
             res0=((unsigned __int128)  A)+(unsigned __int128) B;
             if (A_p && B_p) excpt=11;
+	    if (A_p && !B_p) res0= (res0&0xfffffffffff)|(A&0xfffff00000000000);
+	    if (!A_p && B_p) res0= (res0&0xfffffffffff)|(B&0xfffff00000000000);
 addie:
 	    if (A_p || B_p) {
 		res1=(res=res0)&0xfffffffffff;
 		unsigned long low,hi;
 		ptr p;
 		p.val=pttr;
-		if (!p.get_bounds(low,hi)) {
+
+		if (!p.get_bounds(low,hi,no_O)) {
 		    excpt=11;
 		    break;
 		}
@@ -131,7 +134,7 @@ addie:
 			if ((res1&masq)!=(pttr&masq)) {
 			    excpt=11;
 			} else {
-			    res&=~(1ul<<44);
+			    //res&=~(1ul<<44);
 			}
 		    } else if ((p.val>>44)&1) {
 			unsigned long masq=(0xfffffffe000<<exp)&0xfffffffffff;

@@ -703,8 +703,8 @@ module addsub_alu(a,b,out,sub,en,ben,cout,cout4,cout32,cout_sec,ndiff,cout44);
   assign unptr=b[64] && ~sub ? a[43:4] : xb[43:4];
   
   assign cout_sec[0]=pos_ack[{1'b0,cout_sec0}] | neg_ack[{1'b0,cout_sec0}] && ~err;
-  assign cout_sec[1]=pos_ack[0] & ~err;
-  assign cout_sec[2]=neg_ack[1] & ~err;
+  assign cout_sec[1]=pos_ack[2] & ~err;
+  assign cout_sec[2]=neg_ack[2] & ~err;
 
   assign err=a[64] & b[64] & ~sub || ~a[64] & b[64] & sub;
 
