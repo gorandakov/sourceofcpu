@@ -21,10 +21,11 @@ module fun_fpu(
   parameter [1:0] INDEX=2'd2;
   parameter [0:0] H=1'b0;
   localparam SIMD_WIDTH=68; //half width
+  localparam [4:0] S={~H,3'b0};
   input clk;
   input rst;
-  input [16*~H+67:0] u1_A;
-  input [16*~H+67:0] u1_B;
+  input [S+67:0] u1_A;
+  input [S+67:0] u1_B;
   input [67:0] u1_Bx;
   input [3:0] u1_en;
   input [12:0] u1_op;
@@ -35,8 +36,8 @@ module fun_fpu(
   output [13:0] u1_ret;
   output [5:0] u1_flg;
 
-  input [16*~H+67:0] u2_A;
-  input [16*~H+67:0] u2_B;
+  input [S+67:0] u2_A;
+  input [S+67:0] u2_B;
   input [67:0] u2_Bx;
   input [3:0] u2_en;
   input [12:0] u2_op;
@@ -47,19 +48,19 @@ module fun_fpu(
   output [13:0] u2_ret;
  
 
-  input [16*~H+67:0] FUF0;
-  input [16*~H+67:0] FUF1;
-  input [16*~H+67:0] FUF2;
-  input [16*~H+67:0] FUF3;
-  inout [16*~H+67:0] FUF4;
-  inout [16*~H+67:0] FUF5;
-  inout [16*~H+67:0] FUF6;
-  inout [16*~H+67:0] FUF7;
-  inout [16*~H+67:0] FUF8;
-  inout [16*~H+67:0] FUF9;
+  input [S+67:0] FUF0;
+  input [S+67:0] FUF1;
+  input [S+67:0] FUF2;
+  input [S+67:0] FUF3;
+  inout [S+67:0] FUF4;
+  inout [S+67:0] FUF5;
+  inout [S+67:0] FUF6;
+  inout [S+67:0] FUF7;
+  inout [S+67:0] FUF8;
+  inout [S+67:0] FUF9;
   input [1:0] ALT_INP;
-  input [16*~H+67:0] ALTDATA0;
-  input [16*~H+67:0] ALTDATA1;
+  input [S+67:0] ALTDATA0;
+  input [S+67:0] ALTDATA1;
 
   reg  gxFADD_hi;
   reg  gxFADD_en;
@@ -131,7 +132,7 @@ module fun_fpu(
 
   reg [1:0] ALT_INP_reg;
 
-  rs_write_forward #(16*~H+68) u1_A_fwd(
+  rs_write_forward #(S+68) u1_A_fwd(
   clk,rst,
   ~u1_en[3],
   u1_A,uu_A1,
@@ -148,7 +149,7 @@ module fun_fpu(
   FUF9,FUF9_reg
   );
   
-  rs_write_forward #(16*~H+68) u1_B_fwd(
+  rs_write_forward #(S+68) u1_B_fwd(
   clk,rst,
   ~u1_en[3],
   u1_B,uu_B1,
@@ -165,7 +166,7 @@ module fun_fpu(
   FUF9,FUF9_reg
   );
   
-  rs_write_forward #(16*~H+68) u2_A_fwd(
+  rs_write_forward #(S+68) u2_A_fwd(
   clk,rst,
   ~u2_en[3],
   u2_A,uu_A2,
@@ -182,7 +183,7 @@ module fun_fpu(
   FUF9,FUF9_reg
   );
   
-  rs_write_forward #(16*~H+68) u2_B_fwd(
+  rs_write_forward #(S+68) u2_B_fwd(
   clk,rst,
   ~u2_en[3],
   u2_B,uu_B2,
@@ -209,7 +210,8 @@ module fun_fpu(
     fxDataAFL_REG[0][31:0]}),
   .B({gxDataBFL_reg[1][65],gxDataBFL_reg[1][15+68:68],gxDataBFL_reg[1][64:33],
     gxDataBFL_reg[1][31:0]}),
-  .isDBL(1'b1),
+  .isDBL(fxFADD_dbl|H),
+  .isEXT(fxFADD_ext&!H)
   .isSub(fxFADD_sub[H]),
   .isRSub(fxFADD_rsub),
   .invExcpt(fpcsr[`csrfpu_inv_excpt]),
@@ -384,7 +386,6 @@ module fun_fpu(
 	      gxDataBXL_reg[k]<={16*~H+SIMD_WIDTH{1'B0}};
 	  end
     end else begin
-          for (k=0;k<3;k=k+1) begin
 	      fxFADD_dbl=u1_op_reg[7:0]==`fop_addDL ||
 	        u1_op_reg[7:0]==`fop_addDH ||
 	        u1_op_reg[7:0]==`fop_addDP ||
@@ -457,13 +458,12 @@ module fun_fpu(
 	          fxDataAXL_reg[1]<=uu_A2;
 	          gxDataBXL_reg[0]<=gxDataBFL[0];
 	      end
-          end
     end
     for(k=0;k<2;k=k+1) begin
-        FOOF_reg[k1]<=FOOF[k1];
-        FOOFH_reg[k1]<=FOOFH[k1];
-        fxFCADD_raise_reg[k1]<=fxFCADD_raise[k1];
-        fxFADD_raise_reg[k1]<=fxFADD_raise[k1];
+        FOOF_reg[k]<=FOOF[k];
+        FOOFH_reg[k]<=FOOFH[k];
+        fxFCADD_raise_reg[k]<=fxFCADD_raise[k];
+        fxFADD_raise_reg[k]<=fxFADD_raise[k];
     end
   end
 
