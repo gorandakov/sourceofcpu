@@ -123,16 +123,16 @@ addie:
 		ptr p,p2;
 		p.val=pttr;
 		p2.val=res;
+		unsigned exp=p.val>>59;
 
-		if (!p.get_bounds(low,hi,no_O,p2)) {
+		if (!p.get_bounds(low,hi,no_O,p2) && exp!=31) {
 		    excpt=11;
 		    break;
 		}
 		if (res1>hi || res1<low) {
-		    unsigned exp=p.val>>59;
 		    if (((p.val>>52)&0x7f)<((p.val>>45)&0x7f)) {
 			unsigned long masq=(0xfffffffe000<<exp)&0xfffffffffff;
-			if ((res1&masq)!=(pttr&masq)) {
+			if ((res1&masq)!=(pttr&masq) && exp!=31) {
 			    excpt=11;
 			} else {
 			    //res&=~(1ul<<44);
@@ -140,7 +140,7 @@ addie:
 		    } else if ((p.val>>44)&1) {
 			unsigned long masq=(0xfffffffe000<<exp)&0xfffffffffff;
 			unsigned long delta=0x2000<<exp;
-			if ((res1&masq)!=(pttr&masq) && (res1&masq)!=((pttr+delta)&masq) ) {
+			if ((res1&masq)!=(pttr&masq) && (res1&masq)!=(((pttr&masq)+delta)&(masq|(masq<<1)))  && exp!=31) {
 			    excpt=11;
 			} else if ((res1&masq)!=(pttr&masq)) {
 		            res^=1ul<<44;
@@ -148,7 +148,7 @@ addie:
 		    } else {
 			unsigned long masq=(0xfffffffe000<<exp)&0xfffffffffff;
 			unsigned long delta=0x2000<<exp;
-			if ((res1&masq)!=(pttr&masq) && (res1&masq)!=((pttr-delta)&masq) ) {
+			if ((res1&masq)!=(pttr&masq) && (res1&masq)!=(((pttr&masq)-delta)&(masq|(masq>>1)))  && exp!=31) {
 			    excpt=11;
 			} else if ((res1&masq)!=(pttr&masq)) {
 		            res^=1ul<<44;
