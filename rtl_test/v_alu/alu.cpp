@@ -774,6 +774,14 @@ bool get_check(Vfu_alu *top, req *reqs) {
         reqs[19].op,
         top->u6_ret*2,reqs[19].flags);
         rtn=false; 
+	if (((top->u6_ret&3)==1)!=(reqs[19].excpt==11) || 1) {
+	    printf("A=%lx,B=%lx,A_p=%i,B_p=%i,soft=%i\n",
+		reqs[19].A,
+		reqs[19].B,
+		reqs[19].A_p,
+		reqs[19].B_p,
+		reqs[19].excpt);
+	}
     }
 
     if (reqs[6].alt) {
