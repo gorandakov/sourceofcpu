@@ -715,7 +715,7 @@ module addsub_alu(a,b,out,sub,en,ben,cout,cout4,cout32,cout_sec,ndiff,cout44);
   assign exbits=is_ptr ? ptr[63:44]^{19'b0,pos_flip[cout_sec0]|
   neg_flip[cout_sec0]} : 20'b0;
 
-  agusec_shift nih_mod(ptr[`ptr_exp],C[42:11],cout_sec0);
+  agusec_shift nih_mod(ptr[`ptr_exp],C[43:12],cout_sec0);
   agusec_check_upper3 hin_mod(ptr,unptr,{39'b0,cin},pos_ack,neg_ack,
     pos_flip,neg_flip,ndiff);
   
@@ -1274,7 +1274,7 @@ module add_agu(
   endgenerate
   adder_seq #(WIDTH) add_mod(tmp1,tmp2[WIDTH-1:0],out[43:0],c_s,1'b0,en,,,,);
   assign out[63:44]=en ? ptr[63:44] : 20'bz;
-  agusec_shift ssh_mod(ptr[`ptr_exp],c_s[42:11],cout_sec0);
+  agusec_shift ssh_mod(ptr[`ptr_exp],c_s[43:12],cout_sec0);
   agusec_check_upper3 #(1'b1) chk_mod(ptr,unptr[43:4],b[43:4],pos_ack,neg_ack,,,ndiff);
 endmodule
 
