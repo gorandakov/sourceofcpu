@@ -30,14 +30,14 @@ module agusec_check_upper3(
   assign posx[1]=~|exp[4:3];
   assign posx[0]=1'b0;
   
-  assign msk[0]=&exp[2:0];
-  assign msk[1]=~&exp[2:0];
-  assign msk[2]=exp[2:1]==2'b10 || exp[1:0]==2'b0;
-  assign msk[3]=exp[2:0]==3'b100 || ~exp[2];
-  assign msk[4]=~exp[2];
-  assign msk[5]=~exp[2]&&exp[1:0]!=2'b1;
-  assign msk[6]=~exp[2]&&~^exp[1:0];
-  assign msk[7]=~|exp[2:0];
+  assign msk[1]=&exp[2:0];
+  assign msk[2]=~&exp[2:0];
+  assign msk[3]=exp[2:1]==2'b10 || exp[1:0]==2'b0;
+  assign msk[4]=exp[2:0]==3'b100 || ~exp[2];
+  assign msk[5]=~exp[2];
+  assign msk[6]=~exp[2]&&exp[1:0]!=2'b1;
+  assign msk[7]=~exp[2]&&~^exp[1:0];
+  assign msk[0]=1'b0; //
 
   assign pos_ack[1]=(do_pos && ~on_hi && diff|hiff) || max ; //c==1
   assign pos_ack[0]=do_pos || do_pos2 & ~on_hi & (diff||hiff) || max; //c==0
@@ -77,7 +77,7 @@ module agusec_check_upper3(
         assign pos3[p]= ~posx[p] ||  ~|O[p*8+1+:8];
         assign neg0[p]= ~posx[p] ||  &X[p*8+8+:8];
         assign neg1[p]= ~posx[p] ||  &And[p*8+8+:8];
-        assign neg2[p]= ~posx[p] ||  &X[p*8+7+:8];
+        assign neg2[p]= ~posx[p] ||  &X[p*8+9+:8];
         assign neg3[p]= ~posx[p] ||  &X[p*8+1+:8];
        
         
@@ -87,7 +87,7 @@ module agusec_check_upper3(
         assign xneg3[p]= p!=exp[4:3] ||  &(X[p*8+1+:8]|~msk);
         assign xneg0[p]= p!=exp[4:3] ||  &(X[p*8+8+:8]|~msk);
         assign xneg1[p]= p!=exp[4:3] ||  &(And[p*8+8+:8]|~msk);
-        assign xneg2[p]= p!=exp[4:3] ||  &(X[p*8+7+:8]|~msk);
+        assign xneg2[p]= p!=exp[4:3] ||  &(X[p*8+9+:8]|~msk);
     end
     assign do_pos=&pos0 && &xpos0;
     assign do_pos2=&pos2 && &xpos2;
