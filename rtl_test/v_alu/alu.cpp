@@ -70,6 +70,7 @@ void req::gen(bool alt_, bool mul_, bool can_shift, req *prev1) {
     depA=15;
     depB=15;
     depS=15;
+    res_p=0;
     if ((rand()&0x3f) || (!prev1)) {
     A=(rand()&0x1fffffull) | ((rand()&0x1fffffull)<<21) | 
       ((rand()&0x3fffffull)<<42);
@@ -769,7 +770,7 @@ bool get_check(Vfu_alu *top, req *reqs) {
         top->u4_ret*2,reqs[18].flags);
         rtn=false; 
     }
-    if (reqs[19].en && (!reqs[19].mul && !((top->u6_ret>>3)==reqs[19].flags || 
+    if (reqs[19].en && !reqs[19].mul &&  (!((top->u6_ret>>3)==reqs[19].flags || 
         !(top->u6_ret&0x4) || reqs[19].excpt==11) || ((top->u6_ret&3)==1)!=(reqs[19].excpt==11))) {
         printf("ret9 error;op=%i;ret=%x:%x\n",
         reqs[19].op,
