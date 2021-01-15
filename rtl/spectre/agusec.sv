@@ -16,6 +16,7 @@ module agusec_check_upper3(
   wire [3:0] posx;
   wire do_pos,do_pos2,do_neg,do_neg2,do_neg1;
   wire do_pos3,do_neg3;
+  wire do_pos1;
   wire [7:0] msk;
   wire [40:0] O={1'b0,A|B};
   wire [40:0] X={1'b1,A^B};
@@ -42,8 +43,8 @@ module agusec_check_upper3(
   assign pos_ack[1]=(do_pos && ~on_hi && diff|hiff) || max ; //c==1
   assign pos_ack[0]=do_pos || do_pos2 & ~on_hi & (diff||hiff) || max; //c==0
   assign pos_ack[2]=do_pos3;
-  assign neg_ack[0]=do_neg && on_hi && diff; //c==0
-  assign neg_ack[1]=do_neg || (do_neg2|do_neg1) & on_hi & diff; //c==1
+  assign neg_ack[0]=do_neg && on_hi && diff && do_pos1; //c==0
+  assign neg_ack[1]=do_neg || (do_neg2|do_neg1) & on_hi & diff & do_pos1; //c==1
   assign neg_ack[2]=do_neg3;
 
   assign pos_flip[0]=do_pos2 & ~do_pos & ~on_hi & diff & ~max ||
@@ -57,6 +58,7 @@ module agusec_check_upper3(
   generate
     genvar p;
     wire [3:0] pos0;
+    wire [3:0] pos1;
     wire [3:0] pos2;
     wire [3:0] pos3;
     wire [3:0] neg2;
@@ -64,6 +66,7 @@ module agusec_check_upper3(
     wire [3:0] neg0;
     wire [3:0] neg3;
     wire [3:0] xpos0;
+    wire [3:0] xpos1;
     wire [3:0] xpos2;
     wire [3:0] xpos3;
     wire [3:0] xneg2;
@@ -73,6 +76,7 @@ module agusec_check_upper3(
     for(p=0;p<4;p=p+1) begin : offs
        
         assign pos0[p]= ~posx[p] ||  ~|O[p*8+8+:8];
+        assign pos1[p]= posx[p] &&  |O[p*8+8+:8];
         assign pos2[p]= ~posx[p] ||  ~|O[p*8+9+:8];
         assign pos3[p]= ~posx[p] ||  ~|O[p*8+1+:8];
         assign neg0[p]= ~posx[p] ||  &X[p*8+8+:8];
@@ -82,6 +86,7 @@ module agusec_check_upper3(
        
         
         assign xpos0[p]= p!=exp[4:3] ||  ~|(O[p*8+8+:8]&msk);
+        assign xpos1[p]= p==exp[4:3] &&   |(O[p*8+8+:8]&msk);
         assign xpos2[p]= p!=exp[4:3] ||  ~|(O[p*8+9+:8]&msk);
         assign xpos3[p]= p!=exp[4:3] ||  ~|(O[p*8+1+:8]&msk);
         assign xneg3[p]= p!=exp[4:3] ||  &(X[p*8+1+:8]|~msk);
@@ -90,6 +95,7 @@ module agusec_check_upper3(
         assign xneg2[p]= p!=exp[4:3] ||  &(X[p*8+9+:8]|~msk);
     end
     assign do_pos=&pos0 && &xpos0;
+    assign do_pos1=|pos1 || |xpos1;
     assign do_pos2=&pos2 && &xpos2;
     assign do_pos3=&pos0 && &xpos0 && &pos3 && &xpos3;
     assign do_neg=&neg0 && &xneg0;
