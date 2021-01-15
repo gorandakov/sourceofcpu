@@ -10,6 +10,7 @@ class ptr {
         unsigned long masqueL=eqn ? 0xfffffffe000 : 0xffffffff000;	
 	unsigned long valL=(((val>>44)&1) || eqn) ? val&0xfffffffffff : ((val&0xfffffffffff)-(1ul<<(exp+13))) & masqueL;
 	unsigned long valH=(!((val>>44)&1) || eqn) ? val&0xfffffffffff : ((val&0xfffffffffff)+(1ul<<(exp+13))) & masque;
+	if (valL>(val&0xfffffffffff) ) valL=0;
 	low=(((val>>52)&0x7f)<<(exp+6))|((0xffffffff000<<exp)&
 	masqueL&valL);
 	hi=(((val>>45)&0x7f)<<(exp+6))|((0x1fffffffe000<<exp)&
