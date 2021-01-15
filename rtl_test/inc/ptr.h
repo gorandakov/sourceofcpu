@@ -15,7 +15,7 @@ class ptr {
 	masqueL&valL);
 	hi=(((val>>45)&0x7f)<<(exp+6))|((0x1fffffffe000<<exp)&
 	masque&valH)|((64ul<<exp)-1);
-	unsigned long lowA=(0x0ul<<(exp+6))|((0xffffffff000<<exp)&
+	unsigned long lowA=(0x0ul<<(exp+6))|((0xfffffffe000<<exp)&
 	masqueL&valL);
 	unsigned long hiA=(0x7ful<<(exp+6))|((0x1fffffffe000<<exp)&
 	masque&valH)|((64ul<<exp)-1);
