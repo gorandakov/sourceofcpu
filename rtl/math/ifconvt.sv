@@ -104,14 +104,14 @@ module ifconv_mod(
               A_reg[t*8+:8] : 8'bz;
         assign medb=A_bank[t-7] ?
               A_last[t*8+:8] : 8'bz;
-        if (t<=4)
-            assign medb=A_bank[t+8-7] ?
-                  A_last[(t+8)*8+:8] : 8'bz;
+       // if (t<=4)
+       //     assign medb=A_bank[t+8-7] ?
+        //          A_last[(t+8)*8+:8] : 8'bz;
         assign medbin=A_bank[t-7] ?
               t[3:0] : 4'bz;
-        if (t<=4)
-            assign medbin=A_bank[t+8-7] ?
-                  t[3:0]+4'd8 : 4'bz;
+        //if (t<=4)
+        //    assign medbin=A_bank[t+8-7] ?
+        //          t[3:0]+4'd8 : 4'bz;
         assign endBits=medb_reg[t] ? medBits_reg[t-7+:64] : 64'bz;
         
         adder #(16)  add_mod({{9{medbin_reg[3]}},medbin_reg,t[2:0]},BIAS,

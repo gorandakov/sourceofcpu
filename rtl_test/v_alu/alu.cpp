@@ -118,15 +118,15 @@ void req::gen(bool alt_, bool mul_, bool can_shift, req *prev1) {
 	    if (A_p && !B_p) res0= (res0&0xfffffffffff)|(A&0xfffff00000000000);
 	    if (!A_p && B_p) res0= (res0&0xfffffffffff)|(B&0xfffff00000000000);
 addie:
+            ptr p,p2;
 	    if (A_p || B_p) {
 		res1=(res=res0)&0xfffffffffff;
 		unsigned long low,hi;
-		ptr p,p2;
 		p.val=pttr;
-		p2.val=res;
+		if (!no_O) p2.val=res;
 		unsigned exp=p.val>>59;
 
-		if (!p.get_bounds(low,hi,no_O,p2) && exp!=31) {
+		if (!p.get_bounds(low,hi,no_O,p2) && (exp!=31 || no_O)) {
 		    excpt=11;
 		    break;
 		}
@@ -215,11 +215,13 @@ addie:
 	    if (A_p && !B_p) { 
 		no_O=true; 
                 res1=res=res0=A&(B|0xfffff00000000000);
+		p2.val=B&0xfffffffffff;
 		goto addie; 
 	    }
 	    if (!A_p && B_p) { 
 		no_O=true; 
                 res1=res=res0=B&(A|0xfffff00000000000);
+		p2.val=A&0xfffffffffff;
 		goto addie; 
 	    }
             res1=res=res0;
@@ -238,11 +240,13 @@ addie:
 	    if (A_p && !B_p) { 
 		no_O=true; 
                 res1=res=res0=A|(B&0xfffffffffff);
+		p2.val=~B&0xfffffffffff;
 		goto addie; 
 	    }
 	    if (!A_p && B_p) { 
 		no_O=true; 
                 res1=res=res0=B|(A&0xfffffffffff);
+		p2.val=~A&0xfffffffffff;
 		goto addie; 
 	    }
             res1=res=res0;
@@ -261,11 +265,13 @@ addie:
 	    if (A_p && !B_p) { 
 		no_O=true; 
                 res1=res=res0=A^(B&0xfffffffffff);
+		p2.val=~B&0xfffffffffff;
 		goto addie; 
 	    }
 	    if (!A_p && B_p) { 
 		no_O=true; 
                 res1=res=res0=B^(A&0xfffffffffff);
+		p2.val=~A&0xfffffffffff;
 		goto addie; 
 	    }
             res1=res=res0;

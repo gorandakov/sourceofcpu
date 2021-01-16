@@ -21,9 +21,8 @@ class ptr {
 	masque&valH)|((64ul<<exp)-1);
 	if (no_O) {
 	    lowA=((0xfffffffffc0<<exp)&
-	    (0xfffffffffc0)&valL);
-	    hiA=((0x1fffffffffc0<<exp)&
-	    (masque|0x1fff)&valH)|((64ul<<exp)-1);
+	    (0xfffffffffc0));
+	    return (ptr2.val&lowA)==lowA;
 	}
 	return (ptr2.val&masque)<=hiA && (ptr2.val&masque)>=lowA;
     }
