@@ -133,25 +133,25 @@ addie:
 		if (res1>hi || res1<low) {
 		    if (((p.val>>52)&0x7f)<((p.val>>45)&0x7f)) {
 			unsigned long masq=(0xfffffffe000<<exp)&0xfffffffffff;
-			if ((res1&masq)!=(pttr&masq) && exp!=31) {
+			/*if ((res1&masq)!=(pttr&masq) && exp!=31) {
 			    excpt=11;
 			} else {
 			    //res&=~(1ul<<44);
-			}
+			}*/
 		    } else if ((p.val>>44)&1) {
 			unsigned long masq=(0xfffffffe000<<exp)&0xfffffffffff;
 			unsigned long delta=0x2000<<exp;
-			if ((res1&masq)!=(pttr&masq) && (res1&masq)!=(((pttr&masq)+delta)&(masq|(masq<<1)))  && exp!=31) {
-			    excpt=11;
-			} else if ((res1&masq)!=(pttr&masq)) {
+			/*if ((res1&masq)!=(pttr&masq) && (res1&masq)!=(((pttr&masq)+delta)&(masq|(masq<<1)))  && exp!=31) {
+			    excpt=11;*/
+			if ((res1&masq)!=(pttr&masq)) {
 		            res^=1ul<<44;
 			}
 		    } else {
 			unsigned long masq=(0xfffffffe000<<exp)&0xfffffffffff;
 			unsigned long delta=0x2000<<exp;
-			if ((res1&masq)!=(pttr&masq) && (res1&masq)!=(((pttr&masq)-delta)&(masq|(masq>>1)))  && exp!=31) {
-			    excpt=11;
-			} else if ((res1&masq)!=(pttr&masq)) {
+			/*if ((res1&masq)!=(pttr&masq) && (res1&masq)!=(((pttr&masq)-delta)&(masq|(masq>>1)))  && exp!=31) {
+			    excpt=11;*/
+			if ((res1&masq)!=(pttr&masq)) {
 		            res^=1ul<<44;
 			}
 		    }
