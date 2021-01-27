@@ -392,7 +392,8 @@
 `define mOp2_odd 116
 `define mOp2_addr_low 118:117
 `define mOp2_type 120:119
-`define mOp2_width 121
+`define mOp2_attr 124:121
+`define mOp2_width 125
 
 `define lsaddr_addrE 35:0
 `define lsaddr_addrO 71:36
