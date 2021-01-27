@@ -1187,7 +1187,7 @@ module smallInstr_decoder(
       trien[19]=magic[0] & isImmLoadStore;
       pport[19]=opcode_main[0] ? PORT_STORE : PORT_LOAD;
       if (opcode_main[7:1]==7'b1011000 && instr[10])
-          poperation[19][5:0]==6'd22;
+          poperation[19][5:0]=6'd22;
       else
           poperation[19][5:0]=( opcode_main[7:1]==7'b1011000) ? 
           {2'b10,instr[10:8],opcode_main[0]} : {1'b0,instr[11:8],opcode_main[0]};

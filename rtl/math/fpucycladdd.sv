@@ -147,7 +147,7 @@ module fpucadd(clk,rst,A,A_alt,B,and1,or1,copyA,prc_in,en,rmode,res,res_hi,res_a
           assign {res_alt[52:33],res_alt[31:0]}=prod_reg[105] ? prod_reg[104:53] :
               prod_reg[103:52];
           assign {res_alt[65],res_alt[64:53]}=prod_reg[105] ? {exp_exp1_reg3[15],sgn_reg3,exp_exp1_reg3[10:0]} : 
-              {exp_exp_reg3[15],sgn_reg3,exp_exp_reg3[10:0]} : 13'bz;
+              13'bz;
           assign res_alt[32]=1'b0;
 	  assign res_alt[67:66]=`ptype_dbl;
       end

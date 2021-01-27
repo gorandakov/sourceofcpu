@@ -25,6 +25,8 @@ module backend(
   bus_tlb_data,
   bus_tlb_en,
 
+  newAttr,
+
   rs0i0_rA,rs0i0_rA_use,rs0i0_rA_useF,rs0i0_rA_isV,rs0i0_rA_isAnyV,
   rs0i0_rB,rs0i0_rB_use,rs0i0_rB_useF,rs0i0_rB_isV,rs0i0_rB_isAnyV,rs0i0_useBConst,
   rs0i0_rT,rs0i0_rT_use,rs0i0_rT_useF,rs0i0_rT_isV, 
@@ -397,6 +399,8 @@ module backend(
   input req_tlbEn;
   output [`ctlbData_width-1:0] bus_tlb_data;
   output bus_tlb_en;
+
+  input [3:0] newAttr;
   
   input [IN_REG_WIDTH-1:0] rs0i0_rA;
   input rs0i0_rA_use;
@@ -883,6 +887,9 @@ module backend(
   reg [2:0] rs_rBW_useF_reg;
   reg [2:0] rs_rAW_useF_reg2;
   reg [2:0] rs_rBW_useF_reg2;
+
+  reg [3:0] newAttr_reg;
+  reg [3:0] newAttr_reg2;
 
   wire [2:0][IN_REG_WIDTH-1:0] rrfAW;
   wire [2:0][IN_REG_WIDTH-1:0] rrfBW;
@@ -1551,6 +1558,7 @@ module backend(
   wire [8:0][3:0] fuuFwdB;
   wire [8:0][3:0] fuuFwdS;
   wire [8:0] outThr;
+  wire [8:0][3:0] outAttr;
   wire [2:0] outLSflag;
   wire [2:0][3:0] fuFwdAH;
   wire [2:0][3:0] fuFwdBH;
@@ -4426,6 +4434,7 @@ module backend(
     .newOp0(rs_operation_reg[3*m+0]),.newPort0(rs_port_sch[3*m+0]),.newInstrIndex0({II_upper,rs_index_reg[3*m+0]}),.newLSQ0({LSQ_upper,rs_lsi_reg[m+0]}),
     .rsAlloc0(rs_en_reg[3*m+0]&~rs_alt_reg[m]),.newGazumpA0(gazumpA[3*m+0]),.newGazumpB0(gazumpB[3*m+0]),
     .newFunitA0(funA_reg[3*m+0]),.newFunitB0(funB_reg[3*m+0]),.newWQ0(WQR_reg[m]),.newLSFlag0(rs_ldst_flg_reg[2*m]),
+    .newAttr0(newAttr_reg2),
   .newDataA1(dataA[3*m+1]),.newDataB1(dataB[3*m+1]),.newDataC1(rs_const_reg[3*m+1][32:0]&{33{~rs_useBConst_reg[3*m+1]}}),.newDataS1(dataS),
     .newRegA1(regA_reg[3*m+1]|{9{~inflA[3*m+1]&~depA_reg[3*m+1]}}),
     .newRegB1(regB_reg[3*m+1]|{9{~inflB[3*m+1]&~depB_reg[3*m+1]}}),
@@ -4435,6 +4444,7 @@ module backend(
     .newOp1(rs_operation_reg[3*m+1]),.newPort1(rs_port_sch[3*m+1]),.newInstrIndex1({II_upper,rs_index_reg[3*m+1]}),.newLSQ1({LSQ_upper,rs_lsi_reg[m+3]}),
     .rsAlloc1(rs_en_reg[3*m+1]),.newGazumpA1(gazumpA[3*m+1]),.newGazumpB1(gazumpB[3*m+1]),.newGazumpS1(gazumpS),
     .newFunitA1(funA_reg[3*m+1]),.newFunitB1(funB_reg[3*m+1]),.newFunitS1(funS_reg[3*m+1]),.newLSFlag1(rs_ldst_flg_reg[2*m+1]),
+    .newAttr1(newAttr_reg2),
   .newDataA2(dataA[3*m+2]),.newDataB2(dataB[3*m+2]),.newDataS2(dataS),
     .newRegA2(regA_reg[3*m+2]|{9{~inflA[3*m+2]&~depA_reg[3*m+2]}}),
     .newRegB2(regB_reg[3*m+2]|{9{~inflB[3*m+2]&~depB_reg[3*m+2]}}),
@@ -4443,22 +4453,26 @@ module backend(
     .newOp2(rs_operation_reg[3*m+2]),.newPort2(rs_port_sch[3*m+2]),.newInstrIndex2({II_upper,rs_index_reg[3*m+2]}),
     .rsAlloc2(rs_en_reg[3*m+2]),.newGazumpA2(gazumpA[3*m+2]),.newGazumpB2(gazumpB[3*m+2]),.newGazumpS2(gazumpS),
     .newFunitA2(funA_reg[3*m+2]),.newFunitB2(funB_reg[3*m+2]),.newFunitS2(funS_reg[3*m+2]),
+    .newAttr2(newAttr_reg2),
 // wires to get values out of buffer
   .outDataA0(outDataA[3*m+0]),.outDataB0(outDataB[3*m+0]),.outDataC0(outDataC[m]),.outReg0(outReg[3*m+0]),
     .outOp0(outOp[3*m+0]),.outInstrIndex0(outII[3*m+0]), .outFuFwdA0(fuFwdA[3*m+0]),.outFuFwdB0(fuFwdB[3*m+0]),
     .outFuuFwdA0(fuuFwdA[3*m+0]),.outFuuFwdB0(fuuFwdB[3*m+0]),.outLSQ0(outLSQ[m]),.outDataEn0(outEn[3*m+0]),
-    .outThread0(outThr[3*m+0]),.outWQ0(outWQ[m]),.outLSFlag0(outLSflag[m]),//agu
+    .outThread0(outThr[3*m+0]),.outWQ0(outWQ[m]),.outLSFlag0(outLSflag[m]),
+    .outAttr0(outAttr[3*m+0]),//agu
   .outDataA1(outDataA[3*m+1]),.outDataB1(outDataB[3*m+1]),.outDataS1(outDataS[3*m+1]),.outReg1(outReg[3*m+1]),
     .outRegSimd1(),.outOp1(outOp[3*m+1]),.outInstrIndex1(outII[3*m+1]),
     .outFuFwdA1(fuFwdA[3*m+1]),.outFuFwdB1(fuFwdB[3*m+1]),.outFuFwdS1(fuFwdS[3*m+1]),
     .outFuuFwdA1(fuuFwdA[3*m+1]),.outFuuFwdB1(fuuFwdB[3*m+1]),.outFuuFwdS1(fuuFwdS[3*m+1]),
     .outFuFwdAH1(fuFwdAH[m]),.outFuFwdBH1(fuFwdBH[m]),.outFuuFwdAH1(fuuFwdAH[m]),.outFuuFwdBH1(fuuFwdBH[m]),.outDataEn1(outEn[3*m+1]),
-    .outThread1(outThr[3*m+1]),//alu 1
+    .outThread1(outThr[3*m+1]),
+    .outAttr1(outAttr[3*m+1]),//alu 1
   .outDataA2(outDataA[3*m+2]),.outDataB2(outDataB[3*m+2]),.outDataS2(outDataS[3*m+2]),.outReg2(outReg[3*m+2]),
     .outRegSimd2(),.outOp2(outOp[3*m+2]),.outInstrIndex2(outII[3*m+2]),.outFuFwdA2(fuFwdA[3*m+2]),
     .outFuFwdB2(fuFwdB[3*m+2]),.outFuFwdS2(fuFwdS[3*m+2]),.outFuuFwdA2(fuuFwdA[3*m+2]),
     .outFuuFwdB2(fuuFwdB[3*m+2]),.outFuuFwdS2(fuuFwdS[3*m+2]),.outDataEn2(outEn[3*m+2]),
-    .outThread2(outThr[3*m+2]),//alu 2
+    .outThread2(outThr[3*m+2]),
+    .outAttr2(outAttr[3*m+2]),//alu 2
 // wires from functional units  
   .FU0(FU_reg[0]),.FUreg0(FUreg[0]),.FUwen0(FUwen[0]),
   .FU1(FU_reg[1]),.FUreg1(FUreg[1]),.FUwen1(FUwen[1]),
@@ -5186,18 +5200,21 @@ module backend(
   .u1_op(outOp[0]),.u1_reg(outReg[0]),
   .u1_LSQ_no(outLSQ[0]),.u1_II_no(outII[0]),.u1_WQ_no(outWQ[0]),
   .u1_lsflag(outLSflag[0]),.u1_clkEn(outEn[0][0]),
+  .u1_attr(outAttr[0]),
   .u2_base(outDataB[3]),.u2_index(outDataA[3]),.u2_const(outDataC[1]),
   .u2_base_fufwd(fuFwdB[3]),.u2_base_fuufwd(fuuFwdB[3]),
   .u2_index_fufwd(fuFwdA[3]),.u2_index_fuufwd(fuuFwdA[3]),
   .u2_op(outOp[3]),.u2_reg(outReg[3]),
   .u2_LSQ_no(outLSQ[1]),.u2_II_no(outII[3]),.u2_WQ_no(outWQ[1]),
   .u2_lsflag(outLSflag[1]),.u2_clkEn(outEn[3][0]),
+  .u2_attr(outAttr[3]),
   .u3_base(outDataB[6]),.u3_index(outDataA[6]),.u3_const(outDataC[6]),
   .u3_base_fufwd(fuFwdB[6]),.u3_base_fuufwd(fuuFwdB[6]),
   .u3_index_fufwd(fuFwdA[6]),.u3_index_fuufwd(fuuFwdA[6]),
   .u3_op(outOp[6]),.u3_reg(outReg[6]),
   .u3_LSQ_no(outLSQ[2]),.u3_II_no(outII[6]),.u3_WQ_no(outWQ[2]),
   .u3_lsflag(outLSflag[2]),.u3_clkEn(outEn[6][0]),
+  .u3_attr(outAttr[6]),
   .u4_base(WoutDataB[0]),.u4_index(WoutDataA[0]),.u4_const(WoutDataC[0]),
   .u4_base_fufwd(WfuFwdB[0]),.u4_base_fuufwd(WfuuFwdB[0]),
   .u4_index_fufwd(WfuFwdA[0]),.u4_index_fuufwd(WfuuFwdA[0]),
@@ -5862,6 +5879,8 @@ dcache1 L1D_mod(
 
   always @(posedge clk) begin
       if (rst) begin
+	  newAttr_reg<=4'b0;
+	  newAttr_reg2<=4'b0;
           rs0i0_alloc_reg<=1'b0;
           rs0i1_alloc_reg<=1'b0;
           rs0i2_alloc_reg<=1'b0;
@@ -6227,6 +6246,8 @@ dcache1 L1D_mod(
 	      instr_vec[t]<=1'b0;
 	  end
       end else if (~doStall) begin
+	  newAttr_reg<=newAttr;
+	  newAttr_reg2<=newAttr_reg;
           rs0i0_alloc_reg<=rs0i0_alloc;
           rs0i1_alloc_reg<=rs0i1_alloc;
           rs0i2_alloc_reg<=rs0i2_alloc;

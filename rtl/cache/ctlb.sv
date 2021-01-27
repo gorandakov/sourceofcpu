@@ -213,8 +213,11 @@ module ctlb(
   reg [5:0] init_count;
   reg init_pending_reg;
   wire [5:0] init_count_d;
-  wire [15:0] sproc;
-  wire [47:0] dummy_sproc;
+  wire [23:0] sproc;
+  wire [23:0] pproc;
+  wire [39:0] dummy_pproc;
+  wire [23:0] vmproc;
+  wire [39:0] dummy_vmroc;
 
   reg [IP_WIDTH-1:0] addr_reg;
   
@@ -255,13 +258,32 @@ module ctlb(
   endgenerate
   
   adder_inc #(6) initAdd_mod(init_count,init_count_d,1'b1,);
-  csrss_watch #(`csr_spage) csrSproc_mod(
+  csrss_watch #(`csr_page) csrSproc_mod(
   clk,
   rst,
   csrss_addr,
   csrss_data,
   csrss_en,
-  {sproc,dummy_sproc});
+  {pproc,dummy_pproc});
+  csrss_watch #(`csr_vmpage) csrSproc_mod(
+  clk,
+  rst,
+  csrss_addr,
+  csrss_data,
+  csrss_en,
+  {vmproc,dummy_vmproc});
+  csrss_watch #(`csr_mflags) csrSproc_mod(
+  clk,
+  rst,
+  csrss_addr,
+  csrss_data,
+  csrss_en,
+  mflags);
+
+  assign sproc=mflags[`mflags_vm] ? pproc^{24'd1} : 24'b0;
+
+
+
   
   always @(posedge clk)
     begin

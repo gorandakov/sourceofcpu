@@ -205,15 +205,15 @@ module decoder_aux_const(
       `csr_FPU:			aux_const=csr_fpu;
       `csr_page: begin aux_const=csr_page; aux_can_read=~csr_mflags[`mflags_vm] && !csr_mflags[`mflags_cpl]; end
       `csr_vmpage: begin aux_const=csr_vmpage; aux_can_read=~csr_mflags[`mflags_vm] && !csr_mflags[`mflags_cpl]; end
-      `csr_cpage: begin	aux_const=csr_cpage; aux_can_read=~csr_mflags[`mflags_vm] && !csr_mflags[`mflags_cpl]; end
-      `csr_spage: begin	aux_const=csr_spage; aux_can_read=~csr_mflags[`mflags_vm] && !csr_mflags[`mflags_cpl]; end
+      //`csr_cpage: begin	aux_const=csr_cpage; aux_can_read=~csr_mflags[`mflags_vm] && !csr_mflags[`mflags_cpl]; end
+      //`csr_spage: begin	aux_const=csr_spage; aux_can_read=~csr_mflags[`mflags_vm] && !csr_mflags[`mflags_cpl]; end
       `csr_syscall: begin aux_const=csr_syscall;
            aux_can_jump<=1'b1; 
            aux_can_read=~csr_mflags[`mflags_vm] && csr_mflags[`mflags_cpl]==2'b00; end
       `csr_vmcall: begin aux_const=csr_vmcall; aux_can_jump=
 	   csr_mflags[`mflags_vm] && csr_mflags[`mflags_cpl]==2'b00;
            aux_can_read=~csr_mflags[`mflags_vm] && csr_mflags[`mflags_cpl]==2'b00; end
-      `csr_cpage_mask: begin aux_const=csr_cpage_mask; aux_can_read=~csr_mflags[`mflags_vm] && !csr_mflags[`mflags_cpl]; end
+      //`csr_cpage_mask: begin aux_const=csr_cpage_mask; aux_can_read=~csr_mflags[`mflags_vm] && !csr_mflags[`mflags_cpl]; end
       `csr_indir_table: begin aux_const=csr_indir_tbl; aux_can_read=~csr_mflags[`mflags_vm] && !csr_mflags[`mflags_cpl]; end
       `csr_indir_mask: begin aux_const=csr_indir_mask; aux_can_read=~csr_mflags[`mflags_vm] && !csr_mflags[`mflags_cpl]; end
       `csr_cl_lock: begin aux_const={63'b0,csr_mflags[18]}; csr_mflags[18]<=1'b0; end
@@ -252,11 +252,11 @@ module decoder_aux_const(
       `csr_FPU:			csr_fpu<=csrss_data;
       `csr_page:		csr_page<=csrss_data;
       `csr_vmpage:		csr_vmpage<=csrss_data;
-      `csr_cpage:		csr_cpage<=csrss_data;
-      `csr_spage:		csr_spage<=csrss_data;
+      //`csr_cpage:		csr_cpage<=csrss_data;
+      //`csr_spage:		csr_spage<=csrss_data;
       `csr_syscall:		csr_syscall<=csrss_data;
       `csr_vmcall:		csr_vmcall<=csrss_data;
-      `csr_cpage_mask:		csr_cpage_mask<=csrss_data;
+      //`csr_cpage_mask:		csr_cpage_mask<=csrss_data;
       `csr_indir_table:		csr_indir_tbl<=csrss_data;
       `csr_indir_mask:          csr_indir_mask<=csrss_data;
       `csr_cl_lock:             csr_mflags[18]<=1'b1;
