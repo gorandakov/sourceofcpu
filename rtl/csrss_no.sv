@@ -31,6 +31,7 @@
 `define mflags_transl_en 16
 `define mflags_locked 18
 `define mflags_set_ptr_can 19
+`define mflags_sec 19
 
 
 `define csrfpu_inv_excpt 0

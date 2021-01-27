@@ -1,5 +1,5 @@
 `include "../struct.sv"
-
+`include "../csrss_no.sv"
 module agu_r(
   clk,
   rst,

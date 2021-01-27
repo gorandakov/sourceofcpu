@@ -5144,7 +5144,7 @@ module backend(
     .u4_A_fufwd(fuFwdA[3+2]),.u4_A_fuufwd(fuuFwdA[3+2]),
     .u4_B_fufwd(fuFwdB[3+2]),.u4_B_fuufwd(fuuFwdB[3+2]),
     .u4_S_fufwd(fuFwdS[3+2]),.u4_S_fuufwd(fuuFwdS[3+2]),
-  .u5_A(outDataA[6+1]),.u5_B(outDataB[6+1]),.u5_S(outDataS[6+1]),.u5_nDataAlt(nDataAlt_reg[2][1]).u5_op(outOp[6+1]),
+  .u5_A(outDataA[6+1]),.u5_B(outDataB[6+1]),.u5_S(outDataS[6+1]),.u5_nDataAlt(nDataAlt_reg[2][1]),.u5_op(outOp[6+1]),
   .u5_ret(FUS_alu[4]),.u5_rten(enS_alu[4]),.u5_clkEn(outEn[6+1][0]&outEn[6+1][1]),
     .u5_A_fufwd(fuFwdA[6+1]),.u5_A_fuufwd(fuuFwdA[6+1]),
     .u5_B_fufwd(fuFwdB[6+1]),.u5_B_fuufwd(fuuFwdB[6+1]),
@@ -5306,36 +5306,36 @@ module backend(
   .FU0(FU[0]),.FU1(FU[1]),.FU2(FU[2]),.FU3(FU[3]),.FU4(FU[4]),.FU5(FU[5]),.FU6(FU[6]),.FU7(FU[7]),.FU8(FU[8]),.FU9(FU[9]),
   .FUreg3_reg(FUreg_reg5[3]),.dc_rdataA(dc_rdataA[3]),//is it really reg5?
   msi_exp_addr,msi_en,msi_out_clear,//msi_out_clear=can do msi en
-  .csrss_en(csrss_en).csrss_addr(csrss_addr).csrss_data(csrss_data)
+  .csrss_en(csrss_en),.csrss_addr(csrss_addr),.csrss_data(csrss_data),
   alt_bus_hold,
   alt_bus_addr,
-  .req_addr(req_addr).req_tlbEn(req_tlbEn)
-  .bus_tlb_data(bus_tlb_data).bus_tlb_en(bus_tlb_en)
-  .reqBus_en(reqBus_en)
-  .reqBus_addr(reqBus_addr)
-  .reqBus_req(reqBus_req)
-  .reqBus_want_excl(reqBus_want_excl)
-  .reqBus_dupl(reqBus_dupl)
-  .reqBus_io(reqBus_io)
-  .reqBus_sz(reqBus_sz)
-  .reqBus_low(reqBus_low)
-  .reqBus_bank0(reqBus_bank0)
-  .insert_isData(insert_isData)
-  .insBus_req(insBus_req)
-  .wr0_hit(wr0_hit)
-  .wr0_addrE(wr0_addrE).wr0_addrO(wr0_addrO)
-  .wr0_banks(wr0_banks)
-  .wr0_begin(wr0_begin).wr0_end(wr0_end)
-  .wr0_bgn_ben(wr0_bgn_ben).wr0_end_ben(wr0_end_ben)
-  .wr0_odd(wr0_odd).wr0_split(wr0_split)
-  .wr0_data(wr0_data)
-  .wr1_hit(wr1_hit)
-  .wr1_addrE(wr1_addrE).wr1_addrO(wr1_addrO)
-  .wr1_banks(wr1_banks)
-  .wr1_begin(wr1_begin).wr1_end(wr1_end)
-  .wr1_bgn_ben(wr1_bgn_ben).wr1_end_ben(wr1_end_ben)
-  .wr1_odd(wr1_odd).wr1_split(wr1_split)
-  .wr1_data(wr1_data)
+  .req_addr(req_addr),.req_tlbEn(req_tlbEn),
+  .bus_tlb_data(bus_tlb_data),.bus_tlb_en(bus_tlb_en),
+  .reqBus_en(reqBus_en),
+  .reqBus_addr(reqBus_addr),
+  .reqBus_req(reqBus_req),
+  .reqBus_want_excl(reqBus_want_excl),
+  .reqBus_dupl(reqBus_dupl),
+  .reqBus_io(reqBus_io),
+  .reqBus_sz(reqBus_sz),
+  .reqBus_low(reqBus_low),
+  .reqBus_bank0(reqBus_bank0),
+  .insert_isData(insert_isData),
+  .insBus_req(insBus_req),
+  .wr0_hit(wr0_hit),
+  .wr0_addrE(wr0_addrE),.wr0_addrO(wr0_addrO),
+  .wr0_banks(wr0_banks),
+  .wr0_begin(wr0_begin),.wr0_end(wr0_end),
+  .wr0_bgn_ben(wr0_bgn_ben),.wr0_end_ben(wr0_end_ben),
+  .wr0_odd(wr0_odd),.wr0_split(wr0_split),
+  .wr0_data(wr0_data),
+  .wr1_hit(wr1_hit),
+  .wr1_addrE(wr1_addrE),.wr1_addrO(wr1_addrO),
+  .wr1_banks(wr1_banks),
+  .wr1_begin(wr1_begin),.wr1_end(wr1_end),
+  .wr1_bgn_ben(wr1_bgn_ben),.wr1_end_ben(wr1_end_ben),
+  .wr1_odd(wr1_odd),.wr1_split(wr1_split),
+  .wr1_data(wr1_data),
   .wrStall(wrStall)
   );
  
@@ -5379,7 +5379,7 @@ module backend(
   .doRetire_d(doRetire_d),
   .xbreak(xbreak),
   .has_xbreak(has_xbreak),
-  .ldq_new_mask_reg(ldq_new_mask_reg),bundle_in_reg2.(),.II_upper(II_upper),.LSQ_shr_data(LSQ_shr_data),
+  .ldq_new_mask_reg(ldq_new_mask_reg),.bundle_in_reg2(bundle_in_reg2),.II_upper(II_upper),.LSQ_shr_data(LSQ_shr_data),
   .WQS0_reg(WQS0_reg),.WQR0_reg(WQR0_reg),
   .WQS1_reg(WQS1_reg),.WQR1_reg(WQR1_reg),
   .WQS2_reg(WQS2_reg),.WQR2_reg(WQR2_reg),
