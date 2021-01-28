@@ -1601,6 +1601,7 @@ module backend(
   reg Wagu_blockRS_reg[1:0];
   wire alu_jupdate=enS_alu[5];
   wire [1:0] WoutLSflag;
+  wire [1:0][3:0] WoutAttr;
   
   wire [1:0][DATA_WIDTH-1:0] WfxDataA;
   wire [1:0][DATA_WIDTH-1:0] WfxDataB;
@@ -4922,6 +4923,7 @@ module backend(
     .rsAlloc0(rs_en_reg[0]&rs_alt_reg[0]),.newGazumpA0(gazumpA[0]),.newGazumpB0(gazumpB[0]),
     .newFunitA0(WfunA[0]),.newFunitB0(WfunB[0]),
     .newLSFlag0(rs_ldst_flg[0]),
+    .newAttr0(newAttr_reg2),
   .newDataA1(dataA[3]),.newDataB1(dataB[3]),.newDataC1(rs_const_reg[3][32:0]&{33{~rs_useBConst_reg[3]}}),
     .newRegA1(WregA[1]),.newRegB1(WregB[1]),
     .newANeeded1(WinflA[1]),.newBNeeded1(WinflB[1]),
@@ -4938,6 +4940,7 @@ module backend(
     .rsAlloc1(rs_en_reg[3]&rs_alt_reg[1]),.newGazumpA1(gazumpA[3]),.newGazumpB1(gazumpB[3]),
     .newFunitA1(WfunA[1]),.newFunitB1(WfunB[1]),
     .newLSFlag1(rs_ldst_flg[2]),
+    .newAttr1(newAttr_reg2),
   .newDataA2(dataA[6]),.newDataB2(dataB[6]),.newDataC2(rs_const_reg[6][32:0]&{33{~rs_useBConst_reg[6]}}),
     .newRegA2(WregA[2]),.newRegB2(WregB[2]),
     .newANeeded2(WinflA[2]),.newBNeeded2(WinflB[2]),
@@ -4954,12 +4957,14 @@ module backend(
     .rsAlloc2(rs_en_reg[6]&rs_alt_reg[2]),.newGazumpA2(gazumpA[6]),.newGazumpB2(gazumpB[6]),
     .newFunitA2(WfunA[2]),.newFunitB2(WfunB[2]),
     .newLSFlag2(rs_ldst_flg[4]),
+    .newAttr2(newAttr_reg2),
 // wires to get values out of buffer
   .outDataA0(WoutDataB[0]),.outDataB0(WoutDataA[0]),.outDataC0(WoutDataC[0]),
     .outOp0(WoutOp[0]),.outInstrIndex0(WoutII[0]),
     .outFuFwdA0(WfuFwdB[0]),.outFuFwdB0(WfuFwdA[0]),.outFuuFwdA0(WfuuFwdB[0]),.outFuuFwdB0(WfuuFwdA[0]),
     .outLSQ0(WoutLSQ[0]),.outDataEn0(WoutDataEn[0]),.outThread0(WoutThread[0]),.outWQ0(WoutWQ[0]),
     .outLSFlag0(WoutLSflag[0]),//agu
+    .outAttr0(WoutAttr[0]),
   .outDataB1(WDoutData[0]),.outOp1(WDoutOp[0]),.outInstrIndex1(WDoutII[0]),
     .outFuFwdB1(WDoutFuFwd[0]),.outFuuFwdB1(WDoutFuuFwd[0]),.outLSQ1(WDoutLSQ[0]),
     .outDataEn1(WDoutDataEn[0]),.outThread1(WDoutThread[0]),.outWQ1(WDoutWQ[0]),//data
@@ -4968,6 +4973,7 @@ module backend(
     .outFuFwdA2(WfuFwdA[1]),.outFuFwdB2(WfuFwdB[1]),.outFuuFwdA2(WfuuFwdA[1]),.outFuuFwdB2(WfuuFwdB[1]),
     .outLSQ2(WoutLSQ[1]),.outDataEn2(WoutDataEn[1]),.outThread2(WoutThread[1]),.outWQ2(WoutWQ[1]),
     .outLSFlag2(WoutLSflag[1]),//agu
+    .outAttr2(WoutAttr[1]),
   .outDataA3(WDoutData[1]),.outOp3(WDoutOp[1]),.outInstrIndex3(WDoutII[1]),
     .outFuFwdA3(WDoutFuFwd[1]),.outFuuFwdA3(WDoutFuuFwd[1]),.outLSQ3(WDoutLSQ[1]),
     .outDataEn3(WDoutDataEn[1]),.outThread3(WDoutThread[1]),.outWQ3(WDoutWQ[1]),//data
@@ -5221,12 +5227,14 @@ module backend(
   .u4_op(WoutOp[0]),.u4_reg(9'b0),
   .u4_LSQ_no(WoutLSQ[0]),.u4_II_no(WoutII[0]),.u4_WQ_no(WoutWQ[0]),
   .u4_lsflag(WoutLSflag[0]),.u4_clkEn(WoutDataEn[0][0]),
+  .u4_attr(WoutAttr[0]),
   .u5_base(WoutDataB[1]),.u5_index(WoutDataA[1]),.u5_const(WoutDataC[1]),
   .u5_base_fufwd(WfuFwdB[1]),.u5_base_fuufwd(WfuuFwdB[1]),
   .u5_index_fufwd(WfuFwdA[1]),.u5_index_fuufwd(WfuuFwdA[1]),
   .u5_op(WoutOp[1]),.u5_reg(9'b0),
   .u5_LSQ_no(WoutLSQ[1]),.u5_II_no(WoutII[1]),.u5_WQ_no(WoutWQ[1]),
   .u5_lsflag(WoutLSflag[1]),.u5_clkEn(WoutDataEn[1][0]),
+  .u5_attr(WoutAttr[1]),
   .mOp0_clHit(dc_rdHitCl[0]),.mOp1_clHit(dc_rdHitCl[1]),.mOp2_clHit(dc_rdHitCl[2]),.mOp3_clHit(dc_rdHitCl[3]),
   miss4,
   .mOpY4_en(st0_en),
