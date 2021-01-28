@@ -54,7 +54,7 @@ module dcache1_tag(
   read_exclOut0,read_exclOut1,
   read_hitL_odd,read_hitL_even,read_hitH_odd,read_hitH_even,
   read_hit_odd, read_hit_even,
-  read_excl,
+ // read_excl,
   errH,errL,
   write_exclusive,
   write_rand,
@@ -82,7 +82,7 @@ module dcache1_tag(
   output read_exclOut1;
   output reg read_hitL_odd,read_hitL_even,read_hitH_odd,read_hitH_even;
   output read_hit_odd,read_hit_even;
-  output [1:0] read_excl;  
+ // output [1:0] read_excl;  
   output errH,errL;
   input write_exclusive;
   input [5:0] write_rand;
@@ -205,8 +205,8 @@ module dcache1_tag(
   assign errH=err_tag0;
   assign errL=err_tag1;
   
-  assign read_excl[0]=(read_hitH_odd  | read_hitL_odd) ? tagR1_exclusive : 1'bz; 
-  assign read_excl[1]=(read_hitH_even  | read_hitL_even) ? tagR0_exclusive : 1'bz; 
+ // assign read_excl[0]=(read_hitH_odd  | read_hitL_odd) ? tagR1_exclusive : 1'bz; 
+ // assign read_excl[1]=(read_hitH_even  | read_hitL_even) ? tagR0_exclusive : 1'bz; 
   
   assign read_hit_odd=hit_odd;
   assign read_hit_even=hit_even;

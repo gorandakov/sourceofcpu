@@ -471,7 +471,8 @@ module ccRam_half(
           .write_data(write_data),
           .write_wen(write_wen),
           .invalidate(invalidate),
-          .Err(tagErr[k])
+          .Err(tagErr[k]),
+	  .read_next_hit()
           );
       end
   endgenerate

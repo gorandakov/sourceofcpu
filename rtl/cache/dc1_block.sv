@@ -582,14 +582,16 @@ module dcache1_way(
         .read_hitL_odd(read_hitOL[r]),.read_hitL_even(read_hitEL[r]),
         .read_hitH_odd(read_hitOH[r]),.read_hitH_even(read_hitEH[r]),
         .read_hit_odd(read_hitO[r]),.read_hit_even(read_hitE[r]),
-        //.read_excl
+        .read_exclOut0(),.read_exclOut1(),//.read_excl
         .errH(errH[r]),.errL(errL[r]),
         .write_exclusive(write_insertExclusive),
         .write_rand(insert_rand),
         .write_recent_out(recent[r]),
         .write_recent_in(recent_in),
         .write_wen(write_insert),
-        .write_hit(ins_hit[r])
+        .write_hit(ins_hit[r]),
+        .wb_addr(),
+        .wb_valid()
         );  
         else 
         dcache1_tag #(INDEX) tagR_mod(
@@ -602,7 +604,7 @@ module dcache1_way(
         .read_hitL_odd(read_hitOL[r]),.read_hitL_even(read_hitEL[r]),
         .read_hitH_odd(read_hitOH[r]),.read_hitH_even(read_hitEH[r]),
         .read_hit_odd(read_hitO[r]),.read_hit_even(read_hitE[r]),
-        //.read_excl
+        .read_exclOut0(),.read_exclOut1(),//.read_excl
         .errH(errH[r]),.errL(errL[r]),
         .write_exclusive(write_insertExclusive),
         .write_rand(insert_rand),
@@ -634,7 +636,9 @@ module dcache1_way(
         //.write_recent_out(recent[w+4]),
         .write_recent_in(recent_in),
         .write_wen(write_insert),
-        .write_hit(ins_hit[w+4])
+        .write_hit(ins_hit[w+4]),
+        .wb_addr(),
+        .wb_valid()
         ); 
         
     end
