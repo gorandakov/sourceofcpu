@@ -21,6 +21,7 @@ module backend(
   except_jmp_mask_en,
   except_jmp_mask,
   req_addr,
+  req_tlbAttr,
   req_tlbEn,
   bus_tlb_data,
   bus_tlb_en,
@@ -198,6 +199,7 @@ module backend(
   instr0_port,
   instr0_magic,
   instr0_last,
+  instr0_aft_spc,
   
   instr1_rT,
   instr1_en,
@@ -209,6 +211,7 @@ module backend(
   instr1_port,
   instr1_magic,
   instr1_last,
+  instr1_aft_spc,
     
   instr2_rT,
   instr2_en,
@@ -220,6 +223,7 @@ module backend(
   instr2_port,
   instr2_magic,
   instr2_last,
+  instr2_aft_spc,
   
   instr3_rT,
   instr3_en,
@@ -231,6 +235,7 @@ module backend(
   instr3_port,
   instr3_magic,
   instr3_last,
+  instr3_aft_spc,
   
   instr4_rT,
   instr4_en,
@@ -242,6 +247,7 @@ module backend(
   instr4_port,
   instr4_magic,
   instr4_last,
+  instr4_aft_spc,
   
   instr5_rT,
   instr5_en,
@@ -253,6 +259,7 @@ module backend(
   instr5_port,
   instr5_magic,
   instr5_last,
+  instr5_aft_spc,
 
   instr6_rT,
   instr6_en,
@@ -264,6 +271,7 @@ module backend(
   instr6_port,
   instr6_magic,
   instr6_last,
+  instr6_aft_spc,
 
   instr7_rT,
   instr7_en,
@@ -275,6 +283,7 @@ module backend(
   instr7_port,
   instr7_magic,
   instr7_last,
+  instr7_aft_spc,
 
   instr8_rT,
   instr8_en,
@@ -286,6 +295,7 @@ module backend(
   instr8_port,
   instr8_magic,
   instr8_last,
+  instr8_aft_spc,
 
   instr9_rT,
   instr9_en,
@@ -297,6 +307,7 @@ module backend(
   instr9_port,
   instr9_magic,
   instr9_last,
+  instr9_aft_spc,
 
   jump0Type,jump0Pos,jump0Pred,jump0IP,jump0Mask,
   jump1Type,jump1Pos,jump1Pred,jump1IP,jump1Mask,
@@ -396,6 +407,7 @@ module backend(
   output [3:0] except_jmp_mask;
 
   input [35:0] req_addr; 
+  input [3:0] req_tlbAttr;
   input req_tlbEn;
   output [`ctlbData_width-1:0] bus_tlb_data;
   output bus_tlb_en;
@@ -686,6 +698,7 @@ module backend(
   input [PORT_WIDTH-1:0] instr0_port;
   input [3:0] instr0_magic;
   input instr0_last;
+  input instr0_aft_spc;
   
   input [IN_REG_WIDTH-1:0] instr1_rT;
   input instr1_en;
@@ -697,6 +710,7 @@ module backend(
   input [PORT_WIDTH-1:0] instr1_port;
   input [3:0] instr1_magic;
   input instr1_last;
+  input instr1_aft_spc;
   
   input [IN_REG_WIDTH-1:0] instr2_rT;
   input instr2_en;
@@ -708,6 +722,7 @@ module backend(
   input [PORT_WIDTH-1:0] instr2_port;
   input [3:0] instr2_magic;
   input instr2_last;
+  input instr2_aft_spc;
   
   input [IN_REG_WIDTH-1:0] instr3_rT;
   input instr3_en;
@@ -719,6 +734,7 @@ module backend(
   input [PORT_WIDTH-1:0] instr3_port;
   input [3:0] instr3_magic;
   input instr3_last;
+  input instr3_aft_spc;
   
   input [IN_REG_WIDTH-1:0] instr4_rT;
   input instr4_en;
@@ -730,6 +746,7 @@ module backend(
   input [PORT_WIDTH-1:0] instr4_port;
   input [3:0] instr4_magic;
   input instr4_last;
+  input instr4_aft_spc;
   
   input [IN_REG_WIDTH-1:0] instr5_rT;
   input instr5_en;
@@ -741,6 +758,7 @@ module backend(
   input [PORT_WIDTH-1:0] instr5_port;
   input [3:0] instr5_magic;
   input instr5_last;
+  input instr5_aft_spc;
 
   input [IN_REG_WIDTH-1:0] instr6_rT;
   input instr6_en;
@@ -752,6 +770,7 @@ module backend(
   input [PORT_WIDTH-1:0] instr6_port;
   input [3:0] instr6_magic;
   input instr6_last;
+  input instr6_aft_spc;
 
   input [IN_REG_WIDTH-1:0] instr7_rT;
   input instr7_en;
@@ -763,6 +782,7 @@ module backend(
   input [PORT_WIDTH-1:0] instr7_port;
   input [3:0] instr7_magic;
   input instr7_last;
+  input instr7_aft_spc;
 
   input [IN_REG_WIDTH-1:0] instr8_rT;
   input instr8_en;
@@ -774,6 +794,7 @@ module backend(
   input [PORT_WIDTH-1:0] instr8_port;
   input [3:0] instr8_magic;
   input instr8_last;
+  input instr8_aft_spc;
 
   input [IN_REG_WIDTH-1:0] instr9_rT;
   input instr9_en;
@@ -785,6 +806,7 @@ module backend(
   input [PORT_WIDTH-1:0] instr9_port;
   input [3:0] instr9_magic;
   input instr9_last;
+  input instr9_aft_spc;
   
   input [4:0] jump0Type;
   input [3:0] jump0Pos;
@@ -1211,6 +1233,7 @@ module backend(
   reg [PORT_WIDTH-1:0] instr_port[9:0];
   reg [3:0] instr_magic[9:0];
   reg [9:0] instr_last;
+  reg [9:0] instr_aft_spc;
   
   reg [4:0] jump0Type_reg;
   reg [3:0] jump0Pos_reg;
@@ -1255,6 +1278,7 @@ module backend(
   reg [2:0] instr_magicOff[9:0];
   reg [9:0] instr_gen;
   reg [9:0] instr_vec;
+  reg [9:0] instr_aft_spc_reg;
 
   reg [4:0] jump0Type_reg2;
   reg [3:0] jump0Pos_reg2;
@@ -4968,6 +4992,7 @@ module backend(
   .outDataB1(WDoutData[0]),.outOp1(WDoutOp[0]),.outInstrIndex1(WDoutII[0]),
     .outFuFwdB1(WDoutFuFwd[0]),.outFuuFwdB1(WDoutFuuFwd[0]),.outLSQ1(WDoutLSQ[0]),
     .outDataEn1(WDoutDataEn[0]),.outThread1(WDoutThread[0]),.outWQ1(WDoutWQ[0]),//data
+    .outAttr1(),
   .outDataA2(WoutDataA[1]),.outDataB2(WoutDataB[1]),.outDataC2(WoutDataC[1]),
     .outOp2(WoutOp[1]),.outInstrIndex2(WoutII[1]),
     .outFuFwdA2(WfuFwdA[1]),.outFuFwdB2(WfuFwdB[1]),.outFuuFwdA2(WfuuFwdA[1]),.outFuuFwdB2(WfuuFwdB[1]),
@@ -4977,6 +5002,7 @@ module backend(
   .outDataA3(WDoutData[1]),.outOp3(WDoutOp[1]),.outInstrIndex3(WDoutII[1]),
     .outFuFwdA3(WDoutFuFwd[1]),.outFuuFwdA3(WDoutFuuFwd[1]),.outLSQ3(WDoutLSQ[1]),
     .outDataEn3(WDoutDataEn[1]),.outThread3(WDoutThread[1]),.outWQ3(WDoutWQ[1]),//data
+    .outAttr3(),
 // wires from functional units  
   .FU0(FU_reg[0]),.FUreg0(FUreg[0]),.FUwen0(FUwen[0]),
   .FU1(FU_reg[1]),.FUreg1(FUreg[1]),.FUwen1(FUwen[1]),
@@ -5334,7 +5360,7 @@ module backend(
   .csrss_en(csrss_en),.csrss_addr(csrss_addr),.csrss_data(csrss_data),
   alt_bus_hold,
   alt_bus_addr,
-  .req_addr(req_addr),.req_tlbEn(req_tlbEn),
+  .req_addr(req_addr),.req_tlbAttr(req_tlbAttr),.req_tlbEn(req_tlbEn),
   .bus_tlb_data(bus_tlb_data),.bus_tlb_en(bus_tlb_en),
   .reqBus_en(reqBus_en),
   .reqBus_addr(reqBus_addr),
@@ -5643,6 +5669,12 @@ dcache1 L1D_mod(
   .instr7_rT(instr_rT_reg[7]),.instr7_gen(instr_gen[7]),.instr7_vec(instr_vec[7]),
   .instr8_rT(instr_rT_reg[8]),.instr8_gen(instr_gen[8]),.instr8_vec(instr_vec[8]),
   .instr9_rT(instr_rT_reg[9]),.instr9_gen(instr_gen[9]),.instr9_vec(instr_vec[9]),
+  .instr0_after_spec(instr_aft_spc_reg[0]),  .instr1_after_spec(instr_aft_spc_reg[1]),
+  .instr2_after_spec(instr_aft_spc_reg[2]),  .instr3_after_spec(instr_aft_spc_reg[3]),
+  .instr4_after_spec(instr_aft_spc_reg[4]),  .instr5_after_spec(instr_aft_spc_reg[5]),
+  .instr6_after_spec(instr_aft_spc_reg[6]),  .instr7_after_spec(instr_aft_spc_reg[7]),
+  .instr8_after_spec(instr_aft_spc_reg[8]),  .instr9_after_spec(instr_aft_spc_reg[9]),
+  .instr_attr(newAttr_reg2),
   .iret0(instr_ret_reg[0]),.iret1(instr_ret_reg[1]),.iret2(instr_ret_reg[2]),.iret3(instr_ret_reg[3]),.iret4(instr_ret_reg[4]),
   .iret5(instr_ret_reg[5]),.iret6(instr_ret_reg[6]),.iret7(instr_ret_reg[7]),.iret8(instr_ret_reg[8]),
   .iret0_rF(clrR_reg[0][8:4]),.iret1_rF(clrR_reg[1][8:4]),.iret2_rF(clrR_reg[2][8:4]),
@@ -6238,6 +6270,7 @@ dcache1 L1D_mod(
               instr_port[t]<={PORT_WIDTH{1'B0}};
               instr_magic[t]<=4'b0;
               instr_last[t]<=1'b0;
+	      instr_aft_spc[t]<=1'b0;
               
 	      instr_rT_reg[t]<={IN_REG_WIDTH{1'B0}};
               instr_en_reg[t]<=1'b0;
@@ -6252,6 +6285,7 @@ dcache1 L1D_mod(
 	      instr_magicOff[t]<=3'b0;
 	      instr_gen[t]<=1'b0;
 	      instr_vec[t]<=1'b0;
+	      instr_aft_spc_reg[t]<=1'b0;
 	  end
       end else if (~doStall) begin
 	  newAttr_reg<=newAttr;
@@ -6750,6 +6784,17 @@ dcache1 L1D_mod(
           instr_last[8]<=instr8_last;
           instr_last[9]<=instr9_last;
           
+	  instr_aft_spc[0]<=instr0_aft_spc;
+	  instr_aft_spc[1]<=instr1_aft_spc;
+	  instr_aft_spc[2]<=instr2_aft_spc;
+	  instr_aft_spc[3]<=instr3_aft_spc;
+	  instr_aft_spc[4]<=instr4_aft_spc;
+	  instr_aft_spc[5]<=instr5_aft_spc;
+	  instr_aft_spc[6]<=instr6_aft_spc;
+	  instr_aft_spc[7]<=instr7_aft_spc;
+	  instr_aft_spc[8]<=instr8_aft_spc;
+	  instr_aft_spc[9]<=instr9_aft_spc;
+
 	  jump0TbufWay_reg<=jump0TbufWay;
           jump0JmpInd_reg<=jump0JmpInd;
           jump0GHT_reg<=jump0GHT;
@@ -6908,6 +6953,7 @@ dcache1 L1D_mod(
               instr_port_reg[t]<=instr_port[t];
               //instr_magic_reg[t]<=instr_magic[t];
               instr_last_reg[t]<=instr_last[t];
+	      instr_aft_spc_reg[t]<=instr_aft_spc[t];
 	      casex(instr_magic[t])
 		  4'bxxx0: instr_magicOff[t]<=3'd1;
 		  4'bxx01: instr_magicOff[t]<=3'd2;
