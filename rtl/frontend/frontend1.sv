@@ -21,6 +21,7 @@ module frontend1(
   req_slot,
   req_en,
   req_tlbEn,
+  req_tlbAttr,
   bus_tlb_data,
   bus_tlb_slot,
   bus_tlb_en,
@@ -87,6 +88,7 @@ module frontend1(
   output [9:0] req_slot;
   output req_en;
   output req_tlbEn;
+  output [3:0] req_tlbAttr;
 
   input [`ctlbData_width-1:0] bus_tlb_data;
   input [9:0] bus_tlb_slot;
@@ -146,16 +148,16 @@ module frontend1(
   reg miss_now;
   reg tlbMiss_now;
   reg miss_now_reg;
-  reg [47:0] cc_read_IP;
-  reg [47:0] cc_read_IP_reg;
-  reg [47:0] cc_read_IP_reg2;
-  reg [47:0] cc_read_IP_reg3;
-  reg [47:0] cc_read_IP_reg4;
-  reg [47:0] cc_read_IP_reg5;
+  reg [43:0] cc_read_IP;
+  reg [43:0] cc_read_IP_reg;
+  reg [43:0] cc_read_IP_reg2;
+  reg [43:0] cc_read_IP_reg3;
+  reg [43:0] cc_read_IP_reg4;
+  reg [43:0] cc_read_IP_reg5;
  // reg [47:0] cc_read_IP_REG3;
  // reg [47:0] cc_read_IP_REG4;
-  reg  [47:0] cc_base_IP;
-  wire [47:0] cc_base_IP_d;
+  reg  [43:0] cc_base_IP;
+  wire [43:0] cc_base_IP_d;
   wire cc_base_tick;
   wire [7:0] cc_base_off;
   reg [7:0] cc_base_off_reg;
@@ -163,9 +165,9 @@ module frontend1(
   reg [7:0] cc_base_off_reg3;
   reg [7:0] cc_base_off_reg4;
   
-  reg [47:0] miss_IP;
+  reg [43:0] miss_IP;
   //reg [47:0] link_IP;
-  reg [15:0] proc;
+  reg [23:0] proc;
   reg kmode;
   
   reg instrEn;
