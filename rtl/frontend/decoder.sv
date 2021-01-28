@@ -2381,7 +2381,7 @@ module decoder(
 	  assign jump0TbufOnly=jump0_bit[k] ? dec_tbufOnly_reg[k] : 1'bz;
 	  assign jump1TbufOnly=jump1_bit[k] ? dec_tbufOnly_reg[k] : 1'bz;
 
-
+//verilator lint_off PINMISSING
           smallInstr_decoder dec_mod(
           .clk(clk),
           .rst(rst),
@@ -2421,6 +2421,7 @@ module decoder(
           .isIPRel(dec_IPRel[k]),
           .rAlloc(dec_allocR[k])
           );
+//verilator lint_on PINMISSING
           assign instCls[k]=instQ[k][`instrQ_class];
           assign cls_indir[k]=instCls[k][`iclass_indir];
           assign cls_jump[k]=instCls[k][`iclass_jump];

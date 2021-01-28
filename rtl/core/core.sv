@@ -722,6 +722,14 @@ module heptane_core(
   reg dc2_rExcl_reg;
   reg [511:0] dc2_rdata_reg;
 
+  wire [35:0] L1_expAddr;
+  wire L1_expAddr_en;
+  wire [35:0] MSI_expAddr;
+  wire MSI_expAddr_en;
+  wire MSI_req_excl;
+  wire MSI_expect_swap;
+//  wire MSI_swap_reply;
+
   wire wrStall;
 //  reg ret_ebx_en;
 //  reg [63:0] ret_ebx_data;
@@ -885,7 +893,9 @@ module heptane_core(
   .insert_dirty(rbusDIn_signals_reg[`rbusD_dirty]),
   .insert_dupl(dc2_dupl_rd),
   .hit_LRU(dc2_rLRU_reg),.read_LRU(dc2_rLRUA0),.hit_any(dc2_rhitA0),
-  .read_dir(dc2_rDirA0),.read_excl(dc2_rExclA0)
+  .read_dir(dc2_rDirA0),.read_excl(dc2_rExclA0),
+  .read_expAddr(L1_expAddr),
+  .read_expAddr_en(L1_expAddr_en)
   );
   dcache2_block #(1) dc2B0_mod(
   .clk(clk),
@@ -916,7 +926,9 @@ module heptane_core(
   .insert_dirty(rbusDIn_signals_reg[`rbusD_dirty]),
   .insert_dupl(dc2_dupl_rd),
   .hit_LRU(dc2_rLRU_reg),.read_LRU(dc2_rLRUB0),.hit_any(dc2_rhitB0),
-  .read_dir(dc2_rDirB0),.read_excl(dc2_rExclB0)
+  .read_dir(dc2_rDirB0),.read_excl(dc2_rExclB0),
+  .read_expAddr(L1_expAddr),
+  .read_expAddr_en(L1_expAddr_en)
   );
   dcache2_block #(2) dc2B1_mod(
   .clk(clk),
@@ -947,7 +959,9 @@ module heptane_core(
   .insert_dirty(rbusDIn_signals_reg[`rbusD_dirty]),
   .insert_dupl(dc2_dupl_rd),
   .hit_LRU(dc2_rLRU_reg),.read_LRU(dc2_rLRUB1),.hit_any(dc2_rhitB1),
-  .read_dir(dc2_rDirB1),.read_excl(dc2_rExclB1)
+  .read_dir(dc2_rDirB1),.read_excl(dc2_rExclB1),
+  .read_expAddr(L1_expAddr),
+  .read_expAddr_en(L1_expAddr_en)
   );
 
   frontend1 #(BUS_ID) front_mod(
@@ -1196,6 +1210,7 @@ module heptane_core(
   instr0_port,
   instr0_magic,
   instr0_last,
+  instr0_aft_spc,
   
   instr1_rT,
   instr1_en,
@@ -1207,6 +1222,7 @@ module heptane_core(
   instr1_port,
   instr1_magic,
   instr1_last,
+  instr1_aft_spc,
     
   instr2_rT,
   instr2_en,
@@ -1218,6 +1234,7 @@ module heptane_core(
   instr2_port,
   instr2_magic,
   instr2_last,
+  instr2_aft_spc,
   
   instr3_rT,
   instr3_en,
@@ -1229,6 +1246,7 @@ module heptane_core(
   instr3_port,
   instr3_magic,
   instr3_last,
+  instr3_aft_spc,
   
   instr4_rT,
   instr4_en,
@@ -1240,6 +1258,7 @@ module heptane_core(
   instr4_port,
   instr4_magic,
   instr4_last,
+  instr4_aft_spc,
   
   instr5_rT,
   instr5_en,
@@ -1251,6 +1270,7 @@ module heptane_core(
   instr5_port,
   instr5_magic,
   instr5_last,
+  instr5_aft_spc,
 
   instr6_rT,
   instr6_en,
@@ -1262,6 +1282,7 @@ module heptane_core(
   instr6_port,
   instr6_magic,
   instr6_last,
+  instr6_aft_spc,
 
   instr7_rT,
   instr7_en,
@@ -1273,6 +1294,7 @@ module heptane_core(
   instr7_port,
   instr7_magic,
   instr7_last,
+  instr7_aft_spc,
 
   instr8_rT,
   instr8_en,
@@ -1284,6 +1306,7 @@ module heptane_core(
   instr8_port,
   instr8_magic,
   instr8_last,
+  instr8_aft_spc,
 
   instr9_rT,
   instr9_en,
@@ -1295,6 +1318,7 @@ module heptane_core(
   instr9_port,
   instr9_magic,
   instr9_last,
+  instr9_aft_spc,
   jump0Type,jump0Pos,jump0Taken,
   jump1Type,jump1Pos,jump1Taken,
   jump0BtbWay,jump0JmpInd,jump0GHT,
