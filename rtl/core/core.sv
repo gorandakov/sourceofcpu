@@ -71,6 +71,7 @@ module heptane_core(
   wire [9:0] req_slot;
   wire req_en;
   wire req_tlbEn;
+  wire [3:0] req_tlbAttr;
   reg [36:0] req_addr_reg;
   reg [9:0] req_slot_reg;
   reg req_en_reg;
@@ -143,8 +144,8 @@ module heptane_core(
   wire stall;
 
   wire [2:0] btbl_step;
-  wire [IP_WIDTH-2:0] btbl_IP0;
-  wire [IP_WIDTH-2:0] btbl_IP1;
+  wire [63:0] btbl_IP0;
+  wire [63:0] btbl_IP1;
   wire [3:0] btbl_mask0;
   wire [3:0] btbl_mask1;
   
@@ -443,6 +444,7 @@ module heptane_core(
   wire [PORT_WIDTH-1:0] instr0_port;
   wire [3:0] instr0_magic;
   wire instr0_last;
+  wire instr0_aft_spc;
   
   wire [IN_REG_WIDTH-1:0] instr1_rT;
   wire instr1_en;
@@ -454,6 +456,7 @@ module heptane_core(
   wire [PORT_WIDTH-1:0] instr1_port;
   wire [3:0] instr1_magic;
   wire instr1_last;
+  wire instr1_aft_spc;
   
   wire [IN_REG_WIDTH-1:0] instr2_rT;
   wire instr2_en;
@@ -465,6 +468,7 @@ module heptane_core(
   wire [PORT_WIDTH-1:0] instr2_port;
   wire [3:0] instr2_magic;
   wire instr2_last;
+  wire instr2_aft_spc;
   
   wire [IN_REG_WIDTH-1:0] instr3_rT;
   wire instr3_en;
@@ -476,6 +480,7 @@ module heptane_core(
   wire [PORT_WIDTH-1:0] instr3_port;
   wire [3:0] instr3_magic;
   wire instr3_last;
+  wire instr3_aft_spc;
   
   wire [IN_REG_WIDTH-1:0] instr4_rT;
   wire instr4_en;
@@ -487,6 +492,7 @@ module heptane_core(
   wire [PORT_WIDTH-1:0] instr4_port;
   wire [3:0] instr4_magic;
   wire instr4_last;
+  wire instr4_aft_spc;
   
   wire [IN_REG_WIDTH-1:0] instr5_rT;
   wire instr5_en;
@@ -498,6 +504,7 @@ module heptane_core(
   wire [PORT_WIDTH-1:0] instr5_port;
   wire [3:0] instr5_magic;
   wire instr5_last;
+  wire instr5_aft_spc;
 
   wire [IN_REG_WIDTH-1:0] instr6_rT;
   wire instr6_en;
@@ -509,6 +516,7 @@ module heptane_core(
   wire [PORT_WIDTH-1:0] instr6_port;
   wire [3:0] instr6_magic;
   wire instr6_last;
+  wire instr6_aft_spc;
 
   wire [IN_REG_WIDTH-1:0] instr7_rT;
   wire instr7_en;
@@ -520,6 +528,7 @@ module heptane_core(
   wire [PORT_WIDTH-1:0] instr7_port;
   wire [3:0] instr7_magic;
   wire instr7_last;
+  wire instr7_aft_spc;
 
   wire [IN_REG_WIDTH-1:0] instr8_rT;
   wire instr8_en;
@@ -531,6 +540,7 @@ module heptane_core(
   wire [PORT_WIDTH-1:0] instr8_port;
   wire [3:0] instr8_magic;
   wire instr8_last;
+  wire instr8_aft_spc;
 
   wire [IN_REG_WIDTH-1:0] instr9_rT;
   wire instr9_en;
@@ -542,6 +552,7 @@ module heptane_core(
   wire [PORT_WIDTH-1:0] instr9_port;
   wire [3:0] instr9_magic;
   wire instr9_last;
+  wire instr9_aft_spc;
 
   wire [4:0] jump0Type;
   wire [3:0] jump0Pos;
@@ -561,11 +572,8 @@ module heptane_core(
   wire [1:0] jump1SC;
   wire jump1Miss;
   wire jump1TbufOnly;
-  wire [9:0] instr_trce;
   wire [9:0] instr_fsimd;
-  wire [46:0] traceIP0;
-  wire [46:0] traceIP1;
-  wire [46:0] baseIP;
+  wire [43:0] baseIP;
   wire [5:0] wrt0;
   wire [5:0] wrt1;
   wire [5:0] wrt2;
@@ -836,6 +844,7 @@ module heptane_core(
   .readI_dupl(dc2_dupl_rd),.readI_want_excl(dc2_want_excl),
   .readI_io(dc2_io_en),.readI_dataIO(dc2_dataIO),
   .readI_ins_A(rinsBus_A),.readI_ins_B(rinsBus_B),
+  .readI_code(),
   .miss_en(({dc2_rhitA0,dc2_rhitB0,dc2_rhitB1}==3'b0)|(~dc2_rExcl&dc2_want_excl_reg4) && dc2_rdEnX_reg4),
   .miss_addr(dc2_rd_addr_reg3),.miss_req(dc2_req_rd_reg4),
   .miss_dupl(~dc2_rExcl&dc2_want_excl_reg4&(dc2_rhitA0|dc2_rhitB0|dc2_rhitB1)||dc2_dupl_rd_reg4),
@@ -963,6 +972,7 @@ module heptane_core(
   req_slot,
   req_en,
   req_tlbEn,
+  req_tlbAttr,
   bus_tlb_data,
   bus_tlb_slot,
   bus_tlb_en,
@@ -1314,6 +1324,7 @@ module heptane_core(
   except_jmask_en,
   except_jmask, 
   req_addr[35:0],
+  req_tlbAttr,
   req_tlbEn,
   bus_tlb_data,
   bus_tlb_en,
@@ -1489,6 +1500,7 @@ module heptane_core(
   instr0_port,
   instr0_magic,
   instr0_last,
+  instr0_aft_spc,
   
   instr1_rT,
   instr1_en,
@@ -1500,6 +1512,7 @@ module heptane_core(
   instr1_port,
   instr1_magic,
   instr1_last,
+  instr1_aft_spc,
     
   instr2_rT,
   instr2_en,
@@ -1511,6 +1524,7 @@ module heptane_core(
   instr2_port,
   instr2_magic,
   instr2_last,
+  instr2_aft_spc,
   
   instr3_rT,
   instr3_en,
@@ -1522,6 +1536,7 @@ module heptane_core(
   instr3_port,
   instr3_magic,
   instr3_last,
+  instr3_aft_spc,
   
   instr4_rT,
   instr4_en,
@@ -1533,6 +1548,7 @@ module heptane_core(
   instr4_port,
   instr4_magic,
   instr4_last,
+  instr4_aft_spc,
   
   instr5_rT,
   instr5_en,
@@ -1544,6 +1560,7 @@ module heptane_core(
   instr5_port,
   instr5_magic,
   instr5_last,
+  instr5_aft_spc,
 
   instr6_rT,
   instr6_en,
@@ -1555,6 +1572,7 @@ module heptane_core(
   instr6_port,
   instr6_magic,
   instr6_last,
+  instr6_aft_spc,
 
   instr7_rT,
   instr7_en,
@@ -1566,6 +1584,7 @@ module heptane_core(
   instr7_port,
   instr7_magic,
   instr7_last,
+  instr7_aft_spc,
 
   instr8_rT,
   instr8_en,
@@ -1577,6 +1596,7 @@ module heptane_core(
   instr8_port,
   instr8_magic,
   instr8_last,
+  instr8_aft_spc,
 
   instr9_rT,
   instr9_en,
@@ -1588,6 +1608,7 @@ module heptane_core(
   instr9_port,
   instr9_magic,
   instr9_last,
+  instr9_aft_spc,
 
   jump0Type,jump0Pos,jump0Taken,btbl_IP0,btbl_mask0,
   jump1Type,jump1Pos,jump1Taken,btbl_IP1,btbl_mask1,
