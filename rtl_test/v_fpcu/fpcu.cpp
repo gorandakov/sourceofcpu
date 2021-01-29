@@ -191,6 +191,34 @@ void creat_reqs(int row,unsigned fpcsr) {
 	  reqs[row][4+n].opADDd(1,(op&0x200)==0,1,(fpcsr>>22)&7);
 	  if (op&0x1000) opUnSWP();
 	  break;
+	  case fop_and:
+	  reqs[row][4+n].res[0]=reqs[row][4+n].A[0]  &reqs[row][4+n].B[0];
+	  reqs[row][4+n].res[1]=reqs[row][4+n].A[1]  &reqs[row][4+n].B[1];
+	  reqs[row][4+n].resx[0]=reqs[row][4+n].Ax[0]&reqs[row][4+n].Bx[0];
+	  reqs[row][4+n].resx[1]=reqs[row][4+n].Ax[1]&reqs[row][4+n].Bx[1];
+	  reqs[row][4+n].resh=reqs[row][4+n].Ah      &reqs[row][4+n].Bh;
+	  break;
+	  case fop_or:
+	  reqs[row][4+n].res[0]=reqs[row][4+n].A[0]  |reqs[row][4+n].B[0];
+	  reqs[row][4+n].res[1]=reqs[row][4+n].A[1]  |reqs[row][4+n].B[1];
+	  reqs[row][4+n].resx[0]=reqs[row][4+n].Ax[0]|reqs[row][4+n].Bx[0];
+	  reqs[row][4+n].resx[1]=reqs[row][4+n].Ax[1]|reqs[row][4+n].Bx[1];
+	  reqs[row][4+n].resh=reqs[row][4+n].Ah      |reqs[row][4+n].Bh;
+	  break;
+	  case fop_xor:
+	  reqs[row][4+n].res[0]=reqs[row][4+n].A[0]  ^reqs[row][4+n].B[0];
+	  reqs[row][4+n].res[1]=reqs[row][4+n].A[1]  ^reqs[row][4+n].B[1];
+	  reqs[row][4+n].resx[0]=reqs[row][4+n].Ax[0]^reqs[row][4+n].Bx[0];
+	  reqs[row][4+n].resx[1]=reqs[row][4+n].Ax[1]^reqs[row][4+n].Bx[1];
+	  reqs[row][4+n].resh=reqs[row][4+n].Ah      ^reqs[row][4+n].Bh;
+	  break;
+	  case fop_andn:
+	  reqs[row][4+n].res[0]=reqs[row][4+n].A[0]  &~reqs[row][4+n].B[0];
+	  reqs[row][4+n].res[1]=reqs[row][4+n].A[1]  &~reqs[row][4+n].B[1];
+	  reqs[row][4+n].resx[0]=reqs[row][4+n].Ax[0]&~reqs[row][4+n].Bx[0];
+	  reqs[row][4+n].resx[1]=reqs[row][4+n].Ax[1]&~reqs[row][4+n].Bx[1];
+	  reqs[row][4+n].resh=reqs[row][4+n].Ah      &~reqs[row][4+n].Bh;
+	  break;
       }
       reqs[row][4+n].op=op;
 do_mul:
@@ -198,6 +226,26 @@ do_mul:
       else op=OPS_MUL[lrand48()%(sizeof OPS_MUL/sizeof OPS_MUL[0])];
       if (reqs[row][7+n].en) goto after_mul;
       switch (op) {
+	  case fop_mulDL:
+	  op|=0x100&lrand48();
+	  reqs[row][4+n].opMULd(0,(op&0x100)!=0,0,(fpcsr>>22)&7);
+	  break;
+	  case fop_mulDH:
+	  op|=0x200&lrand48();
+	  reqs[row][4+n].opMULd(1,(op&0x200)==0,1,(fpcsr>>22)&7);
+	  break;
+	  case fop_permDS:
+	  op|=0x1700&lrand48();
+	  reqs[row][4+n].opPERMd(0,(op&0x100)!=0,0,(op&0x400)!=0,(op&0x1000)!=0);
+	  reqs[row][4+n].opPERMd(1,(op&0x200)==0,1,(op&0x400)!=0,(op&0x1000)!=0);
+	  break;
+	  case fop_mulDP:
+	  op|=0x1300&lrand48();
+	  if (op&0x1000) opSWP();
+	  reqs[row][4+n].opMULd(0,(op&0x100)!=0,0,(fpcsr>>22)&7);
+	  reqs[row][4+n].opMULd(1,(op&0x200)==0,1,(fpcsr>>22)&7);
+	  if (op&0x1000) opUnSWP();
+	  break;
       }
 after_mul:
   }
