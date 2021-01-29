@@ -219,7 +219,8 @@ module ctlb(
   wire [23:0] pproc;
   wire [39:0] dummy_pproc;
   wire [23:0] vmproc;
-  wire [39:0] dummy_vmroc;
+  wire [39:0] dummy_vmproc;
+  wire [63:0] mflags;
 
   reg [IP_WIDTH-1:0] addr_reg;
   

@@ -2235,10 +2235,6 @@ module rs(
   output [3:0] outFuuFwdA1;
   output [3:0] outFuuFwdB1;
   output [3:0] outFuuFwdS1;
-  output [3:0] outFuFwdAH1;
-  output [3:0] outFuFwdBH1;
-  output [3:0] outFuuFwdAH1;
-  output [3:0] outFuuFwdBH1;
   output [3:0] outDataEn1;
   output outThread1;
   output [ATTR_WIDTH-1:0] outAttr1;

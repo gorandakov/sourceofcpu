@@ -1199,9 +1199,9 @@ module rs_s(
 
   rs_nonWakeUp_array #(OPERATION_WIDTH) attrA_mod(
   clk,dataRst,stall|doStall,
-  newRsSelect0,newAttrA0,
-  newRsSelect1,newAttrA1,
-  newRsSelect2,newAttrA2,
+  newRsSelect0,newAttr0,
+  newRsSelect1,newAttr1,
+  newRsSelect2,newAttr2,
   
   outRsSelect[0],outBank[0],rsFound[0],outAttr0,
   outRsSelect[1],outBank[1],rsFound[1],outAttr1,
@@ -1210,9 +1210,9 @@ module rs_s(
 
   rs_nonWakeUp_array #(OPERATION_WIDTH) attrB_mod(
   clk,dataRst,stall|doStall,
-  newRsSelect0,newAttrB0,
-  newRsSelect1,newAttrB1,
-  newRsSelect2,newAttrB2,
+  newRsSelect0,newAttr0,
+  newRsSelect1,newAttr1,
+  newRsSelect2,newAttr2,
   
   outRsSelect[2],outBank[2],rsFound[2],outAttr2,
   outRsSelect[3],outBank[3],rsFound[3],outAttr3,

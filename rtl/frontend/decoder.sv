@@ -2350,6 +2350,7 @@ module decoder(
   wire jump1_any;
   
   wire [63:0] aux_const;
+  wire aux_can_jump;
 
   generate 
       genvar k;

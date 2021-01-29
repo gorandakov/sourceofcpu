@@ -144,6 +144,8 @@ module frontend1(
   wire instrFed;
   reg instrFed_reg;
 
+  wire do_seq_any,do_seq_miss;
+
   wire [47:0] cc_read_IP_d;
   wire [47:0] tr_read_IP_d;
   wire do_seq;
@@ -546,7 +548,7 @@ module frontend1(
   wire btbt_can_ins;
   
   wire btb_hold_except;
-  reg read_set_flag;
+  reg read_set_flag,read_set_flag_reg;
   
 //  wire tr_odd_d,tr_half_d;
 //  reg tr_odd,tr_odd_reg,tr_odd_reg2;
@@ -1282,6 +1284,7 @@ module frontend1(
           //ixcept_reg<=1'b0;
           //ixceptLDConfl_reg<=1'b0;
           read_set_flag<=1'b0;
+          read_set_flag_reg<=1'b0;
           cc_read_IP<=INIT_IP;
           miss_IP<=48'b0;
   //        link_IP<=48'b0;
@@ -1445,6 +1448,7 @@ module frontend1(
           //ixceptLDConfl_reg<=ixceptLDConfl;
           jumpTK_en<=1'b0;
           read_set_flag<=ixceptLDConfl;
+	  read_set_flag_reg<=1'b0;
           cc_read_IP<=cc_read_IP_d;
           miss_now<=1'b0;
           miss_cnt<=3'b0;
@@ -1498,6 +1502,7 @@ module frontend1(
           //ixcept_reg<=1'b0;
           //ixceptLDConfl_reg<=1'b0;
           read_set_flag<=1'b0;
+	  read_set_flag_reg<=read_set_flag;
           cc_read_IP<=cc_read_IP_d;
           jumpTK_en<=1'b0;
           if (~cc_read_hit & ~miss_now & instrEn_reg3) begin

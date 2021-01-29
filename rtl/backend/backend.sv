@@ -2126,6 +2126,7 @@ module backend(
 
   wire [8:0] retfl_rF;
   wire [5:0] retfl_data;
+  wire retfl_enG;
 
   wire [1:0][63:0] Wqj_wrAddr;
   wire [1:0][31:0] Wqj_wrBanks;
@@ -4489,7 +4490,7 @@ module backend(
     .outRegSimd1(),.outOp1(outOp[3*m+1]),.outInstrIndex1(outII[3*m+1]),
     .outFuFwdA1(fuFwdA[3*m+1]),.outFuFwdB1(fuFwdB[3*m+1]),.outFuFwdS1(fuFwdS[3*m+1]),
     .outFuuFwdA1(fuuFwdA[3*m+1]),.outFuuFwdB1(fuuFwdB[3*m+1]),.outFuuFwdS1(fuuFwdS[3*m+1]),
-    .outFuFwdAH1(fuFwdAH[m]),.outFuFwdBH1(fuFwdBH[m]),.outFuuFwdAH1(fuuFwdAH[m]),.outFuuFwdBH1(fuuFwdBH[m]),.outDataEn1(outEn[3*m+1]),
+    .outDataEn1(outEn[3*m+1]),
     .outThread1(outThr[3*m+1]),
     .outAttr1(outAttr[3*m+1]),//alu 1
   .outDataA2(outDataA[3*m+2]),.outDataB2(outDataB[3*m+2]),.outDataS2(outDataS[3*m+2]),.outReg2(outReg[3*m+2]),
