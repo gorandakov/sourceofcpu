@@ -525,6 +525,7 @@ module agu_block(
   wire [127+8:0] rec_data;
   wire rec_stall;
   wire rec_tlb_miss;
+  wire [3:0] rec_attr;
 
   wire [63:0] p0_cmplxAddr_d;
   wire [63:0] p1_cmplxAddr_d;
@@ -654,7 +655,7 @@ module agu_block(
 
   wire Em_tlb_req_en;
   wire [43-14:0] Em_tlb_req_addr;
-  wire [3:0] Em_tlb_attr;
+  wire [3:0] Em_tlb_req_attr;
   wire Em_tlb_req_ack;
   
   reg [`lsfxdata_width-1:0] lso_xdataA_reg;
@@ -747,8 +748,10 @@ module agu_block(
   wire [8:0] p5_faultNo;
   
   wire        p4_mex_en;
+  wire [3:0]  p4_mex_attr;
   wire [43:0] p4_mex_addr;
   wire        p5_mex_en;
+  wire [3:0]  p5_mex_attr;
   wire [43:0] p5_mex_addr;
   wire [4:0]  p4_mex_sz;
   wire [4:0]  p5_mex_sz;
@@ -764,6 +767,7 @@ module agu_block(
   reg [7:0]  u1_WQ_no_reg;
   reg        u1_lsflag_reg;
   reg [63:0] u1_const_reg;
+  reg [3:0]  u1_attr_reg;
 
   reg        u2_clkEn_reg;
   reg [12:0] u2_op_reg;
@@ -774,6 +778,7 @@ module agu_block(
   reg [7:0]  u2_WQ_no_reg;
   reg        u2_lsflag_reg;
   reg [63:0] u2_const_reg;
+  reg [3:0]  u2_attr_reg;
   
   reg        u3_clkEn_reg;
   reg [12:0] u3_op_reg;
@@ -784,6 +789,7 @@ module agu_block(
   reg [7:0]  u3_WQ_no_reg;
   reg        u3_lsflag_reg;
   reg [63:0] u3_const_reg;
+  reg [3:0]  u3_attr_reg;
   
   reg        u4_clkEn_reg;
   reg [12:0] u4_op_reg;
@@ -794,6 +800,7 @@ module agu_block(
   reg [7:0]  u4_WQ_no_reg;
   reg        u4_lsflag_reg;
   reg [63:0] u4_const_reg;
+  reg [3:0]  u4_attr_reg;
   
   reg        u5_clkEn_reg;
   reg [12:0] u5_op_reg;
@@ -804,6 +811,7 @@ module agu_block(
   reg [7:0]  u5_WQ_no_reg;
   reg        u5_lsflag_reg;
   reg [63:0] u5_const_reg;
+  reg [3:0]  u5_attr_reg;
   
   reg        u1_clkEn_reg2;
   reg [12:0] u1_op_reg2;
@@ -868,6 +876,7 @@ module agu_block(
   wire [7:0]  mOpX0_WQ;
   wire        mOpX0_lsflag;
   wire        mOpX0_lsfwd;
+  wire [3:0]  mOpX0_attr;
   reg mOpX0_lsflag_reg, mOpX0_lsflag_reg2, mOpX0_lsflag_reg3;
   reg mOpX0_en_reg,     mOpX0_en_reg2,     mOpX0_en_reg3;
   reg mOp0_rsEn_reg,mOp1_rsEn_reg,mOp2_rsEn_reg,mOp3_rsEn_reg;
@@ -906,6 +915,7 @@ module agu_block(
   wire [9:0]  mOp0_II;
   wire [7:0]  mOp0_WQ;
   wire        mOp0_lsflag;
+  wire [3:0]  mOp0_attr;
 
   wire        mOpX1_en;
   wire        mOpX1_thread;
@@ -925,6 +935,7 @@ module agu_block(
   wire [7:0]  mOpX1_WQ;
   wire        mOpX1_lsflag;
   wire        mOpX1_lsfwd;
+  wire [3:0]  mOpX1_attr;
   reg mOpX1_lsflag_reg, mOpX1_lsflag_reg2, mOpX1_lsflag_reg3;
   reg mOpX1_en_reg,     mOpX1_en_reg2,     mOpX1_en_reg3;
   reg [1:0] mOpX1_type_reg;
@@ -961,6 +972,7 @@ module agu_block(
   wire [9:0]  mOp1_II;
   wire [7:0]  mOp1_WQ;
   wire        mOp1_lsflag;
+  wire [3:0]  mOp1_attr;
 
   wire        mOpX2_en;
   wire        mOpX2_thread;
@@ -980,6 +992,7 @@ module agu_block(
   wire [7:0]  mOpX2_WQ;
   wire        mOpX2_lsflag;
   wire        mOpX2_lsfwd;
+  wire [3:0]  mOpX2_attr;
   reg mOpX2_lsflag_reg, mOpX2_lsflag_reg2, mOpX2_lsflag_reg3;
   reg mOpX2_en_reg,     mOpX2_en_reg2,     mOpX2_en_reg3;
   reg [1:0] mOpX2_type_reg;
@@ -1016,6 +1029,7 @@ module agu_block(
   wire [9:0]  mOp2_II;
   wire [7:0]  mOp2_WQ;
   wire        mOp2_lsflag;
+  wire [3:0]  mOp2_attr;
 
   wire        mOpX3_en;
   wire        mOpX3_thread;
@@ -1034,6 +1048,7 @@ module agu_block(
   wire [9:0]  mOpX3_II;
   wire [7:0]  mOpX3_WQ;
   wire        mOpX3_lsflag;
+  wire [3:0]  mOpX3_attr;
   reg mOpX3_lsflag_reg, mOpX3_lsflag_reg2, mOpX3_lsflag_reg3;
   reg mOpX3_en_reg,     mOpX3_en_reg2,     mOpX3_en_reg3;
   reg [1:0] mOpX3_type_reg;
@@ -1075,6 +1090,7 @@ module agu_block(
   wire [7:0]  mOp3_WQ;
   wire        mOp3_lsflag;
   wire        mOp3_lsfwd;
+  wire [3:0]  mOp3_attr;
 
   wire        mOpX4_en;
   wire        mOpX4_thread;
@@ -1093,6 +1109,7 @@ module agu_block(
   wire [9:0]  mOpX4_II;
   wire [7:0]  mOpX4_WQ;
   wire        mOpX4_lsflag;
+  wire [3:0]  mOpX4_attr;
   reg        mOpX4_en_reg;
   reg        mOpX4_thread_reg;
   reg [35:0] mOpX4_addrEven_reg;
@@ -1130,6 +1147,7 @@ module agu_block(
   wire [9:0]  mOp4_II;
   wire [7:0]  mOp4_WQ;
   wire        mOp4_lsflag;
+  wire [3:0]  mOp4_attr;
 
   wire        mOpX5_en;
   wire        mOpX5_thread;
@@ -1148,6 +1166,7 @@ module agu_block(
   wire [9:0]  mOpX5_II;
   wire [7:0]  mOpX5_WQ;
   wire        mOpX5_lsflag;
+  wire [3:0]  mOpX5_attr;
   reg        mOpX5_en_reg;
   reg [35:0] mOpX5_addrEven_reg;
   reg [35:0] mOpX5_addrOdd_reg;
@@ -1182,6 +1201,7 @@ module agu_block(
   wire [9:0]  mOp5_II;
   wire [7:0]  mOp5_WQ;
   wire        mOp5_lsflag;
+  wire [3:0]  mOp5_attr;
 
 
   wire mOp4_rsEn;
@@ -1614,7 +1634,7 @@ module agu_block(
   p5_mex_en,
   Em_tlb_req_en,
   Em_tlb_req_addr,
-  EM_tlb_req_attr,
+  Em_tlb_req_attr,
   Em_tlb_req_ack
   );
           
@@ -1939,7 +1959,7 @@ module agu_block(
   .mOp0_lsflag(rec_lsflag),
  
   .reqtlb_addr(Em_tlb_req_addr),
-  .reqtlb_attr(Em_tlb_attr),
+  .reqtlb_attr(Em_tlb_req_attr),
   .reqtlb_en(Em_tlb_req_en),
   .reqtlb_ack(Em_tlb_req_ack), 
   .reqC_addr(req_addr),

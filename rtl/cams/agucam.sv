@@ -162,6 +162,7 @@ module agucam(
   mOp0_WQ,
   mOp0_thread,
   mOp0_lsflag,
+  mOp0_attr,
   conflict1,
   mOp1_addrMain,
   mOp1_regNo,
@@ -175,6 +176,7 @@ module agucam(
   mOp1_WQ,
   mOp1_thread,
   mOp1_lsflag,
+  mOp1_attr,
   conflict2,
   mOp2_addrMain,
   mOp2_regNo,
@@ -188,6 +190,7 @@ module agucam(
   mOp2_WQ,
   mOp2_thread,
   mOp2_lsflag,
+  mOp2_attr,
 
   conflict3,
   mOp3_addrEven,
@@ -223,7 +226,8 @@ module agucam(
   mOpR_thread,
   mOpR_lsflag,
   mOpR_bread,
-  mOpR_data
+  mOpR_data,
+  mOpR_attr
   );
 
   localparam DEPTH=8;
@@ -262,6 +266,7 @@ module agucam(
   input [7:0] mOp0_WQ;
   input mOp0_thread;
   input mOp0_lsflag;
+  input [3:0] mOp0_attr;
 
   input conflict1;
   input [VADDR_WIDTH-1:0] mOp1_addrMain;
@@ -277,6 +282,7 @@ module agucam(
   input [7:0] mOp1_WQ;
   input mOp1_thread;
   input mOp1_lsflag;
+  input [3:0] mOp1_attr;
 
   input conflict2;
   input [VADDR_WIDTH-1:0] mOp2_addrMain;
@@ -292,6 +298,7 @@ module agucam(
   input [7:0] mOp2_WQ;
   input mOp2_thread;
   input mOp2_lsflag;
+  input [3:0] mOp2_attr;
 
   input conflict3;
   input [PADDR_WIDTH-9:0] mOp3_addrEven;
@@ -329,6 +336,7 @@ module agucam(
   output mOpR_lsflag;
   output [4:0] mOpR_bread;
   output [135:0] mOpR_data;
+  output [3:0] mOpR_attr;
   
   wire [3:0] curConfl;
  // wire [3:0] write_confl;
@@ -423,6 +431,7 @@ module agucam(
   assign write_mop[0][`mOp_WQ]=      mOp0_WQ;
   assign write_mop[0][`mOp_thread]=  mOp0_thread;
   assign write_mop[0][`mOp_lsflag]=  mOp0_lsflag;
+  assign write_mop[0][`mOp_attr]=    mOp0_attr;
 
   assign write_mop[1][`mOp_addrMain]=mOp1_addrMain;
   assign write_mop[1][`mOp_reg]=     mOp1_regNo;
@@ -436,6 +445,7 @@ module agucam(
   assign write_mop[1][`mOp_WQ]=      mOp1_WQ;
   assign write_mop[1][`mOp_thread]=  mOp1_thread;
   assign write_mop[1][`mOp_lsflag]=  mOp1_lsflag;
+  assign write_mop[1][`mOp_attr]=    mOp1_attr;
 
 
   assign write_mop[2][`mOp_addrMain]=mOp2_addrMain;
@@ -450,6 +460,7 @@ module agucam(
   assign write_mop[2][`mOp_WQ]=      mOp2_WQ;
   assign write_mop[2][`mOp_thread]=  mOp2_thread;
   assign write_mop[2][`mOp_lsflag]=  mOp2_lsflag;
+  assign write_mop[2][`mOp_attr]=    mOp2_attr;
 
   assign write_mop3[`mOpX_addrEven]=mOp3_addrEven;
   assign write_mop3[`mOpX_addrOdd]= mOp3_addrOdd;
@@ -489,6 +500,7 @@ module agucam(
   assign mOpR_lsflag=(!conflFound) ? 1'b0 : 1'BZ;
   assign thrmask=(!conflFound) ? 1'b1 : 1'BZ;
   assign mOpR_lsfw=(!conflFound) ? 1'b0 : 1'BZ;
+  assign mOpR_attr=(!conflFound) ? 4'b0 : 4'BZ;
   
   assign read_confl[0]=(wen & count[0]) ? read_conflA[0] : read_conflA[0] && valid[read_mop[0][`mOp_thread]][read_addr];
   assign read_confl[1]=(wen & count[0]) ? read_conflA[1] : read_conflA[1] && valid[read_mop[1][`mOp_thread]][read_addr];
@@ -517,6 +529,7 @@ module agucam(
   assign thrmask=sel[3] ? 1'b0 : 1'bz;
   assign mOpR_lsfw=sel[3] ? 1'b1 : 1'bz;
   assign mOpR_bread=sel[3] ? read_mop3[`mOpX_bread] : 5'BZ;
+  assign mOpR_attr=sel[3] ? 4'b0 : 4'BZ;
 
   generate
     genvar p,k;
@@ -540,6 +553,7 @@ module agucam(
         assign mOpR_lsflag=sel[k] ? read_mop[k][`mOp_lsflag] : 1'BZ;
         assign thrmask=sel[k] ? (read_mop[k][`mOp_thread]) | (~read_mop[k][`mOp_thread]) : 1'bz;
         assign mOpR_lsfw=sel[k] ? 1'b0 : 1'bz;
+        assign mOpR_attr=sel[k] ? read_mop[k][`mOp_attr] : 4'bz;
     end
     for(p=0;p<8;p=p+1) begin
 	assign read_addrU_d=(rdxvalid0[p] || rdvalid1[p] & drvalid0_found &

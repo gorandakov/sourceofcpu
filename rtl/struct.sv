@@ -328,7 +328,8 @@
 `define mOp_lsflag 85
 `define mOp_WQ 93:86
 `define mOp_type 95:94
-`define mOp_width 96
+`define mOp_attr 99:96
+`define mOp_width 100
 
 `define mOpX_addrEven 35:0
 `define mOpX_addrOdd 71:36

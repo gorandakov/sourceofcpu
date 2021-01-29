@@ -577,7 +577,7 @@ module dcache2_way(
     end
   endgenerate
 
-  assign read_LRUP=(~read_odd_reg3 & read_hit_reg) ? read_LRUE : 5'bz;
+  /*assign read_LRUP=(~read_odd_reg3 & read_hit_reg) ? read_LRUE : 5'bz;
   assign read_LRUP=(read_odd_reg3 & read_hit_reg) ? read_LRUO : 5'bz;
   assign read_LRUP=(~read_hit_reg) ? 5'b0 : 5'bz;
   assign read_LRUx=(read_en_reg3 & ~read_odd_reg3) ? read_LRUE : read_LRUO;
@@ -589,7 +589,7 @@ module dcache2_way(
   assign read_explP=(~read_hit_reg) ? 1'b0 : 1'bz;
   assign read_expAddrP=(~read_odd_reg3 & read_hit_reg) ? expAddrE_reg2 : 37'bz;
   assign read_expAddrP=(read_odd_reg3 & read_hit_reg) ? expAddrO_reg2 : 37'bz;
-  assign read_expAddrP=(~read_hit_reg) ? 37'b0 : 37'bz;
+  assign read_expAddrP=(~read_hit_reg) ? 37'b0 : 37'bz;*/
 
   lru_single #(5,{BIG_ID,ID}) lru_mod(
   .lru(read_LRUx_reg2),
