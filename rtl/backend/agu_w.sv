@@ -101,6 +101,7 @@ module sagu(
   output [8:0] mOp_LSQ;
   output [9:0] mOp_II;
   output [7:0] mOp_WQ;
+  output [3:0] mOp_attr;
   output [PADDR_WIDTH-1:8] mOp_addrEven;
   output [PADDR_WIDTH-1:8] mOp_addrOdd;
   output [43:0] mOp_addrMain;

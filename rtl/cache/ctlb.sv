@@ -258,21 +258,21 @@ module ctlb(
   endgenerate
   
   adder_inc #(6) initAdd_mod(init_count,init_count_d,1'b1,);
-  csrss_watch #(`csr_page) csrSproc_mod(
+  csrss_watch #(`csr_page) csrSproc0_mod(
   clk,
   rst,
   csrss_addr,
   csrss_data,
   csrss_en,
   {pproc,dummy_pproc});
-  csrss_watch #(`csr_vmpage) csrSproc_mod(
+  csrss_watch #(`csr_vmpage) csrSproc1_mod(
   clk,
   rst,
   csrss_addr,
   csrss_data,
   csrss_en,
   {vmproc,dummy_vmproc});
-  csrss_watch #(`csr_mflags) csrSproc_mod(
+  csrss_watch #(`csr_mflags) csrSproc2_mod(
   clk,
   rst,
   csrss_addr,

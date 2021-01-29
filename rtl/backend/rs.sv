@@ -2626,7 +2626,7 @@ module rs(
   outRsSelect[2],outBank[2],rsFoundNZ[2],outOp2
   );
   
-  rs_nonWakeUp_array #(ATTR_WIDTH) op_mod(
+  rs_nonWakeUp_array #(ATTR_WIDTH) attr_mod(
   clk,dataRst,stall|doStall,
   newRsSelect0,newAttr0,
   newRsSelect1,newAttr1,
