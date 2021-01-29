@@ -39,7 +39,10 @@ module frontend1(
   btbl_IP1,
   btbl_mask0,
   btbl_mask1,
-  csrss_en,csrss_addr,csrss_data
+  csrss_en,csrss_addr,csrss_data,
+  MSI_expAddr,
+  MSI_expAddr_en,
+  MSI_expAddr_hit
   );
 
   localparam PHYS_WIDTH=44;
@@ -130,6 +133,10 @@ module frontend1(
   input csrss_en;
   input [15:0] csrss_addr;
   input [63:0] csrss_data;
+  
+  input [36:0] MSI_expAddr;
+  input MSI_expAddr_en;
+  output MSI_expAddr_hit;
 
   wire [DATA_WIDTH/2-1:0] read_data;
   wire [14:0] read_dataX;
@@ -596,10 +603,10 @@ module frontend1(
           
           .pushCallStack(jdec_push[k]),
           .popCallStack(jdec_pop[k]),
-//          isJump,
-          .jumpType(jdec_type[k])//,
-//          jumpIndir,
-//          isIPRel
+          .isJump(),
+          .jumpType(jdec_type[k]),
+          .jumpIndir(),
+          .isIPRel()
           );
   
       end
@@ -856,7 +863,10 @@ module frontend1(
   .write_IP({write_IP,5'b0}),
   .cc_write_wen(bus_match_reg),
   .cc_invalidate(1'b0),
-  .write_data(write_data)
+  .write_data(write_data),
+  .chkCL_IP(MSI_expAddr),
+  .chkCL_clkEn(MSI_expAddr_en),
+  .chkCL_hit(MSI_expAddr_hit)
   );  
 
   ctlb tlb_mod(

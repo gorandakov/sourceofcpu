@@ -728,6 +728,7 @@ module heptane_core(
   wire MSI_expAddr_en;
   wire MSI_req_excl;
   wire MSI_expect_swap;
+  wire MSI_expAddr_hitCC;
 //  wire MSI_swap_reply;
 
   wire wrStall;
@@ -1003,7 +1004,10 @@ module heptane_core(
   btbl_IP0,
   btbl_IP1,
   btbl_mask0,btbl_mask1,
-  csrss_en,csrss_addr,csrss_data
+  csrss_en,csrss_addr,csrss_data,
+  MSI_expAddr,
+  MSI_expAddr_en,
+  MSI_expAddr_hitCC
   );
   
 

@@ -582,7 +582,7 @@ module dcache1_way(
         .read_hitL_odd(read_hitOL[r]),.read_hitL_even(read_hitEL[r]),
         .read_hitH_odd(read_hitOH[r]),.read_hitH_even(read_hitEH[r]),
         .read_hit_odd(read_hitO[r]),.read_hit_even(read_hitE[r]),
-        .read_exclOut0(),.read_exclOut1(),//.read_excl
+        .read_exclOut0(),.read_exclOut1(),.read_excl(),
         .errH(errH[r]),.errL(errL[r]),
         .write_exclusive(write_insertExclusive),
         .write_rand(insert_rand),
@@ -604,7 +604,7 @@ module dcache1_way(
         .read_hitL_odd(read_hitOL[r]),.read_hitL_even(read_hitEL[r]),
         .read_hitH_odd(read_hitOH[r]),.read_hitH_even(read_hitEH[r]),
         .read_hit_odd(read_hitO[r]),.read_hit_even(read_hitE[r]),
-        .read_exclOut0(),.read_exclOut1(),//.read_excl
+        .read_exclOut0(),.read_exclOut1(),.read_excl(),
         .errH(errH[r]),.errL(errL[r]),
         .write_exclusive(write_insertExclusive),
         .write_rand(insert_rand),
@@ -629,11 +629,11 @@ module dcache1_way(
         .read_hitL_odd(write_hitOL[w]),.read_hitL_even(write_hitEL[w]),
         .read_hitH_odd(write_hitOH[w]),.read_hitH_even(write_hitEH[w]),
         .read_hit_odd(write_hitO[w]),.read_hit_even(write_hitE[w]),
-        //.read_excl
+        .read_excl(),
         .errH(errH[w+4]),.errL(errL[w+4]),
         .write_exclusive(write_insertExclusive),
         .write_rand(insert_rand),
-        //.write_recent_out(recent[w+4]),
+        .write_recent_out(),
         .write_recent_in(recent_in),
         .write_wen(write_insert),
         .write_hit(ins_hit[w+4]),
