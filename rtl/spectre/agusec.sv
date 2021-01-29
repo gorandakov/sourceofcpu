@@ -1,4 +1,4 @@
-
+`include "../struct.sv"
 
 module agusec_check_upper3(
   input [63:0] ptr,

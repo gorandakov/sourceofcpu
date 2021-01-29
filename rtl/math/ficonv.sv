@@ -58,7 +58,7 @@ module cvt_FP_I_mod(
   get_carry #(16) cmpShift_mod(shift,~(BIAS+16'd64),1'b1,coUP);
   get_carry #(16) cmpShift2_mod(BIAS-16'd63,~shift,1'b1,coNUP);
 
-  adder_inc #(64) inv_mod(~bits,bits2,sign);
+  adder_inc #(64) inv_mod(~bits,bits2,sign,);
 
   assign bits2=~sign ? bits : 64'bz;
 

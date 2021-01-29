@@ -729,6 +729,7 @@ module heptane_core(
   wire MSI_req_excl;
   wire MSI_expect_swap;
   wire MSI_expAddr_hitCC;
+  wire [3:0] dec_attr;
 //  wire MSI_swap_reply;
 
   wire wrStall;
@@ -1356,7 +1357,8 @@ module heptane_core(
   req_tlbEn,
   bus_tlb_data,
   bus_tlb_en,
-  
+  dec_attr,
+
   rs0i0_rA,rs0i0_rA_use,rs0i0_rA_useF,rs0i0_rA_isV,rs0i0_rA_isAnyV,
   rs0i0_rB,rs0i0_rB_use,rs0i0_rB_useF,rs0i0_rB_isV,rs0i0_rB_isAnyV,rs0i0_useBConst,
   rs0i0_rT,rs0i0_rT_use,rs0i0_rT_useF,rs0i0_rT_isV, 

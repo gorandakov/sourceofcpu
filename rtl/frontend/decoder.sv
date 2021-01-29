@@ -2989,6 +2989,7 @@ module decoder(
   .instr9(inst[9][31:0]),
   .aux_const(aux_const),
   .aux_can_jump(aux_can_jump),
+  .aux_can_read(),
   .csrss_no(csrss_no),
   .csrss_en(csrss_en),
   .csrss_data(csrss_data),

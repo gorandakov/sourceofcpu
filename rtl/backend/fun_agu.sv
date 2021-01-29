@@ -1943,7 +1943,7 @@ module agu_block(
   .reqtlb_en(Em_tlb_req_en),
   .reqtlb_ack(Em_tlb_req_ack), 
   .reqC_addr(req_addr),
-  .reqC_tlbAttr(req_tlbAttr),
+  .reqC_attr(req_tlbAttr),
   .reqC_tlbEn(req_tlbEn),
   .busC_tlb_data(bus_tlb_data),
   .busC_tlb_en(bus_tlb_en),
