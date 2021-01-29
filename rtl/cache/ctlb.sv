@@ -88,6 +88,8 @@ module ctlb_way(
 
   wire [OUTDATA_WIDTH-1:0] tlb_data;
 
+  wire validN;
+
   reg write_wen_reg;
 
   reg write_nat_reg;

@@ -163,6 +163,7 @@ module ght_bank(
     wire [7:0] GHTx_addr2;
     wire [7:0] GHTx_addr3;
     wire [7:0] GHTx_addr;
+    wire GHTx_upper0,GHTx_upper1,GHTx_upper2,GHTx_upper3;
  
     wire [511:0] read_data;
     

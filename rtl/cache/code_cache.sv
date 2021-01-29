@@ -234,7 +234,6 @@ module ccRam_way(
    //     assign read_NRU=~(~({32{read_hit}} & read_NRUP)|read_NRU_in);
     end
   endgenerate
-  assign hitNRU=read_hit ? 3'bz : 3'b0;
 
   `ifdef ICACHE_256K
   assign writeX_addr=init ? initCount : 8'bz;
@@ -319,7 +318,7 @@ module ccRam_way(
   .read_clkEn(chkCL_clkEn),
   .read_phys_addr(init ? {initCount} : chkCL_IP[38:2]),
   .read_hit(read_hitC0),
-  .read_err(ErrC0),
+  .read_err(),
   .write_phys_addr(init ? {initCount} : write_IP[38:2]),
   .write_wen(write_wen),
   .invalidate(invalidate),

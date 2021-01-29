@@ -87,9 +87,6 @@ module agu_r(
   input clk;
   input rst;
   input except;
-  input except_gate;
-  input except_in_vm;
-  input except_in_km;
   output doStall;
   input bus_hold;
   input pause_miss;
