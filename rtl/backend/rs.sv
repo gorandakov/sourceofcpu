@@ -6,7 +6,7 @@
 module rs_wakeUp_logic(
   clk,rst,stall,
   isData,
-  //outEq,
+  outEq,
   buffree,
   FU0Hit,FU1Hit,FU2Hit,FU3Hit,
   FUreg0,FU0wen,
@@ -41,7 +41,7 @@ module rs_wakeUp_logic(
   input rst;
   input stall;
   output wire isData;
-  //output [5:0] outEq;
+  output [5:0] outEq;
   input buffree;
   input FU0Hit;
   input FU1Hit;
@@ -270,7 +270,7 @@ module rs_wakeUp_logic(
   assign gzFwd=gazump[9] ? 4'd9 : 4'bz;
   assign gzFwd=gazump[10] ? 4'd15 : 4'bz;
 
-  //assign outEq={|outEq0[9:5],outEq0[9:5]|outEq0[4:0]};
+  assign outEq={|outEq0[9:5],outEq0[9:5]|outEq0[4:0]};
 
   assign outFuFwd0=outRsSelect0 ? fuFwd : {DATA_WIDTH{1'bz}};
 
@@ -341,6 +341,7 @@ endmodule
 module rs_wakeUp_logic_array(
   clk,rst,stall,
   isData,
+  outEq,
   buffree,
   FU0Hit,FU1Hit,FU2Hit,FU3Hit,
   FUreg0,FU0wen,
@@ -355,8 +356,11 @@ module rs_wakeUp_logic_array(
   FUreg9,FU9wen,
   newRsSelect0,newReg0,newFunit0,newGazump0,newIsFP0,newIsV0,
   newRsSelect1,newReg1,newFunit1,newGazump1,newIsFP1,newIsV1,
+  newRsSelect2,newReg2,newFunit2,newGazump2,newIsFP2,newIsV2,
   fuFwd,
-  outRsSelect0,outDataEn0,outBank0,outFound0,outFuFwd0,outFuuFwd0
+  outRsSelect0,outDataEn0,outBank0,outFound0,outFuFwd0,outFuuFwd0,
+  outRsSelect1,outDataEn1,outBank1,outFound1,outFuFwd1,outFuuFwd1,
+  outRsSelect2,outDataEn2,outBank2,outFound2,outFuFwd2,outFuuFwd2
   );
   parameter DATA_WIDTH=`alu_width;
   localparam REG_WIDTH=`reg_addr_width;
@@ -367,6 +371,7 @@ module rs_wakeUp_logic_array(
   input rst;
   input stall;
   output [BUF_COUNT-1:0] isData;
+  output [BUF_COUNT*6-1:0] outEq;
   input [BUF_COUNT-1:0] buffree;
   
 //functional units inputs/outputs
@@ -418,6 +423,12 @@ module rs_wakeUp_logic_array(
   input [10:0] newGazump1;
   input newIsFP1,newIsV1;
 
+  input [BUF_COUNT-1:0] newRsSelect2;
+  input [REG_WIDTH-1:0] newReg2;
+  input [FN_WIDTH-1:0] newFunit2;
+  input [10:0] newGazump2;
+  input newIsFP2,newIsV2;
+  
   output [BUF_COUNT*4-1:0] fuFwd;
   
   input [BUF_COUNT-1:0] outRsSelect0;
@@ -426,15 +437,27 @@ module rs_wakeUp_logic_array(
   input outFound0;
   output [3:0] outFuFwd0;
   output [3:0] outFuuFwd0;
+  input [BUF_COUNT-1:0] outRsSelect1;
+  input outDataEn1;
+  input [3:0] outBank1;
+  input outFound1;
+  output [3:0] outFuFwd1;
+  output [3:0] outFuuFwd1;
+  input [BUF_COUNT-1:0] outRsSelect2;
+  input outDataEn2;
+  input [3:0] outBank2;
+  input outFound2;
+  output [3:0] outFuFwd2;
+  output [3:0] outFuuFwd2;
 
-  wire [1:0] newEQ[1:0];
-  wire [8:0] register[1:0];
-  wire [9:0] funit[1:0];
+  wire [1:0] newEQ[2:0];
+  wire [8:0] register[2:0];
+  wire [9:0] funit[2:0];
 
-  wire [1:0][8:0] Treg0;
-  wire [1:0] Twen0;
-  wire [1:0][8:0] Treg1;
-  wire [1:0] Twen1;
+  wire [2:0][8:0] Treg0;
+  wire [2:0] Twen0;
+  wire [2:0][8:0] Treg1;
+  wire [2:0] Twen1;
 
   wire [8:0] FUreg[18:0];
   wire [18:0] FUwen;
@@ -493,21 +516,25 @@ module rs_wakeUp_logic_array(
   reg [REG_WIDTH-1:0] FUreg9_reg4;
   reg FU9wen_reg4;
 
-  wire [18:0] funit0[1:0];
-  wire [1:0] isFP;
-  wire [1:0] isV;
+  wire [18:0] funit0[2:0];
+  wire [2:0] isFP;
+  wire [2:0] isV;
 
   assign register[0]=newReg0;
   assign register[1]=newReg1;
+  assign register[2]=newReg2;
 
   assign funit[0]=newFunit0;
   assign funit[1]=newFunit1;
+  assign funit[2]=newFunit2;
 
   assign isFP[0]=newIsFP0;
   assign isFP[1]=newIsFP1;
+  assign isFP[2]=newIsFP2;
   
   assign isV[0]=newIsV0;
   assign isV[1]=newIsV1;
+  assign isV[2]=newIsV2;
   
   assign FUreg[0]=FUreg0;
   assign FUreg[1]=FUreg1;
@@ -557,12 +584,16 @@ module rs_wakeUp_logic_array(
           
           wire [3:0] outFuFwd0k;
           wire [3:0] outFuuFwd0k;
-          for (k=0;k<5;k=k+1) begin : bufs_gen
+          wire [3:0] outFuFwd1k;
+          wire [3:0] outFuuFwd1k;
+          wire [3:0] outFuFwd2k;
+          wire [3:0] outFuuFwd2k;
+          for (k=0;k<8;k=k+1) begin : bufs_gen
               rs_wakeUp_logic #(DATA_WIDTH) buf_mod(
               clk,rst,stall,
-              isData[k+5*j],
-              //outEq[(k+5*j)*6+:6],
-              buffree[k+5*j],
+              isData[k+8*j],
+              outEq[(k+8*j)*6+:6],
+              buffree[k+8*j],
               FU0Hit,FU1Hit,FU2Hit,FU3Hit,
               FUreg0,FU0wen,
               FUreg1,FU1wen,
@@ -583,24 +614,35 @@ module rs_wakeUp_logic_array(
               FUreg7_reg4,FU7wen_reg4,
               FUreg8_reg4,FU8wen_reg4,
               FUreg9_reg4,FU9wen_reg4,
-              newRsSelect0[k+5*j],newReg0,newFunit0,newGazump0,newIsFP0,newIsV0,newEQ[0],
-              newRsSelect1[k+5*j],newReg1,newFunit1,newGazump1,newIsFP1,newIsV1,newEQ[1],
-              fuFwd[(k+5*j)*4+:4],
-              outRsSelect0[k+5*j],outDataEn0,outFuFwd0k,outFuuFwd0k
+              newRsSelect0[k+8*j],newReg0,newFunit0,newGazump0,newIsFP0,newIsV0,newEQ[0],
+              newRsSelect1[k+8*j],newReg1,newFunit1,newGazump1,newIsFP1,newIsV1,newEQ[1],
+              newRsSelect2[k+8*j],newReg2,newFunit2,newGazump2,newIsFP2,newIsV2,newEQ[2],
+              fuFwd[(k+8*j)*4+:4],
+              outRsSelect0[k+8*j],outDataEn0,outFuFwd0k,outFuuFwd0k,
+              outRsSelect1[k+8*j],outDataEn1,outFuFwd1k,outFuuFwd1k,
+              outRsSelect2[k+8*j],outDataEn2,outFuFwd2k,outFuuFwd2k
               );
           end
           
           
           assign outFuFwd0=outBank0[j] ? outFuFwd0k : 4'bz;
+          assign outFuFwd1=outBank1[j] ? outFuFwd1k : 4'bz;
+          assign outFuFwd2=outBank2[j] ? outFuFwd2k : 4'bz;
 
           assign outFuuFwd0=outBank0[j] ? outFuuFwd0k : 4'bz;
+          assign outFuuFwd1=outBank1[j] ? outFuuFwd1k : 4'bz;
+          assign outFuuFwd2=outBank2[j] ? outFuuFwd2k : 4'bz;
 
           
           assign outFuFwd0k=outBank0[j] ? 4'bz : 4'hf;
+          assign outFuFwd1k=outBank1[j] ? 4'bz : 4'hf;
+          assign outFuFwd2k=outBank2[j] ? 4'bz : 4'hf;
 
           assign outFuuFwd0k=outBank0[j] ? 4'bz : 4'hf;
+          assign outFuuFwd1k=outBank1[j] ? 4'bz : 4'hf;
+          assign outFuuFwd2k=outBank2[j] ? 4'bz : 4'hf;
       end
-      for(p=0;p<2;p=p+1) begin : newEQ_gen
+      for(p=0;p<3;p=p+1) begin : newEQ_gen
           assign newEQ[p][0]=(register[p]==Treg0[p]) & Twen0[p];
           assign newEQ[p][1]=(register[p]==Treg1[p]) & Twen1[p];
         
@@ -621,8 +663,12 @@ module rs_wakeUp_logic_array(
 
          
   assign outFuFwd0=outFound0 ? 4'bz : 4'hf;
+  assign outFuFwd1=outFound1 ? 4'bz : 4'hf;
+  assign outFuFwd2=outFound2 ? 4'bz : 4'hf;
 
   assign outFuuFwd0=outFound0 ? 4'bz : 4'hf;
+  assign outFuuFwd1=outFound1 ? 4'bz : 4'hf;
+  assign outFuuFwd2=outFound2 ? 4'bz : 4'hf;
  
   always @(posedge clk) begin
     if (rst) begin
