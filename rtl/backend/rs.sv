@@ -2107,6 +2107,17 @@ module rs(
   FUV7H,FUV7L,
   FUV8H,FUV8L,
   FUV9H,FUV9L,
+  
+  FUF0H,FUF0L,
+  FUF1H,FUF1L,
+  FUF2H,FUF2L,
+  FUF3H,FUF3L,
+  FUF4H,FUF4L,
+  FUF5H,FUF5L,
+  FUF6H,FUF6L,
+  FUF7H,FUF7L,
+  FUF8H,FUF8L,
+  FUF9H,FUF9L,
 
   FUS0,FUS1,FUS2,
   FUS3,FUS4,FUS5,
@@ -2375,6 +2386,37 @@ module rs(
   
   input [SIMD_WIDTH-1:0] FUV9H;
   input [16+SIMD_WIDTH-1:0] FUV9L;
+  
+  input [SIMD_WIDTH-1:0] FUF0H;
+  input [16+SIMD_WIDTH-1:0] FUF0L;
+  
+  input [SIMD_WIDTH-1:0] FUF1H;
+  input [16+SIMD_WIDTH-1:0] FUF1L;
+  
+  input [SIMD_WIDTH-1:0] FUF2H;
+  input [16+SIMD_WIDTH-1:0] FUF2L;
+  
+  input [SIMD_WIDTH-1:0] FUF3H;
+  input [16+SIMD_WIDTH-1:0] FUF3L;
+  
+  input [SIMD_WIDTH-1:0] FUF4H;
+  input [16+SIMD_WIDTH-1:0] FUF4L;
+  
+  input [SIMD_WIDTH-1:0] FUF5H;
+  input [16+SIMD_WIDTH-1:0] FUF5L;
+  
+  input [SIMD_WIDTH-1:0] FUF6H;
+  input [16+SIMD_WIDTH-1:0] FUF6L;
+  
+  input [SIMD_WIDTH-1:0] FUF7H;
+  input [16+SIMD_WIDTH-1:0] FUF7L;
+  
+  input [SIMD_WIDTH-1:0] FUF8H;
+  input [16+SIMD_WIDTH-1:0] FUF8L;
+  
+  input [SIMD_WIDTH-1:0] FUF9H;
+  input [16+SIMD_WIDTH-1:0] FUF9L;
+  
   
   
 //FLAGS FU*
