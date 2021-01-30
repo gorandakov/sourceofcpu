@@ -2088,8 +2088,14 @@ module rs(
   newDataVA1H,newDataVB1H,newDataVA1L,newDataVB1L,
   newDataVA2H,newDataVB2H,newDataVA2L,newDataVB2L,
 
+  newDataFA1H,newDataFB1H,newDataFA1L,newDataFB1L,
+  newDataFA2H,newDataFB2H,newDataFA2L,newDataFB2L,
+
   outDataVA1H,outDataVB1H,outDataVA1L,outDataVB1L,
   outDataVA2H,outDataVB2H,outDataVA2L,outDataVB2L,
+
+  outDataFA1H,outDataFB1H,outDataFA1L,outDataFB1L,
+  outDataFA2H,outDataFB2H,outDataFA2L,outDataFB2L,
 
   FUV0H,FUV0L,
   FUV1H,FUV1L,
@@ -2310,6 +2316,16 @@ module rs(
   input [16+SIMD_WIDTH-1:0] newDataVA2L;
   input [16+SIMD_WIDTH-1:0] newDataVB2L;
   
+  input [SIMD_WIDTH-1:0] newDataFA1H;
+  input [SIMD_WIDTH-1:0] newDataFB1H;
+  input [16+SIMD_WIDTH-1:0] newDataFA1L;
+  input [16+SIMD_WIDTH-1:0] newDataFB1L;
+  
+  input [SIMD_WIDTH-1:0] newDataFA2H;
+  input [SIMD_WIDTH-1:0] newDataFB2H;
+  input [16+SIMD_WIDTH-1:0] newDataFA2L;
+  input [16+SIMD_WIDTH-1:0] newDataFB2L;
+  
   output [SIMD_WIDTH-1:0] outDataVA1H;
   output [SIMD_WIDTH-1:0] outDataVB1H;
   output [16+SIMD_WIDTH-1:0] outDataVA1L;
@@ -2319,6 +2335,16 @@ module rs(
   output [SIMD_WIDTH-1:0] outDataVB2H;
   output [16+SIMD_WIDTH-1:0] outDataVA2L;
   output [16+SIMD_WIDTH-1:0] outDataVB2L;
+  
+  output [SIMD_WIDTH-1:0] outDataFA1H;
+  output [SIMD_WIDTH-1:0] outDataFB1H;
+  output [16+SIMD_WIDTH-1:0] outDataFA1L;
+  output [16+SIMD_WIDTH-1:0] outDataFB1L;
+  
+  output [SIMD_WIDTH-1:0] outDataFA2H;
+  output [SIMD_WIDTH-1:0] outDataFB2H;
+  output [16+SIMD_WIDTH-1:0] outDataFA2L;
+  output [16+SIMD_WIDTH-1:0] outDataFB2L;
   
   input [SIMD_WIDTH-1:0] FUV0H;
   input [16+SIMD_WIDTH-1:0] FUV0L;
