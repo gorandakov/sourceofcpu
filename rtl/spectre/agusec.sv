@@ -54,6 +54,8 @@ module agusec_check_upper3(
   assign msk[7]=~&exp[2:0];
   assign msk[0]=1'b0; //
 
+  assign msk0={1'b1,msk[7:1]}&msk;
+
   assign pos_ack[1]=(do_pos && ~on_hi && diff|hiff) || max ; //c==1
   assign pos_ack[0]=do_pos || do_pos2 & ~on_hi & (diff||hiff) || max; //c==0
   assign pos_ack[2]=do_pos3;
