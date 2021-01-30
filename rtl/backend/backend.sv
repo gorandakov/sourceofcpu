@@ -4737,46 +4737,54 @@ module backend(
 
           assign lsw_wdata[n]=WDfxDataEn_reg3[n][3:2] ? lsw_wdataF_reg[n] : WDfxData_reg3[n];
           assign lsw_wdataF[n]=WDfxDataEn_reg2[n][2] ? lsw_wdataV_reg[n] : lsw_wdataF0[n];
-	  assign lsw_wdataV[n]={WDfxDataVH[n][63:0],WDfxDataVL[n][63:0]};
+	  assign lsw_wdataV[n]=(get_ptype2(WDoutOp_reg2[n][5:1],WDfxDataVL[n][67:66])==`ptype_sngl) ?
+		  lsw_wdataV0 : {WDfxDataVH[n][63:0],WDfxDataVL[n][63:0]};
+	  assign lsw_wdataF0[127:32]=(get_ptype2(WDoutOp_reg3[n][5:1],WDfxDataFL[n][67:66])==`ptype_sngl) ?
+		  96'b0 : 96'bz;
 
 	  stNativeD2D stconvHD_mod(.A({16'b0,WDfxDataFH[n][65:33],WDfxDataFH[n][31:0]}),
                   .en(get_ptype2(WDoutOp_reg3[n][5:1],WDfxDataFH[n][67:66])==`ptype_dbl), 
                   .from_ext(1'b0),
                   .from_dbl(1'b1),
 		  .res(lsw_wdataF0[n][127:64]));
-          stNativeE2E stconvED(.A({WDfxDataFH[n][15:0],WDfxDataFL[n][65:33],WDfxDataFL[n][31:0]}),
+          stNativeE2E stconvED(.A({WDfxDataFL[n][68+15:68],WDfxDataFL[n][65:33],WDfxDataFL[n][31:0]}),
                   .en(get_ptype2(WDoutOp_reg3[n][5:1],WDfxDataFL[n][67:66])==`ptype_ext),
 		  .res(lsw_wdataF0[n]));
-	  stNativeD2D stconvLD_mod(.A({WDfxDataFH[n][15:0],WDfxDataFL[n][65:33],WDfxDataFL[n][31:0]}),
+	  stNativeD2D stconvLD_mod(.A({WDfxDataFL[n][68+15:68],WDfxDataFL[n][65:33],WDfxDataFL[n][31:0]}),
                   .en(get_ptype2(WDoutOp_reg3[n][5:1],WDfxDataFL[n][67:66])==`ptype_dbl),
                   .from_ext(get_ptype(WDoutOp_reg3[n][5:1],WDfxDataFL[n][67:66])==`ptype_ext),
                   .from_dbl(get_ptype(WDoutOp_reg3[n][5:1],WDfxDataFL[n][67:66])!=`ptype_ext),
 		  .res(lsw_wdataF0[n][63:0]));
-	  stNativeS2S stconvLLD_mod(.A({16'b0,WDfxDataFH[n][65:33],WDfxDataFH[n][32:0]}),
+	  stNativeS2S stconvEDS_mod(.A({WDfxDataFL[n][68+15:68],WDfxDataFH[n][65:33],WDfxDataFH[n][32:0]}),
                   .en(get_ptype2(WDoutOp_reg3[n][5:1],WDfxDataFL[n][67:66])==`ptype_sngl),
                   .from_ext(get_ptype(WDoutOp_reg3[n][5:1],WDfxDataFL[n][67:66])==`ptype_ext),
                   .from_dbl(get_ptype(WDoutOp_reg3[n][5:1],WDfxDataFL[n][67:66])==`ptype_dbl),
-                  .from_sngl(get_ptype(WDoutOp_reg3[n][5:1],WDfxDataFL[n][67:66])!=`ptype_ext && 
-		    get_ptype(WDoutOp_reg3[n][5:1],WDfxDataFL[n][67:66])!=`ptype_dbl),
+                  .from_sngl(1'b0),
 		  .res(lsw_wdataF0[n][31:0]));
+	  stNativeS2S stconvLLD_mod(.A({49'b0,WDfxDataVL[n][32:0]}),
+                  .en(1'b1),
+                  .from_ext(1'b0),
+                  .from_dbl(1'b0),
+                  .from_sngl(1'b1),
+		  .res(lsw_wdataV0[n][31:0]));
 	  stNativeS2S stconvLHD_mod(.A({49'b0,WDfxDataFL[n][65:33]}),
-                  .en(get_ptype2(WDoutOp_reg3[n][5:1],WDfxDataFL[n][67:66])==`ptype_sngl),
+                  .en(1'b1),
                   .from_ext(1'b0),
                   .from_dbl(1'b0),
                   .from_sngl(1'b1),
-		  .res(lsw_wdataF0[n][63:32]));
-	  stNativeS2S stconvHLD_mod(.A({49'b0,WDfxDataFH[n][32:0]}),
-                  .en(get_ptype2(WDoutOp_reg3[n][5:1],WDfxDataFH[n][67:66])==`ptype_sngl),
+		  .res(lsw_wdataV0[n][63:32]));
+	  stNativeS2S stconvHLD_mod(.A({49'b0,WDfxDataVH[n][32:0]}),
+                  .en(1'b1),
                   .from_ext(1'b0),
                   .from_dbl(1'b0),
                   .from_sngl(1'b1),
-		  .res(lsw_wdataF0[n][95:64]));
-	  stNativeS2S stconvHHD_mod(.A({49'b0,WDfxDataFH[n][65:33]}),
-                  .en(get_ptype2(WDoutOp_reg3[n][5:1],WDfxDataFH[n][67:66])==`ptype_sngl),
+		  .res(lsw_wdataV0[n][95:64]));
+	  stNativeS2S stconvHHD_mod(.A({49'b0,WDfxDataFV[n][65:33]}),
+                  .en(1'b1),
                   .from_ext(1'b0),
                   .from_dbl(1'b0),
                   .from_sngl(1'b1),
-		  .res(lsw_wdataF0[n][127:96]));
+		  .res(lsw_wdataV0[n][127:96]));
 
        
           rs_write_forward fwdDA_mod(
@@ -5445,38 +5453,6 @@ module backend(
   .doStall_LDQ(doStall_LDQ),
   .doStall_LSQ(doStall_LSQ) 
   );
-
-  
-  dmisscam mcam_mod(
-  .clk(clk),
-  .rst(rst),
-  .fill_en(miss_en_reg),
-  .fill_addr(mcam_addr_reg),
-  .fill_st(miss_st_reg),
-  .fill_req(mcam_req),
-  .ins_en(insert_isData),
-  .ins_req(insBus_req[3:0]),
-  .has_free(mcam_hasfree),
-  .fill_match(mcam_dupl),
-  .locked(mcam_locked),
-  .begin_replay(mcam_replay),
-  .unlock(miss_unlock)
-  );
-  
-  
-  mreq #(BUS_ID) mreq_addr_mod(
-  .clk(clk),
-  .rst(rst),
-  .nextReq(mcam_req),
-  .reqSend(mcam_do_req),
-  .reqAddr(mcam_addr_reg),
-  .insReq(insBus_req),
-  .insAddr(insert_addr),
-  .insEn(insBus_en),
-  .insEn_data(insert_isData),
-  .insEn_code(insert_isCode)
-  );
-
 
   get_LDQ_new_en ldq_new_mod(
   rs_port[0],rs_ldst_flg[0], 
