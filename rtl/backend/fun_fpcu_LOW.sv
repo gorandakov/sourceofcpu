@@ -7,28 +7,40 @@ module fun_fpuL(
   rst,
   u1_A,u1_B,u1_Bx,u1_Bxo,u1_en,u1_op,
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
-  u1_ret,u1_flg,
+  u1_ret,u1_ret_en,
   u2_A,u2_B,u2_Bx,u2_Bxo,u2_en,u2_op,
   u2_fufwd_A,u2_fuufwd_A,u2_fufwd_B,u2_fuufwd_B,
-  u2_ret,
+  u2_ret,u2_ret_en,
   u3_A,u3_B,u3_Bx,u3_Bxo,u3_en,u3_op,
   u3_fufwd_A,u3_fuufwd_A,u3_fufwd_B,u3_fuufwd_B,
-  u3_ret,u3_flg,
+  u3_ret,u3_ret_en,
   u4_A,u4_B,u4_Bx,u4_Bxo,u4_en,u4_op,
   u4_fufwd_A,u4_fuufwd_A,u4_fufwd_B,u4_fuufwd_B,
-  u4_ret,
+  u4_ret,u4_ret_en,
   u5_A,u5_B,u5_Bx,u5_Bxo,u5_en,u5_op,
   u5_fufwd_A,u5_fuufwd_A,u5_fufwd_B,u5_fuufwd_B,
-  u5_ret,u5_flg,
+  u5_ret,u5_ret_en,
   u6_A,u6_B,u6_Bx,u6_Bxo,u6_en,u6_op,
   u6_fufwd_A,u6_fuufwd_A,u6_fufwd_B,u6_fuufwd_B,
-  u6_ret,
+  u6_ret,u6_ret_en,
   FUF0,FUF1,FUF2,
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
   FUF9,
   ALTDATA0,ALTDATA1,
-  ALT_INP
+  ALT_INP,
+  FUS_alu0,FUS_alu1,
+  FUS_alu2,FUS_alu3,
+  FUS_alu4,FUS_alu5,
+  ex_alu0,ex_alu1,
+  ex_alu2,ex_alu3,
+  ex_alu4,ex_alu5,
+  fxFADD0_raise_s,
+  fxFCADD1_raise_s,
+  fxFADD2_raise_s,
+  fxFCADD3_raise_s,
+  fxFADD4_raise_s,
+  fxFCADD5_raise_s
   );
   localparam [0:0] H=1'b0;
   localparam SIMD_WIDTH=68; //half width
@@ -45,7 +57,7 @@ module fun_fpuL(
   input [3:0] u1_fufwd_B;
   input [3:0] u1_fuufwd_B;
   output [13:0] u1_ret;
-  output [5:0] u1_flg;
+  output u1_ret_en;
 
   input [16+67:0] u2_A;
   input [16+67:0] u2_B;
@@ -58,6 +70,7 @@ module fun_fpuL(
   input [3:0] u2_fufwd_B;
   input [3:0] u2_fuufwd_B;
   output [13:0] u2_ret;
+  output u2_ret_en;
  
   input [16+67:0] u3_A;
   input [16+67:0] u3_B;
@@ -70,8 +83,8 @@ module fun_fpuL(
   input [3:0] u3_fufwd_B;
   input [3:0] u3_fuufwd_B;
   output [13:0] u3_ret;
-  output [5:0] u3_flg;
-
+  output u3_ret_en;
+  
   input [16+67:0] u4_A;
   input [16+67:0] u4_B;
   input [67:0] u4_Bx;
@@ -83,6 +96,7 @@ module fun_fpuL(
   input [3:0] u4_fufwd_B;
   input [3:0] u4_fuufwd_B;
   output [13:0] u4_ret;
+  output u4_ret_en;
  
   input [16+67:0] u5_A;
   input [16+67:0] u5_B;
@@ -95,8 +109,8 @@ module fun_fpuL(
   input [3:0] u5_fufwd_B;
   input [3:0] u5_fuufwd_B;
   output [13:0] u5_ret;
-  output [5:0] u5_flg;
-
+  output u5_ret_en;
+  
   input [16+67:0] u6_A;
   input [16+67:0] u6_B;
   input [67:0] u6_Bx;
@@ -108,6 +122,7 @@ module fun_fpuL(
   input [3:0] u6_fufwd_B;
   input [3:0] u6_fuufwd_B;
   output [13:0] u6_ret;
+  output u6_ret_en;
  
 
   input [16+67:0] FUF0;
@@ -123,22 +138,45 @@ module fun_fpuL(
   input [1:0] ALT_INP;
   input [16+67:0] ALTDATA0;
   input [16+67:0] ALTDATA1;
+  
+  input [5:0] FUS_alu0;
+  input [5:0] FUS_alu1;
+  input [5:0] FUS_alu2;
+  input [5:0] FUS_alu3;
+  input [5:0] FUS_alu4;
+  input [5:0] FUS_alu5;
+  input [2:0] ex_alu0;
+  input [2:0] ex_alu1;
+  input [2:0] ex_alu2;
+  input [2:0] ex_alu3;
+  input [2:0] ex_alu4;
+  input [2:0] ex_alu5;
+  input [10:0] fxFADD0_raise_s;
+  input [10:0] fxFCADD1_raise_s;
+  input [10:0] fxFADD2_raise_s;
+  input [10:0] fxFCADD3_raise_s;
+  input [10:0] fxFADD4_raise_s;
+  input [10:0] fxFCADD5_raise_s;
 
   fun_fpu #(0,0) fpu0_mod(
   clk,
   rst,
   u1_A,u1_B,u1_Bx,u1_Bxo,u1_en,u1_op,
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
-  u1_ret,u1_flg,
+  u1_ret,u1_ret_en,
   u2_A,u2_B,u2_Bx,u2_Bxo,u2_en,u2_op,
   u2_fufwd_A,u2_fuufwd_A,u2_fufwd_B,u2_fuufwd_B,
-  u2_ret,
+  u2_ret,u2_ret_en,
   FUF0,FUF1,FUF2,
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
   FUF9,
   84'b0,84'b0,
-  2'b0
+  2'b0,
+  FUS_alu0,FUS_alu1,
+  ex_alu0,ex_alu1,
+  fxFADD0_raise_s,
+  fxFCADD1_raise_s
   );
 
   fun_fpu #(1,0) fpu1_mod(
@@ -146,16 +184,20 @@ module fun_fpuL(
   rst,
   u3_A,u3_B,u3_Bx,u3_Bxo,u3_en,u3_op,
   u3_fufwd_A,u3_fuufwd_A,u3_fufwd_B,u3_fuufwd_B,
-  u3_ret,u3_flg,
+  u3_ret,u3_ret_en,
   u4_A,u4_B,u4_Ax,u4_Bx,u4_en,u4_op,
   u4_fufwd_A,u4_fuufwd_A,u4_fufwd_B,u4_fuufwd_B,
-  u4_ret,
+  u4_ret,u4_ret_en,
   FUF0,FUF1,FUF2,
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
   FUF9,
   84'b0,84'b0,
-  2'b0
+  2'b0,
+  FUS_alu2,FUS_alu3,
+  ex_alu2,ex_alu3,
+  fxFADD2_raise_s,
+  fxFCADD3_raise_s
   );
 
   fun_fpu #(2,0) fpu2_mod(
@@ -163,16 +205,20 @@ module fun_fpuL(
   rst,
   u5_A,u5_B,u5_Bx,u5_Bxo,u5_en,u5_op,
   u5_fufwd_A,u5_fuufwd_A,u5_fufwd_B,u5_fuufwd_B,
-  u5_ret,u5_flg,
+  u5_ret,u5_ret_en,
   u6_A,u6_B,u6_Ax,u6_Bx,u6_en,u6_op,
   u6_fufwd_A,u6_fuufwd_A,u6_fufwd_B,u6_fuufwd_B,
-  u6_ret,
+  u6_ret,u6_ret_en,
   FUF0,FUF1,FUF2,
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
   FUF9,
   ALTDATA0,ALTDATA1,
-  ALT_INP
+  ALT_INP,
+  FUS_alu4,FUS_alu5,
+  ex_alu4,ex_alu5,
+  fxFADD4_raise_s,
+  fxFCADD5_raise_s
   );
 
 endmodule
