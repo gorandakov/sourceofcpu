@@ -22,14 +22,14 @@
 `define fop_subEE 21
 `define fop_subED 22
 `define fop_subES 23
-`define fop_addS 24
-`define fop_addSP 25
-`define fop_subS 26
-`define fop_subSP 27
+`define fop_addS 32
+`define fop_addSP 33
+`define fop_subS 34
+`define fop_subSP 35
 `define fop_cmpDH 32
 `define fop_cmpDL 33
 `define fop_cmpE 34
-`define fop_cmpS 35
+`define fop_cmpS 44
 `define fop_pcmplt 36
 `define fop_pcmpge 37
 `define fop_pcmpeq 38
@@ -48,9 +48,9 @@
 `define fop_mulES 5
 `define fop_mulED 6
 `define fop_mulEE 7
-`define fop_mulS 8
-`define fop_mulSP 9
-`define fop_permDS 31
+`define fop_mulS 32
+`define fop_mulSP 33
+`define fop_permDS 45 
 `define fop_rndES 32
 `define fop_rndED 33
 `define fop_rndDSP 34
@@ -60,14 +60,14 @@
 `define fop_divDH 2
 `define fop_divDL 3
 `define fop_sqrtE 4
-`define fop_sqrtS 5
+`define fop_sqrtS 34
 `define fop_divE 6
-`define fop_divS 7
+`define fop_divS 35
 
 `define fop_cvtD 8
 `define fop_cvt32D 9
-`define fop_cvtS 10
-`define fop_cvt32S 11
+`define fop_cvtS 36
+`define fop_cvt32S 37
 `define fop_cvtE   12
 `define fop_tblD   13
 
