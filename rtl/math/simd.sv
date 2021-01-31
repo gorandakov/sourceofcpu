@@ -38,7 +38,7 @@ module add_sat(
 endmodule
 
 
-module simd_socialiste(
+module simd_non_socialiste(
   clk,
   rst,
   en,
