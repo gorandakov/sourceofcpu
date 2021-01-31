@@ -244,7 +244,7 @@ module fun_fpsu(
   .res(FOOF[0][32:0])
   );
   
-  simd_socialiste simd_mod(
+  simd_non_socialiste simd_mod(
   .clk(clk),
   .rst(rst),
   .en(),
