@@ -244,7 +244,16 @@ module fun_fpsu(
   .res(FOOF[0][32:0])
   );
   
- 
+  simd_socialiste simd_mod(
+  .clk(clk),
+  .rst(rst),
+  .en(),
+  .operation(u1_op_reg),
+  .A(fxDataAXL_reg[0]),
+  .B(gxDataBFL_reg[1]),
+  .res(FOOF[0])
+  );
+  
   fperm fperm1H_mod(
   .clk(clk),
   .rst(rst),
