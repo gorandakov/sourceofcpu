@@ -18,6 +18,7 @@ module agusec_check_upper3(
   wire do_pos3,do_neg3;
   wire do_pos1;
   wire [7:0] msk;
+  wire [7:0] msk0;
   wire [40:0] O={1'b0,A|B};
   wire [40:0] X={1'b1,A^B};
   wire [40:0] And={1'b1,A&B};
@@ -93,7 +94,7 @@ module agusec_check_upper3(
        
         assign pos0[p]= ~posx[p] ||  ~redor8(O[p*8+8+:8]);
         assign pos1[p]= posx[p] &&  redor8(ptr[p*8+12+:8]);
-        assign pos2[p]= ~posx[p] ||  ~redor8(O[p*8+9+:8]);
+        assign pos2[p]= ~posx[p] ||  ~(redor8(O[p*8+9+:8])&redadn8(X[p*8+9+:8]&msk0));
         assign pos3[p]= p!=exp[4:3] ||  ~redor8(O[p*8+9+:8]);
         assign neg0[p]= ~posx[p] ||  redand8(X[p*8+8+:8]);
         assign neg1[p]= ~posx[p] ||  redand8(And[p*8+8+:8]);
@@ -108,7 +109,7 @@ module agusec_check_upper3(
         assign xneg3[p]= p!=exp[4:3] ||  redand8(X[p*8+1+:8]|~msk);
         assign xneg0[p]= p!=exp[4:3] ||  redand8(X[p*8+8+:8]|~msk);
         assign xneg1[p]= p!=exp[4:3] ||  redand8(And[p*8+8+:8]|~msk);
-        assign xneg2[p]= p!=exp[4:3] ||  redand8(X[p*8+9+:8]|~msk);
+        assign xneg2[p]= p!=exp[4:3] ||  redand8(X[p*8+9+:8]|~msk)&~redor8(A[p*8+9+:8]&msk0);
     end
     assign do_pos=redand8({pos0,xpos0});
     assign do_pos1=redor8({pos1,xpos1});
