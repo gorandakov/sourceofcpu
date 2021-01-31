@@ -2,7 +2,7 @@
 `include "../fpoperations.sv"
 `include "../csrss_no.sv"
 
-module fun_fpu(
+module fun_fpsu(
   clk,
   rst,
   u1_A,u1_B,u1_Ax,u1_Bx,u1_en,u1_op,
@@ -21,7 +21,7 @@ module fun_fpu(
   parameter [1:0] INDEX=2'd2;
   parameter [0:0] H=1'b0;
   localparam SIMD_WIDTH=68; //half width
-  localparam [4:0] S={~H,3'b0};
+  localparam [4:0] S=5'd0;
   input clk;
   input rst;
   input [S+67:0] u1_A;
@@ -215,7 +215,7 @@ module fun_fpu(
   .isSub(fxFADD_sub[H]),
   .isRSub(fxFADD_rsub),
   .invExcpt(fpcsr[`csrfpu_inv_excpt]),
-  .raise(fxFADD_raise),
+  .raise(fxFADD_raise[0]),
   .fpcsr(fpcsr[31:0]),
   .rmode(fpcsr[`csrfpu_rmode]),
   .copyA(fxFADD_copyA[H]),
@@ -223,6 +223,25 @@ module fun_fpu(
   .logic_sel(fxFADD_loSel),
   .en(H? gxFADD_sn:gxFADD_sin),
   .res(FOOF[0][65:33])
+  );
+  
+  fadds fadd1L_mod(
+  .clk(clk),
+  .rst(rst),
+  .A({fxDataAXL_reg[0][32],fxDataAXL_reg[0][31:0]}),
+  .A_alt({fxDataAFL_REG[0][32],fxDataAFL_REG[0][31:0]}),
+  .B({gxDataBXL_reg[1][32],gxDataBFL_reg[1][31:0]}),
+  .isSub(fxFADD_sub[H]),
+  .isRSub(fxFADD_rsub),
+  .invExcpt(fpcsr[`csrfpu_inv_excpt]),
+  .raise(fxFADD_raise[1]),
+  .fpcsr(fpcsr[31:0]),
+  .rmode(fpcsr[`csrfpu_rmode]),
+  .copyA(fxFADD_copyA[H]),
+  .logic_en(fxFADD_lo),
+  .logic_sel(fxFADD_loSel),
+  .en(H? gxFADD_sn:gxFADD_sin),
+  .res(FOOF[0][32:0])
   );
   
  
@@ -279,7 +298,7 @@ module fun_fpu(
   en);
 */
   
-  fpucadd cadd2L_mod(
+  fpucadd cadd2H_mod(
   .clk(clk),
   .rst(rst),
   .A({fxDataAXL_reg[1][65],fxDataAXL_reg[1][64:33]}),
@@ -289,10 +308,24 @@ module fun_fpu(
   .en(fxFCADD_sn),
   .rmode(fpcsr[`csrfpu_rmode]),
   .res(FOOF[1][65:33]),
-  .raise(fxFCADD_raise),
+  .raise(fxFCADD_raise[0]),
   .fpcsr(fpcsr[31:0])
   );
   
+  
+  fpucadd cadd2L_mod(
+  .clk(clk),
+  .rst(rst),
+  .A({fxDataAXL_reg[1][32],fxDataAXL_reg[1][31:0]}),
+  .A_alt({fxDataAFL_REG[1][32],fxDataAFL_REG[1][31:0]}),
+  .B({gxDataBXL_reg[0][32],gxDataBFL_reg[0][31:0]}),
+  .copyA(fxFCADD_copyA[H]),
+  .en(fxFCADD_sn),
+  .rmode(fpcsr[`csrfpu_rmode]),
+  .res(FOOF[1][32:0]),
+  .raise(fxFCADD_raise[1]),
+  .fpcsr(fpcsr[31:0])
+  );
   
   fperm #(1) fperm1CL_mod(
   .clk(clk),
