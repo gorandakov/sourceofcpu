@@ -5,10 +5,10 @@
 module fun_fpsu(
   clk,
   rst,
-  u1_A,u1_B,u1_Ax,u1_Bx,u1_en,u1_op,
+  u1_A,u1_B,u1_Bx,u1_Ax,u1_en,u1_op,
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
   u1_ret,u1_ret_en,
-  u2_A,u2_B,u2_Ax,u2_Bx,u2_en,u2_op,
+  u2_A,u2_B,u2_Bx,u2_Ax,u2_en,u2_op,
   u2_fufwd_A,u2_fuufwd_A,u2_fufwd_B,u2_fuufwd_B,
   u2_ret,u2_ret_en,
   FUF0,FUF1,FUF2,
@@ -27,6 +27,7 @@ module fun_fpsu(
   input [S+67:0] u1_A;
   input [S+67:0] u1_B;
   input [67:0] u1_Bx;
+  output [67:0] u1_Ax;
   input [3:0] u1_en;
   input [12:0] u1_op;
   input [3:0] u1_fufwd_A;
@@ -39,6 +40,7 @@ module fun_fpsu(
   input [S+67:0] u2_A;
   input [S+67:0] u2_B;
   input [67:0] u2_Bx;
+  output [67:0] u2_Ax;
   input [3:0] u2_en;
   input [12:0] u2_op;
   input [3:0] u2_fufwd_A;
