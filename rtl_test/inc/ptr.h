@@ -7,7 +7,7 @@ class ptr {
 	unsigned exp=val>>59;
 	bool eqn=((val>>52)&0x7f)<((val>>45)&0x7f);
         unsigned long masque=eqn ? 0xfffffffffff : 0x1fffffffffff;	
-        unsigned long masqueL=eqn ? 0xfffffffe000 : 0xffffffff000;	
+        unsigned long masqueL=eqn ? 0xfffffffe000 : 0x1fffffffe000;	
 	unsigned long valL=(((val>>44)&1) || eqn) ? val&0xfffffffffff : ((val&0xfffffffffff)-(1ul<<(exp+13))) & masqueL;
 	unsigned long valH=(!((val>>44)&1) || eqn) ? val&0xfffffffffff : ((val&0xfffffffffff)+(1ul<<(exp+13))) & masque;
 	if (valL>(val&0xfffffffffff) ) valL=0;
