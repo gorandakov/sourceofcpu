@@ -24,7 +24,7 @@ class ptr {
 	    (0xfffffffffc0));
 	    return (ptr2.val&lowA)==lowA;
 	}
-	return (ptr2.val&masque)<=hiA && (ptr2.val&masque)>=lowA;
+	return (ptr2.val&0xfffffffffff)<=hiA && (ptr2.val&0xfffffffffff)>=lowA;
     }
     void set_bounds(unsigned long low,unsigned long hi) {
         unsigned long exp=31;
