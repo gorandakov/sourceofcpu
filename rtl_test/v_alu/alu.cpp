@@ -143,7 +143,7 @@ addie:
 			unsigned long delta=0x2000<<exp;
 			/*if ((res1&masq)!=(pttr&masq) && (res1&masq)!=(((pttr&masq)+delta)&(masq|(masq<<1)))  && exp!=31) {
 			    excpt=11;*/
-			if ((res1&masq)!=(pttr&masq)) {
+			if ((res1&masq)!=(pttr&masq) && exp!=31) {
 		            res^=1ul<<44;
 			}
 		    } else {
@@ -151,7 +151,7 @@ addie:
 			unsigned long delta=0x2000<<exp;
 			/*if ((res1&masq)!=(pttr&masq) && (res1&masq)!=(((pttr&masq)-delta)&(masq|(masq>>1)))  && exp!=31) {
 			    excpt=11;*/
-			if ((res1&masq)!=(pttr&masq)) {
+			if ((res1&masq)!=(pttr&masq) && exp!=31) {
 		            res^=1ul<<44;
 			}
 		    }
@@ -708,6 +708,12 @@ bool get_check(Vfu_alu *top, req *reqs) {
         printf("FU8 error;op=%i:%i;res=%llx:%llx\n",
         top->fu_alu__DOT__u4_op_reg,reqs[8].op,
         get64(top->FU8),reqs[8].res);
+	    printf("A=%lx,B=%lx,A_p=%i,B_p=%i,soft=%i\n",
+		reqs[8].A,
+		reqs[8].B,
+		reqs[8].A_p,
+		reqs[8].B_p,
+		reqs[8].excpt);
         rtn=false; 
     }
     if (reqs[9].en && !reqs[9].mul && !(get64(top->FU9)==reqs[9].res) && reqs[9].excpt!=11)  {
