@@ -5,13 +5,17 @@
 module fun_fpusqr(
   clk,
   rst,
-  u1_A,u1_B,u1_Ax,u1_Bx,u1_en,u1_op,
+  u1_A,u1_B,u1_Av,u1_Bv,u1_en,u1_op,
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
   u1_ret,u1_ret_en,
   FUF0,FUF1,FUF2,
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
-  FUF9
+  FUF9,
+  FUV0,FUV1,FUV2,
+  FUV3,FUV4,FUV5,
+  FUV6,FUV7,FUV8,
+  FUV9
   );
   parameter [1:0] INDEX=2'd2;
   parameter [0:0] H=1'b0;
@@ -21,7 +25,8 @@ module fun_fpusqr(
   input rst;
   input [S+67:0] u1_A;
   input [S+67:0] u1_B;
-  input [67:0] u1_Bx;
+  input [67:0] u1_Av;
+  input [67:0] u1_Bv;
   input [3:0] u1_en;
   input [12:0] u1_op;
   input [3:0] u1_fufwd_A;
@@ -30,6 +35,17 @@ module fun_fpusqr(
   input [3:0] u1_fuufwd_B;
   output [13:0] u1_ret;
   output u1_ret_en;
+
+  input [S+67:0] FUV0;
+  input [S+67:0] FUV1;
+  input [S+67:0] FUV2;
+  input [S+67:0] FUV3;
+  input [S+67:0] FUV4;
+  input [S+67:0] FUV5;
+  inout [S+67:0] FUV6;
+  input [S+67:0] FUV7;
+  input [S+67:0] FUV8;
+  input [S+67:0] FUV9;
 
   input [S+67:0] FUF0;
   input [S+67:0] FUF1;
@@ -62,7 +78,7 @@ module fun_fpusqr(
   clk,rst,
   ~u1_en[3],
   u1_A,uu_A1,
-  u1_fufwd_A,u1_fuufwd_A,
+  u1_fufwd_A_reg,u1_fuufwd_A_reg,
   FUF0,FUF0_reg,
   FUF1,FUF1_reg,
   FUF2,FUF2_reg,
@@ -79,7 +95,7 @@ module fun_fpusqr(
   clk,rst,
   ~u1_en[3],
   u1_B,uu_B1,
-  u1_fufwd_B,u1_fuufwd_B,
+  u1_fufwd_B_reg,u1_fuufwd_B_reg,
   FUF0,FUF0_reg,
   FUF1,FUF1_reg,
   FUF2,FUF2_reg,
@@ -92,6 +108,41 @@ module fun_fpusqr(
   FUF9,FUF9_reg
   );
   
+  rs_write_forward #(68) u1_Av_fwd(
+  clk,rst,
+  ~u1_en[2],
+  u1_Av,uu_Av1,
+  u1_fufwd_A,u1_fuufwd_A,
+  FUV0,FUV0_reg,
+  FUV1,FUV1_reg,
+  FUV2,FUV2_reg,
+  FUV3,FUV3_reg,
+  FUV4,FUV4_reg,
+  FUV5,FUV5_reg,
+  FUV6,FUV6_reg,
+  FUV7,FUV7_reg,
+  FUV8,FUV8_reg,
+  FUV9,FUV9_reg
+  );
+  
+  rs_write_forward #(68) u1_Bv_fwd(
+  clk,rst,
+  ~u1_en[2],
+  u1_Bv,uu_Bv1,
+  u1_fufwd_B,u1_fuufwd_B,
+  FUV0,FUV0_reg,
+  FUV1,FUV1_reg,
+  FUV2,FUV2_reg,
+  FUV3,FUV3_reg,
+  FUV4,FUV4_reg,
+  FUV5,FUV5_reg,
+  FUV6,FUV6_reg,
+  FUV7,FUV7_reg,
+  FUV8,FUV8_reg,
+  FUV9,FUV9_reg
+  );
+  
+
 
   assign fraise2[m]=fxFCADD_sn_reg5[m] ?
     (fxFCADD_raise_s_reg[0]|fxFCADD_raise_s_reg[1])&fpcsr[21:11] :

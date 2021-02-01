@@ -5,7 +5,7 @@
 module fun_fpu(
   clk,
   rst,
-  u1_A,u1_B,u1_Ax,u1_Bx,u1_en,u1_op,
+  u1_A,u1_B,u1_Bx,u1_Ax,u1_en,u1_op,
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
   u1_ret,u1_ret_en,
   u2_A,u2_B,u2_Ax,u2_Bx,u2_en,u2_op,
@@ -31,6 +31,7 @@ module fun_fpu(
   input [S+67:0] u1_A;
   input [S+67:0] u1_B;
   input [67:0] u1_Bx;
+  output [67:0] u1_Ax;
   input [3:0] u1_en;
   input [12:0] u1_op;
   input [3:0] u1_fufwd_A;
@@ -43,6 +44,7 @@ module fun_fpu(
   input [S+67:0] u2_A;
   input [S+67:0] u2_B;
   input [67:0] u2_Bx;
+  output [67:0] u2_Ax;
   input [3:0] u2_en;
   input [12:0] u2_op;
   input [3:0] u2_fufwd_A;
@@ -355,6 +357,9 @@ module fun_fpu(
 //  if (m!=2) assign FUFL[4+m]=FOOFL_reg[2*m+0];
 //  else assign FUFL[4+m]=fxFRT_alten_reg5[2]||~nDataAlt_reg5[2][2] ? {SIMD_WIDTH{1'BZ}} : FOOFL_reg[2*m+0];
 //  assign FUFL[7+m]=FOOFL_reg[2*m+1];
+
+  assign u1_Ax=uu_B1[67:0];
+  assign u2_Ax=uu_B2[67:0];
 
   always @(negedge clk) begin
     if (rst) begin
