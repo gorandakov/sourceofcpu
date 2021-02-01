@@ -104,7 +104,7 @@ module agusec_check_upper3(
         
         assign xpos0[p]= p!=exp[4:3] ||  ~redor8(O[p*8+8+:8]&msk);
         assign xpos1[p]= p==exp[4:3] &&   redor8(ptr[p*8+12+:8]&msk);
-        assign xpos2[p]= p!=exp[4:3] ||  ~(redor8(O[p*8+9+:8]&msk)&redand8(X[p*8+9+:8]&msk0));
+        assign xpos2[p]= p!=exp[4:3] ||  ~(redor8(O[p*8+9+:8]&msk)&redor8(X[p*8+9+:8]&msk0));
         assign xpos3[p]= p!=exp[4:3] ||  ~redor8(O[p*8+1+:8]&msk);
         assign xneg3[p]= p!=exp[4:3] ||  redand8(X[p*8+1+:8]|~msk);
         assign xneg0[p]= p!=exp[4:3] ||  redand8(X[p*8+8+:8]|~msk);
