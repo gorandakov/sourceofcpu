@@ -685,6 +685,12 @@ bool get_check(Vfu_alu *top, req *reqs) {
         top->fu_alu__DOT__u1_op_reg,reqs[4].op,
         get64(top->FU4),reqs[4].res,reqs[4].A_p,reqs[4].B_p,reqs[4].res_p);
         rtn=false; 
+	    printf("A=%lx,B=%lx,A_p=%i,B_p=%i,soft=%i\n",
+		reqs[4].A,
+		reqs[4].B,
+		reqs[4].A_p,
+		reqs[4].B_p,
+		reqs[4].excpt);
     }
     if (reqs[5].en && !(get64(top->FU5)==reqs[5].res) && reqs[5].excpt!=11) { 
         printf("FU5 error;op=%i:%i;res=%llx:%llx\n",
@@ -720,6 +726,12 @@ bool get_check(Vfu_alu *top, req *reqs) {
         printf("FU9 error;op=%i:%i;res=%llx:%llx\n",
         top->fu_alu__DOT__u6_op_reg,reqs[9].op,
         get64(top->FU9),reqs[9].res);
+	    printf("A=%lx,B=%lx,A_p=%i,B_p=%i,soft=%i\n",
+		reqs[9].A,
+		reqs[9].B,
+		reqs[9].A_p,
+		reqs[9].B_p,
+		reqs[9].excpt);
         rtn=false; 
     }
 
