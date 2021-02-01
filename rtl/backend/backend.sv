@@ -4626,56 +4626,7 @@ module backend(
       assign FUFH[n][67:66]=fxLD_sngl_t[n] ? `ptype_sngl : 2'bz;
 
       assign FUFL[n][67:66]=FUFH[n][67:66];
-
-	  rt2_fp rt2_mod(
-          .clk(clk),
-          .rst(rst),
-	  .except(except), //warning: not SMT-ed
-          .rdy(fxFRT_can[n]),
-          .start_process(fxFRT_don_reg3[n]),
-          .step_cnt(fxFRT_steps),
-          .type_(fxFRT_type),
-          .is_root(fxFRT_isRoot),
-          .rmode(fpcsr[`csrfpu_rmode]),
-	  .reg_in(frtReg_reg),
-	  .outII_in(frtII_reg),
-	  .oper_in(frtOp_reg),
-          .normA(fxFRT_normA0),
-          .expA({1'b0,fxFRT_expA}),
-          .nsignA({1'b0,~fxFRT_sgnA}),
-          .normB(fxFRT_normB0),
-          .expB({1'b0,fxFRT_expB}),
-          .nsignB({1'b0,~fxFRT_sgnB}),
-          .result(rtRes[n]),
-	  .reg_out(rtReg[n]),
-	  .outII_out(rtII[n]),
-	  .oper_out(rtOp[n]),
-          .out_en(fxFRT_alten[2][n]),
-          .out_can(!(({fxFRT_alten[2],4'b0}>>n)&4'hf))
-          );
-	  assign fxFRT_alten[1]=4'b0;
-	  assign fxFRT_alten[0]=4'b0;
-
-	  assign outEn[7]=(fxFRT_alten[2][n] && (!(({fxFRT_alten[2],4'b0}>>n)&4'hf)) & ~rst)?
-	    4'b1001 : 4'bz;
-	  assign outII[7]=(fxFRT_alten[2][n] && (!(({fxFRT_alten[2],4'b0}>>n)&4'hf)) & ~rst) ?
-	    rtII[n] : {10{1'bz}};
-	  assign outOp[7]=(fxFRT_alten[2][n] && (!(({fxFRT_alten[2],4'b0}>>n)&4'hf)) & ~rst) ?
-	    rtOp[n] : {13{1'bz}};
-	  assign FUreg[6]=(fxFRT_alten[2][n] && (!(({fxFRT_alten[2],4'b0}>>n)&4'hf)) & ~rst) ?
-	    rtReg[n] : {REG_WIDTH{1'bz}};
-	  assign FUwen[6]=(fxFRT_alten[2][n] && (!(({fxFRT_alten[2],4'b0}>>n)&4'hf)) & ~rst) ?
-	    1'b1 : {REG_WIDTH{1'bz}};
-
-          assign FUreg[6]=~nDataAlt[2] ? FUreg_reg3[9] : {REG_WIDTH{1'bz}};
-	  assign FUwen[6]=~nDataAlt[2] ? FUwen_reg3[9] : {REG_WIDTH{1'bz}};
-
-	  assign outEn[7]=~nDataAlt[2] ? outEn_reg3[8] : 4'bz;
-	  assign outII[7]=~nDataAlt[2] ? outII_reg3[8] : {10{1'bz}};
-	  assign outOp[7]=~nDataAlt[2] ? outOp_reg3[8] : {13{1'bz}};
-
-	  assign {FUFH[6],FUFL[6]}=(fxFRT_alten_reg5[2][n]  && (!(({fxFRT_alten_reg5[2],4'b0}>>n)&4'hf)) && ~rst) ? 
-	    rtRes[n] : {2*SIMD_WIDTH{1'bz}};//tri state close to target
+        
 
       if (n<2) begin : Wfwd
      /*     assign dc_wrAddrE[n]=wreq_hold ? insert_addr_reg3[36:1] : 36'bz;//5
@@ -5122,59 +5073,6 @@ module backend(
   assign rrfBW[2]=(~Wswp[2]) ? rs2i0_rB_reg : rs2i0_rA_reg;
       
 
-/*  assign fxFRT_don[0]=fxFRT_do&fxFRT_can[0]&~fxFRT_don_reg[0]&~fxFRT_don_reg2[0]&~fxFRT_don_reg3[0];
-  assign fxFRT_don[1]=fxFRT_do&&~fxFRT_can[0]|fxFRT_don_reg[0]|fxFRT_don_reg2[0]|fxFRT_don_reg3[0]
-   && fxFRT_can[1] && ~fxFRT_don_reg[1]&&~fxFRT_don_reg2[1]&&~fxFRT_don_reg3[1];
-  assign fxFRT_don[2]=fxFRT_do&&~fxFRT_can[0]|fxFRT_don_reg[0]|fxFRT_don_reg2[0]|fxFRT_don_reg3[0]
-   && ~fxFRT_can[1]|fxFRT_don_reg[1]|fxFRT_don_reg2[1]|fxFRT_don_reg3[1] 
-   && fxFRT_can[2] && ~fxFRT_don_reg[2]&&~fxFRT_don_reg2[2]&&~fxFRT_don_reg3[2];
-  assign fxFRT_don[3]=fxFRT_do&&~fxFRT_can[0]|fxFRT_don_reg[0]|fxFRT_don_reg2[0]|fxFRT_don_reg3[0]
-   && ~fxFRT_can[1]|fxFRT_don_reg[1]|fxFRT_don_reg2[1]|fxFRT_don_reg3[1] 
-   && ~fxFRT_can[2]|fxFRT_don_reg[2]|fxFRT_don_reg2[2]|fxFRT_don_reg3[2] 
-   && fxFRT_can[3] && ~fxFRT_don_reg[3]&&~fxFRT_don_reg2[3]&&~fxFRT_don_reg3[3];
- 
-  assign fxFRT_expA=fxFRT_dblL ? {rtDataA_reg[65],{4{~rtDataA_reg[65]&&{rtDataA_reg[65],rtDataA_reg[63:53]}}},
-    rtDataA_reg[63:53]} : 16'bz;
-  assign fxFRT_expA=fxFRT_dblH ? {rtDataA_reg[SIMD_WIDTH+65],
-    {4{~rtDataA_reg[SIMD_WIDTH+65]&&{rtDataA_reg[SIMD_WIDTH+65],rtDataA_reg[SIMD_WIDTH+63:SIMD_WIDTH+53]}}},
-    rtDataA_reg[SIMD_WIDTH+63:SIMD_WIDTH+53]} : 16'bz;
-  assign fxFRT_expA=fxFRT_sngl ? {rtDataA_reg[65],{7{~rtDataA_reg[65]&&{rtDataA_reg[65],rtDataA_reg[30:23]}}},
-    rtDataA_reg[30:23]} : 16'bz;
-  assign fxFRT_expA=fxFRT_ext ? {rtDataA_reg[65],rtDataA_reg[SIMD_WIDTH+14:SIMD_WIDTH]} : 16'bz;
-  assign fxFRT_expB=fxFRT_dblL? {rtDataB_reg[65],{4{~rtDataB_reg[65]&&{rtDataB_reg[65],rtDataB_reg[63:53]}}},
-    rtDataB_reg[63:53]} : 16'bz;
-  assign fxFRT_expB=fxFRT_dblH ? {rtDataB_reg[SIMD_WIDTH+65],
-    {4{~rtDataB_reg[SIMD_WIDTH+65]&&{rtDataB_reg[SIMD_WIDTH+65],rtDataB_reg[SIMD_WIDTH+63:SIMD_WIDTH+53]}}},
-    rtDataB_reg[SIMD_WIDTH+63:SIMD_WIDTH+53]} : 16'bz;
-  assign fxFRT_expB=fxFRT_sngl ? {rtDataB_reg[65],{7{~rtDataB_reg[65]&&{rtDataB_reg[65],rtDataB_reg[30:23]}}},
-    rtDataB_reg[30:23]} : 16'bz;
-  assign fxFRT_expB=fxFRT_ext ? {rtDataB_reg[65],rtDataB_reg[SIMD_WIDTH+14:SIMD_WIDTH]} : 16'bz;
-
-  assign fxFRT_normA0=fxFRT_dblL_ns ? {1'b1,rtDataA_reg[52:33],rtDataA_reg[31:0],12'b0} : 65'bz;
-  assign fxFRT_normA0=fxFRT_dblH_ns ? {1'b1,rtDataA_reg[SIMD_WIDTH+52:SIMD_WIDTH+33],
-    rtDataA_reg[SIMD_WIDTH+31:SIMD_WIDTH],12'b0} : 65'bz;
-  assign fxFRT_normA0=fxFRT_sngl_ns ?{1'b1,rtDataA_reg[22:0],21'b0} : 65'bz;
-  assign fxFRT_normA0=fxFRT_ext_ns ? {rtDataA_reg[64:33],rtDataA_reg[31:0],1'b0} : 65'bz;
-  assign fxFRT_normA0=fxFRT_dblL_s ? {2'b1,rtDataA_reg[52:33],rtDataA_reg[31:0],11'b0} : 65'bz;
-  assign fxFRT_normA0=fxFRT_dblH_s ? {2'b1,rtDataA_reg[SIMD_WIDTH+52:SIMD_WIDTH+33],
-    rtDataA_reg[SIMD_WIDTH+31:SIMD_WIDTH],11'b0} : 65'bz;
-  assign fxFRT_normA0=fxFRT_sngl_s ?{2'b1,rtDataA_reg[22:0],20'b0} : 65'bz;
-  assign fxFRT_normA0=fxFRT_ext_s ? {1'b0,rtDataA_reg[64:33],rtDataA_reg[31:0]} : 65'bz;
-  assign fxFRT_normB0=fxFRT_dblL ? {1'b1,rtDataB_reg[52:33],rtDataB_reg[31:0],12'b0} : 65'bz;
-  assign fxFRT_normB0=fxFRT_dblH ? {1'b1,rtDataB_reg[SIMD_WIDTH+52:SIMD_WIDTH+33],
-    rtDataB_reg[SIMD_WIDTH+31:SIMD_WIDTH],12'b0} : 65'bz;
-  assign fxFRT_normB0=fxFRT_sngl ?{1'b1,rtDataB_reg[22:0],21'b0} : 65'bz;
-  assign fxFRT_normB0=fxFRT_ext ? {rtDataB_reg[64:33],rtDataB_reg[31:0],1'b0} : 65'bz;
-
-  assign fxFRT_sgnA=fxFRT_dblL ? rtDataA_reg[64] : 1'bz;
-  assign fxFRT_sgnA=fxFRT_dblH ? rtDataA_reg[SIMD_WIDTH+64] : 1'bz;
-  assign fxFRT_sgnA=fxFRT_sngl ? rtDataA_reg[31] : 1'bz;
-  assign fxFRT_sgnA=fxFRT_ext ? rtDataA_reg[31] : 1'bz;
-  assign fxFRT_sgnB=fxFRT_dblL ? rtDataB_reg[64] : 1'bz;
-  assign fxFRT_sgnB=fxFRT_dblH ? rtDataB_reg[SIMD_WIDTH+64] : 1'bz;
-  assign fxFRT_sgnB=fxFRT_sngl ? rtDataB_reg[31] : 1'bz;
-  assign fxFRT_sgnB=fxFRT_ext ? rtDataB_reg[31] : 1'bz;
-*/
   fu_alu alu_ALIGNED(
   .clk(clk),
   .rst(rst),
