@@ -157,15 +157,17 @@ addie:
 		    }
 		}
 		res_p=1;
+                flg64(res0);
+	        res1=res0;
 	    } else {
                 res1=res=res0;
 		res_p=0;
-	    }
-            flg64(res0);
-	    res1=res0;
-            if (!no_O) {
-		flags|=((A1>0&&B1>0&&res1<0) || (A1<0&&B1<0&&res1>0))<<4;
-                flags|=(((A&0xf)+(B&0xf))&0x10)>>1;
+                flg64(res0);
+	        res1=res0;
+                if (!no_O) {
+		    flags|=((A1>0&&B1>0&&res1<0) || (A1<0&&B1<0&&res1>0))<<4;
+                    flags|=(((A&0xf)+(B&0xf))&0x10)>>1;
+	        }
 	    }
             break;
             
