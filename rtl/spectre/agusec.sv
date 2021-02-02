@@ -58,17 +58,17 @@ module agusec_check_upper3(
   assign msk0={1'b1,msk[7:1]}&msk;
 
   assign pos_ack[1]=(do_pos && ~on_hi && diff) || max ; //c==1
-  assign pos_ack[0]=do_pos || (do_pos2  && !(exp==5'h1e && ptr[43])) & ~on_hi & (diff) || max; //c==0
+  assign pos_ack[0]=do_pos || (do_pos2) & ~on_hi & (diff) || max; //c==0
   assign pos_ack[2]=do_pos3;
   assign neg_ack[0]=do_neg && on_hi && diff && do_pos1; //c==0
-  assign neg_ack[1]=do_neg || (do_neg2|do_neg1 && !(exp==5'h1e && !ptr[43])) & on_hi & diff & do_pos1; //c==1
+  assign neg_ack[1]=do_neg || (do_neg2|do_neg1) & on_hi & diff & do_pos1; //c==1
   assign neg_ack[2]=do_neg3;
 
-  assign pos_flip[0]=do_pos2 && !(exp==5'h1e && !ptr[43]) && ~do_pos && ~on_hi && diff && ~max;
+  assign pos_flip[0]=do_pos2 && ~do_pos && ~on_hi && diff && ~max;
   assign pos_flip[1]=do_pos & ~on_hi & diff & ~max;
 
   assign neg_flip[0]=do_neg && on_hi && diff && ~max;
-  assign neg_flip[1]=((do_neg2|do_neg1 && !(exp==5'h1e && ptr[43]) && ~do_neg)) & on_hi & diff & ~max;
+  assign neg_flip[1]=((do_neg2|do_neg1) && ~do_neg) & on_hi & diff & ~max;
 
   get_carry #(7) cmp_mod(ptr[`ptr_hi],~ptr[`ptr_low],1'b1,nhi_less);
   generate
@@ -112,11 +112,11 @@ module agusec_check_upper3(
     end
     assign do_pos=redand8({pos0,xpos0});
     assign do_pos1=redor8({pos1,xpos1});
-    assign do_pos2=redand8({pos2,xpos2});
+    assign do_pos2=redand8({pos2,xpos2}) && exp!=5'h1e;
     assign do_pos3=redand8({pos0,xpos0}) && redand8({pos3,xpos3});
     assign do_neg=redand8({neg0,xneg0});
-    assign do_neg2=redand8({neg2,xneg2});
-    assign do_neg1=redand8({neg1,xneg1});
+    assign do_neg2=redand8({neg2,xneg2}) && exp!=5'h1e;
+    assign do_neg1=redand8({neg1,xneg1}) && exp!=5'h1e;
     assign do_neg3=redand8({neg0,xneg0}) && redand8({neg3,xneg3});
   endgenerate
 
