@@ -4629,62 +4629,6 @@ module backend(
         
 
       if (n<2) begin : Wfwd
-     /*     assign dc_wrAddrE[n]=wreq_hold ? insert_addr_reg3[36:1] : 36'bz;//5
-          assign dc_wrAddrO[n]=wreq_hold ? insert_addr_reg3[36:1] : 36'bz;//5
-          assign dc_wrBanks[n]=wreq_hold ? {32{n==0}} : 32'bz;
-          assign dc_wrEn[n]=wreq_hold ? 1'b0 : 1'bz;
-          assign dc_odd_wr[n]=wreq_hold ? insert_addr_reg3[0] : 1'bz;//5
-          assign dc_split_wr[n]=wreq_hold ? 1'b0 : 1'bz;
-          assign dc_wrBegin[n]=wreq_hold ? 5'b0 : 5'bz;
-          assign dc_size_wr[n]=wreq_hold ? 5'b0 : 5'bz;
-          assign dc_II_wr[n]=wreq_hold ? 10'b0 : 10'bz;
-          assign dc_wdata[n]=wreq_hold ? 160'b0 : 160'bz;
-          assign dc_wrEnd[n]=wreq_hold ? 5'b0 : 5'bz; 
-          assign dc_wrBGN_BNK[n]=wreq_hold ? 4'hf : 4'bz; 
-          assign dc_wrEND_BNK[n]=wreq_hold ? 4'hf : 4'bz; 
-          assign dc_wr_low[n]=wreq_hold ? 2'b0 : 4'bz; 
-*/
-          assign dci_wrAddrE[n]=wreq_data_reg[n][`lsaddr_addrE];
-          assign dci_wrAddrO[n]=wreq_data_reg[n][`lsaddr_addrO];
-          assign dci_wrBanks[n]=wreq_data_reg[n][`lsaddr_banks];
-          assign dci_wrEn[n]=wreq_en_reg[n]&&~wreq_stall;
-          assign dci_odd_wr[n]=wreq_data_reg[n][`lsaddr_odd];
-          assign dci_split_wr[n]=wreq_data_reg[n][`lsaddr_split];
-          assign dci_wrBegin[n]=wreq_data_reg[n][`lsaddr_bank0];
-          assign dci_size_wr[n]=wreq_data_reg[n][`lsaddr_sz];
-          assign dci_II_wr[n]=wreq_data_reg[n][`lsaddr_II];
-          assign dci_wrEnd[n]=wreq_dcEnd[n]; 
-          assign dci_wrBGN_BNK[n]=wreq_bben[n]; 
-          assign dci_wrEND_BNK[n]=wreq_endben[n]; 
-          assign dci_wr_low[n]=wreq_data_reg[n][`lsaddr_low];
-          assign dci_wrTyp[n]=wreq_data_reg[n][`lsaddr_mtype]; 
-          
-          assign lsr_wr_data[n+4][`lsaddr_addrE]=Wq_wrAddrE_reg[n];
-          assign lsr_wr_data[n+4][`lsaddr_addrO]=Wq_wrAddrO_reg[n];
-          assign lsr_wr_data[n+4][`lsaddr_banks]=Wq_wrBanks_reg[n];
-          assign lsr_wr_data[n+4][`lsaddr_bank0]=Wq_wrBeginA_reg[n];
-          assign lsr_wr_data[n+4][`lsaddr_low]=Wq_low_reg[n];
-          assign lsr_wr_data[n+4][`lsaddr_split]=Wq_split_reg[n];
-          assign lsr_wr_data[n+4][`lsaddr_odd]=Wq_odd_reg[n];
-          assign lsr_wr_data[n+4][`lsaddr_st]=1'b1;
-          assign lsr_wr_data[n+4][`lsaddr_sz]=Wq_size_reg[n];
-          assign lsr_wr_data[n+4][`lsaddr_odd_round]=Wq_LSQ_reg[n][8];
-          assign lsr_wr_data[n+4][`lsaddr_II]=Wq_II_reg[n];
-          assign lsr_wr_data[n+4][`lsaddr_WQ]=Wq_WQ_reg[n];
-          assign lsr_wr_data[n+4][`lsaddr_mtype]=Wq_type_reg[n];
-          assign lsr_wr_data[n+4][`lsaddr_reg_hi]=5'd0; //should be unused
-          assign lsr_wr_data[n+4][`lsaddr_reg_low]=4'd0; //should be unused
-          assign lsr_wr_data[n+4][`lsaddr_flag]=1'b0;
-          assign lsr_wr_data[n+4][`lsaddr_pconfl]=1'b0;
-          assign lsr_wr_data[n+4][`lsaddr_except]=1'b0;
-          assign lsr_wr_data[n+4][`lsaddr_blow]=get_byte_mod4(Wq_low_reg[n],Wq_size_reg[n]);
-          
-          assign lsr_wr_data[n+4][`lsaddr_OH]=Wq_odd_reg[n];
-          assign lsr_wr_data[n+4][`lsaddr_EH]=~Wq_odd_reg[n];
-          assign lsr_wr_data[n+4][`lsaddr_OL]=(Wq_odd_reg[n] && ~Wq_split_reg[n]|~Wq_wrBeginA_reg[n][4]) 
-              || (~Wq_odd_reg[n] && Wq_split_reg[n] && Wq_wrBeginA_reg[n][4]);
-          assign lsr_wr_data[n+4][`lsaddr_EL]=(~Wq_odd_reg[n] && ~Wq_split_reg[n]|~Wq_wrBeginA_reg[n][4])
-              || (Wq_odd_reg[n] && Wq_split_reg[n] && Wq_wrBeginA_reg[n][4]);
 
           assign lsw_wdata[n]=WDfxDataEn_reg3[n][3:2] ? lsw_wdataF_reg[n] : WDfxData_reg3[n];
           assign lsw_wdataF[n]=WDfxDataEn_reg2[n][2] ? lsw_wdataV_reg[n] : lsw_wdataF0[n];
@@ -5251,21 +5195,21 @@ module backend(
     lso2_en && (lso2_adata[`lsaddr_reg_low]==1 || lso2_adata[`lsaddr_reg_low]==4 || lso2_adata[`lsaddr_reg_low]==7 ),
     lso2_en && (lso2_adata[`lsaddr_reg_low]==0 || lso2_adata[`lsaddr_reg_low]==3 || lso2_adata[`lsaddr_reg_low]==6 )}),
   .p0_adata(lsr_wr_data[0]),.p0_banks(dc_rdBanks[0]),.p0_LSQ(dc_LSQ[0]),
-    .p0_en(dc_rdEn[0]),.p0_rsEn(dc_rsEn[0]),p0_secq,p0_ret,p0_repl,p0_lsfwd,
+    .p0_en(dc_rdEn[0]),.p0_rsEn(dc_rsEn[0]),.p0_secq(p_secq[0]),.p0_ret(p_ret[0]),.p0_repl(p_repl[0]),.p0_lsfwd(p_lsfwd[0]),
   .p1_adata(lsr_wr_data[1]),.p1_banks(dc_rdBanks[1]),.p1_LSQ(dc_LSQ[1]),
-    .p1_en(dc_rdEn[1]),.p1_rsEn(dc_rsEn[1]),p1_secq,p1_ret,p1_repl,p1_lsfwd,
+    .p1_en(dc_rdEn[1]),.p1_rsEn(dc_rsEn[1]),.p1_secq(p_secq[1]),.p1_ret(p_ret[1]),.p1_repl(p_repl[1]),.p1_lsfwd(p_lsfwd[1]),
   .p2_adata(lsr_wr_data[2]),.p2_banks(dc_rdBanks[2]),.p2_LSQ(dc_LSQ[2]),
-    .p2_en(dc_rdEn[2]),.p2_rsEn(dc_rsEn[2]),p2_secq,p2_ret,p2_repl,p2_lsfwd,p2_data,p2_brdbanks,
+    .p2_en(dc_rdEn[2]),.p2_rsEn(dc_rsEn[2]),.p2_secq(p_secq[2]),.p2_ret(p_ret[2]),.p2_repl(p_repl[2]),.p2_lsfwd(p_lsfwd[2]),.p2_data(p_data[2]),.p2_brdbanks(p_brdbanks[2]),
   .p3_adata(lsr_wr_data[3]),.p3_banks(dc_rdBanks[3]),.p3_LSQ(dc_LSQ[3]),
-    .p3_en(dc_rdEn[3]),.p3_rsEn(dc_rsEn[3]),p3_ioEn,p3_io_ack,p3_ret,p3_data,p3_brdbanks,p3_repl,p3_lsfwd,
-  .p4_adata(lsr_wr_data[4]),.p4_LSQ(),p4_en,p4_secq,p4_ret,
-  .p5_adata(lsr_wr_data[5]),.p5_LSQ(),p5_en,p5_secq,p5_ret,
+    .p3_en(dc_rdEn[3]),.p3_rsEn(dc_rsEn[3]),.p3_ioEn(p3_ioEn),.p3_io_ack(p3_io_ack),.p3_ret(p_ret[3]),.p3_data(p3_data),.p3_brdbanks(p3_brdbanks),.p3_repl(p_repl[3]),.p3_lsfwd(p_lsfwd[3]),
+  .p4_adata(lsr_wr_data[4]),.p4_LSQ(p_LSQ[4]),.p4_en(p_en[4]),.p4_secq(p_secq[4]),.p4_ret(p_ret[4]),
+  .p5_adata(lsr_wr_data[5]),.p5_LSQ(p_LSQ[5]),.p5_en(p_en[5]),.p5_secq(p_secq[5]),.p5_ret(p_ret[5]),
   .FU0Hit(FU0Hit),.FU1Hit(FU1Hit),.FU2Hit(FU2Hit),.FU3Hit(FU3Hit),
   .FU0(FU[0]),.FU1(FU[1]),.FU2(FU[2]),.FU3(FU[3]),.FU4(FU[4]),.FU5(FU[5]),.FU6(FU[6]),.FU7(FU[7]),.FU8(FU[8]),.FU9(FU[9]),
   .FUreg3_reg(FUreg_reg5[3]),.dc_rdataA(dc_rdataA[3]),//is it really reg5?
-  msi_exp_addr,msi_en,msi_out_clear,//msi_out_clear=can do msi en
+  .msi_exp_addr(0),.msi_en(1'b0),.msi_out_clear(),//msi_out_clear=can do msi en
   .csrss_en(csrss_en),.csrss_addr(csrss_addr),.csrss_data(csrss_data),
-  alt_bus_hold,
+  alt_bus_hold,//expunge request
   alt_bus_addr,
   .req_addr(req_addr),.req_tlbAttr(req_tlbAttr),.req_tlbEn(req_tlbEn),
   .bus_tlb_data(bus_tlb_data),.bus_tlb_en(bus_tlb_en),
@@ -5306,12 +5250,12 @@ module backend(
   .miss_pause_agu_reg2(miss_pause_agu_reg2),
   .insert_isData_reg2(insert_isData_reg2),
   .pause_agu(pause_agu),.WDoRsPause(WDoRsPause),
-  .p0_adata(lsr_wr_data[0]),.p0_LSQ(dc_LSQ[0]),.p0_en(dc_rdEn[0]),.p0_rsEn(dc_rsEn[0]),p0_smpc,p0_lsfwd,
-  .p1_adata(lsr_wr_data[1]),.p1_LSQ(dc_LSQ[1]),.p1_en(dc_rdEn[1]),.p1_rsEn(dc_rsEn[1]),p1_smpc,p1_lsfwd,
-  .p2_adata(lsr_wr_data[2]),.p2_LSQ(dc_LSQ[2]),.p2_en(dc_rdEn[2]),.p2_rsEn(dc_rsEn[2]),p2_smpc,p2_lsfwd,
-  .p3_adata(lsr_wr_data[3]),.p3_LSQ(dc_LSQ[3]),.p3_en(dc_rdEn[3]),.p3_rsEn(dc_rsEn[3]),p3_smpc,p3_lsfwd,
-  .p4_adata(lsr_wr_data[4]),.p4_LSQ,p4_en,
-  .p5_adata(lsr_wr_data[5]),.p5_LSQ,p5_en,
+  .p0_adata(lsr_wr_data[0]),.p0_LSQ(dc_LSQ[0]),.p0_en(dc_rdEn[0]),.p0_rsEn(dc_rsEn[0]),.p0_smpc(p_repl[0]),.p0_lsfwd(p_lsfwd[0]),
+  .p1_adata(lsr_wr_data[1]),.p1_LSQ(dc_LSQ[1]),.p1_en(dc_rdEn[1]),.p1_rsEn(dc_rsEn[1]),.p1_smpc(p_repl[1]),.p1_lsfwd(p_lsfwd[1]),
+  .p2_adata(lsr_wr_data[2]),.p2_LSQ(dc_LSQ[2]),.p2_en(dc_rdEn[2]),.p2_rsEn(dc_rsEn[2]),.p2_smpc(p_repl[2]),.p2_lsfwd(p_lsfwd[2]),
+  .p3_adata(lsr_wr_data[3]),.p3_LSQ(dc_LSQ[3]),.p3_en(dc_rdEn[3]),.p3_rsEn(dc_rsEn[3]),.p3_smpc(p_repl[3]),.p3_lsfwd(p_lsfwd[3]),
+  .p4_adata(lsr_wr_data[4]),.p4_LSQ(p_LSQ[4]),.p4_en(p_en[4]),
+  .p5_adata(lsr_wr_data[5]),.p5_LSQ(p_LSQ[5]),.p5_en(p_en[5]),
   .FU0Hit(FU0Hit),
   .FU1Hit(FU1Hit),
   .FU2Hit(FU2Hit),
