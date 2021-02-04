@@ -8,6 +8,7 @@ module fun_fpusqr(
   u1_A,u1_B,u1_Av,u1_Bv,u1_en,u1_op,
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
   u1_ret,u1_ret_en,
+  u1_Bx,u1_Bxo,
   FUF0,FUF1,FUF2,
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
@@ -35,17 +36,19 @@ module fun_fpusqr(
   input [3:0] u1_fuufwd_B;
   output [13:0] u1_ret;
   output u1_ret_en;
+  output [67:0] u1_Bx;
+  input  [67:0] u1_Bxo;
 
-  input [S+67:0] FUV0;
-  input [S+67:0] FUV1;
-  input [S+67:0] FUV2;
-  input [S+67:0] FUV3;
-  input [S+67:0] FUV4;
-  input [S+67:0] FUV5;
-  inout [S+67:0] FUV6;
-  input [S+67:0] FUV7;
-  input [S+67:0] FUV8;
-  input [S+67:0] FUV9;
+  input [67:0] FUV0;
+  input [67:0] FUV1;
+  input [67:0] FUV2;
+  input [67:0] FUV3;
+  input [67:0] FUV4;
+  input [67:0] FUV5;
+  inout [67:0] FUV6;
+  input [67:0] FUV7;
+  input [67:0] FUV8;
+  input [67:0] FUV9;
 
   input [S+67:0] FUF0;
   input [S+67:0] FUF1;
@@ -179,7 +182,7 @@ module fun_fpusqr(
      (fxFRT_can[3] & ~fxFRT_don_reg[3] & ~fxFRT_don_reg2[3] & ~fxFRT_don_reg2[3] & ~fxFRT_don_reg3[3])),.do_(fxFRT_do));
   in_flip_rt #(13+16+SIMD_WIDTH) rtDatB_mod(
     .clk(clk),.rst(rst),.in_en(fxFRT_en),.pause(),
-    .d_in({u1_op_reg,u1_en_reg[3] ? uu_B1 : {16'b0,uu_Bv_reg}),
+    .d_in({u1_op_reg,u1_en_reg[3] ? u1_op_reg[8+H] ? {16'b0,u1_Bxo} : uu_B1 : {16'b0,uu_Bv_reg}),
     .d_out({frtOp,rtDataB}),
     .dout_en((fxFRT_can[0] & ~fxFRT_don_reg[0] & ~fxFRT_don_reg2[0] & ~fxFRT_don_reg2[0] & ~fxFRT_don_reg3[0]) |
      (fxFRT_can[1] & ~fxFRT_don_reg[1] & ~fxFRT_don_reg2[1] & ~fxFRT_don_reg2[1] & ~fxFRT_don_reg3[1]) |
@@ -196,7 +199,9 @@ module fun_fpusqr(
    && ~fxFRT_can[1]|fxFRT_don_reg[1]|fxFRT_don_reg2[1]|fxFRT_don_reg3[1] 
    && ~fxFRT_can[2]|fxFRT_don_reg[2]|fxFRT_don_reg2[2]|fxFRT_don_reg3[2] 
    && fxFRT_can[3] && ~fxFRT_don_reg[3]&&~fxFRT_don_reg2[3]&&~fxFRT_don_reg3[3];
- 
+
+  assign u1_Bx=uu_B1[67:0];
+
   assign fxFRT_expA=fxFRT_dbl ? {rtDataA_reg[65],{4{~rtDataA_reg[65]&&{rtDataA_reg[65],rtDataA_reg[63:53]}}},
     rtDataA_reg[63:53]} : 16'bz;
   assign fxFRT_expA=fxFRT_sngl ? {rtDataA_reg[65],{7{~rtDataA_reg[65]&&{rtDataA_reg[65],rtDataA_reg[30:23]}}},
