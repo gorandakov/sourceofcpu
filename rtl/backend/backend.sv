@@ -28,6 +28,11 @@ module backend(
 
   newAttr,
 
+  MSI_exp_addr,
+  MSI_exp_en,
+  MSI_swap_want,
+  MSI_swap_repl,
+
   rs0i0_rA,rs0i0_rA_use,rs0i0_rA_useF,rs0i0_rA_isV,rs0i0_rA_isAnyV,
   rs0i0_rB,rs0i0_rB_use,rs0i0_rB_useF,rs0i0_rB_isV,rs0i0_rB_isAnyV,rs0i0_useBConst,
   rs0i0_rT,rs0i0_rT_use,rs0i0_rT_useF,rs0i0_rT_isV, 
@@ -414,6 +419,11 @@ module backend(
 
   input [3:0] newAttr;
   
+  input [36:0] MSI_exp_addr;
+  input MSI_exp_en;
+  input MSI_swap_want;
+  input MSI_swap_repl;
+
   input [IN_REG_WIDTH-1:0] rs0i0_rA;
   input rs0i0_rA_use;
   input rs0i0_rA_useF;
@@ -5207,10 +5217,10 @@ module backend(
   .FU0Hit(FU0Hit),.FU1Hit(FU1Hit),.FU2Hit(FU2Hit),.FU3Hit(FU3Hit),
   .FU0(FU[0]),.FU1(FU[1]),.FU2(FU[2]),.FU3(FU[3]),.FU4(FU[4]),.FU5(FU[5]),.FU6(FU[6]),.FU7(FU[7]),.FU8(FU[8]),.FU9(FU[9]),
   .FUreg3_reg(FUreg_reg5[3]),.dc_rdataA(dc_rdataA[3]),//is it really reg5?
-  .msi_exp_addr(0),.msi_en(1'b0),.msi_out_clear(),//msi_out_clear=can do msi en
+  .msi_exp_addr(MSI_exp_addr_reg),.msi_en(MSI_exp_en_reg),.msi_out_clear(),//msi_out_clear=can do msi en; todo - make replace last buffer rather than wait + redu
   .csrss_en(csrss_en),.csrss_addr(csrss_addr),.csrss_data(csrss_data),
-  alt_bus_hold,//expunge request
-  alt_bus_addr,
+  .alt_bus_hold(MSI_exp_en_reg),//expunge request
+  .alt_bus_addr(MSI_exp_addr_reg),
   .req_addr(req_addr),.req_tlbAttr(req_tlbAttr),.req_tlbEn(req_tlbEn),
   .bus_tlb_data(bus_tlb_data),.bus_tlb_en(bus_tlb_en),
   .reqBus_en(reqBus_en),
@@ -5260,7 +5270,7 @@ module backend(
   .FU1Hit(FU1Hit),
   .FU2Hit(FU2Hit),
   .FU3Hit(FU3Hit),
-  st_stall,
+  .st_stall(miss_pause_agu_reg2|bus_holds_agu_reg2),
   .st0_adata(st0_adata),.st0_en(st0_en),.st0_bank1(st0_bank1),.st0_bgn_ben(st0_bgn_ben),.st0_end_ben(st0_end_ben),.st0_data(st0_data),
   .st1_adata(st1_adata),.st1_en(st1_en),.st1_bank1(st1_bank1),.st1_bgn_ben(st1_bgn_ben),.st1_end_ben(st1_end_ben),.st1_data(st1_data),
   .wb0_adata(lso_adata),.wb0_LSQ(lso_LSQ),.wb0_en(lso_en),.wb0_ret(),.wb0_data(lso_data),.wb0_brdbanks(lso_brdbanks),
@@ -5290,7 +5300,7 @@ module backend(
   .mOpY4_II(dc_II_wr_reg3[0]),.mOpY4_hit(dc_wrHit[0]),
   .mOpY5_II(dc_II_wr_reg3[1]),.mOpY5_hit(dc_wrHit[1]),
   .lsi0_reg(lsi0_reg),.lsi1_reg(lsi1_reg),.lsi2_reg(lsi2_reg),
-  MSI_exp_addr,MSI_en,
+  .MSI_exp_addr(MSI_exp_addr_reg),.MSI_en(MSI_exp_en_reg),
   .doStall_STQ(doStall_STQ),
   .doStall_LDQ(doStall_LDQ),
   .doStall_LSQ(doStall_LSQ) 
