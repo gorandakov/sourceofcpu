@@ -5299,6 +5299,7 @@ module backend(
   fun_fpu_BOTH fpu_mod(
   .clk(clk),
   .rst(rst),
+  .fpcsr(fpcsr),
   .u1_A0(outDataAFL[0]),.u1_B0(outDataBFL[0]),
   .u1_A1(outDataAFH[0]),.u1_B1(outDataBFH[0]),.u1_en(outEn_reg2[1]),.u1_op(outOp_reg2[1]),
   .u1_fufwd_A(outFuFwdA_reg2[1]),.u1_fuufwd_A(outFuuFwdA_reg2[1]),
@@ -5357,6 +5358,7 @@ module backend(
   fun_fpsu_BOTH fpsu_mod(
   .clk(clk),
   .rst(rst),
+  .fpcsr(fpcsr),
   .u1_A0(outDataAVL[0]),.u1_B0(outDataBVL[0]),
   .u1_A1(outDataAVH[0]),.u1_B1(outDataBVH[0]),
   .u1_en(outEn_reg[1]),.u1_op(outOp_reg[1]),
@@ -5404,6 +5406,34 @@ module backend(
   ALTDATAH0,ALTDATAH1,
   ALTDATAL0,ALTDATAL1,
   ALT_INP
+  );
+
+  fun_fpusqr sqr_mod(
+  .clk(clk),
+  .rst(rst),
+  .fpcsr(fpcsr),
+  .ul_A(outDataAFL_reg[5]),.ul_B(outDataBFL_reg[5]),.ul_Av(outDataAVL_reg[5]),.ul_Bv(outDataBVL_reg[5]),
+  .uh_A(outDataAFH_reg[5]),.uh_B(outDataBFH_reg[5]),.uh_Av(outDataAVH_reg[5]),.uh_Bv(outDataBVH_reg[5]),
+  .u1_en(outEn_reg[8]),.u1_op(outOp_reg[8]),
+  .u1_fufwd_A(outFuFwdA_reg[8]),.u1_fuufwd_A(outFuuFwdA_reg[8]),
+  .u1_fufwd_B(outFuFwdB_reg[8]),.u1_fuufwd_B(outFuuFwdB_reg[8]),
+  .u1_ret(fsret[6]),.u1_ret_en(fsretEn6),
+  .FUFH0(FUFH[0]),.FUFH1(FUFH[1]),.FUFH2(FUFH[2]),
+  .FUFH3(FUFH[3]),.FUFH4(FUFH[4]),.FUFH5(FUFH[5]),
+  .FUFH6(FUFH[6]),.FUFH7(FUFH[7]),.FUFH8(FUFH[8]),
+  .FUFH9(FUFH[9]),
+  .FUFL0(FUFL[0]),.FUFL1(FUFL[1]),.FUFL2(FUFL[2]),
+  .FUFL3(FUFL[3]),.FUFL4(FUFL[4]),.FUFL5(FUFL[5]),
+  .FUFL6(FUFL[6]),.FUFL7(FUFL[7]),.FUFL8(FUFL[8]),
+  .FUFL9(FUFL[9]),
+  .FUVH0(FUVH[0]),.FUVH1(FUVH[1]),.FUVH2(FUVH[2]),
+  .FUVH3(FUVH[3]),.FUVH4(FUVH[4]),.FUVH5(FUVH[5]),
+  .FUVH6(FUVH[6]),.FUVH7(FUVH[7]),.FUVH8(FUVH[8]),
+  .FUVH9(FUVH[9]),
+  .FUVL0(FUVL[0]),.FUVL1(FUVL[1]),.FUVL2(FUVL[2]),
+  .FUVL3(FUVL[3]),.FUVL4(FUVL[4]),.FUVL5(FUVL[5]),
+  .FUVL6(FUVL[6]),.FUVL7(FUVL[7]),.FUVL8(FUVL[8]),
+  .FUVL9(FUVL[9])
   );
 
   get_LDQ_new_en ldq_new_mod(

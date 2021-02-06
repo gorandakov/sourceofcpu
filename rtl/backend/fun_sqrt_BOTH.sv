@@ -110,6 +110,8 @@ module fun_fpusqr(
 
   reg [1:0] ALT_INP_reg;
 
+  wire [67:0] u1_Bxo;
+  wire [67:0] u1_Bx;
 
 
   assign fraise2[m]=fxFCADD_sn_reg5[m] ?
@@ -136,6 +138,38 @@ module fun_fpusqr(
   no,
   en);
 */
+  fun_fpusqr sqr_low(
+  clk,
+  rst,
+  ul_A,ul_B,ul_Av,ul_Bv,u1_en,u1_op,
+  u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
+  u1_ret,u1_ret_en,
+  u1_Bx,u1_Bxo,
+  FUFL0,FUFL1,FUFL2,
+  FUFL3,FUFL4,FUFL5,
+  FUFL6,FUFL7,FUFL8,
+  FUFL9,
+  FUVL0,FUVL1,FUVL2,
+  FUVL3,FUVL4,FUVL5,
+  FUVL6,FUVL7,FUVL8,
+  FUVL9
+  );
+  fun_fpusqr sqr_hi(
+  clk,
+  rst,
+  uh_A,uh_B,uh_Av,uh_Bv,u1_en,u1_op,
+  u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
+  u1_ret,u1_ret_en,
+  u1_Bxo,u1_Bx,
+  FUFH0,FUFH1,FUFH2,
+  FUFH3,FUFH4,FUFH5,
+  FUFH6,FUFH7,FUFH8,
+  FUFH9,
+  FUVH0,FUVH1,FUVH2,
+  FUVH3,FUVH4,FUVH5,
+  FUVH6,FUVH7,FUVH8,
+  FUVH9
+  );
   
   always @(posedge clk) begin
   end
