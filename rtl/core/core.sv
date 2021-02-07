@@ -1006,9 +1006,10 @@ module heptane_core(
   btbl_IP1,
   btbl_mask0,btbl_mask1,
   csrss_en,csrss_addr,csrss_data,
-  MSI_expAddr,
-  MSI_expAddr_en,
-  MSI_expAddr_hitCC
+  MSI_expAddr_reg,
+  MSI_expAddr_en_reg,
+  MSI_expAddr_hitCC,
+  dec_attr
   );
   
 
@@ -1358,7 +1359,10 @@ module heptane_core(
   bus_tlb_data,
   bus_tlb_en,
   dec_attr,
-
+  MSI_expAddr_reg,
+  MSI_expAddr_en_reg,
+  1'b0,//unused
+  1'b0,//unused
   rs0i0_rA,rs0i0_rA_use,rs0i0_rA_useF,rs0i0_rA_isV,rs0i0_rA_isAnyV,
   rs0i0_rB,rs0i0_rB_use,rs0i0_rB_useF,rs0i0_rB_isV,rs0i0_rB_isAnyV,rs0i0_useBConst,
   rs0i0_rT,rs0i0_rT_use,rs0i0_rT_useF,rs0i0_rT_isV, 

@@ -5348,9 +5348,9 @@ module backend(
   .FUFL3(FUFL[3]),.FUFL4(FUFL[4]),.FUFL5(FUFL[5]),
   .FUFL6(FUFL[6]),.FUFL7(FUFL[7]),.FUFL8(FUFL[8]),
   .FUFL9(FUFL[9]),
-  ALTDATAH0,ALTDATAH1,
-  ALTDATAL0,ALTDATAL1,
-  ALT_INP,
+  .ALTDATAH0(sqrDatH_reg),.ALTDATAH1({FUTYPE_reg,66'b0}),
+  .ALTDATAL0(sqrDatL_reg),.ALTDATAL1(FUCVT2_reg),
+  .ALT_INP({dalt,sqrDatEn}),
   FUS_alu_reg2[0],FUS_alu_reg5[1],
   FUS_alu_reg2[2],FUS_alu_reg5[3],
   FUS_alu_reg2[4],FUS_alu_reg5[5],
@@ -5413,9 +5413,9 @@ module backend(
   .FUFL3(FUVL[3]),.FUFL4(FUVL[4]),.FUFL5(FUVL[5]),
   .FUFL6(FUVL[6]),.FUFL7(FUVL[7]),.FUFL8(FUVL[8]),
   .FUFL9(FUVL[9]),
-  ALTDATAH0,ALTDATAH1,
-  ALTDATAL0,ALTDATAL1,
-  ALT_INP
+  .ALTDATAH0(sqrDatH),.ALTDATAH1({FUTYPE,66'b0}),
+  .ALTDATAL0(sqrDatL[67:0]),.ALTDATAL1(FUCVT2),
+  .ALT_INP({dalt,sqrDatEn})
   );
 
   fun_fpusqr sqr_mod(
@@ -5428,6 +5428,7 @@ module backend(
   .u1_fufwd_A(outFuFwdA_reg[8]),.u1_fuufwd_A(outFuuFwdA_reg[8]),
   .u1_fufwd_B(outFuFwdB_reg[8]),.u1_fuufwd_B(outFuuFwdB_reg[8]),
   .u1_ret(fsret[6]),.u1_ret_en(fsretEn6),
+  .u1_dataH(sqrDatH),.u1_dataL(sqrDatL),.u1_dataEn(sqrDatEn),
   .FUFH0(FUFH[0]),.FUFH1(FUFH[1]),.FUFH2(FUFH[2]),
   .FUFH3(FUFH[3]),.FUFH4(FUFH[4]),.FUFH5(FUFH[5]),
   .FUFH6(FUFH[6]),.FUFH7(FUFH[7]),.FUFH8(FUFH[8]),

@@ -2548,21 +2548,21 @@ module rs(
   DFF2 #(1) outFndX1_mod(clk,dataRst,1'b1,rsFoundNZ[1],rsFoundNZ_reg[1]);
   DFF2 #(1) outFndX2_mod(clk,dataRst,1'b1,rsFoundNZ[2],rsFoundNZ_reg[2]);
 
-  DFF2 #(32*6) outEqA_mod(clk,dataRst,1'b1,outEqA_reg,outEqA_reg2);
-  DFF2 #(32*6) outEqB_mod(clk,dataRst,1'b1,outEqB_reg,outEqB_reg2);
-  DFF2 #(32*6) outEqS_mod(clk,dataRst,1'b1,outEqS_reg,outEqS_reg2);
+  DFF2 #(32*6) outEqA2_mod(clk,dataRst,1'b1,outEqA_reg,outEqA_reg2);
+  DFF2 #(32*6) outEqB2_mod(clk,dataRst,1'b1,outEqB_reg,outEqB_reg2);
+  DFF2 #(32*6) outEqS2_mod(clk,dataRst,1'b1,outEqS_reg,outEqS_reg2);
 
-  DFF2 #(32) outNew0_mod(clk,dataRst,1'b1,newRsSelect0_reg,newRsSelect0_reg2);
-  DFF2 #(32) outNew1_mod(clk,dataRst,1'b1,newRsSelect1_reg,newRsSelect1_reg2);
-  DFF2 #(32) outNew2_mod(clk,dataRst,1'b1,newRsSelect2_reg,newRsSelect2_reg2);
-  DFF2 #(32) outSel1_mod(clk,dataRst,1'b1,outRsSelect_reg[1],outRsSelect_reg2[1]);
-  DFF2 #(32) outSel2_mod(clk,dataRst,1'b1,outRsSelect_reg[2],outRsSelect_reg2[2]);
-  DFF2 #(4) outBnk1_mod(clk,dataRst,1'b1,outBank_reg[1],outBank_reg2[1]);
-  DFF2 #(4) outBnk2_mod(clk,dataRst,1'b1,outBank_reg[2],outBank_reg2[2]);
-  DFF2 #(1) outFnd1_mod(clk,dataRst,1'b1,rsFound_reg[1],rsFound_reg2[1]);
-  DFF2 #(1) outFnd2_mod(clk,dataRst,1'b1,rsFound_reg[2],rsFound_reg2[2]);
-  DFF2 #(1) outFndX1_mod(clk,dataRst,1'b1,rsFoundNZ_reg[1],rsFoundNZ_reg2[1]);
-  DFF2 #(1) outFndX2_mod(clk,dataRst,1'b1,rsFoundNZ_reg[2],rsFoundNZ_reg2[2]);
+  DFF2 #(32) outNew02_mod(clk,dataRst,1'b1,newRsSelect0_reg,newRsSelect0_reg2);
+  DFF2 #(32) outNew12_mod(clk,dataRst,1'b1,newRsSelect1_reg,newRsSelect1_reg2);
+  DFF2 #(32) outNew22_mod(clk,dataRst,1'b1,newRsSelect2_reg,newRsSelect2_reg2);
+  DFF2 #(32) outSel12_mod(clk,dataRst,1'b1,outRsSelect_reg[1],outRsSelect_reg2[1]);
+  DFF2 #(32) outSel22_mod(clk,dataRst,1'b1,outRsSelect_reg[2],outRsSelect_reg2[2]);
+  DFF2 #(4) outBnk12_mod(clk,dataRst,1'b1,outBank_reg[1],outBank_reg2[1]);
+  DFF2 #(4) outBnk22_mod(clk,dataRst,1'b1,outBank_reg[2],outBank_reg2[2]);
+  DFF2 #(1) outFnd12_mod(clk,dataRst,1'b1,rsFound_reg[1],rsFound_reg2[1]);
+  DFF2 #(1) outFnd22_mod(clk,dataRst,1'b1,rsFound_reg[2],rsFound_reg2[2]);
+  DFF2 #(1) outFndX12_mod(clk,dataRst,1'b1,rsFoundNZ_reg[1],rsFoundNZ_reg2[1]);
+  DFF2 #(1) outFndX22_mod(clk,dataRst,1'b1,rsFoundNZ_reg[2],rsFoundNZ_reg2[2]);
 
   generate
       genvar k;
