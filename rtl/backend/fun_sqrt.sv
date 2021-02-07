@@ -8,6 +8,7 @@ module fun_fpusqr(
   u1_A,u1_B,u1_Av,u1_Bv,u1_en,u1_op,
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
   u1_ret,u1_ret_en,
+  en_early,op_early,
   u1_Bx,u1_Bxo,
   FUF0,FUF1,FUF2,
   FUF3,FUF4,FUF5,
@@ -38,6 +39,8 @@ module fun_fpusqr(
   output u1_ret_en;
   output [67:0] u1_Bx;
   input  [67:0] u1_Bxo;
+  input [3:0] en_early;
+  input [12:0] op_early;
 
   input [67:0] FUV0;
   input [67:0] FUV1;
@@ -76,6 +79,57 @@ module fun_fpusqr(
   integer k;
 
   reg [1:0] ALT_INP_reg;
+  
+  wire [2:0][3:0] fxFRT_alten;
+  reg [2:0][3:0] fxFRT_alten_reg;
+  reg [2:0][3:0] fxFRT_alten_reg2;
+  reg [2:0][3:0] fxFRT_alten_reg3;
+  reg [3:0] fxFRT_alten_reg4[2:2];
+  reg [3:0] fxFRT_alten_reg5[2:2];
+  reg [3:0] fxFRT_alten_reg6[2:2];
+  wire [3:0] fxFRT_pause;
+  wire [3:0] fxFRT_can;
+  wire [3:0] fxFRT_don;
+  reg [3:0] fxFRT_can_reg;
+  reg [3:0] fxFRT_don_reg;
+  reg [3:0] fxFRT_don_reg2;
+  reg [3:0] fxFRT_don_reg3;
+  reg [3:0] fxFRT_don_reg4;
+  reg [4:0] fxFRT_steps;
+  reg [2:0] fxFRT_type;
+  reg [4:0] fxFRT_steps_reg;
+  reg [2:0] fxFRT_type_reg;
+  reg fxFRT_isRoot;
+  reg fxFRT_isRoot_reg;
+//  reg [1:0] fxFRT_don_reg;
+  reg fxFRT_dblL_reg;
+  reg fxFRT_dblH_reg;
+  reg fxFRT_ext_reg;
+  reg fxFRT_sngl_reg;
+  reg fxFRT_dblL;
+  reg fxFRT_dblH;
+  reg fxFRT_ext;
+  reg fxFRT_sngl;
+  reg fxFRT_dblL_s;
+  reg fxFRT_dblH_s;
+  reg fxFRT_ext_s;
+  reg fxFRT_sngl_s;
+  reg fxFRT_dblL_ns;
+  reg fxFRT_dblH_ns;
+  reg fxFRT_ext_ns;
+  reg fxFRT_sngl_ns;
+  wire [63:-1] fxFRT_normA0;
+  wire [15:0] fxFRT_expA;
+  wire [63:-1] fxFRT_normB0;
+  wire [15:0] fxFRT_expB;
+  wire fxFRT_sgnA;
+  wire fxFRT_sgnB;
+  wire [3:0][8:0] rtReg;
+  wire [3:0][9:0] rtII;
+  wire [8:0] frtReg;
+  wire [9:0] frtII;
+  reg [8:0] frtReg_reg;
+  reg [9:0] frtII_reg;
 
   rs_write_forward #(S+68) u1_A_fwd(
   clk,rst,
@@ -281,6 +335,134 @@ module fun_fpusqr(
   assign outAltData=fxFRT_alten_reg5[2]!=4'b0 ? {16+SIMD_WIDTH{1'b0}} : {16+SIMD_WIDTH{1'bz}};
 
   always @(posedge clk) begin
+      if (rst) begin
+	  fxFRT_dblL=1'b0;
+	  fxFRT_dblH=1'b0;
+	  fxFRT_ext=1'b0;
+	  fxFRT_sngl=1'b0;
+/*	  fxFRT_dblL_reg<=1'b0;
+          fxFRT_dblH_reg<=1'b0;
+          fxFRT_ext_reg<=1'b0;
+          fxFRT_sngl_reg<=1'b0;*/
+          fxFRT_isRoot=1'b0;
+//	  fxFRT_isRoot_reg<=1'b0;
+	  fxFRT_dblL_s<=1'b0;
+          fxFRT_dblH_s<=1'b0;
+          fxFRT_ext_s<=1'b0;
+          fxFRT_sngl_s<=1'b0;
+	  fxFRT_dblL_ns<=1'b0;
+          fxFRT_dblH_ns<=1'b0;
+          fxFRT_ext_ns<=1'b0;
+          fxFRT_sngl_ns<=1'b0;
+	  fxFRT_steps<=5'd0;
+	  fxFRT_type<=3'b0;
+	  fxFRT_steps_reg<=5'd0;
+	  fxFRT_type_reg<=3'b0;
+	  fxFRT_don_reg<=4'b0;
+	  fxFRT_en<=1'b0;
+	  rtDataA_reg<={2*SIMD_WIDTH{1'b0}};
+	  rtDataB_reg<={2*SIMD_WIDTH{1'b0}};
+	  fxFRT_alten_reg[0]<=4'b0;
+	  fxFRT_alten_reg2[0]<=4'b0;
+	  fxFRT_alten_reg3[0]<=4'b0;
+	  fxFRT_alten_reg[1]<=4'b0;
+	  fxFRT_alten_reg2[1]<=4'b0;
+	  fxFRT_alten_reg3[1]<=4'b0;
+	  fxFRT_alten_reg[2]<=4'b0;
+	  fxFRT_alten_reg2[2]<=4'b0;
+	  fxFRT_alten_reg3[2]<=4'b0;
+	  fxFRT_alten_reg4[2]<=4'b0;
+	  fxFRT_alten_reg5[2]<=4'b0;
+	  fxFRT_alten_reg6[2]<=4'b0;
+	  fxFRT_can_reg<=4'd0;
+	  fxFRT_don_reg<=4'd0;
+	  fxFRT_don_reg2<=4'd0;
+	  fxFRT_don_reg3<=4'd0;
+	  fxFRT_don_reg4<=4'd0;
+	  frtReg_reg<=9'b0;
+	  frtII_reg<=10'b0;
+	  frtOp_reg<=13'b0;
+	  FUCVT2_reg<=82'b0;
+	  FUCVT2_reg2<=82'b0;
+	  FUCVT2_reg3<=82'b0;
+	  FUCVT2_reg4<=82'b0;
+	  FUCVT2_reg5<=82'b0;
+	  FUCVT2_reg6<=82'b0;
+	  FUTYPE_reg<=`ptype_dbl;
+	  FUTYPE_reg2<=`ptype_dbl;
+	  FUTYPE_reg3<=`ptype_dbl;
+	  FUTYPE_reg4<=`ptype_dbl;
+	  FUTYPE_reg5<=`ptype_dbl;
+	  FUTYPE_reg6<=`ptype_dbl;
+      end else begin
+	  fxFRT_dblL=frtOp[7:0]==`fop_sqrtDL || frtOp[7:0]==`fop_divDL;
+          fxFRT_dblH=frtOp[7:0]==`fop_sqrtDH || frtOp[7:0]==`fop_divDH;
+	  fxFRT_dbl=H ? fxFRT_dblH : fxFRT_dblL;
+          fxFRT_ext=frtOp[7:0]==`fop_sqrtE || frtOp[7:0]==`fop_divE;
+          fxFRT_sngl=frtOp[7:0]==`fop_sqrtS || frtOp[7:0]==`fop_divS;
+	  fxFRT_isRoot=frtOp[7:0]==`fop_sqrtDL || frtOp[7:0]==`fop_sqrtDH ||
+                frtOp[7:0]==`fop_sqrtE || frtOp[7:0]==`fop_sqrtS; 
+	  fxFRT_dblL_ns<=fxFRT_dblL && ~rtDataA[53]|~fxFRT_isRoot;
+	  fxFRT_dblH_ns<=fxFRT_dblH && ~rtDataA[SIMD_WIDTH+53]|~fxFRT_isRoot;
+	  fxFRT_dbl_ns=H ? fxFRT_dblH_ns : fxFRT_dblL_ns;
+	  fxFRT_ext_ns<=fxFRT_ext && ~rtDataA[SIMD_WIDTH]|~fxFRT_isRoot;
+	  fxFRT_sngl_ns<=fxFRT_sngl && ~rtDataA[23]|~fxFRT_isRoot;
+	  fxFRT_dblL_s<=fxFRT_dblL && rtDataA[53]&fxFRT_isRoot;
+	  fxFRT_dblH_s<=fxFRT_dblH && rtDataA[SIMD_WIDTH+53]&fxFRT_isRoot;
+	  fxFRT_dbl_s=H ? fxFRT_dblH_s : fxFRT_dblL_s;
+	  fxFRT_ext_s<=fxFRT_ext && rtDataA[SIMD_WIDTH]&fxFRT_isRoot;
+	  fxFRT_sngl_s<=fxFRT_sngl && rtDataA[23]&fxFRT_isRoot;
+    /* 	  fxFRT_dblL_reg<=fxFRT_dblL;
+          fxFRT_dblH_reg<=fxFRT_dblH;
+          fxFRT_ext_reg<=fxFRT_ext;
+          fxFRT_sngl_reg<=fxFRT_sngl;*/
+     //     fxFRT_isRoot_reg<=fxFRT_isRoot;
+	  fxFRT_en<=op_early[11] && en_early[3:2]!=0; 
+	  if (frtOp[7:0]==`fop_sqrtDL || frtOp[7:0]==`fop_divDL ||
+	    frtOp[7:0]==`fop_sqrtDH || frtOp[7:0]==`fop_divDH) begin
+	      fxFRT_steps<=5'd13;
+	      fxFRT_type<=3'b0;
+	  end else if (frtOp[7:0]==`fop_sqrtE || frtOp[7:0]==`fop_divE) begin
+	      fxFRT_steps<=5'd16;
+	      fxFRT_type<=3'd1;
+	  end else if (frtOp[7:0]==`fop_sqrtS || frtOp[7:0]==`fop_divS) begin
+	      fxFRT_steps<=5'd6;
+	      fxFRT_type<=3'd2;
+	  end
+	 /* fxFRT_steps_reg<=fxFRT_steps;
+	  fxFRT_type_reg<=fxFRT_type;*/
+	  fxFRT_don_reg<=fxFRT_don;
+	  fxFRT_alten_reg[2]<=fxFRT_alten[2];
+	  fxFRT_alten_reg2[2]<=fxFRT_alten_reg[2];
+	  fxFRT_alten_reg3[2]<=fxFRT_alten_reg2[2];
+	  fxFRT_alten_reg4[2]<=fxFRT_alten_reg3[2];
+	  fxFRT_alten_reg5[2]<=fxFRT_alten_reg4[2];
+	  fxFRT_alten_reg6[2]<=fxFRT_alten_reg5[2];
+	  fxFRT_can_reg<=fxFRT_can;
+	  fxFRT_don_reg<=fxFRT_don;
+	  fxFRT_don_reg2<=fxFRT_don_reg;
+	  fxFRT_don_reg3<=fxFRT_don_reg2;
+	  fxFRT_don_reg4<=fxFRT_don_reg3;
+	  frtReg_reg<=frtReg;
+      frtII_reg<=frtII;
+      frtOp_reg<=frtOp;
+	  if (fxFRT_don_reg2) begin
+              rtDataA_reg<=rtDataA;
+	      rtDataB_reg<=rtDataB;
+	  end
+	  FUCVT2_reg<=FUCVT2;
+	  FUCVT2_reg2<=FUCVT2_reg;
+	  FUCVT2_reg3<=FUCVT2_reg2;
+	  FUCVT2_reg4<=FUCVT2_reg3;
+	  FUCVT2_reg5<=FUCVT2_reg4;
+	  FUCVT2_reg6<=FUCVT2_reg5;
+	  FUTYPE_reg<=FUTYPE;
+	  FUTYPE_reg2<=FUTYPE_reg;
+	  FUTYPE_reg3<=FUTYPE_reg2;
+	  FUTYPE_reg4<=FUTYPE_reg3;
+	  FUTYPE_reg5<=FUTYPE_reg4;
+	  FUTYPE_reg6<=FUTYPE_reg5;
+      end
   end
 
 endmodule

@@ -10,6 +10,7 @@ module fun_fpusqr(
   u1_en,u1_op,
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
   u1_ret,u1_ret_en,
+  en_early,op_early,
   FUFH0,FUFH1,FUFH2,
   FUFH3,FUFH4,FUFH5,
   FUFH6,FUFH7,FUFH8,
@@ -49,6 +50,8 @@ module fun_fpusqr(
   input [3:0] u1_fuufwd_B;
   output [13:0] u1_ret;
   output u1_ret_en;
+  input [3:0] en_early;
+  input [12:0] op_early;
 
   input [67:0] FUVH0;
   input [67:0] FUVH1;
@@ -144,6 +147,7 @@ module fun_fpusqr(
   ul_A,ul_B,ul_Av,ul_Bv,u1_en,u1_op,
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
   u1_ret,u1_ret_en,
+  en_early,op_early,
   u1_Bx,u1_Bxo,
   FUFL0,FUFL1,FUFL2,
   FUFL3,FUFL4,FUFL5,
@@ -160,6 +164,7 @@ module fun_fpusqr(
   uh_A,uh_B,uh_Av,uh_Bv,u1_en,u1_op,
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
   u1_ret,u1_ret_en,
+  en_early,op_early,
   u1_Bxo,u1_Bx,
   FUFH0,FUFH1,FUFH2,
   FUFH3,FUFH4,FUFH5,
