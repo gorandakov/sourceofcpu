@@ -16,7 +16,7 @@ module agusec_check_upper3(
   wire [3:0] posx;
   wire do_pos,do_pos2,do_neg,do_neg2,do_neg1;
   wire do_pos3,do_neg3;
-  wire do_pos1;
+  wire do_pos1,do_negP;
   wire [7:0] msk;
   wire [7:0] msk0;
   wire [40:0] O={1'b0,A|B};
@@ -77,6 +77,7 @@ module agusec_check_upper3(
     wire [3:0] pos1;
     wire [3:0] pos2;
     wire [3:0] pos3;
+    wire [3:0] posP;
     wire [3:0] neg2;
     wire [3:0] neg1;
     wire [3:0] neg0;
@@ -85,6 +86,7 @@ module agusec_check_upper3(
     wire [3:0] xpos1;
     wire [3:0] xpos2;
     wire [3:0] xpos3;
+    wire [3:0] xposP;
     wire [3:0] xneg2;
     wire [3:0] xneg1;
     wire [3:0] xneg0;
