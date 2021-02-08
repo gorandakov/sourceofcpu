@@ -5793,15 +5793,15 @@ dcache1 L1D_mod(
   assign dc_confl[3]=1'b0;
   
   assign FUS4=FUS_alu[0];
-  assign FUS5=FUS_alu[1];
-  assign FUS6=FUS_alu[2];
-  assign FUS7=FUS_alu[3];
-  assign FUS8=FUS_alu[4];
+  assign FUS5=FUS_alu[2];
+  assign FUS6=FUS_alu[4];
+  assign FUS7=FUS_alu[1];
+  assign FUS8=FUS_alu[3];
   assign FUS9=FUS_alu[5];
 
-  assign FUS1=6'b0;//come from fpu
-  assign FUS2=6'b0;
-  assign FUS3=6'b0;
+  assign FUS1=fret_reg[0][8:3];//come from fpu; very fat wire e.g.g 4x
+  assign FUS2=fret_reg[2][8:3];
+  assign FUS3=fret_reg[4][8:3];
  
    
 //  assign LSQ_lsqA[8:3]=LSQ_upper;

@@ -282,7 +282,7 @@ module fun_fpu(
     (fxFCADD_raise_reg);
   fexcpt fexcpt2_mod(fraise2_reg,{5'b0,FUS_alu1,ex_alu1},
     fmaks2_reg,|outEn_reg6[2][3:2],u2_ret,u2_ret_en);
-  assign fraise3[m]=fxFADD_sn_reg5[m] ?
+  assign fraise3[m]=fxFADD_sn_reg2[m] ?
     (fxFADD_raise_s_reg2[0]|fxFADD_raise_s_reg2[1])&fpcsr[21:11] :
     (fxFADD_raise_reg)&fpcsr[21:11];
   assign fmask3[m]=fxFADD_sn_reg5[m] ?
