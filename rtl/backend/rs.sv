@@ -1111,8 +1111,7 @@ module rs_wakeUpS_logic(
   assign eq_new=eq|({2{newRsSelect1&~stall}}&newEQ1)|({2{newRsSelect2&~stall}}&newEQ2);
 
   assign isDataI=|eq_new;
-  assign isDataF=eq_reg4 && funAdd;
-  assign isData=isFP_d ? isDataF : isDataI;
+  assign isData=isDataI;
 
   assign fuFwd_d=(eq_new[0] & funit_d[0]) ? 4'd0 : 4'bz;
   assign fuFwd_d=(eq_new[0] & funit_d[1]) ? 4'd1 : 4'bz;
@@ -2514,6 +2513,14 @@ module rs(
   wire [3:0] outBank_reg[2:1];
   wire [2:1] rsFound_reg;
   wire [2:1] rsFoundNZ_reg;
+  wire [BUF_COUNT-1:0] newRsSelect0_reg2;
+  wire [BUF_COUNT-1:0] newRsSelect1_reg2;
+  wire [BUF_COUNT-1:0] newRsSelect2_reg2;
+  wire [BUF_COUNT-1:0] outRsSelect_reg2[2:1];
+  wire [3:0] outBank_reg2[2:1];
+  wire [2:1] rsFound_reg2;
+  wire [2:1] rsFoundNZ_reg2;
+  
   
   wire [3:0] outFuFwdA1_reg;
   wire [3:0] outFuFwdB1_reg;
@@ -2583,7 +2590,7 @@ module rs(
 
   DFF2 #(32*6) outEqA2_mod(clk,dataRst,1'b1,outEqA_reg,outEqA_reg2);
   DFF2 #(32*6) outEqB2_mod(clk,dataRst,1'b1,outEqB_reg,outEqB_reg2);
-  DFF2 #(32*6) outEqS2_mod(clk,dataRst,1'b1,outEqS_reg,outEqS_reg2);
+//  DFF2 #(32*6) outEqS2_mod(clk,dataRst,1'b1,outEqS_reg,outEqS_reg2);
 
   DFF2 #(32) outNew02_mod(clk,dataRst,1'b1,newRsSelect0_reg,newRsSelect0_reg2);
   DFF2 #(32) outNew12_mod(clk,dataRst,1'b1,newRsSelect1_reg,newRsSelect1_reg2);

@@ -65,8 +65,8 @@ module fun_fpusqr(
   input [S+67:0] FUF7;
   input [S+67:0] FUF8;
   input [S+67:0] FUF9;
-  output [2:0][3:0] fxFRT_alten;
-  output [3:0]      fxFRT_pause;
+  output [2:0][3:0] fxFRT_alten;//very fat wire
+  output [3:0]      fxFRT_pause;//same here
 
   wire [1:0][10:0] fxFCADD_raise;
   reg [10:0] fxFCADD_raise_reg[1:0];

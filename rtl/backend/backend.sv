@@ -1432,6 +1432,10 @@ module backend(
   reg [3:0] fxLD_sngl_t;
   reg [3:0] fxLD_spair_t;
   
+  wire [2:0][3:0] fxFRT_alten;
+  wire [3:0]      fxFRT_pause;
+  wire [2:0][3:0] fxFRT_alten_reg;
+  
   reg [DATA_WIDTH-1:0] FU_reg[9:0];
   reg [DATA_WIDTH-1:0] FU_reg2[9:0];
 
@@ -4493,7 +4497,7 @@ module backend(
   .FUS8(FUS9_reg),
 // 1 if buffer is free  
   .pause0(pause_agu|miss_pause_agu|bus_holds_agu),
-  .foundAlt1(~(&nDataAlt[m])|(|fxFRT_alten[m])),.foundAlt2(fxFRT_pause[m]|(|fxFRT_alten_reg3[m]))
+  .foundAlt1(~(&nDataAlt[m])|(|fxFRT_alten[m])),.foundAlt2(fxFRT_pause[m])
   );
   
   
@@ -6963,6 +6967,7 @@ dcache1 L1D_mod(
 	      fxLD_ext_t[k]=1'b0;
 	      fxLD_sngl_t[k]=1'b0;
 	      fxLD_spair_t[k]=1'b0;
+	      if (k!=3) fxFRT_alten_reg[k]<=4'b0;
 	  end
       end else begin
 	  for(k=0;k<4;k=k+1) begin
@@ -6985,6 +6990,7 @@ dcache1 L1D_mod(
 	      endcase
 	      fxLD_spair_t[k]=outOp_reg2[5:1]==5'ha;
 	      fxLD_dblext[k]=fxLD_dbl[k]|fxLD_ext[k];
+	      if (k!=3) fxFRT_alten_reg[k]<=fxFRT_alten[k];
 	  end
       end
       if (rst) begin
