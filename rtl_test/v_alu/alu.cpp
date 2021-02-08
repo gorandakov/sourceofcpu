@@ -130,7 +130,7 @@ addie:
 		    excpt=11;
 		    break;
 		}
-		if (res1>hi || res1<low) {
+		if (res1>hi || res1<low || 1) {
 		    if (((p.val>>52)&0x7f)<((p.val>>45)&0x7f)) {
 			unsigned long masq=(0xfffffffe000<<exp)&0xfffffffffff;
 			/*if ((res1&masq)!=(pttr&masq) && exp!=31) {

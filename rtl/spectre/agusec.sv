@@ -57,8 +57,8 @@ module agusec_check_upper3(
 
   assign msk0={1'b1,msk[7:1]}&msk;
 
-  assign pos_ack[1]=(do_pos && ~on_hi && diff) || max ; //c==1
-  assign pos_ack[0]=do_pos || (do_pos2) & ~on_hi & (diff) || max; //c==0
+  assign pos_ack[1]=(do_pos && ~on_hi && diff && ~do_negP) || max ; //c==1
+  assign pos_ack[0]=do_pos || (do_pos2) & ~on_hi & (diff) & ~do_negP || max; //c==0
   assign pos_ack[2]=do_pos3;
   assign neg_ack[0]=do_neg && on_hi && diff && do_pos1; //c==0
   assign neg_ack[1]=do_neg || (do_neg2|do_neg1) & on_hi & diff & do_pos1; //c==1
@@ -99,6 +99,7 @@ module agusec_check_upper3(
         assign neg1[p]= ~posx[p] ||  redand8(And[p*8+8+:8]);
         assign neg2[p]= ~posx[p] ||  redand8(X[p*8+9+:8]);
         assign neg3[p]= p!=exp[4:3] ||  redand8(X[p*8+9+:8]);
+        assign posP[p]= ~posx[p] &&  ~redand8(ptr[p*8+12+:8]);
        
         
         assign xpos0[p]= p!=exp[4:3] ||  ~redor8(O[p*8+8+:8]&msk);
@@ -109,6 +110,7 @@ module agusec_check_upper3(
         assign xneg0[p]= p!=exp[4:3] ||  redand8(X[p*8+8+:8]|~msk);
         assign xneg1[p]= p!=exp[4:3] ||  redand8(And[p*8+8+:8]|~msk);
         assign xneg2[p]= p!=exp[4:3] ||  redand8(X[p*8+9+:8]|~msk)&~redor8(And[p*8+9+:8]&msk0);
+        assign xposP[p]= p!=exp[4:3] ||  ~redand8(ptr[p*8+12+:8]|~msk);
     end
     assign do_pos=redand8({pos0,xpos0});
     assign do_pos1=redor8({pos1,xpos1});
@@ -118,6 +120,7 @@ module agusec_check_upper3(
     assign do_neg2=redand8({neg2,xneg2}) && exp!=5'h1e;
     assign do_neg1=redand8({neg1,xneg1}) && exp!=5'h1e;
     assign do_neg3=redand8({neg0,xneg0}) && redand8({neg3,xneg3});
+    assign do_negP=~redand8({posP,xposP});
   endgenerate
 
 endmodule
