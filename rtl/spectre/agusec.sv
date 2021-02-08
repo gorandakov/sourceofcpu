@@ -116,11 +116,11 @@ module agusec_check_upper3(
     end
     assign do_pos=redand8({pos0,xpos0});
     assign do_pos1=redor8({pos1,xpos1});
-    assign do_pos2=redand8({pos2,xpos2}) && exp!=5'h1e;
+    assign do_pos2=redand8({pos2,xpos2});// && exp!=5'h1e;
     assign do_pos3=redand8({pos0,xpos0}) && redand8({pos3,xpos3});
     assign do_neg=redand8({neg0,xneg0});
-    assign do_neg2=redand8({neg2,xneg2}) && exp!=5'h1e;
-    assign do_neg1=redand8({neg1,xneg1}) && exp!=5'h1e;
+    assign do_neg2=redand8({neg2,xneg2});// && exp!=5'h1e;
+    assign do_neg1=redand8({neg1,xneg1});// && exp!=5'h1e;
     assign do_neg3=redand8({neg0,xneg0}) && redand8({neg3,xneg3});
     assign do_negP=~redand8({posP,xposP});
   endgenerate
