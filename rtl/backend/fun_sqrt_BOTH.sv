@@ -26,7 +26,9 @@ module fun_fpusqr(
   FUVL0,FUVL1,FUVL2,
   FUVL3,FUVL4,FUVL5,
   FUVL6,FUVL7,FUVL8,
-  FUVL9
+  FUVL9,
+  fxFRT_alten,
+  fxFRT_pause
   );
   parameter [1:0] INDEX=2'd2;
   parameter [0:0] H=1'b0;
@@ -96,6 +98,9 @@ module fun_fpusqr(
   input [S+67:0] FUFL7;
   input [S+67:0] FUFL8;
   input [S+67:0] FUFL9;
+  
+  output [2:0][3:0] fxFRT_alten;
+  output [3:0]      fxFRT_pause;
 
   wire [1:0][10:0] fxFCADD_raise;
   reg [10:0] fxFCADD_raise_reg[1:0];
@@ -156,7 +161,9 @@ module fun_fpusqr(
   FUVL0,FUVL1,FUVL2,
   FUVL3,FUVL4,FUVL5,
   FUVL6,FUVL7,FUVL8,
-  FUVL9
+  FUVL9,
+  fxFRT_alten,
+  fxFRT_pause
   );
   fun_fpusqr sqr_hi(
   clk,
@@ -174,6 +181,8 @@ module fun_fpusqr(
   FUVH3,FUVH4,FUVH5,
   FUVH6,FUVH7,FUVH8,
   FUVH9
+  fxFRT_alten,
+  fxFRT_pause
   );
   
   always @(posedge clk) begin

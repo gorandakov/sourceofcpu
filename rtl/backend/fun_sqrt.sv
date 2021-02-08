@@ -17,7 +17,9 @@ module fun_fpusqr(
   FUV0,FUV1,FUV2,
   FUV3,FUV4,FUV5,
   FUV6,FUV7,FUV8,
-  FUV9
+  FUV9,
+  fxFRT_alten,
+  fxFRT_pause
   );
   parameter [1:0] INDEX=2'd2;
   parameter [0:0] H=1'b0;
@@ -63,6 +65,8 @@ module fun_fpusqr(
   input [S+67:0] FUF7;
   input [S+67:0] FUF8;
   input [S+67:0] FUF9;
+  output [2:0][3:0] fxFRT_alten;
+  output [3:0]      fxFRT_pause;
 
   wire [1:0][10:0] fxFCADD_raise;
   reg [10:0] fxFCADD_raise_reg[1:0];
