@@ -87,6 +87,87 @@ module rs_write_forward(
   end
 endmodule
 
+module rs_writeiS_forward(
+  clk,rst,
+  stall,
+  oldData,newData,
+  fuFwd,fuuFwd,
+  FU0,FU0_reg,
+  FU1,FU1_reg,
+  FU2,FU2_reg,
+  FU3,FU3_reg,
+  FU4,FU4_reg,
+  FU5,FU5_reg,
+  FU6,FU6_reg,
+  FU7,FU7_reg,
+  FU8,FU8_reg,
+  FU9,FU9_reg
+  );
+  parameter DATA_WIDTH=6;
+  input clk;
+  input rst;
+  input stall;
+  
+  input [DATA_WIDTH-1:0] oldData;
+  output reg [DATA_WIDTH-1:0] newData;
+  input [3:0] fuFwd;
+  input [3:0] fuuFwd;
+  
+  input [DATA_WIDTH-1:0] FU0;
+  input [DATA_WIDTH-1:0] FU0_reg;
+  input [DATA_WIDTH-1:0] FU1;
+  input [DATA_WIDTH-1:0] FU1_reg;
+  input [DATA_WIDTH-1:0] FU2;
+  input [DATA_WIDTH-1:0] FU2_reg;
+  input [DATA_WIDTH-1:0] FU3;
+  input [DATA_WIDTH-1:0] FU3_reg;
+  input [DATA_WIDTH-1:0] FU4;
+  input [DATA_WIDTH-1:0] FU4_reg;
+  input [DATA_WIDTH-1:0] FU5;
+  input [DATA_WIDTH-1:0] FU5_reg;
+  input [DATA_WIDTH-1:0] FU6;
+  input [DATA_WIDTH-1:0] FU6_reg;
+  input [DATA_WIDTH-1:0] FU7;
+  input [DATA_WIDTH-1:0] FU7_reg;
+  input [DATA_WIDTH-1:0] FU8;
+  input [DATA_WIDTH-1:0] FU8_reg;
+  input [DATA_WIDTH-1:0] FU9;
+  input [DATA_WIDTH-1:0] FU9_reg;
+
+  wire [DATA_WIDTH-1:0] newData_d;
+  wire [DATA_WIDTH-1:0] newDataFu_d;
+  wire [DATA_WIDTH-1:0] newDataFuu_d;
+  
+  assign newDataFu_d=(fuFwd==4'd0) ? FU0 : {DATA_WIDTH{1'BZ}};  
+  assign newDataFuu_d=(fuuFwd==4'd0) ? FU0_reg : {DATA_WIDTH{1'BZ}};  
+  assign newDataFu_d=(fuFwd==4'd1) ? FU1 : {DATA_WIDTH{1'BZ}};  
+  assign newDataFuu_d=(fuuFwd==4'd1) ? FU1_reg : {DATA_WIDTH{1'BZ}};  
+  assign newDataFu_d=(fuFwd==4'd2) ? FU2 : {DATA_WIDTH{1'BZ}};  
+  assign newDataFuu_d=(fuuFwd==4'd2) ? FU2_reg : {DATA_WIDTH{1'BZ}};  
+  assign newDataFu_d=(fuFwd==4'd3) ? FU3 : {DATA_WIDTH{1'BZ}};  
+  assign newDataFuu_d=(fuuFwd==4'd3) ? FU3_reg : {DATA_WIDTH{1'BZ}};  
+  assign newDataFu_d=(fuFwd==4'd4) ? FU4 : {DATA_WIDTH{1'BZ}};  
+  assign newDataFuu_d=(fuuFwd==4'd4) ? FU4_reg : {DATA_WIDTH{1'BZ}};  
+  assign newDataFu_d=(fuFwd==4'd5) ? FU5 : {DATA_WIDTH{1'BZ}};  
+  assign newDataFuu_d=(fuuFwd==4'd5) ? FU5_reg : {DATA_WIDTH{1'BZ}};  
+  assign newDataFu_d=(fuFwd==4'd6) ? FU6 : {DATA_WIDTH{1'BZ}};  
+  assign newDataFuu_d=(fuuFwd==4'd6) ? FU6_reg : {DATA_WIDTH{1'BZ}};  
+  assign newDataFu_d=(fuFwd==4'd7) ? FU7 : {DATA_WIDTH{1'BZ}};  
+  assign newDataFuu_d=(fuuFwd==4'd7) ? FU7_reg : {DATA_WIDTH{1'BZ}};  
+  assign newDataFu_d=(fuFwd==4'd8) ? FU8 : {DATA_WIDTH{1'BZ}};  
+  assign newDataFuu_d=(fuuFwd==4'd8) ? FU8_reg : {DATA_WIDTH{1'BZ}};  
+  assign newDataFu_d=(fuFwd[3] && |fuFwd[2:0]) ? FU9 : {DATA_WIDTH{1'BZ}};  
+  assign newDataFuu_d=(fuuFwd[3] && |fuuFwd[2:0]) ? FU9_reg : {DATA_WIDTH{1'BZ}};  
+
+
+  assign newData=({fuFwd,fuuFwd}==8'hff) ? oldData : {DATA_WIDTH{1'BZ}};  
+  assign newData=(fuFwd!=4'hf) ? newDataFu_d : {DATA_WIDTH{1'BZ}};  
+  assign newData=(fuuFwd!=4'hf) ? newDataFuu_d : {DATA_WIDTH{1'BZ}};  
+
+endmodule
+
+
+
 
 module rs_write_forward_save(
   clk,rst,
