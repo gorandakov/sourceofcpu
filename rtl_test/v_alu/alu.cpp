@@ -99,9 +99,9 @@ void req::gen(bool alt_, bool mul_, bool can_shift, req *prev1) {
     } else {
         int which=rand()%12;
         which=which>=6 ? which-2 : which-6;
-        flags_in=prev1[which+20].flags;
+        flags_in=prev1[which+10].flags;
         depS=which;
-        if (!prev1[which+20].en || prev1[which+20].mul || prev1[which+20].excpt==11) depS=15;
+        if (!prev1[which+10].en || prev1[which+10].mul || prev1[which+10].excpt==11) depS=15;
     }
     if (!alt && !mul) {
         __int128 res0;
