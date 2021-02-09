@@ -2074,6 +2074,13 @@ module backend(
   wire [1:0][1:0] dc_wr_low;
   wire [1:0][1:0] dc_wrTyp;
 
+  wire [5:0] p_repl;
+  wire [3:0] p_lsfwd;
+  wire [127+8:0]p2_data;
+  wire    [4:0] p2_brdbanks;
+  wire [127+8:0]p3_data;
+  wire    [4:0] p3_brdbanks;
+
   reg [PADDR_WIDTH-9:0] dc_wrAddrE_reg[1:0];
   reg [PADDR_WIDTH-9:0] dc_wrAddrO_reg[1:0];
   reg [31:0] dc_wrBanks_reg[1:0];
@@ -5178,15 +5185,15 @@ module backend(
     lso2_en && (lso2_adata[`lsaddr_reg_low]==1 || lso2_adata[`lsaddr_reg_low]==4 || lso2_adata[`lsaddr_reg_low]==7 ),
     lso2_en && (lso2_adata[`lsaddr_reg_low]==0 || lso2_adata[`lsaddr_reg_low]==3 || lso2_adata[`lsaddr_reg_low]==6 )}),
   .p0_adata(lsr_wr_data[0]),.p0_banks(dc_rdBanks[0]),.p0_LSQ(dc_LSQ[0]),
-    .p0_en(dc_rdEn[0]),.p0_rsEn(dc_rsEn[0]),.p0_secq(p_secq[0]),.p0_ret(p_ret[0]),.p0_repl(p_repl[0]),.p0_lsfwd(p_lsfwd[0]),
+    .p0_en(dc_rdEn[0]),.p0_rsEn(dc_rsEn[0]),.p0_secq(),.p0_ret(),.p0_repl(p_repl[0]),.p0_lsfwd(p_lsfwd[0]),
   .p1_adata(lsr_wr_data[1]),.p1_banks(dc_rdBanks[1]),.p1_LSQ(dc_LSQ[1]),
-    .p1_en(dc_rdEn[1]),.p1_rsEn(dc_rsEn[1]),.p1_secq(p_secq[1]),.p1_ret(p_ret[1]),.p1_repl(p_repl[1]),.p1_lsfwd(p_lsfwd[1]),
+    .p1_en(dc_rdEn[1]),.p1_rsEn(dc_rsEn[1]),.p1_secq(),.p1_ret(),.p1_repl(p_repl[1]),.p1_lsfwd(p_lsfwd[1]),
   .p2_adata(lsr_wr_data[2]),.p2_banks(dc_rdBanks[2]),.p2_LSQ(dc_LSQ[2]),
-    .p2_en(dc_rdEn[2]),.p2_rsEn(dc_rsEn[2]),.p2_secq(p_secq[2]),.p2_ret(p_ret[2]),.p2_repl(p_repl[2]),.p2_lsfwd(p_lsfwd[2]),.p2_data(p_data[2]),.p2_brdbanks(p_brdbanks[2]),
+    .p2_en(dc_rdEn[2]),.p2_rsEn(dc_rsEn[2]),.p2_secq(),.p2_ret(),.p2_repl(p_repl[2]),.p2_lsfwd(p_lsfwd[2]),.p2_data(p2_data),.p2_brdbanks(p2_brdbanks),
   .p3_adata(lsr_wr_data[3]),.p3_banks(dc_rdBanks[3]),.p3_LSQ(dc_LSQ[3]),
     .p3_en(dc_rdEn[3]),.p3_rsEn(dc_rsEn[3]),.p3_ioEn(p3_ioEn),.p3_io_ack(p3_io_ack),.p3_ret(p_ret[3]),.p3_data(p3_data),.p3_brdbanks(p3_brdbanks),.p3_repl(p_repl[3]),.p3_lsfwd(p_lsfwd[3]),
-  .p4_adata(lsr_wr_data[4]),.p4_LSQ(p_LSQ[4]),.p4_en(p_en[4]),.p4_secq(p_secq[4]),.p4_ret(p_ret[4]),
-  .p5_adata(lsr_wr_data[5]),.p5_LSQ(p_LSQ[5]),.p5_en(p_en[5]),.p5_secq(p_secq[5]),.p5_ret(p_ret[5]),
+  .p4_adata(lsr_wr_data[4]),.p4_LSQ(p_LSQ[4]),.p4_en(dc_wrEn[0]),.p4_secq(),.p4_ret(),
+  .p5_adata(lsr_wr_data[5]),.p5_LSQ(p_LSQ[5]),.p5_en(dc_wrEn[1]),.p5_secq(),.p5_ret(),
   .FU0Hit(FU0Hit),.FU1Hit(FU1Hit),.FU2Hit(FU2Hit),.FU3Hit(FU3Hit),
   .FU0(FU[0]),.FU1(FU[1]),.FU2(FU[2]),.FU3(FU[3]),.FU4(FU[4]),.FU5(FU[5]),.FU6(FU[6]),.FU7(FU[7]),.FU8(FU[8]),.FU9(FU[9]),
   .FUreg3_reg(FUreg_reg5[3]),.dc_rdataA(dc_rdataA[3]),//is it really reg5?
@@ -5237,8 +5244,8 @@ module backend(
   .p1_adata(lsr_wr_data[1]),.p1_LSQ(dc_LSQ[1]),.p1_en(dc_rdEn[1]),.p1_rsEn(dc_rsEn[1]),.p1_smpc(p_repl[1]),.p1_lsfwd(p_lsfwd[1]),
   .p2_adata(lsr_wr_data[2]),.p2_LSQ(dc_LSQ[2]),.p2_en(dc_rdEn[2]),.p2_rsEn(dc_rsEn[2]),.p2_smpc(p_repl[2]),.p2_lsfwd(p_lsfwd[2]),
   .p3_adata(lsr_wr_data[3]),.p3_LSQ(dc_LSQ[3]),.p3_en(dc_rdEn[3]),.p3_rsEn(dc_rsEn[3]),.p3_smpc(p_repl[3]),.p3_lsfwd(p_lsfwd[3]),
-  .p4_adata(lsr_wr_data[4]),.p4_LSQ(p_LSQ[4]),.p4_en(p_en[4]),
-  .p5_adata(lsr_wr_data[5]),.p5_LSQ(p_LSQ[5]),.p5_en(p_en[5]),
+  .p4_adata(lsr_wr_data[4]),.p4_LSQ(p_LSQ[4]),.p4_en(dc_wrEn[0]),
+  .p5_adata(lsr_wr_data[5]),.p5_LSQ(p_LSQ[5]),.p5_en(dc_wrEn[1]),
   .FU0Hit(FU0Hit),
   .FU1Hit(FU1Hit),
   .FU2Hit(FU2Hit),
@@ -5762,16 +5769,30 @@ dcache1 L1D_mod(
   assign FUwen[2]=FUwen2;
   assign FUwen[3]=FUwen3;
   
+  assign FU[0][64:32]=(~p_lsfwd_reg2[0] | p2_brdbanks_reg2[1]) ? dc_rdataA[0][64:32]:
+        p2_data_reg2[64:32];  
+  assign FU[0][31:0]= (~p_lsfwd_reg2[0] | p2_brdbanks_reg2[0]) ? dc_rdataA[0][31:0]:
+          p2_data_reg2[31:0];  
 
-  assign FU[0]=dc_rdataA[0][63:0];
-  assign FU[1]=dc_rdataA[1][63:0];
-  assign FU[2]=dc_rdataA[2][63:0];
+  assign FU[1][64:32]=(~p_lsfwd_reg2[1] | p2_brdbanks_reg2[1]) ? dc_rdataA[1][64:32]:
+        p2_data_reg2[64:32];  
+  assign FU[1][31:0]= (~p_lsfwd_reg2[1] | p2_brdbanks_reg2[0]) ? dc_rdataA[1][31:0]:
+          p2_data_reg2[31:0];  
+
+  assign FU[2][64:32]=(~p_lsfwd_reg2[2] | p2_brdbanks_reg2[1]) ? dc_rdataA[2][64:32]:
+        p2_data_reg2[64:32];  
+  assign FU[2][31:0]= (~p_lsfwd_reg2[2] | p2_brdbanks_reg2[0]) ? dc_rdataA[2][31:0]:
+          p2_data_reg2[31:0];  
+
+  //assign FU[0]=dc_rdataA[0][63:0];
+  //assign FU[1]=dc_rdataA[1][63:0];
+  //assign FU[2]=dc_rdataA[2][63:0];
   //assign FU[3]=dc_rdataA[3];
 
-  assign FU[3][63:32]=(~dc_lsfwd3_reg3 | dc_bread3_reg3[1]) ? dc_rdataA[3][63:32]:
-        dc_data3_reg3[63:32];  
-  assign FU[3][31:0]=(~dc_lsfwd3_reg3 | dc_bread3_reg3[0]) ? dc_rdataA[3][31:0]:
-          dc_data3_reg3[31:0];  
+  assign FU[3][64:32]=(~p_lsfwd_reg2[3] | p3_brdbanks_reg2[1]) ? dc_rdataA[3][64:32]:
+        p3_data_reg2[64:32];  
+  assign FU[3][31:0]= (~p_lsfwd_reg2[3] | p3_brdbanks_reg2[0]) ? dc_rdataA[3][31:0]:
+          p3_data_reg2[31:0];  
   
   assign FUVH[0]=dc_rdataA_reg[0][127:64]; 
   assign FUVL[0]=dc_rdataA_reg[0][63:0]; 
