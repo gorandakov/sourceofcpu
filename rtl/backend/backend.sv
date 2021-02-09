@@ -1718,6 +1718,7 @@ module backend(
   wire [1:0][127:0] lsw_wdataF;
   reg [127:0] lsw_wdataF_reg[1:0];
   wire [1:0][127:0] lsw_wdataV;
+  wire [1:0][127:0] lsw_wdataV0;
   reg [127:0] lsw_wdataV_reg[1:0];
   wire [1:0][127:0] lsw_wdata; 
 
@@ -4616,7 +4617,7 @@ module backend(
                   .from_dbl(1'b0),
                   .from_sngl(1'b1),
 		  .res(lsw_wdataV0[n][31:0]));
-	  stNativeS2S stconvLHD_mod(.A({49'b0,WDfxDataFL[n][65:33]}),
+	  stNativeS2S stconvLHD_mod(.A({49'b0,WDfxDataVL[n][65:33]}),
                   .en(1'b1),
                   .from_ext(1'b0),
                   .from_dbl(1'b0),
@@ -4628,7 +4629,7 @@ module backend(
                   .from_dbl(1'b0),
                   .from_sngl(1'b1),
 		  .res(lsw_wdataV0[n][95:64]));
-	  stNativeS2S stconvHHD_mod(.A({49'b0,WDfxDataFV[n][65:33]}),
+	  stNativeS2S stconvHHD_mod(.A({49'b0,WDfxDataVH[n][65:33]}),
                   .en(1'b1),
                   .from_ext(1'b0),
                   .from_dbl(1'b0),
