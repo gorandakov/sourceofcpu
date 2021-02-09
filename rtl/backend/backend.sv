@@ -922,7 +922,35 @@ module backend(
 
   reg [3:0] newAttr_reg;
   reg [3:0] newAttr_reg2;
+ 
+  wire write_clear;
 
+  wire [`lsaddr_width-1:0] st0_adata;
+  wire                     st0_en;
+  wire [4:0]               st0_bank1;
+  wire [3:0]               st0_bgn_ben;
+  wire [3:0]               st0_end_ben;
+  wire [159:0]             st0_data;
+  wire [`lsaddr_width-1:0] st1_adata;
+  wire                     st1_en;
+  wire [4:0]               st1_bank1;
+  wire [3:0]               st1_bgn_ben;
+  wire [3:0]               st1_end_ben;
+  wire [159:0]             st1_data;
+
+  wire [`lsaddr_width-1:0] lso_adata;
+  wire [8:0]               lso_LSQ;
+  wire                     lso_en;
+  wire [12:0]              lso_ret;
+  wire [127+8:0]           lso_data;
+  wire [3:0]               lso_bnkread;
+  wire [`lsaddr_width-1:0] lso2_adata;
+  wire [8:0]               lso2_LSQ;
+  wire                     lso2_en;
+  wire [12:0]              lso2_ret;
+  wire [127+8:0]           lso2_data;
+  wire [3:0]               lso2_bnkread;
+  
   wire [2:0][IN_REG_WIDTH-1:0] rrfAW;
   wire [2:0][IN_REG_WIDTH-1:0] rrfBW;
   wire [2:0][REG_WIDTH-1:0] regAW;
@@ -5031,7 +5059,7 @@ module backend(
   .miss_holds_agu(miss_holds_agu),
   .miss_pause_agu(miss_pause_agu),
   .wt_pause_agu(wt_pause_agu),
-  .mOp_write_clear(mOp_write_clear),
+  .mOp_write_clear(write_clear),
   .u1_base(outDataB[0]),.u1_index(outDataA[0]),.u1_const(outDataC[0]),
   .u1_base_fufwd(fuFwdB[0]),.u1_base_fuufwd(fuuFwdB[0]),
   .u1_index_fufwd(fuFwdA[0]),.u1_index_fuufwd(fuuFwdA[0]),
