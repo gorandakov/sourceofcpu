@@ -644,30 +644,6 @@ module dcache1_way(
     end
   endgenerate
   
-/*  dcache_dirty dirtE_mod(
-  clk,
-  rst,
-  read_addrE0_reg[5:0],read_clkEn0_reg, dirtyE,
-  
-  init_dirty ? initCount[3:0] : write_addrE0_reg[5:0], write_hitCl0[0], 
-  write_addrE1_reg[5:0], write_hitCl1[0],
-  write_insert_reg & ~read_odd0_reg, 
-  write_insertDirty,
-  init_dirty
-  );
-
-  dcache_dirty dirtO_mod(
-  clk,
-  rst,
-  read_addrO0_reg[5:0],read_clkEn0_reg, dirtyO,
-  
-  init_dirty ? initCount[3:0] : write_addrO0_reg[5:0], write_hitCl0[1], 
-  write_addrO1_reg[5:0], write_hitCl1[1],
-  write_insert_reg & read_odd0_reg, 
-  write_insertDirty,
-  init_dirty
-  );
-  */
 
   `ifdef DCACHE_256K
   adder_inc #(7) initAdd_mod(initCount,initCount_d,1'b1,);
@@ -1188,15 +1164,15 @@ module dcache1(
           dcache1_way #(w) way_mod(
           clk,
           rst,
-          read_addrE0_reg, read_addrO0_reg, read_bank0_reg, read_clkEn0_reg, read_hit0_way[w], 
-            read_odd0_reg, read_split0_reg,
-          read_addrE1_reg, read_addrO1_reg, read_bank1_reg, read_clkEn1_reg, read_hit1_way[w],   
-            read_odd1_reg, read_split1_reg,
-          read_addrE2_reg, read_addrO2_reg, read_bank2_reg, read_clkEn2_reg, read_hit2_way[w],   
-            read_odd2_reg, read_split2_reg,
-          read_addrE3_reg, read_addrO3_reg, read_bank3_reg, read_clkEn3_reg, read_hit3_way[w],   
-            read_odd3_reg, read_split3_reg,
-          read_bankNoRead_reg,
+          read_addrE0, read_addrO0, read_bank0, read_clkEn0, read_hit0_way[w], 
+            read_odd0, read_split0,
+          read_addrE1, read_addrO1, read_bank1, read_clkEn1, read_hit1_way[w],   
+            read_odd1, read_split1,
+          read_addrE2, read_addrO2, read_bank2, read_clkEn2, read_hit2_way[w],   
+            read_odd2, read_split2,
+          read_addrE3, read_addrO3, read_bank3, read_clkEn3, read_hit3_way[w],   
+            read_odd3, read_split3,
+          read_bankNoRead,
           read_invalidate_reg,
           read_bankHit_way[w],
           read_dataP[w],
@@ -1253,35 +1229,24 @@ module dcache1(
             read_bankHit_way[3][b] | read_bankHit_way[4][b] | read_bankHit_way[5][b] |  
             read_bankHit_way[6][b] | read_bankHit_way[7][b]; */
           if (b<16) begin
-              assign rddata1[0]=({read_beginA_reg2[0][1:0],read_low_reg2[1:0]}==b) ? rxdata[0][b*8+:136] : 136'BZ;
-              assign rddata1[1]=({read_beginA_reg2[1][1:0],read_low_reg2[3:2]}==b) ? rxdata[1][b*8+:136] : 136'BZ;
-              assign rddata1[2]=({read_beginA_reg2[2][1:0],read_low_reg2[5:4]}==b) ? rxdata[2][b*8+:136] : 136'BZ;
-              assign rddata1[3]=({read_beginA_reg2[3][1:0],read_low_reg2[7:6]}==b) ? rxdata[3][b*8+:136] : 136'BZ;
+              assign rddata1[0]=({read_beginA_reg[0][1:0],read_low_reg[1:0]}==b) ? rxdata[0][b*8+:136] : 136'BZ;
+              assign rddata1[1]=({read_beginA_reg[1][1:0],read_low_reg[3:2]}==b) ? rxdata[1][b*8+:136] : 136'BZ;
+              assign rddata1[2]=({read_beginA_reg[2][1:0],read_low_reg[5:4]}==b) ? rxdata[2][b*8+:136] : 136'BZ;
+              assign rddata1[3]=({read_beginA_reg[3][1:0],read_low_reg[7:6]}==b) ? rxdata[3][b*8+:136] : 136'BZ;
           end
       end
       for (p=0;p<4;p=p+1) begin
-	      assign rxdata0[p]=read_data_strip[255:0]&{256{read_beginA_reg2[p][4:2]==3'd0}};
-	      assign rxdata1[p]=read_data_strip[128+255:128]&{256{read_beginA_reg2[p][4:2]==3'd1}};
-	      assign rxdata2[p]=read_data_strip[511:256]&{256{read_beginA_reg2[p][4:2]==3'd2}};
-	      assign rxdata3[p]=read_data_strip[128+511:128+256]&{256{read_beginA_reg2[p][4:2]==3'd3}};
-	      assign rxdata4[p]=read_data_strip[767:512]&{256{read_beginA_reg2[p][4:2]==3'd4}};
-	      assign rxdata5[p]=read_data_strip[767+128:128+512]&{256{read_beginA_reg2[p][4:2]==3'd5}};
-	      assign rxdata6[p]=read_data_strip[1023:768]&{256{read_beginA_reg2[p][4:2]==3'd6}};
+	      assign rxdata0[p]=read_data_strip[255:0]&{256{read_beginA_reg[p][4:2]==3'd0}};
+	      assign rxdata1[p]=read_data_strip[128+255:128]&{256{read_beginA_reg[p][4:2]==3'd1}};
+	      assign rxdata2[p]=read_data_strip[511:256]&{256{read_beginA_reg[p][4:2]==3'd2}};
+	      assign rxdata3[p]=read_data_strip[128+511:128+256]&{256{read_beginA_reg[p][4:2]==3'd3}};
+	      assign rxdata4[p]=read_data_strip[767:512]&{256{read_beginA_reg[p][4:2]==3'd4}};
+	      assign rxdata5[p]=read_data_strip[767+128:128+512]&{256{read_beginA_reg[p][4:2]==3'd5}};
+	      assign rxdata6[p]=read_data_strip[1023:768]&{256{read_beginA_reg[p][4:2]==3'd6}};
 	      assign rxdata7[p]={read_data_strip[127:0],read_data_strip[1023:768+128]}&
-		{256{read_beginA_reg2[p][4:2]==3'd7}};
+		{256{read_beginA_reg[p][4:2]==3'd7}};
 	      assign rxdata[p]=rxdata0[p]|rxdata1[p]|rxdata2[p]|rxdata3[p]|
 		rxdata4[p]|rxdata5[p]|rxdata6[p]|rxdata7[p];
-	     //up to here. 
-             /* assign rddata[p][0*32+:32]=( b==read_beginA_reg2[p]) ? read_data_strip[b*32+:32] : 32'BZ;
-              assign rddata[p][1*32+:32]=( ((b-1)&5'h1f)==read_beginA_reg2[p]) ? read_data_strip[b*32+:32] : 32'BZ;
-              assign rddata[p][2*32+:32]=( ((b-2)&5'h1f)==read_beginA_reg2[p]) ? read_data_strip[b*32+:32] : 32'BZ;
-              assign rddata[p][3*32+:32]=( ((b-3)&5'h1f)==read_beginA_reg2[p]) ? read_data_strip[b*32+:32] : 32'BZ;
-              assign rddata[p][4*32+:32]=( ((b-4)&5'h1f)==read_beginA_reg2[p]) ? read_data_strip[b*32+:32] : 32'BZ;*/
-             // assign rdcan[p][0]=( b==read_beginA_reg2[p]) ? read_data_strip[b*32+32] : 1'BZ;
-             // assign rdcan[p][1]=( ((b-1)&5'h1f)==read_beginA_reg2[p]) ? read_data_strip[((b-1)&5'h1f)*32+32] : 1'BZ;
-             // assign rdcan[p][2]=( b==read_beginB_reg2[p]) ? read_data_strip[b*32+32] : 32'BZ;
-             // assign rdcan[p][3]=( ((b-1)&5'h1f)==read_beginB_reg2[p]) ? read_data_strip[((b-1)&5'h1f)*32+32] : 1'BZ;
-             // assign rdcan[p][4]=( ((b-2)&5'h1f)==read_beginB_reg2[p]) ? read_data_strip[((b-2)&5'h1f)*32+32] : 1'BZ;
               assign read_dataA[p]=rddata1[p] & {{8{mskdata1[p][5]}},{48{mskdata1[p][4]}},{16{mskdata1[p][3]}},{32{mskdata1[p][2]}},
                     {16{mskdata1[p][1]}},{8{mskdata1[p][0]}},8'hff};
       end
@@ -1353,36 +1318,6 @@ module dcache1(
     
   always @(posedge clk) begin
       if (rst)  begin
-          read_addrE0_reg<={ADDR_WIDTH-1{1'B0}};
-          read_addrO0_reg<={ADDR_WIDTH-1{1'B0}};
-          read_bank0_reg<={BANK_COUNT{1'B0}};
-          read_clkEn0_reg<=1'b0;
-          read_odd0_reg<=1'b0;
-          read_split0_reg<=1'b0;
-
-          read_addrE1_reg<={ADDR_WIDTH-1{1'B0}};
-          read_addrO1_reg<={ADDR_WIDTH-1{1'B0}};
-          read_bank1_reg<={BANK_COUNT{1'B0}};
-          read_clkEn1_reg<=1'b0;
-          read_odd1_reg<=1'b0;
-          read_split1_reg<=1'b0;
-
-          read_addrE2_reg<={ADDR_WIDTH-1{1'B0}};
-          read_addrO2_reg<={ADDR_WIDTH-1{1'B0}};
-          read_bank2_reg<={BANK_COUNT{1'B0}};
-          read_clkEn2_reg<=1'b0;
-          read_odd2_reg<=1'b0;
-          read_split2_reg<=1'b0;
-
-          read_addrE3_reg<={ADDR_WIDTH-1{1'B0}};
-          read_addrO3_reg<={ADDR_WIDTH-1{1'B0}};
-          read_bank3_reg<={BANK_COUNT{1'B0}};
-          read_clkEn3_reg<=1'b0;
-          read_odd3_reg<=1'b0;
-          read_split3_reg<=1'b0;
-           
-          read_bankNoRead_reg<={BANK_COUNT{1'B1}};
-  
           read_invalidate_reg<=1'B0; 
 
           write_addrE0_reg<={ADDR_WIDTH-1{1'B0}};
@@ -1436,7 +1371,6 @@ module dcache1(
 
           read_low<=8'b0;
           read_low_reg<=8'b0;
-          read_low_reg2<=8'b0;
           
           
           write_data_reg<={LINE_WIDTH{1'B0}};
@@ -1448,40 +1382,9 @@ module dcache1(
               read_sz_reg[v]<=5'b0;
               read_beginA[v]<=5'b0;
               read_beginA_reg[v]<=5'b0;
-              read_beginA_reg2[v]<=5'b0;
           end
           
       end else begin
-          read_addrE0_reg<=read_addrE0;
-          read_addrO0_reg<=read_addrO0;
-          read_bank0_reg<=read_bank0;
-          read_clkEn0_reg<=read_clkEn0;
-          read_odd0_reg<=read_odd0;
-          read_split0_reg<=read_split0;
-
-          read_addrE1_reg<=read_addrE1;
-          read_addrO1_reg<=read_addrO1;
-          read_bank1_reg<=read_bank1;
-          read_clkEn1_reg<=read_clkEn1;
-          read_odd1_reg<=read_odd1;
-          read_split1_reg<=read_split1;
-
-          read_addrE2_reg<=read_addrE2;
-          read_addrO2_reg<=read_addrO2;
-          read_bank2_reg<=read_bank2;
-          read_clkEn2_reg<=read_clkEn2;
-          read_odd2_reg<=read_odd2;
-          read_split2_reg<=read_split2;
-
-          read_addrE3_reg<=read_addrE3;
-          read_addrO3_reg<=read_addrO3;
-          read_bank3_reg<=read_bank3;
-          read_clkEn3_reg<=read_clkEn3;
-          read_odd3_reg<=read_odd3;
-          read_split3_reg<=read_split3;
-
-          read_bankNoRead_reg<=read_bankNoRead;
-  
           read_invalidate_reg<=read_invalidate; 
 
           write_addrE0_reg<=write_addrE0;
@@ -1535,7 +1438,6 @@ module dcache1(
           
           read_low<={read_low3,read_low2,read_low1,read_low0};
           read_low_reg<=read_low;
-          read_low_reg2<=read_low_reg;
           
           
           if (~insbus_B) write_data_reg[WLINE_WIDTH/2-1:0]<=write_data[WLINE_WIDTH/2-1:0];
@@ -1569,7 +1471,6 @@ module dcache1(
 	 5'hf: mskdata1[v]<=6'b111111;
               endcase
               read_beginA_reg[v]<=read_beginA[v];
-              read_beginA_reg2[v]<=read_beginA_reg[v];
            end
 
       end
