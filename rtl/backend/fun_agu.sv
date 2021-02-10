@@ -126,6 +126,7 @@ module agu_block(
   p3_adata,p3_banks,p3_LSQ,p3_en,p3_rsEn,p3_ioEn,p3_io_ack,p3_ret,p3_data,p3_brdbanks,p3_repl,p3_lsfwd,
   p4_adata,p4_LSQ,p4_en,p4_secq,p4_ret,
   p5_adata,p5_LSQ,p5_en,p5_secq,p5_ret,
+  p_bankNone,
   FU0Hit,FU1Hit,FU2Hit,FU3Hit,
   FU0,FU1,FU2,FU3,FU4,FU5,FU6,FU7,FU8,FU9,
   FUreg3_reg,dc_rdataA,
@@ -391,6 +392,7 @@ module agu_block(
   output       p5_en;
   output       p5_secq;
   output [12:0]p5_ret;
+  output [31:0] p_bankNone;
 
   input FU0Hit,FU1Hit,FU2Hit,FU3Hit;
 
@@ -2506,6 +2508,8 @@ module agu_block(
   assign p3_data=mOpX3_data_reg;
   assign p3_ret={p3_faultCode[3:0],p3_faultNo};
   assign p3_brdbanks=mOpX3_brdread_reg;
+
+  assign p_bankNone=~mOpX3_banks_reg & ~mOpX2_banks_reg & ~mOpX1_banks_reg &~mOpX0_banks_reg;
 
   assign p4_adata[`lsaddr_addrE]=mOpX4_addrEven_reg;
   assign p4_adata[`lsaddr_addrO]=mOpX4_addrOdd_reg;
