@@ -4532,7 +4532,7 @@ module backend(
   .FUS7(FUS8_reg),
   .FUS8(FUS9_reg),
 // 1 if buffer is free  
-  .pause0(pause_agu|miss_pause_agu|bus_holds_agu|insBus_io),
+  .pause0(pause_agu|miss_pause_agu|bus_holds_agu),
   .foundAlt1(~(&nDataAlt[m])|(|fxFRT_alten[m])),.foundAlt2(fxFRT_pause[m])
   );
   
@@ -5191,7 +5191,7 @@ module backend(
   .p2_adata(lsr_wr_data[2]),.p2_banks(dc_rdBanks[2]),.p2_LSQ(dc_LSQ[2]),
     .p2_en(dc_rdEn[2]),.p2_rsEn(dc_rsEn[2]),.p2_secq(),.p2_ret(),.p2_repl(p_repl[2]),.p2_lsfwd(p_lsfwd[2]),.p2_data(p2_data),.p2_brdbanks(p2_brdbanks),
   .p3_adata(lsr_wr_data[3]),.p3_banks(dc_rdBanks[3]),.p3_LSQ(dc_LSQ[3]),
-    .p3_en(dc_rdEn[3]),.p3_rsEn(dc_rsEn[3]),.p3_ioEn(),.p3_is_ack(insBus_io_reg3),.p3_ret(),.p3_data(p3_data),.p3_brdbanks(p3_brdbanks),.p3_repl(p_repl[3]),.p3_lsfwd(p_lsfwd[3]),
+    .p3_en(dc_rdEn[3]),.p3_rsEn(dc_rsEn[3]),.p3_ioEn(p3_ioEn),.p3_io_ack(p3_io_ack),.p3_ret(p_ret[3]),.p3_data(p3_data),.p3_brdbanks(p3_brdbanks),.p3_repl(p_repl[3]),.p3_lsfwd(p_lsfwd[3]),
   .p4_adata(lsr_wr_data[4]),.p4_LSQ(p_LSQ[4]),.p4_en(dc_wrEn[0]),.p4_secq(),.p4_ret(),
   .p5_adata(lsr_wr_data[5]),.p5_LSQ(p_LSQ[5]),.p5_en(dc_wrEn[1]),.p5_secq(),.p5_ret(),
   .p_bankNone(dc_bankNone),
@@ -5802,9 +5802,9 @@ dcache1 L1D_mod(
   //assign FU[2]=dc_rdataA[2][63:0];
   //assign FU[3]=dc_rdataA[3];
 
-  assign FU[3][64:32]=(~p_lsfwd_reg2[3] | p3_brdbanks_reg2[1] && ~insBus_io_reg3) ? dc_rdataA[3][64:32]:
+  assign FU[3][64:32]=(~p_lsfwd_reg2[3] | p3_brdbanks_reg2[1]) ? dc_rdataA[3][64:32]:
         p3_data_reg2[64:32];  
-  assign FU[3][31:0]= (~p_lsfwd_reg2[3] | p3_brdbanks_reg2[0] && ~insBus_io_reg3) ? dc_rdataA[3][31:0]:
+  assign FU[3][31:0]= (~p_lsfwd_reg2[3] | p3_brdbanks_reg2[0]) ? dc_rdataA[3][31:0]:
           p3_data_reg2[31:0];  
   
   assign FUVH[0]=dc_rdataA_reg[0][127:64]; 
@@ -7201,9 +7201,6 @@ dcache1 L1D_mod(
           insBus_dirty_reg<=1'b0;
           insBus_dirty_reg2<=1'b0;
           insBus_dirty_reg3<=1'b0;
-          insBus_io_reg<=1'b0;
-          insBus_io_reg2<=1'b0;
-          insBus_io_reg3<=1'b0;
           insBus_data_reg<={BUS_WIDTH{1'B0}};
           insBus_data_reg2<={BUS_WIDTH{1'B0}};
           insert_addr_reg<=37'b0;
@@ -7213,12 +7210,66 @@ dcache1 L1D_mod(
           dc_rdEn_reg<=4'b0;
           dc_rdEn_reg2<=4'b0;
           dc_rdEn_reg3<=4'b0;
+          dc_tlb_miss_reg<=3'b0;
+          reqBus_en<=1'b0;
+          reqBus_req<=10'b0;
+          reqBus_addr<=37'b0;
+          reqBus_want_excl<=1'b0;
+          reqBus_dupl<=1'b0;
+	  reqBus_sz<=5'b0;
+	  reqBus_low<=2'b0;
+	  reqBus_bank0<=5'd0;
+	  reqBus_io<=1'b0;
+  //        insBus_en<=1'b0;
+  //        insBus_req<=10'b0;
+  //        insBus_data<={BUS_WIDTH{1'b0}};
+          dc_confl_reg<=4'b0;
+          dc_confl_reg2<=4'b0;
+          miss_unlock_reg<=1'b0;
           dc_wrEn_reg<=2'b0;
           dc_wrEn_reg2<=2'b0;
           dc_wrEn_reg3<=2'b0;
           wrStall_reg<=1'b0;
-	  p3_data_reg<=136'b0;
-	  p3_data_reg2<=136'b0;
+          for(k=0;k<4;k=k+1) begin
+              dc_rdReg_reg[k]<={REG_WIDTH{1'B0}};
+              dc_rdReg_reg2[k]<={REG_WIDTH{1'B0}};
+              dc_rdReg_reg3[k]<={REG_WIDTH{1'B0}};
+              if (k<2) begin
+                  dc_II_wr_reg[k]<=10'b0;
+                  dc_II_wr_reg2[k]<=10'b0;
+                  dc_II_wr_reg3[k]<=10'b0;
+                  dc_wrAddrE_reg[k]<={PADDR_WIDTH-8{1'b0}};
+                  dc_wrAddrO_reg[k]<={PADDR_WIDTH-8{1'b0}};
+                  dc_wrBanks_reg[k]<=32'b0;
+                  dc_odd_wr_reg[k]<=1'b0;
+                  dc_split_wr_reg[k]<=1'b0;
+                  dc_wrBegin_reg[k]<=5'd0;
+                  dc_wrEnd_reg[k]<=5'd0;
+                  dc_wrBGN_BNK_reg[k]<=4'hf;
+                  dc_wrEND_BNK_reg[k]<=4'hf;
+                  dc_wdata_reg[k]<=dc_wdata[k];
+                  dc_wrAddrE_reg2[k]<={PADDR_WIDTH-8{1'b0}};
+                  dc_wrAddrO_reg2[k]<={PADDR_WIDTH-8{1'b0}};
+                  dc_wrBanks_reg2[k]<=32'b0;
+                  dc_odd_wr_reg2[k]<=1'b0;
+                  dc_split_wr_reg2[k]<=1'b0;
+                  dc_wrBegin_reg2[k]<=5'd0;
+                  dc_wrEnd_reg2[k]<=5'd0;
+                  dc_wrBGN_BNK_reg2[k]<=4'hf;
+                  dc_wrEND_BNK_reg2[k]<=4'hf;
+                  dc_wdata_reg2[k]<=dc_wdata_reg[k];
+                  dc_wrAddrE_reg3[k]<={PADDR_WIDTH-8{1'b0}};
+                  dc_wrAddrO_reg3[k]<={PADDR_WIDTH-8{1'b0}};
+                  dc_wrBanks_reg3[k]<=32'b0;
+                  dc_odd_wr_reg3[k]<=1'b0;
+                  dc_split_wr_reg3[k]<=1'b0;
+                  dc_wrBegin_reg3[k]<=5'd0;
+                  dc_wrEnd_reg3[k]<=5'd0;
+                  dc_wrBGN_BNK_reg3[k]<=4'hf;
+                  dc_wrEND_BNK_reg3[k]<=4'hf;
+                  dc_wdata_reg3[k]<=dc_wdata_reg2[k];
+              end
+          end
       end else begin
           bus_holds_agu<=insert_isData;
           bus_holds_agu_reg<=bus_holds_agu;
@@ -7244,9 +7295,6 @@ dcache1 L1D_mod(
           insBus_dirty_reg<=insBus_dirty;
           insBus_dirty_reg2<=insBus_dirty_reg;
           insBus_dirty_reg3<=insBus_dirty_reg2;
-          insBus_io_reg<=insBus_io;
-          insBus_io_reg2<=insBus_io_reg;
-          insBus_io_reg3<=insBus_io_reg2;
           insBus_data_reg<=insBus_data;
           insBus_data_reg2<=insBus_data_reg;
           insert_addr_reg<=insert_addr;
@@ -7280,12 +7328,72 @@ dcache1 L1D_mod(
           if (except&&excpt_thread==dc_thr_reg2[3]) dc_rdEn_reg3[3]<=1'b0;
           else dc_rdEn_reg3[3]<=dc_rdEn_reg2[3];
         
+          dc_tlb_miss_reg<=dc_tlb_miss;
+          reqBus_en<=mcam_do_req;
+          reqBus_req<={BUS_ID,mcam_req};
+          reqBus_addr<=mcam_addr_reg;
+          reqBus_want_excl<=mcam_st_reg;
+          reqBus_dupl<=mcam_cldupl_reg;
+	  reqBus_sz<=mcam_sz_reg;
+	  reqBus_low<=mcam_low_reg;
+	  reqBus_bank0<=mcam_bank0_reg;
+	  reqBus_io<=mcam_io_reg;
+//          insBus_en<=dc2_rhitA0 | dc2_rhitB0 | dc2_rhitB1;
+//          insBus_req<=dc2_req_rd_reg4;
+//          insBus_data<=dc2_rdata;
+          dc_confl_reg<=dc_confl;
+          dc_confl_reg2<=dc_confl_reg;
+          miss_unlock_reg<=miss_unlock;
           dc_wrEn_reg<=dc_wrEn;
           dc_wrEn_reg2<=dc_wrEn_reg;
           dc_wrEn_reg3<=dc_wrEn_reg2;
           wrStall_reg<=wrStall;
-	  p3_data_reg<=p3_data;
-	  p3_data_reg2<=insBus_reg2 ? insBus_data_reg2[135:0] : p3_data_reg;
+          for(k=0;k<4;k=k+1) begin
+              dc_rdReg_reg[k]<=dc_rdReg[k];
+              dc_rdReg_reg2[k]<=dc_rdReg_reg[k];
+              dc_rdReg_reg3[k]<=dc_rdReg_reg2[k];
+              if (k<2) begin
+                  dc_II_wr_reg[k]<=dc_II_wr[k];
+                  dc_II_wr_reg2[k]<=dc_II_wr_reg[k];
+                  dc_II_wr_reg3[k]<=dc_II_wr_reg2[k];
+                  dc_wrAddrE_reg[k]<=dc_wrAddrE[k];
+                  dc_wrAddrO_reg[k]<=dc_wrAddrO[k];
+                  dc_wrBanks_reg[k]<=dc_wrBanks[k];
+                  dc_odd_wr_reg[k]<=dc_odd_wr[k];
+                  dc_split_wr_reg[k]<=dc_split_wr[k];
+                  dc_wrBegin_reg[k]<=dc_wrBegin[k];
+                  dc_wrEnd_reg[k]<=dc_wrEnd[k];
+                  dc_wrBGN_BNK_reg[k]<=dc_wrBGN_BNK[k];
+                  dc_wrEND_BNK_reg[k]<=dc_wrEND_BNK[k];
+                  dc_wrAddrE_reg2[k]<=dc_wrAddrE_reg[k];
+                  dc_wrAddrO_reg2[k]<=dc_wrAddrO_reg[k];
+                  dc_wrBanks_reg2[k]<=dc_wrBanks_reg[k];
+                  dc_odd_wr_reg2[k]<=dc_odd_wr_reg[k];
+                  dc_split_wr_reg2[k]<=dc_split_wr_reg[k];
+                  dc_wrBegin_reg2[k]<=dc_wrBegin_reg[k];
+                  dc_wrEnd_reg2[k]<=dc_wrEnd_reg[k];
+                  dc_wrBGN_BNK_reg2[k]<=dc_wrBGN_BNK_reg[k];
+                  dc_wrEND_BNK_reg2[k]<=dc_wrEND_BNK_reg[k];
+                  dc_wrAddrE_reg3[k]<=dc_wrAddrE_reg2[k];
+                  dc_wrAddrO_reg3[k]<=dc_wrAddrO_reg2[k];
+                  dc_wrBanks_reg3[k]<=dc_wrBanks_reg2[k];
+                  dc_odd_wr_reg3[k]<=dc_odd_wr_reg2[k];
+                  dc_split_wr_reg3[k]<=dc_split_wr_reg2[k];
+                  dc_wrBegin_reg3[k]<=dc_wrBegin_reg2[k];
+                  dc_wrEnd_reg3[k]<=dc_wrEnd_reg2[k];
+                  dc_wrBGN_BNK_reg3[k]<=dc_wrBGN_BNK_reg2[k];
+                  dc_wrEND_BNK_reg3[k]<=dc_wrEND_BNK_reg2[k];
+              end
+          end
+      end
+      if (rst) begin
+          rec_addr_reg<=64'b0;
+          rec_register_reg<={REG_WIDTH{1'B0}};
+          rec_tlb_miss_reg<=1'b0;
+      end else if (~rec_stall) begin
+          rec_addr_reg<=rec_addr;
+          rec_register_reg<=rec_register;
+          rec_tlb_miss_reg<=rec_tlb_miss;
       end
       
       if (rst) begin
