@@ -928,6 +928,11 @@ module backend(
   reg insBus_io_reg;
   reg insBus_io_reg2;
   reg insBus_io_reg3;
+  
+  reg [36:0] MSI_exp_addr_reg;
+  reg MSI_exp_en_reg;
+  reg MSI_swap_want_reg;
+  reg MSI_swap_repl_reg;
 
   wire [`lsaddr_width-1:0] st0_adata;
   wire                     st0_en;
@@ -2501,6 +2506,7 @@ module backend(
 
   wire [3:0] PSTQ_match;
   wire bDoStall_rqSpit;
+  wire bDoStall_rqSpit0;
   
   wire [2:0][7:0] WQR;
   wire [2:0][7:0] WQS;
@@ -2543,7 +2549,9 @@ module backend(
   wire [9:0] retM_ret;
   wire [9:0] retM_fine;
   wire [9:0] retM_ldconfl;
+  wire [9:0] retM_waitconfl;
   wire [9:0] retM_excpt;
+  wire [39:0]retM_exbits;
   wire retM_do_retire;
   wire [`lsqshare_width-1:0] retM_data_shr;
   wire [`lsqshare_width-1:0] retM_data_shr_reg;
@@ -5216,7 +5224,7 @@ module backend(
   .FU0(FU[0]),.FU1(FU[1]),.FU2(FU[2]),.FU3(FU[3]),.FU4(FU[4]),.FU5(FU[5]),.FU6(FU[6]),.FU7(FU[7]),.FU8(FU[8]),.FU9(FU[9]),
   .FUreg3_reg(FUreg_reg5[3]),.dc_rdataA(dc_rdataA[3]),//is it really reg5?
   .msi_exp_addr(MSI_exp_addr_reg),.msi_en(MSI_exp_en_reg),.msi_out_clear(),//msi_out_clear=can do msi en; todo - make replace last buffer rather than wait + redu
-  .csrss_en(csrss_en),.csrss_addr(csrss_addr),.csrss_data(csrss_data),
+  .csrss_en(csrss_en),.csrss_addr(csrss_no),.csrss_data(csrss_data),
   .alt_bus_hold(MSI_exp_en_reg),//expunge request
   .alt_bus_addr(MSI_exp_addr_reg),
   .req_addr(req_addr),.req_tlbAttr(req_tlbAttr),.req_tlbEn(req_tlbEn),
@@ -5271,8 +5279,8 @@ module backend(
   .st_stall(miss_pause_agu_reg2|bus_holds_agu_reg2),
   .st0_adata(st0_adata),.st0_en(st0_en),.st0_bank1(st0_bank1),.st0_bgn_ben(st0_bgn_ben),.st0_end_ben(st0_end_ben),.st0_data(st0_data),
   .st1_adata(st1_adata),.st1_en(st1_en),.st1_bank1(st1_bank1),.st1_bgn_ben(st1_bgn_ben),.st1_end_ben(st1_end_ben),.st1_data(st1_data),
-  .wb0_adata(lso_adata),.wb0_LSQ(lso_LSQ),.wb0_en(lso_en),.wb0_ret(),.wb0_data(lso_data),.wb0_brdbanks(lso_brdbanks),
-  .wb1_adata(lso2_adata),.wb1_LSQ(lso2_LSQ),.wb1_en(lso2_en),.wb1_ret(),.wb1_data(lso2_data),.wb1_brdbanks(lso2_brdbanks),
+  .wb0_adata(lso_adata),.wb0_LSQ(lso_LSQ),.wb0_en(lso_en),.wb0_ret(),.wb0_data(lso_data),.wb0_brdbanks(lso_bnkread),
+  .wb1_adata(lso2_adata),.wb1_LSQ(lso2_LSQ),.wb1_en(lso2_en),.wb1_ret(),.wb1_data(lso2_data),.wb1_brdbanks(lso2_bnkread),
   .mem_II_upper(retM_II0),
   .mem_II_upper_in(retM_II),
   .mem_II_bits_fine(retM_fine),
@@ -7248,6 +7256,10 @@ dcache1 L1D_mod(
 	  st1_type_reg<=2'b0;
 	  st1_type_reg2<=2'b0;
 	  st1_type_reg3<=2'b0;
+          MSI_exp_addr_reg<=37'b0;
+          MSI_exp_en_reg<=1'b0;
+          MSI_swap_want_reg<=1'b0;
+          MSI_swap_repl_reg<=1'b0;
       end else begin
           bus_holds_agu<=insert_isData;
           bus_holds_agu_reg<=bus_holds_agu;
@@ -7327,6 +7339,10 @@ dcache1 L1D_mod(
 	  st1_type_reg<=st1_adata[`lsaddr_mtype];
 	  st1_type_reg2<=st1_type_reg;
 	  st1_type_reg3<=st1_type_reg2;
+          MSI_exp_addr_reg<=MSI_exp_addr;
+          MSI_exp_en_reg<=MSI_exp_en;
+          MSI_swap_want_reg<=MSI_swap_want;
+          MSI_swap_repl_reg<=MSI_swap_repl;
       end
       
       if (rst) begin
