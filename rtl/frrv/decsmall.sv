@@ -292,7 +292,9 @@ module smallInstr_decoder(
    instr[11:7]!=5'b0) || (instr[15:14]==2'b1 && instr[11:7]!=5'b0 && 
    instr[12]| |instr[6:2] |~instr[13])))||(instr[1:0]==2'b10 && instr[15:13]==3'b0 && instr[11:7]!=5'b0);  
   assign subIs2xReg5Alu=instr[1:0]==2'b10 && instr[15:13]==3'b100;
-  
+  assign subIsReg3Alu=instr[1:0]==2'b1 && instr[15:13]==3'b100 && !(instr[12:10]==3'b111 && instr[6]);
+  assign subIsJMP=instr[1:0]==2'b1 && (instr[15:13]==3'b101 || instr[15:14]==2'b11);
+
   assign qconstant[1]=pconstant[3];//??
   assign qtrien   [1]=trien    [3];//??
   assign qconstant[2]=pconstant[8];
@@ -666,10 +668,10 @@ module smallInstr_decoder(
 	      prA[3]={1'b0,instr[11:7]};
 	      prB[3]={1'b0,instr[6:2]};
 	      prT[3]={1'b0,instr[11:7]};
-	      poperation[3][7:0]=`op_mov64|4096;
+	      poperation[3]=`op_mov64|4096;
 	      pport[3]=PORT_ALU;
 	  end
-	  3'b0x1: begin
+	  3'b1x1: begin
 	      prA={1'b0,instr[11:7]};
 	      prB={1'b0,instr[6:2]};
 	      prT={1'b0,instr[11:7]};
@@ -677,8 +679,36 @@ module smallInstr_decoder(
 	      pport=PORT_ALU;
 	      pflags_write[3]=1'b1;
 	  end
+	  3'b100: begin
+	      poperation[3]=`op_break|4096;
+	      pport[3]=PORT_ALU;
+	  end
       endcase
       //need to add rA output from mul port of ALU
+
+      ptrien[4]=subIs3RegAlu;
+      puseBConst[4]=~instr[11] | ~instr[10];
+      prA_use[4]=1'b1;
+      prB_use[4]=1'b1;
+      prT_use[4]=1'b1;
+      prA[4]={3'b1,instr[9:7]};
+      prT[4]={3'b1,instr[9:7]};
+      prB[4]={3'b1,instr[4:2]};
+      puseRs[4]=1'b1;
+      pflags_write[4]=1'b1;
+      prAlloc[4]=1'b1;
+      pconstant[4]=instr[11] ? {{27{instr[12]}},instr[6:2]} : {26'b0,instr[12],instr[6:2]};
+      casex({instr[12:10],instr[6:5]})
+	  5'bx00xx: begin poperation[4]=`op_shr64; pport[4]=PORT_SHIFT; end
+	  5'bx01xx: begin poperation[4]=`op_sar64; pport[4]=PORT_SHIFT; end
+	  5'bx10xx: begin poperation[4]=`op_and64; pport[4]=PORT_ALU; end
+	  5'b01100: begin poperation[4]=`op_sub64; pport[4]=PORT_ALU; end
+	  5'b01101: begin poperation[4]=`op_xor64; pport[4]=PORT_ALU; end
+	  5'b01110: begin poperation[4]=`op_or64; pport[4]=PORT_ALU; end
+	  5'b01111: begin poperation[4]=`op_and64; pport[4]=PORT_ALU; end
+	  5'b11100: begin poperation[4]=`op_sub32S; pport[4]=PORT_ALU; end
+	  5'b11101: begin poperation[4]=`op_add32S; pport[4]=PORT_ALU; end
+      endcase
 
       trien[1]=~magic[0] & subIsMovOrExt;
       puseBConst[1]=opcode_sub==6'h29;
