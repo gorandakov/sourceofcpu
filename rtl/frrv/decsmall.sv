@@ -291,7 +291,7 @@ module smallInstr_decoder(
   assign subIsBasicImmAluReg5=(instr[1:0]==2'b01 && (instr[15:13]==3'b0 || (instr[15:13]==3'b1 &&
    instr[11:7]!=5'b0) || (instr[15:14]==2'b1 && instr[11:7]!=5'b0 && 
    instr[12]| |instr[6:2] |~instr[13])))||(instr[1:0]==2'b10 && instr[15:13]==3'b0 && instr[11:7]!=5'b0);  
-
+  assign subIs2xReg5Alu=instr[1:0]==2'b10 && instr[15:13]==3'b100;
   
   assign qconstant[1]=pconstant[3];//??
   assign qtrien   [1]=trien    [3];//??
@@ -613,26 +613,29 @@ module smallInstr_decoder(
 	  pconstant[1]=instr[14:13]==2'b10 ? {24'b0,instr[8:7],instr[12:9],2'b0} :
 	     {23'b0,instr[9:7],instr[12:10],3'b0};
 
-      puseBConst[0]=opcode_sub[0]|subIsBasicShift;
-      prA_use[0]=1'b1;
-      prB_use[0]=1'b1;
-      prT_use[0]=1'b1;
-      puseRs[0]=1'b1;
-      prAlloc[0]=1'b1;
-      pport[0]=subIsBasicShift ? PORT_SHIFT : PORT_ALU;
-      pflags_write[0]=1'b1;
-      if (~prevSpecLoad) begin
-          prA[0]={instr[6],instr[11:8]};
-          prT[0]={instr[6],instr[11:8]};
-          prB[0]={instr[7],instr[15:12]};
-      end else if (opcode_sub[0]|subIsBasicShift) begin
-          prA[0]=5'd16;
-          prT[0]={instr[6],instr[11:8]};
-      end else begin
-          prA[0]={instr[6],instr[11:8]};
-          prT[0]={instr[7],instr[15:12]};
-          prB[0]=5'd16; 
-      end
+      trien[2]=subIsBasicImmAluReg5;
+      puseBConst[2]=1'b1;
+      prA_use[2]=instr[15:13]!=2'b10 && !(instr[15:13]==2'b11 && instr[11:7]!=2);
+      prB_use[2]=1'b1;
+      prT_use[2]=1'b1;
+      puseRs[2]=1'b1;
+      prAlloc[2]=1'b1;
+      pport[2]=instr[1:0]==2'b10 ? PORT_SHIFT : PORT_ALU;
+      pflags_write[2]=!(instr[15:13]!=2'b10 && !(instr[15:13]==2'b11 && instr[11:7]!=2));
+      poperation[2][12]=instr[15:13]!=2'b10 && !(instr[15:13]==2'b11 && instr[11:7]!=2);
+      prA[2]=instr[11:7];
+      prT[2]=instr[11:7];
+      if (instr[15:13]!=3'b11) pconstant[2]=instr[1:0]!=2'b10 ? {{27{instr[12]}},instr[6:2]} :
+	  {26'b0,instr[12],instr[6:2]};
+      else pconstant[2]=instr[11:7]==5'd2 ? {{23{instr[12]}},instr[4:3],instr[5],instr[2],instr[6],4'b0} :
+	  {{15{instr[12]}},instr[6:2],12'b0};
+      case({instr[1:0]==2'b10,instr[15:13]})
+	  case 4'b0: poperation[2][7:0]=`op_add64;
+	  case 4'b1: poperation[2][7:0]=`op_add32S;
+	  case 4'b10: poperation[2][7:0]=`op_mov64;
+	  case 4'b11: poperation[2][7:0]=instr[11:7]==5'd2 ? op_add64 : op_mov64;
+	  case 4'b1000: poperation[2][7:0]=`op_shl64;
+      endcase
 
       trien[1]=~magic[0] & subIsMovOrExt;
       puseBConst[1]=opcode_sub==6'h29;
