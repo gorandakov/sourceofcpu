@@ -2551,7 +2551,7 @@ module backend(
   wire [9:0] retM_ldconfl;
   wire [9:0] retM_waitconfl;
   wire [9:0] retM_excpt;
-  wire [39:0]retM_exbits;
+ // wire [39:0]retM_exbits;
   wire retM_do_retire;
   wire [`lsqshare_width-1:0] retM_data_shr;
   wire [`lsqshare_width-1:0] retM_data_shr_reg;
@@ -5288,7 +5288,7 @@ module backend(
   .mem_II_bits_waitconfl(retM_waitconfl),
   .mem_II_bits_except(retM_excpt),
   .mem_II_bits_ret(retM_ret),
-  .mem_II_exbitsx6(retM_exbits),
+  .mem_II_exbitsx6(),
   .mem_II_stall(bDoStall_rqSpit),
   .mem_II_stall2(bDoStall_rqSpit0),
   .doStall_rs(doStall_rs),.stall_cntrl(stall_cntrl), 
@@ -5712,6 +5712,7 @@ dcache1 L1D_mod(
   .mem_II_upper_out(retM_II),
   .mem_II_bits_fine(retM_fine),
   .mem_II_bits_ldconfl(retM_ldconfl),
+  .mem_II_bits_waitconfl(retM_waitconfl),
   .mem_II_bits_except(retM_excpt),
   .mem_II_bits_ret(retM_ret),
   .mem_II_stall(bDoStall_rqSpit|bDoStall_rqSpit0), 

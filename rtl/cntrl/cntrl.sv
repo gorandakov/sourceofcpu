@@ -527,12 +527,13 @@ module cntrl_find_outcome(
   wire [9:0] pending;
   wire [9:0] exceptn;
   wire [9:0] replay;
+  wire [9:0] replay_safe;
   wire [9:0] done;
   wire [9:0] fpudone;
   wire [9:0] btb_miss;
   wire break_pending,break_prejmp_tick,break_prejmp_ntick;
   wire break_exceptn;
-  wire break_replay;
+  wire break_replay,break_replayS;
   wire break_jump0;
   wire break_jump1;
   wire [9:0][9:0] ret_prev;
@@ -694,6 +695,7 @@ module cntrl_find_outcome(
       assign pending[k]=ret_data[k][`except_status]==2'd0 && !(mem_match & mem_II_bits_ret[k]);
       assign exceptn[k]=(ret_data[k][`except_status]==2'd1 && ~ret_data[k][11]) || (mem_match & mem_II_bits_except[k]);
       assign replay[k]=(ret_data[k][`except_status]==2'd1 && ret_data[k][11]) || (mem_match & mem_II_bits_ldconfl[k]);
+      assign replay_safe[k]=(ret_data[k][`except_status]==2'd1 && ret_data[k][11]) || (mem_match & mem_II_bits_waitconfl[k]);
       assign done[k]=ret_data[k][`except_status]==2'd2 || (mem_match & mem_II_bits_fine[k] & mem_II_bits_ret[k]);
       assign fpudone[k]=ret_data[k][`except_status]==2'd3;//with exception flags set
           
@@ -720,6 +722,7 @@ module cntrl_find_outcome(
       else assign break_prejmp_ntick=break_[0] ? 1'b1 : 1'bz;
       assign break_exceptn=break_[k] ? exceptn[k] : 1'bz;
       assign break_replay=break_[k] ? replay[k] : 1'bz;
+      assign break_replayS=break_[k] ? replay_safe[k] : 1'bz;
       assign break_jump0=break_[k] ? jump0_misPred[k] & done[k] : 1'bz;
       assign break_jump1=break_[k] ? jump1_misPred[k] & done[k] : 1'bz;
       if (k<9) assign flags_d=xbreak0[k+1] ? nextFlags[k] : 6'bz; 
@@ -819,7 +822,7 @@ module cntrl_find_outcome(
       .srcIPOff(IPOff[k]),
       .magicO(magicO[k]),
       .last(last_instr[k]),
-      .excpt(exceptn[k]|btb_miss[k]|replay[k]),
+      .excpt(exceptn[k]|btb_miss[k]|replay[k]|replay_safe[k]),
       .nextIP(nextIP[k])
       );
   
@@ -908,7 +911,7 @@ module cntrl_find_outcome(
   assign exceptIP_d=(break_jump0 && ~jump0_taken && (jump0Type==5'h19)) ? {baseIP[62:43],indir_IP[43:1]} : 63'bz;
   assign exceptIP_d=(break_jump1 & ~jump1_taken && (jump1Type==5'h19)) ? {baseIP[62:43],indir_IP[43:1]} : 63'bz;
   assign exceptIP_d=(break_exceptn) ? {baseIP[62:43],excpt_handlerIP[42:11],excpt_code[5:0],5'b0} : 63'bz;
-  assign exceptIP_d=(break_replay) ? {baseIP[62:43],breakIP} : 63'bz;
+  assign exceptIP_d=(break_replay|break_replayS) ? {baseIP[62:43],breakIP} : 63'bz;
   assign exceptIP_d=(break_pending | ~has_break) ? 63'b0 : 63'bz;
 
   assign csrss_no_d=(break_jump0) ? jump0IP[15:0] : 16'bz;
@@ -919,17 +922,17 @@ module cntrl_find_outcome(
   assign csrss_en_d=(break_exceptn) ? has_some & ~mem_II_stall : 1'bz;
   assign csrss_en_d=(~break_jump0 & ~break_jump1 & ~break_exceptn) ? 1'b0 : 1'bz;
   assign csrss_data_d=(break_exceptn) ? {1'b0,attr[0],attr[1],is_after_spec,attr[3],12'b0,4'b0,breakIP,1'b0} : indir_IP;
-  assign baseIP_d=(jump0_in & jump0_taken &~break_exceptn &~break_replay) ? {jump0BND,jump0IP} : 6_3'bz;
-  assign baseIP_d=(jump1_in & jump1_taken &~break_exceptn &~break_replay) ? {jump1BND,jump1IP} : 63'bz;
+  assign baseIP_d=(jump0_in & jump0_taken &~break_exceptn &~break_replay &~break_replayS) ? {jump0BND,jump0IP} : 6_3'bz;
+  assign baseIP_d=(jump1_in & jump1_taken &~break_exceptn &~break_replay &~break_replayS) ? {jump1BND,jump1IP} : 63'bz;
   assign baseIP_d=(break_exceptn) ? {baseIP[62:43],excpt_handlerIP} : 63'bz;
   assign baseIP_d=break_replay || ~(jump0_in&jump0_taken) & ~(jump1_in&jump1_taken) & (break_jump0||
       break_jump1) ? {baseIP[62:43],breakIP} : 63'bz;
   assign baseIP_d=break_prejmp_ntick & ~(jump0_in&jump0_taken) & ~(jump1_in&jump1_taken) 
       & ~break_jump0 & ~break_jump1 & ~break_exceptn & ~break_replay ? baseIP : 63'bz;
   assign baseIP_d[7:0]=break_prejmp_tick & ~(jump0_in&jump0_taken) & ~(jump1_in&jump1_taken)  
-      & ~break_jump0 & ~break_jump1 & ~break_exceptn & ~break_replay ? baseIP[7:0] : 8'bz;
+      & ~break_jump0 & ~break_jump1 & ~break_exceptn & ~break_replay & !break_replayS ? baseIP[7:0] : 8'bz;
   assign baseIP_d[62:43]=break_prejmp_tick & ~(jump0_in&jump0_taken) & ~(jump1_in&jump1_taken)  
-      & ~break_jump0 & ~break_jump1 & ~break_exceptn & ~break_replay ? baseIP[62:43] : 20'bz;
+      & ~break_jump0 & ~break_jump1 & ~break_exceptn & ~break_replay & !break_replayS ? baseIP[62:43] : 20'bz;
 
   assign jump0_taken=(jump0Pos==4'hf) ? 1'b0 : 1'bz;
   assign jump0_flags=(jump0Pos==4'hf) ? 6'b0 : 6'bz;
@@ -939,6 +942,7 @@ module cntrl_find_outcome(
   assign break_pending=(has_break) ? 1'bz : 1'b0;
   assign break_exceptn=(has_break) ? 1'bz : 1'b0;
   assign break_replay=(has_break) ? 1'bz : 1'b0;
+  assign break_replayS=(has_break) ? 1'bz : 1'b0;
   assign break_jump0=(has_break) ? 1'bz : 1'b0;
   assign break_jump1=(has_break) ? 1'bz : 1'b0;
   
@@ -1346,7 +1350,7 @@ module cntrl_find_outcome(
 	  except<=except_d;
           except_due_jump<=break_jump0|break_jump1 && except_d;
           if (doRetire_d && jump0_in) except_jump_ght<=jump1_in ? {jump1GHT[6:0],jump1_taken} : {jump0GHT[6:0],jump0_taken};
-          except_set_instr_flag<=break_replay;
+          except_set_instr_flag<=break_replay&!break_replayS;
           except_jmp_mask_en<=(break_jump0 | break_jump1) && except_d;
           except_jmp_mask<=break_jump0 ? jump0JMask : jump1JMask;
 
