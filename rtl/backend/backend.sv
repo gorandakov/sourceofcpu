@@ -925,14 +925,30 @@ module backend(
  
   wire write_clear;
 
+  reg insBus_io_reg;
+  reg insBus_io_reg2;
+  reg insBus_io_reg3;
+
   wire [`lsaddr_width-1:0] st0_adata;
   wire                     st0_en;
+  reg                      st0_en_reg;
+  reg                      st0_en_reg2;
+  reg                      st0_en_reg3;
+  reg [1:0]                st0_type_reg;
+  reg [1:0]                st0_type_reg2;
+  reg [1:0]                st0_type_reg3;
   wire [4:0]               st0_bank1;
   wire [3:0]               st0_bgn_ben;
   wire [3:0]               st0_end_ben;
   wire [159:0]             st0_data;
   wire [`lsaddr_width-1:0] st1_adata;
   wire                     st1_en;
+  reg                      st1_en_reg;
+  reg                      st1_en_reg2;
+  reg                      st1_en_reg3;
+  reg [1:1]                st1_type_reg;
+  reg [1:1]                st1_type_reg2;
+  reg [1:1]                st1_type_reg3;
   wire [4:0]               st1_bank1;
   wire [3:0]               st1_bgn_ben;
   wire [3:0]               st1_end_ben;
@@ -1758,7 +1774,8 @@ module backend(
   wire miss_holds_agu;
   reg miss_holds_agu_reg;
   reg miss_holds_agu_reg2;
-  
+ 
+  wire [5:4][7:0] p_LSQ; 
   
   wire [2:0][2:0] nDataAlt;
   reg [2:0][2:0] nDataAlt_reg;
@@ -5191,7 +5208,7 @@ module backend(
   .p2_adata(lsr_wr_data[2]),.p2_banks(dc_rdBanks[2]),.p2_LSQ(dc_LSQ[2]),
     .p2_en(dc_rdEn[2]),.p2_rsEn(dc_rsEn[2]),.p2_secq(),.p2_ret(),.p2_repl(p_repl[2]),.p2_lsfwd(p_lsfwd[2]),.p2_data(p2_data),.p2_brdbanks(p2_brdbanks),
   .p3_adata(lsr_wr_data[3]),.p3_banks(dc_rdBanks[3]),.p3_LSQ(dc_LSQ[3]),
-    .p3_en(dc_rdEn[3]),.p3_rsEn(dc_rsEn[3]),.p3_ioEn(),.p3_is_ack(insBus_io_reg3),.p3_ret(),.p3_data(p3_data),.p3_brdbanks(p3_brdbanks),.p3_repl(p_repl[3]),.p3_lsfwd(p_lsfwd[3]),
+    .p3_en(dc_rdEn[3]),.p3_rsEn(dc_rsEn[3]),.p3_ioEn(),.p3_io_ack(insBus_io_reg3),.p3_ret(),.p3_data(p3_data),.p3_brdbanks(p3_brdbanks),.p3_repl(p_repl[3]),.p3_lsfwd(p_lsfwd[3]),
   .p4_adata(lsr_wr_data[4]),.p4_LSQ(p_LSQ[4]),.p4_en(dc_wrEn[0]),.p4_secq(),.p4_ret(),
   .p5_adata(lsr_wr_data[5]),.p5_LSQ(p_LSQ[5]),.p5_en(dc_wrEn[1]),.p5_secq(),.p5_ret(),
   .p_bankNone(dc_bankNone),
@@ -5548,7 +5565,7 @@ dcache1 L1D_mod(
   .insert_from_ram(),//no need to implement. was going to be spectre protection
   .write_addrE0(st0_adata[`lsaddr_addrE]),
   .write_addrO0(st0_adata[`lsaddr_addrO]),
-  .write_bank0(st0_adata[`lsaddr_banks])),
+  .write_bank0(st0_adata[`lsaddr_banks]),
   .write_clkEn0(st0_en),
   .write_hit0(dc_wrHit[0]),
   .write_hitCl0(dc_wrHitCl[0]),
@@ -5562,7 +5579,7 @@ dcache1 L1D_mod(
   .write_data0(st0_data),
   .write_addrE1(st1_adata[`lsaddr_addrE]),
   .write_addrO1(st1_adata[`lsaddr_addrO]),
-  .write_bank1(st1_adata[`lsaddr_banks])),
+  .write_bank1(st1_adata[`lsaddr_banks]),
   .write_clkEn1(st1_en),
   .write_hit1(dc_wrHit[1]),
   .write_hitCl1(dc_wrHitCl[1]),
@@ -7219,6 +7236,18 @@ dcache1 L1D_mod(
           wrStall_reg<=1'b0;
 	  p3_data_reg<=136'b0;
 	  p3_data_reg2<=136'b0;
+	  st0_en_reg<=1'b0;
+	  st0_en_reg2<=1'b0;
+	  st0_en_reg3<=1'b0;
+	  st0_type_reg<=2'b0;
+	  st0_type_reg2<=2'b0;
+	  st0_type_reg3<=2'b0;
+	  st1_en_reg<=1'b0;
+	  st1_en_reg2<=1'b0;
+	  st1_en_reg3<=1'b0;
+	  st1_type_reg<=2'b0;
+	  st1_type_reg2<=2'b0;
+	  st1_type_reg3<=2'b0;
       end else begin
           bus_holds_agu<=insert_isData;
           bus_holds_agu_reg<=bus_holds_agu;
@@ -7286,6 +7315,18 @@ dcache1 L1D_mod(
           wrStall_reg<=wrStall;
 	  p3_data_reg<=p3_data;
 	  p3_data_reg2<=insBus_reg2 ? insBus_data_reg2[135:0] : p3_data_reg;
+	  st0_en_reg<=st0_en;
+	  st0_en_reg2<=st0_en_reg;
+	  st0_en_reg3<=st0_en_reg2;
+	  st0_type_reg<=st0_adata[`lsaddr_mtype];
+	  st0_type_reg2<=st0_type_reg;
+	  st0_type_reg3<=st0_type_reg2;
+	  st1_en_reg<=st1_en;
+	  st1_en_reg2<=st1_en_reg;
+	  st1_en_reg3<=st1_en_reg2;
+	  st1_type_reg<=st1_adata[`lsaddr_mtype];
+	  st1_type_reg2<=st1_type_reg;
+	  st1_type_reg3<=st1_type_reg2;
       end
       
       if (rst) begin
