@@ -637,6 +637,49 @@ module smallInstr_decoder(
 	  case 4'b1000: poperation[2][7:0]=`op_shl64;
       endcase
 
+      trien[3]=subIs2xReg5Alu;
+      prT_use[3]=instr[6:2]!=0;
+      prA_use[3]=instr[12] || instr[11:7]==0; //EBREAK might wait unnecesaryly but so what
+      prB_use[3]=!(!instr[12] && instr[11:7]==0) ;
+      prAlloc[3]=instr[12] || instr[11:7]!=0; 
+      puseRs[3]=1'b1;
+      casex({instr[12],instr[11:7]!=0,instr[6:2]!=0})
+	  3'b010: begin
+	      jump_type[3]=5'h11;
+	      is_jump[3]=1'b1;
+	      rA[3]={1'b0,instr[11:7]};
+	      poperation[3]=`op_mov64|4096;
+	      pport[3]=PORT_MUL;
+	  end
+	  3'b110: begin
+	      jump_type[3]=5'h11;
+	      is_jump[3]=1'b1;
+	      prA[3]={1'b0,instr[11:7]};
+	      puseBConst[3]=1'b1;
+	      pconstant[3]=0;
+	      pIPRel[3]=1'b1;
+	      prT[3]=6'd1;
+	      poperation[3]=`op_mov64|4096;
+	      pport[3]=PORT_MUL;
+	  end
+	  3'b0x1: begin
+	      prA[3]={1'b0,instr[11:7]};
+	      prB[3]={1'b0,instr[6:2]};
+	      prT[3]={1'b0,instr[11:7]};
+	      poperation[3][7:0]=`op_mov64|4096;
+	      pport[3]=PORT_ALU;
+	  end
+	  3'b0x1: begin
+	      prA={1'b0,instr[11:7]};
+	      prB={1'b0,instr[6:2]};
+	      prT={1'b0,instr[11:7]};
+	      poperation[7:0]=`op_add64;
+	      pport=PORT_ALU;
+	      pflags_write[3]=1'b1;
+	  end
+      endcase
+      //need to add rA output from mul port of ALU
+
       trien[1]=~magic[0] & subIsMovOrExt;
       puseBConst[1]=opcode_sub==6'h29;
       prA_use[1]=1'b0;
