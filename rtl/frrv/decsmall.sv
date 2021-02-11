@@ -288,6 +288,9 @@ module smallInstr_decoder(
   assign subIsBasicLDST=instr[14:13]!=2'b0 && instr[1:0]==2'b0;
   assign subIsStackLDST=instr[14:13]!=2'b0 && instr[1:0]==2'b10 && !(intr[15:14]=2'b01 && instr[11:7]==5'b0);
   
+  assign subIsBasicImmAluReg5=(instr[1:0]==2'b01 && (instr[15:13]==3'b0 || (instr[15:13]==3'b1 &&
+   instr[11:7]!=5'b0) || (instr[15:14]==2'b1 && instr[11:7]!=5'b0 && 
+   instr[12]| |instr[6:2] |~instr[13])))||(instr[1:0]==2'b10 && instr[15:13]==3'b0 && instr[11:7]!=5'b0);  
 
   
   assign qconstant[1]=pconstant[3];//??
@@ -587,6 +590,28 @@ module smallInstr_decoder(
       prT[0]={3'b1,instr[7:6]};
       pconstant[0]=instr[14:13]==2'b10 ? {26'b0,instr[5],instr[12:10],instr[6],2'b0} :
 	  {25'b0,instr[6:5],instr[12:10],3'b0};
+
+      trien[1]=subIsStackLDST;
+      poperation[1]=instr[14] ? {10'h1,instr[14],instr[15]} : {8'b0,~instr[15],instr[15],2'b1,instr[15]};
+      prA_use[1]=1'b0;
+      prB_use[1]=1'b1;
+      prT_use[1]=~instr[15] && instr[14];
+      prC_use[1]=instr[15] && instr[14];
+      prT_useF[1]=~instr[15] && ~instr[14];
+      prC_useF[1]=instr[15] && ~instr[14];
+      puseRs[1]=1'b1;
+      prAlloc[1]=1'b1;
+      puseBConst[1]=1'b0;
+      pport[1]=instr[15] ? PORT_STORE : PORT_LOAD;
+      prB[1]=6'd2;
+      prC[1]={1'b0,instr[6:2]};
+      prT[1]={1'b0,instr[11:7]};
+      if (!instr[15])
+	  pconstant[1]=instr[14:13]==2'b10 ? {24'b0,instr[3:2],instr[12],instr[6:4],2'b0} :
+	     {23'b0,instr[4:2],instr[12],instr[6:5],3'b0};
+      else
+	  pconstant[1]=instr[14:13]==2'b10 ? {24'b0,instr[8:7],instr[12:9],2'b0} :
+	     {23'b0,instr[9:7],instr[12:10],3'b0};
 
       puseBConst[0]=opcode_sub[0]|subIsBasicShift;
       prA_use[0]=1'b1;
