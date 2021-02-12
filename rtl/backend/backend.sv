@@ -1414,15 +1414,6 @@ module backend(
   wire [9:0][16+SIMD_WIDTH-1:0] FUFL;
   wire [5:0][SIMD_WIDTH-1:0] FOOFH;
   wire [5:0][16+SIMD_WIDTH-1:0] FOOFL;
-  reg [SIMD_WIDTH-1:0] FOOFH_reg[5:0];
-  reg [16+SIMD_WIDTH-1:0] FOOFL_reg[5:0];
-//  wire [9:0][SIMD_WIDTH-1:0] FUFUH;
-//  wire [9:0][SIMD_WIDTH-1:0] FUFUL;
-  wire [2:0][5:0] FOOSH;
-  wire [2:0][5:0] FOOSL;
-  wire [2:0][5:0] FOOS;
-  reg  [2:0][5:0] FOOS_reg;
-  reg  [2:0][5:0] FOOS_reg2;
 
   wire [5:0][DATA_WIDTH-1:0] FU_alu;
   wire [5:0][5:0] FUS_alu;
@@ -1697,28 +1688,6 @@ module backend(
   wire [1:0] WoutLSflag;
   wire [1:0][3:0] WoutAttr;
   
-  wire [1:0][DATA_WIDTH-1:0] WfxDataA;
-  wire [1:0][DATA_WIDTH-1:0] WfxDataB;
-  wire [1:0][CONST_WIDTH-1:0] WfxDataC;
-  wire [1:0][OPERATION_WIDTH-1:0] WfxOp;
-  wire [1:0][9:0] WfxII;
-  wire [1:0][7:0] WfxWQ;
-  wire [1:0][8:0] WfxLSQ;
-  wire [1:0][3:0] WfxDataEn;
-  wire [1:0]WfxThread;
-  wire [1:0][3:0] WfxShiftSize;
-  wire [1:0] WfxLSflag;
-  
-  reg [DATA_WIDTH-1:0] WfxDataA_reg[1:0];
-  reg [DATA_WIDTH-1:0] WfxDataB_reg[1:0];
-  reg [CONST_WIDTH-1:0] WfxDataC_reg[1:0];
-  reg [OPERATION_WIDTH-1:0] WfxOp_reg[1:0];
-  reg [9:0] WfxII_reg[1:0];
-  reg [7:0] WfxWQ_reg[1:0];
-  reg [8:0] WfxLSQ_reg[1:0];
-  reg [3:0] WfxDataEn_reg[1:0];
-  reg WfxThread_reg[1:0];
-  reg [3:0] WfxShiftSize_reg[1:0];
   
   wire [1:0][DATA_WIDTH-1:0] WDoutData;
   wire [1:0][OPERATION_WIDTH-1:0] WDoutOp;
@@ -1795,102 +1764,6 @@ module backend(
   reg [2:0][2:0] nDataAlt_reg3;
   reg [2:0][2:0] nDataAlt_reg4;
   reg [2:0][2:0] nDataAlt_reg5;
-  reg [2:0] gxFADD_hi;
-  reg [2:0] gxFADD_en;
-  reg [2:0] gxFADD_en_reg;
-  reg [2:0] gxFADD_en_reg2;
-  reg [2:0] gxFADD_dbl;
-  reg [2:0] gxFADD_ext;
-  reg [2:0] gxFADD_sn;
-  reg [2:0] gxFADD_sin;
-  reg [2:0] gxFADD_ord;
-  reg [2:0] gxFADD_pkdS;
-  reg [2:0] gxFADD_pkdD;
-/*  wire fxAlt1;
-  wire fxAlt2;
-  reg fxAlt1_reg;
-  reg fxAlt1_reg2;
-  reg [2:0] fxAlt1_reg3;
-  reg fxAlt2_reg;
-  reg fxAlt2_reg2;
-  reg fxAlt2_reg3;*/
-  reg [2:0] fxFADD_dbl;
-  reg [2:0] fxFADD_ext;
-  reg [2:0] fxFADD_sin;
-  reg [2:0] fxFADD_dblext;
-  reg [5:0] fxFADD_sub;
-  reg [2:0] fxFADD_rsub;
-  reg [5:0] fxFADD_copyA;
-  reg [3:0] fxFADD_copySA[5:0];
-  reg [1:0] fxFADD_com[2:0];
-  reg [2:0] fxFADD_pswp;
-  reg [2:0] fxFADD_dupl;
-  reg [2:0] fxFADD_pcmp;
-  reg [2:0] fxFADD_lo;
-  reg [2:0][3:0] fxFADD_loSel;
-  reg [2:0] fxFCADD_dbl;
-  reg [2:0] fxFCADD_ext;
-  reg [2:0] fxFCADD_sn;
-  reg [2:0] fxFCADD_dblext;
-  reg [5:0] fxFCADD_copyA;
-  reg [3:0] fxFCADD_copyASN[5:0];
-  reg [1:0] fxFCADD_com[2:0];
-  reg [2:0] fxFCADD_pswp;
-  reg [2:0] fxFCADD_dupl;
-  reg [2:0] fxFCADD_rndD;
-  reg [2:0] fxFCADD_rndS;
-  reg [2:0] fxFADD_dbl_nreg;
-  reg [2:0] fxFADD_ext_nreg;
-  reg [2:0] fxFADD_dblext_nreg;
-  reg [5:0] fxFADD_sub_nreg;
-  reg [2:0] fxFADD_rsub_nreg;
-  reg [5:0] fxFADD_copyA_nreg;
-  reg [1:0] fxFADD_com_nreg[2:0];
-  reg [2:0] fxFADD_pswp_nreg;
-  reg [2:0] fxFCADD_dbl_nreg;
-  reg [2:0] fxFCADD_ext_nreg;
-  reg [2:0] fxFCADD_dblext_nreg;
-  reg [5:0] fxFCADD_copyA_nreg;
-  reg [1:0] fxFCADD_com_nreg[2:0];
-  reg [2:0] fxFCADD_pswp_nreg;
-  wire [5:0][10:0] fxFCADD_raise;
-  reg [10:0] fxFCADD_raise_reg[5:0];
-
-  wire [8:0][DATA_WIDTH-1:0] fxDataA;
-  wire [8:0][DATA_WIDTH-1:0] fxDataB;
-  wire [5:0][SIMD_WIDTH-1:0] fxDataAVH;
-  wire [5:0][SIMD_WIDTH-1:0] fxDataBVH;
-  wire [5:0][SIMD_WIDTH-1:0] fxDataAVL;
-  wire [5:0][SIMD_WIDTH-1:0] fxDataBVL;
-  wire [5:0][SIMD_WIDTH-1:0] fxDataAFH;
-  reg  [SIMD_WIDTH-1:0] fxDataAFH_reg[5:0];
-  reg  [SIMD_WIDTH-1:0] fxDataAXH_reg[5:0];
-  reg  [SIMD_WIDTH-1:0] fxDataAFH_REG[5:0];
-  wire [5:0][SIMD_WIDTH-1:0] fxDataBFH;
-  wire [5:0][16+SIMD_WIDTH-1:0] fxDataAFL;
-  reg  [16+SIMD_WIDTH-1:0] fxDataAFL_reg[5:0];
-  reg  [16+SIMD_WIDTH-1:0] fxDataAXL_reg[5:0];
-  reg  [16+SIMD_WIDTH-1:0] fxDataAFL_REG[5:0];
-  wire [5:0][16+SIMD_WIDTH-1:0] fxDataBFL;
-  wire [5:0][SIMD_WIDTH-1:0] gxDataBFH;
-  reg  [SIMD_WIDTH-1:0] gxDataBFH_reg[5:0];
-  reg  [SIMD_WIDTH-1:0] gxDataBXH_reg[5:0];
-  wire [5:0][16+SIMD_WIDTH-1:0] gxDataBFL;
-  reg  [16+SIMD_WIDTH-1:0] gxDataBFL_reg[5:0];
-  reg  [16+SIMD_WIDTH-1:0] gxDataBXL_reg[5:0];
-  wire [8:0][5:0] fxDataS;
-  
-  wire [2:0][32:0] fxDataC;
-  wire [2:0][REG_WIDTH-1:0] fxReg;
-  wire [2:0][OPERATION_WIDTH-1:0] fxOp;
-  wire [2:0][9:0] fxII;
-  wire [2:0] fxEn;
-  wire [2:0][8:0] fxLSQ;
-  wire [2:0][7:0] fxWQ;
-  wire [2:0] fxThr;
-  wire [2:0] fxLSflag;
-  
-  wire [2:0][3:0] fxShiftSize;
 
   reg [REG_WIDTH-1:0] outReg_reg[8:0];
   reg [REG_WIDTH-1:0] outReg_reg2[8:0];
@@ -1933,175 +1806,29 @@ module backend(
   reg bus_holds_agu,bus_holds_agu_reg,bus_holds_agu_reg2;
   reg bus_holds_agu_reg3,bus_holds_agu_reg4,bus_holds_agu_reg5;
   
-  reg [15:0] proc0;
-  reg [15:0] proc1;
-
-  wire [3:0][PADDR_WIDTH-9:0] dci_rdAddrE;
-  wire [3:0][PADDR_WIDTH-9:0] dci_rdAddrO;
-  wire [3:0][63:0] dci_rdAddr;
-  wire [3:0][31:0] dci_rdBanks;
-  wire [3:0][31:0] dci_rdRsBanks;
-  wire [3:0] dci_rdEn; 
-  wire [3:0] dci_rsEn; 
-  wire [3:0] dci_odd;
-  wire [3:0] dci_split;
-  wire [3:0][1:0] dci_type;
-  wire [3:0][127:0] dci_rdataA;
-  wire [3:0][4:0] dci_rdBeginA;
-  wire [3:0][1:0] dci_low;
-  wire [3:0][4:0] dci_size;
-  wire [3:0][1:0] dci_rdHitCl;
-//  wire [3:0] dc_store;
-  wire [3:0] dci_confl;
-  wire [2:0] dci_tlb_miss;
-  wire [3:0] dci_st;
-  wire [31:0] dci_bankNone;
-  wire [3:0][REG_WIDTH-1:0] dci_rdReg;
-  wire [3:0][8:0] dci_LSQ;
-  wire [3:0][9:0] dci_II;
-  wire [3:0][7:0] dci_WQ;
-  wire [3:0] dci_thr;
-  wire [3:0] dci_lsflags;
-//  wire [3:0] dc_pconfl;
-  wire dci_lsfwd3;
-  wire [3:0] dci_bread3;
-  wire [127:0] dci_data3;
-  
-  wire [3:0][PADDR_WIDTH-9:0] dc_rdAddrE;
-  wire [3:0][PADDR_WIDTH-9:0] dc_rdAddrO;
-  wire [3:0][63:0] dc_rdAddr;
-  wire [3:0][31:0] dc_rdBanks;
-  wire [3:0][31:0] dc_rdRsBanks;
-  wire [3:0][1:0] dc_type;
   wire [3:0] dc_rdEn; 
   wire [3:0] dc_rsEn; 
-  wire [3:0] dc_odd;
-  wire [3:0] dc_split;
   wire [3:0][127+8:0] dc_rdataA;
-  wire [3:0][4:0] dc_rdBeginA;
-  wire [3:0][1:0] dc_low;
-  wire [3:0][4:0] dc_size;
   wire [3:0][1:0] dc_rdHitCl;
 //  wire [3:0] dc_store;
-  wire [3:0] dc_confl;
-  wire [2:0] dc_tlb_miss;
-  wire [3:0] dc_st;
   wire [31:0] dc_bankNone;
-  wire [3:0][REG_WIDTH-1:0] dc_rdReg;
   wire [3:0][8:0] dc_LSQ;
-  wire [3:0][9:0] dc_II;
-  wire [3:0][7:0] dc_WQ;
-  wire [3:0] dc_thr;
-  wire [3:0] dc_lsflags;
-//  wire [3:0] dc_pconfl;
-  wire dc_lsfwd3;
-  wire [3:0] dc_bread3;
-  wire [127:0] dc_data3;
-  wire dc_ioEn3;
-  wire dc_ioEn3_ack;
 
-  reg [PADDR_WIDTH-9:0] dc_rdAddrE_reg[3:0];
-  reg [PADDR_WIDTH-9:0] dc_rdAddrO_reg[3:0];
-  reg [PADDR_WIDTH-9:0] dc_rdAddrE_chk[3:0];
-  reg [PADDR_WIDTH-9:0] dc_rdAddrO_chk[3:0];
-  reg [31:0] dc_rdBanks_reg[3:0];
-  reg [31:0] dc_rdRsBanks_reg[3:0];
-  reg [3:0] dc_odd_reg;
-  reg [3:0] dc_split_reg;
-  reg [127:0] dc_rdataA_reg[3:0];
-  reg [4:0] dc_rdBeginA_reg[3:0];
-  reg [1:0] dc_low_reg[3:0];
-  reg [4:0] dc_size_reg[3:0];
-  reg [4:0] dc_size_reg2[3:0];
-  reg [4:0] dc_size_reg3[3:0];
-//  reg [3:0] dc_store_reg;
-  reg [3:0] dc_confl_reg;
-  reg [3:0] dc_st_reg;
-  reg [3:0][1:0] dc_type_reg;
-  reg [3:0][1:0] dc_type_reg2;
-  reg [3:0][1:0] dc_type_reg3;
- // reg [31:0] dc_bankNone_reg;
+  reg [127+8:0] dc_rdataA_reg[3:0];
   
-  reg [2:0] dc_tlb_miss_reg;  
   reg [3:0] dc_rdEn_reg; 
   reg [3:0] dc_rdEn_reg2; 
   reg [3:0] dc_rdEn_reg3;
   reg [3:0] dc_rsEn_reg; 
-  reg [REG_WIDTH-1:0] dc_rdReg_reg[3:0];
-  reg [REG_WIDTH-1:0] dc_rdReg_reg2[3:0];
-  reg [REG_WIDTH-1:0] dc_rdReg_reg3[3:0];
-  reg [3:0] dc_confl_reg2;
   reg [8:0] dc_LSQ_reg[3:0];
-  reg [9:0] dc_II_reg[3:0];
-  reg [9:0] dc_II_reg2[3:0];
-  reg [9:0] dc_II_reg3[3:0];
-  reg [7:0] dc_WQ_reg[3:0];
-  reg [3:0] dc_thr_reg;
-  reg [3:0] dc_thr_reg2;
-  reg [3:0] dc_lsflags_reg;
-  reg [3:0] dc_lsflags_reg2;
-  reg [3:0] dc_lsflags_reg3;
-  reg dc_lsfwd3_reg;
-  reg dc_lsfwd3_reg2;
-  reg dc_lsfwd3_reg3;
-  reg dc_lsfwd3_reg4;
-  reg [3:0] dc_bread3_reg;
-  reg [3:0] dc_bread3_reg2;
-  reg [3:0] dc_bread3_reg3;
-  reg [3:0] dc_bread3_reg4;
-  reg [127:0] dc_data3_reg;
-  reg [127:0] dc_data3_reg2;
-  reg [127:0] dc_data3_reg3;
-  reg [127:0] dc_data3_reg4;
 
-  wire [1:0][PADDR_WIDTH-9:0] dci_wrAddrE;
-  wire [1:0][PADDR_WIDTH-9:0] dci_wrAddrO;
-  wire [1:0][31:0] dci_wrBanks;
-  wire [1:0] dci_wrEn; 
-  wire [1:0] dci_odd_wr;
-  wire [1:0] dci_split_wr;
-  wire [1:0][5*32-1:0] dci_wdata;
-  wire [1:0][4*32-1:0] dci_wdataP;
-  wire [1:0][4:0] dci_wrBegin;
-  wire [1:0][4:0] dci_size_wr;
-  wire [1:0][1:0] dci_wrHitCl;
-  wire [1:0][1:0] dci_wrDuplCl;
-  wire [1:0][1:0] dci_wspecdata;
-  wire [1:0][9:0] dci_II_wr;
-  wire [1:0] dci_wrHit;
-  wire [1:0][4:0] dci_wrEnd;
-  wire [1:0][3:0] dci_wrBGN_BNK;
-  wire [1:0][3:0] dci_wrEND_BNK;
-  wire [1:0][1:0] dci_wr_low;
-  wire [1:0][1:0] dci_wrTyp;
-  
-  wire [1:0][PADDR_WIDTH-9:0] dc_wrAddrE;
-  wire [1:0][PADDR_WIDTH-9:0] dc_wrAddrO;
-  wire [1:0][31:0] dc_wrBanks;
   wire [1:0] dc_wrEn; 
   reg [1:0] dc_wrEn_reg; 
   reg [1:0] dc_wrEn_reg2; 
   reg [1:0] dc_wrEn_reg3; 
-  wire [1:0] dc_odd_wr;
-  wire [1:0] dc_split_wr;
-  wire [1:0][5*32-1:0] dc_wdata;
-  wire [1:0][4*32-1:0] dc_wdataP;
-  reg [4*32-1:0] dc_wdataP_reg[1:0];
-  wire [1:0][4:0] dc_wrBegin;
-  wire [1:0][4:0] dc_size_wr;
   wire [1:0][1:0] dc_wrHitCl;
   wire [1:0][1:0] dc_wrDuplCl;
-  wire [1:0][1:0] dc_wspecdata;
-  wire [1:0][9:0] dc_II_wr;
-  reg [9:0] dc_II_wr_reg[1:0];
-  reg [9:0] dc_II_wr_reg2[1:0];
-  reg [9:0] dc_II_wr_reg3[1:0];
   wire [1:0] dc_wrHit;
-  wire [1:0][4:0] dc_wrEnd;
-  wire [1:0][3:0] dc_wrBGN_BNK;
-  wire [1:0][3:0] dc_wrEND_BNK;
-  wire [1:0][1:0] dc_wr_low;
-  wire [1:0][1:0] dc_wrTyp;
 
   wire [5:0] p_repl;
   wire [3:0] p_lsfwd;
@@ -2110,114 +1837,16 @@ module backend(
   wire [127+8:0]p3_data;
   wire    [4:0] p3_brdbanks;
 
-  reg [PADDR_WIDTH-9:0] dc_wrAddrE_reg[1:0];
-  reg [PADDR_WIDTH-9:0] dc_wrAddrO_reg[1:0];
-  reg [31:0] dc_wrBanks_reg[1:0];
-  reg [1:0] dc_odd_wr_reg;
-  reg [1:0] dc_split_wr_reg;
-  reg [4:0] dc_wrBegin_reg[1:0];
-  reg [4:0] dc_wrEnd_reg[1:0];
-  reg [3:0] dc_wrBGN_BNK_reg[1:0];
-  reg [3:0] dc_wrEND_BNK_reg[1:0];
-  reg [5*32-1:0] dc_wdata_reg[1:0];
-
-  reg [PADDR_WIDTH-9:0] dc_wrAddrE_reg2[1:0];
-  reg [PADDR_WIDTH-9:0] dc_wrAddrO_reg2[1:0];
-  reg [31:0] dc_wrBanks_reg2[1:0];
-  reg [1:0] dc_odd_wr_reg2;
-  reg [1:0] dc_split_wr_reg2;
-  reg [4:0] dc_wrBegin_reg2[1:0];
-  reg [4:0] dc_wrEnd_reg2[1:0];
-  reg [3:0] dc_wrBGN_BNK_reg2[1:0];
-  reg [3:0] dc_wrEND_BNK_reg2[1:0];
-  reg [5*32-1:0] dc_wdata_reg2[1:0];
-
-  reg [PADDR_WIDTH-9:0] dc_wrAddrE_reg3[1:0];
-  reg [PADDR_WIDTH-9:0] dc_wrAddrO_reg3[1:0];
-  reg [31:0] dc_wrBanks_reg3[1:0];
-  reg [1:0] dc_odd_wr_reg3;
-  reg [1:0] dc_split_wr_reg3;
-  reg [4:0] dc_wrBegin_reg3[1:0];
-  reg [4:0] dc_wrEnd_reg3[1:0];
-  reg [3:0] dc_wrBGN_BNK_reg3[1:0];
-  reg [3:0] dc_wrEND_BNK_reg3[1:0];
-  reg [5*32-1:0] dc_wdata_reg3[1:0];
 
   wire [8:0] retfl_rF;
   wire [5:0] retfl_data;
   wire retfl_enG;
 
-  wire [1:0][63:0] Wqj_wrAddr;
-  wire [1:0][31:0] Wqj_wrBanks;
-  wire [1:0] Wqj_wrEn; 
-  wire [1:0] Wqj_rsEn; 
-  wire [1:0] Wqj_odd;
-  wire [1:0] Wqj_split;
-  wire [1:0][4:0] Wqj_wrBeginA;
-  wire [1:0][4:0] Wqj_wrBeginB;
-  wire [1:0][1:0] Wqj_low;
-  wire [1:0][4:0] Wqj_size;
-  wire [1:0][8:0] Wqj_LSQ;
-  wire [1:0][9:0] Wqj_II;
-  wire [1:0][7:0] Wqj_WQ;
-  wire [1:0][1:0] Wqj_type;
-  wire [1:0] Wqj_thr;
-  wire [1:0] Wqj_lsflags;
-
-  wire [1:0][PADDR_WIDTH-9:0] Wq_wrAddrE;
-  wire [1:0][PADDR_WIDTH-9:0] Wq_wrAddrO;
-  wire [1:0][63:0] Wq_wrAddr;
-  wire [1:0][31:0] Wq_wrBanks;
-  wire [1:0] Wq_wrEn; 
-  wire [1:0] Wq_rsEn; 
-  wire [1:0] Wq_odd;
-  wire [1:0] Wq_split;
-  wire [1:0][4:0] Wq_wrBeginA;
-  wire [1:0][4:0] Wq_wrBeginB;
-  wire [1:0][1:0] Wq_low;
-  wire [1:0][4:0] Wq_size;
-  wire [1:0][8:0] Wq_LSQ;
-  wire [1:0][1:0] Wq_type;
-  wire [1:0][9:0] Wq_II;
-  wire [1:0][7:0] Wq_WQ;
-  wire [1:0] Wq_thr;
-  wire [1:0] Wq_lsflags;
-//  wire [3:0] Wq_store;
-//  wire [3:0] Wq_confl;
-  wire [1:0] Wq_tlb_miss;
-//  wire [3:0] Wq_st;
-//  wire [31:0] Wq_bankNone;
-//  wire [3:0][REG_WIDTH-1:0] Wq_wrReg;
   wire wt_pause_agu;
   reg wt_pause_agu_reg;
   reg wt_pause_agu_reg2;
 
-  reg [PADDR_WIDTH-9:0] Wq_wrAddrE_reg[1:0];
-  reg [PADDR_WIDTH-9:0] Wq_wrAddrO_reg[1:0];
-//  wire [1:0][63:0] Wq_wrAddr;
-  reg [31:0] Wq_wrBanks_reg[1:0];
- // reg [1:0] Wq_wrEn_reg; 
-  reg [1:0] Wq_wrEn_reg; 
-  reg [1:0] Wq_odd_reg;
-  reg [1:0] Wq_split_reg;
-  reg [4:0] Wq_wrBeginA_reg[1:0];
-  reg [4:0] Wq_wrBeginB_reg[1:0];
-  reg [1:0] Wq_low_reg[1:0];
-  reg [4:0] Wq_size_reg[1:0];
-  reg [8:0] Wq_LSQ_reg[1:0];
-  reg [1:0] Wq_type_reg[1:0];
-  reg [9:0] Wq_II_reg[1:0];
-  reg [7:0] Wq_WQ_reg[1:0];
-  reg [1:0] Wq_thr_reg;
-//  wire [3:0] Wq_store;
-//  wire [3:0] Wq_confl;
- // reg [1:0] Wq_tlb_miss_reg;
-//  wire [3:0] Wq_st;
-  reg [31:0] Wq_bankNone_reg;
-//  wire [3:0][REG_WIDTH-1:0] Wq_wrReg;
-  
   wire [5:0][`lsaddr_width-1:0] lsr_wr_data;
-  reg [`lsaddr_width-1:0] lsr_ck_data[3:0];
 
 //  wire [3:0][47:0] wxdata;
 
@@ -2335,94 +1964,6 @@ module backend(
   reg [8:0] retire8_rF_reg2;
   reg retire8_enF_reg2;
   
-  wire [5:0][`lsqxcept_width-1:0] ret_xdata;
-  wire [5:0] ret_xenab;
-  reg  [`lsqxcept_width-1:0] ret_xdata_reg[5:0];
-  reg  [5:0] ret_xenab_reg;
-  reg  [`except_width-1:0] ret_xdata2[5:0];
-  wire [5:0] ret_xldconfl;
-  wire [5:0] ret_xwrconfl;
-
-  reg agu_flip;
-   
-  wire [63:0] rec_addr;
-  wire [4:0] rec_size;
-  wire rec_st;
-  wire rec_split;
-  wire rec_en;
-  wire [4:0] rec_beginA;
-  wire [4:0] rec_beginB;
-  wire rec_stall;
-  wire rec_tlb_miss;
-  wire [REG_WIDTH-1:0] rec_register;
-  wire [9:0] rec_II;
-  wire [7:0] rec_WQ;
-  wire [8:0] rec_LSQ;
-  wire rec_thread;
-  wire rec_lsflag;
-  reg [REG_WIDTH-1:0] rec_register_reg;
-  reg [63:0] rec_addr_reg;
-  reg rec_tlb_miss_reg;
-  wire [35:0] rec_addrE;
-  wire [35:0] rec_addrO;
-  wire rec_lsfwd;
-  wire rec_odd;
-  wire [1:0] rec_addr_low; 
-  wire [3:0] rec_brdbnk;
-  wire [127:0] rec_data;
-  wire [1:0] rec_type; //
-
-  wire miss_next;
-  wire miss_en;
-  wire miss_st;
-  wire miss_odd;
-  wire miss_split;
-  wire [1:0] miss_clHit;
-  wire [1:0] miss_clDo;
-  wire [1:0] miss_clDupl;
-  wire miss_unlock;
-  wire [PADDR_WIDTH-9:0] miss_addrE;
-  wire [PADDR_WIDTH-9:0] miss_addrO;
-  wire [4:0] miss_sz;
-  wire miss_io;
-  wire [4:0] miss_bank0;
-  wire [1:0] miss_low;
-  
-  reg miss_doneEven,miss_doneOdd;
-  reg miss_en_reg;
-//  reg miss_en_reg2;
-  reg miss_st_reg;
-  reg miss_unlock_reg;
-  
-  wire [PADDR_WIDTH-8:0] mcam_addr;
-  reg [PADDR_WIDTH-8:0] mcam_addr_reg;
-  wire [3:0] mcam_req;
-  wire mcam_hasfree;
-  wire mcam_dupl;
-  wire mcam_locked;
-  wire mcam_replay;
-  wire mcam_do_req;
-  wire mcam_st;
-  wire mcam_cldupl;
-  wire [4:0] mcam_sz;
-  wire [4:0] mcam_bank0;
-  wire [1:0] mcam_low;
-  wire mcam_io;
-  reg mcam_st_reg;
-  reg mcam_cldupl_reg;
-  reg [4:0] mcam_sz_reg;
-  reg [4:0] mcam_bank0_reg;
-  reg [1:0] mcam_low_reg;
-  reg mcam_io_reg;
-  
-  
-  wire [63-13:0] tlb_addr;
-  wire tlb_wen;
-  wire tlb_2M;
-  wire [`dtlbData_width-1:0] tlb_data0;
-  wire [`dtlbData_width-1:0] tlb_data1;
-  wire [`dtlbData_width-1:0] tlb_data2;
-  
   wire insert_isCode;
   wire insert_isData;
   reg insert_isData_reg;
@@ -2493,25 +2034,6 @@ module backend(
   wire [5:0] STQ_confl;
   wire [1:0][3*32-1:0] STQ_confls;
 
-  wire [1:0][`lsaddr_width-1:0] wreq_data;
-  reg  [`lsaddr_width-1:0] wreq_data_reg[1:0];
- // wire [1:0][47:0] wreq_xdata;
- // reg  [47:0] wreq_xdata_reg[1:0];
-  wire [1:0] wreq_has;
-  reg  [1:0] wreq_en_reg;
-  wire [1:0] wreq_en;
-  wire [1:0][4:0] wreq_dcEnd;
-  wire [1:0][3:0] wreq_bben;
-  wire [1:0][3:0] wreq_endben;
-  wire wreq_stall,wreq_hold;
- // reg wreq_stall_reg;
-
-  wire [2:0][`lsaddr_width-1:0] PSTQ_data;
-  wire [5:0] PSTQ_data_shr;
-  wire PSTQ_has_store=PSTQ_data_shr!=6'b111111;
-  wire [2:0] PSTQ_en;
-
-  wire [3:0] PSTQ_match;
   wire bDoStall_rqSpit;
   wire bDoStall_rqSpit0;
   
@@ -2519,8 +2041,6 @@ module backend(
   wire [2:0][7:0] WQS;
   reg [7:0] WQS_reg[2:0];
   reg [7:0] WQR_reg[2:0];
-  
-  wire [1:0] sdata_rdy;
   
   wire aStall_STQ;
   wire aDoStall_STQ;
@@ -2532,25 +2052,6 @@ module backend(
   wire lDoStall_STQ;
   wire lStall;
 
-  wire [`lsaddr_width-1:0] stqd_mOpA;
-  wire [`lsaddr_width-1:0] stqd_mOpB;
-  wire [`lsfxdata_width-1:0] stqd_xdataA0;
-  wire [`lsfxdata_width-1:0] stqd_xdataA1;
-  wire [`lsfxdata_width-1:0] stqd_xdataB0;
-  wire [`lsfxdata_width-1:0] stqd_xdataB1;
-  wire [7:0] stqd_addrA0;
-  wire [7:0] stqd_addrA1;
-  wire [7:0] stqd_addrB0;
-  wire [7:0] stqd_addrB1;
-  wire [127:0] stqd_dataA0;
-  wire [127:0] stqd_dataB0;
-  wire [127:0] stqd_dataA1;
-  wire [127:0] stqd_dataB1;
-  wire stqd_rdyA0;
-  wire stqd_rdyA1;
-  wire stqd_rdyB0;
-  wire stqd_rdyB1;
-  
   wire [5:0] retM_II;
   wire [5:0] retM_II0;
   wire [9:0] retM_ret;
@@ -2568,14 +2069,6 @@ module backend(
   wire retM_xbreak_has; 
 
   
-  wire [1:0][63:0] Em_addr;  
-  wire [1:0]Em_en;
-  wire [50:0] Em_tlb_addr;
-  wire Em_tlb_req_en;
-  wire Em_tlb_req_ack;
-
-  wire [135:0] fpE_one={2'd`ptype_ext,50'b0,1'b0,15'h4000,2'd`ptype_ext,1'b0,65'h1_0000_0000_0000_0000};
-  wire [67:0] fpD_one={2'd`ptype_dbl,1'b0,1'b0,11'h400,53'b0};
   wire [15:0] csrss_no;
   wire csrss_en,csrss_thread;
   wire [63:0] csrss_data;
@@ -7340,7 +6833,7 @@ dcache1 L1D_mod(
           dc_wrEn_reg3<=dc_wrEn_reg2;
           wrStall_reg<=wrStall;
 	  p3_data_reg<=p3_data;
-	  p3_data_reg2<=insBus_reg2 ? insBus_data_reg2[135:0] : p3_data_reg;
+	  p3_data_reg2<=insBus_io_reg2 ? insBus_data_reg2[135:0] : p3_data_reg;
 	  st0_en_reg<=st0_en;
 	  st0_en_reg2<=st0_en_reg;
 	  st0_en_reg3<=st0_en_reg2;
@@ -7809,22 +7302,6 @@ dcache1 L1D_mod(
           end
       end
       if (rst) begin
-	  for(p=0;p<6;p=p+1) begin
-	      ret_xdata_reg[p]<=0;
-	      ret_xenab_reg[p]<=1'b0;
-	      ret_xdata2[p]<=0;
-	  end
-      end else begin
-	  for(p=0;p<6;p=p+1) begin
-	      ret_xdata_reg[p]<=ret_xdata[p];
-	      ret_xenab_reg[p]<=ret_xenab[p];
-	      ret_xdata2[p][0]<=1'b0;
-	      ret_xdata2[p][2:1]<=ret_xdata[p][`lsqxcept_xcept] ? 2'd1 : 2'd2;
-	      ret_xdata2[p][8:3]<=ret_xdata[p][`lsqxcept_code];
-	  end
-
-      end
-      if (rst) begin
 	  retire0_rT_reg<=6'b0;
 	  retire0_rF_reg<=9'b0;
 	  retire0_enV_reg<=1'b0;
@@ -7955,155 +7432,8 @@ dcache1 L1D_mod(
 	  retire8_rF_reg2<=retire8_rF_reg;
 	  retire8_enF_reg2<=retire8_enF_reg;
       end
-      if (rst) begin
-          lso_xdataA_reg<=0;
-          lso_xdataB_reg<=0;
-      end else begin
-          lso_xdataA_reg<=lso_xdataA;
-          lso_xdataB_reg<=lso_xdataB;
-      end
   end
  
-  always @(negedge clk) begin
-    if (rst) begin
-	  fxFADD_dbl=3'b111;
-	  fxFADD_dblext=3'b111;
-	  fxFADD_ext=3'b000;
-	  fxFADD_sub=6'b000000;
-	  fxFADD_rsub=3'b0;
-	  fxFADD_copyA=6'b0;
-	  fxFADD_com[0]<=2'b0;
-	  fxFADD_com[1]<=2'b0;
-	  fxFADD_com[2]<=2'b0;
-	  fxFADD_dupl<=3'b0;
-	  fxFCADD_dupl<=3'b0;
-	  fxFADD_pswp<=3'b0;
-	  fxFADD_pcmp<=3'b0;
-	  fxFCADD_dbl=3'b111;
-	  fxFCADD_dblext=3'b111;
-	  fxFCADD_ext=3'b000;
-	  fxFCADD_copyA=6'b0;
-	  fxFCADD_com[0]<=2'b0;
-	  fxFCADD_com[1]<=2'b0;
-	  fxFCADD_com[2]<=2'b0;
-	  fxFCADD_pswp<=3'b0;
-	  fxFADD_sin=3'b0;
-          fxFADD_copySA[0]=4'b0;
-          fxFADD_copySA[1]=4'b0;
-          fxFADD_copySA[2]=4'b0;
-	  fxFCADD_sn=3'b0;
-	  fxFCADD_copyASN[0]=4'b0;
-	  fxFCADD_copyASN[1]=4'b0;
-	  fxFCADD_copyASN[2]=4'b0;
-	  fxFADD_lo=3'b0;
-	  fxFADD_loSel[0]=4'b0;
-	  fxFADD_loSel[1]=4'b0;
-	  fxFADD_loSel[2]=4'b0;
-	  fxFCADD_rndD<=3'b0;
-	  fxFCADD_rndS<=3'b0;
-          for (k=0;k<6;k=k+1) begin
-	      fxDataAFH_reg[k]<={SIMD_WIDTH{1'B0}};
-	      fxDataAFL_reg[k]<={16+SIMD_WIDTH{1'B0}};
-	      gxDataBFH_reg[k]<={SIMD_WIDTH{1'B0}};
-	      gxDataBFL_reg[k]<={16+SIMD_WIDTH{1'B0}};
-	      fxDataAFH_REG[k]<={SIMD_WIDTH{1'B0}};
-	      fxDataAFL_REG[k]<={16+SIMD_WIDTH{1'B0}};
-	      fxDataAXH_reg[k]<={SIMD_WIDTH{1'B0}};
-	      fxDataAXL_reg[k]<={16+SIMD_WIDTH{1'B0}};
-	      gxDataBXH_reg[k]<={SIMD_WIDTH{1'B0}};
-	      gxDataBXL_reg[k]<={16+SIMD_WIDTH{1'B0}};
-	  end
-    end else begin
-          for (k=0;k<3;k=k+1) begin
-	      fxFADD_dbl[k]=outOp_reg3[3*k+1][7:0]==`fop_addDL ||
-	        outOp_reg3[3*k+1][7:0]==`fop_addDH ||
-	        outOp_reg3[3*k+1][7:0]==`fop_addDP ||
-                outOp_reg3[3*k+1][7:0]==`fop_subDL ||
-	        outOp_reg3[3*k+1][7:0]==`fop_subDH ||
-                outOp_reg3[3*k+1][7:0]==`fop_subDP ||
-                outOp_reg3[3*k+1][7:0]==`fop_addsubDP;
-              fxFADD_ext[k]=outOp_reg3[3*k+1][7:0]==`fop_addEE ||
-                outOp_reg3[3*k+1][7:0]==`fop_subEE;
-              fxFADD_dblext[k]=fxFADD_dbl[k]||fxFADD_ext[k];
-	      fxFADD_sub[2*k]=outOp_reg3[3*k+1][7:0]==`fop_subDL ||
-	        outOp_reg3[3*k+1][7:0]==`fop_subDH ||
-                outOp_reg3[3*k+1][7:0]==`fop_subDP ||
-	        outOp_reg3[3*k+1][7:0]==`fop_subEE ||
-		outOp_reg3[3*k+1][7:0]==`fop_subS ||
-		outOp_reg3[3*k+1][7:0]==`fop_subSP;
-	      fxFADD_sub[2*k+1]=fxFADD_sub[2*k] || 
-		outOp_reg3[3*k+1][7:0]==`fop_addsubDP;
-	      fxFADD_rsub[k]=fxFADD_sub[2*k+1] && outOp_reg3[3*k+1][12];
-	      fxFADD_copyA[2*k+1]=outOp_reg3[3*k+1][7:0]==`fop_addDL ||
-                outOp_reg3[3*k+1][7:0]==`fop_subDL;
-	      fxFADD_copyA[2*k+0]=outOp_reg3[3*k+1][7:0]==`fop_addDH ||
-                outOp_reg3[3*k+1][7:0]==`fop_subDH;
-	      fxFADD_lo[k]={outOp_reg3[3*k+1][7:2],2'b0}==`fop_logic;
-	      fxFADD_loSel[k]=outOp_reg3[3*k+1][1:0];
-              fxFADD_pcmp[k]<=gxFADD_pkdS[k] | gxFADD_pkdD[k];
-	      {fxFADD_pswp[k],fxFADD_com[k]}<=outOp_reg3[3*k+1][10:8];
-	      {fxFCADD_pswp[k],fxFCADD_com[k]}<=outOp_reg3[3*k+2][10:8];
-              fxFADD_dupl[k]<=outOp_reg3[3*k+1][12];
-              fxFCADD_dupl[k]<=outOp_reg3[3*k+2][12];
-	      
-	      fxFCADD_dbl[k]=outOp_reg3[3*k+2][7:0]==`fop_mulDL ||
-	        outOp_reg3[3*k+2][7:0]==`fop_mulDH ||
-	        outOp_reg3[3*k+2][7:0]==`fop_mulDP || outOp_reg3[3*k+2][7:0]==`fop_rndDSP;
-              fxFCADD_ext[k]=outOp_reg3[3*k+2][7:0]==`fop_mulEE || outOp_reg3[3*k+2][7:0]==`fop_rndES ||
-	        outOp_reg3[3*k+2][7:0]==`fop_rndED;
-              fxFCADD_dblext[k]=fxFCADD_dbl[k]||fxFCADD_ext[k];
-	      fxFCADD_copyA[2*k+1]=outOp_reg3[3*k+2][7:0]==`fop_mulDL;
-	      fxFCADD_copyA[2*k+0]=outOp_reg3[3*k+2][7:0]==`fop_mulDH;
-	     
-	      fxFCADD_rndD[k]=outOp_reg3[3*k+2][7:0]==`fop_rndED;
-	      fxFCADD_rndS[k]=outOp_reg3[3*k+2][7:0]==`fop_rndES ||
-	        outOp_reg3[3*k+2][7:0]==`fop_rndDSP;
-
-	      fxFADD_sin[k]=outOp_reg3[3*k+1][7:0]==`fop_addS || outOp_reg3[3*k+1][7:0]==`fop_addSP ||
-                  outOp_reg3[3*k+1][7:0]==`fop_subS || outOp_reg3[3*k+1][7:0]==`fop_subSP ||
-		  {outOp_reg3[3*k+1][7:2],2'b0}==`fop_logic;
-              fxFADD_copySA[k]=(outOp_reg3[3*k+1]==`fop_addSP || outOp_reg3[3*k+1][7:0]==`fop_subSP ||
-	          {outOp_reg3[3*k+1][7:2],2'b0}==`fop_logic) ?
-		  {outOp_reg3[3*k+1][10],3'b0}:{2'b11,outOp_reg3[3*k+1][10],1'b0}; 
-	      fxFCADD_sn[k]=outOp_reg3[3*k+1][7:0]==`fop_mulS || outOp_reg3[3*k+1][7:0]==`fop_mulSP;
-              fxFCADD_copyASN[k]=(outOp_reg3[3*k+1]==`fop_mulSP) ?
-		  {outOp_reg3[3*k+2][10],3'b0}:{2'b11,outOp_reg3[3*k+2][10],1'b0}; 
-	      if (fxFADD_dblext[k]) begin
-		  if (~fxFADD_copyA[2*k+1]) fxDataAFH_reg[2*k+0]<=fxDataAFH[2*k+0];
-	          if (~fxFADD_copyA[2*k+0]) fxDataAFL_reg[2*k+0]<=fxDataAFL[2*k+0];
-	          if (~fxFADD_copyA[2*k+1]) gxDataBFH_reg[2*k+1]<=gxDataBFH[2*k+1];
-	          if (~fxFADD_copyA[2*k+0]) gxDataBFL_reg[2*k+1]<=gxDataBFL[2*k+1];
-		  fxDataAFH_REG[2*k+0]<=fxDataAFH[2*k+0];
-	          fxDataAFL_REG[2*k+0]<=fxDataAFL[2*k+0];
-	      end
-	      if (fxFCADD_dblext[k]) begin
-		  if (~fxFCADD_copyA[2*k+1]) fxDataAFH_reg[2*k+1]<=fxDataAFH[2*k+1];
-	          if (~fxFCADD_copyA[2*k+0]) fxDataAFL_reg[2*k+1]<=fxDataAFL[2*k+1];
-	          if (~fxFCADD_copyA[2*k+1]) gxDataBFH_reg[2*k+0]<=gxDataBFH[2*k+0];
-	          if (~fxFCADD_copyA[2*k+0]) gxDataBFL_reg[2*k+0]<=gxDataBFL[2*k+0];
-		  fxDataAFH_REG[2*k+1]<=fxDataAFH[2*k+1];
-	          fxDataAFL_REG[2*k+1]<=fxDataAFL[2*k+1];
-	      end
-	      if (~fxFADD_dblext[k]) begin
-		  fxDataAXH_reg[2*k+0]<=fxDataAFH[2*k+0];
-	          fxDataAXL_reg[2*k+0]<=fxDataAFL[2*k+0];
-	          gxDataBXH_reg[2*k+1]<=gxDataBFH[2*k+1];
-	          gxDataBXL_reg[2*k+1]<=gxDataBFL[2*k+1];
-	      end
-	      if (~fxFCADD_dblext[k]) begin
-		  fxDataAXH_reg[2*k+1]<=fxDataAFH[2*k+1];
-	          fxDataAXL_reg[2*k+1]<=fxDataAFL[2*k+1];
-	          gxDataBXH_reg[2*k+0]<=gxDataBFH[2*k+0];
-	          gxDataBXL_reg[2*k+0]<=gxDataBFL[2*k+0];
-	      end
-          end
-    end
-    for(k1=0;k1<6;k1=k1+1) begin
-        FOOFL_reg[k1]<=FOOFL[k1];
-        FOOFH_reg[k1]<=FOOFH[k1];
-        fxFCADD_raise_reg[k1]<=fxFCADD_raise[k1];
-    end
-  end 
 endmodule
 
 
