@@ -5,6 +5,7 @@
 module fun_fpu_BOTH(
   clk,
   rst,
+  fpcsr,
   u1_A0,u1_B0,u1_A1,u1_B1,u1_en,u1_op,
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
   u1_ret,u1_ret_en,
@@ -51,6 +52,7 @@ module fun_fpu_BOTH(
   localparam SIMD_WIDTH=68; //half width
   input clk;
   input rst;
+  input [31:0] fpcsr;
   input [16+67:0] u1_A0;
   input [16+67:0] u1_B0;
   input [67:0]    u1_A1;
@@ -230,6 +232,7 @@ module fun_fpu_BOTH(
   fun_fpuH hf_mod(
   clk,
   rst,
+  fpcsr,
   u1_A1,u1_B1,u1_Ax,u1_Bx,u1_en,u1_op,
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
   u1_retH,u1_ret_enH,
@@ -271,6 +274,7 @@ module fun_fpu_BOTH(
   fun_fpuL lfpc_mod(
   clk,
   rst,
+  fpcsr,
   u1_A0,u1_B0,u1_Bx,u1_Ax,u1_en,u1_op,
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
   u1_retL,u1_ret_enL,

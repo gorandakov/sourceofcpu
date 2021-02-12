@@ -5,6 +5,7 @@
 module fun_fpusqr(
   clk,
   rst,
+  fpcsr,
   u1_A,u1_B,u1_Av,u1_Bv,u1_en,u1_op,
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
   u1_ret,u1_ret_en,
@@ -27,6 +28,7 @@ module fun_fpusqr(
   localparam [4:0] S={~H,3'b0};
   input clk;
   input rst;
+  input [31:0] fpcsr;
   input [S+67:0] u1_A;
   input [S+67:0] u1_B;
   input [67:0] u1_Av;
@@ -300,7 +302,7 @@ module fun_fpusqr(
           .step_cnt(fxFRT_steps),
           .type_(fxFRT_type),
           .is_root(fxFRT_isRoot),
-          .rmode(fpcsr[`csrfpu_rmode]),
+          .rmode(fxFRT_type==3'd1 ? fpcsr[`csrfpu_rmodeE] : fpcsr[`csrfpu_rmode]),
 	  .reg_in(frtReg_reg),
 	  .outII_in(frtII_reg),
 	  .oper_in(frtOp_reg),
@@ -336,7 +338,7 @@ module fun_fpusqr(
       end
   endgenerate 
 
-  assign outAltData=fxFRT_alten_reg5[2]!=4'b0 ? {16+SIMD_WIDTH{1'b0}} : {16+SIMD_WIDTH{1'bz}};
+  assign outAltData=fxFRT_alten_reg5[2]==4'b0 ? {16+SIMD_WIDTH{1'b0}} : {16+SIMD_WIDTH{1'bz}};
 
   always @(posedge clk) begin
       if (rst) begin

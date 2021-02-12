@@ -5,6 +5,7 @@
 module fun_fpsu_BOTH(
   clk,
   rst,
+  fpcsr,
   u1_A0,u1_B0,u1_A1,u1_B1,u1_en,u1_op,
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
   u1_ret,u1_ret_en,
@@ -39,6 +40,7 @@ module fun_fpsu_BOTH(
   localparam SIMD_WIDTH=68; //half width
   input clk;
   input rst;
+  input [31:0] fpcsr;
   input [67:0] u1_A0;
   input [67:0] u1_B0;
   input [67:0]    u1_A1;

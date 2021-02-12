@@ -5,6 +5,7 @@
 module fun_fpsu(
   clk,
   rst,
+  fpcsr,
   u1_A,u1_B,u1_Bx,u1_Ax,u1_en,u1_op,
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
   u1_ret,u1_ret_en,
@@ -24,6 +25,7 @@ module fun_fpsu(
   localparam [4:0] S=5'd0;
   input clk;
   input rst;
+  input [31:0] fpcsr;
   input [S+67:0] u1_A;
   input [S+67:0] u1_B;
   input [67:0] u1_Bx;

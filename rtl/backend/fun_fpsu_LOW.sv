@@ -5,6 +5,7 @@
 module fun_fpuSL(
   clk,
   rst,
+  fpcsr,
   u1_A,u1_B,u1_Bx,u1_Bxo,u1_en,u1_op,
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
   u1_ret,u1_ret_en,
@@ -34,6 +35,7 @@ module fun_fpuSL(
   localparam SIMD_WIDTH=68; //half width
   input clk;
   input rst;
+  input [31:0] fpcsr;
   input [67:0] u1_A;
   input [67:0] u1_B;
   input [67:0] u1_Bx;
@@ -130,6 +132,7 @@ module fun_fpuSL(
   fun_fpsu #(0,0) fpu0_mod(
   clk,
   rst,
+  fpcsr,
   u1_A,u1_B,u1_Bx,u1_Bxo,u1_en,u1_op,
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
   u1_ret,u1_ret_en,
@@ -147,6 +150,7 @@ module fun_fpuSL(
   fun_fpsu #(1,0) fpu1_mod(
   clk,
   rst,
+  fpcsr,
   u3_A,u3_B,u3_Bx,u3_Bxo,u3_en,u3_op,
   u3_fufwd_A,u3_fuufwd_A,u3_fufwd_B,u3_fuufwd_B,
   u3_ret,u3_ret_en,
@@ -164,6 +168,7 @@ module fun_fpuSL(
   fun_fpsu #(2,0) fpu2_mod(
   clk,
   rst,
+  fpcsr,
   u5_A,u5_B,u5_Bx,u5_Bxo,u5_en,u5_op,
   u5_fufwd_A,u5_fuufwd_A,u5_fufwd_B,u5_fuufwd_B,
   u5_ret,u5_ret_en,

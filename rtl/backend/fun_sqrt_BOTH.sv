@@ -5,6 +5,7 @@
 module fun_fpusqr(
   clk,
   rst,
+  fpcsr,
   ul_A,ul_B,ul_Av,ul_Bv,
   uh_A,uh_B,uh_Av,uh_Bv,
   u1_en,u1_op,
@@ -36,6 +37,7 @@ module fun_fpusqr(
   localparam [4:0] S={~H,3'b0};
   input clk;
   input rst;
+  input [31:0] fpcsr;
   input [S+67:0] ul_A;
   input [S+67:0] ul_B;
   input [67:0] ul_Av;
@@ -149,6 +151,7 @@ module fun_fpusqr(
   fun_fpusqr sqr_low(
   clk,
   rst,
+  fpcsr,
   ul_A,ul_B,ul_Av,ul_Bv,u1_en,u1_op,
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
   u1_ret,u1_ret_en,
@@ -168,6 +171,7 @@ module fun_fpusqr(
   fun_fpusqr sqr_hi(
   clk,
   rst,
+  fpcsr,
   uh_A,uh_B,uh_Av,uh_Bv,u1_en,u1_op,
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
   u1_ret,u1_ret_en,
