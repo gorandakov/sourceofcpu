@@ -946,6 +946,9 @@ module backend(
   wire [4:0]               st0_bank1;
   wire [3:0]               st0_bgn_ben;
   wire [3:0]               st0_end_ben;
+  reg [9:0]                st0_II_reg;
+  reg [9:0]                st0_II_reg2;
+  reg [9:0]                st0_II_reg3;
   wire [159:0]             st0_data;
   wire [`lsaddr_width-1:0] st1_adata;
   wire                     st1_en;
@@ -958,6 +961,9 @@ module backend(
   wire [4:0]               st1_bank1;
   wire [3:0]               st1_bgn_ben;
   wire [3:0]               st1_end_ben;
+  reg [9:0]                st1_II_reg;
+  reg [9:0]                st1_II_reg2;
+  reg [9:0]                st1_II_reg3;
   wire [159:0]             st1_data;
 
   wire [`lsaddr_width-1:0] lso_adata;
@@ -5295,18 +5301,18 @@ module backend(
   .doStall_rs(doStall_rs),.stall_cntrl(stall_cntrl), 
   .doStall_alloc(doStall_alloc),.doStall_cntrl(doStall_cntrl),
   .doStall_WQ(doStall_WQ),.stall_WQ(stall_WQ),
-  .doRetire_d(doRetire_d),
-  .xbreak(xbreak),
-  .has_xbreak(has_xbreak),
+  .doRetire_d(retM_do_retire),
+  .xbreak(retM_xbreak),
+  .has_xbreak(retM_xbreak_has),
   .ldq_new_mask_reg(ldq_new_mask_reg),.bundle_in_reg2(bundle_in_reg2),.II_upper(II_upper),.LSQ_shr_data(LSQ_shr_data),
-  .WQS0_reg(WQS0_reg),.WQR0_reg(WQR0_reg),
-  .WQS1_reg(WQS1_reg),.WQR1_reg(WQR1_reg),
-  .WQS2_reg(WQS2_reg),.WQR2_reg(WQR2_reg),
+  .WQS0_reg(WQS_reg[0]),.WQR0_reg(WQR_reg[0]),
+  .WQS1_reg(WQS_reg[1]),.WQR1_reg(WQR_reg[1]),
+  .WQS2_reg(WQS_reg[2]),.WQR2_reg(WQR_reg[2]),
   .lsw_wq0(WDfxWQ_reg3[0]),.lsw_wdata0(lsw_wdata[0]),.lsw_rs_en0(WDfxDataEn_reg3[0]),
   .lsw_wq1(WDfxWQ_reg3[1]),.lsw_wdata1(lsw_wdata[1]),.lsw_rs_en1(WDfxDataEn_reg3[1]),
-  .mOpY4_II(dc_II_wr_reg3[0]),.mOpY4_hit(dc_wrHit[0]),
-  .mOpY5_II(dc_II_wr_reg3[1]),.mOpY5_hit(dc_wrHit[1]),
-  .lsi0_reg(lsi0_reg),.lsi1_reg(lsi1_reg),.lsi2_reg(lsi2_reg),
+  .mOpY4_II(st0_II_reg3),.mOpY4_hit(dc_wrHit[0]),
+  .mOpY5_II(st1_II_reg3),.mOpY5_hit(dc_wrHit[1]),
+  .lsi0_reg(rs_lsi_reg[0]),.lsi1_reg(rs_lsi_reg[1]),.lsi2_reg(rs_lsi_reg[2]),//only used to check if has mem reqs
   .MSI_exp_addr(MSI_exp_addr_reg),.MSI_en(MSI_exp_en_reg),
   .doStall_STQ(doStall_STQ),
   .doStall_LDQ(doStall_LDQ),
@@ -7252,12 +7258,18 @@ dcache1 L1D_mod(
 	  st0_type_reg<=2'b0;
 	  st0_type_reg2<=2'b0;
 	  st0_type_reg3<=2'b0;
+	  st0_II_reg<=2'b0;
+	  st0_II_reg2<=2'b0;
+	  st0_II_reg3<=2'b0;
 	  st1_en_reg<=1'b0;
 	  st1_en_reg2<=1'b0;
 	  st1_en_reg3<=1'b0;
 	  st1_type_reg<=2'b0;
 	  st1_type_reg2<=2'b0;
 	  st1_type_reg3<=2'b0;
+	  st1_II_reg<=2'b0;
+	  st1_II_reg2<=2'b0;
+	  st1_II_reg3<=2'b0;
           MSI_exp_addr_reg<=37'b0;
           MSI_exp_en_reg<=1'b0;
           MSI_swap_want_reg<=1'b0;
@@ -7335,12 +7347,18 @@ dcache1 L1D_mod(
 	  st0_type_reg<=st0_adata[`lsaddr_mtype];
 	  st0_type_reg2<=st0_type_reg;
 	  st0_type_reg3<=st0_type_reg2;
+	  st0_II_reg<=st0_adata[`lsaddr_II];
+	  st0_II_reg2<=st0_II_reg;
+	  st0_II_reg3<=st0_II_reg2;
 	  st1_en_reg<=st1_en;
 	  st1_en_reg2<=st1_en_reg;
 	  st1_en_reg3<=st1_en_reg2;
 	  st1_type_reg<=st1_adata[`lsaddr_mtype];
 	  st1_type_reg2<=st1_type_reg;
 	  st1_type_reg3<=st1_type_reg2;
+	  st1_II_reg<=st1_adata[`lsaddr_II];
+	  st1_II_reg2<=st1_II_reg;
+	  st1_II_reg3<=st1_II_reg2;
           MSI_exp_addr_reg<=MSI_exp_addr;
           MSI_exp_en_reg<=MSI_exp_en;
           MSI_swap_want_reg<=MSI_swap_want;
