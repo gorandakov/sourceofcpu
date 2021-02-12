@@ -239,6 +239,7 @@ module cntrl_find_outcome(
   mem_II_upper_out,
   mem_II_bits_fine,
   mem_II_bits_ldconfl,
+  mem_II_bits_waitconfl,
   mem_II_bits_except,
   mem_II_bits_ret,
   mem_II_stall,
@@ -512,6 +513,7 @@ module cntrl_find_outcome(
   output [5:0] mem_II_upper_out;
   input [9:0] mem_II_bits_fine;
   input [9:0] mem_II_bits_ldconfl;
+  input [9:0] mem_II_bits_waitconfl;
   input [9:0] mem_II_bits_except;
   input [9:0] mem_II_bits_ret;
   input mem_II_stall;

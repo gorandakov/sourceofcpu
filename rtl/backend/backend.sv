@@ -934,6 +934,7 @@ module backend(
   reg MSI_swap_want_reg;
   reg MSI_swap_repl_reg;
 
+
   wire [`lsaddr_width-1:0] st0_adata;
   wire                     st0_en;
   reg                      st0_en_reg;
@@ -5265,7 +5266,7 @@ module backend(
   .miss_holds_agu_reg2(miss_holds_agu_reg2),
   .miss_pause_agu_reg2(miss_pause_agu_reg2),
   .insert_isData_reg2(insert_isData_reg2),
-  .pause_agu(pause_agu),.WDoRsPause(WDoRsPause),
+  .pause_agu(pause_agu),.WDoRsPause(Wagu_blockRS),
   .p0_adata(lsr_wr_data[0]),.p0_LSQ(dc_LSQ[0]),.p0_en(dc_rdEn[0]),.p0_rsEn(dc_rsEn[0]),.p0_smpc(p_repl[0]),.p0_lsfwd(p_lsfwd[0]),
   .p1_adata(lsr_wr_data[1]),.p1_LSQ(dc_LSQ[1]),.p1_en(dc_rdEn[1]),.p1_rsEn(dc_rsEn[1]),.p1_smpc(p_repl[1]),.p1_lsfwd(p_lsfwd[1]),
   .p2_adata(lsr_wr_data[2]),.p2_LSQ(dc_LSQ[2]),.p2_en(dc_rdEn[2]),.p2_rsEn(dc_rsEn[2]),.p2_smpc(p_repl[2]),.p2_lsfwd(p_lsfwd[2]),
