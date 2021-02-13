@@ -1420,6 +1420,8 @@ module backend(
   wire [9:0][16+SIMD_WIDTH-1:0] FUFL;
   wire [5:0][SIMD_WIDTH-1:0] FOOFH;
   wire [5:0][16+SIMD_WIDTH-1:0] FOOFL;
+  wire [3:0][15:0] FUVLX;
+  reg  [3:0][15:0] FUVLX_reg;
 
   wire [5:0][DATA_WIDTH-1:0] FU_alu;
   wire [5:0][5:0] FUS_alu;
@@ -2075,6 +2077,8 @@ module backend(
   wire retM_xbreak_has; 
 
   
+  wire [135:0] fpE_one={2'd`ptype_ext,50'b0,1'b0,15'h4000,2'd`ptype_ext,1'b0,65'h1_0000_0000_0000_0000};
+  wire [67:0] fpD_one={2'd`ptype_dbl,1'b0,1'b0,11'h400,53'b0};
   wire [15:0] csrss_no;
   wire csrss_en,csrss_thread;
   wire [63:0] csrss_data;
@@ -4131,22 +4135,26 @@ module backend(
 
  //   assign wxdata[n]={get_last_bank(dc_size_reg3[n],dc_rdataA[n]),dc_rdataA[n][23:0]};
 
-      ldD2nativeD lddbl_hi_mod(FUVH_reg[n][63:0],fxLD_dbl[n],fxLD_dbl_t[n],1'b0,{FUFH[n][65:33],FUFH[n][31:0]});
-      LDE2NativeE ldedbl_mod({FUVH_reg[n][15:0],FUVL_reg[n][63:0]},fxLD_ext[n],{FUFH[n][15:0],FUFL[n][65:33],FUFL[n][31:0]});
+      ldD2nativeD lddbl_hi_mod(dc_rdataA_reg2[n][127:64],fxLD_dbl_reg[n],fxLD_dbl_t_reg[n],1'b0,{FUFH[n][65:33],FUFH[n][31:0]});
+      LDE2NativeE ldedbl_mod({dc_rdataA_reg2[n][79:0]},fxLD_ext_reg[n],{FUFL[n][15+68:68],FUFL[n][65:33],FUFL[n][31:0]});
       assign FUFH[n][32]=fxLD_dblext[n] ? 1'b0 : 1'bz;
-      ldD2nativeD lddbl_lo_mod(FUVL_reg[n][63:0],fxLD_dbl[n],fxLD_dbl_t[n],fxLD_ext_t[n],{FUFH[n][15:0],FUFL[n][65:33],FUFL[n][31:0]});
+      ldD2nativeD lddbl_lo_mod(dc_rdataA_reg2[n][63:0],fxLD_dbl_reg[n],fxLD_dbl_t_reg[n],fxLD_ext_t_reg[n],{FUFL[n][65:33],FUFL[n][31:0]});
       assign FUFL[n][32]=fxLD_dblext[n] ? 1'b0 : 1'bz;
-      ldS2nativeS ldsngl_ll(FUVL_reg[n][31:0],fxLD_sin[n],fxLD_sngl_t[n],fxLD_dbl_t[n],fxLD_ext_t[n],{FUFH[n][15:0],FUFL[n][65:0]});
-      ldS2nativeS ldsngl_lh(FUVL_reg[n][63:32],fxLD_sin[n],fxLD_sngl_t[n],1'b0,1'b0,FUFL[n][65:33]);
-      ldS2nativeS ldsngl_hl(FUVH_reg[n][31:0],fxLD_sin[n],fxLD_sngl_t[n],fxLD_dbl_t[n] && ~fxLD_spair_t[n],1'b0,FUFH[n][65:0]);
-      ldS2nativeS ldsngl_hh(FUVL_reg[n][63:32],fxLD_sin[n],fxLD_sngl_t[n],1'b0,1'b0,FUFH[n][65:33]);
-      ldS2nativeS ldsngl_hl2(FUVL_reg[n][63:32],fxLD_sin[n],1'b0,fxLD_dbl_t[n] && fxLD_spair_t[n],1'b0,FUFH[n][65:0]);
-      assign FUFH[n][65:16]=(fxLD_ext_t[n]) ? 50'b0 : 50'bz; 
-      assign FUFH[n][67:66]=fxLD_ext_t[n] ? `ptype_ext : 2'bz;
-      assign FUFH[n][67:66]=fxLD_dbl_t[n] ? `ptype_dbl : 2'bz;
-      assign FUFH[n][67:66]=fxLD_sngl_t[n] ? `ptype_sngl : 2'bz;
+      ldS2nativeS ldsngl_ll(dc_rdataA_reg[n][31:0],fxLD_sin[n],fxLD_sngl_t[n],fxLD_dbl_t[n],fxLD_ext_t[n],{FUVLX[n][15:0],FUVL[n][65:0]});
+      ldS2nativeS ldsngl_lh(dc_rdataA_reg[n][63:32],fxLD_sin[n],fxLD_sngl_t[n],1'b0,1'b0,FUVL[n][65:33]);
+      ldS2nativeS ldsngl_hl(dc_rdataA_reg[n][95:64],fxLD_sin[n],fxLD_sngl_t[n],fxLD_dbl_t[n] && ~fxLD_spair_t[n],1'b0,FUVH[n][65:0]);
+      ldS2nativeS ldsngl_hh(dc_rdataA_reg[n][127:96],fxLD_sin[n],fxLD_sngl_t[n],1'b0,1'b0,FUVH[n][65:33]);
+      ldS2nativeS ldsngl_hl2(dc_rdataA_reg[n][63:32],fxLD_sin[n],1'b0,fxLD_dbl_t[n] && fxLD_spair_t[n],1'b0,FUVH[n][65:0]);
+      assign FUFH[n][65:0]=(fxLD_ext_t[n]) ? 66'b0 : 66'bz; 
+      assign FUFH[n][67:66]=fxLD_ext_t_reg[n] ? `ptype_ext : 2'bz;
+      assign FUFH[n][67:66]=fxLD_dbl_t_reg[n] ? `ptype_dbl : 2'bz;
+      assign FUFH[n][67:66]=fxLD_sngl_t_reg[n] ? `ptype_sngl : 2'bz;
 
       assign FUFL[n][67:66]=FUFH[n][67:66];
+
+      assign {FUFL[n][15+68:68],FUFL[n][65:0]} =fxLD_ext_t_reg[n] & fxLD_sin_reg ? {FUVLX_reg[n][15:0],FUVL_reg[n][65:0]} : 82'bz;
+      assign {FUFL[n][15+68:68],FUFL[n][65:0]} =fxLD_dbl_t_reg[n] & fxLD_sin_reg ? {16'b0,FUVL_reg[n][65:0]} : 82'bz;
+      assign {FUFH[n][65:0]} =fxLD_dbl_t_reg[n] & fxLD_sin_reg ? {FUVH_reg[n][65:0]} : 66'bz;
         
 
       if (n<2) begin : Wfwd
@@ -5346,7 +5354,7 @@ dcache1 L1D_mod(
   assign FUVH[2]=dc_rdataA_reg[2][127:64]; 
   assign FUVL[2]=dc_rdataA_reg[2][63:0]; 
   
-  assign FUVH[3][63:32]=(~dc_lsfwd3_reg4 | dc_bread3_reg4[3]) ? dc_rdataA_reg[3][127:96]:
+  assign FUVH[3][63:32]=(~p_lsfwd_reg3 | p3_brdbanks_reg3[3]) ? dc_rdataA_reg[3][127:96]:
         dc_data3_reg4[127:96];  
   assign FUVH[3][31:0]=(~dc_lsfwd3_reg4 | dc_bread3_reg4[2]) ? dc_rdataA_reg[3][95:64]:
         dc_data3_reg4[95:64];  
@@ -5389,7 +5397,6 @@ dcache1 L1D_mod(
   assign LSQ_shr_data[`lsqshare_wrtII2]=wrtII2_reg;
 //  assign LSQ_shr_data[`lsqshare_flagged]=6'b0; //kludge
   
-  assign dc_confl[3]=1'b0;
   
   assign FUS4=FUS_alu[0];
   assign FUS5=FUS_alu[2];
@@ -5406,29 +5413,6 @@ dcache1 L1D_mod(
 //  assign LSQ_lsqA[8:3]=LSQ_upper;
 //  assign LSQ_lsqB[8:3]=LSQ_upper;
   
-  assign miss_clDo[0]=~miss_clHit[0] && ~miss_odd | miss_split && ~miss_doneEven;
-  assign miss_clDo[1]=~miss_clHit[1] && miss_odd | miss_split && ~miss_doneOdd;
-  
-  assign mcam_addr=miss_clDo[0] ? {miss_addrE,1'b0} : {miss_addrO,1'b1};
-  assign mcam_cldupl=miss_clDo[0] ? miss_clDupl[0] : miss_clDupl[1];
-  assign mcam_st=miss_st;
-  assign mcam_sz=miss_sz;
-  assign mcam_low=miss_low;
-  assign mcam_bank0=miss_bank0;
-  assign mcam_io=miss_io;
-  assign miss_next=miss_en && !(&miss_clDo);
-  
-  assign mcam_do_req=miss_en_reg&&~mcam_locked&&~mcam_dupl&&~mcam_replay;
- 
-  always @* begin
-    for(qq=0;qq<4;qq=qq+1) begin
-        lsr_ck_data[qq]=lsr_wr_data[qq];
-	lsr_ck_data[qq][`lsaddr_addrE]=dc_rdAddrE_chk[qq];
-	lsr_ck_data[qq][`lsaddr_addrO]=dc_rdAddrO_chk[qq];
-	lsr_ck_data[qq][`lsaddr_pconfl]=1'b0;
-    end
-  end
-
   always @(posedge clk) begin
       if (rst) begin
 	  newAttr_reg<=4'b0;
@@ -6896,6 +6880,7 @@ dcache1 L1D_mod(
               FUwen_reg7[f]<=1'b0;
 	      FUVH_reg[f]<={SIMD_WIDTH{1'B0}};
 	      FUVL_reg[f]<={SIMD_WIDTH{1'B0}};
+	      if (f<4) FUVLX_reg[f]<=16'B0;
 	      FUFH_reg[f]<={SIMD_WIDTH{1'B0}};
 	      FUFL_reg[f]<={16+SIMD_WIDTH{1'B0}};
 	//      FUFUH_reg[f]<={SIMD_WIDTH{1'B0}};
@@ -6964,6 +6949,7 @@ dcache1 L1D_mod(
               FUwen_reg7[f]<=FUwen_reg6[f];
 	      FUVH_reg[f]<=FUVH[f];
 	      FUVL_reg[f]<=FUVL[f];
+	      if (f<4) FUVLX_reg[f]<=FUVLX[f];
 	      FUFH_reg[f]<=FUFH[f];
 	      FUFL_reg[f]<=FUFL[f];
 	  //    FUFUH_reg[f]<=FUFUH[f];
