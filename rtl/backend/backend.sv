@@ -7048,7 +7048,16 @@ dcache1 L1D_mod(
 	      dc_LSQ_reg[v]<=dc_LSQ[v];
 	      dc_thr_reg[v]<=dc_thr[v];
 	      dc_thr_reg2[v]<=dc_thr_reg[v];
-	      dc_rdataA_reg[v]<=dc_rdataA[v];
+	      if (v!=3) dc_rdataA_reg[v][31:0]<=p_lsfwd[v] & p2_brdbanks[0] ? p2_data[31:0] : dc_rdataA[v][31:0];
+	      if (v!=3) dc_rdataA_reg[v][63:32]<=p_lsfwd[v] & p2_brdbanks[1] ? p2_data[63:32] : dc_rdataA[v][63:32];
+	      if (v!=3) dc_rdataA_reg[v][95:64]<=p_lsfwd[v] & p2_brdbanks[2] ? p2_data[95:64] : dc_rdataA[v][95:64];
+	      if (v!=3) dc_rdataA_reg[v][127:96]<=p_lsfwd[v] & p2_brdbanks[3] ? p2_data[127:96] : dc_rdataA[v][127:96];
+	      if (v!=3) dc_rdataA_reg[v][135:128]<=p_lsfwd[v] & p2_brdbanks[4] ? p2_data[135:128] : dc_rdataA[v][135:128];
+	      if (v==3) dc_rdataA_reg[v][31:0]<=p_lsfwd[v] & p3_brdbanks[0] ? p3_data[31:0] : dc_rdataA[v][31:0];
+	      if (v==3) dc_rdataA_reg[v][63:32]<=p_lsfwd[v] & p3_brdbanks[1] ? p3_data[63:32] : dc_rdataA[v][63:32];
+	      if (v==3) dc_rdataA_reg[v][95:64]<=p_lsfwd[v] & p3_brdbanks[2] ? p3_data[95:64] : dc_rdataA[v][95:64];
+	      if (v==3) dc_rdataA_reg[v][127:96]<=p_lsfwd[v] & p3_brdbanks[3] ? p3_data[127:96] : dc_rdataA[v][127:96];
+	      if (v==3) dc_rdataA_reg[v][135:128]<=p_lsfwd[v] & p3_brdbanks[4] ? p3_data[135:128] : dc_rdataA[v][135:128];
           end
           for(v=0;v<=1;v=v+1) begin
              WDfxWQ_reg[v]<=WDfxWQ[v];
