@@ -936,6 +936,11 @@ module backend(
 
   wire [3:0] dc_thr=4'b0;
 
+  wire [5:0][13:0] fret;
+  wire [5:0] fret_en;
+  reg  [5:0][13:0] fret_reg;
+  wire [5:0][13:0] fsret;
+
   wire [`lsaddr_width-1:0] st0_adata;
   wire                     st0_en;
   reg                      st0_en_reg;
@@ -6768,6 +6773,12 @@ dcache1 L1D_mod(
           MSI_exp_en_reg<=1'b0;
           MSI_swap_want_reg<=1'b0;
           MSI_swap_repl_reg<=1'b0;
+	  fret_reg[0]<=14'b0;
+	  fret_reg[1]<=14'b0;
+	  fret_reg[2]<=14'b0;
+	  fret_reg[3]<=14'b0;
+	  fret_reg[4]<=14'b0;
+	  fret_reg[5]<=14'b0;
       end else begin
           bus_holds_agu<=insert_isData;
           bus_holds_agu_reg<=bus_holds_agu;
@@ -6857,6 +6868,12 @@ dcache1 L1D_mod(
           MSI_exp_en_reg<=MSI_exp_en;
           MSI_swap_want_reg<=MSI_swap_want;
           MSI_swap_repl_reg<=MSI_swap_repl;
+	  fret_reg[0]<=fret[0];
+	  fret_reg[1]<=fret[1];
+	  fret_reg[2]<=fret[2];
+	  fret_reg[3]<=fret[3];
+	  fret_reg[4]<=fret[4];
+	  fret_reg[5]<=fret[5];
       end
       
       if (rst) begin
