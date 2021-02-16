@@ -1486,6 +1486,15 @@ module backend(
   reg [3:0] fxLD_ext_t;
   reg [3:0] fxLD_sngl_t;
   reg [3:0] fxLD_spair_t;
+  reg [3:0] fxLD_dbl_reg;
+  reg [3:0] fxLD_ext_reg;
+  reg [3:0] fxLD_dblext_reg;
+  reg [3:0] fxLD_sin_reg;
+  reg [3:0] fxLD_dbl_t_reg;
+  reg [3:0] fxLD_ext_t_reg;
+  reg [3:0] fxLD_sngl_t_reg;
+  reg [3:0] fxLD_spair_t_reg;
+  
   
   wire [2:0][3:0] fxFRT_alten;
   wire [3:0]      fxFRT_pause;
@@ -1823,6 +1832,7 @@ module backend(
   wire [3:0][8:0] dc_LSQ;
 
   reg [127+8:0] dc_rdataA_reg[3:0];
+  reg [127+8:0] dc_rdataA_reg2[3:0];
   
   reg [3:0] dc_rdEn_reg; 
   reg [3:0] dc_rdEn_reg2; 
@@ -1830,13 +1840,33 @@ module backend(
   reg [3:0] dc_rsEn_reg; 
   reg [8:0] dc_LSQ_reg[3:0];
 
+  wire [1:0][PADDR_WIDTH-9:0] dc_wrAddrE;
+  wire [1:0][PADDR_WIDTH-9:0] dc_wrAddrO;
+  wire [1:0][31:0] dc_wrBanks;
   wire [1:0] dc_wrEn; 
   reg [1:0] dc_wrEn_reg; 
   reg [1:0] dc_wrEn_reg2; 
   reg [1:0] dc_wrEn_reg3; 
+  wire [1:0] dc_odd_wr;
+  wire [1:0] dc_split_wr;
+  wire [1:0][5*32-1:0] dc_wdata;
+  wire [1:0][4*32-1:0] dc_wdataP;
+  reg [4*32-1:0] dc_wdataP_reg[1:0];
+  wire [1:0][4:0] dc_wrBegin;
+  wire [1:0][4:0] dc_size_wr;
   wire [1:0][1:0] dc_wrHitCl;
   wire [1:0][1:0] dc_wrDuplCl;
+  wire [1:0][1:0] dc_wspecdata;
+  wire [1:0][9:0] dc_II_wr;
+  reg [9:0] dc_II_wr_reg[1:0];
+  reg [9:0] dc_II_wr_reg2[1:0];
+  reg [9:0] dc_II_wr_reg3[1:0];
   wire [1:0] dc_wrHit;
+  wire [1:0][4:0] dc_wrEnd;
+  wire [1:0][3:0] dc_wrBGN_BNK;
+  wire [1:0][3:0] dc_wrEND_BNK;
+  wire [1:0][1:0] dc_wr_low;
+  wire [1:0][1:0] dc_wrTyp;
 
   wire [5:0] p_repl;
   wire [3:0] p_lsfwd;
@@ -4155,7 +4185,11 @@ module backend(
       assign {FUFL[n][15+68:68],FUFL[n][65:0]} =fxLD_ext_t_reg[n] & fxLD_sin_reg ? {FUVLX_reg[n][15:0],FUVL_reg[n][65:0]} : 82'bz;
       assign {FUFL[n][15+68:68],FUFL[n][65:0]} =fxLD_dbl_t_reg[n] & fxLD_sin_reg ? {16'b0,FUVL_reg[n][65:0]} : 82'bz;
       assign {FUFH[n][65:0]} =fxLD_dbl_t_reg[n] & fxLD_sin_reg ? {FUVH_reg[n][65:0]} : 66'bz;
-        
+       
+      assign FUVL[n][65:0]=fxLD_sngl_t[n] | fxLD_dbl_t[n] ? 66'bz : {1'b0,dc_rdataA_reg[n][63:32],1'b0,dc_rdataA_reg[n][31:0]}; 
+      assign FUVH[n][65:0]=fxLD_sngl_t[n] | fxLD_dbl_t[n] ? 66'bz : {1'b0,dc_rdataA_reg[n][127:96],1'b0,dc_rdataA_reg[n][95:64]}; 
+      assign FUVL[n][67:66]=fxLD_sngl_t[n] ? `ptype_sngl : `ptype_int;
+      assign FUVH[n][67:66]=fxLD_sngl_t[n] ? `ptype_sngl : `ptype_int;
 
       if (n<2) begin : Wfwd
 
@@ -6546,6 +6580,14 @@ dcache1 L1D_mod(
 	      fxLD_ext_t[k]=1'b0;
 	      fxLD_sngl_t[k]=1'b0;
 	      fxLD_spair_t[k]=1'b0;
+	      fxLD_dbl_reg[k]=1'b1;
+	      fxLD_ext_reg[k]=1'b0;
+	      fxLD_dblext_reg[k]=1'b1;
+	      fxLD_sin_reg[k]=1'b0;
+	      fxLD_dbl_t_reg[k]=1'b1;
+	      fxLD_ext_t_reg[k]=1'b0;
+	      fxLD_sngl_t_reg[k]=1'b0;
+	      fxLD_spair_t[k]=1'b0;
 	      if (k!=3) fxFRT_alten_reg[k]<=4'b0;
 	  end
       end else begin
@@ -6565,11 +6607,19 @@ dcache1 L1D_mod(
 	      case(outOp_reg2[k][5:1])
                   2,5'he,5: fxLD_sngl_t[k]=1'b1;
 		  3,4,8: fxLD_ext_t[k]=1'b1;
+		  0,12,7: ;
 		  default: fxLD_dbl_t[k]=1'b1; 
 	      endcase
 	      fxLD_spair_t[k]=outOp_reg2[5:1]==5'ha;
 	      fxLD_dblext[k]=fxLD_dbl[k]|fxLD_ext[k];
 	      if (k!=3) fxFRT_alten_reg[k]<=fxFRT_alten[k];
+	      fxLD_dbl_reg[k]=fxLD_dbl[k];
+	      fxLD_ext_reg[k]=fxLD_ext[k];
+	      fxLD_sin_reg[k]=fxLD_sin[k];
+	      fxLD_dbl_t_reg[k]=fxLD_dbl_t[k];
+	      fxLD_ext_t_reg[k]=fxLD_ext_t[k];
+	      fxLD_sngl_t_reg[k]=~fxLD_dbl_t[k]&~fxLD_ext_t[k];
+	      fxLD_spair_t_reg[k]=fxLD_spair_t[k];
 	  end
       end
       if (rst) begin
@@ -7011,6 +7061,7 @@ dcache1 L1D_mod(
               dc_rsEn_reg[v]<=1'b0;
 	      dc_LSQ_reg[v]<=9'b0;
 	      dc_rdataA_reg[v]<=136'b0;
+	      dc_rdataA_reg2[v]<=136'b0;
           end
           for(v=0;v<=1;v=v+1) begin
              WDfxWQ_reg[v]<=8'b0;
@@ -7058,6 +7109,7 @@ dcache1 L1D_mod(
 	      if (v==3) dc_rdataA_reg[v][95:64]<=p_lsfwd[v] & p3_brdbanks[2] ? p3_data[95:64] : dc_rdataA[v][95:64];
 	      if (v==3) dc_rdataA_reg[v][127:96]<=p_lsfwd[v] & p3_brdbanks[3] ? p3_data[127:96] : dc_rdataA[v][127:96];
 	      if (v==3) dc_rdataA_reg[v][135:128]<=p_lsfwd[v] & p3_brdbanks[4] ? p3_data[135:128] : dc_rdataA[v][135:128];
+	      dc_rdataA_reg2[v]<=dc_rdataA_reg[v];
           end
           for(v=0;v<=1;v=v+1) begin
              WDfxWQ_reg[v]<=WDfxWQ[v];
