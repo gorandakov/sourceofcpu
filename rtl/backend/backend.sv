@@ -1874,7 +1874,25 @@ module backend(
   wire    [4:0] p2_brdbanks;
   wire [127+8:0]p3_data;
   wire    [4:0] p3_brdbanks;
-
+  wire [3:0][13:0] p_ret;
+  reg [127+8:0]p2_data_reg;
+  reg [127+8:0]p2_data_reg2;
+  reg [127+8:0]p3_data_reg;
+  reg [127+8:0]p3_data_reg2;
+  reg [13:0] p2_ret_reg;
+  reg [13:0] p2_ret_reg2;
+  reg [13:0] p3_ret_reg;
+  reg [13:0] p3_ret_reg2;
+  reg [9:0] lsr2_II_reg;
+  reg [9:0] lsr2_II_reg2;
+  reg [9:0] lsr3_II_reg;
+  reg [9:0] lsr3_II_reg2;
+  reg [3:0] p_lsfwd_reg;
+  reg [3:0] p_lsfwd_reg2;
+  wire    [4:0] p2_brdbanks_reg;
+  wire    [4:0] p2_brdbanks_reg2;
+  wire    [4:0] p3_brdbanks_reg;
+  wire    [4:0] p3_brdbanks_reg2;
 
   wire [8:0] retfl_rF;
   wire [5:0] retfl_data;
@@ -4757,14 +4775,14 @@ module backend(
   .lso2_wb_en({lso2_en && (lso2_adata[`lsaddr_reg_low]==2 || lso2_adata[`lsaddr_reg_low]==5 || lso2_adata[`lsaddr_reg_low]==8 ),
     lso2_en && (lso2_adata[`lsaddr_reg_low]==1 || lso2_adata[`lsaddr_reg_low]==4 || lso2_adata[`lsaddr_reg_low]==7 ),
     lso2_en && (lso2_adata[`lsaddr_reg_low]==0 || lso2_adata[`lsaddr_reg_low]==3 || lso2_adata[`lsaddr_reg_low]==6 )}),
-  .p0_adata(lsr_wr_data[0]),.p0_banks(dc_rdBanks[0]),.p0_LSQ(dc_LSQ[0]),
-    .p0_en(dc_rdEn[0]),.p0_rsEn(dc_rsEn[0]),.p0_secq(),.p0_ret(),.p0_repl(p_repl[0]),.p0_lsfwd(p_lsfwd[0]),
-  .p1_adata(lsr_wr_data[1]),.p1_banks(dc_rdBanks[1]),.p1_LSQ(dc_LSQ[1]),
-    .p1_en(dc_rdEn[1]),.p1_rsEn(dc_rsEn[1]),.p1_secq(),.p1_ret(),.p1_repl(p_repl[1]),.p1_lsfwd(p_lsfwd[1]),
-  .p2_adata(lsr_wr_data[2]),.p2_banks(dc_rdBanks[2]),.p2_LSQ(dc_LSQ[2]),
-    .p2_en(dc_rdEn[2]),.p2_rsEn(dc_rsEn[2]),.p2_secq(),.p2_ret(),.p2_repl(p_repl[2]),.p2_lsfwd(p_lsfwd[2]),.p2_data(p2_data),.p2_brdbanks(p2_brdbanks),
-  .p3_adata(lsr_wr_data[3]),.p3_banks(dc_rdBanks[3]),.p3_LSQ(dc_LSQ[3]),
-    .p3_en(dc_rdEn[3]),.p3_rsEn(dc_rsEn[3]),.p3_ioEn(),.p3_io_ack(insBus_io_reg3),.p3_ret(),.p3_data(p3_data),.p3_brdbanks(p3_brdbanks),.p3_repl(p_repl[3]),.p3_lsfwd(p_lsfwd[3]),
+  .p0_adata(lsr_wr_data[0]),.p0_banks(),.p0_LSQ(dc_LSQ[0]),
+    .p0_en(dc_rdEn[0]),.p0_rsEn(dc_rsEn[0]),.p0_secq(),.p0_ret(p_ret[0]),.p0_repl(p_repl[0]),.p0_lsfwd(p_lsfwd[0]),
+  .p1_adata(lsr_wr_data[1]),.p1_banks(),.p1_LSQ(dc_LSQ[1]),
+    .p1_en(dc_rdEn[1]),.p1_rsEn(dc_rsEn[1]),.p1_secq(),.p1_ret(p_ret[1]),.p1_repl(p_repl[1]),.p1_lsfwd(p_lsfwd[1]),
+  .p2_adata(lsr_wr_data[2]),.p2_banks(),.p2_LSQ(dc_LSQ[2]),
+    .p2_en(dc_rdEn[2]),.p2_rsEn(dc_rsEn[2]),.p2_secq(),.p2_ret(p_ret[2]),.p2_repl(p_repl[2]),.p2_lsfwd(p_lsfwd[2]),.p2_data(p2_data),.p2_brdbanks(p2_brdbanks),
+  .p3_adata(lsr_wr_data[3]),.p3_banks(),.p3_LSQ(dc_LSQ[3]),
+    .p3_en(dc_rdEn[3]),.p3_rsEn(dc_rsEn[3]),.p3_ioEn(),.p3_io_ack(insBus_io_reg3),.p3_ret(p_ret[3]),.p3_data(p3_data),.p3_brdbanks(p3_brdbanks),.p3_repl(p_repl[3]),.p3_lsfwd(p_lsfwd[3]),
   .p4_adata(lsr_wr_data[4]),.p4_LSQ(p_LSQ[4]),.p4_en(dc_wrEn[0]),.p4_secq(),.p4_ret(),
   .p5_adata(lsr_wr_data[5]),.p5_LSQ(p_LSQ[5]),.p5_en(dc_wrEn[1]),.p5_secq(),.p5_ret(),
   .p_bankNone(dc_bankNone),
@@ -5083,8 +5101,8 @@ module backend(
   .lsi0(rs_lsi[0]),.lsi1(rs_lsi[1]),.lsi2(rs_lsi[2]),
   .WQr0(WQR[0]),.WQr1(WQR[1]),.WQr2(WQR[2]),
   .WQs0(WQS[0]),.WQs1(WQS[1]),.WQs2(WQS[2]),
-  .free0(wreq_en[0]),.freeWQ0(wreq_data[0][`lsaddr_WQ]),
-  .free1(wreq_en[1]),.freeWQ1(wreq_data[1][`lsaddr_WQ])
+  .free0(st0_en),.freeWQ0(st0_adata[`lsaddr_WQ]),
+  .free1(st1_en),.freeWQ1(st1_adata[`lsaddr_WQ])
   );
 
 dcache1 L1D_mod(
@@ -5254,8 +5272,8 @@ dcache1 L1D_mod(
   .ret4_addr(outII_reg6[7]),.ret4_data({4'b0,FUX_alu[2],     exx_alu[2]    }),.ret4_wen(enS_alu_reg4[4]||outEn_reg6[7][3:2]),
   .ret5_addr(outII_reg8[8]),.ret5_data({fexcpt2_no[2]}),.ret5_wen((enS_alu_reg6[5]||outEn_reg8[8][3:2])&~outOp_reg8[8][11]),
     .ret5_IP(FU_reg[9]),.ret5_IP_en(alu_jupdate),
-  .ret6_addr(dc_II_reg3[3]),.ret6_data({4'b0,6'b0,3'd2}),.ret6_wen(FU3Hit & dc_lsfwd3_reg3),
-  .ret7_addr(dc_II_reg3[3]),.ret7_data({4'b0,6'b0,3'd2}),.ret7_wen(FUXHit & dc_lsfwd3_reg3),
+  .ret6_addr(lsr3_II_reg2),.ret6_data(p3_ret_reg2),.ret6_wen(FU3Hit & p_lsfwd_reg2[3]),
+  .ret7_addr(lsr2_II_reg2),.ret7_data(p2_ret_reg2),.ret7_wen(({FU2Hit,FU1Hit,FU0Hit}&p_lsfwd_reg2[2:0])!=3'b0),
   .mem_II_upper(retM_II0),
   .mem_II_upper_out(retM_II),
   .mem_II_bits_fine(retM_fine),
@@ -5291,40 +5309,6 @@ dcache1 L1D_mod(
   assign lStall_lsfw=lDoStall_STQ;
   assign lStall=lDoStall_lsfw|lDoStall_STQ;
   
-  assign wreq_en[0]=~wreq_stall & wreq_has[0] & sdata_rdy[0];
-  assign wreq_en[1]=~wreq_stall & wreq_has[1] & sdata_rdy[0] & sdata_rdy[1] & 
-    !(wreq_data[0][`lsaddr_banks]&wreq_data[1][`lsaddr_banks]);
-
-
-  assign wreq_stall=bus_holds_agu_reg2|miss_holds_agu_reg2|miss_pause_agu_reg2|insert_isData_reg2|wrStall_reg;
-  assign wreq_hold=bus_holds_agu_reg2||miss_pause_agu_reg2&~miss_holds_agu_reg2||insert_isData_reg2;
-  
-  assign dc_rdRsBanks[3]=dc_rdBanks[3];
-  
-
-  assign wr0_hit={dc_wrHit[0] && dc_odd_wr_reg3[0] | dc_split_wr_reg3[0],dc_wrHit[0] && ~dc_odd_wr_reg3[0] | dc_split_wr_reg3[0]};
-  assign wr0_addrE=dc_wrAddrE_reg3[0];
-  assign wr0_addrO=dc_wrAddrO_reg3[0];
-  assign wr0_banks=dc_wrBanks_reg3[0];
-  assign wr0_begin=dc_wrBegin_reg3[0];
-  assign wr0_end=dc_wrEnd_reg3[0];
-  assign wr0_bgn_ben=dc_wrBGN_BNK_reg3[0];
-  assign wr0_end_ben=dc_wrEND_BNK_reg3[0];
-  assign wr0_odd=dc_odd_wr_reg3[0];
-  assign wr0_split=dc_split_wr_reg3[0];
-  assign wr0_data=dc_wdata_reg3[0];
-  
-  assign wr1_hit={dc_wrHit[1] && dc_odd_wr_reg3[1] | dc_split_wr_reg3[1],dc_wrHit[1] && ~dc_odd_wr_reg3[1] | dc_split_wr_reg3[1]};
-  assign wr1_addrE=dc_wrAddrE_reg3[1];
-  assign wr1_addrO=dc_wrAddrO_reg3[1];
-  assign wr1_banks=dc_wrBanks_reg3[1];
-  assign wr1_begin=dc_wrBegin_reg3[1];
-  assign wr1_end=dc_wrEnd_reg3[1];
-  assign wr1_bgn_ben=dc_wrBGN_BNK_reg3[1];
-  assign wr1_end_ben=dc_wrEND_BNK_reg3[1];
-  assign wr1_odd=dc_odd_wr_reg3[1];
-  assign wr1_split=dc_split_wr_reg3[1];
-  assign wr1_data=dc_wdata_reg3[1];
 
   assign regS[0]=9'b0;
   assign regS[3]=9'b0;
@@ -5381,25 +5365,6 @@ dcache1 L1D_mod(
   assign FU[3][31:0]= (~p_lsfwd_reg2[3] | p3_brdbanks_reg2[0] && ~insBus_io_reg3) ? dc_rdataA[3][31:0]:
           p3_data_reg2[31:0];  
   
-  assign FUVH[0]=dc_rdataA_reg[0][127:64]; 
-  assign FUVL[0]=dc_rdataA_reg[0][63:0]; 
-  assign FUVH[1]=dc_rdataA_reg[1][127:64]; 
-  assign FUVL[1]=dc_rdataA_reg[1][63:0]; 
-  assign FUVH[2]=dc_rdataA_reg[2][127:64]; 
-  assign FUVL[2]=dc_rdataA_reg[2][63:0]; 
-  
-  assign FUVH[3][63:32]=(~p_lsfwd_reg3 | p3_brdbanks_reg3[3]) ? dc_rdataA_reg[3][127:96]:
-        dc_data3_reg4[127:96];  
-  assign FUVH[3][31:0]=(~dc_lsfwd3_reg4 | dc_bread3_reg4[2]) ? dc_rdataA_reg[3][95:64]:
-        dc_data3_reg4[95:64];  
-  assign FUVL[3][63:32]=(~dc_lsfwd3_reg4 | dc_bread3_reg4[1]) ? dc_rdataA_reg[3][63:32]:
-        dc_data3_reg4[63:32];  
-  assign FUVL[3][31:0]=(~dc_lsfwd3_reg4 | dc_bread3_reg4[0]) ? dc_rdataA_reg[3][31:0]:
-        dc_data3_reg4[31:0];  
-  
-  
-  
-    
 
 //  assign FU0=dc_rdataA[0][63:0];
 //  assign FU1=dc_rdataA[1][63:0];
@@ -5413,10 +5378,10 @@ dcache1 L1D_mod(
   assign FUreg[2]=dc_rdReg_reg2[2];
   assign FUreg[3]=dc_rdReg_reg2[3];
 
-  assign FU0Hit=FU0HitP & ~dc_confl_reg2[0];
-  assign FU1Hit=FU1HitP & ~dc_confl_reg2[1];
-  assign FU2Hit=FU2HitP & ~dc_confl_reg2[2];
-  assign FU3Hit=FU3HitP & ~dc_confl_reg2[3];
+  assign FU0Hit=FU0HitP;
+  assign FU1Hit=FU1HitP;
+  assign FU2Hit=FU2HitP;
+  assign FU3Hit=FU3HitP;
   
   popcnt10_or_more cnt_lsi_mod({4'b0,rs_lsi[5][2:1]!=2'd3,rs_lsi[4][2:1]!=2'd3,rs_lsi[3][2:1]!=2'd3,
     rs_lsi[2][2:1]!=2'd3,rs_lsi[1][2:1]!=2'd3,rs_lsi[0][2:1]!=2'd3},lsi_cnt);
@@ -6785,6 +6750,21 @@ dcache1 L1D_mod(
           wrStall_reg<=1'b0;
 	  p3_data_reg<=136'b0;
 	  p3_data_reg2<=136'b0;
+	  p2_ret_reg<=14'b0;
+	  p2_ret_reg2<=14'b0;
+	  p3_ret_reg<=14'b0;
+	  p3_ret_reg2<=14'b0;
+	  lsr3_II_reg<=10'b0;
+	  lsr3_II_reg2<=10'b0;
+	  lsr2_II_reg<=10'b0;
+	  lsr2_II_reg2<=10'b0;
+	  p_lsfwd_reg<=4'b0;
+	  p_lsfwd_reg2<=4'b0;
+	  p2_brdbanks_reg<=4'b0;
+	  p2_brdbanks_reg2<=4'b0;
+	  p3_brdbanks_reg<=4'b0;
+	  p3_brdbanks_reg2<=4'b0;
+
 	  st0_en_reg<=1'b0;
 	  st0_en_reg2<=1'b0;
 	  st0_en_reg3<=1'b0;
@@ -6880,6 +6860,24 @@ dcache1 L1D_mod(
           wrStall_reg<=wrStall;
 	  p3_data_reg<=p3_data;
 	  p3_data_reg2<=insBus_io_reg2 ? insBus_data_reg2[135:0] : p3_data_reg;
+	  if (p_lsfwd[0]) p2_ret_reg<=p_ret[0];
+	  if (p_lsfwd[1]) p2_ret_reg<=p_ret[1];
+	  if (p_lsfwd[2]) p2_ret_reg<=p_ret[2];
+	  p2_ret_reg2<=p2_ret_reg;
+	  p3_ret_reg<=p_ret[3];
+	  p3_ret_reg2<=p3_ret_reg;
+	  lsr3_II_reg<=lsr_wr_data[3][`lsaddr_II];
+	  lsr3_II_reg2<=lsr3_II_reg;
+	  if (p_lsfwd[0]) lsr2_II_reg<=lsr_wr_data[0][`lsaddr_II];
+	  if (p_lsfwd[1]) lsr2_II_reg<=lsr_wr_data[1][`lsaddr_II];
+	  if (p_lsfwd[2]) lsr2_II_reg<=lsr_wr_data[2][`lsaddr_II];
+	  lsr2_II_reg2<=lsr2_II_reg;
+	  p_lsfwd_reg<=p_lsfwd;
+	  p_lsfwd_reg2<=p_lsfwd_reg;
+	  p2_brdbanks_reg<=p2_brdbanks;
+	  p2_brdbanks_reg2<=p2_brdbanks_reg;
+	  p3_brdbanks_reg<=p3_brdbanks;
+	  p3_brdbanks_reg2<=p3_brdbanks_reg;
 	  st0_en_reg<=st0_en;
 	  st0_en_reg2<=st0_en_reg;
 	  st0_en_reg3<=st0_en_reg2;
