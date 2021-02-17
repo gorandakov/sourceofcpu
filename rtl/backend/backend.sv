@@ -1840,6 +1840,8 @@ module backend(
   reg [3:0] dc_rsEn_reg; 
   reg [8:0] dc_LSQ_reg[3:0];
 
+  wire [3:0][8:0] dc_rdReg_reg;
+
   wire [1:0][PADDR_WIDTH-9:0] dc_wrAddrE;
   wire [1:0][PADDR_WIDTH-9:0] dc_wrAddrO;
   wire [1:0][31:0] dc_wrBanks;
@@ -1904,6 +1906,12 @@ module backend(
 
   wire [5:0][`lsaddr_width-1:0] lsr_wr_data;
 
+  wire [SIMD_WIDTH-1:0]    sqrDatH;
+  wire [SIMD_WIDTH-1+16:0] sqrDatL;
+  wire                     sqrDatEn;
+  reg  [SIMD_WIDTH-1:0]    sqrDatH_reg;
+  reg  [SIMD_WIDTH-1+16:0] sqrDatL_reg;
+  reg                      sqrDatEn_reg;
 //  wire [3:0][47:0] wxdata;
 
   wire [8:0][3:0] instr_ret;
@@ -5373,10 +5381,10 @@ dcache1 L1D_mod(
  
  // assign dc_rdReg[3]=rec_register_reg;
   
-  assign FUreg[0]=dc_rdReg_reg2[0];
-  assign FUreg[1]=dc_rdReg_reg2[1];
-  assign FUreg[2]=dc_rdReg_reg2[2];
-  assign FUreg[3]=dc_rdReg_reg2[3];
+  assign FUreg[0]=dc_rdReg_reg[0];
+  assign FUreg[1]=dc_rdReg_reg[1];
+  assign FUreg[2]=dc_rdReg_reg[2];
+  assign FUreg[3]=dc_rdReg_reg[3];
 
   assign FU0Hit=FU0HitP;
   assign FU1Hit=FU1HitP;
@@ -6704,9 +6712,6 @@ dcache1 L1D_mod(
     
       end
       
-      if (rst) agu_flip<=1'b0;
-      else agu_flip<=~agu_flip;
-      
       if (rst) begin
           bus_holds_agu<=1'b0;
           bus_holds_agu_reg<=1'b0;
@@ -6747,6 +6752,10 @@ dcache1 L1D_mod(
           dc_wrEn_reg<=2'b0;
           dc_wrEn_reg2<=2'b0;
           dc_wrEn_reg3<=2'b0;
+	  dc_rdReg_reg[0]<=9'b0;
+	  dc_rdReg_reg[1]<=9'b0;
+	  dc_rdReg_reg[2]<=9'b0;
+	  dc_rdReg_reg[3]<=9'b0;
           wrStall_reg<=1'b0;
 	  p3_data_reg<=136'b0;
 	  p3_data_reg2<=136'b0;
@@ -6793,6 +6802,9 @@ dcache1 L1D_mod(
 	  fret_reg[3]<=14'b0;
 	  fret_reg[4]<=14'b0;
 	  fret_reg[5]<=14'b0;
+	  sqrDatL_reg<=0;
+	  sqrDatH_reg<=0;
+	  sqrDatEn_reg<=1'b0;
       end else begin
           bus_holds_agu<=insert_isData;
           bus_holds_agu_reg<=bus_holds_agu;
@@ -6827,32 +6839,36 @@ dcache1 L1D_mod(
           insert_addr_reg2<=insert_addr_reg;
           insert_addr_reg3<=insert_addr_reg2;
           insBus_req_reg<=insBus_req;
-          if (except&&excpt_thread==dc_thr[0]) dc_rdEn_reg[0]<=1'b0;
+          if (except) dc_rdEn_reg[0]<=1'b0;
           else dc_rdEn_reg[0]<=dc_rdEn[0];
-          if (except&&excpt_thread==dc_thr[1]) dc_rdEn_reg[1]<=1'b0;
+          if (except) dc_rdEn_reg[1]<=1'b0;
           else dc_rdEn_reg[1]<=dc_rdEn[1];
-          if (except&&excpt_thread==dc_thr[2]) dc_rdEn_reg[2]<=1'b0;
+          if (except) dc_rdEn_reg[2]<=1'b0;
           else dc_rdEn_reg[2]<=dc_rdEn[2];
-          if (except&&excpt_thread==dc_thr[3]) dc_rdEn_reg[3]<=1'b0;
+          if (except) dc_rdEn_reg[3]<=1'b0;
           else dc_rdEn_reg[3]<=dc_rdEn[3];
 
-          if (except&&excpt_thread==dc_thr_reg[0]) dc_rdEn_reg2[0]<=1'b0;
+          if (except) dc_rdEn_reg2[0]<=1'b0;
           else dc_rdEn_reg2[0]<=dc_rdEn_reg[0];
-          if (except&&excpt_thread==dc_thr_reg[1]) dc_rdEn_reg2[1]<=1'b0;
+          if (except) dc_rdEn_reg2[1]<=1'b0;
           else dc_rdEn_reg2[1]<=dc_rdEn_reg[1];
-          if (except&&excpt_thread==dc_thr_reg[2]) dc_rdEn_reg2[2]<=1'b0;
+          if (except) dc_rdEn_reg2[2]<=1'b0;
           else dc_rdEn_reg2[2]<=dc_rdEn_reg[2];
-          if (except&&excpt_thread==dc_thr_reg[3]) dc_rdEn_reg2[3]<=1'b0;
+          if (except) dc_rdEn_reg2[3]<=1'b0;
           else dc_rdEn_reg2[3]<=dc_rdEn_reg[3];
           
-          if (except&&excpt_thread==dc_thr_reg2[0]) dc_rdEn_reg3[0]<=1'b0;
+          if (except) dc_rdEn_reg3[0]<=1'b0;
           else dc_rdEn_reg3[0]<=dc_rdEn_reg2[0];
-          if (except&&excpt_thread==dc_thr_reg2[1]) dc_rdEn_reg3[1]<=1'b0;
+          if (except) dc_rdEn_reg3[1]<=1'b0;
           else dc_rdEn_reg3[1]<=dc_rdEn_reg2[1];
-          if (except&&excpt_thread==dc_thr_reg2[2]) dc_rdEn_reg3[2]<=1'b0;
+          if (except) dc_rdEn_reg3[2]<=1'b0;
           else dc_rdEn_reg3[2]<=dc_rdEn_reg2[2];
-          if (except&&excpt_thread==dc_thr_reg2[3]) dc_rdEn_reg3[3]<=1'b0;
+          if (except) dc_rdEn_reg3[3]<=1'b0;
           else dc_rdEn_reg3[3]<=dc_rdEn_reg2[3];
+	  dc_rdReg_reg[0]<={lsr_wr_data[0][`lsaddr_reg_hi],lsr_wr_data[0][`lsaddr_reg_low]};
+	  dc_rdReg_reg[1]<={lsr_wr_data[1][`lsaddr_reg_hi],lsr_wr_data[1][`lsaddr_reg_low]};
+	  dc_rdReg_reg[2]<={lsr_wr_data[2][`lsaddr_reg_hi],lsr_wr_data[2][`lsaddr_reg_low]};
+	  dc_rdReg_reg[3]<={lsr_wr_data[3][`lsaddr_reg_hi],lsr_wr_data[3][`lsaddr_reg_low]};
         
           dc_wrEn_reg<=dc_wrEn;
           dc_wrEn_reg2<=dc_wrEn_reg;
@@ -6906,6 +6922,9 @@ dcache1 L1D_mod(
 	  fret_reg[3]<=fret[3];
 	  fret_reg[4]<=fret[4];
 	  fret_reg[5]<=fret[5];
+	  sqrDatL_reg<=sqrDatL;
+	  sqrDatH_reg<=sqrDatH;
+	  sqrDatEn_reg<=sqrDatEn;
       end
       
       if (rst) begin
@@ -7034,13 +7053,13 @@ dcache1 L1D_mod(
           FUS7_reg<=FUS7;
           FUS8_reg<=FUS8;
           FUS9_reg<=FUS9;
-          if (except&&excpt_thread==dc_thr_reg[0]) FUwen0<=1'b0;
+          if (except) FUwen0<=1'b0;
           else FUwen0<=dc_rdEn[0];
-          if (except&&excpt_thread==dc_thr_reg[1]) FUwen1<=1'b0;
+          if (except) FUwen1<=1'b0;
           else FUwen1<=dc_rdEn[1];
-          if (except&&excpt_thread==dc_thr_reg[2]) FUwen2<=1'b0;
+          if (except) FUwen2<=1'b0;
           else FUwen2<=dc_rdEn[2];
-          if (except&&excpt_thread==dc_thr_reg[3]) FUwen3<=1'b0;
+          if (except) FUwen3<=1'b0;
           else FUwen3<=dc_rdEn[3];
           FU0Hit_reg<=FU0Hit;
           FU1Hit_reg<=FU1Hit;
@@ -7095,8 +7114,6 @@ dcache1 L1D_mod(
           for(v=0;v<=3;v=v+1) begin
               dc_rsEn_reg[v]<=dc_rsEn[v];
 	      dc_LSQ_reg[v]<=dc_LSQ[v];
-	      dc_thr_reg[v]<=dc_thr[v];
-	      dc_thr_reg2[v]<=dc_thr_reg[v];
 	      if (v!=3) dc_rdataA_reg[v][31:0]<=p_lsfwd[v] & p2_brdbanks[0] ? p2_data[31:0] : dc_rdataA[v][31:0];
 	      if (v!=3) dc_rdataA_reg[v][63:32]<=p_lsfwd[v] & p2_brdbanks[1] ? p2_data[63:32] : dc_rdataA[v][63:32];
 	      if (v!=3) dc_rdataA_reg[v][95:64]<=p_lsfwd[v] & p2_brdbanks[2] ? p2_data[95:64] : dc_rdataA[v][95:64];
