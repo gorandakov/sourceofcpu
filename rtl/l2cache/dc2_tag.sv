@@ -56,6 +56,7 @@ module dcache2_tag(
   write_wen,
   write_dupl,
   write_hit,
+  write_exp,
   write_excl,write_dir_ins,
   expun_addrE,expun_addrO,
   init,
@@ -82,6 +83,7 @@ module dcache2_tag(
   input write_wen;
   input write_dupl;
   output write_hit;
+  input write_exp;
   input write_excl;
   input write_dir_ins;
   output [35:0] expun_addrE;
@@ -101,7 +103,7 @@ module dcache2_tag(
   wire [`dc2Tag_width-1:0] tag_wDataE;
   wire [`dc2Tag_width-1:0] tag_wDataO;
   reg req_en_reg;
-  reg write_dupl_reg;
+  reg write_dupl_reg,write_exp_req;
   
   dcache2_tag_ram ramE_mod(
   .clk(clk),
@@ -133,9 +135,10 @@ module dcache2_tag(
   assign req_hitE=hitE && ~req_odd_reg | req_split_reg;
   assign req_hitO=hitO && req_odd_reg | req_split_reg;
 
-  assign write_hit=write_dupl_reg ? req_hitE|req_hitO : write_wen_reg && (req_odd_reg ? req_LRUo==5'd23 : req_LRUe==5'd23);
-  assign write_hitE=write_dupl_reg ? req_hitE : write_wen_reg && req_LRUo==5'd23 && ~req_odd_reg;
-  assign write_hitO=write_dupl_reg ? req_hitO : write_wen_reg && req_LRUe==5'd23 && req_odd_reg;
+  assign write_hit=write_dupl_reg|write_exp_req ? req_hitE|req_hitO : write_wen_reg && 
+	  (req_odd_reg ? req_LRUo==5'd23 : req_LRUe==5'd23);
+  assign write_hitE=write_dupl_reg|write_exp_req ? req_hitE : write_wen_reg && req_LRUo==5'd23 && ~req_odd_reg;
+  assign write_hitO=write_dupl_reg|write_exp_req ? req_hitO : write_wen_reg && req_LRUe==5'd23 && req_odd_reg;
   
   assign req_exclE=tag_dataE[`dc2Tag_exclusive];
   assign req_exclO=tag_dataO[`dc2Tag_exclusive];
@@ -147,8 +150,8 @@ module dcache2_tag(
   
   assign tag_wDataE[`dc2Tag_addr_43_16]=(~write_wen_reg || ~write_hitE) ? tag_dataE[`dc2Tag_addr_43_16] : req_addrE_reg[PADDR_WIDTH-9:8]; 
   assign tag_wDataO[`dc2Tag_addr_43_16]=(~write_wen_reg || ~write_hitO) ? tag_dataO[`dc2Tag_addr_43_16] : req_addrO_reg[PADDR_WIDTH-9:8];
-  assign tag_wDataE[`dc2Tag_valid]=(write_wen_reg & write_hitE) ? 1'b1 : tag_dataE[`dc2Tag_valid]; 
-  assign tag_wDataO[`dc2Tag_valid]=(write_wen_reg & write_hitO) ? 1'b1 : tag_dataO[`dc2Tag_valid]; 
+  assign tag_wDataE[`dc2Tag_valid]=(write_wen_reg & write_hitE) ? ~write_exp_req : tag_dataE[`dc2Tag_valid]; 
+  assign tag_wDataO[`dc2Tag_valid]=(write_wen_reg & write_hitO) ? ~write_exp_req : tag_dataO[`dc2Tag_valid]; 
   assign tag_wDataE[`dc2Tag_exclusive]=(write_wen_reg & write_hitE) ? write_excl_reg  : tag_dataE[`dc2Tag_exclusive]; 
   assign tag_wDataO[`dc2Tag_exclusive]=(write_wen_reg & write_hitO) ? write_excl_reg  : tag_dataO[`dc2Tag_exclusive]; 
   assign tag_wDataE[`dc2Tag_ins_dirty]=(write_wen_reg & write_hitE) ? write_dir_ins_reg  : 
@@ -176,6 +179,7 @@ module dcache2_tag(
           req_wrtEn_reg<=1'b0;
           req_en_reg<=1'b0;
           write_dupl_reg<=1'b0;
+	  write_exp_req<=1'b0;
       end else begin
           req_addrE_reg<=req_addrE;
           req_addrO_reg<=req_addrO;
@@ -187,6 +191,7 @@ module dcache2_tag(
           req_wrtEn_reg<=req_wrtEn;
           req_en_reg<=req_en;
           write_dupl_reg<=write_dupl;
+	  write_exp_req<=write_exp;
       end
   end
 endmodule

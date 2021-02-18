@@ -314,6 +314,7 @@ module dc2_cntrl(
   writeI_bBen1,writeI_enBen1,
   writeI_odd1,writeI_split1,
   writeI_data1,
+  writeI_exp,
   readI_en,readI_en2,readI_odd,readI_req,readI_code,readI_dupl,
   readI_want_excl,readI_io,readI_dataIO,readI_ins_A,readI_ins_B,
   miss_en,miss_addr,miss_req,miss_dupl,miss_want_excl, 
@@ -380,6 +381,7 @@ module dc2_cntrl(
   output [3:0] writeI_enBen1;
   output writeI_odd1,writeI_split1;
   output [159:0] writeI_data1;
+  output writeI_exp;
   output readI_en,readI_en2,readI_odd;
   output [4:0] readI_req;
   output readI_code;
@@ -512,6 +514,8 @@ module dc2_cntrl(
   wire [4:0] miss_sz;
   wire [4:0] miss_bank0;
   wire [1:0] miss_low;
+
+  wire read_M1_exp;
   
   reg init;
   reg [4:0] initCount;
@@ -547,8 +551,9 @@ module dc2_cntrl(
   assign rbus_want=cntM!=5'd0;
   assign read_clkEnC1=cntC1 && ~read_clkEnM1 && ~read_clkEnC2 && ~readI_en2_reg;  //read data
   assign read_clkEnC2=cntC2 && ~readI_en2_reg && ~read_clkEnM1;
-  assign read_clkEnM1=rbusD_signals_reg[`rbusD_used] && rbusD_signals_reg[`rbusD_mem_reply] &&
-    rbusD_dst_req_reg[9:5]==ID; //cl insert
+  assign read_clkEnM1=rbusD_signals_reg[`rbusD_used] && (rbusD_signals_reg[`rbusD_mem_reply] &&
+    rbusD_dst_req_reg[9:5]==ID)|rbusD_signals_reg[`rbusD_expun]; //cl insert
+  assign read_M1_exp=rbusD_signals_reg[`rbusD_used] && rbusD_signals_reg[`rbusD_expun];
   assign writeI_addrE0=read_clkEnC1 ? read_addr1[36:1] : 36'bz;
   assign writeI_addrO0=read_clkEnC1 ? read_addr1[36:1] : 36'bz;
   assign writeI_bankEn0=(read_clkEnC2|read_clkEnC1|read_clkEnC|read_clkEnM1) ? 
@@ -585,14 +590,24 @@ module dc2_cntrl(
   assign writeI_split1=read_clkEn ? read_mop[1][`mOpC_split] : 1'bz;
 
 
-  assign writeI_addrE0=read_clkEnM1 ? rbusD_addr_out[36:1] : 36'bz;
-  assign writeI_addrO0=read_clkEnM1 ? rbusD_addr_out[36:1] : 36'bz;
-  assign writeI_addrE1=read_clkEnM1 ? rbusD_addr_out[36:1] : 36'bz;
-  assign writeI_addrO1=read_clkEnM1 ? rbusD_addr_out[36:1] : 36'bz;
-  assign writeI_odd0=read_clkEnM1 ? rbusD_addr_out[0] : 1'bz;
-  assign writeI_split0=read_clkEnM1 ? 1'b0 : 1'bz;
-  assign writeI_odd1=read_clkEnM1 ? rbusD_addr_out[0] : 1'bz;
-  assign writeI_split1=read_clkEnM1 ? 1'b0 : 1'bz;
+  assign writeI_addrE0=read_clkEnM1&~read_M1_exp ? rbusD_addr_out[36:1] : 36'bz;
+  assign writeI_addrO0=read_clkEnM1&~read_M1_exp ? rbusD_addr_out[36:1] : 36'bz;
+  assign writeI_addrE1=read_clkEnM1&~read_M1_exp ? rbusD_addr_out[36:1] : 36'bz;
+  assign writeI_addrO1=read_clkEnM1&~read_M1_exp ? rbusD_addr_out[36:1] : 36'bz;
+  assign writeI_odd0=read_clkEnM1&~read_M1_exp ? rbusD_addr_out[0] : 1'bz;
+  assign writeI_split0=read_clkEnM1&~read_M1_exp ? 1'b0 : 1'bz;
+  assign writeI_odd1=read_clkEnM1&~read_M1_exp ? rbusD_addr_out[0] : 1'bz;
+  assign writeI_split1=read_clkEnM1&~read_M1_exp ? 1'b0 : 1'bz;
+  
+  assign writeI_addrE0=read_clkEnM1&read_M1_exp ? rbusD_data64_reg[36:1] : 36'bz;
+  assign writeI_addrO0=read_clkEnM1&read_M1_exp ? rbusD_data64_reg[36:1] : 36'bz;
+  assign writeI_addrE1=read_clkEnM1&read_M1_exp ? rbusD_data64_reg[36:1] : 36'bz;
+  assign writeI_addrO1=read_clkEnM1&read_M1_exp ? rbusD_data64_reg[36:1] : 36'bz;
+  assign writeI_odd0=read_clkEnM1&read_M1_exp ? rbusD_data64_reg[0] : 1'bz;
+  assign writeI_split0=read_clkEnM1&read_M1_exp ? 1'b0 : 1'bz;
+  assign writeI_odd1=read_clkEnM1&read_M1_exp ? rbusD_data64_reg[0] : 1'bz;
+  assign writeI_split1=read_clkEnM1&read_M1_exp ? 1'b0 : 1'bz;
+  
   
   assign writeI_addrE0=read_clkEnC2 ? read_addr_C2[36:1] : 36'bz;
   assign writeI_addrO0=read_clkEnC2 ? read_addr_C2[36:1] : 36'bz;
@@ -625,11 +640,15 @@ module dc2_cntrl(
   assign readI_code=read_clkEnC;
   assign readI_io=read_clkEnC2 && read_io_C2;
   assign readI_dataIO=read_data_C2;
-  assign readI_ins_A=read_clkEnM1 && ~rbusD_signals_reg[`rbusD_second] && ~rbusD_signals_reg[`rbusD_iorpl];
-  assign readI_ins_B=read_clkEnM1 && rbusD_signals_reg[`rbusD_second] && ~rbusD_signals_reg[`rbusD_iorpl];
+  assign readI_ins_A=read_clkEnM1 && ~rbusD_signals_reg[`rbusD_second] && ~rbusD_signals_reg[`rbusD_iorpl] && 
+	  ~rbusD_signals_reg[`rbusD_expun];
+  assign readI_ins_B=read_clkEnM1 && rbusD_signals_reg[`rbusD_second] && ~rbusD_signals_reg[`rbusD_iorpl] && 
+	  ~rbusD_signals_reg[`rbusD_expun];
 
   assign readI_dupl=read_clkEnC1 & read_dupl1 || read_clkEnM1 & dupl_M1;
   assign readI_want_excl=read_clkEnC1 & read_want_excl1;
+
+  assign writeI_exp=read_clkEnM1 & rbusD_signals_reg[`rbusD_expun];
 
   assign miss_sz=read_sz1_reg4;
   assign miss_bank0=read_bank01_reg4;

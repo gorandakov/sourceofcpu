@@ -850,6 +850,7 @@ module heptane_core(
   .writeI_bBen1(dc2_bBen1),.writeI_enBen1(dc2_enBen1),
   .writeI_odd1(dc2_odd1),.writeI_split1(dc2_split1),
   .writeI_data1(dc2_data1),
+  .writeI_exp(L1_expAddr_en),
   .readI_en(dc2_rdEn),.readI_en2(dc2_rdEnX),.readI_odd(dc2_rdOdd),.readI_req(dc2_req_rd),
   .readI_dupl(dc2_dupl_rd),.readI_want_excl(dc2_want_excl),
   .readI_io(dc2_io_en),.readI_dataIO(dc2_dataIO),
@@ -929,7 +930,6 @@ module heptane_core(
   .insert_dupl(dc2_dupl_rd),
   .hit_LRU(dc2_rLRU_reg),.read_LRU(dc2_rLRUB0),.hit_any(dc2_rhitB0),
   .read_dir(dc2_rDirB0),.read_excl(dc2_rExclB0),
-  .read_expAddr(L1_expAddr),
   .read_expAddr_en(L1_expAddr_en)
   );
   dcache2_block #(2) dc2B1_mod(

@@ -308,7 +308,8 @@ module dcache2_way(
   insert,
   insert_excl,insert_dirty,insert_dupl,
   hit_LRU, read_LRU, read_dir, read_excl, read_expAddr,
-  read_LRU_in, read_dir_in, read_excl_in, read_expAddr_in
+  read_LRU_in, read_dir_in, read_excl_in, read_expAddr_in,
+  expAddr_en
 // init
   );
   localparam ADDR_WIDTH=36;
@@ -360,6 +361,7 @@ module dcache2_way(
   input [4:0] read_LRU_in;
   input read_dir_in,read_excl_in;
   input [36:0] read_expAddr_in;
+  input expAddr_en;
 
   wire write0_hitE;
   wire write0_hitO;
@@ -509,9 +511,10 @@ module dcache2_way(
   .req_hitEL(write0_hitEL),.req_hitOL(write0_hitOL),
   .req_hitEH(write0_hitEH),.req_hitOH(write0_hitOH),
   .req_LRUe(read_LRUE),.req_LRUo(read_LRUO),
-  .write_wen(insert),
+  .write_wen(insert|expAddr_en),
   .write_dupl(insert_dupl),
   .write_hit(ins_hit),
+  .write_exp(expAddr_en),
   .write_excl(insert_excl),.write_dir_ins(insert_dirty),
   .expun_addrE(expAddrE),.expun_addrO(expAddrO),
   .init(init),.initCount(initCount)
@@ -532,9 +535,10 @@ module dcache2_way(
   .req_hitEL(write1_hitEL),.req_hitOL(write1_hitOL),
   .req_hitEH(write1_hitEH),.req_hitOH(write1_hitOH),
   .req_LRUe(read_LRUE),.req_LRUo(read_LRUO),
-  .write_wen(insert),
+  .write_wen(insert|expAddr_en),
   .write_dupl(insert_dupl),
   .write_hit(ins_hit),
+  .write_exp(expAddr_en),
   .write_excl(insert_excl),.write_dir_ins(insert_dirty),
   .expun_addrE(),.expun_addrO(),
   .init(init),.initCount(initCount)
@@ -880,7 +884,8 @@ module dcache2_block(
 //  ins_hit,
   insert,
   insert_excl,insert_dirty,insert_dupl,
-  hit_LRU,read_LRU,hit_any,read_dir,read_excl,read_expAddr
+  hit_LRU,read_LRU,hit_any,read_dir,read_excl,read_expAddrOut,
+  read_expAddr_en
 // init
   );
   localparam ADDR_WIDTH=36;
@@ -929,7 +934,8 @@ module dcache2_block(
   output reg hit_any;
   output reg read_dir;
   output reg read_excl;
-  output reg [36:0] read_expAddr;
+  output reg [36:0] read_expAddrOut;
+  input [36:0] read_expAddr_en;
 
   wire [7:0] read_hit_way;
   reg [7:0] read_hit_way_reg;
@@ -985,7 +991,8 @@ module dcache2_block(
           insert_excl,insert_dirty,insert_dupl,
           hit_LRU,
 	  read_LRUp[k],read_dirP[k],read_exclP[k],read_expAddrP[k],
-	  read_LRUp[k-1],read_dirP[k-1],read_exclP[k-1],read_expAddrP[k-1]
+	  read_LRUp[k-1],read_dirP[k-1],read_exclP[k-1],read_expAddrP[k-1],
+          read_expAddr_en,
           );
       end
       for(b=0;b<32;b=b+1) begin : bank_gen
