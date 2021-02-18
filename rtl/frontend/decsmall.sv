@@ -43,10 +43,7 @@ module smallInstr_decoder(
   thisSpecLoad,
   isIPRel,
   rAlloc,
-  reor_en,
-  reor_val,
-  reor_en_out,
-  reor_val_out,
+  csrss_retIP_en,
   error
   );
   
@@ -117,10 +114,7 @@ module smallInstr_decoder(
   output thisSpecLoad;
   output isIPRel;
   output rAlloc;
-  input reor_en;
-  input [39:0] reor_val;
-  output reor_en_out;
-  output [39:0] reor_val_out;
+  output reg csrss_retIP_en;
   output wire error;
   //7:0 free 15:8 unfree 39:16 fxch/pop/push 
   wire [3:0] magic;
@@ -623,11 +617,13 @@ module smallInstr_decoder(
 	      reor_val_out[17:15]!=tt[2:0]&&reor_val_out[20:18]!=tt[2:0]&&reor_val_out[23:21]!=tt[2:0]);   
 	  end
       end
-      rA_reor=instr[11] ? instr[11:8] : {1'b0,fpu_reor[3*instr[10:8]+:3]};
-      rB_reor=instr[15] ? instr[15:12] : {1'b0,fpu_reor[3*instr[14:12]+:3]};
-      rA_reor32=instr[21:20]!=2'b0 ? instr[21:17] : {2'b0,fpu_reor[3*instr[19:17]+:3]};
-      rB_reor32=instr[26:25]!=2'b0 ? instr[26:22] : {2'b0,fpu_reor[3*instr[24:22]+:3]};
-      rT_reor32=instr[31:30]!=2'b0 ? instr[31:27] : {2'b0,fpu_reor[3*instr[29:27]+:3]};
+      rA_reor=instr[11] ? instr[11:8] : {1'b0,instr[10:8]};
+      rB_reor=instr[15] ? instr[15:12] : {1'b0,instr[14:12]};
+      rA_reor32=instr[21:20]!=2'b0 ? instr[21:17] : {2'b0,instr[19:17]};
+      rB_reor32=instr[26:25]!=2'b0 ? instr[26:22] : {2'b0,instr[24:22]};
+      rT_reor32=instr[31:30]!=2'b0 ? instr[31:27] : {2'b0,instr[29:27]};
+
+      csrss_retIP_en=1'b0;
       
       trien[0]=~magic[0] && subIsBasicALU|subIsBasicShift;
       poperation[0]={8'b0,opcode_sub[4:2],1'b0,opcode_sub[1]};
@@ -1683,6 +1679,7 @@ module smallInstr_decoder(
           prAlloc[35]=1'b1;
           pjumpType[35]=5'b10001;
 	  pconstant[35]=instr[79:16];
+	  csrss_retIP_en=instr[31:16]!=`csr_retIP;
       end
       
       trien[36]=magic[0] & isBasicFPUScalarC;

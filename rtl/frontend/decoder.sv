@@ -1646,7 +1646,8 @@ module decoder(
   instr_fsimd,
   baseIP,
   wrt0,wrt1,wrt2,
-  csrss_no,csrss_en,csrss_data
+  csrss_no,csrss_en,csrss_data,
+  csrss_alt_no,csrss_alt_en,csrss_alt_data
   );
   localparam DATA_WIDTH=`alu_width;
   localparam OPERATION_WIDTH=`operation_width;
@@ -2117,6 +2118,9 @@ module decoder(
   input csrss_en;
   input [63:0] csrss_data;
   
+  wire [9:0] csrss_retIP_en;
+  wire [63:0] csrss_retIP_data;
+
   reg last_trce;
 
   wire [9:0][INSTR_WIDTH-1:0] inst;
@@ -2475,6 +2479,7 @@ module decoder(
           adder #(33) srcXAdd_mod({20'b0,dec_srcIPOffA_reg[k]},{dec_constant_reg[k][31],dec_constant_reg[k][31:0]},dec_srcIPOffx[k],1'b0, 1'b1,,,,);
 
 	  popcnt10 jpop_mod(cls_jump_reg&iUsed_reg,{dummy8_1,btbl_step});
+	  adder #(43) csrAdd_mod({30'b0,dec_srcIPOffA_reg[k]},baseIP_reg[43:1],csrss_retIP_data,1'b0,csrss_retIP_en_reg[k],,,,);
 
           if (k<9) 
           decoder_reorder_mux mux_mod(
