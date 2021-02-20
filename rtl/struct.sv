@@ -155,30 +155,35 @@
 `define jump_P 14
 `define jump_nP 15
 
-`define btb_src_IP 48:0
-`define btb_tgt_IP0 95:49
-`define btb_tgt_IP1 142:96
-`define btb_tgt_IP2 189:143
-`define btb_tgt_IP3 236:190
-`define btb_valid 237
-`define btb_off0 241:238
-`define btb_off1 245:242
-`define btb_off2 249:246
-`define btb_off3 253:250
-`define btb_cond 257:254
-`define btb_indir 261:258
-`define btb_link 266:262
-`define btb_lnkpos 268:267
-`define btb_lnkoff 272:269
-`define btb_tgt_jmask0 276:273
-`define btb_tgt_jmask1 280:277
-`define btb_tgt_jmask2 284:281
-`define btb_tgt_jmask3 288:285
-`define btb_other 292:289
-`define btb_LRU 293
+`define btb_src_IP 33:0
+`define btb_tgt_IP0 96:34
+`define btb_tgt_IP1 159:97
+`define btb_tgt_IP2 222:160
+`define btb_tgt_IP3 285:223
+`define btb_valid 286
+`define btb_off0 290:287
+`define btb_off1 294:291
+`define btb_off2 298:295
+`define btb_off3 302:299
+`define btb_cond 306:303
+`define btb_indir 310:307
+`define btb_link0 315:311
+`define btb_link1 320:316
+`define btb_link2 325:321
+`define btb_link3 330:326
+`define btb_lnkoff0 335:331
+`define btb_lnkoff0 340:336
+`define btb_lnkoff0 345:341
+`define btb_lnkoff0 350:346
+`define btb_tgt_jmask0 354:351
+`define btb_tgt_jmask1 358:355
+`define btb_tgt_jmask2 362:359
+`define btb_tgt_jmask3 366:363
+`define btb_other 370:367
+`define btb_LRU 371
 //lru needs to be kept at highest 2 bits
 
-`define btb_width 294
+`define btb_width 372
 
 `define btb_addr_width 8
 `define btb_addr_count 256
