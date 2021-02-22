@@ -807,7 +807,8 @@ module smallInstr_decoder(
        trien[8]=~magic[0] & subIsLinkRet;
        if (opcode_sub[1]) begin
            //inc dec neg
-           prA[8]=instr[12:8];
+           pport[8]=PORT_ALU;
+	   prA[8]=instr[12:8];
            prB[8]=instr[12:8];
            prT[8]=instr[12:8];
            poperation[8][2]=instr[13];

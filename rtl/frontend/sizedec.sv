@@ -8,7 +8,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   output [12:0] class_;
   output isLNK;
   output isRet;
-  output [15:0] LNK;
+  output [4:0] LNK;
 
   wire clsIndir;
   wire clsJump;
@@ -88,6 +88,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   assign subIsBasicShift=(~opcode_sub[5] && ~subIsBasicALU && opcode_sub[0]) & ~magic[0];
   assign subIsFPUE=opcode_sub==6'b010100 && ~magic[0]; 
   assign subIsFPUSngl=((opcode_sub==6'b010110 || opcode_sub==6'b011000) && opcode_main[7:6]!=2'b11) & ~magic[0];
+  assign subIsLinkRet=(opcode_sub==6'b010110 || opcode_sub==6'b011000) && opcode_main[7:6]==2'b11 && ~magic[0];
   assign subIsSIMD=(opcode_sub[5:3]==3'b011 && opcode_sub[2:1] && ~opcode_sub[0]) & ~magic[0];
   assign subIsMovOrExt=(opcode_sub[5:3]==3'b100 || opcode_sub[5:1]==5'b10100) & ~magic[0];
   assign subIsCmpTest=(opcode_sub[5:1]==5'b10101 || opcode_sub[5:2]==5'b1011) & ~magic[0];
@@ -180,7 +181,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   subIsFPUE & !(opcode_main[7:6]==2'b0),
   subIsSIMD,
   isSimdInt && ((instr[13:9]==5'd0 && ~instr[16]) || (instr[13:9]==5'd5 && ~instr[16]) || (instr[13:8]==5'b11 && instr[16])),
-  subIsBasicALU,subIsCmpTest,
+  subIsBasicALU,subIsCmpTest,subIsLinkRet,
   opcode_main==8'hff && instr[15:13]==3'd1 && magic[0],
   isBasicFPUScalarA && instr[13:9]!=5'd2 && instr[13:8]!=6'd8,
   isBasicFPUScalarB && instr[13:8]!=6'd18 && instr[13:8]!=6'd21,
@@ -252,10 +253,11 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   assign class_[`iclass_flag]=flag;
   assign class_[`iclass_pos0]=clsPos0;
   
-  assign LNK=isRet ? 16'b0 : 16'bz;
+  assign LNK=isRet ? 5'b0 : 5'bz;
 //  assign LNK=(isCallPrep & ~magic[0]) ? instr[11:8] : 16'bz;
-  assign LNK=isCallPrep ? instr[31:16] : 16'bz;
-  assign LNK=(~isRet & ~isCallPrep) ? 16'hf : 16'bz;
+  assign LNK=isCallPrep ? instr[20:16] : 5'bz;
+  assign LNK=subIsLinkRet ? instr[15:12] : 5'bz;
+  assign LNK=(~isRet & ~isCallPrep) ? 5'hf : 5'bz;
   
   assign isLNK=isRet | isCallPrep;
   
