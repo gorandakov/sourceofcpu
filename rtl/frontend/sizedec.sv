@@ -291,7 +291,10 @@ module predecoder_get(
     Joff0,Joff1,Joff2,Joff3,
     Jclass0,Jclass1,Jclass2,Jclass3,
     Jen,
-    lnkLink,lnkOff,lnkMagic,lnkRet,lnkJumps
+    lnkLink0,lnkOff0,lnkMagic0,lnkRet0,lnkJumps0,
+    lnkLink1,lnkOff1,lnkMagic1,lnkRet1,lnkJumps1,
+    lnkLink2,lnkOff2,lnkMagic2,lnkRet2,lnkJumps2,
+    lnkLink3,lnkOff3,lnkMagic3,lnkRet3,lnkJumps3
     );
     localparam CLSWIDTH=12;
     
@@ -380,11 +383,26 @@ module predecoder_get(
     output [11:0] Jclass3;
     
     output [3:0] Jen;
-    output [15:0] lnkLink;
-    output [3:0] lnkOff;
-    output [3:0] lnkMagic;
-    output lnkRet;
-    output [4:0] lnkJumps;
+    output [4:0] lnkLink0;
+    output [3:0] lnkOff0;
+    output [3:0] lnkMagic0;
+    output       lnkRet0;
+    output [4:0] lnkJumps0;
+    output [4:0] lnkLink1;
+    output [3:0] lnkOff1;
+    output [3:0] lnkMagic1;
+    output       lnkRet1;
+    output [4:0] lnkJumps1;
+    output [4:0] lnkLink2;
+    output [3:0] lnkOff2;
+    output [3:0] lnkMagic2;
+    output       lnkRet2;
+    output [4:0] lnkJumps2;
+    output [4:0] lnkLink3;
+    output [3:0] lnkOff3;
+    output [3:0] lnkMagic3;
+    output       lnkRet3;
+    output [4:0] lnkJumps3;
 
     reg [19:-1] instrEnd;
     
