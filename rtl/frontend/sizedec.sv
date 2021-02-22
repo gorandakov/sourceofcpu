@@ -421,14 +421,18 @@ module predecoder_get(
     wire [14:0] jcnt_or_less;
     wire [15:1] jcnt_or_more;
     
-    wire [15:0] is_lnk0;
+    wire [4:0] is_lnk0;
+    wire [4:0] is_lnk1;
+    wire [4:0] is_lnk2;
+    wire [4:0] is_lnk3;
     wire [14:0] is_lnk;
     reg [14:0] is_lnk_reg;
     wire [14:0] first_lnk;
     wire has_lnk;
-    wire [15:0][15:0] LNK;
+    wire [4:0][15:0] LNK;
     wire [14:0] lcnt_or_less;
-    wire [15:0] is_ret0;
+    wire [14:0][14:-1] lcnt;
+    wire [4:0] is_ret0;
     wire [14:0] is_ret;
     reg [14:0] is_ret_reg;
     reg [15:0] flag_bits0;
@@ -442,11 +446,19 @@ module predecoder_get(
             predecoder_class cls_mod(bundle0[k*16+:32],~instrEnd[k+:2],flag_bits0[k],class_[k],
               is_lnk0[k],is_ret0[k],LNK[k]);
             popcnt15 cntJ_mod(is_jmp[14:0] & ((15'b10<<k)-15'b1),cntJEnd[k]);
-
-            if (k<15) begin
-                assign {lnkLink,lnkOff,lnkMagic,lnkRet}=first_lnk[k] ? {LNK[k],k[3:0],instrEnd[k+:4],is_ret[k]} : 25'bz;
-                assign lnkJumps=first_lnk[k] ? cntJEnd[k][4:0] : 5'bz;
-            end  
+            popcnt15 cntL_mod(is_lnk[14:0] & ((15'b10<<k)-15'b1),lcnt[k]);
+            assign {lnkLink0,lnkOff0,lnkMagic0,lnkRet0}=lcnt[k][1] & lcnt[k-1][0] ? {LNK[k],k[3:0],instrEnd[k+:4],is_ret[k]} :
+	       	15'bz;
+            assign {lnkLink1,lnkOff1,lnkMagic1,lnkRet1}=lcnt[k][2] & lcnt[k-1][1] ? {LNK[k],k[3:0],instrEnd[k+:4],is_ret[k]} :
+	       	15'bz;
+            assign {lnkLink2,lnkOff2,lnkMagic2,lnkRet2}=lcnt[k][3] & lcnt[k-1][2] ? {LNK[k],k[3:0],instrEnd[k+:4],is_ret[k]} :
+	       	15'bz;
+            assign {lnkLink3,lnkOff3,lnkMagic3,lnkRet3}=lcnt[k][4] & lcnt[k-1][3] ? {LNK[k],k[3:0],instrEnd[k+:4],is_ret[k]} :
+	       	15'bz;
+            assign lnkJumps0=lcnt[k][1] & lcnt[k-1][0] ? cntJEnd[k][4:0] : 5'bz;
+            assign lnkJumps1=lcnt[k][2] & lcnt[k-1][1] ? cntJEnd[k][4:0] : 5'bz;
+            assign lnkJumps2=lcnt[k][3] & lcnt[k-1][2] ? cntJEnd[k][4:0] : 5'bz;
+            assign lnkJumps3=lcnt[k][4] & lcnt[k-1][3] ? cntJEnd[k][4:0] : 5'bz;
             
             assign {Jclass0,Jmagic0,Jinstr0,Joff0}= 
               cntJEnd[k][1] & cntJEnd[k-1][0] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 100'bz;
@@ -497,6 +509,7 @@ module predecoder_get(
     assign cntEnd[-1]=16'd1;
     assign cntEnd[-2]=16'd1;
     assign cntJEnd[-1]=16'd1;
+    assign lcnt[-1]=15'd1;
     
     assign bundle0={48'b0,btail[15:0],bundle[239:0]};
     
@@ -513,8 +526,14 @@ module predecoder_get(
     assign {class1,magic1, instr1, off1}=cntEnd2[0] ? 100'b0 : 100'bz;
     assign {class0,magic0, instr0, off0}=(!mask) ? 100'b0 : 100'bz;
 
-    assign {lnkLink,lnkOff,lnkMagic,lnkRet}=has_lnk ? 25'bz : 25'b1110_0000_0001_0;
-    assign lnkJumps=has_lnk ? 5'bz : 5'd1;
+    assign {lnkLink0,lnkOff0,lnkMagic0,lnkRet0}=lcnt_or_less[0] ? 15'b1110_0000_0001_0 : 15'bz;
+    assign {lnkLink1,lnkOff1,lnkMagic1,lnkRet1}=lcnt_or_less[1] ? 15'b1110_0000_0001_0 : 15'bz;
+    assign {lnkLink2,lnkOff2,lnkMagic2,lnkRet2}=lcnt_or_less[2] ? 15'b1110_0000_0001_0 : 15'bz;
+    assign {lnkLink3,lnkOff3,lnkMagic3,lnkRet3}=lcnt_or_less[3] ? 15'b1110_0000_0001_0 : 15'bz;
+    assign lnkJumps0=lcnt_or_less[0] ?  5'd1 : 5'bz;
+    assign lnkJumps1=lcnt_or_less[1] ?  5'd1 : 5'bz;
+    assign lnkJumps2=lcnt_or_less[2] ?  5'd1 : 5'bz;
+    assign lnkJumps3=lcnt_or_less[3] ?  5'd1 : 5'bz;
 
     assign instrEn=cntEnd3[12:1];
     assign Jen=jcnt_or_more[4:1];
