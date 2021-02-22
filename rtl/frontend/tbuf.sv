@@ -176,10 +176,10 @@ module tbuf_way(
   tbuf_pred,
   cond,
   indir,
-  link0,lnpos0,lnoff0,
-  link1,lnpos1,lnoff1,
-  link2,lnpos2,lnoff2,
-  link3,lnpos3,lnoff3,
+  link0,lnpos0,
+  link1,lnpos1,
+  link2,lnpos2,
+  link3,lnpos3,
   way,way_hit,
   tgt0I,tgt1I,tgt2I,tgt3I,
   tgt0O,tgt1O,tgt2O,tgt3O,
@@ -187,10 +187,10 @@ module tbuf_way(
   write_off0,write_off1,write_off2,write_off3,
   write_cond,
   write_indir,
-  write_link0,write_lnpos0,write_lnoff0,
-  write_link1,write_lnpos1,write_lnoff1,
-  write_link2,write_lnpos2,write_lnoff2,
-  write_link3,write_lnpos3,write_lnoff3,
+  write_link0,write_lnpos0,
+  write_link1,write_lnpos1,
+  write_link2,write_lnpos2,
+  write_link3,write_lnpos3,
   write_way,
   write_wen,
   write_insert,
@@ -235,16 +235,12 @@ module tbuf_way(
   output [3:0] indir;
   output [4:0] link0;
   output [2:0] lnpos0;
-  output       lnoff0;
   output [4:0] link1;
   output [2:0] lnpos1;
-  output       lnoff1;
   output [4:0] link2;
   output [2:0] lnpos2;
-  output       lnoff2;
   output [4:0] link3;
   output [2:0] lnpos3;
-  output       lnoff3;
   output [2:0] way;
   output way_hit;
   
@@ -269,16 +265,12 @@ module tbuf_way(
   input [3:0] write_indir;
   input [4:0] write_link0;
   input [2:0] write_lnpos0;
-  input [3:0] write_lnoff0;
   input [4:0] write_link1;
   input [2:0] write_lnpos1;
-  input [3:0] write_lnoff1;
   input [4:0] write_link2;
   input [2:0] write_lnpos2;
-  input [3:0] write_lnoff2;
   input [4:0] write_link3;
   input [2:0] write_lnpos3;
-  input [3:0] write_lnoff3;
   input write_way;
   input write_wen;
   input write_insert;  
@@ -364,11 +356,11 @@ module tbuf_way(
   wire [1:0] updS_sc3;
 
   wire read_valid;
-  wire [48:0] read_src;
-  wire [46:0] read_tgt0;
-  wire [46:0] read_tgt1;
-  wire [46:0] read_tgt2;
-  wire [46:0] read_tgt3;
+  wire [28:0] read_src;
+  wire [63:0] read_tgt0;
+  wire [63:0] read_tgt1;
+  wire [63:0] read_tgt2;
+  wire [63:0] read_tgt3;
   wire [3:0] read_off0;
   wire [3:0] read_off1;
   wire [3:0] read_off2;
@@ -381,9 +373,14 @@ module tbuf_way(
   wire [3:0] read_mask;
   wire IP_match;
   wire read_LRU;
-  wire [4:0] read_link;
-  wire [1:0] read_lnpos;
-  wire [3:0] read_lnoff;
+  wire [4:0] read_link0;
+  wire [2:0] read_lnpos0;
+  wire [4:0] read_link1;
+  wire [2:0] read_lnpos1;
+  wire [4:0] read_link2;
+  wire [2:0] read_lnpos2;
+  wire [4:0] read_link3;
+  wire [2:0] read_lnpos3;
 
   wire [6:0] read_freq0;
   wire [6:0] read_freq1;
@@ -465,9 +462,14 @@ module tbuf_way(
   reg [3:0] write_off3_rex;
   reg [3:0] write_cond_rex;
   reg [3:0] write_indir_rex;
-  reg [4:0] write_link_rex;
-  reg [1:0] write_lnpos_rex;
-  reg [3:0] write_lnoff_rex;
+  reg [4:0] write_link0_rex;
+  reg [2:0] write_lnpos0_rex;
+  reg [4:0] write_link1_rex;
+  reg [2:0] write_lnpos1_rex;
+  reg [4:0] write_link2_rex;
+  reg [2:0] write_lnpos2_rex;
+  reg [4:0] write_link3_rex;
+  reg [2:0] write_lnpos3_rex;
   reg write_way_rex;
   
   reg read_clkEn_reg2;
@@ -601,9 +603,14 @@ module tbuf_way(
   assign read_off3=btb_data[`btb_off3];
   assign read_cond=btb_data[`btb_cond];
   assign read_indir=btb_data[`btb_indir];
-  assign read_link=btb_data[`btb_link];
-  assign read_lnpos=btb_data[`btb_lnkpos];
-  assign read_lnoff=btb_data[`btb_lnkoff];
+  assign read_link0=btb_data[`btb_link0];
+  assign read_lnpos0=btb_data[`btb_lnkpos0];
+  assign read_link1=btb_data[`btb_link1];
+  assign read_lnpos1=btb_data[`btb_lnkpos1];
+  assign read_link2=btb_data[`btb_link2];
+  assign read_lnpos2=btb_data[`btb_lnkpos2];
+  assign read_link3=btb_data[`btb_link3];
+  assign read_lnpos3=btb_data[`btb_lnkpos3];
   assign read_LRU=btb_data[`btb_LRU];
   assign read_jmask0=btb_data[`btb_tgt_jmask0];
   assign read_jmask1=btb_data[`btb_tgt_jmask1];
@@ -622,16 +629,21 @@ module tbuf_way(
   assign write_dataW[`btb_valid]=1'b1;
   assign write_dataW[`btb_cond]=write_cond_rex;
   assign write_dataW[`btb_indir]=write_indir_rex;
-  assign write_dataW[`btb_link]=write_link_rex;
-  assign write_dataW[`btb_lnkpos]=write_lnpos_rex;
-  assign write_dataW[`btb_lnkoff]=write_lnoff_rex;
+  assign write_dataW[`btb_link0]=write_link0_rex;
+  assign write_dataW[`btb_lnkpos0]=write_lnpos0_rex;
+  assign write_dataW[`btb_link1]=write_link1_rex;
+  assign write_dataW[`btb_lnkpos1]=write_lnpos1_rex;
+  assign write_dataW[`btb_link2]=write_link2_rex;
+  assign write_dataW[`btb_lnkpos2]=write_lnpos2_rex;
+  assign write_dataW[`btb_link3]=write_link3_rex;
+  assign write_dataW[`btb_lnkpos3]=write_lnpos3_rex;
   assign write_dataW[`btb_LRU]=write_LRU;
   assign write_dataW[`btb_tgt_jmask0]=4'b0;//should be 4'hf, but now zero for testing
   assign write_dataW[`btb_tgt_jmask1]=4'b0;
   assign write_dataW[`btb_tgt_jmask2]=4'b0;
   assign write_dataW[`btb_tgt_jmask3]=4'b0;
   
-  assign IP_match=read_src==nextIP_reg[63:15];
+  assign IP_match=read_src==nextIP_reg[43:15];
   assign read_hit=IP_match && read_valid && ~init && HALF==nextIP_reg[14];
   
   assign way_hit=oen ? read_LRU : 1'bz;
@@ -666,9 +678,14 @@ module tbuf_way(
   assign cond=oen ? read_cond : 4'bz;
   
   assign indir=oen ? read_indir : 4'bz;
-  assign link=oen ? read_link : 4'bz;
-  assign lnpos=oen ? read_lnpos : 4'bz;
-  assign lnoff=oen ? lnoff0 : 4'bz;
+  assign link0=oen ? read_link0 : 5'bz;
+  assign lnpos0=oen ? read_lnpos0 : 3'bz;
+  assign link1=oen ? read_link1 : 5'bz;
+  assign lnpos1=oen ? read_lnpos1 : 3'bz;
+  assign link2=oen ? read_link2 : 5'bz;
+  assign lnpos2=oen ? read_lnpos2 : 3'bz;
+  assign link3=oen ? read_link3 : 5'bz;
+  assign lnpos3=oen ? read_lnpos3 : 3'bz;
   
   assign jmp_mask[0]=oen ? j0_after && read_off0!=4'hf : 1'bz;
   assign jmp_mask[1]=oen ? j1_after && read_off1!=4'hf : 1'bz;
@@ -703,9 +720,14 @@ module tbuf_way(
   assign cond=(read_write_fwd & HALF) ? write_cond_rex : 4'bz;
   
   assign indir=(read_write_fwd & HALF) ? write_indir_rex : 4'bz;
-  assign link=(read_write_fwd & HALF) ? write_link_rex : 4'bz;
-  assign lnpos=(read_write_fwd & HALF) ? write_lnpos_rex : 4'bz;
-  assign lnoff=(read_write_fwd & HALF) ? write_lnoff_rex : 4'bz;
+  assign link0=(read_write_fwd & HALF) ? write_link0_rex : 4'bz;
+  assign lnpos0=(read_write_fwd & HALF) ? write_lnpos0_rex : 4'bz;
+  assign link1=(read_write_fwd & HALF) ? write_link1_rex : 4'bz;
+  assign lnpos1=(read_write_fwd & HALF) ? write_lnpos1_rex : 4'bz;
+  assign link2=(read_write_fwd & HALF) ? write_link2_rex : 4'bz;
+  assign lnpos2=(read_write_fwd & HALF) ? write_lnpos2_rex : 4'bz;
+  assign link3=(read_write_fwd & HALF) ? write_link3_rex : 4'bz;
+  assign lnpos3=(read_write_fwd & HALF) ? write_lnpos3_rex : 4'bz;
   
   assign jmp_mask[0]=(read_write_fwd & HALF) ? j0_afterW && write_off0_rex!=4'hf : 1'bz;
   assign jmp_mask[1]=(read_write_fwd & HALF) ? j1_afterW && write_off1_rex!=4'hf : 1'bz;
@@ -927,9 +949,14 @@ module tbuf_way(
           write_off3_rex<=4'b0;
           write_cond_rex<=4'b0;
           write_indir_rex<=4'b0;
-          write_link_rex<=5'b0;
-          write_lnpos_rex<=2'b0;
-          write_lnoff_rex<=4'b0;
+          write_link0_rex<=5'b0;
+          write_lnpos0_rex<=3'b0;
+          write_link1_rex<=5'b0;
+          write_lnpos1_rex<=3'b0;
+          write_link2_rex<=5'b0;
+          write_lnpos2_rex<=3'b0;
+          write_link3_rex<=5'b0;
+          write_lnpos3_rex<=3'b0;
           write_way_rex<=1'b0;
           IP_wbits_reg<=10'b0;
       //    read_clkEn_reg2<=1'b0;
@@ -951,9 +978,14 @@ module tbuf_way(
               write_off3_rex<=write_off3;
               write_cond_rex<=write_cond;
               write_indir_rex<=write_indir;
-              write_link_rex<=write_link;
-              write_lnpos_rex<=write_lnpos;
-              write_lnoff_rex<=write_lnoff;
+              write_link0_rex<=write_link0;
+              write_lnpos0_rex<=write_lnpos0;
+              write_link1_rex<=write_link1;
+              write_lnpos1_rex<=write_lnpos1;
+              write_link2_rex<=write_link2;
+              write_lnpos2_rex<=write_lnpos2;
+              write_link3_rex<=write_link3;
+              write_lnpos3_rex<=write_lnpos3;
               write_way_rex<=write_way;
         //      read_clkEn_reg2<=read_clkEn;
           end
