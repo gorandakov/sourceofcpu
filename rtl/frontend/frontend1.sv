@@ -927,7 +927,10 @@ module frontend1(
     .Joff0(jmp_off[0]),.Joff1(jmp_off[1]),.Joff2(jmp_off[2]),.Joff3(jmp_off[3]),
     .Jclass0(jmp_class[0]),.Jclass1(jmp_class[1]),.Jclass2(jmp_class[2]),.Jclass3(jmp_class[3]),
     .Jen(jmp_en),
-    .lnkLink(lnk_link),.lnkOff(lnk_off),.lnkMagic(lnk_magic),.lnkRet(lnk_isRet),.lnkJumps(lnk_jpos)
+    .lnkLink0(lnk_link0),.lnkOff0(lnk_off0),.lnkMagic0(lnk_magic0),.lnkRet0(lnk_isRet0),.lnkJumps0(lnk_jpos0),
+    .lnkLink1(lnk_link1),.lnkOff1(lnk_off1),.lnkMagic1(lnk_magic1),.lnkRet1(lnk_isRet1),.lnkJumps1(lnk_jpos1),
+    .lnkLink2(lnk_link2),.lnkOff2(lnk_off2),.lnkMagic2(lnk_magic2),.lnkRet2(lnk_isRet2),.lnkJumps2(lnk_jpos2),
+    .lnkLink3(lnk_link3),.lnkOff3(lnk_off3),.lnkMagic3(lnk_magic3),.lnkRet3(lnk_isRet3),.lnkJumps3(lnk_jpos3)
     );
     
   instrQ instrQ_mod(
@@ -1058,9 +1061,14 @@ module frontend1(
   .tbuf_predB(btb_predB),
   .cond(btb_cond),
   .indir(btb_indir),
-  .link(btb_jlink),
-  .lnpos(btb_jlnpos),
-  .lnoff(jlnin),
+  .link0(btb_jlink0),
+  .lnpos0(btb_jlnpos0),
+  .link1(btb_jlink1),
+  .lnpos1(btb_jlnpos1),
+  .link2(btb_jlink2),
+  .lnpos2(btb_jlnpos2),
+  .link3(btb_jlink3),
+  .lnpos3(btb_jlnpos3),
   .way(btb_way),
   .off0(btb_joff[0]),.off1(btb_joff[1]),.off2(btb_joff[2]),.off3(btb_joff[3]),
   .tgt0I(jdec_target[0]),.tgt1I(jdec_target[1]),.tgt2I(jdec_target[2]),.tgt3I(jdec_target[3]),
@@ -1071,7 +1079,10 @@ module frontend1(
   .write_off0(jmp_off_reg[0]),.write_off1(jmp_off_reg[1]),.write_off2(jmp_off_reg[2]),.write_off3(jmp_off_reg[3]),
   .write_cond(~{jdec_type[3][4],jdec_type[2][4],jdec_type[1][4],jdec_type[0][4]}),
   .write_indir({jdec_type[3]==5'h11,jdec_type[2]==5'h11,jdec_type[1]==5'h11,jdec_type[0]==5'h11}),
-  .write_link(jdec_link[4:0]),.write_lnpos(lnk_lnpos),.write_lnoff(lnk_off_reg),.write_lnoff_in(lnk_offIn),
+  .write_link0(jdec_link0[4:0]),.write_lnpos0(lnk_lnpos0),
+  .write_link1(jdec_link1[4:0]),.write_lnpos1(lnk_lnpos1),
+  .write_link2(jdec_link2[4:0]),.write_lnpos2(lnk_lnpos2),
+  .write_link3(jdec_link3[4:0]),.write_lnpos3(lnk_lnpos3),
   .write_way(btb_way_reg2),
   .write_thread(1'b0),
   .write_wen(1'b0),
