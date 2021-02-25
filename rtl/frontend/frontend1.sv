@@ -1014,9 +1014,21 @@ module frontend1(
   adder_inc #(3) misSlotAdd_mod(miss_slot,miss_slot_next,1'b1,);
   adder_inc #(9) initAdd_mod(initCount,initCount_next,1'b1,);
 
-  adder #(16) lnoff1t_mod({12'b0,lnk_off_reg},lnk_link_reg,jdec_link,1'b1,lnk_magic_reg[0] & ~lnk_isRet_reg,,,,);
-  adder_CSA #(16) lnoff2CSAt_mod({12'b0,lnk_off_reg},lnk_link_reg,16'd2,lpar0,lpar1);
-  adder #(16) lnoff2t_mod(lpar0[15:0],lpar1[15:0],jdec_link,1'b0,~lnk_magic_reg[0] & ~lnk_isRet_reg,,,,);
+  adder #(5) ln0off1t_mod(lnk_off0_reg,lnk_link0_reg,jdec_link0,1'b1,lnk_magic0_reg[0] & ~lnk_isRet0_reg,,,,);
+  adder_CSA #(5) ln0off2CSAt_mod(lnk_off0_reg,lnk_link0_reg,5'd2,lpar00,lpar01);
+  adder #(5) ln0off2t_mod(lpar0[4:0],lpar1[4:0],jdec_link0,1'b0,~lnk_magic0_reg[0] & ~lnk_isRet0_reg,,,,);
+
+  adder #(5) ln1off1t_mod(lnk_off1_reg,lnk_link1_reg,jdec_link1,1'b1,lnk_magic1_reg[0] & ~lnk_isRet1_reg,,,,);
+  adder_CSA #(5) ln1off2CSAt_mod(lnk_off1_reg,lnk_link1_reg,5'd2,lpar10,lpar11);
+  adder #(5) ln1off2t_mod(lpar10[4:0],lpar11[4:0],jdec_link1,1'b0,~lnk_magic1_reg[0] & ~lnk_isRet1_reg,,,,);
+
+  adder #(5) ln2off1t_mod(lnk_off2_reg,lnk_link2_reg,jdec_link2,1'b1,lnk_magic2_reg[0] & ~lnk_isRet2_reg,,,,);
+  adder_CSA #(5) ln2off2CSAt_mod(lnk_off2_reg,lnk_link2_reg,5'd2,lpar20,lpar21);
+  adder #(5) ln2off2t_mod(lpar20[4:0],lpar21[4:0],jdec_link2,1'b0,~lnk_magic2_reg[0] & ~lnk_isRet2_reg,,,,);
+
+  adder #(5) ln3off1t_mod(lnk_off3_reg,lnk_link3_reg,jdec_link3,1'b1,lnk_magic3_reg[0] & ~lnk_isRet3_reg,,,,);
+  adder_CSA #(5) ln3off2CSAt_mod(lnk_off3_reg,lnk_link3_reg,5'd2,lpar30,lpar31);
+  adder #(5) ln3off2t_mod(lpar30[4:0],lpar31[4:0],jdec_link3,1'b0,~lnk_magic3_reg[0] & ~lnk_isRet3_reg,,,,);
 
   get_carry #(4) btbLNoffCmpCC(lnk_off_reg,~cc_read_IP_reg2[4:1],1'b1,lnk_offIn_cc);
   
@@ -1079,10 +1091,10 @@ module frontend1(
   .write_off0(jmp_off_reg[0]),.write_off1(jmp_off_reg[1]),.write_off2(jmp_off_reg[2]),.write_off3(jmp_off_reg[3]),
   .write_cond(~{jdec_type[3][4],jdec_type[2][4],jdec_type[1][4],jdec_type[0][4]}),
   .write_indir({jdec_type[3]==5'h11,jdec_type[2]==5'h11,jdec_type[1]==5'h11,jdec_type[0]==5'h11}),
-  .write_link0(jdec_link0[4:0]),.write_lnpos0(lnk_lnpos0),
-  .write_link1(jdec_link1[4:0]),.write_lnpos1(lnk_lnpos1),
-  .write_link2(jdec_link2[4:0]),.write_lnpos2(lnk_lnpos2),
-  .write_link3(jdec_link3[4:0]),.write_lnpos3(lnk_lnpos3),
+  .write_link0(jdec_link0[4:0]),.write_lnpos0(lnk_off0_reg),
+  .write_link1(jdec_link1[4:0]),.write_lnpos1(lnk_off1_reg),
+  .write_link2(jdec_link2[4:0]),.write_lnpos2(lnk_off2_reg),
+  .write_link3(jdec_link3[4:0]),.write_lnpos3(lnk_off3_reg),
   .write_way(btb_way_reg2),
   .write_thread(1'b0),
   .write_wen(1'b0),
