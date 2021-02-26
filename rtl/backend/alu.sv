@@ -4,7 +4,7 @@
 
 
 
-module alu(clk,rst,except,except_thread,thread,operation,dataEn,nDataAlt,retData,retEn,val1,val2,valS,valRes);
+module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,retData,retEn,val1,val2,valS,valRes);
 
   localparam REG_WIDTH=`reg_addr_width;
   localparam OPERATION_WIDTH=`operation_width;
@@ -17,6 +17,7 @@ module alu(clk,rst,except,except_thread,thread,operation,dataEn,nDataAlt,retData
   input except_thread;
   input thread;
   input [OPERATION_WIDTH-1:0] operation;
+  input [5:0] sub; //high power fat wire
   input dataEn;//1=coming data from rs
   input nDataAlt;//0=feeding data through multiclk unit
   output wire [EXCEPT_WIDTH-1:0] retData;
@@ -272,7 +273,7 @@ module alu(clk,rst,except,except_thread,thread,operation,dataEn,nDataAlt,retData
     .a(val1),
     .b(val2),
     .out(valRes),
-    .sub(is_sub),
+    .sub(sub),
     .en(add_en),
     .ben({(operation[7:0]==`op_add64 || operation[7:0]==`op_sub64) && ~is_ptr && ~(val1[64]&val2[64]&is_sub||val2[64]&is_sub),
     (operation[7:0]==`op_add64 || operation[7:0]==`op_sub64)

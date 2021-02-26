@@ -628,7 +628,7 @@ module addsub_alu(a,b,out,sub,en,ben,cout,cout4,cout32,cout_sec,ndiff,cout44);
   input [64:0] a;
   input [64:0] b;
   output [64:0] out;
-  input sub;
+  input [5:0] sub;
   input en;
   input [1:0] ben;
   output cout;
@@ -699,8 +699,8 @@ module addsub_alu(a,b,out,sub,en,ben,cout,cout4,cout32,cout_sec,ndiff,cout44);
   
   assign cin=sub;
 
-  assign ptr=b[64] && ~sub ? xb[63:0] : a[63:0];
-  assign unptr=b[64] && ~sub ? a[43:4] : xb[43:4];
+  assign ptr=b[64] && ~sub ? b[63:0] : a[63:0];
+  assign unptr=b[64] && ~sub ? xa[43:4] : xb[43:4];
   
   assign cout_sec[0]=pos_ack[{1'b0,cout_sec0}] | neg_ack[{1'b0,cout_sec0}] && ~err;
   assign cout_sec[1]=pos_ack[2] & ~err;
@@ -730,8 +730,14 @@ module addsub_alu(a,b,out,sub,en,ben,cout,cout4,cout32,cout_sec,ndiff,cout44);
   not_array #(1) C1_mod (sub,nC1[0]);
   
   assign cout=C[WIDTH-1];
-  xor_array #(WIDTH) sub_mod (b[63:0],{WIDTH{sub}},xb);
-  
+ 
+  assign xb=sub[0] ? b[63:0] : 64'bz; 
+  assign xb=sub[1] ? ~b[63:0] : 64'bz; 
+  assign xb=sub[2] ? {b[62:0],1'b0} : 64'bz; 
+  assign xa=sub[3] ? a[63:0] : 64'bz;
+  assign xa=sub[4] ? {a[61:0],2'b0} : 64'bz;
+  assign xa=sub[5] ? {a[60:0],3'b0} : 64'bz;
+
   generate
         
     for (i=0;i<WIDTH;i=i+1)

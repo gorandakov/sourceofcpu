@@ -223,6 +223,13 @@ module fu_alu(
   reg [12:0] u6_op_reg3;
   reg [12:0] u6_op_reg4;
 
+  reg [5:0] u1_isSub_reg;
+  reg [5:0] u2_isSub_reg;
+  reg [5:0] u3_isSub_reg;
+  reg [5:0] u4_isSub_reg;
+  reg [5:0] u5_isSub_reg;
+  reg [5:0] u6_isSub_reg;
+
   reg u1_clkEn_reg;
   reg u2_clkEn_reg;
   reg u3_clkEn_reg;
@@ -551,19 +558,19 @@ module fu_alu(
 
 
 
-  alu alu0(clk,rst,except,1'b0,1'b0,u1_op_reg,u1_clkEn_reg,1'b1,
+  alu alu0(clk,rst,except,1'b0,1'b0,u1_op_reg,u1_isSub_reg,u1_clkEn_reg,1'b1,
     u1_ret,u1_rten,uu_A1,uu_B1,uu_S1,FU4);
-  alu #(1'b0)  alu1(clk,rst,except,1'b0,1'b0,u2_op_reg,u2_clkEn_reg,1'b1,
+  alu #(1'b0)  alu1(clk,rst,except,1'b0,1'b0,u2_op_reg,u2_isSub_reg,u2_clkEn_reg,1'b1,
     u2_ret,u2_rten,uu_A2,uu_B2,uu_S2,FU7);
   
-  alu alu2(clk,rst,except,1'b0,1'b0,u3_op_reg,u3_clkEn_reg,1'b1,
+  alu alu2(clk,rst,except,1'b0,1'b0,u3_op_reg,u3_isSub_reg,u3_clkEn_reg,1'b1,
     u3_ret,u3_rten,uu_A3,uu_B3,uu_S3,FU5);
-  alu #(1'b0)  alu3(clk,rst,except,1'b0,1'b0,u4_op_reg,u4_clkEn_reg,1'b1,
+  alu #(1'b0)  alu3(clk,rst,except,1'b0,1'b0,u4_op_reg,u4_isSub_reg,u4_clkEn_reg,1'b1,
     u4_ret,u4_rten,uu_A4,uu_B4,uu_S4,FU8);
   
-  alu alu4(clk,rst,except,1'b0,1'b0,u5_op_reg,u5_clkEn_reg,u5_nDataAlt&&(&nDataAlt),
+  alu alu4(clk,rst,except,1'b0,1'b0,u5_op_reg,u5_isSub_reg,u5_clkEn_reg,u5_nDataAlt&&(&nDataAlt),
     u5_ret,u5_rten,uu_A5,uu_B5,uu_S5,FU6);
-  alu #(1'b0)  alu5(clk,rst,except,1'b0,1'b0,u6_op_reg,u6_clkEn_reg,1'b1,
+  alu #(1'b0)  alu5(clk,rst,except,1'b0,1'b0,u6_op_reg,u6_isSub_reg,u6_clkEn_reg,1'b1,
     u6_ret,u6_rten,uu_A6,uu_B6,uu_S6,FU9);
   
   alu_shift sh2_alu(
@@ -717,6 +724,84 @@ module fu_alu(
       nDataAlt<=~DataAlt;
       nDataAlt_reg<=nDataAlt;
       u5_nDataAlt_reg<=u5_nDataAlt;
+      if (u1_op[7:1]==30) begin
+	  u1_isSub_reg[0]=u1_op[0] && ~u1_op[8];
+	  u1_isSub_reg[1]=~u1_op[0] && ~u1_op[8];
+	  u1_isSub_reg[2]=u1_op[8];
+	  u1_isSub_reg[3]=u1_op[9] && ~u1_op[10];
+	  u1_isSub_reg[4]=~u1_op[9] && ~u1_op[10];
+	  u1_isSub_reg[5]=u1_op[10];
+      end else begin
+	  u1_isSub_reg[0]=u1_op[7:0]!=`op_sub64 && u1_op[7:0]!=`op_sub32;
+	  u1_isSub_reg[1]=u1_op[7:0]==`op_sub64 || u1_op[7:0]==`op_sub32;
+	  u1_isSub_reg[2]=1'b0;
+	  u1_isSub_reg[5:3]=3'd1;
+      end
+      if (u2_op[7:1]==30) begin
+	  u2_isSub_reg[0]=u2_op[0] && ~u2_op[8];
+	  u2_isSub_reg[1]=~u2_op[0] && ~u2_op[8];
+	  u2_isSub_reg[2]=u2_op[8];
+	  u2_isSub_reg[3]=u2_op[9] && ~u2_op[10];
+	  u2_isSub_reg[4]=~u2_op[9] && ~u2_op[10];
+	  u2_isSub_reg[5]=u2_op[10];
+      end else begin
+	  u2_isSub_reg[0]=u2_op[7:0]!=`op_sub64 && u2_op[7:0]!=`op_sub32;
+	  u2_isSub_reg[1]=u2_op[7:0]==`op_sub64 || u2_op[7:0]==`op_sub32;
+	  u2_isSub_reg[2]=1'b0;
+	  u2_isSub_reg[5:3]=3'd1;
+      end
+      if (u3_op[7:1]==30) begin
+	  u3_isSub_reg[0]=u3_op[0] && ~u3_op[8];
+	  u3_isSub_reg[1]=~u3_op[0] && ~u3_op[8];
+	  u3_isSub_reg[2]=u3_op[8];
+	  u3_isSub_reg[3]=u3_op[9] && ~u3_op[10];
+	  u3_isSub_reg[4]=~u3_op[9] && ~u3_op[10];
+	  u3_isSub_reg[5]=u3_op[10];
+      end else begin
+	  u3_isSub_reg[0]=u3_op[7:0]!=`op_sub64 && u3_op[7:0]!=`op_sub32;
+	  u3_isSub_reg[1]=u3_op[7:0]==`op_sub64 || u3_op[7:0]==`op_sub32;
+	  u3_isSub_reg[2]=1'b0;
+	  u3_isSub_reg[5:3]=3'd1;
+      end
+      if (u4_op[7:1]==30) begin
+	  u4_isSub_reg[0]=u4_op[0] && ~u4_op[8];
+	  u4_isSub_reg[1]=~u4_op[0] && ~u4_op[8];
+	  u4_isSub_reg[2]=u4_op[8];
+	  u4_isSub_reg[3]=u4_op[9] && ~u4_op[10];
+	  u4_isSub_reg[4]=~u4_op[9] && ~u4_op[10];
+	  u4_isSub_reg[5]=u4_op[10];
+      end else begin
+	  u4_isSub_reg[0]=u4_op[7:0]!=`op_sub64 && u4_op[7:0]!=`op_sub32;
+	  u4_isSub_reg[1]=u4_op[7:0]==`op_sub64 || u4_op[7:0]==`op_sub32;
+	  u4_isSub_reg[2]=1'b0;
+	  u4_isSub_reg[5:3]=3'd1;
+      end
+      if (u5_op[7:1]==30) begin
+	  u5_isSub_reg[0]=u5_op[0] && ~u5_op[8];
+	  u5_isSub_reg[1]=~u5_op[0] && ~u5_op[8];
+	  u5_isSub_reg[2]=u5_op[8];
+	  u5_isSub_reg[3]=u5_op[9] && ~u5_op[10];
+	  u5_isSub_reg[4]=~u5_op[9] && ~u5_op[10];
+	  u5_isSub_reg[5]=u5_op[10];
+      end else begin
+	  u5_isSub_reg[0]=u5_op[7:0]!=`op_sub64 && u5_op[7:0]!=`op_sub32;
+	  u5_isSub_reg[1]=u5_op[7:0]==`op_sub64 || u5_op[7:0]==`op_sub32;
+	  u5_isSub_reg[2]=1'b0;
+	  u5_isSub_reg[5:3]=3'd1;
+      end
+      if (u6_op[7:1]==30) begin
+	  u6_isSub_reg[0]=u6_op[0] && ~u6_op[8];
+	  u6_isSub_reg[1]=~u6_op[0] && ~u6_op[8];
+	  u6_isSub_reg[2]=u6_op[8];
+	  u6_isSub_reg[3]=u6_op[9] && ~u6_op[10];
+	  u6_isSub_reg[4]=~u6_op[9] && ~u6_op[10];
+	  u6_isSub_reg[5]=u6_op[10];
+      end else begin
+	  u6_isSub_reg[0]=u6_op[7:0]!=`op_sub64 && u6_op[7:0]!=`op_sub32;
+	  u6_isSub_reg[1]=u6_op[7:0]==`op_sub64 || u6_op[7:0]==`op_sub32;
+	  u6_isSub_reg[2]=1'b0;
+	  u6_isSub_reg[5:3]=3'd1;
+      end
   end
 endmodule
 
