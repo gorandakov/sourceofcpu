@@ -83,6 +83,8 @@
 `define op_enptr 58
 `define op_unptr 59
 
+`define op_sadd_even 60
+`define op_sadd_odd 61
 
 //these are even more complicated instructions
 `define op_multiclk 2048
