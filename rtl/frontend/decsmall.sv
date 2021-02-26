@@ -167,6 +167,7 @@ module smallInstr_decoder(
   wire isBasicMUL;
   wire isSimdInt;
   wire isFPUreor;
+  wire isShlAddMulLike;
   wire isBasicFPUScalarA;
   wire isBasicFPUScalarB;
   wire isBasicFPUScalarC;
@@ -335,6 +336,8 @@ module smallInstr_decoder(
   //204,205 for isBaseExtStore (future ext)
   //206,207 for isBaseIndexExtStore (future ext)
   //208,209 for isImmExtStore (future ext)
+
+  assign isShlAddMulLike=opcode_main==2'd210 || opcode_main==2'd211;
   assign isBasicFPUScalarA=opcode_main==8'hef && instr[13:12]==2'b0;
   assign isBasicFPUScalarB=opcode_main==8'hef && instr[13:12]==2'b1;
   assign isBasicFPUScalarC=opcode_main==8'hef && instr[15:12]==4'd2;
@@ -1086,37 +1089,29 @@ module smallInstr_decoder(
           if (instr[15:13]) perror[15]=1;
       end
     
-  //    trien[16]=magic[0] & isCmpTestExtra; 
-	  //we don't assume immediate version; magic==3'b01
-  /*    pport[16]=PORT_ALU;
+      trien[16]=magic[0] & isShlAddMulLike; 
+      pport[16]=PORT_ALU;
       puseBConst[16]=1'b0;
-      pflags_write[16]=1'b1;
-      case(instr[25:23])
-      0: poperation[16]=`op_sub64;
-      1: poperation[16]=`op_sub32;
-      2: poperation[16]=`op_sub16;
-      3: poperation[16]=`op_sub8;
-      4: poperation[16]=`op_and64;
-      5: poperation[16]=`op_and32;
-      6: poperation[16]=`op_and16;
-      7: poperation[16]=`op_and8;
-      default: perror[16]=1;
+      pflags_write[16]=1'b0;
+      case(instr[0])
+      0: poperation[16]=`op_sadd_even;
+      1: poperation[16]=`op_sadd_odd;
       endcase
       prA_use[16]=1'b1;
       prB_use[16]=1'b1;
-      prT_use[16]=1'b0;
+      prT_use[16]=1'b1;
       puseRs[16]=1'b1;
       prAlloc[16]=1'b1;
-      prT[16]=5'd31;
-	 
-      if (instr[25:23]==3 || instr[25:23]==7) begin //8-bit
-          poperation[16][10:8]=instr[28:26];
-      end
-          
+      poperation[16][10:8]=instr[31:29];
+      poperation[16][12]=1'b1;    
       prA[16]={instr[17],instr[11:8]};
       prB[16]=instr[16:12];
-      if (instr[22:18]) perror[16]=1;
-    */ 
+      if (instr[29:23]) perror[16]=1;
+      prA[16]={instr[17],instr[11:8]};
+      prT[16]=instr[16:12];
+      prB[16]=instr[22:18];
+      if (magic[1:0]!=2'b01) perror[16]=1'b1;
+    
       trien[17]=magic[0] & isBaseSpecLoad;
       pport[17]=PORT_LOAD;
       poperation[17][5:0]={opcode_main[7],instr[11:8],1'b0};
