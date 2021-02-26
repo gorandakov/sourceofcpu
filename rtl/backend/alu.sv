@@ -183,7 +183,7 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
   
   assign valRes1=(operation[11] || ~nDataAlt || (~logic_en && ~spec1_en && ~spec2_en)) ? 
     64'b0: 64'bz;
-  assign add_en=(~(|operation[7:3]) && ~operation[11] && ~ (operation[1])) && nDataAlt;
+  assign add_en=(~(|operation[7:3])|(operation[7:1]==7'd30) && ~operation[11] && ~ (operation[1])) && nDataAlt;
   assign add8_en=1'b0;
   assign sahf_en=~operation[11] && operation[7:0]==`op_sahf && nDataAlt;
   assign shift_en=(operation[7:2]==6'd5 || operation[7:2]==6'd6 || operation[7:2]==6'd7) && nDataAlt && ~operation[11];
@@ -275,8 +275,9 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
     .out(valRes),
     .sub(sub),
     .en(add_en),
-    .ben({(operation[7:0]==`op_add64 || operation[7:0]==`op_sub64) && ~is_ptr && ~(val1[64]&val2[64]&is_sub||val2[64]&is_sub),
-    (operation[7:0]==`op_add64 || operation[7:0]==`op_sub64)
+    .ben({(operation[7:0]==`op_add64 || operation[7:0]==`op_sub64 || operation[7:1]==7'd30) && 
+    ~is_ptr && ~(val1[64]&val2[64]&is_sub||val2[64]&is_sub),
+    (operation[7:0]==`op_add64 || operation[7:0]==`op_sub64 || operation[7:1]==7'd30)
       }),
     .cout(carryAdd64),
     .cout4(carryAdd4LL),
