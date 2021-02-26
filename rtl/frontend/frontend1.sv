@@ -738,10 +738,16 @@ module frontend1(
   assign btb_in_link=taken[0] ? jlninx && btbx_jlink[3:0]!=4'hf && btbx_jlnpos==2'b0 : 1'bz;
   assign btb_in_link=(~btb_hasTK) ? jlninx && btbx_jlink[3:0]!=4'hf : 1'bz;//if no jump taken then link is last instr in bundle
 
-  assign btb_in_ret=taken[3] ? btbx_jlink[4:0]==5'h1f && btbx_jlnpos==2'd3: 1'bz;
-  assign btb_in_ret=taken[2] ? btbx_jlink[4:0]==5'h1f && btbx_jlnpos==2'd2 : 1'bz;
-  assign btb_in_ret=taken[1] ? btbx_jlink[4:0]==5'h1f && btbx_jlnpos==2'd1 : 1'bz;
-  assign btb_in_ret=taken[0] ? btbx_jlink[4:0]==5'h1f && btbx_jlnpos==2'd0 : 1'bz;
+  assign btb_in_ret=taken[3] ? (btbx_jlink0[4:0]==5'h1f && btbx_jlnpos0[3] && ~btbx_jlnoff0[4]) ||
+	  (btbx_jlink1[4:0]==5'h1f && btbx_jlnpos1[3] && ~btbx_jlnoff1[4]) ||
+	  (btbx_jlink2[4:0]==5'h1f && btbx_jlnpos2[3] && ~btbx_jlnoff2[4]) ||
+	  (btbx_jlink3[4:0]==5'h1f && btbx_jlnpos3[3] && ~btbx_jlnoff3[4]) : 1'bz;
+  assign btb_in_ret=taken[2] ? (btbx_jlink0[4:0]==5'h1f && btbx_jlnpos0[2] && ~btbx_jlnoff0[4]) ||
+	 (btbx_jlink1[4:0]==5'h1f && btbx_jlnpos1[2] && ~btbx_jlnoff1[4]) ||
+	(btbx_jlink2[4:0]==5'h1f && btbx_jlnpos2[2] && ~btbx_jlnoff2[4]) : 1'bz;
+  assign btb_in_ret=taken[1] ? (btbx_jlink0[4:0]==5'h1f && btbx_jlnpos0[1] && ~btbx_jlnoff0[4]) ||
+	  (btbx_jlink1[4:0]==5'h1f && btbx_jlnpos1[1] && ~btbx_jlnoff1[4]) : 1'bz;
+  assign btb_in_ret=taken[0] ? (btbx_jlink0[4:0]==5'h1f && btbx_jlnpos0[0] && ~btbx_jlnoff0[4]) : 1'bz;
   assign btb_in_ret=(~btb_hasTK) ? 1'b0 : 1'bz;
 
  // assign link_IP_d[0]=1'b0;
