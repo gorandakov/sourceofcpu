@@ -176,10 +176,10 @@ module tbuf_way(
   tbuf_pred,
   cond,
   indir,
-  link0,lnpos0,
-  link1,lnpos1,
-  link2,lnpos2,
-  link3,lnpos3,
+  link0,lnpos0,ljpos0,
+  link1,lnpos1,ljpos1,
+  link2,lnpos2,ljpos2,
+  link3,lnpos3,ljpos3,
   way,way_hit,
   tgt0I,tgt1I,tgt2I,tgt3I,
   tgt0O,tgt1O,tgt2O,tgt3O,
@@ -235,12 +235,16 @@ module tbuf_way(
   output [3:0] indir;
   output [4:0] link0;
   output [4:0] lnpos0;
+  output [4:0] ljpos0;
   output [4:0] link1;
   output [4:0] lnpos1;
+  output [4:0] ljpos1;
   output [4:0] link2;
   output [4:0] lnpos2;
+  output [4:0] ljpos2;
   output [4:0] link3;
   output [4:0] lnpos3;
+  output [4:0] ljpos3;
   output [2:0] way;
   output way_hit;
   

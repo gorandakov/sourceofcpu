@@ -730,7 +730,10 @@ module frontend1(
   
   assign last_off=btb_hasTK ? 4'bz : 4'he;
  
-  assign jlninx=jlnin; 
+  assign jlninx0=btb_jlnin0 && ~btb_jlnpos0[4]; 
+  assign jlninx1=btb_jlnin1 && ~btb_jlnpos1[4]; 
+  assign jlninx2=btb_jlnin2 && ~btb_jlnpos2[4]; 
+  assign jlninx3=btb_jlnin3 && ~btb_jlnpos3[4]; 
 
   assign btb_in_link=taken[3] ? jlninx && btbx_jlink[3:0]!=4'hf : 1'bz;
   assign btb_in_link=taken[2] ? jlninx && btbx_jlink[3:0]!=4'hf && btbx_jlnpos!=2'b11 : 1'bz;
@@ -1071,7 +1074,12 @@ module frontend1(
   adder_CSA #(5) ln3off2CSAt_mod(lnk_off3_reg,lnk_link3_reg,5'd2,lpar30,lpar31);
   adder #(5) ln3off2t_mod(lpar30[4:0],lpar31[4:0],jdec_link3,1'b0,~lnk_magic3_reg[0] & ~lnk_isRet3_reg,,,,);
 
-  get_carry #(4) btbLNoffCmpCC(lnk_off_reg,~cc_read_IP_reg2[4:1],1'b1,lnk_offIn_cc);
+  get_carry #(4) btbLNoffCmpCC(lnk_off0_reg,~cc_read_IP_reg2[4:1],1'b1,lnk_offIn_cc);
+  
+  get_carry #(4) btbL0NoffCmpCC(btb_jlnoff0,~cc_read_IP[4:1],1'b1,btb_jlnin0);
+  get_carry #(4) btbL1NoffCmpCC(btb_jlnoff1,~cc_read_IP[4:1],1'b1,btb_jlnin1);
+  get_carry #(4) btbL2NoffCmpCC(btb_jlnoff2,~cc_read_IP[4:1],1'b1,btb_jlnin2);
+  get_carry #(4) btbL3NoffCmpCC(btb_jlnoff3,~cc_read_IP[4:1],1'b1,btb_jlnin3);
   
   adder #(9) baseTick_mod(cc_read_IP[13:5],~cc_base_IP[13:5],{cc_base_tick,cc_base_off},1'b1,do_seq_reg,,,,);
   adder_inc #(35) baseInc_mod(cc_base_IP[47:13],cc_base_IP_d[47:13],do_seq_reg & cc_base_tick,);
