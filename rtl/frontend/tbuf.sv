@@ -690,7 +690,39 @@ module tbuf_way(
   assign lnpos2=oen ? read_lnpos2 : 3'bz;
   assign link3=oen ? read_link3 : 5'bz;
   assign lnpos3=oen ? read_lnpos3 : 3'bz;
-  
+ 
+  get_carry #(4) cmpJL00_mod(read_off0,~read_lnpos0,1'b1,readx_jln0[1]); 
+  get_carry #(4) cmpJL01_mod(read_off1,~read_lnpos0,1'b1,readx_jln0[2]); 
+  get_carry #(4) cmpJL02_mod(read_off2,~read_lnpos0,1'b1,readx_jln0[3]); 
+  get_carry #(4) cmpJL03_mod(read_off3,~read_lnpos0,1'b1,readx_jln0[4]);
+
+  get_carry #(4) cmpJL10_mod(read_off0,~read_lnpos1,1'b1,readx_jln1[1]); 
+  get_carry #(4) cmpJL11_mod(read_off1,~read_lnpos1,1'b1,readx_jln1[2]); 
+  get_carry #(4) cmpJL12_mod(read_off2,~read_lnpos1,1'b1,readx_jln1[3]); 
+  get_carry #(4) cmpJL13_mod(read_off3,~read_lnpos1,1'b1,readx_jln1[4]);
+
+  get_carry #(4) cmpJL20_mod(read_off0,~read_lnpos2,1'b1,readx_jln2[1]); 
+  get_carry #(4) cmpJL21_mod(read_off1,~read_lnpos2,1'b1,readx_jln2[2]); 
+  get_carry #(4) cmpJL22_mod(read_off2,~read_lnpos2,1'b1,readx_jln2[3]); 
+  get_carry #(4) cmpJL23_mod(read_off3,~read_lnpos2,1'b1,readx_jln2[4]);
+
+  get_carry #(4) cmpJL30_mod(read_off0,~read_lnpos3,1'b1,readx_jln3[1]); 
+  get_carry #(4) cmpJL31_mod(read_off1,~read_lnpos3,1'b1,readx_jln3[2]); 
+  get_carry #(4) cmpJL32_mod(read_off2,~read_lnpos3,1'b1,readx_jln3[3]); 
+  get_carry #(4) cmpJL33_mod(read_off3,~read_lnpos3,1'b1,readx_jln3[4]);
+
+  bit_find_last_bit #(4) fnd0_mod(~readx_jln0,readx_fjlnx0[4:1],readx_fjlnx0[0]);
+  assign readx_fjln0={readx_fjlnx0[4:1],~readx_fjlnx0[0]};
+
+  bit_find_last_bit #(4) fnd1_mod(~readx_jln1,readx_fjlnx1[4:1],readx_fjlnx1[0]);
+  assign readx_fjln1={readx_fjlnx1[4:1],~readx_fjlnx1[0]};
+
+  bit_find_last_bit #(4) fnd2_mod(~readx_jln2,readx_fjlnx2[4:1],readx_fjlnx2[0]);
+  assign readx_fjln2={readx_fjlnx2[4:1],~readx_fjlnx2[0]};
+
+  bit_find_last_bit #(4) fnd3_mod(~readx_jln3,readx_fjlnx3[4:1],readx_fjlnx3[0]);
+  assign readx_fjln3={readx_fjlnx3[4:1],~readx_fjlnx3[0]};
+
   assign jmp_mask[0]=oen ? j0_after && read_off0!=4'hf : 1'bz;
   assign jmp_mask[1]=oen ? j1_after && read_off1!=4'hf : 1'bz;
   assign jmp_mask[2]=oen ? j2_after && read_off2!=4'hf : 1'bz;
