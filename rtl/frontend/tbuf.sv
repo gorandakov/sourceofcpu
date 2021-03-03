@@ -1049,10 +1049,10 @@ module tbuf_way_2(
   tbuf_pred,
   cond,
   indir,
-  link0,lnpos0,
-  link1,lnpos1,
-  link2,lnpos2,
-  link3,lnpos3,
+  link0,lnpos0,ljpos0,
+  link1,lnpos1,ljpos1,
+  link2,lnpos2,ljpos2,
+  link3,lnpos3,ljpos3,
   way,way_hit,
   tgt0I,tgt1I,tgt2I,tgt3I,
   tgt0O,tgt1O,tgt2O,tgt3O,
@@ -1106,12 +1106,16 @@ module tbuf_way_2(
   output [3:0] indir;
   output [4:0] link0;
   output [4:0] lnpos0;
+  output [4:0] ljpos0;
   output [4:0] link1;
   output [4:0] lnpos1;
+  output [4:0] ljpos1;
   output [4:0] link2;
   output [4:0] lnpos2;
+  output [4:0] ljpos2;
   output [4:0] link3;
   output [4:0] lnpos3;
+  output [4:0] ljpos3;
   output [2:0] way;
   output way_hit;
   input [TGTIP_WIDTH-1:1] tgt0I;
@@ -1179,10 +1183,10 @@ module tbuf_way_2(
     tbuf_pred,
     cond,
     indir,
-    link0,lnpos0,
-    link1,lnpos1,
-    link2,lnpos2,
-    link3,lnpos3,
+    link0,lnpos0,ljpos0,
+    link1,lnpos1,ljpos1,
+    link2,lnpos2,ljpos2,
+    link3,lnpos3,ljpos3,
     way,way_hit,
     tgt0I,tgt1I,tgt2I,tgt3I,
     tgt0O,tgt1O,tgt2O,tgt3O,
@@ -1218,10 +1222,10 @@ module tbuf_way_2(
       tbuf_pred,
       cond,
       indir,
-      link0,lnpos0,
-      link1,lnpos1,
-      link2,lnpos2,
-      link3,lnpos3,
+      link0,lnpos0,ljpos0,
+      link1,lnpos1,ljpos1,
+      link2,lnpos2,ljpos2,
+      link3,lnpos3,ljpos3,
       way,way_hit,
       tgt0I,tgt1I,tgt2I,tgt3I,
       tgt0O,tgt1O,tgt2O,tgt3O,
@@ -1276,10 +1280,10 @@ module tbuf(
   tbuf_predA,tbuf_predB,
   cond,
   indir,
-  link0,lnpos0,
-  link1,lnpos1,
-  link2,lnpos2,
-  link3,lnpos3,
+  link0,lnpos0,ljpos0,
+  link1,lnpos1,ljpos1,
+  link2,lnpos2,ljpos2,
+  link3,lnpos3,ljpos3,
   way,
   off0,off1,off2,off3,
   tgt0I,tgt1I,tgt2I,tgt3I,
@@ -1343,12 +1347,16 @@ module tbuf(
   output [3:0] indir;
   output [4:0] link0;
   output [4:0] lnpos0;
+  output [4:0] ljpos0;
   output [4:0] link1;
   output [4:0] lnpos1;
+  output [4:0] ljpos1;
   output [4:0] link2;
   output [4:0] lnpos2;
+  output [4:0] ljpos2;
   output [4:0] link3;
   output [4:0] lnpos3;
+  output [4:0] ljpos3;
   output [2:0] way;
   output [3:0] off0;
   output [3:0] off1;
@@ -1451,20 +1459,28 @@ module tbuf(
   wire [4:0] linkB0;
   wire [4:0]  lnposA0;
   wire [4:0]  lnposB0;
+  wire [4:0]  ljposA0;
+  wire [4:0]  ljposB0;
   wire [4:0] linkA1;
   wire [4:0] linkB1;
   wire [4:0]  lnposA1;
   wire [4:0]  lnposB1;
+  wire [4:0]  ljposA1;
+  wire [4:0]  ljposB1;
    
   wire [4:0] linkA2;
   wire [4:0] linkB2;
   wire [4:0]  lnposA2;
   wire [4:0]  lnposB2;
+  wire [4:0]  ljposA2;
+  wire [4:0]  ljposB2;
    
   wire [4:0] linkA3;
   wire [4:0] linkB3;
   wire [4:0]  lnposA3;
   wire [4:0]  lnposB3;
+  wire [4:0]  ljposA3;
+  wire [4:0]  ljposB3;
    
    
   wire [TGTIP_WIDTH-2:0] tgt0A;
@@ -1562,10 +1578,10 @@ module tbuf(
   tbuf_predA,
   condA,
   indirA,
-  linkA0,lnposA0,
-  linkA1,lnposA1,
-  linkA2,lnposA2,
-  linkA3,lnposA3,
+  linkA0,lnposA0,ljposA0,
+  linkA1,lnposA1,ljposA1,
+  linkA2,lnposA2,ljposA2,
+  linkA3,lnposA3,ljposA3,
   /*way*/,readA_LRU,
   tgt0I_reg,tgt1I_reg,tgt2I_reg,tgt3I_reg,
   tgt0A,tgt1A,tgt2A,tgt3A,
@@ -1603,10 +1619,10 @@ module tbuf(
   tbuf_predB,
   condB,
   indirB,
-  linkB0,lnposB0,
-  linkB1,lnposB1,
-  linkB2,lnposB2,
-  linkB3,lnposB3,
+  linkB0,lnposB0,ljposB0,
+  linkB1,lnposB1,ljposB1,
+  linkB2,lnposB2,ljposB2,
+  linkB3,lnposB3,ljposB3,
   /*way*/,readB_LRU,
   tgt0I_reg,tgt1I_reg,tgt2I_reg,tgt3I_reg,
   tgt0B,tgt1B,tgt2B,tgt3B,
@@ -1638,8 +1654,18 @@ module tbuf(
   assign off3=read_hit_A ? off3A : off3B|{4{~read_hit_B}};
   assign cond=read_hit_A ? condA : condB;
   assign indir=read_hit_A ? indirA : indirB;
-  assign link=read_hit_A ? linkA : linkB&{5{read_hit_B}};
-  assign lnpos=read_hit_A ? lnposA : lnposB|{3{~read_hit_B}};
+  assign link0= read_hit_A ? linkA0 :  linkB0&{5{read_hit_B}};
+  assign lnpos0=read_hit_A ? lnposA0 : lnposB0|{5{~read_hit_B}};
+  assign ljpos0=read_hit_A ? ljposA0 : ljposB0|{5{~read_hit_B}};
+  assign link1= read_hit_A ? linkA1 :  linkB1&{5{read_hit_B}};
+  assign lnpos1=read_hit_A ? lnposA1 : lnposB1|{5{~read_hit_B}};
+  assign ljpos1=read_hit_A ? ljposA1 : ljposB1|{5{~read_hit_B}};
+  assign link2= read_hit_A ? linkA2 :  linkB2&{5{read_hit_B}};
+  assign lnpos2=read_hit_A ? lnposA2 : lnposB2|{5{~read_hit_B}};
+  assign ljpos2=read_hit_A ? ljposA2 : ljposB2|{5{~read_hit_B}};
+  assign link3= read_hit_A ? linkA3 :  linkB3&{5{read_hit_B}};
+  assign lnpos3=read_hit_A ? lnposA3 : lnposB3|{5{~read_hit_B}};
+  assign ljpos3=read_hit_A ? ljposA3 : ljposB3|{5{~read_hit_B}};
   assign read_hitLRU=read_hit_A ? readA_LRU : readB_LRU;
 
   assign read_hit_A=read_hit_way[0];
