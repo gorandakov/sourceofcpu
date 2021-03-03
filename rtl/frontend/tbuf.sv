@@ -442,7 +442,19 @@ module tbuf_way(
   reg update_en_reg,update_en_reg2;
   reg [1:0] update_taken_reg;
   reg [1:0] update_use_reg;
-  
+ 
+  wire [4:1] readx_jln0; 
+  wire [4:1] readx_jln1; 
+  wire [4:1] readx_jln2; 
+  wire [4:1] readx_jln3; 
+  wire [4:0] readx_fjln0; 
+  wire [4:0] readx_fjln1; 
+  wire [4:0] readx_fjln2; 
+  wire [4:0] readx_fjln3; 
+  wire [4:0] readx_fjlnx0; 
+  wire [4:0] readx_fjlnx1; 
+  wire [4:0] readx_fjlnx2; 
+  wire [4:0] readx_fjlnx3; 
   
   wire write_LRU;
   reg [9:0] update_addr_reg;
@@ -468,12 +480,16 @@ module tbuf_way(
   reg [3:0] write_indir_rex;
   reg [4:0] write_link0_rex;
   reg [4:0] write_lnpos0_rex;
+  reg [4:0] write_ljpos0_rex;
   reg [4:0] write_link1_rex;
   reg [4:0] write_lnpos1_rex;
+  reg [4:0] write_ljpos1_rex;
   reg [4:0] write_link2_rex;
   reg [4:0] write_lnpos2_rex;
+  reg [4:0] write_ljpos2_rex;
   reg [4:0] write_link3_rex;
   reg [4:0] write_lnpos3_rex;
+  reg [4:0] write_ljpos3_rex;
   reg write_way_rex;
   
   reg read_clkEn_reg2;
@@ -683,14 +699,20 @@ module tbuf_way(
   
   assign indir=oen ? read_indir : 4'bz;
   assign link0=oen ? read_link0 : 5'bz;
-  assign lnpos0=oen ? read_lnpos0 : 3'bz;
+  assign lnpos0=oen ? read_lnpos0 : 5'bz;
   assign link1=oen ? read_link1 : 5'bz;
-  assign lnpos1=oen ? read_lnpos1 : 3'bz;
+  assign lnpos1=oen ? read_lnpos1 : 5'bz;
   assign link2=oen ? read_link2 : 5'bz;
-  assign lnpos2=oen ? read_lnpos2 : 3'bz;
+  assign lnpos2=oen ? read_lnpos2 : 5'bz;
   assign link3=oen ? read_link3 : 5'bz;
-  assign lnpos3=oen ? read_lnpos3 : 3'bz;
+  assign lnpos3=oen ? read_lnpos3 : 5'bz;
+  
+  assign ljpos3=oen ? readx_fjln3 : 5'bz;
+  assign ljpos2=oen ? readx_fjln2 : 5'bz;
+  assign ljpos1=oen ? readx_fjln1 : 5'bz;
  
+  assign ljpos0=oen ? readx_fjln0 : 5'bz;
+
   get_carry #(4) cmpJL00_mod(read_off0,~read_lnpos0,1'b1,readx_jln0[1]); 
   get_carry #(4) cmpJL01_mod(read_off1,~read_lnpos0,1'b1,readx_jln0[2]); 
   get_carry #(4) cmpJL02_mod(read_off2,~read_lnpos0,1'b1,readx_jln0[3]); 
@@ -756,15 +778,20 @@ module tbuf_way(
   assign cond=(read_write_fwd & HALF) ? write_cond_rex : 4'bz;
   
   assign indir=(read_write_fwd & HALF) ? write_indir_rex : 4'bz;
-  assign link0=(read_write_fwd & HALF) ? write_link0_rex : 4'bz;
-  assign lnpos0=(read_write_fwd & HALF) ? write_lnpos0_rex : 4'bz;
-  assign link1=(read_write_fwd & HALF) ? write_link1_rex : 4'bz;
-  assign lnpos1=(read_write_fwd & HALF) ? write_lnpos1_rex : 4'bz;
-  assign link2=(read_write_fwd & HALF) ? write_link2_rex : 4'bz;
-  assign lnpos2=(read_write_fwd & HALF) ? write_lnpos2_rex : 4'bz;
-  assign link3=(read_write_fwd & HALF) ? write_link3_rex : 4'bz;
-  assign lnpos3=(read_write_fwd & HALF) ? write_lnpos3_rex : 4'bz;
-  
+  assign link0=(read_write_fwd & HALF) ? write_link0_rex : 5'bz;
+  assign lnpos0=(read_write_fwd & HALF) ? write_lnpos0_rex : 5'bz;
+  assign link1=(read_write_fwd & HALF) ? write_link1_rex : 5'bz;
+  assign lnpos1=(read_write_fwd & HALF) ? write_lnpos1_rex : 5'bz;
+  assign link2=(read_write_fwd & HALF) ? write_link2_rex : 5'bz;
+  assign lnpos2=(read_write_fwd & HALF) ? write_lnpos2_rex : 5'bz;
+  assign link3=(read_write_fwd & HALF) ? write_link3_rex : 5'bz;
+  assign lnpos3=(read_write_fwd & HALF) ? write_lnpos3_rex : 5'bz;
+ 
+  assign ljpos3=(read_write_fwd & HALF) ? write_ljpos3_rex : 5'bz;
+  assign ljpos2=(read_write_fwd & HALF) ? write_ljpos2_rex : 5'bz;
+  assign ljpos1=(read_write_fwd & HALF) ? write_ljpos1_rex : 5'bz;
+  assign ljpos0=(read_write_fwd & HALF) ? write_ljpos0_rex : 5'bz;
+   
   assign jmp_mask[0]=(read_write_fwd & HALF) ? j0_afterW && write_off0_rex!=4'hf : 1'bz;
   assign jmp_mask[1]=(read_write_fwd & HALF) ? j1_afterW && write_off1_rex!=4'hf : 1'bz;
   assign jmp_mask[2]=(read_write_fwd & HALF) ? j2_afterW && write_off2_rex!=4'hf : 1'bz;
@@ -987,12 +1014,16 @@ module tbuf_way(
           write_indir_rex<=4'b0;
           write_link0_rex<=5'b0;
           write_lnpos0_rex<=5'b0;
+          write_ljpos0_rex<=5'b0;
           write_link1_rex<=5'b0;
           write_lnpos1_rex<=5'b0;
+          write_ljpos1_rex<=5'b0;
           write_link2_rex<=5'b0;
           write_lnpos2_rex<=5'b0;
+          write_ljpos2_rex<=5'b0;
           write_link3_rex<=5'b0;
           write_lnpos3_rex<=5'b0;
+          write_ljpos3_rex<=5'b0;
           write_way_rex<=1'b0;
           IP_wbits_reg<=10'b0;
       //    read_clkEn_reg2<=1'b0;
@@ -1016,12 +1047,16 @@ module tbuf_way(
               write_indir_rex<=write_indir;
               write_link0_rex<=write_link0;
               write_lnpos0_rex<=write_lnpos0;
+              write_ljpos0_rex<=write_ljpos0;
               write_link1_rex<=write_link1;
               write_lnpos1_rex<=write_lnpos1;
+              write_ljpos1_rex<=write_ljpos1;
               write_link2_rex<=write_link2;
               write_lnpos2_rex<=write_lnpos2;
+              write_ljpos2_rex<=write_ljpos2;
               write_link3_rex<=write_link3;
               write_lnpos3_rex<=write_lnpos3;
+              write_ljpos3_rex<=write_ljpos3;
               write_way_rex<=write_way;
         //      read_clkEn_reg2<=read_clkEn;
           end
