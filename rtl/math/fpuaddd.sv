@@ -56,11 +56,8 @@ module fadd(
       input dbl;
       
       begin
-	  fracxfrm0[10:0]=op[10:0];
-	  fracxfrm0[39:11]=op[39:11];
-	  fracxfrm0[51:40]=op[51:40];
-	  fracxfrm0[52]=op[52]|dbl;
-	  fracxfrm0[63:53]=op[63:53]&{11{~dbl}};
+	  fracxfrm0[63:11]=op[63:11];
+	  fracxfrm0[10:0]=op[10:0]|{11{dbl}};
       end
   endfunction
 
@@ -69,11 +66,7 @@ module fadd(
       input dbl;
       
       begin
-	  fracxfrm1[10:0]=op[10:0];
-	  fracxfrm1[39:11]=op[39:11];
-	  fracxfrm1[51:40]=op[51:40];
-	  fracxfrm1[52]=op[52]|dbl;
-	  fracxfrm1[63:53]=op[63:53]&{11{~dbl}};
+	  fracxfrm1[63:0]=op[63:0];
       end
   endfunction
 
@@ -217,17 +210,15 @@ module fadd(
   assign spec_logic[3]=logic_en && logic_sel==2'd3 && ~copyA;
  
  
-  assign opA=a_more ?  fracxfrm1(A[63:0],isDBL) : 64'bz;
-  assign opB=(sxor & a_more) ?  ~fracxfrm1(B[63:0],isDBL) : 64'bz;
-  assign opA=(~a_more) ?  fracxfrm1(B[63:0],isDBL) : 64'bz;
-  assign opB=(sxor & ~a_more) ?  ~fracxfrm1(A[63:0],isDBL) : 64'bz;
-  assign opB=(~sxor & a_more) ?  fracxfrm0(B[63:0],isDBL) : 64'bz;
-  assign opB=(~sxor & ~a_more) ?  fracxfrm0(A[63:0],isDBL) : 64'bz;
+  assign opA=a_more ?  fracxfrm0(A[63:0],isDBL) : 64'bz;
+  assign opB=(sxor & a_more) ?  ~(B[63:0]) : 64'bz;
+  assign opA=(~a_more) ?  fracxfrm0(B[63:0],isDBL) : 64'bz;
+  assign opB=(sxor & ~a_more) ?  ~(A[63:0]) : 64'bz;
+  assign opB=(~sxor & a_more) ?  (B[63:0]) : 64'bz;
+  assign opB=(~sxor & ~a_more) ?  (A[63:0]) : 64'bz;
   
-  assign opA_exp=(a_more & ~isDBL) ? {A[80],A[78:64]} : 16'bz;
-  assign opA_exp=(a_more & isDBL) ? {A[80],{4{~A[80]}},A[62:52]} : 16'bz;
-  assign opA_exp=(~a_more & ~isDBL) ? {B[80],B[78:64]} : 16'bz;
-  assign opA_exp=(~a_more & isDBL) ? {B[80],{4{~B[80]}},B[62:52]} : 16'bz;
+  assign opA_exp=(a_more) ? {A[80],A[78:64]} : 16'bz;
+  assign opA_exp=(~a_more) ? {B[80],B[78:64]} : 16'bz;
   
   assign expdiff=a_more ? expdiffA : expdiffB;
   
