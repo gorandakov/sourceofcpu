@@ -1365,6 +1365,8 @@ module tbuf(
   link3,lnpos3,ljpos3,
   way,
   off0,off1,off2,off3,
+  attr0I,attr1I,attr2I,attr3I,
+  attr0O,attr1O,attr2O,attr3O,
   tgt0I,tgt1I,tgt2I,tgt3I,
   tgt0O,tgt1O,tgt2O,tgt3O,
   write_off0,write_off1,write_off2,write_off3,
@@ -1441,6 +1443,14 @@ module tbuf(
   output [3:0] off1;
   output [3:0] off2;
   output [3:0] off3;
+  input [3:0] attr0I;
+  input [3:0] attr1I;
+  input [3:0] attr2I;
+  input [3:0] attr3I;
+  output [3:0] attr0O;
+  output [3:0] attr1O;
+  output [3:0] attr2O;
+  output [3:0] attr3O;
   input [TGTIP_WIDTH-1:1] tgt0I;
   input [TGTIP_WIDTH-1:1] tgt1I;
   input [TGTIP_WIDTH-1:1] tgt2I;
@@ -1571,6 +1581,15 @@ module tbuf(
   wire [TGTIP_WIDTH-2:0] tgt1B;
   wire [TGTIP_WIDTH-2:0] tgt2B;
   wire [TGTIP_WIDTH-2:0] tgt3B;
+
+  wire [3:0] attr0A;
+  wire [3:0] attr1A;
+  wire [3:0] attr2A;
+  wire [3:0] attr3A;
+  wire [3:0] attr0B;
+  wire [3:0] attr1B;
+  wire [3:0] attr2B;
+  wire [3:0] attr3B;
   
  // wire [2:0] read_hitLRU;
 
@@ -1600,6 +1619,11 @@ module tbuf(
   reg [TGTIP_WIDTH-1:1] tgt1I_reg;
   reg [TGTIP_WIDTH-1:1] tgt2I_reg;
   reg [TGTIP_WIDTH-1:1] tgt3I_reg;
+
+  reg [3:0] attr0I_reg;
+  reg [3:0] attr1I_reg;
+  reg [3:0] attr2I_reg;
+  reg [3:0] attr3I_reg;
 
   reg [12:0] update_addr0_reg;
   reg [12:0] update_addr1_reg;
@@ -1665,6 +1689,8 @@ module tbuf(
   tgt0I_reg,tgt1I_reg,tgt2I_reg,tgt3I_reg,
   tgt0A,tgt1A,tgt2A,tgt3A,
   off0A,off1A,off2A,off3A,
+  attr0I_reg,attr1I_reg,attr2I_reg,attr3I_reg,
+  attr0A,attr1A,attr2A,attr3A,
   write_off0,write_off1,write_off2,write_off3,
   write_cond,
   write_indir,
@@ -1706,6 +1732,8 @@ module tbuf(
   tgt0I_reg,tgt1I_reg,tgt2I_reg,tgt3I_reg,
   tgt0B,tgt1B,tgt2B,tgt3B,
   off0B,off1B,off2B,off3B,
+  attr0I_reg,attr1I_reg,attr2I_reg,attr3I_reg,
+  attr0B,attr1B,attr2B,attr3B,
   write_off0,write_off1,write_off2,write_off3,
   write_cond,
   write_indir,
@@ -1758,6 +1786,11 @@ module tbuf(
   assign tgt2O=read_hit_A ? tgt2A : tgt2B;
   assign tgt3O=read_hit_A ? tgt3A : tgt3B;
   
+  assign attr0O=read_hit_A ? attr0A : attr0B;
+  assign attr1O=read_hit_A ? attr1A : attr1B;
+  assign attr2O=read_hit_A ? attr2A : attr2B;
+  assign attr3O=read_hit_A ? attr3A : attr3B;
+  
   assign scupd_taken=update_use_REG[1] ? update_taken_REG[1] : update_taken_REG[0];
   assign scupd_addr=update_use_REG[1] ? update_addr1_REG : update_addr0_REG;
   
@@ -1806,6 +1839,11 @@ module tbuf(
           tgt2I_reg<={TGTIP_WIDTH-1{1'B0}};
           tgt3I_reg<={TGTIP_WIDTH-1{1'B0}};
           
+          attr0I_reg<=4'B0;
+          attr1I_reg<=4'B0;
+          attr2I_reg<=4'B0;
+          attr3I_reg<=4'B0;
+          
           update_addr0_reg<=13'b0;
           update_addr1_reg<=13'b0;
           update_en_reg<=1'b0;
@@ -1847,6 +1885,10 @@ module tbuf(
               tgt1I_reg<=tgt1I;
               tgt2I_reg<=tgt2I;
               tgt3I_reg<=tgt3I;
+              attr0I_reg<=attr0I;
+              attr1I_reg<=attr1I;
+              attr2I_reg<=attr2I;
+              attr3I_reg<=attr3I;
           end
           
           if (uxcept_reg) begin
