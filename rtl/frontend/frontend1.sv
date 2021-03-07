@@ -47,7 +47,7 @@ module frontend1(
 
   localparam PHYS_WIDTH=44;
   localparam VIRT_WIDTH=64;
-  localparam IP_WIDTH=48;
+  localparam IP_WIDTH=64;
   localparam [31:0] INIT_IP=32'h0;
   localparam BUS_BANK=32;
   localparam BUS_WIDTH=BUS_BANK*16;
@@ -59,7 +59,7 @@ module frontend1(
   input clk;
   input rst;
   input except;
-  input [VIRT_WIDTH-18:0] exceptIP;
+  input [VIRT_WIDTH-1:0] exceptIP;
   input exceptThread;
   input exceptDueJump;
   input [7:0] exceptJumpGHT;
@@ -146,8 +146,8 @@ module frontend1(
 
   wire do_seq_any,do_seq_miss;
 
-  wire [47:0] cc_read_IP_d;
-  wire [47:0] tr_read_IP_d;
+  wire [63:0] cc_read_IP_d;
+//  wire [63:0] tr_read_IP_d;
   wire do_seq;
   reg do_seq_reg;
   reg do_seq_reg2;
@@ -157,16 +157,16 @@ module frontend1(
   reg miss_now;
   reg tlbMiss_now;
   reg miss_now_reg;
-  reg [43:0] cc_read_IP;
-  reg [43:0] cc_read_IP_reg;
-  reg [43:0] cc_read_IP_reg2;
-  reg [43:0] cc_read_IP_reg3;
-  reg [43:0] cc_read_IP_reg4;
-  reg [43:0] cc_read_IP_reg5;
+  reg [63:0] cc_read_IP;
+  reg [63:0] cc_read_IP_reg;
+  reg [63:0] cc_read_IP_reg2;
+  reg [63:0] cc_read_IP_reg3;
+  reg [63:0] cc_read_IP_reg4;
+  reg [63:0] cc_read_IP_reg5;
  // reg [47:0] cc_read_IP_REG3;
  // reg [47:0] cc_read_IP_REG4;
-  reg  [43:0] cc_base_IP;
-  wire [43:0] cc_base_IP_d;
+  reg  [63:0] cc_base_IP;
+  wire [63:0] cc_base_IP_d;
   wire cc_base_tick;
   wire [7:0] cc_base_off;
   reg [7:0] cc_base_off_reg;
@@ -306,7 +306,7 @@ module frontend1(
   reg [7:0] dreq_reg3; 
 
   reg except_save;
-  reg [VIRT_WIDTH-18:0] exceptIP_save;
+  reg [VIRT_WIDTH-1:0] exceptIP_save;
   reg exceptThread_save;
   reg exceptLDConfl_save;
   reg exceptDueJump_save;
@@ -316,7 +316,7 @@ module frontend1(
   reg ixcept;
   reg ixcept_reg;
   wire uxcept;
-  wire [VIRT_WIDTH-18:0] ixceptIP;
+  wire [VIRT_WIDTH-1:0] ixceptIP;
   wire ixceptThread;
   wire ixceptDueJump;
   wire ixceptLDConfl;
@@ -362,11 +362,11 @@ module frontend1(
   reg [2:0] btb_way_reg2;
   wire [3:0][3:0] jmp_moff;
   reg [3:0] jmp_moff_reg[3:0];
-  wire [3:0][47:1] jmp_par0;
-  wire [3:0][47:1] jmp_par1;
-  wire [3:0][47:1] jmp_tpar0;
-  wire [3:0][47:1] jmp_tpar1;
-  wire [3:0][47:1] jdec_target;
+  wire [3:0][43:1] jmp_par0;
+  wire [3:0][43:1] jmp_par1;
+  wire [3:0][43:1] jmp_tpar0;
+  wire [3:0][43:1] jmp_tpar1;
+  wire [3:0][63:1] jdec_target;
   wire [3:0][3:0] jmp_mask;
   reg [3:0] jmp_mask_reg[3:0];
   reg [3:0] jmp_mask_reg2[3:0];
@@ -470,8 +470,8 @@ module frontend1(
   reg [3:0] last_off_reg2;
   reg [3:0] last_off_reg3;
   reg [3:0] last_off_reg4;
-  wire [46:0] rstack_dataW;
-  wire [46:0] rstack_dataR;
+  wire [67:1] rstack_dataW;
+  wire [67:1] rstack_dataR;
   
   wire btb_has0,btb_has1,btb_has2,btb_has3;
   wire [1:0] btb_sc0A;
@@ -564,26 +564,26 @@ module frontend1(
   reg  [3:0] btbx_joff_reg3[3:0];
   reg  [3:0] btbx_joff_reg4[3:0];
   reg  [2:0] btbxx_way_reg;
-  wire [46:0] btbx_tgt0;
-  wire [46:0] btbx_tgt1;
-  wire [46:0] btbx_tgt2;
-  wire [46:0] btbx_tgt3;
-  reg [46:0] btbx_tgt0_reg;
-  reg [46:0] btbx_tgt1_reg;
-  reg [46:0] btbx_tgt2_reg;
-  reg [46:0] btbx_tgt3_reg;
-  reg [46:0] btbx_tgt0_reg2;
-  reg [46:0] btbx_tgt1_reg2;
-  reg [46:0] btbx_tgt2_reg2;
-  reg [46:0] btbx_tgt3_reg2;
-  reg [46:0] btbx_tgt0_reg3;
-  reg [46:0] btbx_tgt1_reg3;
-  reg [46:0] btbx_tgt2_reg3;
-  reg [46:0] btbx_tgt3_reg3;
-  reg [46:0] btbx_tgt0_reg4;
-  reg [46:0] btbx_tgt1_reg4;
-  reg [46:0] btbx_tgt2_reg4;
-  reg [46:0] btbx_tgt3_reg4;
+  wire [62:0] btbx_tgt0;
+  wire [62:0] btbx_tgt1;
+  wire [62:0] btbx_tgt2;
+  wire [62:0] btbx_tgt3;
+  reg [62:0] btbx_tgt0_reg;
+  reg [62:0] btbx_tgt1_reg;
+  reg [62:0] btbx_tgt2_reg;
+  reg [62:0] btbx_tgt3_reg;
+  reg [62:0] btbx_tgt0_reg2;
+  reg [62:0] btbx_tgt1_reg2;
+  reg [62:0] btbx_tgt2_reg2;
+  reg [62:0] btbx_tgt3_reg2;
+  reg [62:0] btbx_tgt0_reg3;
+  reg [62:0] btbx_tgt1_reg3;
+  reg [62:0] btbx_tgt2_reg3;
+  reg [62:0] btbx_tgt3_reg3;
+  reg [62:0] btbx_tgt0_reg4;
+  reg [62:0] btbx_tgt1_reg4;
+  reg [62:0] btbx_tgt2_reg4;
+  reg [62:0] btbx_tgt3_reg4;
   wire [3:0] btbx_cond;
   reg [3:0] btbx_cond_reg;
   reg [3:0] btbx_cond_reg2;
@@ -615,7 +615,7 @@ module frontend1(
 //  wire instrEn2=instr
   wire jumpTK_btb_fstall;
   reg jumpTK_en;
-  reg [47:0] jumpTK_addr;
+  reg [63:0] jumpTK_addr;
 
   integer m,n,t;
 
