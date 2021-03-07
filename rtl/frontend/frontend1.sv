@@ -770,16 +770,16 @@ module frontend1(
   assign btb_in_link=(~btb_hasTK) ? (jlninx0 && btbx_jlink0[4:0]!=5'h1f)|| (jlninx1 && btbx_jlink1[4:0]!=5'h1f)||
 	  (jlninx2 && btbx_jlink2[4:0]!=5'h1f) || (jlninx3 && btbx_jlink3[4:0]!=5'h1f) : 1'bz;//if no jump taken then link is last instr in bundle
 
-  assign btb_in_ret=taken[3] ? (btbx_jlink0[4:0]==5'h1f && btbx_jlnjpos0[3] && ~btbx_jlnpos0[4]) ||
-	  (btbx_jlink1[4:0]==5'h1f && btbx_jlnjpos1[3] && ~btbx_jlnpos1[4]) ||
-	  (btbx_jlink2[4:0]==5'h1f && btbx_jlnjpos2[3] && ~btbx_jlnpos2[4]) ||
-	  (btbx_jlink3[4:0]==5'h1f && btbx_jlnjpos3[3] && ~btbx_jlnpos3[4]) : 1'bz;
-  assign btb_in_ret=taken[2] ? (btbx_jlink0[4:0]==5'h1f && btbx_jlnjpos0[2] && ~btbx_jlnpos0[4]) ||
-	 (btbx_jlink1[4:0]==5'h1f && btbx_jlnjpos1[2] && ~btbx_jlnpos1[4]) ||
-	(btbx_jlink2[4:0]==5'h1f && btbx_jlnjpos2[2] && ~btbx_jlnpos2[4]) : 1'bz;
-  assign btb_in_ret=taken[1] ? (btbx_jlink0[4:0]==5'h1f && btbx_jlnjpos0[1] && ~btbx_jlnpos0[4]) ||
-	  (btbx_jlink1[4:0]==5'h1f && btbx_jlnjpos1[1] && ~btbx_jlnpos1[4]) : 1'bz;
-  assign btb_in_ret=taken[0] ? (btbx_jlink0[4:0]==5'h1f && btbx_jlnjpos0[0] && ~btbx_jlnpos0[4]) : 1'bz;
+  assign btb_in_ret=taken[3] ? (btbx_jlink0[4:0]==5'h1f && btbx_jlnjpos0[4] && ~btbx_jlnpos0[4]) ||
+	  (btbx_jlink1[4:0]==5'h1f && btbx_jlnjpos1[4] && ~btbx_jlnpos1[4]) ||
+	  (btbx_jlink2[4:0]==5'h1f && btbx_jlnjpos2[4] && ~btbx_jlnpos2[4]) ||
+	  (btbx_jlink3[4:0]==5'h1f && btbx_jlnjpos3[4] && ~btbx_jlnpos3[4]) : 1'bz;
+  assign btb_in_ret=taken[2] ? (btbx_jlink0[4:0]==5'h1f && btbx_jlnjpos0[3] && ~btbx_jlnpos0[4]) ||
+	 (btbx_jlink1[4:0]==5'h1f && btbx_jlnjpos1[3] && ~btbx_jlnpos1[4]) ||
+	(btbx_jlink2[4:0]==5'h1f && btbx_jlnjpos2[3] && ~btbx_jlnpos2[4]) : 1'bz;
+  assign btb_in_ret=taken[1] ? (btbx_jlink0[4:0]==5'h1f && btbx_jlnjpos0[2] && ~btbx_jlnpos0[4]) ||
+	  (btbx_jlink1[4:0]==5'h1f && btbx_jlnjpos1[2] && ~btbx_jlnpos1[4]) : 1'bz;
+  assign btb_in_ret=taken[0] ? (btbx_jlink0[4:0]==5'h1f && btbx_jlnjpos0[1] && ~btbx_jlnpos0[4]) : 1'bz;
   assign btb_in_ret=(~btb_hasTK) ? 1'b0 : 1'bz;
 
  // assign link_IP_d[0]=1'b0;
