@@ -1181,6 +1181,8 @@ module frontend1(
   .ljpos3(btb_jlnjpos3),
   .way(btb_way),
   .off0(btb_joff[0]),.off1(btb_joff[1]),.off2(btb_joff[2]),.off3(btb_joff[3]),
+  .attr0I(jdec_attr[0]),.attr1I(jdec_attr[1]),.attr2I(jdec_attr[2]),.attr3I(jdec_attr[3]),
+  .attr0O(btb_attr0),attr1O(btb_attr1),attr2O(btb_attr2),attr3O(btb_attr3),
   .tgt0I(jdec_target[0]),.tgt1I(jdec_target[1]),.tgt2I(jdec_target[2]),.tgt3I(jdec_target[3]),
   .tgt0O(btb_tgt0),
   .tgt1O(btb_tgt1),
