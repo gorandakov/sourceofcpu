@@ -258,13 +258,13 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   assign class_[`iclass_flag]=flag;
   assign class_[`iclass_pos0]=clsPos0;
   
-  assign LNK=isRet ? 5'b0 : 5'bz;
+  assign LNK=isRet ? 5'h1f : 5'bz;
 //  assign LNK=(isCallPrep & ~magic[0]) ? instr[11:8] : 16'bz;
   assign LNK=isCallPrep ? instr[20:16] : 5'bz;
-  assign LNK=subIsLinkRet ? instr[15:12] : 5'bz;
-  assign LNK=(~isRet & ~isCallPrep) ? 5'hf : 5'bz;
+  assign LNK=subIsLinkRet&~opcode_sub[1] ? {1'b0,instr[15:12]} : 5'bz;
+  assign LNK=(~isRet & ~isCallPrep & ~(subIsLinkRet&~opcode_sub[1])) ? 5'h1f : 5'bz;
   
-  assign isLNK=isRet | isCallPrep;
+  assign isLNK=isRet | isCallPrep | (subIsLinkRet&~opcode_sub[1]);
   
 endmodule
 
