@@ -11,7 +11,7 @@ module ret_stack_ram(
   write_wen
   );
 
-  localparam DATA_WIDTH=47;
+  localparam DATA_WIDTH=67;
   localparam ADDR_WIDTH=5;
   localparam ADDR_COUNT=32;
 
@@ -53,7 +53,7 @@ module ret_stack(
   write_wen
   );
 
-  localparam DATA_WIDTH=47;
+  localparam DATA_WIDTH=67;
   localparam ADDR_WIDTH=4;
   localparam ADDR_COUNT=16;
 
