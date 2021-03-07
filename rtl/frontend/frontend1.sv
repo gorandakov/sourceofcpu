@@ -746,9 +746,15 @@ module frontend1(
   assign btbx_tgt2=btb_tgt2;
   assign btbx_tgt3=btb_tgt3;
   
-//  assign rstack_dataW=cc_read_IP[47:1];
+  assign rstack_dataW[63:44]=cc_read_IP[63:44];
+  assign rstack_dataW[67:64]=cc_attr;
 
   adder #(43) rsw_med(cc_read_IP[43:1],{38'b0,btbx_jlnoff},rstack_dataW[43:1],1'b0,1'b1,,,,);
+
+  assign btbx_jlnoff=jlninx0 ? btbx_lnpos0 : 5'bz;
+  assign btbx_jlnoff={jlninx1,jlninx0}==2'b10 ? btbx_lnpos1 : 5'bz;
+  assign btbx_jlnoff={jlninx2,jlninx1,jlninx0}==3'b100 ? btbx_lnpos2 : 5'bz;
+  assign btbx_jlnoff={jlninx2,jlninx1,jlninx0}==3'b0 ? btbx_lnpos3 : 5'bz;
   
   assign last_off=btb_hasTK ? 4'bz : 4'he;
  
