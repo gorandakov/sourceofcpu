@@ -184,6 +184,8 @@ module tbuf_way(
   tgt0I,tgt1I,tgt2I,tgt3I,
   tgt0O,tgt1O,tgt2O,tgt3O,
   off0,off1,off2,off3,
+  attr0I,attr1I,attr2I,attr3I,
+  attr0O,attr1O,attr2O,attr3O,
   write_off0,write_off1,write_off2,write_off3,
   write_cond,
   write_indir,
@@ -261,6 +263,17 @@ module tbuf_way(
   output [3:0] off1;
   output [3:0] off2;
   output [3:0] off3;
+  
+  input [3:0] attr0I;
+  input [3:0] attr1I;
+  input [3:0] attr2I;
+  input [3:0] attr3I;
+
+  output [3:0] attr0O;
+  output [3:0] attr1O;
+  output [3:0] attr2O;
+  output [3:0] attr3O;
+
   input [3:0] write_off0;
   input [3:0] write_off1;
   input [3:0] write_off2;
