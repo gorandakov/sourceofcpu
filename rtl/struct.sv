@@ -179,11 +179,14 @@
 `define btb_tgt_jmask1 353:350
 `define btb_tgt_jmask2 357:354
 `define btb_tgt_jmask3 361:358
-`define btb_other 365:362
-`define btb_LRU 366
+`define btb_attr0 364:362
+`define btb_attr1 367:365
+`define btb_attr2 370:368
+`define btb_attr3 373:371
+`define btb_LRU 374
 //lru needs to be kept at highest 2 bits
 
-`define btb_width 367
+`define btb_width 375
 
 `define btb_addr_width 8
 `define btb_addr_count 256
