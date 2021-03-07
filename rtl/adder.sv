@@ -673,6 +673,7 @@ module addsub_alu(a,b,out,sub,en,ben,cout,cout4,cout32,cout_sec,ndiff,cout44);
   wire [WIDTH-1:0] nC1;
  
   wire [WIDTH-1:0] xb;
+  wire [WIDTH-1:0] xa;
 
   wire [WIDTH-1:0] bitEn;
 
@@ -697,18 +698,18 @@ module addsub_alu(a,b,out,sub,en,ben,cout,cout4,cout32,cout_sec,ndiff,cout44);
   assign bitEn={{20{ben[1]&en}},{12{ben[0]&en}},{32{en}}};
   
   
-  assign cin=sub;
+  assign cin=sub[1];
 
-  assign ptr=b[64] && ~sub ? b[63:0] : a[63:0];
-  assign unptr=b[64] && ~sub ? xa[43:4] : xb[43:4];
+  assign ptr=b[64] && ~sub[1] ? b[63:0] : a[63:0];
+  assign unptr=b[64] && ~sub[1] ? xa[43:4] : xb[43:4];
   
   assign cout_sec[0]=pos_ack[{1'b0,cout_sec0}] | neg_ack[{1'b0,cout_sec0}] && ~err;
   assign cout_sec[1]=pos_ack[2] & ~err;
   assign cout_sec[2]=neg_ack[2] & ~err;
 
-  assign err=a[64] & b[64] & ~sub || ~a[64] & b[64] & sub;
+  assign err=a[64] & b[64] & ~sub[1] || ~a[64] & b[64] & sub[1] || a[64] & ~sub[3] || b[64] & ~sub[0];
 
-  assign is_ptr=a[64]|b[64] && ~(a[64]&b[64]&sub) && ben==2'b01;
+  assign is_ptr=a[64]|b[64] && ~(a[64]&b[64]&sub[1]) && ben==2'b01;
 
   assign out[64]=en ? is_ptr : 1'bz;
 
@@ -725,9 +726,9 @@ module addsub_alu(a,b,out,sub,en,ben,cout,cout4,cout32,cout_sec,ndiff,cout44);
   xor_array #(WIDTH) X_mod (a[63:0],xb,X);
   nxor_array #(WIDTH) nX_mod (a[63:0],xb,nX);
 
-  assign C1={C[WIDTH-2:0],sub};
+  assign C1={C[WIDTH-2:0],sub[1]};
   assign nC1[WIDTH-1:1]=nC[WIDTH-2:0];
-  not_array #(1) C1_mod (sub,nC1[0]);
+  not_array #(1) C1_mod (sub[1],nC1[0]);
   
   assign cout=C[WIDTH-1];
  

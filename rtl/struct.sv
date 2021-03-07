@@ -172,9 +172,9 @@
 `define btb_link2 320:316
 `define btb_link3 325:321
 `define btb_lnkoff0 330:326
-`define btb_lnkoff0 335:331
-`define btb_lnkoff0 340:336
-`define btb_lnkoff0 345:341
+`define btb_lnkoff1 335:331
+`define btb_lnkoff2 340:336
+`define btb_lnkoff3 345:341
 `define btb_tgt_jmask0 349:346
 `define btb_tgt_jmask1 353:350
 `define btb_tgt_jmask2 357:354

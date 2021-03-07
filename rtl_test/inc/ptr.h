@@ -17,14 +17,14 @@ class ptr {
 	masque&valH)|((64ul<<exp)-1);
 	unsigned long lowA=(0x0ul<<(exp+6))|((0xfffffffe000<<exp)&
 	masqueL&valL);
-	unsigned long hiA=(0x7ful<<(exp+6))|((0x1fffffffe000<<exp)&
-	masque&valH)|((64ul<<exp)-1);
+	unsigned long hiA=(0x0ul<<(exp+6))|((0xfffffffe000<<exp)&
+	masque&valH);
 	if (no_O) {
 	    lowA=((0xfffffffffc0<<exp)&
 	    (0xfffffffffc0));
 	    return (ptr2.val&lowA)==lowA;
 	}
-	return (ptr2.val&0xfffffffffff)<=hiA && (ptr2.val&0xfffffffffff)>=lowA;
+	return (ptr2.val&(0xfffffffe000<<exp))==hiA && (ptr2.val&(0xfffffffe000<<exp))==lowA;
     }
     void set_bounds(unsigned long low,unsigned long hi) {
         unsigned long exp=31;
