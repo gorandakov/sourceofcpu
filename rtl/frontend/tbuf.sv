@@ -378,6 +378,10 @@ module tbuf_way(
   wire [63:0] read_tgt1;
   wire [63:0] read_tgt2;
   wire [63:0] read_tgt3;
+  wire [2:0]  read_attr0;
+  wire [2:0]  read_attr1;
+  wire [2:0]  read_attr2;
+  wire [2:0]  read_attr3;
   wire [3:0] read_off0;
   wire [3:0] read_off1;
   wire [3:0] read_off2;
@@ -629,6 +633,10 @@ module tbuf_way(
   assign read_tgt1=btb_data[`btb_tgt_IP1];
   assign read_tgt2=btb_data[`btb_tgt_IP2];
   assign read_tgt3=btb_data[`btb_tgt_IP3];
+  assign read_attr0=btb_data[`btb_attr0];
+  assign read_attr1=btb_data[`btb_attr1];
+  assign read_attr2=btb_data[`btb_attr2];
+  assign read_attr3=btb_data[`btb_attr3];
   assign read_valid=btb_data[`btb_valid];
   assign read_off0=btb_data[`btb_off0];
   assign read_off1=btb_data[`btb_off1];
@@ -654,6 +662,10 @@ module tbuf_way(
   assign write_dataW[`btb_tgt_IP1]=tgt1I;
   assign write_dataW[`btb_tgt_IP2]=tgt2I;
   assign write_dataW[`btb_tgt_IP3]=tgt3I;
+  assign write_dataW[`btb_attr0]={attr0I[3],attr0I[1:0]};
+  assign write_dataW[`btb_attr1]={attr1I[3],attr1I[1:0]};
+  assign write_dataW[`btb_attr2]={attr2I[3],attr2I[1:0]};
+  assign write_dataW[`btb_attr3]={attr3I[3],attr3I[1:0]};
   assign write_dataW[`btb_src_IP]=nextIP_reg[63:15];
   assign write_dataW[`btb_off0]=write_off0_rex;
   assign write_dataW[`btb_off1]=write_off1_rex;
@@ -685,6 +697,11 @@ module tbuf_way(
   assign tgt1O=(oen) ? read_tgt1 : {TGTIP_WIDTH-1{1'BZ}};
   assign tgt2O=(oen) ? read_tgt2 : {TGTIP_WIDTH-1{1'BZ}};
   assign tgt3O=(oen) ? read_tgt3 : {TGTIP_WIDTH-1{1'BZ}};
+
+  assign attr0O=(oen) ? {read_attr0[2],1'b0,read_attr0[1:0]} : 4'bz;
+  assign attr1O=(oen) ? {read_attr1[2],1'b0,read_attr1[1:0]} : 4'bz;
+  assign attr2O=(oen) ? {read_attr2[2],1'b0,read_attr2[1:0]} : 4'bz;
+  assign attr3O=(oen) ? {read_attr3[2],1'b0,read_attr3[1:0]} : 4'bz;
   
   assign way=oen ? WAY : 1'bz;
   
@@ -1105,6 +1122,8 @@ module tbuf_way_2(
   tgt0I,tgt1I,tgt2I,tgt3I,
   tgt0O,tgt1O,tgt2O,tgt3O,
   off0,off1,off2,off3,
+  attr0I,attr1I,attr2I,attr3I,
+  attr0O,attr1O,attr2O,attr3O,
   write_off0,write_off1,write_off2,write_off3,
   write_cond,
   write_indir,
@@ -1178,6 +1197,14 @@ module tbuf_way_2(
   output [3:0] off1;
   output [3:0] off2;
   output [3:0] off3;
+  input [3:0] attr0I;
+  input [3:0] attr1I;
+  input [3:0] attr2I;
+  input [3:0] attr3I;
+  output [3:0] attr0O;
+  output [3:0] attr1O;
+  output [3:0] attr2O;
+  output [3:0] attr3O;
   input [3:0] write_off0;
   input [3:0] write_off1;
   input [3:0] write_off2;
@@ -1239,6 +1266,8 @@ module tbuf_way_2(
     tgt0I,tgt1I,tgt2I,tgt3I,
     tgt0O,tgt1O,tgt2O,tgt3O,
     off0,off1,off2,off3,
+    attr0I,attr1I,attr2I,attr3I,
+    attr0O,attr1O,attr2O,attr3O,
     write_off0,write_off1,write_off2,write_off3,
     write_cond,
     write_indir,
@@ -1278,6 +1307,8 @@ module tbuf_way_2(
       tgt0I,tgt1I,tgt2I,tgt3I,
       tgt0O,tgt1O,tgt2O,tgt3O,
       off0,off1,off2,off3,
+      attr0I,attr1I,attr2I,attr3I,
+      attr0O,attr1O,attr2O,attr3O,
       write_off0,write_off1,write_off2,write_off3,
       write_cond,
       write_indir,
