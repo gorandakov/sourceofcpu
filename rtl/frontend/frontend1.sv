@@ -447,10 +447,20 @@ module frontend1(
   reg  [4:0] startx_reg3;
   reg  [4:0] startx_reg4;
 
-
+`define ZERO 4
   wire [3:0] btb_indir;
-  wire [4:0] btb_jlink;
-  wire [1:0] btb_jlnpos;
+  wire [4:0]       btb_jlink0;
+  wire [`ZERO:0]  btb_jlnpos0;
+  wire [`ZERO:0] btb_jlnjpos0;
+  wire [4:0]       btb_jlink1;
+  wire [`ZERO:0]  btb_jlnpos1;
+  wire [`ZERO:0] btb_jlnjpos1;
+  wire [4:0]       btb_jlink2;
+  wire [`ZERO:0]  btb_jlnpos2;
+  wire [`ZERO:0] btb_jlnjpos2;
+  wire [4:0]       btb_jlink3;
+  wire [`ZERO:0]  btb_jlnpos3;
+  wire [`ZERO:0] btb_jlnjpos3;
   wire btb_in_link,btb_in_ret;
   wire [11:0] pre_jbefore;
   wire [11:0] pre_jbefore0;
@@ -536,8 +546,18 @@ module frontend1(
 
 
   wire [47:0] btbx_tgt;
-  wire [15:0] btbx_jlink;
-  wire [1:0] btbx_jlnpos;
+  wire [4:0]       btbx_jlink0;
+  wire [`ZERO:0]  btbx_jlnpos0;
+  wire [`ZERO:0] btbx_jlnjpos0;
+  wire [4:0]       btbx_jlink1;
+  wire [`ZERO:0]  btbx_jlnpos1;
+  wire [`ZERO:0] btbx_jlnjpos1;
+  wire [4:0]       btbx_jlink2;
+  wire [`ZERO:0]  btbx_jlnpos2;
+  wire [`ZERO:0] btbx_jlnjpos2;
+  wire [4:0]       btbx_jlink3;
+  wire [`ZERO:0]  btbx_jlnpos3;
+  wire [`ZERO:0] btbx_jlnjpos3;
   wire [3:0][3:0] btbx_joff;
   reg  [3:0] btbx_joff_reg[3:0];
   reg  [3:0] btbx_joff_reg2[3:0];
@@ -726,7 +746,9 @@ module frontend1(
   assign btbx_tgt2=btb_tgt2;
   assign btbx_tgt3=btb_tgt3;
   
-  assign rstack_dataW=cc_read_IP[47:1];
+//  assign rstack_dataW=cc_read_IP[47:1];
+
+  adder #(43) rsw_med(cc_read_IP[43:1],{38'b0,btbx_jlnoff},rstack_dataW[43:1],1'b0,1'b1,,,,);
   
   assign last_off=btb_hasTK ? 4'bz : 4'he;
  
@@ -735,22 +757,29 @@ module frontend1(
   assign jlninx2=btb_jlnin2 && ~btb_jlnpos2[4]; 
   assign jlninx3=btb_jlnin3 && ~btb_jlnpos3[4]; 
 
-  assign btb_in_link=taken[3] ? jlninx && btbx_jlink[3:0]!=4'hf : 1'bz;
-  assign btb_in_link=taken[2] ? jlninx && btbx_jlink[3:0]!=4'hf && btbx_jlnpos!=2'b11 : 1'bz;
-  assign btb_in_link=taken[1] ? jlninx && btbx_jlink[3:0]!=4'hf && ~btbx_jlnpos[1] : 1'bz;
-  assign btb_in_link=taken[0] ? jlninx && btbx_jlink[3:0]!=4'hf && btbx_jlnpos==2'b0 : 1'bz;
-  assign btb_in_link=(~btb_hasTK) ? jlninx && btbx_jlink[3:0]!=4'hf : 1'bz;//if no jump taken then link is last instr in bundle
+  assign btb_in_link=taken[3] ? (jlninx0 && btbx_jlink0[4:0]!=5'h1f && ~btbx_jlnjpos0[3]) ||
+	 (jlninx1 && btbx_jlink1[4:0]!=5'h1f && ~btbx_jlnjpos1[3]) ||
+	(jlninx2 && btbx_jlink2[4:0]!=5'h1f && ~btbx_jlnjpos2[3]) ||
+       (jlninx3 && btbx_jlink3[4:0]!=5'h1f && ~btbx_jlnjpos3[3])	: 1'bz;
+  assign btb_in_link=taken[2] ? (jlninx0 && btbx_jlink0[4:0]!=5'h1f && ~btbx_jlnjpos0[2]) ||
+	 (jlninx1 && btbx_jlink1[4:0]!=5'h1f && ~btbx_jlnjpos1[2]) ||
+	(jlninx2 && btbx_jlink2[4:0]!=5'h1f && ~btbx_jlnjpos2[2]) : 1'bz;
+  assign btb_in_link=taken[1] ? (jlninx0 && btbx_jlink0[4:0]!=5'h1f && ~btbx_jlnjpos0[1]) ||
+	 (jlninx1 && btbx_jlink1[4:0]!=5'h1f && ~btbx_jlnjpos1[1]) : 1'bz;
+  assign btb_in_link=taken[0] ? jlninx0 && btbx_jlink0[4:0]!=5'h1f && btbx_jlnjpos0[0] : 1'bz;
+  assign btb_in_link=(~btb_hasTK) ? (jlninx0 && btbx_jlink0[4:0]!=5'h1f)|| (jlninx1 && btbx_jlink1[4:0]!=5'h1f)||
+	  (jlninx2 && btbx_jlink2[4:0]!=5'h1f) || (jlninx3 && btbx_jlink3[4:0]!=5'h1f) : 1'bz;//if no jump taken then link is last instr in bundle
 
-  assign btb_in_ret=taken[3] ? (btbx_jlink0[4:0]==5'h1f && btbx_jlnpos0[3] && ~btbx_jlnoff0[4]) ||
-	  (btbx_jlink1[4:0]==5'h1f && btbx_jlnpos1[3] && ~btbx_jlnoff1[4]) ||
-	  (btbx_jlink2[4:0]==5'h1f && btbx_jlnpos2[3] && ~btbx_jlnoff2[4]) ||
-	  (btbx_jlink3[4:0]==5'h1f && btbx_jlnpos3[3] && ~btbx_jlnoff3[4]) : 1'bz;
-  assign btb_in_ret=taken[2] ? (btbx_jlink0[4:0]==5'h1f && btbx_jlnpos0[2] && ~btbx_jlnoff0[4]) ||
-	 (btbx_jlink1[4:0]==5'h1f && btbx_jlnpos1[2] && ~btbx_jlnoff1[4]) ||
-	(btbx_jlink2[4:0]==5'h1f && btbx_jlnpos2[2] && ~btbx_jlnoff2[4]) : 1'bz;
-  assign btb_in_ret=taken[1] ? (btbx_jlink0[4:0]==5'h1f && btbx_jlnpos0[1] && ~btbx_jlnoff0[4]) ||
-	  (btbx_jlink1[4:0]==5'h1f && btbx_jlnpos1[1] && ~btbx_jlnoff1[4]) : 1'bz;
-  assign btb_in_ret=taken[0] ? (btbx_jlink0[4:0]==5'h1f && btbx_jlnpos0[0] && ~btbx_jlnoff0[4]) : 1'bz;
+  assign btb_in_ret=taken[3] ? (btbx_jlink0[4:0]==5'h1f && btbx_jlnjpos0[3] && ~btbx_jlnpos0[4]) ||
+	  (btbx_jlink1[4:0]==5'h1f && btbx_jlnjpos1[3] && ~btbx_jlnpos1[4]) ||
+	  (btbx_jlink2[4:0]==5'h1f && btbx_jlnjpos2[3] && ~btbx_jlnpos2[4]) ||
+	  (btbx_jlink3[4:0]==5'h1f && btbx_jlnjpos3[3] && ~btbx_jlnpos3[4]) : 1'bz;
+  assign btb_in_ret=taken[2] ? (btbx_jlink0[4:0]==5'h1f && btbx_jlnjpos0[2] && ~btbx_jlnpos0[4]) ||
+	 (btbx_jlink1[4:0]==5'h1f && btbx_jlnjpos1[2] && ~btbx_jlnpos1[4]) ||
+	(btbx_jlink2[4:0]==5'h1f && btbx_jlnjpos2[2] && ~btbx_jlnpos2[4]) : 1'bz;
+  assign btb_in_ret=taken[1] ? (btbx_jlink0[4:0]==5'h1f && btbx_jlnjpos0[1] && ~btbx_jlnpos0[4]) ||
+	  (btbx_jlink1[4:0]==5'h1f && btbx_jlnjpos1[1] && ~btbx_jlnpos1[4]) : 1'bz;
+  assign btb_in_ret=taken[0] ? (btbx_jlink0[4:0]==5'h1f && btbx_jlnjpos0[0] && ~btbx_jlnpos0[4]) : 1'bz;
   assign btb_in_ret=(~btb_hasTK) ? 1'b0 : 1'bz;
 
  // assign link_IP_d[0]=1'b0;
@@ -864,8 +893,18 @@ module frontend1(
   assign predy_sc1=btb_way ? pred_sc1B&{2{btb_cond[1]}} : pred_sc1A&{2{btb_cond[1]}};
   assign predy_sc2=btb_way ? pred_sc2B&{2{btb_cond[2]}} : pred_sc2A&{2{btb_cond[2]}};
   assign predy_sc3=btb_way ? pred_sc3B&{2{btb_cond[3]}} : pred_sc3A&{2{btb_cond[3]}};
-  assign btbx_jlink=btb_jlink;
-  assign btbx_jlnpos=btb_jlnpos;
+  assign btbx_jlink0= btb_jlink0;
+  assign btbx_jlnpos0=btb_jlnpos0;
+  assign btbx_jlnjpos0=btb_jlnjpos0;
+  assign btbx_jlink1= btb_jlink1;
+  assign btbx_jlnpos1=btb_jlnpos1;
+  assign btbx_jlnjpos1=btb_jlnjpos1;
+  assign btbx_jlink2= btb_jlink2;
+  assign btbx_jlnpos2=btb_jlnpos2;
+  assign btbx_jlnjpos2=btb_jlnjpos2;
+  assign btbx_jlink3= btb_jlink3;
+  assign btbx_jlnpos3=btb_jlnpos3;
+  assign btbx_jlnjpos3=btb_jlnjpos3;
 
   assign jdec_link0=lnk_isRet0_reg ? 5'h1f : 5'bz;
   assign jdec_link1=lnk_isRet1_reg ? 5'h1f : 5'bz;
