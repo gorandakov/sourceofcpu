@@ -167,6 +167,7 @@ module cntrl_find_outcome(
   stall,doStall,
   except,
   exceptIP,
+  except_attr,
   except_thread,
   except_both,
   except_due_jump,
@@ -210,6 +211,7 @@ module cntrl_find_outcome(
   ijump1SC,ijump1Miss,ijump1BtbOnly,
   itk_after,ifsimd,
   iJump0Taken,iJump1Taken,
+  iJump0Attr,iJump1Attr,
   flTE,retire_enFl,
   retire0_rT,retire0_rF,retire0_enG,retire0_enV,retire0_enF,
   retire1_rT,retire1_rF,retire1_enG,retire1_enV,retire1_enF,
@@ -258,6 +260,7 @@ module cntrl_find_outcome(
   
   output reg except;
   output reg [62:0] exceptIP;
+  output reg [3:0] except_attr;
   output reg except_thread;
   output reg except_both;
   output reg except_due_jump;
@@ -413,7 +416,8 @@ module cntrl_find_outcome(
   input [9:0] ifsimd;
   input iJump0Taken;
   input iJump1Taken;
-  
+  input [3:0] iJump0Attr;
+  input [3:0] iJump1Attr;
   output [8:0] flTE;
   output reg retire_enFl;
   output reg [5:0] retire0_rT;
@@ -916,6 +920,18 @@ module cntrl_find_outcome(
   assign exceptIP_d=(break_replay|break_replayS) ? {baseIP[62:43],breakIP} : 63'bz;
   assign exceptIP_d=(break_pending | ~has_break) ? 63'b0 : 63'bz;
 
+  assign except_attr_d=(break_jump0 & jump0_taken) ? jump0Attr : 4'bz;
+  assign except_attr_d=(break_jump1 & jump1_taken) ? jump1Attr : 4'bz;
+  assign exceptIP_d=(break_jump0 && ~jump0_taken && !(jump0Type[4] && jump0Type[2:0]==3'd1)) ? attr : 63'bz;
+  assign exceptIP_d=(break_jump1 & ~jump1_taken && !(jump1Type[4] && jump1Type[2:0]==3'd1)) ? attr : 63'bz;
+  assign exceptIP_d=(break_jump0 && ~jump0_taken && (jump0Type==5'h11)) ? attr : 4'bz;
+  assign exceptIP_d=(break_jump1 & ~jump1_taken && (jump1Type==5'h11)) ? attr : 4'bz;
+  assign exceptIP_d=(break_jump0 && ~jump0_taken && (jump0Type==5'h19)) ? {indir_IP[60],1'b0,indir_IP[62],indir_IP[63]} : 4'bz;
+  assign exceptIP_d=(break_jump1 & ~jump1_taken && (jump1Type==5'h19)) ? {indir_IP[60],1'b0,indir_IP[62],indir_IP[63],indir_IP[60]} : 4'bz;
+  assign exceptIP_d=(break_exceptn) ? attr : 4'bz;
+  assign exceptIP_d=(break_replay|break_replayS) ? attr : 4'bz;
+  assign exceptIP_d=(break_pending | ~has_break) ? 4'b0 : 4'bz;
+
   assign csrss_no_d=(break_jump0) ? jump0IP[15:0] : 16'bz;
   assign csrss_no_d=(break_jump1) ? jump1IP[15:0] : 16'bz;
   assign csrss_no_d=(~break_jump0 & ~break_jump1) ? 16'd`csr_retIP : 16'bz;
@@ -1002,6 +1018,11 @@ module cntrl_find_outcome(
   assign bob_wdata[`bob_pred]={iJump1Taken,iJump0Taken};
   assign {jump1Pred,jump0Pred}=bob_rdata[`bob_pred];
 
+  assign bob_wdata[`bob_attrJ0]=iJump0Attr;
+  assign jump0Attr=bob_rdata[`bob_attrJ0];
+  assign bob_wdata[`bob_attrJ1]=iJump1Attr;
+  assign jump1Attr=bob_rdata[`bob_attrJ1];
+  
   assign bob_wdata[`bob_magicO]={instr9_magic,instr8_magic,instr7_magic,instr6_magic,instr5_magic,
 	  instr4_magic,instr3_magic,instr2_magic,instr1_magic,instr0_magic};
   assign {magicO[9],magicO[8],magicO[7],magicO[6],magicO[5],magicO[4],magicO[3],magicO[2],magicO[1],magicO[0]}=
