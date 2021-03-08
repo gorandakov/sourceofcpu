@@ -7,6 +7,7 @@ module frontend1(
   except,
   exceptIP,
   exceptThread,
+  exceptAttr,
   exceptDueJump,
   exceptJumpGHT,
   exceptLDConfl,
@@ -61,6 +62,7 @@ module frontend1(
   input except;
   input [VIRT_WIDTH-1:0] exceptIP;
   input exceptThread;
+  input [3:0] exceptAttr;
   input exceptDueJump;
   input [7:0] exceptJumpGHT;
   input exceptLDConfl;
@@ -717,12 +719,20 @@ module frontend1(
   assign {cc_base_tick,cc_base_off}=(~do_seq_reg) ? 9'b0 : 9'bz;
   
   assign cc_read_IP_d[4:0]=(~init & do_seq_any & ~jumpTK_en & ~fmstall) ? 5'b0 : 5'bz;
-  assign cc_read_IP_d=(~init & btb_hasTK & ~miss_recover & ~miss_now & ~jumpTK_en & ~(ixcept|uxcept) & ~fmstall) ? btbx_tgt : 48'bz;
-  assign cc_read_IP_d=(~init & miss_recover & ~jumpTK_en & ~(ixcept|uxcept) & ~fmstall) ? miss_IP : 48'bz;
-  assign cc_read_IP_d=(~init & (ixcept|uxcept) ) ? {ixceptIP,1'b0} : 48'bz;
-  assign cc_read_IP_d=(~init & ~jumpTK_en & ~(ixcept|uxcept) & ~miss_now & btb_in_ret & ~fmstall) ? {rstack_dataR,1'b0} : 48'bz;
-  assign cc_read_IP_d=~init & ~(ixcept|uxcept) & jumpTK_en & ~fmstall? jumpTK_addr : 48'bz;
-  assign cc_read_IP_d=(init || fmstall & ~(ixcept|uxcept)) ? cc_read_IP : 48'bz;
+  assign cc_read_IP_d=(~init & btb_hasTK & ~miss_recover & ~miss_now & ~jumpTK_en & ~(ixcept|uxcept) & ~fmstall) ? btbx_tgt : 64'bz;
+  assign cc_read_IP_d=(~init & miss_recover & ~jumpTK_en & ~(ixcept|uxcept) & ~fmstall) ? miss_IP : 64'bz;
+  assign cc_read_IP_d=(~init & (ixcept|uxcept) ) ? {ixceptIP,1'b0} : 64'bz;
+  assign cc_read_IP_d=(~init & ~jumpTK_en & ~(ixcept|uxcept) & ~miss_now & btb_in_ret & ~fmstall) ? {rstack_dataR[63:1],1'b0} : 64'bz;
+  assign cc_read_IP_d=~init & ~(ixcept|uxcept) & jumpTK_en & ~fmstall? jumpTK_addr : 64'bz;
+  assign cc_read_IP_d=(init || fmstall & ~(ixcept|uxcept)) ? cc_read_IP : 64'bz;
+  
+  assign cc_attr_d=(~init & do_seq_any & ~jumpTK_en & ~fmstall) ? cc_attr : 4'bz;
+  assign cc_attr_d=(~init & btb_hasTK & ~miss_recover & ~miss_now & ~jumpTK_en & ~(ixcept|uxcept) & ~fmstall) ? btbx_attr : 4'bz;
+  assign cc_attr_d=(~init & miss_recover & ~jumpTK_en & ~(ixcept|uxcept) & ~fmstall) ? cc_attr : 4'bz;
+  assign cc_attr_d=(~init & (ixcept|uxcept) ) ? {ixceptAttr} : 4'bz;
+  assign cc_attr_d=(~init & ~jumpTK_en & ~(ixcept|uxcept) & ~miss_now & btb_in_ret & ~fmstall) ? {rstack_dataR[67:64]} : 4'bz;
+  assign cc_attr_d=~init & ~(ixcept|uxcept) & jumpTK_en & ~fmstall? jumpTK_attr : 4'bz;
+  assign cc_read_IP_d=(init || fmstall & ~(ixcept|uxcept)) ? cc_attr : 4'bz;
   
   assign bus_match={BUS_ID,1'b1}==bus_slot[9:4] & bus_en;
   assign write_IP={req_addrR,2'b0};
@@ -739,12 +749,25 @@ module frontend1(
   assign btb_tgt=taken[3] ? {btb_tgt3,1'b0} : 48'bz;
   assign btb_tgt=btb_hasTK ? 48'bz : 48'b0;  
 
+  assign btb_attr=taken[0] & ~btb_in_ret ? {btb_attr0} : 4'bz;
+  assign btb_attr=taken[1] & ~btb_in_ret ? {btb_attr1} : 4'bz;
+  assign btb_attr=taken[2] & ~btb_in_ret ? {btb_attr2} : 4'bz;
+  assign btb_attr=taken[3] & ~btb_in_ret ? {btb_attr3} : 4'bz;
+  assign btb_attr=~btb_hasTK & ~btb_in_ret ? cc_attr : 4'bz;  
+  assign btb_attr=btb_in_ret ? rstack_dataR[67:64] : 4'bz;
+
 
   assign btbx_tgt=btb_tgt;
   assign btbx_tgt0=btb_tgt0;
   assign btbx_tgt1=btb_tgt1;
   assign btbx_tgt2=btb_tgt2;
   assign btbx_tgt3=btb_tgt3;
+  
+  assign btbx_attr=btb_attr;
+  assign btbx_attr0=btb_attr0;
+  assign btbx_attr1=btb_attr1;
+  assign btbx_attr2=btb_attr2;
+  assign btbx_attr3=btb_attr3;
   
   assign rstack_dataW[63:44]=cc_read_IP[63:44];
   assign rstack_dataW[67:64]=cc_attr;
@@ -834,6 +857,7 @@ module frontend1(
     ~fstall & ~ixcept;
   
   assign ixceptIP=(~except_save) ? exceptIP : exceptIP_save;
+  assign ixceptAttr=(~except_save) ? exceptAttr : exceptAttr_save;
   assign ixceptThread=(~except_save) ? exceptThread : exceptThread_save;
   assign ixceptDueJump=(~except_save) ? exceptDueJump : exceptDueJump_save;
   assign ixceptLDConfl=(~except_save) ? exceptLDConfl : exceptLDConfl_save;
@@ -1403,6 +1427,7 @@ module frontend1(
           except_save<=1'b0;
           exceptIP_save<={VIRT_WIDTH-17{1'B0}};
           exceptThread_save<=1'b0;
+          exceptAttr_save<=4'b0;
           exceptLDConfl_save<=1'b0;
           exceptDueJump_save<=1'b0;
           exceptJumpGHT_save<=8'b0;
@@ -1412,6 +1437,7 @@ module frontend1(
           except_save<=1'b1;
           exceptIP_save<=exceptIP;
           exceptThread_save<=exceptThread;
+          exceptAttr_save<=exceptAttr;
           exceptLDConfl_save<=exceptLDConfl;
           exceptDueJump_save<=exceptDueJump;
           exceptJumpGHT_save<=exceptJumpGHT;
@@ -1420,6 +1446,7 @@ module frontend1(
       end else if (ixcept) begin
           except_save<=1'b0;
           exceptIP_save<={VIRT_WIDTH-17{1'B0}};
+	  exceptAttr_save<=4'b0;
           exceptThread_save<=1'b0;
           exceptLDConfl_save<=1'b0;
           exceptDueJump_save<=1'b0;
