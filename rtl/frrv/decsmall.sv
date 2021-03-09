@@ -302,7 +302,7 @@ module smallInstr_decoder(
   assign isAdvALUorJump=(instr[6:5]==2'b11 && instr[4] && instr[2]) |
 	  (instr[6] && instr[4:2]==3'b101) && opcode_main[1:0]==2'b11;
   assign isOpFp=instr[6:2]==5'b10100 && opcode_main[1:0]==2'b11;
-  assign isFpFma=opcode_main[6:4]==2'b100 &&
+  assign isFpFma=opcode_main[6:4]==2'b100 && opcode_main[1:0]==2'b11;
 
   assign qconstant[1]=pconstant[3];//??
   assign qtrien   [1]=trien    [3];//??
