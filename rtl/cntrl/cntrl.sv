@@ -922,15 +922,15 @@ module cntrl_find_outcome(
 
   assign except_attr_d=(break_jump0 & jump0_taken) ? jump0Attr : 4'bz;
   assign except_attr_d=(break_jump1 & jump1_taken) ? jump1Attr : 4'bz;
-  assign exceptIP_d=(break_jump0 && ~jump0_taken && !(jump0Type[4] && jump0Type[2:0]==3'd1)) ? attr : 63'bz;
-  assign exceptIP_d=(break_jump1 & ~jump1_taken && !(jump1Type[4] && jump1Type[2:0]==3'd1)) ? attr : 63'bz;
-  assign exceptIP_d=(break_jump0 && ~jump0_taken && (jump0Type==5'h11)) ? attr : 4'bz;
-  assign exceptIP_d=(break_jump1 & ~jump1_taken && (jump1Type==5'h11)) ? attr : 4'bz;
-  assign exceptIP_d=(break_jump0 && ~jump0_taken && (jump0Type==5'h19)) ? {indir_IP[60],1'b0,indir_IP[62],indir_IP[63]} : 4'bz;
-  assign exceptIP_d=(break_jump1 & ~jump1_taken && (jump1Type==5'h19)) ? {indir_IP[60],1'b0,indir_IP[62],indir_IP[63],indir_IP[60]} : 4'bz;
-  assign exceptIP_d=(break_exceptn) ? attr : 4'bz;
-  assign exceptIP_d=(break_replay|break_replayS) ? attr : 4'bz;
-  assign exceptIP_d=(break_pending | ~has_break) ? 4'b0 : 4'bz;
+  assign except_attr_d=(break_jump0 && ~jump0_taken && !(jump0Type[4] && jump0Type[2:0]==3'd1)) ? attr : 63'bz;
+  assign except_attr_d=(break_jump1 & ~jump1_taken && !(jump1Type[4] && jump1Type[2:0]==3'd1)) ? attr : 63'bz;
+  assign except_attr_d=(break_jump0 && ~jump0_taken && (jump0Type==5'h11)) ? attr : 4'bz;
+  assign except_attr_d=(break_jump1 & ~jump1_taken && (jump1Type==5'h11)) ? attr : 4'bz;
+  assign except_attr_d=(break_jump0 && ~jump0_taken && (jump0Type==5'h19)) ? {indir_IP[60],1'b0,indir_IP[62],indir_IP[63]} : 4'bz;
+  assign except_attr_d=(break_jump1 & ~jump1_taken && (jump1Type==5'h19)) ? {indir_IP[60],1'b0,indir_IP[62],indir_IP[63]} : 4'bz;
+  assign except_attr_d=(break_exceptn) ? attr : 4'bz;
+  assign except_attr_d=(break_replay|break_replayS) ? attr : 4'bz;
+  assign except_attr_d=(break_pending | ~has_break) ? 4'b0 : 4'bz;
 
   assign csrss_no_d=(break_jump0) ? jump0IP[15:0] : 16'bz;
   assign csrss_no_d=(break_jump1) ? jump1IP[15:0] : 16'bz;
@@ -1275,6 +1275,7 @@ module cntrl_find_outcome(
 
 	  exceptIP<=63'b0;
 	  except_thread<=1'b0;
+	  except_attr<=4'b0;
 	  except_both<=1'b0;
 	  except<=1'b0;
           except_due_jump<=1'b0;
@@ -1369,6 +1370,7 @@ module cntrl_find_outcome(
 
 	  exceptIP<={exceptIP_d};
           except_thread<=except_thread_d;
+	  except_attr<=except_attr_d;
 	  except_both<=except_both_d;
 	  except<=except_d;
           except_due_jump<=break_jump0|break_jump1 && except_d;
