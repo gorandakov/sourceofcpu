@@ -719,6 +719,22 @@ module smallInstr_decoder(
 	  5'b11101: begin poperation[4]=`op_add32S; pport[4]=PORT_ALU; end
       endcase
 
+      ptrien[6]=isAdvALUorJump;
+      puseBConst[6]=!(instr[6:2]==5'b11001);
+      puseBCxCross[6]=instr[6:2]==5'b11001;
+      prT[6]=instr[11:7];
+      prT_use[6]=!(instr[6:2]==5'b11011 && prT[6]==6'd0);
+      puseRs[6]=prT_use[6];
+      case(instr[6:2])
+	  5'b01101,00101: begin
+	  pconstant[6]={{32{instr[31]},instr[31:12],12'b0};
+	  poperation[6]=op_add64;
+	  pIPRel[6]=!instr[5];
+	  end
+      endcase
+
+      
+
       trien[1]=~magic[0] & subIsMovOrExt;
       puseBConst[1]=opcode_sub==6'h29;
       prA_use[1]=1'b0;
