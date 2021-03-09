@@ -111,7 +111,9 @@
 `define bob_jump1Mask 503:500
 `define bob_aspl 513:504
 `define bob_attr 517:514
-`define bob_width 518
+`define bob_attrJ0 521:518
+`define bob_attrJ1 525:522
+`define bob_width 526
 
 `define attr_km 0
 `define attr_vm 1
