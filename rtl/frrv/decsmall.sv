@@ -295,6 +295,15 @@ module smallInstr_decoder(
   assign subIsReg3Alu=instr[1:0]==2'b1 && instr[15:13]==3'b100 && !(instr[12:10]==3'b111 && instr[6]);
   assign subIsJMP=instr[1:0]==2'b1 && (instr[15:13]==3'b101 || instr[15:14]==2'b11);
 
+  assign isLoad=opcode_main[6:3]==4'b0 && opcode_main[1:0]==2'b11;
+  assign isStore=opcode_main[6:3]==4'b0100 && opcode_main[1:0]==2'b11;
+  assign isBasicALU=!opcode_main[6] && opcode_main[4:2]==3'b100 && opcode_main[1:0]==2'b11;
+  assign isBasicALU32=!opcode_main[6] && opcode_main[4:2]==3'b110 && opcode_main[1:0]==2'b11;
+  assign isAdvALUorJump=(instr[6:5]==2'b11 && instr[4] && instr[2]) |
+	  (instr[6] && instr[4:2]==3'b101) && opcode_main[1:0]==2'b11;
+  assign isOpFp=instr[6:2]==5'b10100 && opcode_main[1:0]==2'b11;
+  assign isFpFma=opcode_main[6:4]==2'b100 &&
+
   assign qconstant[1]=pconstant[3];//??
   assign qtrien   [1]=trien    [3];//??
   assign qconstant[2]=pconstant[8];
