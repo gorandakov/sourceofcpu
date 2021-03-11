@@ -89,6 +89,7 @@ module heptane_core(
   wire [VIRT_WIDTH-2:0] exceptIP;
 
   wire exceptThread;
+  wire [3:0] exceptAttr;
   wire exceptBoth;
   wire [5:0] exceptTrceAddr=6'b0;
   wire [4:0] exceptTrceAddrLow=5'b0;
@@ -148,6 +149,8 @@ module heptane_core(
   wire [63:0] btbl_IP1;
   wire [3:0] btbl_mask0;
   wire [3:0] btbl_mask1;
+  wire [3:0] btbl_attr0;
+  wire [3:0] btbl_attr1;
   
   wire [9:0] iUsed;
   
@@ -982,6 +985,7 @@ module heptane_core(
   exceptIP[46:0],
 //
   exceptThread,
+  exceptAttr,
   except_due_jump,
   except_ght,
   except_flag,
@@ -1014,6 +1018,7 @@ module heptane_core(
   btbl_IP0,
   btbl_IP1,
   btbl_mask0,btbl_mask1,
+  btbl_attr0,btbl_attr1,
   csrss_en,csrss_addr,csrss_data,
   MSI_expAddr_reg,
   MSI_expAddr_en_reg,
@@ -1047,6 +1052,9 @@ module heptane_core(
   
   btbl_IP0,
   btbl_IP1,
+
+  btbl_attr0,
+  btbl_attr1,
   
   halt,
   
@@ -1356,6 +1364,7 @@ module heptane_core(
   except,
   exceptIP,
   exceptThread,
+  exceptAttr,
   exceptBoth,
   except_due_jump,
   except_flag,
@@ -1653,8 +1662,8 @@ module heptane_core(
   instr9_last,
   instr9_aft_spc,
 
-  jump0Type,jump0Pos,jump0Taken,btbl_IP0,btbl_mask0,
-  jump1Type,jump1Pos,jump1Taken,btbl_IP1,btbl_mask1,
+  jump0Type,jump0Pos,jump0Taken,btbl_IP0,btbl_mask0,btbl_attr0,
+  jump1Type,jump1Pos,jump1Taken,btbl_IP1,btbl_mask1,btbl_attr1,
   jump0BtbWay,jump0JmpInd,jump0GHT,
   jump1BtbWay,jump1JmpInd,jump1GHT,
   jump0SC,jump0Miss,jump0TbufOnly,

@@ -40,6 +40,8 @@ module frontend1(
   btbl_IP1,
   btbl_mask0,
   btbl_mask1,
+  btbl_attr0,
+  btbl_attr1,
   csrss_en,csrss_addr,csrss_data,
   MSI_expAddr,
   MSI_expAddr_en,
@@ -131,6 +133,8 @@ module frontend1(
   output [IP_WIDTH-2:0] btbl_IP1;
   output [3:0] btbl_mask0;
   output [3:0] btbl_mask1;
+  output [3:0] btbl_attr0;
+  output [3:0] btbl_attr1;
   
   input csrss_en;
   input [15:0] csrss_addr;
@@ -732,7 +736,7 @@ module frontend1(
   assign cc_attr_d=(~init & (ixcept|uxcept) ) ? {ixceptAttr} : 4'bz;
   assign cc_attr_d=(~init & ~jumpTK_en & ~(ixcept|uxcept) & ~miss_now & btb_in_ret & ~fmstall) ? {rstack_dataR[67:64]} : 4'bz;
   assign cc_attr_d=~init & ~(ixcept|uxcept) & jumpTK_en & ~fmstall? jumpTK_attr : 4'bz;
-  assign cc_read_IP_d=(init || fmstall & ~(ixcept|uxcept)) ? cc_attr : 4'bz;
+  assign cc_attr_d=(init || fmstall & ~(ixcept|uxcept)) ? cc_attr : 4'bz;
   
   assign bus_match={BUS_ID,1'b1}==bus_slot[9:4] & bus_en;
   assign write_IP={req_addrR,2'b0};
@@ -1093,17 +1097,17 @@ module frontend1(
   .stall(stall),
   .read_thread(1'b0),
   .read_cnt(btbl_step),
-  .read_data0({btbl_mask0,btbl_IP0}),
-  .read_data1({btbl_mask1,btbl_IP1}),
+  .read_data0({btbl_mask0,btbl_IP0,btbl_attr0}),
+  .read_data1({btbl_mask1,btbl_IP1,btbl_attr0}),
   .write_wen(instrFed_reg&~btbFStall&~btbFStall_reg&~btbFStall_reg2&~btbFStall_reg3&
     ~btbFStall_recover_reg2&~jq_fstall&~fmstall),
   .write_thread(1'b0),
   .write_cnt(btbFStall_recover_reg ? iqe_jcnD[4:0] : iqe_jcnt_reg2[4:0]),
   .write_start(startx_reg3),
-  .write_data0({jmp_mask_reg4[0],btbx_tgt0_reg4}),
-  .write_data1({jmp_mask_reg4[1],btbx_tgt1_reg4}),
-  .write_data2({jmp_mask_reg4[2],btbx_tgt2_reg4}),
-  .write_data3({jmp_mask_reg4[3],btbx_tgt3_reg4})
+  .write_data0({jmp_mask_reg4[0],btbx_tgt0_reg4,btbx_attr0_reg4}),
+  .write_data1({jmp_mask_reg4[1],btbx_tgt1_reg4,btbx_attr1_reg4}),
+  .write_data2({jmp_mask_reg4[2],btbx_tgt2_reg4,btbx_attr2_reg4}),
+  .write_data3({jmp_mask_reg4[3],btbx_tgt3_reg4,btbx_attr3_reg4})
   );
   /*
   instrQ_tk tk_queue_mod(
@@ -1466,6 +1470,7 @@ module frontend1(
           read_set_flag<=1'b0;
           read_set_flag_reg<=1'b0;
           cc_read_IP<=INIT_IP;
+	  cc_attr<=INIT_ATTR;
           miss_IP<=48'b0;
   //        link_IP<=48'b0;
 //          tr_odd<=1'b0;
@@ -1630,6 +1635,7 @@ module frontend1(
           read_set_flag<=ixceptLDConfl;
 	  read_set_flag_reg<=1'b0;
           cc_read_IP<=cc_read_IP_d;
+          cc_attr<=cc_attr_d;
           miss_now<=1'b0;
           miss_cnt<=3'b0;
           IP_chg<=1'b0;
@@ -1684,6 +1690,7 @@ module frontend1(
           read_set_flag<=1'b0;
 	  read_set_flag_reg<=read_set_flag;
           cc_read_IP<=cc_read_IP_d;
+          cc_attr<=cc_attr_d;
           jumpTK_en<=1'b0;
           if (~cc_read_hit & ~miss_now & instrEn_reg3) begin
               miss_IP<=cc_read_IP_reg3;

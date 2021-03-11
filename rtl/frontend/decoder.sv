@@ -1358,6 +1358,9 @@ module decoder(
   jqe_IP0,
   jqe_IP1,
 
+  jqe_attr0,
+  jqe_attr1,
+
   halt,
   
   all_retired,
@@ -1694,6 +1697,9 @@ module decoder(
   
   input [46:0] jqe_IP0;
   input [46:0] jqe_IP1;
+
+  input [3:0] jqe_attr0;
+  input [3:0] jqe_attr1;
 
   output halt;
 
@@ -3006,6 +3012,7 @@ module decoder(
   .clk(clk),
   .rst(rst),
   .baseIP(baseIP),
+  .baseAttr(baseAttr),
   //base_traceIP,
   .afterTK(dec_afterTaken_reg&iUsed_reg),
   .iUsed(iUsed_reg),
@@ -3020,10 +3027,10 @@ module decoder(
   .srcIPOff7(dec_srcIPOff_reg[7]),
   .srcIPOff8(dec_srcIPOff_reg[8]),
   .srcIPOff9(dec_srcIPOff_reg[9]),
-  .jump0IP(jqe_IP0),.jump0TK(jump0Taken),
-  .jump1IP(jqe_IP1),.jump1TK(jump1Taken),
+  .jump0IP(jqe_IP0),.jump0TK(jump0Taken),.jump0Attr(jqe_attr0),
+  .jump1IP(jqe_IP1),.jump1TK(jump1Taken),.jump1Attr(jqe_attr1),
   .except(except),
-  .exceptIP(exceptIP[47:1])
+  .exceptIP(exceptIP[63:1])
   );
 
   assign rs_store[8:3]=6'b0;

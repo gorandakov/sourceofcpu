@@ -314,8 +314,8 @@ module backend(
   instr9_last,
   instr9_aft_spc,
 
-  jump0Type,jump0Pos,jump0Pred,jump0IP,jump0Mask,
-  jump1Type,jump1Pos,jump1Pred,jump1IP,jump1Mask,
+  jump0Type,jump0Pos,jump0Pred,jump0IP,jump0Mask,jump0Attr,
+  jump1Type,jump1Pos,jump1Pred,jump1IP,jump1Mask,jump1Attr,
   jump0TbufWay,jump0JmpInd,jump0GHT,
   jump1TbufWay,jump1JmpInd,jump1GHT,
   jump0SC,jump0Miss,jump0TbufOnly,
@@ -823,11 +823,13 @@ module backend(
   input jump0Pred;
   input [63:0] jump0IP;
   input [3:0] jump0Mask;
+  input [3:0] jump0Attr;
   input [4:0] jump1Type;
   input [3:0] jump1Pos;
   input jump1Pred;
   input [63:0] jump1IP;
   input [3:0] jump1Mask;
+  input [3:0] jump1Attr;
   input [2:0] jump0TbufWay;
   input [1:0] jump0JmpInd;
   input [7:0] jump0GHT;
