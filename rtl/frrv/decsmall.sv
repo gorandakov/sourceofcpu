@@ -299,8 +299,8 @@ module smallInstr_decoder(
   assign isStore=opcode_main[6:3]==4'b0100 && opcode_main[1:0]==2'b11;
   assign isBasicALU=!opcode_main[6] && opcode_main[4:2]==3'b100 && opcode_main[1:0]==2'b11;
   assign isBasicALU32=!opcode_main[6] && opcode_main[4:2]==3'b110 && opcode_main[1:0]==2'b11;
-  assign isAdvALUorJump=(instr[6:5]==2'b11 && !instr[4] && instr[2] && !(!instr[3] && instr[14:12]!=3'b0)) |
-	  (!instr[6] && instr[4:2]==3'b101) && opcode_main[1:0]==2'b11;
+  assign isAdvALUorJump=(instr[6:5]==2'b11 && instr[4] && instr[2]) |
+	  (instr[6] && instr[4:2]==3'b101) && opcode_main[1:0]==2'b11;
   assign isOpFp=instr[6:2]==5'b10100 && opcode_main[1:0]==2'b11;
   assign isFpFma=opcode_main[6:4]==2'b100 && opcode_main[1:0]==2'b11;
 
@@ -658,21 +658,19 @@ module smallInstr_decoder(
 	  3'b010: begin
 	      jump_type[3]=5'h11;
 	      is_jump[3]=1'b1;
-	      rB[3]={1'b0,instr[11:7]};
-	      puseBCxCross[3]=1'b1;
-	      poperation[3]=`op_add64|4096;
+	      rA[3]={1'b0,instr[11:7]};
+	      poperation[3]=`op_mov64|4096;
 	      pport[3]=PORT_MUL;
 	  end
 	  3'b110: begin
 	      jump_type[3]=5'h11;
 	      is_jump[3]=1'b1;
-	      prB[3]={1'b0,instr[11:7]};
+	      prA[3]={1'b0,instr[11:7]};
 	      puseBConst[3]=1'b1;
-	      puseBCxCross[3]=1'b1;
-	      pconstant[3]={32'b0,32'd4};
+	      pconstant[3]=0;
 	      pIPRel[3]=1'b1;
 	      prT[3]=6'd1;
-	      poperation[3]=`op_add64|4096;
+	      poperation[3]=`op_mov64|4096;
 	      pport[3]=PORT_MUL;
 	  end
 	  3'b0x1: begin
@@ -724,7 +722,7 @@ module smallInstr_decoder(
       ptrien[6]=isAdvALUorJump;
       puseBConst[6]=!(instr[6:2]==5'b11001);
       puseBCxCross[6]=instr[6:2]==5'b11001;
-      prT[6]={1'b0,instr[11:7]};
+      prT[6]=instr[11:7];
       prT_use[6]=!(instr[6:2]==5'b11011 && prT[6]==6'd0);
       puseRs[6]=prT_use[6];
       case(instr[6:2])
@@ -735,26 +733,20 @@ module smallInstr_decoder(
 	  pport[6]=PORT_ALU;
 	  end
 	  5'b11011: begin
-	  pconstant[6]=64'd4;
+	  pconstant[6]={{43{instr[31]},instr[31],instr[19:12],instr[20],instr[30:21],1'b0};
 	  poperation[6]=op_add64;
 	  pIPRel[6]=1'b1;
-	  puseBConst[6]=1'b1;
-	  prB_use=1'b1;
 	  pis_jump[6]=1'b1;
 	  pjump_type[6]=5'b10000;
 	  pport[6]=PORT_ALU;
 	  end
 	  5'b11001: begin
-	  pconstant[6]={{12{instr[31]},instr[31:12],32'd4};
+	  pconstant[6]={{44{instr[31]},instr[31:12]};
 	  poperation[6]=op_add64;
 	  pIPRel[6]=1'b1;
 	  pis_jump[6]=1'b1;
-	  pjump_type[6]=5'b11000;
+	  pjump_type[6]=5'b10000;
 	  pport[6]=PORT_MUL;
-	  puseBConst[6]=1'b1;
-	  puseBCxCross[6]=1'b1;
-	  prB[6]={1'b0,instr[19:15]};
-	  prB_use[6]=1'b1;
 	  end
       endcase
 
