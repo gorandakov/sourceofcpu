@@ -730,23 +730,6 @@ module smallInstr_decoder(
 	  pconstant[6]={{32{instr[31]},instr[31:12],12'b0};
 	  poperation[6]=op_add64;
 	  pIPRel[6]=!instr[5];
-	  pport[6]=PORT_ALU;
-	  end
-	  5'b11011: begin
-	  pconstant[6]={{43{instr[31]},instr[31],instr[19:12],instr[20],instr[30:21],1'b0};
-	  poperation[6]=op_add64;
-	  pIPRel[6]=1'b1;
-	  pis_jump[6]=1'b1;
-	  pjump_type[6]=5'b10000;
-	  pport[6]=PORT_ALU;
-	  end
-	  5'b11001: begin
-	  pconstant[6]={{44{instr[31]},instr[31:12]};
-	  poperation[6]=op_add64;
-	  pIPRel[6]=1'b1;
-	  pis_jump[6]=1'b1;
-	  pjump_type[6]=5'b10000;
-	  pport[6]=PORT_MUL;
 	  end
       endcase
 
