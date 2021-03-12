@@ -286,7 +286,7 @@ module smallInstr_decoder(
  
 
   assign subIsBasicLDST=instr[14:13]!=2'b0 && instr[1:0]==2'b0;
-  assign subIsStackLDST=instr[14:13]!=2'b0 && instr[1:0]==2'b10 && !(intr[15:14]=2'b01 && instr[11:7]==5'b0);
+  assign subIsStackLDST=instr[14:13]!=2'b0 && instr[1:0]==2'b10 && !(intr[15:14]==2'b01 && instr[11:7]==5'b0);
   
   assign subIsBasicImmAluReg5=(instr[1:0]==2'b01 && (instr[15:13]==3'b0 || (instr[15:13]==3'b1 &&
    instr[11:7]!=5'b0) || (instr[15:14]==2'b1 && instr[11:7]!=5'b0 && 
@@ -294,6 +294,8 @@ module smallInstr_decoder(
   assign subIs2xReg5Alu=instr[1:0]==2'b10 && instr[15:13]==3'b100;
   assign subIsReg3Alu=instr[1:0]==2'b1 && instr[15:13]==3'b100 && !(instr[12:10]==3'b111 && instr[6]);
   assign subIsJMP=instr[1:0]==2'b1 && (instr[15:13]==3'b101 || instr[15:14]==2'b11);
+  assign subIsAddI4=instr[15:13]==3'b0 && instr[1:0]==2'b0 && instr[12:5]!=8'b0;
+
 
   assign isLoad=opcode_main[6:3]==4'b0 && opcode_main[1:0]==2'b11;
   assign isStore=opcode_main[6:3]==4'b0100 && opcode_main[1:0]==2'b11;
@@ -720,6 +722,35 @@ module smallInstr_decoder(
 	  5'b11100: begin poperation[4]=`op_sub32S; pport[4]=PORT_ALU; end
 	  5'b11101: begin poperation[4]=`op_add32S; pport[4]=PORT_ALU; end
       endcase
+
+      ptrien[5]=subIsAddI4 | subIsJmp;
+      if (instr[15:14]==2'b11) begin
+	  poperation[5]=`op_sub64;
+	  prA[5]={3'b1,instr[9:7]};
+	  prB[5]={3'b1,instr[9:7]};
+	  prA_use[5]=1'b1;
+	  prB_use[5]=1'b1;
+	  puseRs[5]=1'b1;
+	  pflags_write[5]=1'b1;
+	  prAlloc[5]=1'b1;
+	  pjump_type[5]={4'b0,instr[13]};
+	  pis_jump=1'b1;
+      end else if (instr[15:14]) begin
+	  pis_jump[5]=1'b1;
+	  pjump_type[5]=5'h10;
+      end else begin
+	  poperation[5]=`op_add64;
+	  prA[5]=6'd2;
+	  prT[5]={3'b1,instr[9:7]};
+	  prA_use[5]=1'b1;
+	  prB_use[5]=1'b1;
+	  prT_use[5]=1'b1;
+	  puseBConst[5]=1'b1;
+	  puseRs[5]=1'b1;
+	  pflags_write[5]=1'b1;
+	  prAlloc[5]=1'b1;
+	  pconstant[5]={54'b0,instr[10:7],instr[12:11],instr[5],instr[6],2'b0};
+      end
 
       ptrien[6]=isAdvALUorJump;
       puseBConst[6]=!(instr[6:2]==5'b11001);
