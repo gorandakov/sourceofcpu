@@ -7,6 +7,7 @@ module fadd(
   A,
   A_alt,
   B,
+  Bx,
   isDBL,
   isSub,//inclusive of isRSub
   isRSub,
@@ -33,6 +34,7 @@ module fadd(
   input [80:0] A;
   input [64:0] A_alt;
   input [80:0] B;
+  input [41:0] Bx;
   input isDBL;
   input isSub;
   input isRSub;
@@ -485,23 +487,23 @@ module fadd(
   .A_out(renorSR),.exp_out(renorER)
   );
 
-  adder_CSA #(64) mainCSA(opA_reg,opBs,{63'b0,sxor_reg&res_andtail&~res_rnbit},partM0,partM1);
-  adder_CSA #(64) mainCSAs(opA_reg,opBs,{62'b0,1'b1,sxor_reg&res_andtail&~res_rnbit},partMs0,partMs1);
+  adder_CSA #(64+42) mainCSA({opA_reg,42'b0},{opBs,opBxs},{63'b0,sxor_reg&res_andtail&~res_rnbit,{42{sxor_reg}}},partM0,partM1);
+  adder_CSA #(64+42) mainCSAs({opA_reg,42'b0},{opBs,obBxs},{62'b0,1'b1,sxor_reg&res_andtail&~res_rnbit,{42{sxor_reg}}},partMs0,partMs1);
   
-  adder2c #(64) mainAddNoShift(partM0[63:0],partM1[63:0],resM1,resMR1,1'b0,1'b1,1'b1,1'b1,
+  adder2c #(64+42) mainAddNoShift(partM0[63:0],partM1[63:0],resM1,resMR1,1'b0,1'b1,1'b1,1'b1,
     cout64_M1_ns,cout64_MR1_ns,cout53_M1_ns,cout53_MR1_ns);
-  adder2c #(64) mainAddShift(partMs0[63:0],partMs1[63:0],resM2,resMR2,1'b0,1'b1,1'b1,1'b1,
+  adder2c #(64+42) mainAddShift(partMs0[63:0],partMs1[63:0],resM2,resMR2,1'b0,1'b1,1'b1,1'b1,
     cout64_M2_ns,cout64_MR2_ns,cout53_M2_ns,cout53_MR2_ns);
   
-  adder_CSA #(64) suppCSAOneOff (opA,{1'b1,opB[63:1]},{63'b0,opB[0]}, par1Off_A,par1Off_B);
-  adder_CSA #(64) suppCSAxx (~opA,~opB,64'b1, part_A,part_B);
-  adder_CSA #(64) suppCSAx (opA,opB,64'b1,partt_A,partt_B);
+  adder_CSA #(65) suppCSAOneOff ({opA,1'b0},{1'b1,opB[63:0]},{63'b0,opBx[41]}, par1Off_A,par1Off_B);
+  adder_CSA #(65) suppCSAxx (~{opA,1'b0},~{opB,opBx[41]},65'b1, part_A,part_B);
+  adder_CSA #(65) suppCSAx ({opA,1'b0},{opB,opBx[41]},65'b1,partt_A,partt_B);
   
-  adder2c #(64) suppAddZeroOff(partt_A[63:0],partt_B[63:0],
+  adder2c #(65) suppAddZeroOff(partt_A[64:0],partt_B[64:0],
       resS1,resSR1,1'b0,1'b1,expdiffA==0 && ~alt_en,expdiffA==0&& ~alt_en,cout64_SZ1,cout64_SZR1,cout53_SZ1,cout53_SZR1);
-  adder2c #(64) suppAddZeroOffz(part_A[63:0],part_B[63:0],
+  adder2c #(65) suppAddZeroOffz(part_A[64:0],part_B[64:0],
       resS1,resSR1,1'b0,1'b1,expdiffA==0 && alt_en,expdiffA==0 && alt_en,cout64_Sz1,cout64_SzR1,cout53_Sz1,cout53_SzR1);
-  adder2c #(64) suppAddOneOff (par1Off_A[63:0],par1Off_B[63:0],resS1,resSR1,
+  adder2c #(65) suppAddOneOff (par1Off_A[64:0],par1Off_B[64:0],resS1,resSR1,
       1'b0,1'b1,expdiffA!=0,expdiffA!=0,cout64_S1,cout64_SR1,cout53_S1,cout53_SR1);
 
   adder #(16) expAE_mod({A[80],A[78:64]},~{B[80],B[78:64]},expdiffA,1'b1,~isDBL,moreAE,,,);
