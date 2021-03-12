@@ -337,7 +337,7 @@ module smallInstr_decoder(
   //206,207 for isBaseIndexExtStore (future ext)
   //208,209 for isImmExtStore (future ext)
 
-  assign isShlAddMulLike=opcode_main==2'd210 || opcode_main==2'd211;
+  assign isShlAddMulLike=opcode_main==8'd210 || opcode_main==8'd211;
   assign isBasicFPUScalarA=opcode_main==8'hef && instr[13:12]==2'b0;
   assign isBasicFPUScalarB=opcode_main==8'hef && instr[13:12]==2'b1;
   assign isBasicFPUScalarC=opcode_main==8'hef && instr[15:12]==4'd2;

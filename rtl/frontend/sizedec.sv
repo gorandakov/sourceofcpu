@@ -142,7 +142,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   assign isSimdInt=opcode_main==8'd200;
   assign isFPUreor=opcode_main==8'd201;
   
-  assign isShlAddMulLike=opcode_main==2'd210 || opcode_main==2'd211;
+  assign isShlAddMulLike=opcode_main==8'd210 || opcode_main==8'd211;
   
   assign isBasicFPUScalarA=opcode_main==8'hef && instr[13:12]==2'b0;
   assign isBasicFPUScalarB=opcode_main==8'hef && instr[13:12]==2'b1;

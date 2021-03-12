@@ -793,7 +793,7 @@ module heptane_core(
 //  assign except=1'b0;//iAvail[0] && instr0[15:0]==16'h0023;
   assign rbusDOut_signals[`rbusD_second]=dc2_rhitExp_reg;
   assign rbusDOut_signals[`rbusD_used]=dc2_rhitExp | dc2_rhitExp_reg;
-  assign rbusDOut_signals[`rubsD_mem_reply]=dc2_rhitExp | dc2_rhitExp_reg;
+  assign rbusDOut_signals[`rbusD_mem_reply]=dc2_rhitExp | dc2_rhitExp_reg;
   assign rbusDOut_signals[`rbusD_bcast]=1'b0;
   assign rbusDOut_signals[`rbusD_cc_reply]=1'b0;
   assign rbusDOut_signals[`rbusD_write_back]=1'b0;
