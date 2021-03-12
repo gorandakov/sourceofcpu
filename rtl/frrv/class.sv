@@ -35,8 +35,8 @@ module predec_RV_class(instr,flag,class_,isLNK,isRet,LNK2);
   assign isStore=opcode_main[6:3]==4'b0100 && opcode_main[1:0]==2'b11;
   assign isBasicALU=!opcode_main[6] && opcode_main[4:2]==3'b100 && opcode_main[1:0]==2'b11;
   assign isBasicALU32=!opcode_main[6] && opcode_main[4:2]==3'b110 && opcode_main[1:0]==2'b11;
-  assign isAdvALUorJump=(instr[6:5]==2'b11 && instr[4] && instr[2]) |
-	  (instr[6] && instr[4:2]==3'b101) && opcode_main[1:0]==2'b11;
+  assign isAdvALUorJump=(instr[6:5]==2'b11 && !instr[4] && instr[2] && !(!instr[3] && instr[14:12]!=3'b0)) |
+	  (!instr[6] && instr[4:2]==3'b101) && opcode_main[1:0]==2'b11;
   assign isOpFp=instr[6:2]==5'b10100 && opcode_main[1:0]==2'b11;
   assign isFpFma=opcode_main[6:4]==2'b100 && opcode_main[1:0]==2'b11;
 
