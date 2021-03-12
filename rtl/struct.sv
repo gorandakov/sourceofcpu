@@ -499,7 +499,8 @@
 `define rbusD_excl 6
 `define rbusD_dirty 7
 `define rbusD_iorpl 8
-`define rbusD_width 9
+`define rbusD_expun 9
+`define rbusD_width 10
 
 `define rbusM_data 511:0
 `define rbusM_src_req 521:512
