@@ -48,11 +48,13 @@ module predec_RV_class(instr,flag,class_,isLNK,isRet,LNK2);
   assign clsLoadFPU=|{subIsBasicLDST|subIsStackLDST && instr[15:13]==3'd1,
       isLoad & opcode_main[2]};
 
-  assign clsShift=|{subIsReg3Alu && instr[11:10]!=2'b11};
+  assign clsShift=|{subIsReg3Alu && instr[11:10]!=2'b11,isFpFma};
   assign clsMul=|{isntr[15:13]=3'b100 && instr[1:0]==2'b10 && instr[6:2]==5'b0 && instr[11:7]!=5'b0};
   assign clsALU=|{subIsReg3Alu && instr[11:10]==2'b11,
     subIsBasicImmAluReg5 && !(isntr[15:13]=3'b100 && instr[1:0]==2'b10 && instr[6:2]==5'b0 && instr[11:7]!=5'b0),
     subIs2xReg5Alu,subIsReg3Alu && instr[11:10]==2'b11,
     subIsJMP & instr[14],
-    subIsAddI4};
+    subIsAddI4,
+    isLoad & !opcode_main[2] & !instr[14] & ~&instr[13:12],
+    isFpFma};
 endmodule
