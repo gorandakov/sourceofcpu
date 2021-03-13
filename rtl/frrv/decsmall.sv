@@ -876,6 +876,28 @@ module smallInstr_decoder(
 	  3'b111: poperation[10]=`op_and64;
       endcase
        
+      trien[11]=isBasicALU && instr[6:5]==2'b0 && instr[13:12]==2'b01 && !instr[31] && instr[29:26]==4'b0;//shift immediate
+      prT[11]=instr[11:7];
+      prA[11]=instr[19:15];
+      prT_use[11]=1'b1;
+      prA_use[11]=1'b1;
+      prB_use[11]=1'b1;
+      puseBConst[11]=1'b1;
+      puseRs[11]=1'b1;
+      pflags_write[11]=1'b1;
+      pconstant[11]={58'b0,instr[25:20]}
+      pport[11]=PORT_ALU;
+      prAlloc[11]=1'b1;
+      casex({instr[14],instr[30])
+	  2'b0x: begin 
+	          poperation[11]=`op_shl64;
+	          if (instr[30]) perror[11]=1'b1;
+              end
+	  2'b10: poperation[11]=`op_shr64;
+	  2'b11: poperation[11]=`op_sar64;
+      endcase
+      
+       
       
       trien[1]=~magic[0] & subIsMovOrExt;
       puseBConst[1]=opcode_sub==6'h29;
