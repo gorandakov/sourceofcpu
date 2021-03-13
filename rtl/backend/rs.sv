@@ -2117,17 +2117,17 @@ module rs(
   FU8,FUreg8,FUwen8,
   FU9,FUreg9,FUwen9,
   
-  newDataVA1H,newDataVB1H,newDataVA1L,newDataVB1L,
-  newDataVA2H,newDataVB2H,newDataVA2L,newDataVB2L,
+  newDataVA1H,newDataVB1H,newDataVS1H,newDataVA1L,newDataVB1L,newDataVS1L,
+  newDataVA2H,newDataVB2H,sewDataVS2H,newDataVA2L,newDataVB2L,newDataVS2L,
 
-  newDataFA1H,newDataFB1H,newDataFA1L,newDataFB1L,
-  newDataFA2H,newDataFB2H,newDataFA2L,newDataFB2L,
+  newDataFA1H,newDataFB1H,newDataFS1H,newDataFA1L,newDataFB1L,newDataFS1L,
+  newDataFA2H,newDataFB2H,newDataFS2H,newDataFA2L,newDataFB2L,newDataFS2L,
 
   outDataVA1H,outDataVB1H,outDataVA1L,outDataVB1L,
-  outDataVA2H,outDataVB2H,outDataVA2L,outDataVB2L,
+  outDataVA2H,outDataVB2H,outDataVS2H,outDataVA2L,outDataVB2L,outDataVS2L,
 
   outDataFA1H,outDataFB1H,outDataFA1L,outDataFB1L,
-  outDataFA2H,outDataFB2H,outDataFA2L,outDataFB2L,
+  outDataFA2H,outDataFB2H,outDataFS2H,outDataFA2L,outDataFB2L,outDataFS2L,
 
   FUV0H,FUV0L,
   FUV1H,FUV1L,
