@@ -801,6 +801,7 @@ module smallInstr_decoder(
       pflags_write[7]=1'b1;
       puseRs[7]=1'b1;
       pis_jump[7]=1'b1;
+      pport[7]=PORT_ALU;
      // pconstant[7]={instr[31],instr[7],instr[30:25],instr[11:8],1'b0}
       casex(instr[14:12])
           3'b00x: pjumptype[7]={4'b0,instr[12]};
@@ -811,6 +812,50 @@ module smallInstr_decoder(
 	  default: perror[7]=1'b1;
       endcase
 
+      trien[8]=isLoad&!instr[2];
+      prT[8]=instr[11:7];
+      prB[8]=instr[19:15];
+      prT_use[8]=1'b1;
+      prB_use[8]=1'b1;
+      pconstant[8]={{52{instr[31]}},instr[31:20]};
+      prAlloc[8]=1'b1;
+      puseRs[8]=1'b1;
+      pport[8]=PORT_LOAD;
+      casex(instr[14:12])
+          3'b100,3'b101,3'b110,3'b011: poperation[8][7:0]={5'b100,instr[13:12],1'b0};
+	  3'b000: begin
+		  pchain_alu[8]=1'b1;
+		  poperation[8][7:0]={5'b100,instr[13:12],1'b0};
+		  popchain[8]=`op_sxt8_64|4096;
+	      end
+
+	  3'b001: begin
+		  pchain_alu[8]=1'b1;
+		  poperation[8][7:0]={5'b100,instr[13:12],1'b0};
+		  popchain[8]=`op_sxt16_64|4096;
+	      end
+	  3'b010: begin
+		  pchain_alu[8]=1'b1;
+		  poperation[8][7:0]={5'b100,instr[13:12],1'b0};
+		  popchain[8]=`op_sxt32_64|4096;
+	      end
+	  3'b111: perror[8]=1'b1;
+      endcase
+
+      trien[9]=isStore&!instr[2];
+      prC[9]=instr[24:20];
+      prB[9]=instr[19:15];
+      prC_use[9]=1'b1;
+      prB_use[9]=1'b1;
+      pconstant[9]={{52{instr[31]}},instr[31:25],instr[11:7]};
+      prAlloc[9]=1'b0;
+      puseRs[9]=1'b1;
+      pport[9]=PORT_STORE;
+      poperation[9][7:0]={5'b100,instr[13:12],1'b1};
+      perror[9]=instr[14];
+      
+      
+      
       trien[1]=~magic[0] & subIsMovOrExt;
       puseBConst[1]=opcode_sub==6'h29;
       prA_use[1]=1'b0;
