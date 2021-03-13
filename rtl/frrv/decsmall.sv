@@ -699,7 +699,7 @@ module smallInstr_decoder(
       endcase
       //need to add rA output from mul port of ALU
 
-      ptrien[4]=subIs3RegAlu;
+      trien[4]=subIs3RegAlu;
       puseBConst[4]=~instr[11] | ~instr[10];
       prA_use[4]=1'b1;
       prB_use[4]=1'b1;
@@ -723,7 +723,7 @@ module smallInstr_decoder(
 	  5'b11101: begin poperation[4]=`op_add32S; pport[4]=PORT_ALU; end
       endcase
 
-      ptrien[5]=subIsAddI4 | subIsJmp;
+      trien[5]=subIsAddI4 | subIsJmp;
       if (instr[15:14]==2'b11) begin
 	  poperation[5]=`op_sub64;
 	  prA[5]={3'b1,instr[9:7]};
@@ -752,7 +752,7 @@ module smallInstr_decoder(
 	  pconstant[5]={54'b0,instr[10:7],instr[12:11],instr[5],instr[6],2'b0};
       end
 
-      ptrien[6]=isAdvALUorJump;
+      trien[6]=isAdvALUorJump;
       puseBConst[6]=!(instr[6:2]==5'b11001);
       puseBCxCross[6]=instr[6:2]==5'b11001;
       prT[6]={1'b0,instr[11:7]};

@@ -30,6 +30,7 @@ module predec_RV_class(instr,flag,class_,isLNK,isRet,LNK2);
   assign subIs2xReg5Alu=instr[1:0]==2'b10 && instr[15:13]==3'b100;
   assign subIsReg3Alu=instr[1:0]==2'b1 && instr[15:13]==3'b100 && !(instr[12:10]==3'b111 && instr[6]);
   assign subIsJMP=instr[1:0]==2'b1 && (instr[15:13]==3'b101 || instr[15:14]==2'b11);
+  assign subIsAddI4=instr[15:13]==3'b0 && instr[1:0]==2'b0 && instr[12:5]!=8'b0;
 
   assign isLoad=opcode_main[6:3]==4'b0 && opcode_main[1:0]==2'b11;
   assign isStore=opcode_main[6:3]==4'b0100 && opcode_main[1:0]==2'b11;
@@ -52,5 +53,6 @@ module predec_RV_class(instr,flag,class_,isLNK,isRet,LNK2);
   assign clsALU=|{subIsReg3Alu && instr[11:10]==2'b11,
     subIsBasicImmAluReg5 && !(isntr[15:13]=3'b100 && instr[1:0]==2'b10 && instr[6:2]==5'b0 && instr[11:7]!=5'b0),
     subIs2xReg5Alu,subIsReg3Alu && instr[11:10]==2'b11,
-    subIsJMP & instr[14]};
+    subIsJMP & instr[14],
+    subIsAddI4};
 endmodule
