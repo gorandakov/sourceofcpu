@@ -305,6 +305,8 @@ module smallInstr_decoder(
 	  (!instr[6] && instr[4:2]==3'b101) && opcode_main[1:0]==2'b11;
   assign isOpFp=instr[6:2]==5'b10100 && opcode_main[1:0]==2'b11;
   assign isFpFma=opcode_main[6:4]==2'b100 && opcode_main[1:0]==2'b11;
+  assign isJump=opcode_main[6:0]==5'b1100011;
+  assign isSys=opcode_main[6:0]==5'b1110011;
 
   assign qconstant[1]=pconstant[3];//??
   assign qtrien   [1]=trien    [3];//??
@@ -725,7 +727,7 @@ module smallInstr_decoder(
 
       trien[5]=subIsAddI4 | subIsJmp;
       if (instr[15:14]==2'b11) begin
-	  poperation[5]=`op_sub64;
+	  poperation[5]=`op_and64;
 	  prA[5]={3'b1,instr[9:7]};
 	  prB[5]={3'b1,instr[9:7]};
 	  prA_use[5]=1'b1;
@@ -789,7 +791,25 @@ module smallInstr_decoder(
 	  end
       endcase
 
-      
+      trien[7]=isJump;
+      poperation[7]=`op_sub64;
+      prA[7]={1'b0,instr[19:5]};
+      prB[7]={1'b0,instr[24:20]};
+      prA_use[7]=1'b1;
+      prB_use[7]=1'b1;      
+      prAlloc[7]=1'b1;
+      pflags_write[7]=1'b1;
+      puseRs[7]=1'b1;
+      pis_jump[7]=1'b1;
+     // pconstant[7]={instr[31],instr[7],instr[30:25],instr[11:8],1'b0}
+      casex(instr[14:12])
+          3'b00x: pjumptype[7]={4'b0,instr[12]};
+	  3'b100: pjumptype[7]=5'd11;
+	  3'b101: pjumptype[7]=5'd10;
+	  3'b110: pjumptype[7]=5'd7;
+	  3'b111: pjumptype[7]=5'd6;
+	  default: perror[7]=1'b1;
+      endcase
 
       trien[1]=~magic[0] & subIsMovOrExt;
       puseBConst[1]=opcode_sub==6'h29;

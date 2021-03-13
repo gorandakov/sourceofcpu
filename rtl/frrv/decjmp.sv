@@ -76,6 +76,8 @@ module jump_decoder(
 	  (!instr[6] && instr[4:2]==3'b101) && opcode_main[1:0]==2'b11;
   //assign isOpFp=instr[6:2]==5'b10100 && opcode_main[1:0]==2'b11;
   //assign isFpFma=opcode_main[6:4]==2'b100 && opcode_main[1:0]==2'b11;
+  assign isJump=opcode_main[6:0]==5'b1100011;
+  assign isSys=opcode_main[6:0]==5'b1110011;
 
   
   
@@ -89,6 +91,27 @@ module jump_decoder(
       jumpType=5'b10000;
       pushCallStack=1'b0;
       popCallStack=1'b0;
+      if (isJump) begin
+          pconstant[7]={{52{instr[31]}},instr[7],instr[30:25],instr[11:8],1'b0};
+	  isIPRel=1'b1;
+          casex(instr[14:12])
+              3'b00x: jumptype={4'b0,instr[12]};
+              3'b100: jumptype=5'd11;
+	      3'b101: jumptype=5'd10;
+	      3'b110: jumptype=5'd7;
+	      3'b111: jumptype=5'd6;
+          endcase
+      end else if (subIsJMP) begin
+          if (instr[15:14]==2'b11) begin
+	      jump_type={4'b0,instr[13]};
+	      is_jump=1'b1;
+	      constant={{56{instr[12]}},instr[6:5],instr[2],instr[11:10],instr[4:3],1'b0}
+          end else if (instr[15:14]) begin
+	      is_jump=1'b1;
+	      jump_type=5'h10;
+	      constant={{54{instr[12]}},instr[10:9],instr[6],instr[7],instr[2],instr[11],instr[5:3],1'b0};
+      end else begin
+      end
 
   end
 
