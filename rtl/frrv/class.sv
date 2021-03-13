@@ -40,6 +40,8 @@ module predec_RV_class(instr,flag,class_,isLNK,isRet,LNK2);
 	  (!instr[6] && instr[4:2]==3'b101) && opcode_main[1:0]==2'b11;
   assign isOpFp=instr[6:2]==5'b10100 && opcode_main[1:0]==2'b11;
   assign isFpFma=opcode_main[6:4]==2'b100 && opcode_main[1:0]==2'b11;
+  assign isJump=opcode_main[6:0]==5'b1100011;
+  assign isSys=opcode_main[6:0]==5'b1110011;
 
   assign clsStore=|{subIsBasicLDST|subIsStackLDST && instr[15],
       isStore};
@@ -56,5 +58,8 @@ module predec_RV_class(instr,flag,class_,isLNK,isRet,LNK2);
     subIsJMP & instr[14],
     subIsAddI4,
     isLoad & !opcode_main[2] & !instr[14] & ~&instr[13:12],
-    isFpFma};
+    isFpFma,isJump};
+  assign clsJump=|{isJump,subIsJMP,
+    instr[15:13]==3'b100 && instr[1:0]==2'b10 && instr[6:2]==5'b0 && instr[11:7]!=5'b0};
+  assign clsIndir=|{instr[15:13]==3'b100 && instr[1:0]==2'b10 && instr[6:2]==5'b0 && instr[11:7]!=5'b0};
 endmodule
