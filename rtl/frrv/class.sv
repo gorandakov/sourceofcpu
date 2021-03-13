@@ -55,5 +55,6 @@ module predec_RV_class(instr,flag,class_,isLNK,isRet,LNK2);
     subIs2xReg5Alu,subIsReg3Alu && instr[11:10]==2'b11,
     subIsJMP & instr[14],
     subIsAddI4,
-    isLoad & !opcode_main[2] & !instr[14] & ~&instr[13:12]};
+    isLoad & !opcode_main[2] & !instr[14] & ~&instr[13:12],
+    isFpFma};
 endmodule
