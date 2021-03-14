@@ -13,8 +13,7 @@ module backend(
   bundle_in,
   except,
   exceptIP,
-  excpt_thread,
-  excpt_both,
+  excpt_attr,
   excpt_due_jump,
   except_set_flag,
   excpt_ght,
@@ -403,8 +402,7 @@ module backend(
 
   output except;
   output [62:0] exceptIP;
-  output excpt_thread;
-  output excpt_both;
+  output [3:0] excpt_attr;
   output excpt_due_jump;
   output [7:0] excpt_ght;
   output except_set_flag;
@@ -5196,8 +5194,9 @@ dcache1 L1D_mod(
   .new_addr(II_upper),
   .except(except),
   .exceptIP(exceptIP),
-  .except_thread(excpt_thread),
-  .except_both(excpt_both),
+  .except_attr(excpt_attr),
+  .except_thread(),
+  .except_both(),
   .except_due_jump(excpt_due_jump),
   .except_jump_ght(excpt_ght),
   .except_set_instr_flag(except_set_flag),
@@ -5256,6 +5255,7 @@ dcache1 L1D_mod(
   .ijump1SC(jump1SC_reg2),.ijump1Miss(jump1Miss_reg2),.ijump1BtbOnly(jump1TbufOnly_reg2),
   .itk_after(instr_afterTaken_reg),.ifsimd(instr_fsimd_reg2),
   .iJump0Taken(jump0Pred_reg2),.iJump1Taken(jump1Pred_reg2),
+  .iJump0Attr(jump0Attr_reg2),.iJump1Attr(jump1Attr_reg2),
   .flTE(retfl_rF),.retire_enFl(retfl_enG),
   .retire0_rT(retire0_rT),.retire0_rF(retire0_rF),.retire0_enG(retire0_enG),.retire0_enV(retire0_enV),.retire0_enF(retire0_enF),
   .retire1_rT(retire1_rT),.retire1_rF(retire1_rF),.retire1_enG(retire1_enG),.retire1_enV(retire1_enV),.retire1_enF(retire1_enF),
@@ -5643,11 +5643,13 @@ dcache1 L1D_mod(
 	  jump0Pred_reg<=1'b0;
 	  jump0IP_reg<=64'b0;
 	  jump0Mask_reg<=4'b0;
+	  jump0Attr_reg<=4'h0;
           jump1Type_reg<=5'd0;
 	  jump1Pos_reg<=4'hf;
 	  jump1Pred_reg<=1'b0;
 	  jump1IP_reg<=64'b0;
 	  jump1Mask_reg<=4'b0;
+	  jump1Attr_reg<=4'h0;
 	  instr_fsimd_reg<=10'b0;
 	  baseIP_reg<=47'b0;
           
@@ -5669,11 +5671,13 @@ dcache1 L1D_mod(
 	  jump0Pred_reg2<=1'b0;
 	  jump0IP_reg2<=64'b0;
 	  jump0Mask_reg2<=4'b0;
+	  jump0Attr_reg2<=4'h0;
 	  jump1Type_reg2<=5'd0;
 	  jump1Pos_reg2<=4'hf;
 	  jump1Pred_reg2<=1'b0;
 	  jump1IP_reg2<=64'b0;
 	  jump1Mask_reg2<=4'b0;
+	  jump1Attr_reg2<=4'h0;
           instr_fsimd_reg2<=10'b0;
       
           wrtO0_reg<=4'b0;
@@ -6317,11 +6321,13 @@ dcache1 L1D_mod(
 	  jump0Pred_reg<=jump0Pred;
 	  jump0IP_reg<=jump0IP;
           jump0Mask_reg<=jump0Mask;
+	  jump0Attr_reg<=jump0Attr;
 	  jump1Type_reg<=jump1Type;
 	  jump1Pos_reg<=jump1Pos;
 	  jump1Pred_reg<=jump1Pred;
 	  jump1IP_reg<=jump1IP;
           jump1Mask_reg<=jump1Mask;
+	  jump1Attr_reg<=jump1Attr;
           instr_fsimd_reg<=instr_fsimd;
 	  baseIP_reg<=baseIP;
           
@@ -6342,11 +6348,13 @@ dcache1 L1D_mod(
 	  jump0Pred_reg2<=jump0Pred_reg;
 	  jump0IP_reg2<=jump0IP_reg;
           jump0Mask_reg2<=jump0Mask_reg;
+	  jump0Attr_reg2<=jump0Attr_reg;
 	  jump1Type_reg2<=jump1Type_reg;
 	  jump1Pos_reg2<=jump1Pos_reg;
 	  jump1Pred_reg2<=jump1Pred_reg;
 	  jump1IP_reg2<=jump1IP_reg;
           jump1Mask_reg2<=jump1Mask_reg;
+	  jump1Attr_reg2<=jump1Attr_reg;
           instr_fsimd_reg2<=instr_fsimd_reg;
      
           wrt0_reg<=wrt0;
