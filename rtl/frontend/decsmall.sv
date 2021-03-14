@@ -1675,7 +1675,7 @@ module smallInstr_decoder(
           prAlloc[35]=1'b1;
           pjumpType[35]=5'b10001;
 	  //pconstant[35]=instr[79:16];
-	  csrss_retIP_en=instr[31:16]==`csr_retIP;
+	  csrss_retIP_en=!(instr[31:16]==`csr_retIP);
       end
       
       trien[36]=magic[0] & isBasicFPUScalarC;
