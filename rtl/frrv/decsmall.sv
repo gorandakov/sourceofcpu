@@ -897,7 +897,7 @@ module smallInstr_decoder(
 	  2'b11: poperation[11]=`op_sar64;
       endcase
       
-      trien[12]=isBasicALU32 && instr[6:5]==2'b0 && instr[13:12]!=2'b01 && !instr[14];//non shift immediate
+      trien[12]=isBasicALU32 && instr[6:5]==2'b0 && instr[13:12]!=2'b01 && instr[14:12]==3'b0;//non shift immediate
       prT[12]=instr[11:7];
       prA[12]=instr[19:15];
       prT_use[12]=1'b1;
@@ -910,12 +910,10 @@ module smallInstr_decoder(
       pport[12]=PORT_ALU;
       prAlloc[12]=1'b1;
       case(instr[14:12])
-	  3'b000: poperation[12]=`op_add32;
-	  3'b010: begin poperation[12]=`op_sub32; pchainfl_alu[12]=1'b1; prT_use[12]=1'b1; popchain[12]=`op_csetn|13'b10100000000|4096; end
-	  3'b011: begin poperation[12]=`op_sub32; pchainfl_alu[12]=1'b1; prT_use[12]=1'b1; popchain[12]=`op_csetn|13'b01100000000|4096; end
+	  3'b000: poperation[12]=`op_add32S;
       endcase
        
-      trien[13]=isBasicALU32 && instr[6:5]==2'b0 && instr[13:12]==2'b01 && !instr[31] && instr[29:26]==4'b0;//shift immediate
+      trien[13]=isBasicALU32 && instr[6:5]==2'b0 && instr[13:12]==2'b01 && !instr[31] && instr[29:25]==5'b0;//shift immediate
       prT[13]=instr[11:7];
       prA[13]=instr[19:15];
       prT_use[13]=1'b1;
