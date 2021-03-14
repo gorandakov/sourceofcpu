@@ -1092,9 +1092,9 @@ module smallInstr_decoder(
       case(instr[27:25])
 	  3'b000: poperation[21]=`op_add32;
 	  3'b001: poperation[21]=`op_sub32;
-	  3'b010: poperation[21]=`op_xor64;
-	  3'b011: poperation[21]=`op_or64;
-	  3'b100: poperation[21]=`op_and64;
+	  3'b010: poperation[21]=`op_xor32;
+	  3'b011: poperation[21]=`op_or32;
+	  3'b100: poperation[21]=`op_and32;
 	  default: perror[21]=1'b1;
       endcase
       
@@ -1114,6 +1114,22 @@ module smallInstr_decoder(
 	  2'b001: poperation[22]=`op_shr32;
 	  2'b010: poperation[22]=`op_sar32;
 	  2'b011: perror[22]=1'b1;
+      endcase
+      
+      trien[23]=isExtImm && instr[31:29]==3'b1;//non shift reg
+      prT[23]=instr[11:7];
+      prA[23]=instr[19:15];
+      prB[23]=instr[24:20];
+      prT_use[23]=1'b1;
+      prA_use[23]=1'b1;
+      prB_use[23]=1'b1;
+      puseRs[23]=1'b1;
+      pflags_write[23]=1'b0;
+      pport[23]=PORT_ALU;
+      prAlloc[23]=1'b1;
+      case(instr[28])
+	  1'b0: poperation[23]=`op_sadd|{2'b10,instr[27:25],8'b0};
+	  1'b1: poperation[23]=`op_saddn|{2'b10,instr[27:25],8'b0};
       endcase
       
       trien[1]=~magic[0] & subIsMovOrExt;
