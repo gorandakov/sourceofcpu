@@ -614,6 +614,7 @@ module cntrl_find_outcome(
   wire except_both_d=both_threads;
   wire except_d;
   wire [15:0] proc_d;
+  wire [3:0] except_attr_d;
 
   wire [5:0] flags_d;
   reg  [5:0] flags[1:0];

@@ -3824,6 +3824,7 @@ module decoder_get_baseIP(
   clk,
   rst,
   baseIP,
+  baseAttr,
   afterTK,
   iUsed,
   afterTick,
@@ -3837,14 +3838,16 @@ module decoder_get_baseIP(
   srcIPOff7,
   srcIPOff8,
   srcIPOff9,
-  jump0IP,jump0TK,
-  jump1IP,jump1TK,
+  jump0IP,jump0TK,jump0Attr,
+  jump1IP,jump1TK,jump1Attr,
   except,
-  exceptIP
+  exceptIP,
+  exceptAttr
   );
   input clk;
   input rst;
-  output reg [46:0] baseIP;
+  output reg [63:0] baseIP;
+  output reg [3:0] baseAttr;
   input [9:0] afterTK;
   input [9:0] iUsed;
   input [9:0] afterTick;
@@ -3858,12 +3861,15 @@ module decoder_get_baseIP(
   input [12:0] srcIPOff7;
   input [12:0] srcIPOff8;
   input [12:0] srcIPOff9;
-  input [46:0] jump0IP;
+  input [63:0] jump0IP;
+  input [3:0] jump0Attr;
   input jump0TK;
-  input [46:0] jump1IP;
+  input [63:0] jump1IP;
+  input [3:0] jump1Attr;
   input jump1TK;
   input except;
-  input [46:0] exceptIP;
+  input [63:0] exceptIP;
+  input [3:0] exceptAttr;
 
   wire [12:0] srcIPOff[9:0];
   wire [46:0] nextIP;
