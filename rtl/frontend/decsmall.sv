@@ -1662,7 +1662,7 @@ module smallInstr_decoder(
           pport[35]=PORT_ALU;
           poperation[35][12]=1'b1;
           prAlloc[35]=1'b1;
-	  pconstant[35]=instr[79:16];
+	  //pconstant[35]=instr[79:16];
       end else if (instr[15:13]==3'd2) begin //iret
           puseRs[35]=1'b1;
           prB_use[35]=1'b1;
@@ -1674,8 +1674,8 @@ module smallInstr_decoder(
           poperation[35][12]=1'b1;
           prAlloc[35]=1'b1;
           pjumpType[35]=5'b10001;
-	  pconstant[35]=instr[79:16];
-	  csrss_retIP_en=instr[31:16]!=`csr_retIP;
+	  //pconstant[35]=instr[79:16];
+	  csrss_retIP_en=instr[31:16]==`csr_retIP;
       end
       
       trien[36]=magic[0] & isBasicFPUScalarC;

@@ -119,7 +119,9 @@ module decoder_aux_const(
   csrss_en,
   csrss_data,
   fpE_set,
-  fpE_en);
+  fpE_en,
+  altEn,
+  altData);
  
   input clk;
   input rst;
@@ -142,6 +144,8 @@ module decoder_aux_const(
   input [63:0] csrss_data;
   input [10:0] fpE_set;
   input fpE_en;
+  input altEn;
+  input [63:0] altData;
 
   wire [15:0] iconst[9:0];
   wire [9:0] cls_sys_first;
@@ -262,6 +266,7 @@ module decoder_aux_const(
       `csr_cl_lock:             csr_mflags[18]<=1'b1;
      	      endcase
               aux0_reg<=aux0;
+	      if (altEn) csr_retIP<=altData;
           end
           if (fpE_en && !csrss_en | (csrss_no!=`csr_FPU)) begin
               csr_fpu<=csr_fpu | {44'b0,fpE_set,11'b0};
@@ -2430,7 +2435,8 @@ module decoder(
         //  .prevSpecAlu(dec_aspec[k-1]),
         //  .thisSpecAlu(dec_aspec[k]),
           .isIPRel(dec_IPRel[k]),
-          .rAlloc(dec_allocR[k])
+          .rAlloc(dec_allocR[k]),
+	  .csrss_retIP_en(csrss_retIP_en[k])
           );
 //verilator lint_on PINMISSING
           assign instCls[k]=instQ[k][`instrQ_class];
@@ -2865,6 +2871,7 @@ module decoder(
  // assign dec_aspec[-1]=dec_aspecR;
   assign dec_lspecR_d=(~iUsed[0]) ? dec_lspecR : 1'bz;
 //  assign dec_aspecR_d=~iUsed[0] ? dec_aspecR : 1'bz;
+  assign dec_csrss_retIP_data=dec_csrss_retIP_en_reg==10'b0 ? 64'b0 : 64'bz;
  
   assign jumpT_IPOff=(~(|(dec_taken_reg &iUsed_reg))) ? 13'b0 : 13'bz;
   assign has_taken=|(dec_taken & iUsed);
@@ -3006,7 +3013,10 @@ module decoder(
   .csrss_en(csrss_en),
   .csrss_data(csrss_data),
   .fpE_en(fp_excpt_en),
-  .fpE_set(fp_excpt_set));
+  .fpE_set(fp_excpt_set),
+  .altEn(dec_csrss_retIP_en_reg!=0),
+  .altData(dec_csrss_retIP_data)
+);
 
   decoder_get_baseIP getIP_mod(
   .clk(clk),
@@ -3504,6 +3514,7 @@ module decoder(
 	  dec_last_reg<=10'b0;
 	  dec_fsimd_reg<=10'b0;
 	  afterTick_reg<=10'b0;
+	  dec_csrss_retIP_en_reg<=10'b0;
       end
       else if (~stall||except) begin
           for (n=0;n<10;n=n+1) begin
@@ -3570,6 +3581,7 @@ module decoder(
 	  dec_last_reg<=dec_last;
 	  dec_fsimd_reg<=dec_fsimd;
 	  afterTick_reg<=afterTick;
+	  dec_csrss_retIP_en_reg<=dec_csrss_retIP_en_reg & iUsed;
       end
     end
 endmodule  
