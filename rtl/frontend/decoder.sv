@@ -3845,7 +3845,7 @@ module decoder_get_baseIP(
   );
   input clk;
   input rst;
-  output reg [46:0] baseIP;
+  output reg [62:0] baseIP;
   input [9:0] afterTK;
   input [9:0] iUsed;
   input [9:0] afterTick;
@@ -3859,22 +3859,31 @@ module decoder_get_baseIP(
   input [12:0] srcIPOff7;
   input [12:0] srcIPOff8;
   input [12:0] srcIPOff9;
-  input [46:0] jump0IP;
+  input [62:0] jump0IP;
   input jump0TK;
-  input [46:0] jump1IP;
+  input [62:0] jump1IP;
   input jump1TK;
   input except;
-  input [46:0] exceptIP;
+  input [62:0] exceptIP;
 
   wire [12:0] srcIPOff[9:0];
-  wire [46:0] nextIP;
-  wire [46:0] next_traceIP;
-  wire [46:0] next_baseIP;
+  wire [62:0] nextIP;
+  wire [62:0] next_traceIP;
+  wire [62:0] next_baseIP;
 
 
-  adder_inc #(35) nextAdd_mod(baseIP[46:12],nextIP[46:12],1'b1,);
+  adder_inc #(31) nextAdd_mod(baseIP[42:12],nextIP[42:12],1'b1,);
   assign nextIP[11:0]=baseIP[11:0];
+  assign nextIP[62:43]=baseIP[62:43];
   //assign second_IP=|second_tr_jump ? tk_jumpIP : 47'bz;
+
+  assign next_baseAttr=(jump0TK && ~except) ? jump0Attr : 47'bz;
+  assign next_baseAttr=(jump1TK && ~except) ? jump1Attr : 47'bz;
+  assign next_baseAttr=(~jump0TK && ~jump1TK && !(afterTick&iUsed) 
+    && ~except) ? baseAttr: 47'bz;
+  assign next_baseAttr=(~jump0TK && ~jump1TK && (afterTick&iUsed) 
+    && ~except) ? baseAttr: 47'bz;
+  assign next_baseAttr=except ? exceptAttr : 47'bz;
 
   
   assign next_baseIP=(jump0TK && ~except) ? jump0IP : 47'bz;
@@ -3898,9 +3907,14 @@ module decoder_get_baseIP(
   
   always @(posedge clk) begin
       if (rst) begin
-          baseIP<=47'b0;
+          baseIP<=63'b0;
       end else begin
 	  baseIP<=next_baseIP;
+      end
+      if (rst) begin
+          baseAttr<=63'b0;
+      end else begin
+	  baseAttr<=next_baseAttr;
       end
   end
 endmodule
