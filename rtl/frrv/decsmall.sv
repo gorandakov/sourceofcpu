@@ -886,7 +886,7 @@ module smallInstr_decoder(
       puseRs[11]=1'b1;
       pflags_write[11]=1'b1;
       pconstant[11]={58'b0,instr[25:20]}
-      pport[11]=PORT_ALU;
+      pport[11]=PORT_SHIFT;
       prAlloc[11]=1'b1;
       casex({instr[14],instr[30])
 	  2'b0x: begin 
@@ -923,7 +923,7 @@ module smallInstr_decoder(
       puseRs[13]=1'b1;
       pflags_write[13]=1'b1;
       pconstant[13]={58'b0,instr[25:20]}
-      pport[13]=PORT_ALU;
+      pport[13]=PORT_SHIFT;
       prAlloc[13]=1'b1;
       casex({instr[14],instr[30])
 	  2'b0x: begin 
@@ -934,7 +934,47 @@ module smallInstr_decoder(
 	  2'b11: poperation[13]=`op_sar32;
       endcase
       
+      trien[14]=isBasicALU && instr[6:5]!=2'b0 && instr[13:12]!=2'b01 && !instr[31] && instr[29:25]==5'b0;//non shift reg
+      prT[14]=instr[11:7];
+      prA[14]=instr[19:15];
+      prB[14]=instr[24:20];
+      prT_use[14]=1'b1;
+      prA_use[14]=1'b1;
+      prB_use[14]=1'b1;
+      puseRs[14]=1'b1;
+      pflags_write[14]=1'b1;
+      pport[14]=PORT_ALU;
+      prAlloc[14]=1'b1;
+      case({instr[30],instr[14:12]})
+	  3'b0000: poperation[14]=`op_add64;
+	  3'b1000: poperation[14]=`op_sub64;
+	  3'b010: begin poperation[14]=`op_sub64; pchainfl_alu[10]=1'b1; prT_use[10]=1'b1; popchain[10]=`op_csetn|13'b10100000000|4096; end//uxuss
+	  3'b011: begin poperation[14]=`op_sub64; pchainfl_alu[10]=1'b1; prT_use[10]=1'b1; popchain[10]=`op_csetn|13'b01100000000|4096; end//suxuss
+	  3'b100: poperation[14]=`op_xor64;
+	  3'b110: poperation[14]=`op_or64;
+	  3'b111: poperation[14]=`op_and64;
+      endcase
        
+      trien[15]=isBasicALU && instr[6:5]!=2'b0 && instr[13:12]==2'b01 && !instr[31] && instr[29:25]==5'b0;//shift reg
+      prT[15]=instr[11:7];
+      prA[15]=instr[19:15];
+      prB[15]=instr[24:20];
+      prT_use[15]=1'b1;
+      prA_use[15]=1'b1;
+      prB_use[15]=1'b1;
+      puseRs[15]=1'b1;
+      pflags_write[15]=1'b1;
+      pport[15]=PORT_SHIFT;
+      prAlloc[15]=1'b1;
+      casex({instr[14],instr[30])
+	  2'b0x: begin 
+	          poperation[15]=`op_shl64;
+	          if (instr[30]) perror[11]=1'b1;
+              end
+	  2'b10: poperation[15]=`op_shr64;
+	  2'b11: poperation[15]=`op_sar64;
+      endcase
+      
       
       trien[1]=~magic[0] & subIsMovOrExt;
       puseBConst[1]=opcode_sub==6'h29;
