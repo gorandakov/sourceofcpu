@@ -1056,6 +1056,28 @@ module smallInstr_decoder(
 	  2'b01: poperation[19]=`op_sar32;
       endcase
        
+      trien[20]=isExtALU && instr[14:12]!=3'b100;//mul immediate
+      prT[20]=instr[11:7];
+      prA[20]=instr[19:15];
+      prT_use[20]=1'b1;
+      prA_use[20]=1'b1;
+      prB_use[20]=1'b1;
+      puseBConst[20]=1'b1;
+      puseRs[20]=1'b1;
+      pflags_write[20]=1'b1;
+      pconstant[20]={{52{instr[31]}},instr[31:20]}
+      pport[20]=PORT_ALU;
+      prAlloc[20]=1'b1;
+      case(instr[14:12])
+	  3'b011: begin poperation[20]=`op_mul32|2048; pport[20]=PORT_MUL;  end//suxuss
+	  3'b000: begin poperation[20]=`op_imul32|2048; pport[20]=PORT_MUL;  end//suxuss
+	  3'b001: begin poperation[20]=`op_imul64|2048; pport[20]=PORT_MUL;  end//suxuss
+	  3'b010: begin poperation[20]=`op_lmul64|2048; pport[20]=PORT_MUL;  end//suxuss
+	  3'b111: begin poperation[20]=`op_mul32_64|2048; pport[20]=PORT_MUL;  end//suxuss
+	  3'b110: begin poperation[20]=`op_imul32_64|2048; pport[20]=PORT_MUL;  end//suxuss
+	  3'b101: begin poperation[20]=`op_limul64|2048; pport[20]=PORT_MUL;  end//suxuss
+      endcase
+       
       
       trien[1]=~magic[0] & subIsMovOrExt;
       puseBConst[1]=opcode_sub==6'h29;
