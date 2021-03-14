@@ -305,8 +305,10 @@ module smallInstr_decoder(
 	  (!instr[6] && instr[4:2]==3'b101) && opcode_main[1:0]==2'b11;
   assign isOpFp=instr[6:2]==5'b10100 && opcode_main[1:0]==2'b11;
   assign isFpFma=opcode_main[6:4]==2'b100 && opcode_main[1:0]==2'b11;
-  assign isJump=opcode_main[6:0]==5'b1100011;
-  assign isSys=opcode_main[6:0]==5'b1110011;
+  assign isJump=opcode_main[6:0]==7'b1100011;
+  assign isSys=opcode_main[6:0]==7'b1110011;
+  assign isExtImm=opcode_main[6:0]==7'b1011011;
+  assign isExtALU=opcode_main[6:0]==7'b1111011;
 
   assign qconstant[1]=pconstant[3];//??
   assign qtrien   [1]=trien    [3];//??
@@ -1013,6 +1015,47 @@ module smallInstr_decoder(
 	  2'b11: poperation[17]=`op_sar32;
       endcase
       
+      trien[18]=isExtImm && instr[14:12]!=3'b001;//non shift immediate
+      prT[18]=instr[11:7];
+      prA[18]=instr[19:15];
+      prT_use[18]=1'b1;
+      prA_use[18]=1'b1;
+      prB_use[18]=1'b1;
+      puseBConst[18]=1'b1;
+      puseRs[18]=1'b1;
+      pflags_write[18]=1'b1;
+      pconstant[18]={{52{instr[31]}},instr[31:20]}
+      pport[18]=PORT_ALU;
+      prAlloc[18]=1'b1;
+      case(instr[14:12])
+	  3'b000: poperation[18]=`op_add32;
+	  3'b010: poperation[18]=`op_sub32; 
+	  3'b011: begin poperation[18]=`op_mul64|2048; pport[18]=PORT_MUL;  end//suxuss
+	  3'b100: poperation[18]=`op_xor32;
+	  3'b110: poperation[18]=`op_or32;
+	  3'b111: poperation[18]=`op_and32;
+	  3'b101: poperation[18]=`op_sub64;
+      endcase
+       
+      trien[19]=isExtImm && instr[14:12]==3'b001 && instr[31:27]==5'b0;//shift immediate
+      prT[19]=instr[11:7];
+      prA[19]=instr[19:15];
+      prT_use[19]=1'b1;
+      prA_use[19]=1'b1;
+      prB_use[19]=1'b1;
+      puseBConst[19]=1'b1;
+      puseRs[19]=1'b1;
+      pflags_write[19]=1'b1;
+      pconstant[19]={59'b0,instr[24:20]}
+      pport[19]=PORT_SHIFT;
+      prAlloc[19]=1'b1;
+      case(instr[26:25])
+	  2'b00: poperation[19]=`op_shl32;
+	  2'b10: poperation[19]=`op_shr32; 
+	  2'b11: begin perror[19]=1'b1;  end//suxuss
+	  2'b01: poperation[19]=`op_sar32;
+      endcase
+       
       
       trien[1]=~magic[0] & subIsMovOrExt;
       puseBConst[1]=opcode_sub==6'h29;

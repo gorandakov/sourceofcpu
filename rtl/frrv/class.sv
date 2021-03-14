@@ -56,8 +56,11 @@ module predec_RV_class(instr,flag,class_,isLNK,isRet,LNK2);
       isBasicALU32 && instr[6:5]==2'b0 && instr[13:12]==2'b01 && !instr[31] && instr[29:25]==5'b0,
       isBasicALU && instr[6:5]!=2'b0 && instr[13:12]!=2'b01 && !instr[31] && instr[29:25]==5'b0 && instr[14:13]==2'b01,
       isBasicALU && instr[6:5]!=2'b0 && instr[13:12]==2'b01 && !instr[31] && instr[29:25]==5'b0,
-      isBasicALU32 && instr[6:5]!=2'b0 && instr[13:12]==2'b01 && !instr[31] && instr[29:25]==5'b0};
-  assign clsMul=|{isntr[15:13]=3'b100 && instr[1:0]==2'b10 && instr[6:2]==5'b0 && instr[11:7]!=5'b0};
+      isBasicALU32 && instr[6:5]!=2'b0 && instr[13:12]==2'b01 && !instr[31] && instr[29:25]==5'b0,
+      isExtImm && instr[14:12]==3'b001 && instr[31:27]==5'b0};
+  assign clsMul=|{isntr[15:13]=3'b100 && instr[1:0]==2'b10 && instr[6:2]==5'b0 && instr[11:7]!=5'b0,
+      isExtImm && instr[14:12]==3'b011,
+      instr[6:5]==2'b11 && !instr[4] && instr[2] && !instr[3] && instr[1:0]==2'b11};
   assign clsALU=|{subIsReg3Alu && instr[11:10]==2'b11,
     subIsBasicImmAluReg5 && !(isntr[15:13]=3'b100 && instr[1:0]==2'b10 && instr[6:2]==5'b0 && instr[11:7]!=5'b0),
     subIs2xReg5Alu,subIsReg3Alu && instr[11:10]==2'b11,
@@ -69,10 +72,13 @@ module predec_RV_class(instr,flag,class_,isLNK,isRet,LNK2);
     isBasicALU32 && instr[6:5]==2'b0 && instr[13:12]!=2'b01 && instr[14:12]==3'b0,
     isBasicALU && instr[6:5]!=2'b0 && instr[13:12]!=2'b01 && !instr[31] && instr[29:25]==5'b0,
     isBasicALU32 && instr[6:5]!=2'b0 && instr[14:12]==3'b0 && !instr[31] && instr[29:25]==5'b0,
-    isBasicALU32 && instr[6:5]!=2'b0 && instr[13:12]==2'b01 && !instr[31] && instr[29:25]==5'b0//signed shift32 2op};
+    isBasicALU32 && instr[6:5]!=2'b0 && instr[13:12]==2'b01 && !instr[31] && instr[29:25]==5'b0,//signed shift32 2op
+    isExtImm && instr[14:12]!=3'b001 && instr[14:12]!=3'b011,
+    instr[6] && instr[4:2]==3'b101 && instr[1:0]==2'b11,
+    isntr[6:0]==7'b1101111 && instr[11:7]!=5'b0};
   assign clsJump=|{isJump,subIsJMP,
     instr[15:13]==3'b100 && instr[1:0]==2'b10 && instr[6:2]==5'b0 && instr[11:7]!=5'b0,
     instr[6:5]==2'b11 && !instr[4] && instr[2] && !(!instr[3] && instr[14:12]!=3'b0)};
   assign clsIndir=|{instr[15:13]==3'b100 && instr[1:0]==2'b10 && instr[6:2]==5'b0 && instr[11:7]!=5'b0,
-    instr[6:5]==2'b11 && !instr[4] && instr[2] && !instr[3]};
+    instr[6:5]==2'b11 && !instr[4] && instr[2] && !instr[3] && instr[1:0]==2'b11};
 endmodule
