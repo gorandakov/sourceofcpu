@@ -948,13 +948,13 @@ module smallInstr_decoder(
       pport[14]=PORT_ALU;
       prAlloc[14]=1'b1;
       case({instr[30],instr[14:12]})
-	  3'b0000: poperation[14]=`op_add64;
-	  3'b1000: poperation[14]=`op_sub64;
-	  3'b010: begin poperation[14]=`op_sub64; pchainfl_alu[10]=1'b1; prT_use[10]=1'b1; popchain[10]=`op_csetn|13'b10100000000|4096; end//uxuss
-	  3'b011: begin poperation[14]=`op_sub64; pchainfl_alu[10]=1'b1; prT_use[10]=1'b1; popchain[10]=`op_csetn|13'b01100000000|4096; end//suxuss
-	  3'b100: poperation[14]=`op_xor64;
-	  3'b110: poperation[14]=`op_or64;
-	  3'b111: poperation[14]=`op_and64;
+	  4'b0000: poperation[14]=`op_add64;
+	  4'b1000: poperation[14]=`op_sub64;
+	  4'b010: begin poperation[14]=`op_sub64; pchainfl_alu[10]=1'b1; prT_use[10]=1'b1; popchain[10]=`op_csetn|13'b10100000000|4096; end//uxuss
+	  4'b011: begin poperation[14]=`op_sub64; pchainfl_alu[10]=1'b1; prT_use[10]=1'b1; popchain[10]=`op_csetn|13'b01100000000|4096; end//suxuss
+	  4'b100: poperation[14]=`op_xor64;
+	  4'b110: poperation[14]=`op_or64;
+	  4'b111: poperation[14]=`op_and64;
       endcase
        
       trien[15]=isBasicALU && instr[6:5]!=2'b0 && instr[13:12]==2'b01 && !instr[31] && instr[29:25]==5'b0;//shift reg
@@ -989,8 +989,8 @@ module smallInstr_decoder(
       pport[16]=PORT_ALU;
       prAlloc[16]=1'b1;
       case({instr[30],instr[14:12]})
-	  3'b0000: poperation[16]=`op_add32S;
-	  3'b1000: poperation[16]=`op_sub32S;
+	  4'b0000: poperation[16]=`op_add32S;
+	  4'b1000: poperation[16]=`op_sub32S;
       endcase
        
       trien[17]=isBasicALU32 && instr[6:5]!=2'b0 && instr[13:12]==2'b01 && !instr[31] && instr[29:25]==5'b0;//shift reg
@@ -1078,6 +1078,43 @@ module smallInstr_decoder(
 	  3'b101: begin poperation[20]=`op_limul64|2048; pport[20]=PORT_MUL;  end//suxuss
       endcase
        
+      trien[21]=isExtImm && (instr[31:27]==5'b1 || instr[31:27]==5'b10);//non shift reg
+      prT[21]=instr[11:7];
+      prA[21]=instr[19:15];
+      prB[21]=instr[24:20];
+      prT_use[21]=1'b1;
+      prA_use[21]=1'b1;
+      prB_use[21]=1'b1;
+      puseRs[21]=1'b1;
+      pflags_write[21]=1'b1;
+      pport[21]=PORT_ALU;
+      prAlloc[21]=1'b1;
+      case(instr[27:25])
+	  3'b000: poperation[21]=`op_add32;
+	  3'b001: poperation[21]=`op_sub32;
+	  3'b010: poperation[21]=`op_xor64;
+	  3'b011: poperation[21]=`op_or64;
+	  3'b100: poperation[21]=`op_and64;
+	  default: perror[21]=1'b1;
+      endcase
+      
+      trien[22]=isExtImm && instr[31:27]==5'b11;//shift reg
+      prT[22]=instr[11:7];
+      prA[22]=instr[19:15];
+      prB[22]=instr[24:20];
+      prT_use[22]=1'b1;
+      prA_use[22]=1'b1;
+      prB_use[22]=1'b1;
+      puseRs[22]=1'b1;
+      pflags_write[22]=1'b1;
+      pport[22]=PORT_SHIFT;
+      prAlloc[22]=1'b1;
+      case(instr[26:25])
+	  2'b000: poperation[22]=`op_shl32;
+	  2'b001: poperation[22]=`op_shr32;
+	  2'b010: poperation[22]=`op_sar32;
+	  2'b011: perror[22]=1'b1;
+      endcase
       
       trien[1]=~magic[0] & subIsMovOrExt;
       puseBConst[1]=opcode_sub==6'h29;
