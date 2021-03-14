@@ -1654,8 +1654,7 @@ module decoder(
   instr_fsimd,
   baseIP,
   wrt0,wrt1,wrt2,
-  csrss_no,csrss_en,csrss_data,
-  csrss_alt_no,csrss_alt_en,csrss_alt_data
+  csrss_no,csrss_en,csrss_data
   );
   localparam DATA_WIDTH=`alu_width;
   localparam OPERATION_WIDTH=`operation_width;
