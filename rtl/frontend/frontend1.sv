@@ -638,6 +638,18 @@ module frontend1(
   wire [3:0] btbx_attr2;
   wire [3:0] btbx_attr3;
   wire [3:0] btb_attr;
+  wire jlninx0,jlninx1,jlninx2,jlninx3;
+  wire jlnin0,jlnin1,jlnin2,jlnin3;
+  wire [4:0] btbx_jlnoff;
+  wire [4:0] btb_jlnoff;
+  wire [4:0] btbx_lnpos0;
+  wire [4:0] btbx_lnpos1;
+  wire [4:0] btbx_lnpos2;
+  wire [4:0] btbx_lnpos3;
+  wire [4:0] btb_lnpos0;
+  wire [4:0] btb_lnpos1;
+  wire [4:0] btb_lnpos2;
+  wire [4:0] btb_lnpos3;
 
   integer m,n,t;
 
