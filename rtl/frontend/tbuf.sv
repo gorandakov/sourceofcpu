@@ -814,16 +814,16 @@ module tbuf_way(
   get_carry #(4) wcmpJL32_mod(write_off2_rex,~write_lnpos3_rex,1'b1,writex_jln3[3]); 
   get_carry #(4) wcmpJL33_mod(write_off3_rex,~write_lnpos3_rex,1'b1,writex_jln3[4]);
 
-  bit_find_last_bit #(4) fnd0_mod(~writex_jln0,writex_fjlnx0[4:1],writex_fjlnx0[0]);
+  bit_find_last_bit #(4) wfnd0_mod(~writex_jln0,writex_fjlnx0[4:1],writex_fjlnx0[0]);
   assign writex_fjln0={writex_fjlnx0[4:1],~writex_fjlnx0[0]};
 
-  bit_find_last_bit #(4) fnd1_mod(~writex_jln1,writex_fjlnx1[4:1],writex_fjlnx1[0]);
+  bit_find_last_bit #(4) wfnd1_mod(~writex_jln1,writex_fjlnx1[4:1],writex_fjlnx1[0]);
   assign writex_fjln1={writex_fjlnx1[4:1],~writex_fjlnx1[0]};
 
-  bit_find_last_bit #(4) fnd2_mod(~writex_jln2,writex_fjlnx2[4:1],writex_fjlnx2[0]);
+  bit_find_last_bit #(4) wfnd2_mod(~writex_jln2,writex_fjlnx2[4:1],writex_fjlnx2[0]);
   assign writex_fjln2={writex_fjlnx2[4:1],~writex_fjlnx2[0]};
 
-  bit_find_last_bit #(4) fnd3_mod(~writex_jln3,writex_fjlnx3[4:1],writex_fjlnx3[0]);
+  bit_find_last_bit #(4) wfnd3_mod(~writex_jln3,writex_fjlnx3[4:1],writex_fjlnx3[0]);
   assign writex_fjln3={writex_fjlnx3[4:1],~writex_fjlnx3[0]};
 
   assign jmp_mask[0]=oen ? j0_after && read_off0!=4'hf : 1'bz;
