@@ -650,6 +650,7 @@ module frontend1(
   wire [4:0] btb_lnpos1;
   wire [4:0] btb_lnpos2;
   wire [4:0] btb_lnpos3;
+  wire btb_jlnin0,btb_jlnin1,btb_jlnin2,btb_jlnin3;
 
   integer m,n,t;
 
@@ -846,19 +847,6 @@ module frontend1(
  // assign link_IP_d[0]=1'b0;
   
   //lnk_isRet_reg & lnk_jpos[0] not possible
-  assign lnk_lnpos=(lnk_isRet_reg & lnk_jpos[1]) ? 2'd0 : 2'bz;
-  assign lnk_lnpos=(lnk_isRet_reg & lnk_jpos[2]) ? 2'd1 : 2'bz;
-  assign lnk_lnpos=(lnk_isRet_reg & lnk_jpos[3]) ? 2'd2 : 2'bz;
-  assign lnk_lnpos=(lnk_isRet_reg & lnk_jpos[4]) ? 2'd3 : 2'bz;
-
-  assign lnk_lnpos=(~lnk_isRet_reg & lnk_jpos[0]) ? 2'd0 : 2'bz;
-  assign lnk_lnpos=(~lnk_isRet_reg & lnk_jpos[1]) ? 2'd1 : 2'bz;
-  assign lnk_lnpos=(~lnk_isRet_reg & lnk_jpos[2]) ? 2'd2 : 2'bz;
-  assign lnk_lnpos=(~lnk_isRet_reg & lnk_jpos[3]) ? 2'd3 : 2'bz;
-  assign lnk_lnpos=(~lnk_isRet_reg & lnk_jpos[4]) ? 2'd3 : 2'bz;
-  
-  assign lnk_lnpos=lnk_jpos ? 2'bz : 2'b0;
-  
   
   assign tlb_phys=tlb_data_reg3[`ctlbData_phys];
   assign tlb_nx=tlb_data_reg3[`ctlbData_ne];
