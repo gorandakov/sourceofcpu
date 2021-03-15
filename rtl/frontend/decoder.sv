@@ -2120,7 +2120,7 @@ module decoder(
   output jump1Miss;
   output jump1TbufOnly;
   output [9:0] instr_fsimd;
-  output [46:0] baseIP;
+  output [62:0] baseIP;
   
   output [5:0] wrt0;
   output [5:0] wrt1;
@@ -2132,6 +2132,7 @@ module decoder(
   
   wire [9:0] csrss_retIP_en;
   wire [63:0] csrss_retIP_data;
+  reg  [9:0] csrss_retIP_en_reg;
 
   reg last_trce;
 
@@ -2492,7 +2493,7 @@ module decoder(
           adder #(33) srcXAdd_mod({20'b0,dec_srcIPOffA_reg[k]},{dec_constant_reg[k][31],dec_constant_reg[k][31:0]},dec_srcIPOffx[k],1'b0, 1'b1,,,,);
 
 	  popcnt10 jpop_mod(cls_jump_reg&iUsed_reg,{dummy8_1,btbl_step});
-	  adder #(43) csrAdd_mod({30'b0,dec_srcIPOffA_reg[k]},baseIP_reg[43:1],csrss_retIP_data,1'b0,csrss_retIP_en_reg[k],,,,);
+	  adder #(43) csrAdd_mod({30'b0,dec_srcIPOffA_reg[k]},baseIP[42:0],csrss_retIP_data,1'b0,csrss_retIP_en_reg[k],,,,);
 
           if (k<9) 
           decoder_reorder_mux mux_mod(
@@ -2872,7 +2873,7 @@ module decoder(
  // assign dec_aspec[-1]=dec_aspecR;
   assign dec_lspecR_d=(~iUsed[0]) ? dec_lspecR : 1'bz;
 //  assign dec_aspecR_d=~iUsed[0] ? dec_aspecR : 1'bz;
-  assign dec_csrss_retIP_data=dec_csrss_retIP_en_reg==10'b0 ? 64'b0 : 64'bz;
+  assign csrss_retIP_data=csrss_retIP_en_reg==10'b0 ? 64'b0 : 64'bz;
  
   assign jumpT_IPOff=(~(|(dec_taken_reg &iUsed_reg))) ? 13'b0 : 13'bz;
   assign has_taken=|(dec_taken & iUsed);
@@ -3015,8 +3016,8 @@ module decoder(
   .csrss_data(csrss_data),
   .fpE_en(fp_excpt_en),
   .fpE_set(fp_excpt_set),
-  .altEn(dec_csrss_retIP_en_reg!=0),
-  .altData(dec_csrss_retIP_data)
+  .altEn(csrss_retIP_en_reg!=0),
+  .altData(csrss_retIP_data)
 );
 
   decoder_get_baseIP getIP_mod(
