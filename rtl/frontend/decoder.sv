@@ -1654,6 +1654,7 @@ module decoder(
   jump1SC,jump1Miss,jump1TbufOnly,
   instr_fsimd,
   baseIP,
+  baseAttr,
   wrt0,wrt1,wrt2,
   csrss_no,csrss_en,csrss_data
   );
@@ -2121,6 +2122,7 @@ module decoder(
   output jump1TbufOnly;
   output [9:0] instr_fsimd;
   output [62:0] baseIP;
+  output [3:0] baseAttr;
   
   output [5:0] wrt0;
   output [5:0] wrt1;
@@ -2202,7 +2204,8 @@ module decoder(
 //  reg dec_aspecR;
   wire dec_lspecR_d;
 //  wire dec_aspecR_d;
-  
+  wire [3:0] baseAttr;
+
   reg [OPERATION_WIDTH-1:0] 	dec_operation_reg[9:0];
   reg [REG_WIDTH-1:0] 		dec_rA_reg[9:0];
   reg 				dec_rA_use_reg[9:0];

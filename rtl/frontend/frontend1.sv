@@ -52,6 +52,7 @@ module frontend1(
   localparam VIRT_WIDTH=64;
   localparam IP_WIDTH=64;
   localparam [31:0] INIT_IP=32'h0;
+  localparam [3:0] INIT_ATTR=4'b0;
   localparam BUS_BANK=32;
   localparam BUS_WIDTH=BUS_BANK*16;
   localparam DATA_WIDTH=65*8;
@@ -1322,7 +1323,7 @@ module frontend1(
   .thread(1'b0),
   .read_data(rstack_dataR),
   .write_data(rstack_dataW),
-  .write_lnk(btbx_jlink),
+  .write_lnk(btbx_jlnoff),
   .write_trace(1'b0),
   .write_wen(btb_in_link & btb_hit&instrEn&~fstall)
   );
