@@ -3877,9 +3877,21 @@ module decoder_get_baseIP(
   wire [46:0] next_baseIP;
 
 
-  adder_inc #(35) nextAdd_mod(baseIP[46:12],nextIP[46:12],1'b1,);
+  adder_inc #(35-4) nextAdd_mod(baseIP[42:12],nextIP[46:12],1'b1,);
   assign nextIP[11:0]=baseIP[11:0];
   //assign second_IP=|second_tr_jump ? tk_jumpIP : 47'bz;
+  assign nextIP[11:0]=baseIP[11:0];
+  assign nextIP[62:43]=baseIP[62:43];
+  //assign second_IP=|second_tr_jump ? tk_jumpIP : 47'bz;
+
+  assign next_baseAttr=(jump0TK && ~except) ? jump0Attr : 47'bz;
+  assign next_baseAttr=(jump1TK && ~except) ? jump1Attr : 47'bz;
+  assign next_baseAttr=(~jump0TK && ~jump1TK && !(afterTick&iUsed) 
+    && ~except) ? baseAttr: 47'bz;
+  assign next_baseAttr=(~jump0TK && ~jump1TK && (afterTick&iUsed) 
+    && ~except) ? baseAttr: 47'bz;
+  assign next_baseAttr=except ? exceptAttr : 47'bz;
+
 
   
   assign next_baseIP=(jump0TK && ~except) ? jump0IP : 47'bz;
