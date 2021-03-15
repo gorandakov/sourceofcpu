@@ -628,11 +628,11 @@ module smallInstr_decoder(
 	      reor_val_out[17:15]!=tt[2:0]&&reor_val_out[20:18]!=tt[2:0]&&reor_val_out[23:21]!=tt[2:0]);   
 	  end
       end
-      rA_reor=instr[11] ? instr[11:8] : {1'b0,FPU_reor[3*instr[10:8]+:3]};
-      rB_reor=instr[15] ? instr[15:12] : {1'b0,FPU_reor[3*instr[14:12]+:3]};
-      rA_reor32=instr[21:20]!=2'b0 ? instr[21:17] : {2'b0,FPU_reor[3*instr[19:17]+:3]};
-      rB_reor32=instr[26:25]!=2'b0 ? instr[26:22] : {2'b0,FPU_reor[3*instr[24:22]+:3]};
-      rT_reor32=instr[31:30]!=2'b0 ? instr[31:27] : {2'b0,FPU_reor[3*instr[29:27]+:3]};
+      rA_reor=instr[11] ? instr[11:8] : {1'b0,fpu_reor[3*instr[10:8]+:3]};
+      rB_reor=instr[15] ? instr[15:12] : {1'b0,fpu_reor[3*instr[14:12]+:3]};
+      rA_reor32=instr[21:20]!=2'b0 ? instr[21:17] : {2'b0,fpu_reor[3*instr[19:17]+:3]};
+      rB_reor32=instr[26:25]!=2'b0 ? instr[26:22] : {2'b0,fpu_reor[3*instr[24:22]+:3]};
+      rT_reor32=instr[31:30]!=2'b0 ? instr[31:27] : {2'b0,fpu_reor[3*instr[29:27]+:3]};
 
       csrss_retIP_en=1'b0;
       
