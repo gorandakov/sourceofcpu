@@ -179,7 +179,12 @@ module frontend1(
   reg [7:0] cc_base_off_reg2;
   reg [7:0] cc_base_off_reg3;
   reg [7:0] cc_base_off_reg4;
-  
+ 
+  reg [3:0]  cc_attr;
+  wire [3:0] btbx_attr; 
+
+  wire [3:0] cc_attr_d;
+  wire [3:0] ixceptAttr;
   reg [43:0] miss_IP;
   //reg [47:0] link_IP;
   reg [23:0] proc;
@@ -622,6 +627,17 @@ module frontend1(
   wire jumpTK_btb_fstall;
   reg jumpTK_en;
   reg [63:0] jumpTK_addr;
+  reg [3:0] jumpTK_attr;
+
+  wire [3:0] btb_attr0;
+  wire [3:0] btb_attr1;
+  wire [3:0] btb_attr2;
+  wire [3:0] btb_attr3;
+  wire [3:0] btbx_attr0;
+  wire [3:0] btbx_attr1;
+  wire [3:0] btbx_attr2;
+  wire [3:0] btbx_attr3;
+  wire [3:0] btb_attr;
 
   integer m,n,t;
 
@@ -1624,7 +1640,8 @@ module frontend1(
 	  btbx_jmask_REG<=4'b0;
 	  miss_now_reg<=1'b0;
           jumpTK_en<=1'b0;
-          jumpTK_addr<=48'b0;
+          jumpTK_addr<=64'b0;
+	  jumpTK_attr<=4'b0;
 	  IP_phys_reg<=44'b0;
 	  IP_phys_reg2<=44'b0;
 	  IP_phys_reg3<=44'b0;
@@ -1929,6 +1946,7 @@ module frontend1(
               instrEn_reg2<=1'b0;
               instrEn_reg3<=1'b0;
               jumpTK_addr<=btbx_tgt;
+	      jumpTK_attr<=btbx_attr;
               jumpTK_en<=1'b1;
           end
       end else if (btbFStall_reg3) begin
