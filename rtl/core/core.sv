@@ -910,7 +910,8 @@ module heptane_core(
   .hit_LRU(dc2_rLRU_reg),.read_LRU(dc2_rLRUA0),.hit_any(dc2_rhitA0),
   .read_dir(dc2_rDirA0),.read_excl(dc2_rExclA0),
   .read_expAddr(L1_expAddr),
-  .read_expAddr_en(L1_expAddr_en)
+  .read_expAddr_en(L1_expAddr_en),
+  .read_expAddrOut()
   );
   dcache2_block #(1) dc2B0_mod(
   .clk(clk),
@@ -942,7 +943,9 @@ module heptane_core(
   .insert_dupl(dc2_dupl_rd),
   .hit_LRU(dc2_rLRU_reg),.read_LRU(dc2_rLRUB0),.hit_any(dc2_rhitB0),
   .read_dir(dc2_rDirB0),.read_excl(dc2_rExclB0),
-  .read_expAddr_en(L1_expAddr_en)
+  .read_expAddr(L1_expAddr),
+  .read_expAddr_en(L1_expAddr_en),
+  .read_expAddrOut()
   );
   dcache2_block #(2) dc2B1_mod(
   .clk(clk),
@@ -975,7 +978,8 @@ module heptane_core(
   .hit_LRU(dc2_rLRU_reg),.read_LRU(dc2_rLRUB1),.hit_any(dc2_rhitB1),
   .read_dir(dc2_rDirB1),.read_excl(dc2_rExclB1),
   .read_expAddr(L1_expAddr),
-  .read_expAddr_en(L1_expAddr_en)
+  .read_expAddr_en(L1_expAddr_en),
+  .read_expAddrOut()
   );
 
   frontend1 #(BUS_ID) front_mod(
