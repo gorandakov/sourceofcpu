@@ -472,6 +472,18 @@ module tbuf_way(
   wire [4:0] readx_fjlnx1; 
   wire [4:0] readx_fjlnx2; 
   wire [4:0] readx_fjlnx3; 
+  wire [4:1] writex_jln0; 
+  wire [4:1] writex_jln1; 
+  wire [4:1] writex_jln2; 
+  wire [4:1] writex_jln3; 
+  wire [4:0] writex_fjln0; 
+  wire [4:0] writex_fjln1; 
+  wire [4:0] writex_fjln2; 
+  wire [4:0] writex_fjln3; 
+  wire [4:0] writex_fjlnx0; 
+  wire [4:0] writex_fjlnx1; 
+  wire [4:0] writex_fjlnx2; 
+  wire [4:0] writex_fjlnx3; 
   
   wire write_LRU;
   reg [9:0] update_addr_reg;
@@ -742,6 +754,13 @@ module tbuf_way(
   assign ljpos1=oen ? readx_fjln1 : 5'bz;
  
   assign ljpos0=oen ? readx_fjln0 : 5'bz;
+  
+  assign ljpos3=read_write_fwd ? writex_fjln3 : 5'bz;
+  assign ljpos2=read_write_fwd ? writex_fjln2 : 5'bz;
+  assign ljpos1=read_write_fwd ? writex_fjln1 : 5'bz;
+ 
+  assign ljpos0=read_write_fwd ? writex_fjln0 : 5'bz;
+
 
   get_carry #(4) cmpJL00_mod(read_off0,~read_lnpos0,1'b1,readx_jln0[1]); 
   get_carry #(4) cmpJL01_mod(read_off1,~read_lnpos0,1'b1,readx_jln0[2]); 
@@ -774,6 +793,38 @@ module tbuf_way(
 
   bit_find_last_bit #(4) fnd3_mod(~readx_jln3,readx_fjlnx3[4:1],readx_fjlnx3[0]);
   assign readx_fjln3={readx_fjlnx3[4:1],~readx_fjlnx3[0]};
+
+  get_carry #(4) wcmpJL00_mod(write_off0_rex,~write_lnpos0_rex,1'b1,writex_jln0[1]); 
+  get_carry #(4) wcmpJL01_mod(write_off1_rex,~write_lnpos0_rex,1'b1,writex_jln0[2]); 
+  get_carry #(4) wcmpJL02_mod(write_off2_rex,~write_lnpos0_rex,1'b1,writex_jln0[3]); 
+  get_carry #(4) wcmpJL03_mod(write_off3_rex,~write_lnpos0_rex,1'b1,writex_jln0[4]);
+
+  get_carry #(4) wcmpJL10_mod(write_off0_rex,~write_lnpos1_rex,1'b1,writex_jln1[1]); 
+  get_carry #(4) wcmpJL11_mod(write_off1_rex,~write_lnpos1_rex,1'b1,writex_jln1[2]); 
+  get_carry #(4) wcmpJL12_mod(write_off2_rex,~write_lnpos1_rex,1'b1,writex_jln1[3]); 
+  get_carry #(4) wcmpJL13_mod(write_off3_rex,~write_lnpos1_rex,1'b1,writex_jln1[4]);
+
+  get_carry #(4) wcmpJL20_mod(write_off0_rex,~write_lnpos2_rex,1'b1,writex_jln2[1]); 
+  get_carry #(4) wcmpJL21_mod(write_off1_rex,~write_lnpos2_rex,1'b1,writex_jln2[2]); 
+  get_carry #(4) wcmpJL22_mod(write_off2_rex,~write_lnpos2_rex,1'b1,writex_jln2[3]); 
+  get_carry #(4) wcmpJL23_mod(write_off3_rex,~write_lnpos2_rex,1'b1,writex_jln2[4]);
+
+  get_carry #(4) wcmpJL30_mod(write_off0_rex,~write_lnpos3_rex,1'b1,writex_jln3[1]); 
+  get_carry #(4) wcmpJL31_mod(write_off1_rex,~write_lnpos3_rex,1'b1,writex_jln3[2]); 
+  get_carry #(4) wcmpJL32_mod(write_off2_rex,~write_lnpos3_rex,1'b1,writex_jln3[3]); 
+  get_carry #(4) wcmpJL33_mod(write_off3_rex,~write_lnpos3_rex,1'b1,writex_jln3[4]);
+
+  bit_find_last_bit #(4) fnd0_mod(~writex_jln0,writex_fjlnx0[4:1],writex_fjlnx0[0]);
+  assign writex_fjln0={writex_fjlnx0[4:1],~writex_fjlnx0[0]};
+
+  bit_find_last_bit #(4) fnd1_mod(~writex_jln1,writex_fjlnx1[4:1],writex_fjlnx1[0]);
+  assign writex_fjln1={writex_fjlnx1[4:1],~writex_fjlnx1[0]};
+
+  bit_find_last_bit #(4) fnd2_mod(~writex_jln2,writex_fjlnx2[4:1],writex_fjlnx2[0]);
+  assign writex_fjln2={writex_fjlnx2[4:1],~writex_fjlnx2[0]};
+
+  bit_find_last_bit #(4) fnd3_mod(~writex_jln3,writex_fjlnx3[4:1],writex_fjlnx3[0]);
+  assign writex_fjln3={writex_fjlnx3[4:1],~writex_fjlnx3[0]};
 
   assign jmp_mask[0]=oen ? j0_after && read_off0!=4'hf : 1'bz;
   assign jmp_mask[1]=oen ? j1_after && read_off1!=4'hf : 1'bz;
@@ -817,11 +868,6 @@ module tbuf_way(
   assign link3=(read_write_fwd & HALF) ? write_link3_rex : 5'bz;
   assign lnpos3=(read_write_fwd & HALF) ? write_lnpos3_rex : 5'bz;
  
-  assign ljpos3=(read_write_fwd & HALF) ? write_ljpos3_rex : 5'bz;
-  assign ljpos2=(read_write_fwd & HALF) ? write_ljpos2_rex : 5'bz;
-  assign ljpos1=(read_write_fwd & HALF) ? write_ljpos1_rex : 5'bz;
-  assign ljpos0=(read_write_fwd & HALF) ? write_ljpos0_rex : 5'bz;
-   
   assign jmp_mask[0]=(read_write_fwd & HALF) ? j0_afterW && write_off0_rex!=4'hf : 1'bz;
   assign jmp_mask[1]=(read_write_fwd & HALF) ? j1_afterW && write_off1_rex!=4'hf : 1'bz;
   assign jmp_mask[2]=(read_write_fwd & HALF) ? j2_afterW && write_off2_rex!=4'hf : 1'bz;
@@ -947,7 +993,6 @@ module tbuf_way(
   get_carry #(4) cj2W_mod(~nextIP_reg[4:1],write_off2_rex,1'b1,j2_afterW); 
   get_carry #(4) cj3W_mod(~nextIP_reg[4:1],write_off3_rex,1'b1,j3_afterW); 
  
-  get_carry #(4) clnoff_mod(~nextIP_reg[4:1],read_lnoff,1'b1,lnoff0);
   
   lru_single #(1,WAY) lru_mod(read_LRU,write_LRU,read_hitLRU,init,read_hit|read_hit_other);
   
@@ -1044,16 +1089,12 @@ module tbuf_way(
           write_indir_rex<=4'b0;
           write_link0_rex<=5'b0;
           write_lnpos0_rex<=5'b0;
-          write_ljpos0_rex<=5'b0;
           write_link1_rex<=5'b0;
           write_lnpos1_rex<=5'b0;
-          write_ljpos1_rex<=5'b0;
           write_link2_rex<=5'b0;
           write_lnpos2_rex<=5'b0;
-          write_ljpos2_rex<=5'b0;
           write_link3_rex<=5'b0;
           write_lnpos3_rex<=5'b0;
-          write_ljpos3_rex<=5'b0;
           write_way_rex<=1'b0;
           IP_wbits_reg<=10'b0;
       //    read_clkEn_reg2<=1'b0;
@@ -1077,16 +1118,12 @@ module tbuf_way(
               write_indir_rex<=write_indir;
               write_link0_rex<=write_link0;
               write_lnpos0_rex<=write_lnpos0;
-              write_ljpos0_rex<=write_ljpos0;
               write_link1_rex<=write_link1;
               write_lnpos1_rex<=write_lnpos1;
-              write_ljpos1_rex<=write_ljpos1;
               write_link2_rex<=write_link2;
               write_lnpos2_rex<=write_lnpos2;
-              write_ljpos2_rex<=write_ljpos2;
               write_link3_rex<=write_link3;
               write_lnpos3_rex<=write_lnpos3;
-              write_ljpos3_rex<=write_ljpos3;
               write_way_rex<=write_way;
         //      read_clkEn_reg2<=read_clkEn;
           end

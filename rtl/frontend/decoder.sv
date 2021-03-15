@@ -1343,6 +1343,7 @@ module decoder(
   stall,
   except,
   exceptIP,
+  exceptAttr,
   
   btbl_step,
   
@@ -1672,6 +1673,7 @@ module decoder(
   input stall;
   input except;
   input [IP_WIDTH-1:0] exceptIP;
+  input [3:0] exceptAttr;
 
   output [2:0] btbl_step;
 
@@ -3039,7 +3041,8 @@ module decoder(
   .jump0IP(jqe_IP0),.jump0TK(jump0Taken),.jump0Attr(jqe_attr0),
   .jump1IP(jqe_IP1),.jump1TK(jump1Taken),.jump1Attr(jqe_attr1),
   .except(except),
-  .exceptIP(exceptIP[63:1])
+  .exceptIP(exceptIP[63:1]),
+  .exceptAttr(exceptAttr)
   );
 
   assign rs_store[8:3]=6'b0;
