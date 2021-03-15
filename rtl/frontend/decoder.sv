@@ -3872,9 +3872,9 @@ module decoder_get_baseIP(
   input [3:0] exceptAttr;
 
   wire [12:0] srcIPOff[9:0];
-  wire [46:0] nextIP;
-  wire [46:0] next_traceIP;
-  wire [46:0] next_baseIP;
+  wire [62:0] nextIP;
+  wire [3:0] next_baseAttr;
+  wire [62:0] next_baseIP;
 
 
   adder_inc #(35-4) nextAdd_mod(baseIP[42:12],nextIP[46:12],1'b1,);
@@ -3884,23 +3884,23 @@ module decoder_get_baseIP(
   assign nextIP[62:43]=baseIP[62:43];
   //assign second_IP=|second_tr_jump ? tk_jumpIP : 47'bz;
 
-  assign next_baseAttr=(jump0TK && ~except) ? jump0Attr : 47'bz;
-  assign next_baseAttr=(jump1TK && ~except) ? jump1Attr : 47'bz;
+  assign next_baseAttr=(jump0TK && ~except) ? jump0Attr : 4'bz;
+  assign next_baseAttr=(jump1TK && ~except) ? jump1Attr : 4'bz;
   assign next_baseAttr=(~jump0TK && ~jump1TK && !(afterTick&iUsed) 
-    && ~except) ? baseAttr: 47'bz;
+    && ~except) ? baseAttr: 4'bz;
   assign next_baseAttr=(~jump0TK && ~jump1TK && (afterTick&iUsed) 
-    && ~except) ? baseAttr: 47'bz;
-  assign next_baseAttr=except ? exceptAttr : 47'bz;
+    && ~except) ? baseAttr: 4'bz;
+  assign next_baseAttr=except ? exceptAttr : 4'bz;
 
 
   
-  assign next_baseIP=(jump0TK && ~except) ? jump0IP : 47'bz;
-  assign next_baseIP=(jump1TK && ~except) ? jump1IP : 47'bz;
+  assign next_baseIP=(jump0TK && ~except) ? jump0IP : 62'bz;
+  assign next_baseIP=(jump1TK && ~except) ? jump1IP : 62'bz;
   assign next_baseIP=(~jump0TK && ~jump1TK && !(afterTick&iUsed) 
-    && ~except) ? baseIP: 47'bz;
+    && ~except) ? baseIP: 62'bz;
   assign next_baseIP=(~jump0TK && ~jump1TK && (afterTick&iUsed) 
-    && ~except) ? nextIP: 47'bz;
-  assign next_baseIP=except ? exceptIP : 47'bz;
+    && ~except) ? nextIP: 62'bz;
+  assign next_baseIP=except ? exceptIP : 62'bz;
 
   assign srcIPOff[0]=srcIPOff0;
   assign srcIPOff[1]=srcIPOff1;
@@ -3915,9 +3915,14 @@ module decoder_get_baseIP(
   
   always @(posedge clk) begin
       if (rst) begin
-          baseIP<=47'b0;
+          baseIP<=63'b0;
       end else begin
 	  baseIP<=next_baseIP;
+      end
+      if (rst) begin
+          baseAttr<=4'b0;
+      end else begin
+	  baseAttr<=next_baseAttr;
       end
   end
 endmodule
