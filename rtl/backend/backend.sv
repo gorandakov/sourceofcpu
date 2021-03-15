@@ -2263,7 +2263,7 @@ module backend(
     .writeRet6_addr(retire6_rF_reg),.writeRet6_wen(retire6_enG),
     .writeRet7_addr(retire7_rF_reg),.writeRet7_wen(retire7_enG),
     .writeRet8_addr(retire8_rF_reg),.writeRet8_wen(retire8_enG),
-    .retireAll(except),.retireAll_thread(excpt_thread),
+    .retireAll(except),.retireAll_thread(),
     
   
     .rs0i0_index(rs0i0_index_reg),.rs0i1_index(rs0i1_index_reg),.rs0i2_index(rs0i2_index_reg),
@@ -2319,7 +2319,7 @@ module backend(
     .writeRet6_addr(retire6_rF_reg),.writeRet6_wen(retire6_enG),
     .writeRet7_addr(retire7_rF_reg),.writeRet7_wen(retire7_enG),
     .writeRet8_addr(retire8_rF_reg),.writeRet8_wen(retire8_enG),
-    .retireAll(except),.retireAll_thread(excpt_thread),
+    .retireAll(except),.retireAll_thread(1'b0),
   
     .rs0i0_index(rs0i0_index_reg),.rs0i1_index(rs0i1_index_reg),.rs0i2_index(rs0i2_index_reg),
     .rs1i0_index(rs1i0_index_reg),.rs1i1_index(rs1i1_index_reg),.rs1i2_index(rs1i2_index_reg),
@@ -2430,7 +2430,7 @@ module backend(
        .writeRet7_dom(get_dom_C(retire7_enV,retire7_enF)),.writeRet7_wen(retire7_enV|retire7_enF),
     .writeRet8_addr(retire8_rF_reg),.writeRet8_paddr(retire8_rT),
        .writeRet8_dom(get_dom_C(retire8_enV,retire8_enF)),.writeRet8_wen(retire8_enV|retire8_enF),
-    .retireAll(except),.retireAll_thread(excpt_thread),
+    .retireAll(except),.retireAll_thread(1'b0),
 
     .rs0i0_index(rs0i0_index_reg),.rs0i1_index(rs0i1_index_reg),.rs0i2_index(rs0i2_index_reg),
     .rs1i0_index(rs1i0_index_reg),.rs1i1_index(rs1i1_index_reg),.rs1i2_index(rs1i2_index_reg),
@@ -2496,7 +2496,7 @@ module backend(
        .writeRet7_dom(get_dom_C(retire7_enV,retire7_enF)),.writeRet7_wen(retire7_enV|retire7_enF),
     .writeRet8_addr(retire8_rF_reg),.writeRet8_paddr(retire8_rT),
        .writeRet8_dom(get_dom_C(retire8_enV,retire8_enF)),.writeRet8_wen(retire8_enV|retire8_enF),
-    .retireAll(except),.retireAll_thread(excpt_thread),
+    .retireAll(except),.retireAll_thread(1'b0),
 
     .rs0i0_index(rs0i0_index_reg),.rs0i1_index(rs0i1_index_reg),.rs0i2_index(rs0i2_index_reg),
     .rs1i0_index(rs1i0_index_reg),.rs1i1_index(rs1i1_index_reg),.rs1i2_index(rs1i2_index_reg),
@@ -2509,7 +2509,7 @@ module backend(
   .rst(rst),
   .stall(stall_alloc),
   .doStall(doStall_alloc),
-  .except(except),.ethread(excpt_thread),.eboth(excpt_both),
+  .except(except),.ethread(1'b0),.eboth(1'b0),
   .thread(thread_reg),
   .ret_en(retclr),
   .ret_thread(1'b0),
@@ -4028,7 +4028,7 @@ module backend(
   for (m=0;m<3;m=m+1) begin : main_rs_gen
   rs rs0_mod(
   .clk(clk),
-  .dataRst(rst),.nonDataRst(except|rst),.rst_thread(excpt_thread),
+  .dataRst(rst),.nonDataRst(except|rst),.rst_thread(1'b0),
   .stall(stall_rs[m]),
   .doStall(doStall_rs[m]),
   .FU0Hit(FU0Hit),.FU1Hit(FU1Hit),.FU2Hit(FU2Hit),.FU3Hit(FU3Hit),
@@ -4417,7 +4417,7 @@ module backend(
   
   rs_s storeRs(
   .clk(clk),
-  .dataRst(rst),.nonDataRst(except|rst),.rst_thread(excpt_thread),
+  .dataRst(rst),.nonDataRst(except|rst),.rst_thread(1'b0),
   .stall(stall_rs[3]),
   .doStall(doStall_rs[3]),
   .FU0Hit(FU0Hit),.FU1Hit(FU1Hit),.FU2Hit(FU2Hit),.FU3Hit(FU3Hit),
@@ -5103,8 +5103,8 @@ module backend(
   .newEn(bundle_in_reg),
   .newThr(thread_reg),
   .except(except),
-  .except_thread(excpt_thread),
-  .except_both(excpt_both),
+  .except_thread(1'b0),
+  .except_both(1'b0),
   .wrt0(wrt0_reg),.wrt1(wrt1_reg),.wrt2(wrt2_reg),
   .lsi0(rs_lsi[0]),.lsi1(rs_lsi[1]),.lsi2(rs_lsi[2]),
   .WQr0(WQR[0]),.WQr1(WQR[1]),.WQr2(WQR[2]),
@@ -6484,7 +6484,7 @@ dcache1 L1D_mod(
 	  
       end
       if (except) begin
-          if ((excpt_thread==thread && ~doStall)||(excpt_thread==thread_reg && doStall)) begin
+          if ((~doStall)||(doStall)) begin
               bundle_in_reg<=1'b0;
               rs_en[0]<=1'b0;            
               rs_en[1]<=1'b0;            
@@ -6529,7 +6529,7 @@ dcache1 L1D_mod(
               rs_rT_use<=9'b0;
               rs_rT_useF<=9'b0;
           end
-          if ((excpt_thread==thread_reg && ~doStall) || (excpt_thread==thread_reg2 && doStall)) begin
+          if (( ~doStall) || (doStall)) begin
               bundle_in_reg2<=1'b0;
               rs_en_reg[0]<=1'b0;
               rs_en_reg[1]<=1'b0;

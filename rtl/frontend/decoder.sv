@@ -3520,7 +3520,7 @@ module decoder(
 	  dec_last_reg<=10'b0;
 	  dec_fsimd_reg<=10'b0;
 	  afterTick_reg<=10'b0;
-	  dec_csrss_retIP_en_reg<=10'b0;
+	  csrss_retIP_en_reg<=10'b0;
       end
       else if (~stall||except) begin
           for (n=0;n<10;n=n+1) begin
@@ -3587,7 +3587,7 @@ module decoder(
 	  dec_last_reg<=dec_last;
 	  dec_fsimd_reg<=dec_fsimd;
 	  afterTick_reg<=afterTick;
-	  dec_csrss_retIP_en_reg<=dec_csrss_retIP_en_reg & iUsed;
+	  csrss_retIP_en_reg<=csrss_retIP_en_reg & iUsed;
       end
     end
 endmodule  
