@@ -742,6 +742,8 @@ module heptane_core(
   wire MSI_expect_swap;
   wire MSI_expAddr_hitCC;
   wire [3:0] dec_attr;
+  reg  [35:0] MSI_expAddr_reg;
+  reg  MSI_expAddr_en_reg;
 //  wire MSI_swap_reply;
 
   wire wrStall;
@@ -918,7 +920,7 @@ module heptane_core(
   .insert_dupl(dc2_dupl_rd),
   .hit_LRU(dc2_rLRU_reg),.read_LRU(dc2_rLRUA0),.hit_any(dc2_rhitA0),
   .read_dir(dc2_rDirA0),.read_excl(dc2_rExclA0),
-  .read_expAddr(L1_expAddr),
+  //.read_expAddr(L1_expAddr),
   .read_expAddr_en(L1_expAddr_en),
   .read_expHit(dc2_rhitExpA0),
   .read_expAddrOut()
@@ -953,7 +955,7 @@ module heptane_core(
   .insert_dupl(dc2_dupl_rd),
   .hit_LRU(dc2_rLRU_reg),.read_LRU(dc2_rLRUB0),.hit_any(dc2_rhitB0),
   .read_dir(dc2_rDirB0),.read_excl(dc2_rExclB0),
-  .read_expAddr(L1_expAddr),
+  //.read_expAddr(L1_expAddr),
   .read_expAddr_en(L1_expAddr_en),
   .read_expHit(dc2_rhitExpB0),
   .read_expAddrOut()
@@ -988,7 +990,7 @@ module heptane_core(
   .insert_dupl(dc2_dupl_rd),
   .hit_LRU(dc2_rLRU_reg),.read_LRU(dc2_rLRUB1),.hit_any(dc2_rhitB1),
   .read_dir(dc2_rDirB1),.read_excl(dc2_rExclB1),
-  .read_expAddr(L1_expAddr),
+  //.read_expAddr(L1_expAddr),
   .read_expHit(dc2_rhitExpB1),
   .read_expAddr_en(L1_expAddr_en),
   .read_expAddrOut()
@@ -1782,6 +1784,8 @@ module heptane_core(
 	dc2_dataIO_reg2<=1'b0;
 	dc2_dataIO_reg3<=1'b0;
     end else begin
+        MSI_expAddr_reg<=MSI_expAddr;
+        MSI_expAddr_en_reg<=MSI_expAddr_en;
         if (req_tlbEn) begin
             bus_tlb_slot<=req_slot;
         end
