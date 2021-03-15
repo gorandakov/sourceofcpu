@@ -35,6 +35,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   wire subIsFPUE;
   wire subIsFPUSngl;
   wire subIsSIMD;
+  wire subIsLinkRet;
   
   wire isBasicALU;
   wire isBasicALUExcept;
