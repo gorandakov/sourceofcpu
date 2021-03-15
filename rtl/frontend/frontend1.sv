@@ -318,6 +318,7 @@ module frontend1(
 
   reg except_save;
   reg [VIRT_WIDTH-1:0] exceptIP_save;
+  reg [3:0] exceptAttr_save;
   reg exceptThread_save;
   reg exceptLDConfl_save;
   reg exceptDueJump_save;
