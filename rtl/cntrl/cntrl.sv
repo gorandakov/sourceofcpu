@@ -632,6 +632,8 @@ module cntrl_find_outcome(
   wire [42:0] takenIP;
 
   wire [3:0] attr;
+  wire [3:0] jump0Attr;
+  wire [3:0] jump1Attr;
 
   reg [5:0] initcount;
   wire [5:0] initcount_d;

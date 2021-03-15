@@ -992,7 +992,7 @@ module dcache2_block(
           hit_LRU,
 	  read_LRUp[k],read_dirP[k],read_exclP[k],read_expAddrP[k],
 	  read_LRUp[k-1],read_dirP[k-1],read_exclP[k-1],read_expAddrP[k-1],
-          read_expAddr_en,
+          read_expAddr_en
           );
       end
       for(b=0;b<32;b=b+1) begin : bank_gen
@@ -1045,7 +1045,7 @@ module dcache2_block(
           hit_any<=1'b0;
           read_dir<=1'b0;
           read_excl<=1'b0;
-          read_expAddr<=37'b0;
+          read_expAddrOut<=37'b0;
       end else begin
           write_data0_reg<=write_data0;
           write_data1_reg<=write_data1;
@@ -1074,7 +1074,7 @@ module dcache2_block(
           hit_any<=(|read_hit_way_reg) && ~ins_hit_reg2;
           read_dir<=read_dirP[7];
           read_excl<=read_exclP[7];
-          read_expAddr<=read_expAddrP[7];
+          read_expAddrOut<=read_expAddrP[7];
       end
   end
 endmodule
