@@ -17,9 +17,9 @@ module imul(
   input clkEn;
   input [12:0] op_prev;
   input en;
-  input [63:0] R;
-  input [63:0] C;
-  output [63:0] Res;
+  input [64:0] R;
+  input [64:0] C;
+  output [64:0] Res;
   output reg alt;
   output [5:0] flg;
 
@@ -31,7 +31,12 @@ module imul(
   reg upper_reg4,short_reg4;
   reg en_reg,en_reg2,en_reg3,clkEn_reg;
   reg and1_reg,and1_reg2,and1_reg3,and1_reg4;
+  reg is_sec_reg,is_sec_reg2;
+  reg is_sec_reg3;
+  reg [63:0] sec_res_reg;
+  reg [63:0] sec_res_reg2;
 
+  wire [63:0] sec_res;
   wire [127:0] A_out;
   wire [127:0] B_out;
   reg [127:0] A_out_reg;
@@ -46,6 +51,7 @@ module imul(
   wire resp;
   wire [31:0] resx;
   reg [31:0] resx_reg;
+  wire [63:0] sec_res;
   //wire [63:0] resB;
   //reg bnd,bnd_reg,bnd_reg2,bnd_reg3;
 
@@ -76,6 +82,12 @@ module imul(
 
   assign Res=upper32_reg3 ? {32'b0,resx} :64'bz;
 
+    resx,1'b0,~upper_reg3&~is_sec_reg3,upper_reg3,short_reg3,,,,);
+
+  assign Res[64:0]=is_sec_reg3 ? {ptr_reg2,sec_res_reg2} : {1'b0,64'bz};
+
+  agusec_mul(A[63:0],B[11:0],sec_res);
+  
   always @(posedge clk) begin
     clkEn_reg<=clkEn;
     if (clkEn) begin
@@ -88,6 +100,7 @@ module imul(
       upper32<=1'b0;
       upper32HSU<=1'b0;
       upper64HSU<=1'b0;
+      is_sec<=1'b0;
  //     bnd<=1'b0;
       case({4'b1000,op_prev[7:0]})
       `op_lmul64: begin
@@ -156,6 +169,9 @@ module imul(
 	  upper64HSU<=A[63];
       end
 
+      `op_sec64: begin
+	  is_sec<=1'b1;
+      end
   //    `op_ptrbnd: begin
   //        bnd<=1'b1;
   //    end
@@ -166,6 +182,9 @@ module imul(
       en_reg2<=en_reg;
       en_reg3<=en_reg2;
       alt<=en_reg;
+      is_sec_reg<=is_sec;
+      is_sec_reg2<=is_sec_reg;
+      is_sec_reg3<=is_sec_reg2;
       upper_reg<=upper;
       upper_reg2<=upper_reg;
       upper_reg3<=upper_reg2;
@@ -188,6 +207,10 @@ module imul(
       and1_reg<=and1;
       and1_reg2<=and1_reg;
       and1_reg3<=and1_reg2;
+      sec_res_reg<=sec_res;
+      sec_res_reg2<=sec_res_reg;
+      ptr_reg<=R[64];
+      ptr_reg2<=ptr_reg;
     //  bnd_reg<=bnd;
     //  bnd_reg2<=bnd_reg;
     //  bnd_reg3<=bnd_reg2;

@@ -1343,6 +1343,7 @@ module decoder(
   stall,
   except,
   exceptIP,
+  exceptAttr,
   
   btbl_step,
   
@@ -1653,9 +1654,9 @@ module decoder(
   jump1SC,jump1Miss,jump1TbufOnly,
   instr_fsimd,
   baseIP,
+  baseAttr,
   wrt0,wrt1,wrt2,
-  csrss_no,csrss_en,csrss_data,
-  csrss_alt_no,csrss_alt_en,csrss_alt_data
+  csrss_no,csrss_en,csrss_data
   );
   localparam DATA_WIDTH=`alu_width;
   localparam OPERATION_WIDTH=`operation_width;
@@ -1673,6 +1674,7 @@ module decoder(
   input stall;
   input except;
   input [IP_WIDTH-1:0] exceptIP;
+  input [3:0] exceptAttr;
 
   output [2:0] btbl_step;
 
@@ -2119,7 +2121,8 @@ module decoder(
   output jump1Miss;
   output jump1TbufOnly;
   output [9:0] instr_fsimd;
-  output [46:0] baseIP;
+  output [62:0] baseIP;
+  output [3:0] baseAttr;
   
   output [5:0] wrt0;
   output [5:0] wrt1;
@@ -2131,6 +2134,7 @@ module decoder(
   
   wire [9:0] csrss_retIP_en;
   wire [63:0] csrss_retIP_data;
+  reg  [9:0] csrss_retIP_en_reg;
 
   reg last_trce;
 
@@ -2200,7 +2204,8 @@ module decoder(
 //  reg dec_aspecR;
   wire dec_lspecR_d;
 //  wire dec_aspecR_d;
-  
+  wire [3:0] baseAttr;
+
   reg [OPERATION_WIDTH-1:0] 	dec_operation_reg[9:0];
   reg [REG_WIDTH-1:0] 		dec_rA_reg[9:0];
   reg 				dec_rA_use_reg[9:0];
@@ -2491,7 +2496,7 @@ module decoder(
           adder #(33) srcXAdd_mod({20'b0,dec_srcIPOffA_reg[k]},{dec_constant_reg[k][31],dec_constant_reg[k][31:0]},dec_srcIPOffx[k],1'b0, 1'b1,,,,);
 
 	  popcnt10 jpop_mod(cls_jump_reg&iUsed_reg,{dummy8_1,btbl_step});
-	  adder #(43) csrAdd_mod({30'b0,dec_srcIPOffA_reg[k]},baseIP_reg[43:1],csrss_retIP_data,1'b0,csrss_retIP_en_reg[k],,,,);
+	  adder #(43) csrAdd_mod({30'b0,dec_srcIPOffA_reg[k]},baseIP[42:0],csrss_retIP_data,1'b0,csrss_retIP_en_reg[k],,,,);
 
           if (k<9) 
           decoder_reorder_mux mux_mod(
@@ -2871,7 +2876,7 @@ module decoder(
  // assign dec_aspec[-1]=dec_aspecR;
   assign dec_lspecR_d=(~iUsed[0]) ? dec_lspecR : 1'bz;
 //  assign dec_aspecR_d=~iUsed[0] ? dec_aspecR : 1'bz;
-  assign dec_csrss_retIP_data=dec_csrss_retIP_en_reg==10'b0 ? 64'b0 : 64'bz;
+  assign csrss_retIP_data=csrss_retIP_en_reg==10'b0 ? 64'b0 : 64'bz;
  
   assign jumpT_IPOff=(~(|(dec_taken_reg &iUsed_reg))) ? 13'b0 : 13'bz;
   assign has_taken=|(dec_taken & iUsed);
@@ -3014,8 +3019,8 @@ module decoder(
   .csrss_data(csrss_data),
   .fpE_en(fp_excpt_en),
   .fpE_set(fp_excpt_set),
-  .altEn(dec_csrss_retIP_en_reg!=0),
-  .altData(dec_csrss_retIP_data)
+  .altEn(csrss_retIP_en_reg!=0),
+  .altData(csrss_retIP_data)
 );
 
   decoder_get_baseIP getIP_mod(
@@ -3040,7 +3045,8 @@ module decoder(
   .jump0IP(jqe_IP0),.jump0TK(jump0Taken),.jump0Attr(jqe_attr0),
   .jump1IP(jqe_IP1),.jump1TK(jump1Taken),.jump1Attr(jqe_attr1),
   .except(except),
-  .exceptIP(exceptIP[63:1])
+  .exceptIP(exceptIP[63:1]),
+  .exceptAttr(exceptAttr)
   );
 
   assign rs_store[8:3]=6'b0;
@@ -3514,7 +3520,7 @@ module decoder(
 	  dec_last_reg<=10'b0;
 	  dec_fsimd_reg<=10'b0;
 	  afterTick_reg<=10'b0;
-	  dec_csrss_retIP_en_reg<=10'b0;
+	  csrss_retIP_en_reg<=10'b0;
       end
       else if (~stall||except) begin
           for (n=0;n<10;n=n+1) begin
@@ -3581,7 +3587,7 @@ module decoder(
 	  dec_last_reg<=dec_last;
 	  dec_fsimd_reg<=dec_fsimd;
 	  afterTick_reg<=afterTick;
-	  dec_csrss_retIP_en_reg<=dec_csrss_retIP_en_reg & iUsed;
+	  csrss_retIP_en_reg<=csrss_retIP_en_reg & iUsed;
       end
     end
 endmodule  
@@ -3825,6 +3831,7 @@ module decoder_get_baseIP(
   clk,
   rst,
   baseIP,
+  baseAttr,
   afterTK,
   iUsed,
   afterTick,
@@ -3838,14 +3845,16 @@ module decoder_get_baseIP(
   srcIPOff7,
   srcIPOff8,
   srcIPOff9,
-  jump0IP,jump0TK,
-  jump1IP,jump1TK,
+  jump0IP,jump0TK,jump0Attr,
+  jump1IP,jump1TK,jump1Attr,
   except,
-  exceptIP
+  exceptIP,
+  exceptAttr
   );
   input clk;
   input rst;
   output reg [62:0] baseIP;
+  output reg [3:0] baseAttr;
   input [9:0] afterTK;
   input [9:0] iUsed;
   input [9:0] afterTick;
@@ -3859,40 +3868,44 @@ module decoder_get_baseIP(
   input [12:0] srcIPOff7;
   input [12:0] srcIPOff8;
   input [12:0] srcIPOff9;
-  input [62:0] jump0IP;
+  input [63:0] jump0IP;
+  input [3:0] jump0Attr;
   input jump0TK;
-  input [62:0] jump1IP;
+  input [63:0] jump1IP;
+  input [3:0] jump1Attr;
   input jump1TK;
   input except;
-  input [62:0] exceptIP;
+  input [63:0] exceptIP;
+  input [3:0] exceptAttr;
 
   wire [12:0] srcIPOff[9:0];
   wire [62:0] nextIP;
-  wire [62:0] next_traceIP;
+  wire [3:0] next_baseAttr;
   wire [62:0] next_baseIP;
 
 
-  adder_inc #(31) nextAdd_mod(baseIP[42:12],nextIP[42:12],1'b1,);
+  adder_inc #(35-4) nextAdd_mod(baseIP[42:12],nextIP[46:12],1'b1,);
+  //assign second_IP=|second_tr_jump ? tk_jumpIP : 47'bz;
   assign nextIP[11:0]=baseIP[11:0];
   assign nextIP[62:43]=baseIP[62:43];
   //assign second_IP=|second_tr_jump ? tk_jumpIP : 47'bz;
 
-  assign next_baseAttr=(jump0TK && ~except) ? jump0Attr : 47'bz;
-  assign next_baseAttr=(jump1TK && ~except) ? jump1Attr : 47'bz;
+  assign next_baseAttr=(jump0TK && ~except) ? jump0Attr : 4'bz;
+  assign next_baseAttr=(jump1TK && ~except) ? jump1Attr : 4'bz;
   assign next_baseAttr=(~jump0TK && ~jump1TK && !(afterTick&iUsed) 
-    && ~except) ? baseAttr: 47'bz;
+    && ~except) ? baseAttr: 4'bz;
   assign next_baseAttr=(~jump0TK && ~jump1TK && (afterTick&iUsed) 
-    && ~except) ? baseAttr: 47'bz;
-  assign next_baseAttr=except ? exceptAttr : 47'bz;
+    && ~except) ? baseAttr: 4'bz;
+  assign next_baseAttr=except ? exceptAttr : 4'bz;
 
   
-  assign next_baseIP=(jump0TK && ~except) ? jump0IP : 47'bz;
-  assign next_baseIP=(jump1TK && ~except) ? jump1IP : 47'bz;
+  assign next_baseIP=(jump0TK && ~except) ? jump0IP : 62'bz;
+  assign next_baseIP=(jump1TK && ~except) ? jump1IP : 62'bz;
   assign next_baseIP=(~jump0TK && ~jump1TK && !(afterTick&iUsed) 
-    && ~except) ? baseIP: 47'bz;
+    && ~except) ? baseIP: 62'bz;
   assign next_baseIP=(~jump0TK && ~jump1TK && (afterTick&iUsed) 
-    && ~except) ? nextIP: 47'bz;
-  assign next_baseIP=except ? exceptIP : 47'bz;
+    && ~except) ? nextIP: 62'bz;
+  assign next_baseIP=except ? exceptIP : 62'bz;
 
   assign srcIPOff[0]=srcIPOff0;
   assign srcIPOff[1]=srcIPOff1;
@@ -3912,7 +3925,7 @@ module decoder_get_baseIP(
 	  baseIP<=next_baseIP;
       end
       if (rst) begin
-          baseAttr<=63'b0;
+          baseAttr<=4'b0;
       end else begin
 	  baseAttr<=next_baseAttr;
       end

@@ -52,6 +52,7 @@ module frontend1(
   localparam VIRT_WIDTH=64;
   localparam IP_WIDTH=64;
   localparam [31:0] INIT_IP=32'h0;
+  localparam [3:0] INIT_ATTR=4'b0;
   localparam BUS_BANK=32;
   localparam BUS_WIDTH=BUS_BANK*16;
   localparam DATA_WIDTH=65*8;
@@ -179,7 +180,12 @@ module frontend1(
   reg [7:0] cc_base_off_reg2;
   reg [7:0] cc_base_off_reg3;
   reg [7:0] cc_base_off_reg4;
-  
+ 
+  reg [3:0]  cc_attr;
+  wire [3:0] btbx_attr; 
+
+  wire [3:0] cc_attr_d;
+  wire [3:0] ixceptAttr;
   reg [43:0] miss_IP;
   //reg [47:0] link_IP;
   reg [23:0] proc;
@@ -313,6 +319,7 @@ module frontend1(
 
   reg except_save;
   reg [VIRT_WIDTH-1:0] exceptIP_save;
+  reg [3:0] exceptAttr_save;
   reg exceptThread_save;
   reg exceptLDConfl_save;
   reg exceptDueJump_save;
@@ -359,6 +366,7 @@ module frontend1(
   wire [3:0] jdec_push;
   wire [3:0] jdec_pop;
   wire [3:0][4:0] jdec_type;
+  wire [3:0][3:0] jdec_attr;
   wire [4:0] jdec_link0;
   wire [4:0] jdec_link1;
   wire [4:0] jdec_link2;
@@ -608,20 +616,66 @@ module frontend1(
   wire btb_hold_except;
   reg read_set_flag,read_set_flag_reg;
   
+  reg [3:0] btbx_attr0_reg;
+  reg [3:0] btbx_attr1_reg;
+  reg [3:0] btbx_attr2_reg;
+  reg [3:0] btbx_attr3_reg;
+  reg [3:0] btbx_attr0_reg2;
+  reg [3:0] btbx_attr1_reg2;
+  reg [3:0] btbx_attr2_reg2;
+  reg [3:0] btbx_attr3_reg2;
+  reg [3:0] btbx_attr0_reg3;
+  reg [3:0] btbx_attr1_reg3;
+  reg [3:0] btbx_attr2_reg3;
+  reg [3:0] btbx_attr3_reg3;
+  reg [3:0] btbx_attr0_reg4;
+  reg [3:0] btbx_attr1_reg4;
+  reg [3:0] btbx_attr2_reg4;
+  reg [3:0] btbx_attr3_reg4;
 //  wire tr_odd_d,tr_half_d;
 //  reg tr_odd,tr_odd_reg,tr_odd_reg2;
 //  reg tr_half,tr_half_reg,tr_half_reg2;
 
   wire jlnin,jlnint,jlninx;  
       
-  wire [16:0] lpar0;
-  wire [16:0] lpar1;
+  wire [6:0] lpar30;
+  wire [6:0] lpar31;
+  wire [6:0] lpar20;
+  wire [6:0] lpar21;
+  wire [6:0] lpar10;
+  wire [6:0] lpar11;
+  wire [6:0] lpar00;
+  wire [6:0] lpar01;
  // wire [5:0] lcpar0;
   //wire [5:0] lcpar1;
 //  wire instrEn2=instr
   wire jumpTK_btb_fstall;
   reg jumpTK_en;
   reg [63:0] jumpTK_addr;
+  reg [3:0] jumpTK_attr;
+
+  wire [3:0] btb_attr0;
+  wire [3:0] btb_attr1;
+  wire [3:0] btb_attr2;
+  wire [3:0] btb_attr3;
+  wire [3:0] btbx_attr0;
+  wire [3:0] btbx_attr1;
+  wire [3:0] btbx_attr2;
+  wire [3:0] btbx_attr3;
+  wire [3:0] btb_attr;
+  wire jlninx0,jlninx1,jlninx2,jlninx3;
+  wire jlnin0,jlnin1,jlnin2,jlnin3;
+  wire [4:0] btbx_jlnoff;
+  wire [4:0] btb_jlnoff;
+  wire [4:0] btbx_lnpos0;
+  wire [4:0] btbx_lnpos1;
+  wire [4:0] btbx_lnpos2;
+  wire [4:0] btbx_lnpos3;
+  wire [4:0] btb_lnpos0;
+  wire [4:0] btb_lnpos1;
+  wire [4:0] btb_lnpos2;
+  wire [4:0] btb_lnpos3;
+  wire btb_jlnin0,btb_jlnin1,btb_jlnin2,btb_jlnin3;
 
   integer m,n,t;
 
@@ -818,19 +872,6 @@ module frontend1(
  // assign link_IP_d[0]=1'b0;
   
   //lnk_isRet_reg & lnk_jpos[0] not possible
-  assign lnk_lnpos=(lnk_isRet_reg & lnk_jpos[1]) ? 2'd0 : 2'bz;
-  assign lnk_lnpos=(lnk_isRet_reg & lnk_jpos[2]) ? 2'd1 : 2'bz;
-  assign lnk_lnpos=(lnk_isRet_reg & lnk_jpos[3]) ? 2'd2 : 2'bz;
-  assign lnk_lnpos=(lnk_isRet_reg & lnk_jpos[4]) ? 2'd3 : 2'bz;
-
-  assign lnk_lnpos=(~lnk_isRet_reg & lnk_jpos[0]) ? 2'd0 : 2'bz;
-  assign lnk_lnpos=(~lnk_isRet_reg & lnk_jpos[1]) ? 2'd1 : 2'bz;
-  assign lnk_lnpos=(~lnk_isRet_reg & lnk_jpos[2]) ? 2'd2 : 2'bz;
-  assign lnk_lnpos=(~lnk_isRet_reg & lnk_jpos[3]) ? 2'd3 : 2'bz;
-  assign lnk_lnpos=(~lnk_isRet_reg & lnk_jpos[4]) ? 2'd3 : 2'bz;
-  
-  assign lnk_lnpos=lnk_jpos ? 2'bz : 2'b0;
-  
   
   assign tlb_phys=tlb_data_reg3[`ctlbData_phys];
   assign tlb_nx=tlb_data_reg3[`ctlbData_ne];
@@ -1133,7 +1174,7 @@ module frontend1(
 
   adder #(5) ln0off1t_mod(lnk_off0_reg,lnk_link0_reg,jdec_link0,1'b1,lnk_magic0_reg[0] & ~lnk_isRet0_reg,,,,);
   adder_CSA #(5) ln0off2CSAt_mod(lnk_off0_reg,lnk_link0_reg,5'd2,lpar00,lpar01);
-  adder #(5) ln0off2t_mod(lpar0[4:0],lpar1[4:0],jdec_link0,1'b0,~lnk_magic0_reg[0] & ~lnk_isRet0_reg,,,,);
+  adder #(5) ln0off2t_mod(lpar00[4:0],lpar01[4:0],jdec_link0,1'b0,~lnk_magic0_reg[0] & ~lnk_isRet0_reg,,,,);
 
   adder #(5) ln1off1t_mod(lnk_off1_reg,lnk_link1_reg,jdec_link1,1'b1,lnk_magic1_reg[0] & ~lnk_isRet1_reg,,,,);
   adder_CSA #(5) ln1off2CSAt_mod(lnk_off1_reg,lnk_link1_reg,5'd2,lpar10,lpar11);
@@ -1149,10 +1190,10 @@ module frontend1(
 
   get_carry #(4) btbLNoffCmpCC(lnk_off0_reg,~cc_read_IP_reg2[4:1],1'b1,lnk_offIn_cc);
   
-  get_carry #(4) btbL0NoffCmpCC(btb_jlnoff0,~cc_read_IP[4:1],1'b1,btb_jlnin0);
-  get_carry #(4) btbL1NoffCmpCC(btb_jlnoff1,~cc_read_IP[4:1],1'b1,btb_jlnin1);
-  get_carry #(4) btbL2NoffCmpCC(btb_jlnoff2,~cc_read_IP[4:1],1'b1,btb_jlnin2);
-  get_carry #(4) btbL3NoffCmpCC(btb_jlnoff3,~cc_read_IP[4:1],1'b1,btb_jlnin3);
+  get_carry #(4) btbL0NoffCmpCC(btb_jlnpos0,~cc_read_IP[4:1],1'b1,btb_jlnin0);
+  get_carry #(4) btbL1NoffCmpCC(btb_jlnpos1,~cc_read_IP[4:1],1'b1,btb_jlnin1);
+  get_carry #(4) btbL2NoffCmpCC(btb_jlnpos2,~cc_read_IP[4:1],1'b1,btb_jlnin2);
+  get_carry #(4) btbL3NoffCmpCC(btb_jlnpos3,~cc_read_IP[4:1],1'b1,btb_jlnin3);
   
   adder #(9) baseTick_mod(cc_read_IP[13:5],~cc_base_IP[13:5],{cc_base_tick,cc_base_off},1'b1,do_seq_reg,,,,);
   adder_inc #(35) baseInc_mod(cc_base_IP[47:13],cc_base_IP_d[47:13],do_seq_reg & cc_base_tick,);
@@ -1210,7 +1251,7 @@ module frontend1(
   .way(btb_way),
   .off0(btb_joff[0]),.off1(btb_joff[1]),.off2(btb_joff[2]),.off3(btb_joff[3]),
   .attr0I(jdec_attr[0]),.attr1I(jdec_attr[1]),.attr2I(jdec_attr[2]),.attr3I(jdec_attr[3]),
-  .attr0O(btb_attr0),attr1O(btb_attr1),attr2O(btb_attr2),attr3O(btb_attr3),
+  .attr0O(btb_attr0),.attr1O(btb_attr1),.attr2O(btb_attr2),.attr3O(btb_attr3),
   .tgt0I(jdec_target[0]),.tgt1I(jdec_target[1]),.tgt2I(jdec_target[2]),.tgt3I(jdec_target[3]),
   .tgt0O(btb_tgt0),
   .tgt1O(btb_tgt1),
@@ -1282,7 +1323,7 @@ module frontend1(
   .thread(1'b0),
   .read_data(rstack_dataR),
   .write_data(rstack_dataW),
-  .write_lnk(btbx_jlink),
+  .write_lnk(btbx_jlnoff),
   .write_trace(1'b0),
   .write_wen(btb_in_link & btb_hit&instrEn&~fstall)
   );
@@ -1574,6 +1615,22 @@ module frontend1(
 	  btbx_tgt1_reg4<=47'b0;
 	  btbx_tgt2_reg4<=47'b0;
 	  btbx_tgt3_reg4<=47'b0;
+          btbx_attr0_reg<=47'b0;
+	  btbx_attr1_reg<=47'b0;
+	  btbx_attr2_reg<=47'b0;
+	  btbx_attr3_reg<=47'b0;
+	  btbx_attr0_reg2<=47'b0;
+	  btbx_attr1_reg2<=47'b0;
+	  btbx_attr2_reg2<=47'b0;
+	  btbx_attr3_reg2<=47'b0;
+	  btbx_attr0_reg3<=47'b0;
+	  btbx_attr1_reg3<=47'b0;
+	  btbx_attr2_reg3<=47'b0;
+	  btbx_attr3_reg3<=47'b0;
+	  btbx_attr0_reg4<=47'b0;
+	  btbx_attr1_reg4<=47'b0;
+	  btbx_attr2_reg4<=47'b0;
+	  btbx_attr3_reg4<=47'b0;
 	  btbx_jmask_reg<=4'b0;
 	  iqe_jcnt_reg<=5'b1;
 	  iqe_jcnt_reg2<=5'b1;
@@ -1624,7 +1681,8 @@ module frontend1(
 	  btbx_jmask_REG<=4'b0;
 	  miss_now_reg<=1'b0;
           jumpTK_en<=1'b0;
-          jumpTK_addr<=48'b0;
+          jumpTK_addr<=64'b0;
+	  jumpTK_attr<=4'b0;
 	  IP_phys_reg<=44'b0;
 	  IP_phys_reg2<=44'b0;
 	  IP_phys_reg3<=44'b0;
@@ -1817,6 +1875,22 @@ module frontend1(
 	  btbx_tgt1_reg4<=btbx_tgt1_reg3;
 	  btbx_tgt2_reg4<=btbx_tgt2_reg3;
 	  btbx_tgt3_reg4<=btbx_tgt3_reg3;
+          btbx_attr0_reg<=btbx_attr0;
+	  btbx_attr1_reg<=btbx_attr1;
+	  btbx_attr2_reg<=btbx_attr2;
+	  btbx_attr3_reg<=btbx_attr3;
+	  btbx_attr0_reg2<=btbx_attr0_reg;
+	  btbx_attr1_reg2<=btbx_attr1_reg;
+	  btbx_attr2_reg2<=btbx_attr2_reg;
+	  btbx_attr3_reg2<=btbx_attr3_reg;
+	  btbx_attr0_reg3<=btbx_attr0_reg2;
+	  btbx_attr1_reg3<=btbx_attr1_reg2;
+	  btbx_attr2_reg3<=btbx_attr2_reg2;
+	  btbx_attr3_reg3<=btbx_attr3_reg2;
+	  btbx_attr0_reg4<=btbx_attr0_reg3;
+	  btbx_attr1_reg4<=btbx_attr1_reg3;
+	  btbx_attr2_reg4<=btbx_attr2_reg3;
+	  btbx_attr3_reg4<=btbx_attr3_reg3;
 	  btbx_jmask_reg<=(btb_way ? btb_chmaskB : btb_chmaskA)&{4{btb_hit}};
 	  iqe_jcnt_reg<=iqe_jcnt;
 	  iqe_jcnt_reg2<=iqe_jcnt_reg;
@@ -1917,6 +1991,10 @@ module frontend1(
 	  btbx_tgt1_reg4<=btbx_tgt1;
 	  btbx_tgt2_reg4<=btbx_tgt2;
 	  btbx_tgt3_reg4<=btbx_tgt3;
+          btbx_attr0_reg4<=btbx_attr0;
+	  btbx_attr1_reg4<=btbx_attr1;
+	  btbx_attr2_reg4<=btbx_attr2;
+	  btbx_attr3_reg4<=btbx_attr3;
 //	  iqe_jcnt_reg2<=iqe_jcnt_reg; //reg2 here at same clock as other reg3
 	  startx_reg4<=startx;//??
 	  btb_can_ins_reg4<=btb_can_ins;
@@ -1929,6 +2007,7 @@ module frontend1(
               instrEn_reg2<=1'b0;
               instrEn_reg3<=1'b0;
               jumpTK_addr<=btbx_tgt;
+	      jumpTK_attr<=btbx_attr;
               jumpTK_en<=1'b1;
           end
       end else if (btbFStall_reg3) begin

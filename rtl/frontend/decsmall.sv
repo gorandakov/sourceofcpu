@@ -44,7 +44,11 @@ module smallInstr_decoder(
   isIPRel,
   rAlloc,
   csrss_retIP_en,
-  error
+  error,
+  reor_en_out,
+  reor_val_out,
+  reor_en,
+  reor_val
   );
   
   localparam INSTR_WIDTH=80;
@@ -116,6 +120,10 @@ module smallInstr_decoder(
   output rAlloc;
   output reg csrss_retIP_en;
   output wire error;
+  output reor_en_out;
+  output [23:0] reor_val_out;
+  input reor_en;
+  input [23:0] reor_val;
   //7:0 free 15:8 unfree 39:16 fxch/pop/push 
   wire [3:0] magic;
   wire [11:0] srcIPOff;
@@ -277,7 +285,7 @@ module smallInstr_decoder(
   assign constantDef=(~magic[0]) ? {26'b0,~instr[7] && instr[15:12]==4'b0,instr[7],instr[15:12]} : 32'bz;
  
   assign reor_en_out=isFPUreor&&~reor_error;
-  assign reor_val_out=instr[47:8];
+  assign reor_val_out=instr[31:8];
  
   assign subIsBasicALU=opcode_sub[5:4]==2'b0 || opcode_sub[5:2]==4'b0100;
   assign subIsBasicShift=~opcode_sub[5] && ~subIsBasicALU && opcode_sub[0];
@@ -620,11 +628,11 @@ module smallInstr_decoder(
 	      reor_val_out[17:15]!=tt[2:0]&&reor_val_out[20:18]!=tt[2:0]&&reor_val_out[23:21]!=tt[2:0]);   
 	  end
       end
-      rA_reor=instr[11] ? instr[11:8] : {1'b0,instr[10:8]};
-      rB_reor=instr[15] ? instr[15:12] : {1'b0,instr[14:12]};
-      rA_reor32=instr[21:20]!=2'b0 ? instr[21:17] : {2'b0,instr[19:17]};
-      rB_reor32=instr[26:25]!=2'b0 ? instr[26:22] : {2'b0,instr[24:22]};
-      rT_reor32=instr[31:30]!=2'b0 ? instr[31:27] : {2'b0,instr[29:27]};
+      rA_reor=instr[11] ? instr[11:8] : {1'b0,fpu_reor[3*instr[10:8]+:3]};
+      rB_reor=instr[15] ? instr[15:12] : {1'b0,fpu_reor[3*instr[14:12]+:3]};
+      rA_reor32=instr[21:20]!=2'b0 ? instr[21:17] : {2'b0,fpu_reor[3*instr[19:17]+:3]};
+      rB_reor32=instr[26:25]!=2'b0 ? instr[26:22] : {2'b0,fpu_reor[3*instr[24:22]+:3]};
+      rT_reor32=instr[31:30]!=2'b0 ? instr[31:27] : {2'b0,fpu_reor[3*instr[29:27]+:3]};
 
       csrss_retIP_en=1'b0;
       
@@ -1675,7 +1683,7 @@ module smallInstr_decoder(
           prAlloc[35]=1'b1;
           pjumpType[35]=5'b10001;
 	  //pconstant[35]=instr[79:16];
-	  csrss_retIP_en=instr[31:16]==`csr_retIP;
+	  csrss_retIP_en=!(instr[31:16]==`csr_retIP);
       end
       
       trien[36]=magic[0] & isBasicFPUScalarC;

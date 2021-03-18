@@ -712,6 +712,15 @@ module heptane_core(
   wire dc2_rExclB1;
   wire dc2_rExcl;
   reg dc2_rhit;
+
+  reg dc2_rhitExp;
+  reg dc2_rhitExp_reg;
+  wire dc2_rhitExpA0;
+  wire dc2_rhitExpB0;
+  wire dc2_rhitExpB1;
+  reg dc2_rhitExpA0_reg;
+  reg dc2_rhitExpB0_reg;
+  reg dc2_rhitExpB1_reg;
   
   reg [36:0] dc2_rd_addr;
   reg [36:0] dc2_rd_addr_reg;
@@ -733,6 +742,8 @@ module heptane_core(
   wire MSI_expect_swap;
   wire MSI_expAddr_hitCC;
   wire [3:0] dec_attr;
+  reg  [35:0] MSI_expAddr_reg;
+  reg  MSI_expAddr_en_reg;
 //  wire MSI_swap_reply;
 
   wire wrStall;
@@ -909,8 +920,10 @@ module heptane_core(
   .insert_dupl(dc2_dupl_rd),
   .hit_LRU(dc2_rLRU_reg),.read_LRU(dc2_rLRUA0),.hit_any(dc2_rhitA0),
   .read_dir(dc2_rDirA0),.read_excl(dc2_rExclA0),
-  .read_expAddr(L1_expAddr),
-  .read_expAddr_en(L1_expAddr_en)
+  //.read_expAddr(L1_expAddr),
+  .read_expAddr_en(L1_expAddr_en),
+  .read_expHit(dc2_rhitExpA0),
+  .read_expAddrOut()
   );
   dcache2_block #(1) dc2B0_mod(
   .clk(clk),
@@ -942,7 +955,10 @@ module heptane_core(
   .insert_dupl(dc2_dupl_rd),
   .hit_LRU(dc2_rLRU_reg),.read_LRU(dc2_rLRUB0),.hit_any(dc2_rhitB0),
   .read_dir(dc2_rDirB0),.read_excl(dc2_rExclB0),
-  .read_expAddr_en(L1_expAddr_en)
+  //.read_expAddr(L1_expAddr),
+  .read_expAddr_en(L1_expAddr_en),
+  .read_expHit(dc2_rhitExpB0),
+  .read_expAddrOut()
   );
   dcache2_block #(2) dc2B1_mod(
   .clk(clk),
@@ -974,8 +990,10 @@ module heptane_core(
   .insert_dupl(dc2_dupl_rd),
   .hit_LRU(dc2_rLRU_reg),.read_LRU(dc2_rLRUB1),.hit_any(dc2_rhitB1),
   .read_dir(dc2_rDirB1),.read_excl(dc2_rExclB1),
-  .read_expAddr(L1_expAddr),
-  .read_expAddr_en(L1_expAddr_en)
+  //.read_expAddr(L1_expAddr),
+  .read_expHit(dc2_rhitExpB1),
+  .read_expAddr_en(L1_expAddr_en),
+  .read_expAddrOut()
   );
 
   frontend1 #(BUS_ID) front_mod(
@@ -1721,6 +1739,9 @@ module heptane_core(
         dc2_rhitA0_reg<=1'b0;
         dc2_rhitB0_reg<=1'b0;
         dc2_rhitB1_reg<=1'b0;
+        dc2_rhitExpA0_reg<=1'b0;
+        dc2_rhitExpB0_reg<=1'b0;
+        dc2_rhitExpB1_reg<=1'b0;
         dc2_rd_addr<=37'b0;
         dc2_rd_addr_reg<=37'b0;
         dc2_rd_addr_reg2<=37'b0;
@@ -1749,6 +1770,8 @@ module heptane_core(
         rbusDIn_data_reg<=512'b0;
         rbusDIn_signals_reg<={`rbusD_width{1'b0}};
         dc2_rhit<=1'b0;
+        dc2_rhitExp<=1'b0;
+        dc2_rhitExp_reg<=1'b0;
         dc2_rDir_reg<=1'b0;
         dc2_rExcl_reg<=1'b0;
         dc2_rdata_reg<=512'b0;
@@ -1761,6 +1784,8 @@ module heptane_core(
 	dc2_dataIO_reg2<=1'b0;
 	dc2_dataIO_reg3<=1'b0;
     end else begin
+        MSI_expAddr_reg<=MSI_expAddr;
+        MSI_expAddr_en_reg<=MSI_expAddr_en;
         if (req_tlbEn) begin
             bus_tlb_slot<=req_slot;
         end
@@ -1770,6 +1795,9 @@ module heptane_core(
         dc2_rhitA0_reg<=dc2_rhitA0;
         dc2_rhitB0_reg<=dc2_rhitB0;
         dc2_rhitB1_reg<=dc2_rhitB1;
+        dc2_rhitExpA0_reg<=dc2_rhitExpA0;
+        dc2_rhitExpB0_reg<=dc2_rhitExpB0;
+        dc2_rhitExpB1_reg<=dc2_rhitExpB1;
         dc2_rd_addr<=dc2_rdOdd ? {dc2_addrO0,1'b1} : {dc2_addrE0,1'b0};
         dc2_rd_addr_reg<=dc2_rd_addr;
         dc2_rd_addr_reg2<=dc2_rd_addr_reg;
@@ -1798,6 +1826,8 @@ module heptane_core(
         rbusDIn_data_reg<=rbusDIn_data;
         rbusDIn_signals_reg<=rbusDIn_signals;
         dc2_rhit<=dc2_rhitA0|dc2_rhitB0|dc2_rhitB1;
+        dc2_rhitExp<=dc2_rhitExpA0|dc2_rhitExpB0|dc2_rhitExpB1;
+	dc2_rhitExp_reg<=dc2_rhitExp;
         dc2_rDir_reg<=dc2_rDir;
         dc2_rExcl_reg<=dc2_rExcl;
         dc2_rdata_reg<=dc2_rdata;

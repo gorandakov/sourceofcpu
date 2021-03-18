@@ -614,6 +614,7 @@ module cntrl_find_outcome(
   wire except_both_d=both_threads;
   wire except_d;
   wire [15:0] proc_d;
+  wire [3:0] except_attr_d;
 
   wire [5:0] flags_d;
   reg  [5:0] flags[1:0];
@@ -631,6 +632,8 @@ module cntrl_find_outcome(
   wire [42:0] takenIP;
 
   wire [3:0] attr;
+  wire [3:0] jump0Attr;
+  wire [3:0] jump1Attr;
 
   reg [5:0] initcount;
   wire [5:0] initcount_d;
