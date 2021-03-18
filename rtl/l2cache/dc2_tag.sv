@@ -39,6 +39,64 @@ module dcache2_tag_ram(
 
 endmodule
 
+module dc2_thag_ram(
+  clk,
+  rst,
+  read_clkEn,
+  read_addr,
+  read_data,
+  write0_addr,
+  write0_data,
+  write0_wen,
+  write0_bitEn,
+  write1_addr,
+  write1_data,
+  write1_wen,
+  write1_bitEn,
+  write2_addr,
+  write2_data,
+  write2_wen,
+  write2_bitEn
+  );
+  localparam ADDR_WIDTH=4;
+  localparam DATA_WIDTH=16;
+  localparam ADDR_COUNT=16;
+  
+  input clk;
+  input rst;
+  input read_clkEn;
+  input [ADDR_WIDTH-1:0] read_addr;
+  output [DATA_WIDTH-1:0] read_data;
+  input [ADDR_WIDTH-1:0] write0_addr;
+  input [DATA_WIDTH-1:0] write0_data;
+  input                  write0_wen;
+  input [15:0]           write0_bitEn;
+  input [ADDR_WIDTH-1:0] write1_addr;
+  input [DATA_WIDTH-1:0] write1_data;
+  input                  write1_wen;
+  input [15:0]           write1_bitEn;
+  input [ADDR_WIDTH-1:0] write2_addr;
+  input [DATA_WIDTH-1:0] write2_data;
+  input                  write2_wen;
+  input [15:0]           write2_bitEn;
+  
+  reg [DATA_WIDTH-1:0] ram [ADDR_COUNT-1:0];
+  reg [ADDR_WIDTH-1:0] read_addr_reg;
+  integer b;
+  
+  assign read_data=ram[read_addr_reg];
+
+  always @(posedge clk)
+    begin
+      if (rst) read_addr_reg<={ADDR_WIDTH{1'b0}};
+      else if (read_clkEn) read_addr_reg<=read_addr;
+      if (write0_wen) for(b=0;b<16;b=b+1) if (write0_bitEn[b]) ram[write0_addr][b]<=write0_data[b];
+      if (write1_wen) for(b=0;b<16;b=b+1) if (write1_bitEn[b]) ram[write1_addr][b]<=write1_data[b];
+      if (write2_wen) for(b=0;b<16;b=b+1) if (write2_bitEn[b]) ram[write2_addr][b]<=write2_data[b];
+    end
+
+endmodule
+
 module dcache2_tag(
   clk,
   rst,
