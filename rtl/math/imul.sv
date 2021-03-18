@@ -169,6 +169,15 @@ module imul(
       upper_reg<=upper;
       upper_reg2<=upper_reg;
       upper_reg3<=upper_reg2;
+      upper32_reg<=upper32;
+      upper32_reg2<=upper32_reg;
+      upper32_reg3<=upper32_reg2;
+      upper32HSU_reg<=upper32HSU;
+      upper32HSU_reg2<=upper32HSU_reg;
+      upper32HSU_reg3<=upper32HSU_reg2;
+      upper64HSU_reg<=upper64HSU;
+      upper64HSU_reg2<=upper64HSU_reg;
+      upper64HSU_reg3<=upper64HSU_reg2;
       short_reg<=short;
       short_reg2<=short_reg;
       short_reg3<=short_reg2;
