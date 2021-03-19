@@ -884,8 +884,12 @@ module dcache2_block(
 //  ins_hit,
   insert,
   insert_excl,insert_dirty,insert_dupl,
-  hit_LRU,read_LRU,hit_any,read_dir,read_excl,read_expAddrOut,
-  read_expAddr_en
+  hit_LRU,read_LRU,hit_any,imm_any,read_dir,read_excl,read_expAddrOut,
+  read_expAddr_en,
+  expun_cc_addr,
+  expun_cc_en,
+  expun_dc_addr,
+  expun_dc_en
 // init
   );
   localparam ADDR_WIDTH=36;
@@ -932,13 +936,20 @@ module dcache2_block(
   input [4:0] hit_LRU;
   output reg [4:0] read_LRU;
   output reg hit_any;
+  output reg imm_any;
   output reg read_dir;
   output reg read_excl;
   output reg [36:0] read_expAddrOut;
   input [36:0] read_expAddr_en;
+  input [36:0] expun_cc_addr;
+  input expun_cc_en;
+  input [36:0] expun_dc_addr;
+  input expun_dc_en;
 
   wire [7:0] read_hit_way;
   reg [7:0] read_hit_way_reg;
+  wire [7:0] read_imm_way;
+  reg [7:0] read_imm_way_reg;
   wire read_hit_any;
   wire [32*DATA_WIDTH-1:0] read_dataP[7:-1];
   wire [4:0] read_LRUp[7:-1];
@@ -971,6 +982,7 @@ module dcache2_block(
           read_dataP[k],
           read_dataP[k-1],
           read_hit_way[k],
+	  read_imm_way[k],
           write0_clkEn,
           write_addrE0, write_hitE0,
           write_addrO0, write_hitO0,
@@ -992,7 +1004,11 @@ module dcache2_block(
           hit_LRU,
 	  read_LRUp[k],read_dirP[k],read_exclP[k],read_expAddrP[k],
 	  read_LRUp[k-1],read_dirP[k-1],read_exclP[k-1],read_expAddrP[k-1],
-          read_expAddr_en
+          read_expAddr_en,
+          expun_cc_addr,
+          expun_cc_en,
+          expun_dc_addr,
+          expun_dc_en
           );
       end
       for(b=0;b<32;b=b+1) begin : bank_gen
@@ -1016,6 +1032,7 @@ module dcache2_block(
   assign read_exclP[-1]=1'b0;
   assign read_expAddrP[-1]=37'b0;
   assign read_hit_any=|read_hit_way_reg;
+  assign read_imm_any=|read_imm_way_reg;
 
   always @(posedge clk) begin
       if (rst) begin
@@ -1043,9 +1060,11 @@ module dcache2_block(
   //        ins_hit_reg3<=1'b0;
           read_hit_way_reg<=8'b0;
           hit_any<=1'b0;
+          imm_any<=1'b0;
           read_dir<=1'b0;
           read_excl<=1'b0;
           read_expAddrOut<=37'b0;
+          read_imm_way_reg<=8'b0;
       end else begin
           write_data0_reg<=write_data0;
           write_data1_reg<=write_data1;
@@ -1071,7 +1090,9 @@ module dcache2_block(
           ins_hit_reg2<=|ins_hit_reg;
     //      ins_hit_reg3<=ins_hit_reg2;
           read_hit_way_reg<=read_hit_way;
+          read_imm_way_reg<=read_imm_way;
           hit_any<=(|read_hit_way_reg) && ~ins_hit_reg2;
+          imm_any<=(|read_imm_way_reg) && ~ins_hit_reg2;
           read_dir<=read_dirP[7];
           read_excl<=read_exclP[7];
           read_expAddrOut<=read_expAddrP[7];
