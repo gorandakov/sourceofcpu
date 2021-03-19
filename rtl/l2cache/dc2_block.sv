@@ -653,8 +653,8 @@ module dcache2_way(
   );
 
 
-  assign read_enL=read_en_reg2 & (write0_hitEL_reg & ~read_odd_reg2 || write0_hitOL_reg & read_odd_reg2);
-  assign read_enH=read_en_reg2 & (write0_hitEH_reg & ~read_odd_reg2 || write0_hitOH_reg & read_odd_reg2);
+  assign read_enL=read_en_reg2 & (write0_hitE_reg & ~read_odd_reg2 || write0_hitO_reg & read_odd_reg2);
+  assign read_enH=read_en_reg2 & (write0_hitE_reg & ~read_odd_reg2 || write0_hitO_reg & read_odd_reg2);
   assign read_hit=insert_reg2 ? ins_hit_reg : read_enL;
 
   adder_inc #(8) initAdd_mod(initCount,initCount_next,1'b1,);
@@ -760,6 +760,8 @@ module dcache2_way(
 	  write1_clkEn_reg<=1'b0;
 	  write0_clkEn_reg2<=1'b0;
 	  write1_clkEn_reg2<=1'b0;
+	  write0_hitE_reg;
+	  write0_hitO_reg;
       end else begin
           write0_hitEL_reg<=write0_hitEL;
           write0_hitOL_reg<=write0_hitOL;
@@ -815,6 +817,8 @@ module dcache2_way(
 	  write1_clkEn_reg<=write1_clkEn;
 	  write0_clkEn_reg2<=write0_clkEn_reg;
 	  write1_clkEn_reg2<=write1_clkEn_reg;
+	  write0_hitE_reg<=write0_hitE;
+	  write0_hitO_reg<=write0_hitO;
       end
       if (rst) begin
           write_addrE0_reg<=36'b0;
