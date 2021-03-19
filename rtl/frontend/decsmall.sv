@@ -176,6 +176,7 @@ module smallInstr_decoder(
   wire isSimdInt;
   wire isFPUreor;
   wire isShlAddMulLike;
+  wire isPtrSec;
   wire isBasicFPUScalarA;
   wire isBasicFPUScalarB;
   wire isBasicFPUScalarC;
@@ -346,6 +347,7 @@ module smallInstr_decoder(
   //208,209 for isImmExtStore (future ext)
 
   assign isShlAddMulLike=opcode_main==8'd210 || opcode_main==8'd211;
+  assign isPtrSec=opcode_main==8'd212;
   assign isBasicFPUScalarA=opcode_main==8'hef && instr[13:12]==2'b0;
   assign isBasicFPUScalarB=opcode_main==8'hef && instr[13:12]==2'b1;
   assign isBasicFPUScalarC=opcode_main==8'hef && instr[15:12]==4'd2;
@@ -1097,13 +1099,14 @@ module smallInstr_decoder(
           if (instr[15:13]) perror[15]=1;
       end
     
-      trien[16]=magic[0] & isShlAddMulLike; 
+      trien[16]=magic[0] && isShlAddMulLike|isPtrSec; 
       pport[16]=PORT_ALU;
       puseBConst[16]=1'b0;
       pflags_write[16]=1'b0;
-      case(instr[0])
-      0: poperation[16]=`op_sadd_even;
-      1: poperation[16]=`op_sadd_odd;
+      casex({instr[0],isPtrSec})
+      2'b00: poperation[16]=`op_sadd_even;
+      2'b10: poperation[16]=`op_sadd_odd;
+      2'bx1: begin poperation[16]=`op_sec64; pport[16]=PORT_MUL; end
       endcase
       prA_use[16]=1'b1;
       prB_use[16]=1'b1;
