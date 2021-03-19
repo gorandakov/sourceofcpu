@@ -544,6 +544,55 @@ module dcache2_way(
   .init(init),.initCount(initCount)
   );
   
+  dcache2_tag tagEW0_mod(
+  .clk(clk),
+  .rst(rst),
+  .req_wrtEn(write_hitO0|write_hitE0 && ~read_en),
+  .req_en(write_hitO0|write_hitE0|read_en),
+  .req_addrE(expun_cc_addr[36:1]),
+  .req_addrO(expun_cc_addr[36:1]),
+  .req_odd(expun_cc_addr[0]),
+  .req_split(1'b0),
+  .req_hitE(expun_cc_hitE),.req_hitO(expun_cc_hitO),
+  .req_exclE(),.req_exclO(),
+  .req_dir_ins_E(dirtyE[0]),.req_dir_ins_O(dirtyO[0]),
+  .req_hitEL(write0_hitEL),.req_hitOL(write0_hitOL),
+  .req_hitEH(write0_hitEH),.req_hitOH(write0_hitOH),
+  .req_LRUe(read_LRUE),.req_LRUo(read_LRUO),
+  .write_wen(insert|expAddr_en),
+  .write_dupl(insert_dupl),
+  .write_hit(ins_hit),
+  .write_exp(expAddr_en),
+  .write_excl(insert_excl),.write_dir_ins(insert_dirty),
+  .expun_addrE(),.expun_addrO(),
+  .init(init),.initCount(initCount)
+  );
+  
+  dcache2_tag tagEW1_mod(
+  .clk(clk),
+  .rst(rst),
+  .req_wrtEn(write_hitO0|write_hitE0 && ~read_en),
+  .req_en(write_hitO0|write_hitE0|read_en),
+  .req_addrE(expun_dc_addr[36:1]),
+  .req_addrO(expun_dc_addr[36:1]),
+  .req_odd(expun_dc_addr[0]),
+  .req_split(1'b0),
+  .req_hitE(expun_dc_hitE),.req_hitO(expun_dc_hitO),
+  .req_exclE(exclE[1]),.req_exclO(exclO[1]),
+  .req_dir_ins_E(dirtyE[1]),.req_dir_ins_O(dirtyO[1]),
+  .req_hitEL(write1_hitEL),.req_hitOL(write1_hitOL),
+  .req_hitEH(write1_hitEH),.req_hitOH(write1_hitOH),
+  .req_LRUe(read_LRUE),.req_LRUo(read_LRUO),
+  .write_wen(insert|expAddr_en),
+  .write_dupl(insert_dupl),
+  .write_hit(ins_hit),
+  .write_exp(expAddr_en),
+  .write_excl(insert_excl),.write_dir_ins(insert_dirty),
+  .expun_addrE(),.expun_addrO(),
+  .init(init),.initCount(initCount)
+  );
+  
+  
 //  assign ins_hit=rand_reg==ID && rand_en_reg2 && insert_reg;
   dcache2_LRU_ram LRUe_mod(
   .clk(clk),
