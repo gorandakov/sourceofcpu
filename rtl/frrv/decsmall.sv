@@ -307,7 +307,8 @@ module smallInstr_decoder(
   assign isSys=opcode_main[6:0]==7'b1110011;
   assign isExtImm=opcode_main[6:0]==7'b1011011;
   assign isExtALU=opcode_main[6:0]==7'b1111011;
-
+  assign isAMO=instr[6:2]==5'b01011 && instr[1:0]==2'b11;
+  
   assign qconstant[1]=pconstant[3];//??
   assign qtrien   [1]=trien    [3];//??
   assign qconstant[2]=pconstant[8];
@@ -588,6 +589,16 @@ module smallInstr_decoder(
       else if (instr[11:7]==5'd10) rD_reor32={1'b0,reor_val[14:0]};
       else if (!instr[11])         rD_reor32={reor_val[15],instr[11:7]};
       else                         rD_reor32={1'b0,instr[11:7]};
+      if (instr[19:15]==5'd8)       rS1_reor32={1'b0,reor_val[4:0]};
+      else if (instr[19:15]==5'd9)  rS1_reor32={1'b0,reor_val[9:5]};
+      else if (instr[19:15]==5'd10) rS1_reor32={1'b0,reor_val[14:0]};
+      else if (!instr[19])          rS1_reor32={reor_val[15],instr[19:15]};
+      else                          rS1_reor32={1'b0,instr[19:15]};
+      if (instr[24:20]==5'd8)       rS2_reor32={1'b0,reor_val[4:0]};
+      else if (instr[24:20]==5'd9)  rS2_reor32={1'b0,reor_val[9:5]};
+      else if (instr[24:20]==5'd10) rS2_reor32={1'b0,reor_val[14:0]};
+      else if (!instr[24])          rS2_reor32={reor_val[15],instr[24:20]};
+      else                          rS2_reor32={1'b0,instr[24:20]};
       
       trien[0]=subIsBasicLDST;
       poperation[0]=instr[14] ? {10'h1,instr[14],instr[15]} : {8'b0,~instr[15],instr[15],2'b1,instr[15]};
@@ -1130,6 +1141,27 @@ module smallInstr_decoder(
 	  1'b0: poperation[23]=`op_sadd|{2'b10,instr[27:25],8'b0};
 	  1'b1: poperation[23]=`op_saddn|{2'b10,instr[27:25],8'b0};
       endcase
+
+      trien[24]=isBasicALU|isBasicALU32 && instr[31:25]==7'b1 && !instr[14];
+      prT[24]=instr[11:7];
+      prA[24]=instr[19:15];
+      prB[24]=instr[24:20];
+      prT_use[24]=1'b1;
+      prA_use[24]=1'b1;
+      prB_use[24]=1'b1;
+      puseRs[24]=1'b1;
+      pflags_write[24]=1'b0;
+      pport[24]=PORT_MUL;
+      prAlloc[24]=1'b1;
+      case({isBasicALU,instr[14:12]})
+	  4'b1000: poperation[24]=`op_mul64;
+	  4'b1001: poperation[24]=`op_limul64;
+	  4'b1010: poperation[24]=`op_lHSmul64;
+	  4'b1011: poperation[24]=`op_lmul64;
+	  4'b0000: poperation[24]=`op_mul32;
+          default: perror[24]=1'b1;
+      endcase
+      
       
       trien[1]=~magic[0] & subIsMovOrExt;
       puseBConst[1]=opcode_sub==6'h29;
