@@ -118,9 +118,9 @@ module smallInstr_decoder(
   output isIPRel;
   output rAlloc;
   input reor_en;
-  input [39:0] reor_val;
+  input [15:0] reor_val;
   output reor_en_out;
-  output [39:0] reor_val_out;
+  output [15:0] reor_val_out;
   output wire error;
   //7:0 free 15:8 unfree 39:16 fxch/pop/push 
   wire [3:0] magic;
@@ -130,11 +130,9 @@ module smallInstr_decoder(
 
   reg [31:0] fpu_reor;
 
-  reg [3:0] rA_reor;
-  reg [3:0] rB_reor;
-  reg [4:0] rA_reor32;
-  reg [4:0] rB_reor32;
-  reg [4:0] rT_reor32;
+  reg [5:0] rS1_reor32;
+  reg [5:0] rS2_reor32;
+  reg [5:0] rD_reor32;
   reg reor_error;
 
   wire isBasicALU;
@@ -584,11 +582,12 @@ module smallInstr_decoder(
 	      reor_val_out[17:15]!=tt[2:0]&&reor_val_out[20:18]!=tt[2:0]&&reor_val_out[23:21]!=tt[2:0]);   
 	  end
       end
-      rA_reor=instr[11] ? instr[11:8] : {1'b0,fpu_reor[3*instr[10:8]+:3]};
-      rB_reor=instr[15] ? instr[15:12] : {1'b0,fpu_reor[3*instr[14:12]+:3]};
-      rA_reor32=instr[21:20]!=2'b0 ? instr[21:17] : {2'b0,fpu_reor[3*instr[19:17]+:3]};
-      rB_reor32=instr[26:25]!=2'b0 ? instr[26:22] : {2'b0,fpu_reor[3*instr[24:22]+:3]};
-      rT_reor32=instr[31:30]!=2'b0 ? instr[31:27] : {2'b0,fpu_reor[3*instr[29:27]+:3]};
+      
+      if (instr[11:7]==5'd8)       rD_reor32={1'b0,reor_val[4:0]};
+      else if (instr[11:7]==5'd9)  rD_reor32={1'b0,reor_val[9:5]};
+      else if (instr[11:7]==5'd10) rD_reor32={1'b0,reor_val[14:0]};
+      else if (!instr[11])         rD_reor32={reor_val[15],instr[11:7]};
+      else                         rD_reor32={1'b0,instr[11:7]};
       
       trien[0]=subIsBasicLDST;
       poperation[0]=instr[14] ? {10'h1,instr[14],instr[15]} : {8'b0,~instr[15],instr[15],2'b1,instr[15]};
