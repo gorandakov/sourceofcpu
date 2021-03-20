@@ -105,6 +105,9 @@ module dcache2_tag(
   req_addrE,
   req_addrO,
   req_odd,
+  req_waddrE,
+  req_waddrO,
+  req_wodd,
   req_split,
   req_hitE,req_hitO,req_exclE,req_exclO,
   req_dir_ins_E,req_dir_ins_O,
@@ -128,6 +131,9 @@ module dcache2_tag(
   input [PADDR_WIDTH-9:0] req_addrE;
   input [PADDR_WIDTH-9:0] req_addrO;
   input req_odd;
+  input [PADDR_WIDTH-9:0] req_waddrE;
+  input [PADDR_WIDTH-9:0] req_waddrO;
+  input req_wodd;
   input req_split;
   output req_hitE,req_hitO;
   output req_exclE,req_exclO;
