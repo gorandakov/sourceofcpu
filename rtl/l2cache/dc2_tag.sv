@@ -124,6 +124,7 @@ module dcache2_tag(
   initCount
   );
   localparam PADDR_WIDTH=44;
+  parameter [0:0] DEP=0;
   input clk;
   input rst;
   input req_en;
@@ -135,7 +136,8 @@ module dcache2_tag(
   input [PADDR_WIDTH-9:0] req_waddrO;
   input req_wodd;
   input req_split;
-  output req_hitE,req_hitO;
+  inout req_hitE,req_hitO;
+  output req_shitE,req_shitO;
   output req_exclE,req_exclO;
   output req_dir_ins_E,req_dir_ins_O;
   output reg req_hitEL;
@@ -160,6 +162,9 @@ module dcache2_tag(
   reg [PADDR_WIDTH-9:0] req_addrE_reg;
   reg [PADDR_WIDTH-9:0] req_addrO_reg;
   reg req_odd_reg,req_split_reg;
+  reg [PADDR_WIDTH-9:0] req_waddrE_reg;
+  reg [PADDR_WIDTH-9:0] req_waddrO_reg;
+  reg req_wodd_reg,req_wsplit_reg;
   reg write_wen_reg,req_wrtEn_reg;
   reg write_excl_reg,write_dir_ins_reg;
   wire [`dc2Tag_width-1:0] tag_dataE;
@@ -175,9 +180,9 @@ module dcache2_tag(
   .read_clkEn(req_en),
   .read_addr(req_addrE[7:0]),
   .read_data(tag_dataE),
-  .write_addr(init ? initCount : req_addrE_reg[7:0]),
+  .write_addr(init ? initCount : req_waddrE_reg[7:0]),
   .write_data(tag_wDataE & {`dc2Tag_width{~init}}),
-  .write_wen(write_wen_reg & write_hit & ~req_odd_reg || req_en_reg || init)
+  .write_wen(write_wen_reg & write_hit & ~req_wodd_reg || req_en_reg || init)
   );
 
   dcache2_tag_ram ramO_mod(
@@ -186,18 +191,24 @@ module dcache2_tag(
   .read_clkEn(req_en),
   .read_addr(req_addrO[7:0]),
   .read_data(tag_dataO),
-  .write_addr(init ? initCount : req_addrO_reg[7:0]),
+  .write_addr(init ? initCount : req_waddrO_reg[7:0]),
   .write_data(tag_wDataO & {`dc2Tag_width{~init}}),
-  .write_wen(write_wen_reg & write_hit & ~req_odd_reg || req_en_reg || init)
+  .write_wen(write_wen_reg & write_hit & ~req_wodd_reg || req_en_reg || init)
   );
 
   assign hitE=req_addrE_reg[PADDR_WIDTH-9:8]==tag_dataE[`dc2Tag_addr_43_16] &&
     tag_dataE[`dc2Tag_valid] && req_en_reg;
   assign hitO=req_addrO_reg[PADDR_WIDTH-9:8]==tag_dataO[`dc2Tag_addr_43_16] &&
     tag_dataO[`dc2Tag_valid] && req_en_reg;
- 
-  assign req_hitE=hitE && ~req_odd_reg | req_split_reg;
-  assign req_hitO=hitO && req_odd_reg | req_split_reg;
+
+  generate 
+    if (!DEP) begin
+        assign req_hitE=hitE && ~req_odd_reg | req_split_reg;
+        assign req_hitO=hitO && req_odd_reg | req_split_reg;
+    end
+        assign req_shitE=hitE && ~req_odd_reg | req_split_reg;
+        assign req_shitO=hitO && req_odd_reg | req_split_reg;
+  endgenerate
 
   assign write_hit=write_dupl_reg|write_exp_req ? req_hitE|req_hitO : write_wen_reg && 
 	  (req_odd_reg ? req_LRUo==5'd23 : req_LRUe==5'd23);
@@ -212,8 +223,8 @@ module dcache2_tag(
   assign expun_addrE={tag_dataE[`dc2Tag_addr_43_16],req_addrE_reg[7:0]};
   assign expun_addrO={tag_dataO[`dc2Tag_addr_43_16],req_addrO_reg[7:0]};
   
-  assign tag_wDataE[`dc2Tag_addr_43_16]=(~write_wen_reg || ~write_hitE) ? tag_dataE[`dc2Tag_addr_43_16] : req_addrE_reg[PADDR_WIDTH-9:8]; 
-  assign tag_wDataO[`dc2Tag_addr_43_16]=(~write_wen_reg || ~write_hitO) ? tag_dataO[`dc2Tag_addr_43_16] : req_addrO_reg[PADDR_WIDTH-9:8];
+  assign tag_wDataE[`dc2Tag_addr_43_16]=(~write_wen_reg || ~write_hitE) ? tag_dataE[`dc2Tag_addr_43_16] : req_waddrE_reg[PADDR_WIDTH-9:8]; 
+  assign tag_wDataO[`dc2Tag_addr_43_16]=(~write_wen_reg || ~write_hitO) ? tag_dataO[`dc2Tag_addr_43_16] : req_waddrO_reg[PADDR_WIDTH-9:8];
   assign tag_wDataE[`dc2Tag_valid]=(write_wen_reg & write_hitE) ? ~write_exp_req : tag_dataE[`dc2Tag_valid]; 
   assign tag_wDataO[`dc2Tag_valid]=(write_wen_reg & write_hitO) ? ~write_exp_req : tag_dataO[`dc2Tag_valid]; 
   assign tag_wDataE[`dc2Tag_exclusive]=(write_wen_reg & write_hitE) ? write_excl_reg  : tag_dataE[`dc2Tag_exclusive]; 
@@ -236,6 +247,9 @@ module dcache2_tag(
           req_addrE_reg<=36'b0;
           req_addrO_reg<=36'b0;
           req_odd_reg<=1'b0;
+          req_waddrE_reg<=36'b0;
+          req_waddrO_reg<=36'b0;
+          req_wodd_reg<=1'b0;
           req_split_reg<=1'b0;
           write_wen_reg<=1'b0;
           write_excl_reg<=1'b0;
@@ -248,6 +262,9 @@ module dcache2_tag(
           req_addrE_reg<=req_addrE;
           req_addrO_reg<=req_addrO;
           req_odd_reg<=req_odd;
+          req_waddrE_reg<=req_waddrE;
+          req_waddrO_reg<=req_waddrO;
+          req_wodd_reg<=req_wodd;
           req_split_reg<=req_split;
           write_wen_reg<=write_wen;
           write_excl_reg<=write_excl;

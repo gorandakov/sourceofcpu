@@ -506,6 +506,7 @@ module dcache2_way(
   .req_odd(write_odd0),
   .req_split(write_split0),
   .req_hitE(write0_hitE),.req_hitO(write0_hitO),
+  .req_shitE(),.req_shitO(),
   .req_exclE(exclE[0]),.req_exclO(exclO[0]),
   .req_dir_ins_E(dirtyE[0]),.req_dir_ins_O(dirtyO[0]),
   .req_hitEL(write0_hitEL),.req_hitOL(write0_hitOL),
@@ -530,6 +531,7 @@ module dcache2_way(
   .req_odd(write_odd1),
   .req_split(write_split1),
   .req_hitE(write1_hitE),.req_hitO(write1_hitO),
+  .req_shitE(),.req_shitO(),
   .req_exclE(exclE[1]),.req_exclO(exclO[1]),
   .req_dir_ins_E(dirtyE[1]),.req_dir_ins_O(dirtyO[1]),
   .req_hitEL(write1_hitEL),.req_hitOL(write1_hitOL),
@@ -544,7 +546,7 @@ module dcache2_way(
   .init(init),.initCount(initCount)
   );
   
-  dcache2_tag tagEW0_mod(
+  dcache2_tag #(1)  tagEW0_mod(
   .clk(clk),
   .rst(rst),
   .req_wrtEn(write_hitO0|write_hitE0 && ~read_en),
@@ -553,7 +555,8 @@ module dcache2_way(
   .req_addrO(expun_cc_addr[36:1]),
   .req_odd(expun_cc_addr[0]),
   .req_split(1'b0),
-  .req_hitE(expun_cc_hitE),.req_hitO(expun_cc_hitO),
+  .req_hitE(write0_hitE),.req_hitO(write0_hitO),
+  .req_shitE(expun_cc_hitE),.req_shitO(expun_cc_hitO),
   .req_exclE(),.req_exclO(),
   .req_dir_ins_E(dirtyE[0]),.req_dir_ins_O(dirtyO[0]),
   .req_hitEL(write0_hitEL),.req_hitOL(write0_hitOL),
@@ -568,7 +571,7 @@ module dcache2_way(
   .init(init),.initCount(initCount)
   );
   
-  dcache2_tag tagEW1_mod(
+  dcache2_tag #(1) tagEW1_mod(
   .clk(clk),
   .rst(rst),
   .req_wrtEn(write_hitO0|write_hitE0 && ~read_en),
@@ -577,7 +580,8 @@ module dcache2_way(
   .req_addrO(expun_dc_addr[36:1]),
   .req_odd(expun_dc_addr[0]),
   .req_split(1'b0),
-  .req_hitE(expun_dc_hitE),.req_hitO(expun_dc_hitO),
+  .req_hitE(write0_hitE),.req_hitO(write0_hitO),
+  .req_shitE(expun_dc_hitE),.req_shitO(expun_dc_hitO),
   .req_exclE(exclE[1]),.req_exclO(exclO[1]),
   .req_dir_ins_E(dirtyE[1]),.req_dir_ins_O(dirtyO[1]),
   .req_hitEL(write1_hitEL),.req_hitOL(write1_hitOL),
