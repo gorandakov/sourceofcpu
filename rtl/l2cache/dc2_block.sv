@@ -504,6 +504,9 @@ module dcache2_way(
   .req_addrE(write_addrE0),
   .req_addrO(write_addrO0),
   .req_odd(write_odd0),
+  .req_waddrE(write_addrE0),
+  .req_waddrO(write_addrO0),
+  .req_wodd(write_odd0),
   .req_split(write_split0),
   .req_hitE(write0_hitE),.req_hitO(write0_hitO),
   .req_shitE(),.req_shitO(),
@@ -529,6 +532,9 @@ module dcache2_way(
   .req_addrE(write_addrE1),
   .req_addrO(write_addrO1),
   .req_odd(write_odd1),
+  .req_waddrE(write_addrE1),
+  .req_waddrO(write_addrO1),
+  .req_wodd(write_odd1),
   .req_split(write_split1),
   .req_hitE(write1_hitE),.req_hitO(write1_hitO),
   .req_shitE(),.req_shitO(),
@@ -554,6 +560,9 @@ module dcache2_way(
   .req_addrE(expun_cc_addr[36:1]),
   .req_addrO(expun_cc_addr[36:1]),
   .req_odd(expun_cc_addr[0]),
+  .req_waddrE(write_addrE0),
+  .req_waddrO(write_addrO0),
+  .req_wodd(write_odd0),
   .req_split(1'b0),
   .req_hitE(write0_hitE),.req_hitO(write0_hitO),
   .req_shitE(expun_cc_hitE),.req_shitO(expun_cc_hitO),
@@ -579,6 +588,9 @@ module dcache2_way(
   .req_addrE(expun_dc_addr[36:1]),
   .req_addrO(expun_dc_addr[36:1]),
   .req_odd(expun_dc_addr[0]),
+  .req_waddrE(write_addrE0),
+  .req_waddrO(write_addrO0),
+  .req_wodd(write_odd0),
   .req_split(1'b0),
   .req_hitE(write0_hitE),.req_hitO(write0_hitO),
   .req_shitE(expun_dc_hitE),.req_shitO(expun_dc_hitO),
@@ -596,7 +608,45 @@ module dcache2_way(
   .init(init),.initCount(initCount)
   );
   
+  dc2_thag_ram present_mod(
+  clk,
+  rst,
+  read_clkEn,
+  read_addr,
+  read_data,
+  .write0_addr(expun_cc_addr_reg[4:1]),
+  .write0_data(16'b0),
+  .write0_wen(expun_cc_hitE|expun_cc_hitO&&~expun_cc_addr_reg[0]),
+  .write0_bitEn(16'b1<<expun_cc_addr_reg[7:5]),
+  .write1_addr(expun_dc_addr_reg[4:1]),
+  .write1_data(16'b0),
+  .write1_wen(expun_dc_hitE|expun_cc_hitO&&~expun_dc_addr_reg[0]),
+  .write1_bitEn(16'b1<<expun_dc_addr_reg[7:5]),
+  .write2_addr(write_addrE0_reg[3:0]),
+  .write2_data(16'hffff),
+  .write2_wen(ins_hit && ~write0_odd_reg),
+  .write2_bitEn(16'b1<<write_addrE0_reg[6:4])
+  );
   
+  dc2_thag_ram presentB_mod(
+  clk,
+  rst,
+  read_clkEn,
+  read_addr,
+  read_data,
+  .write0_addr(expun_cc_addr_reg[4:1]),
+  .write0_data(16'b0),
+  .write0_wen(expun_cc_hitE|expun_cc_hitO&&expun_cc_addr_reg[0]),
+  .write0_bitEn(16'b1<<expun_cc_addr_reg[7:5]),
+  .write1_addr(expun_dc_addr_reg[4:1]),
+  .write1_data(16'b0),
+  .write1_wen(expun_dc_hitE|expun_cc_hitO&&expun_dc_addr_reg[0]),
+  .write1_bitEn(16'b1<<expun_dc_addr_reg[7:5]),
+  .write2_addr(write_addrE0_reg[3:0]),
+  .write2_data(16'hffff),
+  .write2_wen(ins_hit && write0_odd_reg),
+  .write2_bitEn(16'b1<<write_addrE0_reg[6:4])
+  );
 //  assign ins_hit=rand_reg==ID && rand_en_reg2 && insert_reg;
   dcache2_LRU_ram LRUe_mod(
   .clk(clk),
