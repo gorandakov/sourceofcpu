@@ -74,6 +74,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   wire isFPUreor;
 
   wire isShlAddMulLike;
+  wire isPtrSec;
 
   wire isBasicFPUScalarA;
   wire isBasicFPUScalarB;
@@ -144,6 +145,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   assign isFPUreor=opcode_main==8'd201;
   
   assign isShlAddMulLike=opcode_main==8'd210 || opcode_main==8'd211;
+  assign isPtrSec=opcode_main==8'd212;
   
   assign isBasicFPUScalarA=opcode_main==8'hef && instr[13:12]==2'b0;
   assign isBasicFPUScalarB=opcode_main==8'hef && instr[13:12]==2'b1;
@@ -235,6 +237,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   
   assign clsMul=|{
     isBasicMUL,
+    isPtrSec,
     opcode_main==8'hff && ~instr[15] && ~instr[13] && magic[0],
     isBasicFPUScalarC && !instr[13:11],
      isBasicFPUScalarCmp && instr[13:11],
