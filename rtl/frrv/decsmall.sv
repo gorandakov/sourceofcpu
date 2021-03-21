@@ -128,11 +128,11 @@ module smallInstr_decoder(
 //  wire isAvx;
   wire [7:0] opcode_main;
 
-  reg [31:0] fpu_reor;
+  reg [15:0] fpu_reor;
 
-  reg [5:0] rS1_reor32;
-  reg [5:0] rS2_reor32;
-  reg [5:0] rD_reor32;
+  reg [5:0] rS1;
+  reg [5:0] rS2;
+  reg [5:0] rD;
   reg reor_error;
 
   wire isBasicALU;
@@ -584,21 +584,21 @@ module smallInstr_decoder(
 	  end
       end
       
-      if (instr[11:7]==5'd8)       rD_reor32={1'b0,reor_val[4:0]};
-      else if (instr[11:7]==5'd9)  rD_reor32={1'b0,reor_val[9:5]};
-      else if (instr[11:7]==5'd10) rD_reor32={1'b0,reor_val[14:0]};
-      else if (!instr[11])         rD_reor32={reor_val[15],instr[11:7]};
-      else                         rD_reor32={1'b0,instr[11:7]};
-      if (instr[19:15]==5'd8)       rS1_reor32={1'b0,reor_val[4:0]};
-      else if (instr[19:15]==5'd9)  rS1_reor32={1'b0,reor_val[9:5]};
-      else if (instr[19:15]==5'd10) rS1_reor32={1'b0,reor_val[14:0]};
-      else if (!instr[19])          rS1_reor32={reor_val[15],instr[19:15]};
-      else                          rS1_reor32={1'b0,instr[19:15]};
-      if (instr[24:20]==5'd8)       rS2_reor32={1'b0,reor_val[4:0]};
-      else if (instr[24:20]==5'd9)  rS2_reor32={1'b0,reor_val[9:5]};
-      else if (instr[24:20]==5'd10) rS2_reor32={1'b0,reor_val[14:0]};
-      else if (!instr[24])          rS2_reor32={reor_val[15],instr[24:20]};
-      else                          rS2_reor32={1'b0,instr[24:20]};
+      if (instr[11:7]==5'd8)       rD={1'b0,reor_val[4:0]};
+      else if (instr[11:7]==5'd9)  rD={1'b0,reor_val[9:5]};
+      else if (instr[11:7]==5'd10) rD={1'b0,reor_val[14:0]};
+      else if (!instr[11])         rD={reor_val[15],instr[11:7]};
+      else                         rD={1'b0,instr[11:7]};
+      if (instr[19:15]==5'd8)       rS1={1'b0,reor_val[4:0]};
+      else if (instr[19:15]==5'd9)  rS1={1'b0,reor_val[9:5]};
+      else if (instr[19:15]==5'd10) rS1={1'b0,reor_val[14:0]};
+      else if (!instr[19])          rS1={reor_val[15],instr[19:15]};
+      else                          rS1={1'b0,instr[19:15]};
+      if (instr[24:20]==5'd8)       rS2={1'b0,reor_val[4:0]};
+      else if (instr[24:20]==5'd9)  rS2={1'b0,reor_val[9:5]};
+      else if (instr[24:20]==5'd10) rS2={1'b0,reor_val[14:0]};
+      else if (!instr[24])          rS2={reor_val[15],instr[24:20]};
+      else                          rS2={1'b0,instr[24:20]};
       
       trien[0]=subIsBasicLDST;
       poperation[0]=instr[14] ? {10'h1,instr[14],instr[15]} : {8'b0,~instr[15],instr[15],2'b1,instr[15]};
@@ -769,7 +769,7 @@ module smallInstr_decoder(
       trien[6]=isAdvALUorJump;
       puseBConst[6]=!(instr[6:2]==5'b11001);
       puseBCxCross[6]=instr[6:2]==5'b11001;
-      prT[6]={1'b0,instr[11:7]};
+      prT[6]={rD};
       prT_use[6]=!(instr[6:2]==5'b11011 && prT[6]==6'd0);
       puseRs[6]=prT_use[6];
       case(instr[6:2])
@@ -798,15 +798,15 @@ module smallInstr_decoder(
 	  pport[6]=PORT_MUL;
 	  puseBConst[6]=1'b1;
 	  puseBCxCross[6]=1'b1;
-	  prB[6]={1'b0,instr[19:15]};
+	  prB[6]=rS1;
 	  prB_use[6]=1'b1;
 	  end
       endcase
 
       trien[7]=isJump;
       poperation[7]=`op_sub64;
-      prA[7]={1'b0,instr[19:5]};
-      prB[7]={1'b0,instr[24:20]};
+      prA[7]=rS1;
+      prB[7]=rS2;
       prA_use[7]=1'b1;
       prB_use[7]=1'b1;      
       prAlloc[7]=1'b1;
@@ -825,8 +825,8 @@ module smallInstr_decoder(
       endcase
 
       trien[8]=isLoad&!instr[2];
-      prT[8]=instr[11:7];
-      prB[8]=instr[19:15];
+      prT[8]=rD;
+      prB[8]=rS1;
       prT_use[8]=1'b1;
       prB_use[8]=1'b1;
       pconstant[8]={{52{instr[31]}},instr[31:20]};
@@ -855,11 +855,11 @@ module smallInstr_decoder(
       endcase
 
       trien[9]=isStore&!instr[2];
-      prC[9]=instr[24:20];
-      prB[9]=instr[19:15];
+      prC[9]=rS2;
+      prB[9]=rS1;
       prC_use[9]=1'b1;
       prB_use[9]=1'b1;
-      pconstant[9]={{52{instr[31]}},instr[31:25],instr[11:7]};
+      pconstant[9]={{52{instr[31]}},instr[31:25],rD};
       prAlloc[9]=1'b0;
       puseRs[9]=1'b1;
       pport[9]=PORT_STORE;
@@ -868,8 +868,8 @@ module smallInstr_decoder(
       
      
       trien[10]=isBasicALU && instr[6:5]==2'b0 && instr[13:12]!=2'b01;//non shift immediate
-      prT[10]=instr[11:7];
-      prA[10]=instr[19:15];
+      prT[10]=rD;
+      prA[10]=rS1;
       prT_use[10]=1'b1;
       prA_use[10]=1'b1;
       prB_use[10]=1'b1;
@@ -889,8 +889,8 @@ module smallInstr_decoder(
       endcase
        
       trien[11]=isBasicALU && instr[6:5]==2'b0 && instr[13:12]==2'b01 && !instr[31] && instr[29:26]==4'b0;//shift immediate
-      prT[11]=instr[11:7];
-      prA[11]=instr[19:15];
+      prT[11]=rD;
+      prA[11]=rS1;
       prT_use[11]=1'b1;
       prA_use[11]=1'b1;
       prB_use[11]=1'b1;
@@ -910,8 +910,8 @@ module smallInstr_decoder(
       endcase
       
       trien[12]=isBasicALU32 && instr[6:5]==2'b0 && instr[13:12]!=2'b01 && instr[14:12]==3'b0;//non shift immediate
-      prT[12]=instr[11:7];
-      prA[12]=instr[19:15];
+      prT[12]=rD;
+      prA[12]=rS1;
       prT_use[12]=1'b1;
       prA_use[12]=1'b1;
       prB_use[12]=1'b1;
@@ -926,8 +926,8 @@ module smallInstr_decoder(
       endcase
        
       trien[13]=isBasicALU32 && instr[6:5]==2'b0 && instr[13:12]==2'b01 && !instr[31] && instr[29:25]==5'b0;//shift immediate
-      prT[13]=instr[11:7];
-      prA[13]=instr[19:15];
+      prT[13]=rD;
+      prA[13]=rS1;
       prT_use[13]=1'b1;
       prA_use[13]=1'b1;
       prB_use[13]=1'b1;
@@ -947,9 +947,9 @@ module smallInstr_decoder(
       endcase
       
       trien[14]=isBasicALU && instr[6:5]!=2'b0 && instr[13:12]!=2'b01 && !instr[31] && instr[29:25]==5'b0;//non shift reg
-      prT[14]=instr[11:7];
-      prA[14]=instr[19:15];
-      prB[14]=instr[24:20];
+      prT[14]=rD;
+      prA[14]=rS1;
+      prB[14]=rS2;
       prT_use[14]=1'b1;
       prA_use[14]=1'b1;
       prB_use[14]=1'b1;
@@ -968,9 +968,9 @@ module smallInstr_decoder(
       endcase
        
       trien[15]=isBasicALU && instr[6:5]!=2'b0 && instr[13:12]==2'b01 && !instr[31] && instr[29:25]==5'b0;//shift reg
-      prT[15]=instr[11:7];
-      prA[15]=instr[19:15];
-      prB[15]=instr[24:20];
+      prT[15]=rD;
+      prA[15]=rS1;
+      prB[15]=rS2;
       prT_use[15]=1'b1;
       prA_use[15]=1'b1;
       prB_use[15]=1'b1;
@@ -988,9 +988,9 @@ module smallInstr_decoder(
       endcase
       
       trien[16]=isBasicALU32 && instr[6:5]!=2'b0 && instr[14:12]==3'b0 && !instr[31] && instr[29:25]==5'b0;//non shift reg
-      prT[16]=instr[11:7];
-      prA[16]=instr[19:15];
-      prB[16]=instr[24:20];
+      prT[16]=rD;
+      prA[16]=rS1;
+      prB[16]=rS2;
       prT_use[16]=1'b1;
       prA_use[16]=1'b1;
       prB_use[16]=1'b1;
@@ -1004,9 +1004,9 @@ module smallInstr_decoder(
       endcase
        
       trien[17]=isBasicALU32 && instr[6:5]!=2'b0 && instr[13:12]==2'b01 && !instr[31] && instr[29:25]==5'b0;//shift reg
-      prT[17]=instr[11:7];
-      prA[17]=instr[19:15];
-      prB[17]=instr[24:20];
+      prT[17]=rD;
+      prA[17]=rS1;
+      prB[17]=rS2;
       prT_use[17]=1'b1;
       prA_use[17]=1'b1;
       prB_use[17]=1'b1;
@@ -1026,8 +1026,8 @@ module smallInstr_decoder(
       endcase
       
       trien[18]=isExtImm && instr[14:12]!=3'b001;//non shift immediate
-      prT[18]=instr[11:7];
-      prA[18]=instr[19:15];
+      prT[18]=rD;
+      prA[18]=rS1;
       prT_use[18]=1'b1;
       prA_use[18]=1'b1;
       prB_use[18]=1'b1;
@@ -1048,8 +1048,8 @@ module smallInstr_decoder(
       endcase
        
       trien[19]=isExtImm && instr[14:12]==3'b001 && instr[31:27]==5'b0;//shift immediate
-      prT[19]=instr[11:7];
-      prA[19]=instr[19:15];
+      prT[19]=rD;
+      prA[19]=rS1;
       prT_use[19]=1'b1;
       prA_use[19]=1'b1;
       prB_use[19]=1'b1;
@@ -1067,8 +1067,8 @@ module smallInstr_decoder(
       endcase
        
       trien[20]=isExtALU && instr[14:12]!=3'b100;//mul immediate
-      prT[20]=instr[11:7];
-      prA[20]=instr[19:15];
+      prT[20]=rD;
+      prA[20]=rS1;
       prT_use[20]=1'b1;
       prA_use[20]=1'b1;
       prB_use[20]=1'b1;
@@ -1089,9 +1089,9 @@ module smallInstr_decoder(
       endcase
        
       trien[21]=isExtImm && (instr[31:27]==5'b1 || instr[31:27]==5'b10);//non shift reg
-      prT[21]=instr[11:7];
-      prA[21]=instr[19:15];
-      prB[21]=instr[24:20];
+      prT[21]=rD;
+      prA[21]=rS1;
+      prB[21]=rS2;
       prT_use[21]=1'b1;
       prA_use[21]=1'b1;
       prB_use[21]=1'b1;
@@ -1109,9 +1109,9 @@ module smallInstr_decoder(
       endcase
       
       trien[22]=isExtImm && instr[31:27]==5'b11;//shift reg
-      prT[22]=instr[11:7];
-      prA[22]=instr[19:15];
-      prB[22]=instr[24:20];
+      prT[22]=rD;
+      prA[22]=rS1;
+      prB[22]=rS2;
       prT_use[22]=1'b1;
       prA_use[22]=1'b1;
       prB_use[22]=1'b1;
@@ -1127,9 +1127,9 @@ module smallInstr_decoder(
       endcase
       
       trien[23]=isExtImm && instr[31:29]==3'b1;//non shift reg
-      prT[23]=instr[11:7];
-      prA[23]=instr[19:15];
-      prB[23]=instr[24:20];
+      prT[23]=rD;
+      prA[23]=rS1;
+      prB[23]=rS2;
       prT_use[23]=1'b1;
       prA_use[23]=1'b1;
       prB_use[23]=1'b1;
@@ -1143,9 +1143,9 @@ module smallInstr_decoder(
       endcase
 
       trien[24]=isBasicALU|isBasicALU32 && instr[31:25]==7'b1 && !instr[14];
-      prT[24]=instr[11:7];
-      prA[24]=instr[19:15];
-      prB[24]=instr[24:20];
+      prT[24]=rD;
+      prA[24]=rS1;
+      prB[24]=rS2;
       prT_use[24]=1'b1;
       prA_use[24]=1'b1;
       prB_use[24]=1'b1;
