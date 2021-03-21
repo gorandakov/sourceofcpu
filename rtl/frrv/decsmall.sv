@@ -279,9 +279,11 @@ module smallInstr_decoder(
   assign constantDef=(magic[1:0]==2'b01) ? {{18{instr[31]}},instr[31:18]} : 32'bz;
   assign constantDef=(~magic[0]) ? {26'b0,~instr[7] && instr[15:12]==4'b0,instr[7],instr[15:12]} : 32'bz;
  
-  assign reor_en_out=isFPUreor&&~reor_error;
-  assign reor_val_out=instr[47:8];
- 
+  assign reor_en_out=isReor&&~reor_error;
+  assign reor_val_out=isReorCall ? {1'b1,instr[24:20],instr[19:15],instr[11:7]} : {1'b0,5'd10,5'd9,5'd8};
+
+  assign isReor=isAMO||(isBasicALU|isBasicALU32 && instr[31:25]==7'b1 && instr[14]);
+  assign isReorCall=isAMO||(isBasicALU|isBasicALU32 && instr[31:25]==7'b1 && instr[14]); 
 
   assign subIsBasicLDST=instr[14:13]!=2'b0 && instr[1:0]==2'b0;
   assign subIsStackLDST=instr[14:13]!=2'b0 && instr[1:0]==2'b10 && !(intr[15:14]==2'b01 && instr[11:7]==5'b0);
