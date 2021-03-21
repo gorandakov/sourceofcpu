@@ -62,7 +62,7 @@ module predec_RV_class(instr,flag,class_,isLNK,isRet,LNK2);
   assign clsMul=|{isntr[15:13]=3'b100 && instr[1:0]==2'b10 && instr[6:2]==5'b0 && instr[11:7]!=5'b0,
       isExtImm && instr[14:12]==3'b011,
       instr[6:5]==2'b11 && !instr[4] && instr[2] && !instr[3] && instr[1:0]==2'b11,
-      isExtALU && instr[14:12]!=3'b100,
+      isExtALU && !instr[14],
       isBasicALU|isBasicALU32 && instr[31:25]==7'b1 && !instr[14]};
   assign clsALU=|{subIsReg3Alu && instr[11:10]==2'b11,
     subIsBasicImmAluReg5 && !(isntr[15:13]=3'b100 && instr[1:0]==2'b10 && instr[6:2]==5'b0 && instr[11:7]!=5'b0),

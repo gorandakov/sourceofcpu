@@ -1070,7 +1070,7 @@ module smallInstr_decoder(
 	  2'b01: poperation[19]=`op_sar32;
       endcase
        
-      trien[20]=isExtALU && instr[14:12]!=3'b100;//mul immediate
+      trien[20]=isExtALU && !instr[14];//mul immediate
       prT[20]=rD;
       prA[20]=rS1;
       prT_use[20]=1'b1;
@@ -1083,13 +1083,10 @@ module smallInstr_decoder(
       pport[20]=PORT_ALU;
       prAlloc[20]=1'b1;
       case(instr[14:12])
-	  3'b011: begin poperation[20]=`op_mul32|2048; pport[20]=PORT_MUL;  end//suxuss
-	  3'b000: begin poperation[20]=`op_imul32|2048; pport[20]=PORT_MUL;  end//suxuss
-	  3'b001: begin poperation[20]=`op_imul64|2048; pport[20]=PORT_MUL;  end//suxuss
+	  3'b000: begin poperation[20]=`op_mul32|2048; pport[20]=PORT_MUL;  end//suxuss
 	  3'b010: begin poperation[20]=`op_lmul64|2048; pport[20]=PORT_MUL;  end//suxuss
-	  3'b111: begin poperation[20]=`op_mul32_64|2048; pport[20]=PORT_MUL;  end//suxuss
-	  3'b110: begin poperation[20]=`op_imul32_64|2048; pport[20]=PORT_MUL;  end//suxuss
-	  3'b101: begin poperation[20]=`op_limul64|2048; pport[20]=PORT_MUL;  end//suxuss
+	  3'b001: begin poperation[20]=`op_lHSmul64|2048; pport[20]=PORT_MUL;  end//suxuss
+	  3'b011: begin poperation[20]=`op_limul64|2048; pport[20]=PORT_MUL;  end//suxuss
       endcase
        
       trien[21]=isExtImm && (instr[31:27]==5'b1 || instr[31:27]==5'b10);//non shift reg
