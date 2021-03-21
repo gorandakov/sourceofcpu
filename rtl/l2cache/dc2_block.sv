@@ -309,7 +309,11 @@ module dcache2_way(
   insert_excl,insert_dirty,insert_dupl,
   hit_LRU, read_LRU, read_dir, read_excl, read_expAddr,
   read_LRU_in, read_dir_in, read_excl_in, read_expAddr_in,
-  expAddr_en
+  expAddr_en,
+  expun_cc_addr,
+  expun_cc_en,
+  expun_dc_addr,
+  expun_dc_en
 // init
   );
   localparam ADDR_WIDTH=36;
@@ -363,6 +367,10 @@ module dcache2_way(
   input read_dir_in,read_excl_in;
   input [36:0] read_expAddr_in;
   input expAddr_en;
+  input [36:0] expun_cc_addr;
+  input expun_cc_en;
+  input [36:0] expun_dc_addr;
+  input expun_dc_en;
 
   wire write0_hitE;
   wire write0_hitO;
