@@ -609,11 +609,11 @@ module dcache2_way(
   );
   
   dc2_thag_ram present_mod(
-  clk,
-  rst,
-  read_clkEn,
-  read_addr,
-  read_data,
+  .clk(clk),
+  .rst(rst),
+  .read_clkEn(read_en),
+  .read_addr(write_addrE0[3:0]),
+  .read_data(expun_dataE),
   .write0_addr(expun_cc_addr_reg[4:1]),
   .write0_data(16'b0),
   .write0_wen(expun_cc_hitE|expun_cc_hitO&&~expun_cc_addr_reg[0]),
@@ -629,11 +629,11 @@ module dcache2_way(
   );
   
   dc2_thag_ram presentB_mod(
-  clk,
-  rst,
-  read_clkEn,
-  read_addr,
-  read_data,
+  .clk(clk),
+  .rst(rst),
+  .read_clkEn(read_en),
+  .read_addr(write_addrE0[3:0]),
+  .read_data(expun_dataO),
   .write0_addr(expun_cc_addr_reg[4:1]),
   .write0_data(16'b0),
   .write0_wen(expun_cc_hitE|expun_cc_hitO&&expun_cc_addr_reg[0]),
