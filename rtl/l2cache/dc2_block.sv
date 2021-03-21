@@ -871,7 +871,7 @@ module dcache2_way(
 	  write1_clkEn_reg2<=write1_clkEn_reg;
 	  write0_hitE_reg<=write0_hitE;
 	  write0_hitO_reg<=write0_hitO;
-	  read_inL1<=expun_imm&read_en_reg;
+	  read_inL1<=expun_imm&read_en_reg&ins_hit;
       end
       if (rst) begin
           write_addrE0_reg<=36'b0;
