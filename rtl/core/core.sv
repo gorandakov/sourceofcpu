@@ -802,8 +802,8 @@ module heptane_core(
   assign dc2_rExcl=dc2_rhitA0 ? dc2_rExclA : dc2_rExclB;
   
 //  assign except=1'b0;//iAvail[0] && instr0[15:0]==16'h0023;
-  assign rbusDOut_signals[`rbusD_second]=dc2_rhitExp_reg;
-  assign rbusDOut_signals[`rbusD_used]=dc2_rhitExp | dc2_rhitExp_reg;
+  assign rbusDOut_signals[`rbusD_second]=dc2_rhitExp_reg && L1_expAddr_en_reg5;
+  assign rbusDOut_signals[`rbusD_used]=dc2_rhitExp & L1_expAddr_en_reg4 || dc2_rhitExp_reg & L1_expAddr_en_reg5;
   assign rbusDOut_signals[`rbusD_mem_reply]=dc2_rhitExp | dc2_rhitExp_reg;
   assign rbusDOut_signals[`rbusD_bcast]=1'b0;
   assign rbusDOut_signals[`rbusD_cc_reply]=1'b0;
@@ -815,9 +815,10 @@ module heptane_core(
   assign rbusDOut_src_req=10'h3ff;
   assign rbusDOut_dst_req=rbusDIn_data_reg[46:37];
   assign rbusDOut_data=dc2_rdata_reg;
-  assign rbusDOut_want=dc2_rhitExp | dc2_rhitExp_reg;
+  assign rbusDOut_want=dc2_rhitExp & ~L1_expAddr_en_reg4 || dc2_rhitExp_reg & ~L1_expAddr_en_reg5;
+  assign rbusDout_replay=dc2_rhitExp & ~L1_expAddr_en_reg4;
 
-  assign insBus_en=dc2_rhit;
+  assign insBus_en=dc2_rhit && ~L1_expAddr_en_reg4;
   assign insBus_io=dc2_io_en_reg4;
   assign insBus_req={BUS_ID,dc2_req_rd_reg5};
   assign insBus_dirty=dc2_rDir_reg;
@@ -922,7 +923,7 @@ module heptane_core(
   .read_dir(dc2_rDirA0),.read_excl(dc2_rExclA0),
   //.read_expAddr(L1_expAddr),
   .read_expAddr_en(L1_expAddr_en),
-  .read_expHit(dc2_rhitExpA0),
+  .imm_any(dc2_rhitExpA0),
   .read_expAddrOut()
   );
   dcache2_block #(1) dc2B0_mod(
@@ -957,7 +958,7 @@ module heptane_core(
   .read_dir(dc2_rDirB0),.read_excl(dc2_rExclB0),
   //.read_expAddr(L1_expAddr),
   .read_expAddr_en(L1_expAddr_en),
-  .read_expHit(dc2_rhitExpB0),
+  .imm_any(dc2_rhitExpB0),
   .read_expAddrOut()
   );
   dcache2_block #(2) dc2B1_mod(
@@ -991,7 +992,7 @@ module heptane_core(
   .hit_LRU(dc2_rLRU_reg),.read_LRU(dc2_rLRUB1),.hit_any(dc2_rhitB1),
   .read_dir(dc2_rDirB1),.read_excl(dc2_rExclB1),
   //.read_expAddr(L1_expAddr),
-  .read_expHit(dc2_rhitExpB1),
+  .imm_any(dc2_rhitExpB1),
   .read_expAddr_en(L1_expAddr_en),
   .read_expAddrOut()
   );

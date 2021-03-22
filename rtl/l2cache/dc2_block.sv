@@ -288,7 +288,7 @@ module dcache2_way(
   rst,
   read_en,read_odd,
   read_data,read_data_in,
-  read_hit,
+  read_hit,read_inL1, // 1 cycle before data
   write0_clkEn,
   write_addrE0, write_hitE0,
   write_addrO0, write_hitO0,
@@ -309,7 +309,11 @@ module dcache2_way(
   insert_excl,insert_dirty,insert_dupl,
   hit_LRU, read_LRU, read_dir, read_excl, read_expAddr,
   read_LRU_in, read_dir_in, read_excl_in, read_expAddr_in,
-  expAddr_en
+  expAddr_en,
+  expun_cc_addr,
+  expun_cc_en,
+  expun_dc_addr,
+  expun_dc_en
 // init
   );
   localparam ADDR_WIDTH=36;
@@ -324,6 +328,7 @@ module dcache2_way(
   output [32*DATA_WIDTH-1:0] read_data;
   input [32*DATA_WIDTH-1:0] read_data_in;
   output read_hit; //1 cycle before data
+  output reg read_inL1;
 
   input write0_clkEn;
   input [ADDR_WIDTH-1:0] write_addrE0;
@@ -362,6 +367,10 @@ module dcache2_way(
   input read_dir_in,read_excl_in;
   input [36:0] read_expAddr_in;
   input expAddr_en;
+  input [36:0] expun_cc_addr;
+  input expun_cc_en;
+  input [36:0] expun_dc_addr;
+  input expun_dc_en;
 
   wire write0_hitE;
   wire write0_hitO;
@@ -684,19 +693,7 @@ module dcache2_way(
     end
   endgenerate
 
-  /*assign read_LRUP=(~read_odd_reg3 & read_hit_reg) ? read_LRUE : 5'bz;
-  assign read_LRUP=(read_odd_reg3 & read_hit_reg) ? read_LRUO : 5'bz;
-  assign read_LRUP=(~read_hit_reg) ? 5'b0 : 5'bz;
-  assign read_LRUx=(read_en_reg3 & ~read_odd_reg3) ? read_LRUE : read_LRUO;
-  assign read_dirP=(~read_odd_reg3 & read_hit_reg) ? dirtyE_reg2 : 1'bz;
-  assign read_dirP=(read_odd_reg3 & read_hit_reg) ? dirtyO_reg2 : 1'bz;
-  assign read_dirP=(~read_hit_reg) ? 1'b0 : 1'bz;
-  assign read_exclP=(~read_odd_reg3 & read_hit_reg) ? exclE_reg2 : 1'bz;
-  assign read_exclP=(read_odd_reg3 & read_hit_reg) ? exclO_reg2 : 1'bz;
-  assign read_explP=(~read_hit_reg) ? 1'b0 : 1'bz;
-  assign read_expAddrP=(~read_odd_reg3 & read_hit_reg) ? expAddrE_reg2 : 37'bz;
-  assign read_expAddrP=(read_odd_reg3 & read_hit_reg) ? expAddrO_reg2 : 37'bz;
-  assign read_expAddrP=(~read_hit_reg) ? 37'b0 : 37'bz;*/
+  assign expun_imm=write_add0_reg ? exrun_dataO[write_addrE0[6:4]] : exrun_dataE[write_addrE0[6:4]]; 
 
   lru_single #(5,{BIG_ID,ID}) lru_mod(
   .lru(read_LRUx_reg2),
@@ -816,6 +813,7 @@ module dcache2_way(
 	  write1_clkEn_reg2<=1'b0;
 	  write0_hitE_reg;
 	  write0_hitO_reg;
+	  read_inL1<=1'b0;
       end else begin
           write0_hitEL_reg<=write0_hitEL;
           write0_hitOL_reg<=write0_hitOL;
@@ -873,6 +871,7 @@ module dcache2_way(
 	  write1_clkEn_reg2<=write1_clkEn_reg;
 	  write0_hitE_reg<=write0_hitE;
 	  write0_hitO_reg<=write0_hitO;
+	  read_inL1<=expun_imm&read_en_reg&ins_hit;
       end
       if (rst) begin
           write_addrE0_reg<=36'b0;
