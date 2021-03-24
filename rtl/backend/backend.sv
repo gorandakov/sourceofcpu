@@ -5152,7 +5152,7 @@ dcache1 L1D_mod(
     .read_sz3(lsr_wr_data[3][`lsaddr_sz]),
   .read_bankNoRead(dc_bankNone),
   .read_invalidate(1'b0),
-  .expun_addr(),
+  .expun_addr(dc_expun_addr),
   .expun_en(),
   .insert_from_ram(),//no need to implement. was going to be spectre protection
   .write_addrE0(st0_adata[`lsaddr_addrE]),

@@ -144,7 +144,7 @@ module ccRam_way(
   read_data,read_data_in,
   read_dataX,read_dataX_in,
   expun_addr,expun_addr_in,
-  read_hit,read_next_hit,
+  read_hit,read_next_hit,expun_hit,
   read_NRU,read_NRU_in,read_NRU_reg,
   chkCL_IP,
   chkCL_clkEn,
@@ -181,6 +181,7 @@ module ccRam_way(
   input [36:0] expun_addr_in;
   output read_hit;
   output read_next_hit;
+  output expun_hit;
   output [2:0] read_NRU;
   input [2:0] read_NRU_in;
   input [2:0] read_NRU_reg;
@@ -316,6 +317,7 @@ module ccRam_way(
   .hitNRU_reg(read_NRU_reg),
   .write_hit(write_hit),
   .write_expun_addr(expun_naddr),
+  .expun_hit(expun_hit),
   .init(init)
   );
   
@@ -335,6 +337,7 @@ module ccRam_way(
   .hitNRU_reg(read_NRU_reg),
   .write_hit(write_hit),
   .write_expun_addr(),
+  .expun_hit(),
   .init(init)
   );
   
@@ -407,7 +410,8 @@ module ccRam_half(
   read_set_flag,
   read_data,
   read_dataX,
-  read_hit,
+  expun_addr,
+  read_hit,expun_hit,
   chkCL_IP,
   chkCL_clkEn,
   chkCL_hit,
@@ -434,22 +438,27 @@ module ccRam_half(
   input read_set_flag;
   output [DATA_WIDTH-1:0] read_data;
   output [59:0] read_dataX;
-  output read_hit;
+  output [36:0] expun_addr;
+  output read_hit,expun_hit;
   input [IP_WIDTH-6:0] chkCL_IP;
   input chkCL_clkEn;
   output chkCL_hit;
   input [IP_WIDTH-6:0] write_IP;
   input [DATA_WIDTH-1:0] write_data;
+  output [36:0] expun_addr;
+  output expun_addr_en;
   input write_wen;
   input invalidate;
   output [7:0] tagErr;
   
   wire [7:0] chkCL_hit_way;
   wire [7:0] read_hit_way;
+  wire [7:0] expun_hit_way;
   
   wire [DATA_WIDTH-1:0] read_dataP[7:-1];
   wire [59:0] read_dataXP[7:-1];
   wire [2:0] read_NRUP[7:-1];
+  wire [36:0] expun_addrP[7:-1];
 
   reg [2:0] read_NRU_reg;
  
@@ -468,7 +477,10 @@ module ccRam_half(
           .read_data_in(read_dataP[k-1]),
           .read_dataX(read_dataXP[k]),
           .read_dataX_in(read_dataXP[k-1]),
+          .expun_addr(expun_addrP[k]),
+          .expun_addr_in(expun_addrP[k-1]),
           .read_hit(read_hit_way[k]),
+	  .expun_hit(expun_hit_way[k]),
           .chkCL_IP(chkCL_IP),
           .chkCL_clkEn(chkCL_clkEn),
           .chkCL_hit(chkCL_hit_way[k]),
@@ -491,9 +503,11 @@ module ccRam_half(
   assign read_dataP[-1]=0;
   assign read_dataXP[-1]=0;
   assign read_NRUP[-1]=0;
+  assign expun_dataP[-1]=0;
 
   assign read_data=read_dataP[7];
   assign read_dataX=read_dataXP[7];
+  assign expun_addr=expun_addrP[7];
   
 
   always @(negedge clk) begin
