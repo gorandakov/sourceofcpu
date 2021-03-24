@@ -32,6 +32,9 @@ module backend(
   MSI_swap_want,
   MSI_swap_repl,
 
+  dc_expun_addr,
+  dc_expun_en,
+
   rs0i0_rA,rs0i0_rA_use,rs0i0_rA_useF,rs0i0_rA_isV,rs0i0_rA_isAnyV,
   rs0i0_rB,rs0i0_rB_use,rs0i0_rB_useF,rs0i0_rB_isV,rs0i0_rB_isAnyV,rs0i0_useBConst,
   rs0i0_rT,rs0i0_rT_use,rs0i0_rT_useF,rs0i0_rT_isV, 
@@ -421,6 +424,9 @@ module backend(
   input MSI_exp_en;
   input MSI_swap_want;
   input MSI_swap_repl;
+  
+  output [36:0] dc_expun_addr;
+  output dc_expun_en;
 
   input [IN_REG_WIDTH-1:0] rs0i0_rA;
   input rs0i0_rA_use;
