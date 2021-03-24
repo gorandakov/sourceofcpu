@@ -102,6 +102,7 @@ module ccTag(
   hitNRU,hitNRU_in,
   hitNRU_reg,
   write_hit,
+  write_expun_addr,
   init
   );
 
@@ -134,6 +135,7 @@ module ccTag(
   input [2:0] hitNRU_in;
   input [2:0] hitNRU_reg;
   output write_hit;
+  output [36:0] write_expun_addr;
   input init;
 
   wire [PHYS_BITS-8:0] tag_paddr;
@@ -142,6 +144,7 @@ module ccTag(
 
   wire [DATA_WIDTH-1:0] read_data;
   wire [DATA_WIDTH-1:0] readW_data;
+  wire [DATA_WIDTH-1:0] read_dataW;
 
   wire [DATA_WIDTH-1:0] write_data_way;
   wire [DATA_WIDTH-1:0] write_data_new;
@@ -178,6 +181,8 @@ module ccTag(
   assign write_data_new[`cc1Tag_paddr]=write_phys_addr_reg;
   assign write_data_new[`cc1Tag_parity]=^write_data_new[DATA_WIDTH-2:0];
 
+  assign write_expun_addr=read_dataW[`cc1Tag_paddr] && {37{write_hit}};
+
   generate
     if (~INDEX[0]) begin
         assign hitNRU=~(({3{read_hit}} & read_NRUw) & hitNRU_in); 
@@ -186,13 +191,24 @@ module ccTag(
     end
   endgenerate
 
-  assign write_hit=write_wen_reg|invalidate_reg && read_NRUw==3'd7;
+  assign write_hit=(write_wen_reg && read_NRUw==3'd7) || (invalidate_reg && read_dataW[`cc1Tag_paddr]==write_addr_reg && read_dataW[`cc1Tag_valid]);
   ccTag_ram ram_mod(
   .clk(clk),
   .rst(rst),
   .read_clkEn(read_clkEn),
   .read_addr(read_phys_addr[7:0]),
   .read_data(read_data),
+  .write_addr(write_phys_addr_reg[7:0]),
+  .write_data(write_data_way),
+  .write_wen(write_hit|init_reg)
+  );
+
+  ccTag_ram ramW_mod(
+  .clk(clk),
+  .rst(rst),
+  .read_clkEn(read_clkEn),
+  .read_addr(write_phys_addr[7:0]),
+  .read_data(read_dataW),
   .write_addr(write_phys_addr_reg[7:0]),
   .write_data(write_data_way),
   .write_wen(write_hit|init_reg)

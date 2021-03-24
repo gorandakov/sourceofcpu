@@ -103,7 +103,7 @@
 //`define op_lmul32 (6|`op_multiclk)
 `define op_lmul64 (7|`op_multiclk)
 
-//`define op_imul8  (8|`op_multiclk)
+`define op_sec64  (8|`op_multiclk)
 `define op_imul32_64 (9|`op_multiclk)
 `define op_imul32 (10|`op_multiclk)
 `define op_imul64 (11|`op_multiclk)
