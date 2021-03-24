@@ -143,7 +143,6 @@ module ccRam_way(
   read_set_flag,
   read_data,read_data_in,
   read_dataX,read_dataX_in,
-  expun_addr,expun_addr_in,
   read_hit,read_next_hit,
   read_NRU,read_NRU_in,read_NRU_reg,
   chkCL_IP,
@@ -177,8 +176,6 @@ module ccRam_way(
   input [DATA_WIDTH-1:0] read_data_in;
   output [59:0] read_dataX;
   input [59:0] read_dataX_in;
-  output [36:0] expun_addr;
-  input [36:0] expun_addr_in;
   output read_hit;
   output read_next_hit;
   output [2:0] read_NRU;
@@ -214,8 +211,6 @@ module ccRam_way(
   wire read_hitC0; 
   wire write_hit; 
 
-  wire [36:0] expun_naddr;
-
   `ifdef ICACHE_256K
   wire [7:0] initCountNext;
   reg [7:0] initCount;
@@ -230,13 +225,11 @@ module ccRam_way(
     if (~INDEX[0]) begin
         assign read_data=~(({DATA_WIDTH{read_hit}} & read_data_ram) | read_data_in);
         assign read_dataX=~(({60{read_hit}} & writeX_data[59:0]) | read_dataX_in);
-        assign expun_addr=~(({37{write_hit}} & expun_naddr[36:0]) | expun_addr_in);
    //     assign read_physOut=~(({32{read_hit}} & read_physOutP)&read_physOut_in);
    //     assign read_NRU=~(({32{read_hit}} & read_NRUP)&read_NRU_in);
     end else begin
         assign read_data=~(~({DATA_WIDTH{read_hit}} & read_data_ram) & read_data_in);
         assign read_dataX=~(~({60{read_hit}} & writeX_data[59:0]) & read_dataX_in);
-        assign expun_addr=~(~({37{write_hit}} & expun_naddr[36:0]) & expun_addr_in);
    //     assign read_physOut=~(~({32{read_hit}} & read_physOutP)|read_physOut_in);
    //     assign read_NRU=~(~({32{read_hit}} & read_NRUP)|read_NRU_in);
     end
@@ -315,7 +308,6 @@ module ccRam_way(
   .hitNRU_in(read_NRU_in),
   .hitNRU_reg(read_NRU_reg),
   .write_hit(write_hit),
-  .write_expun_addr(expun_naddr),
   .init(init)
   );
   
@@ -334,7 +326,6 @@ module ccRam_way(
   .hitNRU_in(read_NRU_in),
   .hitNRU_reg(read_NRU_reg),
   .write_hit(write_hit),
-  .write_expun_addr(),
   .init(init)
   );
   
