@@ -1,0 +1,1551 @@
+`include "../struct.sv"
+
+module lsq_req_ram(
+  clk,
+  rst,
+
+  read_addr,read_data,read_clkEn,
+
+
+  write0_addr,write0_data,write0_wen,
+  write1_addr,write1_data,write1_wen,
+  write2_addr,write2_data,write2_wen,
+  write3_addr,write3_data,write3_wen,
+  write4_addr,write4_data,write4_wen,
+  write5_addr,write5_data,write5_wen,
+  write6_addr,write6_data,write6_wen
+  );
+
+  parameter DATA_WIDTH=`lsaddr_width;
+  localparam ADDR_WIDTH=5;
+  localparam ADDR_COUNT=32;
+  
+  input clk;
+  input rst;
+
+
+  input [ADDR_WIDTH-1:0] read_addr;
+  output [DATA_WIDTH-1:0] read_data;
+  input read_clkEn;
+  
+
+
+  input [ADDR_WIDTH-1:0] write0_addr;
+  input [DATA_WIDTH-1:0] write0_data;
+  input write0_wen;
+
+  input [ADDR_WIDTH-1:0] write1_addr;
+  input [DATA_WIDTH-1:0] write1_data;
+  input write1_wen;
+
+  input [ADDR_WIDTH-1:0] write2_addr;
+  input [DATA_WIDTH-1:0] write2_data;
+  input write2_wen;
+
+  input [ADDR_WIDTH-1:0] write3_addr;
+  input [DATA_WIDTH-1:0] write3_data;
+  input write3_wen;
+  
+  input [ADDR_WIDTH-1:0] write4_addr;
+  input [DATA_WIDTH-1:0] write4_data;
+  input write4_wen;
+
+  input [ADDR_WIDTH-1:0] write5_addr;
+  input [DATA_WIDTH-1:0] write5_data;
+  input write5_wen;
+
+  input [ADDR_WIDTH-1:0] write6_addr;
+  input [DATA_WIDTH-1:0] write6_data;
+  input write6_wen;
+
+
+  reg [DATA_WIDTH-1:0] ram [ADDR_COUNT-1:0];
+
+  reg [ADDR_WIDTH-1:0] read_addr_reg;
+
+  assign read_data=ram[read_addr_reg];
+
+
+  always @(posedge clk)
+    begin
+      if (rst)
+        begin
+          read_addr_reg<={ADDR_WIDTH{1'b0}};
+        end
+      else
+      begin
+        if (read_clkEn)
+            read_addr_reg<=read_addr;
+      end
+      
+
+      if (write0_wen) ram[write0_addr]<=write0_data;
+      if (write1_wen) ram[write1_addr]<=write1_data;
+      if (write2_wen) ram[write2_addr]<=write2_data;
+      if (write3_wen) ram[write3_addr]<=write3_data;
+      if (write4_wen) ram[write4_addr]<=write4_data;
+      if (write5_wen) ram[write5_addr]<=write5_data;
+      if (write6_wen) ram[write6_addr]<=write6_data;
+    end      
+    
+endmodule
+
+module lsq_req_block(
+  clk,
+  rst,
+
+  read_clkEn,
+  read_addr,
+  read0_data,
+  read1_data,
+  read2_data,
+  read3_data,
+  read4_data,
+  read5_data,
+
+
+  write0_addr,write0_data,write0_wen,
+  write1_addr,write1_data,write1_wen,
+  write2_addr,write2_data,write2_wen,
+  write3_addr,write3_data,write3_wen,
+  write4_addr,write4_data,write4_wen,
+  write5_addr,write5_data,write5_wen,
+  write6_addr,write6_data,write6_wen
+  );
+
+  parameter DATA_WIDTH=`lsaddr_width;
+  localparam ADDR_WIDTH=5;
+  localparam ADDR_COUNT=32;
+  localparam ADDR2_WIDTH=8;
+  
+  input clk;
+  input rst;
+
+  input read_clkEn;
+  input [ADDR_WIDTH-1:0] read_addr;
+  
+  output [DATA_WIDTH-1:0]  read0_data;
+  output [DATA_WIDTH-1:0]  read1_data;
+  output [DATA_WIDTH-1:0]  read2_data;
+  output [DATA_WIDTH-1:0]  read3_data;
+  output [DATA_WIDTH-1:0]  read4_data;
+  output [DATA_WIDTH-1:0]  read5_data;
+  
+
+  input [ADDR2_WIDTH-1:0] write0_addr;
+  input [DATA_WIDTH-1:0] write0_data;
+  input write0_wen;
+
+  input [ADDR2_WIDTH-1:0] write1_addr;
+  input [DATA_WIDTH-1:0] write1_data;
+  input write1_wen;
+
+  input [ADDR2_WIDTH-1:0] write2_addr;
+  input [DATA_WIDTH-1:0] write2_data;
+  input write2_wen;
+
+  input [ADDR2_WIDTH-1:0] write3_addr;
+  input [DATA_WIDTH-1:0] write3_data;
+  input write3_wen;
+  
+  input [ADDR2_WIDTH-1:0] write4_addr;
+  input [DATA_WIDTH-1:0] write4_data;
+  input write4_wen;
+
+  input [ADDR2_WIDTH-1:0] write5_addr;
+  input [DATA_WIDTH-1:0] write5_data;
+  input write5_wen;
+
+  input [ADDR_WIDTH-1:0] write6_addr;
+  input [DATA_WIDTH-1:0] write6_data;
+  input write6_wen;
+
+  wire [DATA_WIDTH-1:0]  read_data[5:0];
+  
+  
+  assign read0_data=read_data[0];
+  assign read1_data=read_data[1];
+  assign read2_data=read_data[2];
+  assign read3_data=read_data[3];
+  assign read4_data=read_data[4];
+  assign read5_data=read_data[5];
+
+  
+  generate
+      genvar k;
+      for(k=0;k<6;k=k+1) begin : rams_gen
+          lsq_req_ram #(DATA_WIDTH) RAM_MOD(
+          clk,
+          rst,
+
+          read_addr,read_data[k],read_clkEn,
+
+          write0_addr[7:3],write0_data,write0_wen && write0_addr[2:0]==k,
+          write1_addr[7:3],write1_data,write1_wen && write1_addr[2:0]==k,
+          write2_addr[7:3],write2_data,write2_wen && write2_addr[2:0]==k,
+          write3_addr[7:3],write3_data,write3_wen && write3_addr[2:0]==k,
+          write4_addr[7:3],write4_data,write4_wen && write4_addr[2:0]==k,
+          write5_addr[7:3],write5_data,write5_wen && write5_addr[2:0]==k,
+          write6_addr,write6_data,write6_wen
+          );
+      end
+  endgenerate
+
+  always @(posedge clk) begin
+    if (write0_wen) $display("mmm ",write0_addr," ",write0_data);
+    if (write4_wen) $display("mmm4 ",write4_addr," ",write4_data);
+    if (write5_wen) $display("mmm5 ",write5_addr," ",write5_data);
+    $display("mm1 ",read_addr," ",read0_data," ",read_clkEn);
+  end
+
+endmodule
+
+
+module lsq_ex_ram(
+  clk,
+  rst,
+
+  read_addr,read_data,read_clkEn,
+
+
+  write0_addr,write0_data,write0_wen,
+  write1_addr,write1_data,write1_wen,
+  write2_addr,write2_data,write2_wen,
+  write3_addr,write3_data,write3_wen,
+  write4_addr,write4_data,write4_wen,
+  write5_addr,write5_data,write5_wen,
+  write6_addr,write6_data,write6_wen
+  );
+
+  parameter DATA_WIDTH=`lsqxcept_width;
+  localparam ADDR_WIDTH=5;
+  localparam ADDR_COUNT=32;
+  
+  input clk;
+  input rst;
+
+
+  input [ADDR_WIDTH-1:0] read_addr;
+  output [DATA_WIDTH-1:0] read_data;
+  input read_clkEn;
+  
+
+
+  input [ADDR_WIDTH-1:0] write0_addr;
+  input [DATA_WIDTH-1:0] write0_data;
+  input write0_wen;
+
+  input [ADDR_WIDTH-1:0] write1_addr;
+  input [DATA_WIDTH-1:0] write1_data;
+  input write1_wen;
+
+  input [ADDR_WIDTH-1:0] write2_addr;
+  input [DATA_WIDTH-1:0] write2_data;
+  input write2_wen;
+
+  input [ADDR_WIDTH-1:0] write3_addr;
+  input [DATA_WIDTH-1:0] write3_data;
+  input write3_wen;
+  
+  input [ADDR_WIDTH-1:0] write4_addr;
+  input [DATA_WIDTH-1:0] write4_data;
+  input write4_wen;
+
+  input [ADDR_WIDTH-1:0] write5_addr;
+  input [DATA_WIDTH-1:0] write5_data;
+  input write5_wen;
+
+  input [ADDR_WIDTH-1:0] write6_addr;
+  input [DATA_WIDTH-1:0] write6_data;
+  input write6_wen;
+
+
+  reg [DATA_WIDTH-1:0] ram [ADDR_COUNT-1:0];
+
+  reg [ADDR_WIDTH-1:0] read_addr_reg;
+
+  assign read_data=ram[read_addr_reg];
+
+
+  always @(posedge clk)
+    begin
+      if (rst)
+        begin
+          read_addr_reg<={ADDR_WIDTH{1'b0}};
+        end
+      else
+      begin
+        if (read_clkEn)
+            read_addr_reg<=read_addr;
+      end
+      
+
+      if (write0_wen) ram[write0_addr]<=write0_data;
+      if (write1_wen) ram[write1_addr]<=write1_data;
+      if (write2_wen) ram[write2_addr]<=write2_data;
+      if (write3_wen) ram[write3_addr]<=write3_data;
+      if (write4_wen) ram[write4_addr]<=write4_data;
+      if (write5_wen) ram[write5_addr]<=write5_data;
+      if (write6_wen) ram[write6_addr]<=write6_data;
+    end      
+    
+endmodule
+
+module lsq_ex_block(
+  clk,
+  rst,
+
+  read_clkEn,
+  read_addr,
+  read0_data,
+  read1_data,
+  read2_data,
+  read3_data,
+  read4_data,
+  read5_data,
+
+
+  write0_addr,write0_data,write0_wen,
+  write1_addr,write1_data,write1_wen,
+  write2_addr,write2_data,write2_wen,
+  write3_addr,write3_data,write3_wen,
+  write4_addr,write4_data,write4_wen,
+  write5_addr,write5_data,write5_wen,
+  write6_addr,write6_data,write6_wen
+  );
+
+  parameter DATA_WIDTH=`lsqxcept_width;
+  localparam ADDR_WIDTH=5;
+  localparam ADDR_COUNT=32;
+  localparam ADDR2_WIDTH=8;
+  
+  input clk;
+  input rst;
+
+  input read_clkEn;
+  input [ADDR_WIDTH-1:0] read_addr;
+  
+  output [DATA_WIDTH-1:0]  read0_data;
+  output [DATA_WIDTH-1:0]  read1_data;
+  output [DATA_WIDTH-1:0]  read2_data;
+  output [DATA_WIDTH-1:0]  read3_data;
+  output [DATA_WIDTH-1:0]  read4_data;
+  output [DATA_WIDTH-1:0]  read5_data;
+  
+
+  input [ADDR2_WIDTH-1:0] write0_addr;
+  input [DATA_WIDTH-1:0] write0_data;
+  input write0_wen;
+
+  input [ADDR2_WIDTH-1:0] write1_addr;
+  input [DATA_WIDTH-1:0] write1_data;
+  input write1_wen;
+
+  input [ADDR2_WIDTH-1:0] write2_addr;
+  input [DATA_WIDTH-1:0] write2_data;
+  input write2_wen;
+
+  input [ADDR2_WIDTH-1:0] write3_addr;
+  input [DATA_WIDTH-1:0] write3_data;
+  input write3_wen;
+  
+  input [ADDR2_WIDTH-1:0] write4_addr;
+  input [DATA_WIDTH-1:0] write4_data;
+  input write4_wen;
+
+  input [ADDR2_WIDTH-1:0] write5_addr;
+  input [DATA_WIDTH-1:0] write5_data;
+  input write5_wen;
+
+  input [ADDR_WIDTH-1:0] write6_addr;
+  input [DATA_WIDTH-1:0] write6_data;
+  input write6_wen;
+
+  wire [DATA_WIDTH-1:0]  read_data[5:0];
+  
+  
+  assign read0_data=read_data[0];
+  assign read1_data=read_data[1];
+  assign read2_data=read_data[2];
+  assign read3_data=read_data[3];
+  assign read4_data=read_data[4];
+  assign read5_data=read_data[5];
+
+  
+  generate
+      genvar k;
+      for(k=0;k<6;k=k+1) begin : rams_gen
+          lsq_req_ram #(DATA_WIDTH) RAM_MOD(
+          clk,
+          rst,
+
+          read_addr,read_data[k],read_clkEn,
+
+          write0_addr[7:3],write0_data,write0_wen && write0_addr[2:0]==k,
+          write1_addr[7:3],write1_data,write1_wen && write1_addr[2:0]==k,
+          write2_addr[7:3],write2_data,write2_wen && write2_addr[2:0]==k,
+          write3_addr[7:3],write3_data,write3_wen && write3_addr[2:0]==k,
+          write4_addr[7:3],write4_data,write4_wen && write4_addr[2:0]==k,
+          write5_addr[7:3],write5_data,write5_wen && write5_addr[2:0]==k,
+          write6_addr,write6_data,write6_wen
+          );
+      end
+  endgenerate
+//  always @(posedge clk) begin
+//    if (write4_wen) $display("ppp4 ",write4_addr," ",write4_data);
+//    if (write5_wen) $display("ppp5 ",write5_addr," ",write5_data);
+//  end
+
+
+endmodule
+
+
+
+module lsq_shared_ram(
+  clk,
+  rst,
+  read_clkEn,
+  read_addr,
+  read_data,
+  write_addr,
+  write_data,
+  write_wen
+  );
+
+  localparam DATA_WIDTH=`lsqshare_width;
+  localparam ADDR_WIDTH=5;
+  localparam ADDR_COUNT=32;
+
+  input clk;
+  input rst;
+  input read_clkEn;
+  input [ADDR_WIDTH-1:0] read_addr;
+  output [DATA_WIDTH-1:0] read_data;
+  input [ADDR_WIDTH-1:0] write_addr;
+  input [DATA_WIDTH-1:0] write_data;
+  input write_wen;
+
+  reg [DATA_WIDTH-1:0] ram [ADDR_COUNT-1:0];
+  reg [ADDR_WIDTH-1:0] read_addr_reg;
+  
+  assign read_data=ram[read_addr_reg];
+
+  always @(posedge clk)
+    begin
+      if (rst) read_addr_reg<={ADDR_WIDTH{1'b0}};
+      else if (read_clkEn) read_addr_reg<=read_addr;
+      if (write_wen) ram[write_addr]<=write_data;
+    end
+
+endmodule
+
+
+module lsq_pend_ram(
+  clk,
+  rst,
+  read_clkEn,
+  read_addr,
+  read_data,
+  write_addr0,
+  write_data0,
+  write_wen0,
+  write_addr1,
+  write_data1,
+  write_wen1
+  );
+
+  localparam DATA_WIDTH=`lsqpend_width;
+  localparam ADDR_WIDTH=5;
+  localparam ADDR_COUNT=32;
+
+  input clk;
+  input rst;
+  input read_clkEn;
+  input [ADDR_WIDTH-1:0] read_addr;
+  output [DATA_WIDTH-1:0] read_data;
+  input [ADDR_WIDTH-1:0] write_addr0;
+  input [DATA_WIDTH-1:0] write_data0;
+  input write_wen0;
+  input [ADDR_WIDTH-1:0] write_addr1;
+  input [DATA_WIDTH-1:0] write_data1;
+  input write_wen1;
+
+  reg [DATA_WIDTH-1:0] ram [ADDR_COUNT-1:0];
+  reg [ADDR_WIDTH-1:0] read_addr_reg;
+  
+  assign read_data=ram[read_addr_reg];
+
+  always @(posedge clk)
+    begin
+      if (rst) read_addr_reg<={ADDR_WIDTH{1'b0}};
+      else if (read_clkEn) read_addr_reg<=read_addr;
+      if (write_wen0) ram[write_addr0]<=write_data0;
+      if (write_wen1) ram[write_addr1]<=write_data1;
+    end
+
+endmodule
+
+module lsq_req(
+  clk,
+  rst,
+  
+  stall,
+  doStall,
+  doRsPause,
+
+  except,
+  except_thread,
+
+  aStall,
+  readA_clkEn,
+  readA_rdy,
+  readA_rdyP,
+  readA_thr,
+  read0A_data,read0A_enOut,
+  read1A_data,read1A_enOut,
+  read2A_data,read2A_enOut,
+  read3A_data,read3A_enOut,
+  read4A_data,read4A_enOut,
+  read5A_data,read5A_enOut,
+  
+  readA_conflIn_l,
+  readA_conflInMSI,
+
+  read_data_shr,
+  write_thread_shr,
+  write_data_shr,
+  write_wen_shr,
+  write_addr_shr,
+
+  read0B_xdata,read0B_enOut,
+  read1B_xdata,read1B_enOut,
+  read2B_xdata,read2B_enOut,
+  read3B_xdata,read3B_enOut,
+  read4B_xdata,read4B_enOut,
+  read5B_xdata,read5B_enOut,
+  read_data_shrB,
+  readB_ldconfl,readB_smpconfl,
+  readB_rdy_en,readB_clkEn,
+
+  //loads 0-3, xdata +2 clocks
+  write0_addr,write0_data,write0_xdata,write0_thr,write0_wen,
+  write1_addr,write1_data,write1_xdata,write1_thr,write1_wen,
+  write2_addr,write2_data,write2_xdata,write2_thr,write2_wen,
+  write3_addr,write3_data,write3_xdata,write3_thr,write3_wen,
+  //stores 0-1
+  write4_addr,write4_data,write4_xdata,write4_thr,write4_wen,
+  write5_addr,write5_data,write5_xdata,write5_thr,write5_wen,
+  FU0Hit,FU1Hit,FU2Hit,FU3Hit,
+  smpc0,smpc1,smpc2,smpc3,
+  rsEn0,rsEn1,rsEn2,rsEn3
+  );
+
+  localparam DATA_WIDTH=`lsaddr_width;
+  localparam XDATA_WIDTH=`lsqxcept_width;
+  localparam YDATA_WIDTH=`lsqpend_width;
+  localparam SDATA_WIDTH=`lsqshare_width;
+  localparam ADDR_WIDTH=5;
+//  localparam ADDR1_COUNT=16;
+  localparam ADDR2_WIDTH=9;
+  localparam ADDR_COUNT=32;
+  
+  input clk;
+  input rst;
+
+  input stall;
+  output doStall;
+  output [1:0] doRsPause;
+
+  input except;
+  input except_thread;
+
+  input aStall,readA_clkEn;
+  output readA_rdy,readA_rdyP,readA_thr;
+  
+  output [DATA_WIDTH-1:0]  read0A_data;
+  output read0A_enOut;
+  output [DATA_WIDTH-1:0]  read1A_data;
+  output read1A_enOut;
+  output [DATA_WIDTH-1:0]  read2A_data;
+  output read2A_enOut;
+  output [DATA_WIDTH-1:0]  read3A_data;
+  output read3A_enOut;
+  output [DATA_WIDTH-1:0]  read4A_data;
+  output read4A_enOut;
+  output [DATA_WIDTH-1:0]  read5A_data;
+  output read5A_enOut;
+
+  input [5:0] readA_conflIn_l;
+  input [5:0] readA_conflInMSI;
+
+  output [SDATA_WIDTH-1:0] read_data_shr;
+  input write_thread_shr;
+  input  [SDATA_WIDTH-1:0] write_data_shr;
+  input write_wen_shr;
+  output reg [ADDR_WIDTH:0] write_addr_shr;
+
+  output [XDATA_WIDTH-1:0]  read0B_xdata;
+  output read0B_enOut;
+  output [XDATA_WIDTH-1:0]  read1B_xdata;
+  output read1B_enOut;
+  output [XDATA_WIDTH-1:0]  read2B_xdata;
+  output read2B_enOut;
+  output [XDATA_WIDTH-1:0]  read3B_xdata;
+  output read3B_enOut;
+  output [XDATA_WIDTH-1:0]  read4B_xdata;
+  output read4B_enOut;
+  output [XDATA_WIDTH-1:0]  read5B_xdata;
+  output read5B_enOut;
+  output [SDATA_WIDTH-1:0] read_data_shrB;
+  output [5:0] readB_ldconfl;
+  output [5:0] readB_smpconfl;
+  output readB_rdy_en;
+  input readB_clkEn;
+
+  input [ADDR2_WIDTH-1:0] write0_addr;
+  input [DATA_WIDTH-1:0] write0_data;
+  input [XDATA_WIDTH-3:0] write0_xdata;
+  input write0_thr;
+  input write0_wen;
+
+  input [ADDR2_WIDTH-1:0] write1_addr;
+  input [DATA_WIDTH-1:0] write1_data;
+  input [XDATA_WIDTH-3:0] write1_xdata;
+  input write1_thr;
+  input write1_wen;
+
+  input [ADDR2_WIDTH-1:0] write2_addr;
+  input [DATA_WIDTH-1:0] write2_data;
+  input [XDATA_WIDTH-3:0] write2_xdata;
+  input write2_thr;
+  input write2_wen;
+
+  input [ADDR2_WIDTH-1:0] write3_addr;
+  input [DATA_WIDTH-1:0] write3_data;
+  input [XDATA_WIDTH-3:0] write3_xdata;
+  input write3_thr;
+  input write3_wen;
+  
+  input [ADDR2_WIDTH-1:0] write4_addr;
+  input [DATA_WIDTH-1:0] write4_data;
+  input [XDATA_WIDTH-3:0] write4_xdata;
+  input write4_thr;
+  input write4_wen;
+
+  input [ADDR2_WIDTH-1:0] write5_addr;
+  input [DATA_WIDTH-1:0] write5_data;
+  input [XDATA_WIDTH-3:0] write5_xdata;
+  input write5_thr;
+  input write5_wen;
+  
+  input FU0Hit,FU1Hit,FU2Hit,FU3Hit;
+  input smpc0,smpc1,smpc2,smpc3;
+  input rsEn0,rsEn1,rsEn2,rsEn3;
+  
+  reg [ADDR_COUNT-1:0]  validA;
+  reg [ADDR_COUNT-1:0] validB;
+  reg [ADDR_COUNT-1:0]  validA_next;
+  reg [ADDR_COUNT-1:0] validB_next;
+
+  reg [ADDR_COUNT-1:0]  threadA;
+  reg [ADDR_COUNT-1:0] threadB;
+  reg [ADDR_COUNT-1:0]  threadA_next;
+  reg [ADDR_COUNT-1:0] threadB_next;
+  
+  reg [ADDR_WIDTH-1:0] readA_addr;
+  reg [ADDR_WIDTH-1:0] readB_addr;
+  reg [ADDR_WIDTH-1:0] readA_addr_reg;
+  wire [ADDR_COUNT-1:0] firstB;
+  reg [ADDR_COUNT-1:0] curB;
+  wire foundB;
+  wire [ADDR_COUNT-1:0] firstBN;
+  wire foundBN;
+  wire [ADDR_WIDTH-1:0] readB_addr_d;
+  reg onSameValidB;
+  wire [ADDR_COUNT-1:0] firstA;
+  reg [ADDR_COUNT-1:0] curA;
+  wire foundA;
+  wire [ADDR_COUNT-1:0] firstAN;
+  wire foundAN;
+  wire [ADDR_WIDTH-1:0] readA_addr_d;
+  reg onSameValidA;
+  
+  wire [SDATA_WIDTH-1:0] read_data_shrB_ram;
+  wire [SDATA_WIDTH-1:0] read_data_shr_ram;
+
+  wire [2:0] write4_aux;
+  wire [2:0] write5_aux;
+  
+  reg [ADDR2_WIDTH-1:0] write0_addr_reg;
+  reg [ADDR2_WIDTH-1:0] write1_addr_reg;
+  reg [ADDR2_WIDTH-1:0] write2_addr_reg;
+  reg [ADDR2_WIDTH-1:0] write3_addr_reg;
+  reg [ADDR2_WIDTH-1:0] write0_addr_reg2;
+  reg [ADDR2_WIDTH-1:0] write1_addr_reg2;
+  reg [ADDR2_WIDTH-1:0] write2_addr_reg2;
+  reg [ADDR2_WIDTH-1:0] write3_addr_reg2;
+  reg [XDATA_WIDTH-3:0] write0_xdata_reg;
+  reg [XDATA_WIDTH-3:0] write1_xdata_reg;
+  reg [XDATA_WIDTH-3:0] write2_xdata_reg;
+  reg [XDATA_WIDTH-3:0] write3_xdata_reg;
+  reg [XDATA_WIDTH-3:0] write0_xdata_reg2;
+  reg [XDATA_WIDTH-3:0] write1_xdata_reg2;
+  reg [XDATA_WIDTH-3:0] write2_xdata_reg2;
+  reg [XDATA_WIDTH-3:0] write3_xdata_reg2;
+
+  reg write0_thr_reg;
+  reg write1_thr_reg;
+  reg write2_thr_reg;
+  reg write3_thr_reg;
+  reg write0_thr_reg2;
+  reg write1_thr_reg2;
+  reg write2_thr_reg2;
+  reg write3_thr_reg2;
+
+  reg write0_wen_reg;
+  reg write1_wen_reg;
+  reg write2_wen_reg;
+  reg write3_wen_reg;
+  reg write0_wen_reg2;
+  reg write1_wen_reg2;
+  reg write2_wen_reg2;
+  reg write3_wen_reg2;
+  
+  reg [ADDR2_WIDTH-1:0] write4_addr_REGA;
+  reg [XDATA_WIDTH-3:0] write4_xdata_REGA;
+  reg write4_wen_REGA;
+  reg [2:0] write4_dly_REGA;
+  reg [ADDR2_WIDTH-1:0] write4_addr_REGB;
+  reg [XDATA_WIDTH-3:0] write4_xdata_REGB;
+  reg write4_wen_REGB;
+  reg [2:0] write4_dly_REGB;
+  reg [ADDR2_WIDTH-1:0] write4_addr_REGC;
+  reg [XDATA_WIDTH-3:0] write4_xdata_REGC;
+  reg write4_wen_REGC;
+  reg [2:0] write4_dly_REGC;
+  reg [ADDR2_WIDTH-1:0] write4_addr_REGD;
+  reg [XDATA_WIDTH-3:0] write4_xdata_REGD;
+  reg write4_wen_REGD;
+  reg [2:0] write4_dly_REGD;
+  reg [ADDR2_WIDTH-1:0] write5_addr_REGA;
+  reg [XDATA_WIDTH-3:0] write5_xdata_REGA;
+  reg write5_wen_REGA;
+  reg [2:0] write5_dly_REGA;
+  reg [ADDR2_WIDTH-1:0] write5_addr_REGB;
+  reg [XDATA_WIDTH-3:0] write5_xdata_REGB;
+  reg write5_wen_REGB;
+  reg [2:0] write5_dly_REGB;
+  reg [ADDR2_WIDTH-1:0] write5_addr_REGC;
+  reg [XDATA_WIDTH-3:0] write5_xdata_REGC;
+  reg write5_wen_REGC;
+  reg [2:0] write5_dly_REGC;
+  reg [ADDR2_WIDTH-1:0] write5_addr_REGD;
+  reg [XDATA_WIDTH-3:0] write5_xdata_REGD;
+  reg write5_wen_REGD;
+  reg [2:0] write5_dly_REGD;
+  reg [ADDR2_WIDTH-1:0] write4_addr_REG2;
+  reg [XDATA_WIDTH-3:0] write4_xdata_REG2;
+  reg write4_wen_REG2;
+  reg [2:0] write4_dly_REG2;
+  reg [ADDR2_WIDTH-1:0] write5_addr_REG2;
+  reg [XDATA_WIDTH-3:0] write5_xdata_REG2;
+  reg write5_wen_REG2;
+  reg [2:0] write5_dly_REG2;
+  reg [ADDR2_WIDTH-1:0] write4_addr_REG3;
+  reg [XDATA_WIDTH-3:0] write4_xdata_REG3;
+  reg write4_wen_REG3;
+  reg [2:0] write4_dly_REG3;
+  reg [ADDR2_WIDTH-1:0] write5_addr_REG3;
+  reg [XDATA_WIDTH-3:0] write5_xdata_REG3;
+  reg write5_wen_REG3;
+  reg [2:0] write5_dly_REG3;
+  reg [ADDR2_WIDTH-1:0] write4_addr_REG4;
+  reg [XDATA_WIDTH-3:0] write4_xdata_REG4;
+  reg write4_wen_REG4;
+  reg [2:0] write4_dly_REG4;
+  reg [ADDR2_WIDTH-1:0] write5_addr_REG4;
+  reg [XDATA_WIDTH-3:0] write5_xdata_REG4;
+  reg write5_wen_REG4;
+  reg [2:0] write5_dly_REG4;
+/*
+  reg [XDATA_WIDTH-2:0] write0_xdata_reg;
+  reg [XDATA_WIDTH-2:0] write1_xdata_reg;
+  reg [XDATA_WIDTH-2:0] write2_xdata_reg;
+  reg [XDATA_WIDTH-2:0] write3_xdata_reg;
+
+  reg [XDATA_WIDTH-2:0] write0_xdata_reg2;
+  reg [XDATA_WIDTH-2:0] write1_xdata_reg2;
+  reg [XDATA_WIDTH-2:0] write2_xdata_reg2;
+  reg [XDATA_WIDTH-2:0] write3_xdata_reg2;
+  */
+  wire enableA;
+  wire enableB;
+
+  reg flipA;
+  reg flipB;
+  reg flipA_reg;
+  reg flipA_REH;
+  reg [4:0] readA_addr_REH;
+
+  wire [5:0] readA_flip;
+  wire [5:0] readA_enItem;
+  reg [5:0] readA_enItem_reg;
+  wire [5:0] readA_enItemP;
+  reg [5:0] readA_enItemP_reg;
+  wire [5:0] readA_st;
+  reg [5:0] readA_st_reg;
+  wire [5:0] readA_flag;
+  reg [5:0] readA_flag_reg;
+  wire [5:0] readA_pconfl;
+  reg [5:0] readA_pconfl_reg;
+  wire readA_clkEn0;
+  reg readA_clkEn_reg,readA_clkEn0_reg;
+  wire [5:0] readA_unal;
+  reg  [5:0] readA_unal_reg;
+  
+  wire [5:0] readB_flip;
+  wire [5:0] readB_enItem;
+  wire [5:0] readB_ldconfl2;
+  wire readB_rdy;
+  reg readA_rdy_reg;
+  
+ // wire doStallB;
+  wire readB_clkEn;
+
+  wire [ADDR_WIDTH:0] write_addr_shr_next;
+
+
+  wire reenabA,reenabB;
+/*  reg toflipA,toflipB;*/
+  reg exceptA_fix;
+  reg exceptB_fix;
+
+  reg init;
+  reg [4:0] initCount;
+  wire [4:0] initCount_next;
+
+  wire [YDATA_WIDTH-1:0] read_dataY;
+  wire [YDATA_WIDTH-1:0] write_dataY;
+   
+  assign readA_rdyP=readA_clkEn0;
+   
+  assign readA_thr=threadA[readA_addr];
+ 
+  function [0:0] sz_unal; 
+    input [4:0] sz;
+    sz_unal=sz==5'd0 || sz==5'd1;
+  endfunction
+
+  function [5:0] up_to_first_zero;
+    input [5:0] arg;
+    begin
+        up_to_first_zero[0]=arg[0];
+        up_to_first_zero[1]=&arg[1:0];
+        up_to_first_zero[2]=&arg[2:0];
+        up_to_first_zero[3]=&arg[3:0];
+        up_to_first_zero[4]=&arg[4:0];
+        up_to_first_zero[5]=&arg[5:0];
+    end
+  endfunction
+  assign enableA=(curA&validA)!=0;
+  assign enableB=(curB&validB)!=0;
+
+  assign reenabA=~enableA&write_wen_shr&~stall&~doStall&~except;
+  assign reenabB=~enableB&write_wen_shr&~stall&~doStall&~except;
+  
+//  assign onSameValidA=onSameValidA0 | toflipA;
+//  assign onSameValidB=onSameValidB0 | toflipB;
+  assign read_data_shrB=read_data_shrB_ram|{SDATA_WIDTH{init}};
+  assign read_data_shr=read_data_shr_ram|{SDATA_WIDTH{init}};
+
+  assign readA_flip[0]=read0A_data[`lsaddr_odd_round];
+  assign readA_flip[1]=read1A_data[`lsaddr_odd_round];
+  assign readA_flip[2]=read2A_data[`lsaddr_odd_round];
+  assign readA_flip[3]=read3A_data[`lsaddr_odd_round];
+  assign readA_flip[4]=read4A_data[`lsaddr_odd_round];
+  assign readA_flip[5]=read5A_data[`lsaddr_odd_round];
+
+  assign readB_flip[0]=read0B_xdata[`lsqxcept_odd_round];
+  assign readB_flip[1]=read1B_xdata[`lsqxcept_odd_round];
+  assign readB_flip[2]=read2B_xdata[`lsqxcept_odd_round];
+  assign readB_flip[3]=read3B_xdata[`lsqxcept_odd_round];
+  assign readB_flip[4]=read4B_xdata[`lsqxcept_odd_round];
+  assign readB_flip[5]=read5B_xdata[`lsqxcept_odd_round];
+  
+  assign readA_enItem=read_data_shr[`lsqshare_used];
+  assign readB_enItem=read_data_shrB[`lsqshare_usedB];
+  
+  assign readA_rdy=(readA_flip&readA_enItem)==({6{flipA}}&readA_enItem) && enableA;
+  assign readB_rdy=(readB_flip&readB_enItem)==({6{flipB}}&readB_enItem) && enableB;
+  
+  assign readB_addr_d=(foundB|foundBN) ? 5'bz : write_addr_shr[4:0];
+  assign readA_addr_d=(foundA|foundAN) ? 5'bz : write_addr_shr[4:0];
+  
+ 
+  assign readA_clkEn0=(readA_flip[0]&readA_enItem[0])==flipA && enableA;
+ 
+  assign doStall=validA[write_addr_shr[4:0]] || validB[write_addr_shr[4:0]] ||
+    validA_next[write_addr_shr[4:0]] || validB_next[write_addr_shr[4:0]];
+  
+  assign doRsPause[0]=write4_wen_REGA|write4_wen_REGB|write4_wen_REGC;
+  assign doRsPause[1]=write5_wen_REGA|write5_wen_REGB|write5_wen_REGC;
+
+  assign {
+    read5B_enOut,
+    read4B_enOut,
+    read3B_enOut,
+    read2B_enOut,
+    read1B_enOut,
+    read0B_enOut}=up_to_first_zero(read_dataY[`lsqpend_retire] & {6{enableB&(read_dataY[`lsqpend_odd_rnd_partial]~^flipB)}} &
+    ((readB_flip ^~ {6{flipB}})|~readB_enItem|read_dataY[`lsqpend_pconfl])) & readB_enItem & ~read_dataY[`lsqpend_pconfl]; 
+    
+  assign readA_enItemP=up_to_first_zero((readA_flip ^~ {6{flipA}})&readA_enItem&{6{enableA}});
+  assign {read5A_enOut,read4A_enOut,read3A_enOut,read2A_enOut,read1A_enOut,read0A_enOut}=readA_enItemP;
+
+  assign write_dataY[`lsqpend_retire]=readA_enItemP_reg;
+  assign write_dataY[`lsqpend_pconfl]=readA_pconfl_reg;
+  assign write_dataY[`lsqpend_ldconfl]=readA_enItemP_reg & ~readA_st_reg & ~readA_flag_reg & ~readA_pconfl_reg & readA_conflIn_l;
+  assign write_dataY[`lsqpend_smpconfl]=readA_enItemP_reg & ~readA_st_reg & ~readA_flag_reg & ~readA_pconfl_reg & readA_conflInMSI;
+
+  assign write_dataY[`lsqpend_odd_round]=flipA_reg ~^ readA_rdy_reg;
+  assign write_dataY[`lsqpend_odd_rnd_partial]=flipA_reg ~^ readA_clkEn0_reg;
+     
+  assign readB_rdy_en=readB_rdy && read_dataY[`lsqpend_odd_round]==flipB;
+  assign readB_ldconfl=read_dataY[`lsqpend_ldconfl];
+  assign readB_smpconfl=read_dataY[`lsqpend_smpconfl]|{read5B_xdata[`lsqxcept_smpdep],
+    read4B_xdata[`lsqxcept_smpdep],read3B_xdata[`lsqxcept_smpdep],
+    read2B_xdata[`lsqxcept_smpdep],read1B_xdata[`lsqxcept_smpdep],
+    read0B_xdata[`lsqxcept_smpdep]};
+
+  assign write4_aux[2]=write4_addr[8:3]!={flipA,readA_addr} && write4_addr[8:3]!={flipA_REH,readA_addr_REH} && enableA;
+  assign write4_aux[1:0]={2{write4_addr[8:3]!={flipA,readA_addr} && enableA}};
+  assign write5_aux[2]=write5_addr[8:3]!={flipA,readA_addr} && write5_addr[8:3]!={flipA_REH,readA_addr_REH} && enableA;
+  assign write5_aux[1:0]={2{write5_addr[8:3]!={flipA,readA_addr} && enableA}};
+
+  assign readA_st={
+    read5A_data[`lsaddr_st],
+    read4A_data[`lsaddr_st],
+    read3A_data[`lsaddr_st],
+    read2A_data[`lsaddr_st],
+    read1A_data[`lsaddr_st],
+    read0A_data[`lsaddr_st]};
+      
+  assign readA_flag={
+    read5A_data[`lsaddr_flag],
+    read4A_data[`lsaddr_flag],
+    read3A_data[`lsaddr_flag],
+    read2A_data[`lsaddr_flag],
+    read1A_data[`lsaddr_flag],
+    read0A_data[`lsaddr_flag]};
+
+  assign readA_pconfl={
+    read5A_data[`lsaddr_pconfl],
+    read4A_data[`lsaddr_pconfl],
+    read3A_data[`lsaddr_pconfl],
+    read2A_data[`lsaddr_pconfl],
+    read1A_data[`lsaddr_pconfl],
+    read0A_data[`lsaddr_pconfl]};
+
+  assign readA_unal={
+    read5A_data[`lsaddr_low]!=2'b00 || sz_unal(read5A_data[`lsaddr_sz]),
+    read4A_data[`lsaddr_low]!=2'b00 || sz_unal(read4A_data[`lsaddr_sz]),
+    read3A_data[`lsaddr_low]!=2'b00 || sz_unal(read3A_data[`lsaddr_sz]),
+    read2A_data[`lsaddr_low]!=2'b00 || sz_unal(read2A_data[`lsaddr_sz]),
+    read1A_data[`lsaddr_low]!=2'b00 || sz_unal(read1A_data[`lsaddr_sz]),
+    read0A_data[`lsaddr_low]!=2'b00 || sz_unal(read0A_data[`lsaddr_sz])};
+  
+  generate
+      genvar k;
+      for(k=0;k<32;k=k+1) begin : addrB_gen
+          assign readB_addr_d=(firstB[k] || ~foundB & firstBN[k]) ? k : 5'bz;
+          assign readA_addr_d=(firstA[k] || ~foundA & firstAN[k]) ? k : 5'bz;
+      end
+  endgenerate
+  
+  lsq_req_block toA_mod(
+  clk,
+  rst,
+
+  readA_clkEn | reenabA,
+  readA_addr_d,
+  read0A_data,
+  read1A_data,
+  read2A_data,
+  read3A_data,
+  read4A_data,
+  read5A_data,
+
+
+  init ? {initCount,3'd0} : write0_addr[7:0],write0_data|{DATA_WIDTH{init}},rsEn0 || init,
+  init ? {initCount,3'd1} : write1_addr[7:0],write1_data|{DATA_WIDTH{init}},rsEn1 || init,
+  init ? {initCount,3'd2} : write2_addr[7:0],write2_data|{DATA_WIDTH{init}},rsEn2 || init,
+  init ? {initCount,3'd3} : write3_addr[7:0],write3_data|{DATA_WIDTH{init}},rsEn3 || init,
+  init ? {initCount,3'd4} : write4_addr[7:0],write4_data|{DATA_WIDTH{init}},write4_wen ||init,
+  init ? {initCount,3'd5} : write5_addr[7:0],write5_data|{DATA_WIDTH{init}},write5_wen ||init,
+  write_addr_shr[4:0],{DATA_WIDTH{~write_addr_shr[5]}},write_wen_shr&~doStall&~stall&~init&~except
+  );
+
+  lsq_ex_block toB_mod(
+  clk,
+  rst,
+
+  readB_clkEn | reenabB,
+  readB_addr_d,
+  read0B_xdata,
+  read1B_xdata,
+  read2B_xdata,
+  read3B_xdata,
+  read4B_xdata,
+  read5B_xdata,
+
+
+  init ? {initCount,3'd0} : write0_addr_reg2[7:0],{write0_addr_reg2[8],smpc0,write0_xdata_reg2}|{XDATA_WIDTH{init}},write0_wen_reg2 & FU0Hit || init,
+  init ? {initCount,3'd1} : write1_addr_reg2[7:0],{write1_addr_reg2[8],smpc1,write1_xdata_reg2}|{XDATA_WIDTH{init}},write1_wen_reg2 & FU1Hit || init,
+  init ? {initCount,3'd2} : write2_addr_reg2[7:0],{write2_addr_reg2[8],smpc2,write2_xdata_reg2}|{XDATA_WIDTH{init}},write2_wen_reg2 & FU2Hit || init,
+  init ? {initCount,3'd3} : write3_addr_reg2[7:0],{write3_addr_reg2[8],smpc3,write3_xdata_reg2}|{XDATA_WIDTH{init}},write3_wen_reg2 & FU3Hit || init,
+  init ? {initCount,3'd4} : write4_addr_REG4[7:0],{write4_addr_REG4[8],1'b0,write4_xdata_REG4}|{XDATA_WIDTH{init}},write4_wen_REG4 || init,
+  init ? {initCount,3'd5} : write5_addr_REG4[7:0],{write5_addr_REG4[8],1'b0,write5_xdata_REG4}|{XDATA_WIDTH{init}},write5_wen_REG4 || init,
+  write_addr_shr[4:0],{XDATA_WIDTH{~write_addr_shr[5]}},write_wen_shr&~doStall&~stall&~init&~except
+  );
+
+  lsq_pend_ram pend_mod(
+  clk,
+  rst,
+  readB_clkEn | reenabB,
+  readB_addr_d,
+  read_dataY,
+  init ? initCount : readA_addr_reg,
+  write_dataY|{YDATA_WIDTH{init}},
+  readA_clkEn_reg||readA_clkEn0_reg||init,
+  write_addr_shr[4:0],{YDATA_WIDTH{~write_addr_shr[5]}},write_wen_shr&~doStall&~stall&~init&~except
+  );
+  
+  lsq_shared_ram shrA_mod(
+  clk,
+  rst,
+  readA_clkEn | reenabA,
+  readA_addr_d,
+  read_data_shr_ram,
+  init ? initCount : write_addr_shr[4:0],
+  write_data_shr|{SDATA_WIDTH{init}},
+  write_wen_shr&~doStall&~stall&~except||init
+  );
+
+  lsq_shared_ram shrB_mod(
+  clk,
+  rst,
+  readB_clkEn | reenabB,
+  readB_addr_d,
+  read_data_shrB_ram,
+  init ? initCount : write_addr_shr[4:0],
+  write_data_shr|{SDATA_WIDTH{init}},
+  write_wen_shr&~doStall&~stall&~except||init
+  );
+  
+  bit_find_first_bit #(ADDR_COUNT) lastB_mod(validB&~curB,firstB,foundB);
+  bit_find_first_bit #(ADDR_COUNT) lastA_mod(validA&~curA,firstA,foundA);
+
+  bit_find_first_bit #(ADDR_COUNT) lastBN_mod(validB_next,firstBN,foundBN);
+  bit_find_first_bit #(ADDR_COUNT) lastAN_mod(validA_next,firstAN,foundAN);
+
+//  get_carry #(5) onNextCmpB_mod(write_addr_shr[4:0],~readB_addr,1'b1,onSameValidB0);
+//  get_carry #(5) onNextCmpA_mod(write_addr_shr[4:0],~readA_addr,1'b1,onSameValidA0);
+  
+  adder_inc #(6) wrAdd_mod(write_addr_shr,write_addr_shr_next,1'b1,);
+
+  adder_inc #(5) initAdd_mod(initCount,initCount_next,1'b1,);
+
+  always @(posedge clk) begin
+      if (&read0A_data && read0A_enOut) $display("SS0");
+      if (&read1A_data && read1A_enOut) $display("SS1");
+      if (&read2A_data && read2A_enOut) $display("SS2");
+      if (&read3A_data && read3A_enOut) $display("SS3");
+      if (&read4A_data && read4A_enOut) $display("SS4");
+      if (&read5A_data && read5A_enOut) $display("SS5");
+
+      if (~|read0A_data && read0A_enOut) $display("Sx0");
+      if (~|read1A_data && read1A_enOut) $display("Sx1");
+      if (~|read2A_data && read2A_enOut) $display("Sx2");
+      if (~|read3A_data && read3A_enOut) $display("Sx3");
+      if (~|read4A_data && read4A_enOut) $display("Sx4");
+      if (~|read5A_data && read5A_enOut) $display("Sx5");
+
+      if (rst) begin
+	  write4_addr_REGA=0;
+	  write5_addr_REGA=0;
+	  write4_addr_REGB=0;
+	  write5_addr_REGB=0;
+	  write4_addr_REGC=0;
+	  write5_addr_REGC=0;
+	  write4_addr_REGD=0;
+	  write5_addr_REGD=0;
+	  write4_addr_REG2<=0;
+	  write5_addr_REG2<=0;
+	  write4_addr_REG3<=0;
+	  write5_addr_REG3<=0;
+	  write4_addr_REG4<=0;
+	  write5_addr_REG4<=0;
+	  write4_xdata_REGA=0;
+	  write5_xdata_REGA=0;
+	  write4_xdata_REGB=0;
+	  write5_xdata_REGB=0;
+	  write4_xdata_REGC=0;
+	  write5_xdata_REGC=0;
+	  write4_xdata_REGD=0;
+	  write5_xdata_REGD=0;
+	  write4_xdata_REG2<=0;
+	  write5_xdata_REG2<=0;
+	  write4_xdata_REG3<=0;
+	  write5_xdata_REG3<=0;
+	  write4_xdata_REG4<=0;
+	  write5_xdata_REG4<=0;
+	  write4_wen_REGA=0;
+	  write5_wen_REGA=0;
+	  write4_wen_REGB=0;
+	  write5_wen_REGB=0;
+	  write4_wen_REGC=0;
+	  write5_wen_REGC=0;
+	  write4_wen_REGD=0;
+	  write5_wen_REGD=0;
+	  write4_dly_REGA=0;
+	  write5_dly_REGA=0;
+	  write4_dly_REGB=0;
+	  write5_dly_REGB=0;
+	  write4_dly_REGC=0;
+	  write5_dly_REGC=0;
+	  write4_dly_REGD=0;
+	  write5_dly_REGD=0;
+	  write4_wen_REG2<=0;
+	  write5_wen_REG2<=0;
+	  write4_wen_REG3<=0;
+	  write5_wen_REG3<=0;
+	  write4_wen_REG4<=0;
+	  write5_wen_REG4<=0;
+      readA_addr_REH<=0;
+      flipA_REH<=0;
+      end else if (~~~aStall) begin
+          if (write4_wen_REGD) begin 
+	          write4_addr_REG2<=write4_addr_REGD;
+	          write4_xdata_REG2<=write4_xdata_REGD;
+        	  write4_wen_REG2<=write4_wen_REGD;
+        	  write4_dly_REG2<={write4_dly_REGD[1:0],1'b1};
+          end else if (write4_wen_REGC) begin 
+	          write4_addr_REG2<=write4_addr_REGC;
+	          write4_xdata_REG2<=write4_xdata_REGC;
+        	  write4_wen_REG2<=write4_wen_REGC;
+	          write4_wen_REGC=1'b0;
+        	  write4_dly_REG2<={write4_dly_REGC[1:0],1'b1};
+          end else if (write4_wen_REGB) begin 
+	          write4_addr_REG2<=write4_addr_REGB;
+	          write4_xdata_REG2<=write4_xdata_REGB;
+        	  write4_wen_REG2<=write4_wen_REGB;
+	          write4_wen_REGB=1'b0;
+        	  write4_dly_REG2<={write4_dly_REGB[1:0],1'b1};
+          end else if (write4_wen_REGA) begin 
+	          write4_addr_REG2<=write4_addr_REGA;
+	          write4_xdata_REG2<=write4_xdata_REGA;
+        	  write4_wen_REG2<=write4_wen_REGA;
+     	      write4_wen_REGA=1'b0;
+        	  write4_dly_REG2<={write4_dly_REGA[1:0],1'b1};
+          end else begin
+	          write4_addr_REG2<=write4_addr;
+	          write4_xdata_REG2<=write4_xdata;
+        	  write4_wen_REG2<=write4_wen;
+        	  write4_dly_REG2<=3'b1|write4_aux;
+          end
+          if (write5_wen_REGD) begin 
+	          write5_addr_REG2<=write5_addr_REGD;
+	          write5_xdata_REG2<=write5_xdata_REGD;
+	          write5_wen_REG2<=write5_wen_REGD;
+        	  write5_dly_REG2<={write5_dly_REGD[1:0],1'b1};
+          end else if (write5_wen_REGC) begin 
+	          write5_addr_REG2<=write5_addr_REGC;
+	          write5_xdata_REG2<=write5_xdata_REGC;
+	          write5_wen_REG2<=write5_wen_REGC;
+           	  write5_wen_REGC=1'b0;
+        	  write5_dly_REG2<={write5_dly_REGC[1:0],1'b1};
+          end else if (write5_wen_REGB) begin 
+	          write5_addr_REG2<=write5_addr_REGB;
+	          write5_xdata_REG2<=write5_xdata_REGB;
+	          write5_wen_REG2<=write5_wen_REGB;
+           	  write5_wen_REGB=1'b0;
+        	  write5_dly_REG2<={write5_dly_REGB[1:0],1'b1};
+          end else if (write5_wen_REGA) begin 
+	          write5_addr_REG2<=write5_addr_REGA;
+	          write5_xdata_REG2<=write5_xdata_REGA;
+	          write5_wen_REG2<=write5_wen_REGA;
+    	      write5_wen_REGA=1'b0;
+        	  write5_dly_REG2<={write5_dly_REGA[1:0],1'b1};
+          end else begin
+	          write5_addr_REG2<=write5_addr;
+	          write5_xdata_REG2<=write5_xdata;
+	          write5_wen_REG2<=write5_wen;
+        	  write5_dly_REG2<=3'b1|write5_aux;
+          end
+
+
+	      write4_addr_REG3<=write4_addr_REG2;
+	      write5_addr_REG3<=write5_addr_REG2;
+	      write4_addr_REG4<=write4_addr_REG3;
+	      write5_addr_REG4<=write5_addr_REG3;
+	      write4_xdata_REG3<=write4_xdata_REG2;
+	      write5_xdata_REG3<=write5_xdata_REG2;
+	      write4_xdata_REG4<=write4_xdata_REG3;
+	      write5_xdata_REG4<=write5_xdata_REG3;
+      	  write4_dly_REG3<={write4_dly_REG2[1:0],1'b1};
+      	  write5_dly_REG3<={write5_dly_REG2[1:0],1'b1};
+      	  write4_dly_REG4<={write4_dly_REG3[1:0],1'b1};
+      	  write5_dly_REG4<={write5_dly_REG3[1:0],1'b1};
+	      write4_wen_REGD=1'b0;
+	      write5_wen_REGD=1'b0;
+	      write4_wen_REG3<=write4_wen_REG2;
+	      write5_wen_REG3<=write5_wen_REG2;
+	      write4_wen_REG4<=write4_wen_REG3;
+	      write5_wen_REG4<=write5_wen_REG3;
+	      if (write4_wen && doRsPause[0]) begin
+    	      write4_addr_REGD=write4_addr_REGC;
+	          write4_xdata_REGD=write4_xdata_REGC;
+	          write4_wen_REGD=write4_wen_REGC;
+    	      write4_addr_REGC=write4_addr_REGB;
+	          write4_xdata_REGC=write4_xdata_REGB;
+	          write4_wen_REGC=write4_wen_REGB;
+    	      write4_addr_REGB=write4_addr_REGA;
+	          write4_xdata_REGB=write4_xdata_REGA;
+	          write4_wen_REGB=write4_wen_REGA;
+    	      write4_addr_REGA=write4_addr;
+	          write4_xdata_REGA=write4_xdata;
+	          write4_wen_REGA=write4_wen;
+              write4_dly_REGD={write4_dly_REGC[1:0],1'b1};
+      //        write5_dly_REGD={write5_dly_REGC[1:0],1'b1};
+              write4_dly_REGC={write4_dly_REGB[1:0],1'b1};
+        //      write5_dly_REGC={write5_dly_REGB[1:0],1'b1};
+              write4_dly_REGB={write4_dly_REGA[1:0],1'b1};
+          //    write5_dly_REGB={write5_dly_REGA[1:0],1'b1};
+              write4_dly_REGA=3'b1|write4_aux;
+          end else if (write4_wen) begin
+              write4_dly_REGD={write4_dly_REGD[1:0],1'b1};
+              write4_dly_REGC={write4_dly_REGC[1:0],1'b1};
+              write4_dly_REGB={write4_dly_REGB[1:0],1'b1};
+              write4_dly_REGA={write4_dly_REGA[1:0],1'b1};
+          end
+	      if (write5_wen && doRsPause[1]) begin
+    	      write5_addr_REGD=write5_addr_REGC;
+	          write5_xdata_REGD=write5_xdata_REGC;
+	          write5_wen_REGD=write5_wen_REGC;
+    	      write5_addr_REGC=write5_addr_REGB;
+	          write5_xdata_REGC=write5_xdata_REGB;
+	          write5_wen_REGC=write5_wen_REGB;
+    	      write5_addr_REGB=write5_addr_REGA;
+	          write5_xdata_REGB=write5_xdata_REGA;
+	          write5_wen_REGB=write5_wen_REGA;
+	          write5_addr_REGA=write5_addr;
+    	      write5_xdata_REGA=write5_xdata;
+	          write5_wen_REGA=write5_wen;
+//              write4_dly_REGD={write4_dly_REGC[1:0],1'b1};
+              write5_dly_REGD={write5_dly_REGC[1:0],1'b1};
+  //            write4_dly_REGC={write4_dly_REGB[1:0],1'b1};
+              write5_dly_REGC={write5_dly_REGB[1:0],1'b1};
+    //          write4_dly_REGB={write4_dly_REGA[1:0],1'b1};
+              write5_dly_REGB={write5_dly_REGA[1:0],1'b1};
+              write5_dly_REGA=3'b1|write5_aux;
+          end else if (write5_wen) begin
+              write5_dly_REGD={write5_dly_REGD[1:0],1'b1};
+              write5_dly_REGC={write5_dly_REGC[1:0],1'b1};
+              write5_dly_REGB={write5_dly_REGB[1:0],1'b1};
+              write5_dly_REGA={write5_dly_REGA[1:0],1'b1};
+          end
+          readA_addr_REH<=readA_addr;
+          flipA_REH<=flipA;
+      end else begin
+	      if (write4_wen) begin
+    	      write4_addr_REGD=write4_addr_REGC;
+	          write4_xdata_REGD=write4_xdata_REGC;
+	          write4_wen_REGD=write4_wen_REGC;
+	          write4_dly_REGD=write4_dly_REGC;
+    	      write4_addr_REGC=write4_addr_REGB;
+	          write4_xdata_REGC=write4_xdata_REGB;
+	          write4_wen_REGC=write4_wen_REGB;
+	          write4_dly_REGC=write4_dly_REGB;
+    	      write4_addr_REGB=write4_addr_REGA;
+	          write4_xdata_REGB=write4_xdata_REGA;
+	          write4_wen_REGB=write4_wen_REGA;
+	          write4_dly_REGB=write4_dly_REGA;
+    	      write4_addr_REGA=write4_addr;
+	          write4_xdata_REGA=write4_xdata;
+	          write4_wen_REGA=write4_wen;
+	          write4_dly_REGA=3'b0;
+          end
+	      if (write5_wen) begin
+    	      write5_addr_REGD=write5_addr_REGC;
+	          write5_xdata_REGD=write5_xdata_REGC;
+	          write5_wen_REGD=write5_wen_REGC;
+	          write5_dly_REGD=write5_dly_REGC;
+    	      write5_addr_REGC=write5_addr_REGB;
+	          write5_xdata_REGC=write5_xdata_REGB;
+	          write5_wen_REGC=write5_wen_REGB;
+	          write5_dly_REGC=write5_dly_REGB;
+    	      write5_addr_REGB=write5_addr_REGA;
+	          write5_xdata_REGB=write5_xdata_REGA;
+	          write5_wen_REGB=write5_wen_REGA;
+	          write5_dly_REGB=write5_dly_REGA;
+	          write5_addr_REGA=write5_addr;
+    	      write5_xdata_REGA=write5_xdata;
+	          write5_wen_REGA=write5_wen;
+	          write5_dly_REGA=3'b0;
+          end
+          if (write4_wen_REG4 && write4_dly_REG4[2]) begin
+              write4_addr_REG3<=write4_addr_REG2;
+	          write4_addr_REG4<=write4_addr_REG3;
+	          write4_xdata_REG3<=write4_xdata_REG2;
+	          write4_xdata_REG4<=write4_xdata_REG3;
+      	      write4_dly_REG3<=write4_dly_REG2;
+      	      write4_dly_REG4<=write4_dly_REG3;
+	          write4_wen_REG2<=1'b0;
+	          write4_wen_REG3<=write4_wen_REG2;
+   	          write4_wen_REG4<=write4_wen_REG3;
+          end
+          if (write5_wen_REG4 && write5_dly_REG4[2]) begin
+              write5_addr_REG3<=write5_addr_REG2;
+	          write5_addr_REG4<=write5_addr_REG3;
+	          write5_xdata_REG3<=write5_xdata_REG2;
+	          write5_xdata_REG4<=write5_xdata_REG3;
+      	      write5_dly_REG3<=write5_dly_REG2;
+      	      write5_dly_REG4<=write5_dly_REG3;
+	          write5_wen_REG2<=1'b0;
+	          write5_wen_REG3<=write5_wen_REG2;
+   	          write5_wen_REG4<=write5_wen_REG3;
+          end
+      end
+
+      if (rst) begin
+          validB=32'b0;
+          validB_next=32'b0;
+
+          validA=32'b0;
+          validA_next=32'b0;
+
+          curA=32'b0;
+          curB=32'b0;
+
+	  write0_addr_reg<={ADDR2_WIDTH{1'B0}};
+	  write1_addr_reg<={ADDR2_WIDTH{1'B0}};
+	  write2_addr_reg<={ADDR2_WIDTH{1'B0}};
+	  write3_addr_reg<={ADDR2_WIDTH{1'B0}};
+	  write0_addr_reg2<={ADDR2_WIDTH{1'B0}};
+	  write1_addr_reg2<={ADDR2_WIDTH{1'B0}};
+	  write2_addr_reg2<={ADDR2_WIDTH{1'B0}};
+	  write3_addr_reg2<={ADDR2_WIDTH{1'B0}};
+	  write0_xdata_reg<={XDATA_WIDTH-2{1'B0}};
+	  write1_xdata_reg<={XDATA_WIDTH-2{1'B0}};
+	  write2_xdata_reg<={XDATA_WIDTH-2{1'B0}};
+	  write3_xdata_reg<={XDATA_WIDTH-2{1'B0}};
+	  write0_xdata_reg2<={XDATA_WIDTH-2{1'B0}};
+	  write1_xdata_reg2<={XDATA_WIDTH-2{1'B0}};
+	  write2_xdata_reg2<={XDATA_WIDTH-2{1'B0}};
+	  write3_xdata_reg2<={XDATA_WIDTH-2{1'B0}};
+	  write0_thr_reg<=1'b0;
+      write1_thr_reg<=1'b0;
+      write2_thr_reg<=1'b0;
+      write3_thr_reg<=1'b0;
+      write0_thr_reg2<=1'b0;
+      write1_thr_reg2<=1'b0;
+      write2_thr_reg2<=1'b0;
+      write3_thr_reg2<=1'b0;
+	  write0_wen_reg<=1'b0;
+	  write1_wen_reg<=1'b0;
+	  write2_wen_reg<=1'b0;
+	  write3_wen_reg<=1'b0;
+	  write0_wen_reg2<=1'b0;
+	  write1_wen_reg2<=1'b0;
+	  write2_wen_reg2<=1'b0;
+	  write3_wen_reg2<=1'b0;
+	  //write0_xdata_reg<={XDATA_WIDTH{1'B0}};
+	 // write1_xdata_reg<={XDATA_WIDTH{1'B0}};
+	 // write2_xdata_reg<={XDATA_WIDTH{1'B0}};
+	 // write3_xdata_reg<={XDATA_WIDTH{1'B0}};
+	 // write0_xdata_reg2<={XDATA_WIDTH{1'B0}};
+	 // write1_xdata_reg2<={XDATA_WIDTH{1'B0}};
+	 // write2_xdata_reg2<={XDATA_WIDTH{1'B0}};
+	 // write3_xdata_reg2<={XDATA_WIDTH{1'B0}};
+	  flipA_reg<=1'b0;
+	  readA_rdy_reg<=1'b0;
+	  write_addr_shr<=6'd0;
+	  threadA<=32'b0;
+	  threadB<=32'b0;
+	  threadA_next<=32'b0;
+	  threadB_next<=32'b0;
+	  readA_addr<=5'd0;
+	  readB_addr<=5'd0;
+	  readA_addr_reg<=5'd0;
+	  flipA<=1'b0;
+	  flipB<=1'b0;
+          exceptA_fix<=1'b0;
+          exceptB_fix<=1'b0;
+	  readA_enItem_reg<=6'b0;
+	  readA_enItemP_reg<=6'b0;
+	  readA_st_reg<=6'b0;
+	  readA_flag_reg<=6'b0;
+	  readA_pconfl_reg<=6'b0;
+	  readA_unal_reg<=6'b0;
+	  readA_clkEn_reg<=1'b0;
+          readA_clkEn0_reg<=1'b0;
+      end else begin
+          
+        //  if (readA_clkEn && toFlipA) begin flipA<=~flipA; toFlipA<=1'b0; end
+        //  if (readB_clkEn && toFlipB) begin flipB<=~flipB; toFlipB<=1'b0; end
+
+          if (reenabA) begin validA=validA&~curA; curA=firstA;  exceptA_fix<=1'b0; onSameValidA<=1'b1; end 
+          if (reenabB) begin validB=validB&~curB; curB=firstB;  exceptB_fix<=1'b0; onSameValidB<=1'b1; end 
+          if (foundB && readB_clkEn) begin
+              validB=validB & ~curB;
+              curB=firstB;
+          end else if (readB_clkEn) begin //no new entries
+              validB=validB & ~curB;
+              curB=32'b0;
+              if (~onSameValidB) begin
+                  validB=validB_next;
+                  validB_next=32'b0;
+                  //threadB<=threadB_next;
+                  flipB<=~flipB;
+                  onSameValidB<=1'b1;
+                  curB=firstBN;
+              end
+          end
+          
+          if (foundA && readA_clkEn) begin
+              validA=validA & ~curA;
+              curA=firstA;
+          end else if (readA_clkEn) begin //no new entries
+              validA=validA & ~curA;
+              curA=32'b0;
+              if (~onSameValidA) begin
+                  validA=validA_next;
+                  validA_next=32'b0;
+                //  threadA<=threadA_next;
+                  flipA<=~flipA;
+                  onSameValidA<=1'b1;
+                  curA=firstAN;
+              end
+          end
+          
+          if (write_wen_shr & ~doStall & ~stall & ~except) begin
+
+              if (validA!=0 && write_addr_shr[4:0]==5'd0) begin
+                  onSameValidA<=1'b0;
+              end
+              if (validB!=0 && write_addr_shr[4:0]==5'd0) begin
+                  onSameValidB<=1'b0;
+              end
+
+              if ((validA!=0 && write_addr_shr[4:0]==5'd0)||~onSameValidA&~reenabA&~(readA_clkEn & ~foundA)) begin
+                  validA_next[write_addr_shr[4:0]]=1'b1;
+              end else begin
+                  validA[write_addr_shr[4:0]]=1'b1;
+              end
+              
+              if ((validB!=0 && write_addr_shr[4:0]==5'd0)||~onSameValidB&~reenabB&~(readB_clkEn & ~foundB)) begin
+                  validB_next[write_addr_shr[4:0]]=1'b1;
+              end else begin
+                  validB[write_addr_shr[4:0]]=1'b1;
+              end
+
+              threadB[write_addr_shr[4:0]]<=write_thread_shr;
+              threadA[write_addr_shr[4:0]]<=write_thread_shr;
+
+              if (curA==0) curA[write_addr_shr[4:0]]=1'b1;
+              if (curB==0) curB[write_addr_shr[4:0]]=1'b1;
+
+
+	      
+	      if (!except) write_addr_shr<=write_addr_shr_next;
+          end
+	 //up to here 
+         // exceptA_fix<=1'b0;
+         // exceptB_fix<=1'b0;
+	  if (except) begin
+//	      toflipA<=1'b0;
+//	      toflipB<=1'b0;
+              validA=32'b0;
+	      validB=32'b0;
+	      validA_next=32'b0;
+	      validB_next=32'b0;
+              curA=32'b0;
+              exceptA_fix<=1'b0;
+              flipA<=write_addr_shr[5];
+              curB=32'b0;
+              exceptB_fix<=1'b0;
+              flipB<=write_addr_shr[5];
+              onSameValidA<=1'b1;
+              onSameValidB<=1'b1;
+	  end
+	  
+	  if (readA_clkEn || reenabA) readA_addr<=readA_addr_d;
+	  if (readB_clkEn || reenabB) readB_addr<=readB_addr_d;
+	  if (!aStall) readA_addr_reg<=readA_addr;
+
+	  
+	  write0_addr_reg<=write0_addr;
+	  write1_addr_reg<=write1_addr;
+	  write2_addr_reg<=write2_addr;
+	  write3_addr_reg<=write3_addr;
+	  write0_addr_reg2<=write0_addr_reg;
+	  write1_addr_reg2<=write1_addr_reg;
+	  write2_addr_reg2<=write2_addr_reg;
+	  write3_addr_reg2<=write3_addr_reg;
+	  write0_xdata_reg<=write0_xdata;
+	  write1_xdata_reg<=write1_xdata;
+	  write2_xdata_reg<=write2_xdata;
+	  write3_xdata_reg<=write3_xdata;
+	  write0_xdata_reg2<=write0_xdata_reg;
+	  write1_xdata_reg2<=write1_xdata_reg;
+	  write2_xdata_reg2<=write2_xdata_reg;
+	  write3_xdata_reg2<=write3_xdata_reg;
+	  write0_thr_reg<=write0_thr;
+	  write1_thr_reg<=write1_thr;
+	  write2_thr_reg<=write2_thr;
+	  write3_thr_reg<=write3_thr;
+	  write0_thr_reg2<=write0_thr_reg;
+	  write1_thr_reg2<=write1_thr_reg;
+	  write2_thr_reg2<=write2_thr_reg;
+	  write3_thr_reg2<=write3_thr_reg;
+	  write0_wen_reg<=write0_wen & ~(except && except_thread==write0_thr);
+	  write1_wen_reg<=write1_wen & ~(except && except_thread==write1_thr);
+	  write2_wen_reg<=write2_wen & ~(except && except_thread==write2_thr);
+	  write3_wen_reg<=write3_wen & ~(except && except_thread==write3_thr);
+	  write0_wen_reg2<=write0_wen_reg & ~(except && except_thread==write0_thr_reg);
+	  write1_wen_reg2<=write1_wen_reg & ~(except && except_thread==write1_thr_reg);
+	  write2_wen_reg2<=write2_wen_reg & ~(except && except_thread==write2_thr_reg);
+	  write3_wen_reg2<=write3_wen_reg & ~(except && except_thread==write3_thr_reg);
+	 // write0_xdata_reg<=write0_xdata;
+	 // write1_xdata_reg<=write1_xdata;
+	 // write2_xdata_reg<=write2_xdata;
+	 // write3_xdata_reg<=write3_xdata;
+	 // write0_xdata_reg2<=write0_xdata_reg;
+         // write1_xdata_reg2<=write1_xdata_reg;
+         // write2_xdata_reg2<=write2_xdata_reg;
+         // write3_xdata_reg2<=write3_xdata_reg;
+          if (readA_clkEn||readA_clkEn0&~aStall) begin
+	      flipA_reg<=flipA;
+	      readA_rdy_reg<=readA_rdy;
+	      readA_enItem_reg<=readA_enItem;
+	      readA_enItemP_reg<=readA_enItemP;
+              readA_st_reg<=readA_st;
+              readA_flag_reg<=readA_flag;
+              readA_pconfl_reg<=readA_pconfl;
+              readA_unal_reg<=readA_pconfl;
+           end
+           readA_clkEn_reg<=readA_clkEn;
+           if (!aStall) readA_clkEn0_reg<=readA_clkEn0;
+           else readA_clkEn0_reg<=1'b0;
+      end
+      if (rst) begin
+	  init<=1'b1;
+	  initCount<=5'd0;
+      end else if (init) begin
+	  initCount<=initCount_next;
+	  if (initCount==5'h1f) init<=1'b0;
+      end
+  end  
+
+endmodule
+
