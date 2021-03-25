@@ -1194,6 +1194,37 @@ module smallInstr_decoder(
       endcase
       //perror[9]=instr[14];
       
+      trien[27]=isFpFma;//non shift reg
+      prT[27]=rD;
+      prA[27]=rS1;
+      prB[27]=rS2;
+      prC[27]=instr[31:27];
+      prT_useF[27]=instr[25];
+      prA_useF[27]=instr[25];
+      prB_useF[27]=instr[25];
+      prC_useF[27]=instr[25];
+      prT_useV[27]=~instr[25];
+      prA_useV[27]=~instr[25];
+      prB_useV[27]=~instr[25];
+      prC_useV[27]=~instr[25];
+      prmode[27]=instr[14:12];
+      pchainalu[27]=1'b1;
+      pchainport[27]=PORT_FADD;
+      pport[27]=PORT_FMUL;
+      puseRs[27]=1'b1;
+      pflags_write[27]=1'b0;
+      prAlloc[27]=1'b1;
+      case({instr[3:2],instr[26:25]})
+          4'b0000: begin poperation[27]=`fop_mulXS; popchain[27]=`fop_addXS; end
+          4'b1000: begin poperation[27]=`fop_nmulXS; popchain[27]=`fop_addXS; end
+          4'b0100: begin poperation[27]=`fop_mulXS; popchain[27]=`fop_subXS; end
+          4'b1100: begin poperation[27]=`fop_nmulXS; popchain[27]=`fop_subXS; end
+          4'b0001: begin poperation[27]=`fop_mulXD; popchain[27]=`fop_addXD; end
+          4'b1001: begin poperation[27]=`fop_nmulXD; popchain[27]=`fop_addXD; end
+          4'b0101: begin poperation[27]=`fop_mulXD; popchain[27]=`fop_subXD; end
+          4'b1101: begin poperation[27]=`fop_nmulXD; popchain[27]=`fop_subXD; end
+	  default: perror[27]=1'b1;
+      endcase
       
       trien[1]=~magic[0] & subIsMovOrExt;
       puseBConst[1]=opcode_sub==6'h29;
