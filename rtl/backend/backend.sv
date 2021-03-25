@@ -32,6 +32,9 @@ module backend(
   MSI_swap_want,
   MSI_swap_repl,
 
+  dc_expun_addr,
+  dc_expun_en,
+
   rs0i0_rA,rs0i0_rA_use,rs0i0_rA_useF,rs0i0_rA_isV,rs0i0_rA_isAnyV,
   rs0i0_rB,rs0i0_rB_use,rs0i0_rB_useF,rs0i0_rB_isV,rs0i0_rB_isAnyV,rs0i0_useBConst,
   rs0i0_rT,rs0i0_rT_use,rs0i0_rT_useF,rs0i0_rT_isV, 
@@ -421,6 +424,9 @@ module backend(
   input MSI_exp_en;
   input MSI_swap_want;
   input MSI_swap_repl;
+  
+  output [36:0] dc_expun_addr;
+  output dc_expun_en;
 
   input [IN_REG_WIDTH-1:0] rs0i0_rA;
   input rs0i0_rA_use;
@@ -5146,7 +5152,7 @@ dcache1 L1D_mod(
     .read_sz3(lsr_wr_data[3][`lsaddr_sz]),
   .read_bankNoRead(dc_bankNone),
   .read_invalidate(1'b0),
-  .expun_addr(),
+  .expun_addr(dc_expun_addr),
   .expun_en(),
   .insert_from_ram(),//no need to implement. was going to be spectre protection
   .write_addrE0(st0_adata[`lsaddr_addrE]),

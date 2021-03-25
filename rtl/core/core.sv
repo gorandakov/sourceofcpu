@@ -746,6 +746,10 @@ module heptane_core(
   reg  MSI_expAddr_en_reg;
 //  wire MSI_swap_reply;
 
+  wire [36:0] expun_bk_addr;
+  wire expun_bk_en;
+  //wire [36:0] expun_fr_addr;
+  //wire expun_fr_en;
   wire wrStall;
 //  reg ret_ebx_en;
 //  reg [63:0] ret_ebx_data;
@@ -924,7 +928,11 @@ module heptane_core(
   //.read_expAddr(L1_expAddr),
   .read_expAddr_en(L1_expAddr_en),
   .imm_any(dc2_rhitExpA0),
-  .read_expAddrOut()
+  .read_expAddrOut(),
+  .expun_cc_addr(expun_fr_addr),
+  .expun_cc_en(expun_fr_en),
+  .expun_dc_addr(expun_bk_addr),
+  .expun_dc_en(expun_bk_en)
   );
   dcache2_block #(1) dc2B0_mod(
   .clk(clk),
@@ -959,7 +967,11 @@ module heptane_core(
   //.read_expAddr(L1_expAddr),
   .read_expAddr_en(L1_expAddr_en),
   .imm_any(dc2_rhitExpB0),
-  .read_expAddrOut()
+  .read_expAddrOut(),
+  .expun_cc_addr(expun_fr_addr),
+  .expun_cc_en(expun_fr_en),
+  .expun_dc_addr(expun_bk_addr),
+  .expun_dc_en(expun_bk_en)
   );
   dcache2_block #(2) dc2B1_mod(
   .clk(clk),
@@ -994,7 +1006,11 @@ module heptane_core(
   //.read_expAddr(L1_expAddr),
   .imm_any(dc2_rhitExpB1),
   .read_expAddr_en(L1_expAddr_en),
-  .read_expAddrOut()
+  .read_expAddrOut(),
+  .expun_cc_addr(expun_fr_addr),
+  .expun_cc_en(expun_fr_en),
+  .expun_dc_addr(expun_bk_addr),
+  .expun_dc_en(expun_bk_en)
   );
 
   frontend1 #(BUS_ID) front_mod(
@@ -1398,6 +1414,8 @@ module heptane_core(
   MSI_expAddr_en_reg,
   1'b0,//unused
   1'b0,//unused
+  expun_bk_addr,
+  expun_bk_en,
   rs0i0_rA,rs0i0_rA_use,rs0i0_rA_useF,rs0i0_rA_isV,rs0i0_rA_isAnyV,
   rs0i0_rB,rs0i0_rB_use,rs0i0_rB_useF,rs0i0_rB_isV,rs0i0_rB_isAnyV,rs0i0_useBConst,
   rs0i0_rT,rs0i0_rT_use,rs0i0_rT_useF,rs0i0_rT_isV, 

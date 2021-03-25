@@ -86,7 +86,7 @@ module imul(
 
   assign Res[64:0]=is_sec_reg3 ? {ptr_reg2,sec_res_reg2} : {1'b0,64'bz};
 
-  agusec_mul(A[63:0],B[11:0],sec_res);
+  agusec_mul msec(R[63:0],C[11:0],sec_res);
   
   always @(posedge clk) begin
     clkEn_reg<=clkEn;
