@@ -1163,6 +1163,37 @@ module smallInstr_decoder(
           default: perror[24]=1'b1;
       endcase
       
+      trien[25]=isLoad&instr[2];
+      prT[25]=rD;
+      prB[25]=rS1;
+      prT_use[25]=1'b1;
+      prB_use[25]=1'b1;
+      pconstant[25]={{52{instr[31]}},instr[31:20]};
+      prAlloc[25]=1'b1;
+      puseRs[25]=1'b1;
+      pport[25]=PORT_LOAD;
+      casex(instr[14:12])
+          3'b010: poperation[8][7:0]={7'd5,1'b0};
+          3'b011: poperation[8][7:0]={7'd9,1'b0};
+	  default: perror[25]=1'b1;
+      endcase
+
+      trien[26]=isStore&instr[2];
+      prC[26]=rS2;
+      prB[26]=rS1;
+      prC_use[26]=1'b1;
+      prB_use[26]=1'b1;
+      pconstant[26]={{52{instr[31]}},instr[31:25],rD};
+      prAlloc[26]=1'b0;
+      puseRs[26]=1'b1;
+      pport[26]=PORT_STORE;
+      casex(instr[14:12])
+          3'b010: poperation[8][7:0]={7'd8,1'b1};
+          3'b011: poperation[8][7:0]={7'd5,1'b1};
+	  default: perror[26]=1'b1;
+      endcase
+      //perror[9]=instr[14];
+      
       
       trien[1]=~magic[0] & subIsMovOrExt;
       puseBConst[1]=opcode_sub==6'h29;
