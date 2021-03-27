@@ -1175,6 +1175,9 @@ module smallInstr_decoder(
       casex(instr[14:12])
           3'b010: poperation[8][7:0]={7'd5,1'b0};
           3'b011: poperation[8][7:0]={7'd9,1'b0};
+          3'b100: poperation[8][7:0]={7'd0,1'b0};//int 128
+          3'b101: poperation[8][7:0]={7'd1,1'b0};//double 128
+          3'b110: poperation[8][7:0]={7'd2,1'b0};//single 128
 	  default: perror[25]=1'b1;
       endcase
 
@@ -1190,6 +1193,9 @@ module smallInstr_decoder(
       casex(instr[14:12])
           3'b010: poperation[8][7:0]={7'd8,1'b1};
           3'b011: poperation[8][7:0]={7'd5,1'b1};
+          3'b100: poperation[8][7:0]={7'd10,1'b1};//int 128
+          3'b101: poperation[8][7:0]={7'd11,1'b1};//double 128
+          3'b110: poperation[8][7:0]={7'd12,1'b1};//single 128
 	  default: perror[26]=1'b1;
       endcase
       //perror[9]=instr[14];
