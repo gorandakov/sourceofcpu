@@ -5153,7 +5153,7 @@ dcache1 L1D_mod(
   .read_bankNoRead(dc_bankNone),
   .read_invalidate(1'b0),
   .expun_addr(dc_expun_addr),
-  .expun_en(),
+  .expun_en(dc_expun_en),
   .insert_from_ram(),//no need to implement. was going to be spectre protection
   .write_addrE0(st0_adata[`lsaddr_addrE]),
   .write_addrO0(st0_adata[`lsaddr_addrO]),

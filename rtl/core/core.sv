@@ -1058,7 +1058,9 @@ module heptane_core(
   MSI_expAddr_reg,
   MSI_expAddr_en_reg,
   MSI_expAddr_hitCC,
-  dec_attr
+  //dec_attr
+  expun_fr_addr,
+  expun_fr_en
   );
   
 
