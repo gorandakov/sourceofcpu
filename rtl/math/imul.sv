@@ -31,11 +31,12 @@ module imul(
   reg upper_reg4,short_reg4;
   reg en_reg,en_reg2,en_reg3,clkEn_reg;
   reg and1_reg,and1_reg2,and1_reg3,and1_reg4;
-  reg is_sec_reg,is_sec_reg2;
+  reg is_sec,is_sec_reg,is_sec_reg2;
   reg is_sec_reg3;
   reg [63:0] sec_res_reg;
   reg [63:0] sec_res_reg2;
 
+  reg ptr_reg,ptr_reg2;
   wire [63:0] sec_res;
   wire [127:0] A_out;
   wire [127:0] B_out;
