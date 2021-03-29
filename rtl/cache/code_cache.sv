@@ -317,7 +317,7 @@ module ccRam_way(
   .hitNRU_reg(read_NRU_reg),
   .write_hit(write_hit),
   .write_expun_addr(expun_naddr),
-  .expun_hit(expun_hit),
+  .write_exp_en(expun_hit),
   .init(init)
   );
   
@@ -337,7 +337,7 @@ module ccRam_way(
   .hitNRU_reg(read_NRU_reg),
   .write_hit(write_hit),
   .write_expun_addr(),
-  .expun_hit(),
+  .write_exp_en(),
   .init(init)
   );
   
@@ -498,6 +498,7 @@ module ccRam_half(
   endgenerate
   
   assign read_hit=|read_hit_way;
+  assign expun_hit=|expun_hit_way;
   assign chkCL_hit=|chkCL_hit_way;
 
   assign read_dataP[-1]=0;

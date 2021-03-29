@@ -21,7 +21,9 @@ module cc_comb (
   write_data,
   chkCL_IP,
   chkCL_clkEn,
-  chkCL_hit
+  chkCL_hit,
+  expun_addr,
+  expun_wen
   );  
   
   localparam DATA_WIDTH=65*16;
@@ -49,6 +51,8 @@ module cc_comb (
   input [IP_WIDTH-1:0] chkCL_IP;
   input chkCL_clkEn;
   output chkCL_hit;
+  output [36:0] expun_addr;
+  output expun_wen;
   
   wire [DATA_WIDTH-1:0] read_data0;
   wire [DATA_WIDTH-1:0] cc_read_data0;
@@ -138,12 +142,14 @@ module cc_comb (
   .read_data(cc_read_data0),
   .read_dataX(cc_read_dataX0),
   .read_hit(cc_read_hit0),
+  .expun_hit(cc_expun_hit0),
   .chkCL_IP(chkCL_IP[43:1]),
   .chkCL_clkEn(chkCL_clkEn_reg),
   .chkCL_hit(chkCL_hit),
   .write_IP(write_IP_reg2[IP_WIDTH-1:5]),
   .write_data(write_data_reg2),
   .write_wen(cc_write_wen_reg2),
+  .expun_addr(cc_exp_addr0),
   .invalidate(cc_invalidate_reg2),
   .tagErr(cc_tagErr)
   );
