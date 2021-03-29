@@ -7,7 +7,7 @@ module heptane_core(
   rbusIn_signals,rbusIn_src_req,rbusIn_dst_req,rbusIn_address,
   rbusOut_signals,rbusOut_src_req,rbusOut_dst_req,rbusOut_address,rbusOut_can,rbusOut_want,rbusOut_sz,rbusOut_bank0,rbusOut_low,
   rbusDIn_signals,rbusDIn_src_req,rbusDIn_dst_req,rbusDIn_data,
-  rbusDOut_signals,rbusDOut_src_req,rbusDOut_dst_req,rbusDOut_data,rbusDOut_can,rbusDOut_want
+  rbusDOut_signals,rbusDOut_src_req,rbusDOut_dst_req,rbusDOut_data,rbusDOut_can,rbusDOut_want,rbusDOut_replay
 );
   parameter [4:0] BUS_ID=0;
   localparam PHYS_WIDTH=44;
@@ -49,6 +49,7 @@ module heptane_core(
   output [511:0] rbusDOut_data;
   input rbusDOut_can;
   output rbusDOut_want;
+  output rbusDOut_replay;
 
  
  // reg [63:0] r02_data;
@@ -826,7 +827,7 @@ module heptane_core(
   assign rbusDOut_dst_req=rbusDIn_data_reg[46:37];
   assign rbusDOut_data=dc2_rdata_reg;
   assign rbusDOut_want=dc2_rhitExp & ~L1_expAddr_en_reg4 || dc2_rhitExp_reg & ~L1_expAddr_en_reg5;
-  assign rbusDout_replay=dc2_rhitExp & ~L1_expAddr_en_reg4;
+  assign rbusDOut_replay=dc2_rhitExp & ~L1_expAddr_en_reg4;
 
   assign insBus_en=dc2_rhit && ~L1_expAddr_en_reg4;
   assign insBus_io=dc2_io_en_reg4;
@@ -1060,7 +1061,7 @@ module heptane_core(
   btbl_IP1,
   btbl_mask0,btbl_mask1,
   btbl_attr0,btbl_attr1,
-  csrss_en,csrss_addr,csrss_data,
+  csrss_en,csrss_no,csrss_data,
   MSI_expAddr_reg,
   MSI_expAddr_en_reg,
   MSI_expAddr_hitCC,
@@ -1076,7 +1077,8 @@ module heptane_core(
   rst,
   stall,
   except,
-  {exceptIP[46:0],1'b0},
+  {exceptIP,1'b0},
+  exceptAttr,
   
   btbl_step,
   
@@ -1101,6 +1103,9 @@ module heptane_core(
   
   halt,
   
+  all_retired,
+  fp_excpt_en,
+  fp_excpt_set,
 
   bundleFeed,
 //begin instructions ordered by rs input port
