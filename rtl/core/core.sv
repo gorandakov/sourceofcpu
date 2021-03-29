@@ -736,6 +736,11 @@ module heptane_core(
 
   wire [35:0] L1_expAddr;
   wire L1_expAddr_en;
+  reg L1_expAddr_en_reg;
+  reg L1_expAddr_en_reg2;
+  reg L1_expAddr_en_reg3;
+  reg L1_expAddr_en_reg4;
+  reg L1_expAddr_en_reg5;
   wire [35:0] MSI_expAddr;
   wire MSI_expAddr_en;
   wire MSI_req_excl;
@@ -748,8 +753,9 @@ module heptane_core(
 
   wire [36:0] expun_bk_addr;
   wire expun_bk_en;
-  //wire [36:0] expun_fr_addr;
-  //wire expun_fr_en;
+  wire [36:0] expun_fr_addr;
+  wire expun_fr_en;
+
   wire wrStall;
 //  reg ret_ebx_en;
 //  reg [63:0] ret_ebx_data;
@@ -1804,6 +1810,11 @@ module heptane_core(
 	dc2_dataIO_reg<=1'b0;
 	dc2_dataIO_reg2<=1'b0;
 	dc2_dataIO_reg3<=1'b0;
+        L1_expAddr_en_reg<=1'b0;
+        L1_expAddr_en_reg2<=1'b0;
+        L1_expAddr_en_reg3<=1'b0;
+        L1_expAddr_en_reg4<=1'b0;
+        L1_expAddr_en_reg5<=1'b0;
     end else begin
         MSI_expAddr_reg<=MSI_expAddr;
         MSI_expAddr_en_reg<=MSI_expAddr_en;
@@ -1863,6 +1874,11 @@ module heptane_core(
 	dc2_dataIO_reg<=dc2_dataIO;
 	dc2_dataIO_reg2<=dc2_dataIO_reg;
 	dc2_dataIO_reg3<=dc2_dataIO_reg2;
+        L1_expAddr_en_reg<=L1_expAddr_en;
+        L1_expAddr_en_reg2<=L1_expAddr_en_reg;
+        L1_expAddr_en_reg3<=L1_expAddr_en_reg2;
+        L1_expAddr_en_reg4<=L1_expAddr_en_reg3;
+        L1_expAddr_en_reg5<=L1_expAddr_en_reg4;
     end
   end
 endmodule
