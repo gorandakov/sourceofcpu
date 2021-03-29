@@ -81,7 +81,8 @@ module cc_comb (
   wire [59:0] cc_read_dataX0;
   wire [14:0] read_dataXP[3:0];
   reg [59:0] read_dataX0_reg;
-  
+  wire [36:0] cc_exp_addr0;  
+  wire [36:0] cc_exp_addr0_reg;  
 //  wire [71:0] read_dataY0;
 //  wire [17:0] read_dataYP;
 //  reg [71:0] read_dataY0_reg;
@@ -90,7 +91,8 @@ module cc_comb (
   
   wire cc_read_hit0;
   wire [7:0] cc_tagErr;
-
+  wire cc_expun_hit0;
+  reg cc_expun_hitP; 
 
   reg read_hit0A;
   reg read_hit1A;
@@ -172,15 +174,24 @@ module cc_comb (
   .read_data(read_dataX)
   );
 
-
-
-  cc_fstalle #(9) stHit_mod (
+  cc_fstalle #(37) stAddrExp_mod (
   .clk(clk),
   .rst(rst),
   .except(except),
   .fstall(fstall),
-  .write_data({cc_read_hitP,cc_read_tagErrP}),
-  .read_data({cc_read_hit,cc_read_tagErr})
+  .write_data(cc_exp_addr0_reg),
+  .read_data(expun_addr)
+  );
+
+
+
+  cc_fstalle #(10) stHit_mod (
+  .clk(clk),
+  .rst(rst),
+  .except(except),
+  .fstall(fstall),
+  .write_data({cc_expun_hitP,cc_read_hitP,cc_read_tagErrP}),
+  .read_data({expun_wen,cc_read_hit,cc_read_tagErr})
   );
 
  // adder #(8) wip_mod(write_IP_reg2[14:7],8'hff,writeIP_next,1'b0,1'b1);
@@ -201,11 +212,13 @@ module cc_comb (
 //          write_phys_reg2<=32'b0;
           read_hitP<=1'b0;
           cc_read_hitP<=1'b0;
+          cc_expun_hitP<=1'b0;
    //       cc_read_hitNP<=1'b0;
           read_data0_reg<={DATA_WIDTH{1'b0}};
           read_dataX0_reg<=60'b0;
           write_data_reg2<={DATA_WIDTH{1'B0}};
           cc_read_tagErrP<=8'b0;
+	  cc_exp_addr0_reg<=37'b0;
      //     cc_read_tagErrNP<=8'b0;
           read_hit0A<=1'b0;
           read_hit1A<=1'b0;
@@ -221,6 +234,7 @@ module cc_comb (
     //      write_phys_reg2<=write_phys_reg;
           read_hitP<=cc_read_hit0;
           cc_read_hitP<=cc_read_hit0;
+          cc_expun_hitP<=cc_expun_hit0;
        //   cc_read_hitNP<=cc_read_hitN0;
           read_data0_reg<=read_data0;
           read_dataX0_reg<=read_dataX0;
@@ -229,6 +243,7 @@ module cc_comb (
           if (cc_wen_step[1])
               write_data_reg2[DATA_WIDTH-1:DATA_WIDTH/2]<=write_data_reg[DATA_WIDTH-1:DATA_WIDTH/2];
           cc_read_tagErrP<=cc_tagErr;
+	  cc_exp_addr0_reg<=cc_exp_addr0;
           read_hit0A<=cc_read_hit0 & ~cc_read_IP_reg[6] & ~cc_read_IP_reg[5];
           read_hit1A<=cc_read_hit0 & ~cc_read_IP_reg[6] & cc_read_IP_reg[5];
           read_hit0B<=cc_read_hit0 & cc_read_IP_reg[6] & ~cc_read_IP_reg[5];
