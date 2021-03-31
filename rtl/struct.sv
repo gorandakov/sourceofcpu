@@ -265,17 +265,17 @@
 
 `define instrQ_magic 3:0
 `define instrQ_srcIPOff 11:4
-`define instrQ_btbMiss 16
-`define instrQ_taken 17
-`define instrQ_srcTick 18
-`define instrQ_class 31:19
-`define instrQ_btb_way 34:32
-`define instrQ_jmp_ind 36:35
-`define instrQ_ght_addr 44:37
-`define instrQ_sc 46:45
-`define instrQ_btb_only 47
-`define instrQ_lastInstr 48
-`define instrQ_width 49
+`define instrQ_btbMiss 12
+`define instrQ_taken 13
+`define instrQ_srcTick 14
+`define instrQ_class 27:15
+`define instrQ_btb_way 28
+`define instrQ_jmp_ind 30:29
+`define instrQ_ght_addr 38:31
+`define instrQ_sc 40:39
+`define instrQ_btb_only 41
+`define instrQ_lastInstr 42
+`define instrQ_width 43
 
 
 `define instrQ_addr_count 36
