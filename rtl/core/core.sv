@@ -564,10 +564,10 @@ module heptane_core(
   wire [4:0] jump1Type;
   wire [3:0] jump1Pos;
   wire jump1Taken;
-  wire [2:0] jump0BtbWay;
+  wire jump0BtbWay;
   wire [1:0] jump0JmpInd;
   wire [7:0] jump0GHT;
-  wire [2:0] jump1BtbWay;
+  wire jump1BtbWay;
   wire [1:0] jump1JmpInd;
   wire [7:0] jump1GHT;
   wire [1:0] jump0SC;

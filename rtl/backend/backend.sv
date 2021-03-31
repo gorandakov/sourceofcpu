@@ -834,10 +834,10 @@ module backend(
   input [63:0] jump1IP;
   input [3:0] jump1Mask;
   input [3:0] jump1Attr;
-  input [2:0] jump0TbufWay;
+  input jump0TbufWay;
   input [1:0] jump0JmpInd;
   input [7:0] jump0GHT;
-  input [2:0] jump1TbufWay;
+  input jump1TbufWay;
   input [1:0] jump1JmpInd;
   input [7:0] jump1GHT;
   input [1:0] jump0SC;
@@ -1331,10 +1331,10 @@ module backend(
   reg [5:0] wrt1_reg;
   reg [5:0] wrt2_reg;
   
-  reg [2:0] jump0TbufWay_reg;
+  reg jump0TbufWay_reg;
   reg [1:0] jump0JmpInd_reg;
   reg [7:0] jump0GHT_reg;
-  reg [2:0] jump1TbufWay_reg;
+  reg jump1TbufWay_reg;
   reg [1:0] jump1JmpInd_reg;
   reg [7:0] jump1GHT_reg;
   reg [1:0] jump0SC_reg;
@@ -1375,10 +1375,10 @@ module backend(
   reg [9:0] instr_fsimd_reg2;
 //  reg [46:0] baseIP_reg2;
 
-  reg [2:0] jump0TbufWay_reg2;
+  reg jump0TbufWay_reg2;
   reg [1:0] jump0JmpInd_reg2;
   reg [7:0] jump0GHT_reg2;
-  reg [2:0] jump1TbufWay_reg2;
+  reg jump1TbufWay_reg2;
   reg [1:0] jump1JmpInd_reg2;
   reg [7:0] jump1GHT_reg2;
   reg [1:0] jump0SC_reg2;
@@ -5256,9 +5256,9 @@ dcache1 L1D_mod(
   .iret6_rF(clrR_reg[6][8:4]),.iret7_rF(clrR_reg[7][8:4]),.iret8_rF(clrR_reg[8][8:4]),
   .iret_clr(clr_reg),
   .ijump0Type(jump0Type_reg2),.ijump0Off(jump0Pos_reg2),
-  .ijump0IP(jump0IP_reg2[43:0]),.ijump0Mask(jump0Mask_reg2),.ijump0BND(jump0IP_reg2[63:44]),
+  .ijump0IP(jump0IP_reg2[43:1]),.ijump0Mask(jump0Mask_reg2),.ijump0BND(jump0IP_reg2[63:44]),
   .ijump1Type(jump1Type_reg2),.ijump1Off(jump1Pos_reg2),
-  .ijump1IP(jump1IP_reg2[43:0]),.ijump1Mask(jump1Mask_reg2),.ijump1BND(jump1IP_reg2[63:44]),
+  .ijump1IP(jump1IP_reg2[43:1]),.ijump1Mask(jump1Mask_reg2),.ijump1BND(jump1IP_reg2[63:44]),
   .ijump0BtbWay(jump0TbufWay_reg2),.ijump0JmpInd(jump0JmpInd_reg2),.ijump0GHT(jump0GHT_reg2),
   .ijump1BtbWay(jump1TbufWay_reg2),.ijump1JmpInd(jump1JmpInd_reg2),.ijump1GHT(jump1GHT_reg2),
   .ijump0SC(jump0SC_reg2),.ijump0Miss(jump0Miss_reg2),.ijump0BtbOnly(jump0TbufOnly_reg2),
@@ -5636,10 +5636,10 @@ dcache1 L1D_mod(
 	  rs_alt<=3'b0;
 	  rs_alt_reg<=3'b0;
           
-	  jump0TbufWay_reg<=3'd0;
+	  jump0TbufWay_reg<=1'd0;
           jump0JmpInd_reg<=2'd0;
           jump0GHT_reg<=8'd0;
-          jump1TbufWay_reg<=3'd0;
+          jump1TbufWay_reg<=1'd0;
           jump1JmpInd_reg<=2'd0;
           jump1GHT_reg<=8'd0;
           jump0SC_reg<=2'd0;
@@ -5666,10 +5666,10 @@ dcache1 L1D_mod(
 	  baseIP_reg<=62'b0;
           
               
-	  jump0TbufWay_reg2<=3'd0;
+	  jump0TbufWay_reg2<=1'd0;
           jump0JmpInd_reg2<=2'd0;
           jump0GHT_reg2<=8'd0;
-          jump1TbufWay_reg2<=3'd0;
+          jump1TbufWay_reg2<=1'd0;
           jump1JmpInd_reg2<=2'd0;
           jump1GHT_reg2<=8'd0;
           jump0SC_reg2<=2'd0;

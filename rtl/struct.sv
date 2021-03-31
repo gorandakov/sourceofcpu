@@ -264,7 +264,7 @@
 `define iclass_width 13
 
 `define instrQ_magic 3:0
-`define instrQ_srcIPOff 15:4
+`define instrQ_srcIPOff 11:4
 `define instrQ_btbMiss 16
 `define instrQ_taken 17
 `define instrQ_srcTick 18
