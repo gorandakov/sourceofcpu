@@ -28,7 +28,7 @@
 `define bob_addr_width 6
 `define agu_queue_depth 16
 
-`define except_width 13
+`define except_width 15
 `define except_status 1:0
 `define except_setsFlags 2
 `define except_flags 8:3
