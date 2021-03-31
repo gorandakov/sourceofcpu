@@ -5752,7 +5752,7 @@ dcache1 L1D_mod(
               funB_reg[k]<=10'b0;
               funS_reg[k]<=10'b0;
               rs_lsi[k]<=6'b0;
-              rs_lsi_reg[k]<=6'b0;
+              rs_lsi_reg[k]<=3'b0;
               domA_reg[k]<=2'b0;
               domB_reg[k]<=2'b0;
               instr_ret_reg[k]<=4'hf;
@@ -5786,7 +5786,7 @@ dcache1 L1D_mod(
               instr_rT[t]<={IN_REG_WIDTH{1'B0}};
               instr_en[t]<=1'b0;
               instr_wren[t]<=1'b0;
-              instr_IPOff[t]<=13'b0;
+              instr_IPOff[t]<=9'b0;
               instr_afterTaken[t]<=1'b0;
               instr_rT_useF[t]<=1'b0;
               instr_rT_isV[t]<=1'b0;
@@ -5798,7 +5798,7 @@ dcache1 L1D_mod(
 	      instr_rT_reg[t]<={IN_REG_WIDTH{1'B0}};
               instr_en_reg[t]<=1'b0;
               instr_wren_reg[t]<=1'b0;
-              instr_IPOff_reg[t]<=13'b0;
+              instr_IPOff_reg[t]<=9'b0;
               instr_afterTaken_reg[t]<=1'b0;
               instr_rT_useF_reg[t]<=1'b0;
               instr_rT_isV_reg[t]<=1'b0;

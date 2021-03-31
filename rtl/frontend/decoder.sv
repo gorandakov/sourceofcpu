@@ -2128,10 +2128,10 @@ module decoder(
   output [4:0] jump1Type;
   output [3:0] jump1Pos;
   output jump1Taken;
-  output [2:0] jump0BtbWay;
+  output jump0BtbWay;
   output [1:0] jump0JmpInd;
   output [7:0] jump0GHT;
-  output [2:0] jump1BtbWay;
+  output jump1BtbWay;
   output [1:0] jump1JmpInd;
   output [7:0] jump1GHT;
   output [1:0] jump0SC;
