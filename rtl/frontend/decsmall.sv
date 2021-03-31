@@ -91,7 +91,7 @@ module smallInstr_decoder(
   output useCRet;
   output useBConst;
 //  output reg useBSmall;//small constant use; used for call/pop/push
-  output [63:0] constant;
+  output [64:0] constant;
 //  output reg [3:0] smallConst; //signed
   output [REG_WIDTH-1:0] rT;
   output rT_use;
@@ -244,7 +244,7 @@ module smallInstr_decoder(
   reg pinstr_fsimd[TRICNT_TOP-1:0];
   reg phalt[TRICNT_TOP-1:0];
   
-  wire [63:0] qconstant[11:0];
+  wire [64:0] qconstant[12:0];
   wire [11:0] qtrien;
   
   reg [4:0] pjumpType[TRICNT_TOP-1:0];
@@ -356,29 +356,31 @@ module smallInstr_decoder(
   
   assign isBasicSysInstr=opcode_main==8'hff;
   
-  assign qconstant[1]=pconstant[3];//??
+  assign qconstant[1]={pisIPRel[3],pconstant[3]};//??
   assign qtrien   [1]=trien    [3];//??
-  assign qconstant[2]=pconstant[8];
+  assign qconstant[2]={pisIPRel[8],pconstant[8]};
   assign qtrien   [2]=trien    [8];
-  assign qconstant[3]=pconstant[9];
+  assign qconstant[3]={pisIPRel[9],pconstant[9]};
   assign qtrien   [3]=trien    [9];
-  assign qconstant[4]=pconstant[10];
+  assign qconstant[4]={pisIPRel[10],pconstant[10]};
   assign qtrien   [4]=trien    [10];
-  assign qconstant[5]=pconstant[18];
+  assign qconstant[5]={pisIPRel[18],pconstant[18]};
   assign qtrien   [5]=trien    [18];
-  assign qconstant[6]=pconstant[20];
+  assign qconstant[6]={pisIPRel[20],pconstant[20]};
   assign qtrien   [6]=trien    [20];
-  assign qconstant[7]=pconstant[25];
+  assign qconstant[7]={pisIPRel[25],pconstant[25]};
   assign qtrien   [7]=trien    [25];
-  assign qconstant[8]=pconstant[26];
+  assign qconstant[8]={pisIPRel[26],pconstant[26]};
   assign qtrien   [8]=trien    [26];
-  assign qconstant[9]=pconstant[30];
+  assign qconstant[9]={pisIPRel[30],pconstant[30]};
   assign qtrien   [9]=trien    [30];
-  assign qconstant[10]=pconstant[35];
+  assign qconstant[10]={pisIPRel[35],pconstant[35]};
   assign qtrien   [10]=trien    [35];
-  assign qconstant[11]=pconstant[13];
+  assign qconstant[11]={pisIPRel[13],pconstant[13]};
   assign qtrien   [11]=trien    [13];
-  assign qconstant[0]=pconstant[0];
+  assign qconstant[12]={1'b1,pconstant[19]};
+  assign qtrien   [12]=trien[19];
+  assign qconstant[0]={1'b0,pconstant[0]};
   assign qtrien   [0]=qtrien[11:1]==11'b0;
   
   //triens that set const
@@ -386,8 +388,8 @@ module smallInstr_decoder(
  
   generate
       genvar p,q,m;
-      for(m=0;m<12;m=m+1) begin : triconst_gen
-	  assign constant=qtrien[m] ? qconstant[m] : 64'bz;
+      for(m=0;m<13;m=m+1) begin : triconst_gen
+	  assign constant=qtrien[m] ? qconstant[m] : 65'bz;
       end
       for(p=0;p<5;p=p+1) begin
           wire [OPERATION_WIDTH-1:0] koperation;
@@ -400,7 +402,7 @@ module smallInstr_decoder(
           wire kuseCRet;
           wire kuseBConst;
     //  output reg useBSmall;//small constant use; used for call/pop/push
-          wire [63:0] kconstant;
+          wire [64:0] kconstant;
     //  output reg [3:0] smallConst; //signed
           wire [REG_WIDTH-2:0] krT;
           wire krT_use;
@@ -596,6 +598,7 @@ module smallInstr_decoder(
           pport[tt]=4'b0;
           pconstant[tt][31:0]=constantDef;
           pconstant[tt][63:32]={32{constant[31]}};
+          //pconstant[tt][64]=1'b0;
      //     pisBigConst[tt]=magic[2:0]==3'b111;
           pthisSpecLoad[tt]=1'b0;    
           pisIPRel[tt]=1'b0;

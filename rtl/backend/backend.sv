@@ -369,7 +369,7 @@ module backend(
 //  wbBus_en,
 //  wbBus_req
   );
-  localparam DATA_WIDTH=`alu_width;
+  localparam DATA_WIDTH=65;
   localparam OPERATION_WIDTH=`operation_width;
   localparam RRF_WIDTH=6;
   localparam IN_REG_WIDTH=6;
@@ -847,7 +847,7 @@ module backend(
   input jump1Miss;
   input jump1TbufOnly;
   input [9:0] instr_fsimd;
-  input [46:0] baseIP;
+  input [62:0] baseIP;
   input [5:0] wrt0;
   input [5:0] wrt1;
   input [5:0] wrt2;
@@ -967,9 +967,9 @@ module backend(
   reg                      st1_en_reg;
   reg                      st1_en_reg2;
   reg                      st1_en_reg3;
-  reg [1:1]                st1_type_reg;
-  reg [1:1]                st1_type_reg2;
-  reg [1:1]                st1_type_reg3;
+  reg [1:0]                st1_type_reg;
+  reg [1:0]                st1_type_reg2;
+  reg [1:0]                st1_type_reg3;
   wire [4:0]               st1_bank1;
   wire [3:0]               st1_bgn_ben;
   wire [3:0]               st1_end_ben;
@@ -1326,7 +1326,7 @@ module backend(
   reg [3:0] jump1Attr_reg;
   reg [3:0] jump1Mask_reg;
   reg [9:0] instr_fsimd_reg;
-  reg [46:0] baseIP_reg;
+  reg [62:0] baseIP_reg;
   reg [5:0] wrt0_reg;
   reg [5:0] wrt1_reg;
   reg [5:0] wrt2_reg;
@@ -4185,14 +4185,14 @@ module backend(
   assign rs_enAW[m]=(~Wswp[m]) ? rs_enA[m] : rs_enB[m];
   assign rs_enBW[m]=Wswp[m] ? rs_enA[m] : rs_enB[m];
 
-  assign rs_const_new[3*m]=~rs_IPRel[3*m] ? rs_const[3*m] : 64'bz;
-  assign rs_const_new[3*m]=rs_IPRel[3*m] & ~ rs_afterTK[3*m] ? baseIP_reg : 64'bz;
-  assign rs_const_new[3*m]=rs_IPRel[3*m] & rs_afterTK[3*m] & jump0Pred_reg ? jump0IP_reg : 64'bz;
-  assign rs_const_new[3*m]=rs_IPRel[3*m] & rs_afterTK[3*m] & ~jump0Pred_reg ? jump1IP_reg : 64'bz;
-  assign rs_const_new[3*m+1]=~rs_IPRel[3*m+1] ? rs_const[3*m+1] : 64'bz;
-  assign rs_const_new[3*m+1]=rs_IPRel[3*m+1] & ~ rs_afterTK[3*m+1] ? baseIP_reg : 64'bz;
-  assign rs_const_new[3*m+1]=rs_IPRel[3*m+1] & rs_afterTK[3*m+1] & jump0Pred_reg ? jump0IP_reg : 64'bz;
-  assign rs_const_new[3*m+1]=rs_IPRel[3*m+1] & rs_afterTK[3*m+1] & ~jump0Pred_reg ? jump1IP_reg : 64'bz;
+  assign rs_const_new[3*m]=~rs_IPRel[3*m] ? rs_const[3*m] : 65'bz;
+  assign rs_const_new[3*m]=rs_IPRel[3*m] & ~ rs_afterTK[3*m] ? {1'b1,baseIP_reg,1'b0} : 65'bz;
+  assign rs_const_new[3*m]=rs_IPRel[3*m] & rs_afterTK[3*m] & jump0Pred_reg ? {1'b1,jump0IP_reg} : 65'bz;
+  assign rs_const_new[3*m]=rs_IPRel[3*m] & rs_afterTK[3*m] & ~jump0Pred_reg ? {1'b1,jump1IP_reg} : 65'bz;
+  assign rs_const_new[3*m+1]=~rs_IPRel[3*m+1] ? rs_const[3*m+1] : 65'bz;
+  assign rs_const_new[3*m+1]=rs_IPRel[3*m+1] & ~ rs_afterTK[3*m+1] ? {1'b1,baseIP_reg,1'b0} : 65'bz;
+  assign rs_const_new[3*m+1]=rs_IPRel[3*m+1] & rs_afterTK[3*m+1] & jump0Pred_reg ? {1'b1,jump0IP_reg} : 65'bz;
+  assign rs_const_new[3*m+1]=rs_IPRel[3*m+1] & rs_afterTK[3*m+1] & ~jump0Pred_reg ? {1'b1,jump1IP_reg} : 65'bz;
   assign rs_const_new[3*m+2]=rs_const[3*m+2];
 
   end
@@ -5556,15 +5556,15 @@ dcache1 L1D_mod(
           rs2i1_rB_reg3<={IN_REG_WIDTH{1'B0}};
           rs2i2_rB_reg3<={IN_REG_WIDTH{1'B0}};
 
-          rs0i0_index_reg<=1'b0;
-          rs0i1_index_reg<=1'b0;
-          rs0i2_index_reg<=1'b0;
-          rs1i0_index_reg<=1'b0;
-          rs1i1_index_reg<=1'b0;
-          rs1i2_index_reg<=1'b0;
-          rs2i0_index_reg<=1'b0;
-          rs2i1_index_reg<=1'b0;
-          rs2i2_index_reg<=1'b0;
+          rs0i0_index_reg<=4'b0;
+          rs0i1_index_reg<=4'b0;
+          rs0i2_index_reg<=4'b0;
+          rs1i0_index_reg<=4'b0;
+          rs1i1_index_reg<=4'b0;
+          rs1i2_index_reg<=4'b0;
+          rs2i0_index_reg<=4'b0;
+          rs2i1_index_reg<=4'b0;
+          rs2i2_index_reg<=4'b0;
 	  rs2i2_mul_reg<=1'b0;
 
           rs_rA_isV<=9'b0;
@@ -5574,10 +5574,10 @@ dcache1 L1D_mod(
           rs_rT_isV<=9'b0;
           rs_rT_use<=9'b0;
           rs_rT_useF<=9'b0;
-	  isAV_reg<=1'b0;
-	  isBV_reg<=1'b0;
-	  isAF_reg<=1'b0;
-	  isBF_reg<=1'b0;
+	  isAV_reg<=9'b0;
+	  isBV_reg<=9'b0;
+	  isAF_reg<=9'b0;
+	  isBF_reg<=9'b0;
           rs_enA<=3'b0;
           rs_enB<=3'b0;
           rs_enA_reg<=3'b0;
@@ -5592,8 +5592,8 @@ dcache1 L1D_mod(
           rs2i1_lastFl_reg<=1'b0;
           rs2i2_lastFl_reg<=1'b0;
 
-          rs_ldst_flg<=8'b0;
-          rs_ldst_flg_reg<=8'b0;
+          rs_ldst_flg<=9'b0;
+          rs_ldst_flg_reg<=9'b0;
 
           rs0i1_flagDep_reg<=4'hd;
           rs0i2_flagDep_reg<=4'hd;
@@ -5663,7 +5663,7 @@ dcache1 L1D_mod(
 	  jump1Mask_reg<=4'b0;
 	  jump1Attr_reg<=4'h0;
 	  instr_fsimd_reg<=10'b0;
-	  baseIP_reg<=47'b0;
+	  baseIP_reg<=62'b0;
           
               
 	  jump0TbufWay_reg2<=3'd0;
@@ -5694,12 +5694,12 @@ dcache1 L1D_mod(
 	  jump1Attr_reg2<=4'h0;
           instr_fsimd_reg2<=10'b0;
       
-          wrtO0_reg<=4'b0;
-          wrtO1_reg<=4'b0;
-          wrtO2_reg<=4'b0;
-          wrtII0_reg<=3'b0;
-          wrtII1_reg<=3'b0;
-          wrtII2_reg<=3'b0;
+          wrtO0_reg<=3'b0;
+          wrtO1_reg<=3'b0;
+          wrtO2_reg<=3'b0;
+          wrtII0_reg<=4'b0;
+          wrtII1_reg<=4'b0;
+          wrtII2_reg<=4'b0;
           WQR_reg[0]<=8'd0;
           WQR_reg[1]<=8'd0;
           WQR_reg[2]<=8'd0;
@@ -5731,9 +5731,9 @@ dcache1 L1D_mod(
               rs_operation[k]<={OPERATION_WIDTH{1'B0}};
               rs_operation_reg[k]<={OPERATION_WIDTH{1'B0}};
               rs_operation_reg2[k]<={OPERATION_WIDTH{1'B0}};
-              rs_port[k]<=3'b0;
-              rs_port_reg[k]<=3'b0;
-              rs_port_sch[k]<=3'b0;
+              rs_port[k]<=4'b0;
+              rs_port_reg[k]<=4'b0;
+              rs_port_sch[k]<=4'b0;
               regA_reg[k]<={REG_WIDTH{1'B0}};
               regB_reg[k]<={REG_WIDTH{1'B0}};
               regS_reg[k]<={REG_WIDTH{1'B0}};
@@ -5751,8 +5751,8 @@ dcache1 L1D_mod(
               funA_reg[k]<=10'b0;
               funB_reg[k]<=10'b0;
               funS_reg[k]<=10'b0;
-              rs_lsi[k]<=3'b0;
-              rs_lsi_reg[k]<=3'b0;
+              rs_lsi[k]<=6'b0;
+              rs_lsi_reg[k]<=6'b0;
               domA_reg[k]<=2'b0;
               domB_reg[k]<=2'b0;
               instr_ret_reg[k]<=4'hf;
@@ -6490,7 +6490,7 @@ dcache1 L1D_mod(
 		  4'bxx01: instr_magicOff[t]<=3'd2;
 		  4'bx011: instr_magicOff[t]<=3'd3;
 		  4'b0111: instr_magicOff[t]<=3'd4;
-		  4'b1111: instr_magicOff[t]<=4'd5;
+		  4'b1111: instr_magicOff[t]<=3'd5;
 	      endcase
 	      casex({instr_rT_useF[t],instr_rT_isV[t],instr_port[t]==PORT_LOAD})
 		  3'b0xx: begin instr_gen[t]<=1'b1; instr_vec[t]<=1'b0; end
@@ -6611,7 +6611,7 @@ dcache1 L1D_mod(
 		  0,12,7: ;
 		  default: fxLD_dbl_t[k]=1'b1; 
 	      endcase
-	      fxLD_spair_t[k]=outOp_reg2[5:1]==5'ha;
+	      fxLD_spair_t[k]=outOp_reg2[k][5:1]==5'ha;
 	      fxLD_dblext[k]=fxLD_dbl[k]|fxLD_ext[k];
 	      if (k!=3) fxFRT_alten_reg[k]<=fxFRT_alten[k];
 	      fxLD_dbl_reg[k]=fxLD_dbl[k];
@@ -6628,14 +6628,14 @@ dcache1 L1D_mod(
               outReg_reg[k]<={REG_WIDTH{1'B0}};
               outReg_reg2[k]<={REG_WIDTH{1'B0}};
               outReg_reg3[k]<={REG_WIDTH{1'B0}};
-              outOp_reg[k]<={REG_WIDTH{1'B0}};
-              outOp_reg2[k]<={REG_WIDTH{1'B0}};
-              outOp_reg3[k]<={REG_WIDTH{1'B0}};
-              outOp_reg4[k]<={REG_WIDTH{1'B0}};
-              outOp_reg5[k]<={REG_WIDTH{1'B0}};
-              outOp_reg6[k]<={REG_WIDTH{1'B0}};
-              outOp_reg7[k]<={REG_WIDTH{1'B0}};
-              outOp_reg8[k]<={REG_WIDTH{1'B0}};
+              outOp_reg[k]<={OPERATION_WIDTH{1'B0}};
+              outOp_reg2[k]<={OPERATION_WIDTH{1'B0}};
+              outOp_reg3[k]<={OPERATION_WIDTH{1'B0}};
+              outOp_reg4[k]<={OPERATION_WIDTH{1'B0}};
+              outOp_reg5[k]<={OPERATION_WIDTH{1'B0}};
+              outOp_reg6[k]<={OPERATION_WIDTH{1'B0}};
+              outOp_reg7[k]<={OPERATION_WIDTH{1'B0}};
+              outOp_reg8[k]<={OPERATION_WIDTH{1'B0}};
               outII_reg[k]<=10'b0;
               outII_reg2[k]<=10'b0;
               outII_reg3[k]<=10'b0;
@@ -6797,10 +6797,10 @@ dcache1 L1D_mod(
 	  lsr2_II_reg2<=10'b0;
 	  p_lsfwd_reg<=4'b0;
 	  p_lsfwd_reg2<=4'b0;
-	  p2_brdbanks_reg<=4'b0;
-	  p2_brdbanks_reg2<=4'b0;
-	  p3_brdbanks_reg<=4'b0;
-	  p3_brdbanks_reg2<=4'b0;
+	  p2_brdbanks_reg<=5'b0;
+	  p2_brdbanks_reg2<=5'b0;
+	  p3_brdbanks_reg<=5'b0;
+	  p3_brdbanks_reg2<=5'b0;
 
 	  st0_en_reg<=1'b0;
 	  st0_en_reg2<=1'b0;
@@ -6808,18 +6808,18 @@ dcache1 L1D_mod(
 	  st0_type_reg<=2'b0;
 	  st0_type_reg2<=2'b0;
 	  st0_type_reg3<=2'b0;
-	  st0_II_reg<=2'b0;
-	  st0_II_reg2<=2'b0;
-	  st0_II_reg3<=2'b0;
+	  st0_II_reg<=10'b0;
+	  st0_II_reg2<=10'b0;
+	  st0_II_reg3<=10'b0;
 	  st1_en_reg<=1'b0;
 	  st1_en_reg2<=1'b0;
 	  st1_en_reg3<=1'b0;
 	  st1_type_reg<=2'b0;
 	  st1_type_reg2<=2'b0;
 	  st1_type_reg3<=2'b0;
-	  st1_II_reg<=2'b0;
-	  st1_II_reg2<=2'b0;
-	  st1_II_reg3<=2'b0;
+	  st1_II_reg<=10'b0;
+	  st1_II_reg2<=10'b0;
+	  st1_II_reg3<=10'b0;
           MSI_exp_addr_reg<=37'b0;
           MSI_exp_en_reg<=1'b0;
           MSI_swap_want_reg<=1'b0;

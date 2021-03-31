@@ -21,7 +21,7 @@ module heptane_core(
   localparam IN_REG_WIDTH=6;
   localparam OPERATION_WIDTH=`operation_width;
   localparam PORT_WIDTH=4;
-  localparam RS_WIDTH=64;
+  localparam RS_WIDTH=65;
   localparam REQ_WIDTH=10;
 
   input clk;
@@ -146,8 +146,8 @@ module heptane_core(
   wire stall;
 
   wire [2:0] btbl_step;
-  wire [63:0] btbl_IP0;
-  wire [63:0] btbl_IP1;
+  wire [62:0] btbl_IP0;
+  wire [62:0] btbl_IP1;
   wire [3:0] btbl_mask0;
   wire [3:0] btbl_mask1;
   wire [3:0] btbl_attr0;
@@ -577,7 +577,8 @@ module heptane_core(
   wire jump1Miss;
   wire jump1TbufOnly;
   wire [9:0] instr_fsimd;
-  wire [43:0] baseIP;
+  wire [62:0] baseIP;
+  wire [3:0] baseAttr;
   wire [5:0] wrt0;
   wire [5:0] wrt1;
   wire [5:0] wrt2;
@@ -1024,7 +1025,7 @@ module heptane_core(
   clk,
   rst,
   except,
-  exceptIP[46:0],
+  {exceptIP,1'b0},
 //
   exceptThread,
   exceptAttr,
@@ -1398,6 +1399,7 @@ module heptane_core(
   jump1SC,jump1Miss,jump1TbufOnly,
   instr_fsimd,
   baseIP,
+  baseAttr,
   wrt0,wrt1,wrt2,
   csrss_no,csrss_en,csrss_data
   );
@@ -1710,8 +1712,8 @@ module heptane_core(
   instr9_last,
   instr9_aft_spc,
 
-  jump0Type,jump0Pos,jump0Taken,btbl_IP0,btbl_mask0,btbl_attr0,
-  jump1Type,jump1Pos,jump1Taken,btbl_IP1,btbl_mask1,btbl_attr1,
+  jump0Type,jump0Pos,jump0Taken,{btbl_IP0,1'b0},btbl_mask0,btbl_attr0,
+  jump1Type,jump1Pos,jump1Taken,{btbl_IP1,1'b0},btbl_mask1,btbl_attr1,
   jump0BtbWay,jump0JmpInd,jump0GHT,
   jump1BtbWay,jump1JmpInd,jump1GHT,
   jump0SC,jump0Miss,jump0TbufOnly,

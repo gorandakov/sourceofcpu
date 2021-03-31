@@ -568,7 +568,7 @@ module decoder_reorder_mux(
   output rB_use;
   output rB_useF;
   output useBConst;
-  output [63:0] constant;
+  output [64:0] constant;
   output [REG_WIDTH-1:0] rT;
   output rT_use;
   output rT_useF;
@@ -698,16 +698,16 @@ module decoder_reorder_mux(
   input dec8_useBConst;
   input dec9_useBConst;
 
-  input [63:0] dec0_constant;
-  input [63:0] dec1_constant;
-  input [63:0] dec2_constant;
-  input [63:0] dec3_constant;
-  input [63:0] dec4_constant;
-  input [63:0] dec5_constant;
-  input [63:0] dec6_constant;
-  input [63:0] dec7_constant;
-  input [63:0] dec8_constant;
-  input [63:0] dec9_constant;
+  input [64:0] dec0_constant;
+  input [64:0] dec1_constant;
+  input [64:0] dec2_constant;
+  input [64:0] dec3_constant;
+  input [64:0] dec4_constant;
+  input [64:0] dec5_constant;
+  input [64:0] dec6_constant;
+  input [64:0] dec7_constant;
+  input [64:0] dec8_constant;
+  input [64:0] dec9_constant;
   input [63:0] aux_constant;
 
   input [9:0] dec_cls_sys;
@@ -848,16 +848,16 @@ module decoder_reorder_mux(
   assign operation=(sel[8] & ~sel[1]) ? dec8_operation : {OPERATION_WIDTH{1'BZ}};
   assign operation=sel[9] ? dec9_operation : {OPERATION_WIDTH{1'BZ}};
 
-  assign constantA=(sel[0] & ~sel[1]) ? dec0_constant : 64'bz;
-  assign constantA=(sel[1] & ~sel[0]) ? dec1_constant : 64'bz;
-  assign constantA=(sel[2] & ~sel[1]) ? dec2_constant : 64'bz;
-  assign constantA=(sel[3] & ~sel[1]) ? dec3_constant : 64'bz;
-  assign constantA=(sel[4] & ~sel[1]) ? dec4_constant : 64'bz;
-  assign constantA=(sel[5] & ~sel[1]) ? dec5_constant : 64'bz;
-  assign constantA=(sel[6] & ~sel[1]) ? dec6_constant : 64'bz;
-  assign constantA=(sel[7] & ~sel[1]) ? dec7_constant : 64'bz;
-  assign constantA=(sel[8] & ~sel[1]) ? dec8_constant : 64'bz;
-  assign constantA=sel[9] ? dec9_constant : 64'bz;
+  assign constantA=(sel[0] & ~sel[1]) ? dec0_constant : 65'bz;
+  assign constantA=(sel[1] & ~sel[0]) ? dec1_constant : 65'bz;
+  assign constantA=(sel[2] & ~sel[1]) ? dec2_constant : 65'bz;
+  assign constantA=(sel[3] & ~sel[1]) ? dec3_constant : 65'bz;
+  assign constantA=(sel[4] & ~sel[1]) ? dec4_constant : 65'bz;
+  assign constantA=(sel[5] & ~sel[1]) ? dec5_constant : 65'bz;
+  assign constantA=(sel[6] & ~sel[1]) ? dec6_constant : 65'bz;
+  assign constantA=(sel[7] & ~sel[1]) ? dec7_constant : 65'bz;
+  assign constantA=(sel[8] & ~sel[1]) ? dec8_constant : 65'bz;
+  assign constantA=sel[9] ? dec9_constant : 65'bz;
 
   assign constantB=(sel[0] & ~sel[1]) ? {{31{dec0_srcIPOff[32]}},dec0_srcIPOff} : 64'bz;
   assign constantB=(sel[1] & ~sel[0]) ? {{31{dec1_srcIPOff[32]}},dec1_srcIPOff} : 64'bz;
@@ -870,9 +870,9 @@ module decoder_reorder_mux(
   assign constantB=(sel[8] & ~sel[1]) ? {{31{dec8_srcIPOff[32]}},dec8_srcIPOff} : 64'bz;
   assign constantB=sel[9] ? {{31{dec9_srcIPOff[32]}},dec9_srcIPOff} : 64'bz;
 
-  assign constant=(!(sel&IPRel) && !(sel&dec_cls_sys)) ? constantA : 64'bz;
-  assign constant=((sel&IPRel) && !(sel&dec_cls_sys)) ? constantB : 64'bz;
-  assign constant=(sel&dec_cls_sys) ? aux_constant : 64'bz;
+  assign constant=(!(sel&IPRel) && !(sel&dec_cls_sys)) ? constantA : 65'bz;
+  assign constant=((sel&IPRel) && !(sel&dec_cls_sys)) ? {1'b0,constantB} : 65'bz;
+  assign constant=(sel&dec_cls_sys) ? {1'b0,aux_constant} : 65'bz;
 
   assign st_enA=!(&storeDA[1:0]);
   assign st_enB=!(&storeDB[1:0]);
@@ -1668,7 +1668,7 @@ module decoder(
   wrt0,wrt1,wrt2,
   csrss_no,csrss_en,csrss_data
   );
-  localparam DATA_WIDTH=`alu_width;
+  localparam DATA_WIDTH=`alu_width+1;
   localparam OPERATION_WIDTH=`operation_width;
   localparam RRF_WIDTH=6;
   localparam IN_REG_WIDTH=6;
@@ -1677,7 +1677,7 @@ module decoder(
   localparam INSTR_WIDTH=80;
   localparam INSTRQ_WIDTH=`instrQ_width;
   localparam REG_WIDTH=6;
-  localparam IP_WIDTH=48;
+  localparam IP_WIDTH=64;
   
   input clk;
   input rst;
@@ -1712,8 +1712,8 @@ module decoder(
   input [INSTR_WIDTH-1:0] inst9;
   input [INSTRQ_WIDTH-1:0] instQ9;
   
-  input [46:0] jqe_IP0;
-  input [46:0] jqe_IP1;
+  input [62:0] jqe_IP0;
+  input [62:0] jqe_IP1;
 
   input [3:0] jqe_attr0;
   input [3:0] jqe_attr1;
