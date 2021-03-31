@@ -705,7 +705,7 @@ module backend(
   input [IN_REG_WIDTH-1:0] instr0_rT;
   input instr0_en;
   input instr0_wren;
-  input [12:0] instr0_IPOff;
+  input [8:0] instr0_IPOff;
   input instr0_afterTaken;
   input instr0_rT_useF;
   input instr0_rT_isV;
@@ -717,7 +717,7 @@ module backend(
   input [IN_REG_WIDTH-1:0] instr1_rT;
   input instr1_en;
   input instr1_wren;
-  input [12:0] instr1_IPOff;
+  input [8:0] instr1_IPOff;
   input instr1_afterTaken;
   input instr1_rT_useF;
   input instr1_rT_isV;
@@ -729,7 +729,7 @@ module backend(
   input [IN_REG_WIDTH-1:0] instr2_rT;
   input instr2_en;
   input instr2_wren;
-  input [12:0] instr2_IPOff;
+  input [8:0] instr2_IPOff;
   input instr2_afterTaken;
   input instr2_rT_useF;
   input instr2_rT_isV;
@@ -741,7 +741,7 @@ module backend(
   input [IN_REG_WIDTH-1:0] instr3_rT;
   input instr3_en;
   input instr3_wren;
-  input [12:0] instr3_IPOff;
+  input [8:0] instr3_IPOff;
   input instr3_afterTaken;
   input instr3_rT_useF;
   input instr3_rT_isV;
@@ -753,7 +753,7 @@ module backend(
   input [IN_REG_WIDTH-1:0] instr4_rT;
   input instr4_en;
   input instr4_wren;
-  input [12:0] instr4_IPOff;
+  input [8:0] instr4_IPOff;
   input instr4_afterTaken;
   input instr4_rT_useF;
   input instr4_rT_isV;
@@ -765,7 +765,7 @@ module backend(
   input [IN_REG_WIDTH-1:0] instr5_rT;
   input instr5_en;
   input instr5_wren;
-  input [12:0] instr5_IPOff;
+  input [8:0] instr5_IPOff;
   input instr5_afterTaken;
   input instr5_rT_useF;
   input instr5_rT_isV;
@@ -777,7 +777,7 @@ module backend(
   input [IN_REG_WIDTH-1:0] instr6_rT;
   input instr6_en;
   input instr6_wren;
-  input [12:0] instr6_IPOff;
+  input [8:0] instr6_IPOff;
   input instr6_afterTaken;
   input instr6_rT_useF;
   input instr6_rT_isV;
@@ -789,7 +789,7 @@ module backend(
   input [IN_REG_WIDTH-1:0] instr7_rT;
   input instr7_en;
   input instr7_wren;
-  input [12:0] instr7_IPOff;
+  input [8:0] instr7_IPOff;
   input instr7_afterTaken;
   input instr7_rT_useF;
   input instr7_rT_isV;
@@ -801,7 +801,7 @@ module backend(
   input [IN_REG_WIDTH-1:0] instr8_rT;
   input instr8_en;
   input instr8_wren;
-  input [12:0] instr8_IPOff;
+  input [8:0] instr8_IPOff;
   input instr8_afterTaken;
   input instr8_rT_useF;
   input instr8_rT_isV;
@@ -813,7 +813,7 @@ module backend(
   input [IN_REG_WIDTH-1:0] instr9_rT;
   input instr9_en;
   input instr9_wren;
-  input [12:0] instr9_IPOff;
+  input [8:0] instr9_IPOff;
   input instr9_afterTaken;
   input instr9_rT_useF;
   input instr9_rT_isV;
@@ -1304,7 +1304,7 @@ module backend(
   reg [IN_REG_WIDTH-1:0] instr_rT[9:0];
   reg [9:0] instr_en;
   reg [9:0] instr_wren;
-  reg [12:0] instr_IPOff[9:0];
+  reg [8:0] instr_IPOff[9:0];
   reg [9:0] instr_afterTaken;
   reg [9:0] instr_rT_useF;
   reg [9:0] instr_rT_isV;
@@ -1347,7 +1347,7 @@ module backend(
   reg [IN_REG_WIDTH-1:0] instr_rT_reg[9:0];
   reg [9:0] instr_en_reg;
   reg [9:0] instr_wren_reg;
-  reg [12:0] instr_IPOff_reg[9:0];
+  reg [8:0] instr_IPOff_reg[9:0];
   reg [9:0] instr_afterTaken_reg;
   reg [9:0] instr_rT_useF_reg;
   reg [9:0] instr_rT_isV_reg;
