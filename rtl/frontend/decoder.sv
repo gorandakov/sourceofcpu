@@ -568,7 +568,7 @@ module decoder_reorder_mux(
   output rB_use;
   output rB_useF;
   output useBConst;
-  output [63:0] constant;
+  output [64:0] constant;
   output [REG_WIDTH-1:0] rT;
   output rT_use;
   output rT_useF;
@@ -698,16 +698,16 @@ module decoder_reorder_mux(
   input dec8_useBConst;
   input dec9_useBConst;
 
-  input [63:0] dec0_constant;
-  input [63:0] dec1_constant;
-  input [63:0] dec2_constant;
-  input [63:0] dec3_constant;
-  input [63:0] dec4_constant;
-  input [63:0] dec5_constant;
-  input [63:0] dec6_constant;
-  input [63:0] dec7_constant;
-  input [63:0] dec8_constant;
-  input [63:0] dec9_constant;
+  input [64:0] dec0_constant;
+  input [64:0] dec1_constant;
+  input [64:0] dec2_constant;
+  input [64:0] dec3_constant;
+  input [64:0] dec4_constant;
+  input [64:0] dec5_constant;
+  input [64:0] dec6_constant;
+  input [64:0] dec7_constant;
+  input [64:0] dec8_constant;
+  input [64:0] dec9_constant;
   input [63:0] aux_constant;
 
   input [9:0] dec_cls_sys;
@@ -848,16 +848,16 @@ module decoder_reorder_mux(
   assign operation=(sel[8] & ~sel[1]) ? dec8_operation : {OPERATION_WIDTH{1'BZ}};
   assign operation=sel[9] ? dec9_operation : {OPERATION_WIDTH{1'BZ}};
 
-  assign constantA=(sel[0] & ~sel[1]) ? dec0_constant : 64'bz;
-  assign constantA=(sel[1] & ~sel[0]) ? dec1_constant : 64'bz;
-  assign constantA=(sel[2] & ~sel[1]) ? dec2_constant : 64'bz;
-  assign constantA=(sel[3] & ~sel[1]) ? dec3_constant : 64'bz;
-  assign constantA=(sel[4] & ~sel[1]) ? dec4_constant : 64'bz;
-  assign constantA=(sel[5] & ~sel[1]) ? dec5_constant : 64'bz;
-  assign constantA=(sel[6] & ~sel[1]) ? dec6_constant : 64'bz;
-  assign constantA=(sel[7] & ~sel[1]) ? dec7_constant : 64'bz;
-  assign constantA=(sel[8] & ~sel[1]) ? dec8_constant : 64'bz;
-  assign constantA=sel[9] ? dec9_constant : 64'bz;
+  assign constantA=(sel[0] & ~sel[1]) ? dec0_constant : 65'bz;
+  assign constantA=(sel[1] & ~sel[0]) ? dec1_constant : 65'bz;
+  assign constantA=(sel[2] & ~sel[1]) ? dec2_constant : 65'bz;
+  assign constantA=(sel[3] & ~sel[1]) ? dec3_constant : 65'bz;
+  assign constantA=(sel[4] & ~sel[1]) ? dec4_constant : 65'bz;
+  assign constantA=(sel[5] & ~sel[1]) ? dec5_constant : 65'bz;
+  assign constantA=(sel[6] & ~sel[1]) ? dec6_constant : 65'bz;
+  assign constantA=(sel[7] & ~sel[1]) ? dec7_constant : 65'bz;
+  assign constantA=(sel[8] & ~sel[1]) ? dec8_constant : 65'bz;
+  assign constantA=sel[9] ? dec9_constant : 65'bz;
 
   assign constantB=(sel[0] & ~sel[1]) ? {{31{dec0_srcIPOff[32]}},dec0_srcIPOff} : 64'bz;
   assign constantB=(sel[1] & ~sel[0]) ? {{31{dec1_srcIPOff[32]}},dec1_srcIPOff} : 64'bz;
@@ -870,9 +870,9 @@ module decoder_reorder_mux(
   assign constantB=(sel[8] & ~sel[1]) ? {{31{dec8_srcIPOff[32]}},dec8_srcIPOff} : 64'bz;
   assign constantB=sel[9] ? {{31{dec9_srcIPOff[32]}},dec9_srcIPOff} : 64'bz;
 
-  assign constant=(!(sel&IPRel) && !(sel&dec_cls_sys)) ? constantA : 64'bz;
-  assign constant=((sel&IPRel) && !(sel&dec_cls_sys)) ? constantB : 64'bz;
-  assign constant=(sel&dec_cls_sys) ? aux_constant : 64'bz;
+  assign constant=(!(sel&IPRel) && !(sel&dec_cls_sys)) ? constantA : 65'bz;
+  assign constant=((sel&IPRel) && !(sel&dec_cls_sys)) ? {1'b0,constantB} : 65'bz;
+  assign constant=(sel&dec_cls_sys) ? {1'b0,aux_constant} : 65'bz;
 
   assign st_enA=!(&storeDA[1:0]);
   assign st_enB=!(&storeDB[1:0]);
@@ -1546,6 +1546,7 @@ module decoder(
   instr0_port,
   instr0_magic,
   instr0_last,
+  instr0_aft_spc,
   
   instr1_rT,
   instr1_en,
@@ -1557,6 +1558,7 @@ module decoder(
   instr1_port,
   instr1_magic,
   instr1_last,
+  instr1_aft_spc,
     
   instr2_rT,
   instr2_en,
@@ -1568,6 +1570,7 @@ module decoder(
   instr2_port,
   instr2_magic,
   instr2_last,
+  instr2_aft_spc,
   
   instr3_rT,
   instr3_en,
@@ -1579,6 +1582,7 @@ module decoder(
   instr3_port,
   instr3_magic,
   instr3_last,
+  instr3_aft_spc,
   
   instr4_rT,
   instr4_en,
@@ -1590,6 +1594,7 @@ module decoder(
   instr4_port,
   instr4_magic,
   instr4_last,
+  instr4_aft_spc,
   
   instr5_rT,
   instr5_en,
@@ -1601,6 +1606,7 @@ module decoder(
   instr5_port,
   instr5_magic,
   instr5_last,
+  instr5_aft_spc,
 
   instr6_rT,
   instr6_en,
@@ -1612,6 +1618,7 @@ module decoder(
   instr6_port,
   instr6_magic,
   instr6_last,
+  instr6_aft_spc,
 
   instr7_rT,
   instr7_en,
@@ -1623,6 +1630,7 @@ module decoder(
   instr7_port,
   instr7_magic,
   instr7_last,
+  instr7_aft_spc,
 
   instr8_rT,
   instr8_en,
@@ -1634,6 +1642,7 @@ module decoder(
   instr8_port,
   instr8_magic,
   instr8_last,
+  instr8_aft_spc,
 
   instr9_rT,
   instr9_en,
@@ -1645,6 +1654,7 @@ module decoder(
   instr9_port,
   instr9_magic,
   instr9_last,
+  instr9_aft_spc,
 
   jump0Type,jump0Pos,jump0Taken,
   jump1Type,jump1Pos,jump1Taken,
@@ -1658,7 +1668,7 @@ module decoder(
   wrt0,wrt1,wrt2,
   csrss_no,csrss_en,csrss_data
   );
-  localparam DATA_WIDTH=`alu_width;
+  localparam DATA_WIDTH=`alu_width+1;
   localparam OPERATION_WIDTH=`operation_width;
   localparam RRF_WIDTH=6;
   localparam IN_REG_WIDTH=6;
@@ -1667,7 +1677,7 @@ module decoder(
   localparam INSTR_WIDTH=80;
   localparam INSTRQ_WIDTH=`instrQ_width;
   localparam REG_WIDTH=6;
-  localparam IP_WIDTH=48;
+  localparam IP_WIDTH=64;
   
   input clk;
   input rst;
@@ -1702,8 +1712,8 @@ module decoder(
   input [INSTR_WIDTH-1:0] inst9;
   input [INSTRQ_WIDTH-1:0] instQ9;
   
-  input [46:0] jqe_IP0;
-  input [46:0] jqe_IP1;
+  input [62:0] jqe_IP0;
+  input [62:0] jqe_IP1;
 
   input [3:0] jqe_attr0;
   input [3:0] jqe_attr1;
@@ -2002,6 +2012,7 @@ module decoder(
   output [PORT_WIDTH-1:0] instr0_port;
   output [3:0] instr0_magic;
   output instr0_last;
+  output reg instr0_aft_spc;
   
   output [IN_REG_WIDTH-1:0] instr1_rT;
   output instr1_en;
@@ -2013,6 +2024,7 @@ module decoder(
   output [PORT_WIDTH-1:0] instr1_port;
   output [3:0] instr1_magic;
   output instr1_last;
+  output reg instr1_aft_spc;
   
   output [IN_REG_WIDTH-1:0] instr2_rT;
   output instr2_en;
@@ -2024,6 +2036,7 @@ module decoder(
   output [PORT_WIDTH-1:0] instr2_port;
   output [3:0] instr2_magic;
   output instr2_last;
+  output reg instr2_aft_spc;
   
   output [IN_REG_WIDTH-1:0] instr3_rT;
   output instr3_en;
@@ -2035,6 +2048,7 @@ module decoder(
   output [PORT_WIDTH-1:0] instr3_port;
   output [3:0] instr3_magic;
   output instr3_last;
+  output reg instr3_aft_spc;
   
   output [IN_REG_WIDTH-1:0] instr4_rT;
   output instr4_en;
@@ -2046,6 +2060,7 @@ module decoder(
   output [PORT_WIDTH-1:0] instr4_port;
   output [3:0] instr4_magic;
   output instr4_last;
+  output reg instr4_aft_spc;
   
   output [IN_REG_WIDTH-1:0] instr5_rT;
   output instr5_en;
@@ -2057,6 +2072,7 @@ module decoder(
   output [PORT_WIDTH-1:0] instr5_port;
   output [3:0] instr5_magic;
   output instr5_last;
+  output reg instr5_aft_spc;
 
   output [IN_REG_WIDTH-1:0] instr6_rT;
   output instr6_en;
@@ -2068,6 +2084,7 @@ module decoder(
   output [PORT_WIDTH-1:0] instr6_port;
   output [3:0] instr6_magic;
   output instr6_last;
+  output reg instr6_aft_spc;
 
   output [IN_REG_WIDTH-1:0] instr7_rT;
   output instr7_en;
@@ -2079,6 +2096,7 @@ module decoder(
   output [PORT_WIDTH-1:0] instr7_port;
   output [3:0] instr7_magic;
   output instr7_last;
+  output reg instr7_aft_spc;
 
   output [IN_REG_WIDTH-1:0] instr8_rT;
   output instr8_en;
@@ -2090,6 +2108,7 @@ module decoder(
   output [PORT_WIDTH-1:0] instr8_port;
   output [3:0] instr8_magic;
   output instr8_last;
+  output reg instr8_aft_spc;
 
   output [IN_REG_WIDTH-1:0] instr9_rT;
   output instr9_en;
@@ -2101,6 +2120,7 @@ module decoder(
   output [PORT_WIDTH-1:0] instr9_port;
   output [3:0] instr9_magic;
   output instr9_last;
+  output reg instr9_aft_spc;
 
   output [4:0] jump0Type;
   output [3:0] jump0Pos;
@@ -3521,6 +3541,16 @@ module decoder(
 	  dec_fsimd_reg<=10'b0;
 	  afterTick_reg<=10'b0;
 	  csrss_retIP_en_reg<=10'b0;
+	  instr0_aft_spc<=1'b0;
+	  instr1_aft_spc<=1'b0;
+	  instr2_aft_spc<=1'b0;
+	  instr3_aft_spc<=1'b0;
+	  instr4_aft_spc<=1'b0;
+	  instr5_aft_spc<=1'b0;
+	  instr6_aft_spc<=1'b0;
+	  instr7_aft_spc<=1'b0;
+	  instr8_aft_spc<=1'b0;
+	  instr9_aft_spc<=1'b0;
       end
       else if (~stall||except) begin
           for (n=0;n<10;n=n+1) begin
@@ -3588,6 +3618,16 @@ module decoder(
 	  dec_fsimd_reg<=dec_fsimd;
 	  afterTick_reg<=afterTick;
 	  csrss_retIP_en_reg<=csrss_retIP_en_reg & iUsed;
+	  instr0_aft_spc<=dec_lspec[-1];
+	  instr1_aft_spc<=dec_lspec[1-1];
+	  instr2_aft_spc<=dec_lspec[2-1];
+	  instr3_aft_spc<=dec_lspec[3-1];
+	  instr4_aft_spc<=dec_lspec[4-1];
+	  instr5_aft_spc<=dec_lspec[5-1];
+	  instr6_aft_spc<=dec_lspec[6-1];
+	  instr7_aft_spc<=dec_lspec[7-1];
+	  instr8_aft_spc<=dec_lspec[8-1];
+	  instr9_aft_spc<=dec_lspec[9-1];
       end
     end
 endmodule  

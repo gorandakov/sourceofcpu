@@ -457,7 +457,7 @@ module dcache2_way(
   wire [1:0] exclO;
   wire [35:0] expAddrE;
   wire [35:0] expAddrO;
-
+  wire expun_imm;
   reg [1:0] dirtyE_reg;
   reg [1:0] dirtyO_reg;
   reg [1:0] exclE_reg;
@@ -470,7 +470,10 @@ module dcache2_way(
   reg [1:0] exclO_reg2;
   reg [35:0] expAddrE_reg2;
   reg [35:0] expAddrO_reg2;
-  
+ 
+  reg [4:0] expun_dc_addr_reg;
+  reg [4:0] expun_cc_addr_reg;
+
   wire read_enL,read_enH;
   reg write0_hitEL_reg;
   reg write0_hitOL_reg;
@@ -500,7 +503,13 @@ module dcache2_way(
   reg read_hit_reg;
   reg ins_hit_reg;
   reg ins_hit_reg2;
-  
+ 
+  wire [15:0] expun_dataE;
+  wire [15:0] expun_dataO;
+
+  wire expun_dc_hitE,expun_dc_hitO;
+  wire expun_cc_hitE,expun_cc_hitO;
+
   wire [4:0] read_LRUP;
   wire read_dirP,read_exclP;
   wire [36:0] read_expAddrP;
@@ -633,7 +642,7 @@ module dcache2_way(
   .write1_bitEn(16'b1<<expun_dc_addr_reg[7:5]),
   .write2_addr(write_addrE0_reg[3:0]),
   .write2_data(16'hffff),
-  .write2_wen(ins_hit && ~write0_odd_reg),
+  .write2_wen(ins_hit && ~read_odd_reg),
   .write2_bitEn(16'b1<<write_addrE0_reg[6:4])
   );
   
@@ -653,7 +662,7 @@ module dcache2_way(
   .write1_bitEn(16'b1<<expun_dc_addr_reg[7:5]),
   .write2_addr(write_addrE0_reg[3:0]),
   .write2_data(16'hffff),
-  .write2_wen(ins_hit && write0_odd_reg),
+  .write2_wen(ins_hit && read_odd_reg),
   .write2_bitEn(16'b1<<write_addrE0_reg[6:4])
   );
 //  assign ins_hit=rand_reg==ID && rand_en_reg2 && insert_reg;
@@ -693,7 +702,7 @@ module dcache2_way(
     end
   endgenerate
 
-  assign expun_imm=write_add0_reg ? exrun_dataO[write_addrE0[6:4]] : exrun_dataE[write_addrE0[6:4]]; 
+  assign expun_imm=read_odd_reg ? expun_dataO[write_addrE0[6:4]] : expun_dataE[write_addrE0[6:4]]; 
 
   lru_single #(5,{BIG_ID,ID}) lru_mod(
   .lru(read_LRUx_reg2),
@@ -811,9 +820,11 @@ module dcache2_way(
 	  write1_clkEn_reg<=1'b0;
 	  write0_clkEn_reg2<=1'b0;
 	  write1_clkEn_reg2<=1'b0;
-	  write0_hitE_reg;
-	  write0_hitO_reg;
+	  write0_hitE_reg<=1'b0;
+	  write0_hitO_reg<=1'b0;
 	  read_inL1<=1'b0;
+	  expun_cc_addr_reg<=5'b0;
+	  expun_dc_addr_reg<=5'b0;
       end else begin
           write0_hitEL_reg<=write0_hitEL;
           write0_hitOL_reg<=write0_hitOL;
@@ -872,6 +883,8 @@ module dcache2_way(
 	  write0_hitE_reg<=write0_hitE;
 	  write0_hitO_reg<=write0_hitO;
 	  read_inL1<=expun_imm&read_en_reg&ins_hit;
+	  expun_cc_addr_reg<=expun_cc_addr[4:0];
+	  expun_dc_addr_reg<=expun_dc_addr[4:0];
       end
       if (rst) begin
           write_addrE0_reg<=36'b0;
@@ -1074,6 +1087,7 @@ module dcache2_block(
   reg insBus_A_reg,insBus_B_reg;
   reg [7:0] ins_hit_reg;
   reg ins_hit_reg2;
+  wire read_imm_any;
 //  reg ins_hit_reg3;
   wire read_dirP[7:-1],read_exclP[7:-1];
   wire [36:0] read_expAddrP[7:-1];

@@ -45,7 +45,9 @@ module frontend1(
   csrss_en,csrss_addr,csrss_data,
   MSI_expAddr,
   MSI_expAddr_en,
-  MSI_expAddr_hit
+  MSI_expAddr_hit,
+  expun_addr,
+  expun_wen
   );
 
   localparam PHYS_WIDTH=44;
@@ -144,6 +146,8 @@ module frontend1(
   input [36:0] MSI_expAddr;
   input MSI_expAddr_en;
   output MSI_expAddr_hit;
+  output [36:0] expun_addr;
+  output expun_wen;
 
   wire [DATA_WIDTH/2-1:0] read_data;
   wire [14:0] read_dataX;
@@ -1026,7 +1030,9 @@ module frontend1(
   .write_data(write_data),
   .chkCL_IP(MSI_expAddr),
   .chkCL_clkEn(MSI_expAddr_en),
-  .chkCL_hit(MSI_expAddr_hit)
+  .chkCL_hit(MSI_expAddr_hit),
+  .expun_addr(expun_addr),
+  .expun_wen(expun_wen)
   );  
 
   ctlb tlb_mod(

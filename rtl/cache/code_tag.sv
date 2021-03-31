@@ -103,6 +103,7 @@ module ccTag(
   hitNRU_reg,
   write_hit,
   write_expun_addr,
+  write_exp_en,
   init
   );
 
@@ -136,6 +137,7 @@ module ccTag(
   input [2:0] hitNRU_reg;
   output write_hit;
   output [36:0] write_expun_addr;
+  output write_exp_en;
   input init;
 
   wire [PHYS_BITS-8:0] tag_paddr;
@@ -182,6 +184,7 @@ module ccTag(
   assign write_data_new[`cc1Tag_parity]=^write_data_new[DATA_WIDTH-2:0];
 
   assign write_expun_addr=read_dataW[`cc1Tag_paddr] && {37{write_hit}};
+  assign write_exp_en=write_hit && read_dataW[`cc1Tag_valid ];
 
   generate
     if (~INDEX[0]) begin
@@ -191,7 +194,7 @@ module ccTag(
     end
   endgenerate
 
-  assign write_hit=(write_wen_reg && read_NRUw==3'd7) || (invalidate_reg && read_dataW[`cc1Tag_paddr]==write_addr_reg && read_dataW[`cc1Tag_valid]);
+  assign write_hit=(write_wen_reg && read_NRUw==3'd7) || (invalidate_reg && read_dataW[`cc1Tag_paddr]==write_phys_addr_reg && read_dataW[`cc1Tag_valid]);
   ccTag_ram ram_mod(
   .clk(clk),
   .rst(rst),

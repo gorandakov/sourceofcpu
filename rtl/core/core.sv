@@ -7,7 +7,7 @@ module heptane_core(
   rbusIn_signals,rbusIn_src_req,rbusIn_dst_req,rbusIn_address,
   rbusOut_signals,rbusOut_src_req,rbusOut_dst_req,rbusOut_address,rbusOut_can,rbusOut_want,rbusOut_sz,rbusOut_bank0,rbusOut_low,
   rbusDIn_signals,rbusDIn_src_req,rbusDIn_dst_req,rbusDIn_data,
-  rbusDOut_signals,rbusDOut_src_req,rbusDOut_dst_req,rbusDOut_data,rbusDOut_can,rbusDOut_want
+  rbusDOut_signals,rbusDOut_src_req,rbusDOut_dst_req,rbusDOut_data,rbusDOut_can,rbusDOut_want,rbusDOut_replay
 );
   parameter [4:0] BUS_ID=0;
   localparam PHYS_WIDTH=44;
@@ -21,7 +21,7 @@ module heptane_core(
   localparam IN_REG_WIDTH=6;
   localparam OPERATION_WIDTH=`operation_width;
   localparam PORT_WIDTH=4;
-  localparam RS_WIDTH=64;
+  localparam RS_WIDTH=65;
   localparam REQ_WIDTH=10;
 
   input clk;
@@ -49,6 +49,7 @@ module heptane_core(
   output [511:0] rbusDOut_data;
   input rbusDOut_can;
   output rbusDOut_want;
+  output rbusDOut_replay;
 
  
  // reg [63:0] r02_data;
@@ -145,8 +146,8 @@ module heptane_core(
   wire stall;
 
   wire [2:0] btbl_step;
-  wire [63:0] btbl_IP0;
-  wire [63:0] btbl_IP1;
+  wire [62:0] btbl_IP0;
+  wire [62:0] btbl_IP1;
   wire [3:0] btbl_mask0;
   wire [3:0] btbl_mask1;
   wire [3:0] btbl_attr0;
@@ -576,7 +577,8 @@ module heptane_core(
   wire jump1Miss;
   wire jump1TbufOnly;
   wire [9:0] instr_fsimd;
-  wire [43:0] baseIP;
+  wire [62:0] baseIP;
+  wire [3:0] baseAttr;
   wire [5:0] wrt0;
   wire [5:0] wrt1;
   wire [5:0] wrt2;
@@ -736,6 +738,11 @@ module heptane_core(
 
   wire [35:0] L1_expAddr;
   wire L1_expAddr_en;
+  reg L1_expAddr_en_reg;
+  reg L1_expAddr_en_reg2;
+  reg L1_expAddr_en_reg3;
+  reg L1_expAddr_en_reg4;
+  reg L1_expAddr_en_reg5;
   wire [35:0] MSI_expAddr;
   wire MSI_expAddr_en;
   wire MSI_req_excl;
@@ -748,8 +755,9 @@ module heptane_core(
 
   wire [36:0] expun_bk_addr;
   wire expun_bk_en;
-  //wire [36:0] expun_fr_addr;
-  //wire expun_fr_en;
+  wire [36:0] expun_fr_addr;
+  wire expun_fr_en;
+
   wire wrStall;
 //  reg ret_ebx_en;
 //  reg [63:0] ret_ebx_data;
@@ -820,7 +828,7 @@ module heptane_core(
   assign rbusDOut_dst_req=rbusDIn_data_reg[46:37];
   assign rbusDOut_data=dc2_rdata_reg;
   assign rbusDOut_want=dc2_rhitExp & ~L1_expAddr_en_reg4 || dc2_rhitExp_reg & ~L1_expAddr_en_reg5;
-  assign rbusDout_replay=dc2_rhitExp & ~L1_expAddr_en_reg4;
+  assign rbusDOut_replay=dc2_rhitExp & ~L1_expAddr_en_reg4;
 
   assign insBus_en=dc2_rhit && ~L1_expAddr_en_reg4;
   assign insBus_io=dc2_io_en_reg4;
@@ -1017,7 +1025,7 @@ module heptane_core(
   clk,
   rst,
   except,
-  exceptIP[46:0],
+  {exceptIP,1'b0},
 //
   exceptThread,
   exceptAttr,
@@ -1054,11 +1062,13 @@ module heptane_core(
   btbl_IP1,
   btbl_mask0,btbl_mask1,
   btbl_attr0,btbl_attr1,
-  csrss_en,csrss_addr,csrss_data,
+  csrss_en,csrss_no,csrss_data,
   MSI_expAddr_reg,
   MSI_expAddr_en_reg,
   MSI_expAddr_hitCC,
-  dec_attr
+  //dec_attr
+  expun_fr_addr,
+  expun_fr_en
   );
   
 
@@ -1068,7 +1078,8 @@ module heptane_core(
   rst,
   stall,
   except,
-  {exceptIP[46:0],1'b0},
+  {exceptIP,1'b0},
+  exceptAttr,
   
   btbl_step,
   
@@ -1093,6 +1104,9 @@ module heptane_core(
   
   halt,
   
+  all_retired,
+  fp_excpt_en,
+  fp_excpt_set,
 
   bundleFeed,
 //begin instructions ordered by rs input port
@@ -1385,6 +1399,7 @@ module heptane_core(
   jump1SC,jump1Miss,jump1TbufOnly,
   instr_fsimd,
   baseIP,
+  baseAttr,
   wrt0,wrt1,wrt2,
   csrss_no,csrss_en,csrss_data
   );
@@ -1697,8 +1712,8 @@ module heptane_core(
   instr9_last,
   instr9_aft_spc,
 
-  jump0Type,jump0Pos,jump0Taken,btbl_IP0,btbl_mask0,btbl_attr0,
-  jump1Type,jump1Pos,jump1Taken,btbl_IP1,btbl_mask1,btbl_attr1,
+  jump0Type,jump0Pos,jump0Taken,{btbl_IP0,1'b0},btbl_mask0,btbl_attr0,
+  jump1Type,jump1Pos,jump1Taken,{btbl_IP1,1'b0},btbl_mask1,btbl_attr1,
   jump0BtbWay,jump0JmpInd,jump0GHT,
   jump1BtbWay,jump1JmpInd,jump1GHT,
   jump0SC,jump0Miss,jump0TbufOnly,
@@ -1802,6 +1817,11 @@ module heptane_core(
 	dc2_dataIO_reg<=1'b0;
 	dc2_dataIO_reg2<=1'b0;
 	dc2_dataIO_reg3<=1'b0;
+        L1_expAddr_en_reg<=1'b0;
+        L1_expAddr_en_reg2<=1'b0;
+        L1_expAddr_en_reg3<=1'b0;
+        L1_expAddr_en_reg4<=1'b0;
+        L1_expAddr_en_reg5<=1'b0;
     end else begin
         MSI_expAddr_reg<=MSI_expAddr;
         MSI_expAddr_en_reg<=MSI_expAddr_en;
@@ -1861,6 +1881,11 @@ module heptane_core(
 	dc2_dataIO_reg<=dc2_dataIO;
 	dc2_dataIO_reg2<=dc2_dataIO_reg;
 	dc2_dataIO_reg3<=dc2_dataIO_reg2;
+        L1_expAddr_en_reg<=L1_expAddr_en;
+        L1_expAddr_en_reg2<=L1_expAddr_en_reg;
+        L1_expAddr_en_reg3<=L1_expAddr_en_reg2;
+        L1_expAddr_en_reg4<=L1_expAddr_en_reg3;
+        L1_expAddr_en_reg5<=L1_expAddr_en_reg4;
     end
   end
 endmodule
