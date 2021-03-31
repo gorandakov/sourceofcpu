@@ -4940,7 +4940,7 @@ module backend(
   .FUFL9(FUFL[9]),
   .ALTDATAH0(sqrDatH_reg),.ALTDATAH1({FUTYPE_reg,66'b0}),
   .ALTDATAL0(sqrDatL_reg),.ALTDATAL1(FUCVT2_reg),
-  .ALT_INP({dalt,sqrDatEn}),
+  .ALT_INP({dalt[1],sqrDatEn}),
   FUS_alu_reg2[0],FUS_alu_reg5[1],
   FUS_alu_reg2[2],FUS_alu_reg5[3],
   FUS_alu_reg2[4],FUS_alu_reg5[5],
@@ -5663,7 +5663,8 @@ dcache1 L1D_mod(
 	  jump1Mask_reg<=4'b0;
 	  jump1Attr_reg<=4'h0;
 	  instr_fsimd_reg<=10'b0;
-	  baseIP_reg<=62'b0;
+	  
+	  baseIP_reg<=63'b0;
           
               
 	  jump0TbufWay_reg2<=1'd0;
