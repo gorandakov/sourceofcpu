@@ -702,9 +702,9 @@ module cntrl_find_outcome(
     for(k=0;k<10;k=k+1) begin : jumps_gen
       assign flagSet[k]=ret_data[k][`except_setsFlags];
       assign pending[k]=ret_data[k][`except_status]==2'd0 && !(mem_match & mem_II_bits_ret[k]);
-      assign exceptn[k]=(ret_data[k][`except_status]==2'd1 && ~ret_data[k][11]) || (mem_match & mem_II_bits_except[k]);
-      assign replay[k]=(ret_data[k][`except_status]==2'd1 && ret_data[k][11]) || (mem_match & mem_II_bits_ldconfl[k]);
-      assign replay_safe[k]=(ret_data[k][`except_status]==2'd1 && ret_data[k][11]) || (mem_match & mem_II_bits_waitconfl[k]);
+      assign exceptn[k]=(ret_data[k][`except_status]==2'd1 && ~ret_data[k][14]) || (mem_match & mem_II_bits_except[k]);
+      assign replay[k]=(ret_data[k][`except_status]==2'd1 && ret_data[k][14]) || (mem_match & mem_II_bits_ldconfl[k]);
+      assign replay_safe[k]=(ret_data[k][`except_status]==2'd1 && ret_data[k][14]) || (mem_match & mem_II_bits_waitconfl[k]);
       assign done[k]=ret_data[k][`except_status]==2'd2 || (mem_match & mem_II_bits_fine[k] & mem_II_bits_ret[k]);
       assign fpudone[k]=ret_data[k][`except_status]==2'd3;//with exception flags set
           
