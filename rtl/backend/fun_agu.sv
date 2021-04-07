@@ -347,7 +347,7 @@ module agu_block(
   output       p0_en;
   output       p0_rsEn;
   output       p0_secq;
-  output [13:0]p0_ret;
+  output [12:0]p0_ret;
   output       p0_repl;
   output       p0_lsfwd;
   output [`lsaddr_width-1:0] p1_adata;
@@ -356,7 +356,7 @@ module agu_block(
   output       p1_en;
   output       p1_rsEn;
   output       p1_secq;
-  output [13:0]p1_ret;
+  output [12:0]p1_ret;
   output       p1_repl;
   output       p1_lsfwd;
   output [`lsaddr_width-1:0] p2_adata;
@@ -365,7 +365,7 @@ module agu_block(
   output       p2_en;
   output       p2_rsEn;
   output       p2_secq;
-  output [13:0]p2_ret;
+  output [12:0]p2_ret;
   output       p2_repl;
   output       p2_lsfwd;
   output[127+8:0]p2_data;
@@ -377,7 +377,7 @@ module agu_block(
   output       p3_rsEn;
   output       p3_ioEn;
   input        p3_io_ack;
-  output [13:0]p3_ret;
+  output [12:0]p3_ret;
   output[127+8:0]p3_data;
   output [4:0] p3_brdbanks;
   output       p3_repl;
@@ -386,12 +386,12 @@ module agu_block(
   output [8:0] p4_LSQ;
   output       p4_en;
   output       p4_secq;
-  output [13:0]p4_ret;
+  output [12:0]p4_ret;
   output [`lsaddr_width-1:0] p5_adata;
   output [8:0] p5_LSQ;
   output       p5_en;
   output       p5_secq;
-  output [13:0]p5_ret;
+  output [12:0]p5_ret;
   output [31:0] p_bankNone;
 
   input FU0Hit,FU1Hit,FU2Hit,FU3Hit;
@@ -2400,7 +2400,7 @@ module agu_block(
   assign p0_rsEn=mOp0_rsEn_reg && ~p0_pageFault;
   assign p0_en=mOpX0_en_reg & !p0_conflict;
   assign p0_LSQ=mOpX0_LSQ_reg;
-  assign p0_ret={1'b0,p0_faultCode[3:0],p0_faultNo};
+  assign p0_ret={p0_faultCode[3:0],p0_faultNo};
   assign p0_secq=mOp0_sec_reg;
   assign p0_lsfwd=mOpX0_lsfwd;
 
@@ -2434,7 +2434,7 @@ module agu_block(
   assign p1_rsEn=mOp1_rsEn_reg && ~p1_pageFault;
   assign p1_en=mOpX1_en_reg & ~p1_conflict;
   assign p1_LSQ=mOpX1_LSQ_reg;
-  assign p1_ret={1'b0,p1_faultCode[3:0],p1_faultNo};
+  assign p1_ret={p1_faultCode[3:0],p1_faultNo};
   assign p1_secq=mOp1_sec_reg;
   assign p1_lsfwd=mOpX1_lsfwd;
 
@@ -2468,7 +2468,7 @@ module agu_block(
   assign p2_rsEn=mOp2_rsEn_reg && ~p2_pageFault;
   assign p2_en=mOpX2_en_reg & ~p2_conflict;
   assign p2_LSQ=mOpX2_LSQ_reg;
-  assign p2_ret={1'b0,p2_faultCode[3:0],p2_faultNo};
+  assign p2_ret={p2_faultCode[3:0],p2_faultNo};
   assign p2_secq=mOp2_sec_reg;
   assign p2_lsfwd=mOpX2_lsfwd;
   assign p2_data=mOpX2_data_reg;
@@ -2506,7 +2506,7 @@ module agu_block(
   assign p3_LSQ=mOpX3_LSQ_reg;
   assign p3_lsfwd=mOpX3_lsfwd;
   assign p3_data=mOpX3_data_reg;
-  assign p3_ret={1'b0,p3_faultCode[3:0],p3_faultNo};
+  assign p3_ret={p3_faultCode[3:0],p3_faultNo};
   assign p3_brdbanks=mOpX3_brdread_reg;
 
   assign p_bankNone=~mOpX3_banks_reg & ~mOpX2_banks_reg & ~mOpX1_banks_reg &~mOpX0_banks_reg;
@@ -2540,7 +2540,7 @@ module agu_block(
   assign p4_en=mOpX4_en_reg;
   assign p4_LSQ=mOpX4_LSQ_reg;
   assign p4_secq=mOp4_sec_reg;
-  assign p4_ret={1'b0,p4_faultCode[3:0],p4_faultNo};
+  assign p4_ret={p4_faultCode[3:0],p4_faultNo};
 
   assign p5_adata[`lsaddr_addrE]=mOpX5_addrEven_reg;
   assign p5_adata[`lsaddr_addrO]=mOpX5_addrOdd_reg;
@@ -2571,7 +2571,7 @@ module agu_block(
   assign p5_en=mOpX5_en_reg;
   assign p5_LSQ=mOpX5_LSQ_reg;
   assign p5_secq=mOp5_sec_reg;
-  assign p5_ret={1'b0,p5_faultCode[3:0],p5_faultNo};
+  assign p5_ret={p5_faultCode[3:0],p5_faultNo};
 
   always @(posedge clk) begin
       if (p4_mex_en) $display("mex4");
