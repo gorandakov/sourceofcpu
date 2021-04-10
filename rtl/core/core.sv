@@ -86,7 +86,8 @@ module heptane_core(
   wire [255:0] read_data_strip;
   
   wire except;
-  
+  wire fp_excpt_en;
+  wire [10:0] fp_excpt_set; 
   wire [VIRT_WIDTH-2:0] exceptIP;
 
   wire exceptThread;
@@ -743,13 +744,13 @@ module heptane_core(
   reg L1_expAddr_en_reg3;
   reg L1_expAddr_en_reg4;
   reg L1_expAddr_en_reg5;
-  wire [35:0] MSI_expAddr;
+  wire [36:0] MSI_expAddr;
   wire MSI_expAddr_en;
   wire MSI_req_excl;
   wire MSI_expect_swap;
   wire MSI_expAddr_hitCC;
   wire [3:0] dec_attr;
-  reg  [35:0] MSI_expAddr_reg;
+  reg  [36:0] MSI_expAddr_reg;
   reg  MSI_expAddr_en_reg;
 //  wire MSI_swap_reply;
 
@@ -1766,7 +1767,7 @@ module heptane_core(
   begin
     
     if (rst) begin
-        bus_tlb_slot<=8'b0;
+        bus_tlb_slot<=10'b0;
         req_addr_reg<=37'b0;
         req_en_reg<=1'b0;
         req_slot_reg<=10'b0;
@@ -1814,9 +1815,9 @@ module heptane_core(
 	dc2_io_en_reg2<=1'b0;
 	dc2_io_en_reg3<=1'b0;
 	dc2_io_en_reg4<=1'b0;
-	dc2_dataIO_reg<=1'b0;
-	dc2_dataIO_reg2<=1'b0;
-	dc2_dataIO_reg3<=1'b0;
+	dc2_dataIO_reg<=64'b0;
+	dc2_dataIO_reg2<=64'b0;
+	dc2_dataIO_reg3<=64'b0;
         L1_expAddr_en_reg<=1'b0;
         L1_expAddr_en_reg2<=1'b0;
         L1_expAddr_en_reg3<=1'b0;
