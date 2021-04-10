@@ -1588,7 +1588,7 @@ module backend(
   wire [8:0][16+SIMD_WIDTH-1:0] dataAFL;
 
   wire [8:0][SIMD_WIDTH-1:0] dataBVH;
-  wire [8:0][16+SIMD_WIDTH-1:0] dataBVL;
+  wire [8:0][SIMD_WIDTH-1:0] dataBVL;
   wire [8:0][SIMD_WIDTH-1:0] dataBFH;
   wire [8:0][16+SIMD_WIDTH-1:0] dataBFL;
 
