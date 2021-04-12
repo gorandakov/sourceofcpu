@@ -586,7 +586,7 @@ module heptane_core(
 
   wire [15:0] csrss_no;
   wire csrss_en;
-  wire [64:0] csrss_data;
+  wire [63:0] csrss_data;
   
   wire insBus_en;
   wire insBus_io;
