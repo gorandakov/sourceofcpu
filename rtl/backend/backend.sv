@@ -1765,14 +1765,14 @@ module backend(
   reg  [7:0] WDfxWQ_reg4[1:0];
   wire [1:0] WDfxThr;
  
-  wire [1:0][127:0] lsw_wdataF0;
-  wire [1:0][127:0] lsw_wdataF1;
-  wire [1:0][127:0] lsw_wdataF;
-  reg [127:0] lsw_wdataF_reg[1:0];
+  wire [1:0][135:0] lsw_wdataF0;
+  wire [1:0][135:0] lsw_wdataF1;
+  wire [1:0][135:0] lsw_wdataF;
+  reg [135:0] lsw_wdataF_reg[1:0];
   wire [1:0][127:0] lsw_wdataV;
   wire [1:0][127:0] lsw_wdataV0;
   reg [127:0] lsw_wdataV_reg[1:0];
-  wire [1:0][127:0] lsw_wdata; 
+  wire [1:0][135:0] lsw_wdata; 
 
   wire pause_agu;
   wire miss_pause_agu;
@@ -1783,7 +1783,7 @@ module backend(
   reg miss_holds_agu_reg;
   reg miss_holds_agu_reg2;
  
-  wire [5:4][7:0] p_LSQ; 
+  wire [5:4][8:0] p_LSQ; 
   
   wire [2:0][2:0] nDataAlt;
   reg [2:0][2:0] nDataAlt_reg;
@@ -4788,8 +4788,8 @@ module backend(
   .mOpY5_data_o(dc_wdata[1]),
   .mOpY5_type_o(),
   .mOpY5_II_o(),
-  .lso_adata(lso_adata),.lso_xdataA(lso_en<<11),.lso_data(lso_data),.lso_bnkread(lso_bnkread),
-  .lso2_adata(lso2_adata),.lso2_xdataA(lso2_en<<11),.lso2_data(lso2_data),.lso2_bnkread(lso2_bnkread),
+  .lso_adata(lso_adata),.lso_xdataA(lso_en<<11),.lso_data(lso_data),.lso_bnkread({lso_bnkread[3],lso_bnkread}),
+  .lso2_adata(lso2_adata),.lso2_xdataA(lso2_en<<11),.lso2_data(lso2_data),.lso2_bnkread({lso2_bnkread[3],lso2_bnkread}),
   .lso2_wb_en({lso2_en && (lso2_adata[`lsaddr_reg_low]==2 || lso2_adata[`lsaddr_reg_low]==5 || lso2_adata[`lsaddr_reg_low]==8 ),
     lso2_en && (lso2_adata[`lsaddr_reg_low]==1 || lso2_adata[`lsaddr_reg_low]==4 || lso2_adata[`lsaddr_reg_low]==7 ),
     lso2_en && (lso2_adata[`lsaddr_reg_low]==0 || lso2_adata[`lsaddr_reg_low]==3 || lso2_adata[`lsaddr_reg_low]==6 )}),
@@ -4958,7 +4958,7 @@ module backend(
   fun_fpsu_BOTH fpsu_mod(
   .clk(clk),
   .rst(rst),
-  .fpcsr(fpcsr),
+  .fpcsr(fpcsr[31:0]),
   .u1_A0(outDataAVL[0]),.u1_B0(outDataBVL[0]),
   .u1_A1(outDataAVH[0]),.u1_B1(outDataBVH[0]),
   .u1_en(outEn_reg[1]),.u1_op(outOp_reg[1]),
@@ -5004,8 +5004,8 @@ module backend(
   .FUFL6(FUVL[6]),.FUFL7(FUVL[7]),.FUFL8(FUVL[8]),
   .FUFL9(FUVL[9]),
   .ALTDATAH0(sqrDatH),.ALTDATAH1({FUTYPE,66'b0}),
-  .ALTDATAL0(sqrDatL[67:0]),.ALTDATAL1(FUCVT2),
-  .ALT_INP({dalt,sqrDatEn})
+  .ALTDATAL0(sqrDatL[67:0]),.ALTDATAL1(FUCVT2[67:0]),
+  .ALT_INP({dalt[1],sqrDatEn})
   );
 
   fun_fpusqr sqr_mod(
