@@ -4788,8 +4788,8 @@ module backend(
   .mOpY5_data_o(dc_wdata[1]),
   .mOpY5_type_o(),
   .mOpY5_II_o(),
-  .lso_adata(lso_adata),.lso_xdataA(lso_en<<11),.lso_data(lso_data),.lso_bnkread({lso_bnkread[3],lso_bnkread}),
-  .lso2_adata(lso2_adata),.lso2_xdataA(lso2_en<<11),.lso2_data(lso2_data),.lso2_bnkread({lso2_bnkread[3],lso2_bnkread}),
+  .lso_adata(lso_adata),.lso_xdataA({lso_en,11'b0}),.lso_data(lso_data),.lso_bnkread({lso_bnkread[3],lso_bnkread}),
+  .lso2_adata(lso2_adata),.lso2_xdataA({lso2_en,11'b0}),.lso2_data(lso2_data),.lso2_bnkread({lso2_bnkread[3],lso2_bnkread}),
   .lso2_wb_en({lso2_en && (lso2_adata[`lsaddr_reg_low]==2 || lso2_adata[`lsaddr_reg_low]==5 || lso2_adata[`lsaddr_reg_low]==8 ),
     lso2_en && (lso2_adata[`lsaddr_reg_low]==1 || lso2_adata[`lsaddr_reg_low]==4 || lso2_adata[`lsaddr_reg_low]==7 ),
     lso2_en && (lso2_adata[`lsaddr_reg_low]==0 || lso2_adata[`lsaddr_reg_low]==3 || lso2_adata[`lsaddr_reg_low]==6 )}),
@@ -7133,7 +7133,7 @@ dcache1 L1D_mod(
 	     WDoutOp_reg[v]<=13'b0;
 	     WDoutOp_reg2[v]<=13'b0;
 	     WDoutOp_reg3[v]<=13'b0;
-             lsw_wdataF_reg[v]<=128'b0;
+             lsw_wdataF_reg[v]<=136'b0;
              lsw_wdataV_reg[v]<=128'b0;
              Wagu_blockRS_reg[v]<=1'b0;
           end

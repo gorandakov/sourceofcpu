@@ -197,7 +197,7 @@ module fun_fpuH(
   FUF6,FUF7,FUF8,
   FUF9,
   68'b0,68'b0,
-  2'b0
+  2'b0,
   FUS_alu2,FUS_alu3,
   ex_alu2,ex_alu3,
   fxFADD2_raise_s,
