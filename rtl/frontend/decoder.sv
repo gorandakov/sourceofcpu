@@ -2005,7 +2005,7 @@ module decoder(
   output [IN_REG_WIDTH-1:0] instr0_rT;
   output instr0_en;
   output instr0_wren;
-  output [12:0] instr0_IPOff;
+  output [8:0] instr0_IPOff;
   output instr0_afterTaken;
   output instr0_rT_useF;
   output instr0_rT_isV;
@@ -2017,7 +2017,7 @@ module decoder(
   output [IN_REG_WIDTH-1:0] instr1_rT;
   output instr1_en;
   output instr1_wren;
-  output [12:0] instr1_IPOff;
+  output [8:0] instr1_IPOff;
   output instr1_afterTaken;
   output instr1_rT_useF;
   output instr1_rT_isV;
@@ -2029,7 +2029,7 @@ module decoder(
   output [IN_REG_WIDTH-1:0] instr2_rT;
   output instr2_en;
   output instr2_wren;
-  output [12:0] instr2_IPOff;
+  output [8:0] instr2_IPOff;
   output instr2_afterTaken;
   output instr2_rT_useF;
   output instr2_rT_isV;
@@ -2041,7 +2041,7 @@ module decoder(
   output [IN_REG_WIDTH-1:0] instr3_rT;
   output instr3_en;
   output instr3_wren;
-  output [12:0] instr3_IPOff;
+  output [8:0] instr3_IPOff;
   output instr3_afterTaken;
   output instr3_rT_useF;
   output instr3_rT_isV;
@@ -2053,7 +2053,7 @@ module decoder(
   output [IN_REG_WIDTH-1:0] instr4_rT;
   output instr4_en;
   output instr4_wren;
-  output [12:0] instr4_IPOff;
+  output [8:0] instr4_IPOff;
   output instr4_afterTaken;
   output instr4_rT_useF;
   output instr4_rT_isV;
@@ -2065,7 +2065,7 @@ module decoder(
   output [IN_REG_WIDTH-1:0] instr5_rT;
   output instr5_en;
   output instr5_wren;
-  output [12:0] instr5_IPOff;
+  output [8:0] instr5_IPOff;
   output instr5_afterTaken;
   output instr5_rT_useF;
   output instr5_rT_isV;
@@ -2077,7 +2077,7 @@ module decoder(
   output [IN_REG_WIDTH-1:0] instr6_rT;
   output instr6_en;
   output instr6_wren;
-  output [12:0] instr6_IPOff;
+  output [8:0] instr6_IPOff;
   output instr6_afterTaken;
   output instr6_rT_useF;
   output instr6_rT_isV;
@@ -2089,7 +2089,7 @@ module decoder(
   output [IN_REG_WIDTH-1:0] instr7_rT;
   output instr7_en;
   output instr7_wren;
-  output [12:0] instr7_IPOff;
+  output [8:0] instr7_IPOff;
   output instr7_afterTaken;
   output instr7_rT_useF;
   output instr7_rT_isV;
@@ -2101,7 +2101,7 @@ module decoder(
   output [IN_REG_WIDTH-1:0] instr8_rT;
   output instr8_en;
   output instr8_wren;
-  output [12:0] instr8_IPOff;
+  output [8:0] instr8_IPOff;
   output instr8_afterTaken;
   output instr8_rT_useF;
   output instr8_rT_isV;
@@ -2113,7 +2113,7 @@ module decoder(
   output [IN_REG_WIDTH-1:0] instr9_rT;
   output instr9_en;
   output instr9_wren;
-  output [12:0] instr9_IPOff;
+  output [8:0] instr9_IPOff;
   output instr9_afterTaken;
   output instr9_rT_useF;
   output instr9_rT_isV;
@@ -2128,10 +2128,10 @@ module decoder(
   output [4:0] jump1Type;
   output [3:0] jump1Pos;
   output jump1Taken;
-  output [2:0] jump0BtbWay;
+  output jump0BtbWay;
   output [1:0] jump0JmpInd;
   output [7:0] jump0GHT;
-  output [2:0] jump1BtbWay;
+  output jump1BtbWay;
   output [1:0] jump1JmpInd;
   output [7:0] jump1GHT;
   output [1:0] jump0SC;
@@ -2198,12 +2198,12 @@ module decoder(
 
   wire [9:0] dec_fsimd;
 
-  wire [9:0][11:0] dec_srcIPOff;
+  wire [9:0][7:0] dec_srcIPOff;
   reg  [12:0] dec_srcIPOff_reg[9:0];
-  wire [9:0][12:0] dec_srcIPOffA;
+  wire [9:0][8:0] dec_srcIPOffA;
   wire [9:0][32:0] dec_srcIPOffx;
   
-  reg [12:0] dec_srcIPOffA_reg[9:0];
+  reg [8:0] dec_srcIPOffA_reg[9:0];
 
   
   wire [9:0] dec_allocR;
@@ -2506,14 +2506,14 @@ module decoder(
           assign rs1i2_index=(rs_index[7][k] & ~rs_index[7][k^1]) ? k : 4'bz;
           assign rs2i2_index=(rs_index[8][k] & ~rs_index[8][k^1]) ? k : 4'bz;
 
-          adder #(13) srcAddA1_mod({afterTick[k],dec_srcIPOff[k]},13'd1,dec_srcIPOffA[k],1'b0,~dec_magic[k][0],,,,);
-          adder #(13) srcAddA2_mod({afterTick[k],dec_srcIPOff[k]},13'd2,dec_srcIPOffA[k],1'b0,dec_magic[k][1:0]==2'b01,,,,);
-          adder #(13) srcAddA3_mod({afterTick[k],dec_srcIPOff[k]},13'd3,dec_srcIPOffA[k],1'b0,dec_magic[k][2:0]==3'b011,,,,);
-          adder #(13) srcAddA4_mod({afterTick[k],dec_srcIPOff[k]},13'd4,dec_srcIPOffA[k],1'b0,dec_magic[k][3:0]==4'b0111,,,,);
-          adder #(13) srcAddA5_mod({afterTick[k],dec_srcIPOff[k]},13'd5,dec_srcIPOffA[k],1'b0,dec_magic[k][3:0]==4'b1111,,,,);
+          adder #(9) srcAddA1_mod({afterTick[k],dec_srcIPOff[k]},9'd1,dec_srcIPOffA[k],1'b0,~dec_magic[k][0],,,,);
+          adder #(9) srcAddA2_mod({afterTick[k],dec_srcIPOff[k]},9'd2,dec_srcIPOffA[k],1'b0,dec_magic[k][1:0]==2'b01,,,,);
+          adder #(9) srcAddA3_mod({afterTick[k],dec_srcIPOff[k]},9'd3,dec_srcIPOffA[k],1'b0,dec_magic[k][2:0]==3'b011,,,,);
+          adder #(9) srcAddA4_mod({afterTick[k],dec_srcIPOff[k]},9'd4,dec_srcIPOffA[k],1'b0,dec_magic[k][3:0]==4'b0111,,,,);
+          adder #(9) srcAddA5_mod({afterTick[k],dec_srcIPOff[k]},9'd5,dec_srcIPOffA[k],1'b0,dec_magic[k][3:0]==4'b1111,,,,);
 
           
-          adder #(33) srcXAdd_mod({20'b0,dec_srcIPOffA_reg[k]},{dec_constant_reg[k][31],dec_constant_reg[k][31:0]},dec_srcIPOffx[k],1'b0, 1'b1,,,,);
+          adder #(33) srcXAdd_mod({23'b0,dec_srcIPOffA_reg[k]},{dec_constant_reg[k][31],dec_constant_reg[k][31:0]},dec_srcIPOffx[k],1'b0, 1'b1,,,,);
 
 	  popcnt10 jpop_mod(cls_jump_reg&iUsed_reg,{dummy8_1,btbl_step});
 	  adder #(43) csrAdd_mod({30'b0,dec_srcIPOffA_reg[k]},baseIP[42:0],csrss_retIP_data,1'b0,csrss_retIP_en_reg[k],,,,);
@@ -3924,9 +3924,8 @@ module decoder_get_baseIP(
   wire [62:0] next_baseIP;
 
 
-  adder_inc #(35-4) nextAdd_mod(baseIP[42:12],nextIP[46:12],1'b1,);
-  //assign second_IP=|second_tr_jump ? tk_jumpIP : 47'bz;
-  assign nextIP[11:0]=baseIP[11:0];
+  adder_inc #(36) nextAdd_mod(baseIP[42:8],nextIP[42:8],1'b1,);
+  assign nextIP[7:0]=baseIP[7:0];
   assign nextIP[62:43]=baseIP[62:43];
   //assign second_IP=|second_tr_jump ? tk_jumpIP : 47'bz;
 

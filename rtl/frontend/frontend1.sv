@@ -179,11 +179,11 @@ module frontend1(
   reg  [63:0] cc_base_IP;
   wire [63:0] cc_base_IP_d;
   wire cc_base_tick;
-  wire [7:0] cc_base_off;
-  reg [7:0] cc_base_off_reg;
-  reg [7:0] cc_base_off_reg2;
-  reg [7:0] cc_base_off_reg3;
-  reg [7:0] cc_base_off_reg4;
+  wire [3:0] cc_base_off;
+  reg [3:0] cc_base_off_reg;
+  reg [3:0] cc_base_off_reg2;
+  reg [3:0] cc_base_off_reg3;
+  reg [3:0] cc_base_off_reg4;
  
   reg [3:0]  cc_attr;
   wire [3:0] btbx_attr; 
@@ -732,9 +732,9 @@ module frontend1(
           wire [3:0] isJ;
           assign pre_other[j][`instrQ_magic]=~pre_magic_reg[j];
           assign pre_other[j][`instrQ_srcIPOff]={cc_base_off_reg4,pre_off_reg[j]};
-          if (j!=11) assign pre_other[j][`instrQ_srcTick]=cc_read_IP_reg4[47:13]!=cc_read_IP_reg5[47:13] &&
+          if (j!=11) assign pre_other[j][`instrQ_srcTick]=cc_read_IP_reg4[43:9]!=cc_read_IP_reg5[43:9] &&
 	     do_seq_reg5 && pre_instrEn_reg[j]&&pre_jbefore[j]&&~pre_instrEn_reg[j+1]|~pre_jbefore[j+1]; 
-          else assign pre_other[j][`instrQ_srcTick]=cc_read_IP_reg4[47:13]!=cc_read_IP_reg5[47:13] &&
+          else assign pre_other[j][`instrQ_srcTick]=cc_read_IP_reg4[43:9]!=cc_read_IP_reg5[43:9] &&
 	     do_seq_reg5 && pre_instrEn_reg[j]&&pre_jbefore[j]; 
           assign pre_other[j][`instrQ_class]=pre_class_reg[j];
           //assign pre_other[j][`instrQ_taken]=btb_hasTK_reg3 ? 1'bz : 1'b0;
@@ -775,10 +775,10 @@ module frontend1(
   
   assign instrFed=instrEn_reg3 && (cc_read_hit && tlb_match);
   
-  assign cc_base_IP_d=(~do_seq_reg) ? cc_read_IP : 48'bz;
-  assign cc_base_IP_d=(do_seq_reg & ~cc_base_tick) ? cc_base_IP : 48'bz;
-  assign cc_base_IP_d[12:0]=(do_seq_reg & cc_base_tick) ? cc_base_IP[12:0] : 13'bz;
-  assign {cc_base_tick,cc_base_off}=(~do_seq_reg) ? 9'b0 : 9'bz;
+  assign cc_base_IP_d=(~do_seq_reg) ? cc_read_IP : 64'bz;
+  assign cc_base_IP_d=(do_seq_reg & ~cc_base_tick) ? cc_base_IP : 64'bz;
+  assign cc_base_IP_d[7:0]=(do_seq_reg & cc_base_tick) ? cc_base_IP[7:0] : 9'bz;
+  assign {cc_base_tick,cc_base_off}=(~do_seq_reg) ? 4'b0 : 4'bz;
   
   assign cc_read_IP_d[4:0]=(~init & do_seq_any & ~jumpTK_en & ~fmstall) ? 5'b0 : 5'bz;
   assign cc_read_IP_d=(~init & btb_hasTK & ~miss_recover & ~miss_now & ~jumpTK_en & ~(ixcept|uxcept) & ~fmstall) ? btbx_tgt : 64'bz;
@@ -1201,8 +1201,8 @@ module frontend1(
   get_carry #(4) btbL2NoffCmpCC(btb_jlnpos2,~cc_read_IP[4:1],1'b1,btb_jlnin2);
   get_carry #(4) btbL3NoffCmpCC(btb_jlnpos3,~cc_read_IP[4:1],1'b1,btb_jlnin3);
   
-  adder #(9) baseTick_mod(cc_read_IP[13:5],~cc_base_IP[13:5],{cc_base_tick,cc_base_off},1'b1,do_seq_reg,,,,);
-  adder_inc #(35) baseInc_mod(cc_base_IP[47:13],cc_base_IP_d[47:13],do_seq_reg & cc_base_tick,);
+  adder #(5) baseTick_mod(cc_read_IP[9:5],~cc_base_IP[9:5],{cc_base_tick,cc_base_off},1'b1,do_seq_reg,,,,);
+  adder_inc #(36) baseInc_mod(cc_base_IP[43:9],cc_base_IP_d[43:9],do_seq_reg & cc_base_tick,);
   
   tbuf tbuf_mod(
   .clk(clk),
@@ -1658,10 +1658,10 @@ module frontend1(
           GHT_reg2<=8'b0;
           GHT_reg3<=8'b0;
           GHT_reg4<=8'b0;
-          cc_base_off_reg<=8'b0;
-          cc_base_off_reg2<=8'b0;
-          cc_base_off_reg3<=8'b0;
-          cc_base_off_reg4<=8'b0;
+          cc_base_off_reg<=4'b0;
+          cc_base_off_reg2<=4'b0;
+          cc_base_off_reg3<=4'b0;
+          cc_base_off_reg4<=4'b0;
           taken_reg<=4'b0;
           taken_reg2<=4'b0;
           taken_reg3<=4'b0;

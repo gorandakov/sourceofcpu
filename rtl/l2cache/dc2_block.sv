@@ -1059,7 +1059,7 @@ module dcache2_block(
   output reg read_dir;
   output reg read_excl;
   output reg [36:0] read_expAddrOut;
-  input [36:0] read_expAddr_en;
+  input read_expAddr_en;
   input [36:0] expun_cc_addr;
   input expun_cc_en;
   input [36:0] expun_dc_addr;

@@ -86,7 +86,8 @@ module heptane_core(
   wire [255:0] read_data_strip;
   
   wire except;
-  
+  wire fp_excpt_en;
+  wire [10:0] fp_excpt_set; 
   wire [VIRT_WIDTH-2:0] exceptIP;
 
   wire exceptThread;
@@ -441,7 +442,7 @@ module heptane_core(
   wire [IN_REG_WIDTH-1:0] instr0_rT;
   wire instr0_en;
   wire instr0_wren;
-  wire [12:0] instr0_IPOff;
+  wire [8:0] instr0_IPOff;
   wire instr0_afterTaken;
   wire instr0_rT_useF;
   wire instr0_rT_isV;
@@ -453,7 +454,7 @@ module heptane_core(
   wire [IN_REG_WIDTH-1:0] instr1_rT;
   wire instr1_en;
   wire instr1_wren;
-  wire [12:0] instr1_IPOff;
+  wire [8:0] instr1_IPOff;
   wire instr1_afterTaken;
   wire instr1_rT_useF;
   wire instr1_rT_isV;
@@ -465,7 +466,7 @@ module heptane_core(
   wire [IN_REG_WIDTH-1:0] instr2_rT;
   wire instr2_en;
   wire instr2_wren;
-  wire [12:0] instr2_IPOff;
+  wire [8:0] instr2_IPOff;
   wire instr2_afterTaken;
   wire instr2_rT_useF;
   wire instr2_rT_isV;
@@ -477,7 +478,7 @@ module heptane_core(
   wire [IN_REG_WIDTH-1:0] instr3_rT;
   wire instr3_en;
   wire instr3_wren;
-  wire [12:0] instr3_IPOff;
+  wire [8:0] instr3_IPOff;
   wire instr3_afterTaken;
   wire instr3_rT_useF;
   wire instr3_rT_isV;
@@ -489,7 +490,7 @@ module heptane_core(
   wire [IN_REG_WIDTH-1:0] instr4_rT;
   wire instr4_en;
   wire instr4_wren;
-  wire [12:0] instr4_IPOff;
+  wire [8:0] instr4_IPOff;
   wire instr4_afterTaken;
   wire instr4_rT_useF;
   wire instr4_rT_isV;
@@ -501,7 +502,7 @@ module heptane_core(
   wire [IN_REG_WIDTH-1:0] instr5_rT;
   wire instr5_en;
   wire instr5_wren;
-  wire [12:0] instr5_IPOff;
+  wire [8:0] instr5_IPOff;
   wire instr5_afterTaken;
   wire instr5_rT_useF;
   wire instr5_rT_isV;
@@ -513,7 +514,7 @@ module heptane_core(
   wire [IN_REG_WIDTH-1:0] instr6_rT;
   wire instr6_en;
   wire instr6_wren;
-  wire [12:0] instr6_IPOff;
+  wire [8:0] instr6_IPOff;
   wire instr6_afterTaken;
   wire instr6_rT_useF;
   wire instr6_rT_isV;
@@ -525,7 +526,7 @@ module heptane_core(
   wire [IN_REG_WIDTH-1:0] instr7_rT;
   wire instr7_en;
   wire instr7_wren;
-  wire [12:0] instr7_IPOff;
+  wire [8:0] instr7_IPOff;
   wire instr7_afterTaken;
   wire instr7_rT_useF;
   wire instr7_rT_isV;
@@ -537,7 +538,7 @@ module heptane_core(
   wire [IN_REG_WIDTH-1:0] instr8_rT;
   wire instr8_en;
   wire instr8_wren;
-  wire [12:0] instr8_IPOff;
+  wire [8:0] instr8_IPOff;
   wire instr8_afterTaken;
   wire instr8_rT_useF;
   wire instr8_rT_isV;
@@ -549,7 +550,7 @@ module heptane_core(
   wire [IN_REG_WIDTH-1:0] instr9_rT;
   wire instr9_en;
   wire instr9_wren;
-  wire [12:0] instr9_IPOff;
+  wire [8:0] instr9_IPOff;
   wire instr9_afterTaken;
   wire instr9_rT_useF;
   wire instr9_rT_isV;
@@ -564,10 +565,10 @@ module heptane_core(
   wire [4:0] jump1Type;
   wire [3:0] jump1Pos;
   wire jump1Taken;
-  wire [2:0] jump0BtbWay;
+  wire jump0BtbWay;
   wire [1:0] jump0JmpInd;
   wire [7:0] jump0GHT;
-  wire [2:0] jump1BtbWay;
+  wire jump1BtbWay;
   wire [1:0] jump1JmpInd;
   wire [7:0] jump1GHT;
   wire [1:0] jump0SC;
@@ -743,13 +744,13 @@ module heptane_core(
   reg L1_expAddr_en_reg3;
   reg L1_expAddr_en_reg4;
   reg L1_expAddr_en_reg5;
-  wire [35:0] MSI_expAddr;
+  wire [36:0] MSI_expAddr;
   wire MSI_expAddr_en;
   wire MSI_req_excl;
   wire MSI_expect_swap;
   wire MSI_expAddr_hitCC;
   wire [3:0] dec_attr;
-  reg  [35:0] MSI_expAddr_reg;
+  reg  [36:0] MSI_expAddr_reg;
   reg  MSI_expAddr_en_reg;
 //  wire MSI_swap_reply;
 
@@ -1766,7 +1767,7 @@ module heptane_core(
   begin
     
     if (rst) begin
-        bus_tlb_slot<=8'b0;
+        bus_tlb_slot<=10'b0;
         req_addr_reg<=37'b0;
         req_en_reg<=1'b0;
         req_slot_reg<=10'b0;
@@ -1814,9 +1815,9 @@ module heptane_core(
 	dc2_io_en_reg2<=1'b0;
 	dc2_io_en_reg3<=1'b0;
 	dc2_io_en_reg4<=1'b0;
-	dc2_dataIO_reg<=1'b0;
-	dc2_dataIO_reg2<=1'b0;
-	dc2_dataIO_reg3<=1'b0;
+	dc2_dataIO_reg<=64'b0;
+	dc2_dataIO_reg2<=64'b0;
+	dc2_dataIO_reg3<=64'b0;
         L1_expAddr_en_reg<=1'b0;
         L1_expAddr_en_reg2<=1'b0;
         L1_expAddr_en_reg3<=1'b0;

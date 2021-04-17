@@ -705,7 +705,7 @@ module backend(
   input [IN_REG_WIDTH-1:0] instr0_rT;
   input instr0_en;
   input instr0_wren;
-  input [12:0] instr0_IPOff;
+  input [8:0] instr0_IPOff;
   input instr0_afterTaken;
   input instr0_rT_useF;
   input instr0_rT_isV;
@@ -717,7 +717,7 @@ module backend(
   input [IN_REG_WIDTH-1:0] instr1_rT;
   input instr1_en;
   input instr1_wren;
-  input [12:0] instr1_IPOff;
+  input [8:0] instr1_IPOff;
   input instr1_afterTaken;
   input instr1_rT_useF;
   input instr1_rT_isV;
@@ -729,7 +729,7 @@ module backend(
   input [IN_REG_WIDTH-1:0] instr2_rT;
   input instr2_en;
   input instr2_wren;
-  input [12:0] instr2_IPOff;
+  input [8:0] instr2_IPOff;
   input instr2_afterTaken;
   input instr2_rT_useF;
   input instr2_rT_isV;
@@ -741,7 +741,7 @@ module backend(
   input [IN_REG_WIDTH-1:0] instr3_rT;
   input instr3_en;
   input instr3_wren;
-  input [12:0] instr3_IPOff;
+  input [8:0] instr3_IPOff;
   input instr3_afterTaken;
   input instr3_rT_useF;
   input instr3_rT_isV;
@@ -753,7 +753,7 @@ module backend(
   input [IN_REG_WIDTH-1:0] instr4_rT;
   input instr4_en;
   input instr4_wren;
-  input [12:0] instr4_IPOff;
+  input [8:0] instr4_IPOff;
   input instr4_afterTaken;
   input instr4_rT_useF;
   input instr4_rT_isV;
@@ -765,7 +765,7 @@ module backend(
   input [IN_REG_WIDTH-1:0] instr5_rT;
   input instr5_en;
   input instr5_wren;
-  input [12:0] instr5_IPOff;
+  input [8:0] instr5_IPOff;
   input instr5_afterTaken;
   input instr5_rT_useF;
   input instr5_rT_isV;
@@ -777,7 +777,7 @@ module backend(
   input [IN_REG_WIDTH-1:0] instr6_rT;
   input instr6_en;
   input instr6_wren;
-  input [12:0] instr6_IPOff;
+  input [8:0] instr6_IPOff;
   input instr6_afterTaken;
   input instr6_rT_useF;
   input instr6_rT_isV;
@@ -789,7 +789,7 @@ module backend(
   input [IN_REG_WIDTH-1:0] instr7_rT;
   input instr7_en;
   input instr7_wren;
-  input [12:0] instr7_IPOff;
+  input [8:0] instr7_IPOff;
   input instr7_afterTaken;
   input instr7_rT_useF;
   input instr7_rT_isV;
@@ -801,7 +801,7 @@ module backend(
   input [IN_REG_WIDTH-1:0] instr8_rT;
   input instr8_en;
   input instr8_wren;
-  input [12:0] instr8_IPOff;
+  input [8:0] instr8_IPOff;
   input instr8_afterTaken;
   input instr8_rT_useF;
   input instr8_rT_isV;
@@ -813,7 +813,7 @@ module backend(
   input [IN_REG_WIDTH-1:0] instr9_rT;
   input instr9_en;
   input instr9_wren;
-  input [12:0] instr9_IPOff;
+  input [8:0] instr9_IPOff;
   input instr9_afterTaken;
   input instr9_rT_useF;
   input instr9_rT_isV;
@@ -834,10 +834,10 @@ module backend(
   input [63:0] jump1IP;
   input [3:0] jump1Mask;
   input [3:0] jump1Attr;
-  input [2:0] jump0TbufWay;
+  input jump0TbufWay;
   input [1:0] jump0JmpInd;
   input [7:0] jump0GHT;
-  input [2:0] jump1TbufWay;
+  input jump1TbufWay;
   input [1:0] jump1JmpInd;
   input [7:0] jump1GHT;
   input [1:0] jump0SC;
@@ -1304,7 +1304,7 @@ module backend(
   reg [IN_REG_WIDTH-1:0] instr_rT[9:0];
   reg [9:0] instr_en;
   reg [9:0] instr_wren;
-  reg [12:0] instr_IPOff[9:0];
+  reg [8:0] instr_IPOff[9:0];
   reg [9:0] instr_afterTaken;
   reg [9:0] instr_rT_useF;
   reg [9:0] instr_rT_isV;
@@ -1331,10 +1331,10 @@ module backend(
   reg [5:0] wrt1_reg;
   reg [5:0] wrt2_reg;
   
-  reg [2:0] jump0TbufWay_reg;
+  reg jump0TbufWay_reg;
   reg [1:0] jump0JmpInd_reg;
   reg [7:0] jump0GHT_reg;
-  reg [2:0] jump1TbufWay_reg;
+  reg jump1TbufWay_reg;
   reg [1:0] jump1JmpInd_reg;
   reg [7:0] jump1GHT_reg;
   reg [1:0] jump0SC_reg;
@@ -1347,7 +1347,7 @@ module backend(
   reg [IN_REG_WIDTH-1:0] instr_rT_reg[9:0];
   reg [9:0] instr_en_reg;
   reg [9:0] instr_wren_reg;
-  reg [12:0] instr_IPOff_reg[9:0];
+  reg [8:0] instr_IPOff_reg[9:0];
   reg [9:0] instr_afterTaken_reg;
   reg [9:0] instr_rT_useF_reg;
   reg [9:0] instr_rT_isV_reg;
@@ -1375,10 +1375,10 @@ module backend(
   reg [9:0] instr_fsimd_reg2;
 //  reg [46:0] baseIP_reg2;
 
-  reg [2:0] jump0TbufWay_reg2;
+  reg jump0TbufWay_reg2;
   reg [1:0] jump0JmpInd_reg2;
   reg [7:0] jump0GHT_reg2;
-  reg [2:0] jump1TbufWay_reg2;
+  reg jump1TbufWay_reg2;
   reg [1:0] jump1JmpInd_reg2;
   reg [7:0] jump1GHT_reg2;
   reg [1:0] jump0SC_reg2;
@@ -1588,7 +1588,7 @@ module backend(
   wire [8:0][16+SIMD_WIDTH-1:0] dataAFL;
 
   wire [8:0][SIMD_WIDTH-1:0] dataBVH;
-  wire [8:0][16+SIMD_WIDTH-1:0] dataBVL;
+  wire [8:0][SIMD_WIDTH-1:0] dataBVL;
   wire [8:0][SIMD_WIDTH-1:0] dataBFH;
   wire [8:0][16+SIMD_WIDTH-1:0] dataBFL;
 
@@ -1765,14 +1765,14 @@ module backend(
   reg  [7:0] WDfxWQ_reg4[1:0];
   wire [1:0] WDfxThr;
  
-  wire [1:0][127:0] lsw_wdataF0;
-  wire [1:0][127:0] lsw_wdataF1;
-  wire [1:0][127:0] lsw_wdataF;
-  reg [127:0] lsw_wdataF_reg[1:0];
+  wire [1:0][135:0] lsw_wdataF0;
+  wire [1:0][135:0] lsw_wdataF1;
+  wire [1:0][135:0] lsw_wdataF;
+  reg [135:0] lsw_wdataF_reg[1:0];
   wire [1:0][127:0] lsw_wdataV;
   wire [1:0][127:0] lsw_wdataV0;
   reg [127:0] lsw_wdataV_reg[1:0];
-  wire [1:0][127:0] lsw_wdata; 
+  wire [1:0][135:0] lsw_wdata; 
 
   wire pause_agu;
   wire miss_pause_agu;
@@ -1783,7 +1783,7 @@ module backend(
   reg miss_holds_agu_reg;
   reg miss_holds_agu_reg2;
  
-  wire [5:4][7:0] p_LSQ; 
+  wire [5:4][8:0] p_LSQ; 
   
   wire [2:0][2:0] nDataAlt;
   reg [2:0][2:0] nDataAlt_reg;
@@ -4788,8 +4788,8 @@ module backend(
   .mOpY5_data_o(dc_wdata[1]),
   .mOpY5_type_o(),
   .mOpY5_II_o(),
-  .lso_adata(lso_adata),.lso_xdataA(lso_en<<11),.lso_data(lso_data),.lso_bnkread(lso_bnkread),
-  .lso2_adata(lso2_adata),.lso2_xdataA(lso2_en<<11),.lso2_data(lso2_data),.lso2_bnkread(lso2_bnkread),
+  .lso_adata(lso_adata),.lso_xdataA({lso_en,11'b0}),.lso_data(lso_data),.lso_bnkread({lso_bnkread[3],lso_bnkread}),
+  .lso2_adata(lso2_adata),.lso2_xdataA({lso2_en,11'b0}),.lso2_data(lso2_data),.lso2_bnkread({lso2_bnkread[3],lso2_bnkread}),
   .lso2_wb_en({lso2_en && (lso2_adata[`lsaddr_reg_low]==2 || lso2_adata[`lsaddr_reg_low]==5 || lso2_adata[`lsaddr_reg_low]==8 ),
     lso2_en && (lso2_adata[`lsaddr_reg_low]==1 || lso2_adata[`lsaddr_reg_low]==4 || lso2_adata[`lsaddr_reg_low]==7 ),
     lso2_en && (lso2_adata[`lsaddr_reg_low]==0 || lso2_adata[`lsaddr_reg_low]==3 || lso2_adata[`lsaddr_reg_low]==6 )}),
@@ -4940,7 +4940,7 @@ module backend(
   .FUFL9(FUFL[9]),
   .ALTDATAH0(sqrDatH_reg),.ALTDATAH1({FUTYPE_reg,66'b0}),
   .ALTDATAL0(sqrDatL_reg),.ALTDATAL1(FUCVT2_reg),
-  .ALT_INP({dalt,sqrDatEn}),
+  .ALT_INP({dalt[1],sqrDatEn}),
   FUS_alu_reg2[0],FUS_alu_reg5[1],
   FUS_alu_reg2[2],FUS_alu_reg5[3],
   FUS_alu_reg2[4],FUS_alu_reg5[5],
@@ -4958,7 +4958,7 @@ module backend(
   fun_fpsu_BOTH fpsu_mod(
   .clk(clk),
   .rst(rst),
-  .fpcsr(fpcsr),
+  .fpcsr(fpcsr[31:0]),
   .u1_A0(outDataAVL[0]),.u1_B0(outDataBVL[0]),
   .u1_A1(outDataAVH[0]),.u1_B1(outDataBVH[0]),
   .u1_en(outEn_reg[1]),.u1_op(outOp_reg[1]),
@@ -5004,8 +5004,8 @@ module backend(
   .FUFL6(FUVL[6]),.FUFL7(FUVL[7]),.FUFL8(FUVL[8]),
   .FUFL9(FUVL[9]),
   .ALTDATAH0(sqrDatH),.ALTDATAH1({FUTYPE,66'b0}),
-  .ALTDATAL0(sqrDatL[67:0]),.ALTDATAL1(FUCVT2),
-  .ALT_INP({dalt,sqrDatEn})
+  .ALTDATAL0(sqrDatL[67:0]),.ALTDATAL1(FUCVT2[67:0]),
+  .ALT_INP({dalt[1],sqrDatEn})
   );
 
   fun_fpusqr sqr_mod(
@@ -5256,9 +5256,9 @@ dcache1 L1D_mod(
   .iret6_rF(clrR_reg[6][8:4]),.iret7_rF(clrR_reg[7][8:4]),.iret8_rF(clrR_reg[8][8:4]),
   .iret_clr(clr_reg),
   .ijump0Type(jump0Type_reg2),.ijump0Off(jump0Pos_reg2),
-  .ijump0IP(jump0IP_reg2[43:0]),.ijump0Mask(jump0Mask_reg2),.ijump0BND(jump0IP_reg2[63:44]),
+  .ijump0IP(jump0IP_reg2[43:1]),.ijump0Mask(jump0Mask_reg2),.ijump0BND(jump0IP_reg2[63:44]),
   .ijump1Type(jump1Type_reg2),.ijump1Off(jump1Pos_reg2),
-  .ijump1IP(jump1IP_reg2[43:0]),.ijump1Mask(jump1Mask_reg2),.ijump1BND(jump1IP_reg2[63:44]),
+  .ijump1IP(jump1IP_reg2[43:1]),.ijump1Mask(jump1Mask_reg2),.ijump1BND(jump1IP_reg2[63:44]),
   .ijump0BtbWay(jump0TbufWay_reg2),.ijump0JmpInd(jump0JmpInd_reg2),.ijump0GHT(jump0GHT_reg2),
   .ijump1BtbWay(jump1TbufWay_reg2),.ijump1JmpInd(jump1JmpInd_reg2),.ijump1GHT(jump1GHT_reg2),
   .ijump0SC(jump0SC_reg2),.ijump0Miss(jump0Miss_reg2),.ijump0BtbOnly(jump0TbufOnly_reg2),
@@ -5636,10 +5636,10 @@ dcache1 L1D_mod(
 	  rs_alt<=3'b0;
 	  rs_alt_reg<=3'b0;
           
-	  jump0TbufWay_reg<=3'd0;
+	  jump0TbufWay_reg<=1'd0;
           jump0JmpInd_reg<=2'd0;
           jump0GHT_reg<=8'd0;
-          jump1TbufWay_reg<=3'd0;
+          jump1TbufWay_reg<=1'd0;
           jump1JmpInd_reg<=2'd0;
           jump1GHT_reg<=8'd0;
           jump0SC_reg<=2'd0;
@@ -5663,13 +5663,14 @@ dcache1 L1D_mod(
 	  jump1Mask_reg<=4'b0;
 	  jump1Attr_reg<=4'h0;
 	  instr_fsimd_reg<=10'b0;
-	  baseIP_reg<=62'b0;
+	  
+	  baseIP_reg<=63'b0;
           
               
-	  jump0TbufWay_reg2<=3'd0;
+	  jump0TbufWay_reg2<=1'd0;
           jump0JmpInd_reg2<=2'd0;
           jump0GHT_reg2<=8'd0;
-          jump1TbufWay_reg2<=3'd0;
+          jump1TbufWay_reg2<=1'd0;
           jump1JmpInd_reg2<=2'd0;
           jump1GHT_reg2<=8'd0;
           jump0SC_reg2<=2'd0;
@@ -5752,7 +5753,7 @@ dcache1 L1D_mod(
               funB_reg[k]<=10'b0;
               funS_reg[k]<=10'b0;
               rs_lsi[k]<=6'b0;
-              rs_lsi_reg[k]<=6'b0;
+              rs_lsi_reg[k]<=3'b0;
               domA_reg[k]<=2'b0;
               domB_reg[k]<=2'b0;
               instr_ret_reg[k]<=4'hf;
@@ -5786,7 +5787,7 @@ dcache1 L1D_mod(
               instr_rT[t]<={IN_REG_WIDTH{1'B0}};
               instr_en[t]<=1'b0;
               instr_wren[t]<=1'b0;
-              instr_IPOff[t]<=13'b0;
+              instr_IPOff[t]<=9'b0;
               instr_afterTaken[t]<=1'b0;
               instr_rT_useF[t]<=1'b0;
               instr_rT_isV[t]<=1'b0;
@@ -5798,7 +5799,7 @@ dcache1 L1D_mod(
 	      instr_rT_reg[t]<={IN_REG_WIDTH{1'B0}};
               instr_en_reg[t]<=1'b0;
               instr_wren_reg[t]<=1'b0;
-              instr_IPOff_reg[t]<=13'b0;
+              instr_IPOff_reg[t]<=9'b0;
               instr_afterTaken_reg[t]<=1'b0;
               instr_rT_useF_reg[t]<=1'b0;
               instr_rT_isV_reg[t]<=1'b0;
@@ -7132,7 +7133,7 @@ dcache1 L1D_mod(
 	     WDoutOp_reg[v]<=13'b0;
 	     WDoutOp_reg2[v]<=13'b0;
 	     WDoutOp_reg3[v]<=13'b0;
-             lsw_wdataF_reg[v]<=128'b0;
+             lsw_wdataF_reg[v]<=136'b0;
              lsw_wdataV_reg[v]<=128'b0;
              Wagu_blockRS_reg[v]<=1'b0;
           end

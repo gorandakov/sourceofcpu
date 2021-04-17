@@ -271,7 +271,7 @@ module cntrl_find_outcome(
   output reg [15:0] csrss_no;
   output reg csrss_thread;
   output reg csrss_en;
-  output reg [6_4:0] csrss_data;
+  output reg [6_3:0] csrss_data;
   input new_en;
   input new_thread;
   output wire [5:0] new_addr;
@@ -690,7 +690,7 @@ module cntrl_find_outcome(
   wire [15:0] csrss_no_d;
   wire csrss_thread_d;
   wire csrss_en_d;
-  wire [64:0] csrss_data_d;
+  wire [63:0] csrss_data_d;
 
   reg [42:0] archReg_xcpt_retIP		[1:0];
   reg [42:0] archReg_xcpt_handlerIP	[1:0];
@@ -942,7 +942,7 @@ module cntrl_find_outcome(
   assign csrss_en_d=(break_jump1) ? jump1Type==5'b11001 && has_some && ~mem_II_stall : 1'bz;
   assign csrss_en_d=(break_exceptn) ? has_some & ~mem_II_stall : 1'bz;
   assign csrss_en_d=(~break_jump0 & ~break_jump1 & ~break_exceptn) ? 1'b0 : 1'bz;
-  assign csrss_data_d=(break_exceptn) ? {1'b0,attr[0],attr[1],is_after_spec,attr[3],12'b0,4'b0,breakIP,1'b0} : indir_IP;
+  assign csrss_data_d=(break_exceptn) ? {attr[0],attr[1],is_after_spec,attr[3],12'b0,4'b0,breakIP,1'b0} : indir_IP[63:0];
   assign baseIP_d=(jump0_in & jump0_taken &~break_exceptn &~break_replay &~break_replayS) ? {jump0BND,jump0IP} : 6_3'bz;
   assign baseIP_d=(jump1_in & jump1_taken &~break_exceptn &~break_replay &~break_replayS) ? {jump1BND,jump1IP} : 63'bz;
   assign baseIP_d=(break_exceptn) ? {baseIP[62:43],excpt_handlerIP} : 63'bz;
@@ -1290,7 +1290,7 @@ module cntrl_find_outcome(
           csrss_no<=16'b0;
           csrss_thread<=1'b0;
           csrss_en<=1'b0;
-          csrss_data<=65'b0;
+          csrss_data<=64'b0;
 
 	  baseIP<=63'b0;
 

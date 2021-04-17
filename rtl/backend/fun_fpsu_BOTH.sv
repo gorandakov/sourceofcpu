@@ -202,6 +202,7 @@ module fun_fpsu_BOTH(
   fun_fpuSL hf_mod(
   clk,
   rst,
+  fpcsr,
   u1_A1,u1_B1,u1_Ax,u1_Bx,u1_en,u1_op,
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
   u1_retH,u1_ret_enH,
@@ -231,6 +232,7 @@ module fun_fpsu_BOTH(
   fun_fpuSL lfpc_mod(
   clk,
   rst,
+  fpcsr,
   u1_A0,u1_B0,u1_Bx,u1_Ax,u1_en,u1_op,
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
   u1_retL,u1_ret_enL,
