@@ -21,7 +21,9 @@ module fun_fpu(
   FUS_alu0,FUS_alu1,
   ex_alu0,ex_alu1,
   fxFADD_raise_s,
-  fxFCADD_raise_s
+  fxFCADD_raise_s,
+  FOOSH_in,
+  FOOSH_out
   );
   parameter [1:0] INDEX=2'd2;
   parameter [0:0] H=1'b0;
@@ -76,9 +78,14 @@ module fun_fpu(
   input [2:0] ex_alu1;
   input [1:0][10:0] fxFADD_raise_s;
   input [1:0] [10:0] fxFCADD_raise_s;
+  input [5:0] FOOSH_in;
+  output [5:0] FOOSH_out;
 
   wire [1:0][S+67:0] FOOF;
   reg [1:0][S+67:0] FOOF_reg;
+  wire [5:0] FOOSH;
+  reg [5:0] FOOSH_reg;
+  reg [5:0] FOOSH_reg2;
   reg  gxFADD_hi;
   reg  gxFADD_en;
   reg  gxFADD_en_reg;
@@ -90,6 +97,7 @@ module fun_fpu(
   reg  gxFADD_ord;
   reg  gxFADD_pkdS;
   reg  gxFADD_pkdD;
+  reg  gxFADD_pkdD_reg;
 /*  wire fxAlt1;
   wire fxAlt2;
   reg fxAlt1_reg;
@@ -352,6 +360,7 @@ module fun_fpu(
   no,
   en);
 */
+  assign FOOSH_out=FOOSH_reg2;
   
   fpucadd cadd2L_mod(
   .clk(clk),
@@ -423,6 +432,8 @@ module fun_fpu(
     fxFCADD_sn_reg5<=fxFCADD_sn_reg4;
     fxFADD_sn_reg<=fxFADD_sin;
     fxFADD_sn_reg2<=fxFADD_sn_reg;
+    FOOSH_reg<=FOOSH;
+    gxFADD_pkdD_reg<=H? !gxFADD_sn:!gxFADD_sin;
     if (rst) begin
 	  fxFADD_dbl=3'b111;
 	  fxFADD_dblext=3'b111;
@@ -587,6 +598,7 @@ module fun_fpu(
       FUF7_reg<=FUF7;
       FUF8_reg<=FUF8;
       FUF9_reg<=FUF9;
+      FOOSH_reg2<=gxFADD_pkdD_reg ? FOOSH_reg : FOOSH_in;
       /*gxFADD_en=u1_op[0] && u1_clkEn && u1_op[7:0]==`fop_cmpDH || u1_op[7:0]==`fop_cmpDL || u1_op[7:0]==`fop_cmpE || u1_op[7:0]==`fop_cmpS;
       gxFADD_ord=u1_op[10];
       gxFADD_hi=u1_op[7:0]==`fop_cmpDH;
