@@ -155,6 +155,9 @@ module fun_fpsu(
   reg [1:0][67:0] fxDataAFL_reg;
   reg [1:0][67:0] gxDataBXL_reg;
   reg [1:0][67:0] fxDataAXL_reg;
+  reg [3:0] u1_en_reg;
+  reg [3:0] u2_en_reg;
+
 
   rs_write_forward #(S+68) u1_A_fwd(
   clk,rst,
@@ -523,7 +526,7 @@ module fun_fpsu(
         fxFCADD_raise_s_reg[k]<=fxFCADD_s_raise[k];
         fxFADD_raise_s_reg[k]<=fxFADD_s_raise[k];
     end
-      gxFADD_en=u1_op_reg[0] && u1_clkEn && u1_op_reg[7:0]==`fop_cmpDH || u1_op_reg[7:0]==`fop_cmpDL || u1_op_reg[7:0]==`fop_cmpE || u1_op_reg[7:0]==`fop_cmpS;
+      gxFADD_en=u1_op_reg[0] && u1_en_reg[2] && u1_op_reg[7:0]==`fop_cmpDH || u1_op_reg[7:0]==`fop_cmpDL || u1_op_reg[7:0]==`fop_cmpE || u1_op_reg[7:0]==`fop_cmpS;
       gxFADD_ord=u1_op_reg[10];
       gxFADD_hi=u1_op_reg[7:0]==`fop_cmpDH;
       gxFADD_ext=u1_op_reg[7:0]==`fop_cmpE;
@@ -542,6 +545,8 @@ module fun_fpsu(
       ALT_INP_reg<=ALT_INP;
       u1_op_reg<=u1_op;
       u2_op_reg<=u2_op;
+      u1_en_reg<=u1_en;
+      u2_en_reg<=u2_en;
   end
 
 endmodule
