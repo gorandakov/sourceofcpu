@@ -428,6 +428,7 @@ module fun_fpsu(
     fxFCADD_sn_reg5<=fxFCADD_sn_reg4;
     fxFADD_sn_reg<=fxFADD_sin;
     fxFADD_sn_reg2<=fxFADD_sn_reg;
+    FOOSH_reg<=FOOSH;
     if (rst) begin
 	  fxFADD_dbl=3'b111;
 	  fxFADD_dblext=3'b111;
@@ -565,6 +566,13 @@ module fun_fpsu(
       gxFADD_en_reg[k]<=gxFADD_en[k];
       gxFADD_en_reg2[k]<=gxFADD_en_reg[k];
       u1_op_reg2<=u1_op_reg;
+      u1_en_reg2<=u1_en_reg;
+      u1_en_reg3<=u1_en_reg2;
+      u2_en_reg2<=u2_en_reg;
+      u2_en_reg3<=u2_en_reg2;
+      u2_en_reg4<=u2_en_reg3;
+      u2_en_reg5<=u2_en_reg4;
+      u2_en_reg6<=u2_en_reg5;
 
   end
 
