@@ -200,16 +200,16 @@ module fun_fpu(
   reg [3:0] u2_en_reg;
   reg [12:0] u1_op_reg;
   reg [12:0] u1_op_reg2;
-  reg [12:0] u1_en_reg2;
-  reg [12:0] u1_en_reg3;
-  reg [12:0] u1_en_reg4;
+  reg [3:0] u1_en_reg2;
+  reg [3:0] u1_en_reg3;
+  reg [3:0] u1_en_reg4;
   reg [12:0] u2_op_reg;
-  reg [12:0] u2_en_reg2;
-  reg [12:0] u2_en_reg3;
-  reg [12:0] u2_en_reg4;
-  reg [12:0] u2_en_reg5;
-  reg [12:0] u2_en_reg6;
-  reg [12:0] u2_en_reg7;
+  reg [3:0] u2_en_reg2;
+  reg [3:0] u2_en_reg3;
+  reg [3:0] u2_en_reg4;
+  reg [3:0] u2_en_reg5;
+  reg [3:0] u2_en_reg6;
+  reg [3:0] u2_en_reg7;
 
   rs_write_forward #(S+68) u1_A_fwd(
   clk,rst,

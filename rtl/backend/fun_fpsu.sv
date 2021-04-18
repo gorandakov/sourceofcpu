@@ -157,7 +157,34 @@ module fun_fpsu(
   reg [1:0][67:0] fxDataAXL_reg;
   reg [3:0] u1_en_reg;
   reg [3:0] u2_en_reg;
+  wire [S+67:0] uu_A1;
+  wire [S+67:0] uu_A2;
+  wire [S+67:0] uu_B1;
+  wire [S+67:0] uu_B2;
 
+  reg [S+67:0] FUF0_reg;
+  reg [S+67:0] FUF1_reg;
+  reg [S+67:0] FUF2_reg;
+  reg [S+67:0] FUF3_reg;
+  reg [S+67:0] FUF4_reg;
+  reg [S+67:0] FUF5_reg;
+  reg [S+67:0] FUF6_reg;
+  reg [S+67:0] FUF7_reg;
+  reg [S+67:0] FUF8_reg;
+  reg [S+67:0] FUF9_reg;
+
+  reg [12:0] u1_op_reg;
+  reg [12:0] u1_op_reg2;
+  reg [3:0] u1_en_reg2;
+  reg [3:0] u1_en_reg3;
+  reg [3:0] u1_en_reg4;
+  reg [12:0] u2_op_reg;
+  reg [3:0] u2_en_reg2;
+  reg [3:0] u2_en_reg3;
+  reg [3:0] u2_en_reg4;
+  reg [3:0] u2_en_reg5;
+  reg [3:0] u2_en_reg6;
+  reg [3:0] u2_en_reg7;
 
   rs_write_forward #(S+68) u1_A_fwd(
   clk,rst,
@@ -547,6 +574,18 @@ module fun_fpsu(
       u2_op_reg<=u2_op;
       u1_en_reg<=u1_en;
       u2_en_reg<=u2_en;
+      u1_en_reg4<=u1_en_reg3;
+      u2_en_reg7<=u2_en_reg6;
+      FUF0_reg<=FUF0;
+      FUF1_reg<=FUF1;
+      FUF2_reg<=FUF2;
+      FUF3_reg<=FUF3;
+      FUF4_reg<=FUF4;
+      FUF5_reg<=FUF5;
+      FUF6_reg<=FUF6;
+      FUF7_reg<=FUF7;
+      FUF8_reg<=FUF8;
+      FUF9_reg<=FUF9;
   end
 
 endmodule
