@@ -17,7 +17,8 @@ module fun_fpsu(
   FUF6,FUF7,FUF8,
   FUF9,
   ALTDATA0,ALTDATA1,
-  ALT_INP
+  ALT_INP,
+  FOOSL_out
   );
   parameter [1:0] INDEX=2'd2;
   parameter [0:0] H=1'b0;
@@ -66,6 +67,12 @@ module fun_fpsu(
   input [1:0] ALT_INP;
   input [S+67:0] ALTDATA0;
   input [S+67:0] ALTDATA1;
+  output [5:0] FOOSL_out;
+
+  wire [1:0][S+67:0] FOOF;
+  reg [1:0][S+67:0] FOOF_reg;
+  wire [5:0] FOOSL;
+  reg [5:0] FOOSL_reg;
 
   reg  gxFADD_hi;
   reg  gxFADD_en;
