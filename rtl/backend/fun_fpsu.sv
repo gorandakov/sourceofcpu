@@ -149,6 +149,8 @@ module fun_fpsu(
   wire [10:0] fraise3;
   wire [10:0] fmask2;
   wire [10:0] fmask3;
+  reg [10:0] fraise2_reg;
+  reg [10:0] fraise3_reg;
   reg [10:0] fmask2_reg;
   reg [10:0] fmask3_reg;
   //wire [15:0] u1_Bx=u1_BH[15:0];
@@ -160,6 +162,7 @@ module fun_fpsu(
   wire [1:0][67:0] gxDataBFL;
   reg [1:0][67:0] gxDataBFL_reg;
   reg [1:0][67:0] fxDataAFL_reg;
+  reg [1:0][67:0] fxDataAFL_REG;
   reg [1:0][67:0] gxDataBXL_reg;
   reg [1:0][67:0] fxDataAXL_reg;
   reg [3:0] u1_en_reg;
@@ -304,7 +307,7 @@ module fun_fpsu(
   simd_non_socialiste simd_mod(
   .clk(clk),
   .rst(rst),
-  .en(),
+  .en(fxFADD_int),
   .operation(u1_op_reg),
   .A(fxDataAXL_reg[0]),
   .B(gxDataBFL_reg[1]),
@@ -340,21 +343,21 @@ module fun_fpsu(
   //assign FOOS=gxFADD_hi ? FOOSH[m] : FOOSL[m];
 
   assign fraise2=fxFCADD_sn_reg5 ?
-    (fxFCADD_raise_s_reg[0]|fxFCADD_raise_s_reg[1])&fpcsr[21:11] :
-    (fxFCADD_raise_reg)&fpcsr[21:11];
+    (fxFCADD_raise_reg[0]|fxFCADD_raise_reg[1])&fpcsr[21:11] :
+    11'b0&fpcsr[21:11];
   assign fmask2=fxFCADD_sn_reg5 ?
     (fxFCADD_raise_s_reg[0]|fxFCADD_raise_s_reg[1]) :
-    (fxFCADD_raise_reg);
-  fexcpt fexcpt2_mod(fraise2_reg,{5'b0,FUS_alu1,ex_alu1},
-    fmaks2_reg,|outEn_reg6[2][3:2],u2_ret,u2_ret_en);
+    11'b0;
+  fexcpt fexcpt2_mod(fraise2_reg,{5'b0,6'b0,3'b0},
+    fmask2_reg,|u2_en_reg7[2][3:2],u2_ret,u2_ret_en);
   assign fraise3=fxFADD_sn_reg2 ?
-    (fxFADD_raise_s_reg[0]|fxFADD_raise_s_reg[1])&fpcsr[21:11] :
-    (fxFADD_raise_reg)&fpcsr[21:11];
+    (fxFADD_raise_reg[0]|fxFADD_raise_reg[1])&fpcsr[21:11] :
+    11'b0&fpcsr[21:11];
   assign fmask3=fxFADD_sn_reg2 ?
-    (fxFADD_raise_s_reg[0]|fxFADD_raise_s_reg[1]) :
-    (fxFADD_raise_reg);
-  fexcpt fexcpt3_mod(fraise3_reg,{5'b0,FUS_alu0,ex_alu0},
-    fmaks3_reg,|outEn_reg6[1][3:2],u1_ret,u1_ret_en);
+    (fxFADD_raise_reg[0]|fxFADD_raise_reg[1]) :
+    11'b0;
+  fexcpt fexcpt3_mod(fraise3_reg,{5'b0,6'b0,3'b0},
+    fmask3_reg,|u1_en_reg4[1][3:2],u1_ret,u1_ret_en);
 /*module fexcpt(
   mask,
   in,
@@ -556,11 +559,8 @@ module fun_fpsu(
     end
     for(k=0;k<2;k=k+1) begin
         FOOF_reg[k]<=FOOF[k];
-        FOOFH_reg[k]<=FOOFH[k];
         fxFCADD_raise_reg[k]<=fxFCADD_raise[k];
         fxFADD_raise_reg[k]<=fxFADD_raise[k];
-        fxFCADD_raise_s_reg[k]<=fxFCADD_s_raise[k];
-        fxFADD_raise_s_reg[k]<=fxFADD_s_raise[k];
     end
       gxFADD_en=u1_op_reg[0] && u1_en_reg[2] && u1_op_reg[7:0]==`fop_cmpDH || u1_op_reg[7:0]==`fop_cmpDL || u1_op_reg[7:0]==`fop_cmpE || u1_op_reg[7:0]==`fop_cmpS;
       gxFADD_ord=u1_op_reg[10];
