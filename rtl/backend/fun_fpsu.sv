@@ -260,7 +260,8 @@ module fun_fpsu(
   FUF8,FUF8_reg,
   FUF9,FUF9_reg
   );
-  
+ 
+  assign FOOSL_out=FOOSL_reg; 
   
   fadds fadd1H_mod(
   .clk(clk),
@@ -328,7 +329,7 @@ module fun_fpsu(
   .B({gxDataBXL_reg[1][65],gxDataBXL_reg[1][31:0]}),
   .ord(gxFADD_ord),.invExcpt(fpcsr[`csrfpu_inv_excpt]),
   .isExt(H ? 1'b0: gxFADD_ext),.isDbl(gxFADD_dbl),.isSng(H? gxFADD_sn:gxFADD_sin),
-  .afm(1'b0),.flags(FOOSH),
+  .afm(1'b0),.flags(FOOSL),
   .paired(gxFADD_pkdS),
   .vec(gxFADD_pkdD),
   .jumpType(5'b0),
@@ -435,7 +436,7 @@ module fun_fpsu(
     fxFCADD_sn_reg5<=fxFCADD_sn_reg4;
     fxFADD_sn_reg<=fxFADD_sin;
     fxFADD_sn_reg2<=fxFADD_sn_reg;
-    FOOSH_reg<=FOOSH;
+    FOOSL_reg<=FOOSL;
     if (rst) begin
 	  fxFADD_dbl=3'b111;
 	  fxFADD_dblext=3'b111;
