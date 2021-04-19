@@ -5011,7 +5011,7 @@ module backend(
   .FUFL9(FUVL[9]),
   .ALTDATAH0(sqrDatH),.ALTDATAH1({FUTYPE,66'b0}),
   .ALTDATAL0(sqrDatL[67:0]),.ALTDATAL1(FUCVT2[67:0]),
-  .ALT_INP({dalt[1],sqrDatEn})
+  .ALT_INP({dalt[1],sqrDatEn}),
   .FOOFL0(FOOFL1),.FOOFL1(FOOFL2),.FOOFL2(FOOFL3)
   );
 

@@ -323,14 +323,14 @@ module fun_fpu_BOTH(
   fxFADD2_raise_s,
   fxFCADD3_raise_s,
   fxFADD4_raise_s,
-  fxFCADD5_raise_s
+  fxFCADD5_raise_s,
   FOOSL0_reg, LFOOSH0,
   FOOSL1_reg, LFOOSH1,
   FOOSL2_reg, LFOOSH2
   );
 
-  assign FUS0=u1_op_reg4[7:0]==`op_cmpDH  ? HFOOSH0 : LFOOSH0; 
-  assign FUS1=u3_op_reg4[7:0]==`op_cmpDH  ? HFOOSH1 : LFOOSH1; 
-  assign FUS2=u5_op_reg4[7:0]==`op_cmpDH  ? HFOOSH2 : LFOOSH2; 
+  assign FUS0=u1_op_reg4[7:0]==`fop_cmpDH  ? HFOOSH0 : LFOOSH0; 
+  assign FUS1=u3_op_reg4[7:0]==`fop_cmpDH  ? HFOOSH1 : LFOOSH1; 
+  assign FUS2=u5_op_reg4[7:0]==`fop_cmpDH  ? HFOOSH2 : LFOOSH2; 
 
 endmodule
