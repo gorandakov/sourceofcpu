@@ -41,7 +41,10 @@ module fun_fpuL(
   fxFADD2_raise_s,
   fxFCADD3_raise_s,
   fxFADD4_raise_s,
-  fxFCADD5_raise_s
+  fxFCADD5_raise_s,
+  FOOSH0_in,  FOOSH0_out,
+  FOOSH1_in,  FOOSH1_out,
+  FOOSH2_in,  FOOSH2_out
   );
   localparam [0:0] H=1'b0;
   localparam SIMD_WIDTH=68; //half width
@@ -159,6 +162,12 @@ module fun_fpuL(
   input [10:0] fxFCADD3_raise_s;
   input [10:0] fxFADD4_raise_s;
   input [10:0] fxFCADD5_raise_s;
+  input [5:0]  FOOSH0_in;
+  output [5:0] FOOSH0_out;
+  input [5:0]  FOOSH1_in;
+  output [5:0] FOOSH1_out;
+  input [5:0]  FOOSH2_in;
+  output [5:0] FOOSH2_out;
 
   fun_fpu #(0,0) fpu0_mod(
   clk,
@@ -179,7 +188,9 @@ module fun_fpuL(
   FUS_alu0,FUS_alu1,
   ex_alu0,ex_alu1,
   fxFADD0_raise_s,
-  fxFCADD1_raise_s
+  fxFCADD1_raise_s,
+  FOOSH0_in,
+  FOOSH0_out
   );
 
   fun_fpu #(1,0) fpu1_mod(
@@ -201,7 +212,9 @@ module fun_fpuL(
   FUS_alu2,FUS_alu3,
   ex_alu2,ex_alu3,
   fxFADD2_raise_s,
-  fxFCADD3_raise_s
+  fxFCADD3_raise_s,
+  FOOSH1_in,
+  FOOSH1_out
   );
 
   fun_fpu #(2,0) fpu2_mod(
@@ -223,7 +236,9 @@ module fun_fpuL(
   FUS_alu4,FUS_alu5,
   ex_alu4,ex_alu5,
   fxFADD4_raise_s,
-  fxFCADD5_raise_s
+  fxFCADD5_raise_s,
+  FOOSH2_in,
+  FOOSH2_out
   );
 
 endmodule
