@@ -46,7 +46,9 @@ module fun_fpu_BOTH(
   fxFADD2_raise_s,
   fxFCADD3_raise_s,
   fxFADD4_raise_s,
-  fxFCADD5_raise_s
+  fxFCADD5_raise_s,
+  FUS0,FUS1,FUS2,
+  FOOSL0,FOOSL1,FOOSL2
   );
   localparam [0:0] H=1'b1;
   localparam SIMD_WIDTH=68; //half width
@@ -177,6 +179,14 @@ module fun_fpu_BOTH(
   input [10:0] fxFCADD3_raise_s;
   input [10:0] fxFADD4_raise_s;
   input [10:0] fxFCADD5_raise_s;
+
+  output [5:0] FUS0;
+  output [5:0] FUS1;
+  output [5:0] FUS2;
+
+  input [5:0] FOOSL0;
+  input [5:0] FOOSL1;
+  input [5:0] FOOSL2;
   
   wire [67:0] u1_Ax;
   wire [67:0] u1_Bx;
@@ -268,8 +278,11 @@ module fun_fpu_BOTH(
   fxFADD2_raise_s,
   fxFCADD3_raise_s,
   fxFADD4_raise_s,
-  fxFCADD5_raise_s
-  );
+  fxFCADD5_raise_s,
+  FOOSL0_reg, HFOOSH0,
+  FOOSL1_reg, HFOOSH1,
+  FOOSL2_reg, HFOOSH2
+  ); 
 
   fun_fpuL lfpc_mod(
   clk,
@@ -311,6 +324,13 @@ module fun_fpu_BOTH(
   fxFCADD3_raise_s,
   fxFADD4_raise_s,
   fxFCADD5_raise_s
+  FOOSL0_reg, LFOOSH0,
+  FOOSL1_reg, LFOOSH1,
+  FOOSL2_reg, LFOOSH2
   );
+
+  assign FUS0=u1_op_reg4[7:0]==`op_cmpDH  ? HFOOSH0 : LFOOSH0; 
+  assign FUS1=u3_op_reg4[7:0]==`op_cmpDH  ? HFOOSH1 : LFOOSH1; 
+  assign FUS2=u5_op_reg4[7:0]==`op_cmpDH  ? HFOOSH2 : LFOOSH2; 
 
 endmodule
