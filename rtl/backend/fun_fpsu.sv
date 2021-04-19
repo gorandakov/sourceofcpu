@@ -96,6 +96,7 @@ module fun_fpsu(
   reg  fxFADD_dbl;
   reg  fxFADD_ext;
   reg  fxFADD_sin;
+  reg  fxFADD_int;
   reg  fxFADD_sn_reg;
   reg  fxFADD_sn_reg2;
   reg  fxFADD_dblext;
@@ -444,6 +445,7 @@ module fun_fpsu(
 	  fxFADD_dbl=3'b111;
 	  fxFADD_dblext=3'b111;
 	  fxFADD_ext=3'b000;
+	  fxFADD_int=1'b0;
 	  fxFADD_sub=6'b000000;
 	  fxFADD_rsub=3'b0;
 	  fxFADD_copyA=6'b0;
@@ -484,17 +486,18 @@ module fun_fpsu(
 	      gxDataBXL_reg[k]<={16*~H+SIMD_WIDTH{1'B0}};
 	  end
     end else begin
-	      fxFADD_dbl=u1_op_reg[7:0]==`fop_addDL ||
+	      fxFADD_dbl=(u1_op_reg[7:0]==`fop_addDL ||
 	        u1_op_reg[7:0]==`fop_addDH ||
 	        u1_op_reg[7:0]==`fop_addDP ||
                 u1_op_reg[7:0]==`fop_subDL ||
 	        u1_op_reg[7:0]==`fop_subDH ||
                 u1_op_reg[7:0]==`fop_subDP ||
                 u1_op_reg[7:0]==`fop_addsubDP ||
-                {u1_op_reg[7:2],2'b0}==`fop_logic;
-             fxFADD_ext=u1_op_reg[7:0]==`fop_addEE ||
-                u1_op_reg[7:0]==`fop_subEE;
+                {u1_op_reg[7:2],2'b0}==`fop_logic) && u1_en_reg[3];
+             fxFADD_ext=(u1_op_reg[7:0]==`fop_addEE ||
+                u1_op_reg[7:0]==`fop_subEE) && u1_en_reg[3];
               fxFADD_dblext=fxFADD_dbl[k]||fxFADD_ext[k];
+	      fxFADD_int=u1_en_reg[2] && u1_op_reg[5]==1'b0;
 	      fxFADD_sub[0]=u1_op_reg[7:0]==`fop_subDL ||
 	        u1_op_reg[7:0]==`fop_subDH ||
                 u1_op_reg[7:0]==`fop_subDP ||

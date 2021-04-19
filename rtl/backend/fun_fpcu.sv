@@ -309,7 +309,7 @@ module fun_fpu(
   fperm fperm1H_mod(
   .clk(clk),
   .rst(rst),
-  .en(~(H? fxFADD_dbl:fxFADD_dblext)&~fxFADD_sin&~fxFADD_pcmp&~fxFADD_int),
+  .en(~(H? fxFADD_dbl:fxFADD_dblext)&~fxFADD_sin&~fxFADD_pcmp),
   .copyA(H? fxFADD_com==2'b01 : ~fxFADD_com[0]),
   .swpSngl(fxFADD_pswp),
   .dupSngl(fxFADD_dupl),
