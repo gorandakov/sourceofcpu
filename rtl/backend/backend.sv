@@ -947,6 +947,10 @@ module backend(
   reg  [5:0][13:0] fret_reg;
   wire [5:0][13:0] fsret;
 
+  wire [5:0] FOOFL1;
+  wire [5:0] FOOFL2;
+  wire [5:0] FOOFL3;
+
   wire [`lsaddr_width-1:0] st0_adata;
   wire                     st0_en;
   reg                      st0_en_reg;
@@ -4941,18 +4945,20 @@ module backend(
   .ALTDATAH0(sqrDatH_reg),.ALTDATAH1({FUTYPE_reg,66'b0}),
   .ALTDATAL0(sqrDatL_reg),.ALTDATAL1(FUCVT2_reg),
   .ALT_INP({dalt[1],sqrDatEn}),
-  FUS_alu_reg2[0],FUS_alu_reg5[1],
-  FUS_alu_reg2[2],FUS_alu_reg5[3],
-  FUS_alu_reg2[4],FUS_alu_reg5[5],
-  ex_alu_reg2[0],ex_alu_reg5[1],
-  ex_alu_reg2[2],ex_alu_reg5[3],
-  ex_alu_reg2[4],ex_alu_reg5[5],
-  fsret[0],
-  fsret[1],
-  fsret[2],
-  fsret[3],
-  fsret[4],
-  fsret[5]
+  .FUS_alu0(FUS_alu_reg2[0]),.FUS_alu1(FUS_alu_reg5[1]),
+  .FUS_alu2(FUS_alu_reg2[2]),.FUS_alu3(FUS_alu_reg5[3]),
+  .FUS_alu4(FUS_alu_reg2[4]),.FUS_alu5(FUS_alu_reg5[5]),
+  .ex_alu0(ex_alu_reg2[0]),.ex_alu1(ex_alu_reg5[1]),
+  .ex_alu2(ex_alu_reg2[2]),.ex_alu3(ex_alu_reg5[3]),
+  .ex_alu4(ex_alu_reg2[4]),.ex_alu5(ex_alu_reg5[5]),
+  .fxFADD0_raise_s(fsret[0]),
+  .fxFCADD1_raise_s(fsret[1]),
+  .fxFADD2_raise_s(fsret[2]),
+  .fxFCADD3_raise_s(fsret[3]),
+  .fxFADD4_raise_s(fsret[4]),
+  .fxFCADD5_raise_s(fsret[5]),
+  .FUS0(FUS1),.FUS1(FUS2),.FUS2(FUS3),
+  .FOOSL0(FOOFL1),.FOOSL1(FOOFL2),.FOOSL2(FOOFL3)
   );
 
   fun_fpsu_BOTH fpsu_mod(
@@ -5006,6 +5012,7 @@ module backend(
   .ALTDATAH0(sqrDatH),.ALTDATAH1({FUTYPE,66'b0}),
   .ALTDATAL0(sqrDatL[67:0]),.ALTDATAL1(FUCVT2[67:0]),
   .ALT_INP({dalt[1],sqrDatEn})
+  .FOOFL0(FOOFL1),.FOOFL1(FOOFL2),.FOOFL2(FOOFL3)
   );
 
   fun_fpusqr sqr_mod(
@@ -5424,9 +5431,9 @@ dcache1 L1D_mod(
   assign FUS8=FUS_alu[3];
   assign FUS9=FUS_alu[5];
 
-  assign FUS1=fret_reg[0][8:3];//come from fpu; very fat wire e.g.g 4x
-  assign FUS2=fret_reg[2][8:3];
-  assign FUS3=fret_reg[4][8:3];
+//  assign FUS1=fret_reg[0][8:3];//come from fpu; very fat wire e.g.g 4x
+//  assign FUS2=fret_reg[2][8:3];
+//  assign FUS3=fret_reg[4][8:3];
  
    
 //  assign LSQ_lsqA[8:3]=LSQ_upper;
