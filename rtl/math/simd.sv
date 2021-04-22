@@ -69,6 +69,7 @@ module simd_non_socialiste(
   wire [63:0] resSH;
   reg en_reg;
   reg en_reg2;
+  wire [63:0] resh;
 
   assign resh=out8&~outL&~shSH_reg ? resD_reg[1] : 64'bz;
   assign resh=out16&~outL&~shSH_reg ? resD_reg[2] : 64'bz;
@@ -178,6 +179,8 @@ module simd_sasquach_shift(
   reg [63:0] shf;
   reg [7:0] fill8;
   reg [3:0] fill16;
+  reg [12:0] operation_reg;
+
   generate
       genvar k;
       for(k=0;k<16;k=k+1) begin

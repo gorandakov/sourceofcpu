@@ -18,13 +18,14 @@ module fcmpd(clk,rst,
   input [4:0] jumpType;
   input [1:0] cmod;
   output [67:0] res_pkd;
-  wire cmpC;
+  wire cmpC,x_cmpC;
 
   wire [15:0] extA;
   wire [15:0] extB;
   wire fEQl;
   wire A_s,B_s;
   wire [1:0] A_h,B_h;
+  wire[15:0] emsk;
 
   wire res_unord;
   wire res_S,res_C,res_Z;
@@ -41,6 +42,8 @@ module fcmpd(clk,rst,
   wire res_x_S,res_x_C,res_x_Z;
   wire x_COA,x_COB;
 
+  wire A_zero,A_infty,A_nan,A_x_zero,A_x_infty,A_x_nan;
+  wire B_zero,B_infty,B_nan,B_x_zero,B_x_infty,B_x_nan;
   wire [1:0] vres;
   wire vres1;
   reg [1:0] vres_reg;

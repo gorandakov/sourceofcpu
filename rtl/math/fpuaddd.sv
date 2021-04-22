@@ -191,6 +191,7 @@ module fadd(
   wire [3:0] xpon;
   wire [3:0] X_xpon;
   wire [3:0] Y_xpon;
+  wire invExcpt;
 
   assign A_exp=(~isDBL) ? {A[80],A[78:64]} : {A[80],{4{~A[80]}},A[62:52]};
   assign B_exp=(~isDBL) ? {B[80],B[78:64]} : {B[80],{4{~B[80]}},B[62:52]};
@@ -205,6 +206,8 @@ module fadd(
   assign B_zero=(B_exp&emsk)==16'b0;
   assign B_infty=(B_exp|~emsk)==16'hfffe;
   assign B_nan=(B_exp|~emsk)==16'hffff;
+
+  assign invExcpt=fpcsr[`csrfpu_inv_excpt];
 
   assign spec_snan=A_nan & ~B_infty & invExcpt & ~copyA || B_nan & ~A_infty & invExcpt & ~copyA || A_infty & B_infty & sxor & invExcpt & ~copyA;  
   assign spec_qnan=A_nan & ~B_infty & ~invExcpt & ~copyA || B_nan & ~A_infty & ~invExcpt & ~copyA || A_infty & B_infty & sxor & ~invExcpt & ~copyA;
