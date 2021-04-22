@@ -185,6 +185,9 @@ module fadd(
   wire [15:0] emsk=isDBL ? 16'h87ff : 16'hffff;
   integer m;
 
+  wire renor_any,exp_dec_non_denor_IEEE_0,exp_dec_non_denor_IEEE_1,exp_dec_non_denor,exp_min_IEEE,exp_inc_oor_IEEE,exp_max_IEEE,exp_inc_oor,exp_max,
+	  exp_dec_non_denor_IEEE,exp_min_kludge;
+  reg exp_inc_oor_reg,exp_inc_oor_IEEE_reg,exp_dec_non_denor_reg,exp_dec_non_denor_IEEE_reg;
   wire [3:0] xpon;
   wire [3:0] X_xpon;
   wire [3:0] Y_xpon;
@@ -549,6 +552,10 @@ module fadd(
 	  A_reg<=81'b0;
 	  B_reg<=81'b0;
 	  en_reg<=1'b1;
+          exp_inc_oor_reg<=1'b0;
+	  exp_inc_oor_IEEE_reg<=1'b0;
+	  exp_dec_non_denor_reg<=1'b0;
+	  exp_dec_non_denor_IEEE_reg<=1'b0;
       end else begin
 	  for (m=0;m<8;m=m+1) expdiffeq[m]<=expdiff[2:0]==m && ~expoor;
           sxor_reg<=sxor;
@@ -591,6 +598,10 @@ module fadd(
           A_reg<=copyA ? {A_alt[64],16'b0,A_alt[63:0]} : A;
           B_reg<=B;
 	  en_reg<=en;
+          exp_inc_oor_reg<=exp_inc_oor;
+	  exp_inc_oor_IEEE_reg<=exp_inc_oor_IEEE;
+	  exp_dec_non_denor_reg<=exp_dec_non_denor;
+	  exp_dec_non_denor_IEEE_reg<=exp_dec_non_denor_IEEE;
       end
   end
 endmodule
