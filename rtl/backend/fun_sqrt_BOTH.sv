@@ -148,7 +148,7 @@ module fun_fpusqr(
   no,
   en);
 */
-  fun_fpusqr sqr_low(
+  fun_fpusqr0 sqr_low(
   clk,
   rst,
   fpcsr,
@@ -168,7 +168,7 @@ module fun_fpusqr(
   fxFRT_alten,
   fxFRT_pause
   );
-  fun_fpusqr sqr_hi(
+  fun_fpusqr0 sqr_hi(
   clk,
   rst,
   fpcsr,
@@ -184,7 +184,7 @@ module fun_fpusqr(
   FUVH0,FUVH1,FUVH2,
   FUVH3,FUVH4,FUVH5,
   FUVH6,FUVH7,FUVH8,
-  FUVH9
+  FUVH9,
   fxFRT_alten,
   fxFRT_pause
   );

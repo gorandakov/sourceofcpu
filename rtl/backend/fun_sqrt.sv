@@ -2,7 +2,7 @@
 `include "../fpoperations.sv"
 `include "../csrss_no.sv"
 
-module fun_fpusqr(
+module fun_fpusqr0(
   clk,
   rst,
   fpcsr,
@@ -242,7 +242,7 @@ module fun_fpusqr(
      (fxFRT_can[3] & ~fxFRT_don_reg[3] & ~fxFRT_don_reg2[3] & ~fxFRT_don_reg2[3] & ~fxFRT_don_reg3[3])),.do_(fxFRT_do));
   in_flip_rt #(13+16+SIMD_WIDTH) rtDatB_mod(
     .clk(clk),.rst(rst),.in_en(fxFRT_en),.pause(),
-    .d_in({u1_op_reg,u1_en_reg[3] ? u1_op_reg[8+H] ? {16'b0,u1_Bxo} : uu_B1 : {16'b0,uu_Bv_reg}),
+    .d_in({u1_op_reg,u1_en_reg[3] ? (u1_op_reg[8+H] ? {16'b0,u1_Bxo} : uu_B1) : {16'b0,uu_Bv_reg}}),
     .d_out({frtOp,rtDataB}),
     .dout_en((fxFRT_can[0] & ~fxFRT_don_reg[0] & ~fxFRT_don_reg2[0] & ~fxFRT_don_reg2[0] & ~fxFRT_don_reg3[0]) |
      (fxFRT_can[1] & ~fxFRT_don_reg[1] & ~fxFRT_don_reg2[1] & ~fxFRT_don_reg2[1] & ~fxFRT_don_reg3[1]) |
