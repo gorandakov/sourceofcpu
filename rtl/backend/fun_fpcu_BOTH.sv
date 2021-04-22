@@ -226,6 +226,27 @@ module fun_fpu_BOTH(
   wire [13:0] u6_retL;
   wire u6_ret_enL;
 
+  wire [5:0] LFOOSH0;
+  wire [5:0] LFOOSH1;
+  wire [5:0] LFOOSH2;
+
+  wire [5:0] HFOOSH0;
+  wire [5:0] HFOOSH1;
+  wire [5:0] HFOOSH2;
+
+  reg [12:0] u1_op_reg;
+  reg [12:0] u1_op_reg2;
+  reg [12:0] u1_op_reg3;
+  reg [12:0] u1_op_reg4;
+  reg [12:0] u3_op_reg;
+  reg [12:0] u3_op_reg2;
+  reg [12:0] u3_op_reg3;
+  reg [12:0] u3_op_reg4;
+  reg [12:0] u5_op_reg;
+  reg [12:0] u5_op_reg2;
+  reg [12:0] u5_op_reg3;
+  reg [12:0] u5_op_reg4;
+
   assign u1_ret=u1_retL|u1_retH;
   assign u1_ret_en=u1_ret_enL| u1_ret_enH;
   assign u2_ret=u2_retL|u2_retH;
@@ -279,9 +300,9 @@ module fun_fpu_BOTH(
   fxFCADD3_raise_s,
   fxFADD4_raise_s,
   fxFCADD5_raise_s,
-  FOOSL0_reg, HFOOSH0,
-  FOOSL1_reg, HFOOSH1,
-  FOOSL2_reg, HFOOSH2
+  FOOSL0, HFOOSH0,
+  FOOSL1, HFOOSH1,
+  FOOSL2, HFOOSH2
   ); 
 
   fun_fpuL lfpc_mod(
@@ -324,13 +345,27 @@ module fun_fpu_BOTH(
   fxFCADD3_raise_s,
   fxFADD4_raise_s,
   fxFCADD5_raise_s,
-  FOOSL0_reg, LFOOSH0,
-  FOOSL1_reg, LFOOSH1,
-  FOOSL2_reg, LFOOSH2
+  FOOSL0, LFOOSH0,
+  FOOSL1, LFOOSH1,
+  FOOSL2, LFOOSH2
   );
 
   assign FUS0=u1_op_reg4[7:0]==`fop_cmpDH  ? HFOOSH0 : LFOOSH0; 
   assign FUS1=u3_op_reg4[7:0]==`fop_cmpDH  ? HFOOSH1 : LFOOSH1; 
   assign FUS2=u5_op_reg4[7:0]==`fop_cmpDH  ? HFOOSH2 : LFOOSH2; 
 
+  always @(posedge clk) begin
+      u1_op_reg<=u1_op;
+      u1_op_reg2<=u1_op_reg;
+      u1_op_reg3<=u1_op_reg2;
+      u1_op_reg4<=u1_op_reg3;
+      u3_op_reg<=u3_op;
+      u3_op_reg2<=u3_op_reg;
+      u3_op_reg3<=u3_op_reg2;
+      u3_op_reg4<=u3_op_reg3;
+      u5_op_reg<=u5_op;
+      u5_op_reg2<=u5_op_reg;
+      u5_op_reg3<=u5_op_reg2;
+      u5_op_reg4<=u5_op_reg3;
+  end
 endmodule
