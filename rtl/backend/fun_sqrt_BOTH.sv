@@ -12,6 +12,12 @@ module fun_fpusqr(
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
   u1_ret,u1_ret_en,
   en_early,op_early,
+  outEn,
+  outII,
+  outOp,
+  FUreg,
+  FUwen,
+  outAltData,
   FUFH0,FUFH1,FUFH2,
   FUFH3,FUFH4,FUFH5,
   FUFH6,FUFH7,FUFH8,
@@ -56,6 +62,12 @@ module fun_fpusqr(
   output u1_ret_en;
   input [3:0] en_early;
   input [12:0] op_early;
+  output [3:0] outEn;
+  output [9:0] outII;
+  output [12:0] outOp;
+  output [8:0] FUreg;
+  output FUwen;
+  output [2*SIMD_WIDTH-1:0] outAltData;
 
   input [67:0] FUVH0;
   input [67:0] FUVH1;
@@ -150,6 +162,8 @@ module fun_fpusqr(
   no,
   en);
 */
+  assign outAltData=outOp==`fop_sqrtDH || outOp==`fop_divDH ? outAltDataH : outAltDataL;
+
   fun_fpusqr0 sqr_low(
   clk,
   rst,
@@ -173,8 +187,8 @@ module fun_fpusqr(
   FUVL3,FUVL4,FUVL5,
   FUVL6,FUVL7,FUVL8,
   FUVL9,
-  fxFRT_altenL,
-  fxFRT_pauseL
+  fxFRT_alten,
+  fxFRT_pause
   );
   fun_fpusqr0 sqr_hi(
   clk,
@@ -199,8 +213,8 @@ module fun_fpusqr(
   FUVH3,FUVH4,FUVH5,
   FUVH6,FUVH7,FUVH8,
   FUVH9,
-  fxFRT_altenLH,
-  fxFRT_pauseLH
+  ,
+  
   );
   
   always @(posedge clk) begin
