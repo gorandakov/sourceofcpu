@@ -123,6 +123,8 @@ module fun_fpusqr(
   wire [67:0] u1_Bxo;
   wire [67:0] u1_Bx;
 
+  wire [2*SIMD_WIDTH-1:0] outAltDataL;
+  wire [2*SIMD_WIDTH-1:0] outAltDataH;
 
   assign fraise2[m]=fxFCADD_sn_reg5[m] ?
     (fxFCADD_raise_s_reg[0]|fxFCADD_raise_s_reg[1])&fpcsr[21:11] :
@@ -157,6 +159,12 @@ module fun_fpusqr(
   u1_ret,u1_ret_en,
   en_early,op_early,
   u1_Bx,u1_Bxo,
+  outEn,
+  outII,
+  outOp,
+  FUreg,
+  FUwen,
+  outAltDataL,
   FUFL0,FUFL1,FUFL2,
   FUFL3,FUFL4,FUFL5,
   FUFL6,FUFL7,FUFL8,
@@ -165,8 +173,8 @@ module fun_fpusqr(
   FUVL3,FUVL4,FUVL5,
   FUVL6,FUVL7,FUVL8,
   FUVL9,
-  fxFRT_alten,
-  fxFRT_pause
+  fxFRT_altenL,
+  fxFRT_pauseL
   );
   fun_fpusqr0 sqr_hi(
   clk,
@@ -177,6 +185,12 @@ module fun_fpusqr(
   u1_ret,u1_ret_en,
   en_early,op_early,
   u1_Bxo,u1_Bx,
+  ,//En
+  ,//II
+  ,//Op
+  ,//FUreg
+  ,//FUwen
+  outAltDataH,
   FUFH0,FUFH1,FUFH2,
   FUFH3,FUFH4,FUFH5,
   FUFH6,FUFH7,FUFH8,
@@ -185,8 +199,8 @@ module fun_fpusqr(
   FUVH3,FUVH4,FUVH5,
   FUVH6,FUVH7,FUVH8,
   FUVH9,
-  fxFRT_alten,
-  fxFRT_pause
+  fxFRT_altenLH,
+  fxFRT_pauseLH
   );
   
   always @(posedge clk) begin
