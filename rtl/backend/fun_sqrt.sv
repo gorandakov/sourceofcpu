@@ -11,6 +11,12 @@ module fun_fpusqr0(
   u1_ret,u1_ret_en,
   en_early,op_early,
   u1_Bx,u1_Bxo,
+  outEn,
+  outII,
+  outOp,
+  FUreg,
+  FUwen,
+  outAltData,
   FUF0,FUF1,FUF2,
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
@@ -45,6 +51,13 @@ module fun_fpusqr0(
   input  [67:0] u1_Bxo;
   input [3:0] en_early;
   input [12:0] op_early;
+  
+  output [3:0] outEn;
+  output [9:0] outII;
+  output [12:0] outOp;
+  output [8:0] FUreg;
+  output FUwen;
+  output [2*SIMD_WIDTH-1:0] outAltData;
 
   input [67:0] FUV0;
   input [67:0] FUV1;
