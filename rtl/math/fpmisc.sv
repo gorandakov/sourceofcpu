@@ -155,6 +155,21 @@ module rt2_fp(
  assign minus_norm=~normA;
 
  assign exact_result=&P && ~|inv_bits;
+ 
+ assign EXT_lead=digits[68];
+ assign EXT_rnbit=EXT_lead ? digits[3] : digits[2];
+ assign EXT_tail=EXT_lead ? |digits[2:0] | ~exact_result : |digits[1:0] | ~exact_result;
+ assign EXT_last=EXT_lead? digits[4] : digits[3]; 
+ assign EXT_rnd=~isrnd_zero && (EXT_rnbit & ~(isrnd_even & ~EXT_tail & EXT_last) 
+    || (isrnd_plus && EXT_rnbit | EXT_tail));  
+ 
+ assign SNGL_lead=digits[27];
+ assign SNGL_rnbit=SNGL_lead ? digits[3] : digits[2];
+ assign SNGL_tail=SNGL_lead ? |digits[2:0] | ~exact_result : |digits[1:0] | ~exact_result;
+ assign SNGL_last=SNGL_lead? digits[4] : digits[3]; 
+ assign SNGL_rnd=~isrnd_zero && (SNGL_rnbit & ~(isrnd_even & ~SNGL_tail & SNGL_last) 
+    || (isrnd_plus && SNGL_rnbit | SNGL_tail));  
+ 
 
  assign DBL_lead=digits[55];
  assign DBL_rnbit=DBL_lead ? digits[2] : digits[1];
@@ -231,8 +246,14 @@ module rt2_fp(
 
  adder #(17) expAdd_mod(expA_reg,17'h7fff,exp_inc,1'b0,1'b1,,,,);
  adder_CSA #(16) exp2CSA_mod(expA_reg[15:0],~expB_reg[15:0],BIAS[15:0],e2p0,e2p1);
- adder2c #(17) exp2Add_mod(e2p0,e2p1,exp2,exp2,1'b0,1'b1,~DBL_lead&&expA_reg,DBL_lead&&expA_reg,,,,);
- assign exp2=( expA_reg==0) ? 0 : 17'bz;
+ adder2c #(17) exp2Add_mod(e2p0,e2p1,exp2x,exp2x,1'b0,1'b1,~ANY_lead&&expA_reg!=0,ANY_lead&&expA_reg!=0,,,,);
+ assign exp2x=( expA_reg==0) ? 0 : 17'bz;
+ assign exp2=(A_nan||B_nan||B_zero&A_zero||A_infty&B_infty) ? 17'hffff: 17'bz;
+ assign exp2=(A_infty&~B_infty&~B_nan||~A_infty&~A_nan&B_zero||(exp2[17]^exp2[16])&ANY_xbit2||
+       (exp2x==ANY_enan&&~A_nan&&~B_nan)) ? 17'hfffe : 17'bz;
+ assign exp2=(A_zero&~B_nan||B_infty&~A_nan&~A_infty||~exp2x_cmp&~exp2[17]&~A_nan&~B_nan&~B_zero&~A_infty) ? 17'h0 : 17'bz;
+
+ get_carry #(17) exp2cmp_mod(exp2x,~ANY_denor,1'b1,exp2x_cmp);
 
   sdupmass pm_mod(
   normB[63:0],
@@ -355,10 +376,10 @@ module rt2_fp(
           ROUND_TRUNC: begin isrnd_even<=1'b0; isrnd_zero<=1'b1; isrnd_plus<=1'b0; end
           ROUND_ROUND: begin isrnd_even<=1'b0; isrnd_zero<=1'b0; isrnd_plus<=1'b0; end
           ROUND_EVEN : begin isrnd_even<=1'b1; isrnd_zero<=1'b0; isrnd_plus<=1'b0; end
-          ROUND_PLUS : begin isrnd_even<=1'b0; isrnd_zero<=1'b0; isrnd_plus<=1'b0; end
-          ROUND_MINUS: begin isrnd_even<=1'b0; isrnd_zero<=1'b1; isrnd_plus<=1'b0; end
-          ROUND_UP   : begin isrnd_even<=1'b0; isrnd_zero<=1'b0; isrnd_plus<=1'b1; end
-          ROUND_DOWN : begin isrnd_even<=1'b0; isrnd_zero<=1'b1; isrnd_plus<=1'b0; end
+          ROUND_PLUS : begin isrnd_even<=1'b0; isrnd_zero<=!(is_root||nsignA^~nsignB); isrnd_plus<=1'b0; end
+          ROUND_MINUS: begin isrnd_even<=1'b0; isrnd_zero<=(is_root||nsignA^~nsignB); isrnd_plus<=1'b0; end
+          ROUND_UP   : begin isrnd_even<=1'b0; isrnd_zero<=!(is_root||nsignA^~nsignB); isrnd_plus<=(is_root||nsignA^~nsignB); end
+          ROUND_DOWN : begin isrnd_even<=1'b0; isrnd_zero<=(is_root||nsignA^~nsignB); isrnd_plus<=!(is_root||nsignA^~nsignB); end
         endcase
      end else if (perform_stage && is_root_reg) begin
 	 inv_bits<={inv_bits[47:-1],8'hff};
