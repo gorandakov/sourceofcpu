@@ -378,7 +378,7 @@ module rt2_fp(
 	 cnt<=step_cnt;
 	 rdy<=1'b0;
 	 digits<=68'b0;
-	 type_reg<=type_;
+	 type_reg<=type_==3 ? 1 : type_;//int=EXT
 	 nsignA_reg<=nsignA;
 	 nsignB_reg<=nsignB;
 	 is_root_reg<=is_root;
@@ -393,7 +393,10 @@ module rt2_fp(
           ROUND_MINUS: begin isrnd_even<=1'b0; isrnd_zero<=(is_root||nsignA^~nsignB); isrnd_plus<=1'b0; end
           ROUND_UP   : begin isrnd_even<=1'b0; isrnd_zero<=!(is_root||nsignA^~nsignB); isrnd_plus<=(is_root||nsignA^~nsignB); end
           ROUND_DOWN : begin isrnd_even<=1'b0; isrnd_zero<=(is_root||nsignA^~nsignB); isrnd_plus<=!(is_root||nsignA^~nsignB); end
-        endcase
+         endcase
+	 if (type_==3) begin
+             begin isrnd_even<=1'b0; isrnd_zero<=1'b1; isrnd_plus<=1'b0; end//int=round_trunc
+	 end
      end else if (perform_stage && is_root_reg) begin
 	 inv_bits<={inv_bits[47:-1],8'hff};
 	 P<={P_d[127:0],inv_bits[55:48]};
@@ -422,7 +425,7 @@ module rt2_fp(
 	// if (out_en&out_can) rdy<=1'b1;
 	 digits<={digits[63:0],new_digit};
      end
-     if (cnt==(3+2) && perform_stage && ~rst) out_en<=1'b1;
+     if (cnt==(3+1+(type_reg!=2)) && perform_stage && ~rst) out_en<=1'b1;
      else if (rst|out_can) out_en<=1'b0;
      if (rdy0_reg2) rdy<=1'b1;
       
