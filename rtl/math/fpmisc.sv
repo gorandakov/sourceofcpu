@@ -425,7 +425,7 @@ module rt2_fp(
 	// if (out_en&out_can) rdy<=1'b1;
 	 digits<={digits[63:0],new_digit};
      end
-     if (cnt==(3+1+(type_reg!=2)) && perform_stage && ~rst) out_en<=1'b1;
+     if (cnt==(2+1+(type_reg!=2)) && perform_stage && ~rst) out_en<=1'b1;
      else if (rst|out_can) out_en<=1'b0;
      if (rdy0_reg2) rdy<=1'b1;
       
