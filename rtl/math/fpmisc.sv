@@ -101,6 +101,7 @@ module rt2_fp(
  reg [15:1][7:0] Se_arg_reg;
  reg [15:1][13:0] Se_arg2_reg;
  wire [16:0] exp_inc;
+ wire [16:0] exp_incy;
  reg nsignA_reg;
  reg nsignB_reg;
  wire [67:0] normB_11;
@@ -118,6 +119,7 @@ module rt2_fp(
  wire [16:0] e2p0;
  wire [16:0] e2p1;
  wire [16:0] exp2;
+ wire [16:0] exp2x;
  reg rdy0;
  reg rdy0_reg;
  reg rdy0_reg2;
@@ -244,7 +246,7 @@ module rt2_fp(
  assign result[65:33]=(type_reg==2) ? 33'b0 : 33'bz;
 
 
- adder #(17) expAdd_mod(expA_reg,17'h7fff,exp_inc,1'b0,1'b1,,,,);
+ adder #(17) expAdd_mod(expA_reg,17'h7fff,exp_incy,1'b0,1'b1,,,,);
  adder_CSA #(16) exp2CSA_mod(expA_reg[15:0],~expB_reg[15:0],BIAS[15:0],e2p0,e2p1);
  adder2c #(17) exp2Add_mod(e2p0,e2p1,exp2x,exp2x,1'b0,1'b1,~ANY_lead&&expA_reg!=0,ANY_lead&&expA_reg!=0,,,,);
  assign exp2x=( expA_reg==0) ? 0 : 17'bz;
@@ -253,7 +255,18 @@ module rt2_fp(
        (exp2x==ANY_enan&&~A_nan&&~B_nan)) ? 17'hfffe : 17'bz;
  assign exp2=(A_zero&~B_nan||B_infty&~A_nan&~A_infty||~exp2x_cmp&~exp2[17]&~A_nan&~B_nan&~B_zero&~A_infty) ? 17'h0 : 17'bz;
 
+ assign exp_inc=specR_zero ? 17'b0 : 17'bz;
+ assign exp_inc=specR_infty ? 17'hfffe : 17'bz;
+
+ assign exp_inc=specR_nan ? 17'hffff : 17'bz;
+
+ assign exp_inc=specR_nan|specR_infty|spacR_zero ? 17'bz : exp_incy;
+
+ assign exp2=~A_nan&&~B_nan&&~A_infty&&~B_infty&&~A_zero&&~B_zero&&!~exp2x_cmp&~exp2[17]&&!(exp2[17]^exp2[16])&ANY_xbit2&&
+	 !(exp2x==ANY_enan&&~A_nan&&~B_nan) ? exp2x : 17'bz;//bottle
+
  get_carry #(17) exp2cmp_mod(exp2x,~ANY_denor,1'b1,exp2x_cmp);
+ get_carry #(17) exp2tycmp_mod(exp_incy,~ANY_denor,1'b1,exp2y_cmp);
 
   sdupmass pm_mod(
   normB[63:0],
@@ -265,8 +278,8 @@ module rt2_fp(
   normB_1101,
   normB_1111);
 
- assign specR_zero=expA_reg==17'b0;
- assign specR_nan=~nsignA_reg && expA_reg || A_nan;
+ assign specR_zero=expA_reg==17'b0||~exp2y_cmp&~exp_inc[17];
+ assign specR_nan=~nsignA_reg && expA_reg!=0 || A_nan;
  assign specR_infty=nsignA_reg && A_infty;
 
  assign DBL_oor=exp2[14:11]!={4{~exp2[15]}};
