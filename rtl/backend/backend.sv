@@ -4944,7 +4944,7 @@ module backend(
   .FUFL9(FUFL[9]),
   .ALTDATAH0(sqrDatH_reg),.ALTDATAH1({FUTYPE_reg,66'b0}),
   .ALTDATAL0(sqrDatL_reg),.ALTDATAL1(FUCVT2_reg),
-  .ALT_INP({dalt[1],sqrDatEn}),
+  .ALT_INP({dalt[1],sqrDatEn_reg}),
   .FUS_alu0(FUS_alu_reg2[0]),.FUS_alu1(FUS_alu_reg5[1]),
   .FUS_alu2(FUS_alu_reg2[2]),.FUS_alu3(FUS_alu_reg5[3]),
   .FUS_alu4(FUS_alu_reg2[4]),.FUS_alu5(FUS_alu_reg5[5]),
@@ -5009,9 +5009,9 @@ module backend(
   .FUFL3(FUVL[3]),.FUFL4(FUVL[4]),.FUFL5(FUVL[5]),
   .FUFL6(FUVL[6]),.FUFL7(FUVL[7]),.FUFL8(FUVL[8]),
   .FUFL9(FUVL[9]),
-  .ALTDATAH0(sqrDatH),.ALTDATAH1({FUTYPE,66'b0}),
-  .ALTDATAL0(sqrDatL[67:0]),.ALTDATAL1(FUCVT2[67:0]),
-  .ALT_INP({dalt[1],sqrDatEn}),
+  .ALTDATAH0(sqrDatH_reg),.ALTDATAH1({FUTYPE,66'b0}),
+  .ALTDATAL0(sqrDatL_reg[67:0]),.ALTDATAL1(FUCVT2[67:0]),
+  .ALT_INP({dalt[1],sqrDatEn_reg}),
   .FOOFL0(FOOFL1),.FOOFL1(FOOFL2),.FOOFL2(FOOFL3)
   );
 
@@ -5025,8 +5025,14 @@ module backend(
   .u1_fufwd_A(fuFwdA_reg[8]),.u1_fuufwd_A(fuuFwdA_reg[8]),
   .u1_fufwd_B(fuFwdB_reg[8]),.u1_fuufwd_B(fuuFwdB_reg[8]),
   .u1_ret(fsret[6]),.u1_ret_en(fsretEn6),
-  .u1_dataH(sqrDatH),.u1_dataL(sqrDatL),.u1_dataEn(sqrDatEn),
+  //.u1_dataH(sqrDatH),.u1_dataL(sqrDatL),.u1_dataEn(sqrDatEn),
   .en_early(outEn[8]),.op_early(outOp[8]),
+  .outEn(outEnX),
+  .outII(outIIX),
+  .outOp(outOpX),
+  .FUreg(outRegX),
+  .FUwen(),
+  .outAltData({sqrDatH[67:0],sqrDatL[67:0]}),
   .FUFH0(FUFH[0]),.FUFH1(FUFH[1]),.FUFH2(FUFH[2]),
   .FUFH3(FUFH[3]),.FUFH4(FUFH[4]),.FUFH5(FUFH[5]),
   .FUFH6(FUFH[6]),.FUFH7(FUFH[7]),.FUFH8(FUFH[8]),
@@ -5044,6 +5050,16 @@ module backend(
   .FUVL6(FUVL[6]),.FUVL7(FUVL[7]),.FUVL8(FUVL[8]),
   .FUVL9(FUVL[9])
   );
+
+  assign fxFRT_alten[2]=sqrtDatEn_reg;
+  assign fxFRT_alten[0]=4'b0;
+  assign fxFRT_alten[1]=4'b0;
+  assign sqrDatL[68+15:68]=sqrDatH[15:0];
+
+  assign outEn[7]=sqrDatEn_reg ? outEnX_reg : 4'bz;
+  assign outII[7]=sqrDatEn_reg ? outIIX_reg :10'bz;
+  assign outOp[7]=sqrDatEn_reg ? outOpX_reg :13'bz;
+  assign outReg[7]=sqrDatEn_reg ? outRegX_reg : 9'bz;
 
   get_LDQ_new_en ldq_new_mod(
   rs_port[0],rs_ldst_flg[0], 
