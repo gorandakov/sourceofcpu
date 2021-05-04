@@ -105,6 +105,28 @@ module fun_fpusqr0(
 
   reg [1:0] ALT_INP_reg;
   
+  reg [67:0] FUV0_reg;
+  reg [67:0] FUV1_reg;
+  reg [67:0] FUV2_reg;
+  reg [67:0] FUV3_reg;
+  reg [67:0] FUV4_reg;
+  reg [67:0] FUV5_reg;
+  reg [67:0] FUV6_reg;
+  reg [67:0] FUV7_reg;
+  reg [67:0] FUV8_reg;
+  reg [67:0] FUV9_reg;
+
+  reg [S+67:0] FUF0_reg;
+  reg [S+67:0] FUF1_reg;
+  reg [S+67:0] FUF2_reg;
+  reg [S+67:0] FUF3_reg;
+  reg [S+67:0] FUF4_reg;
+  reg [S+67:0] FUF5_reg;
+  reg [S+67:0] FUF6_reg;
+  reg [S+67:0] FUF7_reg;
+  reg [S+67:0] FUF8_reg;
+  reg [S+67:0] FUF9_reg;
+  
   wire [2:0][3:0] fxFRT_alten;
   reg [2:0][3:0] fxFRT_alten_reg;
   reg [2:0][3:0] fxFRT_alten_reg2;
@@ -155,7 +177,7 @@ module fun_fpusqr0(
   reg [12:0] frtOp_reg;
   wire [3:0][12:0] rtOp;
   wire [3:0][S+67:0] rtRes;
-  reg fxFRT_do;
+  reg fxFRT_do,fxFRT_en;
   reg [12:0] u1_op_reg;
   reg [9:0]  u1_II_reg;
   reg [3:0]  u1_en_reg;
@@ -173,6 +195,11 @@ module fun_fpusqr0(
   reg [67:0] uu_Av_reg;
 
   reg [REG_WIDTH-1:0] u1_regNo_reg;
+  
+  reg [3:0] u1_fufwd_A_reg;
+  reg [3:0] u1_fuufwd_A_reg;
+  reg [3:0] u1_fufwd_B_reg;
+  reg [3:0] u1_fuufwd_B_reg;
 
   rs_write_forward #(S+68) u1_A_fwd(
   clk,rst,
@@ -475,6 +502,32 @@ module fun_fpusqr0(
 	  u1_op_reg<=u1_op;
 	  u1_II_reg<=u1_II;
 	  u1_en_reg<=u1_en;
+          u1_fufwd_A_reg<=u1_fufwd_A;
+          u1_fuufwd_A_reg<=u1_fuufwd_A;
+          u1_fufwd_B_reg<=u1_fufwd_B;
+          u1_fuufwd_B_reg<=u1_fuufwd_B;
+
+	  FUV0_reg<=FUV0;
+	  FUV1_reg<=FUV1;
+	  FUV2_reg<=FUV2;
+	  FUV3_reg<=FUV3;
+	  FUV4_reg<=FUV4;
+	  FUV5_reg<=FUV5;
+	  FUV6_reg<=FUV6;
+	  FUV7_reg<=FUV7;
+	  FUV8_reg<=FUV8;
+	  FUV9_reg<=FUV9;
+
+	  FUF0_reg<=FUF0;
+	  FUF1_reg<=FUF1;
+	  FUF2_reg<=FUF2;
+	  FUF3_reg<=FUF3;
+	  FUF4_reg<=FUF4;
+	  FUF5_reg<=FUF5;
+	  FUF6_reg<=FUF6;
+	  FUF7_reg<=FUF7;
+	  FUF8_reg<=FUF8;
+	  FUF9_reg<=FUF9;
 
 	  if (fxFRT_don_reg2) begin
               rtDataA_reg<=rtDataA;

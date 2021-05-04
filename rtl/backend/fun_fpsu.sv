@@ -368,11 +368,10 @@ module fun_fpsu(
   en);
 */
   
-  fpucadd cadd2H_mod(
+  fpumuls cadd2H_mod(
   .clk(clk),
   .rst(rst),
   .A({fxDataAXL_reg[1][65],fxDataAXL_reg[1][64:33]}),
-  .A_alt({fxDataAFL_REG[1][65],fxDataAFL_REG[1][64:33]}),
   .B({gxDataBXL_reg[0][65],gxDataBFL_reg[0][64:33]}),
   .copyA(fxFCADD_copyA[H]),
   .en(fxFCADD_sn),
@@ -383,11 +382,10 @@ module fun_fpsu(
   );
   
   
-  fpucadd cadd2L_mod(
+  fpumuls cadd2L_mod(
   .clk(clk),
   .rst(rst),
   .A({fxDataAXL_reg[1][32],fxDataAXL_reg[1][31:0]}),
-  .A_alt({fxDataAFL_REG[1][32],fxDataAFL_REG[1][31:0]}),
   .B({gxDataBXL_reg[0][32],gxDataBFL_reg[0][31:0]}),
   .copyA(fxFCADD_copyA[H]),
   .en(fxFCADD_sn),

@@ -125,6 +125,9 @@ module rt2_fp(
  reg rdy0_reg2;
  wire [16:0] ANY_denor;
  wire [16:0] ANY_enan;
+ wire exp2x_cmp,exp2y_cmp;
+ wire ANY_lead;
+ wire ANY_xbit2;
  integer p;
 
 //WARNING: need to tage negative sign from bit 128; 129 bit adder with same
@@ -262,7 +265,7 @@ module rt2_fp(
 
  assign exp_inc=specR_nan ? 17'hffff : 17'bz;
 
- assign exp_inc=specR_nan|specR_infty|spacR_zero ? 17'bz : exp_incy;
+ assign exp_inc=specR_nan|specR_infty|specR_zero ? 17'bz : exp_incy;
 
  assign exp2=~A_nan&&~B_nan&&~A_infty&&~B_infty&&~A_zero&&~B_zero&&!~exp2x_cmp&~exp2[17]&&!(exp2[17]^exp2[16])&ANY_xbit2&&
 	 !(exp2x==ANY_enan&&~A_nan&&~B_nan) ? exp2x : 17'bz;//bottle
@@ -275,6 +278,14 @@ module rt2_fp(
  assign ANY_denor=type_reg[1:0]!=2'b0 && type_reg!=3'd1 ? 17'hbfff-17'd24 : 17'bz;
 
  assign ANY_enan=17'hffff;
+
+ assign ANY_lead=type_reg[1:0]==2'b0 ? DBL_lead : 1'bz;
+ assign ANY_lead=type_reg==3'b1 ? EXT_lead : 1'bz;
+ assign ANY_lead=type_reg[1:0]!=2'b0 && type_reg!=3'd1 ? SNGL_lead : 1'bz;
+
+ assign ANY_xbit2=type_reg[1:0]==2'b0 ? exp2[10] : 1'bz;
+ assign ANY_xbit2=type_reg==3'b1 ? exp2[14] : 1'bz;
+ assign ANY_xbit2=type_reg[1:0]!=2'b0 && type_reg!=3'd1 ? exp2[7] : 1'bz;
 
   sdupmass pm_mod(
   normB[63:0],
