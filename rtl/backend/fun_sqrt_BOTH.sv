@@ -5,12 +5,14 @@
 module fun_fpusqr(
   clk,
   rst,
+  except,
   fpcsr,
   ul_A,ul_B,ul_Av,ul_Bv,
   uh_A,uh_B,uh_Av,uh_Bv,
   u1_en,u1_op,
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
-  u1_ret,u1_ret_en,
+//  u1_ret,u1_ret_en,
+  u1_regNo,u1_II,
   en_early,op_early,
   outEn,
   outII,
@@ -43,6 +45,7 @@ module fun_fpusqr(
   localparam [4:0] S={~H,3'b0};
   input clk;
   input rst;
+  input except;
   input [31:0] fpcsr;
   input [S+67:0] ul_A;
   input [S+67:0] ul_B;
@@ -58,8 +61,10 @@ module fun_fpusqr(
   input [3:0] u1_fuufwd_A;
   input [3:0] u1_fufwd_B;
   input [3:0] u1_fuufwd_B;
-  output [13:0] u1_ret;
-  output u1_ret_en;
+//  output [13:0] u1_ret;
+//  output u1_ret_en;
+  input [8:0] u1_regNo;
+  input [9:0] u1_II;
   input [3:0] en_early;
   input [12:0] op_early;
   output [3:0] outEn;
@@ -138,7 +143,7 @@ module fun_fpusqr(
   wire [2*SIMD_WIDTH-1:0] outAltDataL;
   wire [2*SIMD_WIDTH-1:0] outAltDataH;
 
-  assign fraise2[m]=fxFCADD_sn_reg5[m] ?
+  /*assign fraise2[m]=fxFCADD_sn_reg5[m] ?
     (fxFCADD_raise_s_reg[0]|fxFCADD_raise_s_reg[1])&fpcsr[21:11] :
     (fxFCADD_raise_reg)&fpcsr[21:11];
   assign fmask2[m]=fxFCADD_sn_reg5[m] ?
@@ -153,7 +158,7 @@ module fun_fpusqr(
     (fxFADD_raise_s_reg[0]|fxFADD_raise_s_reg[1]) :
     (fxFADD_raise_reg);
   fexcpt fexcpt3_mod(fraise3_reg,{5'b0,FUS_alu0,ex_alu0},
-    fmaks3_reg,|outEn_reg6[1][3:2],u1_ret,u1_ret_en);
+    fmaks3_reg,|outEn_reg6[1][3:2],u1_ret,u1_ret_en);*/
 /*module fexcpt(
   mask,
   in,
@@ -166,11 +171,11 @@ module fun_fpusqr(
 
   fun_fpusqr0 sqr_low(
   clk,
-  rst,
+  rst,except,
   fpcsr,
   ul_A,ul_B,ul_Av,ul_Bv,u1_en,u1_op,
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
-  u1_ret,u1_ret_en,
+  ,,u1_regNo,u1_II,
   en_early,op_early,
   u1_Bx,u1_Bxo,
   outEn,
@@ -192,11 +197,11 @@ module fun_fpusqr(
   );
   fun_fpusqr0 sqr_hi(
   clk,
-  rst,
+  rst,except,
   fpcsr,
   uh_A,uh_B,uh_Av,uh_Bv,u1_en,u1_op,
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
-  u1_ret,u1_ret_en,
+  ,,u1_regNo,u1_II,
   en_early,op_early,
   u1_Bxo,u1_Bx,
   ,//En

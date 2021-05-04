@@ -1682,6 +1682,24 @@ module backend(
   wire [2:0][3:0] fuuFwdBH;
   
   wire [2:0][3:0] outShiftSize;
+ 
+  wire [3:0]  outEnX;
+  wire [9:0]  outIIX;
+  wire [12:0] outOpX;
+  wire [8:0]  outRegX;
+  reg [3:0]  outEnX_reg;
+  reg [9:0]  outIIX_reg;
+  reg [12:0] outOpX_reg;
+  reg [8:0]  outRegX_reg;
+
+  wire [5:5][SIMD_WIDTH-1:0] outDataAVH_reg;
+  wire [5:5][SIMD_WIDTH-1:0] outDataBVH_reg;
+  wire [5:5][SIMD_WIDTH-1:0] outDataAVL_reg;
+  wire [5:5][SIMD_WIDTH-1:0] outDataBVL_reg;
+  wire [5:5][SIMD_WIDTH-1:0] outDataAFH_reg;
+  wire [5:5][SIMD_WIDTH-1:0] outDataBFH_reg;
+  wire [5:5][16+SIMD_WIDTH-1:0] outDataAFL_reg;
+  wire [5:5][16+SIMD_WIDTH-1:0] outDataBFL_reg;
   
   reg [3:0] fuFwdA_reg[8:0];
   reg [3:0] fuFwdB_reg[8:0];
@@ -5024,7 +5042,7 @@ module backend(
   .u1_en(outEn_reg[8]),.u1_op(outOp_reg[8]),
   .u1_fufwd_A(fuFwdA_reg[8]),.u1_fuufwd_A(fuuFwdA_reg[8]),
   .u1_fufwd_B(fuFwdB_reg[8]),.u1_fuufwd_B(fuuFwdB_reg[8]),
-  .u1_ret(fsret[6]),.u1_ret_en(fsretEn6),
+ // .u1_ret(fsret[6]),.u1_ret_en(fsretEn6),
   //.u1_dataH(sqrDatH),.u1_dataL(sqrDatL),.u1_dataEn(sqrDatEn),
   .en_early(outEn[8]),.op_early(outOp[8]),
   .outEn(outEnX),
@@ -6704,6 +6722,18 @@ dcache1 L1D_mod(
           fxAlt2_reg2<=1'b0;
           fxAlt1_reg3<=1'b0;
           fxAlt2_reg3<=1'b0;*/
+	  outEnX_reg<=4'b0;
+	  outIIX_reg<=10'hf;
+	  outOpX_reg<=13'b0;
+	  outRegX_reg<=9'b0;
+          outDataAVH_reg<={SIMD_WIDTH{1'b0}};
+          outDataBVH_reg<={SIMD_WIDTH{1'b0}};
+          outDataAVL_reg<={SIMD_WIDTH{1'b0}};
+          outDataBVL_reg<={SIMD_WIDTH{1'b0}};
+          outDataAFH_reg<={SIMD_WIDTH{1'b0}};
+          outDataBFH_reg<={SIMD_WIDTH{1'b0}};
+          outDataAFL_reg<={16+SIMD_WIDTH{1'b0}};
+          outDataBFL_reg<={16+SIMD_WIDTH{1'b0}};
       end else begin
           for (k=0;k<9;k=k+1) begin
               outReg_reg[k]<=outReg[k];
@@ -6761,6 +6791,18 @@ dcache1 L1D_mod(
           fxAlt2_reg2<=fxAlt2_reg;
           fxAlt1_reg3<={fxAlt1_reg2,2'b0};
           fxAlt2_reg3<=fxAlt2_reg2;*/
+	  outEnX_reg<=outEnX;
+	  outIIX_reg<=outIIX;
+	  outOpX_reg<=outOpX;
+	  outRegX_reg<=outRegX;
+          outDataAVH_reg<=outDataAVH;
+          outDataBVH_reg<=outDataBVH;
+          outDataAVL_reg<=outDataAVL;
+          outDataBVL_reg<=outDataBVL;
+          outDataAFH_reg<=outDataAFH;
+          outDataBFH_reg<=outDataBFH;
+          outDataAFL_reg<=outDataAFL;
+          outDataBFL_reg<=outDataBFL;
     
       end
       

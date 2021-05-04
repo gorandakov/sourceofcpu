@@ -5,10 +5,12 @@
 module fun_fpusqr0(
   clk,
   rst,
+  except,
   fpcsr,
   u1_A,u1_B,u1_Av,u1_Bv,u1_en,u1_op,
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
   u1_ret,u1_ret_en,
+  u1_regNo,u1_II,
   en_early,op_early,
   u1_Bx,u1_Bxo,
   outEn,
@@ -32,8 +34,10 @@ module fun_fpusqr0(
   parameter [0:0] H=1'b0;
   localparam SIMD_WIDTH=68; //half width
   localparam [4:0] S={~H,3'b0};
+  localparam REG_WIDTH=9;
   input clk;
   input rst;
+  input except;
   input [31:0] fpcsr;
   input [S+67:0] u1_A;
   input [S+67:0] u1_B;
@@ -47,6 +51,8 @@ module fun_fpusqr0(
   input [3:0] u1_fuufwd_B;
   output [13:0] u1_ret;
   output u1_ret_en;
+  input [REG_WIDTH-1:0] u1_regNo;
+  input [9:0] u1_II;
   output [67:0] u1_Bx;
   input  [67:0] u1_Bxo;
   input [3:0] en_early;
@@ -121,20 +127,16 @@ module fun_fpusqr0(
   reg fxFRT_isRoot;
   reg fxFRT_isRoot_reg;
 //  reg [1:0] fxFRT_don_reg;
-  reg fxFRT_dblL_reg;
-  reg fxFRT_dblH_reg;
+  reg fxFRT_dbl_reg;
   reg fxFRT_ext_reg;
   reg fxFRT_sngl_reg;
-  reg fxFRT_dblL;
-  reg fxFRT_dblH;
+  reg fxFRT_dbl;
   reg fxFRT_ext;
   reg fxFRT_sngl;
-  reg fxFRT_dblL_s;
-  reg fxFRT_dblH_s;
+  reg fxFRT_dbl_s;
   reg fxFRT_ext_s;
   reg fxFRT_sngl_s;
-  reg fxFRT_dblL_ns;
-  reg fxFRT_dblH_ns;
+  reg fxFRT_dbl_ns;
   reg fxFRT_ext_ns;
   reg fxFRT_sngl_ns;
   wire [63:-1] fxFRT_normA0;
@@ -147,8 +149,30 @@ module fun_fpusqr0(
   wire [3:0][9:0] rtII;
   wire [8:0] frtReg;
   wire [9:0] frtII;
+  wire [12:0] frtOp;
   reg [8:0] frtReg_reg;
   reg [9:0] frtII_reg;
+  reg [12:0] frtOp_reg;
+  wire [3:0][12:0] rtOp;
+  wire [3:0][S+67:0] rtRes;
+  reg fxFRT_do;
+  reg [12:0] u1_op_reg;
+  reg [9:0]  u1_II_reg;
+  reg [3:0]  u1_en_reg;
+
+  wire [S+67:0] rtDataA;
+  wire [S+67:0] rtDataB;
+  reg  [S+67:0] rtDataA_reg;
+  reg  [S+67:0] rtDataB_reg;
+
+  wire [67:0] uu_Bv1;
+  wire [67:0] uu_Av1;
+  wire [S+67:0] uu_B1;
+  wire [S+67:0] uu_A1;
+  reg [67:0] uu_Bv_reg;
+  reg [67:0] uu_Av_reg;
+
+  reg [REG_WIDTH-1:0] u1_regNo_reg;
 
   rs_write_forward #(S+68) u1_A_fwd(
   clk,rst,
@@ -219,7 +243,7 @@ module fun_fpusqr0(
   );
   
 
-
+/*
   assign fraise2[m]=fxFCADD_sn_reg5[m] ?
     (fxFCADD_raise_s_reg[0]|fxFCADD_raise_s_reg[1])&fpcsr[21:11] :
     (fxFCADD_raise_reg)&fpcsr[21:11];
@@ -235,7 +259,7 @@ module fun_fpusqr0(
     (fxFADD_raise_s_reg[0]|fxFADD_raise_s_reg[1]) :
     (fxFADD_raise_reg);
   fexcpt fexcpt3_mod(fraise3_reg,{5'b0,FUS_alu0,ex_alu0},
-    fmaks3_reg,|outEn_reg6[1][3:2],u1_ret,u1_ret_en);
+    fmaks3_reg,|outEn_reg6[1][3:2],u1_ret,u1_ret_en);*/
 /*module fexcpt(
   mask,
   in,
@@ -247,7 +271,7 @@ module fun_fpusqr0(
   
   in_flip_rt #(16+SIMD_WIDTH+9+10) rtDatA_mod(
     .clk(clk),.rst(rst),.in_en(fxFRT_en),.pause(fxFRT_pause[2]),
-    .d_in({u1_II_reg,u1_regNo_reg3[8],u1_en_reg[3] ? uu_A1 : {16'b0,uu_Av_reg}}),
+    .d_in({u1_II_reg,u1_regNo_reg,u1_en_reg[3] ? uu_A1 : {16'b0,uu_Av_reg}}),
     .d_out({frtII,frtReg,rtDataA}),
     .dout_en((fxFRT_can[0] & ~fxFRT_don_reg[0] & ~fxFRT_don_reg2[0] & ~fxFRT_don_reg2[0] & ~fxFRT_don_reg3[0]) |
      (fxFRT_can[1] & ~fxFRT_don_reg[1] & ~fxFRT_don_reg2[1] & ~fxFRT_don_reg2[1] & ~fxFRT_don_reg3[1]) |
@@ -355,8 +379,7 @@ module fun_fpusqr0(
 
   always @(posedge clk) begin
       if (rst) begin
-	  fxFRT_dblL=1'b0;
-	  fxFRT_dblH=1'b0;
+	  fxFRT_dbl=1'b0;
 	  fxFRT_ext=1'b0;
 	  fxFRT_sngl=1'b0;
 /*	  fxFRT_dblL_reg<=1'b0;
@@ -365,12 +388,10 @@ module fun_fpusqr0(
           fxFRT_sngl_reg<=1'b0;*/
           fxFRT_isRoot=1'b0;
 //	  fxFRT_isRoot_reg<=1'b0;
-	  fxFRT_dblL_s<=1'b0;
-          fxFRT_dblH_s<=1'b0;
+	  fxFRT_dbl_s<=1'b0;
           fxFRT_ext_s<=1'b0;
           fxFRT_sngl_s<=1'b0;
-	  fxFRT_dblL_ns<=1'b0;
-          fxFRT_dblH_ns<=1'b0;
+	  fxFRT_dbl_ns<=1'b0;
           fxFRT_ext_ns<=1'b0;
           fxFRT_sngl_ns<=1'b0;
 	  fxFRT_steps<=5'd0;
@@ -401,34 +422,17 @@ module fun_fpusqr0(
 	  frtReg_reg<=9'b0;
 	  frtII_reg<=10'b0;
 	  frtOp_reg<=13'b0;
-	  FUCVT2_reg<=82'b0;
-	  FUCVT2_reg2<=82'b0;
-	  FUCVT2_reg3<=82'b0;
-	  FUCVT2_reg4<=82'b0;
-	  FUCVT2_reg5<=82'b0;
-	  FUCVT2_reg6<=82'b0;
-	  FUTYPE_reg<=`ptype_dbl;
-	  FUTYPE_reg2<=`ptype_dbl;
-	  FUTYPE_reg3<=`ptype_dbl;
-	  FUTYPE_reg4<=`ptype_dbl;
-	  FUTYPE_reg5<=`ptype_dbl;
-	  FUTYPE_reg6<=`ptype_dbl;
       end else begin
-	  fxFRT_dblL=frtOp[7:0]==`fop_sqrtDL || frtOp[7:0]==`fop_divDL;
-          fxFRT_dblH=frtOp[7:0]==`fop_sqrtDH || frtOp[7:0]==`fop_divDH;
-	  fxFRT_dbl=H ? fxFRT_dblH : fxFRT_dblL;
+	  fxFRT_dbl=!H ? frtOp[7:0]==`fop_sqrtDL || frtOp[7:0]==`fop_divDL :
+              frtOp[7:0]==`fop_sqrtDH || frtOp[7:0]==`fop_divDH;
           fxFRT_ext=frtOp[7:0]==`fop_sqrtE || frtOp[7:0]==`fop_divE;
           fxFRT_sngl=frtOp[7:0]==`fop_sqrtS || frtOp[7:0]==`fop_divS;
 	  fxFRT_isRoot=frtOp[7:0]==`fop_sqrtDL || frtOp[7:0]==`fop_sqrtDH ||
                 frtOp[7:0]==`fop_sqrtE || frtOp[7:0]==`fop_sqrtS; 
-	  fxFRT_dblL_ns<=fxFRT_dblL && ~rtDataA[53]|~fxFRT_isRoot;
-	  fxFRT_dblH_ns<=fxFRT_dblH && ~rtDataA[SIMD_WIDTH+53]|~fxFRT_isRoot;
-	  fxFRT_dbl_ns=H ? fxFRT_dblH_ns : fxFRT_dblL_ns;
+	  fxFRT_dbl_ns<=fxFRT_dbl && ~rtDataA[53]|~fxFRT_isRoot;
 	  fxFRT_ext_ns<=fxFRT_ext && ~rtDataA[SIMD_WIDTH]|~fxFRT_isRoot;
 	  fxFRT_sngl_ns<=fxFRT_sngl && ~rtDataA[23]|~fxFRT_isRoot;
-	  fxFRT_dblL_s<=fxFRT_dblL && rtDataA[53]&fxFRT_isRoot;
-	  fxFRT_dblH_s<=fxFRT_dblH && rtDataA[SIMD_WIDTH+53]&fxFRT_isRoot;
-	  fxFRT_dbl_s=H ? fxFRT_dblH_s : fxFRT_dblL_s;
+	  fxFRT_dbl_s<=fxFRT_dbl && rtDataA[53]&fxFRT_isRoot;
 	  fxFRT_ext_s<=fxFRT_ext && rtDataA[SIMD_WIDTH]&fxFRT_isRoot;
 	  fxFRT_sngl_s<=fxFRT_sngl && rtDataA[23]&fxFRT_isRoot;
     /* 	  fxFRT_dblL_reg<=fxFRT_dblL;
@@ -463,24 +467,19 @@ module fun_fpusqr0(
 	  fxFRT_don_reg3<=fxFRT_don_reg2;
 	  fxFRT_don_reg4<=fxFRT_don_reg3;
 	  frtReg_reg<=frtReg;
-      frtII_reg<=frtII;
-      frtOp_reg<=frtOp;
+          frtII_reg<=frtII;
+          frtOp_reg<=frtOp;
+	  uu_Av_reg<=uu_Av1;
+	  uu_Bv_reg<=uu_Bv1;
+	  u1_regNo_reg<=u1_regNo;
+	  u1_op_reg<=u1_op;
+	  u1_II_reg<=u1_II;
+	  u1_en_reg<=u1_en;
+
 	  if (fxFRT_don_reg2) begin
               rtDataA_reg<=rtDataA;
 	      rtDataB_reg<=rtDataB;
 	  end
-	  FUCVT2_reg<=FUCVT2;
-	  FUCVT2_reg2<=FUCVT2_reg;
-	  FUCVT2_reg3<=FUCVT2_reg2;
-	  FUCVT2_reg4<=FUCVT2_reg3;
-	  FUCVT2_reg5<=FUCVT2_reg4;
-	  FUCVT2_reg6<=FUCVT2_reg5;
-	  FUTYPE_reg<=FUTYPE;
-	  FUTYPE_reg2<=FUTYPE_reg;
-	  FUTYPE_reg3<=FUTYPE_reg2;
-	  FUTYPE_reg4<=FUTYPE_reg3;
-	  FUTYPE_reg5<=FUTYPE_reg4;
-	  FUTYPE_reg6<=FUTYPE_reg5;
       end
   end
 
