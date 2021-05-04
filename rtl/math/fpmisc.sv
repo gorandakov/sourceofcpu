@@ -123,6 +123,8 @@ module rt2_fp(
  reg rdy0;
  reg rdy0_reg;
  reg rdy0_reg2;
+ wire [16:0] ANY_denor;
+ wire [16:0] ANY_enan;
  integer p;
 
 //WARNING: need to tage negative sign from bit 128; 129 bit adder with same
@@ -158,7 +160,7 @@ module rt2_fp(
 
  assign exact_result=&P && ~|inv_bits;
  
- assign EXT_lead=digits[68];
+ assign EXT_lead=digits[67];
  assign EXT_rnbit=EXT_lead ? digits[3] : digits[2];
  assign EXT_tail=EXT_lead ? |digits[2:0] | ~exact_result : |digits[1:0] | ~exact_result;
  assign EXT_last=EXT_lead? digits[4] : digits[3]; 
@@ -267,6 +269,12 @@ module rt2_fp(
 
  get_carry #(17) exp2cmp_mod(exp2x,~ANY_denor,1'b1,exp2x_cmp);
  get_carry #(17) exp2tycmp_mod(exp_incy,~ANY_denor,1'b1,exp2y_cmp);
+
+ assign ANY_denor=type_reg[1:0]==2'b0 ? 17'hbfff-17'd53 : 17'bz;
+ assign ANY_denor=type_reg==3'b1 ? 17'hbfff-17'd64 : 17'bz;
+ assign ANY_denor=type_reg[1:0]!=2'b0 && type_reg!=3'd1 ? 17'hbfff-17'd24 : 17'bz;
+
+ assign ANY_enan=17'hffff;
 
   sdupmass pm_mod(
   normB[63:0],
