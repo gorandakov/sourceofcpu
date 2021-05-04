@@ -153,8 +153,12 @@ module s_fadd(
   wire A_s2;
   reg en_reg;
   integer m;
-    
+  wire renor_any,exp_dec_non_denor_IEEE_0,exp_dec_non_denor_IEEE_1,exp_dec_non_denor,exp_min_IEEE,exp_inc_oor_IEEE,exp_max_IEEE,exp_inc_oor,exp_max,
+	  exp_dec_non_denor_IEEE,exp_min_kludge;
+  reg exp_inc_oor_reg,exp_inc_oor_IEEE_reg,exp_dec_non_denor_reg,exp_dec_non_denor_IEEE_reg;
   wire [3:0] xpon;
+  wire invExcpt;
+    
 
   assign A_exp={A[32],A[30:23]};
   assign B_exp={B[32],B[30:23]};
@@ -453,6 +457,10 @@ module s_fadd(
 	  A_reg<=33'b0;
 	  B_reg<=33'b0;
 	  en_reg<=1'b1;
+          exp_inc_oor_reg<=1'b0;
+	  exp_inc_oor_IEEE_reg<=1'b0;
+	  exp_dec_non_denor_reg<=1'b0;
+	  exp_dec_non_denor_IEEE_reg<=1'b0;
       end else begin
 	  for (m=0;m<8;m=m+1) expdiffeq[m]<=expdiff[2:0]==m && ~expoor;
           sxor_reg<=sxor;
@@ -495,6 +503,10 @@ module s_fadd(
           A_reg<=A;
           B_reg<=B;
 	  en_reg<=en;
+          exp_inc_oor_reg<=exp_inc_oor;
+	  exp_inc_oor_IEEE_reg<=exp_inc_oor_IEEE;
+	  exp_dec_non_denor_reg<=exp_dec_non_denor;
+	  exp_dec_non_denor_IEEE_reg<=exp_dec_non_denor_IEEE;
       end
   end
 endmodule
