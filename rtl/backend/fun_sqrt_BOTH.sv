@@ -42,7 +42,7 @@ module fun_fpusqr(
   parameter [1:0] INDEX=2'd2;
   parameter [0:0] H=1'b0;
   localparam SIMD_WIDTH=68; //half width
-  localparam [4:0] S={~H,3'b0};
+  localparam [4:0] S={~H,4'b0};
   input clk;
   input rst;
   input except;
@@ -118,7 +118,7 @@ module fun_fpusqr(
   input [S+67:0] FUFL8;
   input [S+67:0] FUFL9;
   
-  output [2:0][3:0] fxFRT_alten;
+  output [3:0] fxFRT_alten;
   output [3:0]      fxFRT_pause;
 
   wire [1:0][10:0] fxFCADD_raise;

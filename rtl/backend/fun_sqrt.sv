@@ -86,7 +86,7 @@ module fun_fpusqr0(
   input [S+67:0] FUF7;
   input [S+67:0] FUF8;
   input [S+67:0] FUF9;
-  output [2:0][3:0] fxFRT_alten;//very fat wire
+  output [3:0] fxFRT_alten;//very fat wire
   output [3:0]      fxFRT_pause;//same here
 
   wire [1:0][10:0] fxFCADD_raise;
@@ -127,13 +127,13 @@ module fun_fpusqr0(
   reg [S+67:0] FUF8_reg;
   reg [S+67:0] FUF9_reg;
   
-  wire [2:0][3:0] fxFRT_alten;
-  reg [2:0][3:0] fxFRT_alten_reg;
-  reg [2:0][3:0] fxFRT_alten_reg2;
-  reg [2:0][3:0] fxFRT_alten_reg3;
-  reg [3:0] fxFRT_alten_reg4[2:2];
-  reg [3:0] fxFRT_alten_reg5[2:2];
-  reg [3:0] fxFRT_alten_reg6[2:2];
+  wire [3:0] fxFRT_alten;
+  reg [3:0] fxFRT_alten_reg;
+  reg [3:0] fxFRT_alten_reg2;
+  reg [3:0] fxFRT_alten_reg3;
+  reg [3:0] fxFRT_alten_reg4;
+  reg [3:0] fxFRT_alten_reg5;
+  reg [3:0] fxFRT_alten_reg6;
   wire [3:0] fxFRT_pause;
   wire [3:0] fxFRT_can;
   wire [3:0] fxFRT_don;
@@ -380,29 +380,29 @@ module fun_fpusqr0(
 	  .reg_out(rtReg[n]),
 	  .outII_out(rtII[n]),
 	  .oper_out(rtOp[n]),
-          .out_en(fxFRT_alten[2][n]),
+          .out_en(fxFRT_alten[n]),
           .out_can(!(({fxFRT_alten[2],4'b0}>>n)&4'hf))
           );
 	  assign fxFRT_alten[1]=4'b0;
 	  assign fxFRT_alten[0]=4'b0;
 
-	  assign outEn=(fxFRT_alten[2][n] && (!(({fxFRT_alten[2],4'b0}>>n)&4'hf)) & ~rst)?
+	  assign outEn=(fxFRT_alten[n] && (!(({fxFRT_alten[2],4'b0}>>n)&4'hf)) & ~rst)?
 	    4'b1001 : 4'bz;
-	  assign outII=(fxFRT_alten[2][n] && (!(({fxFRT_alten[2],4'b0}>>n)&4'hf)) & ~rst) ?
+	  assign outII=(fxFRT_alten[n] && (!(({fxFRT_alten[2],4'b0}>>n)&4'hf)) & ~rst) ?
 	    rtII[n] : {10{1'bz}};
-	  assign outOp=(fxFRT_alten[2][n] && (!(({fxFRT_alten[2],4'b0}>>n)&4'hf)) & ~rst) ?
+	  assign outOp=(fxFRT_alten[n] && (!(({fxFRT_alten[2],4'b0}>>n)&4'hf)) & ~rst) ?
 	    rtOp[n] : {13{1'bz}};
-	  assign FUreg=(fxFRT_alten[2][n] && (!(({fxFRT_alten[2],4'b0}>>n)&4'hf)) & ~rst) ?
+	  assign FUreg=(fxFRT_alten[n] && (!(({fxFRT_alten[2],4'b0}>>n)&4'hf)) & ~rst) ?
 	    rtReg[n] : {REG_WIDTH{1'bz}};
-	  assign FUwen=(fxFRT_alten[2][n] && (!(({fxFRT_alten[2],4'b0}>>n)&4'hf)) & ~rst) ?
+	  assign FUwen=(fxFRT_alten[n] && (!(({fxFRT_alten[2],4'b0}>>n)&4'hf)) & ~rst) ?
 	    1'b1 : {REG_WIDTH{1'bz}};
 
-	  assign outAltData=(fxFRT_alten_reg5[2][n]  && (!(({fxFRT_alten_reg5[2],4'b0}>>n)&4'hf)) && ~rst) ? 
+	  assign outAltData=(fxFRT_alten_reg5[n]  && (!(({fxFRT_alten_reg5,4'b0}>>n)&4'hf)) && ~rst) ? 
 	    rtRes[n] : {2*SIMD_WIDTH{1'bz}};//tri state close to target
       end
   endgenerate 
 
-  assign outAltData=fxFRT_alten_reg5[2]==4'b0 ? {16+SIMD_WIDTH{1'b0}} : {16+SIMD_WIDTH{1'bz}};
+  assign outAltData=fxFRT_alten_reg5==4'b0 ? {16+SIMD_WIDTH{1'b0}} : {16+SIMD_WIDTH{1'bz}};
 
   always @(posedge clk) begin
       if (rst) begin
@@ -482,12 +482,12 @@ module fun_fpusqr0(
 	 /* fxFRT_steps_reg<=fxFRT_steps;
 	  fxFRT_type_reg<=fxFRT_type;*/
 	  fxFRT_don_reg<=fxFRT_don;
-	  fxFRT_alten_reg[2]<=fxFRT_alten[2];
-	  fxFRT_alten_reg2[2]<=fxFRT_alten_reg[2];
-	  fxFRT_alten_reg3[2]<=fxFRT_alten_reg2[2];
-	  fxFRT_alten_reg4[2]<=fxFRT_alten_reg3[2];
-	  fxFRT_alten_reg5[2]<=fxFRT_alten_reg4[2];
-	  fxFRT_alten_reg6[2]<=fxFRT_alten_reg5[2];
+	  fxFRT_alten_reg<=fxFRT_alten;
+	  fxFRT_alten_reg2<=fxFRT_alten_reg;
+	  fxFRT_alten_reg3<=fxFRT_alten_reg2;
+	  fxFRT_alten_reg4<=fxFRT_alten_reg3;
+	  fxFRT_alten_reg5<=fxFRT_alten_reg4;
+	  fxFRT_alten_reg6<=fxFRT_alten_reg5;
 	  fxFRT_can_reg<=fxFRT_can;
 	  fxFRT_don_reg<=fxFRT_don;
 	  fxFRT_don_reg2<=fxFRT_don_reg;

@@ -20,7 +20,7 @@ module rss_buf(
 // 1 if buffer is free  
   bufFree
 );
-  localparam DATA_WIDTH=`alu_width;
+  localparam DATA_WIDTH=`alu_width+1;
   localparam REG_WIDTH=`reg_addr_width;
   localparam OPERATION_WIDTH=`operation_width;
   localparam LSQ_WIDTH=`lsqRsNo_width;
@@ -613,7 +613,7 @@ module rs_s(
   FUF8H,FUF8L,
   FUF9H,FUF9L
 );
-  localparam DATA_WIDTH=`alu_width;
+  localparam DATA_WIDTH=`alu_width+1;
   localparam SIMD_WIDTH=68;
   localparam REG_WIDTH=`reg_addr_width;
   localparam OPERATION_WIDTH=`operation_width;

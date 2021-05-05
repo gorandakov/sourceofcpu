@@ -2157,7 +2157,7 @@ module rs(
 // 1 if buffer is free  
   pause0,foundAlt1,foundAlt2
 );
-  localparam DATA_WIDTH=`alu_width;
+  localparam DATA_WIDTH=`alu_width+1;
   localparam SIMD_WIDTH=68;//half-width
   localparam REG_WIDTH=`reg_addr_width;
   localparam OPERATION_WIDTH=`operation_width;
@@ -2351,13 +2351,13 @@ module rs(
 //SIMD
   input [SIMD_WIDTH-1:0] newDataVA1H;
   input [SIMD_WIDTH-1:0] newDataVB1H;
-  input [16+SIMD_WIDTH-1:0] newDataVA1L;
-  input [16+SIMD_WIDTH-1:0] newDataVB1L;
+  input [SIMD_WIDTH-1:0] newDataVA1L;
+  input [SIMD_WIDTH-1:0] newDataVB1L;
   
   input [SIMD_WIDTH-1:0] newDataVA2H;
   input [SIMD_WIDTH-1:0] newDataVB2H;
-  input [16+SIMD_WIDTH-1:0] newDataVA2L;
-  input [16+SIMD_WIDTH-1:0] newDataVB2L;
+  input [SIMD_WIDTH-1:0] newDataVA2L;
+  input [SIMD_WIDTH-1:0] newDataVB2L;
   
   input [SIMD_WIDTH-1:0] newDataFA1H;
   input [SIMD_WIDTH-1:0] newDataFB1H;
@@ -2371,13 +2371,13 @@ module rs(
   
   output [SIMD_WIDTH-1:0] outDataVA1H;
   output [SIMD_WIDTH-1:0] outDataVB1H;
-  output [16+SIMD_WIDTH-1:0] outDataVA1L;
-  output [16+SIMD_WIDTH-1:0] outDataVB1L;
+  output [SIMD_WIDTH-1:0] outDataVA1L;
+  output [SIMD_WIDTH-1:0] outDataVB1L;
   
   output [SIMD_WIDTH-1:0] outDataVA2H;
   output [SIMD_WIDTH-1:0] outDataVB2H;
-  output [16+SIMD_WIDTH-1:0] outDataVA2L;
-  output [16+SIMD_WIDTH-1:0] outDataVB2L;
+  output [SIMD_WIDTH-1:0] outDataVA2L;
+  output [SIMD_WIDTH-1:0] outDataVB2L;
   
   output [SIMD_WIDTH-1:0] outDataFA1H;
   output [SIMD_WIDTH-1:0] outDataFB1H;
@@ -2390,34 +2390,34 @@ module rs(
   output [16+SIMD_WIDTH-1:0] outDataFB2L;
   
   input [SIMD_WIDTH-1:0] FUV0H;
-  input [16+SIMD_WIDTH-1:0] FUV0L;
+  input [SIMD_WIDTH-1:0] FUV0L;
   
   input [SIMD_WIDTH-1:0] FUV1H;
-  input [16+SIMD_WIDTH-1:0] FUV1L;
+  input [SIMD_WIDTH-1:0] FUV1L;
   
   input [SIMD_WIDTH-1:0] FUV2H;
-  input [16+SIMD_WIDTH-1:0] FUV2L;
+  input [SIMD_WIDTH-1:0] FUV2L;
   
   input [SIMD_WIDTH-1:0] FUV3H;
-  input [16+SIMD_WIDTH-1:0] FUV3L;
+  input [SIMD_WIDTH-1:0] FUV3L;
   
   input [SIMD_WIDTH-1:0] FUV4H;
-  input [16+SIMD_WIDTH-1:0] FUV4L;
+  input [SIMD_WIDTH-1:0] FUV4L;
   
   input [SIMD_WIDTH-1:0] FUV5H;
-  input [16+SIMD_WIDTH-1:0] FUV5L;
+  input [SIMD_WIDTH-1:0] FUV5L;
   
   input [SIMD_WIDTH-1:0] FUV6H;
-  input [16+SIMD_WIDTH-1:0] FUV6L;
+  input [SIMD_WIDTH-1:0] FUV6L;
   
   input [SIMD_WIDTH-1:0] FUV7H;
-  input [16+SIMD_WIDTH-1:0] FUV7L;
+  input [SIMD_WIDTH-1:0] FUV7L;
   
   input [SIMD_WIDTH-1:0] FUV8H;
-  input [16+SIMD_WIDTH-1:0] FUV8L;
+  input [SIMD_WIDTH-1:0] FUV8L;
   
   input [SIMD_WIDTH-1:0] FUV9H;
-  input [16+SIMD_WIDTH-1:0] FUV9L;
+  input [SIMD_WIDTH-1:0] FUV9L;
   
   input [SIMD_WIDTH-1:0] FUF0H;
   input [16+SIMD_WIDTH-1:0] FUF0L;
@@ -2715,7 +2715,7 @@ module rs(
   outRsSelect_reg[2],outBank_reg[2],rsFoundNZ_reg[2],outDataVA2H
   );
   
-  rs_wakeUp_data_array #(16+SIMD_WIDTH) dataA_VL_mod(
+  rs_wakeUp_data_array #(SIMD_WIDTH) dataA_VL_mod(
   clk,dataRst,stall|doStall,
   32'b0,{SIMD_WIDTH{1'b0}},
   newRsSelect1_reg,newDataVA1L,
@@ -2744,7 +2744,7 @@ module rs(
   outRsSelect_reg[2],outBank_reg[2],rsFoundNZ_reg[2],outDataVB2H
   );
 
-  rs_wakeUp_data_array #(16+SIMD_WIDTH) dataB_VL_mod(
+  rs_wakeUp_data_array #(SIMD_WIDTH) dataB_VL_mod(
   clk,dataRst,stall|doStall,
   32'b0,{SIMD_WIDTH{1'b0}},
   newRsSelect1_reg,newDataVB1L,

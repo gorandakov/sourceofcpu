@@ -158,8 +158,8 @@ module fun_fpu_BOTH(
   input [1:0] ALT_INP;
   input [16+67:0] ALTDATAL0;
   input [16+67:0] ALTDATAL1;
-  input [16+67:0] ALTDATAH0;
-  input [16+67:0] ALTDATAH1;
+  input [67:0] ALTDATAH0;
+  input [67:0] ALTDATAH1;
 
   input [5:0] FUS_alu0;
   input [5:0] FUS_alu1;
