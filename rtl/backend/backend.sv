@@ -2165,7 +2165,7 @@ module backend(
   wire retM_xbreak_has; 
 
   
-  wire [135:0] fpE_one={2'd`ptype_ext,50'b0,1'b0,15'h4000,2'd`ptype_ext,1'b0,65'h1_0000_0000_0000_0000};
+  wire [83:0] fpE_one={16'b0,2'd`ptype_ext,1'b1,65'h1_0000_0000_0000_0000};
   wire [67:0] fpD_one={2'd`ptype_dbl,1'b0,1'b0,11'h400,53'b0};
   wire [15:0] csrss_no;
   wire csrss_en,csrss_thread;
@@ -2870,15 +2870,15 @@ module backend(
   .read7_constEn(~rs_rA_useF_reg2[7]),
   .read8_constEn(~rs_rA_useF_reg2[8]),
 
-  .read0_const(is_rndE(rs_operation_reg2[0]) ? fpE_one[135:68] : fpD_one),
-  .read1_const(is_rndE(rs_operation_reg2[1]) ? fpE_one[135:68] : fpD_one),
-  .read2_const(is_rndE(rs_operation_reg2[2]) ? fpE_one[135:68] : fpD_one),
-  .read3_const(is_rndE(rs_operation_reg2[3]) ? fpE_one[135:68] : fpD_one),
-  .read4_const(is_rndE(rs_operation_reg2[4]) ? fpE_one[135:68] : fpD_one),
-  .read5_const(is_rndE(rs_operation_reg2[5]) ? fpE_one[135:68] : fpD_one),
-  .read6_const(is_rndE(rs_operation_reg2[6]) ? fpE_one[135:68] : fpD_one),
-  .read7_const(is_rndE(rs_operation_reg2[7]) ? fpE_one[135:68] : fpD_one),
-  .read8_const(is_rndE(rs_operation_reg2[8]) ? fpE_one[135:68] : fpD_one),
+  .read0_const(is_rndE(rs_operation_reg2[0]) ? 68'b0 : fpD_one),
+  .read1_const(is_rndE(rs_operation_reg2[1]) ? 68'b0 : fpD_one),
+  .read2_const(is_rndE(rs_operation_reg2[2]) ? 68'b0 : fpD_one),
+  .read3_const(is_rndE(rs_operation_reg2[3]) ? 68'b0 : fpD_one),
+  .read4_const(is_rndE(rs_operation_reg2[4]) ? 68'b0 : fpD_one),
+  .read5_const(is_rndE(rs_operation_reg2[5]) ? 68'b0 : fpD_one),
+  .read6_const(is_rndE(rs_operation_reg2[6]) ? 68'b0 : fpD_one),
+  .read7_const(is_rndE(rs_operation_reg2[7]) ? 68'b0 : fpD_one),
+  .read8_const(is_rndE(rs_operation_reg2[8]) ? 68'b0 : fpD_one),
 
   .retireRead0_addr(retire0_rF_reg2),.retireRead0_data(ret_dataAFH[0]),
   .retireRead1_addr(retire1_rF_reg2),.retireRead1_data(ret_dataAFH[1]),
