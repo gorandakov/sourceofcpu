@@ -2573,7 +2573,7 @@ module backend(
   .funit6(newU[6]),.funit7(newU[7]),.funit8(newU[8])
   );
   
-  regfile regA_mod(
+  regfile #(DATA_WIDTH) regA_mod(
   .clk(clk),
   .rst(rst),
   .read_clkEn(~doStall),
@@ -2608,15 +2608,15 @@ module backend(
   .read7_constEn(~rs_rA_use[7]),
   .read8_constEn(~rs_rA_use[8]),
 
-  .read0_const(rs_const_new[0]&{64{useAConstW[0]}}),
-  .read1_const(rs_const[1]&{64{rs_useAConst[1]}}),
-  .read2_const(rs_const[2]&{64{rs_useAConst[2]}}),
-  .read3_const(rs_const_new[3]&{64{useAConstW[1]}}),
-  .read4_const(rs_const[4]&{64{rs_useAConst[4]}}),
-  .read5_const(rs_const[5]&{64{rs_useAConst[5]}}),
-  .read6_const(rs_const_new[6]&{64{useAConstW[2]}}),
-  .read7_const(rs_const[7]&{64{rs_useAConst[7]}}),
-  .read8_const(rs_const[8]&{64{rs_useAConst[8]}}),
+  .read0_const(rs_const_new[0]&{65{useAConstW[0]}}),
+  .read1_const(rs_const[1]&{65{rs_useAConst[1]}}),
+  .read2_const(rs_const[2]&{65{rs_useAConst[2]}}),
+  .read3_const(rs_const_new[3]&{65{useAConstW[1]}}),
+  .read4_const(rs_const[4]&{65{rs_useAConst[4]}}),
+  .read5_const(rs_const[5]&{65{rs_useAConst[5]}}),
+  .read6_const(rs_const_new[6]&{65{useAConstW[2]}}),
+  .read7_const(rs_const[7]&{65{rs_useAConst[7]}}),
+  .read8_const(rs_const[8]&{65{rs_useAConst[8]}}),
 
   .retireRead0_addr(retire0_rF),.retireRead0_data(ret_dataA[0]),
   .retireRead1_addr(retire1_rF),.retireRead1_data(ret_dataA[1]),
@@ -3142,7 +3142,7 @@ module backend(
   .newAddr8(clrR_reg[8][8:4]),.newEn8(clr_reg[8])
   );
 
-  regfile regB_mod(
+  regfile #(DATA_WIDTH) regB_mod(
   .clk(clk),
   .rst(rst),
   .read_clkEn(~doStall),
@@ -3177,14 +3177,14 @@ module backend(
   .read7_constEn(rs2i1_useBConst_reg|~rs_rB_use[7]),
   .read8_constEn(rs2i2_useBConst_reg|~rs_rB_use[8]),
 
-  .read0_const(rs_const_new[0]&{64{useBConstW[0]}}),
-  .read1_const(rs_const_new[1]&{64{rs0i1_useBConst_reg}}),
+  .read0_const(rs_const_new[0]&{65{useBConstW[0]}}),
+  .read1_const(rs_const_new[1]&{65{rs0i1_useBConst_reg}}),
   .read2_const(rs_const_new[2]),
-  .read3_const(rs_const_new[3]&{64{useBConstW[1]}}),
-  .read4_const(rs_const_new[4]&{64{rs1i1_useBConst_reg}}),
+  .read3_const(rs_const_new[3]&{65{useBConstW[1]}}),
+  .read4_const(rs_const_new[4]&{65{rs1i1_useBConst_reg}}),
   .read5_const(rs_const_new[5]),
-  .read6_const(rs_const_new[6]&{64{useBConstW[2]}}),
-  .read7_const(rs_const_new[7]&{64{rs2i1_useBConst_reg}}),
+  .read6_const(rs_const_new[6]&{65{useBConstW[2]}}),
+  .read7_const(rs_const_new[7]&{65{rs2i1_useBConst_reg}}),
   .read8_const(rs_const_new[8]),
 
   .retireRead0_addr(retire0_rF),.retireRead0_data(ret_dataB[0]),
@@ -3279,7 +3279,7 @@ module backend(
   .write9_addr_reg(FUreg_reg3[9]),.write9_data_reg(FUVH_reg[9]),.write9_wen_reg(FUwen_reg3[9])
   );
 
-  regfile #(16+SIMD_WIDTH) regBVL_mod(
+  regfile #(SIMD_WIDTH) regBVL_mod(
   .clk(clk),
   .rst(rst),
   .read_clkEn(~doStall),
@@ -3317,15 +3317,15 @@ module backend(
   .read7_constEn(~rs_rB_useF_reg[7]),
   .read8_constEn(~rs_rB_useF_reg[8]),
 
-  .read0_const({16+SIMD_WIDTH{1'B0}}),
-  .read1_const({16+SIMD_WIDTH{1'B0}}),
-  .read2_const({16+SIMD_WIDTH{1'B0}}),
-  .read3_const({16+SIMD_WIDTH{1'B0}}),
-  .read4_const({16+SIMD_WIDTH{1'B0}}),
-  .read5_const({16+SIMD_WIDTH{1'B0}}),
-  .read6_const({16+SIMD_WIDTH{1'B0}}),
-  .read7_const({16+SIMD_WIDTH{1'B0}}),
-  .read8_const({16+SIMD_WIDTH{1'B0}}),
+  .read0_const({SIMD_WIDTH{1'B0}}),
+  .read1_const({SIMD_WIDTH{1'B0}}),
+  .read2_const({SIMD_WIDTH{1'B0}}),
+  .read3_const({SIMD_WIDTH{1'B0}}),
+  .read4_const({SIMD_WIDTH{1'B0}}),
+  .read5_const({SIMD_WIDTH{1'B0}}),
+  .read6_const({SIMD_WIDTH{1'B0}}),
+  .read7_const({SIMD_WIDTH{1'B0}}),
+  .read8_const({SIMD_WIDTH{1'B0}}),
 
   .retireRead0_addr(retire0_rF_reg),.retireRead0_data(ret_dataBVL[0]),
   .retireRead1_addr(retire1_rF_reg),.retireRead1_data(ret_dataBVL[1]),
@@ -3471,7 +3471,7 @@ module backend(
   .write9_addr_reg(FUreg_reg7[9]),.write9_data_reg(FUFH_reg[9]),.write9_wen_reg(FUwen_reg7[9])
   );
 
-  regfile #(SIMD_WIDTH) regBFL_mod(
+  regfile #(16+SIMD_WIDTH) regBFL_mod(
   .clk(clk),
   .rst(rst),
   .read_clkEn(~doStall),
@@ -3509,15 +3509,15 @@ module backend(
   .read7_constEn(~rs_rB_useF_reg2[7]),
   .read8_constEn(~rs_rB_useF_reg2[8]),
 
-  .read0_const({SIMD_WIDTH{1'B0}}),
-  .read1_const({SIMD_WIDTH{1'B0}}),
-  .read2_const({SIMD_WIDTH{1'B0}}),
-  .read3_const({SIMD_WIDTH{1'B0}}),
-  .read4_const({SIMD_WIDTH{1'B0}}),
-  .read5_const({SIMD_WIDTH{1'B0}}),
-  .read6_const({SIMD_WIDTH{1'B0}}),
-  .read7_const({SIMD_WIDTH{1'B0}}),
-  .read8_const({SIMD_WIDTH{1'B0}}),
+  .read0_const({16+SIMD_WIDTH{1'B0}}),
+  .read1_const({16+SIMD_WIDTH{1'B0}}),
+  .read2_const({16+SIMD_WIDTH{1'B0}}),
+  .read3_const({16+SIMD_WIDTH{1'B0}}),
+  .read4_const({16+SIMD_WIDTH{1'B0}}),
+  .read5_const({16+SIMD_WIDTH{1'B0}}),
+  .read6_const({16+SIMD_WIDTH{1'B0}}),
+  .read7_const({16+SIMD_WIDTH{1'B0}}),
+  .read8_const({16+SIMD_WIDTH{1'B0}}),
 
   .retireRead0_addr(retire0_rF_reg2),.retireRead0_data(ret_dataBFL[0]),
   .retireRead1_addr(retire1_rF_reg2),.retireRead1_data(ret_dataBFL[1]),
@@ -3730,7 +3730,7 @@ module backend(
   
   
   
-  rrf rrfA_mod(
+  rrf #(DATA_WIDTH) rrfA_mod(
   .clk(clk),
   .rst(rst),
   .read_clkEn(~doStall),
@@ -3861,7 +3861,7 @@ module backend(
   .write_thread(1'b0)
   );
 
-  rrf rrfB_mod(
+  rrf #(DATA_WIDTH) rrfB_mod(
   .clk(clk),
   .rst(rst),
   .read_clkEn(~doStall),
@@ -4019,9 +4019,9 @@ module backend(
   .write3_addr_reg(FUreg_reg2[7]),.write3_data_reg(FUS7_reg),.write3_wen_reg(FUwen_reg2[7] && ex_alu[1][2]),
   .write4_addr_reg(FUreg_reg2[8]),.write4_data_reg(FUS8_reg),.write4_wen_reg(FUwen_reg2[8] && ex_alu[3][2]),
   .write5_addr_reg(FUreg_reg2[9]),.write5_data_reg(FUS9_reg),.write5_wen_reg(FUwen_reg2[9] && ex_alu[5][2] ),
-  .write6_addr_reg(FUreg_reg5[4]),.write6_data_reg(FUS1_reg[0]),.write6_wen_reg(FUwen_reg5[4] && fsret[0][2]),
-  .write7_addr_reg(FUreg_reg5[5]),.write7_data_reg(FUS2_reg[1]),.write7_wen_reg(FUwen_reg5[5] && fsret[2][2]),
-  .write8_addr_reg(FUreg_reg5[6]),.write8_data_reg(FUS3_reg[2]),.write8_wen_reg(FUwen_reg5[6] && fsret[4][2]),
+  .write6_addr_reg(FUreg_reg5[4]),.write6_data_reg(FUS1_reg),.write6_wen_reg(FUwen_reg5[4] && fsret[0][2]),
+  .write7_addr_reg(FUreg_reg5[5]),.write7_data_reg(FUS2_reg),.write7_wen_reg(FUwen_reg5[5] && fsret[2][2]),
+  .write8_addr_reg(FUreg_reg5[6]),.write8_data_reg(FUS3_reg),.write8_wen_reg(FUwen_reg5[6] && fsret[4][2]),
   .newAddr0(clrR_reg[0][8:4]),.newEn0(clrS_reg[0]),
   .newAddr1(clrR_reg[1][8:4]),.newEn1(clrS_reg[1]),
   .newAddr2(clrR_reg[2][8:4]),.newEn2(clrS_reg[2]),

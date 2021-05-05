@@ -81,7 +81,7 @@ module rrf_buf(
   input [DATA_WIDTH-1:0] write8_data;
   input                  write8_wen;
 
-  input [14:0] read_thread;
+  input read_thread;
   input write_thread;
 
   reg [DATA_WIDTH-1:0] data0;
@@ -238,7 +238,7 @@ module rrf(
   input [DATA_WIDTH-1:0] write8_data;
   input                  write8_wen;
   
-  input [14:0] read_thread;
+  input read_thread;
   input write_thread;
 
   reg [ADDR_WIDTH-1:0] read0_addr_reg;

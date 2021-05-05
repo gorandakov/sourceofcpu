@@ -24,7 +24,7 @@ module rrf_flag_buf(
   input [DATA_WIDTH-1:0] write0_data;
   input                  write0_wen;
 
-  input [144:0] read_thread;
+  input read_thread;
   input write_thread;
 
   reg [DATA_WIDTH-1:0] data0;
@@ -74,7 +74,7 @@ module rrf_flag(
   input [DATA_WIDTH-1:0] write0_data;
   input                  write0_wen;
   
-  input [144:0] read_thread;
+  input read_thread;
   input write_thread;
 
   reg read_thread_reg;

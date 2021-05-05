@@ -2191,7 +2191,7 @@ module rs(
   input newBNeeded0;
   input [REG_WIDTH-1:0] newReg0;
   input [OPERATION_WIDTH-1:0]   newOp0;
-  input [4:0] newPort0;
+  input [3:0] newPort0;
   input [II_WIDTH-1:0] newInstrIndex0;  
   input [LSQ_WIDTH-1:0] newLSQ0;
   input rsAlloc0;
@@ -2216,7 +2216,7 @@ module rs(
   input [REG_WIDTH-1:0] newReg1;
   input [REG_WIDTH-1:0] newRegSimd1;
   input [OPERATION_WIDTH-1:0]   newOp1;
-  input [4:0] newPort1;  
+  input [3:0] newPort1;  
   input [II_WIDTH-1:0] newInstrIndex1;
   input [LSQ_WIDTH-1:0] newLSQ1;
   input rsAlloc1;
@@ -2241,7 +2241,7 @@ module rs(
   input [REG_WIDTH-1:0] newReg2;
   input [REG_WIDTH-1:0] newRegSimd2;
   input [OPERATION_WIDTH-1:0]   newOp2;
-  input [4:0] newPort2;  
+  input [3:0] newPort2;  
   input [II_WIDTH-1:0] newInstrIndex2;
   input rsAlloc2;
   input [10:0] newGazumpA2;
