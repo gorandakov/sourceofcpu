@@ -4254,8 +4254,8 @@ module backend(
           assign lsw_wdata[n]=WDfxDataEn_reg3[n][3:2] ? lsw_wdataF_reg[n] : WDfxData_reg3[n];
           assign lsw_wdataF[n]=WDfxDataEn_reg2[n][2] ? lsw_wdataV_reg[n] : lsw_wdataF0[n];
 	  assign lsw_wdataV[n]=(get_ptype2(WDoutOp_reg2[n][5:1],WDfxDataVL[n][67:66])==`ptype_sngl) ?
-		  lsw_wdataV0 : {WDfxDataVH[n][63:0],WDfxDataVL[n][63:0]};
-	  assign lsw_wdataF0[127:32]=(get_ptype2(WDoutOp_reg3[n][5:1],WDfxDataFL[n][67:66])==`ptype_sngl) ?
+		  lsw_wdataV0[n] : {WDfxDataVH[n][63:0],WDfxDataVL[n][63:0]};
+	  assign lsw_wdataF0[n][127:32]=(get_ptype2(WDoutOp_reg3[n][5:1],WDfxDataFL[n][67:66])==`ptype_sngl) ?
 		  96'b0 : 96'bz;
 
 	  stNativeD2D stconvHD_mod(.A({16'b0,WDfxDataFH[n][65:33],WDfxDataFH[n][31:0]}),
@@ -5039,12 +5039,12 @@ module backend(
   .fpcsr(fpcsr),
   .ul_A(outDataAFL_reg[5]),.ul_B(outDataBFL_reg[5]),.ul_Av(outDataAVL_reg[5]),.ul_Bv(outDataBVL_reg[5]),
   .uh_A(outDataAFH_reg[5]),.uh_B(outDataBFH_reg[5]),.uh_Av(outDataAVH_reg[5]),.uh_Bv(outDataBVH_reg[5]),
-  .u1_en(outEn_reg[8]),.u1_op(outOp_reg[8]),
+  .u1_en(outEn_reg3[8]),.u1_op(outOp_reg3[8]),
   .u1_fufwd_A(fuFwdA_reg[8]),.u1_fuufwd_A(fuuFwdA_reg[8]),
   .u1_fufwd_B(fuFwdB_reg[8]),.u1_fuufwd_B(fuuFwdB_reg[8]),
  // .u1_ret(fsret[6]),.u1_ret_en(fsretEn6),
   //.u1_dataH(sqrDatH),.u1_dataL(sqrDatL),.u1_dataEn(sqrDatEn),
-  .en_early(outEn[8]),.op_early(outOp[8]),
+  .en_early(outEn_reg2[8]),.op_early(outOp_reg2[8]),
   .outEn(outEnX),
   .outII(outIIX),
   .outOp(outOpX),
@@ -5066,10 +5066,14 @@ module backend(
   .FUVL0(FUVL[0]),.FUVL1(FUVL[1]),.FUVL2(FUVL[2]),
   .FUVL3(FUVL[3]),.FUVL4(FUVL[4]),.FUVL5(FUVL[5]),
   .FUVL6(FUVL[6]),.FUVL7(FUVL[7]),.FUVL8(FUVL[8]),
-  .FUVL9(FUVL[9])
+  .FUVL9(FUVL[9]),
+  .fxFRT_alten(sqrDatEn),
+  .fxFRT_pause(fxFRT_pause),
+  .u1_II(outII_reg3[8]),
+  .u1_regNo(outReg_reg3[8])
   );
 
-  assign fxFRT_alten[2]=sqrtDatEn_reg;
+  assign fxFRT_alten[2]=sqrDatEn_reg;
   assign fxFRT_alten[0]=4'b0;
   assign fxFRT_alten[1]=4'b0;
   assign sqrDatL[68+15:68]=sqrDatH[15:0];

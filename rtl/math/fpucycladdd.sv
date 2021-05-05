@@ -1,7 +1,7 @@
 `include "../struct.sv"
 `include "../fpoperations.sv"
 
-module fpucadd(clk,rst,A,A_alt,B,and1,or1,copyA,prc_in,en,rmode,res,res_hi,res_alt,isDBL,fpcsr,raise,is_rndD,is_rndS);
+module fpucadd(clk,rst,A,A_alt,B,and1,or1,copyA,en,rmode,res,res_hi,isDBL,fpcsr,raise,is_rndD,is_rndS);
   localparam [15:0] BIAS=16'h7fff;
   localparam ROUND_TRUNC=0;
   localparam ROUND_ROUND=1;
@@ -20,12 +20,10 @@ module fpucadd(clk,rst,A,A_alt,B,and1,or1,copyA,prc_in,en,rmode,res,res_hi,res_a
   input and1;
   input or1;
   input copyA;
-  input prc_in;
   input en;
   input [2:0] rmode;
   output [67:0] res;
   output [15:0] res_hi;
-  inout [67:0] res_alt; //connected between "high" and "low"
   input isDBL;
   input [31:0] fpcsr;
   output [10:0] raise;
@@ -142,16 +140,6 @@ module fpucadd(clk,rst,A,A_alt,B,and1,or1,copyA,prc_in,en,rmode,res,res_hi,res_a
   get_carry #(17) cmp4_mod(~exp_denor_IEEE,exp_exp_reg,1'b1,exp_non_denor_IEEE);
   get_carry #(17) cmp5_mod(~exp_denor_IEEE,exp_exp1_reg,1'b1,exp_non_denor_IEEE);
 
-  generate
-      if (!H) begin
-          assign {res_alt[52:33],res_alt[31:0]}=prod_reg[105] ? prod_reg[104:53] :
-              prod_reg[103:52];
-          assign {res_alt[65],res_alt[64:53]}=prod_reg[105] ? {exp_exp1_reg3[15],sgn_reg3,exp_exp1_reg3[10:0]} : 
-              13'bz;
-          assign res_alt[32]=1'b0;
-	  assign res_alt[67:66]=`ptype_dbl;
-      end
-  endgenerate
   assign exp_exp_d=exp_oor & ~fpcsr_reg[`csrfpu_clip_IEEE] ? exp_max : 17'b0;
   assign exp_exp_d=exp_oor_IEEE & fpcsr_reg[`csrfpu_clip_IEEE] ? exp_max_IEEE : 17'bz;
   assign exp_exp_d=~exp_non_denor_IEEE & fpcsr_reg[`csrfpu_daz] || exp_exp_reg[16] ? 17'b0 : 17'bz;
@@ -299,7 +287,7 @@ module fpucadd(clk,rst,A,A_alt,B,and1,or1,copyA,prc_in,en,rmode,res,res_hi,res_a
       exp_exp_reg3<=exp_exp_reg2;
       exp_exp1_reg3<=exp_exp1_reg2;
       exp_max<=isDBL ? 17'hffe : 17'hfffe;
-      exp_max_IEEE<=isDBL ? 17'h7ff : 17'h7fff;
+      exp_max_IEEE<=isDBL ? 17'hbff : 17'hbfff;
       exp_denor_IEEE<=isDBL ? 17'h401 : 17'h4001;
       fpcsr_reg<=fpcsr;
       if (~is_rndD_reg2 & ~is_rndS_reg2) begin
