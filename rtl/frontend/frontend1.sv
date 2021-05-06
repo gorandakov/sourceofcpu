@@ -375,9 +375,9 @@ module frontend1(
   wire [4:0] jdec_link1;
   wire [4:0] jdec_link2;
   wire [4:0] jdec_link3;
-  wire [2:0] btb_way;
-  reg [2:0] btb_way_reg;
-  reg [2:0] btb_way_reg2;
+  wire btb_way;
+  reg  btb_way_reg;
+  reg  btb_way_reg2;
   wire [3:0][3:0] jmp_moff;
   reg [3:0] jmp_moff_reg[3:0];
   wire [3:0][43:1] jmp_par0;
@@ -563,7 +563,7 @@ module frontend1(
   reg [4:0] iqe_jcnt_reg2;
 
 
-  wire [47:0] btbx_tgt;
+  wire [63:0] btbx_tgt;
   wire [4:0]       btbx_jlink0;
   wire [`ZERO:0]  btbx_jlnpos0;
   wire [`ZERO:0] btbx_jlnjpos0;
@@ -581,7 +581,7 @@ module frontend1(
   reg  [3:0] btbx_joff_reg2[3:0];
   reg  [3:0] btbx_joff_reg3[3:0];
   reg  [3:0] btbx_joff_reg4[3:0];
-  reg  [2:0] btbxx_way_reg;
+  reg  btbxx_way_reg;
   wire [62:0] btbx_tgt0;
   wire [62:0] btbx_tgt1;
   wire [62:0] btbx_tgt2;
@@ -1584,8 +1584,8 @@ module frontend1(
               if (n<4) btbx_joff_reg4[n]<=4'b0;
           end
           instrFed_reg<=1'b0;
-          btb_way_reg<=3'b0;
-          btb_way_reg2<=3'b0;
+          btb_way_reg<=1'b0;
+          btb_way_reg2<=1'b0;
           btb_hit_reg<=1'b0;
           btb_hit_reg2<=1'b0;
           btb_hit_reg3<=1'b0;
@@ -1653,7 +1653,7 @@ module frontend1(
           btb_hasTK_reg2<=1'b0;
           btb_hasTK_reg3<=1'b0;
           btb_hasTK_reg4<=1'b0;
-          btbxx_way_reg<=3'b0;
+          btbxx_way_reg<=1'b0;
           GHT_reg<=8'b0;
           GHT_reg2<=8'b0;
           GHT_reg3<=8'b0;
