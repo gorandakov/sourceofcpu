@@ -53,7 +53,7 @@ module frontend1(
   localparam PHYS_WIDTH=44;
   localparam VIRT_WIDTH=64;
   localparam IP_WIDTH=64;
-  localparam [31:0] INIT_IP=32'h0;
+  localparam [63:0] INIT_IP=64'h0;
   localparam [3:0] INIT_ATTR=4'b0;
   localparam BUS_BANK=32;
   localparam BUS_WIDTH=BUS_BANK*16;
@@ -190,7 +190,7 @@ module frontend1(
 
   wire [3:0] cc_attr_d;
   wire [3:0] ixceptAttr;
-  reg [43:0] miss_IP;
+  reg [63:0] miss_IP;
   //reg [47:0] link_IP;
   reg [23:0] proc;
   reg kmode;
@@ -284,7 +284,7 @@ module frontend1(
   wire [INSTR_WIDTH-1:0] pre_instr10;
   wire [INSTR_WIDTH-1:0] pre_instr11;
 
-  reg [12:0] pre_instrEn_reg;
+  reg [11:0] pre_instrEn_reg;
   reg [INSTR_WIDTH-1:0] pre_instr0_reg;
   reg [INSTR_WIDTH-1:0] pre_instr1_reg;
   reg [INSTR_WIDTH-1:0] pre_instr2_reg;
@@ -559,8 +559,8 @@ module frontend1(
   wire [5:0] iqe_jcnt;
   wire [3:0] iqe_jbitZ;
   wire [5:0] iqe_jcnD;
-  reg [4:0] iqe_jcnt_reg;
-  reg [4:0] iqe_jcnt_reg2;
+  reg [5:0] iqe_jcnt_reg;
+  reg [5:0] iqe_jcnt_reg2;
 
 
   wire [63:0] btbx_tgt;
@@ -1360,8 +1360,8 @@ module frontend1(
       if (rst) begin
           dreq<=8'b0;
       end else for (m=0;m<8;m=m+1) begin
-          if (req_en && req_slot[2:0]==m) dreq[m]<=1'b1;
-          if (bus_en && bus_slot[2:0]==m) dreq[m]<=1'b0;
+          if (req_en && req_slot[2:0]==m[2:0]) dreq[m]<=1'b1;
+          if (bus_en && bus_slot[2:0]==m[2:0]) dreq[m]<=1'b0;
       end
       if (rst) begin
           init<=1'b1;
@@ -1476,7 +1476,7 @@ module frontend1(
       
       if (rst) begin
           except_save<=1'b0;
-          exceptIP_save<={VIRT_WIDTH-17{1'B0}};
+          exceptIP_save<={64{1'B0}};
           exceptThread_save<=1'b0;
           exceptAttr_save<=4'b0;
           exceptLDConfl_save<=1'b0;
@@ -1496,7 +1496,7 @@ module frontend1(
           except_jmask_en_save<=except_jmask_en;
       end else if (ixcept) begin
           except_save<=1'b0;
-          exceptIP_save<={VIRT_WIDTH-17{1'B0}};
+          exceptIP_save<={64{1'B0}};
 	  exceptAttr_save<=4'b0;
           exceptThread_save<=1'b0;
           exceptLDConfl_save<=1'b0;
@@ -1518,13 +1518,13 @@ module frontend1(
           read_set_flag_reg<=1'b0;
           cc_read_IP<=INIT_IP;
 	  cc_attr<=INIT_ATTR;
-          miss_IP<=48'b0;
+          miss_IP<=64'b0;
   //        link_IP<=48'b0;
 //          tr_odd<=1'b0;
 //          tr_half<=1'b0;
           tlb_data_reg<={`ctlbData_width{1'b0}};
           miss_now<=1'b0;
-          miss_cnt<=3'b0;
+          miss_cnt<=5'b0;
           IP_chg<=1'b0;
           IP_chg_reg<=1'b0;
           IP_chg_reg2<=1'b0;
@@ -1532,7 +1532,7 @@ module frontend1(
           IP_chg_reg4<=1'b0;
           miss_slot<=3'b0;
           tlb_hit_reg<=1'b0;
-          bus_data_reg<={DATA_WIDTH{1'B0}};
+          bus_data_reg<={BUS_WIDTH{1'B0}};
           bus_match_reg<=1'b0;
           bus_tlb_match_reg<=1'b0;
           bus_tlb_match_reg2<=1'b0;
@@ -1542,14 +1542,14 @@ module frontend1(
           instrEn_reg<=1'b0;
           instrEn_reg2<=1'b0;
           instrEn_reg3<=1'b0;
-          cc_read_IP_reg<=48'b0;
-          cc_read_IP_reg2<=48'b0;
-          cc_read_IP_reg3<=48'b0;
-          cc_read_IP_reg4<=48'b0;
-          cc_read_IP_reg5<=48'b0;
+          cc_read_IP_reg<=64'b0;
+          cc_read_IP_reg2<=64'b0;
+          cc_read_IP_reg3<=64'b0;
+          cc_read_IP_reg4<=64'b0;
+          cc_read_IP_reg5<=64'b0;
           tlbMiss_now<=1'b0;
           miss_seq<=1'b0;
-          proc<=16'b0;
+          proc<=24'b0;
           kmode<=1'b1;
           miss_phys<=32'b0;
           tlb_hit_reg2<=1'b0;
@@ -1560,7 +1560,7 @@ module frontend1(
           bus_match0_reg2<=1'b0;
           bus_match0_reg3<=1'b0;
           bus_match0_reg4<=1'b0;
-          pre_instrEn_reg<=13'b0;
+          pre_instrEn_reg<=12'b0;
           pre_instr0_reg<={INSTR_WIDTH{1'B0}};
           pre_instr1_reg<={INSTR_WIDTH{1'B0}};
           pre_instr2_reg<={INSTR_WIDTH{1'B0}};
@@ -1605,41 +1605,41 @@ module frontend1(
 	  jmp_mask_reg4[1]<=4'b0;
 	  jmp_mask_reg4[2]<=4'b0;
 	  jmp_mask_reg4[3]<=4'b0;
-          btbx_tgt0_reg<=47'b0;
-	  btbx_tgt1_reg<=47'b0;
-	  btbx_tgt2_reg<=47'b0;
-	  btbx_tgt3_reg<=47'b0;
-	  btbx_tgt0_reg2<=47'b0;
-	  btbx_tgt1_reg2<=47'b0;
-	  btbx_tgt2_reg2<=47'b0;
-	  btbx_tgt3_reg2<=47'b0;
-	  btbx_tgt0_reg3<=47'b0;
-	  btbx_tgt1_reg3<=47'b0;
-	  btbx_tgt2_reg3<=47'b0;
-	  btbx_tgt3_reg3<=47'b0;
-	  btbx_tgt0_reg4<=47'b0;
-	  btbx_tgt1_reg4<=47'b0;
-	  btbx_tgt2_reg4<=47'b0;
-	  btbx_tgt3_reg4<=47'b0;
-          btbx_attr0_reg<=47'b0;
-	  btbx_attr1_reg<=47'b0;
-	  btbx_attr2_reg<=47'b0;
-	  btbx_attr3_reg<=47'b0;
-	  btbx_attr0_reg2<=47'b0;
-	  btbx_attr1_reg2<=47'b0;
-	  btbx_attr2_reg2<=47'b0;
-	  btbx_attr3_reg2<=47'b0;
-	  btbx_attr0_reg3<=47'b0;
-	  btbx_attr1_reg3<=47'b0;
-	  btbx_attr2_reg3<=47'b0;
-	  btbx_attr3_reg3<=47'b0;
-	  btbx_attr0_reg4<=47'b0;
-	  btbx_attr1_reg4<=47'b0;
-	  btbx_attr2_reg4<=47'b0;
-	  btbx_attr3_reg4<=47'b0;
+          btbx_tgt0_reg<=63'b0;
+	  btbx_tgt1_reg<=63'b0;
+	  btbx_tgt2_reg<=63'b0;
+	  btbx_tgt3_reg<=63'b0;
+	  btbx_tgt0_reg2<=63'b0;
+	  btbx_tgt1_reg2<=63'b0;
+	  btbx_tgt2_reg2<=63'b0;
+	  btbx_tgt3_reg2<=63'b0;
+	  btbx_tgt0_reg3<=63'b0;
+	  btbx_tgt1_reg3<=63'b0;
+	  btbx_tgt2_reg3<=63'b0;
+	  btbx_tgt3_reg3<=63'b0;
+	  btbx_tgt0_reg4<=63'b0;
+	  btbx_tgt1_reg4<=63'b0;
+	  btbx_tgt2_reg4<=63'b0;
+	  btbx_tgt3_reg4<=63'b0;
+          btbx_attr0_reg<=4'b0;
+	  btbx_attr1_reg<=4'b0;
+	  btbx_attr2_reg<=4'b0;
+	  btbx_attr3_reg<=4'b0;
+	  btbx_attr0_reg2<=4'b0;
+	  btbx_attr1_reg2<=4'b0;
+	  btbx_attr2_reg2<=4'b0;
+	  btbx_attr3_reg2<=4'b0;
+	  btbx_attr0_reg3<=4'b0;
+	  btbx_attr1_reg3<=4'b0;
+	  btbx_attr2_reg3<=4'b0;
+	  btbx_attr3_reg3<=4'b0;
+	  btbx_attr0_reg4<=4'b0;
+	  btbx_attr1_reg4<=4'b0;
+	  btbx_attr2_reg4<=4'b0;
+	  btbx_attr3_reg4<=4'b0;
 	  btbx_jmask_reg<=4'b0;
-	  iqe_jcnt_reg<=5'b1;
-	  iqe_jcnt_reg2<=5'b1;
+	  iqe_jcnt_reg<=6'b1;
+	  iqe_jcnt_reg2<=6'b1;
 	  startx_reg<=5'b0;
 	  startx_reg2<=5'b0;
 	  startx_reg3<=5'b0;
@@ -1682,7 +1682,7 @@ module frontend1(
 	  predx_sc1_reg4<=2'b0;
 	  predx_sc2_reg4<=2'b0;
 	  predx_sc3_reg4<=2'b0;
-	  cc_base_IP<=48'b0;
+	  cc_base_IP<=64'b0;
 	  taken_REG<=4'b0;
 	  btbx_jmask_REG<=4'b0;
 	  miss_now_reg<=1'b0;
@@ -1701,7 +1701,7 @@ module frontend1(
           cc_read_IP<=cc_read_IP_d;
           cc_attr<=cc_attr_d;
           miss_now<=1'b0;
-          miss_cnt<=3'b0;
+          miss_cnt<=5'b0;
           IP_chg<=1'b0;
           IP_chg_reg<=1'b0;
           IP_chg_reg2<=1'b0;
@@ -1774,8 +1774,8 @@ module frontend1(
               miss_now<=1'b0;
               tlbMiss_now<=1'b0;
               instrEn<=1'b1;
-              miss_cnt<=4'b0;
-              miss_slot<=4'b0;
+              miss_cnt<=5'b0;
+              miss_slot<=3'b0;
           end
           if (miss_cnt==15) miss_seq<=1'b0;
           if (miss_slot==7 || tlbMiss_now) miss_seq<=1'b0;
