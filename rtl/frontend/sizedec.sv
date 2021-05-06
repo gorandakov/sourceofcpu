@@ -352,18 +352,18 @@ module predecoder_get(
     output [3:0] off10;
     output [3:0] off11;
     
-    output [11:0] class0;
-    output [11:0] class1;
-    output [11:0] class2;
-    output [11:0] class3;
-    output [11:0] class4;
-    output [11:0] class5;
-    output [11:0] class6;
-    output [11:0] class7;
-    output [11:0] class8;
-    output [11:0] class9;
-    output [11:0] class10;
-    output [11:0] class11;
+    output [12:0] class0;
+    output [12:0] class1;
+    output [12:0] class2;
+    output [12:0] class3;
+    output [12:0] class4;
+    output [12:0] class5;
+    output [12:0] class6;
+    output [12:0] class7;
+    output [12:0] class8;
+    output [12:0] class9;
+    output [12:0] class10;
+    output [12:0] class11;
     
     output [11:0] instrEn;
     output reg isAvx;
@@ -386,10 +386,10 @@ module predecoder_get(
     output [3:0] Joff2;
     output [3:0] Joff3;
     
-    output [11:0] Jclass0;
-    output [11:0] Jclass1;
-    output [11:0] Jclass2;
-    output [11:0] Jclass3;
+    output [12:0] Jclass0;
+    output [12:0] Jclass1;
+    output [12:0] Jclass2;
+    output [12:0] Jclass3;
     
     output [3:0] Jen;
     output [4:0] lnkLink0;

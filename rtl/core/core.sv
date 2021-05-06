@@ -68,12 +68,12 @@ module heptane_core(
   wire [9:0] bus_slot;
   wire bus_en;
   
-  wire [36:0] req_addr;
+  wire [37:0] req_addr;
   wire [9:0] req_slot;
   wire req_en;
   wire req_tlbEn;
   wire [3:0] req_tlbAttr;
-  reg [36:0] req_addr_reg;
+  reg [37:0] req_addr_reg;
   reg [9:0] req_slot_reg;
   reg req_en_reg;
 
@@ -851,7 +851,7 @@ module heptane_core(
   .read_sz(reqBus_sz),
   .read_bank0(reqBus_bank0),
   .read_low(reqBus_low),
-  .Cread_addr(req_addr_reg),
+  .Cread_addr(req_addr_reg[36:0]),
   .Cread_en(req_en_reg),
   .Cread_req(req_slot_reg[4:0]),
 //  .write0_clkEn({dc_wrHit[0] && dc_odd_wr_reg3[0] | dc_split_wr_reg3[0],dc_wrHit[0] && ~dc_odd_wr_reg3[0] | dc_split_wr_reg3[0]}),
@@ -1420,7 +1420,7 @@ module heptane_core(
   except_ght,
   except_jmask_en,
   except_jmask, 
-  req_addr[35:0],
+  req_addr[30:0],
   req_tlbAttr,
   req_tlbEn,
   bus_tlb_data,
@@ -1768,7 +1768,7 @@ module heptane_core(
     
     if (rst) begin
         bus_tlb_slot<=10'b0;
-        req_addr_reg<=37'b0;
+        req_addr_reg<=38'b0;
         req_en_reg<=1'b0;
         req_slot_reg<=10'b0;
         dc2_rhitA0_reg<=1'b0;
