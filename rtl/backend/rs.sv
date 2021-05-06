@@ -2774,7 +2774,7 @@ module rs(
   
   rs_wakeUp_data_array #(16+SIMD_WIDTH) dataA_FL_mod(
   clk,dataRst,stall|doStall,
-  32'b0,{SIMD_WIDTH{1'b0}},
+  32'b0,{16+SIMD_WIDTH{1'b0}},
   newRsSelect1_reg2,newDataFA1L,
   newRsSelect2_reg2,newDataFA2L,
   outEqA_reg,
@@ -2803,7 +2803,7 @@ module rs(
 
   rs_wakeUp_data_array #(16+SIMD_WIDTH) dataB_FL_mod(
   clk,dataRst,stall|doStall,
-  32'b0,{SIMD_WIDTH{1'b0}},
+  32'b0,{16+SIMD_WIDTH{1'b0}},
   newRsSelect1_reg2,newDataFB1L,
   newRsSelect2_reg2,newDataFB2L,
   outEqB_reg,

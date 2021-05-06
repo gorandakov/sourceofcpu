@@ -935,15 +935,15 @@ module ratV(
         assign read_fun[7]=(read_addr_reg[7][5:3]==l) ? read_funA[7] : {FN_WIDTH{1'BZ}};
         assign read_fun[8]=(read_addr_reg[8][5:3]==l) ? read_funA[8] : {FN_WIDTH{1'BZ}};
 
-        assign read_dom[0]=(read_addr_reg[0][5:3]==l) ? read_domA[0] : {FN_WIDTH{1'BZ}};
-        assign read_dom[1]=(read_addr_reg[1][5:3]==l) ? read_domA[1] : {FN_WIDTH{1'BZ}};
-        assign read_dom[2]=(read_addr_reg[2][5:3]==l) ? read_domA[2] : {FN_WIDTH{1'BZ}};
-        assign read_dom[3]=(read_addr_reg[3][5:3]==l) ? read_domA[3] : {FN_WIDTH{1'BZ}};
-        assign read_dom[4]=(read_addr_reg[4][5:3]==l) ? read_domA[4] : {FN_WIDTH{1'BZ}};
-        assign read_dom[5]=(read_addr_reg[5][5:3]==l) ? read_domA[5] : {FN_WIDTH{1'BZ}};
-        assign read_dom[6]=(read_addr_reg[6][5:3]==l) ? read_domA[6] : {FN_WIDTH{1'BZ}};
-        assign read_dom[7]=(read_addr_reg[7][5:3]==l) ? read_domA[7] : {FN_WIDTH{1'BZ}};
-        assign read_dom[8]=(read_addr_reg[8][5:3]==l) ? read_domA[8] : {FN_WIDTH{1'BZ}};
+        assign read_dom[0]=(read_addr_reg[0][5:3]==l) ? read_domA[0] : {2{1'BZ}};
+        assign read_dom[1]=(read_addr_reg[1][5:3]==l) ? read_domA[1] : {2{1'BZ}};
+        assign read_dom[2]=(read_addr_reg[2][5:3]==l) ? read_domA[2] : {2{1'BZ}};
+        assign read_dom[3]=(read_addr_reg[3][5:3]==l) ? read_domA[3] : {2{1'BZ}};
+        assign read_dom[4]=(read_addr_reg[4][5:3]==l) ? read_domA[4] : {2{1'BZ}};
+        assign read_dom[5]=(read_addr_reg[5][5:3]==l) ? read_domA[5] : {2{1'BZ}};
+        assign read_dom[6]=(read_addr_reg[6][5:3]==l) ? read_domA[6] : {2{1'BZ}};
+        assign read_dom[7]=(read_addr_reg[7][5:3]==l) ? read_domA[7] : {2{1'BZ}};
+        assign read_dom[8]=(read_addr_reg[8][5:3]==l) ? read_domA[8] : {2{1'BZ}};
         
     end
     for (k=0;k<=8;k=k+1)

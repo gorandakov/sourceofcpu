@@ -480,8 +480,8 @@ module rat_flags(
           read_data_buf : {ROB_ADDR_WIDTH{1'BZ}};
         assign read_fun[k]=(read_addr_reg[k]==4'he || read_addr_reg[k]==4'hd) ?
           read_fun_buf : {FN_WIDTH{1'BZ}};
-        assign read_retired[k]=(read_addr_reg[k]==4'he) ? read_retired_buf : {ROB_ADDR_WIDTH{1'BZ}};
-        assign read_retired[k]=(read_addr_reg[k]==4'hd) ? 1'b1 : {ROB_ADDR_WIDTH{1'BZ}};
+        assign read_retired[k]=(read_addr_reg[k]==4'he) ? read_retired_buf : 1'BZ;
+        assign read_retired[k]=(read_addr_reg[k]==4'hd) ? 1'b1 : 1'BZ;
     end
 
   endgenerate

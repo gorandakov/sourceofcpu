@@ -1,5 +1,5 @@
 `include "../struct.sv"
-
+//verilator lint_off WIDTH
 //dcache1_ram read during write behaviour: write first
 module dc2_cntrl_ram(
   clk,
@@ -895,4 +895,5 @@ module dc2_cntrl(
       end
   end
 endmodule
+//verilator lint_on WIDTH
 

@@ -939,8 +939,8 @@ module rs_s(
   wire [BUF_COUNT-1:0] isDataA;
   wire [BUF_COUNT-1:0] isDataB;
 
-  wire [63:0] outDataA2P;
-  wire [63:0] outDataB0P;
+  wire [64:0] outDataA2P;
+  wire [64:0] outDataB0P;
   wire outZeroB0,outZeroA2;
 
   wire [6*BUF_COUNT-1:0] outEqA;
@@ -990,8 +990,8 @@ module rs_s(
   assign newIsVB[1]=newPort1[5] && (newPort1[2:0]==3'b000 || newPort1[2]);
   assign newIsVB[2]=newPort2[5] && (newPort2[2:0]==3'b000 || newPort2[2]);
 
-  assign outDataB0=outDataB0P&{64{~outZeroB0}};
-  assign outDataA2=outDataA2P&{64{~outZeroA2}};
+  assign outDataB0=outDataB0P&{65{~outZeroB0}};
+  assign outDataA2=outDataA2P&{65{~outZeroA2}};
 
   rss_array rs_mod(
   clk,
@@ -1348,7 +1348,7 @@ module rs_s(
   32'b0,4'b0,1'b0,
   );
 
-  rs_nonWakeUp_array #(OPERATION_WIDTH) attrA_mod(
+  rs_nonWakeUp_array #(4) attrA_mod(
   clk,dataRst,stall|doStall,
   newRsSelect0,newAttr0,
   newRsSelect1,newAttr1,
@@ -1359,7 +1359,7 @@ module rs_s(
   32'b0,4'b0,1'b0,
   );
 
-  rs_nonWakeUp_array #(OPERATION_WIDTH) attrB_mod(
+  rs_nonWakeUp_array #(4) attrB_mod(
   clk,dataRst,stall|doStall,
   newRsSelect0,newAttr0,
   newRsSelect1,newAttr1,

@@ -1,6 +1,6 @@
 `include "../struct.sv"
 
-
+//verilator lint_off WIDTH
 module reg_alloc(
   clk,
   rst,
@@ -1543,3 +1543,5 @@ module fexcpt(
   assign msk1=in_en ? {in_mask,2'd3} : {5'b0,in,2'd2};
   assign no=en ? 13'bz : msk1;
 endmodule
+//verilator lint_on WIDTH
+
