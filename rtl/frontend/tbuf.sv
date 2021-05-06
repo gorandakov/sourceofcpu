@@ -247,7 +247,7 @@ module tbuf_way(
   output [4:0] link3;
   output [4:0] lnpos3;
   output [4:0] ljpos3;
-  output [2:0] way;
+  output way;
   output way_hit;
   
   input [TGTIP_WIDTH-1:1] tgt0I;
@@ -1220,7 +1220,7 @@ module tbuf_way_2(
   output [4:0] link3;
   output [4:0] lnpos3;
   output [4:0] ljpos3;
-  output [2:0] way;
+  output way;
   output way_hit;
   input [TGTIP_WIDTH-1:1] tgt0I;
   input [TGTIP_WIDTH-1:1] tgt1I;
@@ -1425,7 +1425,7 @@ module tbuf(
   );
   
   localparam IP_WIDTH=64;
-  localparam TGTIP_WIDTH=48;
+  localparam TGTIP_WIDTH=64;
   localparam HIST_WIDTH=8;
   localparam DATA_WIDTH=`btb_width;
   localparam EXTRA_WIDTH=`btbExtra_width;
@@ -1475,7 +1475,7 @@ module tbuf(
   output [4:0] link3;
   output [4:0] lnpos3;
   output [4:0] ljpos3;
-  output [2:0] way;
+  output way;
   output [3:0] off0;
   output [3:0] off1;
   output [3:0] off2;
@@ -1565,8 +1565,8 @@ module tbuf(
   wire [3:0] condA;
   wire [3:0] condB;
   
-  wire [2:0] wayA;
-  wire [2:0] wayB;
+  wire wayA;
+  wire wayB;
   wire [7:0] way_hit_way;
     
   wire [3:0] indirA;
@@ -1644,7 +1644,7 @@ module tbuf(
   reg [4:0] write_lnpos2_reg;
   reg [4:0] write_link3_reg;
   reg [4:0] write_lnpos3_reg;
-  reg [2:0] write_way_reg;
+  reg write_way_reg;
   reg write_thread_reg;
   reg write_wen_reg;
   reg write_insert_reg;  
