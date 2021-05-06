@@ -2173,7 +2173,7 @@ module decoder(
   wire [9:0]dec_rC_use;
   wire [9:0]dec_rC_useF;
   wire [9:0] dec_useCRet;
-  wire [9:0][63:0] dec_constant;
+  wire [9:0][64:0] dec_constant;
   wire [9:0][REG_WIDTH-1:0] dec_rT;
   wire [9:0]dec_rT_use;
   wire [9:0]dec_rT_useF;
@@ -2181,7 +2181,7 @@ module decoder(
   wire [9:0]dec_useRs;
   wire [9:0]dec_halt;
 
-  wire [9:0][2:0] dec_btbWay;
+  wire [9:0] dec_btbWay;
   wire [9:0][1:0] dec_jmpInd;
   wire [9:0][7:0] dec_ght;
   wire [9:0][1:0] dec_sc;
@@ -2199,7 +2199,7 @@ module decoder(
   wire [9:0] dec_fsimd;
 
   wire [9:0][7:0] dec_srcIPOff;
-  reg  [12:0] dec_srcIPOff_reg[9:0];
+  reg  [8:0] dec_srcIPOff_reg[9:0];
   wire [9:0][8:0] dec_srcIPOffA;
   wire [9:0][32:0] dec_srcIPOffx;
   
@@ -2239,7 +2239,7 @@ module decoder(
   reg 				dec_rC_use_reg[9:0];
   reg 				dec_rC_useF_reg[9:0];
   reg [9:0]			dec_useCRet_reg;
-  reg [63:0] 			dec_constant_reg[9:0];
+  reg [64:0] 			dec_constant_reg[9:0];
   reg [REG_WIDTH-1:0] 		dec_rT_reg[9:0];
   reg 				dec_rT_use_reg[9:0];
   reg 				dec_rT_useF_reg[9:0];
@@ -2247,7 +2247,7 @@ module decoder(
   reg 				dec_useRs_reg[9:0];
   reg [4:0] 			dec_jumpType_reg[9:0];
   
-  reg [2:0] dec_btbWay_reg[9:0];
+  reg dec_btbWay_reg[9:0];
   reg [1:0] dec_jmpInd_reg[9:0];
   reg [7:0] dec_ght_reg[9:0];
   reg [1:0] dec_sc_reg[9:0];
@@ -2269,8 +2269,6 @@ module decoder(
 
 
 
-  reg [IP_WIDTH-1:0] current_srcIP;
-  wire [IP_WIDTH-1:0] current_srcIP_d;
   wire [IP_WIDTH-1:0] taken_srcIP;
 
   wire [9:0][REG_WIDTH-1:0] dep_rA;
@@ -2323,7 +2321,7 @@ module decoder(
   wire [8:0]rs_rB_use;
   wire [8:0]rs_rB_useF;
   wire [8:0]rs_useBConst;
-  wire [8:0][63:0] rs_constant;
+  wire [8:0][64:0] rs_constant;
   wire [8:0][REG_WIDTH-1:0] rs_rT;
   wire [8:0]rs_rT_use;
   wire [8:0]rs_rT_useF;
@@ -2360,7 +2358,6 @@ module decoder(
   wire [8:0] rs_store;
   wire [8:0] rs_storeL;
   
-  wire [12:0] jumpT_IPOff;
   wire [9:0] afterTick;
   reg  [9:0] afterTick_reg;
   wire [9:0] dec_tick;
@@ -2405,8 +2402,8 @@ module decoder(
 	  assign jump0Taken=jump0_bit[k] ? dec_taken_reg[k] : 1'bz;
 	  assign jump1Taken=jump1_bit[k] ? dec_taken_reg[k] : 1'bz;
 
-	  assign jump0BtbWay=jump0_bit[k] ? dec_btbWay_reg[k] : 3'bz;
-	  assign jump1BtbWay=jump1_bit[k] ? dec_btbWay_reg[k] : 3'bz;
+	  assign jump0BtbWay=jump0_bit[k] ? dec_btbWay_reg[k] : 1'bz;
+	  assign jump1BtbWay=jump1_bit[k] ? dec_btbWay_reg[k] : 1'bz;
 
 	  assign jump0JmpInd=jump0_bit[k] ? dec_jmpInd_reg[k] : 2'bz;
 	  assign jump1JmpInd=jump1_bit[k] ? dec_jmpInd_reg[k] : 2'bz;
@@ -2513,10 +2510,10 @@ module decoder(
           adder #(9) srcAddA5_mod({afterTick[k],dec_srcIPOff[k]},9'd5,dec_srcIPOffA[k],1'b0,dec_magic[k][3:0]==4'b1111,,,,);
 
           
-          adder #(33) srcXAdd_mod({23'b0,dec_srcIPOffA_reg[k]},{dec_constant_reg[k][31],dec_constant_reg[k][31:0]},dec_srcIPOffx[k],1'b0, 1'b1,,,,);
+          adder #(33) srcXAdd_mod({24'b0,dec_srcIPOffA_reg[k]},{dec_constant_reg[k][31],dec_constant_reg[k][31:0]},dec_srcIPOffx[k],1'b0, 1'b1,,,,);
 
 	  popcnt10 jpop_mod(cls_jump_reg&iUsed_reg,{dummy8_1,btbl_step});
-	  adder #(43) csrAdd_mod({30'b0,dec_srcIPOffA_reg[k]},baseIP[42:0],csrss_retIP_data,1'b0,csrss_retIP_en_reg[k],,,,);
+	  adder #(43) csrAdd_mod({34'b0,dec_srcIPOffA_reg[k]},baseIP[42:0],csrss_retIP_data[43:1],1'b0,csrss_retIP_en_reg[k],,,,);
 
           if (k<9) 
           decoder_reorder_mux mux_mod(
@@ -2524,7 +2521,7 @@ module decoder(
           1'b1,
           rs_index[k],
           k==5 && has_mul,k==8 && has_mul,
-          rs_store[k] && !rs_storeL,
+          rs_store[k] && rs_storeL==0,
           rs_storeL[k],
           rs_storeDA,
           rs_storeDB,
@@ -2875,7 +2872,6 @@ module decoder(
           flag_lastWr[k]
           );
           
-          assign jumpT_IPOff=(dec_taken_reg[k] & iUsed_reg[k]) ? dec_srcIPOffA_reg[k] : 13'bz;
           
           if (k>0) assign afterTick[k]=(|dec_tick[k-1:0]);
           else assign afterTick[0]=1'b0;
@@ -2897,17 +2893,13 @@ module decoder(
   assign dec_lspecR_d=(~iUsed[0]) ? dec_lspecR : 1'bz;
 //  assign dec_aspecR_d=~iUsed[0] ? dec_aspecR : 1'bz;
   assign csrss_retIP_data=csrss_retIP_en_reg==10'b0 ? 64'b0 : 64'bz;
- 
-  assign jumpT_IPOff=(~(|(dec_taken_reg &iUsed_reg))) ? 13'b0 : 13'bz;
+  assign csrss_retIP_data[63:44]=csrss_retIP_en_reg!=10'b0 ? {baseAttr[0],baseAttr[1],1'b0,baseAttr[3],16'b0} : 20'bz; 
+  assign csrss_retIP_data[0]=csrss_retIP_en_reg!=10'b0 ? 1'b0 : 1'bz; 
+
   assign has_taken=|(dec_taken & iUsed);
   assign has_tick=|(dec_tick & iUsed);
  
   assign has_mul=|(cls_mul_reg&iUsed_reg); 
-
-  assign current_srcIP_d=except ? exceptIP : {IP_WIDTH{1'BZ}};
-  assign current_srcIP_d=(~except & has_taken) ? taken_srcIP : {IP_WIDTH{1'BZ}};
-  assign current_srcIP_d[12:0]=(~except & ~has_taken & has_tick) ? current_srcIP[12:0] : 13'bz;
-  assign current_srcIP_d=(~except & ~has_taken & ~has_tick) ? current_srcIP : 48'bz;
 
   assign rs0i0_index=(&rs_index[0][1:0]) ? 4'hf : 4'bz;
   assign rs1i0_index=(&rs_index[1][1:0]) ? 4'hf : 4'bz;
@@ -2919,34 +2911,32 @@ module decoder(
   assign rs1i2_index=(&rs_index[7][1:0]) ? 4'hf : 4'bz;
   assign rs2i2_index=(&rs_index[8][1:0]) ? 4'hf : 4'bz;
 
-  assign jump0Pos=jump0_bit ? 4'bz : 4'hf;
-  assign jump1Pos=jump1_bit ? 4'bz : 4'hf;
+  assign jump0Pos=jump0_bit!=0 ? 4'bz : 4'hf;
+  assign jump1Pos=jump1_bit!=0 ? 4'bz : 4'hf;
 
-  assign jump0Type=jump0_bit ? 5'bz : 5'h10;
-  assign jump1Type=jump1_bit ? 5'bz : 5'h10;
+  assign jump0Type=jump0_bit!=0 ? 5'bz : 5'h10;
+  assign jump1Type=jump1_bit!=0 ? 5'bz : 5'h10;
 
-  assign jump0Taken=jump0_bit ? 1'bz : 1'b0;
-  assign jump1Taken=jump1_bit ? 1'bz : 1'b0;
+  assign jump0Taken=jump0_bit!=0 ? 1'bz : 1'b0;
+  assign jump1Taken=jump1_bit!=0 ? 1'bz : 1'b0;
   
-  assign jump0BtbWay=jump0_bit ? 3'bz : 3'b0;
-  assign jump1BtbWay=jump1_bit ? 3'bz : 3'b0;
+  assign jump0BtbWay=jump0_bit!=0 ? 1'bz : 1'b0;
+  assign jump1BtbWay=jump1_bit!=0 ? 1'bz : 1'b0;
 
-  assign jump0JmpInd=jump0_bit ? 2'bz : 2'b0;
-  assign jump1JmpInd=jump1_bit ? 2'bz : 2'b0;
+  assign jump0JmpInd=jump0_bit!=0 ? 2'bz : 2'b0;
+  assign jump1JmpInd=jump1_bit!=0 ? 2'bz : 2'b0;
 
-  assign jump0GHT=jump0_bit ? 8'bz : 8'b0;
-  assign jump1GHT=jump1_bit ? 8'bz : 8'b0;
+  assign jump0GHT=jump0_bit!=0 ? 8'bz : 8'b0;
+  assign jump1GHT=jump1_bit!=0 ? 8'bz : 8'b0;
 
-  assign jump0SC=jump0_bit ? 2'bz : 2'b0;
-  assign jump1SC=jump1_bit ? 2'bz : 2'b0;
+  assign jump0SC=jump0_bit!=0 ? 2'bz : 2'b0;
+  assign jump1SC=jump1_bit!=0 ? 2'bz : 2'b0;
 
-  assign jump0Miss=jump0_bit ? 1'bz : 1'b0;
-  assign jump1Miss=jump1_bit ? 1'bz : 1'b0;
+  assign jump0Miss=jump0_bit!=0 ? 1'bz : 1'b0;
+  assign jump1Miss=jump1_bit!=0 ? 1'bz : 1'b0;
 
-  assign jump0TbufOnly=jump0_bit ? 1'bz : 1'b0;
-  assign jump1TbufOnly=jump1_bit ? 1'bz : 1'b0;
-  
-  adder_inc #(35) currentAdd_mod(current_srcIP[47:13],current_srcIP_d[47:13],~except & ~has_taken & has_tick,);
+  assign jump0TbufOnly=jump0_bit!=0 ? 1'bz : 1'b0;
+  assign jump1TbufOnly=jump1_bit!=0 ? 1'bz : 1'b0;
   
   decoder_permitted_i permi_mod(
   .branch(cls_jump),
@@ -3496,11 +3486,11 @@ module decoder(
               dec_rT_useF_reg[n]<=1'b0;
               dec_port_reg[n]<=4'b0;
               dec_useRs_reg[n]<=1'b0;
-              dec_srcIPOffA_reg[n]<=13'b0;
+              dec_srcIPOffA_reg[n]<=9'b0;
               dec_jumpType_reg[n]<=5'b0;
 	      dec_magic_reg[n]<=4'b0;
-	      dec_srcIPOff_reg[n]<=13'b0;
-	      dec_btbWay_reg[n]<=3'd0;
+	      dec_srcIPOff_reg[n]<=9'b0;
+	      dec_btbWay_reg[n]<=1'd0;
 	      dec_jmpInd_reg[n]<=2'b0;
 	      dec_ght_reg[n]<=8'b0;
 	      dec_sc_reg[n]<=2'b0;
@@ -3536,7 +3526,6 @@ module decoder(
           dec_rA_isV_reg<=10'b0;
           dec_rB_isV_reg<=10'b0;
           dec_rT_isV_reg<=10'b0;
-          current_srcIP<=48'b0;
 	  dec_last_reg<=10'b0;
 	  dec_fsimd_reg<=10'b0;
 	  afterTick_reg<=10'b0;
@@ -3613,7 +3602,6 @@ module decoder(
           dec_rA_isV_reg<=dec_rA_isV;
           dec_rB_isV_reg<=dec_rB_isV;
           dec_rT_isV_reg<=dec_rT_isV;
-          current_srcIP<=current_srcIP_d;
 	  dec_last_reg<=dec_last;
 	  dec_fsimd_reg<=dec_fsimd;
 	  afterTick_reg<=afterTick;
@@ -3893,32 +3881,32 @@ module decoder_get_baseIP(
   );
   input clk;
   input rst;
-  output reg [63:0] baseIP;
+  output reg [62:0] baseIP;
   output reg [3:0] baseAttr;
   input [9:0] afterTK;
   input [9:0] iUsed;
   input [9:0] afterTick;
-  input [12:0] srcIPOff0;
-  input [12:0] srcIPOff1;
-  input [12:0] srcIPOff2;
-  input [12:0] srcIPOff3;
-  input [12:0] srcIPOff4;
-  input [12:0] srcIPOff5;
-  input [12:0] srcIPOff6;
-  input [12:0] srcIPOff7;
-  input [12:0] srcIPOff8;
-  input [12:0] srcIPOff9;
-  input [63:0] jump0IP;
+  input [8:0] srcIPOff0;
+  input [8:0] srcIPOff1;
+  input [8:0] srcIPOff2;
+  input [8:0] srcIPOff3;
+  input [8:0] srcIPOff4;
+  input [8:0] srcIPOff5;
+  input [8:0] srcIPOff6;
+  input [8:0] srcIPOff7;
+  input [8:0] srcIPOff8;
+  input [8:0] srcIPOff9;
+  input [62:0] jump0IP;
   input [3:0] jump0Attr;
   input jump0TK;
-  input [63:0] jump1IP;
+  input [62:0] jump1IP;
   input [3:0] jump1Attr;
   input jump1TK;
   input except;
-  input [63:0] exceptIP;
+  input [62:0] exceptIP;
   input [3:0] exceptAttr;
 
-  wire [12:0] srcIPOff[9:0];
+  wire [8:0] srcIPOff[9:0];
   wire [62:0] nextIP;
   wire [3:0] next_baseAttr;
   wire [62:0] next_baseIP;
