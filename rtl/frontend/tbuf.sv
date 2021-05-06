@@ -1510,7 +1510,7 @@ module tbuf(
   input [4:0] write_lnpos2;
   input [4:0] write_link3;
   input [4:0] write_lnpos3;
-  input [2:0] write_way;
+  input write_way;
   input write_thread;
   input write_wen;
   input write_insert;  

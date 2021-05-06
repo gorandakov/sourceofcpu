@@ -281,9 +281,10 @@
 `define instrQ_addr_count 36
 `define instrQ_addr_width 6
 
-`define instrQExtra_IP 46:0
-`define instrQExtra_jmask 50:47
-`define instrQExtra_width 51
+`define instrQExtra_attr 3:0
+`define instrQExtra_IP 66:4
+`define instrQExtra_jmask 70:67
+`define instrQExtra_width 71
 
 
 

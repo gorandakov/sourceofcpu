@@ -511,11 +511,11 @@ module frontend1(
   wire [3:0] btb_predB;
   wire [3:0] btb_predA;
   wire [3:0] btb_cond;
-  wire [47:0] btb_tgt;
-  wire [46:0] btb_tgt0;
-  wire [46:0] btb_tgt1;
-  wire [46:0] btb_tgt2;
-  wire [46:0] btb_tgt3;
+  wire [63:0] btb_tgt;
+  wire [62:0] btb_tgt0;
+  wire [62:0] btb_tgt1;
+  wire [62:0] btb_tgt2;
+  wire [62:0] btb_tgt3;
   wire [1:0] pred_sc0A;
   wire [1:0] pred_sc1A;
   wire [1:0] pred_sc2A;
@@ -642,14 +642,14 @@ module frontend1(
 
   wire jlnin,jlnint,jlninx;  
       
-  wire [6:0] lpar30;
-  wire [6:0] lpar31;
-  wire [6:0] lpar20;
-  wire [6:0] lpar21;
-  wire [6:0] lpar10;
-  wire [6:0] lpar11;
-  wire [6:0] lpar00;
-  wire [6:0] lpar01;
+  wire [5:0] lpar30;
+  wire [5:0] lpar31;
+  wire [5:0] lpar20;
+  wire [5:0] lpar21;
+  wire [5:0] lpar10;
+  wire [5:0] lpar11;
+  wire [5:0] lpar00;
+  wire [5:0] lpar01;
  // wire [5:0] lcpar0;
   //wire [5:0] lcpar1;
 //  wire instrEn2=instr
@@ -1024,11 +1024,11 @@ module frontend1(
   .cc_read_tagErr(cc_tagErr),
   .read_data(read_data),
   .read_dataX(read_dataX),
-  .write_IP({write_IP,5'b0}),
+  .write_IP({write_IP[43:5],5'b0}),
   .cc_write_wen(bus_match_reg),
   .cc_invalidate(1'b0),
   .write_data(write_data),
-  .chkCL_IP(MSI_expAddr),
+  .chkCL_IP({MSI_expAddr,7'b0}),
   .chkCL_clkEn(MSI_expAddr_en),
   .chkCL_hit(MSI_expAddr_hit),
   .expun_addr(expun_addr),
@@ -1058,7 +1058,7 @@ module frontend1(
   .read_addr(bus_slot[2:0]),
   .read_data({req_addrR,req_addrP}),
   .write_addr(req_slot[2:0]),
-  .write_data({proc,cc_read_IP_reg4[47:7],miss_phys}),
+  .write_data({cc_read_IP_reg4[63:7],miss_phys}),
   .write_wen(req_en|req_tlbEn)
   );
 
@@ -1194,15 +1194,15 @@ module frontend1(
   adder_CSA #(5) ln3off2CSAt_mod(lnk_off3_reg,lnk_link3_reg,5'd2,lpar30,lpar31);
   adder #(5) ln3off2t_mod(lpar30[4:0],lpar31[4:0],jdec_link3,1'b0,~lnk_magic3_reg[0] & ~lnk_isRet3_reg,,,,);
 
-  get_carry #(4) btbLNoffCmpCC(lnk_off0_reg,~cc_read_IP_reg2[4:1],1'b1,lnk_offIn_cc);
+  get_carry #(4) btbLNoffCmpCC(lnk_off0_reg[3:0],~cc_read_IP_reg2[4:1],1'b1,lnk_offIn_cc);
   
-  get_carry #(4) btbL0NoffCmpCC(btb_jlnpos0,~cc_read_IP[4:1],1'b1,btb_jlnin0);
-  get_carry #(4) btbL1NoffCmpCC(btb_jlnpos1,~cc_read_IP[4:1],1'b1,btb_jlnin1);
-  get_carry #(4) btbL2NoffCmpCC(btb_jlnpos2,~cc_read_IP[4:1],1'b1,btb_jlnin2);
-  get_carry #(4) btbL3NoffCmpCC(btb_jlnpos3,~cc_read_IP[4:1],1'b1,btb_jlnin3);
+  get_carry #(4) btbL0NoffCmpCC(btb_jlnpos0[3:0],~cc_read_IP[4:1],1'b1,btb_jlnin0);
+  get_carry #(4) btbL1NoffCmpCC(btb_jlnpos1[3:0],~cc_read_IP[4:1],1'b1,btb_jlnin1);
+  get_carry #(4) btbL2NoffCmpCC(btb_jlnpos2[3:0],~cc_read_IP[4:1],1'b1,btb_jlnin2);
+  get_carry #(4) btbL3NoffCmpCC(btb_jlnpos3[3:0],~cc_read_IP[4:1],1'b1,btb_jlnin3);
   
   adder #(5) baseTick_mod(cc_read_IP[9:5],~cc_base_IP[9:5],{cc_base_tick,cc_base_off},1'b1,do_seq_reg,,,,);
-  adder_inc #(36) baseInc_mod(cc_base_IP[43:9],cc_base_IP_d[43:9],do_seq_reg & cc_base_tick,);
+  adder_inc #(35) baseInc_mod(cc_base_IP[43:9],cc_base_IP_d[43:9],do_seq_reg & cc_base_tick,);
   
   tbuf tbuf_mod(
   .clk(clk),
@@ -1216,7 +1216,7 @@ module frontend1(
   .uxcept(uxcept),
   .read_clkEn(ixcept || ~fstall & new_instrEn||
      btbFStall_recover & ~iq_fstall & ~jq_fstall),
-  .nextIP({proc,btbFStall_reg2 ? cc_read_IP_reg2[47:1] : cc_read_IP_d[47:1]}),
+  .nextIP({btbFStall_reg2 ? cc_read_IP_reg2[63:1] : cc_read_IP_d[63:1]}),
   .read_hit(btb_hit),
   .taken(taken&{4{btb_hit}}),
   .has0(btb_has0),

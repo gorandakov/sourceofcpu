@@ -65,7 +65,7 @@ module ret_stack(
   input thread;
   output [DATA_WIDTH-1:0] read_data;
   input [DATA_WIDTH-1:0] write_data;
-  input [15:0] write_lnk;
+  input [4:0] write_lnk;
   input write_trace;
   input write_wen;
 
@@ -83,7 +83,7 @@ module ret_stack(
   reg thread_reg;
   reg write_trace_reg;
   reg [DATA_WIDTH-1:0] write_data_reg;
-  reg [15:0] write_link_reg;
+  reg [4:0] write_link_reg;
   
   ret_stack_ram ram_mod(
   clk,
@@ -96,8 +96,8 @@ module ret_stack(
   write_wen_reg
   );
   
-  adder #(43) wrtTdat_mod(write_data_reg[46:4],{{31{write_link_reg[15]}},write_link_reg[15:4]},write_data_new[46:4],1'b0,write_trace_reg,,,,);
-  adder #(43) wrtdat_mod(write_data_reg[46:4],43'b0,write_data_new[46:4],write_link_reg[4],~write_trace_reg,,,,);
+  adder #(43) wrtdat_mod(write_data_reg[46:4],43'b0,write_data_new[46:4],write_link_reg[4],1'b1,,,,);
+  assign write_data_new[66:47]=write_data_reg[66:47];
   
   adder_inc #(ADDR_WIDTH) rdInc0_mod(read_addr[0],read_addr_inc[0],1'b1,);
   adder_inc #(ADDR_WIDTH) rdInc1_mod(read_addr[1],read_addr_inc[1],1'b1,);
