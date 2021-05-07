@@ -1025,10 +1025,10 @@ module dcache1(
   wire [1:0] write_dupl0_way[7:0];
   wire [1:0] write_dupl1_way[7:0];
 
-  wire write_dupl0P;
-  wire write_dupl1P;
-  reg write_dupl0P_reg;
-  reg write_dupl1P_reg;
+  wire [1:0] write_dupl0P;
+  wire [1:0] write_dupl1P;
+  reg [1:0] write_dupl0P_reg;
+  reg [1:0] write_dupl1P_reg;
   
   reg rdreqE0,rdreqO0;
   reg rdreqE1,rdreqO1;
@@ -1279,8 +1279,8 @@ module dcache1(
 
   assign expun_addr=wb_addr_reg2;
   assign expun_en=wb_enOut_reg2;
-  assign wb_addr=insert_hit_way ? 37'bz : 37'b0;
-  assign wb_enOut=insert_hit_way ? 1'bz : 1'b0;
+  assign wb_addr=insert_hit_way!=0 ? 37'bz : 37'b0;
+  assign wb_enOut=insert_hit_way!=0 ? 1'bz : 1'b0;
   
   assign write_hitCl0P=write_hit0_way[0] | write_hit0_way[1] | write_hit0_way[2] | 
     write_hit0_way[3] | write_hit0_way[4] | write_hit0_way[5] |  
@@ -1373,11 +1373,11 @@ module dcache1(
           read_low_reg<=8'b0;
           
           
-          write_data_reg<={LINE_WIDTH{1'B0}};
+          write_data_reg<=1024'B0;
           read_dataP_reg2<={LINE_WIDTH{1'B0}};
           
           for(v=0;v<4;v=v+1) begin
-              mskdata1[v]<=5'b0;
+              mskdata1[v]<=6'b0;
               read_sz[v]<=5'b0;
               read_sz_reg[v]<=5'b0;
               read_beginA[v]<=5'b0;
@@ -1465,7 +1465,7 @@ module dcache1(
          5'h3:  mskdata1[v]<=6'b01111; //long double
          5'h0,5'h1,5'h2:  mskdata1[v]<=6'b11111; //int, double, single 128 bit (u)
          5'hc,5'hd,5'he:  mskdata1[v]<=6'b11111; //int, double, single 128 bit (a)
-         5'h4,5'h5,4'h6:  mskdata1[v]<=6'b00011; //singleE,single,singleD
+         5'h4,5'h5,5'h6:  mskdata1[v]<=6'b00011; //singleE,single,singleD
          5'h8,5'h9,5'ha:  mskdata1[v]<=6'b00111; //doubleE, double, singlePairD
          5'hb,5'h7:  mskdata1[v]<=6'b00111; //singlePair,64 int(u), 64 int(a)
 	 5'hf: mskdata1[v]<=6'b111111;
@@ -1480,7 +1480,7 @@ module dcache1(
       if (rst) begin
           write_bank0_reg2<=32'b0;
           write_bank1_reg2<=32'b0;
-          write_data_reg2<={LINE_WIDTH{1'B0}};
+          write_data_reg2<={WLINE_WIDTH{1'B0}};
           insert_exclusive_reg2<=1'b0;
           insert_dirty_reg2<=1'b0;
           
@@ -1533,7 +1533,7 @@ module dcache1(
           insert_en_reg2<=1'b0;
           
           read_dataP_reg<={LINE_WIDTH{1'B0}};
-          write_data_reg2<={LINE_WIDTH{1'B0}};
+          write_data_reg2<={WLINE_WIDTH{1'B0}};
       end else begin
           write_bank0_reg2<=write_bank0_reg;
           write_bank1_reg2<=write_bank1_reg;

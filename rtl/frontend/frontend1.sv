@@ -770,7 +770,7 @@ module frontend1(
   
   assign bus_match0=bus_en && bus_slot=={BUS_ID,5'b10000};
   
-  assign tlb_IP=bus_tlb_match_reg ? {proc,miss_IP[47:12]} : {proc,cc_read_IP[47:12]};
+  assign tlb_IP=bus_tlb_match_reg ? {proc[20:0],miss_IP[43:13]} : {proc[20:0],cc_read_IP[43:13]};
   
   assign bus_tlb_match=bus_tlb_slot[9:5]==BUS_ID && bus_tlb_en;
   
@@ -1041,7 +1041,7 @@ module frontend1(
   .rst(rst),
   .read_clkEn(instrEn || bus_tlb_match_reg || ixcept),
   .fStall(fstall),
-  .addr(tlb_IP),
+  .addr({tlb_IP,13'b0}),
   .read_data(tlb_data),
   .nat_jump(1'b0),
   .read_hit(tlb_hit),

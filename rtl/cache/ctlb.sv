@@ -189,7 +189,7 @@ module ctlb(
 
   localparam DATA_WIDTH=`ctlb_width;
   localparam OUTDATA_WIDTH=`ctlbData_width;
-  localparam IP_WIDTH=64-12;
+  localparam IP_WIDTH=65;
   localparam ADDR_WIDTH=5;
 
   
@@ -239,9 +239,9 @@ module ctlb(
         rst,
         read_clkEn,
         fStall,
-        init_pending ? init_count : addr,
+        init_pending ? {59'b0,init_count} : addr,
 	nat_jump,
-	sproc,
+	sproc[20:0],
         read_data,
         oldLRU[k],
         read_hit_way[k],
