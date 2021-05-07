@@ -40,14 +40,14 @@ module ctlb_way(
   read_clkEn,
   fStall,
   addr,
-  nat_jump,
+  tr_jump,
   sproc,
   read_data,
   read_lru,
   read_hit,
   write_data,
   write_wen,
-  write_nat,
+  write_tr,
   invalidate,
   init,
   newLRU
@@ -56,7 +56,7 @@ module ctlb_way(
   parameter WAYNO=0;
   localparam DATA_WIDTH=`ctlb_width;
   localparam OUTDATA_WIDTH=`ctlbData_width;
-  localparam IP_WIDTH=64;
+  localparam IP_WIDTH=65;
   localparam ADDR_WIDTH=5;
 
   
@@ -65,14 +65,14 @@ module ctlb_way(
   input read_clkEn;
   input fStall;
   input [IP_WIDTH-1:0] addr;
-  input nat_jump;
-  input [15:0] sproc;
+  input tr_jump;
+  input [20:0] sproc;
   output [OUTDATA_WIDTH-1:0] read_data;
   output [1:0] read_lru;
   output read_hit;
   input [OUTDATA_WIDTH-1:0] write_data;
   input write_wen;
-  input write_nat;
+  input write_tr;
   input invalidate;
   input init;
   input [1:0] newLRU;
@@ -92,7 +92,7 @@ module ctlb_way(
 
   reg write_wen_reg;
 
-  reg write_nat_reg;
+  reg write_tr_reg;
 
   reg [OUTDATA_WIDTH-1:0] write_data_reg;
   
@@ -105,16 +105,16 @@ module ctlb_way(
   assign validN=read_data_ram[`ctlb_validN];
   assign read_lru=read_data_ram[`ctlb_lru];
   
-  assign read_hit=(valid&~nat_jump||validN&nat_jump) && ((ip|{12{~nat_jump}})==(addr|{12{~nat_jump}}) ||
-    ((ip|{12{~nat_jump}})=={sproc,addr[47:0]|{12{~nat_jump}}} && tlb_data[`ctlbData_global])) && ~invalidate_reg;
+  assign read_hit=(valid&~tr_jump||validN&tr_jump) && ((ip|{13{~tr_jump}})==(addr|{13{~tr_jump}}) ||
+    ((ip|{13{~tr_jump}})=={sproc,addr[43:0]|{13{~tr_jump}}} && tlb_data[`ctlbData_global])) && ~invalidate_reg;
   
   assign write_wen_ram=(write_wen_reg && read_lru==2'b11) || read_clkEn&~fStall;
   
   assign tlb_data=read_data_ram[`ctlb_data];
   assign read_data=read_hit ? read_data_ram[`ctlb_data] : {OUTDATA_WIDTH{1'BZ}};
   assign write_data_new[`ctlb_ip]=addr;
-  assign write_data_new[`ctlb_valid]=~write_nat_reg;
-  assign write_data_new[`ctlb_validN]=write_nat_reg;
+  assign write_data_new[`ctlb_valid]=~write_tr_reg;
+  assign write_data_new[`ctlb_validN]=write_tr_reg;
   assign write_data_new[`ctlb_data]=write_data_reg;
   assign write_data_new[`ctlb_lru]=2'b11;
   
@@ -139,9 +139,9 @@ module ctlb_way(
   ctlb_ram ram_mod(
   .clk(clk),
   .rst(rst),
-  .read_addr(nat_jump ? addr[9:4] : addr[17:12]),
+  .read_addr(tr_jump ? addr[9:4] : addr[18:13]),
   .read_data(read_data_ram),
-  .write_addr(nat_jump ? addr[9:4] : addr[17:12]),
+  .write_addr(tr_jump ? addr[9:4] : addr[18:13]),
   .write_data(write_data_ram),
   .write_wen(write_wen_ram|init)
   );
@@ -155,7 +155,7 @@ module ctlb_way(
 		  write_data_reg<={OUTDATA_WIDTH{1'B0}};
 		  invalidate_reg<=1'b0;
 		  read_clkEn_reg<=1'b0;
-		  write_nat_reg<=1'b0;
+		  write_tr_reg<=1'b0;
 		end
 	  else if (~fStall)
 	    begin 
@@ -164,7 +164,7 @@ module ctlb_way(
 		  write_data_reg<=write_data;
 		  invalidate_reg<=invalidate;
 		  read_clkEn_reg<=read_clkEn;
-		  write_nat_reg<=write_nat;
+		  write_tr_reg<=write_tr;
 		end
     end
   

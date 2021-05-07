@@ -116,10 +116,10 @@ module cc_comb (
   assign read_data0=cc_read_data0;
   assign read_dataX0=cc_read_dataX0;
   
-  assign read_dataP[0]=({256{read_hit0A}} & read_data0_reg[DATA_WIDTH/4-1:0]) | ~read_dataP[1]; 
-  assign read_dataP[1]=~(({256{~read_hit1A}} |  ~read_data0_reg[DATA_WIDTH/2-1:DATA_WIDTH/4]) & ~read_dataP[2]); 
-  assign read_dataP[2]=~(({256{read_hit0B}} & read_data0_reg[DATA_WIDTH/4*3-1:DATA_WIDTH/2]) | read_dataP[3]); 
-  assign read_dataP[3]=~(({256{~read_hit1B}} | ~read_data0_reg[DATA_WIDTH-1:DATA_WIDTH/4*3])); 
+  assign read_dataP[0]=({260{read_hit0A}} & read_data0_reg[DATA_WIDTH/4-1:0]) | ~read_dataP[1]; 
+  assign read_dataP[1]=~(({260{~read_hit1A}} |  ~read_data0_reg[DATA_WIDTH/2-1:DATA_WIDTH/4]) & ~read_dataP[2]); 
+  assign read_dataP[2]=~(({260{read_hit0B}} & read_data0_reg[DATA_WIDTH/4*3-1:DATA_WIDTH/2]) | read_dataP[3]); 
+  assign read_dataP[3]=~(({260{~read_hit1B}} | ~read_data0_reg[DATA_WIDTH-1:DATA_WIDTH/4*3])); 
   
   assign read_dataXP[0]=({15{read_hit0A}} & read_dataX0_reg[14:0]) | ~read_dataXP[1]; 
   assign read_dataXP[1]=~(({15{~read_hit1A}} | ~read_dataX0_reg[29:15]) & ~read_dataXP[2]); 
@@ -145,7 +145,7 @@ module cc_comb (
   .read_dataX(cc_read_dataX0),
   .read_hit(cc_read_hit0),
   .expun_hit(cc_expun_hit0),
-  .chkCL_IP(chkCL_IP[43:1]),
+  .chkCL_IP(chkCL_IP[43:5]),
   .chkCL_clkEn(chkCL_clkEn_reg),
   .chkCL_hit(chkCL_hit),
   .write_IP(write_IP_reg2[IP_WIDTH-1:5]),
@@ -208,7 +208,7 @@ module cc_comb (
   always @(negedge clk)
   begin
       if (rst) begin
-          write_IP_reg2<=64'b0;
+          write_IP_reg2<=44'b0;
 //          write_phys_reg2<=32'b0;
           read_hitP<=1'b0;
           cc_read_hitP<=1'b0;
@@ -227,7 +227,7 @@ module cc_comb (
   //        read_physOut0_reg<={PHYS_WIDTH-12{1'B0}};
           cc_write_wen_reg2<=1'b0;
           cc_invalidate_reg2<=1'b0;
-          cc_read_IP_reg<=59'b0;
+          cc_read_IP_reg<=39'b0;
       end
       else begin
           write_IP_reg2<=write_IP_reg;
@@ -251,14 +251,14 @@ module cc_comb (
       //    read_physOut0_reg<=read_physOut0;
           cc_write_wen_reg2<=cc_write_wen_reg;
           cc_invalidate_reg2<=cc_invalidate_reg;
-          cc_read_IP_reg<=cc_read_IP;
+          cc_read_IP_reg<=cc_read_IP[43:5];
       end
   end
   
   always @(posedge clk)
   begin
       if (rst) begin
-          write_IP_reg<=64'b0;
+          write_IP_reg<=44'b0;
         //  write_phys_reg<=32'b0;
           write_data_reg<={DATA_WIDTH{1'B0}};
           cc_write_wen_reg<=1'b0;
