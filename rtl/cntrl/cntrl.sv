@@ -925,8 +925,8 @@ module cntrl_find_outcome(
 
   assign except_attr_d=(break_jump0 & jump0_taken) ? jump0Attr : 4'bz;
   assign except_attr_d=(break_jump1 & jump1_taken) ? jump1Attr : 4'bz;
-  assign except_attr_d=(break_jump0 && ~jump0_taken && !(jump0Type[4] && jump0Type[2:0]==3'd1)) ? attr : 63'bz;
-  assign except_attr_d=(break_jump1 & ~jump1_taken && !(jump1Type[4] && jump1Type[2:0]==3'd1)) ? attr : 63'bz;
+  assign except_attr_d=(break_jump0 && ~jump0_taken && !(jump0Type[4] && jump0Type[2:0]==3'd1)) ? attr : 4'bz;
+  assign except_attr_d=(break_jump1 & ~jump1_taken && !(jump1Type[4] && jump1Type[2:0]==3'd1)) ? attr : 4'bz;
   assign except_attr_d=(break_jump0 && ~jump0_taken && (jump0Type==5'h11)) ? attr : 4'bz;
   assign except_attr_d=(break_jump1 & ~jump1_taken && (jump1Type==5'h11)) ? attr : 4'bz;
   assign except_attr_d=(break_jump0 && ~jump0_taken && (jump0Type==5'h19)) ? {indir_IP[60],1'b0,indir_IP[62],indir_IP[63]} : 4'bz;
@@ -1163,16 +1163,16 @@ module cntrl_find_outcome(
   .write7_addr(ret7_addr),.write7_data(ret7_data),.write7_wen(ret7_wen),
   
   .writeInit_addr(init ? initcount : new_addr),.writeInit_wen((new_en && ~stall && ~doStall)|init),
-  .writeInit_data0({11'b0,instr0_en|init ? 2'd0 : 2'd2}),
-  .writeInit_data1({11'b0,instr1_en|init ? 2'd0 : 2'd2}),
-  .writeInit_data2({11'b0,instr2_en|init ? 2'd0 : 2'd2}),
-  .writeInit_data3({11'b0,instr3_en|init ? 2'd0 : 2'd2}),
-  .writeInit_data4({11'b0,instr4_en|init ? 2'd0 : 2'd2}),
-  .writeInit_data5({11'b0,instr5_en|init ? 2'd0 : 2'd2}),
-  .writeInit_data6({11'b0,instr6_en|init ? 2'd0 : 2'd2}),
-  .writeInit_data7({11'b0,instr7_en|init ? 2'd0 : 2'd2}),
-  .writeInit_data8({11'b0,instr8_en|init ? 2'd0 : 2'd2}),
-  .writeInit_data9({11'b0,instr9_en|init ? 2'd0 : 2'd2})
+  .writeInit_data0({13'b0,instr0_en|init ? 2'd0 : 2'd2}),
+  .writeInit_data1({13'b0,instr1_en|init ? 2'd0 : 2'd2}),
+  .writeInit_data2({13'b0,instr2_en|init ? 2'd0 : 2'd2}),
+  .writeInit_data3({13'b0,instr3_en|init ? 2'd0 : 2'd2}),
+  .writeInit_data4({13'b0,instr4_en|init ? 2'd0 : 2'd2}),
+  .writeInit_data5({13'b0,instr5_en|init ? 2'd0 : 2'd2}),
+  .writeInit_data6({13'b0,instr6_en|init ? 2'd0 : 2'd2}),
+  .writeInit_data7({13'b0,instr7_en|init ? 2'd0 : 2'd2}),
+  .writeInit_data8({13'b0,instr8_en|init ? 2'd0 : 2'd2}),
+  .writeInit_data9({13'b0,instr9_en|init ? 2'd0 : 2'd2})
   );
 
   BOBind indir_mod(

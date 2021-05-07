@@ -222,7 +222,7 @@ module smallInstr_decoder(
 //  output reg useBSmall;//small constant use; used for call/pop/push
   reg [63:0] pconstant[TRICNT_TOP-1:0];
 //  output reg [3:0] smallConst; //signed
-  reg [REG_WIDTH-1:0] prT[TRICNT_TOP-1:0];
+  reg [REG_WIDTH-2:0] prT[TRICNT_TOP-1:0];
   reg prT_use[TRICNT_TOP-1:0];
   reg [3:0] pport[TRICNT_TOP-1:0];
   reg puseRs[TRICNT_TOP-1:0];
@@ -943,13 +943,13 @@ module smallInstr_decoder(
        puseRs[11]=1'b1;
        prAlloc[11]=1'b1;
        if (~prevSpecLoad) begin
-           prA[11]=(opcode_main[7:6]==2'd3) ? rB_reor : rA_reor;
-           prT[11]=rA_reor;
-           prB[11]=(opcode_main[7:6]==2'd3) ? rA_reor : rB_reor;
+           prA[11]=(opcode_main[7:6]==2'd3) ? {1'b0,rB_reor} : {1'b0,rA_reor};
+           prT[11]={1'b0,rA_reor};
+           prB[11]=(opcode_main[7:6]==2'd3) ? {1'b0,rA_reor} : {1'b0,rB_reor};
        end else begin
-           prA[11]=(opcode_main[7:6]==2'd3) ? 6'd15 : rA_reor;
-           prT[11]=rA_reor;
-           prB[11]=(opcode_main[7:6]==2'd3) ? rA_reor : 6'd15;
+           prA[11]=(opcode_main[7:6]==2'd3) ? 5'd15 : {1'b0,rA_reor};
+           prT[11]={1'b0,rA_reor};
+           prB[11]=(opcode_main[7:6]==2'd3) ? {1'b0,rA_reor} : 5'd15;
        end
        prA_useF[11]=1'b1;
        prB_useF[11]=1'b1;
@@ -982,7 +982,7 @@ module smallInstr_decoder(
           end else begin
               prC[12]={freg_vf(opcode_main[4:0],~opcode_main[5]),instr[11:8]};
 	      if (opcode_main[5] && prC[12]==REG_SP) prC[12]=5'd16;
-              prB[12]=instr[15:12];
+              prB[12]={freg_vf(opcode_main[4:0],~opcode_main[5]),instr[15:12]};
           end
       //        if (prevSpecAlu) rC=6'd16;
       end else begin
@@ -991,7 +991,7 @@ module smallInstr_decoder(
               prT[12]=instr[16:12];
           end else begin
               prT[12]={freg_vf(opcode_main[4:0],~opcode_main[5]),instr[11:8]};
-              prB[12]=instr[15:12];
+              prB[12]={freg_vf(opcode_main[4:0],~opcode_main[5]),instr[15:12]};
           end
       end
       if (opcode_main[0] && opcode_main[5:3]==3'b101) perror[12]=1'b1;
@@ -1003,8 +1003,8 @@ module smallInstr_decoder(
           poperation[13][5:0]=(opcode_main[7:4]==4'b0111) ? {2'b10,opcode_main[3:0]} : {1'b0,opcode_main[4:0]};
       poperation[13][7]=1'b0;
       poperation[13][6]=~(magic==4'b0111 && instr[57]);
-      poperation[13][9:8]=(magic[2:0]==3'b111 ? instr[53:52] : magic[1:0]==2'b01) ?
-        instr[22:21] : instr[24:23];
+      poperation[13][9:8]=magic[2:0]==3'b111 ? instr[53:52] : ( magic[1:0]==2'b01 ?
+        instr[22:21] : instr[24:23]);
       poperation[13][12:10]=3'b0;
       prA_use[13]=~(magic==4'b0111 && instr[57]);
       prT_use[13]=~opcode_main[0] && opcode_main[7:4]==4'b0111 && ~opcode_main[3];
@@ -1044,9 +1044,9 @@ module smallInstr_decoder(
       prB_use[13]=1'b1;
       prA_use[13]=~(magic==4'b0111 && instr[57]);
       pisIPRel[13]=magic==4'b0111 & instr[59];
-      if (operation[9:8] && ~operation[6]) perror[13]=1;
+      if (|operation[9:8] && ~operation[6]) perror[13]=1;
       if (magic[2:0]==3'b111 && instr[59] && ~instr[58]) perror[13]=1;
-      if (magic[2:0]==3'b111 && instr[63:60]) perror[13]=1;
+      if (magic[2:0]==3'b111 && instr[63:60]!=0) perror[13]=1;
       if (opcode_main[0] &&opcode_main[7:4]==4'b0111 && opcode_main[3])
           perror[13]=1;
       
@@ -1097,9 +1097,9 @@ module smallInstr_decoder(
           prA[15]={instr[16],instr[15:12]};
           prB[15]={instr[17],instr[11:8]};
           if (instr[28]) perror[15]=1;
-      end else if (magic[2:0]==2'b011) begin
+      end else if (magic[2:0]==3'b011) begin
           prA[15]=instr[12:8];
-          if (instr[15:13]) perror[15]=1;
+          if (instr[15:13]!=0) perror[15]=1;
       end
     
       trien[16]=magic[0] && isShlAddMulLike|isPtrSec; 
@@ -1120,7 +1120,7 @@ module smallInstr_decoder(
       poperation[16][12]=1'b1;    
       prA[16]={instr[17],instr[11:8]};
       prB[16]=instr[16:12];
-      if (instr[29:23]) perror[16]=1;
+      if (instr[29:23]!=0) perror[16]=1;
       prA[16]={instr[17],instr[11:8]};
       prT[16]=instr[16:12];
       prB[16]=instr[22:18];
@@ -1153,8 +1153,8 @@ module smallInstr_decoder(
       trien[18]=magic[0] & isBaseIndexSpecLoad;
           pport[18]=PORT_LOAD;
           poperation[18][6:0]={~(magic==4'b0111 && instr[57]),opcode_main[7],instr[11:8],1'b0};
-          poperation[18][9:8]=(magic[2:0]==3'b111 ? instr[53:52] : magic[2:0]==2'b01) ? 
-            instr[22:21] : instr[24:23];
+          poperation[18][9:8]=magic[2:0]==3'b111 ? instr[53:52] :( magic[1:0]==2'b01 ? 
+            instr[22:21] : instr[24:23]);
           poperation[18][12:10]=3'b0;
           poperation[18][7:6]=2'b0;
           prA_use[18]=~(magic==4'b0111 && instr[57]);
@@ -1184,9 +1184,9 @@ module smallInstr_decoder(
           prA_use[18]=~(magic==4'b0111 && instr[57]);
           prB_use[18]=1'b1;
           pisIPRel[18]=magic==4'b0111 && instr[59];
-          if (poperation[18][9:8] && ~poperation[18][6]) perror[18]=1;
+          if (|poperation[18][9:8] && ~poperation[18][6]) perror[18]=1;
           if (magic[2:0]==3'b111 && instr[59] && ~instr[58]) perror[18]=1;
-          if (magic[2:0]==3'b111 && instr[63:60]) perror[18]=1;
+          if (magic[2:0]==3'b111 && instr[63:60]!=0) perror[18]=1;
           if (opcode_main[7] && instr[11]) perror[18]=1'b1;          
 
       
@@ -1228,7 +1228,7 @@ module smallInstr_decoder(
       if (opcode_main[0] && (opcode_main[7:1]==7'b1011000 && instr[10]))
           perror[19]=1'b1;
           
-      if (magic[1:0]==3'b01 && instr[17]) perror[19]=1;
+      if (magic[1:0]==2'b01 && instr[17]) perror[19]=1;
       
       trien[20]=magic[0] & isBasicCJump;
       puseBConst[20]=magic[1:0]!=2'b01 && instr[18];
@@ -1248,7 +1248,7 @@ module smallInstr_decoder(
       prB[20]={instr[16],instr[15:12]};
       prT[20]=5'd31;
       pjumpType[20]={1'b0,(magic[1:0]==2'b01) ? instr[18] : instr[32],opcode_main[3:1]};  
-      if (puseBConst[20] && prB[20]) perror[20]=1;
+      if (puseBConst[20] && prB[20]!=0) perror[20]=1;
 
       trien[21]=magic[0] & isLongCondJump;
       puseRs[21]=1'b0;
@@ -1312,7 +1312,7 @@ module smallInstr_decoder(
           puseCRet[25]=1'b1;
           pisIPRel[25]=1'b1;
             //  useBSmall=1'b1;
-          poperation[25]=mode64 ? {`mop_int64,1'b1} : {`mop_int32,1'b1};
+          poperation[25]=mode64 ? {9'b0,`mop_int64,1'b1} : {9'b0,`mop_int32,1'b1};
           prC[25]=instr[12:8];
           pconstant[25]=64'b0;
           pjumpType[25]=5'b10000;
@@ -1324,7 +1324,7 @@ module smallInstr_decoder(
           prA_use[25]=1'b0;
           prT_use[25]=1'b1;
           pisIPRel[25]=1'b1;
-          pconstant[25]={{49{instr[31]}},instr[31:16],1'b0};
+          pconstant[25]={{47{instr[31]}},instr[31:16],1'b0};
           prT[25]=instr[12:8];
           poperation[25][7:0]=mode64 ? `op_add64 : `op_add32;
           puseRs[25]=1'b1;
@@ -1422,7 +1422,7 @@ module smallInstr_decoder(
 	  poperation[28][12]=1'b1;
 	  pisIPRel[28]=1'b1;
 	  prT[28]=instr[12:8];
-	  if (instr[15:13]) perror[28]=1;
+	  if (instr[15:13]!=0) perror[28]=1;
           poperation[28][12]=1'b1;
           //WARNING: loads IP only; no offset
       end else begin
@@ -1457,18 +1457,18 @@ module smallInstr_decoder(
               prT[29]=instr[16:12];
               prB[29]=5'd31;
           end else begin
-              prA[29]=instr[11:8];
-              prT[29]=instr[15:12];
+              prA[29]={1'b0,instr[11:8]};
+              prT[29]={1'b0,instr[15:12]};
               prB[29]=5'd31;
           end
       end else begin
           if (~prevSpecLoad) begin
-              prA[29]=instr[15:12];
-              prT[29]=instr[15:12];
-              prB[29]=instr[11:8];
+              prA[29]={1'b0,instr[15:12]};
+              prT[29]={1'b0,instr[15:12]};
+              prB[29]={1'b0,instr[11:8]};
           end else begin
-              prA[29]=instr[11:8];
-              prT[29]=instr[15:12];
+              prA[29]={1'b0,instr[11:8]};
+              prT[29]={1'b0,instr[15:12]};
               prB[29]=5'd16;
           end
       end
@@ -1483,16 +1483,16 @@ module smallInstr_decoder(
       prAlloc[30]=1'b1;
       puseBConst[30]=opcode_main[0];
       case({opcode_main[6:3],opcode_main[1]})
-	      0: poperation[30][7:0]=`op_mul32;
-	      1: poperation[30][7:0]=`op_mul32_64;
-	      2: poperation[30][7:0]=`op_mul64;
-	      3: poperation[30][7:0]=`op_lmul64;
-	      4: poperation[30][7:0]=`op_imul32;
-	      5: poperation[30][7:0]=`op_imul32_64;
-	      6: poperation[30][7:0]=`op_imul64;
-	      7: poperation[30][7:0]=`op_limul64;
-	      8: begin poperation[30][7:0]=`op_enptr; pport[30]=PORT_ALU; prB_use[30]=1'b0; end
-	      9: begin poperation[30][7:0]=`op_unptr; pport[30]=PORT_ALU; prB_use[30]=1'b0; end
+	      0: poperation[30]=`op_mul32;
+	      1: poperation[30]=`op_mul32_64;
+	      2: poperation[30]=`op_mul64;
+	      3: poperation[30]=`op_lmul64;
+	      4: poperation[30]=`op_imul32;
+	      5: poperation[30]=`op_imul32_64;
+	      6: poperation[30]=`op_imul64;
+	      7: poperation[30]=`op_limul64;
+	      8: begin poperation[30]=`op_enptr; pport[30]=PORT_ALU; prB_use[30]=1'b0; end
+	      9: begin poperation[30]=`op_unptr; pport[30]=PORT_ALU; prB_use[30]=1'b0; end
 	      default: perror[30]=1'b1;
       endcase
       if (opcode_main[0]) begin
@@ -1506,8 +1506,8 @@ module smallInstr_decoder(
                prB[30]=5'd31;
                perror[30]=0;
            end else begin
-               prA[30]=instr[11:8];
-               prT[30]=instr[15:12];
+               prA[30]={1'b0,instr[11:8]};
+               prT[30]={1'b0,instr[15:12]};
                prB[30]=5'd31;
            end
       end else begin
@@ -1574,7 +1574,7 @@ module smallInstr_decoder(
           prB[32]=instr[26:22];
           prT[32]=instr[31:27];
 	  if (instr[15:14]==2'd3) prA_useF[32]=0;
-	  if (instr[15:14]==2'd3 && instr[21:17]) perror[32]=1;
+	  if (instr[15:14]==2'd3 && instr[21:17]!=0) perror[32]=1;
       end else if ((instr[13:9]==5'b0 || instr[13:8]==6'b10) & instr[16]) begin
           pport[32]=PORT_VCMP;
           poperation[32][5:0]=(instr[13:8]==6'b10) ? 6'd11 : {5'd6,instr[8]};
@@ -1593,7 +1593,7 @@ module smallInstr_decoder(
           prB[32]=instr[26:22];
           prT[32]=instr[31:27];
           poperation[32][7:0]=8'hff;//mov 128 bit untyped
-	  if (instr[21:17]) perror[32]=1;
+	  if (instr[21:17]!=0) perror[32]=1;
       end
       
       trien[33]=magic[0] & isBasicFPUScalarA;
@@ -1682,7 +1682,7 @@ module smallInstr_decoder(
           prB_use[35]=1'b1;
           puseBConst[35]=1'b1;
           prT_use[35]=1'b0;
-          if (instr[12:8] || ~ can_jump_csr) perror[35]=1;
+          if (instr[12:8]!=0 || ~ can_jump_csr) perror[35]=1;
           poperation[35]=mode64 ? `op_mov64 : `op_mov32;
           pport[35]=PORT_MUL;
           poperation[35][12]=1'b1;
@@ -1703,7 +1703,7 @@ module smallInstr_decoder(
       prB_useF[36]=1'b1;
       prAlloc[36]=1'b1;
       {poperation[36][11],poperation[36][9:8]}={1'b1,{2{instr[16]}}};
-      if (instr[15:14]) perror[36]=1;
+      if (instr[15:14]!=0) perror[36]=1;
       case(instr[13:8])
           6'd32: begin poperation[36][7:0]=`fop_sqrtDH; pport[36]=PORT_FMUL; prB_useF[36]=1'b0; end
           6'd33: begin poperation[36][7:0]=`fop_sqrtDL; pport[36]=PORT_FMUL; prB_useF[36]=1'b0; end
@@ -1741,7 +1741,8 @@ module smallInstr_decoder(
 	  6'd40: begin poperation[37][7:0]=`fop_tblD; pport[37]=PORT_MUL; prA_useF[37]=1'b0; prT_use[37]=1'b1; end
 	  6'd41: begin poperation[37][7:0]=`fop_cvtD; pport[37]=PORT_MUL; prA_useF[37]=1'b0; prT_use[37]=1'b1; end
 	  6'd42: begin poperation[37][7:0]=`fop_cvt32D; pport[37]=PORT_MUL; prA_useF[37]=1'b0; prT_use[37]=1'b1; end
-	  6'd43: begin poperation[37][7:0]=`fop_cvtE; pport[37]=PORT_MUL; prA_useF[37]=1'b0; prT_use[37]=1'b1; prB[37]=rB_reor32; end
+	  6'd43: begin poperation[37][7:0]=`fop_cvtE; pport[37]=PORT_MUL; prA_useF[37]=1'b0; prT_use[37]=1'b1;
+	      prB[37]=rB_reor32; end
 	  6'd44: begin poperation[37][7:0]=`fop_cvtS; pport[37]=PORT_MUL; prA_useF[37]=1'b0; prT_use[37]=1'b1; end
 	  6'd45: begin poperation[37][7:0]=`fop_cvt32S; pport[37]=PORT_MUL; prA_useF[37]=1'b0; prT_use[37]=1'b1; end
           default: perror[37]=1;

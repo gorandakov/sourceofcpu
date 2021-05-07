@@ -85,9 +85,9 @@ module decoder_permitted_i(
           assign permB[k]=branch_cnt[k][2] & taken_cnt[k][1] & indir_cnt[k][1];
           
           if (k>0)
-              assign permC[k]=(|(sys[k:0])) ? !sys[k-1:0] && !pos0[k] : !pos0[k];
+              assign permC[k]=(|(sys[k:0])) ? sys[k-1:0]==0 && pos0[k]==0 : pos0[k]==0;
           else
-              assign permC[k]=!(pos0[0] && allret);
+              assign permC[k]=(pos0[0] && allret)==0;
       end
   endgenerate
   
@@ -196,19 +196,19 @@ module decoder_aux_const(
       case(aux0_reg)
       `csr_retIP: begin	aux_const=csr_retIP; 
           aux_can_jump=csr_mflags[`mflags_cpl]==2'b0;
-          aux_can_read=~csr_mflags[`mflags_vm] && !csr_mflags[`mflags_cpl]; end
+          aux_can_read=~csr_mflags[`mflags_vm] && 0==csr_mflags[`mflags_cpl]; end
       `csr_excStackSave: begin aux_const=csr_excStackSave;
-        aux_can_read=~csr_mflags[`mflags_vm] && !csr_mflags[`mflags_cpl]; end
+        aux_can_read=~csr_mflags[`mflags_vm] && 0==csr_mflags[`mflags_cpl]; end
       `csr_excStack: begin aux_const=csr_excStack;
-        aux_can_read=~csr_mflags[`mflags_vm] && !csr_mflags[`mflags_cpl]; end
+        aux_can_read=~csr_mflags[`mflags_vm] && 0==csr_mflags[`mflags_cpl]; end
       `csr_PCR: begin	aux_const=csr_PCR;
-        aux_can_read=~csr_mflags[`mflags_vm] && !csr_mflags[`mflags_cpl]; end
+        aux_can_read=~csr_mflags[`mflags_vm] && 0==csr_mflags[`mflags_cpl]; end
       `csr_PCR_reg_save:begin aux_const= csr_PCR_reg_save;
-        aux_can_read=~csr_mflags[`mflags_vm] && !csr_mflags[`mflags_cpl]; end
-      `csr_mflags: begin	aux_const=csr_mflags; aux_can_read=~csr_mflags[`mflags_vm] && !csr_mflags[`mflags_cpl]; end
+        aux_can_read=~csr_mflags[`mflags_vm] && 0==csr_mflags[`mflags_cpl]; end
+      `csr_mflags: begin	aux_const=csr_mflags; aux_can_read=~csr_mflags[`mflags_vm] && 0==csr_mflags[`mflags_cpl]; end
       `csr_FPU:			aux_const=csr_fpu;
-      `csr_page: begin aux_const=csr_page; aux_can_read=~csr_mflags[`mflags_vm] && !csr_mflags[`mflags_cpl]; end
-      `csr_vmpage: begin aux_const=csr_vmpage; aux_can_read=~csr_mflags[`mflags_vm] && !csr_mflags[`mflags_cpl]; end
+      `csr_page: begin aux_const=csr_page; aux_can_read=~csr_mflags[`mflags_vm] && 0==csr_mflags[`mflags_cpl]; end
+      `csr_vmpage: begin aux_const=csr_vmpage; aux_can_read=~csr_mflags[`mflags_vm] && 0==csr_mflags[`mflags_cpl]; end
       //`csr_cpage: begin	aux_const=csr_cpage; aux_can_read=~csr_mflags[`mflags_vm] && !csr_mflags[`mflags_cpl]; end
       //`csr_spage: begin	aux_const=csr_spage; aux_can_read=~csr_mflags[`mflags_vm] && !csr_mflags[`mflags_cpl]; end
       `csr_syscall: begin aux_const=csr_syscall;
@@ -218,8 +218,8 @@ module decoder_aux_const(
 	   csr_mflags[`mflags_vm] && csr_mflags[`mflags_cpl]==2'b00;
            aux_can_read=~csr_mflags[`mflags_vm] && csr_mflags[`mflags_cpl]==2'b00; end
       //`csr_cpage_mask: begin aux_const=csr_cpage_mask; aux_can_read=~csr_mflags[`mflags_vm] && !csr_mflags[`mflags_cpl]; end
-      `csr_indir_table: begin aux_const=csr_indir_tbl; aux_can_read=~csr_mflags[`mflags_vm] && !csr_mflags[`mflags_cpl]; end
-      `csr_indir_mask: begin aux_const=csr_indir_mask; aux_can_read=~csr_mflags[`mflags_vm] && !csr_mflags[`mflags_cpl]; end
+      `csr_indir_table: begin aux_const=csr_indir_tbl; aux_can_read=~csr_mflags[`mflags_vm] && csr_mflags[`mflags_cpl]==0; end
+      `csr_indir_mask: begin aux_const=csr_indir_mask; aux_can_read=~csr_mflags[`mflags_vm] && csr_mflags[`mflags_cpl]==0; end
       `csr_cl_lock: begin aux_const={63'b0,csr_mflags[18]}; csr_mflags[18]<=1'b0; end
       default:			aux_const=64'b0;
       endcase
@@ -269,7 +269,7 @@ module decoder_aux_const(
 	      if (altEn) csr_retIP<=altData;
           end
           if (fpE_en && !csrss_en | (csrss_no!=`csr_FPU)) begin
-              csr_fpu<=csr_fpu | {44'b0,fpE_set,11'b0};
+              csr_fpu<=csr_fpu | {42'b0,fpE_set,11'b0};
           end
       end
   end
@@ -825,7 +825,7 @@ module decoder_reorder_mux(
   
   input [9:0] dec_afterTaken;
 
-  wire [63:0] constantA;
+  wire [64:0] constantA;
   wire [63:0] constantB;
   wire [REG_WIDTH-1:0] rA1;
   wire [REG_WIDTH-1:0] rA2;
@@ -870,9 +870,9 @@ module decoder_reorder_mux(
   assign constantB=(sel[8] & ~sel[1]) ? {{31{dec8_srcIPOff[32]}},dec8_srcIPOff} : 64'bz;
   assign constantB=sel[9] ? {{31{dec9_srcIPOff[32]}},dec9_srcIPOff} : 64'bz;
 
-  assign constant=(!(sel&IPRel) && !(sel&dec_cls_sys)) ? constantA : 65'bz;
-  assign constant=((sel&IPRel) && !(sel&dec_cls_sys)) ? {1'b0,constantB} : 65'bz;
-  assign constant=(sel&dec_cls_sys) ? {1'b0,aux_constant} : 65'bz;
+  assign constant=(0==(sel&dec_IPRel) && 0==(sel&dec_cls_sys)) ? constantA : 65'bz;
+  assign constant=(0!=(sel&dec_IPRel) && 0==(sel&dec_cls_sys)) ? {1'b0,constantB} : 65'bz;
+  assign constant=0!=(sel&dec_cls_sys) ? {1'b0,aux_constant} : 65'bz;
 
   assign st_enA=!(&storeDA[1:0]);
   assign st_enB=!(&storeDB[1:0]);
@@ -3851,7 +3851,7 @@ module decoder_flag_wr(
   output lastWr;
 
   
-  assign lastWr=doWrite & !instr_write_1_9;
+  assign lastWr=doWrite & 0==instr_write_1_9;
   
 endmodule
 
@@ -3912,7 +3912,7 @@ module decoder_get_baseIP(
   wire [62:0] next_baseIP;
 
 
-  adder_inc #(36) nextAdd_mod(baseIP[42:8],nextIP[42:8],1'b1,);
+  adder_inc #(35) nextAdd_mod(baseIP[42:8],nextIP[42:8],1'b1,);
   assign nextIP[7:0]=baseIP[7:0];
   //assign second_IP=|second_tr_jump ? tk_jumpIP : 47'bz;
   assign nextIP[7:0]=baseIP[7:0];
@@ -3921,21 +3921,21 @@ module decoder_get_baseIP(
 
   assign next_baseAttr=(jump0TK && ~except) ? jump0Attr : 4'bz;
   assign next_baseAttr=(jump1TK && ~except) ? jump1Attr : 4'bz;
-  assign next_baseAttr=(~jump0TK && ~jump1TK && !(afterTick&iUsed) 
+  assign next_baseAttr=(~jump0TK && ~jump1TK && 0==(afterTick&iUsed) 
     && ~except) ? baseAttr: 4'bz;
-  assign next_baseAttr=(~jump0TK && ~jump1TK && (afterTick&iUsed) 
+  assign next_baseAttr=(~jump0TK && ~jump1TK && 0!=(afterTick&iUsed) 
     && ~except) ? baseAttr: 4'bz;
   assign next_baseAttr=except ? exceptAttr : 4'bz;
 
 
   
-  assign next_baseIP=(jump0TK && ~except) ? jump0IP : 62'bz;
-  assign next_baseIP=(jump1TK && ~except) ? jump1IP : 62'bz;
-  assign next_baseIP=(~jump0TK && ~jump1TK && !(afterTick&iUsed) 
-    && ~except) ? baseIP: 62'bz;
-  assign next_baseIP=(~jump0TK && ~jump1TK && (afterTick&iUsed) 
-    && ~except) ? nextIP: 62'bz;
-  assign next_baseIP=except ? exceptIP : 62'bz;
+  assign next_baseIP=(jump0TK && ~except) ? jump0IP : 63'bz;
+  assign next_baseIP=(jump1TK && ~except) ? jump1IP : 63'bz;
+  assign next_baseIP=(~jump0TK && ~jump1TK && 0==(afterTick&iUsed) 
+    && ~except) ? baseIP: 63'bz;
+  assign next_baseIP=(~jump0TK && ~jump1TK && 0!=(afterTick&iUsed) 
+    && ~except) ? nextIP: 63'bz;
+  assign next_baseIP=except ? exceptIP : 63'bz;
 
   assign srcIPOff[0]=srcIPOff0;
   assign srcIPOff[1]=srcIPOff1;
