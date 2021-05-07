@@ -190,14 +190,14 @@ module instrQextra(
   assign write_data0x=write_start[0] ? write_data0 : {DATA_WIDTH{1'bz}};
   assign write_data0x=write_start[1] ? write_data1 : {DATA_WIDTH{1'bz}};
   assign write_data0x=write_start[2] ? write_data2 : {DATA_WIDTH{1'bz}};
-  assign write_data0x=write_start[4:3] ? write_data3 : {DATA_WIDTH{1'bz}};
+  assign write_data0x=|write_start[4:3] ? write_data3 : {DATA_WIDTH{1'bz}};
 
   assign write_data1x=write_start[0] ? write_data1 : {DATA_WIDTH{1'bz}};
   assign write_data1x=write_start[1] ? write_data2 : {DATA_WIDTH{1'bz}};
-  assign write_data1x=write_start[4:2] ? write_data3 : {DATA_WIDTH{1'bz}};
+  assign write_data1x=|write_start[4:2] ? write_data3 : {DATA_WIDTH{1'bz}};
   
   assign write_data2x=write_start[0] ? write_data2 : {DATA_WIDTH{1'bz}};
-  assign write_data2x=write_start[4:1] ? write_data3 : {DATA_WIDTH{1'bz}};
+  assign write_data2x=|write_start[4:1] ? write_data3 : {DATA_WIDTH{1'bz}};
   
   assign write_data3x=write_data3;
 
@@ -233,11 +233,11 @@ module instrQextra(
   .read_addr0({read_thread,read_addr0_d[read_thread]}),.read_data0(read_data0),
   .read_addr1({read_thread,read_addr1_d[read_thread]}),.read_data1(read_data1),
   .write_addr0({write_thread,write_addr0[write_thread]}),.write_data0(write_data0x),
-    .write_wen0(write_wen && ~fStall && ~doFStall && write_cnt[4:1]),
+    .write_wen0(write_wen && ~fStall && ~doFStall && |write_cnt[4:1]),
   .write_addr1({write_thread,write_addr1[write_thread]}),.write_data1(write_data1x),
-    .write_wen1(write_wen && ~fStall && ~doFStall && write_cnt[4:2]),
+    .write_wen1(write_wen && ~fStall && ~doFStall && |write_cnt[4:2]),
   .write_addr2({write_thread,write_addr2[write_thread]}),.write_data2(write_data2x),
-    .write_wen2(write_wen && ~fStall && ~doFStall && write_cnt[4:3]),
+    .write_wen2(write_wen && ~fStall && ~doFStall && |write_cnt[4:3]),
   .write_addr3({write_thread,write_addr3[write_thread]}),.write_data3(write_data3x),
     .write_wen3(write_wen && ~fStall && ~doFStall && write_cnt[4])
   );

@@ -126,7 +126,7 @@ module smallInstr_decoder(
   input [23:0] reor_val;
   //7:0 free 15:8 unfree 39:16 fxch/pop/push 
   wire [3:0] magic;
-  wire [11:0] srcIPOff;
+  wire [7:0] srcIPOff;
 //  wire isAvx;
   wire [7:0] opcode_main;
 
@@ -245,7 +245,7 @@ module smallInstr_decoder(
   reg phalt[TRICNT_TOP-1:0];
   
   wire [64:0] qconstant[12:0];
-  wire [11:0] qtrien;
+  wire [12:0] qtrien;
   
   reg [4:0] pjumpType[TRICNT_TOP-1:0];
   
@@ -857,7 +857,7 @@ module smallInstr_decoder(
 
        trien[9]=magic[0] & isBasicALU & ~isBasicALUExcept;
        puseBConst[9]=opcode_main[0];
-       poperation[9][7:0]={opcode_main[5:3],1'b0,opcode_main[1]};
+       poperation[9][7:0]={3'b0,opcode_main[5:3],1'b0,opcode_main[1]};
        if (opcode_main[2]) perror[9]=1; //disable 8 and 16 bit insns
        pflags_write[9]=1'b1;
        if (magic[1:0]==2'b01) begin
@@ -884,8 +884,8 @@ module smallInstr_decoder(
                prB[9]=5'd31;
                perror[9]=0;
            end else begin
-               prA[9]=instr[11:8];
-               prT[9]=instr[15:12];
+               prA[9]={1'b0,instr[11:8]};
+               prT[9]={1'b0,instr[15:12]};
                prB[9]=5'd31;
            end
        end else begin
@@ -921,7 +921,7 @@ module smallInstr_decoder(
                prT[10]=instr[16:12];
                prB[10]=5'd31;
                puseBConst[10]=1'b1;
-               pconstant[10]=instr[23:18];
+               pconstant[10]={58'b0,instr[23:18]};
                pflags_use[10]=~instr[24];
                pflags_write[10]=~instr[24];
                poperation[10][12]=instr[24];

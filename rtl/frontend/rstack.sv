@@ -121,19 +121,19 @@ module ret_stack(
           write_addr[1]<=4'b0;
           write_addr_reg<=4'b0;
           thread_reg<=1'b0;
-          write_data_reg<=48'b0;
+          write_data_reg<=67'b0;
           write_wen_reg<=1'b0;
           write_trace_reg<=1'b0;
-          write_link_reg<=16'b0;
+          write_link_reg<=5'b0;
       end else if (except) begin
           read_addr[except_thread]<=4'hf;
           write_addr[except_thread]<=4'b0;
           write_addr_reg<=4'b0;
           thread_reg<=thread;
-          write_data_reg<=48'b0;
+          write_data_reg<=67'b0;
           write_wen_reg<=1'b0;
           write_trace_reg<=1'b0;
-          write_link_reg<=16'b0;
+          write_link_reg<=5'b0;
       end else begin
           if (read_clkEn) begin
               read_addr[thread]<=read_addr_dec[thread];

@@ -633,7 +633,7 @@ module instrQ(
   instrQ_box box_mod(
   clk,
   rst,
-  write_instrEn|init,
+  write_instrEn|{11'b0,init},
   init ? initCount[0] : write_thread,
   (write_wen & ~doFStall) | init,
   init ? initCount[6:1] : write_addr[0],
@@ -671,21 +671,21 @@ module instrQ(
   
   always @(posedge clk) begin
       for (k=0;k<10;k=k+1) if (rst) begin
-          read_addrA[k]<=k;
-          read_addrB[k]<=k; 
+          read_addrA[k]<=k[5:0];
+          read_addrB[k]<=k[5:0]; 
       end else if (except) begin
-          if (read_thread) read_addrB[k]<=k;
-          else read_addrA[k]<=k;
+          if (read_thread) read_addrB[k]<=k[5:0];
+          else read_addrA[k]<=k[5:0];
       end else if (read_clkEn) begin
           if (read_thread) read_addrB[k]<=read_addrB_d[k];
           else read_addrA[k]<=read_addrA_d[k];
       end
       for (k=0;k<12;k=k+1) if (rst) begin
-          write_addrB[k]<=k;
-          write_addrA[k]<=k; 
+          write_addrB[k]<=k[5:0];
+          write_addrA[k]<=k[5:0]; 
       end else if (except) begin
-          if (except_thread) write_addrB[k]<=k;
-          else write_addrA[k]<=k;
+          if (except_thread) write_addrB[k]<=k[5:0];
+          else write_addrA[k]<=k[5:0];
       end else if (write_wen & ~doFStall) begin
           if (write_thread) write_addrB[k]<=write_addrB_d[k];
           else write_addrA[k]<=write_addrA_d[k];
@@ -694,8 +694,6 @@ module instrQ(
           busy[0]<=6'd0;
           busy[1]<=6'd0;
           read_thread_reg<=1'b0;
-          init<=1'b0;
-          initCount<=6'b0;
       end else if (except) begin
           if (~except_thread) busy[0]<=6'd0;
           else busy[1]<=6'd0;

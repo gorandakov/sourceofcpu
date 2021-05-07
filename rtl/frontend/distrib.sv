@@ -611,7 +611,7 @@ module distrib(
 
   assign fmem=stol ? ldst_cnt_or_more[2] : ldst_cnt_or_more[3];
   assign stol=|{storeL,storeI};
-  assign nmul=!mul;
+  assign nmul=0==mul;
 
   assign sto0H=stol ? 1'b0 : store_cnt_or_more[1];
   assign sto1H=stol ? store_cnt_or_more[1] : store_cnt_or_more[2];
@@ -625,35 +625,35 @@ module distrib(
   assign ldpos=(stol & store_cnt[1]) ? {lpos[1:0],lpos[2]} : 3'bz;
   assign ldpos=(stol & store_cnt[2]) ? lpos : 3'bz;
 
-  assign lsiH0=(~stol & nmul ) ? lsiA0 : {POS_WIDTH{1'BZ}};
-  assign lsiH0=(stol & nmul  ) ? lsiB0 : {POS_WIDTH{1'BZ}};
-  assign lsiH0=(~stol & ~nmul) ? lsiC0 : {POS_WIDTH{1'BZ}};
-  assign lsiH0=(stol & ~nmul ) ? lsiD0 : {POS_WIDTH{1'BZ}};
+  assign lsiH0=(~stol & nmul ) ? lsiA0 : {6{1'BZ}};
+  assign lsiH0=(stol & nmul  ) ? lsiB0 : {6{1'BZ}};
+  assign lsiH0=(~stol & ~nmul) ? lsiC0 : {6{1'BZ}};
+  assign lsiH0=(stol & ~nmul ) ? lsiD0 : {6{1'BZ}};
 
-  assign lsiH1=(~stol & nmul ) ? lsiA1 : {POS_WIDTH{1'BZ}};
-  assign lsiH1=(stol & nmul  ) ? lsiB1 : {POS_WIDTH{1'BZ}};
-  assign lsiH1=(~stol & ~nmul) ? lsiC1 : {POS_WIDTH{1'BZ}};
-  assign lsiH1=(stol & ~nmul ) ? lsiD1 : {POS_WIDTH{1'BZ}};
+  assign lsiH1=(~stol & nmul ) ? lsiA1 : {6{1'BZ}};
+  assign lsiH1=(stol & nmul  ) ? lsiB1 : {6{1'BZ}};
+  assign lsiH1=(~stol & ~nmul) ? lsiC1 : {6{1'BZ}};
+  assign lsiH1=(stol & ~nmul ) ? lsiD1 : {6{1'BZ}};
 
-  assign lsiH2=(~stol & nmul ) ? lsiA2 : {POS_WIDTH{1'BZ}};
-  assign lsiH2=(stol & nmul  ) ? lsiB2 : {POS_WIDTH{1'BZ}};
-  assign lsiH2=(~stol & ~nmul) ? lsiC2 : {POS_WIDTH{1'BZ}};
-  assign lsiH2=(stol & ~nmul ) ? lsiD2 : {POS_WIDTH{1'BZ}};
+  assign lsiH2=(~stol & nmul ) ? lsiA2 : {6{1'BZ}};
+  assign lsiH2=(stol & nmul  ) ? lsiB2 : {6{1'BZ}};
+  assign lsiH2=(~stol & ~nmul) ? lsiC2 : {6{1'BZ}};
+  assign lsiH2=(stol & ~nmul ) ? lsiD2 : {6{1'BZ}};
 
-  assign lsiH3=(~stol & nmul ) ? lsiA3 : {POS_WIDTH{1'BZ}};
-  assign lsiH3=(stol & nmul  ) ? lsiB3 : {POS_WIDTH{1'BZ}};
-  assign lsiH3=(~stol & ~nmul) ? lsiC3 : {POS_WIDTH{1'BZ}};
-  assign lsiH3=(stol & ~nmul ) ? lsiD3 : {POS_WIDTH{1'BZ}};
+  assign lsiH3=(~stol & nmul ) ? lsiA3 : {6{1'BZ}};
+  assign lsiH3=(stol & nmul  ) ? lsiB3 : {6{1'BZ}};
+  assign lsiH3=(~stol & ~nmul) ? lsiC3 : {6{1'BZ}};
+  assign lsiH3=(stol & ~nmul ) ? lsiD3 : {6{1'BZ}};
 
-  assign lsiH4=(~stol & nmul ) ? lsiA4 : {POS_WIDTH{1'BZ}};
-  assign lsiH4=(stol & nmul  ) ? lsiB4 : {POS_WIDTH{1'BZ}};
-  assign lsiH4=(~stol & ~nmul) ? lsiC4 : {POS_WIDTH{1'BZ}};
-  assign lsiH4=(stol & ~nmul ) ? lsiD4 : {POS_WIDTH{1'BZ}};
+  assign lsiH4=(~stol & nmul ) ? lsiA4 : {6{1'BZ}};
+  assign lsiH4=(stol & nmul  ) ? lsiB4 : {6{1'BZ}};
+  assign lsiH4=(~stol & ~nmul) ? lsiC4 : {6{1'BZ}};
+  assign lsiH4=(stol & ~nmul ) ? lsiD4 : {6{1'BZ}};
 
-  assign lsiH5=(~stol & nmul ) ? lsiA5 : {POS_WIDTH{1'BZ}};
-  assign lsiH5=(stol & nmul  ) ? lsiB5 : {POS_WIDTH{1'BZ}};
-  assign lsiH5=(~stol & ~nmul) ? lsiC5 : {POS_WIDTH{1'BZ}};
-  assign lsiH5=(stol & ~nmul ) ? lsiD5 : {POS_WIDTH{1'BZ}};
+  assign lsiH5=(~stol & nmul ) ? lsiA5 : {6{1'BZ}};
+  assign lsiH5=(stol & nmul  ) ? lsiB5 : {6{1'BZ}};
+  assign lsiH5=(~stol & ~nmul) ? lsiC5 : {6{1'BZ}};
+  assign lsiH5=(stol & ~nmul ) ? lsiD5 : {6{1'BZ}};
 
   assign lpos_d=(load_cnt[0]) ? lpos : 3'bz;
   assign lpos_d=(load_cnt[2]) ? {lpos[1:0],lpos[2]} : 3'bz;
@@ -710,12 +710,12 @@ module distrib(
   assign lsiC4=lsiA4; 
   assign lsiC5=6'h3f;
 
-  assign lsiD0=3'd7; 
+  assign lsiD0=6'h1f; 
   assign lsiD1=lsiA0; 
   assign lsiD2=lsiA1; 
   assign lsiD3=lsiA2; 
   assign lsiD4=lsiA3; 
-  assign lsiD5=3'd6; 
+  assign lsiD5=6'h3f; 
   
   popcnt10 load_mod(load,load_cnt);
   popcnt10 alu_mod(alu,alu_cnt);
