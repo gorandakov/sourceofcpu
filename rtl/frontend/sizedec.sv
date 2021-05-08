@@ -415,13 +415,13 @@ module predecoder_get(
 
     reg [19:-1] instrEnd;
     
-    wire [15:-2][16:0] cntEnd;
+    wire [15:-2][15:0] cntEnd;
     wire [15:-1] mask;
  
     wire [15:0] cntEnd2;
     wire [16:1] cntEnd3;
     
-    wire [15:0][11:0] class_ ;
+    wire [15:0][12:0] class_ ;
     wire [255+16+48:0] bundle0;
 
     wire [14:0] is_jmp;
@@ -430,26 +430,23 @@ module predecoder_get(
     wire [14:0] jcnt_or_less;
     wire [15:1] jcnt_or_more;
     
-    wire [4:0] is_lnk0;
-    wire [4:0] is_lnk1;
-    wire [4:0] is_lnk2;
-    wire [4:0] is_lnk3;
+    wire [14:0] is_lnk0;
     wire [14:0] is_lnk;
     reg [14:0] is_lnk_reg;
     wire [14:0] first_lnk;
     wire has_lnk;
-    wire [4:0][15:0] LNK;
+    wire [15:0][4:0] LNK;
     wire [14:0] lcnt_or_less;
     wire [14:0][14:-1] lcnt;
-    wire [4:0] is_ret0;
+    wire [14:0] is_ret0;
     wire [14:0] is_ret;
     reg [14:0] is_ret_reg;
     reg [15:0] flag_bits0;
         
     generate
         genvar k;
-        for(k=0;k<=15;k=k+1) begin : popcnt_gen
-            popcnt16 cnt_mod(instrEnd[15:0] & ((15'b10<<k)-15'b1) & mask[15:0],cntEnd[k]);
+        for(k=0;k<15;k=k+1) begin : popcnt_gen
+            popcnt15 cnt_mod(instrEnd[14:0] & ((15'b10<<k)-15'b1) & mask[14:0],cntEnd[k]);
             get_carry #(4) carry_mod(k[3:0],~startOff,1'b1,mask[k]);
  
             predecoder_class cls_mod(bundle0[k*16+:32],~instrEnd[k+:2],flag_bits0[k],class_[k],
@@ -457,51 +454,51 @@ module predecoder_get(
             popcnt15 cntJ_mod(is_jmp[14:0] & ((15'b10<<k)-15'b1),cntJEnd[k]);
             popcnt15 cntL_mod(is_lnk[14:0] & ((15'b10<<k)-15'b1),lcnt[k]);
             assign {lnkLink0,lnkOff0,lnkMagic0,lnkRet0}=lcnt[k][1] & lcnt[k-1][0] ? {LNK[k],1'b0,k[3:0],instrEnd[k+:4],is_ret[k]} :
-	       	16'bz;
+	       	15'bz;
             assign {lnkLink1,lnkOff1,lnkMagic1,lnkRet1}=lcnt[k][2] & lcnt[k-1][1] ? {LNK[k],1'b0,k[3:0],instrEnd[k+:4],is_ret[k]} :
-	       	16'bz;
+	       	15'bz;
             assign {lnkLink2,lnkOff2,lnkMagic2,lnkRet2}=lcnt[k][3] & lcnt[k-1][2] ? {LNK[k],1'b0,k[3:0],instrEnd[k+:4],is_ret[k]} :
-	       	16'bz;
+	       	15'bz;
             assign {lnkLink3,lnkOff3,lnkMagic3,lnkRet3}=lcnt[k][4] & lcnt[k-1][3] ? {LNK[k],1'b0,k[3:0],instrEnd[k+:4],is_ret[k]} :
-	       	16'bz;
+	       	15'bz;
             assign lnkJumps0=lcnt[k][1] & lcnt[k-1][0] ? cntJEnd[k][4:0] : 5'bz;
             assign lnkJumps1=lcnt[k][2] & lcnt[k-1][1] ? cntJEnd[k][4:0] : 5'bz;
             assign lnkJumps2=lcnt[k][3] & lcnt[k-1][2] ? cntJEnd[k][4:0] : 5'bz;
             assign lnkJumps3=lcnt[k][4] & lcnt[k-1][3] ? cntJEnd[k][4:0] : 5'bz;
             
             assign {Jclass0,Jmagic0,Jinstr0,Joff0}= 
-              cntJEnd[k][1] & cntJEnd[k-1][0] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 100'bz;
+              cntJEnd[k][1] & cntJEnd[k-1][0] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 101'bz;
             assign {Jclass1,Jmagic1,Jinstr1,Joff1}= 
-              cntJEnd[k][2] & cntJEnd[k-1][1] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 100'bz;
+              cntJEnd[k][2] & cntJEnd[k-1][1] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 101'bz;
             assign {Jclass2,Jmagic2,Jinstr2,Joff2}= 
-              cntJEnd[k][3] & cntJEnd[k-1][2] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 100'bz;
+              cntJEnd[k][3] & cntJEnd[k-1][2] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 101'bz;
             assign {Jclass3,Jmagic3,Jinstr3,Joff3}= 
-              cntJEnd[k][4] & cntJEnd[k-1][3] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 100'bz;
+              cntJEnd[k][4] & cntJEnd[k-1][3] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 101'bz;
             
             assign {class0,magic0,instr0,off0}=(mask[k] & ~mask[k-1]) ?
-              {class_[k],instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 100'bz;
+              {class_[k],instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 101'bz;
             assign {class1,magic1,instr1,off1}=mask[k] & 
-              cntEnd[k-1][1] & cntEnd[k-2][0] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 100'bz;
+              cntEnd[k-1][1] & cntEnd[k-2][0] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 101'bz;
             assign {class2,magic2,instr2,off2}=mask[k] & 
-              cntEnd[k-1][2] & cntEnd[k-2][1] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 100'bz;
+              cntEnd[k-1][2] & cntEnd[k-2][1] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 101'bz;
             assign {class3,magic3,instr3,off3}=mask[k] &
-              cntEnd[k-1][3] & cntEnd[k-2][2] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 100'bz;
+              cntEnd[k-1][3] & cntEnd[k-2][2] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 101'bz;
             assign {class4,magic4,instr4,off4}=mask[k] &
-              cntEnd[k-1][4] & cntEnd[k-2][3] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 100'bz;
+              cntEnd[k-1][4] & cntEnd[k-2][3] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 101'bz;
             assign {class5,magic5,instr5,off5}=mask[k] &
-              cntEnd[k-1][5] & cntEnd[k-2][4] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 100'bz;
+              cntEnd[k-1][5] & cntEnd[k-2][4] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 101'bz;
             assign {class6,magic6,instr6,off6}=mask[k] &
-              cntEnd[k-1][6] & cntEnd[k-2][5] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 100'bz;
+              cntEnd[k-1][6] & cntEnd[k-2][5] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 101'bz;
             assign {class7,magic7,instr7,off7}=mask[k] &
-              cntEnd[k-1][7] & cntEnd[k-2][6] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 100'bz;
+              cntEnd[k-1][7] & cntEnd[k-2][6] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 101'bz;
             assign {class8,magic8,instr8,off8}=mask[k] &
-              cntEnd[k-1][8] & cntEnd[k-2][7] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 100'bz;
+              cntEnd[k-1][8] & cntEnd[k-2][7] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 101'bz;
             assign {class9,magic9,instr9,off9}=mask[k] &
-              cntEnd[k-1][9] & cntEnd[k-2][8] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 100'bz;
+              cntEnd[k-1][9] & cntEnd[k-2][8] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 101'bz;
             assign {class10,magic10,instr10,off10}=mask[k] &
-              cntEnd[k-1][10] & cntEnd[k-2][9] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 100'bz;
+              cntEnd[k-1][10] & cntEnd[k-2][9] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 101'bz;
             assign {class11,magic11,instr11,off11}=mask[k] &
-              cntEnd[k-1][11] & cntEnd[k-2][10] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 100'bz;
+              cntEnd[k-1][11] & cntEnd[k-2][10] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 101'bz;
 
         end
     endgenerate
@@ -518,27 +515,27 @@ module predecoder_get(
     assign cntEnd[-1]=16'd1;
     assign cntEnd[-2]=16'd1;
     assign cntJEnd[-1]=16'd1;
-    assign lcnt[-1]=15'd1;
+    assign lcnt[-1]=16'd1;
     
-    assign bundle0={48'b0,btail[15:0],bundle[239:0]};
+    assign bundle0={64'b0,btail[15:0],bundle[239:0]};
     
-    assign {class11,magic11, instr11, off11}=cntEnd2[10] ? 100'b0 : 100'bz;
-    assign {class10,magic10, instr10, off10}=cntEnd2[9] ? 100'b0 : 100'bz;
-    assign {class9,magic9, instr9, off9}=cntEnd2[8] ? 100'b0 : 100'bz;
-    assign {class8,magic8, instr8, off8}=cntEnd2[7] ? 100'b0 : 100'bz;
-    assign {class7,magic7, instr7, off7}=cntEnd2[6] ? 100'b0 : 100'bz;
-    assign {class6,magic6, instr6, off6}=cntEnd2[5] ? 100'b0 : 100'bz;
-    assign {class5,magic5, instr5, off5}=cntEnd2[4] ? 100'b0 : 100'bz;
-    assign {class4,magic4, instr4, off4}=cntEnd2[3] ? 100'b0 : 100'bz;
-    assign {class3,magic3, instr3, off3}=cntEnd2[2] ? 100'b0 : 100'bz;
-    assign {class2,magic2, instr2, off2}=cntEnd2[1] ? 100'b0 : 100'bz;
-    assign {class1,magic1, instr1, off1}=cntEnd2[0] ? 100'b0 : 100'bz;
-    assign {class0,magic0, instr0, off0}=(!mask) ? 100'b0 : 100'bz;
+    assign {class11,magic11, instr11, off11}=cntEnd2[10] ? 101'b0 : 101'bz;
+    assign {class10,magic10, instr10, off10}=cntEnd2[9] ? 101'b0 : 101'bz;
+    assign {class9,magic9, instr9, off9}=cntEnd2[8] ? 101'b0 : 101'bz;
+    assign {class8,magic8, instr8, off8}=cntEnd2[7] ? 101'b0 : 101'bz;
+    assign {class7,magic7, instr7, off7}=cntEnd2[6] ? 101'b0 : 101'bz;
+    assign {class6,magic6, instr6, off6}=cntEnd2[5] ? 101'b0 : 101'bz;
+    assign {class5,magic5, instr5, off5}=cntEnd2[4] ? 101'b0 : 101'bz;
+    assign {class4,magic4, instr4, off4}=cntEnd2[3] ? 101'b0 : 101'bz;
+    assign {class3,magic3, instr3, off3}=cntEnd2[2] ? 101'b0 : 101'bz;
+    assign {class2,magic2, instr2, off2}=cntEnd2[1] ? 101'b0 : 101'bz;
+    assign {class1,magic1, instr1, off1}=cntEnd2[0] ? 101'b0 : 101'bz;
+    assign {class0,magic0, instr0, off0}=(0==mask) ? 101'b0 : 101'bz;
 
-    assign {lnkLink0,lnkOff0,lnkMagic0,lnkRet0}=lcnt_or_less[0] ? 16'b1110_10000_0001_0 : 16'bz;
-    assign {lnkLink1,lnkOff1,lnkMagic1,lnkRet1}=lcnt_or_less[1] ? 16'b1110_10000_0001_0 : 16'bz;
-    assign {lnkLink2,lnkOff2,lnkMagic2,lnkRet2}=lcnt_or_less[2] ? 16'b1110_10000_0001_0 : 16'bz;
-    assign {lnkLink3,lnkOff3,lnkMagic3,lnkRet3}=lcnt_or_less[3] ? 16'b1110_10000_0001_0 : 16'bz;
+    assign {lnkLink0,lnkOff0,lnkMagic0,lnkRet0}=lcnt_or_less[0] ? 15'b1110_10000_0001_0 : 15'bz;
+    assign {lnkLink1,lnkOff1,lnkMagic1,lnkRet1}=lcnt_or_less[1] ? 15'b1110_10000_0001_0 : 15'bz;
+    assign {lnkLink2,lnkOff2,lnkMagic2,lnkRet2}=lcnt_or_less[2] ? 15'b1110_10000_0001_0 : 15'bz;
+    assign {lnkLink3,lnkOff3,lnkMagic3,lnkRet3}=lcnt_or_less[3] ? 15'b1110_10000_0001_0 : 15'bz;
     assign lnkJumps0=lcnt_or_less[0] ?  5'd1 : 5'bz;
     assign lnkJumps1=lcnt_or_less[1] ?  5'd1 : 5'bz;
     assign lnkJumps2=lcnt_or_less[2] ?  5'd1 : 5'bz;
@@ -562,22 +559,22 @@ module predecoder_get(
         class_[2][`iclass_jump],
         class_[1][`iclass_jump],
         class_[0][`iclass_jump]
-        } & instrEnd[13:-1] & (instrEnd[14:0] | instrEnd[15:1] | instrEnd[15:2] |
-          instrEnd[15:3]);
+        } & instrEnd[13:-1] & (instrEnd[14:0] | instrEnd[15:1] | {1'b0,instrEnd[15:2]} |
+          {2'b0,instrEnd[15:3]});
 
     assign is_lnk=is_lnk0[14:0] & instrEnd[13:-1];
-    assign is_ret=is_lnk0[14:0] & instrEnd[13:-1] & is_ret[14:0];
+    assign is_ret=is_lnk0[14:0] & instrEnd[13:-1] & is_ret0[14:0];
     
-    assign {Jclass3,Jmagic3, Jinstr3, Joff3}=jcnt_or_less[3] ? 100'b0 : 100'bz;
-    assign {Jclass2,Jmagic2, Jinstr2, Joff2}=jcnt_or_less[2] ? 100'b0 : 100'bz;
-    assign {Jclass1,Jmagic1, Jinstr1, Joff1}=jcnt_or_less[1] ? 100'b0 : 100'bz;
-    assign {Jclass0,Jmagic0, Jinstr0, Joff0}=jcnt_or_less[0] ? 100'b0 : 100'bz;
+    assign {Jclass3,Jmagic3, Jinstr3, Joff3}=jcnt_or_less[3] ? 101'b0 : 101'bz;
+    assign {Jclass2,Jmagic2, Jinstr2, Joff2}=jcnt_or_less[2] ? 101'b0 : 101'bz;
+    assign {Jclass1,Jmagic1, Jinstr1, Joff1}=jcnt_or_less[1] ? 101'b0 : 101'bz;
+    assign {Jclass0,Jmagic0, Jinstr0, Joff0}=jcnt_or_less[0] ? 101'b0 : 101'bz;
       
     assign hasJumps=(is_jmp & mask[14:0])!=15'b0;
     
     always @*
       begin
-        instrEnd={3'b0,btail[16],bundle[254:240],1'b1};
+        instrEnd={4'b0,btail[16],bundle[254:240],1'b1};
         error=cntEnd3[13] || startOff==15;
         isAvx=bundle[255];
         jerror=~lcnt_or_less[1] || ~jcnt_or_less[4];
