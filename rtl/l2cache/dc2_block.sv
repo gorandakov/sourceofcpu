@@ -471,8 +471,8 @@ module dcache2_way(
   reg [35:0] expAddrE_reg2;
   reg [35:0] expAddrO_reg2;
  
-  reg [4:0] expun_dc_addr_reg;
-  reg [4:0] expun_cc_addr_reg;
+  reg [7:0] expun_dc_addr_reg;
+  reg [7:0] expun_cc_addr_reg;
 
   wire read_enL,read_enH;
   reg write0_hitEL_reg;
@@ -630,41 +630,22 @@ module dcache2_way(
   .clk(clk),
   .rst(rst),
   .read_clkEn(read_en),
-  .read_addr(write_addrE0[3:0]),
+  .read_addr({write_addrE0[2:0],write_odd0}),
   .read_data(expun_dataE),
-  .write0_addr(expun_cc_addr_reg[4:1]),
+  .write0_addr(expun_cc_addr_reg[3:0]),
   .write0_data(16'b0),
-  .write0_wen(expun_cc_hitE|expun_cc_hitO&&~expun_cc_addr_reg[0]),
+  .write0_wen(expun_cc_hitE|expun_cc_hitO),
   .write0_bitEn(16'b1<<expun_cc_addr_reg[7:5]),
-  .write1_addr(expun_dc_addr_reg[4:1]),
+  .write1_addr(expun_dc_addr_reg[3:0]),
   .write1_data(16'b0),
-  .write1_wen(expun_dc_hitE|expun_cc_hitO&&~expun_dc_addr_reg[0]),
-  .write1_bitEn(16'b1<<expun_dc_addr_reg[7:5]),
-  .write2_addr(write_addrE0_reg[3:0]),
+  .write1_wen(expun_dc_hitE|expun_cc_hitO),
+  .write1_bitEn(16'b1<<expun_dc_addr_reg[7:4]),
+  .write2_addr({write_addrE0_reg[2:0],write_odd0_reg}),
   .write2_data(16'hffff),
-  .write2_wen(ins_hit && ~read_odd_reg),
-  .write2_bitEn(16'b1<<write_addrE0_reg[6:4])
+  .write2_wen(ins_hit),
+  .write2_bitEn(16'b1<<write_addrE0_reg[6:3])
   );
   
-  dc2_thag_ram presentB_mod(
-  .clk(clk),
-  .rst(rst),
-  .read_clkEn(read_en),
-  .read_addr(write_addrE0[3:0]),
-  .read_data(expun_dataO),
-  .write0_addr(expun_cc_addr_reg[4:1]),
-  .write0_data(16'b0),
-  .write0_wen(expun_cc_hitE|expun_cc_hitO&&expun_cc_addr_reg[0]),
-  .write0_bitEn(16'b1<<expun_cc_addr_reg[7:5]),
-  .write1_addr(expun_dc_addr_reg[4:1]),
-  .write1_data(16'b0),
-  .write1_wen(expun_dc_hitE|expun_cc_hitO&&expun_dc_addr_reg[0]),
-  .write1_bitEn(16'b1<<expun_dc_addr_reg[7:5]),
-  .write2_addr(write_addrE0_reg[3:0]),
-  .write2_data(16'hffff),
-  .write2_wen(ins_hit && read_odd_reg),
-  .write2_bitEn(16'b1<<write_addrE0_reg[6:4])
-  );
 //  assign ins_hit=rand_reg==ID && rand_en_reg2 && insert_reg;
   dcache2_LRU_ram LRUe_mod(
   .clk(clk),
@@ -702,7 +683,7 @@ module dcache2_way(
     end
   endgenerate
 
-  assign expun_imm=read_odd_reg ? expun_dataO[write_addrE0[6:4]] : expun_dataE[write_addrE0[6:4]]; 
+  assign expun_imm=expun_dataE[write_addrE0[6:3]]; 
 
   lru_single #(5,{BIG_ID,ID}) lru_mod(
   .lru(read_LRUx_reg2),
@@ -805,10 +786,10 @@ module dcache2_way(
           insert_reg5<=1'b0;
           read_LRUx_reg<=5'b0;
           read_LRUx_reg2<=5'b0;
-          dirtyE_reg<=1'b0;
-          dirtyO_reg<=1'b0;
-          dirtyE_reg2<=1'b0;
-          dirtyO_reg2<=1'b0;
+          dirtyE_reg<=2'b0;
+          dirtyO_reg<=2'b0;
+          dirtyE_reg2<=2'b0;
+          dirtyO_reg2<=2'b0;
           exclE_reg<=2'b0;
           exclO_reg<=2'b0;
           exclE_reg2<=2'b0;
@@ -823,8 +804,8 @@ module dcache2_way(
 	  write0_hitE_reg<=1'b0;
 	  write0_hitO_reg<=1'b0;
 	  read_inL1<=1'b0;
-	  expun_cc_addr_reg<=5'b0;
-	  expun_dc_addr_reg<=5'b0;
+	  expun_cc_addr_reg<=8'b0;
+	  expun_dc_addr_reg<=8'b0;
       end else begin
           write0_hitEL_reg<=write0_hitEL;
           write0_hitOL_reg<=write0_hitOL;
@@ -865,12 +846,12 @@ module dcache2_way(
           insert_reg5<=insert_reg4;
           read_LRUx_reg<=read_LRUx;
           read_LRUx_reg2<=read_LRUx_reg;
-          dirtyE_reg<=|dirtyE;
-          dirtyO_reg<=|dirtyO;
+          dirtyE_reg<=dirtyE;
+          dirtyO_reg<=dirtyO;
           dirtyE_reg2<=dirtyE_reg;
           dirtyO_reg2<=dirtyO_reg;
-          exclE_reg<=exclE[0];
-          exclO_reg<=exclO[0];
+          exclE_reg<=exclE;
+          exclO_reg<=exclO;
           exclE_reg2<=exclE_reg;
           exclO_reg2<=exclO_reg;
           read_hit_reg<=read_hit;
@@ -883,8 +864,8 @@ module dcache2_way(
 	  write0_hitE_reg<=write0_hitE;
 	  write0_hitO_reg<=write0_hitO;
 	  read_inL1<=expun_imm&read_en_reg&ins_hit;
-	  expun_cc_addr_reg<=expun_cc_addr[4:0];
-	  expun_dc_addr_reg<=expun_dc_addr[4:0];
+	  expun_cc_addr_reg<=expun_cc_addr[7:0];
+	  expun_dc_addr_reg<=expun_dc_addr[7:0];
       end
       if (rst) begin
           write_addrE0_reg<=36'b0;
@@ -892,29 +873,29 @@ module dcache2_way(
           write_bankEn0_reg<=32'b0;
           write_begin0_reg<=5'b0;
           write_end0_reg<=5'b0;
-          write_bBen0_reg<=2'b0;
-          write_enBen0_reg<=2'b0;
+          write_bBen0_reg<=4'b0;
+          write_enBen0_reg<=4'b0;
           write_addrE1_reg<=36'b0;
           write_addrO1_reg<=36'b0;
           write_bankEn1_reg<=32'b0;
           write_begin1_reg<=5'b0;
           write_end1_reg<=5'b0;
-          write_bBen1_reg<=2'b0;
-          write_enBen1_reg<=2'b0;
+          write_bBen1_reg<=4'b0;
+          write_enBen1_reg<=4'b0;
           write_addrE0_reg2<=36'b0;
           write_addrO0_reg2<=36'b0;
           write_bankEn0_reg2<=32'b0;
           write_begin0_reg2<=5'b0;
           write_end0_reg2<=5'b0;
-          write_bBen0_reg2<=2'b0;
-          write_enBen0_reg2<=2'b0;
+          write_bBen0_reg2<=4'b0;
+          write_enBen0_reg2<=4'b0;
           write_addrE1_reg2<=36'b0;
           write_addrO1_reg2<=36'b0;
           write_bankEn1_reg2<=32'b0;
           write_begin1_reg2<=5'b0;
           write_end1_reg2<=5'b0;
-          write_bBen1_reg2<=2'b0;
-          write_enBen1_reg2<=2'b0;
+          write_bBen1_reg2<=4'b0;
+          write_enBen1_reg2<=4'b0;
           write_addrE0_reg3<=8'b0;
           write_addrO0_reg3<=8'b0;
           write_addrE0_reg4<=8'b0;

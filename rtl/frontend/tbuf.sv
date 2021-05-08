@@ -1256,7 +1256,7 @@ module tbuf_way_2(
   input [4:0] write_lnpos2;
   input [4:0] write_link3;
   input [4:0] write_lnpos3;
-  input [2:0] write_way;
+  input write_way;
   input write_wen;
   input write_insert;  
   input [12:0] update_addr0;
@@ -1689,7 +1689,7 @@ module tbuf(
   .rst(rst),
   .except(except),
   .except_thread(except_thread),
-  .new_addr({nextIP_reg[12:5]^nextIP_reg[20:13],write_way_reg}),
+  .new_addr({nextIP_reg[12:5]^nextIP_reg[20:13],2'b0,write_way_reg}),
   .new_thread(write_thread_reg),
   .new_en(write_insert_reg),
   .chk_addr0(update_addr0_reg[10:0]),
@@ -1816,7 +1816,7 @@ module tbuf(
   assign read_hit_B=read_hit_way[1];
   assign read_hit=|read_hit_way;
  
-  assign way=read_hit_way ? read_hit_B : readB_LRU; 
+  assign way=|read_hit_way ? read_hit_B : readB_LRU; 
 
   assign tgt0O=read_hit_A ? tgt0A : tgt0B;
   assign tgt1O=read_hit_A ? tgt1A : tgt1B;
@@ -1884,12 +1884,12 @@ module tbuf(
           update_addr0_reg<=13'b0;
           update_addr1_reg<=13'b0;
           update_en_reg<=1'b0;
-          update_taken_reg<=4'b0;
+          update_taken_reg<=2'b0;
           update_use_reg<=2'b0;
 
           update_addr0_REG<=13'b0;
           update_addr1_REG<=13'b0;
-          update_taken_REG<=4'b0;
+          update_taken_REG<=2'b0;
           update_use_REG<=2'b0;
           
           nextIP_reg<={IP_WIDTH-1{1'B0}};
