@@ -18,7 +18,7 @@ module ldD2nativeD(
   wire hasB,has;
   wire [11:0] exp;
   wire [64:0] resX;
-  wire [81:0] resY;
+  wire [80:0] resY;
   wire A_z;
   bit_find_last_bit #(52) last_mod(A[51:0],last,has);
   bit_find_last_bit #(7) lastB_mod({|A[51:48],|A[47:40],|A[39:32],|A[31:24],|A[23:16],|A[15:8],|A[7:0]},lastB,hasB);
@@ -29,7 +29,9 @@ module ldD2nativeD(
 	      wire [11:0] expK;
               for(l1=0;l1<((l==6) ? 4 : 8);l1=l1+1) begin
 	          wire [11:0] natExp=12'h3ff-l*8-l1;
+		  //verilator lint_off WIDTH
                   assign denorK=last[l*8+l1] ? A[l*8+l1:0]<<(52-(l*8+l1)) : 52'bz;
+		  //verilator lint_on WIDTH
 		  assign expK=last[l*8+l1]? natExp : 12'bz;
 	      end
 	      assign denorK=lastB[l] ? 52'bz :  52'b0;
@@ -43,8 +45,8 @@ module ldD2nativeD(
 
   assign A_z=A[51:0]==52'b0;
   assign resX=(A[62:52]==0 && ~A_z) ? {exp[11],A[63],exp[10:0],denor} :  65'bz;
-  assign resX=(A[62:52]!=0 && A[62:52]!=10'h7ff) ? {A[62],A[63],~A[62],A[61:0]} : 65'bz;
-  assign resX=(A[62:52]==10'h7ff) ? {A[62],A[63],A[62:53],~A_z,A[51:0]} : 65'bz;
+  assign resX=(A[62:52]!=0 && A[62:52]!=11'h7ff) ? {A[62],A[63],~A[62],A[61:0]} : 65'bz;
+  assign resX=(A[62:52]==11'h7ff && A_z) ? {A[62],A[63],A[62:53],~A_z,A[51:0]} : 65'bz;
   assign resX=(A[62:52]==0 && A_z) ? {1'b0,A[63],11'b0,denor} :  65'bz;
   assign resY=(A[62:52]==0 && ~A_z) ? {exp[11],A[63],{4{~exp[11]}},exp[10:0],1'b0,denor,11'b0} :  81'bz;
   assign resY=(A[62:52]!=0 && A[62:52]!=11'h7ff) ? {A[62],A[63],{5{~A[62]}},A[61:52],1'b1,A[51:0],11'b0} : 81'bz;
@@ -76,7 +78,7 @@ module ldS2nativeS(
   wire [11:0] exp;
   wire [32:0] resX;
   wire [64:0] resY;
-  wire [81:0] resZ;
+  wire [80:0] resZ;
   wire A_z;
 
   bit_find_last_bit #(23) last_mod(A[22:0],last,has);
@@ -88,7 +90,9 @@ module ldS2nativeS(
 	      wire [11:0] expK;
               for(l1=0;l1<((l==2) ? 7 : 8);l1=l1+1) begin
 	          wire [11:0] natExp=12'h3ff-l*8-l1;
+		  //verilator lint_off WIDTH
                   assign denorK=last[l*8+l1] ? A[l*8+l1:0]<<(23-(l*8+l1)) : 23'bz;
+		  //verilator lint_on WIDTH
 		  assign expK=last[l*8+l1]? natExp : 12'bz;
 	      end
 	      assign denorK=lastB[l] ? 23'bz :  23'b0;
@@ -109,13 +113,13 @@ module ldS2nativeS(
   assign resY=(A[30:23]!=0 && A[30:23]!=8'hff) ? {A[30],A[31],{4{~A[30]}},A[29:0],29'b0} : 65'bz;
   assign resY=(A[30:23]==8'hff) ? {A[30],A[31],{4{A[30]}},A[29:24],~A_z,A[22:0],29'b0} : 65'bz;
   assign resY=(A[30:23]==0 && A_z) ? {1'b0,A[31],11'b0,denor,29'b0} :  65'bz;
-  assign resZ=(A[30:23]==0 && ~A_z) ? {exp[8],A[31],{7{~exp[8]}},exp[7:0],1'b0,denor,39'b0} :  81'bz;
-  assign resZ=(A[30:23]!=0 && A[30:23]!=8'hff)  ? {A[30],A[31],{8{~A[30]}},A[29:23],1'b1,A[22:0],39'b0} : 81'bz;
-  assign resZ=(A[30:23]==8'hff) ? {A[30],A[31],{8{A[30]}},A[29:24],~A_z,1'b1,A[22:0],39'b0} : 81'bz;
-  assign resZ=(A[30:23]==0 && A_z) ? {1'b0,A[31],15'b0,1'b0,denor,39'b0} :  81'bz;
+  assign resZ=(A[30:23]==0 && ~A_z) ? {exp[8],A[31],{7{~exp[8]}},exp[7:0],1'b0,denor,40'b0} :  81'bz;
+  assign resZ=(A[30:23]!=0 && A[30:23]!=8'hff)  ? {A[30],A[31],{8{~A[30]}},A[29:23],1'b1,A[22:0],40'b0} : 81'bz;
+  assign resZ=(A[30:23]==8'hff) ? {A[30],A[31],{8{A[30]}},A[29:24],~A_z,1'b1,A[22:0],40'b0} : 81'bz;
+  assign resZ=(A[30:23]==0 && A_z) ? {1'b0,A[31],15'b0,1'b0,denor,40'b0} :  81'bz;
   assign res[32:0]=(en&to_sngl) ? resX : 33'bz;
-  assign res[65:0]=(en&to_dbl) ? {resY[64:32],1'b0,resY[31:0]} : 65'bz;
-  assign res[81:0]=(en&to_ext) ? {resZ[80:65],resZ[64],resZ[63:32],1'b0,resZ[31:0]} : 81'bz;
+  assign res[65:0]=(en&to_dbl) ? {resY[64:32],1'b0,resY[31:0]} : 66'bz;
+  assign res[81:0]=(en&to_ext) ? {resZ[80:65],resZ[64],resZ[63:32],1'b0,resZ[31:0]} : 82'bz;
 endmodule
 
 module stNativeD2D(A,en,from_dbl,from_ext,res);
@@ -140,7 +144,7 @@ module stNativeD2D(A,en,from_dbl,from_ext,res);
   wire sgn=from_dbl ? A[63] : A[80];
 
   adder #(16) expAddD_mod(DEN,~expA,expOff,1'b1,1'b1,is_den,,,);
-  adder #(16) expAddZ_mod(DEN-12'd51,~expA,expOff1,1'b1,1'b1,is_zero,,,);
+  adder #(16) expAddZ_mod(DEN-16'd51,~expA,expOff1,1'b1,1'b1,is_zero,,,);
   adder #(16) expAddO_mod(expA,~OVFL,,1'b1,1'b1,is_overflow,,,);
 
   assign is_nan=&expA;
@@ -152,15 +156,17 @@ module stNativeD2D(A,en,from_dbl,from_ext,res);
   generate
     genvar k;
     for(k=0;k<8;k=k+1) begin : shifker_gen
-        assign shf0=(expOff[5:3]==k) ? {1'b1,A_1[51:0]}>>(k*8) : 53'bz; 
-	assign shf1=(expOff[2:0]==k) ? shf0>>k : 53'bz;
+	//verilator lint_off WIDTH
+        assign shf0=(expOff[5:3]==k) ? {1'b1,A_1[51:0]}>>(k*8) : 52'bz; 
+	//verilator lint_on WIDTH
+	assign shf1=(expOff[2:0]==k) ? shf0>>k : 52'bz;
     end
   endgenerate
 endmodule
 
 module stNativeS2S(A,en,from_sngl,from_dbl,from_ext,res);
-  localparam DEN=15'h4000;
-  localparam OVFL=15'h807e;
+  localparam DEN=16'h4000;
+  localparam OVFL=16'h807e;
   input [81:0] A;
   input en;
   input from_sngl;
@@ -194,19 +200,21 @@ module stNativeS2S(A,en,from_sngl,from_dbl,from_ext,res);
   assign sgn=from_sngl? A[31] : 1'bz;
 
   adder #(16) expAddD_mod(DEN,~expA,expOff,1'b1,1'b1,is_den,,,);
-  adder #(16) expAddZ_mod(DEN-12'd22,~expA,expOff1,1'b1,1'b1,is_zero,,,);
+  adder #(16) expAddZ_mod(DEN-16'd22,~expA,expOff1,1'b1,1'b1,is_zero,,,);
   adder #(16) expAddO_mod(expA,~OVFL,,1'b1,1'b1,is_overflow,,,);
 
   assign is_nan=&expA;
   assign res=(~is_zero && ~ is_overflow && ~is_den && en) ? {sgn,expA[15],expA[6:0],A_1[22:0]} : 32'bz;
-  assign res=(is_den && ~is_zero && en) ? {sgn,9'b0,shf1} : 32'bz;
+  assign res=(is_den && ~is_zero && en) ? {sgn,8'b0,shf1} : 32'bz;
   assign res=(is_zero && en) ? {sgn,31'b0} : 32'bz;
-  assign res=(is_overflow && ~is_nan && en) ? {sgn,9'h1ff,23'b0} : 32'bz; 
-  assign res=(is_nan && en) ? {sgn,9'h1ff,A[22:0]} : 32'bz;
+  assign res=(is_overflow && ~is_nan && en) ? {sgn,8'hff,23'b0} : 32'bz; 
+  assign res=(is_nan && en) ? {sgn,8'hff,A[22:0]|23'b1} : 32'bz;
   generate
     genvar k;
     for(k=0;k<8;k=k+1) begin : shifker_gen
+	//verilator lint_off WIDTH
         assign shf0=(expOff[5:3]==k) ? {1'b1,A_1[22:0]}>>(k*8) : 23'bz; 
+	//verilator lint_on WIDTH
 	assign shf1=(expOff[2:0]==k) ? shf0>>k : 23'bz;
     end
   endgenerate

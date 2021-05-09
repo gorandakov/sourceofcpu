@@ -11,7 +11,7 @@ module LDE2NativeE(
   //assign except=A[78:64]==0 && A[63:0];//denormal
   assign res=(A[78:64]!=0 && A[78:64]!=15'hefff && en) ? {~A[78],A[79],A[77:64],A[78],A[63:0]} : 81'bz;
   assign res=(A[78:64]==15'hefff && en) ? {A[79:65],A[62:0]!=63'b0,A[78],A[63:0]} : 81'bz;
-  assign res=(A[78:64]==0 && en) ? 81'b0 :  65'bz;//denormal loaded as zero for extended format
+  assign res=(A[78:64]==0 && en) ? 81'b0 :  81'bz;//denormal loaded as zero for extended format
 endmodule
 
 module stNativeE2E(
@@ -27,7 +27,7 @@ module stNativeE2E(
  
   wire is_den;
   wire is_overflow;
-  wire [15:0] expA={A[64],A[78:65]};
+  wire [15:0] expA={A[64],A[79:65]};
   wire is_unord=&expA;
   wire [15:0] expOff;
   adder #(16) expAddD_mod(DEN,~expA,expOff,1'b1,1'b1,is_den,,,);
