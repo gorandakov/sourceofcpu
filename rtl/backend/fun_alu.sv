@@ -197,7 +197,7 @@ module fu_alu(
 
   wire [81:0] FUCVT2_0;
   wire [1:0] FUTYPE_0;
-  wire [63:0] FUMUL;
+  wire [64:0] FUMUL;
   wire [5:0] MULFL;
 
   reg [3:0] u2_sz;
@@ -639,7 +639,7 @@ module fu_alu(
 
   assign fcvtout={FUCVT2_0[81:66],FUTYPE_0,FUCVT2_0[65:0]};
  
-  assign FU6=(~&nDataAlt) ? {1'b0,FUMUL} : 65'bz;
+  assign FU6=(~&nDataAlt) ? FUMUL : 65'bz;
   assign FU6=(~u5_nDataAlt) ? {1'b0,FUCVTIN} : 65'bz;
   
   assign u5_ret=(~u5_nDataAlt_reg|(~nDataAlt_reg[1])) ? {6'b0,1'b0,2'd2} : 
@@ -657,7 +657,7 @@ module fu_alu(
   .en(u6_clkEn_reg && u6_op_reg[11] && (u6_op_reg[7:0]==1 || u6_op_reg[7:0]
     ==2 || u6_op_reg[7:0]==3 || u6_op_reg[7:0]==9 || u6_op_reg[7:0]==10 ||
     u6_op_reg[7:0]==11 || u6_op_reg[7:0]==5 || u6_op_reg[7:0]==7)),  
-  .R(uu_A6[63:0]),.C(uu_B6[63:0]),
+  .R(uu_A6),.C(uu_B6),
   .alt(DataAlt[0]),
   .Res(FUMUL),
   .flg(MULFL)

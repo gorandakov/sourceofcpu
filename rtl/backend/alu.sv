@@ -8,7 +8,7 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
 
   localparam REG_WIDTH=`reg_addr_width;
   localparam OPERATION_WIDTH=`operation_width;
-  localparam EXCEPT_WIDTH=`except_width-4;
+  localparam EXCEPT_WIDTH=9;
   localparam FLAG_WIDTH=6; 
   parameter NOSHIFT=1'b1;  
   input clk;

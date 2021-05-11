@@ -30,10 +30,10 @@ module fun_fpusqr0(
   fxFRT_alten,
   fxFRT_pause
   );
-  parameter [1:0] INDEX=2'd2;
+  //parameter [1:0] INDEX=2'd2;
   parameter [0:0] H=1'b0;
   localparam SIMD_WIDTH=68; //half width
-  localparam [4:0] S={~H,3'b0};
+  localparam S={27'b0,~H,4'b0};
   localparam REG_WIDTH=9;
   input clk;
   input rst;
