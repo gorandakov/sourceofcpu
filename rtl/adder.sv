@@ -1228,6 +1228,9 @@ module add_agu(
   wire [WIDTH-1:0] c1;
   wire [WIDTH-1:0] c2;
   wire [WIDTH-1:0] c3;
+
+  wire dummy1;
+  wire dummy2;
   
   wire [WIDTH-1:0] xorab;
   wire [WIDTH-1:0] nxorab;
@@ -1282,7 +1285,7 @@ module add_agu(
   adder_seq #(WIDTH) add_mod(tmp1,tmp2[WIDTH-1:0],out[43:0],c_s,1'b0,en,,,,);
   assign out[63:44]=en ? ptr[63:44] : 20'bz;
   agusec_shift ssh_mod(ptr[`ptr_exp],c_s[43:12],cout_sec0);
-  agusec_check_upper3 #(1'b1) chk_mod(ptr,unptr[43:4],b[43:4],pos_ack,neg_ack,,,ndiff);
+  agusec_check_upper3 #(1'b1) chk_mod(ptr,unptr[43:4],b[43:4],{dummy1,pos_ack},{dummy2,neg_ack},,,ndiff);
 endmodule
 
 

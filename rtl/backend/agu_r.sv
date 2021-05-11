@@ -497,7 +497,7 @@ module agu_r(
 	  mOp0_LSQ_reg<=9'b0;
 	  mOp0_II_reg<=10'b0;
 	  mOp0_WQ_reg<=8'b0;
-	  mOp0_attr_reg<=8'b0;
+	  mOp0_attr_reg<=4'b0;
           mOp0_addrEven_reg<=36'b0;
           mOp0_addrOdd_reg<=36'b0;
           mOp0_lsfwd_reg<=1'b0;

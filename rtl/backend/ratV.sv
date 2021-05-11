@@ -407,15 +407,15 @@ module ratV_buf(
   assign read7_fun=match_rd7 ? ~funit_rd : {FN_WIDTH{1'bz}};  
   assign read8_fun=match_rd8 ? ~funit_rd : {FN_WIDTH{1'bz}};  
 
-  assign read0_dom=match_rd0 ? ~dom_rd : {FN_WIDTH{1'bz}};  
-  assign read1_dom=match_rd1 ? ~dom_rd : {FN_WIDTH{1'bz}};  
-  assign read2_dom=match_rd2 ? ~dom_rd : {FN_WIDTH{1'bz}};  
-  assign read3_dom=match_rd3 ? ~dom_rd : {FN_WIDTH{1'bz}};  
-  assign read4_dom=match_rd4 ? ~dom_rd : {FN_WIDTH{1'bz}};  
-  assign read5_dom=match_rd5 ? ~dom_rd : {FN_WIDTH{1'bz}};  
-  assign read6_dom=match_rd6 ? ~dom_rd : {FN_WIDTH{1'bz}};  
-  assign read7_dom=match_rd7 ? ~dom_rd : {FN_WIDTH{1'bz}};  
-  assign read8_dom=match_rd8 ? ~dom_rd : {FN_WIDTH{1'bz}};  
+  assign read0_dom=match_rd0 ? ~dom_rd : {2{1'bz}};  
+  assign read1_dom=match_rd1 ? ~dom_rd : {2{1'bz}};  
+  assign read2_dom=match_rd2 ? ~dom_rd : {2{1'bz}};  
+  assign read3_dom=match_rd3 ? ~dom_rd : {2{1'bz}};  
+  assign read4_dom=match_rd4 ? ~dom_rd : {2{1'bz}};  
+  assign read5_dom=match_rd5 ? ~dom_rd : {2{1'bz}};  
+  assign read6_dom=match_rd6 ? ~dom_rd : {2{1'bz}};  
+  assign read7_dom=match_rd7 ? ~dom_rd : {2{1'bz}};  
+  assign read8_dom=match_rd8 ? ~dom_rd : {2{1'bz}};  
 
   assign read0_retired=match_rd0 ? ~retired_rd : 1'bz;  
   assign read1_retired=match_rd1 ? ~retired_rd : 1'bz;  
@@ -427,39 +427,28 @@ module ratV_buf(
   assign read7_retired=match_rd7 ? ~retired_rd : 1'bz;  
   assign read8_retired=match_rd8 ? ~retired_rd : 1'bz;
   
-  assign robAddr_rd=robAddr[read_thread];  
-  assign funit_rd=funit[read_thread];  
-  assign retired_rd=retired[read_thread];  
-  assign dom_rd=dom[read_thread];
-  assign robAddr_ret=robAddr[ret_thread];
+  assign robAddr_rd=robAddr;  
+  assign funit_rd=funit;  
+  assign retired_rd=retired;  
+  assign dom_rd=dom;
+  assign robAddr_ret=robAddr;
 
   always @(posedge clk)
     begin
       if (rst) begin
-          robAddr[0]<=9'h1ff;
-          robAddr[1]<=9'h1ff;
-          funit[0]<=10'b0111111111;
-          funit[1]<=10'b0111111111;
-          dom[0]<=2'b11;
-          dom[1]<=2'b11;
-          domp[0]<=2'b0;
-          domp[1]<=2'b0;
+          robAddr<=9'h1ff;
+          funit<=10'b0111111111;
+          dom<=2'b11;
+          domp<=2'b0;
       end else begin
-          if (~write_thread & match_new) robAddr[0]<=robAddr_d;
-          if ( write_thread & match_new) robAddr[1]<=robAddr_d;
-          if (~write_thread & match_new) funit[0]<=funit_d;
-          if ( write_thread & match_new) funit[1]<=funit_d;
-          if (retireAll & ~retireAll_thread) dom[0]<=domp[0];
-          else if (~write_thread & match_new) dom[0]<=dom_d;
-          if (retireAll &  retireAll_thread) dom[1]<=domp[1];
-          else if ( write_thread & match_new) dom[1]<=dom_d;
-          if (~ret_thread & match_retp) domp[0]<=domp_d;
-          if ( ret_thread & match_retp) domp[1]<=domp_d;
+          if (~write_thread & match_new) robAddr<=robAddr_d;
+          if (~write_thread & match_new) funit<=funit_d;
+          if (retireAll & ~retireAll_thread) dom<=domp;
+          else if (~write_thread & match_new) dom<=dom_d;
+          if (~ret_thread & match_retp) domp<=domp_d;
       end
       if (match_ret & ~ret_thread || match_new & ~write_thread 
-	    || retireAll & ~retireAll_thread || rst) retired[0]<=retired_d[0];
-      if (match_ret & ret_thread || match_new & write_thread 
-	    || retireAll & retireAll_thread || rst) retired[1]<=retired_d[1];
+	    || retireAll & ~retireAll_thread || rst) retired<=retired_d;
     end   
 endmodule
 
