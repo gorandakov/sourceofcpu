@@ -714,7 +714,7 @@ module reginfl_ram_block(
               7: initRegCount[3:0]<=4'd8;
               8: initRegCount<={initRegCount_next,4'd0};          
             endcase
-          if ((initRegCount[ADDR_WIDTH-1:4]==(`reg_small_count-1)) & (initRegCount[3:0]==4'd8))
+          if ((initRegCount[ADDR_WIDTH-1:4]==(31)) & (initRegCount[3:0]==4'd8))
             doInit<=1'b0; 
 		  if (read_clkEn)
 		    begin

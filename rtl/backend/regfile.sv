@@ -924,15 +924,15 @@ module regfile_ram_block(
         begin
           doInit<=1'b1;
           initRegCount<={ADDR_WIDTH{1'b0}};
-		  read0_const_reg<={DATA_WIDTH+1{1'B0}};
-		  read1_const_reg<={DATA_WIDTH+1{1'B0}};
-		  read2_const_reg<={DATA_WIDTH+1{1'B0}};
-		  read3_const_reg<={DATA_WIDTH+1{1'B0}};
-		  read4_const_reg<={DATA_WIDTH+1{1'B0}};
-		  read5_const_reg<={DATA_WIDTH+1{1'B0}};
-		  read6_const_reg<={DATA_WIDTH+1{1'B0}};
-		  read7_const_reg<={DATA_WIDTH+1{1'B0}};
-		  read8_const_reg<={DATA_WIDTH+1{1'B0}};
+		  read0_const_reg<={DATA_WIDTH{1'B0}};
+		  read1_const_reg<={DATA_WIDTH{1'B0}};
+		  read2_const_reg<={DATA_WIDTH{1'B0}};
+		  read3_const_reg<={DATA_WIDTH{1'B0}};
+		  read4_const_reg<={DATA_WIDTH{1'B0}};
+		  read5_const_reg<={DATA_WIDTH{1'B0}};
+		  read6_const_reg<={DATA_WIDTH{1'B0}};
+		  read7_const_reg<={DATA_WIDTH{1'B0}};
+		  read8_const_reg<={DATA_WIDTH{1'B0}};
 		  read0_constEn_reg<=1'b0;
 		  read1_constEn_reg<=1'b0;
 		  read2_constEn_reg<=1'b0;
@@ -957,7 +957,7 @@ module regfile_ram_block(
               7: initRegCount[3:0]<=4'd8;
               8: initRegCount<={initRegCount_next,4'd0};          
             endcase
-          if ((initRegCount[ADDR_WIDTH-1:4]==(`reg_small_count-1)) & (initRegCount[3:0]==4'd8))
+          if ((initRegCount[ADDR_WIDTH-1:4]==(31)) & (initRegCount[3:0]==4'd8))
             doInit<=1'b0; 
 		  if (read_clkEn)
 		    begin
