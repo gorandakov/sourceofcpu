@@ -172,7 +172,7 @@ module imul(
     //  bnd_reg2<=bnd_reg;
     //  bnd_reg3<=bnd_reg2;
     end
-    Res_reg<=Res;
+    Res_reg<=Res[63:0];
     dummy2_reg<=dummy2;
     dummy_reg<=dummy;
     //dummy8_reg<=dummy[7:0];

@@ -770,7 +770,7 @@ module dcache1_way(
       end else if (init) begin
           initCount<=initCount_d;
           if (initCount==7'h7f) init<=1'b0;
-          if (initCount==4'hf) init_dirty<=1'b0;
+          if (initCount==7'hf) init_dirty<=1'b0;
       end
      `else
       if (rst) begin
@@ -780,7 +780,7 @@ module dcache1_way(
       end else if (init) begin
           initCount<=initCount_d;
           if (initCount==6'd63) init<=1'b0;
-          if (initCount==4'hf) init_dirty<=1'b0;
+          if (initCount==6'hf) init_dirty<=1'b0;
       end
       `endif
   end

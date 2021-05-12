@@ -88,14 +88,14 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
 
   wire [5:0] opcode_sub;
   
-  assign subIsBasicALU=(!opcode_sub[5:4] || opcode_sub[5:2]==4'b0100) & ~magic[0];
+  assign subIsBasicALU=(!|opcode_sub[5:4] || opcode_sub[5:2]==4'b0100) & ~magic[0];
   assign subIsBasicShift=(~opcode_sub[5] && ~subIsBasicALU && opcode_sub[0]) & ~magic[0];
   assign subIsFPUE=opcode_sub==6'b010100 && ~magic[0]; 
   assign subIsFPUSngl=((opcode_sub==6'b010110 || opcode_sub==6'b011000) && opcode_main[7:6]!=2'b11) & ~magic[0];
   assign subIsLinkRet=(opcode_sub==6'b010110 || opcode_sub==6'b011000) && opcode_main[7:6]==2'b11 && ~magic[0];
-  assign subIsSIMD=(opcode_sub[5:3]==3'b011 && opcode_sub[2:1] && ~opcode_sub[0]) & ~magic[0];
+  assign subIsSIMD=(opcode_sub[5:3]==3'b011 && |opcode_sub[2:1] && ~opcode_sub[0]) & ~magic[0];
   assign subIsMovOrExt=(opcode_sub[5:3]==3'b100 || opcode_sub[5:1]==5'b10100) & ~magic[0];
-  assign subIsCmpTest=(opcode_sub[5:1]==5'b10101 || opcode_sub[5:2]==5'b1011) & ~magic[0];
+  assign subIsCmpTest=(opcode_sub[5:1]==5'b10101 || opcode_sub[5:2]==4'b1011) & ~magic[0];
   assign subIsCJ=opcode_sub[5:2]==4'b1100 && ~magic[0];
   assign subIsFPUD=(opcode_sub[5:2]==4'b1101 || opcode_sub[5:1]==5'b11100) & ~magic[0];
   assign subIsFPUPD=(opcode_sub[5:3]==3'b111 && opcode_sub[5:1]!=5'b11100) & ~magic[0];
@@ -105,12 +105,12 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   assign opcode_sub=instr[5:0];
   
   
-  assign isBasicALU=(!opcode_main[7:5] || opcode_main[7:3]==3'b00100) & ~opcode_main[2] & magic[0];
-  assign isBasicMUL=(!opcode_main[7:5] || opcode_main[7:3]==3'b00100) & opcode_main[2] & magic[0];
-  assign isBasicALUExcept=~opcode_main[0] && magic[1:0]==2'b11 | (magic==2'b01 && instr[28:23]);  
+  assign isBasicALU=(!|opcode_main[7:5] || opcode_main[7:3]==5'b00100) & ~opcode_main[2] & magic[0];
+  assign isBasicMUL=(!|opcode_main[7:5] || opcode_main[7:3]==5'b00100) & opcode_main[2] & magic[0];
+  assign isBasicALUExcept=~opcode_main[0] && magic[1:0]==2'b11 | (magic==2'b01 && |instr[28:23]);  
   assign isBasicShift=(opcode_main[7:1]==7'd20 || opcode_main[7:1]==7'd21 ||
       opcode_main[7:1]==7'd22)&&magic[0];      
-  assign isBasicShiftExcept=magic==2'b01 && instr[29:25];
+  assign isBasicShiftExcept=magic==2'b01 && |instr[29:25];
   
   assign isBasicCmpTest=(opcode_main[7:1]==7'd23 || opcode_main[7:2]==6'd12 ||
     opcode_main[7:1]==7'd26) && magic[0];
@@ -188,14 +188,14 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   subIsFPUPD & !(opcode_sub[5:1]==5'b11101), subIsFPUSngl & !(opcode_main[7:6]==2'b0),
   subIsFPUE & !(opcode_main[7:6]==2'b0),
   subIsSIMD,
-  isSimdInt && ((instr[13:9]==5'd0 && ~instr[16]) || (instr[13:9]==5'd5 && ~instr[16]) || (instr[13:8]==5'b11 && instr[16])),
+  isSimdInt && ((instr[13:9]==5'd0 && ~instr[16]) || (instr[13:9]==5'd5 && ~instr[16]) || (instr[13:8]==6'b11 && instr[16])),
   subIsBasicALU,subIsCmpTest,subIsLinkRet,
   opcode_main==8'hff && instr[15:13]==3'd1 && magic[0],
   isBasicFPUScalarA && instr[13:9]!=5'd2 && instr[13:8]!=6'd8,
   isBasicFPUScalarB && instr[13:8]!=6'd18 && instr[13:8]!=6'd21,
-  isBasicFPUScalarC && instr[13:11],
-  isBasicFPUScalarCmp && !instr[13:11],
-  isBasicFPUScalarCmp2 && !instr[13:11],
+  isBasicFPUScalarC && |instr[13:11],
+  isBasicFPUScalarCmp && !|instr[13:11],
+  isBasicFPUScalarCmp2 && !|instr[13:11],
   subIsMovOrExt,
   isLeaIPRel
   };
@@ -206,7 +206,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
     subIsFPUPD & (opcode_sub[5:1]==5'b11101) || subIsFPUSngl &(opcode_main[7:6]==2'b0)
     || subIsFPUE &(opcode_main[7:6]==2'b0) || isSimdInt & instr[16] ||
     (isSimdInt && ~((instr[13:9]==5'd0 && ~instr[16]) || (instr[13:9]==5'd5 && ~instr[16]) ||
-     (instr[13:8]==5'b11 && instr[16]))) || 
+     (instr[13:8]==6'b11 && instr[16]))) || 
     (isBasicFPUScalarA && ~(instr[13:9]!=5'd2 && instr[13:8]!=6'd8)) ||
     (isBasicFPUScalarB && ~(instr[13:8]!=6'd18 && instr[13:8]!=6'd21));
   
@@ -222,7 +222,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   isBaseLoadStore &  opcode_main[0],
   isImmLoadStore && opcode_main[0],
   isBaseIndexLoadStore & opcode_main[0],
-  isCall & magic
+  isCall & magic[0]
   };
   
   assign clsStore2=isBaseIndexLoadStore & opcode_main[0];
@@ -239,9 +239,9 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
     isBasicMUL,
     isPtrSec,
     opcode_main==8'hff && ~instr[15] && ~instr[13] && magic[0],
-    isBasicFPUScalarC && !instr[13:11],
-     isBasicFPUScalarCmp && instr[13:11],
-     isBasicFPUScalarCmp2 && instr[13:11]
+    isBasicFPUScalarC && !|instr[13:11],
+     isBasicFPUScalarCmp && |instr[13:11],
+     isBasicFPUScalarCmp2 && |instr[13:11]
   };
   
   assign clsSys=isBasicSysInstr|isFPUreor;
