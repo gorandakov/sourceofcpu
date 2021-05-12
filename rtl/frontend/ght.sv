@@ -256,49 +256,49 @@ module ght_bank(
     assign GHTx_sc1=jumpMask[0] ? GHT1_sc[0] : GHT1_sc[1];
     assign GHTx_sc2=jumpMask[0] ? GHT2_sc[0] : 2'bz;
     assign GHTx_sc2=(jumpMask[1:0]==2'b10) ? GHT2_sc[1] : 2'bz;
-    assign GHTx_sc2=(!jumpMask[1:0]) ? GHT2_sc[2] : 2'bz;
+    assign GHTx_sc2=(!|jumpMask[1:0]) ? GHT2_sc[2] : 2'bz;
     assign GHTx_sc3=jumpMask[0] ? GHT3_sc[0] : 2'bz;
     assign GHTx_sc3=(jumpMask[1:0]==2'b10) ? GHT3_sc[1] : 2'bz;
     assign GHTx_sc3=(jumpMask[2:0]==3'b100) ? GHT3_sc[2] : 2'bz;
-    assign GHTx_sc3=(!jumpMask[2:0]) ? GHT3_sc[3] : 2'bz;
+    assign GHTx_sc3=(!|jumpMask[2:0]) ? GHT3_sc[3] : 2'bz;
 
     assign GHTx_sc=curJump[0] ? GHTx_sc0 : 2'bz;
     assign GHTx_sc=curJump[1] ? GHTx_sc1 : 2'bz;
     assign GHTx_sc=curJump[2] ? GHTx_sc2 : 2'bz;
     assign GHTx_sc=curJump[3] ? GHTx_sc3 : 2'bz;
-    assign GHTx_sc=curJump ? 2'bz : 2'b11;
+    assign GHTx_sc=curJump!=0 ? 2'bz : 2'b11;
     
     assign GHTx_addr0=read_addr[15:8];
     assign GHTx_addr1=jumpMask[0] ? read1_addr[0] : read1_addr[1];
     assign GHTx_addr2=jumpMask[0] ? read2_addr[0] : 8'bz;
     assign GHTx_addr2=(jumpMask[1:0]==2'b10) ? read2_addr[1] : 8'bz;
-    assign GHTx_addr2=(!jumpMask[1:0]) ? read2_addr[2] : 8'bz;
+    assign GHTx_addr2=(!|jumpMask[1:0]) ? read2_addr[2] : 8'bz;
     assign GHTx_addr3=jumpMask[0] ? read3_addr[0] : 8'bz;
     assign GHTx_addr3=(jumpMask[1:0]==2'b10) ? read3_addr[1] : 8'bz;
     assign GHTx_addr3=(jumpMask[2:0]==3'b100) ? read3_addr[2] : 8'bz;
-    assign GHTx_addr3=(!jumpMask[2:0]) ? read3_addr[3] : 8'bz;
+    assign GHTx_addr3=(!|jumpMask[2:0]) ? read3_addr[3] : 8'bz;
 
     assign GHTx_addr=curJump[0] ? GHTx_addr0 : 8'bz;
     assign GHTx_addr=curJump[1] ? GHTx_addr1 : 8'bz;
     assign GHTx_addr=curJump[2] ? GHTx_addr2 : 8'bz;
     assign GHTx_addr=curJump[3] ? GHTx_addr3 : 8'bz;
-    assign GHTx_addr=curJump ? 8'bz : 8'b0;
+    assign GHTx_addr=curJump!=0 ? 8'bz : 8'b0;
 
     assign GHTx_en=curJump[0] ? jumpMask[0] : 1'bz;
     assign GHTx_en=curJump[1] ? (|jumpMask[1:0]) & jumpMask[1] : 1'bz;
     assign GHTx_en=curJump[2] ? (|jumpMask[2:0]) & jumpMask[2] : 1'bz;
     assign GHTx_en=curJump[3] ? (|jumpMask[3:0]) & jumpMask[3] : 1'bz;
-    assign GHTx_en=curJump ? 1'bz : 1'b0;
+    assign GHTx_en=curJump!=0 ? 1'bz : 1'b0;
 
     assign GHTx_upper0=upper0;
     assign GHTx_upper1=jumpMask[0] ? upper1 : upper0;
     assign GHTx_upper2=jumpMask[0] ? upper2 : 1'bz;
     assign GHTx_upper2=(jumpMask[1:0]==2'b10) ? upper1 : 1'bz;
-    assign GHTx_upper2=(!jumpMask[1:0]) ? upper0 : 1'bz;
+    assign GHTx_upper2=(!|jumpMask[1:0]) ? upper0 : 1'bz;
     assign GHTx_upper3=jumpMask[0] ? upper3 : 1'bz;
     assign GHTx_upper3=(jumpMask[1:0]==2'b10) ? upper2 : 1'bz;
     assign GHTx_upper3=(jumpMask[2:0]==3'b100) ? upper1 : 1'bz;
-    assign GHTx_upper3=(!jumpMask[2:0]) ? upper0 : 1'bz;
+    assign GHTx_upper3=(!|jumpMask[2:0]) ? upper0 : 1'bz;
 
     sel_ght_entry sel_mod(read_data,read_addr[15:8],upper0,GHT0_sc);
     sel_ght_entry sel1_mod(read_data,read1_addr[0],upper1,GHT1_sc[0]);
