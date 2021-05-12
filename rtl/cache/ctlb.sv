@@ -104,9 +104,10 @@ module ctlb_way(
   assign valid=read_data_ram[`ctlb_valid];
   assign validN=read_data_ram[`ctlb_validN];
   assign read_lru=read_data_ram[`ctlb_lru];
-  
+ //verilator lint_off WIDTH 
   assign read_hit=(valid&~tr_jump||validN&tr_jump) && ((ip|{13{~tr_jump}})==(addr|{13{~tr_jump}}) ||
     ((ip|{13{~tr_jump}})=={sproc,addr[43:0]|{13{~tr_jump}}} && tlb_data[`ctlbData_global])) && ~invalidate_reg;
+ //verilator lint_on WIDTH
   
   assign write_wen_ram=(write_wen_reg && read_lru==2'b11) || read_clkEn&~fStall;
   

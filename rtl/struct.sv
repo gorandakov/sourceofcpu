@@ -318,12 +318,12 @@
 `define ctlbData_global 34
 `define ctlbData_width 35
 
-`define ctlb_ip 63:0
-`define ctlb_valid 64
-`define ctlb_validN 65
-`define ctlb_lru 67:66 
-`define ctlb_data 102:68
-`define ctlb_width 103
+`define ctlb_ip 64:0
+`define ctlb_valid 65
+`define ctlb_validN 66
+`define ctlb_lru 68:67 
+`define ctlb_data 103:69
+`define ctlb_width 104
 
 
 
