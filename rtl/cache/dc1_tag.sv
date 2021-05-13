@@ -224,8 +224,8 @@ module dcache1_tag(
     read_odd_reg ? tagR1_valid : tagR0_valid) : 1'bz;
   always @(negedge clk) begin
       if (rst) begin
-          read_addrOdd_reg<=29'b0;
-          read_addrEven_reg<=29'b0;
+          read_addrOdd_reg<=36'b0;
+          read_addrEven_reg<=36'b0;
           read_odd_reg<=1'b0;
           read_en_reg<=1'b0;
           read_split_reg<=1'b0;
@@ -248,7 +248,7 @@ module dcache1_tag(
       
       if (rst) begin
           init<=1'b1;
-          initCount<=6'b0;
+          initCount<=0;
       end else if (init) begin
           initCount<=initCount_d;
           `ifdef DCACHE_256K

@@ -266,7 +266,7 @@ module ccRam_way(
   `endif
   .read_data(readX_data_ram),
   .write_addr(writeX_addr),
-  .write_data(init ? 31'b0 : {writeX_data[60],writeX_data[29:0]}),
+  .write_data(init ? 60'b0 : writeX_data),
   .write_wen(write_hit|init|read_clkEn_reg)
   );
 
@@ -281,7 +281,11 @@ module ccRam_way(
   .read_addr(read_IP[8:2]),
   `endif
   .read_data(read_data_ram[DATA_WIDTH/2-1:0]),
+  `ifdef ICACHE_256K
+  .write_addr(init ? initCount : write_IP_reg[9:2]),
+  `else
   .write_addr(init ? initCount : write_IP_reg[8:2]),
+  `endif
   .write_data(write_data_reg[DATA_WIDTH/2-1:0] & {DATA_WIDTH/2{~init}}),
   .write_wen(write_hit|init)
   );
@@ -296,12 +300,16 @@ module ccRam_way(
   .read_addr(read_IP[8:2]),
   `endif
   .read_data(read_data_ram[DATA_WIDTH-1:DATA_WIDTH/2]),
+  `ifdef ICACHE_256K
+  .write_addr(init ? initCount : write_IP_reg[9:2]),
+  `else
   .write_addr(init ? initCount : write_IP_reg[8:2]),
+  `endif
   .write_data(write_data_reg[DATA_WIDTH-1:DATA_WIDTH/2] & {DATA_WIDTH/2{~init}}),
   .write_wen(write_hit|init)
   );
 
-
+//verilator lint_off WIDTH
   ccTag #(INDEX) tag_mod(
   .clk(clk),
   .rst(rst),
@@ -340,7 +348,7 @@ module ccRam_way(
   .write_exp_en(),
   .init(init)
   );
-  
+//verilator lint_on WIDTH  
   
   `ifdef ICACHE_256K  
   adder_inc #(8) initAdd_mod(initCount,initCountNext,1'b1,);
@@ -352,15 +360,15 @@ module ccRam_way(
       writeX_data=readX_data_ram;
       for (k=0;k<4;k=k+1)
           for (j=0;j<15;j=j+1) begin
-              writeX_data[k*15+j]=writeX_data[k*15+j]||(read_set_flag_reg && read_IP_low_reg==j 
-                && read_IP_reg[1:0]==k);
+              writeX_data[k*15+j]=writeX_data[k*15+j]||(read_set_flag_reg && read_IP_low_reg==j[3:0] 
+                && read_IP_reg[1:0]==k[1:0]);
           end
   end
   
   always @(negedge clk)
   begin
       if (rst) begin
-          write_IP_reg<=59'b0;
+          write_IP_reg<=39'b0;
         //  hitNRU_reg<=3'b0;
           write_data_reg<={DATA_WIDTH{1'B0}};
           read_clkEn_reg<=1'b0;
