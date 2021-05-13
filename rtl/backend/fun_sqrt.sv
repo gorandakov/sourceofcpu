@@ -296,17 +296,17 @@ module fun_fpusqr0(
   en);
 */
   
-  in_flip_rt #(16+SIMD_WIDTH+9+10) rtDatA_mod(
+  in_flip_rt #(S+SIMD_WIDTH+9+10) rtDatA_mod(
     .clk(clk),.rst(rst),.in_en(fxFRT_en),.pause(fxFRT_pause[2]),
-    .d_in({u1_II_reg,u1_regNo_reg,u1_en_reg[3] ? uu_A1 : {16'b0,uu_Av_reg}}),
+    .d_in({u1_II_reg,u1_regNo_reg,u1_en_reg[3] ? uu_A1 : {{S{1'b0}},uu_Av_reg}}),
     .d_out({frtII,frtReg,rtDataA}),
     .dout_en((fxFRT_can[0] & ~fxFRT_don_reg[0] & ~fxFRT_don_reg2[0] & ~fxFRT_don_reg2[0] & ~fxFRT_don_reg3[0]) |
      (fxFRT_can[1] & ~fxFRT_don_reg[1] & ~fxFRT_don_reg2[1] & ~fxFRT_don_reg2[1] & ~fxFRT_don_reg3[1]) |
      (fxFRT_can[2] & ~fxFRT_don_reg[2] & ~fxFRT_don_reg2[2] & ~fxFRT_don_reg2[2] & ~fxFRT_don_reg3[2]) |
      (fxFRT_can[3] & ~fxFRT_don_reg[3] & ~fxFRT_don_reg2[3] & ~fxFRT_don_reg2[3] & ~fxFRT_don_reg3[3])),.do_(fxFRT_do));
-  in_flip_rt #(13+16+SIMD_WIDTH) rtDatB_mod(
+  in_flip_rt #(13+S+SIMD_WIDTH) rtDatB_mod(
     .clk(clk),.rst(rst),.in_en(fxFRT_en),.pause(),
-    .d_in({u1_op_reg,u1_en_reg[3] ? (u1_op_reg[8+H] ? {16'b0,u1_Bxo} : uu_B1) : {16'b0,uu_Bv_reg}}),
+    .d_in({u1_op_reg,u1_en_reg[3] ? (u1_op_reg[8+{31'b0,H}] ? {{S{1'b0}},u1_Bxo} : uu_B1) : {{S{1'b0}},uu_Bv_reg}}),
     .d_out({frtOp,rtDataB}),
     .dout_en((fxFRT_can[0] & ~fxFRT_don_reg[0] & ~fxFRT_don_reg2[0] & ~fxFRT_don_reg2[0] & ~fxFRT_don_reg3[0]) |
      (fxFRT_can[1] & ~fxFRT_don_reg[1] & ~fxFRT_don_reg2[1] & ~fxFRT_don_reg2[1] & ~fxFRT_don_reg3[1]) |
@@ -335,8 +335,13 @@ module fun_fpusqr0(
   assign fxFRT_expB=fxFRT_sngl ? {rtDataB_reg[65],{7{~rtDataB_reg[65]&&|{rtDataB_reg[65],rtDataB_reg[30:23]}}},
     rtDataB_reg[30:23]} : 16'bz;
   generate
-      assign fxFRT_expA=fxFRT_ext ? {rtDataA_reg[65],rtDataA_reg[SIMD_WIDTH+14:SIMD_WIDTH]} : 16'bz;
-      assign fxFRT_expB=fxFRT_ext ? {rtDataB_reg[65],rtDataB_reg[SIMD_WIDTH+14:SIMD_WIDTH]} : 16'bz;
+    if (!H) begin
+        assign fxFRT_expA=fxFRT_ext ? {rtDataA_reg[65],rtDataA_reg[SIMD_WIDTH+14:SIMD_WIDTH]} : 16'bz;
+        assign fxFRT_expB=fxFRT_ext ? {rtDataB_reg[65],rtDataB_reg[SIMD_WIDTH+14:SIMD_WIDTH]} : 16'bz;
+    end else begin
+        assign fxFRT_expA=fxFRT_ext ? 16'b0 : 16'bz;
+        assign fxFRT_expB=fxFRT_ext ? 16'b0 : 16'bz;
+    end
   endgenerate
 
   assign fxFRT_normA0=fxFRT_dbl_ns ? {1'b1,rtDataA_reg[52:33],rtDataA_reg[31:0],12'b0} : 65'bz;

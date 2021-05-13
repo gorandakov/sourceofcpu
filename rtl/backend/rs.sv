@@ -228,12 +228,12 @@ module rs_wakeUp_logic(
 
   assign isFP_d=(newRsSelect0 & ~stall) ? newIsFP0 : 1'bz;
   assign isFP_d=(newRsSelect1 & ~stall) ? newIsFP1 : 1'bz;
-  assign isFP_d=(newRsSelect2 & ~stall) ? newIsFP2 : 11'bz;
+  assign isFP_d=(newRsSelect2 & ~stall) ? newIsFP2 : 1'bz;
   assign isFP_d=(~newRsSelect0 & ~newRsSelect1 & ~newRsSelect2 || stall) ? isFP : 1'bz;
 
   assign isV_d=(newRsSelect0 & ~stall) ? newIsV0 : 1'bz;
   assign isV_d=(newRsSelect1 & ~stall) ? newIsV1 : 1'bz;
-  assign isV_d=(newRsSelect2 & ~stall) ? newIsV2 : 11'bz;
+  assign isV_d=(newRsSelect2 & ~stall) ? newIsV2 : 1'bz;
   assign isV_d=(~newRsSelect0 & ~newRsSelect1 & ~newRsSelect2 || stall) ? isV : 1'bz;
   
   assign eq[0]=(register==Treg0) & Twen0 & ~newRsSelect0 & ~newRsSelect1 & ~newRsSelect2;
@@ -275,13 +275,13 @@ module rs_wakeUp_logic(
 
   assign outEq={|outEq0[9:5],outEq0[9:5]|outEq0[4:0]};
 
-  assign outFuFwd0=outRsSelect0 ? fuFwd : {DATA_WIDTH{1'bz}};
-  assign outFuFwd1=outRsSelect1 ? fuFwd : {DATA_WIDTH{1'bz}};
-  assign outFuFwd2=outRsSelect2 ? fuFwd : {DATA_WIDTH{1'bz}};
+  assign outFuFwd0=outRsSelect0 ? fuFwd : {4{1'bz}};
+  assign outFuFwd1=outRsSelect1 ? fuFwd : {4{1'bz}};
+  assign outFuFwd2=outRsSelect2 ? fuFwd : {4{1'bz}};
 
-  assign outFuuFwd0=outRsSelect0 ? fuuFwd : {DATA_WIDTH{1'bz}};
-  assign outFuuFwd1=outRsSelect1 ? fuuFwd : {DATA_WIDTH{1'bz}};
-  assign outFuuFwd2=outRsSelect2 ? fuuFwd : {DATA_WIDTH{1'bz}};
+  assign outFuuFwd0=outRsSelect0 ? fuuFwd : {4{1'bz}};
+  assign outFuuFwd1=outRsSelect1 ? fuuFwd : {4{1'bz}};
+  assign outFuuFwd2=outRsSelect2 ? fuuFwd : {4{1'bz}};
 
   assign register_d=(newRsSelect0 & ~rst & ~stall) ? newReg0 : {REG_WIDTH{1'bz}};
   assign register_d=(newRsSelect1 & ~rst & ~stall) ? newReg1 : {REG_WIDTH{1'bz}};
@@ -818,13 +818,13 @@ module rs_wakeUp_data(
   assign data_d0=outEq[2] ? FU2 : {WIDTH{1'bz}};
   assign data_d0=outEq[3] ? FU3 : {WIDTH{1'bz}};
   assign data_d0=outEq[4] ? FU4 : {WIDTH{1'bz}};
-  assign data_d0=outEq[4:0] ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+  assign data_d0=|outEq[4:0] ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
   assign data_d1=outEq[0] ? FU5 : {WIDTH{1'bz}};
   assign data_d1=outEq[1] ? FU6 : {WIDTH{1'bz}};
   assign data_d1=outEq[2] ? FU7 : {WIDTH{1'bz}};
   assign data_d1=outEq[3] ? FU8 : {WIDTH{1'bz}};
   assign data_d1=outEq[4] ? FU9 : {WIDTH{1'bz}};
-  assign data_d1=outEq[4:0] ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+  assign data_d1=|outEq[4:0] ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
   assign data_d=(newRsSelect0 & ~rst & ~stall) ? newData0 : {WIDTH{1'bz}};
   assign data_d=(newRsSelect1 & ~rst & ~stall) ? newData1 : {WIDTH{1'bz}};
   assign data_d=(newRsSelect2 & ~rst & ~stall) ? newData2 : {WIDTH{1'bz}};
@@ -832,8 +832,8 @@ module rs_wakeUp_data(
   assign data_d=rst ? {WIDTH{1'b0}} : {WIDTH{1'bz}};
 
   assign data_d=(data_en & ~(stall && newRsSelect0|newRsSelect1|newRsSelect2) || rst) ? {WIDTH{1'bz}} : data_q;
-  assign data_d=(outEq[4:0] && outEq[5]) ? data_d1 : {WIDTH{1'BZ}};
-  assign data_d=(outEq[4:0] && ~outEq[5]) ? data_d0 : {WIDTH{1'BZ}};
+  assign data_d=(|outEq[4:0] && outEq[5]) ? data_d1 : {WIDTH{1'BZ}};
+  assign data_d=(|outEq[4:0] && ~outEq[5]) ? data_d0 : {WIDTH{1'BZ}};
   assign outData0=outRsSelect0 ? data_q : {WIDTH{1'bz}};
   assign outData1=outRsSelect1 ? data_q : {WIDTH{1'bz}};
   assign outData2=outRsSelect2 ? data_q : {WIDTH{1'bz}};
@@ -1037,7 +1037,7 @@ module rs_wakeUpS_logic(
 
   reg [1:0] eq_reg;
 
-  reg [9:0] eq_mask;
+  reg [1:0] eq_mask;
    
   wire [REG_WIDTH-1:0] register_d;
   reg [REG_WIDTH-1:0] register;
@@ -1102,7 +1102,7 @@ module rs_wakeUpS_logic(
   assign gazump=(~newRsSelect1 & ~newRsSelect2 || stall) ? 11'b10000000000 : 11'bz;
 
   assign isFP_d=(newRsSelect1 & ~stall) ? newIsFP1 : 1'bz;
-  assign isFP_d=(newRsSelect2 & ~stall) ? newIsFP2 : 11'bz;
+  assign isFP_d=(newRsSelect2 & ~stall) ? newIsFP2 : 1'bz;
   assign isFP_d=(~newRsSelect1 & ~newRsSelect2 || stall) ? isFP : 1'bz;
 
   assign eq[0]=(register==Treg0) & Twen0 & ~newRsSelect1 & ~newRsSelect2;
@@ -1139,11 +1139,11 @@ module rs_wakeUpS_logic(
 
   assign outEq={|outEq0[9:5],outEq0[9:5]|{outEq0[4:1],1'b0}};
 
-  assign outFuFwd1=outRsSelect1 ? fuFwd : {DATA_WIDTH{1'bz}};
-  assign outFuFwd2=outRsSelect2 ? fuFwd : {DATA_WIDTH{1'bz}};
+  assign outFuFwd1=outRsSelect1 ? fuFwd : {4{1'bz}};
+  assign outFuFwd2=outRsSelect2 ? fuFwd : {4{1'bz}};
 
-  assign outFuuFwd1=outRsSelect1 ? fuuFwd : {DATA_WIDTH{1'bz}};
-  assign outFuuFwd2=outRsSelect2 ? fuuFwd : {DATA_WIDTH{1'bz}};
+  assign outFuuFwd1=outRsSelect1 ? fuuFwd : {4{1'bz}};
+  assign outFuuFwd2=outRsSelect2 ? fuuFwd : {4{1'bz}};
 
   assign register_d=(newRsSelect1 & ~rst & ~stall) ? newReg1 : {REG_WIDTH{1'bz}};
   assign register_d=(newRsSelect2 & ~rst & ~stall) ? newReg2 : {REG_WIDTH{1'bz}};
@@ -1172,9 +1172,9 @@ module rs_wakeUpS_logic(
 		  fuFwd<=4'b0;
 		  fuuFwd<=4'b0;
 		  isFP<=1'b0;
-		  eq_reg<=10'b0;
-		  outEq0<=10'b0;
-		  eq_mask<=10'b0;
+		  eq_reg<=2'b0;
+		  outEq0<=9'b0;
+		  eq_mask<=2'b0;
        end else begin
           if (newRsSelect1|newRsSelect2 && ~stall) begin
               eq_mask<=2'h3;
