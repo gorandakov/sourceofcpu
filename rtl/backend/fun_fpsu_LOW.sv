@@ -150,7 +150,7 @@ module fun_fpuSL(
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
   FUF9,
-  84'b0,84'b0,
+  68'b0,68'b0,
   2'b0,
   FOOSL0_out
   );
@@ -169,7 +169,7 @@ module fun_fpuSL(
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
   FUF9,
-  84'b0,84'b0,
+  68'b0,68'b0,
   2'b0,
   FOOSL1_out
   );

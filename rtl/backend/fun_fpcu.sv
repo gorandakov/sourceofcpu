@@ -76,8 +76,8 @@ module fun_fpu(
   input [5:0] FUS_alu1;
   input [2:0] ex_alu0;
   input [2:0] ex_alu1;
-  input [1:0][10:0] fxFADD_raise_s;
-  input [1:0] [10:0] fxFCADD_raise_s;
+  input [10:0] fxFADD_raise_s;
+  input [10:0] fxFCADD_raise_s;
   input [5:0] FOOSH_in;
   output [5:0] FOOSH_out;
 
@@ -153,11 +153,11 @@ module fun_fpu(
   reg [1:0] fxFCADD_com_nreg;
   reg  fxFCADD_pswp_nreg;
   wire [1:0][10:0] fxFCADD_raise;
-  reg [10:0] fxFCADD_raise_reg[1:0];
-  reg [10:0] fxFCADD_raise_s_reg[1:0];
-  wire [1:0][10:0] fxFADD_raise;
-  reg [10:0] fxFADD_raise_reg[1:0];
-  reg [10:0] fxFADD_raise_s_reg[1:0];
+  reg [10:0] fxFCADD_raise_reg;
+  reg [10:0] fxFCADD_raise_s_reg;
+  wire [10:0] fxFADD_raise;
+  reg [10:0] fxFADD_raise_reg;
+  reg [10:0] fxFADD_raise_s_reg;
   wire [10:0] fraise2;
   wire [10:0] fraise3;
   wire [10:0] fmask2;
@@ -337,18 +337,18 @@ module fun_fpu(
   //assign FOOS=gxFADD_hi ? FOOSH[m] : FOOSL[m];
 
   assign fraise2=fxFCADD_sn_reg5 ?
-    (fxFCADD_raise_s_reg[0]|fxFCADD_raise_s_reg[1])&fpcsr[21:11] :
+    fxFCADD_raise_s_reg&fpcsr[21:11] :
     (fxFCADD_raise_reg)&fpcsr[21:11];
   assign fmask2=fxFCADD_sn_reg5 ?
-    (fxFCADD_raise_s_reg[0]|fxFCADD_raise_s_reg[1]) :
+    fxFCADD_raise_s_reg :
     (fxFCADD_raise_reg);
   fexcpt fexcpt2_mod(fraise2_reg,{5'b0,FUS_alu1,ex_alu1},
     fmask2_reg,|u2_en_reg7[3:2],u2_ret,u2_ret_en);
   assign fraise3=fxFADD_sn_reg2 ?
-    (fxFADD_raise_s_reg[0]|fxFADD_raise_s_reg[1])&fpcsr[21:11] :
+    fxFADD_raise_s_reg&fpcsr[21:11] :
     (fxFADD_raise_reg)&fpcsr[21:11];
   assign fmask3=fxFADD_sn_reg2 ?
-    (fxFADD_raise_s_reg[0]|fxFADD_raise_s_reg[1]) :
+    fxFADD_raise_s_reg :
     (fxFADD_raise_reg);
   fexcpt fexcpt3_mod(fraise3_reg,{5'b0,FUS_alu0,ex_alu0},
     fmask3_reg,|u1_en_reg4[1][3:2],u1_ret,u1_ret_en);
@@ -553,11 +553,11 @@ module fun_fpu(
     end
     for(k=0;k<2;k=k+1) begin
         FOOF_reg[k]<=FOOF[k];
-        fxFCADD_raise_reg[k]<=fxFCADD_raise[k];
-        fxFADD_raise_reg[k]<=fxFADD_raise[k];
-        fxFCADD_raise_s_reg[k]<=fxFCADD_raise_s[k];
-        fxFADD_raise_s_reg[k]<=fxFADD_raise_s[k];
     end
+      fxFCADD_raise_reg<=fxFCADD_raise;
+      fxFADD_raise_reg<=fxFADD_raise;
+      fxFCADD_raise_s_reg<=fxFCADD_raise_s;
+      fxFADD_raise_s_reg<=fxFADD_raise_s;
       gxFADD_en=u1_op_reg[0] && u1_en_reg[3] && u1_op_reg[7:0]==`fop_cmpDH || u1_op_reg[7:0]==`fop_cmpDL || u1_op_reg[7:0]==`fop_cmpE || 
 	      u1_op_reg[7:0]==`fop_cmpS;
       gxFADD_ord=u1_op_reg[10];
