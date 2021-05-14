@@ -50,10 +50,10 @@ module rt2_fp(
   input [12:0] oper_in;
   input [63:-1] normA;
   input [16:0] expA;
-  input [1:0] nsignA;
+  input nsignA;
   input [63:-1] normB;
   input [16:0] expB;
-  input [1:0] nsignB;
+  input nsignB;
   output [2*SIMD_WIDTH-1:0] result;
   output reg [8:0] reg_out;
   output reg [II_WIDTH-1:0] outII_out;
@@ -207,47 +207,47 @@ module rt2_fp(
  
  adder2o #(52) digg1Add_E(digits[54:3],rndbits[54:3],{result[52:33],result[31:0]},
   {result[SIMD_WIDTH+52:SIMD_WIDTH+33],result[SIMD_WIDTH+31:SIMD_WIDTH]},1'b0,
-  DBL_rnd && type_reg==0 && DBL_lead,DBL_rnd && type_reg==8 && DBL_lead,,,,);
+  DBL_rnd && type_reg==0 && DBL_lead,DBL_rnd && type_reg==4 && DBL_lead,,,,);
  adder2o #(52) digg0Add_E(digits[53:2],rndbits[54:3],{result[52:33],result[31:0]},
    {result[SIMD_WIDTH+52:SIMD_WIDTH+33],result[SIMD_WIDTH+31:SIMD_WIDTH]},1'b0,
-   DBL_rnd && type_reg==0 && ~DBL_lead,DBL_rnd && type_reg==8 && ~DBL_lead,,,,);
+   DBL_rnd && type_reg==0 && ~DBL_lead,DBL_rnd && type_reg==4 && ~DBL_lead,,,,);
  assign {result[52:33],result[31:0]}=(type_reg==0  && ~DBL_rnd && DBL_lead) ? digits[54:3] : 52'bz;
  assign {result[52:33],result[31:0]}=(type_reg==0  && ~DBL_rnd && ~DBL_lead) ? digits[53:2] : 52'bz;
  assign {result[SIMD_WIDTH+52:SIMD_WIDTH+33],result[SIMD_WIDTH+31:SIMD_WIDTH]}=
-   (type_reg==8  && ~DBL_rnd && DBL_lead) ? digits[54:3] : 52'bz;
+   (type_reg==4  && ~DBL_rnd && DBL_lead) ? digits[54:3] : 52'bz;
  assign {result[SIMD_WIDTH+52:SIMD_WIDTH+33],result[SIMD_WIDTH+31:SIMD_WIDTH]}=
-   (type_reg==8  && ~DBL_rnd && ~DBL_lead) ? digits[53:2] : 52'bz;
- assign {result[65],result[63:53]}=(type_reg==0 && is_root_reg) ? {exp_inc[16],exp_inc[11:1]} : 16'bz; 
+   (type_reg==4  && ~DBL_rnd && ~DBL_lead) ? digits[53:2] : 52'bz;
+ assign {result[65],result[63:53]}=(type_reg==0 && is_root_reg) ? {exp_inc[16],exp_inc[11:1]} : 12'bz; 
  assign result[64]=(type_reg==0 & is_root_reg) ? 1'b0 : 1'bz;
- assign {result[65],result[63:53]}=(type_reg==0 && ~is_root_reg) ? {exp2[15],exp2[10:0]} : 16'bz; 
+ assign {result[65],result[63:53]}=(type_reg==0 && ~is_root_reg) ? {exp2[15],exp2[10:0]} : 12'bz; 
  assign result[64]=(type_reg==0 & ~is_root_reg) ? nsignA_reg^nsignB_reg : 1'bz;
- assign {result[SIMD_WIDTH+65],result[SIMD_WIDTH+63:SIMD_WIDTH+53]}=(type_reg==8
-   && is_root_reg) ? {exp_inc[16],exp_inc[11:1]} : 16'bz; 
- assign result[SIMD_WIDTH+64]=(type_reg==8 & is_root_reg) ? 1'b0 : 1'bz;
- assign {result[SIMD_WIDTH+65],result[SIMD_WIDTH+63:SIMD_WIDTH+53]}=(type_reg==8
-   && ~is_root_reg) ? {exp2[15],exp2[10:0]} : 16'bz; 
- assign result[SIMD_WIDTH+64]=(type_reg==8 & ~is_root_reg) ? nsignA_reg^nsignB_reg : 1'bz;
- assign result[67:66]=(type_reg==0 || type_reg==8) ? 2'd`ptype_dbl : 2'bz;
- assign result[SIMD_WIDTH+67:SIMD_WIDTH+66]=(type_reg==0 || type_reg==8) ? 2'd`ptype_dbl : 2'bz;
- assign result[65:0]=(type_reg==8) ? 66'b0 : 66'bz;
+ assign {result[SIMD_WIDTH+65],result[SIMD_WIDTH+63:SIMD_WIDTH+53]}=(type_reg==4
+   && is_root_reg) ? {exp_inc[16],exp_inc[11:1]} : 12'bz; 
+ assign result[SIMD_WIDTH+64]=(type_reg==4 & is_root_reg) ? 1'b0 : 1'bz;
+ assign {result[SIMD_WIDTH+65],result[SIMD_WIDTH+63:SIMD_WIDTH+53]}=(type_reg==4
+   && ~is_root_reg) ? {exp2[15],exp2[10:0]} : 12'bz; 
+ assign result[SIMD_WIDTH+64]=(type_reg==4 & ~is_root_reg) ? nsignA_reg^nsignB_reg : 1'bz;
+ assign result[67:66]=(type_reg==0 || type_reg==4) ? 2'd`ptype_dbl : 2'bz;
+ assign result[SIMD_WIDTH+67:SIMD_WIDTH+66]=(type_reg==0 || type_reg==4) ? 2'd`ptype_dbl : 2'bz;
+ assign result[65:0]=(type_reg==4) ? 66'b0 : 66'bz;
  assign result[SIMD_WIDTH+65:SIMD_WIDTH+16]=(type_reg==0||
    type_reg==2 || type_reg==1) ? 50'b0 : 50'bz;
  assign result[SIMD_WIDTH+15:SIMD_WIDTH]=(type_reg==0||
    type_reg==2) ? 16'b0 : 16'bz;
  assign result[32]=(type_reg==0) ? 1'b0 : 1'bz;
- assign result[SIMD_WIDTH+32]=(type_reg==8) ? 1'b0 : 1'bz;
+ assign result[SIMD_WIDTH+32]=(type_reg==4) ? 1'b0 : 1'bz;
 
  adder #(23) digg1Add_S(digits[26:4],{22'b0,1'b1},result[22:0],1'b0,SNGL_rnd && type_reg==2 && SNGL_lead,,,,);
  adder #(23) digg0Add_S(digits[25:3],{22'b0,1'b1},result[22:0],1'b0,SNGL_rnd && type_reg==2 && ~SNGL_lead,,,,);
  assign result[22:0]=(type_reg==2  && ~SNGL_rnd && SNGL_lead) ? digits[26:4] : 23'bz;
  assign result[22:0]=(type_reg==2  && ~SNGL_rnd && ~SNGL_lead) ? digits[25:3] : 23'bz;
- assign {result[32],result[30:23]}=(type_reg==2 && is_root_reg) ? {exp_inc[16],exp_inc[8:1]} : 12'bz; 
+ assign {result[32],result[30:23]}=(type_reg==2 && is_root_reg) ? {exp_inc[16],exp_inc[8:1]} : 9'bz; 
  assign result[31]=(type_reg==2 & is_root_reg) ? 1'b0 : 1'bz;
- assign {result[32],result[30:23]}=(type_reg==2 && ~is_root_reg) ? {exp2[15],exp2[7:0]} : 12'bz; 
+ assign {result[32],result[30:23]}=(type_reg==2 && ~is_root_reg) ? {exp2[15],exp2[7:0]} : 9'bz; 
  assign result[31]=(type_reg==2 & ~is_root_reg) ? nsignA_reg^nsignB_reg : 1'bz;
  assign result[67:66]=(type_reg==2) ? 2'd`ptype_sngl : 2'bz;
  assign result[SIMD_WIDTH+67:SIMD_WIDTH+66]=(type_reg==2) ? 2'd`ptype_sngl : 2'bz;
-// assign result[2*SIMD_WIDTH:0]=(type_reg==8) ? 66'b0 : 66'bz;
+// assign result[2*SIMD_WIDTH:0]=(type_reg==4) ? 66'b0 : 66'bz;
  assign result[65:33]=(type_reg==2) ? 33'b0 : 33'bz;
 
 
@@ -256,9 +256,9 @@ module rt2_fp(
  adder2c #(17) exp2Add_mod(e2p0,e2p1,exp2x,exp2x,1'b0,1'b1,~ANY_lead&&expA_reg!=0,ANY_lead&&expA_reg!=0,,,,);
  assign exp2x=( expA_reg==0) ? 0 : 17'bz;
  assign exp2=(A_nan||B_nan||B_zero&A_zero||A_infty&B_infty) ? 17'hffff: 17'bz;
- assign exp2=(A_infty&~B_infty&~B_nan||~A_infty&~A_nan&B_zero||(exp2[17]^exp2[16])&ANY_xbit2||
+ assign exp2=(A_infty&~B_infty&~B_nan||~A_infty&~A_nan&B_zero||(exp2[16]^exp2[15])&ANY_xbit2||
        (exp2x==ANY_enan&&~A_nan&&~B_nan)) ? 17'hfffe : 17'bz;
- assign exp2=(A_zero&~B_nan||B_infty&~A_nan&~A_infty||~exp2x_cmp&~exp2[17]&~A_nan&~B_nan&~B_zero&~A_infty) ? 17'h0 : 17'bz;
+ assign exp2=(A_zero&~B_nan||B_infty&~A_nan&~A_infty||~exp2x_cmp&~exp2[16]&~A_nan&~B_nan&~B_zero&~A_infty) ? 17'h0 : 17'bz;
 
  assign exp_inc=specR_zero ? 17'b0 : 17'bz;
  assign exp_inc=specR_infty ? 17'hfffe : 17'bz;
@@ -267,7 +267,7 @@ module rt2_fp(
 
  assign exp_inc=specR_nan|specR_infty|specR_zero ? 17'bz : exp_incy;
 
- assign exp2=~A_nan&&~B_nan&&~A_infty&&~B_infty&&~A_zero&&~B_zero&&!~exp2x_cmp&~exp2[17]&&!(exp2[17]^exp2[16])&ANY_xbit2&&
+ assign exp2=~A_nan&&~B_nan&&~A_infty&&~B_infty&&~A_zero&&~B_zero&&!~exp2x_cmp&~exp2[16]&&!(exp2[16]^exp2[15])&ANY_xbit2&&
 	 !(exp2x==ANY_enan&&~A_nan&&~B_nan) ? exp2x : 17'bz;//bottle
 
  get_carry #(17) exp2cmp_mod(exp2x,~ANY_denor,1'b1,exp2x_cmp);
@@ -297,7 +297,7 @@ module rt2_fp(
   normB_1101,
   normB_1111);
 
- assign specR_zero=expA_reg==17'b0||~exp2y_cmp&~exp_inc[17];
+ assign specR_zero=expA_reg==17'b0||~exp2y_cmp&~exp_inc[16];
  assign specR_nan=~nsignA_reg && expA_reg!=0 || A_nan;
  assign specR_infty=nsignA_reg && A_infty;
 
@@ -327,7 +327,9 @@ module rt2_fp(
 	 P<={8'hff,64'hffff_ffff_ffff_ffff,56'hffff_ffff_ffff_ff,8'b0};
 	 for(p=1;p<16;p=p+1) begin
 	     Se[p]<=72'b0;
+		 //verilator lint_off WIDTH
 	     Se_arg2_reg[p]<=p*p;
+		 //verilator lint_on WIDTH
 	     Se_arg_reg[p]<=8'b0;
 	 end
 	 P_en_reg<=16'b1;
@@ -359,29 +361,31 @@ module rt2_fp(
                  Se[p]<=72'b0;
                  SeA[p]<=0;
                  SeB[p]<=1'b0;
+		 //verilator lint_off WIDTH
                  Se_arg2_reg[p]<=p*p;
+		 //verilator lint_on WIDTH
                  Se_arg_reg[p]<=8'b0;
              end
          end else begin
              P<={2'b11,minus_norm[63:0],64'hffff_ffff_ffff_ffff,6'h3f};
-             {SeA[1],Se[1][63:51]}<={4'b0,normB[63:0]};
-             {SeA[2],Se[2][63:51]}<={3'b0,normB[63:0],1'b0};
-             {SeA[4],Se[4][63:51]}<={2'b0,normB[63:0],2'b0};
-             {SeA[8],Se[8][63:51]}<={1'b0,normB[63:0],3'b0};
-             {SeA[3],Se[3][63:51]}<=normB_11;
-             {SeA[6],Se[6][63:51]}<={normB_11[66:0],1'b0};
-             {SeA[12],Se[12][63:51]}<={normB_11[65:0],2'b0};
-             {SeA[5],Se[5][63:51]}<=normB_101;
-             {SeA[10],Se[10][63:51]}<={normB_101[66:0],1'b0};
-             {SeA[9],Se[9][63:51]}<=normB_1001;
-             {SeA[7],Se[7][63:51]}<=normB_111;
-             {SeA[14],Se[14][63:51]}<={normB_111[66:0],1'b0};
-             {SeA[11],Se[11][63:51]}<=normB_1011;
-             {SeA[13],Se[13][63:51]}<=normB_1101;
-             {SeA[15],Se[15][63:51]}<=normB_1111;
+             {SeA[1],Se[1][63:51]}<={1'b0,4'b0,normB[63:0]};
+             {SeA[2],Se[2][63:51]}<={1'b0,3'b0,normB[63:0],1'b0};
+             {SeA[4],Se[4][63:51]}<={1'b0,2'b0,normB[63:0],2'b0};
+             {SeA[8],Se[8][63:51]}<={1'b0,1'b0,normB[63:0],3'b0};
+             {SeA[3],Se[3][63:51]}<={1'b0,normB_11};
+             {SeA[6],Se[6][63:51]}<={1'b0,normB_11[66:0],1'b0};
+             {SeA[12],Se[12][63:51]}<={1'b0,normB_11[65:0],2'b0};
+             {SeA[5],Se[5][63:51]}<={1'b0,normB_101};
+             {SeA[10],Se[10][63:51]}<={1'b0,normB_101[66:0],1'b0};
+             {SeA[9],Se[9][63:51]}<={1'b0,normB_1001};
+             {SeA[7],Se[7][63:51]}<={1'b0,normB_111};
+             {SeA[14],Se[14][63:51]}<={1'b0,normB_111[66:0],1'b0};
+             {SeA[11],Se[11][63:51]}<={1'b0,normB_1011};
+             {SeA[13],Se[13][63:51]}<={1'b0,normB_1101};
+             {SeA[15],Se[15][63:51]}<={1'b0,normB_1111};
 
 	     for(p=1;p<16;p=p+1) begin
-		 Se[p][52:-8]<=59'b0;
+		 Se[p][52:-8]<=61'b0;
 		 SeB[p]<=1'b0;
                  Se_arg2_reg[p]<=14'b0;
                  Se_arg_reg[p]<=8'b0;
@@ -428,7 +432,7 @@ module rt2_fp(
 	 exact_reg<=exact_reg|exact_result;
 	 P_en_reg<=P_en;
 	 cnt<=cnt_d;
-	 if (!cnt) perform_stage<=1'b0;
+	 if (!|cnt) perform_stage<=1'b0;
 	// if (out_en&out_can) rdy<=1'b1;
 	 digits<={digits[63:0],new_digit};
      end else if (perform_stage && ~is_root_reg) begin
@@ -440,11 +444,11 @@ module rt2_fp(
 	 exact_reg<=exact_reg|exact_result;
 	 P_en_reg<=P_en;
 	 cnt<=cnt_d;
-	 if (!cnt) perform_stage<=1'b0;
+	 if (!|cnt) perform_stage<=1'b0;
 	// if (out_en&out_can) rdy<=1'b1;
 	 digits<={digits[63:0],new_digit};
      end
-     if (cnt==(2+1+(type_reg!=2)) && perform_stage && ~rst) out_en<=1'b1;
+     if ({27'b0,cnt}==(2+1+{31'b0,(type_reg!=2)}) && perform_stage && ~rst) out_en<=1'b1;
      else if (rst|out_can) out_en<=1'b0;
      if (rdy0_reg2) rdy<=1'b1;
       

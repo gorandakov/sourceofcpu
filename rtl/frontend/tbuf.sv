@@ -374,10 +374,10 @@ module tbuf_way(
 
   wire read_valid;
   wire [28:0] read_src;
-  wire [63:0] read_tgt0;
-  wire [63:0] read_tgt1;
-  wire [63:0] read_tgt2;
-  wire [63:0] read_tgt3;
+  wire [62:0] read_tgt0;
+  wire [62:0] read_tgt1;
+  wire [62:0] read_tgt2;
+  wire [62:0] read_tgt3;
   wire [2:0]  read_attr0;
   wire [2:0]  read_attr1;
   wire [2:0]  read_attr2;
@@ -572,7 +572,7 @@ module tbuf_way(
   assign update_addr_new=( upd_idS & ~init) ? saved_addr0[10:1] : 10'bz;
   assign update_addr_new=( ~upd_id0 && ~upd_id1 &&~upd_idS && ~init )
     ? 10'b0 : 10'bz;
-  assign update_addr_new= init ? init_count : 10'bz;
+  assign update_addr_new= init ? {1'b0,init_count} : 10'bz;
   
   assign update_addr=update_addr_new;
   
@@ -597,35 +597,35 @@ module tbuf_way(
   assign read_freq3=extra_data[`btbExtra_freq3];
   
   
-  assign extra_update[`btbExtra_freq0]=upd_j0_reg ? updW_freq0 : 7'bz; 
-  assign extra_update[`btbExtra_freq1]=upd_j1_reg ? updW_freq1 : 7'bz; 
-  assign extra_update[`btbExtra_freq2]=upd_j2_reg ? updW_freq2 : 7'bz; 
-  assign extra_update[`btbExtra_freq3]=upd_j3_reg ? updW_freq3 : 7'bz; 
+  assign extra_update[`btbExtra_freq0]=|upd_j0_reg ? updW_freq0 : 7'bz; 
+  assign extra_update[`btbExtra_freq1]=|upd_j1_reg ? updW_freq1 : 7'bz; 
+  assign extra_update[`btbExtra_freq2]=|upd_j2_reg ? updW_freq2 : 7'bz; 
+  assign extra_update[`btbExtra_freq3]=|upd_j3_reg ? updW_freq3 : 7'bz; 
 
-  assign extra_update[`btbExtra_freq0]=sve_j0 ? updS_freq0 : 7'bz; 
-  assign extra_update[`btbExtra_freq1]=sve_j1 ? updS_freq1 : 7'bz; 
-  assign extra_update[`btbExtra_freq2]=sve_j2 ? updS_freq2 : 7'bz; 
-  assign extra_update[`btbExtra_freq3]=sve_j3 ? updS_freq3 : 7'bz; 
+  assign extra_update[`btbExtra_freq0]=|sve_j0 ? updS_freq0 : 7'bz; 
+  assign extra_update[`btbExtra_freq1]=|sve_j1 ? updS_freq1 : 7'bz; 
+  assign extra_update[`btbExtra_freq2]=|sve_j2 ? updS_freq2 : 7'bz; 
+  assign extra_update[`btbExtra_freq3]=|sve_j3 ? updS_freq3 : 7'bz; 
 
-  assign extra_update[`btbExtra_freq0]=(!upd_j0_reg && !sve_j0) ? upd_freq0 : 7'bz; 
-  assign extra_update[`btbExtra_freq1]=(!upd_j1_reg && !sve_j1) ? upd_freq1 : 7'bz; 
-  assign extra_update[`btbExtra_freq2]=(!upd_j2_reg && !sve_j2) ? upd_freq2 : 7'bz; 
-  assign extra_update[`btbExtra_freq3]=(!upd_j3 && !sve_j3) ? upd_freq3 : 7'bz; 
+  assign extra_update[`btbExtra_freq0]=(!|upd_j0_reg && !|sve_j0) ? upd_freq0 : 7'bz; 
+  assign extra_update[`btbExtra_freq1]=(!|upd_j1_reg && !|sve_j1) ? upd_freq1 : 7'bz; 
+  assign extra_update[`btbExtra_freq2]=(!|upd_j2_reg && !|sve_j2) ? upd_freq2 : 7'bz; 
+  assign extra_update[`btbExtra_freq3]=(!|upd_j3 && !|sve_j3) ? upd_freq3 : 7'bz; 
 
-  assign extra_update[`btbExtra_satCount0]=upd_j0_reg ? updW_sc0 : 2'bz; 
-  assign extra_update[`btbExtra_satCount1]=upd_j1_reg ? updW_sc1 : 2'bz; 
-  assign extra_update[`btbExtra_satCount0]=upd_j2_reg ? updW_sc2 : 2'bz; 
-  assign extra_update[`btbExtra_satCount0]=upd_j3_reg ? updW_sc3 : 2'bz; 
+  assign extra_update[`btbExtra_satCount0]=|upd_j0_reg ? updW_sc0 : 2'bz; 
+  assign extra_update[`btbExtra_satCount1]=|upd_j1_reg ? updW_sc1 : 2'bz; 
+  assign extra_update[`btbExtra_satCount0]=|upd_j2_reg ? updW_sc2 : 2'bz; 
+  assign extra_update[`btbExtra_satCount0]=|upd_j3_reg ? updW_sc3 : 2'bz; 
 
-  assign extra_update[`btbExtra_satCount0]=sve_j0 ? updS_sc0 : 2'bz; 
-  assign extra_update[`btbExtra_satCount1]=sve_j1 ? updS_sc1 : 2'bz; 
-  assign extra_update[`btbExtra_satCount0]=sve_j2 ? updS_sc2 : 2'bz; 
-  assign extra_update[`btbExtra_satCount0]=sve_j3 ? updS_sc3 : 2'bz; 
+  assign extra_update[`btbExtra_satCount0]=|sve_j0 ? updS_sc0 : 2'bz; 
+  assign extra_update[`btbExtra_satCount1]=|sve_j1 ? updS_sc1 : 2'bz; 
+  assign extra_update[`btbExtra_satCount0]=|sve_j2 ? updS_sc2 : 2'bz; 
+  assign extra_update[`btbExtra_satCount0]=|sve_j3 ? updS_sc3 : 2'bz; 
 
-  assign extra_update[`btbExtra_satCount0]=(!upd_j0_reg && !sve_j0) ? upd_sc0 : 2'bz; 
-  assign extra_update[`btbExtra_satCount1]=(!upd_j1_reg && !sve_j1) ? upd_sc1 : 2'bz; 
-  assign extra_update[`btbExtra_satCount2]=(!upd_j2_reg && !sve_j2) ? upd_sc2 : 2'bz; 
-  assign extra_update[`btbExtra_satCount3]=(!upd_j3_reg && !sve_j3) ? upd_sc3 : 2'bz; 
+  assign extra_update[`btbExtra_satCount0]=(!|upd_j0_reg && !|sve_j0) ? upd_sc0 : 2'bz; 
+  assign extra_update[`btbExtra_satCount1]=(!|upd_j1_reg && !|sve_j1) ? upd_sc1 : 2'bz; 
+  assign extra_update[`btbExtra_satCount2]=(!|upd_j2_reg && !|sve_j2) ? upd_sc2 : 2'bz; 
+  assign extra_update[`btbExtra_satCount3]=(!|upd_j3_reg && !|sve_j3) ? upd_sc3 : 2'bz; 
 
   assign extra_dataW=(write_insert|init) ? extra_insert : extra_update; 
 //  assign write_data=init ? {DATA_WIDTH{1'B0}} : write_dataW;
@@ -678,7 +678,7 @@ module tbuf_way(
   assign write_dataW[`btb_attr1]={attr1I[3],attr1I[1:0]};
   assign write_dataW[`btb_attr2]={attr2I[3],attr2I[1:0]};
   assign write_dataW[`btb_attr3]={attr3I[3],attr3I[1:0]};
-  assign write_dataW[`btb_src_IP]=nextIP_reg[63:15];
+  assign write_dataW[`btb_src_IP]=nextIP_reg[43:15];
   assign write_dataW[`btb_off0]=write_off0_rex;
   assign write_dataW[`btb_off1]=write_off1_rex;
   assign write_dataW[`btb_off2]=write_off2_rex;
@@ -762,25 +762,25 @@ module tbuf_way(
   assign ljpos0=read_write_fwd ? writex_fjln0 : 5'bz;
 
 
-  get_carry #(4) cmpJL00_mod(read_off0,~read_lnpos0,1'b1,readx_jln0[1]); 
-  get_carry #(4) cmpJL01_mod(read_off1,~read_lnpos0,1'b1,readx_jln0[2]); 
-  get_carry #(4) cmpJL02_mod(read_off2,~read_lnpos0,1'b1,readx_jln0[3]); 
-  get_carry #(4) cmpJL03_mod(read_off3,~read_lnpos0,1'b1,readx_jln0[4]);
+  get_carry #(4) cmpJL00_mod(read_off0,~read_lnpos0[3:0],1'b1,readx_jln0[1]); 
+  get_carry #(4) cmpJL01_mod(read_off1,~read_lnpos0[3:0],1'b1,readx_jln0[2]); 
+  get_carry #(4) cmpJL02_mod(read_off2,~read_lnpos0[3:0],1'b1,readx_jln0[3]); 
+  get_carry #(4) cmpJL03_mod(read_off3,~read_lnpos0[3:0],1'b1,readx_jln0[4]);
 
-  get_carry #(4) cmpJL10_mod(read_off0,~read_lnpos1,1'b1,readx_jln1[1]); 
-  get_carry #(4) cmpJL11_mod(read_off1,~read_lnpos1,1'b1,readx_jln1[2]); 
-  get_carry #(4) cmpJL12_mod(read_off2,~read_lnpos1,1'b1,readx_jln1[3]); 
-  get_carry #(4) cmpJL13_mod(read_off3,~read_lnpos1,1'b1,readx_jln1[4]);
+  get_carry #(4) cmpJL10_mod(read_off0,~read_lnpos1[3:0],1'b1,readx_jln1[1]); 
+  get_carry #(4) cmpJL11_mod(read_off1,~read_lnpos1[3:0],1'b1,readx_jln1[2]); 
+  get_carry #(4) cmpJL12_mod(read_off2,~read_lnpos1[3:0],1'b1,readx_jln1[3]); 
+  get_carry #(4) cmpJL13_mod(read_off3,~read_lnpos1[3:0],1'b1,readx_jln1[4]);
 
-  get_carry #(4) cmpJL20_mod(read_off0,~read_lnpos2,1'b1,readx_jln2[1]); 
-  get_carry #(4) cmpJL21_mod(read_off1,~read_lnpos2,1'b1,readx_jln2[2]); 
-  get_carry #(4) cmpJL22_mod(read_off2,~read_lnpos2,1'b1,readx_jln2[3]); 
-  get_carry #(4) cmpJL23_mod(read_off3,~read_lnpos2,1'b1,readx_jln2[4]);
+  get_carry #(4) cmpJL20_mod(read_off0,~read_lnpos2[3:0],1'b1,readx_jln2[1]); 
+  get_carry #(4) cmpJL21_mod(read_off1,~read_lnpos2[3:0],1'b1,readx_jln2[2]); 
+  get_carry #(4) cmpJL22_mod(read_off2,~read_lnpos2[3:0],1'b1,readx_jln2[3]); 
+  get_carry #(4) cmpJL23_mod(read_off3,~read_lnpos2[3:0],1'b1,readx_jln2[4]);
 
-  get_carry #(4) cmpJL30_mod(read_off0,~read_lnpos3,1'b1,readx_jln3[1]); 
-  get_carry #(4) cmpJL31_mod(read_off1,~read_lnpos3,1'b1,readx_jln3[2]); 
-  get_carry #(4) cmpJL32_mod(read_off2,~read_lnpos3,1'b1,readx_jln3[3]); 
-  get_carry #(4) cmpJL33_mod(read_off3,~read_lnpos3,1'b1,readx_jln3[4]);
+  get_carry #(4) cmpJL30_mod(read_off0,~read_lnpos3[3:0],1'b1,readx_jln3[1]); 
+  get_carry #(4) cmpJL31_mod(read_off1,~read_lnpos3[3:0],1'b1,readx_jln3[2]); 
+  get_carry #(4) cmpJL32_mod(read_off2,~read_lnpos3[3:0],1'b1,readx_jln3[3]); 
+  get_carry #(4) cmpJL33_mod(read_off3,~read_lnpos3[3:0],1'b1,readx_jln3[4]);
 
   bit_find_last_bit #(4) fnd0_mod(~readx_jln0,readx_fjlnx0[4:1],readx_fjlnx0[0]);
   assign readx_fjln0={readx_fjlnx0[4:1],~readx_fjlnx0[0]};
@@ -794,25 +794,25 @@ module tbuf_way(
   bit_find_last_bit #(4) fnd3_mod(~readx_jln3,readx_fjlnx3[4:1],readx_fjlnx3[0]);
   assign readx_fjln3={readx_fjlnx3[4:1],~readx_fjlnx3[0]};
 
-  get_carry #(4) wcmpJL00_mod(write_off0_rex,~write_lnpos0_rex,1'b1,writex_jln0[1]); 
-  get_carry #(4) wcmpJL01_mod(write_off1_rex,~write_lnpos0_rex,1'b1,writex_jln0[2]); 
-  get_carry #(4) wcmpJL02_mod(write_off2_rex,~write_lnpos0_rex,1'b1,writex_jln0[3]); 
-  get_carry #(4) wcmpJL03_mod(write_off3_rex,~write_lnpos0_rex,1'b1,writex_jln0[4]);
+  get_carry #(4) wcmpJL00_mod(write_off0_rex,~write_lnpos0_rex[3:0],1'b1,writex_jln0[1]); 
+  get_carry #(4) wcmpJL01_mod(write_off1_rex,~write_lnpos0_rex[3:0],1'b1,writex_jln0[2]); 
+  get_carry #(4) wcmpJL02_mod(write_off2_rex,~write_lnpos0_rex[3:0],1'b1,writex_jln0[3]); 
+  get_carry #(4) wcmpJL03_mod(write_off3_rex,~write_lnpos0_rex[3:0],1'b1,writex_jln0[4]);
 
-  get_carry #(4) wcmpJL10_mod(write_off0_rex,~write_lnpos1_rex,1'b1,writex_jln1[1]); 
-  get_carry #(4) wcmpJL11_mod(write_off1_rex,~write_lnpos1_rex,1'b1,writex_jln1[2]); 
-  get_carry #(4) wcmpJL12_mod(write_off2_rex,~write_lnpos1_rex,1'b1,writex_jln1[3]); 
-  get_carry #(4) wcmpJL13_mod(write_off3_rex,~write_lnpos1_rex,1'b1,writex_jln1[4]);
+  get_carry #(4) wcmpJL10_mod(write_off0_rex,~write_lnpos1_rex[3:0],1'b1,writex_jln1[1]); 
+  get_carry #(4) wcmpJL11_mod(write_off1_rex,~write_lnpos1_rex[3:0],1'b1,writex_jln1[2]); 
+  get_carry #(4) wcmpJL12_mod(write_off2_rex,~write_lnpos1_rex[3:0],1'b1,writex_jln1[3]); 
+  get_carry #(4) wcmpJL13_mod(write_off3_rex,~write_lnpos1_rex[3:0],1'b1,writex_jln1[4]);
 
-  get_carry #(4) wcmpJL20_mod(write_off0_rex,~write_lnpos2_rex,1'b1,writex_jln2[1]); 
-  get_carry #(4) wcmpJL21_mod(write_off1_rex,~write_lnpos2_rex,1'b1,writex_jln2[2]); 
-  get_carry #(4) wcmpJL22_mod(write_off2_rex,~write_lnpos2_rex,1'b1,writex_jln2[3]); 
-  get_carry #(4) wcmpJL23_mod(write_off3_rex,~write_lnpos2_rex,1'b1,writex_jln2[4]);
+  get_carry #(4) wcmpJL20_mod(write_off0_rex,~write_lnpos2_rex[3:0],1'b1,writex_jln2[1]); 
+  get_carry #(4) wcmpJL21_mod(write_off1_rex,~write_lnpos2_rex[3:0],1'b1,writex_jln2[2]); 
+  get_carry #(4) wcmpJL22_mod(write_off2_rex,~write_lnpos2_rex[3:0],1'b1,writex_jln2[3]); 
+  get_carry #(4) wcmpJL23_mod(write_off3_rex,~write_lnpos2_rex[3:0],1'b1,writex_jln2[4]);
 
-  get_carry #(4) wcmpJL30_mod(write_off0_rex,~write_lnpos3_rex,1'b1,writex_jln3[1]); 
-  get_carry #(4) wcmpJL31_mod(write_off1_rex,~write_lnpos3_rex,1'b1,writex_jln3[2]); 
-  get_carry #(4) wcmpJL32_mod(write_off2_rex,~write_lnpos3_rex,1'b1,writex_jln3[3]); 
-  get_carry #(4) wcmpJL33_mod(write_off3_rex,~write_lnpos3_rex,1'b1,writex_jln3[4]);
+  get_carry #(4) wcmpJL30_mod(write_off0_rex,~write_lnpos3_rex[3:0],1'b1,writex_jln3[1]); 
+  get_carry #(4) wcmpJL31_mod(write_off1_rex,~write_lnpos3_rex[3:0],1'b1,writex_jln3[2]); 
+  get_carry #(4) wcmpJL32_mod(write_off2_rex,~write_lnpos3_rex[3:0],1'b1,writex_jln3[3]); 
+  get_carry #(4) wcmpJL33_mod(write_off3_rex,~write_lnpos3_rex[3:0],1'b1,writex_jln3[4]);
 
   bit_find_last_bit #(4) wfnd0_mod(~writex_jln0,writex_fjlnx0[4:1],writex_fjlnx0[0]);
   assign writex_fjln0={writex_fjlnx0[4:1],~writex_fjlnx0[0]};
@@ -831,10 +831,10 @@ module tbuf_way(
   assign jmp_mask[2]=oen ? j2_after && read_off2!=4'hf : 1'bz;
   assign jmp_mask[3]=oen ? j3_after && read_off3!=4'hf : 1'bz;
   
-  assign sc0=oen ? sc0P | ~read_cond : 2'bz;
-  assign sc1=oen ? sc1P | ~read_cond : 2'bz;
-  assign sc2=oen ? sc2P | ~read_cond : 2'bz;
-  assign sc3=oen ? sc3P | ~read_cond : 2'bz;
+  assign sc0=oen ? sc0P | {1'b0,~read_cond[0]} : 2'bz;
+  assign sc1=oen ? sc1P | {1'b0,~read_cond[1]} : 2'bz;
+  assign sc2=oen ? sc2P | {1'b0,~read_cond[2]} : 2'bz;
+  assign sc3=oen ? sc3P | {1'b0,~read_cond[3]} : 2'bz;
 
 //  assign read_hitLRU=read_hit ? read_LRU : 1'bz;
   //
@@ -881,7 +881,7 @@ module tbuf_way(
 //  assign read_hitLRU=read_hit ? read_LRU : 1'bz;
   
   assign ram_wen=write_wen & read_hit || write_insert & (write_way==WAY) || 
-    (mStall && ~write_wen && ~write_insert && taken_reg && ~except_reg);
+    (mStall && ~write_wen && ~write_insert && taken_reg!=0 && ~except_reg);
 
   assign write_data=(write_insert|write_wen && ~init) ? write_dataW : {DATA_WIDTH{1'BZ}};
   assign write_data=(~write_insert & ~write_wen & ~init) ? {write_LRU_reg,write_dataJ} : {DATA_WIDTH{1'BZ}};
@@ -907,11 +907,11 @@ module tbuf_way(
   assign sve_taken[3]=|(sve_j3 & saved_tk);
 
   assign write_addr=(~init  & ~mStall) ? IP_wbits : 10'bz;
-  assign write_addr=init ? init_count : 10'bz;
+  assign write_addr=init ? {1'b0,init_count} : 10'bz;
   assign write_addr=(mStall & ~init) ? IP_wbits_reg : 10'bz;
   
   always @* begin
-      write_dataJ=btb_data_reg;
+      write_dataJ=btb_data_reg[`btb_width-2:0];
       case(taken_reg)
       4'b1: write_dataJ[`btb_tgt_jmask0]=jmp_mask_in;
       4'b10: write_dataJ[`btb_tgt_jmask1]=jmp_mask_in;
@@ -1045,7 +1045,7 @@ module tbuf_way(
           upd_j2_reg<=2'b0;
           upd_j3_reg<=2'b0;
           upd_taken_reg<=4'b0;
-          update_addr_reg<=8'b0;
+          update_addr_reg<=10'b0;
           update_en_reg2<=1'b0;
           has_saved_reg<=1'b0;
       end else begin
