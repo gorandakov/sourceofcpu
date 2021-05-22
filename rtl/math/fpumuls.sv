@@ -52,7 +52,7 @@ module fpumuls(clk,rst,A,B,copyA,en,rmode,res,raise,fpcsr);
   wire [22:-1] rndbit_dbl={22'b0,prod_reg[47],~prod_reg[47]};
   wire [9:0] exp_exp_d;
   wire [9:0] exp_exp1_d;
-  wire [31:0] fpcsr_reg;
+  reg [31:0] fpcsr_reg;
   wire [4:0] expon;
   wire exp_oor,exp1_oor,exp_oor_IEEE,exp1_oor_IEEE;
   wire exp_non_denor_IEEE,exp1_non_denor_IEEE;

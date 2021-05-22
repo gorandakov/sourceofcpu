@@ -456,10 +456,10 @@ module fun_fpusqr0(
 	  fxFRT_isRoot=frtOp[7:0]==`fop_sqrtDL || frtOp[7:0]==`fop_sqrtDH ||
                 frtOp[7:0]==`fop_sqrtE || frtOp[7:0]==`fop_sqrtS; 
 	  fxFRT_dbl_ns<=fxFRT_dbl && ~rtDataA[53]|~fxFRT_isRoot;
-	  fxFRT_ext_ns<=fxFRT_ext && ~rtDataA[SIMD_WIDTH]|~fxFRT_isRoot;
+	  fxFRT_ext_ns<=fxFRT_ext && ~rtDataA[SIMD_WIDTH-16+S]|~fxFRT_isRoot;
 	  fxFRT_sngl_ns<=fxFRT_sngl && ~rtDataA[23]|~fxFRT_isRoot;
 	  fxFRT_dbl_s<=fxFRT_dbl && rtDataA[53]&fxFRT_isRoot;
-	  fxFRT_ext_s<=fxFRT_ext && rtDataA[SIMD_WIDTH]&fxFRT_isRoot;
+	  fxFRT_ext_s<=fxFRT_ext && rtDataA[SIMD_WIDTH-16+S]&fxFRT_isRoot;
 	  fxFRT_sngl_s<=fxFRT_sngl && rtDataA[23]&fxFRT_isRoot;
     /* 	  fxFRT_dblL_reg<=fxFRT_dblL;
           fxFRT_dblH_reg<=fxFRT_dblH;
