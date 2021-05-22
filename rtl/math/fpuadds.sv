@@ -1,7 +1,7 @@
 `include "../fpoperations.sv"
 `include "../struct.sv"
 
-module s_fadd(
+module fadds(
   clk,
   rst,
   A,

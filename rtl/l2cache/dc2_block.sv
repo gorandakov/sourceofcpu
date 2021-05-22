@@ -422,6 +422,8 @@ module dcache2_way(
   reg [4:0] write_end1_reg;
   reg [3:0] write_bBen1_reg;
   reg [3:0] write_enBen1_reg;
+  reg write_odd0_reg;
+  reg write_odd1_reg;
 
   reg write0_clkEn_reg2;
   reg write1_clkEn_reg2;
@@ -771,6 +773,8 @@ module dcache2_way(
           write0_hitOH_reg3<=1'b0;
           write1_hitEH_reg3<=1'b0;
           write1_hitOH_reg3<=1'b0;
+	  write_odd0_reg<=1'b0;
+	  write_odd1_reg<=1'b0;
           read_odd_reg<=1'b0;
           read_en_reg<=1'b0;
           read_odd_reg2<=1'b0;
@@ -831,6 +835,8 @@ module dcache2_way(
           write0_hitOH_reg3<=write0_hitOH_reg2;
           write1_hitEH_reg3<=write1_hitEH_reg2;
           write1_hitOH_reg3<=write1_hitOH_reg2;
+	  write_odd0_reg<=write_odd0;
+	  write_odd1_reg<=write_odd1;
           read_odd_reg<=read_odd;
           read_en_reg<=read_en;
           read_odd_reg2<=read_odd_reg;

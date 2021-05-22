@@ -1206,7 +1206,7 @@ module backend(
   
   reg [DATA_WIDTH-1:0] rs_const[8:0];
   reg [DATA_WIDTH-1:0] rs_const_reg[8:0];
-  reg [DATA_WIDTH-1:0] rs_const_new[8:0];
+  wire [8:0][DATA_WIDTH-1:0] rs_const_new;
   reg [8:0] rs_IPRel;
   reg [8:0] rs_afterTK;
 
@@ -4732,7 +4732,7 @@ module backend(
   .u2_LSQ_no(outLSQ[1]),.u2_II_no(outII[3]),.u2_WQ_no(outWQ[1]),
   .u2_lsflag(outLSflag[1]),.u2_clkEn(outEn[3][0]),
   .u2_attr(outAttr[3]),
-  .u3_base(outDataB[6]),.u3_index(outDataA[6]),.u3_const(outDataC[6]),
+  .u3_base(outDataB[6]),.u3_index(outDataA[6]),.u3_const(outDataC[2]),
   .u3_base_fufwd(fuFwdB[6]),.u3_base_fuufwd(fuuFwdB[6]),
   .u3_index_fufwd(fuFwdA[6]),.u3_index_fuufwd(fuuFwdA[6]),
   .u3_op(outOp[6]),.u3_reg(outReg[6]),
@@ -5056,6 +5056,7 @@ module backend(
   fun_fpusqr sqr_mod(
   .clk(clk),
   .rst(rst),
+  .except(except),
   .fpcsr(fpcsr[31:0]),
   .ul_A(outDataAFL_reg[5]),.ul_B(outDataBFL_reg[5]),.ul_Av(outDataAVL_reg[5]),.ul_Bv(outDataBVL_reg[5]),
   .uh_A(outDataAFH_reg[5]),.uh_B(outDataBFH_reg[5]),.uh_Av(outDataAVH_reg[5]),.uh_Bv(outDataBVH_reg[5]),

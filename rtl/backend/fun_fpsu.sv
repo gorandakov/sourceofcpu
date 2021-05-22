@@ -271,11 +271,9 @@ module fun_fpsu(
   .clk(clk),
   .rst(rst),
   .A({fxDataAXL_reg[0][65],fxDataAXL_reg[0][64:33]}),
-  .A_alt({fxDataAFL_REG[0][65],fxDataAFL_REG[0][64:33]}),
   .B({gxDataBXL_reg[1][65],gxDataBFL_reg[1][64:33]}),
   .isSub(fxFADD_sub[H]),
   .isRSub(fxFADD_rsub),
-  .invExcpt(fpcsr[`csrfpu_inv_excpt]),
   .raise(fxFADD_raise[0]),
   .fpcsr(fpcsr[31:0]),
   .rmode(fpcsr[`csrfpu_rmode]),
@@ -290,11 +288,9 @@ module fun_fpsu(
   .clk(clk),
   .rst(rst),
   .A({fxDataAXL_reg[0][32],fxDataAXL_reg[0][31:0]}),
-  .A_alt({fxDataAFL_REG[0][32],fxDataAFL_REG[0][31:0]}),
   .B({gxDataBXL_reg[1][32],gxDataBFL_reg[1][31:0]}),
   .isSub(fxFADD_sub[H]),
   .isRSub(fxFADD_rsub),
-  .invExcpt(fpcsr[`csrfpu_inv_excpt]),
   .raise(fxFADD_raise[1]),
   .fpcsr(fpcsr[31:0]),
   .rmode(fpcsr[`csrfpu_rmode]),
@@ -329,8 +325,8 @@ module fun_fpsu(
   fcmpd fcmpL_mod(
   .clk(clk),
   .rst(rst),
-  .A({fxDataAXL_reg[0][65],fxDataAXL_reg[0][31:0]}),
-  .B({gxDataBXL_reg[1][65],gxDataBXL_reg[1][31:0]}),
+  .A({16'b0,fxDataAXL_reg[0][65:0]}),
+  .B({16'b0,gxDataBXL_reg[1][65:0]}),
   .ord(gxFADD_ord),.invExcpt(fpcsr[`csrfpu_inv_excpt]),
   .isExt(H ? 1'b0: gxFADD_ext),.isDbl(gxFADD_dbl),.isSng(H? gxFADD_sn:gxFADD_sin),
   .afm(1'b0),.flags(FOOSL),
@@ -349,16 +345,16 @@ module fun_fpsu(
   assign fmask2=fxFCADD_sn_reg5 ?
     (fxFCADD_raise_s_reg[0]|fxFCADD_raise_s_reg[1]) :
     11'b0;
-  fexcpt fexcpt2_mod(fraise2_reg,{5'b0,6'b0,3'b0},
-    fmask2_reg,|u2_en_reg7[2][3:2],u2_ret,u2_ret_en);
+  fexcpt fexcpt2_mod(fraise2_reg,{6'b0,3'b0},
+    fmask2_reg,|u2_en_reg7[3:2],u2_ret,u2_ret_en);
   assign fraise3=fxFADD_sn_reg2 ?
     (fxFADD_raise_reg[0]|fxFADD_raise_reg[1])&fpcsr[21:11] :
     11'b0&fpcsr[21:11];
   assign fmask3=fxFADD_sn_reg2 ?
     (fxFADD_raise_reg[0]|fxFADD_raise_reg[1]) :
     11'b0;
-  fexcpt fexcpt3_mod(fraise3_reg,{5'b0,6'b0,3'b0},
-    fmask3_reg,|u1_en_reg4[1][3:2],u1_ret,u1_ret_en);
+  fexcpt fexcpt3_mod(fraise3_reg,{6'b0,3'b0},
+    fmask3_reg,|u1_en_reg4[3:2],u1_ret,u1_ret_en);
 /*module fexcpt(
   mask,
   in,
@@ -407,9 +403,9 @@ module fun_fpsu(
  
   generate
       if (H) assign gxDataBFL[1]=u1_op_reg[9] ? u1_Bx : uu_B1;
-      else assign gxDataBFL[1]=u1_op_reg[8] ? {uu_B1[68+15:68],u1_Bx} : uu_B1;
+      else assign gxDataBFL[1]=u1_op_reg[8] ? {u1_Bx} : uu_B1;
       if (H) assign gxDataBFL[0]=u2_op_reg[9] ? u2_Bx : uu_B2;
-      else assign gxDataBFL[0]=u2_op_reg[8] ? {uu_B2[68+15:68],u2_Bx} : uu_B2;
+      else assign gxDataBFL[0]=u2_op_reg[8] ? {u2_Bx} : uu_B2;
       if (INDEX==0) begin
 	      assign FUF4=FOOF_reg[0];
 	      assign FUF7=FOOF_reg[1];

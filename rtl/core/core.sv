@@ -1105,7 +1105,7 @@ module heptane_core(
   
   halt,
   
-  all_retired,
+  1'b1,//all_retired,
   fp_excpt_en,
   fp_excpt_set,
 
