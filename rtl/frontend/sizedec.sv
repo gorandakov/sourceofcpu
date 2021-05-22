@@ -437,7 +437,7 @@ module predecoder_get(
     wire has_lnk;
     wire [15:0][4:0] LNK;
     wire [14:0] lcnt_or_less;
-    wire [14:0][14:-1] lcnt;
+    wire [14:-1][15:0] lcnt;
     wire [14:0] is_ret0;
     wire [14:0] is_ret;
     reg [14:0] is_ret_reg;
