@@ -342,7 +342,7 @@ module fun_fpu(
   assign fmask2=fxFCADD_sn_reg5 ?
     fxFCADD_raise_s_reg :
     (fxFCADD_raise_reg);
-  fexcpt fexcpt2_mod(fraise2_reg,{5'b0,FUS_alu1,ex_alu1},
+  fexcpt fexcpt2_mod(fraise2_reg,{FUS_alu1,ex_alu1},
     fmask2_reg,|u2_en_reg7[3:2],u2_ret,u2_ret_en);
   assign fraise3=fxFADD_sn_reg2 ?
     fxFADD_raise_s_reg&fpcsr[21:11] :
@@ -350,7 +350,7 @@ module fun_fpu(
   assign fmask3=fxFADD_sn_reg2 ?
     fxFADD_raise_s_reg :
     (fxFADD_raise_reg);
-  fexcpt fexcpt3_mod(fraise3_reg,{5'b0,FUS_alu0,ex_alu0},
+  fexcpt fexcpt3_mod(fraise3_reg,{FUS_alu0,ex_alu0},
     fmask3_reg,|u1_en_reg4[3:2],u1_ret,u1_ret_en);
 /*module fexcpt(
   mask,

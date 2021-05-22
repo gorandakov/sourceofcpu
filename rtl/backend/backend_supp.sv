@@ -1521,13 +1521,13 @@ module fexcpt(
   en);
 
   input [10:0] mask;
-  input [5:0] in;
+  input [8:0] in;
   input [10:0] in_mask;
   input in_en;
-  output [5:0] no;
+  output [13:0] no;
   output en;
 
-  wire [12:0] msk1;
+  wire [13:0] msk1;
   wire [10:0] first;
   
 
@@ -1540,8 +1540,8 @@ module fexcpt(
     end
   endgenerate
 
-  assign msk1=in_en ? {in_mask,2'd3} : {5'b0,in,2'd2};
-  assign no=en ? 13'bz : msk1;
+  assign msk1=in_en ? {in_mask,3'd3} : {5'b0,in};
+  assign no=en ? 14'bz : msk1;
 endmodule
 //verilator lint_on WIDTH
 
