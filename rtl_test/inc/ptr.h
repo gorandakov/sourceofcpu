@@ -33,8 +33,8 @@ class ptr {
 	unsigned long bnd2=bnd1;
 	if (!eqn) {
             if (val>>44) bnd2+=1ul<<(exp+13);
-	    else (val>>44) bnd2-=1ul<<(exp+13);
-	    bnd&=0xfffffffffff;
+	    else bnd2-=1ul<<(exp+13);
+	    bnd2&=0xfffffffffff;
 	}
 	flip=0;
 	if (no_O==1) {
