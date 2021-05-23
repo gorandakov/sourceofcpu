@@ -1457,6 +1457,8 @@ module dcache1(
           
           for(v=0;v<4;v=v+1) begin
               read_sz_reg[v]<=read_sz[v];
+       //verilator lint_off CASEINCOMPLETE
+
               case(read_sz_reg[v])
          5'd16: mskdata1[v]<=6'b00000;
          5'd17: mskdata1[v]<=6'b00001;
@@ -1470,6 +1472,7 @@ module dcache1(
          5'hb,5'h7:  mskdata1[v]<=6'b00111; //singlePair,64 int(u), 64 int(a)
 	 5'hf: mskdata1[v]<=6'b111111;
               endcase
+       //verilator lint_on CASEINCOMPLETE
               read_beginA_reg[v]<=read_beginA[v];
            end
 

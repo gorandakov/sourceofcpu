@@ -1957,7 +1957,7 @@ module frontend1(
 	  IP_phys_reg2<=IP_phys_reg;
 	  IP_phys_reg3<=IP_phys_reg2;
       end else if (btbFStall_recover && ~iq_fstall && ~jq_fstall && ~fmstall) begin
-          pre_instrEn_reg<=pre_instrEn;
+          pre_instrEn_reg<={1'b0,pre_instrEn};
           pre_instr0_reg<=pre_instr0;
           pre_instr1_reg<=pre_instr1;
           pre_instr2_reg<=pre_instr2;

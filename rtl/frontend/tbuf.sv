@@ -64,6 +64,7 @@ module tbuf_ram_block(
   input [DATA_WIDTH-1:0] write_data;
   input write_wen;
 
+  //verilator lint_off WIDTH
   tbuf_ram ram0_mod(
   clk,
   rst,
@@ -96,6 +97,7 @@ module tbuf_ram_block(
   {1'b0,write_data[DATA_WIDTH-1:(DATA_WIDTH+2)/3*2]},
   write_wen
   );
+  //verilator lint_on WIDTH
 endmodule
 
 //read-during-write behaviour: write first;
@@ -912,12 +914,14 @@ module tbuf_way(
   
   always @* begin
       write_dataJ=btb_data_reg[`btb_width-2:0];
+       //verilator lint_off CASEINCOMPLETE
       case(taken_reg)
       4'b1: write_dataJ[`btb_tgt_jmask0]=jmp_mask_in;
       4'b10: write_dataJ[`btb_tgt_jmask1]=jmp_mask_in;
       4'b100: write_dataJ[`btb_tgt_jmask2]=jmp_mask_in;
       4'b1000: write_dataJ[`btb_tgt_jmask3]=jmp_mask_in;
       endcase
+       //verilator lint_on CASEINCOMPLETE
   end
   tbuf_ram_block tbuf_mod(
   .clk(clk),

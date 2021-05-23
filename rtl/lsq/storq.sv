@@ -1932,10 +1932,12 @@ module storq(
     if (rst) begin
         cur_pos<=3'b1;
     end else if (new_enP_reg & ~aStall & ~aDoStall &~except) begin
+       //verilator lint_off CASEINCOMPLETE
         case(wrt_cnt)
       4'b10: cur_pos<={cur_pos[1:0],cur_pos[2]};
       4'b100: cur_pos<={cur_pos[0],cur_pos[2:1]};
         endcase
+       //verilator lint_on CASEINCOMPLETE
     end 
     if (rst) begin
         cur_posh<=3'b1;

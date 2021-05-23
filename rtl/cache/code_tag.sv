@@ -155,9 +155,9 @@ module ccTag(
   reg read_clkEn_reg2;
 
 
-  reg [PHYS_BITS-6:0] read_phys_addr_reg;
-  reg [PHYS_BITS-6:0] write_phys_addr_reg;
-  reg [PHYS_BITS-6:0] read_phys_addr_reg2;
+  reg [PHYS_BITS-8:0] read_phys_addr_reg;
+  reg [PHYS_BITS-8:0] write_phys_addr_reg;
+  reg [PHYS_BITS-8:0] read_phys_addr_reg2;
  
 
   wire [2:0] read_NRUr;
@@ -183,7 +183,7 @@ module ccTag(
   assign write_data_new[`cc1Tag_paddr]=write_phys_addr_reg;
   assign write_data_new[`cc1Tag_parity]=^write_data_new[DATA_WIDTH-2:0];
 
-  assign write_expun_addr=read_dataW[`cc1Tag_paddr] && {37{write_hit}};
+  assign write_expun_addr=read_dataW[`cc1Tag_paddr] & {37{write_hit}};
   assign write_exp_en=write_hit && read_dataW[`cc1Tag_valid ];
 
   generate
@@ -255,12 +255,12 @@ module ccTag(
       if (rst) read_clkEn_reg2<=1'b0;
       else read_clkEn_reg2<=read_clkEn_reg;
       if (rst) begin
-          read_phys_addr_reg<=57'b0;
-          write_phys_addr_reg<=57'b0;
+          read_phys_addr_reg<=37'b0;
+          write_phys_addr_reg<=37'b0;
           write_wen_reg<=1'b0;
           read_NRUr_reg<=3'b0;
           invalidate_reg<=1'b0;
-          read_phys_addr_reg2<=57'b0;
+          read_phys_addr_reg2<=37'b0;
           init_reg<=1'b0;
           init_reg2<=1'b0;
       end

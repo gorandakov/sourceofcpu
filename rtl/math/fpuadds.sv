@@ -153,8 +153,12 @@ module fadds(
   wire A_s2;
   reg en_reg;
   integer m;
-  wire renor_any,exp_dec_non_denor_IEEE_0,exp_dec_non_denor_IEEE_1,exp_dec_non_denor,exp_min_IEEE,exp_inc_oor_IEEE,exp_max_IEEE,exp_inc_oor,exp_max,
-	  exp_dec_non_denor_IEEE,exp_min_kludge;
+  wire renor_any,exp_dec_non_denor_IEEE_0,exp_dec_non_denor_IEEE_1,exp_dec_non_denor,exp_inc_oor_IEEE,exp_inc_oor,
+	  exp_dec_non_denor_IEEE;
+  wire [8:0] exp_min_IEEE;
+  wire [8:0] exp_max_IEEE;
+  wire [8:0] exp_min_kludge;
+  wire [8:0] exp_max;
   reg exp_inc_oor_reg,exp_inc_oor_IEEE_reg,exp_dec_non_denor_reg,exp_dec_non_denor_IEEE_reg;
   wire [3:0] xpon;
   wire invExcpt;
@@ -222,10 +226,10 @@ module fadds(
   assign rndpath=(expdiffA==1 || expdiffB==1) && sxor;
   
   assign res[22:0]=(renor_simple & ~spec_any & en_reg) ? renorS[22:0] : 23'bz;
-  assign {res[32],res[30:23]}=(renor_simple & ~spec_any & en_reg) ? renorE : 16'bz;
+  assign {res[32],res[30:23]}=(renor_simple & ~spec_any & en_reg) ? renorE : 9'bz;
   
   assign res[22:0]=(renor_round & ~spec_any & en_reg) ? renorSR[22:0] : 23'bz;
-  assign {res[32],res[30:23]}=(renor_round & en_reg & ~spec_any) ? renorER : 16'bz;
+  assign {res[32],res[30:23]}=(renor_round & en_reg & ~spec_any) ? renorER : 9'bz;
 
   assign res[31]=(renor_simple & en_reg & ~spec_any) ? A_s1_reg : 1'bz;
   assign res[31]=(renor_round & en_reg & ~spec_any) ? A_s1_reg : 1'bz;
@@ -252,7 +256,7 @@ module fadds(
   
   assign renor_simple=altpath_reg && ~renor_round;
   
-  assign expoor=expdiff[8:5]!=4'b0 || expdiff[8:3]==5'b000011;//&& expdiff!=16'h40; 
+  assign expoor=expdiff[8:5]!=4'b0 || expdiff[8:3]==6'b000011;//&& expdiff!=16'h40; 
 
   assign resX[31]=A_s1_reg;
   
@@ -269,14 +273,14 @@ module fadds(
   assign exp_min_kludge=9'h99;
 
   assign raise[`csrfpu_inv_excpt]=spec_snan_reg;
-  assign raise[`csrfpu_under_excpt]=A_s1_reg & exp_inc_oor_reg & xpon[1] & ~res_spec;
-  assign raise[`csrfpu_over_excpt]=~A_s1_reg & exp_inc_oor_reg & xpon[1] & ~res_spec;
-  assign raise[`csrfpu_under_ieee_excpt]=A_s1_reg & exp_inc_oor_IEEE_reg & xpon[1] & ~res_spec;
-  assign raise[`csrfpu_over_ieee_excpt]=~A_s1_reg & exp_inc_oor_IEEE_reg & xpon[1] & ~res_spec;
-  assign raise[`csrfpu_denor_excpt]=~exp_dec_non_denor_reg & xpon[0] & ~res_spec;
-  assign raise[`csrfpu_denor_ieee_excpt]=~exp_dec_non_denor_IEEE_reg & xpon[0] & ~res_spec;
-  assign raise[`csrfpu_inexact_excpt]=!xpon[3:2]; 
-  assign raise[`csrfpu_inexact_ieee_excpt]=!xpon[3:2]; 
+  assign raise[`csrfpu_under_excpt]=A_s1_reg & exp_inc_oor_reg & xpon[1] & ~spec_any;
+  assign raise[`csrfpu_over_excpt]=~A_s1_reg & exp_inc_oor_reg & xpon[1] & ~spec_any;
+  assign raise[`csrfpu_under_ieee_excpt]=A_s1_reg & exp_inc_oor_IEEE_reg & xpon[1] & ~spec_any;
+  assign raise[`csrfpu_over_ieee_excpt]=~A_s1_reg & exp_inc_oor_IEEE_reg & xpon[1] & ~spec_any;
+  assign raise[`csrfpu_denor_excpt]=~exp_dec_non_denor_reg & xpon[0] & ~spec_any;
+  assign raise[`csrfpu_denor_ieee_excpt]=~exp_dec_non_denor_IEEE_reg & xpon[0] & ~spec_any;
+  assign raise[`csrfpu_inexact_excpt]=!|xpon[3:2]; 
+  assign raise[`csrfpu_inexact_ieee_excpt]=!|xpon[3:2]; 
   assign raise[`csrfpu_denor_consume_excpt]=1'b0;
   assign raise[`csrfpu_denor_produce_excpt]=1'b0;
 
@@ -298,13 +302,13 @@ module fadds(
   assign resX[22:0]=main_simpleL ? {resM1[21:0],res_rnbit^Smain_subroundL} : 23'bz;
   assign resX[22:0]=main_roundL ? {resMR1[21:0],1'b0} : 23'bz;
   
-  assign {resX[32],resX[30:23]}=main_simple ? {opA_exp_reg[8:0]} : 12'bz;
-  assign {resX[32],resX[30:23]}=main_round ? {opA_exp_reg[8:0]} : 12'bz;
-  assign {resX[32],resX[30:23]}=main_simpleC ? {opA_exp_inc[8:0]} : 12'bz;
-  assign {resX[32],resX[30:23]}=main_roundC ? {opA_exp_inc[8:0]} : 12'bz;
-  assign {resX[32],resX[30:23]}=main_simpleRC ? {opA_exp_inc[8:0]} : 12'bz;
-  assign {resX[32],resX[30:23]}=main_simpleL ? {opA_exp_dec[8:0]} : 12'bz;
-  assign {resX[32],resX[30:23]}=main_roundL ? {opA_exp_dec[8:0]} : 12'bz;
+  assign {resX[32],resX[30:23]}=main_simple ? {opA_exp_reg[8:0]} : 9'bz;
+  assign {resX[32],resX[30:23]}=main_round ? {opA_exp_reg[8:0]} : 9'bz;
+  assign {resX[32],resX[30:23]}=main_simpleC ? {opA_exp_inc[8:0]} : 9'bz;
+  assign {resX[32],resX[30:23]}=main_roundC ? {opA_exp_inc[8:0]} : 9'bz;
+  assign {resX[32],resX[30:23]}=main_simpleRC ? {opA_exp_inc[8:0]} : 9'bz;
+  assign {resX[32],resX[30:23]}=main_simpleL ? {opA_exp_dec[8:0]} : 9'bz;
+  assign {resX[32],resX[30:23]}=main_roundL ? {opA_exp_dec[8:0]} : 9'bz;
   
   assign main_lo=~resM1[23] && ~(cout64_M1_ns^partM1[24]^sxor_reg);
   assign main_ulo=main_lo && resMR1[23];
@@ -340,8 +344,8 @@ module fadds(
           else if (!k) begin
               assign opBs1=(expdiff[5:3]==k && ~expoor) ? {{k*8{sxor}},opB[23:k*8]} : 24'bz;
               assign xop1[1:0]=(expdiff[5:3]==3'b0 && ~expoor) ? 2'b0 : 2'bz;
-              assign xop1[1:0]=(expdiff==16'h18) ? opB[23:22] : 2'bz;
-              assign xop1[1:0]=(expdiff==16'h19) ? {sxor,opB[23]} : 2'bz;
+              assign xop1[1:0]=(expdiff==9'h18) ? opB[23:22] : 2'bz;
+              assign xop1[1:0]=(expdiff==9'h19) ? {sxor,opB[23]} : 2'bz;
           end
           if (k<3) begin 
               wire e_more,e_eq,e_eq2;
@@ -423,7 +427,7 @@ module fadds(
   always @(*) begin
       if (rst) begin
           expdiffeq<=8'b1;
-          opA_exp_reg<=16'b0;
+          opA_exp_reg<=9'b0;
           sxor_reg<=1'b0;
           expdiff_reg<=9'b0;
           expoor_reg<=1'b0;
@@ -431,7 +435,7 @@ module fadds(
           opA_reg<=24'b0;
           resS1_reg<=24'b0;
           resSR1_reg<=24'b0;
-          xop1_reg<=9'b0;
+          xop1_reg<=10'b0;
           andtailBs1_reg<=1'b0;
           andtailBs1_c_reg<=1'b0;
           andtailBs1_L_reg<=1'b0;
@@ -462,7 +466,7 @@ module fadds(
 	  exp_dec_non_denor_reg<=1'b0;
 	  exp_dec_non_denor_IEEE_reg<=1'b0;
       end else begin
-	  for (m=0;m<8;m=m+1) expdiffeq[m]<=expdiff[2:0]==m && ~expoor;
+	  for (m=0;m<8;m=m+1) expdiffeq[m]<=expdiff[2:0]==m[2:0] && ~expoor;
           sxor_reg<=sxor;
           expdiff_reg<=expdiff;
           opA_exp_reg<=opA_exp;

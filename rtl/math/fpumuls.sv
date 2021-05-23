@@ -124,8 +124,8 @@ module fpumuls(clk,rst,A,B,copyA,en,rmode,res,raise,fpcsr);
   assign res[22:0]=(prod_reg[47] & ~DBL_rnd1 & ~spec_any & en_reg3) ? prod_reg[46:24]:23'bz;
   assign res[22:0]=(~prod_reg[47] & ~DBL_rnd0 & ~spec_any & en_reg3) ? prod_reg[45:23]:23'bz;
    
-  assign {res[32],res[30:23]}=(prod_reg[47] & ~spec_any & en_reg3) ? {exp_exp1_reg3[8],sgn_reg3,exp_exp1_reg3[7:0]} : 13'bz;
-  assign {res[32],res[30:23]}=(~prod_reg[47] & ~spec_any & en_reg3) ? {exp_exp_reg3[8],sgn_reg3,exp_exp_reg3[7:0]} : 13'bz;
+  assign {res[32],res[31:23]}=(prod_reg[47] & ~spec_any & en_reg3) ? {exp_exp1_reg3[8],sgn_reg3,exp_exp1_reg3[7:0]} : 10'bz;
+  assign {res[32],res[31:23]}=(~prod_reg[47] & ~spec_any & en_reg3) ? {exp_exp_reg3[8],sgn_reg3,exp_exp_reg3[7:0]} : 10'bz;
 
   assign expon=(prod_reg[47] & ~spec_any) ? 
     {~DBL_rnbit1 & ~ DBL_tail1,exp_exp1_reg3[9],exp1_non_denor_IEEE_reg2,exp1_oor_IEEE_reg2,exp1_oor_reg2} : 5'bz;

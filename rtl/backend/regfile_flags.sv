@@ -61,7 +61,7 @@ module regfileFl_ram(
 
   assign read0_data=ram[read0_addr_reg];
 
-  assign retireRead_data=ram[retireRead_addr_reg];
+  assign retireRead_data=ram[retireRead_addr_reg][5:0];
 
   always @(posedge clk)
     begin

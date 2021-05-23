@@ -1292,6 +1292,7 @@ module alloc_WQ(
 	  thrdB<=120'b0;
 	  busyB<=120'b0;
       end else if (~stall & ~doStall & newEn) begin
+       //verilator lint_off CASEINCOMPLETE
           casex({~{&wrt0[1:0],&wrt1[1:0],&wrt2[1:0]},pos})
               4'b1x01,4'b11x0: begin
               addr_low<=addr_low1;
@@ -1306,6 +1307,7 @@ module alloc_WQ(
               xaddr_hi<=xaddr_hi2;
               end
           endcase
+       //verilator lint_on CASEINCOMPLETE
           if (wrcnt[1] | wrcnt[3]) pos<=~pos;
           if (pos) begin
 	      if (wrcnt[3:1]) thrdB[addr_low]<=newThr;
@@ -1536,7 +1538,7 @@ module fexcpt(
   generate
     genvar t;
     for(t=0;t<11;t=t+1) begin
-        assign no=first[t] ? {t[10:0],2'd3} : 6'bz;
+        assign no=first[t] ? {t[11:0],2'd3} : 14'bz;
     end
   endgenerate
 
