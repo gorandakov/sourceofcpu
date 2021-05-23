@@ -82,7 +82,7 @@ module cc_comb (
   wire [14:0] read_dataXP[3:0];
   reg [59:0] read_dataX0_reg;
   wire [36:0] cc_exp_addr0;  
-  wire [36:0] cc_exp_addr0_reg;  
+  reg [36:0] cc_exp_addr0_reg;  
 //  wire [71:0] read_dataY0;
 //  wire [17:0] read_dataYP;
 //  reg [71:0] read_dataY0_reg;

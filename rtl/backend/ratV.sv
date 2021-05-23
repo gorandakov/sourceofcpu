@@ -207,9 +207,9 @@ module ratV_buf(
   input write_thread;
   input ret_thread;
   
-  reg [ROB_ADDR_WIDTH-1:0] robAddr[1:0];
-  reg retired[1:0];
-  reg [FN_WIDTH-1:0] funit[1:0];
+  reg [ROB_ADDR_WIDTH-1:0] robAddr;
+  reg retired;
+  reg [FN_WIDTH-1:0] funit;
   reg [1:0] dom;
   reg [1:0] domp;
 

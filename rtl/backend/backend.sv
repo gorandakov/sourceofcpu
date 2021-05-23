@@ -1512,7 +1512,7 @@ module backend(
   
   wire [2:0][3:0] fxFRT_alten;
   wire [3:0]      fxFRT_pause;
-  wire [2:0][3:0] fxFRT_alten_reg;
+  reg [2:0][3:0] fxFRT_alten_reg;
   
   reg [DATA_WIDTH-1:0] FU_reg[9:0];
   reg [DATA_WIDTH-1:0] FU_reg2[9:0];
@@ -1692,14 +1692,14 @@ module backend(
   reg [12:0] outOpX_reg;
   reg [8:0]  outRegX_reg;
 
-  wire [5:5][SIMD_WIDTH-1:0] outDataAVH_reg;
-  wire [5:5][SIMD_WIDTH-1:0] outDataBVH_reg;
-  wire [5:5][SIMD_WIDTH-1:0] outDataAVL_reg;
-  wire [5:5][SIMD_WIDTH-1:0] outDataBVL_reg;
-  wire [5:5][SIMD_WIDTH-1:0] outDataAFH_reg;
-  wire [5:5][SIMD_WIDTH-1:0] outDataBFH_reg;
-  wire [5:5][16+SIMD_WIDTH-1:0] outDataAFL_reg;
-  wire [5:5][16+SIMD_WIDTH-1:0] outDataBFL_reg;
+  reg [5:5][SIMD_WIDTH-1:0] outDataAVH_reg;
+  reg [5:5][SIMD_WIDTH-1:0] outDataBVH_reg;
+  reg [5:5][SIMD_WIDTH-1:0] outDataAVL_reg;
+  reg [5:5][SIMD_WIDTH-1:0] outDataBVL_reg;
+  reg [5:5][SIMD_WIDTH-1:0] outDataAFH_reg;
+  reg [5:5][SIMD_WIDTH-1:0] outDataBFH_reg;
+  reg [5:5][16+SIMD_WIDTH-1:0] outDataAFL_reg;
+  reg [5:5][16+SIMD_WIDTH-1:0] outDataBFL_reg;
   
   reg [3:0] fuFwdA_reg[8:0];
   reg [3:0] fuFwdB_reg[8:0];
@@ -1872,7 +1872,7 @@ module backend(
   reg [3:0] dc_rsEn_reg; 
   reg [8:0] dc_LSQ_reg[3:0];
 
-  wire [3:0][8:0] dc_rdReg_reg;
+  reg [3:0][8:0] dc_rdReg_reg;
 
   wire [1:0][PADDR_WIDTH-9:0] dc_wrAddrE;
   wire [1:0][PADDR_WIDTH-9:0] dc_wrAddrO;
@@ -1923,10 +1923,10 @@ module backend(
   reg [9:0] lsr3_II_reg2;
   reg [3:0] p_lsfwd_reg;
   reg [3:0] p_lsfwd_reg2;
-  wire    [4:0] p2_brdbanks_reg;
-  wire    [4:0] p2_brdbanks_reg2;
-  wire    [4:0] p3_brdbanks_reg;
-  wire    [4:0] p3_brdbanks_reg2;
+  reg    [4:0] p2_brdbanks_reg;
+  reg    [4:0] p2_brdbanks_reg2;
+  reg    [4:0] p3_brdbanks_reg;
+  reg    [4:0] p3_brdbanks_reg2;
 
   wire [8:0] retfl_rF;
   wire [5:0] retfl_data;
@@ -2158,7 +2158,7 @@ module backend(
  // wire [39:0]retM_exbits;
   wire retM_do_retire;
   wire [`lsqshare_width-1:0] retM_data_shr;
-  wire [`lsqshare_width-1:0] retM_data_shr_reg;
+  reg [`lsqshare_width-1:0] retM_data_shr_reg;
   //reg retM_ret_ret;
   wire [9:0] retM_xbreak;
   wire retM_stall;
