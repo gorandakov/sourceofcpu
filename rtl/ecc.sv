@@ -1,5 +1,5 @@
 `include "struct.sv"
-
+//verilator lint_off WIDTH
 module hamingChk32(data,hasError,error);
   parameter WIDTH=38;
   input [WIDTH-1:0] data;
@@ -89,3 +89,5 @@ module dc1_get_par(in,out);
 
   assign out={^in[31:24],in[31:24],^in[23:16],in[23:16],^in[15:8],in[15:8],^in[7:0],in[7:0]};
 endmodule
+//verilator lint_on WIDTH
+

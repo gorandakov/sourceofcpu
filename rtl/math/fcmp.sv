@@ -72,9 +72,9 @@ module fcmpd(clk,rst,
     begin
         fracxfrm[22:0]=d_in[22:0];
 	fracxfrm[23]=d_in[23]|sngl;
-	fracxfrm[51:24]=d_in[51:24]&~sngl;
+	fracxfrm[51:24]=d_in[51:24]&{27'b0,~sngl};
 	fracxfrm[52]=d_in[52]&~sngl||dbl;
-	fracxfrm[63:53]=d_in[63:53]&~ext;
+	fracxfrm[63:53]=d_in[63:53]&{10'b0,~ext};
     end
   endfunction
 
@@ -161,7 +161,7 @@ module fcmpd(clk,rst,
 
   assign flags={res_C,1'b0,1'b0,res_S,res_Z,res_unord};
 
-  assign res_pkd[65:0]=ven_reg ? {vtype_reg,{33{vres_reg[1]}},{33{vres_reg[0]}}} : 68'bz; 
+  assign res_pkd[67:0]=ven_reg ? {vtype_reg,{33{vres_reg[1]}},{33{vres_reg[0]}}} : 68'bz; 
   always @(negedge clk) begin
     if (rst) vres_reg<=2'b0;
     else vres_reg<=vres;

@@ -22,14 +22,14 @@ module add_sat(
   assign res=(is_sat&~is_sign&is_sub&~cout) ? {WIDTH{1'B0}} : {WIDTH{1'Bz}};
   assign res=(is_sat&is_sign&ovfl_A) ? {WIDTH{1'B1}} : {WIDTH{1'Bz}};
   assign res=(is_sat&is_sign&ovfl_S) ? {WIDTH{1'B0}} : {WIDTH{1'Bz}};
-  assign min0=(is_sign && res1[WIDTH-1:0] ^ (ovfl_A|ovfl_S)) ||
+  assign min0=(is_sign && res1[WIDTH-1] ^ (ovfl_A|ovfl_S)) ||
       (~is_sign & ~cout);
   assign res=(is_min&min0 ||is_max&~min0) ? A : {WIDTH{1'BZ}};
   assign res=(is_min&min0 ||is_max&~min0) ? A : {WIDTH{1'BZ}};
   assign ovfl_S=A[WIDTH-1] & Bx[WIDTH-1] & ~res1[WIDTH-1];
   assign ovfl_A=~A[WIDTH-1] & ~Bx[WIDTH-1] & res1[WIDTH-1];
 
-  assign flags={cout,ovfl_A|ovfl_S,1'b0,res1[WIDTH-1:0],A==B,1'b0};
+  assign flags={cout,ovfl_A|ovfl_S,1'b0,res1[WIDTH-1],A==B,1'b0};
 
   except_jump_cmp jcmp_mod(flags,{1'b0,jump_type},do_jmp);
 
@@ -88,7 +88,7 @@ module simd_non_socialiste(
   shSH
   );
 
-  assign res=en_reg2 ? {`ptype_int,1'b0,resh[63:32],1'b0,resh[31:0]} : 68'bz;
+  assign res=en_reg2 ? {2'd`ptype_int,1'b0,resh[63:32],1'b0,resh[31:0]} : 68'bz;
   generate
       genvar d;
       for(d=0;d<8;d=d+1) begin
@@ -120,7 +120,7 @@ module simd_non_socialiste(
         operation[5:0]==`simd_psubsat || operation[5:0]==`simd_pmins ||operation[5:0]==`simd_pmaxs||operation[5:0]
 	==`simd_pmin||operation[5:0]==`simd_pmax;
       is_cmp<=operation[5:0]==`simd_cmp;
-      jump_type<={operation[12],operation[9:8]};
+      jump_type<={operation[12],operation[9:8],1'b0};
       resD_reg[1]<=resD[1];
       resD_reg[2]<=resD[2];
       resD_reg[3]<=resD[3];
@@ -183,11 +183,13 @@ module simd_sasquach_shift(
 
   generate
       genvar k;
-      for(k=0;k<16;k=k+1) begin
-          if (k<8) assign shf8[k*8+:8]=(B_reg[k*8+:3]==k & dir) ? {{8{fill8[k]}},A_reg[k*8+:8]}>>k : 8'bz;
-          if (k<8) assign shf8[k*8+:8]=(B_reg[k*8+:3]==k & ~dir) ? A_reg[k*8+:8]<<k : 8'bz;
-          assign shf16[k*16+:16]=(B_reg[k*16+:4]==k & dir) ? {{16{fill16[k]}},A_reg[k*16+:16]}>>k : 16'bz;
-          assign shf16[k*16+:16]=(B_reg[k*16+:4]==k & ~dir) ? A_reg[k*16+:16]>>k : 16'bz;
+      for(k=0;k<8;k=k+1) begin
+          //verilator lint_off WIDTH  
+          assign shf8[k*8+:8]=(B_reg[k*8+:3]==k & dir) ? {{8{fill8[k]}},A_reg[k*8+:8]}>>k : 8'bz;
+          assign shf8[k*8+:8]=(B_reg[k*8+:3]==k & ~dir) ? A_reg[k*8+:8]<<k : 8'bz;
+          if (k<4) assign shf16[k*16+:16]=(B_reg[k*16+:4]==k & dir) ? {{16{fill16[k]}},A_reg[k*16+:16]}>>k : 16'bz;
+          if (k<4) assign shf16[k*16+:16]=(B_reg[k*16+:4]==k & ~dir) ? A_reg[k*16+:16]>>k : 16'bz;
+          //verilator lint_on WIDTH  
       end
   endgenerate
 

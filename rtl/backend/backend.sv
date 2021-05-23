@@ -4443,7 +4443,7 @@ module backend(
       assign domErrA[u]=~((rs_rA_isV[u]~^domA[u][0]) || rs_rA_isAnyV[u] || domA[u][1]) && rs_rA_useF[u];
       assign domErrB[u]=~((rs_rB_isV[u]~^domB[u][0]) || rs_rB_isAnyV[u] || domB[u][1]) && rs_rB_useF[u];
       
-      if (u%3) begin
+      if ((u%3)!=0) begin
           assign gazumpA[u]=isAF_reg[u] ? gazumpFA[u] : 11'bz;
           assign gazumpA[u]=isAV_reg[u] ? gazumpAV[u] : 11'bz;
           assign gazumpA[u]=(~isAV_reg[u] & ~isAF_reg[u]) ? gazumpAG[u] : 11'bz;

@@ -340,8 +340,8 @@ module fadds(
   generate
       genvar k;
       for(k=0;k<8;k=k+1) begin
-          if (k && k<3) assign {opBs1,xop1[1:0]}=(expdiff[5:3]==k && ~expoor) ? {{k*8{sxor}},opB[23:k*8-2]} : 26'bz;
-          else if (!k) begin
+          if (|k && k<3) assign {opBs1,xop1[1:0]}=(expdiff[5:3]==k && ~expoor) ? {{k*8{sxor}},opB[23:k*8-2]} : 26'bz;
+          else if (!|k) begin
               assign opBs1=(expdiff[5:3]==k && ~expoor) ? {{k*8{sxor}},opB[23:k*8]} : 24'bz;
               assign xop1[1:0]=(expdiff[5:3]==3'b0 && ~expoor) ? 2'b0 : 2'bz;
               assign xop1[1:0]=(expdiff==9'h18) ? opB[23:22] : 2'bz;

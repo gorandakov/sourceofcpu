@@ -168,8 +168,8 @@ module dcache2_bank(
   );
   localparam ADDR_WIDTH=8;
   localparam DATA_WIDTH=32;
-  parameter [4:0] INDEX=0;
-  parameter [0:0] TOP=0;
+  parameter [4:0] INDEX=5'd0;
+  parameter [0:0] TOP=1'b0;
 
   input clk;
   input rst;
@@ -704,7 +704,7 @@ module dcache2_way(
   generate
       genvar b;
       for(b=0;b<16;b=b+1) begin : bank_gen
-          dcache2_bank #(b,ID[0]) bankL_mod(
+          dcache2_bank #(b[4:0],ID[0]) bankL_mod(
           .clk(clk),
           .rst(rst),
           .read_en(read_enL),
@@ -724,7 +724,7 @@ module dcache2_way(
           .write_data(write_data[DATA_WIDTH*b+:DATA_WIDTH]),
           .ins_hit(ins_hit_reg)
           );
-          dcache2_bank #(b+16,ID[0]) bankH_mod(
+          dcache2_bank #(b[4:0]+5'd16,ID[0]) bankH_mod(
           .clk(clk),
           .rst(rst),
           .read_en(read_enH),

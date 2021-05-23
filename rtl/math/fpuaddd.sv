@@ -437,7 +437,7 @@ module fadd(
   generate
       genvar k;
       for(k=0;k<8;k=k+1) begin
-          if (k) assign {opBs1,xop1[1:0]}=(expdiff[5:3]==k && ~expoor) ? {{k*8{sxor}},opB[63:k*8-2]} : 66'bz;
+          if (k!=0) assign {opBs1,xop1[1:0]}=(expdiff[5:3]==k && ~expoor) ? {{k*8{sxor}},opB[63:k*8-2]} : 66'bz;
           else begin
               assign opBs1=(expdiff[5:3]==k && ~expoor) ? {{k*8{sxor}},opB[63:k*8]} : 64'bz;
               assign xop1[1:0]=(expdiff[5:3]==3'b0 && ~expoor) ? 2'b0 : 2'bz;

@@ -464,7 +464,7 @@ module rat_flags(
   
   generate
     for (k=0;k<=8;k=k+1)begin : deps_gen
-        if (k%3)
+        if ((k%3)!=0)
         rat_flags_dep dep_mod(
         read_addr_reg[k],
         read_data[k],
