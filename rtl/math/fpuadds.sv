@@ -419,7 +419,7 @@ module fadds(
   
   adder_inc #(9) aExpInc(opA_exp_reg,opA_exp_inc,1'b1,);
   adder #(9) aExpDec(opA_exp_reg,9'h1ff,opA_exp_dec,1'b0,1'b1,,,,);
-  
+ //verilator lint_off COMBDLY 
   always @(*) begin
       if (rst) begin
           expdiffeq<=8'b1;
@@ -509,6 +509,7 @@ module fadds(
 	  exp_dec_non_denor_IEEE_reg<=exp_dec_non_denor_IEEE;
       end
   end
+  //verilator lint_on COMBDLY
 endmodule
 
 

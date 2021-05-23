@@ -212,7 +212,7 @@ module decoder_aux_const(
       //`csr_cpage: begin	aux_const=csr_cpage; aux_can_read=~csr_mflags[`mflags_vm] && !csr_mflags[`mflags_cpl]; end
       //`csr_spage: begin	aux_const=csr_spage; aux_can_read=~csr_mflags[`mflags_vm] && !csr_mflags[`mflags_cpl]; end
       `csr_syscall: begin aux_const=csr_syscall;
-           aux_can_jump<=1'b1; 
+           aux_can_jump=1'b1; 
            aux_can_read=~csr_mflags[`mflags_vm] && csr_mflags[`mflags_cpl]==2'b00; end
       `csr_vmcall: begin aux_const=csr_vmcall; aux_can_jump=
 	   csr_mflags[`mflags_vm] && csr_mflags[`mflags_cpl]==2'b00;
@@ -220,7 +220,7 @@ module decoder_aux_const(
       //`csr_cpage_mask: begin aux_const=csr_cpage_mask; aux_can_read=~csr_mflags[`mflags_vm] && !csr_mflags[`mflags_cpl]; end
       `csr_indir_table: begin aux_const=csr_indir_tbl; aux_can_read=~csr_mflags[`mflags_vm] && csr_mflags[`mflags_cpl]==0; end
       `csr_indir_mask: begin aux_const=csr_indir_mask; aux_can_read=~csr_mflags[`mflags_vm] && csr_mflags[`mflags_cpl]==0; end
-      `csr_cl_lock: begin aux_const={63'b0,csr_mflags[18]}; csr_mflags[18]<=1'b0; end
+      `csr_cl_lock: begin aux_const={63'b0,csr_mflags[18]}; end
       default:			aux_const=64'b0;
       endcase
   end

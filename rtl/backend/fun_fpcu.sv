@@ -458,8 +458,8 @@ module fun_fpu(
 	  fxFCADD_copyASN=4'b0;
 	  fxFADD_lo=1'b0;
 	  fxFADD_loSel=2'b0;
-	  fxFCADD_rndD<=1'b0;
-	  fxFCADD_rndS<=1'b0;
+	  fxFCADD_rndD=1'b0;
+	  fxFCADD_rndS=1'b0;
           for (k=0;k<2;k=k+1) begin
 	      fxDataAFL_reg[k]<={16+SIMD_WIDTH{1'B0}};
 	      gxDataBFL_reg[k]<={16+SIMD_WIDTH{1'B0}};
