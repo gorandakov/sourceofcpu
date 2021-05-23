@@ -565,264 +565,10 @@ void gen_reqs(req *reqs,bool simp=false) {
 }
 
 void req_set(Vfu_alu *mod,req reqs[10]) {
-    set64i(mod->u1_A,reqs[4].A,reqs[4].A_p);
-    set64i(mod->u1_B,reqs[4].B,reqs[4].B_p);
-    mod->u1_S=reqs[14].flags_in;
-    mod->u1_op=reqs[4].op;
-    mod->u1_clkEn=reqs[4].en;
-    mod->u1_A_fufwd=reqs[4].fuA();
-    mod->u1_A_fuufwd=reqs[4].fuuA();
-    mod->u1_B_fufwd=reqs[4].fuB();
-    mod->u1_B_fuufwd=reqs[4].fuuB();
-    mod->u1_S_fufwd=reqs[4].fuFl();
-    mod->u1_S_fuufwd=reqs[4].fuuFl();
-
-    set64i(mod->u3_A,reqs[5].A,reqs[5].A_p);
-    set64i(mod->u3_B,reqs[5].B,reqs[5].B_p);
-    mod->u3_S=reqs[15].flags_in;
-    mod->u3_op=reqs[5].op;
-    mod->u3_clkEn=reqs[5].en;
-    mod->u3_A_fufwd=reqs[5].fuA();
-    mod->u3_A_fuufwd=reqs[5].fuuA();
-    mod->u3_B_fufwd=reqs[5].fuB();
-    mod->u3_B_fuufwd=reqs[5].fuuB();
-    mod->u3_S_fufwd=reqs[5].fuFl();
-    mod->u3_S_fuufwd=reqs[5].fuuFl();
-
-    set64i(mod->u5_A,reqs[6].A,reqs[6].A_p);
-    set64i(mod->u5_B,reqs[6].B,reqs[6].B_p);
-    mod->u5_S=reqs[16].flags_in;
-    mod->u5_op=reqs[6].op;
-    mod->u5_clkEn=reqs[6].en && !reqs[6].alt;
-    mod->u5_A_fufwd=reqs[6].fuA();
-    mod->u5_A_fuufwd=reqs[6].fuuA();
-    mod->u5_B_fufwd=reqs[6].fuB();
-    mod->u5_B_fuufwd=reqs[6].fuuB();
-    mod->u5_S_fufwd=reqs[6].fuFl();
-    mod->u5_S_fuufwd=reqs[6].fuuFl();
-    mod->u5_nDataAlt=1;
-
-    set64i(mod->u2_A,reqs[7].A,reqs[7].A_p);
-    set64i(mod->u2_B,reqs[7].B,reqs[7].B_p);
-    mod->u2_S=reqs[17].flags_in;
-    mod->u2_op=reqs[7].op;
-    mod->u2_clkEn=reqs[7].en;
-    mod->u2_A_fufwd=reqs[7].fuA();
-    mod->u2_A_fuufwd=reqs[7].fuuA();
-    mod->u2_B_fufwd=reqs[7].fuB();
-    mod->u2_B_fuufwd=reqs[7].fuuB();
-    mod->u2_S_fufwd=reqs[7].fuFl();
-    mod->u2_S_fuufwd=reqs[7].fuuFl();
-
-    set64i(mod->u4_A,reqs[8].A,reqs[8].A_p);
-    set64i(mod->u4_B,reqs[8].B,reqs[8].B_p);
-    mod->u4_S=reqs[18].flags_in;
-    mod->u4_op=reqs[8].op;
-    mod->u4_clkEn=reqs[8].en;
-    mod->u4_A_fufwd=reqs[8].fuA();
-    mod->u4_A_fuufwd=reqs[8].fuuA();
-    mod->u4_B_fufwd=reqs[8].fuB();
-    mod->u4_B_fuufwd=reqs[8].fuuB();
-    mod->u4_S_fufwd=reqs[8].fuFl();
-    mod->u4_S_fuufwd=reqs[8].fuuFl();
-
-    set64i(mod->u6_A,reqs[9].A,reqs[9].A_p);
-    set64i(mod->u6_B,reqs[9].B,reqs[9].B_p);
-    mod->u6_S=reqs[19].flags_in;
-    mod->u6_op=reqs[9].op;
-    mod->u6_clkEn=reqs[9].en;
-    mod->u6_A_fufwd=reqs[9].fuA();
-    mod->u6_A_fuufwd=reqs[9].fuuA();
-    mod->u6_B_fufwd=reqs[9].fuB();
-    mod->u6_B_fuufwd=reqs[9].fuuB();
-    mod->u6_S_fufwd=reqs[9].fuFl();
-    mod->u6_S_fuufwd=reqs[9].fuuFl();
-    
-    mod->FUS4=reqs[14].flags;
-    mod->FUS5=reqs[15].flags;
-    mod->FUS6=reqs[16].flags;
-    mod->FUS7=reqs[17].flags;
-    mod->FUS8=reqs[18].flags;
-    mod->FUS9=reqs[19].flags;
-
-    set64i(mod->FU0,reqs[10].res,reqs[10].res_p);
-    set64i(mod->FU1,reqs[11].res,reqs[11].res_p);
-    set64i(mod->FU2,reqs[12].res,reqs[12].res_p);
-    set64i(mod->FU3,reqs[13].res,reqs[13].res_p);
-
-   /* if (reqs[16].alt) mod->FU6=reqs[6].res;
-    else mod->FU6=0xbaadf00dbaadf00dull;
-    if (reqs[26].alt) mod->u5_ret=(reqs[26].flags<<3)|2|((reqs[26].op&0x1000)>>10);
-    else mod->u5_ret=0;*/
 }
 
 bool get_check(Vfu_alu *top, req *reqs) {
     bool rtn=true;
-    static unsigned num_s[3];
-
-    if (reqs[4].en && !(get64(top->FU4)==reqs[4].res) && reqs[4].excpt!=11) { 
-        printf("FU4 error;op=%i:%i;res=%llx:%llx;%i:%i:%i\n",
-        top->fu_alu__DOT__u1_op_reg,reqs[4].op,
-        get64(top->FU4),reqs[4].res,reqs[4].A_p,reqs[4].B_p,reqs[4].res_p);
-        rtn=false; 
-	    printf("A=%lx,B=%lx,A_p=%i,B_p=%i,soft=%i\n",
-		reqs[4].A,
-		reqs[4].B,
-		reqs[4].A_p,
-		reqs[4].B_p,
-		reqs[4].excpt);
-    }
-    if (reqs[5].en && !(get64(top->FU5)==reqs[5].res) && reqs[5].excpt!=11) { 
-        printf("FU5 error;op=%i:%i;res=%llx:%llx\n",
-        top->fu_alu__DOT__u3_op_reg,reqs[5].op,
-        get64(top->FU5),reqs[5].res);
-        rtn=false; 
-    }
-    if (reqs[6].en && !(get64(top->FU6)==reqs[6].res) && reqs[6].excpt!=11)  {
-        printf("FU6 error;op=%i:%i;res=%llx:%llx;%i:%i:%i\n",
-        top->fu_alu__DOT__u5_op_reg,reqs[6].op,
-        get64(top->FU6),reqs[6].res,reqs[6].A_p,reqs[6].B_p,reqs[6].res_p);
-        rtn=false; 
-    }
-    if (reqs[7].en && !(get64(top->FU7)==reqs[7].res) && reqs[7].excpt!=11)  {
-        printf("FU7 error;op=%i:%i;res=%llx:%llx\n;%i:%i:%i",
-        top->fu_alu__DOT__u2_op_reg,reqs[7].op,
-        get64(top->FU7),reqs[7].res,reqs[7].A_p,reqs[7].B_p,reqs[7].res_p);
-        rtn=false; 
-    }
-    if (reqs[8].en && !(get64(top->FU8)==reqs[8].res) && reqs[8].excpt!=11)  {
-        printf("FU8 error;op=%i:%i;res=%llx:%llx\n",
-        top->fu_alu__DOT__u4_op_reg,reqs[8].op,
-        get64(top->FU8),reqs[8].res);
-	    printf("A=%lx,B=%lx,A_p=%i,B_p=%i,soft=%i\n",
-		reqs[8].A,
-		reqs[8].B,
-		reqs[8].A_p,
-		reqs[8].B_p,
-		reqs[8].excpt);
-        rtn=false; 
-    }
-    if (reqs[9].en && !reqs[9].mul && !(get64(top->FU9)==reqs[9].res) && reqs[9].excpt!=11)  {
-        printf("FU9 error;op=%i:%i;res=%llx:%llx\n",
-        top->fu_alu__DOT__u6_op_reg,reqs[9].op,
-        get64(top->FU9),reqs[9].res);
-	    printf("A=%lx,B=%lx,A_p=%i,B_p=%i,soft=%i\n",
-		reqs[9].A,
-		reqs[9].B,
-		reqs[9].A_p,
-		reqs[9].B_p,
-		reqs[9].excpt);
-        rtn=false; 
-    }
-
-    if (reqs[14].en && (!((top->u1_ret>>3)==reqs[14].flags || 
-        !(top->u1_ret&0x4) || reqs[14].excpt==11) || ((top->u1_ret&3)==1)!=(reqs[14].excpt==11))) {
-        printf("ret4 error;op=%i;ret=%x:%x\n",
-        reqs[14].op,
-        top->u1_ret*2,reqs[14].flags);
-	if (((top->u1_ret&3)==1)!=(reqs[14].excpt==11) || 1) {
-	    printf("A=%lx,B=%lx,A_p=%i,B_p=%i,soft=%i\n",
-		reqs[14].A,
-		reqs[14].B,
-		reqs[14].A_p,
-		reqs[14].B_p,
-		reqs[14].excpt);
-	}
-        rtn=false; 
-    }
-    if (reqs[15].en && (!((top->u3_ret>>3)==reqs[15].flags || 
-        !(top->u3_ret&0x4) || reqs[15].excpt==11) || ((top->u3_ret&3)==1)!=(reqs[15].excpt==11))) {
-        printf("ret5 error;op=%i;ret=%x:%x\n",
-        reqs[15].op,
-        top->u3_ret*2,reqs[15].flags);
-        rtn=false; 
-	if (((top->u3_ret&3)==1)!=(reqs[15].excpt==11) || 1) {
-	    printf("A=%lx,B=%lx,A_p=%i,B_p=%i,soft=%i\n",
-		reqs[15].A,
-		reqs[15].B,
-		reqs[15].A_p,
-		reqs[15].B_p,
-		reqs[15].excpt);
-	}
-    }
-    if ((reqs[16].en || reqs[16].alt) && (!((top->u5_ret>>3)==reqs[16].flags || 
-        !(top->u5_ret&0x4) || reqs[16].excpt==11) || ((top->u5_ret&3)==1)!=(reqs[16].excpt==11))) {
-        printf("ret6 error;op=%i;ret=%x:%x;ex=%i;res=%llx\n",
-        reqs[16].op,
-        top->u5_ret*2,reqs[16].flags,
-	((top->u5_ret&3)==1)!=(reqs[16].excpt==11),
-	reqs[16].res);
-	if (((top->u5_ret&3)==1)!=(reqs[16].excpt==11) ||1) {
-	    printf("A=%lx,B=%lx,A_p=%i,B_p=%i,soft=%i\n",
-		reqs[16].A,
-		reqs[16].B,
-		reqs[16].A_p,
-		reqs[16].B_p,
-		reqs[16].excpt);
-	}
-        rtn=false; 
-    }
-    if (reqs[17].en && (!((top->u2_ret>>3)==reqs[17].flags || 
-        !(top->u2_ret&0x4) || reqs[17].excpt==11) || ((top->u2_ret&3)==1)!=(reqs[17].excpt==11))) {
-        printf("ret7 error;op=%i;ret=%x:%x\n",
-        reqs[17].op,
-        top->u2_ret*2,reqs[17].flags);
-	if (((top->u2_ret&3)==1)!=(reqs[17].excpt==11) || 1) {
-	    printf("A=%lx,B=%lx,A_p=%i,B_p=%i,soft=%i\n",
-		reqs[17].A,
-		reqs[17].B,
-		reqs[17].A_p,
-		reqs[17].B_p,
-		reqs[17].excpt);
-	}
-        rtn=false; 
-    }
-    if (reqs[18].en && (!((top->u4_ret>>3)==reqs[18].flags || 
-        !(top->u4_ret&0x4) || reqs[18].excpt==11) || ((top->u4_ret&3)==1)!=(reqs[18].excpt==11))) {
-        printf("ret8 error;op=%i;ret=%x:%x\n",
-        reqs[18].op,
-        top->u4_ret*2,reqs[18].flags);
-        rtn=false; 
-    }
-    if (reqs[19].en && !reqs[19].mul &&  (!((top->u6_ret>>3)==reqs[19].flags || 
-        !(top->u6_ret&0x4) || reqs[19].excpt==11) || ((top->u6_ret&3)==1)!=(reqs[19].excpt==11))) {
-        printf("ret9 error;op=%i;ret=%x:%x\n",
-        reqs[19].op,
-        top->u6_ret*2,reqs[19].flags);
-        rtn=false; 
-	if (((top->u6_ret&3)==1)!=(reqs[19].excpt==11) || 1) {
-	    printf("A=%lx,B=%lx,A_p=%i,B_p=%i,soft=%i\n",
-		reqs[19].A,
-		reqs[19].B,
-		reqs[19].A_p,
-		reqs[19].B_p,
-		reqs[19].excpt);
-	}
-    }
-
-    if (reqs[6].alt) {
-        if ((reqs[6].op&0xff)<12) {
-            if (!(get64(top->FU6)==reqs[6].res))  {
-                printf("FU6-M error;op=%i:%i;res=%llx:%llx\n",
-                top->fu_alu__DOT__u5_op_reg&0xff,reqs[6].op&0xff,
-                get64(top->FU6),reqs[6].res);
-                rtn=false; 
-            }
-        } else {
-            if (reqs[6].num[0]!=num_s[0] || reqs[6].num[1]!=num_s[1] ||
-                reqs[6].num[2]!=num_s[2]) {
-                printf("FU6-MC error;op=%i:%i;res=%llx:%llx\n",
-                top->fu_alu__DOT__u5_op_reg&0x4ff,reqs[6].op&0x4ff,
-                get64(top->FU6),reqs[6].res);
-                rtn=false; 
-            }
-        }
-    }
-    num_s[0]=top->fcvtout[0];
-    num_s[1]=top->fcvtout[1];
-    num_s[2]=top->fcvtout[2];
-    return rtn;
-
 }
 
 void fp_get_ext(long double a, unsigned num[3]) {
@@ -888,22 +634,27 @@ bool ckran_alu(unsigned long long ptr,unsigned long long &addr) {
     return false;
 }
 
+void gen_prog(req *reqs,int count) {
+}
+
+
 int main(int argc, char *argv[]) {
     Verilated::commandArgs(argc, argv);
-    Vfu_alu *top=new Vfu_alu();
+    Vheptane_core *top=new Vfu_alu();
     Verilated::assertOn(false);
     int initcount=10;
     int cyc=0;
-    req reqs[4][10];
+    req *reqs=new req[10*100000000];
     fesetround(FE_TOWARDZERO);
     top->clk=0;
     top->rst=1;
     top->except=0;
-    gen_reqs(reqs[1],1);
-    gen_reqs(reqs[2],1);
-    gen_reqs(reqs[3],1);
-    gen_reqs(reqs[0]);
-    req_set(top,reqs[0]);
+    gen_reqs(reqs[99999997*10],1);
+    gen_reqs(reqs[99999998*10],1);
+    gen_reqs(reqs[99999999*10],1);
+    gen_reqs(reqs[99999996*10]);
+    gen_prog(reqs[99999996*10],99999996)
+    req_set(top,reqs[99999996*10]);
     top->eval();
     top->clk=1;
     top->eval();
