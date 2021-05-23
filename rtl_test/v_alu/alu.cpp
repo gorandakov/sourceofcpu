@@ -123,39 +123,19 @@ addie:
 		res1=(res=res0)&0xfffffffffff;
 		unsigned long low,hi;
 		p.val=pttr;
+		unsigned long b=p2.val;
 		if (!no_O) p2.val=res;
 		unsigned exp=p.val>>59;
+		bool flip;
 
-		if (!p.get_bounds(low,hi,no_O,p2) && (exp!=31 || no_O)) {
+		if (!p.get_bounds2(no_O,p2,b,flip) && (exp!=31 || no_O)) {
 		    excpt=11;
 		    break;
 		}
-		if (res1>hi || res1<low || 1) {
-		    if (((p.val>>52)&0x7f)<((p.val>>45)&0x7f)) {
-			unsigned long masq=(0xfffffffe000<<exp)&0xfffffffffff;
-			/*if ((res1&masq)!=(pttr&masq) && exp!=31) {
-			    excpt=11;
-			} else {
-			    //res&=~(1ul<<44);
-			}*/
-		    } else if ((p.val>>44)&1) {
-			unsigned long masq=(0xfffffffe000<<exp)&0xfffffffffff;
-			unsigned long delta=0x2000<<exp;
-			/*if ((res1&masq)!=(pttr&masq) && (res1&masq)!=(((pttr&masq)+delta)&(masq|(masq<<1)))  && exp!=31) {
-			    excpt=11;*/
-			if ((res1&masq)!=(pttr&masq) && exp!=31) {
-		            res^=1ul<<44;
-			}
-		    } else {
-			unsigned long masq=(0xfffffffe000<<exp)&0xfffffffffff;
-			unsigned long delta=0x2000<<exp;
-			/*if ((res1&masq)!=(pttr&masq) && (res1&masq)!=(((pttr&masq)-delta)&(masq|(masq>>1)))  && exp!=31) {
-			    excpt=11;*/
-			if ((res1&masq)!=(pttr&masq) && exp!=31) {
-		            res^=1ul<<44;
-			}
-		    }
-		}
+		if ((((res>>44)^(pttr>>44))&1)!=flip) {
+		    excpt=11;
+		    break;
+		};
 		res_p=1;
                 flg64(res0);
 	        res1=res0;
@@ -215,7 +195,7 @@ addie:
             res1=res=res0=A&B;
 	    if (A_p && B_p) excpt=11;
 	    if (A_p && !B_p) { 
-		no_O=true; 
+		no_O=2; 
                 res1=res=res0=A&(B|0xfffff00000000000);
 		p2.val=B&0xfffffffffff;
 		goto addie; 
@@ -240,15 +220,15 @@ addie:
             res1=res=res0=A|B;
 	    if (A_p && B_p) excpt=11;
 	    if (A_p && !B_p) { 
-		no_O=true; 
+		no_O=1; 
                 res1=res=res0=A|(B&0xfffffffffff);
-		p2.val=~B&0xfffffffffff;
+		p2.val=B&0xfffffffffff;
 		goto addie; 
 	    }
 	    if (!A_p && B_p) { 
-		no_O=true; 
+		no_O=1; 
                 res1=res=res0=B|(A&0xfffffffffff);
-		p2.val=~A&0xfffffffffff;
+		p2.val=A&0xfffffffffff;
 		goto addie; 
 	    }
             res1=res=res0;
@@ -265,13 +245,13 @@ addie:
             res1=res=res0=A^B;
 	    if (A_p && B_p) excpt=11;
 	    if (A_p && !B_p) { 
-		no_O=true; 
+		no_O=1; 
                 res1=res=res0=A^(B&0xfffffffffff);
 		p2.val=~B&0xfffffffffff;
 		goto addie; 
 	    }
 	    if (!A_p && B_p) { 
-		no_O=true; 
+		no_O=1; 
                 res1=res=res0=B^(A&0xfffffffffff);
 		p2.val=~A&0xfffffffffff;
 		goto addie; 
