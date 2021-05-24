@@ -396,21 +396,29 @@ addie:
             break;
  
             case 32:
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movq %%%s,  %%%s\n",reg65[rB],reg65[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"movq $%i, %%%s\n",(int) B,reg65[rT]);
             res=B;
             flags=flags_in;
             break;
 
             case 33:
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movl %%%s,  %%%s\n",reg32[rB],reg32[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"movl $%i, %%%s\n",(int) B,reg32[rT]);
             res=B&0xffffffffull;
             flags=flags_in;
             break;
 
             case 34:
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movw %%%s,  %%%s\n",reg16[rB],reg16[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"movw $%i, %%%s\n",(int) B,reg16[rT]);
             res=(B&0xffffull)|(A&0xffffffffffff0000ull);
             flags=flags_in;
             break;
 
             case 35:
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movq %%%s,  %%%s\n",reg8[rB],reg8[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"sarl $%i, %%%s\n",(int) B,reg8[rT]);
             if (op&256) res=(A&0xffffffffffff00ffull)| ((op&1024) ? B&0xff00ull :
                 (B&0xffull)<<8);
             else res=(A&0xffffffffffffff00ull)| ((op&1024) ? (B&0xff00ull)>>8 :
@@ -419,36 +427,50 @@ addie:
             break;
 
             case 36:
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movzbl %%%s,  %%%s\n",reg32[rB],reg32[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"movzbl $%i, %%%s\n",(int) B,reg32[rT]);
             res=B&0xffull;
             flags=flags_in;
             break;
 
             case 37:
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movzwl %%%s,  %%%s\n",reg32[rB],reg32[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"movzwl $%i, %%%s\n",(int) B,reg32[rT]);
             res=B&0xffffull;
             flags=flags_in;
             break;
 
             case 39:
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movsbq %%%s,  %%%s\n",reg65[rB],reg65[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"movsbq $%i, %%%s\n",(int) B,reg65[rT]);
             res=(B&0x80) ? B|0xffffffffffffff00ull : B&0xffull;
             flags=flags_in;
             break;
 
             case 40:
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movswq %%%s,  %%%s\n",reg65[rB],reg65[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"movswq $%i, %%%s\n",(int) B,reg65[rT]);
             res=(B&0x8000) ? B|0xffffffffffff0000ull : B&0xffffull;
             flags=flags_in;
             break;
 
             case 41:
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movslq %%%s,  %%%s\n",reg65[rB],reg65[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"movslq $%i, %%%s\n",(int) B,reg65[rT]);
             res=(B&0x80000000) ? B|0xffffffff00000000ull : B&0xffffffffull;
             flags=flags_in;
             break;
 
             case 42:
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movsbl %%%s,  %%%s\n",reg32[rB],reg32[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"movsbl $%i, %%%s\n",(int) B,reg32[rT]);
             res=(B0&0x80) ? B0x|0xffffff00ull : B0x&0xffull;
             flags=flags_in;
             break;
 
             case 43:
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movswl %%%s,  %%%s\n",reg32[rB],reg32[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"movswl $%i, %%%s\n",(int) B,reg32[rT]);
             res=(B0&0x8000) ? B0x|0xffff0000ull : B0x&0xffffull;
             flags=flags_in;
             break;
