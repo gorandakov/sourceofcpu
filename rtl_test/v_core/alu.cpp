@@ -102,6 +102,11 @@ class req {
     unsigned alt,mul;
     unsigned en;
     unsigned num[3];
+    unsigned rA,rB,rT;
+    unsigned base,index,scale;
+    unsigned offset;
+    unsigned has_mem;
+    unsigned has_alu;
     char asmtext[32];
     void gen(bool alt_, bool mul_, bool can_shift, req *prev1=NULL);
     void flgPTR(__int128 r);
@@ -112,7 +117,7 @@ class req {
     bool testj(int code);
 };
 
-void req::gen(bool alt_, bool mul_, bool can_shift, req *prev1) {
+void req::gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont &contx) {
     alt=alt_;
     mul=mul_;
     excpt=-1;
@@ -120,42 +125,25 @@ void req::gen(bool alt_, bool mul_, bool can_shift, req *prev1) {
     if (!alt && !mul && can_shift)  op=OPS_S_REGL[rand()%(sizeof OPS_S_REGL/2)];
     if (!alt && mul) op=OPS_M_REGL[rand()%(sizeof OPS_M_REGL/2)]|0x800;
     if (alt) op=rand()&0x1ffff;
-    depA=15;
-    depB=15;
-    depS=15;
     res_p=0;
-    if ((rand()&0x3f) || (!prev1)) {
-    A=(rand()&0x1fffffull) | ((rand()&0x1fffffull)<<21) | 
-      ((rand()&0x3fffffull)<<42);
-    A_p=rand()&0x1u;
+    rA=rand()&0x1f;
+    rB=rand()&0x1f;
+    rT=rand()&0x1f;
+    if (rand()&1) {
+        B=lrand48()&0xffffffff;
+	B_p=0;
+	rA&=0xf;
+	rT&=0xf;
+    } else if (rand()&1) {
+	B=(lrand48()&0x1fff)-0x1000;
+	B_p=0;
     } else {
-        int which=rand()%20;
-        A=prev1[which].res;
-        A_p=prev1[which].res_p;
-        depA=which-10;
-        if (!prev1[which].en || prev1[which].mul || prev1[which].excpt==11) depA=15;
+	B=contx->reg_gen[rB];
+	B_p=contx->reg_genP[rB];
     }
-    if ((rand()&0x3f) || (!prev1)) {
-    B=(rand()&0x1fffffull) | ((rand()&0x1fffffull)<<21) | 
-      ((rand()&0x3fffffull)<<42);
-    B_p=rand()&0x1u;
-    } else {
-        int which=rand()%20;
-        B=prev1[which].res;
-        B_p=prev1[which].res_p;
-        depB=which-10;
-        if (!prev1[which].en || prev1[which].mul || prev1[which].excpt==11) depB=15;
-    }
-    if ((rand()&0x3f) || (!prev1)) {
-       flags_in=rand()&0x3f;
-       depS=15;
-    } else {
-        int which=rand()%12;
-        which=which>=6 ? which-2 : which-6;
-        flags_in=prev1[which+10].flags;
-        depS=which;
-        if (!prev1[which+10].en || prev1[which+10].mul || prev1[which+10].excpt==11) depS=15;
-    }
+    A=contx->reg_gen[rA];
+    A_p=contx->reg_genP[rA];
+
     if (!alt && !mul) {
         __int128 res0;
         int A0=A,B0=B,res2;
