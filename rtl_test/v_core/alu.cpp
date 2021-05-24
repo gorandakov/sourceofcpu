@@ -134,15 +134,18 @@ void req::gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont &contx) {
 	B_p=0;
 	rA&=0xf;
 	rT&=0xf;
+	rB=-1;
     } else if (rand()&1) {
 	B=(lrand48()&0x1fff)-0x1000;
 	B_p=0;
+	rB=-1;
     } else {
 	B=contx->reg_gen[rB];
 	B_p=contx->reg_genP[rB];
     }
     A=contx->reg_gen[rA];
     A_p=contx->reg_genP[rA];
+    asmtext[0]=0;
 
     if (!alt && !mul) {
         __int128 res0;
@@ -154,6 +157,10 @@ void req::gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont &contx) {
 	bool no_O=false;
         switch(op&0xff) {
             case 0:
+	
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"addq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"addq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
+
             res0=((unsigned __int128)  A)+(unsigned __int128) B;
             if (A_p && B_p) excpt=11;
 	    if (A_p && !B_p) res0= (res0&0xfffffffffff)|(A&0xfffff00000000000);
@@ -193,6 +200,9 @@ addie:
             break;
             
             case 1:
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"addl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"addl $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
+
             res0=((unsigned __int128) A0x)+(unsigned __int128) B0x;
             res2=res=res0&0xffffffffull;
             flg32(res0);
@@ -201,6 +211,9 @@ addie:
             break;
 
             case 4:
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"subq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"subq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
+
             res0=((unsigned __int128) A)+((unsigned __int128)~B)+(one>>63);
 	    if (A_p && !B_p) {
                 res0=(((unsigned __int128) A)+(((unsigned __int128)~B)+(one>>63))&0xffffffffffful)|
@@ -225,6 +238,9 @@ addie:
             break;
             
             case 5:
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"subl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"subl $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
+
             res0=((unsigned __int128) A0x)+((unsigned __int128) ~B0x)+1;
             res2=res=res0&0xffffffffull;
             flg32(res0^0x100000000ll);
@@ -233,6 +249,9 @@ addie:
             break;
 
             case 8:
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"andq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"andq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
+
             res1=res=res0=A&B;
 	    if (A_p && B_p) excpt=11;
 	    if (A_p && !B_p) { 
@@ -252,12 +271,18 @@ addie:
             break;
 
             case 9:
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"andl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"andl $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
+
             res0=A0x&B0x;
             res2=res=res0&0xffffffffull;
             flg32(res);
             break;
 
             case 12:
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"orq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"orq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
+
             res1=res=res0=A|B;
 	    if (A_p && B_p) excpt=11;
 	    if (A_p && !B_p) { 
@@ -277,12 +302,18 @@ addie:
             break;
 
             case 13:
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"orl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"orl $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
+
             res0=A0x|B0x;
             res2=res=res0&0xffffffffull;
             flg32(res);
             break;
 
             case 16:
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"xorq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"xorq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
+
             res1=res=res0=A^B;
 	    if (A_p && B_p) excpt=11;
 	    if (A_p && !B_p) { 
@@ -302,42 +333,63 @@ addie:
             break;
 
             case 17:
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"xorl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"xorl $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
+
             res0=A0x^B0x;
             res2=res=res0&0xffffffffull;
             flg32(res);
             break;
 
             case 20:
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"salq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"sllq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
+
             res0=((__int128) A)<<(B&0x3f);
             res1=res=res0;
             flg64(res0);
             break;
 
             case 21:
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"sall %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"slll $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
+
             res0=((__int128) A0x)<<(B0x&0x3f);
             res2=res=res0&0xffffffffull;
             flg32(res0);
             break;
 
             case 24:
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"slrq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"slrq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
+
             res0=(B&0x3f) ?((__int128)  A) >>((B&0x3f)-1) :((__int128)  A)<<1;
             res1=res=(res0>>1);
             flg64(((res0>>1)&0xffffffffffffffffull)|((res0&0x1) ? one<<1:0));
             break;
 
             case 25:
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"slrl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"slrl $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
+
             res0=(B0x&0x3f) ?((__int128)A0x) >>((B0x&0x3f)-1) :((__int128)  A0x)<<1;
             res=(res0>>1)&0xffffffffull;
             flg32(((res0>>1)&0xffffffffu)|((res0&0x1)<<32));
             break;
 
             case 28:
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"sarq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"sarq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
+
             res0=(B&0x3f) ?((__int128) A1) >>((B&0x3f)-1) :((__int128)  A1)<<1;
             res1=res=(res0>>1);
             flg64(((res0>>1)&0xffffffffffffffffull)|((res0&0x1) ? one<<1 : 0));
             break;
 
             case 29:
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"sarl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"sarl $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
+
             res0=(B0x&0x3f) ? ((__int128) A0) >>((B0x&0x3f)-1) :((__int128) A0)<<1;
             res2=res=(res0>>1)&0xffffffffull;
             flg32(((res0>>1)&0xffffffffu)|((res0&0x1)<<32));
