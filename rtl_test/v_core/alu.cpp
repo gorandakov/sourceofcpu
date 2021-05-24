@@ -91,6 +91,77 @@ char *reg65[]={
 "r31"
 };
 
+char *reg16[]={
+"ax",
+"bx",
+"cx",
+"dx",
+"si",
+"di",
+"sp",
+"bp",
+"r8w",
+"r9w",
+"r10w",
+"r11w",
+"r12w",
+"r13w",
+"r14w",
+"r15w",
+"r16w",
+"r17w",
+"r18w",
+"r19w",
+"r20w",
+"r21w",
+"r22w",
+"r23w",
+"r24w",
+"r25w",
+"r26w",
+"r27w",
+"r28w",
+"r29w",
+"r30w",
+"r31w"
+};
+
+char *reg8[]={
+"al",
+"bl",
+"cl",
+"dl",
+"sil",
+"dil",
+"spl",
+"bpl",
+"r8l",
+"r9l",
+"r10l",
+"r11l",
+"r12l",
+"r13l",
+"r14l",
+"r15l",
+"r16l",
+"r17l",
+"r18l",
+"r19l",
+"r20l",
+"r21l",
+"r22l",
+"r23l",
+"r24l",
+"r25l",
+"r26l",
+"r27l",
+"ah",
+"bh",
+"ch",
+"dh"
+};
+
+
 
 class req {
     public:
@@ -478,6 +549,13 @@ addie:
             case 48:
             case 49:
             op|=rand()&0x700;
+	    if (rB<0) {
+		rB=rand()&0x1f;
+		B=contx->reg_gen[rB];
+		B_p=contx->reg_genP[rB];
+	    }
+	    snprintf(asmtext,sizeof asmtext,"cmov%sq %%%s, %%%s, %%%s\n",COND(op),reg65[rB],reg65[rA],reg65[rT]);
+
             res=testj(((op&0x700)>>7)|(op&0x1)) ? B : A;
             res_p=testj(((op&0x700)>>7)|(op&0x1)) ? B_p : A_p;
             flags=flags_in;
@@ -486,6 +564,14 @@ addie:
             case 50:
             case 51:
             op|=rand()&0x700;
+            op|=rand()&0x700;
+	    if (rB<0) {
+		rB=rand()&0x1f;
+		B=contx->reg_gen[rB];
+		B_p=contx->reg_genP[rB];
+                A0x=A,B0x=B;
+	    }
+	    snprintf(asmtext,sizeof asmtext,"cmov%sl %%%s, %%%s, %%%s\n",COND(op),reg32[rB],reg32[rA],reg32[rT]);
             res=testj(((op&0x700)>>7)|(op&0x1)) ? B0x : A0x;
             flags=flags_in;
             break;
@@ -494,6 +580,12 @@ addie:
             case 52:
             case 53:
             op|=rand()&0x700;
+	    if (rB<0) {
+		rB=rand()&0x1f;
+		B=contx->reg_gen[rB];
+		B_p=contx->reg_genP[rB];
+	    }
+	    snprintf(asmtext,sizeof asmtext,"clahf%s %%%s\n",COND(op),reg32[rA]);
             res=0;
             flags=testj(((op&0x700)>>7)|(op&0x1)) ? A&0x3f : flags_in;
             break;
@@ -501,16 +593,34 @@ addie:
             case 54:
             case 55:
             op|=rand()&0x700;
+	    if (rB<0) {
+		rB=rand()&0x1f;
+		B=contx->reg_gen[rB];
+		B_p=contx->reg_genP[rB];
+	    }
+	    snprintf(asmtext,sizeof asmtext,"cset%s %%%s\n",COND(op),reg32[rT]);
             res=testj(((op&0x700)>>7)|(op&0x1));
             flags=flags_in;
             break;
 
             case 56:
+	    if (rB<0) {
+		rB=rand()&0x1f;
+		B=contx->reg_gen[rB];
+		B_p=contx->reg_genP[rB];
+	    }
+	    snprintf(asmtext,sizeof asmtext,"sahf %%%s\n",reg32[rT]);
             res=flags_in&0x3f;
             flags=flags_in;
             break;
 
             case 57:
+	    if (rB<0) {
+		rB=rand()&0x1f;
+		B=contx->reg_gen[rB];
+		B_p=contx->reg_genP[rB];
+	    }
+	    snprintf(asmtext,sizeof asmtext,"lahf %%%s\n",reg32[rA]);
             res=0;
             flags=A&0x3f;
             break;
