@@ -21,6 +21,77 @@ void fp_get_double(double a, unsigned num[3]);
 void fp_get_single(float a, unsigned num[3]);
 bool ckran_alu(unsigned long long ptr,unsigned long long addr);
 
+char *reg32[]={
+"eax",
+"ebx",
+"ecx",
+"edx",
+"esi",
+"edi",
+"esp",
+"ebp",
+"r8d",
+"r9d",
+"r10d",
+"r11d",
+"r12d",
+"r13d",
+"r14d",
+"r15d",
+"r16d",
+"r17d",
+"r18d",
+"r19d",
+"r20d",
+"r21d",
+"r22d",
+"r23d",
+"r24d",
+"r25d",
+"r26d",
+"r27d",
+"r28d",
+"r29d",
+"r30d",
+"r31d"
+};
+
+char *reg65[]={
+"rax",
+"rbx",
+"rcx",
+"rdx",
+"rsi",
+"rdi",
+"rsp",
+"rbp",
+"r8",
+"r9",
+"r10",
+"r11",
+"r12",
+"r13",
+"r14",
+"r15",
+"r16",
+"r17",
+"r18",
+"r19",
+"r20",
+"r21",
+"r22",
+"r23",
+"r24",
+"r25",
+"r26",
+"r27",
+"r28",
+"r29",
+"r30",
+"r31"
+};
+
+
 class req {
     public:
     unsigned int op;
@@ -29,9 +100,9 @@ class req {
     unsigned flags,flags_in;
     unsigned fset;
     unsigned alt,mul;
-    int depA,depB,depS;
     unsigned en;
     unsigned num[3];
+    char asmtext[32];
     void gen(bool alt_, bool mul_, bool can_shift, req *prev1=NULL);
     void flgPTR(__int128 r);
     void flg64(__int128 r);
@@ -39,24 +110,6 @@ class req {
     void flgM64(unsigned long long r, bool big=0);
     void flgM128(unsigned __int128 r, bool big=0);
     bool testj(int code);
-    int fuA() {
-        return depA<0 ? depA+10 : 15;
-    }
-    int fuB() {
-        return depB<0 ? depB+10 : 15;
-    }
-    int fuFl() {
-        return depS<0 ? depS+10 : 15;
-    }
-    int fuuA() {
-        return depA<0 ? 15 : depA;
-    }
-    int fuuB() {
-        return depB<0 ? 15 : depB;
-    }
-    int fuuFl() {
-        return depS<0 ? 15 : depS;
-    }
 };
 
 void req::gen(bool alt_, bool mul_, bool can_shift, req *prev1) {
