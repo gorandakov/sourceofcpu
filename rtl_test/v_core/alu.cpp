@@ -179,7 +179,8 @@ class req {
     unsigned has_mem;
     unsigned has_alu;
     char asmtext[32];
-    void gen(bool alt_, bool mul_, bool can_shift, req *prev1=NULL);
+    void gen(bool alt_, bool mul_, bool can_shift, req *prev1=NULL,hcont *contx);
+    void gen_init(int rT,int dom,unsigned long int val,int val_p);
     void flgPTR(__int128 r);
     void flg64(__int128 r);
     void flg32(__int128 r);
@@ -187,8 +188,21 @@ class req {
     void flgM128(unsigned __int128 r, bool big=0);
     bool testj(int code);
 };
+    
+void req::gen_init(int rT,int dom,unsigned long int val,int val_p) {
+    has_alu=true;
+    res=val;
+    res_p=val_p;
+    op=32;
+    rB=-1;
+    rA=-1;
+    this->rT=rT;
+    op=32;
+    if (!val_p) snprintf(asmtext,sizeof asmtext,"movabs $%li\n",B);
+    else snprintf(asmtext,sizeof asmtext,"movabsp $%li\n",B);//WARNING: movabsp non impl and not in cpu spec
+}
 
-void req::gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont &contx) {
+void req::gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx) {
     alt=alt_;
     mul=mul_;
     excpt=-1;
@@ -218,6 +232,8 @@ void req::gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont &contx) {
     A_p=contx->reg_genP[rA];
     asmtext[0]=0;
 
+    has_alu=1;
+    //has_mem=0;
     if (!alt && !mul) {
         __int128 res0;
         int A0=A,B0=B,res2;
