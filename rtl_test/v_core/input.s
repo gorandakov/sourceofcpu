@@ -7,7 +7,7 @@ movzbl (%r9),%r8d
 call is_alpha
 testl %eax,%eax
 je parse_error
-lea chrbuftkn(%rip),%rsi
+movq $chrbuftkn,%rsi
 xorl %eax,%eax
 movq %eax,(%rsi)
 .p2align 5
@@ -63,7 +63,7 @@ no_o_brack:
 call is_alpha
 testl %eax,%eax
 je parse_number
-lea chrbuftkn(%rip),%rsi
+movq $chrbuftkn,%rsi
 xorl %eax,%eax
 movq %eax,(%rsi)
 .p2align 5
