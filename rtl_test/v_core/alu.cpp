@@ -566,7 +566,7 @@ addie:
 		goto addie; 
 	    }
 	    if (!A_p && B_p) { 
-		no_O=true; 
+		no_O=2; 
                 res1=res=res0=B&(A|0xfffff00000000000);
 		p2.val=A&0xfffffffffff;
 		goto addie; 
@@ -624,13 +624,13 @@ addie:
 	    if (A_p && !B_p) { 
 		no_O=1; 
                 res1=res=res0=A^(B&0xfffffffffff);
-		p2.val=~B&0xfffffffffff;
+		p2.val=B&0xfffffffffff;
 		goto addie; 
 	    }
 	    if (!A_p && B_p) { 
 		no_O=1; 
                 res1=res=res0=B^(A&0xfffffffffff);
-		p2.val=~A&0xfffffffffff;
+		p2.val=A&0xfffffffffff;
 		goto addie; 
 	    }
             res1=res=res0;

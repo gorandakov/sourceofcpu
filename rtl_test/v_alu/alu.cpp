@@ -101,7 +101,7 @@ void req::gen(bool alt_, bool mul_, bool can_shift, req *prev1) {
         which=which>=6 ? which-2 : which-6;
         flags_in=prev1[which+10].flags;
         depS=which;
-        if (!prev1[which+10].en || prev1[which+10].mul || prev1[which+10].excpt==11) depS=15;
+        if (!prev1[which+10].en || prev1[which+10].mul || prev1[which+10].excpt==11 || (prev1[which+10].op&0x1000)) depS=15;
     }
     if (!alt && !mul) {
         __int128 res0;
@@ -201,7 +201,7 @@ addie:
 		goto addie; 
 	    }
 	    if (!A_p && B_p) { 
-		no_O=true; 
+		no_O=2; 
                 res1=res=res0=B&(A|0xfffff00000000000);
 		p2.val=A&0xfffffffffff;
 		goto addie; 
