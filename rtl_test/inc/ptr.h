@@ -32,7 +32,7 @@ class ptr {
 	unsigned long bnd1=(val&0xfffffffffff) & (0xfffffffe000<<exp);
 	unsigned long bnd2=bnd1;
 	if (!eqn) {
-            if (val>>44) bnd2+=1ul<<(exp+13);
+            if ((val>>44)&1) bnd2+=1ul<<(exp+13);
 	    else bnd2-=1ul<<(exp+13);
 	    bnd2&=0xfffffffffff;
 	}
@@ -47,9 +47,9 @@ class ptr {
 	    (0xfffffffffc0));
 	    return (b&bnd)==bnd;
 	}
-	if (eqn && !(val>>44)) return false;
-	if (!eqn || (ptr2.val&(0xfffffffe000<<exp))!=bnd1) flip=1;
-	return (ptr2.val&(0xfffffffe000<<exp))==bnd1 || (ptr2.val&(0xfffffffe000<<exp))==bnd2;
+	if (eqn && !((val>>44)&1)) return false;
+	if ((ptr2.val&0xfffffffffff&(0xfffffffe000<<exp))!=bnd1) flip=1;
+	return (ptr2.val&0xfffffffffff&(0xfffffffe000<<exp))==bnd1 || (ptr2.val&0xfffffffffff&(0xfffffffe000<<exp))==bnd2;
     }
     void set_bounds(unsigned long low,unsigned long hi) {
         unsigned long exp=31;
