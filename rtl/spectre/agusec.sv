@@ -55,7 +55,7 @@ module agusec_check_upper3(
   assign msk[7]=~&exp[2:0];
   assign msk[0]=1'b0; //
 
-  assign msk0={1'b1,msk[7:1]}&msk;
+  assign msk0={1'b0,msk[7:1]}&~msk;
 
   assign pos_ack[1]=((do_pos) && ~on_hi && diff) || max ; //c==1
   assign pos_ack[0]=do_pos & ~(~diff && on_hi)|| (do_pos2) & ~on_hi & (diff) || max; //c==0
@@ -106,12 +106,12 @@ module agusec_check_upper3(
         
         assign xpos0[p]= p!=exp[4:3] ||  ~redor8(O[p*8+8+:8]&msk);
       //  assign xpos1[p]= p==exp[4:3] &&   redor8(ptr[p*8+12+:8]&msk);
-        assign xpos2[p]= p!=exp[4:3] ||  ~(redor8(O[p*8+9+:8]&msk)&redor8(X[p*8+9+:8]&msk0));
+        assign xpos2[p]= p!=exp[4:3] ||  (~redor8(O[p*8+9+:8]&msk)&~redor8(And[p*8+9+:8]&msk0));
         assign xpos3[p]= p!=exp[4:3] ||  ~redor8(O[p*8+1+:8]&msk);
         assign xneg3[p]= p!=exp[4:3] ||  redand8(X[p*8+1+:8]|~msk);
         assign xneg0[p]= p!=exp[4:3] ||  redand8(X[p*8+8+:8]|~msk);
         assign xneg1[p]= p!=exp[4:3] ||  redand8(And[p*8+8+:8]|~msk);
-        assign xneg2[p]= p!=exp[4:3] ||  redand8(X[p*8+9+:8]|~msk)&~redor8(And[p*8+9+:8]&msk0);
+        assign xneg2[p]= p!=exp[4:3] ||  (redand8(X[p*8+9+:8]|~msk)&~redor8(And[p*8+9+:8]&msk0));
     //    assign xposP[p]= p!=exp[4:3] ||  ~redand8(ptr[p*8+12+:8]|~msk);
     end
     assign do_pos=redand8({pos0,xpos0});

@@ -637,12 +637,12 @@ void req_set(Vfu_alu *mod,req reqs[10]) {
     mod->u6_S_fufwd=reqs[19].fuFl();
     mod->u6_S_fuufwd=reqs[19].fuuFl();
     
-    mod->FUS4=reqs[14].flags;
-    mod->FUS5=reqs[15].flags;
-    mod->FUS6=reqs[16].flags;
-    mod->FUS7=reqs[17].flags;
-    mod->FUS8=reqs[18].flags;
-    mod->FUS9=reqs[19].flags;
+    mod->FUS4=reqs[24].flags;
+    mod->FUS5=reqs[25].flags;
+    mod->FUS6=reqs[26].flags;
+    mod->FUS7=reqs[27].flags;
+    mod->FUS8=reqs[28].flags;
+    mod->FUS9=reqs[29].flags;
 
     set64i(mod->FU0,reqs[10].res,reqs[10].res_p);
     set64i(mod->FU1,reqs[11].res,reqs[11].res_p);
