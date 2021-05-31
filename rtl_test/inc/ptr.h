@@ -29,7 +29,7 @@ class ptr {
     bool get_bounds2(int no_O,ptr ptr2,unsigned long b,bool &flip) {
 	unsigned exp=val>>59;
 	bool eqn=((val>>52)&0x7f)<((val>>45)&0x7f);
-	unsigned long bnd1=(val&0xfffffffffff) & (0xfffffffe000<<exp);
+	unsigned long bnd1=(val&0xfffffffffff) & (0xfffffffe000ul<<exp);
 	unsigned long bnd2=bnd1;
 	if (!eqn) {
             if ((val>>44)&1) bnd2+=1ul<<(exp+13);
@@ -38,18 +38,18 @@ class ptr {
 	}
 	flip=0;
 	if (no_O==1) {
-	    unsigned long bnd=((0xfffffffffc0<<exp)&
+	    unsigned long bnd=((0xfffffffffc0ul<<exp)&
 	    (0xfffffffffc0));
 	    return (b&bnd)==0;
 	}
 	if (no_O==2) {
-	    unsigned long bnd=((0xfffffffffc0<<exp)&
+	    unsigned long bnd=((0xfffffffffc0ul<<exp)&
 	    (0xfffffffffc0));
 	    return (b&bnd)==bnd;
 	}
 	if (eqn && !((val>>44)&1)) return false;
-	if ((ptr2.val&0xfffffffffff&(0xfffffffe000<<exp))!=bnd1) flip=1;
-	return (ptr2.val&0xfffffffffff&(0xfffffffe000<<exp))==bnd1 || (ptr2.val&0xfffffffffff&(0xfffffffe000<<exp))==bnd2;
+	if ((ptr2.val&0xfffffffffff&(0xfffffffe000ul<<exp))!=bnd1) flip=1;
+	return (ptr2.val&0xfffffffffff&(0xfffffffe000ul<<exp))==bnd1 || (ptr2.val&0xfffffffffff&(0xfffffffe000ul<<exp))==bnd2;
     }
     void set_bounds(unsigned long low,unsigned long hi) {
         unsigned long exp=31;
