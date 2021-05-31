@@ -110,7 +110,7 @@ void req::gen(bool alt_, bool mul_, bool can_shift, req *prev1) {
         long long int A1=A,B1=B,res1;
         unsigned __int128 one=0x8000000000000000ull;
         unsigned long long pttr=A_p ? A : B;
-	bool no_O=false;
+	int no_O=0;
         switch(op&0xff) {
             case 0:
             res0=((unsigned __int128)  A)+(unsigned __int128) B;
@@ -132,9 +132,8 @@ addie:
 		    excpt=11;
 		    break;
 		}
-		if ((((res>>44)^(pttr>>44))&1)!=flip) {
-		    excpt=11;
-		    break;
+		if (flip) {
+		    res^=1ul<<44;
 		};
 		res_p=1;
                 flg64(res0);
