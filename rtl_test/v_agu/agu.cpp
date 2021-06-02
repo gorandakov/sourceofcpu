@@ -1152,10 +1152,10 @@ bool get_check(Vagu_block *top, int exc) {
 	FU2Hit[0]=0;
         if (FU3Reg[0]!=0x1fc) FU3Hit[0]=0;
     }
-    top->FU0Hit=FU0Hit[0];
-    top->FU1Hit=FU1Hit[0];
-    top->FU2Hit=FU2Hit[0];
-    top->FU3Hit=FU3Hit[0];
+    top->FU0Hit=FU0Hit[1];
+    top->FU1Hit=FU1Hit[1];
+    top->FU2Hit=FU2Hit[1];
+    top->FU3Hit=FU3Hit[1];
     top->mOpY4_hit=Y4Hit[2];
     top->mOpY4_clHit=3*(Y4Hit[2]);
     top->miss4=((!Y4Hit[2])||wms)&&Y4En[2];
@@ -1168,11 +1168,11 @@ bool get_check(Vagu_block *top, int exc) {
     if ((!top->miss5) && Y5Hit[2]) reqs[Y5_n[2]][Y5_n2[2]].en=0;
     if (top->mOp_write_clear) wms=0;
 
-    top->dc_rdataA[0]=FU3_data[0][0];
-    top->dc_rdataA[1]=FU3_data[0][1];
-    top->dc_rdataA[2]=FU3_data[0][2];
-    top->dc_rdataA[3]=FU3_data[0][3];
-    top->FUreg3_reg=FU3Reg[0];
+    top->dc_rdataA[0]=FU3_data[1][0];
+    top->dc_rdataA[1]=FU3_data[1][1];
+    top->dc_rdataA[2]=FU3_data[1][2];
+    top->dc_rdataA[3]=FU3_data[1][3];
+    top->FUreg3_reg=FU3Reg[1];
 
     for(n=2;n;n--) {
         Y4Hit[n]=Y4Hit[n-1];
