@@ -28,7 +28,7 @@ class ptr {
     }
     bool get_bounds2(int no_O,ptr ptr2,unsigned long b,bool &flip) {
 	unsigned exp=val>>59;
-	bool eqn=((val>>52)&0x7f)<((val>>45)&0x7f);
+	bool eqn=((val>>52)&0x7f)<=((val>>45)&0x7f);
 	unsigned long bnd1=(val&0xfffffffffff) & (0xfffffffe000ul<<exp);
 	unsigned long bnd2=bnd1;
 	if (!eqn) {

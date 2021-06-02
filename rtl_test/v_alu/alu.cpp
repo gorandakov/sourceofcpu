@@ -926,7 +926,7 @@ int main(int argc, char *argv[]) {
             cyc=cyc+1;
             if (!get_check(top,reqs[1])) {
                 printf("error @%i\n",cyc);
-                sleep(1);
+                exit(1);
             }
             if ((cyc%10000)==0) {
                 printf("cycle %i\n",cyc);

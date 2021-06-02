@@ -394,7 +394,7 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
 
   always @(posedge clk)
     begin
-      $display("flg ",valS," jt ",jumpType," j",doJmp," op ",operation);
+//      $display("flg ",valS," jt ",jumpType," j",doJmp," op ",operation);
       if (rst)
         begin
           valRes_reg<=65'b0;
