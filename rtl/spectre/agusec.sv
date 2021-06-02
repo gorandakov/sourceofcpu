@@ -46,9 +46,9 @@ module agusec_check_upper3(
   assign posx[1]=~|exp[4:3];
   assign posx[0]=1'b0;
   
-  assign msk[1]=exp[2:1]==2'b0;
-  assign msk[2]=exp[2:1]==2'b0 || exp[2:0]==3'b10;
-  assign msk[3]=exp[1:0]!=2'b11 && ~exp[2];
+  assign msk[1]=exp[2:0]==3'b0;
+  assign msk[2]=exp[2:1]==2'b0;
+  assign msk[3]=exp[2:1]==2'b0 || exp[2:0]==3'b010;
   assign msk[4]=~exp[2];
   assign msk[5]=exp[2:0]==3'd4 || ~exp[2];
   assign msk[6]=exp[2:0]==3'd5 || exp[2:0]==3'd4 || ~exp[2];
