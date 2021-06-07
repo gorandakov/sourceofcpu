@@ -31,6 +31,36 @@ module MSI_bus_data_ram(
   end
 endmodule
 
+module MSI_bus_nondata_ram(
+  clk,rst,
+  read_addr,read_data,read_clkEn,
+  write_addr,write_data,write_ben,write_wen);
+  localparam data_width=2*`rbusD_width+40;
+  localparam addr_width=5;
+  localparam addr_count=32;
+  input clk;
+  input rst;
+  input [4:0] read_addr;
+  output [data_width-1:0] read_data;
+  input read_clkEn;
+  input [4:0] write_addr;
+  input [data_width-1:0] write_data;
+  input [data_width-1:0] write_ben;
+  input write_wen;
+
+  reg [4:0] read_addr_reg;
+  reg [data_width-1:0] ram[31:0];
+
+  assign read_data=ram[read_addr_reg];
+
+  integer b;
+  always @(posedge clk) begin
+      if (read_clkEn) read_addr_reg<=read_addr;
+      if (write_wen) for(b=0;b<data_width/2;b=b+1)
+	  if (write_ben[b]) ram[write_addr][b]<=write_data[b];
+  end
+endmodule
+
 module MSI_bus_data_ram_box(
   clk,rst,doStall,stall,
   read_data,read_bank,read_clkEn,
@@ -38,6 +68,7 @@ module MSI_bus_data_ram_box(
   localparam data_width=32;
   localparam addr_width=5;
   localparam addr_count=32;
+  localparam sigwidth=`rbusD_width+20;
   input clk;
   input rst;
   output doStall;
@@ -60,12 +91,15 @@ module MSI_bus_data_ram_box(
   wire [4:0] read_addr_d;
   wire [5:0] cnt_inc;
   wire [5:0] cnt_dec;
+  wire [sigwidth*2-1:0] read_data_non;
+  wire [sigwidth*2-1:0] write_data_non;
+  wire [sigwidth*2-1:0] write_ben_non;
 
   always @(posedge clk) begin
       read_bank_reg<=read_bank;
       if (cnt!=6'd0 && read_clkEn) read_addr<=read_addr_d;
-      if (write_wen && !read_clkEn) cnt<=cnt_inc;
-      if (read_clkEn && !write_wen) cnt<=cnt_dec;
+      if (write_wen && !(read_clkEn&&read_bank) && write_bank) cnt<=cnt_inc;
+      if (read_clkEn && read_bank && !(write_wen && write_bank)) cnt<=cnt_dec;
   end
 
   get_carry #(6) cmp_mod(cnt,~6'd24,1'b1,doStall);
@@ -82,6 +116,11 @@ module MSI_bus_data_ram_box(
         write_addr,write_data0[x*data_width*2+:data_width*2],write_ben,write_wen);
     end
   endgenerate
+  
+  MSI_bus_nondata_ram ramN_mod(
+  clk,rst,
+  read_addr,read_data_non,read_clkEn,
+  write_addr,write_data_non,write_ben_non,write_wen);
 
   assign write_ben={data_width{{~write_bank,write_bank}}};
   integer k;
