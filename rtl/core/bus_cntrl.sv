@@ -63,8 +63,8 @@ endmodule
 
 module MSI_bus_data_ram_box(
   clk,rst,doStall,stall,
-  read_data,read_bank,read_clkEn,read_signals,read_src_req,read_dst_req,
-  write_addr,write_data,write_bank,write_wen,write_signals,write_src_req,write_dst_req);
+  read_data,read_bank,read_clkEn,
+  write_addr,write_data,write_bank,write_wen);
   localparam data_width=32;
   localparam addr_width=5;
   localparam addr_count=32;
@@ -76,16 +76,10 @@ module MSI_bus_data_ram_box(
   output reg [16*data_width-1:0] read_data;
   input read_bank;
   input read_clkEn;
-  output [`rbusD_width-1:0] read_signals;
-  output [9:0] read_src_req;
-  output [9:0] read_dst_req;
   input [4:0] write_addr;
   input [16*data_width-1:0] write_data;
   input write_bank;
   input write_wen;
-  input [`rbusD_width-1:0] write_signals;
-  input [9:0] write_src_req;
-  input [9:0] write_dst_req;
   
   wire [data_width*2-1:0] write_ben;
   reg [16*data_width*2-1:0] read_data0;
