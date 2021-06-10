@@ -93,7 +93,7 @@ module decoder_permitted_i(
   
 //  assign permC[0]=~halt;
   
-  assign perm=permA & permB & permC & iAvail;
+  assign perm=permA & permB & permC & iAvail & 10'hff;
 
 endmodule
 
