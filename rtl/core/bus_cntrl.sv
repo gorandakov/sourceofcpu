@@ -130,11 +130,17 @@ module MSI_bus_data_ram_box(
 
   assign write_ben={data_width{{~write_bank,write_bank}}};
   integer k;
-  always @(read_data0) begin
+  always @(read_data0,write_data) begin
 	  for(k=0;k<(16*data_width);k=k+1) begin
 		  read_data[k]=read_bank_reg ? read_data0[k*2+1] : read_data0[k*2];
 		  write_data0[k*2+:2]={2{write_data[k]}};
 	  end
+	  for(k=0;k<`rbusD_width;k++) begin
+		  write_data_non[k*2+:2]={2{write_data_non9[k]}};
+		  read_data_non9[k]=read_bank_reg ? read_data_non[k*2+1] : read_data_non[k*2]
+	  end
   end
+  assign write_data_non9={write_signals,write_src_req,write_dst_req};
+  assign {read_signals,read_src_req,read_dst_req}=read_data_non9;
 endmodule
 
