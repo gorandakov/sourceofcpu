@@ -68,6 +68,7 @@ module MSI_bus_data_ram_box(
   localparam data_width=32;
   localparam addr_width=5;
   localparam addr_count=32;
+  localparam waitcnt=15;
   localparam sigwidth=`rbusD_width+20;
   input clk;
   input rst;
@@ -100,19 +101,40 @@ module MSI_bus_data_ram_box(
   wire [sigwidth*2-1:0] read_data_non;
   wire [sigwidth*2-1:0] write_data_non;
   wire [sigwidth*2-1:0] write_ben_non;
+  wire wait_non_full;
+  wire [5:0] cnt_wait;
+  wire doStall0;
+  wire [5:0] wcnt_d;
+  reg [5:0] wcnt;
 
   always @(posedge clk) begin
-      read_bank_reg<=read_bank;
-      if (cnt!=6'd0 && read_clkEn) read_addr<=read_addr_d;
-      if (write_wen && !(read_clkEn&&read_bank) && write_bank) cnt<=cnt_inc;
-      if (read_clkEn && read_bank && !(write_wen && write_bank)) cnt<=cnt_dec;
+      if (rst) begin
+	  read_bank_reg<=1'b0;
+	  cnt<=6'd0;
+	  wcnt<=6'd0;
+      end else begin
+          read_bank_reg<=read_bank;
+          if (cnt!=6'd0 && read_clkEn) read_addr<=read_addr_d;
+          if (write_wen && !(read_clkEn&&read_bank) && write_bank) cnt<=cnt_inc;
+          if (read_clkEn && read_bank && !(write_wen && write_bank)) cnt<=cnt_dec;
+          if (write_wen && !write_bank && write_rpl) begin
+	      if (wait_non_full) begin
+	          wcnt<=waitcnt[5:0];
+	      end else begin
+	          wcnt<=cnt_wait;
+	      end
+          end else begin
+	      if (wcnt!=6'd0) wcnt<=wcnt_d;
+          end
+      end
   end
 
-  get_carry #(6) cmp_mod(cnt,~6'd24,1'b1,doStall);
+  get_carry #(6) cmp_mod(cnt,~6'd24,1'b1,doStall0);
   adder_inc #(5) inc_mod(read_addr,read_addr_d,1'b1,);
   adder_inc #(6) inc_cnt_mod(cnt,cnt_inc,1'b1,);
   adder #(6) dec_cnt_mod(cnt,6'h3f,cnt_dec,1'b0,1'b1,,,);
-
+  adder #(6) cntAdd_mod(waitcnt[5:0],~cnt,cnt_wait,read_clkEn,1'b1,wait_non_full,,);
+  adder #(6) cntDec_mod(wcnt,6'h3f,wcnt_d,1'b0,1'b1,,,);
   generate
     genvar x;
     for(x=0;x<16;x=x+1) begin : h_ram
@@ -142,5 +164,6 @@ module MSI_bus_data_ram_box(
   end
   assign write_data_non9={write_signals,write_src_req,write_dst_req};
   assign {read_signals,read_src_req,read_dst_req}=read_data_non9;
+  assign doStall=doStall0 || wcnt!=6'd0;
 endmodule
 
