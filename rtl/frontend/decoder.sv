@@ -316,6 +316,7 @@ module decoder_reorder_mux(
   dec_rB_isV,
   dec_rT_isV,
   dec_ls_flag,
+  dec_second,
   
   dec0_operation,
   dec1_operation,
@@ -327,6 +328,17 @@ module decoder_reorder_mux(
   dec7_operation,
   dec8_operation,
   dec9_operation,
+
+  dec0_opchain,
+  dec1_opchain,
+  dec2_opchain,
+  dec3_opchain,
+  dec4_opchain,
+  dec5_opchain,
+  dec6_opchain,
+  dec7_opchain,
+  dec8_opchain,
+  dec9_opchain,
 
   dec0_rA,
   dec1_rA,
@@ -507,6 +519,17 @@ module decoder_reorder_mux(
   dec8_port,
   dec9_port,
 
+  dec0_sport,
+  dec1_sport,
+  dec2_sport,
+  dec3_sport,
+  dec4_sport,
+  dec5_sport,
+  dec6_sport,
+  dec7_sport,
+  dec8_sport,
+  dec9_sport,
+
   dec0_useRs,
   dec1_useRs,
   dec2_useRs,
@@ -598,6 +621,7 @@ module decoder_reorder_mux(
   input [9:0] dec_rB_isV;
   input [9:0] dec_rT_isV;
   input [9:0] dec_ls_flag;
+  input [9:0] dec_second;
   
   input [OPERATION_WIDTH-1:0] dec0_operation;
   input [OPERATION_WIDTH-1:0] dec1_operation;
@@ -609,6 +633,17 @@ module decoder_reorder_mux(
   input [OPERATION_WIDTH-1:0] dec7_operation;
   input [OPERATION_WIDTH-1:0] dec8_operation;
   input [OPERATION_WIDTH-1:0] dec9_operation;
+
+  input [OPERATION_WIDTH-1:0] dec0_opchain;
+  input [OPERATION_WIDTH-1:0] dec1_opchain;
+  input [OPERATION_WIDTH-1:0] dec2_opchain;
+  input [OPERATION_WIDTH-1:0] dec3_opchain;
+  input [OPERATION_WIDTH-1:0] dec4_opchain;
+  input [OPERATION_WIDTH-1:0] dec5_opchain;
+  input [OPERATION_WIDTH-1:0] dec6_opchain;
+  input [OPERATION_WIDTH-1:0] dec7_opchain;
+  input [OPERATION_WIDTH-1:0] dec8_opchain;
+  input [OPERATION_WIDTH-1:0] dec9_opchain;
 
   input [REG_WIDTH-1:0] dec0_rA;
   input [REG_WIDTH-1:0] dec1_rA;
@@ -790,6 +825,17 @@ module decoder_reorder_mux(
   input [3:0] dec8_port;
   input [3:0] dec9_port;
 
+  input [3:0] dec0_sport;
+  input [3:0] dec1_sport;
+  input [3:0] dec2_sport;
+  input [3:0] dec3_sport;
+  input [3:0] dec4_sport;
+  input [3:0] dec5_sport;
+  input [3:0] dec6_sport;
+  input [3:0] dec7_sport;
+  input [3:0] dec8_sport;
+  input [3:0] dec9_sport;
+
   input dec0_useRs;
   input dec1_useRs;
   input dec2_useRs;
@@ -837,17 +883,29 @@ module decoder_reorder_mux(
   wire rB1_use,rB2_use;
   wire rB1_useF,rB2_useF;
 
-  assign operation=(sel[0] & ~sel[1]) ? dec0_operation : {OPERATION_WIDTH{1'BZ}};
-  assign operation=(sel[1] & ~sel[0]) ? dec1_operation : {OPERATION_WIDTH{1'BZ}};
-  assign operation=(sel[2] & ~sel[1]) ? dec2_operation : {OPERATION_WIDTH{1'BZ}};
-  assign operation=(sel[3] & ~sel[1]) ? dec3_operation : {OPERATION_WIDTH{1'BZ}};
-  assign operation=(sel[4] & ~sel[1]) ? dec4_operation : {OPERATION_WIDTH{1'BZ}};
-  assign operation=(sel[5] & ~sel[1]) ? dec5_operation : {OPERATION_WIDTH{1'BZ}};
-  assign operation=(sel[6] & ~sel[1]) ? dec6_operation : {OPERATION_WIDTH{1'BZ}};
-  assign operation=(sel[7] & ~sel[1]) ? dec7_operation : {OPERATION_WIDTH{1'BZ}};
-  assign operation=(sel[8] & ~sel[1]) ? dec8_operation : {OPERATION_WIDTH{1'BZ}};
-  assign operation=sel[9] ? dec9_operation : {OPERATION_WIDTH{1'BZ}};
+  assign operation=(sel[0] & ~sel[1] & ~dec_second[0]) ? dec0_operation : {OPERATION_WIDTH{1'BZ}};
+  assign operation=(sel[1] & ~sel[0] & ~dec_second[1]) ? dec1_operation : {OPERATION_WIDTH{1'BZ}};
+  assign operation=(sel[2] & ~sel[1] & ~dec_second[2]) ? dec2_operation : {OPERATION_WIDTH{1'BZ}};
+  assign operation=(sel[3] & ~sel[1] & ~dec_second[3]) ? dec3_operation : {OPERATION_WIDTH{1'BZ}};
+  assign operation=(sel[4] & ~sel[1] & ~dec_second[4]) ? dec4_operation : {OPERATION_WIDTH{1'BZ}};
+  assign operation=(sel[5] & ~sel[1] & ~dec_second[5]) ? dec5_operation : {OPERATION_WIDTH{1'BZ}};
+  assign operation=(sel[6] & ~sel[1] & ~dec_second[6]) ? dec6_operation : {OPERATION_WIDTH{1'BZ}};
+  assign operation=(sel[7] & ~sel[1] & ~dec_second[7]) ? dec7_operation : {OPERATION_WIDTH{1'BZ}};
+  assign operation=(sel[8] & ~sel[1] & ~dec_second[8]) ? dec8_operation : {OPERATION_WIDTH{1'BZ}};
+  assign operation=sel[9] & ~dec_second[9] ? dec9_operation : {OPERATION_WIDTH{1'BZ}};
 
+  assign operation=(sel[0] & ~sel[1] & dec_second[0]) ? dec0_opchain : {OPERATION_WIDTH{1'BZ}};
+  assign operation=(sel[1] & ~sel[0] & dec_second[1]) ? dec1_opchain : {OPERATION_WIDTH{1'BZ}};
+  assign operation=(sel[2] & ~sel[1] & dec_second[2]) ? dec2_opchain : {OPERATION_WIDTH{1'BZ}};
+  assign operation=(sel[3] & ~sel[1] & dec_second[3]) ? dec3_opchain : {OPERATION_WIDTH{1'BZ}};
+  assign operation=(sel[4] & ~sel[1] & dec_second[4]) ? dec4_opchain : {OPERATION_WIDTH{1'BZ}};
+  assign operation=(sel[5] & ~sel[1] & dec_second[5]) ? dec5_opchain : {OPERATION_WIDTH{1'BZ}};
+  assign operation=(sel[6] & ~sel[1] & dec_second[6]) ? dec6_opchain : {OPERATION_WIDTH{1'BZ}};
+  assign operation=(sel[7] & ~sel[1] & dec_second[7]) ? dec7_opchain : {OPERATION_WIDTH{1'BZ}};
+  assign operation=(sel[8] & ~sel[1] & dec_second[8]) ? dec8_opchain : {OPERATION_WIDTH{1'BZ}};
+  assign operation=sel[9] & dec_second[9] ? dec9_opchain : {OPERATION_WIDTH{1'BZ}};
+
+  
   assign constantA=(sel[0] & ~sel[1]) ? dec0_constant : 65'bz;
   assign constantA=(sel[1] & ~sel[0]) ? dec1_constant : 65'bz;
   assign constantA=(sel[2] & ~sel[1]) ? dec2_constant : 65'bz;
@@ -877,93 +935,118 @@ module decoder_reorder_mux(
   assign st_enA=!(&storeDA[1:0]);
   assign st_enB=!(&storeDB[1:0]);
 
-  assign port=(sel[0] & ~sel[1]) ? dec0_port : 4'bz;
-  assign port=(sel[1] & ~sel[0]) ? dec1_port : 4'bz;
-  assign port=(sel[2] & ~sel[1]) ? dec2_port : 4'bz;
-  assign port=(sel[3] & ~sel[1]) ? dec3_port : 4'bz;
-  assign port=(sel[4] & ~sel[1]) ? dec4_port : 4'bz;
-  assign port=(sel[5] & ~sel[1]) ? dec5_port : 4'bz;
-  assign port=(sel[6] & ~sel[1]) ? dec6_port : 4'bz;
-  assign port=(sel[7] & ~sel[1]) ? dec7_port : 4'bz;
-  assign port=(sel[8] & ~sel[1]) ? dec8_port : 4'bz;
-  assign port=(sel[9] & ~sel[1]) ? dec9_port : 4'bz;
+  assign port=(sel[0] & ~sel[1] & ~dec_second[0]) ? dec0_port : 4'bz;
+  assign port=(sel[1] & ~sel[0] & ~dec_second[1]) ? dec1_port : 4'bz;
+  assign port=(sel[2] & ~sel[1] & ~dec_second[2]) ? dec2_port : 4'bz;
+  assign port=(sel[3] & ~sel[1] & ~dec_second[3]) ? dec3_port : 4'bz;
+  assign port=(sel[4] & ~sel[1] & ~dec_second[4]) ? dec4_port : 4'bz;
+  assign port=(sel[5] & ~sel[1] & ~dec_second[5]) ? dec5_port : 4'bz;
+  assign port=(sel[6] & ~sel[1] & ~dec_second[6]) ? dec6_port : 4'bz;
+  assign port=(sel[7] & ~sel[1] & ~dec_second[7]) ? dec7_port : 4'bz;
+  assign port=(sel[8] & ~sel[1] & ~dec_second[8]) ? dec8_port : 4'bz;
+  assign port=(sel[9] & ~sel[1] & ~dec_second[9]) ? dec9_port : 4'bz;
   assign port=(&sel[1:0]) ? 4'd0 : 4'bz;
+  assign port=(sel[0] & ~sel[1] & dec_second[0]) ? dec0_sport : 4'bz;
+  assign port=(sel[1] & ~sel[0] & dec_second[1]) ? dec1_sport : 4'bz;
+  assign port=(sel[2] & ~sel[1] & dec_second[2]) ? dec2_sport : 4'bz;
+  assign port=(sel[3] & ~sel[1] & dec_second[3]) ? dec3_sport : 4'bz;
+  assign port=(sel[4] & ~sel[1] & dec_second[4]) ? dec4_sport : 4'bz;
+  assign port=(sel[5] & ~sel[1] & dec_second[5]) ? dec5_sport : 4'bz;
+  assign port=(sel[6] & ~sel[1] & dec_second[6]) ? dec6_sport : 4'bz;
+  assign port=(sel[7] & ~sel[1] & dec_second[7]) ? dec7_sport : 4'bz;
+  assign port=(sel[8] & ~sel[1] & dec_second[8]) ? dec8_sport : 4'bz;
+  assign port=(sel[9] & ~sel[1] & dec_second[9]) ? dec9_sport : 4'bz;
   
-  assign rA1=(sel[0] & ~sel[1] & ~storeL & ~store) ? dec0_rA : {REG_WIDTH{1'BZ}};
-  assign rA1=(sel[1] & ~sel[0] & ~storeL & ~store) ? dec1_rA : {REG_WIDTH{1'BZ}};
-  assign rA1=(sel[2] & ~sel[1] & ~storeL & ~store) ? dec2_rA : {REG_WIDTH{1'BZ}};
-  assign rA1=(sel[3] & ~sel[1] & ~storeL & ~store) ? dec3_rA : {REG_WIDTH{1'BZ}};
-  assign rA1=(sel[4] & ~sel[1] & ~storeL & ~store) ? dec4_rA : {REG_WIDTH{1'BZ}};
-  assign rA1=(sel[5] & ~sel[1] & ~storeL & ~store) ? dec5_rA : {REG_WIDTH{1'BZ}};
-  assign rA1=(sel[6] & ~sel[1] & ~storeL & ~store) ? dec6_rA : {REG_WIDTH{1'BZ}};
-  assign rA1=(sel[7] & ~sel[1] & ~storeL & ~store) ? dec7_rA : {REG_WIDTH{1'BZ}};
-  assign rA1=(sel[8] & ~sel[1] & ~storeL & ~store) ? dec8_rA : {REG_WIDTH{1'BZ}};
-  assign rA1=(sel[9] & ~sel[1] & ~storeL & ~store) ? dec9_rA : {REG_WIDTH{1'BZ}};
-  assign rA1=((&sel[1:0]) & ~storeL & ~store) ? {REG_WIDTH{1'B0}} : {REG_WIDTH{1'BZ}};
+  assign rA1=(sel[0] & ~sel[1] ) ? dec0_rA : {REG_WIDTH{1'BZ}};
+  assign rA1=(sel[1] & ~sel[0] ) ? dec1_rA : {REG_WIDTH{1'BZ}};
+  assign rA1=(sel[2] & ~sel[1] ) ? dec2_rA : {REG_WIDTH{1'BZ}};
+  assign rA1=(sel[3] & ~sel[1] ) ? dec3_rA : {REG_WIDTH{1'BZ}};
+  assign rA1=(sel[4] & ~sel[1] ) ? dec4_rA : {REG_WIDTH{1'BZ}};
+  assign rA1=(sel[5] & ~sel[1] ) ? dec5_rA : {REG_WIDTH{1'BZ}};
+  assign rA1=(sel[6] & ~sel[1] ) ? dec6_rA : {REG_WIDTH{1'BZ}};
+  assign rA1=(sel[7] & ~sel[1] ) ? dec7_rA : {REG_WIDTH{1'BZ}};
+  assign rA1=(sel[8] & ~sel[1] ) ? dec8_rA : {REG_WIDTH{1'BZ}};
+  assign rA1=(sel[9] & ~sel[1] ) ? dec9_rA : {REG_WIDTH{1'BZ}};
+  assign rA1=((&sel[1:0])) ? {REG_WIDTH{1'B0}} : {REG_WIDTH{1'BZ}};
 
-  assign rB1=(sel[0] & ~sel[1] & ~storeL) ? dec0_rB : {REG_WIDTH{1'BZ}};
-  assign rB1=(sel[1] & ~sel[0] & ~storeL) ? dec1_rB : {REG_WIDTH{1'BZ}};
-  assign rB1=(sel[2] & ~sel[1] & ~storeL) ? dec2_rB : {REG_WIDTH{1'BZ}};
-  assign rB1=(sel[3] & ~sel[1] & ~storeL) ? dec3_rB : {REG_WIDTH{1'BZ}};
-  assign rB1=(sel[4] & ~sel[1] & ~storeL) ? dec4_rB : {REG_WIDTH{1'BZ}};
-  assign rB1=(sel[5] & ~sel[1] & ~storeL) ? dec5_rB : {REG_WIDTH{1'BZ}};
-  assign rB1=(sel[6] & ~sel[1] & ~storeL) ? dec6_rB : {REG_WIDTH{1'BZ}};
-  assign rB1=(sel[7] & ~sel[1] & ~storeL) ? dec7_rB : {REG_WIDTH{1'BZ}};
-  assign rB1=(sel[8] & ~sel[1] & ~storeL) ? dec8_rB : {REG_WIDTH{1'BZ}};
-  assign rB1=(sel[9] & ~sel[1] & ~storeL) ? dec9_rB : {REG_WIDTH{1'BZ}};
-  assign rB1=((&sel[1:0]) & ~storeL) ? {REG_WIDTH{1'B0}} : {REG_WIDTH{1'BZ}};
+  assign rB1=(sel[0] & ~sel[1]) ? dec0_rB : {REG_WIDTH{1'BZ}};
+  assign rB1=(sel[1] & ~sel[0]) ? dec1_rB : {REG_WIDTH{1'BZ}};
+  assign rB1=(sel[2] & ~sel[1]) ? dec2_rB : {REG_WIDTH{1'BZ}};
+  assign rB1=(sel[3] & ~sel[1]) ? dec3_rB : {REG_WIDTH{1'BZ}};
+  assign rB1=(sel[4] & ~sel[1]) ? dec4_rB : {REG_WIDTH{1'BZ}};
+  assign rB1=(sel[5] & ~sel[1]) ? dec5_rB : {REG_WIDTH{1'BZ}};
+  assign rB1=(sel[6] & ~sel[1]) ? dec6_rB : {REG_WIDTH{1'BZ}};
+  assign rB1=(sel[7] & ~sel[1]) ? dec7_rB : {REG_WIDTH{1'BZ}};
+  assign rB1=(sel[8] & ~sel[1]) ? dec8_rB : {REG_WIDTH{1'BZ}};
+  assign rB1=(sel[9] & ~sel[1]) ? dec9_rB : {REG_WIDTH{1'BZ}};
+  assign rB1=((&sel[1:0])) ? {REG_WIDTH{1'B0}} : {REG_WIDTH{1'BZ}};
 
-  assign rA2=(storeDA[0] & ~storeDA[1] & storeL) ? dec0_rC : {REG_WIDTH{1'BZ}};
-  assign rA2=(storeDA[1] & ~storeDA[0] & storeL) ? dec1_rC : {REG_WIDTH{1'BZ}};
-  assign rA2=(storeDA[2] & ~storeDA[1] & storeL) ? dec2_rC : {REG_WIDTH{1'BZ}};
-  assign rA2=(storeDA[3] & ~storeDA[1] & storeL) ? dec3_rC : {REG_WIDTH{1'BZ}};
-  assign rA2=(storeDA[4] & ~storeDA[1] & storeL) ? dec4_rC : {REG_WIDTH{1'BZ}};
-  assign rA2=(storeDA[5] & ~storeDA[1] & storeL) ? dec5_rC : {REG_WIDTH{1'BZ}};
-  assign rA2=(storeDA[6] & ~storeDA[1] & storeL) ? dec6_rC : {REG_WIDTH{1'BZ}};
-  assign rA2=(storeDA[7] & ~storeDA[1] & storeL) ? dec7_rC : {REG_WIDTH{1'BZ}};
-  assign rA2=(storeDA[8] & ~storeDA[1] & storeL) ? dec8_rC : {REG_WIDTH{1'BZ}};
-  assign rA2=(storeDA[9] & ~storeDA[1] & storeL) ? dec9_rC : {REG_WIDTH{1'BZ}};
-  assign rA2=((&storeDA[1:0]) & storeL) ? {REG_WIDTH{1'B0}} : {REG_WIDTH{1'BZ}};
+  assign rA2=(storeDA[0] & ~storeDA[1]) ? dec0_rC : {REG_WIDTH{1'BZ}};
+  assign rA2=(storeDA[1] & ~storeDA[0]) ? dec1_rC : {REG_WIDTH{1'BZ}};
+  assign rA2=(storeDA[2] & ~storeDA[1]) ? dec2_rC : {REG_WIDTH{1'BZ}};
+  assign rA2=(storeDA[3] & ~storeDA[1]) ? dec3_rC : {REG_WIDTH{1'BZ}};
+  assign rA2=(storeDA[4] & ~storeDA[1]) ? dec4_rC : {REG_WIDTH{1'BZ}};
+  assign rA2=(storeDA[5] & ~storeDA[1]) ? dec5_rC : {REG_WIDTH{1'BZ}};
+  assign rA2=(storeDA[6] & ~storeDA[1]) ? dec6_rC : {REG_WIDTH{1'BZ}};
+  assign rA2=(storeDA[7] & ~storeDA[1]) ? dec7_rC : {REG_WIDTH{1'BZ}};
+  assign rA2=(storeDA[8] & ~storeDA[1]) ? dec8_rC : {REG_WIDTH{1'BZ}};
+  assign rA2=(storeDA[9] & ~storeDA[1]) ? dec9_rC : {REG_WIDTH{1'BZ}};
+  assign rA2=((&storeDA[1:0])) ? {REG_WIDTH{1'B0}} : {REG_WIDTH{1'BZ}};
 
-  assign rB2=(storeDB[0] & ~storeDB[1] & storeL) ? dec0_rC : {REG_WIDTH{1'BZ}};
-  assign rB2=(storeDB[1] & ~storeDB[0] & storeL) ? dec1_rC : {REG_WIDTH{1'BZ}};
-  assign rB2=(storeDB[2] & ~storeDB[1] & storeL) ? dec2_rC : {REG_WIDTH{1'BZ}};
-  assign rB2=(storeDB[3] & ~storeDB[1] & storeL) ? dec3_rC : {REG_WIDTH{1'BZ}};
-  assign rB2=(storeDB[4] & ~storeDB[1] & storeL) ? dec4_rC : {REG_WIDTH{1'BZ}};
-  assign rB2=(storeDB[5] & ~storeDB[1] & storeL) ? dec5_rC : {REG_WIDTH{1'BZ}};
-  assign rB2=(storeDB[6] & ~storeDB[1] & storeL) ? dec6_rC : {REG_WIDTH{1'BZ}};
-  assign rB2=(storeDB[7] & ~storeDB[1] & storeL) ? dec7_rC : {REG_WIDTH{1'BZ}};
-  assign rB2=(storeDB[8] & ~storeDB[1] & storeL) ? dec8_rC : {REG_WIDTH{1'BZ}};
-  assign rB2=(storeDB[9] & ~storeDB[1] & storeL) ? dec9_rC : {REG_WIDTH{1'BZ}};
-  assign rB2=((&storeDB[1:0]) & storeL) ? {REG_WIDTH{1'B0}} : {REG_WIDTH{1'BZ}};
+  assign rB2=(storeDB[0] & ~storeDB[1]) ? dec0_rC : {REG_WIDTH{1'BZ}};
+  assign rB2=(storeDB[1] & ~storeDB[0]) ? dec1_rC : {REG_WIDTH{1'BZ}};
+  assign rB2=(storeDB[2] & ~storeDB[1]) ? dec2_rC : {REG_WIDTH{1'BZ}};
+  assign rB2=(storeDB[3] & ~storeDB[1]) ? dec3_rC : {REG_WIDTH{1'BZ}};
+  assign rB2=(storeDB[4] & ~storeDB[1]) ? dec4_rC : {REG_WIDTH{1'BZ}};
+  assign rB2=(storeDB[5] & ~storeDB[1]) ? dec5_rC : {REG_WIDTH{1'BZ}};
+  assign rB2=(storeDB[6] & ~storeDB[1]) ? dec6_rC : {REG_WIDTH{1'BZ}};
+  assign rB2=(storeDB[7] & ~storeDB[1]) ? dec7_rC : {REG_WIDTH{1'BZ}};
+  assign rB2=(storeDB[8] & ~storeDB[1]) ? dec8_rC : {REG_WIDTH{1'BZ}};
+  assign rB2=(storeDB[9] & ~storeDB[1]) ? dec9_rC : {REG_WIDTH{1'BZ}};
+  assign rB2=((&storeDB[1:0])) ? {REG_WIDTH{1'B0}} : {REG_WIDTH{1'BZ}};
 
-  assign rB=storeL ? rB2 : rB1;
+  assign rB=storeL ? rB2 : {REG_WIDTH{1'bz}};
+  assign rB=~storeL && 0!=(sel&dec_second) ? rB2 : {REG_WIDTH{1'bz}};
+  assign rB=~storeL && 0==(sel&dec_second) ? rB1 : {REG_WIDTH{1'bz}};
 
-  assign rA3=(sel[0] & ~sel[1] & store) ? dec0_rC : {REG_WIDTH{1'BZ}};
-  assign rA3=(sel[1] & ~sel[0] & store) ? dec1_rC : {REG_WIDTH{1'BZ}};
-  assign rA3=(sel[2] & ~sel[1] & store) ? dec2_rC : {REG_WIDTH{1'BZ}};
-  assign rA3=(sel[3] & ~sel[1] & store) ? dec3_rC : {REG_WIDTH{1'BZ}};
-  assign rA3=(sel[4] & ~sel[1] & store) ? dec4_rC : {REG_WIDTH{1'BZ}};
-  assign rA3=(sel[5] & ~sel[1] & store) ? dec5_rC : {REG_WIDTH{1'BZ}};
-  assign rA3=(sel[6] & ~sel[1] & store) ? dec6_rC : {REG_WIDTH{1'BZ}};
-  assign rA3=(sel[7] & ~sel[1] & store) ? dec7_rC : {REG_WIDTH{1'BZ}};
-  assign rA3=(sel[8] & ~sel[1] & store) ? dec8_rC : {REG_WIDTH{1'BZ}};
-  assign rA3=(sel[9] & ~sel[1] & store) ? dec9_rC : {REG_WIDTH{1'BZ}};
+  assign rA3=(sel[0] & ~sel[1]) ? dec0_rC : {REG_WIDTH{1'BZ}};
+  assign rA3=(sel[1] & ~sel[0]) ? dec1_rC : {REG_WIDTH{1'BZ}};
+  assign rA3=(sel[2] & ~sel[1]) ? dec2_rC : {REG_WIDTH{1'BZ}};
+  assign rA3=(sel[3] & ~sel[1]) ? dec3_rC : {REG_WIDTH{1'BZ}};
+  assign rA3=(sel[4] & ~sel[1]) ? dec4_rC : {REG_WIDTH{1'BZ}};
+  assign rA3=(sel[5] & ~sel[1]) ? dec5_rC : {REG_WIDTH{1'BZ}};
+  assign rA3=(sel[6] & ~sel[1]) ? dec6_rC : {REG_WIDTH{1'BZ}};
+  assign rA3=(sel[7] & ~sel[1]) ? dec7_rC : {REG_WIDTH{1'BZ}};
+  assign rA3=(sel[8] & ~sel[1]) ? dec8_rC : {REG_WIDTH{1'BZ}};
+  assign rA3=(sel[9]) ? dec9_rC : {REG_WIDTH{1'BZ}};
   
+  assign rA4=(sel[0] & ~sel[1]) ? 9'h20 : {REG_WIDTH{1'BZ}};
+  assign rA4=(sel[1] & ~sel[0]) ? 9'h21 : {REG_WIDTH{1'BZ}};
+  assign rA4=(sel[2] & ~sel[1]) ? 9'h22 : {REG_WIDTH{1'BZ}};
+  assign rA4=(sel[3] & ~sel[1]) ? 9'h23 : {REG_WIDTH{1'BZ}};
+  assign rA4=(sel[4] & ~sel[1]) ? 9'h24 : {REG_WIDTH{1'BZ}};
+  assign rA4=(sel[5] & ~sel[1]) ? 9'h25 : {REG_WIDTH{1'BZ}};
+  assign rA4=(sel[6] & ~sel[1]) ? 9'h26 : {REG_WIDTH{1'BZ}};
+  assign rA4=(sel[7] & ~sel[1]) ? 9'h27 : {REG_WIDTH{1'BZ}};
+  assign rA4=(sel[8] & ~sel[1]) ? 9'h28 : {REG_WIDTH{1'BZ}};
+  assign rA4=(sel[9]) ? 9'h29 : {REG_WIDTH{1'BZ}};
+  
+  assign rA=(~store && ~storeL && 0!=(sel&dec_second)) ? rA4 : {REG_WIDTH{1'BZ}};
   assign rA=store ? rA3 : {REG_WIDTH{1'BZ}};
   assign rA=storeL ? rA2 : {REG_WIDTH{1'BZ}};
-  assign rA=(~store & ~storeL) ? rA1 : {REG_WIDTH{1'BZ}};
+  assign rA=(~store && ~storeL && 0==(sel&dec_second)) ? rA1 : {REG_WIDTH{1'BZ}};
 
-  assign rT=(sel[0] & ~sel[1]) ? dec0_rT : {REG_WIDTH{1'BZ}};
-  assign rT=(sel[1] & ~sel[0]) ? dec1_rT : {REG_WIDTH{1'BZ}};
-  assign rT=(sel[2] & ~sel[1]) ? dec2_rT : {REG_WIDTH{1'BZ}};
-  assign rT=(sel[3] & ~sel[1]) ? dec3_rT : {REG_WIDTH{1'BZ}};
-  assign rT=(sel[4] & ~sel[1]) ? dec4_rT : {REG_WIDTH{1'BZ}};
-  assign rT=(sel[5] & ~sel[1]) ? dec5_rT : {REG_WIDTH{1'BZ}};
-  assign rT=(sel[6] & ~sel[1]) ? dec6_rT : {REG_WIDTH{1'BZ}};
-  assign rT=(sel[7] & ~sel[1]) ? dec7_rT : {REG_WIDTH{1'BZ}};
-  assign rT=(sel[8] & ~sel[1]) ? dec8_rT : {REG_WIDTH{1'BZ}};
-  assign rT=sel[9] ? dec9_rT : {REG_WIDTH{1'BZ}};
+  assign rT=(sel[0] & ~sel[1] & ~dec_second[0]) ? dec0_rT : {REG_WIDTH{1'BZ}};
+  assign rT=(sel[1] & ~sel[0] & ~dec_second[1]) ? dec1_rT : {REG_WIDTH{1'BZ}};
+  assign rT=(sel[2] & ~sel[1] & ~dec_second[2]) ? dec2_rT : {REG_WIDTH{1'BZ}};
+  assign rT=(sel[3] & ~sel[1] & ~dec_second[3]) ? dec3_rT : {REG_WIDTH{1'BZ}};
+  assign rT=(sel[4] & ~sel[1] & ~dec_second[4]) ? dec4_rT : {REG_WIDTH{1'BZ}};
+  assign rT=(sel[5] & ~sel[1] & ~dec_second[5]) ? dec5_rT : {REG_WIDTH{1'BZ}};
+  assign rT=(sel[6] & ~sel[1] & ~dec_second[6]) ? dec6_rT : {REG_WIDTH{1'BZ}};
+  assign rT=(sel[7] & ~sel[1] & ~dec_second[7]) ? dec7_rT : {REG_WIDTH{1'BZ}};
+  assign rT=(sel[8] & ~sel[1] & ~dec_second[8]) ? dec8_rT : {REG_WIDTH{1'BZ}};
+  assign rT=sel[9] & ~dec_second[9] ? dec9_rT : {REG_WIDTH{1'BZ}};
+  assign rT=0!=(sel&dec_second) ? 9'h2f : {REG_WIDTH{1'BZ}};
 
   assign rA_isV=(sel[0] & ~sel[1] & ~storeL & ~store) ? dec_rA_isV[0] : 1'BZ;
   assign rA_isV=(sel[1] & ~sel[0] & ~storeL & ~store) ? dec_rA_isV[1] : 1'BZ;
@@ -1119,7 +1202,10 @@ module decoder_reorder_mux(
   assign rB2_use=(storeDB[9] & ~storeDB[1]) ? dec9_rB_use && avail[9] : 1'BZ;
   assign rB2_use=(storeDB[0] & storeDB[1]) ? 1'b0 : 1'BZ;
 
-  assign rB_use=storeL ? rB2_use : rB1_use;
+  assign rB_use=storeL ? rB2_use : 1'bz;
+  assign rB_use=~storeL && 0==(sel&dec_second) ?  rB1_use : 1'bz;
+  assign rB_use=~storeL && 0!=(sel&dec_second) ?  rA2_use : 1'bz;
+
 
   assign rB1_useF=(sel[0] & ~sel[1]) ? dec0_rB_useF & avail[0] : 1'BZ;
   assign rB1_useF=(sel[1] & ~sel[0]) ? dec1_rB_useF & avail[1] : 1'BZ;
@@ -1145,7 +1231,9 @@ module decoder_reorder_mux(
   assign rB2_useF=(storeDB[9] & ~storeDB[1]) ? dec9_rB_useF && avail[9] : 1'BZ;
   assign rB2_useF=(storeDB[0] & storeDB[1]) ? 1'b0 : 1'BZ;
   
-  assign rB_useF=storeL ? rB2_useF : rB1_useF;
+  assign rB_useF=storeL ? rB2_useF : 1'bz;
+  assign rB_useF=~storeL && 0==(sel&dec_second) ?  rB1_useF : 1'bz;
+  assign rB_useF=~storeL && 0==(sel&dec_second) ?  rA2_useF : 1'bz;
 
   assign rT_use=(sel[0] & ~sel[1]) ? dec0_rT_use & avail[0] : 1'BZ;
   assign rT_use=(sel[1] & ~sel[0]) ? dec1_rT_use & avail[1] : 1'BZ;
