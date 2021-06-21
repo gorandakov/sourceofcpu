@@ -23,6 +23,12 @@ module distrib(
   pos6,
   pos7,
   pos8,
+  sec3,
+  sec4,
+  sec5,
+  sec6,
+  sec7,
+  sec8,
   sto0,
   sto1,
   sto2,
@@ -68,6 +74,13 @@ module distrib(
   output [POS_WIDTH-1:0] pos6;
   output [POS_WIDTH-1:0] pos7;
   output [POS_WIDTH-1:0] pos8;
+
+  output sec3;
+  output sec4;
+  output sec5;
+  output sec6;
+  output sec7;
+  output sec8;
 
   output sto0,sto1,sto2;
   output stol0,stol1,stol2;
@@ -325,6 +338,16 @@ module distrib(
   assign {pos8,pos7,pos6}=(nmul & shpos[2]) ? {posH7,posH6,posH8} : {3*POS_WIDTH{1'BZ}};
   assign {pos8,pos7,pos6}=(~nmul) ? {posH8,posH7,posH6} : {3*POS_WIDTH{1'BZ}};
 
+  assign {sec5,sec4,sec3}=(nmul & ldpos[0]) ? {secH5,secH4,secH3} : {3{1'BZ}};
+  assign {sec5,sec4,sec3}=(nmul & ldpos[1]) ? {secH3,secH5,secH4} : {3{1'BZ}};
+  assign {sec5,sec4,sec3}=(nmul & ldpos[2]) ? {secH4,secH3,secH5} : {3{1'BZ}};
+  assign {sec5,sec4,sec3}=(~nmul) ? {secH5,secH4,secH3} : {3{1'BZ}};
+
+  assign {sec8,sec7,sec6}=(nmul & shpos[0]) ? {secH8,secH7,secH6} : {3{1'BZ}};
+  assign {sec8,sec7,sec6}=(nmul & shpos[1]) ? {secH6,secH8,secH7} : {3{1'BZ}};
+  assign {sec8,sec7,sec6}=(nmul & shpos[2]) ? {secH7,secH6,secH8} : {3{1'BZ}};
+  assign {sec8,sec7,sec6}=(~nmul) ? {secH8,secH7,secH6} : {3{1'BZ}};
+
   popcnt3 shpos_mod({&posH8[1:0],&posH7[1:0],&posH6[1:0]},shpos_cnt);
 
   assign posH0=(~stol & nmul ) ? posA0 : {POS_WIDTH{1'BZ}};
@@ -372,6 +395,37 @@ module distrib(
   assign posH8=(~stol & ~nmul) ? posC8 : {POS_WIDTH{1'BZ}};
   assign posH8=(stol & ~nmul ) ? posD8 : {POS_WIDTH{1'BZ}};
   
+  assign secH3=(~stol & nmul ) ? secA3 : 1'BZ;
+  assign secH3=(stol & nmul  ) ? secB3 : 1'BZ;
+  assign secH3=(~stol & ~nmul) ? secC3 : 1'BZ;
+  assign secH3=(stol & ~nmul ) ? secD3 : 1'BZ;
+
+  assign secH4=(~stol & nmul ) ? secA4 : 1'BZ;
+  assign secH4=(stol & nmul  ) ? secB4 : 1'BZ;
+  assign secH4=(~stol & ~nmul) ? secC4 : 1'BZ;
+  assign secH4=(stol & ~nmul ) ? secD4 : 1'BZ;
+
+  assign secH5=(~stol & nmul ) ? secA5 : 1'BZ;
+  assign secH5=(stol & nmul  ) ? secB5 : 1'BZ;
+  assign secH5=(~stol & ~nmul) ? secC5 : 1'BZ;
+  assign secH5=(stol & ~nmul ) ? secD5 : 1'BZ;
+
+  assign secH6=(~stol & nmul ) ? secA6 : 1'BZ;
+  assign secH6=(stol & nmul  ) ? secB6 : 1'BZ;
+  assign secH6=(~stol & ~nmul) ? secC6 : 1'BZ;
+  assign secH6=(stol & ~nmul ) ? secD6 : 1'BZ;
+
+  assign secH7=(~stol & nmul ) ? secA7 : 1'BZ;
+  assign secH7=(stol & nmul  ) ? secB7 : 1'BZ;
+  assign secH7=(~stol & ~nmul) ? secC7 : 1'BZ;
+  assign secH7=(stol & ~nmul ) ? secD7 : 1'BZ;
+
+  assign secH8=(~stol & nmul ) ? secA8 : 1'BZ;
+  assign secH8=(stol & nmul  ) ? secB8 : 1'BZ;
+  assign secH8=(~stol & ~nmul) ? secC8 : 1'BZ;
+  assign secH8=(stol & ~nmul ) ? secD8 : 1'BZ;
+  
+
 
   assign posA0=store_cnt_or_more[1] ? store_index[0] : {POS_WIDTH{1'BZ}};
   assign posA1=store_cnt_or_more[2] ? store_index[1] : {POS_WIDTH{1'BZ}};
@@ -419,12 +473,28 @@ module distrib(
   assign posA4=(store_cnt[3] & load_cnt_or_more[2]) ? load_index[1] : {POS_WIDTH{1'BZ}};
   assign posA5=(store_cnt[3] & load_cnt_or_more[3]) ? load_index[2] : {POS_WIDTH{1'BZ}};
 
-//  assign posC3=(store_cnt[0] & load_cnt_or_more[4]) ? load_index[3] : {POS_WIDTH{1'BZ}};
-//  assign posC4=(store_cnt[0] & load_cnt_or_more[5]) ? load_index[4] : {POS_WIDTH{1'BZ}};
+  assign secA3=(store_cnt[0] & load_cnt_or_more[4]) ? 1'b0 : 1'BZ;
+  assign secA4=(store_cnt[0] & load_cnt_or_more[5]) ? 1'b0 : 1'BZ;
+  assign secA5=(store_cnt[0] & load_cnt_or_more[6]) ? 1'b0 : 1'BZ;
+
+  assign secA3=(store_cnt[1] & load_cnt_or_more[3]) ? 1'b0 : 1'BZ;
+  assign secA4=(store_cnt[1] & load_cnt_or_more[4]) ? 1'b0 : 1'BZ;
+  assign secA5=(store_cnt[1] & load_cnt_or_more[5]) ? 1'b0 : 1'BZ;
+
+  assign secA3=(store_cnt[2] & load_cnt_or_more[2]) ? 1'b0 : 1'BZ;
+  assign secA4=(store_cnt[2] & load_cnt_or_more[3]) ? 1'b0 : 1'BZ;
+  assign secA5=(store_cnt[2] & load_cnt_or_more[4]) ? 1'b0 : 1'BZ;
+
+  assign secA3=(store_cnt[3] & load_cnt_or_more[1]) ? 1'b0 : 1'BZ;
+  assign secA4=(store_cnt[3] & load_cnt_or_more[2]) ? 1'b0 : 1'BZ;
+  assign secA5=(store_cnt[3] & load_cnt_or_more[3]) ? 1'b0 : 1'BZ;
+
+  assign posC3=(store_cnt[0] & load_cnt_or_more[4]) ? load_index[3] : {POS_WIDTH{1'BZ}};
+  assign posC4=(store_cnt[0] & load_cnt_or_more[5]) ? load_index[4] : {POS_WIDTH{1'BZ}};
 //  assign posC5=(store_cnt[0] & load_cnt_or_more[6]) ? load_index[5] : {POS_WIDTH{1'BZ}};
 
   assign posC3=(store_cnt[1] & load_cnt_or_more[3]) ? load_index[2] : {POS_WIDTH{1'BZ}};
-//  assign posC4=(store_cnt[1] & load_cnt_or_more[4]) ? load_index[3] : {POS_WIDTH{1'BZ}};
+  assign posC4=(store_cnt[1] & load_cnt_or_more[4]) ? load_index[3] : {POS_WIDTH{1'BZ}};
 //  assign posC5=(store_cnt[1] & load_cnt_or_more[5]) ? load_index[4] : {POS_WIDTH{1'BZ}};
 
   assign posC3=(store_cnt[2] & load_cnt_or_more[2]) ? load_index[1] : {POS_WIDTH{1'BZ}};
@@ -434,6 +504,23 @@ module distrib(
   assign posC3=(store_cnt[3] & load_cnt_or_more[1]) ? load_index[0] : {POS_WIDTH{1'BZ}};
   assign posC4=(store_cnt[3] & load_cnt_or_more[2]) ? load_index[1] : {POS_WIDTH{1'BZ}};
 //  assign posC5=(store_cnt[3] & load_cnt_or_more[3]) ? load_index[2] : {POS_WIDTH{1'BZ}};
+
+  assign secC3=(store_cnt[0] & load_cnt_or_more[4]) ? 1'b0 : 1'BZ;
+  assign secC4=(store_cnt[0] & load_cnt_or_more[5]) ? 1'b0 : 1'BZ;
+//  assign secC5=(store_cnt[0] & load_cnt_or_more[6]) ? 1'b0 : 1'BZ;
+
+  assign secC3=(store_cnt[1] & load_cnt_or_more[3]) ? 1'b0 : 1'BZ;
+  assign secC4=(store_cnt[1] & load_cnt_or_more[4]) ? 1'b0 : 1'BZ;
+//  assign secC5=(store_cnt[1] & load_cnt_or_more[5]) ? 1'b0 : 1'BZ;
+
+  assign secC3=(store_cnt[2] & load_cnt_or_more[2]) ? 1'b0 : 1'BZ;
+  assign secC4=(store_cnt[2] & load_cnt_or_more[3]) ? 1'b0 : 1'BZ;
+//  assign secC5=(store_cnt[2] & load_cnt_or_more[4]) ? 1'b0 : 1'BZ;
+
+  assign secC3=(store_cnt[3] & load_cnt_or_more[1]) ? 1'b0 : 1'BZ;
+  assign secC4=(store_cnt[3] & load_cnt_or_more[2]) ? 1'b0 : 1'BZ;
+//  assign secC5=(store_cnt[3] & load_cnt_or_more[3]) ? 1'b0 : 1'BZ;
+
 
 
   
@@ -445,6 +532,14 @@ module distrib(
   assign posB4=(store_cnt[2] & load_cnt_or_more[2]) ? load_index[1] : {POS_WIDTH{1'BZ}};
   assign posB5=(store_cnt[2] & load_cnt_or_more[3]) ? load_index[2] : {POS_WIDTH{1'BZ}};
 
+  assign secB3=(store_cnt[1] & load_cnt_or_more[2]) ? 1'b0 : 1'BZ;
+  assign secB4=(store_cnt[1] & load_cnt_or_more[3]) ? 1'b0 : 1'BZ;
+  assign secB5=(store_cnt[1] & load_cnt_or_more[4]) ? 1'b0 : 1'BZ;
+
+  assign secB3=(store_cnt[2] & load_cnt_or_more[1]) ? 1'b0 : 1'BZ;
+  assign secB4=(store_cnt[2] & load_cnt_or_more[2]) ? 1'b0 : 1'BZ;
+  assign secB5=(store_cnt[2] & load_cnt_or_more[3]) ? 1'b0 : 1'BZ;
+
   assign posD3=(store_cnt[1] & load_cnt_or_more[2]) ? load_index[1] : {POS_WIDTH{1'BZ}};
   assign posD4=(store_cnt[1] & load_cnt_or_more[3]) ? load_index[2] : {POS_WIDTH{1'BZ}};
 //  assign posD5=(store_cnt[1] & load_cnt_or_more[4]) ? load_index[3] : {POS_WIDTH{1'BZ}};
@@ -452,6 +547,15 @@ module distrib(
   assign posD3=(store_cnt[2] & load_cnt_or_more[1]) ? load_index[0] : {POS_WIDTH{1'BZ}};
   assign posD4=(store_cnt[2] & load_cnt_or_more[2]) ? load_index[1] : {POS_WIDTH{1'BZ}};
 //  assign posD5=(store_cnt[2] & load_cnt_or_more[3]) ? load_index[2] : {POS_WIDTH{1'BZ}};
+  
+  
+  assign secD3=(store_cnt[1] & load_cnt_or_more[2]) ? 1'b0 : 1'BZ;
+  assign secD4=(store_cnt[1] & load_cnt_or_more[3]) ? 1'b0 : 1'BZ;
+//  assign secD5=(store_cnt[1] & load_cnt_or_more[4]) ? 1'b0 : 1'BZ;
+
+  assign secD3=(store_cnt[2] & load_cnt_or_more[1]) ? 1'b0 : 1'BZ;
+  assign secD4=(store_cnt[2] & load_cnt_or_more[2]) ? 1'b0 : 1'BZ;
+//  assign secD5=(store_cnt[2] & load_cnt_or_more[3]) ? 1'b0 : 1'BZ;
 //alu
   assign posA3=(ldst_cnt_or_less[3] & alu_cnt_or_more[1]) ? alu_index[0] : {POS_WIDTH{1'BZ}}; 
   assign posA4=(ldst_cnt_or_less[3] & alu_cnt_or_more[2]) ? alu_index[1] : {POS_WIDTH{1'BZ}}; 
@@ -460,8 +564,18 @@ module distrib(
   assign posA7=(ldst_cnt_or_less[3] & alu_cnt_or_more[5]) ? alu_index[4] : {POS_WIDTH{1'BZ}}; 
   assign posA8=(ldst_cnt_or_less[3] & alu_cnt_or_more[6]) ? alu_index[5] : {POS_WIDTH{1'BZ}}; 
 
+  assign secA3=(ldst_cnt_or_less[3] & alu_cnt_or_more[1]) ? 1'b1 : 1'BZ; 
+  assign secA4=(ldst_cnt_or_less[3] & alu_cnt_or_more[2]) ? 1'b1 : 1'BZ; 
+  assign secA5=(ldst_cnt_or_less[3] & alu_cnt_or_more[3]) ? 1'b1 : 1'BZ; 
+  assign secA6=(ldst_cnt_or_less[3] & alu_cnt_or_more[4]) ? 1'b1 : 1'BZ; 
+  assign secA7=(ldst_cnt_or_less[3] & alu_cnt_or_more[5]) ? 1'b1 : 1'BZ; 
+  assign secA8=(ldst_cnt_or_less[3] & alu_cnt_or_more[6]) ? 1'b1 : 1'BZ; 
+
   assign posC3=(ldst_cnt_or_less[3] & alu_cnt_or_more[1]) ? alu_index[0] : {POS_WIDTH{1'BZ}}; 
   assign posC4=(ldst_cnt_or_less[3] & alu_cnt_or_more[2]) ? alu_index[1] : {POS_WIDTH{1'BZ}}; 
+
+  assign secC3=(ldst_cnt_or_less[3] & alu_cnt_or_more[1]) ? 1'b1 : 1'BZ; 
+  assign secC4=(ldst_cnt_or_less[3] & alu_cnt_or_more[2]) ? 1'b1 : 1'BZ; 
 
   assign posA4=(ldst_cnt[4] & alu_cnt_or_more[1]) ? alu_index[0] : {POS_WIDTH{1'BZ}}; 
   assign posA5=(ldst_cnt[4] & alu_cnt_or_more[2]) ? alu_index[1] : {POS_WIDTH{1'BZ}}; 
@@ -469,16 +583,33 @@ module distrib(
   assign posA7=(ldst_cnt[4] & alu_cnt_or_more[4]) ? alu_index[3] : {POS_WIDTH{1'BZ}}; 
   assign posA8=(ldst_cnt[4] & alu_cnt_or_more[5]) ? alu_index[4] : {POS_WIDTH{1'BZ}}; 
 
+  assign secA4=(ldst_cnt[4] & alu_cnt_or_more[1]) ? 1'b1 : 1'BZ; 
+  assign secA5=(ldst_cnt[4] & alu_cnt_or_more[2]) ? 1'b1 : 1'BZ; 
+  assign secA6=(ldst_cnt[4] & alu_cnt_or_more[3]) ? 1'b1 : 1'BZ; 
+  assign secA7=(ldst_cnt[4] & alu_cnt_or_more[4]) ? 1'b1 : 1'BZ; 
+  assign secA8=(ldst_cnt[4] & alu_cnt_or_more[5]) ? 1'b1 : 1'BZ; 
+
   assign posC4=(ldst_cnt[4] & alu_cnt_or_more[1]) ? alu_index[0] : {POS_WIDTH{1'BZ}}; 
+
+  assign secC4=(ldst_cnt[4] & alu_cnt_or_more[1]) ? 1'b1 : 1'BZ; 
 
   assign posA5=(ldst_cnt[5] & alu_cnt_or_more[1]) ? alu_index[0] : {POS_WIDTH{1'BZ}}; 
   assign posA6=(ldst_cnt[5] & alu_cnt_or_more[2]) ? alu_index[1] : {POS_WIDTH{1'BZ}}; 
   assign posA7=(ldst_cnt[5] & alu_cnt_or_more[3]) ? alu_index[2] : {POS_WIDTH{1'BZ}}; 
   assign posA8=(ldst_cnt[5] & alu_cnt_or_more[4]) ? alu_index[3] : {POS_WIDTH{1'BZ}}; 
 
+  assign secA5=(ldst_cnt[5] & alu_cnt_or_more[1]) ? 1'b1 : 1'BZ; 
+  assign secA6=(ldst_cnt[5] & alu_cnt_or_more[2]) ? 1'b1 : 1'BZ; 
+  assign secA7=(ldst_cnt[5] & alu_cnt_or_more[3]) ? 1'b1 : 1'BZ; 
+  assign secA8=(ldst_cnt[5] & alu_cnt_or_more[4]) ? 1'b1 : 1'BZ; 
+
   assign posA6=(ldst_cnt[6] & alu_cnt_or_more[1]) ? alu_index[0] : {POS_WIDTH{1'BZ}}; 
   assign posA7=(ldst_cnt[6] & alu_cnt_or_more[2]) ? alu_index[1] : {POS_WIDTH{1'BZ}}; 
   assign posA8=(ldst_cnt[6] & alu_cnt_or_more[3]) ? alu_index[2] : {POS_WIDTH{1'BZ}}; 
+
+  assign secA6=(ldst_cnt[6] & alu_cnt_or_more[1]) ? 1'b1 : 1'BZ; 
+  assign secA7=(ldst_cnt[6] & alu_cnt_or_more[2]) ? 1'b1 : 1'BZ; 
+  assign secA8=(ldst_cnt[6] & alu_cnt_or_more[3]) ? 1'b1 : 1'BZ; 
 
   assign posB3=(ldst_cnt_or_less[2] & alu_cnt_or_more[1]) ? alu_index[0] : {POS_WIDTH{1'BZ}}; 
   assign posB4=(ldst_cnt_or_less[2] & alu_cnt_or_more[2]) ? alu_index[1] : {POS_WIDTH{1'BZ}}; 
@@ -487,8 +618,18 @@ module distrib(
   assign posB7=(ldst_cnt_or_less[2] & alu_cnt_or_more[5]) ? alu_index[4] : {POS_WIDTH{1'BZ}}; 
   assign posB8=(ldst_cnt_or_less[2] & alu_cnt_or_more[6]) ? alu_index[5] : {POS_WIDTH{1'BZ}}; 
 
+  assign secB3=(ldst_cnt_or_less[2] & alu_cnt_or_more[1]) ? 1'b1 : 1'BZ; 
+  assign secB4=(ldst_cnt_or_less[2] & alu_cnt_or_more[2]) ? 1'b1 : 1'BZ; 
+  assign secB5=(ldst_cnt_or_less[2] & alu_cnt_or_more[3]) ? 1'b1 : 1'BZ; 
+  assign secB6=(ldst_cnt_or_less[2] & alu_cnt_or_more[4]) ? 1'b1 : 1'BZ; 
+  assign secB7=(ldst_cnt_or_less[2] & alu_cnt_or_more[5]) ? 1'b1 : 1'BZ; 
+  assign secB8=(ldst_cnt_or_less[2] & alu_cnt_or_more[6]) ? 1'b1 : 1'BZ; 
+
   assign posD3=(ldst_cnt_or_less[2] & alu_cnt_or_more[1]) ? alu_index[0] : {POS_WIDTH{1'BZ}}; 
   assign posD4=(ldst_cnt_or_less[2] & alu_cnt_or_more[2]) ? alu_index[1] : {POS_WIDTH{1'BZ}}; 
+
+  assign secD3=(ldst_cnt_or_less[2] & alu_cnt_or_more[1]) ? 1'b1 : 1'BZ; 
+  assign secD4=(ldst_cnt_or_less[2] & alu_cnt_or_more[2]) ? 1'b1 : 1'BZ; 
 
   assign posB4=(ldst_cnt[3] & alu_cnt_or_more[1]) ? alu_index[0] : {POS_WIDTH{1'BZ}}; 
   assign posB5=(ldst_cnt[3] & alu_cnt_or_more[2]) ? alu_index[1] : {POS_WIDTH{1'BZ}}; 
@@ -496,16 +637,33 @@ module distrib(
   assign posB7=(ldst_cnt[3] & alu_cnt_or_more[4]) ? alu_index[3] : {POS_WIDTH{1'BZ}}; 
   assign posB8=(ldst_cnt[3] & alu_cnt_or_more[5]) ? alu_index[4] : {POS_WIDTH{1'BZ}}; 
 
+  assign secB4=(ldst_cnt[3] & alu_cnt_or_more[1]) ? 1'b1 : 1'BZ; 
+  assign secB5=(ldst_cnt[3] & alu_cnt_or_more[2]) ? 1'b1 : 1'BZ; 
+  assign secB6=(ldst_cnt[3] & alu_cnt_or_more[3]) ? 1'b1 : 1'BZ; 
+  assign secB7=(ldst_cnt[3] & alu_cnt_or_more[4]) ? 1'b1 : 1'BZ; 
+  assign secB8=(ldst_cnt[3] & alu_cnt_or_more[5]) ? 1'b1 : 1'BZ; 
+
   assign posD4=(ldst_cnt[3] & alu_cnt_or_more[1]) ? alu_index[0] : {POS_WIDTH{1'BZ}}; 
 
+  assign secD4=(ldst_cnt[3] & alu_cnt_or_more[1]) ? 1'b1 : 1'BZ; 
+  
   assign posB5=(ldst_cnt[4] & alu_cnt_or_more[1]) ? alu_index[0] : {POS_WIDTH{1'BZ}}; 
   assign posB6=(ldst_cnt[4] & alu_cnt_or_more[2]) ? alu_index[1] : {POS_WIDTH{1'BZ}}; 
   assign posB7=(ldst_cnt[4] & alu_cnt_or_more[3]) ? alu_index[2] : {POS_WIDTH{1'BZ}}; 
   assign posB8=(ldst_cnt[4] & alu_cnt_or_more[4]) ? alu_index[3] : {POS_WIDTH{1'BZ}}; 
 
+  assign secB5=(ldst_cnt[4] & alu_cnt_or_more[1]) ? 1'b1 : 1'BZ; 
+  assign secB6=(ldst_cnt[4] & alu_cnt_or_more[2]) ? 1'b1 : 1'BZ; 
+  assign secB7=(ldst_cnt[4] & alu_cnt_or_more[3]) ? 1'b1 : 1'BZ; 
+  assign secB8=(ldst_cnt[4] & alu_cnt_or_more[4]) ? 1'b1 : 1'BZ; 
+
   assign posB6=(ldst_cnt[5] & alu_cnt_or_more[1]) ? alu_index[0] : {POS_WIDTH{1'BZ}}; 
   assign posB7=(ldst_cnt[5] & alu_cnt_or_more[2]) ? alu_index[1] : {POS_WIDTH{1'BZ}}; 
   assign posB8=(ldst_cnt[5] & alu_cnt_or_more[3]) ? alu_index[2] : {POS_WIDTH{1'BZ}}; 
+  
+  assign secB6=(ldst_cnt[5] & alu_cnt_or_more[1]) ? 1'b1 : 1'BZ; 
+  assign secB7=(ldst_cnt[5] & alu_cnt_or_more[2]) ? 1'b1 : 1'BZ; 
+  assign secB8=(ldst_cnt[5] & alu_cnt_or_more[3]) ? 1'b1 : 1'BZ; 
   
   assign posC5={POS_WIDTH{1'B1}}; 
   assign posC8=mul; 
@@ -529,6 +687,25 @@ module distrib(
 
   assign posD6=(ldst_cnt[4] & alu_cnt_or_more[1]) ? alu_index[0] : {POS_WIDTH{1'BZ}};
   assign posD7=(ldst_cnt[4] & alu_cnt_or_more[2]) ? alu_index[1] : {POS_WIDTH{1'BZ}};
+
+
+  assign secC6=(ldst_cnt[3] & alu_cnt_or_more[3]) ? 1'b1 : 1'BZ;
+  assign secC7=(ldst_cnt[3] & alu_cnt_or_more[4]) ? 1'b1 : 1'BZ;
+
+  assign secC6=(ldst_cnt[4] & alu_cnt_or_more[2]) ? 1'b1 : 1'BZ;
+  assign secC7=(ldst_cnt[4] & alu_cnt_or_more[3]) ? 1'b1 : 1'BZ;
+
+  assign secC6=(ldst_cnt[5] & alu_cnt_or_more[1]) ? 1'b1 : 1'BZ;
+  assign secC7=(ldst_cnt[5] & alu_cnt_or_more[2]) ? 1'b1 : 1'BZ;
+
+  assign secD6=(ldst_cnt[2] & alu_cnt_or_more[3]) ? 1'b1 : 1'BZ;
+  assign secD7=(ldst_cnt[2] & alu_cnt_or_more[4]) ? 1'b1 : 1'BZ;
+
+  assign secD6=(ldst_cnt[3] & alu_cnt_or_more[2]) ? 1'b1 : 1'BZ;
+  assign secD7=(ldst_cnt[3] & alu_cnt_or_more[3]) ? 1'b1 : 1'BZ;
+
+  assign secD6=(ldst_cnt[4] & alu_cnt_or_more[1]) ? 1'b1 : 1'BZ;
+  assign secD7=(ldst_cnt[4] & alu_cnt_or_more[2]) ? 1'b1 : 1'BZ;
 
 //shift   
   assign posA8=shift_cnt_or_more[1] ? shift_index[0] : {POS_WIDTH{1'BZ}};
