@@ -202,6 +202,12 @@ module distrib(
   wire [POS_WIDTH-1:0] posH7;
   wire [POS_WIDTH-1:0] posH8;
 
+  wire secA3,secA4,secA5,secA6,secA7,secA8;
+  wire secB3,secB4,secB5,secB6,secB7,secB8;
+  wire secC3,secC4,secC5,secC6,secC7,secC8;
+  wire secD3,secD4,secD5,secD6,secD7,secD8;
+  wire secH3,secH4,secH5,secH6,secH7,secH8;
+
   wire [5:0] lsiH0;
   wire [5:0] lsiH1;
   wire [5:0] lsiH2;
