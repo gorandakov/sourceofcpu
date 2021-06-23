@@ -24,23 +24,17 @@ module smallInstr_decoder(
   rA_useF,rB_useF,rT_useF,rC_useF,maskOp,
   rA_isV,rB_isV,rT_isV,
   rBT_copyV,
-  js_atom,
-  clr64,clr128,
   chain,
   flags_use,
   flags_write,
   instr_fsimd,//choose simd-like over extended instr
   halt,
   
-  pushCallStack,
-  popCallStack,
   isJump,
   jumpTaken,
   jumpType,
   jumpBtbHit,
   jumpIndir,
-  prevSpecLoad,
-  thisSpecLoad,
   isIPRel,
   rAlloc,
   reor_en,
@@ -50,7 +44,7 @@ module smallInstr_decoder(
   error
   );
   
-  localparam INSTR_WIDTH=80;
+  localparam INSTR_WIDTH=32;
   localparam INSTRQ_WIDTH=`instrQ_width;
   localparam EXTRACONST_WIDTH=`extraconst_width;
   localparam OPERATION_WIDTH=`operation_width;
@@ -73,7 +67,6 @@ module smallInstr_decoder(
   localparam TRICNT_TOP=40;//really 38; 2 redundant
   input clk;
   input rst;
-  input mode64;
   
   input [INSTRQ_WIDTH-1:0] instrQ;
 
@@ -98,23 +91,18 @@ module smallInstr_decoder(
   output useRs;
   output rA_useF,rB_useF,rT_useF,rC_useF,maskOp;
   output rA_isV,rB_isV,rT_isV,rBT_copyV;
-  output [15:0] js_atom;
-  output clr64,clr128,chain;
+  output chain;
   output flags_use;
   output flags_write;
   output instr_fsimd;
   output halt;
   
-  output pushCallStack;
-  output popCallStack;
   output isJump;
   output jumpTaken;
   output [4:0] jumpType;
   output jumpBtbHit;
   output jumpIndir;
   
-  input prevSpecLoad;
-  output thisSpecLoad;
   output isIPRel;
   output rAlloc;
   input reor_en;
@@ -135,62 +123,6 @@ module smallInstr_decoder(
   reg [5:0] rD;
   reg reor_error;
 
-  wire isBasicALU;
-  wire isBasicALUExcept;
-  wire isBasicShift;
-  wire isBasicShiftExcept;
-  wire isBasicCmpTest;
-  wire isCmpTestExtra;   
-  
-  wire isBaseLoadStore;
-  wire isBaseIndexLoadStore;
-  wire isBaseSpecLoad;
-  wire isBaseIndexSpecLoad;
-  wire isImmLoadStore;
-
-  wire isBasicCJump;
- // wire isInvCJumpLong;
-  wire isSelfTestCJump;
-  wire isLongCondJump;
-  wire isUncondJump;
-  
-  wire isIndirJump;
-  wire isCall;
-  wire isCallPrep;
-  wire isRet;
-  
-  wire isMovOrExtA,isMovOrExtB;
-  wire isMovOrExtExcept;
-  wire isLeaIPRel;
-  wire isCmov;
-  wire isCSet;
-  wire isBasicAddNoFl;
-  wire isAddNoFlExtra;
-  wire isShiftNoFl;
-  
-  wire isBasicMUL;
-  wire isSimdInt;
-  wire isFPUreor;
-  wire isBasicFPUScalarA;
-  wire isBasicFPUScalarB;
-  wire isBasicFPUScalarC;
-  wire isBasicFPUScalarCmp;
-  wire isBasicFPUScalarCmp2;
-  
-  wire isBasicSysInstr;
-
-  wire subIsBasicALU;
-  wire subIsMovOrExt;
-  wire subIsBasicShift;
-  wire subIsCmpTest;
-  wire subIsCJ;
-  wire subIsFPUD;
-  wire subIsFPUPD;
-  wire subIsFPUE;
-  wire subIsFPUSngl;
-  wire subIsSIMD;
-  wire subIsLinkRet;
-  
   
   reg keep2instr;
   
@@ -229,8 +161,6 @@ module smallInstr_decoder(
   reg prB_isV[TRICNT_TOP-1:0];
   reg prT_isV[TRICNT_TOP-1:0];
   reg prBT_copyV[TRICNT_TOP-1:0];
-  reg pclr64[TRICNT_TOP-1:0];
-  reg pclr128[TRICNT_TOP-1:0];
   reg pchain[TRICNT_TOP-1:0];
   reg pflags_use[TRICNT_TOP-1:0];
   reg pflags_write[TRICNT_TOP-1:0];
@@ -243,26 +173,35 @@ module smallInstr_decoder(
   
   reg [4:0] pjumpType[TRICNT_TOP-1:0];
   
-  reg pthisSpecLoad[TRICNT_TOP-1:0];
   reg pisIPRel[TRICNT_TOP-1:0];
   reg prAlloc[TRICNT_TOP-1:0];
   reg [TRICNT_TOP-1:0] trien;
   reg perror[TRICNT_TOP-1:0];
 
+  wire subIsBasicLDST;
+  wire subIsStackLDST;
+  
+  wire subIsBasicImmAluReg5;
+  wire subIs2xReg5Alu;
+  wire subIsReg3Alu;
+  wire subIsJMP;
+  wire subIsAddI4;
+
+
+  wire isLoad;
+  wire isStore;
+  wire isBasicALU;
+  wire isBasicALU32;
+  wire isAdvALUorJump;
+  wire isOpFp;
+  wire isFpFma;
+  wire isJump;
+  wire isSys;
+  wire isExtImm;
+  wire isExtALU;
+  wire isAMO;
   integer tt;
 
-  function [0:0] fop_v;
-    input [4:0] op;
-    fop_v=op==5'b0 || op==5'h18 || op==5'he ||
-      op==5'b1 || op==5'd19 || op==5'd21;
-  endfunction 
-
-  function [0:0] freg_vf;
-    input [4:0] op;
-    input [0:0] is_fp;
-    freg_vf=is_fp && op!=5'd6 && op!=5'd8 && op!=5'd16 &&
-	    op!=5'd7 && op!=5'd9 && op!=5'd13;
-  endfunction 
   assign magic=instrQ[`instrQ_magic];
   assign jumpBtbHit=~instrQ[`instrQ_btbMiss];
   assign jumpIndir=class_[`iclass_indir];
@@ -275,9 +214,7 @@ module smallInstr_decoder(
   assign opcode_main=instr[7:0];
   assign opcode_sub=instr[5:0];
   
-  assign constantDef=(magic[1:0]==2'b11) ? instr[47:16] : 32'bz;
-  assign constantDef=(magic[1:0]==2'b01) ? {{18{instr[31]}},instr[31:18]} : 32'bz;
-  assign constantDef=(~magic[0]) ? {26'b0,~instr[7] && instr[15:12]==4'b0,instr[7],instr[15:12]} : 32'bz;
+  assign constantDef={52{instr[31],instr[31:20]};
  
   assign reor_en_out=isReor&&~reor_error;
   assign reor_val_out=isReorCall ? {1'b1,instr[24:20],instr[19:15],instr[11:7]} : {1'b0,5'd10,5'd9,5'd8};
