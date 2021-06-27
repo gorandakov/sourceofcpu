@@ -110,8 +110,35 @@ module jump_decoder(
 	      is_jump=1'b1;
 	      jump_type=5'h10;
 	      constant={{54{instr[12]}},instr[10:9],instr[6],instr[7],instr[2],instr[11],instr[5:3],1'b0};
-      end else begin
-      end
+      end else if (subIs2xReg5Alu) begin
+          casex({instr[12],instr[11:7]!=0,instr[6:2]!=0})
+	  3'b010: begin
+	      jump_type=5'h11;
+	      is_jump=1'b1;
+	  end
+	  3'b110: begin
+	      jump_type=5'h11;
+	      is_jump=1'b1;
+	      constant={32'b0,32'd4};
+	      isIPRel=1'b1;
+	  end
+          endcase
+      end else if (isAdvALUorJump) begin
+          case(instr[6:2])
+          5'b11011: begin
+	      constant=64'd4;
+	      isIPRel=1'b1;
+	      is_jump=1'b1;
+	      jump_type=5'b10000;
+	  end
+	  5'b11001: begin
+	      constant={{12{instr[31]},instr[31:12],32'd4};
+	      isIPRel=1'b1;
+	      is_jump=1'b1;
+	      jump_type=5'b11000;
+	  end
+          endcase
+     end
 
   end
 

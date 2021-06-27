@@ -12,6 +12,7 @@ module smallInstr_decoder(
   instrQ,
   instr,
   operation,
+  opchain,
   can_jump_csr,
   rA,rA_use,
   rB,rB_use,useBConst,//useBSmall,
@@ -19,7 +20,7 @@ module smallInstr_decoder(
   constant,
 //  smallConst,
   rT,rT_use,
-  port,
+  port,port2,
   useRs,
   rA_useF,rB_useF,rT_useF,rC_useF,maskOp,
   rA_isV,rB_isV,rT_isV,
@@ -73,6 +74,7 @@ module smallInstr_decoder(
   input [INSTR_WIDTH-1:0] instr;
   
   output [OPERATION_WIDTH-1:0] operation;
+  output [OPERATION_WIDTH-1:0] opchain;
   input can_jump_csr;
   output [REG_WIDTH-1:0] rA;
   output rA_use;
@@ -88,6 +90,7 @@ module smallInstr_decoder(
   output [REG_WIDTH-1:0] rT;
   output rT_use;
   output [3:0] port;
+  output [3:0] port2;
   output useRs;
   output rA_useF,rB_useF,rT_useF,rC_useF,maskOp;
   output rA_isV,rB_isV,rT_isV,rBT_copyV;
@@ -137,6 +140,7 @@ module smallInstr_decoder(
   wire flags_wrFPU;
 
   reg [OPERATION_WIDTH-1:0] poperation[TRICNT_TOP-1:0];
+  reg [OPERATION_WIDTH-1:0] popchain[TRICNT_TOP-1:0];
   reg [REG_WIDTH-2:0] prA[TRICNT_TOP-1:0];
   reg prA_use[TRICNT_TOP-1:0];
   reg [REG_WIDTH-2:0] prB[TRICNT_TOP-1:0];
@@ -151,6 +155,7 @@ module smallInstr_decoder(
   reg [REG_WIDTH-1:0] prT[TRICNT_TOP-1:0];
   reg prT_use[TRICNT_TOP-1:0];
   reg [3:0] pport[TRICNT_TOP-1:0];
+  reg [3:0] pport2[TRICNT_TOP-1:0];
   reg puseRs[TRICNT_TOP-1:0];
   reg prA_useF[TRICNT_TOP-1:0];
   reg prB_useF[TRICNT_TOP-1:0];
@@ -285,6 +290,7 @@ module smallInstr_decoder(
       end
       for(p=0;p<5;p=p+1) begin
           wire [OPERATION_WIDTH-1:0] koperation;
+          wire [OPERATION_WIDTH-1:0] kopchain;
           wire [REG_WIDTH-2:0] krA;
           wire krA_use;
           wire [REG_WIDTH-2:0] krB;
@@ -299,6 +305,7 @@ module smallInstr_decoder(
           wire [REG_WIDTH-2:0] krT;
           wire krT_use;
           wire [3:0] kport;
+          wire [3:0] kport2;
           wire kuseRs;
           wire krA_useF;
           wire krB_useF;
@@ -352,8 +359,10 @@ module smallInstr_decoder(
 	      assign kinstr_fsimd=trien[p*8+q] ? pinstr_fsimd[p*8+q] : 1'bz;
 	      assign kerror=trien[p*8+q] ? perror[p*8+q] : 1'bz;
 	      assign kport=trien[p*8+q] ? pport[p*8+q] : 4'bz;
+	      assign kport2=trien[p*8+q] ? pport2[p*8+q] : 4'bz;
 	      assign kjumpType=trien[p*8+q] ? pjumpType[p*8+q] : 5'bz;
 	      assign koperation=trien[p*8+q] ? poperation[p*8+q] : 13'bz;
+	      assign kopchain=trien[p*8+q] ? popchain[p*8+q] : 13'bz;
 	  end
 	  assign krA=(~|trien[p*8+:8]) ? 5'b0 : 5'bz;
 	  assign krB=(~|trien[p*8+:8]) ? 5'b0 : 5'bz;
@@ -384,8 +393,10 @@ module smallInstr_decoder(
 	  assign kinstr_fsimd=(~|trien[p*8+:8]) ? 1'b0 : 1'bz;
 	  assign kerror=(~|trien[p*8+:8]) ? 1'b0 : 1'bz;
 	  assign kport=(~|trien[p*8+:8]) ? 4'b0 : 4'bz;
+	  assign kport2=(~|trien[p*8+:8]) ? 4'b0 : 4'bz;
 	  assign kjumpType=(~|trien[p*8+:8]) ? 5'b10000 : 5'bz;
 	  assign koperation=(~|trien[p*8+:8]) ? 13'b0 : 13'bz;
+	  assign kopchain=(~|trien[p*8+:8]) ? 13'b0 : 13'bz;
 	      
 	  assign rA=(|trien[p*8+:8]) ? {1'b0,krA} : 6'bz;
 	  assign rB=(|trien[p*8+:8]) ? {1'b0,krB} : 6'bz;
@@ -416,8 +427,10 @@ module smallInstr_decoder(
 	  assign instr_fsimd=(|trien[p*8+:8]) ? kinstr_fsimd : 1'bz;
 	  assign error=(|trien[p*8+:8]) ? kerror : 1'bz;
 	  assign port=(|trien[p*8+:8]) ? kport : 4'bz;
+	  assign port2=(|trien[p*8+:8]) ? kport2 : 4'bz;
 	  assign jumpType=(|trien[p*8+:8]) ? kjumpType : 5'bz;
 	  assign operation=(|trien[p*8+:8]) ? koperation : 13'bz;
+	  assign opchain=(|trien[p*8+:8]) ? kopchain : 13'bz;
       end
 
   endgenerate 
@@ -451,13 +464,11 @@ module smallInstr_decoder(
   assign instr_fsimd=(~|trien) ? 1'b0 : 1'bz;
   assign error=(~|trien) ? 1'b1 : 1'bz;
   assign port=(~|trien) ? PORT_LOAD : 4'bz;
+  assign port2=(~|trien) ? PORT_ALU : 4'bz;
   assign jumpType=(~|trien) ? 5'b10000 : 5'bz;
   assign operation=(~|trien) ? 13'hff : 13'bz;
+  assign opchain=(~|trien) ? 13'hff : 13'bz;
   
-  assign thisSpecLoad=isBaseSpecLoad | isBaseIndexSpecLoad | (~opcode_main[0] &&
-    opcode_main[7:1]==7'b1011000 && ~instr[10] && instr[15:12]==REG_SP && 
-    (magic[1:0]!=2'b01 || ~instr[16]));
- 
   always @(posedge clk) begin
     if (rst) fpu_reor<=32'b111110101100011010001000;
     else if (reor_en) begin
@@ -477,6 +488,7 @@ module smallInstr_decoder(
       reor_error=1'b0;
       for(tt=0;tt<TRICNT_TOP;tt=tt+1) begin 
           poperation[tt]=13'b0;
+          popchain[tt]=13'b0;
           puseBConst[tt]=1'b0;
           puseRs[tt]=1'b0;
           prA[tt]=5'd0;
@@ -488,6 +500,7 @@ module smallInstr_decoder(
           prT_use[tt]=1'b0;
           prC_use[tt]=1'b0;
           pport[tt]=4'b0;
+          pport2[tt]=PORT_ALU;
           pconstant[tt][31:0]=constantDef;
           pconstant[tt][63:32]={32{constant[31]}};
      //     pisBigConst[tt]=magic[2:0]==3'b111;
@@ -626,7 +639,7 @@ module smallInstr_decoder(
 	      prB[3]={1'b0,instr[11:7]};
 	      puseBConst[3]=1'b1;
 	      puseBCxCross[3]=1'b1;
-	      pconstant[3]={32'b0,32'd4};
+	      pconstant[3]={32'b0,32'd2};
 	      pIPRel[3]=1'b1;
 	      prT[3]=6'd1;
 	      poperation[3]=`op_add64|4096;
@@ -777,18 +790,18 @@ module smallInstr_decoder(
       casex(instr[14:12])
           3'b100,3'b101,3'b110,3'b011: poperation[8][7:0]={5'b100,instr[13:12],1'b0};
 	  3'b000: begin
-		  pchain_alu[8]=1'b1;
+		  pchain[8]=1'b1;
 		  poperation[8][7:0]={5'b100,instr[13:12],1'b0};
 		  popchain[8]=`op_sxt8_64|4096;
 	      end
 
 	  3'b001: begin
-		  pchain_alu[8]=1'b1;
+		  pchain[8]=1'b1;
 		  poperation[8][7:0]={5'b100,instr[13:12],1'b0};
 		  popchain[8]=`op_sxt16_64|4096;
 	      end
 	  3'b010: begin
-		  pchain_alu[8]=1'b1;
+		  pchain[8]=1'b1;
 		  poperation[8][7:0]={5'b100,instr[13:12],1'b0};
 		  popchain[8]=`op_sxt32_64|4096;
 	      end
@@ -822,8 +835,8 @@ module smallInstr_decoder(
       prAlloc[10]=1'b1;
       case(instr[14:12])
 	  3'b000: poperation[10]=`op_add64;
-	  3'b010: begin poperation[10]=`op_sub64; pchainfl_alu[10]=1'b1; prT_use[10]=1'b1; popchain[10]=`op_csetn|13'b10100000000|4096; end//uxuss
-	  3'b011: begin poperation[10]=`op_sub64; pchainfl_alu[10]=1'b1; prT_use[10]=1'b1; popchain[10]=`op_csetn|13'b01100000000|4096; end//suxuss
+	  3'b010: begin poperation[10]=`op_sub64; pchain[10]=1'b1; prT_use[10]=1'b1; popchain[10]=`op_csetn|13'b10100000000|4096; end//uxuss
+	  3'b011: begin poperation[10]=`op_sub64; pchain[10]=1'b1; prT_use[10]=1'b1; popchain[10]=`op_csetn|13'b01100000000|4096; end//suxuss
 	  3'b100: poperation[10]=`op_xor64;
 	  3'b110: poperation[10]=`op_or64;
 	  3'b111: poperation[10]=`op_and64;
@@ -901,8 +914,8 @@ module smallInstr_decoder(
       case({instr[30],instr[14:12]})
 	  4'b0000: poperation[14]=`op_add64;
 	  4'b1000: poperation[14]=`op_sub64;
-	  4'b010: begin poperation[14]=`op_sub64; pchainfl_alu[10]=1'b1; prT_use[10]=1'b1; popchain[10]=`op_csetn|13'b10100000000|4096; end//uxuss
-	  4'b011: begin poperation[14]=`op_sub64; pchainfl_alu[10]=1'b1; prT_use[10]=1'b1; popchain[10]=`op_csetn|13'b01100000000|4096; end//suxuss
+	  4'b010: begin poperation[14]=`op_sub64; pchain[10]=1'b1; prT_use[10]=1'b1; popchain[10]=`op_csetn|13'b10100000000|4096; end//uxuss
+	  4'b011: begin poperation[14]=`op_sub64; pchain[10]=1'b1; prT_use[10]=1'b1; popchain[10]=`op_csetn|13'b01100000000|4096; end//suxuss
 	  4'b100: poperation[14]=`op_xor64;
 	  4'b110: poperation[14]=`op_or64;
 	  4'b111: poperation[14]=`op_and64;
@@ -955,7 +968,7 @@ module smallInstr_decoder(
       pflags_write[17]=1'b1;
       pport[17]=PORT_SHIFT;
       prAlloc[17]=1'b1;
-      pchain_alu[17]=1'b1;
+      pchain[17]=1'b1;
       popchain[17]=`op_sxt32_64|4096;
       casex({instr[14],instr[30])
 	  2'b0x: begin 
@@ -1145,8 +1158,8 @@ module smallInstr_decoder(
       prB_useV[27]=~instr[25];
       prC_useV[27]=~instr[25];
       prmode[27]=instr[14:12];
-      pchainalu[27]=1'b1;
-      pchainport[27]=PORT_FADD;
+      pchain[27]=1'b1;
+      pport2[27]=PORT_FADD;
       pport[27]=PORT_FMUL;
       puseRs[27]=1'b1;
       pflags_write[27]=1'b0;
