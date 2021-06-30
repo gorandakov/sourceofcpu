@@ -170,7 +170,7 @@ endmodule
 module rs_writeC_forward(
   clk,rst,
   stall,
-  oldData,newData,const_data,
+  oldData,newData,const_data,newData2,
   fuFwd,fuuFwd,is_const,
   FU0,FU0_reg,
   FU1,FU1_reg,
@@ -191,6 +191,7 @@ module rs_writeC_forward(
   input [DATA_WIDTH-1:0] oldData;
   output reg [DATA_WIDTH-1:0] newData;
   input [DATA_WIDTH-1:0] const_data;
+  output reg [DATA_WIDTH-1:0] newData2;
   input [3:0] fuFwd;
   input [3:0] fuuFwd;
   input is_const;
@@ -217,6 +218,7 @@ module rs_writeC_forward(
   input [DATA_WIDTH-1:0] FU9_reg;
 
   wire [DATA_WIDTH-1:0] newData_d;
+  wire [DATA_WIDTH-1:0] newData2_d;
   wire [DATA_WIDTH-1:0] newDataFu_d;
   wire [DATA_WIDTH-1:0] newDataFuu_d;
   
@@ -247,11 +249,18 @@ module rs_writeC_forward(
   assign newData_d=(fuFwd!=4'hf) ? newDataFu_d : {DATA_WIDTH{1'BZ}};  
   assign newData_d=(fuuFwd!=4'hf) ? newDataFuu_d : {DATA_WIDTH{1'BZ}};  
 
+  assign newData2_d=({fuFwd,fuuFwd}==8'hff) ? oldData : {DATA_WIDTH{1'BZ}};  
+  assign newData2_d=(fuFwd!=4'hf) ? newDataFu_d : {DATA_WIDTH{1'BZ}};  
+  assign newData2_d=(fuuFwd!=4'hf) ? newDataFuu_d : {DATA_WIDTH{1'BZ}};  
+
   always @(posedge clk) 
   begin
       if (rst) newData<={DATA_WIDTH{1'B0}};
       else if (~stall)
         newData<=newData_d;
+      if (rst) newData2<={DATA_WIDTH{1'B0}};
+      else if (~stall)
+        newData2<=newData2_d;
   end
 endmodule
 
