@@ -544,6 +544,8 @@ module smallInstr_decoder(
           pinstr_fsimd[tt]=1'b1;
 	  pmaskOp[tt]=1'b0;
 	  trien[tt]=1'b0;
+	  pcxEn[tt]=1'b0;
+	  pisIPRelB[tt]=1'b0;
 	  if (tt<8) begin
 	      reor_error=reor_error||(reor_val_out[2:0]!=tt[2:0]&&reor_val_out[5:3]!=tt[2:0]&&
 	      reor_val_out[8:6]!=tt[2:0]&&reor_val_out[11:9]!=tt[2:0]&&reor_val_out[14:12]!=tt[2:0]&&
