@@ -43,7 +43,7 @@ module backend(
   rs0i0_en,
   rs0i0_const,
   rs0i0_index,
-  rs0i0_IPRel,
+  rs0i0_IPRel,rs0i0_IPRelB,rs0i0_cxEn,
   rs0i0_afterTaken,
   rs0i0_alt,
   rs0i0_alloc,
@@ -62,7 +62,7 @@ module backend(
   rs0i1_en,
   rs0i1_const,
   rs0i1_index,
-  rs0i1_IPRel,
+  rs0i1_IPRel,rs0i1_IPRelB,rs0i1_cxEn,
   rs0i1_afterTaken,
   rs0i1_alloc,
   rs0i1_allocF,
@@ -80,7 +80,7 @@ module backend(
   rs0i2_en,
   rs0i2_const,
   rs0i2_index,
-  rs0i2_IPRel,
+  rs0i2_IPRel,rs0i2_IPRelB,rs0i2_cxEn,
   rs0i2_afterTaken,
   rs0i2_alloc,
   rs0i2_allocF,
@@ -96,7 +96,7 @@ module backend(
   rs1i0_en,
   rs1i0_const,
   rs1i0_index,
-  rs1i0_IPRel,
+  rs1i0_IPRel,rs1i0_IPRelB,rs1i0_cxEn,
   rs1i0_afterTaken,
   rs1i0_alt,
   rs1i0_alloc,
@@ -115,7 +115,7 @@ module backend(
   rs1i1_en,
   rs1i1_const,
   rs1i1_index,
-  rs1i1_IPRel,
+  rs1i1_IPRel,rs1i1_IPRelB,rs1i1_cxEn,
   rs1i1_afterTaken,
   rs1i1_alloc,
   rs1i1_allocF,
@@ -133,7 +133,7 @@ module backend(
   rs1i2_en,
   rs1i2_const,
   rs1i2_index,
-  rs1i2_IPRel,
+  rs1i2_IPRel,rs1i2_IPRelB,rs1i2_cxEn,
   rs1i2_afterTaken,
   rs1i2_alloc,
   rs1i2_allocF,
@@ -149,7 +149,7 @@ module backend(
   rs2i0_en,
   rs2i0_const,
   rs2i0_index,
-  rs2i0_IPRel,
+  rs2i0_IPRel,rs2i0_IPRelB,rs2i0_cxEn,
   rs2i0_afterTaken,
   rs2i0_alt,
   rs2i0_alloc,
@@ -168,7 +168,7 @@ module backend(
   rs2i1_en,
   rs2i1_const,
   rs2i1_index,
-  rs2i1_IPRel,
+  rs2i1_IPRel,rs2i1_IPRelB,rs2i1_cxEn,
   rs2i1_afterTaken,
   rs2i1_alloc,
   rs2i1_allocF,
@@ -186,7 +186,7 @@ module backend(
   rs2i2_en,
   rs2i2_const,
   rs2i2_index,
-  rs2i2_IPRel,
+  rs2i2_IPRel,rs2i2_IPRelB,rs2i2_cxEn,
   rs2i2_afterTaken,
   rs2i2_alloc,
   rs2i2_allocF,
@@ -448,7 +448,7 @@ module backend(
   input rs0i0_en;
   input [DATA_WIDTH-1:0] rs0i0_const;
   input [3:0] rs0i0_index;
-  input rs0i0_IPRel;
+  input rs0i0_IPRel,rs0i0_IPRelB,rs0i0_cxEn;
   input rs0i0_afterTaken;
   input rs0i0_alt;
   input rs0i0_alloc;
@@ -480,7 +480,7 @@ module backend(
   input rs0i1_en;
   input [DATA_WIDTH-1:0] rs0i1_const;
   input [3:0] rs0i1_index;
-  input rs0i1_IPRel;
+  input rs0i1_IPRel,rs0i1_IPRelB,rs0i1_cxEn;
   input rs0i1_afterTaken;
   input rs0i1_alloc;
   input rs0i1_allocF;
@@ -511,7 +511,7 @@ module backend(
   input rs0i2_en;
   input [DATA_WIDTH-1:0] rs0i2_const;
   input [3:0] rs0i2_index;
-  input rs0i2_IPRel;
+  input rs0i2_IPRel,rs0i2_IPRelB,rs0i2_cxEn;
   input rs0i2_afterTaken;
   input rs0i2_alloc;
   input rs0i2_allocF;
@@ -539,7 +539,7 @@ module backend(
   input rs1i0_en;
   input [DATA_WIDTH-1:0] rs1i0_const;
   input [3:0] rs1i0_index;
-  input rs1i0_IPRel;
+  input rs1i0_IPRel,rs1i0_IPRelB,rs1i0_cxEn;
   input rs1i0_afterTaken;
   input rs1i0_alt;
   input rs1i0_alloc;
@@ -571,7 +571,7 @@ module backend(
   input rs1i1_en;
   input [DATA_WIDTH-1:0] rs1i1_const;
   input [3:0] rs1i1_index;
-  input rs1i1_IPRel;
+  input rs1i1_IPRel,rs1i1_IPRelB,rs1i1_cxEn;
   input rs1i1_afterTaken;
   input rs1i1_alloc;
   input rs1i1_allocF;
@@ -602,7 +602,7 @@ module backend(
   input rs1i2_en;
   input [DATA_WIDTH-1:0] rs1i2_const;
   input [3:0] rs1i2_index;
-  input rs1i2_IPRel;
+  input rs1i2_IPRel,rs1i2_IPRelB,rs1i2_cxEn;
   input rs1i2_afterTaken;
   input rs1i2_alloc;
   input rs1i2_allocF;
@@ -630,7 +630,7 @@ module backend(
   input rs2i0_en;
   input [DATA_WIDTH-1:0] rs2i0_const;
   input [3:0] rs2i0_index;
-  input rs2i0_IPRel;
+  input rs2i0_IPRel,rs2i0_IPRelB,rs2i0_cxEn;
   input rs2i0_afterTaken;
   input rs2i0_alt;
   input rs2i0_alloc;
@@ -662,7 +662,7 @@ module backend(
   input rs2i1_en;
   input [DATA_WIDTH-1:0] rs2i1_const;
   input [3:0] rs2i1_index;
-  input rs2i1_IPRel;
+  input rs2i1_IPRel,rs2i1_IPRelB,rs2i1_cxEn;
   input rs2i1_afterTaken;
   input rs2i1_alloc;
   input rs2i1_allocF;
@@ -693,7 +693,7 @@ module backend(
   input rs2i2_en;
   input [DATA_WIDTH-1:0] rs2i2_const;
   input [3:0] rs2i2_index;
-  input rs2i2_IPRel;
+  input rs2i2_IPRel,rs2i2_IPRelB,rs2i2_cxEn;
   input rs2i2_afterTaken;
   input rs2i2_alloc;
   input rs2i2_allocF;
@@ -1209,6 +1209,7 @@ module backend(
   wire [8:0][DATA_WIDTH-1:0] rs_const_new;
   reg [8:0] rs_IPRel;
   reg [8:0] rs_afterTK;
+  reg [8:0] rs_IPRelB;
 
   reg rs_en[8:0];
   reg rs_en_reg[8:0];
@@ -2609,14 +2610,14 @@ module backend(
   .read8_constEn(~rs_rA_use[8]),
 
   .read0_const(rs_const_new[0]&{65{useAConstW[0]}}),
-  .read1_const(rs_const[1]&{65{rs_useAConst[1]}}),
-  .read2_const(rs_const[2]&{65{rs_useAConst[2]}}),
+  .read1_const(rs_const_new[1]&{65{rs_useAConst[1]}}),
+  .read2_const(rs_const_new[2]&{65{rs_useAConst[2]}}),
   .read3_const(rs_const_new[3]&{65{useAConstW[1]}}),
-  .read4_const(rs_const[4]&{65{rs_useAConst[4]}}),
-  .read5_const(rs_const[5]&{65{rs_useAConst[5]}}),
+  .read4_const(rs_const_new[4]&{65{rs_useAConst[4]}}),
+  .read5_const(rs_const_new[5]&{65{rs_useAConst[5]}}),
   .read6_const(rs_const_new[6]&{65{useAConstW[2]}}),
-  .read7_const(rs_const[7]&{65{rs_useAConst[7]}}),
-  .read8_const(rs_const[8]&{65{rs_useAConst[8]}}),
+  .read7_const(rs_const_new[7]&{65{rs_useAConst[7]}}),
+  .read8_const(rs_const_new[8]&{65{rs_useAConst[8]}}),
 
   .retireRead0_addr(retire0_rF),.retireRead0_data(ret_dataA[0]),
   .retireRead1_addr(retire1_rF),.retireRead1_data(ret_dataA[1]),
@@ -3177,15 +3178,15 @@ module backend(
   .read7_constEn(rs2i1_useBConst_reg|~rs_rB_use[7]),
   .read8_constEn(rs2i2_useBConst_reg|~rs_rB_use[8]),
 
-  .read0_const(rs_const_new[0]&{65{useBConstW[0]}}),
-  .read1_const(rs_const_new[1]&{65{rs0i1_useBConst_reg}}),
-  .read2_const(rs_const_new[2]),
-  .read3_const(rs_const_new[3]&{65{useBConstW[1]}}),
-  .read4_const(rs_const_new[4]&{65{rs1i1_useBConst_reg}}),
-  .read5_const(rs_const_new[5]),
-  .read6_const(rs_const_new[6]&{65{useBConstW[2]}}),
-  .read7_const(rs_const_new[7]&{65{rs2i1_useBConst_reg}}),
-  .read8_const(rs_const_new[8]),
+  .read0_const(rs_const_newB[0]&{65{useBConstW[0]}}),
+  .read1_const(rs_const_newB[1]&{65{rs0i1_useBConst_reg}}),
+  .read2_const(rs_const_newB[2]),
+  .read3_const(rs_const_newB[3]&{65{useBConstW[1]}}),
+  .read4_const(rs_const_newB[4]&{65{rs1i1_useBConst_reg}}),
+  .read5_const(rs_const_newB[5]),
+  .read6_const(rs_const_newB[6]&{65{useBConstW[2]}}),
+  .read7_const(rs_const_newB[7]&{65{rs2i1_useBConst_reg}}),
+  .read8_const(rs_const_newB[8]),
 
   .retireRead0_addr(retire0_rF),.retireRead0_data(ret_dataB[0]),
   .retireRead1_addr(retire1_rF),.retireRead1_data(ret_dataB[1]),
@@ -4216,7 +4217,23 @@ module backend(
   assign rs_const_new[3*m+1]=rs_IPRel[3*m+1] & ~ rs_afterTK[3*m+1] ? {1'b1,baseIP_reg,1'b0} : 65'bz;
   assign rs_const_new[3*m+1]=rs_IPRel[3*m+1] & rs_afterTK[3*m+1] & jump0Pred_reg ? {1'b1,jump0IP_reg} : 65'bz;
   assign rs_const_new[3*m+1]=rs_IPRel[3*m+1] & rs_afterTK[3*m+1] & ~jump0Pred_reg ? {1'b1,jump1IP_reg} : 65'bz;
-  assign rs_const_new[3*m+2]=rs_const[3*m+2];
+  assign rs_const_new[3*m+2]=~rs_IPRel[3*m+2] ? rs_const[3*m+2] : 65'bz;
+  assign rs_const_new[3*m+2]=rs_IPRel[3*m+2] & ~ rs_afterTK[3*m+2] ? {1'b1,baseIP_reg,1'b0} : 65'bz;
+  assign rs_const_new[3*m+2]=rs_IPRel[3*m+2] & rs_afterTK[3*m+2] & jump0Pred_reg ? {1'b1,jump0IP_reg} : 65'bz;
+  assign rs_const_new[3*m+2]=rs_IPRel[3*m+2] & rs_afterTK[3*m+2] & ~jump0Pred_reg ? {1'b1,jump1IP_reg} : 65'bz;
+
+  assign rs_const_newB[3*m]=~rs_IPRel[3*m] ? rs_const[3*m] : 65'bz;
+  assign rs_const_newB[3*m]=rs_IPRel[3*m] & ~ rs_afterTK[3*m] ? {1'b1,baseIP_reg,1'b0} : 65'bz;
+  assign rs_const_newB[3*m]=rs_IPRel[3*m] & rs_afterTK[3*m] & jump0Pred_reg ? {1'b1,jump0IP_reg} : 65'bz;
+  assign rs_const_newB[3*m]=rs_IPRel[3*m] & rs_afterTK[3*m] & ~jump0Pred_reg ? {1'b1,jump1IP_reg} : 65'bz;
+  assign rs_const_newB[3*m+1]=~rs_IPRelB[3*m+1] ? rs_const[3*m+1] : 65'bz;
+  assign rs_const_newB[3*m+1]=rs_IPRelB[3*m+1] & ~ rs_afterTK[3*m+1] ? {1'b1,baseIP_reg,1'b0} : 65'bz;
+  assign rs_const_newB[3*m+1]=rs_IPRelB[3*m+1] & rs_afterTK[3*m+1] & jump0Pred_reg ? {1'b1,jump0IP_reg} : 65'bz;
+  assign rs_const_newB[3*m+1]=rs_IPRelB[3*m+1] & rs_afterTK[3*m+1] & ~jump0Pred_reg ? {1'b1,jump1IP_reg} : 65'bz;
+  assign rs_const_newB[3*m+2]=~rs_IPRelB[3*m+2] ? rs_const[3*m+2] : 65'bz;
+  assign rs_const_newB[3*m+2]=rs_IPRelB[3*m+2] & ~ rs_afterTK[3*m+2] ? {1'b1,baseIP_reg,1'b0} : 65'bz;
+  assign rs_const_newB[3*m+2]=rs_IPRelB[3*m+2] & rs_afterTK[3*m+2] & jump0Pred_reg ? {1'b1,jump0IP_reg} : 65'bz;
+  assign rs_const_newB[3*m+2]=rs_IPRelB[3*m+2] & rs_afterTK[3*m+2] & ~jump0Pred_reg ? {1'b1,jump1IP_reg} : 65'bz;
 
   end
  
@@ -5792,6 +5809,7 @@ dcache1 L1D_mod(
               rs_const[k]<={DATA_WIDTH{1'B0}};
               rs_const_reg[k]<={DATA_WIDTH{1'B0}};
 	      rs_IPRel[k]<=1'b0;
+	      rs_IPRelB[k]<=1'b0;
 	      rs_afterTK[k]<=1'b0;
               rs_index[k]<=4'b0;
               rs_index_reg[k]<=4'b0;
@@ -6061,6 +6079,16 @@ dcache1 L1D_mod(
           rs_IPRel[6]<=rs2i0_IPRel;
           rs_IPRel[7]<=rs2i1_IPRel;
           rs_IPRel[8]<=rs2i2_IPRel;
+
+	  rs_IPRelB[0]<=rs0i0_IPRelB;
+          rs_IPRelB[1]<=rs0i1_IPRelB;
+          rs_IPRelB[2]<=rs0i2_IPRelB;
+          rs_IPRelB[3]<=rs1i0_IPRelB;
+          rs_IPRelB[4]<=rs1i1_IPRelB;
+          rs_IPRelB[5]<=rs1i2_IPRelB;
+          rs_IPRelB[6]<=rs2i0_IPRelB;
+          rs_IPRelB[7]<=rs2i1_IPRelB;
+          rs_IPRelB[8]<=rs2i2_IPRelB;
 
 	  rs_afterTK[0]<=rs0i0_afterTaken;
           rs_afterTK[1]<=rs0i1_afterTaken;
