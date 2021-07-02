@@ -2260,12 +2260,13 @@ module decoder(
   wire [9:0][REG_WIDTH-1:0] dec_rC;
   wire [9:0]dec_rC_use;
   wire [9:0]dec_rC_useF;
-  wire [9:0] dec_useCRet;
+  wire [9:0] dec_useCxEn;
   wire [9:0][64:0] dec_constant;
   wire [9:0][REG_WIDTH-1:0] dec_rT;
   wire [9:0]dec_rT_use;
   wire [9:0]dec_rT_useF;
   wire [9:0][3:0] dec_port;
+  wire [9:0][3:0] dec_port2;
   wire [9:0]dec_useRs;
   wire [9:0]dec_halt;
 
@@ -2326,12 +2327,13 @@ module decoder(
   reg [REG_WIDTH-1:0] 		dec_rC_reg[9:0];
   reg 				dec_rC_use_reg[9:0];
   reg 				dec_rC_useF_reg[9:0];
-  reg [9:0]			dec_useCRet_reg;
+  reg [9:0]			dec_useCxEn_reg;
   reg [64:0] 			dec_constant_reg[9:0];
   reg [REG_WIDTH-1:0] 		dec_rT_reg[9:0];
   reg 				dec_rT_use_reg[9:0];
   reg 				dec_rT_useF_reg[9:0];
   reg [3:0] 			dec_port_reg[9:0];
+  reg [3:0] 			dec_port2_reg[9:0];
   reg 				dec_useRs_reg[9:0];
   reg [4:0] 			dec_jumpType_reg[9:0];
   
@@ -2517,11 +2519,12 @@ module decoder(
           .operation(dec_operation[k]),
 	  .can_jump_csr(aux_can_jump),
           .rA(dec_rA[k]),.rA_use(dec_rA_use[k]),
-          .rB(dec_rB[k]),.rB_use(dec_rB_use[k]),.useBConst(dec_useBConst[k]),
-          .rC(dec_rC[k]),.rC_use(dec_rC_use[k]),.useCRet(dec_useCRet[k]),
+          .rB(dec_rB[k]),.rB_use(dec_rB_use[k]),.useBConst(dec_useBConst[k]),.cxEn(dec_useCxEn),
+          .rC(dec_rC[k]),.rC_use(dec_rC_use[k]),//.useCRet(dec_useCRet[k]),
           .constant(dec_constant[k]),
           .rT(dec_rT[k]),.rT_use(dec_rT_use[k]),
           .port(dec_port[k]),
+          .port2(dec_port2[k]),
           .useRs(dec_useRs[k]),
           .rA_useF(dec_rA_useF[k]),.rB_useF(dec_rB_useF[k]),.rT_useF(dec_rT_useF[k]),.rC_useF(dec_rC_useF[k]),
           .rA_isV(dec_rA_isV[k]),.rB_isV(dec_rB_isV[k]),.rT_isV(dec_rT_isV[k]),
@@ -2644,6 +2647,7 @@ module decoder(
           dec_rB_isV_reg,
           dec_rT_isV_reg,
           cls_flag_reg,
+	  decx_second,
           
           dec_operation_reg[0],
           dec_operation_reg[1],
@@ -2655,6 +2659,17 @@ module decoder(
           dec_operation_reg[7],
           dec_operation_reg[8],
           dec_operation_reg[9],
+
+          dec_opchain_reg[0],
+          dec_opchain_reg[1],
+          dec_opchain_reg[2],
+          dec_opchain_reg[3],
+          dec_opchain_reg[4],
+          dec_opchain_reg[5],
+          dec_opchain_reg[6],
+          dec_opchain_reg[7],
+          dec_opchain_reg[8],
+          dec_opchain_reg[9],
 
           dep_rA[0],
           dep_rA[1],
@@ -2835,6 +2850,17 @@ module decoder(
           dec_port_reg[7],
           dec_port_reg[8],
           dec_port_reg[9],
+
+          dec_port2_reg[0],
+          dec_port2_reg[1],
+          dec_port2_reg[2],
+          dec_port2_reg[3],
+          dec_port2_reg[4],
+          dec_port2_reg[5],
+          dec_port2_reg[6],
+          dec_port2_reg[7],
+          dec_port2_reg[8],
+          dec_port2_reg[9],
 
           dec_useRs_reg[0],
           dec_useRs_reg[1],
@@ -3567,12 +3593,13 @@ module decoder(
               dec_rC_reg[n]<={REG_WIDTH{1'b0}};
               dec_rC_use_reg[n]<=1'b0;
               dec_rC_useF_reg[n]<=1'b0;
-              dec_useCRet_reg[n]<=1'b0;
+              dec_useCxEn_reg[n]<=1'b0;
               dec_constant_reg[n]<=65'b0;
               dec_rT_reg[n]<={REG_WIDTH{1'b0}};
               dec_rT_use_reg[n]<=1'b0;
               dec_rT_useF_reg[n]<=1'b0;
               dec_port_reg[n]<=4'b0;
+              dec_port2_reg[n]<=4'b0;
               dec_useRs_reg[n]<=1'b0;
               dec_srcIPOffA_reg[n]<=9'b0;
               dec_jumpType_reg[n]<=5'b0;
@@ -3643,12 +3670,13 @@ module decoder(
               dec_rC_reg[n]<=dec_rC[n];
               dec_rC_use_reg[n]<=dec_rC_use[n] && iUsed[n];
               dec_rC_useF_reg[n]<=dec_rC_useF[n] && iUsed[n];
-              dec_useCRet_reg[n]<=dec_useCRet[n] && iUsed[n];
+              dec_useCxEn_reg[n]<=dec_useCxEn[n] && iUsed[n];
               dec_constant_reg[n]<=dec_constant[n];
               dec_rT_reg[n]<=dec_rT[n];
               dec_rT_use_reg[n]<=dec_rT_use[n] && iUsed[n] && ~except;
               dec_rT_useF_reg[n]<=dec_rT_useF[n] && iUsed[n] && ~except;
               dec_port_reg[n]<=dec_port[n];
+              dec_port2_reg[n]<=dec2_port[n];
               dec_useRs_reg[n]<=dec_useRs[n] && iUsed[n] && ~except;
               dec_srcIPOffA_reg[n]<=dec_srcIPOffA[n];
               dec_jumpType_reg[n]<=dec_jumpType[n];
