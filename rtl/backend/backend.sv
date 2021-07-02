@@ -1210,6 +1210,7 @@ module backend(
   reg [8:0] rs_IPRel;
   reg [8:0] rs_afterTK;
   reg [8:0] rs_IPRelB;
+  reg [2:0] rs_cxEn;
 
   reg rs_en[8:0];
   reg rs_en_reg[8:0];
@@ -5804,6 +5805,7 @@ dcache1 L1D_mod(
           Wswp_reg<=3'b0;
           WopA_reg<=13'b0;
           WopB_reg<=13'b0;
+	  rs_cxEn<=3'b0;
           for(k=0;k<9;k=k+1) begin
               clrR_reg[k]<=9'b0;
               rs_const[k]<={DATA_WIDTH{1'B0}};
@@ -6089,6 +6091,8 @@ dcache1 L1D_mod(
           rs_IPRelB[6]<=rs2i0_IPRelB;
           rs_IPRelB[7]<=rs2i1_IPRelB;
           rs_IPRelB[8]<=rs2i2_IPRelB;
+
+	  rs_cxEn<={rs2i2_cxEn,2'b0};
 
 	  rs_afterTK[0]<=rs0i0_afterTaken;
           rs_afterTK[1]<=rs0i1_afterTaken;
