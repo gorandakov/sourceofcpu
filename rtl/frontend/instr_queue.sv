@@ -31,7 +31,7 @@ module instrQ_buf(
   read_addr8,read_instr8,read_other8,
   read_addr9,read_instr9,read_other9
   );
-  localparam WIDTH=32;
+  localparam WIDTH=80;
   localparam OTHER=`instrQ_width;
   localparam ADDR_WIDTH=3;
   localparam WADDR_WIDTH=6;
