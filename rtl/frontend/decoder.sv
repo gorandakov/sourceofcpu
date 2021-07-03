@@ -1622,6 +1622,8 @@ module decoder(
   rs2i2_flagDep,
   rs2i2_lastFl,
   rs2i2_mul,
+  rs2i2_cxEn,
+  rs2i2_IPRelB,
 //end reordered small instructions
 //begin instructions in program order
   instr0_rT, 
@@ -2088,6 +2090,8 @@ module decoder(
   output [3:0] rs2i2_flagDep;
   output rs2i2_lastFl;
   output rs2i2_mul;
+  output rs2i2_cxEn;
+  output rs2i2_IPRelB;
 
   
   output [IN_REG_WIDTH-1:0] instr0_rT;
@@ -2301,6 +2305,11 @@ module decoder(
   
   wire [9:0] dec_IPRel;
   reg [9:0] dec_IPRel_reg;
+  wire [9:0] dec_IPRelB;
+  reg [9:0] dec_IPRelB_reg;
+  wire [9:0] dec_cxEn;
+  reg [9:0] dec_cxEn_reg;
+  
   
   wire has_taken;
   wire has_tick;
@@ -2442,6 +2451,8 @@ module decoder(
   wire hasJump0;
   wire hasJump1;
 
+  wire [9:0] decx_second;
+
   reg [9:0] iAvail_reg;
   wire [9:0] rs_storeDA;
   wire [9:0] rs_storeDB;
@@ -2543,11 +2554,12 @@ module decoder(
 //          .jumpBtbHit,
 //          .jumpEmbed,
 //          .jumpIndir,
-          .prevSpecLoad(dec_lspec[k-1]),
-          .thisSpecLoad(dec_lspec[k]),
+//          .prevSpecLoad(dec_lspec[k-1]),
+//          .thisSpecLoad(dec_lspec[k]),
         //  .prevSpecAlu(dec_aspec[k-1]),
         //  .thisSpecAlu(dec_aspec[k]),
           .isIPRel(dec_IPRel[k]),
+          .isIPRelB(dec_IPRelB[k]),
           .rAlloc(dec_allocR[k]),
 	  .csrss_retIP_en(csrss_retIP_en[k])
           );
@@ -2593,6 +2605,10 @@ module decoder(
           assign rs0i2_index=(rs_index[6][k] & ~rs_index[6][k^1]) ? k : 4'bz;
           assign rs1i2_index=(rs_index[7][k] & ~rs_index[7][k^1]) ? k : 4'bz;
           assign rs2i2_index=(rs_index[8][k] & ~rs_index[8][k^1]) ? k : 4'bz;
+
+	  assign rs2i2_cxEn=|dec_cxEn_reg;
+	  assign rs2i2_IPRelB=|dec_IPRelB_reg;
+	  
 
           adder #(9) srcAddA1_mod({afterTick[k],dec_srcIPOff[k]},9'd1,dec_srcIPOffA[k],1'b0,~dec_magic[k][0],,,,);
           adder #(9) srcAddA2_mod({afterTick[k],dec_srcIPOff[k]},9'd2,dec_srcIPOffA[k],1'b0,dec_magic[k][1:0]==2'b01,,,,);
@@ -3070,6 +3086,8 @@ module decoder(
   .perm(iUsed)
   );
 
+  assign decx_second[2:0]=3'b0;
+
   distrib distr_mod(
   clk,
   rst,
@@ -3092,6 +3110,12 @@ module decoder(
   rs_index[6],
   rs_index[7],
   rs_index[8],
+  decx_second[3],
+  decx_second[4],
+  decx_second[5],
+  decx_second[6],
+  decx_second[7],
+  decx_second[8],
   rs_store[0],
   rs_store[1],
   rs_store[2],
@@ -3618,6 +3642,7 @@ module decoder(
           dec_lspecR<=1'b0;
          // dec_aspecR<=1'b0;
           dec_IPRel_reg<=10'b0;
+          dec_IPRelB_reg<=10'b0;
           iUsed_reg<=10'b0;
           cls_indir_reg<=10'b0;
           cls_jump_reg<=10'b0;
@@ -3695,6 +3720,7 @@ module decoder(
           dec_lspecR<=dec_lspecR_d;
          // dec_aspecR<=dec_aspecR_d;
           dec_IPRel_reg<=dec_IPRel;
+          dec_IPRelB_reg<=dec_IPRelB&iUsed;
           iUsed_reg<=iUsed;
           cls_indir_reg<=cls_indir;
           cls_jump_reg<=cls_jump & {10{~except}};
