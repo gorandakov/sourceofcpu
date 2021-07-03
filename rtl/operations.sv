@@ -6,7 +6,6 @@
 `define op_add32 1
 `define op_add16 2
 `define op_add8  3
-`define op_add32S 257
 
 `define op_sub64 4
 `define op_sub32 5
