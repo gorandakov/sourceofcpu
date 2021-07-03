@@ -24,7 +24,6 @@ module fu_alu(
     u6_A_fufwd,u6_A_fuufwd,u6_B_fufwd,u6_B_fuufwd,
     u6_S_fufwd,u6_S_fuufwd,
     u6_constant,u6_cxen,
-    cin_seq_jmp,valJmp,
   FU0, FU1,  FU2,  FU3,
   FU4, FU5,  FU6,  FU7,
   FU8, FU9,
@@ -127,8 +126,6 @@ module fu_alu(
   input [3:0]           u6_S_fuufwd;
   input [63:0] u6_constant;
   input u6_cxen;
-  output cin_seq_jmp;
-  output [64:0] valJmp;
 
   input [64:0] FU0;
   input [64:0] FU1;
@@ -442,8 +439,8 @@ module fu_alu(
   rs_write_forward #(65) u6_B_fwd(
   clk,rst,
   ~u6_clkEn,
-  u6_B,uu_B6,{1'b0,{32{u6_const[31]}},u6_const[31:0]})
-  u6_B_fufwd,u6_B_fuufwd,u6_cxen,
+  u6_B,uu_B6,
+  u6_B_fufwd,u6_B_fuufwd,
   FU0,FU0_reg,
   FU1,FU1_reg,
   FU2,FU2_reg,
@@ -578,20 +575,6 @@ module fu_alu(
     u5_ret,u5_rten,uu_A5,uu_B5,uu_S5,FU6);
   alu #(1'b0)  alu5(clk,rst,except,1'b0,1'b0,u6_op_reg,u6_isSub_reg,u6_clkEn_reg,1'b1,
     u6_ret,u6_rten,uu_A6,uu_B6,uu_S6,FU9);
-  adder_alu alu5_jmp(
-    .a(uu_A6),
-    .b({1'b0,{32{u6_const_reg[63]}},u6_const_reg[63:32}),
-    .out(valJmp),
-    .sub(1'b0),
-    .en(1'b0),
-    .ben(2'b11),
-    .cout(),
-    .cout4(),
-    .cout32(),
-    .cout_sec(cin_seq_jmp),
-    .ndiff(),
-    .cout44()
-  );
   
   alu_shift sh2_alu(
   clk,
