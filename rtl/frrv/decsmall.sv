@@ -642,7 +642,7 @@ module smallInstr_decoder(
 	      jump_type[3]=5'h11;
 	      is_jump[3]=1'b1;
 	      rB[3]={1'b0,instr[11:7]};
-	      pcxEn[3]=1'b1;
+	      puseBCxCross[3]=1'b1;
 	      poperation[3]=`op_add64|4096;
 	      pport[3]=PORT_MUL;
 	  end
@@ -650,7 +650,8 @@ module smallInstr_decoder(
 	      jump_type[3]=5'h11;
 	      is_jump[3]=1'b1;
 	      prB[3]={1'b0,instr[11:7]};
-	      pcxEn[3]=1'b1;
+	      puseBConst[3]=1'b1;
+	      puseBCxCross[3]=1'b1;
 	      pconstant[3]={32'b0,32'd2};
 	      pIPRel[3]=1'b1;
 	      prT[3]=6'd1;
@@ -734,7 +735,7 @@ module smallInstr_decoder(
 
       trien[6]=isAdvALUorJump;
       puseBConst[6]=!(instr[6:2]==5'b11001);
-      pcxEn[6]=instr[6:2]==5'b11001;
+      puseBCxCross[6]=instr[6:2]==5'b11001;
       prT[6]={rD};
       prT_use[6]=!(instr[6:2]==5'b11011 && prT[6]==6'd0);
       puseRs[6]=prT_use[6];
@@ -758,13 +759,12 @@ module smallInstr_decoder(
 	  5'b11001: begin
 	  pconstant[6]={{12{instr[31]},instr[31:12],32'd4};
 	  poperation[6]=op_add64;
-	  pisIPRel[6]=1'b1;
-	  pisIPRelB[6]=1'b1;
+	  pIPRel[6]=1'b1;
 	  pis_jump[6]=1'b1;
 	  pjump_type[6]=5'b11000;
 	  pport[6]=PORT_MUL;
-	  //puseBConst[6]=1'b1;
-	  pcxEn[6]=1'b1;
+	  puseBConst[6]=1'b1;
+	  puseBCxCross[6]=1'b1;
 	  prB[6]=rS1;
 	  prB_use[6]=1'b1;
 	  end
