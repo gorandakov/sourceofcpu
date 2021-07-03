@@ -1211,8 +1211,6 @@ module backend(
   reg [8:0] rs_afterTK;
   reg [8:0] rs_IPRelB;
   reg [2:0] rs_cxEn;
-  reg [2:0] rs_cxEn_reg;
-  wire [2:0] outCxEn;
 
   reg rs_en[8:0];
   reg rs_en_reg[8:0];
@@ -1663,8 +1661,7 @@ module backend(
   wire [5:0][SIMD_WIDTH-1:0] outDataBFH;
   wire [5:0][16+SIMD_WIDTH-1:0] outDataAFL;
   wire [5:0][16+SIMD_WIDTH-1:0] outDataBFL;
-  wire [2:0][63:0] outDataC;
-  wire [2:0][63:0] outDataC2;
+  wire [2:0][32:0] outDataC;
   wire [8:0][5:0] outDataS;
   wire [8:0][REG_WIDTH-1:0] outReg;
   wire [8:0][OPERATION_WIDTH-1:0] outOp;
@@ -4072,7 +4069,7 @@ module backend(
   .FU0Hit(FU0Hit),.FU1Hit(FU1Hit),.FU2Hit(FU2Hit),.FU3Hit(FU3Hit),
   .new_thread(thread_reg2),
 // wires to store new values in a buffer
-  .newDataA0(dataA[3*m+0]),.newDataB0(dataB[3*m+0]),.newDataC0(rs_const_reg[3*m+0][63:0]&{64{~rs_useBConst_reg[3*m+0]}}),
+  .newDataA0(dataA[3*m+0]),.newDataB0(dataB[3*m+0]),.newDataC0(rs_const_reg[3*m+0][32:0]&{33{~rs_useBConst_reg[3*m+0]}}),
     .newRegA0(regA_reg[3*m+0]|{9{~inflA[3*m+0]&~depA_reg[3*m+0]}}),
     .newRegB0(regB_reg[3*m+0]|{9{~inflB[3*m+0]&~depB_reg[3*m+0]}}),
     .newANeeded0(inflA[3*m+0]|depA_reg[3*m+0]),.newBNeeded0(inflB[3*m+0]|depB_reg[3*m+0]),.newReg0(newR_reg[3*m+0]),
@@ -4080,7 +4077,7 @@ module backend(
     .rsAlloc0(rs_en_reg[3*m+0]&~rs_alt_reg[m]),.newGazumpA0(gazumpA[3*m+0]),.newGazumpB0(gazumpB[3*m+0]),
     .newFunitA0(funA_reg[3*m+0]),.newFunitB0(funB_reg[3*m+0]),.newWQ0(WQR_reg[m]),.newLSFlag0(rs_ldst_flg_reg[2*m]),
     .newAttr0(newAttr_reg2),
-  .newDataA1(dataA[3*m+1]),.newDataB1(dataB[3*m+1]),.newDataC1(rs_const_reg[3*m+1][63:0]&{64{~rs_useBConst_reg[3*m+1]}}),.newDataS1(dataS),
+  .newDataA1(dataA[3*m+1]),.newDataB1(dataB[3*m+1]),.newDataC1(rs_const_reg[3*m+1][32:0]&{33{~rs_useBConst_reg[3*m+1]}}),.newDataS1(dataS),
     .newRegA1(regA_reg[3*m+1]|{9{~inflA[3*m+1]&~depA_reg[3*m+1]}}),
     .newRegB1(regB_reg[3*m+1]|{9{~inflB[3*m+1]&~depB_reg[3*m+1]}}),
     .newRegS1(regS_reg[3*m+1]|{REG_WIDTH{~Sinfl[3*m+1]}}),
@@ -4090,8 +4087,7 @@ module backend(
     .rsAlloc1(rs_en_reg[3*m+1]),.newGazumpA1(gazumpA[3*m+1]),.newGazumpB1(gazumpB[3*m+1]),.newGazumpS1(gazumpS),
     .newFunitA1(funA_reg[3*m+1]),.newFunitB1(funB_reg[3*m+1]),.newFunitS1(funS_reg[3*m+1]),.newLSFlag1(rs_ldst_flg_reg[2*m+1]),
     .newAttr1(newAttr_reg2),
-  .newDataA2(dataA[3*m+2]),.newDataB2(dataB[3*m+2]),.newDataC2(rs_const_reg[3*m+2][63:0]&{64{~rs_useBConst_reg[3*m+2]|rs_cxEn_reg[m]}}),
-    .newDataS2(dataS),
+  .newDataA2(dataA[3*m+2]),.newDataB2(dataB[3*m+2]),.newDataS2(dataS),
     .newRegA2(regA_reg[3*m+2]|{9{~inflA[3*m+2]&~depA_reg[3*m+2]}}),
     .newRegB2(regB_reg[3*m+2]|{9{~inflB[3*m+2]&~depB_reg[3*m+2]}}),
     .newRegS2(regS_reg[3*m+2]|{REG_WIDTH{~Sinfl[3*m+2]}}),
@@ -4100,7 +4096,6 @@ module backend(
     .rsAlloc2(rs_en_reg[3*m+2]),.newGazumpA2(gazumpA[3*m+2]),.newGazumpB2(gazumpB[3*m+2]),.newGazumpS2(gazumpS),
     .newFunitA2(funA_reg[3*m+2]),.newFunitB2(funB_reg[3*m+2]),.newFunitS2(funS_reg[3*m+2]),
     .newAttr2(newAttr_reg2),
-    .newCx2(rs_cxEn_reg[m]),
 // wires to get values out of buffer
   .outDataA0(outDataA[3*m+0]),.outDataB0(outDataB[3*m+0]),.outDataC0(outDataC[m]),.outReg0(outReg[3*m+0]),
     .outOp0(outOp[3*m+0]),.outInstrIndex0(outII[3*m+0]), .outFuFwdA0(fuFwdA[3*m+0]),.outFuFwdB0(fuFwdB[3*m+0]),
@@ -4114,14 +4109,12 @@ module backend(
     .outDataEn1(outEn[3*m+1]),
     .outThread1(outThr[3*m+1]),
     .outAttr1(outAttr[3*m+1]),//alu 1
-  .outDataA2(outDataA[3*m+2]),.outDataB2(outDataB[3*m+2]),.outDataS2(outDataS[3*m+2]),
-    .outDataC2(outDataC2[m]),.outReg2(outReg[3*m+2]),
+  .outDataA2(outDataA[3*m+2]),.outDataB2(outDataB[3*m+2]),.outDataS2(outDataS[3*m+2]),.outReg2(outReg[3*m+2]),
     .outRegSimd2(),.outOp2(outOp[3*m+2]),.outInstrIndex2(outII[3*m+2]),.outFuFwdA2(fuFwdA[3*m+2]),
     .outFuFwdB2(fuFwdB[3*m+2]),.outFuFwdS2(fuFwdS[3*m+2]),.outFuuFwdA2(fuuFwdA[3*m+2]),
     .outFuuFwdB2(fuuFwdB[3*m+2]),.outFuuFwdS2(fuuFwdS[3*m+2]),.outDataEn2(outEn[3*m+2]),
     .outThread2(outThr[3*m+2]),
-    .outAttr2(outAttr[3*m+2]),
-    .outCx2(outCxEn[m]),//alu 2
+    .outAttr2(outAttr[3*m+2]),//alu 2
 // wires from functional units  
   .FU0(FU_reg[0]),.FUreg0(FUreg[0]),.FUwen0(FUwen[0]),
   .FU1(FU_reg[1]),.FUreg1(FUreg[1]),.FUwen1(FUwen[1]),
@@ -5813,7 +5806,6 @@ dcache1 L1D_mod(
           WopA_reg<=13'b0;
           WopB_reg<=13'b0;
 	  rs_cxEn<=3'b0;
-	  rs_cxEn_reg<=3'b0;
           for(k=0;k<9;k=k+1) begin
               clrR_reg[k]<=9'b0;
               rs_const[k]<={DATA_WIDTH{1'B0}};
@@ -6101,7 +6093,6 @@ dcache1 L1D_mod(
           rs_IPRelB[8]<=rs2i2_IPRelB;
 
 	  rs_cxEn<={rs2i2_cxEn,2'b0};
-	  rs_cxEn_reg<=rs_cxEn;
 
 	  rs_afterTK[0]<=rs0i0_afterTaken;
           rs_afterTK[1]<=rs0i1_afterTaken;
