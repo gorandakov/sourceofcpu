@@ -1062,21 +1062,14 @@ module frontend1(
   .write_data({cc_read_IP_reg4[63:7],miss_phys}),
   .write_wen(req_en|req_tlbEn)
   );
-  
-  frrv_rom_stage stpBits_mod(
-  .bytes_in({read_data[258:195],read_data[193:130],read_data[128:65],read_data[63:0]}),
-  .startoff(cc_read_IP_reg2[4:1]),
-  .bite_tail(bite_tail),
-  .bits_out(btail)
-  );
 
   predecoder_get preDec_mod(
     .clk(clk),
     .rst(rst),
-    .bundle({read_data_reg[258:195],read_data_reg[193:130],read_data_reg[128:65],read_data_reg[63:0]}),
-    .btail(btail_reg),
-    .flag_bits(read_dataX_reg),
-    .startOff(cc_read_IP_reg3[4:1]),
+    .bundle({read_data[258:195],read_data[193:130],read_data[128:65],read_data[63:0]}),
+    .btail(17'b0),
+    .flag_bits(read_dataX),
+    .startOff(cc_read_IP_reg2[4:1]),
     .instr0(pre_instr0),.instr1(pre_instr1),.instr2(pre_instr2),.instr3(pre_instr3),
     .instr4(pre_instr4),.instr5(pre_instr5),.instr6(pre_instr6),.instr7(pre_instr7),
     .instr8(pre_instr8),.instr9(pre_instr9),.instr10(pre_instr10),.instr11(pre_instr11),
@@ -1110,7 +1103,7 @@ module frontend1(
   .rst(rst),
   .write_instrEn(pre_instrEn_reg[11:0]&pre_jbefore),
   .write_thread(1'b0),
-  .write_wen(instrFed_reg2&~btbFStall&~btbFStall_reg&~btbFStall_reg2&~btbFStall_reg3&~btbFStall_reg4&~btbFStall_recover_reg3&~jq_fstall&~fmstall),
+  .write_wen(instrFed_reg&~btbFStall&~btbFStall_reg&~btbFStall_reg2&~btbFStall_reg3&~btbFStall_recover_reg2&~jq_fstall&~fmstall),
   .doFStall(iq_fstall),
   .except(uxcept|ixcept),
   .except_thread(1'b0),
@@ -1147,22 +1140,22 @@ module frontend1(
   .rst(rst),
   .except(uxcept|ixcept),
   .except_thread(ixceptThread),
-  .fStall(iq_fstall|fmstall|btbFStall|btbFStall_reg|btbFStall_reg2|btbFStall_reg3|btbFStall_reg4|btbFStall_recover_reg3),
+  .fStall(iq_fstall|fmstall|btbFStall|btbFStall_reg|btbFStall_reg2|btbFStall_reg3|btbFStall_recover_reg2),
   .doFStall(jq_fstall),
   .stall(stall),
   .read_thread(1'b0),
   .read_cnt(btbl_step),
   .read_data0({btbl_mask0,btbl_IP0,btbl_attr0}),
   .read_data1({btbl_mask1,btbl_IP1,btbl_attr0}),
-  .write_wen(instrFed_reg&~btbFStall&~btbFStall_reg&~btbFStall_reg2&~btbFStall_reg3&~btbFStall_reg44&
-    ~btbFStall_recover_reg3&~jq_fstall&~fmstall),
+  .write_wen(instrFed_reg&~btbFStall&~btbFStall_reg&~btbFStall_reg2&~btbFStall_reg3&
+    ~btbFStall_recover_reg2&~jq_fstall&~fmstall),
   .write_thread(1'b0),
-  .write_cnt(btbFStall_recover_reg2 ? iqe_jcnD[4:0] : iqe_jcnt_reg2[4:0]),
-  .write_start(startx_reg4),
-  .write_data0({jmp_mask_reg5[0],btbx_tgt0_reg5,btbx_attr0_reg5}),
-  .write_data1({jmp_mask_reg5[1],btbx_tgt1_reg5,btbx_attr1_reg5}),
-  .write_data2({jmp_mask_reg5[2],btbx_tgt2_reg5,btbx_attr2_reg5}),
-  .write_data3({jmp_mask_reg5[3],btbx_tgt3_reg5,btbx_attr3_reg5})
+  .write_cnt(btbFStall_recover_reg ? iqe_jcnD[4:0] : iqe_jcnt_reg2[4:0]),
+  .write_start(startx_reg3),
+  .write_data0({jmp_mask_reg4[0],btbx_tgt0_reg4,btbx_attr0_reg4}),
+  .write_data1({jmp_mask_reg4[1],btbx_tgt1_reg4,btbx_attr1_reg4}),
+  .write_data2({jmp_mask_reg4[2],btbx_tgt2_reg4,btbx_attr2_reg4}),
+  .write_data3({jmp_mask_reg4[3],btbx_tgt3_reg4,btbx_attr3_reg4})
   );
   /*
   instrQ_tk tk_queue_mod(
