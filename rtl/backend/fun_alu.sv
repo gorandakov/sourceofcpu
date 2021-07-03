@@ -23,7 +23,6 @@ module fu_alu(
   u6_A,u6_B,u6_S,u6_op,u6_ret,u6_rten,u6_clkEn,
     u6_A_fufwd,u6_A_fuufwd,u6_B_fufwd,u6_B_fuufwd,
     u6_S_fufwd,u6_S_fuufwd,
-    u6_constant,u6_cxen,
   FU0, FU1,  FU2,  FU3,
   FU4, FU5,  FU6,  FU7,
   FU8, FU9,
@@ -124,8 +123,6 @@ module fu_alu(
   input [3:0]           u6_B_fuufwd;
   input [3:0]           u6_S_fufwd;
   input [3:0]           u6_S_fuufwd;
-  input [63:0] u6_constant;
-  input u6_cxen;
 
   input [64:0] FU0;
   input [64:0] FU1;

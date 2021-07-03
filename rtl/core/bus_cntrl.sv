@@ -62,9 +62,9 @@ module MSI_bus_nondata_ram(
 endmodule
 
 module MSI_bus_data_ram_box(
-  clk,rst,doStall,doStallR,
+  clk,rst,doStall,stall,
   read_data,read_bank,read_clkEn,read_signals,read_src_req,read_dst_req,
-  write_addr,write_data,write_bank,write_wen,write_signals,write_src_req,write_dst_req,write_wait);
+  write_addr,write_data,write_bank,write_wen,write_signals,write_src_req,write_dst_req);
   localparam data_width=32;
   localparam addr_width=5;
   localparam addr_count=32;
@@ -73,7 +73,7 @@ module MSI_bus_data_ram_box(
   input clk;
   input rst;
   output doStall;
-  output doStallR;
+  input stall;
   output reg [16*data_width-1:0] read_data;
   input read_bank;
   input read_clkEn;
@@ -87,7 +87,6 @@ module MSI_bus_data_ram_box(
   input [`rbusD_width-1:0] write_signals;
   input [9:0] write_src_req;
   input [9:0] write_dst_req;
-  input write_wait;
   
   wire [data_width*2-1:0] write_ben;
   reg [16*data_width*2-1:0] read_data0;
@@ -118,8 +117,8 @@ module MSI_bus_data_ram_box(
           if (cnt!=6'd0 && read_clkEn) read_addr<=read_addr_d;
           if (write_wen && !(read_clkEn&&read_bank) && write_bank) cnt<=cnt_inc;
           if (read_clkEn && read_bank && !(write_wen && write_bank)) cnt<=cnt_dec;
-          if (write_wen && !write_bank && write_wait) begin
-	      if (!wait_non_full) begin
+          if (write_wen && !write_bank && write_rpl) begin
+	      if (wait_non_full) begin
 	          wcnt<=waitcnt[5:0];
 	      end else begin
 	          wcnt<=cnt_wait;
@@ -165,7 +164,6 @@ module MSI_bus_data_ram_box(
   end
   assign write_data_non9={write_signals,write_src_req,write_dst_req};
   assign {read_signals,read_src_req,read_dst_req}=read_data_non9;
-  assign doStall=doStall0;
-  assign doStallR=wcnt!=6'd0 || cnt==6'd0;
+  assign doStall=doStall0 || wcnt!=6'd0;
 endmodule
 
