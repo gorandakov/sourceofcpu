@@ -11,7 +11,8 @@
 `define op_sub64 4
 `define op_sub32 5
 `define op_sub16 6
-`define op_sub8  7 
+`define op_sub8  7
+`define op_sub32S 261
 
 `define op_and64 8
 `define op_and32 9
@@ -86,6 +87,8 @@
 
 `define op_sadd_even 60
 `define op_sadd_odd 61
+
+`define op_break 62
 
 //these are even more complicated instructions
 `define op_multiclk 2048

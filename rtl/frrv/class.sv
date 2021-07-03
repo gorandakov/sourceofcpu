@@ -22,7 +22,7 @@ module predec_RV_class(instr,flag,class_,isLNK,isRet,LNK2);
   wire clsPos0;
   
   assign subIsBasicLDST=instr[14:13]!=2'b0 && instr[1:0]==2'b0;
-  assign subIsStackLDST=instr[14:13]!=2'b0 && instr[1:0]==2'b10 && !(intr[15:14]=2'b01 && instr[11:7]==5'b0);
+  assign subIsStackLDST=instr[14:13]!=2'b0 && instr[1:0]==2'b10 && !(intr[15:14]==2'b01 && instr[11:7]==5'b0);
   
   assign subIsBasicImmAluReg5=(instr[1:0]==2'b01 && (instr[15:13]==3'b0 || (instr[15:13]==3'b1 &&
    instr[11:7]!=5'b0) || (instr[15:14]==2'b1 && instr[11:7]!=5'b0 && 
@@ -39,9 +39,9 @@ module predec_RV_class(instr,flag,class_,isLNK,isRet,LNK2);
   assign isAdvALUorJump=(instr[6:5]==2'b11 && !instr[4] && instr[2] && !(!instr[3] && instr[14:12]!=3'b0)) |
 	  (!instr[6] && instr[4:2]==3'b101) && opcode_main[1:0]==2'b11;
   assign isOpFp=instr[6:2]==5'b10100 && opcode_main[1:0]==2'b11;
-  assign isFpFma=opcode_main[6:4]==2'b100 && opcode_main[1:0]==2'b11;
-  assign isJump=opcode_main[6:0]==5'b1100011;
-  assign isSys=opcode_main[6:0]==5'b1110011;
+  assign isFpFma=opcode_main[6:4]==3'b100 && opcode_main[1:0]==2'b11;
+  assign isJump=opcode_main[6:0]==7'b1100011;
+  assign isSys=opcode_main[6:0]==7'b1110011;
 
   assign clsStore=|{subIsBasicLDST|subIsStackLDST && instr[15],
       isStore};
@@ -59,13 +59,13 @@ module predec_RV_class(instr,flag,class_,isLNK,isRet,LNK2);
       isBasicALU32 && instr[6:5]!=2'b0 && instr[13:12]==2'b01 && !instr[31] && instr[29:25]==5'b0,
       isExtImm && instr[14:12]==3'b001 && instr[31:27]==5'b0,
       isExtImm && instr[31:27]==5'b11};
-  assign clsMul=|{isntr[15:13]=3'b100 && instr[1:0]==2'b10 && instr[6:2]==5'b0 && instr[11:7]!=5'b0,
+  assign clsMul=|{isntr[15:13]==3'b100 && instr[1:0]==2'b10 && instr[6:2]==5'b0 && instr[11:7]!=5'b0,
       isExtImm && instr[14:12]==3'b011,
       instr[6:5]==2'b11 && !instr[4] && instr[2] && !instr[3] && instr[1:0]==2'b11,
       isExtALU && !instr[14],
       isBasicALU|isBasicALU32 && instr[31:25]==7'b1 && !instr[14]};
   assign clsALU=|{subIsReg3Alu && instr[11:10]==2'b11,
-    subIsBasicImmAluReg5 && !(isntr[15:13]=3'b100 && instr[1:0]==2'b10 && instr[6:2]==5'b0 && instr[11:7]!=5'b0),
+    subIsBasicImmAluReg5 && !(isntr[15:13]==3'b100 && instr[1:0]==2'b10 && instr[6:2]==5'b0 && instr[11:7]!=5'b0),
     subIs2xReg5Alu,subIsReg3Alu && instr[11:10]==2'b11,
     subIsJMP & instr[14],
     subIsAddI4,

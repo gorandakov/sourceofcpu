@@ -83,7 +83,6 @@ module imul(
 
   assign Res=upper32_reg3 ? {32'b0,resx} :64'bz;
 
-    resx,1'b0,~upper_reg3&~is_sec_reg3,upper_reg3,short_reg3,,,,);
 
   assign Res[64:0]=is_sec_reg3 ? {ptr_reg2,sec_res_reg2} : {1'b0,64'bz};
 
