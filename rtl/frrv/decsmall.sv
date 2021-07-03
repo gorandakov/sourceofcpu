@@ -84,7 +84,6 @@ module smallInstr_decoder(
   output rC_use;
   output useCRet;
   output useBConst;
-  output cxEn;
 //  output reg useBSmall;//small constant use; used for call/pop/push
   output [63:0] constant;
 //  output reg [3:0] smallConst; //signed
@@ -108,7 +107,6 @@ module smallInstr_decoder(
   output jumpIndir;
   
   output isIPRel;
-  output isIPRelB;
   output rAlloc;
   input reor_en;
   input [15:0] reor_val;
@@ -151,7 +149,6 @@ module smallInstr_decoder(
   reg prC_use[TRICNT_TOP-1:0];
   reg puseCRet[TRICNT_TOP-1:0];
   reg puseBConst[TRICNT_TOP-1:0];
-  reg cxEn[TRICNT_TOP-1:0];
 //  output reg useBSmall;//small constant use; used for call/pop/push
   reg [63:0] pconstant[TRICNT_TOP-1:0];
 //  output reg [3:0] smallConst; //signed
@@ -182,7 +179,6 @@ module smallInstr_decoder(
   reg [4:0] pjumpType[TRICNT_TOP-1:0];
   
   reg pisIPRel[TRICNT_TOP-1:0];
-  reg pisIPRelB[TRICNT_TOP-1:0];
   reg prAlloc[TRICNT_TOP-1:0];
   reg [TRICNT_TOP-1:0] trien;
   reg perror[TRICNT_TOP-1:0];
@@ -303,7 +299,6 @@ module smallInstr_decoder(
           wire krC_use;
           wire kuseCRet;
           wire kuseBConst;
-          wire kcxEn;
     //  output reg useBSmall;//small constant use; used for call/pop/push
           wire [63:0] kconstant;
     //  output reg [3:0] smallConst; //signed
@@ -331,7 +326,6 @@ module smallInstr_decoder(
           wire krAlloc;
           wire kthisSpecLoad;
           wire kisIPRel;
-          wire kisIPRelB;
           wire kflags_wrFPU;
           wire kerror;
           wire [4:0] kjumpType;
@@ -356,10 +350,8 @@ module smallInstr_decoder(
 	      assign kuseRs=trien[p*8+q] ? puseRs[p*8+q] : 1'bz;
 	      assign krAlloc=trien[p*8+q] ? prAlloc[p*8+q] : 1'bz;
 	      assign kuseBConst=trien[p*8+q] ? puseBConst[p*8+q] : 1'bz;
-	      assign kcxEn=trien[p*8+q] ? pcxEn[p*8+q] : 1'bz;
 	      assign kthisSpecLoad=trien[p*8+q] ? pthisSpecLoad[p*8+q] : 1'bz;
 	      assign kisIPRel=trien[p*8+q] ? pisIPRel[p*8+q] : 1'bz;
-	      assign kisIPRelB=trien[p*8+q] ? pisIPRelB[p*8+q] : 1'bz;
 	      assign kflags_use=trien[p*8+q] ? pflags_use[p*8+q] : 1'bz;
 	      assign kflags_write=trien[p*8+q] ? pflags_write[p*8+q] : 1'bz;
 	      assign kflags_wrFPU=trien[p*8+q] ? pflags_wrFPU[p*8+q] : 1'bz;
@@ -392,9 +384,8 @@ module smallInstr_decoder(
 	  assign kuseRs=(~|trien[p*8+:8]) ? 1'b0 : 1'bz;
 	  assign krAlloc=(~|trien[p*8+:8]) ? 1'b0 : 1'bz;
 	  assign kuseBConst=(~|trien[p*8+:8]) ? 1'b0 : 1'bz;
-	  assign kcxEn=(~|trien[p*8+:8]) ? 1'b0 : 1'bz;
+	  assign kthisSpecLoad=(~|trien[p*8+:8]) ? 1'b0 : 1'bz;
 	  assign kisIPRel=(~|trien[p*8+:8]) ? 1'b0 : 1'bz;
-	  assign kisIPRelB=(~|trien[p*8+:8]) ? 1'b0 : 1'bz;
 	  assign kflags_use=(~|trien[p*8+:8]) ? 1'b0 : 1'bz;
 	  assign kflags_write=(~|trien[p*8+:8]) ? 1'b0 : 1'bz;
 	  assign kflags_wrFPU=(~|trien[p*8+:8]) ? 1'b0 : 1'bz;
@@ -427,10 +418,8 @@ module smallInstr_decoder(
 	  assign useRs=(|trien[p*8+:8]) ? kuseRs : 1'bz;
 	  assign rAlloc=(|trien[p*8+:8]) ? krAlloc : 1'bz;
 	  assign useBConst=(|trien[p*8+:8]) ? kuseBConst : 1'bz;
-	  assign cxEn=(|trien[p*8+:8]) ? kcxEn : 1'bz;
 //	  assign thisSpecLoad=(|trien[p*8+:8]) ? kthisSpecLoad : 1'bz;
 	  assign isIPRel=(|trien[p*8+:8]) ? kisIPRel : 1'bz;
-	  assign isIPRelB=(|trien[p*8+:8]) ? kisIPRelB : 1'bz;
 	  assign flags_use=(|trien[p*8+:8]) ? kflags_use : 1'bz;
 	  assign flags_write=(|trien[p*8+:8]) ? kflags_write : 1'bz;
 	  assign flags_wrFPU=(|trien[p*8+:8]) ? kflags_wrFPU : 1'bz;
@@ -466,10 +455,8 @@ module smallInstr_decoder(
   assign useRs=(~|trien) ? 1'b0 : 1'bz;
   assign rAlloc=(~|trien) ? 1'b0 : 1'bz;
   assign useBConst=(~|trien) ? 1'b0 : 1'bz;
-  assign cxEn=(~|trien) ? 1'b0 : 1'bz;
 //  assign thisSpecLoad=(~|trien) ? 1'b0 : 1'bz;
   assign isIPRel=(~|trien) ? 1'b0 : 1'bz;
-  assign isIPRelB=(~|trien) ? 1'b0 : 1'bz;
   assign flags_use=(~|trien) ? 1'b0 : 1'bz;
   assign flags_write=(~|trien) ? 1'b0 : 1'bz;
   assign flags_wrFPU=(~|trien) ? 1'b0 : 1'bz;
