@@ -1110,7 +1110,7 @@ module frontend1(
   .rst(rst),
   .write_instrEn(pre_instrEn_reg[11:0]&pre_jbefore),
   .write_thread(1'b0),
-  .write_wen(instrFed_reg2&~btbFStall&~btbFStall_reg&~btbFStall_reg2&~btbFStall_reg3&~btbFStall_reg4&~btbFStall_recover_reg2&~jq_fstall&~fmstall),
+  .write_wen(instrFed_reg2&~btbFStall&~btbFStall_reg&~btbFStall_reg2&~btbFStall_reg3&~btbFStall_reg4&~btbFStall_recover_reg3&~jq_fstall&~fmstall),
   .doFStall(iq_fstall),
   .except(uxcept|ixcept),
   .except_thread(1'b0),
@@ -1147,7 +1147,7 @@ module frontend1(
   .rst(rst),
   .except(uxcept|ixcept),
   .except_thread(ixceptThread),
-  .fStall(iq_fstall|fmstall|btbFStall|btbFStall_reg|btbFStall_reg2|btbFStall_reg3|btbFStall_reg4|btbFStall_recover_reg2),
+  .fStall(iq_fstall|fmstall|btbFStall|btbFStall_reg|btbFStall_reg2|btbFStall_reg3|btbFStall_reg4|btbFStall_recover_reg3),
   .doFStall(jq_fstall),
   .stall(stall),
   .read_thread(1'b0),
@@ -1155,9 +1155,9 @@ module frontend1(
   .read_data0({btbl_mask0,btbl_IP0,btbl_attr0}),
   .read_data1({btbl_mask1,btbl_IP1,btbl_attr0}),
   .write_wen(instrFed_reg&~btbFStall&~btbFStall_reg&~btbFStall_reg2&~btbFStall_reg3&~btbFStall_reg44&
-    ~btbFStall_recover_reg2&~jq_fstall&~fmstall),
+    ~btbFStall_recover_reg3&~jq_fstall&~fmstall),
   .write_thread(1'b0),
-  .write_cnt(btbFStall_recover_reg ? iqe_jcnD[4:0] : iqe_jcnt_reg2[4:0]),
+  .write_cnt(btbFStall_recover_reg2 ? iqe_jcnD[4:0] : iqe_jcnt_reg2[4:0]),
   .write_start(startx_reg4),
   .write_data0({jmp_mask_reg5[0],btbx_tgt0_reg5,btbx_attr0_reg5}),
   .write_data1({jmp_mask_reg5[1],btbx_tgt1_reg5,btbx_attr1_reg5}),
@@ -1391,13 +1391,11 @@ module frontend1(
           btbFStall_reg<=1'b0;
           btbFStall_reg2<=1'b0;
           btbFStall_reg3<=1'b0;
-          btbFStall_reg4<=1'b0;
 //          btbFStall_reg4<=1'b0;
 //          btbFStall_reg5<=1'b0;
           btbFStall_recover<=1'b0;
           btbFStall_recover_reg<=1'b0;
           btbFStall_recover_reg2<=1'b0;
-          btbFStall_recover_reg3<=1'b0;
           GHT<=8'b0;
           lnk_link0_reg<=5'b0;
           lnk_off0_reg<=5'b0;
@@ -1438,10 +1436,10 @@ module frontend1(
           btbFStall_reg<=btbFStall & ~btbFStall_save;
           btbFStall_reg2<=btbFStall_reg;
           btbFStall_reg3<=btbFStall_reg2;
-          btbFStall_reg4<=btbFStall_reg3;
+//          btbFStall_reg4<=btbFStall_reg3;
 //          btbFStall_reg5<=btbFStall_reg4;
           if (btbFStall_recover && ~iq_fstall && ~jq_fstall && ~fmstall) btbFStall_recover<=1'b0;
-          else btbFStall_recover<=btbFStall_recover|btbFStall_reg4;
+          else btbFStall_recover<=btbFStall_recover|btbFStall_reg3;
           
           if (~iq_fstall & ~jq_fstall & ~fmstall) btbFStall_recover_reg<=btbFStall_recover;
           if (~fstall) btbFStall_recover_reg2<=btbFStall_recover_reg;
@@ -1557,7 +1555,6 @@ module frontend1(
           cc_read_IP_reg3<=64'b0;
           cc_read_IP_reg4<=64'b0;
           cc_read_IP_reg5<=64'b0;
-          cc_read_IP_reg6<=64'b0;
           tlbMiss_now<=1'b0;
           miss_seq<=1'b0;
           proc<=24'b0;
@@ -1593,7 +1590,6 @@ module frontend1(
               if (n<4) btbx_joff_reg2[n]<=4'b0;
               if (n<4) btbx_joff_reg3[n]<=4'b0;
               if (n<4) btbx_joff_reg4[n]<=4'b0;
-              if (n<4) btbx_joff_reg5[n]<=4'b0;
           end
           instrFed_reg<=1'b0;
           btb_way_reg<=1'b0;
@@ -1601,7 +1597,6 @@ module frontend1(
           btb_hit_reg<=1'b0;
           btb_hit_reg2<=1'b0;
           btb_hit_reg3<=1'b0;
-          btb_hit_reg4<=1'b0;
 	  jmp_mask_reg[0]<=4'b0;
 	  jmp_mask_reg[1]<=4'b0;
 	  jmp_mask_reg[2]<=4'b0;
@@ -1618,10 +1613,6 @@ module frontend1(
 	  jmp_mask_reg4[1]<=4'b0;
 	  jmp_mask_reg4[2]<=4'b0;
 	  jmp_mask_reg4[3]<=4'b0;
-	  jmp_mask_reg5[0]<=4'b0;
-	  jmp_mask_reg5[1]<=4'b0;
-	  jmp_mask_reg5[2]<=4'b0;
-	  jmp_mask_reg5[3]<=4'b0;
           btbx_tgt0_reg<=63'b0;
 	  btbx_tgt1_reg<=63'b0;
 	  btbx_tgt2_reg<=63'b0;
@@ -1638,10 +1629,6 @@ module frontend1(
 	  btbx_tgt1_reg4<=63'b0;
 	  btbx_tgt2_reg4<=63'b0;
 	  btbx_tgt3_reg4<=63'b0;
-	  btbx_tgt0_reg5<=63'b0;
-	  btbx_tgt1_reg5<=63'b0;
-	  btbx_tgt2_reg5<=63'b0;
-	  btbx_tgt3_reg5<=63'b0;
           btbx_attr0_reg<=4'b0;
 	  btbx_attr1_reg<=4'b0;
 	  btbx_attr2_reg<=4'b0;
@@ -1658,10 +1645,6 @@ module frontend1(
 	  btbx_attr1_reg4<=4'b0;
 	  btbx_attr2_reg4<=4'b0;
 	  btbx_attr3_reg4<=4'b0;
-	  btbx_attr0_reg5<=4'b0;
-	  btbx_attr1_reg5<=4'b0;
-	  btbx_attr2_reg5<=4'b0;
-	  btbx_attr3_reg5<=4'b0;
 	  btbx_jmask_reg<=4'b0;
 	  iqe_jcnt_reg<=6'b1;
 	  iqe_jcnt_reg2<=6'b1;
@@ -1669,34 +1652,28 @@ module frontend1(
 	  startx_reg2<=5'b0;
 	  startx_reg3<=5'b0;
 	  startx_reg4<=5'b0;
-	  startx_reg5<=5'b0;
           do_seq_reg<=1'b0;
           do_seq_reg2<=1'b0;
           do_seq_reg3<=1'b0;
           do_seq_reg4<=1'b0;
           do_seq_reg5<=1'b0;
-          do_seq_reg6<=1'b0;
           btb_hasTK_reg<=1'b0;
           btb_hasTK_reg2<=1'b0;
           btb_hasTK_reg3<=1'b0;
           btb_hasTK_reg4<=1'b0;
-          btb_hasTK_reg5<=1'b0;
           btbxx_way_reg<=1'b0;
           GHT_reg<=8'b0;
           GHT_reg2<=8'b0;
           GHT_reg3<=8'b0;
           GHT_reg4<=8'b0;
-          GHT_reg5<=8'b0;
           cc_base_off_reg<=4'b0;
           cc_base_off_reg2<=4'b0;
           cc_base_off_reg3<=4'b0;
           cc_base_off_reg4<=4'b0;
-          cc_base_off_reg5<=4'b0;
           taken_reg<=4'b0;
           taken_reg2<=4'b0;
           taken_reg3<=4'b0;
           taken_reg4<=4'b0;
-          taken_reg5<=4'b0;
 	  predx_sc0_reg<=2'b0;
 	  predx_sc1_reg<=2'b0;
 	  predx_sc2_reg<=2'b0;
@@ -1713,10 +1690,6 @@ module frontend1(
 	  predx_sc1_reg4<=2'b0;
 	  predx_sc2_reg4<=2'b0;
 	  predx_sc3_reg4<=2'b0;
-	  predx_sc0_reg5<=2'b0;
-	  predx_sc1_reg5<=2'b0;
-	  predx_sc2_reg5<=2'b0;
-	  predx_sc3_reg5<=2'b0;
 	  cc_base_IP<=64'b0;
 	  taken_REG<=4'b0;
 	  btbx_jmask_REG<=4'b0;
@@ -1752,7 +1725,6 @@ module frontend1(
           instrEn_reg<=1'b0;
           instrEn_reg2<=1'b0;
           instrEn_reg3<=1'b0;
-          instrEn_reg4<=1'b0;
           tlbMiss_now<=1'b0;
           miss_seq<=1'b0;
           tlb_hit_reg2<=1'b0;
@@ -1766,28 +1738,23 @@ module frontend1(
           btb_hit_reg<=1'b0;
           btb_hit_reg2<=1'b0;
           btb_hit_reg3<=1'b0;
-          btb_hit_reg4<=1'b0;
           do_seq_reg<=1'b0;
           do_seq_reg2<=1'b0;
           do_seq_reg3<=1'b0;
           do_seq_reg4<=1'b0;
           do_seq_reg5<=1'b0;
-          do_seq_reg6<=1'b0;
           btb_hasTK_reg<=1'b0;
           btb_hasTK_reg2<=1'b0;
           btb_hasTK_reg3<=1'b0;
           btb_hasTK_reg4<=1'b0;
-          btb_hasTK_reg5<=1'b0;
 	  btb_can_ins_reg<=1'b1;
 	  btb_can_ins_reg2<=1'b1;
 	  btb_can_ins_reg3<=1'b1;
 	  btb_can_ins_reg4<=1'b1;
-	  btb_can_ins_reg5<=1'b1;
 	  btbx_cond_reg<=4'b0;
 	  btbx_cond_reg2<=4'b0;
 	  btbx_cond_reg3<=4'b0;
 	  btbx_cond_reg4<=4'b0;
-	  btbx_cond_reg5<=4'b0;
 	  cc_base_IP<=cc_read_IP_d;
       end else if (~fstall) begin
           //ixcept_reg<=1'b0;
@@ -1839,17 +1806,14 @@ module frontend1(
           instrEn_reg<=instrEn;
           instrEn_reg2<=instrEn_reg;
           instrEn_reg3<=instrEn_reg2;
-          instrEn_reg4<=instrEn_reg3;
           cc_read_IP_reg<=cc_read_IP;
           cc_read_IP_reg2<=cc_read_IP_reg;
           cc_read_IP_reg3<=cc_read_IP_reg2;
           cc_read_IP_reg4<=cc_read_IP_reg3;
           cc_read_IP_reg5<=cc_read_IP_reg4;
-          cc_read_IP_reg6<=cc_read_IP_reg6;
           tlb_hit_reg2<=tlb_hit_reg;
           tlb_hit_reg3<=tlb_hit_reg2;
           tlb_hit_reg4<=tlb_hit_reg3;
-          tlb_hit_reg5<=tlb_hit_reg4;
           tlb_data_reg2<=tlb_data_reg;
           tlb_phys_reg<=tlb_phys;
           tlb_data_reg3<=tlb_data_reg2;
@@ -1893,7 +1857,6 @@ module frontend1(
           btb_hit_reg<=btb_hit;
           btb_hit_reg2<=btb_hit_reg;
           btb_hit_reg3<=btb_hit_reg2;
-          btb_hit_reg4<=btb_hit_reg3;
 	  jmp_mask_reg[0]<=jmp_mask[0];
 	  jmp_mask_reg[1]<=jmp_mask[1];
 	  jmp_mask_reg[2]<=jmp_mask[2];
@@ -1910,10 +1873,6 @@ module frontend1(
 	  jmp_mask_reg4[1]<=jmp_mask_reg3[1];
 	  jmp_mask_reg4[2]<=jmp_mask_reg3[2];
 	  jmp_mask_reg4[3]<=jmp_mask_reg3[3];
-	  jmp_mask_reg5[0]<=jmp_mask_reg4[0];
-	  jmp_mask_reg5[1]<=jmp_mask_reg4[1];
-	  jmp_mask_reg5[2]<=jmp_mask_reg4[2];
-	  jmp_mask_reg5[3]<=jmp_mask_reg4[3];
           btbx_tgt0_reg<=btbx_tgt0;
 	  btbx_tgt1_reg<=btbx_tgt1;
 	  btbx_tgt2_reg<=btbx_tgt2;
@@ -1930,10 +1889,6 @@ module frontend1(
 	  btbx_tgt1_reg4<=btbx_tgt1_reg3;
 	  btbx_tgt2_reg4<=btbx_tgt2_reg3;
 	  btbx_tgt3_reg4<=btbx_tgt3_reg3;
-	  btbx_tgt0_reg5<=btbx_tgt0_reg4;
-	  btbx_tgt1_reg5<=btbx_tgt1_reg4;
-	  btbx_tgt2_reg5<=btbx_tgt2_reg4;
-	  btbx_tgt3_reg5<=btbx_tgt3_reg4;
           btbx_attr0_reg<=btbx_attr0;
 	  btbx_attr1_reg<=btbx_attr1;
 	  btbx_attr2_reg<=btbx_attr2;
@@ -1950,10 +1905,6 @@ module frontend1(
 	  btbx_attr1_reg4<=btbx_attr1_reg3;
 	  btbx_attr2_reg4<=btbx_attr2_reg3;
 	  btbx_attr3_reg4<=btbx_attr3_reg3;
-	  btbx_attr0_reg5<=btbx_attr0_reg4;
-	  btbx_attr1_reg5<=btbx_attr1_reg4;
-	  btbx_attr2_reg5<=btbx_attr2_reg4;
-	  btbx_attr3_reg5<=btbx_attr3_reg4;
 	  btbx_jmask_reg<=(btb_way ? btb_chmaskB : btb_chmaskA)&{4{btb_hit}};
 	  iqe_jcnt_reg<=iqe_jcnt;
 	  iqe_jcnt_reg2<=iqe_jcnt_reg;
@@ -1961,34 +1912,28 @@ module frontend1(
 	  startx_reg2<=startx_reg;
 	  startx_reg3<=startx_reg2;
 	  startx_reg4<=startx_reg3;
-	  startx_reg5<=startx_reg5;
           do_seq_reg<=do_seq;
           do_seq_reg2<=do_seq_reg;
           do_seq_reg3<=do_seq_reg2;
           do_seq_reg4<=do_seq_reg3;
           do_seq_reg5<=do_seq_reg4;
-          do_seq_reg6<=do_seq_reg5;
           btb_hasTK_reg<=btb_hasTK && btb_hit;
           btb_hasTK_reg2<=btb_hasTK_reg;
           btb_hasTK_reg3<=btb_hasTK_reg2;
           btb_hasTK_reg4<=btb_hasTK_reg3;
-          btb_hasTK_reg5<=btb_hasTK_reg4;
           btbxx_way_reg<=btb_way_reg2;
           GHT_reg<=GHT;
           GHT_reg2<=GHT_reg;
           GHT_reg3<=GHT_reg2;
           GHT_reg4<=GHT_reg3;
-          GHT_reg5<=GHT_reg4;
           cc_base_off_reg<=cc_base_off;
           cc_base_off_reg2<=cc_base_off_reg;
           cc_base_off_reg3<=cc_base_off_reg2;
           cc_base_off_reg4<=cc_base_off_reg3;
-          cc_base_off_reg5<=cc_base_off_reg4;
           taken_reg<=taken;
           taken_reg2<=taken_reg;
           taken_reg3<=taken_reg2;
           taken_reg4<=taken_reg3;
-          taken_reg5<=taken_reg4;
 	  predx_sc0_reg<=predx_sc0;
 	  predx_sc1_reg<=predx_sc1;
 	  predx_sc2_reg<=predx_sc2;
@@ -2005,20 +1950,14 @@ module frontend1(
 	  predx_sc1_reg4<=predx_sc1_reg3;
 	  predx_sc2_reg4<=predx_sc2_reg3;
 	  predx_sc3_reg4<=predx_sc3_reg3;
-	  predx_sc0_reg5<=predx_sc0_reg4;
-	  predx_sc1_reg5<=predx_sc1_reg4;
-	  predx_sc2_reg5<=predx_sc2_reg4;
-	  predx_sc3_reg5<=predx_sc3_reg4;
 	  btb_can_ins_reg<=1'b1;
 	  btb_can_ins_reg2<=1'b1;
 	  btb_can_ins_reg3<=1'b1;
 	  btb_can_ins_reg4<=1'b1;
-	  btb_can_ins_reg5<=1'b1;
 	  btbx_cond_reg<=btbx_cond;
 	  btbx_cond_reg2<=btbx_cond_reg;
 	  btbx_cond_reg3<=btbx_cond_reg2;
 	  btbx_cond_reg4<=btbx_cond_reg3;
-	  btbx_cond_reg5<=btbx_cond_reg4;
 	  cc_base_IP<=cc_base_IP_d;
 	  miss_now_reg<=miss_now;
 	  IP_phys_reg<=IP_phys;
@@ -2046,35 +1985,34 @@ module frontend1(
               if (n<4) btbx_joff_reg3[n]<=btbx_joff[n];
           end
           instrFed_reg<=instrFed;
-          do_seq_reg6<=do_seq_reg5;
-          btb_hasTK_reg5<=btb_hasTK;
-          taken_reg5<=taken;
-	  predx_sc0_reg5<=predx_sc0;
-	  predx_sc1_reg5<=predx_sc1;
-	  predx_sc2_reg5<=predx_sc2;
-	  predx_sc3_reg5<=predx_sc3;
+          do_seq_reg5<=do_seq_reg4;
+          btb_hasTK_reg4<=btb_hasTK;
+          taken_reg4<=taken;
+	  predx_sc0_reg4<=predx_sc0;
+	  predx_sc1_reg4<=predx_sc1;
+	  predx_sc2_reg4<=predx_sc2;
+	  predx_sc3_reg4<=predx_sc3;
           cc_read_IP_reg4<=cc_read_IP_reg3;
           cc_read_IP_reg5<=cc_read_IP_reg4;
-          cc_read_IP_reg6<=cc_read_IP_reg5;
           btbxx_way_reg<=btb_way;
           GHT_reg4<=GHT;
-          cc_base_off_reg5<=cc_base_off_reg4;
-	  jmp_mask_reg5[0]<=jmp_mask[0];
-	  jmp_mask_reg5[1]<=jmp_mask[1];
-	  jmp_mask_reg5[2]<=jmp_mask[2];
-	  jmp_mask_reg5[3]<=jmp_mask[3];
-          btbx_tgt0_reg5<=btbx_tgt0;
-	  btbx_tgt1_reg5<=btbx_tgt1;
-	  btbx_tgt2_reg5<=btbx_tgt2;
-	  btbx_tgt3_reg5<=btbx_tgt3;
-          btbx_attr0_reg5<=btbx_attr0;
-	  btbx_attr1_reg5<=btbx_attr1;
-	  btbx_attr2_reg5<=btbx_attr2;
-	  btbx_attr3_reg5<=btbx_attr3;
+          cc_base_off_reg4<=cc_base_off_reg3;
+	  jmp_mask_reg4[0]<=jmp_mask[0];
+	  jmp_mask_reg4[1]<=jmp_mask[1];
+	  jmp_mask_reg4[2]<=jmp_mask[2];
+	  jmp_mask_reg4[3]<=jmp_mask[3];
+          btbx_tgt0_reg4<=btbx_tgt0;
+	  btbx_tgt1_reg4<=btbx_tgt1;
+	  btbx_tgt2_reg4<=btbx_tgt2;
+	  btbx_tgt3_reg4<=btbx_tgt3;
+          btbx_attr0_reg4<=btbx_attr0;
+	  btbx_attr1_reg4<=btbx_attr1;
+	  btbx_attr2_reg4<=btbx_attr2;
+	  btbx_attr3_reg4<=btbx_attr3;
 //	  iqe_jcnt_reg2<=iqe_jcnt_reg; //reg2 here at same clock as other reg3
-	  startx_reg5<=startx;//??
-	  btb_can_ins_reg5<=btb_can_ins;
-	  btbx_cond_reg5<=btbx_cond;
+	  startx_reg4<=startx;//??
+	  btb_can_ins_reg4<=btb_can_ins;
+	  btbx_cond_reg4<=btbx_cond;
 	  taken_REG<=taken;
 	  btbx_jmask_REG<=(btb_way ? btb_chmaskB : btb_chmaskA)&{4{btb_hit}};
           if (jumpTK_btb_fstall) begin
@@ -2086,12 +2024,9 @@ module frontend1(
 	      jumpTK_attr<=btbx_attr;
               jumpTK_en<=1'b1;
           end
-      end else if (btbFStall_reg4) begin
-          btb_hit_reg4<=1'b1;
-	  btb_can_ins_reg4<=btb_can_ins_reg3;
       end else if (btbFStall_reg3) begin
+          btb_hit_reg3<=1'b1;
 	  btb_can_ins_reg3<=btb_can_ins_reg2;
-	  btb_can_ins_reg2<=btb_can_ins_reg;
       end else if (btbFStall_reg2) begin
 	  btb_can_ins_reg2<=btb_can_ins_reg;
 	  btb_can_ins_reg<=btb_can_ins;
@@ -2102,16 +2037,14 @@ module frontend1(
           last_off_reg2<=4'b0;
           last_off_reg3<=4'b0;
           last_off_reg4<=4'b0;
-          last_off_reg5<=4'b0;
       end else begin
           if (~fstall) begin
             last_off_reg<=last_off;
             last_off_reg2<=last_off_reg;
             last_off_reg3<=last_off_reg2;
             last_off_reg4<=last_off_reg3;
-            last_off_reg5<=last_off_reg4;
           end else if (btbFStall_recover && ~iq_fstall && ~jq_fstall && ~fmstall) begin
-            last_off_reg5<=last_off;
+            last_off_reg4<=last_off;
           end
       end
   end
