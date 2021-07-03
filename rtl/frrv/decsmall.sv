@@ -1226,6 +1226,1125 @@ module smallInstr_decoder(
 	  default: perror[27]=1'b1;
       endcase
       
+      trien[1]=~magic[0] & subIsMovOrExt;
+      puseBConst[1]=opcode_sub==6'h29;
+      prA_use[1]=1'b0;
+      prB_use[1]=1'b1;
+      prT_use[1]=1'b1;
+      puseRs[1]=1'b1;
+      prAlloc[1]=1'b1;
+      pport[1]=PORT_ALU;
+      poperation[1][12]=1'b1;
+      case(opcode_sub)
+	6'h20,6'h29: poperation[1]=`op_mov64;
+	6'h21: poperation[1]=`op_mov32;
+	6'h22: poperation[1]=`op_zxt8_64;
+	6'h23: poperation[1]=`op_zxt16_64;
+	6'h24: poperation[1]=`op_sxt8_32;
+	6'h25: poperation[1]=`op_sxt16_32;
+	6'h26: poperation[1]=`op_sxt8_64;
+	6'h27: poperation[1]=`op_sxt16_64;
+	6'h28: poperation[1]=`op_sxt32_64;
+       endcase
+       prB[1]={instr[6],instr[11:8]};
+       prT[1]={instr[7],instr[15:12]};
+
+       trien[2]=~magic[0] & subIsCmpTest;
+       puseBConst[2]=opcode_sub[0] & ~(opcode_sub[2:1]==2'h3);
+       prA_use[2]=1'b1;
+       prB_use[2]=1'b1;
+       prT_use[2]=1'b0;
+       puseRs[2]=1'b1;
+       prAlloc[2]=1'b0;
+       pport[2]=PORT_ALU;
+       pflags_write[2]=1'b1;
+       prB[2]={instr[6],instr[11:8]};
+       prA[2]={instr[7],instr[15:12]};
+       case (opcode_sub[2:1])
+         2'h1:  poperation[2]=`op_sub64;
+         2'h2:  poperation[2]=`op_sub32;
+         2'h3:  poperation[2]=opcode_sub[0] ? `op_and64 : `op_and32;
+       endcase
+      
+       trien[3]=~magic[0] & subIsCJ;
+       pconstant[3]={{55{instr[15]}},instr[15:8],1'b0};
+       pport[3]=0;
+       pjumpType[3]=({instr[7:6],instr[1:0]}==4'hf) ? 5'h10 : 
+         {1'b0,instr[7:6],instr[1:0]};
+       
+       trien[4]=~magic[0] & subIsFPUD;
+       puseRs[4]=1'b1;
+       prAlloc[4]=1'b1;
+       poperation[4][12]=1'b0;//opcode_sub[5:1]!=5'b11100;
+       poperation[4][8]=opcode_sub[0];
+       poperation[4][9]=opcode_sub[0];
+       if (~prevSpecLoad) begin
+           prA[4]={1'b1,instr[11:8]};
+           prT[4]={1'b1,instr[11:8]};
+           prB[4]={instr[7],instr[15:12]};
+       end else begin
+           prB[4]=5'd15; //not a mistake; fpu spec instr is 15 rather than 16
+           prT[4]={1'b1,instr[11:8]};
+           prA[4]={instr[7],instr[15:12]};
+       end
+       prA_useF[4]=1'b1;
+       prB_useF[4]=1'b1;
+       prT_useF[4]=1'b1;
+       if (opcode_sub[5:1]==5'b11100) begin
+           pport[4]=PORT_FMUL;
+           poperation[4][7:0]=instr[6] ? `fop_mulDH : `fop_mulDL;
+       end else begin
+	   pport[4]=PORT_FADD;
+           if (opcode_sub[1]) begin
+               poperation[4][7:0]=instr[6] ? `fop_subDH : `fop_subDL;
+           end else begin
+               poperation[4][7:0]=instr[6] ? `fop_addDH : `fop_addDL;
+           end
+       end
+       
+       trien[5]=~magic[0] & subIsFPUPD;
+       puseRs[5]=1'b1;
+       prAlloc[5]=1'b1;
+       poperation[5][12]=opcode_sub[5:1]!=5'b11101 && opcode_sub[0] && opcode_main[6];
+       poperation[5][8]=opcode_sub[0];
+       poperation[5][9]=opcode_main[6];
+       if (~prevSpecLoad) begin
+           prA[5]={1'b1,instr[11:8]};
+           prT[5]={1'b1,instr[11:8]};
+           prB[5]={instr[7],instr[15:12]};
+       end else begin
+           prB[5]=5'd15; 
+           prT[5]={1'b1,instr[11:8]};
+           prA[5]={instr[7],instr[15:12]};
+       end
+       prA_useF[5]=1'b1;
+       prB_useF[5]=1'b1;
+       prT_useF[5]=1'b1;
+       if (opcode_sub[5:1]==5'b11101) begin
+           pport[5]=PORT_FMUL;
+           poperation[5][7:0]=`fop_mulDP;
+       end else begin
+	   pport[5]=PORT_FADD;
+           if (opcode_sub[1]) begin
+               poperation[5][7:0]=`fop_subDP;
+           end else begin
+               poperation[5][7:0]=`fop_addDP;
+           end
+       end
+       
+       trien[6]=~magic[0] & subIsSIMD;
+       puseRs[6]=1'b1;
+       prAlloc[6]=1'b1;
+       pport[6]=PORT_VADD;
+       if (~prevSpecLoad) begin
+           prA[6]={1'b1,instr[11:8]};
+           prT[6]={1'b1,instr[11:8]};
+           prB[6]={1'b1,instr[15:12]};
+       end else begin
+           prB[6]=5'd15;
+           prT[6]={1'b1,instr[11:8]};
+           prA[6]={1'b1,instr[15:12]};
+       end
+       prA_useF[6]={opcode_sub[2:1],opcode_main[7:6]}!=4'b0111;
+       prB_useF[6]=1'b1;
+       prT_useF[6]=1'b1;
+       prA_isV[6]={opcode_sub[2:1],opcode_main[7:6]}!=4'b0111;
+       prB_isV[6]=1'b1;
+       prT_isV[6]=1'b1;
+       casex({opcode_sub[2:1],opcode_main[7:6]})
+           4'b0100: poperation[6]=`simd_pxor;
+           4'b0101: poperation[6]=`simd_por;
+           4'b0110: poperation[6]=`simd_pand;
+           4'b0111: poperation[6]=`simd_pnot;
+           4'b10xx: poperation[6][7:0]={opcode_main[7:6],6'd`simd_padd};
+           4'b11xx: poperation[6][7:0]={opcode_main[7:6],6'd`simd_psub};
+       endcase              
+       trien[7]=~magic[0] & subIsFPUSngl;
+       puseRs[7]=1'b1;
+       prAlloc[7]=1'b1;
+       if (~prevSpecLoad) begin
+           prA[7]={1'b1,instr[11:8]};
+           prT[7]={1'b1,instr[11:8]};
+           prB[7]={1'b1,instr[15:12]};
+       end else begin
+           prB[7]=5'd15; 
+           prT[7]={1'b1,instr[11:8]};
+           prA[7]={1'b1,instr[15:12]};
+       end
+       prA_useF[7]=1'b1;
+       prB_useF[7]=1'b1;
+       prT_useF[7]=1'b1;
+       case({opcode_main[3],opcode_main[7:6]})
+     3'd0: begin pport[7]=PORT_FMUL; poperation[7]=`fop_mulS; end
+     3'd1: begin pport[7]=PORT_FADD; poperation[7]=`fop_addS; end
+     3'd2: begin pport[7]=PORT_FADD; poperation[7]=`fop_subS; end
+     3'd4: begin pport[7]=PORT_FMUL; poperation[7]=`fop_mulSP; end
+     3'd5: begin pport[7]=PORT_FADD; poperation[7]=`fop_addSP; end
+     3'd6: begin pport[7]=PORT_FADD; poperation[7]=`fop_subSP; end
+       endcase
+       trien[8]=~magic[0] & subIsLinkRet;
+       if (opcode_sub[1]) begin
+           //inc dec neg
+           prA[8]=instr[12:8];
+           prB[8]=instr[12:8];
+           prT[8]=instr[12:8];
+           poperation[8][2]=instr[13];
+           poperation[8][0]=instr[14];
+           poperation[8][8]=instr[15];
+           poperation[8][9]=~instr[15];
+           prA_use[8]=~instr[15];
+           prB_use[8]=1'b1;
+           puseBConst[8]=instr[15];
+           pconstant[8]=64'd1;
+           prT_use[8]=1'b1;
+           puseRs[8]=1'b1;
+           prAlloc[8]=1'b1;
+           pflags_use[8]=1'b1;
+           pflags_write[8]=1'b1;
+           if (instr[15:13]==3'h7) perror[8]=1'b1;
+       end else begin
+           pport[8]=PORT_ALU;
+           poperation[8][12]=1'b1;
+           puseBConst[8]=1'b1;
+           prB_use[8]=1'b1;
+           prA_use[8]=1'b0;
+           prT_use[8]=1'b1;
+           pisIPRel[8]=1'b1;
+           pconstant[8]={59'b0,instr[15:12],1'b0};
+           prT[8]={1'b1,instr[11:8]};
+           poperation[8][7:0]=mode64 ? `op_add64 : `op_add32;
+           puseRs[8]=1'b1;
+       end
+
+       trien[9]=magic[0] & isBasicALU & ~isBasicALUExcept;
+       puseBConst[9]=opcode_main[0];
+       poperation[9][7:0]={opcode_main[5:3],1'b0,opcode_main[1]};
+       if (opcode_main[2]) perror[9]=1; //disable 8 and 16 bit insns
+       pflags_write[9]=1'b1;
+       if (magic[1:0]==2'b01) begin
+           poperation[9][12]=instr[31];
+           pflags_write[9]=~instr[31];
+           pconstant[9]={{51{instr[30]}},instr[30:18]};
+       end
+          
+       prA_use[9]=1'b1;
+       prB_use[9]=1'b1;
+       prT_use[9]=1'b1;
+       puseRs[9]=1'b1;
+       prAlloc[9]=1'b1;
+       pport[9]=PORT_ALU;
+          
+       if (opcode_main[0]) begin
+           if (magic[1:0]==2'b01) begin
+               prA[9]={instr[17],instr[11:8]};
+               prT[9]=instr[16:12];
+               prB[9]=5'd31;
+           end else if (magic[3:0]==4'b0111) begin
+               prA[9]={instr[48],instr[11:8]};
+               prT[9]={instr[49],instr[15:12]};
+               prB[9]=5'd31;
+               perror[9]=0;
+           end else begin
+               prA[9]=instr[11:8];
+               prT[9]=instr[15:12];
+               prB[9]=5'd31;
+           end
+       end else begin
+           if (magic[1:0]==2'b01) begin
+               prA[9]={instr[17],instr[11:8]};
+               prT[9]=instr[16:12];
+               prB[9]=instr[22:18];
+           end else begin
+               perror[9]=1;
+           end
+       end
+        //  if (rT==6'd16) thisSpecAlu=1'b1;
+      
+       trien[10]=magic[0] & isBasicShift & ~isBasicShiftExcept;
+       prA_use[10]=1'b1;
+       prB_use[10]=1'b1;
+       prT_use[10]=1'b1;
+       puseRs[10]=1'b1;
+       prAlloc[10]=1'b1;
+       pport[10]=PORT_SHIFT;
+       case (opcode_main[7:0])
+       40: poperation[10]=`op_shl64;
+       41: poperation[10]=`op_sar64;
+       42: poperation[10]=`op_shr64;
+       43: poperation[10]=`op_shl32;
+       44: poperation[10]=`op_sar32;
+       45: poperation[10]=`op_shr32;
+       endcase
+            
+       if (magic[1:0]==2'b01) begin
+           if (instr[30]) begin
+               prA[10]={instr[17],instr[11:8]};
+               prT[10]=instr[16:12];
+               prB[10]=5'd31;
+               puseBConst[10]=1'b1;
+               pconstant[10]=instr[23:18];
+               pflags_use[10]=~instr[24];
+               pflags_write[10]=~instr[24];
+               poperation[10][12]=instr[24];
+           end else begin
+               prA[10]={instr[17],instr[11:8]};
+               prT[10]=instr[16:12];
+               prB[10]=instr[22:18];
+               puseBConst[10]=1'b0;
+               pflags_use[10]=~instr[24];
+               pflags_write[10]=~instr[24];
+               poperation[10][12]=instr[24];
+           end
+           poperation[10][12]=instr[24];              
+       end else begin
+           perror[10]=1'b1;
+       end
+//          if (rT==6'd16) thisSpecAlu=1'b1;
+       trien[11]=~magic[0] & subIsFPUE;
+       puseRs[11]=1'b1;
+       prAlloc[11]=1'b1;
+       if (~prevSpecLoad) begin
+           prA[11]=(opcode_main[7:6]==2'd3) ? rB_reor : rA_reor;
+           prT[11]=rA_reor;
+           prB[11]=(opcode_main[7:6]==2'd3) ? rA_reor : rB_reor;
+       end else begin
+           prA[11]=(opcode_main[7:6]==2'd3) ? 6'd15 : rA_reor;
+           prT[11]=rA_reor;
+           prB[11]=(opcode_main[7:6]==2'd3) ? rA_reor : 6'd15;
+       end
+       prA_useF[11]=1'b1;
+       prB_useF[11]=1'b1;
+       prT_useF[11]=1'b1;
+       case(opcode_main[7:6])
+     2'd0: begin pport[11]=PORT_FMUL; poperation[11]=`fop_mulEE; end
+     2'd1: begin pport[11]=PORT_FADD; poperation[11]=`fop_addEE; end
+     2'd2: begin pport[11]=PORT_FADD; poperation[11]=`fop_subEE; end
+     2'd3: begin pport[11]=PORT_FADD; poperation[11]=`fop_subEE; end
+       endcase
+
+      trien[12]=magic[0] & isBaseLoadStore;
+      poperation[12][5:0]=(opcode_main[5:3]==3'b101) ? 6'h22 : opcode_main[5:0];
+      poperation[12][12:6]=7'b0;
+      prA_use[12]=1'b0;
+      prB_use[12]=1'b1;
+      prT_use[12]=~opcode_main[0] & opcode_main[5] && opcode_main[5:3]!=3'b101;
+      prC_use[12]=opcode_main[0] & opcode_main[5];
+      prT_useF[12]=~opcode_main[0] & ~opcode_main[5];
+      prC_useF[12]=opcode_main[0] & ~opcode_main[5];
+      prT_isV[12]=~opcode_main[0] & ~opcode_main[5] & fop_v(opcode_main[4:0]);
+      puseRs[12]=1'b1;
+      prAlloc[12]=~opcode_main[0] && opcode_main[5:3]!=3'b101;
+      puseBConst[12]=1'b0;
+      pport[12]=opcode_main[0] ? PORT_STORE : PORT_LOAD;
+      if (opcode_main[0]) begin //store
+          if (magic[1:0]==2'b01) begin
+              prB[12]={instr[17],instr[11:8]};
+              prC[12]=instr[16:12];
+          end else begin
+              prC[12]={freg_vf(opcode_main[4:0],~opcode_main[5]),instr[11:8]};
+	      if (opcode_main[5] && prC[12]==REG_SP) prC[12]=5'd16;
+              prB[12]=instr[15:12];
+          end
+      //        if (prevSpecAlu) rC=6'd16;
+      end else begin
+          if (magic[1:0]==2'b01) begin
+              prB[12]={instr[17],instr[11:8]};
+              prT[12]=instr[16:12];
+          end else begin
+              prT[12]={freg_vf(opcode_main[4:0],~opcode_main[5]),instr[11:8]};
+              prB[12]=instr[15:12];
+          end
+      end
+      if (opcode_main[0] && opcode_main[5:3]==3'b101) perror[12]=1'b1;
+     //     if (prevSpecAlu) rC=6'd16;
+      trien[13]=magic[0] & isBaseIndexLoadStore;
+      if (opcode_main[7:4]==4'b0111 && opcode_main[3])
+          poperation[13][5:0]=6'd22;
+      else
+          poperation[13][5:0]=(opcode_main[7:4]==4'b0111) ? {2'b10,opcode_main[3:0]} : {1'b0,opcode_main[4:0]};
+      poperation[13][7]=1'b0;
+      poperation[13][6]=~(magic==4'b0111 && instr[57]);
+      poperation[13][9:8]=(magic[2:0]==3'b111 ? instr[53:52] : magic[1:0]==2'b01) ?
+        instr[22:21] : instr[24:23];
+      poperation[13][12:10]=3'b0;
+      prA_use[13]=~(magic==4'b0111 && instr[57]);
+      prT_use[13]=~opcode_main[0] && opcode_main[7:4]==4'b0111 && ~opcode_main[3];
+      prC_use[13]=opcode_main[0] && opcode_main[7:4]==4'b0111;
+      prT_useF[13]=~opcode_main[0] && opcode_main[7:4]!=4'b0111;
+      prT_isV[13]=~opcode_main[0] && opcode_main[7:4]!=4'b0111 && fop_v(opcode_main[4:0]);
+      prC_useF[13]=opcode_main[0] && opcode_main[7:4]!=4'b0111;
+      puseRs[13]=1'b1;
+      prAlloc[13]=~opcode_main[0] && !(opcode_main[7:4]==4'b0111 && opcode_main[3]);// & opcode_main[7:4]==4'b0111;
+      puseBConst[13]=magic==4'b0111 && instr[58];
+      pport[13]=opcode_main[0] ? PORT_STORE : PORT_LOAD;
+      if (magic[2:0]!=3'b111) pconstant[13]=(magic[1:0]==2'b11) ? {{9+32{instr[47]}},instr[47:25]} : {{23+32{instr[31]}},instr[31:23]};
+      if (opcode_main[0]) begin //store
+          if (magic==4'b0111) begin 
+              prC[13]={instr[54],instr[11:8]};
+              prB[13]={instr[55],instr[15:12]};
+              prA[13]={instr[56],instr[51:48]};
+              perror[13]=0;
+          end else begin
+              prC[13]={instr[20],instr[11:8]};
+              prB[13]={instr[21]&&magic[1:0]!=2'b01,instr[15:12]};
+              prA[13]={instr[22]&&magic[1:0]!=2'b01,instr[19:16]};
+          end 
+        //  if (prevSpecAlu) rC=6'd16;
+      end else begin
+          if (magic==4'b0111) begin 
+              prT[13]={instr[54],instr[11:8]};
+              prB[13]={instr[55],instr[15:12]};
+              prA[13]={instr[56],instr[51:48]};
+              perror[13]=0;
+          end else begin
+              prT[13]={instr[20],instr[11:8]};
+              prB[13]={instr[21]&&magic[1:0]!=2'b01,instr[15:12]};
+              prA[13]={instr[22]&&magic[1:0]!=2'b01,instr[19:16]};
+          end
+      end
+      prB_use[13]=1'b1;
+      prA_use[13]=~(magic==4'b0111 && instr[57]);
+      pisIPRel[13]=magic==4'b0111 & instr[59];
+      if (operation[9:8] && ~operation[6]) perror[13]=1;
+      if (magic[2:0]==3'b111 && instr[59] && ~instr[58]) perror[13]=1;
+      if (magic[2:0]==3'b111 && instr[63:60]) perror[13]=1;
+      if (opcode_main[0] &&opcode_main[7:4]==4'b0111 && opcode_main[3])
+          perror[13]=1;
+      
+      trien[14]=isCmov;//
+      prA[14]={instr[17],instr[11:8]};
+      prT[14]=instr[16:12];
+      prB[14]=instr[22:18];
+      prA_use[14]=1'b1;
+      prB_use[14]=1'b1;
+      prT_use[14]=1'b1;
+      puseRs[14]=1'b1;
+      prAlloc[14]=1'b1;
+      pport[14]=PORT_ALU;
+      case(instr[28:26])
+      0: begin poperation[14][7:0]=`op_clahf; prB_use[14]=1'b0; prT_use=1'b0; pflags_write[14]=1'b1; end
+      1: begin poperation[14][7:0]=`op_clahfn; prB_use[14]=1'b0; prT_use=1'b0; pflags_write[14]=1'b1; end
+      2: poperation[14][7:0]=`op_cmov64;
+      3: poperation[14][7:0]=`op_cmovn64;
+      4: poperation[14][7:0]=`op_cmov32;
+      5: poperation[14][7:0]=`op_cmovn32;
+      6: begin poperation[14][7:0]=`op_lahf; prB_use[14]=1'b0; prT_use=1'b0; pflags_write[14]=1'b1; end
+      7: begin poperation[14][7:0]=`op_sahf; prB_use[14]=1'b0; end
+      endcase
+      poperation[14][10:8]=instr[25:23];
+      poperation[14][12:11]=2'b10;
+      pflags_use[14]=1'b1;
+      
+      trien[15]=magic[0] & isBasicCmpTest; 
+	  //if there is magic, we assume immediate version
+      puseBConst[15]=instr[31] || magic[1:0]!=2'b01;
+      pport[15]=PORT_ALU;
+      pflags_write[15]=1'b1;
+      case(opcode_main)
+      46,47: poperation[15]=`op_sub64;
+      48,49: poperation[15]=`op_sub32;
+      50,51: poperation[15]=`op_and64;
+      52,53: poperation[15]=`op_and32;
+      default: perror[15]=1;
+      endcase
+      prA_use[15]=1'b1;
+      prB_use[15]=1'b1;
+      prT_use[15]=1'b0;
+      puseRs[15]=1'b1;
+      prAlloc[15]=1'b1;
+      prT[15]=5'd31;
+	 
+      if (magic[1:0]==2'b01) begin
+          prA[15]={instr[16],instr[15:12]};
+          prB[15]={instr[17],instr[11:8]};
+          if (instr[28]) perror[15]=1;
+      end else if (magic[2:0]==2'b011) begin
+          prA[15]=instr[12:8];
+          if (instr[15:13]) perror[15]=1;
+      end
+    
+  //    trien[16]=magic[0] & isCmpTestExtra; 
+	  //we don't assume immediate version; magic==3'b01
+  /*    pport[16]=PORT_ALU;
+      puseBConst[16]=1'b0;
+      pflags_write[16]=1'b1;
+      case(instr[25:23])
+      0: poperation[16]=`op_sub64;
+      1: poperation[16]=`op_sub32;
+      2: poperation[16]=`op_sub16;
+      3: poperation[16]=`op_sub8;
+      4: poperation[16]=`op_and64;
+      5: poperation[16]=`op_and32;
+      6: poperation[16]=`op_and16;
+      7: poperation[16]=`op_and8;
+      default: perror[16]=1;
+      endcase
+      prA_use[16]=1'b1;
+      prB_use[16]=1'b1;
+      prT_use[16]=1'b0;
+      puseRs[16]=1'b1;
+      prAlloc[16]=1'b1;
+      prT[16]=5'd31;
+	 
+      if (instr[25:23]==3 || instr[25:23]==7) begin //8-bit
+          poperation[16][10:8]=instr[28:26];
+      end
+          
+      prA[16]={instr[17],instr[11:8]};
+      prB[16]=instr[16:12];
+      if (instr[22:18]) perror[16]=1;
+    */ 
+      trien[17]=magic[0] & isBaseSpecLoad;
+      pport[17]=PORT_LOAD;
+      poperation[17][5:0]={opcode_main[7],instr[11:8],1'b0};
+      poperation[17][12:6]=7'b0;
+      prA_use[17]=1'b0;
+      prB_use[17]=1'b1;
+      prT_use[17]=opcode_main[7];
+      prT_useF[17]=~opcode_main[7];
+      prT_isV[17]=~opcode_main[7] & fop_v({instr[11:8],1'b0});
+      puseRs[17]=1'b1;
+      prAlloc[17]=1'b1;
+      puseBConst[17]=1'b0;
+      //if (prevSpecLoad) rT=5'd17;
+      //else 
+      prT[17]=opcode_main[7] ? 5'd16 : 5'd15;
+      pthisSpecLoad[17]=1'b1;
+          
+      if (magic[1:0]==2'b01) begin
+          prB[17]=instr[16:12];
+      end else begin
+          prB[17]={1'b0,instr[15:12]};
+      end
+      if (opcode_main[7] && instr[11]) perror[17]=1;          
+      
+      trien[18]=magic[0] & isBaseIndexSpecLoad;
+          pport[18]=PORT_LOAD;
+          poperation[18][6:0]={~(magic==4'b0111 && instr[57]),opcode_main[7],instr[11:8],1'b0};
+          poperation[18][9:8]=(magic[2:0]==3'b111 ? instr[53:52] : magic[2:0]==2'b01) ? 
+            instr[22:21] : instr[24:23];
+          poperation[18][12:10]=3'b0;
+          poperation[18][7:6]=2'b0;
+          prA_use[18]=~(magic==4'b0111 && instr[57]);
+          prT_use[18]=opcode_main[7];
+          prT_useF[18]=~opcode_main[7];
+          prT_isV[18]=~opcode_main[7] && fop_v({instr[11:8],1'b0});
+          puseRs[18]=1'b1;
+          prAlloc[18]=1'b1;
+          puseBConst[18]=magic==4'b0111 & instr[58];
+          if (magic[2:0]!=3'b111) pconstant[18]=(magic[1:0]==2'b11) ? {{9+32{instr[47]}},instr[47:25]} : {{23+32{instr[31]}},instr[31:23]};
+          perror[18]=1'b0;
+         // if (prevSpecLoad) rT=5'd17;
+         // else 
+          prT[18]=5'd16;
+          pthisSpecLoad[18]=1'b1;
+          if (magic==4'b0111) begin 
+              prB[18]={instr[55],instr[15:12]};
+              prA[18]={instr[56],instr[51:48]};
+              perror[18]=0;
+          end else if (magic[0]) begin
+              prB[18]={instr[21]&&magic[1:0]!=2'b01,instr[15:12]};
+              prA[18]={instr[22]&&magic[1:0]!=2'b01,instr[19:16]};
+          end else begin
+              perror[18]=1;
+          end
+          if (opcode_main[7] && instr[11]) perror[18]=1;          
+          prA_use[18]=~(magic==4'b0111 && instr[57]);
+          prB_use[18]=1'b1;
+          pisIPRel[18]=magic==4'b0111 && instr[59];
+          if (poperation[18][9:8] && ~poperation[18][6]) perror[18]=1;
+          if (magic[2:0]==3'b111 && instr[59] && ~instr[58]) perror[18]=1;
+          if (magic[2:0]==3'b111 && instr[63:60]) perror[18]=1;
+          if (opcode_main[7] && instr[11]) perror[18]=1'b1;          
+
+      
+      trien[19]=magic[0] & isImmLoadStore;
+      pport[19]=opcode_main[0] ? PORT_STORE : PORT_LOAD;
+      if (opcode_main[7:1]==7'b1011000 && instr[10])
+          poperation[19][5:0]=6'd22;
+      else
+          poperation[19][5:0]=( opcode_main[7:1]==7'b1011000) ? 
+          {2'b10,instr[10:8],opcode_main[0]} : {1'b0,instr[11:8],opcode_main[0]};
+      poperation[19][12:6]=7'b0;
+      pisIPRel[19]=( opcode_main[7:1]==7'b1011000) ? instr[11] : opcode_main[1];
+      prA_use[19]=1'b0;
+      prB_use[19]=1'b1;
+      prT_use[19]=~opcode_main[0] && opcode_main[7:1]==7'b1011000 && ~instr[10];
+      prC_use[19]=opcode_main[0] && opcode_main[7:1]==7'b1011000;
+      prT_useF[19]=~opcode_main[0] && opcode_main[7:1]!=7'b1011000;
+      prC_useF[19]=opcode_main[0] && opcode_main[7:1]!=7'b1011000;
+      prT_isV[19]=~opcode_main[0] && opcode_main[7:1]!=7'b1011000 && fop_v({instr[11:8],1'b0});
+      puseRs[19]=1'b1;
+      prAlloc[19]=~opcode_main[0] && !(opcode_main[7:1]==7'b1011000 && instr[10]);
+      puseBConst[19]=1'b1;
+      //if (magic[3]) perror[19]=1'b0;
+      if (opcode_main[0]) begin
+          if (magic[1:0]==2'b01) prC[19]=instr[16:12];
+          else prC[19]={freg_vf({instr[11:8],1'b0},opcode_main[7:1]!=7'b1011000),instr[15:12]};
+          if (prT[19]==REG_SP && opcode_main[7:0]==8'b10110001) begin
+              prT[19]=5'd16;
+          end
+       //   if (prevSpecAlu) rC=6'd16;
+      end else begin
+          if (magic[1:0]==2'b01) prT[19]=instr[16:12];
+          else prT[19]={freg_vf({instr[11:8],1'b0},opcode_main[7:1]!=7'b1011000),instr[15:12]};
+          if (prT[19]==REG_SP && opcode_main[7:0]==8'b10110000) begin
+              prT[19]=5'd16;
+              pthisSpecLoad[19]=1'b1;
+          end
+      end
+      if (opcode_main[0] && (opcode_main[7:1]==7'b1011000 && instr[10]))
+          perror[19]=1'b1;
+          
+      if (magic[1:0]==3'b01 && instr[17]) perror[19]=1;
+      
+      trien[20]=magic[0] & isBasicCJump;
+      puseBConst[20]=magic[1:0]!=2'b01 && instr[18];
+      poperation[20][7:0]=opcode_main[0] ? `op_sub32 : `op_sub64;
+      poperation[20][12:8]=5'b0;
+      pflags_write[20]=1'b1;
+      prA_use[20]=1'b1;
+      prB_use[20]=1'b1;
+      prT_use[20]=1'b0;
+      puseRs[20]=1'b1;
+      prAlloc[20]=1'b1;
+      if (magic[1:0]!=2'b01) pconstant[20]={{51{instr[31]}},instr[31:19]};
+         // flags_use=1'b1;          
+      pport[20]=PORT_ALU;
+          
+      prA[20]={instr[17],instr[11:8]};
+      prB[20]={instr[16],instr[15:12]};
+      prT[20]=5'd31;
+      pjumpType[20]={1'b0,(magic[1:0]==2'b01) ? instr[18] : instr[32],opcode_main[3:1]};  
+      if (puseBConst[20] && prB[20]) perror[20]=1;
+
+      trien[21]=magic[0] & isLongCondJump;
+      puseRs[21]=1'b0;
+      pjumpType[21]={1'b0,instr[11:8]};
+      pconstant[21][0]=1'b0;
+      pflags_use[21]=1'b1;
+      if (magic[1:0]==2'b01) begin
+          pconstant[21]={{43{instr[31]}},instr[31:12],1'b0};
+      end else if (~magic[0]) begin
+          perror[21]=1;
+      end 
+      
+      trien[22]=magic[0] & isSelfTestCJump;
+          //warning: if magic is 0 then error
+      pport[22]=PORT_ALU;
+      puseBConst[22]=1'b0;
+      poperation[22][7:0]=opcode_main[0] ? `op_and32 : `op_and64;
+      poperation[22][12:8]=5'b0;
+      pflags_write[22]=1'b1;
+      prA_use[22]=1'b1;
+      prB_use[22]=1'b1;
+      prT_use[22]=1'b0;
+      puseRs[22]=1'b1;
+      prAlloc[22]=1'b1;
+      pjumpType[22]={1'b0,instr[11:8]};
+      pflags_use[22]=1'b1;
+          
+      prA[22]={instr[16],instr[15:12]};
+      prB[22]={instr[16],instr[15:12]};
+      
+      trien[23]=magic[0] & isUncondJump;
+      puseRs[23]=1'b0;
+      pjumpType[23]=5'b10000;
+      /*pconstant[23][0]=1'b0;
+      if (magic[1:0]==2'b01) begin
+          pconstant[23]={{39{instr[31]}},instr[31:8],1'b0};
+      end else if (~magic[0]) begin
+          pconstant[23]={{55{instr[15]}},instr[15:8],1'b0};
+      end */
+      
+      trien[24]=magic[0] & isIndirJump;
+      pport[24]=PORT_MUL;
+      prB[24]=instr[12:8];
+      prB_use[24]=1'b1;
+      prT_use[24]=1'b0;
+      puseRs[24]=1'b1;
+      prAlloc[24]=1'b1;
+      poperation[24]=mode64 ? `op_mov64 : `op_mov32;
+      poperation[24][12]=1'b1;
+      if (magic[0]) perror[24]=1;
+      pjumpType[24]=5'b10001;
+      
+      trien[25]=magic[0] && isCall|isCallPrep|isRet;
+      if (isCall) begin
+          pport[25]=PORT_STORE; //warning: need indirect call
+          prB[25]=REG_SP;
+          prB_use[25]=1'b1;
+          prC_use[25]=1'b1;
+          puseRs[25]=1'b1;
+          prAlloc[25]=1'b0;
+          puseCRet[25]=1'b1;
+          pisIPRel[25]=1'b1;
+            //  useBSmall=1'b1;
+          poperation[25]=mode64 ? {`mop_int64,1'b1} : {`mop_int32,1'b1};
+          prC[25]=instr[12:8];
+          pconstant[25]=64'b0;
+          pjumpType[25]=5'b10000;
+      end else if (isCallPrep) begin
+        //  ppushCallStack[25]=1'b1;
+          pport[25]=PORT_ALU;
+          puseBConst[25]=1'b1;
+          prB_use[25]=1'b1;
+          prA_use[25]=1'b0;
+          prT_use[25]=1'b1;
+          pisIPRel[25]=1'b1;
+          pconstant[25]={{49{instr[31]}},instr[31:16],1'b0};
+          prT[25]=instr[12:8];
+          poperation[25][7:0]=mode64 ? `op_add64 : `op_add32;
+          puseRs[25]=1'b1;
+          poperation[25][12]=1'b1;
+      end else begin 
+          pport[25]=PORT_MUL;
+          prB[25]=instr[12:8];
+          prB_use[25]=1'b1;
+          prT_use[25]=1'b0;
+          puseRs[25]=1'b1;
+          prAlloc[25]=1'b1;
+        //  ppopCallStack[25]=1'b1;
+          poperation[25]=mode64 ? `op_mov64 : `op_mov32;
+          poperation[25][12]=1'b1;
+          pjumpType[25]=5'b10001;
+      end
+
+      trien[26]=magic[0] && isMovOrExtB && ~isMovOrExtExcept;
+      puseBConst[26]=(magic[1:0]==2'b11 || (magic[1:0]==2'b01 && instr[31]));
+      pport[26]=PORT_ALU;
+      prA_use[26]=opcode_main==8'd186||opcode_main==8'd185;
+      prB_use[26]=1'b1;
+      prT_use[26]=1'b1;
+      puseRs[26]=1'b1;
+      prAlloc[26]=1'b1;
+      if (magic[3:0]==4'hf && opcode_main!=8'd183) perror[26]=0;
+      poperation[26][12]=1'b1;
+      case(opcode_main)
+      8'd183: poperation[26][7:0]=`op_mov64;
+      8'd184: poperation[26][7:0]=`op_mov32;
+      8'd185: poperation[26][7:0]=`op_mov16;
+      8'd186: poperation[26][7:0]=`op_mov8;
+      8'd187: poperation[26][7:0]=`op_zxt8_64;
+      8'd189: poperation[26][7:0]=`op_sxt8_32;
+      endcase
+ 
+      if (magic[1:0]==2'b01) begin
+          prA[26]={instr[17],instr[11:8]};
+          prT[26]={instr[17],instr[11:8]};
+          prB[26]=instr[16:12];
+          pconstant[26]={{51{instr[30]}},instr[30:18]};
+          if (opcode_main[7:0]==8'd186) begin
+              poperation[26][8]=instr[30];
+              poperation[26][9]=instr[30];
+              poperation[26][10]=instr[29];
+          end                  
+      end else  begin
+          prA[26]=instr[12:8];
+          prT[26]=instr[12:8];
+          prB[26]=5'd31;
+	  if (~puseBConst[26]) perror[26]=1;
+      end 
+      
+      trien[27]=magic[0] && isMovOrExtA && ~isMovOrExtExcept;
+      pport[27]=PORT_ALU;
+      prA_use[27]=1'b0;
+      prB_use[27]=1'b1;
+      prT_use[27]=1'b1;
+      puseRs[27]=1'b1;
+      prAlloc[27]=1'b1;
+      poperation[27][12]=1'b1;
+      case(opcode_main)
+      8'd188: poperation[27][7:0]=`op_zxt16_64;
+      8'd190: poperation[27][7:0]=`op_sxt16_32;
+      8'd191: poperation[27][7:0]=`op_sxt8_64;
+      8'd192: poperation[27][7:0]=`op_sxt16_64;
+      8'd193: poperation[27][7:0]=`op_sxt32_64;
+      endcase
+ 
+      if (magic[1:0]==2'b01) begin
+          prA[27]={instr[17],instr[11:8]};
+          prT[27]={instr[17],instr[11:8]};
+          prB[27]=instr[16:12];
+          if (opcode_main[7:1]==7'd93 || opcode_main==8'd191) begin
+              poperation[27][8]=instr[30];
+              poperation[27][9]=instr[30];
+              poperation[27][10]=instr[29];
+              if (instr[31]) begin
+                  perror[27]=1;
+              end
+          end                  
+      end else  begin
+	  perror[27]=1'b1;
+      end
+       
+      trien[28]=magic[0] && isLeaIPRel|isCSet;
+      if (isLeaIPRel) begin
+          puseBConst[28]=1'b1;
+	  pport[28]=PORT_ALU;
+	  prB_use[28]=1'b1;
+	  prT_use[28]=1'b1;
+	  puseRs[28]=1'b1;
+	  prAlloc[28]=1'b1;
+	  poperation[28][7:0]=`op_add64;
+	  poperation[28][12]=1'b1;
+	  pisIPRel[28]=1'b1;
+	  prT[28]=instr[12:8];
+	  if (instr[15:13]) perror[28]=1;
+          poperation[28][12]=1'b1;
+          //WARNING: loads IP only; no offset
+      end else begin
+          poperation[28][7:0]=instr[12] ? `op_csetn : `op_cset;
+          poperation[28][10:8]=instr[15:13];
+          poperation[28][12]=1'b1;
+          pport[28]=PORT_ALU;
+          puseRs[28]=1'b1;
+          prAlloc[28]=1'b1;
+          prT_use[28]=1'b0;
+          pflags_use[28]=1'b1;
+          if (magic[1:0]==2'b01) prT[28]={instr[17],instr[11:8]};
+          //else if (~magic[0]) rT=instr[11:8];
+          else perror[28]=1;
+      end
+      
+      trien[29]=magic[0] & isBasicAddNoFl;
+          //if no magic, it's register-register
+      puseBConst[29]=magic[2:0]==3'b011;
+      poperation[29][11:0]=opcode_main[0] ? `op_add64 : `op_add32;
+      poperation[29][12]=1'b1;
+      pport[29]=PORT_ALU;
+      prA_use[29]=1'b1;
+      prB_use[29]=1'b1;
+      prT_use[29]=1'b1;
+      puseRs[29]=1'b1;
+      prAlloc[29]=1'b1;
+          
+      if (magic[0]) begin
+          if (magic[1:0]==2'b01) begin
+              prA[29]={instr[17],instr[11:8]};
+              prT[29]=instr[16:12];
+              prB[29]=5'd31;
+          end else begin
+              prA[29]=instr[11:8];
+              prT[29]=instr[15:12];
+              prB[29]=5'd31;
+          end
+      end else begin
+          if (~prevSpecLoad) begin
+              prA[29]=instr[15:12];
+              prT[29]=instr[15:12];
+              prB[29]=instr[11:8];
+          end else begin
+              prA[29]=instr[11:8];
+              prT[29]=instr[15:12];
+              prB[29]=5'd16;
+          end
+      end
+      //    if (rT==6'd16) thisSpecAlu=1'b1;
+      
+      trien[30]=magic[0] && isBasicMUL && ~isBasicALUExcept;
+      pport[30]=PORT_MUL;
+      prA_use[30]=1'b1;
+      prB_use[30]=1'b1;
+      prT_use[30]=1'b1;
+      puseRs[30]=1'b1;
+      prAlloc[30]=1'b1;
+      puseBConst[30]=opcode_main[0];
+      case({opcode_main[6:3],opcode_main[1]})
+	      0: poperation[30][7:0]=`op_mul32;
+	      1: poperation[30][7:0]=`op_mul32_64;
+	      2: poperation[30][7:0]=`op_mul64;
+	      3: poperation[30][7:0]=`op_lmul64;
+	      4: poperation[30][7:0]=`op_imul32;
+	      5: poperation[30][7:0]=`op_imul32_64;
+	      6: poperation[30][7:0]=`op_imul64;
+	      7: poperation[30][7:0]=`op_limul64;
+	      8: begin poperation[30][7:0]=`op_enptr; pport[30]=PORT_ALU; prB_use[30]=1'b0; end
+	      9: begin poperation[30][7:0]=`op_unptr; pport[30]=PORT_ALU; prB_use[30]=1'b0; end
+	      default: perror[30]=1'b1;
+      endcase
+      if (opcode_main[0]) begin
+           if (magic[1:0]==2'b01) begin
+               prA[30]={instr[17],instr[11:8]};
+               prT[30]=instr[16:12];
+               prB[30]=5'd31;
+           end else if (magic[3:0]==4'b0111) begin
+               prA[30]={instr[48],instr[11:8]};
+               prT[30]={instr[49],instr[15:12]};
+               prB[30]=5'd31;
+               perror[30]=0;
+           end else begin
+               prA[30]=instr[11:8];
+               prT[30]=instr[15:12];
+               prB[30]=5'd31;
+           end
+      end else begin
+           if (magic[1:0]==2'b01) begin
+               prA[30]={instr[17],instr[11:8]};
+               prT[30]=instr[16:12];
+               prB[30]=instr[22:18];
+           end else begin
+               perror[30]=1;
+           end
+      end
+	  
+/*      trien[31]=magic[0] & isRegImul;
+      pport[31]=PORT_MUL;
+      prA_use[31]=1'b1;
+      prB_use[31]=1'b1;
+      prT_use[31]=1'b1;
+      puseRs[31]=1'b1;
+      prAlloc[31]=1'b1;
+      puseBConst[31]=1'b0;
+      prA[31]={instr[17],instr[11:8]};
+      prT[31]=instr[16:12];
+      prB[31]=instr[22:18];
+      pflags_write[31]=~instr[25];
+      case(instr[24:23])
+        2'd0: poperation[31][7:0]=`op_limul64;
+        2'd1: poperation[31][7:0]=`op_imul64;
+        2'd2: poperation[31][7:0]=`op_imul32;
+        2'd3: poperation[31][7:0]=`op_imul32_64;
+      endcase
+      poperation[31][11]=1'b1;
+      poperation[31][12]=instr[25];
+  */    
+      trien[32]=magic[0] & isSimdInt;
+      puseRs[32]=1'b1;
+      prA_useF[32]=1'b1;
+      prB_useF[32]=1'b1;
+      prT_useF[32]=1'b1;
+      prA_isV[32]=1'b1;
+      prB_isV[32]=1'b1;
+      prT_isV[32]=1'b1;
+      prAlloc[32]=1'b1;
+      if ((instr[13:11]==3'd0 || instr[13:8]==6'd8 || instr[13:8]==6'd9) & ~instr[16]) begin
+          //add(s) sub(s) min max
+          pport[32]=(instr[13:9]==5'b0) ? PORT_VADD : PORT_VCMP;
+          poperation[32][5:0]=instr[13:8];
+          poperation[32][7:6]=instr[15:14];
+          prA[32]=instr[21:17];
+          prB[32]=instr[26:22]; 
+          prT[32]=instr[31:27];
+      end else if (instr[13:12]==2'b1 && ~instr[16]) begin
+          pport[32]=PORT_VCMP;
+          poperation[32][5:0]=`simd_cmp;
+          poperation[32][7:6]=instr[15:14];
+          {poperation[32][12],poperation[32][10:8]}=instr[11:8]; //compare criterion
+          prA[32]=instr[21:17];
+          prB[32]=instr[26:22];
+          prT[32]=instr[31:27];
+      end else if ((instr[13:8]==6'd10 || instr[13:8]==6'd11) & ~instr[16]) begin
+          //bitwise
+          pport[32]=PORT_VADD;
+          poperation[32][7:0]=(instr[13:8]==6'd10) ? {6'b100,instr[15:14]} : {6'b101,instr[15:14]};
+          prA[32]=instr[21:17];
+          prB[32]=instr[26:22];
+          prT[32]=instr[31:27];
+	  if (instr[15:14]==2'd3) prA_useF[32]=0;
+	  if (instr[15:14]==2'd3 && instr[21:17]) perror[32]=1;
+      end else if ((instr[13:9]==5'b0 || instr[13:8]==6'b10) & instr[16]) begin
+          pport[32]=PORT_VCMP;
+          poperation[32][5:0]=(instr[13:8]==6'b10) ? 6'd11 : {5'd6,instr[8]};
+          poperation[32][6]=instr[14];
+          perror[32]=instr[15]; //no 32and 64 bit shift for now
+          prA[32]=instr[21:17];
+          prB[32]=instr[26:22];
+          prT[32]=instr[31:27];
+      end else if (instr[13:8]==6'b11 & instr[16]) begin
+          // rA_isAnyV=1'b1;
+          prA_useF[32]=1'b0;
+          prBT_copyV[32]=1'b1;
+          pport[32]=PORT_VANY;
+          perror[32]=instr[15:14]!=2'b0; 
+          prA[32]=instr[21:17];
+          prB[32]=instr[26:22];
+          prT[32]=instr[31:27];
+          poperation[32][7:0]=8'hff;//mov 128 bit untyped
+	  if (instr[21:17]) perror[32]=1;
+      end
+      
+      trien[33]=magic[0] & isBasicFPUScalarA;
+      puseRs[33]=1'b1;
+      if (magic[1:0]!=2'b01) perror[33]=1;
+      prA[33]=instr[21:17];
+      prB[33]=instr[26:22];
+      prT[33]=instr[31:27];
+      prT_useF[33]=1'b1;
+      prA_useF[33]=1'b1;
+      prB_useF[33]=1'b1;
+      prAlloc[33]=1'b1;
+      {poperation[33][12],poperation[33][9:8]}=instr[16:14];
+      case(instr[13:8])
+          6'd0: begin poperation[33][7:0]=`fop_addDH; pport[33]=PORT_FADD; end
+          6'd1: begin poperation[33][7:0]=`fop_addDL; pport[33]=PORT_FADD; end
+          6'd2: begin poperation[33][7:0]=`fop_subDH; pport[33]=PORT_FADD; end
+          6'd3: begin poperation[33][7:0]=`fop_subDL; pport[33]=PORT_FADD; end
+          6'd4: begin poperation[33][7:0]=`fop_mulDH; perror[33]=perror[33]|instr[16]; pport[33]=PORT_FMUL; end
+          6'd5: begin poperation[33][7:0]=`fop_mulDL; perror[33]=perror[33]|instr[16]; pport[33]=PORT_FMUL; end
+          6'd6: begin poperation[33][7:0]=`fop_addDP; pport[33]=PORT_FADD; end
+          6'd7: begin poperation[33][7:0]=`fop_subDP; pport[33]=PORT_FADD; end
+          6'd8: begin poperation[33][7:0]=`fop_mulDP; perror[33]=perror[33]|instr[16]; pport[33]=PORT_FMUL; end
+          6'd9: begin poperation[33][7:0]=`fop_addsubDP; pport[33]=PORT_FADD; end
+          default: perror[33]=1;
+      endcase
+      
+      trien[34]=magic[0] & isBasicFPUScalarB;
+      puseRs[34]=1'b1;
+      if (magic[1:0]!=2'b01) perror[34]=1;
+      prA[34]=instr[21:17];
+      prB[34]=instr[26:22];
+      prT[34]=instr[31:27];
+      prT_useF[34]=1'b1;
+      prA_useF[34]=1'b1;
+      prB_useF[34]=1'b1;
+      prAlloc[34]=1'b1;
+      {poperation[34][10],poperation[34][9:8]}=instr[16:14];
+      case(instr[13:8])
+          6'd16: begin poperation[34][7:0]=`fop_addS; pport[34]=PORT_FADD; end
+          6'd17: begin poperation[34][7:0]=`fop_subS; pport[34]=PORT_FADD; end
+          6'd18: begin poperation[34][7:0]=`fop_mulS; pport[34]=PORT_FMUL; end
+          6'd19: begin poperation[34][7:0]=`fop_addSP; pport[34]=PORT_FADD; end
+          6'd20: begin poperation[34][7:0]=`fop_subSP; pport[34]=PORT_FADD; end
+          6'd21: begin poperation[34][7:0]=`fop_mulSP; pport[34]=PORT_FMUL; end
+          6'd22: begin poperation[34][7:0]=`fop_addEE; pport[34]=PORT_FADD; 
+                 prA[34]=rA_reor32; prB[34]=rB_reor32; prT[34]=rT_reor32; end
+          6'd23: begin poperation[34][7:0]=`fop_subEE; pport[34]=PORT_FADD;
+                 prA[34]=rA_reor32; prB[34]=rB_reor32; prT[34]=rT_reor32; end
+          6'd24: begin poperation[34][7:0]=`fop_mulEE; pport[34]=PORT_FADD; 
+                 prA[34]=rA_reor32; prB[34]=rB_reor32; prT[34]=rT_reor32; end
+          6'd26,6'd27: begin 
+	      poperation[34][7:0]=`fop_permDS; 
+	      pport[34]=PORT_FANY; 
+	      poperation[34][12]=instr[8];
+                 end
+          default: perror[34]=1;
+      endcase
+      
+      trien[35]=(isBasicSysInstr);
+         // if (instr[15:8]==8'hff && ~magic[0]) halt=1'b1;
+      if (instr[15:13]==3'b0) begin //write CSR
+        // constant=instr[31:16];
+          prB_use[35]=1'b1;
+          puseBConst[35]=1'b0;
+          pport[35]=PORT_MUL;
+          prA_use[35]=1'b0;
+          prB[35]=instr[12:8];            
+          poperation[35]=mode64 ? `op_mov64 : `op_mov32;
+          puseRs[35]=1'b1;
+          pjumpType[35]=5'b11001;
+          poperation[35][12]=1'b1;
+      end else if (instr[15:13]==3'd1) begin //read_CSR
+          puseRs[35]=1'b1;
+          prB_use[35]=1'b1;
+          puseBConst[35]=1'b1;
+          prT_use[35]=1'b1;
+          prT[35]=instr[12:8];
+          poperation[35]=mode64 ? `op_mov64 : `op_mov32;
+          pport[35]=PORT_ALU;
+          poperation[35][12]=1'b1;
+          prAlloc[35]=1'b1;
+	  pconstant[35]=instr[79:16];
+      end else if (instr[15:13]==3'd2) begin //iret
+          puseRs[35]=1'b1;
+          prB_use[35]=1'b1;
+          puseBConst[35]=1'b1;
+          prT_use[35]=1'b0;
+          if (instr[12:8] || ~ can_jump_csr) perror[35]=1;
+          poperation[35]=mode64 ? `op_mov64 : `op_mov32;
+          pport[35]=PORT_MUL;
+          poperation[35][12]=1'b1;
+          prAlloc[35]=1'b1;
+          pjumpType[35]=5'b10001;
+	  pconstant[35]=instr[79:16];
+      end
+      
+      trien[36]=magic[0] & isBasicFPUScalarC;
+      puseRs[36]=1'b1;
+      if (magic[1:0]!=2'b01) perror[36]=1;
+      prA[36]=instr[21:17];
+      prB[36]=instr[26:22];
+      prT[36]=instr[31:27];
+      prT_useF[36]=1'b1;
+      prA_useF[36]=1'b1;
+      prB_useF[36]=1'b1;
+      prAlloc[36]=1'b1;
+      {poperation[36][11],poperation[36][9:8]}={1'b1,{2{instr[16]}}};
+      if (instr[15:14]) perror[36]=1;
+      case(instr[13:8])
+          6'd32: begin poperation[36][7:0]=`fop_sqrtDH; pport[36]=PORT_FMUL; prB_useF[36]=1'b0; end
+          6'd33: begin poperation[36][7:0]=`fop_sqrtDL; pport[36]=PORT_FMUL; prB_useF[36]=1'b0; end
+          6'd34: begin poperation[36][7:0]=`fop_divDH; pport[36]=PORT_FMUL; end
+          6'd35: begin poperation[36][7:0]=`fop_divDL; pport[36]=PORT_FMUL; end
+          6'd36: begin poperation[36][7:0]=`fop_sqrtE; pport[36]=PORT_FMUL; prB_useF[36]=1'b0; 
+                 prA[34]=rA_reor32; prB[34]=rB_reor32; prT[34]=rT_reor32; end
+          6'd37: begin poperation[36][7:0]=`fop_divE; pport[36]=PORT_FMUL; 
+                 prA[34]=rA_reor32; prB[34]=rB_reor32; prT[34]=rT_reor32; end
+          6'd38: begin poperation[36][7:0]=`fop_sqrtS; pport[36]=PORT_FMUL; prB_useF[36]=1'b0; end
+          6'd39: begin poperation[36][7:0]=`fop_divS; pport[36]=PORT_FMUL; end
+	  6'd40,6'd41,6'd42,6'd43: begin poperation[36][7:0]=`fop_logic; poperation[36][1:0]=instr[9:8]; 
+	     pport[36]=PORT_FADD; poperation[36][10:8]={instr[16],2'b0}; end 
+          default: perror[36]=1;
+      endcase
+      
+      trien[37]=magic[0] & isBasicFPUScalarCmp;
+      puseRs[37]=1'b1;
+      if (magic[1:0]!=2'b01) perror[37]=1;
+      prA[37]=instr[21:17];
+      prB[37]=instr[26:22];
+      prT[37]=instr[31:27];
+      prT_useF[37]=1'b0;
+      prA_useF[37]=1'b1;
+      prB_useF[37]=1'b1;
+      prAlloc[37]=1'b1;
+      pflags_write[37]=1'b1;
+      poperation[37][9:8]={2{instr[16]}};
+      poperation[37][10]=instr[10]; //ordered
+      case(instr[13:8])
+          6'd32,6'd36: begin poperation[37][7:0]=`fop_cmpDH; pport[37]=PORT_FADD; end
+          6'd33,6'd37: begin poperation[37][7:0]=`fop_cmpDL; pport[37]=PORT_FADD; end
+          6'd34,6'd38: begin poperation[37][7:0]=`fop_cmpE; pport[37]=PORT_FADD; prA[37]=rA_reor32; prB[37]=rB_reor32; end
+          6'd35,6'd39: begin poperation[37][7:0]=`fop_cmpS; pport[37]=PORT_FADD; end
+	  6'd40: begin poperation[37][7:0]=`fop_tblD; pport[37]=PORT_MUL; prA_useF[37]=1'b0; prT_use[37]=1'b1; end
+	  6'd41: begin poperation[37][7:0]=`fop_cvtD; pport[37]=PORT_MUL; prA_useF[37]=1'b0; prT_use[37]=1'b1; end
+	  6'd42: begin poperation[37][7:0]=`fop_cvt32D; pport[37]=PORT_MUL; prA_useF[37]=1'b0; prT_use[37]=1'b1; end
+	  6'd43: begin poperation[37][7:0]=`fop_cvtE; pport[37]=PORT_MUL; prA_useF[37]=1'b0; prT_use[37]=1'b1; prB[37]=rB_reor32; end
+	  6'd44: begin poperation[37][7:0]=`fop_cvtS; pport[37]=PORT_MUL; prA_useF[37]=1'b0; prT_use[37]=1'b1; end
+	  6'd45: begin poperation[37][7:0]=`fop_cvt32S; pport[37]=PORT_MUL; prA_useF[37]=1'b0; prT_use[37]=1'b1; end
+          default: perror[37]=1;
+      endcase
+      //flags_write=~operation[12] & useRs || flags_wrFPU;
+      trien[38]=magic[0] & isBasicFPUScalarCmp2;
+      puseRs[38]=1'b1;
+      if (magic[1:0]!=2'b01) perror[38]=1;
+      prA[38]=instr[21:17];
+      prB[38]=instr[26:22];
+      prT_useF[38]=1'b1;
+      prT[38]=instr[31:27];
+      prA_useF[38]=1'b1;
+      prB_useF[38]=1'b1;
+      prAlloc[38]=1'b1;
+      pflags_write[38]=1'b1;
+      poperation[38][10]=instr[16]; //signed/single
+      case(instr[13:8])
+	  6'd32: begin poperation[38][7:0]=`fop_pcmplt; pport[38]=PORT_FADD; end
+	  6'd33: begin poperation[38][7:0]=`fop_pcmpge; pport[38]=PORT_FADD; end
+	  6'd34: begin poperation[38][7:0]=`fop_pcmpeq; pport[38]=PORT_FADD; end
+	  6'd35: begin poperation[38][7:0]=`fop_pcmpne; pport[38]=PORT_FADD; end
+	  6'd36: begin poperation[38][7:0]=`fop_rndES; pport[38]=PORT_FMUL; 
+                 prA[34]=rA_reor32; prB[34]=rB_reor32; prT[34]=rT_reor32; end
+	  6'd37: begin poperation[38][7:0]=`fop_rndED; pport[38]=PORT_FMUL; 
+                 prA[34]=rA_reor32; prB[34]=rB_reor32; prT[34]=rT_reor32; end
+	  6'd38: begin poperation[38][7:0]=`fop_rndDSP; pport[38]=PORT_FMUL; end
+	  6'd40: begin poperation[38][7:0]=`op_cvtE; pport[38]=PORT_MUL; pflags_write[38]=1'b0;
+	    prA_useF[38]=1'b0; prB_useF[38]=1'b0; prB_use[38]=1'b1; prT[38]=rT_reor32; end
+	  6'd41: begin poperation[38][7:0]=`op_cvtD; pport[38]=PORT_MUL; pflags_write[38]=1'b0;
+	    prA_useF[38]=1'b0; prB_useF[38]=1'b0; prB_use[38]=1'b1; end
+	  6'd42: begin poperation[38][7:0]=`op_cvtS; pport[38]=PORT_MUL; pflags_write[38]=1'b0;
+	    prA_useF[38]=1'b0; prB_useF[38]=1'b0; prB_use[38]=1'b1; end
+	    //add select instruction single,double
+	  default: perror[38]=1;
+      endcase
   end
 
 
