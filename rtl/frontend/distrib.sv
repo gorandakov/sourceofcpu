@@ -732,31 +732,6 @@ module distrib(
   assign posD4=shift_cnt_or_more[3] ? shift_index[2] : {POS_WIDTH{1'BZ}};
   assign posD3=shift_cnt_or_more[4] ? shift_index[3] : {POS_WIDTH{1'BZ}};
   
-  assign secA8=shift_cnt_or_more[1] ? 1'b0 : 1'BZ;
-  assign secA7=shift_cnt_or_more[2] ? 1'b0 : 1'BZ;
-  assign secA6=shift_cnt_or_more[3] ? 1'b0 : 1'BZ;
-  assign secA5=shift_cnt_or_more[4] ? 1'b0 : 1'BZ;
-  assign secA4=shift_cnt_or_more[5] ? 1'b0 : 1'BZ;
-  assign secA3=shift_cnt_or_more[6] ? 1'b0 : 1'BZ;
-
-  assign secB8=shift_cnt_or_more[1] ? 1'b0 : 1'BZ;
-  assign secB7=shift_cnt_or_more[2] ? 1'b0 : 1'BZ;
-  assign secB6=shift_cnt_or_more[3] ? 1'b0 : 1'BZ;
-  assign secB5=shift_cnt_or_more[4] ? 1'b0 : 1'BZ;
-  assign secB4=shift_cnt_or_more[5] ? 1'b0 : 1'BZ;
-  assign secB3=shift_cnt_or_more[6] ? 1'b0 : 1'BZ;
-
-  assign secC7=shift_cnt_or_more[1] ? 1'b0 : 1'BZ;
-  assign secC6=shift_cnt_or_more[2] ? 1'b0 : 1'BZ;
-  assign secC4=shift_cnt_or_more[3] ? 1'b0 : 1'BZ;
-  assign secC3=shift_cnt_or_more[4] ? 1'b0 : 1'BZ;
-
-  assign secD7=shift_cnt_or_more[1] ? 1'b0 : 1'BZ;
-  assign secD6=shift_cnt_or_more[2] ? 1'b0 : 1'BZ;
-  assign secD4=shift_cnt_or_more[3] ? 1'b0 : 1'BZ;
-  assign secD3=shift_cnt_or_more[4] ? 1'b0 : 1'BZ;
-  
-
 
 //holes
   assign posA8=(fmem & lsa_cnt_or_less[8] & ~shift_cnt_or_more[1]) ? {POS_WIDTH{1'B1}} : {POS_WIDTH{1'BZ}};
@@ -810,58 +785,6 @@ module distrib(
   assign posB3=(~fmem & alu_cnt[0] & ~shift_cnt_or_more[6]) ? {POS_WIDTH{1'B1}} : {POS_WIDTH{1'BZ}};
   assign posC3=(~fmem & alu_cnt[0] & ~shift_cnt_or_more[4]) ? {POS_WIDTH{1'B1}} : {POS_WIDTH{1'BZ}};
   assign posD3=(~fmem & alu_cnt[0] & ~shift_cnt_or_more[4]) ? {POS_WIDTH{1'B1}} : {POS_WIDTH{1'BZ}};
-
-  assign secA8=(fmem & lsa_cnt_or_less[8] & ~shift_cnt_or_more[1]) ? 1'B0 : 1'BZ;
-  assign secB8=(fmem & lsa_cnt_or_less[7] & ~shift_cnt_or_more[1]) ? 1'B0 : 1'BZ;
-
-  assign secA7=(fmem & lsa_cnt_or_less[7] & ~shift_cnt_or_more[2]) ? 1'B0 : 1'BZ;
-  assign secB7=(fmem & lsa_cnt_or_less[6] & ~shift_cnt_or_more[2]) ? 1'B0 : 1'BZ;
-  assign secC7=(fmem & lsa_cnt_or_less[6] & ~shift_cnt_or_more[1]) ? 1'B0 : 1'BZ;
-  assign secD7=(fmem & lsa_cnt_or_less[5] & ~shift_cnt_or_more[1]) ? 1'B0 : 1'BZ;
-
-  assign secA6=(fmem & lsa_cnt_or_less[6] & ~shift_cnt_or_more[3]) ? 1'B0 : 1'BZ;
-  assign secB6=(fmem & lsa_cnt_or_less[5] & ~shift_cnt_or_more[3]) ? 1'B0 : 1'BZ;
-  assign secC6=(fmem & lsa_cnt_or_less[5] & ~shift_cnt_or_more[2]) ? 1'B0 : 1'BZ;
-  assign secD6=(fmem & lsa_cnt_or_less[4] & ~shift_cnt_or_more[2]) ? 1'B0 : 1'BZ;
-
-  assign secA5=(fmem & lsa_cnt_or_less[5] & ~shift_cnt_or_more[4]) ? 1'B0 : 1'BZ;
-  assign secB5=(fmem & lsa_cnt_or_less[4] & ~shift_cnt_or_more[4]) ? 1'B0 : 1'BZ;
-
-  assign secA4=(fmem & lsa_cnt_or_less[4] & ~shift_cnt_or_more[5]) ? 1'B0 : 1'BZ;
-  assign secB4=(fmem & lsa_cnt_or_less[3] & ~shift_cnt_or_more[5]) ? 1'B0 : 1'BZ;
-  assign secC4=(fmem & lsa_cnt_or_less[4] & ~shift_cnt_or_more[3]) ? 1'B0 : 1'BZ;
-  assign secD4=(fmem & lsa_cnt_or_less[3] & ~shift_cnt_or_more[3]) ? 1'B0 : 1'BZ;
-
-  assign secA3=(fmem & lsa_cnt_or_less[3] & ~shift_cnt_or_more[6]) ? 1'B0 : 1'BZ;
-  assign secB3=(fmem & lsa_cnt_or_less[2] & ~shift_cnt_or_more[6]) ? 1'B0 : 1'BZ;
-  assign secC3=(fmem & lsa_cnt_or_less[3] & ~shift_cnt_or_more[4]) ? 1'B0 : 1'BZ;
-  assign secD3=(fmem & lsa_cnt_or_less[2] & ~shift_cnt_or_more[4]) ? 1'B0 : 1'BZ;
-
-  assign secA8=(~fmem & alu_cnt_or_less[5] & ~shift_cnt_or_more[1]) ? 1'B0 : 1'BZ;
-  assign secB8=(~fmem & alu_cnt_or_less[5] & ~shift_cnt_or_more[1]) ? 1'B0 : 1'BZ;
-
-  assign secA7=(~fmem & alu_cnt_or_less[4] & ~shift_cnt_or_more[2]) ? 1'B0 : 1'BZ;
-  assign secB7=(~fmem & alu_cnt_or_less[4] & ~shift_cnt_or_more[2]) ? 1'B0 : 1'BZ;
-  assign secC7=(~fmem & alu_cnt_or_less[3] & ~shift_cnt_or_more[1]) ? 1'B0 : 1'BZ;
-  assign secD7=(~fmem & alu_cnt_or_less[3] & ~shift_cnt_or_more[1]) ? 1'B0 : 1'BZ;
-
-  assign secA6=(~fmem & alu_cnt_or_less[3] & ~shift_cnt_or_more[3]) ? 1'B0 : 1'BZ;
-  assign secB6=(~fmem & alu_cnt_or_less[3] & ~shift_cnt_or_more[3]) ? 1'B0 : 1'BZ;
-  assign secC6=(~fmem & alu_cnt_or_less[2] & ~shift_cnt_or_more[2]) ? 1'B0 : 1'BZ;
-  assign secD6=(~fmem & alu_cnt_or_less[2] & ~shift_cnt_or_more[2]) ? 1'B0 : 1'BZ;
-
-  assign secA5=(~fmem & alu_cnt_or_less[2] & ~shift_cnt_or_more[4]) ? 1'B0 : 1'BZ;
-  assign secB5=(~fmem & alu_cnt_or_less[2] & ~shift_cnt_or_more[4]) ? 1'B0 : 1'BZ;
-
-  assign secA4=(~fmem & alu_cnt_or_less[1] & ~shift_cnt_or_more[5]) ? 1'B0 : 1'BZ;
-  assign secB4=(~fmem & alu_cnt_or_less[1] & ~shift_cnt_or_more[5]) ? 1'B0 : 1'BZ;
-  assign secC4=(~fmem & alu_cnt_or_less[1] & ~shift_cnt_or_more[3]) ? 1'B0 : 1'BZ;
-  assign secD4=(~fmem & alu_cnt_or_less[1] & ~shift_cnt_or_more[3]) ? 1'B0 : 1'BZ;
-
-  assign secA3=(~fmem & alu_cnt[0] & ~shift_cnt_or_more[6]) ? 1'B0 : 1'BZ;
-  assign secB3=(~fmem & alu_cnt[0] & ~shift_cnt_or_more[6]) ? 1'B0 : 1'BZ;
-  assign secC3=(~fmem & alu_cnt[0] & ~shift_cnt_or_more[4]) ? 1'B0 : 1'BZ;
-  assign secD3=(~fmem & alu_cnt[0] & ~shift_cnt_or_more[4]) ? 1'B0 : 1'BZ;
 
   assign fmem=stol ? ldst_cnt_or_more[2] : ldst_cnt_or_more[3];
   assign stol=|{storeL,storeI};
