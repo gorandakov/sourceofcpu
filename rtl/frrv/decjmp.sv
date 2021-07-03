@@ -76,8 +76,8 @@ module jump_decoder(
 	  (!instr[6] && instr[4:2]==3'b101) && opcode_main[1:0]==2'b11;
   //assign isOpFp=instr[6:2]==5'b10100 && opcode_main[1:0]==2'b11;
   //assign isFpFma=opcode_main[6:4]==2'b100 && opcode_main[1:0]==2'b11;
-  assign isJump=opcode_main[6:0]==7'b1100011;
-  assign isSys=opcode_main[6:0]==7'b1110011;
+  assign isJump=opcode_main[6:0]==5'b1100011;
+  assign isSys=opcode_main[6:0]==5'b1110011;
 
   
   
@@ -105,12 +105,11 @@ module jump_decoder(
           if (instr[15:14]==2'b11) begin
 	      jump_type={4'b0,instr[13]};
 	      is_jump=1'b1;
-	      constant={{56{instr[12]}},instr[6:5],instr[2],instr[11:10],instr[4:3],1'b0};
+	      constant={{56{instr[12]}},instr[6:5],instr[2],instr[11:10],instr[4:3],1'b0}
           end else if (instr[15:14]) begin
 	      is_jump=1'b1;
 	      jump_type=5'h10;
 	      constant={{54{instr[12]}},instr[10:9],instr[6],instr[7],instr[2],instr[11],instr[5:3],1'b0};
-          end
       end else if (subIs2xReg5Alu) begin
           casex({instr[12],instr[11:7]!=0,instr[6:2]!=0})
 	  3'b010: begin
@@ -133,7 +132,7 @@ module jump_decoder(
 	      jump_type=5'b10000;
 	  end
 	  5'b11001: begin
-	      constant={{12{instr[31]}},instr[31:12],32'd4};
+	      constant={{12{instr[31]},instr[31:12],32'd4};
 	      isIPRel=1'b1;
 	      is_jump=1'b1;
 	      jump_type=5'b11000;

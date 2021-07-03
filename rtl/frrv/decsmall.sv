@@ -223,7 +223,7 @@ module smallInstr_decoder(
   assign opcode_main=instr[7:0];
   assign opcode_sub=instr[5:0];
   
-  assign constantDef={{52{instr[31]}},instr[31:20]};
+  assign constantDef={52{instr[31],instr[31:20]};
  
   assign reor_en_out=isReor&&~reor_error;
   assign reor_val_out=isReorCall ? {1'b1,instr[24:20],instr[19:15],instr[11:7]} : {1'b0,5'd10,5'd9,5'd8};
@@ -252,7 +252,7 @@ module smallInstr_decoder(
   assign isAdvALUorJump=(instr[6:5]==2'b11 && !instr[4] && instr[2] && !(!instr[3] && instr[14:12]!=3'b0)) |
 	  (!instr[6] && instr[4:2]==3'b101) && opcode_main[1:0]==2'b11;
   assign isOpFp=instr[6:2]==5'b10100 && opcode_main[1:0]==2'b11;
-  assign isFpFma=opcode_main[6:4]==3'b100 && opcode_main[1:0]==2'b11;
+  assign isFpFma=opcode_main[6:4]==2'b100 && opcode_main[1:0]==2'b11;
   assign isJump=opcode_main[6:0]==7'b1100011;
   assign isSys=opcode_main[6:0]==7'b1110011;
   assign isExtImm=opcode_main[6:0]==7'b1011011;
@@ -626,11 +626,11 @@ module smallInstr_decoder(
       else pconstant[2]=instr[11:7]==5'd2 ? {{23{instr[12]}},instr[4:3],instr[5],instr[2],instr[6],4'b0} :
 	  {{15{instr[12]}},instr[6:2],12'b0};
       case({instr[1:0]==2'b10,instr[15:13]})
-	  4'b0: poperation[2][7:0]=`op_add64;
-	  4'b1: poperation[2][7:0]=`op_add32S;
-	  4'b10: poperation[2][7:0]=`op_mov64;
-	  4'b11: poperation[2][7:0]=instr[11:7]==5'd2 ? op_add64 : op_mov64;
-	  4'b1000: poperation[2][7:0]=`op_shl64;
+	  case 4'b0: poperation[2][7:0]=`op_add64;
+	  case 4'b1: poperation[2][7:0]=`op_add32S;
+	  case 4'b10: poperation[2][7:0]=`op_mov64;
+	  case 4'b11: poperation[2][7:0]=instr[11:7]==5'd2 ? op_add64 : op_mov64;
+	  case 4'b1000: poperation[2][7:0]=`op_shl64;
       endcase
 
       trien[3]=subIs2xReg5Alu;
@@ -742,7 +742,7 @@ module smallInstr_decoder(
       puseRs[6]=prT_use[6];
       case(instr[6:2])
 	  5'b01101,00101: begin
-	  pconstant[6]={{32{instr[31]}},instr[31:12],12'b0};
+	  pconstant[6]={{32{instr[31]},instr[31:12],12'b0};
 	  poperation[6]=op_add64;
 	  pIPRel[6]=!instr[5];
 	  pport[6]=PORT_ALU;
@@ -758,7 +758,7 @@ module smallInstr_decoder(
 	  pport[6]=PORT_ALU;
 	  end
 	  5'b11001: begin
-	  pconstant[6]={{12{instr[31]}},instr[31:12],32'd4};
+	  pconstant[6]={{12{instr[31]},instr[31:12],32'd4};
 	  poperation[6]=op_add64;
 	  pisIPRel[6]=1'b1;
 	  pisIPRelB[6]=1'b1;
@@ -845,7 +845,7 @@ module smallInstr_decoder(
       puseBConst[10]=1'b1;
       puseRs[10]=1'b1;
       pflags_write[10]=1'b1;
-      pconstant[10]={{52{instr[31]}},instr[31:20]};
+      pconstant[10]={{52{instr[31]}},instr[31:20]}
       pport[10]=PORT_ALU;
       prAlloc[10]=1'b1;
       case(instr[14:12])
@@ -866,10 +866,10 @@ module smallInstr_decoder(
       puseBConst[11]=1'b1;
       puseRs[11]=1'b1;
       pflags_write[11]=1'b1;
-      pconstant[11]={58'b0,instr[25:20]};
+      pconstant[11]={58'b0,instr[25:20]}
       pport[11]=PORT_SHIFT;
       prAlloc[11]=1'b1;
-      casex({instr[14],instr[30]})
+      casex({instr[14],instr[30])
 	  2'b0x: begin 
 	          poperation[11]=`op_shl64;
 	          if (instr[30]) perror[11]=1'b1;
@@ -887,7 +887,7 @@ module smallInstr_decoder(
       puseBConst[12]=1'b1;
       puseRs[12]=1'b1;
       pflags_write[12]=1'b1;
-      pconstant[12]={{52{instr[31]}},instr[31:20]};
+      pconstant[12]={{52{instr[31]}},instr[31:20]}
       pport[12]=PORT_ALU;
       prAlloc[12]=1'b1;
       case(instr[14:12])
@@ -903,10 +903,10 @@ module smallInstr_decoder(
       puseBConst[13]=1'b1;
       puseRs[13]=1'b1;
       pflags_write[13]=1'b1;
-      pconstant[13]={58'b0,instr[25:20]};
+      pconstant[13]={58'b0,instr[25:20]}
       pport[13]=PORT_SHIFT;
       prAlloc[13]=1'b1;
-      casex({instr[14],instr[30]})
+      casex({instr[14],instr[30])
 	  2'b0x: begin 
 	          poperation[13]=`op_shl32;
 	          if (instr[30]) perror[13]=1'b1;
@@ -947,7 +947,7 @@ module smallInstr_decoder(
       pflags_write[15]=1'b1;
       pport[15]=PORT_SHIFT;
       prAlloc[15]=1'b1;
-      casex({instr[14],instr[30]})
+      casex({instr[14],instr[30])
 	  2'b0x: begin 
 	          poperation[15]=`op_shl64;
 	          if (instr[30]) perror[11]=1'b1;
@@ -985,7 +985,7 @@ module smallInstr_decoder(
       prAlloc[17]=1'b1;
       pchain[17]=1'b1;
       popchain[17]=`op_sxt32_64|4096;
-      casex({instr[14],instr[30]})
+      casex({instr[14],instr[30])
 	  2'b0x: begin 
 	          poperation[17]=`op_shl32;
 	          if (instr[30]) perror[11]=1'b1;
@@ -1003,7 +1003,7 @@ module smallInstr_decoder(
       puseBConst[18]=1'b1;
       puseRs[18]=1'b1;
       pflags_write[18]=1'b1;
-      pconstant[18]={{52{instr[31]}},instr[31:20]};
+      pconstant[18]={{52{instr[31]}},instr[31:20]}
       pport[18]=PORT_ALU;
       prAlloc[18]=1'b1;
       case(instr[14:12])
@@ -1025,7 +1025,7 @@ module smallInstr_decoder(
       puseBConst[19]=1'b1;
       puseRs[19]=1'b1;
       pflags_write[19]=1'b1;
-      pconstant[19]={59'b0,instr[24:20]};
+      pconstant[19]={59'b0,instr[24:20]}
       pport[19]=PORT_SHIFT;
       prAlloc[19]=1'b1;
       case(instr[26:25])
@@ -1044,7 +1044,7 @@ module smallInstr_decoder(
       puseBConst[20]=1'b1;
       puseRs[20]=1'b1;
       pflags_write[20]=1'b1;
-      pconstant[20]={{52{instr[31]}},instr[31:20]};
+      pconstant[20]={{52{instr[31]}},instr[31:20]}
       pport[20]=PORT_ALU;
       prAlloc[20]=1'b1;
       case(instr[14:12])
@@ -1104,8 +1104,8 @@ module smallInstr_decoder(
       pport[23]=PORT_ALU;
       prAlloc[23]=1'b1;
       case(instr[28])
-	  1'b0: poperation[23]=`op_sadd_even|{2'b10,instr[27:25],8'b0};
-	  1'b1: poperation[23]=`op_sadd_odd|{2'b10,instr[27:25],8'b0};
+	  1'b0: poperation[23]=`op_sadd|{2'b10,instr[27:25],8'b0};
+	  1'b1: poperation[23]=`op_saddn|{2'b10,instr[27:25],8'b0};
       endcase
 
       trien[24]=isBasicALU|isBasicALU32 && instr[31:25]==7'b1 && !instr[14];
