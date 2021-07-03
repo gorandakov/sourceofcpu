@@ -1074,8 +1074,6 @@ module backend(
   wire [8:0][FN_WIDTH-1:0] newU;
   wire [8:0][1:0] newD;
 
-  wire [64:0] JALR_ip;
-  wire JALR_exc;
 //  reg [REG_WIDTH-1:0] newU_reg[8:0];
 
 
@@ -4719,8 +4717,6 @@ module backend(
     .u6_A_fufwd(fuFwdA[6+2]),.u6_A_fuufwd(fuuFwdA[6+2]),
     .u6_B_fufwd(fuFwdB[6+2]),.u6_B_fuufwd(fuuFwdB[6+2]),
     .u6_S_fufwd(fuFwdS[6+2]),.u6_S_fuufwd(fuuFwdS[6+2]),
-    .u6_constant(outDataC2[2]),.u6_cxen(outCxEn[2]),
-    .cin_seq_jmp(JALR_exc),.valJmp(JALR_ip),
   .FU0(FU[0]), .FU1(FU[1]),  .FU2(FU[2]),  .FU3(FU[3]),
   .FU4(FU[4]), .FU5(FU[5]),  .FU6(FU[6]),  .FU7(FU[7]),
   .FU8(FU[8]), .FU9(FU[9]),
@@ -5385,8 +5381,8 @@ dcache1 L1D_mod(
   .ret2_addr(outII_reg6[4]),.ret2_data({1'b0,fret[2]}),.ret2_wen(fret_en[2]),
   .ret3_addr(outII_reg8[5]),.ret3_data({1'b0,fret[3]}),.ret3_wen(fret_en[3]),
   .ret4_addr(outII_reg6[7]),.ret4_data({1'b0,fret[4]}),.ret4_wen(fret_en[4]),
-  .ret5_addr(outII_reg8[8]),.ret5_data(~JALR_exc & ~outCxEn_reg[2] ? 14'h59 : {1'b0,fret[5]}),.ret5_wen(fret_en[5]),
-    .ret5_IP(JALR_ip),.ret5_IP_en(alu_jupdate),
+  .ret5_addr(outII_reg8[8]),.ret5_data({1'b0,fret[5]}/*h*/),.ret5_wen(fret_en[5]),
+    .ret5_IP(FU_reg[9]),.ret5_IP_en(alu_jupdate),
   .ret6_addr(lsr3_II_reg2),.ret6_data({1'b1,p3_ret_reg2}),.ret6_wen(FU3Hit & p_lsfwd_reg2[3]),
   .ret7_addr(lsr2_II_reg2),.ret7_data({1'b1,p2_ret_reg2}),.ret7_wen(({FU2Hit,FU1Hit,FU0Hit}&p_lsfwd_reg2[2:0])!=3'b0),
   .mem_II_upper(retM_II0),
