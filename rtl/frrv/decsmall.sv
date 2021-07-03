@@ -118,9 +118,9 @@ module smallInstr_decoder(
   output isIPRel;
   output rAlloc;
   input reor_en;
-  input [15:0] reor_val;
+  input [39:0] reor_val;
   output reor_en_out;
-  output [15:0] reor_val_out;
+  output [39:0] reor_val_out;
   output wire error;
   //7:0 free 15:8 unfree 39:16 fxch/pop/push 
   wire [3:0] magic;
@@ -128,11 +128,13 @@ module smallInstr_decoder(
 //  wire isAvx;
   wire [7:0] opcode_main;
 
-  reg [15:0] fpu_reor;
+  reg [31:0] fpu_reor;
 
-  reg [5:0] rS1;
-  reg [5:0] rS2;
-  reg [5:0] rD;
+  reg [3:0] rA_reor;
+  reg [3:0] rB_reor;
+  reg [4:0] rA_reor32;
+  reg [4:0] rB_reor32;
+  reg [4:0] rT_reor32;
   reg reor_error;
 
   wire isBasicALU;
@@ -279,16 +281,12 @@ module smallInstr_decoder(
   assign constantDef=(magic[1:0]==2'b01) ? {{18{instr[31]}},instr[31:18]} : 32'bz;
   assign constantDef=(~magic[0]) ? {26'b0,~instr[7] && instr[15:12]==4'b0,instr[7],instr[15:12]} : 32'bz;
  
-  assign reor_en_out=isReor&&~reor_error;
-  assign reor_val_out=isReorCall ? {1'b1,instr[24:20],instr[19:15],instr[11:7]} : {1'b0,5'd10,5'd9,5'd8};
-
-  assign isReor=isAMO||(isBasicALU|isBasicALU32 && instr[31:25]==7'b1 && instr[14])||
-	  (isSys&&instr[13:12]!=2'b0);
-  assign isReorCall=isAMO||(isBasicALU|isBasicALU32 && instr[31:25]==7'b1 && instr[14])||
-	  (isSys&&instr[13:12]!=2'b0); 
+  assign reor_en_out=isFPUreor&&~reor_error;
+  assign reor_val_out=instr[47:8];
+ 
 
   assign subIsBasicLDST=instr[14:13]!=2'b0 && instr[1:0]==2'b0;
-  assign subIsStackLDST=instr[14:13]!=2'b0 && instr[1:0]==2'b10 && !(intr[15:14]==2'b01 && instr[11:7]==5'b0);
+  assign subIsStackLDST=instr[14:13]!=2'b0 && instr[1:0]==2'b10 && !(intr[15:14]=2'b01 && instr[11:7]==5'b0);
   
   assign subIsBasicImmAluReg5=(instr[1:0]==2'b01 && (instr[15:13]==3'b0 || (instr[15:13]==3'b1 &&
    instr[11:7]!=5'b0) || (instr[15:14]==2'b1 && instr[11:7]!=5'b0 && 
@@ -296,23 +294,16 @@ module smallInstr_decoder(
   assign subIs2xReg5Alu=instr[1:0]==2'b10 && instr[15:13]==3'b100;
   assign subIsReg3Alu=instr[1:0]==2'b1 && instr[15:13]==3'b100 && !(instr[12:10]==3'b111 && instr[6]);
   assign subIsJMP=instr[1:0]==2'b1 && (instr[15:13]==3'b101 || instr[15:14]==2'b11);
-  assign subIsAddI4=instr[15:13]==3'b0 && instr[1:0]==2'b0 && instr[12:5]!=8'b0;
-
 
   assign isLoad=opcode_main[6:3]==4'b0 && opcode_main[1:0]==2'b11;
   assign isStore=opcode_main[6:3]==4'b0100 && opcode_main[1:0]==2'b11;
   assign isBasicALU=!opcode_main[6] && opcode_main[4:2]==3'b100 && opcode_main[1:0]==2'b11;
   assign isBasicALU32=!opcode_main[6] && opcode_main[4:2]==3'b110 && opcode_main[1:0]==2'b11;
-  assign isAdvALUorJump=(instr[6:5]==2'b11 && !instr[4] && instr[2] && !(!instr[3] && instr[14:12]!=3'b0)) |
-	  (!instr[6] && instr[4:2]==3'b101) && opcode_main[1:0]==2'b11;
+  assign isAdvALUorJump=(instr[6:5]==2'b11 && instr[4] && instr[2]) |
+	  (instr[6] && instr[4:2]==3'b101) && opcode_main[1:0]==2'b11;
   assign isOpFp=instr[6:2]==5'b10100 && opcode_main[1:0]==2'b11;
   assign isFpFma=opcode_main[6:4]==2'b100 && opcode_main[1:0]==2'b11;
-  assign isJump=opcode_main[6:0]==7'b1100011;
-  assign isSys=opcode_main[6:0]==7'b1110011;
-  assign isExtImm=opcode_main[6:0]==7'b1011011;
-  assign isExtALU=opcode_main[6:0]==7'b1111011;
-  assign isAMO=instr[6:2]==5'b01011 && instr[1:0]==2'b11;
-  
+
   assign qconstant[1]=pconstant[3];//??
   assign qtrien   [1]=trien    [3];//??
   assign qconstant[2]=pconstant[8];
@@ -587,22 +578,11 @@ module smallInstr_decoder(
 	      reor_val_out[17:15]!=tt[2:0]&&reor_val_out[20:18]!=tt[2:0]&&reor_val_out[23:21]!=tt[2:0]);   
 	  end
       end
-      
-      if (instr[11:7]==5'd8)       rD={1'b0,reor_val[4:0]};
-      else if (instr[11:7]==5'd9)  rD={1'b0,reor_val[9:5]};
-      else if (instr[11:7]==5'd10) rD={1'b0,reor_val[14:0]};
-      else if (!instr[11])         rD={reor_val[15],instr[11:7]};
-      else                         rD={1'b0,instr[11:7]};
-      if (instr[19:15]==5'd8)       rS1={1'b0,reor_val[4:0]};
-      else if (instr[19:15]==5'd9)  rS1={1'b0,reor_val[9:5]};
-      else if (instr[19:15]==5'd10) rS1={1'b0,reor_val[14:0]};
-      else if (!instr[19])          rS1={reor_val[15],instr[19:15]};
-      else                          rS1={1'b0,instr[19:15]};
-      if (instr[24:20]==5'd8)       rS2={1'b0,reor_val[4:0]};
-      else if (instr[24:20]==5'd9)  rS2={1'b0,reor_val[9:5]};
-      else if (instr[24:20]==5'd10) rS2={1'b0,reor_val[14:0]};
-      else if (!instr[24])          rS2={reor_val[15],instr[24:20]};
-      else                          rS2={1'b0,instr[24:20]};
+      rA_reor=instr[11] ? instr[11:8] : {1'b0,fpu_reor[3*instr[10:8]+:3]};
+      rB_reor=instr[15] ? instr[15:12] : {1'b0,fpu_reor[3*instr[14:12]+:3]};
+      rA_reor32=instr[21:20]!=2'b0 ? instr[21:17] : {2'b0,fpu_reor[3*instr[19:17]+:3]};
+      rB_reor32=instr[26:25]!=2'b0 ? instr[26:22] : {2'b0,fpu_reor[3*instr[24:22]+:3]};
+      rT_reor32=instr[31:30]!=2'b0 ? instr[31:27] : {2'b0,fpu_reor[3*instr[29:27]+:3]};
       
       trien[0]=subIsBasicLDST;
       poperation[0]=instr[14] ? {10'h1,instr[14],instr[15]} : {8'b0,~instr[15],instr[15],2'b1,instr[15]};
@@ -678,21 +658,19 @@ module smallInstr_decoder(
 	  3'b010: begin
 	      jump_type[3]=5'h11;
 	      is_jump[3]=1'b1;
-	      rB[3]={1'b0,instr[11:7]};
-	      puseBCxCross[3]=1'b1;
-	      poperation[3]=`op_add64|4096;
+	      rA[3]={1'b0,instr[11:7]};
+	      poperation[3]=`op_mov64|4096;
 	      pport[3]=PORT_MUL;
 	  end
 	  3'b110: begin
 	      jump_type[3]=5'h11;
 	      is_jump[3]=1'b1;
-	      prB[3]={1'b0,instr[11:7]};
+	      prA[3]={1'b0,instr[11:7]};
 	      puseBConst[3]=1'b1;
-	      puseBCxCross[3]=1'b1;
-	      pconstant[3]={32'b0,32'd4};
+	      pconstant[3]=0;
 	      pIPRel[3]=1'b1;
 	      prT[3]=6'd1;
-	      poperation[3]=`op_add64|4096;
+	      poperation[3]=`op_mov64|4096;
 	      pport[3]=PORT_MUL;
 	  end
 	  3'b0x1: begin
@@ -717,7 +695,7 @@ module smallInstr_decoder(
       endcase
       //need to add rA output from mul port of ALU
 
-      trien[4]=subIs3RegAlu;
+      ptrien[4]=subIs3RegAlu;
       puseBConst[4]=~instr[11] | ~instr[10];
       prA_use[4]=1'b1;
       prB_use[4]=1'b1;
@@ -741,39 +719,10 @@ module smallInstr_decoder(
 	  5'b11101: begin poperation[4]=`op_add32S; pport[4]=PORT_ALU; end
       endcase
 
-      trien[5]=subIsAddI4 | subIsJmp;
-      if (instr[15:14]==2'b11) begin
-	  poperation[5]=`op_and64;
-	  prA[5]={3'b1,instr[9:7]};
-	  prB[5]={3'b1,instr[9:7]};
-	  prA_use[5]=1'b1;
-	  prB_use[5]=1'b1;
-	  puseRs[5]=1'b1;
-	  pflags_write[5]=1'b1;
-	  prAlloc[5]=1'b1;
-	  pjump_type[5]={4'b0,instr[13]};
-	  pis_jump=1'b1;
-      end else if (instr[15:14]) begin
-	  pis_jump[5]=1'b1;
-	  pjump_type[5]=5'h10;
-      end else begin
-	  poperation[5]=`op_add64;
-	  prA[5]=6'd2;
-	  prT[5]={3'b1,instr[9:7]};
-	  prA_use[5]=1'b1;
-	  prB_use[5]=1'b1;
-	  prT_use[5]=1'b1;
-	  puseBConst[5]=1'b1;
-	  puseRs[5]=1'b1;
-	  pflags_write[5]=1'b1;
-	  prAlloc[5]=1'b1;
-	  pconstant[5]={54'b0,instr[10:7],instr[12:11],instr[5],instr[6],2'b0};
-      end
-
-      trien[6]=isAdvALUorJump;
+      ptrien[6]=isAdvALUorJump;
       puseBConst[6]=!(instr[6:2]==5'b11001);
       puseBCxCross[6]=instr[6:2]==5'b11001;
-      prT[6]={rD};
+      prT[6]=instr[11:7];
       prT_use[6]=!(instr[6:2]==5'b11011 && prT[6]==6'd0);
       puseRs[6]=prT_use[6];
       case(instr[6:2])
@@ -781,451 +730,11 @@ module smallInstr_decoder(
 	  pconstant[6]={{32{instr[31]},instr[31:12],12'b0};
 	  poperation[6]=op_add64;
 	  pIPRel[6]=!instr[5];
-	  pport[6]=PORT_ALU;
-	  end
-	  5'b11011: begin
-	  pconstant[6]=64'd4;
-	  poperation[6]=op_add64;
-	  pIPRel[6]=1'b1;
-	  puseBConst[6]=1'b1;
-	  prB_use=1'b1;
-	  pis_jump[6]=1'b1;
-	  pjump_type[6]=5'b10000;
-	  pport[6]=PORT_ALU;
-	  end
-	  5'b11001: begin
-	  pconstant[6]={{12{instr[31]},instr[31:12],32'd4};
-	  poperation[6]=op_add64;
-	  pIPRel[6]=1'b1;
-	  pis_jump[6]=1'b1;
-	  pjump_type[6]=5'b11000;
-	  pport[6]=PORT_MUL;
-	  puseBConst[6]=1'b1;
-	  puseBCxCross[6]=1'b1;
-	  prB[6]=rS1;
-	  prB_use[6]=1'b1;
 	  end
       endcase
 
-      trien[7]=isJump;
-      poperation[7]=`op_sub64;
-      prA[7]=rS1;
-      prB[7]=rS2;
-      prA_use[7]=1'b1;
-      prB_use[7]=1'b1;      
-      prAlloc[7]=1'b1;
-      pflags_write[7]=1'b1;
-      puseRs[7]=1'b1;
-      pis_jump[7]=1'b1;
-      pport[7]=PORT_ALU;
-     // pconstant[7]={instr[31],instr[7],instr[30:25],instr[11:8],1'b0}
-      casex(instr[14:12])
-          3'b00x: pjumptype[7]={4'b0,instr[12]};
-	  3'b100: pjumptype[7]=5'd11;
-	  3'b101: pjumptype[7]=5'd10;
-	  3'b110: pjumptype[7]=5'd7;
-	  3'b111: pjumptype[7]=5'd6;
-	  default: perror[7]=1'b1;
-      endcase
+      
 
-      trien[8]=isLoad&!instr[2];
-      prT[8]=rD;
-      prB[8]=rS1;
-      prT_use[8]=1'b1;
-      prB_use[8]=1'b1;
-      pconstant[8]={{52{instr[31]}},instr[31:20]};
-      prAlloc[8]=1'b1;
-      puseRs[8]=1'b1;
-      pport[8]=PORT_LOAD;
-      casex(instr[14:12])
-          3'b100,3'b101,3'b110,3'b011: poperation[8][7:0]={5'b100,instr[13:12],1'b0};
-	  3'b000: begin
-		  pchain_alu[8]=1'b1;
-		  poperation[8][7:0]={5'b100,instr[13:12],1'b0};
-		  popchain[8]=`op_sxt8_64|4096;
-	      end
-
-	  3'b001: begin
-		  pchain_alu[8]=1'b1;
-		  poperation[8][7:0]={5'b100,instr[13:12],1'b0};
-		  popchain[8]=`op_sxt16_64|4096;
-	      end
-	  3'b010: begin
-		  pchain_alu[8]=1'b1;
-		  poperation[8][7:0]={5'b100,instr[13:12],1'b0};
-		  popchain[8]=`op_sxt32_64|4096;
-	      end
-	  3'b111: perror[8]=1'b1;
-      endcase
-
-      trien[9]=isStore&!instr[2];
-      prC[9]=rS2;
-      prB[9]=rS1;
-      prC_use[9]=1'b1;
-      prB_use[9]=1'b1;
-      pconstant[9]={{52{instr[31]}},instr[31:25],rD};
-      prAlloc[9]=1'b0;
-      puseRs[9]=1'b1;
-      pport[9]=PORT_STORE;
-      poperation[9][7:0]={5'b100,instr[13:12],1'b1};
-      perror[9]=instr[14];
-      
-     
-      trien[10]=isBasicALU && instr[6:5]==2'b0 && instr[13:12]!=2'b01;//non shift immediate
-      prT[10]=rD;
-      prA[10]=rS1;
-      prT_use[10]=1'b1;
-      prA_use[10]=1'b1;
-      prB_use[10]=1'b1;
-      puseBConst[10]=1'b1;
-      puseRs[10]=1'b1;
-      pflags_write[10]=1'b1;
-      pconstant[10]={{52{instr[31]}},instr[31:20]}
-      pport[10]=PORT_ALU;
-      prAlloc[10]=1'b1;
-      case(instr[14:12])
-	  3'b000: poperation[10]=`op_add64;
-	  3'b010: begin poperation[10]=`op_sub64; pchainfl_alu[10]=1'b1; prT_use[10]=1'b1; popchain[10]=`op_csetn|13'b10100000000|4096; end//uxuss
-	  3'b011: begin poperation[10]=`op_sub64; pchainfl_alu[10]=1'b1; prT_use[10]=1'b1; popchain[10]=`op_csetn|13'b01100000000|4096; end//suxuss
-	  3'b100: poperation[10]=`op_xor64;
-	  3'b110: poperation[10]=`op_or64;
-	  3'b111: poperation[10]=`op_and64;
-      endcase
-       
-      trien[11]=isBasicALU && instr[6:5]==2'b0 && instr[13:12]==2'b01 && !instr[31] && instr[29:26]==4'b0;//shift immediate
-      prT[11]=rD;
-      prA[11]=rS1;
-      prT_use[11]=1'b1;
-      prA_use[11]=1'b1;
-      prB_use[11]=1'b1;
-      puseBConst[11]=1'b1;
-      puseRs[11]=1'b1;
-      pflags_write[11]=1'b1;
-      pconstant[11]={58'b0,instr[25:20]}
-      pport[11]=PORT_SHIFT;
-      prAlloc[11]=1'b1;
-      casex({instr[14],instr[30])
-	  2'b0x: begin 
-	          poperation[11]=`op_shl64;
-	          if (instr[30]) perror[11]=1'b1;
-              end
-	  2'b10: poperation[11]=`op_shr64;
-	  2'b11: poperation[11]=`op_sar64;
-      endcase
-      
-      trien[12]=isBasicALU32 && instr[6:5]==2'b0 && instr[13:12]!=2'b01 && instr[14:12]==3'b0;//non shift immediate
-      prT[12]=rD;
-      prA[12]=rS1;
-      prT_use[12]=1'b1;
-      prA_use[12]=1'b1;
-      prB_use[12]=1'b1;
-      puseBConst[12]=1'b1;
-      puseRs[12]=1'b1;
-      pflags_write[12]=1'b1;
-      pconstant[12]={{52{instr[31]}},instr[31:20]}
-      pport[12]=PORT_ALU;
-      prAlloc[12]=1'b1;
-      case(instr[14:12])
-	  3'b000: poperation[12]=`op_add32S;
-      endcase
-       
-      trien[13]=isBasicALU32 && instr[6:5]==2'b0 && instr[13:12]==2'b01 && !instr[31] && instr[29:25]==5'b0;//shift immediate
-      prT[13]=rD;
-      prA[13]=rS1;
-      prT_use[13]=1'b1;
-      prA_use[13]=1'b1;
-      prB_use[13]=1'b1;
-      puseBConst[13]=1'b1;
-      puseRs[13]=1'b1;
-      pflags_write[13]=1'b1;
-      pconstant[13]={58'b0,instr[25:20]}
-      pport[13]=PORT_SHIFT;
-      prAlloc[13]=1'b1;
-      casex({instr[14],instr[30])
-	  2'b0x: begin 
-	          poperation[13]=`op_shl32;
-	          if (instr[30]) perror[13]=1'b1;
-              end
-	  2'b10: poperation[13]=`op_shr32;
-	  2'b11: poperation[13]=`op_sar32;
-      endcase
-      
-      trien[14]=isBasicALU && instr[6:5]!=2'b0 && instr[13:12]!=2'b01 && !instr[31] && instr[29:25]==5'b0;//non shift reg
-      prT[14]=rD;
-      prA[14]=rS1;
-      prB[14]=rS2;
-      prT_use[14]=1'b1;
-      prA_use[14]=1'b1;
-      prB_use[14]=1'b1;
-      puseRs[14]=1'b1;
-      pflags_write[14]=1'b1;
-      pport[14]=PORT_ALU;
-      prAlloc[14]=1'b1;
-      case({instr[30],instr[14:12]})
-	  4'b0000: poperation[14]=`op_add64;
-	  4'b1000: poperation[14]=`op_sub64;
-	  4'b010: begin poperation[14]=`op_sub64; pchainfl_alu[10]=1'b1; prT_use[10]=1'b1; popchain[10]=`op_csetn|13'b10100000000|4096; end//uxuss
-	  4'b011: begin poperation[14]=`op_sub64; pchainfl_alu[10]=1'b1; prT_use[10]=1'b1; popchain[10]=`op_csetn|13'b01100000000|4096; end//suxuss
-	  4'b100: poperation[14]=`op_xor64;
-	  4'b110: poperation[14]=`op_or64;
-	  4'b111: poperation[14]=`op_and64;
-      endcase
-       
-      trien[15]=isBasicALU && instr[6:5]!=2'b0 && instr[13:12]==2'b01 && !instr[31] && instr[29:25]==5'b0;//shift reg
-      prT[15]=rD;
-      prA[15]=rS1;
-      prB[15]=rS2;
-      prT_use[15]=1'b1;
-      prA_use[15]=1'b1;
-      prB_use[15]=1'b1;
-      puseRs[15]=1'b1;
-      pflags_write[15]=1'b1;
-      pport[15]=PORT_SHIFT;
-      prAlloc[15]=1'b1;
-      casex({instr[14],instr[30])
-	  2'b0x: begin 
-	          poperation[15]=`op_shl64;
-	          if (instr[30]) perror[11]=1'b1;
-              end
-	  2'b10: poperation[15]=`op_shr64;
-	  2'b11: poperation[15]=`op_sar64;
-      endcase
-      
-      trien[16]=isBasicALU32 && instr[6:5]!=2'b0 && instr[14:12]==3'b0 && !instr[31] && instr[29:25]==5'b0;//non shift reg
-      prT[16]=rD;
-      prA[16]=rS1;
-      prB[16]=rS2;
-      prT_use[16]=1'b1;
-      prA_use[16]=1'b1;
-      prB_use[16]=1'b1;
-      puseRs[16]=1'b1;
-      pflags_write[16]=1'b1;
-      pport[16]=PORT_ALU;
-      prAlloc[16]=1'b1;
-      case({instr[30],instr[14:12]})
-	  4'b0000: poperation[16]=`op_add32S;
-	  4'b1000: poperation[16]=`op_sub32S;
-      endcase
-       
-      trien[17]=isBasicALU32 && instr[6:5]!=2'b0 && instr[13:12]==2'b01 && !instr[31] && instr[29:25]==5'b0;//shift reg
-      prT[17]=rD;
-      prA[17]=rS1;
-      prB[17]=rS2;
-      prT_use[17]=1'b1;
-      prA_use[17]=1'b1;
-      prB_use[17]=1'b1;
-      puseRs[17]=1'b1;
-      pflags_write[17]=1'b1;
-      pport[17]=PORT_SHIFT;
-      prAlloc[17]=1'b1;
-      pchain_alu[17]=1'b1;
-      popchain[17]=`op_sxt32_64|4096;
-      casex({instr[14],instr[30])
-	  2'b0x: begin 
-	          poperation[17]=`op_shl32;
-	          if (instr[30]) perror[11]=1'b1;
-              end
-	  2'b10: poperation[17]=`op_shr32;
-	  2'b11: poperation[17]=`op_sar32;
-      endcase
-      
-      trien[18]=isExtImm && instr[14:12]!=3'b001;//non shift immediate
-      prT[18]=rD;
-      prA[18]=rS1;
-      prT_use[18]=1'b1;
-      prA_use[18]=1'b1;
-      prB_use[18]=1'b1;
-      puseBConst[18]=1'b1;
-      puseRs[18]=1'b1;
-      pflags_write[18]=1'b1;
-      pconstant[18]={{52{instr[31]}},instr[31:20]}
-      pport[18]=PORT_ALU;
-      prAlloc[18]=1'b1;
-      case(instr[14:12])
-	  3'b000: poperation[18]=`op_add32;
-	  3'b010: poperation[18]=`op_sub32; 
-	  3'b011: begin poperation[18]=`op_mul64|2048; pport[18]=PORT_MUL;  end//suxuss
-	  3'b100: poperation[18]=`op_xor32;
-	  3'b110: poperation[18]=`op_or32;
-	  3'b111: poperation[18]=`op_and32;
-	  3'b101: poperation[18]=`op_sub64;
-      endcase
-       
-      trien[19]=isExtImm && instr[14:12]==3'b001 && instr[31:27]==5'b0;//shift immediate
-      prT[19]=rD;
-      prA[19]=rS1;
-      prT_use[19]=1'b1;
-      prA_use[19]=1'b1;
-      prB_use[19]=1'b1;
-      puseBConst[19]=1'b1;
-      puseRs[19]=1'b1;
-      pflags_write[19]=1'b1;
-      pconstant[19]={59'b0,instr[24:20]}
-      pport[19]=PORT_SHIFT;
-      prAlloc[19]=1'b1;
-      case(instr[26:25])
-	  2'b00: poperation[19]=`op_shl32;
-	  2'b10: poperation[19]=`op_shr32; 
-	  2'b11: begin perror[19]=1'b1;  end//suxuss
-	  2'b01: poperation[19]=`op_sar32;
-      endcase
-       
-      trien[20]=isExtALU && !instr[14];//mul immediate
-      prT[20]=rD;
-      prA[20]=rS1;
-      prT_use[20]=1'b1;
-      prA_use[20]=1'b1;
-      prB_use[20]=1'b1;
-      puseBConst[20]=1'b1;
-      puseRs[20]=1'b1;
-      pflags_write[20]=1'b1;
-      pconstant[20]={{52{instr[31]}},instr[31:20]}
-      pport[20]=PORT_ALU;
-      prAlloc[20]=1'b1;
-      case(instr[14:12])
-	  3'b000: begin poperation[20]=`op_mul32|2048; pport[20]=PORT_MUL;  end//suxuss
-	  3'b010: begin poperation[20]=`op_lmul64|2048; pport[20]=PORT_MUL;  end//suxuss
-	  3'b001: begin poperation[20]=`op_lHSmul64|2048; pport[20]=PORT_MUL;  end//suxuss
-	  3'b011: begin poperation[20]=`op_limul64|2048; pport[20]=PORT_MUL;  end//suxuss
-      endcase
-       
-      trien[21]=isExtImm && (instr[31:27]==5'b1 || instr[31:27]==5'b10);//non shift reg
-      prT[21]=rD;
-      prA[21]=rS1;
-      prB[21]=rS2;
-      prT_use[21]=1'b1;
-      prA_use[21]=1'b1;
-      prB_use[21]=1'b1;
-      puseRs[21]=1'b1;
-      pflags_write[21]=1'b1;
-      pport[21]=PORT_ALU;
-      prAlloc[21]=1'b1;
-      case(instr[27:25])
-	  3'b000: poperation[21]=`op_add32;
-	  3'b001: poperation[21]=`op_sub32;
-	  3'b010: poperation[21]=`op_xor32;
-	  3'b011: poperation[21]=`op_or32;
-	  3'b100: poperation[21]=`op_and32;
-	  default: perror[21]=1'b1;
-      endcase
-      
-      trien[22]=isExtImm && instr[31:27]==5'b11;//shift reg
-      prT[22]=rD;
-      prA[22]=rS1;
-      prB[22]=rS2;
-      prT_use[22]=1'b1;
-      prA_use[22]=1'b1;
-      prB_use[22]=1'b1;
-      puseRs[22]=1'b1;
-      pflags_write[22]=1'b1;
-      pport[22]=PORT_SHIFT;
-      prAlloc[22]=1'b1;
-      case(instr[26:25])
-	  2'b000: poperation[22]=`op_shl32;
-	  2'b001: poperation[22]=`op_shr32;
-	  2'b010: poperation[22]=`op_sar32;
-	  2'b011: perror[22]=1'b1;
-      endcase
-      
-      trien[23]=isExtImm && instr[31:29]==3'b1;//non shift reg
-      prT[23]=rD;
-      prA[23]=rS1;
-      prB[23]=rS2;
-      prT_use[23]=1'b1;
-      prA_use[23]=1'b1;
-      prB_use[23]=1'b1;
-      puseRs[23]=1'b1;
-      pflags_write[23]=1'b0;
-      pport[23]=PORT_ALU;
-      prAlloc[23]=1'b1;
-      case(instr[28])
-	  1'b0: poperation[23]=`op_sadd|{2'b10,instr[27:25],8'b0};
-	  1'b1: poperation[23]=`op_saddn|{2'b10,instr[27:25],8'b0};
-      endcase
-
-      trien[24]=isBasicALU|isBasicALU32 && instr[31:25]==7'b1 && !instr[14];
-      prT[24]=rD;
-      prA[24]=rS1;
-      prB[24]=rS2;
-      prT_use[24]=1'b1;
-      prA_use[24]=1'b1;
-      prB_use[24]=1'b1;
-      puseRs[24]=1'b1;
-      pflags_write[24]=1'b0;
-      pport[24]=PORT_MUL;
-      prAlloc[24]=1'b1;
-      case({isBasicALU,instr[14:12]})
-	  4'b1000: poperation[24]=`op_mul64;
-	  4'b1001: poperation[24]=`op_limul64;
-	  4'b1010: poperation[24]=`op_lHSmul64;
-	  4'b1011: poperation[24]=`op_lmul64;
-	  4'b0000: poperation[24]=`op_mul32;
-          default: perror[24]=1'b1;
-      endcase
-      
-      trien[25]=isLoad&instr[2];
-      prT[25]=rD;
-      prB[25]=rS1;
-      prT_use[25]=1'b1;
-      prB_use[25]=1'b1;
-      pconstant[25]={{52{instr[31]}},instr[31:20]};
-      prAlloc[25]=1'b1;
-      puseRs[25]=1'b1;
-      pport[25]=PORT_LOAD;
-      casex(instr[14:12])
-          3'b010: poperation[8][7:0]={7'd5,1'b0};
-          3'b011: poperation[8][7:0]={7'd9,1'b0};
-	  default: perror[25]=1'b1;
-      endcase
-
-      trien[26]=isStore&instr[2];
-      prC[26]=rS2;
-      prB[26]=rS1;
-      prC_use[26]=1'b1;
-      prB_use[26]=1'b1;
-      pconstant[26]={{52{instr[31]}},instr[31:25],rD};
-      prAlloc[26]=1'b0;
-      puseRs[26]=1'b1;
-      pport[26]=PORT_STORE;
-      casex(instr[14:12])
-          3'b010: poperation[8][7:0]={7'd8,1'b1};
-          3'b011: poperation[8][7:0]={7'd5,1'b1};
-	  default: perror[26]=1'b1;
-      endcase
-      //perror[9]=instr[14];
-      
-      trien[27]=isFpFma;//non shift reg
-      prT[27]=rD;
-      prA[27]=rS1;
-      prB[27]=rS2;
-      prC[27]=instr[31:27];
-      prT_useF[27]=instr[25];
-      prA_useF[27]=instr[25];
-      prB_useF[27]=instr[25];
-      prC_useF[27]=instr[25];
-      prT_useV[27]=~instr[25];
-      prA_useV[27]=~instr[25];
-      prB_useV[27]=~instr[25];
-      prC_useV[27]=~instr[25];
-      prmode[27]=instr[14:12];
-      pchainalu[27]=1'b1;
-      pchainport[27]=PORT_FADD;
-      pport[27]=PORT_FMUL;
-      puseRs[27]=1'b1;
-      pflags_write[27]=1'b0;
-      prAlloc[27]=1'b1;
-      case({instr[3:2],instr[26:25]})
-          4'b0000: begin poperation[27]=`fop_mulXS; popchain[27]=`fop_addXS; end
-          4'b1000: begin poperation[27]=`fop_nmulXS; popchain[27]=`fop_addXS; end
-          4'b0100: begin poperation[27]=`fop_mulXS; popchain[27]=`fop_subXS; end
-          4'b1100: begin poperation[27]=`fop_nmulXS; popchain[27]=`fop_subXS; end
-          4'b0001: begin poperation[27]=`fop_mulXD; popchain[27]=`fop_addXD; end
-          4'b1001: begin poperation[27]=`fop_nmulXD; popchain[27]=`fop_addXD; end
-          4'b0101: begin poperation[27]=`fop_mulXD; popchain[27]=`fop_subXD; end
-          4'b1101: begin poperation[27]=`fop_nmulXD; popchain[27]=`fop_subXD; end
-	  default: perror[27]=1'b1;
-      endcase
-      
       trien[1]=~magic[0] & subIsMovOrExt;
       puseBConst[1]=opcode_sub==6'h29;
       prA_use[1]=1'b0;

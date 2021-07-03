@@ -3914,6 +3914,8 @@ module decoder_get_baseIP(
 
   adder_inc #(35) nextAdd_mod(baseIP[42:8],nextIP[42:8],1'b1,);
   assign nextIP[7:0]=baseIP[7:0];
+  //assign second_IP=|second_tr_jump ? tk_jumpIP : 47'bz;
+  assign nextIP[7:0]=baseIP[7:0];
   assign nextIP[62:43]=baseIP[62:43];
   //assign second_IP=|second_tr_jump ? tk_jumpIP : 47'bz;
 
@@ -3924,6 +3926,7 @@ module decoder_get_baseIP(
   assign next_baseAttr=(~jump0TK && ~jump1TK && 0!=(afterTick&iUsed) 
     && ~except) ? baseAttr: 4'bz;
   assign next_baseAttr=except ? exceptAttr : 4'bz;
+
 
   
   assign next_baseIP=(jump0TK && ~except) ? jump0IP : 63'bz;

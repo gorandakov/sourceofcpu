@@ -107,10 +107,6 @@
 `define op_imul32_64 (9|`op_multiclk)
 `define op_imul32 (10|`op_multiclk)
 `define op_imul64 (11|`op_multiclk)
-`define op_limul32 (12|`op_multiclk)
-`define op_lmul32 (13|`op_multiclk)
-`define op_lHSmul32 (14|`op_multiclk)
-`define op_lHSmul64 (15|`op_multiclk)
 
 `define op_cvtE 12
 `define op_cvtD 13

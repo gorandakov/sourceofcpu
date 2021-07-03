@@ -74,15 +74,6 @@ module imul(
 
   icompr cmp_mod(clk,clkEn,R[63:0],C[63:0],A_out,B_out,and1,is_sig,sig,sm_sig);
   adder2oM #(128) add_mod(A_out_reg,B_out_reg,{dummy2,Res[63:0]},{Res[63:0],dummy},
-    resx,1'b0,~upper_reg3,upper_reg3,short_reg3,,,,);
- 
-  adder_CSA #(128) HSU64_CSA(A_out_reg,B_out_reg,128'hffffffff00000000,part64A,part64B); 
-  adder_CSA #(64) HSU32_CSA(A_out_reg[63:0],B_out_reg[63:0],64'hffff0000,part32A,part32B); 
-  adder #(64) HSU32_add(part32A[63:0],part32B[63:0],{Res[31:0],dummy3},1'b0,upper32HSU_reg3,,,,);
-  adder #(128) HSU64_add(part64A[127:0],part64B[127:0],{Res[63:0],dummy4},1'b0,upper64HSU_reg3,,,,);
-
-  assign Res=upper32_reg3 ? {32'b0,resx} :64'bz;
-
     resx,1'b0,~upper_reg3&~is_sec_reg3,upper_reg3,short_reg3,,,,);
 
   assign Res[64:0]=is_sec_reg3 ? {ptr_reg2,sec_res_reg2} : {1'b0,64'bz};
@@ -98,9 +89,6 @@ module imul(
       sm_sig<=1'b1;
       upper<=1'b0;
       short<=1'b0;
-      upper32<=1'b0;
-      upper32HSU<=1'b0;
-      upper64HSU<=1'b0;
       is_sec<=1'b0;
  //     bnd<=1'b0;
       case({4'b1000,op_prev[7:0]})
@@ -147,29 +135,6 @@ module imul(
 	  sm_sig<=1'b0;
 	  upper<=1'b1;
       end
-      `op_limul32: begin
-	  and1<=1'b0;
-	  sig<=1'b0;
-	  upper32<=1'b0;
-      end
-      `op_lmul32: begin
-	  and1<=1'b0;
-	  sig<=1'b1;
-	  upper32<=1'b0;
-      end
-      `op_lHSmul32: begin
-	  and1<=1'b0;
-	  sig<=1'b1;
-	  upper32<=!A[31];
-	  upper32HSU<=A[31];
-      end
-      `op_lHSmul64: begin
-	  and1<=1'b0;
-	  sig<=1'b1;
-	  upper<=!A[63];
-	  upper64HSU<=A[63];
-      end
-
       `op_sec64: begin
 	  is_sec<=1'b1;
       end
@@ -189,15 +154,6 @@ module imul(
       upper_reg<=upper;
       upper_reg2<=upper_reg;
       upper_reg3<=upper_reg2;
-      upper32_reg<=upper32;
-      upper32_reg2<=upper32_reg;
-      upper32_reg3<=upper32_reg2;
-      upper32HSU_reg<=upper32HSU;
-      upper32HSU_reg2<=upper32HSU_reg;
-      upper32HSU_reg3<=upper32HSU_reg2;
-      upper64HSU_reg<=upper64HSU;
-      upper64HSU_reg2<=upper64HSU_reg;
-      upper64HSU_reg3<=upper64HSU_reg2;
       short_reg<=short;
       short_reg2<=short_reg;
       short_reg3<=short_reg2;
