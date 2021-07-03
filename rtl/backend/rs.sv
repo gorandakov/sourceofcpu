@@ -2094,7 +2094,7 @@ module rs(
   newDataA2,newDataB2,newDataS2,newRegA2,newRegB2,newRegS2,
     newANeeded2,newBNeeded2,newSNeeded2,newReg2,newRegSimd2,newOp2,newPort2,
     newInstrIndex2,rsAlloc2,newGazumpA2,newGazumpB2,newGazumpS2,
-    newFunitA2,newFunitB2,newFunitS2,newAttr2,newCx2,
+    newFunitA2,newFunitB2,newFunitS2,newAttr2,
 // wires to get values out of buffer
   outDataA0,outDataB0,outDataC0,outReg0,outOp0,outInstrIndex0,outWQ0,outLSFlag0,
     outFuFwdA0,outFuFwdB0,outFuuFwdA0,outFuuFwdB0,outLSQ0,outDataEn0,outThread0,//agu
@@ -2104,7 +2104,7 @@ module rs(
     outFuuFwdS1,outDataEn1,outThread1,outAttr1,//alu 1
   outDataA2,outDataB2,outDataS2,outReg2,outRegSimd2,outOp2,outInstrIndex2,
     outFuFwdA2,outFuFwdB2,outFuFwdS2,outFuuFwdA2,outFuuFwdB2,
-    outFuuFwdS2,outDataEn2,outThread2,outAttr2,outCx2,//alu 2
+    outFuuFwdS2,outDataEn2,outThread2,outAttr2,//alu 2
 // wires from functional units  
   FU0,FUreg0,FUwen0,
   FU1,FUreg1,FUwen1,
@@ -2162,7 +2162,7 @@ module rs(
   localparam REG_WIDTH=`reg_addr_width;
   localparam OPERATION_WIDTH=`operation_width;
   localparam LSQ_WIDTH=`lsqRsNo_width;
-  localparam CONST_WIDTH=64;
+  localparam CONST_WIDTH=33;
   localparam FLAGS_WIDTH=6;  
   localparam BUF_COUNT=`rs_buf_count;
   localparam II_WIDTH=10;  
@@ -2251,7 +2251,6 @@ module rs(
   input [FN_WIDTH-1:0] newFunitB2;
   input [FN_WIDTH-1:0] newFunitS2;
   input [ATTR_WIDTH-1:0] newAttr2;
-  input newCx2;
   
 // output data to functional units
 
@@ -2305,7 +2304,6 @@ module rs(
   output [3:0] outDataEn2;
   output outThread2;
   output [ATTR_WIDTH-1:0] outAttr2;
-  output outCx2;
 
   
 
@@ -2841,18 +2839,16 @@ module rs(
   outRsSelect[2],outBank[2],rsFoundNZ[2],outOp2
   );
   
-  //verilator lint_off WIDTH
-  rs_nonWakeUp_array #(ATTR_WIDTH+1) attr_mod(
+  rs_nonWakeUp_array #(ATTR_WIDTH) attr_mod(
   clk,dataRst,stall|doStall,
-  newRsSelect0,{1'b0,newAttr0},
-  newRsSelect1,{1'b0,newAttr1},
-  newRsSelect2,{newCx2,newAttr2},
+  newRsSelect0,newAttr0,
+  newRsSelect1,newAttr1,
+  newRsSelect2,newAttr2,
   
   outRsSelect[0],outBank[0],rsFoundNZ[0],outAttr0,
   outRsSelect[1],outBank[1],rsFound[1],outAttr1,
-  outRsSelect[2],outBank[2],rsFoundNZ[2],{outCx2,outAttr2}
+  outRsSelect[2],outBank[2],rsFoundNZ[2],outAttr2
   );
-  //verilator lint_on WIDTH
   
   rs_nonWakeUp_array #(1) LSF_mod(
   clk,dataRst,stall|doStall,
