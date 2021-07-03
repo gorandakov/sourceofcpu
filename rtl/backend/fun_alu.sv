@@ -443,7 +443,7 @@ module fu_alu(
   rs_writeC_forward #(65) u6_B_fwd(
   clk,rst,
   ~u6_clkEn,
-  u6_B,uu_B6,{1'b0,{32{u6_const[31]}},u6_const[31:0]}),uu_JR6,
+  u6_B,uu_B6,{1'b0,{32{u6_const[31]}},u6_const[31:0]},uu_JR6,
   u6_B_fufwd,u6_B_fuufwd,u6_cxen,
   FU0,FU0_reg,
   FU1,FU1_reg,
@@ -581,7 +581,7 @@ module fu_alu(
     u6_ret,u6_rten,uu_A6,uu_B6,uu_S6,FU9);
   adder_alu alu5_jmp(
     .a(uu_JR6),
-    .b({1'b0,{32{u6_const_reg[63]}},u6_const_reg[63:32}),
+    .b({1'b0,{32{u6_const_reg[63]}},u6_const_reg[63:32]}),
     .out(valJmp),
     .sub(6'b001001),
     .sxen(1'b0),

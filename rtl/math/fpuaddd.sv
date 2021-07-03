@@ -31,10 +31,10 @@ module fadd(
 
   input clk;
   input rst;
-  input [80:0] A;
+  input [64:0] A;
   input [64:0] A_alt;
-  input [80:0] B;
-  input [41:0] Bx;
+  input [64:0] B;
+  input [52:0] Bx;
   input isDBL;
   input isSub;
   input isRSub;
@@ -46,53 +46,30 @@ module fadd(
   input logic_en;
   input [1:0] logic_sel;
   output [67:0] res;
-  output [15:0] res_hi;
-//need to set bit 53 to one if isDBL; not yet done
-//need to clear/set bits 63-54 if isDBL and corresponging conditions
-//if no isDBL, set one op low bits to 0, other to one depening on rounding
-//width
-  function [63:0] fracxfrm0;
-      input [63:0] op;
-      input dbl;
-      
-      begin
-	  fracxfrm0[63:11]=op[63:11];
-	  fracxfrm0[10:0]=op[10:0]|{11{dbl}};
-      end
-  endfunction
-
-  function [63:0] fracxfrm1;
-      input [63:0] op;
-      input dbl;
-      
-      begin
-	  fracxfrm1[63:0]=op[63:0];
-      end
-  endfunction
 
   wire sxor;
   reg sxor_reg;
   wire a_more;
-  wire [63:0] opA;
-  wire [63:0] opB;
+  wire [105:0] opA;
+  wire [105:0] opB;
   wire moreAD,moreAE;
-  wire [15:0] expdiffA;
-  wire [15:0] expdiffB;
-  wire [15:0] expdiff;
-  reg  [15:0] expdiff_reg;
-  wire [63:0] opBs1;
-  wire [63:0] opBs;
-  reg [63:0] opBs1_reg;
-  reg [63:0] opA_reg;
+  wire [11:0] expdiffA;
+  wire [11:0] expdiffB;
+  wire [11:0] expdiff;
+  reg  [11:0] expdiff_reg;
+  wire [105:0] opBs1;
+  wire [105:0] opBs;
+  reg [105:0] opBs1_reg;
+  reg [105:0] opA_reg;
 //  reg [63:0] opB_reg;
-  wire [64:0] partM0;
-  wire [64:0] partM1;
-  wire [64:0] partMs0;
-  wire [64:0] partMs1;
-  wire [63:0] resS1;
-  wire [63:0] resSR1;
-  reg [63:0] resS1_reg;
-  reg [63:0] resSR1_reg;
+  wire [106:0] partM0;
+  wire [106:0] partM1;
+  wire [106:0] partMs0;
+  wire [106:0] partMs1;
+  wire [53:0] resS1;
+  wire [53:0] resSR1;
+  reg [53:0] resS1_reg;
+  reg [53:0] resSR1_reg;
   wire resS_rnbit;
   wire res_rnbit,res_tail,res_andtail;
   wire res_rnbitC,res_tailC,res_andtailC;
@@ -109,22 +86,22 @@ module fadd(
   wire Smain_simple,Smain_round;
   wire Smain_simpleC,Smain_roundC,Smain_simpleRC;
   wire Smain_simpleL,Smain_roundL,Smain_subroundL;
-  wire [63:0] renorS;
-  wire [15:0] renorE;
-  wire [63:0] renorSR;
-  wire [15:0] renorER;
-  wire [7:0] andtailBs1;
-  wire [7:0] andtailBs;
-  wire [7:0] andtailBs1_c;
-  wire [7:0] andtailBs_c;
-  wire [7:0] andtailBs1_L;
-  wire [7:0] andtailBs_L;
-  wire [7:0] tailBs1;
-  wire [7:0] tailBs;
-  wire [7:0] tailBs1_c;
-  wire [7:0] tailBs_c;
-  wire [7:0] tailBs1_L;
-  wire [7:0] tailBs_L;
+  wire [52:0] renorS;
+  wire [11:0] renorE;
+  wire [52:0] renorSR;
+  wire [11:0] renorER;
+  wire [15:0] andtailBs1;
+  wire [15:0] andtailBs;
+  wire [15:0] andtailBs1_c;
+  wire [15:0] andtailBs_c;
+  wire [15:0] andtailBs1_L;
+  wire [15:0] andtailBs_L;
+  wire [15:0] tailBs1;
+  wire [15:0] tailBs;
+  wire [15:0] tailBs1_c;
+  wire [15:0] tailBs_c;
+  wire [15:0] tailBs1_L;
+  wire [15:0] tailBs_L;
   reg andtailBs1_reg;
   reg andtailBs1_c_reg;
   reg andtailBs1_L_reg;
@@ -132,10 +109,10 @@ module fadd(
   reg tailBs1_c_reg;
   reg tailBs1_L_reg;
   reg isDBL_reg;
-  wire [63:0] resM1;
-  wire [63:0] resMR1;
-  wire [63:0] resM2;
-  wire [63:0] resMR2;
+  wire [105:0] resM1;
+  wire [105:0] resMR1;
+  wire [105:0] resM2;
+  wire [105:0] resMR2;
   wire cout64_M1_ns,cout64_MR1_ns,cout53_M1_ns,cout53_MR1_ns;
   wire cout64_M2_ns,cout64_MR2_ns,cout53_M2_ns,cout53_MR2_ns;
   wire cout64_SZ1,cout64_SZR1,cout53_SZ1,cout53_SZR1;
@@ -152,19 +129,18 @@ module fadd(
   reg [9:0] xop1_reg;
   reg isrnd_zero,isrnd_even,isrnd_plus;
   wire [64:0] resX;
-  wire [80:0] resY;
   wire main_lo,main_ulo,Smain_lo,Smain_ulo;
-  wire [15:0] opA_exp;
-  wire [15:0] opA_exp_inc;
-  wire [15:0] opA_exp_dec;
-  reg [15:0] opA_exp_reg;
+  wire [11:0] opA_exp;
+  wire [11:0] opA_exp_inc;
+  wire [11:0] opA_exp_dec;
+  reg [11:0] opA_exp_reg;
   wire altpath;
   reg altpath_reg;
   wire rndpath;
   reg rndpath_reg;
   reg opB_reg;
-  wire [15:0] A_exp;
-  wire [15:0] B_exp;
+  wire [11:0] A_exp;
+  wire [11:0] B_exp;
   wire A_zero,A_infty,A_nan;
   wire B_zero,B_infty,B_nan;
   wire spec_snan,spec_qnan,spec_pinf,spec_ninf,spec_A,spec_B;
@@ -172,9 +148,9 @@ module fadd(
   wire [3:0] spec_logic;
   reg [3:0] spec_logic_reg;
   reg spec_any;
-  wire [80:0] res_spec;
-  reg [80:0] A_reg;
-  reg [80:0] B_reg;
+  wire [64:0] res_spec;
+  reg [64:0] A_reg;
+  reg [64:0] B_reg;
   wire A_s2;
   reg en_reg;
   wire [15:0] emsk=isDBL ? 16'h87ff : 16'hffff;
@@ -182,10 +158,10 @@ module fadd(
 
   wire renor_any,exp_dec_non_denor_IEEE_0,exp_dec_non_denor_IEEE_1,exp_dec_non_denor,exp_inc_oor_IEEE,exp_inc_oor,
 	  exp_dec_non_denor_IEEE;
-  wire [15:0] exp_min_IEEE;
-  wire [15:0] exp_max_IEEE;
-  wire [15:0] exp_min_kludge;
-  wire [15:0] exp_max;
+  wire [11:0] exp_min_IEEE;
+  wire [11:0] exp_max_IEEE;
+  wire [11:0] exp_min_kludge;
+  wire [11:0] exp_max;
   reg exp_inc_oor_reg,exp_inc_oor_IEEE_reg,exp_dec_non_denor_reg,exp_dec_non_denor_IEEE_reg;
   wire [3:0] xpon;
   wire [3:0] X_xpon;
