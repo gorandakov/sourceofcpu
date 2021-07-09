@@ -29,3 +29,25 @@ bool cjump(unsigned type,unsigned flags) {
 //mngwana una no get rich
     }
 }
+
+char *COND(int index) {
+    switch(index) {
+	case jump_Z: return "je";
+	case jump_nZ: return "jne";
+	case jump_S: return "js";
+	case jump_nS: return "jns";
+        case jump_uGT: return "jgt";
+        case jump_uLE:  return "jle";
+        case jump_uGE:  return "jge";
+        case jump_uLT:  return "jlt";
+        case jump_sGT:  return "ja";
+        case jump_sLE:  return "jbe";
+        case jump_sGE:  return "jae";
+        case jump_sLT:  return "jb";
+        case jump_O:    return "jo";
+        case jump_nO:   return "jno";
+        case jump_P:    return "jp";
+        case jump_nP:   return "jnp";
+    }
+    return "<err>";
+}
