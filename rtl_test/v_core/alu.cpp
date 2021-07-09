@@ -997,31 +997,6 @@ bool req::testj(int code) {
     }
 }
 
-void gen_reqs(req *reqs,bool simp=false) {
-    req *ptr=simp ? NULL : reqs+10;
-    bool a=simp ? false : ptr[29].mul&&ptr[29].en; 
-    bool mul=rand()%10==0;
-    reqs[0].gen(0,0,0);
-    reqs[1].gen(0,0,1);
-    reqs[2].gen(0,0,0);
-    reqs[3].gen(0,0,1);
-    reqs[4].gen(0,0,0,ptr);
-    reqs[5].gen(0,0,0,ptr);
-    reqs[6].gen(a,0,0,ptr);
-    reqs[7].gen(0,0,1,ptr);
-    reqs[8].gen(0,0,1,ptr);
-    reqs[9].gen(0,mul,1,ptr);
-
-    if (a) {
-        reqs[6].res=ptr[29].res;
-        reqs[6].flags=ptr[29].flags;
-        reqs[6].op=ptr[29].op;
-        reqs[6].num[0]=ptr[29].num[0];
-        reqs[6].num[1]=ptr[29].num[1];
-        reqs[6].num[2]=ptr[29].num[2];
-        reqs[6].en=0;
-    }
-}
 
 void req_set(Vfu_alu *mod,req reqs[10]) {
 }
@@ -1093,7 +1068,15 @@ bool ckran_alu(unsigned long long ptr,unsigned long long &addr) {
     return false;
 }
 
-void gen_prog(req *reqs,int count) {
+void gen_prog(req *reqs,int count, FILE *f) {
+   int n;
+   for(n=0;n<31;n++) {
+       if (n!=6) reqs[n].gen_init(n,0,0,0);
+       else reqs[n].gen_init(n,0,0xf80fc00008000000,1);
+   }
+   reqs[31].gen_init(31,0,0x8000,0);
+   reqs[32].gen_movcsr(csr_page,31);
+   
 }
 
 
@@ -1108,12 +1091,8 @@ int main(int argc, char *argv[]) {
     top->clk=0;
     top->rst=1;
     top->except=0;
-    gen_reqs(reqs[99999997*10],1);
-    gen_reqs(reqs[99999998*10],1);
-    gen_reqs(reqs[99999999*10],1);
-    gen_reqs(reqs[99999996*10]);
-    gen_prog(reqs[99999996*10],99999996)
-    req_set(top,reqs[99999996*10]);
+    gen_prog(reqs[0],100000000)
+    req_set(top,reqs[0]);
     top->eval();
     top->clk=1;
     top->eval();
@@ -1123,12 +1102,6 @@ int main(int argc, char *argv[]) {
         top->clk=0;
         top->eval();
         top->eval();
-        for(k=3;k>=1;k=k-1) {
-            for(j=0;j<10;j++) {
-                reqs[k][j]=reqs[k-1][j];
-            }
-        }
-        gen_reqs(reqs[0]);
         top->clk=1;
         top->eval();
         req_set(top,reqs[0]);
