@@ -998,7 +998,27 @@ bool req::testj(int code) {
 }
 
 
-void req_set(Vfu_alu *mod,req reqs[10]) {
+void req_set(Vfu_alu *mod,req *reqs,char *mem) {
+    static unsigned long addr[32];
+    static unsigned pos=0;
+    static unsigned pos_R=0;
+    static bool R=0;
+    if (top->rbusOut_want && top->rbusOut_can) {
+	addr[pos]=top->rbusOut_addr;
+	sigs[pos]=top->rbusOut_signals;
+	src[pos]=top->rbusOut_src_req;
+	pos++;
+    }
+    if (pos_R!=pos) {
+	unsigned signals=0;
+	top->rbusDIn_signals=signals;
+	top->rbusDIn_src_req=src[pos_R];
+	if (!R) {
+	    memcpy((char *) top->rbusDIn_data,mem[addr[pos_R]<<7],64);
+	} else {
+	    memcpy((char *) top->rbusDIn_data,mem[(addr[pos_R]<<7)+64],64);
+	}
+    }
 }
 
 bool get_check(Vfu_alu *top, req *reqs) {
