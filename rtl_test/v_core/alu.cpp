@@ -1010,14 +1010,30 @@ void req_set(Vfu_alu *mod,req *reqs,char *mem) {
 	pos++;
     }
     if (pos_R!=pos) {
-	unsigned signals=0;
+	unsigned signals=(1<<(rbusD_mem_reply))|(1<<(rbusD_mem_used));
 	top->rbusDIn_signals=signals;
-	top->rbusDIn_src_req=src[pos_R];
+	top->rbusDIn_dst_req=src[pos_R];
 	if (!R) {
 	    memcpy((char *) top->rbusDIn_data,mem[addr[pos_R]<<7],64);
 	} else {
 	    memcpy((char *) top->rbusDIn_data,mem[(addr[pos_R]<<7)+64],64);
+	    top->rbusDIn_signals|=1<<(rbusD_second);
 	}
+    } else {
+	top->rbusDIn_signals=0;
+    }
+
+    if (top->rbusDOut_can && top->rbusDOut_want) {
+	unsigned long address=top->rbusDOut_address<<7;
+	if (!(rbusDOut_signals&(1<<(rbusD_write_back)))) {
+            goto end_DOut;
+	}
+	if (!(top->rbusDOut_signals&(1<<(rbusD_second)))) {
+	    memcpy(mem[addr[pos_R]<<7],(char *) top->rbusDOut_data,64);
+        } else {
+	    memcpy(mem[(addr[pos_R]<<7)+64],(char *) top->rbusDOut_data,64);
+	}
+        end_DOut:
     }
 }
 
