@@ -272,7 +272,7 @@ module ratV_buf(
   wire [1:0] dom_d;
   wire [1:0] domp_d;
   
-  wire retired_d[1:0];
+  wire retired_d;
 
   wire match_rd0;
   wire match_rd1;
@@ -348,8 +348,7 @@ module ratV_buf(
 
   assign robAddr_d=(rst | ~match_new) ? {ROB_ADDR_WIDTH{1'b1}} : {ROB_ADDR_WIDTH{1'bz}};
 
-  assign retired_d[0]=~(match_ret & ~ret_thread & ~(match_new & read_clkEn) || rst || retireAll & ~retireAll_thread); 
-  assign retired_d[1]=~(match_ret & ret_thread & ~(match_new & read_clkEn) || rst || retireAll & retireAll_thread); 
+  assign retired_d=~(match_ret & ~ret_thread & ~(match_new & read_clkEn) || rst || retireAll & ~retireAll_thread); 
 
   assign funit_d=(match_new0 & ~rst) ? ~writeNew0_fun : {FN_WIDTH{1'bz}};
   assign funit_d=(match_new1 & ~rst) ? ~writeNew1_fun : {FN_WIDTH{1'bz}};

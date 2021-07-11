@@ -1,9 +1,11 @@
 #include <cstdlib>
 #include <cfenv>
-#include "Vfu_alu.h"
+#include "Vheptane_core.h"
 #include "verilated.h"
 #include "../inc/ptr.h"
 #include "contx.h"
+#include "../inc/struct.h"
+#include "../inc/cjump.h"
 
 #define get64(a) ((((unsigned long long) a[1])<<32)|(unsigned long long) a[0])
 #define set64i(a,b,c) a[0]=b;a[1]=b>>32;a[2]=c;
@@ -398,7 +400,7 @@ class req {
     unsigned has_mem;
     unsigned has_alu;
     char asmtext[32];
-    void gen(bool alt_, bool mul_, bool can_shift, req *prev1=NULL,hcont *contx);
+    void gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx);
     void gen_init(int rT,int dom,unsigned long int val,int val_p);
     void flgPTR(__int128 r);
     void flg64(__int128 r);
@@ -1003,25 +1005,27 @@ bool req::testj(int code) {
 }
 
 
-void req_set(Vfu_alu *mod,req *reqs,char *mem) {
+void req_set(Vheptane_core *top,req *reqs,char *mem) {
     static unsigned long addr[32];
     static unsigned pos=0;
     static unsigned pos_R=0;
     static bool R=0;
+    static unsigned sigs[32];
+    static unsigned src[32];
     if (top->rbusOut_want && top->rbusOut_can) {
-	addr[pos]=top->rbusOut_addr;
+	addr[pos]=top->rbusOut_address;
 	sigs[pos]=top->rbusOut_signals;
 	src[pos]=top->rbusOut_src_req;
 	pos++;
     }
     if (pos_R!=pos) {
-	unsigned signals=(1<<(rbusD_mem_reply))|(1<<(rbusD_mem_used));
+	unsigned signals=(1<<(rbusD_mem_reply))|(1<<(rbusD_used));
 	top->rbusDIn_signals=signals;
 	top->rbusDIn_dst_req=src[pos_R];
 	if (!R) {
-	    memcpy((char *) top->rbusDIn_data,mem[addr[pos_R]<<7],64);
+	    memcpy((char *) top->rbusDIn_data,&mem[addr[pos_R]<<7],64);
 	} else {
-	    memcpy((char *) top->rbusDIn_data,mem[(addr[pos_R]<<7)+64],64);
+	    memcpy((char *) top->rbusDIn_data,&mem[(addr[pos_R]<<7)+64],64);
 	    top->rbusDIn_signals|=1<<(rbusD_second);
 	}
     } else {
@@ -1029,20 +1033,20 @@ void req_set(Vfu_alu *mod,req *reqs,char *mem) {
     }
 
     if (top->rbusDOut_can && top->rbusDOut_want) {
-	unsigned long address=top->rbusDOut_address<<7;
-	if (!(rbusDOut_signals&(1<<(rbusD_write_back)))) {
+	//unsigned long address=<<7;
+	if (!(top->rbusDOut_signals&(1<<(rbusD_write_back)))) {
             goto end_DOut;
 	}
 	if (!(top->rbusDOut_signals&(1<<(rbusD_second)))) {
-	    memcpy(mem[addr[pos_R]<<7],(char *) top->rbusDOut_data,64);
+	    memcpy(&mem[addr[pos_R]<<7],(char *) top->rbusDOut_data,64);
         } else {
-	    memcpy(mem[(addr[pos_R]<<7)+64],(char *) top->rbusDOut_data,64);
+	    memcpy(&mem[(addr[pos_R]<<7)+64],(char *) top->rbusDOut_data,64);
 	}
-        end_DOut:
+        end_DOut:;
     }
 }
 
-bool get_check(Vfu_alu *top, req *reqs) {
+bool get_check(Vheptane_core *top, req *reqs) {
     bool rtn=true;
 }
 
@@ -1133,17 +1137,20 @@ void gen_prog(req *reqs,int count, FILE *f,hcont *contx) {
 
 int main(int argc, char *argv[]) {
     Verilated::commandArgs(argc, argv);
-    Vheptane_core *top=new Vfu_alu();
+    Vheptane_core *top=new Vheptane_core();
     Verilated::assertOn(false);
     int initcount=10;
     int cyc=0;
+    FILE *FOUT;
+    hcont contx;
+    char *mem=(char *) malloc(2*1024*1024*1024);
+    bzero(mem,2*1024*1024*1024);
     req *reqs=new req[10*100000000];
     fesetround(FE_TOWARDZERO);
     top->clk=0;
     top->rst=1;
-    top->except=0;
-    gen_prog(reqs[0],100000000)
-    req_set(top,reqs[0]);
+    gen_prog(reqs,100000000,FOUT,&contx);
+    req_set(top,reqs,mem);
     top->eval();
     top->clk=1;
     top->eval();
@@ -1155,11 +1162,11 @@ int main(int argc, char *argv[]) {
         top->eval();
         top->clk=1;
         top->eval();
-        req_set(top,reqs[0]);
+        req_set(top,reqs,mem);
         top->eval();
         if (!initcount) {
             cyc=cyc+1;
-            if (!get_check(top,reqs[1])) {
+            if (!get_check(top,reqs)) {
                 printf("error @%i\n",cyc);
                 sleep(1);
             }

@@ -8,5 +8,5 @@ class hcont {
   unsigned reg_fpA_X[32];
   unsigned short reg_fpB_X[32];
   hcont() {
-  };
-}
+  }
+};
