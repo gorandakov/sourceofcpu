@@ -3,6 +3,7 @@
 #include "Vfu_alu.h"
 #include "verilated.h"
 #include "../inc/ptr.h"
+#include "contx.h"
 
 #define get64(a) ((((unsigned long long) a[1])<<32)|(unsigned long long) a[0])
 #define set64i(a,b,c) a[0]=b;a[1]=b>>32;a[2]=c;
