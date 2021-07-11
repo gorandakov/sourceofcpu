@@ -412,6 +412,10 @@ void req::gen_init(int rT,int dom,unsigned long int val,int val_p) {
     has_alu=true;
     res=val;
     res_p=val_p;
+    B=val;
+    B_p=val_p;
+    A=0;
+    A_p=0;
     op=32;
     rB=-1;
     rA=-1;
