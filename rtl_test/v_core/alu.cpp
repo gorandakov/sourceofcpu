@@ -1105,14 +1105,24 @@ bool ckran_alu(unsigned long long ptr,unsigned long long &addr) {
     return false;
 }
 
-void gen_prog(req *reqs,int count, FILE *f) {
+void gen_prog(req *reqs,int count, FILE *f,hcont *contx) {
    int n;
+   fprintf(f,".text\n");
+   fprintf(f,"_start:\n");
    for(n=0;n<31;n++) {
        if (n!=6) reqs[n].gen_init(n,0,0,0);
        else reqs[n].gen_init(n,0,0xf80fc00008000000,1);
+       fprintf(f,"%s\n",reqs[n].asmtext);
    }
    reqs[31].gen_init(31,0,0x8000,0);
-   reqs[32].gen_movcsr(csr_page,31);
+  // reqs[32].gen_movcsr(csr_page,31);
+   
+   for(n=32;n<count;n++) {
+           reqs[n].gen(false, false, lrand48()&1, NULL,contx);
+	   fprintf(f,"%s\n",reqs[n].asmtext);
+   }
+   fprintf(f,".p2align 5\n");
+   
    
 }
 
