@@ -57,8 +57,8 @@ module fun_fpu_BOTH(
   input [31:0] fpcsr;
   input [16+67:0] u1_A0;
   input [16+67:0] u1_B0;
-  input [67:0]    u1_A1;
-  input [67:0]    u1_B1;
+  input [16+67:0]    u1_A1;
+  input [16+67:0]    u1_B1;
   input [3:0] u1_en;
   input [12:0] u1_op;
   input [3:0] u1_fufwd_A;
@@ -70,8 +70,8 @@ module fun_fpu_BOTH(
 
   input [16+67:0] u2_A0;
   input [16+67:0] u2_B0;
-  input [67:0]    u2_A1;
-  input [67:0]    u2_B1;
+  input [16+67:0]    u2_A1;
+  input [16+67:0]    u2_B1;
   input [3:0] u2_en;
   input [12:0] u2_op;
   input [3:0] u2_fufwd_A;
@@ -83,8 +83,8 @@ module fun_fpu_BOTH(
  
   input [16+67:0] u3_A0;
   input [16+67:0] u3_B0;
-  input [67:0]    u3_A1;
-  input [67:0]    u3_B1;
+  input [16+67:0]    u3_A1;
+  input [16+67:0]    u3_B1;
   input [3:0] u3_en;
   input [12:0] u3_op;
   input [3:0] u3_fufwd_A;
@@ -96,8 +96,8 @@ module fun_fpu_BOTH(
 
   input [16+67:0] u4_A0;
   input [16+67:0] u4_B0;
-  input [67:0]    u4_A1;
-  input [67:0]    u4_B1;
+  input [16+67:0]    u4_A1;
+  input [16+67:0]    u4_B1;
   input [3:0] u4_en;
   input [12:0] u4_op;
   input [3:0] u4_fufwd_A;
@@ -109,8 +109,8 @@ module fun_fpu_BOTH(
  
   input [16+67:0] u5_A0;
   input [16+67:0] u5_B0;
-  input [67:0]    u5_A1;
-  input [67:0]    u5_B1;
+  input [16+67:0]    u5_A1;
+  input [16+67:0]    u5_B1;
   input [3:0] u5_en;
   input [12:0] u5_op;
   input [3:0] u5_fufwd_A;
@@ -122,8 +122,8 @@ module fun_fpu_BOTH(
 
   input [16+67:0] u6_A0;
   input [16+67:0] u6_B0;
-  input [67:0]    u6_A1;
-  input [67:0]    u6_B1;
+  input [16+67:0]    u6_A1;
+  input [16+67:0]    u6_B1;
   input [3:0] u6_en;
   input [12:0] u6_op;
   input [3:0] u6_fufwd_A;
@@ -134,16 +134,16 @@ module fun_fpu_BOTH(
   output u6_ret_en;
  
 
-  input [67:0] FUFH0;
-  input [67:0] FUFH1;
-  input [67:0] FUFH2;
-  input [67:0] FUFH3;
-  inout [67:0] FUFH4;
-  inout [67:0] FUFH5;
-  inout [67:0] FUFH6;
-  inout [67:0] FUFH7;
-  inout [67:0] FUFH8;
-  inout [67:0] FUFH9;
+  input [16+67:0] FUFH0;
+  input [16+67:0] FUFH1;
+  input [16+67:0] FUFH2;
+  input [16+67:0] FUFH3;
+  inout [16+67:0] FUFH4;
+  inout [16+67:0] FUFH5;
+  inout [16+67:0] FUFH6;
+  inout [16+67:0] FUFH7;
+  inout [16+67:0] FUFH8;
+  inout [16+67:0] FUFH9;
   
   input [16+67:0] FUFL0;
   input [16+67:0] FUFL1;
@@ -158,8 +158,8 @@ module fun_fpu_BOTH(
   input [1:0] ALT_INP;
   input [16+67:0] ALTDATAL0;
   input [16+67:0] ALTDATAL1;
-  input [67:0] ALTDATAH0;
-  input [67:0] ALTDATAH1;
+  input [16+67:0] ALTDATAH0;
+  input [16+67:0] ALTDATAH1;
 
   input [5:0] FUS_alu0;
   input [5:0] FUS_alu1;
@@ -260,7 +260,7 @@ module fun_fpu_BOTH(
   assign u6_ret=u6_retL|u6_retH;
   assign u6_ret_en=u6_ret_enL| u6_ret_enH;
 
-  fun_fpuH hf_mod(
+  fun_fpuL hf_mod(
   clk,
   rst,
   fpcsr,
