@@ -31,23 +31,24 @@ bool cjump(unsigned type,unsigned flags) {
 }
 
 char *COND(int index) {
+    index=((index>>7)&0xe)|(index&1);
     switch(index) {
-	case jump_Z: return "je";
-	case jump_nZ: return "jne";
-	case jump_S: return "js";
-	case jump_nS: return "jns";
-        case jump_uGT: return "jgt";
-        case jump_uLE:  return "jle";
-        case jump_uGE:  return "jge";
-        case jump_uLT:  return "jlt";
-        case jump_sGT:  return "ja";
-        case jump_sLE:  return "jbe";
-        case jump_sGE:  return "jae";
-        case jump_sLT:  return "jb";
-        case jump_O:    return "jo";
-        case jump_nO:   return "jno";
-        case jump_P:    return "jp";
-        case jump_nP:   return "jnp";
+	case jump_Z: return "e";
+	case jump_nZ: return "ne";
+	case jump_S: return "s";
+	case jump_nS: return "ns";
+        case jump_uGT: return "gt";
+        case jump_uLE:  return "le";
+        case jump_uGE:  return "ge";
+        case jump_uLT:  return "lt";
+        case jump_sGT:  return "a";
+        case jump_sLE:  return "be";
+        case jump_sGE:  return "ae";
+        case jump_sLT:  return "b";
+        case jump_O:    return "o";
+        case jump_nO:   return "no";
+        case jump_P:    return "p";
+        case jump_nP:   return "np";
     }
     return "<err>";
 }
