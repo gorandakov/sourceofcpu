@@ -1358,7 +1358,7 @@ module smallInstr_decoder(
       prT_use[26]=1'b1;
       puseRs[26]=1'b1;
       prAlloc[26]=1'b1;
-      if (magic[3:0]==4'hf && opcode_main!=8'd183) perror[26]=0;
+      if (magic[3:0]==4'hf && opcode_main==8'd183) perror[26]=0;
       poperation[26][12]=1'b1;
       //verilator lint_off CASEINCOMPLETE
       case(opcode_main)
