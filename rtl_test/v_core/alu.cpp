@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include <cfenv>
+#include <cstdio>
 #include "Vheptane_core.h"
 #include "verilated.h"
 #include "../inc/ptr.h"
@@ -394,12 +395,12 @@ class req {
     unsigned alt,mul;
     unsigned en;
     unsigned num[3];
-    unsigned rA,rB,rT;
+    int rA,rB,rT;
     unsigned base,index,scale;
     unsigned offset;
     unsigned has_mem;
     unsigned has_alu;
-    char asmtext[32];
+    char asmtext[64];
     void gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx);
     void gen_init(int rT,int dom,unsigned long int val,int val_p);
     void flgPTR(__int128 r);
@@ -410,7 +411,7 @@ class req {
     bool testj(int code);
 };
     
-void req::gen_init(int rT,int dom,unsigned long int val,int val_p) {
+void req::gen_init(int rT_,int dom,unsigned long int val,int val_p) {
     has_alu=true;
     res=val;
     res_p=val_p;
@@ -421,10 +422,10 @@ void req::gen_init(int rT,int dom,unsigned long int val,int val_p) {
     op=32;
     rB=-1;
     rA=-1;
-    this->rT=rT;
+    this->rT=rT_;
     op=32;
-    if (!val_p) snprintf(asmtext,sizeof asmtext,"movabs $%li\n",B);
-    else snprintf(asmtext,sizeof asmtext,"movabsp $%li\n",B);//WARNING: movabsp non impl and not in cpu spec
+    if (!val_p) snprintf(asmtext,sizeof asmtext,"movabs $%li,%%%s\n",B,reg65[rT]);
+    else snprintf(asmtext,sizeof asmtext,"movabsp $%li,%%%s\n",B,reg65[rT]);//WARNING: movabsp non impl and not in cpu spec
 }
 
 void req::gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx) {
@@ -1120,7 +1121,7 @@ void gen_prog(req *reqs,int count, FILE *f,hcont *contx) {
    for(n=0;n<31;n++) {
        if (n!=6) reqs[n].gen_init(n,0,0,0);
        else reqs[n].gen_init(n,0,0xf80fc00008000000,1);
-       fprintf(f,"%s\n",reqs[n].asmtext);
+       fprintf(f,"%s",reqs[n].asmtext);
    }
    reqs[31].gen_init(31,0,0x8000,0);
   // reqs[32].gen_movcsr(csr_page,31);
@@ -1141,15 +1142,18 @@ int main(int argc, char *argv[]) {
     Verilated::assertOn(false);
     int initcount=10;
     int cyc=0;
-    FILE *FOUT;
+    FILE *FOUT=fopen("/tmp/asm2.s","w");
+    if (!FOUT) exit(1);
     hcont contx;
     char *mem=(char *) malloc(2*1024*1024*1024);
     bzero(mem,2*1024*1024*1024);
-    req *reqs=new req[10*100000000];
+    req *reqs=new req[10000000];
     fesetround(FE_TOWARDZERO);
     top->clk=0;
     top->rst=1;
-    gen_prog(reqs,100000000,FOUT,&contx);
+    gen_prog(reqs,10000000,FOUT,&contx);
+    fclose(FOUT);
+    exit(0);
     req_set(top,reqs,mem);
     top->eval();
     top->clk=1;
