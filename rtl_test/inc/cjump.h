@@ -37,10 +37,10 @@ char *COND(int index) {
 	case jump_nZ: return "ne";
 	case jump_S: return "s";
 	case jump_nS: return "ns";
-        case jump_uGT: return "gt";
+        case jump_uGT: return "g";
         case jump_uLE:  return "le";
         case jump_uGE:  return "ge";
-        case jump_uLT:  return "lt";
+        case jump_uLT:  return "l";
         case jump_sGT:  return "a";
         case jump_sLE:  return "be";
         case jump_sGE:  return "ae";

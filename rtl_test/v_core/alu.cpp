@@ -415,76 +415,6 @@ char *reg65[]={
 "r31"
 };
 
-char *reg16[]={
-"ax",
-"bx",
-"cx",
-"dx",
-"si",
-"di",
-"sp",
-"bp",
-"r8w",
-"r9w",
-"r10w",
-"r11w",
-"r12w",
-"r13w",
-"r14w",
-"r15w",
-"r16w",
-"r17w",
-"r18w",
-"r19w",
-"r20w",
-"r21w",
-"r22w",
-"r23w",
-"r24w",
-"r25w",
-"r26w",
-"r27w",
-"r28w",
-"r29w",
-"r30w",
-"r31w"
-};
-
-char *reg8[]={
-"al",
-"bl",
-"cl",
-"dl",
-"sil",
-"dil",
-"spl",
-"bpl",
-"r8l",
-"r9l",
-"r10l",
-"r11l",
-"r12l",
-"r13l",
-"r14l",
-"r15l",
-"r16l",
-"r17l",
-"r18l",
-"r19l",
-"r20l",
-"r21l",
-"r22l",
-"r23l",
-"r24l",
-"r25l",
-"r26l",
-"r27l",
-"ah",
-"bh",
-"ch",
-"dh"
-};
-
 
 
 class req {
@@ -758,7 +688,7 @@ addie:
 
             case 20:
 	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"salq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
-	    else snprintf(asmtext,sizeof asmtext,"sllq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"shlq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
 
             res0=((__int128) A)<<(B&0x3f);
             res1=res=res0;
@@ -767,7 +697,7 @@ addie:
 
             case 21:
 	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"sall %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
-	    else snprintf(asmtext,sizeof asmtext,"slll $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"shll $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
 
             res0=((__int128) A0x)<<(B0x&0x3f);
             res2=res=res0&0xffffffffull;
@@ -775,8 +705,8 @@ addie:
             break;
 
             case 24:
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"slrq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
-	    else snprintf(asmtext,sizeof asmtext,"slrq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"shrq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"shrq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
 
             res0=(B&0x3f) ?((__int128)  A) >>((B&0x3f)-1) :((__int128)  A)<<1;
             res1=res=(res0>>1);
@@ -784,8 +714,8 @@ addie:
             break;
 
             case 25:
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"slrl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
-	    else snprintf(asmtext,sizeof asmtext,"slrl $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"shrl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"shrl $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
 
             res0=(B0x&0x3f) ?((__int128)A0x) >>((B0x&0x3f)-1) :((__int128)  A0x)<<1;
             res=(res0>>1)&0xffffffffull;
@@ -832,8 +762,13 @@ addie:
             break;
 
             case 35:
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movq %%%s,  %%%s\n",reg8[rB],reg8[rT]);
-	    else snprintf(asmtext,sizeof asmtext,"sarl $%i, %%%s\n",(int) B,reg8[rT]);
+	    if (rB<0) {
+		rB=rand()&0x1f;
+		B=contx->reg_gen[rB];
+		B_p=contx->reg_genP[rB];
+	    }
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movb %%%s,  %%%s\n",reg8[rB+((op&1024)>>5)],reg8[rT+((op&256)>>3)]);
+	    else snprintf(asmtext,sizeof asmtext,"movb $%i, %%%s\n",(int) B,reg8[rT]);
             if (op&256) res=(A&0xffffffffffff00ffull)| ((op&1024) ? B&0xff00ull :
                 (B&0xffull)<<8);
             else res=(A&0xffffffffffffff00ull)| ((op&1024) ? (B&0xff00ull)>>8 :
@@ -842,49 +777,84 @@ addie:
             break;
 
             case 36:
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movzbl %%%s,  %%%s\n",reg32[rB],reg32[rT]);
+	    if (rB<0) {
+		rB=rand()&0x1f;
+		B=contx->reg_gen[rB];
+		B_p=contx->reg_genP[rB];
+	    }
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movzbl %%%s,  %%%s\n",reg8[rB],reg32[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"movzbl $%i, %%%s\n",(int) B,reg32[rT]);
             res=B&0xffull;
             flags=flags_in;
             break;
 
             case 37:
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movzwl %%%s,  %%%s\n",reg32[rB],reg32[rT]);
+	    if (rB<0) {
+		rB=rand()&0x1f;
+		B=contx->reg_gen[rB];
+		B_p=contx->reg_genP[rB];
+	    }
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movzwl %%%s,  %%%s\n",reg16[rB],reg32[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"movzwl $%i, %%%s\n",(int) B,reg32[rT]);
             res=B&0xffffull;
             flags=flags_in;
             break;
 
             case 39:
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movsbq %%%s,  %%%s\n",reg65[rB],reg65[rT]);
+	    if (rB<0) {
+		rB=rand()&0x1f;
+		B=contx->reg_gen[rB];
+		B_p=contx->reg_genP[rB];
+	    }
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movsbq %%%s,  %%%s\n",reg8[rB],reg65[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"movsbq $%i, %%%s\n",(int) B,reg65[rT]);
             res=(B&0x80) ? B|0xffffffffffffff00ull : B&0xffull;
             flags=flags_in;
             break;
 
             case 40:
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movswq %%%s,  %%%s\n",reg65[rB],reg65[rT]);
+	    if (rB<0) {
+		rB=rand()&0x1f;
+		B=contx->reg_gen[rB];
+		B_p=contx->reg_genP[rB];
+	    }
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movswq %%%s,  %%%s\n",reg16[rB],reg65[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"movswq $%i, %%%s\n",(int) B,reg65[rT]);
             res=(B&0x8000) ? B|0xffffffffffff0000ull : B&0xffffull;
             flags=flags_in;
             break;
 
             case 41:
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movslq %%%s,  %%%s\n",reg65[rB],reg65[rT]);
+	    if (rB<0) {
+		rB=rand()&0x1f;
+		B=contx->reg_gen[rB];
+		B_p=contx->reg_genP[rB];
+	    }
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movslq %%%s,  %%%s\n",reg32[rB],reg65[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"movslq $%i, %%%s\n",(int) B,reg65[rT]);
             res=(B&0x80000000) ? B|0xffffffff00000000ull : B&0xffffffffull;
             flags=flags_in;
             break;
 
             case 42:
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movsbl %%%s,  %%%s\n",reg32[rB],reg32[rT]);
+	    if (rB<0) {
+		rB=rand()&0x1f;
+		B=contx->reg_gen[rB];
+		B_p=contx->reg_genP[rB];
+	    }
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movsbl %%%s,  %%%s\n",reg8[rB],reg32[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"movsbl $%i, %%%s\n",(int) B,reg32[rT]);
             res=(B0&0x80) ? B0x|0xffffff00ull : B0x&0xffull;
             flags=flags_in;
             break;
 
             case 43:
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movswl %%%s,  %%%s\n",reg32[rB],reg32[rT]);
+	    if (rB<0) {
+		rB=rand()&0x1f;
+		B=contx->reg_gen[rB];
+		B_p=contx->reg_genP[rB];
+	    }
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movswl %%%s,  %%%s\n",reg16[rB],reg32[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"movswl $%i, %%%s\n",(int) B,reg32[rT]);
             res=(B0&0x8000) ? B0x|0xffff0000ull : B0x&0xffffull;
             flags=flags_in;
@@ -929,7 +899,7 @@ addie:
 		B=contx->reg_gen[rB];
 		B_p=contx->reg_genP[rB];
 	    }
-	    snprintf(asmtext,sizeof asmtext,"clahf%s %%%s\n",COND(op),reg32[rA]);
+	    snprintf(asmtext,sizeof asmtext,"clahf%sl %%%s\n",COND(op),reg32[rA]);
             res=0;
             flags=testj(((op&0x700)>>7)|(op&0x1)) ? A&0x3f : flags_in;
             break;
@@ -942,7 +912,7 @@ addie:
 		B=contx->reg_gen[rB];
 		B_p=contx->reg_genP[rB];
 	    }
-	    snprintf(asmtext,sizeof asmtext,"cset%s %%%s\n",COND(op),reg32[rT]);
+	    snprintf(asmtext,sizeof asmtext,"cset%sl %%%s\n",COND(op),reg32[rT]);
             res=testj(((op&0x700)>>7)|(op&0x1));
             flags=flags_in;
             break;
@@ -953,7 +923,7 @@ addie:
 		B=contx->reg_gen[rB];
 		B_p=contx->reg_genP[rB];
 	    }
-	    snprintf(asmtext,sizeof asmtext,"sahf %%%s\n",reg32[rT]);
+	    snprintf(asmtext,sizeof asmtext,"sahfl %%%s\n",reg32[rT]);
             res=flags_in&0x3f;
             flags=flags_in;
             break;
@@ -964,7 +934,7 @@ addie:
 		B=contx->reg_gen[rB];
 		B_p=contx->reg_genP[rB];
 	    }
-	    snprintf(asmtext,sizeof asmtext,"lahf %%%s\n",reg32[rA]);
+	    snprintf(asmtext,sizeof asmtext,"lahfl %%%s\n",reg32[rA]);
             res=0;
             flags=A&0x3f;
             break;
