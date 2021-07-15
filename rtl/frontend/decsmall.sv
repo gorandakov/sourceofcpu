@@ -1385,7 +1385,7 @@ module smallInstr_decoder(
           prA[26]=instr[12:8];
           prT[26]=instr[12:8];
           prB[26]=5'd31;
-	  pIPRel[26]=instr[15];
+	  pisIPRel[26]=instr[15];
 	  if (~puseBConst[26]) perror[26]=1;
       end 
       
