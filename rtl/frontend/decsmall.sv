@@ -356,29 +356,29 @@ module smallInstr_decoder(
   
   assign isBasicSysInstr=opcode_main==8'hff;
   
-  assign qconstant[1]={pisIPRel[3],pconstant[3]};//??
+  assign qconstant[1]={1'b0,pconstant[3]};//??
   assign qtrien   [1]=trien    [3];//??
-  assign qconstant[2]={pisIPRel[8],pconstant[8]};
+  assign qconstant[2]={1'b0,pconstant[8]};
   assign qtrien   [2]=trien    [8];
-  assign qconstant[3]={pisIPRel[9],pconstant[9]};
+  assign qconstant[3]={1'b0,pconstant[9]};
   assign qtrien   [3]=trien    [9];
-  assign qconstant[4]={pisIPRel[10],pconstant[10]};
+  assign qconstant[4]={1'b0,pconstant[10]};
   assign qtrien   [4]=trien    [10];
-  assign qconstant[5]={pisIPRel[18],pconstant[18]};
+  assign qconstant[5]={1'b0,pconstant[18]};
   assign qtrien   [5]=trien    [18];
-  assign qconstant[6]={pisIPRel[20],pconstant[20]};
+  assign qconstant[6]={1'b0,pconstant[20]};
   assign qtrien   [6]=trien    [20];
-  assign qconstant[7]={pisIPRel[25],pconstant[25]};
+  assign qconstant[7]={1'b0,pconstant[25]};
   assign qtrien   [7]=trien    [25];
-  assign qconstant[8]={pisIPRel[26],pconstant[26]};
+  assign qconstant[8]={(magic[3:0]==4'hf && opcode_main==8'd183) & instr[15],pconstant[26]};
   assign qtrien   [8]=trien    [26];
-  assign qconstant[9]={pisIPRel[30],pconstant[30]};
+  assign qconstant[9]={1'b0,pconstant[30]};
   assign qtrien   [9]=trien    [30];
-  assign qconstant[10]={pisIPRel[35],pconstant[35]};
+  assign qconstant[10]={1'b0,pconstant[35]};
   assign qtrien   [10]=trien    [35];
-  assign qconstant[11]={pisIPRel[13],pconstant[13]};
+  assign qconstant[11]={1'b0,pconstant[13]};
   assign qtrien   [11]=trien    [13];
-  assign qconstant[12]={1'b1,pconstant[19]};
+  assign qconstant[12]={~pisIPRel[19],pconstant[19]};
   assign qtrien   [12]=trien[19];
   assign qconstant[0]={1'b0,pconstant[0]};
   assign qtrien   [0]=qtrien[11:1]==11'b0;
@@ -1385,7 +1385,6 @@ module smallInstr_decoder(
           prA[26]=instr[12:8];
           prT[26]=instr[12:8];
           prB[26]=5'd31;
-	  pisIPRel[26]=instr[15];
 	  if (~puseBConst[26]) perror[26]=1;
       end 
       
