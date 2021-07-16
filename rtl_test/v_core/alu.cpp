@@ -1196,6 +1196,7 @@ void gen_prog(req *reqs,int count, FILE *f,hcont *contx) {
        fprintf(f,"%s",reqs[n].asmtext);
    }
    reqs[31].gen_init(31,0,0x8000,0);
+   fprintf(f,"%s",reqs[31].asmtext);
   // reqs[32].gen_movcsr(csr_page,31);
    
    for(n=32;n<count;n++) {
