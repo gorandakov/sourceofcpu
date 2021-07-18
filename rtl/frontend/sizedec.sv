@@ -225,7 +225,14 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   isCall & magic[0]
   };
   
-  assign clsStore2=isBaseIndexLoadStore & opcode_main[0];
+  assign clsStore2=|{
+  isBaseLoadStore &  opcode_main[0],
+  isImmLoadStore && opcode_main[0],
+  isBaseIndexLoadStore & opcode_main[0],
+  isCall & magic[0]
+  };
+  
+//  assign clsStore2=isBaseIndexLoadStore & opcode_main[0];
 
   assign clsLoadFPU=|{
     isBaseLoadStore & ~opcode_main[0] & ~opcode_main[5],
