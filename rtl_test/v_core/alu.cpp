@@ -1218,15 +1218,28 @@ int main(int argc, char *argv[]) {
     FILE *FOUT=fopen("/tmp/asm2.s","w");
     if (!FOUT) exit(1);
     hcont contx;
-    char *mem=(char *) malloc(2*1024*1024*1024);
-    bzero(mem,2*1024*1024*1024);
+    char *mem=(char *) malloc(2l*1024*1024*1024);
+    bzero(mem,2l*1024*1024*1024);
     req *reqs=new req[10000000];
     fesetround(FE_TOWARDZERO);
     top->clk=0;
     top->rst=1;
     gen_prog(reqs,10000000,FOUT,&contx);
     fclose(FOUT);
-    exit(0);
+    if (argc==2 && !strcmp(argv[1],"-asm")) exit(0);
+    int fd=open("~/.hsim/hsim.bin",O_RDONLY);
+    if (fd>=0) {
+	struct stat s;
+	long sz;
+	fstat(fd,&s);
+	sz=s.st_size;
+	sz=(sz+4095l)&0xfffffffff000;
+	if (sz>(1024l*1024*1024)) {
+            printf("map too big!\n");
+	    exit(1);
+	}
+        mmap(mem,sz,PROT_READ|PROT_WRITE,MAP_FIXED|MAP_PRIVATE,fd,0);
+    }
     req_set(top,reqs,mem);
     top->eval();
     top->clk=1;
