@@ -1,6 +1,11 @@
 #include <cstdlib>
 #include <cfenv>
 #include <cstdio>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/mman.h>
+#include <fcntl.h>
 #include "Vheptane_core.h"
 #include "verilated.h"
 #include "../inc/ptr.h"
@@ -1239,6 +1244,8 @@ int main(int argc, char *argv[]) {
 	    exit(1);
 	}
         mmap(mem,sz,PROT_READ|PROT_WRITE,MAP_FIXED|MAP_PRIVATE,fd,0);
+    } else {
+	perror("open() ");
     }
     req_set(top,reqs,mem);
     top->eval();
