@@ -195,7 +195,7 @@ module lsq_req_block(
     if (write0_wen) $display("mmm ",write0_addr," ",write0_data);
     if (write4_wen) $display("mmm4 ",write4_addr," ",write4_data);
     if (write5_wen) $display("mmm5 ",write5_addr," ",write5_data);
-    $display("mm1 ",read_addr," ",read0_data," ",read_clkEn);
+    //$display("mm1 ",read_addr," ",read0_data," ",read_clkEn);
   end
 
 endmodule

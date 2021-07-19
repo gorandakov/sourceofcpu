@@ -1126,6 +1126,22 @@ void req_set(Vheptane_core *top,req *reqs,char *mem) {
 
 bool get_check(Vheptane_core *top, req *reqs) {
     bool rtn=true;
+    static unsigned long pos=0;
+    long k,count;
+    static unsigned xbreak=0;
+    static unsigned retire=0;
+    if (retire) {
+	for(k=0;k<10;k++) {
+	    if (xbreak&(1<<k)) break;
+	}
+	count=(top->heptane_core__DOT__except && top->heptane_core__DOT__except_due_jump) ? k+1 : k;
+	if (top->heptane_core__DOT__except) printf("except %li\n",count);
+	else printf("ret %li\n",count);
+	pos+=count;
+    }
+    xbreak=top->heptane_core__DOT__bck_mod__DOT__retM_xbreak;
+    retire=top->heptane_core__DOT__bck_mod__DOT__retM_do_retire;
+    return rtn;
 }
 
 void fp_get_ext(long double a, unsigned num[3]) {
@@ -1232,7 +1248,10 @@ int main(int argc, char *argv[]) {
     gen_prog(reqs,10000000,FOUT,&contx);
     fclose(FOUT);
     if (argc==2 && !strcmp(argv[1],"-asm")) exit(0);
-    int fd=open("~/.hsim/hsim.bin",O_RDONLY);
+    char mname[256];
+    mname[0]=0;
+    snprintf(mname,256,"%s/.hsim/hsim.bin",getenv("HOME"));
+    int fd=open(mname,O_RDONLY);
     if (fd>=0) {
 	struct stat s;
 	long sz;

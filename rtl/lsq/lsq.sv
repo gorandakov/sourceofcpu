@@ -325,7 +325,7 @@ module lsq_decide_ret(
        // doRetire_reg<=1'b0;
        dataB_shr_out<={`lsqshare_width{1'b0}};
     end else begin
-	$display("dd ",dataB_II," ",dataB_II_reg," ",cntrl_II);
+	//$display("dd ",dataB_II," ",dataB_II_reg," ",cntrl_II);
         for(t=0;t<10;t=t+1) if ((ret_ret && cntrl_II==dataB_II)|
            (~ret_ret && cntrl_II==dataB_II_reg && doRetire|(cntrl_II==dataB_II)) &&
            ~bStall) begin
