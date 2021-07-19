@@ -416,6 +416,7 @@ module pager(
           VPTR[1]<=0;
           //CPTR<=0;
           SPTR<=0;
+	  mflags<=64'b0;
           //CMSK<=0;
           //IPTR<=0;
           //IMSK<=0;
