@@ -1239,8 +1239,12 @@ int main(int argc, char *argv[]) {
     FILE *FOUT=fopen("/tmp/asm2.s","w");
     if (!FOUT) exit(1);
     hcont contx;
-    char *mem=(char *) malloc(2l*1024*1024*1024);
-    bzero(mem,2l*1024*1024*1024);
+    char *mem=(char *) mmap(0,2l*1024*1024*1024,PROT_READ|PROT_WRITE,MAP_ANON|MAP_PRIVATE,-1,0);
+    if (!mem) {
+	perror("mem");
+	exit(1);
+    }
+    //bzero(mem,2l*1024*1024*1024);
     req *reqs=new req[10000000];
     fesetround(FE_TOWARDZERO);
     top->clk=0;
@@ -1262,7 +1266,10 @@ int main(int argc, char *argv[]) {
             printf("map too big!\n");
 	    exit(1);
 	}
-        mmap(mem,sz,PROT_READ|PROT_WRITE,MAP_FIXED|MAP_PRIVATE,fd,0);
+        if (!mmap(mem,sz,PROT_READ|PROT_WRITE,MAP_FIXED|MAP_PRIVATE,fd,0)) {
+	    perror("mmap");
+	    exit(1);
+	}
     } else {
 	perror("open() ");
     }
