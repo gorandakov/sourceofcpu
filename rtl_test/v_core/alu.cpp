@@ -553,7 +553,7 @@ addie:
 	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"addl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"addl $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
 
-            res0=((__int128) A0)+(__int128) B0;
+            res0=((unsigned __int128) A0x)+(unsigned __int128) B0x;
             res2=res=res0&0xffffffffull;
             flg32(res0);
             flags|=((A0>0&&B0>0&&res2<0) || (A0<0&&B0<0&&res2>0))<<4;
@@ -591,7 +591,7 @@ addie:
 	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"subl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"subl $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
 
-            res0=((__int128) A0)+((__int128) ~B0)+1;
+            res0=((unsigned __int128) A0x)+((unsigned __int128) ~B0x)+1;
             res2=res=res0&0xffffffffull;
             flg32(res0^0x100000000ll);
             flags|=((A0>=0&&B0<0&&res2<0) || (A0<0&&B0>0&&res2>0))<<4;
