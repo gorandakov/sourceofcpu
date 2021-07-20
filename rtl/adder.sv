@@ -853,9 +853,9 @@ module addsub_alu(a,b,out,sub,en,ben,cout,cout4,cout32,cout_sec,ndiff,cout44);
 	
 	if (1)
 	  begin
-	    assign out[63:44]=(en&~ben[1]&ben[0]) ? exbits : 20'bz; 
+	    assign out[63:32]=(en&~ben[1]&ben[0]) ? {exbits,12'b0} : 20'bz; 
             assign out[63:32]=(X[31] & ~ben[1]&~ben[0]) ? {32{~C1[31]}} : 32'bz;
-            assign out[63:32]=(nX[31] & ~ben[1]&~ben[0]) ? {32{~nC1[i]}} : 32'bz;
+            assign out[63:32]=(nX[31] & ~ben[1]&~ben[0]) ? {32{~nC1[31]}} : 32'bz;
 	  end
     
   endgenerate
