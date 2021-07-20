@@ -249,7 +249,7 @@ module pager(
       end
   end
   always @(posedge clk) begin
-      if (writeTlb_wenC) begin
+      if (writeTlb_wen) begin
           $display("tlb ip ",writeTlb_IP," ",new_inv_reg);
           $display("data 0: ",writeTlb_data0);
           $display("data 1: ",writeTlb_data1);
