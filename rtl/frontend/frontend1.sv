@@ -248,7 +248,7 @@ module frontend1(
   
   wire [VIRT_WIDTH-6:0] write_IP;
   wire [VIRT_WIDTH-8:0] req_addrR;
-  wire [PHYS_WIDTH-13:0] req_addrP;
+  wire [PHYS_WIDTH-14:0] req_addrP;
   wire [VIRT_WIDTH-13:0] tlb_IP;
   
   wire bus_tlb_match;
@@ -798,7 +798,7 @@ module frontend1(
   assign cc_attr_d=(init || fmstall & ~(ixcept|uxcept)) ? cc_attr : 4'bz;
   
   assign bus_match={BUS_ID,1'b1}==bus_slot[9:4] & bus_en;
-  assign write_IP={req_addrR,2'b0};
+  assign write_IP={req_addrP,req_addrR[5:0],2'b0};
   
   assign do_seq=~miss_now && ~miss_recover && ~(ixcept|uxcept) && ~btb_hasTK && ~btb_in_ret;
   assign do_seq_miss=miss_now && ~miss_recover && ~(ixcept|uxcept) && ~btb_hasTK && ~btb_in_ret;

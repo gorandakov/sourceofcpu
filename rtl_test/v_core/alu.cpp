@@ -1090,13 +1090,18 @@ void req_set(Vheptane_core *top,req *reqs,char *mem) {
     static bool R=0;
     static unsigned sigs[32];
     static unsigned src[32];
+    static unsigned delay=0;
+    static bool bmr=0;
     if (top->rbusOut_want && top->rbusOut_can) {
 	addr[pos]=top->rbusOut_address;
 	sigs[pos]=top->rbusOut_signals;
 	src[pos]=top->rbusOut_src_req;
 	pos++;
+	pos&=0x1f;
+	if (pos_R==pos) delay=0;
     }
-    if (pos_R!=pos) {
+    if (pos_R!=pos) delay++;
+    if (pos_R!=pos && delay>10) {
 	unsigned signals=(1<<(rbusD_mem_reply))|(1<<(rbusD_used));
 	top->rbusDIn_signals=signals;
 	top->rbusDIn_dst_req=src[pos_R];
@@ -1106,6 +1111,10 @@ void req_set(Vheptane_core *top,req *reqs,char *mem) {
 	    memcpy((char *) top->rbusDIn_data,&mem[(addr[pos_R]<<7)+64],64);
 	    top->rbusDIn_signals|=1<<(rbusD_second);
 	}
+	printf("retn 0x%lx,\t%i\n",addr[pos_R],R);
+	R=!R;
+	if (!R) pos_R++;
+	pos_R&=0x1f;
     } else {
 	top->rbusDIn_signals=0;
     }
@@ -1122,6 +1131,19 @@ void req_set(Vheptane_core *top,req *reqs,char *mem) {
 	}
         end_DOut:;
     }
+    top->rbusOut_can=1;
+    if (top->rbusOut_want) printf("want 0x%lx,\t%i,\t%i\n",top->rbusOut_address,pos,pos_R);
+   // if (top->heptane_core__DOT__dc2_rdEnX_reg4) printf("dc2_rdEnX_reg4\n");
+    if (top->heptane_core__DOT__req_en_reg) printf("wantR 0x%lx,\t%i\n",top->heptane_core__DOT__req_addr_reg,
+	top->heptane_core__DOT__req_slot_reg);
+    if (bmr) printf("insert 0x%lx\n",
+	top->heptane_core__DOT__front_mod__DOT__cc_mod__DOT__write_IP_reg);
+    if (top->heptane_core__DOT__front_mod__DOT__bus_match_reg) bmr=1;
+    else bmr=0;
+    if (top->heptane_core__DOT__insBus_en) printf("insBus 0x%x, 0x%8x%8x%8x\n",top->heptane_core__DOT__dc2_req_rd_reg5,
+        top->heptane_core__DOT__front_mod__DOT__req_mod__DOT__ram[top->heptane_core__DOT__dc2_req_rd_reg5&7][2],
+	top->heptane_core__DOT__front_mod__DOT__req_mod__DOT__ram[top->heptane_core__DOT__dc2_req_rd_reg5&7][1],
+	top->heptane_core__DOT__front_mod__DOT__req_mod__DOT__ram[top->heptane_core__DOT__dc2_req_rd_reg5&7][0]);
 }
 
 bool get_check(Vheptane_core *top, req *reqs) {
@@ -1141,6 +1163,7 @@ bool get_check(Vheptane_core *top, req *reqs) {
     }
     xbreak=top->heptane_core__DOT__bck_mod__DOT__retM_xbreak;
     retire=top->heptane_core__DOT__bck_mod__DOT__retM_do_retire;
+    if (top->heptane_core__DOT__iAvail) printf("iAvail 0x%x\n",top->heptane_core__DOT__iAvail);
     return rtn;
 }
 
@@ -1278,25 +1301,28 @@ int main(int argc, char *argv[]) {
     top->clk=1;
     top->eval();
     top->rst=0;
+    top->clk=0;
+    top->eval();
+    top->eval();
     while(!Verilated::gotFinish()) {
         int k,j;
+        top->clk=1;
+        top->eval();
+        top->eval();
         top->clk=0;
         top->eval();
         top->eval();
-        top->clk=1;
-        top->eval();
-        req_set(top,reqs,mem);
-        top->eval();
         if (!initcount) {
+            req_set(top,reqs,mem);
             cyc=cyc+1;
             if (!get_check(top,reqs)) {
                 printf("error @%i\n",cyc);
                 sleep(1);
             }
-            if ((cyc%10000)==0) {
+            if ((cyc%100)==0) {
                 printf("cycle %i\n",cyc);
             }
-
+           
         } else {
             initcount=initcount-1;
             if (!initcount) Verilated::assertOn(true);
