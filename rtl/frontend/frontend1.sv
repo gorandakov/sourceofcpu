@@ -246,8 +246,8 @@ module frontend1(
   reg [PHYS_WIDTH-1:0] IP_phys_reg2; 
   reg [PHYS_WIDTH-1:0] IP_phys_reg3; 
   
-  wire [VIRT_WIDTH-6:0] write_IP;
-  wire [VIRT_WIDTH-8:0] req_addrR;
+  wire [VIRT_WIDTH-26:0] write_IP;
+  wire [VIRT_WIDTH-28:0] req_addrR;
   wire [PHYS_WIDTH-14:0] req_addrP;
   wire [VIRT_WIDTH-13:0] tlb_IP;
   
@@ -2058,7 +2058,7 @@ module frontReq_ram(
   write_wen
   );
 
-  localparam DATA_WIDTH=44-12+64-7;
+  localparam DATA_WIDTH=44-13+64-27;
   localparam ADDR_WIDTH=3;
   localparam ADDR_COUNT=8;
 
