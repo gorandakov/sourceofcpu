@@ -225,7 +225,7 @@ module frontend1(
   reg [2:0] miss_slot;
   wire [2:0] miss_slot_next;
 
-  reg [PHYS_WIDTH-13:0] miss_phys;
+  reg [PHYS_WIDTH-14:0] miss_phys;
   
   wire req_en0,req_en1;
   //wire overpage;
@@ -1552,7 +1552,7 @@ module frontend1(
           miss_seq<=1'b0;
           proc<=24'b0;
           kmode<=1'b1;
-          miss_phys<=32'b0;
+          miss_phys<=31'b0;
           tlb_hit_reg2<=1'b0;
           tlb_data_reg2<={`ctlbData_width{1'b0}};
           tlb_data_reg3<={`ctlbData_width{1'b0}};
@@ -1759,7 +1759,7 @@ module frontend1(
           jumpTK_en<=1'b0;
           if (~cc_read_hit & ~miss_now & instrEn_reg3) begin
               miss_IP<=cc_read_IP_reg3;
-              miss_phys<=IP_phys_reg3[43:12];
+              miss_phys<=IP_phys_reg3[43:13];
               miss_now<=1'b1;
               tlbMiss_now<=~tlb_match;
               miss_cnt<=0;
