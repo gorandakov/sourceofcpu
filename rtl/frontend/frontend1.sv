@@ -1025,7 +1025,7 @@ module frontend1(
   .cc_read_tagErr(cc_tagErr),
   .read_data(read_data),
   .read_dataX(read_dataX),
-  .write_IP({write_IP[43:5],5'b0}),
+  .write_IP({write_IP,5'b0}),
   .cc_write_wen(bus_match_reg),
   .cc_invalidate(1'b0),
   .write_data(write_data),
@@ -1059,7 +1059,7 @@ module frontend1(
   .read_addr(bus_slot[2:0]),
   .read_data({req_addrR,req_addrP}),
   .write_addr(req_slot[2:0]),
-  .write_data({cc_read_IP_reg4[63:7],miss_phys}),
+  .write_data({cc_read_IP_reg4[43:7],miss_phys}),
   .write_wen(req_en|req_tlbEn)
   );
 
