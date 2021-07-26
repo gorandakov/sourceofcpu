@@ -188,9 +188,9 @@ module ccTag(
 
   generate
     if (~INDEX[0]) begin
-        assign hitNRU=~(({3{read_hit}} & read_NRUw) & hitNRU_in); 
+        assign hitNRU=~(({3{read_hit}} & read_NRUr) & hitNRU_in); 
     end else begin
-        assign hitNRU=~(~({3{read_hit}} & read_NRUw) | hitNRU_in); 
+        assign hitNRU=~(~({3{read_hit}} & read_NRUr) | hitNRU_in); 
     end
   endgenerate
 
@@ -231,7 +231,7 @@ module ccTag(
   ccTag_lram lram1_mod(
   .clk(clk),
   .rst(rst),
-  .read_clkEn(read_clkEn),
+  .read_clkEn(write_wen),
   .read_addr(write_phys_addr[7:0]),
   .read_data(read_NRUw),
   .write_addr(read_phys_addr_reg2[7:0]),
@@ -244,7 +244,7 @@ module ccTag(
   .newLRU(write_NRU),
   .hitLRU(hitNRU_reg),
   .init(init_reg2),
-  .en(read_clkEn_reg2)
+  .en(read_clkEn_reg2 && read_hit_reg)
   );
 
   
@@ -263,6 +263,7 @@ module ccTag(
           read_phys_addr_reg2<=37'b0;
           init_reg<=1'b0;
           init_reg2<=1'b0;
+	  read_hit_reg<=1'b0;
       end
       else begin
           read_phys_addr_reg<=read_phys_addr;
@@ -273,7 +274,10 @@ module ccTag(
           read_phys_addr_reg2<=read_phys_addr_reg;
           init_reg<=init;
           init_reg2<=init_reg;
+	  read_hit_reg<=read_hit;
       end
+      if (write_hit) $display("whit ",write_data_way);
+      if (read_clkEn_reg) $display("rhit ",read_phys_addr_reg," ",read_hit);
   end
   
 endmodule
