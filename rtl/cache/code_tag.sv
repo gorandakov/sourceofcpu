@@ -223,7 +223,7 @@ module ccTag(
   .read_clkEn(read_clkEn),
   .read_addr(read_phys_addr[7:0]),
   .read_data(read_NRUr),
-  .write_addr(read_phys_addr_reg2[7:0]),
+  .write_addr(read_phys_addr_reg[7:0]),
   .write_data(write_NRU),
   .write_wen(EXT ? init_reg2 : read_clkEn_reg2|init_reg2)
   );
@@ -234,7 +234,7 @@ module ccTag(
   .read_clkEn(read_clkEn),
   .read_addr(write_phys_addr[7:0]),
   .read_data(read_NRUw),
-  .write_addr(read_phys_addr_reg2[7:0]),
+  .write_addr(read_phys_addr_reg[7:0]),
   .write_data(write_NRU),
   .write_wen(EXT ? init_reg2 : read_clkEn_reg2|init_reg2)
   );
