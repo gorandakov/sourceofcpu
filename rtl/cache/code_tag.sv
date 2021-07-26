@@ -277,7 +277,7 @@ module ccTag(
 	  read_hit_reg<=read_hit;
       end
       if (write_wen_reg) $display("whit ",write_data_way," lruw ",read_hitLRUw);
-      if (read_clkEn_reg) $display("rhit ",read_phys_addr_reg," ",read_hit);
+     // if (read_clkEn_reg) $display("rhit ",read_phys_addr_reg," ",read_hit);
   end
   
 endmodule
