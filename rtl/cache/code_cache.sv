@@ -517,7 +517,7 @@ module ccRam_half(
   assign expun_addr=expun_addrP[7];
   
 
-  always @(negedge clk) begin
+  always @(*) begin
     if (rst) read_NRU_reg<=3'b0;
     else read_NRU_reg<=read_NRUP[7];
   end

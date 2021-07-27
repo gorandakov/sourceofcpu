@@ -1144,6 +1144,8 @@ void req_set(Vheptane_core *top,req *reqs,char *mem) {
         top->heptane_core__DOT__front_mod__DOT__req_mod__DOT__ram[top->heptane_core__DOT__dc2_req_rd_reg5&7][2],
 	top->heptane_core__DOT__front_mod__DOT__req_mod__DOT__ram[top->heptane_core__DOT__dc2_req_rd_reg5&7][1],
 	top->heptane_core__DOT__front_mod__DOT__req_mod__DOT__ram[top->heptane_core__DOT__dc2_req_rd_reg5&7][0]);
+    if (top->heptane_core__DOT__front_mod__DOT__cc_mod__DOT__cc_write_wen_reg2)
+	    printf("wenR\n");
 }
 
 bool get_check(Vheptane_core *top, req *reqs) {

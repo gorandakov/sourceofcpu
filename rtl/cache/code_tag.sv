@@ -154,6 +154,7 @@ module ccTag(
   reg read_clkEn_reg;
   reg read_clkEn_reg2;
 
+  reg read_hit_reg;
 
   reg [PHYS_BITS-8:0] read_phys_addr_reg;
   reg [PHYS_BITS-8:0] write_phys_addr_reg;
@@ -188,9 +189,9 @@ module ccTag(
 
   generate
     if (~INDEX[0]) begin
-        assign hitNRU=~(({3{read_hit_reg}} & read_NRUr_reg) & hitNRU_in); 
+        assign hitNRU=~(~({3{read_hit_reg}} & read_NRUr_reg) & hitNRU_in); 
     end else begin
-        assign hitNRU=~(~({3{read_hit_reg}} & read_NRUr_reg) | hitNRU_in); 
+        assign hitNRU=~(({3{read_hit_reg}} & read_NRUr_reg) | hitNRU_in); 
     end
   endgenerate
 
@@ -244,7 +245,7 @@ module ccTag(
   .newLRU(write_NRU),
   .hitLRU(hitNRU_reg),
   .init(init_reg2),
-  .en(read_clkEn_reg2 && read_hit_reg)
+  .en(read_clkEn_reg2)
   );
 
   
@@ -276,7 +277,7 @@ module ccTag(
           init_reg2<=init_reg;
 	  read_hit_reg<=read_hit;
       end
-      if (write_wen_reg) $display("whit ",write_data_way," lruw ",read_hitLRUw);
+      if (write_wen_reg) $display("whit ",write_data_way," lruw ",read_NRUw);
      // if (read_clkEn_reg) $display("rhit ",read_phys_addr_reg," ",read_hit);
   end
   
