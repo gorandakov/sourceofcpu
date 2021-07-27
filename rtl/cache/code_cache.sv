@@ -518,8 +518,7 @@ module ccRam_half(
   
 
   always @(*) begin
-    if (rst) read_NRU_reg<=3'b0;
-    else read_NRU_reg<=read_NRUP[7];
+    read_NRU_reg=read_NRUP[7];
   end
 
 endmodule

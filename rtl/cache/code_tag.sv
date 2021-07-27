@@ -188,7 +188,7 @@ module ccTag(
   assign write_exp_en=write_hit && read_dataW[`cc1Tag_valid ];
 
   generate
-    if (~INDEX[0]) begin
+    if (INDEX[0]) begin
         assign hitNRU=~(~({3{read_hit_reg}} & read_NRUr_reg) & hitNRU_in); 
     end else begin
         assign hitNRU=~(({3{read_hit_reg}} & read_NRUr_reg) | hitNRU_in); 
