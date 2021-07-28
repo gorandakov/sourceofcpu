@@ -1302,10 +1302,10 @@ int main(int argc, char *argv[]) {
     top->eval();
     top->clk=1;
     top->eval();
-    top->rst=0;
     top->clk=0;
     top->eval();
     top->eval();
+    top->rst=0;
     while(!Verilated::gotFinish()) {
         int k,j;
         top->clk=1;
@@ -1314,6 +1314,7 @@ int main(int argc, char *argv[]) {
         top->clk=0;
         top->eval();
         top->eval();
+        if (top->heptane_core__DOT__front_mod__DOT__cc_mod__DOT__cc_mod__DOT__wayMod_gen__BRA__7__KET____DOT__way_mod__DOT__tag_mod__DOT__init_reg2) printf("dinit7 0x%x\n",top->heptane_core__DOT__front_mod__DOT__cc_mod__DOT__cc_mod__DOT__wayMod_gen__BRA__7__KET____DOT__way_mod__DOT__tag_mod__DOT__write_NRU);
         if (!initcount) {
             req_set(top,reqs,mem);
             cyc=cyc+1;
