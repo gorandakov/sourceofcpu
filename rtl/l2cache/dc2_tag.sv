@@ -184,7 +184,7 @@ module dcache2_tag(
   .read_data(tag_dataE),
   .write_addr(init ? initCount : req_waddrE_reg[7:0]),
   .write_data(tag_wDataE & {`dc2Tag_width{~init}}),
-  .write_wen(write_wen_reg & write_hit & ~req_wodd_reg || req_en_reg || init)
+  .write_wen(write_wen_reg & write_hit & ~req_wodd_reg || req_en_reg & ~req_odd_reg || init)
   );
 
   dcache2_tag_ram ramO_mod(
@@ -195,7 +195,7 @@ module dcache2_tag(
   .read_data(tag_dataO),
   .write_addr(init ? initCount : req_waddrO_reg[7:0]),
   .write_data(tag_wDataO & {`dc2Tag_width{~init}}),
-  .write_wen(write_wen_reg & write_hit & ~req_wodd_reg || req_en_reg || init)
+  .write_wen(write_wen_reg & write_hit & req_wodd_reg || req_en_reg & req_odd_reg || init)
   );
 
   assign hitE=req_addrE_reg[PADDR_WIDTH-9:8]==tag_dataE[`dc2Tag_addr_43_16] &&
