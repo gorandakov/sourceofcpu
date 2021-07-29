@@ -360,11 +360,13 @@ module dcache2_way(
   input insert_dupl;
   input [4:0] hit_LRU;
   output [4:0] read_LRU;
-  output read_dir,read_excl;
+  output [1:0] read_dir;
+  output [1:0] read_excl;
   output [36:0] read_expAddr;
 //  input init;
   input [4:0] read_LRU_in;
-  input read_dir_in,read_excl_in;
+  input [1:0] read_dir_in;
+  input [1:0] read_excl_in;
   input [36:0] read_expAddr_in;
   input expAddr_en;
   input [36:0] expun_cc_addr;
@@ -459,6 +461,13 @@ module dcache2_way(
   wire [1:0] exclO;
   wire [35:0] expAddrE;
   wire [35:0] expAddrO;
+  wire [1:0] read_dirx;
+  wire [1:0] read_exclx;
+  wire [35:0] read_expAddrx;
+  reg [1:0] read_dirx_reg;
+  reg [1:0] read_exclx_reg;
+  reg [35:0] read_expAddrx_reg;
+
   wire expun_imm;
   reg [1:0] dirtyE_reg;
   reg [1:0] dirtyO_reg;
@@ -652,8 +661,8 @@ module dcache2_way(
   dcache2_LRU_ram LRUe_mod(
   .clk(clk),
   .rst(rst),
-  .read_nClkEn(~read_en_reg2),
-  .read_addr(write_addrE0_reg2[7:0]),
+  .read_nClkEn(~read_en),
+  .read_addr(write_addrE0[7:0]),
   .read_data(read_LRUE),
   .write_addr(init ? initCount : write_addrE0_reg5[7:0]),
   .write_data(new_LRU),
@@ -663,8 +672,8 @@ module dcache2_way(
   dcache2_LRU_ram LRUo_mod(
   .clk(clk),
   .rst(rst),
-  .read_nClkEn(~read_en_reg2),
-  .read_addr(write_addrO0_reg2[7:0]),
+  .read_nClkEn(~read_en),
+  .read_addr(write_addrO0[7:0]),
   .read_data(read_LRUO),
   .write_addr(init ? initCount : write_addrO0_reg5[7:0]),
   .write_data(new_LRU),
@@ -686,6 +695,16 @@ module dcache2_way(
   endgenerate
 
   assign expun_imm=expun_dataE[write_addrE0[6:3]]; 
+
+  assign read_LRUx=write_odd0_reg ? read_LRUO : read_LRUE;
+  assign read_dirx=dirtyO | dirtyE;
+  assign read_exclx=exclO | exclE;
+  assign read_expAddrx=write_odd0_reg ? expAddrO : expAddrE;
+
+  assign read_LRUP={5{read_hit_reg}} & read_LRUx_reg;
+  assign read_dirP={2{read_hit_reg}} & read_dirx_reg;
+  assign read_exclP={2{read_hit_reg}} & read_exclx_reg;
+  assign read_expAddrP={36{read_hit_reg}} & read_expAddrx_reg;
 
   lru_single #(5,{BIG_ID,ID}) lru_mod(
   .lru(read_LRUx_reg2),
@@ -798,6 +817,9 @@ module dcache2_way(
           exclO_reg<=2'b0;
           exclE_reg2<=2'b0;
           exclO_reg2<=2'b0;
+          read_dirx_reg<=2'b0;
+          read_exclx_reg<=2'b0;
+          read_expAddrx_reg<=36'b0;
           read_hit_reg<=1'b0;
           ins_hit_reg<=1'b0;
           ins_hit_reg2<=1'b0;
@@ -860,6 +882,9 @@ module dcache2_way(
           exclO_reg<=exclO;
           exclE_reg2<=exclE_reg;
           exclO_reg2<=exclO_reg;
+          read_dirx_reg<=read_dirx;
+          read_exclx_reg<=read_exclx;
+          read_expAddrx_reg<=read_expAddrx;
           read_hit_reg<=read_hit;
           ins_hit_reg<=ins_hit;
           ins_hit_reg2<=ins_hit_reg;
