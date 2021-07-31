@@ -44,7 +44,10 @@ module fun_fpuL(
   fxFCADD5_raise_s,
   FOOSH0_in,  FOOSH0_out,
   FOOSH1_in,  FOOSH1_out,
-  FOOSH2_in,  FOOSH2_out
+  FOOSH2_in,  FOOSH2_out,
+  XI_dataS,
+  fxFRT_alten_reg3,
+  daltX
   );
   localparam [0:0] H=1'b0;
   localparam SIMD_WIDTH=68; //half width
@@ -190,7 +193,7 @@ module fun_fpuL(
   fxFADD0_raise_s,
   fxFCADD1_raise_s,
   FOOSH0_in,
-  FOOSH0_out
+  FOOSH0_out,
   );
 
   fun_fpu #(1,0) fpu1_mod(
@@ -214,7 +217,7 @@ module fun_fpuL(
   fxFADD2_raise_s,
   fxFCADD3_raise_s,
   FOOSH1_in,
-  FOOSH1_out
+  FOOSH1_out,
   );
 
   fun_fpu #(2,0) fpu2_mod(
@@ -238,7 +241,27 @@ module fun_fpuL(
   fxFADD4_raise_s,
   fxFCADD5_raise_s,
   FOOSH2_in,
-  FOOSH2_out
+  FOOSH2_out,
+  XI_dataD
   );
+ 
+  cvt_FP_I_mod fp2i_mod(
+  .clk(clk),
+  .rst(rst),
+  .en(u5_en_reg[3] && u5_en_reg[0] && u5_op_reg[11] 
+  && (u5_op_reg[7:0]==`fop_cvtD ||
+    u5_op_reg[7:0]==`fop_cvtE || u5_op_reg[7:0]==`fop_cvtS ||
+    u5_op_reg[7:0]==`fop_cvt32S || u5_op_reg[7:0]==`fop_cvt32D ||
+    u5_op_reg[7:0]==`fop_tblD)),
+  .clkEn(~fxFRT_alten_reg3),
+  .A(gxDataBFL[15+68:68],gxDataBFL[65:0]}),
+  .isDBL(u5_op_reg[7:0]==`fop_cvtD || u5_op_reg[7:0]==`fop_cvt32D),
+  .isEXT(u5_op_reg[7:0]==`fop_cvtE),
+  .isSNG(u5_op_reg[7:0]!=`fop_cvtD && u5_op_reg[7:0]!=`fop_cvt32D &&
+    u5_op_reg[7:0]!=`fop_cvtE),
+  .verbatim(u5_op_reg[7:0]==`fop_tblD),
+  .is32b(u5_op_reg[7:0]==`fop_cvt32S || u5_op_reg[7:0]==`fop_cvt32D),
+  .res(FUCVT1),
+  .alt(nDataAlt[2][1])
 
 endmodule

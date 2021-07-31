@@ -4609,24 +4609,6 @@ module backend(
   .alt(nDataAlt[2][0]),
   .Res(FUMUL)
  );
- cvt_FP_I_mod fp2i_mod(
-  .clk(clk),
-  .rst(rst),
-  .en(outEn_reg3[3*2+2][3] && outEn_reg3[3*2+2][0] && outOp_reg3[3*2+2][11] 
-  && (outOp_reg3[3*2+2][7:0]==`fop_cvtD ||
-    outOp_reg3[3*2+2][7:0]==`fop_cvtE || outOp_reg3[3*2+2][7:0]==`fop_cvtS ||
-    outOp_reg3[3*2+2][7:0]==`fop_cvt32S ||outOp_reg3[3*2+2][7:0]==`fop_cvt32D ||
-    outOp_reg3[3*2+2][7:0]==`fop_tblD)),
-  .clkEn(~(|fxFRT_alten_reg3[2])),
-  .A({gxDataBFH[2*2+0][15:0],gxDataBFL[2*2+0][65:0]}),
-  .isDBL(outOp_reg3[3*2+2][7:0]==`fop_cvtD || outOp_reg3[3*2+2][7:0]==`fop_cvt32D),
-  .isEXT(outOp_reg3[3*2+2][7:0]==`fop_cvtE),
-  .isSNG(outOp_reg3[3*2+2][7:0]!=`fop_cvtD && outOp_reg3[3*2+2][7:0]!=`fop_cvt32D &&
-    outOp_reg3[3*2+2][7:0]!=`fop_cvtE),
-  .verbatim(outOp_reg3[3*2+2][7:0]==`fop_tblD),
-  .is32b(outOp_reg3[3*2+2][7:0]==`fop_cvt32S || outOp_reg3[3*2+2][7:0]==`fop_cvt32D),
-  .res(FUCVT1),
-  .alt(nDataAlt[2][1])
 );*/
 /*
   assign nDataAlt[0]=3'b111;
