@@ -1167,6 +1167,13 @@ bool get_check(Vheptane_core *top, req *reqs) {
     xbreak=top->heptane_core__DOT__bck_mod__DOT__retM_xbreak;
     retire=top->heptane_core__DOT__bck_mod__DOT__retM_do_retire;
     if (top->heptane_core__DOT__iAvail) printf("iAvail 0x%x\n",top->heptane_core__DOT__iAvail);
+   // for(k=0;k<6;k++) {
+	if (top->heptane_core__DOT__bck_mod__DOT__enS_alu) {
+	    printf("ALU 0x%x, fl 0x%lx, ret 0x%x\n",top->heptane_core__DOT__bck_mod__DOT__enS_alu,
+		top->heptane_core__DOT__bck_mod__DOT__FUS_alu,
+		top->heptane_core__DOT__bck_mod__DOT__ex_alu);
+	}
+  //  }
     return rtn;
 }
 
