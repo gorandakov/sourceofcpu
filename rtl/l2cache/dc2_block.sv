@@ -463,10 +463,10 @@ module dcache2_way(
   wire [35:0] expAddrO;
   wire [1:0] read_dirx;
   wire [1:0] read_exclx;
-  wire [35:0] read_expAddrx;
+  wire [36:0] read_expAddrx;
   reg [1:0] read_dirx_reg;
   reg [1:0] read_exclx_reg;
-  reg [35:0] read_expAddrx_reg;
+  reg [36:0] read_expAddrx_reg;
 
   wire expun_imm;
   reg [1:0] dirtyE_reg;
@@ -522,7 +522,8 @@ module dcache2_way(
   wire expun_cc_hitE,expun_cc_hitO;
 
   wire [4:0] read_LRUP;
-  wire read_dirP,read_exclP;
+  wire [1:0] read_dirP;
+  wire [1:0] read_exclP;
   wire [36:0] read_expAddrP;
   
   dcache2_tag tagW0_mod(
@@ -699,12 +700,12 @@ module dcache2_way(
   assign read_LRUx=write_odd0_reg ? read_LRUO : read_LRUE;
   assign read_dirx=dirtyO | dirtyE;
   assign read_exclx=exclO | exclE;
-  assign read_expAddrx=write_odd0_reg ? expAddrO : expAddrE;
+  assign read_expAddrx=write_odd0_reg ? {expAddrO,1'b1} : {expAddrE,1'b0};
 
   assign read_LRUP={5{read_hit_reg}} & read_LRUx_reg;
   assign read_dirP={2{read_hit_reg}} & read_dirx_reg;
   assign read_exclP={2{read_hit_reg}} & read_exclx_reg;
-  assign read_expAddrP={36{read_hit_reg}} & read_expAddrx_reg;
+  assign read_expAddrP={37{read_hit_reg}} & read_expAddrx_reg;
 
   lru_single #(5,{BIG_ID,ID}) lru_mod(
   .lru(read_LRUx_reg2),
@@ -819,7 +820,7 @@ module dcache2_way(
           exclO_reg2<=2'b0;
           read_dirx_reg<=2'b0;
           read_exclx_reg<=2'b0;
-          read_expAddrx_reg<=36'b0;
+          read_expAddrx_reg<=37'b0;
           read_hit_reg<=1'b0;
           ins_hit_reg<=1'b0;
           ins_hit_reg2<=1'b0;

@@ -1096,9 +1096,9 @@ void req_set(Vheptane_core *top,req *reqs,char *mem) {
 	addr[pos]=top->rbusOut_address;
 	sigs[pos]=top->rbusOut_signals;
 	src[pos]=top->rbusOut_src_req;
+	if (pos_R==pos) delay=0;
 	pos++;
 	pos&=0x1f;
-	if (pos_R==pos) delay=0;
     }
     if (pos_R!=pos) delay++;
     if (pos_R!=pos && delay>10) {
@@ -1133,7 +1133,8 @@ void req_set(Vheptane_core *top,req *reqs,char *mem) {
     }
     top->rbusOut_can=1;
     if (top->rbusOut_want) printf("want 0x%lx,\t%i,\t%i\n",top->rbusOut_address,pos,pos_R);
-   // if (top->heptane_core__DOT__dc2_rdEnX_reg4) printf("dc2_rdEnX_reg4\n");
+    if (top->heptane_core__DOT__dc2_rdEnX_reg4) printf("dc2_rdEnX_reg4 0x%lx, 0x%x\n",top->heptane_core__DOT__dc2_rd_addr_reg3,
+		    top->heptane_core__DOT__dc2_req_rd_reg4);
     if (top->heptane_core__DOT__req_en_reg) printf("wantR 0x%lx,\t%i\n",top->heptane_core__DOT__req_addr_reg,
 	top->heptane_core__DOT__req_slot_reg);
     if (bmr) printf("insert 0x%lx\n",
