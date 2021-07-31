@@ -646,7 +646,7 @@ module fu_alu(
     9'bz; 
   assign u5_ret=u5_nDataAlt_reg&~nDataAlt_reg[0] ? {MULFL,~u6_op_reg4[12],
     2'd2} : 9'bz; 
-  assign u5_rten=(~u5_nDataAlt_reg|(~&nDataAlt_reg)) ? nDataAlt_reg[1] : 
+  assign u5_rten=(~u5_nDataAlt_reg|(~&nDataAlt_reg)) ? 1'b1 : 
     1'bz; 
 
   imul imul_mod(

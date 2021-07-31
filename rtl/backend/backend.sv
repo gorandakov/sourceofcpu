@@ -7405,6 +7405,15 @@ dcache1 L1D_mod(
 	  retire8_rF_reg2<=retire8_rF_reg;
 	  retire8_enF_reg2<=retire8_enF_reg;
       end
+      if (rst) begin
+	  nDataAlt_reg[0]<=3'b0;
+	  nDataAlt_reg[1]<=3'b0;
+	  nDataAlt_reg[2]<=3'b0;
+      end else begin
+	  nDataAlt_reg[0]<=nDataAlt[0];
+	  nDataAlt_reg[1]<=nDataAlt[1];
+	  nDataAlt_reg[2]<=nDataAlt[2];
+      end
   end
  
 endmodule
