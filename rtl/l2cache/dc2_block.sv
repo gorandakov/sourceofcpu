@@ -1101,7 +1101,8 @@ module dcache2_block(
   reg ins_hit_reg2;
   wire read_imm_any;
 //  reg ins_hit_reg3;
-  wire read_dirP[7:-1],read_exclP[7:-1];
+  wire [1:0] read_dirP[7:-1];
+  wire [1:0] read_exclP[7:-1];
   wire [36:0] read_expAddrP[7:-1];
   generate
       genvar k,b,q;
@@ -1160,8 +1161,8 @@ module dcache2_block(
   assign read_dataP[-1][511:0]=512'b0;
   assign read_dataP[-1][1023:512]=512'b0;
   assign read_LRUp[-1]={ID,3'b0};
-  assign read_dirP[-1]=1'b0;
-  assign read_exclP[-1]=1'b0;
+  assign read_dirP[-1]=2'b0;
+  assign read_exclP[-1]=2'b0;
   assign read_expAddrP[-1]=37'b0;
   assign read_hit_any=|read_hit_way_reg;
   assign read_imm_any=|read_imm_way_reg;
@@ -1225,8 +1226,8 @@ module dcache2_block(
           read_imm_way_reg<=read_imm_way;
           hit_any<=(|read_hit_way_reg) && ~ins_hit_reg2;
           imm_any<=(|read_imm_way_reg) && ~ins_hit_reg2;
-          read_dir<=read_dirP[7];
-          read_excl<=read_exclP[7];
+          read_dir<=read_dirP[7][0];
+          read_excl<=read_exclP[7][0];
           read_expAddrOut<=read_expAddrP[7];
       end
   end
