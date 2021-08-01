@@ -915,6 +915,8 @@ module backend(
   reg [REQ_WIDTH-1:0] reqBus_req;
   reg reqBus_want_excl;
 */
+  wire [67:0] XI_dataS;
+
   wire [2:0] useBConstW;
   wire [2:0] useAConstW;
   wire [2:0] rs_rAW_use;
@@ -4978,7 +4980,11 @@ module backend(
   .fxFADD4_raise_s(fsret[4][10:0]),
   .fxFCADD5_raise_s(fsret[5][10:0]),
   .FUS0(FUS1),.FUS1(FUS2),.FUS2(FUS3),
-  .FOOSL0(FOOFL1),.FOOSL1(FOOFL2),.FOOSL2(FOOFL3)
+  .FOOSL0(FOOFL1),.FOOSL1(FOOFL2),.FOOSL2(FOOFL3),
+  .XI_dataS(XI_dataS),
+  .fxFRT_alten_reg3(|fxFRT_alten_reg3[2]),
+  .daltX(nDataAlt[2][1]),
+  .FUCVT1(FUCVT1[63:0])
   );
 
   fun_fpsu_BOTH fpsu_mod(
@@ -5032,7 +5038,8 @@ module backend(
   .ALTDATAH0(sqrDatH_reg),.ALTDATAH1({FUTYPE,66'b0}),
   .ALTDATAL0(sqrDatL_reg[67:0]),.ALTDATAL1({FUTYPE,FUCVT2[65:0]}),
   .ALT_INP({dalt[1],sqrDatEn_reg}),
-  .FOOFL0(FOOFL1),.FOOFL1(FOOFL2),.FOOFL2(FOOFL3)
+  .FOOFL0(FOOFL1),.FOOFL1(FOOFL2),.FOOFL2(FOOFL3),
+  .XI_dataS(XI_dataS)
   );
 
   fun_fpusqr sqr_mod(

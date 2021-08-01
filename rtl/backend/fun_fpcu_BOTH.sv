@@ -48,7 +48,11 @@ module fun_fpu_BOTH(
   fxFADD4_raise_s,
   fxFCADD5_raise_s,
   FUS0,FUS1,FUS2,
-  FOOSL0,FOOSL1,FOOSL2
+  FOOSL0,FOOSL1,FOOSL2,
+  XI_dataS,
+  fxFRT_alten_reg3,
+  daltX,
+  FUCVT1
   );
   localparam [0:0] H=1'b1;
   localparam SIMD_WIDTH=68; //half width
@@ -188,6 +192,11 @@ module fun_fpu_BOTH(
   input [5:0] FOOSL1;
   input [5:0] FOOSL2;
   
+  input [67:0] XI_dataS;
+  input fxFRT_alten_reg3;
+  output daltX;
+  output [63:0] FUCVT1;
+
   wire [67:0] u1_Ax;
   wire [67:0] u1_Bx;
   wire [67:0] u2_Ax;
