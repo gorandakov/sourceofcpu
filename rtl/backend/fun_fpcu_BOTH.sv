@@ -356,7 +356,11 @@ module fun_fpu_BOTH(
   fxFCADD5_raise_s,
   FOOSL0, LFOOSH0,
   FOOSL1, LFOOSH1,
-  FOOSL2, LFOOSH2
+  FOOSL2, LFOOSH2,
+  XI_dataS,
+  fxFRT_alten_reg3,
+  daltX,
+  FUCVT1
   );
 
   assign FUS0=u1_op_reg4[7:0]==`fop_cmpDH  ? HFOOSH0 : LFOOSH0; 

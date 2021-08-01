@@ -271,5 +271,5 @@ module fun_fpuL(
   .is32b(u5_op_reg[7:0]==`fop_cvt32S || u5_op_reg[7:0]==`fop_cvt32D),
   .res(FUCVT1),
   .alt(daltX)
-
+  );
 endmodule
