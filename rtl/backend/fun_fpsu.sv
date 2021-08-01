@@ -18,7 +18,8 @@ module fun_fpsu(
   FUF9,
   ALTDATA0,ALTDATA1,
   ALT_INP,
-  FOOSL_out
+  FOOSL_out,
+  HH_data
   );
   parameter [1:0] INDEX=2'd2;
   parameter [0:0] H=1'b0;
@@ -68,6 +69,7 @@ module fun_fpsu(
   input [S+67:0] ALTDATA0;
   input [S+67:0] ALTDATA1;
   output [5:0] FOOSL_out;
+  output [S+67:0] HH_data;
 
   wire [1:0][S+67:0] FOOF;
   reg [1:0][S+67:0] FOOF_reg;
@@ -363,7 +365,8 @@ module fun_fpsu(
   no,
   en);
 */
-  
+  assign HH_data=gxDataBXL_reg[0];
+
   fpumuls cadd2H_mod(
   .clk(clk),
   .rst(rst),

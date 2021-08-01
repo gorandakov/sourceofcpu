@@ -47,7 +47,8 @@ module fun_fpuL(
   FOOSH2_in,  FOOSH2_out,
   XI_dataS,
   fxFRT_alten_reg3,
-  daltX
+  daltX,
+  FUCVT1
   );
   localparam [0:0] H=1'b0;
   localparam SIMD_WIDTH=68; //half width
@@ -171,6 +172,12 @@ module fun_fpuL(
   output [5:0] FOOSH1_out;
   input [5:0]  FOOSH2_in;
   output [5:0] FOOSH2_out;
+  input [67:0] XI_dataS;
+  input fxFRT_alten_reg3;
+  output daltX;
+  output [63:0] FUCVT1;
+
+  wire [16+68:0] XI_dataD;
 
   fun_fpu #(0,0) fpu0_mod(
   clk,
@@ -254,7 +261,8 @@ module fun_fpuL(
     u5_op_reg[7:0]==`fop_cvt32S || u5_op_reg[7:0]==`fop_cvt32D ||
     u5_op_reg[7:0]==`fop_tblD)),
   .clkEn(~fxFRT_alten_reg3),
-  .A(gxDataBFL[15+68:68],gxDataBFL[65:0]}),
+  .A((u5_op_reg2[7:0]!=`fop_cvtD && u5_op_reg2[7:0]!=`fop_cvt32D &&
+    u5_op_reg2[7:0]!=`fop_cvtE) ? {16'b0,XI_dataS} : XI_dataD),
   .isDBL(u5_op_reg[7:0]==`fop_cvtD || u5_op_reg[7:0]==`fop_cvt32D),
   .isEXT(u5_op_reg[7:0]==`fop_cvtE),
   .isSNG(u5_op_reg[7:0]!=`fop_cvtD && u5_op_reg[7:0]!=`fop_cvt32D &&
@@ -262,6 +270,6 @@ module fun_fpuL(
   .verbatim(u5_op_reg[7:0]==`fop_tblD),
   .is32b(u5_op_reg[7:0]==`fop_cvt32S || u5_op_reg[7:0]==`fop_cvt32D),
   .res(FUCVT1),
-  .alt(nDataAlt[2][1])
+  .alt(daltX)
 
 endmodule

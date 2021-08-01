@@ -23,7 +23,8 @@ module fun_fpu(
   fxFADD_raise_s,
   fxFCADD_raise_s,
   FOOSH_in,
-  FOOSH_out
+  FOOSH_out,
+  HH_data
   );
   parameter [1:0] INDEX=2'd2;
   parameter [0:0] H=1'b0;
@@ -80,6 +81,7 @@ module fun_fpu(
   input [10:0] fxFCADD_raise_s;
   input [5:0] FOOSH_in;
   output [5:0] FOOSH_out;
+  output [S+67:0] HH_data;
 
   wire [1:0][16+67:0] FOOF;
   reg [1:0][S+67:0] FOOF_reg;
@@ -361,7 +363,10 @@ module fun_fpu(
   en);
 */
   assign FOOSH_out=FOOSH_reg2;
-  
+  //verilator lint_off WIDTH
+  assign HH_data=gxDataBFL_reg[0];
+  //verilator lint_on WIDTH
+
   fpucadd cadd2L_mod(
   .clk(clk),
   .rst(rst),
