@@ -35,7 +35,8 @@ module fun_fpsu_BOTH(
   ALTDATAH0,ALTDATAH1,
   ALTDATAL0,ALTDATAL1,
   ALT_INP,
-  FOOFL0,FOOFL1,FOOFL2
+  FOOFL0,FOOFL1,FOOFL2,
+  XI_dataS
   );
   localparam [0:0] H=1'b1;
   localparam SIMD_WIDTH=68; //half width
@@ -151,6 +152,8 @@ module fun_fpsu_BOTH(
   output [5:0] FOOFL0;
   output [5:0] FOOFL1;
   output [5:0] FOOFL2;
+
+  output [67:0] XI_dataS;
   
   wire [67:0] u1_Ax;
   wire [67:0] u1_Bx;
@@ -230,7 +233,7 @@ module fun_fpsu_BOTH(
   FUFH6,FUFH7,FUFH8,
   FUFH9,
   ALTDATAH0,ALTDATAH1,
-  ALT_INP,,,
+  ALT_INP,,,,
   );
 
   fun_fpuSL lfpc_mod(
@@ -261,7 +264,8 @@ module fun_fpsu_BOTH(
   FUFL9,
   ALTDATAL0,ALTDATAL1,
   ALT_INP,
-  FOOFL0,FOOFL1,FOOFL2
+  FOOFL0,FOOFL1,FOOFL2,
+  XI_dataS
   );
 
 endmodule
