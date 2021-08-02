@@ -1515,6 +1515,8 @@ module backend(
   wire [2:0][3:0] fxFRT_alten;
   wire [3:0]      fxFRT_pause;
   reg [2:0][3:0] fxFRT_alten_reg;
+  reg [2:0][3:0] fxFRT_alten_reg2;
+  reg [2:0][3:0] fxFRT_alten_reg3;
   
   reg [DATA_WIDTH-1:0] FU_reg[9:0];
   reg [DATA_WIDTH-1:0] FU_reg2[9:0];
@@ -4690,6 +4692,8 @@ module backend(
 
   assign nDataAlt[2][2]=~dalt[1];
   assign nDataAlt[2][0]=~dalt[0];
+  assign nDataAlt[0]=3'b111;
+  assign nDataAlt[1]=3'b111;
  
   agu_block #(BUS_ID) agu_aligned(
   .clk(clk), .rst(rst),
@@ -6646,6 +6650,8 @@ dcache1 L1D_mod(
 	      fxLD_sngl_t_reg[k]=1'b0;
 	      fxLD_spair_t[k]=1'b0;
 	      if (k!=3) fxFRT_alten_reg[k]<=4'b0;
+	      if (k!=3) fxFRT_alten_reg2[k]<=4'b0;
+	      if (k!=3) fxFRT_alten_reg3[k]<=4'b0;
 	  end
       end else begin
 	  for(k=0;k<4;k=k+1) begin
@@ -6670,6 +6676,8 @@ dcache1 L1D_mod(
 	      fxLD_spair_t[k]=outOp_reg2[k][5:1]==5'ha;
 	      fxLD_dblext[k]=fxLD_dbl[k]|fxLD_ext[k];
 	      if (k!=3) fxFRT_alten_reg[k]<=fxFRT_alten[k];
+	      if (k!=3) fxFRT_alten_reg2[k]<=fxFRT_alten_reg[k];
+	      if (k!=3) fxFRT_alten_reg3[k]<=fxFRT_alten_reg2[k];
 	      fxLD_dbl_reg[k]=fxLD_dbl[k];
 	      fxLD_ext_reg[k]=fxLD_ext[k];
 	      fxLD_sin_reg[k]=fxLD_sin[k];

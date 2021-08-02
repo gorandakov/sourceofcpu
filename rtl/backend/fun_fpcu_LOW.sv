@@ -177,7 +177,11 @@ module fun_fpuL(
   output daltX;
   output [63:0] FUCVT1;
 
-  wire [16+68:0] XI_dataD;
+  wire [15+68:0] XI_dataD;
+  reg [3:0] u5_en_reg;
+  reg [12:0] u5_op_reg;
+  reg [3:0] u5_en_reg2;
+  reg [12:0] u5_op_reg2;
 
   fun_fpu #(0,0) fpu0_mod(
   clk,
@@ -262,7 +266,7 @@ module fun_fpuL(
     u5_op_reg[7:0]==`fop_tblD)),
   .clkEn(~fxFRT_alten_reg3),
   .A((u5_op_reg2[7:0]!=`fop_cvtD && u5_op_reg2[7:0]!=`fop_cvt32D &&
-    u5_op_reg2[7:0]!=`fop_cvtE) ? {16'b0,XI_dataS} : XI_dataD),
+    u5_op_reg2[7:0]!=`fop_cvtE) ? {16'b0,XI_dataS[65:0]} : {XI_dataD[15+68:68],XI_dataD[65:0]}),
   .isDBL(u5_op_reg[7:0]==`fop_cvtD || u5_op_reg[7:0]==`fop_cvt32D),
   .isEXT(u5_op_reg[7:0]==`fop_cvtE),
   .isSNG(u5_op_reg[7:0]!=`fop_cvtD && u5_op_reg[7:0]!=`fop_cvt32D &&
@@ -272,4 +276,13 @@ module fun_fpuL(
   .res(FUCVT1),
   .alt(daltX)
   );
+
+  always @(posedge clk) begin
+      u5_en_reg<=u5_en;
+      u5_op_reg<=u5_op;
+  end
+  always @(negedge clk) begin
+      u5_en_reg2<=u5_en_reg;
+      u5_op_reg2<=u5_op_reg;
+  end
 endmodule
