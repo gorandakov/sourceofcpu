@@ -6792,7 +6792,7 @@ dcache1 L1D_mod(
 	      ex_alu_reg[k]<=ex_alu[k];
 	      enS_alu_reg[k]<=enS_alu[k];
 	      FUS_alu_reg2[k]<=FUS_alu_reg[k];
-	      ex_alu_reg2[k]<=ex_alu_reg[k];
+	      ex_alu_reg2[k]<=ex_alu_reg[k]&{3{enS_alu_reg[k]}};
 	      enS_alu_reg2[k]<=enS_alu_reg[k];
 	      FUS_alu_reg3[k]<=FUS_alu_reg2[k];
 	      ex_alu_reg3[k]<=ex_alu_reg2[k];
