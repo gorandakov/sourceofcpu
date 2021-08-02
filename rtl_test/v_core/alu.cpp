@@ -1174,6 +1174,14 @@ bool get_check(Vheptane_core *top, req *reqs) {
 		top->heptane_core__DOT__bck_mod__DOT__ex_alu);
 	}
   //  }
+    if (top->heptane_core__DOT__bck_mod__DOT__outEn&0x111111111ul) {
+	printf("outEn 0x%lx\n",top->heptane_core__DOT__bck_mod__DOT__outEn);
+    }
+    for(k=0;k<9;k++) {
+        if (top->heptane_core__DOT__bck_mod__DOT__rs_en_reg[k]) {
+	    printf("rs_en_reg 0x%x\n",k);
+        }
+    }
     return rtn;
 }
 
