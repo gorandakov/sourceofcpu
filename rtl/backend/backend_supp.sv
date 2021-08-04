@@ -1531,19 +1531,23 @@ module fexcpt(
 
   wire [13:0] msk1;
   wire [10:0] first;
+  wire en0;
+  wire [13:0] no0;
   
 
-  bit_find_first_bit #(11) first_mod(mask,first,en);
+  bit_find_first_bit #(11) first_mod(mask,first,en0);
 
   generate
     genvar t;
     for(t=0;t<11;t=t+1) begin
-        assign no=first[t] ? {t[11:0],2'd3} : 14'bz;
+        assign no0=first[t] ? {t[11:0],2'd3} : 14'bz;
     end
   endgenerate
 
-  assign msk1=in_en ? {in_mask,3'd3} : {5'b0,in};
-  assign no=en ? 14'bz : msk1;
+  assign no=in_en & ~en0 ? {in_mask,3'd3} : 14'bz;
+  assign no=in_en & en0 ? no0 : 14'bz;
+  assign no=~in_en ? {5'b0,in} : 14'bz;
+  assign no0=en0 ? 14'bz : 14'b0;
 endmodule
 //verilator lint_on WIDTH
 

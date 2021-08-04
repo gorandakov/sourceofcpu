@@ -1182,6 +1182,11 @@ bool get_check(Vheptane_core *top, req *reqs) {
 	    printf("rs_en_reg 0x%x\n",k);
         }
     }
+    for(k=0;k<6;k++) {
+	if (top->heptane_core__DOT__bck_mod__DOT__fret_en&(1<<k)) {
+	    printf("fsret %i,\t0x%x\n",k,top->heptane_core__DOT__bck_mod__DOT__fret[k]);
+	}
+    }
     return rtn;
 }
 
