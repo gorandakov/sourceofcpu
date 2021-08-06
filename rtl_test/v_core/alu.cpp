@@ -1163,13 +1163,22 @@ bool get_check(Vheptane_core *top, req *reqs) {
 	    if (xbreak&(1<<k)) break;
 	}
 	count=(top->heptane_core__DOT__except && top->heptane_core__DOT__except_due_jump) ? k+1 : k;
+	if (count>insn_count[insn_posR]) count=insn_count[insn_posR];
+	insn_posR++;
+	insn_posR&=0x3f;
 	if (top->heptane_core__DOT__except) printf("except %li\n",count);
 	else printf("ret %li\n",count);
 	pos+=count;
     }
     xbreak=top->heptane_core__DOT__bck_mod__DOT__retM_xbreak;
     retire=top->heptane_core__DOT__bck_mod__DOT__retM_do_retire;
-    if (top->heptane_core__DOT__iAvail) printf("iAvail 0x%x\n",top->heptane_core__DOT__iAvail);
+    if (top->heptane_core__DOT__iAvail) printf("iAvail 0x%x, \t0x%x\n",top->heptane_core__DOT__iAvail,top->heptane_core__DOT__instrEn);
+    if (top->heptane_core__DOT__instrEn) {
+        k=0;
+	while (top->heptane_core__DOT__instrEn&(1<<k)) {k++;}
+	insn_count[insn_posW++]=k;
+	insn_posW&=0x3f;
+    }
    // for(k=0;k<6;k++) {
 	if (top->heptane_core__DOT__bck_mod__DOT__enS_alu) {
 	    printf("ALU 0x%x, fl 0x%lx, ret 0x%x\n",top->heptane_core__DOT__bck_mod__DOT__enS_alu,
@@ -1182,14 +1191,17 @@ bool get_check(Vheptane_core *top, req *reqs) {
     }
     for(k=0;k<9;k++) {
         if (top->heptane_core__DOT__bck_mod__DOT__rs_en_reg[k]) {
-	    printf("rs_en_reg 0x%x\n",k);
+	    printf("rs_en_reg 0x%x, \t0x%x\n",k,top->heptane_core__DOT__bck_mod__DOT__rs_port_sch[k]);
         }
     }
     for(k=0;k<6;k++) {
 	if (top->heptane_core__DOT__bck_mod__DOT__fret_en&(1<<k)) {
 	    unsigned long val;
+	    int k2;
+	    k2=(k>>1)*3+1+(k&1);
 	    extract_e(top->heptane_core__DOT__bck_mod__DOT__fret,14*k,14*k+13,val);
-	    printf("fsret %i,\t0x%x\n",k,val);
+	    if ((k&1)==0) printf("fsret %i,\t0x%x, \t0x%x\n",k,val,top->heptane_core__DOT__bck_mod__DOT__outII_reg8[k2]);
+	    if ((k&1)==1) printf("fsret %i,\t0x%x, \t0x%x\n",k,val,top->heptane_core__DOT__bck_mod__DOT__outII_reg11[k2]);
 	}
     }
     return rtn;
