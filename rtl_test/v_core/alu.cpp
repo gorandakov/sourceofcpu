@@ -12,6 +12,7 @@
 #include "contx.h"
 #include "../inc/struct.h"
 #include "../inc/cjump.h"
+#include "../inc/extract.h"
 
 #define get64(a) ((((unsigned long long) a[1])<<32)|(unsigned long long) a[0])
 #define set64i(a,b,c) a[0]=b;a[1]=b>>32;a[2]=c;
@@ -1184,7 +1185,9 @@ bool get_check(Vheptane_core *top, req *reqs) {
     }
     for(k=0;k<6;k++) {
 	if (top->heptane_core__DOT__bck_mod__DOT__fret_en&(1<<k)) {
-	    printf("fsret %i,\t0x%x\n",k,top->heptane_core__DOT__bck_mod__DOT__fret[k]);
+	    unsigned long val;
+	    extract_e(top->heptane_core__DOT__bck_mod__DOT__fret,14*k,14*k+13,val);
+	    printf("fsret %i,\t0x%x\n",k,val);
 	}
     }
     return rtn;
