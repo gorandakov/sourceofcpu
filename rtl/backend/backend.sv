@@ -1837,6 +1837,9 @@ module backend(
   reg [9:0] outII_reg6[8:0];
   reg [9:0] outII_reg7[8:0];
   reg [9:0] outII_reg8[8:0];
+  reg [9:0] outII_reg9[8:0];
+  reg [9:0] outII_reg10[8:0];
+  reg [9:0] outII_reg11[8:0];
   reg [3:0] outEn_reg[8:0];
   reg [3:0] outEn_reg2[8:0];
   reg [3:0] outEn_reg3[8:0];
@@ -5344,12 +5347,24 @@ dcache1 L1D_mod(
   .jupd1_en(jupd1_en),.jupdt1_en(jupdt1_en),.jupd1_ght_en(jupd1_ght_en),
   .jupd1_addr(jupd1_addr),.jupd1_baddr(jupd1_baddr),
   .jupd1_sc(jupd1_sc),.jupd1_tk(jupd1_tk),
-  .ret0_addr(outII_reg6[1]),.ret0_data({1'b0,fret[0]}),.ret0_wen(fret_en[0]),
-  .ret1_addr(outII_reg8[2]),.ret1_data({1'b0,fret[1]}),.ret1_wen(fret_en[1]),
-  .ret2_addr(outII_reg6[4]),.ret2_data({1'b0,fret[2]}),.ret2_wen(fret_en[2]),
-  .ret3_addr(outII_reg8[5]),.ret3_data({1'b0,fret[3]}),.ret3_wen(fret_en[3]),
-  .ret4_addr(outII_reg6[7]),.ret4_data({1'b0,fret[4]}),.ret4_wen(fret_en[4]),
-  .ret5_addr(outII_reg8[8]),.ret5_data({1'b0,fret[5]}/*h*/),.ret5_wen(fret_en[5]),
+  .ret0_addr(fren_en[0] ? outII_reg8[1] : outII_reg2),
+  .ret0_data(fren_en[0] ? {1'b0,fret[0]} : {6'b0,FUS_alu[0],ex_alu[0]}),
+  .ret0_wen(fret_en[0]|enS_alu[0]),
+  .ret1_addr(fren_en[1] ? outII_reg11[2] : outII_reg2[2]),
+    .ret1_data(fren_en[1] ? {1'b0,fret[1]} : {6'b0,FUS_alu[1],ex_alu[1]}),
+    .ret1_wen(fret_en[1]|enS_alu[1]),
+  .ret2_addr(fren_en[2] ? outII_reg8[4] : outII_reg2[4]),
+    .ret2_data(fren_en[2] ? {1'b0,fret[2]} : {6'b0,FUS_alu[2],ex_alu[2]}),
+    .ret2_wen(fret_en[2]|enS_alu[2]),
+  .ret3_addr(fren_en[3] ? outII_reg11[5] : outII_reg2[5]),
+    .ret3_data(fren_en[3] ? {1'b0,fret[3]} : {6'b0,FUS_alu[3],ex_alu[3]}),
+    .ret3_wen(fret_en[3]|enS_alu[3]),
+  .ret4_addr(fren_en[4] ? outII_reg8[7] : outII_reg2[7]),
+    .ret4_data(fren_en[4] ? {1'b0,fret[4]} : {6'b0,FUS_alu[4],ex_alu[4]}),
+    .ret4_wen(fret_en[4]|enS_alu[4]),
+  .ret5_addr(fren_en[5] ? outII_reg11[8] : outII_reg2[8]),
+    .ret5_data(fren_en[5] ? {1'b0,fret[5]} : {6'b0,FUS_alu[5],ex_alu[5]}/*h*/),
+    .ret5_wen(fret_en[5]|enS_alu[5]),
     .ret5_IP(FU_reg[9]),.ret5_IP_en(alu_jupdate),
   .ret6_addr(lsr3_II_reg2),.ret6_data({1'b1,p3_ret_reg2}),.ret6_wen(FU3Hit & p_lsfwd_reg2[3]),
   .ret7_addr(lsr2_II_reg2),.ret7_data({1'b1,p2_ret_reg2}),.ret7_wen(({FU2Hit,FU1Hit,FU0Hit}&p_lsfwd_reg2[2:0])!=3'b0),
@@ -6708,6 +6723,9 @@ dcache1 L1D_mod(
               outII_reg6[k]<=10'b0;
               outII_reg7[k]<=10'b0;
               outII_reg8[k]<=10'b0;
+              outII_reg9[k]<=10'b0;
+              outII_reg10[k]<=10'b0;
+              outII_reg11[k]<=10'b0;
               outEn_reg[k]<=4'b0;
               outEn_reg2[k]<=4'b0;
               outEn_reg3[k]<=4'b0;
@@ -6777,6 +6795,9 @@ dcache1 L1D_mod(
               outII_reg6[k]<=outII_reg5[k];
               outII_reg7[k]<=outII_reg6[k];
               outII_reg8[k]<=outII_reg7[k];
+              outII_reg9[k]<=outII_reg8[k];
+              outII_reg10[k]<=outII_reg9[k];
+              outII_reg11[k]<=outII_reg10[k];
               outEn_reg[k]<=outEn[k];
               outEn_reg2[k]<=outEn_reg[k];
               outEn_reg3[k]<=outEn_reg2[k];
@@ -6790,7 +6811,7 @@ dcache1 L1D_mod(
           for (k=0;k<6;k=k+1) begin
 	      FUS_alu_reg[k]<=FUS_alu[k];
 	      ex_alu_reg[k]<=ex_alu[k];
-	      enS_alu_reg[k]<=enS_alu[k];
+	      enS_alu_reg[k]<=enS_alu[k]&fret_en[k];
 	      FUS_alu_reg2[k]<=FUS_alu_reg[k];
 	      ex_alu_reg2[k]<=ex_alu_reg[k]&{3{enS_alu_reg[k]}};
 	      enS_alu_reg2[k]<=enS_alu_reg[k];
