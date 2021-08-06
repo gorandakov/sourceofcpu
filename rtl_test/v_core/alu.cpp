@@ -252,10 +252,10 @@ char *reg8[]={
 "bl",
 "cl",
 "dl",
-"sil",
-"dil",
 "spl",
 "bpl",
+"sil",
+"dil",
 "r8b",
 "r9b",
 "r10b",
@@ -320,10 +320,10 @@ char *reg16[]={
 "bx",
 "cx",
 "dx",
-"si",
-"di",
 "sp",
 "bp",
+"si",
+"di",
 "r8w",
 "r9w",
 "r10w",
@@ -356,10 +356,10 @@ char *reg32[]={
 "ebx",
 "ecx",
 "edx",
-"esi",
-"edi",
 "esp",
 "ebp",
+"esi",
+"edi",
 "r8d",
 "r9d",
 "r10d",
@@ -391,10 +391,10 @@ char *reg65[]={
 "rbx",
 "rcx",
 "rdx",
-"rsi",
-"rdi",
 "rsp",
 "rbp",
+"rsi",
+"rdi",
 "r8",
 "r9",
 "r10",
@@ -1156,6 +1156,8 @@ bool get_check(Vheptane_core *top, req *reqs) {
     long k,count;
     static unsigned xbreak=0;
     static unsigned retire=0;
+    static int insn_count[64];
+    static int insn_posR=0,insn_posW=0;
     if (retire) {
 	for(k=0;k<10;k++) {
 	    if (xbreak&(1<<k)) break;
