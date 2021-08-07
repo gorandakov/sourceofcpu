@@ -1204,6 +1204,15 @@ bool get_check(Vheptane_core *top, req *reqs) {
 	    if ((k&1)==1) printf("fsret %i,\t0x%x, \t0x%x\n",k,val,top->heptane_core__DOT__bck_mod__DOT__outII_reg11[k2]);
 	}
     }
+    if (top->heptane_core__DOT__front_mod__DOT__cc_mod__DOT____Vcellout__stHit_mod__read_data&0x100) {
+	printf("fetch ");
+	for(k=3;k>=0;k--) {
+	   unsigned long val;
+	   extract_e(top->heptane_core__DOT__front_mod__DOT__read_data,65*k,65*k+63,val);
+	   printf("%#8lx",val);
+	}
+	printf(" 0x%lx\n",top->heptane_core__DOT__front_mod__DOT__IP_phys_reg3);
+    }
     return rtn;
 }
 
