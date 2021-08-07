@@ -1209,7 +1209,7 @@ bool get_check(Vheptane_core *top, req *reqs) {
 	for(k=3;k>=0;k--) {
 	   unsigned long val;
 	   extract_e(top->heptane_core__DOT__front_mod__DOT__read_data,65*k,65*k+63,val);
-	   printf("%#8lx",val);
+	   printf("%#16lx",val);
 	}
 	printf(" 0x%lx\n",top->heptane_core__DOT__front_mod__DOT__IP_phys_reg3);
     }
