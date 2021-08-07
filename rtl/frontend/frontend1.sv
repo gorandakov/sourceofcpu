@@ -1016,7 +1016,7 @@ module frontend1(
   cc_comb cc_mod(
   .clk(clk),
   .rst(rst),
-  .read_clkEn(1'b1),
+  .read_clkEn(instrEn_reg),
   .read_set_flag(read_set_flag_reg),
   .fstall(fstall),
   .except(ixcept),
