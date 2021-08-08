@@ -404,6 +404,12 @@ module ccRam_way(
              init<=1'b0;
       end
       `endif
+      if (write_hit) begin
+	  $display("WH ",{write_data_reg[258:195],write_data_reg[193:130],write_data_reg[128:65],write_data_reg[63:0]});
+	  $display("WH ",{write_data_reg[260+258:260+195],write_data_reg[260+193:260+130],
+	      write_data_reg[260+128:260+65],write_data_reg[260+63:260+0]});
+          $display("WA ",write_IP_reg[9:2]);
+      end
   end
     
 endmodule

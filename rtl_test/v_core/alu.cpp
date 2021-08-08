@@ -1107,9 +1107,9 @@ void req_set(Vheptane_core *top,req *reqs,char *mem) {
 	top->rbusDIn_signals=signals;
 	top->rbusDIn_dst_req=src[pos_R];
 	if (!R) {
-	    memcpy((char *) top->rbusDIn_data,&mem[addr[pos_R]<<7],64);
+	    memcpy((char *) top->rbusDIn_data,mem+(addr[pos_R]<<7),64);
 	} else {
-	    memcpy((char *) top->rbusDIn_data,&mem[(addr[pos_R]<<7)+64],64);
+	    memcpy((char *) top->rbusDIn_data,mem+((addr[pos_R]<<7)+64),64);
 	    top->rbusDIn_signals|=1<<(rbusD_second);
 	}
 	printf("retn 0x%lx,\t%i\n",addr[pos_R],R);
@@ -1126,9 +1126,9 @@ void req_set(Vheptane_core *top,req *reqs,char *mem) {
             goto end_DOut;
 	}
 	if (!(top->rbusDOut_signals&(1<<(rbusD_second)))) {
-	    memcpy(&mem[addr[pos_R]<<7],(char *) top->rbusDOut_data,64);
+	    memcpy(mem+(addr[pos_R]<<7),(char *) top->rbusDOut_data,64);
         } else {
-	    memcpy(&mem[(addr[pos_R]<<7)+64],(char *) top->rbusDOut_data,64);
+	    memcpy(mem+((addr[pos_R]<<7)+64),(char *) top->rbusDOut_data,64);
 	}
         end_DOut:;
     }
@@ -1142,12 +1142,14 @@ void req_set(Vheptane_core *top,req *reqs,char *mem) {
 	top->heptane_core__DOT__front_mod__DOT__cc_mod__DOT__write_IP_reg);
     if (top->heptane_core__DOT__front_mod__DOT__bus_match_reg) bmr=1;
     else bmr=0;
-    if (top->heptane_core__DOT__insBus_en) printf("insBus 0x%x, 0x%8x%8x%8x\n",top->heptane_core__DOT__dc2_req_rd_reg5,
-        top->heptane_core__DOT__front_mod__DOT__req_mod__DOT__ram[top->heptane_core__DOT__dc2_req_rd_reg5&7][2],
-	top->heptane_core__DOT__front_mod__DOT__req_mod__DOT__ram[top->heptane_core__DOT__dc2_req_rd_reg5&7][1],
-	top->heptane_core__DOT__front_mod__DOT__req_mod__DOT__ram[top->heptane_core__DOT__dc2_req_rd_reg5&7][0]);
+    if (top->heptane_core__DOT__insBus_en) printf("insBus 0x%x, 0x%#8x%#8x%#8x%#8x\n",top->heptane_core__DOT__dc2_req_rd_reg5,
+	top->heptane_core__DOT__dc2_rdata_reg[3],top->heptane_core__DOT__dc2_rdata_reg[2],
+	top->heptane_core__DOT__dc2_rdata_reg[1],top->heptane_core__DOT__dc2_rdata_reg[0]);
     if (top->heptane_core__DOT__front_mod__DOT__cc_mod__DOT__cc_write_wen_reg2)
 	    printf("wenR\n");
+    if (top->heptane_core__DOT__rinsBus_A) printf("insburst 0x%8x%8x%8x%8x\n",top->heptane_core__DOT__rbusDIn_data_reg[3],
+	top->heptane_core__DOT__rbusDIn_data_reg[2],top->heptane_core__DOT__rbusDIn_data_reg[1],
+	top->heptane_core__DOT__rbusDIn_data_reg[0]);
 }
 
 bool get_check(Vheptane_core *top, req *reqs) {
