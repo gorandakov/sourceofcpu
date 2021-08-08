@@ -1215,7 +1215,7 @@ module dcache2_block(
           write_bankEn1_reg<=write_bankEn1;
           
         //  read_hit_any<=(|read_hit_way) && ~ins_hit_reg;
-          if (read_en_reg3) read_data<=read_dataP[7];
+          read_data<=read_dataP[7];
           read_LRU<=read_LRUp[7];
           read_en_reg<=read_en;
           read_en_reg2<=read_en_reg;
