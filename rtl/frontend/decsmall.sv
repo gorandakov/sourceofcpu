@@ -349,7 +349,7 @@ module smallInstr_decoder(
 
   assign isShlAddMulLike=opcode_main==8'd210 || opcode_main==8'd211;
   assign isPtrSec=opcode_main==8'd212;
-  assign isJalR=opcode_main==8'd213;
+  assign isJalR=opcode_main=8'd213;
 
   assign isBasicFPUScalarA=opcode_main==8'hef && instr[13:12]==2'b0;
   assign isBasicFPUScalarB=opcode_main==8'hef && instr[13:12]==2'b1;
