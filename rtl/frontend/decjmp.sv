@@ -70,7 +70,6 @@ module jump_decoder(
   wire isCall;
   wire isRet;
   
-  wire isJalR;
   
   wire isBasicSysInstr;
   
@@ -108,7 +107,6 @@ module jump_decoder(
   assign isCall=(opcode_main==8'd182 && (instr[15:13]==3'd1 || instr[15:13]==3'd2))&magic[0];
   assign isRet=(opcode_main==8'd182 && instr[15:13]==3'd3)&magic[0];
   assign subIsCJ=(opcode_main[5:2]==4'b1100)&~magic[0];
-  assign isJalR=opcode_main==8'd213 && magic[0];
 
  // assign isCmpTestExtra=(opcode_main==198 && magic[1:0]==2'b01 && instr[31:29]==3'd1)&magic[0];
   
@@ -151,7 +149,8 @@ module jump_decoder(
           if (magic[1:0]==2'b01) begin
               constant={{39{instr[31]}},instr[31:8],1'b0};
           end 
-      end else if (isIndirJump|isJalR) begin
+      end else if (isIndirJump) begin
+          if (magic[0]) error=1;
           jumpType=5'b10001;
       end else if (isCall) begin
           isIPRel=1'b1;

@@ -75,7 +75,6 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
 
   wire isShlAddMulLike;
   wire isPtrSec;
-  wire isJalR;
 
   wire isBasicFPUScalarA;
   wire isBasicFPUScalarB;
@@ -142,18 +141,17 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
 //  assign isCmpTestExtra=opcode_main==198 && magic==2'b01 && instr[31:29]==3'd1;
   
   
-  assign isSimdInt=opcode_main==8'd200 && magic[0];
-  assign isFPUreor=opcode_main==8'd201 && magic[0];
+  assign isSimdInt=opcode_main==8'd200;
+  assign isFPUreor=opcode_main==8'd201;
   
-  assign isShlAddMulLike=(opcode_main==8'd210 || opcode_main==8'd211) && magic[0];
-  assign isPtrSec=opcode_main==8'd212 && magic[0];
-  assign isJalR=opcode_main==8'd213 && magic[0];
+  assign isShlAddMulLike=opcode_main==8'd210 || opcode_main==8'd211;
+  assign isPtrSec=opcode_main==8'd212;
   
-  assign isBasicFPUScalarA=opcode_main==8'hef && instr[13:12]==2'b0 && magic[0];
-  assign isBasicFPUScalarB=opcode_main==8'hef && instr[13:12]==2'b1 && magic[0];
-  assign isBasicFPUScalarC=opcode_main==8'hef && instr[15:12]==4'd2 && magic[0];
-  assign isBasicFPUScalarCmp=opcode_main==8'hef && instr[15:12]==4'd6 && magic[0];
-  assign isBasicFPUScalarCmp2=opcode_main==8'hef && instr[15:12]==4'ha && magic[0];
+  assign isBasicFPUScalarA=opcode_main==8'hef && instr[13:12]==2'b0;
+  assign isBasicFPUScalarB=opcode_main==8'hef && instr[13:12]==2'b1;
+  assign isBasicFPUScalarC=opcode_main==8'hef && instr[15:12]==4'd2;
+  assign isBasicFPUScalarCmp=opcode_main==8'hef && instr[15:12]==4'd6;
+  assign isBasicFPUScalarCmp2=opcode_main==8'hef && instr[15:12]==4'ha;
 
   assign isCallPrep=(opcode_main==8'd199) && magic[0];
   
