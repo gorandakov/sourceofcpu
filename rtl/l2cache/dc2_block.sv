@@ -1093,7 +1093,7 @@ module dcache2_block(
   reg write0_clkEn_reg,write1_clkEn_reg;
   wire [1023:0] write_data;
   reg [1023:0] write_data_reg;
-  wire [7+1:0] ins_hit;
+  wire [7:0] ins_hit;
   reg [159:0] write_data0_reg;
   reg [159:0] write_data1_reg;
   reg [511:0] busIns_data_reg;
