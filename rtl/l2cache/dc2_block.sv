@@ -1078,10 +1078,10 @@ module dcache2_block(
   input [36:0] expun_dc_addr;
   input expun_dc_en;
 
-  wire [7:0] read_hit_way;
-  reg [7:0] read_hit_way_reg;
-  wire [7:0] read_imm_way;
-  reg [7:0] read_imm_way_reg;
+  wire [8:0] read_hit_way;
+  reg [8:0] read_hit_way_reg;
+  wire [8:0] read_imm_way;
+  reg [8:0] read_imm_way_reg;
   wire read_hit_any;
   wire [32*DATA_WIDTH-1:0] read_dataP[7:-1];
   wire [4:0] read_LRUp[7:-1];
@@ -1098,7 +1098,7 @@ module dcache2_block(
   reg [159:0] write_data1_reg;
   reg [511:0] busIns_data_reg;
   reg insBus_A_reg,insBus_B_reg;
-  reg [7:0] ins_hit_reg;
+  reg [8:0] ins_hit_reg;
   reg ins_hit_reg2;
   wire read_imm_any;
 //  reg ins_hit_reg3;
@@ -1189,16 +1189,16 @@ module dcache2_block(
           read_en_reg<=1'b0;
           read_en_reg2<=1'b0;
           read_en_reg3<=1'b0;
-          ins_hit_reg<=8'b0;
+          ins_hit_reg<=9'b0;
           ins_hit_reg2<=1'b0;
   //        ins_hit_reg3<=1'b0;
-          read_hit_way_reg<=8'b0;
+          read_hit_way_reg<=9'b0;
           hit_any<=1'b0;
           imm_any<=1'b0;
           read_dir<=1'b0;
           read_excl<=1'b0;
           read_expAddrOut<=37'b0;
-          read_imm_way_reg<=8'b0;
+          read_imm_way_reg<=9'b0;
       end else begin
           write_data0_reg<=write_data0;
           write_data1_reg<=write_data1;
