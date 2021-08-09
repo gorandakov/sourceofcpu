@@ -566,7 +566,7 @@ module dc2_cntrl(
   assign writeI_split0=read_clkEnC1 ? 1'b0 : 1'bz;
   assign writeI_data0=read_data0;
   assign {writeI_hitO0,writeI_hitE0}=( read_clkEnC2|read_clkEnC1|read_clkEnC|read_clkEnM1) ?
-    {writeI_odd0,~writeI_odd0} &{2{~read_clkEnM1}} : read_hit[0] & {2{read_clkEn}};
+    {writeI_odd0,~writeI_odd0} &{2{read_clkEnM1}} : read_hit[0] & {2{read_clkEn}};
 
   assign writeI_addrE1=read_clkEnC1 ? read_addr1[36:1] : 36'bz;
   assign writeI_addrO1=read_clkEnC1 ? read_addr1[36:1] : 36'bz;
@@ -578,7 +578,7 @@ module dc2_cntrl(
   assign writeI_odd1=read_clkEnC1 ? read_addr1[0] : 1'bz;
   assign writeI_split1=read_clkEnC1 ? 1'b0 : 1'bz;
   assign writeI_data1=read_data1;
-  assign {writeI_hitO1,writeI_hitE1}=( read_clkEnC1|read_clkEnC|read_clkEnM1) ? 2'b0 : read_hit[1] & {2{read_clkEn}};
+  assign {writeI_hitO1,writeI_hitE1}=( read_clkEnC1|read_clkEnC) ? 2'b0 : read_hit[1] & {2{read_clkEn}};
 
   assign writeI_addrE0=read_clkEn ? read_mop[0][`mOpC_addrEven] : 36'bz;
   assign writeI_addrO0=read_clkEn ? read_mop[0][`mOpC_addrOdd] : 36'bz;
