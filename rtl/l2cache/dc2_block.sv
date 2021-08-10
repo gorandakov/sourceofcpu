@@ -318,7 +318,7 @@ module dcache2_way(
   );
   localparam ADDR_WIDTH=36;
   localparam DATA_WIDTH=32;
-  parameter [2:0] ID=0;
+  parameter [4:0] ID=0;
   parameter [1:0] BIG_ID=0;
 
   input clk;
@@ -707,7 +707,7 @@ module dcache2_way(
   assign read_exclP={2{read_hit_reg}} & read_exclx_reg;
   assign read_expAddrP={37{read_hit_reg}} & read_expAddrx_reg;
 
-  lru_single #(5,{BIG_ID,ID}) lru_mod(
+  lru_single #(5,{3'b0,BIG_ID}*5'h9+ID) lru_mod(
   .lru(read_LRUx_reg2),
   .newLRU(new_LRU),
   .hitLRU(hit_LRU),
@@ -733,7 +733,7 @@ module dcache2_way(
           .read_data_in(read_data_in[DATA_WIDTH*b+:DATA_WIDTH]),
           .write_addrE0(write_addrE0_reg2[7:0]), .write_hitE0(write0_hitEL_reg3),
           .write_addrO0(write_addrO0_reg2[7:0]), .write_hitO0(write0_hitOL_reg3),
-          .write_bankEn0(write_bankEn0_reg2[b] && write0_clkEn_reg2), 
+          .write_bankEn0(write_bankEn0_reg2[b] && write0_clkEn_reg2|ins_hit_reg), 
           .write_begin0(write_begin0_reg2),.write_end0(write_end0_reg2),
           .write_bBen0(write_bBen0_reg2),.write_enBen0(write_enBen0_reg2),
           .write_addrE1(write_addrE1_reg2[7:0]), .write_hitE1(write1_hitEL_reg3),
@@ -753,12 +753,12 @@ module dcache2_way(
           .read_data_in(read_data_in[DATA_WIDTH*(b+16)+:DATA_WIDTH]),
           .write_addrE0(write_addrE0_reg2[7:0]), .write_hitE0(write0_hitEH_reg3),
           .write_addrO0(write_addrO0_reg2[7:0]), .write_hitO0(write0_hitOH_reg3),
-          .write_bankEn0(write_bankEn0_reg2[b+16]), 
+          .write_bankEn0(write_bankEn0_reg2[b+16] && write0_clkEn_reg2|ins_hit_reg), 
           .write_begin0(write_begin0_reg2),.write_end0(write_end0_reg2),
           .write_bBen0(write_bBen0_reg2),.write_enBen0(write_enBen0_reg2),
           .write_addrE1(write_addrE1_reg2[7:0]), .write_hitE1(write1_hitEH_reg3),
           .write_addrO1(write_addrO1_reg2[7:0]), .write_hitO1(write1_hitOH_reg3),
-          .write_bankEn1(write_bankEn1_reg2[b+16]), 
+          .write_bankEn1(write_bankEn1_reg2[b+16] && write1_clkEn_reg2), 
           .write_begin1(write_begin1_reg2),.write_end1(write_end1_reg2),
           .write_bBen1(write_bBen1_reg2),.write_enBen1(write_enBen1_reg2),
           .write_data(write_data[DATA_WIDTH*(b+16)+:DATA_WIDTH]),
@@ -1107,7 +1107,7 @@ module dcache2_block(
   wire [36:0] read_expAddrP[7:-1];
   generate
       genvar k,b,q;
-      for(k=0;k<8;k=k+1) begin : ways_gen
+      for(k=0;k<9;k=k+1) begin : ways_gen
           dcache2_way #(k,ID)  way_mod(
           clk,
           rst,
