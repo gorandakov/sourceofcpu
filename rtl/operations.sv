@@ -102,6 +102,8 @@
 `define op_limul64 (5|`op_multiclk)
 //`define op_lmul32 (6|`op_multiclk)
 `define op_lmul64 (7|`op_multiclk)
+`define op_swp64  (6|`op_multiclk)
+`define op_swp32  (4|`op_multiclk)
 
 `define op_sec64  (8|`op_multiclk)
 `define op_imul32_64 (9|`op_multiclk)
