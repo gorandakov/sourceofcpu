@@ -35,8 +35,11 @@ module imul(
   reg is_sec_reg3;
   reg [63:0] sec_res_reg;
   reg [63:0] sec_res_reg2;
+  reg [63:0] swp_res_reg;
+  reg [63:0] swp_res_reg2;
 
   reg ptr_reg,ptr_reg2;
+  wire [63:0] swp_res;
   wire [63:0] sec_res;
   wire [127:0] A_out;
   wire [127:0] B_out;
@@ -77,6 +80,9 @@ module imul(
     resx,1'b0,~upper_reg3&~is_sec_reg3,upper_reg3,short_reg3,,,,);
 
   assign Res[64:0]=is_sec_reg3 ? {ptr_reg2,sec_res_reg2} : {1'b0,64'bz};
+  assign Res[63:0]=is_swp_reg3 ? swp_res_reg2 : 64'bz;
+  assign swp_res=is_swp[0] ? {32'b0,R[7:0],R[15:8],R[23:16],R[31:24]}: 
+	  {R[7:0],R[15:8],R[23:16],R[31:24],R[39:32],R[47:40],R[55:48],R[63:56]};
 
   agusec_mul msec(R[63:0],C[11:0],sec_res);
   
@@ -138,6 +144,12 @@ module imul(
       `op_sec64: begin
 	  is_sec<=1'b1;
       end
+      `op_swp32: begin
+	  is_swp<=2'b1;
+      end
+      `op_swp64: begin
+	  is_swp<=2'b10;
+      end
   //    `op_ptrbnd: begin
   //        bnd<=1'b1;
   //    end
@@ -151,6 +163,9 @@ module imul(
       is_sec_reg<=is_sec;
       is_sec_reg2<=is_sec_reg;
       is_sec_reg3<=is_sec_reg2;
+      is_swp_reg<=|is_swp;
+      is_swp_reg2<=is_swp_reg;
+      is_swp_reg3<=is_swp_reg2;
       upper_reg<=upper;
       upper_reg2<=upper_reg;
       upper_reg3<=upper_reg2;
@@ -166,6 +181,8 @@ module imul(
       and1_reg3<=and1_reg2;
       sec_res_reg<=sec_res;
       sec_res_reg2<=sec_res_reg;
+      swp_res_reg<=swp_res;
+      swp_res_reg2<=swp_res_reg;
       ptr_reg<=R[64];
       ptr_reg2<=ptr_reg;
     //  bnd_reg<=bnd;
