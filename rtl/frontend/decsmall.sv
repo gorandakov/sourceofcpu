@@ -177,6 +177,7 @@ module smallInstr_decoder(
   wire isFPUreor;
   wire isShlAddMulLike;
   wire isPtrSec;
+  wire isJalR;
   wire isBasicFPUScalarA;
   wire isBasicFPUScalarB;
   wire isBasicFPUScalarC;
@@ -348,6 +349,8 @@ module smallInstr_decoder(
 
   assign isShlAddMulLike=opcode_main==8'd210 || opcode_main==8'd211;
   assign isPtrSec=opcode_main==8'd212;
+  assign isJalR=opcode_main=8'd213;
+
   assign isBasicFPUScalarA=opcode_main==8'hef && instr[13:12]==2'b0;
   assign isBasicFPUScalarB=opcode_main==8'hef && instr[13:12]==2'b1;
   assign isBasicFPUScalarC=opcode_main==8'hef && instr[15:12]==4'd2;
@@ -1532,27 +1535,21 @@ module smallInstr_decoder(
            end
       end
 	  
-/*      trien[31]=magic[0] & isRegImul;
+      trien[31]=magic[0] & isJalR;
       pport[31]=PORT_MUL;
       prA_use[31]=1'b1;
       prB_use[31]=1'b1;
-      prT_use[31]=1'b1;
+      prT_use[31]=1'b0;
       puseRs[31]=1'b1;
       prAlloc[31]=1'b1;
-      puseBConst[31]=1'b0;
+      puseBConst[31]=1'b1;
       prA[31]={instr[17],instr[11:8]};
-      prT[31]=instr[16:12];
-      prB[31]=instr[22:18];
-      pflags_write[31]=~instr[25];
-      case(instr[24:23])
-        2'd0: poperation[31][7:0]=`op_limul64;
-        2'd1: poperation[31][7:0]=`op_imul64;
-        2'd2: poperation[31][7:0]=`op_imul32;
-        2'd3: poperation[31][7:0]=`op_imul32_64;
-      endcase
+      pflags_write[31]=1'b0;
+      poperation[31][7:0]=`op_add64;
       poperation[31][11]=1'b1;
-      poperation[31][12]=instr[25];
-  */    
+      poperation[31][12]=1'b1;
+      pjumpType[31]=5'h11;
+ 
       trien[32]=magic[0] & isSimdInt;
       puseRs[32]=1'b1;
       prA_useF[32]=1'b1;
