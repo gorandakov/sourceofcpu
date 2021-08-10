@@ -623,13 +623,14 @@ endmodule
 
 
 
-module addsub_alu(a,b,out,sub,en,ben,cout,cout4,cout32,cout_sec,ndiff,cout44);
+module addsub_alu(a,b,out,sub,en,sxtEn,ben,cout,cout4,cout32,cout_sec,ndiff,cout44);
   parameter WIDTH=64;
   input [64:0] a;
   input [64:0] b;
   output [64:0] out;
   input [5:0] sub;
   input en;
+  input sxtEn;
   input [1:0] ben;
   output cout;
   output cout4;
@@ -853,8 +854,10 @@ module addsub_alu(a,b,out,sub,en,ben,cout,cout4,cout32,cout_sec,ndiff,cout44);
 	
 	if (1)
 	  begin
-	    assign out[63:44]=(en&~ben[1]) ? exbits : 20'bz; 
-	    assign out[43:32]=(en&~ben[0]) ? 12'b0:12'bz; 
+	    assign out[63:44]=(en&~ben[1]&~sxtEn) ? exbits : 20'bz; 
+	    assign out[43:32]=(en&~ben[0]&~sxtEn) ? 12'b0:12'bz; 
+            assign out[63:32]=(X[31] & sxtEn) ? ~C1[31] : 1'bz;
+            assign out[i]=(nX[31] & sxtEn) ? ~nC1[31] : 1'bz;
 	  end
     
   endgenerate
