@@ -1083,8 +1083,8 @@ module dcache2_block(
   wire [8:0] read_imm_way;
   reg [8:0] read_imm_way_reg;
   wire read_hit_any;
-  wire [32*DATA_WIDTH-1:0] read_dataP[7:-1];
-  wire [4:0] read_LRUp[7:-1];
+  wire [32*DATA_WIDTH-1:0] read_dataP[8:-1];
+  wire [4:0] read_LRUp[8:-1];
   reg read_en_reg,read_en_reg2,read_en_reg3;
   reg [4:0] write_begin0_reg;
   reg [4:0] write_begin1_reg;
@@ -1102,9 +1102,9 @@ module dcache2_block(
   reg ins_hit_reg2;
   wire read_imm_any;
 //  reg ins_hit_reg3;
-  wire [1:0] read_dirP[7:-1];
-  wire [1:0] read_exclP[7:-1];
-  wire [36:0] read_expAddrP[7:-1];
+  wire [1:0] read_dirP[8:-1];
+  wire [1:0] read_exclP[8:-1];
+  wire [36:0] read_expAddrP[8:-1];
   generate
       genvar k,b,q;
       for(k=0;k<9;k=k+1) begin : ways_gen
@@ -1215,8 +1215,8 @@ module dcache2_block(
           write_bankEn1_reg<=write_bankEn1;
           
         //  read_hit_any<=(|read_hit_way) && ~ins_hit_reg;
-          read_data<=read_dataP[7];
-          read_LRU<=read_LRUp[7];
+          read_data<=~read_dataP[8];
+          read_LRU<=~read_LRUp[8];
           read_en_reg<=read_en;
           read_en_reg2<=read_en_reg;
           read_en_reg3<=read_en_reg2;
@@ -1227,9 +1227,9 @@ module dcache2_block(
           read_imm_way_reg<=read_imm_way;
           hit_any<=(|read_hit_way_reg) && ~ins_hit_reg2;
           imm_any<=(|read_imm_way_reg) && ~ins_hit_reg2;
-          read_dir<=read_dirP[7][0];
-          read_excl<=read_exclP[7][0];
-          read_expAddrOut<=read_expAddrP[7];
+          read_dir<=~read_dirP[8][0];
+          read_excl<=~read_exclP[8][0];
+          read_expAddrOut<=~read_expAddrP[8];
       end
   end
 endmodule
