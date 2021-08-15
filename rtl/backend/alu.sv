@@ -275,7 +275,7 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
     .out(valRes),
     .sub(sub),
     .en(add_en),
-    .sxtEn(operation[7:0]==`op_add16 || operation[7:0]==`op_sub16);
+    .sxtEn(operation[7:0]==`op_add16 || operation[7:0]==`op_sub16),
     .ben({(operation[7:0]==`op_add64 || operation[7:0]==`op_sub64 || operation[7:1]==7'd30) && 
     ~is_ptr && ~(val1[64]&val2[64]&is_sub||val2[64]&is_sub),
     (operation[7:0]==`op_add64 || operation[7:0]==`op_sub64 || operation[7:1]==7'd30)
@@ -335,7 +335,7 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
   assign flags_COASZP=((retOp==`op_and32) | (retOp==`op_or32) | (retOp==`op_xor32) && isFlags_reg) ?
     {3'b000,valRes_reg[31],flag32_ZF,flag8_PF} : 6'bz;
 
-  assign flags_COASZP=retOP==`op_add8 || retOp==`op_sub8  || retOp==`op_and8  || retOp==`op_xor8 || retOp==`op_or8 
+  assign flags_COASZP=retOp==`op_add8 || retOp==`op_sub8  || retOp==`op_and8  || retOp==`op_xor8 || retOp==`op_or8 
    || retOp==`op_and16  || retOp==`op_xor16 || retOp==`op_or16  ? 6'b0 : 6'bz;
 
   assign flags_COASZP=((|retOp[7:5]) && retOp!=`op_lahf && retOp!=`op_clahf && retOp!=`op_clahfn && ~retOp[11]) ? 6'b0 : 6'bz;

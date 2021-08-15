@@ -33,6 +33,9 @@ module imul(
   reg and1_reg,and1_reg2,and1_reg3,and1_reg4;
   reg is_sec,is_sec_reg,is_sec_reg2;
   reg is_sec_reg3;
+  reg is_swp_reg,is_swp_reg2;
+  reg is_swp_reg3;
+  reg [1:0] is_swp;
   reg [63:0] sec_res_reg;
   reg [63:0] sec_res_reg2;
   reg [63:0] swp_res_reg;

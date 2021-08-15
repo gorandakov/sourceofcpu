@@ -131,7 +131,7 @@ module dcache2_ram_box(
   );
   EccGet32 ecc_mod(bcombine(write_ben_reg,strip_ECC(read_data_ram),write_data_reg),write_data_ram);
 
-  assign read_data=strip_ECC(read_data_ram);
+  assign read_data=write_wen_ram ? strip_ECC(write_data_ram) : strip_ECC(read_data_ram);
 
   always @(posedge clk) begin
       write_data_reg<=write_data;
@@ -727,7 +727,7 @@ module dcache2_way(
           dcache2_bank #(b[4:0],ID[0]) bankL_mod(
           .clk(clk),
           .rst(rst),
-          .read_en(read_enL),
+          .read_en(read_enL|ins_hit_reg),
           .read_odd(read_odd_reg2),
           .read_data(read_data[DATA_WIDTH*b+:DATA_WIDTH]),
           .read_data_in(read_data_in[DATA_WIDTH*b+:DATA_WIDTH]),
@@ -747,7 +747,7 @@ module dcache2_way(
           dcache2_bank #(b[4:0]+5'd16,ID[0]) bankH_mod(
           .clk(clk),
           .rst(rst),
-          .read_en(read_enH),
+          .read_en(read_enH|ins_hit_reg),
           .read_odd(read_odd_reg2),
           .read_data(read_data[DATA_WIDTH*(b+16)+:DATA_WIDTH]),
           .read_data_in(read_data_in[DATA_WIDTH*(b+16)+:DATA_WIDTH]),
