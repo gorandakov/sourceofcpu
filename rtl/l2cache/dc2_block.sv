@@ -1225,8 +1225,8 @@ module dcache2_block(
     //      ins_hit_reg3<=ins_hit_reg2;
           read_hit_way_reg<=read_hit_way;
           read_imm_way_reg<=read_imm_way;
-          hit_any<=(|read_hit_way_reg) && ~ins_hit_reg2;
-          imm_any<=(|read_imm_way_reg) && ~ins_hit_reg2;
+          hit_any<=(|read_hit_way_reg);
+          imm_any<=(|read_imm_way_reg);
           read_dir<=~read_dirP[8][0];
           read_excl<=~read_exclP[8][0];
           read_expAddrOut<=~read_expAddrP[8];
