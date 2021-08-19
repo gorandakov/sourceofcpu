@@ -320,6 +320,7 @@ module frontend1(
   reg [7:0] dreq_reg; 
   reg [7:0] dreq_reg2; 
   reg [7:0] dreq_reg3; 
+  reg [7:0] dreq_reg4; 
 
   reg except_save;
   reg [VIRT_WIDTH-1:0] exceptIP_save;
@@ -900,7 +901,7 @@ module frontend1(
   assign req_addr=(~req_en0 & ~req_en1) ?  38'b0 : 38'bz;
   assign req_slot=(~req_en0 & ~req_en1) ? 10'b0 : 10'bz;
   
-  assign miss_recover=(bus_match0_reg2 && ~miss_seq && dreq_reg3==0)|| bus_tlb_match_reg3;
+  assign miss_recover=(bus_match0_reg3 && ~miss_seq && dreq_reg4==0)|| bus_tlb_match_reg3;
 
 
   assign uxcept=except & ~miss_now & ~btb_hold_except || except_save & ~miss_now &
@@ -1380,6 +1381,7 @@ module frontend1(
           dreq_reg<=8'b0;
           dreq_reg2<=8'b0;
           dreq_reg3<=8'b0;
+          dreq_reg4<=8'b0;
           btbFStall_save<=1'b0;
           btbFStall_reg<=1'b0;
           btbFStall_reg2<=1'b0;
@@ -1425,6 +1427,7 @@ module frontend1(
           dreq_reg<=dreq;
           dreq_reg2<=dreq_reg;
           dreq_reg3<=dreq_reg2;
+          dreq_reg4<=dreq_reg3;
           btbFStall_save<=btbFStall & ~(btbFStall_recover && ~fstall);
           btbFStall_reg<=btbFStall & ~btbFStall_save;
           btbFStall_reg2<=btbFStall_reg;
