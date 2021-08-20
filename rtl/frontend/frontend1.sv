@@ -1363,7 +1363,7 @@ module frontend1(
           dreq<=8'b0;
       end else for (m=0;m<8;m=m+1) begin
           if (req_en && req_slot[2:0]==m[2:0]) dreq[m]<=1'b1;
-          if (bus_en && bus_slot[2:0]==m[2:0]) dreq[m]<=1'b0;
+          if (bus_en && bus_slot[2:0]==m[2:0] && bus_match) dreq[m]<=1'b0;
       end
       if (rst) begin
           init<=1'b1;

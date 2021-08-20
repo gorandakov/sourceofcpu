@@ -550,7 +550,7 @@ module dc2_cntrl(
   assign read_clkEnM=rbus_can && rbus_want;
   assign rbus_want=cntM!=5'd0;
   assign read_clkEnC1=cntC1 && ~read_clkEnM1 && ~read_clkEnC2 && ~readI_en2_reg;  //read data
-  assign read_clkEnC2=cntC2 && ~readI_en2_reg && ~read_clkEnM1;
+  assign read_clkEnC2=1'b0;
   assign read_clkEnM1=rbusD_signals_reg[`rbusD_used] && (rbusD_signals_reg[`rbusD_mem_reply] &&
     rbusD_dst_req_reg[9:5]==ID)|rbusD_signals_reg[`rbusD_expun]; //cl insert
   assign read_M1_exp=rbusD_signals_reg[`rbusD_used] && rbusD_signals_reg[`rbusD_expun];
@@ -761,16 +761,6 @@ module dc2_cntrl(
   .write_addr(init ? initCount[3:0] : write_addrC1),
   .write_data(init ? 1'b0 : {read_want_excl,read_dupl,read_addr,read_req,read_io,read_sz,read_bank0,read_low}),
   .write_wen(read_en|init)
-  );
-  dc2_cntrlMiC2_ram ramC2_mod(
-  .clk(clk),
-  .rst(rst),
-  .read_clkEn(read_clkEnC2),
-  .read_addr(read_addrC2_d),
-  .read_data({read_addr_C2,read_req_C2}),
-  .write_addr(init ? initCount : write_addrC2),
-  .write_data(init ? 1'b0 : {rbusD_addr_out,rbusD_dst_req_reg[4:0]}),
-  .write_wen(wen_C2||init)
   );
   
   dc2_cntrlM_ram ramM_mod(
