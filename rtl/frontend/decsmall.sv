@@ -1447,7 +1447,7 @@ module smallInstr_decoder(
           pport[28]=PORT_ALU;
           puseRs[28]=1'b1;
           prAlloc[28]=1'b1;
-          prT_use[28]=1'b0;
+          prT_use[28]=1'b1;
           pflags_use[28]=1'b1;
           if (magic[1:0]==2'b01) prT[28]={instr[17],instr[11:8]};
           //else if (~magic[0]) rT=instr[11:8];
