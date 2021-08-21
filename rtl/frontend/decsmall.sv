@@ -1071,19 +1071,19 @@ module smallInstr_decoder(
       puseRs[14]=1'b1;
       prAlloc[14]=1'b1;
       pport[14]=PORT_ALU;
+      pflags_use[14]=1'b1;
       case(instr[28:26])
-      0: begin poperation[14][7:0]=`op_clahf; prB_use[14]=1'b0; prT_use[14]=1'b0; pflags_write[14]=1'b1; end
-      1: begin poperation[14][7:0]=`op_clahfn; prB_use[14]=1'b0; prT_use[14]=1'b0; pflags_write[14]=1'b1; end
+      0: begin poperation[14][7:0]=`op_clahf; prB_use[14]=1'b0; prT_use[14]=1'b0; pflags_write[14]=1'b1; pflags_use[14]=1'b0; end
+      1: begin poperation[14][7:0]=`op_clahfn; prB_use[14]=1'b0; prT_use[14]=1'b0; pflags_write[14]=1'b1; pflags_use[14]=1'b0; end
       2: poperation[14][7:0]=`op_cmov64;
       3: poperation[14][7:0]=`op_cmovn64;
       4: poperation[14][7:0]=`op_cmov32;
       5: poperation[14][7:0]=`op_cmovn32;
-      6: begin poperation[14][7:0]=`op_lahf; prB_use[14]=1'b0; prT_use[14]=1'b0; pflags_write[14]=1'b1; end
+      6: begin poperation[14][7:0]=`op_lahf; prB_use[14]=1'b0; prT_use[14]=1'b0; pflags_write[14]=1'b1; pflags_use[14]=1'b0; end
       7: begin poperation[14][7:0]=`op_sahf; prB_use[14]=1'b0; prA_use[14]=1'b0; end
       endcase
       poperation[14][10:8]=instr[25:23];
       poperation[14][12:11]=2'b10;
-      pflags_use[14]=1'b1;
       
       trien[15]=magic[0] & isBasicCmpTest; 
 	  //if there is magic, we assume immediate version
