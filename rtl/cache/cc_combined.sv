@@ -116,15 +116,15 @@ module cc_comb (
   assign read_data0=cc_read_data0;
   assign read_dataX0=cc_read_dataX0;
   
-  assign read_dataP[0]=({260{read_hit0A}} & read_data0_reg[DATA_WIDTH/4-1:0]) | ~read_dataP[1]; 
-  assign read_dataP[1]=~(({260{~read_hit1A}} |  ~read_data0_reg[DATA_WIDTH/2-1:DATA_WIDTH/4]) & ~read_dataP[2]); 
-  assign read_dataP[2]=~(({260{read_hit0B}} & read_data0_reg[DATA_WIDTH/4*3-1:DATA_WIDTH/2]) | read_dataP[3]); 
-  assign read_dataP[3]=~(({260{~read_hit1B}} | ~read_data0_reg[DATA_WIDTH-1:DATA_WIDTH/4*3])); 
+  assign read_dataP[0]=~(({260{~read_hit0A}} | read_data0_reg[DATA_WIDTH/4-1:0]) & read_dataP[1]); 
+  assign read_dataP[1]=~(({260{read_hit1A}} &  read_data0_reg[DATA_WIDTH/2-1:DATA_WIDTH/4]) | read_dataP[2]); 
+  assign read_dataP[2]=~(({260{~read_hit0B}} | read_data0_reg[DATA_WIDTH/4*3-1:DATA_WIDTH/2]) & read_dataP[3]); 
+  assign read_dataP[3]=~(({260{read_hit1B}} & read_data0_reg[DATA_WIDTH-1:DATA_WIDTH/4*3])); 
   
-  assign read_dataXP[0]=({15{read_hit0A}} & read_dataX0_reg[14:0]) | ~read_dataXP[1]; 
-  assign read_dataXP[1]=~(({15{~read_hit1A}} | ~read_dataX0_reg[29:15]) & ~read_dataXP[2]); 
-  assign read_dataXP[2]=~(({15{read_hit0B}} & read_dataX0_reg[44:30]) | ~read_dataXP[3]); 
-  assign read_dataXP[3]=~({15{read_hit1B}} | ~read_dataX0_reg[59:45]); 
+  assign read_dataXP[0]=~(({15{~read_hit0A}} | read_dataX0_reg[14:0]) & read_dataXP[1]); 
+  assign read_dataXP[1]=~(({15{read_hit1A}} & ~read_dataX0_reg[29:15]) | read_dataXP[2]); 
+  assign read_dataXP[2]=~(({15{~read_hit0B}} | read_dataX0_reg[44:30]) & read_dataXP[3]); 
+  assign read_dataXP[3]=~({15{read_hit1B}} & ~read_dataX0_reg[59:45]); 
 
 
 /*  assign read_dataYP=read_hit0A ? read_dataY0_reg[17:0] : 18'BZ; 
@@ -244,10 +244,10 @@ module cc_comb (
               write_data_reg2[DATA_WIDTH-1:DATA_WIDTH/2]<=write_data_reg[DATA_WIDTH-1:DATA_WIDTH/2];
           cc_read_tagErrP<=cc_tagErr;
 	  cc_exp_addr0_reg<=cc_exp_addr0;
-          read_hit0A<=cc_read_hit0 & ~cc_read_IP_reg[6] & ~cc_read_IP_reg[5];
-          read_hit1A<=cc_read_hit0 & ~cc_read_IP_reg[6] & cc_read_IP_reg[5];
-          read_hit0B<=cc_read_hit0 & cc_read_IP_reg[6] & ~cc_read_IP_reg[5];
-          read_hit1B<=cc_read_hit0 & cc_read_IP_reg[6] & cc_read_IP_reg[5];
+          read_hit0A<=cc_read_hit0 & ~cc_read_IP_reg[1] & ~cc_read_IP_reg[0];
+          read_hit1A<=cc_read_hit0 & ~cc_read_IP_reg[1] & cc_read_IP_reg[0];
+          read_hit0B<=cc_read_hit0 & cc_read_IP_reg[1] & ~cc_read_IP_reg[0];
+          read_hit1B<=cc_read_hit0 & cc_read_IP_reg[1] & cc_read_IP_reg[0];
       //    read_physOut0_reg<=read_physOut0;
           cc_write_wen_reg2<=cc_write_wen_reg;
           cc_invalidate_reg2<=cc_invalidate_reg;

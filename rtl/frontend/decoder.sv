@@ -2517,7 +2517,7 @@ module decoder(
 
           if (k<9) 
           decoder_reorder_mux mux_mod(
-          iAvail_reg,
+          iUsed_reg,
           1'b1,
           rs_index[k],
           k==5 && has_mul,k==8 && has_mul,
@@ -3349,80 +3349,80 @@ module decoder(
   
 
   assign instr0_rT=	dec_rT_reg[0];
-  assign instr0_wren=	dec_rT_use_reg[0] | dec_rT_useF_reg[0] && iAvail_reg[0];
-  assign instr0_en=	dec_useRs_reg[0] & iAvail_reg[0];
+  assign instr0_wren=	dec_rT_use_reg[0] | dec_rT_useF_reg[0] && iUsed_reg[0];
+  assign instr0_en=	dec_useRs_reg[0] & iUsed_reg[0];
   assign instr0_rT_useF=dec_rT_useF_reg[0];
   assign instr0_rT_isV= dec_rT_isV_reg[0];
   assign instr0_port=   dec_port_reg[0];
   assign instr0_magic=  dec_magic_reg[0];
   
   assign instr1_rT=	dec_rT_reg[1];
-  assign instr1_wren=	dec_rT_use_reg[1] | dec_rT_useF_reg[1] && iAvail_reg[1];
-  assign instr1_en=	dec_useRs_reg[1] & iAvail_reg[1];
+  assign instr1_wren=	dec_rT_use_reg[1] | dec_rT_useF_reg[1] && iUsed_reg[1];
+  assign instr1_en=	dec_useRs_reg[1] & iUsed_reg[1];
   assign instr1_rT_useF=dec_rT_useF_reg[1];
   assign instr1_rT_isV= dec_rT_isV_reg[1];
   assign instr1_port=   dec_port_reg[1];
   assign instr1_magic=  dec_magic_reg[1];
 
   assign instr2_rT=	dec_rT_reg[2];
-  assign instr2_wren=	dec_rT_use_reg[2] | dec_rT_useF_reg[2] && iAvail_reg[2];
-  assign instr2_en=	dec_useRs_reg[2] & iAvail_reg[2];
+  assign instr2_wren=	dec_rT_use_reg[2] | dec_rT_useF_reg[2] && iUsed_reg[2];
+  assign instr2_en=	dec_useRs_reg[2] & iUsed_reg[2];
   assign instr2_rT_useF=dec_rT_useF_reg[2];
   assign instr2_rT_isV= dec_rT_isV_reg[2];
   assign instr2_port=   dec_port_reg[2];
   assign instr2_magic=  dec_magic_reg[2];
 
   assign instr3_rT=	dec_rT_reg[3];
-  assign instr3_wren=	dec_rT_use_reg[3] | dec_rT_useF_reg[3] && iAvail_reg[3];
-  assign instr3_en=	dec_useRs_reg[3] & iAvail_reg[3];
+  assign instr3_wren=	dec_rT_use_reg[3] | dec_rT_useF_reg[3] && iUsed_reg[3];
+  assign instr3_en=	dec_useRs_reg[3] & iUsed_reg[3];
   assign instr3_rT_useF=dec_rT_useF_reg[3];
   assign instr3_rT_isV= dec_rT_isV_reg[3];
   assign instr3_port=   dec_port_reg[3];
   assign instr3_magic=  dec_magic_reg[3];
 
   assign instr4_rT=	dec_rT_reg[4];
-  assign instr4_wren=	dec_rT_use_reg[4] | dec_rT_useF_reg[4] && iAvail_reg[4];
-  assign instr4_en=	dec_useRs_reg[4] & iAvail_reg[4];
+  assign instr4_wren=	dec_rT_use_reg[4] | dec_rT_useF_reg[4] && iUsed_reg[4];
+  assign instr4_en=	dec_useRs_reg[4] & iUsed_reg[4];
   assign instr4_rT_useF=dec_rT_useF_reg[4];
   assign instr4_rT_isV= dec_rT_isV_reg[4];
   assign instr4_port=   dec_port_reg[4];
   assign instr4_magic=  dec_magic_reg[4];
 
   assign instr5_rT=	dec_rT_reg[5];
-  assign instr5_wren=	dec_rT_use_reg[5] | dec_rT_useF_reg[5] && iAvail_reg[5];
-  assign instr5_en=	dec_useRs_reg[5] & iAvail_reg[5];
+  assign instr5_wren=	dec_rT_use_reg[5] | dec_rT_useF_reg[5] && iUsed_reg[5];
+  assign instr5_en=	dec_useRs_reg[5] & iUsed_reg[5];
   assign instr5_rT_useF=dec_rT_useF_reg[5];
   assign instr5_rT_isV= dec_rT_isV_reg[5];
   assign instr5_port=   dec_port_reg[5];
   assign instr5_magic=  dec_magic_reg[5];
     
   assign instr6_rT=	dec_rT_reg[6];
-  assign instr6_wren=	dec_rT_use_reg[6] | dec_rT_useF_reg[6] && iAvail_reg[6];
-  assign instr6_en=	dec_useRs_reg[6] & iAvail_reg[6];
+  assign instr6_wren=	dec_rT_use_reg[6] | dec_rT_useF_reg[6] && iUsed_reg[6];
+  assign instr6_en=	dec_useRs_reg[6] & iUsed_reg[6];
   assign instr6_rT_useF=dec_rT_useF_reg[6];
   assign instr6_rT_isV= dec_rT_isV_reg[6];
   assign instr6_port=   dec_port_reg[6];
   assign instr6_magic=  dec_magic_reg[6];
 
   assign instr7_rT=	dec_rT_reg[7];
-  assign instr7_wren=	dec_rT_use_reg[7] | dec_rT_useF_reg[7] && iAvail_reg[7];
-  assign instr7_en=	dec_useRs_reg[7] & iAvail_reg[7];
+  assign instr7_wren=	dec_rT_use_reg[7] | dec_rT_useF_reg[7] && iUsed_reg[7];
+  assign instr7_en=	dec_useRs_reg[7] & iUsed_reg[7];
   assign instr7_rT_useF=dec_rT_useF_reg[7];
   assign instr7_rT_isV= dec_rT_isV_reg[7];
   assign instr7_port=   dec_port_reg[7];
   assign instr7_magic=  dec_magic_reg[7];
   
   assign instr8_rT=	dec_rT_reg[8];
-  assign instr8_wren=	dec_rT_use_reg[8] | dec_rT_useF_reg[8] && iAvail_reg[8];
-  assign instr8_en=	dec_useRs_reg[8] & iAvail_reg[8];
+  assign instr8_wren=	dec_rT_use_reg[8] | dec_rT_useF_reg[8] && iUsed_reg[8];
+  assign instr8_en=	dec_useRs_reg[8] & iUsed_reg[8];
   assign instr8_rT_useF=dec_rT_useF_reg[8];
   assign instr8_rT_isV= dec_rT_isV_reg[8];
   assign instr8_port=   dec_port_reg[8];
   assign instr8_magic=  dec_magic_reg[8];
   
   assign instr9_rT=	dec_rT_reg[9];
-  assign instr9_wren=	dec_rT_use_reg[9] | dec_rT_useF_reg[9] && iAvail_reg[9];
-  assign instr9_en=	dec_useRs_reg[9] & iAvail_reg[9];
+  assign instr9_wren=	dec_rT_use_reg[9] | dec_rT_useF_reg[9] && iUsed_reg[9];
+  assign instr9_en=	dec_useRs_reg[9] & iUsed_reg[9];
   assign instr9_rT_useF=dec_rT_useF_reg[9];
   assign instr9_rT_isV= dec_rT_isV_reg[9];
   assign instr9_port=   dec_port_reg[9];
