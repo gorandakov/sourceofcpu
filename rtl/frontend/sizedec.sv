@@ -132,7 +132,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   assign isCall=(opcode_main==8'd182 && (instr[15:13]==3'd1 || instr[15:13]==3'd2)) && magic[0];
   assign isRet=(opcode_main==8'd182 && instr[15:13]==3'd3) && magic[0];
   assign isMovOrExt=(opcode_main==8'd183 || opcode_main[7:3]==5'b10111 || opcode_main[7:1]==7'd96) && magic[0];
-  assign isMovOrExtExcept=magic[1] && opcode_main!=8'd183 && opcode_main[7:1]!=7'd92;
+  assign isMovOrExtExcept=magic[1:0]==2'b11 && opcode_main!=8'd183 && opcode_main[7:1]!=7'd92;
   assign isCSet=(opcode_main==8'd194) && magic[0]; 
   assign isBasicAddNoFl=(opcode_main==8'd195 || opcode_main==8'd196) && magic[0];
   
