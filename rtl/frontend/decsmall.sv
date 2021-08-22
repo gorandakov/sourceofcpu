@@ -933,7 +933,7 @@ module smallInstr_decoder(
                prB[10]=5'd31;
                puseBConst[10]=1'b1;
                pconstant[10]={58'b0,instr[23:18]};
-               pflags_use[10]=~instr[24];
+               pflags_use[10]=1'b0;
                pflags_write[10]=~instr[24];
                poperation[10][12]=instr[24];
            end else begin
@@ -941,7 +941,7 @@ module smallInstr_decoder(
                prT[10]=instr[16:12];
                prB[10]=instr[22:18];
                puseBConst[10]=1'b0;
-               pflags_use[10]=~instr[24];
+               pflags_use[10]=1'b0;
                pflags_write[10]=~instr[24];
                poperation[10][12]=instr[24];
            end
@@ -1072,18 +1072,21 @@ module smallInstr_decoder(
       prAlloc[14]=1'b1;
       pport[14]=PORT_ALU;
       pflags_use[14]=1'b1;
+      poperation[14][12:11]=2'b10;
       case(instr[28:26])
-      0: begin poperation[14][7:0]=`op_clahf; prB_use[14]=1'b0; prT_use[14]=1'b0; pflags_write[14]=1'b1; pflags_use[14]=1'b0; end
-      1: begin poperation[14][7:0]=`op_clahfn; prB_use[14]=1'b0; prT_use[14]=1'b0; pflags_write[14]=1'b1; pflags_use[14]=1'b0; end
+      0: begin poperation[14][7:0]=`op_clahf; prB_use[14]=1'b0; prT_use[14]=1'b0;
+             pflags_write[14]=1'b1; pflags_use[14]=1'b0; poperation[14][12]=1'b0;  end
+      1: begin poperation[14][7:0]=`op_clahfn; prB_use[14]=1'b0; prT_use[14]=1'b0;
+             pflags_write[14]=1'b1; pflags_use[14]=1'b0;  poperation[14][12]=1'b0;end
       2: poperation[14][7:0]=`op_cmov64;
       3: poperation[14][7:0]=`op_cmovn64;
       4: poperation[14][7:0]=`op_cmov32;
       5: poperation[14][7:0]=`op_cmovn32;
-      6: begin poperation[14][7:0]=`op_lahf; prB_use[14]=1'b0; prT_use[14]=1'b0; pflags_write[14]=1'b1; pflags_use[14]=1'b0; end
+      6: begin poperation[14][7:0]=`op_lahf; prB_use[14]=1'b0; prT_use[14]=1'b0; 
+             pflags_write[14]=1'b1; pflags_use[14]=1'b0;  poperation[14][12]=1'b0;end
       7: begin poperation[14][7:0]=`op_sahf; prB_use[14]=1'b0; prA_use[14]=1'b0; end
       endcase
       poperation[14][10:8]=instr[25:23];
-      poperation[14][12:11]=2'b10;
       
       trien[15]=magic[0] & isBasicCmpTest; 
 	  //if there is magic, we assume immediate version

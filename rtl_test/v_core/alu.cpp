@@ -1179,7 +1179,7 @@ bool get_check(Vheptane_core *top, req *reqs) {
     }
     xbreak=top->heptane_core__DOT__bck_mod__DOT__retM_xbreak;
     retire=top->heptane_core__DOT__bck_mod__DOT__retM_do_retire;
-    if (top->heptane_core__DOT__iAvail) printf("iAvail 0x%x, \t0x%x\n",top->heptane_core__DOT__iAvail,top->heptane_core__DOT__instrEn);
+    if (top->heptane_core__DOT__iAvail) printf("iAvail 0x%x, \t0x%x, \t0x%x, \t0x%x\n",top->heptane_core__DOT__iAvail,top->heptane_core__DOT__instrEn,top->heptane_core__DOT__dec_mod__DOT__cls_ALU,top->heptane_core__DOT__dec_mod__DOT__cls_shift);
     if (top->heptane_core__DOT__instrEn) {
         k=0;
 	while (top->heptane_core__DOT__instrEn&(1<<k)) {k++;}
