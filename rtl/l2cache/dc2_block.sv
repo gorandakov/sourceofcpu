@@ -156,6 +156,7 @@ module dcache2_bank(
   read_en,
   read_odd,
   read_data,read_data_in,
+  read_datax,read_datax_in,
   write_addrE0, write_hitE0,
   write_addrO0, write_hitO0,
   write_bankEn0, 
@@ -180,6 +181,8 @@ module dcache2_bank(
   input read_odd; //+1 cycle
   output [DATA_WIDTH-1:0] read_data;
   input [DATA_WIDTH-1:0] read_data_in;
+  output [DATA_WIDTH-1:0] read_datax;
+  input [DATA_WIDTH-1:0] read_datax_in;
 
   input [ADDR_WIDTH-1:0] write_addrE0;
   input write_hitE0; //+1 cycle
@@ -204,9 +207,11 @@ module dcache2_bank(
   
  // wire [ADDR_WIDTH-1:0] read_addr[1:0];
   wire [DATA_WIDTH-1:0] read_data_ram[1:0];
+  wire [DATA_WIDTH-1:0] read_datax_ram[1:0];
   wire enE,enO;
   wire onE,onO;
   wire [DATA_WIDTH-1:0] read_dataP;
+  wire [DATA_WIDTH-1:0] read_dataxP;
 
   wire [ADDR_WIDTH-1:0] write_addrO;
   wire [ADDR_WIDTH-1:0] write_addrE;
@@ -221,11 +226,17 @@ module dcache2_bank(
   assign read_dataP=(read_en_reg|ins_hit_reg && read_odd_reg) ? read_data_ram[1] : {DATA_WIDTH{1'bz}};
   assign read_dataP=(~(read_en_reg|ins_hit_reg)) ? {DATA_WIDTH{1'B0}} : {DATA_WIDTH{1'BZ}};  
 
+  assign read_dataxP=(read_en_reg|ins_hit_reg && ~read_odd_reg) ? read_datax_ram[0] : {DATA_WIDTH{1'bz}};
+  assign read_dataxP=(read_en_reg|ins_hit_reg && read_odd_reg) ? read_datax_ram[1] : {DATA_WIDTH{1'bz}};
+  assign read_dataxP=(~(read_en_reg|ins_hit_reg)) ? {DATA_WIDTH{1'B0}} : {DATA_WIDTH{1'BZ}};  
+
   generate
     if (~TOP) begin
         assign read_data=~(read_dataP|read_data_in);
+        assign read_datax=~(read_dataxP|read_datax_in);
     end else begin
 	assign read_data=~(~read_dataP&read_data_in);
+	assign read_datax=~(~read_dataxP&read_datax_in);
     end
   endgenerate
   assign write_addrE=write_bankEn0 ? write_addrE0 : write_addrE1;
@@ -247,6 +258,7 @@ module dcache2_bank(
   .read_nClkEn(~read_en),
   .read_addr(write_addrE),//read/write addr
   .read_data(read_data_ram[0]),
+  .read_datax(read_datax_ram[0]),
   .write_data(write_data),
   .write_wen((write_bankEn && write_hitE0|write_hitE1)|(ins_hit&~read_odd)),
   .write_ben(write_ben)
@@ -258,6 +270,7 @@ module dcache2_bank(
   .read_nClkEn(~read_en),
   .read_addr(write_addrO),//read/write addr
   .read_data(read_data_ram[1]),
+  .read_datax(read_datax_ram[1]),
   .write_data(write_data),
   .write_wen((write_bankEn && write_hitO0|write_hitO1)|(ins_hit&read_odd)),
   .write_ben(write_ben)
