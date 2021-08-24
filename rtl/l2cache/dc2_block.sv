@@ -82,6 +82,7 @@ module dcache2_ram_box(
   read_nClkEn,
   read_addr,
   read_data,
+  read_datax,
   write_data,
   write_wen,
   write_ben
@@ -94,6 +95,7 @@ module dcache2_ram_box(
   input read_nClkEn;
   input [ADDR_WIDTH-1:0] read_addr;
   output [31:0] read_data;
+  output [31:0] read_datax;
   input [31:0] write_data;
   input write_wen;
   input [3:0] write_ben;
@@ -132,6 +134,7 @@ module dcache2_ram_box(
   EccGet32 ecc_mod(bcombine(write_ben_reg,strip_ECC(read_data_ram),write_data_reg),write_data_ram);
 
   assign read_data=write_wen_ram ? strip_ECC(write_data_ram) : strip_ECC(read_data_ram);
+  assign read_datax=strip_ECC(read_data_ram);
 
   always @(posedge clk) begin
       write_data_reg<=write_data;
