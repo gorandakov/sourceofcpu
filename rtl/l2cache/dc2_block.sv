@@ -291,6 +291,7 @@ module dcache2_way(
   rst,
   read_en,read_odd,
   read_data,read_data_in,
+  read_dataX,read_dataX_in,
   read_hit,read_inL1, // 1 cycle before data
   write0_clkEn,
   write_addrE0, write_hitE0,
@@ -330,6 +331,8 @@ module dcache2_way(
   input read_odd;
   output [32*DATA_WIDTH-1:0] read_data;
   input [32*DATA_WIDTH-1:0] read_data_in;
+  output [32*DATA_WIDTH-1:0] read_dataX;
+  input [32*DATA_WIDTH-1:0] read_dataX_in;
   output read_hit; //1 cycle before data
   output reg read_inL1;
 
@@ -734,6 +737,8 @@ module dcache2_way(
           .read_odd(read_odd_reg2),
           .read_data(read_data[DATA_WIDTH*b+:DATA_WIDTH]),
           .read_data_in(read_data_in[DATA_WIDTH*b+:DATA_WIDTH]),
+          .read_datax(read_datax[DATA_WIDTH*b+:DATA_WIDTH]),
+          .read_datax_in(read_datax_in[DATA_WIDTH*b+:DATA_WIDTH]),
           .write_addrE0(write_addrE0_reg2[7:0]), .write_hitE0(write0_hitEL_reg3),
           .write_addrO0(write_addrO0_reg2[7:0]), .write_hitO0(write0_hitOL_reg3),
           .write_bankEn0(write_bankEn0_reg2[b] && write0_clkEn_reg2|ins_hit_reg), 
@@ -754,6 +759,8 @@ module dcache2_way(
           .read_odd(read_odd_reg2),
           .read_data(read_data[DATA_WIDTH*(b+16)+:DATA_WIDTH]),
           .read_data_in(read_data_in[DATA_WIDTH*(b+16)+:DATA_WIDTH]),
+          .read_datax(read_datax[DATA_WIDTH*(b+16)+:DATA_WIDTH]),
+          .read_datax_in(read_datax_in[DATA_WIDTH*(b+16)+:DATA_WIDTH]),
           .write_addrE0(write_addrE0_reg2[7:0]), .write_hitE0(write0_hitEH_reg3),
           .write_addrO0(write_addrO0_reg2[7:0]), .write_hitO0(write0_hitOH_reg3),
           .write_bankEn0(write_bankEn0_reg2[b+16] && write0_clkEn_reg2|ins_hit_reg), 
@@ -996,7 +1003,7 @@ module dcache2_block(
   clk,
   rst,
   read_en,read_odd,
-  read_data,
+  read_data,read_dataX,
   write0_clkEn,
   write_addrE0, write_hitE0,
   write_addrO0, write_hitO0,
@@ -1036,6 +1043,7 @@ module dcache2_block(
   input read_en; 
   input read_odd;
   output reg [32*DATA_WIDTH-1:0] read_data;
+  output reg [32*DATA_WIDTH-1:0] read_datax;
 
   input write0_clkEn;
   input [ADDR_WIDTH-1:0] write_addrE0;
@@ -1087,6 +1095,7 @@ module dcache2_block(
   reg [8:0] read_imm_way_reg;
   wire read_hit_any;
   wire [32*DATA_WIDTH-1:0] read_dataP[8:-1];
+  wire [32*DATA_WIDTH-1:0] read_dataxP[8:-1];
   wire [4:0] read_LRUp[8:-1];
   reg read_en_reg,read_en_reg2,read_en_reg3;
   reg [4:0] write_begin0_reg;
@@ -1118,6 +1127,8 @@ module dcache2_block(
           read_odd,
           read_dataP[k],
           read_dataP[k-1],
+          read_dataxP[k],
+          read_dataxP[k-1],
           read_hit_way[k],
 	  read_imm_way[k],
           write0_clkEn,
@@ -1164,6 +1175,8 @@ module dcache2_block(
 
   assign read_dataP[-1][511:0]=512'b0;
   assign read_dataP[-1][1023:512]=512'b0;
+  assign read_dataxP[-1][511:0]=512'b0;
+  assign read_dataxP[-1][1023:512]=512'b0;
   assign read_LRUp[-1]={ID,3'b0};
   assign read_dirP[-1]=2'b0;
   assign read_exclP[-1]=2'b0;
@@ -1188,6 +1201,7 @@ module dcache2_block(
           
         //  read_hit_any<=1'b0;
           read_data<=1024'b0;
+          read_datax<=1024'b0;
           read_LRU<=5'h0;
           read_en_reg<=1'b0;
           read_en_reg2<=1'b0;
@@ -1219,6 +1233,7 @@ module dcache2_block(
           
         //  read_hit_any<=(|read_hit_way) && ~ins_hit_reg;
           read_data<=~read_dataP[8];
+          read_datax<=~read_dataxP[8];
           read_LRU<=~read_LRUp[8];
           read_en_reg<=read_en;
           read_en_reg2<=read_en_reg;
