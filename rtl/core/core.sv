@@ -633,6 +633,7 @@ module heptane_core(
   reg dc2_io_en_reg2;
   reg dc2_io_en_reg3;
   reg dc2_io_en_reg4;
+  reg dc2_io_en_reg5;
   wire [63:0] dc2_dataIO;
   reg [63:0] dc2_dataIO_reg;
   reg [63:0] dc2_dataIO_reg2;
@@ -744,6 +745,8 @@ module heptane_core(
   reg [511:0] rbusDIn_data_reg;
   reg dc2_rDir_reg;
   reg dc2_rExcl_reg;
+  reg dc2_rDir_reg2;
+  reg dc2_rExcl_reg2;
   reg [511:0] dc2_rdata_reg;
   reg [511:0] dc2_rdataExp_reg;
 
@@ -934,7 +937,7 @@ module heptane_core(
   .rst(rst),
   .read_en(dc2_rdEn),.read_odd(dc2_rdOdd),
   .read_data(dc2_rdataA0),
-  .read_datax(dc2_rdataExpA0),
+  .read_dataX(dc2_rdataExpA0),
   .write0_clkEn(dc2_hitE0 | dc2_hitO0),
   .write_addrE0(dc2_addrE0), .write_hitE0(dc2_hitE0),
   .write_addrO0(dc2_addrO0), .write_hitO0(dc2_hitO0),
@@ -974,7 +977,7 @@ module heptane_core(
   .rst(rst),
   .read_en(dc2_rdEn),.read_odd(dc2_rdOdd),
   .read_data(dc2_rdataB0),
-  .read_datax(dc2_rdataExpB0),
+  .read_dataX(dc2_rdataExpB0),
   .write0_clkEn(dc2_hitE0 | dc2_hitO0),
   .write_addrE0(dc2_addrE0), .write_hitE0(dc2_hitE0),
   .write_addrO0(dc2_addrO0), .write_hitO0(dc2_hitO0),
@@ -1014,7 +1017,7 @@ module heptane_core(
   .rst(rst),
   .read_en(dc2_rdEn),.read_odd(dc2_rdOdd),
   .read_data(dc2_rdataB1),
-  .read_datax(dc2_rdataExpB1),
+  .read_dataX(dc2_rdataExpB1),
   .write0_clkEn(dc2_hitE0 | dc2_hitO0),
   .write_addrE0(dc2_addrE0), .write_hitE0(dc2_hitE0),
   .write_addrO0(dc2_addrO0), .write_hitO0(dc2_hitO0),
@@ -1837,6 +1840,8 @@ module heptane_core(
         dc2_rhitExp_reg<=1'b0;
         dc2_rDir_reg<=1'b0;
         dc2_rExcl_reg<=1'b0;
+        dc2_rDir_reg2<=1'b0;
+        dc2_rExcl_reg2<=1'b0;
         dc2_rdata_reg<=512'b0;
         dc2_rdataExp_reg<=512'b0;
         dc2_rLRU_reg<=5'b0;
@@ -1844,6 +1849,7 @@ module heptane_core(
 	dc2_io_en_reg2<=1'b0;
 	dc2_io_en_reg3<=1'b0;
 	dc2_io_en_reg4<=1'b0;
+	dc2_io_en_reg5<=1'b0;
 	dc2_dataIO_reg<=64'b0;
 	dc2_dataIO_reg2<=64'b0;
 	dc2_dataIO_reg3<=64'b0;
@@ -1914,6 +1920,7 @@ module heptane_core(
 	dc2_io_en_reg2<=dc2_io_en_reg;
 	dc2_io_en_reg3<=dc2_io_en_reg2;
 	dc2_io_en_reg4<=dc2_io_en_reg3;
+	dc2_io_en_reg5<=dc2_io_en_reg4;
 	dc2_dataIO_reg<=dc2_dataIO;
 	dc2_dataIO_reg2<=dc2_dataIO_reg;
 	dc2_dataIO_reg3<=dc2_dataIO_reg2;
