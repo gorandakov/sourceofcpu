@@ -275,7 +275,7 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
     .out(valRes),
     .sub(sub),
     .en(add_en),
-    .sxtEn(operation[7:0]==`op_add32 || operation[7:0]==`op_sub32),
+    .sxtEn(operation[7:0]==`op_add16 || operation[7:0]==`op_sub16),
     .ben({(operation[7:0]==`op_add64 || operation[7:0]==`op_sub64 || operation[7:1]==7'd30) && 
     ~is_ptr && ~(val1[64]&val2[64]&is_sub||val2[64]&is_sub),
     (operation[7:0]==`op_add64 || operation[7:0]==`op_sub64 || operation[7:1]==7'd30)
