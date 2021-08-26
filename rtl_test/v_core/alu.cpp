@@ -1146,12 +1146,16 @@ void req_set(Vheptane_core *top,req *reqs,char *mem) {
 	top->heptane_core__DOT__dc2_rdata_reg[3],top->heptane_core__DOT__dc2_rdata_reg[2],
 	top->heptane_core__DOT__dc2_rdata_reg[1],top->heptane_core__DOT__dc2_rdata_reg[0],
 	top->heptane_core__DOT__dc2_rhitB1_reg);
+    if (!top->heptane_core__DOT__insBus_en && top->heptane_core__DOT__dc2_rhit) printf("insBusX 0x%x, 0x%#8x%#8x%#8x%#8x, %i\n",top->heptane_core__DOT__dc2_req_rd_reg5,
+	top->heptane_core__DOT__dc2_rdata_reg[3],top->heptane_core__DOT__dc2_rdata_reg[2],
+	top->heptane_core__DOT__dc2_rdata_reg[1],top->heptane_core__DOT__dc2_rdata_reg[0],
+	top->heptane_core__DOT__dc2_rhitB1_reg);
     if (top->heptane_core__DOT__front_mod__DOT__cc_mod__DOT__cc_write_wen_reg2)
 	    printf("wenR\n");
     if (top->heptane_core__DOT__rinsBus_A||top->heptane_core__DOT__rinsBus_B) {
-	    printf("insburst 0x%8x%8x%8x%8x, %i\n",top->heptane_core__DOT__rbusDIn_data_reg[3],
+	    printf("insburst 0x%8x%8x%8x%8x, %i, 0x%lx\n",top->heptane_core__DOT__rbusDIn_data_reg[3],
 	top->heptane_core__DOT__rbusDIn_data_reg[2],top->heptane_core__DOT__rbusDIn_data_reg[1],
-	top->heptane_core__DOT__rbusDIn_data_reg[0],top->heptane_core__DOT__dc2_rdOdd);
+	top->heptane_core__DOT__rbusDIn_data_reg[0],top->heptane_core__DOT__dc2_rdOdd,top->heptane_core__DOT__dc2_addrE0);
 	    if (top->heptane_core__DOT__dc2_hitE0||top->heptane_core__DOT__dc2_hitO0||top->heptane_core__DOT__dc2_hitE1||
 		top->heptane_core__DOT__dc2_hitO1) printf("shmupd\n");
     }
