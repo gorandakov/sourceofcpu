@@ -583,7 +583,7 @@ module dcache2_way(
   .req_odd(write_odd1),
   .req_waddrE(write_addrE1),
   .req_waddrO(write_addrO1),
-  .req_wodd(write_odd1),
+  .req_wodd(write_odd0),
   .req_split(write_split1),
   .req_hitE(write1_hitE),.req_hitO(write1_hitO),
   .req_shitE(),.req_shitO(),
