@@ -263,7 +263,7 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
  
   assign is_ptr=val1[64]|val2[64] && ~(val1[64]&val2[64]&is_sub||val2[64]&is_sub) && add_en|logic_en|
     (cmov_en&&(doJmp&val2[64]||~doJmp&val1[64]))|(operation[11:0]==12'd58) && 
-    (operation[1:0]==2'b0||cmov_en||operation[11:1]==11'd29);
+    ((operation[1:0]==2'b0 && !operation[5]|(operation[7:2]==6'b001000))||cmov_en||operation[11:1]==11'd29);
 
   assign is_sub=operation[7:0]==`op_sub64 || operation[7:0]==`op_sub32;
 
