@@ -678,15 +678,15 @@ module smallInstr_decoder(
       poperation[1][12]=1'b1;
        //verilator lint_off CASEINCOMPLETE
       case(opcode_sub)
-	6'h20,6'h29: poperation[1]=`op_mov64;
-	6'h21: poperation[1]=`op_mov32;
-	6'h22: poperation[1]=`op_zxt8_64;
-	6'h23: poperation[1]=`op_zxt16_64;
-	6'h24: poperation[1]=`op_sxt8_32;
-	6'h25: poperation[1]=`op_sxt16_32;
-	6'h26: poperation[1]=`op_sxt8_64;
-	6'h27: poperation[1]=`op_sxt16_64;
-	6'h28: poperation[1]=`op_sxt32_64;
+	6'h20,6'h29: poperation[1][7:0]=`op_mov64;
+	6'h21: poperation[1][7:0]=`op_mov32;
+	6'h22: poperation[1][7:0]=`op_zxt8_64;
+	6'h23: poperation[1][7:0]=`op_zxt16_64;
+	6'h24: poperation[1][7:0]=`op_sxt8_32;
+	6'h25: poperation[1][7:0]=`op_sxt16_32;
+	6'h26: poperation[1][7:0]=`op_sxt8_64;
+	6'h27: poperation[1][7:0]=`op_sxt16_64;
+	6'h28: poperation[1][7:0]=`op_sxt32_64;
        endcase
        //verilator lint_on CASEINCOMPLETE
        prB[1]={instr[6],instr[11:8]};
@@ -1310,7 +1310,7 @@ module smallInstr_decoder(
       prT_use[24]=1'b0;
       puseRs[24]=1'b1;
       prAlloc[24]=1'b1;
-      poperation[24]=mode64 ? `op_mov64 : `op_mov32;
+      poperation[24][7:0]=mode64 ? `op_mov64 : `op_mov32;
       poperation[24][12]=1'b1;
       if (magic[0]) perror[24]=1;
       pjumpType[24]=5'b10001;
