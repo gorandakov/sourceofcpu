@@ -1161,7 +1161,7 @@ void req_set(Vheptane_core *top,req *reqs,char *mem) {
     }
 }
 
-bool get_check(Vheptane_core *top, req *reqs) {
+bool get_check(Vheptane_core *top, req *reqs,unsigned long &ip) {
     bool rtn=true;
     static unsigned long pos=0;
     long k,count;
@@ -1178,7 +1178,8 @@ bool get_check(Vheptane_core *top, req *reqs) {
 	insn_posR++;
 	insn_posR&=0x3f;
 	if (top->heptane_core__DOT__except) printf("except %li\n",count);
-	else printf("ret %li\n",count);
+	else printf("ret %li, \t%li\n",count,ip+count);
+	ip+=count;
 	pos+=count;
     }
     xbreak=top->heptane_core__DOT__bck_mod__DOT__retM_xbreak;
@@ -1319,6 +1320,7 @@ int main(int argc, char *argv[]) {
     Verilated::assertOn(false);
     int initcount=10;
     int cyc=0;
+    unsigned long ip=0;
     FILE *FOUT=fopen("/tmp/asm2.s","w");
     if (!FOUT) exit(1);
     hcont contx;
@@ -1376,7 +1378,7 @@ int main(int argc, char *argv[]) {
         if (!initcount) {
             req_set(top,reqs,mem);
             cyc=cyc+1;
-            if (!get_check(top,reqs)) {
+            if (!get_check(top,reqs,ip)) {
                 printf("error @%i\n",cyc);
                 sleep(1);
             }
