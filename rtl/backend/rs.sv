@@ -1302,6 +1302,13 @@ module rs_wakeUpS_logic_array(
   reg [REG_WIDTH-1:0] FUreg2_reg;
   reg FU2wen_reg;
 
+  reg [REG_WIDTH-1:0] FUreg3_reg;
+  reg FU3wen_reg;
+  reg [REG_WIDTH-1:0] FUreg4_reg;
+  reg FU4wen_reg;
+  reg [REG_WIDTH-1:0] FUreg5_reg;
+  reg FU5wen_reg;
+
   reg [REG_WIDTH-1:0] FUreg0_reg2;
   reg FU0wen_reg2;
   reg [REG_WIDTH-1:0] FUreg1_reg2;
@@ -1370,12 +1377,12 @@ module rs_wakeUpS_logic_array(
               isData[k+8*j],
               outEq[(k+8*j)*6+:6],
               buffree[k+8*j],
-              FUreg0,FU0wen,
-              FUreg1,FU1wen,
-              FUreg2,FU2wen,
-              FUreg3,FU3wen,
-              FUreg4,FU4wen,
-              FUreg5,FU5wen,
+              FUreg0_reg,FU0wen_reg,
+              FUreg1_reg,FU1wen_reg,
+              FUreg2_reg,FU2wen_reg,
+              FUreg3_reg,FU3wen_reg,
+              FUreg4_reg,FU4wen_reg,
+              FUreg5_reg,FU5wen_reg,
               FUreg0_reg4,FU0wen_reg4,
               FUreg1_reg4,FU1wen_reg4,
               FUreg2_reg4,FU2wen_reg4,
@@ -1427,6 +1434,12 @@ module rs_wakeUpS_logic_array(
     FU1wen_reg<=FU1wen;
     FUreg2_reg<=FUreg2;
     FU2wen_reg<=FU2wen;
+    FUreg3_reg<=FUreg3;
+    FU3wen_reg<=FU3wen;
+    FUreg4_reg<=FUreg4;
+    FU4wen_reg<=FU4wen;
+    FUreg5_reg<=FUreg5;
+    FU5wen_reg<=FU5wen;
     FUreg0_reg2<=FUreg0_reg;
     FU0wen_reg2<=FU0wen_reg;
     FUreg1_reg2<=FUreg1_reg;
