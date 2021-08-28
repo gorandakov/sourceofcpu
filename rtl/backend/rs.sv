@@ -1341,23 +1341,23 @@ module rs_wakeUpS_logic_array(
   assign FUreg[0]=FUreg0_reg4;
   assign FUreg[1]=FUreg1_reg4;
   assign FUreg[2]=FUreg2_reg4;
-  assign FUreg[4]=FUreg0;
-  assign FUreg[5]=FUreg1;
-  assign FUreg[6]=FUreg2;
-  assign FUreg[7]=FUreg3;
-  assign FUreg[8]=FUreg4;
-  assign FUreg[9]=FUreg5;
+  assign FUreg[4]=FUreg0_reg;
+  assign FUreg[5]=FUreg1_reg;
+  assign FUreg[6]=FUreg2_reg;
+  assign FUreg[7]=FUreg3_reg;
+  assign FUreg[8]=FUreg4_reg;
+  assign FUreg[9]=FUreg5_reg;
 
   assign FUwen[3]=1'b0;
   assign FUwen[0]=FU0wen_reg4;
   assign FUwen[1]=FU1wen_reg4;
   assign FUwen[2]=FU2wen_reg4;
-  assign FUwen[4]=FU0wen;
-  assign FUwen[5]=FU1wen;
-  assign FUwen[6]=FU2wen;
-  assign FUwen[7]=FU3wen;
-  assign FUwen[8]=FU4wen;
-  assign FUwen[9]=FU5wen;
+  assign FUwen[4]=FU0wen_reg;
+  assign FUwen[5]=FU1wen_reg;
+  assign FUwen[6]=FU2wen_reg;
+  assign FUwen[7]=FU3wen_reg;
+  assign FUwen[8]=FU4wen_reg;
+  assign FUwen[9]=FU5wen_reg;
   generate
       genvar j,k,p,q;
       for (j=0;j<4;j=j+1) begin : banks_gen
