@@ -4057,7 +4057,7 @@ module backend(
   .rs1i2_flagDep(rs1i2_flagDep_reg2),
   .rs2i1_flagDep(rs2i1_flagDep_reg2),
   .rs2i2_flagDep(rs2i2_flagDep_reg2),
-  .srcFlight(inflS),
+  .srcFlight(inflS&&gazumpS[9:0]==10'b0),
   .infl(Sinfl)
   );
   
