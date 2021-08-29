@@ -1760,7 +1760,7 @@ module frontend1(
           cc_read_IP<=cc_read_IP_d;
           cc_attr<=cc_attr_d;
           jumpTK_en<=1'b0;
-          if (~cc_read_hit & ~miss_now & instrEn_reg3) begin
+          if ((~cc_read_hit|~tlb_match) & ~miss_now & instrEn_reg3) begin
               miss_IP<=cc_read_IP_reg3;
               miss_phys<=IP_phys_reg3[43:13];
               miss_now<=1'b1;
