@@ -965,42 +965,58 @@ addie:
         resS=AS*BS;
         switch(op&0xff) {
             case 1:
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"mullq %%%s,  %%%s, %%%s\n",reg64[rB],reg64[rA],reg64[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"mullq $%i, %%%s, %%%s\n",(int) B,reg64[rA],reg64[rT]);
             res=res0x;
             flgM64(res0x,true);
             break;
 
             case 2:
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"mull %%%s,  %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"mull $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
             res=res0x & 0xffffffffull;
             flgM64(res0x);
             break;
 
             case 3:
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"mulq %%%s,  %%%s, %%%s\n",reg64[rB],reg64[rA],reg64[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"mulq $%i, %%%s, %%%s\n",(int) B,reg64[rA],reg64[rT]);
             res=res0;
             flgM128(res0);
             break;
             
             case 9:
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"imullq %%%s,  %%%s, %%%s\n",reg64[rB],reg64[rA],reg64[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"imullq $%i, %%%s, %%%s\n",(int) B,reg64[rA],reg64[rT]);
             res=resSx;
             flgM64(resSx,1);
             break;
 
             case 10:
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"imull %%%s,  %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"imull $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
             res=resSx & 0xffffffffull;
             flgM64(resSx);
             break;
 
             case 11:
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"imulq %%%s,  %%%s, %%%s\n",reg64[rB],reg64[rA],reg64[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"imulq $%i, %%%s, %%%s\n",(int) B,reg64[rA],reg64[rT]);
             res=resS;
             flgM128(resS);
             break;
 
             case 5:
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"limulq %%%s,  %%%s, %%%s\n",reg64[rB],reg64[rA],reg64[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"limulq $%i, %%%s, %%%s\n",(int) B,reg64[rA],reg64[rT]);
             resU=resS>>63;
             res=resU>>1;
             flgM128(resS,1);
             break;
             
             case 7:
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"lmulq %%%s,  %%%s, %%%s\n",reg64[rB],reg64[rA],reg64[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"lmulq $%i, %%%s, %%%s\n",(int) B,reg64[rA],reg64[rT]);
             resU=res0>>63;
             res=resU>>1;
             flgM128(res0,1);
