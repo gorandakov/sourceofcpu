@@ -869,7 +869,7 @@ module backend(
   
   output [15:0] csrss_no;
   output csrss_en;
-  output [63:0] csrss_data;
+  output [64:0] csrss_data;
   
   input insBus_en;
   input insBus_io;
@@ -2176,7 +2176,7 @@ module backend(
   wire [67:0] fpD_one={2'd`ptype_dbl,1'b0,1'b0,11'h400,53'b0};
   wire [15:0] csrss_no;
   wire csrss_en,csrss_thread;
-  wire [63:0] csrss_data;
+  wire [64:0] csrss_data;
  
   wire [5:0][15:0] dummyFH;
   wire [63:0] fpcsr;
@@ -2254,7 +2254,7 @@ module backend(
       input [12:0] op;
       is_rndE=(op[7:0]==`fop_rndES || op[7:0]==`fop_rndED) & ~op[11];
   endfunction
-  csrss_watch #(`csr_FPU,64'h20000) fpcsr_mod(clk,rst,csrss_no,csrss_data,csrss_en,fpcsr);
+  csrss_watch #(`csr_FPU,64'h20000) fpcsr_mod(clk,rst,csrss_no,csrss_data[63:0],csrss_en,fpcsr);
 
   rat ratA_mod(
     .clk(clk),
@@ -4841,7 +4841,7 @@ module backend(
   .FU0(FU[0]),.FU1(FU[1]),.FU2(FU[2]),.FU3(FU[3]),.FU4(FU[4]),.FU5(FU[5]),.FU6(FU[6]),.FU7(FU[7]),.FU8(FU[8]),.FU9(FU[9]),
   .FUreg3_reg(FUreg_reg5[3]),.dc_rdataA(dc_rdataA[3]),//is it really reg5?
   .msi_exp_addr(MSI_exp_addr_reg),.msi_en(MSI_exp_en_reg),.msi_out_clear(),//msi_out_clear=can do msi en; todo - make replace last buffer rather than wait + redu
-  .csrss_en(csrss_en),.csrss_addr(csrss_no),.csrss_data(csrss_data),
+  .csrss_en(csrss_en),.csrss_addr(csrss_no),.csrss_data(csrss_data[63:0]),
   .alt_bus_hold(MSI_exp_en_reg),//expunge request
   .alt_bus_addr(MSI_exp_addr_reg),
   .req_addr(req_addr),.req_tlbAttr(req_tlbAttr),.req_tlbEn(req_tlbEn),

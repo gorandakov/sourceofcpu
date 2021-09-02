@@ -586,7 +586,7 @@ module heptane_core(
 
   wire [15:0] csrss_no;
   wire csrss_en;
-  wire [63:0] csrss_data;
+  wire [64:0] csrss_data;
   
   wire insBus_en;
   wire insBus_io;
@@ -1094,7 +1094,7 @@ module heptane_core(
   btbl_IP1,
   btbl_mask0,btbl_mask1,
   btbl_attr0,btbl_attr1,
-  csrss_en,csrss_no,csrss_data,
+  csrss_en,csrss_no,csrss_data[63:0],
   MSI_expAddr_reg,
   MSI_expAddr_en_reg,
   MSI_expAddr_hitCC,
