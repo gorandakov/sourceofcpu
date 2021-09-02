@@ -1376,7 +1376,7 @@ module smallInstr_decoder(
       8'd189: poperation[26][7:0]=`op_sxt8_32;
       endcase
       //verilator lint_on CASEINCOMPLETE
- 
+      if (magic[3:0]==4'hf) pconstant[26]=instr[79:16]; 
       if (magic[1:0]==2'b01) begin
           prA[26]={instr[17],instr[11:8]};
           prT[26]={instr[17],instr[11:8]};

@@ -1164,7 +1164,7 @@ void req_set(Vheptane_core *top,req *reqs,char *mem) {
 bool get_check(Vheptane_core *top, req *reqs,unsigned long &ip) {
     bool rtn=true;
     static unsigned long pos=0;
-    long k,count;
+    long k,x,count;
     static unsigned xbreak=0;
     static unsigned retire=0;
     static int insn_count[64];
@@ -1179,6 +1179,48 @@ bool get_check(Vheptane_core *top, req *reqs,unsigned long &ip) {
 	insn_posR&=0x3f;
 	if (top->heptane_core__DOT__except) printf("except %li\n",count);
 	else printf("ret %li, \t%li\n",count,ip+count);
+	for(x=0;x<count;x++) {
+	    if (x<9) for(k=x+1;k<9;k=k+1) if (reqs[ip+x].rT==reqs[ip+k].rT || reqs[ip+x].rT<0) goto no_srch;
+	    for(k=0;k<9;k=k+1) {
+		unsigned long val,valp;
+		extract_e(top->heptane_core__DOT__bck_mod__DOT__ret_dataA,65*k,65*k+63,val);
+		extract_e(top->heptane_core__DOT__bck_mod__DOT__ret_dataA,65*k+64,65*k+64,valp);
+		switch(k) {
+		    case 0: if (top->heptane_core__DOT__bck_mod__DOT__retire0_rT!=reqs[ip+x].rT ||
+					    !top->heptane_core__DOT__bck_mod__DOT__retire0_enG) continue;
+			    break;
+		    case 1: if (top->heptane_core__DOT__bck_mod__DOT__retire1_rT!=reqs[ip+x].rT ||
+					    !top->heptane_core__DOT__bck_mod__DOT__retire1_enG) continue;
+			    break;
+		    case 2: if (top->heptane_core__DOT__bck_mod__DOT__retire2_rT!=reqs[ip+x].rT ||
+					    !top->heptane_core__DOT__bck_mod__DOT__retire2_enG) continue;
+			    break;
+		    case 3: if (top->heptane_core__DOT__bck_mod__DOT__retire3_rT!=reqs[ip+x].rT ||
+					    !top->heptane_core__DOT__bck_mod__DOT__retire3_enG) continue;
+			    break;
+		    case 4: if (top->heptane_core__DOT__bck_mod__DOT__retire4_rT!=reqs[ip+x].rT ||
+					    !top->heptane_core__DOT__bck_mod__DOT__retire4_enG) continue;
+			    break;
+		    case 5: if (top->heptane_core__DOT__bck_mod__DOT__retire5_rT!=reqs[ip+x].rT ||
+					    !top->heptane_core__DOT__bck_mod__DOT__retire5_enG) continue;
+			    break;
+		    case 6: if (top->heptane_core__DOT__bck_mod__DOT__retire6_rT!=reqs[ip+x].rT ||
+					    !top->heptane_core__DOT__bck_mod__DOT__retire6_enG) continue;
+			    break;
+		    case 7: if (top->heptane_core__DOT__bck_mod__DOT__retire7_rT!=reqs[ip+x].rT ||
+					    !top->heptane_core__DOT__bck_mod__DOT__retire7_enG) continue;
+			    break;
+		    case 8: if (top->heptane_core__DOT__bck_mod__DOT__retire8_rT!=reqs[ip+x].rT ||
+					    !top->heptane_core__DOT__bck_mod__DOT__retire8_enG) continue;
+			    break;
+		}
+		if (reqs[ip+x].res!=val || reqs[ip+x].res_p!=valp) {
+		    printf("reterr %i, %li\n",x,ip+x);
+		    rtn=false;
+		}
+no_srch:;
+	    }
+	}
 	ip+=count;
 	pos+=count;
     }
@@ -1313,6 +1355,7 @@ void gen_prog(req *reqs,int count, FILE *f,hcont *contx) {
    
 }
 
+req *reqs;
 
 int main(int argc, char *argv[]) {
     Verilated::commandArgs(argc, argv);
@@ -1330,7 +1373,7 @@ int main(int argc, char *argv[]) {
 	exit(1);
     }
     //bzero(mem,2l*1024*1024*1024);
-    req *reqs=new req[10000000];
+    reqs=new req[10000000];
     fesetround(FE_TOWARDZERO);
     top->clk=0;
     top->rst=1;
@@ -1381,6 +1424,7 @@ int main(int argc, char *argv[]) {
             if (!get_check(top,reqs,ip)) {
                 printf("error @%i\n",cyc);
                 sleep(1);
+		return 1;
             }
             if ((cyc%100)==0) {
                 printf("cycle %i\n",cyc);

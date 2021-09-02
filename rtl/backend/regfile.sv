@@ -1440,6 +1440,8 @@ module regfile(
   wire [8:0][DATA_WIDTH-1:0] ram_read_data;
   wire [8:0][DATA_WIDTH-1:0] read_data;
   wire [8:0][ADDR_WIDTH-1:0] read_addr;
+  wire [8:0][DATA_WIDTH-1:0] ram_retireRead_data;
+  wire [8:0][DATA_WIDTH-1:0] retireRead_data;
 
 
   wire read_constEn[8:0];
@@ -1516,15 +1518,15 @@ module regfile(
   read7_const,
   read8_const,
 
-  retireRead0_addr,retireRead0_data,
-  retireRead1_addr,retireRead1_data,
-  retireRead2_addr,retireRead2_data,
-  retireRead3_addr,retireRead3_data,
-  retireRead4_addr,retireRead4_data,
-  retireRead5_addr,retireRead5_data,
-  retireRead6_addr,retireRead6_data,
-  retireRead7_addr,retireRead7_data,
-  retireRead8_addr,retireRead8_data,
+  retireRead0_addr,ram_retireRead_data[0],
+  retireRead1_addr,ram_retireRead_data[1],
+  retireRead2_addr,ram_retireRead_data[2],
+  retireRead3_addr,ram_retireRead_data[3],
+  retireRead4_addr,ram_retireRead_data[4],
+  retireRead5_addr,ram_retireRead_data[5],
+  retireRead6_addr,ram_retireRead_data[6],
+  retireRead7_addr,ram_retireRead_data[7],
+  retireRead8_addr,ram_retireRead_data[8],
 
   write0_addr_reg2,write0_data_reg,write0_wen_reg2,
   write1_addr_reg2,write1_data_reg,write1_wen_reg2,
@@ -1589,6 +1591,16 @@ module regfile(
   assign read7_match=read_match[7];
   assign read8_match=read_match[8];
   
+  assign retireRead0_data=retireRead_data[0];
+  assign retireRead1_data=retireRead_data[1];
+  assign retireRead2_data=retireRead_data[2];
+  assign retireRead3_data=retireRead_data[3];
+  assign retireRead4_data=retireRead_data[4];
+  assign retireRead5_data=retireRead_data[5];
+  assign retireRead6_data=retireRead_data[6];
+  assign retireRead7_data=retireRead_data[7];
+  assign retireRead8_data=retireRead_data[8];
+
   generate for(b=0;b<=8;b=b+1)
     begin
       regfile_zero_cycle_write #(DATA_WIDTH) zcw_mod(
@@ -1597,6 +1609,45 @@ module regfile(
       ram_read_data[b],read_data[b],read_addr[b],
 
       read_constEn[b],read_oe[b], read_match[b],
+      
+      write0_addr_reg,write0_wen_reg,
+      write1_addr_reg,write1_wen_reg,
+      write2_addr_reg,write2_wen_reg,
+      write3_addr_reg,write3_wen_reg,
+      write4_addr_reg,write4_wen_reg,
+      write5_addr_reg,write5_wen_reg,
+      write6_addr_reg,write6_wen_reg,
+      write7_addr_reg,write7_wen_reg,
+      write8_addr_reg,write8_wen_reg,
+      write9_addr_reg,write9_wen_reg,
+      write0_addr_reg2,write0_wen_reg2,
+      write1_addr_reg2,write1_wen_reg2,
+      write2_addr_reg2,write2_wen_reg2,
+      write3_addr_reg2,write3_wen_reg2,
+      write4_addr_reg2,write4_wen_reg2,
+      write5_addr_reg2,write5_wen_reg2,
+      write6_addr_reg2,write6_wen_reg2,
+      write7_addr_reg2,write7_wen_reg2,
+      write8_addr_reg2,write8_wen_reg2,
+      write9_addr_reg2,write9_wen_reg2,
+      write0_data_reg,
+      write1_data_reg,
+      write2_data_reg,
+      write3_data_reg,
+      write4_data_reg,
+      write5_data_reg,
+      write6_data_reg,
+      write7_data_reg,
+      write8_data_reg,
+      write9_data_reg
+      );
+      
+      regfile_zero_cycle_write #(DATA_WIDTH) zcwiR_mod(
+      clk,rst,
+      read_clkEn,
+      ram_retireRead_data[b],retireRead_data[b],read_addr[b],
+
+      1'b0,1'b1,,
       
       write0_addr_reg,write0_wen_reg,
       write1_addr_reg,write1_wen_reg,
