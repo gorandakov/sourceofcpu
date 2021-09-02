@@ -1442,6 +1442,7 @@ module regfile(
   wire [8:0][ADDR_WIDTH-1:0] read_addr;
   wire [8:0][DATA_WIDTH-1:0] ram_retireRead_data;
   wire [8:0][DATA_WIDTH-1:0] retireRead_data;
+  wire [8:0][ADDR_WIDTH-1:0] retireRead_addr;
 
 
   wire read_constEn[8:0];
@@ -1601,6 +1602,16 @@ module regfile(
   assign retireRead7_data=retireRead_data[7];
   assign retireRead8_data=retireRead_data[8];
 
+  assign retireRead_addr[0]=retireRead0_addr;
+  assign retireRead_addr[1]=retireRead1_addr;
+  assign retireRead_addr[2]=retireRead2_addr;
+  assign retireRead_addr[3]=retireRead3_addr;
+  assign retireRead_addr[4]=retireRead4_addr;
+  assign retireRead_addr[5]=retireRead5_addr;
+  assign retireRead_addr[6]=retireRead6_addr;
+  assign retireRead_addr[7]=retireRead7_addr;
+  assign retireRead_addr[8]=retireRead8_addr;
+
   generate for(b=0;b<=8;b=b+1)
     begin
       regfile_zero_cycle_write #(DATA_WIDTH) zcw_mod(
@@ -1645,7 +1656,7 @@ module regfile(
       regfile_zero_cycle_write #(DATA_WIDTH) zcwiR_mod(
       clk,rst,
       read_clkEn,
-      ram_retireRead_data[b],retireRead_data[b],read_addr[b],
+      ram_retireRead_data[b],retireRead_data[b],retireRead_addr[b],
 
       1'b0,1'b1,,
       
