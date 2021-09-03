@@ -908,6 +908,7 @@ addie:
 	    snprintf(asmtext,sizeof asmtext,"clahf%sl %%%s\n",COND(op),reg32[rA]);
             res=0;
             flags=testj(((op&0x700)>>7)|(op&0x1)) ? A&0x3f : flags_in;
+	    rT=-1;
             break;
 
             case 54:
@@ -943,6 +944,7 @@ addie:
 	    snprintf(asmtext,sizeof asmtext,"lahfl %%%s\n",reg32[rA]);
             res=0;
             flags=A&0x3f;
+	    rT=-1;
             break;
         }
     } else if (!alt) {
@@ -1341,9 +1343,13 @@ void gen_prog(req *reqs,int count, FILE *f,hcont *contx) {
        if (n!=6) reqs[n].gen_init(n,0,lrand48()|(lrand48()<<48),0);
        else reqs[n].gen_init(n,0,0xf80fc00008000000,1);
        fprintf(f,"%s",reqs[n].asmtext);
+       contx->reg_gen[n]=reqs[n].res;
+       contx->reg_genP[n]=reqs[n].res_p;
    }
    reqs[31].gen_init(31,0,0x8000,0);
    fprintf(f,"%s",reqs[31].asmtext);
+   contx->reg_gen[n]=reqs[n].res;
+   contx->reg_genP[n]=reqs[n].res_p;
   // reqs[32].gen_movcsr(csr_page,31);
    
    for(n=32;n<count;n++) {
