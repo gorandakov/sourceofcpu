@@ -860,7 +860,7 @@ module rs_wakeUp_data_array(
   outRsSelect2,outBank2,outFound2,outData2
   );
 
-  parameter WIDTH=`alu_width;
+  parameter WIDTH=`alu_width+1;
   localparam BUF_COUNT=32;
   
   input clk;
@@ -2712,6 +2712,34 @@ module rs(
   fuFwdS,
   outRsSelect[1],outDataEn1[0],outBank[1],rsFoundNZ[1],outFuFwdS1,outFuuFwdS1,
   outRsSelect[2],outDataEn2[0],outBank[2],rsFoundNZ[2],outFuFwdS2,outFuuFwdS2
+  );
+
+  rs_wakeUp_data_array genA_mod(
+  clk,rst,stall,
+  newRsSelect0,newDataA0,
+  newRsSelect1,newDataA1,
+  newRsSelect2,newDataA2,
+  outEqA,
+  FU0,FU1,FU2,FU3,
+  FU4,FU5,FU6,
+  FU7,FU8,FU9,
+  outRsSelect[0],outBank[0],rsFoundNZ[0],outDataA0,
+  outRsSelect[1],outBank[1],rsFoundNZ[1],outDataA1,
+  outRsSelect[2],outBank[2],rsFoundNZ[2],outDataA2
+  );
+
+  rs_wakeUp_data_array genB_mod(
+  clk,rst,stall,
+  newRsSelect0,newDataB0,
+  newRsSelect1,newDataB1,
+  newRsSelect2,newDataB2,
+  outEqB,
+  FU0,FU1,FU2,FU3,
+  FU4,FU5,FU6,
+  FU7,FU8,FU9,
+  outRsSelect[0],outBank[0],rsFoundNZ[0],outDataB0,
+  outRsSelect[1],outBank[1],rsFoundNZ[1],outDataB1,
+  outRsSelect[2],outBank[2],rsFoundNZ[2],outDataB2
   );
 
   rs_wakeUp_data_array #(SIMD_WIDTH) dataA_VH_mod(
