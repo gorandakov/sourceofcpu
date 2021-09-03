@@ -2715,7 +2715,7 @@ module rs(
   );
 
   rs_wakeUp_data_array genA_mod(
-  clk,rst,stall,
+  clk,dataRst,stall|doStall,
   newRsSelect0,newDataA0,
   newRsSelect1,newDataA1,
   newRsSelect2,newDataA2,
@@ -2729,7 +2729,7 @@ module rs(
   );
 
   rs_wakeUp_data_array genB_mod(
-  clk,rst,stall,
+  clk,dataRst,stall|doStall,
   newRsSelect0,newDataB0,
   newRsSelect1,newDataB1,
   newRsSelect2,newDataB2,

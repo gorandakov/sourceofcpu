@@ -261,9 +261,9 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
 
   assign valRes1[63:8]=((smallOP==`op_cset || smallOP==`op_csetn) && ~operation[11]) ? 56'b0 : 56'bz;
  
-  assign is_ptr=val1[64]|val2[64] && ~(val1[64]&val2[64]&is_sub||val2[64]&is_sub) && add_en|logic_en|
-    (cmov_en&&(doJmp&val2[64]||~doJmp&val1[64]))|(operation[11:0]==12'd58) && 
-    ((operation[1:0]==2'b0 && !operation[5]|(operation[7:2]==6'b001000))||cmov_en||operation[11:1]==11'd29);
+  assign is_ptr=val1[64]|val2[64]|(operation[11:0]==12'd58) && ~(val1[64]&val2[64]&is_sub||val2[64]&is_sub) && add_en|logic_en|
+    (cmov_en&&(doJmp&val2[64]||~doJmp&val1[64]))|(operation[11:0]==12'd58)|(operation[11:0]==`op_mov64) && 
+    ((operation[1:0]==2'b0 && operation[7:5]==3'b0|(operation[7:2]==6'b001000))||cmov_en||operation[11:1]==11'd29);
 
   assign is_sub=operation[7:0]==`op_sub64 || operation[7:0]==`op_sub32;
 
