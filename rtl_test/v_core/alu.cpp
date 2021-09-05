@@ -19,9 +19,9 @@
 
 unsigned short OPS_REGL[]={0,1,4,5,8,9,12,13,16,17,32|4096,33|4096,34|4096,
 35|4096,36|4096,37|4096,39|4096,40|4096,41|4096,42|4096,43|4096,48|4096,49|4096,
-50|4096,51|4096,52|4096,53|4096,54|4096,55|4096,56|4096,57|4096};
+50|4096,51|4096,52,53,54|4096,55|4096,56|4096,57};
 unsigned short OPS_S_REGL[]={0,1,4,5,8,9,12,13,16,17,20,21,24,25,28,29,32|4096,
-33|4096,34|4096,35|4096,36|4096,37|4096,39|4096,40|4096,41|4096,42|4096,43|4096,48|4096,49|4096,50|4096,51|4096,52|4096,53|4096,54|4096,55|4096,56|4096,57|4096
+33|4096,34|4096,35|4096,36|4096,37|4096,39|4096,40|4096,41|4096,42|4096,43|4096,48|4096,49|4096,50|4096,51|4096,52,53,54|4096,55|4096,56|4096,57
 };
 unsigned short OPS_M_REGL[]={1,2,3,5,7,9,10,11,12|4096,13|4096,14|4096,
 12|4096|1024,13|4096|1024,14|4096|1024};
@@ -495,6 +495,7 @@ void req::gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx) {
     A=contx->reg_gen[rA];
     A_p=contx->reg_genP[rA];
     asmtext[0]=0;
+    flags_in=contx->flags;
 
     has_alu=1;
     //has_mem=0;
@@ -847,6 +848,8 @@ addie:
 		rB=rand()&0x1f;
 		B=contx->reg_gen[rB];
 		B_p=contx->reg_genP[rB];
+		B0=B;
+		B0x=B;
 	    }
 	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movsbl %%%s,  %%%s\n",reg8[rB],reg32[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"movsbl $%i, %%%s\n",(int) B,reg32[rT]);
@@ -859,6 +862,8 @@ addie:
 		rB=rand()&0x1f;
 		B=contx->reg_gen[rB];
 		B_p=contx->reg_genP[rB];
+		B0=B;
+		B0x=B;
 	    }
 	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movswl %%%s,  %%%s\n",reg16[rB],reg32[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"movswl $%i, %%%s\n",(int) B,reg32[rT]);
@@ -889,7 +894,8 @@ addie:
 		rB=rand()&0x1f;
 		B=contx->reg_gen[rB];
 		B_p=contx->reg_genP[rB];
-                A0x=A,B0x=B;
+		B0=B;
+		B0x=B;
 	    }
 	    snprintf(asmtext,sizeof asmtext,"cmov%sl %%%s, %%%s, %%%s\n",COND(op),reg32[rB],reg32[rA],reg32[rT]);
             res=testj(((op&0x700)>>7)|(op&0x1)) ? B0x : A0x;
@@ -1027,6 +1033,11 @@ addie:
         }
     }
     en=rand()&0xff!=0;
+    if (!(op&0x1000)) contx->flags=flags;
+    if (rT>=0) {
+	contx->reg_gen[rT]=res;
+	contx->reg_genP[rT]=res_p;
+    }
 }
 
 void req::flg64(__int128 r) {

@@ -405,12 +405,12 @@ module get_flag_infl(
   input srcFlight;
   output [8:0] infl;
   
-  assign infl[1]=rs0i1_flagDep==4'he && srcFlight;
-  assign infl[2]=rs0i2_flagDep==4'he && srcFlight;
-  assign infl[4]=rs1i1_flagDep==4'he && srcFlight;
-  assign infl[5]=rs1i2_flagDep==4'he && srcFlight;
-  assign infl[7]=rs2i1_flagDep==4'he && srcFlight;
-  assign infl[8]=rs2i2_flagDep==4'he && srcFlight;
+  assign infl[1]=rs0i1_flagDep==4'he && srcFlight || ~rs0i1_flagDep[3] || rs0i1_flagDep=4'h8;
+  assign infl[2]=rs0i2_flagDep==4'he && srcFlight || ~rs0i2_flagDep[3] || rs0i2_flagDep=4'h8;
+  assign infl[4]=rs1i1_flagDep==4'he && srcFlight || ~rs1i1_flagDep[3] || rs1i1_flagDep=4'h8;
+  assign infl[5]=rs1i2_flagDep==4'he && srcFlight || ~rs1i2_flagDep[3] || rs1i2_flagDep=4'h8;
+  assign infl[7]=rs2i1_flagDep==4'he && srcFlight || ~rs2i1_flagDep[3] || rs2i1_flagDep=4'h8;
+  assign infl[8]=rs2i2_flagDep==4'he && srcFlight || ~rs2i2_flagDep[3] || rs2i2_flagDep=4'h8;
   
   assign infl[0]=1'b0;
   assign infl[3]=1'b0;
