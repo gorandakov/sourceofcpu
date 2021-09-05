@@ -764,6 +764,8 @@ addie:
             case 34:
 	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movw %%%s,  %%%s\n",reg16[rB],reg16[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"movw $%i, %%%s\n",(int) B,reg16[rT]);
+	    rA=rT;
+	    A=contx->reg_gen[rA];
             res=(B&0xffffull)|(A&0xffffffffffff0000ull);
             flags=flags_in;
             break;
@@ -776,6 +778,8 @@ addie:
 	    }
 	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movb %%%s,  %%%s\n",reg8[rB+((op&1024)>>5)],reg8[rT+((op&256)>>3)]);
 	    else snprintf(asmtext,sizeof asmtext,"movb $%i, %%%s\n",(int) B,reg8[rT]);
+	    rA=rT;
+	    A=contx->reg_gen[rA];
             if (op&256) res=(A&0xffffffffffff00ffull)| ((op&1024) ? B&0xff00ull :
                 (B&0xffull)<<8);
             else res=(A&0xffffffffffffff00ull)| ((op&1024) ? (B&0xff00ull)>>8 :
@@ -1193,7 +1197,7 @@ bool get_check(Vheptane_core *top, req *reqs,unsigned long &ip) {
 	if (top->heptane_core__DOT__except) printf("except %li\n",count);
 	else printf("ret %li, \t%li\n",count,ip+count);
 	for(x=0;x<count;x++) {
-	    if (x<9) for(k=x+1;k<9;k=k+1) if (reqs[ip+x].rT==reqs[ip+k].rT || reqs[ip+x].rT<0) goto no_srch;
+	    if (x<9) for(k=x+1;k<count;k=k+1) if (reqs[ip+x].rT==reqs[ip+k].rT || reqs[ip+x].rT<0) goto no_srch;
 	    for(k=0;k<9;k=k+1) {
 		unsigned long val,valp;
 		extract_e(top->heptane_core__DOT__bck_mod__DOT__ret_dataA,65*k,65*k+63,val);
@@ -1231,8 +1235,8 @@ bool get_check(Vheptane_core *top, req *reqs,unsigned long &ip) {
 		    printf("reterr %i, %li\n",x,ip+x);
 		    rtn=false;
 		}
-no_srch:;
 	    }
+no_srch:;
 	}
 	ip+=count;
 	pos+=count;
