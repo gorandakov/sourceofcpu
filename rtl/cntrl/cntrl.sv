@@ -716,10 +716,10 @@ module cntrl_find_outcome(
       /* verilator lint_off WIDTH */
       if (k>0) bit_find_last_bit #(10) lastfl_mod({10'b0,flagSet[k-1:0]},flag_last,flag_has);
       /* verilator lint_on WIDTH */
-      if (k>0) assign lfl=xbreak[k] ? flag_last : 10'bz;
-      else assign lfl=xbreak[k] ? 10'b0 : 10'bz;
-      if (k>0) assign lfl_has=xbreak[k] ? flag_has : 1'bz;
-      else assign lfl_has=xbreak[k] ? 1'b0 : 1'bz;
+      if (k>0) assign lfl=xbreak0[k] ? flag_last : 10'bz;
+      else assign lfl=xbreak0[k] ? 10'b0 : 10'bz;
+      if (k>0) assign lfl_has=xbreak0[k] ? flag_has : 1'bz;
+      else assign lfl_has=xbreak0[k] ? 1'b0 : 1'bz;
       if (k>0) assign jump0_in=xbreak0[k] ? |jump0_here[k-1:0] : 1'bz;
       else assign jump0_in=xbreak0[k] ? 1'b0 : 1'bz;
       if (k>0) assign jump1_in=xbreak0[k] ? |jump1_here[k-1:0] : 1'bz;

@@ -1938,6 +1938,7 @@ module backend(
   wire [8:0] retfl_rF;
   wire [5:0] retfl_data;
   wire retfl_enG;
+  reg [8:0] retfl_rF_reg;
 
   wire wt_pause_agu;
   reg wt_pause_agu_reg;
@@ -7357,6 +7358,7 @@ dcache1 L1D_mod(
 	  retire8_rT_reg2<=6'b0;
 	  retire8_rF_reg2<=9'b0;
 	  retire8_enF_reg2<=1'b0;
+	  retfl_rF_reg<=9'b0;
       end else begin
 	  retire0_rT_reg<=retire0_rT;
 	  retire0_rF_reg<=retire0_rF;
@@ -7422,6 +7424,7 @@ dcache1 L1D_mod(
 	  retire8_rT_reg2<=retire8_rT_reg;
 	  retire8_rF_reg2<=retire8_rF_reg;
 	  retire8_enF_reg2<=retire8_enF_reg;
+	  retfl_rF_reg<=retfl_rF;
       end
       if (rst) begin
 	  nDataAlt_reg[0]<=3'b0;
