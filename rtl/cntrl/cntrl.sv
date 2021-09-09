@@ -850,6 +850,8 @@ module cntrl_find_outcome(
   assign breakIP=has_break ? 43'bz : 43'b0;
   assign excpt_code=has_break ? 8'bz : 8'b0;
   assign lastIP=has_break ? 1'bz : 1'b0;
+      
+  bit_find_last_bit #(10) lastfl_mod(flagSet,flag_last,flag_has);
   
   assign lfl=has_xbreak0 ? 10'bz : flag_last;
   assign lfl_has=has_xbreak0 ? 1'bz : flag_has;
