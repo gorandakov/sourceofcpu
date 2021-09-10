@@ -4015,7 +4015,7 @@ module backend(
   .clk(clk),
   .rst(rst),
   .read_clkEn(~doStall),
-  .retire_clkEn(1'b0),
+  .retire_clkEn(1'b1),
 
   .read0_addr(regFl),.read0_data({inflS,dataS}),.read0_oe(~retFl),.read0_gazump(gazumpS),
 
