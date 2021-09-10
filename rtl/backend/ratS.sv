@@ -136,7 +136,7 @@ module rat_flags_buf(
   assign match_ret8[0]=(writeRet5_addr==robAddr[0]) & writeRet8_wen;    
 
   assign match_ret[0]=|{match_ret0[0],match_ret1[0],match_ret2[0],match_ret3[0],
-    match_ret4[0],match_ret5[0],match_ret6[0],match_ret6[0],match_ret8[0]};
+    match_ret4[0],match_ret5[0],match_ret6[0],match_ret7[0],match_ret8[0]};
 
   assign match_ret0[1]=(writeRet0_addr==robAddr[1]) & writeRet0_wen;    
   assign match_ret1[1]=(writeRet1_addr==robAddr[1]) & writeRet1_wen;    
@@ -149,7 +149,7 @@ module rat_flags_buf(
   assign match_ret8[1]=(writeRet5_addr==robAddr[1]) & writeRet8_wen;    
 
   assign match_ret[1]=|{match_ret0[1],match_ret1[1],match_ret2[1],match_ret3[1],
-    match_ret4[1],match_ret5[1],match_ret6[1],match_ret6[1],match_ret8[1]};
+    match_ret4[1],match_ret5[1],match_ret6[1],match_ret7[1],match_ret8[1]};
 	
 
   assign robAddr_d=(writeNew1_wen & ~rst) ? writeNew1_data : {ROB_ADDR_WIDTH{1'bz}};
