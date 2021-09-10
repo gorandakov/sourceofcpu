@@ -2742,6 +2742,20 @@ module rs(
   outRsSelect[2],outBank[2],rsFoundNZ[2],outDataB2
   );
 
+  rs_wakeUp_data_array #(6) genC(
+  clk,rst,stall,
+  32'b0,6'b0,
+  newRsSelect1,newDataS1,
+  newRsSelect2,newDataS2,
+  outEqS,
+  FUS0,FUS1,FUS2,6'b0,
+  FUS3,FUS4,FUS5,
+  FUS6,FUS7,FUS8,
+  32'b0,4'b0,1'b0,,
+  outRsSelect1,outBank1,outFound1,outDataS1,
+  outRsSelect2,outBank2,outFound2,outDataS2
+  );
+
   rs_wakeUp_data_array #(SIMD_WIDTH) dataA_VH_mod(
   clk,dataRst,stall|doStall,
   32'b0,{SIMD_WIDTH{1'b0}},
