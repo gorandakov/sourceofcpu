@@ -428,6 +428,7 @@ class req {
     public:
     unsigned int op;
     unsigned long long A,B,res;
+    unsigned long addr;
     unsigned A_p,B_p,res_p,excpt;
     unsigned flags,flags_in;
     unsigned fset;
@@ -440,8 +441,9 @@ class req {
     unsigned has_mem;
     unsigned has_alu;
     char asmtext[64];
-    void gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,bool has_mem);
+    void gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,bool has_mem_);
     void gen_init(int rT,int dom,unsigned long int val,int val_p);
+    void gen_mem(req* prev1,unsigned code,char * mem);
     void flgPTR(__int128 r);
     void flg64(__int128 r);
     void flg32(__int128 r);
@@ -467,7 +469,7 @@ void req::gen_init(int rT_,int dom,unsigned long int val,int val_p) {
     else snprintf(asmtext,sizeof asmtext,"movabsp $%li,%%%s\n",B,reg65[rT]);//WARNING: movabsp non impl and not in cpu spec
 }
 
-void req::gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,bool has_mem) {
+void req::gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,bool has_mem_) {
     alt=alt_;
     mul=mul_;
     excpt=-1;
@@ -479,6 +481,7 @@ void req::gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,bool
     rA=rand()&0x1f;
     rB=rand()&0x1f;
     rT=rand()&0x1f;
+    addr=lrand48()%(MEMRGN_DATA_SZ-8);
     if (rand()&1) {
         B=lrand48()&0xffffffff;
 	B_p=0;
@@ -1042,6 +1045,21 @@ addie:
     if (rT>=0) {
 	contx->reg_gen[rT]=res;
 	contx->reg_genP[rT]=res_p;
+    }
+}
+    
+void req::gen_mem(req* prev1,unsigned code,char *mem,unsigned long addr) {
+    res=0;
+    res_p=0;
+    switch(code) {
+        case 8: res|=(unsigned char) mem[MEMRGN_DATA+addr+4]<<32;
+	        res|=(unsigned char) mem[MEMRGN_DATA+addr+5]<<40;        
+	        res|=(unsigned char) mem[MEMRGN_DATA+addr+6]<<48;        
+	        res|=(unsigned char) mem[MEMRGN_DATA+addr+7]<<56;        
+        case 4: res|=(unsigned char) mem[MEMRGN_DATA+addr+2]<<16;
+	        res|=(unsigned char) mem[MEMRGN_DATA+addr+3]<<24;        
+        case 2: res|=(unsigned char) mem[MEMRGN_DATA+addr+1]<<8; 
+        case 1: res|=(unsigned char) mem[MEMRGN_DATA+addr]; break;
     }
 }
 
