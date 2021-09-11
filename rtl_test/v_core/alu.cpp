@@ -514,7 +514,13 @@ void req::gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,bool
         switch(op&0xff) {
             case 0:
 	
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"addq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
+	    if (has_mem_) {
+		(this-1)->gen_mem(NULL,8,mem,addr);
+		rB=16;
+		B=(this-1)->res;
+		B_p=(this-1)->res_p;
+		snprintf(asmtext,sizeof (asmtext), "addq %li(%rip), %%%s, %%%s\n",addr,,reg65[rA],reg65[rT]);
+	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"addq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"addq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
 
             res0=((unsigned __int128)  A)+(unsigned __int128) B;
