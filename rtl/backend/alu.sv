@@ -339,7 +339,7 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
    || retOp==`op_and16  || retOp==`op_xor16 || retOp==`op_or16  ? 6'b0 : 6'bz;
 
   assign flags_COASZP=((|retOp[7:5]) && retOp!=`op_lahf && retOp!=`op_clahf && retOp!=`op_clahfn && ~retOp[11]) ? 6'b0 : 6'bz;
-  assign flags_COASZP=(retOp==`op_lahf && ~retOp[11]) ? valS_reg : 6'bz;
+  assign flags_COASZP=(retOp==`op_lahf && ~retOp[11]) ? val1_reg[5:0] : 6'bz;
   assign flags_COASZP=(isFlags_reg&~retOp[11]&(retOp[7:5]==3'b0)) ? 6'bz : 6'b0;  
   assign flags_COASZP=((retOp==`op_clahf || retOp==`op_clahfn) && doJmp) ? val1_reg[5:0] : 6'bz;
   assign flags_COASZP=((retOp==`op_clahf || retOp==`op_clahfn) && ~doJmp) ? valS_reg : 6'bz;
