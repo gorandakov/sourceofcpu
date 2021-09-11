@@ -1197,6 +1197,7 @@ bool get_check(Vheptane_core *top, req *reqs,unsigned long &ip) {
 	if (top->heptane_core__DOT__except) printf("except %li\n",count);
 	else printf("ret %li, \t%li\n",count,ip+count);
 	for(x=0;x<count;x++) {
+	    if (reqs[ip+x].rT<0) goto no_srch;
 	    if (x<9) for(k=x+1;k<count;k=k+1) if (reqs[ip+x].rT==reqs[ip+k].rT || reqs[ip+x].rT<0) goto no_srch;
 	    for(k=0;k<9;k=k+1) {
 		unsigned long val,valp;
@@ -1235,6 +1236,11 @@ bool get_check(Vheptane_core *top, req *reqs,unsigned long &ip) {
 		    printf("reterr %i, %li\n",x,ip+x);
 		    rtn=false;
 		}
+		break;
+	    }
+            if (k==9) {
+	        printf("reterr %i, %li, missing\n",x,ip+x);
+	        rtn=false;
 	    }
 no_srch:;
 	}
