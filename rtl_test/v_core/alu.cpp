@@ -421,7 +421,8 @@ char *reg65[]={
 "r31"
 };
 
-
+#define MEMRGN_DATA 512*1024*1024
+#define MEMRGN_DATA_SZ 65536
 
 class req {
     public:
@@ -439,7 +440,7 @@ class req {
     unsigned has_mem;
     unsigned has_alu;
     char asmtext[64];
-    void gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx);
+    void gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,bool has_mem);
     void gen_init(int rT,int dom,unsigned long int val,int val_p);
     void flgPTR(__int128 r);
     void flg64(__int128 r);
@@ -466,7 +467,7 @@ void req::gen_init(int rT_,int dom,unsigned long int val,int val_p) {
     else snprintf(asmtext,sizeof asmtext,"movabsp $%li,%%%s\n",B,reg65[rT]);//WARNING: movabsp non impl and not in cpu spec
 }
 
-void req::gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx) {
+void req::gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,bool has_mem) {
     alt=alt_;
     mul=mul_;
     excpt=-1;
@@ -1359,6 +1360,7 @@ bool ckran_alu(unsigned long long ptr,unsigned long long &addr) {
 void gen_prog(req *reqs,int count, FILE *f,hcont *contx) {
    int n;
    fprintf(f,".text\n");
+   fprintf(f,".global _start\n");
    fprintf(f,"_start:\n");
    for(n=0;n<31;n++) {
        if (n!=6) reqs[n].gen_init(n,0,lrand48()|(lrand48()<<48),0);
@@ -1374,8 +1376,14 @@ void gen_prog(req *reqs,int count, FILE *f,hcont *contx) {
   // reqs[32].gen_movcsr(csr_page,31);
    
    for(n=32;n<count;n++) {
-           reqs[n].gen(false, false, lrand48()&1, NULL,contx);
-	   fprintf(f,"%s\n",reqs[n].asmtext);
+	   if (lrand48()&1) {
+               reqs[n].gen(false, false, lrand48()&1, NULL,contx,false);
+	       fprintf(f,"%s",reqs[n].asmtext);
+	   } else {
+               reqs[n+1].gen(false, false, lrand48()&1, NULL,contx,true);
+	       n++;
+	       fprintf(f,"%s",reqs[n].asmtext);
+	   }
    }
    fprintf(f,".p2align 5\n");
    
