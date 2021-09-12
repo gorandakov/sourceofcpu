@@ -562,7 +562,13 @@ addie:
             break;
             
             case 1:
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"addl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
+	    if (has_mem_) {
+		(this-1)->gen_mem(NULL,8,mem,addr);
+		rB=16;
+		B=(this-1)->res;
+		B_p=(this-1)->res_p;
+		snprintf(asmtext,sizeof (asmtext), "addl %li(%rip), %%%s, %%%s\n",addr,,reg32[rA],reg32[rT]);
+	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"addl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"addl $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
 
             res0=((unsigned __int128) A0x)+(unsigned __int128) B0x;
@@ -573,7 +579,13 @@ addie:
             break;
 
             case 4:
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"subq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
+	    if (has_mem_) {
+		(this-1)->gen_mem(NULL,8,mem,addr);
+		rB=16;
+		B=(this-1)->res;
+		B_p=(this-1)->res_p;
+		snprintf(asmtext,sizeof (asmtext), "subq %li(%rip), %%%s, %%%s\n",addr,,reg65[rA],reg65[rT]);
+	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"subq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"subq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
 
             res0=((unsigned __int128) A)+((unsigned __int128)~B)+(one>>63);
@@ -600,7 +612,13 @@ addie:
             break;
             
             case 5:
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"subl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
+	    if (has_mem_) {
+		(this-1)->gen_mem(NULL,8,mem,addr);
+		rB=16;
+		B=(this-1)->res;
+		B_p=(this-1)->res_p;
+		snprintf(asmtext,sizeof (asmtext), "subl %li(%rip), %%%s, %%%s\n",addr,,reg32[rA],reg32[rT]);
+	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"subl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"subl $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
 
             res0=((unsigned __int128) A0x)+((unsigned __int128) ~B0x)+1;
