@@ -563,7 +563,7 @@ addie:
             
             case 1:
 	    if (has_mem_) {
-		(this-1)->gen_mem(NULL,8,mem,addr);
+		(this-1)->gen_mem(NULL,4,mem,addr);
 		rB=16;
 		B=(this-1)->res;
 		B_p=(this-1)->res_p;
@@ -613,7 +613,7 @@ addie:
             
             case 5:
 	    if (has_mem_) {
-		(this-1)->gen_mem(NULL,8,mem,addr);
+		(this-1)->gen_mem(NULL,4,mem,addr);
 		rB=16;
 		B=(this-1)->res;
 		B_p=(this-1)->res_p;
@@ -629,7 +629,13 @@ addie:
             break;
 
             case 8:
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"andq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
+	    if (has_mem_) {
+		(this-1)->gen_mem(NULL,8,mem,addr);
+		rB=16;
+		B=(this-1)->res;
+		B_p=(this-1)->res_p;
+		snprintf(asmtext,sizeof (asmtext), "andq %li(%rip), %%%s, %%%s\n",addr,,reg65[rA],reg65[rT]);
+	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"andq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"andq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
 
             res1=res=res0=A&B;
@@ -651,7 +657,13 @@ addie:
             break;
 
             case 9:
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"andl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
+	    if (has_mem_) {
+		(this-1)->gen_mem(NULL,4,mem,addr);
+		rB=16;
+		B=(this-1)->res;
+		B_p=(this-1)->res_p;
+		snprintf(asmtext,sizeof (asmtext), "andl %li(%rip), %%%s, %%%s\n",addr,,reg32[rA],reg32[rT]);
+	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"andl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"andl $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
 
             res0=A0x&B0x;
