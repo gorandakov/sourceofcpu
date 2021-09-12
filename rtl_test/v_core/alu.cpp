@@ -519,7 +519,7 @@ void req::gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,bool
 		rB=16;
 		B=(this-1)->res;
 		B_p=(this-1)->res_p;
-		snprintf(asmtext,sizeof (asmtext), "addq %li(%rip), %%%s, %%%s\n",addr,reg65[rA],reg65[rT]);
+		snprintf(asmtext,sizeof (asmtext), "addq %li(%rip), %%%s, %%%s\n",addr,,reg65[rA],reg65[rT]);
 	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"addq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"addq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
 
@@ -567,7 +567,7 @@ addie:
 		rB=16;
 		B=(this-1)->res;
 		B_p=(this-1)->res_p;
-		snprintf(asmtext,sizeof (asmtext), "addl %li(%rip), %%%s, %%%s\n",addr,reg32[rA],reg32[rT]);
+		snprintf(asmtext,sizeof (asmtext), "addl %li(%rip), %%%s, %%%s\n",addr,,reg32[rA],reg32[rT]);
 	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"addl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"addl $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
 
@@ -584,7 +584,7 @@ addie:
 		rB=16;
 		B=(this-1)->res;
 		B_p=(this-1)->res_p;
-		snprintf(asmtext,sizeof (asmtext), "subq %li(%rip), %%%s, %%%s\n",addr,reg65[rA],reg65[rT]);
+		snprintf(asmtext,sizeof (asmtext), "subq %li(%rip), %%%s, %%%s\n",addr,,reg65[rA],reg65[rT]);
 	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"subq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"subq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
 
@@ -617,7 +617,7 @@ addie:
 		rB=16;
 		B=(this-1)->res;
 		B_p=(this-1)->res_p;
-		snprintf(asmtext,sizeof (asmtext), "subl %li(%rip), %%%s, %%%s\n",addr,reg32[rA],reg32[rT]);
+		snprintf(asmtext,sizeof (asmtext), "subl %li(%rip), %%%s, %%%s\n",addr,,reg32[rA],reg32[rT]);
 	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"subl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"subl $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
 
@@ -634,7 +634,7 @@ addie:
 		rB=16;
 		B=(this-1)->res;
 		B_p=(this-1)->res_p;
-		snprintf(asmtext,sizeof (asmtext), "andq %li(%rip), %%%s, %%%s\n",addr,reg65[rA],reg65[rT]);
+		snprintf(asmtext,sizeof (asmtext), "andq %li(%rip), %%%s, %%%s\n",addr,,reg65[rA],reg65[rT]);
 	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"andq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"andq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
 
@@ -662,7 +662,7 @@ addie:
 		rB=16;
 		B=(this-1)->res;
 		B_p=(this-1)->res_p;
-		snprintf(asmtext,sizeof (asmtext), "andl %li(%rip), %%%s, %%%s\n",addr,reg32[rA],reg32[rT]);
+		snprintf(asmtext,sizeof (asmtext), "andl %li(%rip), %%%s, %%%s\n",addr,,reg32[rA],reg32[rT]);
 	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"andl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"andl $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
 
@@ -672,13 +672,7 @@ addie:
             break;
 
             case 12:
-	    if (has_mem_) {
-		(this-1)->gen_mem(NULL,8,mem,addr);
-		rB=16;
-		B=(this-1)->res;
-		B_p=(this-1)->res_p;
-		snprintf(asmtext,sizeof (asmtext), "orq %li(%rip), %%%s, %%%s\n",addr,,reg65[rA],reg65[rT]);
-	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"orq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"orq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"orq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
 
             res1=res=res0=A|B;
@@ -700,13 +694,7 @@ addie:
             break;
 
             case 13:
-	    if (has_mem_) {
-		(this-1)->gen_mem(NULL,4,mem,addr);
-		rB=16;
-		B=(this-1)->res;
-		B_p=(this-1)->res_p;
-		snprintf(asmtext,sizeof (asmtext), "orl %li(%rip), %%%s, %%%s\n",addr,reg32[rA],reg32[rT]);
-	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"orl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"orl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"orl $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
 
             res0=A0x|B0x;
