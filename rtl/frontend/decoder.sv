@@ -3951,7 +3951,7 @@ module decoder_get_baseIP(
   
   always @(posedge clk) begin
       if (rst) begin
-          baseIP<=63'b0;
+          baseIP<={20'hf80fe,43'b0};
       end else begin
 	  baseIP<=next_baseIP;
       end

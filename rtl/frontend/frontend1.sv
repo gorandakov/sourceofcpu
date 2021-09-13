@@ -1686,7 +1686,7 @@ module frontend1(
 	  predx_sc1_reg4<=2'b0;
 	  predx_sc2_reg4<=2'b0;
 	  predx_sc3_reg4<=2'b0;
-	  cc_base_IP<=64'b0;
+	  cc_base_IP<={20'hf80fe,44'b0};
 	  taken_REG<=4'b0;
 	  btbx_jmask_REG<=4'b0;
 	  miss_now_reg<=1'b0;
