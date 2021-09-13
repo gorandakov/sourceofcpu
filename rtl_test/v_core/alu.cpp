@@ -677,7 +677,7 @@ addie:
 		rB=16;
 		B=(this-1)->res;
 		B_p=(this-1)->res_p;
-		snprintf(asmtext,sizeof (asmtext), "orq %li(%rip), %%%s, %%%s\n",addr,,reg65[rA],reg65[rT]);
+		snprintf(asmtext,sizeof (asmtext), "orq %li(%rip), %%%s, %%%s\n",addr,reg65[rA],reg65[rT]);
 	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"orq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"orq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
 
@@ -715,7 +715,13 @@ addie:
             break;
 
             case 16:
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"xorq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
+	    if (has_mem_) {
+		(this-1)->gen_mem(NULL,8,mem,addr);
+		rB=16;
+		B=(this-1)->res;
+		B_p=(this-1)->res_p;
+		snprintf(asmtext,sizeof (asmtext), "xorq %li(%rip), %%%s, %%%s\n",addr,reg65[rA],reg65[rT]);
+	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"xorq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"xorq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
 
             res1=res=res0=A^B;
@@ -737,7 +743,13 @@ addie:
             break;
 
             case 17:
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"xorl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
+	    if (has_mem_) {
+		(this-1)->gen_mem(NULL,4,mem,addr);
+		rB=16;
+		B=(this-1)->res;
+		B_p=(this-1)->res_p;
+		snprintf(asmtext,sizeof (asmtext), "xorl %li(%rip), %%%s, %%%s\n",addr,reg32[rA],reg32[rT]);
+	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"xorl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"xorl $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
 
             res0=A0x^B0x;
@@ -1441,13 +1453,12 @@ void gen_prog(req *reqs,int count, FILE *f,hcont *contx) {
    contx->reg_genP[n]=reqs[n].res_p;
   // reqs[32].gen_movcsr(csr_page,31);
    
-   for(n=32;n<count;n++) {
+   for(n=32;n<(count-1);n++) {
 	   if (lrand48()&1) {
-               reqs[n].gen(false, false, lrand48()&1, NULL,contx,false);
+               reqs[n].gen(false, (lrand48()%50)==37, lrand48()&1, NULL,contx,false);
 	       fprintf(f,"%s",reqs[n].asmtext);
 	   } else {
-               reqs[n+1].gen(false, false, lrand48()&1, NULL,contx,true);
-	       n++;
+               if (reqs[n+1].gen(false, (lrand48()%50)==3, false, NULL,contx,true)) n++;
 	       fprintf(f,"%s",reqs[n].asmtext);
 	   }
    }
