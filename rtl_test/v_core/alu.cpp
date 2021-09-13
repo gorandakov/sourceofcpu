@@ -1277,7 +1277,7 @@ bool get_check(Vheptane_core *top, req *reqs,unsigned long &ip) {
 	else printf("ret %li, \t%li\n",count,ip+count);
 	for(x=0;x<count;x++) {
 	    if (reqs[ip+x].rT<0) goto no_srch;
-	    if (x<9) for(k=x+1;k<count;k=k+1) if (reqs[ip+x].rT==reqs[ip+k].rT || reqs[ip+x].rT<0) goto no_srch;
+	    if (x<(count-1)) for(k=x+1;k<count;k=k+1) if (reqs[ip+x].rT==reqs[ip+k].rT || reqs[ip+x].rT<0) goto no_srch;
 	    for(k=0;k<9;k=k+1) {
 		unsigned long val,valp;
 		extract_e(top->heptane_core__DOT__bck_mod__DOT__ret_dataA,65*k,65*k+63,val);
