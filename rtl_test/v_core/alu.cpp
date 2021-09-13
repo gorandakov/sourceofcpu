@@ -1455,10 +1455,10 @@ void gen_prog(req *reqs,int count, FILE *f,hcont *contx) {
    
    for(n=32;n<(count-1);n++) {
 	   if (lrand48()&1) {
-               reqs[n].gen(false, (lrand48()%50)==37, lrand48()&1, NULL,contx,false);
+               reqs[n].gen(false, false, lrand48()&1, NULL,contx,false);
 	       fprintf(f,"%s",reqs[n].asmtext);
 	   } else {
-               if (reqs[n+1].gen(false, (lrand48()%50)==3, false, NULL,contx,true)) n++;
+               if (reqs[n+1].gen(false, false, false, NULL,contx,true)) n++;
 	       fprintf(f,"%s",reqs[n].asmtext);
 	   }
    }
