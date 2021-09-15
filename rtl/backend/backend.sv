@@ -2304,7 +2304,7 @@ module backend(
     .writeRet6_addr(retire6_rF_reg),.writeRet6_wen(retire6_enG),
     .writeRet7_addr(retire7_rF_reg),.writeRet7_wen(retire7_enG),
     .writeRet8_addr(retire8_rF_reg),.writeRet8_wen(retire8_enG),
-    .retireAll(except),.retireAll_thread(),
+    .retireAll(except),.retireAll_thread(1'b0),
     
   
     .rs0i0_index(rs0i0_index_reg),.rs0i1_index(rs0i1_index_reg),.rs0i2_index(rs0i2_index_reg),
