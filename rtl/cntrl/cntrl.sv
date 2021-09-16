@@ -758,9 +758,9 @@ module cntrl_find_outcome(
           assign ret_prevV[j][k]=ret_prev[j][k] && isVec[j] && isVec[k];
           assign ret_prevF[j][k]=ret_prev[j][k] && isFPU[j] && isFPU[k];
           
-	  assign retireG[j]=reteq ? ~xbreak[k]  && ret_prevG[k]==0 && isGen[k] : 1'bz; 
-          assign retireV[j]=reteq ? ~xbreak[k]  && ret_prevV[k]==0 && isVec[k] : 1'bz; 
-          assign retireF[j]=reteq ? ~xbreak[k]  && ret_prevF[k]==0 && isFPU[k] : 1'bz;
+	  assign retireG[j]=reteq ? ~xbreak[k]  && ret_prevG[k]==0 && isGen[k] && ~rT[k][5] : 1'bz; 
+          assign retireV[j]=reteq ? ~xbreak[k]  && ret_prevV[k]==0 && isVec[k] && ~rT[k][5]  : 1'bz; 
+          assign retireF[j]=reteq ? ~xbreak[k]  && ret_prevF[k]==0 && isFPU[k] && ~rT[k][5]  : 1'bz;
 	  assign retireR[j]=reteq ? ~xbreak[k] : 1'bz; 
 
           assign rTe[j]=reteq ? rT[k] : 6'bz;
