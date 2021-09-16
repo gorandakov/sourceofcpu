@@ -213,15 +213,15 @@ module cntrl_find_outcome(
   iJump0Taken,iJump1Taken,
   iJump0Attr,iJump1Attr,
   flTE,retire_enFl,
-  retire0_rT,retire0_rF,retire0_enG,retire0_enV,retire0_enF,
-  retire1_rT,retire1_rF,retire1_enG,retire1_enV,retire1_enF,
-  retire2_rT,retire2_rF,retire2_enG,retire2_enV,retire2_enF,
-  retire3_rT,retire3_rF,retire3_enG,retire3_enV,retire3_enF,
-  retire4_rT,retire4_rF,retire4_enG,retire4_enV,retire4_enF,
-  retire5_rT,retire5_rF,retire5_enG,retire5_enV,retire5_enF,
-  retire6_rT,retire6_rF,retire6_enG,retire6_enV,retire6_enF,
-  retire7_rT,retire7_rF,retire7_enG,retire7_enV,retire7_enF,
-  retire8_rT,retire8_rF,retire8_enG,retire8_enV,retire8_enF,
+  retire0_rT,retire0_rF,retire0_enG,retire0_enV,retire0_enF,retire0_enR,
+  retire1_rT,retire1_rF,retire1_enG,retire1_enV,retire1_enF,retire1_enR,
+  retire2_rT,retire2_rF,retire2_enG,retire2_enV,retire2_enF,retire2_enR,
+  retire3_rT,retire3_rF,retire3_enG,retire3_enV,retire3_enF,retire3_enR,
+  retire4_rT,retire4_rF,retire4_enG,retire4_enV,retire4_enF,retire4_enR,
+  retire5_rT,retire5_rF,retire5_enG,retire5_enV,retire5_enF,retire5_enR,
+  retire6_rT,retire6_rF,retire6_enG,retire6_enV,retire6_enF,retire6_enR,
+  retire7_rT,retire7_rF,retire7_enG,retire7_enV,retire7_enF,retire7_enR,
+  retire8_rT,retire8_rF,retire8_enG,retire8_enV,retire8_enF,retire8_enR,
   doRetire,retcnt,retclr,
   jupd0_en,jupdt0_en,jupd0_ght_en,
   jupd0_addr,jupd0_baddr,
@@ -466,6 +466,16 @@ module cntrl_find_outcome(
   output reg retire8_enV;
   output reg retire8_enF;
 
+  output reg retire0_enR;
+  output reg retire1_enR;
+  output reg retire2_enR;
+  output reg retire3_enR;
+  output reg retire4_enR;
+  output reg retire5_enR;
+  output reg retire6_enR;
+  output reg retire7_enR;
+  output reg retire8_enR;
+
   output reg doRetire;
   output reg [3:0] retcnt;
   output reg [8:0] retclr;
@@ -567,6 +577,7 @@ module cntrl_find_outcome(
   wire [8:0] retireV;
   wire [8:0] retireF;
   wire [8:0] no_retire;
+  wire [8:0] retireR;
 
   wire [8:0][8:0] retire_rF;
 
@@ -749,7 +760,8 @@ module cntrl_find_outcome(
           
 	  assign retireG[j]=reteq ? ~xbreak[k]  && ret_prevG[k]==0 && isGen[k] : 1'bz; 
           assign retireV[j]=reteq ? ~xbreak[k]  && ret_prevV[k]==0 && isVec[k] : 1'bz; 
-          assign retireF[j]=reteq ? ~xbreak[k]  && ret_prevF[k]==0 && isFPU[k] : 1'bz; 
+          assign retireF[j]=reteq ? ~xbreak[k]  && ret_prevF[k]==0 && isFPU[k] : 1'bz;
+	  assign retireR[j]=reteq ? ~xbreak[k] : 1'bz; 
 
           assign rTe[j]=reteq ? rT[k] : 6'bz;
 
@@ -763,6 +775,7 @@ module cntrl_find_outcome(
           assign retireG[k]=no_retire[k] ? 1'b0 : 1'bz;
           assign retireV[k]=no_retire[k] ? 1'b0 : 1'bz;
           assign retireF[k]=no_retire[k] ? 1'b0 : 1'bz;
+          assign retireR[k]=no_retire[k] ? 1'b0 : 1'bz;
           assign rTe[k]=no_retire[k] ? 6'd0 : 6'bz;
           //assign rFe[k]=no_retire[k] ? 9'd0 : 9'bz;
       end
@@ -971,9 +984,9 @@ module cntrl_find_outcome(
   
   assign flags_d=xbreak0[0] ? flags[retire_thread_reg] : 6'bz;
 
-  assign retireG[0]=(ret[0]==4'hf) ? 1'b0 : 1'bz;
-  assign retireV[0]=(ret[0]==4'hf) ? 1'b0 : 1'bz;
-  assign retireF[0]=(ret[0]==4'hf) ? 1'b0 : 1'bz;
+ // assign retireG[0]=(ret[0]==4'hf) ? 1'b0 : 1'bz;
+ // assign retireV[0]=(ret[0]==4'hf) ? 1'b0 : 1'bz;
+ // assign retireF[0]=(ret[0]==4'hf) ? 1'b0 : 1'bz;
   
   assign proc_d=(jump0Type==5'h1e || jump1Type==5'h1e) ? indir_IP[15:0] : archReg_proc[retire_thread_reg];
 	 
@@ -1256,6 +1269,16 @@ module cntrl_find_outcome(
 	  retire7_enF<=1'b0;
 	  retire8_enF<=1'b0;
 
+	  retire0_enR<=1'b0;
+	  retire1_enR<=1'b0;
+	  retire2_enR<=1'b0;
+	  retire3_enR<=1'b0;
+	  retire4_enR<=1'b0;
+	  retire5_enR<=1'b0;
+	  retire6_enR<=1'b0;
+	  retire7_enR<=1'b0;
+	  retire8_enR<=1'b0;
+
 	  retire_enFl<=1'b0;
 
 	  doRetire<=1'b0;
@@ -1331,6 +1354,16 @@ module cntrl_find_outcome(
 	  retire6_enG<=doRetire_d && retireG[6];
 	  retire7_enG<=doRetire_d && retireG[7];
 	  retire8_enG<=doRetire_d && retireG[8];
+	  
+	  retire0_enR<=doRetire_d && retireR[0];
+	  retire1_enR<=doRetire_d && retireR[1];
+	  retire2_enR<=doRetire_d && retireR[2];
+	  retire3_enR<=doRetire_d && retireR[3];
+	  retire4_enR<=doRetire_d && retireR[4];
+	  retire5_enR<=doRetire_d && retireR[5];
+	  retire6_enR<=doRetire_d && retireR[6];
+	  retire7_enR<=doRetire_d && retireR[7];
+	  retire8_enR<=doRetire_d && retireR[8];
 	  
 	  retire0_enV<=doRetire_d && retireV[0];
 	  retire1_enV<=doRetire_d && retireV[1];
