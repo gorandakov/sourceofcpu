@@ -1075,9 +1075,9 @@ module smallInstr_decoder(
       poperation[14][12:11]=2'b10;
       case(instr[28:26])
       0: begin poperation[14][7:0]=`op_clahf; prB_use[14]=1'b0; prT_use[14]=1'b0;
-             pflags_write[14]=1'b1; pflags_use[14]=1'b0; poperation[14][12]=1'b0;  end
+             pflags_write[14]=1'b1; pflags_use[14]=1'b1; poperation[14][12]=1'b0;  end
       1: begin poperation[14][7:0]=`op_clahfn; prB_use[14]=1'b0; prT_use[14]=1'b0;
-             pflags_write[14]=1'b1; pflags_use[14]=1'b0;  poperation[14][12]=1'b0;end
+             pflags_write[14]=1'b1; pflags_use[14]=1'b1;  poperation[14][12]=1'b0;end
       2: poperation[14][7:0]=`op_cmov64;
       3: poperation[14][7:0]=`op_cmovn64;
       4: poperation[14][7:0]=`op_cmov32;

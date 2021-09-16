@@ -441,9 +441,9 @@ class req {
     unsigned has_mem;
     unsigned has_alu;
     char asmtext[64];
-    void gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,bool has_mem_);
+    void gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,bool has_mem_,char *mem);
     void gen_init(int rT,int dom,unsigned long int val,int val_p);
-    void gen_mem(req* prev1,unsigned code,char * mem);
+    void gen_mem(req* prev1,unsigned code,char * mem,unsigned long addr);
     void flgPTR(__int128 r);
     void flg64(__int128 r);
     void flg32(__int128 r);
@@ -469,7 +469,7 @@ void req::gen_init(int rT_,int dom,unsigned long int val,int val_p) {
     else snprintf(asmtext,sizeof asmtext,"movabsp $%li,%%%s\n",B,reg65[rT]);//WARNING: movabsp non impl and not in cpu spec
 }
 
-void req::gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,bool has_mem_) {
+void req::gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,bool has_mem_,char *mem) {
     alt=alt_;
     mul=mul_;
     excpt=-1;
@@ -481,7 +481,7 @@ void req::gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,bool
     rA=rand()&0x1f;
     rB=rand()&0x1f;
     rT=rand()&0x1f;
-    addr=lrand48()%(MEMRGN_DATA_SZ-8);
+    if (has_mem_) addr=lrand48()%(MEMRGN_DATA_SZ-8);
     if (rand()&1) {
         B=lrand48()&0xffffffff;
 	B_p=0;
@@ -1454,13 +1454,13 @@ void gen_prog(req *reqs,int count, FILE *f,hcont *contx) {
   // reqs[32].gen_movcsr(csr_page,31);
    
    for(n=32;n<(count-1);n++) {
-	   if (lrand48()&1) {
-               reqs[n].gen(false, false, lrand48()&1, NULL,contx,false);
+//	   if (lrand48()&1) {
+               reqs[n].gen(false, false, lrand48()&1, NULL,contx,false,NULL);
 	       fprintf(f,"%s",reqs[n].asmtext);
-	   } else {
-               if (reqs[n+1].gen(false, false, false, NULL,contx,true)) n++;
-	       fprintf(f,"%s",reqs[n].asmtext);
-	   }
+//	   } else {
+//               if (reqs[n+1].gen(false, false, false, NULL,contx,true)) n++;
+//	       fprintf(f,"%s",reqs[n].asmtext);
+//	   }
    }
    fprintf(f,".p2align 5\n");
    
@@ -1479,6 +1479,7 @@ int main(int argc, char *argv[]) {
     FILE *FOUT=fopen("/tmp/asm2.s","w");
     if (!FOUT) exit(1);
     hcont contx;
+    memset((void *) &contx,0,sizeof (contx));
     char *mem=(char *) mmap(0,2l*1024*1024*1024,PROT_READ|PROT_WRITE,MAP_ANON|MAP_PRIVATE,-1,0);
     if (!mem) {
 	perror("mem");
