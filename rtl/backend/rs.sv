@@ -249,17 +249,17 @@ module rs_wakeUp_logic(
   assign isData=isV_d ? isDataV : 1'bz;
   assign isData=(~isFP_d & ~isV_d) ? isDataI : 1'bz;
 */  
-  assign fuFwd_d=(eq_new[0] & funit_d[0]) ? 4'd0 : 4'bz;
-  assign fuFwd_d=(eq_new[0] & funit_d[1]) ? 4'd1 : 4'bz;
-  assign fuFwd_d=(eq_new[0] & funit_d[2]) ? 4'd2 : 4'bz;
-  assign fuFwd_d=(eq_new[1] & funit_d[3]) ? 4'd3 : 4'bz;
-  assign fuFwd_d=(eq_new[0] & funit_d[4]) ? 4'd4 : 4'bz;
-  assign fuFwd_d=(eq_new[0] & funit_d[5]) ? 4'd5 : 4'bz;
-  assign fuFwd_d=(eq_new[0] & funit_d[6]) ? 4'd6 : 4'bz;
-  assign fuFwd_d=(eq_new[0] & funit_d[7]) ? 4'd7 : 4'bz;
-  assign fuFwd_d=(eq_new[0] & funit_d[8]) ? 4'd8 : 4'bz;
-  assign fuFwd_d=(eq_new[0] & funit_d[9]) ? 4'd9 : 4'bz;
-  assign fuFwd_d=(eq_new[0]|(eq_new[1]&funit_d[3])&&~rst) ? 4'bz : 4'd15;
+  assign fuFwd_d=(eq[0] & funit_d[0]) ? 4'd0 : 4'bz;
+  assign fuFwd_d=(eq[0] & funit_d[1]) ? 4'd1 : 4'bz;
+  assign fuFwd_d=(eq[0] & funit_d[2]) ? 4'd2 : 4'bz;
+  assign fuFwd_d=(eq[1] & funit_d[3]) ? 4'd3 : 4'bz;
+  assign fuFwd_d=(eq[0] & funit_d[4]) ? 4'd4 : 4'bz;
+  assign fuFwd_d=(eq[0] & funit_d[5]) ? 4'd5 : 4'bz;
+  assign fuFwd_d=(eq[0] & funit_d[6]) ? 4'd6 : 4'bz;
+  assign fuFwd_d=(eq[0] & funit_d[7]) ? 4'd7 : 4'bz;
+  assign fuFwd_d=(eq[0] & funit_d[8]) ? 4'd8 : 4'bz;
+  assign fuFwd_d=(eq[0] & funit_d[9]) ? 4'd9 : 4'bz;
+  assign fuFwd_d=(eq[0]|(eq_new[1]&funit_d[3])&&~rst) ? 4'bz : 4'd15;
 
   assign gzFwd=gazump[0] ? 4'd0 : 4'bz;
   assign gzFwd=gazump[1] ? 4'd1 : 4'bz;
@@ -1113,17 +1113,17 @@ module rs_wakeUpS_logic(
   assign isDataI=|eq_new;
   assign isData=isDataI;
 
-  assign fuFwd_d=(eq_new[0] & funit_d[0]) ? 4'd0 : 4'bz;
-  assign fuFwd_d=(eq_new[0] & funit_d[1]) ? 4'd1 : 4'bz;
-  assign fuFwd_d=(eq_new[0] & funit_d[2]) ? 4'd2 : 4'bz;
+  assign fuFwd_d=(eq[0] & funit_d[0]) ? 4'd0 : 4'bz;
+  assign fuFwd_d=(eq[0] & funit_d[1]) ? 4'd1 : 4'bz;
+  assign fuFwd_d=(eq[0] & funit_d[2]) ? 4'd2 : 4'bz;
  // assign fuFwd_d=(eq_new[1] & funit[3]) ? 4'd3 : 4'bz;
-  assign fuFwd_d=(eq_new[0] & funit_d[4]) ? 4'd4 : 4'bz;
-  assign fuFwd_d=(eq_new[0] & funit_d[5]) ? 4'd5 : 4'bz;
-  assign fuFwd_d=(eq_new[0] & funit_d[6]) ? 4'd6 : 4'bz;
-  assign fuFwd_d=(eq_new[0] & funit_d[7]) ? 4'd7 : 4'bz;
-  assign fuFwd_d=(eq_new[0] & funit_d[8]) ? 4'd8 : 4'bz;
-  assign fuFwd_d=(eq_new[0] & funit_d[9]) ? 4'd9 : 4'bz;
-  assign fuFwd_d=(eq_new[0]&~rst) ? 4'bz : 4'd15;
+  assign fuFwd_d=(eq[0] & funit_d[4]) ? 4'd4 : 4'bz;
+  assign fuFwd_d=(eq[0] & funit_d[5]) ? 4'd5 : 4'bz;
+  assign fuFwd_d=(eq[0] & funit_d[6]) ? 4'd6 : 4'bz;
+  assign fuFwd_d=(eq[0] & funit_d[7]) ? 4'd7 : 4'bz;
+  assign fuFwd_d=(eq[0] & funit_d[8]) ? 4'd8 : 4'bz;
+  assign fuFwd_d=(eq[0] & funit_d[9]) ? 4'd9 : 4'bz;
+  assign fuFwd_d=(eq[0]&~rst) ? 4'bz : 4'd15;
 
   assign gzFwd=gazump[0] ? 4'd0 : 4'bz;
   assign gzFwd=gazump[1] ? 4'd1 : 4'bz;
