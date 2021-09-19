@@ -119,6 +119,7 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
  
   wire [4:0] jumpType; 
   wire doJmp;
+  reg doJmp_reg;
   
   wire add_en;
   wire shift_en;
@@ -342,8 +343,8 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
 	  ~retOp[11]) ? 6'b0 : 6'bz;
   assign flags_COASZP=(retOp[7:0]==`op_lahf && ~retOp[11]) ? val1_reg[5:0] : 6'bz;
   assign flags_COASZP=(isFlags_reg&~retOp[11]&(retOp[7:5]==3'b0)) ? 6'bz : 6'b0;  
-  assign flags_COASZP=((retOp[7:0]==`op_clahf || retOp[7:0]==`op_clahfn) && doJmp) ? val1_reg[5:0] : 6'bz;
-  assign flags_COASZP=((retOp[7:0]==`op_clahf || retOp[7:0]==`op_clahfn) && ~doJmp) ? valS_reg : 6'bz;
+  assign flags_COASZP=((retOp[7:0]==`op_clahf || retOp[7:0]==`op_clahfn) && doJmp_reg) ? val1_reg[5:0] : 6'bz;
+  assign flags_COASZP=((retOp[7:0]==`op_clahf || retOp[7:0]==`op_clahfn) && ~doJmp_reg) ? valS_reg : 6'bz;
   //other stuff
   
   assign retData[`except_flags]=nDataAlt_reg && ~shift_en_reg|NOSHIFT 
@@ -433,6 +434,8 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
 
 	  shift_en_reg<=1'b0;
 
+	  doJmp_reg<=1'b0;
+
           thrinh_reg<=1'b0;
           except_reg<=1'b0;
           except_thread_reg<=1'b0;
@@ -482,6 +485,7 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
           
           nDataAlt_reg<=nDataAlt;
           
+	  doJmp_reg<=doJmp;
 	  shift_en_reg<=shift_en;
           valS_reg<=valS;
           val1_reg<=val1[5:0];
