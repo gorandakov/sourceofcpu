@@ -320,7 +320,7 @@ module rs_wakeUp_logic(
           else
 	    begin
 	      if (newRsSelect0|newRsSelect1|newRsSelect2 && ~stall) begin
-              eq_mask<=2'h3;
+              eq_mask<=2'h3 & ~eq_new;
           end else begin
               eq_mask<=(eq_mask & ~eq_new) | {eq_reg[1]&~FU3Hit&funit[3], eq_reg[0]&~FU2Hit&funit[2] || 
 		  eq_reg[0]&~FU1Hit&funit[1] || eq_reg[0]&~FU0Hit&funit[0]};
@@ -1177,14 +1177,14 @@ module rs_wakeUpS_logic(
 		  eq_mask<=2'b0;
        end else begin
           if (newRsSelect1|newRsSelect2 && ~stall) begin
-              eq_mask<=2'h3;
+              eq_mask<=2'h3 & ~eq_new;
           end else begin
               eq_mask<=eq_mask & ~eq_new;
           end
 	  fuFwd<=fuFwd_d;
 	  fuuFwd<=gazump[10] ? fuFwd|{4{newRsSelect1|newRsSelect2}} : gzFwd;
 	  isFP<=isFP_d;
-	  eq_reg<=eq&(eq_mask|{2{newRsSelect1|newRsSelect2 & ~stall}})&{2{~sel}};
+	  eq_reg<=eq_new&(eq_mask|{2{newRsSelect1|newRsSelect2 & ~stall}})&{2{~sel}};
 		  
 	  outEq0[4]<=(~isFP & eq_reg[0]&funit[4])|gazump[0]&&~sel;
           outEq0[5]<=(~isFP & eq_reg[0]&funit[5])|gazump[1]&&~sel;
