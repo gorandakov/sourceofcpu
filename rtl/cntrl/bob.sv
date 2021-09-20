@@ -65,6 +65,7 @@ module bob_addr(
   reg [5:0] cnt;
   wire [5:0] cnt_inc;
   wire [5:0] cnt_dec;
+  wire [5:0] new_addr_d;
   adder_inc #(5) add1_mod(retire_addr0,retire0_inc,1'b1,);
   adder_inc #(5) add2_mod(cnt,cnt_inc,1'b1,);
   adder_inc #(5) add3_mod(new_addr,new_addr_d,new_addr!=6'd47,);

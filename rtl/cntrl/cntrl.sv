@@ -1123,20 +1123,13 @@ module cntrl_find_outcome(
   .clk(clk),
   .rst(rst),
   .except(except_d),
-  .except_thread(except_thread_d),
-  .except_both(except_both_d),
   .new_en(new_en&~except),
-  .new_thread(new_thread),
   .new_addr(new_addr),
   .stall(stall),
   .doStall(doStall),
   .hasRetire(has_some),
-  .hasRetireX(has_someX),
   .doRetire(doRetire_d),
-  .retire_addr(retire_addr),
-  .retire_addr_reg(retire_addr_reg),
-  .retire_thread(retire_thread),
-  .both(both_threads),.thread0(thread0),.thread1(thread1)
+  .retire_addr(retire_addr)
   );
 
   bob_except xcpt_mod(
@@ -1374,9 +1367,9 @@ module cntrl_find_outcome(
 	  jupd1_ght_en<=jump1_in & ~jump1Miss & ~jump1BtbOnly & doRetire_d;
 
 	  exceptIP<={exceptIP_d};
-          except_thread<=except_thread_d;
+          //except_thread<=except_thread_d;
 	  except_attr<=except_attr_d;
-	  except_both<=except_both_d;
+	  //except_both<=except_both_d;
 	  except<=except_d;
           except_due_jump<=break_jump0|break_jump1 && except_d;
           if (doRetire_d && jump0_in) except_jump_ght<=jump1_in ? {jump1GHT[6:0],jump1_taken} : {jump0GHT[6:0],jump0_taken};
@@ -1385,7 +1378,7 @@ module cntrl_find_outcome(
           except_jmp_mask<=break_jump0 ? jump0JMask : jump1JMask;
 
           csrss_no<=csrss_no_d;
-          csrss_thread<=except_thread_d;
+          //csrss_thread<=except_thread_d;
           csrss_en<=csrss_en_d;
           csrss_data<=csrss_data_d;
 
@@ -1394,11 +1387,12 @@ module cntrl_find_outcome(
 
 	  //if (both_threads) retire_thread<=~retire_thread;
 	  //else retire_thread<=thread1;
-	  retire_thread_reg<=retire_thread;
+	  //
+	  //retire_thread_reg<=retire_thread;
 	  retcnt<=(doRetire_d&~init) ? retcnt_d : 4'd1;
 	  retclr<={9{doRetire_d&~init}} & retclrP;
 
-          if (break_exceptn && has_someX && indir_ready) begin
+          if (break_exceptn && has_some && indir_ready) begin
 	      archReg_xcpt_retIP[retire_thread_reg]<=breakIP;	
 //	      archReg_xcpt_code[retire_thread_reg]<=excpt_code;	
           end
