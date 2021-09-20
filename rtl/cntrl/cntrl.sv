@@ -1097,7 +1097,7 @@ module cntrl_find_outcome(
 
   assign indirMismatch=(takenIP!=indir_IP[43:1] || ~indir_IP[64]) && has_indir && indir_ready;
 
-  assign except_d=has_break && ~break_pending && has_some && ~init && ~mem_II_stall && indir_ready|~has_indir;
+  assign except_d=has_break && ~break_pending && has_some && ~init && indir_ready|~has_indir;
   
   assign retire8_rF[3:0]=4'd8;
   assign retire7_rF[3:0]=4'd7;
