@@ -58,7 +58,7 @@ module bob_addr(
   output doStall;
   output reg hasRetire;
   input doRetire;
-  output [5:0] retire_addr;
+  output reg [5:0] retire_addr;
 
   reg [5:0] retire_addr0;
   wire [5:0] retire0_inc;
@@ -74,8 +74,6 @@ module bob_addr(
   assign new_addr_d=new_addr==6'd47 ? 6'd0 : 6'bz;
 
   adder #(6) add4_mod(cnt,6'h3f,cnt_dec,1'b0,1'b1,,,,);
-
-  assign retire_addr=retire_addr0;
 
   assign doStall=cnt==6'd48;
   
