@@ -83,6 +83,7 @@ module bob_addr(
       end else if (except) begin
           retire_addr=new_addr;
       end else begin
+	  retire_addr=retire_addr0;
 	  if (doRetire && retire_addr0!=6'd47) retire_addr=retire0_inc;
 	  if (doRetire && retire_addr0==6'd47) retire_addr=6'b0;
       end
