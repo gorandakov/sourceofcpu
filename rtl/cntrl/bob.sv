@@ -66,6 +66,7 @@ module bob_addr(
   wire [5:0] cnt_inc;
   wire [5:0] cnt_dec;
   wire [5:0] new_addr_d;
+  reg except_reg;
   adder_inc #(6) add1_mod(retire_addr0,retire0_inc,1'b1,);
   adder_inc #(6) add2_mod(cnt,cnt_inc,1'b1,);
   adder_inc #(6) add3_mod(new_addr,new_addr_d,new_addr!=6'd47,);
@@ -84,17 +85,20 @@ module bob_addr(
 	  cnt<=6'd0;
 	  new_addr<=6'd0;
 	  hasRetire<=1'b0;
+	  except_reg<=1'b0;
       end else if (except) begin
           retire_addr0<=new_addr;
 	  cnt<=6'd0;
 	  hasRetire<=1'b0;
+	  except_reg<=1'b1;
       end else begin
 	  if (new_en && !stall && !doStall) new_addr<=new_addr_d;
 	  if (new_en && !stall && !doStall && !doRetire) cnt<=cnt_inc;
 	  if (!new_en | stall | doStall && doRetire) cnt<=cnt_dec;
-	  if (doRetire && retire_addr0!=6'd47) retire_addr0<=retire0_inc;
-	  if (doRetire && retire_addr0==6'd47) retire_addr0<=6'b0;
+	  if (doRetire|except_reg && retire_addr0!=6'd47) retire_addr0<=retire0_inc;
+	  if (doRetire|except_reg && retire_addr0==6'd47) retire_addr0<=6'b0;
           hasRetire<=cnt!=6'd0;
+	  except_reg<=1'b0;
       end
   end
 
