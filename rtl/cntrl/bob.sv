@@ -56,7 +56,7 @@ module bob_addr(
   output reg [5:0] new_addr;
   input stall;
   output doStall;
-  output hasRetire;
+  output reg hasRetire;
   input doRetire;
   output [5:0] retire_addr;
 
@@ -66,17 +66,16 @@ module bob_addr(
   wire [5:0] cnt_inc;
   wire [5:0] cnt_dec;
   wire [5:0] new_addr_d;
-  adder_inc #(5) add1_mod(retire_addr0,retire0_inc,1'b1,);
-  adder_inc #(5) add2_mod(cnt,cnt_inc,1'b1,);
-  adder_inc #(5) add3_mod(new_addr,new_addr_d,new_addr!=6'd47,);
+  adder_inc #(6) add1_mod(retire_addr0,retire0_inc,1'b1,);
+  adder_inc #(6) add2_mod(cnt,cnt_inc,1'b1,);
+  adder_inc #(6) add3_mod(new_addr,new_addr_d,new_addr!=6'd47,);
 
   assign new_addr_d=new_addr==6'd47 ? 6'd0 : 6'bz;
 
-  adder #(5) add4_mod(cnt,6'h3f,cnt_dec,1'b0,1'b1,,,);
+  adder #(6) add4_mod(cnt,6'h3f,cnt_dec,1'b0,1'b1,,,,);
 
   assign retire_addr=retire_addr0;
 
-  assign hasRetire=cnt!=6'd0;
   assign doStall=cnt==6'd48;
 
   always @(posedge clk) begin
@@ -84,15 +83,18 @@ module bob_addr(
 	  retire_addr0<=6'd0;
 	  cnt<=6'd0;
 	  new_addr<=6'd0;
+	  hasRetire<=1'b0;
       end else if (except) begin
-          retire_addr<=new_addr;
+          retire_addr0<=new_addr;
 	  cnt<=6'd0;
+	  hasRetire<=1'b0;
       end else begin
 	  if (new_en && !stall && !doStall) new_addr<=new_addr_d;
-	  if (new_en && !stall && !doStall && !doRetire) cnt=cnt_inc;
-	  if (!new_en | stall | doStall && doRetire) cnt=cnt_dec;
-	  if (doRetire && retire_addr0!=6'd47) retire_add0<=retire0_inc;
-	  if (doRetire && retire_addr0==6'd47) retire_add0<=6'b0;
+	  if (new_en && !stall && !doStall && !doRetire) cnt<=cnt_inc;
+	  if (!new_en | stall | doStall && doRetire) cnt<=cnt_dec;
+	  if (doRetire && retire_addr0!=6'd47) retire_addr0<=retire0_inc;
+	  if (doRetire && retire_addr0==6'd47) retire_addr0<=6'b0;
+          hasRetire<=cnt!=6'd0;
       end
   end
 
