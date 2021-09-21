@@ -15,7 +15,6 @@ module decoder_permitted_i(
   sys,
   pos0,
   iAvail,
-  stall,
   halt,
   allret,
   perm
@@ -32,7 +31,6 @@ module decoder_permitted_i(
   input [9:0] sys;
   input [9:0] pos0;
   input [9:0] iAvail;
-  input stall;
   input halt;
   input allret;
   output [9:0] perm;
@@ -95,7 +93,7 @@ module decoder_permitted_i(
   
 //  assign permC[0]=~halt;
   
-  assign perm=permA & permB & permC & iAvail & {10{~stall}};
+  assign perm=permA & permB & permC & iAvail;
 
 endmodule
 
@@ -2954,7 +2952,6 @@ module decoder(
   .sys(cls_sys),
   .pos0(cls_pos0),
   .iAvail(iAvail),
-  .stall(stall),
   .halt(dec_halt[0]),
   .allret(all_retired),
   .perm(iUsed)
