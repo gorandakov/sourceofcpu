@@ -779,7 +779,7 @@ module frontend1(
   
   assign cc_base_IP_d=(~do_seq_reg) ? cc_read_IP : 64'bz;
   assign cc_base_IP_d=(do_seq_reg & ~cc_base_tick) ? cc_base_IP : 64'bz;
-  assign cc_base_IP_d[7:0]=(do_seq_reg & cc_base_tick) ? cc_base_IP[7:0] : 8'bz;
+  assign cc_base_IP_d[8:0]=(do_seq_reg & cc_base_tick) ? cc_base_IP[8:0] : 9'bz;
   assign {cc_base_tick,cc_base_off}=(~do_seq_reg) ? 5'b0 : 5'bz;
   
   assign cc_read_IP_d[4:0]=(~init & do_seq_any & ~jumpTK_en & ~fmstall) ? 5'b0 : 5'bz;
@@ -1769,11 +1769,18 @@ module frontend1(
               miss_slot<=3'b0;
               miss_seq<=1'b1;
               instrEn<=1'b0;
+	      instrEn_reg<=1'b0;
+	      instrEn_reg2<=1'b0;
+	      instrEn_reg3<=1'b0;
               bus_match0_reg<=1'b0;
               bus_match0_reg2<=1'b0;
               bus_match0_reg3<=1'b0;
               bus_match0_reg4<=1'b0;
-          end
+          end else begin
+              instrEn_reg<=instrEn;
+              instrEn_reg2<=instrEn_reg;
+              instrEn_reg3<=instrEn_reg2;
+	  end
           if (miss_recover) begin
               miss_now<=1'b0;
               tlbMiss_now<=1'b0;
@@ -1799,9 +1806,6 @@ module frontend1(
           bus_tlb_match_reg2<=bus_tlb_match_reg;
           bus_tlb_match_reg3<=bus_tlb_match_reg2;
           bus_tlb_data_reg<=bus_tlb_data;
-          instrEn_reg<=instrEn;
-          instrEn_reg2<=instrEn_reg;
-          instrEn_reg3<=instrEn_reg2;
           cc_read_IP_reg<=cc_read_IP;
           cc_read_IP_reg2<=cc_read_IP_reg;
           cc_read_IP_reg3<=cc_read_IP_reg2;
