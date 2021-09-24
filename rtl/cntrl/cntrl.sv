@@ -753,7 +753,7 @@ module cntrl_find_outcome(
 
           assign rTe[j]=reteq ? rT[k] : 6'bz;
 
-          assign flE=reteq && lfl[k] ? rT[j] : 9'bz;	  
+          assign flE=reteq && lfl[k] ? retire_rF[j] : 9'bz;	  
       end
       assign flE=~lfl[k] ? 9'b0 : 9'bz;
       assign flTE=lfl[k] ? flE : 9'bz;
