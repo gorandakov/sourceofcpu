@@ -1179,6 +1179,118 @@ bool req::testj(int code) {
     }
 }
 
+unsigned get_retfl_data(Vheptane_core *vlTOPp) {
+
+            
+           return   (((((((((((((((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__0__KET____DOT__ram_mod__DOT__retA_en)
+                                 ? vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__0__KET____DOT__ram_mod__DOT__ramA_mod__DOT__ram
+                                [vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__0__KET____DOT__ram_mod__DOT__ramA_mod__DOT__retireRead_addr_reg]
+                                 : 0U) & ((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__0__KET____DOT__ram_mod__DOT__retA_en)
+                                           ? 0x3fU : 0U)) 
+                              | (((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__0__KET____DOT__ram_mod__DOT__retB_en)
+                                   ? vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__0__KET____DOT__ram_mod__DOT__ramB_mod__DOT__ram
+                                  [vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__0__KET____DOT__ram_mod__DOT__ramB_mod__DOT__retireRead_addr_reg]
+                                   : 0U) & ((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__0__KET____DOT__ram_mod__DOT__retB_en)
+                                             ? 0x3fU
+                                             : 0U))) 
+                             & (IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT____pinNumber8__en2)) 
+                            | (((((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__1__KET____DOT__ram_mod__DOT__retA_en)
+                                   ? vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__1__KET____DOT__ram_mod__DOT__ramA_mod__DOT__ram
+                                  [vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__1__KET____DOT__ram_mod__DOT__ramA_mod__DOT__retireRead_addr_reg]
+                                   : 0U) & ((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__1__KET____DOT__ram_mod__DOT__retA_en)
+                                             ? 0x3fU
+                                             : 0U)) 
+                                | (((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__1__KET____DOT__ram_mod__DOT__retB_en)
+                                     ? vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__1__KET____DOT__ram_mod__DOT__ramB_mod__DOT__ram
+                                    [vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__1__KET____DOT__ram_mod__DOT__ramB_mod__DOT__retireRead_addr_reg]
+                                     : 0U) & ((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__1__KET____DOT__ram_mod__DOT__retB_en)
+                                               ? 0x3fU
+                                               : 0U))) 
+                               & (IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT____pinNumber8__en4))) 
+                           | (((((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__2__KET____DOT__ram_mod__DOT__retA_en)
+                                  ? vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__2__KET____DOT__ram_mod__DOT__ramA_mod__DOT__ram
+                                 [vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__2__KET____DOT__ram_mod__DOT__ramA_mod__DOT__retireRead_addr_reg]
+                                  : 0U) & ((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__2__KET____DOT__ram_mod__DOT__retA_en)
+                                            ? 0x3fU
+                                            : 0U)) 
+                               | (((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__2__KET____DOT__ram_mod__DOT__retB_en)
+                                    ? vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__2__KET____DOT__ram_mod__DOT__ramB_mod__DOT__ram
+                                   [vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__2__KET____DOT__ram_mod__DOT__ramB_mod__DOT__retireRead_addr_reg]
+                                    : 0U) & ((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__2__KET____DOT__ram_mod__DOT__retB_en)
+                                              ? 0x3fU
+                                              : 0U))) 
+                              & (IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT____pinNumber8__en6))) 
+                          | (((((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__3__KET____DOT__ram_mod__DOT__retA_en)
+                                 ? vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__3__KET____DOT__ram_mod__DOT__ramA_mod__DOT__ram
+                                [vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__3__KET____DOT__ram_mod__DOT__ramA_mod__DOT__retireRead_addr_reg]
+                                 : 0U) & ((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__3__KET____DOT__ram_mod__DOT__retA_en)
+                                           ? 0x3fU : 0U)) 
+                              | (((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__3__KET____DOT__ram_mod__DOT__retB_en)
+                                   ? vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__3__KET____DOT__ram_mod__DOT__ramB_mod__DOT__ram
+                                  [vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__3__KET____DOT__ram_mod__DOT__ramB_mod__DOT__retireRead_addr_reg]
+                                   : 0U) & ((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__3__KET____DOT__ram_mod__DOT__retB_en)
+                                             ? 0x3fU
+                                             : 0U))) 
+                             & (IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT____pinNumber8__en8))) 
+                         | (((((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__4__KET____DOT__ram_mod__DOT__retA_en)
+                                ? vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__4__KET____DOT__ram_mod__DOT__ramA_mod__DOT__ram
+                               [vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__4__KET____DOT__ram_mod__DOT__ramA_mod__DOT__retireRead_addr_reg]
+                                : 0U) & ((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__4__KET____DOT__ram_mod__DOT__retA_en)
+                                          ? 0x3fU : 0U)) 
+                             | (((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__4__KET____DOT__ram_mod__DOT__retB_en)
+                                  ? vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__4__KET____DOT__ram_mod__DOT__ramB_mod__DOT__ram
+                                 [vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__4__KET____DOT__ram_mod__DOT__ramB_mod__DOT__retireRead_addr_reg]
+                                  : 0U) & ((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__4__KET____DOT__ram_mod__DOT__retB_en)
+                                            ? 0x3fU
+                                            : 0U))) 
+                            & (IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT____pinNumber8__en10))) 
+                        | (((((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__5__KET____DOT__ram_mod__DOT__retA_en)
+                               ? vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__5__KET____DOT__ram_mod__DOT__ramA_mod__DOT__ram
+                              [vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__5__KET____DOT__ram_mod__DOT__ramA_mod__DOT__retireRead_addr_reg]
+                               : 0U) & ((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__5__KET____DOT__ram_mod__DOT__retA_en)
+                                         ? 0x3fU : 0U)) 
+                            | (((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__5__KET____DOT__ram_mod__DOT__retB_en)
+                                 ? vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__5__KET____DOT__ram_mod__DOT__ramB_mod__DOT__ram
+                                [vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__5__KET____DOT__ram_mod__DOT__ramB_mod__DOT__retireRead_addr_reg]
+                                 : 0U) & ((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__5__KET____DOT__ram_mod__DOT__retB_en)
+                                           ? 0x3fU : 0U))) 
+                           & (IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT____pinNumber8__en12))) 
+                       | (((((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__6__KET____DOT__ram_mod__DOT__retA_en)
+                              ? vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__6__KET____DOT__ram_mod__DOT__ramA_mod__DOT__ram
+                             [vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__6__KET____DOT__ram_mod__DOT__ramA_mod__DOT__retireRead_addr_reg]
+                              : 0U) & ((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__6__KET____DOT__ram_mod__DOT__retA_en)
+                                        ? 0x3fU : 0U)) 
+                           | (((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__6__KET____DOT__ram_mod__DOT__retB_en)
+                                ? vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__6__KET____DOT__ram_mod__DOT__ramB_mod__DOT__ram
+                               [vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__6__KET____DOT__ram_mod__DOT__ramB_mod__DOT__retireRead_addr_reg]
+                                : 0U) & ((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__6__KET____DOT__ram_mod__DOT__retB_en)
+                                          ? 0x3fU : 0U))) 
+                          & (IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT____pinNumber8__en14))) 
+                      | (((((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__7__KET____DOT__ram_mod__DOT__retA_en)
+                             ? vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__7__KET____DOT__ram_mod__DOT__ramA_mod__DOT__ram
+                            [vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__7__KET____DOT__ram_mod__DOT__ramA_mod__DOT__retireRead_addr_reg]
+                             : 0U) & ((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__7__KET____DOT__ram_mod__DOT__retA_en)
+                                       ? 0x3fU : 0U)) 
+                          | (((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__7__KET____DOT__ram_mod__DOT__retB_en)
+                               ? vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__7__KET____DOT__ram_mod__DOT__ramB_mod__DOT__ram
+                              [vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__7__KET____DOT__ram_mod__DOT__ramB_mod__DOT__retireRead_addr_reg]
+                               : 0U) & ((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__7__KET____DOT__ram_mod__DOT__retB_en)
+                                         ? 0x3fU : 0U))) 
+                         & (IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT____pinNumber8__en16))) 
+                     | (((((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__8__KET____DOT__ram_mod__DOT__retA_en)
+                            ? vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__8__KET____DOT__ram_mod__DOT__ramA_mod__DOT__ram
+                           [vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__8__KET____DOT__ram_mod__DOT__ramA_mod__DOT__retireRead_addr_reg]
+                            : 0U) & ((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__8__KET____DOT__ram_mod__DOT__retA_en)
+                                      ? 0x3fU : 0U)) 
+                         | (((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__8__KET____DOT__ram_mod__DOT__retB_en)
+                              ? vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__8__KET____DOT__ram_mod__DOT__ramB_mod__DOT__ram
+                             [vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__8__KET____DOT__ram_mod__DOT__ramB_mod__DOT__retireRead_addr_reg]
+                              : 0U) & ((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__8__KET____DOT__ram_mod__DOT__retB_en)
+                                        ? 0x3fU : 0U))) 
+                        & (IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT____pinNumber8__en18))) 
+                    & (IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT____pinNumber8__en1)) 
+                   & (IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT____pinNumber8__en1));
+}
 
 void req_set(Vheptane_core *top,req *reqs,char *mem) {
     static unsigned long addr[32];
@@ -1367,6 +1479,7 @@ no_srch:;
 	   extract_e(top->heptane_core__DOT__front_mod__DOT__read_data,65*k,65*k+63,val);
 	   printf("%#16lx",val);
 	}
+	if (!top->heptane_core__DOT__front_mod__DOT__instrEn_reg3) printf(" err ");
 	printf(" 0x%lx\n",top->heptane_core__DOT__front_mod__DOT__IP_phys_reg3);
     }
     return rtn;
