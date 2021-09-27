@@ -1377,6 +1377,7 @@ bool get_check(Vheptane_core *top, req *reqs,unsigned long &ip) {
     static unsigned retire=0;
     static int insn_count[64];
     static int insn_posR=0,insn_posW=0;
+    static unsigned retII=0;
     if (retire) {
 	for(k=0;k<10;k++) {
 	    if (xbreak&(1<<k)) break;
@@ -1386,7 +1387,7 @@ bool get_check(Vheptane_core *top, req *reqs,unsigned long &ip) {
 	insn_posR++;
 	insn_posR&=0x3f;
 	if (top->heptane_core__DOT__except) printf("except %li\n",count);
-	else printf("ret %li, \t%li\n",count,ip+count);
+	else printf("ret %li, \t%li, %x\n",count,ip+count,retII);
 	for(x=0;x<count;x++) {
 	    if (reqs[ip+x].rT<0) goto no_srch;
 	    if (x<(count-1)) for(k=x+1;k<count;k=k+1) if (reqs[ip+x].rT==reqs[ip+k].rT || reqs[ip+x].rT<0) goto no_srch;
@@ -1424,13 +1425,14 @@ bool get_check(Vheptane_core *top, req *reqs,unsigned long &ip) {
 			    break;
 		}
 		if (reqs[ip+x].res!=val || reqs[ip+x].res_p!=valp) {
-		    printf("reterr %i, %li\n, %li:%li, instr %s\n",x,ip+x,reqs[ip+x].res,val,reqs[ip+x].asmtext);
+		    printf("reterr %i, %li, %lx:%lx, instr %s, AB %lx:%lx\n",x,ip+x,reqs[ip+x].res,val,reqs[ip+x].asmtext,
+			reqs[ip+x].A,reqs[ip+x].B);
 		    rtn=false;
 		}
 		break;
 	    }
             if (k==9) {
-		printf("reterr %i, %li\n, %li, instr %s\n",x,ip+x,reqs[ip+x].res,reqs[ip+x].asmtext);
+		printf("reterr %i, %lx, %lx, instr %s\n",x,ip+x,reqs[ip+x].res,reqs[ip+x].asmtext);
 	        rtn=false;
 	    }
 no_srch:;
@@ -1440,6 +1442,7 @@ no_srch:;
     }
     xbreak=top->heptane_core__DOT__bck_mod__DOT__retM_xbreak;
     retire=top->heptane_core__DOT__bck_mod__DOT__retM_do_retire;
+    retII=top->heptane_core__DOT__bck_mod__DOT__cntrl_unit_mod__DOT__retire_addr_reg;
     if (top->heptane_core__DOT__iAvail) printf("iAvail 0x%x, \t0x%x, \t0x%x, \t0x%x\n",top->heptane_core__DOT__iAvail,top->heptane_core__DOT__instrEn,top->heptane_core__DOT__dec_mod__DOT__cls_ALU,top->heptane_core__DOT__dec_mod__DOT__cls_shift);
     if (top->heptane_core__DOT__instrEn) {
         k=0;
@@ -1485,6 +1488,20 @@ no_srch:;
     return rtn;
 }
 
+void prog_locate(req *reqs,char *mem) {
+    unsigned long addr=0;
+    unsigned long ins=0;
+    unsigned bits=mem[30]|(mem[31]<<8);
+    while (1) {
+	int n,sz;
+	reqs[ins]=addr;
+	for(n=0;n<15;n++) if (bits&(1<<n)) {sz=n; break;}
+	addr+=sz+1;
+	bits>>=sz+1;
+	if (!bits) {
+	}
+    }
+}
 void fp_get_ext(long double a, unsigned num[3]) {
     if (a!=0.0) {
         unsigned *p1=(unsigned*) &a;
