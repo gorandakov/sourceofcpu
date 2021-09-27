@@ -1488,7 +1488,7 @@ no_srch:;
     return rtn;
 }
 
-void prog_locate(req *reqs,char *mem) {
+void prog_locate(req *reqs,unsigned char *mem) {
     unsigned long addr=0;
     unsigned long ins=0;
     unsigned bits=mem[30]|(mem[31]<<8);
