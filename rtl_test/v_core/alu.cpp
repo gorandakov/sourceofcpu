@@ -1494,12 +1494,15 @@ void prog_locate(req *reqs,char *mem) {
     unsigned bits=mem[30]|(mem[31]<<8);
     while (1) {
 	int n,sz;
-	reqs[ins].offset=addr;
+	reqs[ins++].offset=addr;
 	for(n=0;n<15;n++) if (bits&(1<<n)) {sz=n; break;}
 	addr+=sz*2+2;
 	bits>>=sz+1;
 	if (!bits) {
+	    addr=(addr+31)&0xfffffffe0;
+            bits=mem[addr+30]|(mem[addr+31]<<8);
 	}
+	if (ins>=10000000) return;
     }
 }
 void fp_get_ext(long double a, unsigned num[3]) {
