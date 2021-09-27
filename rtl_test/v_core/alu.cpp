@@ -1494,9 +1494,9 @@ void prog_locate(req *reqs,char *mem) {
     unsigned bits=mem[30]|(mem[31]<<8);
     while (1) {
 	int n,sz;
-	reqs[ins]=addr;
+	reqs[ins].offset=addr;
 	for(n=0;n<15;n++) if (bits&(1<<n)) {sz=n; break;}
-	addr+=sz+1;
+	addr+=sz*2+2;
 	bits>>=sz+1;
 	if (!bits) {
 	}
@@ -1644,6 +1644,7 @@ int main(int argc, char *argv[]) {
     } else {
 	perror("open() ");
     }
+    prog_locate(reqs,(unsigned char *)mem);
     req_set(top,reqs,mem);
     top->eval();
     top->clk=1;

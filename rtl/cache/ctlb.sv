@@ -89,6 +89,8 @@ module ctlb_way(
   wire [OUTDATA_WIDTH-1:0] tlb_data;
 
   wire validN;
+  
+  reg [IP_WIDTH-1:0] addr_reg;
 
   reg write_wen_reg;
 
@@ -113,7 +115,7 @@ module ctlb_way(
   
   assign tlb_data=read_data_ram[`ctlb_data];
   assign read_data=read_hit ? read_data_ram[`ctlb_data] : {OUTDATA_WIDTH{1'BZ}};
-  assign write_data_new[`ctlb_ip]=addr;
+  assign write_data_new[`ctlb_ip]=addr_reg;
   assign write_data_new[`ctlb_valid]=~write_tr_reg;
   assign write_data_new[`ctlb_validN]=write_tr_reg;
   assign write_data_new[`ctlb_data]=write_data_reg;
@@ -142,7 +144,7 @@ module ctlb_way(
   .rst(rst),
   .read_addr(tr_jump ? addr[9:4] : addr[18:13]),
   .read_data(read_data_ram),
-  .write_addr(tr_jump ? addr[9:4] : addr[18:13]),
+  .write_addr(write_tr_reg ? addr_reg[9:4] :( write_wen_reg ? addr_reg[18:13] : (tr_jump ? addr[9:4] : addr[18:13]))),
   .write_data(write_data_ram),
   .write_wen(write_wen_ram|init)
   );
@@ -157,6 +159,7 @@ module ctlb_way(
 		  invalidate_reg<=1'b0;
 		  read_clkEn_reg<=1'b0;
 		  write_tr_reg<=1'b0;
+		  addr_reg<=0;
 		end
 	  else if (~fStall)
 	    begin 
@@ -166,6 +169,7 @@ module ctlb_way(
 		  invalidate_reg<=invalidate;
 		  read_clkEn_reg<=read_clkEn;
 		  write_tr_reg<=write_tr;
+		  addr_reg<=addr;
 		end
     end
   
