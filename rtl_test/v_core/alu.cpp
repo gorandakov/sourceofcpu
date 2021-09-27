@@ -1424,13 +1424,13 @@ bool get_check(Vheptane_core *top, req *reqs,unsigned long &ip) {
 			    break;
 		}
 		if (reqs[ip+x].res!=val || reqs[ip+x].res_p!=valp) {
-		    printf("reterr %i, %li\n",x,ip+x);
+		    printf("reterr %i, %li\n, %li:%li",x,ip+x,reqs[ip+x].res,val);
 		    rtn=false;
 		}
 		break;
 	    }
             if (k==9) {
-	        printf("reterr %i, %li, missing\n",x,ip+x);
+		printf("reterr %i, %li\n, %li:%li",x,ip+x,reqs[ip+x].res,val);
 	        rtn=false;
 	    }
 no_srch:;
