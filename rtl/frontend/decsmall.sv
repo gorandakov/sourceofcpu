@@ -351,11 +351,11 @@ module smallInstr_decoder(
   assign isPtrSec=opcode_main==8'd212;
   assign isJalR=opcode_main==8'd213;
 
-  assign isBasicFPUScalarA=opcode_main==8'hef && instr[13:12]==2'b0;
-  assign isBasicFPUScalarB=opcode_main==8'hef && instr[13:12]==2'b1;
-  assign isBasicFPUScalarC=opcode_main==8'hef && instr[15:12]==4'd2;
-  assign isBasicFPUScalarCmp=opcode_main==8'hef && instr[15:12]==4'd6;
-  assign isBasicFPUScalarCmp2=opcode_main==8'hef && instr[15:12]==4'd10;
+  assign isBasicFPUScalarA=opcode_main==8'hf0 && instr[13:12]==2'b0;
+  assign isBasicFPUScalarB=opcode_main==8'hf0 && instr[13:12]==2'b1;
+  assign isBasicFPUScalarC=opcode_main==8'hf0 && instr[15:12]==4'd2;
+  assign isBasicFPUScalarCmp=opcode_main==8'hf0 && instr[15:12]==4'd6;
+  assign isBasicFPUScalarCmp2=opcode_main==8'hf0 && instr[15:12]==4'd10;
   
   assign isBasicSysInstr=opcode_main==8'hff;
   

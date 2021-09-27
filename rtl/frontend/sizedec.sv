@@ -149,11 +149,11 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   assign isPtrSec=opcode_main==8'd212 && magic[0];
   assign isJalR=opcode_main==8'd213 && magic[0];
   
-  assign isBasicFPUScalarA=opcode_main==8'hef && instr[13:12]==2'b0 && magic[0];
-  assign isBasicFPUScalarB=opcode_main==8'hef && instr[13:12]==2'b1 && magic[0];
-  assign isBasicFPUScalarC=opcode_main==8'hef && instr[15:12]==4'd2 && magic[0];
-  assign isBasicFPUScalarCmp=opcode_main==8'hef && instr[15:12]==4'd6 && magic[0];
-  assign isBasicFPUScalarCmp2=opcode_main==8'hef && instr[15:12]==4'ha && magic[0];
+  assign isBasicFPUScalarA=opcode_main==8'hf0 && instr[13:12]==2'b0 && magic[0];
+  assign isBasicFPUScalarB=opcode_main==8'hf0 && instr[13:12]==2'b1 && magic[0];
+  assign isBasicFPUScalarC=opcode_main==8'hf0 && instr[15:12]==4'd2 && magic[0];
+  assign isBasicFPUScalarCmp=opcode_main==8'hf0 && instr[15:12]==4'd6 && magic[0];
+  assign isBasicFPUScalarCmp2=opcode_main==8'hf0 && instr[15:12]==4'ha && magic[0];
 
   assign isCallPrep=(opcode_main==8'd199) && magic[0];
   
