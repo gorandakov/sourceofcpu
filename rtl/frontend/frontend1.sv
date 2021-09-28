@@ -1040,7 +1040,7 @@ module frontend1(
   ctlb tlb_mod(
   .clk(clk),
   .rst(rst),
-  .read_clkEn(instrEn || bus_tlb_match_reg || ixcept),
+  .read_clkEn(instrEn || ixcept),
   .fStall(fstall),
   .addr({tlb_IP,13'b0}),
   .read_data(tlb_data),
