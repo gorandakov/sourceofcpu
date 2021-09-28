@@ -884,7 +884,7 @@ module frontend1(
   assign tlb_na=tlb_data_reg3[`ctlbData_na];
   assign tlb_sys=tlb_data_reg3[`ctlbData_sys];
   
-  assign tlb_match=tlb_hit_reg4;
+  assign tlb_match=tlb_hit_reg3;
 
   assign IP_phys={tlb_data[`ctlbData_phys],cc_read_IP[12:0]};
 
