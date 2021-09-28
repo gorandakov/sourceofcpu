@@ -110,17 +110,17 @@ module ctlb_way(
   assign read_lru=read_data_ram[`ctlb_lru];
  //verilator lint_off WIDTH 
   assign read_hit=(valid&~tr_jump||validN&tr_jump) && ((ip|{13{~tr_jump}})==(addr|{13{~tr_jump}}) ||
-    ((ip|{13{~tr_jump}})=={sproc,addr[43:0]|{13{~tr_jump}}} && tlb_data[`ctlbData_global])) && ~invalidate_reg;
+    ((ip|{13{~tr_jump}})=={sproc,addr[43:0]|{13{~tr_jump}}} && tlb_data[`ctlbData_global])) && ~invalidate;
  //verilator lint_on WIDTH
   
-  assign write_wen_ram=(write_wen_reg && read_lru_reg==2'b11) || read_clkEn&~fStall&~write_wen_reg;
+  assign write_wen_ram=(write_wen && read_lru==2'b11) || read_clkEn&~fStall&~write_wen;
   
   assign tlb_data=read_data_ram[`ctlb_data];
   assign read_data=read_hit ? read_data_ram[`ctlb_data] : {OUTDATA_WIDTH{1'BZ}};
-  assign write_data_new[`ctlb_ip]=addr_reg;
-  assign write_data_new[`ctlb_valid]=~write_tr_reg;
-  assign write_data_new[`ctlb_validN]=write_tr_reg;
-  assign write_data_new[`ctlb_data]=write_data_reg;
+  assign write_data_new[`ctlb_ip]=addr;
+  assign write_data_new[`ctlb_valid]=~write_tr;
+  assign write_data_new[`ctlb_validN]=write_tr;
+  assign write_data_new[`ctlb_data]=write_data;
   assign write_data_new[`ctlb_lru]=2'b11;
   
   assign write_data_init[`ctlb_ip]=0;
@@ -130,15 +130,15 @@ module ctlb_way(
   assign write_data_init[`ctlb_lru]=WAYNO[1:0];
 
   assign write_data_same[`ctlb_ip]=ip;
-  assign write_data_same[`ctlb_valid]=valid && ~(invalidate_reg&read_hit);
-  assign write_data_same[`ctlb_validN]=validN && ~(invalidate_reg&read_hit);
+  assign write_data_same[`ctlb_valid]=valid && ~(invalidate&read_hit);
+  assign write_data_same[`ctlb_validN]=validN && ~(invalidate&read_hit);
   assign write_data_same[`ctlb_data]=read_data_ram[`ctlb_data];
 
   assign write_data_same[`ctlb_lru]=newLRU;
   
   
-  assign write_data_ram=write_wen_reg & ~init ? write_data_new : {DATA_WIDTH{1'BZ}};
-  assign write_data_ram=~write_wen_reg & ~init ? write_data_same : {DATA_WIDTH{1'BZ}};
+  assign write_data_ram=write_wen & ~init ? write_data_new : {DATA_WIDTH{1'BZ}};
+  assign write_data_ram=~write_wen & ~init ? write_data_same : {DATA_WIDTH{1'BZ}};
   assign write_data_ram=init ? write_data_init : {DATA_WIDTH{1'BZ}};
   
   ctlb_ram ram_mod(
@@ -146,13 +146,14 @@ module ctlb_way(
   .rst(rst),
   .read_addr(tr_jump ? addr[9:4] : addr[18:13]),
   .read_data(read_data_ram),
-  .write_addr(write_tr_reg ? addr_reg[9:4] :( write_wen_reg ? addr_reg[18:13] : (tr_jump ? addr[9:4] : addr[18:13]))),
+  .write_addr(tr_jump ? addr[9:4] : addr[18:13]),
   .write_data(write_data_ram),
   .write_wen(write_wen_ram|init)
   );
 
   always @(posedge clk)
     begin
+	  if (write_wen_ram && write_wen_reg) $display("TL_B ",tr_jump ? addr[9:4] : addr[18:13]," ",write_data_ram," ",write_data_new);
 	  if (rst)
 	    begin
 		  write_wen_reg<=1'b0;
@@ -236,7 +237,7 @@ module ctlb(
   reg read_clkEn_reg;
 
   assign read_hit=(|read_hit_way) & ~init_pending;
-  assign hitLRU=read_hit ? 2'bz : 2'b11;
+  assign hitLRU=read_hit ? 2'bz : 2'b00;
   assign read_data=read_hit ? {OUTDATA_WIDTH{1'BZ}} : {OUTDATA_WIDTH{1'B0}};
 
   generate
