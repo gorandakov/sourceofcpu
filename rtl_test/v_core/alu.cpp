@@ -1425,8 +1425,8 @@ bool get_check(Vheptane_core *top, req *reqs,unsigned long &ip) {
 			    break;
 		}
 		if (reqs[ip+x].res!=val || reqs[ip+x].res_p!=valp) {
-		    printf("reterr %i, %li, %lx:%lx, instr %s, AB %lx:%lx\n",x,ip+x,reqs[ip+x].res,val,reqs[ip+x].asmtext,
-			reqs[ip+x].A,reqs[ip+x].B);
+		    printf("reterr %i, %li, %lx:%lx,off %lx, instr %s, AB %lx:%lx\n",x,ip+x,reqs[ip+x].res,val,reqs[ip+x].offset,
+			reqs[ip+x].asmtext,reqs[ip+x].A,reqs[ip+x].B);
 		    rtn=false;
 		}
 		break;
@@ -1484,6 +1484,10 @@ no_srch:;
 	}
 	if (!top->heptane_core__DOT__front_mod__DOT__instrEn_reg3) printf(" err ");
 	printf(" 0x%lx\n",top->heptane_core__DOT__front_mod__DOT__IP_phys_reg3);
+    }
+    if (top->heptane_core__DOT__front_mod__DOT__bus_tlb_match_reg) {
+	printf("TLBIN 0x%lx -> 0x%lx\n",top->heptane_core__DOT__front_mod__DOT__tlb_IP<<13,
+	    top->heptane_core__DOT__front_mod__DOT__bus_tlb_data_reg);
     }
     return rtn;
 }
