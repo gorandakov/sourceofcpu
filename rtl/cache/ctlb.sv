@@ -102,6 +102,8 @@ module ctlb_way(
   
   reg read_clkEn_reg;
   
+  reg [1:0] read_lru_reg;
+
   assign ip=read_data_ram[`ctlb_ip];
   assign valid=read_data_ram[`ctlb_valid];
   assign validN=read_data_ram[`ctlb_validN];
@@ -111,7 +113,7 @@ module ctlb_way(
     ((ip|{13{~tr_jump}})=={sproc,addr[43:0]|{13{~tr_jump}}} && tlb_data[`ctlbData_global])) && ~invalidate_reg;
  //verilator lint_on WIDTH
   
-  assign write_wen_ram=(write_wen_reg && read_lru==2'b11) || read_clkEn&~fStall;
+  assign write_wen_ram=(write_wen_reg && read_lru_reg==2'b11) || read_clkEn&~fStall;
   
   assign tlb_data=read_data_ram[`ctlb_data];
   assign read_data=read_hit ? read_data_ram[`ctlb_data] : {OUTDATA_WIDTH{1'BZ}};
@@ -160,6 +162,7 @@ module ctlb_way(
 		  read_clkEn_reg<=1'b0;
 		  write_tr_reg<=1'b0;
 		  addr_reg<=0;
+		  read_lru_reg<=0;
 		end
 	  else if (~fStall)
 	    begin 
@@ -170,6 +173,7 @@ module ctlb_way(
 		  read_clkEn_reg<=read_clkEn;
 		  write_tr_reg<=write_tr;
 		  addr_reg<=addr;
+		  read_lru_reg<=read_lru;
 		end
     end
   
