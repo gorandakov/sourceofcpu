@@ -284,7 +284,7 @@ module smallInstr_decoder(
   
   assign constantDef=(magic[1:0]==2'b11) ? instr[47:16] : 32'bz;
   assign constantDef=(magic[1:0]==2'b01) ? {{18{instr[31]}},instr[31:18]} : 32'bz;
-  assign constantDef=(~magic[0]) ? {26'b0,~instr[7] && instr[15:12]==4'b0,instr[7],instr[15:12]} : 32'bz;
+  assign constantDef=(~magic[0]) ? {26'b0,~instr[6] && instr[11:8]==4'b0,instr[6],instr[11:8]} : 32'bz;
  
   assign reor_en_out=isFPUreor&&~reor_error;
   assign reor_val_out=instr[31:8];
