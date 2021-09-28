@@ -249,7 +249,7 @@ module ctlb(
         rst,
         read_clkEn,
         fStall,
-        init_pending ? {59'b0,init_count} : addr,
+        init_pending ? {46'b0,init_count,13'b0} : addr,
 	nat_jump,
 	sproc[20:0],
         read_data,
