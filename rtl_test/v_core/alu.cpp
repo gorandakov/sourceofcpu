@@ -441,7 +441,7 @@ class req {
     unsigned has_mem;
     unsigned has_alu;
     char asmtext[64];
-    void gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,bool has_mem_,char *mem);
+    bool gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,bool has_mem_,char *mem);
     void gen_init(int rT,int dom,unsigned long int val,int val_p);
     void gen_mem(req* prev1,unsigned code,char * mem,unsigned long addr);
     void flgPTR(__int128 r);
@@ -469,10 +469,11 @@ void req::gen_init(int rT_,int dom,unsigned long int val,int val_p) {
     else snprintf(asmtext,sizeof asmtext,"movabsp $%li,%%%s\n",B,reg65[rT]);//WARNING: movabsp non impl and not in cpu spec
 }
 
-void req::gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,bool has_mem_,char *mem) {
+bool req::gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,bool has_mem_,char *mem) {
     alt=alt_;
     mul=mul_;
     excpt=-1;
+    bool rtn=has_mem_;
     if (!alt && !mul && !can_shift) op=OPS_REGL[rand()%(sizeof OPS_REGL/2)];
     if (!alt && !mul && can_shift)  op=OPS_S_REGL[rand()%(sizeof OPS_S_REGL/2)];
     if (!alt && mul) op=OPS_M_REGL[rand()%(sizeof OPS_M_REGL/2)]|0x800;
@@ -764,6 +765,10 @@ addie:
             res0=((__int128) A)<<(B&0x3f);
             res1=res=res0;
             flg64(res0);
+	    if (has_mem_) {
+		rtn=false;
+		*(this-1)=*this;
+	    }
             break;
 
             case 21:
@@ -773,6 +778,10 @@ addie:
             res0=((__int128) A0x)<<(B0x&0x3f);
             res2=res=res0&0xffffffffull;
             flg32(res0);
+	    if (has_mem_) {
+		rtn=false;
+		*(this-1)=*this;
+	    }
             break;
 
             case 24:
@@ -782,6 +791,10 @@ addie:
             res0=(B&0x3f) ?((__int128)  A) >>((B&0x3f)-1) :((__int128)  A)<<1;
             res1=res=(res0>>1);
             flg64(((res0>>1)&0xffffffffffffffffull)|((res0&0x1) ? one<<1:0));
+	    if (has_mem_) {
+		rtn=false;
+		*(this-1)=*this;
+	    }
             break;
 
             case 25:
@@ -791,6 +804,10 @@ addie:
             res0=(B0x&0x3f) ?((__int128)A0x) >>((B0x&0x3f)-1) :((__int128)  A0x)<<1;
             res=(res0>>1)&0xffffffffull;
             flg32(((res0>>1)&0xffffffffu)|((res0&0x1)<<32));
+	    if (has_mem_) {
+		rtn=false;
+		*(this-1)=*this;
+	    }
             break;
 
             case 28:
@@ -800,6 +817,10 @@ addie:
             res0=(B&0x3f) ?((__int128) A1) >>((B&0x3f)-1) :((__int128)  A1)<<1;
             res1=res=(res0>>1);
             flg64(((res0>>1)&0xffffffffffffffffull)|((res0&0x1) ? one<<1 : 0));
+	    if (has_mem_) {
+		rtn=false;
+		*(this-1)=*this;
+	    }
             break;
 
             case 29:
@@ -809,6 +830,10 @@ addie:
             res0=(B0x&0x3f) ? ((__int128) A0) >>((B0x&0x3f)-1) :((__int128) A0)<<1;
             res2=res=(res0>>1)&0xffffffffull;
             flg32(((res0>>1)&0xffffffffu)|((res0&0x1)<<32));
+	    if (has_mem_) {
+		rtn=false;
+		*(this-1)=*this;
+	    }
             break;
  
             case 32:
