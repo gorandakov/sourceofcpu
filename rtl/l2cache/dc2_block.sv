@@ -409,7 +409,7 @@ module dcache2_way(
   wire write1_hitOL;
   wire write1_hitEH;
   wire write1_hitOH;
-  reg read_en_reg,read_en_reg2,read_en_reg3;
+  reg read_en_reg,read_en_reg2,read_en_reg3,read_en_reg4,read_en_reg5;
   reg insert_reg,insert_reg2,insert_reg3,insert_reg4,insert_reg5;
   reg read_odd_reg,read_odd_reg2,read_odd_reg3,read_odd_reg4,read_odd_reg5;
   reg init,init_reg,init_reg2;
@@ -686,7 +686,7 @@ module dcache2_way(
   .read_data(read_LRUE),
   .write_addr(init ? initCount : write_addrE0_reg5[7:0]),
   .write_data(new_LRU),
-  .write_wen(insert_reg5 & ~read_odd_reg5 || init)
+  .write_wen(insert_reg5 & ~read_odd_reg5 || init || read_en_reg5 & ~read_odd_reg5)
   );
  
   dcache2_LRU_ram LRUo_mod(
@@ -697,7 +697,7 @@ module dcache2_way(
   .read_data(read_LRUO),
   .write_addr(init ? initCount : write_addrO0_reg5[7:0]),
   .write_data(new_LRU),
-  .write_wen(insert_reg5 & read_odd_reg5 || init)
+  .write_wen(insert_reg5 & read_odd_reg5 || init || read_en_reg5 & read_odd_reg5)
   );
 
   generate
@@ -731,7 +731,7 @@ module dcache2_way(
   .newLRU(new_LRU),
   .hitLRU(hit_LRU),
   .init(init),
-  .en(1'b1)
+  .en(~insert_reg5)
   );
 
 
@@ -825,7 +825,9 @@ module dcache2_way(
           read_odd_reg3<=1'b0;
           read_en_reg3<=1'b0;
           read_odd_reg4<=1'b0;
+          read_en_reg4<=1'b0;
           read_odd_reg5<=1'b0;
+          read_en_reg5<=1'b0;
           insert_reg<=1'b0;
           insert_reg2<=1'b0;
           insert_reg3<=1'b0;
@@ -890,7 +892,9 @@ module dcache2_way(
           read_odd_reg3<=read_odd_reg2;
           read_en_reg3<=read_en_reg2;
           read_odd_reg4<=read_odd_reg2;
+          read_en_reg4<=read_en_reg3;
           read_odd_reg5<=read_odd_reg2;
+          read_en_reg5<=read_en_reg4;
           insert_reg<=insert;
           insert_reg2<=insert_reg;
           insert_reg3<=insert_reg2;
