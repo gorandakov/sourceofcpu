@@ -283,11 +283,11 @@ module rs_wakeUp_logic(
   assign outFuuFwd1=outRsSelect1 ? fuuFwd : {4{1'bz}};
   assign outFuuFwd2=outRsSelect2 ? fuuFwd : {4{1'bz}};
 
-  assign register_d=(newRsSelect0 & ~rst & ~stall) ? newReg0 : {REG_WIDTH{1'bz}};
-  assign register_d=(newRsSelect1 & ~rst & ~stall) ? newReg1 : {REG_WIDTH{1'bz}};
-  assign register_d=(newRsSelect2 & ~rst & ~stall) ? newReg2 : {REG_WIDTH{1'bz}};
-  assign register_d=rst ? {REG_WIDTH{1'b1}} : {REG_WIDTH{1'bz}};
-  assign register_d=(~newRsSelect0 & ~newRsSelect1 & ~newRsSelect2 & ~rst || stall &~rst) ? register : {REG_WIDTH{1'bz}};
+  assign register_d=(newRsSelect0 & ~rst & ~stall & ~isData) ? newReg0 : {REG_WIDTH{1'bz}};
+  assign register_d=(newRsSelect1 & ~rst & ~stall & ~isData) ? newReg1 : {REG_WIDTH{1'bz}};
+  assign register_d=(newRsSelect2 & ~rst & ~stall & ~isData) ? newReg2 : {REG_WIDTH{1'bz}};
+  assign register_d=rst | isData ? {REG_WIDTH{1'b1}} : {REG_WIDTH{1'bz}};
+  assign register_d=(~newRsSelect0 & ~newRsSelect1 & ~newRsSelect2 & ~rst & ~isData || stall &~rst&~isData) ? register : {REG_WIDTH{1'bz}};
 
   assign funit_d=(newRsSelect0 & ~rst & ~stall) ? newFunit0 : {FN_WIDTH{1'bz}};
   assign funit_d=(newRsSelect1 & ~rst & ~stall) ? newFunit1 : {FN_WIDTH{1'bz}};
@@ -1145,10 +1145,10 @@ module rs_wakeUpS_logic(
   assign outFuuFwd1=outRsSelect1 ? fuuFwd : {4{1'bz}};
   assign outFuuFwd2=outRsSelect2 ? fuuFwd : {4{1'bz}};
 
-  assign register_d=(newRsSelect1 & ~rst & ~stall) ? newReg1 : {REG_WIDTH{1'bz}};
-  assign register_d=(newRsSelect2 & ~rst & ~stall) ? newReg2 : {REG_WIDTH{1'bz}};
-  assign register_d=rst ? {REG_WIDTH{1'b0}} : {REG_WIDTH{1'bz}};
-  assign register_d=(~newRsSelect1 & ~newRsSelect2 & ~rst || stall &~rst) ? register : {REG_WIDTH{1'bz}};
+  assign register_d=(newRsSelect1 & ~rst & ~stall & ~isData) ? newReg1 : {REG_WIDTH{1'bz}};
+  assign register_d=(newRsSelect2 & ~rst & ~stall & ~isData) ? newReg2 : {REG_WIDTH{1'bz}};
+  assign register_d=rst|isData ? {REG_WIDTH{1'b0}} : {REG_WIDTH{1'bz}};
+  assign register_d=(~newRsSelect1 & ~newRsSelect2 & ~rst & ~isData || stall &~rst&~isData) ? register : {REG_WIDTH{1'bz}};
 
   assign funit_d=(newRsSelect1 & ~rst & ~stall) ? newFunit1 : {FN_WIDTH{1'bz}};
   assign funit_d=(newRsSelect2 & ~rst & ~stall) ? newFunit2 : {FN_WIDTH{1'bz}};
