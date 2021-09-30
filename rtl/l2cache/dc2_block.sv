@@ -453,6 +453,145 @@ module dcache2_xbit_ram_box(
   end
 endmodule
 
+module dcache2_bitx_bank(
+  clk,
+  rst,
+  read_en,
+  read_odd,
+  read_data,read_data_in,
+  read_datax,read_datax_in,
+  write_addrE0, write_hitE0,
+  write_addrO0, write_hitO0,
+  write_begin0,write_data0,
+  write_addrE1, write_hitE1,
+  write_addrO1, write_hitO1,
+  write_begin1,write_data1,
+  write_data,
+  ins_hit
+  );
+  localparam ADDR_WIDTH=8;
+  localparam DATA_WIDTH=32;
+  parameter [4:0] INDEX=5'd0;
+  parameter [0:0] TOP=1'b0;
+
+  input clk;
+  input rst;
+  input read_en; //+1 cycle
+  input read_odd; //+1 cycle
+  output [DATA_WIDTH-1:0] read_data;
+  input [DATA_WIDTH-1:0] read_data_in;
+  output [DATA_WIDTH-1:0] read_datax;
+  input [DATA_WIDTH-1:0] read_datax_in;
+
+  input [ADDR_WIDTH-1:0] write_addrE0;
+  input write_hitE0; //+1 cycle
+  input [ADDR_WIDTH-1:0] write_addrO0;
+  input write_hitO0; //+1 cycle
+  input [4:0] write_begin0;
+  input write_data0;
+  input [ADDR_WIDTH-1:0] write_addrE1;
+  input write_hitE1; //+1 cycle
+  input [ADDR_WIDTH-1:0] write_addrO1;
+  input write_hitO1; //+1 cycle
+  input [4:0] write_begin1;
+  input write_data1;
+  input [DATA_WIDTH-1:0] write_data;
+  input ins_hit;
+  
+ // wire [ADDR_WIDTH-1:0] read_addr[1:0];
+  wire [DATA_WIDTH-1:0] read_data_ram[1:0];
+  wire [DATA_WIDTH-1:0] read_datax_ram[1:0];
+  wire enE,enO;
+  wire onE,onO;
+  wire [DATA_WIDTH-1:0] read_dataP;
+  wire [DATA_WIDTH-1:0] read_dataxP;
+
+  wire [31:0] write_ben0;
+  wire [31:0] write_ben1;
+  wire [31:0] write_ben_ins;
+  
+  reg read_en_reg;
+  reg read_odd_reg;
+  reg ins_hit_reg;
+
+  assign read_dataP=(read_en_reg|ins_hit_reg && ~read_odd_reg) ? read_data_ram[0] : {DATA_WIDTH{1'bz}};
+  assign read_dataP=(read_en_reg|ins_hit_reg && read_odd_reg) ? read_data_ram[1] : {DATA_WIDTH{1'bz}};
+  assign read_dataP=(~(read_en_reg|ins_hit_reg)) ? {DATA_WIDTH{1'B0}} : {DATA_WIDTH{1'BZ}};  
+
+  assign read_dataxP=(read_en_reg|ins_hit_reg && ~read_odd_reg) ? read_datax_ram[0] : {DATA_WIDTH{1'bz}};
+  assign read_dataxP=(read_en_reg|ins_hit_reg && read_odd_reg) ? read_datax_ram[1] : {DATA_WIDTH{1'bz}};
+  assign read_dataxP=(~(read_en_reg|ins_hit_reg)) ? {DATA_WIDTH{1'B0}} : {DATA_WIDTH{1'BZ}};  
+
+  generate
+    if (~TOP) begin
+        assign read_data=~(read_dataP|read_data_in);
+        assign read_datax=~(read_dataxP|read_datax_in);
+    end else begin
+	assign read_data=~(~read_dataP&read_data_in);
+	assign read_datax=~(~read_dataxP&read_datax_in);
+    end
+  endgenerate
+ 
+  assign write_ben0=32'd1<<write_begin0;
+  assign write_ben1=32'd1<<write_begin1;
+  assign write_ben_ins=read_odd ? 32'hffff0000 : 32'h0000ffff;  
+  
+  dcache2_xbit_ram_box ramE_mod(
+  .clk(clk),
+  .rst(rst),
+  .read_nClkEn(~read_en),
+  .read0_addr(write_addrE0),//read/write addr
+  .read0_data(read_data_ram[0]),
+  .read0_datax(read_datax_ram[0]),
+  .write0_data(ins_hit ? {write_data,write_data} : {32{write_data0}}),
+  .write0_wen((write_hitE0)|(ins_hit&~read_odd)),
+  .write0_ben(ins_hit ? write_ben_ins : write_ben0),
+  .read1_addr(write_addrE1),//read/write addr
+  .write1_data(ins_hit ? {write_data,write_data} : {32{write_data1}}),
+  .write1_wen((write_hitE1)|(ins_hit&~read_odd)),
+  .write1_ben(ins_hit ? write_ben_ins : write_ben1)
+  );
+
+  dcache2_xbit_ram_box ramE_mod(
+  .clk(clk),
+  .rst(rst),
+  .read_nClkEn(~read_en),
+  .read0_addr(write_addrO0),//read/write addr
+  .read0_data(read_data_ram[1]),
+  .read0_datax(read_datax_ram[1]),
+  .write0_data(ins_hit ? {write_data,write_data} : {32{write_data0}}),
+  .write0_wen((write_hitO0)|(ins_hit&read_odd)),
+  .write0_ben(ins_hit ? write_ben_ins : write_ben0),
+  .read1_addr(write_addrO1),//read/write addr
+  .write1_data(ins_hit ? {write_data,write_data} : {32{write_data1}}),
+  .write1_wen((write_hitO1)|(ins_hit&read_odd)),
+  .write1_ben(ins_hit ? write_ben_ins : write_ben1)
+  );
+
+  
+  always @(posedge clk)
+    begin
+      if (rst)
+        begin
+            read_odd_reg<=1'b0;
+            read_en_reg<=1'b0;
+            ins_hit_reg<=1'b0;
+        //    read_data_ram_reg[0]<={DATA_WIDTH{1'B0}};
+        //    read_data_ram_reg[1]<={DATA_WIDTH{1'B0}};
+        end
+      else
+        begin
+            read_odd_reg<=read_odd;
+            read_en_reg<=read_en;
+            ins_hit_reg<=ins_hit;
+        //    read_data_ram_reg[0]<=read_data_ram[0];
+        //    read_data_ram_reg[1]<=read_data_ram[1];
+        end
+    end
+  
+endmodule
+
+
 module dcache2_way(
   clk,
   rst,
