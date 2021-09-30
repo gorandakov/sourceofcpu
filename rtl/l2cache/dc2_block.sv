@@ -299,6 +299,160 @@ module dcache2_bank(
   
 endmodule
 
+//dcache1_ram read during write behaviour: write first
+module dcache2_xbit_ram(
+  clk,
+  rst,
+  read_nClkEn,
+  read0_addr,
+  read0_data,
+  read1_addr,
+  read1_data,
+  write0_addr,
+  write0_data,
+  write0_wen,
+  write1_addr,
+  write1_data,
+  write1_wen,
+  );
+  localparam ADDR_WIDTH=8-1;
+  localparam DATA_WIDTH=`dcache2_data_width;
+  localparam ADDR_COUNT=256/2;
+  
+  input clk;
+  input rst;
+  input read_nClkEn;
+  input [ADDR_WIDTH-1:0]  read0_addr;
+  output [DATA_WIDTH-1:0] read0_data;
+  input [ADDR_WIDTH-1:0]  read1_addr;
+  output [DATA_WIDTH-1:0] read1_data;
+  input [ADDR_WIDTH-1:0] write1_addr;
+  input [DATA_WIDTH-1:0] write1_data;
+  input                  write1_wen;
+  input [ADDR_WIDTH-1:0] write0_addr;
+  input [DATA_WIDTH-1:0] write0_data;
+  input                  write0_wen;
+
+  reg [DATA_WIDTH-1:0] ram [ADDR_COUNT-1:0];
+  reg [ADDR_WIDTH-1:0] read0_addr_reg;
+  reg [ADDR_WIDTH-1:0] read1_addr_reg;
+  
+  assign read0_data=ram[read0_addr_reg];
+  assign read1_data=ram[read1_addr_reg];
+
+  always @(posedge clk)
+    begin
+      if (rst) read0_addr_reg<={ADDR_WIDTH{1'b0}};
+      else if (!read_nClkEn) read0_addr_reg<=read0_addr; 
+      if (rst) read1_addr_reg<={ADDR_WIDTH{1'b0}};
+      else if (!read_nClkEn) read1_addr_reg<=read1_addr; 
+      if (write0_wen) ram[write0_addr]<=write0_data;
+      if (write1_wen) ram[write1_addr]<=write1_data;
+    end
+
+endmodule
+
+module dcache2_xbit_ram_box(
+  clk,
+  rst,
+  read_nClkEn,
+  read0_addr,
+  read0_data,
+  read0_datax,
+  write0_data,
+  write0_wen,
+  write0_ben,
+  read1_addr,
+  write1_data,
+  write1_wen,
+  write1_ben
+  );
+  localparam ADDR_WIDTH=8-1;
+  localparam DATA_WIDTH=`dcache2_data_width;
+  
+  input clk;
+  input rst;
+  input read_nClkEn;
+  input [ADDR_WIDTH-1:0] read0_addr;
+  output [31:0] read0_data;
+  output [31:0] read0_datax;
+  input [31:0] write0_data;
+  input write0_wen;
+  input [31:0] write0_ben;
+  input [ADDR_WIDTH-1:0] read1_addr;
+  input [31:0] write1_data;
+  input write1_wen;
+  input [31:0] write1_ben;
+
+  reg [ADDR_WIDTH-1:0]  read0_addr_reg;
+  reg [31:0]            write0_data_reg;
+  reg                   write0_wen_ram;
+  reg [3:0]             write0_ben_reg;
+  wire [DATA_WIDTH-1:0] read0_data_ram;
+  wire [DATA_WIDTH-1:0] write0_data_ram;
+  reg [ADDR_WIDTH-1:0]  read1_addr_reg;
+  reg [31:0]            write1_data_reg;
+  reg                   write1_wen_ram;
+  reg [3:0]             write1_ben_reg;
+  wire [DATA_WIDTH-1:0] read1_data_ram;
+  wire [DATA_WIDTH-1:0] write1_data_ram;
+
+  function [31:0] bcombine;
+      input [31:0] bit_en;
+      input [31:0] old_data;
+      input [31:0] new_data;
+      integer t;
+      for(t=0;t<32;t=t+1)  bcombine[t]=bit_en[t] ? new_data[t] : old_data[t];
+  endfunction
+  function [31:0] strip_ECC;
+      input [39:1] dataIn;
+  
+      strip_ECC={dataIn[38:33],dataIn[31:17],dataIn[15:9],dataIn[7:5],dataIn[3]};
+
+  endfunction
+
+  dcache2_xbit_ram ram_mod(
+  clk,
+  rst,
+  read_nClkEn,
+  read0_addr,
+  read0_data_ram,
+  read1_addr,
+  read1_data_ram,
+  read0_addr_reg,
+  write0_data_ram,
+  write0_wen_ram,
+  read1_addr_reg,
+  write1_data_ram,
+  write1_wen_ram
+  );
+  EccGet32 eccA_mod(bcombine(write0_ben_reg,strip_ECC(read0_data_ram),write0_data_reg),write0_data_ram);
+  EccGet32 eccB_mod(bcombine(write1_ben_reg,strip_ECC(read1_data_ram),write1_data_reg),write1_data_ram);
+
+  assign read0_data=write0_wen_ram ? strip_ECC(write0_data_ram) : strip_ECC(read0_data_ram);
+  assign read0_datax=strip_ECC(read0_data_ram);
+
+  always @(posedge clk) begin
+      write0_data_reg<=write0_data;
+      write1_data_reg<=write1_data;
+      if (rst) begin
+          read0_addr_reg<=7'b0;
+          write0_wen_ram<=1'b0;
+          write0_ben_reg<=32'b0;
+          read1_addr_reg<=7'b0;
+          write1_wen_ram<=1'b0;
+          write1_ben_reg<=32'b0;
+      end else begin
+          read0_addr_reg<=read0_addr;
+          write0_wen_ram<=write0_wen;
+          write0_ben_reg<=write0_ben;
+          read1_addr_reg<=read1_addr;
+          write1_wen_ram<=write1_wen;
+          write1_ben_reg<=write1_ben;
+      end
+  end
+endmodule
+
 module dcache2_way(
   clk,
   rst,
