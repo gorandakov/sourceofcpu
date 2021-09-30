@@ -596,6 +596,7 @@ module heptane_core(
   wire insBus_dirty;
   wire insBus_exclusive;
   wire [511:0] insBus_data;
+  wire [7:0] insBus_dataPTR;
 
   wire rinsBus_A,rinsBus_B;
 
@@ -673,18 +674,36 @@ module heptane_core(
   wire [1023:0] dc2_rdataExpA0;
   wire [1023:0] dc2_rdataExpB0;
   wire [1023:0] dc2_rdataExpB1;
+  wire [15:0] dc2_rdataPTRA0;
+  wire [15:0] dc2_rdataPTRB0;
+  wire [15:0] dc2_rdataPTRB1;
+  wire [15:0] dc2_rdataExpPTRA0;
+  wire [15:0] dc2_rdataExpPTRB0;
+  wire [15:0] dc2_rdataExpPTRB1;
   reg [1023:512] dc2_rdataA0_reg;
   reg [1023:512] dc2_rdataB0_reg;
   reg [1023:512] dc2_rdataB1_reg;
   reg [1023:512] dc2_rdataExpA0_reg;
   reg [1023:512] dc2_rdataExpB0_reg;
   reg [1023:512] dc2_rdataExpB1_reg;
+  reg [15:8] dc2_rdataPTRA0_reg;
+  reg [15:8] dc2_rdataPTRB0_reg;
+  reg [15:8] dc2_rdataPTRB1_reg;
+  reg [15:8] dc2_rdataExpPTRA0_reg;
+  reg [15:8] dc2_rdataExpPTRB0_reg;
+  reg [15:8] dc2_rdataExpPTRB1_reg;
   wire [511:0] dc2_rdataA;
   wire [511:0] dc2_rdataB;
   wire [511:0] dc2_rdata;
   wire [511:0] dc2_rdataExpA;
   wire [511:0] dc2_rdataExpB;
   wire [511:0] dc2_rdataExp;
+  wire [7:0] dc2_rdataPTRA;
+  wire [7:0] dc2_rdataPTRB;
+  wire [7:0] dc2_rdataPTR;
+  wire [7:0] dc2_rdataExpPTRA;
+  wire [7:0] dc2_rdataExpPTRB;
+  wire [7:0] dc2_rdataExpPTR;
   wire dc2_hitE0,dc2_hitO0;
   wire [35:0] dc2_addrE0;
   wire [35:0] dc2_addrO0;
@@ -858,6 +877,7 @@ module heptane_core(
   assign rbusDOut_src_req=10'h3ff;
   assign rbusDOut_dst_req=rbusDIn_data_reg[46:37];
   assign rbusDOut_data=dc2_rdataExp_reg;
+  assign rbusDOut_dataPTR=dc2_rdataExpPTR_reg;
   assign rbusDOut_want=dc2_rhitExp & ~L1_expAddr_en_reg4 || dc2_rhitExp_reg & ~L1_expAddr_en_reg5;
   assign rbusDOut_replay=dc2_rhitExp & ~L1_expAddr_en_reg4;
 
@@ -867,6 +887,7 @@ module heptane_core(
   assign insBus_dirty=dc2_rDir_reg;
   assign insBus_exclusive=dc2_rExcl_reg;
   assign insBus_data=dc2_rdata_reg;
+  assign insBus_dataPTR=dc2_rdataPTR_reg;
 
   dc2_cntrl dc2_cntrl_mod(
   .clk(clk),
