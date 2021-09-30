@@ -6,8 +6,8 @@ module heptane_core(
   rst,
   rbusIn_signals,rbusIn_src_req,rbusIn_dst_req,rbusIn_address,
   rbusOut_signals,rbusOut_src_req,rbusOut_dst_req,rbusOut_address,rbusOut_can,rbusOut_want,rbusOut_sz,rbusOut_bank0,rbusOut_low,
-  rbusDIn_signals,rbusDIn_src_req,rbusDIn_dst_req,rbusDIn_data,
-  rbusDOut_signals,rbusDOut_src_req,rbusDOut_dst_req,rbusDOut_data,rbusDOut_can,rbusDOut_want,rbusDOut_replay
+  rbusDIn_signals,rbusDIn_src_req,rbusDIn_dst_req,rbusDIn_data,rbusDIn_dataPTR,
+  rbusDOut_signals,rbusDOut_src_req,rbusDOut_dst_req,rbusDOut_data,rbusDOut_dataPTR,rbusDOut_can,rbusDOut_want,rbusDOut_replay
 );
   parameter [4:0] BUS_ID=0;
   localparam PHYS_WIDTH=44;
@@ -43,10 +43,12 @@ module heptane_core(
   input [9:0] rbusDIn_src_req;
   input [9:0] rbusDIn_dst_req;
   input [511:0] rbusDIn_data;
+  input [7:0] rbusDIn_dataPTR;
   output [`rbusD_width-1:0] rbusDOut_signals;
   output [9:0] rbusDOut_src_req;
   output [9:0] rbusDOut_dst_req;
   output [511:0] rbusDOut_data;
+  output [7:0] rbusDOut_dataPTR;
   input rbusDOut_can;
   output rbusDOut_want;
   output rbusDOut_replay;
