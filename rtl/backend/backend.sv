@@ -337,6 +337,7 @@ module backend(
   insBus_dirty,
   insBus_exclusive,
   insBus_data,
+  insBus_dataPTR,
   reqBus_en,
   reqBus_addr,
   reqBus_req,
@@ -877,6 +878,7 @@ module backend(
   input insBus_dirty;
   input insBus_exclusive;
   input [BUS_WIDTH-1:0] insBus_data;
+  input [7:0] insBus_dataPTR;
 
   output reg reqBus_en;
   output reg [43:7] reqBus_addr;
@@ -2097,6 +2099,8 @@ module backend(
   reg [BUS_WIDTH-1:0] insBus_data_reg;
   reg [BUS_WIDTH-1:0] insBus_data_reg2;
  // wire [8*BANK_WIDTH-1:0] insBus_data_ECC;
+  reg [7:0] insBus_dataPTR_reg;
+  reg [7:0] insBus_dataPTR_reg2;
 
   wire [5:0] LSQ_upper;
   wire [2:0] LSQ_lsqA;
@@ -5253,6 +5257,7 @@ dcache1 L1D_mod(
   //.wb_en,
   //.busWb_data
   .busIns_data(insBus_data_reg2),
+  .busIns_dataPTR(insBus_dataPTR_reg2),
   .insbus_A(insert_isData_reg2),
   .insbus_B(insert_isData_reg3)
   );
