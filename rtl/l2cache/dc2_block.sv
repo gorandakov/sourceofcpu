@@ -470,7 +470,7 @@ module dcache2_bitx_bank(
   ins_hit
   );
   localparam ADDR_WIDTH=8;
-  localparam DATA_WIDTH=32;
+  localparam DATA_WIDTH=16;
   parameter [4:0] INDEX=5'd0;
   parameter [0:0] TOP=1'b0;
 
@@ -499,27 +499,33 @@ module dcache2_bitx_bank(
   input ins_hit;
   
  // wire [ADDR_WIDTH-1:0] read_addr[1:0];
-  wire [DATA_WIDTH-1:0] read_data_ram[1:0];
-  wire [DATA_WIDTH-1:0] read_datax_ram[1:0];
+  wire [31:0] read_data_ram[1:0];
+  wire [31:0] read_datax_ram[1:0];
   wire enE,enO;
   wire onE,onO;
-  wire [DATA_WIDTH-1:0] read_dataP;
-  wire [DATA_WIDTH-1:0] read_dataxP;
+  wire [31:0] read_dataP;
+  wire [31:0] read_dataxP;
 
   wire [31:0] write_ben0;
   wire [31:0] write_ben1;
   wire [31:0] write_ben_ins;
   
+  reg [ADDR_WIDTH-1:0] write_addrE0_reg;
+  
   reg read_en_reg;
   reg read_odd_reg;
   reg ins_hit_reg;
 
-  assign read_dataP=(read_en_reg|ins_hit_reg && ~read_odd_reg) ? read_data_ram[0] : {DATA_WIDTH{1'bz}};
-  assign read_dataP=(read_en_reg|ins_hit_reg && read_odd_reg) ? read_data_ram[1] : {DATA_WIDTH{1'bz}};
+  assign read_dataP=(read_en_reg|ins_hit_reg && ~write_addrE0_reg[7]  && ~read_odd_reg) ? read_data_ram[0][15:0] : {DATA_WIDTH{1'bz}};
+  assign read_dataP=(read_en_reg|ins_hit_reg && ~write_addrE0_reg[7] && read_odd_reg) ? read_data_ram[1][15:0] : {DATA_WIDTH{1'bz}};
+  assign read_dataP=(read_en_reg|ins_hit_reg && write_addrE0_reg[7]  && ~read_odd_reg) ? read_data_ram[0][31:16] : {DATA_WIDTH{1'bz}};
+  assign read_dataP=(read_en_reg|ins_hit_reg && write_addrE0_reg[7] && read_odd_reg) ? read_data_ram[1][31:16] : {DATA_WIDTH{1'bz}};
   assign read_dataP=(~(read_en_reg|ins_hit_reg)) ? {DATA_WIDTH{1'B0}} : {DATA_WIDTH{1'BZ}};  
 
-  assign read_dataxP=(read_en_reg|ins_hit_reg && ~read_odd_reg) ? read_datax_ram[0] : {DATA_WIDTH{1'bz}};
-  assign read_dataxP=(read_en_reg|ins_hit_reg && read_odd_reg) ? read_datax_ram[1] : {DATA_WIDTH{1'bz}};
+  assign read_dataxP=(read_en_reg|ins_hit_reg && ~write_addrE0_reg[7] && ~read_odd_reg) ? read_datax_ram[0][15:0] : {DATA_WIDTH{1'bz}};
+  assign read_dataxP=(read_en_reg|ins_hit_reg && ~write_addrE0_reg[7] && read_odd_reg) ? read_datax_ram[1][15:0] : {DATA_WIDTH{1'bz}};
+  assign read_dataxP=(read_en_reg|ins_hit_reg && write_addrE0_reg[7] && ~read_odd_reg) ? read_datax_ram[0][31:16] : {DATA_WIDTH{1'bz}};
+  assign read_dataxP=(read_en_reg|ins_hit_reg && write_addrE0_reg[7] && read_odd_reg) ? read_datax_ram[1][31:16] : {DATA_WIDTH{1'bz}};
   assign read_dataxP=(~(read_en_reg|ins_hit_reg)) ? {DATA_WIDTH{1'B0}} : {DATA_WIDTH{1'BZ}};  
 
   generate
@@ -534,19 +540,19 @@ module dcache2_bitx_bank(
  
   assign write_ben0=32'd1<<write_begin0;
   assign write_ben1=32'd1<<write_begin1;
-  assign write_ben_ins=read_odd ? 32'hffff0000 : 32'h0000ffff;  
+  assign write_ben_ins=write_addrE0_reg[7] ? 32'hffff0000 : 32'h0000ffff;  
   
   dcache2_xbit_ram_box ramE_mod(
   .clk(clk),
   .rst(rst),
   .read_nClkEn(~read_en),
-  .read0_addr(write_addrE0),//read/write addr
+  .read0_addr(write_addrE0[6:0]),//read/write addr
   .read0_data(read_data_ram[0]),
   .read0_datax(read_datax_ram[0]),
   .write0_data(ins_hit ? {write_data,write_data} : {32{write_data0}}),
   .write0_wen((write_hitE0)|(ins_hit&~read_odd)),
   .write0_ben(ins_hit ? write_ben_ins : write_ben0),
-  .read1_addr(write_addrE1),//read/write addr
+  .read1_addr(write_addrE1[6:0]),//read/write addr
   .write1_data(ins_hit ? {write_data,write_data} : {32{write_data1}}),
   .write1_wen((write_hitE1)|(ins_hit&~read_odd)),
   .write1_ben(ins_hit ? write_ben_ins : write_ben1)
@@ -556,13 +562,13 @@ module dcache2_bitx_bank(
   .clk(clk),
   .rst(rst),
   .read_nClkEn(~read_en),
-  .read0_addr(write_addrO0),//read/write addr
+  .read0_addr(write_addrO0[6:0]),//read/write addr
   .read0_data(read_data_ram[1]),
   .read0_datax(read_datax_ram[1]),
   .write0_data(ins_hit ? {write_data,write_data} : {32{write_data0}}),
   .write0_wen((write_hitO0)|(ins_hit&read_odd)),
   .write0_ben(ins_hit ? write_ben_ins : write_ben0),
-  .read1_addr(write_addrO1),//read/write addr
+  .read1_addr(write_addrO1[6:0]),//read/write addr
   .write1_data(ins_hit ? {write_data,write_data} : {32{write_data1}}),
   .write1_wen((write_hitO1)|(ins_hit&read_odd)),
   .write1_ben(ins_hit ? write_ben_ins : write_ben1)
@@ -576,16 +582,14 @@ module dcache2_bitx_bank(
             read_odd_reg<=1'b0;
             read_en_reg<=1'b0;
             ins_hit_reg<=1'b0;
-        //    read_data_ram_reg[0]<={DATA_WIDTH{1'B0}};
-        //    read_data_ram_reg[1]<={DATA_WIDTH{1'B0}};
+	    write_addrE0_reg<=0;
         end
       else
         begin
             read_odd_reg<=read_odd;
             read_en_reg<=read_en;
             ins_hit_reg<=ins_hit;
-        //    read_data_ram_reg[0]<=read_data_ram[0];
-        //    read_data_ram_reg[1]<=read_data_ram[1];
+	    write_addrE0_reg<=write_addrE0;
         end
     end
   
@@ -1033,6 +1037,22 @@ module dcache2_way(
   assign read_hit=insert_reg2 ? ins_hit_reg : read_enL;
 
   adder_inc #(8) initAdd_mod(initCount,initCount_next,1'b1,);
+  dcache2_bitx_bank pbit_mod(
+  .clk(clk),
+  .rst(rst),
+  .read_en(read_enL|read_enH|ins_hit_reg),
+  .read_odd(read_odd_reg2),
+  .read_data(read_dataPTR),.read_data_in(read_dataPTR_in),
+  .read_datax(read_dataPTRx),.read_datax_in(read_dataPTRx_in),
+  .write_addrE0(write_addrE0_reg2[7:0]), .write_hitE0(write0_hitEL_reg3),
+  .write_addrO0(write_addrO0_reg2[7:0]), .write_hitO0(write0_hitOL_reg3),
+  .write_begin0(write_begin0_reg2),.write_data0(write_pbit0_reg2),
+  .write_addrE1(write_addrE1_reg2[7:0]), .write_hitE1(write1_hitEL_reg3),
+  .write_addrO1(write_addrO1_reg2[7:0]), .write_hitO1(write1_hitOL_reg3),
+  .write_begin1(write_begin1_reg2),.write_data1(write_pbit1_reg2),
+  .write_data(write_dataPTR),
+  .ins_hit(ins_hit_reg)
+  );
   generate
       genvar b;
       for(b=0;b<16;b=b+1) begin : bank_gen
