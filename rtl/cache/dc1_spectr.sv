@@ -94,7 +94,7 @@ module dc1_xbit(
   input [ADDR_WIDTH+4:0] write1_addr;
   input write1_odd;
   input write1_pbit;
-  input write_ins;
+  input [1:0] write_ins;
   input [15:0] write_data;
 
   wire [35:0] read0_data_ram[1:0];
@@ -142,7 +142,7 @@ generate
   read1_clkEn,
   read1_addr[ADDR_WIDTH+3:4],
   read1_data_ram[x],
-  write0_clkEn_reg[x]|write_ins_reg[x],
+  write0_clkEn_reg[x]|write_ins[x],
   write0_addr_reg[ADDR_WIDTH+3:4],
   write_dataA,
   write1_clkEn_reg[x]&~write_ins_reg[x],
@@ -161,7 +161,7 @@ generate
   write0_clkEn_reg[x]|write_ins_reg[x],
   write0_addr_reg[ADDR_WIDTH+3:4],
   write_dataA,
-  write1_clkEn_reg[x]&~write_ins_reg[x],
+  write1_clkEn_reg[x]&~write_ins[x],
   write1_addr_reg[ADDR_WIDTH+3:4],
   write_dataB);
 
