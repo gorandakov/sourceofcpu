@@ -71,6 +71,48 @@ module dc1_xbit(
   localparam ADDR_WIDTH=5;
   localparam ADDR_COUNT=32;
   `endif
+  input clk;
+  input rst;
+  input read0_clkEn;
+  input [ADDR_WIDTH+4:0] read0_addr;
+  input read0_odd;
+  output read0_pbit;
+  input read1_clkEn;
+  input [ADDR_WIDTH+4:0] read1_addr;
+  input read1_odd;read1_pbit;
+  input read2_clkEn;
+  input [ADDR_WIDTH+4:0] read2_addr;
+  input read2_odd;read2_pbit;
+  input read3_clkEn;
+  input [ADDR_WIDTH+4:0] read3_addr;
+  input read3_odd;read3_pbit;
+  input write0_clkEn;
+  input [ADDR_WIDTH+4:0] write0_addr;
+  input write0_odd;
+  input write0_pbit;
+  input write1_clkEn;
+  input [ADDR_WIDTH+4:0] write1_addr;
+  input write1_odd;
+  input write1_pbit;
+  input write_ins;
+  input [15:0] write_data;
+
+  wire [35:0] read0_data_ram[1:0];
+  wire [35:0] read1_data_ram[1:0];
+  wire [35:0] read2_data_ram[1:0];
+  wire [35:0] read3_data_ram[1:0];
+  wire [35:0] readA_data_ram[1:0];
+  wire [35:0] readB_data_ram[1:0];
+  wire [35:0] write_dataA;
+  wire [35:0] write_dataB;
+
+  reg write0_clkEn_reg[1:0];
+  reg write1_clkEn_reg[1:0];
+  reg write_ins_reg[1:0];
+  
+  reg [ADDR_WIDTH+4:0] write1_addr_reg;
+  reg [ADDR_WIDTH+4:0] write0_addr_reg;
+
 generate
   genvar x;
   for(x=0;x<2;x=x+1)begin : ramset
@@ -122,6 +164,8 @@ generate
   write1_clkEn_reg[x]&~write_ins_reg[x],
   write1_addr_reg[ADDR_WIDTH+3:4],
   write_dataB);
+  end
+endgenerate
 
 
 endmodule
