@@ -54,3 +54,74 @@ module dc1_xbit_ram(
   end
 endmodule
 
+module dc1_xbit(
+  clk,
+  rst,
+  read0_clkEn,read0_addr,read0_odd,read0_pbit,
+  read1_clkEn,read1_addr,read1_odd,read1_pbit,
+  read2_clkEn,read2_addr,read2_odd,read2_pbit,
+  read3_clkEn,read3_addr,read3_odd,read3_pbit,
+  write0_clkEn,write0_addr,write0_odd,write0_pbit,
+  write1_clkEn,write1_addr,write1_odd,write1_pbit,
+  write_ins,write_data);
+  `ifdef DCACHE_256K
+  localparam ADDR_WIDTH=6;
+  localparam ADDR_COUNT=64;
+  `else
+  localparam ADDR_WIDTH=5;
+  localparam ADDR_COUNT=32;
+  `endif
+generate
+  genvar x;
+  for(x=0;x<2;x=x+1)begin : ramset
+  dc1_xbit_ram ramA0(
+  clk,
+  rst,
+  read0_clkEn,
+  read0_addr[ADDR_WIDTH+3:4],
+  read0_data_ram[x],
+  read1_clkEn,
+  read1_addr[ADDR_WIDTH+3:4],
+  read1_data_ram[x],
+  write0_clkEn_reg[x]|write_ins_reg[x],
+  write0_addr_reg[ADDR_WIDTH+3:4],
+  write_dataA,
+  write1_clkEn_reg[x]&~write_ins_reg[x],
+  write1_addr_reg[ADDR_WIDTH+3:4],
+  write_dataB);
+
+  dc1_xbit_ram ramB0(
+  clk,
+  rst,
+  read2_clkEn,
+  read2_addr[ADDR_WIDTH+3:4],
+  read2_data_ram[x],
+  read3_clkEn,
+  read3_addr[ADDR_WIDTH+3:4],
+  read3_data_ram[x],
+  write0_clkEn_reg[x]|write_ins_reg[x],
+  write0_addr_reg[ADDR_WIDTH+3:4],
+  write_dataA,
+  write1_clkEn_reg[x]&~write_ins_reg[x],
+  write1_addr_reg[ADDR_WIDTH+3:4],
+  write_dataB);
+
+
+  dc1_xbit_ram ramC0(
+  clk,
+  rst,
+  write0_clkEn,
+  write0_addr[ADDR_WIDTH+3:4],
+  readA_data_ram[x],
+  write1_clkEn,
+  write1_addr[ADDR_WIDTH+3:4],
+  readB_data_ram[x],
+  write0_clkEn_reg[x]|write_ins_reg[x],
+  write0_addr_reg[ADDR_WIDTH+3:4],
+  write_dataA,
+  write1_clkEn_reg[x]&~write_ins_reg[x],
+  write1_addr_reg[ADDR_WIDTH+3:4],
+  write_dataB);
+
+
+endmodule
