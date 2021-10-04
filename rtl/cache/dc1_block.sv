@@ -292,7 +292,7 @@ module dcache1_way(
   write_hitCl0,
   write_dupl0,
   write_split0,
-  write_pbit0,
+  write_pbit0,write_d128_0,
   write_odd0,
   write_addrE1,
   write_addrO1,
@@ -304,7 +304,7 @@ module dcache1_way(
   write_hitCl1,
   write_dupl1,
   write_split1,
-  write_pbit1,
+  write_pbit1,write_d128_1,
   write_odd1,
   write_insert,
   write_insertExclusive,
@@ -339,8 +339,8 @@ module dcache1_way(
   output [1:0] read_hit0;
   input read_odd0;
   input read_split0;
-  output read_pbit0;
-  input read_pbit0_in;
+  output [1:0] read_pbit0;
+  input [1:0] read_pbit0_in;
   
   input [ADDR_WIDTH-2:0] read_addrE1;
   input [ADDR_WIDTH-2:0] read_addrO1;
@@ -349,8 +349,8 @@ module dcache1_way(
   output [1:0] read_hit1;
   input read_odd1;
   input read_split1;
-  output read_pbit1;
-  input read_pbit1_in;
+  output [1:0] read_pbit1;
+  input [1:0] read_pbit1_in;
   
   input [ADDR_WIDTH-2:0] read_addrE2;
   input [ADDR_WIDTH-2:0] read_addrO2;
@@ -359,8 +359,8 @@ module dcache1_way(
   output [1:0] read_hit2;
   input read_odd2;
   input read_split2;
-  output read_pbit2;
-  input read_pbit2_in;
+  output [1:0] read_pbit2;
+  input [1:0] read_pbit2_in;
 
   input [ADDR_WIDTH-2:0] read_addrE3;
   input [ADDR_WIDTH-2:0] read_addrO3;
@@ -369,8 +369,8 @@ module dcache1_way(
   output [1:0] read_hit3;
   input read_odd3;
   input read_split3;
-  output read_pbit3;
-  input read_pbit3_in;
+  output [1:0] read_pbit3;
+  input [1:0] read_pbit3_in;
   
   input [BANK_COUNT-1:0] read_bankNoRead;//bits are 1 if other bank reads are 0
   
@@ -390,7 +390,8 @@ module dcache1_way(
   input [3:0] write_enBen0;
   input write_clkEn0;
   input write_hit0;
-  input write_pbit0;
+  input [1:0] write_pbit0;
+  input write_d128_0;
   output [1:0] write_hitCl0;
   output [1:0] write_dupl0;
   input write_split0;
@@ -404,7 +405,8 @@ module dcache1_way(
   input [3:0] write_enBen1;
   input write_clkEn1;
   input write_hit1;
-  input write_pbit1;
+  input [1:0] write_pbit1;
+  input write_d128_1;
   output [1:0] write_hitCl1;
   output [1:0] write_dupl1;
   input write_split1;
@@ -500,15 +502,15 @@ module dcache1_way(
  
   wire [1:0] write_dupl[1:0];
   
-  wire read_pbit0P;
-  wire read_pbit1P;
-  wire read_pbit2P;
-  wire read_pbit3P;
+  wire [1:0] read_pbit0P;
+  wire [1:0] read_pbit1P;
+  wire [1:0] read_pbit2P;
+  wire [1:0] read_pbit3P;
   
-  wire read0_pbitP;
-  wire read1_pbitP;
-  wire read2_pbitP;
-  wire read3_pbitP;
+  wire [1:0] read0_pbitP;
+  wire [1:0] read1_pbitP;
+  wire [1:0] read2_pbitP;
+  wire [1:0] read3_pbitP;
  
   reg init;
   reg init_dirty;
@@ -528,7 +530,9 @@ module dcache1_way(
   .read2_clkEn(1'b1),.read2_addr(read_odd2 ? {read_addrO2[6:0],read_begin2[4:1]} : {read_addrE2[6:0],read_begin2[4:1]}),.read2_odd(read_odd2),.read2_pbit(read2_pbitP),
   .read3_clkEn(1'b1),.read3_addr(read_odd3 ? {read_addrO3[6:0],read_begin3[4:1]} : {read_addrE3[6:0],read_begin3[4:1]}),.read3_odd(read_odd3),.read3_pbit(read3_pbitP),
   .write0_clkEn(1'b1),.write0_addr(write_odd0 ? {write_addrO0[6:0],write_begin0[4:1]} : {write_addrE0[6:0],write_begin0[4:1]}),.write0_odd(write_odd0),.write0_pbit(write0_pbit),
+  .write0_d128(write_d128_0),
   .write1_clkEn(1'b1),.write1_addr(write_odd1 ? {write_addrO1[6:0],write_begin1[4:1]} : {write_addrE1[6:0],write_begin1[4:1]}),.write1_odd(write_odd1),.write1_pbit(write1_pbit),
+  .write1_d128(write_d128_1),
   .write_ins(ins_hit),.write_data(write_dataPTR));
   //verilator lint_on WIDTH
   generate
@@ -539,20 +543,20 @@ module dcache1_way(
         assign read_pbit2=~(read_pbit2P|read_pbit2_in);  
         assign read_pbit3=~(read_pbit3P|read_pbit3_in);  
         
-        assign read_pbit0P=read0_pbitP&(read_hitE[0]&~read_odd0_reg||read_hitO[0]&read_odd0_reg);
-        assign read_pbit1P=read1_pbitP&(read_hitE[1]&~read_odd1_reg||read_hitO[1]&read_odd1_reg);
-        assign read_pbit2P=read2_pbitP&(read_hitE[2]&~read_odd2_reg||read_hitO[2]&read_odd2_reg);
-        assign read_pbit3P=read3_pbitP&(read_hitE[3]&~read_odd3_reg||read_hitO[3]&read_odd3_reg);
+        assign read_pbit0P=read0_pbitP&{2{(read_hitE[0]&~read_odd0_reg||read_hitO[0]&read_odd0_reg)}};
+        assign read_pbit1P=read1_pbitP&{2{(read_hitE[1]&~read_odd1_reg||read_hitO[1]&read_odd1_reg)}};
+        assign read_pbit2P=read2_pbitP&{2{(read_hitE[2]&~read_odd2_reg||read_hitO[2]&read_odd2_reg)}};
+        assign read_pbit3P=read3_pbitP&{2{(read_hitE[3]&~read_odd3_reg||read_hitO[3]&read_odd3_reg)}};
     end else begin
         assign read_pbit0=~(read_pbit0P&read_pbit0_in);  
         assign read_pbit1=~(read_pbit1P&read_pbit1_in);  
         assign read_pbit2=~(read_pbit2P&read_pbit2_in);  
         assign read_pbit3=~(read_pbit3P&read_pbit3_in);  
 
-        assign read_pbit0P=~read0_pbitP|~(read_hitE[0]&~read_odd0_reg||read_hitO[0]&read_odd0_reg);
-        assign read_pbit1P=~read1_pbitP|~(read_hitE[1]&~read_odd1_reg||read_hitO[1]&read_odd1_reg);
-        assign read_pbit2P=~read2_pbitP|~(read_hitE[2]&~read_odd2_reg||read_hitO[2]&read_odd2_reg);
-        assign read_pbit3P=~read3_pbitP|~(read_hitE[3]&~read_odd3_reg||read_hitO[3]&read_odd3_reg);
+        assign read_pbit0P=~read0_pbitP|{2{~(read_hitE[0]&~read_odd0_reg||read_hitO[0]&read_odd0_reg)}};
+        assign read_pbit1P=~read1_pbitP|{2{~(read_hitE[1]&~read_odd1_reg||read_hitO[1]&read_odd1_reg)}};
+        assign read_pbit2P=~read2_pbitP|{2{~(read_hitE[2]&~read_odd2_reg||read_hitO[2]&read_odd2_reg)}};
+        assign read_pbit3P=~read3_pbitP|{2{~(read_hitE[3]&~read_odd3_reg||read_hitO[3]&read_odd3_reg)}};
     end
     for (b=0;b<BANK_COUNT;b=b+1) begin : banks
 
@@ -877,6 +881,7 @@ module dcache1(
   write_endBen0,
   write_data0,
   write_pbit0,
+  write_d128_0,
   write_addrE1,
   write_addrO1,
   write_bank1,
@@ -892,6 +897,7 @@ module dcache1(
   write_endBen1,
   write_data1,
   write_pbit1,
+  write_d128_1,
   write_clear,
   insert_en,
   insert_from_ram,
@@ -924,7 +930,7 @@ module dcache1(
   input read_odd0;
   input read_split0;
   output [127+8:0] read_dataA0;
-  output read_pbit0;
+  output [1:0] read_pbit0;
   input [4:0] read_beginA0;
   input [1:0] read_low0;
   input [4:0] read_sz0;
@@ -938,7 +944,7 @@ module dcache1(
   input read_odd1;
   input read_split1;
   output [127+8:0] read_dataA1;
-  output read_pbit1;
+  output [1:0] read_pbit1;
   input [4:0] read_beginA1;
   input [1:0] read_low1;
   input [4:0] read_sz1;
@@ -953,7 +959,7 @@ module dcache1(
   input read_odd2;
   input read_split2;
   output [127+8:0] read_dataA2;
-  output read_pbit2;
+  output [1:0] read_pbit2;
   input [4:0] read_beginA2;
   input [1:0] read_low2;
   input [4:0] read_sz2;
@@ -968,7 +974,7 @@ module dcache1(
   input read_odd3;
   input read_split3;
   output [127+8:0] read_dataA3;
-  output read_pbit3;
+  output [1:0] read_pbit3;
   input [4:0] read_beginA3;
   input [1:0] read_low3;
   input [4:0] read_sz3;
@@ -992,7 +998,8 @@ module dcache1(
   input [3:0] write_bgnBen0;
   input [3:0] write_endBen0;
   input [5*32-1:0] write_data0;
-  input write_pbit0;
+  input [1:0] write_pbit0;
+  input write_d128_0;
   input [ADDR_WIDTH-2:0] write_addrE1;
   input [ADDR_WIDTH-2:0] write_addrO1;
   input [BANK_COUNT-1:0] write_bank1;
@@ -1007,7 +1014,8 @@ module dcache1(
   input [3:0] write_bgnBen1;
   input [3:0] write_endBen1;
   input [5*32-1:0] write_data1;
-  input write_pbit1;
+  input [1:0] write_pbit1;
+  input write_d128_1;
   input write_clear;
   
   input insert_en;    
@@ -1029,7 +1037,19 @@ module dcache1(
   reg [LINE_WIDTH-1:0] read_dataP_reg;
   reg [LINE_WIDTH-1:0] read_dataP_reg2;
   wire [BANK_COUNT*32-1:0] read_data_strip;
-
+  wire [1:0] read_pbit0P[7:-1];
+  wire [1:0] read_pbit1P[7:-1];
+  wire [1:0] read_pbit2P[7:-1];
+  wire [1:0] read_pbit3P[7:-1];
+  
+  reg [1:0] read_pbit0P_reg;
+  reg [1:0] read_pbit0P_reg2;
+  reg [1:0] read_pbit1P_reg;
+  reg [1:0] read_pbit1P_reg2;
+  reg [1:0] read_pbit2P_reg;
+  reg [1:0] read_pbit2P_reg2;
+  reg [1:0] read_pbit3P_reg;
+  reg [1:0] read_pbit3P_reg2;
 
   wire [5:0] err_tag[7:0];
   
@@ -1146,12 +1166,16 @@ module dcache1(
   reg [3:0] write_endBen0_reg;
   reg write_clkEn0_reg;
   reg write_split0_reg;
+  reg [1:0] write_pbit0_reg;
+  reg write_d128_0_reg;
   reg write_odd0_reg;
   reg [ADDR_WIDTH-2:0] write_addrE1_reg;
   reg [ADDR_WIDTH-2:0] write_addrO1_reg;
   reg [BANK_COUNT-1:0] write_bank1_reg;
   reg write_clkEn1_reg;
   reg write_split1_reg;
+  reg [1:0] write_pbit1_reg;
+  reg write_d128_1_reg;
   reg write_odd1_reg;
   reg [4:0] write_begin1_reg;
   reg [4:0] write_end1_reg;
@@ -1254,6 +1278,7 @@ module dcache1(
           write_dupl0_way[w],
           write_split0_reg,
           write_pbit0_reg,
+          write_d128_0_reg,
           write_odd0_reg,
           write_addrE1_reg,
           write_addrO1_reg,
@@ -1266,6 +1291,7 @@ module dcache1(
           write_dupl1_way[w],
           write_split1_reg,
           write_pbit1_reg,
+          write_d128_1_reg,
           write_odd1_reg,
           insert_en_reg,
           insert_exclusive_reg2,
@@ -1408,6 +1434,8 @@ module dcache1(
           write_end0_reg<=5'b0;
           write_bgnBen0_reg<=4'b0;
           write_endBen0_reg<=4'b0; 
+          write_pbit0_reg<=2'b0;
+          write_d128_0_reg<=1'b0;
 
           write_addrE1_reg<={ADDR_WIDTH-1{1'B0}};
           write_addrO1_reg<={ADDR_WIDTH-1{1'B0}};
@@ -1419,6 +1447,8 @@ module dcache1(
           write_clkEn1_reg<=1'B0;
           write_split1_reg<=1'B0;
           write_odd1_reg<=1'B0;
+          write_pbit1_reg<=2'b0;
+          write_d128_1_reg<=1'b0;
 
           insert_en_reg<=1'b0;
           insert_exclusive_reg<=1'b0;
@@ -1480,6 +1510,8 @@ module dcache1(
           write_end0_reg<=write_end0;
           write_bgnBen0_reg<=write_bgnBen0;
           write_endBen0_reg<=write_endBen0;
+          write_pbit0_reg<=write_pbit0;
+          write_d128_0_reg<=write_d128_0;
 
           write_addrE1_reg<=write_addrE1;
           write_addrO1_reg<=write_addrO1;
@@ -1491,6 +1523,8 @@ module dcache1(
           write_clkEn1_reg<=write_clkEn1;
           write_split1_reg<=write_split1;
           write_odd1_reg<=write_odd1;
+          write_pbit1_reg<=write_pbit1;
+          write_d128_1_reg<=write_d128_1;
 
           insert_en_reg<=insert_en;    
           insert_exclusive_reg<=insert_exclusive;
@@ -1688,10 +1722,10 @@ module dcache1(
           write_clkEn1_reg2<=write_clkEn1_reg;
           
           insert_en_reg2<=insert_en_reg;
-          read_pbit0P_reg<=read_pbit0P;
-          read_pbit1P_reg<=read_pbit1P;
-          read_pbit2P_reg<=read_pbit2P;
-          read_pbit3P_reg<=read_pbit3P;
+          read_pbit0P_reg<=read_pbit0P[7];
+          read_pbit1P_reg<=read_pbit1P[7];
+          read_pbit2P_reg<=read_pbit2P[7];
+          read_pbit3P_reg<=read_pbit3P[7];
           read_dataP_reg<=read_dataP[7];
           write_data_reg2<=write_data_reg;
       end
