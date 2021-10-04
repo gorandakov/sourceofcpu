@@ -1231,13 +1231,13 @@ module dcache1(
           clk,
           rst,
           read_addrE0, read_addrO0, read_bank0, read_clkEn0, read_hit0_way[w], 
-            read_odd0, read_split0,
+            read_odd0, read_split0, read_pbit0P[w], read_pbit0P[w-1],
           read_addrE1, read_addrO1, read_bank1, read_clkEn1, read_hit1_way[w],   
-            read_odd1, read_split1,
+            read_odd1, read_split1, read_pbit1P[w], read_pbit1P[w-1],
           read_addrE2, read_addrO2, read_bank2, read_clkEn2, read_hit2_way[w],   
-            read_odd2, read_split2,
+            read_odd2, read_split2, read_pbit2P[w], read_pbit2P[w-1],
           read_addrE3, read_addrO3, read_bank3, read_clkEn3, read_hit3_way[w],   
-            read_odd3, read_split3,
+            read_odd3, read_split3, read_pbit3P[w], read_pbit3P[w-1],
           read_bankNoRead,
           read_invalidate_reg,
           read_bankHit_way[w],
@@ -1253,6 +1253,7 @@ module dcache1(
           write_hit0_way[w],
           write_dupl0_way[w],
           write_split0_reg,
+          write_pbit0_reg,
           write_odd0_reg,
           write_addrE1_reg,
           write_addrO1_reg,
@@ -1264,11 +1265,13 @@ module dcache1(
           write_hit1_way[w],
           write_dupl1_way[w],
           write_split1_reg,
+          write_pbit1_reg,
           write_odd1_reg,
           insert_en_reg,
           insert_exclusive_reg2,
           insert_dirty_reg2,
           write_data_ecc,
+          write_dataPTR,
           err_tag[w],
           recent_in,
           recent_out[w],
@@ -1319,6 +1322,11 @@ module dcache1(
   endgenerate
 
   LFSR16_6 rnd_mod(clk,rst,insert_rand);
+  
+  assign read_pbit0=read_pbit0P_reg2;
+  assign read_pbit1=read_pbit1P_reg2;
+  assign read_pbit2=read_pbit2P_reg2;
+  assign read_pbit3=read_pbit3P_reg2;
   
   assign read_hitCl0Q=read_hit0_way[0] | read_hit0_way[1] | read_hit0_way[2] | 
     read_hit0_way[3] | read_hit0_way[4] | read_hit0_way[5] |  
@@ -1372,6 +1380,10 @@ module dcache1(
   assign read_dataA3=read_dataA[3];
  
   assign read_dataP[-1]={LINE_WIDTH{1'B0}}; 
+  assign read_pbit0P[-1]=1'b0;
+  assign read_pbit1P[-1]=1'b0;
+  assign read_pbit2P[-1]=1'b0;
+  assign read_pbit3P[-1]=1'b0;
 
   assign read_hit0P=(|read_hitCl0Q[0] | ~rdreqE0) && (read_hitCl0Q[1] | ~rdreqO0) &&
     (rdreqE0 | rdreqO0) && ~insert_en_reg2;
@@ -1440,7 +1452,12 @@ module dcache1(
           
           
           write_data_reg<=1024'B0;
+          write_dataPTR_reg<=16'b0;
           read_dataP_reg2<={LINE_WIDTH{1'B0}};
+          read_pbit0P_reg2<=1'b0;
+          read_pbit1P_reg2<=1'b0;
+          read_pbit2P_reg2<=1'b0;
+          read_pbit3P_reg2<=1'b0;
           
           for(v=0;v<4;v=v+1) begin
               mskdata1[v]<=6'b0;
@@ -1509,7 +1526,14 @@ module dcache1(
           if (~insbus_B) write_data_reg[WLINE_WIDTH/2-1:0]<=write_data[WLINE_WIDTH/2-1:0];
           if (~insbus_A) write_data_reg[WLINE_WIDTH-1:WLINE_WIDTH/2]<=write_data[WLINE_WIDTH-1:WLINE_WIDTH/2];
           
+          if (~insbus_B) write_dataPTR_reg[7:0]<=busIns_dataPTR;
+          if (~insbus_A) write_dataPTR_reg[15:8]<=busIns_dataPTR;
+          
           if (read_clkEnAny) read_dataP_reg2<=read_dataP_reg;
+          if (read_clkEnAny) read_pbit0P_reg2<=read_pbit0P_reg;
+          if (read_clkEnAny) read_pbit1P_reg2<=read_pbit1P_reg;
+          if (read_clkEnAny) read_pbit2P_reg2<=read_pbit2P_reg;
+          if (read_clkEnAny) read_pbit3P_reg2<=read_pbit3P_reg;
 
           read_sz[0]<=read_sz0;
           read_sz[1]<=read_sz1;
@@ -1550,6 +1574,7 @@ module dcache1(
           write_bank0_reg2<=32'b0;
           write_bank1_reg2<=32'b0;
           write_data_reg2<={WLINE_WIDTH{1'B0}};
+          write_dataPTR_reg2<=16'b0;
           insert_exclusive_reg2<=1'b0;
           insert_dirty_reg2<=1'b0;
           
@@ -1600,13 +1625,17 @@ module dcache1(
           write_clkEn1_reg2<=1'b0;
           
           insert_en_reg2<=1'b0;
-          
+          read_pbit0P_reg<=1'b0;
+          read_pbit1P_reg<=1'b0;
+          read_pbit2P_reg<=1'b0;
+          read_pbit3P_reg<=1'b0;
           read_dataP_reg<={LINE_WIDTH{1'B0}};
           write_data_reg2<={WLINE_WIDTH{1'B0}};
       end else begin
           write_bank0_reg2<=write_bank0_reg;
           write_bank1_reg2<=write_bank1_reg;
           write_data_reg2<=write_data;
+          write_dataPTR_reg2<=write_dataPTR_reg;
           insert_exclusive_reg2<=insert_exclusive_reg;
           insert_dirty_reg2<=insert_dirty;
           
@@ -1659,7 +1688,10 @@ module dcache1(
           write_clkEn1_reg2<=write_clkEn1_reg;
           
           insert_en_reg2<=insert_en_reg;
-          
+          read_pbit0P_reg<=read_pbit0P;
+          read_pbit1P_reg<=read_pbit1P;
+          read_pbit2P_reg<=read_pbit2P;
+          read_pbit3P_reg<=read_pbit3P;
           read_dataP_reg<=read_dataP[7];
           write_data_reg2<=write_data_reg;
       end
