@@ -849,16 +849,16 @@ module dcache1(
   clk,
   rst,
   read_addrE0, read_addrO0, read_bank0, read_clkEn0, read_hit0, read_hitCl0, 
-    read_odd0, read_split0, read_dataA0, 
+    read_odd0, read_split0, read_dataA0, read_pbit0,
     read_beginA0, read_low0, read_sz0,
   read_addrE1, read_addrO1, read_bank1, read_clkEn1, read_hit1, read_hitCl1,   
-    read_odd1, read_split1, read_dataA1,
+    read_odd1, read_split1, read_dataA1, read_pbit1,
     read_beginA1, read_low1, read_sz1,
   read_addrE2, read_addrO2, read_bank2, read_clkEn2, read_hit2, read_hitCl2,   
-    read_odd2, read_split2, read_dataA2,
+    read_odd2, read_split2, read_dataA2, read_pbit2,
     read_beginA2,  read_low2, read_sz2,
   read_addrE3, read_addrO3, read_bank3, read_clkEn3, read_hit3, read_hitCl3,   
-    read_odd3, read_split3, read_dataA3,
+    read_odd3, read_split3, read_dataA3, read_pbit3,
     read_beginA3, read_low3, read_sz3,
   read_bankNoRead,
   read_invalidate,
@@ -876,6 +876,7 @@ module dcache1(
   write_bgnBen0,
   write_endBen0,
   write_data0,
+  write_pbit0,
   write_addrE1,
   write_addrO1,
   write_bank1,
@@ -890,6 +891,7 @@ module dcache1(
   write_bgnBen1,
   write_endBen1,
   write_data1,
+  write_pbit1,
   write_clear,
   insert_en,
   insert_from_ram,
@@ -898,6 +900,7 @@ module dcache1(
 //  wb_en,
 //  busWb_data,
   busIns_data,
+  busIns_dataPTR,
   insbus_A,insbus_B,
   expun_addr,expun_en
   );
@@ -921,6 +924,7 @@ module dcache1(
   input read_odd0;
   input read_split0;
   output [127+8:0] read_dataA0;
+  output read_pbit0;
   input [4:0] read_beginA0;
   input [1:0] read_low0;
   input [4:0] read_sz0;
@@ -934,6 +938,7 @@ module dcache1(
   input read_odd1;
   input read_split1;
   output [127+8:0] read_dataA1;
+  output read_pbit1;
   input [4:0] read_beginA1;
   input [1:0] read_low1;
   input [4:0] read_sz1;
@@ -948,6 +953,7 @@ module dcache1(
   input read_odd2;
   input read_split2;
   output [127+8:0] read_dataA2;
+  output read_pbit2;
   input [4:0] read_beginA2;
   input [1:0] read_low2;
   input [4:0] read_sz2;
@@ -962,6 +968,7 @@ module dcache1(
   input read_odd3;
   input read_split3;
   output [127+8:0] read_dataA3;
+  output read_pbit3;
   input [4:0] read_beginA3;
   input [1:0] read_low3;
   input [4:0] read_sz3;
@@ -985,6 +992,7 @@ module dcache1(
   input [3:0] write_bgnBen0;
   input [3:0] write_endBen0;
   input [5*32-1:0] write_data0;
+  input write_pbit0;
   input [ADDR_WIDTH-2:0] write_addrE1;
   input [ADDR_WIDTH-2:0] write_addrO1;
   input [BANK_COUNT-1:0] write_bank1;
@@ -999,6 +1007,7 @@ module dcache1(
   input [3:0] write_bgnBen1;
   input [3:0] write_endBen1;
   input [5*32-1:0] write_data1;
+  input write_pbit1;
   input write_clear;
   
   input insert_en;    
@@ -1008,6 +1017,7 @@ module dcache1(
 //  output reg wb_en;
 //  output [LINE_WIDTH/4-1:0] busWb_data;
   input [511:0] busIns_data;
+  input [7:0] busIns_dataPTR;
   input insbus_A,insbus_B;
   output [ADDR_WIDTH-1:0] expun_addr;
   output expun_en;
