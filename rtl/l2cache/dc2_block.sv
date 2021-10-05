@@ -612,6 +612,7 @@ module dcache2_way(
   write_begin0,write_end0,
   write_bBen0,write_enBen0,
   write_odd0,write_split0,
+  write_d128_0,
   write1_clkEn,
   write_addrE1, write_hitE1,
   write_addrO1, write_hitO1,
@@ -619,6 +620,7 @@ module dcache2_way(
   write_begin1,write_end1,
   write_bBen1,write_enBen1,
   write_odd1,write_split1,
+  write_d128_1,
   write_data,
   ins_hit,
   insert,
@@ -662,7 +664,8 @@ module dcache2_way(
   input [4:0] write_end0;
   input [3:0] write_bBen0;
   input [3:0] write_enBen0;
-  input write_pbit0;
+  input [1:0] write_pbit0;
+  input write_d128_0;
   input write_odd0,write_split0;
   input write1_clkEn;
   input [ADDR_WIDTH-1:0] write_addrE1;
@@ -674,7 +677,8 @@ module dcache2_way(
   input [4:0] write_end1;
   input [3:0] write_bBen1;
   input [3:0] write_enBen1;
-  input write_pbit1;
+  input [1:0] write_pbit1;
+  input write_d128_1;
   input write_odd1,write_split1;
   input [32*DATA_WIDTH-1:0] write_data;
   output ins_hit;
@@ -750,8 +754,10 @@ module dcache2_way(
   reg [3:0] write_enBen1_reg;
   reg write_odd0_reg;
   reg write_odd1_reg;
-  reg write_pbit0_reg;
-  reg write_pbit1_reg;
+  reg [1:0] write_pbit0_reg;
+  reg [1:0] write_pbit1_reg;
+  reg write_d128_0_reg;
+  reg write_d128_1_reg;
 
   reg write0_clkEn_reg2;
   reg write1_clkEn_reg2;
@@ -773,8 +779,10 @@ module dcache2_way(
   reg [4:0] write_end1_reg2;
   reg [3:0] write_bBen1_reg2;
   reg [3:0] write_enBen1_reg2;
-  reg write_pbit0_reg2;
-  reg write_pbit1_reg2;
+  reg [1:0] write_pbit0_reg2;
+  reg [1:0] write_pbit1_reg2;
+  reg write_d128_0_reg2;
+  reg write_d128_1_reg2;
 
   reg [7:0] write_addrE0_reg3;
   reg [7:0] write_addrO0_reg3;
@@ -1059,9 +1067,11 @@ module dcache2_way(
   .write_addrE0(write_addrE0_reg2[7:0]), .write_hitE0(write0_hitEL_reg3),
   .write_addrO0(write_addrO0_reg2[7:0]), .write_hitO0(write0_hitOL_reg3),
   .write_begin0(write_begin0_reg2),.write_data0(write_pbit0_reg2),
+  .write_d128_0(write_d128_0_reg2),
   .write_addrE1(write_addrE1_reg2[7:0]), .write_hitE1(write1_hitEL_reg3),
   .write_addrO1(write_addrO1_reg2[7:0]), .write_hitO1(write1_hitOL_reg3),
   .write_begin1(write_begin1_reg2),.write_data1(write_pbit1_reg2),
+  .write_d128_1(write_d128_1_reg2),
   .write_data(write_dataPTR),
   .ins_hit(ins_hit_reg)
   );
@@ -1153,10 +1163,14 @@ module dcache2_way(
           read_en_reg4<=1'b0;
           read_odd_reg5<=1'b0;
           read_en_reg5<=1'b0;
-	  write_pbit0_reg<=1'b0;
-	  write_pbit1_reg<=1'b0;
-	  write_pbit0_reg2<=1'b0;
-	  write_pbit1_reg2<=1'b0;
+	  write_pbit0_reg<=2'b0;
+	  write_pbit1_reg<=2'b0;
+	  write_pbit0_reg2<=2'b0;
+	  write_pbit1_reg2<=2'b0;
+	  write_d128_0_reg<=1'b0;
+	  write_d128_1_reg<=1'b0;
+	  write_d128_0_reg2<=1'b0;
+	  write_d128_1_reg2<=1'b0;
           insert_reg<=1'b0;
           insert_reg2<=1'b0;
           insert_reg3<=1'b0;
@@ -1228,6 +1242,10 @@ module dcache2_way(
 	  write_pbit1_reg<=write_pbit1;
 	  write_pbit0_reg2<=write_pbit0_reg;
 	  write_pbit1_reg2<=write_pbit1_reg;
+	  write_d128_0_reg<=write_d128_0;
+	  write_d128_1_reg<=write_d128_1;
+	  write_d128_0_reg2<=write_d128_0_reg;
+	  write_d128_1_reg2<=write_d128_1_reg;
           insert_reg<=insert;
           insert_reg2<=insert_reg;
           insert_reg3<=insert_reg2;
@@ -1363,6 +1381,7 @@ module dcache2_block(
   write_bBen0,write_enBen0,
   write_odd0,write_split0,
   write_data0,
+  write_d128_0,
   write1_clkEn,
   write_addrE1, write_hitE1,
   write_addrO1, write_hitO1,
@@ -1371,6 +1390,7 @@ module dcache2_block(
   write_bBen1,write_enBen1,
   write_odd1,write_split1,
   write_data1,
+  write_d128_1,
   busIns_data,
   busIns_dataPTR,
   insBus_A,
@@ -1409,7 +1429,8 @@ module dcache2_block(
   input [4:0] write_end0;
   input [3:0] write_bBen0;
   input [3:0] write_enBen0;
-  input write_pbit0;
+  input [1:0] write_pbit0;
+  input       write_d128_0;
   input write_odd0,write_split0;
   input [159:0] write_data0;
   input write1_clkEn;
@@ -1422,7 +1443,8 @@ module dcache2_block(
   input [4:0] write_end1;
   input [3:0] write_bBen1;
   input [3:0] write_enBen1;
-  input write_pbit1;
+  input [1:0] write_pbit1;
+  input       write_d128_1;
   input write_odd1,write_split1;
   input [159:0] write_data1;
   input [511:0] busIns_data;
@@ -1500,6 +1522,7 @@ module dcache2_block(
           write_begin0,write_end0,
           write_bBen0,write_enBen0,
           write_odd0,write_split0,
+	  write_d128_0,
           write1_clkEn,
           write_addrE1, write_hitE1,
           write_addrO1, write_hitO1,
@@ -1507,6 +1530,7 @@ module dcache2_block(
           write_begin1,write_end1,
           write_bBen1,write_enBen1,
           write_odd1,write_split1,
+	  write_d128_1,
           write_data_reg,
           write_dataPTR_reg2,
           ins_hit[k],
