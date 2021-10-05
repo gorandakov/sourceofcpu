@@ -2265,6 +2265,11 @@ module backend(
      endcase
   endfunction
 
+  function get_d128;
+      input [4:0] msz;
+      get_d128=msz==5'h1 || msz==5'h2 || msz==5'h0 || msz==5'ha || msz==5'hc || msz==5'hB || msz==5'hf;
+  endfunction
+
   function [0:0] is_rndE;
       input [12:0] op;
       is_rndE=(op[7:0]==`fop_rndES || op[7:0]==`fop_rndED) & ~op[11];
@@ -5246,6 +5251,7 @@ dcache1 L1D_mod(
   .write_dupl0(dc_wrDuplCl[0]),
   .write_split0(st0_adata[`lsaddr_split]),
   .write_pbit0(st0_pbit),
+  .write_d128_0(get_d128(st0_adata[`lsaddr_sz])),
   .write_odd0(st0_adata[`lsaddr_odd]),
   .write_begin0(st0_adata[`lsaddr_bank0]),
   .write_end0(st0_bank1),
@@ -5261,6 +5267,7 @@ dcache1 L1D_mod(
   .write_dupl1(dc_wrDuplCl[1]),
   .write_split1(st1_adata[`lsaddr_split]),
   .write_pbit1(st1_pbit),
+  .write_d128_1(get_d128(st1_adata[`lsaddr_sz])),
   .write_odd1(st1_adata[`lsaddr_odd]),
   .write_begin1(st1_adata[`lsaddr_bank0]),
   .write_end1(st1_bank1),
