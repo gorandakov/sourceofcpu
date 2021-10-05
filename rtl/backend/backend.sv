@@ -355,6 +355,7 @@ module backend(
   wr0_bgn_ben,wr0_end_ben,
   wr0_odd,wr0_split,
   wr0_data,
+  wr0_pbit,wr0_d128,
   wr1_hit,
   wr1_addrE,wr1_addrO,
   wr1_banks,
@@ -362,6 +363,7 @@ module backend(
   wr1_bgn_ben,wr1_end_ben,
   wr1_odd,wr1_split,
   wr1_data,
+  wr1_pbit,wr1_d128,
   wrStall
 //  extBus_en,
 //  extBus_addr,
@@ -900,6 +902,8 @@ module backend(
   output [3:0] wr0_end_ben;
   output wr0_odd,wr0_split;
   output [159:0] wr0_data;
+  output [1:0] wr0_pbit;
+  output       wr0_d128;
   output [1:0] wr1_hit;
   output [35:0] wr1_addrE;
   output [35:0] wr1_addrO;
@@ -909,6 +913,8 @@ module backend(
   output [3:0] wr1_bgn_ben;
   output [3:0] wr1_end_ben;
   output [159:0] wr1_data;
+  output [1:0] wr1_pbit;
+  output       wr1_d128;
   output wr1_odd,wr1_split;
   input wrStall;
 /*
@@ -4787,6 +4793,7 @@ module backend(
   .mOpY4_split(st0_adata[`lsaddr_split]),
   .mOpY4_clHit(dc_wrHitCl[0]),
   .mOpY4_data(st0_data),
+  .mOpY4_pbit(st0_pbit),
   .mOpY4_type(st0_adata[`lsaddr_mtype]),
   .mOpY4_II(st0_adata[`lsaddr_II]),
   .mOpY4_en_o(dc_wrEn[0]),
@@ -4825,6 +4832,7 @@ module backend(
   .mOpY5_split(st1_adata[`lsaddr_split]),
   .mOpY5_clHit(dc_wrHitCl[1]),
   .mOpY5_data(st1_data),
+  .mOpY5_pbit(st1_pbit),
   .mOpY5_type(st1_adata[`lsaddr_mtype]),
   .mOpY5_II(st1_adata[`lsaddr_II]),
   .mOpY5_en_o(dc_wrEn[1]),
@@ -4887,6 +4895,7 @@ module backend(
   .wr0_bgn_ben(wr0_bgn_ben),.wr0_end_ben(wr0_end_ben),
   .wr0_odd(wr0_odd),.wr0_split(wr0_split),
   .wr0_data(wr0_data),
+  .wr0_pbit(wr0_pbit),.wr0_d128(wr0_d128),
   .wr1_hit(wr1_hit),
   .wr1_addrE(wr1_addrE),.wr1_addrO(wr1_addrO),
   .wr1_banks(wr1_banks),
@@ -4894,6 +4903,7 @@ module backend(
   .wr1_bgn_ben(wr1_bgn_ben),.wr1_end_ben(wr1_end_ben),
   .wr1_odd(wr1_odd),.wr1_split(wr1_split),
   .wr1_data(wr1_data),
+  .wr1_pbit(wr1_pbit),.wr1_d128(wr1_d128),
   .wrStall(wrStall)
   );
  
