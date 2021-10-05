@@ -202,18 +202,24 @@ generate
 endgenerate
 
 always @* begin
-  write_dataAx=write0_data_pbit_reg<<{write0_addr_reg[ADDR_WIDTH+4],write0_addr_reg[3:0]};
-  write_dataBx=write1_data_pbit_reg<<{write1_addr_reg[ADDR_WIDTH+4],write1_addr_reg[3:0]};
+  write_dataAx[write0_odd_reg]=write0_data_pbit_reg<<{write0_addr_reg[ADDR_WIDTH+4],write0_addr_reg[3:0]};
+  write_dataBx[write1_odd_reg]=write1_data_pbit_reg<<{write1_addr_reg[ADDR_WIDTH+4],write1_addr_reg[3:0]};
+  write_dataAx[~write0_odd_reg]=readA_data_ramx[~write_odd_reg];
+  write_dataBx[~write1_odd_reg]=readB_data_ramx[~write_odd_reg];
   for(k=0;k<16;k=k+1) begin
       if (write0_odd_reg && k!=write0_addr_reg[3:0] && ((k-1)!=write0_addr_reg[3:0] || ~write0_d128_reg)
-          write_dataAx[k+16]=readA_data_ramx;
+          write_dataAx[1][k+16]=readA_data_ramx[1];
       if (~write0_odd_reg && k!=write0_addr_reg[3:0] && ((k-1)!=write0_addr_reg[3:0] || ~write0_d128_reg)
-          write_dataAx[k]=readA_data_ramx;
+          write_dataAx[0][k]=readA_data_ramx[0];
       if (write1_odd_reg && k!=write1_addr_reg[3:0] && ((k-1)!=write1_addr_reg[3:0] || ~write1_d128_reg)
-          write_dataBx[k+16]=readB_data_ramx;
+          write_dataBx[1][k+16]=readB_data_ramx[1];
       if (~write1_odd_reg && k!=write1_addr_reg[3:0] && ((k-1)!=write1_addr_reg[3:0] || ~write1_d128_reg)
-          write_dataBx[k]=readB_data_ramx;
+          write_dataBx[0][k]=readB_data_ramx[0];
   end
+  if (write0_odd_reg && 4'hf==write0_addr_reg[3:0] && ~|write_ins_reg) write_dataAx[0][0]<=write0_data_pbit_reg[1];
+  if (write1_odd_reg && 4'hf==write1_addr_reg[3:0] && ~|write_ins_reg) write_dataBx[0][0]<=write1_data_pbit_reg[1];
+  if (~write0_odd_reg && 4'hf==write0_addr_reg[3:0] && ~|write_ins_reg) write_dataAx[1][0]<=write0_data_pbit_reg[1];
+  if (~write1_odd_reg && 4'hf==write1_addr_reg[3:0] && ~|write_ins_reg) write_dataBx[1][0]<=write1_data_pbit_reg[1];
   if (write_ins_reg[0]) write_dataAx[15:0]= write_data_reg; 
   if (write_ins_reg[1]) write_dataAx[31:16]= write_data_reg; 
 end
