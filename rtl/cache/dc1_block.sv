@@ -525,13 +525,13 @@ module dcache1_way(
   dc1_xbit pbit_mod(
   .clk(clk),
   .rst(rst),
-  .read0_clkEn(1'b1),.read0_addr(read_odd0 ? {read_addrO0[6:0],read_begin0[4:1]} : {read_addrE0[6:0],read_begin0[4:1]}),.read0_odd(read_odd0),.read0_pbit(read0_pbitP),
-  .read1_clkEn(1'b1),.read1_addr(read_odd1 ? {read_addrO1[6:0],read_begin1[4:1]} : {read_addrE1[6:0],read_begin1[4:1]}),.read1_odd(read_odd1),.read1_pbit(read1_pbitP),
-  .read2_clkEn(1'b1),.read2_addr(read_odd2 ? {read_addrO2[6:0],read_begin2[4:1]} : {read_addrE2[6:0],read_begin2[4:1]}),.read2_odd(read_odd2),.read2_pbit(read2_pbitP),
-  .read3_clkEn(1'b1),.read3_addr(read_odd3 ? {read_addrO3[6:0],read_begin3[4:1]} : {read_addrE3[6:0],read_begin3[4:1]}),.read3_odd(read_odd3),.read3_pbit(read3_pbitP),
-  .write0_clkEn(1'b1),.write0_addr(write_odd0 ? {write_addrO0[6:0],write_begin0[4:1]} : {write_addrE0[6:0],write_begin0[4:1]}),.write0_odd(write_odd0),.write0_pbit(write0_pbit),
+  .read0_clkEn(1'b1),.read0_addrO({read_addrO0[6:0],read_begin0[4:1]}),.read0_addrE({read_addrE0[6:0],read_begin0[4:1]}),.read0_odd(read_odd0),.read0_pbit(read0_pbitP),
+  .read1_clkEn(1'b1),.read1_addrO({read_addrO1[6:0],read_begin1[4:1]}),.read1_addrE({read_addrE1[6:0],read_begin1[4:1]}),.read1_odd(read_odd1),.read1_pbit(read1_pbitP),
+  .read2_clkEn(1'b1),.read2_addrO({read_addrO2[6:0],read_begin2[4:1]}),.read2_addrE({read_addrE2[6:0],read_begin2[4:1]}),.read2_odd(read_odd2),.read2_pbit(read2_pbitP),
+  .read3_clkEn(1'b1),.read3_addrO({read_addrO3[6:0],read_begin3[4:1]}),.read3_addrE({read_addrE3[6:0],read_begin3[4:1]}),.read3_odd(read_odd3),.read3_pbit(read3_pbitP),
+  .write0_clkEn(1'b1),.write0_addrO({write_addrO0[6:0],write_begin0[4:1]}),.write0_addrE({write_addrE0[6:0],write_begin0[4:1]}),.write0_odd(write_odd0),.write0_pbit(write0_pbit),
   .write0_d128(write_d128_0),
-  .write1_clkEn(1'b1),.write1_addr(write_odd1 ? {write_addrO1[6:0],write_begin1[4:1]} : {write_addrE1[6:0],write_begin1[4:1]}),.write1_odd(write_odd1),.write1_pbit(write1_pbit),
+  .write1_clkEn(1'b1),.write1_addrO({write_addrO1[6:0],write_begin1[4:1]}),.write1_addrE({write_addrE1[6:0],write_begin1[4:1]}),.write1_odd(write_odd1),.write1_pbit(write1_pbit),
   .write1_d128(write_d128_1),
   .write_ins(ins_hit),.write_data(write_dataPTR));
   //verilator lint_on WIDTH
