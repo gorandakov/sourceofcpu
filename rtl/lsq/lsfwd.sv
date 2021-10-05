@@ -300,7 +300,7 @@ module lsf_buf(
   );
   localparam ADATA_WIDTH=`lsaddr_width;
   localparam XDATA_WIDTH=`lsfxdata_width;
-  localparam DATA_WIDTH=128+8;
+  localparam DATA_WIDTH=128+8+2;
   localparam WQ_WIDTH=8;
   input clk;
   input rst;
@@ -498,7 +498,7 @@ module lsf_array(
   );
   localparam ADATA_WIDTH=`lsaddr_width;
   localparam XDATA_WIDTH=`lsfxdata_width;
-  localparam DATA_WIDTH=128+8;
+  localparam DATA_WIDTH=128+8+2;
   localparam WQ_WIDTH=8;
   localparam BUF_COUNT=48;
 
@@ -677,8 +677,10 @@ endmodule
 module lsfw_combine(
   xdataA,xdataB,
   dataA,dataB,
+  pdataA,pdataB,
   data_req,
   outData,
+  outPData,
   outBnRead
   );
   localparam XDATA_WIDTH=`lsfxdata_width;
@@ -687,8 +689,11 @@ module lsfw_combine(
   input [XDATA_WIDTH-1:0] xdataB;
   input [DATA_WIDTH-1:0] dataA;
   input [DATA_WIDTH-1:0] dataB;
+  input [1:0] pdataA;
+  input [1:0] pdataB;
   input [`lsaddr_width-1:0] data_req;
   output [DATA_WIDTH-1:0] outData;
+  output [1:0] outPData;
   output reg [3:0] outBnRead;
 
   wire hasA=xdataA[`lsfxdata_has];
@@ -748,11 +753,22 @@ module lsfw_combine(
           assign dataMB=(MshiftB[3:0]==k) ? dataB>>(k*8) : 136'BZ;
           assign dataNA=(MshiftA[3:0]==k) ? dataA<<(k*8) : 136'BZ;
           assign dataNB=(MshiftB[3:0]==k) ? dataB<<(k*8) : 136'BZ;
+	  assign pdataMA=(MshiftA[3:0]==k) ? {{8{pdataA[1]}},{8{pdataA[0]}}}>>k : 1'bz;
+	  assign pdataMB=(MshiftB[3:0]==k) ? {{8{pdataB[1]}},{8{pdataB[0]}}}>>k : 1'bz;
+	  assign pdataNA=(MshiftA[3:0]==k) ? {{8{pdataA[1]}},{8{pdataA[0]}}}<<k : 1'bz;
+	  assign pdataNB=(MshiftB[3:0]==k) ? {{8{pdataB[1]}},{8{pdataB[0]}}}<<k : 1'bz;
       end
   endgenerate
 
   assign dataQA=~MshiftA[4] ? dataMA : dataNA;
   assign dataQB=~MshiftB[4] ? dataMB : dataNB;
+  assign pdataQA=~MshiftA[4] ? pdataMA : pdataNA;
+  assign pdataQB=~MshiftB[4] ? pdataMB : pdataNB;
+          
+  assign outPData[0]=(byBankA & banksA[0] || MexactA) ? pdataQA[0] : 
+      pdataQB[0]; 
+  assign outPData[2]=(byBankA & banksA[4] || MexactA) ? pdataQA[8] : 
+      pdataQB[8]; 
 
 //  assign outData=MexactA ? dataMA : 128'BZ;
 //  assign outData=hasA ? 128'BZ : 128'b0;

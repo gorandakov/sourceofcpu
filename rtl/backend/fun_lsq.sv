@@ -17,10 +17,10 @@ module fun_lsq(
   FU2Hit,
   FU3Hit,
   st_stall,
-  st0_adata,st0_en,st0_bank1,st0_bgn_ben,st0_end_ben,st0_data,
-  st1_adata,st1_en,st1_bank1,st1_bgn_ben,st1_end_ben,st1_data,
-  wb0_adata,wb0_LSQ,wb0_en,wb0_ret,wb0_data,wb0_brdbanks,
-  wb1_adata,wb1_LSQ,wb1_en,wb1_ret,wb1_data,wb1_brdbanks,
+  st0_adata,st0_en,st0_bank1,st0_bgn_ben,st0_end_ben,st0_data,st0_pbit,
+  st1_adata,st1_en,st1_bank1,st1_bgn_ben,st1_end_ben,st1_data,st1_pbit,
+  wb0_adata,wb0_LSQ,wb0_en,wb0_ret,wb0_data,wb0_brdbanks,wb0_pbit,
+  wb1_adata,wb1_LSQ,wb1_en,wb1_ret,wb1_data,wb1_brdbanks,wb1_pbit,
   mem_II_upper,
   mem_II_upper_in,
   mem_II_bits_fine,
@@ -41,8 +41,8 @@ module fun_lsq(
   WQS0_reg,WQR0_reg,
   WQS1_reg,WQR1_reg,
   WQS2_reg,WQR2_reg,
-  lsw_wq0,lsw_wdata0,lsw_rs_en0,
-  lsw_wq1,lsw_wdata1,lsw_rs_en1,
+  lsw_wq0,lsw_wdata0,lsw_pdata0,lsw_rs_en0,
+  lsw_wq1,lsw_wdata1,lsw_pdata1,lsw_rs_en1,
   mOpY4_II,mOpY4_hit,
   mOpY5_II,mOpY5_hit,
   lsi0_reg,lsi1_reg,lsi2_reg,
@@ -96,24 +96,28 @@ module fun_lsq(
   output [3:0]               st0_bgn_ben;
   output [3:0]               st0_end_ben;
   output [159:0]             st0_data;
+  output [1:0]               st0_pbit;
   output [`lsaddr_width-1:0] st1_adata;
   output                     st1_en;
   output [4:0]               st1_bank1;
   output [3:0]               st1_bgn_ben;
   output [3:0]               st1_end_ben;
   output [159:0]             st1_data;
+  output [1:0]               st1_pbit;
   output [`lsaddr_width-1:0] wb0_adata;
   output [8:0]               wb0_LSQ;
   output                     wb0_en;
   output [12:0]              wb0_ret;
   output [127+8:0]           wb0_data;
   output [3:0]               wb0_brdbanks;
+  output [1:0]               wb0_pbit;
   output [`lsaddr_width-1:0] wb1_adata;
   output [8:0]               wb1_LSQ;
   output                     wb1_en;
   output [12:0]              wb1_ret;
   output [127+8:0]           wb1_data;
   output [3:0]               wb1_brdbanks;
+  output [1:0]               wb1_pbit;
   
   output [5:0]   mem_II_upper;
   input  [5:0]   mem_II_upper_in;
@@ -147,9 +151,11 @@ module fun_lsq(
   input [7:0] WQR2_reg;
   input [7:0]     lsw_wq0;
   input [127+8:0] lsw_wdata0;
+  input [1:0]     lsw_pdata0;
   input [3:0]     lsw_rs_en0;
   input [7:0]     lsw_wq1;
   input [127+8:0] lsw_wdata1;
+  input [1:0]     lsw_pdata1;
   input [3:0]     lsw_rs_en1;
   input [9:0] mOpY4_II;
   input       mOpY4_hit;
@@ -202,12 +208,18 @@ module fun_lsq(
   wire [127+8:0]             stqd_dataB0;
   wire [127+8:0]             stqd_dataA1;
   wire [127+8:0]             stqd_dataB1;
+  wire [1:0]                 stqd_pbitA0;
+  wire [1:0]                 stqd_pbitB0;
+  wire [1:0]                 stqd_pbitA1;
+  wire [1:0]                 stqd_pbitB1;
   wire                       stqd_rdyA0;
   wire                       stqd_rdyA1;
   wire                       stqd_rdyB0;
   wire                       stqd_rdyB1;
   wire [127+8:0]               dc_wdataP[1:0];
   reg  [127+8:0]               dc_wdataP_reg[1:0];
+  wire [1:0]                   dc_pdataP[1:0];
+  reg  [1:0]                   dc_pdataP_reg[1:0];
   wire [1:0] sdata_rdy;
   wire [5:0] retM_II_in;
   wire [5:0] retM_II;
@@ -532,18 +544,22 @@ module fun_lsq(
   .en0(wreq_en[0]),.en1(wreq_en[1])
   );
 
-  wrtdata_combine wcomb0_mod(.data(dc_wdataP_reg[0]),.en(1'b1),
-    .odata(st0_data),.low(wreq_data_reg[0][`lsaddr_low]),.sz(wreq_data_reg[0][`lsaddr_sz]));
-  wrtdata_combine wcomb1_mod(.data(dc_wdataP_reg[1]),.en(1'b1),
-      .odata(st1_data),.low(wreq_data_reg[1][`lsaddr_low]),.sz(wreq_data_reg[1][`lsaddr_sz]));
+  wrtdata_combine wcomb0_mod(.data(dc_wdataP_reg[0]),.pdata(dc_pdataP_reg[0]),.en(1'b1),
+    .odata(st0_data),.opdata(st0_pbit),.low(wreq_data_reg[0][`lsaddr_low]),.sz(wreq_data_reg[0][`lsaddr_sz]));
+  wrtdata_combine wcomb1_mod(.data(dc_wdataP_reg[1]),.pdata(dc_pdataP_reg[1]),.en(1'b1),
+      .odata(st1_data),.opdata(st1_pbit),.low(wreq_data_reg[1][`lsaddr_low]),.sz(wreq_data_reg[1][`lsaddr_sz]));
 
   
   wire [127+8:0]           wb1_dataA;
   wire [127+8:0]           wb1_dataB;
+  wire [1:0]               wb1_pbitA;
+  wire [1:0]               wb1_pbitB;
   wire [`lsfxdata_width-1:0] wb1_xdataA;
   wire [`lsfxdata_width-1:0] wb1_xdataB;
   wire [127+8:0]           wb0_dataA;
   wire [127+8:0]           wb0_dataB;
+  wire [1:0]               wb0_pbitA;
+  wire [1:0]               wb0_pbitB;
   wire [`lsfxdata_width-1:0] wb0_xdataA;
   wire [`lsfxdata_width-1:0] wb0_xdataB;
   wire [127+8:0]           sso_data;
@@ -560,22 +576,22 @@ module fun_lsq(
   .newDataXA0(stqd_xdataA0),.newDataXB0(stqd_xdataA1),
   .newReqWQA0(stqd_addrA0),
   .newReqWQB0(stqd_addrA1),
-  .newDataA0(stqd_dataA0),.newRdyA0(stqd_rdyA0),
-  .newDataB0(stqd_dataA1),.newRdyB0(stqd_rdyA1),
+  .newDataA0({stqd_pbitA0,stqd_dataA0}),.newRdyA0(stqd_rdyA0),
+  .newDataB0({stqd_pbitA1,stqd_dataA1}),.newRdyB0(stqd_rdyA1),
   .newAData1(stqd_mOpB),.newEn1(stqd_xdataB0[`lsfxdata_has]),
   .newDataXA1(stqd_xdataB0),.newDataXB1(stqd_xdataB1),
   .newReqWQA1(stqd_addrB0),
   .newReqWQB1(stqd_addrB1),
-  .newDataA1(stqd_dataB0),.newRdyA1(stqd_rdyB0),
-  .newDataB1(stqd_dataB1),.newRdyB1(stqd_rdyB1),
+  .newDataA1({stqd_pbitB0,stqd_dataB0}),.newRdyA1(stqd_rdyB0),
+  .newDataB1({stqd_pbitB1,stqd_dataB1}),.newRdyB1(stqd_rdyB1),
   .out0PortEn(~pause_agu),
   .out1PortEn(~pause_agu),
   .out0Adata(wb0_adata),.out0XdataA(wb0_xdataA),.out0XdataB(wb0_xdataB),
-  .out0DataA(wb0_dataA),.out0DataB(wb0_dataB),
+  .out0DataA({wb0_pbitA,wb0_dataA}),.out0DataB({wb0_pbitB,wb0_dataB}),
   .out1Adata(wb1_adata),.out1XdataA(wb1_xdataA),.out1XdataB(wb1_xdataB),
-  .out1DataA(wb1_dataA),.out1DataB(wb1_dataB),
-  .InpWQA(lsw_wq0),.InpEnA(lsw_rs_en0[0]),.InpDataA(lsw_wdata0),
-  .InpWQB(lsw_wq1),.InpEnB(lsw_rs_en1[0]),.InpDataB(lsw_wdata1)
+  .out1DataA({wb1_pbitA,wb1_dataA}),.out1DataB({wb1_pbitB,wb1_dataB}),
+  .InpWQA(lsw_wq0),.InpEnA(lsw_rs_en0[0]),.InpDataA({lsw_pdata0,lsw_wdata0}),
+  .InpWQB(lsw_wq1),.InpEnB(lsw_rs_en1[0]),.InpDataB({lsw_pdata1,lsw_wdata1})
   );
 
   assign wb0_en=wb0_xdataA[`lsfxdata_has];
@@ -584,16 +600,20 @@ module fun_lsq(
   lsfw_combine hlwcombB_mod(
   .xdataA(wb1_xdataA),.xdataB(wb1_xdataB),
   .dataA(wb1_dataA),.dataB(wb1_dataB),
+  .pdataA(wb1_pbitA),.pdataB(wb1_pbitB),
   .data_req(wb1_adata),
   .outData(wb1_data),
+  .outPData(wb1_pbit),
   .outBnRead(wb1_brdbanks)
   );
 
   lsfw_combine hlwcombA_mod(
   .xdataA(wb0_xdataA),.xdataB(wb0_xdataB),
   .dataA(wb0_dataA),.dataB(wb0_dataB),
+  .pdataA(wb0_pbitA),.pdataB(wb0_pbitB),
   .data_req(wb0_adata),
   .outData(wb0_data),
+  .outPData(wb0_pbit),
   .outBnRead(wb0_brdbanks)
   );
 
@@ -602,16 +622,16 @@ module fun_lsq(
   .clk(clk),
   .rst(rst),
 
-  .read_addr0(stqd_addrA0),.read_data0({stqd_rdyA0,stqd_dataA0}),
-  .read_addr1(stqd_addrA1),.read_data1({stqd_rdyA1,stqd_dataA1}),
-  .read_addr2(stqd_addrB0),.read_data2({stqd_rdyB0,stqd_dataB0}),
-  .read_addr3(stqd_addrB1),.read_data3({stqd_rdyB1,stqd_dataB1}),
-  .read_addr4(wreq_data[0][`lsaddr_WQ]),.read_data4({sdata_rdy[0],dc_wdataP[0]}),
-  .read_addr5(wreq_data[1][`lsaddr_WQ]),.read_data5({sdata_rdy[1],dc_wdataP[1]}),
+  .read_addr0(stqd_addrA0),.read_data0({stqd_rdyA0,stqd_pbitA0,stqd_dataA0}),
+  .read_addr1(stqd_addrA1),.read_data1({stqd_rdyA1,stqd_pbitA1,stqd_dataA1}),
+  .read_addr2(stqd_addrB0),.read_data2({stqd_rdyB0,stqd_pbitB0,stqd_dataB0}),
+  .read_addr3(stqd_addrB1),.read_data3({stqd_rdyB1,stqd_pbitB1,stqd_dataB1}),
+  .read_addr4(wreq_data[0][`lsaddr_WQ]),.read_data4({sdata_rdy[0],dc_pdataP[0],dc_wdataP[0]}),
+  .read_addr5(wreq_data[1][`lsaddr_WQ]),.read_data5({sdata_rdy[1],dc_pdataP[1],dc_wdataP[1]}),
 
 
-  .write0_addr(lsw_wq0),.write0_data({1'b1,lsw_wdata0}),.write0_wen(lsw_rs_en0[0]),
-  .write1_addr(lsw_wq1),.write1_data({1'b1,lsw_wdata1}),.write1_wen(lsw_rs_en1[0]),
+  .write0_addr(lsw_wq0),.write0_data({1'b1,lsw_pdata0,lsw_wdata0}),.write0_wen(lsw_rs_en0[0]),
+  .write1_addr(lsw_wq1),.write1_data({1'b1,lsw_pdata0,lsw_wdata1}),.write1_wen(lsw_rs_en1[0]),
   .new0_addr(WQS0_reg),.new0_en(LSQ_shr_data[`lsqshare_wrt0]!=3'd7 && 
       bundle_in_reg2 && ~stall),.new0_odd(WQS0_reg[0]),
   .new1_addr(WQS1_reg),.new1_en(LSQ_shr_data[`lsqshare_wrt1]!=3'd7 &&
@@ -707,6 +727,10 @@ module fun_lsq(
     wreq_en_reg<=wreq_en;
     wreq_data_reg[0]<=wreq_data[0];
     wreq_data_reg[1]<=wreq_data[1];
+    dc_wdataP_reg[0]<=dc_wdataP[0];
+    dc_wdataP_reg[1]<=dc_wdataP[1];
+    dc_pdataP_reg[0]<=dc_pdataP[0];
+    dc_pdataP_reg[1]<=dc_pdataP[1];
   end
 
 endmodule
