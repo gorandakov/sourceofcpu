@@ -130,10 +130,14 @@ module dc1_xbit(
   reg write1_clkEn_reg[1:0];
   reg write_ins_reg[1:0];
   
-  reg [ADDR_WIDTH+4:0] write1_addrE_reg;
-  reg [ADDR_WIDTH+4:0] write0_addrO_reg;
-  reg [ADDR_WIDTH+4:0] write1_addrE_reg;
-  reg [ADDR_WIDTH+4:0] write0_addrO_reg;
+  reg [ADDR_WIDTH+4:0] write1_addr_reg;
+  reg [ADDR_WIDTH+4:0] write0_addr_reg;
+  reg [ADDR_WIDTH+4:0] write1_addrEO_reg[1:0];
+  reg [ADDR_WIDTH+4:0] write0_addrEO_reg[1:0];
+  wire [ADDR_WIDTH+4:0] read0_addrEO[1:0];
+  wire [ADDR_WIDTH+4:0] read1_addrEO[1:0];
+  wire [ADDR_WIDTH+4:0] read2_addrEO[1:0];
+  wire [ADDR_WIDTH+4:0] read3_addrEO[1:0];
   integer k;
   reg write0_d128_reg;
   reg write1_d128_reg;
@@ -159,10 +163,10 @@ generate
   read1_addrEO[x][ADDR_WIDTH+3:4],
   read1_data_ram[x],
   write0_clkEn_reg[x]|write_ins[x],
-  write0_addr_reg[ADDR_WIDTH+3:4],
+  write0_addrEO_reg[x][ADDR_WIDTH+3:4],
   write_dataA[x],
   write1_clkEn_reg[x]&~write_ins_reg[x],
-  write1_addr_reg[ADDR_WIDTH+3:4],
+  write1_addrEO_reg[x][ADDR_WIDTH+3:4],
   write_dataB[x]);
 
   dc1_xbit_ram ramB0(
@@ -175,10 +179,10 @@ generate
   read3_addrEO[x][ADDR_WIDTH+3:4],
   read3_data_ram[x],
   write0_clkEn_reg[x]|write_ins_reg[x],
-  write0_addr_reg[ADDR_WIDTH+3:4],
+  write0_addrEO_reg[x][ADDR_WIDTH+3:4],
   write_dataA[x],
   write1_clkEn_reg[x]&~write_ins[x],
-  write1_addr_reg[ADDR_WIDTH+3:4],
+  write1_addrEO_reg[x][ADDR_WIDTH+3:4],
   write_dataB[x]);
 
 
@@ -192,14 +196,23 @@ generate
   write1_addrEO[x][ADDR_WIDTH+3:4],
   readB_data_ram[x],
   write0_clkEn_reg[x]|write_ins_reg[x],
-  write0_addr_reg[ADDR_WIDTH+3:4],
+  write0_addrEO_reg[x][ADDR_WIDTH+3:4],
   write_dataA[x],
   write1_clkEn_reg[x]&~write_ins_reg[x],
-  write1_addr_reg[ADDR_WIDTH+3:4],
+  write1_addrEO_reg[x][ADDR_WIDTH+3:4],
   write_dataB[x]);
 
   end
 endgenerate
+
+assign read0_addrEO[0]=read0_addrE;
+assign read0_addrEO[1]=read0_addrO;
+assign read1_addrEO[0]=read1_addrE;
+assign read1_addrEO[1]=read1_addrO;
+assign read2_addrEO[0]=read2_addrE;
+assign read2_addrEO[1]=read2_addrO;
+assign read3_addrEO[0]=read3_addrE;
+assign read3_addrEO[1]=read3_addrO;
 
 always @* begin
   write_dataAx[write0_odd_reg]=write0_data_pbit_reg<<{write0_addr_reg[ADDR_WIDTH+4],write0_addr_reg[3:0]};
@@ -259,6 +272,10 @@ always @(posedge clk) begin
       write_data_reg<=0;
       write0_addr_reg<=0;
       write1_addr_reg<=0;
+      write0_addrEO_reg[0]<=0;
+      write1_addrEO_reg[0]<=0;
+      write0_addrEO_reg[1]<=0;
+      write1_addrEO_reg[1]<=0;
       read0_addr_reg<=0;
       read1_addr_reg<=0;
       read2_addr_reg<=0;
@@ -278,12 +295,16 @@ always @(posedge clk) begin
       write1_clkEn_reg<={write1_odd,~write1_odd}&{2{write1_clkEn}};
       write_ins_reg<={write0_odd,~write0_odd}&{2{write_ins}};
       write_data_reg<=write_data;
-      write0_addr_reg<=write0_addr;
-      write1_addr_reg<=write1_addr;
-      read0_addr_reg<=read0_addr;
-      read1_addr_reg<=read1_addr;
-      read2_addr_reg<=read2_addr;
-      read3_addr_reg<=read3_addr;
+      write0_addr_reg<=write0_odd ? write0_addrO : write0_addrE;
+      write1_addr_reg<=write1_odd ? write1_addrO : write1_addrE;
+      write0_addrEO_reg[0]<=write0_addrE;
+      write1_addrEO_reg[0]<=write1_addrE;
+      write0_addrEO_reg[1]<=write0_addrO;
+      write1_addrEO_reg[1]<=write1_addrO;
+      read0_addr_reg<=read0_addrE;
+      read1_addr_reg<=read1_addrE;
+      read2_addr_reg<=read2_addrE;
+      read3_addr_reg<=read3_addrE;
       read0_odd_reg<=read0_odd;
       read1_odd_reg<=read1_odd;
       read2_odd_reg<=read2_odd;
