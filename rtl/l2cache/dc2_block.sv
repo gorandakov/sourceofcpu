@@ -488,13 +488,13 @@ module dcache2_bitx_bank(
   input [ADDR_WIDTH-1:0] write_addrO0;
   input write_hitO0; //+1 cycle
   input [4:0] write_begin0;
-  input write_data0;
+  input [1:0] write_data0;
   input [ADDR_WIDTH-1:0] write_addrE1;
   input write_hitE1; //+1 cycle
   input [ADDR_WIDTH-1:0] write_addrO1;
   input write_hitO1; //+1 cycle
   input [4:0] write_begin1;
-  input write_data1;
+  input [1:0] write_data1;
   input [DATA_WIDTH-1:0] write_data;
   input ins_hit;
   
@@ -537,11 +537,18 @@ module dcache2_bitx_bank(
 	assign read_datax=~(~read_dataxP&read_datax_in);
     end
   endgenerate
- 
-  assign write_ben0=32'd1<<{write_odd0 ? write_addrO0[7] : write_addrE0[7],write_begin0[4:1]};
-  assign write_ben1=32'd1<<{write_odd1 ? write_addrO1[7] : write_addrE1[7],write_begin1[4:1]};
-  assign write_ben_ins=write_addrE0_reg[7] ? 32'hffff0000 : 32'h0000ffff;  
-  
+
+  always @* begin 
+      write_ben0x[write_odd0]=32'd1<<{write_odd0 ? write_addrO0[7] : write_addrE0[7],write_begin0[4:1]};
+      write_ben1x[write_odd1]=32'd1<<{write_odd1 ? write_addrO1[7] : write_addrE1[7],write_begin1[4:1]};
+      write_ben0x[~write_odd0]=0;
+      write_ben1x[~write_odd1]=0;
+      write_ben_ins=write_addrE0_reg[7] ? 32'hffff0000 : 32'h0000ffff;  
+      if (write_begin0!=4'hf) write_ben0x[write_odd0]|=32'd2<<{write_odd0 ? write_addrO0[7] : write_addrE0[7],write_begin0[4:1]};
+      else write_ben0x[~write_odd0]=32'd1<<{~write_odd0 ? write_addrO0[7] : write_addrE0[7],4'b0};
+      if (write_begin1!=4'hf) write_ben1x[write_odd1]|=32'd2<<{write_odd1 ? write_addrO1[7] : write_addrE1[7],write_begin1[4:1]};
+      else write_ben1x[~write_odd1]=32'd1<<{write_odd1 ? write_addrO1[7] : write_addrE1[7],4'b0};
+  end
   dcache2_xbit_ram_box ramE_mod(
   .clk(clk),
   .rst(rst),
@@ -549,13 +556,13 @@ module dcache2_bitx_bank(
   .read0_addr(write_addrE0[6:0]),//read/write addr
   .read0_data(read_data_ram[0]),
   .read0_datax(read_datax_ram[0]),
-  .write0_data(ins_hit ? {write_data,write_data} : {32{write_data0}}),
+  .write0_data(ins_hit ? {write_data,write_data} : write_begin0[1] ? {16{{write_data0[0],write_data0[1]}}} : {16{write_data0}}),
   .write0_wen((write_hitE0)|(ins_hit&~read_odd)),
-  .write0_ben(ins_hit ? write_ben_ins : write_ben0),
+  .write0_ben(ins_hit ? write_ben_ins : write_ben0x[0]),
   .read1_addr(write_addrE1[6:0]),//read/write addr
-  .write1_data(ins_hit ? {write_data,write_data} : {32{write_data1}}),
+  .write1_data(ins_hit ? {write_data,write_data} : write_begin1[1] ? {16{{write_data1[0],write_data1[1]}}} : {16{write_data1}}),
   .write1_wen((write_hitE1)|(ins_hit&~read_odd)),
-  .write1_ben(ins_hit ? write_ben_ins : write_ben1)
+  .write1_ben(ins_hit ? write_ben_ins : write_ben1x[0])
   );
 
   dcache2_xbit_ram_box ramE_mod(
@@ -565,13 +572,13 @@ module dcache2_bitx_bank(
   .read0_addr(write_addrO0[6:0]),//read/write addr
   .read0_data(read_data_ram[1]),
   .read0_datax(read_datax_ram[1]),
-  .write0_data(ins_hit ? {write_data,write_data} : {32{write_data0}}),
+  .write0_data(ins_hit ? {write_data,write_data} : write_begin0[1] ? {16{{write_data0[0],write_data0[1]}}} : {16{write_data0}}),
   .write0_wen((write_hitO0)|(ins_hit&read_odd)),
-  .write0_ben(ins_hit ? write_ben_ins : write_ben0),
+  .write0_ben(ins_hit ? write_ben_ins : write_ben0x[1]),
   .read1_addr(write_addrO1[6:0]),//read/write addr
-  .write1_data(ins_hit ? {write_data,write_data} : {32{write_data1}}),
+  .write1_data(ins_hit ? {write_data,write_data} : write_begin1[1] ? {16{{write_data1[0],write_data1[1]}}} : {16{write_data1}}),
   .write1_wen((write_hitO1)|(ins_hit&read_odd)),
-  .write1_ben(ins_hit ? write_ben_ins : write_ben1)
+  .write1_ben(ins_hit ? write_ben_ins : write_ben1x[1])
   );
 
   
