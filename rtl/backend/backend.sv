@@ -1000,11 +1000,13 @@ module backend(
   wire [12:0]              lso_ret;
   wire [127+8:0]           lso_data;
   wire [3:0]               lso_bnkread;
+  wire [1:0]               lso_pbit;
   wire [`lsaddr_width-1:0] lso2_adata;
   wire [8:0]               lso2_LSQ;
   wire                     lso2_en;
   wire [12:0]              lso2_ret;
   wire [127+8:0]           lso2_data;
+  wire [1:0]               lso2_pbit;
   wire [3:0]               lso2_bnkread;
   
   wire [2:0][IN_REG_WIDTH-1:0] rrfAW;
@@ -4853,7 +4855,9 @@ module backend(
   .mOpY5_type_o(),
   .mOpY5_II_o(),
   .lso_adata(lso_adata),.lso_xdataA({lso_en,11'b0}),.lso_data(lso_data),.lso_bnkread({lso_bnkread[3],lso_bnkread}),
+  .lso_pbit(lso_pbit),
   .lso2_adata(lso2_adata),.lso2_xdataA({lso2_en,11'b0}),.lso2_data(lso2_data),.lso2_bnkread({lso2_bnkread[3],lso2_bnkread}),
+  .lso2_pbit(lso2_pbit),
   .lso2_wb_en({lso2_en && (lso2_adata[`lsaddr_reg_low]==2 || lso2_adata[`lsaddr_reg_low]==5 || lso2_adata[`lsaddr_reg_low]==8 ),
     lso2_en && (lso2_adata[`lsaddr_reg_low]==1 || lso2_adata[`lsaddr_reg_low]==4 || lso2_adata[`lsaddr_reg_low]==7 ),
     lso2_en && (lso2_adata[`lsaddr_reg_low]==0 || lso2_adata[`lsaddr_reg_low]==3 || lso2_adata[`lsaddr_reg_low]==6 )}),
@@ -4932,7 +4936,9 @@ module backend(
   .st1_adata(st1_adata),.st1_en(st1_en),.st1_bank1(st1_bank1),.st1_bgn_ben(st1_bgn_ben),.st1_end_ben(st1_end_ben),.st1_data(st1_data),
   .st1_pbit(st1_pbit),
   .wb0_adata(lso_adata),.wb0_LSQ(lso_LSQ),.wb0_en(lso_en),.wb0_ret(),.wb0_data(lso_data),.wb0_brdbanks(lso_bnkread),
+  .wb0_pbit(lso_pbit),
   .wb1_adata(lso2_adata),.wb1_LSQ(lso2_LSQ),.wb1_en(lso2_en),.wb1_ret(),.wb1_data(lso2_data),.wb1_brdbanks(lso2_bnkread),
+  .wb1_pbit(lso2_pbit),
   .mem_II_upper(retM_II0),
   .mem_II_upper_in(retM_II),
   .mem_II_bits_fine(retM_fine),
@@ -4954,7 +4960,7 @@ module backend(
   .WQS1_reg(WQS_reg[1]),.WQR1_reg(WQR_reg[1]),
   .WQS2_reg(WQS_reg[2]),.WQR2_reg(WQR_reg[2]),
   .lsw_wq0(WDfxWQ_reg3[0]),.lsw_wdata0(lsw_wdata[0]),.lsw_pdata0(lsw_pbit[0]),.lsw_rs_en0(WDfxDataEn_reg3[0]),
-  .lsw_wq1(WDfxWQ_reg3[1]),.lsw_wdata1(lsw_wdata[1]),.lsw_pdata0(lsw_pbit[1]),.lsw_rs_en1(WDfxDataEn_reg3[1]),
+  .lsw_wq1(WDfxWQ_reg3[1]),.lsw_wdata1(lsw_wdata[1]),.lsw_pdata1(lsw_pbit[1]),.lsw_rs_en1(WDfxDataEn_reg3[1]),
   .mOpY4_II(st0_II_reg3),.mOpY4_hit(dc_wrHit[0]),
   .mOpY5_II(st1_II_reg3),.mOpY5_hit(dc_wrHit[1]),
   .lsi0_reg(rs_lsi_reg[0]),.lsi1_reg(rs_lsi_reg[1]),.lsi2_reg(rs_lsi_reg[2]),//only used to check if has mem reqs
