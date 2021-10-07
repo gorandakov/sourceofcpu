@@ -154,6 +154,7 @@ module agu_block(
   wr0_bgn_ben,wr0_end_ben,
   wr0_odd,wr0_split,
   wr0_data,
+  wr0_pbit,wr0_d128,
   wr1_hit,
   wr1_addrE,wr1_addrO,
   wr1_banks,
@@ -161,6 +162,7 @@ module agu_block(
   wr1_bgn_ben,wr1_end_ben,
   wr1_odd,wr1_split,
   wr1_data,
+  wr1_pbit,wr1_d128,
   wrStall
   );
   parameter [4:0] BUS_ID=5'd0;
@@ -448,6 +450,8 @@ module agu_block(
   output [3:0] wr0_end_ben;
   output wr0_odd,wr0_split;
   output [159:0] wr0_data;
+  output [1:0] wr0_pbit;
+  output wr0_d128;
   output [1:0] wr1_hit;
   output [35:0] wr1_addrE;
   output [35:0] wr1_addrO;
@@ -457,6 +461,8 @@ module agu_block(
   output [3:0] wr1_bgn_ben;
   output [3:0] wr1_end_ben;
   output [159:0] wr1_data;
+  output [1:0] wr1_pbit;
+  output wr1_d128;
   output wr1_odd,wr1_split;
   input wrStall;
   
@@ -2032,6 +2038,8 @@ module agu_block(
   assign wr0_odd=mOpY4_odd_o_reg3;
   assign wr0_split=mOpY4_split_o_reg3;
   assign wr0_data=mOpY4_data_o_reg3;
+  assign wr0_pbit=mOpY4_pbit_o_reg3;
+  assign wr0_d128=mOpY4_d128_o_reg3;
   
   assign wr1_hit={mOpY5_hit && mOpY5_odd_o_reg3 | mOpY5_split_o_reg3,mOpY5_hit && ~mOpY5_odd_o_reg3 | mOpY5_split_o_reg3};
   assign wr1_addrE=mOpY5_addrEven_o_reg3;
@@ -2044,6 +2052,8 @@ module agu_block(
   assign wr1_odd=mOpY5_odd_o_reg3;
   assign wr1_split=mOpY5_split_o_reg3;
   assign wr1_data=mOpY5_data_o_reg3;
+  assign wr1_pbit=mOpY5_pbit_o_reg3;
+  assign wr1_d128=mOpY5_d128_o_reg3;
   
   assign miss_clDo[0]=~mOpR_clHit[0] && ~miss_doneEven && ~mOpR_odd|mOpR_split;
   assign miss_clDo[1]=~mOpR_clHit[1] && ~miss_doneOdd &&  mOpR_odd|mOpR_split;
