@@ -119,10 +119,16 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   assign isBaseSpecLoad=(opcode_main==8'd54 || opcode_main==8'd176) && magic[0];
   assign isBaseIndexSpecLoad=(opcode_main==8'd55 || opcode_main==8'd177) && magic[0];
   
-  assign isImmLoadStore=(opcode_main[7:2]==6'd15 || opcode_main[7:1]==7'b1011000) && magic[0];  
+  assign isImmLoadStore=((opcode_main[7:2]==6'd15 & !isImmCISC) || opcode_main[7:1]==7'b1011000) & magic[0];  
+  assign isImmCISC=instr[17:16]!=0;
+  assign isBaseCISC=magic[1]==1'b0 ? instr[19:18]!=2'b0 : 1'bz;
+  assign isBaseCISC=magic[1]==2'b1 ? instr[17:16]!=2'b0 : 1'bz;
+  assign isBaseLoadStore=((opcode_main[7:5]==3'b010 && !isBaseCISC) || opcode_main[7:4]==4'b0110) & magic[0];
+  assign isBaseIndexCISC=magic[1]==1'b0 ? instr[24:23]!=0 : 1'bz;
+  assign isBaseIndexCISC=magic[2:1]==2'b01 ? instr[26:25]!=0 : 1'bz;
+  assign isBaseIndexCISC=magic[2:1]==2'b11 ? instr[17:16]!=0 : 1'bz;
+  assign isBaseIndexLoadStore=((opcode_main[7:5]==3'b100 && !isBaseIndexCISC) || opcode_main[7:4]==4'b0111) & magic[0];
 
-  assign isBaseLoadStore=(opcode_main[7:5]==3'b010 || opcode_main[7:4]==4'b0110) && magic[0];
-  assign isBaseIndexLoadStore=(opcode_main[7:5]==3'b100 || opcode_main[7:4]==4'b0111) && magic[0];
 
   assign isBasicCJump=(opcode_main[7:4]==4'b1010) && magic[0];
   assign isSelfTestCJump=(opcode_main==8'd178 || opcode_main==8'd179) && magic[0];
