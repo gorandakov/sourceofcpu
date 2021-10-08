@@ -205,6 +205,7 @@ module agucam(
   mOp3_II,
   mOp3_WQ,
   mOp3_data,
+  mOp3_pbit,
   mOp3_bread,
 
   mOpR_addrMain,
@@ -227,6 +228,7 @@ module agucam(
   mOpR_lsflag,
   mOpR_bread,
   mOpR_data,
+  mOpR_pbit,
   mOpR_attr
   );
 
@@ -315,6 +317,7 @@ module agucam(
   input [7:0] mOp3_WQ;
   input [135:0] mOp3_data;
   input [4:0] mOp3_bread;
+  input [1:0] mOp3_pbit;
 
   output [VADDR_WIDTH-1:0] mOpR_addrMain;
   output [PADDR_WIDTH-9:0] mOpR_addrEven;
@@ -337,7 +340,8 @@ module agucam(
   output [4:0] mOpR_bread;
   output [135:0] mOpR_data;
   output [3:0] mOpR_attr;
-  
+  output [1:0] mOpR_pbit;
+
   wire [3:0] curConfl;
  // wire [3:0] write_confl;
   wire [3:0] read_conflA;
@@ -474,6 +478,7 @@ module agucam(
   assign write_mop3[`mOpX_WQ]=      mOp3_WQ;
   assign write_mop3[`mOpX_odd]=     mOp3_odd;
   assign write_mop3[`mOpX_low]=     mOp3_low;
+  assign write_mop3[`mOpX_pbit]=    mOp3_pbit;
   assign write_mop3[`mOpX_bread]=   mOp3_bread;
 //  assign write_mop3[`mOpX_thr]=  1'b0; //fixme: not thread safe
 
@@ -501,6 +506,7 @@ module agucam(
   assign thrmask=(!conflFound) ? 1'b1 : 1'BZ;
   assign mOpR_lsfw=(!conflFound) ? 1'b0 : 1'BZ;
   assign mOpR_attr=(!conflFound) ? 4'b0 : 4'BZ;
+  assign mOpR_pbit=(!conflFound) ? 2'b0 : 2'BZ;
   
   assign read_confl[0]=(wen & count[0]) ? read_conflA[0] : read_conflA[0] && valid[read_mop[0][`mOp_thread]][read_addr];
   assign read_confl[1]=(wen & count[0]) ? read_conflA[1] : read_conflA[1] && valid[read_mop[1][`mOp_thread]][read_addr];
@@ -530,6 +536,7 @@ module agucam(
   assign mOpR_lsfw=sel[3] ? 1'b1 : 1'bz;
   assign mOpR_bread=sel[3] ? read_mop3[`mOpX_bread] : 5'BZ;
   assign mOpR_attr=sel[3] ? 4'b0 : 4'BZ;
+  assign mOpR_attr=sel[3] ? read_mop3[`mOpX_pbit] : 2'BZ;
 
   generate
     genvar p,k;
@@ -554,6 +561,7 @@ module agucam(
         assign thrmask=sel[k] ? (read_mop[k][`mOp_thread]) | (~read_mop[k][`mOp_thread]) : 1'bz;
         assign mOpR_lsfw=sel[k] ? 1'b0 : 1'bz;
         assign mOpR_attr=sel[k] ? read_mop[k][`mOp_attr] : 4'bz;
+        assign mOpR_pbit=sel[k] ? 2'b0 : 2'bz;
     end
     for(p=0;p<8;p=p+1) begin
 	assign read_addrU_d=(rdxvalid0[p] || rdvalid1[p] & drvalid0_found &
