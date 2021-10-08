@@ -319,7 +319,7 @@ module smallInstr_decoder(
   assign isBaseIndexSpecLoad=opcode_main==8'd55 || opcode_main==8'd203;
   
   assign isImmLoadStore=(opcode_main[7:2]==6'd15 & !isImmCISC) || opcode_main[7:1]==7'b1011000;  
-  assign isImmCISC=instr[17:16]!=0;
+  assign isImmCISC=instr[1];
   assign isBaseCISC=magic[1]==1'b0 ? instr[19:18]!=2'b0 : 1'bz;
   assign isBaseCISC=magic[1]==2'b1 ? instr[17:16]!=2'b0 : 1'bz;
   assign isBaseLoadStore=(opcode_main[7:5]==3'b010 && !isBaseCISC) || opcode_main[7:4]==4'b0110;
@@ -1221,7 +1221,7 @@ module smallInstr_decoder(
           poperation[19][5:0]=( opcode_main[7:1]==7'b1011000) ? 
           {2'b10,instr[10:8],opcode_main[0]} : {1'b0,instr[11:8],opcode_main[0]};
       poperation[19][12:6]=7'b0;
-      pisIPRel[19]=( opcode_main[7:1]==7'b1011000) ? instr[11] : opcode_main[1];
+      pisIPRel[19]=1'b1;
       prA_use[19]=1'b0;
       prB_use[19]=1'b1;
       prT_use[19]=~opcode_main[0] && opcode_main[7:1]==7'b1011000 && ~instr[10];
