@@ -2895,6 +2895,8 @@ module agu_block(
       mOpY4_odd_o_reg<=mOpY4_odd_o;
       mOpY4_split_o_reg<=mOpY4_split_o;
       mOpY4_data_o_reg<=mOpY4_data_o;
+      mOpY4_pbit_o_reg<=mOpY5_pbit_o;
+      mOpY4_d128_o_reg<=mOpY5_d128_o;
 
       mOpY4_addrEven_o_reg2<=mOpY4_addrEven_o_reg;
       mOpY4_addrOdd_o_reg2<=mOpY4_addrOdd_o_reg;
@@ -2906,6 +2908,8 @@ module agu_block(
       mOpY4_odd_o_reg2<=mOpY4_odd_o_reg;
       mOpY4_split_o_reg2<=mOpY4_split_o_reg;
       mOpY4_data_o_reg2<=mOpY4_data_o_reg;
+      mOpY4_pbit_o_reg2<=mOpY5_pbit_o_reg;
+      mOpY4_d128_o_reg2<=mOpY5_d128_o_reg;
 
       mOpY4_addrEven_o_reg3<=mOpY4_addrEven_o_reg2;
       mOpY4_addrOdd_o_reg3<=mOpY4_addrOdd_o_reg2;
@@ -2917,6 +2921,8 @@ module agu_block(
       mOpY4_odd_o_reg3<=mOpY4_odd_o_reg2;
       mOpY4_split_o_reg3<=mOpY4_split_o_reg2;
       mOpY4_data_o_reg3<=mOpY4_data_o_reg2;
+      mOpY4_pbit_o_reg3<=mOpY5_pbit_o_reg2;
+      mOpY4_d128_o_reg3<=mOpY5_d128_o_reg2;
 
       mOpY5_addrEven_o_reg<=mOpY5_addrEven_o;
       mOpY5_addrOdd_o_reg<=mOpY5_addrOdd_o;
@@ -2928,6 +2934,8 @@ module agu_block(
       mOpY5_odd_o_reg<=mOpY5_odd_o;
       mOpY5_split_o_reg<=mOpY5_split_o;
       mOpY5_data_o_reg<=mOpY5_data_o;
+      mOpY5_pbit_o_reg<=mOpY5_pbit_o;
+      mOpY5_d128_o_reg<=mOpY5_d128_o;
 
       mOpY5_addrEven_o_reg2<=mOpY5_addrEven_o_reg;
       mOpY5_addrOdd_o_reg2<=mOpY5_addrOdd_o_reg;
@@ -2939,6 +2947,8 @@ module agu_block(
       mOpY5_odd_o_reg2<=mOpY5_odd_o_reg;
       mOpY5_split_o_reg2<=mOpY5_split_o_reg;
       mOpY5_data_o_reg2<=mOpY5_data_o_reg;
+      mOpY5_pbit_o_reg2<=mOpY5_pbit_o_reg;
+      mOpY5_d128_o_reg2<=mOpY5_d128_o_reg;
 
       mOpY5_addrEven_o_reg3<=mOpY5_addrEven_o_reg2;
       mOpY5_addrOdd_o_reg3<=mOpY5_addrOdd_o_reg2;
@@ -2950,6 +2960,8 @@ module agu_block(
       mOpY5_odd_o_reg3<=mOpY5_odd_o_reg2;
       mOpY5_split_o_reg3<=mOpY5_split_o_reg2;
       mOpY5_data_o_reg3<=mOpY5_data_o_reg2;
+      mOpY5_pbit_o_reg3<=mOpY5_pbit_o_reg2;
+      mOpY5_d128_o_reg3<=mOpY5_d128_o_reg2;
 
       p0_en_reg<=p0_en;
       p1_en_reg<=p1_en;
