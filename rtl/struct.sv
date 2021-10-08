@@ -355,8 +355,9 @@
 `define mOpX_WQ 113:106
 `define mOpX_bread 118:114
 `define mOpX_mtype 120:119
-`define mOpX_dummy 121
-`define mOpX_width 122
+`define mOpX_bpit 122:121
+`define mOpX_dummy 123
+`define mOpX_width 124
 
 
 `define mOpC_addrEven 35:0
