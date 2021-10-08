@@ -562,6 +562,8 @@ module agu_block(
   reg        mOpY4_odd_o_reg;
   reg        mOpY4_split_o_reg;
   reg [159:0]mOpY4_data_o_reg;
+  reg [1  :0]mOpY4_pbit_o_reg;
+  reg        mOpY4_d128_o_reg;
 
   reg [35:0] mOpY4_addrEven_o_reg2;
   reg [35:0] mOpY4_addrOdd_o_reg2;
@@ -573,6 +575,8 @@ module agu_block(
   reg        mOpY4_odd_o_reg2;
   reg        mOpY4_split_o_reg2;
   reg [159:0]mOpY4_data_o_reg2;
+  reg [1  :0]mOpY4_pbit_o_reg2;
+  reg        mOpY4_d128_o_reg2;
   
   reg [35:0] mOpY4_addrEven_o_reg3;
   reg [35:0] mOpY4_addrOdd_o_reg3;
@@ -584,6 +588,8 @@ module agu_block(
   reg        mOpY4_odd_o_reg3;
   reg        mOpY4_split_o_reg3;
   reg [159:0]mOpY4_data_o_reg3;
+  reg [1  :0]mOpY4_pbit_o_reg3;
+  reg        mOpY4_d128_o_reg3;
 
   reg [35:0] mOpY5_addrEven_o_reg;
   reg [35:0] mOpY5_addrOdd_o_reg;
@@ -595,6 +601,8 @@ module agu_block(
   reg        mOpY5_odd_o_reg;
   reg        mOpY5_split_o_reg;
   reg [159:0]mOpY5_data_o_reg;
+  reg [1  :0]mOpY5_pbit_o_reg;
+  reg        mOpY5_d128_o_reg;
 
   reg [35:0] mOpY5_addrEven_o_reg2;
   reg [35:0] mOpY5_addrOdd_o_reg2;
@@ -606,6 +614,8 @@ module agu_block(
   reg        mOpY5_odd_o_reg2;
   reg        mOpY5_split_o_reg2;
   reg [159:0]mOpY5_data_o_reg2;
+  reg [1  :0]mOpY5_pbit_o_reg2;
+  reg        mOpY5_d128_o_reg2;
   
   reg [35:0] mOpY5_addrEven_o_reg3;
   reg [35:0] mOpY5_addrOdd_o_reg3;
@@ -617,6 +627,8 @@ module agu_block(
   reg        mOpY5_odd_o_reg3;
   reg        mOpY5_split_o_reg3;
   reg [159:0]mOpY5_data_o_reg3;
+  reg [1  :0]mOpY5_pbit_o_reg3;
+  reg        mOpY5_d128_o_reg3;
 
 
 

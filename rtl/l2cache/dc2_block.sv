@@ -313,7 +313,7 @@ module dcache2_xbit_ram(
   write0_wen,
   write1_addr,
   write1_data,
-  write1_wen,
+  write1_wen
   );
   localparam ADDR_WIDTH=8-1;
   localparam DATA_WIDTH=`dcache2_data_width;
@@ -544,9 +544,11 @@ module dcache2_bitx_bank(
       write_ben0x[~write_odd0]=0;
       write_ben1x[~write_odd1]=0;
       write_ben_ins=write_addrE0_reg[7] ? 32'hffff0000 : 32'h0000ffff;  
-      if (write_begin0!=4'hf) write_ben0x[write_odd0]|=32'd2<<{write_odd0 ? write_addrO0[7] : write_addrE0[7],write_begin0[4:1]};
+      if (write_begin0!=4'hf) write_ben0x[write_odd0]=write_ben0x[write_odd0]| (
+	      32'd2<<{write_odd0 ? write_addrO0[7] : write_addrE0[7],write_begin0[4:1]});
       else write_ben0x[~write_odd0]=32'd1<<{~write_odd0 ? write_addrO0[7] : write_addrE0[7],4'b0};
-      if (write_begin1!=4'hf) write_ben1x[write_odd1]|=32'd2<<{write_odd1 ? write_addrO1[7] : write_addrE1[7],write_begin1[4:1]};
+      if (write_begin1!=4'hf) write_ben1x[write_odd1]=write_ben1x[write_odd1] | ( 
+	      32'd2<<{write_odd1 ? write_addrO1[7] : write_addrE1[7],write_begin1[4:1]});
       else write_ben1x[~write_odd1]=32'd1<<{write_odd1 ? write_addrO1[7] : write_addrE1[7],4'b0};
   end
   dcache2_xbit_ram_box ramE_mod(
