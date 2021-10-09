@@ -264,6 +264,7 @@ module missQ(
   mOp2_lsflag_o,
   mOp2_lsfwd_o,
   mOp2_data_o,
+  mOp2_pbit_o,
   mOp2_brdread_o,
   miss3,
   mOp3_en,
@@ -440,6 +441,7 @@ module missQ(
   input [2:0] WB_fwd;
   input [4:0] mOpW_brdread;
   input [127+8:0] mOpW_data;
+  input [1:0] mOpW_pbit;
 
   input mOpW_en;
   input mOpW_thread;
@@ -576,6 +578,7 @@ module missQ(
   output mOp2_lsflag_o;
   output mOp2_lsfwd_o;
   output [135:0] mOp2_data_o;
+  output [1:0] mOp2_pbit_o;
   output [4:0] mOp2_brdread_o;
 
   input miss3;
@@ -599,6 +602,7 @@ module missQ(
   input mOp3_lsflag;
   input mOp3_lsfwd;
   input [135:0] mOp3_data;
+  input [1:0] mOp3_pbit;
   input [4:0] mOp3_brdbanks;
 
   output mOp3_en_o;
@@ -620,6 +624,7 @@ module missQ(
   output mOp3_lsflag_o;
   output mOp3_lsfwd_o;
   output [127+8:0] mOp3_data_o;
+  output [1:0] mOp3_pbit_o;
   output [3+1:0] mOp3_brdbanks_o;
 
   input miss4;
@@ -640,6 +645,7 @@ module missQ(
   input mOp4_split;
   input [1:0] mOp4_clHit;
   input [159:0] mOp4_data;
+  input [1:0] mOp4_pbit;
   input [1:0] mOp4_type;
   input [9:0] mOp4_II;
 
@@ -658,6 +664,7 @@ module missQ(
   output [1:0] mOp4_addr_low_o;
   output mOp4_split_o;
   output [159:0] mOp4_data_o;
+  output [1:0] mOp4_pbit_o;
   output [1:0] mOp4_type_o;
   output [9:0] mOp4_II_o;
 
@@ -679,6 +686,7 @@ module missQ(
   input mOp5_split;
   input [1:0] mOp5_clHit;
   input [159:0] mOp5_data;
+  input [1:0] mOp5_pbit;
   input [1:0] mOp5_type;
   input [9:0] mOp5_II;
   
@@ -697,6 +705,7 @@ module missQ(
   output [1:0] mOp5_addr_low_o;
   output mOp5_split_o;
   output [159:0] mOp5_data_o;
+  output [1:0] mOp5_pbit_o;
   output [1:0] mOp5_type_o;
   output [9:0] mOp5_II_o;
   
