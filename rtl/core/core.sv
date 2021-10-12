@@ -620,6 +620,8 @@ module heptane_core(
   wire [3:0] wr0_end_ben;
   wire wr0_odd,wr0_split;
   wire [159:0] wr0_data;
+  wire [1:0] wr0_pbit;
+  wire       wr0_d128;
   wire [1:0] wr1_hit;
   wire [43:8] wr1_addrE;
   wire [43:8] wr1_addrO;
@@ -630,6 +632,8 @@ module heptane_core(
   wire [3:0] wr1_end_ben;
   wire wr1_odd,wr1_split;
   wire [159:0] wr1_data;
+  wire [1:0] wr1_pbit;
+  wire       wr1_d128;
   
   wire dc2_io_en;
   reg dc2_io_en_reg;
@@ -714,6 +718,8 @@ module heptane_core(
   wire [3:0] dc2_enBen0;
   wire dc2_odd0,dc2_split0;
   wire [159:0] dc2_data0;
+  wire [1:0]   dc2_pbit0;
+  wire         dc2_d128_0;
   wire dc2_hitE1,dc2_hitO1;
   wire [35:0] dc2_addrE1;
   wire [35:0] dc2_addrO1;
@@ -724,6 +730,8 @@ module heptane_core(
   wire [3:0] dc2_enBen1;
   wire dc2_odd1,dc2_split1;
   wire [159:0] dc2_data1;
+  wire [1:0]   dc2_pbit1;
+  wire         dc2_d128_1;
   wire dc2_rhitB0,dc2_rhitB1,dc2_rhitA0;
   reg dc2_rhitB0_reg,dc2_rhitB1_reg,dc2_rhitA0_reg;
   wire [4:0] dc2_rLRUA;
@@ -914,6 +922,8 @@ module heptane_core(
   .write_bBen0(wr0_bgn_ben),.write_enBen0(wr0_end_ben),
   .write_odd0(wr0_odd),.write_split0(wr0_split),
   .write_data0(wr0_data),
+  .write_pbit0(wr0_pbit),
+  .write_d128_0(wr0_d128),
   .write1_clkEn(wr1_hit),
   .write_addrE1(wr1_addrE), 
   .write_addrO1(wr1_addrO),
@@ -922,6 +932,8 @@ module heptane_core(
   .write_bBen1(wr1_bgn_ben),.write_enBen1(wr1_end_ben),
   .write_odd1(wr1_odd),.write_split1(wr1_split),
   .write_data1(wr1_data),
+  .write_pbit1(wr1_pbit),
+  .write_d128_1(wr1_d128),
   //writeI0_clkEn,
   .writeI_addrE0(dc2_addrE0), .writeI_hitE0(dc2_hitE0),
   .writeI_addrO0(dc2_addrO0), .writeI_hitO0(dc2_hitO0),
@@ -930,6 +942,8 @@ module heptane_core(
   .writeI_bBen0(dc2_bBen0),.writeI_enBen0(dc2_enBen0),
   .writeI_odd0(dc2_odd0),.writeI_split0(dc2_split0),
   .writeI_data0(dc2_data0),
+  .writeI_pbit0(dc2_pbit0),
+  .writeI_d128_0(dc2_d128_0),
  //writeI1_clkEn,
   .writeI_addrE1(dc2_addrE1), .writeI_hitE1(dc2_hitE1),
   .writeI_addrO1(dc2_addrO1), .writeI_hitO1(dc2_hitO1),
@@ -938,6 +952,8 @@ module heptane_core(
   .writeI_bBen1(dc2_bBen1),.writeI_enBen1(dc2_enBen1),
   .writeI_odd1(dc2_odd1),.writeI_split1(dc2_split1),
   .writeI_data1(dc2_data1),
+  .writeI_pbit1(dc2_pbit1),
+  .writeI_d128_1(dc2_d128_1),
   .writeI_exp(L1_expAddr_en),
   .readI_en(dc2_rdEn),.readI_en2(dc2_rdEnX),.readI_odd(dc2_rdOdd),.readI_req(dc2_req_rd),
   .readI_dupl(dc2_dupl_rd),.readI_want_excl(dc2_want_excl),
