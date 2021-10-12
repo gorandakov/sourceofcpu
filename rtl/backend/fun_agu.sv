@@ -540,6 +540,7 @@ module agu_block(
   wire rec_stall;
   wire rec_tlb_miss;
   wire [3:0] rec_attr;
+  wire [1:0] rec_pbit;
 
   wire [63:0] p0_cmplxAddr_d;
   wire [63:0] p1_cmplxAddr_d;
@@ -1243,6 +1244,7 @@ module agu_block(
   wire mOp3_rsEn;
   wire [4:0] mOp3_brdread;
   wire [127+8:0] mOp3_data;
+  wire [1:0]   mOp3_pbit;
   wire [4:0] mOpX3_brdread;
   wire [127+8:0] mOpX3_data;
   wire [1:0] mOpX3_pbit;
@@ -1956,7 +1958,8 @@ module agu_block(
   .mOpR_type(rec_type),
   .mOpR_thread(),
   .mOpR_bread(rec_brdbnk),
-  .mOpR_data(rec_data)
+  .mOpR_data(rec_data),
+  .mOpR_pbit(rec_pbit)
   );
   
   agu_r rec_agu_mod(
@@ -1976,6 +1979,7 @@ module agu_block(
   .mOp0_addr_low(rec_addr_low),
   .mOp0_bread(rec_brdbnk),
   .mOp0_data(rec_data),
+  .mOp0_pbit(rec_pbit),
   .mOp0_sz(rec_size),
   .mOp0_invtlb(rec_invtlb),
   .mOp0_st(1'b0),
@@ -2023,6 +2027,7 @@ module agu_block(
   .mOp_lsfwd(mOp3_lsfwd),
   .mOp_bread(mOp3_brdread),
   .mOp_data(mOp3_data),
+  .mOp_pbit(mOp3_pbit),
   .mOp_lsflag(mOp3_lsflag),
   .mOp_tlb_miss(rec_tlb_miss),
   .FU3Hit(FU3Hit),
@@ -2260,6 +2265,7 @@ module agu_block(
   mOp3_lsflag,
   mOp3_lsfwd,
   mOp3_data,
+  mOp3_pbit,
   mOp3_brdread,
   mOpX3_en,
   ,

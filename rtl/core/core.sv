@@ -1819,6 +1819,7 @@ module heptane_core(
   insBus_dirty,
   insBus_exclusive,
   insBus_data,
+  insBus_dataPTR,
   reqBus_en,
   reqBus_addr,
   reqBus_req,
@@ -1835,6 +1836,7 @@ module heptane_core(
   wr0_bgn_ben,wr0_end_ben,
   wr0_odd,wr0_split,
   wr0_data,
+  wr0_pbit,wr0_d128,
   wr1_hit,
   wr1_addrE,wr1_addrO,
   wr1_banks,
@@ -1842,6 +1844,7 @@ module heptane_core(
   wr1_bgn_ben,wr1_end_ben,
   wr1_odd,wr1_split,
   wr1_data,
+  wr1_pbit,wr1_d128,
   wrStall
   );
   
