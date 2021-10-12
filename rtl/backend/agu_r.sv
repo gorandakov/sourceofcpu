@@ -19,6 +19,7 @@ module agu_r(
   mOp0_addr_low,
   mOp0_bread,
   mOp0_data,
+  mOp0_pbit,
   mOp0_sz,
   mOp0_invtlb,
   mOp0_st,
@@ -64,6 +65,7 @@ module agu_r(
   mOp_type,
   mOp_bread,
   mOp_data,
+  mOp_pbit,
   mOp_tlb_miss,
   FU3Hit,
   FU3reg,
@@ -102,6 +104,7 @@ module agu_r(
   input [1:0] mOp0_addr_low;
   input [3+1:0] mOp0_bread;
   input [127+8:0] mOp0_data;
+  input [1:0] mOp0_data;
   input [4:0] mOp0_sz;
   input mOp0_invtlb;
   input mOp0_st;
@@ -151,6 +154,7 @@ module agu_r(
   output [1:0] mOp_type;
   output [3+1:0] mOp_bread;
   output [127+8:0] mOp_data;
+  output [1:0] mOp_pbit;
   output mOp_tlb_miss;
   input FU3Hit;
   input [8:0] FU3reg;
@@ -286,10 +290,11 @@ module agu_r(
   assign mOp_WQ=(~req_bus) ? mOp0_WQ_reg : 8'bz;
 //  assign mOp_thread=(~req_bus) ? mOp0_thread_reg : 1'bz;
   assign mOp_lsflag=(~req_bus) ? mOp0_lsflag_reg : 1'bz;
-  assign mOp_lsfwd=(~req_bus) ? mOp0_lsfwd_reg : 1'bz;
+  assign mOp_lsfwd=(~req_bus) ? mOp0_lsfwd_reg : 1'b0;
   assign mOp_type=(~req_bus) ? mOp0_type_reg : 2'b00;
-  assign mOp_bread=(~req_bus) ? mOp0_bread_reg|{5{~mOp0_lsfwd_reg}} : 5'bz;
-  assign mOp_data=(~req_bus) ? mOp0_data_reg : 136'bz;
+  assign mOp_bread=(~req_bus) ? mOp0_bread_reg|{5{~mOp0_lsfwd_reg}} : 5'b1111;
+  assign mOp_data=(~req_bus) ? mOp0_data_reg : 136'b0;
+  assign mOp_pbit=(~req_bus) ? mOp0_pbit_reg : 2'b0;
  
   assign mOp_en=(~req_bus) ? mOp0_en_reg & (tlb_hit|mOp0_lsfwd_reg|tlb_is_inv) & ~req_bus & ~except &
     ~pause_miss_reg2 & ~reqtlb_en & ~reqC_tlbEn & ~tlb_proceed & ~bus_hold & (mOp0_type_reg!=2'b10) : 1'bz; 
@@ -505,6 +510,7 @@ module agu_r(
           mOp0_addr_low_reg<=2'b0;
           mOp0_bread_reg<={1'b0,4'b0};
           mOp0_data_reg<={8'b0,128'b0};
+          mOp0_pbit_reg<={2'b0};
           addrMain_tlb<=65'b0;
       end else if (except) begin
           mOp0_en_reg<=1'b0;
@@ -532,6 +538,7 @@ module agu_r(
               mOp0_addr_low_reg<=mOp0_addr_low;
               mOp0_bread_reg<=mOp0_bread;
               mOp0_data_reg<=mOp0_data;
+              mOp0_pbit_reg<=mOp0_pbit;
 	      if (~mOp0_attr[`attr_vm]) begin
 		  proc<=pproc;
 		  sproc<=0;
