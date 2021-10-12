@@ -370,7 +370,9 @@
 `define mOpC_req 124:122
 `define mOpC_odd 125
 `define mOpC_split 126
-`define mOpC_width 127
+`define mOpC_pbit 128:127
+`define mOpC_d128 129
+`define mOpC_width 130
 
 `define mOp1_addrEven 35:0
 `define mOp1_addrOdd 71:36

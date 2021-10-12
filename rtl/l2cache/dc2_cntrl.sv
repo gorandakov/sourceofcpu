@@ -290,6 +290,7 @@ module dc2_cntrl(
   write_bBen0,write_enBen0,
   write_odd0,write_split0,
   write_data0,
+  write_pbit0,write_d128_0,
   write1_clkEn,
   write_addrE1,
   write_addrO1, 
@@ -298,6 +299,7 @@ module dc2_cntrl(
   write_bBen1,write_enBen1,
   write_odd1,write_split1,
   write_data1,
+  write_pbit1,write_d128_1,
 //  writeI0_clkEn,
   writeI_addrE0, writeI_hitE0,
   writeI_addrO0, writeI_hitO0,
@@ -306,6 +308,7 @@ module dc2_cntrl(
   writeI_bBen0,writeI_enBen0,
   writeI_odd0,writeI_split0,
   writeI_data0,
+  writeI_pbit0,writeI_d128_0,
 //  writeI1_clkEn,
   writeI_addrE1, writeI_hitE1,
   writeI_addrO1, writeI_hitO1,
@@ -314,6 +317,7 @@ module dc2_cntrl(
   writeI_bBen1,writeI_enBen1,
   writeI_odd1,writeI_split1,
   writeI_data1,
+  writeI_pbit1,writeI_d128_1,
   writeI_exp,
   readI_en,readI_en2,readI_odd,readI_req,readI_code,readI_dupl,
   readI_want_excl,readI_io,readI_dataIO,readI_ins_A,readI_ins_B,
@@ -349,6 +353,8 @@ module dc2_cntrl(
   input [3:0] write_enBen0;
   input write_odd0,write_split0;
   input [159:0] write_data0;
+  input [1:0] write_pbit0;
+  input write_d128_0;
   input [1:0] write1_clkEn;
   input [ADDR_WIDTH-1:0] write_addrE1;
   input [ADDR_WIDTH-1:0] write_addrO1;
@@ -359,6 +365,8 @@ module dc2_cntrl(
   input [3:0] write_enBen1;
   input write_odd1,write_split1;
   input [159:0] write_data1;
+  input [1:0] write_pbit1;
+  input write_d128_1;
   output [ADDR_WIDTH-1:0] writeI_addrE0;
   output writeI_hitE0; //+1 cycle
   output [ADDR_WIDTH-1:0] writeI_addrO0;
@@ -370,6 +378,8 @@ module dc2_cntrl(
   output [3:0] writeI_enBen0;
   output writeI_odd0,writeI_split0;
   output [159:0] writeI_data0;
+  output [1:0] writeI_pbit0;
+  output writeI_d128_0;
   output [ADDR_WIDTH-1:0] writeI_addrE1;
   output writeI_hitE1; //+1 cycle
   output [ADDR_WIDTH-1:0] writeI_addrO1;
@@ -381,6 +391,8 @@ module dc2_cntrl(
   output [3:0] writeI_enBen1;
   output writeI_odd1,writeI_split1;
   output [159:0] writeI_data1;
+  output [1:0] writeI_pbit1;
+  output writeI_d128_1;
   output writeI_exp;
   output readI_en,readI_en2,readI_odd;
   output [4:0] readI_req;
@@ -531,6 +543,8 @@ module dc2_cntrl(
   assign write_mop[0][`mOpC_odd]=write_odd0;
   assign write_mop[0][`mOpC_split]=write_split0;
   assign write_mop[0][`mOpC_req]=read_req[2:0];
+  assign write_mop[0][`mOpC_pbit]=write_pbit0;
+  assign write_mop[0][`mOpC_d128]=write_d128_0;
   
   assign write_mop[1][`mOpC_addrEven]=write_addrE1;
   assign write_mop[1][`mOpC_addrOdd]=write_addrO1;
@@ -542,6 +556,8 @@ module dc2_cntrl(
   assign write_mop[1][`mOpC_odd]=write_odd1;
   assign write_mop[1][`mOpC_split]=write_split1;
   assign write_mop[1][`mOpC_req]={1'b0,read_req[4:3]};
+  assign write_mop[1][`mOpC_pbit]=write_pbit1;
+  assign write_mop[1][`mOpC_d128]=write_d128_1;
   
   assign write_wen=write0_clkEn || write1_clkEn;
   assign read_clkEn=cnt && ~read_clkEnC && ~read_clkEnC2 && ~readI_en2_reg && 
@@ -562,6 +578,8 @@ module dc2_cntrl(
   assign writeI_end0=(read_clkEnC2|read_clkEnC1|read_clkEnC|read_clkEnM1) ? 5'd0 : read_mop[0][`mOpC_end];
   assign writeI_bBen0=(read_clkEnC2|read_clkEnC1|read_clkEnC|read_clkEnM1) ? 4'hf : read_mop[0][`mOpC_bben];
   assign writeI_enBen0=(read_clkEnC2|read_clkEnC1|read_clkEnC|read_clkEnM1) ? 4'hf : read_mop[0][`mOpC_endben];
+  assign writeI_pbit0=(read_clkEnC2|read_clkEnC1|read_clkEnC|read_clkEnM1) ? 2'b0 : read_mop[0][`mOpC_pbit];
+  assign writeI_d128_0=(read_clkEnC2|read_clkEnC1|read_clkEnC|read_clkEnM1) ? 1'b0 : read_mop[0][`mOpC_d128];
   assign writeI_odd0=read_clkEnC1 ? read_addr1[0] : 1'bz;
   assign writeI_split0=read_clkEnC1 ? 1'b0 : 1'bz;
   assign writeI_data0=read_data0;
@@ -575,6 +593,8 @@ module dc2_cntrl(
   assign writeI_end1=(read_clkEnC1|read_clkEnC) ? 5'd1 : read_mop[1][`mOpC_end];
   assign writeI_bBen1=(read_clkEnC1|read_clkEnC) ? 4'hf : read_mop[1][`mOpC_bben];
   assign writeI_enBen1=(read_clkEnC1|read_clkEnC) ? 4'hf : read_mop[1][`mOpC_endben];
+  assign writeI_pbit1=(read_clkEnC1|read_clkEnC) ? 2'b0 : read_mop[1][`mOpC_pbit];
+  assign writeI_d128_1=(read_clkEnC1|read_clkEnC) ? 1'b0 : read_mop[1][`mOpC_d128];
   assign writeI_odd1=read_clkEnC1 ? read_addr1[0] : 1'bz;
   assign writeI_split1=read_clkEnC1 ? 1'b0 : 1'bz;
   assign writeI_data1=read_data1;

@@ -1252,7 +1252,7 @@ module missQ(
   assign mOp4_en_o=now_flushing_reg2 ?       read_confl[4]&~thrinhibitconfl[4]  : 1'bz;
   assign mOp4_en_o=alt_bus_hold ? 1'b0 : 1'bz;
   assign mOp4_en_o=~now_flushing_reg2 & ~alt_bus_hold ? mOp4_en : 1'bz;;
-  assign {mOp4_pbit_o,mOp4_dupl_dummy,mOp4_bank1_o=now_flushing_reg2 ?    read_mop[4][`mOp1_LSQ] : {mOp4_pbit,2'b0,mOp4_bank1};
+  assign {mOp4_pbit_o,mOp4_dupl_dummy,mOp4_bank1_o}=now_flushing_reg2 ?    read_mop[4][`mOp1_LSQ] : {mOp4_pbit,2'b0,mOp4_bank1};
   assign mOp4_II_o=now_flushing_reg2 ?       read_mop[4][`mOp1_II] : mOp4_II;
   assign {mOp4_bgn_b_o,mOp4_end_b_o}=now_flushing_reg2 ? read_mop[4][`mOp1_WQ] : 8'bz;
   assign {mOp4_bgn_b_o,mOp4_end_b_o}=alt_bus_hold ? 8'hff : 8'bz;
@@ -1283,7 +1283,7 @@ module missQ(
   assign mOp5_en_o=now_flushing_reg2 ?       read_confl[5]&~thrinhibitconfl[5]  : 1'bz;
   assign mOp5_en_o=alt_bus_hold ? 1'b0 : 1'bz;
   assign mOp5_en_o=~now_flushing_reg2 & ~alt_bus_hold ? mOp5_en : 1'bz;;
-  assign {mOp5_pbit_o,mOp5_dupl_dummy,mOp5_bank1_o=now_flushing_reg2 ?    read_mop[5][`mOp1_LSQ] : {mOp5_pbit,2'b0,mOp5_bank1};
+  assign {mOp5_pbit_o,mOp5_dupl_dummy,mOp5_bank1_o}=now_flushing_reg2 ?    read_mop[5][`mOp1_LSQ] : {mOp5_pbit,2'b0,mOp5_bank1};
   assign mOp5_II_o=now_flushing_reg2 ?       read_mop[5][`mOp1_II] : mOp5_II;
   assign {mOp5_bgn_b_o,mOp5_end_b_o}=now_flushing_reg2 ? read_mop[5][`mOp1_WQ] : 8'bz;
   assign {mOp5_bgn_b_o,mOp5_end_b_o}=alt_bus_hold ? 8'hff : 8'bz;
