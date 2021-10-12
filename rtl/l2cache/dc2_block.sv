@@ -567,7 +567,7 @@ module dcache2_bitx_bank(
   .write1_ben(ins_hit ? write_ben_ins : write_ben1x[0])
   );
 
-  dcache2_xbit_ram_box ramE_mod(
+  dcache2_xbit_ram_box ramO_mod(
   .clk(clk),
   .rst(rst),
   .read_nClkEn(~read_en),
@@ -1457,6 +1457,7 @@ module dcache2_block(
   input write_odd1,write_split1;
   input [159:0] write_data1;
   input [511:0] busIns_data;
+  input [7:0] busIns_dataPTR;
   input insBus_A,insBus_B;
 //  output ins_hit;
   input insert;

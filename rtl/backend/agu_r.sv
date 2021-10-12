@@ -104,7 +104,7 @@ module agu_r(
   input [1:0] mOp0_addr_low;
   input [3+1:0] mOp0_bread;
   input [127+8:0] mOp0_data;
-  input [1:0] mOp0_data;
+  input [1:0] mOp0_pbit;
   input [4:0] mOp0_sz;
   input mOp0_invtlb;
   input mOp0_st;
