@@ -283,6 +283,7 @@ module agu_block(
   input[159:0] mOpY4_data;
   input [1:0]  mOpY4_type;
   input [9:0]  mOpY4_II;
+  input [1:0]  mOpY4_pbit;
   output        mOpY4_en_o;
   //mOp4_thread,
   output [35:0] mOpY4_addrEven_o;
@@ -300,6 +301,7 @@ module agu_block(
   output[159:0] mOpY4_data_o;
   output [1:0]  mOpY4_type_o;
   output [9:0]  mOpY4_II_o;
+  output [1:0]  mOpY4_pbit_o;
   input miss5;
   input        mOpY5_en;
   input        mOpY5_hit;
@@ -321,6 +323,7 @@ module agu_block(
   input[159:0] mOpY5_data;
   input [1:0]  mOpY5_type;
   input [9:0]  mOpY5_II;
+  input [1:0]  mOpY5_pbit;
   output        mOpY5_en_o;
   //mOp4_thread,
   output [35:0] mOpY5_addrEven_o;
@@ -338,15 +341,18 @@ module agu_block(
   output[159:0] mOpY5_data_o;
   output [1:0]  mOpY5_type_o;
   output [9:0]  mOpY5_II_o;
+  output [1:0]  mOpY5_pbit_o;
   input [`lsaddr_width-1:0] lso_adata;
   input [`lsfxdata_width-1:0] lso_xdataA;
   input [127+8:0] lso_data;
   input [3+1:0]   lso_bnkread;
+  input [1:0] lso_pbit;
   input [`lsaddr_width-1:0] lso2_adata;
   input [`lsfxdata_width-1:0] lso2_xdataA;
   input [127+8:0] lso2_data;
   input [3+1:0]   lso2_bnkread;
   input [2:0] lso2_wb_en;
+  input [1:0] lso2_pbit;
   output [`lsaddr_width-1:0] p0_adata;
   output [31:0]p0_banks;
   output [8:0] p0_LSQ;
