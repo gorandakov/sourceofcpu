@@ -50,7 +50,9 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   wire isBaseIndexSpecLoad;
   wire isImmLoadStore;
   wire isBasicMUL;
-
+  wire isImmCISC;
+  wire isBaseCISC;
+  wire isBaseIndexCISC;
   wire isLeaIPRel;
 
   wire isBasicCJump;

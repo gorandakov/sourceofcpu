@@ -207,6 +207,7 @@ module agu_r(
   reg [1:0] mOp0_addr_low_reg;
   reg [3+1:0] mOp0_bread_reg;
   reg [127+1+7:0] mOp0_data_reg;
+  reg [1:0] mOp0_pbit_reg;
 
   wire [29:0] addrInPage;
   wire [29:0] addrOffPage;

@@ -1190,7 +1190,8 @@ module dcache1(
   reg insert_dirty_reg2;
   reg [1023:0] write_data_reg2;
   wire [LINE_WIDTH-1:0] write_data_ecc;
-
+  reg [15:0] write_dataPTR_reg;
+  reg [15:0] write_dataPTR_reg2;
   reg [BANK_COUNT-1:0] write_bank0_reg2;
   reg [BANK_COUNT-1:0] write_bank1_reg2;
   
@@ -1297,7 +1298,7 @@ module dcache1(
           insert_exclusive_reg2,
           insert_dirty_reg2,
           write_data_ecc,
-          write_dataPTR,
+          write_dataPTR_reg2,
           err_tag[w],
           recent_in,
           recent_out[w],

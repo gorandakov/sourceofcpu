@@ -478,6 +478,10 @@ module agu_block(
   output wr1_odd,wr1_split;
   input wrStall;
   
+  function get_d128;
+      input [4:0] msz;
+      get_d128=msz==5'h1 || msz==5'h2 || msz==5'h0 || msz==5'ha || msz==5'hc || msz==5'hB || msz==5'hf;
+  endfunction
   
   wire csrss_thread=1'b0;
 

@@ -641,6 +641,7 @@ module dcache2_way(
   write_odd1,write_split1,
   write_d128_1,
   write_data,
+  write_dataPTR,
   ins_hit,
   insert,
   insert_excl,insert_dirty,insert_dupl,
@@ -700,6 +701,7 @@ module dcache2_way(
   input write_d128_1;
   input write_odd1,write_split1;
   input [32*DATA_WIDTH-1:0] write_data;
+  input [15:0] write_dataPTR;
   output ins_hit;
   input insert;
   input insert_excl;
@@ -798,6 +800,8 @@ module dcache2_way(
   reg [4:0] write_end1_reg2;
   reg [3:0] write_bBen1_reg2;
   reg [3:0] write_enBen1_reg2;
+  reg write_odd0_reg2;
+  reg write_odd1_reg2;
   reg [1:0] write_pbit0_reg2;
   reg [1:0] write_pbit1_reg2;
   reg write_d128_0_reg2;
@@ -1172,6 +1176,8 @@ module dcache2_way(
           write1_hitOH_reg3<=1'b0;
 	  write_odd0_reg<=1'b0;
 	  write_odd1_reg<=1'b0;
+	  write_odd0_reg2<=1'b0;
+	  write_odd1_reg2<=1'b0;
           read_odd_reg<=1'b0;
           read_en_reg<=1'b0;
           read_odd_reg2<=1'b0;
@@ -1247,6 +1253,8 @@ module dcache2_way(
           write1_hitOH_reg3<=write1_hitOH_reg2;
 	  write_odd0_reg<=write_odd0;
 	  write_odd1_reg<=write_odd1;
+	  write_odd0_reg2<=write_odd0_reg;
+	  write_odd1_reg2<=write_odd1_reg;
           read_odd_reg<=read_odd;
           read_en_reg<=read_en;
           read_odd_reg2<=read_odd_reg;

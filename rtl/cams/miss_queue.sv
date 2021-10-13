@@ -837,6 +837,7 @@ module missQ(
   reg mOp2_lsfwd_reg[3:1];
   reg [127+8:0] mOp2_data_reg[3:1];
   reg [4:0] mOp2_brdread_reg[3:1];
+  reg [1:0] mOp2_pbit_reg[3:1];
 
   reg mOp3_thread_reg[3:1];
   reg [PADDR_WIDTH-1:8] mOp3_addrEven_reg[3:1];
@@ -858,6 +859,7 @@ module missQ(
   reg mOp3_lsfwd_reg[3:1];
   reg [127+8:0] mOp3_data_reg[3:1];
   reg [4:0] mOp3_brdbanks_reg[3:1];
+  reg [1:0] mOp3_pbit_reg[3:1];
 
 //  reg mOp4_thread_reg[3:1];
   reg [PADDR_WIDTH-1:8] mOp4_addrEven_reg[3:1];
@@ -874,6 +876,7 @@ module missQ(
   reg [1:0] mOp4_type_reg[3:1];
   reg [3:0] mOp4_bgn_b_reg[3:1];
   reg [3:0] mOp4_end_b_reg[3:1];
+  reg [1:0] mOp4_pbit_reg[3:1];
 
 //  reg mOp5_thread_reg[3:1];
   reg [PADDR_WIDTH-1:8] mOp5_addrEven_reg[3:1];
@@ -890,6 +893,7 @@ module missQ(
   reg [1:0] mOp5_type_reg[3:1];
   reg [3:0] mOp5_bgn_b_reg[3:1];
   reg [3:0] mOp5_end_b_reg[3:1];
+  reg [1:0] mOp5_pbit_reg[3:1];
 
   reg [31:0] bank4;
   reg [31:0] bank5;
