@@ -712,6 +712,12 @@ module lsfw_combine(
   wire [127+8:0] dataNB;
   wire [127+8:0] dataQA;
   wire [127+8:0] dataQB;
+  wire pdataMA;
+  wire pdataMB;
+  wire pdataNA;
+  wire pdataNB;
+  wire pdataQA;
+  wire pdataQB;
   wire [3:0] opsz;
   wire [127+8:0] mask;
   

@@ -1345,7 +1345,7 @@ module wrtdata_combine(data,pdata,en,odata,opdata,low,sz);
   input [1:0] pdata;
   input en;
   output [159:0] odata;
-  output [1:0] podata;
+  output [1:0] opdata;
   input [1:0] low;
   input [4:0] sz;
 
@@ -1359,7 +1359,7 @@ module wrtdata_combine(data,pdata,en,odata,opdata,low,sz);
 	  //verilator lint_on WIDTH
       end
   endgenerate
-  assign podata=pdata;
+  assign opdata=pdata;
 
 endmodule
 
