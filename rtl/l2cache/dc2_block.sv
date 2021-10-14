@@ -387,13 +387,13 @@ module dcache2_xbit_ram_box(
   reg [ADDR_WIDTH-1:0]  read0_addr_reg;
   reg [31:0]            write0_data_reg;
   reg                   write0_wen_ram;
-  reg [3:0]             write0_ben_reg;
+  reg [31:0]             write0_ben_reg;
   wire [DATA_WIDTH-1:0] read0_data_ram;
   wire [DATA_WIDTH-1:0] write0_data_ram;
   reg [ADDR_WIDTH-1:0]  read1_addr_reg;
   reg [31:0]            write1_data_reg;
   reg                   write1_wen_ram;
-  reg [3:0]             write1_ben_reg;
+  reg [31:0]             write1_ben_reg;
   wire [DATA_WIDTH-1:0] read1_data_ram;
   wire [DATA_WIDTH-1:0] write1_data_ram;
 
@@ -509,12 +509,12 @@ module dcache2_bitx_bank(
   wire [31:0] read_datax_ram[1:0];
   wire enE,enO;
   wire onE,onO;
-  wire [31:0] read_dataP;
-  wire [31:0] read_dataxP;
+  wire [15:0] read_dataP;
+  wire [15:0] read_dataxP;
 
-  wire [31:0] write_ben0x[1:0];
-  wire [31:0] write_ben1x[1:0];
-  wire [31:0] write_ben_ins;
+  reg  [31:0] write_ben0x[1:0];
+  reg  [31:0] write_ben1x[1:0];
+  reg  [31:0] write_ben_ins;
   
   reg [ADDR_WIDTH-1:0] write_addrE0_reg;
   
@@ -551,12 +551,12 @@ module dcache2_bitx_bank(
       write_ben1x[~write_odd1]=0;
       write_ben_ins=write_addrE0_reg[7] ? 32'hffff0000 : 32'h0000ffff;  
       if (write_d128_0) begin
-          if (write_begin0!=4'hf) write_ben0x[write_odd0]=write_ben0x[write_odd0]| (
+          if (write_begin0[4:1]!=4'hf) write_ben0x[write_odd0]=write_ben0x[write_odd0]| (
 	      32'd2<<{write_odd0 ? write_addrO0[7] : write_addrE0[7],write_begin0[4:1]});
           else write_ben0x[~write_odd0]=32'd1<<{~write_odd0 ? write_addrO0[7] : write_addrE0[7],4'b0};
       end
       if (write_d128_1) begin
-          if (write_begin1!=4'hf) write_ben1x[write_odd1]=write_ben1x[write_odd1] | ( 
+          if (write_begin1[4:1]!=4'hf) write_ben1x[write_odd1]=write_ben1x[write_odd1] | ( 
 	      32'd2<<{write_odd1 ? write_addrO1[7] : write_addrE1[7],write_begin1[4:1]});
           else write_ben1x[~write_odd1]=32'd1<<{write_odd1 ? write_addrO1[7] : write_addrE1[7],4'b0};
       end

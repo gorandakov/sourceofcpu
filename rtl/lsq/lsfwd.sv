@@ -712,12 +712,12 @@ module lsfw_combine(
   wire [127+8:0] dataNB;
   wire [127+8:0] dataQA;
   wire [127+8:0] dataQB;
-  wire pdataMA;
-  wire pdataMB;
-  wire pdataNA;
-  wire pdataNB;
-  wire pdataQA;
-  wire pdataQB;
+  wire [15:0] pdataMA;
+  wire [15:0] pdataMB;
+  wire [15:0] pdataNA;
+  wire [15:0] pdataNB;
+  wire [15:0] pdataQA;
+  wire [15:0] pdataQB;
   wire [3:0] opsz;
   wire [127+8:0] mask;
   
@@ -759,10 +759,10 @@ module lsfw_combine(
           assign dataMB=(MshiftB[3:0]==k) ? dataB>>(k*8) : 136'BZ;
           assign dataNA=(MshiftA[3:0]==k) ? dataA<<(k*8) : 136'BZ;
           assign dataNB=(MshiftB[3:0]==k) ? dataB<<(k*8) : 136'BZ;
-	  assign pdataMA=(MshiftA[3:0]==k) ? {{8{pdataA[1]}},{8{pdataA[0]}}}>>k : 1'bz;
-	  assign pdataMB=(MshiftB[3:0]==k) ? {{8{pdataB[1]}},{8{pdataB[0]}}}>>k : 1'bz;
-	  assign pdataNA=(MshiftA[3:0]==k) ? {{8{pdataA[1]}},{8{pdataA[0]}}}<<k : 1'bz;
-	  assign pdataNB=(MshiftB[3:0]==k) ? {{8{pdataB[1]}},{8{pdataB[0]}}}<<k : 1'bz;
+	  assign pdataMA=(MshiftA[3:0]==k) ? {{8{pdataA[1]}},{8{pdataA[0]}}}>>k : 16'bz;
+	  assign pdataMB=(MshiftB[3:0]==k) ? {{8{pdataB[1]}},{8{pdataB[0]}}}>>k : 16'bz;
+	  assign pdataNA=(MshiftA[3:0]==k) ? {{8{pdataA[1]}},{8{pdataA[0]}}}<<k : 16'bz;
+	  assign pdataNB=(MshiftB[3:0]==k) ? {{8{pdataB[1]}},{8{pdataB[0]}}}<<k : 16'bz;
       end
   endgenerate
 
@@ -773,7 +773,7 @@ module lsfw_combine(
           
   assign outPData[0]=(byBankA & banksA[0] || MexactA) ? pdataQA[0] : 
       pdataQB[0]; 
-  assign outPData[2]=(byBankA & banksA[4] || MexactA) ? pdataQA[8] : 
+  assign outPData[1]=(byBankA & banksA[2] || MexactA) ? pdataQA[8] : 
       pdataQB[8]; 
 
 //  assign outData=MexactA ? dataMA : 128'BZ;

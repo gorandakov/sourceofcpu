@@ -3,7 +3,7 @@
 
 module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   input [31:0] instr;
-  input [1:0] magic;
+  input [3:0] magic;
   input flag;
   output [12:0] class_;
   output isLNK;
@@ -110,10 +110,10 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   
   assign isBasicALU=(!|opcode_main[7:5] || opcode_main[7:3]==5'b00100) & ~opcode_main[2] & magic[0];
   assign isBasicMUL=(!|opcode_main[7:5] || opcode_main[7:3]==5'b00100) & opcode_main[2] & magic[0];
-  assign isBasicALUExcept=~opcode_main[0] && magic[1:0]==2'b11 | (magic==2'b01 && |instr[28:23]);  
+  assign isBasicALUExcept=~opcode_main[0] && magic[1:0]==2'b11 | (magic[1:0]==2'b01 && |instr[28:23]);  
   assign isBasicShift=(opcode_main[7:1]==7'd20 || opcode_main[7:1]==7'd21 ||
       opcode_main[7:1]==7'd22)&&magic[0];      
-  assign isBasicShiftExcept=magic==2'b01 && |instr[29:25];
+  assign isBasicShiftExcept=magic[1:0]==2'b01 && |instr[29:25];
   
   assign isBasicCmpTest=(opcode_main[7:1]==7'd23 || opcode_main[7:2]==6'd12 ||
     opcode_main[7:1]==7'd26) && magic[0];
@@ -124,7 +124,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   assign isImmLoadStore=((opcode_main[7:2]==6'd15 & !isImmCISC) || opcode_main[7:1]==7'b1011000) & magic[0];  
   assign isImmCISC=instr[1];
   assign isBaseCISC=magic[1]==1'b0 ? instr[19:18]!=2'b0 : 1'bz;
-  assign isBaseCISC=magic[1]==2'b1 ? instr[17:16]!=2'b0 : 1'bz;
+  assign isBaseCISC=magic[1]==1'b1 ? instr[17:16]!=2'b0 : 1'bz;
   assign isBaseLoadStore=((opcode_main[7:5]==3'b010 && !isBaseCISC) || opcode_main[7:4]==4'b0110) & magic[0];
   assign isBaseIndexCISC=magic[1]==1'b0 ? instr[24:23]!=0 : 1'bz;
   assign isBaseIndexCISC=magic[2:1]==2'b01 ? instr[26:25]!=0 : 1'bz;
@@ -146,8 +146,8 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   
   assign isLeaIPRel=(opcode_main==8'd197) & magic[0];
 
-  assign isCmov=opcode_main==198 && magic==2'b01 && instr[31:29]==3'd0;
-//  assign isCmpTestExtra=opcode_main==198 && magic==2'b01 && instr[31:29]==3'd1;
+  assign isCmov=opcode_main==198 && magic[1:0]==2'b01 && instr[31:29]==3'd0;
+//  assign isCmpTestExtra=opcode_main==198 && magic[1:0]==2'b01 && instr[31:29]==3'd1;
   
   
   assign isSimdInt=opcode_main==8'd200 && magic[0];
@@ -466,7 +466,7 @@ module predecoder_get(
             popcnt15 cnt_mod(instrEnd[14:0] & ((15'b10<<k)-15'b1) & mask[14:0],cntEnd[k]);
             get_carry #(4) carry_mod(k[3:0],~startOff,1'b1,mask[k]);
  
-            predecoder_class cls_mod(bundle0[k*16+:32],~instrEnd[k+:2],flag_bits0[k],class_[k],
+            predecoder_class cls_mod(bundle0[k*16+:32],~instrEnd[k+:4],flag_bits0[k],class_[k],
               is_lnk0[k],is_ret0[k],LNK[k]);
             popcnt15 cntJ_mod(is_jmp[14:0] & ((15'b10<<k)-15'b1),cntJEnd[k]);
             popcnt15 cntL_mod(is_lnk[14:0] & ((15'b10<<k)-15'b1),lcnt[k]);

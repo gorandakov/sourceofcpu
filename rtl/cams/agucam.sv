@@ -536,7 +536,7 @@ module agucam(
   assign mOpR_lsfw=sel[3] ? 1'b1 : 1'bz;
   assign mOpR_bread=sel[3] ? read_mop3[`mOpX_bread] : 5'BZ;
   assign mOpR_attr=sel[3] ? 4'b0 : 4'BZ;
-  assign mOpR_attr=sel[3] ? read_mop3[`mOpX_pbit] : 2'BZ;
+  assign mOpR_pbit=sel[3] ? read_mop3[`mOpX_pbit] : 2'BZ;
 
   generate
     genvar p,k;

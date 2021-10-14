@@ -128,9 +128,9 @@ module dc1_xbit(
 
   reg [15:0] write_data_reg;
 
-  reg write0_clkEn_reg[1:0];
-  reg write1_clkEn_reg[1:0];
-  reg write_ins_reg[1:0];
+  reg [1:0] write0_clkEn_reg;
+  reg [1:0] write1_clkEn_reg;
+  reg [1:0] write_ins_reg;
   
   reg [ADDR_WIDTH+4:0] write1_addr_reg;
   reg [ADDR_WIDTH+4:0] write0_addr_reg;
@@ -244,32 +244,33 @@ assign write1_addrEO[0]=write1_addrE;
 assign write1_addrEO[1]=write1_addrO;
 
 always @* begin
-  write_dataAx[write0_odd_reg]=(0|write0_pbit_reg)<<{write0_addr_reg[ADDR_WIDTH+4],write0_addr_reg[3:0]};
-  write_dataBx[write1_odd_reg]=(0|write1_pbit_reg)<<{write1_addr_reg[ADDR_WIDTH+4],write1_addr_reg[3:0]};
+  write_dataAx[write0_odd_reg]={30'b0,write0_pbit_reg}<<{write0_addr_reg[ADDR_WIDTH+4],write0_addr_reg[3:0]};
+  write_dataBx[write1_odd_reg]={30'b0,write1_pbit_reg}<<{write1_addr_reg[ADDR_WIDTH+4],write1_addr_reg[3:0]};
   write_dataAx[~write0_odd_reg]=readA_data_ramx[~write0_odd_reg];
   write_dataBx[~write1_odd_reg]=readB_data_ramx[~write1_odd_reg];
   for(k=0;k<16;k=k+1) begin
-      if (write0_odd_reg && k!=write0_addr_reg[3:0] && ((k-1)!=write0_addr_reg[3:0] || ~write0_d128_reg))
-          write_dataAx[1][k+16]=readA_data_ramx[1];
-      if (~write0_odd_reg && k!=write0_addr_reg[3:0] && ((k-1)!=write0_addr_reg[3:0] || ~write0_d128_reg))
-          write_dataAx[0][k]=readA_data_ramx[0];
-      if (write1_odd_reg && k!=write1_addr_reg[3:0] && ((k-1)!=write1_addr_reg[3:0] || ~write1_d128_reg))
-          write_dataBx[1][k+16]=readB_data_ramx[1];
-      if (~write1_odd_reg && k!=write1_addr_reg[3:0] && ((k-1)!=write1_addr_reg[3:0] || ~write1_d128_reg))
-          write_dataBx[0][k]=readB_data_ramx[0];
+      if (write0_addr_reg[ADDR_WIDTH+4] && k[3:0]!=write0_addr_reg[3:0] && ((k[4:0]-5'd1)!={1'b0,write0_addr_reg[3:0]} || ~write0_d128_reg))
+          write_dataAx[1][k+16]=readA_data_ramx[1][k+16];
+      if (~write0_addr_reg[ADDR_WIDTH+4] && k[3:0]!=write0_addr_reg[3:0] && ((k[4:0]-5'd1)!={1'b0,write0_addr_reg[3:0]} || ~write0_d128_reg))
+          write_dataAx[0][k]=readA_data_ramx[0][k];
+      if (write1_addr_reg[ADDR_WIDTH+4] && k[3:0]!=write1_addr_reg[3:0] && ((k[4:0]-5'd1)!={1'b0,write1_addr_reg[3:0]} || ~write1_d128_reg))
+          write_dataBx[1][k+16]=readB_data_ramx[1][k+16];
+      if (~write1_addr_reg[ADDR_WIDTH+4] && k[3:0]!=write1_addr_reg[3:0] && ((k[4:0]-5'd1)!={1'b0,write1_addr_reg[3:0]} || ~write1_d128_reg))
+          write_dataBx[0][k]=readB_data_ramx[0][k];
   end
-  if (write0_odd_reg && 4'hf==write0_addr_reg[3:0] && ~|write_ins_reg) write_dataAx[0][0]<=write0_pbit_reg[1];
-  if (write1_odd_reg && 4'hf==write1_addr_reg[3:0] && ~|write_ins_reg) write_dataBx[0][0]<=write1_pbit_reg[1];
-  if (~write0_odd_reg && 4'hf==write0_addr_reg[3:0] && ~|write_ins_reg) write_dataAx[1][0]<=write0_pbit_reg[1];
-  if (~write1_odd_reg && 4'hf==write1_addr_reg[3:0] && ~|write_ins_reg) write_dataBx[1][0]<=write1_pbit_reg[1];
-  if (write_ins_reg[0]) write_dataAx[15:0]= write_data_reg; 
-  if (write_ins_reg[1]) write_dataAx[31:16]= write_data_reg; 
+  if (write0_odd_reg && 4'hf==write0_addr_reg[3:0] && ~|write_ins_reg) write_dataAx[0][0]=write0_pbit_reg[1];
+  if (write1_odd_reg && 4'hf==write1_addr_reg[3:0] && ~|write_ins_reg) write_dataBx[0][0]=write1_pbit_reg[1];
+  if (~write0_odd_reg && 4'hf==write0_addr_reg[3:0] && ~|write_ins_reg) write_dataAx[1][0]=write0_pbit_reg[1];
+  if (~write1_odd_reg && 4'hf==write1_addr_reg[3:0] && ~|write_ins_reg) write_dataBx[1][0]=write1_pbit_reg[1];
+  if (write_ins_reg[0]) write_dataAx[0][15+16*write0_addr_reg[ADDR_WIDTH+4]+:16]= write_data_reg; 
+  if (write_ins_reg[1]) write_dataAx[1][15+16*write0_addr_reg[ADDR_WIDTH+4]+:16]= write_data_reg; 
 end
-assign {dummy0,write_dataA[17:0]}=write0_addr_reg[ADDR_WIDTH+4] ? en_ECC(readA_data_ramx) : en_ECC(write_dataAx);
-assign {write_dataA[35:18],dummy1}=~write0_addr_reg[ADDR_WIDTH+4] ? en_ECC(readA_data_ramx) : en_ECC(write_dataAx);
-assign {dummy2,write_dataB[17:0]}=write1_addr_reg[ADDR_WIDTH+4] ? en_ECC(readB_data_ramx) : en_ECC(write_dataBx);
-assign {write_dataB[35:18],dummy3}=~write1_addr_reg[ADDR_WIDTH+4] ? en_ECC(readB_data_ramx) : en_ECC(write_dataBx);
-  
+ 
+assign write_dataA[0]=en_ECC(write_dataAx[0]);
+assign write_dataA[1]=en_ECC(write_dataAx[1]);
+assign write_dataB[0]=en_ECC(write_dataBx[0]);
+assign write_dataB[1]=en_ECC(write_dataBx[1]);
+
 assign read0_data_ramx[0]={1'b0,un_ECC(read0_data_ram[0])};
 assign read1_data_ramx[0]={1'b0,un_ECC(read1_data_ram[0])};
 assign read2_data_ramx[0]={1'b0,un_ECC(read2_data_ram[0])};
@@ -284,10 +285,10 @@ assign readA_data_ramx[1]=un_ECC(readA_data_ram[1]);
 assign readB_data_ramx[1]=un_ECC(readB_data_ram[1]);
 
 always @* begin
-  read0_pbit=read0_data_ramx[read0_odd_reg][{read0_addrEO_reg[read0_odd_reg][ADDR_WIDTH+4],read0_addr_reg[3:0]}+:2];
-  read0_pbit=read1_data_ramx[read1_odd_reg][{read1_addrEO_reg[read1_odd_reg][ADDR_WIDTH+4],read1_addr_reg[3:0]}+:2];
-  read0_pbit=read2_data_ramx[read2_odd_reg][{read2_addrEO_reg[read2_odd_reg][ADDR_WIDTH+4],read2_addr_reg[3:0]}+:2];
-  read0_pbit=read3_data_ramx[read3_odd_reg][{read3_addrEO_reg[read3_odd_reg][ADDR_WIDTH+4],read3_addr_reg[3:0]}+:2];
+  read0_pbit=read0_data_ramx[read0_odd_reg][{1'b0,read0_addrEO_reg[read0_odd_reg][ADDR_WIDTH+4],read0_addr_reg[3:0]}+:2];
+  read0_pbit=read1_data_ramx[read1_odd_reg][{1'b0,read1_addrEO_reg[read1_odd_reg][ADDR_WIDTH+4],read1_addr_reg[3:0]}+:2];
+  read0_pbit=read2_data_ramx[read2_odd_reg][{1'b0,read2_addrEO_reg[read2_odd_reg][ADDR_WIDTH+4],read2_addr_reg[3:0]}+:2];
+  read0_pbit=read3_data_ramx[read3_odd_reg][{1'b0,read3_addrEO_reg[read3_odd_reg][ADDR_WIDTH+4],read3_addr_reg[3:0]}+:2];
   if (read0_addr_reg[3:0]==4'hf) read0_pbit[1]=read0_data_ramx[~read0_odd_reg][0];
   if (read1_addr_reg[3:0]==4'hf) read1_pbit[1]=read1_data_ramx[~read1_odd_reg][0];
   if (read2_addr_reg[3:0]==4'hf) read2_pbit[1]=read2_data_ramx[~read2_odd_reg][0];
@@ -330,7 +331,7 @@ always @(posedge clk) begin
   end else begin
       write0_clkEn_reg<={write0_odd,~write0_odd}&{2{write0_clkEn}};
       write1_clkEn_reg<={write1_odd,~write1_odd}&{2{write1_clkEn}};
-      write_ins_reg<={write0_odd,~write0_odd}&{2{write_ins}};
+      write_ins_reg<=write_ins;
       write_data_reg<=write_data;
       write0_addr_reg<=write0_odd ? write0_addrO : write0_addrE;
       write1_addr_reg<=write1_odd ? write1_addrO : write1_addrE;
