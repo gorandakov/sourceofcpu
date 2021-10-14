@@ -218,141 +218,170 @@ void req::gen(void) {
 	    alu_p[9]=res_p;
 	    alu_f[9]=flags;
 
-            case 20:
             res0=((__int128) A)<<(B&0x3f);
             res1=res=res0;
             flg64(res0);
-            break;
+	    shift  [0]=res;
+	    shift_p[0]=res_p;
+	    shift_f[0]=flags;
 
-            case 21:
             res0=((__int128) A0x)<<(B0x&0x3f);
             res2=res=res0&0xffffffffull;
             flg32(res0);
-            break;
+	    shift  [1]=res;
+	    shift_p[1]=res_p;
+	    shift_f[1]=flags;
 
-            case 24:
             res0=(B&0x3f) ?((__int128)  A) >>((B&0x3f)-1) :((__int128)  A)<<1;
             res1=res=(res0>>1);
             flg64(((res0>>1)&0xffffffffffffffffull)|((res0&0x1) ? one<<1:0));
-            break;
+	    shift  [2]=res;
+	    shift_p[2]=res_p;
+	    shift_f[2]=flags;
 
-            case 25:
             res0=(B0x&0x3f) ?((__int128)A0x) >>((B0x&0x3f)-1) :((__int128)  A0x)<<1;
             res=(res0>>1)&0xffffffffull;
             flg32(((res0>>1)&0xffffffffu)|((res0&0x1)<<32));
-            break;
+	    shift  [3]=res;
+	    shift_p[3]=res_p;
+	    shift_f[3]=flags;
 
-            case 28:
             res0=(B&0x3f) ?((__int128) A1) >>((B&0x3f)-1) :((__int128)  A1)<<1;
             res1=res=(res0>>1);
             flg64(((res0>>1)&0xffffffffffffffffull)|((res0&0x1) ? one<<1 : 0));
-            break;
+	    shift  [4]=res;
+	    shift_p[4]=res_p;
+	    shift_f[4]=flags;
 
-            case 29:
             res0=(B0x&0x3f) ? ((__int128) A0) >>((B0x&0x3f)-1) :((__int128) A0)<<1;
             res2=res=(res0>>1)&0xffffffffull;
             flg32(((res0>>1)&0xffffffffu)|((res0&0x1)<<32));
-            break;
+	    shift  [5]=res;
+	    shift_p[5]=res_p;
+	    shift_f[5]=flags;
  
-            case 32:
             res=B;
+	    res_p=B_p;
             flags=flags_in;
-            break;
+	    mov  [0]=res;
+	    mov_p[0]=res_p;
+	    mov_f[0]=flags;
 
-            case 33:
             res=B&0xffffffffull;
+	    res_p=0;
             flags=flags_in;
-            break;
+	    mov  [1]=res;
+	    mov_p[1]=res_p;
+	    mov_f[1]=flags;
 
-            case 34:
             res=(B&0xffffull)|(A&0xffffffffffff0000ull);
+	    res_p=0;
             flags=flags_in;
-            break;
+	    mov  [2]=res;
+	    mov_p[2]=res_p;
+	    mov_f[2]=flags;
 
-            case 35:
+	    res_p=0;
             if (op&256) res=(A&0xffffffffffff00ffull)| ((op&1024) ? B&0xff00ull :
                 (B&0xffull)<<8);
             else res=(A&0xffffffffffffff00ull)| ((op&1024) ? (B&0xff00ull)>>8 :
                 B&0xffull);
             flags=flags_in;
-            break;
+	    mov  [3]=res;
+	    mov_p[3]=res_p;
+	    mov_f[3]=flags;
 
-            case 36:
             res=B&0xffull;
+	    res_p=0;
             flags=flags_in;
-            break;
+	    mov  [4]=res;
+	    mov_p[4]=res_p;
+	    mov_f[4]=flags;
 
-            case 37:
             res=B&0xffffull;
+	    res_p=0;
             flags=flags_in;
-            break;
+	    mov  [5]=res;
+	    mov_p[5]=res_p;
+	    mov_f[5]=flags;
 
-            case 39:
             res=(B&0x80) ? B|0xffffffffffffff00ull : B&0xffull;
+	    res_p=0;
             flags=flags_in;
-            break;
+	    mov  [6]=res;
+	    mov_p[6]=res_p;
+	    mov_f[6]=flags;
 
-            case 40:
             res=(B&0x8000) ? B|0xffffffffffff0000ull : B&0xffffull;
+	    res_p=0;
             flags=flags_in;
-            break;
+	    mov  [7]=res;
+	    mov_p[7]=res_p;
+	    mov_f[7]=flags;
 
-            case 41:
             res=(B&0x80000000) ? B|0xffffffff00000000ull : B&0xffffffffull;
+	    res_p=0;
             flags=flags_in;
-            break;
+	    mov  [8]=res;
+	    mov_p[8]=res_p;
+	    mov_f[8]=flags;
 
-            case 42:
             res=(B0&0x80) ? B0x|0xffffff00ull : B0x&0xffull;
+	    res_p=0;
             flags=flags_in;
-            break;
+	    mov  [9]=res;
+	    mov_p[9]=res_p;
+	    mov_f[9]=flags;
 
-            case 43:
             res=(B0&0x8000) ? B0x|0xffff0000ull : B0x&0xffffull;
+	    res_p=0;
             flags=flags_in;
-            break;
+	    mov  [10]=res;
+	    mov_p[10]=res_p;
+	    mov_f[10]=flags;
 
-            case 48:
-            case 49:
-            op|=rand()&0x700;
             res=testj(((op&0x700)>>7)|(op&0x1)) ? B : A;
             res_p=testj(((op&0x700)>>7)|(op&0x1)) ? B_p : A_p;
             flags=flags_in;
-            break;
+	    mov  [11]=res;
+	    mov_p[11]=res_p;
+	    mov_f[11]=flags;
             
-            case 50:
-            case 51:
-            op|=rand()&0x700;
             res=testj(((op&0x700)>>7)|(op&0x1)) ? B0x : A0x;
+	    res_p=0;
             flags=flags_in;
-            break;
+	    mov  [12]=res;
+	    mov_p[12]=res_p;
+	    mov_f[12]=flags;
             
             
-            case 52:
-            case 53:
-            op|=rand()&0x700;
             res=0;
+	    res_p=0;
             flags=testj(((op&0x700)>>7)|(op&0x1)) ? A&0x3f : flags_in;
-            break;
+	    flaginstr  [0]=res;
+	    flaginstr_p[0]=res_p;
+	    flaginstr_f[0]=flags;
 
-            case 54:
-            case 55:
-            op|=rand()&0x700;
             res=testj(((op&0x700)>>7)|(op&0x1));
+	    res_p=0;
             flags=flags_in;
-            break;
+	    flaginstr  [1]=res;
+	    flaginstr_p[1]=res_p;
+	    flaginstr_f[1]=flags;
 
-            case 56:
             res=flags_in&0x3f;
+	    res_p=0;
             flags=flags_in;
-            break;
+	    flaginstr  [2]=res;
+	    flaginstr_p[2]=res_p;
+	    flaginstr_f[2]=flags;
 
-            case 57:
             res=0;
+	    res_p=0;
             flags=A&0x3f;
-            break;
-        }
-    } else if (!alt) {
+	    flaginstr  [3]=res;
+	    flaginstr_p[3]=res_p;
+	    flaginstr_f[3]=flags;
         __int128 AS=(long long) A;
         unsigned __int128 A0=A;
         __int128 BS=(long long) B;
@@ -370,49 +399,73 @@ void req::gen(void) {
         res0x=(unsigned long) Au * (unsigned long) Bu;
         res0=A0*B0;
         resS=AS*BS;
-        switch(op&0xff) {
-            case 1:
             res=res0x;
+	    res_p=0;
             flgM64(res0x,true);
-            break;
+	    mul  [0]=res;
+	    mul_p[0]=res_p;
+	    mul_f[0]=flags;
 
-            case 2:
             res=res0x & 0xffffffffull;
+	    res_p=0;
             flgM64(res0x);
-            break;
+	    mul  [1]=res;
+	    mul_p[1]=res_p;
+	    mul_f[1]=flags;
 
-            case 3:
             res=res0;
+	    res_p=0;
             flgM128(res0);
-            break;
+	    mul  [2]=res;
+	    mul_p[2]=res_p;
+	    mul_f[2]=flags;
             
-            case 9:
             res=resSx;
+	    res_p=0;
             flgM64(resSx,1);
-            break;
+	    mul  [3]=res;
+	    mul_p[3]=res_p;
+	    mul_f[3]=flags;
 
-            case 10:
             res=resSx & 0xffffffffull;
+	    res_p=0;
             flgM64(resSx);
-            break;
+	    mul  [4]=res;
+	    mul_p[4]=res_p;
+	    mul_f[4]=flags;
 
-            case 11:
             res=resS;
+	    res_p=0;
             flgM128(resS);
-            break;
+	    mul  [5]=res;
+	    mul_p[5]=res_p;
+	    mul_f[5]=flags;
 
-            case 5:
             resU=resS>>63;
             res=resU>>1;
+	    res_p=0;
             flgM128(resS,1);
-            break;
+	    mul  [6]=res;
+	    mul_p[6]=res_p;
+	    mul_f[6]=flags;
             
-            case 7:
             resU=res0>>63;
             res=resU>>1;
+	    res_p=0;
             flgM128(res0,1);
-            break;
+	    mul  [7]=res;
+	    mul_p[7]=res_p;
+	    mul_f[7]=flags;
 
+	    mul  [8]=B;
+	    mul_p[8]=0;
+	    mul_f[8]=flags_in;
+
+	    mul  [9]=B;
+	    mul_p[9]=1;
+	    mul_f[9]=flags_in;
+
+	    /*
             case 12:
             fp_get_ext((op&0x400) ? (long double) (signed long) B : 
               (long double) B,num);
@@ -431,7 +484,7 @@ void req::gen(void) {
             break;
         }
     }
-    en=rand()&0xff!=0;
+    en=rand()&0xff!=0;*/
 }
 
 void req::flg64(__int128 r) {
