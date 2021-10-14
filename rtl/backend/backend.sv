@@ -1922,6 +1922,8 @@ module backend(
   wire [1:0][3:0] dc_wrEND_BNK;
   wire [1:0][1:0] dc_wr_low;
   wire [1:0][1:0] dc_wrTyp;
+  wire [1:0][4:0] dc_wrSZ;
+  wire [1:0][1:0] dc_pdata;
 
   wire [5:0] p_repl;
   wire [3:0] p_lsfwd;
@@ -4299,7 +4301,7 @@ module backend(
       if (n<2) begin : Wfwd
 
           assign lsw_wdata[n]=|WDfxDataEn_reg3[n][3:2] ? lsw_wdataF_reg[n] : {63'b0,8'b0,WDfxData_reg3[n][63:0]};
-          assign lsw_pdata[n]=|WDfxDataEn_reg3[n][2] ? {lsw_wdataF_reg[132],ldw_wdataF_reg[128]} : 2'bz;
+          assign lsw_pdata[n]=|WDfxDataEn_reg3[n][2] ? {lsw_wdataF_reg[132],lsw_wdataF_reg[128]} : 2'bz;
 	  assign lsw_pdata[n]=|WDfxDataEn_reg3[n][3:2] ? 2'bz : {1'b0,WDfxData_reg3[n][64]};
 	  assign lsw_pdata[n]=|WDfxDataEn_reg3[n][3] ? 2'b0 : 2'bz;
           assign lsw_wdataF[n]=WDfxDataEn_reg2[n][2] ? lsw_wdataV_reg[n] : {WDfxDataFH[n][67:66],WDfxDataFH[n][65],WDfxDataFH[n][32],
@@ -4962,8 +4964,8 @@ module backend(
   .WQS0_reg(WQS_reg[0]),.WQR0_reg(WQR_reg[0]),
   .WQS1_reg(WQS_reg[1]),.WQR1_reg(WQR_reg[1]),
   .WQS2_reg(WQS_reg[2]),.WQR2_reg(WQR_reg[2]),
-  .lsw_wq0(WDfxWQ_reg3[0]),.lsw_wdata0(lsw_wdata[0]),.lsw_pdata0(lsw_pbit[0]),.lsw_rs_en0(WDfxDataEn_reg3[0]),
-  .lsw_wq1(WDfxWQ_reg3[1]),.lsw_wdata1(lsw_wdata[1]),.lsw_pdata1(lsw_pbit[1]),.lsw_rs_en1(WDfxDataEn_reg3[1]),
+  .lsw_wq0(WDfxWQ_reg3[0]),.lsw_wdata0(lsw_wdata[0]),.lsw_pdata0(lsw_pdata[0]),.lsw_rs_en0(WDfxDataEn_reg3[0]),
+  .lsw_wq1(WDfxWQ_reg3[1]),.lsw_wdata1(lsw_wdata[1]),.lsw_pdata1(lsw_pdata[1]),.lsw_rs_en1(WDfxDataEn_reg3[1]),
   .mOpY4_II(st0_II_reg3),.mOpY4_hit(dc_wrHit[0]),
   .mOpY5_II(st1_II_reg3),.mOpY5_hit(dc_wrHit[1]),
   .lsi0_reg(rs_lsi_reg[0]),.lsi1_reg(rs_lsi_reg[1]),.lsi2_reg(rs_lsi_reg[2]),//only used to check if has mem reqs

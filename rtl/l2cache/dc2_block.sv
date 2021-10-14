@@ -1525,6 +1525,8 @@ module dcache2_block(
   wire [1:0] read_dirP[8:-1];
   wire [1:0] read_exclP[8:-1];
   wire [36:0] read_expAddrP[8:-1];
+  reg [7:0] write_dataPTR_reg;
+  reg [15:0] write_dataPTR_reg2;
   generate
       genvar k,b,q;
       for(k=0;k<9;k=k+1) begin : ways_gen
@@ -1640,7 +1642,7 @@ module dcache2_block(
           if (~insBus_A_reg) write_data_reg[1023:512]<=write_data[1023:512];
           if (~insBus_B_reg) write_dataPTR_reg2[7:0]<=write_dataPTR_reg;
           if (~insBus_A_reg) write_dataPTR_reg2[15:8]<=write_dataPTR_reg;
-	  write_dataPTR_reg<=write_dataPTR;
+	  write_dataPTR_reg<=busIns_dataPTR;
           busIns_data_reg<=busIns_data;
           insBus_A_reg<=insBus_A;
           insBus_B_reg<=insBus_B;
