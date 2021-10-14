@@ -321,7 +321,7 @@ module smallInstr_decoder(
   assign isImmLoadStore=(opcode_main[7:2]==6'd15 & !isImmCISC) || opcode_main[7:1]==7'b1011000;  
   assign isImmCISC=instr[1];
   assign isBaseCISC=magic[1]==1'b0 ? instr[19:18]!=2'b0 : 1'bz;
-  assign isBaseCISC=magic[1]==2'b1 ? instr[17:16]!=2'b0 : 1'bz;
+  assign isBaseCISC=magic[1]==1'b1 ? instr[17:16]!=2'b0 : 1'bz;
   assign isBaseLoadStore=(opcode_main[7:5]==3'b010 && !isBaseCISC) || opcode_main[7:4]==4'b0110;
   assign isBaseIndexCISC=magic[1]==1'b0 ? instr[24:23]!=0 : 1'bz;
   assign isBaseIndexCISC=magic[2:1]==2'b01 ? instr[26:25]!=0 : 1'bz;

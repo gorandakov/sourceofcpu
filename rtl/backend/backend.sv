@@ -1878,7 +1878,7 @@ module backend(
   wire [3:0] dc_rdEn; 
   wire [3:0] dc_rsEn; 
   wire [3:0][127+8:0] dc_rdataA;
-  wire [3:0] dc_pbitA;
+  wire [3:0][1:0] dc_pbitA;
   wire [3:0][1:0] dc_rdHitCl;
 //  wire [3:0] dc_store;
   wire [31:0] dc_bankNone;
@@ -1928,20 +1928,20 @@ module backend(
   wire [5:0] p_repl;
   wire [3:0] p_lsfwd;
   wire [127+8:0]p2_data;
-  wire          p2_pdata;
+  wire [1:0]    p2_pdata;
   wire    [4:0] p2_brdbanks;
   wire [127+8:0]p3_data;
-  wire          p3_pdata;
+  wire [1:0]    p3_pdata;
   wire    [4:0] p3_brdbanks;
   wire [3:0][13:0] p_ret;
   reg [127+8:0]p2_data_reg;
   reg [127+8:0]p2_data_reg2;
   reg [127+8:0]p3_data_reg;
   reg [127+8:0]p3_data_reg2;
-  reg p2_pdata_reg;
-  reg p2_pdata_reg2;
-  reg p3_pdata_reg;
-  reg p3_pdata_reg2;
+  reg [1:0]  p2_pdata_reg;
+  reg [1:0]  p2_pdata_reg2;
+  reg [1:0]  p3_pdata_reg;
+  reg [1:0]  p3_pdata_reg2;
   reg [13:0] p2_ret_reg;
   reg [13:0] p2_ret_reg2;
   reg [13:0] p3_ret_reg;
@@ -4300,8 +4300,8 @@ module backend(
 
       if (n<2) begin : Wfwd
 
-          assign lsw_wdata[n]=|WDfxDataEn_reg3[n][3:2] ? lsw_wdataF_reg[n] : {63'b0,8'b0,WDfxData_reg3[n][63:0]};
-          assign lsw_pdata[n]=|WDfxDataEn_reg3[n][2] ? {lsw_wdataF_reg[132],lsw_wdataF_reg[128]} : 2'bz;
+          assign lsw_wdata[n]=|WDfxDataEn_reg3[n][3:2] ? lsw_wdataF_reg[n] : {64'b0,8'b0,WDfxData_reg3[n][63:0]};
+          assign lsw_pdata[n]=|WDfxDataEn_reg3[n][2] ? {lsw_wdataF_reg[n][132],lsw_wdataF_reg[n][128]} : 2'bz;
 	  assign lsw_pdata[n]=|WDfxDataEn_reg3[n][3:2] ? 2'bz : {1'b0,WDfxData_reg3[n][64]};
 	  assign lsw_pdata[n]=|WDfxDataEn_reg3[n][3] ? 2'b0 : 2'bz;
           assign lsw_wdataF[n]=WDfxDataEn_reg2[n][2] ? lsw_wdataV_reg[n] : {WDfxDataFH[n][67:66],WDfxDataFH[n][65],WDfxDataFH[n][32],
@@ -5489,19 +5489,19 @@ dcache1 L1D_mod(
         p2_data_reg2[63:32];  
   assign FU[0][31:0]= (~p_lsfwd_reg2[0] | p2_brdbanks_reg2[0]) ? dc_rdataA[0][31:0]:
           p2_data_reg2[31:0];  
-  assign FU[0][64]=(~p_lsfwd_reg2[0] | p2_brdbanks_reg2[0]) ? dc_pbitA[0] : p2_pdata_reg2;
+  assign FU[0][64]=(~p_lsfwd_reg2[0] | p2_brdbanks_reg2[0]) ? dc_pbitA[0][0] : p2_pdata_reg2[0];
 
   assign FU[1][63:32]=(~p_lsfwd_reg2[1] | p2_brdbanks_reg2[1]) ? dc_rdataA[1][63:32]:
         p2_data_reg2[63:32];  
   assign FU[1][31:0]= (~p_lsfwd_reg2[1] | p2_brdbanks_reg2[0]) ? dc_rdataA[1][31:0]:
           p2_data_reg2[31:0];  
-  assign FU[1][64]=(~p_lsfwd_reg2[1] | p2_brdbanks_reg2[0]) ? dc_pbitA[1] : p2_pdata_reg2;
+  assign FU[1][64]=(~p_lsfwd_reg2[1] | p2_brdbanks_reg2[0]) ? dc_pbitA[1][0] : p2_pdata_reg2[0];
 
   assign FU[2][63:32]=(~p_lsfwd_reg2[2] | p2_brdbanks_reg2[1]) ? dc_rdataA[2][63:32]:
         p2_data_reg2[63:32];  
   assign FU[2][31:0]= (~p_lsfwd_reg2[2] | p2_brdbanks_reg2[0]) ? dc_rdataA[2][31:0]:
           p2_data_reg2[31:0];  
-  assign FU[2][64]=(~p_lsfwd_reg2[2] | p2_brdbanks_reg2[0]) ? dc_pbitA[2] : p2_pdata_reg2;
+  assign FU[2][64]=(~p_lsfwd_reg2[2] | p2_brdbanks_reg2[0]) ? dc_pbitA[2][0] : p2_pdata_reg2[0];
 
   //assign FU[0]=dc_rdataA[0][63:0];
   //assign FU[1]=dc_rdataA[1][63:0];
@@ -5512,7 +5512,7 @@ dcache1 L1D_mod(
         p3_data_reg2[63:32];  
   assign FU[3][31:0]= (~p_lsfwd_reg2[3] | p3_brdbanks_reg2[0] && ~insBus_io_reg3) ? dc_rdataA[3][31:0]:
           p3_data_reg2[31:0];  
-  assign FU[3][64]=(~p_lsfwd_reg2[3] | p3_brdbanks_reg2[0] && ~insBus_io_reg3) ? dc_pbitA[3] : p3_pdata_reg2;
+  assign FU[3][64]=(~p_lsfwd_reg2[3] | p3_brdbanks_reg2[0] && ~insBus_io_reg3) ? dc_pbitA[3][0] : p3_pdata_reg2[0];
   
 
 //  assign FU0=dc_rdataA[0][63:0];
@@ -6965,10 +6965,10 @@ dcache1 L1D_mod(
 	  p2_brdbanks_reg2<=5'b0;
 	  p3_brdbanks_reg<=5'b0;
 	  p3_brdbanks_reg2<=5'b0;
-	  p2_pdata_reg<=1'b0;
-	  p2_pdata_reg2<=1'b0;
-	  p3_pdata_reg<=1'b0;
-	  p3_pdata_reg2<=1'b0;
+	  p2_pdata_reg<=2'b0;
+	  p2_pdata_reg2<=2'b0;
+	  p3_pdata_reg<=2'b0;
+	  p3_pdata_reg2<=2'b0;
 
 	  st0_en_reg<=1'b0;
 	  st0_en_reg2<=1'b0;

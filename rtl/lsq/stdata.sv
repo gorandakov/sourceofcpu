@@ -18,7 +18,7 @@ module lsw_data_ram(
   write3_addr,write3_data,write3_wen
   );
 
-  localparam DATA_WIDTH=2*64+1+8;
+  localparam DATA_WIDTH=2*64+1+8+2;
   localparam ADDR_WIDTH=7;
   localparam ADDR_COUNT=120;
   
@@ -96,7 +96,7 @@ module lsw_data(
   new2_addr,new2_en,new2_odd
   );
 
-  localparam DATA_WIDTH=2*64+1+8;
+  localparam DATA_WIDTH=2*64+1+8+2;
   localparam ADDR_WIDTH=8;
   
   input clk;

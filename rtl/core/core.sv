@@ -774,6 +774,7 @@ module heptane_core(
 //  reg [9:0] rbusDIn_src_req_reg;
 //  reg [9:0] rbusDIn_dst_req_reg;
   reg [511:0] rbusDIn_data_reg;
+  reg [7:0] rbusDIn_dataPTR_reg;
   reg dc2_rDir_reg;
   reg dc2_rExcl_reg;
   reg dc2_rDir_reg2;
@@ -1893,6 +1894,7 @@ module heptane_core(
         dc2_req_rd_reg4<=5'b0;
         dc2_req_rd_reg5<=5'b0;
         rbusDIn_data_reg<=512'b0;
+	rbusDIn_dataPTR_reg<=8'b0;
         rbusDIn_signals_reg<={`rbusD_width{1'b0}};
         dc2_rhit<=1'b0;
         dc2_rhitExp<=1'b0;
@@ -1960,6 +1962,7 @@ module heptane_core(
         dc2_req_rd_reg4<=dc2_req_rd_reg3;
         dc2_req_rd_reg5<=dc2_req_rd_reg4;
         rbusDIn_data_reg<=rbusDIn_data;
+        rbusDIn_dataPTR_reg<=rbusDIn_dataPTR;
         rbusDIn_signals_reg<=rbusDIn_signals;
         dc2_rhit<=dc2_rhitA0|dc2_rhitB0|dc2_rhitB1;
         dc2_rhitExp<=dc2_rhitExpA0|dc2_rhitExpB0|dc2_rhitExpB1;

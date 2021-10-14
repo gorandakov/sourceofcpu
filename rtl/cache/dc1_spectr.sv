@@ -77,22 +77,22 @@ module dc1_xbit(
   input [ADDR_WIDTH+4:0] read0_addrE;
   input [ADDR_WIDTH+4:0] read0_addrO;
   input read0_odd;
-  output [1:0] read0_pbit;
+  output reg [1:0] read0_pbit;
   input read1_clkEn;
   input [ADDR_WIDTH+4:0] read1_addrE;
   input [ADDR_WIDTH+4:0] read1_addrO;
   input read1_odd;
-  input [1:0] read1_pbit;
+  output reg [1:0] read1_pbit;
   input read2_clkEn;
   input [ADDR_WIDTH+4:0] read2_addrE;
   input [ADDR_WIDTH+4:0] read2_addrO;
   input read2_odd;
-  input [1:0] read2_pbit;
+  output reg [1:0] read2_pbit;
   input read3_clkEn;
   input [ADDR_WIDTH+4:0] read3_addrE;
   input [ADDR_WIDTH+4:0] read3_addrO;
   input read3_odd;
-  input [1:0] read3_pbit;
+  output reg [1:0] read3_pbit;
   input write0_clkEn;
   input [ADDR_WIDTH+4:0] write0_addrE;
   input [ADDR_WIDTH+4:0] write0_addrO;
@@ -126,6 +126,8 @@ module dc1_xbit(
   reg [31:0] write_dataAx[1:0];
   reg [31:0] write_dataBx[1:0];
 
+  reg [15:0] write_data_reg;
+
   reg write0_clkEn_reg[1:0];
   reg write1_clkEn_reg[1:0];
   reg write_ins_reg[1:0];
@@ -140,6 +142,18 @@ module dc1_xbit(
   wire [ADDR_WIDTH+4:0] read3_addrEO[1:0];
   wire [ADDR_WIDTH+4:0] write0_addrEO[1:0];
   wire [ADDR_WIDTH+4:0] write1_addrEO[1:0];
+  reg  [ADDR_WIDTH+4:0] read0_addrEO_reg[1:0];
+  reg  [ADDR_WIDTH+4:0] read1_addrEO_reg[1:0];
+  reg  [ADDR_WIDTH+4:0] read2_addrEO_reg[1:0];
+  reg  [ADDR_WIDTH+4:0] read3_addrEO_reg[1:0];
+  reg  [ADDR_WIDTH+4:0] read0_addr_reg;
+  reg  [ADDR_WIDTH+4:0] read1_addr_reg;
+  reg  [ADDR_WIDTH+4:0] read2_addr_reg;
+  reg  [ADDR_WIDTH+4:0] read3_addr_reg;
+  reg read0_odd_reg;
+  reg read1_odd_reg;
+  reg read2_odd_reg;
+  reg read3_odd_reg;
   integer k;
   reg write0_d128_reg;
   reg write1_d128_reg;
@@ -251,10 +265,10 @@ always @* begin
   if (write_ins_reg[0]) write_dataAx[15:0]= write_data_reg; 
   if (write_ins_reg[1]) write_dataAx[31:16]= write_data_reg; 
 end
-assign {dummy0,write_dataA[17:0]}=write0_addr_reg[ADDR_WIDTH+4] ? en_ECC(read_dataA_ramx) : en_ECC(write_dataAx);
-assign {write_dataA[35:18],dummy1}=~write0_addr_reg[ADDR_WIDTH+4] ? en_ECC(read_dataA_ramx) : en_ECC(write_dataAx);
-assign {dummy2,write_dataB[17:0]}=write1_addr_reg[ADDR_WIDTH+4] ? en_ECC(read_dataB_ramx) : en_ECC(write_dataBx);
-assign {write_dataB[35:18],dummy3}=~write1_addr_reg[ADDR_WIDTH+4] ? en_ECC(read_dataB_ramx) : en_ECC(write_dataBx);
+assign {dummy0,write_dataA[17:0]}=write0_addr_reg[ADDR_WIDTH+4] ? en_ECC(readA_data_ramx) : en_ECC(write_dataAx);
+assign {write_dataA[35:18],dummy1}=~write0_addr_reg[ADDR_WIDTH+4] ? en_ECC(readA_data_ramx) : en_ECC(write_dataAx);
+assign {dummy2,write_dataB[17:0]}=write1_addr_reg[ADDR_WIDTH+4] ? en_ECC(readB_data_ramx) : en_ECC(write_dataBx);
+assign {write_dataB[35:18],dummy3}=~write1_addr_reg[ADDR_WIDTH+4] ? en_ECC(readB_data_ramx) : en_ECC(write_dataBx);
   
 assign read0_data_ramx[0]={1'b0,un_ECC(read0_data_ram[0])};
 assign read1_data_ramx[0]={1'b0,un_ECC(read1_data_ram[0])};
@@ -291,10 +305,18 @@ always @(posedge clk) begin
       write1_addrEO_reg[0]<=0;
       write0_addrEO_reg[1]<=0;
       write1_addrEO_reg[1]<=0;
-      read0_addr_reg<=0;
+      read0_addr_reg<=0;// NOT AN ERROR!
       read1_addr_reg<=0;
       read2_addr_reg<=0;
       read3_addr_reg<=0;
+      read0_addrEO_reg[0]<=0;
+      read1_addrEO_reg[0]<=0;
+      read2_addrEO_reg[0]<=0;
+      read3_addrEO_reg[0]<=0;
+      read0_addrEO_reg[1]<=0;
+      read1_addrEO_reg[1]<=0;
+      read2_addrEO_reg[1]<=0;
+      read3_addrEO_reg[1]<=0;
       read0_odd_reg<=1'b0;
       read1_odd_reg<=1'b0;
       read2_odd_reg<=1'b0;
@@ -320,6 +342,14 @@ always @(posedge clk) begin
       read1_addr_reg<=read1_addrE;
       read2_addr_reg<=read2_addrE;
       read3_addr_reg<=read3_addrE;
+      read0_addrEO_reg[0]<=read0_addrEO[0];
+      read1_addrEO_reg[0]<=read1_addrEO[0];
+      read2_addrEO_reg[0]<=read2_addrEO[0];
+      read3_addrEO_reg[0]<=read3_addrEO[0];
+      read0_addrEO_reg[1]<=read0_addrEO[1];
+      read1_addrEO_reg[1]<=read1_addrEO[1];
+      read2_addrEO_reg[1]<=read2_addrEO[1];
+      read3_addrEO_reg[1]<=read3_addrEO[1];
       read0_odd_reg<=read0_odd;
       read1_odd_reg<=read1_odd;
       read2_odd_reg<=read2_odd;
