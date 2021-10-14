@@ -138,9 +138,19 @@ module dc1_xbit(
   wire [ADDR_WIDTH+4:0] read1_addrEO[1:0];
   wire [ADDR_WIDTH+4:0] read2_addrEO[1:0];
   wire [ADDR_WIDTH+4:0] read3_addrEO[1:0];
+  wire [ADDR_WIDTH+4:0] write0_addrEO[1:0];
+  wire [ADDR_WIDTH+4:0] write1_addrEO[1:0];
   integer k;
   reg write0_d128_reg;
   reg write1_d128_reg;
+  reg [1:0] write0_pbit_reg;
+  reg [1:0] write1_pbit_reg;
+  reg write0_odd_reg;
+  reg write1_odd_reg;
+  wire [17:0] dummy0;
+  wire [17:0] dummy1;
+  wire [17:0] dummy2;
+  wire [17:0] dummy3;
 
 function [35:0] en_ECC;
   input [31:0] data;
@@ -214,32 +224,37 @@ assign read2_addrEO[1]=read2_addrO;
 assign read3_addrEO[0]=read3_addrE;
 assign read3_addrEO[1]=read3_addrO;
 
+assign write0_addrEO[0]=write0_addrE;
+assign write0_addrEO[1]=write0_addrO;
+assign write1_addrEO[0]=write1_addrE;
+assign write1_addrEO[1]=write1_addrO;
+
 always @* begin
-  write_dataAx[write0_odd_reg]=write0_data_pbit_reg<<{write0_addr_reg[ADDR_WIDTH+4],write0_addr_reg[3:0]};
-  write_dataBx[write1_odd_reg]=write1_data_pbit_reg<<{write1_addr_reg[ADDR_WIDTH+4],write1_addr_reg[3:0]};
-  write_dataAx[~write0_odd_reg]=readA_data_ramx[~write_odd_reg];
-  write_dataBx[~write1_odd_reg]=readB_data_ramx[~write_odd_reg];
+  write_dataAx[write0_odd_reg]=(0|write0_pbit_reg)<<{write0_addr_reg[ADDR_WIDTH+4],write0_addr_reg[3:0]};
+  write_dataBx[write1_odd_reg]=(0|write1_pbit_reg)<<{write1_addr_reg[ADDR_WIDTH+4],write1_addr_reg[3:0]};
+  write_dataAx[~write0_odd_reg]=readA_data_ramx[~write0_odd_reg];
+  write_dataBx[~write1_odd_reg]=readB_data_ramx[~write1_odd_reg];
   for(k=0;k<16;k=k+1) begin
-      if (write0_odd_reg && k!=write0_addr_reg[3:0] && ((k-1)!=write0_addr_reg[3:0] || ~write0_d128_reg)
+      if (write0_odd_reg && k!=write0_addr_reg[3:0] && ((k-1)!=write0_addr_reg[3:0] || ~write0_d128_reg))
           write_dataAx[1][k+16]=readA_data_ramx[1];
-      if (~write0_odd_reg && k!=write0_addr_reg[3:0] && ((k-1)!=write0_addr_reg[3:0] || ~write0_d128_reg)
+      if (~write0_odd_reg && k!=write0_addr_reg[3:0] && ((k-1)!=write0_addr_reg[3:0] || ~write0_d128_reg))
           write_dataAx[0][k]=readA_data_ramx[0];
-      if (write1_odd_reg && k!=write1_addr_reg[3:0] && ((k-1)!=write1_addr_reg[3:0] || ~write1_d128_reg)
+      if (write1_odd_reg && k!=write1_addr_reg[3:0] && ((k-1)!=write1_addr_reg[3:0] || ~write1_d128_reg))
           write_dataBx[1][k+16]=readB_data_ramx[1];
-      if (~write1_odd_reg && k!=write1_addr_reg[3:0] && ((k-1)!=write1_addr_reg[3:0] || ~write1_d128_reg)
+      if (~write1_odd_reg && k!=write1_addr_reg[3:0] && ((k-1)!=write1_addr_reg[3:0] || ~write1_d128_reg))
           write_dataBx[0][k]=readB_data_ramx[0];
   end
-  if (write0_odd_reg && 4'hf==write0_addr_reg[3:0] && ~|write_ins_reg) write_dataAx[0][0]<=write0_data_pbit_reg[1];
-  if (write1_odd_reg && 4'hf==write1_addr_reg[3:0] && ~|write_ins_reg) write_dataBx[0][0]<=write1_data_pbit_reg[1];
-  if (~write0_odd_reg && 4'hf==write0_addr_reg[3:0] && ~|write_ins_reg) write_dataAx[1][0]<=write0_data_pbit_reg[1];
-  if (~write1_odd_reg && 4'hf==write1_addr_reg[3:0] && ~|write_ins_reg) write_dataBx[1][0]<=write1_data_pbit_reg[1];
+  if (write0_odd_reg && 4'hf==write0_addr_reg[3:0] && ~|write_ins_reg) write_dataAx[0][0]<=write0_pbit_reg[1];
+  if (write1_odd_reg && 4'hf==write1_addr_reg[3:0] && ~|write_ins_reg) write_dataBx[0][0]<=write1_pbit_reg[1];
+  if (~write0_odd_reg && 4'hf==write0_addr_reg[3:0] && ~|write_ins_reg) write_dataAx[1][0]<=write0_pbit_reg[1];
+  if (~write1_odd_reg && 4'hf==write1_addr_reg[3:0] && ~|write_ins_reg) write_dataBx[1][0]<=write1_pbit_reg[1];
   if (write_ins_reg[0]) write_dataAx[15:0]= write_data_reg; 
   if (write_ins_reg[1]) write_dataAx[31:16]= write_data_reg; 
 end
-assign write_dataA[17:0]=write0_addr_reg[ADDR_WIDTH+4] ? en_ECC(read_dataA_ramx[17:0]) : en_ECC(write_dataAx)[17:0];
-assign write_dataA[35:18]=~write0_addr_reg[ADDR_WIDTH+4] ? en_ECC(read_dataA_ramx[35:18]) : en_ECC(write_dataAx)[35:18];
-assign write_dataB[17:0]=write1_addr_reg[ADDR_WIDTH+4] ? en_ECC(read_dataB_ramx[17:0]) : en_ECC(write_dataBx)[17:0];
-assign write_dataB[35:18]=~write1_addr_reg[ADDR_WIDTH+4] ? en_ECC(read_dataB_ramx[35:18]) : en_ECC(write_dataBx)[35:18];
+assign {dummy0,write_dataA[17:0]}=write0_addr_reg[ADDR_WIDTH+4] ? en_ECC(read_dataA_ramx) : en_ECC(write_dataAx);
+assign {write_dataA[35:18],dummy1}=~write0_addr_reg[ADDR_WIDTH+4] ? en_ECC(read_dataA_ramx) : en_ECC(write_dataAx);
+assign {dummy2,write_dataB[17:0]}=write1_addr_reg[ADDR_WIDTH+4] ? en_ECC(read_dataB_ramx) : en_ECC(write_dataBx);
+assign {write_dataB[35:18],dummy3}=~write1_addr_reg[ADDR_WIDTH+4] ? en_ECC(read_dataB_ramx) : en_ECC(write_dataBx);
   
 assign read0_data_ramx[0]={1'b0,un_ECC(read0_data_ram[0])};
 assign read1_data_ramx[0]={1'b0,un_ECC(read1_data_ram[0])};

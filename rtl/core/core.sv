@@ -705,9 +705,11 @@ module heptane_core(
   wire [7:0] dc2_rdataPTRA;
   wire [7:0] dc2_rdataPTRB;
   wire [7:0] dc2_rdataPTR;
+  reg  [7:0] dc2_rdataPTR_reg;
   wire [7:0] dc2_rdataExpPTRA;
   wire [7:0] dc2_rdataExpPTRB;
   wire [7:0] dc2_rdataExpPTR;
+  reg  [7:0] dc2_rdataExpPTR_reg;
   wire dc2_hitE0,dc2_hitO0;
   wire [35:0] dc2_addrE0;
   wire [35:0] dc2_addrO0;
@@ -1901,6 +1903,8 @@ module heptane_core(
         dc2_rExcl_reg2<=1'b0;
         dc2_rdata_reg<=512'b0;
         dc2_rdataExp_reg<=512'b0;
+	dc2_rdataPTR_reg<=8'b0;
+	dc2_rdataExpPTR_reg<=8'b0;
         dc2_rLRU_reg<=5'b0;
 	dc2_io_en_reg<=1'b0;
 	dc2_io_en_reg2<=1'b0;
@@ -1966,6 +1970,8 @@ module heptane_core(
         dc2_rExcl_reg2<=dc2_rExcl_reg;
         dc2_rdata_reg<=dc2_rdata;
         dc2_rdataExp_reg<=dc2_rdataExp;
+	dc2_rdataPTR_reg<=dc2_rdataPTR;
+        dc2_rdataExpPTR_reg<=dc2_rdataExpPTR;
         dc2_rLRU_reg<=dc2_rLRU;
         dc2_rdataA0_reg<=dc2_rdataA0[1023:512];
         dc2_rdataB0_reg<=dc2_rdataB0[1023:512];
