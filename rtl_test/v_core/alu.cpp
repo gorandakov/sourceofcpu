@@ -469,7 +469,7 @@ void req::gen_init(int rT_,int dom,unsigned long int val,int val_p) {
     else snprintf(asmtext,sizeof asmtext,"movabsp $%li,%%%s\n",B,reg65[rT]);//WARNING: movabsp non impl and not in cpu spec
 }
 
-bool req::gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,bool has_mem_,char *mem,char *memp) {
+bool req::gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,bool has_mem_,char *mem) {
     alt=alt_;
     mul=mul_;
     excpt=-1;
@@ -516,7 +516,7 @@ bool req::gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,bool
             case 0:
 	
 	    if (has_mem_) {
-		(this-1)->gen_mem(NULL,8,mem,memp,addr);
+		(this-1)->gen_mem(NULL,8,mem,addr);
 		rB=16;
 		B=(this-1)->res;
 		B_p=(this-1)->res_p;
@@ -564,7 +564,7 @@ addie:
             
             case 1:
 	    if (has_mem_) {
-		(this-1)->gen_mem(NULL,4,mem,memp,addr);
+		(this-1)->gen_mem(NULL,4,mem,addr);
 		rB=16;
 		B=(this-1)->res;
 		B_p=(this-1)->res_p;
@@ -581,7 +581,7 @@ addie:
 
             case 4:
 	    if (has_mem_) {
-		(this-1)->gen_mem(NULL,8,mem,memp,addr);
+		(this-1)->gen_mem(NULL,8,mem,addr);
 		rB=16;
 		B=(this-1)->res;
 		B_p=(this-1)->res_p;
@@ -614,7 +614,7 @@ addie:
             
             case 5:
 	    if (has_mem_) {
-		(this-1)->gen_mem(NULL,4,mem,memp,addr);
+		(this-1)->gen_mem(NULL,4,mem,addr);
 		rB=16;
 		B=(this-1)->res;
 		B_p=(this-1)->res_p;
@@ -631,7 +631,7 @@ addie:
 
             case 8:
 	    if (has_mem_) {
-		(this-1)->gen_mem(NULL,8,mem,memp,addr);
+		(this-1)->gen_mem(NULL,8,mem,addr);
 		rB=16;
 		B=(this-1)->res;
 		B_p=(this-1)->res_p;
@@ -659,7 +659,7 @@ addie:
 
             case 9:
 	    if (has_mem_) {
-		(this-1)->gen_mem(NULL,4,mem,memp,addr);
+		(this-1)->gen_mem(NULL,4,mem,addr);
 		rB=16;
 		B=(this-1)->res;
 		B_p=(this-1)->res_p;
@@ -674,7 +674,7 @@ addie:
 
             case 12:
 	    if (has_mem_) {
-		(this-1)->gen_mem(NULL,8,mem,memp,addr);
+		(this-1)->gen_mem(NULL,8,mem,addr);
 		rB=16;
 		B=(this-1)->res;
 		B_p=(this-1)->res_p;
@@ -702,7 +702,7 @@ addie:
 
             case 13:
 	    if (has_mem_) {
-		(this-1)->gen_mem(NULL,4,mem,memp,addr);
+		(this-1)->gen_mem(NULL,4,mem,addr);
 		rB=16;
 		B=(this-1)->res;
 		B_p=(this-1)->res_p;
@@ -717,7 +717,7 @@ addie:
 
             case 16:
 	    if (has_mem_) {
-		(this-1)->gen_mem(NULL,8,mem,memp,addr);
+		(this-1)->gen_mem(NULL,8,mem,addr);
 		rB=16;
 		B=(this-1)->res;
 		B_p=(this-1)->res_p;
@@ -745,7 +745,7 @@ addie:
 
             case 17:
 	    if (has_mem_) {
-		(this-1)->gen_mem(NULL,4,mem,memp,addr);
+		(this-1)->gen_mem(NULL,4,mem,addr);
 		rB=16;
 		B=(this-1)->res;
 		B_p=(this-1)->res_p;
@@ -838,9 +838,8 @@ addie:
  
             case 32:
 	    if (has_mem_) {
-		(this-1)->gen_mem(NULL,8,mem,memp,addr);
-		snprintf(*(this-1).asmtext,sizeof (asmtext), "movq %li(%rip), %%%s\n",addr,reg65[rT]);
-                *(this-1).rT=rT;
+		(this-1)->gen_mem(NULL,8,mem,addr);
+		snprintf(asmtext,sizeof (asmtext), "movq %li(%rip), %%%s\n",addr,reg65[rT]);
 		rtn=false;
 	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"movq %%%s,  %%%s\n",reg65[rB],reg65[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"movq $%i, %%%s\n",(int) B,reg65[rT]);
@@ -850,9 +849,8 @@ addie:
 
             case 33:
 	    if (has_mem_) {
-		(this-1)->gen_mem(NULL,4,mem,memp,addr);
-		snprintf(*(this-1).asmtext,sizeof (asmtext), "movl %li(%rip), %%%s\n",addr,reg32[rT]);
-                *(this-1).rT=rT;
+		(this-1)->gen_mem(NULL,4,mem,addr);
+		snprintf(asmtext,sizeof (asmtext), "movl %li(%rip), %%%s\n",addr,reg32[rT]);
 		rtn=false;
 	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"movl %%%s,  %%%s\n",reg32[rB],reg32[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"movl $%i, %%%s\n",(int) B,reg32[rT]);
@@ -867,10 +865,6 @@ addie:
 	    A=contx->reg_gen[rA];
             res=(B&0xffffull)|(A&0xffffffffffff0000ull);
             flags=flags_in;
-	    if (has_mem_) {
-		rtn=false;
-		*(this-1)=*this;
-	    }
             break;
 
             case 35:
@@ -896,9 +890,8 @@ addie:
 
             case 36:
 	    if (has_mem_) {
-		(this-1)->gen_mem(NULL,1,mem,memp,addr);
-		snprintf(*(this-1).asmtext,sizeof (asmtext), "movzbl %li(%rip), %%%s\n",addr,reg32[rT]);
-                *(this-1).rT=rT;
+		(this-1)->gen_mem(NULL,1,mem,addr);
+		snprintf(asmtext,sizeof (asmtext), "movzbl %li(%rip), %%%s\n",addr,reg32[rT]);
 		rtn=false;
 	    } else if (rB<0) {
 		rB=rand()&0x1f;
@@ -913,9 +906,8 @@ addie:
 
             case 37:
 	    if (has_mem_) {
-		(this-1)->gen_mem(NULL,2,mem,memp,addr);
-		snprintf(*(this-1).asmtext,sizeof (asmtext), "movzwl %li(%rip), %%%s\n",addr,reg32[rT]);
-                *(this-1).rT=rT;
+		(this-1)->gen_mem(NULL,2,mem,addr);
+		snprintf(asmtext,sizeof (asmtext), "movzwl %li(%rip), %%%s\n",addr,reg32[rT]);
 		rtn=false;
 	    } else if (rB<0) {
 		rB=rand()&0x1f;
@@ -1199,15 +1191,10 @@ addie:
     }
     en=rand()&0xff!=0;
     if (!(op&0x1000)) contx->flags=flags;
-    if (rtn && (rT>=0)) {
+    if (rT>=0) {
 	contx->reg_gen[rT]=res;
 	contx->reg_genP[rT]=res_p;
     }
-    if (!rtn && (*(this-1).rT>=0)) {
-	contx->reg_gen[rT]=*(this-1).res;
-	contx->reg_genP[rT]=*(this-1).res_p;
-    }
-    return rtn;
 }
     
 void req::gen_mem(req* prev1,unsigned code,char *mem,unsigned long addr) {
@@ -1674,7 +1661,7 @@ bool ckran_alu(unsigned long long ptr,unsigned long long &addr) {
     return false;
 }
 
-void gen_prog(req *reqs,int count, FILE *f,hcont *contx,char *mem) {
+void gen_prog(req *reqs,int count, FILE *f,hcont *contx) {
    int n;
    fprintf(f,".text\n");
    fprintf(f,".global _start\n");
@@ -1693,13 +1680,13 @@ void gen_prog(req *reqs,int count, FILE *f,hcont *contx,char *mem) {
   // reqs[32].gen_movcsr(csr_page,31);
    
    for(n=32;n<(count-1);n++) {
-	   if (lrand48()&1) {
+//	   if (lrand48()&1) {
                reqs[n].gen(false, false, lrand48()&1, NULL,contx,false,NULL);
 	       fprintf(f,"%s",reqs[n].asmtext);
-	   } else {
-               if (reqs[n+1].gen(false, false, false, NULL,contx,true,mem)) n++;
-	       fprintf(f,"%s",reqs[n].asmtext);
-	   }
+//	   } else {
+//               if (reqs[n+1].gen(false, false, false, NULL,contx,true)) n++;
+//	       fprintf(f,"%s",reqs[n].asmtext);
+//	   }
    }
    fprintf(f,".p2align 5\n");
    
@@ -1720,7 +1707,6 @@ int main(int argc, char *argv[]) {
     hcont contx;
     memset((void *) &contx,0,sizeof (contx));
     char *mem=(char *) mmap(0,2l*1024*1024*1024,PROT_READ|PROT_WRITE,MAP_ANON|MAP_PRIVATE,-1,0);
-    char *memp=(char *) mmap(0,2l*1024*1024*1024/64,PROT_READ|PROT_WRITE,MAP_ANON|MAP_PRIVATE,-1,0);
     if (!mem) {
 	perror("mem");
 	exit(1);
@@ -1730,7 +1716,7 @@ int main(int argc, char *argv[]) {
     fesetround(FE_TOWARDZERO);
     top->clk=0;
     top->rst=1;
-    gen_prog(reqs,10000000,FOUT,&contx,mem);
+    gen_prog(reqs,10000000,FOUT,&contx);
     fclose(FOUT);
     if (argc==2 && !strcmp(argv[1],"-asm")) exit(0);
     char mname[256];
