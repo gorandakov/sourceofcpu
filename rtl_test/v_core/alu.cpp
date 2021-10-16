@@ -443,7 +443,7 @@ class req {
     char asmtext[64];
     bool gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,bool has_mem_,char *mem);
     void gen_init(int rT,int dom,unsigned long int val,int val_p);
-    void gen_mem(req* prev1,unsigned code,char * mem,char *memp,unsigned long addr);
+    void gen_mem(req* prev1,unsigned code,char * mem,unsigned long addr);
     void flgPTR(__int128 r);
     void flg64(__int128 r);
     void flg32(__int128 r);
@@ -1210,12 +1210,11 @@ addie:
     return rtn;
 }
     
-void req::gen_mem(req* prev1,unsigned code,char *mem,char *memp,unsigned long addr) {
+void req::gen_mem(req* prev1,unsigned code,char *mem,unsigned long addr) {
     res=0;
     res_p=0;
     switch(code) {
-        case 8: res_p=(memp[MEMRGN_DATA+addr/8]>>(addr&7))&0x1;
-		res|=(unsigned char) mem[MEMRGN_DATA+addr+4]<<32;
+        case 8: res|=(unsigned char) mem[MEMRGN_DATA+addr+4]<<32;
 	        res|=(unsigned char) mem[MEMRGN_DATA+addr+5]<<40;        
 	        res|=(unsigned char) mem[MEMRGN_DATA+addr+6]<<48;        
 	        res|=(unsigned char) mem[MEMRGN_DATA+addr+7]<<56;        
