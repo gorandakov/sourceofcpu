@@ -837,22 +837,14 @@ addie:
             break;
  
             case 32:
-	    if (has_mem_) {
-		(this-1)->gen_mem(NULL,8,mem,addr);
-		snprintf(asmtext,sizeof (asmtext), "movq %li(%rip), %%%s\n",addr,reg65[rT]);
-		rtn=false;
-	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"movq %%%s,  %%%s\n",reg65[rB],reg65[rT]);
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movq %%%s,  %%%s\n",reg65[rB],reg65[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"movq $%i, %%%s\n",(int) B,reg65[rT]);
             res=B;
             flags=flags_in;
             break;
 
             case 33:
-	    if (has_mem_) {
-		(this-1)->gen_mem(NULL,4,mem,addr);
-		snprintf(asmtext,sizeof (asmtext), "movl %li(%rip), %%%s\n",addr,reg32[rT]);
-		rtn=false;
-	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"movl %%%s,  %%%s\n",reg32[rB],reg32[rT]);
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movl %%%s,  %%%s\n",reg32[rB],reg32[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"movl $%i, %%%s\n",(int) B,reg32[rT]);
             res=B&0xffffffffull;
             flags=flags_in;
@@ -882,18 +874,10 @@ addie:
             else res=(A&0xffffffffffffff00ull)| ((op&1024) ? (B&0xff00ull)>>8 :
                 B&0xffull);
             flags=flags_in;
-	    if (has_mem_) {
-		rtn=false;
-		*(this-1)=*this;
-	    }
             break;
 
             case 36:
-	    if (has_mem_) {
-		(this-1)->gen_mem(NULL,1,mem,addr);
-		snprintf(asmtext,sizeof (asmtext), "movzbl %li(%rip), %%%s\n",addr,reg32[rT]);
-		rtn=false;
-	    } else if (rB<0) {
+	    if (rB<0) {
 		rB=rand()&0x1f;
 		B=contx->reg_gen[rB];
 		B_p=contx->reg_genP[rB];
@@ -905,11 +889,7 @@ addie:
             break;
 
             case 37:
-	    if (has_mem_) {
-		(this-1)->gen_mem(NULL,2,mem,addr);
-		snprintf(asmtext,sizeof (asmtext), "movzwl %li(%rip), %%%s\n",addr,reg32[rT]);
-		rtn=false;
-	    } else if (rB<0) {
+	    if (rB<0) {
 		rB=rand()&0x1f;
 		B=contx->reg_gen[rB];
 		B_p=contx->reg_genP[rB];
@@ -930,10 +910,6 @@ addie:
 	    else snprintf(asmtext,sizeof asmtext,"movsbq $%i, %%%s\n",(int) B,reg65[rT]);
             res=(B&0x80) ? B|0xffffffffffffff00ull : B&0xffull;
             flags=flags_in;
-	    if (has_mem_) {
-		rtn=false;
-		*(this-1)=*this;
-	    }
             break;
 
             case 40:
@@ -946,10 +922,6 @@ addie:
 	    else snprintf(asmtext,sizeof asmtext,"movswq $%i, %%%s\n",(int) B,reg65[rT]);
             res=(B&0x8000) ? B|0xffffffffffff0000ull : B&0xffffull;
             flags=flags_in;
-	    if (has_mem_) {
-		rtn=false;
-		*(this-1)=*this;
-	    }
             break;
 
             case 41:
@@ -962,10 +934,6 @@ addie:
 	    else snprintf(asmtext,sizeof asmtext,"movslq $%i, %%%s\n",(int) B,reg65[rT]);
             res=(B&0x80000000) ? B|0xffffffff00000000ull : B&0xffffffffull;
             flags=flags_in;
-	    if (has_mem_) {
-		rtn=false;
-		*(this-1)=*this;
-	    }
             break;
 
             case 42:
@@ -980,10 +948,6 @@ addie:
 	    else snprintf(asmtext,sizeof asmtext,"movsbl $%i, %%%s\n",(int) B,reg32[rT]);
             res=(B0&0x80) ? B0x|0xffffff00ull : B0x&0xffull;
             flags=flags_in;
-	    if (has_mem_) {
-		rtn=false;
-		*(this-1)=*this;
-	    }
             break;
 
             case 43:
@@ -998,10 +962,6 @@ addie:
 	    else snprintf(asmtext,sizeof asmtext,"movswl $%i, %%%s\n",(int) B,reg32[rT]);
             res=(B0&0x8000) ? B0x|0xffff0000ull : B0x&0xffffull;
             flags=flags_in;
-	    if (has_mem_) {
-		rtn=false;
-		*(this-1)=*this;
-	    }
             break;
 
             case 48:
@@ -1017,10 +977,6 @@ addie:
             res=testj(((op&0x700)>>7)|(op&0x1)) ? B : A;
             res_p=testj(((op&0x700)>>7)|(op&0x1)) ? B_p : A_p;
             flags=flags_in;
-	    if (has_mem_) {
-		rtn=false;
-		*(this-1)=*this;
-	    }
             break;
             
             case 50:
@@ -1037,10 +993,6 @@ addie:
 	    snprintf(asmtext,sizeof asmtext,"cmov%sl %%%s, %%%s, %%%s\n",COND(op),reg32[rB],reg32[rA],reg32[rT]);
             res=testj(((op&0x700)>>7)|(op&0x1)) ? B0x : A0x;
             flags=flags_in;
-	    if (has_mem_) {
-		rtn=false;
-		*(this-1)=*this;
-	    }
             break;
             
             
@@ -1056,10 +1008,6 @@ addie:
             res=0;
             flags=testj(((op&0x700)>>7)|(op&0x1)) ? A&0x3f : flags_in;
 	    rT=-1;
-	    if (has_mem_) {
-		rtn=false;
-		*(this-1)=*this;
-	    }
             break;
 
             case 54:
@@ -1073,10 +1021,6 @@ addie:
 	    snprintf(asmtext,sizeof asmtext,"cset%sl %%%s\n",COND(op),reg32[rT]);
             res=testj(((op&0x700)>>7)|(op&0x1));
             flags=flags_in;
-	    if (has_mem_) {
-		rtn=false;
-		*(this-1)=*this;
-	    }
             break;
 
             case 56:
@@ -1088,10 +1032,6 @@ addie:
 	    snprintf(asmtext,sizeof asmtext,"sahfl %%%s\n",reg32[rT]);
             res=flags_in&0x3f;
             flags=flags_in;
-	    if (has_mem_) {
-		rtn=false;
-		*(this-1)=*this;
-	    }
             break;
 
             case 57:
@@ -1104,10 +1044,6 @@ addie:
             res=0;
             flags=A&0x3f;
 	    rT=-1;
-	    if (has_mem_) {
-		rtn=false;
-		*(this-1)=*this;
-	    }
             break;
         }
     } else if (!alt) {
