@@ -1394,7 +1394,7 @@ unsigned get_retfl_data(Vheptane_core *vlTOPp) {
                    & (IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT____pinNumber8__en1));
 }
 
-void req_set(Vheptane_core *top,req *reqs,char *mem,char *memp) {
+void req_set(Vheptane_core *top,req *reqs,char *mem) {
     static unsigned long addr[32];
     static unsigned pos=0;
     static unsigned pos_R=0;
@@ -1418,10 +1418,8 @@ void req_set(Vheptane_core *top,req *reqs,char *mem,char *memp) {
 	top->rbusDIn_dst_req=src[pos_R];
 	if (!R) {
 	    memcpy((char *) top->rbusDIn_data,mem+(addr[pos_R]<<7),64);
-	    top->rbusDIn_dataPTR=mem(addr[pos_R]<<1);
 	} else {
 	    memcpy((char *) top->rbusDIn_data,mem+((addr[pos_R]<<7)+64),64);
-	    top->rbusDIn_dataPTR=mem((addr[pos_R]<<1)+1);
 	    top->rbusDIn_signals|=1<<(rbusD_second);
 	}
 	printf("retn 0x%lx,\t%i\n",addr[pos_R],R);
@@ -1439,10 +1437,8 @@ void req_set(Vheptane_core *top,req *reqs,char *mem,char *memp) {
 	}
 	if (!(top->rbusDOut_signals&(1<<(rbusD_second)))) {
 	    memcpy(mem+(addr[pos_R]<<7),(char *) top->rbusDOut_data,64);
-	    mem(addr[pos_R]<<1)=top->rbusDIn_dataPTR;
         } else {
 	    memcpy(mem+((addr[pos_R]<<7)+64),(char *) top->rbusDOut_data,64);
-	    mem((addr[pos_R]<<1)+1)=top->rbusDIn_dataPTR;
 	}
         end_DOut:;
     }
