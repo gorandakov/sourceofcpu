@@ -441,7 +441,7 @@ class req {
     unsigned has_mem;
     unsigned has_alu;
     char asmtext[64];
-    bool gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,bool has_mem_,char *mem);
+    bool gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,bool has_mem_,char *mem,char *pmem);
     void gen_init(int rT,int dom,unsigned long int val,int val_p);
     void gen_mem(req* prev1,unsigned code,char * mem,char *memp,unsigned long addr);
     void flgPTR(__int128 r);
@@ -767,7 +767,7 @@ addie:
             flg64(res0);
 	    if (has_mem_) {
 		rtn=false;
-		*(this-1)=*this;
+		(*(this-1))=*this;
 	    }
             break;
 
@@ -780,7 +780,7 @@ addie:
             flg32(res0);
 	    if (has_mem_) {
 		rtn=false;
-		*(this-1)=*this;
+		(*(this-1))=*this;
 	    }
             break;
 
@@ -793,7 +793,7 @@ addie:
             flg64(((res0>>1)&0xffffffffffffffffull)|((res0&0x1) ? one<<1:0));
 	    if (has_mem_) {
 		rtn=false;
-		*(this-1)=*this;
+		(*(this-1))=*this;
 	    }
             break;
 
@@ -806,7 +806,7 @@ addie:
             flg32(((res0>>1)&0xffffffffu)|((res0&0x1)<<32));
 	    if (has_mem_) {
 		rtn=false;
-		*(this-1)=*this;
+		(*(this-1))=*this;
 	    }
             break;
 
@@ -819,7 +819,7 @@ addie:
             flg64(((res0>>1)&0xffffffffffffffffull)|((res0&0x1) ? one<<1 : 0));
 	    if (has_mem_) {
 		rtn=false;
-		*(this-1)=*this;
+		(*(this-1))=*this;
 	    }
             break;
 
@@ -832,15 +832,15 @@ addie:
             flg32(((res0>>1)&0xffffffffu)|((res0&0x1)<<32));
 	    if (has_mem_) {
 		rtn=false;
-		*(this-1)=*this;
+		(*(this-1))=*this;
 	    }
             break;
  
             case 32:
 	    if (has_mem_) {
 		(this-1)->gen_mem(NULL,8,mem,memp,addr);
-		snprintf(*(this-1).asmtext,sizeof (asmtext), "movq %li(%rip), %%%s\n",addr,reg65[rT]);
-                *(this-1).rT=rT;
+		snprintf((*(this-1)).asmtext,sizeof (asmtext), "movq %li(%rip), %%%s\n",addr,reg65[rT]);
+                (*(this-1)).rT=rT;
 		rtn=false;
 	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"movq %%%s,  %%%s\n",reg65[rB],reg65[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"movq $%i, %%%s\n",(int) B,reg65[rT]);
@@ -851,8 +851,8 @@ addie:
             case 33:
 	    if (has_mem_) {
 		(this-1)->gen_mem(NULL,4,mem,memp,addr);
-		snprintf(*(this-1).asmtext,sizeof (asmtext), "movl %li(%rip), %%%s\n",addr,reg32[rT]);
-                *(this-1).rT=rT;
+		snprintf((*(this-1)).asmtext,sizeof (asmtext), "movl %li(%rip), %%%s\n",addr,reg32[rT]);
+                (*(this-1)).rT=rT;
 		rtn=false;
 	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"movl %%%s,  %%%s\n",reg32[rB],reg32[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"movl $%i, %%%s\n",(int) B,reg32[rT]);
@@ -869,7 +869,7 @@ addie:
             flags=flags_in;
 	    if (has_mem_) {
 		rtn=false;
-		*(this-1)=*this;
+		(*(this-1))=*this;
 	    }
             break;
 
@@ -890,15 +890,15 @@ addie:
             flags=flags_in;
 	    if (has_mem_) {
 		rtn=false;
-		*(this-1)=*this;
+		(*(this-1))=*this;
 	    }
             break;
 
             case 36:
 	    if (has_mem_) {
 		(this-1)->gen_mem(NULL,1,mem,memp,addr);
-		snprintf(*(this-1).asmtext,sizeof (asmtext), "movzbl %li(%rip), %%%s\n",addr,reg32[rT]);
-                *(this-1).rT=rT;
+		snprintf((*(this-1)).asmtext,sizeof (asmtext), "movzbl %li(%rip), %%%s\n",addr,reg32[rT]);
+                (*(this-1)).rT=rT;
 		rtn=false;
 	    } else if (rB<0) {
 		rB=rand()&0x1f;
@@ -914,8 +914,8 @@ addie:
             case 37:
 	    if (has_mem_) {
 		(this-1)->gen_mem(NULL,2,mem,memp,addr);
-		snprintf(*(this-1).asmtext,sizeof (asmtext), "movzwl %li(%rip), %%%s\n",addr,reg32[rT]);
-                *(this-1).rT=rT;
+		snprintf((*(this-1)).asmtext,sizeof (asmtext), "movzwl %li(%rip), %%%s\n",addr,reg32[rT]);
+                (*(this-1)).rT=rT;
 		rtn=false;
 	    } else if (rB<0) {
 		rB=rand()&0x1f;
@@ -940,7 +940,7 @@ addie:
             flags=flags_in;
 	    if (has_mem_) {
 		rtn=false;
-		*(this-1)=*this;
+		(*(this-1))=*this;
 	    }
             break;
 
@@ -956,7 +956,7 @@ addie:
             flags=flags_in;
 	    if (has_mem_) {
 		rtn=false;
-		*(this-1)=*this;
+		(*(this-1))=*this;
 	    }
             break;
 
@@ -972,7 +972,7 @@ addie:
             flags=flags_in;
 	    if (has_mem_) {
 		rtn=false;
-		*(this-1)=*this;
+		(*(this-1))=*this;
 	    }
             break;
 
@@ -990,7 +990,7 @@ addie:
             flags=flags_in;
 	    if (has_mem_) {
 		rtn=false;
-		*(this-1)=*this;
+		(*(this-1))=*this;
 	    }
             break;
 
@@ -1008,7 +1008,7 @@ addie:
             flags=flags_in;
 	    if (has_mem_) {
 		rtn=false;
-		*(this-1)=*this;
+		(*(this-1))=*this;
 	    }
             break;
 
@@ -1027,7 +1027,7 @@ addie:
             flags=flags_in;
 	    if (has_mem_) {
 		rtn=false;
-		*(this-1)=*this;
+		(*(this-1))=*this;
 	    }
             break;
             
@@ -1047,7 +1047,7 @@ addie:
             flags=flags_in;
 	    if (has_mem_) {
 		rtn=false;
-		*(this-1)=*this;
+		(*(this-1))=*this;
 	    }
             break;
             
@@ -1066,7 +1066,7 @@ addie:
 	    rT=-1;
 	    if (has_mem_) {
 		rtn=false;
-		*(this-1)=*this;
+		(*(this-1))=*this;
 	    }
             break;
 
@@ -1083,7 +1083,7 @@ addie:
             flags=flags_in;
 	    if (has_mem_) {
 		rtn=false;
-		*(this-1)=*this;
+		(*(this-1))=*this;
 	    }
             break;
 
@@ -1098,7 +1098,7 @@ addie:
             flags=flags_in;
 	    if (has_mem_) {
 		rtn=false;
-		*(this-1)=*this;
+		(*(this-1))=*this;
 	    }
             break;
 
@@ -1114,7 +1114,7 @@ addie:
 	    rT=-1;
 	    if (has_mem_) {
 		rtn=false;
-		*(this-1)=*this;
+		(*(this-1))=*this;
 	    }
             break;
         }
@@ -1203,9 +1203,9 @@ addie:
 	contx->reg_gen[rT]=res;
 	contx->reg_genP[rT]=res_p;
     }
-    if (!rtn && (*(this-1).rT>=0)) {
-	contx->reg_gen[rT]=*(this-1).res;
-	contx->reg_genP[rT]=*(this-1).res_p;
+    if (!rtn && ((*(this-1)).rT>=0)) {
+	contx->reg_gen[(*(this-1)).rT]=(*(this-1)).res;
+	contx->reg_genP[(*(this-1)).rT]=(*(this-1)).res_p;
     }
     return rtn;
 }
@@ -1419,10 +1419,10 @@ void req_set(Vheptane_core *top,req *reqs,char *mem,char *memp) {
 	top->rbusDIn_dst_req=src[pos_R];
 	if (!R) {
 	    memcpy((char *) top->rbusDIn_data,mem+(addr[pos_R]<<7),64);
-	    top->rbusDIn_dataPTR=mem(addr[pos_R]<<1);
+	    top->rbusDIn_dataPTR=mem[addr[pos_R]<<1];
 	} else {
 	    memcpy((char *) top->rbusDIn_data,mem+((addr[pos_R]<<7)+64),64);
-	    top->rbusDIn_dataPTR=mem((addr[pos_R]<<1)+1);
+	    top->rbusDIn_dataPTR=mem[(addr[pos_R]<<1)+1];
 	    top->rbusDIn_signals|=1<<(rbusD_second);
 	}
 	printf("retn 0x%lx,\t%i\n",addr[pos_R],R);
@@ -1440,10 +1440,10 @@ void req_set(Vheptane_core *top,req *reqs,char *mem,char *memp) {
 	}
 	if (!(top->rbusDOut_signals&(1<<(rbusD_second)))) {
 	    memcpy(mem+(addr[pos_R]<<7),(char *) top->rbusDOut_data,64);
-	    mem(addr[pos_R]<<1)=top->rbusDIn_dataPTR;
+	    mem[addr[pos_R]<<1]=top->rbusDIn_dataPTR;
         } else {
 	    memcpy(mem+((addr[pos_R]<<7)+64),(char *) top->rbusDOut_data,64);
-	    mem((addr[pos_R]<<1)+1)=top->rbusDIn_dataPTR;
+	    mem[(addr[pos_R]<<1)+1]=top->rbusDIn_dataPTR;
 	}
         end_DOut:;
     }
@@ -1679,7 +1679,7 @@ bool ckran_alu(unsigned long long ptr,unsigned long long &addr) {
     return false;
 }
 
-void gen_prog(req *reqs,int count, FILE *f,hcont *contx,char *mem) {
+void gen_prog(req *reqs,int count, FILE *f,hcont *contx,char *mem,char *pmem) {
    int n;
    fprintf(f,".text\n");
    fprintf(f,".global _start\n");
@@ -1699,10 +1699,10 @@ void gen_prog(req *reqs,int count, FILE *f,hcont *contx,char *mem) {
    
    for(n=32;n<(count-1);n++) {
 	   if (lrand48()&1) {
-               reqs[n].gen(false, false, lrand48()&1, NULL,contx,false,NULL);
+               reqs[n].gen(false, false, lrand48()&1, NULL,contx,false,NULL,NULL);
 	       fprintf(f,"%s",reqs[n].asmtext);
 	   } else {
-               if (reqs[n+1].gen(false, false, false, NULL,contx,true,mem)) n++;
+               if (reqs[n+1].gen(false, false, false, NULL,contx,true,mem,pmem)) n++;
 	       fprintf(f,"%s",reqs[n].asmtext);
 	   }
    }
@@ -1735,7 +1735,7 @@ int main(int argc, char *argv[]) {
     fesetround(FE_TOWARDZERO);
     top->clk=0;
     top->rst=1;
-    gen_prog(reqs,10000000,FOUT,&contx,mem);
+    gen_prog(reqs,10000000,FOUT,&contx,mem,memp);
     fclose(FOUT);
     if (argc==2 && !strcmp(argv[1],"-asm")) exit(0);
     char mname[256];
@@ -1760,7 +1760,7 @@ int main(int argc, char *argv[]) {
 	perror("open() ");
     }
     prog_locate(reqs,(unsigned char *)mem);
-    req_set(top,reqs,mem);
+    req_set(top,reqs,mem,memp);
     top->eval();
     top->clk=1;
     top->eval();
@@ -1778,7 +1778,7 @@ int main(int argc, char *argv[]) {
         top->eval();
         if (top->heptane_core__DOT__front_mod__DOT__cc_mod__DOT__cc_mod__DOT__wayMod_gen__BRA__7__KET____DOT__way_mod__DOT__tag_mod__DOT__init_reg2) printf("dinit7 0x%x\n",top->heptane_core__DOT__front_mod__DOT__cc_mod__DOT__cc_mod__DOT__wayMod_gen__BRA__7__KET____DOT__way_mod__DOT__tag_mod__DOT__write_NRU);
         if (!initcount) {
-            req_set(top,reqs,mem);
+            req_set(top,reqs,mem,memp);
             cyc=cyc+1;
             if (!get_check(top,reqs,ip)) {
                 printf("error @%i\n",cyc);
