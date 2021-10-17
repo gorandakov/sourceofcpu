@@ -1679,6 +1679,24 @@ bool ckran_alu(unsigned long long ptr,unsigned long long &addr) {
     return false;
 }
 
+
+void gen_memrgn(char *mem,char *pmem) {
+    int n;
+    for(n=0;n<(MEMRGN_DATA_SZ/8);n++) {
+	unsigned long *xmem=(unsigned long *) (mem+8*n+MEMRGN_DATA);
+        if ((lrand48()%3)==1) {
+	    pmem[n/8+MEMRGN_DATA/64]|=1<<(n&0x7);
+	    *xmem=lrand48()&0xfffffffffff;
+	    *xmem|=0xf80ff00000000000ul;	    
+	} else {
+	    pmem[n/8+MEMRGN_DATA/64]&=~(1<<(n&0x7));
+	    *xmem=lrand48()&0xfffffffffff;
+	    *xmem|=lrand48()<<44;	    
+	}
+    }
+}
+
+
 void gen_prog(req *reqs,int count, FILE *f,hcont *contx,char *mem,char *pmem) {
    int n;
    fprintf(f,".text\n");
@@ -1735,6 +1753,7 @@ int main(int argc, char *argv[]) {
     fesetround(FE_TOWARDZERO);
     top->clk=0;
     top->rst=1;
+    gen_memrgn(mem,memp);
     gen_prog(reqs,10000000,FOUT,&contx,mem,memp);
     fclose(FOUT);
     if (argc==2 && !strcmp(argv[1],"-asm")) exit(0);
