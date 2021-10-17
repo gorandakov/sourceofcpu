@@ -1203,7 +1203,7 @@ addie:
 	contx->reg_gen[rT]=res;
 	contx->reg_genP[rT]=res_p;
     }
-    if (!rtn && ((*(this-1)).rT>=0)) {
+    if (!rtn && has_mem_ && ((*(this-1)).rT>=0)) {
 	contx->reg_gen[(*(this-1)).rT]=(*(this-1)).res;
 	contx->reg_genP[(*(this-1)).rT]=(*(this-1)).res_p;
     }
