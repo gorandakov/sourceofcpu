@@ -1199,7 +1199,7 @@ addie:
     }
     en=rand()&0xff!=0;
     if (!(op&0x1000)) contx->flags=flags;
-    if (rtn && (rT>=0)) {
+    if ((rtn||!has_mem_) && (rT>=0)) {
 	contx->reg_gen[rT]=res;
 	contx->reg_genP[rT]=res_p;
     }
