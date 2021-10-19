@@ -236,8 +236,8 @@ module rs_wakeUp_logic(
   assign isV_d=(newRsSelect2 & ~stall) ? newIsV2 : 1'bz;
   assign isV_d=(~newRsSelect0 & ~newRsSelect1 & ~newRsSelect2 || stall) ? isV : 1'bz;
   
-  assign eq[0]=(register==Treg0) & Twen0 & ~newRsSelect0 & ~newRsSelect1 & ~newRsSelect2 & ~eq_mask[0];
-  assign eq[1]=(register==Treg1) & Twen1 & ~newRsSelect0 & ~newRsSelect1 & ~newRsSelect2 & ~eq_mask[1];
+  assign eq[0]=(register==Treg0) & Twen0 & ~newRsSelect0 & ~newRsSelect1 & ~newRsSelect2 & eq_mask[0];
+  assign eq[1]=(register==Treg1) & Twen1 & ~newRsSelect0 & ~newRsSelect1 & ~newRsSelect2 & eq_mask[1];
 
   assign eq_new=eq|({2{newRsSelect0&~stall}}&newEQ0)|({2{newRsSelect1&~stall}}&newEQ1)|
     ({2{newRsSelect2&~stall}}&newEQ2);
@@ -1105,8 +1105,8 @@ module rs_wakeUpS_logic(
   assign isFP_d=(newRsSelect2 & ~stall) ? newIsFP2 : 1'bz;
   assign isFP_d=(~newRsSelect1 & ~newRsSelect2 || stall) ? isFP : 1'bz;
 
-  assign eq[0]=(register==Treg0) & Twen0 & ~newRsSelect1 & ~newRsSelect2 &~eq_mask[0];
-  assign eq[1]=(register==Treg1) & Twen1 & ~newRsSelect1 & ~newRsSelect2 &~eq_mask[1];
+  assign eq[0]=(register==Treg0) & Twen0 & ~newRsSelect1 & ~newRsSelect2 &eq_mask[0];
+  assign eq[1]=(register==Treg1) & Twen1 & ~newRsSelect1 & ~newRsSelect2 &eq_mask[1];
 
   assign eq_new=eq|({2{newRsSelect1&~stall}}&newEQ1)|({2{newRsSelect2&~stall}}&newEQ2);
 
