@@ -2550,7 +2550,7 @@ module decoder(
           rs_ldst_flag[k],
           rs_enA[k],
           rs_enB[k],  
-          dec_IPRel,
+          dec_IPRel_reg,
           alloc,
           allocF,
           dec_allocR_reg,
