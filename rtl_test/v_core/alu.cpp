@@ -1427,7 +1427,7 @@ void req_set(Vheptane_core *top,req *reqs,char *mem,char *memp) {
 	    top->rbusDIn_dataPTR=mem[(addr[pos_R]<<1)+1];
 	    top->rbusDIn_signals|=1<<(rbusD_second);
 	}
-	printf("retn 0x%lx,\t%i, 0x%x\n",addr[pos_R],R,src[pos_R]);
+	printf("retn 0x%lx,\t%i\n",addr[pos_R],R);
 	R=!R;
 	if (!R) pos_R++;
 	pos_R&=0x1f;
