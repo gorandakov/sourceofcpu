@@ -6275,7 +6275,7 @@ dcache1 L1D_mod(
           rs_useBConst<={rs2i2_useBConst,rs2i1_useBConst,rs2i0_useBConst,
             rs1i2_useBConst,rs1i1_useBConst,rs1i0_useBConst,
             rs0i2_useBConst,rs0i1_useBConst,rs0i0_useBConst};
-          rs_useBConst_reg<=rs_useBConst&~rs_IPRel;
+          rs_useBConst_reg<=rs_useBConst;
           rs_useAConst<={rs2i2_useAConst,rs2i1_useAConst,1'b0,
             rs1i2_useAConst,rs1i1_useAConst,1'b0,
             rs0i2_useAConst,rs0i1_useAConst,1'b0};
