@@ -920,8 +920,6 @@ module agu_block(
   reg [1:0] mOpX0_type_reg;
   reg [1:0] mOpX0_type_reg2;
   reg [1:0] mOpX0_type_reg3;
-  reg        mOp0_sec_reg2;
-  reg        mOp0_sec_reg3;
   
   reg [35:0] mOpX0_addrEven_reg;
   reg [35:0] mOpX0_addrOdd_reg;
@@ -993,8 +991,6 @@ module agu_block(
   reg [8:0]  mOpX1_LSQ_reg;
   reg [9:0]  mOpX1_II_reg;
   reg [7:0]  mOpX1_WQ_reg;
-  reg        mOp1_sec_reg2;
-  reg        mOp1_sec_reg3;
   
   wire        mOp1_en,mOp1_sec;
   wire [43:0] mOp1_addrMain;
@@ -1052,8 +1048,6 @@ module agu_block(
   reg [8:0]  mOpX2_LSQ_reg;
   reg [9:0]  mOpX2_II_reg;
   reg [7:0]  mOpX2_WQ_reg;
-  reg        mOp2_sec_reg2;
-  reg        mOp2_sec_reg3;
   
   wire        mOp2_en,mOp2_sec;
   wire [43:0] mOp2_addrMain;
@@ -2061,13 +2055,13 @@ module agu_block(
 
   assign miss0=~FU0Hit & mOpX0_en_reg3 & ~p0_conflict_reg2 & 
     ~bus_holds_agu_reg4 & ~mOpX0_lsflag_reg3 & 
-    (mOpX0_type_reg3!=2'b10) & ~except & ~mOp0_sec_reg3;
+    (mOpX0_type_reg3!=2'b10) & ~except;
   assign miss1=~FU1Hit & mOpX1_en_reg3 & ~p1_conflict_reg2 & 
     ~bus_holds_agu_reg4 & ~mOpX1_lsflag_reg3 & 
-    (mOpX1_type_reg3!=2'b10) & ~except & ~mOp1_sec_reg3;
+    (mOpX1_type_reg3!=2'b10) & ~except;
   assign miss2=~FU2Hit & mOpX2_en_reg3 & ~p2_conflict_reg2 & 
     ~bus_holds_agu_reg4 & ~mOpX2_lsflag_reg3 & 
-    (mOpX2_type_reg3!=2'b10) & ~except & ~mOp2_sec_reg3;
+    (mOpX2_type_reg3!=2'b10) & ~except;
   assign miss3=~FU3Hit & mOpX3_en_reg3 & 
     ~bus_holds_agu_reg4 & ~mOpX3_lsflag_reg3 & (~except || mOpX3_register_reg3==9'h1fc);
   
@@ -2742,18 +2736,11 @@ module agu_block(
       u5_WQ_no_reg2<=u5_WQ_no_reg;
       u5_lsflag_reg2<=u5_lsflag_reg;
      
-      mOp0_sec_reg<=mOp0_sec&~now_flushing;
-      mOp1_sec_reg<=mOp1_sec&~now_flushing;
-      mOp2_sec_reg<=mOp2_sec&~now_flushing;
+      mOp0_sec_reg<=mOp0_sec;
+      mOp1_sec_reg<=mOp1_sec;
+      mOp2_sec_reg<=mOp2_sec;
       mOp4_sec_reg<=mOp4_sec;
       mOp5_sec_reg<=mOp5_sec;
-
-      mOp0_sec_reg2<=mOp0_sec_reg;
-      mOp1_sec_reg2<=mOp1_sec_reg;
-      mOp2_sec_reg2<=mOp2_sec_reg;
-      mOp0_sec_reg3<=mOp0_sec_reg2;
-      mOp1_sec_reg3<=mOp1_sec_reg2;
-      mOp2_sec_reg3<=mOp2_sec_reg2;
 
       mOpX0_en_reg     <=mOpX0_en;
       mOpX0_lsflag_reg <=mOpX0_lsflag;
