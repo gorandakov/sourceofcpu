@@ -1213,6 +1213,8 @@ addie:
 void req::gen_mem(req* prev1,unsigned code,char *mem,char *memp,unsigned long addr) {
     res=0;
     res_p=0;
+    rT=16;
+    asmtext[0]='\x00';
     switch(code) {
         case 8: res_p=(memp[MEMRGN_DATA+addr/8]>>(addr&7))&0x1;
 		res|=(unsigned char) mem[MEMRGN_DATA+addr+4]<<32;
@@ -1613,7 +1615,7 @@ void prog_locate(req *reqs,unsigned char *mem) {
 	    addr=(addr+31)&0xfffffffe0;
             bits=mem[addr+30]|(mem[addr+31]<<8);
 	}
-	if (ins>=10000000) return;
+	if (ins>=(10000000-1)) return;
     }
 }
 void fp_get_ext(long double a, unsigned num[3]) {
