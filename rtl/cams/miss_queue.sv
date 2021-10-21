@@ -1791,7 +1791,7 @@ module missQ(
 		      validSR[0]=16'b0;
 		      validSR[1]=16'b0;
 		      vMaskR=0;
-		      vMaskRN
+		      vMaskRN=0;
 	              vOn_nextR=0;
 		  end
 		  //usign    
