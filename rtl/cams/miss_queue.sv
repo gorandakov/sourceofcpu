@@ -1797,10 +1797,10 @@ module missQ(
 		  //usign    
 	     end
              if (doStep && ~begin_flush_reg2) begin
-	          valid[0][read_addr_d]=1'b0;
-	          valid[1][read_addr_d]=1'b0;
-	          validS[0][read_addr_d]=1'b0;
-	          validS[1][read_addr_d]=1'b0;
+	          valid[0][read_addr]=1'b0;
+	          valid[1][read_addr]=1'b0;
+	          validS[0][read_addr]=1'b0;
+	          validS[1][read_addr]=1'b0;
 		  if (now_flushing_reg2) begin
 		      vMask[read_addr]=1'b0;
 		      vMaskR[read_addr]=1'b0;
