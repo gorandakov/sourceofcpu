@@ -1499,24 +1499,24 @@ module missQ(
 //  adder #(5) coundF_dec_mod(countF,5'b11111,countF_d,1'b0,1'b1); 
   adder_inc #(4) initAdd_mod(initCount,initCount_next,1'b1,);
 
-  bit_find_first_bit #(16) rdfirst0_mod((valid[0]|valid[1])&vMask,rdvalid0,rdvalid0_found);
-  bit_find_first_bit #(16) rdfirst1_mod((valid[0]|valid[1])&vMaskN,rdvalid1,rdvalid1_found);
-  bit_find_first_bit #(16) rdfirstR0_mod((validR[0]|validR[1])&vMaskR,rdvalidR0,rdvalidR0_found);
-  bit_find_first_bit #(16) rdfirstR1_mod((validR[0]|validR[1])&vMaskRN,rdvalidR1,rdvalidR1_found);
-  bit_find_first_bit #(16) rdfirstEA0_mod((valid[0]|validS[1])&vMask,rdvalidEA0,rdvalidEA0_found);
-  bit_find_first_bit #(16) rdfirstEA1_mod((valid[0]|validS[1])&vMaskN,rdvalidEA1,rdvalidEA1_found);
-  bit_find_first_bit #(16) rdfirstEB0_mod((validS[0]|valid[1])&vMask,rdvalidEB0,rdvalidEB0_found);
-  bit_find_first_bit #(16) rdfirstEB1_mod((validS[0]|valid[1])&vMaskN,rdvalidEB1,rdvalidEB1_found);
-  bit_find_first_bit #(16) rdfirstRA0_mod((validR[0]|validSR[1])&vMaskR,rdvalidRA0,rdvalidRA0_found);
-  bit_find_first_bit #(16) rdfirstRA1_mod((validR[0]|validSR[1])&vMaskRN,rdvalidRA1,rdvalidRA1_found);
-  bit_find_first_bit #(16) rdfirstRB0_mod((validSR[0]|validR[1])&vMaskR,rdvalidRB0,rdvalidRB0_found);
-  bit_find_first_bit #(16) rdfirstRB1_mod((validSR[0]|validR[1])&vMaskRN,rdvalidRB1,rdvalidRB1_found);
+  bit_find_first_bit #(16) rdfirst0_mod((valid[0])&vMask,rdvalid0,rdvalid0_found);
+  bit_find_first_bit #(16) rdfirst1_mod((valid[0])&vMaskN,rdvalid1,rdvalid1_found);
+  bit_find_first_bit #(16) rdfirstR0_mod((validR[0])&vMaskR,rdvalidR0,rdvalidR0_found);
+  bit_find_first_bit #(16) rdfirstR1_mod((validR[0])&vMaskRN,rdvalidR1,rdvalidR1_found);
+  bit_find_first_bit #(16) rdfirstEA0_mod((valid[0])&vMask,rdvalidEA0,rdvalidEA0_found);
+  bit_find_first_bit #(16) rdfirstEA1_mod((valid[0])&vMaskN,rdvalidEA1,rdvalidEA1_found);
+  bit_find_first_bit #(16) rdfirstEB0_mod((validS[0])&vMask,rdvalidEB0,rdvalidEB0_found);
+  bit_find_first_bit #(16) rdfirstEB1_mod((validS[0])&vMaskN,rdvalidEB1,rdvalidEB1_found);
+  bit_find_first_bit #(16) rdfirstRA0_mod((validR[0])&vMaskR,rdvalidRA0,rdvalidRA0_found);
+  bit_find_first_bit #(16) rdfirstRA1_mod((validR[0])&vMaskRN,rdvalidRA1,rdvalidRA1_found);
+  bit_find_first_bit #(16) rdfirstRB0_mod((validSR[0])&vMaskR,rdvalidRB0,rdvalidRB0_found);
+  bit_find_first_bit #(16) rdfirstRB1_mod((validSR[0])&vMaskRN,rdvalidRB1,rdvalidRB1_found);
 
 //  popcnt16 cntMod(valid[0]|valid[1]|validR[0]|validR[1],count);
-  popcnt16_or_more cntM_mod(valid[0]|valid[1]&(vMask|vMaskN),cmore);
-  popcnt16 cntMod0(valid[0]|valid[1]&(vMask|vMaskN),count0);
-  popcnt16 cntMod1((valid[0]|valid[1])&~(validR[0]|validR[1])&(vMask|vMaskN),count1);
-  popcnt16 cntModR(validR[0]|validR[1]&(vMaskR|vMaskRN),countR);
+  popcnt16_or_more cntM_mod(valid[0]&(vMask|vMaskN),cmore);
+  popcnt16 cntMod0(valid[0]&(vMask|vMaskN),count0);
+  popcnt16 cntMod1((valid[0])&~(validR[0])&(vMask|vMaskN),count1);
+  popcnt16 cntModR(validR[0]&(vMaskR|vMaskRN),countR);
   
   bit_find_first_bit #(6) findConfl_mod(curConfl,sel,conflFound);
 
@@ -1584,10 +1584,10 @@ module missQ(
 
   assign read_addr_d=(begin_flush_reg2) & ~except ? read_addrB_d : 4'bz;
   assign read_addr_d=(~begin_flush_reg2) & ~ except ? read_addrA_d : 4'bz;
-  assign read_addr_d=(begin_flush_reg2 || ~rdvalidEA0_found & ~ rdvalidEA1_found) & except & excpt_thread ? read_addrRA_d : 4'bz;
-  assign read_addr_d=(begin_flush_reg2 || ~rdvalidEB0_found & ~ rdvalidEB1_found) & except &~excpt_thread ? read_addrRB_d : 4'bz;
-  assign read_addr_d=(~begin_flush_reg2 && rdvalidEA0_found | rdvalidEA1_found) & except & excpt_thread ? read_addrEA_d : 4'bz;
-  assign read_addr_d=(~begin_flush_reg2 && rdvalidEB0_found | rdvalidEB1_found) & except &~excpt_thread ? read_addrEB_d : 4'bz;
+  assign read_addr_d=(begin_flush_reg2) & except & excpt_thread ? read_addrRA_d : 4'bz;
+  assign read_addr_d=(begin_flush_reg2) & except &~excpt_thread ? read_addrRB_d : 4'bz;
+  assign read_addr_d=(~begin_flush_reg2) & except & excpt_thread ? read_addrEA_d : 4'bz;
+  assign read_addr_d=(~begin_flush_reg2) & except &~excpt_thread ? read_addrEB_d : 4'bz;
 
   always @* begin
       stepOver4=read_mop[4][`mOp1_low]!=2'd0;
