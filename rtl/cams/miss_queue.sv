@@ -1461,17 +1461,17 @@ module missQ(
     genvar p;
     for(p=0;p<16;p=p+1) begin
 	assign read_addrA_d=(rdvalid0[p] || rdvalid1[p] & ~rdvalid0_found)
-          ? p[3:0] : 4'bz;
+          ? p[3:0]+4'd1 : 4'bz;
 	assign read_addrB_d=(rdvalidR0[p] || rdvalidR1[p] & ~rdvalidR0_found)
-          ? p[3:0] : 4'bz;
+          ? p[3:0]+4'd1 : 4'bz;
 	assign read_addrEA_d=(rdvalidEA0[p] || rdvalidEA1[p] & ~rdvalidEA0_found)
-          ? p[3:0] : 4'bz;
+          ? p[3:0]+4'd1 : 4'bz;
 	assign read_addrEB_d=(rdvalidEB0[p] || rdvalidEB1[p] & ~rdvalidEB0_found)
-          ? p[3:0] : 4'bz;
+          ? p[3:0]+4'd1 : 4'bz;
 	assign read_addrRA_d=(rdvalidRA0[p] || rdvalidRA1[p] & ~rdvalidRA0_found)
-          ? p[3:0] : 4'bz;
+          ? p[3:0]+4'd1 : 4'bz;
 	assign read_addrRB_d=(rdvalidRB0[p] || rdvalidRB1[p] & ~rdvalidRB0_found)
-          ? p[3:0] : 4'bz;
+          ? p[3:0]+4'd1 : 4'bz;
     end
     assign read_addrRA_d=~rdvalidRA0_found && ~rdvalidRA1_found
       ? write_addr : 4'bz;
@@ -1759,8 +1759,8 @@ module missQ(
 	          if (begin_flush_reg2) begin
 			vMask=vMaskR;
 			vMaskN=vMaskRN;
-			valid[0]=validR[0]&~(rdvalidR0 | (rdvalidR1 & {16{~rdvalidR0_found}}));
-			valid[1]=validR[1]&~(rdvalidR0 | (rdvalidR1 & {16{~rdvalidR0_found}}));
+			valid[0]=validR[0];
+			valid[1]=validR[1];
 			vOn_next=vOn_nextR;
 			if (validR[0]==16'b0) pwned=1'b1;
 			validR[0]=16'b0;
@@ -1782,8 +1782,8 @@ module missQ(
 	          if (begin_flush_reg2) begin
 		      vMask=vMaskR;
 		      vMaskN=vMaskRN;
-		      valid[0]=validR[0]&~(rdvalidR0 | (rdvalidR1 & {16{~rdvalidR0_found}}));
-		      valid[1]=validR[1]&~(rdvalidR0 | (rdvalidR1 & {16{~rdvalidR0_found}}));
+		      valid[0]=validR[0];
+		      valid[1]=validR[1];
 		      if (validR[0]==16'b0) pwned=1'b1;
 		      vOn_next=vOn_nextR;
 		      validR[0]=16'b0;
@@ -1791,7 +1791,7 @@ module missQ(
 		      validSR[0]=16'b0;
 		      validSR[1]=16'b0;
 		      vMaskR=0;
-		      vMaskRN=0;
+		      vMaskRN
 	              vOn_nextR=0;
 		  end
 		  //usign    
