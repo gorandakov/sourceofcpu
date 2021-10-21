@@ -1513,7 +1513,7 @@ module missQ(
   bit_find_first_bit #(16) rdfirstRB1_mod((validSR[0]|validR[1])&vMaskRN,rdvalidRB1,rdvalidRB1_found);
 
 //  popcnt16 cntMod(valid[0]|valid[1]|validR[0]|validR[1],count);
-  popcnt16_or_more cntM_mod(valid[0]|valid[1]&~(vMask|vMaskN),cmore);
+  popcnt16_or_more cntM_mod(valid[0]|valid[1]&(vMask|vMaskN),cmore);
   popcnt16 cntMod0(valid[0]|valid[1]&(vMask|vMaskN),count0);
   popcnt16 cntMod1((valid[0]|valid[1])&~(validR[0]|validR[1])&(vMask|vMaskN),count1);
   popcnt16 cntModR(validR[0]|validR[1]&(vMaskR|vMaskRN),countR);
