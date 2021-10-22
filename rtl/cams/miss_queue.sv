@@ -758,6 +758,7 @@ module missQ(
   wire [16:0] countR;
   wire [16:0] count1;
   wire [16:1] cmore;
+  wire [16:1] cmoreVR;
   wire wen;
   //wire [3:0] write_addr_dec;
  
@@ -1514,13 +1515,14 @@ module missQ(
 
 //  popcnt16 cntMod(valid[0]|valid[1]|validR[0]|validR[1],count);
   popcnt16_or_more cntM_mod(valid[0]&(vMask|vMaskN),cmore);
+  popcnt16_or_more cntM_mod(validR[0]&(vMask|vMaskN),cmoreVR);
   popcnt16 cntMod0(valid[0]&(vMask|vMaskN),count0);
   popcnt16 cntMod1((valid[0])&~(validR[0])&(vMask|vMaskN),count1);
   popcnt16 cntModR(validR[0]&(vMaskR|vMaskRN),countR);
   
   bit_find_first_bit #(6) findConfl_mod(curConfl,sel,conflFound);
 
-  assign doSkip_d=cmore[STALL_COUNT];
+  assign doSkip_d=cmoreVR[STALL_COUNT];
 //  adder #(4) write_dec_mod(write_addr,4'hf,write_addr_dec,1'b0,1'b1);
   
 
