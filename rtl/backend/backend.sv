@@ -4730,6 +4730,8 @@ module backend(
   assign nDataAlt[2][0]=~dalt[0];
   assign nDataAlt[0]=3'b111;
   assign nDataAlt[1]=3'b111;
+
+  assign insert_isData=insBus_req[9:5]==BUS_ID && !insBus_reg[4] && insBus_en;
  
   agu_block #(BUS_ID) agu_aligned(
   .clk(clk), .rst(rst),
