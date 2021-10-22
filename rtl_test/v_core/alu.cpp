@@ -1398,12 +1398,12 @@ unsigned get_retfl_data(Vheptane_core *vlTOPp) {
 }
 
 void req_set(Vheptane_core *top,req *reqs,char *mem,char *memp) {
-    static unsigned long addr[32];
+    static unsigned long addr[64];
     static unsigned pos=0;
     static unsigned pos_R=0;
     static bool R=0;
-    static unsigned sigs[32];
-    static unsigned src[32];
+    static unsigned sigs[64];
+    static unsigned src[64];
     static unsigned delay=0;
     static bool bmr=0;
     if (top->rbusOut_want && top->rbusOut_can) {
@@ -1412,7 +1412,7 @@ void req_set(Vheptane_core *top,req *reqs,char *mem,char *memp) {
 	src[pos]=top->rbusOut_src_req;
 	if (pos_R==pos) delay=0;
 	pos++;
-	pos&=0x1f;
+	pos&=0x3f;
     }
     if (pos_R!=pos) delay++;
     if (pos_R!=pos && delay>10) {
@@ -1430,7 +1430,7 @@ void req_set(Vheptane_core *top,req *reqs,char *mem,char *memp) {
 	printf("retn 0x%lx,\t%i, 0x%x\n",addr[pos_R],R,src[pos_R]);
 	R=!R;
 	if (!R) pos_R++;
-	pos_R&=0x1f;
+	pos_R&=0x3f;
     } else {
 	top->rbusDIn_signals=0;
     }
