@@ -1601,6 +1601,14 @@ no_srch:;
     if (top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__mOpR_en_reg) {
 	printf("mOpR_en_reg 0x%lx\n",top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__mcam_addr_reg);
     }
+    if (top->heptane_core__DOT__bck_mod__DOT__FUwen_reg[0]|top->heptane_core__DOT__bck_mod__DOT__FUwen_reg[1]|
+	top->heptane_core__DOT__bck_mod__DOT__FUwen_reg[2]|top->heptane_core__DOT__bck_mod__DOT__FUwen_reg[3]) {
+	printf("FUwen_reg 0x%x, 0x%x\n",top->heptane_core__DOT__bck_mod__DOT__FUwen_reg[0] | 
+	(top->heptane_core__DOT__bck_mod__DOT__FUwen_reg[1]<<1) |(top->heptane_core__DOT__bck_mod__DOT__FUwen_reg[2]<<2)|
+	(top->heptane_core__DOT__bck_mod__DOT__FUwen_reg[3]<<3),
+	top->heptane_core__DOT__bck_mod__DOT__FU0HitP | (top->heptane_core__DOT__bck_mod__DOT__FU1HitP<<1) |
+	(top->heptane_core__DOT__bck_mod__DOT__FU2HitP<<2) |(top->heptane_core__DOT__bck_mod__DOT__FU3HitP<<3));
+    }
     return rtn;
 }
 
