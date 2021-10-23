@@ -1464,15 +1464,15 @@ module missQ(
 	assign read_addrA_d=(rdvalid0[p] || rdvalid1[p] & ~rdvalid0_found)
           ? p[3:0]+4'd1 : 4'bz;
 	assign read_addrB_d=(rdvalidR0[p] || rdvalidR1[p] & ~rdvalidR0_found)
-          ? p[3:0]+4'd1 : 4'bz;
+          ? p[3:0] : 4'bz;
 	assign read_addrEA_d=(rdvalidEA0[p] || rdvalidEA1[p] & ~rdvalidEA0_found)
           ? p[3:0]+4'd1 : 4'bz;
 	assign read_addrEB_d=(rdvalidEB0[p] || rdvalidEB1[p] & ~rdvalidEB0_found)
           ? p[3:0]+4'd1 : 4'bz;
 	assign read_addrRA_d=(rdvalidRA0[p] || rdvalidRA1[p] & ~rdvalidRA0_found)
-          ? p[3:0]+4'd1 : 4'bz;
+          ? p[3:0] : 4'bz;
 	assign read_addrRB_d=(rdvalidRB0[p] || rdvalidRB1[p] & ~rdvalidRB0_found)
-          ? p[3:0]+4'd1 : 4'bz;
+          ? p[3:0] : 4'bz;
     end
     assign read_addrRA_d=~rdvalidRA0_found && ~rdvalidRA1_found
       ? write_addr : 4'bz;
