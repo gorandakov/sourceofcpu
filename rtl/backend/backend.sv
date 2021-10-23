@@ -4884,8 +4884,6 @@ module backend(
   .FUreg3_reg(FUreg_reg5[3]),.dc_rdataA(dc_rdataA[3]),//is it really reg5?
   .msi_exp_addr(MSI_exp_addr_reg),.msi_en(MSI_exp_en_reg),.msi_out_clear(),//msi_out_clear=can do msi en; todo - make replace last buffer rather than wait + redu
   .csrss_en(csrss_en),.csrss_addr(csrss_no),.csrss_data(csrss_data[63:0]),
-  .alt_bus_hold(MSI_exp_en_reg),//expunge request
-  .alt_bus_addr(MSI_exp_addr_reg),
   .req_addr(req_addr),.req_tlbAttr(req_tlbAttr),.req_tlbEn(req_tlbEn),
   .bus_tlb_data(bus_tlb_data),.bus_tlb_en(bus_tlb_en),
   .reqBus_en(reqBus_en),

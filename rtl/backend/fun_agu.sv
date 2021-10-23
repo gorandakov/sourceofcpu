@@ -136,8 +136,6 @@ module agu_block(
   FUreg3_reg,dc_rdataA,
   msi_exp_addr,msi_en,msi_out_clear,//msi_out_clear=can do msi en
   csrss_en,csrss_addr,csrss_data,
-  alt_bus_hold,
-  alt_bus_addr,
   req_addr,req_tlbAttr,req_tlbEn,
   bus_tlb_data,bus_tlb_en,
   reqBus_en,
@@ -430,8 +428,6 @@ module agu_block(
   input csrss_en;
   input [15:0] csrss_addr;
   input [63:0] csrss_data;
-  input alt_bus_hold;
-  input [36:0] alt_bus_addr;
 
   input [30:0] req_addr;
   input [3:0] req_tlbAttr;
@@ -568,6 +564,11 @@ module agu_block(
   
   reg alt_bus_hold_reg;
   reg [36:0] alt_bus_addr_reg;
+  wire [36:0] insBus_addr;
+  reg  [36:0] insBus_addr_reg;
+  reg  [36:0] insBus_addr_reg2;
+  reg insert_isData_reg;
+  reg insert_isData_reg2;
  
   reg [35:0] mOpY4_addrEven_o_reg;
   reg [35:0] mOpY4_addrOdd_o_reg;
@@ -647,6 +648,8 @@ module agu_block(
   reg [1  :0]mOpY5_pbit_o_reg3;
   reg        mOpY5_d128_o_reg3;
 
+  wire alt_bus_hold;
+  wire [36:0] alt_bus_addr;
 
 
 
@@ -2425,12 +2428,16 @@ module agu_block(
   .fill_req(mcam_req),
   .ins_en(insert_isData),
   .ins_req(insBus_req[3:0]),
+  .ins_addr_o(insBus_addr),
   .has_free(mcam_hasfree),
   .fill_match(mcam_dupl),
   .locked(mcam_locked),
   .begin_replay(mcam_replay),
   .unlock(miss_unlock)
   );
+
+  assign alt_bus_hold=insert_isData_reg2;
+  assign alt_bus_addr=insBus_addr_reg2;
 
   assign p0_adata[`lsaddr_addrE]=mOpX0_addrEven_reg;
   assign p0_adata[`lsaddr_addrO]=mOpX0_addrOdd_reg;
@@ -3085,5 +3092,16 @@ module agu_block(
       FU7_reg<=FU7;
       FU8_reg<=FU8;
       FU9_reg<=FU9;
+      if (rst) begin
+          insert_isData_reg<=1'b0;
+          insert_isData_reg2<=1'b0;
+	  insBus_addr_reg<=37'b0;
+	  insBus_addr_reg2<=37'b0;
+      end else begin
+          insert_isData_reg<=insert_isData;
+          insert_isData_reg2<=insert_isData_reg;
+	  insBus_addr_reg<=insBus_addr;
+	  insBus_addr_reg2<=insBus_addr_reg;
+      end
   end
 endmodule
