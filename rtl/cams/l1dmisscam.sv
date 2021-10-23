@@ -25,6 +25,7 @@ module dmisscam_buf(
   fill_st,
   ins_en,
   ins_req,
+  ins_addr_o,
   filled,
   busy,
   unlock
@@ -46,6 +47,7 @@ module dmisscam_buf(
   input fill_st;
   input ins_en;
   input [3:0] ins_req;
+  output [PADDR_WIDTH-8:0] ins_addr_o;
   output reg filled;
   output reg busy;
   input unlock;
@@ -57,7 +59,9 @@ module dmisscam_buf(
   reg stepin;
   
   assign fill_match_o=fill_addr==addr && busy;
-  
+ 
+  assign ins_addr_o=(ins_en && ins_req==REQ) ? addr : 37'bz;
+
   always @(posedge clk) begin
       if (rst) begin
           filled<=1'b0;
@@ -93,6 +97,7 @@ module dmisscam(
   fill_req,
   ins_en,
   ins_req,
+  ins_addr_o,
   has_free,
   fill_match,
   locked,
@@ -114,6 +119,7 @@ module dmisscam(
   output [3:0] fill_req;
   input ins_en;
   input [3:0] ins_req;
+  output [PADDR_WIDTH-8:0] ins_addr_o;
   output has_free;
   output fill_match;
   output reg locked;
@@ -143,6 +149,7 @@ module dmisscam(
           fill_st,
           ins_en,
           ins_req,
+	  ins_addr_o,
           filled[k],
           busy[k],
           unlock
@@ -155,6 +162,7 @@ module dmisscam(
   assign fill_match=|fill_match_o;
   assign has_free=found;
   assign fill_req=found ? 4'bz : 4'b0;
+  assign ins_addr_o=ins_en ? 37'bz : 37'b0;
   
   assign begin_replay=started & ~(|filled);
 
