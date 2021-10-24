@@ -1515,7 +1515,7 @@ module missQ(
 
 //  popcnt16 cntMod(valid[0]|valid[1]|validR[0]|validR[1],count);
   popcnt16_or_more cntM_mod(valid[0]&(vMask|vMaskN),cmore);
-  popcnt16_or_more cntM2_mod(validR[0]&(vMask|vMaskN),cmoreVR);
+  popcnt16_or_more cntM2_mod(validR[0]&(vMaskR|vMaskRN),cmoreVR);
   popcnt16 cntMod0(valid[0]&(vMask|vMaskN),count0);
   popcnt16 cntMod1((valid[0])&~(validR[0])&(vMask|vMaskN),count1);
   popcnt16 cntModR(validR[0]&(vMaskR|vMaskRN),countR);
