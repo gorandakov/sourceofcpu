@@ -416,7 +416,7 @@ module missQ(
   localparam ADDR_WIDTH=4;
   localparam DATA_WIDTH=2+2*`mOp1_width;
   localparam MOP_WIDTH=`mOp1_width;
-  localparam STALL_COUNT=10;
+  localparam STALL_COUNT=9;
   localparam VADDR_WIDTH=64;
   localparam PADDR_WIDTH=44;
   localparam OPERATION_WIDTH=`operation_width;
