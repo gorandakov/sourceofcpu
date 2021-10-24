@@ -307,7 +307,7 @@ module smallInstr_decoder(
 
   assign isBasicALU=(opcode_main[7:5]==3'b0 || opcode_main[7:3]==5'b00100) & ~opcode_main[2];
   assign isBasicMUL=(opcode_main[7:5]==3'b0 || opcode_main[7:3]==5'b00100) & opcode_main[2];
-  assign isBasicALUExcept=~opcode_main[0] && (magic[1:0]==2'b11 || (magic[1:0]==2'b01 && instr[28:23]!=6'b0));  
+  assign isBasicALUExcept=~opcode_main[0] && (magic[1:0]==2'b01 && instr[28:23]!=6'b0);  
   assign isBasicShift=opcode_main[7:1]==7'd20 || opcode_main[7:1]==7'd21 ||
       opcode_main[7:1]==7'd22;      
   assign isBasicShiftExcept=magic[1:0]==2'b01 && instr[29:25]!=5'b0;
@@ -876,7 +876,7 @@ module smallInstr_decoder(
        end
 
        trien[9]=magic[0] & isBasicALU & ~isBasicALUExcept;
-       puseBConst[9]=opcode_main[0];
+       puseBConst[9]=opcode_main[0]||magic[1:0]==2'b11;
        poperation[9][7:0]={3'b0,opcode_main[5:3],1'b0,opcode_main[1]};
        if (opcode_main[2]) perror[9]=1; //disable 8 and 16 bit insns
        pflags_write[9]=1'b1;
@@ -893,7 +893,7 @@ module smallInstr_decoder(
        prAlloc[9]=1'b1;
        pport[9]=PORT_ALU;
           
-       if (opcode_main[0]) begin
+       if (opcode_main[0]||magic[1:0]==2'b11) begin
            if (magic[1:0]==2'b01) begin
                prA[9]={instr[17],instr[11:8]};
                prT[9]=instr[16:12];
@@ -903,10 +903,12 @@ module smallInstr_decoder(
                prT[9]={instr[49],instr[15:12]};
                prB[9]=5'd31;
                perror[9]=0;
+	       if (~opcode_main[0]) pconstant[9]={instr[47:16],{32{instr[16]}}};
            end else begin
                prA[9]={1'b0,instr[11:8]};
                prT[9]={1'b0,instr[15:12]};
                prB[9]=5'd31;
+	       if (~opcode_main[0]) pconstant[9]={instr[47:16],{32{instr[16]}}};
            end
        end else begin
            if (magic[1:0]==2'b01) begin
