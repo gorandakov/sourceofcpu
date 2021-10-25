@@ -129,21 +129,18 @@ module fadd(
   reg [9:0] xop1_reg;
   reg isrnd_zero,isrnd_even,isrnd_plus;
 
-  //up to here
-  wire [64:0] resX;
-  wire [80:0] resY;
-  wire main_lo,main_ulo,Smain_lo,Smain_ulo;
-  wire [15:0] opA_exp;
-  wire [15:0] opA_exp_inc;
-  wire [15:0] opA_exp_dec;
-  reg [15:0] opA_exp_reg;
+  wire Smain_lo,Smain_ulo;
+  wire [11:0] opA_exp;
+  wire [11:0] opA_exp_inc;
+  wire [11:0] opA_exp_dec;
+  reg [11:0] opA_exp_reg;
   wire altpath;
   reg altpath_reg;
   wire rndpath;
   reg rndpath_reg;
   reg opB_reg;
-  wire [15:0] A_exp;
-  wire [15:0] B_exp;
+  wire [11:0] A_exp;
+  wire [11:0] B_exp;
   wire A_zero,A_infty,A_nan;
   wire B_zero,B_infty,B_nan;
   wire spec_snan,spec_qnan,spec_pinf,spec_ninf,spec_A,spec_B;
@@ -151,39 +148,39 @@ module fadd(
   wire [3:0] spec_logic;
   reg [3:0] spec_logic_reg;
   reg spec_any;
-  wire [80:0] res_spec;
-  reg [80:0] A_reg;
-  reg [80:0] B_reg;
+  wire [64:0] res_spec;
+  reg [64:0] A_reg;
+  reg [64:0] B_reg;
   wire A_s2;
   reg en_reg;
-  wire [15:0] emsk=isDBL ? 16'h87ff : 16'hffff;
+  wire [11:0] emsk=isDBL ? 16'h87f : 16'hfff;
   integer m;
 
   wire renor_any,exp_dec_non_denor_IEEE_0,exp_dec_non_denor_IEEE_1,exp_dec_non_denor,exp_inc_oor_IEEE,exp_inc_oor,
 	  exp_dec_non_denor_IEEE;
-  wire [15:0] exp_min_IEEE;
-  wire [15:0] exp_max_IEEE;
-  wire [15:0] exp_min_kludge;
-  wire [15:0] exp_max;
+  wire [11:0] exp_min_IEEE;
+  wire [11:0] exp_max_IEEE;
+  wire [11:0] exp_min_kludge;
+  wire [11:0] exp_max;
   reg exp_inc_oor_reg,exp_inc_oor_IEEE_reg,exp_dec_non_denor_reg,exp_dec_non_denor_IEEE_reg;
   wire [3:0] xpon;
   wire [3:0] X_xpon;
   wire [3:0] Y_xpon;
   wire invExcpt;
 
-  assign A_exp=(~isDBL) ? {A[80],A[78:64]} : {A[80],{4{~A[80]}},A[62:52]};
-  assign B_exp=(~isDBL) ? {B[80],B[78:64]} : {B[80],{4{~B[80]}},B[62:52]};
+  assign A_exp={A[64],A[62:52]};
+  assign B_exp=isFMA ? B_exp_hi : {B[64],B[62:52]};
 
  // assign A_h=isDBL ? {|A[51:0]} : {|A[62:0]}; 
  // assign B_h=isDBL ? {|B[51:0]} : {|B[62:0]}; 
 
-  assign A_zero=(A_exp&emsk)==16'b0;
-  assign A_infty=(A_exp|~emsk)==16'hfffe;
-  assign A_nan=(A_exp|~emsk)==16'hffff;
+  assign A_zero=(A_exp&emsk)==12'b0;
+  assign A_infty=(A_exp|~emsk)==12'hffe;
+  assign A_nan=(A_exp|~emsk)==12'hfff;
   
-  assign B_zero=(B_exp&emsk)==16'b0;
-  assign B_infty=(B_exp|~emsk)==16'hfffe;
-  assign B_nan=(B_exp|~emsk)==16'hffff;
+  assign B_zero=(B_exp&emsk)==12'b0;
+  assign B_infty=(B_exp|~emsk)==12'hffe;
+  assign B_nan=(B_exp|~emsk)==12'hfff;
 
   assign invExcpt=fpcsr[`csrfpu_inv_excpt];
 
@@ -199,39 +196,36 @@ module fadd(
   assign spec_logic[3]=logic_en && logic_sel==2'd3 && ~copyA;
  
  
-  assign opA=a_more ?  fracxfrm1(A[63:0],isDBL) : 64'bz;
-  assign opB=(sxor & a_more) ?  ~fracxfrm1(B[63:0],isDBL) : 64'bz;
-  assign opA=(~a_more) ?  fracxfrm1(B[63:0],isDBL) : 64'bz;
-  assign opB=(sxor & ~a_more) ?  ~fracxfrm1(A[63:0],isDBL) : 64'bz;
-  assign opB=(~sxor & a_more) ?  fracxfrm0(B[63:0],isDBL) : 64'bz;
-  assign opB=(~sxor & ~a_more) ?  fracxfrm0(A[63:0],isDBL) : 64'bz;
+  assign opA=a_more ?  {1'b1,A[51:0],53'b0} : 106'bz;
+  assign opB=(sxor & a_more) ?  ~(isFMA ? B_hi : {1'b1,B[51:0],53'b0}) : 106'bz;
+  assign opA=(~a_more) ?  (isFMA ? B_hi : {1'b1,B[51:0],53'b0}) : 106'bz;
+  assign opB=(sxor & ~a_more) ?  ~{1'b1,A[51:0],53'b0} : 106'bz;
+  assign opB=(~sxor & a_more) ?  (isFMA ? B_hi : {1'b1,B[51:0],53'b0}) : 106'bz;
+  assign opB=(~sxor & ~a_more) ?  {1'b1,A[51:0],53'b0} : 106'bz;
   
-  assign opA_exp=(a_more & ~isDBL) ? {A[80],A[78:64]} : 16'bz;
-  assign opA_exp=(a_more & isDBL) ? {A[80],{4{~A[80]}},A[62:52]} : 16'bz;
-  assign opA_exp=(~a_more & ~isDBL) ? {B[80],B[78:64]} : 16'bz;
-  assign opA_exp=(~a_more & isDBL) ? {B[80],{4{~B[80]}},B[62:52]} : 16'bz;
+  assign opA_exp=(a_more ) ? A_exp : B_exp;
   
   assign expdiff=a_more ? expdiffA : expdiffB;
   
 //  assign Bx=is_alt ? B_alt : B;
 
-  assign opBs1=expoor ? {64{sxor_reg}} : 64'bz;
-  assign opBs=expoor_reg ? {64{sxor_reg}} : 64'bz;
+  assign opBs1=expoor ? {106{sxor_reg}} : 106'bz;
+  assign opBs=expoor_reg ? {106{sxor_reg}} : 106'bz;
   assign res_rnbit=expoor_reg ? xop1_reg[1]^(res_andtail&sxor_reg) : 1'bz;
 //  assign res_rnbitC=expoor_reg ?  : 1'bz;
   assign res_rnbitL=expoor_reg ? xop1_reg[0]^(res_andtailL&sxor_reg) : 1'bz;
-  assign xop1[1:0]=(expoor && expdiff[15:1]!=15'h20) ? {2{sxor}} : 2'bz;
+  assign xop1[1:0]=(expoor && expdiff[11:1]!=11'h20) ? {2{sxor}} : 2'bz;
   
-  assign a_more=isDBL ? moreAD : moreAE;
+  assign a_more=moreAD;
 
-  assign sxor=isDBL ? A[63]^B[63]^isSub : A[79]^B[79]^isSub;
-  assign A_s=isDBL ? A[63]^(isRSub) : A[79]^(isRSub);
-  assign B_s=isDBL ? B[63]^(isSub&~isRSub) : B[79]^(isSub&~isRSub);
+  assign sxor=A[63]^B[63]^isSub;
+  assign A_s=A[63]^(isRSub);
+  assign B_s=B[63]^(isSub&~isRSub);
   assign A_s1=a_more ? A_s : B_s;
   assign B_s1=a_more ? B_s : A_s;
   assign A_s2=(a_more & ~(expdiffA==0 && alt_en && sxor)) ? A_s : B_s;
 
-  assign alt_en=isDBL ? ~cout53_SZ1 : ~cout64_SZ1;
+  assign alt_en=~cout53_SZ1;
 
   assign resS_rnbit=(expdiffA!=0) ? ~opB[0] : 1'b0;
   assign altpath=(expdiffA==0 || expdiffA==1 || expdiffB==1) && sxor;
@@ -239,44 +233,32 @@ module fadd(
  
   assign res[67:66]=en_reg ? `ptype_dbl : 2'bz;
 
-  assign res[64:0]=(renor_simple & ~isDBL_reg & ~spec_any & en_reg) ? {renorS[63:32],1'b0,renorS[31:0]} : 65'bz;
-  assign res[52:0]=(renor_simple & isDBL_reg & ~spec_any & en_reg) ? {renorS[62:43],1'b0,renorS[42:11]} : 53'bz;
-  assign {res[65],res_hi[14:0]}=(renor_simple & ~isDBL_reg & ~spec_any & en_reg) ? renorE : 16'bz;
-  assign {res[65],res[63:53]}=(renor_simple & isDBL_reg & ~spec_any & en_reg) ? {renorE[15],renorE[10:0]} : 12'bz;
+  assign res[52:0]=(renor_simple & ~spec_any & en_reg) ? {renorS[62:43],1'b0,renorS[42:11]} : 53'bz;
+  assign {res[65],res[63:53]}=(renor_simple & ~spec_any & en_reg) ? {renorE[11],renorE[10:0]} : 12'bz;
   
-  assign res[64:0]=(renor_round & ~isDBL_reg & ~spec_any & en_reg) ? {renorSR[63:32],1'b0,renorSR[31:0]} : 65'bz;
-  assign res[52:0]=(renor_round & isDBL_reg & ~spec_any & en_reg) ? {renorSR[62:43],1'b0,renorSR[42:11]} : 53'bz;
-  assign {res[65],res_hi[14:0]}=(renor_round & ~isDBL_reg & en_reg & ~spec_any) ? renorER : 16'bz;
-  assign {res[65],res[63:53]}=(renor_round & isDBL_reg & en_reg & ~spec_any) ? {renorER[11],renorER[10:0]} : 12'bz;
+  assign res[52:0]=(renor_round & ~spec_any & en_reg) ? {renorSR[62:43],1'b0,renorSR[42:11]} : 53'bz;
+  assign {res[65],res[63:53]}=(renor_round & en_reg & ~spec_any) ? {renorER[11],renorER[10:0]} : 12'bz;
 
-  assign res_hi[15]=(renor_simple & ~isDBL_reg & en_reg & ~spec_any) ? A_s1_reg : 1'bz;
-  assign res[15]=(renor_round & ~isDBL_reg & en_reg & ~spec_any) ? A_s1_reg : 1'bz;
-  assign res[64]=(renor_simple & isDBL_reg & en_reg & ~spec_any) ? A_s1_reg : 1'bz;
-  assign res[64]=(renor_round & isDBL_reg & en_reg & ~spec_any) ? A_s1_reg : 1'bz;
+  assign res[64]=(renor_simple & en_reg & ~spec_any) ? A_s1_reg : 1'bz;
+  assign res[64]=(renor_round & en_reg & ~spec_any) ? A_s1_reg : 1'bz;
   
 
-  assign {res[65],res_hi,res[64:0]}=(~renor_simple && ~renor_round && ~isDBL_reg && ~spec_any && en_reg) ? {resY[80:32],1'b0,resY[31:0]} : 82'bz;
-  assign res[65:0]=(~renor_simple && ~renor_round &&  isDBL_reg && ~spec_any && en_reg) ? {resX[64:32],1'b0,resX[31:0]} : 66'bz;
+  assign res[65:0]=(~renor_simple && ~renor_round &&  ~spec_any && en_reg) ? {resX[64:32],1'b0,resX[31:0]} : 66'bz;
 
-  assign {res[65],res[64:0]}=(spec_any & en_reg) ? {res_spec[80],res_spec[63:32],1'b0,res_spec[31:0]} : 66'bz;  
-  assign res_hi=(spec_any & ~isDBL_reg & en_reg) ? {res_spec[79:64]} : 16'bz;  
+  assign {res[65],res[64:0]}=(spec_any & en_reg) ? {res_spec[64],res_spec[63:32],1'b0,res_spec[31:0]} : 66'bz;  
 
-  assign res_spec=spec_A_reg ? A_reg : 81'bz;
-  assign res_spec=spec_B_reg ? B_reg : 81'bz;
-  assign res_spec=(spec_snan_reg & ~isDBL_reg) ? {17'h1ffff,64'b1} : 81'bz;
-  assign res_spec=(spec_qnan_reg & ~isDBL_reg) ? {17'h1ffff,64'h8000000000000001} : 81'bz;
-  assign res_spec=(spec_pinf_reg & ~isDBL_reg) ? {17'h1effe,64'b0} : 81'bz;
-  assign res_spec=(spec_ninf_reg & ~isDBL_reg) ? {17'h1fffe,64'b0} : 81'bz;
-  assign res_spec=(spec_snan_reg & isDBL_reg) ? {17'h1ffff,64'hfff0000000000001} : 81'bz;
-  assign res_spec=(spec_qnan_reg & isDBL_reg) ? {17'h1ffff,64'hfff8000000000001} : 81'bz;
-  assign res_spec=(spec_pinf_reg & isDBL_reg) ? {17'h1efff,64'h7fe0000000000000} : 81'bz;
-  assign res_spec=(spec_ninf_reg & isDBL_reg) ? {17'h1ffff,64'hffe0000000000000} : 81'bz;
-  assign res_spec=spec_logic_reg[0] ? A_reg&B_reg : 81'bz;
-  assign res_spec=spec_logic_reg[1] ? A_reg|B_reg : 81'bz;
-  assign res_spec=spec_logic_reg[2] ? A_reg^B_reg : 81'bz;
-  assign res_spec=spec_logic_reg[3] ? A_reg&~B_reg : 81'bz;
-  assign res_spec=spec_any ?  81'bz :  81'b0;
-
+  assign res_spec=spec_A_reg ? A_reg : 65'bz;
+  assign res_spec=spec_B_reg ? B_reg : 65'bz;
+  assign res_spec=(spec_snan_reg) ? {65'h1fff0000000000001} : 65'bz;
+  assign res_spec=(spec_qnan_reg) ? {65'h1fff4000000000001} : 65'bz;
+  assign res_spec=(spec_pinf_reg) ? {65'h17fe8000000000000} : 65'bz;
+  assign res_spec=(spec_ninf_reg) ? {65'h1ffe8000000000000} : 65'bz;
+  assign res_spec=spec_logic_reg[0] ? A_reg&B_reg : 65'bz;
+  assign res_spec=spec_logic_reg[1] ? A_reg|B_reg : 65'bz;
+  assign res_spec=spec_logic_reg[2] ? A_reg^B_reg : 65'bz;
+  assign res_spec=spec_logic_reg[3] ? A_reg&~B_reg : 65'bz;
+  assign res_spec=spec_any ?  65'bz :  65'b0;
+//up to here
   assign renor_round=rndpath_reg && !(opB_reg || isrnd_zero ||(isrnd_even && resSR1_reg[0])) &&
   (isDBL_reg ? resS1_reg[52] : resS1_reg[63]);
   
