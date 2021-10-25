@@ -961,27 +961,28 @@ module smallInstr_decoder(
            perror[10]=1'b1;
        end
 //          if (rT==6'd16) thisSpecAlu=1'b1;
-       trien[11]=~magic[0] & subIsFPUE;
-       puseRs[11]=1'b1;
-       prAlloc[11]=1'b1;
-       if (~prevSpecLoad) begin
-           prA[11]=(opcode_main[7:6]==2'd3) ? {1'b0,rB_reor} : {1'b0,rA_reor};
-           prT[11]={1'b0,rA_reor};
-           prB[11]=(opcode_main[7:6]==2'd3) ? {1'b0,rA_reor} : {1'b0,rB_reor};
-       end else begin
-           prA[11]=(opcode_main[7:6]==2'd3) ? 5'd15 : {1'b0,rA_reor};
-           prT[11]={1'b0,rA_reor};
-           prB[11]=(opcode_main[7:6]==2'd3) ? {1'b0,rA_reor} : 5'd15;
-       end
-       prA_useF[11]=1'b1;
-       prB_useF[11]=1'b1;
-       prT_useF[11]=1'b1;
-       case(opcode_main[7:6])
-     2'd0: begin pport[11]=PORT_FMUL; poperation[11]=`fop_mulEE; end
-     2'd1: begin pport[11]=PORT_FADD; poperation[11]=`fop_addEE; end
-     2'd2: begin pport[11]=PORT_FADD; poperation[11]=`fop_subEE; end
-     2'd3: begin pport[11]=PORT_FADD; poperation[11]=`fop_subEE; end
-       endcase
+      trien[11]=~magic[0] & subIsFPUE;
+      poperation[11]={10'b0,opcode_main[6]&~instr[7],2'b10};
+      puseBConst[11]=opcode_main[7];
+      prA_use[11]=1'b1;
+      prB_use[11]=1'b1;
+      prT_use[11]=1'b1;
+      puseRs[11]=1'b1;
+      prAlloc[11]=1'b1;
+      pport[11]=PORT_ALU;
+      pflags_write[11]=1'b0;
+      if (~prevSpecLoad & ~opcode_main[7]) begin
+          prA[11]={1'b0,instr[11:8]};
+          prT[11]={1'b0,instr[11:8]};
+          prB[11]={1'b0,instr[15:12]};
+      end else if (!opcode_sub[7]) begin
+          prA[11]={1'b0,instr[15:12]};
+          prB[11]=5'd16;
+          prT[11]={1'b0,instr[11:8]};
+      end else begin
+          prA[11]={instr[7],instr[15:12]};
+          prT[11]={instr[7],instr[15:12]};
+      end
 
       trien[12]=magic[0] & isBaseLoadStore;
       poperation[12][5:0]=(opcode_main[5:3]==3'b101) ? 6'h22 : opcode_main[5:0];
