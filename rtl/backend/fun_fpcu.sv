@@ -326,10 +326,7 @@ module fun_fpu(
     fxDataAFL_REG[0][31:0]}),
   .B({gxDataBFL_reg[1][65],gxDataBFL_reg[1][15+68:68],gxDataBFL_reg[1][64:33],
     gxDataBFL_reg[1][31:0]}),
- // .isDBL(fxFADD_dbl|H),
-  .B_hi(read_hi),
-  .B_exp_hi(read_exp_hi),
-  .B_sgn_hi(read_sgn_hi),
+  .isDBL(fxFADD_dbl|H),
   //.isEXT(fxFADD_ext&!H),
   .isSub(fxFADD_sub[H]),
   .isRSub(fxFADD_rsub),
@@ -341,7 +338,8 @@ module fun_fpu(
   .logic_en(fxFADD_lo),
   .logic_sel(fxFADD_loSel),
   .en(H? fxFADD_dbl:fxFADD_dblext),
-  .res(FOOF[0][67:0])
+  .res(FOOF[0][67:0]),
+  .res_hi(FOOF[0][68+15:68])
   );
   
  
