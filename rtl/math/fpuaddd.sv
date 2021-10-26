@@ -243,7 +243,7 @@ module fadd(
   assign res[64]=(renor_round & en_reg & ~spec_any) ? A_s1_reg : 1'bz;
   
 
-  //assign res[65:0]=(~renor_simple && ~renor_round &&  ~spec_any && en_reg) ? {resX[64:32],1'b0,resX[31:0]} : 66'bz;
+  assign res[65:0]=(~renor_simple && ~renor_round &&  ~spec_any && en_reg) ? {resX[64:32],1'b0,resX[31:0]} : 66'bz;
 
   assign {res[65],res[64:0]}=(spec_any & en_reg) ? {res_spec[64],res_spec[63:32],1'b0,res_spec[31:0]} : 66'bz;  
 
@@ -258,25 +258,28 @@ module fadd(
   assign res_spec=spec_logic_reg[2] ? A_reg^B_reg : 65'bz;
   assign res_spec=spec_logic_reg[3] ? A_reg&~B_reg : 65'bz;
   assign res_spec=spec_any ?  65'bz :  65'b0;
-
+//up to here
   assign renor_round=rndpath_reg && !(opB_reg || isrnd_zero ||(isrnd_even && resSR1_reg[0])) &&
-  resS1_reg[52];
+  (isDBL_reg ? resS1_reg[52] : resS1_reg[63]);
   
   assign renor_simple=altpath_reg && ~renor_round;
   
-  assign expoor=expdiff[11:6]!=6'b0 ;//&& expdiff!=16'h40; 
+  assign expoor=expdiff[15:6]!=10'b0 ;//&& expdiff!=16'h40; 
 
-  get_carry #(12) cmp1_mod(opA_exp,~exp_max,1'b1,exp_inc_oor);
-  get_carry #(12) cmp2_mod(opA_exp,~exp_max_IEEE,1'b1,exp_inc_oor_IEEE);
-  get_carry #(12) cmp3_mod(opA_exp,~exp_min_IEEE,1'b1,exp_dec_non_denor_IEEE_0);
-  get_carry #(12) cmp4_mod(opA_exp,~exp_min_kludge,1'b1,exp_dec_non_denor_IEEE_1);
-  assign exp_dec_non_denor=opA_exp[11:1]!=0;
+  assign resY[79]=A_s1_reg;
+  assign resX[63]=A_s1_reg;
+    
+  get_carry #(16) cmp1_mod(opA_exp,~exp_max,1'b1,exp_inc_oor);
+  get_carry #(16) cmp2_mod(opA_exp,~exp_max_IEEE,1'b1,exp_inc_oor_IEEE);
+  get_carry #(16) cmp3_mod(opA_exp,~exp_min_IEEE,1'b1,exp_dec_non_denor_IEEE_0);
+  get_carry #(16) cmp4_mod(opA_exp,~exp_min_kludge,1'b1,exp_dec_non_denor_IEEE_1);
+  assign exp_dec_non_denor=opA_exp[15:1]!=0;
   assign exp_dec_non_denor_IEEE=altpath ? exp_dec_non_denor_IEEE_1 : exp_dec_non_denor_IEEE_0;
 
-  assign exp_max=12'hffd;
-  assign exp_max_IEEE=12'hbfe;
-  assign exp_min_IEEE=12'h401;
-  assign exp_min_kludge=12'h436;
+  assign exp_max=isDBL ? 16'hffd : 16'hfffd;
+  assign exp_max_IEEE=isDBL ? 16'hbfe : 16'hbffe;
+  assign exp_min_IEEE=isDBL ? 16'h401 : 16'h4001;
+  assign exp_min_kludge=isDBL ? 16'h436 : 16'h4021;
 
   assign raise[`csrfpu_inv_excpt]=spec_snan_reg;
   assign raise[`csrfpu_under_excpt]=A_s1_reg & exp_inc_oor_reg & xpon[1] & ~spec_any;
@@ -290,45 +293,86 @@ module fadd(
   assign raise[`csrfpu_denor_consume_excpt]=1'b0;
   assign raise[`csrfpu_denor_produce_excpt]=1'b0;
 
-  assign xpon=Smain_simple ? {res_rnbit,res_tail,2'b00} : 4'bz;
-  assign xpon=Smain_round ? {res_rnbit,res_tail,2'b00} : 4'bz;
-  assign xpon=Smain_simpleC ? {res_rnbitC,res_tailC,2'b10} : 4'bz;
-  assign xpon=Smain_roundC ? {res_rnbitC,res_tailC,2'b10} : 4'bz;
-  assign xpon=Smain_simpleRC ? {res_rnbit,res_tail,2'b10} : 4'bz;
-  assign xpon=Smain_simpleL ? {res_rnbitL,res_tailL,2'b01} : 4'bz;
-  assign xpon=Smain_roundL ? {res_rnbitL,res_tailL,2'b00} : 4'bz;
+  assign X_xpon=Smain_simple ? {res_rnbit,res_tail,2'b00} : 4'bz;
+  assign X_xpon=Smain_round ? {res_rnbit,res_tail,2'b00} : 4'bz;
+  assign X_xpon=Smain_simpleC ? {res_rnbitC,res_tailC,2'b10} : 4'bz;
+  assign X_xpon=Smain_roundC ? {res_rnbitC,res_tailC,2'b10} : 4'bz;
+  assign X_xpon=Smain_simpleRC ? {res_rnbit,res_tail,2'b10} : 4'bz;
+  assign X_xpon=Smain_simpleL ? {res_rnbitL,res_tailL,2'b01} : 4'bz;
+  assign X_xpon=Smain_roundL ? {res_rnbitL,res_tailL,2'b00} : 4'bz;
   
+  assign Y_xpon=main_simple ? {res_rnbit,res_tail,2'b00} : 4'bz;
+  assign Y_xpon=main_round ? {res_rnbit,res_tail,2'b00} : 4'bz;
+  assign Y_xpon=main_simpleC ? {res_rnbitC,res_tailC,2'b10} : 4'bz;
+  assign Y_xpon=main_roundC ? {res_rnbitC,res_tailC,2'b10} : 4'bz;
+  assign Y_xpon=main_simpleRC ? {res_rnbit,res_tail,2'b10} : 4'bz;
+  assign Y_xpon=main_simpleL ? {res_rnbitL,res_tailL,2'b01} : 4'bz;
+  assign Y_xpon=main_roundL ? {res_rnbitL,res_tailL,2'b00} : 4'bz;
+ 
+  assign xpon=isDBL_reg & ~renor_simple & ~renor_any  ? X_xpon : 4'bz;
+  assign xpon=~isDBL_reg & ~renor_simple & ~renor_any  ? X_xpon : 4'bz;
   assign xpon=renor_simple | renor_round ? {renor_round,3'b001} : 4'bz;
    
-  assign res[51:0]=Smain_simple ? resM1[104:53] : 52'bz;
-  assign res[51:0]=Smain_round ? resMR1[104:53] : 52'bz;
-  assign res[51:0]=Smain_simpleC ? resM1[105:54] : 52'bz;
-  assign res[51:0]=Smain_roundC ? resM2[105:54] : 52'bz;
-  assign res[51:0]=Smain_simpleRC ? resMR1[105:54] : 52'bz;
-  assign res[51:0]=Smain_simpleL ? {resM1[103:53],res_rnbit^Smain_subroundL} : 52'bz;
-  assign res[51:0]=Smain_roundL ? {resMR1[103:53],1'b0} : 52'bz;
+  assign resX[51:0]=Smain_simple ? resM1[51:0] : 52'bz;
+  assign resX[51:0]=Smain_round ? resMR1[51:0] : 52'bz;
+  assign resX[51:0]=Smain_simpleC ? resM1[52:1] : 52'bz;
+  assign resX[51:0]=Smain_roundC ? resM2[52:1] : 52'bz;
+  assign resX[51:0]=Smain_simpleRC ? resMR1[52:1] : 52'bz;
+  assign resX[51:0]=Smain_simpleL ? {resM1[50:0],res_rnbit^Smain_subroundL} : 52'bz;
+  assign resX[51:0]=Smain_roundL ? {resMR1[50:0],1'b0} : 52'bz;
   
-  assign {res[64],res[62:52]}=Smain_simple ? {opA_exp_reg[15],opA_exp_reg[10:0]} : 12'bz;
-  assign {res[64],res[62:52]}=Smain_round ? {opA_exp_reg[15],opA_exp_reg[10:0]} : 12'bz;
-  assign {res[64],res[62:52]}=Smain_simpleC ? {opA_exp_inc[15],opA_exp_inc[10:0]} : 12'bz;
-  assign {res[64],res[62:52]}=Smain_roundC ? {opA_exp_inc[15],opA_exp_inc[10:0]} : 12'bz;
-  assign {res[64],res[62:52]}=Smain_simpleRC ? {opA_exp_inc[15],opA_exp_inc[10:0]} : 12'bz;
-  assign {res[64],res[62:52]}=Smain_simpleL ? {opA_exp_dec[15],opA_exp_dec[10:0]} : 12'bz;
-  assign {res[64],res[62:52]}=Smain_roundL ? {opA_exp_dec[15],opA_exp_dec[10:0]} : 12'bz;
+  assign {resX[64],resX[62:52]}=Smain_simple ? {opA_exp_reg[15],opA_exp_reg[10:0]} : 12'bz;
+  assign {resX[64],resX[62:52]}=Smain_round ? {opA_exp_reg[15],opA_exp_reg[10:0]} : 12'bz;
+  assign {resX[64],resX[62:52]}=Smain_simpleC ? {opA_exp_inc[15],opA_exp_inc[10:0]} : 12'bz;
+  assign {resX[64],resX[62:52]}=Smain_roundC ? {opA_exp_inc[15],opA_exp_inc[10:0]} : 12'bz;
+  assign {resX[64],resX[62:52]}=Smain_simpleRC ? {opA_exp_inc[15],opA_exp_inc[10:0]} : 12'bz;
+  assign {resX[64],resX[62:52]}=Smain_simpleL ? {opA_exp_dec[15],opA_exp_dec[10:0]} : 12'bz;
+  assign {resX[64],resX[62:52]}=Smain_roundL ? {opA_exp_dec[15],opA_exp_dec[10:0]} : 12'bz;
   
-  assign Smain_lo=~resM1[105] && ~(resM1[106]);
-  assign Smain_ulo=Smain_lo && resMR1[105];
+  assign {resY[80],resY[78:64]}=main_simple ? opA_exp_reg : 16'bz;
+  assign {resY[80],resY[78:64]}=main_round ? opA_exp_reg : 16'bz;
+  assign {resY[80],resY[78:64]}=main_simpleC ? opA_exp_inc : 16'bz;
+  assign {resY[80],resY[78:64]}=main_roundC ? opA_exp_inc : 16'bz;
+  assign {resY[80],resY[78:64]}=main_simpleRC ? opA_exp_inc : 16'bz;
+  assign {resY[80],resY[78:64]}=main_simpleL ? opA_exp_dec : 16'bz;
+  assign {resY[80],resY[78:64]}=main_roundL ? opA_exp_dec : 16'bz;
+   
+  assign resY[63:0]=main_simple ? resM1[63:0] : 64'bz;
+  assign resY[63:0]=main_round ? resMR1[63:0] : 64'bz;
+  assign resY[63:0]=main_simpleC ? {1'b1,resM1[63:1]} : 64'bz;
+  assign resY[63:0]=main_roundC ? {1'b1,resM2[63:1]} : 64'bz;
+  assign resY[63:0]=main_simpleRC ? {1'b1,resMR1[63:1]} : 64'bz;
+  assign resY[63:0]=main_simpleL ? {resM1[62:0],res_rnbit^main_subroundL} : 64'bz;
+  assign resY[63:0]=main_roundL ? {resMR1[62:0],1'b0} : 64'bz;
+
   
+  assign main_lo=~resM1[63] && ~(cout64_M1_ns^partM1[64]^sxor_reg);
+  assign main_ulo=main_lo && resMR1[63];
+  assign Smain_lo=~resM1[52] && ~(resM1[53]);
+  assign Smain_ulo=Smain_lo && resMR1[52];
   
-  assign Smain_simple=~Smain_lo && (~res_rnbit & ~(res_tail & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tail&&resMR1[53])) && ~(resM1[106]&~sxor_reg);
-  assign Smain_round=(~Smain_lo && !(~res_rnbit & ~(res_tail & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tail&&resMR1[53])) && ~(resMR1[106]&~sxor_reg)) ||
+  assign main_simple=~main_lo && (~res_rnbit & ~(res_tail & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tail&&resMR1[0])) && 
+    ~(cout64_M1_ns^partM1[64]^sxor_reg);
+  assign main_round=(~main_lo && !(~res_rnbit & ~(res_tail & isrnd_plus) || isrnd_zero ||(isrnd_even && ~res_tail&&resMR1[0])) && ~(cout64_MR1_ns^partM1[64]^sxor_reg)) ||
+    (main_ulo && !(~res_rnbitL & ~(res_tailL & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tailL&&~res_rnbit)));
+  assign main_roundC=~main_lo && !(~res_rnbitC & ~(res_tailC & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tailC&&resM2[1])) && (cout64_M1_ns^partM1[64]^sxor_reg) &&
+   (~res_rnbit & ~(res_tail & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tail&&resMR1[0]));
+  assign main_simpleC=~main_lo && ((~res_rnbitC & ~(res_tailC & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tailC&&resM2[1])) && (cout64_M1_ns^partM1[64]^sxor_reg) &&
+    (~res_rnbit & ~(res_tail & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tail&&resMR1[0])));
+  assign main_simpleRC=~main_lo && (!(~res_rnbit & ~(res_tail & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tail&&resMR1[0])) && (cout64_MR1_ns^partM1[64]^sxor_reg));
+  assign main_simpleL=main_lo && ((~res_rnbitL & ~(res_tailL & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tailL&&~res_rnbit)) || ~res_rnbit);
+  assign main_roundL=main_lo && !(~res_rnbitL & ~(res_tailL & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tailL&&~res_rnbit)) && ~main_ulo && res_rnbit;
+  assign main_subroundL=main_lo && !(~res_rnbitL & ~(res_tailL & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tailL&&~res_rnbit)) && ~main_ulo;//|~res_rnbitL;
+  
+  assign Smain_simple=~Smain_lo && (~res_rnbit & ~(res_tail & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tail&&resMR1[0])) && ~(resM1[53]&~sxor_reg);
+  assign Smain_round=(~Smain_lo && !(~res_rnbit & ~(res_tail & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tail&&resMR1[0])) && ~(resMR1[53]&~sxor_reg)) ||
     (Smain_ulo && !(~res_rnbitL & ~(res_tailL & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tailL&&~res_rnbit)
     ) );
-  assign Smain_roundC=~Smain_lo && !(~res_rnbitC & ~(res_tailC & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tailC&&resM2[54])) && (resM1[106]&~sxor_reg) &&
+  assign Smain_roundC=~Smain_lo && !(~res_rnbitC & ~(res_tailC & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tailC&&resM2[1])) && (resM1[53]&~sxor_reg) &&
    (~res_rnbit & ~(res_tail & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tail&resMR1[0]));
-  assign Smain_simpleC=~Smain_lo && ((~res_rnbitC & ~(res_tailC & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tailC&&resM2[54])) && (resM1[106]&~sxor_reg) &&
+  assign Smain_simpleC=~Smain_lo && ((~res_rnbitC & ~(res_tailC & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tailC&&resM2[1])) && (resM1[53]&~sxor_reg) &&
     (~res_rnbit & ~(res_tail & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tail&&resMR1[0]))); 
-  assign Smain_simpleRC=~Smain_lo && (!(~res_rnbit & ~(res_tail & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tail&&resMR1[53])) && (resMR1[106]&~sxor_reg));
+  assign Smain_simpleRC=~Smain_lo && (!(~res_rnbit & ~(res_tail & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tail&&resMR1[0])) && (resMR1[53]&~sxor_reg));
   assign Smain_simpleL=Smain_lo && ((~res_rnbitL & ~(res_tailL & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tailL&&~res_rnbit)) ||
     ~res_rnbit);/* && 
    ~(res_rnbit && (res_rnbitL^sxor_reg) && res_andtailL);*/
@@ -336,7 +380,7 @@ module fadd(
    res_rnbit;
   assign Smain_subroundL=Smain_lo && !(~res_rnbitL & ~(res_tailL & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tailL&&~res_rnbit)) && ~Smain_ulo;//|~res_rnbitL;
   
-  assign res_rnbitC=resM1[53];
+  assign res_rnbitC=resM1[0];
   assign xop1[9:2]=opBs1[7:0];
   assign res_tail=sxor_reg ? ~res_andtail : |{tailBs,tailBs1_reg};
   assign res_tailC=sxor_reg ? ~res_andtailC : |{tailBs_c,tailBs1_c_reg};
@@ -345,7 +389,7 @@ module fadd(
   assign res_andtailC=&{andtailBs_c,andtailBs1_c_reg};
   assign res_andtailL=&{andtailBs_L,andtailBs1_L_reg};
 
-  //up to here
+  
   generate
       genvar k;
       for(k=0;k<8;k=k+1) begin
