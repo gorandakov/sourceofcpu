@@ -196,7 +196,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   isShlAddMulLike,
   isSimdInt & ~instr[16],subIsFPUD & !(opcode_sub[5:1]==5'b11100),
   subIsFPUPD & !(opcode_sub[5:1]==5'b11101), subIsFPUSngl & !(opcode_main[7:6]==2'b0),
-  subIsFPUE,
+  subIsFPUE & !(opcode_main[7:6]==2'b0),
   subIsSIMD,
   isSimdInt && ((instr[13:9]==5'd0 && ~instr[16]) || (instr[13:9]==5'd5 && ~instr[16]) || (instr[13:8]==6'b11 && instr[16])),
   subIsBasicALU,subIsCmpTest,subIsLinkRet,
@@ -214,7 +214,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   
   assign clsShift=isBasicShift & ~isBasicShiftExcept || subIsBasicShift || subIsFPUD & (opcode_sub[5:1]==5'b11100) ||
     subIsFPUPD & (opcode_sub[5:1]==5'b11101) || subIsFPUSngl &(opcode_main[7:6]==2'b0)
-    || isSimdInt & instr[16] ||
+    || subIsFPUE &(opcode_main[7:6]==2'b0) || isSimdInt & instr[16] ||
     (isSimdInt && ~((instr[13:9]==5'd0 && ~instr[16]) || (instr[13:9]==5'd5 && ~instr[16]) ||
      (instr[13:8]==6'b11 && instr[16]))) || 
     (isBasicFPUScalarA && ~(instr[13:9]!=5'd2 && instr[13:8]!=6'd8)) ||
@@ -264,7 +264,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   assign clsSys=isBasicSysInstr|isFPUreor;
   
   assign clsFPU=isBasicFPUScalarA || isBasicFPUScalarB || isBasicFPUScalarC || subIsFPUD || subIsFPUPD || subIsFPUSngl ||
-    subIsSIMD;
+    subIsFPUE || subIsSIMD;
   assign class_[`iclass_indir]=clsIndir;
   assign class_[`iclass_jump]= clsJump;
   assign class_[`iclass_ALU]= clsALU;
