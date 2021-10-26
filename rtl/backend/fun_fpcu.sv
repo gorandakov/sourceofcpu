@@ -2,32 +2,6 @@
 `include "../fpoperations.sv"
 `include "../csrss_no.sv"
 
-module fun_fpu_ram(
-  clk,
-  rst,
-  read_addr,
-  read_data,
-  write_addr,
-  write_data,
-  write_wen);
-  input clk;
-  input rst;
-  input [4:0] read_addr;
-  output [105+12+1:0] read_data;
-  input [4:0] write_addr;
-  input [105+12+1:0] write_data;
-  input write_wen;
-
-  reg [105+12+1:0] RAM[31:0];
-
-  assign read_data=RAM[read_addr];
-
-  always @(negedge clk) begin
-      if (write_wen) RAM[write_addr]<=write_data;
-  end
-endmodule
-
-
 module fun_fpu(
   clk,
   rst,
@@ -307,15 +281,6 @@ module fun_fpu(
   FUF9,FUF9_reg
   );
   
-  fun_fpu_ram ramFMA_mod(
-  clk,
-  rst,
-  u1_rsNo,
-  {read_hi,read_exp_hi,read_sgn_hi},
-  u2_rsNo_reg4,
-  {write_hi,write_exp_hi,write_sgn_hi},
-  write_hi_wen
-  );
   
   fadd fadd1H_mod(
   .clk(clk),
