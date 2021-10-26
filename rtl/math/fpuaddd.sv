@@ -7,9 +7,7 @@ module fadd(
   A,
   A_alt,
   B,
-  B_hi,
-  B_exp_hi,
-  B_sgn_hi,
+  isDBL,
   isSub,//inclusive of isRSub
   isRSub,
   fpcsr,
@@ -19,7 +17,8 @@ module fadd(
   copyA,
   logic_en,
   logic_sel,
-  res
+  res,
+  res_hi
   );
   localparam ROUND_TRUNC=0;
   localparam ROUND_ROUND=1;
@@ -31,12 +30,10 @@ module fadd(
 
   input clk;
   input rst;
-  input [64:0] A;
+  input [80:0] A;
   input [64:0] A_alt;
-  input [64:0] B;
-  input [105:0] B_hi;
-  input [11:0] B_exp_hi;
-  input B_sgn_hi;
+  input [80:0] B;
+  input isDBL;
   input isSub;
   input isRSub;
   input [31:0] fpcsr;
@@ -52,30 +49,55 @@ module fadd(
 //need to clear/set bits 63-54 if isDBL and corresponging conditions
 //if no isDBL, set one op low bits to 0, other to one depening on rounding
 //width
+  function [63:0] fracxfrm0;
+      input [63:0] op;
+      input dbl;
+      
+      begin
+	  fracxfrm0[10:0]=op[10:0];
+	  fracxfrm0[39:11]=op[39:11];
+	  fracxfrm0[51:40]=op[51:40];
+	  fracxfrm0[52]=op[52]|dbl;
+	  fracxfrm0[63:53]=op[63:53]&{11{~dbl}};
+      end
+  endfunction
+
+  function [63:0] fracxfrm1;
+      input [63:0] op;
+      input dbl;
+      
+      begin
+	  fracxfrm1[10:0]=op[10:0];
+	  fracxfrm1[39:11]=op[39:11];
+	  fracxfrm1[51:40]=op[51:40];
+	  fracxfrm1[52]=op[52]|dbl;
+	  fracxfrm1[63:53]=op[63:53]&{11{~dbl}};
+      end
+  endfunction
 
   wire sxor;
   reg sxor_reg;
   wire a_more;
-  wire [105:0] opA;
-  wire [105:0] opB;
+  wire [63:0] opA;
+  wire [63:0] opB;
   wire moreAD,moreAE;
-  wire [11:0] expdiffA;
-  wire [11:0] expdiffB;
-  wire [11:0] expdiff;
-  reg  [11:0] expdiff_reg;
-  wire [105:0] opBs1;
-  wire [105:0] opBs;
-  reg [105:0] opBs1_reg;
-  reg [105:0] opA_reg;
+  wire [15:0] expdiffA;
+  wire [15:0] expdiffB;
+  wire [15:0] expdiff;
+  reg  [15:0] expdiff_reg;
+  wire [63:0] opBs1;
+  wire [63:0] opBs;
+  reg [63:0] opBs1_reg;
+  reg [63:0] opA_reg;
 //  reg [63:0] opB_reg;
-  wire [106:0] partM0;
-  wire [106:0] partM1;
-  wire [106:0] partMs0;
-  wire [106:0] partMs1;
-  wire [52:0] resS1;
-  wire [52:0] resSR1;
-  reg [52:0] resS1_reg;
-  reg [52:0] resSR1_reg;
+  wire [64:0] partM0;
+  wire [64:0] partM1;
+  wire [64:0] partMs0;
+  wire [64:0] partMs1;
+  wire [63:0] resS1;
+  wire [63:0] resSR1;
+  reg [63:0] resS1_reg;
+  reg [63:0] resSR1_reg;
   wire resS_rnbit;
   wire res_rnbit,res_tail,res_andtail;
   wire res_rnbitC,res_tailC,res_andtailC;
@@ -86,11 +108,16 @@ module fadd(
   wire A_s,B_s,A_s1,B_s1;
   reg A_s1_reg;
   wire renor_simple,renor_round;
+  wire main_simple,main_round;
+  wire main_simpleL,main_roundL,main_subroundL;
+  wire main_simpleC,main_roundC,main_simpleRC;
   wire Smain_simple,Smain_round;
   wire Smain_simpleC,Smain_roundC,Smain_simpleRC;
   wire Smain_simpleL,Smain_roundL,Smain_subroundL;
   wire [63:0] renorS;
+  wire [15:0] renorE;
   wire [63:0] renorSR;
+  wire [15:0] renorER;
   wire [7:0] andtailBs1;
   wire [7:0] andtailBs;
   wire [7:0] andtailBs1_c;
@@ -109,27 +136,26 @@ module fadd(
   reg tailBs1_reg;
   reg tailBs1_c_reg;
   reg tailBs1_L_reg;
-  wire [105:0] resM1;
-  wire [105:0] resMR1;
-  wire [105:0] resM2;
-  wire [105:0] resMR2;
+  reg isDBL_reg;
+  wire [63:0] resM1;
+  wire [63:0] resMR1;
+  wire [63:0] resM2;
+  wire [63:0] resMR2;
   wire cout64_M1_ns,cout64_MR1_ns,cout53_M1_ns,cout53_MR1_ns;
   wire cout64_M2_ns,cout64_MR2_ns,cout53_M2_ns,cout53_MR2_ns;
   wire cout64_SZ1,cout64_SZR1,cout53_SZ1,cout53_SZR1;
   wire cout64_Sz1,cout64_SzR1,cout53_Sz1,cout53_SzR1;
   wire cout64_S1,cout64_SR1,cout53_S1,cout53_SR1;
-  wire [53:0] par1Off_A;
-  wire [53:0] par1Off_B;
-  wire [53:0] part_A;
-  wire [53:0] part_B;
-  wire [53:0] partt_A;
-  wire [53:0] partt_B;
+  wire [64:0] par1Off_A;
+  wire [64:0] par1Off_B;
+  wire [64:0] part_A;
+  wire [64:0] part_B;
+  wire [64:0] partt_A;
+  wire [64:0] partt_B;
   reg [7:0] expdiffeq;
   wire [9:0] xop1;
   reg [9:0] xop1_reg;
   reg isrnd_zero,isrnd_even,isrnd_plus;
-
-  //up to here
   wire [64:0] resX;
   wire [80:0] resY;
   wire main_lo,main_ulo,Smain_lo,Smain_ulo;
