@@ -2666,7 +2666,7 @@ module rs(
   newRsSelect1,newRegA1,newFunitA1,newGazumpA1,newPort1[3],newPort1[2],
   newRsSelect2,newRegA2,newFunitA2,newGazumpA2,newPort2[3],newPort2[2],
   fuFwdA,
-  outRsSelect[0],outDataEn0[0],outBank[0],rsFound[0],outFuFwdA0,outFuuFwdA0,
+  outRsSelect[0],outDataEn0[0],outBank[0],rsFoundNZ[0],outFuFwdA0,outFuuFwdA0,
   outRsSelect[1],outDataEn1[0],outBank[1],rsFoundNZ[1],outFuFwdA1,outFuuFwdA1,
   outRsSelect[2],outDataEn2[0],outBank[2],rsFoundNZ[2],outFuFwdA2,outFuuFwdA2
   );
@@ -2691,7 +2691,7 @@ module rs(
   newRsSelect1,newRegB1,newFunitB1,newGazumpB1,newPort1[3],newPort1[2],
   newRsSelect2,newRegB2,newFunitB2,newGazumpB2,newPort2[3],newPort2[2],
   fuFwdB,
-  outRsSelect[0],outDataEn0[0],outBank[0],rsFound[0],outFuFwdB0,outFuuFwdB0,
+  outRsSelect[0],outDataEn0[0],outBank[0],rsFoundNZ[0],outFuFwdB0,outFuuFwdB0,
   outRsSelect[1],outDataEn1[0],outBank[1],rsFoundNZ[1],outFuFwdB1,outFuuFwdB1,
   outRsSelect[2],outDataEn2[0],outBank[2],rsFoundNZ[2],outFuFwdB2,outFuuFwdB2
   );
@@ -2723,7 +2723,7 @@ module rs(
   FU0,FU1,FU2,FU3,
   FU4,FU5,FU6,
   FU7,FU8,FU9,
-  outRsSelect[0],outBank[0],rsFound[0],outDataA0,
+  outRsSelect[0],outBank[0],rsFoundNZ[0],outDataA0,
   outRsSelect[1],outBank[1],rsFoundNZ[1],outDataA1,
   outRsSelect[2],outBank[2],rsFoundNZ[2],outDataA2
   );
@@ -2737,7 +2737,7 @@ module rs(
   FU0,FU1,FU2,FU3,
   FU4,FU5,FU6,
   FU7,FU8,FU9,
-  outRsSelect[0],outBank[0],rsFound[0],outDataB0,
+  outRsSelect[0],outBank[0],rsFoundNZ[0],outDataB0,
   outRsSelect[1],outBank[1],rsFoundNZ[1],outDataB1,
   outRsSelect[2],outBank[2],rsFoundNZ[2],outDataB2
   );
