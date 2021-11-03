@@ -992,9 +992,9 @@ module missQ(
   assign write_addr_d=(~wen & ~rst) ? write_addr : 4'bz; 
   
   assign write_addr_d=rst ? 4'b0:4'bz;
-  assign count_d=~wen & ~now_flushing &~rst ? count : 5'bz;
-  assign count_d=wen & now_flushing &~rst ? count : 5'bz;
-  assign count_d=rst ? 5'b0 : 5'bz;
+//  assign count_d=~wen & ~now_flushing &~rst ? count : 5'bz;
+//  assign count_d=wen & now_flushing &~rst ? count : 5'bz;
+//  assign count_d=rst ? 5'b0 : 5'bz;
  
   
   assign {read_confl[1:0],read_mop[1],read_mop[0]}=read_dataA;
@@ -1430,8 +1430,8 @@ module missQ(
 
   //assign rdwr_match2=read_addr==write_addr_end;
   //assign rdwr_match=countF==5'd1;
-  assign flush_end=now_flushing_reg2 ? count1[2:0]!=0 && now_flushing : (countR[2:1]!=0) & now_flushing_reg & (~wen|countR[1]) || 
-	  (countR[1:0]!=0) & now_flushing & ~now_flushing_reg & ~wen;// && ~wen|countR[0];
+  assign flush_end=(now_flushing_reg2 && count0[2:0]!=0) || ((count0[2:1]!=0) & now_flushing_reg) || 
+	  ((count0[0]!=0) && now_flushing);// && ~wen|countR[0];
 //  assign flush_end=now_flushing_reg2 ? count1[2] && now_flushing : (countR[2:1]!=0) & now_flushing_reg || 
 //	  countR[1] & now_flushing & ~now_flushing_reg;// && ~wen|countR[0];
 //need to take care of case with only one flush
@@ -1497,8 +1497,8 @@ module missQ(
   
  // adder_inc #(4) read_inc_mod(read_addr,read_addr_d,doStep &~begin_flush_reg2 &~rst,);
   adder_inc #(4) write_inc_mod(write_addr,write_addr_d,wen&~rst,);
-  adder_inc #(5) count_inc_mod(count,count_d,~now_flushing & wen & ~rst);
-  adder #(5) count_dec_mod(count,5'b11111,count_d,1'b0,now_flushing & ~wen & ~rst);
+//  adder_inc #(5) count_inc_mod(count,count_d,~now_flushing & wen & ~rst);
+//  adder #(5) count_dec_mod(count,5'b11111,count_d,1'b0,now_flushing & ~wen & ~rst);
   //adder #(4) wrEndAdd_mod(write_addr,4'hf,write_addr_end_d,1'b0,1'b1);
 //  adder #(5) coundF_dec_mod(countF,5'b11111,countF_d,1'b0,1'b1); 
   adder_inc #(4) initAdd_mod(initCount,initCount_next,1'b1,);
