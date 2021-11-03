@@ -563,9 +563,6 @@ module agu_block(
   reg [63:0] p5_cmplxAddr;
   
   reg alt_bus_hold_reg;
-  reg alt_bus_hold_reg2;
-  reg alt_bus_hold_reg3;
-  reg alt_bus_hold_reg4;
   reg [36:0] alt_bus_addr_reg;
   wire [36:0] insBus_addr;
   reg  [36:0] insBus_addr_reg;
@@ -2067,14 +2064,14 @@ module agu_block(
 
   assign miss0=~FU0Hit & mOpX0_en_reg3 & ~p0_conflict_reg2 & 
     ~bus_holds_agu_reg4 & ~mOpX0_lsflag_reg3 & 
-    (mOpX0_type_reg3!=2'b10) & ~except & ~mOp0_sec_reg3 & ~alt_bus_hold_reg4;
+    (mOpX0_type_reg3!=2'b10) & ~except & ~mOp0_sec_reg3;
   assign miss1=~FU1Hit & mOpX1_en_reg3 & ~p1_conflict_reg2 & 
     ~bus_holds_agu_reg4 & ~mOpX1_lsflag_reg3 & 
-    (mOpX1_type_reg3!=2'b10) & ~except & ~mOp1_sec_reg3 & ~alt_bus_hold_reg4;
+    (mOpX1_type_reg3!=2'b10) & ~except & ~mOp1_sec_reg3;
   assign miss2=~FU2Hit & mOpX2_en_reg3 & ~p2_conflict_reg2 & 
     ~bus_holds_agu_reg4 & ~mOpX2_lsflag_reg3 & 
-    (mOpX2_type_reg3!=2'b10) & ~except & ~mOp2_sec_reg3 & ~alt_bus_hold_reg4;
-  assign miss3=~FU3Hit & mOpX3_en_reg3 & ~alt_bus_hold_reg4 & 
+    (mOpX2_type_reg3!=2'b10) & ~except & ~mOp2_sec_reg3;
+  assign miss3=~FU3Hit & mOpX3_en_reg3 & 
     ~bus_holds_agu_reg4 & ~mOpX3_lsflag_reg3 & (~except || mOpX3_register_reg3==9'h1fc);
   
   assign wr0_hit={mOpY4_hit && mOpY4_odd_o_reg3 | mOpY4_split_o_reg3,mOpY4_hit && ~mOpY4_odd_o_reg3 | mOpY4_split_o_reg3};
@@ -2938,9 +2935,6 @@ module agu_block(
       lso_xdataA_reg<=lso_xdataA;
       alt_bus_hold_reg<=alt_bus_hold;
       alt_bus_addr_reg<=alt_bus_addr;
-      alt_bus_hold_reg2<=alt_bus_hold_reg;
-      alt_bus_hold_reg3<=alt_bus_hold_reg2;
-      alt_bus_hold_reg4<=alt_bus_hold_reg3;
       
       bus_holds_agu<=insert_isData;
       bus_holds_agu_reg<=bus_holds_agu;
