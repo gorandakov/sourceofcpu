@@ -992,7 +992,10 @@ module missQ(
   assign write_addr_d=(~wen & ~rst) ? write_addr : 4'bz; 
   
   assign write_addr_d=rst ? 4'b0:4'bz;
-  
+  assign count_d=~wen & ~now_flushing &~rst ? count : 5'bz;
+  assign count_d=wen & now_flushing &~rst ? count : 5'bz;
+  assign count_d=rst ? 5'b0 : 5'bz;
+ 
   
   assign {read_confl[1:0],read_mop[1],read_mop[0]}=read_dataA;
   assign {read_confl[3:2],read_mop[3],read_mop[2]}=read_dataB;
@@ -1494,8 +1497,8 @@ module missQ(
   
  // adder_inc #(4) read_inc_mod(read_addr,read_addr_d,doStep &~begin_flush_reg2 &~rst,);
   adder_inc #(4) write_inc_mod(write_addr,write_addr_d,wen&~rst,);
-//  adder_inc #(5) count_inc_mod(count,count_d,~now_flushing & wen & ~rst);
-//  adder #(5) count_dec_mod(count,5'b11111,count_d,1'b0,now_flushing & ~wen & ~rst);
+  adder_inc #(5) count_inc_mod(count,count_d,~now_flushing & wen & ~rst);
+  adder #(5) count_dec_mod(count,5'b11111,count_d,1'b0,now_flushing & ~wen & ~rst);
   //adder #(4) wrEndAdd_mod(write_addr,4'hf,write_addr_end_d,1'b0,1'b1);
 //  adder #(5) coundF_dec_mod(countF,5'b11111,countF_d,1'b0,1'b1); 
   adder_inc #(4) initAdd_mod(initCount,initCount_next,1'b1,);
@@ -1788,13 +1791,13 @@ module missQ(
 		      valid[1]=validR[1];
 		      if (validR[0]==16'b0) pwned=1'b1;
 		      vOn_next=vOn_nextR;
-		      validR[0]=16'b0;
-		      validR[1]=16'b0;
-		      validSR[0]=16'b0;
-		      validSR[1]=16'b0;
-		      vMaskR=0;
-		      vMaskRN=0;
-	              vOn_nextR=0;
+		      //validR[0]=16'b0;
+		      //validR[1]=16'b0;
+		      //validSR[0]=16'b0;
+		      //validSR[1]=16'b0;
+		      //vMaskR=0;
+		      //vMaskRN=0;
+	              //vOn_nextR=0;
 		  end
 		  //usign    
 	     end
@@ -1804,12 +1807,20 @@ module missQ(
 	          validS[0][read_addr]=1'b0;
 	          validS[1][read_addr]=1'b0;
 		  if (now_flushing_reg2) begin
+	              validR[0][read_addr]=1'b0;
+	              validR[1][read_addr]=1'b0;
+	              validSR[0][read_addr]=1'b0;
+	              validSR[1][read_addr]=1'b0;
 		      vMask[read_addr]=1'b0;
 		      vMaskR[read_addr]=1'b0;
+		      vMaskN[read_addr]=1'b0;
+		      vMaskRN[read_addr]=1'b0;
 		  end
 	     end 
 	  end
-	  
+	  if ((vMask&vMaskN)!=0) $display("vMaskN");
+	  if ((vMaskR&vMaskRN)!=0) $display("vMaskRN");
+
           if (rst) doSkip<=1'b0;
 	  else if (doSkip_d || last_inserted) doSkip<=1'b1;
 	  else if (flush_end|~locked && ~doSkip_d) doSkip<=1'b0;
