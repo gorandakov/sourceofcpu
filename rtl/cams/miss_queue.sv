@@ -1844,11 +1844,11 @@ module missQ(
 	      begin_flush<=last_inserted_reg4;
               //else if (now_flushing && ~(wen && begin_flush_reg|begin_flush_reg2)) countF<=countF_d;
 	      if (begin_flush) now_flushing<=1'b1;
-	      else if (flush_end|pwned) now_flushing<=1'b0;
+	      else if (flush_end) now_flushing<=1'b0;
 	      begin_flush_reg<=begin_flush;
 	      begin_flush_reg2<=begin_flush_reg;
-	      now_flushing_reg<=now_flushing&~pwned&~(now_flushing_reg2&&count1[1:0]!=0);
-	      now_flushing_reg2<=now_flushing_reg&~pwned&~(now_flushing_reg2&&count1[0]);
+	      now_flushing_reg<=now_flushing;
+	      now_flushing_reg2<=now_flushing_reg;
 	      if (now_flushing_reg&pwned) $display("flX ",read_addr_d,validR[0]);
 	//      if (now_flushing_reg & ~now_flushing_reg2) now_flooshing<=1'b1;
 	//      else if (flush_end) now_flooshing<=1'b0;
