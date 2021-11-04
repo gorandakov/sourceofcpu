@@ -1609,6 +1609,12 @@ no_srch:;
 	top->heptane_core__DOT__bck_mod__DOT__FU0HitP | (top->heptane_core__DOT__bck_mod__DOT__FU1HitP<<1) |
 	(top->heptane_core__DOT__bck_mod__DOT__FU2HitP<<2) |(top->heptane_core__DOT__bck_mod__DOT__FU3HitP<<3));
     }
+    if (top->heptane_core__DOT__bck_mod__DOT__miss_pause_agu) {
+	printf("miss_pause_agu\n");
+	if (top->heptane_core__DOT__bck_mod__DOT__outEn&1) printf("outEn0\n");
+	if (top->heptane_core__DOT__bck_mod__DOT__outEn&8) printf("outEn3\n");
+	if (top->heptane_core__DOT__bck_mod__DOT__outEn&64) printf("outEn6\n");
+    }
     return rtn;
 }
 
