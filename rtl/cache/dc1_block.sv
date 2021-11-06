@@ -1715,19 +1715,19 @@ module dcache1(
           insert_exclusive_reg2<=insert_exclusive_reg;
           insert_dirty_reg2<=insert_dirty_reg;
           
-          read_invalidate_reg2<=read_invalidate_reg;
+          read_invalidate_reg2<=read_invalidate_reg;//?? remove _reg 
           
           wb_addr_reg<=wb_addr;
           wb_enOut_reg<=wb_enOut;
 
-          rdreqE0<=~read_odd0_reg | read_split0_reg && read_clkEn0_reg;
-          rdreqO0<=read_odd0_reg | read_split0_reg && read_clkEn0_reg;
-          rdreqE1<=~read_odd1_reg | read_split1_reg && read_clkEn1_reg;
-          rdreqO1<=read_odd1_reg | read_split1_reg && read_clkEn1_reg;
-          rdreqE2<=~read_odd2_reg | read_split2_reg && read_clkEn2_reg;
-          rdreqO2<=read_odd2_reg | read_split2_reg && read_clkEn2_reg;
-          rdreqE3<=~read_odd3_reg | read_split3_reg && read_clkEn3_reg;
-          rdreqO3<=read_odd3_reg | read_split3_reg && read_clkEn3_reg;
+          rdreqE0<=~read_odd0 | read_split0 && read_clkEn0;
+          rdreqO0<=read_odd0 | read_split0 && read_clkEn0;
+          rdreqE1<=~read_odd1 | read_split1 && read_clkEn1;
+          rdreqO1<=read_odd1 | read_split1 && read_clkEn1;
+          rdreqE2<=~read_odd2 | read_split2 && read_clkEn2;
+          rdreqO2<=read_odd2 | read_split2 && read_clkEn2;
+          rdreqE3<=~read_odd3 | read_split3 && read_clkEn3;
+          rdreqO3<=read_odd3 | read_split3 && read_clkEn3;
 
           wrreqE0<=~write_odd0_reg | write_split0_reg && write_clkEn0_reg;
           wrreqO0<=write_odd0_reg | write_split0_reg && write_clkEn0_reg;

@@ -1615,6 +1615,9 @@ no_srch:;
 	if (top->heptane_core__DOT__bck_mod__DOT__outEn&8) printf("outEn3\n");
 	if (top->heptane_core__DOT__bck_mod__DOT__outEn&64) printf("outEn6\n");
     }
+    if (top->heptane_core__DOT__bck_mod__DOT__dc_rdEn) {
+	printf("");
+    }
     return rtn;
 }
 
