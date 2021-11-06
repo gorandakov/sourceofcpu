@@ -2439,8 +2439,8 @@ module agu_block(
   .unlock(miss_unlock)
   );
 
-  assign alt_bus_hold=insert_isData_reg2;
-  assign alt_bus_addr=insBus_addr_reg2;
+  assign alt_bus_hold=insert_isData;
+  assign alt_bus_addr=insBus_addr;
 
   assign p0_adata[`lsaddr_addrE]=mOpX0_addrEven_reg;
   assign p0_adata[`lsaddr_addrO]=mOpX0_addrOdd_reg;
