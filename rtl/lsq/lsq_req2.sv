@@ -827,7 +827,7 @@ module lsq_req(
   wire [YDATA_WIDTH-1:0] read_dataY;
   wire [YDATA_WIDTH-1:0] write_dataY;
    
-  assign readA_rdyP=readA_clkEn0;
+  assign readA_rdyP=readA_clkEn0 && ~init;
    
   assign readA_thr=threadA[readA_addr];
  
@@ -875,8 +875,8 @@ module lsq_req(
   assign readA_enItem=read_data_shr[`lsqshare_used];
   assign readB_enItem=read_data_shrB[`lsqshare_usedB];
   
-  assign readA_rdy=(readA_flip&readA_enItem)==({6{flipA}}&readA_enItem) && enableA;
-  assign readB_rdy=(readB_flip&readB_enItem)==({6{flipB}}&readB_enItem) && enableB;
+  assign readA_rdy=(readA_flip&readA_enItem)==({6{flipA}}&readA_enItem) && enableA && ~init;
+  assign readB_rdy=(readB_flip&readB_enItem)==({6{flipB}}&readB_enItem) && enableB && ~init;
   
   assign readB_addr_d=(foundB|foundBN) ? 5'bz : write_addr_shr[4:0];
   assign readA_addr_d=(foundA|foundAN) ? 5'bz : write_addr_shr[4:0];
@@ -896,10 +896,10 @@ module lsq_req(
     read3B_enOut,
     read2B_enOut,
     read1B_enOut,
-    read0B_enOut}=up_to_first_zero(read_dataY[`lsqpend_retire] & {6{enableB&(read_dataY[`lsqpend_odd_rnd_partial]~^flipB)}} &
+    read0B_enOut}=up_to_first_zero(read_dataY[`lsqpend_retire] & {6{~init&enableB&(read_dataY[`lsqpend_odd_rnd_partial]~^flipB)}} &
     ((readB_flip ^~ {6{flipB}})|~readB_enItem|read_dataY[`lsqpend_pconfl])) & readB_enItem & ~read_dataY[`lsqpend_pconfl]; 
     
-  assign readA_enItemP=up_to_first_zero((readA_flip ^~ {6{flipA}})&readA_enItem&{6{enableA}});
+  assign readA_enItemP=up_to_first_zero((readA_flip ^~ {6{flipA}})&readA_enItem&{6{enableA&~init}});
   assign {read5A_enOut,read4A_enOut,read3A_enOut,read2A_enOut,read1A_enOut,read0A_enOut}=readA_enItemP;
 
   assign write_dataY[`lsqpend_retire]=readA_enItemP_reg;
