@@ -643,24 +643,24 @@ module lsq_req(
   input rsEn0,rsEn1,rsEn2,rsEn3;
   
   reg [ADDR_COUNT-1:0]  validA;
-  reg [ADDR_COUNT-1:0] validB;
+  reg [2*ADDR_COUNT-1:0] validB;
   reg [ADDR_COUNT-1:0]  validA_next;
-  reg [ADDR_COUNT-1:0] validB_next;
+  reg [2*ADDR_COUNT-1:0] validB_next;
 
   reg [ADDR_COUNT-1:0]  threadA;
-  reg [ADDR_COUNT-1:0] threadB;
+  reg [2*ADDR_COUNT-1:0] threadB;
   reg [ADDR_COUNT-1:0]  threadA_next;
-  reg [ADDR_COUNT-1:0] threadB_next;
+  reg [2*ADDR_COUNT-1:0] threadB_next;
   
   reg [ADDR_WIDTH-1:0] readA_addr;
-  reg [ADDR_WIDTH-1:0] readB_addr;
+  reg [ADDR_WIDTH:0] readB_addr;
   reg [ADDR_WIDTH-1:0] readA_addr_reg;
-  wire [ADDR_COUNT-1:0] firstB;
-  reg [ADDR_COUNT-1:0] curB;
+  wire [2*ADDR_COUNT-1:0] firstB;
+  reg [2*ADDR_COUNT-1:0] curB;
   wire foundB;
-  wire [ADDR_COUNT-1:0] firstBN;
+  wire [2*ADDR_COUNT-1:0] firstBN;
   wire foundBN;
-  wire [ADDR_WIDTH-1:0] readB_addr_d;
+  wire [ADDR_WIDTH:0] readB_addr_d;
   reg onSameValidB;
   wire [ADDR_COUNT-1:0] firstA;
   reg [ADDR_COUNT-1:0] curA;
@@ -878,7 +878,7 @@ module lsq_req(
   assign readA_rdy=(readA_flip&readA_enItem)==({6{flipA}}&readA_enItem) && enableA && ~init;
   assign readB_rdy=(readB_flip&readB_enItem)==({6{flipB}}&readB_enItem) && enableB && ~init;
   
-  assign readB_addr_d=(foundB|foundBN) ? 5'bz : write_addr_shr[4:0];
+  assign readB_addr_d=(foundB|foundBN) ? 6'bz : write_addr_shr;
   assign readA_addr_d=(foundA|foundAN) ? 5'bz : write_addr_shr[4:0];
   
  
@@ -957,7 +957,7 @@ module lsq_req(
   generate
       genvar k;
       for(k=0;k<32;k=k+1) begin : addrB_gen
-          assign readB_addr_d=(firstB[k] || ~foundB & firstBN[k]) ? k : 5'bz;
+          assign readB_addr_d=(firstB[k] || firstB[k+32] || ~foundB & firstBN[k]) ? {~firstB[k],k} : 6'bz;
           assign readA_addr_d=(firstA[k] || ~foundA & firstAN[k]) ? k : 5'bz;
       end
   endgenerate
@@ -976,12 +976,12 @@ module lsq_req(
   read5A_data,
 
 
-  init ? {initCount,3'd0} : write0_addr[7:0],write0_data|{DATA_WIDTH{init}},rsEn0 || init,
-  init ? {initCount,3'd1} : write1_addr[7:0],write1_data|{DATA_WIDTH{init}},rsEn1 || init,
-  init ? {initCount,3'd2} : write2_addr[7:0],write2_data|{DATA_WIDTH{init}},rsEn2 || init,
-  init ? {initCount,3'd3} : write3_addr[7:0],write3_data|{DATA_WIDTH{init}},rsEn3 || init,
-  init ? {initCount,3'd4} : write4_addr[7:0],write4_data|{DATA_WIDTH{init}},write4_wen ||init,
-  init ? {initCount,3'd5} : write5_addr[7:0],write5_data|{DATA_WIDTH{init}},write5_wen ||init,
+  init ? {initCount[4:0],3'd0} : write0_addr[7:0],write0_data|{DATA_WIDTH{init}},rsEn0 || init,
+  init ? {initCount[4:0],3'd1} : write1_addr[7:0],write1_data|{DATA_WIDTH{init}},rsEn1 || init,
+  init ? {initCount[4:0],3'd2} : write2_addr[7:0],write2_data|{DATA_WIDTH{init}},rsEn2 || init,
+  init ? {initCount[4:0],3'd3} : write3_addr[7:0],write3_data|{DATA_WIDTH{init}},rsEn3 || init,
+  init ? {initCount[4:0],3'd4} : write4_addr[7:0],write4_data|{DATA_WIDTH{init}},write4_wen ||init,
+  init ? {initCount[4:0],3'd5} : write5_addr[7:0],write5_data|{DATA_WIDTH{init}},write5_wen ||init,
   write_addr_shr[4:0],{DATA_WIDTH{~write_addr_shr[5]}},write_wen_shr&~doStall&~stall&~init&~except
   );
 
@@ -999,13 +999,13 @@ module lsq_req(
   read5B_xdata,
 
 
-  init ? {initCount,3'd0} : write0_addr_reg2[7:0],{write0_addr_reg2[8],smpc0,write0_xdata_reg2}|{XDATA_WIDTH{init}},write0_wen_reg2 & FU0Hit || init,
-  init ? {initCount,3'd1} : write1_addr_reg2[7:0],{write1_addr_reg2[8],smpc1,write1_xdata_reg2}|{XDATA_WIDTH{init}},write1_wen_reg2 & FU1Hit || init,
-  init ? {initCount,3'd2} : write2_addr_reg2[7:0],{write2_addr_reg2[8],smpc2,write2_xdata_reg2}|{XDATA_WIDTH{init}},write2_wen_reg2 & FU2Hit || init,
-  init ? {initCount,3'd3} : write3_addr_reg2[7:0],{write3_addr_reg2[8],smpc3,write3_xdata_reg2}|{XDATA_WIDTH{init}},write3_wen_reg2 & FU3Hit || init,
-  init ? {initCount,3'd4} : write4_addr_REG4[7:0],{write4_addr_REG4[8],1'b0,write4_xdata_REG4}|{XDATA_WIDTH{init}},write4_wen_REG4 || init,
-  init ? {initCount,3'd5} : write5_addr_REG4[7:0],{write5_addr_REG4[8],1'b0,write5_xdata_REG4}|{XDATA_WIDTH{init}},write5_wen_REG4 || init,
-  write_addr_shr[4:0],{XDATA_WIDTH{~write_addr_shr[5]}},write_wen_shr&~doStall&~stall&~init&~except
+  init ? {initCount,3'd0} : write0_addr_reg2[8:0],{write0_addr_reg2[8],smpc0,write0_xdata_reg2}|{XDATA_WIDTH{init}},write0_wen_reg2 & FU0Hit || init,
+  init ? {initCount,3'd1} : write1_addr_reg2[8:0],{write1_addr_reg2[8],smpc1,write1_xdata_reg2}|{XDATA_WIDTH{init}},write1_wen_reg2 & FU1Hit || init,
+  init ? {initCount,3'd2} : write2_addr_reg2[8:0],{write2_addr_reg2[8],smpc2,write2_xdata_reg2}|{XDATA_WIDTH{init}},write2_wen_reg2 & FU2Hit || init,
+  init ? {initCount,3'd3} : write3_addr_reg2[8:0],{write3_addr_reg2[8],smpc3,write3_xdata_reg2}|{XDATA_WIDTH{init}},write3_wen_reg2 & FU3Hit || init,
+  init ? {initCount,3'd4} : write4_addr_REG4[8:0],{write4_addr_REG4[8],1'b0,write4_xdata_REG4}|{XDATA_WIDTH{init}},write4_wen_REG4 || init,
+  init ? {initCount,3'd5} : write5_addr_REG4[8:0],{write5_addr_REG4[8],1'b0,write5_xdata_REG4}|{XDATA_WIDTH{init}},write5_wen_REG4 || init,
+  write_addr_shr,{XDATA_WIDTH{~write_addr_shr[5]}},write_wen_shr&~doStall&~stall&~init&~except
   );
 
   lsq_pend_ram pend_mod(
@@ -1017,7 +1017,7 @@ module lsq_req(
   init ? initCount : readA_addr_reg,
   write_dataY|{YDATA_WIDTH{init}},
   readA_clkEn_reg||readA_clkEn0_reg||init,
-  write_addr_shr[4:0],{YDATA_WIDTH{~write_addr_shr[5]}},write_wen_shr&~doStall&~stall&~init&~except
+  write_addr_shr,{YDATA_WIDTH{~write_addr_shr[5]}},write_wen_shr&~doStall&~stall&~init&~except
   );
   
   lsq_shared_ram shrA_mod(
@@ -1026,7 +1026,7 @@ module lsq_req(
   readA_clkEn | reenabA,
   readA_addr_d,
   read_data_shr_ram,
-  init ? initCount : write_addr_shr[4:0],
+  init ? initCount[4:0] : write_addr_shr[4:0],
   write_data_shr|{SDATA_WIDTH{init}},
   write_wen_shr&~doStall&~stall&~except||init
   );
@@ -1037,15 +1037,15 @@ module lsq_req(
   readB_clkEn | reenabB,
   readB_addr_d,
   read_data_shrB_ram,
-  init ? initCount : write_addr_shr[4:0],
+  init ? initCount : write_addr_shr,
   write_data_shr|{SDATA_WIDTH{init}},
   write_wen_shr&~doStall&~stall&~except||init
   );
   
-  bit_find_first_bit #(ADDR_COUNT) lastB_mod(validB&~curB,firstB,foundB);
+  bit_find_first_bit #(2*ADDR_COUNT) lastB_mod(validB&~curB,firstB,foundB);
   bit_find_first_bit #(ADDR_COUNT) lastA_mod(validA&~curA,firstA,foundA);
 
-  bit_find_first_bit #(ADDR_COUNT) lastBN_mod(validB_next,firstBN,foundBN);
+  bit_find_first_bit #(2*ADDR_COUNT) lastBN_mod(validB_next,firstBN,foundBN);
   bit_find_first_bit #(ADDR_COUNT) lastAN_mod(validA_next,firstAN,foundAN);
 
 //  get_carry #(5) onNextCmpB_mod(write_addr_shr[4:0],~readB_addr,1'b1,onSameValidB0);
@@ -1053,7 +1053,7 @@ module lsq_req(
   
   adder_inc #(6) wrAdd_mod(write_addr_shr,write_addr_shr_next,1'b1,);
 
-  adder_inc #(5) initAdd_mod(initCount,initCount_next,1'b1,);
+  adder_inc #(6) initAdd_mod(initCount,initCount_next,1'b1,);
 
   always @(posedge clk) begin
       if (&read0A_data && read0A_enOut) $display("SS0");
@@ -1318,14 +1318,14 @@ module lsq_req(
       end
 
       if (rst) begin
-          validB=32'b0;
-          validB_next=32'b0;
+          validB=64'b0;
+          validB_next=64'b0;
 
           validA=32'b0;
           validA_next=32'b0;
 
-          curA=32'b0;
-          curB=32'b0;
+          curA=64'b0;
+          curB=64'b0;
 
 	  write0_addr_reg<={ADDR2_WIDTH{1'B0}};
 	  write1_addr_reg<={ADDR2_WIDTH{1'B0}};
@@ -1371,9 +1371,9 @@ module lsq_req(
 	  readA_rdy_reg<=1'b0;
 	  write_addr_shr<=6'd0;
 	  threadA<=32'b0;
-	  threadB<=32'b0;
+	  threadB<=64'b0;
 	  threadA_next<=32'b0;
-	  threadB_next<=32'b0;
+	  threadB_next<=64'b0;
 	  readA_addr<=5'd0;
 	  readB_addr<=5'd0;
 	  readA_addr_reg<=5'd0;
@@ -1401,10 +1401,11 @@ module lsq_req(
               curB=firstB;
           end else if (readB_clkEn) begin //no new entries
               validB=validB & ~curB;
-              curB=32'b0;
+	      if (readB_addr_d[5]) flipB<=~flipB;
+              curB=64'b0;
               if (~onSameValidB) begin
                   validB=validB_next;
-                  validB_next=32'b0;
+                  validB_next=64'b0;
                   //threadB<=threadB_next;
                   flipB<=~flipB;
                   onSameValidB<=1'b1;
@@ -1433,7 +1434,7 @@ module lsq_req(
               if (validA!=0 && write_addr_shr[4:0]==5'd0) begin
                   onSameValidA<=1'b0;
               end
-              if (validB!=0 && write_addr_shr[4:0]==5'd0) begin
+              if (validB!=0 && write_addr_shr==6'd0) begin
                   onSameValidB<=1'b0;
               end
 
@@ -1443,16 +1444,16 @@ module lsq_req(
                   validA[write_addr_shr[4:0]]=1'b1;
               end
               
-              if ((validB!=0 && write_addr_shr[4:0]==5'd0)||~onSameValidB&~reenabB&~(readB_clkEn & ~foundB)) begin
-                  validB_next[write_addr_shr[4:0]]=1'b1;
+              if ((validB!=0 && write_addr_shr==6'd0)||~onSameValidB&~reenabB&~(readB_clkEn & ~foundB)) begin
+                  validB_next[write_addr_shr]=1'b1;
               end else begin
-                  validB[write_addr_shr[4:0]]=1'b1;
+                  validB[write_addr_shr]=1'b1;
               end
 
-              threadB[write_addr_shr[4:0]]<=write_thread_shr;
+              threadB[write_addr_shr]<=write_thread_shr;
               threadA[write_addr_shr[4:0]]<=write_thread_shr;
 
-              if (curA==0) curA[write_addr_shr[4:0]]=1'b1;
+              if (curA==0) curA[write_addr_shr]=1'b1;
               if (curB==0) curB[write_addr_shr[4:0]]=1'b1;
 
 
@@ -1466,13 +1467,13 @@ module lsq_req(
 //	      toflipA<=1'b0;
 //	      toflipB<=1'b0;
               validA=32'b0;
-	      validB=32'b0;
+	      validB=64'b0;
 	      validA_next=32'b0;
-	      validB_next=32'b0;
+	      validB_next=64'b0;
               curA=32'b0;
               exceptA_fix<=1'b0;
               flipA<=write_addr_shr[5];
-              curB=32'b0;
+              curB=64'b0;
               exceptB_fix<=1'b0;
               flipB<=write_addr_shr[5];
               onSameValidA<=1'b1;
