@@ -386,6 +386,7 @@ module frontend1(
   wire [3:0][43:1] jmp_tpar0;
   wire [3:0][43:1] jmp_tpar1;
   wire [3:0][63:1] jdec_target;
+  wire [3:0][2:0] jdec_sec;
   wire [3:0][3:0] jmp_mask;
   reg [3:0] jmp_mask_reg[3:0];
   reg [3:0] jmp_mask_reg2[3:0];
@@ -707,10 +708,13 @@ module frontend1(
           
           assign btbx_joff[k]=btb_joff[k]; 
           
-          adder_CSA #(43) cs1_mod({cc_read_IP_reg3[43:5],jmp_off_reg[k]},{39'b0,jmp_moff_reg[k]},jdec_const_reg[k][43:1], {par0,jmp_par0[k]}, {par1,jmp_par1[k]});
-          adder #(43) add1_mod(jmp_par0[k], jmp_par1[k],jdec_target[k][43:1],1'b0,1'b1,,,,);
-	  assign jdec_target[k][63:44]=cc_read_IP_reg3[63:44];
-          
+          //adder_CSA #(43) cs1_mod({cc_read_IP_reg3[43:5],jmp_off_reg[k]},{39'b0,jmp_moff_reg[k]},jdec_const_reg[k][43:1], {par0,jmp_par0[k]}, {par1,jmp_par1[k]});
+          //adder #(43) add1_mod(jmp_par0[k], jmp_par1[k],jdec_target[k][43:1],1'b0,1'b1,,,,);
+	  //assign jdec_target[k][63:44]=cc_read_IP_reg3[63:44];
+          add_agu add1_mod(.a({cc_read_IP_reg3[63:5],jmp_off_reg[k],1'b0}},.b({59'b0,jmp_moff_reg[k],1'b0}),
+	      .c({20'b0,jdec_const_reg[k][43:1],1'b0}),.out({jdec_target[k],par0}),.cout_sec(jdec_sec[k]),.ndiff(),.en(1'b1),
+	      .shift(4'h1));
+ 
           jump_decoder jdec_mod(
           .clk(clk),
           .rst(rst),
