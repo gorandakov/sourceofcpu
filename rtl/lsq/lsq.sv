@@ -338,14 +338,14 @@ module lsq_decide_ret(
             retire_exbitsx6[4*t+:4]<=dataB_ebits_item[t];
 	    if (doRetire | ret_ret) dataB_II_reg<=dataB_II;
 	    if (doRetire | ret_ret) dataB_shr_out<=dataB_data_shr;
-	    if (doRetire && ret_ret|(dataB_II==dataB_II_reg)) /*$$*/begin
+	    /*if (doRetire && ret_ret|(dataB_II==dataB_II_reg)) /-*$$*-/begin
                 retire_enOutP[t]<=1'b0;
 	        retire_fine[t]<=1'b0;
 	        retire_ldconfl[t]<=1'b0;
 	        retire_waitconfl[t]<=1'b0;
 	        retire_except[t]<= 1'b0;
                 retire_exbitsx6[4*t+:4]<=4'b0;
-	    end
+	    end*/
 	    ret_ret<=1'b0;
 	end 
 	if (~bStall) begin
