@@ -2765,6 +2765,11 @@ module agu_block(
       mOp1_sec_reg3<=mOp1_sec_reg2;
       mOp2_sec_reg3<=mOp2_sec_reg2;
 
+      mOp0_rsEn_reg<=mOp0_rsEn;
+      mOp1_rsEn_reg<=mOp1_rsEn;
+      mOp2_rsEn_reg<=mOp2_rsEn;
+      mOp3_rsEn_reg<=mOp3_rsEn;
+
       mOpX0_en_reg     <=mOpX0_en;
       mOpX0_lsflag_reg <=mOpX0_lsflag;
       mOpX0_type_reg   <=mOpX0_type;
