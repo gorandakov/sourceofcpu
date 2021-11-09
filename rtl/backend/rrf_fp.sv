@@ -119,6 +119,9 @@ module rrfF(
   write3_addr,write3_data,write3_wen,
   write4_addr,write4_data,write4_wen,
   write5_addr,write5_data,write5_wen,
+  write6_addr,write6_data,write6_wen,
+  write7_addr,write7_data,write7_wen,
+  write8_addr,write8_data,write8_wen,
   read_thread,
   write_thread
   );
@@ -163,6 +166,15 @@ module rrfF(
   input [ADDR_WIDTH-1:0] write5_addr;
   input [DATA_WIDTH-1:0] write5_data;
   input                  write5_wen;
+  input [ADDR_WIDTH-1:0] write6_addr;
+  input [DATA_WIDTH-1:0] write6_data;
+  input                  write6_wen;
+  input [ADDR_WIDTH-1:0] write7_addr;
+  input [DATA_WIDTH-1:0] write7_data;
+  input                  write7_wen;
+  input [ADDR_WIDTH-1:0] write8_addr;
+  input [DATA_WIDTH-1:0] write8_data;
+  input                  write9_wen;
   
   input read_thread;
   input write_thread;
@@ -173,6 +185,25 @@ module rrfF(
   reg [ADDR_WIDTH-1:0] read3_addr_reg;
   
   reg read_thread_reg;
+  
+  wire [ADDR_WIDTH-1:0] write0P_addr;
+  wire [DATA_WIDTH-1:0] write0P_data;
+  wire                  write0P_wen;
+  wire [ADDR_WIDTH-1:0] write1P_addr;
+  wire [DATA_WIDTH-1:0] write1P_data;
+  wire                  write1P_wen;
+  wire [ADDR_WIDTH-1:0] write2P_addr;
+  wire [DATA_WIDTH-1:0] write2P_data;
+  wire                  write2P_wen;
+  wire [ADDR_WIDTH-1:0] write3P_addr;
+  wire [DATA_WIDTH-1:0] write3P_data;
+  wire                  write3P_wen;
+  wire [ADDR_WIDTH-1:0] write4P_addr;
+  wire [DATA_WIDTH-1:0] write4P_data;
+  wire                  write4P_wen;
+  wire [ADDR_WIDTH-1:0] write5P_addr;
+  wire [DATA_WIDTH-1:0] write5P_data;
+  wire                  write5P_wen;
 
 /*  wire [DATA_WIDTH-1:0] read0_data_ram;
   wire [DATA_WIDTH-1:0] read1_data_ram;
