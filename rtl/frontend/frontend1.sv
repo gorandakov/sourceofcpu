@@ -178,6 +178,7 @@ module frontend1(
  // reg [47:0] cc_read_IP_REG4;
   reg  [63:0] cc_base_IP;
   wire [63:0] cc_base_IP_d;
+  wire [8:0] cc_base_dummy9;
   wire cc_base_tick;
   wire [3:0] cc_base_off;
   reg [3:0] cc_base_off_reg;
@@ -1208,8 +1209,10 @@ module frontend1(
   get_carry #(4) btbL3NoffCmpCC(btb_jlnpos3[3:0],~cc_read_IP[4:1],1'b1,btb_jlnin3);
   
   adder #(5) baseTick_mod(cc_read_IP[9:5],~cc_base_IP[9:5],{cc_base_tick,cc_base_off},1'b1,do_seq_reg,,,,);
-  adder_inc #(35) baseInc_mod(cc_base_IP[43:9],cc_base_IP_d[43:9],do_seq_reg & cc_base_tick,);
-  
+ // adder_inc #(35) baseInc_mod(cc_base_IP[43:9],cc_base_IP_d[43:9],do_seq_reg & cc_base_tick,);
+  add_agu(.a({1'b1,cc_base_IP[63:9],9'b0),.b(65'b0),.c(44'b1000000000),.out({cc_base_IP_d[63:9],cc_base_dummy9}),
+      .cout_sec(cc_base_sec),.ndiff(),.en(do_seq_reg && cc_base_tick),.shift(4'h1));
+ 
   tbuf tbuf_mod(
   .clk(clk),
   .rst(rst),
@@ -1690,7 +1693,7 @@ module frontend1(
 	  predx_sc1_reg4<=2'b0;
 	  predx_sc2_reg4<=2'b0;
 	  predx_sc3_reg4<=2'b0;
-	  cc_base_IP<={20'hf80fe,44'b0};
+	  cc_base_IP<={20'hf80ff,44'b0};
 	  taken_REG<=4'b0;
 	  btbx_jmask_REG<=4'b0;
 	  miss_now_reg<=1'b0;
