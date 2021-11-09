@@ -218,8 +218,8 @@ module lsq_ex_ram(
   );
 
   parameter DATA_WIDTH=`lsqxcept_width;
-  localparam ADDR_WIDTH=5;
-  localparam ADDR_COUNT=32;
+  localparam ADDR_WIDTH=6;
+  localparam ADDR_COUNT=64;
   
   input clk;
   input rst;
@@ -315,9 +315,9 @@ module lsq_ex_block(
   );
 
   parameter DATA_WIDTH=`lsqxcept_width;
-  localparam ADDR_WIDTH=5;
-  localparam ADDR_COUNT=32;
-  localparam ADDR2_WIDTH=8;
+  localparam ADDR_WIDTH=6;
+  localparam ADDR_COUNT=64;
+  localparam ADDR2_WIDTH=9;
   
   input clk;
   input rst;
@@ -381,12 +381,12 @@ module lsq_ex_block(
 
           read_addr,read_data[k],read_clkEn,
 
-          write0_addr[7:3],write0_data,write0_wen && write0_addr[2:0]==k,
-          write1_addr[7:3],write1_data,write1_wen && write1_addr[2:0]==k,
-          write2_addr[7:3],write2_data,write2_wen && write2_addr[2:0]==k,
-          write3_addr[7:3],write3_data,write3_wen && write3_addr[2:0]==k,
-          write4_addr[7:3],write4_data,write4_wen && write4_addr[2:0]==k,
-          write5_addr[7:3],write5_data,write5_wen && write5_addr[2:0]==k,
+          write0_addr[8:3],write0_data,write0_wen && write0_addr[2:0]==k,
+          write1_addr[8:3],write1_data,write1_wen && write1_addr[2:0]==k,
+          write2_addr[8:3],write2_data,write2_wen && write2_addr[2:0]==k,
+          write3_addr[8:3],write3_data,write3_wen && write3_addr[2:0]==k,
+          write4_addr[8:3],write4_data,write4_wen && write4_addr[2:0]==k,
+          write5_addr[8:3],write5_data,write5_wen && write5_addr[2:0]==k,
           write6_addr,write6_data,write6_wen
           );
       end
@@ -439,6 +439,45 @@ module lsq_shared_ram(
 
 endmodule
 
+module lsq_sharedB_ram(
+  clk,
+  rst,
+  read_clkEn,
+  read_addr,
+  read_data,
+  write_addr,
+  write_data,
+  write_wen
+  );
+
+  localparam DATA_WIDTH=`lsqshare_width;
+  localparam ADDR_WIDTH=6;
+  localparam ADDR_COUNT=64;
+
+  input clk;
+  input rst;
+  input read_clkEn;
+  input [ADDR_WIDTH-1:0] read_addr;
+  output [DATA_WIDTH-1:0] read_data;
+  input [ADDR_WIDTH-1:0] write_addr;
+  input [DATA_WIDTH-1:0] write_data;
+  input write_wen;
+
+  reg [DATA_WIDTH-1:0] ram [ADDR_COUNT-1:0];
+  reg [ADDR_WIDTH-1:0] read_addr_reg;
+  
+  assign read_data=ram[read_addr_reg];
+
+  always @(posedge clk)
+    begin
+      if (rst) read_addr_reg<={ADDR_WIDTH{1'b0}};
+      else if (read_clkEn) read_addr_reg<=read_addr;
+      if (write_wen) ram[write_addr]<=write_data;
+    end
+
+endmodule
+
+
 
 module lsq_pend_ram(
   clk,
@@ -455,8 +494,8 @@ module lsq_pend_ram(
   );
 
   localparam DATA_WIDTH=`lsqpend_width;
-  localparam ADDR_WIDTH=5;
-  localparam ADDR_COUNT=32;
+  localparam ADDR_WIDTH=6;
+  localparam ADDR_COUNT=64;
 
   input clk;
   input rst;
@@ -1031,7 +1070,7 @@ module lsq_req(
   write_wen_shr&~doStall&~stall&~except||init
   );
 
-  lsq_shared_ram shrB_mod(
+  lsq_sharedB_ram shrB_mod(
   clk,
   rst,
   readB_clkEn | reenabB,
