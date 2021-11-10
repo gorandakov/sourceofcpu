@@ -1603,7 +1603,7 @@ module dcache1(
               read_sz_reg[v]<=read_sz[v];
        //verilator lint_off CASEINCOMPLETE
 
-              case(read_sz_reg[v])
+              case(read_sz[v])
          5'd16: mskdata1[v]<=6'b00000;
          5'd17: mskdata1[v]<=6'b00001;
          5'd18: mskdata1[v]<=6'b00011;
