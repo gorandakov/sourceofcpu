@@ -950,9 +950,9 @@ module ldq(
   assign chkL1_en=(chk_data_shr[`lsqshare_wrt1]==3'd7) ? 1'B0 : 1'bz; 
   assign chkL2_en=(chk_data_shr[`lsqshare_wrt2]==3'd7) ? 1'B0 : 1'bz; 
  
-  assign chkL0_mask=(chk_data_shr[`lsqshare_wrt0]==3'd7) ? 6'B111111 : 6'bz; 
-  assign chkL1_mask=(chk_data_shr[`lsqshare_wrt1]==3'd7) ? 6'B111111 : 6'bz; 
-  assign chkL2_mask=(chk_data_shr[`lsqshare_wrt2]==3'd7) ? 6'B111111 : 6'bz; 
+  assign chkL0_mask=(chk_data_shr[`lsqshare_wrt0]==3'd7) ? 6'B0 : 6'bz; 
+  assign chkL1_mask=(chk_data_shr[`lsqshare_wrt1]==3'd7) ? 6'B0 : 6'bz; 
+  assign chkL2_mask=(chk_data_shr[`lsqshare_wrt2]==3'd7) ? 6'B0 : 6'bz; 
 
   assign new3_reg_low=new_data[3][`lsaddr_reg_low];
 
