@@ -292,7 +292,8 @@ module smallInstr_decoder(
  
   assign reor_en_out=isFPUreor&&~reor_error;
   assign reor_val_out=instr[31:8];
- 
+  assign thisSpecLoad=isBaseSpecLoad || isBaseIndexSpecLoad || ({magic[1:0]==2'b01 && instr[16],instr[15:12]}==REG_SP && 
+      opcode_main[7:0]==8'b10110000);
   assign subIsBasicALU=opcode_sub[5:4]==2'b0 || opcode_sub[5:2]==4'b0100;
   assign subIsBasicShift=~opcode_sub[5] && ~subIsBasicALU && opcode_sub[0];
   assign subIsFPUE=opcode_sub==6'b010100 && ~magic[0]; 
@@ -463,7 +464,7 @@ module smallInstr_decoder(
 	      assign kuseRs=trien[p*8+q] ? puseRs[p*8+q] : 1'bz;
 	      assign krAlloc=trien[p*8+q] ? prAlloc[p*8+q] : 1'bz;
 	      assign kuseBConst=trien[p*8+q] ? puseBConst[p*8+q] : 1'bz;
-	      assign kthisSpecLoad=trien[p*8+q] ? pthisSpecLoad[p*8+q] : 1'bz;
+//	      assign kthisSpecLoad=trien[p*8+q] ? pthisSpecLoad[p*8+q] : 1'bz;
 	      assign kisIPRel=trien[p*8+q] ? pisIPRel[p*8+q] : 1'bz;
 	      assign kflags_use=trien[p*8+q] ? pflags_use[p*8+q] : 1'bz;
 	      assign kflags_write=trien[p*8+q] ? pflags_write[p*8+q] : 1'bz;
@@ -495,7 +496,7 @@ module smallInstr_decoder(
 	  assign kuseRs=(~|trien[p*8+:8]) ? 1'b0 : 1'bz;
 	  assign krAlloc=(~|trien[p*8+:8]) ? 1'b0 : 1'bz;
 	  assign kuseBConst=(~|trien[p*8+:8]) ? 1'b0 : 1'bz;
-	  assign kthisSpecLoad=(~|trien[p*8+:8]) ? 1'b0 : 1'bz;
+//	  assign kthisSpecLoad=(~|trien[p*8+:8]) ? 1'b0 : 1'bz;
 	  assign kisIPRel=(~|trien[p*8+:8]) ? 1'b0 : 1'bz;
 	  assign kflags_use=(~|trien[p*8+:8]) ? 1'b0 : 1'bz;
 	  assign kflags_write=(~|trien[p*8+:8]) ? 1'b0 : 1'bz;
@@ -574,9 +575,6 @@ module smallInstr_decoder(
   assign jumpType=(~|trien) ? 5'b10000 : 5'bz;
   assign operation=(~|trien) ? 13'hff : 13'bz;
   
-  assign thisSpecLoad=isBaseSpecLoad | isBaseIndexSpecLoad | (~opcode_main[0] &&
-    opcode_main[7:1]==7'b1011000 && ~instr[10] && instr[15:12]==REG_SP && 
-    (magic[1:0]!=2'b01 || ~instr[16]));
  
   always @(posedge clk) begin
     if (rst) fpu_reor<=32'b111110101100011010001000;
