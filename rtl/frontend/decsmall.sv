@@ -293,7 +293,7 @@ module smallInstr_decoder(
   assign reor_en_out=isFPUreor&&~reor_error;
   assign reor_val_out=instr[31:8];
   assign thisSpecLoad=isBaseSpecLoad || isBaseIndexSpecLoad || ({magic[1:0]==2'b01 && instr[16],instr[15:12]}==REG_SP && 
-      opcode_main[7:0]==8'b10110000);
+      opcode_main[7:0]==8'b10110000 && !instr[10]);
   assign subIsBasicALU=opcode_sub[5:4]==2'b0 || opcode_sub[5:2]==4'b0100;
   assign subIsBasicShift=~opcode_sub[5] && ~subIsBasicALU && opcode_sub[0];
   assign subIsFPUE=opcode_sub==6'b010100 && ~magic[0]; 
@@ -1236,8 +1236,8 @@ module smallInstr_decoder(
       if (opcode_main[0]) begin
           if (magic[1:0]==2'b01) prC[19]=instr[16:12];
           else prC[19]={freg_vf({instr[11:8],1'b0},opcode_main[7:1]!=7'b1011000),instr[15:12]};
-          if (prT[19]==REG_SP && opcode_main[7:0]==8'b10110001) begin
-              prT[19]=5'd16;
+          if (prC[19]==REG_SP && opcode_main[7:0]==8'b10110001) begin
+              prC[19]=5'd16;
           end
        //   if (prevSpecAlu) rC=6'd16;
       end else begin
