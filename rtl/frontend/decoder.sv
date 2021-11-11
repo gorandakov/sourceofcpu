@@ -2513,7 +2513,7 @@ module decoder(
           adder #(9) srcAddA5_mod({afterTick[k],dec_srcIPOff[k]},9'd5,dec_srcIPOffA[k],1'b0,dec_magic[k][3:0]==4'b1111,,,,);
 
           
-          adder #(33) srcXAdd_mod({23'b0,dec_srcIPOffA_reg[k],1'b0},{dec_constant_reg[k][31],dec_constant_reg[k][31:0]},dec_srcIPOffx[k],1'b0, 1'b1,,,,);
+          adder #(33) srcXAdd_mod({24'b0,dec_srcIPOffA_reg[k]},{dec_constant_reg[k][31],dec_constant_reg[k][31:0]},dec_srcIPOffx[k],1'b0, 1'b1,,,,);
 
 	  popcnt10 jpop_mod(cls_jump_reg&iUsed_reg,{dummy8_1,btbl_step});
 	  adder #(43) csrAdd_mod({34'b0,dec_srcIPOffA_reg[k]},baseIP[42:0],csrss_retIP_data[43:1],1'b0,csrss_retIP_en_reg[k],,,,);
