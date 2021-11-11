@@ -1566,7 +1566,7 @@ module dcache1(
           write_dupl0<=write_dupl0P_reg;
           write_dupl1<=write_dupl1P_reg;
 
-          read_clkEnAny<=|{read_clkEn0_reg,read_clkEn1_reg,read_clkEn2_reg,read_clkEn3_reg};
+          read_clkEnAny<=|{read_clkEn0,read_clkEn1,read_clkEn2,read_clkEn3};
           
           write_clear_reg<=write_clear;
           
