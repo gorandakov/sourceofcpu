@@ -566,7 +566,7 @@ addie:
 	    if (has_mem_) {
 		(this-1)->gen_mem(NULL,4,mem,memp,addr);
 		rB=16;
-		B=(this-1)->res;
+		B0x=B=(this-1)->res;
 		B_p=(this-1)->res_p;
 		snprintf(asmtext,sizeof (asmtext), "addl %li(%rip), %%%s, %%%s\n",MEMRGN_DATA+addr,reg32[rA],reg32[rT]);
 	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"addl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
@@ -616,7 +616,7 @@ addie:
 	    if (has_mem_) {
 		(this-1)->gen_mem(NULL,4,mem,memp,addr);
 		rB=16;
-		B=(this-1)->res;
+		B0x=B=(this-1)->res;
 		B_p=(this-1)->res_p;
 		snprintf(asmtext,sizeof (asmtext), "subl %li(%rip), %%%s, %%%s\n",MEMRGN_DATA+addr,reg32[rA],reg32[rT]);
 	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"subl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
@@ -661,7 +661,7 @@ addie:
 	    if (has_mem_) {
 		(this-1)->gen_mem(NULL,4,mem,memp,addr);
 		rB=16;
-		B=(this-1)->res;
+		B0x=B=(this-1)->res;
 		B_p=(this-1)->res_p;
 		snprintf(asmtext,sizeof (asmtext), "andl %li(%rip), %%%s, %%%s\n",MEMRGN_DATA+addr,reg32[rA],reg32[rT]);
 	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"andl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
@@ -704,7 +704,7 @@ addie:
 	    if (has_mem_) {
 		(this-1)->gen_mem(NULL,4,mem,memp,addr);
 		rB=16;
-		B=(this-1)->res;
+		B0x=B=(this-1)->res;
 		B_p=(this-1)->res_p;
 		snprintf(asmtext,sizeof (asmtext), "orl %li(%rip), %%%s, %%%s\n",MEMRGN_DATA+addr,reg32[rA],reg32[rT]);
 	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"orl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
@@ -747,7 +747,7 @@ addie:
 	    if (has_mem_) {
 		(this-1)->gen_mem(NULL,4,mem,memp,addr);
 		rB=16;
-		B=(this-1)->res;
+		B0x=B=(this-1)->res;
 		B_p=(this-1)->res_p;
 		snprintf(asmtext,sizeof (asmtext), "xorl %li(%rip), %%%s, %%%s\n",MEMRGN_DATA+addr,reg32[rA],reg32[rT]);
 	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"xorl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
