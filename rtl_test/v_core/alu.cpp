@@ -520,7 +520,7 @@ bool req::gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,bool
 		rB=16;
 		B=(this-1)->res;
 		B_p=(this-1)->res_p;
-		snprintf(asmtext,sizeof (asmtext), "addq %li(%rip), %%%s, %%%s\n",MEMRGN_DATA+addr,reg65[rA],reg65[rT]);
+		snprintf(asmtext,sizeof (asmtext), "addq mem+%li(%rip), %%%s, %%%s\n",addr,reg65[rA],reg65[rT]);
 	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"addq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"addq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
 
@@ -568,7 +568,7 @@ addie:
 		rB=16;
 		B0x=B=(this-1)->res;
 		B_p=(this-1)->res_p;
-		snprintf(asmtext,sizeof (asmtext), "addl %li(%rip), %%%s, %%%s\n",MEMRGN_DATA+addr,reg32[rA],reg32[rT]);
+		snprintf(asmtext,sizeof (asmtext), "addl mem+%li(%rip), %%%s, %%%s\n",addr,reg32[rA],reg32[rT]);
 	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"addl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"addl $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
 
@@ -585,7 +585,7 @@ addie:
 		rB=16;
 		B=(this-1)->res;
 		B_p=(this-1)->res_p;
-		snprintf(asmtext,sizeof (asmtext), "subq %li(%rip), %%%s, %%%s\n",MEMRGN_DATA+addr,reg65[rA],reg65[rT]);
+		snprintf(asmtext,sizeof (asmtext), "subq mem+%li(%rip), %%%s, %%%s\n",addr,reg65[rA],reg65[rT]);
 	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"subq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"subq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
 
@@ -618,7 +618,7 @@ addie:
 		rB=16;
 		B0x=B=(this-1)->res;
 		B_p=(this-1)->res_p;
-		snprintf(asmtext,sizeof (asmtext), "subl %li(%rip), %%%s, %%%s\n",MEMRGN_DATA+addr,reg32[rA],reg32[rT]);
+		snprintf(asmtext,sizeof (asmtext), "subl mem+%li(%rip), %%%s, %%%s\n",addr,reg32[rA],reg32[rT]);
 	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"subl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"subl $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
 
@@ -635,7 +635,7 @@ addie:
 		rB=16;
 		B=(this-1)->res;
 		B_p=(this-1)->res_p;
-		snprintf(asmtext,sizeof (asmtext), "andq %li(%rip), %%%s, %%%s\n",MEMRGN_DATA+addr,reg65[rA],reg65[rT]);
+		snprintf(asmtext,sizeof (asmtext), "andq mem+%li(%rip), %%%s, %%%s\n",addr,reg65[rA],reg65[rT]);
 	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"andq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"andq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
 
@@ -663,7 +663,7 @@ addie:
 		rB=16;
 		B0x=B=(this-1)->res;
 		B_p=(this-1)->res_p;
-		snprintf(asmtext,sizeof (asmtext), "andl %li(%rip), %%%s, %%%s\n",MEMRGN_DATA+addr,reg32[rA],reg32[rT]);
+		snprintf(asmtext,sizeof (asmtext), "andl mem+%li(%rip), %%%s, %%%s\n",addr,reg32[rA],reg32[rT]);
 	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"andl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"andl $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
 
@@ -678,7 +678,7 @@ addie:
 		rB=16;
 		B=(this-1)->res;
 		B_p=(this-1)->res_p;
-		snprintf(asmtext,sizeof (asmtext), "orq %li(%rip), %%%s, %%%s\n",MEMRGN_DATA+addr,reg65[rA],reg65[rT]);
+		snprintf(asmtext,sizeof (asmtext), "orq mem+%li(%rip), %%%s, %%%s\n",addr,reg65[rA],reg65[rT]);
 	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"orq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"orq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
 
@@ -706,7 +706,7 @@ addie:
 		rB=16;
 		B0x=B=(this-1)->res;
 		B_p=(this-1)->res_p;
-		snprintf(asmtext,sizeof (asmtext), "orl %li(%rip), %%%s, %%%s\n",MEMRGN_DATA+addr,reg32[rA],reg32[rT]);
+		snprintf(asmtext,sizeof (asmtext), "orl mem+%li(%rip), %%%s, %%%s\n",addr,reg32[rA],reg32[rT]);
 	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"orl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"orl $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
 
@@ -721,7 +721,7 @@ addie:
 		rB=16;
 		B=(this-1)->res;
 		B_p=(this-1)->res_p;
-		snprintf(asmtext,sizeof (asmtext), "xorq %li(%rip), %%%s, %%%s\n",MEMRGN_DATA+addr,reg65[rA],reg65[rT]);
+		snprintf(asmtext,sizeof (asmtext), "xorq mem+%li(%rip), %%%s, %%%s\n",addr,reg65[rA],reg65[rT]);
 	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"xorq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"xorq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
 
@@ -749,7 +749,7 @@ addie:
 		rB=16;
 		B0x=B=(this-1)->res;
 		B_p=(this-1)->res_p;
-		snprintf(asmtext,sizeof (asmtext), "xorl %li(%rip), %%%s, %%%s\n",MEMRGN_DATA+addr,reg32[rA],reg32[rT]);
+		snprintf(asmtext,sizeof (asmtext), "xorl mem+%li(%rip), %%%s, %%%s\n",addr,reg32[rA],reg32[rT]);
 	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"xorl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"xorl $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
 
@@ -839,7 +839,7 @@ addie:
             case 32:
 	    if (has_mem_) {
 		(this-1)->gen_mem(NULL,8,mem,memp,addr);
-		snprintf((*(this-1)).asmtext,sizeof (asmtext), "movq %li(%rip), %%%s\n",MEMRGN_DATA+addr,reg65[rT]);
+		snprintf((*(this-1)).asmtext,sizeof (asmtext), "movq mem+%li(%rip), %%%s\n",addr,reg65[rT]);
                 (*(this-1)).rT=rT;
 		rtn=false;
 	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"movq %%%s,  %%%s\n",reg65[rB],reg65[rT]);
@@ -851,7 +851,7 @@ addie:
             case 33:
 	    if (has_mem_) {
 		(this-1)->gen_mem(NULL,4,mem,memp,addr);
-		snprintf((*(this-1)).asmtext,sizeof (asmtext), "movl %li(%rip), %%%s\n",MEMRGN_DATA+addr,reg32[rT]);
+		snprintf((*(this-1)).asmtext,sizeof (asmtext), "movl mem+%li(%rip), %%%s\n",addr,reg32[rT]);
                 (*(this-1)).rT=rT;
 		rtn=false;
 	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"movl %%%s,  %%%s\n",reg32[rB],reg32[rT]);
@@ -897,7 +897,7 @@ addie:
             case 36:
 	    if (has_mem_) {
 		(this-1)->gen_mem(NULL,1,mem,memp,addr);
-		snprintf((*(this-1)).asmtext,sizeof (asmtext), "movzbl %li(%rip), %%%s\n",MEMRGN_DATA+addr,reg32[rT]);
+		snprintf((*(this-1)).asmtext,sizeof (asmtext), "movzbl mem+%li(%rip), %%%s\n",addr,reg32[rT]);
                 (*(this-1)).rT=rT;
 		rtn=false;
 	    } else if (rB<0) {
@@ -914,7 +914,7 @@ addie:
             case 37:
 	    if (has_mem_) {
 		(this-1)->gen_mem(NULL,2,mem,memp,addr);
-		snprintf((*(this-1)).asmtext,sizeof (asmtext), "movzwl %li(%rip), %%%s\n",MEMRGN_DATA+addr,reg32[rT]);
+		snprintf((*(this-1)).asmtext,sizeof (asmtext), "movzwl mem+%li(%rip), %%%s\n",addr,reg32[rT]);
                 (*(this-1)).rT=rT;
 		rtn=false;
 	    } else if (rB<0) {
@@ -1215,17 +1215,19 @@ void req::gen_mem(req* prev1,unsigned code,char *mem,char *memp,unsigned long ad
     res_p=0;
     rT=16;
     asmtext[0]='\x00';
+#define UC (unsigned long)
     switch(code) {
         case 8: res_p=(memp[MEMRGN_DATA+addr/8]>>(addr&7))&0x1;
-		res|=(unsigned char) mem[MEMRGN_DATA+addr+4]<<32;
-	        res|=(unsigned char) mem[MEMRGN_DATA+addr+5]<<40;        
-	        res|=(unsigned char) mem[MEMRGN_DATA+addr+6]<<48;        
-	        res|=(unsigned char) mem[MEMRGN_DATA+addr+7]<<56;        
+		res|=UC (unsigned char) mem[MEMRGN_DATA+addr+4]<<32;
+	        res|=UC (unsigned char) mem[MEMRGN_DATA+addr+5]<<40;        
+	        res|=UC (unsigned char) mem[MEMRGN_DATA+addr+6]<<48;        
+	        res|=UC (unsigned char) mem[MEMRGN_DATA+addr+7]<<56;        
         case 4: res|=(unsigned char) mem[MEMRGN_DATA+addr+2]<<16;
 	        res|=(unsigned char) mem[MEMRGN_DATA+addr+3]<<24;        
         case 2: res|=(unsigned char) mem[MEMRGN_DATA+addr+1]<<8; 
         case 1: res|=(unsigned char) mem[MEMRGN_DATA+addr]; break;
     }
+#undef UC
 }
 
 void req::flg64(__int128 r) {
@@ -1723,6 +1725,7 @@ void gen_prog(req *reqs,int count, FILE *f,hcont *contx,char *mem,char *pmem) {
    int n;
    fprintf(f,".text\n");
    fprintf(f,".global _start\n");
+   fprintf(f,".comm mem,65536\n");
    fprintf(f,"_start:\n");
    for(n=0;n<31;n++) {
        if (n!=6) reqs[n].gen_init(n,0,lrand48()|(lrand48()<<48),0);
