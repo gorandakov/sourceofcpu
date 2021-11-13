@@ -1222,10 +1222,10 @@ void req::gen_mem(req* prev1,unsigned code,char *mem,char *memp,unsigned long ad
 	        res|=UC (unsigned char) mem[MEMRGN_DATA+addr+5]<<40;        
 	        res|=UC (unsigned char) mem[MEMRGN_DATA+addr+6]<<48;        
 	        res|=UC (unsigned char) mem[MEMRGN_DATA+addr+7]<<56;        
-        case 4: res|=(unsigned char) mem[MEMRGN_DATA+addr+2]<<16;
-	        res|=(unsigned char) mem[MEMRGN_DATA+addr+3]<<24;        
-        case 2: res|=(unsigned char) mem[MEMRGN_DATA+addr+1]<<8; 
-        case 1: res|=(unsigned char) mem[MEMRGN_DATA+addr]; break;
+        case 4: res|=UC (unsigned char) mem[MEMRGN_DATA+addr+2]<<16;
+	        res|=UC (unsigned char) mem[MEMRGN_DATA+addr+3]<<24;        
+        case 2: res|=UC (unsigned char) mem[MEMRGN_DATA+addr+1]<<8; 
+        case 1: res|=UC (unsigned char) mem[MEMRGN_DATA+addr]; break;
     }
 #undef UC
 }
