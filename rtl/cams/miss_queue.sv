@@ -1585,7 +1585,7 @@ module missQ(
   );
 
   assign doStep=now_flushing_reg2 || ((curConfl==6'b0001 || curConfl==6'b0010 || curConfl==6'b0100 || curConfl==6'b1000 ||
-    curConfl==6'b10000 || curConfl==6'b100000) && read_clkEn && ~count0[0]) || except;
+    curConfl==6'b10000 || curConfl==6'b100000 || curConfl==6'b0) && read_clkEn && ~count0[0]) || except;
 
   assign read_addr_d=(begin_flush_reg2) & ~except ? read_addrB_d : 4'bz;
   assign read_addr_d=(~begin_flush_reg2) & ~ except ? read_addrA_d : 4'bz;
