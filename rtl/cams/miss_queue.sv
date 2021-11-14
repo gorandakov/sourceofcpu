@@ -1706,7 +1706,7 @@ module missQ(
                       miss4 & ~thrreginh[3][4]||
                       miss5 & ~thrreginh[3][5]
 		    )
-	            if (~now_flushing_reg2) valid[0][write_addr]=1'b1;
+	            valid[0][write_addr]=1'b1;
 		  if (miss0 & ~thrreginh[3][0] & ~except||
                       miss1 & ~thrreginh[3][1] & ~except||
                       miss2 & ~thrreginh[3][2] & ~except||
@@ -1768,13 +1768,13 @@ module missQ(
 			valid[1]=validR[1];
 			vOn_next=vOn_nextR;
 			if (validR[0]==16'b0) pwned=1'b1;
-			validR[0]=16'b0;
-			validR[1]=16'b0;
-		        validSR[0]=16'b0;
-		        validSR[1]=16'b0;
-		        vMaskR=0;
-		        vMaskRN=0;
-			vOn_nextR=0;
+		//	validR[0]=16'b0;
+		//	validR[1]=16'b0;
+		//        validSR[0]=16'b0;
+		//        validSR[1]=16'b0;
+		//        vMaskR=0;
+		//        vMaskRN=0;
+		//	vOn_nextR=0;
 		  end
 	      end else begin
 	          if (doStep) begin
