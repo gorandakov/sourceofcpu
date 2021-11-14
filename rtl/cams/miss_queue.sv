@@ -908,6 +908,7 @@ module missQ(
   reg now_flushing_reg;
   reg begin_flush_reg2;
   reg now_flushing_reg2;
+  reg now_flushing_reg3;
   reg sticky_begin;
 
   reg last_inserted_reg;
@@ -1735,7 +1736,7 @@ module missQ(
                      miss5 & ~thrreginh[3][5]
 		    )
 	            validSR[0][write_addr]=1'b1;
-		  if (vMask!=0&&write_addr==0) begin
+		  if (vMask!=0&&write_addr==0 && ~now_flushing_reg2) begin
 		        vMaskN=16'b1;
 			vOn_next=1'b1;
 			if (doStep&&~rdvalid0_found&&vMaskN!=0) begin
@@ -1743,7 +1744,7 @@ module missQ(
 			    vOn_next=1'b0;
 			    vMaskN=0;
 			end
-		  end else begin
+		  end else if (~now_flushing_reg2) begin
 		        if (vOn_next) vMaskN[write_addr]=1'b1;
 		        else vMask[write_addr]=1'b1;
 		        if (doStep) begin
@@ -1816,6 +1817,14 @@ module missQ(
 		      vMaskN[read_addr]=1'b0;
 		      vMaskRN[read_addr]=1'b0;
 		  end
+	     end
+	     if (~now_flushing_reg2 && now_flushing_reg3) begin
+		 vMask=vMaskR;
+		 vMaskN=vMaskRN;
+		 valid[0]=validR[0];
+		 valid[1]=validR[1];
+	//	 if (validR[0]==16'b0) pwned=1'b1;
+		 vOn_next=vOn_nextR;
 	     end 
 	  end
 	  if ((vMask&vMaskN)!=0) $display("vMaskN");
@@ -1833,6 +1842,7 @@ module missQ(
 	      begin_flush_reg2<=1'b0;
 	      now_flushing_reg<=1'b0;
 	      now_flushing_reg2<=1'b0;
+	      now_flushing_reg3<=1'b0;
 	  //    now_flooshing<=1'b0;
 	      last_inserted_reg<=1'b0;
 	      last_inserted_reg2<=1'b0;
@@ -1849,6 +1859,7 @@ module missQ(
 	      begin_flush_reg2<=begin_flush_reg;
 	      now_flushing_reg<=now_flushing;
 	      now_flushing_reg2<=now_flushing_reg;
+	      now_flushing_reg3<=now_flushing_reg2;
 	      if (now_flushing_reg&pwned) $display("flX ",read_addr_d,validR[0]);
 	//      if (now_flushing_reg & ~now_flushing_reg2) now_flooshing<=1'b1;
 	//      else if (flush_end) now_flooshing<=1'b0;
