@@ -1706,7 +1706,7 @@ module missQ(
                       miss4 & ~thrreginh[3][4]||
                       miss5 & ~thrreginh[3][5]
 		    )
-	            valid[0][write_addr]=1'b1;
+	            if (~now_flushing_reg2) valid[0][write_addr]=1'b1;
 		  if (miss0 & ~thrreginh[3][0] & ~except||
                       miss1 & ~thrreginh[3][1] & ~except||
                       miss2 & ~thrreginh[3][2] & ~except||
