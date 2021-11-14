@@ -1692,11 +1692,11 @@ module missQ(
 	  end else begin
               pwned=1'b0;
 	     if (except) begin
-	         valid[0]=validS[0];
+	     //    valid[0]=validS[0];
 		 valid_rd=16'b0;
 	     end
 	     if (except) begin
-                 validR[0]=validSR[0];
+               //  validR[0]=validSR[0];
 	     end
 	      if (wen) begin
 		  if (miss0 & ~thrreginh[3][0] & ~except||
