@@ -110,6 +110,22 @@ module missQ(
   mOp0_II,
   mOp0_WQ,
   mOp0_lsflag,
+  mOp0_en_o,
+  mOp0_thread_o,
+  mOp0_addrEven_o,
+  mOp0_addrOdd_o,
+  mOp0_sz_o,
+  mOp0_st_o,
+  mOp0_banks_o,
+  mOp0_bank0_o,
+  mOp0_odd_o,
+  mOp0_addr_low_o,
+  mOp0_split_o,
+  mOp0_register_o,
+  mOp0_LSQ_o,
+  mOp0_II_o,
+  mOp0_WQ_o,
+  mOp0_lsflag_o,
   miss1,
   mOp1_en,
   mOp1_thread,
@@ -128,6 +144,22 @@ module missQ(
   mOp1_II,
   mOp1_WQ,
   mOp1_lsflag,
+  mOp1_en_o,
+  mOp1_thread_o,
+  mOp1_addrEven_o,
+  mOp1_addrOdd_o,
+  mOp1_sz_o,
+  mOp1_st_o,
+  mOp1_banks_o,
+  mOp1_bank0_o,
+  mOp1_odd_o,
+  mOp1_addr_low_o,
+  mOp1_split_o,
+  mOp1_register_o,
+  mOp1_LSQ_o,
+  mOp1_II_o,
+  mOp1_WQ_o,
+  mOp1_lsflag_o,
   miss2,
   mOp2_en,
   mOp2_thread,
@@ -145,7 +177,22 @@ module missQ(
   mOp2_LSQ,
   mOp2_II,
   mOp2_WQ,
-  mOp2_lsflag,
+  mOp2_en_no,
+  mOp2_thread_no,
+  mOp2_addrEven_no,
+  mOp2_addrOdd_no,
+  mOp2_sz_no,
+  mOp2_st_no,
+  mOp2_banks_no,
+  mOp2_bank0_no,
+  mOp2_odd_no,
+  mOp2_addr_low_no,
+  mOp2_split_no,
+  mOp2_register_no,
+  mOp2_LSQ_no,
+  mOp2_II_no,
+  mOp2_WQ_no,
+  mOp2_lsflag_no,
   miss3,
   mOp3_en,
   mOp3_thread,
@@ -167,6 +214,25 @@ module missQ(
   mOp3_lsfwd,
   mOp3_data,
   mOp3_brdbanks,
+  mOp3_en_no,
+  mOp3_thread_no,
+  mOp3_addrEven_no,
+  mOp3_addrOdd_no,
+  mOp3_sz_no,
+  mOp3_st_no,
+  mOp3_banks_no,
+  mOp3_bank0_no,
+  mOp3_odd_no,
+  mOp3_addr_low_no,
+  mOp3_split_no,
+  mOp3_register_no,
+  mOp3_LSQ_no,
+  mOp3_II_no,
+  mOp3_WQ_no,
+  mOp3_lsflag_no,
+  mOp3_lsfwd_no,
+  mOp3_data_no,
+  mOp3_brdbanks_no,
   miss4,
   mOp4_en,
   mOp4_dupl,//write to a non-exclusive cl
@@ -186,6 +252,23 @@ module missQ(
   mOp4_clHit,
   mOp4_data,
   mOp4_II,
+  mOp4_en_no,
+  mOp4_dupl_no,//write to a non-exclusive cl
+  //mOp4_thread,
+  mOp4_addrEven_no,
+  mOp4_addrOdd_no,
+  mOp4_sz_no,
+  mOp4_first_no,
+  mOp4_banks_no,
+  mOp4_bank0_no,
+  mOp4_bank1_no,
+  mOp4_bgn_b_no,
+  mOp4_end_b_no,
+  mOp4_odd_no,
+  mOp4_addr_low_no,
+  mOp4_split_no,
+  mOp4_data_no,
+  mOp4_II_no,
   miss5,
   mOp5_en,
   mOp5_dupl,
@@ -205,6 +288,23 @@ module missQ(
   mOp5_clHit,
   mOp5_data,
   mOp5_II,
+  mOp5_en_no,
+  mOp5_dupl_no,
+ // mOp5_thread,
+  mOp5_addrEven_no,
+  mOp5_addrOdd_no,
+  mOp5_sz_no,
+  mOp5_first_no,
+  mOp5_banks_no,
+  mOp5_bank0_no,
+  mOp5_bank1_no,
+  mOp5_bgn_b_no,
+  mOp5_end_b_no,
+  mOp5_odd_no,
+  mOp5_addr_low_no,
+  mOp5_split_no,
+  mOp5_data_no,
+  mOp5_II_no,
 
   mOp_noBanks,
   mOp_write_clear,
@@ -248,123 +348,229 @@ module missQ(
   output reg do_unlock;
 
   input miss0;
-  output mOp0_en;
-  inout mOp0_thread;
-  inout [PADDR_WIDTH-1:8] mOp0_addrEven;
-  inout [PADDR_WIDTH-1:8] mOp0_addrOdd;
-  inout [4:0] mOp0_sz;
-  inout mOp0_st;
-  inout [BANK_COUNT-1:0] mOp0_banks;
-  inout [4:0] mOp0_bank0;
-  inout mOp0_odd;
-  inout [1:0] mOp0_addr_low;
-  inout mOp0_split;
-  inout [REG_WIDTH-1:0] mOp0_register;
+  input mOp0_en;
+  input mOp0_thread;
+  input [PADDR_WIDTH-1:8] mOp0_addrEven;
+  input [PADDR_WIDTH-1:8] mOp0_addrOdd;
+  input [4:0] mOp0_sz;
+  input mOp0_st;
+  input [BANK_COUNT-1:0] mOp0_banks;
+  input [4:0] mOp0_bank0;
+  input mOp0_odd;
+  input [1:0] mOp0_addr_low;
+  input mOp0_split;
+  input [REG_WIDTH-1:0] mOp0_register;
   input [1:0] mOp0_clHit;
-  inout [8:0] mOp0_LSQ;
-  inout [9:0] mOp0_II;
-  inout [7:0] mOp0_WQ;
-  inout mOp0_lsflag;
+  input [8:0] mOp0_LSQ;
+  input [9:0] mOp0_II;
+  input [7:0] mOp0_WQ;
+  input mOp0_lsflag;
+  output mOp0_en_o;
+  output mOp0_thread_o;
+  output [PADDR_WIDTH-1:8] mOp0_addrEven_o;
+  output [PADDR_WIDTH-1:8] mOp0_addrOdd_o;
+  output [4:0] mOp0_sz_o;
+  output mOp0_st_o;
+  output [BANK_COUNT-1:0] mOp0_banks_o;
+  output [4:0] mOp0_bank0_o;
+  output mOp0_odd_o;
+  output [1:0] mOp0_addr_low_o;
+  output mOp0_split_o;
+  output [REG_WIDTH-1:0] mOp0_register_o;
+  output [8:0] mOp0_LSQ_o;
+  output [9:0] mOp0_II_o;
+  output [7:0] mOp0_WQ_o;
+  output mOp0_lsflag_o;
+
 
   input miss1;
-  output mOp1_en;
-  inout mOp1_thread;
-  inout [PADDR_WIDTH-1:8] mOp1_addrEven;
-  inout [PADDR_WIDTH-1:8] mOp1_addrOdd;
-  inout [4:0] mOp1_sz;
-  inout mOp1_st;
-  inout [BANK_COUNT-1:0] mOp1_banks;
-  inout [4:0] mOp1_bank0;
-  inout mOp1_odd;
-  inout [1:0] mOp1_addr_low;
-  inout mOp1_split;
-  inout [REG_WIDTH-1:0] mOp1_register;
+  input mOp1_en;
+  input mOp1_thread;
+  input [PADDR_WIDTH-1:8] mOp1_addrEven;
+  input [PADDR_WIDTH-1:8] mOp1_addrOdd;
+  input [4:0] mOp1_sz;
+  input mOp1_st;
+  input [BANK_COUNT-1:0] mOp1_banks;
+  input [4:0] mOp1_bank0;
+  input mOp1_odd;
+  input [1:0] mOp1_addr_low;
+  input mOp1_split;
+  input [REG_WIDTH-1:0] mOp1_register;
   input [1:0] mOp1_clHit;
-  inout [8:0] mOp1_LSQ;
-  inout [9:0] mOp1_II;
-  inout [7:0] mOp1_WQ;
-  inout mOp1_lsflag;
+  input [8:0] mOp1_LSQ;
+  input [9:0] mOp1_II;
+  input [7:0] mOp1_WQ;
+  input mOp1_lsflag;
+  output mOp1_en_o;
+  output mOp1_thread_o;
+  output [PADDR_WIDTH-1:8] mOp1_addrEven_o;
+  output [PADDR_WIDTH-1:8] mOp1_addrOdd_o;
+  output [4:0] mOp1_sz_o;
+  output mOp1_st_o;
+  output [BANK_COUNT-1:0] mOp1_banks_o;
+  output [4:0] mOp1_bank0_o;
+  output mOp1_odd_o;
+  output [1:0] mOp1_addr_low_o;
+  output mOp1_split_o;
+  output [REG_WIDTH-1:0] mOp1_register_o;
+  output [8:0] mOp1_LSQ_o;
+  output [9:0] mOp1_II_o;
+  output [7:0] mOp1_WQ_o;
+  output mOp1_lsflag_o;
+
 
   input miss2;
-  output mOp2_en;
-  inout mOp2_thread;
-  inout [PADDR_WIDTH-1:8] mOp2_addrEven;
-  inout [PADDR_WIDTH-1:8] mOp2_addrOdd;
-  inout [4:0] mOp2_sz;
-  inout mOp2_st;
-  inout [BANK_COUNT-1:0] mOp2_banks;
-  inout [4:0] mOp2_bank0;
-  inout mOp2_odd;
-  inout [1:0] mOp2_addr_low;
-  inout mOp2_split;
-  inout [REG_WIDTH-1:0] mOp2_register;
+  input mOp2_en;
+  input mOp2_thread;
+  input [PADDR_WIDTH-1:8] mOp2_addrEven;
+  input [PADDR_WIDTH-1:8] mOp2_addrOdd;
+  input [4:0] mOp2_sz;
+  input mOp2_st;
+  input [BANK_COUNT-1:0] mOp2_banks;
+  input [4:0] mOp2_bank0;
+  input mOp2_odd;
+  input [1:0] mOp2_addr_low;
+  input mOp2_split;
+  input [REG_WIDTH-1:0] mOp2_register;
   input [1:0] mOp2_clHit;
-  inout [8:0] mOp2_LSQ;
-  inout [9:0] mOp2_II;
-  inout [7:0] mOp2_WQ;
-  inout mOp2_lsflag;
+  input [8:0] mOp2_LSQ;
+  input [9:0] mOp2_II;
+  input [7:0] mOp2_WQ;
+  input mOp2_lsflag;
+  output mOp2_en_no;
+  output mOp2_thread_no;
+  output [PADDR_WIDTH-1:8] mOp2_addrEven_no;
+  output [PADDR_WIDTH-1:8] mOp2_addrOdd_no;
+  output [4:0] mOp2_sz_no;
+  output mOp2_st_no;
+  output [BANK_COUNT-1:0] mOp2_banks_no;
+  output [4:0] mOp2_bank0_no;
+  output mOp2_odd_no;
+  output [1:0] mOp2_addr_low_no;
+  output mOp2_split_no;
+  output [REG_WIDTH-1:0] mOp2_register_no;
+  output [8:0] mOp2_LSQ_no;
+  output [9:0] mOp2_II_no;
+  output [7:0] mOp2_WQ_no;
+  output mOp2_lsflag_no;
+
 
   input miss3;
-  output mOp3_en;
-  inout mOp3_thread;
-  inout [PADDR_WIDTH-1:8] mOp3_addrEven;
-  inout [PADDR_WIDTH-1:8] mOp3_addrOdd;
-  inout [4:0] mOp3_sz;
-  inout mOp3_st;
-  inout [BANK_COUNT-1:0] mOp3_banks;
-  inout [4:0] mOp3_bank0;
-  inout mOp3_odd;
-  inout [1:0] mOp3_addr_low;
-  inout mOp3_split;
-  inout [REG_WIDTH-1:0] mOp3_register;
+  input mOp3_en;
+  input mOp3_thread;
+  input [PADDR_WIDTH-1:8] mOp3_addrEven;
+  input [PADDR_WIDTH-1:8] mOp3_addrOdd;
+  input [4:0] mOp3_sz;
+  input mOp3_st;
+  input [BANK_COUNT-1:0] mOp3_banks;
+  input [4:0] mOp3_bank0;
+  input mOp3_odd;
+  input [1:0] mOp3_addr_low;
+  input mOp3_split;
+  input [REG_WIDTH-1:0] mOp3_register;
   input [1:0] mOp3_clHit;
-  inout [8:0] mOp3_LSQ;
-  inout [9:0] mOp3_II;
-  inout [7:0] mOp3_WQ;
-  inout mOp3_lsflag;
-  inout mOp3_lsfwd;
-  inout [127:0] mOp3_data;
-  inout [3:0] mOp3_brdbanks;
+  input [8:0] mOp3_LSQ;
+  input [9:0] mOp3_II;
+  input [7:0] mOp3_WQ;
+  input mOp3_lsflag;
+  input mOp3_lsfwd;
+  input [127:0] mOp3_data;
+  input [3:0] mOp3_brdbanks;
+  output mOp3_en_no;
+  output mOp3_thread_no;
+  output [PADDR_WIDTH-1:8] mOp3_addrEven_no;
+  output [PADDR_WIDTH-1:8] mOp3_addrOdd_no;
+  output [4:0] mOp3_sz_no;
+  output mOp3_st_no;
+  output [BANK_COUNT-1:0] mOp3_banks_no;
+  output [4:0] mOp3_bank0_no;
+  output mOp3_odd_no;
+  output [1:0] mOp3_addr_low_no;
+  output mOp3_split_no;
+  output [REG_WIDTH-1:0] mOp3_register_no;
+  output [8:0] mOp3_LSQ_no;
+  output [9:0] mOp3_II_no;
+  output [7:0] mOp3_WQ_no;
+  output mOp3_lsflag_no;
+  output mOp3_lsfwd_no;
+  output [127:0] mOp3_data_no;
+  output [3:0] mOp3_brdbanks_no;
 
   input miss4;
-  output mOp4_en;
+  input mOp4_en;
   input [1:0] mOp4_dupl;
  // inout mOp4_thread;
-  inout [PADDR_WIDTH-1:8] mOp4_addrEven;
-  inout [PADDR_WIDTH-1:8] mOp4_addrOdd;
-  inout [4:0] mOp4_sz;
+  input [PADDR_WIDTH-1:8] mOp4_addrEven;
+  input [PADDR_WIDTH-1:8] mOp4_addrOdd;
+  input [4:0] mOp4_sz;
   input mOp4_first;
+//output [BANK_COUNT-1:0] mOp4_banks;
+  input [4:0] mOp4_bank0;
+  input [4:0] mOp4_bank1;
+//output [3:0] mOp4_bgn_b;
+//output [3:0] mOp4_end_b;
+  input mOp4_odd;
+  input [1:0] mOp4_addr_low;
+  input mOp4_split;
+  input [1:0] mOp4_clHit;
+  input [159:0] mOp4_data;
+  input [9:0] mOp4_II;
+  output mOp4_en_no;
+  output [1:0] mOp4_dupl_no;
+ // inout mOp4_thread;
+  output [PADDR_WIDTH-1:8] mOp4_addrEven_no;
+  output [PADDR_WIDTH-1:8] mOp4_addrOdd_no;
+  output [4:0] mOp4_sz_no;
+  output mOp4_first_no;
   output [BANK_COUNT-1:0] mOp4_banks;
-  inout [4:0] mOp4_bank0;
-  inout [4:0] mOp4_bank1;
+  output [4:0] mOp4_bank0_no;
+  output [4:0] mOp4_bank1_no;
   output [3:0] mOp4_bgn_b;
   output [3:0] mOp4_end_b;
-  inout mOp4_odd;
-  inout [1:0] mOp4_addr_low;
-  inout mOp4_split;
-  input [1:0] mOp4_clHit;
-  inout [159:0] mOp4_data;
-  inout [9:0] mOp4_II;
+  output mOp4_odd_no;
+  output [1:0] mOp4_addr_low_no;
+  output mOp4_split_no;
+  output [1:0] mOp4_clHit_no;
+  output [159:0] mOp4_data_no;
+  output [9:0] mOp4_II_no;
 
   input miss5;
-  output mOp5_en;
+  input mOp5_en;
   input [1:0] mOp5_dupl;
 //  inout mOp5_thread;
-  inout [PADDR_WIDTH-1:8] mOp5_addrEven;
-  inout [PADDR_WIDTH-1:8] mOp5_addrOdd;
-  inout [4:0] mOp5_sz;
+  input [PADDR_WIDTH-1:8] mOp5_addrEven;
+  input [PADDR_WIDTH-1:8] mOp5_addrOdd;
+  input [4:0] mOp5_sz;
   input mOp5_first;
+//output [BANK_COUNT-1:0] mOp5_banks;
+  input [4:0] mOp5_bank0;
+  input [4:0] mOp5_bank1;
+//output [3:0] mOp5_bgn_b;
+//output [3:0] mOp5_end_b;
+  input mOp5_odd;
+  input [1:0] mOp5_addr_low;
+  input mOp5_split;
+  input [1:0] mOp5_clHit;
+  input [159:0] mOp5_data;
+  input [9:0] mOp5_II;
+  output mOp5_en_no;
+  output [1:0] mOp5_dupl_no;
+//  inout mOp5_thread;
+  output [PADDR_WIDTH-1:8] mOp5_addrEven_no;
+  output [PADDR_WIDTH-1:8] mOp5_addrOdd_no;
+  output [4:0] mOp5_sz_no;
+  output mOp5_first_no;
   output [BANK_COUNT-1:0] mOp5_banks;
-  inout [4:0] mOp5_bank0;
-  inout [4:0] mOp5_bank1;
+  output [4:0] mOp5_bank0_no;
+  output [4:0] mOp5_bank1_no;
   output [3:0] mOp5_bgn_b;
   output [3:0] mOp5_end_b;
-  inout mOp5_odd;
-  inout [1:0] mOp5_addr_low;
-  inout mOp5_split;
-  input [1:0] mOp5_clHit;
-  inout [159:0] mOp5_data;
-  inout [9:0] mOp5_II;
+  output mOp5_odd_no;
+  output [1:0] mOp5_addr_low_no;
+  output mOp5_split_no;
+  output [1:0] mOp5_clHit_no;
+  output [159:0] mOp5_data_no;
+  output [9:0] mOp5_II_no;
   
   output [31:0] mOp_noBanks;
   output mOp_write_clear;
