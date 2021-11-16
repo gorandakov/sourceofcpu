@@ -92,28 +92,6 @@ module missQ(
   doSkip,
   do_bus_hold,
   do_unlock,
-  nowfl,
-  WB_fwd,
-  mOpW_brdread,
-  mOpW_data,
-  mOpW_pbit,
-  mOpW_en,
-  mOpW_thread,
-  mOpW_addrEven,
-  mOpW_addrOdd,
-  mOpW_sz,
-  mOpW_st,
-  mOpW_banks,
-  mOpW_bank0,
-  mOpW_odd,
-  mOpW_addr_low,
-  mOpW_split,
-  mOpW_register,
-  mOpW_type,
-  mOpW_LSQ,
-  mOpW_II,
-  mOpW_WQ,
-  mOpW_lsflag,
   miss0,
   mOp0_en,
   mOp0_thread,
@@ -368,30 +346,6 @@ module missQ(
   output reg doSkip;
   output do_bus_hold;
   output reg do_unlock;
-  output nowfl;
-  
-  input [2:0] WB_fwd;
-  input [4:0] mOpW_brdread;
-  input [127+8:0] mOpW_data;
-  input [1:0] mOpW_pbit;
-
-  input mOpW_en;
-  input mOpW_thread;
-  input [PADDR_WIDTH-1:8] mOpW_addrEven;
-  input [PADDR_WIDTH-1:8] mOpW_addrOdd;
-  input [4:0] mOpW_sz;
-  input mOpW_st;
-  input [BANK_COUNT-1:0] mOpW_banks;
-  input [4:0] mOpW_bank0;
-  input mOpW_odd;
-  input [1:0] mOpW_addr_low;
-  input mOpW_split;
-  input [REG_WIDTH-1:0] mOpW_register;
-  input [1:0] mOpW_type;
-  input [8:0] mOpW_LSQ;
-  input [9:0] mOpW_II;
-  input [7:0] mOpW_WQ;
-  input mOpW_lsflag;
 
   input miss0;
   input mOp0_en;
@@ -853,290 +807,109 @@ module missQ(
   assign read_thread={2'b0,read_mop[3][`mOp1_thr],read_mop[2][`mOp1_thr],read_mop[1][`mOp1_thr],read_mop[0][`mOp1_thr]};
 
   assign thrinhibitconfl=(read_thread & {4{thrblk_en1}}) | (~read_thread & {4{thrblk_en0}}); 
+
+  assign mOp0_thread=now_flushing_reg2 ?   read_mop[0][`mOp1_thr] : 1'bz;
+  assign mOp0_addrEven=now_flushing_reg2 ? read_mop[0][`mOp1_addrEven] : 36'bz;
+  assign mOp0_addrOdd=now_flushing_reg2 ?  read_mop[0][`mOp1_addrOdd] : 36'bz;
+  assign mOp0_sz=now_flushing_reg2 ?       read_mop[0][`mOp1_sz] : 5'bz;
+  assign mOp0_st=now_flushing_reg2 ?       read_mop[0][`mOp1_st] : 1'bz;
+  assign mOp0_split=now_flushing_reg2 ?    read_mop[0][`mOp1_split] : 1'bz;
+  assign mOp0_addr_low=now_flushing_reg2 ? read_mop[0][`mOp1_low] : 2'bz;
+  assign mOp0_odd=now_flushing_reg2 ?      read_mop[0][`mOp1_odd] : 1'bz;
+  assign mOp0_banks=now_flushing_reg2 ?    read_mop[0][`mOp1_banks] : 32'bz;
+  assign mOp0_bank0=now_flushing_reg2 ?    read_mop[0][`mOp1_bank0] : 5'bz;
+  assign mOp0_register=now_flushing_reg2 ? read_mop[0][`mOp1_regNo] : 9'bz;
+  assign mOp0_en=now_flushing_reg2 ?       read_confl[0]&~thrinhibitconfl[0] : 1'bz;
+  assign mOp0_LSQ=now_flushing_reg2 ?      read_mop[0][`mOp1_LSQ] : 9'bz;
+  assign mOp0_II=now_flushing_reg2 ?       read_mop[0][`mOp1_II] : 10'bz;
+  assign mOp0_WQ=now_flushing_reg2 ?       read_mop[0][`mOp1_WQ] : 8'bz;
+  assign mOp0_lsflag=now_flushing_reg2 ?   read_mop[0][`mOp1_lsf] : 1'bz;
   
-  assign mOp0_thread_o=now_flushing_reg2 && ~WB_fwd[0] ?   read_mop[0][`mOp1_thr] : 1'bz;
-  assign mOp0_thread_o=~now_flushing_reg2 && ~WB_fwd[0] ? mOp0_thread : 1'bz;
-  assign mOp0_thread_o=WB_fwd[0] ? mOpW_thread : 1'bz;
-  assign mOp0_addrEven_o=now_flushing_reg2 && ~WB_fwd[0] ? read_mop[0][`mOp1_addrEven] : 36'bz; 
-  assign mOp0_addrEven_o=~now_flushing_reg2 & ~alt_bus_hold & ~WB_fwd[0] ? mOp0_addrEven : 36'bz;
-  assign mOp0_addrEven_o=alt_bus_hold & ~ WB_fwd[0] ? alt_bus_addr[36:1] : 36'bz;
-  assign mOp0_addrEven_o=WB_fwd[0] ? mOpW_addrEven : 36'bz;
-  assign mOp0_addrOdd_o=now_flushing_reg2 && ~WB_fwd[0] ? read_mop[0][`mOp1_addrOdd] : 36'bz; 
-  assign mOp0_addrOdd_o=~now_flushing_reg2 & ~alt_bus_hold & ~WB_fwd[0] ? mOp0_addrOdd : 36'bz;
-  assign mOp0_addrOdd_o=alt_bus_hold & ~ WB_fwd[0] ? alt_bus_addr[36:1] : 36'bz;
-  assign mOp0_addrOdd_o=WB_fwd[0] ? mOpW_addrOdd : 36'bz;
-  assign mOp0_sz_o=now_flushing_reg2 & ~WB_fwd[0] ?       read_mop[0][`mOp1_sz] : 5'bz; 
-  assign mOp0_sz_o=~now_flushing_reg2 & ~WB_fwd[0] ? mOp0_sz : 5'bz; 
-  assign mOp0_sz_o=WB_fwd[0] ? mOpW_sz : 5'bz;
-  assign mOp0_st_o=now_flushing_reg2 & ~WB_fwd[0] ?       read_mop[0][`mOp1_st] : 1'bz; 
-  assign mOp0_st_o=~now_flushing_reg2 & ~WB_fwd[0] ? mOp0_st : 1'bz; 
-  assign mOp0_st_o=WB_fwd[0] ? mOpW_st : 1'bz;
-  assign mOp0_split_o=now_flushing_reg2 & ~WB_fwd[0] ?    read_mop[0][`mOp1_split] : 1'bz; 
-  assign mOp0_split_o=~now_flushing_reg2 & ~WB_fwd[0] ? mOp0_split : 1'bz; 
-  assign mOp0_split_o=WB_fwd[0] ? mOpW_split : 1'bz;
-  assign mOp0_addr_low_o=now_flushing_reg2 & ~WB_fwd[0] ? read_mop[0][`mOp1_low] : 2'bz;
-  assign mOp0_addr_low_o=~now_flushing_reg2 & ~WB_fwd[0] ? mOp0_addr_low : 2'bz; 
-  assign mOp0_addr_low_o=WB_fwd[0] ? mOpW_addr_low : 2'bz;
-  assign mOp0_odd_o=now_flushing_reg2 & ~WB_fwd[0] ? read_mop[0][`mOp1_odd] : 1'bz; 
-  assign mOp0_odd_o=~now_flushing_reg2 & ~alt_bus_hold & ~WB_fwd[0] ? mOp0_odd : 1'bz;
-  assign mOp0_odd_o=alt_bus_hold && ~WB_fwd[0]? alt_bus_addr[0] : 1'bz;
-  assign mOp0_odd_o=WB_fwd[0] ? mOpW_odd : 1'bz;
-  assign mOp0_banks_o=now_flushing_reg2 && ~WB_fwd[0] ?    read_mop[0][`mOp1_banks] : 32'bz;
-  assign mOp0_banks_o=alt_bus_hold && ~WB_fwd[0] ? 32'b0 : 32'bz;
-  assign mOp0_banks_o=~now_flushing_reg2 & ~alt_bus_hold & ~WB_fwd[0] ? mOp0_banks : 32'bz;
-  assign mOp0_banks_o=WB_fwd[0] ? mOpW_banks : 32'bz;
-  assign mOp0_bank0_o=now_flushing_reg2 & ~WB_fwd[0] ?    read_mop[0][`mOp1_bank0] : 5'bz; 
-  assign mOp0_bank0_o=~now_flushing_reg2 & ~WB_fwd[0] ? mOp0_bank0 : 5'bz; 
-  assign mOp0_bank0_o=WB_fwd[0] ? mOpW_bank0 : 5'bz;
-  assign mOp0_register_o=now_flushing_reg2 && ~WB_fwd[0] ? read_mop[0][`mOp1_regNo] : 9'bz;
-  assign mOp0_register_o=alt_bus_hold & ~ WB_fwd[0] ? 9'h1ef : 9'bz;
-  assign mOp0_register_o=~alt_bus_hold & ~now_flushing_reg2 & ~WB_fwd[0] ? mOp0_register : 9'bz;
-  assign mOp0_register_o=WB_fwd[0] ? mOpW_register : 9'bz;
-  assign mOp0_type_o=now_flushing_reg2 && ~WB_fwd[0] ? read_mop[0][`mOp1_type] : 2'bz;
-  assign mOp0_type_o=alt_bus_hold & ~WB_fwd[0] ? 2'b0 : 2'bz;
-  assign mOp0_type_o=~alt_bus_hold & ~now_flushing_reg2 & ~WB_fwd[0] ? mOp0_type : 2'bz;
-  assign mOp0_type_o=WB_fwd[0] ? mOpW_type : 2'bz;
-  assign mOp0_en_o=now_flushing_reg2 && ~WB_fwd[0] ?       read_confl[0]&~thrinhibitconfl[0]  : 1'bz;
-  assign mOp0_en_o=alt_bus_hold & ~WB_fwd[0] ? 1'b1 : 1'bz;
-  assign mOp0_en_o=~now_flushing_reg2 & ~alt_bus_hold & ~WB_fwd[0] ? mOp0_en : 1'bz;
-  assign mOp0_en_o=WB_fwd[0] ? mOpW_en : 1'bz;
-  assign mOp0_LSQ_o=now_flushing_reg2 & ~WB_fwd[0] ?      read_mop[0][`mOp1_LSQ] : 9'bz; 
-  assign mOp0_LSQ_o=~now_flushing_reg2 & ~WB_fwd[0] ? mOp0_LSQ : 9'bz; 
-  assign mOp0_LSQ_o=WB_fwd[0] ? mOpW_LSQ : 9'bz;
-  assign mOp0_II_o=now_flushing_reg2 & ~WB_fwd[0] ?       read_mop[0][`mOp1_II] : 10'bz; 
-  assign mOp0_II_o=~now_flushing_reg2 & ~WB_fwd[0] ? mOp0_II : 10'bz; 
-  assign mOp0_II_o=WB_fwd[0] ? mOpW_II : 10'bz;
-  assign mOp0_WQ_o=now_flushing_reg2 & ~WB_fwd[0] ?       read_mop[0][`mOp1_WQ] : 8'bz; 
-  assign mOp0_WQ_o=~now_flushing_reg2 & ~WB_fwd[0] ? mOp0_WQ : 8'bz; 
-  assign mOp0_WQ_o=WB_fwd[0] ? mOpW_WQ : 8'bz;
-  assign mOp0_lsflag_o=now_flushing_reg2 & ~WB_fwd[0] ?   read_mop[0][`mOp1_lsf] : 1'bz; 
-  assign mOp0_lsflag_o=~now_flushing_reg2 & ~WB_fwd[0] ? mOp0_lsflag : 1'bz; 
-  assign mOp0_lsflag_o=WB_fwd[0] ? mOpW_lsflag : 1'bz;
-  assign mOp0_lsfwd_o=now_flushing_reg2 ?    read_mop[0][`mOp1_lsfwd] :  WB_fwd[0];
+  assign mOp1_thread=now_flushing_reg2 ?   read_mop[1][`mOp1_thr] : 1'bz;
+  assign mOp1_addrEven=now_flushing_reg2 ? read_mop[1][`mOp1_addrEven] : 36'bz;
+  assign mOp1_addrOdd=now_flushing_reg2 ?  read_mop[1][`mOp1_addrOdd] : 36'bz;
+  assign mOp1_sz=now_flushing_reg2 ?       read_mop[1][`mOp1_sz] : 5'bz;
+  assign mOp1_st=now_flushing_reg2 ?       read_mop[1][`mOp1_st] : 1'bz;
+  assign mOp1_split=now_flushing_reg2 ?    read_mop[1][`mOp1_split] : 1'bz;
+  assign mOp1_addr_low=now_flushing_reg2 ? read_mop[1][`mOp1_low] : 2'bz;
+  assign mOp1_odd=now_flushing_reg2 ?      read_mop[1][`mOp1_odd] : 1'bz;
+  assign mOp1_banks=now_flushing_reg2 ?    read_mop[1][`mOp1_banks] : 32'bz;
+  assign mOp1_bank0=now_flushing_reg2 ?    read_mop[1][`mOp1_bank0] : 5'bz;
+  assign mOp1_register=now_flushing_reg2 ? read_mop[1][`mOp1_regNo] : 9'bz;
+  assign mOp1_en=now_flushing_reg2 ?       read_confl[1]&~thrinhibitconfl[1]  : 1'bz;
+  assign mOp1_LSQ=now_flushing_reg2 ?      read_mop[1][`mOp1_LSQ] : 9'bz;
+  assign mOp1_II=now_flushing_reg2 ?       read_mop[1][`mOp1_II] : 10'bz;
+  assign mOp1_WQ=now_flushing_reg2 ?       read_mop[1][`mOp1_WQ] : 8'bz;
+  assign mOp1_lsflag=now_flushing_reg2 ?   read_mop[1][`mOp1_lsf] : 1'bz;
 
-  assign mOp1_thread_o=now_flushing_reg2 && ~WB_fwd[1] ?   read_mop[1][`mOp1_thr] : 1'bz;
-  assign mOp1_thread_o=~now_flushing_reg2 && ~WB_fwd[1] ? mOp1_thread : 1'bz;
-  assign mOp1_thread_o=WB_fwd[1] ? mOpW_thread : 1'bz;
-  assign mOp1_addrEven_o=now_flushing_reg2 && ~WB_fwd[1] ? read_mop[1][`mOp1_addrEven] : 36'bz; 
-  assign mOp1_addrEven_o=~now_flushing_reg2 & ~alt_bus_hold & ~WB_fwd[1] ? mOp1_addrEven : 36'bz;
-  assign mOp1_addrEven_o=alt_bus_hold & ~ WB_fwd[1] ? alt_bus_addr[36:1] : 36'bz;
-  assign mOp1_addrEven_o=WB_fwd[1] ? mOpW_addrEven : 36'bz;
-  assign mOp1_addrOdd_o=now_flushing_reg2 && ~WB_fwd[1] ? read_mop[1][`mOp1_addrOdd] : 36'bz; 
-  assign mOp1_addrOdd_o=~now_flushing_reg2 & ~alt_bus_hold & ~WB_fwd[1] ? mOp1_addrOdd : 36'bz;
-  assign mOp1_addrOdd_o=alt_bus_hold & ~ WB_fwd[1] ? alt_bus_addr[36:1] : 36'bz;
-  assign mOp1_addrOdd_o=WB_fwd[1] ? mOpW_addrOdd : 36'bz;
-  assign mOp1_sz_o=now_flushing_reg2 & ~WB_fwd[1] ?       read_mop[1][`mOp1_sz] : 5'bz; 
-  assign mOp1_sz_o=~now_flushing_reg2 & ~WB_fwd[1] ? mOp1_sz : 5'bz; 
-  assign mOp1_sz_o=WB_fwd[1] ? mOpW_sz : 5'bz;
-  assign mOp1_st_o=now_flushing_reg2 & ~WB_fwd[1] ?       read_mop[1][`mOp1_st] : 1'bz; 
-  assign mOp1_st_o=~now_flushing_reg2 & ~WB_fwd[1] ? mOp1_st : 1'bz; 
-  assign mOp1_st_o=WB_fwd[1] ? mOpW_st : 1'bz;
-  assign mOp1_split_o=now_flushing_reg2 & ~WB_fwd[1] ?    read_mop[1][`mOp1_split] : 1'bz; 
-  assign mOp1_split_o=~now_flushing_reg2 & ~WB_fwd[1] ? mOp1_split : 1'bz; 
-  assign mOp1_split_o=WB_fwd[1] ? mOpW_split : 1'bz;
-  assign mOp1_addr_low_o=now_flushing_reg2 & ~WB_fwd[1] ? read_mop[1][`mOp1_low] : 2'bz;
-  assign mOp1_addr_low_o=~now_flushing_reg2 & ~WB_fwd[1] ? mOp1_addr_low : 2'bz; 
-  assign mOp1_addr_low_o=WB_fwd[1] ? mOpW_addr_low : 2'bz;
-  assign mOp1_odd_o=now_flushing_reg2 & ~WB_fwd[1] ? read_mop[1][`mOp1_odd] : 1'bz; 
-  assign mOp1_odd_o=~now_flushing_reg2 & ~alt_bus_hold & ~WB_fwd[1] ? mOp1_odd : 1'bz;
-  assign mOp1_odd_o=alt_bus_hold && ~WB_fwd[1]? alt_bus_addr[1] : 1'bz;
-  assign mOp1_odd_o=WB_fwd[1] ? mOpW_odd : 1'bz;
-  assign mOp1_banks_o=now_flushing_reg2 && ~WB_fwd[1] ?    read_mop[1][`mOp1_banks] : 32'bz;
-  assign mOp1_banks_o=alt_bus_hold && ~WB_fwd[1] ? 32'b0 : 32'bz;
-  assign mOp1_banks_o=~now_flushing_reg2 & ~alt_bus_hold & ~WB_fwd[1] ? mOp1_banks : 32'bz;
-  assign mOp1_banks_o=WB_fwd[1] ? mOpW_banks : 32'bz;
-  assign mOp1_bank0_o=now_flushing_reg2 & ~WB_fwd[1] ?    read_mop[1][`mOp1_bank0] : 5'bz; 
-  assign mOp1_bank0_o=~now_flushing_reg2 & ~WB_fwd[1] ? mOp1_bank0 : 5'bz; 
-  assign mOp1_bank0_o=WB_fwd[1] ? mOpW_bank0 : 5'bz;
-  assign mOp1_register_o=now_flushing_reg2 && ~WB_fwd[1] ? read_mop[1][`mOp1_regNo] : 9'bz;
-  assign mOp1_register_o=alt_bus_hold & ~ WB_fwd[1] ? 9'h1ef : 9'bz;
-  assign mOp1_register_o=~alt_bus_hold & ~now_flushing_reg2 & ~WB_fwd[1] ? mOp1_register : 9'bz;
-  assign mOp1_register_o=WB_fwd[1] ? mOpW_register : 9'bz;
-  assign mOp1_type_o=now_flushing_reg2 && ~WB_fwd[1] ? read_mop[1][`mOp1_type] : 2'bz;
-  assign mOp1_type_o=alt_bus_hold & ~WB_fwd[1] ? 2'b0 : 2'bz;
-  assign mOp1_type_o=~alt_bus_hold & ~now_flushing_reg2 & ~WB_fwd[1] ? mOp1_type : 2'bz;
-  assign mOp1_type_o=WB_fwd[1] ? mOpW_type : 2'bz;
-  assign mOp1_en_o=now_flushing_reg2 && ~WB_fwd[1] ?       read_confl[1]&~thrinhibitconfl[1]  : 1'bz;
-  assign mOp1_en_o=alt_bus_hold & ~WB_fwd[1] ? 1'b1 : 1'bz;
-  assign mOp1_en_o=~now_flushing_reg2 & ~alt_bus_hold & ~WB_fwd[1] ? mOp1_en : 1'bz;
-  assign mOp1_en_o=WB_fwd[1] ? mOpW_en : 1'bz;
-  assign mOp1_LSQ_o=now_flushing_reg2 & ~WB_fwd[1] ?      read_mop[1][`mOp1_LSQ] : 9'bz; 
-  assign mOp1_LSQ_o=~now_flushing_reg2 & ~WB_fwd[1] ? mOp1_LSQ : 9'bz; 
-  assign mOp1_LSQ_o=WB_fwd[1] ? mOpW_LSQ : 9'bz;
-  assign mOp1_II_o=now_flushing_reg2 & ~WB_fwd[1] ?       read_mop[1][`mOp1_II] : 10'bz; 
-  assign mOp1_II_o=~now_flushing_reg2 & ~WB_fwd[1] ? mOp1_II : 10'bz; 
-  assign mOp1_II_o=WB_fwd[1] ? mOpW_II : 10'bz;
-  assign mOp1_WQ_o=now_flushing_reg2 & ~WB_fwd[1] ?       read_mop[1][`mOp1_WQ] : 8'bz; 
-  assign mOp1_WQ_o=~now_flushing_reg2 & ~WB_fwd[1] ? mOp1_WQ : 8'bz; 
-  assign mOp1_WQ_o=WB_fwd[1] ? mOpW_WQ : 8'bz;
-  assign mOp1_lsflag_o=now_flushing_reg2 & ~WB_fwd[1] ?   read_mop[1][`mOp1_lsf] : 1'bz; 
-  assign mOp1_lsflag_o=~now_flushing_reg2 & ~WB_fwd[1] ? mOp1_lsflag : 1'bz; 
-  assign mOp1_lsflag_o=WB_fwd[1] ? mOpW_lsflag : 1'bz;
-  assign mOp1_lsfwd_o=now_flushing_reg2 ?    read_mop[1][`mOp1_lsfwd] : WB_fwd[1];
+  assign mOp2_thread=now_flushing_reg2 ?   read_mop[2][`mOp1_thr] : 1'bz;
+  assign mOp2_addrEven=now_flushing_reg2 ? read_mop[2][`mOp1_addrEven] : 36'bz;
+  assign mOp2_addrOdd=now_flushing_reg2 ?  read_mop[2][`mOp1_addrOdd] : 36'bz;
+  assign mOp2_sz=now_flushing_reg2 ?       read_mop[2][`mOp1_sz] : 5'bz;
+  assign mOp2_st=now_flushing_reg2 ?       read_mop[2][`mOp1_st] : 1'bz;
+  assign mOp2_split=now_flushing_reg2 ?    read_mop[2][`mOp1_split] : 1'bz;
+  assign mOp2_addr_low=now_flushing_reg2 ? read_mop[2][`mOp1_low] : 2'bz;
+  assign mOp2_odd=now_flushing_reg2 ?      read_mop[2][`mOp1_odd] : 1'bz;
+  assign mOp2_banks=now_flushing_reg2 ?    read_mop[2][`mOp1_banks] : 32'bz;
+  assign mOp2_bank0=now_flushing_reg2 ?    read_mop[2][`mOp1_bank0] : 5'bz;
+  assign mOp2_register=now_flushing_reg2 ? read_mop[2][`mOp1_regNo] : 9'bz;
+  assign mOp2_en=now_flushing_reg2 ?       read_confl[2]&~thrinhibitconfl[2]  : 1'bz;
+  assign mOp2_LSQ=now_flushing_reg2 ?      read_mop[2][`mOp1_LSQ] : 9'bz;
+  assign mOp2_II=now_flushing_reg2 ?       read_mop[2][`mOp1_II] : 10'bz;
+  assign mOp2_WQ=now_flushing_reg2 ?       read_mop[2][`mOp1_WQ] : 8'bz;
+  assign mOp2_lsflag=now_flushing_reg2 ?   read_mop[2][`mOp1_lsf] : 1'bz;
 
-  assign mOp2_thread_o=now_flushing_reg2 && ~WB_fwd[2] ?   read_mop[2][`mOp1_thr] : 1'bz;
-  assign mOp2_thread_o=~now_flushing_reg2 && ~WB_fwd[2] ? mOp2_thread : 1'bz;
-  assign mOp2_thread_o=WB_fwd[2] ? mOpW_thread : 1'bz;
-  assign mOp2_addrEven_o=now_flushing_reg2 && ~WB_fwd[2] ? read_mop[2][`mOp1_addrEven] : 36'bz; 
-  assign mOp2_addrEven_o=~now_flushing_reg2 & ~alt_bus_hold & ~WB_fwd[2] ? mOp2_addrEven : 36'bz;
-  assign mOp2_addrEven_o=alt_bus_hold & ~ WB_fwd[2] ? alt_bus_addr[36:1] : 36'bz;
-  assign mOp2_addrEven_o=WB_fwd[2] ? mOpW_addrEven : 36'bz;
-  assign mOp2_addrOdd_o=now_flushing_reg2 && ~WB_fwd[2] ? read_mop[2][`mOp1_addrOdd] : 36'bz; 
-  assign mOp2_addrOdd_o=~now_flushing_reg2 & ~alt_bus_hold & ~WB_fwd[2] ? mOp2_addrOdd : 36'bz;
-  assign mOp2_addrOdd_o=alt_bus_hold & ~ WB_fwd[2] ? alt_bus_addr[36:1] : 36'bz;
-  assign mOp2_addrOdd_o=WB_fwd[2] ? mOpW_addrOdd : 36'bz;
-  assign mOp2_sz_o=now_flushing_reg2 & ~WB_fwd[2] ?       read_mop[2][`mOp1_sz] : 5'bz; 
-  assign mOp2_sz_o=~now_flushing_reg2 & ~WB_fwd[2] ? mOp2_sz : 5'bz; 
-  assign mOp2_sz_o=WB_fwd[2] ? mOpW_sz : 5'bz;
-  assign mOp2_st_o=now_flushing_reg2 & ~WB_fwd[2] ?       read_mop[2][`mOp1_st] : 1'bz; 
-  assign mOp2_st_o=~now_flushing_reg2 & ~WB_fwd[2] ? mOp2_st : 1'bz; 
-  assign mOp2_st_o=WB_fwd[2] ? mOpW_st : 1'bz;
-  assign mOp2_split_o=now_flushing_reg2 & ~WB_fwd[2] ?    read_mop[2][`mOp1_split] : 1'bz; 
-  assign mOp2_split_o=~now_flushing_reg2 & ~WB_fwd[2] ? mOp2_split : 1'bz; 
-  assign mOp2_split_o=WB_fwd[2] ? mOpW_split : 1'bz;
-  assign mOp2_addr_low_o=now_flushing_reg2 & ~WB_fwd[2] ? read_mop[2][`mOp1_low] : 2'bz;
-  assign mOp2_addr_low_o=~now_flushing_reg2 & ~WB_fwd[2] ? mOp2_addr_low : 2'bz; 
-  assign mOp2_addr_low_o=WB_fwd[2] ? mOpW_addr_low : 2'bz;
-  assign mOp2_odd_o=now_flushing_reg2 & ~WB_fwd[2] ? read_mop[2][`mOp1_odd] : 1'bz; 
-  assign mOp2_odd_o=~now_flushing_reg2 & ~alt_bus_hold & ~WB_fwd[2] ? mOp2_odd : 1'bz;
-  assign mOp2_odd_o=alt_bus_hold && ~WB_fwd[2]? alt_bus_addr[2] : 1'bz;
-  assign mOp2_odd_o=WB_fwd[2] ? mOpW_odd : 1'bz;
-  assign mOp2_banks_o=now_flushing_reg2 && ~WB_fwd[2] ?    read_mop[2][`mOp1_banks] : 32'bz;
-  assign mOp2_banks_o=alt_bus_hold && ~WB_fwd[2] ? 32'b0 : 32'bz;
-  assign mOp2_banks_o=~now_flushing_reg2 & ~alt_bus_hold & ~WB_fwd[2] ? mOp2_banks : 32'bz;
-  assign mOp2_banks_o=WB_fwd[2] ? mOpW_banks : 32'bz;
-  assign mOp2_bank0_o=now_flushing_reg2 & ~WB_fwd[2] ?    read_mop[2][`mOp1_bank0] : 5'bz; 
-  assign mOp2_bank0_o=~now_flushing_reg2 & ~WB_fwd[2] ? mOp2_bank0 : 5'bz; 
-  assign mOp2_bank0_o=WB_fwd[2] ? mOpW_bank0 : 5'bz;
-  assign mOp2_register_o=now_flushing_reg2 && ~WB_fwd[2] ? read_mop[2][`mOp1_regNo] : 9'bz;
-  assign mOp2_register_o=alt_bus_hold & ~ WB_fwd[2] ? 9'h1ef : 9'bz;
-  assign mOp2_register_o=~alt_bus_hold & ~now_flushing_reg2 & ~WB_fwd[2] ? mOp2_register : 9'bz;
-  assign mOp2_register_o=WB_fwd[2] ? mOpW_register : 9'bz;
-  assign mOp2_type_o=now_flushing_reg2 && ~WB_fwd[2] ? read_mop[2][`mOp1_type] : 2'bz;
-  assign mOp2_type_o=alt_bus_hold & ~WB_fwd[2] ? 2'b0 : 2'bz;
-  assign mOp2_type_o=~alt_bus_hold & ~now_flushing_reg2 & ~WB_fwd[2] ? mOp2_type : 2'bz;
-  assign mOp2_type_o=WB_fwd[2] ? mOpW_type : 2'bz;
-  assign mOp2_en_o=now_flushing_reg2 && ~WB_fwd[2] ?       read_confl[2]&~thrinhibitconfl[2]  : 1'bz;
-  assign mOp2_en_o=alt_bus_hold & ~WB_fwd[2] ? 1'b1 : 1'bz;
-  assign mOp2_en_o=~now_flushing_reg2 & ~alt_bus_hold & ~WB_fwd[2] ? mOp2_en : 1'bz;
-  assign mOp2_en_o=WB_fwd[2] ? mOpW_en : 1'bz;
-  assign mOp2_LSQ_o=now_flushing_reg2 & ~WB_fwd[2] ?      read_mop[2][`mOp1_LSQ] : 9'bz; 
-  assign mOp2_LSQ_o=~now_flushing_reg2 & ~WB_fwd[2] ? mOp2_LSQ : 9'bz; 
-  assign mOp2_LSQ_o=WB_fwd[2] ? mOpW_LSQ : 9'bz;
-  assign mOp2_II_o=now_flushing_reg2 & ~WB_fwd[2] ?       read_mop[2][`mOp1_II] : 10'bz; 
-  assign mOp2_II_o=~now_flushing_reg2 & ~WB_fwd[2] ? mOp2_II : 10'bz; 
-  assign mOp2_II_o=WB_fwd[2] ? mOpW_II : 10'bz;
-  assign mOp2_WQ_o=now_flushing_reg2 & ~WB_fwd[2] ?       read_mop[2][`mOp1_WQ] : 8'bz; 
-  assign mOp2_WQ_o=~now_flushing_reg2 & ~WB_fwd[2] ? mOp2_WQ : 8'bz; 
-  assign mOp2_WQ_o=WB_fwd[2] ? mOpW_WQ : 8'bz;
-  assign mOp2_lsflag_o=now_flushing_reg2 & ~WB_fwd[2] ?   read_mop[2][`mOp1_lsf] : 1'bz; 
-  assign mOp2_lsflag_o=~now_flushing_reg2 & ~WB_fwd[2] ? mOp2_lsflag : 1'bz; 
-  assign mOp2_lsflag_o=WB_fwd[2] ? mOpW_lsflag : 1'bz;
-  assign mOp2_lsfwd_o=now_flushing_reg2 ?    read_mop[2][`mOp1_lsfwd] : WB_fwd[2];
-  assign mOp2_data_o=now_flushing_reg2 ?     read_dxdata[127+8+5:5] : mOpW_data;
-  assign mOp2_pbit_o=now_flushing_reg2 ?     read_dxdata[127+8+5+2:127+8+5+1] : mOpW_pbit;
-  assign mOp2_brdread_o=now_flushing_reg2 ? read_dxdata[4:0] : mOpW_brdread;
-
-
-
-
-  assign mOp3_thread_o=now_flushing_reg2 ?   read_mop[3][`mOp1_thr] : mOp3_thread;
-  assign mOp3_addrEven_o=now_flushing_reg2 ? read_mop[3][`mOp1_addrEven] : 36'bz; 
-  assign mOp3_addrEven_o=~now_flushing_reg2 & ~alt_bus_hold ? mOp3_addrEven : 36'bz;
-  assign mOp3_addrEven_o=alt_bus_hold ? alt_bus_addr[36:1] : 36'bz;
-  assign mOp3_addrOdd_o=now_flushing_reg2 ? read_mop[3][`mOp1_addrOdd] : 36'bz; 
-  assign mOp3_addrOdd_o=~now_flushing_reg2 & ~alt_bus_hold ? mOp3_addrOdd : 36'bz;
-  assign mOp3_addrOdd_o=alt_bus_hold ? alt_bus_addr[36:1] : 36'bz;
-  assign mOp3_sz_o=now_flushing_reg2 ?       read_mop[3][`mOp1_sz] : mOp3_sz;
-  assign mOp3_st_o=now_flushing_reg2 ?       read_mop[3][`mOp1_st] : mOp3_st;
-  assign mOp3_split_o=now_flushing_reg2 ?    read_mop[3][`mOp1_split] : mOp3_split;
-  assign mOp3_addr_low_o=now_flushing_reg2 ? read_mop[3][`mOp1_low] : mOp3_addr_low;
-  assign mOp3_odd_o=now_flushing_reg2 ? read_mop[3][`mOp1_odd] : 1'bz; 
-  assign mOp3_odd_o=~now_flushing_reg2 & ~alt_bus_hold ? mOp3_odd : 1'bz;
-  assign mOp3_odd_o=alt_bus_hold ? alt_bus_addr[0] : 1'bz;
-  assign mOp3_banks_o=now_flushing_reg2 ?    read_mop[3][`mOp1_banks] : 32'bz;
-  assign mOp3_banks_o=alt_bus_hold ? 32'b0 : 32'bz;
-  assign mOp3_banks_o=~now_flushing_reg2 & ~alt_bus_hold ? mOp3_banks : 32'bz;
-  assign mOp3_bank0_o=now_flushing_reg2 ?    read_mop[3][`mOp1_bank0] : mOp3_bank0;
-  assign mOp3_register_o=now_flushing_reg2 ? read_mop[3][`mOp1_regNo] : 9'bz;
-  assign mOp3_register_o=alt_bus_hold ? 9'h1ef : 9'bz;
-  assign mOp3_register_o=~alt_bus_hold & ~now_flushing_reg2 ? mOp3_register : 9'bz;
-  assign mOp3_type_o=now_flushing_reg2 ? read_mop[3][`mOp1_type] : 2'bz;
-  assign mOp3_type_o=alt_bus_hold ? 2'b0 : 2'bz;
-  assign mOp3_type_o=~alt_bus_hold & ~now_flushing_reg2 ? mOp3_type : 2'bz;
-  assign mOp3_en_o=now_flushing_reg2 ?       read_confl[3]&~thrinhibitconfl[3]  : 1'bz;
-  assign mOp3_en_o=alt_bus_hold ? 1'b1 : 1'bz;
-  assign mOp3_en_o=~now_flushing_reg2 & ~alt_bus_hold ? mOp3_en : 1'bz;;
-  assign mOp3_LSQ_o=now_flushing_reg2 ?      read_mop[3][`mOp1_LSQ] : mOp3_LSQ;
-  assign mOp3_II_o=now_flushing_reg2 ?       read_mop[3][`mOp1_II] : mOp3_II;
-  assign mOp3_WQ_o=now_flushing_reg2 ?       read_mop[3][`mOp1_WQ] : mOp3_WQ;
-  assign mOp3_lsflag_o=now_flushing_reg2 ?   read_mop[3][`mOp1_lsf] : mOp3_lsflag;
-  assign mOp3_lsfwd_o=now_flushing_reg2 ?    read_mop[3][`mOp1_lsfwd] : mOp3_lsfwd;
-  assign mOp3_data_o=now_flushing_reg2 ?     read_dxdata[143+127+8+5:143+5] : mOp3_data;
-  assign mOp3_pbit_o=now_flushing_reg2 ?     read_dxdata[143+127+8+5+2:143+127+8+5+1] : mOp3_pbit;
-  assign mOp3_brdbanks_o=now_flushing_reg2 ? read_dxdata[145+4:145] : mOp3_brdbanks;
+  assign mOp3_thread=now_flushing_reg2 ?   read_mop[3][`mOp1_thr] : 1'bz;
+  assign mOp3_addrEven=now_flushing_reg2 ? read_mop[3][`mOp1_addrEven] : 36'bz;
+  assign mOp3_addrOdd=now_flushing_reg2 ?  read_mop[3][`mOp1_addrOdd] : 36'bz;
+  assign mOp3_sz=now_flushing_reg2 ?       read_mop[3][`mOp1_sz] : 5'bz;
+  assign mOp3_st=now_flushing_reg2 ?       read_mop[3][`mOp1_st] : 1'bz;
+  assign mOp3_split=now_flushing_reg2 ?    read_mop[3][`mOp1_split] : 1'bz;
+  assign mOp3_addr_low=now_flushing_reg2 ? read_mop[3][`mOp1_low] : 2'bz;
+  assign mOp3_odd=now_flushing_reg2 ?      read_mop[3][`mOp1_odd] : 1'bz;
+  assign mOp3_banks=now_flushing_reg2 ?    read_mop[3][`mOp1_banks] : 32'bz;
+  assign mOp3_bank0=now_flushing_reg2 ?    read_mop[3][`mOp1_bank0] : 5'bz;
+  assign mOp3_register=now_flushing_reg2 ? read_mop[3][`mOp1_regNo] : 9'bz;
+  assign mOp3_en=now_flushing_reg2 ?       read_confl[3]&~thrinhibitconfl[3]  : 1'bz;
+  assign mOp3_LSQ=now_flushing_reg2 ?      read_mop[3][`mOp1_LSQ] : 9'bz;
+  assign mOp3_II=now_flushing_reg2 ?       read_mop[3][`mOp1_II] : 10'bz;
+  assign mOp3_WQ=now_flushing_reg2 ?       read_mop[3][`mOp1_WQ] : 8'bz;
+  assign mOp3_lsflag=now_flushing_reg2 ?   read_mop[3][`mOp1_lsf] : 1'bz;
+  assign mOp3_lsfwd=now_flushing_reg2 ?    read_mop[3][`mOp1_lsfwd] : 1'bz;
+  assign mOp3_data=now_flushing_reg2 ?     read_ddata[127+4:4] : 128'bz;
+  assign mOp3_brdbanks=now_flushing_reg2 ? read_ddata[387:384] : 4'bz;
 
 //  assign mOp4_thread=now_flushing_reg2 ?   read_mop[4][`mOp1_thr] : 1'bz;
-  assign mOp4_addrEven_o=now_flushing_reg2 ? read_mop[4][`mOp1_addrEven] : 36'bz; 
-  assign mOp4_addrEven_o=~now_flushing_reg2 & ~alt_bus_hold ? mOp4_addrEven : 36'bz;
-  assign mOp4_addrEven_o=alt_bus_hold ? alt_bus_addr[36:1] : 36'bz;
-  assign mOp4_addrOdd_o=now_flushing_reg2 ? read_mop[4][`mOp1_addrOdd] : 36'bz; 
-  assign mOp4_addrOdd_o=~now_flushing_reg2 & ~alt_bus_hold ? mOp4_addrOdd : 36'bz;
-  assign mOp4_addrOdd_o=alt_bus_hold ? alt_bus_addr[36:1] : 36'bz;
-  assign mOp4_sz_o=now_flushing_reg2 ?       read_mop[4][`mOp1_sz] : mOp4_sz;
-//  assign mOp4_first_o=now_flushing_reg2 ?    read_mop[4][`mOp1_st] : mOp4_first;
-  assign mOp4_split_o=now_flushing_reg2 ?    read_mop[4][`mOp1_split] : mOp4_split;
-  assign mOp4_odd_o=now_flushing_reg2 ? read_mop[4][`mOp1_odd] : 1'bz; 
-  assign mOp4_odd_o=~now_flushing_reg2 & ~alt_bus_hold ? mOp4_odd : 1'bz;
-  assign mOp4_odd_o=alt_bus_hold ? alt_bus_addr[0] : 1'bz;
-  assign mOp4_addr_low_o=now_flushing_reg2 ? read_mop[4][`mOp1_low] : mOp4_addr_low;
-  assign mOp4_bank0_o=now_flushing_reg2 ?    read_mop[4][`mOp1_bank0] : mOp4_bank0;
-  assign mOp4_banks_o=now_flushing_reg2 ?    bank4 : 32'bz;
-  assign mOp4_banks_o=alt_bus_hold ? 32'hffff_ffff : 32'bz;
-  assign mOp4_banks_o=~now_flushing_reg2 & ~alt_bus_hold ? mOp4_banks : 32'bz;
-  assign mOp4_data_o=now_flushing_reg2 ? {read_ddata[127:0],read_mop[4][`mOp1_banks]} : mOp4_data;
-  assign mOp4_type_o=now_flushing_reg2 ? read_mop[4][`mOp1_type] : 2'bz;
-  assign mOp4_type_o=alt_bus_hold ? 2'b0 : 2'bz;
-  assign mOp4_type_o=~alt_bus_hold & ~now_flushing_reg2 ? mOp4_type : 2'bz;
-  assign mOp4_en_o=now_flushing_reg2 ?       read_confl[4]&~thrinhibitconfl[4]  : 1'bz;
-  assign mOp4_en_o=alt_bus_hold ? 1'b0 : 1'bz;
-  assign mOp4_en_o=~now_flushing_reg2 & ~alt_bus_hold ? mOp4_en : 1'bz;;
-  assign {mOp4_pbit_o,mOp4_dupl_dummy,mOp4_bank1_o}=now_flushing_reg2 ?    read_mop[4][`mOp1_LSQ] : {mOp4_pbit,2'b0,mOp4_bank1};
-  assign mOp4_II_o=now_flushing_reg2 ?       read_mop[4][`mOp1_II] : mOp4_II;
-  assign {mOp4_bgn_b_o,mOp4_end_b_o}=now_flushing_reg2 ? read_mop[4][`mOp1_WQ] : 8'bz;
-  assign {mOp4_bgn_b_o,mOp4_end_b_o}=alt_bus_hold ? 8'hff : 8'bz;
-  assign {mOp4_bgn_b_o,mOp4_end_b_o}=~now_flushing_reg2 & ~alt_bus_hold ? {mOp4_bgn_b,mOp4_end_b} : 8'bz;
+  assign mOp4_addrEven=now_flushing_reg2 ? read_mop[4][`mOp1_addrEven] : 36'bz;
+  assign mOp4_addrOdd=now_flushing_reg2 ?  read_mop[4][`mOp1_addrOdd] : 36'bz;
+  assign mOp4_sz=now_flushing_reg2 ?       read_mop[4][`mOp1_sz] : 5'bz;
+  assign mOp4_first=now_flushing_reg2 ?    read_mop[4][`mOp1_st] : 1'bz;
+  assign mOp4_split=now_flushing_reg2 ?    read_mop[4][`mOp1_split] : 1'bz;
+  assign mOp4_odd=now_flushing_reg2 ?      read_mop[4][`mOp1_odd] : 1'bz;
+  assign mOp4_addr_low=now_flushing_reg2 ? read_mop[4][`mOp1_low] : 2'bz;
+  assign mOp4_bank0=now_flushing_reg2 ?    read_mop[4][`mOp1_bank0] : 5'bz;
+  assign mOp4_banks=now_flushing_reg2 ?    bank4 : 32'bz;
+  assign mOp4_data=now_flushing_reg2 ? {read_ddata[255+4:128+4],read_mop[4][`mOp1_banks]} : 160'bz;
+  assign mOp4_en=now_flushing_reg2 ?       read_confl[4]&~thrinhibitconfl[4]  : 1'bz;
+  assign mOp4_bank1=now_flushing_reg2 ?    read_mop[4][`mOp1_LSQ] : 9'bz;
+  assign mOp4_II=now_flushing_reg2 ?       read_mop[4][`mOp1_II] : 10'bz;
+  assign {mOp4_bgn_b,mOp4_end_b}=now_flushing_reg2 ? read_mop[4][`mOp1_WQ] : 8'bz;
 
 //  assign mOp5_thread=now_flushing_reg2 ?   read_mop[5][`mOp1_thr] : 1'bz;
-  assign mOp5_addrEven_o=now_flushing_reg2 ? read_mop[5][`mOp1_addrEven] : 36'bz; 
-  assign mOp5_addrEven_o=~now_flushing_reg2 & ~alt_bus_hold ? mOp5_addrEven : 36'bz;
-  assign mOp5_addrEven_o=alt_bus_hold ? alt_bus_addr[36:1] : 36'bz;
-  assign mOp5_addrOdd_o=now_flushing_reg2 ? read_mop[5][`mOp1_addrOdd] : 36'bz; 
-  assign mOp5_addrOdd_o=~now_flushing_reg2 & ~alt_bus_hold ? mOp5_addrOdd : 36'bz;
-  assign mOp5_addrOdd_o=alt_bus_hold ? alt_bus_addr[36:1] : 36'bz;
-  assign mOp5_sz_o=now_flushing_reg2 ?       read_mop[5][`mOp1_sz] : mOp5_sz;
-//  assign mOp5_first_o=now_flushing_reg2 ?    read_mop[5][`mOp1_st] : mOp5_first;
-  assign mOp5_split_o=now_flushing_reg2 ?    read_mop[5][`mOp1_split] : mOp5_split;
-  assign mOp5_odd_o=now_flushing_reg2 ? read_mop[5][`mOp1_odd] : 1'bz; 
-  assign mOp5_odd_o=~now_flushing_reg2 & ~alt_bus_hold ? mOp5_odd : 1'bz;
-  assign mOp5_odd_o=alt_bus_hold ? alt_bus_addr[0] : 1'bz;
-  assign mOp5_addr_low_o=now_flushing_reg2 ? read_mop[5][`mOp1_low] : mOp5_addr_low;
-  assign mOp5_bank0_o=now_flushing_reg2 ?    read_mop[5][`mOp1_bank0] : mOp5_bank0;
-  assign mOp5_banks_o=now_flushing_reg2 ?    bank5 : 32'bz;
-  assign mOp5_banks_o=alt_bus_hold ? 32'b0 : 32'bz;
-  assign mOp5_banks_o=~now_flushing_reg2 & ~alt_bus_hold ? mOp5_banks : 32'bz;
-  assign mOp5_data_o=now_flushing_reg2 ? {read_ddata[255:128],read_mop[5][`mOp1_banks]} : mOp5_data;
-  assign mOp5_type_o=now_flushing_reg2 ? read_mop[5][`mOp1_type] : 2'bz;
-  assign mOp5_type_o=alt_bus_hold ? 2'b0 : 2'bz;
-  assign mOp5_type_o=~alt_bus_hold & ~now_flushing_reg2 ? mOp5_type : 2'bz;
-  assign mOp5_en_o=now_flushing_reg2 ?       read_confl[5]&~thrinhibitconfl[5]  : 1'bz;
-  assign mOp5_en_o=alt_bus_hold ? 1'b0 : 1'bz;
-  assign mOp5_en_o=~now_flushing_reg2 & ~alt_bus_hold ? mOp5_en : 1'bz;;
-  assign {mOp5_pbit_o,mOp5_dupl_dummy,mOp5_bank1_o}=now_flushing_reg2 ?    read_mop[5][`mOp1_LSQ] : {mOp5_pbit,2'b0,mOp5_bank1};
-  assign mOp5_II_o=now_flushing_reg2 ?       read_mop[5][`mOp1_II] : mOp5_II;
-  assign {mOp5_bgn_b_o,mOp5_end_b_o}=now_flushing_reg2 ? read_mop[5][`mOp1_WQ] : 8'bz;
-  assign {mOp5_bgn_b_o,mOp5_end_b_o}=alt_bus_hold ? 8'hff : 8'bz;
-  assign {mOp5_bgn_b_o,mOp5_end_b_o}=~now_flushing_reg2 & ~alt_bus_hold ? {mOp5_bgn_b,mOp5_end_b} : 8'bz;
+  assign mOp5_addrEven=now_flushing_reg2 ? read_mop[5][`mOp1_addrEven] : 36'bz;
+  assign mOp5_addrOdd=now_flushing_reg2 ?  read_mop[5][`mOp1_addrOdd] : 36'bz;
+  assign mOp5_sz=now_flushing_reg2 ?       read_mop[5][`mOp1_sz] : 5'bz;
+  assign mOp5_first=now_flushing_reg2 ?    read_mop[5][`mOp1_st] : 1'bz;
+  assign mOp5_split=now_flushing_reg2 ?    read_mop[5][`mOp1_split] : 1'bz;
+  assign mOp5_odd=now_flushing_reg2 ?      read_mop[5][`mOp1_odd] : 1'bz;
+  assign mOp5_addr_low=now_flushing_reg2 ? read_mop[5][`mOp1_low] : 2'bz;
+  assign mOp5_bank0=now_flushing_reg2 ?    read_mop[5][`mOp1_bank0] : 5'bz;
+  assign mOp5_banks=now_flushing_reg2 ?    bank5 : 32'bz;
+  assign mOp5_data=now_flushing_reg2 ? {read_ddata[383+4:256+4],read_mop[5][`mOp1_banks]} : 160'bz;
+  assign mOp5_en=now_flushing_reg2 ?       read_confl[5]&~thrinhibitconfl[5]  : 1'bz;
+  assign mOp5_bank1=now_flushing_reg2 ?    read_mop[5][`mOp1_LSQ] : 9'bz;
+  assign mOp5_II=now_flushing_reg2 ?       read_mop[5][`mOp1_II] : 10'bz;
+  assign {mOp5_bgn_b,mOp5_end_b}=now_flushing_reg2 ? read_mop[5][`mOp1_WQ] : 8'bz;
 
   assign write_mop[0][`mOp1_thr]=     mOp0_thread_reg[3];
   assign write_mop[0][`mOp1_addrEven]=mOp0_addrEven_reg[3];
@@ -1150,12 +923,11 @@ module missQ(
   assign write_mop[0][`mOp1_bank0]=   mOp0_bank0_reg[3];
   assign write_mop[0][`mOp1_clHit]=   mOp0_clHit;
   assign write_mop[0][`mOp1_regNo]=   mOp0_register_reg[3];
-  assign write_mop[0][`mOp1_type]=    mOp0_type_reg[3];
   assign write_mop[0][`mOp1_LSQ]=     mOp0_LSQ_reg[3];
   assign write_mop[0][`mOp1_II]=      mOp0_II_reg[3];
   assign write_mop[0][`mOp1_WQ]=      mOp0_WQ_reg[3];
   assign write_mop[0][`mOp1_lsf]=     mOp0_lsflag_reg[3];
-  assign write_mop[0][`mOp1_lsfwd]=   mOp0_lsfwd_reg[3];
+  assign write_mop[0][`mOp1_lsfwd]=   1'b0;
 
   assign write_mop[1][`mOp1_thr]=     mOp1_thread_reg[3];
   assign write_mop[1][`mOp1_addrEven]=mOp1_addrEven_reg[3];
@@ -1169,12 +941,11 @@ module missQ(
   assign write_mop[1][`mOp1_bank0]=   mOp1_bank0_reg[3];
   assign write_mop[1][`mOp1_clHit]=   mOp1_clHit;
   assign write_mop[1][`mOp1_regNo]=   mOp1_register_reg[3];
-  assign write_mop[1][`mOp1_type]=    mOp1_type_reg[3];
   assign write_mop[1][`mOp1_LSQ]=     mOp1_LSQ_reg[3];
   assign write_mop[1][`mOp1_II]=      mOp1_II_reg[3];
   assign write_mop[1][`mOp1_WQ]=      mOp1_WQ_reg[3];
   assign write_mop[1][`mOp1_lsf]=     mOp1_lsflag_reg[3];
-  assign write_mop[1][`mOp1_lsfwd]=   mOp1_lsfwd_reg[3];
+  assign write_mop[1][`mOp1_lsfwd]=   1'b0;
 
   assign write_mop[2][`mOp1_thr]=     mOp2_thread_reg[3];
   assign write_mop[2][`mOp1_addrEven]=mOp2_addrEven_reg[3];
@@ -1188,12 +959,11 @@ module missQ(
   assign write_mop[2][`mOp1_bank0]=   mOp2_bank0_reg[3];
   assign write_mop[2][`mOp1_clHit]=   mOp2_clHit;
   assign write_mop[2][`mOp1_regNo]=   mOp2_register_reg[3];
-  assign write_mop[2][`mOp1_type]=    mOp2_type_reg[3];
   assign write_mop[2][`mOp1_LSQ]=     mOp2_LSQ_reg[3];
   assign write_mop[2][`mOp1_II]=      mOp2_II_reg[3];
   assign write_mop[2][`mOp1_WQ]=      mOp2_WQ_reg[3];
   assign write_mop[2][`mOp1_lsf]=     mOp2_lsflag_reg[3];
-  assign write_mop[2][`mOp1_lsfwd]=   mOp2_lsfwd_reg[3];
+  assign write_mop[2][`mOp1_lsfwd]=   1'b0;
 
   assign write_mop[3][`mOp1_thr]=     mOp3_thread_reg[3];
   assign write_mop[3][`mOp1_addrEven]=mOp3_addrEven_reg[3];
@@ -1207,7 +977,6 @@ module missQ(
   assign write_mop[3][`mOp1_bank0]=   mOp3_bank0_reg[3];
   assign write_mop[3][`mOp1_clHit]=   mOp3_clHit;
   assign write_mop[3][`mOp1_regNo]=   mOp3_register_reg[3];
-  assign write_mop[3][`mOp1_type]=    mOp3_type_reg[3];
   assign write_mop[3][`mOp1_LSQ]=     mOp3_LSQ_reg[3];
   assign write_mop[3][`mOp1_II]=      mOp3_II_reg[3];
   assign write_mop[3][`mOp1_WQ]=      mOp3_WQ_reg[3];
@@ -1225,9 +994,8 @@ module missQ(
   assign write_mop[4][`mOp1_low]=     mOp4_addr_low_reg[3];
   assign write_mop[4][`mOp1_banks]=   mOp4_data_reg[3][31:0];
   assign write_mop[4][`mOp1_bank0]=   mOp4_bank0_reg[3];
-  assign write_mop[4][`mOp1_type]=    mOp4_type_reg[3];
   assign write_mop[4][`mOp1_clHit]=   mOp4_clHit;
-  assign write_mop[4][`mOp1_LSQ]=     {mOp4_pbit_reg[3],mOp4_dupl,mOp4_bank1_reg[3]};
+  assign write_mop[4][`mOp1_LSQ]=     {mOp4_dupl,mOp4_bank1_reg[3]};
   assign write_mop[4][`mOp1_II]=      mOp4_II_reg[3];
   assign write_mop[4][`mOp1_WQ]=      {mOp4_bgn_b_reg[3],mOp4_end_b_reg[3]};
   assign write_mop[4][`mOp1_lsfwd]=   1'b0;
@@ -1243,13 +1011,11 @@ module missQ(
   assign write_mop[5][`mOp1_low]=     mOp5_addr_low_reg[3];
   assign write_mop[5][`mOp1_banks]=   mOp5_data_reg[3][31:0];
   assign write_mop[5][`mOp1_bank0]=   mOp5_bank0_reg[3];
-  assign write_mop[5][`mOp1_type]=    mOp5_type_reg[3];
   assign write_mop[5][`mOp1_clHit]=   mOp5_clHit;
-  assign write_mop[5][`mOp1_LSQ]=     {mOp5_pbit_reg[3],mOp5_dupl,mOp5_bank1_reg[3]};
+  assign write_mop[5][`mOp1_LSQ]=     {mOp5_dupl,mOp5_bank1_reg[3]};
   assign write_mop[5][`mOp1_II]=      mOp5_II_reg[3];
   assign write_mop[5][`mOp1_WQ]=      {mOp5_bgn_b_reg[3],mOp5_end_b_reg[3]};
   assign write_mop[5][`mOp1_lsfwd]=   1'b0;
-
 
 
   assign mOpR_en=conflFound && ~init && count;
