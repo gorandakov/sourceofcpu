@@ -1164,7 +1164,7 @@ module missQ(
   assign write_mop[0][`mOp1_bank0]=   mOp0_bank0_reg[3];
   assign write_mop[0][`mOp1_clHit]=   mOp0_clHit;
   assign write_mop[0][`mOp1_regNo]=   mOp0_register_reg[3];
-  assign write_mop[0][`mOp1_type]=    mOp0_type_reg[3];
+  assign write_mop[0][`mOp1_type]=    mOp0_ctype_reg[3];
   assign write_mop[0][`mOp1_LSQ]=     mOp0_LSQ_reg[3];
   assign write_mop[0][`mOp1_II]=      mOp0_II_reg[3];
   assign write_mop[0][`mOp1_WQ]=      mOp0_WQ_reg[3];
@@ -1183,7 +1183,7 @@ module missQ(
   assign write_mop[1][`mOp1_bank0]=   mOp1_bank0_reg[3];
   assign write_mop[1][`mOp1_clHit]=   mOp1_clHit;
   assign write_mop[1][`mOp1_regNo]=   mOp1_register_reg[3];
-  assign write_mop[1][`mOp1_type]=    mOp1_type_reg[3];
+  assign write_mop[1][`mOp1_type]=    mOp1_ctype_reg[3];
   assign write_mop[1][`mOp1_LSQ]=     mOp1_LSQ_reg[3];
   assign write_mop[1][`mOp1_II]=      mOp1_II_reg[3];
   assign write_mop[1][`mOp1_WQ]=      mOp1_WQ_reg[3];
@@ -1202,7 +1202,7 @@ module missQ(
   assign write_mop[2][`mOp1_bank0]=   mOp2_bank0_reg[3];
   assign write_mop[2][`mOp1_clHit]=   mOp2_clHit;
   assign write_mop[2][`mOp1_regNo]=   mOp2_register_reg[3];
-  assign write_mop[2][`mOp1_type]=    mOp2_type_reg[3];
+  assign write_mop[2][`mOp1_type]=    mOp2_ctype_reg[3];
   assign write_mop[2][`mOp1_LSQ]=     mOp2_LSQ_reg[3];
   assign write_mop[2][`mOp1_II]=      mOp2_II_reg[3];
   assign write_mop[2][`mOp1_WQ]=      mOp2_WQ_reg[3];
@@ -1221,7 +1221,7 @@ module missQ(
   assign write_mop[3][`mOp1_bank0]=   mOp3_bank0_reg[3];
   assign write_mop[3][`mOp1_clHit]=   mOp3_clHit;
   assign write_mop[3][`mOp1_regNo]=   mOp3_register_reg[3];
-  assign write_mop[3][`mOp1_type]=    mOp3_type_reg[3];
+  assign write_mop[3][`mOp1_type]=    mOp3_ctype_reg[3];
   assign write_mop[3][`mOp1_LSQ]=     mOp3_LSQ_reg[3];
   assign write_mop[3][`mOp1_II]=      mOp3_II_reg[3];
   assign write_mop[3][`mOp1_WQ]=      mOp3_WQ_reg[3];
@@ -1239,7 +1239,7 @@ module missQ(
   assign write_mop[4][`mOp1_low]=     mOp4_addr_low_reg[3];
   assign write_mop[4][`mOp1_banks]=   mOp4_data_reg[3][31:0];
   assign write_mop[4][`mOp1_bank0]=   mOp4_bank0_reg[3];
-  assign write_mop[4][`mOp1_type]=    mOp4_type_reg[3];
+  assign write_mop[4][`mOp1_type]=    mOp4_ctype_reg[3];
   assign write_mop[4][`mOp1_clHit]=   mOp4_clHit;
   assign write_mop[4][`mOp1_LSQ]=     {mOp4_pbit_reg[3],mOp4_dupl,mOp4_bank1_reg[3]};
   assign write_mop[4][`mOp1_II]=      mOp4_II_reg[3];
@@ -1257,7 +1257,7 @@ module missQ(
   assign write_mop[5][`mOp1_low]=     mOp5_addr_low_reg[3];
   assign write_mop[5][`mOp1_banks]=   mOp5_data_reg[3][31:0];
   assign write_mop[5][`mOp1_bank0]=   mOp5_bank0_reg[3];
-  assign write_mop[5][`mOp1_type]=    mOp5_type_reg[3];
+  assign write_mop[5][`mOp1_type]=    mOp5_ctype_reg[3];
   assign write_mop[5][`mOp1_clHit]=   mOp5_clHit;
   assign write_mop[5][`mOp1_LSQ]=     {mOp5_pbit_reg[3],mOp5_dupl,mOp5_bank1_reg[3]};
   assign write_mop[5][`mOp1_II]=      mOp5_II_reg[3];
@@ -1613,6 +1613,8 @@ module missQ(
               mOp0_LSQ_reg[1]<=mOp0_LSQ_o;
               mOp0_II_reg[1]<=mOp0_II_o;
               mOp0_WQ_reg[1]<=mOp0_WQ_o;
+              mOp0_pbit_reg[1]<=mOp0_pbit_o;
+              mOp0_ctype_reg[1]<=mOp0_ctype_o;
               mOp0_lsflag_reg[1]<=mOp0_lsflag_o;
 
               thrreginh[1][1]<=mOp1_thread_o~^excpt_thread && except;
@@ -1630,6 +1632,8 @@ module missQ(
               mOp1_LSQ_reg[1]<=mOp1_LSQ_o;
               mOp1_II_reg[1]<=mOp1_II_o;
               mOp1_WQ_reg[1]<=mOp1_WQ_o;
+              mOp1_pbit_reg[1]<=mOp1_pbit_o;
+              mOp1_ctype_reg[1]<=mOp1_ctype_o;
               mOp1_lsflag_reg[1]<=mOp1_lsflag_o;
 
               thrreginh[1][2]<=mOp2_thread_no~^excpt_thread && except;
@@ -1647,6 +1651,8 @@ module missQ(
               mOp2_LSQ_reg[1]<=mOp2_LSQ_no;
               mOp2_II_reg[1]<=mOp2_II_no;
               mOp2_WQ_reg[1]<=mOp2_WQ_no;
+              mOp2_pbit_reg[1]<=mOp2_pbit_no;
+              mOp2_ctype_reg[1]<=mOp2_ctype_no;
               mOp2_lsflag_reg[1]<=mOp2_lsflag_no;
               
               thrreginh[1][3]<=mOp3_thread_no~^excpt_thread && except;
@@ -1668,6 +1674,8 @@ module missQ(
               mOp3_lsfwd_reg[1]<=mOp3_lsfwd_no;
               mOp3_data_reg[1]<=mOp3_data_no;
               mOp3_brdbanks_reg[1]<=mOp3_brdbanks_no;
+              mOp3_pbit_reg[1]<=mOp3_pbit_no;
+              mOp3_ctype_reg[1]<=mOp3_ctype_no;
 
               thrreginh[1][4]<=1'b0;
               mOp4_addrEven_reg[1]<=mOp4_addrEven_no;
@@ -1683,6 +1691,8 @@ module missQ(
               mOp4_II_reg[1]<=mOp4_II_no;
               mOp4_bgn_b_reg[1]<=mOp4_bgn_b_no;
               mOp4_end_b_reg[1]<=mOp4_end_b_no;
+              mOp4_pbit_reg[1]<=mOp4_pbit_no;
+              mOp4_ctype_reg[1]<=mOp4_ctype_no;
 
               thrreginh[1][5]<=1'b0;
               mOp5_addrEven_reg[1]<=mOp5_addrEven_no;
@@ -1698,6 +1708,8 @@ module missQ(
               mOp5_II_reg[1]<=mOp5_II_no;
               mOp5_bgn_b_reg[1]<=mOp5_bgn_b_no;
               mOp5_end_b_reg[1]<=mOp5_end_b_no;
+              mOp5_pbit_reg[1]<=mOp5_pbit_no;
+              mOp5_ctype_reg[1]<=mOp5_ctype_no;
               for(r=2;r<=3;r=r+1) begin
                   thrreginh[r][0]<=thrreginh[r-1][0] || (mOp0_thread_reg[r-1]~^excpt_thread && except);
 	          mOp0_thread_reg[r]<=mOp0_thread_reg[r-1];
@@ -1714,6 +1726,8 @@ module missQ(
                   mOp0_LSQ_reg[r]<=mOp0_LSQ_reg[r-1];
                   mOp0_II_reg[r]<=mOp0_II_reg[r-1];
                   mOp0_WQ_reg[r]<=mOp0_WQ_reg[r-1];
+                  mOp0_pbit_reg[r]<=mOp0_pbit_reg[r-1];
+                  mOp0_ctype_reg[r]<=mOp0_ctype_reg[r-1];
                   mOp0_lsflag_reg[r]<=mOp0_lsflag_reg[r-1];
 
                   thrreginh[r][1]<=thrreginh[r-1][1] || (mOp1_thread_reg[r-1]~^excpt_thread && except);
@@ -1731,6 +1745,8 @@ module missQ(
                   mOp1_LSQ_reg[r]<=mOp1_LSQ_reg[r-1];
                   mOp1_II_reg[r]<=mOp1_II_reg[r-1];
                   mOp1_WQ_reg[r]<=mOp1_WQ_reg[r-1];
+                  mOp1_pbit_reg[r]<=mOp1_pbit_reg[r-1];
+                  mOp1_ctype_reg[r]<=mOp1_ctype_reg[r-1];
                   mOp1_lsflag_reg[r]<=mOp1_lsflag_reg[r-1];
 
                   thrreginh[r][2]<=thrreginh[r-1][2] || (mOp2_thread_reg[r-1]~^excpt_thread && except);
@@ -1748,6 +1764,8 @@ module missQ(
                   mOp2_LSQ_reg[r]<=mOp2_LSQ_reg[r-1];
                   mOp2_II_reg[r]<=mOp2_II_reg[r-1];
                   mOp2_WQ_reg[r]<=mOp2_WQ_reg[r-1];
+                  mOp2_pbit_reg[r]<=mOp2_pbit_reg[r-1];
+                  mOp2_ctype_reg[r]<=mOp2_ctype_reg[r-1];
                   mOp2_lsflag_reg[r]<=mOp2_lsflag_reg[r-1];
                   
                   thrreginh[r][3]<=thrreginh[r-1][3] || (mOp3_thread_reg[r-1]~^excpt_thread && except);
@@ -1769,6 +1787,8 @@ module missQ(
                   mOp3_data_reg[r]<=mOp3_data_reg[r-1];
                   mOp3_lsfwd_reg[r]<=mOp3_lsfwd_reg[r-1];
                   mOp3_brdbanks_reg[r]<=mOp3_brdbanks_reg[r-1];
+                  mOp3_pbit_reg[r]<=mOp3_pbit_reg[r-1];
+                  mOp3_ctype_reg[r]<=mOp3_ctype_reg[r-1];
 
                  // thrreginh[r][4]<=thrreginh[r-1][4] || (mOp4_thread_reg[r-1]~^excpt_thread && except);
                   mOp4_addrEven_reg[r]<=mOp4_addrEven_reg[r-1];
@@ -1784,6 +1804,8 @@ module missQ(
                   mOp4_II_reg[r]<=mOp4_II_reg[r-1];
                   mOp4_bgn_b_reg[r]<=mOp4_bgn_b_reg[r-1];
                   mOp4_end_b_reg[r]<=mOp4_end_b_reg[r-1];
+                  mOp4_pbit_reg[r]<=mOp4_pbit_reg[r-1];
+                  mOp4_ctype_reg[r]<=mOp4_ctype_reg[r-1];
 
                  // thrreginh[r][5]<=thrreginh[r-1][5] || (mOp5_thread_reg[r-1]~^excpt_thread && except);
                   mOp5_addrEven_reg[r]<=mOp5_addrEven_reg[r-1];
@@ -1799,6 +1821,8 @@ module missQ(
                   mOp5_II_reg[r]<=mOp5_II_reg[r-1];
                   mOp5_bgn_b_reg[r]<=mOp5_bgn_b_reg[r-1];
                   mOp5_end_b_reg[r]<=mOp5_end_b_reg[r-1];
+                  mOp5_pbit_reg[r]<=mOp5_pbit_reg[r-1];
+                  mOp5_ctype_reg[r]<=mOp5_ctype_reg[r-1];
               end
           end
           if (rst) begin
