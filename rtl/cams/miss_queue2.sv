@@ -119,7 +119,7 @@ endmodule
 
 
 
-
+//verilator lint_off PINMISSING
 
 module missQ(
   clk,
@@ -1888,4 +1888,5 @@ module missQ(
 endmodule
 
 
+//verilator lint_on PINMISSING
 
