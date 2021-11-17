@@ -52,7 +52,7 @@ module missQ_data_ram(
   write_wen
   );
 
-  localparam DATA_WIDTH=3*128+4;
+  localparam DATA_WIDTH=2*128;
   localparam ADDR_WIDTH=4;
   localparam ADDR_COUNT=16;
 
@@ -78,6 +78,45 @@ module missQ_data_ram(
     end
 
 endmodule
+
+module missQ_datax_ram(
+  clk,
+  rst,
+  read_clkEn,
+  read_addr,
+  read_data,
+  write_addr,
+  write_data,
+  write_wen
+  );
+
+  localparam DATA_WIDTH=2*128+16+10+4;
+  localparam ADDR_WIDTH=4;
+  localparam ADDR_COUNT=16;
+
+  input clk;
+  input rst;
+  input read_clkEn;
+  input [ADDR_WIDTH-1:0] read_addr;
+  output [DATA_WIDTH-1:0] read_data;
+  input [ADDR_WIDTH-1:0] write_addr;
+  input [DATA_WIDTH-1:0] write_data;
+  input write_wen;
+
+  reg [DATA_WIDTH-1:0] ram [ADDR_COUNT-1:0];
+  reg [ADDR_WIDTH-1:0] read_addr_reg;
+  
+  assign read_data=ram[read_addr_reg];
+
+  always @(posedge clk)
+    begin
+      if (rst) read_addr_reg<={ADDR_WIDTH{1'b0}};
+      else if (read_clkEn) read_addr_reg<=read_addr;
+      if (write_wen) ram[write_addr]<=write_data;
+    end
+
+endmodule
+
 
 
 
@@ -365,7 +404,8 @@ module missQ(
   localparam INDEX_WIDTH=7;
   localparam BANK_COUNT=32;
   localparam REG_WIDTH=9;
-  localparam DDATA_WIDTH=3*128+4;
+  localparam DDATA_WIDTH=2*128;
+  localparam DXDATA_WIDTH=2*128+16+10+4;
  
   input clk;
   input rst;
@@ -682,6 +722,8 @@ module missQ(
   wire [DATA_WIDTH-1:0] read_dataC;
   wire [DDATA_WIDTH-1:0] read_ddata;
   wire [DDATA_WIDTH-1:0] write_ddata;
+  wire [DXDATA_WIDTH-1:0] read_dxdata;
+  wire [DXDATA_WIDTH-1:0] write_dxdata;
   
   
   reg [5:0] confl_mask;
@@ -839,8 +881,9 @@ module missQ(
   assign write_dataA={miss1&~thrreginh[3][1],miss0&~thrreginh[3][0],write_mop[1],write_mop[0]}&{DATA_WIDTH{~init}};
   assign write_dataB={miss3&~thrreginh[3][3],miss2&~thrreginh[3][2],write_mop[3],write_mop[2]}&{DATA_WIDTH{~init}};
   assign write_dataC={miss5&~thrreginh[3][5],miss4&~thrreginh[3][4],write_mop[5],write_mop[4]}&{DATA_WIDTH{~init}};
-  assign write_ddata={mOp5_data_reg[3][159:32],mOp4_data_reg[3][159:32],mOp3_data_reg[3],mOp3_brdbanks_reg[3]}
-    &{DDATA_WIDTH{~init}};
+  assign write_ddata={mOp5_data_reg[3][159:32],mOp4_data_reg[3][159:32]}&{DDATA_WIDTH{~init}};
+  assign write_dxdata={mOp3_pbit_reg[3],mOp3_data_reg[3],mOp3_brdbanks_reg[3],mOp2_pbit_reg[3],mOp2_data_reg[3],mOp2_brdread_reg[3]}
+    &{DXDATA_WIDTH{~init}};
   
   assign wen=miss0&~thrreginh[3][0]||miss1&~thrreginh[3][1]||miss2&~thrreginh[3][2]||
       miss3&~thrreginh[3][3]||miss4&~thrreginh[3][4]||miss5&~thrreginh[3][5];
@@ -1366,6 +1409,17 @@ module missQ(
   read_ddata,
   init ? initCount : write_addr,
   write_ddata,
+  wen|init
+  );
+  
+  missQ_datax_ram ramXD_mod(
+  clk,
+  rst,
+  doStep|begin_flush_reg2,
+  read_addr_d,
+  read_dxdata,
+  init ? initCount : write_addr,
+  write_dxdata,
   wen|init
   );
 
