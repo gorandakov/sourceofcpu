@@ -278,7 +278,6 @@ module missQ(
   mOp3_lsfwd,
   mOp3_data,
   mOp3_pbit,
-  mOp3_ctype,
   mOp3_brdbanks,
   mOp3_en_no,
   mOp3_thread_no,
@@ -299,7 +298,6 @@ module missQ(
   mOp3_lsfwd_no,
   mOp3_data_no,
   mOp3_pbit_no,
-  mOp3_ctype_no,
   mOp3_brdbanks_no,
   miss4,
   mOp4_en,
@@ -320,7 +318,6 @@ module missQ(
   mOp4_clHit,
   mOp4_data,
   mOp4_pbit,
-  mOp4_ctype,
   mOp4_II,
   mOp4_en_no,
   mOp4_dupl_no,//write to a non-exclusive cl
@@ -339,7 +336,6 @@ module missQ(
   mOp4_split_no,
   mOp4_data_no,
   mOp4_pbit_no,
-  mOp4_ctype_no,
   mOp4_II_no,
   miss5,
   mOp5_en,
@@ -360,7 +356,6 @@ module missQ(
   mOp5_clHit,
   mOp5_data,
   mOp5_pbit,
-  mOp5_ctype,
   mOp5_II,
   mOp5_en_no,
   mOp5_dupl_no,
@@ -379,7 +374,6 @@ module missQ(
   mOp5_split_no,
   mOp5_data_no,
   mOp5_pbit_no,
-  mOp5_ctype_no,
   mOp5_II_no,
 
   mOp_noBanks,
@@ -582,7 +576,6 @@ module missQ(
   input mOp3_lsfwd;
   input [127:0] mOp3_data;
   input [1:0] mOp3_pbit;
-  input [1:0] mOp3_ctype;
   input [3:0] mOp3_brdbanks;
   output mOp3_en_no;
   output mOp3_thread_no;
@@ -603,7 +596,6 @@ module missQ(
   output mOp3_lsfwd_no;
   output [127:0] mOp3_data_no;
   output [1:0] mOp3_pbit_no;
-  output [1:0] mOp3_ctype_no;
   output [3:0] mOp3_brdbanks_no;
 
   input miss4;
@@ -625,7 +617,6 @@ module missQ(
   input [1:0] mOp4_clHit;
   input [159:0] mOp4_data;
   input [1:0] mOp4_pbit;
-  input [1:0] mOp4_ctype;
   input [9:0] mOp4_II;
   output mOp4_en_no;
   output [1:0] mOp4_dupl_no;
@@ -645,7 +636,6 @@ module missQ(
   output [1:0] mOp4_clHit_no;
   output [159:0] mOp4_data_no;
   output [1:0] mOp4_pbit_no;
-  output [1:0] mOp4_ctype_no;
   output [9:0] mOp4_II_no;
 
   input miss5;
@@ -667,7 +657,6 @@ module missQ(
   input [1:0] mOp5_clHit;
   input [159:0] mOp5_data;
   input [1:0] mOp5_pbit;
-  input [1:0] mOp5_ctype;
   input [9:0] mOp5_II;
   output mOp5_en_no;
   output [1:0] mOp5_dupl_no;
@@ -687,7 +676,6 @@ module missQ(
   output [1:0] mOp5_clHit_no;
   output [159:0] mOp5_data_no;
   output [1:0] mOp5_pbit_no;
-  output [1:0] mOp5_ctype_no;
   output [9:0] mOp5_II_no;
   
   output [31:0] mOp_noBanks;
