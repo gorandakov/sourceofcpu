@@ -868,13 +868,11 @@ module missQ(
   reg [3:0] initCount;
   wire [3:0] initCount_next;
   
-  reg [3:0] thrblk_addr0;
-  reg thrblk_en0;
-  reg [3:0] thrblk_addr1;
-  reg thrblk_en1; 
   wire [5:0] read_thread; 
   wire [5:0] thrinhibitconfl;
   reg [5:0] thrreginh[3:1];
+
+  reg [15:0] validR;//note validR is different from miss_queue.sv; it means 1 for not cleared by except (block read replays if 0)
   
   wire [4:0] dummy5;
 
@@ -909,7 +907,7 @@ module missQ(
  
   assign read_thread={2'b0,read_mop[3][`mOp1_thr],read_mop[2][`mOp1_thr],read_mop[1][`mOp1_thr],read_mop[0][`mOp1_thr]};
 
-  assign thrinhibitconfl=(read_thread & {4{thrblk_en1}}) | (~read_thread & {4{thrblk_en0}}); 
+  assign thrinhibitconfl={2'b0,{4{validR[read_addr]==1'b0}}}; 
   
   assign mOp0_thread_o=now_flushing_reg2 && ~WB_fwd[0] ?   read_mop[0][`mOp1_thr] : 1'bz;
   assign mOp0_thread_o=~now_flushing_reg2 && ~WB_fwd[0] ? mOp0_thread : 1'bz;
@@ -1490,24 +1488,11 @@ module missQ(
 	      write_addr_end2<=write_addr_dec;
 	  end
 
-          if (rst) begin
-	      thrblk_addr0<=4'd0;
-	      thrblk_en0<=1'b0;
-	  end else if (except && ~excpt_thread && count) begin
-	      thrblk_addr0<=write_addr;
-	      thrblk_en0<=1'b1;
-	  end else if (now_flushing_reg && read_addr_d==thrblk_addr0 && thrblk_en0) begin
-	      thrblk_en0<=1'b0;
-	  end
-	  
-          if (rst) begin
-	      thrblk_addr1<=4'd0;
-	      thrblk_en1<=1'b0;
-	  end else if (except && excpt_thread && count) begin
-	      thrblk_addr1<=write_addr;
-	      thrblk_en1<=1'b1;
-	  end else if (now_flushing_reg && read_addr_d==thrblk_addr1 && thrblk_en1) begin
-	      thrblk_en1<=1'b0;
+	  if (rst) begin
+	      validR=16'b0;
+	  end else if (wen|except) begin
+	      if (wen) validR[write_addr]<=1'b1;
+	      if (except) validR<=16'b0;
 	  end
 	  
           if (rst) doSkip<=1'b0;
