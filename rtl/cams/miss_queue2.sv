@@ -187,6 +187,7 @@ module missQ(
   mOp0_II_o,
   mOp0_WQ_o,
   mOp0_lsflag_o,
+  mOp0_lsfwd_o,
   miss1,
   mOp1_en,
   mOp1_thread,
@@ -221,6 +222,7 @@ module missQ(
   mOp1_II_o,
   mOp1_WQ_o,
   mOp1_lsflag_o,
+  mOp1_lsfwd_o,
   miss2,
   mOp2_en,
   mOp2_thread,
@@ -254,6 +256,7 @@ module missQ(
   mOp2_II_no,
   mOp2_WQ_no,
   mOp2_lsflag_no,
+  mOp2_lsfwd_o,
   miss3,
   mOp3_en,
   mOp3_thread,
@@ -475,6 +478,7 @@ module missQ(
   output [9:0] mOp0_II_o;
   output [7:0] mOp0_WQ_o;
   output mOp0_lsflag_o;
+  output mOp0_lsfwd_o;
 
 
   input miss1;
@@ -511,6 +515,7 @@ module missQ(
   output [9:0] mOp1_II_o;
   output [7:0] mOp1_WQ_o;
   output mOp1_lsflag_o;
+  output mOp1_lsfwd_o;
 
 
   input miss2;
@@ -547,6 +552,7 @@ module missQ(
   output [9:0] mOp2_II_no;
   output [7:0] mOp2_WQ_no;
   output mOp2_lsflag_no;
+  output mOp2_lsfwd_o;
 
 
   input miss3;
@@ -743,7 +749,6 @@ module missQ(
   reg [8:0] mOp0_LSQ_reg[3:1];
   reg [9:0] mOp0_II_reg[3:1];
   reg [7:0] mOp0_WQ_reg[3:1];
-  reg [1:0] mOp0_pbit_reg[3:1];
   reg [1:0] mOp0_ctype_reg[3:1];
   reg mOp0_lsflag_reg[3:1];
 
@@ -762,7 +767,6 @@ module missQ(
   reg [8:0] mOp1_LSQ_reg[3:1];
   reg [9:0] mOp1_II_reg[3:1];
   reg [7:0] mOp1_WQ_reg[3:1];
-  reg [1:0] mOp1_pbit_reg[3:1];
   reg [1:0] mOp1_ctype_reg[3:1];
   reg mOp1_lsflag_reg[3:1];
 
@@ -781,7 +785,6 @@ module missQ(
   reg [8:0] mOp2_LSQ_reg[3:1];
   reg [9:0] mOp2_II_reg[3:1];
   reg [7:0] mOp2_WQ_reg[3:1];
-  reg [1:0] mOp2_pbit_reg[3:1];
   reg [1:0] mOp2_ctype_reg[3:1];
   reg mOp2_lsflag_reg[3:1];
 
@@ -1664,7 +1667,6 @@ module missQ(
               mOp0_LSQ_reg[1]<=mOp0_LSQ_o;
               mOp0_II_reg[1]<=mOp0_II_o;
               mOp0_WQ_reg[1]<=mOp0_WQ_o;
-              mOp0_pbit_reg[1]<=mOp0_pbit_o;
               mOp0_ctype_reg[1]<=mOp0_ctype_o;
               mOp0_lsflag_reg[1]<=mOp0_lsflag_o;
 
@@ -1683,7 +1685,6 @@ module missQ(
               mOp1_LSQ_reg[1]<=mOp1_LSQ_o;
               mOp1_II_reg[1]<=mOp1_II_o;
               mOp1_WQ_reg[1]<=mOp1_WQ_o;
-              mOp1_pbit_reg[1]<=mOp1_pbit_o;
               mOp1_ctype_reg[1]<=mOp1_ctype_o;
               mOp1_lsflag_reg[1]<=mOp1_lsflag_o;
 
@@ -1702,7 +1703,6 @@ module missQ(
               mOp2_LSQ_reg[1]<=mOp2_LSQ_no;
               mOp2_II_reg[1]<=mOp2_II_no;
               mOp2_WQ_reg[1]<=mOp2_WQ_no;
-              mOp2_pbit_reg[1]<=mOp2_pbit_no;
               mOp2_ctype_reg[1]<=mOp2_ctype_no;
               mOp2_lsflag_reg[1]<=mOp2_lsflag_no;
               
@@ -1777,7 +1777,6 @@ module missQ(
                   mOp0_LSQ_reg[r]<=mOp0_LSQ_reg[r-1];
                   mOp0_II_reg[r]<=mOp0_II_reg[r-1];
                   mOp0_WQ_reg[r]<=mOp0_WQ_reg[r-1];
-                  mOp0_pbit_reg[r]<=mOp0_pbit_reg[r-1];
                   mOp0_ctype_reg[r]<=mOp0_ctype_reg[r-1];
                   mOp0_lsflag_reg[r]<=mOp0_lsflag_reg[r-1];
 
@@ -1796,7 +1795,6 @@ module missQ(
                   mOp1_LSQ_reg[r]<=mOp1_LSQ_reg[r-1];
                   mOp1_II_reg[r]<=mOp1_II_reg[r-1];
                   mOp1_WQ_reg[r]<=mOp1_WQ_reg[r-1];
-                  mOp1_pbit_reg[r]<=mOp1_pbit_reg[r-1];
                   mOp1_ctype_reg[r]<=mOp1_ctype_reg[r-1];
                   mOp1_lsflag_reg[r]<=mOp1_lsflag_reg[r-1];
 
@@ -1815,7 +1813,6 @@ module missQ(
                   mOp2_LSQ_reg[r]<=mOp2_LSQ_reg[r-1];
                   mOp2_II_reg[r]<=mOp2_II_reg[r-1];
                   mOp2_WQ_reg[r]<=mOp2_WQ_reg[r-1];
-                  mOp2_pbit_reg[r]<=mOp2_pbit_reg[r-1];
                   mOp2_ctype_reg[r]<=mOp2_ctype_reg[r-1];
                   mOp2_lsflag_reg[r]<=mOp2_lsflag_reg[r-1];
                   
