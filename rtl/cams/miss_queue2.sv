@@ -788,6 +788,7 @@ module missQ(
   reg [7:0] mOp0_WQ_reg[3:1];
   reg [1:0] mOp0_ctype_reg[3:1];
   reg mOp0_lsflag_reg[3:1];
+  reg mOp0_lsfwd_reg[3:1];
 
   reg mOp1_thread_reg[3:1];
   reg [PADDR_WIDTH-1:8] mOp1_addrEven_reg[3:1];
@@ -806,6 +807,7 @@ module missQ(
   reg [7:0] mOp1_WQ_reg[3:1];
   reg [1:0] mOp1_ctype_reg[3:1];
   reg mOp1_lsflag_reg[3:1];
+  reg mOp1_lsfwd_reg[3:1];
 
   reg mOp2_thread_reg[3:1];
   reg [PADDR_WIDTH-1:8] mOp2_addrEven_reg[3:1];
@@ -827,6 +829,7 @@ module missQ(
   reg [127+8:0] mOp2_data_reg[3:1];
   reg [4:0] mOp2_brdread_reg[3:1];
   reg [1:0] mOp2_pbit_reg[3:1];
+  reg mOp2_lsfwd_reg[3:1];
 
   reg mOp3_thread_reg[3:1];
   reg [PADDR_WIDTH-1:8] mOp3_addrEven_reg[3:1];
@@ -1786,7 +1789,7 @@ module missQ(
               mOp4_addrEven_reg[1]<=mOp4_addrEven_no;
               mOp4_addrOdd_reg[1]<=mOp4_addrOdd_no;
               mOp4_sz_reg[1]<=mOp4_sz_no;
-              mOp4_first_reg[1]<=mOp4_first_no;
+          //    mOp4_first_reg[1]<=mOp4_first_no;
               mOp4_bank0_reg[1]<=mOp4_bank0_no;
               mOp4_odd_reg[1]<=mOp4_odd_no;
               mOp4_addr_low_reg[1]<=mOp4_addr_low_no;
@@ -1803,7 +1806,7 @@ module missQ(
               mOp5_addrEven_reg[1]<=mOp5_addrEven_no;
               mOp5_addrOdd_reg[1]<=mOp5_addrOdd_no;
               mOp5_sz_reg[1]<=mOp5_sz_no;
-              mOp5_first_reg[1]<=mOp5_first_no;
+            //  mOp5_first_reg[1]<=mOp5_first_no;
               mOp5_bank0_reg[1]<=mOp5_bank0_no;
               mOp5_odd_reg[1]<=mOp5_odd_no;
               mOp5_addr_low_reg[1]<=mOp5_addr_low_no;
