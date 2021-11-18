@@ -148,7 +148,7 @@ module missQ(
   mOpW_addr_low,
   mOpW_split,
   mOpW_register,
-  mOpW_type,
+  mOpW_ctype,
   mOpW_LSQ,
   mOpW_II,
   mOpW_WQ,
@@ -245,7 +245,7 @@ module missQ(
   mOp2_LSQ,
   mOp2_II,
   mOp2_WQ,
-  mOp2_lsflag,\\s
+  mOp2_lsflag,//s
   mOp2_en_no,
   mOp2_thread_no,
   mOp2_addrEven_no,
@@ -263,7 +263,10 @@ module missQ(
   mOp2_II_no,
   mOp2_WQ_no,
   mOp2_lsflag_no,
-  mOp2_lsfwd_o,
+  mOp2_lsfwd_no,
+  mOp2_data_o,
+  mOp2_pbit_o,
+  mOp2_brdread_o,
   miss3,
   mOp3_en,
   mOp3_thread,
@@ -316,7 +319,7 @@ module missQ(
   mOp4_addrOdd,
   mOp4_sz,
   mOp4_first,
- // mOp4_banks,
+  mOp4_banks,
   mOp4_bank0,
   mOp4_bank1,
   mOp4_bgn_b,
@@ -330,12 +333,12 @@ module missQ(
   mOp4_ctype,
   mOp4_II,
   mOp4_en_no,
-  mOp4_dupl_no,//write to a non-exclusive cl
+ // mOp4_dupl_no,//write to a non-exclusive cl
   //mOp4_thread,
   mOp4_addrEven_no,
   mOp4_addrOdd_no,
   mOp4_sz_no,
-  mOp4_first_no,
+//  mOp4_first_no,
   mOp4_banks_no,
   mOp4_bank0_no,
   mOp4_bank1_no,
@@ -356,7 +359,7 @@ module missQ(
   mOp5_addrOdd,
   mOp5_sz,
   mOp5_first,
-//  mOp5_banks,
+  mOp5_banks,
   mOp5_bank0,
   mOp5_bank1,
   mOp5_bgn_b,
@@ -370,12 +373,12 @@ module missQ(
   mOp5_ctype,
   mOp5_II,
   mOp5_en_no,
-  mOp5_dupl_no,
+//  mOp5_dupl_no,
  // mOp5_thread,
   mOp5_addrEven_no,
   mOp5_addrOdd_no,
   mOp5_sz_no,
-  mOp5_first_no,
+//  mOp5_first_no,
   mOp5_banks_no,
   mOp5_bank0_no,
   mOp5_bank1_no,
@@ -453,7 +456,7 @@ module missQ(
   input [1:0] mOpW_addr_low;
   input mOpW_split;
   input [REG_WIDTH-1:0] mOpW_register;
-  input [1:0] mOpW_type;
+  input [1:0] mOpW_ctype;
   input [8:0] mOpW_LSQ;
   input [9:0] mOpW_II;
   input [7:0] mOpW_WQ;
@@ -573,7 +576,10 @@ module missQ(
   output [9:0] mOp2_II_no;
   output [7:0] mOp2_WQ_no;
   output mOp2_lsflag_no;
-  output mOp2_lsfwd_o;
+  output mOp2_lsfwd_no;
+  output [135:0] mOp2_data_o;
+  output [1:0] mOp2_pbit_o;
+  output [4:0] mOp2_brdread_o;
 
 
   input miss3;
@@ -629,11 +635,11 @@ module missQ(
   input [PADDR_WIDTH-1:8] mOp4_addrOdd;
   input [4:0] mOp4_sz;
   input mOp4_first;
-//output [BANK_COUNT-1:0] mOp4_banks;
+  output [BANK_COUNT-1:0] mOp4_banks;
   input [4:0] mOp4_bank0;
   input [4:0] mOp4_bank1;
-//output [3:0] mOp4_bgn_b;
-//output [3:0] mOp4_end_b;
+  output [3:0] mOp4_bgn_b;
+  output [3:0] mOp4_end_b;
   input mOp4_odd;
   input [1:0] mOp4_addr_low;
   input mOp4_split;
@@ -643,12 +649,12 @@ module missQ(
   input [1:0] mOp4_ctype;
   input [9:0] mOp4_II;
   output mOp4_en_no;
-  output [1:0] mOp4_dupl_no;
+  //output [1:0] mOp4_dupl_no;
  // inout mOp4_thread;
   output [PADDR_WIDTH-1:8] mOp4_addrEven_no;
   output [PADDR_WIDTH-1:8] mOp4_addrOdd_no;
   output [4:0] mOp4_sz_no;
-  output mOp4_first_no;
+  //output mOp4_first_no;
   output [BANK_COUNT-1:0] mOp4_banks_no;
   output [4:0] mOp4_bank0_no;
   output [4:0] mOp4_bank1_no;
@@ -657,7 +663,7 @@ module missQ(
   output mOp4_odd_no;
   output [1:0] mOp4_addr_low_no;
   output mOp4_split_no;
-  output [1:0] mOp4_clHit_no;
+//  output [1:0] mOp4_clHit_no;
   output [159:0] mOp4_data_no;
   output [1:0] mOp4_pbit_no;
   output [1:0] mOp4_ctype_no;
@@ -671,11 +677,11 @@ module missQ(
   input [PADDR_WIDTH-1:8] mOp5_addrOdd;
   input [4:0] mOp5_sz;
   input mOp5_first;
-//output [BANK_COUNT-1:0] mOp5_banks;
+ output [BANK_COUNT-1:0] mOp5_banks;
   input [4:0] mOp5_bank0;
   input [4:0] mOp5_bank1;
-//output [3:0] mOp5_bgn_b;
-//output [3:0] mOp5_end_b;
+  output [3:0] mOp5_bgn_b;
+  output [3:0] mOp5_end_b;
   input mOp5_odd;
   input [1:0] mOp5_addr_low;
   input mOp5_split;
@@ -685,12 +691,12 @@ module missQ(
   input [1:0] mOp5_ctype;
   input [9:0] mOp5_II;
   output mOp5_en_no;
-  output [1:0] mOp5_dupl_no;
+ // output [1:0] mOp5_dupl_no;
 //  inout mOp5_thread;
   output [PADDR_WIDTH-1:8] mOp5_addrEven_no;
   output [PADDR_WIDTH-1:8] mOp5_addrOdd_no;
   output [4:0] mOp5_sz_no;
-  output mOp5_first_no;
+  //output mOp5_first_no;
   output [BANK_COUNT-1:0] mOp5_banks_no;
   output [4:0] mOp5_bank0_no;
   output [4:0] mOp5_bank1_no;
@@ -699,7 +705,7 @@ module missQ(
   output mOp5_odd_no;
   output [1:0] mOp5_addr_low_no;
   output mOp5_split_no;
-  output [1:0] mOp5_clHit_no;
+  //output [1:0] mOp5_clHit_no;
   output [159:0] mOp5_data_no;
   output [1:0] mOp5_pbit_no;
   output [1:0] mOp5_ctype_no;
@@ -818,6 +824,9 @@ module missQ(
   reg [7:0] mOp2_WQ_reg[3:1];
   reg [1:0] mOp2_ctype_reg[3:1];
   reg mOp2_lsflag_reg[3:1];
+  reg [127+8:0] mOp2_data_reg[3:1];
+  reg [4:0] mOp2_brdread_reg[3:1];
+  reg [1:0] mOp2_pbit_reg[3:1];
 
   reg mOp3_thread_reg[3:1];
   reg [PADDR_WIDTH-1:8] mOp3_addrEven_reg[3:1];
@@ -921,6 +930,8 @@ module missQ(
   reg [15:0] validR;//note validR is different from miss_queue.sv; it means 1 for not cleared by except (block read replays if 0)
   
   wire [4:0] dummy5;
+  wire [1:0] mOp4_dupl_dummy;
+  wire [1:0] mOp5_dupl_dummy;
 
   assign write_dataA={miss1&~thrreginh[3][1],miss0&~thrreginh[3][0],write_mop[1],write_mop[0]}&{DATA_WIDTH{~init}};
   assign write_dataB={miss3&~thrreginh[3][3],miss2&~thrreginh[3][2],write_mop[3],write_mop[2]}&{DATA_WIDTH{~init}};
@@ -1136,9 +1147,9 @@ module missQ(
   assign mOp2_lsflag_no=~now_flushing_reg2 & ~WB_fwd[2] ? mOp2_lsflag : 1'bz; 
   assign mOp2_lsflag_no=WB_fwd[2] ? mOpW_lsflag : 1'bz;
   assign mOp2_lsfwd_no=now_flushing_reg2 ?    read_mop[2][`mOp1_lsfwd] : WB_fwd[2];
-  assign mOp2_data_no=now_flushing_reg2 ?     read_dxdata[127+8+5:5] : mOpW_data;
-  assign mOp2_pbit_no=now_flushing_reg2 ?     read_dxdata[127+8+5+2:127+8+5+1] : mOpW_pbit;
-  assign mOp2_brdread_no=now_flushing_reg2 ? read_dxdata[4:0] : mOpW_brdread;
+  assign mOp2_data_o=now_flushing_reg2 ?     read_dxdata[127+8+5:5] : mOpW_data;
+  assign mOp2_pbit_o=now_flushing_reg2 ?     read_dxdata[127+8+5+2:127+8+5+1] : mOpW_pbit;
+  assign mOp2_brdread_o=now_flushing_reg2 ? read_dxdata[4:0] : mOpW_brdread;
 
 
 
@@ -1638,6 +1649,9 @@ module missQ(
                   mOp2_II_reg[r]<=10'b0;
                   mOp2_WQ_reg[r]<=8'b0;
                   mOp2_lsflag_reg[r]<=1'b0;
+                  mOp2_data_reg[r]<={8'b0,128'b0};
+                  mOp2_pbit_reg[r]<=2'b0;
+                  mOp2_brdread_reg[r]<=5'b0;
                   
                   mOp3_thread_reg[r]<=1'b0; 
                   mOp3_addrEven_reg[r]<={PADDR_WIDTH-8{1'B0}};
@@ -1742,6 +1756,9 @@ module missQ(
               mOp2_WQ_reg[1]<=mOp2_WQ_no;
               mOp2_ctype_reg[1]<=mOp2_ctype_no;
               mOp2_lsflag_reg[1]<=mOp2_lsflag_no;
+              mOp2_data_reg[1]<=mOp2_data_o;
+              mOp2_pbit_reg[1]<=mOp2_pbit_o;
+              mOp2_brdread_reg[1]<=mOp2_brdread_o;
               
               thrreginh[1][3]<=mOp3_thread_no~^excpt_thread && except;
 	      mOp3_thread_reg[1]<=mOp3_thread_no;
@@ -1852,6 +1869,9 @@ module missQ(
                   mOp2_WQ_reg[r]<=mOp2_WQ_reg[r-1];
                   mOp2_ctype_reg[r]<=mOp2_ctype_reg[r-1];
                   mOp2_lsflag_reg[r]<=mOp2_lsflag_reg[r-1];
+                  mOp2_data_reg[r]<=mOp2_data_reg[r-1];
+                  mOp2_pbit_reg[r]<=mOp2_pbit_reg[r-1];
+                  mOp2_brdread_reg[r]<=mOp2_brdread_reg[r-1];
                   
                   thrreginh[r][3]<=thrreginh[r-1][3] || (mOp3_thread_reg[r-1]~^excpt_thread && except);
 	          mOp3_thread_reg[r]<=mOp3_thread_reg[r-1];
