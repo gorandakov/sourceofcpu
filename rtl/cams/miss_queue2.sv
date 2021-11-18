@@ -245,6 +245,7 @@ module missQ(
   mOp2_LSQ,
   mOp2_II,
   mOp2_WQ,
+  mOp2_lsflag,\\s
   mOp2_en_no,
   mOp2_thread_no,
   mOp2_addrEven_no,
@@ -315,7 +316,7 @@ module missQ(
   mOp4_addrOdd,
   mOp4_sz,
   mOp4_first,
-  mOp4_banks,
+ // mOp4_banks,
   mOp4_bank0,
   mOp4_bank1,
   mOp4_bgn_b,
@@ -355,7 +356,7 @@ module missQ(
   mOp5_addrOdd,
   mOp5_sz,
   mOp5_first,
-  mOp5_banks,
+//  mOp5_banks,
   mOp5_bank0,
   mOp5_bank1,
   mOp5_bgn_b,
@@ -651,8 +652,8 @@ module missQ(
   output [BANK_COUNT-1:0] mOp4_banks_no;
   output [4:0] mOp4_bank0_no;
   output [4:0] mOp4_bank1_no;
-  output [3:0] mOp4_bgn_b;
-  output [3:0] mOp4_end_b;
+  output [3:0] mOp4_bgn_b_no;
+  output [3:0] mOp4_end_b_no;
   output mOp4_odd_no;
   output [1:0] mOp4_addr_low_no;
   output mOp4_split_no;
@@ -693,8 +694,8 @@ module missQ(
   output [BANK_COUNT-1:0] mOp5_banks_no;
   output [4:0] mOp5_bank0_no;
   output [4:0] mOp5_bank1_no;
-  output [3:0] mOp5_bgn_b;
-  output [3:0] mOp5_end_b;
+  output [3:0] mOp5_bgn_b_no;
+  output [3:0] mOp5_end_b_no;
   output mOp5_odd_no;
   output [1:0] mOp5_addr_low_no;
   output mOp5_split_no;
@@ -704,7 +705,8 @@ module missQ(
   output [1:0] mOp5_ctype_no;
   output [9:0] mOp5_II_no;
   
-  output [31:0] mOp_noBanks;
+  input [31:0] mOp_noBanks;
+  output [31:0] mOp_noBanks_o;
   output mOp_write_clear;
 
   output mOpR_en;
