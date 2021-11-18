@@ -166,6 +166,7 @@ module missQ(
   mOp0_addr_low,
   mOp0_split,
   mOp0_register,
+  mOp0_ctype,
   mOp0_clHit,
   mOp0_LSQ,
   mOp0_II,
@@ -183,6 +184,7 @@ module missQ(
   mOp0_addr_low_o,
   mOp0_split_o,
   mOp0_register_o,
+  mOp0_ctype_o,
   mOp0_LSQ_o,
   mOp0_II_o,
   mOp0_WQ_o,
@@ -201,6 +203,7 @@ module missQ(
   mOp1_addr_low,
   mOp1_split,
   mOp1_register,
+  mOp1_ctype,
   mOp1_clHit,
   mOp1_LSQ,
   mOp1_II,
@@ -218,6 +221,7 @@ module missQ(
   mOp1_addr_low_o,
   mOp1_split_o,
   mOp1_register_o,
+  mOp1_ctype_o,
   mOp1_LSQ_o,
   mOp1_II_o,
   mOp1_WQ_o,
@@ -236,6 +240,7 @@ module missQ(
   mOp2_addr_low,
   mOp2_split,
   mOp2_register,
+  mOp2_ctype,
   mOp2_clHit,
   mOp2_LSQ,
   mOp2_II,
@@ -252,6 +257,7 @@ module missQ(
   mOp2_addr_low_no,
   mOp2_split_no,
   mOp2_register_no,
+  mOp2_ctype_no,
   mOp2_LSQ_no,
   mOp2_II_no,
   mOp2_WQ_no,
@@ -383,15 +389,17 @@ module missQ(
   mOp5_II_no,
 
   mOp_noBanks,
+  mOp_noBanks_o,//
   mOp_write_clear,
   mOpR_en,
   mOpR_addrEven,
   mOpR_addrOdd,
   mOpR_sz,
   mOpR_st,
-  mOpR_first,
-  mOpR_banks,
+  //mOpR_first,
+  //mOpR_banks,
   mOpR_bank0,
+  mOpR_io,//
   mOpR_odd,
   mOpR_addr_low,
   mOpR_split,
@@ -463,6 +471,7 @@ module missQ(
   input [1:0] mOp0_addr_low;
   input mOp0_split;
   input [REG_WIDTH-1:0] mOp0_register;
+  input [1:0] mOp0_ctype;
   input [1:0] mOp0_clHit;
   input [8:0] mOp0_LSQ;
   input [9:0] mOp0_II;
@@ -480,6 +489,7 @@ module missQ(
   output [1:0] mOp0_addr_low_o;
   output mOp0_split_o;
   output [REG_WIDTH-1:0] mOp0_register_o;
+  output [1:0] mOp0_ctype_o;
   output [8:0] mOp0_LSQ_o;
   output [9:0] mOp0_II_o;
   output [7:0] mOp0_WQ_o;
@@ -500,6 +510,7 @@ module missQ(
   input [1:0] mOp1_addr_low;
   input mOp1_split;
   input [REG_WIDTH-1:0] mOp1_register;
+  input [1:0] mOp1_ctype;
   input [1:0] mOp1_clHit;
   input [8:0] mOp1_LSQ;
   input [9:0] mOp1_II;
@@ -517,6 +528,7 @@ module missQ(
   output [1:0] mOp1_addr_low_o;
   output mOp1_split_o;
   output [REG_WIDTH-1:0] mOp1_register_o;
+  output [1:0] mOp1_ctype_o;
   output [8:0] mOp1_LSQ_o;
   output [9:0] mOp1_II_o;
   output [7:0] mOp1_WQ_o;
@@ -537,6 +549,7 @@ module missQ(
   input [1:0] mOp2_addr_low;
   input mOp2_split;
   input [REG_WIDTH-1:0] mOp2_register;
+  input [1:0] mOp2_ctype;
   input [1:0] mOp2_clHit;
   input [8:0] mOp2_LSQ;
   input [9:0] mOp2_II;
@@ -554,6 +567,7 @@ module missQ(
   output [1:0] mOp2_addr_low_no;
   output mOp2_split_no;
   output [REG_WIDTH-1:0] mOp2_register_no;
+  output [1:0] mOp2_ctype_no;
   output [8:0] mOp2_LSQ_no;
   output [9:0] mOp2_II_no;
   output [7:0] mOp2_WQ_no;
@@ -698,14 +712,17 @@ module missQ(
   output [PADDR_WIDTH-1:8] mOpR_addrOdd;
   output [4:0] mOpR_sz;
   output mOpR_st;
-  output mOpR_first;
-  output [BANK_COUNT-1:0] mOpR_banks;
+ // output mOpR_first;
+ // output [BANK_COUNT-1:0] mOpR_banks;
   output [4:0] mOpR_bank0;
   output mOpR_odd;
   output [1:0] mOpR_addr_low;
   output mOpR_split;
   output [1:0] mOpR_clHit;
   output [1:0] mOpR_dupl;
+  output mOpR_io;
+  input alt_bus_hold;
+  input [36:0] alt_bus_addr;
   wire [5:0] curConfl;
 //  wire [5:0] write_confl;
   wire [5:0] read_confl;
@@ -915,8 +932,8 @@ module missQ(
   assign read_addr_d=~doStep & ~begin_flush_reg2 & ~rst ? read_addr : 4'bz; 
   assign read_addr_d=begin_flush_reg2 &~rst ? read_addr_begin : 4'bz;
   assign write_addr_d=~wen & ~rst ? write_addr : 4'bz; 
-  assign count_d=~wen & ~now_flushing &~rst ? count : 5'bz;
-  assign count_d=wen & now_flushing &~rst ? count : 5'bz;
+  assign count_d=~wen & (~now_flushing|alt_bus_hold) &~rst ? count : 5'bz;
+  assign count_d=wen & now_flushing & ~alt_bus_hold &~rst ? count : 5'bz;
   
   assign read_addr_d=rst ? 4'b0:4'bz;
   assign write_addr_d=rst ? 4'b0:4'bz;
@@ -927,10 +944,12 @@ module missQ(
   assign {read_confl[3:2],read_mop[3],read_mop[2]}=read_dataB;
   assign {read_confl[5:4],read_mop[5],read_mop[4]}=read_dataC;
 
-  assign do_bus_hold=now_flushing;
+  assign do_bus_hold=now_flushing;//??_reg
   
-  assign mOp_noBanks=now_flushing_reg2 ? 
+  assign mOp_noBanks_o=now_flushing_reg2&~alt_bus_hold ? 
     ~(rdbanks[0]|rdbanks[1]|rdbanks[2]|rdbanks[3]) : 32'bz;
+  assign mOp_noBanks_o=alt_bus_hold ? 32'hffffffff : 32'bz;
+  assign mOp_noBanks_o=~now_flushing_reg2&~alt_bus_hold ? mOp_noBanks : 32'bz;
  
   assign read_thread={2'b0,read_mop[3][`mOp1_thr],read_mop[2][`mOp1_thr],read_mop[1][`mOp1_thr],read_mop[0][`mOp1_thr]};
 
@@ -1343,12 +1362,13 @@ module missQ(
   assign mOpR_split=!conflFound ? 1'B0 : 1'BZ;
   assign mOpR_odd=!conflFound ? 1'B0 : 1'BZ;
   assign mOpR_addr_low=!conflFound ? 2'B0 : 2'BZ;
-  assign mOpR_banks=!conflFound ? 32'b0 : 32'BZ;
+  //assign mOpR_banks=!conflFound ? 32'b0 : 32'BZ;
   assign mOpR_bank0=!conflFound ? 5'b0 : 5'BZ;
   assign mOpR_clHit=!conflFound ? 2'b0 : 2'BZ;
-  assign mOpR_first=!conflFound ? 1'b0 : 1'BZ;
+  //assign mOpR_first=!conflFound ? 1'b0 : 1'BZ;
   assign mOpR_dupl=!conflFound ? 2'b0 : 2'BZ;
-  
+  assign mOpR_io=(!conflFound) ? 1'B0 : 1'BZ;
+ 
   assign curConfl=read_confl&confl_mask;
 
   assign rdwr_match2=read_addr==write_addr_end;
@@ -1363,13 +1383,15 @@ module missQ(
         assign mOpR_addrOdd=sel[k] ? read_mop[k][`mOp1_addrOdd] : {PADDR_WIDTH-8{1'BZ}};
         assign mOpR_sz=sel[k] ? read_mop[k][`mOp1_sz] : 5'BZ;
         assign mOpR_st=sel[k] ? read_mop[k][`mOp1_st] : 1'BZ;
-        assign mOpR_first=sel[k] ? read_mop[k][`mOp1_st] : 1'BZ;
+    //    assign mOpR_first=sel[k] ? read_mop[k][`mOp1_st] : 1'BZ;
         assign mOpR_split=sel[k] ? read_mop[k][`mOp1_split] : 1'BZ;
         assign mOpR_odd=sel[k] ? read_mop[k][`mOp1_odd] : 1'BZ;
         assign mOpR_addr_low=sel[k] ? read_mop[k][`mOp1_low] : 2'BZ;
-        assign mOpR_banks=sel[k] ? read_mop[k][`mOp1_banks] : 32'BZ;
+      //  assign mOpR_banks=sel[k] ? read_mop[k][`mOp1_banks] : 32'BZ;
         assign mOpR_bank0=sel[k] ? read_mop[k][`mOp1_bank0] : 5'BZ;
         assign mOpR_clHit=sel[k] ? read_mop[k][`mOp1_clHit] : 5'BZ;
+        assign mOpR_io=sel[k] ? read_mop[k][`mOp1_type]==2'b10 : 1'BZ;
+        
         if (k>=4)
           assign {mOpR_dupl,dummy5}=sel[k] ? read_mop[k][`mOp1_LSQ] : 9'bz;
         else
@@ -1380,8 +1402,8 @@ module missQ(
   
   adder_inc #(4) read_inc_mod(read_addr,read_addr_d,doStep &~begin_flush_reg2 &~rst);
   adder_inc #(4) write_inc_mod(write_addr,write_addr_d,wen&~rst);
-  adder_inc #(5) count_inc_mod(count,count_d,~now_flushing & wen & ~rst);
-  adder #(5) count_dec_mod(count,5'b11111,count_d,1'b0,now_flushing & ~wen & ~rst);
+  adder_inc #(5) count_inc_mod(count,count_d,(~now_flushing|alt_bus_hold) & wen & ~rst);
+  adder #(5) count_dec_mod(count,5'b11111,count_d,1'b0,now_flushing & ~alt_bus_hold & ~wen & ~rst);
   //adder #(4) wrEndAdd_mod(write_addr,4'hf,write_addr_end_d,1'b0,1'b1);
   adder #(5) coundF_dec_mod(countF,5'b11111,countF_d,1'b0,1'b1); 
   adder_inc #(4) initAdd_mod(initCount,initCount_next,1'b1);
@@ -1448,7 +1470,7 @@ module missQ(
   wen|init
   );
 
-  assign doStep=now_flushing_reg2 || ((curConfl==6'b0001 || curConfl==6'b0010 || curConfl==6'b0100 || curConfl==6'b1000 ||
+  assign doStep=now_flushing_reg2&~alt_bus_hold || ((curConfl==6'b0001 || curConfl==6'b0010 || curConfl==6'b0100 || curConfl==6'b1000 ||
     curConfl==6'b10000 || curConfl==6'b100000) && read_clkEn && ~rdwr_match2 && count);
  
   always @* begin
@@ -1486,9 +1508,9 @@ module missQ(
 	      confl_mask<=6'b111111;
 	  end else begin
 	      if (!count && wen) confl_mask<=6'h3f;
-	      else if (count && read_clkEn && ~rdwr_match) confl_mask<=confl_mask&~sel;
+	      else if (count && read_clkEn && ~rdwr_match && ~alt_bus_hold) confl_mask<=confl_mask&~sel;
 	  end
-	  read_addr<=read_addr_d;
+	  if (!(now_flushing_reg2&alt_bus_hold)) read_addr<=read_addr_d;
 	  write_addr<=write_addr_d;
 	  count<=count_d;
 	  if (rst) begin
@@ -1544,9 +1566,10 @@ module missQ(
 	  end else begin
 	      begin_flush<=last_inserted_reg4;
               if (begin_flush) countF<=count_d;
-              else if (now_flushing && ~(wen && begin_flush_reg|begin_flush_reg2)) countF<=countF_d;
+              else if (now_flushing && ~(wen && begin_flush_reg|begin_flush_reg2) && ~alt_bus_hold) 
+                  countF<=countF_d;
 	      if (begin_flush) now_flushing<=1'b1;
-	      else if (flush_end) now_flushing<=1'b0;
+	      else if (flush_end&&~alt_bus_hold) now_flushing<=1'b0;
 	      begin_flush_reg<=begin_flush;
 	      begin_flush_reg2<=begin_flush_reg;
 	      now_flushing_reg<=now_flushing;
@@ -1557,7 +1580,7 @@ module missQ(
 	      last_inserted_reg2<=last_inserted_reg;
 	      last_inserted_reg3<=last_inserted_reg2;
 	      last_inserted_reg4<=last_inserted_reg3;
-	      do_unlock<=flush_end;
+	      do_unlock<=flush_end&&~alt_bus_hold;
 	      read_addr_reg<=read_addr;
 	  end
 	  if (rst) locked<=1'b0;
