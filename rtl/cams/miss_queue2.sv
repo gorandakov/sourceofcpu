@@ -120,7 +120,7 @@ endmodule
 
 
 //verilator lint_off PINMISSING
-
+//verilator lint_off WIDTH
 module missQ(
   clk,
   rst,
@@ -635,11 +635,11 @@ module missQ(
   input [PADDR_WIDTH-1:8] mOp4_addrOdd;
   input [4:0] mOp4_sz;
   input mOp4_first;
-  output [BANK_COUNT-1:0] mOp4_banks;
+  input [BANK_COUNT-1:0] mOp4_banks;
   input [4:0] mOp4_bank0;
   input [4:0] mOp4_bank1;
-  output [3:0] mOp4_bgn_b;
-  output [3:0] mOp4_end_b;
+  input [3:0] mOp4_bgn_b;
+  input [3:0] mOp4_end_b;
   input mOp4_odd;
   input [1:0] mOp4_addr_low;
   input mOp4_split;
@@ -677,11 +677,11 @@ module missQ(
   input [PADDR_WIDTH-1:8] mOp5_addrOdd;
   input [4:0] mOp5_sz;
   input mOp5_first;
- output [BANK_COUNT-1:0] mOp5_banks;
+  input [BANK_COUNT-1:0] mOp5_banks;
   input [4:0] mOp5_bank0;
   input [4:0] mOp5_bank1;
-  output [3:0] mOp5_bgn_b;
-  output [3:0] mOp5_end_b;
+  input [3:0] mOp5_bgn_b;
+  input [3:0] mOp5_end_b;
   input mOp5_odd;
   input [1:0] mOp5_addr_low;
   input mOp5_split;
@@ -1944,6 +1944,7 @@ module missQ(
   
 endmodule
 
+//verilator lint_on WIDTH
 
 //verilator lint_on PINMISSING
 
