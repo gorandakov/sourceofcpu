@@ -601,10 +601,10 @@ module missQ(
   input [7:0] mOp3_WQ;
   input mOp3_lsflag;
   input mOp3_lsfwd;
-  input [127:0] mOp3_data;
+  input [135:0] mOp3_data;
   input [1:0] mOp3_pbit;
   input [1:0] mOp3_ctype;
-  input [3:0] mOp3_brdbanks;
+  input [4:0] mOp3_brdbanks;
   output mOp3_en_no;
   output mOp3_thread_no;
   output [PADDR_WIDTH-1:8] mOp3_addrEven_no;
@@ -622,10 +622,10 @@ module missQ(
   output [7:0] mOp3_WQ_no;
   output mOp3_lsflag_no;
   output mOp3_lsfwd_no;
-  output [127:0] mOp3_data_no;
+  output [135:0] mOp3_data_no;
   output [1:0] mOp3_pbit_no;
   output [1:0] mOp3_ctype_no;
-  output [3:0] mOp3_brdbanks_no;
+  output [4:0] mOp3_brdbanks_no;
 
   input miss4;
   input mOp4_en;
@@ -955,7 +955,6 @@ module missQ(
   assign write_addr_d=rst ? 4'b0:4'bz;
   assign count_d=rst ? 5'b0 : 5'bz;
   
-  
   assign {read_confl[1:0],read_mop[1],read_mop[0]}=read_dataA;
   assign {read_confl[3:2],read_mop[3],read_mop[2]}=read_dataB;
   assign {read_confl[5:4],read_mop[5],read_mop[4]}=read_dataC;
@@ -970,7 +969,9 @@ module missQ(
   assign read_thread={2'b0,read_mop[3][`mOp1_thr],read_mop[2][`mOp1_thr],read_mop[1][`mOp1_thr],read_mop[0][`mOp1_thr]};
 
   assign thrinhibitconfl={2'b0,{4{validR[read_addr]==1'b0}}}; 
-  
+ 
+  assign nowfl=now_flushing_reg2;
+
   assign mOp0_thread_o=now_flushing_reg2 && ~WB_fwd[0] ?   read_mop[0][`mOp1_thr] : 1'bz;
   assign mOp0_thread_o=~now_flushing_reg2 && ~WB_fwd[0] ? mOp0_thread : 1'bz;
   assign mOp0_thread_o=WB_fwd[0] ? mOpW_thread : 1'bz;
@@ -1556,8 +1557,8 @@ module missQ(
 	  if (rst) begin
 	      validR=16'b0;
 	  end else if (wen|except) begin
-	      if (wen) validR[write_addr]<=1'b1;
-	      if (except) validR<=16'b0;
+	      if (wen) validR[write_addr]=1'b1;
+	      if (except) validR=16'b0;
 	  end
 	  
           if (rst) doSkip<=1'b0;
