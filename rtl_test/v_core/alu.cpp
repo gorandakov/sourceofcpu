@@ -839,11 +839,11 @@ addie:
             case 32:
 	    if (has_mem_) {
 		(this-1)->gen_mem(NULL,8,mem,memp,addr);
-		snprintf((*(this-1)).asmtext,sizeof (asmtext), "movq mem+%li(%rip), %%%s\n",addr,reg65[rT]);
+		snprintf((*(this-1)).asmtext,sizeof (asmtext), "copyq mem+%li(%rip), %%%s\n",addr,reg65[rT]);
                 (*(this-1)).rT=rT;
 		rtn=false;
-	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"movq %%%s,  %%%s\n",reg65[rB],reg65[rT]);
-	    else snprintf(asmtext,sizeof asmtext,"movq $%i, %%%s\n",(int) B,reg65[rT]);
+	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"copyq %%%s,  %%%s\n",reg65[rB],reg65[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"copyq $%i, %%%s\n",(int) B,reg65[rT]);
             res=B;
             flags=flags_in;
             break;
@@ -851,18 +851,18 @@ addie:
             case 33:
 	    if (has_mem_) {
 		(this-1)->gen_mem(NULL,4,mem,memp,addr);
-		snprintf((*(this-1)).asmtext,sizeof (asmtext), "movl mem+%li(%rip), %%%s\n",addr,reg32[rT]);
+		snprintf((*(this-1)).asmtext,sizeof (asmtext), "copyl mem+%li(%rip), %%%s\n",addr,reg32[rT]);
                 (*(this-1)).rT=rT;
 		rtn=false;
-	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"movl %%%s,  %%%s\n",reg32[rB],reg32[rT]);
-	    else snprintf(asmtext,sizeof asmtext,"movl $%i, %%%s\n",(int) B,reg32[rT]);
+	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"copyl %%%s,  %%%s\n",reg32[rB],reg32[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"copyl $%i, %%%s\n",(int) B,reg32[rT]);
             res=B&0xffffffffull;
             flags=flags_in;
             break;
 
             case 34:
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movw %%%s,  %%%s\n",reg16[rB],reg16[rT]);
-	    else snprintf(asmtext,sizeof asmtext,"movw $%i, %%%s\n",(int) B,reg16[rT]);
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"copyw %%%s,  %%%s\n",reg16[rB],reg16[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"copyw $%i, %%%s\n",(int) B,reg16[rT]);
 	    rA=rT;
 	    A=contx->reg_gen[rA];
             res=(B&0xffffull)|(A&0xffffffffffff0000ull);
@@ -879,8 +879,8 @@ addie:
 		B=contx->reg_gen[rB];
 		B_p=contx->reg_genP[rB];
 	    }
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movb %%%s,  %%%s\n",reg8[rB+((op&1024)>>5)],reg8[rT+((op&256)>>3)]);
-	    else snprintf(asmtext,sizeof asmtext,"movb $%i, %%%s\n",(int) B,reg8[rT]);
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"copyb %%%s,  %%%s\n",reg8[rB+((op&1024)>>5)],reg8[rT+((op&256)>>3)]);
+	    else snprintf(asmtext,sizeof asmtext,"copyb $%i, %%%s\n",(int) B,reg8[rT]);
 	    rA=rT;
 	    A=contx->reg_gen[rA];
             if (op&256) res=(A&0xffffffffffff00ffull)| ((op&1024) ? B&0xff00ull :
@@ -897,7 +897,7 @@ addie:
             case 36:
 	    if (has_mem_) {
 		(this-1)->gen_mem(NULL,1,mem,memp,addr);
-		snprintf((*(this-1)).asmtext,sizeof (asmtext), "movzbl mem+%li(%rip), %%%s\n",addr,reg32[rT]);
+		snprintf((*(this-1)).asmtext,sizeof (asmtext), "copyzbl mem+%li(%rip), %%%s\n",addr,reg32[rT]);
                 (*(this-1)).rT=rT;
 		rtn=false;
 	    } else if (rB<0) {
@@ -905,8 +905,8 @@ addie:
 		B=contx->reg_gen[rB];
 		B_p=contx->reg_genP[rB];
 	    }
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movzbl %%%s,  %%%s\n",reg8[rB],reg32[rT]);
-	    else snprintf(asmtext,sizeof asmtext,"movzbl $%i, %%%s\n",(int) B,reg32[rT]);
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"copyzbl %%%s,  %%%s\n",reg8[rB],reg32[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"copyzbl $%i, %%%s\n",(int) B,reg32[rT]);
             res=B&0xffull;
             flags=flags_in;
             break;
@@ -914,7 +914,7 @@ addie:
             case 37:
 	    if (has_mem_) {
 		(this-1)->gen_mem(NULL,2,mem,memp,addr);
-		snprintf((*(this-1)).asmtext,sizeof (asmtext), "movzwl mem+%li(%rip), %%%s\n",addr,reg32[rT]);
+		snprintf((*(this-1)).asmtext,sizeof (asmtext), "copyzwl mem+%li(%rip), %%%s\n",addr,reg32[rT]);
                 (*(this-1)).rT=rT;
 		rtn=false;
 	    } else if (rB<0) {
@@ -922,8 +922,8 @@ addie:
 		B=contx->reg_gen[rB];
 		B_p=contx->reg_genP[rB];
 	    }
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movzwl %%%s,  %%%s\n",reg16[rB],reg32[rT]);
-	    else snprintf(asmtext,sizeof asmtext,"movzwl $%i, %%%s\n",(int) B,reg32[rT]);
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"copyzwl %%%s,  %%%s\n",reg16[rB],reg32[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"copyzwl $%i, %%%s\n",(int) B,reg32[rT]);
             res=B&0xffffull;
             flags=flags_in;
             break;
@@ -934,8 +934,8 @@ addie:
 		B=contx->reg_gen[rB];
 		B_p=contx->reg_genP[rB];
 	    }
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movsbq %%%s,  %%%s\n",reg8[rB],reg65[rT]);
-	    else snprintf(asmtext,sizeof asmtext,"movsbq $%i, %%%s\n",(int) B,reg65[rT]);
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"copysbq %%%s,  %%%s\n",reg8[rB],reg65[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"copysbq $%i, %%%s\n",(int) B,reg65[rT]);
             res=(B&0x80) ? B|0xffffffffffffff00ull : B&0xffull;
             flags=flags_in;
 	    if (has_mem_) {
@@ -950,8 +950,8 @@ addie:
 		B=contx->reg_gen[rB];
 		B_p=contx->reg_genP[rB];
 	    }
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movswq %%%s,  %%%s\n",reg16[rB],reg65[rT]);
-	    else snprintf(asmtext,sizeof asmtext,"movswq $%i, %%%s\n",(int) B,reg65[rT]);
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"copyswq %%%s,  %%%s\n",reg16[rB],reg65[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"copyswq $%i, %%%s\n",(int) B,reg65[rT]);
             res=(B&0x8000) ? B|0xffffffffffff0000ull : B&0xffffull;
             flags=flags_in;
 	    if (has_mem_) {
@@ -966,8 +966,8 @@ addie:
 		B=contx->reg_gen[rB];
 		B_p=contx->reg_genP[rB];
 	    }
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movslq %%%s,  %%%s\n",reg32[rB],reg65[rT]);
-	    else snprintf(asmtext,sizeof asmtext,"movslq $%i, %%%s\n",(int) B,reg65[rT]);
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"copyslq %%%s,  %%%s\n",reg32[rB],reg65[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"copyslq $%i, %%%s\n",(int) B,reg65[rT]);
             res=(B&0x80000000) ? B|0xffffffff00000000ull : B&0xffffffffull;
             flags=flags_in;
 	    if (has_mem_) {
@@ -984,8 +984,8 @@ addie:
 		B0=B;
 		B0x=B;
 	    }
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movsbl %%%s,  %%%s\n",reg8[rB],reg32[rT]);
-	    else snprintf(asmtext,sizeof asmtext,"movsbl $%i, %%%s\n",(int) B,reg32[rT]);
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"copysbl %%%s,  %%%s\n",reg8[rB],reg32[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"copysbl $%i, %%%s\n",(int) B,reg32[rT]);
             res=(B0&0x80) ? B0x|0xffffff00ull : B0x&0xffull;
             flags=flags_in;
 	    if (has_mem_) {
@@ -1002,8 +1002,8 @@ addie:
 		B0=B;
 		B0x=B;
 	    }
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"movswl %%%s,  %%%s\n",reg16[rB],reg32[rT]);
-	    else snprintf(asmtext,sizeof asmtext,"movswl $%i, %%%s\n",(int) B,reg32[rT]);
+	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"copyswl %%%s,  %%%s\n",reg16[rB],reg32[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"copyswl $%i, %%%s\n",(int) B,reg32[rT]);
             res=(B0&0x8000) ? B0x|0xffff0000ull : B0x&0xffffull;
             flags=flags_in;
 	    if (has_mem_) {
