@@ -428,7 +428,7 @@ class req {
     public:
     unsigned int op;
     unsigned long long A,B,res;
-    unsigned long addr;
+    unsigned long long addr;
     unsigned A_p,B_p,res_p,excpt;
     unsigned flags,flags_in;
     unsigned fset;
@@ -442,8 +442,8 @@ class req {
     unsigned has_alu;
     char asmtext[64];
     bool gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,bool has_mem_,char *mem,char *pmem);
-    void gen_init(int rT,int dom,unsigned long int val,int val_p);
-    void gen_mem(req* prev1,unsigned code,char * mem,char *memp,unsigned long addr);
+    void gen_init(int rT,int dom,unsigned long long int val,int val_p);
+    void gen_mem(req* prev1,unsigned code,char * mem,char *memp,unsigned long long addr);
     void flgPTR(__int128 r);
     void flg64(__int128 r);
     void flg32(__int128 r);
@@ -452,7 +452,7 @@ class req {
     bool testj(int code);
 };
     
-void req::gen_init(int rT_,int dom,unsigned long int val,int val_p) {
+void req::gen_init(int rT_,int dom,unsigned long long int val,int val_p) {
     has_alu=true;
     res=val;
     res_p=val_p;
@@ -532,9 +532,9 @@ addie:
             ptr p,p2;
 	    if (A_p || B_p) {
 		res1=(res=res0)&0xfffffffffff;
-		unsigned long low,hi;
+		unsigned long long low,hi;
 		p.val=pttr;
-		unsigned long b=p2.val;
+		unsigned long long b=p2.val;
 		if (!no_O) p2.val=res;
 		unsigned exp=p.val>>59;
 		bool flip;
@@ -1132,8 +1132,8 @@ addie:
         long long resSx;
         unsigned long long res0x;
         unsigned __int128 resU;
-        resSx= (signed long) As * (signed long) Bs;
-        res0x=(unsigned long) Au * (unsigned long) Bu;
+        resSx= (signed long long) As * (signed long long) Bs;
+        res0x=(unsigned long long) Au * (unsigned long long) Bu;
         res0=A0*B0;
         resS=AS*BS;
         switch(op&0xff) {
@@ -1180,19 +1180,19 @@ addie:
             break;
 
             case 12:
-            fp_get_ext((op&0x400) ? (long double) (signed long) B : 
+            fp_get_ext((op&0x400) ? (long double) (signed long long) B : 
               (long double) B,num);
             flags=flags_in;
             break;
             
             case 13:
-            fp_get_double((op&0x400) ? (double) (signed long) B : 
+            fp_get_double((op&0x400) ? (double) (signed long long) B : 
               (double) B,num);
             flags=flags_in;
             break;
 
             case 14:
-            fp_get_single((op&0x400) ? (float) (signed long) B : (float) B,num);
+            fp_get_single((op&0x400) ? (float) (signed long long) B : (float) B,num);
             flags=flags_in;
             break;
         }
@@ -1210,12 +1210,12 @@ addie:
     return rtn;
 }
     
-void req::gen_mem(req* prev1,unsigned code,char *mem,char *memp,unsigned long addr) {
+void req::gen_mem(req* prev1,unsigned code,char *mem,char *memp,unsigned long long addr) {
     res=0;
     res_p=0;
     rT=16;
     asmtext[0]='\x00';
-#define UC (unsigned long)
+#define UC (unsigned long long)
     switch(code) {
         case 8: res_p=(memp[MEMRGN_DATA+addr/8]>>(addr&7))&0x1;
 		res|=UC (unsigned char) mem[MEMRGN_DATA+addr+4]<<32;
@@ -1254,7 +1254,7 @@ void req::flgM64(unsigned long long r,bool big) {
 }
 void req::flgM128(unsigned __int128 r, bool big) {
     unsigned __int128 r0=r>>63;
-    long r1=r;
+    long long r1=r;
     r0=r0>>1;
     flags=((r0!=0)<<5) | (!((r0==0xffffffffffffffffull && r1<0) | (r0==0 &&
     r1>=0))<<4) | (((r0&0x8000000000000000 && big) || (r1<0 && !big))<<2) |
@@ -1400,7 +1400,7 @@ unsigned get_retfl_data(Vheptane_core *vlTOPp) {
 }
 
 void req_set(Vheptane_core *top,req *reqs,char *mem,char *memp) {
-    static unsigned long addr[64];
+    static unsigned long long addr[64];
     static unsigned pos=0;
     static unsigned pos_R=0;
     static bool R=0;
@@ -1438,7 +1438,7 @@ void req_set(Vheptane_core *top,req *reqs,char *mem,char *memp) {
     }
 
     if (top->rbusDOut_can && top->rbusDOut_want) {
-	//unsigned long address=<<7;
+	//unsigned long long address=<<7;
 	if (!(top->rbusDOut_signals&(1<<(rbusD_write_back)))) {
             goto end_DOut;
 	}
@@ -1480,10 +1480,10 @@ void req_set(Vheptane_core *top,req *reqs,char *mem,char *memp) {
     }
 }
 
-bool get_check(Vheptane_core *top, req *reqs,unsigned long &ip) {
+bool get_check(Vheptane_core *top, req *reqs,unsigned long long &ip) {
     bool rtn=true;
-    static unsigned long pos=0;
-    long k,x,count;
+    static unsigned long long pos=0;
+    long long k,x,count;
     static unsigned xbreak=0;
     static unsigned retire=0;
     static int insn_count[64];
@@ -1503,7 +1503,7 @@ bool get_check(Vheptane_core *top, req *reqs,unsigned long &ip) {
 	    if (reqs[ip+x].rT<0) goto no_srch;
 	    if (x<(count-1)) for(k=x+1;k<count;k=k+1) if (reqs[ip+x].rT==reqs[ip+k].rT || reqs[ip+x].rT<0) goto no_srch;
 	    for(k=0;k<9;k=k+1) {
-		unsigned long val,valp;
+		unsigned long long val,valp;
 		extract_e(top->heptane_core__DOT__bck_mod__DOT__ret_dataA,65*k,65*k+63,val);
 		extract_e(top->heptane_core__DOT__bck_mod__DOT__ret_dataA,65*k+64,65*k+64,valp);
 		switch(k) {
@@ -1578,7 +1578,7 @@ no_srch:;
     }
     for(k=0;k<6;k++) {
 	if (top->heptane_core__DOT__bck_mod__DOT__fret_en&(1<<k)) {
-	    unsigned long val;
+	    unsigned long long val;
 	    int k2;
 	    k2=(k>>1)*3+1+(k&1);
 	    extract_e(top->heptane_core__DOT__bck_mod__DOT__fret,14*k,14*k+13,val);
@@ -1589,7 +1589,7 @@ no_srch:;
     if (top->heptane_core__DOT__front_mod__DOT__cc_mod__DOT____Vcellout__stHit_mod__read_data&0x100) {
 	printf("fetch ");
 	for(k=3;k>=0;k--) {
-	   unsigned long val;
+	   unsigned long long val;
 	   extract_e(top->heptane_core__DOT__front_mod__DOT__read_data,65*k,65*k+63,val);
 	   printf("%#16lx",val);
 	}
@@ -1624,8 +1624,8 @@ no_srch:;
 }
 
 void prog_locate(req *reqs,unsigned char *mem) {
-    unsigned long addr=0;
-    unsigned long ins=0;
+    unsigned long long addr=0;
+    unsigned long long ins=0;
     unsigned bits=mem[30]|(mem[31]<<8);
     while (1) {
 	int n,sz;
@@ -1658,7 +1658,7 @@ void fp_get_ext(long double a, unsigned num[3]) {
 
 void fp_get_double(double a, unsigned num[3]) {
     if (a!=0.0) {
-        unsigned long *p1= (unsigned long *)&a;
+        unsigned long long *p1= (unsigned long long *)&a;
         num[0]=*p1&0xffffffffu;
         num[1]=((*p1&0x7fffffff00000000ull)>>31)^0x80000000ull;
         num[2]=(*p1>>63)|((*p1>>61)&0x2)|0x8;
@@ -1707,7 +1707,7 @@ bool ckran_alu(unsigned long long ptr,unsigned long long &addr) {
 void gen_memrgn(char *mem,char *pmem) {
     int n;
     for(n=0;n<(MEMRGN_DATA_SZ/8);n++) {
-	unsigned long *xmem=(unsigned long *) (mem+8*n+MEMRGN_DATA);
+	unsigned long long *xmem=(unsigned long long *) (mem+8*n+MEMRGN_DATA);
         if ((lrand48()%3)==1) {
 	    pmem[n/8+MEMRGN_DATA/64]|=1<<(n&0x7);
 	    *xmem=lrand48()&0xfffffffffff;
@@ -1762,7 +1762,7 @@ int main(int argc, char *argv[]) {
     Verilated::assertOn(false);
     int initcount=10;
     int cyc=0;
-    unsigned long ip=0;
+    unsigned long long ip=0;
     FILE *FOUT=fopen("/tmp/asm2.s","w");
     if (!FOUT) exit(1);
     hcont contx;
@@ -1788,7 +1788,7 @@ int main(int argc, char *argv[]) {
     int fd=open(mname,O_RDONLY);
     if (fd>=0) {
 	struct stat s;
-	long sz;
+	long long sz;
 	fstat(fd,&s);
 	sz=s.st_size;
 	sz=(sz+4095l)&0xfffffffff000;
