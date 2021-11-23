@@ -1488,7 +1488,7 @@ module missQ(
   );
 
   assign doStep=now_flushing_reg2&~alt_bus_hold || ((curConfl==6'b0001 || curConfl==6'b0010 || curConfl==6'b0100 || curConfl==6'b1000 ||
-    curConfl==6'b10000 || curConfl==6'b100000) && read_clkEn && ~rdwr_match2 && count);
+    curConfl==6'b10000 || curConfl==6'b100000 || curConfl==0) && read_clkEn && ~rdwr_match2 && count);
  
   always @* begin
       stepOver4=read_mop[4][`mOp1_low]!=2'd0;
