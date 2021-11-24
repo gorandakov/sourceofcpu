@@ -1377,7 +1377,7 @@ module missQ(
   assign mOpR_addr_low=!conflFound ? 2'B0 : 2'BZ;
   //assign mOpR_banks=!conflFound ? 32'b0 : 32'BZ;
   assign mOpR_bank0=!conflFound ? 5'b0 : 5'BZ;
-  assign mOpR_clHit=!conflFound ? 2'b11 : 2'BZ;
+  assign mOpR_clHit=!conflFound ? 2'b0 : 2'BZ;
   //assign mOpR_first=!conflFound ? 1'b0 : 1'BZ;
   assign mOpR_dupl=!conflFound ? 2'b0 : 2'BZ;
   assign mOpR_io=(!conflFound) ? 1'B0 : 1'BZ;
