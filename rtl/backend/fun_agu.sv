@@ -2105,8 +2105,8 @@ module agu_block(
   assign wr1_pbit=mOpY5_pbit_o_reg3;
   assign wr1_d128=mOpY5_d128_o_reg3;
   
-  assign miss_clDo[0]=~mOpR_clHit[0] && ~miss_doneEven && ~mOpR_odd|mOpR_split;
-  assign miss_clDo[1]=~mOpR_clHit[1] && ~miss_doneOdd &&  mOpR_odd|mOpR_split;
+  assign miss_clDo[0]=mOpR_en && ~mOpR_clHit[0] && ~miss_doneEven && ~mOpR_odd|mOpR_split;
+  assign miss_clDo[1]=mOpR_en && ~mOpR_clHit[1] && ~miss_doneOdd &&  mOpR_odd|mOpR_split;
   
   assign mcam_addr=miss_clDo[0] ? {mOpR_addrEven,1'b0} : {mOpR_addrOdd,1'b1};
   assign mcam_cldupl=miss_clDo[0] ? mOpR_dupl[0] : mOpR_dupl[1];
