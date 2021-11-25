@@ -961,6 +961,7 @@ module agu_block(
   wire [7:0]  mOp0_WQ;
   wire        mOp0_lsflag;
   wire [3:0]  mOp0_attr;
+  reg        mOpX0_lsfwd_reg;
 
   wire        mOpX1_en;
   wire        mOpX1_thread;
@@ -1020,6 +1021,7 @@ module agu_block(
   wire [7:0]  mOp1_WQ;
   wire        mOp1_lsflag;
   wire [3:0]  mOp1_attr;
+  reg        mOpX1_lsfwd_reg;
 
   wire        mOpX2_en;
   wire        mOpX2_thread;
@@ -1079,6 +1081,7 @@ module agu_block(
   wire [7:0]  mOp2_WQ;
   wire        mOp2_lsflag;
   wire [3:0]  mOp2_attr;
+  reg        mOpX2_lsfwd_reg;
 
   wire        mOpX3_en;
   wire        mOpX3_thread;
@@ -2823,6 +2826,7 @@ module agu_block(
       mOpX0_LSQ_reg<=mOpX0_LSQ;
       mOpX0_II_reg<=mOpX0_II;
       mOpX0_WQ_reg<=mOpX0_WQ;
+      mOpX0_lsfwd_reg  <=mOpX0_lsfwd;
 
       mOpX1_addrEven_reg<=mOpX1_addrEven;
       mOpX1_addrOdd_reg<=mOpX1_addrOdd;
@@ -2836,6 +2840,7 @@ module agu_block(
       mOpX1_LSQ_reg<=mOpX1_LSQ;
       mOpX1_II_reg<=mOpX1_II;
       mOpX1_WQ_reg<=mOpX1_WQ;
+      mOpX1_lsfwd_reg  <=mOpX1_lsfwd;
 
       mOpX2_addrEven_reg<=mOpX2_addrEven;
       mOpX2_addrOdd_reg<=mOpX2_addrOdd;
@@ -2852,6 +2857,7 @@ module agu_block(
       mOpX2_brdread_reg<=mOpX2_brdread;
       mOpX2_data_reg<=mOpX2_data;
       mOpX2_pbit_reg<=mOpX2_pbit;
+      mOpX2_lsfwd_reg  <=mOpX3_lsfwd;
 
       mOpX3_addrEven_reg<=mOpX3_addrEven;
       mOpX3_addrOdd_reg<=mOpX3_addrOdd;
