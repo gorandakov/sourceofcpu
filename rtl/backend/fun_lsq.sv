@@ -6,6 +6,7 @@ module fun_lsq(
   except,
   bus_holds_agu_reg2,miss_holds_agu_reg2,miss_pause_agu_reg2,insert_isData_reg2,
   pause_agu,WDoRsPause,
+  lsq_index,
   p0_adata,p0_LSQ,p0_en,p0_rsEn,p0_smpc,p0_lsfwd,
   p1_adata,p1_LSQ,p1_en,p1_rsEn,p1_smpc,p1_lsfwd,
   p2_adata,p2_LSQ,p2_en,p2_rsEn,p2_smpc,p2_lsfwd,
@@ -58,6 +59,7 @@ module fun_lsq(
   input bus_holds_agu_reg2,miss_holds_agu_reg2,miss_pause_agu_reg2,insert_isData_reg2;
   input pause_agu;
   output [1:0] WDoRsPause;
+  output [5:0] lsq_index;
   input [`lsaddr_width-1:0] p0_adata;
   input [8:0]               p0_LSQ;
   input                     p0_en;
@@ -493,7 +495,7 @@ module fun_lsq(
   .write_thread_shr(1'b0),
   .write_data_shr(LSQ_shr_data),
   .write_wen_shr((lsi0_reg!=3'd6 || lsi1_reg!=3'd6 || lsi2_reg!=3'd6) && bundle_in_reg2),
-  .write_addr_shr(LSQ_upper),
+  .write_addr_shr(lsq_index),
 //verilator lint_off WIDTH
   .read0B_xdata(ret_xdata[0]),.read0B_enOut(ret_xenab[0]),
   .read1B_xdata(ret_xdata[1]),.read1B_enOut(ret_xenab[1]),
