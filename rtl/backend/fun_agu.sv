@@ -2115,7 +2115,7 @@ module agu_block(
   assign mcam_low=mOpR_addr_low;
   assign mcam_bank0=mOpR_bank0;
   assign mcam_io=mOpR_io;
-  assign miss_next=mOpR_en && !(&miss_clDo) && mcam_hasfree;
+  assign miss_next=!(&miss_clDo) && mcam_hasfree;
   
   assign mcam_do_req=mOpR_en_reg&&~mcam_locked&&~mcam_dupl&&~mcam_replay;
 
