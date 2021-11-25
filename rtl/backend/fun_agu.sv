@@ -2474,7 +2474,7 @@ module agu_block(
   assign p0_LSQ=mOpX0_LSQ_reg;
   assign p0_ret={1'b0,p0_faultCode[3:0],p0_faultNo};
   assign p0_secq=mOp0_sec_reg;
-  assign p0_lsfwd=mOpX0_lsfwd;
+  assign p0_lsfwd=mOpX0_lsfwd_reg;
 
   assign p1_adata[`lsaddr_addrE]=mOpX1_addrEven_reg;
   assign p1_adata[`lsaddr_addrO]=mOpX1_addrOdd_reg;
@@ -2508,7 +2508,7 @@ module agu_block(
   assign p1_LSQ=mOpX1_LSQ_reg;
   assign p1_ret={1'b0,p1_faultCode[3:0],p1_faultNo};
   assign p1_secq=mOp1_sec_reg;
-  assign p1_lsfwd=mOpX1_lsfwd;
+  assign p1_lsfwd=mOpX1_lsfwd_reg;
 
   assign p2_adata[`lsaddr_addrE]=mOpX2_addrEven_reg;
   assign p2_adata[`lsaddr_addrO]=mOpX2_addrOdd_reg;
@@ -2542,7 +2542,7 @@ module agu_block(
   assign p2_LSQ=mOpX2_LSQ_reg;
   assign p2_ret={1'b0,p2_faultCode[3:0],p2_faultNo};
   assign p2_secq=mOp2_sec_reg;
-  assign p2_lsfwd=mOpX2_lsfwd;
+  assign p2_lsfwd=mOpX2_lsfwd_reg;
   assign p2_data=mOpX2_data_reg;
   assign p2_pbit=mOpX2_pbit_reg;
   assign p2_brdbanks=mOpX2_brdread_reg;
@@ -2577,7 +2577,7 @@ module agu_block(
   assign p3_rsEn=mOp3_rsEn_reg && ~p3_pageFault && ~now_flushing_reg;
   assign p3_en=mOpX3_en_reg;
   assign p3_LSQ=mOpX3_LSQ_reg;
-  assign p3_lsfwd=mOpX3_lsfwd;
+  assign p3_lsfwd=mOpX3_lsfwd_reg;
   assign p3_data=mOpX3_data_reg;
   assign p3_pbit=mOpX3_pbit_reg;
   assign p3_ret={1'b0,p3_faultCode[3:0],p3_faultNo};
