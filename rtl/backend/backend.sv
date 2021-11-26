@@ -4969,7 +4969,7 @@ module backend(
   .mOpY4_II(st0_II_reg3),.mOpY4_hit(dc_wrHit[0]),
   .mOpY5_II(st1_II_reg3),.mOpY5_hit(dc_wrHit[1]),
   .lsi0_reg(rs_lsi_reg[0]),.lsi1_reg(rs_lsi_reg[1]),.lsi2_reg(rs_lsi_reg[2]),//only used to check if has mem reqs
-  .MSI_exp_addr(MSI_exp_addr_reg),.MSI_en(MSI_exp_en_reg),
+  .MSI_exp_addr(MSI_exp_addr_reg),.MSI_en(MSI_exp_en_reg),.lsq_index(LSQ_upper),
   .doStall_STQ(doStall_STQ),
   .doStall_LDQ(doStall_LDQ),
   .doStall_LSQ(doStall_LSQ) 
