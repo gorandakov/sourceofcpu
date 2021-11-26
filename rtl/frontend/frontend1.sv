@@ -741,9 +741,9 @@ module frontend1(
           assign pre_other[j][`instrQ_magic]=~pre_magic_reg[j];
           assign pre_other[j][`instrQ_srcIPOff]={cc_base_off_reg4,pre_off_reg[j]};
           if (j!=11) assign pre_other[j][`instrQ_srcTick]=cc_read_IP_reg4[43:9]!=cc_read_IP_reg5[43:9] &&
-	     do_seq_reg5 && pre_instrEn_reg[j]&&pre_jbefore[j]&&~pre_instrEn_reg[j+1]|~pre_jbefore[j+1]; 
+	     do_seq_reg5 && pre_instrEn_reg[j]&&pre_jbefore[j]&&j==0; 
           else assign pre_other[j][`instrQ_srcTick]=cc_read_IP_reg4[43:9]!=cc_read_IP_reg5[43:9] &&
-	     do_seq_reg5 && pre_instrEn_reg[j]&&pre_jbefore[j]; 
+	     do_seq_reg5 && pre_instrEn_reg[j]&&pre_jbefore[j]&&j==0; 
           assign pre_other[j][`instrQ_class]=pre_class_reg[j];
           //assign pre_other[j][`instrQ_taken]=btb_hasTK_reg3 ? 1'bz : 1'b0;
           assign pre_other[j][`instrQ_taken]=(taken_reg4 & isJ) !=4'b0;

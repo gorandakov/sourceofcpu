@@ -2876,8 +2876,7 @@ module decoder(
           );
           
           
-          if (k>0) assign afterTick[k]=(|dec_tick[k-1:0]);
-          else assign afterTick[0]=1'b0;
+          assign afterTick[k]=(|dec_tick[k:0]);
           if (k>0) assign dec_afterTaken[k]=(|dec_taken[k-1:0]);
           else assign dec_afterTaken[0]=1'b0;
           
