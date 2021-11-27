@@ -1200,13 +1200,13 @@ addie:
     }
     en=rand()&0xff!=0;
     if (!(op&0x1000)) contx->flags=flags;
+    if (has_mem_ && ((*(this-1)).rT>=0)) {
+	contx->reg_gen[(*(this-1)).rT]=(*(this-1)).res;
+	contx->reg_genP[(*(this-1)).rT]=(*(this-1)).res_p;
+    }
     if ((rtn||!has_mem_) && (rT>=0)) {
 	contx->reg_gen[rT]=res;
 	contx->reg_genP[rT]=res_p;
-    }
-    if (!rtn && has_mem_ && ((*(this-1)).rT>=0)) {
-	contx->reg_gen[(*(this-1)).rT]=(*(this-1)).res;
-	contx->reg_genP[(*(this-1)).rT]=(*(this-1)).res_p;
     }
     return rtn;
 }
@@ -1462,10 +1462,16 @@ void req_set(Vheptane_core *top,req *reqs,char *mem,char *memp) {
 	top->heptane_core__DOT__front_mod__DOT__cc_mod__DOT__write_IP_reg);
     if (top->heptane_core__DOT__front_mod__DOT__bus_match_reg) bmr=1;
     else bmr=0;
-    if (top->heptane_core__DOT__insBus_en) printf("insBus 0x%x, 0x%#8x%#8x%#8x%#8x, %i\n",top->heptane_core__DOT__dc2_req_rd_reg5,
+    if (top->heptane_core__DOT__insBus_en) 
+	    printf("insBus 0x%x, 0x%#8x%#8x%#8x%#8x, %i\n",top->heptane_core__DOT__dc2_req_rd_reg5,
 	top->heptane_core__DOT__dc2_rdata_reg[3],top->heptane_core__DOT__dc2_rdata_reg[2],
 	top->heptane_core__DOT__dc2_rdata_reg[1],top->heptane_core__DOT__dc2_rdata_reg[0],
 	top->heptane_core__DOT__dc2_rhitB1_reg);
+    if (top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__alt_bus_hold_reg2) {
+	printf("ABH -> 0x%lx,0x%lx\n",
+			top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__mOpX0_addrEven_reg,
+			top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__mOpX0_addrOdd_reg);
+    }
     if (!top->heptane_core__DOT__insBus_en && top->heptane_core__DOT__dc2_rhit) printf("insBusX 0x%x, 0x%#8x%#8x%#8x%#8x, %i\n",top->heptane_core__DOT__dc2_req_rd_reg5,
 	top->heptane_core__DOT__dc2_rdata_reg[3],top->heptane_core__DOT__dc2_rdata_reg[2],
 	top->heptane_core__DOT__dc2_rdata_reg[1],top->heptane_core__DOT__dc2_rdata_reg[0],
