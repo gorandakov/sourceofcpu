@@ -1058,8 +1058,8 @@ module smallInstr_decoder(
       end
       prB_use[13]=1'b1;
       prA_use[13]=~(magic==4'b0111 && instr[57]);
-      pisIPRel[13]=magic==4'b0111 & instr[59];
-      if (|operation[9:8] && ~operation[6]) perror[13]=1;
+      pisIPRel[13]=magic==4'b0111 && instr[59];
+      if (|poperation[13][9:8] && ~poperation[13][6]) perror[13]=1;
       if (magic[2:0]==3'b111 && instr[59] && ~instr[58]) perror[13]=1;
       if (magic[2:0]==3'b111 && instr[63:60]!=0) perror[13]=1;
       if (opcode_main[0] &&opcode_main[7:4]==4'b0111 && opcode_main[3])
