@@ -1234,11 +1234,11 @@ module smallInstr_decoder(
       //if (magic[3]) perror[19]=1'b0;
       if (opcode_main[0]) begin
           if (magic[1:0]==2'b01) prC[19]=instr[16:12];
-          else prC[19]={opcode_main[7:1]!=7'b1011000 ? instr[1] : instr[11],instr[15:12]};
+          else prC[19]={opcode_main[7:1]!=7'b1011000 ? instr[11] : instr[1],instr[15:12]};
        //   if (prevSpecAlu) rC=6'd16;
       end else begin
           if (magic[1:0]==2'b01) prT[19]=instr[16:12];
-          else prT[19]={opcode_main[7:1]!=7'b1011000 ? instr[1] : instr[11],instr[15:12]};
+          else prT[19]={opcode_main[7:1]!=7'b1011000 ? instr[11] : instr[1],instr[15:12]};
           if (prT[19]==5'd16 && opcode_main[7:0]==8'b10110000) begin
               prT[19]=5'd16;
               pthisSpecLoad[19]=1'b1;
