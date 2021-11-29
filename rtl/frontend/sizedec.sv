@@ -121,8 +121,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   assign isBaseSpecLoad=(opcode_main==8'd54 || opcode_main==8'd176) && magic[0];
   assign isBaseIndexSpecLoad=(opcode_main==8'd55 || opcode_main==8'd177) && magic[0];
   
-  assign isImmLoadStore=((opcode_main[7:2]==6'd15 & !isImmCISC) || opcode_main[7:1]==7'b1011000) & magic[0];  
-  assign isImmCISC=instr[1];
+  assign isImmLoadStore=((opcode_main[7:2]==6'd15) || opcode_main[7:1]==7'b1011000) & magic[0];  
   assign isBaseCISC=magic[1]==1'b0 ? instr[19:18]!=2'b0 : 1'bz;
   assign isBaseCISC=magic[1]==1'b1 ? instr[17:16]!=2'b0 : 1'bz;
   assign isBaseLoadStore=((opcode_main[7:5]==3'b010 && !isBaseCISC) || opcode_main[7:4]==4'b0110) & magic[0];
