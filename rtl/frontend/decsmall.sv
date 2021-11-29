@@ -319,9 +319,15 @@ module smallInstr_decoder(
   assign isBaseSpecLoad=opcode_main==8'd54 || opcode_main==8'd202;
   assign isBaseIndexSpecLoad=opcode_main==8'd55 || opcode_main==8'd203;
   
-  assign isImmLoadStore=(opcode_main[7:2]==6'd15) || opcode_main[7:1]==7'b1011000;  
-  assign isBaseLoadStore=(opcode_main[7:5]==3'b010) || opcode_main[7:4]==4'b0110;
-  assign isBaseIndexLoadStore=(opcode_main[7:5]==3'b100) || opcode_main[7:4]==4'b0111;
+  assign isImmLoadStore=(opcode_main[7:2]==6'd15 & !isImmCISC) || opcode_main[7:1]==7'b1011000;  
+  assign isImmCISC=instr[1];
+  assign isBaseCISC=magic[1]==1'b0 ? instr[19:18]!=2'b0 : 1'bz;
+  assign isBaseCISC=magic[1]==1'b1 ? instr[17:16]!=2'b0 : 1'bz;
+  assign isBaseLoadStore=(opcode_main[7:5]==3'b010 && !isBaseCISC) || opcode_main[7:4]==4'b0110;
+  assign isBaseIndexCISC=magic[1]==1'b0 ? instr[24:23]!=0 : 1'bz;
+  assign isBaseIndexCISC=magic[2:1]==2'b01 ? instr[26:25]!=0 : 1'bz;
+  assign isBaseIndexCISC=magic[2:1]==2'b11 ? instr[17:16]!=0 : 1'bz;
+  assign isBaseIndexLoadStore=(opcode_main[7:5]==3'b100 && !isBaseIndexCISC) || opcode_main[7:4]==4'b0111;
 
   assign isBasicCJump=opcode_main[7:4]==4'b1010;
   //gap 176-177 for imm load.
@@ -1020,7 +1026,6 @@ module smallInstr_decoder(
       poperation[13][9:8]=magic[2:0]==3'b111 ? instr[53:52] : ( magic[1:0]==2'b01 ?
         instr[22:21] : instr[24:23]);
       poperation[13][12:10]=3'b0;
-      if (magic==4'b0111) perror[13]=1'b0;
       prA_use[13]=~(magic==4'b0111 && instr[57]);
       prT_use[13]=~opcode_main[0] && opcode_main[7:4]==4'b0111 && ~opcode_main[3];
       prC_use[13]=opcode_main[0] && opcode_main[7:4]==4'b0111;
