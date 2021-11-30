@@ -2557,7 +2557,7 @@ module rs(
   newANeeded1,newBNeeded1,newSNeeded1,newRsSelect1,newPort1,
   newANeeded2,newBNeeded2,newSNeeded2,newRsSelect2,newPort2,
 // wires to get values out of buffer
-  outRsSelect[0],outBank[0],rsFound[0],portReady[0],outDataEn0,outThread0,//agu
+  outRsSelect[0],outBank[0],rsFoundNZ[0],portReady[0],outDataEn0,outThread0,//agu
   outRsSelect[1],outBank[1],rsFound[1],portReady[1],outDataEn1,outThread1,//alu 1
   outRsSelect[2],outBank[2],rsFoundNZ[2],portReady[2],outDataEn2,outThread2,//alu 2
   fuFwdA,fuFwdB,
@@ -2922,7 +2922,7 @@ module rs(
   newRsSelect1,newReg1,
   newRsSelect2,newReg2,
   
-  outRsSelect[0],outBank[0],rsFound[0],outReg0,
+  outRsSelect[0],outBank[0],rsFoundNZ[0],outReg0,
   outRsSelect[1],outBank[1],rsFound[1],outReg1,
   outRsSelect[2],outBank[2],rsFoundNZ[2],outReg2
   );
@@ -2945,7 +2945,7 @@ module rs(
   newRsSelect1,newLSQ1,
   32'b0,{LSQ_WIDTH{1'B0}},
   
-  outRsSelect[0],outBank[0],rsFound[0],outLSQ0,
+  outRsSelect[0],outBank[0],rsFoundNZ[0],outLSQ0,
   32'b0,4'B0,1'b1,,
   32'b0,4'B0,1'b1,
   );
@@ -2956,7 +2956,7 @@ module rs(
   newRsSelect1,{WQ_WIDTH{1'B0}},
   32'b0,{WQ_WIDTH{1'B0}},
   
-  outRsSelect[0],outBank[0],rsFound[0],outWQ0,
+  outRsSelect[0],outBank[0],rsFoundNZ[0],outWQ0,
   32'b0,4'B0,1'b1,,
   32'b0,4'B0,1'b1,
   );
@@ -2967,7 +2967,7 @@ module rs(
   newRsSelect1,newInstrIndex1,
   newRsSelect2,newInstrIndex2,
   
-  outRsSelect[0],outBank[0],rsFound[0],outInstrIndex0,
+  outRsSelect[0],outBank[0],rsFoundNZ[0],outInstrIndex0,
   outRsSelect[1],outBank[1],rsFound[1],outInstrIndex1,
   outRsSelect[2],outBank[2],rsFoundNZ[2],outInstrIndex2
   );
