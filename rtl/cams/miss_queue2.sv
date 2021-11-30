@@ -955,7 +955,7 @@ module missQ(
   assign {read_confl[3:2],read_mop[3],read_mop[2]}=read_dataB;
   assign {read_confl[5:4],read_mop[5],read_mop[4]}=read_dataC;
 
-  assign do_bus_hold=now_flushing;//??_reg
+  assign do_bus_hold=now_flushing||begin_flush||last_inserted_reg4;
   
   assign mOp_noBanks_o=now_flushing&~alt_bus_hold ? 
     ~(rdbanks[0]|rdbanks[1]|rdbanks[2]|rdbanks[3]) : 32'bz;
