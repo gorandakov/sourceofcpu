@@ -1467,12 +1467,17 @@ void req_set(Vheptane_core *top,req *reqs,char *mem,char *memp) {
 	top->heptane_core__DOT__dc2_rdata_reg[3],top->heptane_core__DOT__dc2_rdata_reg[2],
 	top->heptane_core__DOT__dc2_rdata_reg[1],top->heptane_core__DOT__dc2_rdata_reg[0],
 	top->heptane_core__DOT__dc2_rhitB1_reg);
+    static int idr=0;
     if (top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__alt_bus_hold_reg2) {
 	printf("ABH -> 0x%lx,0x%lx,is_ins 0x%x\n",
 			top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__mOpX0_addrEven_reg,
 			top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__mOpX0_addrOdd_reg,
-			top->heptane_core__DOT__bck_mod__DOT__insert_isData_reg3);
+			idr);
     }
+    if (top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__mOpX2_addrEven_reg==0x200042 && top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__mOpX2_en_reg) {
+	printf(" ");
+    }
+    idr=top->heptane_core__DOT__bck_mod__DOT__insert_isData_reg3;
     if (!top->heptane_core__DOT__insBus_en && top->heptane_core__DOT__dc2_rhit) printf("insBusX 0x%x, 0x%#8x%#8x%#8x%#8x, %i\n",top->heptane_core__DOT__dc2_req_rd_reg5,
 	top->heptane_core__DOT__dc2_rdata_reg[3],top->heptane_core__DOT__dc2_rdata_reg[2],
 	top->heptane_core__DOT__dc2_rdata_reg[1],top->heptane_core__DOT__dc2_rdata_reg[0],

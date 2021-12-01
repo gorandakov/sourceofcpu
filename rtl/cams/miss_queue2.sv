@@ -1053,7 +1053,7 @@ module missQ(
   assign mOp1_addr_low_o=WB_fwd[1] ? mOpW_addr_low : 2'bz;
   assign mOp1_odd_o=now_flushing & ~WB_fwd[1] ? read_mop[1][`mOp1_odd] : 1'bz; 
   assign mOp1_odd_o=~now_flushing & ~alt_bus_hold & ~WB_fwd[1] ? mOp1_odd : 1'bz;
-  assign mOp1_odd_o=alt_bus_hold && ~WB_fwd[1]? alt_bus_addr[1] : 1'bz;
+  assign mOp1_odd_o=alt_bus_hold && ~WB_fwd[1]? alt_bus_addr[0] : 1'bz;
   assign mOp1_odd_o=WB_fwd[1] ? mOpW_odd : 1'bz;
   assign mOp1_banks_o=now_flushing && ~WB_fwd[1] ?    read_mop[1][`mOp1_banks] : 32'bz;
   assign mOp1_banks_o=alt_bus_hold && ~WB_fwd[1] ? 32'b0 : 32'bz;
@@ -1113,7 +1113,7 @@ module missQ(
   assign mOp2_addr_low_no=WB_fwd[2] ? mOpW_addr_low : 2'bz;
   assign mOp2_odd_no=now_flushing & ~WB_fwd[2] ? read_mop[2][`mOp1_odd] : 1'bz; 
   assign mOp2_odd_no=~now_flushing & ~alt_bus_hold & ~WB_fwd[2] ? mOp2_odd : 1'bz;
-  assign mOp2_odd_no=alt_bus_hold && ~WB_fwd[2]? alt_bus_addr[2] : 1'bz;
+  assign mOp2_odd_no=alt_bus_hold && ~WB_fwd[2]? alt_bus_addr[0] : 1'bz;
   assign mOp2_odd_no=WB_fwd[2] ? mOpW_odd : 1'bz;
   assign mOp2_banks_no=now_flushing && ~WB_fwd[2] ?    read_mop[2][`mOp1_banks] : 32'bz;
   assign mOp2_banks_no=alt_bus_hold && ~WB_fwd[2] ? 32'b0 : 32'bz;
