@@ -1468,9 +1468,10 @@ void req_set(Vheptane_core *top,req *reqs,char *mem,char *memp) {
 	top->heptane_core__DOT__dc2_rdata_reg[1],top->heptane_core__DOT__dc2_rdata_reg[0],
 	top->heptane_core__DOT__dc2_rhitB1_reg);
     if (top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__alt_bus_hold_reg2) {
-	printf("ABH -> 0x%lx,0x%lx\n",
+	printf("ABH -> 0x%lx,0x%lx,is_ins 0x%x\n",
 			top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__mOpX0_addrEven_reg,
-			top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__mOpX0_addrOdd_reg);
+			top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__mOpX0_addrOdd_reg,
+			top->heptane_core__DOT__bck_mod__DOT__insert_isData_reg3);
     }
     if (!top->heptane_core__DOT__insBus_en && top->heptane_core__DOT__dc2_rhit) printf("insBusX 0x%x, 0x%#8x%#8x%#8x%#8x, %i\n",top->heptane_core__DOT__dc2_req_rd_reg5,
 	top->heptane_core__DOT__dc2_rdata_reg[3],top->heptane_core__DOT__dc2_rdata_reg[2],
@@ -1612,11 +1613,16 @@ no_srch:;
     }
     if (top->heptane_core__DOT__bck_mod__DOT__FUwen_reg[0]|top->heptane_core__DOT__bck_mod__DOT__FUwen_reg[1]|
 	top->heptane_core__DOT__bck_mod__DOT__FUwen_reg[2]|top->heptane_core__DOT__bck_mod__DOT__FUwen_reg[3]) {
-	printf("FUwen_reg 0x%x, 0x%x\n",top->heptane_core__DOT__bck_mod__DOT__FUwen_reg[0] | 
+	printf("FUwen_reg 0x%x, 0x%x : 0x%x,0x%x,0x%x,0x%x\n",top->heptane_core__DOT__bck_mod__DOT__FUwen_reg[0] | 
 	(top->heptane_core__DOT__bck_mod__DOT__FUwen_reg[1]<<1) |(top->heptane_core__DOT__bck_mod__DOT__FUwen_reg[2]<<2)|
 	(top->heptane_core__DOT__bck_mod__DOT__FUwen_reg[3]<<3),
 	top->heptane_core__DOT__bck_mod__DOT__FU0HitP | (top->heptane_core__DOT__bck_mod__DOT__FU1HitP<<1) |
-	(top->heptane_core__DOT__bck_mod__DOT__FU2HitP<<2) |(top->heptane_core__DOT__bck_mod__DOT__FU3HitP<<3));
+	(top->heptane_core__DOT__bck_mod__DOT__FU2HitP<<2) |(top->heptane_core__DOT__bck_mod__DOT__FU3HitP<<3),
+	top->heptane_core__DOT__bck_mod__DOT__FUreg_reg[0],
+	top->heptane_core__DOT__bck_mod__DOT__FUreg_reg[1],
+	top->heptane_core__DOT__bck_mod__DOT__FUreg_reg[2],
+	top->heptane_core__DOT__bck_mod__DOT__FUreg_reg[3]
+	);
     }
     if (top->heptane_core__DOT__bck_mod__DOT__miss_pause_agu) {
 	printf("miss_pause_agu\n");
@@ -1828,6 +1834,7 @@ int main(int argc, char *argv[]) {
         top->eval();
         top->eval();
         if (top->heptane_core__DOT__front_mod__DOT__cc_mod__DOT__cc_mod__DOT__wayMod_gen__BRA__7__KET____DOT__way_mod__DOT__tag_mod__DOT__init_reg2) printf("dinit7 0x%x\n",top->heptane_core__DOT__front_mod__DOT__cc_mod__DOT__cc_mod__DOT__wayMod_gen__BRA__7__KET____DOT__way_mod__DOT__tag_mod__DOT__write_NRU);
+        top->rbusOut_can=1;
         if (!initcount) {
             req_set(top,reqs,mem,memp);
             cyc=cyc+1;
