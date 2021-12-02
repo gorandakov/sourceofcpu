@@ -214,8 +214,8 @@ module dcache1_tag(
   always @* begin
       read_hitH_odd=read_odd_reg && hit_odd;
       read_hitH_even=~read_odd_reg && hit_even;
-      read_hitL_odd=read_split_reg ? read_hitH_even : read_hitH_odd;
-      read_hitL_even=read_split_reg ? read_hitH_odd : read_hitH_even;
+      read_hitL_odd=read_split_reg ? hit_even&hit_odd : read_hitH_odd;
+      read_hitL_even=read_split_reg ? hit_even&hit_odd : read_hitH_even;
   end
   
   assign wb_addr=write_hit ? (
