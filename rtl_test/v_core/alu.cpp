@@ -1469,12 +1469,13 @@ void req_set(Vheptane_core *top,req *reqs,char *mem,char *memp) {
 	top->heptane_core__DOT__dc2_rhitB1_reg);
     static int idr=0;
     if (top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__alt_bus_hold_reg2) {
-	printf("ABH -> 0x%lx,0x%lx,is_ins 0x%x\n",
+	printf("ABH -> 0x%lx,0x%lx,o 0x%x,is_ins 0x%x\n",
 			top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__mOpX0_addrEven_reg,
 			top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__mOpX0_addrOdd_reg,
+                        top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__mOpX0_odd_reg,
 			idr);
     }
-    if (top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__mOpX2_addrEven_reg==0x200042 && top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__mOpX2_en_reg) {
+    if (top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__mOpX1_addrEven_reg==0x2000ec && top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__mOpX1_en_reg) {
 	printf(" ");
     }
     idr=top->heptane_core__DOT__bck_mod__DOT__insert_isData_reg3;
@@ -1834,10 +1835,10 @@ int main(int argc, char *argv[]) {
         int k,j;
         top->clk=1;
         top->eval();
-        top->eval();
+	//usleep(5000);
         top->clk=0;
         top->eval();
-        top->eval();
+	//usleep(5000);
         if (top->heptane_core__DOT__front_mod__DOT__cc_mod__DOT__cc_mod__DOT__wayMod_gen__BRA__7__KET____DOT__way_mod__DOT__tag_mod__DOT__init_reg2) printf("dinit7 0x%x\n",top->heptane_core__DOT__front_mod__DOT__cc_mod__DOT__cc_mod__DOT__wayMod_gen__BRA__7__KET____DOT__way_mod__DOT__tag_mod__DOT__write_NRU);
         top->rbusOut_can=1;
         if (!initcount) {
