@@ -1218,7 +1218,7 @@ void req::gen_mem(req* prev1,unsigned code,char *mem,char *memp,unsigned long lo
     asmtext[0]='\x00';
 #define UC (unsigned long long)
     switch(code) {
-        case 8: res_p=(memp[MEMRGN_DATA+addr/8]>>(addr&7))&0x1;
+        case 8: res_p=(memp[MEMRGN_DATA+addr/64]>>((addr&0x38)>>3))&0x1;
 		res|=UC (unsigned char) mem[MEMRGN_DATA+addr+4]<<32;
 	        res|=UC (unsigned char) mem[MEMRGN_DATA+addr+5]<<40;        
 	        res|=UC (unsigned char) mem[MEMRGN_DATA+addr+6]<<48;        
