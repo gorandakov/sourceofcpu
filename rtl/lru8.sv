@@ -142,3 +142,98 @@ module lru_double(
 
 endmodule
 
+module lru_single0_wcom(
+  lru,
+  newLRU,
+  hitLRU,
+  init,
+  en,
+  wen
+  );
+  parameter WIDTH=3;
+  parameter [WIDTH-1:0] INITVAL=0;
+  parameter [WIDTH-1:0] WPCOM=1<<(WIDTH-1);
+  
+  input [WIDTH-1:0] lru;
+  output [WIDTH-1:0] newLRU;
+  input [WIDTH-1:0] hitLRU;
+  input init;
+  input en;
+  input wen;
+  
+  wire hitThis;
+  wire hitThisOrAfter;
+  wire hitBefore;
+  wire hitAfter;
+  wire nochg;
+  wire [WIDTH-1:0] lru_next;
+  
+  assign hitThis=hitLRU==lru;
+  assign hitAfter=hitThisOrAfter & ~hitThis;
+  assign hitBefore=~hitThisOrAfter;
+  
+  assign newLRU=(hitThis & ~init &en&~(nochg&wen)) ? WPCOM&{WIDTH{wen}} : {WIDTH{1'BZ}};
+  assign newLRU=(hitAfter & ~init &en&~(nochg&wen)) ? lru : {WIDTH{1'BZ}};
+  assign newLRU=(hitBefore & ~init &en&~(nochg&wen))? lru_next : {WIDTH{1'BZ}};
+  assign newLRU=init ? INITVAL : {WIDTH{1'BZ}};
+  assign newLRU=(~en|(nochg&wen) && ~init) ? lru : {WIDTH{1'BZ}};
+  
+  generate
+      if (WIDTH>1) begin : adders_gen
+          get_carry #(WIDTH) cmp_mod (lru,~hitLRU,1'b1,hitThisOrAfter);   
+	  get_carry #(WIDTH) cmpW_mod (WPCOM,~lru,1'b1,nochg);
+          adder_inc #(WIDTH) inc_mod (lru,lru_next,1'b1,);
+      end else begin
+          assign hitThisOrAfter=lru|~hitLRU;
+          assign lru_next=~lru;
+      end
+  endgenerate
+endmodule
+
+
+module lru_single_wcom(
+//save gate delay
+  lru,
+  newLRU,
+  hitLRU,
+  init,
+  en,
+  wen
+  );
+  parameter WIDTH=2;
+  parameter [WIDTH-1:0] INITVAL=0;
+  parameter [WIDTH-1:0] WPCOM;
+  localparam COUNT=1<<WIDTH;
+  
+  input [WIDTH-1:0] lru;
+  output [WIDTH-1:0] newLRU;
+  input [WIDTH-1:0] hitLRU;
+  input init;
+  input en;
+  input wen;
+
+  wire [COUNT-1:0][WIDTH-1:0] newLRUa;
+  
+  genvar k;
+  
+  generate
+    for(k=0;k<COUNT;k=k+1)
+	  begin : lru_gen
+        lru_single0 #(WIDTH,INITVAL,WPCOM) lru_mod(
+        lru,
+        newLRUa[k],
+        k[WIDTH-1:0],
+        init,
+        en,
+	wen
+        );	
+        assign newLRU= (hitLRU==k && ~init)  ? newLRUa[k] : {WIDTH{1'BZ}};		
+	  end
+  endgenerate
+  
+  assign newLRU=init ? INITVAL : {WIDTH{1'bz}};
+  
+endmodule
+
+
+
