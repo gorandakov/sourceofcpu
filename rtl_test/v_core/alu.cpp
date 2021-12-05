@@ -556,6 +556,7 @@ addie:
 		res_p=0;
                 flg64(res0);
 	        res1=res0;
+		B1=B;
                 if (!no_O) {
 		    flags|=((A1>0&&B1>0&&res1<0) || (A1<0&&B1<0&&res1>0))<<4;
                     flags|=(((A&0xf)+(B&0xf))&0x10)>>1;
@@ -576,6 +577,7 @@ addie:
             res0=((unsigned __int128) A0x)+(unsigned __int128) B0x;
             res2=res=res0&0xffffffffull;
             flg32(res0);
+	    B0=B;
             flags|=((A0>0&&B0>0&&res2<0) || (A0<0&&B0<0&&res2>0))<<4;
             flags|=(((A&0xf)+(B&0xf))&0x10)>>1;
             break;
@@ -606,7 +608,8 @@ addie:
 	    res_p=0;
             if (!(A_p && B_p)) flg64(res0^(one<<1));
 	    else flgPTR(res0^(one>>19));
-            
+            B1=B;
+
             if (!(A_p && B_p)) flags|=((A1>=0&&B1<0&&res1<0) || (A1<0&&B1>0&&res1>0))<<4;
             if ((A_p && B_p)) flags|=((!(A1&0x80000000000)&&(B1&0x80000000000)&&(res1&0x80000000000)) || 
 		((A1&0x80000000000)&&!(B1&0x80000000000)&&!(res1&0x80000000000)))<<4;
@@ -626,6 +629,7 @@ addie:
             res0=((unsigned __int128) A0x)+((unsigned __int128) ~B0x)+1;
             res2=res=res0&0xffffffffull;
             flg32(res0^0x100000000ll);
+	    B0=B;
             flags|=((A0>=0&&B0<0&&res2<0) || (A0<0&&B0>0&&res2>0))<<4;
             flags|=(((A&0xf)-(B&0xf))&0x10)>>1;
             break;
@@ -1512,7 +1516,7 @@ bool get_check(Vheptane_core *top, req *reqs,unsigned long long &ip) {
 	insn_posR++;
 	insn_posR&=0x3f;
 	if (top->heptane_core__DOT__except) printf("except %li\n",count);
-	else printf("ret %li, \t%li, %x\n",count,ip+count,retII);
+	else printf("ret %li, \t%li, %x, fl:0x%x\n",count,ip+count,retII,get_retfl_data(top));
 	for(x=0;x<count;x++) {
 	    if (reqs[ip+x].rT<0) goto no_srch;
 	    if (x<(count-1)) for(k=x+1;k<count;k=k+1) if (reqs[ip+x].rT==reqs[ip+k].rT || reqs[ip+x].rT<0) goto no_srch;
