@@ -3,7 +3,7 @@
 
 module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   input [31:0] instr;
-  input magic;
+  input [3:0] magic;
   input flag;
   output [12:0] class_;
   output isLNK;
@@ -91,7 +91,22 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
 
   wire [5:0] opcode_sub;
   
+  assign subIsBasicALU=(!|opcode_sub[5:4] || opcode_sub[5:2]==4'b0100) & ~magic[0];
+  assign subIsBasicShift=(~opcode_sub[5] && ~subIsBasicALU && opcode_sub[0]) & ~magic[0];
+  assign subIsFPUE=opcode_sub==6'b010100 && ~magic[0]; 
+  assign subIsFPUSngl=((opcode_sub==6'b010110 || opcode_sub==6'b011000) && opcode_main[7:6]!=2'b11) & ~magic[0];
+  assign subIsLinkRet=(opcode_sub==6'b010110 || opcode_sub==6'b011000) && opcode_main[7:6]==2'b11 && ~magic[0];
+  assign subIsSIMD=(opcode_sub[5:3]==3'b011 && |opcode_sub[2:1] && ~opcode_sub[0]) & ~magic[0];
+  assign subIsMovOrExt=(opcode_sub[5:3]==3'b100 || opcode_sub[5:1]==5'b10100) & ~magic[0];
+  assign subIsCmpTest=(opcode_sub[5:1]==5'b10101 || opcode_sub[5:2]==4'b1011) & ~magic[0];
+  assign subIsCJ=opcode_sub[5:2]==4'b1100 && ~magic[0];
+  assign subIsFPUD=(opcode_sub[5:2]==4'b1101 || opcode_sub[5:1]==5'b11100) & ~magic[0];
+  assign subIsFPUPD=(opcode_sub[5:3]==3'b111 && opcode_sub[5:1]!=5'b11100) & ~magic[0];
+  
+  
   assign opcode_main=instr[7:0];
+  assign opcode_sub=instr[5:0];
+  
   
   assign isBasicALU=(!|opcode_main[7:5] || opcode_main[7:3]==5'b00100) & ~opcode_main[2] & magic[0];
   assign isBasicMUL=(!|opcode_main[7:5] || opcode_main[7:3]==5'b00100) & opcode_main[2] & magic[0];
@@ -157,6 +172,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   isIndirJump,
   isCall,
   isRet,
+  subIsCJ,
   opcode_main==8'hff && ~instr[15] && ~instr[13] && magic[0]
   };
 
@@ -177,19 +193,29 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   isBasicAddNoFl,
   isCmov,
   isShlAddMulLike,
-  isSimdInt,
+  isSimdInt & ~instr[16],subIsFPUD & !(opcode_sub[5:1]==5'b11100),
+  subIsFPUPD & !(opcode_sub[5:1]==5'b11101), subIsFPUSngl & !(opcode_main[7:6]==2'b0),
+  subIsFPUE & !(opcode_main[7:6]==2'b0),
+  subIsSIMD,
+  isSimdInt && ((instr[13:9]==5'd0 && ~instr[16]) || (instr[13:9]==5'd5 && ~instr[16]) || (instr[13:8]==6'b11 && instr[16])),
+  subIsBasicALU,subIsCmpTest,subIsLinkRet,
   opcode_main==8'hff && instr[15:13]==3'd1 && magic[0],
   isBasicFPUScalarA && instr[13:9]!=5'd2 && instr[13:8]!=6'd8,
   isBasicFPUScalarB && instr[13:8]!=6'd18 && instr[13:8]!=6'd21,
   isBasicFPUScalarC && |instr[13:11],
   isBasicFPUScalarCmp && !|instr[13:11],
   isBasicFPUScalarCmp2 && !|instr[13:11],
+  subIsMovOrExt,
   isLeaIPRel
   };
   
   assign clsPos0=opcode_main==8'hff && instr[15:13]==3'd1 && magic[0] && instr[31:16]==`csr_FPU;
   
-  assign clsShift=isBasicShift & ~isBasicShiftExcept || 
+  assign clsShift=isBasicShift & ~isBasicShiftExcept || subIsBasicShift || subIsFPUD & (opcode_sub[5:1]==5'b11100) ||
+    subIsFPUPD & (opcode_sub[5:1]==5'b11101) || subIsFPUSngl &(opcode_main[7:6]==2'b0)
+    || subIsFPUE &(opcode_main[7:6]==2'b0) || isSimdInt & instr[16] ||
+    (isSimdInt && ~((instr[13:9]==5'd0 && ~instr[16]) || (instr[13:9]==5'd5 && ~instr[16]) ||
+     (instr[13:8]==6'b11 && instr[16]))) || 
     (isBasicFPUScalarA && ~(instr[13:9]!=5'd2 && instr[13:8]!=6'd8)) ||
     (isBasicFPUScalarB && ~(instr[13:8]!=6'd18 && instr[13:8]!=6'd21));
   
@@ -236,7 +262,8 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   
   assign clsSys=isBasicSysInstr|isFPUreor;
   
-  assign clsFPU=isBasicFPUScalarA || isBasicFPUScalarB || isBasicFPUScalarC;
+  assign clsFPU=isBasicFPUScalarA || isBasicFPUScalarB || isBasicFPUScalarC || subIsFPUD || subIsFPUPD || subIsFPUSngl ||
+    subIsFPUE || subIsSIMD;
   assign class_[`iclass_indir]=clsIndir;
   assign class_[`iclass_jump]= clsJump;
   assign class_[`iclass_ALU]= clsALU;
@@ -254,9 +281,10 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   assign LNK=isRet ? 5'h1f : 5'bz;
 //  assign LNK=(isCallPrep & ~magic[0]) ? instr[11:8] : 16'bz;
   assign LNK=isCallPrep ? instr[20:16] : 5'bz;
-  assign LNK=(~isRet & ~isCallPrep) ? 5'h1f : 5'bz;
+  assign LNK=subIsLinkRet&~opcode_sub[1] ? {1'b0,instr[15:12]} : 5'bz;
+  assign LNK=(~isRet & ~isCallPrep & ~(subIsLinkRet&~opcode_sub[1])) ? 5'h1f : 5'bz;
   
-  assign isLNK=isRet | isCallPrep;
+  assign isLNK=isRet | isCallPrep | (subIsLinkRet&~opcode_sub[1]);
   
 endmodule
 
@@ -297,43 +325,35 @@ module predecoder_get(
     
     input clk;
     input rst;
-    input [511:0] bundle;
+    input [255:0] bundle;
     input [16:0] btail;
-    input [15:0] flag_bits;
+    input [14:0] flag_bits;
     input [3:0] startOff;
-    output [63:0] instr0;
-    output [63:0] instr1;
-    output [63:0] instr2;
-    output [63:0] instr3;
-    output [63:0] instr4;
-    output [63:0] instr5;
-    output [63:0] instr6;
-    output [63:0] instr7;
-    output [63:0] instr8;
-    output [63:0] instr9;
-    output [63:0] instr10;
-    output [63:0] instr11;
-    output [63:0] instr12;
-    output [63:0] instr13;
-    output [63:0] instr14;
-    output [63:0] instr15;
+    output [79:0] instr0;
+    output [79:0] instr1;
+    output [79:0] instr2;
+    output [79:0] instr3;
+    output [79:0] instr4;
+    output [79:0] instr5;
+    output [79:0] instr6;
+    output [79:0] instr7;
+    output [79:0] instr8;
+    output [79:0] instr9;
+    output [79:0] instr10;
+    output [79:0] instr11;
 
-    output magic0;
-    output magic1;
-    output magic2;
-    output magic3;
-    output magic4;
-    output magic5;
-    output magic6;
-    output magic7;
-    output magic8;
-    output magic9;
-    output magic10;
-    output magic11;
-    output magic12;
-    output magic13;
-    output magic14;
-    output magic15;
+    output [3:0] magic0;
+    output [3:0] magic1;
+    output [3:0] magic2;
+    output [3:0] magic3;
+    output [3:0] magic4;
+    output [3:0] magic5;
+    output [3:0] magic6;
+    output [3:0] magic7;
+    output [3:0] magic8;
+    output [3:0] magic9;
+    output [3:0] magic10;
+    output [3:0] magic11;
 
     output [3:0] off0;
     output [3:0] off1;
@@ -347,10 +367,6 @@ module predecoder_get(
     output [3:0] off9;
     output [3:0] off10;
     output [3:0] off11;
-    output [3:0] off12;
-    output [3:0] off13;
-    output [3:0] off14;
-    output [3:0] off15;
     
     output [12:0] class0;
     output [12:0] class1;
@@ -364,26 +380,22 @@ module predecoder_get(
     output [12:0] class9;
     output [12:0] class10;
     output [12:0] class11;
-    output [12:0] class12;
-    output [12:0] class13;
-    output [12:0] class14;
-    output [12:0] class15;
     
-    output [15:0] instrEn;
+    output [11:0] instrEn;
     output reg isAvx;
     output hasJumps;
     output reg error;
     output reg jerror;
     
-    output [63:0] Jinstr0;
-    output [63:0] Jinstr1;
-    output [63:0] Jinstr2;
-    output [63:0] Jinstr3;
+    output [79:0] Jinstr0;
+    output [79:0] Jinstr1;
+    output [79:0] Jinstr2;
+    output [79:0] Jinstr3;
 
-    output Jmagic0;
-    output Jmagic1;
-    output Jmagic2;
-    output Jmagic3;
+    output [3:0] Jmagic0;
+    output [3:0] Jmagic1;
+    output [3:0] Jmagic2;
+    output [3:0] Jmagic3;
 
     output [3:0] Joff0;
     output [3:0] Joff1;
