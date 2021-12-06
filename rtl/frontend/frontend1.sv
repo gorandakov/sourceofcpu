@@ -1920,7 +1920,7 @@ module frontend1(
 	  startx_reg2<=startx_reg;
 	  startx_reg3<=startx_reg2;
 	  startx_reg4<=startx_reg3;
-          do_seq_reg<=do_seq;
+          do_seq_reg<=do_seq|miss_recover;
           do_seq_reg2<=do_seq_reg;
           do_seq_reg3<=do_seq_reg2;
           do_seq_reg4<=do_seq_reg3;
