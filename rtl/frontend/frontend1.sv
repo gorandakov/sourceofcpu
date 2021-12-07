@@ -792,7 +792,7 @@ module frontend1(
   assign cc_base_IP_d=(~do_seq_reg && ~(miss_recover && proturberan)) ? cc_read_IP : 64'bz;
   assign cc_base_IP_d=(do_seq_reg & ~cc_base_tick & ~(miss_recover && proturberan)) ? cc_base_IP : 64'bz;
   assign cc_base_IP_d[8:0]=(do_seq_reg & cc_base_tick || (miss_recover && proturberan)) ? cc_base_IP[8:0] : 9'bz;
-  assign {cc_base_tick,cc_base_off}=(~do_seq_reg  && ~(miss_recover && proturberan)) ? 5'b0 : 5'bz;
+ // assign {cc_base_tick,cc_base_off}=(~do_seq_reg  && ~(miss_recover && proturberan)) ? 5'b0 : 5'bz;
   
   assign cc_read_IP_d[4:0]=(~init & do_seq_any & ~jumpTK_en & ~fmstall) ? 5'b0 : 5'bz;
   assign cc_read_IP_d=(~init & btb_hasTK & ~miss_recover & ~miss_now & ~jumpTK_en & ~(ixcept|uxcept) & ~fmstall) ? btbx_tgt : 64'bz;
@@ -1215,8 +1215,7 @@ module frontend1(
   get_carry #(4) btbL2NoffCmpCC(btb_jlnpos2[3:0],~cc_read_IP[4:1],1'b1,btb_jlnin2);
   get_carry #(4) btbL3NoffCmpCC(btb_jlnpos3[3:0],~cc_read_IP[4:1],1'b1,btb_jlnin3);
   
-  adder #(5) baseTick_mod(cc_read_IP[9:5],~cc_base_IP[9:5],{cc_base_tick,cc_base_off},1'b1,do_seq_reg|(miss_recover && proturberan)
-      ,,,,);
+  adder #(5) baseTick_mod(cc_read_IP[9:5],~cc_base_IP[9:5],{cc_base_tick,cc_base_off},1'b1,1'b1,,,,);
  // adder_inc #(35) baseInc_mod(cc_base_IP[43:9],cc_base_IP_d[43:9],do_seq_reg & cc_base_tick,);
   add_agu baseInc_mod(.a({1'b1,cc_base_IP[63:9],9'b0}),.b(64'b0),.c(65'b1000000000),.out({cc_base_IP_d[63:9],cc_base_dummy9}),
       .cout_sec(cc_base_sec),.ndiff(),.en(do_seq_reg && cc_base_tick && ~(miss_recover && proturberan)),.shift(4'h1));
