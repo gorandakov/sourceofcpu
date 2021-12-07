@@ -85,7 +85,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   wire isBasicFPUScalarCmp;
   wire isBasicFPUScalarCmp2;
 
-  wire isBasicSysInstr=opcode_main==8'hff&&magic[0];
+  wire isBasicSysInstr;
   
   wire isCallPrep;
 
@@ -103,7 +103,9 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   assign subIsFPUD=(opcode_sub[5:2]==4'b1101 || opcode_sub[5:1]==5'b11100) & ~magic[0];
   assign subIsFPUPD=(opcode_sub[5:3]==3'b111 && opcode_sub[5:1]!=5'b11100) & ~magic[0];
   
-  
+ 
+  assign isBasicSysInstr=opcode_main==8'hff&&magic[0]; 
+
   assign opcode_main=instr[7:0];
   assign opcode_sub=instr[5:0];
   
