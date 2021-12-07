@@ -85,7 +85,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   wire isBasicFPUScalarCmp;
   wire isBasicFPUScalarCmp2;
 
-  wire isBasicSysInstr=opcode_main==8'hff;
+  wire isBasicSysInstr=opcode_main==8'hff&&magic[0];
   
   wire isCallPrep;
 
