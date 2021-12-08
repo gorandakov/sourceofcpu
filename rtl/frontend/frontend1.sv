@@ -1789,7 +1789,7 @@ module frontend1(
 	      instrEn_reg<=1'b0;
 	      instrEn_reg2<=1'b0;
 	      instrEn_reg3<=1'b0;
-	      insrFed_reg<=1'b0;
+	      if (~btbFStall_recover_reg2) instrFed_reg<=1'b0;
               bus_match0_reg<=1'b0;
               bus_match0_reg2<=1'b0;
               bus_match0_reg3<=1'b0;

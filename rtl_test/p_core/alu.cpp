@@ -1614,6 +1614,9 @@ no_srch:;
 	if (!top->heptane_core__DOT__front_mod__DOT__instrEn_reg3) printf(" err ");
 	printf(" 0x%lx\n",top->heptane_core__DOT__front_mod__DOT__IP_phys_reg3);
     }
+    if (top->heptane_core__DOT__front_mod__DOT__instrFed_reg) {
+        printf("FeD 0x%x\n",top->heptane_core__DOT__front_mod__DOT__cc_base_off<<5);
+    }
     if (top->heptane_core__DOT__front_mod__DOT__bus_tlb_match_reg) {
 	printf("TLBIN 0x%lx -> 0x%lx\n",top->heptane_core__DOT__front_mod__DOT__tlb_IP<<13,
 	    top->heptane_core__DOT__front_mod__DOT__bus_tlb_data_reg);
