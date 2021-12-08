@@ -1985,7 +1985,7 @@ module frontend1(
 	  btbx_cond_reg2<=btbx_cond_reg;
 	  btbx_cond_reg3<=btbx_cond_reg2;
 	  btbx_cond_reg4<=btbx_cond_reg3;
-	  cc_base_IP<=cc_base_IP_d;
+	  if (instrEn) cc_base_IP<=cc_base_IP_d;
 	  miss_now_reg<=miss_now;
 	  IP_phys_reg<=IP_phys;
 	  IP_phys_reg2<=IP_phys_reg;
