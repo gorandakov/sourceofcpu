@@ -1788,6 +1788,7 @@ module frontend1(
 	      instrEn_reg<=1'b0;
 	      instrEn_reg2<=1'b0;
 	      instrEn_reg3<=1'b0;
+	      insrFed_reg<=1'b0;
               bus_match0_reg<=1'b0;
               bus_match0_reg2<=1'b0;
               bus_match0_reg3<=1'b0;
@@ -1796,6 +1797,7 @@ module frontend1(
               instrEn_reg<=instrEn;
               instrEn_reg2<=instrEn_reg;
               instrEn_reg3<=instrEn_reg2;
+              instrFed_reg<=instrFed;
 	  end
           if (miss_recover) begin
               miss_now<=1'b0;
@@ -1872,7 +1874,6 @@ module frontend1(
               if (n<4) btbx_joff_reg3[n]<=btbx_joff_reg2[n];
               if (n<4) btbx_joff_reg4[n]<=btbx_joff_reg3[n];
           end
-          instrFed_reg<=instrFed;
           btb_way_reg<=btb_way;
           btb_way_reg2<=btb_way_reg;
           btb_hit_reg<=btb_hit;
@@ -1975,7 +1976,7 @@ module frontend1(
 	  btbx_cond_reg2<=btbx_cond_reg;
 	  btbx_cond_reg3<=btbx_cond_reg2;
 	  btbx_cond_reg4<=btbx_cond_reg3;
-	  if (instrFed_reg~btbFStall_recover_reg2)  cc_base_IP<=cc_base_IP_d;
+	  if (instrFed_reg&~btbFStall_recover_reg2)  cc_base_IP<=cc_base_IP_d;
 	  miss_now_reg<=miss_now;
 	  IP_phys_reg<=IP_phys;
 	  IP_phys_reg2<=IP_phys_reg;
