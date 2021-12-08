@@ -794,7 +794,7 @@ module frontend1(
   assign cc_base_IP_d[8:0]=(do_seq_reg5 & cc_base_tick) ? cc_base_IP[8:0] : 9'bz;
  // assign {cc_base_tick,cc_base_off}=(~do_seq_reg  && ~(miss_recover && proturberan)) ? 5'b0 : 5'bz;
   
-  assign cc_read_IP_d[4:0]=(~init & do_seq_any & ~jumpTK_en & ~fmstall) ? 5'b0 : 5'bz;
+  assign cc_read_IP_d[4:0]=(~init & do_seq_any & ~jumpTK_en & ~fmstall & ~(do_seq&miss_recover)) ? 5'b0 : 5'bz;
   assign cc_read_IP_d=(~init & btb_hasTK & ~miss_recover & ~miss_now & ~jumpTK_en & ~(ixcept|uxcept) & ~fmstall) ? btbx_tgt : 64'bz;
   assign cc_read_IP_d=(~init & miss_recover & ~jumpTK_en & ~(ixcept|uxcept) & ~fmstall) ? miss_IP : 64'bz;
   assign cc_read_IP_d=(~init & (ixcept|uxcept) ) ? {ixceptIP[63:1],1'b0} : 64'bz;
@@ -802,7 +802,7 @@ module frontend1(
   assign cc_read_IP_d=~init & ~(ixcept|uxcept) & jumpTK_en & ~fmstall? jumpTK_addr : 64'bz;
   assign cc_read_IP_d=(init || fmstall & ~(ixcept|uxcept)) ? cc_read_IP : 64'bz;
   
-  assign cc_attr_d=(~init & do_seq_any & ~jumpTK_en & ~fmstall) ? cc_attr : 4'bz;
+  assign cc_attr_d=(~init & do_seq_any & ~jumpTK_en & ~fmstall & ~(do_seq&miss_recover)) ? cc_attr : 4'bz;
   assign cc_attr_d=(~init & btb_hasTK & ~miss_recover & ~miss_now & ~jumpTK_en & ~(ixcept|uxcept) & ~fmstall) ? btbx_attr : 4'bz;
   assign cc_attr_d=(~init & miss_recover & ~jumpTK_en & ~(ixcept|uxcept) & ~fmstall) ? cc_attr : 4'bz;
   assign cc_attr_d=(~init & (ixcept|uxcept) ) ? {ixceptAttr} : 4'bz;
@@ -813,7 +813,7 @@ module frontend1(
   assign bus_match={BUS_ID,1'b1}==bus_slot[9:4] & bus_en;
   assign write_IP={req_addrP,req_addrR[5:0],2'b0};
   
-  assign do_seq=~miss_now && ~miss_recover && ~(ixcept|uxcept) && ~btb_hasTK && ~btb_in_ret;
+  assign do_seq=~miss_now | miss_recover && ~(ixcept|uxcept) && ~btb_hasTK && ~btb_in_ret;
   assign do_seq_miss=miss_now && ~miss_recover && ~(ixcept|uxcept) && ~btb_hasTK && ~btb_in_ret;
   assign do_seq_any=~miss_recover && ~(ixcept|uxcept) && ~btb_hasTK && ~btb_in_ret;
 
@@ -1185,7 +1185,7 @@ module frontend1(
   );*/
     
   adder_inc #(43) seqAdd_mod(cc_read_IP[47:5],cc_read_IP_d[47:5],
-    do_seq &~init & ~jumpTK_en & ~fmstall,);
+    do_seq &~init & ~jumpTK_en & ~fmstall &~miss_recover,);
   adder #(43) seqM_Add_mod(cc_read_IP[47:5],43'd2,cc_read_IP_d[47:5],
     1'b0,do_seq_miss &~init & ~jumpTK_en & ~fmstall,,,,);
   adder_inc #(5) misCntAdd_mod(miss_cnt,miss_cnt_next,1'b1,);
@@ -1767,6 +1767,7 @@ module frontend1(
 	  btbx_cond_reg3<=4'b0;
 	  btbx_cond_reg4<=4'b0;
 	  cc_base_IP<=cc_read_IP_d;
+	  miss_IP<=cc_read_IP_d;
       end else if (~fstall) begin
           //ixcept_reg<=1'b0;
           //ixceptLDConfl_reg<=1'b0;
