@@ -745,10 +745,10 @@ module frontend1(
       for (j=0;j<12;j=j+1) begin
           wire [3:0] isJ;
           assign pre_other[j][`instrQ_magic]=~pre_magic_reg[j];
-          assign pre_other[j][`instrQ_srcIPOff]={cc_base_off_reg4,pre_off_reg[j]};
-          if (j!=11) assign pre_other[j][`instrQ_srcTick]=cc_base_tick_reg4 &&//cc_read_IP_reg4[43:9]!=cc_read_IP_reg5[43:9] &&
+          assign pre_other[j][`instrQ_srcIPOff]={cc_base_off,pre_off_reg[j]};
+          if (j!=11) assign pre_other[j][`instrQ_srcTick]=cc_base_tick &&//cc_read_IP_reg4[43:9]!=cc_read_IP_reg5[43:9] &&
 	     do_seq_reg5 && pre_instrEn_reg[j]&&pre_jbefore[j]&&j==0; 
-          else assign pre_other[j][`instrQ_srcTick]=cc_base_tick_reg4 &&//cc_read_IP_reg4[43:9]!=cc_read_IP_reg5[43:9] &&
+          else assign pre_other[j][`instrQ_srcTick]=cc_base_tick &&//cc_read_IP_reg4[43:9]!=cc_read_IP_reg5[43:9] &&
 	     do_seq_reg5 && pre_instrEn_reg[j]&&pre_jbefore[j]&&j==0; 
           assign pre_other[j][`instrQ_class]=pre_class_reg[j];
           //assign pre_other[j][`instrQ_taken]=btb_hasTK_reg3 ? 1'bz : 1'b0;
@@ -789,9 +789,9 @@ module frontend1(
   
   assign instrFed=instrEn_reg3 && (cc_read_hit && tlb_match);
   
-  assign cc_base_IP_d=(~do_seq_reg && ~(miss_recover && proturberan)) ? cc_read_IP : 64'bz;
-  assign cc_base_IP_d=(do_seq_reg & ~cc_base_tick & ~(miss_recover && proturberan)) ? cc_base_IP : 64'bz;
-  assign cc_base_IP_d[8:0]=(do_seq_reg & cc_base_tick || (miss_recover && proturberan)) ? cc_base_IP[8:0] : 9'bz;
+  assign cc_base_IP_d=(~do_seq_reg5) ? cc_read_IP_reg4 : 64'bz;
+  assign cc_base_IP_d=(do_seq_reg5 & ~cc_base_tick) ? cc_base_IP : 64'bz;
+  assign cc_base_IP_d[8:0]=(do_seq_reg5 & cc_base_tick) ? cc_base_IP[8:0] : 9'bz;
  // assign {cc_base_tick,cc_base_off}=(~do_seq_reg  && ~(miss_recover && proturberan)) ? 5'b0 : 5'bz;
   
   assign cc_read_IP_d[4:0]=(~init & do_seq_any & ~jumpTK_en & ~fmstall) ? 5'b0 : 5'bz;
@@ -1215,12 +1215,10 @@ module frontend1(
   get_carry #(4) btbL2NoffCmpCC(btb_jlnpos2[3:0],~cc_read_IP[4:1],1'b1,btb_jlnin2);
   get_carry #(4) btbL3NoffCmpCC(btb_jlnpos3[3:0],~cc_read_IP[4:1],1'b1,btb_jlnin3);
   
-  adder #(5) baseTick_mod(cc_read_IP[9:5],~cc_base_IP[9:5],{cc_base_tick,cc_base_off},1'b1,1'b1,,,,);
+  adder #(5) baseTick_mod(cc_read_IP_reg4[9:5],~cc_base_IP[9:5],{cc_base_tick,cc_base_off},1'b1,1'b1,,,,);
  // adder_inc #(35) baseInc_mod(cc_base_IP[43:9],cc_base_IP_d[43:9],do_seq_reg & cc_base_tick,);
   add_agu baseInc_mod(.a({1'b1,cc_base_IP[63:9],9'b0}),.b(64'b0),.c(65'b1000000000),.out({cc_base_IP_d[63:9],cc_base_dummy9}),
-      .cout_sec(cc_base_sec),.ndiff(),.en(do_seq_reg && cc_base_tick && ~(miss_recover && proturberan)),.shift(4'h1));
-  add_agu baseDec_mod(.a({1'b1,cc_base_IP[63:9],9'b0}),.b(64'b0),.c(65'hfffffffffffffe00),.out({cc_base_IP_d[63:9],cc_base_dummy9dec}),
-      .cout_sec(cc_base_sec),.ndiff(),.en(miss_recover && proturberan),.shift(4'h1));
+      .cout_sec(cc_base_sec),.ndiff(),.en(do_seq_reg5 && cc_base_tick),.shift(4'h1));
  
   tbuf tbuf_mod(
   .clk(clk),
@@ -1567,10 +1565,10 @@ module frontend1(
           cc_read_IP_reg3<=64'b0;
           cc_read_IP_reg4<=64'b0;
           cc_read_IP_reg5<=64'b0;
-          cc_base_tick_reg<=1'b0;
-          cc_base_tick_reg2<=1'b0;
-          cc_base_tick_reg3<=1'b0;
-          cc_base_tick_reg4<=1'b0;
+          //cc_base_tick_reg<=1'b0;
+         // cc_base_tick_reg2<=1'b0;
+         // cc_base_tick_reg3<=1'b0;
+         // cc_base_tick_reg4<=1'b0;
 
           tlbMiss_now<=1'b0;
           miss_seq<=1'b0;
@@ -1683,10 +1681,6 @@ module frontend1(
           GHT_reg2<=8'b0;
           GHT_reg3<=8'b0;
           GHT_reg4<=8'b0;
-          cc_base_off_reg<=4'b0;
-          cc_base_off_reg2<=4'b0;
-          cc_base_off_reg3<=4'b0;
-          cc_base_off_reg4<=4'b0;
           taken_reg<=4'b0;
           taken_reg2<=4'b0;
           taken_reg3<=4'b0;
@@ -1783,7 +1777,7 @@ module frontend1(
           jumpTK_en<=1'b0;
           if ((~cc_read_hit|~tlb_match) & ~miss_now & instrEn_reg3) begin
               miss_IP<=cc_read_IP_reg3;
-	      proturberan<=cc_base_tick|cc_base_tick_reg|cc_base_tick_reg2|cc_base_tick_reg3;
+	      //proturberan<=cc_base_tick|cc_base_tick_reg|cc_base_tick_reg2|cc_base_tick_reg3;
               miss_phys<=IP_phys_reg3[43:13];
               miss_now<=1'b1;
               tlbMiss_now<=~tlb_match;
@@ -1809,7 +1803,7 @@ module frontend1(
               instrEn<=1'b1;
               miss_cnt<=5'b0;
               miss_slot<=3'b0;
-	      proturberan<=1'b0;
+	      //proturberan<=1'b0;
           end
           if (miss_cnt==15) miss_seq<=1'b0;
           if (miss_slot==7 || tlbMiss_now) miss_seq<=1'b0;
@@ -1834,10 +1828,10 @@ module frontend1(
           cc_read_IP_reg3<=cc_read_IP_reg2;
           cc_read_IP_reg4<=cc_read_IP_reg3;
           cc_read_IP_reg5<=cc_read_IP_reg4;
-          cc_base_tick_reg<=cc_base_tick;
-          cc_base_tick_reg2<=cc_base_tick_reg;
-          cc_base_tick_reg3<=cc_base_tick_reg2;
-          cc_base_tick_reg4<=cc_base_tick_reg3;
+         // cc_base_tick_reg<=cc_base_tick;
+         // cc_base_tick_reg2<=cc_base_tick_reg;
+         // cc_base_tick_reg3<=cc_base_tick_reg2;
+         // cc_base_tick_reg4<=cc_base_tick_reg3;
           tlb_hit_reg2<=tlb_hit_reg;
           tlb_hit_reg3<=tlb_hit_reg2;
           tlb_hit_reg4<=tlb_hit_reg3;
@@ -1953,10 +1947,6 @@ module frontend1(
           GHT_reg2<=GHT_reg;
           GHT_reg3<=GHT_reg2;
           GHT_reg4<=GHT_reg3;
-          cc_base_off_reg<=cc_base_off;
-          cc_base_off_reg2<=cc_base_off_reg;
-          cc_base_off_reg3<=cc_base_off_reg2;
-          cc_base_off_reg4<=cc_base_off_reg3;
           taken_reg<=taken;
           taken_reg2<=taken_reg;
           taken_reg3<=taken_reg2;
@@ -2020,11 +2010,9 @@ module frontend1(
 	  predx_sc2_reg4<=predx_sc2;
 	  predx_sc3_reg4<=predx_sc3;
           cc_read_IP_reg4<=cc_read_IP_reg3;
-          cc_base_tick_reg4<=cc_base_tick_reg3;
           cc_read_IP_reg5<=cc_read_IP_reg4;
           btbxx_way_reg<=btb_way;
           GHT_reg4<=GHT;
-          cc_base_off_reg4<=cc_base_off_reg3;
 	  jmp_mask_reg4[0]<=jmp_mask[0];
 	  jmp_mask_reg4[1]<=jmp_mask[1];
 	  jmp_mask_reg4[2]<=jmp_mask[2];
