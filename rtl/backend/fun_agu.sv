@@ -718,6 +718,7 @@ module agu_block(
   wire mOpR_split;
   wire [1:0] mOpR_clHit;
   wire [1:0] mOpR_dupl;
+  wire mOpR_stall;
  
   wire p0_conflict;
   wire p1_conflict;
@@ -2411,6 +2412,7 @@ module agu_block(
   mOpR_split,
   mOpR_clHit,
   mOpR_dupl,
+  mOpR_stall,
   alt_bus_hold_reg,
   alt_bus_addr_reg
   );
@@ -3058,7 +3060,7 @@ module agu_block(
 
       now_flushing_reg<=now_flushing;
       
-      if (rst|miss_next) begin
+      if (rst|(miss_next&~mOpR_stall)) begin
           miss_doneEven<=1'b0;
           miss_doneOdd<=1'b0;
       end else begin
