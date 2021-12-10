@@ -409,6 +409,7 @@ module missQ(
   mOpR_split,
   mOpR_clHit,
   mOpR_dupl,
+  rdwr_match2,
   alt_bus_hold,
   alt_bus_addr
   );
@@ -729,6 +730,7 @@ module missQ(
   output [1:0] mOpR_clHit;
   output [1:0] mOpR_dupl;
   output mOpR_io;
+  output rdwd_match2;
   input alt_bus_hold;
   input [36:0] alt_bus_addr;
   wire [5:0] curConfl;
