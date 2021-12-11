@@ -4193,7 +4193,7 @@ module backend(
   .FUS7(FUS8_reg),
   .FUS8(FUS9_reg),
 // 1 if buffer is free  
-  .pause0(pause_agu|miss_pause_agu|bus_holds_agu_reg|insBus_io),
+  .pause0(pause_agu|miss_pause_agu|bus_holds_agu|bus_holds_agu_reg|insBus_io),
   .foundAlt1(~(&nDataAlt[m])|(|fxFRT_alten[m])),.foundAlt2(fxFRT_pause[m])
   );
   
