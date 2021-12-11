@@ -3060,7 +3060,7 @@ module agu_block(
 
       now_flushing_reg<=now_flushing;
       
-      if (rst|(miss_next&~mOpR_stall)) begin
+      if (rst|(miss_next&&~mOpR_stall|~mOpR_en)) begin
           miss_doneEven<=1'b0;
           miss_doneOdd<=1'b0;
       end else begin

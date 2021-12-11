@@ -730,7 +730,7 @@ module missQ(
   output [1:0] mOpR_clHit;
   output [1:0] mOpR_dupl;
   output mOpR_io;
-  output rdwd_match2;
+  output rdwr_match2;
   input alt_bus_hold;
   input [36:0] alt_bus_addr;
   wire [5:0] curConfl;
@@ -1368,7 +1368,7 @@ module missQ(
 
 
 
-  assign mOpR_en=conflFound && ~init && count;
+  assign mOpR_en=conflFound && ~init && count && ~now_flushing;
 
   assign mOpR_addrEven=!conflFound ? {PADDR_WIDTH-8{1'B0}} : {PADDR_WIDTH-8{1'BZ}};
   assign mOpR_addrOdd=!conflFound ? {PADDR_WIDTH-8{1'B0}} : {PADDR_WIDTH-8{1'BZ}};
