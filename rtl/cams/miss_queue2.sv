@@ -1519,7 +1519,7 @@ module missQ(
     begin
 	  if (rst) begin
 	      confl_mask<=6'b111111;
-	  end else if (flush_end|doStep) begin
+	  end else if ((flush_end&~alt_bus_hold)|doStep) begin
 	      confl_mask<=6'b111111;
 	  end else begin
 	      if (!count && wen) confl_mask<=6'h3f;
@@ -1561,7 +1561,7 @@ module missQ(
 	  
           if (rst) doSkip<=1'b0;
 	  else if (doSkip_d || last_inserted) doSkip<=1'b1;
-	  else if (flush_end|~locked && ~doSkip_d) doSkip<=1'b0;
+	  else if ((flush_end&~alt_bus_hold)|~locked && ~doSkip_d) doSkip<=1'b0;
 	  
 	  if (rst) begin
               countF<=5'd0;
