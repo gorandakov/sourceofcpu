@@ -1228,6 +1228,9 @@ module dcache1(
   reg [4:0] read_sz[3:0];
   reg [4:0] read_sz_reg[3:0];
 
+  wire [3:0][6:0] read_addrsx;
+  reg [3:0][6:0] read_addrsx_reg;
+  wire [3:0] rsxdata1;
   wire [7:0] write_back_way;
   wire [7:0] write_back2_way;
   
@@ -1348,6 +1351,10 @@ module dcache1(
               assign rddata1[1]=({read_beginA_reg[1][1:0],read_low_reg[3:2]}==b) ? rxdata[1][b*8+:136] : 136'BZ;
               assign rddata1[2]=({read_beginA_reg[2][1:0],read_low_reg[5:4]}==b) ? rxdata[2][b*8+:136] : 136'BZ;
               assign rddata1[3]=({read_beginA_reg[3][1:0],read_low_reg[7:6]}==b) ? rxdata[3][b*8+:136] : 136'BZ;
+              assign rsxdata1[0]=({read_addrsx_reg[0][3:0]}==b) ? rxdata[0][b*8+7+:1]&&read_sz_reg[0][4:3]==2'b11 : 1'BZ;
+              assign rsxdata1[1]=({read_addrsx_reg[1][3:0]}==b) ? rxdata[0][b*8+7+:1]&&read_sz_reg[1][4:3]==2'b11 : 1'BZ;
+              assign rsxdata1[2]=({read_addrsx_reg[2][3:0]}==b) ? rxdata[0][b*8+7+:1]&&read_sz_reg[2][4:3]==2'b11 : 1'BZ;
+              assign rsxdata1[3]=({read_addrsx_reg[3][3:0]}==b) ? rxdata[0][b*8+7+:1]&&read_sz_reg[3][4:3]==2'b11 : 1'BZ;
           end
       end
       for (p=0;p<4;p=p+1) begin
@@ -1362,13 +1369,34 @@ module dcache1(
 		{256{read_beginA_reg[p][4:2]==3'd7}};
 	      assign rxdata[p]=rxdata0[p]|rxdata1[p]|rxdata2[p]|rxdata3[p]|
 		rxdata4[p]|rxdata5[p]|rxdata6[p]|rxdata7[p];
-              assign read_dataA[p]=rddata1[p] & {{8{mskdata1[p][5]}},{48{mskdata1[p][4]}},{16{mskdata1[p][3]}},{32{mskdata1[p][2]}},
-                    {16{mskdata1[p][1]}},{8{mskdata1[p][0]}},8'hff};
+              assign read_dataA[p]={mskdata1[p][5] ? rddata1[p][135:128] : {8{1'b0}}
+		      mskdata1[p][4] ? rddata1[p][127:80] : {48{1'b0}},
+		      mskdata1[p][3] ? rddata1[p][79:64] : {16{1'b0}},
+		      mskdata1[p][2] ? rddata1[p][63:32] : {32{rsxdata1[p]}},
+		      mskdata1[p][1] ? rddata1[p][31:16] : {16{rsxdata1[p]}},
+		      mskdata1[p][0] ? rddata1[p][15:7] : {8{rsxdata1[p]}},rddata1[p][7:0]};
       end
   endgenerate
 
   LFSR16_6 rnd_mod(clk,rst,insert_rand);
   
+  adder #(7) addrsx_0_1({read_beginA0,read_low0},7'h0,read_addrsx[0],1'b0,read_sz0[1:0]==2'd0,,,,);
+  adder #(7) addrsx_0_2({read_beginA0,read_low0},7'h1,read_addrsx[0],1'b0,read_sz0[1:0]==2'd1,,,,);
+  adder #(7) addrsx_0_4({read_beginA0,read_low0},7'h3,read_addrsx[0],1'b0,read_sz0[1:0]==2'd2,,,,);
+  adder #(7) addrsx_0_8({read_beginA0,read_low0},7'h7,read_addrsx[0],1'b0,read_sz0[1:0]==2'd3,,,,);
+  adder #(7) addrsx_1_1({read_beginA1,read_low1},7'h0,read_addrsx[1],1'b0,read_sz1[1:0]==2'd0,,,,);
+  adder #(7) addrsx_1_2({read_beginA1,read_low1},7'h1,read_addrsx[1],1'b0,read_sz1[1:0]==2'd1,,,,);
+  adder #(7) addrsx_1_4({read_beginA1,read_low1},7'h3,read_addrsx[1],1'b0,read_sz1[1:0]==2'd2,,,,);
+  adder #(7) addrsx_1_8({read_beginA1,read_low1},7'h7,read_addrsx[1],1'b0,read_sz1[1:0]==2'd3,,,,);
+  adder #(7) addrsx_2_1({read_beginA2,read_low2},7'h0,read_addrsx[2],1'b0,read_sz2[1:0]==2'd0,,,,);
+  adder #(7) addrsx_2_2({read_beginA2,read_low2},7'h1,read_addrsx[2],1'b0,read_sz2[1:0]==2'd1,,,,);
+  adder #(7) addrsx_2_4({read_beginA2,read_low2},7'h3,read_addrsx[2],1'b0,read_sz2[1:0]==2'd2,,,,);
+  adder #(7) addrsx_2_8({read_beginA2,read_low2},7'h7,read_addrsx[2],1'b0,read_sz2[1:0]==2'd3,,,,);
+  adder #(7) addrsx_3_1({read_beginA3,read_low3},7'h0,read_addrsx[3],1'b0,read_sz3[1:0]==2'd0,,,,);
+  adder #(7) addrsx_3_2({read_beginA3,read_low3},7'h1,read_addrsx[3],1'b0,read_sz3[1:0]==2'd1,,,,);
+  adder #(7) addrsx_3_4({read_beginA3,read_low3},7'h3,read_addrsx[3],1'b0,read_sz3[1:0]==2'd2,,,,);
+  adder #(7) addrsx_3_8({read_beginA3,read_low3},7'h7,read_addrsx[3],1'b0,read_sz3[1:0]==2'd3,,,,);
+
   assign read_pbit0=read_pbit0P_reg2;
   assign read_pbit1=read_pbit1P_reg2;
   assign read_pbit2=read_pbit2P_reg2;
@@ -1515,6 +1543,7 @@ module dcache1(
               read_sz_reg[v]<=5'b0;
               read_beginA[v]<=5'b0;
               read_beginA_reg[v]<=5'b0;
+	      read_addrsx_reg[v]<=7'b0;
           end
           
       end else begin
@@ -1601,6 +1630,7 @@ module dcache1(
           
           for(v=0;v<4;v=v+1) begin
               read_sz_reg[v]<=read_sz[v];
+	      read_addrsx_reg[v]<=read_addrsx[v];
        //verilator lint_off CASEINCOMPLETE
 
               case(read_sz[v])
