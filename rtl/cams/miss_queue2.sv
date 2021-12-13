@@ -1387,7 +1387,7 @@ module missQ(
   assign curConfl=read_confl&confl_mask;
 
   assign rdwr_match2=read_addr==write_addr_end;
-  assign rdwr_match=countF==5'd1;
+  assign rdwr_match=countF==5'd0;
   assign flush_end=rdwr_match && now_flushing;
 
   assign mOp_write_clear=begin_flush;
