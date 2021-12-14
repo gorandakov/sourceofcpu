@@ -86,16 +86,77 @@ module dmisscam_buf(
     
 endmodule
 
+module dm_alloc(
+  busy,en,en_out,
+  bit0,
+  bit1,
+  bit2,
+  bit3,
+  bit4,
+  bit5);
+  input [7:0] busy;
+  input [5:0] en;
+  output [5:0] en_out;
+  output [7:0] bit0;
+  output [7:0] bit1;
+  output [7:0] bit2;
+  output [7:0] bit3;
+  output [7:0] bit4;
+  output [7:0] bit5;
 
+  wire en_outX0,en_outP0;
+  wire en_outX1,en_outP1;
+  wire en_outX2,en_outP2;
+  wire en_outX3,en_outP3;
+  wire en_outX4,en_outP4;
+  wire en_outX5,en_outP5;
+  wire [10:1] busy_cnt;
+  wire [5:0] cnt2;
+  wire [5:0] cnt5;
+
+  bit_find_first_bit #(8) bit0_mod(~busy&{8{en[0]}},bit0,en_outP0);
+  bit_find_first_bit #(8) bit1_mod(~busy&{8{en[1]}}&~bit0,bit1,en_outP1);
+  bit_find_first_bit #(8) bit2_mod(~busy&{8{en[2]}}&~bit0&~bit1,bit2,en_outP2);
+  bit_find_last_bit #(8) bit3_mod(~busy&{8{en[3]}},bit3,en_outP3);
+  bit_find_last_bit #(8) bit4_mod(~busy&{8{en[4]}}&~bit3,bit4,en_outP4);
+  bit_find_last_bit #(8) bit5_mod(~busy&{8{en[5]}}&~bit3&~bit4,bit5,en_outP5);
+
+  popcnt10_or_more cpop_mod({2'b0,~busy},busy_cnt);
+  popcnt5 cpop2_mod({en[0],en[3],en[1],en[4],1'b0},cnt2);
+  popcnt5 cpop5_mod({en[0],en[3],en[1],en[4],en[2]},cnt5);
+  
+  assign en_outX0=en_out0 & busy_cnt[1];
+  assign en_outX3=en_out0 & en_out3 & busy_cnt[2] || ~en_out0 & en_out3 & busy_cnt[1];
+  assign en_outX1=en_out0 & en_out3 & en_out1 & busy_cnt[3] || ~en_out0 & en_out3 & en_out1 & busy_cnt[2] ||
+      en_out0 & ~en_out3 & en_out1 & busy_cnt[2] || ~en_out0 & ~en_out3 & en_out1 & busy_cnt[1]; 
+  assign en_outX4=en_out0 & en_out3 & en_out1 & en_out4 & busy_cnt[4] ||~en_out0 & en_out3 & en_out1 & en_out4 & busy_cnt[3] ||
+	  en_out0 & ~en_out3 & en_out1 & en_out4 & busy_cnt[3] ||en_out0 & en_out3 & ~en_out1 & en_out4 & busy_cnt[3] ||
+	  ~en_out0 & ~en_out3 & en_out1 & en_out4 & busy_cnt[2] || ~en_out0 & en_out3 & ~en_out1 & en_out4 & busy_cnt[2] ||
+	  en_out0 & ~en_out3 & ~en_out1 & en_out4 & busy_cnt[2] ||~en_out0 & ~en_out3 & ~en_out1 & en_out4 & busy_cnt[1]; 
+  assign en_outX2=cnt2[4]&busy_cnt[5] || cnt2[3]&busy_cnt[4] || cnt2[2]&busy_cnt[3] || cnt2[1] & busy_cnt[2] || cnt2[0] &busy_cnt[1];
+  assign en_outX5=cnt5[5]&busy_cnt[6] || cnt5[4]&busy_cnt[5] || cnt5[3]&busy_cnt[4] || cnt5[2] & busy_cnt[3] || cnt5[1] &busy_cnt[2] ||
+	  cnt5[0]&busy_cnt[1];
+  assign en_out0=en_outP0 & en_outX0;
+  assign en_out1=en_outP1 & en_outX1;
+  assign en_out2=en_outP2 & en_outX2;
+  assign en_out3=en_outP3 & en_outX3;
+  assign en_out4=en_outP4 & en_outX4;
+  assign en_out5=en_outP5 & en_outX5;
+
+
+
+endmodule
 
 module dmisscam(
   clk,
   rst,
-  fill_en,
-  fill_en_pre,
-  fill_addr,
-  fill_st,
-  fill_req,
+  fill_en0,fill_addrE0,fill_addrO0,fill_st0,
+  fill_en1,fill_addrE1,fill_addrO1,fill_st1,
+  fill_en2,fill_addrE2,fill_addrO2,fill_st2,
+  fill_en3,fill_addrE3,fill_addrO3,fill_st3,
+  fill_en4,fill_addrE4,fill_addrO4,fill_st4,
+  fill_en5,fill_addrE5,fill_addrO5,fill_st5,
+  read_en0,read_addrE0,read_addrO0,read_st0,read_req0,
   ins_en,
   ins_req,
   ins_addr_o,
