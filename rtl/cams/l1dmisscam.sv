@@ -166,7 +166,7 @@ module dmisscam(
   assign fill_req=found ? 4'bz : 4'b0;
   assign ins_addr_o=ins_en ? 37'bz : 37'b0;
   
-  assign begin_replay=started & ~(|filled) && ~fill_en && ~fill_en_pre;
+  assign begin_replay=started & ~(|filled) && (~fill_en & ~fill_en_pre || (&busy));
 
   
   bit_find_first_bit #(16) first_mod(~busy,first,found);
