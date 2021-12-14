@@ -1523,7 +1523,7 @@ module missQ(
 	      confl_mask<=6'b111111;
 	  end else begin
 	      if (!count && wen) confl_mask<=6'h3f;
-	      else if (count && read_clkEn && ~rdwr_match && ~alt_bus_hold) confl_mask<=confl_mask&~sel;
+	      else if (count && read_clkEn && ~rdwr_match2 && ~alt_bus_hold) confl_mask<=confl_mask&~sel;
 	  end
 	  if (!alt_bus_hold) read_addr<=read_addr_d;
 	  write_addr<=write_addr_d;
