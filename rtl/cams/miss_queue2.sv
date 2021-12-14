@@ -1386,7 +1386,7 @@ module missQ(
  
   assign curConfl=read_confl&confl_mask;
 
-  assign rdwr_match2=countF==5'd2;
+  assign rdwr_match2=read_addr=write_addr_end;
   assign rdwr_match=countF==5'd1;
   assign flush_end=rdwr_match && now_flushing;
 
@@ -1523,7 +1523,7 @@ module missQ(
 	      confl_mask<=6'b111111;
 	  end else begin
 	      if (!count && wen && ~now_flushing) confl_mask<=6'h3f;
-	      else if (count && read_clkEn && ~rdwr_match && ~alt_bus_hold) confl_mask<=confl_mask&~sel;
+	      else if (count && read_clkEn && ~alt_bus_hold) confl_mask<=confl_mask&~sel;
 	  end
 	  if (!alt_bus_hold) read_addr<=read_addr_d;
 	  write_addr<=write_addr_d;
