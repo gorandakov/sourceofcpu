@@ -2431,6 +2431,7 @@ module agu_block(
   .clk(clk),
   .rst(rst),
   .fill_en(mOpR_en_reg),
+  .fill_en_pre(mOpR_en),
   .fill_addr(mcam_addr_reg),
   .fill_st(mcam_st_reg),
   .fill_req(mcam_req),

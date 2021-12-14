@@ -92,6 +92,7 @@ module dmisscam(
   clk,
   rst,
   fill_en,
+  fill_en_pre,
   fill_addr,
   fill_st,
   fill_req,
@@ -114,6 +115,7 @@ module dmisscam(
   input rst;
 
   input fill_en;
+  input fill_en_pre;
   input [PADDR_WIDTH-8:0] fill_addr;
   input fill_st;
   output [3:0] fill_req;
@@ -164,7 +166,7 @@ module dmisscam(
   assign fill_req=found ? 4'bz : 4'b0;
   assign ins_addr_o=ins_en ? 37'bz : 37'b0;
   
-  assign begin_replay=started & ~(|filled);
+  assign begin_replay=started & ~(|filled) && ~fill_en && ~fill_en_pre;
 
   
   bit_find_first_bit #(16) first_mod(~busy,first,found);
