@@ -1514,9 +1514,6 @@ module missQ(
           ((sz5==5 && stepOver5) && read_mop[5][`mOp1_bank0]==((q-4)&5'h1f)) ;
       end
   end
-  always @* begin
-      do_unlock=flush_end&&~alt_bus_hold;
-  end
   
   always @(posedge clk)
     begin
@@ -1547,10 +1544,10 @@ module missQ(
 	  if (rst) begin
 	     write_addr_end<=4'b0;
 	     write_addr_end2<=4'b0;
-	  end else if (wen && ~locked) begin
+	  end else if (wen && ~locked|do_unlock) begin
 	      write_addr_end<=write_addr;
 	      write_addr_end2<=write_addr_d;
-	  end else if (~locked & ~wen) begin
+	  end else if (do_unlock & ~wen) begin
 	      write_addr_end<=write_addr_dec;
 	      write_addr_end2<=write_addr_dec;
 	  end
@@ -1574,6 +1571,7 @@ module missQ(
 	      last_inserted_reg2<=1'b0;
 	      last_inserted_reg3<=1'b0;
 	      last_inserted_reg4<=1'b0;
+	      do_unlock<=1'b0;
 	      read_addr_reg<={ADDR_WIDTH{1'B0}};
 	  end else begin
 	      begin_flush<=last_inserted_reg4;
@@ -1586,6 +1584,7 @@ module missQ(
 	      last_inserted_reg2<=last_inserted_reg;
 	      last_inserted_reg3<=last_inserted_reg2;
 	      last_inserted_reg4<=last_inserted_reg3;
+	      do_unlock<=flush_end&&~alt_bus_hold;
 	      read_addr_reg<=read_addr;
 	  end
 	  if (rst) locked<=1'b0;
