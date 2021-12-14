@@ -1544,10 +1544,10 @@ module missQ(
 	  if (rst) begin
 	     write_addr_end<=4'b0;
 	     write_addr_end2<=4'b0;
-	  end else if (wen && ~locked|do_unlock) begin
+	  end else if (wen && ~locked|do_unlock|(flush_end&&~alt_bus_hold)) begin
 	      write_addr_end<=write_addr;
 	      write_addr_end2<=write_addr_d;
-	  end else if (do_unlock & ~wen) begin
+	  end else if (do_unlock|(flush_end&&~alt_bus_hold) & ~wen) begin
 	      write_addr_end<=write_addr_dec;
 	      write_addr_end2<=write_addr_dec;
 	  end
