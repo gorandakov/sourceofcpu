@@ -152,7 +152,7 @@ module dmisscam(
 	  ins_addr_o,
           filled[k],
           busy[k],
-          unlock
+          begin_replay
           );
           assign fill_req=first[k] ? k[3:0] : 4'bz;
       end
