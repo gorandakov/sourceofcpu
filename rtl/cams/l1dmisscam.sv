@@ -147,6 +147,35 @@ module dm_alloc(
 
 endmodule
 
+module dm_cmp(
+  in_en,
+  in_addr,
+  out_en,
+  cmp_addr0,cmp_en0,
+  cmp_addr1,cmp_en1,
+  cmp_addr2,cmp_en2,
+  cmp_addr3,cmp_en3,
+  cmp_addr4,cmp_en4);
+  localparam WIDTH=36;
+  input in_en;
+  input [WIDTH-1:0] in_addr;
+  output out_en;
+  input [WIDTH-1:0] cmp_addr0;
+  input               cmp_en0;
+  input [WIDTH-1:0] cmp_addr1;
+  input               cmp_en1;
+  input [WIDTH-1:0] cmp_addr2;
+  input               cmp_en2;
+  input [WIDTH-1:0] cmp_addr3;
+  input               cmp_en3;
+  input [WIDTH-1:0] cmp_addr4;
+  input               cmp_en4;
+
+  assign out_en=in_en && (cmp_addr0!=in_addr || ~cmp_en0) && (cmp_addr1!=in_addr || ~cmp_en1) && (cmp_addr2!=in_addr || ~cmp_en2)
+       && (cmp_addr3!=in_addr || ~cmp_en3) && (cmp_addr4!=in_addr || ~cmp_en4);
+
+endmodule
+
 module dmisscam(
   clk,
   rst,
@@ -156,7 +185,7 @@ module dmisscam(
   fill_en3,fill_addrE3,fill_addrO3,fill_st3,
   fill_en4,fill_addrE4,fill_addrO4,fill_st4,
   fill_en5,fill_addrE5,fill_addrO5,fill_st5,
-  read_en0,read_addrE0,read_addrO0,read_st0,read_req0,
+  read_en0,read_addr0,read_st0,read_req0,
   ins_en,
   ins_req,
   ins_addr_o,
@@ -175,20 +204,43 @@ module dmisscam(
   input clk;
   input rst;
 
-  input fill_en;
-  input fill_en_pre;
-  input [PADDR_WIDTH-8:0] fill_addr;
-  input fill_st;
-  output [3:0] fill_req;
+  input [1:0]                fill_en0;
+  input [PADDR_WIDTH-9:0] fill_addrE0;
+  input [PADDR_WIDTH-9:0] fill_addrO0;
+  input                      fill_st0;
+  input [1:0]                fill_en1;
+  input [PADDR_WIDTH-9:0] fill_addrE1;
+  input [PADDR_WIDTH-9:0] fill_addrO1;
+  input                      fill_st1;
+  input [1:0]                fill_en2;
+  input [PADDR_WIDTH-9:0] fill_addrE2;
+  input [PADDR_WIDTH-9:0] fill_addrO2;
+  input                      fill_st2;
+  input [1:0]                fill_en3;
+  input [PADDR_WIDTH-9:0] fill_addrE3;
+  input [PADDR_WIDTH-9:0] fill_addrO3;
+  input                      fill_st3;
+  input [1:0]                fill_en4;
+  input [PADDR_WIDTH-9:0] fill_addrE4;
+  input [PADDR_WIDTH-9:0] fill_addrO4;
+  input                      fill_st4;
+  input [1:0]                fill_en5;
+  input [PADDR_WIDTH-9:0] fill_addrE5;
+  input [PADDR_WIDTH-9:0] fill_addrO5;
+  input                      fill_st5;
+  output                     read_en0;
+  output [PADDR_WIDTH-8:0] read_addr0;
+  output                     read_st0;
+  output [3:0]              read_req0;
   input ins_en;
   input [3:0] ins_req;
   output [PADDR_WIDTH-8:0] ins_addr_o;
   output has_free;
-  output fill_match;
   output reg locked;
   output begin_replay;
   input unlock;
 
+  wire fill_match;
   wire [15:0] fill_match_o;
   wire [15:0] filled;
   wire [15:0] busy;
