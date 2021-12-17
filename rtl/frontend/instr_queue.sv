@@ -12,24 +12,13 @@ module instrQ_buf(
   write_addr3,write_instr3,write_other3,
   write_addr4,write_instr4,write_other4,
   write_addr5,write_instr5,write_other5,
-  write_addr6,write_instr6,write_other6,
-  write_addr7,write_instr7,write_other7,
-  write_addr8,write_instr8,write_other8,
-  write_addr9,write_instr9,write_other9,
-  write_addr10,write_instr10,write_other10,
-  write_addr11,write_instr11,write_other11,
   read_thread,
   read_clkEn,
   read_addr0,read_instr0,read_other0,
   read_addr1,read_instr1,read_other1,
   read_addr2,read_instr2,read_other2,
   read_addr3,read_instr3,read_other3,
-  read_addr4,read_instr4,read_other4,
-  read_addr5,read_instr5,read_other5,
-  read_addr6,read_instr6,read_other6,
-  read_addr7,read_instr7,read_other7,
-  read_addr8,read_instr8,read_other8,
-  read_addr9,read_instr9,read_other9
+  read_addr4,read_instr4,read_other4
   );
   localparam WIDTH=80;
   localparam OTHER=`instrQ_width;
@@ -61,24 +50,6 @@ module instrQ_buf(
   input [WADDR_WIDTH-1:0] write_addr5;
   input [WIDTH-1:0] write_instr5;
   input [OTHER-1:0] write_other5;
-  input [WADDR_WIDTH-1:0] write_addr6;
-  input [WIDTH-1:0] write_instr6;
-  input [OTHER-1:0] write_other6;
-  input [WADDR_WIDTH-1:0] write_addr7;
-  input [WIDTH-1:0] write_instr7;
-  input [OTHER-1:0] write_other7;
-  input [WADDR_WIDTH-1:0] write_addr8;
-  input [WIDTH-1:0] write_instr8;
-  input [OTHER-1:0] write_other8;
-  input [WADDR_WIDTH-1:0] write_addr9;
-  input [WIDTH-1:0] write_instr9;
-  input [OTHER-1:0] write_other9;
-  input [WADDR_WIDTH-1:0] write_addr10;
-  input [WIDTH-1:0] write_instr10;
-  input [OTHER-1:0] write_other10;
-  input [WADDR_WIDTH-1:0] write_addr11;
-  input [WIDTH-1:0] write_instr11;
-  input [OTHER-1:0] write_other11;
 
   input read_thread;
   input read_clkEn;
@@ -98,35 +69,20 @@ module instrQ_buf(
   input [ADDR_WIDTH-1:0] read_addr4;
   output [WIDTH-1:0] read_instr4;
   output [OTHER-1:0] read_other4;
-  input [ADDR_WIDTH-1:0] read_addr5;
-  output [WIDTH-1:0] read_instr5;
-  output [OTHER-1:0] read_other5;
-  input [ADDR_WIDTH-1:0] read_addr6;
-  output [WIDTH-1:0] read_instr6;
-  output [OTHER-1:0] read_other6;
-  input [ADDR_WIDTH-1:0] read_addr7;
-  output [WIDTH-1:0] read_instr7;
-  output [OTHER-1:0] read_other7;
-  input [ADDR_WIDTH-1:0] read_addr8;
-  output [WIDTH-1:0] read_instr8;
-  output [OTHER-1:0] read_other8;
-  input [ADDR_WIDTH-1:0] read_addr9;
-  output [WIDTH-1:0] read_instr9;
-  output [OTHER-1:0] read_other9;
   
-  reg [WIDTH-1:0] instr[1:0];
-  reg [OTHER-1:0] other[1:0];
-  reg read_en[9:0];
+  reg [WIDTH-1:0] instr;
+  reg [OTHER-1:0] other;
+  reg read_en[4:0];
   integer k;
   wire [WIDTH-1:0] instr_rd;
   wire [OTHER-1:0] other_rd;
   wire [WIDTH-1:0] instr_wr;
   wire [OTHER-1:0] other_wr;
-  wire [11:0] instr_wren;
+  wire [5:0] instr_wren;
   wire instr_wrAny;
 
-  assign instr_rd=instr[read_thread];
-  assign other_rd=other[read_thread];
+  assign instr_rd=instr;
+  assign other_rd=other;
   
   assign read_instr0=read_en[0] ? instr_rd : {WIDTH{1'BZ}};
   assign read_other0=read_en[0] ? other_rd : {OTHER{1'BZ}};
@@ -138,16 +94,6 @@ module instrQ_buf(
   assign read_other3=read_en[3] ? other_rd : {OTHER{1'BZ}};
   assign read_instr4=read_en[4] ? instr_rd : {WIDTH{1'BZ}};
   assign read_other4=read_en[4] ? other_rd : {OTHER{1'BZ}};
-  assign read_instr5=read_en[5] ? instr_rd : {WIDTH{1'BZ}};
-  assign read_other5=read_en[5] ? other_rd : {OTHER{1'BZ}};
-  assign read_instr6=read_en[6] ? instr_rd : {WIDTH{1'BZ}};
-  assign read_other6=read_en[6] ? other_rd : {OTHER{1'BZ}};
-  assign read_instr7=read_en[7] ? instr_rd : {WIDTH{1'BZ}};
-  assign read_other7=read_en[7] ? other_rd : {OTHER{1'BZ}};
-  assign read_instr8=read_en[8] ? instr_rd : {WIDTH{1'BZ}};
-  assign read_other8=read_en[8] ? other_rd : {OTHER{1'BZ}};
-  assign read_instr9=read_en[9] ? instr_rd : {WIDTH{1'BZ}};
-  assign read_other9=read_en[9] ? other_rd : {OTHER{1'BZ}};
  
  //verilator lint_off WIDTH 
   assign instr_wren[0]=write_addr0==INDEX && write_instrEn[0];
@@ -156,12 +102,6 @@ module instrQ_buf(
   assign instr_wren[3]=write_addr3==INDEX && write_instrEn[3];
   assign instr_wren[4]=write_addr4==INDEX && write_instrEn[4];
   assign instr_wren[5]=write_addr5==INDEX && write_instrEn[5];
-  assign instr_wren[6]=write_addr6==INDEX && write_instrEn[6];
-  assign instr_wren[7]=write_addr7==INDEX && write_instrEn[7];
-  assign instr_wren[8]=write_addr8==INDEX && write_instrEn[8];
-  assign instr_wren[9]=write_addr9==INDEX && write_instrEn[9];
-  assign instr_wren[10]=write_addr10==INDEX && write_instrEn[10];
-  assign instr_wren[11]=write_addr11==INDEX && write_instrEn[11];
  //verilator lint_on WIDTH
   
   assign instr_wr=instr_wren[0] ? write_instr0 : {WIDTH{1'BZ}};
@@ -170,12 +110,6 @@ module instrQ_buf(
   assign instr_wr=instr_wren[3] ? write_instr3 : {WIDTH{1'BZ}};
   assign instr_wr=instr_wren[4] ? write_instr4 : {WIDTH{1'BZ}};
   assign instr_wr=instr_wren[5] ? write_instr5 : {WIDTH{1'BZ}};
-  assign instr_wr=instr_wren[6] ? write_instr6 : {WIDTH{1'BZ}};
-  assign instr_wr=instr_wren[7] ? write_instr7 : {WIDTH{1'BZ}};
-  assign instr_wr=instr_wren[8] ? write_instr8 : {WIDTH{1'BZ}};
-  assign instr_wr=instr_wren[9] ? write_instr9 : {WIDTH{1'BZ}};
-  assign instr_wr=instr_wren[10] ? write_instr10 : {WIDTH{1'BZ}};
-  assign instr_wr=instr_wren[11] ? write_instr11 : {WIDTH{1'BZ}};
   assign instr_wr=(!instr_wrAny) ? {WIDTH{1'B0}} : {WIDTH{1'BZ}};  
 
   assign other_wr=instr_wren[0] ? write_other0 : {OTHER{1'BZ}};
@@ -184,12 +118,6 @@ module instrQ_buf(
   assign other_wr=instr_wren[3] ? write_other3 : {OTHER{1'BZ}};
   assign other_wr=instr_wren[4] ? write_other4 : {OTHER{1'BZ}};
   assign other_wr=instr_wren[5] ? write_other5 : {OTHER{1'BZ}};
-  assign other_wr=instr_wren[6] ? write_other6 : {OTHER{1'BZ}};
-  assign other_wr=instr_wren[7] ? write_other7 : {OTHER{1'BZ}};
-  assign other_wr=instr_wren[8] ? write_other8 : {OTHER{1'BZ}};
-  assign other_wr=instr_wren[9] ? write_other9 : {OTHER{1'BZ}};
-  assign other_wr=instr_wren[10] ? write_other10 : {OTHER{1'BZ}};
-  assign other_wr=instr_wren[11] ? write_other11 : {OTHER{1'BZ}};
   assign other_wr=(!instr_wrAny) ? {OTHER{1'B0}} : {OTHER{1'BZ}};  
 
   assign instr_wrAny=|instr_wren;
@@ -197,22 +125,17 @@ module instrQ_buf(
   always @(posedge clk) 
   begin
       if (write_wen&instr_wrAny) begin
-          instr[write_thread]<=instr_wr;
-          other[write_thread]<=other_wr;
+          instr<=instr_wr;
+          other<=other_wr;
       end
       if (rst) begin
-          for(k=0;k<10;k=k+1) read_en[k]<=INITEN;
+          for(k=0;k<4;k=k+1) read_en[k]<=INITEN;
       end else if (read_clkEn) begin
           read_en[0]<=read_addr0==INDEX[2:0];
           read_en[1]<=read_addr1==INDEX[2:0];
           read_en[2]<=read_addr2==INDEX[2:0];
           read_en[3]<=read_addr3==INDEX[2:0];
           read_en[4]<=read_addr4==INDEX[2:0];
-          read_en[5]<=read_addr5==INDEX[2:0];
-          read_en[6]<=read_addr6==INDEX[2:0];
-          read_en[7]<=read_addr7==INDEX[2:0];
-          read_en[8]<=read_addr8==INDEX[2:0];
-          read_en[9]<=read_addr9==INDEX[2:0];
       end
   end
   
@@ -352,64 +275,144 @@ module instrQ_box(
           wire [9:0][WIDTH-1:0] read_instrm;
           wire [9:0][OTHER-1:0] read_otherm;
           
-          for (l=0;l<8;l=l+1) begin : buf_gen
-              instrQ_buf #(l+m*8,l==0) buf_mod(
+          for (l=0;l<8;l=l+2) begin : buf_gen
+              instrQ_buf #(l+m*8,l==0) buf0_mod(
               clk,
               rst,
-              write_instrEn,
+              write_instrEn[5:0],
               write_thread,
               write_wen,
-              write_addr0,write_instr0,write_other0,
-              write_addr1,write_instr1,write_other1,
-              write_addr2,write_instr2,write_other2,
-              write_addr3,write_instr3,write_other3,
-              write_addr4,write_instr4,write_other4,
-              write_addr5,write_instr5,write_other5,
-              write_addr6,write_instr6,write_other6,
-              write_addr7,write_instr7,write_other7,
-              write_addr8,write_instr8,write_other8,
-              write_addr9,write_instr9,write_other9,
-              write_addr10,write_instr10,write_other10,
-              write_addr11,write_instr11,write_other11,
+              write_addr0[0] ? write_addr1 : write_addr0,
+	          write_addr0[0] ? write_instr1 : write_instr0,
+		  write_addr0[0] ? write_other1 : write_other0,
+              write_addr2[0] ? write_addr3 : write_addr2,
+	          write_addr2[0] ? write_instr3 : write_instr2,
+		  write_addr2[0] ? write_other3 : write_other2,
+              write_addr4[0] ? write_addr5 : write_addr4,
+	          write_addr4[0] ? write_instr5 : write_instr4,
+		  write_addr4[0] ? write_other5 : write_other4,
+              write_addr6[0] ? write_addr7 : write_addr6,
+	          write_addr6[0] ? write_instr7 : write_instr6,
+		  write_addr6[0] ? write_other7 : write_other6,
+              write_addr8[0] ? write_addr9 : write_addr8,
+	          write_addr8[0] ? write_instr9 : write_instr8,
+		  write_addr8[0] ? write_other9 : write_other8,
+              write_addr10[0] ? write_addr11 : write_addr10,
+	          write_addr10[0] ? write_instr11 : write_instr10,
+		  write_addr10[0] ? write_other11 : write_other10,
               read_thread,
               read_clkEn,
-              read_addr0[2:0],read_instrm[0],read_otherm[0],
-              read_addr1[2:0],read_instrm[1],read_otherm[1],
-              read_addr2[2:0],read_instrm[2],read_otherm[2],
-              read_addr3[2:0],read_instrm[3],read_otherm[3],
-              read_addr4[2:0],read_instrm[4],read_otherm[4],
-              read_addr5[2:0],read_instrm[5],read_otherm[5],
-              read_addr6[2:0],read_instrm[6],read_otherm[6],
-              read_addr7[2:0],read_instrm[7],read_otherm[7],
-              read_addr8[2:0],read_instrm[8],read_otherm[8],
-              read_addr9[2:0],read_instrm[9],read_otherm[9]
+              read_addr0[0] ? read_addr1[2:0] : read_addr0[2:0],read_instrm[0],read_otherm[0],
+              read_addr2[0] ? read_addr3[2:0] : read_addr2[2:0],read_instrm[2],read_otherm[2],
+              read_addr4[0] ? read_addr5[2:0] : read_addr4[2:0],read_instrm[4],read_otherm[4],
+              read_addr6[0] ? read_addr7[2:0] : read_addr6[2:0],read_instrm[6],read_otherm[6],
+              read_addr8[0] ? read_addr9[2:0] : read_addr8[2:0],read_instrm[8],read_otherm[8]
               );
+              
+	      instrQ_buf #(l+m*8+1,l==1) buf1_mod(
+              clk,
+              rst,
+              write_instrEn[11:6],
+              write_thread,
+              write_wen,
+              ~write_addr0[0] ? write_addr1 : write_addr0,
+	          ~write_addr0[0] ? write_instr1 : write_instr0,
+		  ~write_addr0[0] ? write_other1 : write_other0,
+              ~write_addr2[0] ? write_addr3 : write_addr2,
+	          ~write_addr2[0] ? write_instr3 : write_instr2,
+		  ~write_addr2[0] ? write_other3 : write_other2,
+              ~write_addr4[0] ? write_addr5 : write_addr4,
+	          ~write_addr4[0] ? write_instr5 : write_instr4,
+		  ~write_addr4[0] ? write_other5 : write_other4,
+              ~write_addr6[0] ? write_addr7 : write_addr6,
+	          ~write_addr6[0] ? write_instr7 : write_instr6,
+		  ~write_addr6[0] ? write_other7 : write_other6,
+              ~write_addr8[0] ? write_addr9 : write_addr8,
+	          ~write_addr8[0] ? write_instr9 : write_instr8,
+		  ~write_addr8[0] ? write_other9 : write_other8,
+              ~write_addr10[0] ? write_addr11 : write_addr10,
+	          ~write_addr10[0] ? write_instr11 : write_instr10,
+		  ~write_addr10[0] ? write_other11 : write_other10,
+              read_thread,
+              read_clkEn,
+              read_addr0[0] ? read_addr1[2:0] : read_addr0[2:0],read_instrm[0],read_otherm[0],
+              read_addr2[0] ? read_addr3[2:0] : read_addr2[2:0],read_instrm[2],read_otherm[2],
+              read_addr4[0] ? read_addr5[2:0] : read_addr4[2:0],read_instrm[4],read_otherm[4],
+              read_addr6[0] ? read_addr7[2:0] : read_addr6[2:0],read_instrm[6],read_otherm[6],
+              read_addr8[0] ? read_addr9[2:0] : read_addr8[2:0],read_instrm[8],read_otherm[8]
+              );
+
+
           end
           
           
-          assign read_instr0=read_en0[m] ? read_instrm[0] : {WIDTH{1'BZ}};
-          assign read_instr1=read_en1[m] ? read_instrm[1] : {WIDTH{1'BZ}};
-          assign read_instr2=read_en2[m] ? read_instrm[2] : {WIDTH{1'BZ}};
-          assign read_instr3=read_en3[m] ? read_instrm[3] : {WIDTH{1'BZ}};
-          assign read_instr4=read_en4[m] ? read_instrm[4] : {WIDTH{1'BZ}};
-          assign read_instr5=read_en5[m] ? read_instrm[5] : {WIDTH{1'BZ}};
-          assign read_instr6=read_en6[m] ? read_instrm[6] : {WIDTH{1'BZ}};
-          assign read_instr7=read_en7[m] ? read_instrm[7] : {WIDTH{1'BZ}};
-          assign read_instr8=read_en8[m] ? read_instrm[8] : {WIDTH{1'BZ}};
-          assign read_instr9=read_en9[m] ? read_instrm[9] : {WIDTH{1'BZ}};
+          assign read_instr0x=read_en0[m] ? read_instrm[0] : {WIDTH{1'BZ}};
+          assign read_instr1x=read_en1[m] ? read_instrm[1] : {WIDTH{1'BZ}};
+          assign read_instr2x=read_en2[m] ? read_instrm[2] : {WIDTH{1'BZ}};
+          assign read_instr3x=read_en3[m] ? read_instrm[3] : {WIDTH{1'BZ}};
+          assign read_instr4x=read_en4[m] ? read_instrm[4] : {WIDTH{1'BZ}};
+          assign read_instr5x=read_en5[m] ? read_instrm[5] : {WIDTH{1'BZ}};
+          assign read_instr6x=read_en6[m] ? read_instrm[6] : {WIDTH{1'BZ}};
+          assign read_instr7x=read_en7[m] ? read_instrm[7] : {WIDTH{1'BZ}};
+          assign read_instr8x=read_en8[m] ? read_instrm[8] : {WIDTH{1'BZ}};
+          assign read_instr9x=read_en9[m] ? read_instrm[9] : {WIDTH{1'BZ}};
 
-          assign read_other0=read_en0[m] ? read_otherm[0] : {OTHER{1'BZ}};
-          assign read_other1=read_en1[m] ? read_otherm[1] : {OTHER{1'BZ}};
-          assign read_other2=read_en2[m] ? read_otherm[2] : {OTHER{1'BZ}};
-          assign read_other3=read_en3[m] ? read_otherm[3] : {OTHER{1'BZ}};
-          assign read_other4=read_en4[m] ? read_otherm[4] : {OTHER{1'BZ}};
-          assign read_other5=read_en5[m] ? read_otherm[5] : {OTHER{1'BZ}};
-          assign read_other6=read_en6[m] ? read_otherm[6] : {OTHER{1'BZ}};
-          assign read_other7=read_en7[m] ? read_otherm[7] : {OTHER{1'BZ}};
-          assign read_other8=read_en8[m] ? read_otherm[8] : {OTHER{1'BZ}};
-          assign read_other9=read_en9[m] ? read_otherm[9] : {OTHER{1'BZ}};
+          assign read_other0x=read_en0[m] ? read_otherm[0] : {OTHER{1'BZ}};
+          assign read_other1x=read_en1[m] ? read_otherm[1] : {OTHER{1'BZ}};
+          assign read_other2x=read_en2[m] ? read_otherm[2] : {OTHER{1'BZ}};
+          assign read_other3x=read_en3[m] ? read_otherm[3] : {OTHER{1'BZ}};
+          assign read_other4x=read_en4[m] ? read_otherm[4] : {OTHER{1'BZ}};
+          assign read_other5x=read_en5[m] ? read_otherm[5] : {OTHER{1'BZ}};
+          assign read_other6x=read_en6[m] ? read_otherm[6] : {OTHER{1'BZ}};
+          assign read_other7x=read_en7[m] ? read_otherm[7] : {OTHER{1'BZ}};
+          assign read_other8x=read_en8[m] ? read_otherm[8] : {OTHER{1'BZ}};
+          assign read_other9x=read_en9[m] ? read_otherm[9] : {OTHER{1'BZ}};
+          
+	  assign read_instr0y=read_en0[m] ? read_instrm[1] : {WIDTH{1'BZ}};
+          assign read_instr1y=read_en1[m] ? read_instrm[0] : {WIDTH{1'BZ}};
+          assign read_instr2y=read_en2[m] ? read_instrm[3] : {WIDTH{1'BZ}};
+          assign read_instr3y=read_en3[m] ? read_instrm[2] : {WIDTH{1'BZ}};
+          assign read_instr4y=read_en4[m] ? read_instrm[5] : {WIDTH{1'BZ}};
+          assign read_instr5y=read_en5[m] ? read_instrm[4] : {WIDTH{1'BZ}};
+          assign read_instr6y=read_en6[m] ? read_instrm[7] : {WIDTH{1'BZ}};
+          assign read_instr7y=read_en7[m] ? read_instrm[6] : {WIDTH{1'BZ}};
+          assign read_instr8y=read_en8[m] ? read_instrm[9] : {WIDTH{1'BZ}};
+          assign read_instr9y=read_en9[m] ? read_instrm[8] : {WIDTH{1'BZ}};
+
+          assign read_other0y=read_en0[m] ? read_otherm[1] : {OTHER{1'BZ}};
+          assign read_other1y=read_en1[m] ? read_otherm[0] : {OTHER{1'BZ}};
+          assign read_other2y=read_en2[m] ? read_otherm[3] : {OTHER{1'BZ}};
+          assign read_other3y=read_en3[m] ? read_otherm[2] : {OTHER{1'BZ}};
+          assign read_other4y=read_en4[m] ? read_otherm[5] : {OTHER{1'BZ}};
+          assign read_other5y=read_en5[m] ? read_otherm[4] : {OTHER{1'BZ}};
+          assign read_other6y=read_en6[m] ? read_otherm[7] : {OTHER{1'BZ}};
+          assign read_other7y=read_en7[m] ? read_otherm[6] : {OTHER{1'BZ}};
+          assign read_other8y=read_en8[m] ? read_otherm[9] : {OTHER{1'BZ}};
+          assign read_other9y=read_en9[m] ? read_otherm[9] : {OTHER{1'BZ}};
       end
   endgenerate
+
+  assign read_instr0=read_addr0[0] ? read_instr0y : read_instr0x;
+  assign read_instr1=read_addr1[0] ? read_instr1y : read_instr1x;
+  assign read_instr2=read_addr2[0] ? read_instr2y : read_instr2x;
+  assign read_instr3=read_addr3[0] ? read_instr3y : read_instr3x;
+  assign read_instr4=read_addr4[0] ? read_instr4y : read_instr4x;
+  assign read_instr5=read_addr5[0] ? read_instr5y : read_instr5x;
+  assign read_instr6=read_addr6[0] ? read_instr6y : read_instr6x;
+  assign read_instr7=read_addr7[0] ? read_instr7y : read_instr7x;
+  assign read_instr8=read_addr8[0] ? read_instr8y : read_instr8x;
+  assign read_instr9=read_addr9[0] ? read_instr9y : read_instr9x;
+  
+  assign read_other0=read_addr0[0] ? read_other0y : read_other0x;
+  assign read_other1=read_addr1[0] ? read_other1y : read_other1x;
+  assign read_other2=read_addr2[0] ? read_other2y : read_other2x;
+  assign read_other3=read_addr3[0] ? read_other3y : read_other3x;
+  assign read_other4=read_addr4[0] ? read_other4y : read_other4x;
+  assign read_other5=read_addr5[0] ? read_other5y : read_other5x;
+  assign read_other6=read_addr6[0] ? read_other6y : read_other6x;
+  assign read_other7=read_addr7[0] ? read_other7y : read_other7x;
+  assign read_other8=read_addr8[0] ? read_other8y : read_other8x;
+  assign read_other9=read_addr9[0] ? read_other9y : read_other9x;
   
   always @(posedge clk) begin
   
