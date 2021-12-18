@@ -250,6 +250,31 @@ module dmisscam(
   wire found;
   
   reg started;
+  
+  reg [1:0]                fill_en0_reg;
+  reg [PADDR_WIDTH-9:0] fill_addrE0_reg;
+  reg [PADDR_WIDTH-9:0] fill_addrO0_reg;
+  reg                      fill_st0_reg;
+  reg [1:0]                fill_en1_reg;
+  reg [PADDR_WIDTH-9:0] fill_addrE1_reg;
+  reg [PADDR_WIDTH-9:0] fill_addrO1_reg;
+  reg                      fill_st1_reg;
+  reg [1:0]                fill_en2_reg;
+  reg [PADDR_WIDTH-9:0] fill_addrE2_reg;
+  reg [PADDR_WIDTH-9:0] fill_addrO2_reg;
+  reg                      fill_st2_reg;
+  reg [1:0]                fill_en3_reg;
+  reg [PADDR_WIDTH-9:0] fill_addrE3_reg;
+  reg [PADDR_WIDTH-9:0] fill_addrO3_reg;
+  reg                      fill_st3_reg;
+  reg [1:0]                fill_en4_reg;
+  reg [PADDR_WIDTH-9:0] fill_addrE4_reg;
+  reg [PADDR_WIDTH-9:0] fill_addrO4_reg;
+  reg                      fill_st4_reg;
+  reg [1:0]                fill_en5_reg;
+  reg [PADDR_WIDTH-9:0] fill_addrE5_reg;
+  reg [PADDR_WIDTH-9:0] fill_addrO5_reg;
+  reg                      fill_st5_reg;
     
   generate
       genvar k;
@@ -272,7 +297,110 @@ module dmisscam(
           assign fill_req=first[k] ? k[3:0] : 4'bz;
       end
   endgenerate
+  dm_cmp cmpO0_mod(
+  fill_en0[1],
+  fill_addrO0,
+  cmpEnO0,
+  fill_addrO1,fill_en1[1],
+  fill_addrO2,fill_en2[1],
+  fill_addrO3,fill_en3[1],
+  fill_addrO4,fill_en4[1],
+  fill_addrO5,fill_en5[1]);
   
+  dm_cmp cmpO1_mod(
+  fill_en1[1],
+  fill_addrO1,
+  cmpEnO1,
+  fill_addrO1,1'b0,
+  fill_addrO2,fill_en2[1],
+  fill_addrO3,fill_en3[1],
+  fill_addrO4,fill_en4[1],
+  fill_addrO5,fill_en5[1]);
+
+  dm_cmp cmpO2_mod(
+  fill_en2[1],
+  fill_addrO2,
+  cmpEnO2,
+  fill_addrO1,1'b0,
+  fill_addrO2,1'b0,
+  fill_addrO3,fill_en3[1],
+  fill_addrO4,fill_en4[1],
+  fill_addrO5,fill_en5[1]);
+
+  dm_cmp cmpO3_mod(
+  fill_en3[1],
+  fill_addrO3,
+  cmpEnO3,
+  fill_addrO1,1'b0,
+  fill_addrO2,1'b0,
+  fill_addrO3,1'b0,
+  fill_addrO4,fill_en4[1],
+  fill_addrO5,fill_en5[1]);
+
+  dm_cmp cmpO4_mod(
+  fill_en4[1],
+  fill_addrO4,
+  cmpEnO4,
+  fill_addrO1,1'b0,
+  fill_addrO2,1'b0,
+  fill_addrO3,1'b0,
+  fill_addrO4,1'b0,
+  fill_addrO5,fill_en5[1]);
+
+  assign cmpEnO5=fill_en5[1];
+ 
+  dm_cmp cmpE0_mod(
+  fill_en0[0],
+  fill_addrE0,
+  cmpEnE0,
+  fill_addrE1,fill_en1[0],
+  fill_addrE2,fill_en2[0],
+  fill_addrE3,fill_en3[0],
+  fill_addrE4,fill_en4[0],
+  fill_addrE5,fill_en5[0]);
+  
+  dm_cmp cmpE1_mod(
+  fill_en1[0],
+  fill_addrE1,
+  cmpEnE1,
+  fill_addrE1,1'b0,
+  fill_addrE2,fill_en2[0],
+  fill_addrE3,fill_en3[0],
+  fill_addrE4,fill_en4[0],
+  fill_addrE5,fill_en5[0]);
+
+  dm_cmp cmpE2_mod(
+  fill_en2[0],
+  fill_addrE2,
+  cmpEnE2,
+  fill_addrE1,1'b0,
+  fill_addrE2,1'b0,
+  fill_addrE3,fill_en3[0],
+  fill_addrE4,fill_en4[0],
+  fill_addrE5,fill_en5[0]);
+
+  dm_cmp cmpE3_mod(
+  fill_en3[0],
+  fill_addrE3,
+  cmpEnE3,
+  fill_addrE1,1'b0,
+  fill_addrE2,1'b0,
+  fill_addrE3,1'b0,
+  fill_addrE4,fill_en4[0],
+  fill_addrE5,fill_en5[0]);
+
+  dm_cmp cmpE4_mod(
+  fill_en4[0],
+  fill_addrE4,
+  cmpEnE4,
+  fill_addrE1,1'b0,
+  fill_addrE2,1'b0,
+  fill_addrE3,1'b0,
+  fill_addrE4,1'b0,
+  fill_addrE5,fill_en5[0]);
+
+  assign cmpEnE5=fill_en5[0];
+ 
   assign fill_en_way=first & {16{fill_en&~locked&~begin_replay}};
   assign fill_match=|fill_match_o;
   assign has_free=found;
@@ -290,6 +418,57 @@ module dmisscam(
       if (rst) started<=1'b0;
       else if (begin_replay) started<=1'b0;
       else if (fill_en&~locked) started<=1'b1;
+      if (rst) begin
+          fill_en0_reg<=0;
+          fill_addrE0_reg<=0;
+          fill_addrO0_reg<=0;
+          fill_st0_reg<=0;
+          fill_en1_reg<=0;
+          fill_addrE1_reg<=0;
+          fill_addrO1_reg<=0;
+          fill_st1_reg<=0;
+          fill_en2_reg<=0;
+          fill_addrE2_reg<=0;
+          fill_addrO2_reg<=0;
+          fill_st2_reg<=0;
+          fill_en3_reg<=0;
+          fill_addrE3_reg<=0;
+          fill_addrO3_reg<=0;
+          fill_st3_reg<=0;
+          fill_en4_reg<=0;
+          fill_addrE4_reg<=0;
+          fill_addrO4_reg<=0;
+          fill_st4_reg<=0;
+          fill_en5_reg<=0;
+          fill_addrE5_reg<=0;
+          fill_addrO5_reg<=0;
+          fill_st5_reg<=0;
+      end else begin
+          fill_en0_reg<=fill_en0;
+          fill_addrE0_reg<=fill_addrE0;
+          fill_addrO0_reg<=fill_addrO0;
+          fill_st0_reg<=fill_st0;
+          fill_en1_reg<=fill_en1;
+          fill_addrE1_reg<=fill_addrE1;
+          fill_addrO1_reg<=fill_addrO1;
+          fill_st1_reg<=fill_st1;
+          fill_en2_reg<=fill_en2;
+          fill_addrE2_reg<=fill_addrE2;
+          fill_addrO2_reg<=fill_addrO2;
+          fill_st2_reg<=fill_st2;
+          fill_en3_reg<=fill_en3;
+          fill_addrE3_reg<=fill_addrE3;
+          fill_addrO3_reg<=fill_addrO3;
+          fill_st3_reg<=fill_st3;
+          fill_en4_reg<=fill_en4;
+          fill_addrE4_reg<=fill_addrE4;
+          fill_addrO4_reg<=fill_addrO4;
+          fill_st4_reg<=fill_st4;
+          fill_en5_reg<=fill_en5;
+          fill_addrE5_reg<=fill_addrE5;
+          fill_addrO5_reg<=fill_addrO5;
+          fill_st5_reg<=fill_st5;
+      end
   end
   
 endmodule
