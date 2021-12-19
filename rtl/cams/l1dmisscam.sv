@@ -19,10 +19,15 @@ module dmisscam_buf(
   clk,
   rst,
   fill_match,
-  fill_match_o,
   fill_en,
   fill_addr,
   fill_st,
+  fill_match_o0, fill_en0, fill_addr0,
+  fill_match_o1, fill_en1, fill_addr1,
+  fill_match_o2, fill_en2, fill_addr2,
+  fill_match_o3, fill_en3, fill_addr3,
+  fill_match_o4, fill_en4, fill_addr4,
+  fill_match_o5, fill_en5, fill_addr5,
   ins_en,
   ins_req,
   ins_addr_o,
@@ -41,10 +46,27 @@ module dmisscam_buf(
   input rst;
 
   input fill_match;
-  output fill_match_o;
   input fill_en;
   input [PADDR_WIDTH-8:0] fill_addr;
   input fill_st;
+  output               fill_match_o0;
+  input                     fill_en0;
+  input [PADDR_WIDTH-8:0] fill_addr0;
+  output               fill_match_o1;
+  input                     fill_en1;
+  input [PADDR_WIDTH-8:0] fill_addr1;
+  output               fill_match_o2;
+  input                     fill_en2;
+  input [PADDR_WIDTH-8:0] fill_addr2;
+  output               fill_match_o3;
+  input                     fill_en3;
+  input [PADDR_WIDTH-8:0] fill_addr3;
+  output               fill_match_o4;
+  input                     fill_en4;
+  input [PADDR_WIDTH-8:0] fill_addr4;
+  output               fill_match_o5;
+  input                     fill_en5;
+  input [PADDR_WIDTH-8:0] fill_addr5;
   input ins_en;
   input [3:0] ins_req;
   output [PADDR_WIDTH-8:0] ins_addr_o;
@@ -58,7 +80,12 @@ module dmisscam_buf(
   reg [2:0] steps;
   reg stepin;
   
-  assign fill_match_o=fill_addr==addr && busy;
+  assign fill_match_o0=fill_addr0==addr && busy && fill_en0;
+  assign fill_match_o1=fill_addr1==addr && busy && fill_en1;
+  assign fill_match_o2=fill_addr2==addr && busy && fill_en2;
+  assign fill_match_o3=fill_addr3==addr && busy && fill_en3;
+  assign fill_match_o4=fill_addr4==addr && busy && fill_en4;
+  assign fill_match_o5=fill_addr5==addr && busy && fill_en5;
  
   assign ins_addr_o=(ins_en && ins_req==REQ) ? addr : 37'bz;
 
@@ -279,24 +306,114 @@ module dmisscam(
   generate
       genvar k;
       for(k=0;k<16;k=k+1) begin : buffers_gen
-          dmisscam_buf #(k) buf_mod(
-          clk,
-          rst,
-          fill_match,
-          fill_match_o[k],
-          fill_en_way[k],
-          fill_addr,
-          fill_st,
-          ins_en,
-          ins_req,
-	  ins_addr_o,
-          filled[k],
-          busy[k],
-          unlock
-          );
           assign fill_req=first[k] ? k[3:0] : 4'bz;
+          if (k<8) begin
+              assign fill_addr[k]=en_outE[0] & bitE0[k] ? {fill_addrE0_reg,1'b1} : 37'bz;
+              assign fill_addr[k]=en_outE[1] & bitE1[k] ? {fill_addrE1_reg,1'b1} : 37'bz;
+              assign fill_addr[k]=en_outE[2] & bitE2[k] ? {fill_addrE2_reg,1'b1} : 37'bz;
+              assign fill_addr[k]=en_outE[3] & bitE3[k] ? {fill_addrE3_reg,1'b1} : 37'bz;
+              assign fill_addr[k]=en_outE[4] & bitE4[k] ? {fill_addrE4_reg,1'b1} : 37'bz;
+              assign fill_addr[k]=en_outE[5] & bitE5[k] ? {fill_addrE5_reg,1'b1} : 37'bz;
+              assign fill_addr[k]=~bitE0[k]&~bitE1[k]&~bitE2[k]&~bitE3[k]&~bitE4[k]&~bitE5[k] ? 37'b0 : 
+                  37'bz;
+              assign fill_en_way[k]=bitE0[k]|bitE1[k]|bitE2[k]|bitE3[k]|bitE4[k]|bitE5[k];
+              dmisscam_buf #(k) buf_mod(
+              clk,
+              rst,
+              fill_match[k],
+              fill_en_way[k],
+              fill_addr[k],
+              fill_st,
+              fill_match_o   [0],
+              fill_en_way_chk[0],
+              fill_addrE0_reg,
+              fill_match_o   [1],
+              fill_en_way_chk[1],
+              fill_addrE1_reg,
+              fill_match_o   [2],
+              fill_en_way_chk[2],
+              fill_addrE2_reg,
+              fill_match_o   [3],
+              fill_en_way_chk[3],
+              fill_addrE3_reg,
+              fill_match_o   [4],
+              fill_en_way_chk[4],
+              fill_addrE4_reg,
+              fill_match_o   [5],
+              fill_en_way_chk[5],
+              fill_addrE5_reg,
+              ins_en,
+              ins_req,
+	      ins_addr_o,
+              filled[k],
+              busy[k],
+              unlock
+              );
+
+          end else begin
+              assign fill_addr[k]=en_outO[0] & bitO0[k-8] ? {fill_addrO0_reg,1'b1} : 37'bz;
+              assign fill_addr[k]=en_outO[1] & bitO1[k-8] ? {fill_addrO1_reg,1'b1} : 37'bz;
+              assign fill_addr[k]=en_outO[2] & bitO2[k-8] ? {fill_addrO2_reg,1'b1} : 37'bz;
+              assign fill_addr[k]=en_outO[3] & bitO3[k-8] ? {fill_addrO3_reg,1'b1} : 37'bz;
+              assign fill_addr[k]=en_outO[4] & bitO4[k-8] ? {fill_addrO4_reg,1'b1} : 37'bz;
+              assign fill_addr[k]=en_outO[5] & bitO5[k-8] ? {fill_addrO5_reg,1'b1} : 37'bz;
+              assign fill_addr[k]=~bitO0[k-8]&~bitO1[k-8]&~bitO2[k-8]&~bitO3[k-8]&
+                  ~bitO4[k-8]&~bitO5[k-8] ? 37'b0 : 37'bz;
+              assign fill_en_way[k]=bitO0[k]|bitO1[k]|bitO2[k]|bitO3[k]|bitO4[k]|bitO5[k];
+              fill_match[k]=fill_match_o[k];
+              dmisscam_buf #(k) buf_mod(
+              clk,
+              rst,
+              fill_match[k],
+              fill_en_way[k],
+              fill_addr[k],
+              fill_st,
+              fill_match_o   [0],
+              fill_en_way_chk[0],
+              fill_addrO0_reg,
+              fill_match_o   [1],
+              fill_en_way_chk[1],
+              fill_addrO1_reg,
+              fill_match_o   [2],
+              fill_en_way_chk[2],
+              fill_addrO2_reg,
+              fill_match_o   [3],
+              fill_en_way_chk[3],
+              fill_addrO3_reg,
+              fill_match_o   [4],
+              fill_en_way_chk[4],
+              fill_addrO4_reg,
+              fill_match_o   [5],
+              fill_en_way_chk[5],
+              fill_addrO5_reg,
+              ins_en,
+              ins_req,
+	      ins_addr_o,
+              filled[k],
+              busy[k],
+              unlock
+              );
+          end
       end
   endgenerate
+  dm_alloc aE_mod(
+  busy,enE,en_outE,
+  bitE0,
+  bitE1,
+  bitE2,
+  bitE3,
+  bitE4,
+  bitE5);
+
+  dm_alloc aO_mod(
+  busy,enO,en_outO,
+  bitO0,
+  bitO1,
+  bitO2,
+  bitO3,
+  bitO4,
+  bitO5);
+  
   dm_cmp cmpO0_mod(
   fill_en0[1],
   fill_addrO0,
@@ -444,27 +561,27 @@ module dmisscam(
           fill_addrO5_reg<=0;
           fill_st5_reg<=0;
       end else begin
-          fill_en0_reg<=fill_en0;
+          fill_en0_reg<=fill_en0&{cmpEnO0,cmpEnE0};
           fill_addrE0_reg<=fill_addrE0;
           fill_addrO0_reg<=fill_addrO0;
           fill_st0_reg<=fill_st0;
-          fill_en1_reg<=fill_en1;
+          fill_en1_reg<=fill_en1&{cmpEnO1,cmpEnE1};
           fill_addrE1_reg<=fill_addrE1;
           fill_addrO1_reg<=fill_addrO1;
           fill_st1_reg<=fill_st1;
-          fill_en2_reg<=fill_en2;
+          fill_en2_reg<=fill_en2&{cmpEnO2,cmpEnE2};
           fill_addrE2_reg<=fill_addrE2;
           fill_addrO2_reg<=fill_addrO2;
           fill_st2_reg<=fill_st2;
-          fill_en3_reg<=fill_en3;
+          fill_en3_reg<=fill_en3&{cmpEnO3,cmpEnE3};
           fill_addrE3_reg<=fill_addrE3;
           fill_addrO3_reg<=fill_addrO3;
           fill_st3_reg<=fill_st3;
-          fill_en4_reg<=fill_en4;
+          fill_en4_reg<=fill_en4&{cmpEnO4,cmpEnE4};
           fill_addrE4_reg<=fill_addrE4;
           fill_addrO4_reg<=fill_addrO4;
           fill_st4_reg<=fill_st4;
-          fill_en5_reg<=fill_en5;
+          fill_en5_reg<=fill_en5&{cmpEnO5,cmpEnE5};
           fill_addrE5_reg<=fill_addrE5;
           fill_addrO5_reg<=fill_addrO5;
           fill_st5_reg<=fill_st5;
