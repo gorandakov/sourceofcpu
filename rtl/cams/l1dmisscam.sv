@@ -206,12 +206,12 @@ endmodule
 module dmisscam(
   clk,
   rst,
-  fill_en0,fill_addrE0,fill_addrO0,fill_st0,
-  fill_en1,fill_addrE1,fill_addrO1,fill_st1,
-  fill_en2,fill_addrE2,fill_addrO2,fill_st2,
-  fill_en3,fill_addrE3,fill_addrO3,fill_st3,
-  fill_en4,fill_addrE4,fill_addrO4,fill_st4,
-  fill_en5,fill_addrE5,fill_addrO5,fill_st5,
+  fill_en0,fill_addrE0,fill_addrO0,fill_st0,fill_dupl0,fill_sz0,fill_odd0,fill_io0,fill_split0,fill_bbank0,fill_low0,
+  fill_en1,fill_addrE1,fill_addrO1,fill_st1,fill_dupl1,fill_sz1,fill_odd1,fill_io1,fill_split1,fill_bbank1,fill_low1,
+  fill_en2,fill_addrE2,fill_addrO2,fill_st2,fill_dupl2,fill_sz2,fill_odd2,fill_io2,fill_split2,fill_bbank2,fill_low2,
+  fill_en3,fill_addrE3,fill_addrO3,fill_st3,fill_dupl3,fill_sz3,fill_odd3,fill_io3,fill_split3,fill_bbank3,fill_low3,
+  fill_en4,fill_addrE4,fill_addrO4,fill_st4,fill_dupl4,fill_sz4,fill_odd4,fill_io4,fill_split4,fill_bbank4,fill_low4,
+  fill_en5,fill_addrE5,fill_addrO5,fill_st5,fill_dupl5,fill_sz5,fill_odd5,fill_io5,fill_split5,fill_bbank5,fill_low5,
   read_en0,read_addr0,read_st0,read_req0,
   ins_en,
   ins_req,
@@ -236,6 +236,13 @@ module dmisscam(
   input [PADDR_WIDTH-9:0] fill_addrO0;
   input                      fill_st0;
   input [1:0]                fill_en1;
+  input                    fill_dupl0;
+  input [4:0]                fill_sz0;
+  input                     fill_odd0;
+  input                      fill_io0;
+  input                   fill_split0;
+  input [4:0]             fill_bbank0;
+  input [1:0]               fill_low0;
   input [PADDR_WIDTH-9:0] fill_addrE1;
   input [PADDR_WIDTH-9:0] fill_addrO1;
   input                      fill_st1;
@@ -266,6 +273,41 @@ module dmisscam(
   output reg locked;
   output begin_replay;
   input unlock;
+  input                    fill_dupl1;
+  input [4:0]                fill_sz1;
+  input                     fill_odd1;
+  input                      fill_io1;
+  input                   fill_split1;
+  input [4:0]             fill_bbank1;
+  input [1:0]               fill_low1;
+  input                    fill_dupl2;
+  input [4:0]                fill_sz2;
+  input                     fill_odd2;
+  input                      fill_io2;
+  input                   fill_split2;
+  input [4:0]             fill_bbank2;
+  input [1:0]               fill_low2;
+  input                    fill_dupl3;
+  input [4:0]                fill_sz3;
+  input                     fill_odd3;
+  input                      fill_io3;
+  input                   fill_split3;
+  input [4:0]             fill_bbank3;
+  input [1:0]               fill_low3;
+  input                    fill_dupl4;
+  input [4:0]                fill_sz4;
+  input                     fill_odd4;
+  input                      fill_io4;
+  input                   fill_split4;
+  input [4:0]             fill_bbank4;
+  input [1:0]               fill_low4;
+  input                    fill_dupl5;
+  input [4:0]                fill_sz5;
+  input                     fill_odd5;
+  input                      fill_io5;
+  input                   fill_split5;
+  input [4:0]             fill_bbank5;
+  input [1:0]               fill_low5;
 
   wire fill_match;
   wire [5:0][15:0] fill_match_o;

@@ -1485,6 +1485,38 @@ module missQ(
   wen|init
   );
 
+  dmisscam ms_mod(
+  clk,
+  rst,
+  {2{miss0}}&{mOp0_clHit}&{mOp0_odd_reg[3]|mOp0_split_reg[3],~mOp0_odd_reg[3]|mOp0_split_reg[3]},
+  mOp0_addrE_reg[3],mOp0_addrO_reg[3],mOp0_st_reg[3],mOp0_dupl_reg[3],mOp0_sz_reg[3],
+  mOp0_odd_reg[3],mOp0_io_reg[3],mOp0_split_reg[3],mOp0_bank0_reg[3],mOp0_low_reg[3],
+  {2{miss1}}&{mOp1_clHit}&{mOp1_odd_reg[3]|mOp1_split_reg[3],~mOp1_odd_reg[3]|mOp1_split_reg[3]},
+  mOp1_addrE_reg[3],mOp1_addrO_reg[3],mOp1_st_reg[3],mOp1_dupl_reg[3],mOp1_sz_reg[3],
+  mOp1_odd_reg[3],mOp1_io_reg[3],mOp1_split_reg[3],mOp1_bank0_reg[3],mOp1_low_reg[3],
+  {2{miss2}}&{mOp2_clHit}&{mOp2_odd_reg[3]|mOp2_split_reg[3],~mOp2_odd_reg[3]|mOp2_split_reg[3]},
+  mOp2_addrE_reg[3],mOp2_addrO_reg[3],mOp2_st_reg[3],mOp2_dupl_reg[3],mOp2_sz_reg[3],
+  mOp2_odd_reg[3],mOp2_io_reg[3],mOp2_split_reg[3],mOp2_bank0_reg[3],mOp2_low_reg[3],
+  {2{miss3}}&{mOp3_clHit}&{mOp3_odd_reg[3]|mOp3_split_reg[3],~mOp3_odd_reg[3]|mOp3_split_reg[3]},
+  mOp3_addrE_reg[3],mOp3_addrO_reg[3],mOp3_st_reg[3],mOp3_dupl_reg[3],mOp3_sz_reg[3],
+  mOp3_odd_reg[3],mOp3_io_reg[3],mOp3_split_reg[3],mOp3_bank0_reg[3],mOp3_low_reg[3],
+  {2{miss4}}&{mOp4_clHit}&{mOp4_odd_reg[3]|mOp4_split_reg[3],~mOp4_odd_reg[3]|mOp4_split_reg[3]},
+  mOp4_addrE_reg[3],mOp4_addrO_reg[3],mOp4_st_reg[3],mOp4_dupl_reg[3],mOp4_sz_reg[3],
+  mOp4_odd_reg[3],mOp4_io_reg[3],mOp4_split_reg[3],mOp4_bank0_reg[3],mOp4_low_reg[3],
+  {2{miss5}}&{mOp5_clHit}&{mOp5_odd_reg[3]|mOp5_split_reg[3],~mOp5_odd_reg[3]|mOp5_split_reg[3]},
+  mOp5_addrE_reg[3],mOp5_addrO_reg[3],mOp5_st_reg[3],mOp5_dupl_reg[3],mOp5_sz_reg[3],
+  mOp5_odd_reg[3],mOp5_io_reg[3],mOp5_split_reg[3],mOp5_bank0_reg[3],mOp5_low_reg[3],
+  read_en0,read_addr0,read_st0,read_req0,
+  ins_en,
+  ins_req,
+  ins_addr_o,
+  has_free,
+  fill_match,
+  locked,
+  begin_replay,
+  unlock
+  );
+
   assign doStep=now_flushing&~alt_bus_hold || ((curConfl==6'b0001 || curConfl==6'b0010 || curConfl==6'b0100 || curConfl==6'b1000 ||
     curConfl==6'b10000 || curConfl==6'b100000 || curConfl==0) && read_clkEn && ~rdwr_match2 && count);
  
