@@ -396,18 +396,14 @@ module missQ(
   mOp_noBanks_o,//
   mOp_write_clear,
   mOpR_en,
-  mOpR_addrEven,
-  mOpR_addrOdd,
+  mOpR_addr,
   mOpR_sz,
   mOpR_st,
-  //mOpR_first,
-  //mOpR_banks,
   mOpR_bank0,
   mOpR_io,//
   mOpR_odd,
   mOpR_addr_low,
   mOpR_split,
-  mOpR_clHit,
   mOpR_dupl,
   rdwr_match2,
   alt_bus_hold,
@@ -717,18 +713,14 @@ module missQ(
   output mOp_write_clear;
 
   output mOpR_en;
-  output [PADDR_WIDTH-1:8] mOpR_addrEven;
-  output [PADDR_WIDTH-1:8] mOpR_addrOdd;
+  output [PADDR_WIDTH-1:7] mOpR_addr;
   output [4:0] mOpR_sz;
   output mOpR_st;
- // output mOpR_first;
- // output [BANK_COUNT-1:0] mOpR_banks;
   output [4:0] mOpR_bank0;
   output mOpR_odd;
   output [1:0] mOpR_addr_low;
   output mOpR_split;
-  output [1:0] mOpR_clHit;
-  output [1:0] mOpR_dupl;
+  output mOpR_dupl;
   output mOpR_io;
   output rdwr_match2;
   input alt_bus_hold;
@@ -1506,7 +1498,7 @@ module missQ(
   {2{miss5}}&{mOp5_clHit}&{mOp5_odd_reg[3]|mOp5_split_reg[3],~mOp5_odd_reg[3]|mOp5_split_reg[3]},
   mOp5_addrE_reg[3],mOp5_addrO_reg[3],mOp5_st_reg[3],mOp5_dupl_reg[3],mOp5_sz_reg[3],
   mOp5_odd_reg[3],mOp5_io_reg[3],mOp5_split_reg[3],mOp5_bank0_reg[3],mOp5_low_reg[3],
-  read_en0,read_addr0,read_st0,read_req0,
+  mOpR_en,mOpR_addr,mOpR_st,mOpR_req,mOpR_dupl,mOpR_sz,mOpR_odd,mOpR_io,mOpR_split,mOpR_bank0,mOpR_low,
   ins_en,
   ins_req,
   ins_addr_o,
