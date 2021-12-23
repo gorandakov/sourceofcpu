@@ -66,6 +66,13 @@ module dmisscam_buf(
   input fill_en;
   input [PADDR_WIDTH-8:0] fill_addr;
   input fill_st;
+  input fill_dupl;
+  input [4:0] fill_sz;
+  input fill_odd;
+  input fill_io;
+  input fill_split;
+  input [4:0] fill_bbank;
+  input [1:0] fill_low;
   output               fill_match_o0;
   input                     fill_en0;
   input [PADDR_WIDTH-8:0] fill_addr0;
@@ -84,6 +91,16 @@ module dmisscam_buf(
   output               fill_match_o5;
   input                     fill_en5;
   input [PADDR_WIDTH-8:0] fill_addr5;
+  output read_en;
+  output [PADDR_WIDTH-8:0] read_addr;
+  output read_st;
+  output read_dupl;
+  output [4:0] read_sz;
+  output read_odd;
+  output read_io;
+  output read_split;
+  output [4:0] read_bbank;
+  output [1:0] read_low;
   input ins_en;
   input [3:0] ins_req;
   output [PADDR_WIDTH-8:0] ins_addr_o;
@@ -96,6 +113,14 @@ module dmisscam_buf(
   reg [INDEX_WIDTH-1:0] wrin;
   reg [2:0] steps;
   reg stepin;
+  //reg st;
+  reg dupl;
+  reg [4:0] sz;
+  reg odd;
+  reg io;
+  reg split;
+  reg [4:0] bbank;
+  reg [1:0] low;
   
   assign fill_match_o0=fill_addr0==addr && busy && fill_en0;
   assign fill_match_o1=fill_addr1==addr && busy && fill_en1;
@@ -106,6 +131,16 @@ module dmisscam_buf(
  
   assign ins_addr_o=(ins_en && ins_req==REQ) ? addr : 37'bz;
 
+  assign read_addr=read_en ? addr : 37'bz;
+  assign read_sz=read_en ? sz : 5'bz;
+  assign read_odd=read_en ? odd : 1'bz;
+  assign read_dupl=read_en ? dupl : 1'bz;
+  assign read_low=read_en ? low : 2'bz;
+  assign read_split=read_en ? split : 1'bz;
+  assign read_bbank=read_en ? bbank : 5'bz;
+  assign read_io=read_en ? io : 1'bz;
+  assign read_st=read_en ? store : 1'bz;
+
   always @(posedge clk) begin
       if (rst) begin
           filled<=1'b0;
@@ -115,11 +150,25 @@ module dmisscam_buf(
           wrin<={INDEX_WIDTH{1'B0}};
           steps<=3'b0;
           stepin<=1'b0;
+          dupl<=1'b0;
+          sz<=5'b0;
+          odd<=1'b0;
+          io<=1'b0;
+          split<=1'b0;
+          bbank<=5'b0;
+          low<=2'b0;
       end else if (fill_en && ~fill_match) begin
           filled<=1'b1;
           busy<=1'b1;
           addr<=fill_addr;
           store<=fill_st;
+          dupl<=fill_dupl;
+          sz<=fill_sz;
+          odd<=fill_odd;
+          io<=fill_io;
+          split<=fill_split;
+          bbank<=fill_bbank;
+          low<=fill_low;
       end else begin
           if (ins_en && ins_req==REQ) begin
               filled<=1'b0;
