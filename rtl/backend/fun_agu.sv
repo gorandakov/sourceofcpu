@@ -705,8 +705,7 @@ module agu_block(
   
   wire mOpR_en;
   reg mOpR_en_reg;
-  wire [35:0] mOpR_addrEven;
-  wire [35:0] mOpR_addrOdd;
+  wire [36:0] mOpR_addr;
   wire [4:0]  mOpR_sz;
   wire mOpR_st;
 //  mOpR_first,
@@ -716,8 +715,7 @@ module agu_block(
   wire mOpR_odd;
   wire [1:0] mOpR_addr_low;
   wire mOpR_split;
-  wire [1:0] mOpR_clHit;
-  wire [1:0] mOpR_dupl;
+  wire mOpR_dupl;
   wire mOpR_stall;
  
   wire p0_conflict;
@@ -2399,18 +2397,15 @@ module agu_block(
   mOp_noBanks_o,
   mOp_write_clear,
   mOpR_en,
-  mOpR_addrEven,
-  mOpR_addrOdd,
+  mOpR_addr,
   mOpR_sz,
+  mOpR_req,
   mOpR_st,
-//  mOpR_first,
-//  mOpR_banks,
   mOpR_bank0,
   mOpR_io,
   mOpR_odd,
   mOpR_addr_low,
   mOpR_split,
-  mOpR_clHit,
   mOpR_dupl,
   mOpR_stall,
   alt_bus_hold_reg,
@@ -2426,7 +2421,8 @@ module agu_block(
   p2_adata_reg,p2_en,p2_repl,
   p3_adata_reg,p3_en,p3_repl,
   msi_exp_addr,msi_en,msi_out_clear);
-  
+ 
+/* 
   dmisscam mcam_mod(
   .clk(clk),
   .rst(rst),
@@ -2444,7 +2440,7 @@ module agu_block(
   .begin_replay(mcam_replay),
   .unlock(miss_unlock)
   );
-
+*/
   assign alt_bus_hold=insert_isData_reg2;
   assign alt_bus_addr=insBus_addr_reg2;
 
@@ -3080,15 +3076,15 @@ module agu_block(
 	  reqBus_bank0<=5'd0;
 	  reqBus_io<=1'b0;
       end else begin
-          reqBus_en<=mcam_do_req;
-          reqBus_req<={BUS_ID,1'b0,mcam_req};
-          reqBus_addr<=mcam_addr_reg;
-          reqBus_want_excl<=mcam_st_reg;
-          reqBus_dupl<=mcam_cldupl_reg;
-	  reqBus_sz<=mcam_sz_reg;
-	  reqBus_low<=mcam_low_reg;
-	  reqBus_bank0<=mcam_bank0_reg;
-	  reqBus_io<=mcam_io_reg;
+          reqBus_en<=mOpR_en;
+          reqBus_req<={BUS_ID,1'b0,mOpR_req};
+          reqBus_addr<=mOpR_addr;
+          reqBus_want_excl<=mOpR_st;
+          reqBus_dupl<=mOpR_dupl;
+	  reqBus_sz<=mOpR_sz;
+	  reqBus_low<=mOpR_addr_low;
+	  reqBus_bank0<=mOpR_bank0_reg;
+	  reqBus_io<=mOpR_io_reg;
       end
 
       if (rst) begin
