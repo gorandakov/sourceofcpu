@@ -868,7 +868,7 @@ module dmisscam(
 
   assign cmpEnE5=fill_en5[0];
  
-  assign fill_en_way=first & {16{fill_en&~locked&~begin_replay}};
+  assign fill_en=fill_en_way;
   assign fill_match=|fill_match_o;
   assign has_free=found;
  // assign fill_req=read_en!=16'b0 ? 4'bz : 4'b0;

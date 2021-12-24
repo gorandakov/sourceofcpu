@@ -1482,7 +1482,7 @@ module missQ(
   ,//has_free
   locked,
   last_inserted,
-  do_unlock
+  begin_flush
   );
 
   assign doStep=now_flushing&~alt_bus_hold;
