@@ -266,6 +266,48 @@ module instrQ_box(
   reg [5:0] read_en8;
   reg [5:0] read_en9;
   
+  wire [WIDTH-1:0] read_instr0x;
+  wire [OTHER-1:0] read_other0x;
+  wire [WIDTH-1:0] read_instr1x;
+  wire [OTHER-1:0] read_other1x;
+  wire [WIDTH-1:0] read_instr2x;
+  wire [OTHER-1:0] read_other2x;
+  wire [WIDTH-1:0] read_instr3x;
+  wire [OTHER-1:0] read_other3x;
+  wire [WIDTH-1:0] read_instr4x;
+  wire [OTHER-1:0] read_other4x;
+  wire [WIDTH-1:0] read_instr5x;
+  wire [OTHER-1:0] read_other5x;
+  wire [WIDTH-1:0] read_instr6x;
+  wire [OTHER-1:0] read_other6x;
+  wire [WIDTH-1:0] read_instr7x;
+  wire [OTHER-1:0] read_other7x;
+  wire [WIDTH-1:0] read_instr8x;
+  wire [OTHER-1:0] read_other8x;
+  wire [WIDTH-1:0] read_instr9x;
+  wire [OTHER-1:0] read_other9x;
+  
+  wire [WIDTH-1:0] read_instr0y;
+  wire [OTHER-1:0] read_other0y;
+  wire [WIDTH-1:0] read_instr1y;
+  wire [OTHER-1:0] read_other1y;
+  wire [WIDTH-1:0] read_instr2y;
+  wire [OTHER-1:0] read_other2y;
+  wire [WIDTH-1:0] read_instr3y;
+  wire [OTHER-1:0] read_other3y;
+  wire [WIDTH-1:0] read_instr4y;
+  wire [OTHER-1:0] read_other4y;
+  wire [WIDTH-1:0] read_instr5y;
+  wire [OTHER-1:0] read_other5y;
+  wire [WIDTH-1:0] read_instr6y;
+  wire [OTHER-1:0] read_other6y;
+  wire [WIDTH-1:0] read_instr7y;
+  wire [OTHER-1:0] read_other7y;
+  wire [WIDTH-1:0] read_instr8y;
+  wire [OTHER-1:0] read_other8y;
+  wire [WIDTH-1:0] read_instr9y;
+  wire [OTHER-1:0] read_other9y;
+  
   
   integer k;
   generate
