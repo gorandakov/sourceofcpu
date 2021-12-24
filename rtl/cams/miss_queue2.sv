@@ -126,11 +126,11 @@ module missQ(
   rst,
   except,
   excpt_thread,
-  read_clkEn,
-  last_inserted,
+//  read_clkEn,
+//  last_inserted,
   doSkip,
   do_bus_hold,
-  do_unlock,
+//  do_unlock,
   nowfl,
   WB_fwd,
   mOpW_brdread,
@@ -430,11 +430,11 @@ module missQ(
   input rst;
   input except;
   input excpt_thread;
-  input read_clkEn;
-  input last_inserted;
+  wire read_clkEn;
+  wire last_inserted;
   output reg doSkip;
   output do_bus_hold;
-  output reg do_unlock;
+  reg do_unlock;
   output nowfl;
   
   input [2:0] WB_fwd;
