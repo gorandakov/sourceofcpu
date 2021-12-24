@@ -2129,7 +2129,7 @@ module agu_block(
   except,
   1'b0,
   insert_isData,
-  insBus_req,
+  insBus_req[3:0],
   insBus_addr,
  // miss_next,
  // mcam_replay,

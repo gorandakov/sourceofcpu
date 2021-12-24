@@ -29,7 +29,7 @@ module instrQ_buf(
   
   input clk;
   input rst;
-  input [11:0] write_instrEn;
+  input [5:0] write_instrEn;
   input write_thread;
   input write_wen;
   input [WADDR_WIDTH-1:0] write_addr0;
@@ -321,7 +321,10 @@ module instrQ_box(
               instrQ_buf #(l+m*8,l==0) buf0_mod(
               clk,
               rst,
-              write_instrEn[5:0],
+              //write_instrEn[5:0],
+	      write_addr0[0] ? 
+	          {write_instrEn[11],write_instrEn[9],write_instrEn[7],write_instrEn[5],write_instrEn[3],write_instrEn[1]} :
+	          {write_instrEn[10],write_instrEn[8],write_instrEn[6],write_instrEn[4],write_instrEn[2],write_instrEn[0]},
               write_thread,
               write_wen,
               write_addr0[0] ? write_addr1 : write_addr0,
@@ -354,7 +357,9 @@ module instrQ_box(
 	      instrQ_buf #(l+m*8+1,l==1) buf1_mod(
               clk,
               rst,
-              write_instrEn[11:6],
+	      ~write_addr0[0] ? 
+	          {write_instrEn[11],write_instrEn[9],write_instrEn[7],write_instrEn[5],write_instrEn[3],write_instrEn[1]} :
+	          {write_instrEn[10],write_instrEn[8],write_instrEn[6],write_instrEn[4],write_instrEn[2],write_instrEn[0]},
               write_thread,
               write_wen,
               ~write_addr0[0] ? write_addr1 : write_addr0,

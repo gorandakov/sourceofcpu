@@ -400,7 +400,9 @@ module dmisscam(
   wire [15:0] [1:0]       fill_low;
   wire [15:0][36:0]       fill_addr;
   wire [15:0] fill_en;
-  
+ 
+  wire [15:0] read_en_way;
+
   reg started;
   
   wire [5:0] en_outE;
@@ -484,6 +486,8 @@ module dmisscam(
   reg                   fill_split5_reg;
   reg [4:0]             fill_bbank5_reg;
   reg [1:0]               fill_low5_reg;
+  
+  reg [15:0] pwned;
   
   wire [5:0] enE;
   wire [5:0] enO;  
@@ -867,7 +871,7 @@ module dmisscam(
   assign fill_en_way=first & {16{fill_en&~locked&~begin_replay}};
   assign fill_match=|fill_match_o;
   assign has_free=found;
-  assign fill_req=read_en!=16'b0 ? 4'bz : 4'b0;
+ // assign fill_req=read_en!=16'b0 ? 4'bz : 4'b0;
   assign ins_addr_o=ins_en ? 37'bz : 37'b0;
   
   assign begin_replay=started & ~(|filled);
@@ -875,7 +879,7 @@ module dmisscam(
   assign enE={fill_en5_reg[0],fill_en4_reg[0],fill_en3_reg[0],fill_en2_reg[0],fill_en1_reg[0],fill_en0_reg[0]};
   assign enO={fill_en5_reg[1],fill_en4_reg[1],fill_en3_reg[1],fill_en2_reg[1],fill_en1_reg[1],fill_en0_reg[1]};
   
-  bit_find_first_bit #(16) first_mod(busy&filled&~pwned,read_en_way);
+  bit_find_first_bit #(16) first_mod(busy&filled&~pwned,read_en_way,read_en);
 
   assign found=busy!=16'hffff;
   
@@ -884,7 +888,7 @@ module dmisscam(
       else locked<=locked|~found|begin_replay && ~unlock;
       if (rst) started<=1'b0;
       else if (begin_replay) started<=1'b0;
-      else if (fill_en&~locked) started<=1'b1;
+      else if ((|fill_en)&~locked) started<=1'b1;
       if (rst) begin
 	  pwned<=16'b0;
       end else begin
