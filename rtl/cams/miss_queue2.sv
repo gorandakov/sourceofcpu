@@ -128,6 +128,9 @@ module missQ(
   excpt_thread,
 //  read_clkEn,
 //  last_inserted,
+  insert_isData,
+  insBus_req,
+  insBus_addr,
   doSkip,
   do_bus_hold,
 //  do_unlock,
@@ -430,6 +433,9 @@ module missQ(
   input rst;
   input except;
   input excpt_thread;
+  input insert_isData;
+  input [3:0] insBus_req;
+  output [36:0] insBus_addr;
   wire read_clkEn;
   wire last_inserted;
   output reg doSkip;
@@ -928,6 +934,7 @@ module missQ(
   wire [1:0] mOp4_dupl_dummy;
   wire [1:0] mOp5_dupl_dummy;
 
+  assign read_clkEn=1'b1;
   assign write_dataA={miss1&~thrreginh[3][1],miss0&~thrreginh[3][0],write_mop[1],write_mop[0]}&{DATA_WIDTH{~init}};
   assign write_dataB={miss3&~thrreginh[3][3],miss2&~thrreginh[3][2],write_mop[3],write_mop[2]}&{DATA_WIDTH{~init}};
   assign write_dataC={miss5&~thrreginh[3][5],miss4&~thrreginh[3][4],write_mop[5],write_mop[4]}&{DATA_WIDTH{~init}};
@@ -991,7 +998,7 @@ module missQ(
   assign mOp0_odd_o=~now_flushing & ~alt_bus_hold & ~WB_fwd[0] ? mOp0_odd : 1'bz;
   assign mOp0_odd_o=alt_bus_hold && ~WB_fwd[0]? alt_bus_addr[0] : 1'bz;
   assign mOp0_odd_o=WB_fwd[0] ? mOpW_odd : 1'bz;
-  assign mOp0_banks_o=now_flushing && ~WB_fwd[0] ?    rbanks[0] : 32'bz;
+  assign mOp0_banks_o=now_flushing && ~WB_fwd[0] ?    rdbanks[0] : 32'bz;
   assign mOp0_banks_o=alt_bus_hold && ~WB_fwd[0] ? 32'b0 : 32'bz;
   assign mOp0_banks_o=~now_flushing & ~alt_bus_hold & ~WB_fwd[0] ? mOp0_banks : 32'bz;
   assign mOp0_banks_o=WB_fwd[0] ? mOpW_banks : 32'bz;
@@ -1365,7 +1372,7 @@ module missQ(
  
   assign curConfl=read_confl&confl_mask;
 
-  assign rdwr_match2=read_addr=write_addr_end;
+  assign rdwr_match2=read_addr==write_addr_end;
   assign rdwr_match=countF==5'd1;
   assign flush_end=rdwr_match && now_flushing;
 
@@ -1451,36 +1458,34 @@ module missQ(
   clk,
   rst,
   {2{miss0}}&{mOp0_clHit}&{mOp0_odd_reg[3]|mOp0_split_reg[3],~mOp0_odd_reg[3]|mOp0_split_reg[3]},
-  mOp0_addrE_reg[3],mOp0_addrO_reg[3],mOp0_st_reg[3],mOp0_dupl_reg[3],mOp0_sz_reg[3],
-  mOp0_odd_reg[3],mOp0_io_reg[3],mOp0_split_reg[3],mOp0_bank0_reg[3],mOp0_low_reg[3],
+  mOp0_addrEven_reg[3],mOp0_addrOdd_reg[3],mOp0_st_reg[3],2'b0,mOp0_sz_reg[3],
+  mOp0_odd_reg[3],mOp0_ctype_reg[3]==2'b10,mOp0_split_reg[3],mOp0_bank0_reg[3],mOp0_addr_low_reg[3],
   {2{miss1}}&{mOp1_clHit}&{mOp1_odd_reg[3]|mOp1_split_reg[3],~mOp1_odd_reg[3]|mOp1_split_reg[3]},
-  mOp1_addrE_reg[3],mOp1_addrO_reg[3],mOp1_st_reg[3],mOp1_dupl_reg[3],mOp1_sz_reg[3],
-  mOp1_odd_reg[3],mOp1_io_reg[3],mOp1_split_reg[3],mOp1_bank0_reg[3],mOp1_low_reg[3],
+  mOp1_addrEven_reg[3],mOp1_addrOdd_reg[3],mOp1_st_reg[3],2'b0,mOp1_sz_reg[3],
+  mOp1_odd_reg[3],mOp1_ctype_reg[3]==2'b10,mOp1_split_reg[3],mOp1_bank0_reg[3],mOp1_addr_low_reg[3],
   {2{miss2}}&{mOp2_clHit}&{mOp2_odd_reg[3]|mOp2_split_reg[3],~mOp2_odd_reg[3]|mOp2_split_reg[3]},
-  mOp2_addrE_reg[3],mOp2_addrO_reg[3],mOp2_st_reg[3],mOp2_dupl_reg[3],mOp2_sz_reg[3],
-  mOp2_odd_reg[3],mOp2_io_reg[3],mOp2_split_reg[3],mOp2_bank0_reg[3],mOp2_low_reg[3],
+  mOp2_addrEven_reg[3],mOp2_addrOdd_reg[3],mOp2_st_reg[3],2'b0,mOp2_sz_reg[3],
+  mOp2_odd_reg[3],mOp2_ctype_reg[3]==2'b10,mOp2_split_reg[3],mOp2_bank0_reg[3],mOp2_addr_low_reg[3],
   {2{miss3}}&{mOp3_clHit}&{mOp3_odd_reg[3]|mOp3_split_reg[3],~mOp3_odd_reg[3]|mOp3_split_reg[3]},
-  mOp3_addrE_reg[3],mOp3_addrO_reg[3],mOp3_st_reg[3],mOp3_dupl_reg[3],mOp3_sz_reg[3],
-  mOp3_odd_reg[3],mOp3_io_reg[3],mOp3_split_reg[3],mOp3_bank0_reg[3],mOp3_low_reg[3],
+  mOp3_addrEven_reg[3],mOp3_addrOdd_reg[3],mOp3_st_reg[3],2'b0,mOp3_sz_reg[3],
+  mOp3_odd_reg[3],mOp3_ctype_reg[3]==2'b10,mOp3_split_reg[3],mOp3_bank0_reg[3],mOp3_addr_low_reg[3],
   {2{miss4}}&{mOp4_clHit}&{mOp4_odd_reg[3]|mOp4_split_reg[3],~mOp4_odd_reg[3]|mOp4_split_reg[3]},
-  mOp4_addrE_reg[3],mOp4_addrO_reg[3],mOp4_st_reg[3],mOp4_dupl_reg[3],mOp4_sz_reg[3],
-  mOp4_odd_reg[3],mOp4_io_reg[3],mOp4_split_reg[3],mOp4_bank0_reg[3],mOp4_low_reg[3],
+  mOp4_addrEven_reg[3],mOp4_addrOdd_reg[3],1'b1,mOp4_dupl,mOp4_sz_reg[3],
+  mOp4_odd_reg[3],mOp4_ctype_reg[3]==2'b10,mOp4_split_reg[3],mOp4_bank0_reg[3],mOp4_addr_low_reg[3],
   {2{miss5}}&{mOp5_clHit}&{mOp5_odd_reg[3]|mOp5_split_reg[3],~mOp5_odd_reg[3]|mOp5_split_reg[3]},
-  mOp5_addrE_reg[3],mOp5_addrO_reg[3],mOp5_st_reg[3],mOp5_dupl_reg[3],mOp5_sz_reg[3],
-  mOp5_odd_reg[3],mOp5_io_reg[3],mOp5_split_reg[3],mOp5_bank0_reg[3],mOp5_low_reg[3],
-  mOpR_en,mOpR_addr,mOpR_st,mOpR_req,mOpR_dupl,mOpR_sz,mOpR_odd,mOpR_io,mOpR_split,mOpR_bank0,mOpR_low,
-  ins_en,
-  ins_req,
-  ins_addr_o,
-  has_free,
-  fill_match,
+  mOp5_addrEven_reg[3],mOp5_addrOdd_reg[3],1'b1,mOp5_dupl,mOp5_sz_reg[3],
+  mOp5_odd_reg[3],mOp5_ctype_reg[3]==2'b10,mOp5_split_reg[3],mOp5_bank0_reg[3],mOp5_addr_low_reg[3],
+  mOpR_en,mOpR_addr,mOpR_st,mOpR_req,mOpR_dupl,mOpR_sz,mOpR_odd,mOpR_io,mOpR_split,mOpR_bank0,mOpR_addr_low,
+  insert_isData,
+  insBus_req[3:0],
+  insBus_addr,
+  ,//has_free
   locked,
-  begin_replay,
-  unlock
+  last_inserted,
+  do_unlock
   );
 
-  assign doStep=now_flushing&~alt_bus_hold || ((curConfl==6'b0001 || curConfl==6'b0010 || curConfl==6'b0100 || curConfl==6'b1000 ||
-    curConfl==6'b10000 || curConfl==6'b100000 || curConfl==0) && read_clkEn && ~rdwr_match2 && count);
+  assign doStep=now_flushing&~alt_bus_hold;
  
   always @* begin
       stepOver4=read_mop[4][`mOp1_low]!=2'd0;

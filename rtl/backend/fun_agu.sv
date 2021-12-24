@@ -704,6 +704,7 @@ module agu_block(
   reg [`lsfxdata_width-1:0] lso_xdataA_reg;
   
   wire mOpR_en;
+  wire [3:0] mOpR_req;
   reg mOpR_en_reg;
   wire [36:0] mOpR_addr;
   wire [4:0]  mOpR_sz;
@@ -2106,7 +2107,7 @@ module agu_block(
   assign wr1_data=mOpY5_data_o_reg3;
   assign wr1_pbit=mOpY5_pbit_o_reg3;
   assign wr1_d128=mOpY5_d128_o_reg3;
-  
+ /* 
   assign miss_clDo[0]=mOpR_en && ~mOpR_clHit[0] && ~miss_doneEven && ~mOpR_odd|mOpR_split;
   assign miss_clDo[1]=mOpR_en && ~mOpR_clHit[1] && ~miss_doneOdd &&  mOpR_odd|mOpR_split;
   
@@ -2120,13 +2121,16 @@ module agu_block(
   assign miss_next=!(&miss_clDo) && mcam_hasfree;
   
   assign mcam_do_req=mOpR_en_reg&&~mcam_locked&&~mcam_dupl&&~mcam_replay;
-
+*/
 
   missQ memmiss(
   clk,
   rst,
   except,
   1'b0,
+  insert_isData,
+  insBus_req,
+  insBus_addr,
  // miss_next,
  // mcam_replay,
   miss_pause_agu,//??
@@ -3083,8 +3087,8 @@ module agu_block(
           reqBus_dupl<=mOpR_dupl;
 	  reqBus_sz<=mOpR_sz;
 	  reqBus_low<=mOpR_addr_low;
-	  reqBus_bank0<=mOpR_bank0_reg;
-	  reqBus_io<=mOpR_io_reg;
+	  reqBus_bank0<=mOpR_bank0;
+	  reqBus_io<=mOpR_io;
       end
 
       if (rst) begin

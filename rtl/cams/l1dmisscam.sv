@@ -278,12 +278,12 @@ module dmisscam(
   fill_en3,fill_addrE3,fill_addrO3,fill_st3,fill_dupl3,fill_sz3,fill_odd3,fill_io3,fill_split3,fill_bbank3,fill_low3,
   fill_en4,fill_addrE4,fill_addrO4,fill_st4,fill_dupl4,fill_sz4,fill_odd4,fill_io4,fill_split4,fill_bbank4,fill_low4,
   fill_en5,fill_addrE5,fill_addrO5,fill_st5,fill_dupl5,fill_sz5,fill_odd5,fill_io5,fill_split5,fill_bbank5,fill_low5,
-  read_en0,read_addr0,read_st0,read_req0,
+  read_en,read_addr,read_st,read_req,read_dupl,read_sz,read_odd,read_io,read_split,read_bbank,read_low,
   ins_en,
   ins_req,
   ins_addr_o,
   has_free,
-  fill_match,
+ // fill_match,
   locked,
   begin_replay,
   unlock
@@ -302,7 +302,7 @@ module dmisscam(
   input [PADDR_WIDTH-9:0] fill_addrO0;
   input                      fill_st0;
   input [1:0]                fill_en1;
-  input                    fill_dupl0;
+  input [1:0]              fill_dupl0;
   input [4:0]                fill_sz0;
   input                     fill_odd0;
   input                      fill_io0;
@@ -346,35 +346,35 @@ module dmisscam(
   output reg locked;
   output begin_replay;
   input unlock;
-  input                    fill_dupl1;
+  input [1:0]              fill_dupl1;
   input [4:0]                fill_sz1;
   input                     fill_odd1;
   input                      fill_io1;
   input                   fill_split1;
   input [4:0]             fill_bbank1;
   input [1:0]               fill_low1;
-  input                    fill_dupl2;
+  input [1:0]              fill_dupl2;
   input [4:0]                fill_sz2;
   input                     fill_odd2;
   input                      fill_io2;
   input                   fill_split2;
   input [4:0]             fill_bbank2;
   input [1:0]               fill_low2;
-  input                    fill_dupl3;
+  input [1:0]              fill_dupl3;
   input [4:0]                fill_sz3;
   input                     fill_odd3;
   input                      fill_io3;
   input                   fill_split3;
   input [4:0]             fill_bbank3;
   input [1:0]               fill_low3;
-  input                    fill_dupl4;
+  input [1:0]              fill_dupl4;
   input [4:0]                fill_sz4;
   input                     fill_odd4;
   input                      fill_io4;
   input                   fill_split4;
   input [4:0]             fill_bbank4;
   input [1:0]               fill_low4;
-  input                    fill_dupl5;
+  input [1:0]              fill_dupl5;
   input [4:0]                fill_sz5;
   input                     fill_odd5;
   input                      fill_io5;
@@ -390,8 +390,33 @@ module dmisscam(
   
   wire [15:0] first;
   wire found;
+  wire[15:0]              fill_dupl;
+  wire [15:0] [4:0]       fill_sz;
+  wire[15:0]              fill_odd;
+  wire[15:0]              fill_io;
+  wire[15:0]              fill_st;
+  wire[15:0]              fill_split;
+  wire [15:0] [4:0]       fill_bbank;
+  wire [15:0] [1:0]       fill_low;
+  wire [15:0][36:0]       fill_addr;
+  wire [15:0] fill_en;
   
   reg started;
+  
+  wire [5:0] en_outE;
+  wire [5:0] en_outO;
+  wire [7:0] bitE0;
+  wire [7:0] bitE1;
+  wire [7:0] bitE2;
+  wire [7:0] bitE3;
+  wire [7:0] bitE4;
+  wire [7:0] bitE5;
+  wire [7:0] bitO0;
+  wire [7:0] bitO1;
+  wire [7:0] bitO2;
+  wire [7:0] bitO3;
+  wire [7:0] bitO4;
+  wire [7:0] bitO5;
   
   reg [1:0]                fill_en0_reg;
   reg [PADDR_WIDTH-9:0] fill_addrE0_reg;
@@ -417,6 +442,48 @@ module dmisscam(
   reg [PADDR_WIDTH-9:0] fill_addrE5_reg;
   reg [PADDR_WIDTH-9:0] fill_addrO5_reg;
   reg                      fill_st5_reg;
+  reg [1:0]              fill_dupl0_reg;
+  reg [4:0]                fill_sz0_reg;
+  reg                     fill_odd0_reg;
+  reg                      fill_io0_reg;
+  reg                   fill_split0_reg;
+  reg [4:0]             fill_bbank0_reg;
+  reg [1:0]               fill_low0_reg;
+  reg [1:0]              fill_dupl1_reg;
+  reg [4:0]                fill_sz1_reg;
+  reg                     fill_odd1_reg;
+  reg                      fill_io1_reg;
+  reg                   fill_split1_reg;
+  reg [4:0]             fill_bbank1_reg;
+  reg [1:0]               fill_low1_reg;
+  reg [1:0]              fill_dupl2_reg;
+  reg [4:0]                fill_sz2_reg;
+  reg                     fill_odd2_reg;
+  reg                      fill_io2_reg;
+  reg                   fill_split2_reg;
+  reg [4:0]             fill_bbank2_reg;
+  reg [1:0]               fill_low2_reg;
+  reg [1:0]              fill_dupl3_reg;
+  reg [4:0]                fill_sz3_reg;
+  reg                     fill_odd3_reg;
+  reg                      fill_io3_reg;
+  reg                   fill_split3_reg;
+  reg [4:0]             fill_bbank3_reg;
+  reg [1:0]               fill_low3_reg;
+  reg [1:0]              fill_dupl4_reg;
+  reg [4:0]                fill_sz4_reg;
+  reg                     fill_odd4_reg;
+  reg                      fill_io4_reg;
+  reg                   fill_split4_reg;
+  reg [4:0]             fill_bbank4_reg;
+  reg [1:0]               fill_low4_reg;
+  reg [1:0]              fill_dupl5_reg;
+  reg [4:0]                fill_sz5_reg;
+  reg                     fill_odd5_reg;
+  reg                      fill_io5_reg;
+  reg                   fill_split5_reg;
+  reg [4:0]             fill_bbank5_reg;
+  reg [1:0]               fill_low5_reg;
   
   wire [5:0] enE;
   wire [5:0] enO;  
@@ -481,12 +548,12 @@ module dmisscam(
               assign fill_split[k]=en_outE[5] & bitE5[k] ? fill_split5_reg : 1'bz;
               assign fill_split[k]=~bitE0[k]&~bitE1[k]&~bitE2[k]&~bitE3[k]&~bitE4[k]&~bitE5[k] ? 1'b0 : 
                   1'bz;
-              assign fill_bbank[k]=en_outE[0] & bitE0[k] ? {fill_bbank0_reg,1'b1} : 37'bz;
-              assign fill_bbank[k]=en_outE[1] & bitE1[k] ? {fill_bbank1_reg,1'b1} : 37'bz;
-              assign fill_bbank[k]=en_outE[2] & bitE2[k] ? {fill_bbank2_reg,1'b1} : 37'bz;
-              assign fill_bbank[k]=en_outE[3] & bitE3[k] ? {fill_bbank3_reg,1'b1} : 37'bz;
-              assign fill_bbank[k]=en_outE[4] & bitE4[k] ? {fill_bbank4_reg,1'b1} : 37'bz;
-              assign fill_bbank[k]=en_outE[5] & bitE5[k] ? {fill_bbank5_reg,1'b1} : 37'bz;
+              assign fill_bbank[k]=en_outE[0] & bitE0[k] ? fill_bbank0_reg : 5'bz;
+              assign fill_bbank[k]=en_outE[1] & bitE1[k] ? fill_bbank1_reg : 5'bz;
+              assign fill_bbank[k]=en_outE[2] & bitE2[k] ? fill_bbank2_reg : 5'bz;
+              assign fill_bbank[k]=en_outE[3] & bitE3[k] ? fill_bbank3_reg : 5'bz;
+              assign fill_bbank[k]=en_outE[4] & bitE4[k] ? fill_bbank4_reg : 5'bz;
+              assign fill_bbank[k]=en_outE[5] & bitE5[k] ? fill_bbank5_reg : 5'bz;
               assign fill_bbank[k]=~bitE0[k]&~bitE1[k]&~bitE2[k]&~bitE3[k]&~bitE4[k]&~bitE5[k] ? 5'b0 : 
                   5'bz;
               assign fill_low[k]=en_outE[0] & bitE0[k] ? fill_low0_reg : 2'bz;
@@ -514,22 +581,22 @@ module dmisscam(
 	      fill_low[k],
               fill_match_o   [0][k],
               fill_en0[0]&&cmpEnE0,
-              fill_addrE0,
+              {fill_addrE0,1'b0},
               fill_match_o   [1][k],
               fill_en1[0]&&cmpEnE1,
-              fill_addrE1,
+              {fill_addrE1,1'b0},
               fill_match_o   [2][k],
               fill_en2[0]&&cmpEnE2,
-              fill_addrE2,
+              {fill_addrE2,1'b0},
               fill_match_o   [3][k],
               fill_en3[0]&&cmpEnE3,
-              fill_addrE3,
+              {fill_addrE3,1'b0},
               fill_match_o   [4][k],
               fill_en4[0]&&cmpEnE4,
-              fill_addrE4,
+              {fill_addrE4,1'b0},
               fill_match_o   [5][k],
               fill_en5[0]&&cmpEnE5,
-              fill_addrE5,
+              {fill_addrE5,1'b0},
               read_en_way[k],
               read_addr,
               read_st,
@@ -605,12 +672,12 @@ module dmisscam(
               assign fill_split[k]=en_outO[5] & bitO5[k] ? fill_split5_reg : 1'bz;
               assign fill_split[k]=~bitO0[k]&~bitO1[k]&~bitO2[k]&~bitO3[k]&~bitO4[k]&~bitO5[k] ? 1'b0 : 
                   1'bz;
-              assign fill_bbank[k]=en_outO[0] & bitO0[k] ? {fill_bbank0_reg,1'b1} : 37'bz;
-              assign fill_bbank[k]=en_outO[1] & bitO1[k] ? {fill_bbank1_reg,1'b1} : 37'bz;
-              assign fill_bbank[k]=en_outO[2] & bitO2[k] ? {fill_bbank2_reg,1'b1} : 37'bz;
-              assign fill_bbank[k]=en_outO[3] & bitO3[k] ? {fill_bbank3_reg,1'b1} : 37'bz;
-              assign fill_bbank[k]=en_outO[4] & bitO4[k] ? {fill_bbank4_reg,1'b1} : 37'bz;
-              assign fill_bbank[k]=en_outO[5] & bitO5[k] ? {fill_bbank5_reg,1'b1} : 37'bz;
+              assign fill_bbank[k]=en_outO[0] & bitO0[k] ? fill_bbank0_reg : 5'bz;
+              assign fill_bbank[k]=en_outO[1] & bitO1[k] ? fill_bbank1_reg : 5'bz;
+              assign fill_bbank[k]=en_outO[2] & bitO2[k] ? fill_bbank2_reg : 5'bz;
+              assign fill_bbank[k]=en_outO[3] & bitO3[k] ? fill_bbank3_reg : 5'bz;
+              assign fill_bbank[k]=en_outO[4] & bitO4[k] ? fill_bbank4_reg : 5'bz;
+              assign fill_bbank[k]=en_outO[5] & bitO5[k] ? fill_bbank5_reg : 5'bz;
               assign fill_bbank[k]=~bitO0[k]&~bitO1[k]&~bitO2[k]&~bitO3[k]&~bitO4[k]&~bitO5[k] ? 5'b0 : 
                   5'bz;
               assign fill_low[k]=en_outO[0] & bitO0[k] ? fill_low0_reg : 2'bz;
@@ -630,24 +697,41 @@ module dmisscam(
               fill_en_way[k],
               fill_addr[k],
               fill_st[k],
+	      fill_dupl[k],
+	      fill_sz[k],
+	      fill_odd[k],
+	      fill_io[k],
+	      fill_split[k],
+	      fill_bbank[k],
+	      fill_low[k],
               fill_match_o   [0][k],
               fill_en0[1]&&cmpEnO0,
-              fill_addrO0,
+              {fill_addrO0,1'b1},
               fill_match_o   [1][k],
               fill_en1[1]&&cmpEnO1,
-              fill_addrO1,
+              {fill_addrO1,1'b1},
               fill_match_o   [2][k],
               fill_en2[1]&&cmpEnO2,
-              fill_addrO2,
+              {fill_addrO2,1'b1},
               fill_match_o   [3][k],
               fill_en3[1]&&cmpEnO3,
-              fill_addrO3,
+              {fill_addrO3,1'b1},
               fill_match_o   [4][k],
               fill_en4[1]&&cmpEnO4,
-              fill_addrO4,
+              {fill_addrO4,1'b1},
               fill_match_o   [5][k],
               fill_en5[1]&&cmpEnO5,
-              fill_addrO5,
+              {fill_addrO5,1'b1},
+              read_en_way[k],
+              read_addr,
+              read_st,
+	      read_dupl,
+	      read_sz,
+	      read_odd,
+	      read_io,
+	      read_split,
+	      read_bbank,
+	      read_low,
               ins_en,
               ins_req,
 	      ins_addr_o,
@@ -788,8 +872,8 @@ module dmisscam(
   
   assign begin_replay=started & ~(|filled);
 
-  assign enE={fill_en5_reg[0],fill_en4_reg[0],fill_en3_reg[0],fill_en2_reg[0],fill_en1_reg[0],fill_en0_reg[0]}
-  assign enO={fill_en5_reg[1],fill_en4_reg[1],fill_en3_reg[1],fill_en2_reg[1],fill_en1_reg[1],fill_en0_reg[1]}
+  assign enE={fill_en5_reg[0],fill_en4_reg[0],fill_en3_reg[0],fill_en2_reg[0],fill_en1_reg[0],fill_en0_reg[0]};
+  assign enO={fill_en5_reg[1],fill_en4_reg[1],fill_en3_reg[1],fill_en2_reg[1],fill_en1_reg[1],fill_en0_reg[1]};
   
   bit_find_first_bit #(16) first_mod(busy&filled&~pwned,read_en_way);
 
