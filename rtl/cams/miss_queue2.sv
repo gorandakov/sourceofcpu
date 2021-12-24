@@ -398,6 +398,7 @@ module missQ(
   mOpR_en,
   mOpR_addr,
   mOpR_sz,
+  mOpR_req,
   mOpR_st,
   mOpR_bank0,
   mOpR_io,//
@@ -715,6 +716,7 @@ module missQ(
   output mOpR_en;
   output [PADDR_WIDTH-1:7] mOpR_addr;
   output [4:0] mOpR_sz;
+  output [3:0] mOpR_req;
   output mOpR_st;
   output [4:0] mOpR_bank0;
   output mOpR_odd;
@@ -989,7 +991,7 @@ module missQ(
   assign mOp0_odd_o=~now_flushing & ~alt_bus_hold & ~WB_fwd[0] ? mOp0_odd : 1'bz;
   assign mOp0_odd_o=alt_bus_hold && ~WB_fwd[0]? alt_bus_addr[0] : 1'bz;
   assign mOp0_odd_o=WB_fwd[0] ? mOpW_odd : 1'bz;
-  assign mOp0_banks_o=now_flushing && ~WB_fwd[0] ?    read_mop[0][`mOp1_banks] : 32'bz;
+  assign mOp0_banks_o=now_flushing && ~WB_fwd[0] ?    rbanks[0] : 32'bz;
   assign mOp0_banks_o=alt_bus_hold && ~WB_fwd[0] ? 32'b0 : 32'bz;
   assign mOp0_banks_o=~now_flushing & ~alt_bus_hold & ~WB_fwd[0] ? mOp0_banks : 32'bz;
   assign mOp0_banks_o=WB_fwd[0] ? mOpW_banks : 32'bz;
@@ -1049,7 +1051,7 @@ module missQ(
   assign mOp1_odd_o=~now_flushing & ~alt_bus_hold & ~WB_fwd[1] ? mOp1_odd : 1'bz;
   assign mOp1_odd_o=alt_bus_hold && ~WB_fwd[1]? alt_bus_addr[0] : 1'bz;
   assign mOp1_odd_o=WB_fwd[1] ? mOpW_odd : 1'bz;
-  assign mOp1_banks_o=now_flushing && ~WB_fwd[1] ?    read_mop[1][`mOp1_banks] : 32'bz;
+  assign mOp1_banks_o=now_flushing && ~WB_fwd[1] ?    rdbanks[1] : 32'bz;
   assign mOp1_banks_o=alt_bus_hold && ~WB_fwd[1] ? 32'b0 : 32'bz;
   assign mOp1_banks_o=~now_flushing & ~alt_bus_hold & ~WB_fwd[1] ? mOp1_banks : 32'bz;
   assign mOp1_banks_o=WB_fwd[1] ? mOpW_banks : 32'bz;
@@ -1109,7 +1111,7 @@ module missQ(
   assign mOp2_odd_no=~now_flushing & ~alt_bus_hold & ~WB_fwd[2] ? mOp2_odd : 1'bz;
   assign mOp2_odd_no=alt_bus_hold && ~WB_fwd[2]? alt_bus_addr[0] : 1'bz;
   assign mOp2_odd_no=WB_fwd[2] ? mOpW_odd : 1'bz;
-  assign mOp2_banks_no=now_flushing && ~WB_fwd[2] ?    read_mop[2][`mOp1_banks] : 32'bz;
+  assign mOp2_banks_no=now_flushing && ~WB_fwd[2] ?    rdbanks[2] : 32'bz;
   assign mOp2_banks_no=alt_bus_hold && ~WB_fwd[2] ? 32'b0 : 32'bz;
   assign mOp2_banks_no=~now_flushing & ~alt_bus_hold & ~WB_fwd[2] ? mOp2_banks : 32'bz;
   assign mOp2_banks_no=WB_fwd[2] ? mOpW_banks : 32'bz;
@@ -1162,7 +1164,7 @@ module missQ(
   assign mOp3_odd_no=now_flushing ? read_mop[3][`mOp1_odd] : 1'bz; 
   assign mOp3_odd_no=~now_flushing & ~alt_bus_hold ? mOp3_odd : 1'bz;
   assign mOp3_odd_no=alt_bus_hold ? alt_bus_addr[0] : 1'bz;
-  assign mOp3_banks_no=now_flushing ?    read_mop[3][`mOp1_banks] : 32'bz;
+  assign mOp3_banks_no=now_flushing ?    rdbanks[3] : 32'bz;
   assign mOp3_banks_no=alt_bus_hold ? 32'b0 : 32'bz;
   assign mOp3_banks_no=~now_flushing & ~alt_bus_hold ? mOp3_banks : 32'bz;
   assign mOp3_bank0_no=now_flushing ?    read_mop[3][`mOp1_bank0] : mOp3_bank0;
@@ -1174,7 +1176,7 @@ module missQ(
   assign mOp3_ctype_no=~alt_bus_hold & ~now_flushing ? mOp3_ctype : 2'bz;
   assign mOp3_en_no=now_flushing ?       read_confl[3]&~thrinhibitconfl[3]  : 1'bz;
   assign mOp3_en_no=alt_bus_hold ? 1'b1 : 1'bz;
-  assign mOp3_en_no=~now_flushing & ~alt_bus_hold ? mOp3_en : 1'bz;;
+  assign mOp3_en_no=~now_flushing & ~alt_bus_hold ? mOp3_en : 1'bz;
   assign mOp3_LSQ_no=now_flushing ?      read_mop[3][`mOp1_LSQ] : mOp3_LSQ;
   assign mOp3_II_no=now_flushing ?       read_mop[3][`mOp1_II] : mOp3_II;
   assign mOp3_WQ_no=now_flushing ?       read_mop[3][`mOp1_WQ] : mOp3_WQ;
@@ -1360,21 +1362,6 @@ module missQ(
 
 
 
-  assign mOpR_en=conflFound && ~init && count && ~now_flushing;
-
-  assign mOpR_addrEven=!conflFound ? {PADDR_WIDTH-8{1'B0}} : {PADDR_WIDTH-8{1'BZ}};
-  assign mOpR_addrOdd=!conflFound ? {PADDR_WIDTH-8{1'B0}} : {PADDR_WIDTH-8{1'BZ}};
-  assign mOpR_sz=!conflFound ? 5'B0 : 5'BZ;
-  assign mOpR_st=!conflFound ? 1'B0 : 1'BZ;
-  assign mOpR_split=!conflFound ? 1'B0 : 1'BZ;
-  assign mOpR_odd=!conflFound ? 1'B0 : 1'BZ;
-  assign mOpR_addr_low=!conflFound ? 2'B0 : 2'BZ;
-  //assign mOpR_banks=!conflFound ? 32'b0 : 32'BZ;
-  assign mOpR_bank0=!conflFound ? 5'b0 : 5'BZ;
-  assign mOpR_clHit=!conflFound ? 2'b0 : 2'BZ;
-  //assign mOpR_first=!conflFound ? 1'b0 : 1'BZ;
-  assign mOpR_dupl=!conflFound ? 2'b0 : 2'BZ;
-  assign mOpR_io=(!conflFound) ? 1'B0 : 1'BZ;
  
   assign curConfl=read_confl&confl_mask;
 
@@ -1385,25 +1372,8 @@ module missQ(
   assign mOp_write_clear=begin_flush;
   
   generate
-    for(k=0;k<=5;k=k+1)  begin
-        assign mOpR_addrEven=sel[k] ? read_mop[k][`mOp1_addrEven] : {PADDR_WIDTH-8{1'BZ}};
-        assign mOpR_addrOdd=sel[k] ? read_mop[k][`mOp1_addrOdd] : {PADDR_WIDTH-8{1'BZ}};
-        assign mOpR_sz=sel[k] ? read_mop[k][`mOp1_sz] : 5'BZ;
-        assign mOpR_st=sel[k] ? read_mop[k][`mOp1_st] : 1'BZ;
-    //    assign mOpR_first=sel[k] ? read_mop[k][`mOp1_st] : 1'BZ;
-        assign mOpR_split=sel[k] ? read_mop[k][`mOp1_split] : 1'BZ;
-        assign mOpR_odd=sel[k] ? read_mop[k][`mOp1_odd] : 1'BZ;
-        assign mOpR_addr_low=sel[k] ? read_mop[k][`mOp1_low] : 2'BZ;
-      //  assign mOpR_banks=sel[k] ? read_mop[k][`mOp1_banks] : 32'BZ;
-        assign mOpR_bank0=sel[k] ? read_mop[k][`mOp1_bank0] : 5'BZ;
-        assign mOpR_clHit=sel[k] ? read_mop[k][`mOp1_clHit] : 5'BZ;
-        assign mOpR_io=sel[k] ? read_mop[k][`mOp1_type]==2'b10 : 1'BZ;
-        
-        if (k>=4)
-          assign {mOpR_dupl,dummy5}=sel[k] ? read_mop[k][`mOp1_LSQ] : 9'bz;
-        else
-          assign mOpR_dupl=sel[k] ? 2'b0 : 2'bz;
-        if (k<4) assign rdbanks[k]=read_mop[k][`mOp1_banks] & {32{read_confl[k]}};        
+    for(k=0;k<4;k=k+1)  begin
+        assign rdbanks[k]=read_mop[k][`mOp1_banks] & {32{read_confl[k]}};        
     end
   endgenerate
   
