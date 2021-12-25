@@ -91,7 +91,7 @@ module dmisscam_buf(
   output               fill_match_o5;
   input                     fill_en5;
   input [PADDR_WIDTH-8:0] fill_addr5;
-  output read_en;
+  input read_en;
   output [PADDR_WIDTH-8:0] read_addr;
   output read_st;
   output read_dupl;
@@ -500,7 +500,7 @@ module dmisscam(
   generate
       genvar k;
       for(k=0;k<16;k=k+1) begin : buffers_gen
-          assign read_req=first[k] ? k[3:0] : 4'bz;
+          assign read_req=read_en_way[k] ? k[3:0] : 4'bz;
           if (k<8) begin//fill_st0,fill_dupl0,fill_sz0,fill_odd0,fill_io0,fill_split0,fill_bbank0,fill_low0,
               assign fill_addr[k]=en_outE[0] & bitE0[k] ? {fill_addrE0_reg,1'b1} : 37'bz;
               assign fill_addr[k]=en_outE[1] & bitE1[k] ? {fill_addrE1_reg,1'b1} : 37'bz;
@@ -879,6 +879,16 @@ module dmisscam(
   assign has_free=found;
  // assign fill_req=read_en!=16'b0 ? 4'bz : 4'b0;
   assign ins_addr_o=ins_en ? 37'bz : 37'b0;
+  assign read_addr=read_en ? 37'bz : 37'b0;
+  assign read_st=read_en ? 1'bz:1'b0;
+  assign read_dupl=read_en ? 1'bz:1'b0;
+  assign read_sz=read_en ? 5'bz:5'b0;
+  assign read_odd=read_en ? 1'bz:1'b0;
+  assign read_io=read_en ? 1'bz:1'b0;
+  assign read_split=read_en ? 1'bz:1'b0;
+  assign read_bbank=read_en ? 5'bz:5'b0;
+  assign read_low=read_en ? 2'bz : 2'b0;
+  assign read_req=read_en ? 4'bz:4'b0;
   
   assign begin_replay=started & ~(|filled);
 
@@ -898,7 +908,7 @@ module dmisscam(
       if (rst) begin
 	  pwned<=16'b0;
       end else begin
-	  if (!locked) pwned<=pwned|first;
+	  if (!locked) pwned<=pwned|read_en_way;
 	  if (unlock) pwned<=16'b0;
       end
       if (rst) begin
