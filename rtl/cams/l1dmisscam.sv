@@ -494,6 +494,7 @@ module dmisscam(
   reg [1:0]               fill_low5_reg;
   
   reg [15:0] pwned;
+  wire read_en0;
   
   wire [5:0] enE;
   wire [5:0] enO;  
@@ -578,7 +579,7 @@ module dmisscam(
               dmisscam_buf #(k) buf_mod(
               clk,
               rst,
-              ~fill_en_way[k],
+              locked,
               fill_en_way[k],
               fill_addr[k],
               fill_st[k],
@@ -703,7 +704,7 @@ module dmisscam(
               dmisscam_buf #(k) buf_mod(
               clk,
               rst,
-              ~fill_en_way[k],
+              locked,
               fill_en_way[k],
               fill_addr[k],
               fill_st[k],
@@ -896,6 +897,8 @@ module dmisscam(
   assign enO={fill_en5_reg[1],fill_en4_reg[1],fill_en3_reg[1],fill_en2_reg[1],fill_en1_reg[1],fill_en0_reg[1]};
   
   bit_find_first_bit #(16) first_mod(busy&filled&~pwned,read_en_way,read_en);
+  
+ // assign read_en=read_en0;
 
   assign found=busy!=16'hffff;
   
@@ -908,7 +911,7 @@ module dmisscam(
       if (rst) begin
 	  pwned<=16'b0;
       end else begin
-	  if (!locked) pwned<=pwned|read_en_way;
+	  pwned<=pwned|read_en_way;
 	  if (unlock) pwned<=16'b0;
       end
       if (rst) begin
