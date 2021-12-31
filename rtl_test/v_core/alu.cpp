@@ -1473,11 +1473,12 @@ void req_set(Vheptane_core *top,req *reqs,char *mem,char *memp) {
 	top->heptane_core__DOT__dc2_rhitB1_reg);
     static int idr=0;
     if (top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__alt_bus_hold_reg2) {
-	printf("ABH -> 0x%lx,0x%lx,o 0x%x,is_ins 0x%x\n",
+	printf("ABH -> 0x%lx,0x%lx,o 0x%x,is_ins 0x%x:0x%x\n",
 			top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__mOpX0_addrEven_reg,
 			top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__mOpX0_addrOdd_reg,
                         top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__mOpX0_odd_reg,
-			idr);
+			idr,
+			top->heptane_core__DOT__bck_mod__DOT__L1D_mod__DOT__ins_hit);
     }
     if (top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__mOpX2_addrOdd_reg==0x2000f7 && top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__mOpX2_en_reg) {
 	printf(" ");
