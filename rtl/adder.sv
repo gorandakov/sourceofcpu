@@ -696,21 +696,31 @@ module addsub_alu(a,b,out,sub,en,sxtEn,ben,cout,cout4,cout32,cout_sec,ndiff,cout
   
   genvar i;
   
-  assign bitEn={{20{ben[0]&en}},{12{ben[0]&en}},{32{en}}};
+  assign bitEn={{20{ben[1]&en}},{12{ben[0]&en}},{32{en}}};
   
   
   assign cin=sub[1];
 
-  assign cout_sec[0]=~err;
-  assign cout_sec[1]=~err;
-  assign cout_sec[2]=~err;
+  assign ptr=b[64] && ~sub[1] ? b[63:0] : a[63:0];
+  assign unptr=b[64] && ~sub[1] ? xa[43:4] : xb[43:4];
+  
+  assign cout_sec[0]=pos_ack[{1'b0,cout_sec0}] | neg_ack[{1'b0,cout_sec0}] && ~err;
+  assign cout_sec[1]=pos_ack[2] & ~err;
+  assign cout_sec[2]=neg_ack[2] & ~err;
 
   assign err=a[64] & b[64] & ~sub[1] || ~a[64] & b[64] & sub[1] || a[64] & ~sub[3] || b[64] & ~sub[0];
 
-  assign is_ptr=a[64]|b[64] && ~(a[64]&b[64]&sub[1]) && ben[0];
+  assign is_ptr=a[64]|b[64] && ~(a[64]&b[64]&sub[1]) && ben==2'b01;
 
   assign out[64]=en ? is_ptr : 1'bz;
 
+  assign exbits=is_ptr ? ptr[63:44]^{19'b0,pos_flip[cout_sec0]|
+  neg_flip[cout_sec0]} : 20'b0;
+
+  agusec_shift nih_mod(ptr[`ptr_exp],C[43:12],cout_sec0);
+  agusec_check_upper3 hin_mod(ptr,unptr,{39'b0,cin},pos_ack,neg_ack,
+    pos_flip,neg_flip,ndiff);
+  
   nand_array #(WIDTH) nG0_mod(a[63:0],xb,nG0);
   nor_array #(WIDTH)  nP0_mod(a[63:0],xb,nP0);
   
@@ -844,7 +854,7 @@ module addsub_alu(a,b,out,sub,en,sxtEn,ben,cout,cout4,cout32,cout_sec,ndiff,cout
 	
 	if (1)
 	  begin
-	    assign out[63:44]=(en&~ben[1]) ? 20'b0 : 20'bz; 
+	    assign out[63:44]=(en&~ben[1]) ? exbits : 20'bz; 
 	    assign out[43:32]=(en&~ben[0]) ? 12'b0:12'bz; 
           //  assign out[63:32]=(X[31] & sxtEn) ? {32{~C1[31]}} : {32{1'bz}};
           //  assign out[63:32]=(nX[31] & sxtEn) ? {32{~nC1[31]}} : {32{1'bz}};
@@ -1205,7 +1215,7 @@ module add_agu(
   en,
   shift
   );
-  parameter WIDTH=64;
+  parameter WIDTH=44;
   input [64:0] a;//base
   input [63:0] b;
   input [64:0] c; //index
@@ -1236,20 +1246,20 @@ module add_agu(
 
   wire [43:0] c_s;
 
-//  wire [63:0] ptr=(c[64] & shift[0]) ? c[63:0] : a[63:0];
-//  wire [63:0] unptr=(c[64] & shift[0]) ? a[63:0] : c[63:0];
+  wire [63:0] ptr=(c[64] & shift[0]) ? c[63:0] : a[63:0];
+  wire [63:0] unptr=(c[64] & shift[0]) ? a[63:0] : c[63:0];
 
   genvar k;
   
-  assign xorab=a[63:0]^b[63:0];
-  assign nxorab=a[63:0]~^b[63:0];
-//  assign andab=a[63:0]&b[43:0];
-//  assign orab=a[63:0]|b[63:0];
-  assign c1={c[62:0],1'b0};
-  assign c2={c[61:0],2'b0};
-  assign c3={c[60:0],3'b0};
+  assign xorab=a[43:0]^b[43:0];
+  assign nxorab=a[43:0]~^b[43:0];
+  assign andab=a[43:0]&b[43:0];
+  assign orab=a[43:0]|b[43:0];
+  assign c1={c[42:0],1'b0};
+  assign c2={c[41:0],2'b0};
+  assign c3={c[40:0],3'b0};
   assign tmp2[0]=1'b0;
-  assign cout_sec=~err;
+  assign cout_sec=pos_ack[cout_sec0] | neg_ack[cout_sec0] && ~err;
   
   generate
     for(k=0;k<=43;k=k+1)
@@ -1275,7 +1285,10 @@ module add_agu(
         assign tmp2[k+1]=(shift[3] & c3[k]) ? orab[k] : 1'bz;
       end
   endgenerate
-  adder_seq #(WIDTH) add_mod(tmp1,tmp2[WIDTH-1:0],out[63:0],c_s,1'b0,en,,,,);
+  adder_seq #(WIDTH) add_mod(tmp1,tmp2[WIDTH-1:0],out[43:0],c_s,1'b0,en,,,,);
+  assign out[63:44]=en ? ptr[63:44] : 20'bz;
+  agusec_shift ssh_mod(ptr[`ptr_exp],c_s[43:12],cout_sec0);
+  agusec_check_upper3 #(1'b1) chk_mod(ptr,unptr[43:4],b[43:4],{dummy1,pos_ack},{dummy2,neg_ack},,,ndiff);
 endmodule
 
 
