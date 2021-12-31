@@ -579,7 +579,7 @@ module dmisscam(
               dmisscam_buf #(k) buf_mod(
               clk,
               rst,
-              locked|begin_replay,
+              locked|~found|begin_replay,
               fill_en_way[k],
               fill_addr[k],
               fill_st[k],
@@ -704,7 +704,7 @@ module dmisscam(
               dmisscam_buf #(k) buf_mod(
               clk,
               rst,
-              locked|begin_replay,
+              locked|~found|begin_replay,
               fill_en_way[k],
               fill_addr[k],
               fill_st[k],

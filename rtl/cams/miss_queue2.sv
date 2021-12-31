@@ -895,6 +895,10 @@ module missQ(
   reg [2:0] sz5;
   
   reg begin_flush;
+  reg begin_flush_reg;
+  reg begin_flush_reg2;
+  reg begin_flush_reg3;
+  reg begin_flush_reg4;
   reg now_flushing;
   wire flush_end;
   reg sticky_begin;
@@ -1482,7 +1486,7 @@ module missQ(
   ,//has_free
   locked,
   last_inserted,
-  begin_flush
+  begin_flush_reg4
   );
 
   assign doStep=now_flushing&~alt_bus_hold;
@@ -1565,6 +1569,10 @@ module missQ(
 	  if (rst) begin
               countF<=5'd0;
 	      begin_flush<=1'b0;
+	      begin_flush_reg<=1'b0;
+	      begin_flush_reg2<=1'b0;
+	      begin_flush_reg3<=1'b0;
+	      begin_flush_reg4<=1'b0;
 	      now_flushing<=1'b0;
 	      last_inserted_reg<=1'b0;
 	      last_inserted_reg2<=1'b0;
@@ -1574,6 +1582,10 @@ module missQ(
 	      read_addr_reg<={ADDR_WIDTH{1'B0}};
 	  end else begin
 	      begin_flush<=last_inserted_reg4;
+              begin_flush_reg<=begin_flush;
+              begin_flush_reg2<=begin_flush_reg;
+              begin_flush_reg3<=begin_flush_reg2;
+              begin_flush_reg4<=begin_flush_reg3;
               if (begin_flush) countF<=count_d;
               else if (now_flushing && ~alt_bus_hold) 
                   countF<=countF_d;
