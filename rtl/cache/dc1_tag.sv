@@ -142,7 +142,7 @@ module dcache1_tag(
   `endif
   .write_data(write_hit ? tag_write_data&{DATA_WIDTH{~init}} : 
     tag_same_data&{DATA_WIDTH{~init}}),
-  .write_wen(write_hit&~read_odd_reg || read_en_reg & (~read_odd_reg) ||init)
+  .write_wen(write_hit&~read_odd_reg || read_en_reg & (~read_odd_reg | read_split_reg) ||init)
   );  
 
   dcache1_tag_ram tagR1_mod(
@@ -158,7 +158,7 @@ module dcache1_tag(
   `endif
   .write_data(write_hit ? tag_write_data&{DATA_WIDTH{~init}} : 
     tag_same_data&{DATA_WIDTH{~init}}),
-  .write_wen(write_hit&read_odd_reg || read_en_reg & (read_odd_reg)||init)
+  .write_wen(write_hit&read_odd_reg || read_en_reg & (read_odd_reg | read_split_reg)||init)
   );  
 
   `ifdef DCACHE_256K
@@ -192,7 +192,7 @@ module dcache1_tag(
   assign tag_write_data[`dc1Tag_exclusive]=write_exclusive;
   assign tag_write_data[`dc1Tag_parity]=^tag_write_data[DATA_WIDTH-2:0];
 
-  assign tag_same_data[`dc1Tag_addr_43_14]=read_odd_reg ? tagR1_IP[PADDR_WIDTH-9:6] : tagR0_IP[PADDR_WIDTH-9:6];
+  assign tag_same_data[`dc1Tag_addr_43_14]=read_odd_reg ? tagR1_data[PADDR_WIDTH-9:6] : tagR0_data[PADDR_WIDTH-9:6];
   assign tag_same_data[`dc1Tag_valid]=~read_invl_reg|(hit_odd|hit_even) && (read_odd_reg ? tagR1_valid : tagR0_valid);
   assign tag_same_data[`dc1Tag_recent]=hit_odd | hit_even;
   assign tag_same_data[`dc1Tag_exclusive]=read_odd_reg ? tagR1_exclusive : tagR0_exclusive;
