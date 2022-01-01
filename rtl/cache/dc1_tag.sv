@@ -192,10 +192,10 @@ module dcache1_tag(
   assign tag_write_data[`dc1Tag_exclusive]=write_exclusive;
   assign tag_write_data[`dc1Tag_parity]=^tag_write_data[DATA_WIDTH-2:0];
 
-  assign tag_same_data[`dc1Tag_addr_43_14]=read_odd_reg ? tagR1_data[PADDR_WIDTH-9:6] : tagR0_data[PADDR_WIDTH-9:6];
-  assign tag_same_data[`dc1Tag_valid]=~read_invl_reg|(hit_odd|hit_even) && (read_odd_reg ? tagR1_valid : tagR0_valid);
+  assign tag_same_data[`dc1Tag_addr_43_14]=read_odd_reg ? read_addrOdd_reg[PADDR_WIDTH-9:6] : read_addrEven_reg[PADDR_WIDTH-9:6];
+  assign tag_same_data[`dc1Tag_valid]=~read_invl_reg && (read_odd_reg ? tagR1_valid : tagR0_valid);
   assign tag_same_data[`dc1Tag_recent]=hit_odd | hit_even;
-  assign tag_same_data[`dc1Tag_exclusive]=read_odd_reg ? tagR1_exclusive : tagR0_exclusive;
+  assign tag_same_data[`dc1Tag_exclusive]=tagR0_exclusive;
   assign tag_same_data[`dc1Tag_parity]=^tag_same_data[DATA_WIDTH-2:0];
   
   assign write_hit=(write_recent_in) ? write_hit2 : write_hit1;
