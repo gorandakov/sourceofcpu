@@ -503,12 +503,12 @@ module dmisscam(
       for(k=0;k<16;k=k+1) begin : buffers_gen
           assign read_req=read_en_way[k] ? k[3:0] : 4'bz;
           if (k<8) begin//fill_st0,fill_dupl0,fill_sz0,fill_odd0,fill_io0,fill_split0,fill_bbank0,fill_low0,
-              assign fill_addr[k]=en_outE[0] & bitE0[k] ? {fill_addrE0_reg,1'b1} : 37'bz;
-              assign fill_addr[k]=en_outE[1] & bitE1[k] ? {fill_addrE1_reg,1'b1} : 37'bz;
-              assign fill_addr[k]=en_outE[2] & bitE2[k] ? {fill_addrE2_reg,1'b1} : 37'bz;
-              assign fill_addr[k]=en_outE[3] & bitE3[k] ? {fill_addrE3_reg,1'b1} : 37'bz;
-              assign fill_addr[k]=en_outE[4] & bitE4[k] ? {fill_addrE4_reg,1'b1} : 37'bz;
-              assign fill_addr[k]=en_outE[5] & bitE5[k] ? {fill_addrE5_reg,1'b1} : 37'bz;
+              assign fill_addr[k]=en_outE[0] & bitE0[k] ? {fill_addrE0_reg,1'b0} : 37'bz;
+              assign fill_addr[k]=en_outE[1] & bitE1[k] ? {fill_addrE1_reg,1'b0} : 37'bz;
+              assign fill_addr[k]=en_outE[2] & bitE2[k] ? {fill_addrE2_reg,1'b0} : 37'bz;
+              assign fill_addr[k]=en_outE[3] & bitE3[k] ? {fill_addrE3_reg,1'b0} : 37'bz;
+              assign fill_addr[k]=en_outE[4] & bitE4[k] ? {fill_addrE4_reg,1'b0} : 37'bz;
+              assign fill_addr[k]=en_outE[5] & bitE5[k] ? {fill_addrE5_reg,1'b0} : 37'bz;
               assign fill_addr[k]=~bitE0[k]&~bitE1[k]&~bitE2[k]&~bitE3[k]&~bitE4[k]&~bitE5[k] ? 37'b0 : 
                   37'bz;
               assign fill_st[k]=en_outE[0] & bitE0[k] ? fill_st0_reg : 1'bz;
