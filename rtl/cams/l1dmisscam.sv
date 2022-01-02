@@ -585,7 +585,7 @@ module dmisscam(
               fill_st[k],
 	      fill_dupl[k],
 	      fill_sz[k],
-	      1'b0,//fill_odd[k],
+	      fill_odd[k],
 	      fill_io[k],
 	      fill_split[k],
 	      fill_bbank[k],
@@ -710,7 +710,7 @@ module dmisscam(
               fill_st[k],
 	      fill_dupl[k],
 	      fill_sz[k],
-	      1'b1,//fill_odd[k],
+	      fill_odd[k],
 	      fill_io[k],
 	      fill_split[k],
 	      fill_bbank[k],
@@ -914,7 +914,7 @@ module dmisscam(
 	  pwned<=pwned|read_en_way;
 	  if (unlock) pwned<=16'b0;
       end
-      $display("slp ",started,locked,pwned,unlock,begin_replay,read_en_way," RA ",read_addr);
+      $display("slp ",started,locked,pwned,unlock,begin_replay,read_en_way," RA ",read_addr)
       if (rst) begin
           fill_en0_reg<=0;
           fill_addrE0_reg<=0;
