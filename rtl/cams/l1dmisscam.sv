@@ -629,22 +629,22 @@ module dmisscam(
 	      fill_bbank[k],
 	      fill_low[k],
               fill_match_o   [0][k],
-              fill_en0[0]&&&cmpEnE0,
+              fill_en0[0]&& &cmpEnE0,
               {fill_addrE0,1'b0},
               fill_match_o   [1][k],
-              fill_en1[0]&&&cmpEnE1,
+              fill_en1[0]&& &cmpEnE1,
               {fill_addrE1,1'b0},
               fill_match_o   [2][k],
-              fill_en2[0]&&&cmpEnE2,
+              fill_en2[0]&& &cmpEnE2,
               {fill_addrE2,1'b0},
               fill_match_o   [3][k],
-              fill_en3[0]&&&cmpEnE3,
+              fill_en3[0]&& &cmpEnE3,
               {fill_addrE3,1'b0},
               fill_match_o   [4][k],
-              fill_en4[0]&&&cmpEnE4,
+              fill_en4[0]&& &cmpEnE4,
               {fill_addrE4,1'b0},
               fill_match_o   [5][k],
-              fill_en5[0]&&&cmpEnE5,
+              fill_en5[0]&& &cmpEnE5,
               {fill_addrE5,1'b0},
               read_en_way[k],
               read_addr,
@@ -752,22 +752,22 @@ module dmisscam(
 	      fill_bbank[k],
 	      fill_low[k],
               fill_match_o   [0][k],
-              fill_en0[1]&&&cmpEnO0,
+              fill_en0[1]&& &cmpEnO0,
               {fill_addrO0,1'b1},
               fill_match_o   [1][k],
-              fill_en1[1]&&&cmpEnO1,
+              fill_en1[1]&& &cmpEnO1,
               {fill_addrO1,1'b1},
               fill_match_o   [2][k],
-              fill_en2[1]&&&cmpEnO2,
+              fill_en2[1]&& &cmpEnO2,
               {fill_addrO2,1'b1},
               fill_match_o   [3][k],
-              fill_en3[1]&&&cmpEnO3,
+              fill_en3[1]&& &cmpEnO3,
               {fill_addrO3,1'b1},
               fill_match_o   [4][k],
-              fill_en4[1]&&&cmpEnO4,
+              fill_en4[1]&& &cmpEnO4,
               {fill_addrO4,1'b1},
               fill_match_o   [5][k],
-              fill_en5[1]&&&cmpEnO5,
+              fill_en5[1]&& &cmpEnO5,
               {fill_addrO5,1'b1},
               read_en_way[k],
               read_addr,
@@ -1145,27 +1145,27 @@ module dmisscam(
           fill_bbank4_reg<=5'b0;
           fill_low4_reg<=2'b0;
       end else begin
-          fill_en0_reg<=fill_en0&{~|fill_match_o[0][15:8],~|fill_match_o[0][7:0]};
+          fill_en0_reg<=fill_en0&{|cmpEnO0,|cmpEnE0}&{~|fill_match_o[0][15:8],~|fill_match_o[0][7:0]};
           fill_addrE0_reg<=fill_addrE0;
           fill_addrO0_reg<=fill_addrO0;
           fill_st0_reg<=fill_st0;
-          fill_en1_reg<=fill_en1&{~|fill_match_o[1][15:8],~|fill_match_o[1][7:0]};
+          fill_en1_reg<=fill_en1&{|cmpEnO1,|cmpEnE1}&{~|fill_match_o[1][15:8],~|fill_match_o[1][7:0]};
           fill_addrE1_reg<=fill_addrE1;
           fill_addrO1_reg<=fill_addrO1;
           fill_st1_reg<=fill_st1;
-          fill_en2_reg<=fill_en2&{~|fill_match_o[2][15:8],~|fill_match_o[2][7:0]};
+          fill_en2_reg<=fill_en2&{|cmpEnO2,|cmpEnE2}&{~|fill_match_o[2][15:8],~|fill_match_o[2][7:0]};
           fill_addrE2_reg<=fill_addrE2;
           fill_addrO2_reg<=fill_addrO2;
           fill_st2_reg<=fill_st2;
-          fill_en3_reg<=fill_en3&{~|fill_match_o[3][15:8],~|fill_match_o[3][7:0]};
+          fill_en3_reg<=fill_en3&{|cmpEnO3,|cmpEnE3}&{~|fill_match_o[3][15:8],~|fill_match_o[3][7:0]};
           fill_addrE3_reg<=fill_addrE3;
           fill_addrO3_reg<=fill_addrO3;
           fill_st3_reg<=fill_st3;
-          fill_en4_reg<=fill_en4&{~|fill_match_o[4][15:8],~|fill_match_o[4][7:0]};
+          fill_en4_reg<=fill_en4&{|cmpEnO4,|cmpEnE4}&{~|fill_match_o[4][15:8],~|fill_match_o[4][7:0]};
           fill_addrE4_reg<=fill_addrE4;
           fill_addrO4_reg<=fill_addrO4;
           fill_st4_reg<=fill_st4;
-          fill_en5_reg<=fill_en5&{~|fill_match_o[5][15:8],~|fill_match_o[5][7:0]};
+          fill_en5_reg<=fill_en5&{|cmpEnO5,|cmpEnE5}&{~|fill_match_o[5][15:8],~|fill_match_o[5][7:0]};
           fill_addrE5_reg<=fill_addrE5;
           fill_addrO5_reg<=fill_addrO5;
           fill_st5_reg<=fill_st5;
