@@ -1487,7 +1487,7 @@ void req_set(Vheptane_core *top,req *reqs,char *mem,char *memp) {
 	((top->heptane_core__DOT__bck_mod__DOT__L1D_mod__DOT__ways_gen__BRA__6__KET____DOT__way_mod__DOT__ins_hit&1)<<6)|
 	((top->heptane_core__DOT__bck_mod__DOT__L1D_mod__DOT__ways_gen__BRA__7__KET____DOT__way_mod__DOT__ins_hit&1)<<7));
     }
-    if (top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__mOpX2_addrOdd_reg==0x2000f7 && top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__mOpX2_en_reg) {
+    if (top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__mOpX1_addrOdd_reg==0x200002 && top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__mOpX1_en_reg) {
 	printf(" ");
     }
     idr=top->heptane_core__DOT__bck_mod__DOT__insert_isData_reg3;
