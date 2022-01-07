@@ -503,12 +503,12 @@ module dmisscam(
       for(k=0;k<16;k=k+1) begin : buffers_gen
           assign read_req=read_en_way[k] ? k[3:0] : 4'bz;
           if (k<8) begin//fill_st0,fill_dupl0,fill_sz0,fill_odd0,fill_io0,fill_split0,fill_bbank0,fill_low0,
-              assign fill_addr[k]=en_outE[0] & bitE0[k] ? {fill_addrE0_reg,1'b1} : 37'bz;
-              assign fill_addr[k]=en_outE[1] & bitE1[k] ? {fill_addrE1_reg,1'b1} : 37'bz;
-              assign fill_addr[k]=en_outE[2] & bitE2[k] ? {fill_addrE2_reg,1'b1} : 37'bz;
-              assign fill_addr[k]=en_outE[3] & bitE3[k] ? {fill_addrE3_reg,1'b1} : 37'bz;
-              assign fill_addr[k]=en_outE[4] & bitE4[k] ? {fill_addrE4_reg,1'b1} : 37'bz;
-              assign fill_addr[k]=en_outE[5] & bitE5[k] ? {fill_addrE5_reg,1'b1} : 37'bz;
+              assign fill_addr[k]=en_outE[0] & bitE0[k] ? {fill_addrE0_reg,1'b0} : 37'bz;
+              assign fill_addr[k]=en_outE[1] & bitE1[k] ? {fill_addrE1_reg,1'b0} : 37'bz;
+              assign fill_addr[k]=en_outE[2] & bitE2[k] ? {fill_addrE2_reg,1'b0} : 37'bz;
+              assign fill_addr[k]=en_outE[3] & bitE3[k] ? {fill_addrE3_reg,1'b0} : 37'bz;
+              assign fill_addr[k]=en_outE[4] & bitE4[k] ? {fill_addrE4_reg,1'b0} : 37'bz;
+              assign fill_addr[k]=en_outE[5] & bitE5[k] ? {fill_addrE5_reg,1'b0} : 37'bz;
               assign fill_addr[k]=~fill_en_way[k] ? 37'b0 : 
                   37'bz;
               assign fill_st[k]=en_outE[0] & bitE0[k] ? fill_st0_reg : 1'bz;
@@ -575,7 +575,8 @@ module dmisscam(
               assign fill_low[k]=en_outE[5] & bitE5[k] ? fill_low5_reg : 2'bz;
               assign fill_low[k]=~fill_en_way[k] ? 2'b0 : 
                   2'bz;
-              assign fill_en_way[k]=bitE0[k]&en_outE[0]||bitE1[k]&en_outE[1]||bitE2[k]&en_outE[2]||bitE3[k]&en_outE[3]||bitE4[k]&en_outE4||bitE5[k]&en_outE[5];
+              assign fill_en_way[k]=bitE0[k]&en_outE[0]||bitE1[k]&en_outE[1]||bitE2[k]&en_outE[2]||
+		      bitE3[k]&en_outE[3]||bitE4[k]&en_outE[4]||bitE5[k]&en_outE[5];
               dmisscam_buf #(k) buf_mod(
               clk,
               rst,
