@@ -349,8 +349,8 @@ module lsq_decide_ret(
 	    ret_ret<=1'b0;
 	end 
 	if (~bStall) begin
-            if (dataB_enOut && ~doRetire) ret_ret<=1'b0;
-	    else if (doRetire && dataB_II==~~~~dataB_II_reg) begin
+//            if (dataB_enOut && ~doRetire) ret_ret<=1'b0;
+	    if (doRetire && dataB_II==~~~~dataB_II_reg) begin
 		ret_ret<=1'b1;
 		dataB_II_reg<=6'h3f;
 	    end else if (doRetire && dataB_ready) ret_ret<=1'b0;
