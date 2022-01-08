@@ -347,13 +347,17 @@ module lsq_decide_ret(
                 retire_exbitsx6[4*t+:4]<=4'b0;
 	    end*/
 	    ret_ret<=1'b0;
+	    if (doRetire && cntrl_II==dataB_II_reg) begin
+		    ret_ret<=1'b1;
+		    dataB_II_reg<=6'h3f;
+	    end
+	    if (doRetire && ~dataB_ret_mask[0]) begin 
+		    ret_ret<=1'b1;
+		    dataB_II_reg<=6'h3f;
+	    end
 	end 
 	if (~bStall) begin
             if (dataB_enOut && ~doRetire) ret_ret<=1'b0;
-	    else if (doRetire && dataB_II==~~~~dataB_II_reg) begin
-		ret_ret<=1'b1;
-		dataB_II_reg<=6'h3f;
-	    end else if (doRetire && dataB_ready) ret_ret<=1'b0;
 	end
         if (except && except_thread==dataB_thread) begin
             ret_ret<=1'b1;
