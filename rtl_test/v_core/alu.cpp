@@ -1598,7 +1598,8 @@ no_srch:;
 	printf("outEn 0x%lx\n",top->heptane_core__DOT__bck_mod__DOT__outEn);
     }
     for(k=0;k<9;k++) {
-        if (top->heptane_core__DOT__bck_mod__DOT__rs_en_reg[k]) {
+        if (top->heptane_core__DOT__bck_mod__DOT__rs_en_reg[k] && !(top->heptane_core__DOT__bck_mod__DOT__stall_rs|
+				top->heptane_core__DOT__bck_mod__DOT__doStall_rs)) {
 	    printf("rs_en_reg 0x%x, \t0x%x\n",k,top->heptane_core__DOT__bck_mod__DOT__rs_port_sch[k]);
         }
     }

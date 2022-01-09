@@ -327,8 +327,7 @@ module lsq_decide_ret(
     end else begin
 	//$display("dd ",dataB_II," ",dataB_II_reg," ",cntrl_II);
         for(t=0;t<10;t=t+1) if ((ret_ret && cntrl_II==dataB_II && dataB_ret_mask[0])|
-           (~ret_ret && cntrl_II==dataB_II_reg && doRetire|(cntrl_II==dataB_II)) &&
-           ~bStall) begin
+           (~ret_ret && cntrl_II==dataB_II_reg && doRetire|(cntrl_II==dataB_II))) begin
             retire_enOutP[t]<=  dataB_ret_mask2[t];
 	    retire_fine[t]<=  ~dataB_err_mask2[t] && ~dataB_err_mask3[t]
             && ~dataB_err_mask4[t];
@@ -348,12 +347,10 @@ module lsq_decide_ret(
 	    end*/
 	    ret_ret<=1'b0;
 	end 
-	if (~bStall) begin
-//            if (dataB_enOut && ~doRetire) ret_ret<=1'b0;
-	    if (doRetire && dataB_II==~~~~dataB_II_reg) begin
-		ret_ret<=1'b1;
-		dataB_II_reg<=6'h3f;
-	    end else if (doRetire && dataB_ready) ret_ret<=1'b0;
+	if (doRetire && (dataB_II==dataB_II_reg)|~dataB_ret_mask[0]) begin
+	    ret_ret<=1'b1;
+	    dataB_II_reg<=6'h3f;
+	end 
 	end
         if (except && except_thread==dataB_thread) begin
             ret_ret<=1'b1;
