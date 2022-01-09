@@ -96,7 +96,7 @@ module rrf_flag(
 		  
 		  read0_oe_reg<=1'b1;
 		end
-	  else if (read_clkEn)
+	  else
 	    begin
 
 		  read_thread_reg<=read_thread;

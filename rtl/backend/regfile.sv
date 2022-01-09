@@ -1226,7 +1226,6 @@ module regfile_zero_cycle_write(
         end
       else 
         begin 
-          if (read_clkEn)
             begin
               read_constEn_reg<=read_constEn;
               read_oe_reg<=read_oe;
