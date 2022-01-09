@@ -1449,15 +1449,16 @@ module lsq_req(
           if (foundB && readB_clkEn) begin
               validB=validB & ~curB;
               curB=firstB;
+	      flipB<=readB_addr_d[5];
           end else if (readB_clkEn) begin //no new entries
               validB=validB & ~curB;
-	      if (readB_addr_d[5]) flipB<=~flipB;
+	      flipB<=readB_addr_d[5];
               curB=64'b0;
               if (~onSameValidB) begin
                   validB=validB_next;
                   validB_next=64'b0;
                   //threadB<=threadB_next;
-                  flipB<=~flipB;
+//                  flipB<=~flipB;
                   onSameValidB<=1'b1;
                   curB=firstBN;
               end

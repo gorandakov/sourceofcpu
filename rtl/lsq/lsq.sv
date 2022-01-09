@@ -351,7 +351,6 @@ module lsq_decide_ret(
 	    ret_ret<=1'b1;
 	    dataB_II_reg<=6'h3f;
 	end 
-	end
         if (except && except_thread==dataB_thread) begin
             ret_ret<=1'b1;
             dataB_II_reg<=6'h3f;
