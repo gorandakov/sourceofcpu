@@ -347,7 +347,7 @@ module lsq_decide_ret(
 	    end*/
 	    ret_ret<=1'b0;
 	end 
-	if (doRetire && (dataB_II==dataB_II_reg)|~dataB_ret_mask[0]) begin
+	if (doRetire && (dataB_II==dataB_II_reg)) begin
 	    ret_ret<=1'b1;
 	    dataB_II_reg<=6'h3f;
 	end 
