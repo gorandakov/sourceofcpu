@@ -306,60 +306,23 @@ module lsq_decide_ret(
 
 //  assign dataB_enOut0=dataB_ready && (doRetire && cntrl_II==dataB_II0_reg[9:4]) | 
 //    (ret_ret && cntrl_II==dataB_II0[9:4]);
-  assign dataB_enOut=dataB_ready && (doRetire && cntrl_II==dataB_II_reg && ~bStall) | 
-      (ret_ret && cntrl_II==dataB_II);
-  assign retire_enOut=retire_enOutP & {10{ cntrl_II==dataB_II_reg}};
-  assign out_II=dataB_II_reg;
+  assign dataB_enOut=dataB_ready && (doRetire && cntrl_II==dataB_II && ~bStall);
+  assign retire_enOut=retire_enOutP & {10{ cntrl_II==dataB_II}};
+  assign out_II=dataB_II;
   //assign out_II=ret_ret ? dataB_II : dataB_II_reg;
-  always @(posedge clk) begin
-    if (rst) begin
-        retire_enOutP<=10'b0;
-	retire_fine<=10'b0;
-	retire_ldconfl<=10'b0;
-	retire_waitconfl<=10'b0;
-        retire_exbitsx6<=40'b0;
-	retire_except<=10'b0;
-	dataB_II_reg<=6'h3f;
-	//non_ret<=1'b0;
-        ret_ret<=1'b1;
-       // doRetire_reg<=1'b0;
-       dataB_shr_out<={`lsqshare_width{1'b0}};
-    end else begin
+  always @(*) begin
 	//$display("dd ",dataB_II," ",dataB_II_reg," ",cntrl_II);
-        for(t=0;t<10;t=t+1) if ((ret_ret && cntrl_II==dataB_II && dataB_ret_mask[0])|
-           (~ret_ret && cntrl_II==dataB_II_reg && doRetire|(cntrl_II==dataB_II))) begin
-            retire_enOutP[t]<=  dataB_ret_mask2[t];
-	    retire_fine[t]<=  ~dataB_err_mask2[t] && ~dataB_err_mask3[t]
+        for(t=0;t<10;t=t+1) begin
+            retire_enOutP[t]=  dataB_ret_mask2[t];
+	    retire_fine[t]=  ~dataB_err_mask2[t] && ~dataB_err_mask3[t]
             && ~dataB_err_mask4[t];
-	    retire_ldconfl[t]<=dataB_err_mask3[t];
-	    retire_waitconfl[t]<=dataB_err_mask4[t];
-	    retire_except[t]<= dataB_err_mask2[t];
+	    retire_ldconfl[t]=dataB_err_mask3[t];
+	    retire_waitconfl[t]=dataB_err_mask4[t];
+	    retire_except[t]= dataB_err_mask2[t];
             retire_exbitsx6[4*t+:4]<=dataB_ebits_item[t];
-	    if (doRetire | ret_ret) dataB_II_reg<=dataB_II;
-	    if (doRetire | ret_ret) dataB_shr_out<=dataB_data_shr;
-	    /*if (doRetire && ret_ret|(dataB_II==dataB_II_reg)) /-*$$*-/begin
-                retire_enOutP[t]<=1'b0;
-	        retire_fine[t]<=1'b0;
-	        retire_ldconfl[t]<=1'b0;
-	        retire_waitconfl[t]<=1'b0;
-	        retire_except[t]<= 1'b0;
-                retire_exbitsx6[4*t+:4]<=4'b0;
-	    end*/
-	    ret_ret<=1'b0;
+	    dataB_II_reg=dataB_II;
+	    dataB_shr_out=dataB_data_shr;
 	end 
-	if (doRetire && (dataB_II==dataB_II_reg)) begin
-	    ret_ret<=1'b1;
-	    dataB_II_reg<=6'h3f;
-	end 
-        if (except && except_thread==dataB_thread) begin
-            ret_ret<=1'b1;
-            dataB_II_reg<=6'h3f;
-            retire_enOutP<=10'b0;
-        end  
-      //  if (dataB_enOut) non_ret<=1'b1;
-      //  if (except) non_ret<=1'b0;
-       // doRetire_reg<=doRetire;
-    end
   end
 endmodule
   
