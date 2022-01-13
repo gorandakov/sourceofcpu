@@ -1770,12 +1770,16 @@ void gen_prog(req *reqs,int count, FILE *f,hcont *contx,char *mem,char *pmem) {
    contx->reg_genP[n]=reqs[n].res_p;
   // reqs[32].gen_movcsr(csr_page,31);
    
-   for(n=32;n<(count-1);n++) {
-	   if (lrand48()&1) {
+   for(n=32;n<(count-2);n++) {
+	   int p;
+	   if ((p=lrand48()&3)==2) {
                reqs[n].gen(false, false, lrand48()&1, NULL,contx,false,NULL,NULL);
 	       fprintf(f,"%s",reqs[n].asmtext);
-	   } else {
+	   } else if (p)  {
                if (reqs[n+1].gen(false, false, false, NULL,contx,true,mem,pmem)) n++;
+	       fprintf(f,"%s",reqs[n].asmtext);
+	   } else {
+               if (reqs[n+2].gen(false, false, false, NULL,contx,true+1,mem,pmem)) n+=2;
 	       fprintf(f,"%s",reqs[n].asmtext);
 	   }
    }
