@@ -319,7 +319,7 @@ module lsq_decide_ret(
 	    retire_ldconfl[t]=dataB_err_mask3[t];
 	    retire_waitconfl[t]=dataB_err_mask4[t];
 	    retire_except[t]= dataB_err_mask2[t];
-            retire_exbitsx6[4*t+:4]<=dataB_ebits_item[t];
+            retire_exbitsx6[4*t+:4]=dataB_ebits_item[t];
 	    dataB_II_reg=dataB_II;
 	    dataB_shr_out=dataB_data_shr;
 	end 

@@ -999,7 +999,7 @@ module lsq_req(
   generate
       genvar k;
       for(k=0;k<32;k=k+1) begin : addrB_gen
-          assign readB_addr_d=(firstB[k] || firstB[k+32] || ~foundB & firstBN[k]) ? {~firstB[k],k[4:0]} : 6'bz;
+          assign readB_addr_d=(firstB[k] || firstB[k+32] || ~foundB & (firstBN[k]|firstBN[k+32])) ? {~firstB[k]&foundB||~firstBN[k]&~foundB,k[4:0]} : 6'bz;
           assign readA_addr_d=(firstA[k] || ~foundA & firstAN[k]) ? k : 5'bz;
       end
   endgenerate
