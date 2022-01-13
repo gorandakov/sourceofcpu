@@ -483,6 +483,7 @@ bool req::gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,bool
     rB=rand()&0x1f;
     rT=rand()&0x1f;
     if (has_mem_ && rT==16) rT=17;
+    if (has_mem_ && rA==16) rA=17;
     if (has_mem_) addr=lrand48()%(MEMRGN_DATA_SZ-8);
     if (rand()&1) {
         B=lrand48()&0xffffffff;
