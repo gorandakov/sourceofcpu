@@ -935,8 +935,8 @@ addie:
  
             case 32:
 	    if (has_mem_==2) {
-		(this-1)->gen_memw(NULL,8,mem,memp,addr,B,B_p);
-		snprintf((*(this-1)).asmtext,sizeof (asmtext), "copyq %%%s, mem+%li(%rip))\n",reg65[rT],addr);
+		(this-1)->gen_memw(NULL,8,mem,memp,addr,A,A_p);
+		snprintf((*(this-1)).asmtext,sizeof (asmtext), "copyq %%%s, mem+%li(%rip))\n",reg65[rA],addr);
 		(this-1)->rT=-1;
 		(this-1)->flags=flags_in;
 		rtn=false;
@@ -956,8 +956,8 @@ addie:
 
             case 33:
 	    if (has_mem_==2) {
-		(this-1)->gen_memw(NULL,4,mem,memp,addr,B,B_p);
-		snprintf((*(this-1)).asmtext,sizeof (asmtext), "copyq %%%s, mem+%li(%rip))\n",reg32[rT],addr);
+		(this-1)->gen_memw(NULL,4,mem,memp,addr,A,A_p);
+		snprintf((*(this-1)).asmtext,sizeof (asmtext), "copyq %%%s, mem+%li(%rip))\n",reg32[rA],addr);
 		(this-1)->rT=-1;
 		(this-1)->flags=flags_in;
 		rtn=false;
@@ -976,7 +976,14 @@ addie:
             break;
 
             case 34:
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"copyw %%%s,  %%%s\n",reg16[rB],reg16[rT]);
+	    if (has_mem_==2) {
+		(this-1)->gen_memw(NULL,2,mem,memp,addr,A,A_p);
+		snprintf((*(this-1)).asmtext,sizeof (asmtext), "copyq %%%s, mem+%li(%rip))\n",reg16[rA],addr);
+		(this-1)->rT=-1;
+		(this-1)->flags=flags_in;
+		rtn=false;
+		break;
+	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"copyw %%%s,  %%%s\n",reg16[rB],reg16[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"copyw $%i, %%%s\n",(int) B,reg16[rT]);
 	    rA=rT;
 	    A=contx->reg_gen[rA];
@@ -994,7 +1001,14 @@ addie:
 		B=contx->reg_gen[rB];
 		B_p=contx->reg_genP[rB];
 	    }
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"copyb %%%s,  %%%s\n",reg8[rB+((op&1024)>>5)],reg8[rT+((op&256)>>3)]);
+	    if (has_mem_==2) {
+		(this-1)->gen_memw(NULL,1,mem,memp,addr,A,A_p);
+		snprintf((*(this-1)).asmtext,sizeof (asmtext), "copyq %%%s, mem+%li(%rip))\n",reg8[rA],addr);
+		(this-1)->rT=-1;
+		(this-1)->flags=flags_in;
+		rtn=false;
+		break;
+	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"copyb %%%s,  %%%s\n",reg8[rB+((op&1024)>>5)],reg8[rT+((op&256)>>3)]);
 	    else snprintf(asmtext,sizeof asmtext,"copyb $%i, %%%s\n",(int) B,reg8[rT]);
 	    rA=rT;
 	    A=contx->reg_gen[rA];
@@ -1015,6 +1029,8 @@ addie:
 		snprintf((*(this-1)).asmtext,sizeof (asmtext), "copyzbl mem+%li(%rip), %%%s\n",addr,reg32[rT]);
                 (*(this-1)).rT=rT;
 		rtn=false;
+		(*(this-1)).flags=flags_in;
+		break;
 	    } else if (rB<0) {
 		rB=rand()&0x1f;
 		B=contx->reg_gen[rB];
@@ -1032,6 +1048,8 @@ addie:
 		snprintf((*(this-1)).asmtext,sizeof (asmtext), "copyzwl mem+%li(%rip), %%%s\n",addr,reg32[rT]);
                 (*(this-1)).rT=rT;
 		rtn=false;
+		(*(this-1)).flags=flags_in;
+		break;
 	    } else if (rB<0) {
 		rB=rand()&0x1f;
 		B=contx->reg_gen[rB];
