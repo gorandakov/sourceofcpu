@@ -946,7 +946,6 @@ addie:
 		snprintf((*(this-1)).asmtext,sizeof (asmtext), "copyq mem+%li(%rip), %%%s\n",addr,reg65[rT]);
                 (*(this-1)).rT=rT;
 		rtn=false;
-                (this-1)->res=B;
                 (this-1)->flags=flags_in;
 		break;
 	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"copyq %%%s,  %%%s\n",reg65[rB],reg65[rT]);
@@ -968,7 +967,6 @@ addie:
 		snprintf((*(this-1)).asmtext,sizeof (asmtext), "copyl mem+%li(%rip), %%%s\n",addr,reg32[rT]);
                 (*(this-1)).rT=rT;
 		rtn=false;
-                (this-1)->res=B&0xffffffffull;
                 (this-1)->flags=flags_in;
 		break;
 	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"copyl %%%s,  %%%s\n",reg32[rB],reg32[rT]);
