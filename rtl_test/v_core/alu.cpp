@@ -1336,9 +1336,12 @@ addie:
 	contx->reg_gen[(*(this-1)).rT]=(*(this-1)).res;
 	contx->reg_genP[(*(this-1)).rT]=(*(this-1)).res_p;
     }
-    if ((rtn||!has_mem_) && (rT>=0)) {
+    if ((rtn||!has_mem_) && (rT>=0) && has_mem_!=2) {
 	contx->reg_gen[rT]=res;
 	contx->reg_genP[rT]=res_p;
+    }
+    if (has_mem_==2 && rtn) {
+        (this+1)->gen_memw(NULL,(this-1)->op,mem,memp,addr,res,res_p);
     }
     return rtn;
 }
@@ -1347,6 +1350,7 @@ void req::gen_mem(req* prev1,unsigned code,char *mem,char *memp,unsigned long lo
     res=0;
     res_p=0;
     rT=16;
+    op=code;
     asmtext[0]='\x00';
 #define UC (unsigned long long)
     switch(code) {
@@ -1362,6 +1366,28 @@ void req::gen_mem(req* prev1,unsigned code,char *mem,char *memp,unsigned long lo
     }
 #undef UC
 }
+
+void req::gen_memw(req* prev1,unsigned code,char *mem,char *memp,unsigned long long addr,unsigned long long Dt,int Dt_p) {
+    res=0;
+    res_p=0;
+    rT=-1;
+    asmtext[0]='w';
+    asmtext[1]='\x00';
+    op=code;
+    mem[MEMRGN_DATA+addr+0]=(Dt>>0)&0xffull;
+    if (code) mem[MEMRGN_DATA+addr+1]=(Dt>>8)&0xffull;
+    if (code>2) mem[MEMRGN_DATA+addr+2]=(Dt>>16)&0xffull;
+    if (code>2) mem[MEMRGN_DATA+addr+3]=(Dt>>24)&0xffull;
+    if (code>4) {
+        mem[MEMRGN_DATA+addr+4]=(Dt>>32)&0xffull;
+        mem[MEMRGN_DATA+addr+5]=(Dt>>40)&0xffull;
+        mem[MEMRGN_DATA+addr+6]=(Dt>>48)&0xffull;
+        mem[MEMRGN_DATA+addr+7]=(Dt>>56)&0xffull;
+    }
+    memp[(MEMRGN_DATA+addr)/64]=(memp[(MEMRGN_DATA+addr)/64])&(0xff7f>>(7-((MEMRGN_DATA+addr)/8)%8))|
+	(Dt_p<<(((MEMRGN_DATA+addr)/8)%8));
+}
+
 
 void req::flg64(__int128 r) {
     flags=((r>>59)&0x20)|((r>>61)&0x4)|(((unsigned long long) r==0)<<1)|
