@@ -33,6 +33,8 @@ module predec_RV_class(instr,flag,class_,isLNK,isRet,LNK2);
 
   assign isLoad=opcode_main[6:3]==4'b0 && opcode_main[1:0]==2'b11;
   assign isStore=opcode_main[6:3]==4'b0100 && opcode_main[1:0]==2'b11;
+  assign isLoadEx=opcode_main[6:2]==5'b10 && opcode_main[1:0]==2'b11;
+  assign isStoreEx=opcode_main[6:2]==5'b01010 && opcode_main[1:0]==2'b11;
   assign isBasicALU=!opcode_main[6] && opcode_main[4:2]==3'b100 && opcode_main[1:0]==2'b11;
   assign isBasicALU32=!opcode_main[6] && opcode_main[4:2]==3'b110 && opcode_main[1:0]==2'b11;
   assign isAdvALUorJump=(instr[6:5]==2'b11 && instr[4] && instr[2]) |
@@ -41,16 +43,16 @@ module predec_RV_class(instr,flag,class_,isLNK,isRet,LNK2);
   assign isFpFma=opcode_main[6:4]==2'b100 && opcode_main[1:0]==2'b11;
 
   assign clsStore=|{subIsBasicLDST|subIsStackLDST && instr[15],
-      isStore};
+      isStore,isStoreEx};
   assign clsLoad=|{subIsBasicLDST|subIsStackLDST && ~instr[15],
-      isLoad};
+      isLoad,isLoadEx};
   assign clsLoadFPU=|{subIsBasicLDST|subIsStackLDST && instr[15:13]==3'd1,
-      isLoad & opcode_main[2]};
+      isLoad & opcode_main[2],isLoadEx & opcode_main[15]};
 
   assign clsShift=|{subIsReg3Alu && instr[11:10]!=2'b11};
   assign clsMul=|{isntr[15:13]=3'b100 && instr[1:0]==2'b10 && instr[6:2]==5'b0 && instr[11:7]!=5'b0};
   assign clsALU=|{subIsReg3Alu && instr[11:10]==2'b11,
     subIsBasicImmAluReg5 && !(isntr[15:13]=3'b100 && instr[1:0]==2'b10 && instr[6:2]==5'b0 && instr[11:7]!=5'b0),
     subIs2xReg5Alu,subIsReg3Alu && instr[11:10]==2'b11,
-    subIsJMP & instr[14]};
+    subIsJMP & instr[14],isAdvALUorJump};
 endmodule

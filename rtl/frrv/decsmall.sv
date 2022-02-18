@@ -297,6 +297,8 @@ module smallInstr_decoder(
 
   assign isLoad=opcode_main[6:3]==4'b0 && opcode_main[1:0]==2'b11;
   assign isStore=opcode_main[6:3]==4'b0100 && opcode_main[1:0]==2'b11;
+  assign isLoadEx=opcode_main[6:2]==5'b10 && opcode_main[1:0]==2'b11;
+  assign isStoreEx=opcode_main[6:2]==5'b01010 && opcode_main[1:0]==2'b11;
   assign isBasicALU=!opcode_main[6] && opcode_main[4:2]==3'b100 && opcode_main[1:0]==2'b11;
   assign isBasicALU32=!opcode_main[6] && opcode_main[4:2]==3'b110 && opcode_main[1:0]==2'b11;
   assign isAdvALUorJump=(instr[6:5]==2'b11 && instr[4] && instr[2]) |
@@ -790,6 +792,20 @@ module smallInstr_decoder(
       prB[7]=instr[19:15];
       prAlloc[7]=isLoad;
       pconstant[7]=isLoad ? {{42{instr[31}},instr[31:20} : {{42{instr[31]}},instr[31:25],instr[11:7]};
+      
+      ptrien[8]=isLoadEx & ~instr[15] || isStoreEx & ~instr[15];
+      poperation[8]={8'b10,instr[14:12],instr[5]};
+      pport[8]=isLoadEx ? PORT_LOAD : PORT_STORE;
+      puseRs[8]=1'b1;
+      prT_use[8]=isLoad;
+      prC_use[8]=isStore;
+      prA_use[8]=1'b1;
+      prT[8]={2'b01,instr[9:7]};
+      prC[8]={2'b01,instr[19:17];
+      prB[8]={2'b01,instr[16],instr[11:10]};
+      prA[8]=isLoadEx ? prC[8] : prT[8];
+      prAlloc[7]=isLoadEx;
+      pconstant[7]={{42{instr[31}},instr[31:20};
   end
 
 
