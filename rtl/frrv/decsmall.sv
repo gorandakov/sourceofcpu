@@ -961,49 +961,6 @@ module smallInstr_decoder(
 	      perror[11]=1'b1;
       endcase
       
-      ptrien[12]=isBasicALU | isBasicALU32 && instr[5] && instr[13:12]==2'b01 && ~instr[31] && instr[29:25]==5'b0;
-      puseRs[12]=1'b1;
-      prA_use[12]=1'b1;
-      prB_use[12]=1'b1;
-      prT_use[12]=1'b1;
-      prT[12]=instr[11:7];
-      prA[12]=instr[19:15];
-      prB[12]=instr[24:20];
-      prAlloc[12]=1'b1;
-      casex({isBasicALU32,instr[14],instr[30]})
-	  3'b000: begin
-              pport[12]=PORT_SHIFT;
-	      poperation[12]=`op_shl64;
-	      pflags_write[12]=1'b1;
-	  end
-	  3'b100: begin
-              pport[12]=PORT_SHIFT;
-	      poperation[12]=`op_shl32|2;
-	      pflags_write[12]=1'b1;
-	  end
-	  3'b010: begin
-              pport[12]=PORT_SHIFT;
-	      poperation[12]=`op_shr64;
-	      pflags_write[12]=1'b1;
-	  end
-	  3'b110: begin
-              pport[12]=PORT_SHIFT;
-	      poperation[12]=`op_shr32|2;
-	      pflags_write[12]=1'b1;
-	  end
-	  3'b011: begin
-              pport[12]=PORT_SHIFT;
-	      poperation[12]=`op_sar64;
-	      pflags_write[12]=1'b1;
-	  end
-	  3'b111: begin
-              pport[12]=PORT_SHIFT;
-	      poperation[12]=`op_sar32|2;
-	      pflags_write[12]=1'b1;
-	  end
-          default: perror[12]=1'b1;
-      endcase
-      
   end
 
 
