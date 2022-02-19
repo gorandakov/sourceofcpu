@@ -50,16 +50,12 @@ module predec_RV_class(instr,flag,class_,isLNK,isRet,LNK2);
       isLoad & opcode_main[2],isLoadEx & opcode_main[15]};
 
   assign clsShift=|{subIsReg3Alu && instr[11:10]!=2'b11,
-          isBasicALU | isBasicALU32 && ~instr[5] && instr[13:12]==2'b01 && ~instr[31] && instr[29:26]==4'b0,
-          isBasicALU | isBasicALU32 && instr[5] && instr[13:12]==2'b01 && ~instr[31] && instr[29:25]==5'b0 };
-  assign clsMul=|{isntr[15:13]=3'b100 && instr[1:0]==2'b10 && instr[6:2]==5'b0 && instr[11:7]!=5'b0,
 	  isBasicALU | isBasicALU32 && ~instr[5] && instr[13:12]!=2'b01 && instr[14:13]==2'b01,
-	  isBasicALU | isBasicALU32 && instr[5] && instr[13:12]!=2'b01 && instr[14:13]==2'b01 && instr[31:25]==7'b0,
-        };
+          isBasicALU | isBasicALU32 && ~instr[5] && instr[13:12]==2'b01 && ~instr[31] && instr[29:26]==4'b0};
+  assign clsMul=|{isntr[15:13]=3'b100 && instr[1:0]==2'b10 && instr[6:2]==5'b0 && instr[11:7]!=5'b0};
   assign clsALU=|{subIsReg3Alu && instr[11:10]==2'b11,
     subIsBasicImmAluReg5 && !(isntr[15:13]=3'b100 && instr[1:0]==2'b10 && instr[6:2]==5'b0 && instr[11:7]!=5'b0),
     subIs2xReg5Alu,subIsReg3Alu && instr[11:10]==2'b11,
     subIsJMP & instr[14],isAdvALUorJump,
-    isBasicALU | isBasicALU32 && ~instr[5] && instr[13:12]!=2'b01,
-    isBasicALU | isBasicALU32 && instr[5] && instr[13:12]!=2'b01 && ~instr[31] && instr[29:25]==5'b0 };
+    isBasicALU | isBasicALU32 && ~instr[5] && instr[13:12]!=2'b01};
 endmodule
