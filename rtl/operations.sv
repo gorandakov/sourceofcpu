@@ -98,9 +98,9 @@
 `define op_mul32 (2|`op_multiclk)
 `define op_mul64 (3|`op_multiclk)
 
-//`define op_lmul8  (4|`op_multiclk)
+`define op_xlt  (4|`op_multiclk)
 `define op_limul64 (5|`op_multiclk)
-//`define op_lmul32 (6|`op_multiclk)
+`define op_xltu (6|`op_multiclk)
 `define op_lmul64 (7|`op_multiclk)
 `define op_swp64  (6|`op_multiclk)
 `define op_swp32  (4|`op_multiclk)
