@@ -23,7 +23,6 @@ module fu_alu(
   u6_A,u6_B,u6_S,u6_op,u6_ret,u6_rten,u6_clkEn,
     u6_A_fufwd,u6_A_fuufwd,u6_B_fufwd,u6_B_fuufwd,
     u6_S_fufwd,u6_S_fuufwd,
-  u6_constr,u6_xconst,u6_bxcross,
   FU0, FU1,  FU2,  FU3,
   FU4, FU5,  FU6,  FU7,
   FU8, FU9,
@@ -124,9 +123,6 @@ module fu_alu(
   input [3:0]           u6_B_fuufwd;
   input [3:0]           u6_S_fufwd;
   input [3:0]           u6_S_fuufwd;
-  input [11:0] u6_constr;
-  input [19:0] u6_xconst;
-  input u6_bxcross;
 
   input [64:0] FU0;
   input [64:0] FU1;
@@ -191,7 +187,6 @@ module fu_alu(
   wire [64:0] uu_B5;
   wire [64:0] uu_A6;
   wire [64:0] uu_B6;
-  wire [64:0] uu_B7;
 
   wire [5:0] uu_S1;
   wire [5:0] uu_S2;
@@ -436,7 +431,7 @@ module fu_alu(
   rs_write_forward_JALR #(33) u6_Bx_fwd(
   clk,rst,
   ~u6_clkEn,
-  u6_B[64:32],uu_B6[64:32],33'h0|{21'b0,u6_constr},u6_op=13'd2 || u6_op==13'd6,
+  u6_B[64:32],uu_B6[64:32],33'h0,u6_op=13'd2 || u6_op==13'd6,
   u6_B_fufwd,u6_B_fuufwd,
   FU0[64:32],FU0_reg[64:32],
   FU1[64:32],FU1_reg[64:32],
@@ -449,24 +444,6 @@ module fu_alu(
   FU8[64:32],FU8_reg[64:32],
   FU9[64:32],FU9_reg[64:32]
   );
-  
-  rs_write_forward #(33) u7_Bx_fwd(
-  clk,rst,
-  ~u6_clkEn,
-  u6_B,uu_B7,
-  u6_B_fufwd,u6_B_fuufwd,
-  FU0,FU0_reg,
-  FU1,FU1_reg,
-  FU2,FU2_reg,
-  FU3,FU3_reg,
-  FU4,FU4_reg,
-  FU5,FU5_reg,
-  FU6,FU6_reg,
-  FU7,FU7_reg,
-  FU8,FU8_reg,
-  FU9,FU9_reg
-  );
-  
   
   rs_write_forward #(32) u1_A_fwd(
   clk,rst,
