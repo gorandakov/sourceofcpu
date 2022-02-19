@@ -808,15 +808,6 @@ module smallInstr_decoder(
       pconstant[7]={{42{instr[31}},instr[31:20};
 
       ptrien[9]=isBasicALU | isBasicALU32 && ~instr[5] && instr[13:12]!=2'b01;
-      pconstant[9]={{52{instr[31]}},instr[31:20]};
-      puseRs[9]=1'b1;
-      prA_use[9]=1'b1;
-      prB_use[9]=1'b1;
-      prB_useBConst[9]=1'b1;
-      prT_use[9]=1'b1;
-      prT[9]=instr[11:7];
-      prA[9]=instr[19:15];
-      prAlloc[9]=1'b1;
       casex({isBasicALU32,instr[14:12})
 	  4'b0000: begin
               pport[9]=PORT_ALU;
@@ -855,55 +846,6 @@ module smallInstr_decoder(
 	      poperation[9]=`op_and64;
 	      pflags_write[9]=1'b1;
 	  end
-	  default:
-	      perror[9]=1'b1;
-      endcase
-      
-      ptrien[10]=isBasicALU | isBasicALU32 && ~instr[5] && instr[13:12]==2'b01 && ~instr[31] && instr[29:26]==4'b0;
-      pconstant[10]={{52{1'b0}},4'b0,instr[25:20]};
-      puseRs[10]=1'b1;
-      prA_use[10]=1'b1;
-      prB_use[10]=1'b1;
-      prB_useBConst[10]=1'b1;
-      prT_use[10]=1'b1;
-      prT[10]=instr[11:7];
-      prA[10]=instr[19:15];
-      prAlloc[10]=1'b1;
-      casex({isBasicALU32,instr[14],instr[30]})
-	  3'b000: begin
-              pport[10]=PORT_SHIFT;
-	      poperation[10]=`op_shl64;
-	      pflags_write[10]=1'b1;
-	  end
-	  3'b100: begin
-              pport[10]=PORT_SHIFT;
-	      poperation[10]=`op_shl32|2;
-	      pflags_write[10]=1'b1;
-	      if (instr[25]) perror[10]=1'b1;
-	  end
-	  3'b010: begin
-              pport[10]=PORT_SHIFT;
-	      poperation[10]=`op_shr64;
-	      pflags_write[10]=1'b1;
-	  end
-	  3'b110: begin
-              pport[10]=PORT_SHIFT;
-	      poperation[10]=`op_shr32|2;
-	      pflags_write[10]=1'b1;
-	      if (instr[25]) perror[10]=1'b1;
-	  end
-	  3'b011: begin
-              pport[10]=PORT_SHIFT;
-	      poperation[10]=`op_sar64;
-	      pflags_write[10]=1'b1;
-	  end
-	  3'b111: begin
-              pport[10]=PORT_SHIFT;
-	      poperation[10]=`op_sar32|2;
-	      pflags_write[10]=1'b1;
-	      if (instr[25]) perror[10]=1'b1;
-	  end
-          default: perror[10]=1'b1;
       endcase
   end
 
