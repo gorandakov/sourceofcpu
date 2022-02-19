@@ -727,11 +727,6 @@ module addsub_alu(a,b,out,sub,en,sxtEn,ben,cout,cout4,cout32,cout_sec,ndiff,cout
   xor_array #(WIDTH) X_mod (a[63:0],xb,X);
   nxor_array #(WIDTH) nX_mod (a[63:0],xb,nX);
 
-  assign Xx[31:0]=X[31:0];
-  assign Xx[63:32]=sxtEn ? {32{X[31]}} : X[63:32];
-  assign nXx[31:0]=X[31:0];
-  assign nXx[63:32]=sxtEn ? {32{nX[31]}} : nX[63:32];
-
   assign C1={C[WIDTH-2:0],sub[1]};
   assign nC1[WIDTH-1:1]=nC[WIDTH-2:0];
   not_array #(1) C1_mod (sub[1],nC1[0]);
@@ -749,8 +744,8 @@ module addsub_alu(a,b,out,sub,en,sxtEn,ben,cout,cout4,cout32,cout_sec,ndiff,cout
         
     for (i=0;i<WIDTH;i=i+1)
       begin : out_gen
-        assign out[i]=(Xx[i] & bitEn[i]) ? ~C1[i] : 1'bz;
-        assign out[i]=(nXx[i] & bitEn[i]) ? ~nC1[i] : 1'bz;
+        assign out[i]=(X[i] & bitEn[i]) ? ~C1[i] : 1'bz;
+        assign out[i]=(nX[i] & bitEn[i]) ? ~nC1[i] : 1'bz;
       end 
     if (WIDTH>1)
       begin
