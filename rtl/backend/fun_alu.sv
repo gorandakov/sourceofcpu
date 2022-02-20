@@ -241,213 +241,213 @@ module fu_alu(
   reg [8:0] u6_ret_reg2;
   reg [8:0] u6_ret_reg3;
 
-  rs_write_forward #(65) u1_A_fwd(
+  rs_write_forward #(32) u1_A_fwd(
   clk,rst,
   ~u1_clkEn,
-  u1_A,uu_A1,
+  u1_A[31:0],uu_A1[31:0],
   u1_A_fufwd,u1_A_fuufwd,
-  FU0,FU0_reg,
-  FU1,FU1_reg,
-  FU2,FU2_reg,
-  FU3,FU3_reg,
-  FU4,FU4_reg,
-  FU5,FU5_reg,
-  FU6,FU6_reg,
-  FU7,FU7_reg,
-  FU8,FU8_reg,
-  FU9,FU9_reg
+  FU0[31:0],FU0_reg[31:0],
+  FU1[31:0],FU1_reg[31:0],
+  FU2[31:0],FU2_reg[31:0],
+  FU3[31:0],FU3_reg[31:0],
+  FU4[31:0],FU4_reg[31:0],
+  FU5[31:0],FU5_reg[31:0],
+  FU6[31:0],FU6_reg[31:0],
+  FU7[31:0],FU7_reg[31:0],
+  FU8[31:0],FU8_reg[31:0],
+  FU9[31:0],FU9_reg[31:0]
   );
   
-  rs_write_forward #(65) u1_B_fwd(
+  rs_write_forward #(32) u1_B_fwd(
   clk,rst,
   ~u1_clkEn,
-  u1_B,uu_B1,
+  u1_B[31:0],uu_B1[31:0],
   u1_B_fufwd,u1_B_fuufwd,
-  FU0,FU0_reg,
-  FU1,FU1_reg,
-  FU2,FU2_reg,
-  FU3,FU3_reg,
-  FU4,FU4_reg,
-  FU5,FU5_reg,
-  FU6,FU6_reg,
-  FU7,FU7_reg,
-  FU8,FU8_reg,
-  FU9,FU9_reg
+  FU0[31:0],FU0_reg[31:0],
+  FU1[31:0],FU1_reg[31:0],
+  FU2[31:0],FU2_reg[31:0],
+  FU3[31:0],FU3_reg[31:0],
+  FU4[31:0],FU4_reg[31:0],
+  FU5[31:0],FU5_reg[31:0],
+  FU6[31:0],FU6_reg[31:0],
+  FU7[31:0],FU7_reg[31:0],
+  FU8[31:0],FU8_reg[31:0],
+  FU9[31:0],FU9_reg[31:0]
   );
   
   
-  rs_write_forward #(65) u2_A_fwd(
+  rs_write_forward #(32) u2_A_fwd(
   clk,rst,
   ~u2_clkEn,
-  u2_A,uu_A2,
+  u2_A[31:0],uu_A2[31:0],
   u2_A_fufwd,u2_A_fuufwd,
-  FU0,FU0_reg,
-  FU1,FU1_reg,
-  FU2,FU2_reg,
-  FU3,FU3_reg,
-  FU4,FU4_reg,
-  FU5,FU5_reg,
-  FU6,FU6_reg,
-  FU7,FU7_reg,
-  FU8,FU8_reg,
-  FU9,FU9_reg
+  FU0[31:0],FU0_reg[31:0],
+  FU1[31:0],FU1_reg[31:0],
+  FU2[31:0],FU2_reg[31:0],
+  FU3[31:0],FU3_reg[31:0],
+  FU4[31:0],FU4_reg[31:0],
+  FU5[31:0],FU5_reg[31:0],
+  FU6[31:0],FU6_reg[31:0],
+  FU7[31:0],FU7_reg[31:0],
+  FU8[31:0],FU8_reg[31:0],
+  FU9[31:0],FU9_reg[31:0]
   );
   
-  rs_write_forward #(65) u2_B_fwd(
+  rs_write_forward #(32) u2_B_fwd(
   clk,rst,
   ~u2_clkEn,
-  u2_B,uu_B2,
+  u2_B[31:0],uu_B2[31:0],
   u2_B_fufwd,u2_B_fuufwd,
-  FU0,FU0_reg,
-  FU1,FU1_reg,
-  FU2,FU2_reg,
-  FU3,FU3_reg,
-  FU4,FU4_reg,
-  FU5,FU5_reg,
-  FU6,FU6_reg,
-  FU7,FU7_reg,
-  FU8,FU8_reg,
-  FU9,FU9_reg
+  FU0[31:0],FU0_reg[31:0],
+  FU1[31:0],FU1_reg[31:0],
+  FU2[31:0],FU2_reg[31:0],
+  FU3[31:0],FU3_reg[31:0],
+  FU4[31:0],FU4_reg[31:0],
+  FU5[31:0],FU5_reg[31:0],
+  FU6[31:0],FU6_reg[31:0],
+  FU7[31:0],FU7_reg[31:0],
+  FU8[31:0],FU8_reg[31:0],
+  FU9[31:0],FU9_reg[31:0]
   );
   
   
-  rs_write_forward #(65) u3_A_fwd(
+  rs_write_forward #(32) u3_A_fwd(
   clk,rst,
   ~u3_clkEn,
-  u3_A,uu_A3,
+  u3_A[31:0],uu_A3[31:0],
   u3_A_fufwd,u3_A_fuufwd,
-  FU0,FU0_reg,
-  FU1,FU1_reg,
-  FU2,FU2_reg,
-  FU3,FU3_reg,
-  FU4,FU4_reg,
-  FU5,FU5_reg,
-  FU6,FU6_reg,
-  FU7,FU7_reg,
-  FU8,FU8_reg,
-  FU9,FU9_reg
+  FU0[31:0],FU0_reg[31:0],
+  FU1[31:0],FU1_reg[31:0],
+  FU2[31:0],FU2_reg[31:0],
+  FU3[31:0],FU3_reg[31:0],
+  FU4[31:0],FU4_reg[31:0],
+  FU5[31:0],FU5_reg[31:0],
+  FU6[31:0],FU6_reg[31:0],
+  FU7[31:0],FU7_reg[31:0],
+  FU8[31:0],FU8_reg[31:0],
+  FU9[31:0],FU9_reg[31:0]
   );
   
-  rs_write_forward #(65) u3_B_fwd(
+  rs_write_forward #(32) u3_B_fwd(
   clk,rst,
   ~u3_clkEn,
-  u3_B,uu_B3,
+  u3_B[31:0],uu_B3[31:0],
   u3_B_fufwd,u3_B_fuufwd,
-  FU0,FU0_reg,
-  FU1,FU1_reg,
-  FU2,FU2_reg,
-  FU3,FU3_reg,
-  FU4,FU4_reg,
-  FU5,FU5_reg,
-  FU6,FU6_reg,
-  FU7,FU7_reg,
-  FU8,FU8_reg,
-  FU9,FU9_reg
+  FU0[31:0],FU0_reg[31:0],
+  FU1[31:0],FU1_reg[31:0],
+  FU2[31:0],FU2_reg[31:0],
+  FU3[31:0],FU3_reg[31:0],
+  FU4[31:0],FU4_reg[31:0],
+  FU5[31:0],FU5_reg[31:0],
+  FU6[31:0],FU6_reg[31:0],
+  FU7[31:0],FU7_reg[31:0],
+  FU8[31:0],FU8_reg[31:0],
+  FU9[31:0],FU9_reg[31:0]
   );
   
   
-  rs_write_forward #(65) u4_A_fwd(
+  rs_write_forward #(32) u4_A_fwd(
   clk,rst,
   ~u4_clkEn,
-  u4_A,uu_A4,
+  u4_A[31:0],uu_A4[31:0],
   u4_A_fufwd,u4_A_fuufwd,
-  FU0,FU0_reg,
-  FU1,FU1_reg,
-  FU2,FU2_reg,
-  FU3,FU3_reg,
-  FU4,FU4_reg,
-  FU5,FU5_reg,
-  FU6,FU6_reg,
-  FU7,FU7_reg,
-  FU8,FU8_reg,
-  FU9,FU9_reg
+  FU0[31:0],FU0_reg[31:0],
+  FU1[31:0],FU1_reg[31:0],
+  FU2[31:0],FU2_reg[31:0],
+  FU3[31:0],FU3_reg[31:0],
+  FU4[31:0],FU4_reg[31:0],
+  FU5[31:0],FU5_reg[31:0],
+  FU6[31:0],FU6_reg[31:0],
+  FU7[31:0],FU7_reg[31:0],
+  FU8[31:0],FU8_reg[31:0],
+  FU9[31:0],FU9_reg[31:0]
   );
   
-  rs_write_forward #(65) u4_B_fwd(
+  rs_write_forward #(32) u4_B_fwd(
   clk,rst,
   ~u4_clkEn,
-  u4_B,uu_B4,
+  u4_B[31:0],uu_B4[31:0],
   u4_B_fufwd,u4_B_fuufwd,
-  FU0,FU0_reg,
-  FU1,FU1_reg,
-  FU2,FU2_reg,
-  FU3,FU3_reg,
-  FU4,FU4_reg,
-  FU5,FU5_reg,
-  FU6,FU6_reg,
-  FU7,FU7_reg,
-  FU8,FU8_reg,
-  FU9,FU9_reg
+  FU0[31:0],FU0_reg[31:0],
+  FU1[31:0],FU1_reg[31:0],
+  FU2[31:0],FU2_reg[31:0],
+  FU3[31:0],FU3_reg[31:0],
+  FU4[31:0],FU4_reg[31:0],
+  FU5[31:0],FU5_reg[31:0],
+  FU6[31:0],FU6_reg[31:0],
+  FU7[31:0],FU7_reg[31:0],
+  FU8[31:0],FU8_reg[31:0],
+  FU9[31:0],FU9_reg[31:0]
   );
   
   
-  rs_write_forward #(65) u5_A_fwd(
+  rs_write_forward #(32) u5_A_fwd(
   clk,rst,
   ~u5_clkEn,
-  u5_A,uu_A5,
+  u5_A[31:0],uu_A5[31:0],
   u5_A_fufwd,u5_A_fuufwd,
-  FU0,FU0_reg,
-  FU1,FU1_reg,
-  FU2,FU2_reg,
-  FU3,FU3_reg,
-  FU4,FU4_reg,
-  FU5,FU5_reg,
-  FU6,FU6_reg,
-  FU7,FU7_reg,
-  FU8,FU8_reg,
-  FU9,FU9_reg
+  FU0[31:0],FU0_reg[31:0],
+  FU1[31:0],FU1_reg[31:0],
+  FU2[31:0],FU2_reg[31:0],
+  FU3[31:0],FU3_reg[31:0],
+  FU4[31:0],FU4_reg[31:0],
+  FU5[31:0],FU5_reg[31:0],
+  FU6[31:0],FU6_reg[31:0],
+  FU7[31:0],FU7_reg[31:0],
+  FU8[31:0],FU8_reg[31:0],
+  FU9[31:0],FU9_reg[31:0]
   );
   
-  rs_write_forward #(65) u5_B_fwd(
+  rs_write_forward #(32) u5_B_fwd(
   clk,rst,
   ~u5_clkEn,
-  u5_B,uu_B5,
+  u5_B[31:0],uu_B5[31:0],
   u5_B_fufwd,u5_B_fuufwd,
-  FU0,FU0_reg,
-  FU1,FU1_reg,
-  FU2,FU2_reg,
-  FU3,FU3_reg,
-  FU4,FU4_reg,
-  FU5,FU5_reg,
-  FU6,FU6_reg,
-  FU7,FU7_reg,
-  FU8,FU8_reg,
-  FU9,FU9_reg
+  FU0[31:0],FU0_reg[31:0],
+  FU1[31:0],FU1_reg[31:0],
+  FU2[31:0],FU2_reg[31:0],
+  FU3[31:0],FU3_reg[31:0],
+  FU4[31:0],FU4_reg[31:0],
+  FU5[31:0],FU5_reg[31:0],
+  FU6[31:0],FU6_reg[31:0],
+  FU7[31:0],FU7_reg[31:0],
+  FU8[31:0],FU8_reg[31:0],
+  FU9[31:0],FU9_reg[31:0]
   );
   
   
-  rs_write_forward #(65) u6_A_fwd(
+  rs_write_forward #(32) u6_A_fwd(
   clk,rst,
   ~u6_clkEn,
-  u6_A,uu_A6,
+  u6_A[31:0],uu_A6[31:0],
   u6_A_fufwd,u6_A_fuufwd,
-  FU0,FU0_reg,
-  FU1,FU1_reg,
-  FU2,FU2_reg,
-  FU3,FU3_reg,
-  FU4,FU4_reg,
-  FU5,FU5_reg,
-  FU6,FU6_reg,
-  FU7,FU7_reg,
-  FU8,FU8_reg,
-  FU9,FU9_reg
+  FU0[31:0],FU0_reg[31:0],
+  FU1[31:0],FU1_reg[31:0],
+  FU2[31:0],FU2_reg[31:0],
+  FU3[31:0],FU3_reg[31:0],
+  FU4[31:0],FU4_reg[31:0],
+  FU5[31:0],FU5_reg[31:0],
+  FU6[31:0],FU6_reg[31:0],
+  FU7[31:0],FU7_reg[31:0],
+  FU8[31:0],FU8_reg[31:0],
+  FU9[31:0],FU9_reg
   );
   
-  rs_write_forward #(65) u6_B_fwd(
+  rs_write_forward #(32) u6_B_fwd(
   clk,rst,
   ~u6_clkEn,
-  u6_B,uu_B6,
+  u6_B[31:0],uu_B6[31:0],
   u6_B_fufwd,u6_B_fuufwd,
-  FU0,FU0_reg,
-  FU1,FU1_reg,
-  FU2,FU2_reg,
-  FU3,FU3_reg,
-  FU4,FU4_reg,
-  FU5,FU5_reg,
-  FU6,FU6_reg,
-  FU7,FU7_reg,
-  FU8,FU8_reg,
-  FU9,FU9_reg
+  FU0[31:0],FU0_reg[31:0],
+  FU1[31:0],FU1_reg[31:0],
+  FU2[31:0],FU2_reg[31:0],
+  FU3[31:0],FU3_reg[31:0],
+  FU4[31:0],FU4_reg[31:0],
+  FU5[31:0],FU5_reg[31:0],
+  FU6[31:0],FU6_reg[31:0],
+  FU7[31:0],FU7_reg[31:0],
+  FU8[31:0],FU8_reg[31:0],
+  FU9[31:0],FU9_reg[31:0]
   );
   
   rs_write_forward #(6) u1_S_fwd(
