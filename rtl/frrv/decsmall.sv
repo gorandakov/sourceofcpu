@@ -778,18 +778,6 @@ module smallInstr_decoder(
 	  pport[6]=PORT_ALU;
 	  end
       endcase
-
-      ptrien[7]=isLoad & ~instr[2] || isStore & ~instr[2];
-      poperation[7]={8'b0,instr[14:12],instr[5]};
-      pport[7]=isLoad ? PORT_LOAD : PORT_STORE;
-      puseRs[7]=1'b1;
-      prT_use[7]=isLoad;
-      prC_use[7]=isStore;
-      prT[7]=instr[11:7];
-      prC[7]=instr[24:20];
-      prB[7]=instr[19:15];
-      prAlloc[7]=isLoad;
-      pconstant[7]=isLoad ? {{42{instr[31}},instr[31:20} : {{42{instr[31]}},instr[31:25],instr[11:7]};
   end
 
 
