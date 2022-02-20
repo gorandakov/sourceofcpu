@@ -130,71 +130,6 @@ module smallInstr_decoder(
 
   reg [31:0] fpu_reor;
 
-  reg [3:0] rA_reor;
-  reg [3:0] rB_reor;
-  reg [4:0] rA_reor32;
-  reg [4:0] rB_reor32;
-  reg [4:0] rT_reor32;
-  reg reor_error;
-
-  wire isBasicALU;
-  wire isBasicALUExcept;
-  wire isBasicShift;
-  wire isBasicShiftExcept;
-  wire isBasicCmpTest;
-  wire isCmpTestExtra;   
-  
-  wire isBaseLoadStore;
-  wire isBaseIndexLoadStore;
-  wire isBaseSpecLoad;
-  wire isBaseIndexSpecLoad;
-  wire isImmLoadStore;
-
-  wire isBasicCJump;
- // wire isInvCJumpLong;
-  wire isSelfTestCJump;
-  wire isLongCondJump;
-  wire isUncondJump;
-  
-  wire isIndirJump;
-  wire isCall;
-  wire isCallPrep;
-  wire isRet;
-  
-  wire isMovOrExtA,isMovOrExtB;
-  wire isMovOrExtExcept;
-  wire isLeaIPRel;
-  wire isCmov;
-  wire isCSet;
-  wire isBasicAddNoFl;
-  wire isAddNoFlExtra;
-  wire isShiftNoFl;
-  
-  wire isBasicMUL;
-  wire isSimdInt;
-  wire isFPUreor;
-  wire isBasicFPUScalarA;
-  wire isBasicFPUScalarB;
-  wire isBasicFPUScalarC;
-  wire isBasicFPUScalarCmp;
-  wire isBasicFPUScalarCmp2;
-  
-  wire isBasicSysInstr;
-
-  wire subIsBasicALU;
-  wire subIsMovOrExt;
-  wire subIsBasicShift;
-  wire subIsCmpTest;
-  wire subIsCJ;
-  wire subIsFPUD;
-  wire subIsFPUPD;
-  wire subIsFPUE;
-  wire subIsFPUSngl;
-  wire subIsSIMD;
-  wire subIsLinkRet;
-  
-  
-  reg keep2instr;
   
   wire [31:0] constantDef;
 
@@ -277,9 +212,7 @@ module smallInstr_decoder(
   assign opcode_main=instr[7:0];
   assign opcode_sub=instr[5:0];
   
-  assign constantDef=(magic[1:0]==2'b11) ? instr[47:16] : 32'bz;
-  assign constantDef=(magic[1:0]==2'b01) ? {{18{instr[31]}},instr[31:18]} : 32'bz;
-  assign constantDef=(~magic[0]) ? {26'b0,~instr[7] && instr[15:12]==4'b0,instr[7],instr[15:12]} : 32'bz;
+  assign constantDef={{20{instr[31]}},instr[31:20]};
  
   assign reor_en_out=isFPUreor&&~reor_error;
   assign reor_val_out=instr[47:8];
@@ -308,7 +241,7 @@ module smallInstr_decoder(
   assign isOpFp=instr[6:2]==5'b10100 && opcode_main[1:0]==2'b11;
   assign isFpFma=opcode_main[6:4]==2'b100 && opcode_main[1:0]==2'b11;
 
-  assign qconstant[1]=pconstant[3];//??
+/*  assign qconstant[1]=pconstant[3];//??
   assign qtrien   [1]=trien    [3];//??
   assign qconstant[2]=pconstant[8];
   assign qtrien   [2]=trien    [8];
@@ -332,7 +265,7 @@ module smallInstr_decoder(
   assign qtrien   [11]=trien    [13];
   assign qconstant[0]=pconstant[0];
   assign qtrien   [0]=qtrien[11:1]==11'b0;
-  
+  */
   //triens that set const
   //3,8,9,10,13,18,20,25,26,30, 35
  
@@ -512,24 +445,7 @@ module smallInstr_decoder(
   assign jumpType=(~|trien) ? 5'b10000 : 5'bz;
   assign operation=(~|trien) ? 13'hff : 13'bz;
   
-  assign thisSpecLoad=isBaseSpecLoad | isBaseIndexSpecLoad | (~opcode_main[0] &&
-    opcode_main[7:1]==7'b1011000 && ~instr[10] && instr[15:12]==REG_SP && 
-    (magic[1:0]!=2'b01 || ~instr[16]));
  
-  always @(posedge clk) begin
-    if (rst) fpu_reor<=32'b111110101100011010001000;
-    else if (reor_en) begin
-        fpu_reor[2:0]<=fpu_reor[3*reor_val[2:0]+:3];
-        fpu_reor[5:3]<=fpu_reor[3*reor_val[5:3]+:3];
-        fpu_reor[8:6]<=fpu_reor[3*reor_val[8:6]+:3];
-        fpu_reor[11:9]<=fpu_reor[3*reor_val[11:9]+:3];
-        fpu_reor[14:12]<=fpu_reor[3*reor_val[14:12]+:3];
-        fpu_reor[17:15]<=fpu_reor[3*reor_val[17:15]+:3];
-        fpu_reor[20:18]<=fpu_reor[3*reor_val[20:18]+:3];
-        fpu_reor[23:21]<=fpu_reor[3*reor_val[23:21]+:3];
-    end
-  end
-
   always @*
   begin
       reor_error=1'b0;
@@ -1017,23 +933,23 @@ module smallInstr_decoder(
       prAlloc[14]=1'b1;
       pflags_use[14]=1'b1;
       
-      ptrien[14]=isALUEx && instr[31:28]==4'b1;
-      prT[14]={instr[11:8],instr[25]};
-      prA[14]=instr[19:15];
-      prB[14]=instr[24:20];
+      ptrien[15]=isALUEx && instr[31:28]==4'b1;
+      prT[15]={instr[11:8],instr[25]};
+      prA[15]=instr[19:15];
+      prB[15]=instr[24:20];
       case (instr[27:26])
-	  2'b00: poperation[14]= `op_cset;
-          2'b01: poperation[14]= `op_csetn;
-	  2'b10: poperation[14]= `op_clahf;
-	  2'b11: poperation[14]= `op_clahfn;
+	  2'b00: poperation[15]= `op_cset;
+          2'b01: poperation[15]= `op_csetn;
+	  2'b10: poperation[15]= `op_clahf;
+	  2'b11: poperation[15]= `op_clahfn;
       end
-      poperation[14][10:8]=instr[14:12];
-      prA_use[14]=1'b1;
-      prB_use[14]=~instr[27];
-      prT_use[14]=~instr[27];
-      puseRs[14]=1'b1;
-      prAlloc[14]=1'b1;
-      pflags_use[14]=1'b1;
+      poperation[15][10:8]=instr[14:12];
+      prA_use[15]=1'b1;
+      prB_use[15]=~instr[27];
+      prT_use[15]=~instr[27];
+      puseRs[15]=1'b1;
+      prAlloc[15]=1'b1;
+      pflags_use[15]=1'b1;
   end
 
 
