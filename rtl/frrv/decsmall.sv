@@ -807,7 +807,7 @@ module smallInstr_decoder(
       prAlloc[7]=isLoadEx;
       pconstant[7]={{42{instr[31}},instr[31:20};
 
-      ptrien[9]=isBasicALU | isBasicALU32 && ~instr[5];
+      ptrien[9]=isBasicALU | isBasicALU32 && ~instr[5] && instr[13:12]!=2'b01;
       casex({isBasicALU32,instr[14:12})
 	  4'b0000: begin
               pport[9]=PORT_ALU;
@@ -829,6 +829,21 @@ module smallInstr_decoder(
               pport[9]=PORT_ALU_SHIFT;
 	      poperation[9]=`op_sub64;
 	      poperationsh[9]=`op_csetn && (3<<8);
+	      pflags_write[9]=1'b1;
+	  end
+	  4'b0100: begin
+              pport[9]=PORT_ALU;
+	      poperation[9]=`op_xor64;
+	      pflags_write[9]=1'b1;
+	  end
+	  4'b0110: begin
+              pport[9]=PORT_ALU;
+	      poperation[9]=`op_or64;
+	      pflags_write[9]=1'b1;
+	  end
+	  4'b0111: begin
+              pport[9]=PORT_ALU;
+	      poperation[9]=`op_and64;
 	      pflags_write[9]=1'b1;
 	  end
       endcase
