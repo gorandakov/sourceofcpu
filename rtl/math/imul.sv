@@ -35,7 +35,6 @@ module imul(
   reg is_sec_reg3;
   reg is_swp_reg,is_swp_reg2;
   reg is_swp_reg3;
-  reg is_xlt,is_xltu;
   reg [1:0] is_swp;
   reg [63:0] sec_res_reg;
   reg [63:0] sec_res_reg2;
@@ -57,8 +56,6 @@ module imul(
   //reg [7:0] dummy8_reg;
   wire resz;
   wire resp;
-  wire [63:0] dummy5;
-  wire xltco;
   wire [31:0] resx;
   reg [31:0] resx_reg;
   wire [63:0] sec_res;
@@ -84,8 +81,6 @@ module imul(
   icompr cmp_mod(clk,clkEn,R[63:0],C[63:0],A_out,B_out,and1,is_sig,sig,sm_sig);
   adder2oM #(128) add_mod(A_out_reg,B_out_reg,{dummy2,Res[63:0]},{Res[63:0],dummy},
     resx,1'b0,~upper_reg3&~is_sec_reg3,upper_reg3,short_reg3,,,,);
-
-  adder #(64) xltadd_mod(R[63:0],~C[63:0],dummy5,1'b1,1'b1,xltco,,,);
 
   assign Res[64:0]=is_sec_reg3 ? {ptr_reg2,sec_res_reg2} : {1'b0,64'bz};
   assign Res[63:0]=is_swp_reg3 ? swp_res_reg2 : 64'bz;
@@ -158,14 +153,6 @@ module imul(
       `op_swp64: begin
 	  is_swp<=2'b10;
       end
-      `op_xlt: begin
-	   is_swp<=2'b10;
-	   is_xlt<=1'b1;
-      end
-      `op_xltu: begin
-	   is_swp<=2'b10;
-	   is_xltu<=1'b1;
-      end
   //    `op_ptrbnd: begin
   //        bnd<=1'b1;
   //    end
@@ -198,8 +185,6 @@ module imul(
       sec_res_reg<=sec_res;
       sec_res_reg2<=sec_res_reg;
       swp_res_reg<=swp_res;
-      if (is_xlt) swp_res_reg<={63'b0,dummy5[63]};
-      if (is_xltu) swp_res_reg<={63'b0,~xltco};
       swp_res_reg2<=swp_res_reg;
       ptr_reg<=R[64];
       ptr_reg2<=ptr_reg;
