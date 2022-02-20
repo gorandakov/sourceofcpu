@@ -303,6 +303,8 @@ module smallInstr_decoder(
   assign isBasicALU32=!opcode_main[6] && opcode_main[4:2]==3'b110 && opcode_main[1:0]==2'b11;
   assign isAdvALUorJump=(instr[6:5]==2'b11 && instr[4] && instr[2]) |
 	  (instr[6] && instr[4:2]==3'b101) && opcode_main[1:0]==2'b11;
+  assign isJumpEx=opcode_main==8'h7f;
+  assign isALUEx=opcode_main==8'hff;
   assign isOpFp=instr[6:2]==5'b10100 && opcode_main[1:0]==2'b11;
   assign isFpFma=opcode_main[6:4]==2'b100 && opcode_main[1:0]==2'b11;
 
@@ -992,6 +994,46 @@ module smallInstr_decoder(
           default: perror[12]=1'b1;
       endcase
       
+      ptrien[13]=isJumpEx;
+      pconstant[13]={{43{instr[31]}},instr[31],instr[20:12],instr[21],instr[30:22],1'b0};
+      pis_jump[13]=1'b1;//JAL
+      pjump_type[13]={1'b0,instr[11:8]};
+
+      ptrien[14]=isALUEx && instr[31:28]==4'b0;
+      prT[14]={instr[11:8],instr[25]};
+      prA[14]=instr[19:15];
+      prB[14]=instr[24:20];
+      case (instr[27:26])
+	  2'b00: poperation[14]= `op_cmov64;
+          2'b01: poperation[14]= `op_cmovn64;
+	  2'b10: poperation[14]= `op_cmov32;
+	  2'b11: poperation[14]= `op_cmovn32;
+      end
+      poperation[14][10:8]=instr[14:12];
+      prA_use[14]=1'b1;
+      prB_use[14]=1'b1;
+      prT_use[14]=1'b1;
+      puseRs[14]=1'b1;
+      prAlloc[14]=1'b1;
+      pflags_use[14]=1'b1;
+      
+      ptrien[14]=isALUEx && instr[31:28]==4'b1;
+      prT[14]={instr[11:8],instr[25]};
+      prA[14]=instr[19:15];
+      prB[14]=instr[24:20];
+      case (instr[27:26])
+	  2'b00: poperation[14]= `op_cset;
+          2'b01: poperation[14]= `op_csetn;
+	  2'b10: poperation[14]= `op_clahf;
+	  2'b11: poperation[14]= `op_clahfn;
+      end
+      poperation[14][10:8]=instr[14:12];
+      prA_use[14]=1'b1;
+      prB_use[14]=~instr[27];
+      prT_use[14]=~instr[27];
+      puseRs[14]=1'b1;
+      prAlloc[14]=1'b1;
+      pflags_use[14]=1'b1;
   end
 
 
