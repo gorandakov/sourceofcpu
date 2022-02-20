@@ -163,9 +163,9 @@ module rs_write_forward_JALR(
   assign newDataFuu_d=(auxEn) ? auxData : {DATA_WIDTH{1'BZ}};  
 
 
-  assign newData_d=({fuFwd,fuuFwd}==8'hff && !auxEn) ? oldData : {DATA_WIDTH{1'BZ}};  
-  assign newData_d=(fuFwd!=4'hf && !auxEn) ? newDataFu_d : {DATA_WIDTH{1'BZ}};  
-  assign newData_d=(fuuFwd!=4'hf || auxEn) ? newDataFuu_d : {DATA_WIDTH{1'BZ}};  
+  assign newData_d=({fuFwd,fuuFwd}==8'hff) ? oldData : {DATA_WIDTH{1'BZ}};  
+  assign newData_d=(fuFwd!=4'hf) ? newDataFu_d : {DATA_WIDTH{1'BZ}};  
+  assign newData_d=(fuuFwd!=4'hf) ? newDataFuu_d : {DATA_WIDTH{1'BZ}};  
 
   always @(posedge clk) 
   begin
