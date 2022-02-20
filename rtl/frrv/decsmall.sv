@@ -833,12 +833,14 @@ module smallInstr_decoder(
 	      poperation[9]=`op_sub64;
 	      poperationsh[9]=`op_cset && (4<<8);
 	      pflags_write[9]=1'b1;
+	      pflags_use[9]=1'b1;
 	  end
 	  4'b0011: begin
               pport[9]=PORT_ALU_SHIFT;
 	      poperation[9]=`op_sub64;
 	      poperationsh[9]=`op_csetn && (3<<8);
 	      pflags_write[9]=1'b1;
+	      pflags_use[9]=1'b1;
 	  end
 	  4'b0100: begin
               pport[9]=PORT_ALU;
@@ -905,6 +907,60 @@ module smallInstr_decoder(
 	  end
           default: perror[10]=1'b1;
       endcase
+      
+      ptrien[11]=isBasicALU | isBasicALU32 && instr[5] && instr[13:12]!=2'b01 && ~instr[31] && instr[29:25]==5'b0;
+      puseRs[11]=1'b1;
+      prA_use[11]=1'b1;
+      prB_use[11]=1'b1;
+      prT_use[11]=1'b1;
+      prT[11]=instr[11:7];
+      prA[11]=instr[19:15];
+      prB[11]=instr[24:20];
+      prAlloc[11]=1'b1;
+      casex({isBasicALU32,instr[14:12})
+	  4'b0000: begin
+              pport[11]=PORT_ALU;
+	      poperation[11]=`op_add64;
+	      pflags_write[11]=1'b1;
+	  end
+	  4'b1000: begin
+              pport[11]=PORT_ALU;
+	      poperation[11]=`op_add16;//32s
+	      pflags_write[11]=1'b1;
+	  end
+	  4'b0010: begin
+              pport[11]=PORT_ALU_SHIFT;
+	      poperation[11]=`op_sub64;
+	      poperationsh[11]=`op_cset && (4<<8);
+	      pflags_write[11]=1'b1;
+	      pflags_use[11]=1'b1;
+	  end
+	  4'b0011: begin
+              pport[11]=PORT_ALU_SHIFT;
+	      poperation[11]=`op_sub64;
+	      poperationsh[11]=`op_csetn && (3<<8);
+	      pflags_write[11]=1'b1;
+	      pflags_use[11]=1'b1;
+	  end
+	  4'b0100: begin
+              pport[11]=PORT_ALU;
+	      poperation[11]=`op_xor64;
+	      pflags_write[11]=1'b1;
+	  end
+	  4'b0110: begin
+              pport[11]=PORT_ALU;
+	      poperation[11]=`op_or64;
+	      pflags_write[11]=1'b1;
+	  end
+	  4'b0111: begin
+              pport[11]=PORT_ALU;
+	      poperation[11]=`op_and64;
+	      pflags_write[11]=1'b1;
+	  end
+	  default:
+	      perror[11]=1'b1;
+      endcase
+      
   end
 
 
