@@ -1222,6 +1222,7 @@ module dcache1(
   wire [255:0] rxdata7[3:0];
   wire [255:0] rxdata[3:0];
   wire [3:0][127+8:0] rddata1;
+  wire [3:0] riddata1;
 //  wire [4:0] rdcan[3:0];
   wire [3:0][127+8:0] read_dataA;
   reg [5:0] mskdata1[3:0];
@@ -1244,6 +1245,7 @@ module dcache1(
   reg [7:0] read_low;
   reg [7:0] read_low_reg;
   reg [7:0] read_low_reg2;
+  reg [1:0] read_szio_reg[3:0];
   
 //  reg [LINE_WIDTH-1:0] wb_data;
  
@@ -1348,6 +1350,15 @@ module dcache1(
               assign rddata1[1]=({read_beginA_reg[1][1:0],read_low_reg[3:2]}==b) ? rxdata[1][b*8+:136] : 136'BZ;
               assign rddata1[2]=({read_beginA_reg[2][1:0],read_low_reg[5:4]}==b) ? rxdata[2][b*8+:136] : 136'BZ;
               assign rddata1[3]=({read_beginA_reg[3][1:0],read_low_reg[7:6]}==b) ? rxdata[3][b*8+:136] : 136'BZ;
+              
+	      assign riddata1[0]=({read_beginA_reg[0][1:0],read_low_reg[1:0]}==b) ? read_sz_reg[0][4:2]==3'b101 & 
+		      rxdata[0][b*8+7+read_szio_reg[0]*8] : 1'BZ;
+              assign riddata1[1]=({read_beginA_reg[1][1:0],read_low_reg[3:2]}==b) ? read_sz_reg[1][4:2]==3'b101 & 
+		      rxdata[1][b*8+7+read_szio_reg[1]*8] : 1'BZ;
+              assign riddata1[2]=({read_beginA_reg[2][1:0],read_low_reg[5:4]}==b) ? read_sz_reg[2][4:2]==3'b101 & 
+		      rxdata[2][b*8+7+read_szio_reg[2]*8] : 1'BZ;
+              assign riddata1[3]=({read_beginA_reg[3][1:0],read_low_reg[7:6]}==b) ? read_sz_reg[3][4:2]==3'b101 & 
+		      rxdata[3][b*8+7+read_szio_reg[3]*8] : 1'BZ;
           end
       end
       for (p=0;p<4;p=p+1) begin
@@ -1364,6 +1375,11 @@ module dcache1(
 		rxdata4[p]|rxdata5[p]|rxdata6[p]|rxdata7[p];
               assign read_dataA[p]=rddata1[p] & {{8{mskdata1[p][5]}},{48{mskdata1[p][4]}},{16{mskdata1[p][3]}},{32{mskdata1[p][2]}},
                     {16{mskdata1[p][1]}},{8{mskdata1[p][0]}},8'hff};
+	      assign read_dataA[p][7:0]=rddata1[p][7:0];
+	      assign read_dataA[p][15:8]=mskdata1[p][0] ? rddata1[p][15:8] : {8{riddata[p]}};
+	      assign read_dataA[p][31:16]=mskdata1[p][1] ? rddata1[p][31:16] : {16{riddata[p]}};
+	      assign read_dataA[p][63:32]=mskdata1[p][2] ? rddata1[p][63:32] : {32{riddata[p]}};
+	      assign read_dataA[p][135:64]=rddata1[p][135:64] & {{8{mskdata1[p][5]}},{48{mskdata1[p][4]}},{16{mskdata1[p][3]}}};
       end
   endgenerate
 
@@ -1499,6 +1515,10 @@ module dcache1(
 
           read_low<=8'b0;
           read_low_reg<=8'b0;
+	  read_szio_reg[0]<=2'b0;
+	  read_szio_reg[1]<=2'b0;
+	  read_szio_reg[2]<=2'b0;
+	  read_szio_reg[2]<=2'b0;
           
           
           write_data_reg<=1024'B0;
@@ -1575,6 +1595,8 @@ module dcache1(
           
           read_low<={read_low3,read_low2,read_low1,read_low0};
           read_low_reg<=read_low;
+
+
           
           
           if (~insbus_B) write_data_reg[WLINE_WIDTH/2-1:0]<=write_data[WLINE_WIDTH/2-1:0];
@@ -1601,6 +1623,9 @@ module dcache1(
           
           for(v=0;v<4;v=v+1) begin
               read_sz_reg[v]<=read_sz[v];
+	      read_szio_reg[v]<=2'b0;
+	      if (read_sz[v][1:0]==2'd1) read_szio_reg[v]<=1;
+	      else if (read_sz[v][1:0]==2'd2) read_szio_reg[v]<=3;
        //verilator lint_off CASEINCOMPLETE
 
               case(read_sz[v])
