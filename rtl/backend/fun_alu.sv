@@ -241,6 +241,210 @@ module fu_alu(
   reg [8:0] u6_ret_reg2;
   reg [8:0] u6_ret_reg3;
 
+  rs_write_forward_JALR #(33) u1_Ax_fwd(
+  clk,rst,
+  ~u1_clkEn,
+  u1_A[64:32],uu_A1[64:32],33'hffffffff,u1_op=13'd2 || u1_op==13'd6,
+  u1_A_fufwd,u1_A_fuufwd,
+  FU0[64:32],FU0_reg[64:32],
+  FU1[64:32],FU1_reg[64:32],
+  FU2[64:32],FU2_reg[64:32],
+  FU3[64:32],FU3_reg[64:32],
+  FU4[64:32],FU4_reg[64:32],
+  FU5[64:32],FU5_reg[64:32],
+  FU6[64:32],FU6_reg[64:32],
+  FU7[64:32],FU7_reg[64:32],
+  FU8[64:32],FU8_reg[64:32],
+  FU9[64:32],FU9_reg[64:32]
+  );
+  
+  rs_write_forward_JALR #(33) u1_Bx_fwd(
+  clk,rst,
+  ~u1_clkEn,
+  u1_B[64:32],uu_B1[64:32],33'h0,u1_op=13'd2 || u1_op==13'd6,
+  u1_B_fufwd,u1_B_fuufwd,
+  FU0[64:32],FU0_reg[64:32],
+  FU1[64:32],FU1_reg[64:32],
+  FU2[64:32],FU2_reg[64:32],
+  FU3[64:32],FU3_reg[64:32],
+  FU4[64:32],FU4_reg[64:32],
+  FU5[64:32],FU5_reg[64:32],
+  FU6[64:32],FU6_reg[64:32],
+  FU7[64:32],FU7_reg[64:32],
+  FU8[64:32],FU8_reg[64:32],
+  FU9[64:32],FU9_reg[64:32]
+  );
+  
+  rs_write_forward_JALR #(33) u2_Ax_fwd(
+  clk,rst,
+  ~u2_clkEn,
+  u2_A[64:32],uu_A2[64:32],33'hffffffff,u2_op=13'd2 || u2_op==13'd6,
+  u2_A_fufwd,u2_A_fuufwd,
+  FU0[64:32],FU0_reg[64:32],
+  FU1[64:32],FU1_reg[64:32],
+  FU2[64:32],FU2_reg[64:32],
+  FU3[64:32],FU3_reg[64:32],
+  FU4[64:32],FU4_reg[64:32],
+  FU5[64:32],FU5_reg[64:32],
+  FU6[64:32],FU6_reg[64:32],
+  FU7[64:32],FU7_reg[64:32],
+  FU8[64:32],FU8_reg[64:32],
+  FU9[64:32],FU9_reg[64:32]
+  );
+  
+  rs_write_forward_JALR #(33) u2_Bx_fwd(
+  clk,rst,
+  ~u2_clkEn,
+  u2_B[64:32],uu_B2[64:32],33'h0,u2_op=13'd2 || u2_op==13'd6,
+  u2_B_fufwd,u2_B_fuufwd,
+  FU0[64:32],FU0_reg[64:32],
+  FU1[64:32],FU1_reg[64:32],
+  FU2[64:32],FU2_reg[64:32],
+  FU3[64:32],FU3_reg[64:32],
+  FU4[64:32],FU4_reg[64:32],
+  FU5[64:32],FU5_reg[64:32],
+  FU6[64:32],FU6_reg[64:32],
+  FU7[64:32],FU7_reg[64:32],
+  FU8[64:32],FU8_reg[64:32],
+  FU9[64:32],FU9_reg[64:32]
+  );
+  
+  rs_write_forward_JALR #(33) u3_Ax_fwd(
+  clk,rst,
+  ~u3_clkEn,
+  u3_A[64:32],uu_A3[64:32],33'hffffffff,u3_op=13'd2 || u3_op==13'd6,
+  u3_A_fufwd,u3_A_fuufwd,
+  FU0[64:32],FU0_reg[64:32],
+  FU1[64:32],FU1_reg[64:32],
+  FU2[64:32],FU2_reg[64:32],
+  FU3[64:32],FU3_reg[64:32],
+  FU4[64:32],FU4_reg[64:32],
+  FU5[64:32],FU5_reg[64:32],
+  FU6[64:32],FU6_reg[64:32],
+  FU7[64:32],FU7_reg[64:32],
+  FU8[64:32],FU8_reg[64:32],
+  FU9[64:32],FU9_reg[64:32]
+  );
+  
+  rs_write_forward_JALR #(33) u3_Bx_fwd(
+  clk,rst,
+  ~u3_clkEn,
+  u3_B[64:32],uu_B3[64:32],33'h0,u3_op=13'd2 || u3_op==13'd6,
+  u3_B_fufwd,u3_B_fuufwd,
+  FU0[64:32],FU0_reg[64:32],
+  FU1[64:32],FU1_reg[64:32],
+  FU2[64:32],FU2_reg[64:32],
+  FU3[64:32],FU3_reg[64:32],
+  FU4[64:32],FU4_reg[64:32],
+  FU5[64:32],FU5_reg[64:32],
+  FU6[64:32],FU6_reg[64:32],
+  FU7[64:32],FU7_reg[64:32],
+  FU8[64:32],FU8_reg[64:32],
+  FU9[64:32],FU9_reg[64:32]
+  );
+  
+  rs_write_forward_JALR #(33) u4_Ax_fwd(
+  clk,rst,
+  ~u4_clkEn,
+  u4_A[64:32],uu_A4[64:32],33'hffffffff,u4_op=13'd2 || u4_op==13'd6,
+  u4_A_fufwd,u4_A_fuufwd,
+  FU0[64:32],FU0_reg[64:32],
+  FU1[64:32],FU1_reg[64:32],
+  FU2[64:32],FU2_reg[64:32],
+  FU3[64:32],FU3_reg[64:32],
+  FU4[64:32],FU4_reg[64:32],
+  FU5[64:32],FU5_reg[64:32],
+  FU6[64:32],FU6_reg[64:32],
+  FU7[64:32],FU7_reg[64:32],
+  FU8[64:32],FU8_reg[64:32],
+  FU9[64:32],FU9_reg[64:32]
+  );
+  
+  rs_write_forward_JALR #(33) u4_Bx_fwd(
+  clk,rst,
+  ~u4_clkEn,
+  u4_B[64:32],uu_B4[64:32],33'h0,u4_op=13'd2 || u4_op==13'd6,
+  u4_B_fufwd,u4_B_fuufwd,
+  FU0[64:32],FU0_reg[64:32],
+  FU1[64:32],FU1_reg[64:32],
+  FU2[64:32],FU2_reg[64:32],
+  FU3[64:32],FU3_reg[64:32],
+  FU4[64:32],FU4_reg[64:32],
+  FU5[64:32],FU5_reg[64:32],
+  FU6[64:32],FU6_reg[64:32],
+  FU7[64:32],FU7_reg[64:32],
+  FU8[64:32],FU8_reg[64:32],
+  FU9[64:32],FU9_reg[64:32]
+  );
+  
+  rs_write_forward_JALR #(33) u5_Ax_fwd(
+  clk,rst,
+  ~u5_clkEn,
+  u5_A[64:32],uu_A5[64:32],33'hffffffff,u5_op=13'd2 || u5_op==13'd6,
+  u5_A_fufwd,u5_A_fuufwd,
+  FU0[64:32],FU0_reg[64:32],
+  FU1[64:32],FU1_reg[64:32],
+  FU2[64:32],FU2_reg[64:32],
+  FU3[64:32],FU3_reg[64:32],
+  FU4[64:32],FU4_reg[64:32],
+  FU5[64:32],FU5_reg[64:32],
+  FU6[64:32],FU6_reg[64:32],
+  FU7[64:32],FU7_reg[64:32],
+  FU8[64:32],FU8_reg[64:32],
+  FU9[64:32],FU9_reg[64:32]
+  );
+  
+  rs_write_forward_JALR #(33) u5_Bx_fwd(
+  clk,rst,
+  ~u5_clkEn,
+  u5_B[64:32],uu_B5[64:32],33'h0,u5_op=13'd2 || u5_op==13'd6,
+  u5_B_fufwd,u5_B_fuufwd,
+  FU0[64:32],FU0_reg[64:32],
+  FU1[64:32],FU1_reg[64:32],
+  FU2[64:32],FU2_reg[64:32],
+  FU3[64:32],FU3_reg[64:32],
+  FU4[64:32],FU4_reg[64:32],
+  FU5[64:32],FU5_reg[64:32],
+  FU6[64:32],FU6_reg[64:32],
+  FU7[64:32],FU7_reg[64:32],
+  FU8[64:32],FU8_reg[64:32],
+  FU9[64:32],FU9_reg[64:32]
+  );
+  
+  rs_write_forward_JALR #(33) u6_Ax_fwd(
+  clk,rst,
+  ~u6_clkEn,
+  u6_A[64:32],uu_A6[64:32],33'hffffffff,u6_op=13'd2 || u6_op==13'd6,
+  u6_A_fufwd,u6_A_fuufwd,
+  FU0[64:32],FU0_reg[64:32],
+  FU1[64:32],FU1_reg[64:32],
+  FU2[64:32],FU2_reg[64:32],
+  FU3[64:32],FU3_reg[64:32],
+  FU4[64:32],FU4_reg[64:32],
+  FU5[64:32],FU5_reg[64:32],
+  FU6[64:32],FU6_reg[64:32],
+  FU7[64:32],FU7_reg[64:32],
+  FU8[64:32],FU8_reg[64:32],
+  FU9[64:32],FU9_reg[64:32]
+  );
+  
+  rs_write_forward_JALR #(33) u6_Bx_fwd(
+  clk,rst,
+  ~u6_clkEn,
+  u6_B[64:32],uu_B6[64:32],33'h0,u6_op=13'd2 || u6_op==13'd6,
+  u6_B_fufwd,u6_B_fuufwd,
+  FU0[64:32],FU0_reg[64:32],
+  FU1[64:32],FU1_reg[64:32],
+  FU2[64:32],FU2_reg[64:32],
+  FU3[64:32],FU3_reg[64:32],
+  FU4[64:32],FU4_reg[64:32],
+  FU5[64:32],FU5_reg[64:32],
+  FU6[64:32],FU6_reg[64:32],
+  FU7[64:32],FU7_reg[64:32],
+  FU8[64:32],FU8_reg[64:32],
+  FU9[64:32],FU9_reg[64:32]
+  );
+  
   rs_write_forward #(32) u1_A_fwd(
   clk,rst,
   ~u1_clkEn,
