@@ -1063,9 +1063,6 @@ module rs_wakeUpS_logic(
   
   wire isDataF,isDataI;
 
-  reg [3:0] fuFwd_reg;
-  reg [3:0] fuuFwd_reg;
-
   wire sel;
 
   wire funM,funAdd,funMul;
@@ -1167,11 +1164,7 @@ module rs_wakeUpS_logic(
 	else assign Twen1=FUwen[3] & funit[3];
     end
   endgenerate
-
-  always @* begin
-	  fuFwd=fuFwd_d;
-	  fuuFwd=gazump[10] ? fuFwd_reg|{4{newRsSelect1|newRsSelect2}} : gzFwd;
-  end
+  
   always @(posedge clk)
     begin
 //      data_q<=data_d;
@@ -1188,8 +1181,8 @@ module rs_wakeUpS_logic(
           end else begin
               eq_mask<=eq_mask & ~eq_new;
           end
-	  fuFwd_reg<=fuFwd_d;
-	  fuuFwd_reg<=gazump[10] ? fuFwd_reg|{4{newRsSelect1|newRsSelect2}} : gzFwd;
+	  fuFwd<=fuFwd_d;
+	  fuuFwd<=gazump[10] ? fuFwd|{4{newRsSelect1|newRsSelect2}} : gzFwd;
 	  isFP<=isFP_d;
 	  eq_reg<=eq_new&(eq_mask|{2{newRsSelect1|newRsSelect2 & ~stall}})&{2{~sel}};
 		  
@@ -1345,26 +1338,26 @@ module rs_wakeUpS_logic_array(
   assign funit[2]=newFunit2;
 
   assign FUreg[3]=9'b0;
-  assign FUreg[0]=FUreg0_reg3;
-  assign FUreg[1]=FUreg1_reg3;
-  assign FUreg[2]=FUreg2_reg3;
-  assign FUreg[4]=FUreg0;
-  assign FUreg[5]=FUreg1;
-  assign FUreg[6]=FUreg2;
-  assign FUreg[7]=FUreg3;
-  assign FUreg[8]=FUreg4;
-  assign FUreg[9]=FUreg5;
+  assign FUreg[0]=FUreg0_reg4;
+  assign FUreg[1]=FUreg1_reg4;
+  assign FUreg[2]=FUreg2_reg4;
+  assign FUreg[4]=FUreg0_reg;
+  assign FUreg[5]=FUreg1_reg;
+  assign FUreg[6]=FUreg2_reg;
+  assign FUreg[7]=FUreg3_reg;
+  assign FUreg[8]=FUreg4_reg;
+  assign FUreg[9]=FUreg5_reg;
 
   assign FUwen[3]=1'b0;
-  assign FUwen[0]=FU0wen_reg3;
-  assign FUwen[1]=FU1wen_reg3;
-  assign FUwen[2]=FU2wen_reg3;
-  assign FUwen[4]=FU0wen;
-  assign FUwen[5]=FU1wen;
-  assign FUwen[6]=FU2wen;
-  assign FUwen[7]=FU3wen;
-  assign FUwen[8]=FU4wen;
-  assign FUwen[9]=FU5wen;
+  assign FUwen[0]=FU0wen_reg4;
+  assign FUwen[1]=FU1wen_reg4;
+  assign FUwen[2]=FU2wen_reg4;
+  assign FUwen[4]=FU0wen_reg;
+  assign FUwen[5]=FU1wen_reg;
+  assign FUwen[6]=FU2wen_reg;
+  assign FUwen[7]=FU3wen_reg;
+  assign FUwen[8]=FU4wen_reg;
+  assign FUwen[9]=FU5wen_reg;
   generate
       genvar j,k,p,q;
       for (j=0;j<4;j=j+1) begin : banks_gen
@@ -1384,15 +1377,15 @@ module rs_wakeUpS_logic_array(
               isData[k+8*j],
               outEq[(k+8*j)*6+:6],
               buffree[k+8*j],
-              FUreg0,FU0wen,
-              FUreg1,FU1wen,
-              FUreg2,FU2wen,
-              FUreg3,FU3wen,
-              FUreg4,FU4wen,
-              FUreg5,FU5wen,
-              FUreg0_reg3,FU0wen_reg3,
-              FUreg1_reg3,FU1wen_reg3,
-              FUreg2_reg3,FU2wen_reg3,
+              FUreg0_reg,FU0wen_reg,
+              FUreg1_reg,FU1wen_reg,
+              FUreg2_reg,FU2wen_reg,
+              FUreg3_reg,FU3wen_reg,
+              FUreg4_reg,FU4wen_reg,
+              FUreg5_reg,FU5wen_reg,
+              FUreg0_reg4,FU0wen_reg4,
+              FUreg1_reg4,FU1wen_reg4,
+              FUreg2_reg4,FU2wen_reg4,
               newRsSelect1[k+8*j],newReg1,newFunit1,newGazump1,newIsFP1,newEQ[1],
               newRsSelect2[k+8*j],newReg2,newFunit2,newGazump2,newIsFP2,newEQ[2],
               fuFwd[(k+8*j)*4+:4],
@@ -2754,7 +2747,7 @@ module rs(
   32'b0,6'b0,
   newRsSelect1,newDataS1,
   newRsSelect2,newDataS2,
-  outEqS_reg,
+  outEqS,
   FUS0,FUS1,FUS2,6'b0,
   FUS3,FUS4,FUS5,
   FUS6,FUS7,FUS8,
