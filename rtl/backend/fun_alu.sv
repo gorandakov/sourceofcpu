@@ -450,7 +450,7 @@ module fu_alu(
   FU9,FU9_reg
   );
   
-  rs_write_forward #(6) u1_S_fwd(
+  rs_writeiS_forward #(6) u1_S_fwd(
   clk,rst,
   ~u1_clkEn,
   u1_S,uu_S1,
@@ -467,7 +467,7 @@ module fu_alu(
   FUS9,FUS9_reg
   );
 
-  rs_write_forward #(6) u2_S_fwd(
+  rs_writeiS_forward #(6) u2_S_fwd(
   clk,rst,
   ~u2_clkEn,
   u2_S,uu_S2,
@@ -485,7 +485,7 @@ module fu_alu(
   );
 
 
-  rs_write_forward #(6) u3_S_fwd(
+  rs_writeiS_forward #(6) u3_S_fwd(
   clk,rst,
   ~u3_clkEn,
   u3_S,uu_S3,
@@ -503,7 +503,7 @@ module fu_alu(
   );
 
 
-  rs_write_forward #(6) u4_S_fwd(
+  rs_writeiS_forward #(6) u4_S_fwd(
   clk,rst,
   ~u4_clkEn,
   u4_S,uu_S4,
@@ -521,7 +521,7 @@ module fu_alu(
   );
 
 
-  rs_write_forward #(6) u5_S_fwd(
+  rs_writeiS_forward #(6) u5_S_fwd(
   clk,rst,
   ~u5_clkEn,
   u5_S,uu_S5,
@@ -539,7 +539,7 @@ module fu_alu(
   );
 
 
-  rs_write_forward #(6) u6_S_fwd(
+  rs_writeiS_forward #(6) u6_S_fwd(
   clk,rst,
   ~u6_clkEn,
   u6_S,uu_S6,
