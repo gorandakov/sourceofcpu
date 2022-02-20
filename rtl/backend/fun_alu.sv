@@ -23,7 +23,7 @@ module fu_alu(
   u6_A,u6_B,u6_S,u6_op,u6_ret,u6_rten,u6_clkEn,
     u6_A_fufwd,u6_A_fuufwd,u6_B_fufwd,u6_B_fuufwd,
     u6_S_fufwd,u6_S_fuufwd,
-  u6_constr,u6_xconst,u6_bxcross,
+  u6_constr,u6_xconst,u6_bxcross,u6_axcross,jtarg,
   FU0, FU1,  FU2,  FU3,
   FU4, FU5,  FU6,  FU7,
   FU8, FU9,
@@ -127,6 +127,8 @@ module fu_alu(
   input [11:0] u6_constr;
   input [19:0] u6_xconst;
   input u6_bxcross;
+  input u6_axcross;
+  output [64:0] jtarg;
 
   input [64:0] FU0;
   input [64:0] FU1;
@@ -227,6 +229,8 @@ module fu_alu(
   reg [12:0] u6_op_reg2;
   reg [12:0] u6_op_reg3;
   reg [12:0] u6_op_reg4;
+
+  wire jtarg_sec;
 
   reg [5:0] u1_isSub_reg;
   reg [5:0] u2_isSub_reg;
@@ -436,7 +440,7 @@ module fu_alu(
   rs_write_forward_JALR #(33) u6_Bx_fwd(
   clk,rst,
   ~u6_clkEn,
-  u6_B[64:32],uu_B6[64:32],33'h0|{21'b0,u6_constr},u6_op=13'd2 || u6_op==13'd6,
+  u6_B[64:32],uu_B6[64:32],33'h0,u6_op=13'd2 || u6_op==13'd6 || u6_bxcross,
   u6_B_fufwd,u6_B_fuufwd,
   FU0[64:32],FU0_reg[64:32],
   FU1[64:32],FU1_reg[64:32],
@@ -660,10 +664,10 @@ module fu_alu(
   FU9[31:0],FU9_reg
   );
   
-  rs_write_forward #(32) u6_B_fwd(
+  rs_write_forward_JALR #(32) u6_B_fwd(
   clk,rst,
   ~u6_clkEn,
-  u6_B[31:0],uu_B6[31:0],
+  u6_B[31:0],uu_B6[31:0],32'h0|{20'b0,u6_constr},u6_bxcross,
   u6_B_fufwd,u6_B_fuufwd,
   FU0[31:0],FU0_reg[31:0],
   FU1[31:0],FU1_reg[31:0],
@@ -799,7 +803,11 @@ module fu_alu(
     u5_ret,u5_rten,uu_A5,uu_B5,uu_S5,FU6);
   alu #(1'b0)  alu5(clk,rst,except,1'b0,1'b0,u6_op_reg,u6_isSub_reg,u6_clkEn_reg,1'b1,
     u6_ret,u6_rten,uu_A6,uu_B6,uu_S6,FU9);
-  
+`ifdef riscv
+  addsub_alu alu6(u6_axcross_reg ? uu_A6 : uu_B7,{1'b0,{44{u6_xconst_reg[19]}},u6_xconst_reg},jtarg,
+  1'b0,1'b1,1'b0,2'b11,,,,jtarg_sec,,);
+`endif
+
   alu_shift sh2_alu(
   clk,
   rst,
