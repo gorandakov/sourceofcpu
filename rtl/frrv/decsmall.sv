@@ -829,18 +829,12 @@ module smallInstr_decoder(
 	      pflags_write[9]=1'b1;
 	  end
 	  4'b0010: begin
-              pport[9]=PORT_ALU_SHIFT;
-	      poperation[9]=`op_sub64;
-	      poperationsh[9]=`op_cset && (4<<8);
-	      pflags_write[9]=1'b1;
-	      pflags_use[9]=1'b1;
+              pport[9]=PORT_MUL;
+	      poperation[9]=`op_xlt;
 	  end
 	  4'b0011: begin
-              pport[9]=PORT_ALU_SHIFT;
-	      poperation[9]=`op_sub64;
-	      poperationsh[9]=`op_csetn && (3<<8);
-	      pflags_write[9]=1'b1;
-	      pflags_use[9]=1'b1;
+              pport[9]=PORT_MUL;
+	      poperation[9]=`op_xltu;
 	  end
 	  4'b0100: begin
               pport[9]=PORT_ALU;
@@ -929,18 +923,12 @@ module smallInstr_decoder(
 	      pflags_write[11]=1'b1;
 	  end
 	  4'b0010: begin
-              pport[11]=PORT_ALU_SHIFT;
-	      poperation[11]=`op_sub64;
-	      poperationsh[11]=`op_cset && (4<<8);
-	      pflags_write[11]=1'b1;
-	      pflags_use[11]=1'b1;
+              pport[11]=PORT_MUL;
+	      poperation[11]=`op_xlt;
 	  end
 	  4'b0011: begin
-              pport[11]=PORT_ALU_SHIFT;
-	      poperation[11]=`op_sub64;
-	      poperationsh[11]=`op_csetn && (3<<8);
-	      pflags_write[11]=1'b1;
-	      pflags_use[11]=1'b1;
+              pport[11]=PORT_MUL;
+	      poperation[11]=`op_xltu;
 	  end
 	  4'b0100: begin
               pport[11]=PORT_ALU;
