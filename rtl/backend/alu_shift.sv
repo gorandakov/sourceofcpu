@@ -69,9 +69,7 @@ module alu_shift(
   coutL
   );
 
-  assign valRes[31:0]=is_shift ? valres0[31:0] : 32'bz;
-  assign valRes[63:32]=is_shift&~operation[1] ? valres0[63:32] : 32'bz;
-  assign valRes[63:32]=is_shift&operation[1] ? {32{valres0[31]}} : 32'bz;
+  assign valRes=is_shift ? valres0 : 64'bz;
 
   assign retData[`except_flags]=is_shift_reg ? flags_COASZP : 6'bz;
 
