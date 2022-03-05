@@ -1341,6 +1341,7 @@ addie:
 	contx->reg_genP[rT]=res_p;
     }
     if (has_mem_==2 && rtn) {
+	rT=-1;
         (this+1)->gen_memw(NULL,(this-1)->op,mem,memp,addr,res,res_p);
     }
     return rtn;
