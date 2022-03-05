@@ -1151,7 +1151,7 @@ module smallInstr_decoder(
       if (isPtrSec && instr[29]) begin
 	  pport[16]=PORT_MUL;
 	  poperation[16]=instr[30] ? `op_swp32 : `op_swp64;
-	  if (instr[31]) perror[16]==1'b1;
+	  if (instr[31]) perror[16]=1'b1;
       end
     
       trien[17]=magic[0] & isBaseSpecLoad;

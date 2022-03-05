@@ -444,6 +444,7 @@ class req {
     bool gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,bool has_mem_,char *mem,char *pmem);
     void gen_init(int rT,int dom,unsigned long long int val,int val_p);
     void gen_mem(req* prev1,unsigned code,char * mem,char *memp,unsigned long long addr);
+    void gen_memw(req* prev1,unsigned code,char * mem,char *memp,unsigned long long addr,unsigned long long res, char res_p);
     void flgPTR(__int128 r);
     void flg64(__int128 r);
     void flg32(__int128 r);
@@ -515,7 +516,7 @@ bool req::gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,bool
         unsigned long long pttr=A_p ? A : B;
 	bool no_O=false;
 	int mmem=0;
-	if (has_mem_) mmen=lrand48()%3;
+	if (has_mem_) mmem=lrand48()%3;
         switch(op&0xff) {
             case 0:
 	    if (has_mem_==2) {
@@ -1368,7 +1369,7 @@ void req::gen_mem(req* prev1,unsigned code,char *mem,char *memp,unsigned long lo
 #undef UC
 }
 
-void req::gen_memw(req* prev1,unsigned code,char *mem,char *memp,unsigned long long addr,unsigned long long Dt,int Dt_p) {
+void req::gen_memw(req* prev1,unsigned code,char *mem,char *memp,unsigned long long addr,unsigned long long Dt,char Dt_p) {
     res=0;
     res_p=0;
     rT=-1;
