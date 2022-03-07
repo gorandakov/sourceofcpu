@@ -958,7 +958,7 @@ addie:
             case 33:
 	    if (has_mem_==2) {
 		(this-1)->gen_memw(NULL,4,mem,memp,addr,A,A_p);
-		snprintf((*(this-1)).asmtext,sizeof (asmtext), "copyq %%%s, mem+%li(%rip))\n",reg32[rA],addr);
+		snprintf((*(this-1)).asmtext,sizeof (asmtext), "copyl %%%s, mem+%li(%rip)\n",reg32[rA],addr);
 		(this-1)->rT=-1;
 		(this-1)->flags=flags_in;
 		rtn=false;
@@ -979,7 +979,7 @@ addie:
             case 34:
 	    if (has_mem_==2) {
 		(this-1)->gen_memw(NULL,2,mem,memp,addr,A,A_p);
-		snprintf((*(this-1)).asmtext,sizeof (asmtext), "copyq %%%s, mem+%li(%rip))\n",reg16[rA],addr);
+		snprintf((*(this-1)).asmtext,sizeof (asmtext), "copyw %%%s, mem+%li(%rip)\n",reg16[rA],addr);
 		(this-1)->rT=-1;
 		(this-1)->flags=flags_in;
 		rtn=false;
@@ -1004,7 +1004,7 @@ addie:
 	    }
 	    if (has_mem_==2) {
 		(this-1)->gen_memw(NULL,1,mem,memp,addr,A,A_p);
-		snprintf((*(this-1)).asmtext,sizeof (asmtext), "copyq %%%s, mem+%li(%rip))\n",reg8[rA],addr);
+		snprintf((*(this-1)).asmtext,sizeof (asmtext), "copyb %%%s, mem+%li(%rip)\n",reg8[rA],addr);
 		(this-1)->rT=-1;
 		(this-1)->flags=flags_in;
 		rtn=false;
