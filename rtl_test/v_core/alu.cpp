@@ -1962,6 +1962,8 @@ int main(int argc, char *argv[]) {
     memset((void *) &contx,0,sizeof (contx));
     char *mem=(char *) mmap(0,2l*1024*1024*1024,PROT_READ|PROT_WRITE,MAP_ANON|MAP_PRIVATE,-1,0);
     char *memp=(char *) mmap(0,2l*1024*1024*1024/64,PROT_READ|PROT_WRITE,MAP_ANON|MAP_PRIVATE,-1,0);
+    char *memw=(char *) mmap(0,2l*1024*1024*1024,PROT_READ|PROT_WRITE,MAP_ANON|MAP_PRIVATE,-1,0);
+    char *mempw=(char *) mmap(0,2l*1024*1024*1024/64,PROT_READ|PROT_WRITE,MAP_ANON|MAP_PRIVATE,-1,0);
     if (!mem) {
 	perror("mem");
 	exit(1);
@@ -1972,7 +1974,9 @@ int main(int argc, char *argv[]) {
     top->clk=0;
     top->rst=1;
     gen_memrgn(mem,memp);
-    gen_prog(reqs,10000000,FOUT,&contx,mem,memp);
+    memcpy(memw,mem,2l*1024*1024*1024);
+    memcpy(mempw,memp,2l*1024*1024*1024/64);
+    gen_prog(reqs,10000000,FOUT,&contx,memw,mempw);
     fclose(FOUT);
     if (argc==2 && !strcmp(argv[1],"-asm")) exit(0);
     char mname[256];
