@@ -441,7 +441,7 @@ class req {
     unsigned has_mem;
     unsigned has_alu;
     char asmtext[64];
-    bool gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,bool has_mem_,char *mem,char *pmem);
+    bool gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,int has_mem_,char *mem,char *pmem);
     void gen_init(int rT,int dom,unsigned long long int val,int val_p);
     void gen_mem(req* prev1,unsigned code,char * mem,char *memp,unsigned long long addr);
     void gen_memw(req* prev1,unsigned code,char * mem,char *memp,unsigned long long addr,unsigned long long res, char res_p);
@@ -470,7 +470,7 @@ void req::gen_init(int rT_,int dom,unsigned long long int val,int val_p) {
     else snprintf(asmtext,sizeof asmtext,"movabsp $%li,%%%s\n",B,reg65[rT]);//WARNING: movabsp non impl and not in cpu spec
 }
 
-bool req::gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,bool has_mem_,char *mem,char *memp) {
+bool req::gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,int has_mem_,char *mem,char *memp) {
     alt=alt_;
     mul=mul_;
     excpt=-1;
@@ -937,7 +937,7 @@ addie:
             case 32:
 	    if (has_mem_==2) {
 		(this-1)->gen_memw(NULL,8,mem,memp,addr,A,A_p);
-		snprintf((*(this-1)).asmtext,sizeof (asmtext), "copyq %%%s, mem+%li(%rip))\n",reg65[rA],addr);
+		snprintf((*(this-1)).asmtext,sizeof (asmtext), "copyq %%%s, mem+%li(%rip)\n",reg65[rA],addr);
 		(this-1)->rT=-1;
 		(this-1)->flags=flags_in;
 		rtn=false;
@@ -1927,15 +1927,19 @@ void gen_prog(req *reqs,int count, FILE *f,hcont *contx,char *mem,char *pmem) {
    
    for(n=32;n<(count-2);n++) {
 	   int p;
-	   if ((p=lrand48()&3)==2) {
-               reqs[n].gen(false, false, lrand48()&1, NULL,contx,false,NULL,NULL);
+	   if ((p=(lrand48()&3))==2) {
+               reqs[n].gen(false, false, lrand48()&1, NULL,contx,0,NULL,NULL);
 	       fprintf(f,"%s",reqs[n].asmtext);
 	   } else if (p)  {
-               if (reqs[n+1].gen(false, false, false, NULL,contx,true,mem,pmem)) n++;
+               if (reqs[n+1].gen(false, false, false, NULL,contx,1,mem,pmem)) n++;
 	       fprintf(f,"%s",reqs[n].asmtext);
 	   } else {
-               if (reqs[n+2].gen(false, false, false, NULL,contx,true+1,mem,pmem)) n+=2;
-	       fprintf(f,"%s",reqs[n].asmtext);
+               if (reqs[n+1].gen(false, false, false, NULL,contx,2,mem,pmem)) {
+		   n+=2;
+	           fprintf(f,"%s",reqs[n-1].asmtext);
+	       } else {
+	           fprintf(f,"%s",reqs[n].asmtext);
+	       }
 	   }
    }
    fprintf(f,".p2align 5\n");
