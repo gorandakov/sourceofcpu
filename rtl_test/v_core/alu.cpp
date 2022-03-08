@@ -1765,8 +1765,8 @@ no_srch:;
 	    int k2;
 	    k2=(k>>1)*3+1+(k&1);
 	    extract_e(top->heptane_core__DOT__bck_mod__DOT__fret,14*k,14*k+13,val);
-	    if ((k&1)==0) printf("fsret %i,\t0x%x, \t0x%x\n",k,val,top->heptane_core__DOT__bck_mod__DOT__outII_reg8[k2]);
-	    if ((k&1)==1) printf("fsret %i,\t0x%x, \t0x%x\n",k,val,top->heptane_core__DOT__bck_mod__DOT__outII_reg11[k2]);
+	    if ((k&1)==0) printf("fsret %i,\t0x%x, \t0x%x\n",k,val,top->heptane_core__DOT__bck_mod__DOT__outII_reg4[k2]);
+	    if ((k&1)==1) printf("fsret %i,\t0x%x, \t0x%x\n",k,val,top->heptane_core__DOT__bck_mod__DOT__outII_reg7[k2]);
 	}
     }
     if (top->heptane_core__DOT__front_mod__DOT__cc_mod__DOT____Vcellout__stHit_mod__read_data&0x100) {
