@@ -348,7 +348,7 @@ module fun_fpsu(
     (fxFCADD_raise_s_reg[0]|fxFCADD_raise_s_reg[1]) :
     11'b0;
   fexcpt fexcpt2_mod(fraise2_reg,{6'b0,3'b0},
-    fmask2_reg,|u2_en_reg7[3:2],u2_ret,u2_ret_en);
+    fmask2_reg,|u2_en_reg7[3:2]&u2_en_reg7[0],u2_ret,u2_ret_en);
   assign fraise3=fxFADD_sn_reg2 ?
     (fxFADD_raise_reg[0]|fxFADD_raise_reg[1])&fpcsr[21:11] :
     11'b0&fpcsr[21:11];
@@ -356,7 +356,7 @@ module fun_fpsu(
     (fxFADD_raise_reg[0]|fxFADD_raise_reg[1]) :
     11'b0;
   fexcpt fexcpt3_mod(fraise3_reg,{6'b0,3'b0},
-    fmask3_reg,|u1_en_reg4[3:2],u1_ret,u1_ret_en);
+    fmask3_reg,|u1_en_reg4[3:2]&u1_en_reg4[0],u1_ret,u1_ret_en);
 /*module fexcpt(
   mask,
   in,
