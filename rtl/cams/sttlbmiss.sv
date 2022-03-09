@@ -26,14 +26,14 @@ module wtmiss_ram(
   input write_wen;
 
   reg [DATA_WIDTH-1:0] ram [ADDR_COUNT-1:0];
-  //reg [ADDR_WIDTH-1:0] read_addr_reg;
+  reg [ADDR_WIDTH-1:0] read_addr_reg;
   
-  assign read_data=ram[read_addr];
+  assign read_data=ram[read_addr_reg];
 
   always @(posedge clk)
     begin
-      //if (rst) read_addr_reg<={ADDR_WIDTH{1'b0}};
-      //else if (read_clkEn) read_addr_reg<=read_addr;
+      if (rst) read_addr_reg<={ADDR_WIDTH{1'b0}};
+      else if (read_clkEn) read_addr_reg<=read_addr;
       if (write_wen) ram[write_addr]<=write_data;
     end
 
@@ -257,7 +257,7 @@ module wtmiss(
   .clk(clk),
   .rst(rst),
   .read_clkEn(enOut&&pause==0),
-  .read_addr(read_addr),
+  .read_addr(read_addr_d),
   .read_data({rdmiss[0],read_mop[0]}),
   .write_addr(inIt ? inIt_cnt : write_addr),
   .write_data({miss0,write_mop[0]}&{DATA_WIDTH{~inIt}}),
@@ -267,7 +267,7 @@ module wtmiss(
   .clk(clk),
   .rst(rst),
   .read_clkEn(enOut&&pause==0),
-  .read_addr(read_addr),
+  .read_addr(read_addr_d),
   .read_data({rdmiss[1],read_mop[1]}),
   .write_addr(inIt ? inIt_cnt : write_addr),
   .write_data({miss1,write_mop[1]}&{DATA_WIDTH{~inIt}}),
@@ -494,7 +494,7 @@ module wtmiss(
       if (rst) begin
           read_addr<=2'b0;
       end else begin
-          if (enOut&&pause==0) read_addr<=read_addr_d;
+          if (stepW[0]&&pause==0) read_addr<=read_addr_d;
       end
       if (rst) begin
           inIt<=1'b1;
