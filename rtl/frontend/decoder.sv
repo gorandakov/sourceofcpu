@@ -2967,7 +2967,7 @@ module decoder(
   cls_shift_reg & iUsed_reg,
   cls_load_reg & iUsed_reg,
   cls_store_reg & iUsed_reg,
-  cls_storeI_reg,//12,8 bit and misaligned
+  cls_storeI_reg & iUsed_reg,//12,8 bit and misaligned
   cls_store2_reg & iUsed_reg,//base+index
   cls_FPU_reg & iUsed_reg,
   cls_loadFPU_reg & iUsed_reg,
