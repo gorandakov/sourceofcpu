@@ -494,7 +494,7 @@ module wtmiss(
       if (rst) begin
           read_addr<=2'b0;
       end else begin
-          if (enOut&&pause==0) read_addr<=read_addr_d;
+          if (stepW[0]&&pause==0) read_addr<=read_addr_d;
       end
       if (rst) begin
           inIt<=1'b1;
