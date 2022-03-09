@@ -120,8 +120,8 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   assign isBasicCmpTest=(opcode_main[7:1]==7'd23 || opcode_main[7:2]==6'd12 ||
     opcode_main[7:1]==7'd26) && magic[0];
 
-  assign isBaseSpecLoad=(opcode_main==8'd54 || opcode_main==8'd176) && magic[0];
-  assign isBaseIndexSpecLoad=(opcode_main==8'd55 || opcode_main==8'd177) && magic[0];
+  assign isBaseSpecLoad=(opcode_main==8'd54 || opcode_main==8'd202) && magic[0];
+  assign isBaseIndexSpecLoad=(opcode_main==8'd55 || opcode_main==8'd203) && magic[0];
   
   assign isImmLoadStore=((opcode_main[7:2]==6'd15) || opcode_main[7:1]==7'b1011000) & magic[0];  
   assign isBaseCISC=magic[1]==1'b0 ? instr[19:18]!=2'b0 : 1'bz;
