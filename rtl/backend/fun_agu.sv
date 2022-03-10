@@ -775,9 +775,6 @@ module agu_block(
   wire p3_pageFault;
   wire p4_pageFault;
   wire p5_pageFault;
-  
-  reg p4_pageFault_reg;
-  reg p5_pageFault_reg;
 
   wire [7:0] p0_faultCode;
   wire [7:0] p1_faultCode;
@@ -785,9 +782,6 @@ module agu_block(
   wire [7:0] p3_faultCode;
   wire [7:0] p4_faultCode;
   wire [7:0] p5_faultCode;
-  reg [7:0] p4_faultCode_reg;
-  reg [7:0] p5_faultCode_reg;
-  
   
   wire [8:0] p0_faultNo;
   wire [8:0] p1_faultNo;
@@ -795,8 +789,6 @@ module agu_block(
   wire [8:0] p3_faultNo;
   wire [8:0] p4_faultNo;
   wire [8:0] p5_faultNo;
-  reg [8:0] p4_faultNo_reg;
-  reg [8:0] p5_faultNo_reg;
   
   wire        p4_mex_en;
   wire [3:0]  p4_mex_attr;
@@ -2616,7 +2608,7 @@ module agu_block(
   assign p4_adata[`lsaddr_mtype]=mOpX4_type_reg;
   assign p4_adata[`lsaddr_flag]= mOpX4_lsflag_reg;
   assign p4_adata[`lsaddr_pconfl]=1'b0;//unused for store
-  assign p4_adata[`lsaddr_except]=p4_pageFault_reg;
+  assign p4_adata[`lsaddr_except]=p4_pageFault;
   assign p4_adata[`lsaddr_blow]=get_byte_mod4(mOpX4_low_reg,mOpX4_sz_reg);
   assign p4_adata[`lsaddr_OH]=   mOpX4_odd_reg;
   assign p4_adata[`lsaddr_EH]=  ~mOpX4_odd_reg;
@@ -2624,11 +2616,11 @@ module agu_block(
         || (~mOpX4_odd_reg && mOpX4_split_reg && mOpX4_bank0_reg[4]);
   assign p4_adata[`lsaddr_EL]=(~mOpX4_odd_reg && ~mOpX4_split_reg|~mOpX4_bank0_reg[4])
     || (mOpX4_odd_reg && mOpX4_split_reg && mOpX4_bank0_reg[4]);
-  assign p4_adata[`lsaddr_etype]=p4_faultCode_reg[3:0];
+  assign p4_adata[`lsaddr_etype]=p4_faultCode[3:0];
   assign p4_en=mOpX4_en_reg;
   assign p4_LSQ=mOpX4_LSQ_reg;
   assign p4_secq=mOp4_sec_reg;
-  assign p4_ret={1'b0,p4_faultCode_reg[3:0],p4_faultNo_reg};
+  assign p4_ret={1'b0,p4_faultCode[3:0],p4_faultNo};
 
   assign p5_adata[`lsaddr_addrE]=mOpX5_addrEven_reg;
   assign p5_adata[`lsaddr_addrO]=mOpX5_addrOdd_reg;
@@ -2647,7 +2639,7 @@ module agu_block(
   assign p5_adata[`lsaddr_mtype]=mOpX5_type_reg;
   assign p5_adata[`lsaddr_flag]= mOpX5_lsflag_reg;
   assign p5_adata[`lsaddr_pconfl]=1'b0;
-  assign p5_adata[`lsaddr_except]=p5_pageFault_reg;
+  assign p5_adata[`lsaddr_except]=p5_pageFault;
   assign p5_adata[`lsaddr_blow]=get_byte_mod4(mOpX5_low_reg,mOpX5_sz_reg);
   assign p5_adata[`lsaddr_OH]=   mOpX5_odd_reg;
   assign p5_adata[`lsaddr_EH]=  ~mOpX5_odd_reg;
@@ -2655,11 +2647,11 @@ module agu_block(
         || (~mOpX5_odd_reg && mOpX5_split_reg && mOpX5_bank0_reg[4]);
   assign p5_adata[`lsaddr_EL]=(~mOpX5_odd_reg && ~mOpX5_split_reg|~mOpX5_bank0_reg[4])
     || (mOpX5_odd_reg && mOpX5_split_reg && mOpX5_bank0_reg[4]);
-  assign p5_adata[`lsaddr_etype]=p5_faultCode_reg[3:0];
+  assign p5_adata[`lsaddr_etype]=p5_faultCode[3:0];
   assign p5_en=mOpX5_en_reg;
   assign p5_LSQ=mOpX5_LSQ_reg;
   assign p5_secq=mOp5_sec_reg;
-  assign p5_ret={1'b0,p5_faultCode_reg[3:0],p5_faultNo_reg};
+  assign p5_ret={1'b0,p5_faultCode[3:0],p5_faultNo};
 
   always @(posedge clk) begin
       if (p4_mex_en) $display("mex4");
@@ -2670,15 +2662,6 @@ module agu_block(
 
       p4_mex_en_reg<=p4_mex_en;
       p5_mex_en_reg<=p5_mex_en;
-  
-      p4_pageFault_reg<=p4_pageFault;
-      p5_pageFault_reg<=p5_pageFault;
-
-      p4_faultCode_reg<=p4_faultCode;
-      p5_faultCode_reg<=p5_faultCode;
-      p4_faultNo_reg<=p4_faultNo;
-      p5_faultNo_reg<=p5_faultNo;
-
 
       u1_clkEn_reg<=u1_clkEn;
       u1_op_reg<=u1_op;
