@@ -425,6 +425,8 @@ module sagu(
     begin
 //	  if (rst) cmplxAddr<={ADDR_WIDTH{1'B0}};
 //	  else cmplxAddr<=mex_en ? mex_addr : cmplxAddr_d;
+	  if (fault_tlb) $display("WfaultTlb");
+	  if (fault_cann) $display("WfaultPtr");
           if (rst) mex_en_reg<=1'b0;
           else mex_en_reg<=mex_en;
           if (rst) mex_en_reg2<=1'b0;
