@@ -336,8 +336,8 @@ module sagu(
   
   assign mflags0=mflags;
   
-  assign fault_tlb={!attr2[`attr_km] && tlb_data[`dtlbData_sys] , ~tlb_data[`dtlbData_na]|tlb_data[`dtlbData_wp]}; 
-  assign fault_tlb_next={!attr2[`attr_km] && tlb_data_next[`dtlbData_sys] , ~tlb_data_next[`dtlbData_na]|tlb_data_next[`dtlbData_wp]}; 
+  assign fault_tlb={mflags0[`mflags_cpl]==2'd3 && tlb_data[`dtlbData_sys] , ~tlb_data[`dtlbData_na]|tlb_data[`dtlbData_wp]}; 
+  assign fault_tlb_next={mflags0[`mflags_cpl]==2'd3 && tlb_data_next[`dtlbData_sys] , ~tlb_data_next[`dtlbData_na]|tlb_data_next[`dtlbData_wp]}; 
 
   adder #(14) nextCAddr_mod({1'b0,cmplxAddr[12:0]},14'b10000000,addrNext,1'b0,1'b1,,,,);
 
