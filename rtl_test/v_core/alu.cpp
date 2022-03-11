@@ -1678,10 +1678,17 @@ bool get_check(Vheptane_core *top, req *reqs,unsigned long long &ip) {
 	    if (xbreak&(1<<k)) break;
 	}
 	count=(top->heptane_core__DOT__except && top->heptane_core__DOT__except_due_jump) ? k+1 : k;
-	if (count>insn_count[insn_posR]) count=insn_count[insn_posR];
+	if (count==10) count=insn_count[insn_posR];
+	if (count!=insn_count[insn_posR] && !top->heptane_core__DOT__except) {
+	    printf("wrong count at %li, 0x%x\n",ip,retII);
+	    rtn=false;
+	}
 	insn_posR++;
 	insn_posR&=0x3f;
-	if (top->heptane_core__DOT__except) printf("except %li\n",count);
+	if (top->heptane_core__DOT__except) {
+            printf("except %li, %li\n",count,ip);
+	    rtn=false;
+	}
 	else printf("ret %li, \t%li, %x, fl:0x%x\n",count,ip+count,retII,get_retfl_data(top));
 	for(x=0;x<count;x++) {
 	    if (reqs[ip+x].rT<0) goto no_srch;
@@ -1739,8 +1746,9 @@ no_srch:;
     retire=top->heptane_core__DOT__bck_mod__DOT__retM_do_retire;
     retII=top->heptane_core__DOT__bck_mod__DOT__cntrl_unit_mod__DOT__retire_addr_reg;
     if (top->heptane_core__DOT__iAvail) printf("iAvail 0x%x, \t0x%x, \t0x%x, \t0x%x\n",top->heptane_core__DOT__iAvail,top->heptane_core__DOT__instrEn,top->heptane_core__DOT__dec_mod__DOT__cls_ALU,top->heptane_core__DOT__dec_mod__DOT__cls_shift);
-    if (top->heptane_core__DOT__instrEn) {
-        k=0;
+    if (top->heptane_core__DOT__instrEn && top->heptane_core__DOT__bck_mod__DOT__stall_rs==0 && 
+		    top->heptane_core__DOT__bck_mod__DOT__doStall_rs==0) {
+	k=0;
 	while (top->heptane_core__DOT__instrEn&(1<<k)) {k++;}
 	insn_count[insn_posW++]=k;
 	insn_posW&=0x3f;
