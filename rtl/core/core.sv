@@ -900,6 +900,9 @@ module heptane_core(
   assign insBus_data=dc2_rdata_reg;
   assign insBus_dataPTR=dc2_rdataPTR_reg;
 
+  assign MSI_expAddr=37'b0;
+  assign MSI_expAddr_en=1'b0;
+
   dc2_cntrl dc2_cntrl_mod(
   .clk(clk),
   .rst(rst),
