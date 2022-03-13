@@ -190,10 +190,10 @@ module ldq_buf(
   assign chkMatch2=chkMatch[2]&~free&chkEn2;
   assign chkMatch3=chkMatch[3]&~free&chkEn3;
 
-  assign freeConfl0=(((freeII0==II && confl!=0) || (((chkMask0&freeMask0)!=0 || (chkMask1&freeMask0)!=0 || 
-    (chkMask2&freeMask0)!=0) && freeII0[9:4]==II[9:4])) && ~free) &freeEn0;
-  assign freeConfl1=(((freeII1==II && confl!=0) || (((chkMask0&freeMask1)!=0 || (chkMask1&freeMask1)!=0 || 
-    (chkMask2&freeMask1)!=0) && freeII1[9:4]==II[9:4])) && ~free) &freeEn1;
+  assign freeConfl0=(((freeII0==II && confl!=0) || (((~chkMask0&freeMask0)!=0 || (~chkMask1&freeMask0)!=0 || 
+    (~chkMask2&freeMask0)!=0) && freeII0[9:4]==II[9:4])) && ~free) &freeEn0;
+  assign freeConfl1=(((freeII1==II && confl!=0) || (((~chkMask0&freeMask1)!=0 || (~chkMask1&freeMask1)!=0 || 
+    (~chkMask2&freeMask1)!=0) && freeII1[9:4]==II[9:4])) && ~free) &freeEn1;
 
   assign freeConflSmp0=(freeII0==II && confl_smp) & freeEn0;
   assign freeConflSmp1=(freeII1==II && confl_smp) & freeEn1;
