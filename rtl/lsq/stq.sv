@@ -10,8 +10,8 @@ module stq_buf_L(
   chk3_en, chk3_addrEO, chk3_odd, chk3_bytes, chk3_subBNK, chk3_match, chk3_partial,
   chk4_en, chk4_addrEO, chk4_odd, chk4_bytes, chk4_subBNK, chk4_match, chk4_partial,
   chk5_en, chk5_addrEO, chk5_odd, chk5_bytes, chk5_subBNK, chk5_match, chk5_partial,
-  upd0_en, upd0_addrEO, upd0_odd, upd0_subBNK, upd0_match,
-  upd1_en, upd1_addrEO, upd1_odd, upd1_subBNK, upd1_match,
+  upd0_en, 
+  upd1_en, 
   free_en,free,upd,passe,passe_en);
   localparam WIDTH=36;
   input clk;
@@ -72,16 +72,7 @@ module stq_buf_L(
   output chk5_partial;
 
   input upd0_en;
-  input [WIDTH-1:0] upd0_addrEO;
-  input upd0_odd;
-  input [7:0] upd0_subBNK;
-  output upd0_match;
-
   input upd1_en;
-  input [WIDTH-1:0] upd1_addrEO;
-  input upd1_odd;
-  input [7:0] upd1_subBNK;
-  output upd1_match;
 
   input free_en;
   output reg free;
@@ -102,19 +93,19 @@ module stq_buf_L(
   assign chk4_match0=chk4_addrEO==addrEO && (chk4_subBNK&subBNK)!=0 && chk4_odd==odd;
   assign chk5_match0=chk5_addrEO==addrEO && (chk5_subBNK&subBNK)!=0 && chk5_odd==odd;
   
-  assign chk0_match=chk0_match0 && chk0_en && ~free && ~passe && (chk0_bytes&~bytes)==0;
-  assign chk1_match=chk1_match0 && chk1_en && ~free && ~passe && (chk1_bytes&~bytes)==0;
-  assign chk2_match=chk2_match0 && chk2_en && ~free && ~passe && (chk2_bytes&~bytes)==0;
-  assign chk3_match=chk3_match0 && chk3_en && ~free && ~passe && (chk3_bytes&~bytes)==0;
-  assign chk4_match=chk4_match0 && chk4_en && ~free && ~passe && (chk4_bytes&~bytes)==0;
-  assign chk5_match=chk5_match0 && chk5_en && ~free && ~passe && (chk5_bytes&~bytes)==0;
+  assign chk0_match=chk0_match0 && chk0_en && ~free && ~passe && (chk0_bytes&~bytes)==0 && upd;
+  assign chk1_match=chk1_match0 && chk1_en && ~free && ~passe && (chk1_bytes&~bytes)==0 && upd;
+  assign chk2_match=chk2_match0 && chk2_en && ~free && ~passe && (chk2_bytes&~bytes)==0 && upd;
+  assign chk3_match=chk3_match0 && chk3_en && ~free && ~passe && (chk3_bytes&~bytes)==0 && upd;
+  assign chk4_match=chk4_match0 && chk4_en && ~free && ~passe && (chk4_bytes&~bytes)==0 && upd;
+  assign chk5_match=chk5_match0 && chk5_en && ~free && ~passe && (chk5_bytes&~bytes)==0 && upd;
 
-  assign chk0_match=chk0_match0 && chk0_en && ~free && ~passe && (chk0_bytes&~bytes)!=0;
-  assign chk1_match=chk1_match0 && chk1_en && ~free && ~passe && (chk1_bytes&~bytes)!=0;
-  assign chk2_match=chk2_match0 && chk2_en && ~free && ~passe && (chk2_bytes&~bytes)!=0;
-  assign chk3_match=chk3_match0 && chk3_en && ~free && ~passe && (chk3_bytes&~bytes)!=0;
-  assign chk4_match=chk4_match0 && chk4_en && ~free && ~passe && (chk4_bytes&~bytes)!=0;
-  assign chk5_match=chk5_match0 && chk5_en && ~free && ~passe && (chk5_bytes&~bytes)!=0;
+  assign chk0_match=chk0_match0 && chk0_en && ~free && ~passe && ((chk0_bytes&~bytes)!=0 || ~upd);
+  assign chk1_match=chk1_match0 && chk1_en && ~free && ~passe && ((chk1_bytes&~bytes)!=0 || ~upd);
+  assign chk2_match=chk2_match0 && chk2_en && ~free && ~passe && ((chk2_bytes&~bytes)!=0 || ~upd);
+  assign chk3_match=chk3_match0 && chk3_en && ~free && ~passe && ((chk3_bytes&~bytes)!=0 || ~upd);
+  assign chk4_match=chk4_match0 && chk4_en && ~free && ~passe && ((chk4_bytes&~bytes)!=0 || ~upd);
+  assign chk5_match=chk5_match0 && chk5_en && ~free && ~passe && ((chk5_bytes&~bytes)!=0 || ~upd);
 
   always @(posedge clk) begin
       if (rst) begin
@@ -134,6 +125,9 @@ module stq_buf_L(
               free<=1'b0;
               upd<=1'b0;
               passe<=1'b0;
+          end
+          if (upd0_en|upd1_en) begin
+              upd<=1'b1;
           end
           if (passe_en) passe<=1'b1;
           if (free_en) begin 
