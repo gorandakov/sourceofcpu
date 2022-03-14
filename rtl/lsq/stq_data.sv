@@ -45,4 +45,50 @@ module stq_data(
   
 endmodule  
   
+
+module stq_data_array(
+  clk,
+  rst,
+  wrt0_en,wrt0_data,
+  wrt1_en,wrt1_data,
+  chk0_en,chk0_data,
+  chk1_en,chk1_data,
+  chk2_en,chk2_data,
+  chk3_en,chk3_data,
+  chk4_en,chk4_data,
+  chk5_en,chk5_data)
+  parameter WIDTH=32;
+  localparam BUF_COUNT=64;
+  input clk;
+  input rst;
+  input [BUF_COUNT-1:0] wrt0_en;
+  input [WIDTH-1:0] wrt0_data;
+  input [BUF_COUNT-1:0] wrt1_en;
+  input [WIDTH-1:0] wrt1_data;
+  input [BUF_COUNT-1:0] chk0_en;
+  output [WIDTH-1:0] chk0_data;
+  input [BUF_COUNT-1:0] chk1_en;
+  output [WIDTH-1:0] chk1_data;
+  input [BUF_COUNT-1:0] chk2_en;
+  output [WIDTH-1:0] chk2_data;
+  input [BUF_COUNT-1:0] chk3_en;
+  output [WIDTH-1:0] chk3_data;
+  input [BUF_COUNT-1:0] chk4_en;
+  output [WIDTH-1:0] chk4_data;
+  input [BUF_COUNT-1:0] chk5_en;
+  output [WIDTH-1:0] chk5_data;
   
+  generate
+    genvar bank,row;
+    for(bank=0;bank<8;bank=bank+1) begin : bnk_gen
+        wire [WIDTH-1:0] chk0_dataK;
+        wire [WIDTH-1:0] chk1_dataK;
+        wire [WIDTH-1:0] chk2_dataK;
+        wire [WIDTH-1:0] chk3_dataK;
+        wire [WIDTH-1:0] chk4_dataK;
+        wire [WIDTH-1:0] chk5_dataK;
+        for(row=0;row<8;row=row+1) begin : row_gen
+        end
+    end
+  endgenerate
+endmodule  
