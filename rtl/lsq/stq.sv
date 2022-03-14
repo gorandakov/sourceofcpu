@@ -3,6 +3,7 @@ module stq_buf_L(
   clk,
   rst,
   stallA,
+  excpt,
   wrt0_en, wrt0_addrEO, wrt0_odd, wrt0_bytes, wrt0_subBNK,
   wrt1_en, wrt1_addrEO, wrt1_odd, wrt1_bytes, wrt1_subBNK,
   chk0_en, chk0_addrEO, chk0_odd, chk0_bytes, chk0_subBNK, chk0_match, chk0_partial,
@@ -18,7 +19,8 @@ module stq_buf_L(
   input clk;
   input rst;
   input stallA;
-
+  input excpt;
+  
   input wrt0_en;
   input [WIDTH-1:0] wrt0_addrEO;
   input wrt0_odd;
@@ -152,6 +154,9 @@ module stq_buf_L(
           end
           if (free_en) begin 
               free<=1'b1;
+              passe<=1'b0;
+          end
+          if (excpt&free&passe) begin
               passe<=1'b0;
           end
       end
