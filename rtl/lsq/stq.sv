@@ -131,7 +131,7 @@ module stq_buf_L(
               subBNK<=wrt0_subBNK;
               odd<=wrt0_odd;
               free<=1'b0;
-              upd<=1'b0;
+              //upd<=1'b0;
               passe<=1'b0;
           end
           if (wrt1_en) begin
@@ -140,13 +140,16 @@ module stq_buf_L(
               subBNK<=wrt1_subBNK;
               odd<=wrt1_odd;
               free<=1'b0;
-              upd<=1'b0;
+              //upd<=1'b0;
               passe<=1'b0;
           end
           if (upd0_en|upd1_en) begin
               upd<=1'b1;
           end
-          if (passe_en) passe<=1'b1;
+          if (passe_en) begin
+              passe<=1'b1;
+              upd<=1'b0;
+          end
           if (free_en) begin 
               free<=1'b1;
               passe<=1'b0;
