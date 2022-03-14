@@ -1041,12 +1041,12 @@ module lsq_req(
   read5B_xdata,
 
 
-  init ? {initCount,3'd0} : write0_addr_reg2[8:0],{write0_addr_reg2[8],smpc0_reg2,write0_xdata_reg2}|{XDATA_WIDTH{init}},write0_wen_reg2 & FU0Hit || init,
-  init ? {initCount,3'd1} : write1_addr_reg2[8:0],{write1_addr_reg2[8],smpc1_reg2,write1_xdata_reg2}|{XDATA_WIDTH{init}},write1_wen_reg2 & FU1Hit || init,
-  init ? {initCount,3'd2} : write2_addr_reg2[8:0],{write2_addr_reg2[8],smpc2_reg2,write2_xdata_reg2}|{XDATA_WIDTH{init}},write2_wen_reg2 & FU2Hit || init,
-  init ? {initCount,3'd3} : write3_addr_reg2[8:0],{write3_addr_reg2[8],smpc3_reg2,write3_xdata_reg2}|{XDATA_WIDTH{init}},write3_wen_reg2 & FU3Hit || init,
-  init ? {initCount,3'd4} : write4_addr_REG4[8:0],{write4_addr_REG4[8],1'b0,write4_xdata_REG4}|{XDATA_WIDTH{init}},write4_wen_REG4 || init,
-  init ? {initCount,3'd5} : write5_addr_REG4[8:0],{write5_addr_REG4[8],1'b0,write5_xdata_REG4}|{XDATA_WIDTH{init}},write5_wen_REG4 || init,
+  init ? {initCount,3'd0} : write0_addr[8:0],{write0_addr[8],smpc0,write0_xdata}|{XDATA_WIDTH{init}},write0_wen || init,
+  init ? {initCount,3'd1} : write1_addr[8:0],{write1_addr[8],smpc1,write1_xdata}|{XDATA_WIDTH{init}},write1_wen || init,
+  init ? {initCount,3'd2} : write2_addr[8:0],{write2_addr[8],smpc2,write2_xdata}|{XDATA_WIDTH{init}},write2_wen || init,
+  init ? {initCount,3'd3} : write3_addr[8:0],{write3_addr[8],smpc3,write3_xdata}|{XDATA_WIDTH{init}},write3_wen || init,
+  init ? {initCount,3'd4} : write4_addr[8:0],{write4_addr[8],1'b0,write4_xdata}|{XDATA_WIDTH{init}},write4_wen || init,
+  init ? {initCount,3'd5} : write5_addr[8:0],{write5_addr[8],1'b0,write5_xdata}|{XDATA_WIDTH{init}},write5_wen || init,
   write_addr_shr,{XDATA_WIDTH{~write_addr_shr[5]}},write_wen_shr&~doStall&~stall&~init&~except
   );
 
