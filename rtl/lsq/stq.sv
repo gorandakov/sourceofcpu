@@ -4,6 +4,7 @@ module stq_buf_L(
   rst,
   stallA,
   wrt0_en, wrt0_addrEO, wrt0_odd, wrt0_bytes, wrt0_subBNK,
+  wrt1_en, wrt1_addrEO, wrt1_odd, wrt1_bytes, wrt1_subBNK,
   chk0_en, chk0_addrEO, chk0_odd, chk0_bytes, chk0_subBNK, chk0_match, chk0_partial,
   chk1_en, chk1_addrEO, chk1_odd, chk1_bytes, chk1_subBNK, chk1_match, chk1_partial,
   chk2_en, chk2_addrEO, chk2_odd, chk2_bytes, chk2_subBNK, chk2_match, chk2_partial,
@@ -17,11 +18,18 @@ module stq_buf_L(
   input clk;
   input rst;
   input stallA;
+
   input wrt0_en;
   input [WIDTH-1:0] wrt0_addrEO;
   input wrt0_odd;
   input [3:0] wrt0_bytes;
   input [7:0] wrt0_subBNK;
+
+  input wrt1_en;
+  input [WIDTH-1:0] wrt1_addrEO;
+  input wrt1_odd;
+  input [3:0] wrt1_bytes;
+  input [7:0] wrt1_subBNK;
 
   input chk0_en;
   input [WIDTH-1:0] chk0_addrEO;
@@ -122,6 +130,15 @@ module stq_buf_L(
               bytes<=wrt0_bytes;
               subBNK<=wrt0_subBNK;
               odd<=wrt0_odd;
+              free<=1'b0;
+              upd<=1'b0;
+              passe<=1'b0;
+          end
+          if (wrt1_en) begin
+              addrEO<=wrt1_addrEO;
+              bytes<=wrt1_bytes;
+              subBNK<=wrt1_subBNK;
+              odd<=wrt1_odd;
               free<=1'b0;
               upd<=1'b0;
               passe<=1'b0;
