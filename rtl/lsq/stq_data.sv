@@ -24,7 +24,10 @@ module stq_data(
   chk2_en,chk2_data,
   chk3_en,chk3_data,
   chk4_en,chk4_data,
-  chk5_en,chk5_data)
+  chk5_en,chk5_data,
+  chk6_en,chk6_data,
+  chk7_en,chk7_data
+  )
   parameter WIDTH=32;
   input clk;
   input rst;
@@ -44,6 +47,10 @@ module stq_data(
   output [WIDTH-1:0] chk4_data;
   input chk5_en;
   output [WIDTH-1:0] chk5_data;
+  input chk6_en;
+  output [WIDTH-1:0] chk6_data;
+  input chk7_en;
+  output [WIDTH-1:0] chk7_data;
   
   assign chk0_data=chk0_en ? data : {WIDTH{1'bz}};
   assign chk1_data=chk1_en ? data : {WIDTH{1'bz}};
@@ -51,6 +58,8 @@ module stq_data(
   assign chk3_data=chk3_en ? data : {WIDTH{1'bz}};
   assign chk4_data=chk4_en ? data : {WIDTH{1'bz}};
   assign chk5_data=chk5_en ? data : {WIDTH{1'bz}};
+  assign chk6_data=chk6_en ? data : {WIDTH{1'bz}};
+  assign chk7_data=chk7_en ? data : {WIDTH{1'bz}};
   
   always @(posedge clk) begin
       if (wrt0_en) data<=wrt0_data;
@@ -70,7 +79,10 @@ module stq_data_array(
   chk2_en,chk2_data,
   chk3_en,chk3_data,
   chk4_en,chk4_data,
-  chk5_en,chk5_data)
+  chk5_en,chk5_data,
+  chk6_en,chk6_data,
+  chk7_en,chk7_data
+  )
   parameter WIDTH=32;
   localparam BUF_COUNT=64;
   input clk;
@@ -91,6 +103,10 @@ module stq_data_array(
   output [WIDTH-1:0] chk4_data;
   input [BUF_COUNT-1:0] chk5_en;
   output [WIDTH-1:0] chk5_data;
+  input [BUF_COUNT-1:0] chk6_en;
+  output [WIDTH-1:0] chk6_data;
+  input [BUF_COUNT-1:0] chk7_en;
+  output [WIDTH-1:0] chk7_data;
   
   generate
     genvar bank,row;
@@ -101,6 +117,8 @@ module stq_data_array(
         wire [WIDTH-1:0] chk3_dataK;
         wire [WIDTH-1:0] chk4_dataK;
         wire [WIDTH-1:0] chk5_dataK;
+        wire [WIDTH-1:0] chk6_dataK;
+        wire [WIDTH-1:0] chk7_dataK;
         for(row=0;row<8;row=row+1) begin : row_gen
             stq_data(
             clk,
@@ -112,7 +130,10 @@ module stq_data_array(
             chk2_en[bank*8+row],chk2_dataK,
             chk3_en[bank*8+row],chk3_dataK,
             chk4_en[bank*8+row],chk4_dataK,
-            chk5_en[bank*8+row],chk5_dataK);
+            chk5_en[bank*8+row],chk5_dataK,
+            chk6_en[bank*8+row],chk6_dataK,
+            chk7_en[bank*8+row],chk7_dataK
+            );
         end
         assign chk0_dataK=|chk0_en[bank*8+:8] ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
         assign chk1_dataK=|chk1_en[bank*8+:8] ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
@@ -120,6 +141,8 @@ module stq_data_array(
         assign chk3_dataK=|chk3_en[bank*8+:8] ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
         assign chk4_dataK=|chk4_en[bank*8+:8] ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
         assign chk5_dataK=|chk5_en[bank*8+:8] ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+        assign chk6_dataK=|chk6_en[bank*8+:8] ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+        assign chk7_dataK=|chk7_en[bank*8+:8] ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
 
         assign chk0_data=|chk0_en[bank*8+:8] ? chk0_dataK : {WIDTH{1'BZ}};
         assign chk1_data=|chk1_en[bank*8+:8] ? chk1_dataK : {WIDTH{1'BZ}};
@@ -127,6 +150,16 @@ module stq_data_array(
         assign chk3_data=|chk3_en[bank*8+:8] ? chk3_dataK : {WIDTH{1'BZ}};
         assign chk4_data=|chk4_en[bank*8+:8] ? chk4_dataK : {WIDTH{1'BZ}};
         assign chk5_data=|chk5_en[bank*8+:8] ? chk5_dataK : {WIDTH{1'BZ}};
+        assign chk6_data=|chk6_en[bank*8+:8] ? chk6_dataK : {WIDTH{1'BZ}};
+        assign chk7_data=|chk7_en[bank*8+:8] ? chk7_dataK : {WIDTH{1'BZ}};
     end
   endgenerate
+  assign chk0_data=|chk0_en ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+  assign chk1_data=|chk1_en ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+  assign chk2_data=|chk2_en ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+  assign chk3_data=|chk3_en ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+  assign chk4_data=|chk4_en ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+  assign chk5_data=|chk5_en ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+  assign chk6_data=|chk6_en ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+  assign chk7_data=|chk7_en ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
 endmodule  
