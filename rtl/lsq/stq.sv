@@ -40,6 +40,38 @@ module stq(
   generate
       genvar b,x;
       for(b=0;b<4;b=b+1) begin : L
+          assign chk0_subBNK[b]={chk0_banks[28+b],chk0_banks[24+b],chk0_banks[20+b],chk0_banks[16+b],
+              chk0_banks[12+b],chk0_banks[8+b],chk0_banks[4+b],chk0_banks[0+b]};
+          assign chk0_banks=chk0_adata[`lsaddr_banks];
+
+          assign chk1_subBNK[b]={chk1_banks[28+b],chk1_banks[24+b],chk1_banks[20+b],chk1_banks[16+b],
+              chk1_banks[12+b],chk1_banks[8+b],chk1_banks[4+b],chk1_banks[0+b]};
+          assign chk1_banks=chk1_adata[`lsaddr_banks];
+
+          assign chk2_subBNK[b]={chk2_banks[28+b],chk2_banks[24+b],chk2_banks[20+b],chk2_banks[16+b],
+              chk2_banks[12+b],chk2_banks[8+b],chk2_banks[4+b],chk2_banks[0+b]};
+          assign chk2_banks=chk2_adata[`lsaddr_banks];
+
+          assign chk3_subBNK[b]={chk3_banks[28+b],chk3_banks[24+b],chk3_banks[20+b],chk3_banks[16+b],
+              chk3_banks[12+b],chk3_banks[8+b],chk3_banks[4+b],chk3_banks[0+b]};
+          assign chk3_banks=chk3_adata[`lsaddr_banks];
+
+          assign chk4_subBNK[b]={chk4_banks[28+b],chk4_banks[24+b],chk4_banks[20+b],chk4_banks[16+b],
+              chk4_banks[12+b],chk4_banks[8+b],chk4_banks[4+b],chk4_banks[0+b]};
+          assign chk4_banks=chk4_adata[`lsaddr_banks];
+
+          assign chk5_subBNK[b]={chk5_banks[28+b],chk5_banks[24+b],chk5_banks[20+b],chk5_banks[16+b],
+              chk5_banks[12+b],chk5_banks[8+b],chk5_banks[4+b],chk5_banks[0+b]};
+          assign chk5_banks=chk5_adata[`lsaddr_banks];
+          
+          assign wrt0_subBNK[b]={wrt0_banks[28+b],wrt0_banks[24+b],wrt0_banks[20+b],wrt0_banks[16+b],
+              wrt0_banks[12+b],wrt0_banks[8+b],wrt0_banks[4+b],wrt0_banks[0+b]};
+          assign wrt0_banks=wrt0_adata[`lsaddr_banks];
+
+          assign wrt1_subBNK[b]={wrt1_banks[28+b],wrt1_banks[24+b],wrt1_banks[20+b],wrt1_banks[16+b],
+              wrt1_banks[12+b],wrt1_banks[8+b],wrt1_banks[4+b],wrt1_banks[0+b]};
+          assign wrt1_banks=wrt1_adata[`lsaddr_banks];
+
           stq_buf_L_array arr0_mod(
           clk,
           rst,
