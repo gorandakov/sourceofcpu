@@ -30,6 +30,8 @@ module stq(
   chk5_adata,chk5_en,chk5_LSQ,  
   wrt0_adata,wrt0_en,wrt0_LSQ,
   wrt1_adata,wrt1_en,wrt1_LSQ,
+  upd0_WQ,upd0_en,upd0_data,upd0_sz,
+  upd1_WQ,upd1_en,upd1_data,upd1_sz,
   pse0_WQ,pse0_en,
   pse1_WQ,pse1_en,
   wb1_adata,wb1_LSQ,wb1_data,wb1_bnkEn,wb1_en,wb1_way,
@@ -43,16 +45,16 @@ module stq(
           rst,
           aStall|aDoStall,
           excpt,
-          wrt0_en, wrt0_addrEO[b], wrt0_odd[b], wrt0_bytes[b], wrt0_subBNK[b],
-          wrt1_en, wrt1_addrEO[b], wrt1_odd[b], wrt1_bytes[b], wrt1_subBNK[b],
+          wrt0_en0, wrt0_addrEO[b], wrt0_odd[b], wrt0_bytes[b], wrt0_subBNK[b],
+          wrt1_en0, wrt1_addrEO[b], wrt1_odd[b], wrt1_bytes[b], wrt1_subBNK[b],
           chk0_en, chk0_addrEO[b], chk0_odd[b], chk0_bytes[b], chk0_subBNK[b], chk0_match[b][31:0], chk0_partial[b][31:0],
           chk1_en, chk1_addrEO[b], chk1_odd[b], chk1_bytes[b], chk1_subBNK[b], chk1_match[b][31:0], chk1_partial[b][31:0],
           chk2_en, chk2_addrEO[b], chk2_odd[b], chk2_bytes[b], chk2_subBNK[b], chk2_match[b][31:0], chk2_partial[b][31:0],
           chk3_en, chk3_addrEO[b], chk3_odd[b], chk3_bytes[b], chk3_subBNK[b], chk3_match[b][31:0], chk3_partial[b][31:0],
           chk4_en, chk4_addrEO[b], chk4_odd[b], chk4_bytes[b], chk4_subBNK[b], chk4_match[b][31:0], chk4_partial[b][31:0],
           chk5_en, chk5_addrEO[b], chk5_odd[b], chk5_bytes[b], chk5_subBNK[b], chk5_match[b][31:0], chk5_partial[b][31:0],
-          upd0_en[31:0], 
-          upd1_en[31:0], 
+          upd0_en0[31:0], 
+          upd1_en0[31:0], 
           free_en[31:0],free[31:0],upd[31:0],passe[31:0],passe_en[31:0]);end
 
           stq_buf_L_array arr1_mod(
@@ -60,23 +62,23 @@ module stq(
           rst,
           aStall|aDoStall,
           excpt,
-          wrt0_en, wrt0_addrEO[b], wrt0_odd[b], wrt0_bytes[b], wrt0_subBNK[b],
-          wrt1_en, wrt1_addrEO[b], wrt1_odd[b], wrt1_bytes[b], wrt1_subBNK[b],
+          wrt0_en0, wrt0_addrEO[b], wrt0_odd[b], wrt0_bytes[b], wrt0_subBNK[b],
+          wrt1_en0, wrt1_addrEO[b], wrt1_odd[b], wrt1_bytes[b], wrt1_subBNK[b],
           chk0_en, chk0_addrEO[b], chk0_odd[b], chk0_bytes[b], chk0_subBNK[b], chk0_match[b][63:32], chk0_partial[b][63:32],
           chk1_en, chk1_addrEO[b], chk1_odd[b], chk1_bytes[b], chk1_subBNK[b], chk1_match[b][63:32], chk1_partial[b][63:32],
           chk2_en, chk2_addrEO[b], chk2_odd[b], chk2_bytes[b], chk2_subBNK[b], chk2_match[b][63:32], chk2_partial[b][63:32],
           chk3_en, chk3_addrEO[b], chk3_odd[b], chk3_bytes[b], chk3_subBNK[b], chk3_match[b][63:32], chk3_partial[b][63:32],
           chk4_en, chk4_addrEO[b], chk4_odd[b], chk4_bytes[b], chk4_subBNK[b], chk4_match[b][63:32], chk4_partial[b][63:32],
           chk5_en, chk5_addrEO[b], chk5_odd[b], chk5_bytes[b], chk5_subBNK[b], chk5_match[b][63:32], chk5_partial[b][63:32],
-          upd0_en[63:32], 
-          upd1_en[63:32], 
+          upd0_en0[63:32], 
+          upd1_en0[63:32], 
           free_en[63:32],free[63:32],upd[63:32],passe[63:32],passe_en[63:32]);
           
           stq_data_array #(32+~b[0]) dat_mod(
           clk,
           rst,
-          wrt0_en,{wrt0_pbit[b/2],wrt0_data[32*b+:32]},
-          wrt1_en,{wrt1_pbit[b/2],wrt1_data[32*b+:32]},
+          upd0_en0,{upd0_pbit[b/2],upd0_data[32*b+:32]},
+          upd1_en0,{upd1_pbit[b/2],upd1_data[32*b+:32]},
           chk0_match[b]|chk0_partial[b],chk0_data[32*b+:32],
           chk1_match[b]|chk1_partial[b],chk1_data[32*b+:32],
           chk2_match[b]|chk2_partial[b],chk2_data[32*b+:32],
@@ -91,8 +93,8 @@ module stq(
           stq_data_array #(8) datX_mod(
           clk,
           rst,
-          wrt0_en,wrt0_data[135:128],
-          wrt1_en,wrt1_data[135:128],
+          upd0_en0,upd0_data[135:128],
+          upd1_en0,upd1_data[135:128],
           chk0_match[b]|chk0_partial[b],chk0_data[135:128],
           chk1_match[b]|chk1_partial[b],chk1_data[135:128],
           chk2_match[b]|chk2_partial[b],chk2_data[135:128],
@@ -103,6 +105,15 @@ module stq(
           WLN1_match[b],WLN1_data[135:128]
           );
 
+      end
+      for(x=0;x<64;x=x+1) begin : X
+          assign WLN0_match[x]=WLN0_adata[`lsaddr_WQ]==x && WLN0_en;
+          assign WLN1_match[x]=WLN1_adata[`lsaddr_WQ]==x && WNL1_en;
+          assign wrt0_en0[x]=wrt0_adata[`lsaddr_WQ]==x && wrt0_en;
+          assign wrt1_en0[x]=wrt1_adata[`lsaddr_WQ]==x && wrt1_en;
+          assign upd0_en0[x]=upd0_WQ==x && upd0_en;
+          assign upd1_en0[x]=upd1_WQ==x && upd1_en;
+          assign passe_en[x]=(pse0_WQ==x && pse0_en) || (pse1_WQ==x && pse1_en);
       end
   endgenerate
 endmodule
