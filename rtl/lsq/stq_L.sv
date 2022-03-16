@@ -113,19 +113,19 @@ module stq_buf_L(
   reg [3:0] odd;
   reg upd;
   
-  assign chk0_match0=chk0_addrEO==addrEO && (chk0_subBNK&subBNK)!=0 && chk0_odd==odd;
-  assign chk1_match0=chk1_addrEO==addrEO && (chk1_subBNK&subBNK)!=0 && chk1_odd==odd;
-  assign chk2_match0=chk2_addrEO==addrEO && (chk2_subBNK&subBNK)!=0 && chk2_odd==odd;
-  assign chk3_match0=chk3_addrEO==addrEO && (chk3_subBNK&subBNK)!=0 && chk3_odd==odd;
-  assign chk4_match0=chk4_addrEO==addrEO && (chk4_subBNK&subBNK)!=0 && chk4_odd==odd;
-  assign chk5_match0=chk5_addrEO==addrEO && (chk5_subBNK&subBNK)!=0 && chk5_odd==odd;
+  assign chk0_match0=chk0_addrEO==addrEO && (chk0_subBNK&subBNK)!=0 && chk0_odd[0]==odd[0];
+  assign chk1_match0=chk1_addrEO==addrEO && (chk1_subBNK&subBNK)!=0 && chk1_odd[0]==odd[0];
+  assign chk2_match0=chk2_addrEO==addrEO && (chk2_subBNK&subBNK)!=0 && chk2_odd[0]==odd[0];
+  assign chk3_match0=chk3_addrEO==addrEO && (chk3_subBNK&subBNK)!=0 && chk3_odd[0]==odd[0];
+  assign chk4_match0=chk4_addrEO==addrEO && (chk4_subBNK&subBNK)!=0 && chk4_odd[0]==odd[0];
+  assign chk5_match0=chk5_addrEO==addrEO && (chk5_subBNK&subBNK)!=0 && chk5_odd[0]==odd[0];
   
-  assign chk0_match=chk0_match0 && chk0_en && ~free && ~passe && (chk0_bytes&~bytes)==0 && upd;
-  assign chk1_match=chk1_match0 && chk1_en && ~free && ~passe && (chk1_bytes&~bytes)==0 && upd;
-  assign chk2_match=chk2_match0 && chk2_en && ~free && ~passe && (chk2_bytes&~bytes)==0 && upd;
-  assign chk3_match=chk3_match0 && chk3_en && ~free && ~passe && (chk3_bytes&~bytes)==0 && upd;
-  assign chk4_match=chk4_match0 && chk4_en && ~free && ~passe && (chk4_bytes&~bytes)==0 && upd;
-  assign chk5_match=chk5_match0 && chk5_en && ~free && ~passe && (chk5_bytes&~bytes)==0 && upd;
+  assign chk0_match=chk0_match0 && chk0_en && ~free && ~passe && (chk0_bytes&~bytes)==0 && upd && chk0_odd==odd;
+  assign chk1_match=chk1_match0 && chk1_en && ~free && ~passe && (chk1_bytes&~bytes)==0 && upd && chk1_odd==odd;
+  assign chk2_match=chk2_match0 && chk2_en && ~free && ~passe && (chk2_bytes&~bytes)==0 && upd && chk2_odd==odd;
+  assign chk3_match=chk3_match0 && chk3_en && ~free && ~passe && (chk3_bytes&~bytes)==0 && upd && chk3_odd==odd;
+  assign chk4_match=chk4_match0 && chk4_en && ~free && ~passe && (chk4_bytes&~bytes)==0 && upd && chk4_odd==odd;
+  assign chk5_match=chk5_match0 && chk5_en && ~free && ~passe && (chk5_bytes&~bytes)==0 && upd && chk5_odd==odd;
 
   assign chk0_match=chk0_match0 && chk0_en && ~free && ~passe && ((chk0_bytes&~bytes)!=0 || ~upd);
   assign chk1_match=chk1_match0 && chk1_en && ~free && ~passe && ((chk1_bytes&~bytes)!=0 || ~upd);
