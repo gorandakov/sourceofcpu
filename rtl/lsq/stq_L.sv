@@ -43,18 +43,21 @@ module stq_buf_L(
   input [3:0] wrt0_odd;
   input [3:0] wrt0_bytes;
   input [7:0] wrt0_subBNK;
+  input [7:0] wrt0_subBNK2;
 
   input wrt1_en;
   input [WIDTH-1:0] wrt1_addrEO;
   input [3:0] wrt1_odd;
   input [3:0] wrt1_bytes;
   input [7:0] wrt1_subBNK;
+  input [7:0] wrt1_subBNK2;
 
   input chk0_en;
   input [WIDTH-1:0] chk0_addrEO;
   input [3:0] chk0_odd;
   input [3:0] chk0_bytes;
   input [7:0] chk0_subBNK;
+  input [7:0] chk0_subBNK2;
   output chk0_match;
   output chk0_partial;
 
@@ -63,6 +66,7 @@ module stq_buf_L(
   input [3:0] chk1_odd;
   input [3:0] chk1_bytes;
   input [7:0] chk1_subBNK;
+  input [7:0] chk1_subBNK2;
   output chk1_match;
   output chk1_partial;
 
@@ -71,6 +75,7 @@ module stq_buf_L(
   input [3:0] chk2_odd;
   input [3:0] chk2_bytes;
   input [7:0] chk2_subBNK;
+  input [7:0] chk2_subBNK2;
   output chk2_match;
   output chk2_partial;
 
@@ -79,6 +84,7 @@ module stq_buf_L(
   input [3:0] chk3_odd;
   input [3:0] chk3_bytes;
   input [7:0] chk3_subBNK;
+  input [7:0] chk3_subBNK2;
   output chk3_match;
   output chk3_partial;
 
@@ -87,6 +93,7 @@ module stq_buf_L(
   input [3:0] chk4_odd;
   input [3:0] chk4_bytes;
   input [7:0] chk4_subBNK;
+  input [7:0] chk4_subBNK2;
   output chk4_match;
   output chk4_partial;
 
@@ -95,6 +102,7 @@ module stq_buf_L(
   input [3:0] chk5_odd;
   input [3:0] chk5_bytes;
   input [7:0] chk5_subBNK;
+  input [7:0] chk5_subBNK2;
   output chk5_match;
   output chk5_partial;
 
@@ -110,35 +118,37 @@ module stq_buf_L(
   reg [WIDTH-1:0] addrEO;
   reg [3:0] bytes;
   reg [7:0] subBNK;
+  reg [7:0] subBNK2;
   reg [3:0] odd;
   reg upd;
   
-  assign chk0_match0=chk0_addrEO==addrEO && (chk0_subBNK&subBNK)!=0 && chk0_odd[0]==odd[0];
-  assign chk1_match0=chk1_addrEO==addrEO && (chk1_subBNK&subBNK)!=0 && chk1_odd[0]==odd[0];
-  assign chk2_match0=chk2_addrEO==addrEO && (chk2_subBNK&subBNK)!=0 && chk2_odd[0]==odd[0];
-  assign chk3_match0=chk3_addrEO==addrEO && (chk3_subBNK&subBNK)!=0 && chk3_odd[0]==odd[0];
-  assign chk4_match0=chk4_addrEO==addrEO && (chk4_subBNK&subBNK)!=0 && chk4_odd[0]==odd[0];
-  assign chk5_match0=chk5_addrEO==addrEO && (chk5_subBNK&subBNK)!=0 && chk5_odd[0]==odd[0];
+  assign chk0_match0=chk0_addrEO==addrEO && (chk0_subBNK2&subBNK2)!=0 && chk0_odd[0]==odd[0];
+  assign chk1_match0=chk1_addrEO==addrEO && (chk1_subBNK2&subBNK2)!=0 && chk1_odd[0]==odd[0];
+  assign chk2_match0=chk2_addrEO==addrEO && (chk2_subBNK2&subBNK2)!=0 && chk2_odd[0]==odd[0];
+  assign chk3_match0=chk3_addrEO==addrEO && (chk3_subBNK2&subBNK2)!=0 && chk3_odd[0]==odd[0];
+  assign chk4_match0=chk4_addrEO==addrEO && (chk4_subBNK2&subBNK2)!=0 && chk4_odd[0]==odd[0];
+  assign chk5_match0=chk5_addrEO==addrEO && (chk5_subBNK2&subBNK2)!=0 && chk5_odd[0]==odd[0];
   
-  assign chk0_match=chk0_match0 && chk0_en && ~free && ~passe && (chk0_bytes&~bytes)==0 && upd && chk0_odd==odd;
-  assign chk1_match=chk1_match0 && chk1_en && ~free && ~passe && (chk1_bytes&~bytes)==0 && upd && chk1_odd==odd;
-  assign chk2_match=chk2_match0 && chk2_en && ~free && ~passe && (chk2_bytes&~bytes)==0 && upd && chk2_odd==odd;
-  assign chk3_match=chk3_match0 && chk3_en && ~free && ~passe && (chk3_bytes&~bytes)==0 && upd && chk3_odd==odd;
-  assign chk4_match=chk4_match0 && chk4_en && ~free && ~passe && (chk4_bytes&~bytes)==0 && upd && chk4_odd==odd;
-  assign chk5_match=chk5_match0 && chk5_en && ~free && ~passe && (chk5_bytes&~bytes)==0 && upd && chk5_odd==odd;
+  assign chk0_match=chk0_match0 && chk0_en && ~free && ~passe && (chk0_bytes&~bytes)==0 && upd && chk0_odd==odd && (chk0_subBNK&subBNK)!=0;
+  assign chk1_match=chk1_match0 && chk1_en && ~free && ~passe && (chk1_bytes&~bytes)==0 && upd && chk1_odd==odd && (chk1_subBNK&subBNK)!=0;
+  assign chk2_match=chk2_match0 && chk2_en && ~free && ~passe && (chk2_bytes&~bytes)==0 && upd && chk2_odd==odd && (chk2_subBNK&subBNK)!=0;
+  assign chk3_match=chk3_match0 && chk3_en && ~free && ~passe && (chk3_bytes&~bytes)==0 && upd && chk3_odd==odd && (chk3_subBNK&subBNK)!=0;
+  assign chk4_match=chk4_match0 && chk4_en && ~free && ~passe && (chk4_bytes&~bytes)==0 && upd && chk4_odd==odd && (chk4_subBNK&subBNK)!=0;
+  assign chk5_match=chk5_match0 && chk5_en && ~free && ~passe && (chk5_bytes&~bytes)==0 && upd && chk5_odd==odd && (chk5_subBNK&subBNK)!=0;
 
-  assign chk0_match=chk0_match0 && chk0_en && ~free && ~passe && ((chk0_bytes&~bytes)!=0 || ~upd);
-  assign chk1_match=chk1_match0 && chk1_en && ~free && ~passe && ((chk1_bytes&~bytes)!=0 || ~upd);
-  assign chk2_match=chk2_match0 && chk2_en && ~free && ~passe && ((chk2_bytes&~bytes)!=0 || ~upd);
-  assign chk3_match=chk3_match0 && chk3_en && ~free && ~passe && ((chk3_bytes&~bytes)!=0 || ~upd);
-  assign chk4_match=chk4_match0 && chk4_en && ~free && ~passe && ((chk4_bytes&~bytes)!=0 || ~upd);
-  assign chk5_match=chk5_match0 && chk5_en && ~free && ~passe && ((chk5_bytes&~bytes)!=0 || ~upd);
+  assign chk0_partial=chk0_match0 && chk0_en && ~free && ~passe && ((chk0_bytes&~bytes)!=0 || ~upd);
+  assign chk1_partial=chk1_match0 && chk1_en && ~free && ~passe && ((chk1_bytes&~bytes)!=0 || ~upd);
+  assign chk2_partial=chk2_match0 && chk2_en && ~free && ~passe && ((chk2_bytes&~bytes)!=0 || ~upd);
+  assign chk3_partial=chk3_match0 && chk3_en && ~free && ~passe && ((chk3_bytes&~bytes)!=0 || ~upd);
+  assign chk4_partial=chk4_match0 && chk4_en && ~free && ~passe && ((chk4_bytes&~bytes)!=0 || ~upd);
+  assign chk5_partial=chk5_match0 && chk5_en && ~free && ~passe && ((chk5_bytes&~bytes)!=0 || ~upd);
 
   always @(posedge clk) begin
       if (rst) begin
           addrEO<=0;
           bytes<=0;
           subBNK<=0;
+          subBNK2<=0;
           free<=1'b1;
           upd<=1'b1;
           passe<=1'b0;
@@ -148,6 +158,7 @@ module stq_buf_L(
               addrEO<=wrt0_addrEO;
               bytes<=wrt0_bytes;
               subBNK<=wrt0_subBNK;
+              subBNK2<=wrt0_subBNK2;
               odd<=wrt0_odd;
               free<=1'b0;
               //upd<=1'b0;
@@ -157,6 +168,7 @@ module stq_buf_L(
               addrEO<=wrt1_addrEO;
               bytes<=wrt1_bytes;
               subBNK<=wrt1_subBNK;
+              subBNK2<=wrt1_subBNK2;
               odd<=wrt1_odd;
               free<=1'b0;
               //upd<=1'b0;
