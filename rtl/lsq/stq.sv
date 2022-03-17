@@ -119,22 +119,6 @@ module stq(
               wrt1_banks[12+b],wrt1_banks[8+b],wrt1_banks[4+b],wrt1_banks[0+b]};
           assign wrt1_odd1[b]=wrt1_banks[28+b] && |wrt1_banks[3:0] ? wrt1_odd0^4'b1 : wrt1_odd0;
 
-          assign chk0_subBNK2[b]={chk0_banks2[28+b],chk0_banks2[24+b],chk0_banks2[20+b],chk0_banks2[16+b],
-              chk0_banks2[12+b],chk0_banks2[8+b],chk0_banks2[4+b],chk0_banks2[0+b]};
-          assign chk1_subBNK2[b]={chk1_banks2[28+b],chk1_banks2[24+b],chk1_banks2[20+b],chk1_banks2[16+b],
-              chk1_banks2[12+b],chk1_banks2[8+b],chk1_banks2[4+b],chk1_banks2[0+b]};
-          assign chk2_subBNK2[b]={chk2_banks2[28+b],chk2_banks2[24+b],chk2_banks2[20+b],chk2_banks2[16+b],
-              chk2_banks2[12+b],chk2_banks2[8+b],chk2_banks2[4+b],chk2_banks2[0+b]};
-          assign chk3_subBNK2[b]={chk3_banks2[28+b],chk3_banks2[24+b],chk3_banks2[20+b],chk3_banks2[16+b],
-              chk3_banks2[12+b],chk3_banks2[8+b],chk3_banks2[4+b],chk3_banks2[0+b]};
-          assign chk4_subBNK2[b]={chk4_banks2[28+b],chk4_banks2[24+b],chk4_banks2[20+b],chk4_banks2[16+b],
-              chk4_banks2[12+b],chk4_banks2[8+b],chk4_banks2[4+b],chk4_banks2[0+b]};
-          assign chk5_subBNK2[b]={chk5_banks2[28+b],chk5_banks2[24+b],chk5_banks2[20+b],chk5_banks2[16+b],
-              chk5_banks2[12+b],chk5_banks2[8+b],chk5_banks2[4+b],chk5_banks2[0+b]};
-          assign wrt0_subBNK2[b]={wrt0_banks2[28+b],wrt0_banks2[24+b],wrt0_banks2[20+b],wrt0_banks2[16+b],
-              wrt0_banks2[12+b],wrt0_banks2[8+b],wrt0_banks2[4+b],wrt0_banks2[0+b]};
-          assign wrt1_subBNK2[b]={wrt1_banks2[28+b],wrt1_banks2[24+b],wrt1_banks2[20+b],wrt1_banks2[16+b],
-              wrt1_banks2[12+b],wrt1_banks2[8+b],wrt1_banks2[4+b],wrt1_banks2[0+b]};
           stq_buf_L_array arr0_mod(
           clk,
           rst,
@@ -250,14 +234,4 @@ module stq(
     wrt1_adata[`lsaddr_banks] : lowt(wrt1_adata[`lsaddr_banks]);
   assign wrt1_odd0[2:0]=(wrt1_adata[`lsaddr_sz]==5'h11 || wrt1_adata[`lsaddr_sz]==5'h10) ? {2'b0,wrt1_odd} : {wrt1_adata{`lsaddr_low],wrt1_odd}; 
   assign wrt1_odd0[3]=wrt1_adata[`lsaddr_sz]==5'hf;
-
-  assign chk0_banks2=chk0_adata[`lsaddr_banks];
-  assign chk1_banks2=chk1_adata[`lsaddr_banks];
-  assign chk2_banks2=chk2_adata[`lsaddr_banks];
-  assign chk3_banks2=chk3_adata[`lsaddr_banks];
-  assign chk4_banks2=chk4_adata[`lsaddr_banks];
-  assign chk5_banks2=chk5_adata[`lsaddr_banks];
-  assign wrt0_banks2=wrt0_adata[`lsaddr_banks];
-  assign wrt1_banks2=wrt1_adata[`lsaddr_banks];
-
 endmodule
