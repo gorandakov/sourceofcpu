@@ -16,93 +16,66 @@ limitations under the License.
 
 
 
-module stq_buf_L(
+module stq_buf_A(
   clk,
   rst,
   stallA,
   excpt,
-  wrt0_en, wrt0_odd, wrt0_bytes, wrt0_subBNK, wrt0_subBNK2, 
-  wrt1_en, wrt1_odd, wrt1_bytes, wrt1_subBNK, wrt1_subBNK2, 
-  chk0_en, chk0_addrEO, chk0_odd, chk0_bytes, chk0_subBNK, chk0_subBNK2, chk0_match, chk0_partial,
-  chk1_en, chk1_addrEO, chk1_odd, chk1_bytes, chk1_subBNK, chk1_subBNK2, chk1_match, chk1_partial,
-  chk2_en, chk2_addrEO, chk2_odd, chk2_bytes, chk2_subBNK, chk2_subBNK2, chk2_match, chk2_partial,
-  chk3_en, chk3_addrEO, chk3_odd, chk3_bytes, chk3_subBNK, chk3_subBNK2, chk3_match, chk3_partial,
-  chk4_en, chk4_addrEO, chk4_odd, chk4_bytes, chk4_subBNK, chk4_subBNK2, chk4_match, chk4_partial,
-  chk5_en, chk5_addrEO, chk5_odd, chk5_bytes, chk5_subBNK, chk5_subBNK2, chk5_match, chk5_partial,
+  wrt0_en, wrt0_addrE, wrt0_addrO, 
+  wrt1_en, wrt1_addrE, wrt1_addrO, 
+  chk0_en, chk0_addrEO, chk0_addrE, chk0_addrO,
+  chk0_en, chk0_addrEO, chk0_addrE, chk0_addrO,
+  chk0_en, chk0_addrEO, chk0_addrE, chk0_addrO,
+  chk0_en, chk0_addrEO, chk0_addrE, chk0_addrO,
+  chk0_en, chk0_addrEO, chk0_addrE, chk0_addrO,
+  chk0_en, chk0_addrEO, chk0_addrE, chk0_addrO,
   upd0_en, 
   upd1_en, 
   free_en,free,upd,passe,passe_en);
-  localparam WIDTH=2;
+  localparam WIDTH=36;
   input clk;
   input rst;
   input stallA;
   input excpt;
   
   input wrt0_en;
-  input [3:0] wrt0_odd;
-  input [3:0] wrt0_bytes;
-  input [3:0] wrt0_subBNK;
-  input [3:0] wrt0_subBNK2;
+  input [WIDTH-1:0] wrt0_addrE;
+  input [WIDTH-1:0] wrt0_addrO;
 
   input wrt1_en;
-  input [3:0] wrt1_odd;
-  input [3:0] wrt1_bytes;
-  input [3:0] wrt1_subBNK;
-  input [3:0] wrt1_subBNK2;
+  input [WIDTH-1:0] wrt0_addrE;
+  input [WIDTH-1:0] wrt0_addrO;
 
   input chk0_en;
-  input [WIDTH-1:0] chk0_addrEO;
-  input [3:0] chk0_odd;
-  input [3:0] chk0_bytes;
-  input [3:0] chk0_subBNK;
-  input [3:0] chk0_subBNK2;
-  output chk0_match;
-  output chk0_partial;
+  output [1:0] chk0_addrEO;
+  input [WIDTH-1:0] chk0_addrE;
+  input [WIDTH-1:0] chk0_addrO;
 
   input chk1_en;
-  input [WIDTH-1:0] chk1_addrEO;
-  input [3:0] chk1_odd;
-  input [3:0] chk1_bytes;
-  input [3:0] chk1_subBNK;
-  input [3:0] chk1_subBNK2;
-  output chk1_match;
-  output chk1_partial;
-
+  output [1:0] chk1_addrEO;
+  input [WIDTH-1:0] chk1_addrE;
+  input [WIDTH-1:0] chk1_addrO;
+  
   input chk2_en;
-  input [WIDTH-1:0] chk2_addrEO;
-  input [3:0] chk2_odd;
-  input [3:0] chk2_bytes;
-  input [3:0] chk2_subBNK;
-  input [3:0] chk2_subBNK2;
-  output chk2_match;
-  output chk2_partial;
-
+  output [1:0] chk2_addrEO;
+  input [WIDTH-1:0] chk2_addrE;
+  input [WIDTH-1:0] chk2_addrO;
+  
   input chk3_en;
-  input [WIDTH-1:0] chk3_addrEO;
-  input [3:0] chk3_odd;
-  input [3:0] chk3_bytes;
-  input [3:0] chk3_subBNK;
-  input [3:0] chk3_subBNK2;
-  output chk3_match;
-  output chk3_partial;
-
+  output [1:0] chk3_addrEO;
+  input [WIDTH-1:0] chk3_addrE;
+  input [WIDTH-1:0] chk3_addrO;
+  
   input chk4_en;
-  input [WIDTH-1:0] chk4_addrEO;
-  input [3:0] chk4_odd;
-  input [3:0] chk4_bytes;
-  input [3:0] chk4_subBNK;
-  input [3:0] chk4_subBNK2;
-  output chk4_match;
-  output chk4_partial;
-
+  output [1:0] chk4_addrEO;
+  input [WIDTH-1:0] chk4_addrE;
+  input [WIDTH-1:0] chk4_addrO;
+  
   input chk5_en;
-  input [WIDTH-1:0] chk5_addrEO;
-  input [3:0] chk5_odd;
-  input [3:0] chk5_bytes;
-  input [3:0] chk5_subBNK;
-  input [3:0] chk5_subBNK2;
-  output chk5_match;
-  output chk5_partial;
+  output [1:0] chk5_addrEO;
+  input [WIDTH-1:0] chk5_addrE;
+  input [WIDTH-1:0] chk5_addrO;
+
 
   input upd0_en;
   input upd1_en;
@@ -113,61 +86,42 @@ module stq_buf_L(
   output reg passe;
   input passe_en;
   
-  reg [WIDTH-1:0] addrEO;
-  reg [3:0] bytes;
-  reg [3:0] subBNK;
-  reg [3:0] subBNK2;
-  reg [3:0] odd;
+  reg [WIDTH-1:0] addrE;
+  reg [WIDTH-1:0] addrO;
   reg upd;
   
-  assign chk0_match0=chk0_addrEO[chk0_odd] && (chk0_subBNK2&subBNK2)!=0 && chk0_odd[0]==odd[0];
-  assign chk1_match0=chk1_addrEO[chk1_odd] && (chk1_subBNK2&subBNK2)!=0 && chk1_odd[0]==odd[0];
-  assign chk2_match0=chk2_addrEO[chk2_odd] && (chk2_subBNK2&subBNK2)!=0 && chk2_odd[0]==odd[0];
-  assign chk3_match0=chk3_addrEO[chk3_odd] && (chk3_subBNK2&subBNK2)!=0 && chk3_odd[0]==odd[0];
-  assign chk4_match0=chk4_addrEO[chk4_odd] && (chk4_subBNK2&subBNK2)!=0 && chk4_odd[0]==odd[0];
-  assign chk5_match0=chk5_addrEO[chk5_odd] && (chk5_subBNK2&subBNK2)!=0 && chk5_odd[0]==odd[0];
-  
-  assign chk0_match=chk0_match0 && chk0_en && ~free && ~passe && (chk0_bytes&~bytes)==0 && upd && chk0_odd==odd && (chk0_subBNK&subBNK)!=0;
-  assign chk1_match=chk1_match0 && chk1_en && ~free && ~passe && (chk1_bytes&~bytes)==0 && upd && chk1_odd==odd && (chk1_subBNK&subBNK)!=0;
-  assign chk2_match=chk2_match0 && chk2_en && ~free && ~passe && (chk2_bytes&~bytes)==0 && upd && chk2_odd==odd && (chk2_subBNK&subBNK)!=0;
-  assign chk3_match=chk3_match0 && chk3_en && ~free && ~passe && (chk3_bytes&~bytes)==0 && upd && chk3_odd==odd && (chk3_subBNK&subBNK)!=0;
-  assign chk4_match=chk4_match0 && chk4_en && ~free && ~passe && (chk4_bytes&~bytes)==0 && upd && chk4_odd==odd && (chk4_subBNK&subBNK)!=0;
-  assign chk5_match=chk5_match0 && chk5_en && ~free && ~passe && (chk5_bytes&~bytes)==0 && upd && chk5_odd==odd && (chk5_subBNK&subBNK)!=0;
+  assign chk0_addrEO[0]=chk0_addrE==addrE && ~free && ~passe;
+  assign chk1_addrEO[0]=chk1_addrE==addrE && ~free && ~passe;
+  assign chk2_addrEO[0]=chk2_addrE==addrE && ~free && ~passe;
+  assign chk3_addrEO[0]=chk3_addrE==addrE && ~free && ~passe;
+  assign chk4_addrEO[0]=chk4_addrE==addrE && ~free && ~passe;
+  assign chk5_addrEO[0]=chk5_addrE==addrE && ~free && ~passe;
 
-  assign chk0_partial=chk0_match0 && chk0_en && ~free && ~passe && ((chk0_bytes&~bytes)!=0 || ~upd);
-  assign chk1_partial=chk1_match0 && chk1_en && ~free && ~passe && ((chk1_bytes&~bytes)!=0 || ~upd);
-  assign chk2_partial=chk2_match0 && chk2_en && ~free && ~passe && ((chk2_bytes&~bytes)!=0 || ~upd);
-  assign chk3_partial=chk3_match0 && chk3_en && ~free && ~passe && ((chk3_bytes&~bytes)!=0 || ~upd);
-  assign chk4_partial=chk4_match0 && chk4_en && ~free && ~passe && ((chk4_bytes&~bytes)!=0 || ~upd);
-  assign chk5_partial=chk5_match0 && chk5_en && ~free && ~passe && ((chk5_bytes&~bytes)!=0 || ~upd);
+  assign chk0_addrEO[1]=chk0_addrO==addrO && ~free && ~passe;
+  assign chk1_addrEO[1]=chk1_addrO==addrO && ~free && ~passe;
+  assign chk2_addrEO[1]=chk2_addrO==addrO && ~free && ~passe;
+  assign chk3_addrEO[1]=chk3_addrO==addrO && ~free && ~passe;
+  assign chk4_addrEO[1]=chk4_addrO==addrO && ~free && ~passe;
+  assign chk5_addrEO[1]=chk5_addrO==addrO && ~free && ~passe;
 
   always @(posedge clk) begin
       if (rst) begin
-          addrEO<=0;
-          bytes<=0;
-          subBNK<=0;
-          subBNK2<=0;
+          addrE<=0;
+          addrO<=0;
           free<=1'b1;
           upd<=1'b1;
           passe<=1'b0;
-          odd<=4'b0;
       end else begin
           if (wrt0_en) begin
-              addrEO<=wrt0_addrEO;
-              bytes<=wrt0_bytes;
-              subBNK<=wrt0_subBNK;
-              subBNK2<=wrt0_subBNK2;
-              odd<=wrt0_odd;
+              addrE<=wrt0_addrE;
+              addrO<=wrt0_addrO;
               free<=1'b0;
               //upd<=1'b0;
               passe<=1'b0;
           end
           if (wrt1_en) begin
-              addrEO<=wrt1_addrEO;
-              bytes<=wrt1_bytes;
-              subBNK<=wrt1_subBNK;
-              subBNK2<=wrt1_subBNK2;
-              odd<=wrt1_odd;
+              addrE<=wrt1_addrE;
+              addrO<=wrt1_addrO;
               free<=1'b0;
               //upd<=1'b0;
               passe<=1'b0;
