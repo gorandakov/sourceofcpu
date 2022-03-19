@@ -227,4 +227,38 @@ module stq(
     wrt1_adata[`lsaddr_banks] : lowt(wrt1_adata[`lsaddr_banks]);
   assign wrt1_odd0[2:0]=(wrt1_adata[`lsaddr_sz]==5'h11 || wrt1_adata[`lsaddr_sz]==5'h10) ? {2'b0,wrt1_odd} : {wrt1_adata{`lsaddr_low],wrt1_odd}; 
   assign wrt1_odd0[3]=wrt1_adata[`lsaddr_sz]==5'hf;
+  
+  stq_buf_A_array A0_mod(
+  clk,
+  rst,
+  stallA,
+  excpt,
+  wrt0_en0[31:0], wrt0_addrE, wrt0_addrO, 
+  wrt1_en0[31:0], wrt1_addrE, wrt1_addrO, 
+  chk0_en, chk0_addrEO[31:0], chk0_addrE, chk0_addrO,
+  chk1_en, chk1_addrEO[31:0], chk1_addrE, chk1_addrO,
+  chk2_en, chk2_addrEO[31:0], chk2_addrE, chk2_addrO,
+  chk3_en, chk3_addrEO[31:0], chk3_addrE, chk3_addrO,
+  chk4_en, chk4_addrEO[31:0], chk4_addrE, chk4_addrO,
+  chk5_en, chk5_addrEO[31:0], chk5_addrE, chk5_addrO,
+  upd0_en[31:0], 
+  upd1_en[31:0], 
+  free_en[31:0],,,,passe_en[31:0]);
+
+  stq_buf_A_array A1_mod(
+  clk,
+  rst,
+  stallA,
+  excpt,
+  wrt0_en0[63:32], wrt0_addrE, wrt0_addrO, 
+  wrt1_en0[63:32], wrt1_addrE, wrt1_addrO, 
+  chk0_en, chk0_addrEO[63:32], chk0_addrE, chk0_addrO,
+  chk1_en, chk1_addrEO[63:32], chk1_addrE, chk1_addrO,
+  chk2_en, chk2_addrEO[63:32], chk2_addrE, chk2_addrO,
+  chk3_en, chk3_addrEO[63:32], chk3_addrE, chk3_addrO,
+  chk4_en, chk4_addrEO[63:32], chk4_addrE, chk4_addrO,
+  chk5_en, chk5_addrEO[63:32], chk5_addrE, chk5_addrO,
+  upd0_en[63:32], 
+  upd1_en[63:32], 
+  free_en[63:32],,,,passe_en[63:32]);
 endmodule
