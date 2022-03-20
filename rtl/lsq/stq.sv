@@ -257,7 +257,7 @@ module stq(
       end
   endfunction
   generate
-      genvar b,x;
+      genvar a,b,x;
       for(b=0;b<8;b=b+1) begin : L
           assign chk0_subBNK[b]={chk0_banks[24+b],chk0_banks[16+b],chk0_banks[8+b],chk0_banks[0+b]};
           assign chk0_odd1[b]=chk0_banks[24+b] && |chk0_banks[3:0] ? chk0_odd0^4'b1 : chk0_odd0;
@@ -368,7 +368,22 @@ module stq(
           assign upd1_en0[x]=upd1_WQ==x && upd1_en;
           assign passe_en[x]=(pse0_WQ==x && pse0_en) || (pse1_WQ==x && pse1_en);
       end
+      for(a=0;a<6;a=a+1) begin : wrt
+          assign WLN0_en=LSQ_shr_data[`lsqshare_wrt0]==a ? &rdy[a:0] : 1'bz;
+          assign WLN1_en=LSQ_shr_data[`lsqshare_wrt1]==a ? &rdy[a:0] : 1'bz;
+          assign WLN0_adata=LSQ_shr_data[`lsqshare_wrt0]==a ? chk_adata[a] : {`lsaddr_width{1'bz}};
+          assign WLN1_adata=LSQ_shr_data[`lsqshare_wrt1]==a ? chk_adata[a] : {`lsaddr_width{1'bz}};
+          assign WLN0_WQ=LSQ_shr_data[`lsqshare_wrt0]==a ? chk_adata[a][`lsaddr_WQ] : {8{1'bz}};
+          assign WLN1_WQ=LSQ_shr_data[`lsqshare_wrt1]==a ? chk_adata[a][`lsaddr_WQ] : {8{1'bz}};
+      end
   endgenerate
+  assign WLN0_en=LSQ_shr_data[`lsqshare_wrt0]==3'd7 ? 1'b0 : 1'bz;
+  assign WLN1_en=LSQ_shr_data[`lsqshare_wrt1]==3'd7 ? 1'b0 : 1'bz;
+  assign WLN0_adata=LSQ_shr_data[`lsqshare_wrt0]==3'd7 ? {`lsaddr_width{1'b0}} : {`lsaddr_width{1'bz}};
+  assign WLN1_adata=LSQ_shr_data[`lsqshare_wrt1]==3'd7 ? {`lsaddr_width{1'b0}} : {`lsaddr_width{1'bz}};
+  assign WLN0_WQ=LSQ_shr_data[`lsqshare_wrt0]==3'd7 ? 8'b0 : 8'bz;
+  assign WLN1_WQ=LSQ_shr_data[`lsqshare_wrt1]==3'd7 ? 8'b0 : 8'bz;
+  
   assign chk0_banks=(chk0_adata[`lsaddr_sz]==5'h11 || chk0_adata[`lsaddr_sz]==5'h10 || chk0_adata[`lsaddr_low]==2'b0) ?
     chk0_adata[`lsaddr_banks] : lowt(chk0_adata[`lsaddr_banks]);
   assign chk0_odd0[2:0]=(chk0_adata[`lsaddr_sz]==5'h11 || chk0_adata[`lsaddr_sz]==5'h10) ? {2'b0,chk0_odd} : {chk0_adata{`lsaddr_low],chk0_odd}; 
