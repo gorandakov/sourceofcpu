@@ -116,7 +116,81 @@ module stq(
   output [1:0] wb0_pbit;
   output [4:0] wb0_bnkEn;
   output wb0_en;
-
+  
+  wire [7:0] chk0_subBNK;
+  wire [7:0] chk1_subBNK;
+  wire [7:0] chk2_subBNK;
+  wire [7:0] chk3_subBNK;
+  wire [7:0] chk4_subBNK;
+  wire [7:0] chk5_subBNK;
+  wire [7:0] wrt0_subBNK;
+  wire [7:0] wrt1_subBNK;
+  wire [7:0] chk0_subBNK2;
+  wire [7:0] chk1_subBNK2;
+  wire [7:0] chk2_subBNK2;
+  wire [7:0] chk3_subBNK2;
+  wire [7:0] chk4_subBNK2;
+  wire [7:0] chk5_subBNK2;
+  wire [7:0] wrt0_subBNK2;
+  wire [7:0] wrt1_subBNK2;
+  wire [3:0] chk0_odd0;
+  wire [3:0] chk1_odd0;
+  wire [3:0] chk2_odd0;
+  wire [3:0] chk3_odd0;
+  wire [3:0] chk4_odd0;
+  wire [3:0] chk5_odd0;
+  wire [3:0] wrt0_odd0;
+  wire [3:0] wrt1_odd0;
+  wire [3:0] chk0_odd1;
+  wire [3:0] chk1_odd1;
+  wire [3:0] chk2_odd1;
+  wire [3:0] chk3_odd1;
+  wire [3:0] chk4_odd1;
+  wire [3:0] chk5_odd1;
+  wire [3:0] wrt0_odd1;
+  wire [3:0] wrt1_odd1;
+  wire [63:0][1:0] chk0_addrOE;
+  wire [63:0][1:0] chk1_addrOE;
+  wire [63:0][1:0] chk2_addrOE;
+  wire [63:0][1:0] chk3_addrOE;
+  wire [63:0][1:0] chk4_addrOE;
+  wire [63:0][1:0] chk5_addrOE;
+  wire [31:0] chk0_banks;
+  wire [31:0] chk1_banks;
+  wire [31:0] chk2_banks;
+  wire [31:0] chk3_banks;
+  wire [31:0] chk4_banks;
+  wire [31:0] chk5_banks;
+  wire [31:0] wrt0_banks;
+  wire [31:0] wrt1_banks;
+  wire [31:0] chk0_banks2;
+  wire [31:0] chk1_banks2;
+  wire [31:0] chk2_banks2;
+  wire [31:0] chk3_banks2;
+  wire [31:0] chk4_banks2;
+  wire [31:0] chk5_banks2;
+  wire [31:0] wrt0_banks2;
+  wire [31:0] wrt1_banks2;
+  wire [63:0] WLN0_match;
+  wire [63:0] WLN1_match;
+  wire [63:0] wrt0_en0;
+  wire [63:0] wrt1_en0;
+  wire [63:0] upd0_en0;
+  wire [63:0] upd1_en0;
+  wire [63:0] passe_en;
+  wire [63:0] passe;
+  wire [63:0] free;
+  wire [63:0] upd;
+  
+  wire [135:0] chk0_data;
+  wire [135:0] chk1_data;
+  wire [135:0] chk2_data;
+  wire [135:0] chk3_data;
+  wire [135:0] chk4_data;
+  wire [135:0] chk5_data;
+  wire [135:0] WLN0_data;
+  wire [135:0] WLN1_data;
+  
   
   function [31:0] lowt;
       input [31:0] data;
@@ -190,6 +264,15 @@ module stq(
 
           assign wrt1_subBNK[b]={wrt1_banks[24+b],wrt1_banks[16+b],wrt1_banks[8+b],wrt1_banks[0+b]};
           assign wrt1_odd1[b]=wrt1_banks[24+b] && |wrt1_banks[3:0] ? wrt1_odd0^4'b1 : wrt1_odd0;
+
+          assign chk0_subBNK2[b]={chk0_banks2[24+b],chk0_banks2[16+b],chk0_banks2[8+b],chk0_banks2[0+b]};
+          assign chk1_subBNK2[b]={chk1_banks2[24+b],chk1_banks2[16+b],chk1_banks2[8+b],chk1_banks2[0+b]};
+          assign chk2_subBNK2[b]={chk2_banks2[24+b],chk2_banks2[16+b],chk2_banks2[8+b],chk2_banks2[0+b]};
+          assign chk3_subBNK2[b]={chk3_banks2[24+b],chk3_banks2[16+b],chk3_banks2[8+b],chk3_banks2[0+b]};
+          assign chk4_subBNK2[b]={chk4_banks2[24+b],chk4_banks2[16+b],chk4_banks2[8+b],chk4_banks2[0+b]};
+          assign chk5_subBNK2[b]={chk5_banks2[24+b],chk5_banks2[16+b],chk5_banks2[8+b],chk5_banks2[0+b]};
+          assign wrt0_subBNK2[b]={wrt0_banks2[24+b],wrt0_banks2[16+b],wrt0_banks2[8+b],wrt0_banks2[0+b]};
+          assign wrt1_subBNK2[b]={wrt1_banks2[24+b],wrt1_banks2[16+b],wrt1_banks2[8+b],wrt1_banks2[0+b]};
 
           stq_buf_L_array arr0_mod(
           clk,
@@ -307,6 +390,15 @@ module stq(
     wrt1_adata[`lsaddr_banks] : lowt(wrt1_adata[`lsaddr_banks]);
   assign wrt1_odd0[2:0]=(wrt1_adata[`lsaddr_sz]==5'h11 || wrt1_adata[`lsaddr_sz]==5'h10) ? {2'b0,wrt1_odd} : {wrt1_adata{`lsaddr_low],wrt1_odd}; 
   assign wrt1_odd0[3]=wrt1_adata[`lsaddr_sz]==5'hf;
+  
+  assign chk0_banks=chk0_adata[`lsaddr_banks];
+  assign chk1_banks=chk1_adata[`lsaddr_banks];
+  assign chk2_banks=chk2_adata[`lsaddr_banks];
+  assign chk3_banks=chk3_adata[`lsaddr_banks];
+  assign chk4_banks=chk4_adata[`lsaddr_banks];
+  assign chk5_banks=chk5_adata[`lsaddr_banks];
+  assign wrt0_banks=wrt0_adata[`lsaddr_banks];
+  assign wrt1_banks=wrt1_adata[`lsaddr_banks];
   
   stq_buf_A_array A0_mod(
   clk,
