@@ -191,6 +191,24 @@ module stq(
   wire [135:0] WLN0_data;
   wire [135:0] WLN1_data;
   
+  wire [7:0][63:0] chk0_match;
+  wire [7:0][63:0] chk1_match;
+  wire [7:0][63:0] chk2_match;
+  wire [7:0][63:0] chk3_match;
+  wire [7:0][63:0] chk4_match;
+  wire [7:0][63:0] chk5_match;
+  wire [7:0][63:0] chk0_partial;
+  wire [7:0][63:0] chk1_partial;
+  wire [7:0][63:0] chk2_partial;
+  wire [7:0][63:0] chk3_partial;
+  wire [7:0][63:0] chk4_partial;
+  wire [7:0][63:0] chk5_partial;
+  wire [3:0][63:0] chk0_match_first;
+  wire [3:0][63:0] chk1_match_first;
+  wire [3:0][63:0] chk2_match_first;
+  wire [3:0][63:0] chk3_match_first;
+  wire [3:0][63:0] chk4_match_first;
+  wire [3:0][63:0] chk5_match_first;
   
   function [31:0] lowt;
       input [31:0] data;
