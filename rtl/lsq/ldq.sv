@@ -54,7 +54,6 @@ module ldq_buf(
   newAddrE1,newAddrO1,newBanks1,newBlow1,newII1,newIsOH1,newIsEH1,newIsOL1,newIsEL1,newEn1,newThr1,newChk1,
   chkAddrE0,chkAddrO0,chkBanks0,chkBlow0, chkIsOH0,chkIsEH0,chkIsOL0,chkIsEL0,chkEn0,chkMask0,
   chkAddrE1,chkAddrO1,chkBanks1,chkBlow1, chkIsOH1,chkIsEH1,chkIsOL1,chkIsEL1,chkEn1,chkMask1,
-  chkAddrE2,chkAddrO2,chkBanks2,chkBlow2, chkIsOH2,chkIsEH2,chkIsOL2,chkIsEL2,chkEn2,chkMask2,
   chkAddrE3,chkAddrO3,chkIsOH3,chkIsEH3,chkIsOL3,chkIsEL3,chkEn3,
   freeII0,freeMask0,freeEnX0,freeEn0,freeConfl0,freeConflSmp0,
   freeII1,freeMask1,freeEnX1,freeEn1,freeConfl1,freeConflSmp1,
@@ -104,13 +103,6 @@ module ldq_buf(
   input chkIsOH1,chkIsEH1,chkIsOL1,chkIsEL1;
   input chkEn1;
   input [5:0] chkMask1;
-  input [PADDR_WIDTH-9:0] chkAddrE2;
-  input [PADDR_WIDTH-9:0] chkAddrO2;
-  input [31:0] chkBanks2;
-  input [3:0] chkBlow2;
-  input chkIsOH2,chkIsEH2,chkIsOL2,chkIsEL2;
-  input chkEn2;
-  input [5:0] chkMask2;
   input [PADDR_WIDTH-9:0] chkAddrE3;
   input [PADDR_WIDTH-9:0] chkAddrO3;
   input chkIsOH3,chkIsEH3,chkIsOL3,chkIsEL3;
@@ -187,7 +179,7 @@ module ldq_buf(
   
   assign chkMatch0=chkMatch[0]&~free&chkEn0;
   assign chkMatch1=chkMatch[1]&~free&chkEn1;
-  assign chkMatch2=chkMatch[2]&~free&chkEn2;
+//  assign chkMatch2=chkMatch[2]&~free&chkEn2;
   assign chkMatch3=chkMatch[3]&~free&chkEn3;
 
   assign freeConfl0=(((freeII0==II && confl!=0)  && freeII0[9:4]==II[9:4]) && ~free) &freeEn0;
@@ -261,7 +253,7 @@ module ldq_buf(
       end else begin
           if (freeEnX0 && freeII0==II && ~aStall) free<=1'b1;
           if (freeEnX1 && freeII1==II && ~aStall) free<=1'b1;
-          confl<=confl || chkMatch0 || chkMatch1 || chkMatch2 || chkMatch3;
+          confl<=confl || chkMatch0 || chkMatch1 || chkMatch3;
           confl_smp<=confl_smp | chkMatch3;
       end
   end
@@ -467,7 +459,6 @@ module ldq_array(
   newAddrE1,newAddrO1,newBanks1,newBlow1,newII1,newIsOH1,newIsEH1,newIsOL1,newIsEL1,newEn1,newThr1,
   chkAddrE0,chkAddrO0,chkBanks0,chkBlow0, chkIsOH0,chkIsEH0,chkIsOL0,chkIsEL0,chkEn0,chkMask0,
   chkAddrE1,chkAddrO1,chkBanks1,chkBlow1, chkIsOH1,chkIsEH1,chkIsOL1,chkIsEL1,chkEn1,chkMask1,
-  chkAddrE2,chkAddrO2,chkBanks2,chkBlow2, chkIsOH2,chkIsEH2,chkIsOL2,chkIsEL2,chkEn2,chkMask2,
   chkAddrE3,chkAddrO3, chkIsOH3,chkIsEH3,chkIsOL3,chkIsEL3,chkEn3,
   freeII0,freeMask0,freeEnX0,freeEn0,freeConfl0,freeConflSmp0,
   freeII1,freeMask1,freeEnX1,freeEn1,freeConfl1,freeConflSmp1,
@@ -520,13 +511,6 @@ module ldq_array(
   input chkIsOH1,chkIsEH1,chkIsOL1,chkIsEL1;
   input chkEn1;
   input [5:0] chkMask1;
-  input [PADDR_WIDTH-9:0] chkAddrE2;
-  input [PADDR_WIDTH-9:0] chkAddrO2;
-  input [31:0] chkBanks2;
-  input [3:0] chkBlow2;
-  input chkIsOH2,chkIsEH2,chkIsOL2,chkIsEL2;
-  input chkEn2;
-  input [5:0] chkMask2;
   input [PADDR_WIDTH-9:0] chkAddrE3;
   input [PADDR_WIDTH-9:0] chkAddrO3;
   input chkIsOH3,chkIsEH3,chkIsOL3,chkIsEL3;
@@ -590,11 +574,6 @@ module ldq_array(
   assign chk0MatchE[1]=chkAddrE1==newAddrE0;   
   assign chk0MatchO[1]=chkAddrO1==newAddrO0;   
 
-  assign chk0BankL[2]=(newBanks0[15:0]&chkBanks2[15:0])!=0;
-  assign chk0BankH[2]=(newBanks0[31:16]&chkBanks2[31:16])!=0;
-  assign chk0MatchE[2]=chkAddrE2==newAddrE0;   
-  assign chk0MatchO[2]=chkAddrO2==newAddrO0;   
-
   assign chk0BankL[3]=|newBanks0[15:0];
   assign chk0BankH[3]=|newBanks0[31:16];
   assign chk0MatchE[3]=chkAddrE3==newAddrE0;   
@@ -602,13 +581,11 @@ module ldq_array(
 
   assign chkBlow[0]=chkBlow0; 
   assign chkBlow[1]=chkBlow1; 
-  assign chkBlow[2]=chkBlow2; 
   assign chkBlow[3]=4'hf; 
   
   assign chkMatch0=
     chk0Match[0]&chkEn0 ||
     chk0Match[1]&chkEn1 ||
-    chk0Match[2]&chkEn2 ||
     chk0Match[3]&chkEn3;
 
   assign chk1BankL[0]= (newBanks1[15:0]&chkBanks0[15:0])!=0;
@@ -621,11 +598,6 @@ module ldq_array(
   assign chk1MatchE[1]=chkAddrE1==newAddrE1;   
   assign chk1MatchO[1]=chkAddrO1==newAddrO1;   
 
-  assign chk1BankL[2]=(newBanks1[15:0]&chkBanks2[15:0])!=0;
-  assign chk1BankH[2]=(newBanks1[31:16]&chkBanks2[31:16])!=0;
-  assign chk1MatchE[2]=chkAddrE2==newAddrE1;   
-  assign chk1MatchO[2]=chkAddrO2==newAddrO1;   
-
   assign chk1BankL[3]=|newBanks1[15:0];
   assign chk1BankH[3]=|newBanks1[31:16];
   assign chk1MatchE[3]=chkAddrE3==newAddrE1;   
@@ -634,7 +606,6 @@ module ldq_array(
   assign chkMatch1=
     chk1Match[0]&chkEn0 ||
     chk1Match[1]&chkEn1 ||
-    chk1Match[2]&chkEn2 ||
     chk1Match[3]&chkEn3;
 
 
@@ -669,7 +640,6 @@ module ldq_array(
           newAddrE1,newAddrO1,newBanks1,newBlow1,newII1,newIsOH1,newIsEH1,newIsOL1,newIsEL1,newEn1_buf[p],newThr1,chkMatch1,
           chkAddrE0,chkAddrO0,chkBanks0,chkBlow0, chkIsOH0,chkIsEH0,chkIsOL0,chkIsEL0,chkEn0,chkMask0,
           chkAddrE1,chkAddrO1,chkBanks1,chkBlow1, chkIsOH1,chkIsEH1,chkIsOL1,chkIsEL1,chkEn1,chkMask1,
-          chkAddrE2,chkAddrO2,chkBanks2,chkBlow2, chkIsOH2,chkIsEH2,chkIsOL2,chkIsEL2,chkEn2,chkMask2,
           chkAddrE3,chkAddrO3, chkIsOH3,chkIsEH3,chkIsOL3,chkIsEL3,chkEn3,
           freeII0,freeMask0,freeEnX0,freeEn0,freeConfl0_buf[p],freeConflSmp0_buf[p],
           freeII1,freeMask1,freeEnX1,freeEn1,freeConfl1_buf[p],freeConflSmp1_buf[p],
@@ -772,24 +742,14 @@ module ldq(
   wire [DATA_WIDTH-1:0] chkL0_data;
   wire [DATA_WIDTH-1:0] chkL1_data;
   wire [DATA_WIDTH-1:0] chkL2_data;
-  reg  [DATA_WIDTH-1:0] chkL0_data_reg;
-  reg  [DATA_WIDTH-1:0] chkL1_data_reg;
-  reg  [DATA_WIDTH-1:0] chkL2_data_reg;
   wire [5:0] chkL0_mask;
   wire [5:0] chkL1_mask;
   wire [5:0] chkL2_mask;
-  reg  [5:0] chkL0_mask_reg;
-  reg  [5:0] chkL1_mask_reg;
-  reg  [5:0] chkL2_mask_reg;
   wire [5:0][5:0] chk_mask;
   wire [5:0][II_WIDTH-1:0] chk_II;
   reg [5:0][II_WIDTH-1:0] II_save;
   wire [2:0][5:0] chkbits;
-  reg  [5:0] chkbits_reg[2:0];
   wire [2:0][10:1] cnt_chk;
- // reg  [2:1] cnt_chk_reg[2:0];
-  reg chk_en_reg;
-  reg chk_enP_reg;
   
   integer u;
   wire [5:0][DATA_WIDTH-1:0] chk_dataA;
@@ -800,7 +760,6 @@ module ldq(
   wire [5:0] conflP;
   wire [5:0] confl_smpP;
   wire [5:0] confl_X;
-  reg  [5:0] confl_X_reg;
   
 //  wire [2:0] chkMatch;
   reg [PADDR_WIDTH-8:0] expun_addr_reg;
@@ -838,25 +797,21 @@ module ldq(
           .newIsOL1(new_data[3][`lsaddr_OL]),.newIsEL1(new_data[3][`lsaddr_EL]),
 	  .newEn1(new_rsEn[3]&&(new3_reg_low==k || new3_reg_low==(k+3) || new3_reg_low==(k+6))&
           ~(~new_data[3][`lsaddr_st] && new_isFlag[3])),.newThr1(new_thread[3]),
-        .chkAddrE0(chkL0_data_reg[`lsaddr_addrE]),.chkAddrO0(chkL0_data_reg[`lsaddr_addrO]),
-          .chkBanks0(chkL0_data_reg[`lsaddr_banks]),.chkBlow0(chkL0_data_reg[`lsaddr_blow]), .chkIsOH0(chkL0_data_reg[`lsaddr_OH]),
-          .chkIsEH0(chkL0_data_reg[`lsaddr_EH]),.chkIsOL0(chkL0_data_reg[`lsaddr_OL]),
-          .chkIsEL0(chkL0_data_reg[`lsaddr_EL]),.chkEn0(chkEn0),.chkMask0(chkL0_mask_reg),
-        .chkAddrE1(chkL1_data_reg[`lsaddr_addrE]),.chkAddrO1(chkL1_data_reg[`lsaddr_addrO]),
-          .chkBanks1(chkL1_data_reg[`lsaddr_banks]),.chkBlow1(chkL1_data_reg[`lsaddr_blow]), .chkIsOH1(chkL1_data_reg[`lsaddr_OH]),
-          .chkIsEH1(chkL1_data_reg[`lsaddr_EH]),.chkIsOL1(chkL1_data_reg[`lsaddr_OL]),
-          .chkIsEL1(chkL1_data_reg[`lsaddr_EL]),.chkEn1(chkEn1),.chkMask1(chkL1_mask_reg),
-        .chkAddrE2(chkL2_data_reg[`lsaddr_addrE]),.chkAddrO2(chkL2_data_reg[`lsaddr_addrO]),
-          .chkBanks2(chkL2_data_reg[`lsaddr_banks]),.chkBlow2(chkL2_data_reg[`lsaddr_blow]), .chkIsOH2(chkL2_data_reg[`lsaddr_OH]),
-          .chkIsEH2(chkL2_data_reg[`lsaddr_EH]),.chkIsOL2(chkL2_data_reg[`lsaddr_OL]),
-          .chkIsEL2(chkL2_data_reg[`lsaddr_EL]),.chkEn2(chkEn2),.chkMask2(chkL2_mask_reg),
+        .chkAddrE0(chkL0_data[`lsaddr_addrE]),.chkAddrO0(chkL0_data[`lsaddr_addrO]),
+          .chkBanks0(chkL0_data[`lsaddr_banks]),.chkBlow0(chkL0_data[`lsaddr_blow]), .chkIsOH0(chkL0_data[`lsaddr_OH]),
+          .chkIsEH0(chkL0_data[`lsaddr_EH]),.chkIsOL0(chkL0_data[`lsaddr_OL]),
+          .chkIsEL0(chkL0_data[`lsaddr_EL]),.chkEn0(chkEn0),.chkMask0(chkL0_mask),
+        .chkAddrE1(chkL1_data[`lsaddr_addrE]),.chkAddrO1(chkL1_data[`lsaddr_addrO]),
+          .chkBanks1(chkL1_data[`lsaddr_banks]),.chkBlow1(chkL1_data[`lsaddr_blow]), .chkIsOH1(chkL1_data[`lsaddr_OH]),
+          .chkIsEH1(chkL1_data[`lsaddr_EH]),.chkIsOL1(chkL1_data[`lsaddr_OL]),
+          .chkIsEL1(chkL1_data[`lsaddr_EL]),.chkEn1(chkEn1),.chkMask1(chkL1_mask),
         .chkAddrE3(expun_addr_reg[44-8:1]),.chkAddrO3(expun_addr_reg[44-8:1]), 
 	   .chkIsOH3(expun_addr_reg[0]),.chkIsEH3(~expun_addr_reg[0]),
 	   .chkIsOL3(expun_addr_reg[0]),.chkIsEL3(~expun_addr_reg[0]),.chkEn3(expun_en_reg),
-        .freeII0(chk_II[k]),.freeMask0(chk_mask[k]),.freeEnX0(cnt_chk[k][1] & chk_en_reg & ~aStall),
-	.freeEn0(cnt_chk[k][1] & chk_enP_reg),.freeConfl0(conflP[k]),.freeConflSmp0(confl_smpP[k]),
-        .freeII1(chk_II[k+3]),.freeMask1(chk_mask[k+3]),.freeEnX1(cnt_chk[k][2] & chk_en_reg & ~aStall),
-	.freeEn1(cnt_chk[k][2] & chk_enP_reg),.freeConfl1(conflP[k+3]),.freeConflSmp1(confl_smpP[k+3]),
+        .freeII0(chk_II[k]),.freeMask0(chk_mask[k]),.freeEnX0(cnt_chk[k][1] & chk_en & ~aStall),
+	.freeEn0(cnt_chk[k][1] & chk_enP),.freeConfl0(conflP[k]),.freeConflSmp0(confl_smpP[k]),
+        .freeII1(chk_II[k+3]),.freeMask1(chk_mask[k+3]),.freeEnX1(cnt_chk[k][2] & chk_en & ~aStall),
+	.freeEn1(cnt_chk[k][2] & chk_enP),.freeConfl1(conflP[k+3]),.freeConflSmp1(confl_smpP[k+3]),
         .free()
         );
         popcnt10_or_more cpop_mod({4'b0,chkbits_reg[k]},cnt_chk[k]);
@@ -877,15 +832,12 @@ module ldq(
     for(p=0;p<6;p=p+1) begin
         assign chkL0_data=(chk_data_shr[`lsqshare_wrt0]==p) ? chk_dataA[p] : {DATA_WIDTH{1'bz}}; 
         assign chkL1_data=(chk_data_shr[`lsqshare_wrt1]==p) ? chk_dataA[p] : {DATA_WIDTH{1'bz}}; 
-        assign chkL2_data=(chk_data_shr[`lsqshare_wrt2]==p) ? chk_dataA[p] : {DATA_WIDTH{1'bz}};
 
         assign chkL0_en=(chk_data_shr[`lsqshare_wrt0]==p) ? chk_enA[p] : 1'bz; 
         assign chkL1_en=(chk_data_shr[`lsqshare_wrt1]==p) ? chk_enA[p] : 1'bz; 
-        assign chkL2_en=(chk_data_shr[`lsqshare_wrt2]==p) ? chk_enA[p] : 1'bz;
         
         assign chkL0_mask=(chk_data_shr[`lsqshare_wrt0]==p) ? 6'b111110<<p : 6'bz; 
         assign chkL1_mask=(chk_data_shr[`lsqshare_wrt1]==p) ? 6'b111110<<p  : 6'bz; 
-        assign chkL2_mask=(chk_data_shr[`lsqshare_wrt2]==p) ? 6'b111110<<p  : 6'bz;
 
 	assign confl_X[p]=chk_dataA[p][`lsaddr_mtype]==2'b10 && ~chk_dataA[p][`lsaddr_flag];
         
@@ -894,46 +846,46 @@ module ldq(
               chk_dataA[p][`lsaddr_reg_low]==(4'd3+l[3:0]) || chk_dataA[p][`lsaddr_reg_low]==(4'd6+l[3:0])) &&
               chk_enA[p] && ~chk_dataA[p][`lsaddr_st];
  
-            if (p!=0) assign chk_II[l]=(chkbits_reg[l][p] && chkbits_reg[l][p-1:0]==0) ? II_save[p] : 10'bz;
-            else assign chk_II[l]=(chkbits_reg[l][p]) ? II_save[p] : 10'bz;
-            if (p!=0) assign chk_II[l+3]=(chkbits_reg[l][p] && chkbits_reg[l][p-1:0]!=0) ? II_save[p] : 10'bz;
+            if (p!=0) assign chk_II[l]=(chkbits[l][p] && chkbits[l][p-1:0]==0) ? II_save[p] : 10'bz;
+            else assign chk_II[l]=(chkbits[l][p]) ? II_save[p] : 10'bz;
+            if (p!=0) assign chk_II[l+3]=(chkbits[l][p] && chkbits[l][p-1:0]!=0) ? II_save[p] : 10'bz;
 
-            if (p!=0) assign chk_mask[l]=(chkbits_reg[l][p] && chkbits_reg[l][p-1:0]==0) ? 6'b1<<p : 6'bz;
-            else assign chk_mask[l]=(chkbits_reg[l][p]) ? 6'b1<<p : 6'bz;
-            if (p!=0) assign chk_mask[l+3]=(chkbits_reg[l][p] && chkbits_reg[l][p-1:0]!=0) ? 6'b1<<p : 6'bz;
+            if (p!=0) assign chk_mask[l]=(chkbits[l][p] && chkbits[l][p-1:0]==0) ? 6'b1<<p : 6'bz;
+            else assign chk_mask[l]=(chkbits[l][p]) ? 6'b1<<p : 6'bz;
+            if (p!=0) assign chk_mask[l+3]=(chkbits[l][p] && chkbits[l][p-1:0]!=0) ? 6'b1<<p : 6'bz;
 
-            if (p!=0) assign confl[p]=(chkbits_reg[l][p] && chkbits_reg[l][p-1:0]==0) ? conflP[l]|confl_X_reg[p] : 1'bz;
-            else assign confl[p]=(chkbits_reg[l][p]) ? conflP[l]|confl_X_reg[p] : 1'bz;
-            if (p!=0) assign confl[p]=(chkbits_reg[l][p] && chkbits_reg[l][p-1:0]!=0) ? conflP[l+3]|confl_X_reg[p] : 1'bz;
+            if (p!=0) assign confl[p]=(chkbits[l][p] && chkbits[l][p-1:0]==0) ? conflP[l]|confl_X[p] : 1'bz;
+            else assign confl[p]=(chkbits[l][p]) ? conflP[l]|confl_X[p] : 1'bz;
+            if (p!=0) assign confl[p]=(chkbits[l][p] && chkbits[l][p-1:0]!=0) ? conflP[l+3]|confl_X[p] : 1'bz;
             
-            if (p!=0) assign conflX[p]=(chkbits_reg[l][p] && chkbits_reg[l][p-1:0]==0) ? confl_X_reg[p] : 1'bz;
-            else assign conflX[p]=(chkbits_reg[l][p]) ? confl_X_reg[p] : 1'bz;
-            if (p!=0) assign conflX[p]=(chkbits_reg[l][p] && chkbits_reg[l][p-1:0]!=0) ? confl_X_reg[p] : 1'bz;
+            if (p!=0) assign conflX[p]=(chkbits[l][p] && chkbits[l][p-1:0]==0) ? confl_X[p] : 1'bz;
+            else assign conflX[p]=(chkbits[l][p]) ? confl_X[p] : 1'bz;
+            if (p!=0) assign conflX[p]=(chkbits[l][p] && chkbits[l][p-1:0]!=0) ? confl_X[p] : 1'bz;
             
-            if (p!=0) assign confl_smp[p]=(chkbits_reg[l][p] && chkbits_reg[l][p-1:0]==0) ? confl_smpP[l] : 1'bz;
-            else assign confl_smp[p]=(chkbits_reg[l][p]) ? confl_smpP[l] : 1'bz;
-            if (p!=0) assign confl_smp[p]=(chkbits_reg[l][p] && chkbits_reg[l][p-1:0]!=0) ? confl_smpP[l+3] : 1'bz;
+            if (p!=0) assign confl_smp[p]=(chkbits[l][p] && chkbits[l][p-1:0]==0) ? confl_smpP[l] : 1'bz;
+            else assign confl_smp[p]=(chkbits[l][p]) ? confl_smpP[l] : 1'bz;
+            if (p!=0) assign confl_smp[p]=(chkbits[l][p] && chkbits[l][p-1:0]!=0) ? confl_smpP[l+3] : 1'bz;
             
            /* if (p) assign chk_ret[l]=(chkbits_reg[l][p] && !chkbits_reg[l][p-1:0]) ? ret_mask[II_save[p][3:0]] : 10'bz;
             else assign chk_ret[l]=(chkbits_reg[l][p]) ? ret_mask[II_save[p][3:0]] : 10'bz;
             if (p) assign chk_ret[l+3]=(chkbits_reg[l][p] && chkbits_reg[l][p-1:0]) ? ret_mask[II_save[p][3:0]] : 10'bz;*/
         end
-        assign confl[p]=(chkbits_reg[0][p] || chkbits_reg[1][p] || chkbits_reg[2][p]) ? 1'bz : 1'b0; 
-        assign conflX[p]=(chkbits_reg[0][p] || chkbits_reg[1][p] || chkbits_reg[2][p]) ? 1'bz : 1'b0; 
-        assign confl_smp[p]=(chkbits_reg[0][p] || chkbits_reg[1][p] || chkbits_reg[2][p]) ? 1'bz : 1'b0; 
+        assign confl[p]=(chkbits[0][p] || chkbits[1][p] || chkbits[2][p]) ? 1'bz : 1'b0; 
+        assign conflX[p]=(chkbits[0][p] || chkbits[1][p] || chkbits[2][p]) ? 1'bz : 1'b0; 
+        assign confl_smp[p]=(chkbits[0][p] || chkbits[1][p] || chkbits[2][p]) ? 1'bz : 1'b0; 
     end
   endgenerate
   
-  assign chk_II[0]=chkbits_reg[0]!=0 ? 10'bz : 10'hf;
-  assign chk_II[1]=chkbits_reg[1]!=0 ? 10'bz : 10'hf;
-  assign chk_II[2]=chkbits_reg[2]!=0 ? 10'bz : 10'hf;
+  assign chk_II[0]=chkbits[0]!=0 ? 10'bz : 10'hf;
+  assign chk_II[1]=chkbits[1]!=0 ? 10'bz : 10'hf;
+  assign chk_II[2]=chkbits[2]!=0 ? 10'bz : 10'hf;
   assign chk_II[3]=cnt_chk[0][2] ? 10'bz : 10'hf;
   assign chk_II[4]=cnt_chk[1][2] ? 10'bz : 10'hf;
   assign chk_II[5]=cnt_chk[2][2] ? 10'bz : 10'hf;
 
-  assign chk_mask[0]=chkbits_reg[0]!=0 ? 6'bz : 6'b0;
-  assign chk_mask[1]=chkbits_reg[1]!=0 ? 6'bz : 6'b0;
-  assign chk_mask[2]=chkbits_reg[2]!=0 ? 6'bz : 6'b0;
+  assign chk_mask[0]=chkbits[0]!=0 ? 6'bz : 6'b0;
+  assign chk_mask[1]=chkbits[1]!=0 ? 6'bz : 6'b0;
+  assign chk_mask[2]=chkbits[2]!=0 ? 6'bz : 6'b0;
   assign chk_mask[3]=cnt_chk[0][2] ? 6'bz : 6'b0;
   assign chk_mask[4]=cnt_chk[1][2] ? 6'bz : 6'b0;
   assign chk_mask[5]=cnt_chk[2][2] ? 6'bz : 6'b0;
@@ -942,15 +894,12 @@ module ldq(
 
   assign chkL0_data=(chk_data_shr[`lsqshare_wrt0]==3'd7) ? {DATA_WIDTH{1'B0}} : {DATA_WIDTH{1'bz}}; 
   assign chkL1_data=(chk_data_shr[`lsqshare_wrt1]==3'd7) ? {DATA_WIDTH{1'B0}} : {DATA_WIDTH{1'bz}}; 
-  assign chkL2_data=(chk_data_shr[`lsqshare_wrt2]==3'd7) ? {DATA_WIDTH{1'B0}} : {DATA_WIDTH{1'bz}}; 
 
   assign chkL0_en=(chk_data_shr[`lsqshare_wrt0]==3'd7) ? 1'B0 : 1'bz; 
   assign chkL1_en=(chk_data_shr[`lsqshare_wrt1]==3'd7) ? 1'B0 : 1'bz; 
-  assign chkL2_en=(chk_data_shr[`lsqshare_wrt2]==3'd7) ? 1'B0 : 1'bz; 
  
   assign chkL0_mask=(chk_data_shr[`lsqshare_wrt0]==3'd7) ? 6'B0 : 6'bz; 
   assign chkL1_mask=(chk_data_shr[`lsqshare_wrt1]==3'd7) ? 6'B0 : 6'bz; 
-  assign chkL2_mask=(chk_data_shr[`lsqshare_wrt2]==3'd7) ? 6'B0 : 6'bz; 
 
   assign new3_reg_low=new_data[3][`lsaddr_reg_low];
 
@@ -984,6 +933,14 @@ module ldq(
   assign new_isFlag[3]=new3_isFlag;
   
   adder_inc #(8) init_add_mod(initcount,initcount_new,1'b1,);
+
+  always @* begin
+        for(u=0;u<6;u=u+1) begin
+            II_save[u]=chk_dataA[u][`lsaddr_II];
+        end
+        chkEn0=chk_data_shr[`lsqshare_wrt0]!=3'd7 && chkL0_en;
+        chkEn1=chk_data_shr[`lsqshare_wrt1]!=3'd7 && chkL1_en;
+  end
   
   always @(posedge clk) begin
     if (rst) begin
@@ -994,74 +951,14 @@ module ldq(
         if (initcount==8'hff) init<=1'b0;
     end
     if (rst) begin
-        chkL0_data_reg<={DATA_WIDTH{1'B0}};
-        chkL1_data_reg<={DATA_WIDTH{1'B0}};
-        chkL2_data_reg<={DATA_WIDTH{1'B0}};
-        chkL0_mask_reg<=6'B0;
-        chkL1_mask_reg<=6'B0;
-        chkL2_mask_reg<=6'B0;
-        for(u=0;u<6;u=u+1) begin
-            II_save[u]<=10'b0;
-        end
-        chkbits_reg[0]<=6'b0;
-        chkbits_reg[1]<=6'b0;
-        chkbits_reg[2]<=6'b0;
-        chkEn0<=1'b0;
-        chkEn1<=1'b0;
-        chkEn2<=1'b0;
-        chk_enP_reg<=1'b0;
-        chk_en_reg<=1'b0;
-        chk_enA_reg<=6'b0;
-        expun_addr_reg<=37'b0;
-        expun_en_reg<=1'b0;
-	confl_X_reg<=6'b0;
+        expun_addr_reg<=0;
+        expun_en_reg<=0;
     end else if (~init && ~aStall) begin
-        chkL0_data_reg<=chkL0_data;
-        chkL1_data_reg<=chkL1_data;
-        chkL2_data_reg<=chkL2_data;
-        chkL0_mask_reg<=chkL0_mask;
-        chkL1_mask_reg<=chkL1_mask;
-        chkL2_mask_reg<=chkL2_mask;
-        if (~chkL0_data[`lsaddr_split] & ~chkL0_data[`lsaddr_odd] || chk_data_shr[`lsqshare_wrt0]==3'd7)
-          chkL0_data_reg[`lsaddr_addrO]<=chkL0_data_reg[`lsaddr_addrO];
-        if (~chkL0_data[`lsaddr_split] & chkL0_data[`lsaddr_odd] || chk_data_shr[`lsqshare_wrt0]==3'd7)
-          chkL0_data_reg[`lsaddr_addrE]<=chkL0_data_reg[`lsaddr_addrE];
-        if (~chkL1_data[`lsaddr_split] & ~chkL1_data[`lsaddr_odd] || chk_data_shr[`lsqshare_wrt1]==3'd7)
-          chkL1_data_reg[`lsaddr_addrO]<=chkL1_data_reg[`lsaddr_addrO];
-        if (~chkL1_data[`lsaddr_split] & chkL1_data[`lsaddr_odd] || chk_data_shr[`lsqshare_wrt1]==3'd7)
-          chkL1_data_reg[`lsaddr_addrE]<=chkL1_data_reg[`lsaddr_addrE];
-        if (~chkL2_data[`lsaddr_split] & ~chkL2_data[`lsaddr_odd] || chk_data_shr[`lsqshare_wrt2]==3'd7)
-          chkL2_data_reg[`lsaddr_addrO]<=chkL2_data_reg[`lsaddr_addrO];
-        if (~chkL2_data[`lsaddr_split] && chkL2_data[`lsaddr_odd] || chk_data_shr[`lsqshare_wrt2]==3'd7)
-          chkL2_data_reg[`lsaddr_addrE]<=chkL2_data_reg[`lsaddr_addrE];
-        for(u=0;u<6;u=u+1) begin
-            II_save[u]<=chk_dataA[u][`lsaddr_II];
-        end
-        chkbits_reg[0]<=chkbits[0];
-        chkbits_reg[1]<=chkbits[1];
-        chkbits_reg[2]<=chkbits[2];
-        chkEn0<=chk_data_shr[`lsqshare_wrt0]!=3'd7 && chkL0_en;
-        chkEn1<=chk_data_shr[`lsqshare_wrt1]!=3'd7 && chkL1_en;
-        chkEn2<=chk_data_shr[`lsqshare_wrt2]!=3'd7 && chkL2_en;
         expun_addr_reg<=expun_addr;
         expun_en_reg<=expun_en;
-        chk_enP_reg<=chk_enP;
-        chk_en_reg<=chk_en;
-        chk_enA_reg<=chk_enA;
-	confl_X_reg<=confl_X;
     end else if (~init && ~chk_en) begin
         expun_addr_reg<=expun_addr;
         expun_en_reg<=expun_en;
-        chk_enP_reg<=chk_enP;
-        chk_en_reg<=chk_en;
-        chk_enA_reg<=chk_enA;
-	confl_X_reg<=confl_X;
-        for(u=0;u<6;u=u+1) begin
-            II_save[u]<=chk_dataA[u][`lsaddr_II];
-        end
-        chkbits_reg[0]<=chkbits[0]; //no tim cook
-        chkbits_reg[1]<=chkbits[1];
-        chkbits_reg[2]<=chkbits[2];
     end
   end
 endmodule
