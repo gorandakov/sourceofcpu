@@ -12,9 +12,7 @@ module rss_buf(
   newANeeded2,newBNeeded2,newRsSelect2,newPort2,
 // wires to get values out of buffer
   outRsSelect0,portReady0,outDataEn0,outThread0,outZeroB0,//agu
-  outRsSelect1,portReady1,outDataEn1,outThread1,//data
   outRsSelect2,portReady2,outDataEn2,outThread2,outZeroA2,//agu
-  outRsSelect3,portReady3,outDataEn3,outThread3,//data
   fuFwdA,fuFwdB,
   isDataA,isDataB,
 // 1 if buffer is free  
@@ -62,21 +60,11 @@ module rss_buf(
   output outThread0;
   output outZeroB0;
     
-  input outRsSelect1;
-  output wire portReady1;
-  output [3:0] outDataEn1;
-  output outThread1;
-
   input outRsSelect2;
   output wire portReady2;
   output [3:0] outDataEn2;
   output outThread2;
   output outZeroA2;
-
-  input outRsSelect3;
-  output wire portReady3;
-  output [3:0] outDataEn3;
-  output outThread3;
 
   input [3:0] fuFwdA;
   input [3:0] fuFwdB;
@@ -94,14 +82,8 @@ module rss_buf(
   wire portReady0_d;
   wire portReady0_q;
 
-  wire portReady1_d;
-  wire portReady1_q;
-
   wire portReady2_d;
   wire portReady2_q;
-
-  wire portReady3_d;
-  wire portReady3_q;
 
  
 
@@ -317,19 +299,11 @@ module rss_buf(
   assign outThread0=outRsSelect0 ? thread_q : 1'bz;
   assign outZeroB0=outRsSelect0 ? ~dataAPunding_q : 1'bz;
   
-// issue port 1 - data
-  assign outDataEn1=outRsSelect1 ? {4{~unFwdCheck}} &{FPB_q,VecB_q,~FPB_q&~VecB_q,1'b1} : 4'bz;
-  assign outThread1=outRsSelect1 ? thread_q : 1'bz;
- 
   
 // issue port 2 - agu 2
   assign outDataEn2=outRsSelect2 ? {4{~unFwdCheck}} &{3'B1,1'b1} : 4'bz;
   assign outThread2=outRsSelect2 ? thread_q : 1'bz;
   assign outZeroA2=outRsSelect2 ? ~dataBPunding_q : 1'bz;
-
-// issue port 2 - data 2
-  assign outDataEn3=outRsSelect3 ? {4{~unFwdCheck}} &{FPA_q,VecA_q,~FPA_q&~VecA_q,1'b1} : 4'bz;
-  assign outThread3=outRsSelect3 ? thread_q : 1'bz;
 
 
 // end data output
