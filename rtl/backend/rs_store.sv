@@ -577,9 +577,7 @@ module rss_array(
   newANeeded2,newBNeeded2,newRsSelect2,newPort2,
 // wires to get values out of buffer
   outRsSelect0,outRsBank0,outFound0,portReady0,outDataEn0,outThread0,outZeroB0,//agu
-  outRsSelect1,outRsBank1,outFound1,portReady1,outDataEn1,outThread1,//data
   outRsSelect2,outRsBank2,outFound2,portReady2,outDataEn2,outThread2,outZeroA2,//agu 2
-  outRsSelect3,outRsBank3,outFound3,portReady3,outDataEn3,outThread3,//data 2
   fuFwdA,fuFwdB,
   isDataA,isDataB,
 // 1 if buffer is free  
@@ -630,13 +628,6 @@ module rss_array(
   output outThread0;
   output outZeroB0;
     
-  input [BUF_COUNT-1:0] outRsSelect1;
-  input [3:0] outRsBank1;
-  input outFound1;
-  output [BUF_COUNT-1:0] portReady1;
-  output [3:0] outDataEn1;
-  output outThread1;
-
   input [BUF_COUNT-1:0] outRsSelect2;
   input [3:0] outRsBank2;
   input outFound2;
@@ -644,13 +635,6 @@ module rss_array(
   output [3:0] outDataEn2;
   output outThread2;
   output outZeroA2;
-
-  input [BUF_COUNT-1:0] outRsSelect3;
-  input [3:0] outRsBank3;
-  input outFound3;
-  output [BUF_COUNT-1:0] portReady3;
-  output [3:0] outDataEn3;
-  output outThread3;
 
   input [BUF_COUNT*4-1:0] fuFwdA;
   input [BUF_COUNT*4-1:0] fuFwdB;
@@ -666,13 +650,9 @@ module rss_array(
       genvar k,j;
       for (j=0;j<4;j=j+1) begin : banks_gen
           wire [3:0] outDataEn0a;
-          wire [3:0] outDataEn1a;
           wire [3:0] outDataEn2a;
-          wire [3:0] outDataEn3a;
           wire outThread0a;
-          wire outThread1a;
           wire outThread2a;
-          wire outThread3a;
           wire outZeroA2a,outZeroB0a;
           for(k=0;k<8;k=k+1) begin : buffers_gen
               rss_buf buf_mod(
@@ -687,9 +667,7 @@ module rss_array(
               newANeeded2,newBNeeded2,newRsSelect2[j*8+k],newPort2,
 //     wires to get values out of buffer
               outRsSelect0[j*8+k],portReady0[j*8+k],outDataEn0a,outThread0a,outZeroB0a,//agu
-              outRsSelect1[j*8+k],portReady1[j*8+k],outDataEn1a,outThread1a,//data 1
               outRsSelect2[j*8+k],portReady2[j*8+k],outDataEn2a,outThread2a,outZeroA2a,//agu 2
-              outRsSelect3[j*8+k],portReady3[j*8+k],outDataEn3a,outThread3a,//data 2
               fuFwdA[(j*8+k)*4+:4],fuFwdB[(j*8+k)*4+:4],
               isDataA[j*8+k],isDataB[j*8+k],
 //     1 if buffer is free  
@@ -697,21 +675,13 @@ module rss_array(
               );
           end
           assign outDataEn0a=outRsBank0[j] ? 4'bz : 4'b0;
-          assign outDataEn1a=outRsBank1[j] ? 4'bz : 4'b0;
           assign outDataEn2a=outRsBank2[j] ? 4'bz : 4'b0;
-          assign outDataEn3a=outRsBank3[j] ? 4'bz : 4'b0;
           assign outDataEn0=outRsBank0[j] ? outDataEn0a : 4'bz;
-          assign outDataEn1=outRsBank1[j] ? outDataEn1a : 4'bz;
           assign outDataEn2=outRsBank2[j] ? outDataEn2a : 4'bz;
-          assign outDataEn3=outRsBank3[j] ? outDataEn3a : 4'bz;
           assign outThread0a=outRsBank0[j] ? 1'bz : 1'b0;
-          assign outThread1a=outRsBank1[j] ? 1'bz : 1'b0;
           assign outThread2a=outRsBank2[j] ? 1'bz : 1'b0;
-          assign outThread3a=outRsBank3[j] ? 1'bz : 1'b0;
           assign outThread0=outRsBank0[j] ? outThread0a : 1'bz;
-          assign outThread1=outRsBank1[j] ? outThread1a : 1'bz;
           assign outThread2=outRsBank2[j] ? outThread2a : 1'bz;
-          assign outThread3=outRsBank3[j] ? outThread2a : 1'bz;
           assign outZeroB0a=outRsBank0[j] ? 1'bz : 1'b0;
           assign outZeroA2a=outRsBank2[j] ? 1'bz : 1'b0;
           assign outZeroB0=outRsBank0[j] ? outZeroB0a : 1'bz;
@@ -720,19 +690,124 @@ module rss_array(
   endgenerate
 
   assign outDataEn0=outFound0 ? 4'bz : 4'b0;
-  assign outDataEn1=outFound1 ? 4'bz : 4'b0;
   assign outDataEn2=outFound2 ? 4'bz : 4'b0;
-  assign outDataEn3=outFound3 ? 4'bz : 4'b0;
 
   assign outThread0=outFound0 ? 1'bz : 1'b0;
-  assign outThread1=outFound1 ? 1'bz : 1'b0;
   assign outThread2=outFound2 ? 1'bz : 1'b0;
-  assign outThread3=outFound3 ? 1'bz : 1'b0;
 
   assign outZeroB0=outFound0 ? 1'bz : 1'b0;
   assign outZeroA2=outFound2 ? 1'bz : 1'b0;
 
 endmodule
+
+
+module rss_D_array(
+  clk,
+  dataRst,nonDataRst,rst_thread,
+  stall,
+  FU0Hit,FU1Hit,FU2Hit,FU3Hit,
+  new_thread,
+// wires to store new values in a buffer
+  newANeeded0,newBNeeded0,newRsSelect0,newPort0,
+  newANeeded1,newBNeeded1,newRsSelect1,newPort1,
+  newANeeded2,newBNeeded2,newRsSelect2,newPort2,
+// wires to get values out of buffer
+  outRsSelect1,outRsBank1,outFound1,portReady1,outDataEn1,outThread1,//data
+  fuFwdA,
+  isDataA,isDataB,
+// 1 if buffer is free  
+  bufFree
+);
+  localparam DATA_WIDTH=`alu_width;
+  localparam REG_WIDTH=`reg_addr_width;
+  localparam OPERATION_WIDTH=`operation_width;
+  localparam LSQ_WIDTH=`lsqRsNo_width;
+  localparam CONST_WIDTH=32;
+  localparam FLAGS_WIDTH=`flags_width;
+  localparam ROB_WIDTH=10;  
+  localparam BUF_COUNT=32;
+  
+  input clk;
+  input dataRst;
+  input nonDataRst;
+  input rst_thread;
+  input stall;
+  input FU0Hit;
+  input FU1Hit;
+  input FU2Hit;
+  input FU3Hit;
+  input new_thread;
+//Input of new data from registeres
+  input newANeeded0;
+  input newBNeeded0;
+  input [BUF_COUNT-1:0] newRsSelect0;
+  input [8:0] newPort0;
+
+  input newANeeded1;
+  input newBNeeded1;
+  input [BUF_COUNT-1:0] newRsSelect1;
+  input [8:0] newPort1;  
+
+  input newANeeded2;
+  input newBNeeded2;
+  input [BUF_COUNT-1:0] newRsSelect2;
+  input [8:0] newPort2;  
+
+// output data to functional units
+
+  input [BUF_COUNT-1:0] outRsSelect1;
+  input [3:0] outRsBank1;
+  input outFound1;
+  output [BUF_COUNT-1:0] portReady1;
+  output [3:0] outDataEn1;
+  output outThread1;
+
+  input [BUF_COUNT*4-1:0] fuFwdA;
+
+  input [BUF_COUNT-1:0] isDataA;
+  input [BUF_COUNT-1:0] isDataB;
+
+// free output
+  output [BUF_COUNT-1:0]  bufFree;
+// wires
+// wires - new data
+  generate
+      genvar k,j;
+      for (j=0;j<4;j=j+1) begin : banks_gen
+          wire [3:0] outDataEn1a;
+          wire outThread1a;
+          for(k=0;k<8;k=k+1) begin : buffers_gen
+              rss_buf buf_mod(
+              clk,
+              dataRst,nonDataRst,rst_thread,
+              stall,
+              FU0Hit,FU1Hit,FU2Hit,FU3Hit,
+              new_thread,
+//     wires to store new values in a buffer
+              newANeeded0,newBNeeded0,newRsSelect0[j*8+k],newPort0,
+              newANeeded1,newBNeeded1,newRsSelect1[j*8+k],newPort1,
+              newANeeded2,newBNeeded2,newRsSelect2[j*8+k],newPort2,
+//     wires to get values out of buffer
+              outRsSelect1[j*8+k],portReady1[j*8+k],outDataEn1a,outThread1a,//data 1
+              fuFwdA[(j*8+k)*4+:4],
+              isDataA[j*8+k],isDataB[j*8+k],
+//     1 if buffer is free  
+              bufFree[j*8+k]
+              );
+          end
+          assign outDataEn1a=outRsBank1[j] ? 4'bz : 4'b0;
+          assign outDataEn1=outRsBank1[j] ? outDataEn1a : 4'bz;
+          assign outThread1a=outRsBank1[j] ? 1'bz : 1'b0;
+          assign outThread1=outRsBank1[j] ? outThread1a : 1'bz;
+      end
+  endgenerate
+
+  assign outDataEn1=outFound1 ? 4'bz : 4'b0;
+
+  assign outThread1=outFound1 ? 1'bz : 1'b0;
+
+endmodule
+
 
 
 
