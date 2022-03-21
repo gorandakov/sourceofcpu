@@ -4619,6 +4619,9 @@ module backend(
   .FU7(FU_reg[7]),.FUreg7(FUreg[7]),.FUwen7(FUwen[7]),
   .FU8(FU_reg[8]),.FUreg8(FUreg[8]),.FUwen8(FUwen[8]),
   .FU9(FU_reg[9]),.FUreg9(FUreg[9]),.FUwen9(FUwen[9]),
+
+  .FUWQ0(lsr_wr_data[4][`lsaddr_WQ]), .FUWQen0(dc_wrEn[0]),
+  .FUWQ1(lsr_wr_data[5][`lsaddr_WQ]), .FUWQen1(dc_wrEn[1]),
   
   .newDataVA0H(dataAVH[0]),.newDataVB0H(dataBVH[0]),.newDataVA0L(dataAVL[0]),.newDataVB0L(dataBVL[0]),
   .newDataFA0H(dataAFH[0]),.newDataFB0H(dataBFH[0]),.newDataFA0L(dataAFL[0]),.newDataFB0L(dataBFL[0]),
