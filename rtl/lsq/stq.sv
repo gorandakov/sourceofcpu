@@ -330,30 +330,46 @@ module stq(
           stq_data_array #(32+~b[0]) dat_mod(
           clk,
           rst,
-          upd0_en0,{upd0_pbit[b/2],upd0_data[32*b+:32]},
-          upd1_en0,{upd1_pbit[b/2],upd1_data[32*b+:32]},
+          upd0_en0,{upd0_pbit[upd0_b[b][1]],upd0_data[32*Rupd0_b[b]+:32]},
+          upd1_en0,{upd1_pbit[upd1_b[b][1]],upd1_data[32*Rupd1_b[b]+:32]},
           chk0_match_first[b],chk0_data[32*b+:32],
           chk1_match_first[b],chk1_data[32*b+:32],
           chk2_match_first[b],chk2_data[32*b+:32],
           chk3_match_first[b],chk3_data[32*b+:32],
           chk4_match_first[b],chk4_data[32*b+:32],
           chk5_match_first[b],chk5_data[32*b+:32],
-          WLN0_match[b],{WLN0_pbit[b],WLN0_data[32*b+:32]},
-          WLN1_match[b],{WLN1_pbit[b],WLN1_data[32*b+:32]}
+          WLN0_match[b],{WLN0_pbit[WLN0_b[b]],WLN0_dataX[32*b+:32]},
+          WLN1_match[b],{WLN1_pbit[WLN1_b[b]],WLN1_dataX[32*b+:32]}
           );
           
+          if (b<4) begin
+              WLN0_data[32*b+:32]=WLN0_dataX[32*WLN0_b[b]+:32];
+              WLN1_data[32*b+:32]=WLN1_dataX[32*WLN1_b[b]+:32];
+              assign WLN0_b[b]=-(WLN0_adata[`lsaddr_begin0]&3)+b[1:0]; 
+              assign WLN1_b[b]=-(WLN1_adata[`lsaddr_begin0]&3)+b[1:0]; 
+              assign chk0_b[b]=-(chk0_adata[`lsaddr_begin0]&3)+b[1:0]; 
+              assign chk1_b[b]=-(chk1_adata[`lsaddr_begin0]&3)+b[1:0]; 
+              assign chk2_b[b]=-(chk2_adata[`lsaddr_begin0]&3)+b[1:0]; 
+              assign chk3_b[b]=-(chk3_adata[`lsaddr_begin0]&3)+b[1:0]; 
+              assign chk4_b[b]=-(chk4_adata[`lsaddr_begin0]&3)+b[1:0]; 
+              assign chk5_b[b]=-(chk5_adata[`lsaddr_begin0]&3)+b[1:0]; 
+              assign upd0_b[b]=-(upd0_begin0&3)+b[1:0]; 
+              assign upd1_b[b]=-(upd1_begin0&3)+b[1:0]; 
+              assign Rupd0_b[b]=(upd0_begin0&3)+b[1:0]; 
+              assign Rupd1_b[b]=(upd1_begin0&3)+b[1:0]; 
+          end
           if (b==3)
           stq_data_array #(8) datX_mod(
           clk,
           rst,
           upd0_en0,upd0_data[135:128],
           upd1_en0,upd1_data[135:128],
-          chk0_match_first[b],chk0_data[135:128],
-          chk1_match_first[b],chk1_data[135:128],
-          chk2_match_first[b],chk2_data[135:128],
-          chk3_match_first[b],chk3_data[135:128],
-          chk4_match_first[b],chk4_data[135:128],
-          chk5_match_first[b],chk5_data[135:128],
+          chk0_match_first[chk0_b[b]],chk0_data[135:128],
+          chk1_match_first[chk1_b[b]],chk1_data[135:128],
+          chk2_match_first[chk2_b[b]],chk2_data[135:128],
+          chk3_match_first[chk3_b[b]],chk3_data[135:128],
+          chk4_match_first[chk4_b[b]],chk4_data[135:128],
+          chk5_match_first[chk5_b[b]],chk5_data[135:128],
           WLN0_match[b],WLN0_data[135:128],
           WLN1_match[b],WLN1_data[135:128]
           );
@@ -466,4 +482,12 @@ module stq(
   upd0_en[63:32], 
   upd1_en[63:32], 
   free_en[63:32],,,,passe_en[63:32]);
+  
+  stq_adata bgn_mod(
+  clk,
+  rst,
+  wrt0_en,wrt0_WQ,wrt0_adata[`lsaddr_begin0],
+  wrt1_en,wrt1_WQ,wrt1_adata[`lsaddr_begin0],
+  upd0_WQ,upd0_begin0,
+  upd1_WQ,upd1_begin0);
 endmodule
