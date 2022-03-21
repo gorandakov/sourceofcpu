@@ -857,6 +857,9 @@ module rs_s(
   FU8,FUreg8,FUwen8,
   FU9,FUreg9,FUwen9,
 
+  FUWQ0,FUWQen0,
+  FUWQ1,FUWQen1,
+
   newDataVA0H,newDataVB0H,newDataVA0L,newDataVB0L,
   newDataVA1H,newDataVB1H,newDataVA1L,newDataVB1L,
   newDataVA2H,newDataVB2H,newDataVA2L,newDataVB2L,
@@ -1092,6 +1095,12 @@ module rs_s(
   input [REG_WIDTH-1:0] FUreg9;
   input FUwen9;
 
+  input [5:0] FUWQ0;
+  input FUWQen0;
+
+  input [5:0] FUWQ1;
+  input FUWQen1;
+
 //SIMD
   input [SIMD_WIDTH-1:0] newDataVA0H;
   input [SIMD_WIDTH-1:0] newDataVB0H;
@@ -1285,13 +1294,47 @@ module rs_s(
   newANeeded2,newBNeeded2,newRsSelect2,{newEnB2,newEnA2,newPort2},
 // wires to get values out of buffer
   outRsSelect[0],outBank[0],rsFound[0],portReady[0],outDataEn0,outThread0,outZeroB0,//agu
-  outRsSelect[1],outBank[1],rsFound[1],portReady[1],outDataEn1,outThread1,//data
   outRsSelect[2],outBank[2],rsFound[2],portReady[2],outDataEn2,outThread2,outZeroA2,//agu 2
-  outRsSelect[3],outBank[3],rsFound[3],portReady[3],outDataEn3,outThread3,//data 2
   fuFwdA,fuFwdB,
   isDataA,isDataB,
 // 1 if buffer is free  
   bufFree
+  );
+  
+  rss_D_array rs0_mod(
+  clk,
+  dataRst,nonDataRst,rst_thread,
+  stall|doStall,
+  FU0Hit,FU1Hit,FU2Hit,FU3Hit,
+  new_thread,
+// wires to store new values in a buffer
+  newANeeded0,1'b1,newRsSelect0,{newEnB0,newEnA0,newPort0},
+  newANeeded1,1'b1,newRsSelect1,{newEnB1,newEnA1,newPort1},
+  newANeeded2,1'b1,newRsSelect2,{newEnB2,newEnA2,newPort2},
+// wires to get values out of buffer
+  outRsSelect[1],outBank[1],rsFound[1],portReady[1],outDataEn1,outThread1,//data
+  fuFwdA,
+  isDataA,isDataWA,
+// 1 if buffer is free  
+  bufFreeA
+  );
+  
+  rss_D_array rs_mod(
+  clk,
+  dataRst,nonDataRst,rst_thread,
+  stall|doStall,
+  FU0Hit,FU1Hit,FU2Hit,FU3Hit,
+  new_thread,
+// wires to store new values in a buffer
+  newBNeeded0,1'b1,newRsSelect0,{newEnB0,newEnA0,newPort0},
+  newBNeeded1,1'b1,newRsSelect1,{newEnB1,newEnA1,newPort1},
+  newBNeeded2,1'b1,newRsSelect2,{newEnB2,newEnA2,newPort2},
+// wires to get values out of buffer
+  outRsSelect[3],outBank[3],rsFound[3],portReady[3],outDataEn3,outThread3,//data 2
+  fuFwdB,
+  isDataB,isDataWB,
+// 1 if buffer is free  
+  bufFreeB
   );
   
   DFF2 #(192) outEqA_mod(clk,dataRst,1'b1,outEqA,outEqA_reg);
