@@ -28,6 +28,25 @@ module WQ_wakeUP_logic(
   input [5:0] FUWQ1;
   input     FUWQen1;
   output isData;
+
+  reg port_en;
+  reg [5:0] WQ;
+
+  wire [5:0] WQ_d;
+  wire newRsSelectAny;
+  wire port_en_d;
+
+  assign newRsSelectAny=newRsSelect0|newRsSelect1|newRsSelect2;
+
+  assign WQ_d=newRsSelect0 ? newWQ0 : 6'bz;
+  assign WQ_d=newRsSelect1 ? newWQ1 : 6'bz;
+  assign WQ_d=newRsSelect2 ? newWQ2 : 6'bz;
+  assign WQ_d=~newRsSelectAny ? WQ : 6'bz;
+  
+  assign port_en_d=newRsSelect0 ? newPortEn0 : 6'bz;
+  assign port_en_d=newRsSelect1 ? newPortEn1 : 6'bz;
+  assign port_en_d=newRsSelect2 ? newPortEn2 : 6'bz;
+  assign port_en_d=~newRsSelectAny ? port_en : 6'bz;
 endmodule
 
 module rss_buf(
