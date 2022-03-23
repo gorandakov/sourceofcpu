@@ -72,6 +72,51 @@ module WQ_wakeUP_logic(
   end
 endmodule
 
+module WQ_wakeUP_logic_array(
+  clk,
+  rst,
+  stall,
+  newWQ0,newRsSelect0,newPortEn0,
+  newWQ1,newRsSelect1,newPortEn1,
+  newWQ2,newRsSelect2,newPortEn2,
+  FUWQ0,FUWQen0,
+  FUWQ1,FUWQen1,
+  isData);
+
+  input clk;
+  input rst;
+  input stall;
+  input [5:0] newWQ0;
+  input [31:0] newRsSelect0;
+  input   newPortEn0;
+  input [5:0] newWQ1;
+  input [31:0] newRsSelect1;
+  input   newPortEn1;
+  input [5:0] newWQ2;
+  input [31:0] newRsSelect2;
+  input   newPortEn2;
+  input [5:0] FUWQ0;
+  input     FUWQen0;
+  input [5:0] FUWQ1;
+  input     FUWQen1;
+  output [31:0] isData;
+  generate
+      genvar x;
+      for(x=0;x<32;x=x+1) begin : BUF
+          WQ_wakeUP_logic buf_mod(
+          clk,
+          rst,
+          stall,
+          newWQ0,newRsSelect0[x],newPortEn0,2'b0,
+          newWQ1,newRsSelect1[x],newPortEn1,2'b0,
+          newWQ2,newRsSelect2[x],newPortEn2,2'b0,
+          FUWQ0,FUWQen0,
+          FUWQ1,FUWQen1,
+          isData[x]
+          );
+      end
+endmodule
+
 module rss_buf(
   clk,
   dataRst,nonDataRst,rst_thread,
@@ -1676,6 +1721,29 @@ module rs_s(
   outRsSelect[1],outBank[1],rsFound[1],outWQ1,
   32'b0,4'B0,1'b1,
   );
+
+  WQ_wakeUP_logic_array WQLA_mod(
+  clk,
+  rst,
+  stall,
+  newWQA0,newRsSelect0,newPort0[2]&newPort0[6],
+  newWQA1,newRsSelect1,newPort1[2]&newPort1[6],
+  newWQA2,newRsSelect2,newPort2[2]&newPort2[6],
+  FUWQ0,FUWQen0,
+  FUWQ1,FUWQen1,
+  isDataWQA);
+  
+  WQ_wakeUP_logic_array WQLB_mod(
+  clk,
+  rst,
+  stall,
+  newWQB0,newRsSelect0,newPort0[2]&newPort0[7],
+  newWQB1,newRsSelect1,newPort1[2]&newPort1[7],
+  newWQB2,newRsSelect2,newPort2[2]&newPort2[7],
+  FUWQ0,FUWQen0,
+  FUWQ1,FUWQen1,
+  isDataWQB);
+
 
   rs_nonWakeUp_array #(CONST_WIDTH) dataC_mod(
   clk,dataRst,stall|doStall,
