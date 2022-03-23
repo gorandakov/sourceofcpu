@@ -1214,6 +1214,7 @@ module rs_wakeUpS_logic_array(
   FUreg3,FU3wen,
   FUreg4,FU4wen,
   FUreg5,FU5wen,
+  FU6wen,FU7wen,FU8wen,
   newRsSelect1,newReg1,newFunit1,newGazump1,newIsFP1,
   newRsSelect2,newReg2,newFunit2,newGazump2,newIsFP2,
   fuFwd,
@@ -1330,6 +1331,9 @@ module rs_wakeUpS_logic_array(
   reg [REG_WIDTH-1:0] FUreg2_reg4;
   reg FU2wen_reg4;
 
+  reg FU6wen_reg;
+  reg FU7wen_reg;
+  reg FU8wen_reg;
 
   assign register[1]=newReg1;
   assign register[2]=newReg2;
@@ -1440,12 +1444,15 @@ module rs_wakeUpS_logic_array(
     FU4wen_reg<=FU4wen;
     FUreg5_reg<=FUreg5;
     FU5wen_reg<=FU5wen;
+    FU6wen_reg<=FU6wen;
+    FU7wen_reg<=FU7wen;
+    FU8wen_reg<=FU8wen;
     FUreg0_reg2<=FUreg0_reg;
-    FU0wen_reg2<=FU0wen_reg;
+    FU0wen_reg2<=FU6wen_reg;
     FUreg1_reg2<=FUreg1_reg;
-    FU1wen_reg2<=FU1wen_reg;
+    FU1wen_reg2<=FU7wen_reg;
     FUreg2_reg2<=FUreg2_reg;
-    FU2wen_reg2<=FU2wen_reg;
+    FU2wen_reg2<=FU8wen_reg;
     FUreg0_reg3<=FUreg0_reg2;
     FU0wen_reg3<=FU0wen_reg2;
     FUreg1_reg3<=FUreg1_reg2;
@@ -2167,6 +2174,15 @@ module rs(
   FUS0,FUS1,FUS2,
   FUS3,FUS4,FUS5,
   FUS6,FUS7,FUS8,
+  FUSreg0,FUSwen0,
+  FUSreg1,FUSwen1,
+  FUSreg2,FUSwen2,
+  FUSreg3,FUSwen3,
+  FUSreg4,FUSwen4,
+  FUSreg5,FUSwen5,
+  FUSreg6,FUSwen6,
+  FUSreg7,FUSwen7,
+  FUSreg8,FUSwen8,
 // 1 if buffer is free  
   pause0,foundAlt1,foundAlt2
 );
@@ -2474,6 +2490,24 @@ module rs(
   input [FLAGS_WIDTH-1:0] FUS6;
   input [FLAGS_WIDTH-1:0] FUS7;
   input [FLAGS_WIDTH-1:0] FUS8;
+  input [REG_WIDTH-1:0] FUSreg0;
+  input FUSwen0;
+  input [REG_WIDTH-1:0] FUSreg1;
+  input FUSwen1;
+  input [REG_WIDTH-1:0] FUSreg2;
+  input FUSwen2;
+  input [REG_WIDTH-1:0] FUSreg3;
+  input FUSwen3;
+  input [REG_WIDTH-1:0] FUSreg4;
+  input FUSwen4;
+  input [REG_WIDTH-1:0] FUSreg5;
+  input FUSwen5;
+  input [REG_WIDTH-1:0] FUSreg6;
+  input FUSwen6;
+  input [REG_WIDTH-1:0] FUSreg7;
+  input FUSwen7;
+  input [REG_WIDTH-1:0] FUSreg8;
+  input FUSwen8;
 
   
   input pause0;
@@ -2701,12 +2735,13 @@ module rs(
   isDataS,
   outEqS,
   bufFree,
-  FUreg4,FUwen4,
-  FUreg5,FUwen5,
-  FUreg6,FUwen6,
-  FUreg7,FUwen7,
-  FUreg8,FUwen8,
-  FUreg9,FUwen9,
+  FUSreg3,FUSwen3,
+  FUSreg4,FUSwen4,
+  FUSreg5,FUSwen5,
+  FUSreg6,FUSwen6,
+  FUSreg7,FUSwen7,
+  FUSreg8,FUSwen8,
+  FUSwen0,FUSwen1,FUSwen2,
   newRsSelect1,newRegS1,{newFunitS1[9:3],newFunitS1[6:4]&{3{|newPort1[3:2]}}},newGazumpS1,|newPort1[3:2],
   newRsSelect2,newRegS2,{newFunitS2[9:3],newFunitS2[6:4]&{3{|newPort2[3:2]}}},newGazumpS2,|newPort2[3:2],
   fuFwdS,
