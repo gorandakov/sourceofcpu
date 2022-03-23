@@ -280,6 +280,7 @@ endmodule
 
 module get_clear_reg(
   newR0,newR1,newR2,newR3,newR4,newR5,newR6,newR7,newR8,
+  newRF0,newRF1,newRF2,newRF3,newRF4,newRF5,newRF6,newRF7,newRF8,
   alloc,clr,
   allocS,clrS,
   clrR0,clrR1,clrR2,
@@ -298,6 +299,16 @@ module get_clear_reg(
   input [REG_WIDTH-1:0] newR7;
   input [REG_WIDTH-1:0] newR8;
 
+  input [REG_WIDTH-1:0] newRF0;
+  input [REG_WIDTH-1:0] newRF1;
+  input [REG_WIDTH-1:0] newRF2;
+  input [REG_WIDTH-1:0] newRF3;
+  input [REG_WIDTH-1:0] newRF4;
+  input [REG_WIDTH-1:0] newRF5;
+  input [REG_WIDTH-1:0] newRF6;
+  input [REG_WIDTH-1:0] newRF7;
+  input [REG_WIDTH-1:0] newRF8;
+
   input [8:0] alloc;
   output [8:0] clr;
 
@@ -314,9 +325,22 @@ module get_clear_reg(
   output [REG_WIDTH-1:0] clrR7;
   output [REG_WIDTH-1:0] clrR8;
   
+  output [REG_WIDTH-1:0] clrRS0;
+  output [REG_WIDTH-1:0] clrRS1;
+  output [REG_WIDTH-1:0] clrRS2;
+  output [REG_WIDTH-1:0] clrRS3;
+  output [REG_WIDTH-1:0] clrRS4;
+  output [REG_WIDTH-1:0] clrRS5;
+  output [REG_WIDTH-1:0] clrRS6;
+  output [REG_WIDTH-1:0] clrRS7;
+  output [REG_WIDTH-1:0] clrRS8;
+  
   reg [REG_WIDTH-1:0] rs0_newR[2:0];
   reg [REG_WIDTH-1:0] rs1_newR[2:0];
   reg [REG_WIDTH-1:0] rs2_newR[2:0];
+  reg [REG_WIDTH-1:0] rs0_newRF[2:0];
+  reg [REG_WIDTH-1:0] rs1_newRF[2:0];
+  reg [REG_WIDTH-1:0] rs2_newRF[2:0];
   reg [2:0] rs0_hasR;
   reg [2:0] rs1_hasR;
   reg [2:0] rs2_hasR;
@@ -335,6 +359,16 @@ module get_clear_reg(
   assign clrR2=rs2_newR[0];
   assign clrR5=rs2_newR[1];
   assign clrR8=rs2_newR[2];
+
+  assign clrRS0=rs0_newRF[0];
+  assign clrRS3=rs0_newRF[1];
+  assign clrRS6=rs0_newRF[2];
+  assign clrRS1=rs1_newRF[0];
+  assign clrRS4=rs1_newRF[1];
+  assign clrRS7=rs1_newRF[2];
+  assign clrRS2=rs2_newRF[0];
+  assign clrRS5=rs2_newRF[1];
+  assign clrRS8=rs2_newRF[2];
 
   assign clr[0]=rs0_hasR[0];
   assign clr[3]=rs0_hasR[1];
@@ -380,6 +414,21 @@ module get_clear_reg(
           rs0_hasS[k]=(newR0[3:0]==k*3 && allocS[0]) || (newR1[3:0]==k*3 && allocS[1]) || (newR2[3:0]==k*3 && allocS[2]);
           rs1_hasS[k]=(newR3[3:0]==k*3+1 && allocS[3]) || (newR4[3:0]==k*3+1 && allocS[4]) || (newR5[3:0]==k*3+1 && allocS[5]);
           rs2_hasS[k]=(newR6[3:0]==k*3+2 && allocS[6]) || (newR7[3:0]==k*3+2 && allocS[7]) || (newR8[3:0]==k*3+2 && allocS[8]);
+          
+	  rs0_newRF[k]=9'd0;
+          if (newRF0[3:0]==k*3 && allocS[0]) rs0_newRF[k]=newRF0;
+          if (newRF1[3:0]==k*3 && allocS[1]) rs0_newRF[k]=newRF1;
+          if (newRF2[3:0]==k*3 && allocS[2]) rs0_newRF[k]=newRF2;
+
+          rs1_newRF[k]=9'd1;
+          if (newRF3[3:0]==k*3+1 && allocS[3]) rs1_newRF[k]=newRF3;
+          if (newRF4[3:0]==k*3+1 && allocS[4]) rs1_newRF[k]=newRF4;
+          if (newRF5[3:0]==k*3+1 && allocS[5]) rs1_newRF[k]=newRF5;
+          
+          rs2_newRF[k]=9'd2;
+          if (newRF6[3:0]==k*3+2 && allocS[6]) rs2_newRF[k]=newRF6;
+          if (newRF7[3:0]==k*3+2 && allocS[7]) rs2_newRF[k]=newRF7;
+          if (newRF8[3:0]==k*3+2 && allocS[8]) rs2_newRF[k]=newRF8;
       end
   end
 endmodule
