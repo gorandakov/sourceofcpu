@@ -1,5 +1,35 @@
 `include "../struct.sv"
 
+module WQ_wakeUP_logic(
+  clk,
+  rst,
+  stall,
+  newWQ0,newRsSelect0,newPortEn0,
+  newWQ1,newRsSelect1,newPortEn1,
+  newWQ2,newRsSelect2,newPortEn2,
+  FUWQ0,FUWQen0,
+  FUWQ1,FUWQen1,
+  isData);
+
+  input clk;
+  input rst;
+  input stall;
+  input [5:0] newWQ0;
+  input newRsSelect0;
+  input   newPortEn0;
+  input [5:0] newWQ1;
+  input newRsSelect1;
+  input   newPortEn1;
+  input [5:0] newWQ2;
+  input newRsSelect2;
+  input   newPortEn2;
+  input [5:0] FUWQ0;
+  input     FUWQen0;
+  input [5:0] FUWQ1;
+  input     FUWQen1;
+  output isData;
+endmodule
+
 module rss_buf(
   clk,
   dataRst,nonDataRst,rst_thread,
