@@ -1344,6 +1344,8 @@ module rs_s(
   wire [127:0] fuFwdB;
   wire [BUF_COUNT-1:0] isDataA;
   wire [BUF_COUNT-1:0] isDataB;
+  wire [BUF_COUNT-1:0] isDataWQA;
+  wire [BUF_COUNT-1:0] isDataWQB;
 
   wire [64:0] outDataA2P;
   wire [64:0] outDataB0P;
@@ -1431,12 +1433,12 @@ module rs_s(
 // wires to get values out of buffer
   outRsSelect[1],outBank[1],rsFound[1],portReady[1],outDataEn1,outThread1,//data
   fuFwdA,
-  isDataA,isDataWA,
+  isDataA,isDataWQA,
 // 1 if buffer is free  
   bufFreeA
   );
   
-  rss_D_array rs_mod(
+  rss_D_array rs1_mod(
   clk,
   dataRst,nonDataRst,rst_thread,
   stall|doStall,
@@ -1449,7 +1451,7 @@ module rs_s(
 // wires to get values out of buffer
   outRsSelect[3],outBank[3],rsFound[3],portReady[3],outDataEn3,outThread3,//data 2
   fuFwdB,
-  isDataB,isDataWB,
+  isDataB,isDataWQB,
 // 1 if buffer is free  
   bufFreeB
   );
