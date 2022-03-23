@@ -4,9 +4,9 @@ module WQ_wakeUP_logic(
   clk,
   rst,
   stall,
-  newWQ0,newRsSelect0,newPortEn0,
-  newWQ1,newRsSelect1,newPortEn1,
-  newWQ2,newRsSelect2,newPortEn2,
+  newWQ0,newRsSelect0,newPortEn0,newEQ0,
+  newWQ1,newRsSelect1,newPortEn1,newEQ1,
+  newWQ2,newRsSelect2,newPortEn2,newEQ2,
   FUWQ0,FUWQen0,
   FUWQ1,FUWQen1,
   isData);
@@ -17,12 +17,15 @@ module WQ_wakeUP_logic(
   input [5:0] newWQ0;
   input newRsSelect0;
   input   newPortEn0;
+  input [1:0] newEQ0;
   input [5:0] newWQ1;
   input newRsSelect1;
   input   newPortEn1;
+  input [1:0] newEQ1;
   input [5:0] newWQ2;
   input newRsSelect2;
   input   newPortEn2;
+  input [1:0] newEQ2;
   input [5:0] FUWQ0;
   input     FUWQen0;
   input [5:0] FUWQ1;
@@ -35,6 +38,8 @@ module WQ_wakeUP_logic(
   wire [5:0] WQ_d;
   wire newRsSelectAny;
   wire port_en_d;
+  wire [1:0] eq;
+  wire [1:0] eq_new;
 
   assign newRsSelectAny=newRsSelect0|newRsSelect1|newRsSelect2;
 
@@ -43,10 +48,28 @@ module WQ_wakeUP_logic(
   assign WQ_d=newRsSelect2 ? newWQ2 : 6'bz;
   assign WQ_d=~newRsSelectAny ? WQ : 6'bz;
   
-  assign port_en_d=newRsSelect0 ? newPortEn0 : 6'bz;
-  assign port_en_d=newRsSelect1 ? newPortEn1 : 6'bz;
-  assign port_en_d=newRsSelect2 ? newPortEn2 : 6'bz;
-  assign port_en_d=~newRsSelectAny ? port_en : 6'bz;
+  assign port_en_d=newRsSelect0&~stall ? newPortEn0&~isData : 6'bz;
+  assign port_en_d=newRsSelect1&~stall ? newPortEn1&~isData : 6'bz;
+  assign port_en_d=newRsSelect2&~stall ? newPortEn2&~isData : 6'bz;
+  assign port_en_d=~newRsSelectAny|stall ? port_en&~isData : 6'bz;
+  
+  assign eq[0]=(WQ==FUWQ0) & FUWQen0 & port_en & ~newRsSelect0 & ~newRsSelect1 & ~newRsSelect2;
+  assign eq[1]=(WQ==FUWQ1) & FUWQen1 & port_en & ~newRsSelect0 & ~newRsSelect1 & ~newRsSelect2;
+
+  assign eq_new=eq|({2{newRsSelect0&~stall}}&newEQ0)|({2{newRsSelect1&~stall}}&newEQ1)|
+    ({2{newRsSelect2&~stall}}&newEQ2);
+
+  assign isData=|eq_new;
+
+  always @(posedge clk) begin 
+      if (rst) begin
+	  WQ<=0;
+	  port_en<=0;
+      end else begin
+	  WQ<=WQ_d;
+	  port_en<=port_en_d;
+      end
+  end
 endmodule
 
 module rss_buf(
