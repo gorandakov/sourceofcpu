@@ -290,7 +290,7 @@ module stq_buf_L_array(
   
   generate
       genvar t;
-      for(t=0;t<BUF_COUNT;t=t+1) begin buf_gen
+      for(t=0;t<BUF_COUNT;t=t+1) begin : buf_gen
           stq_buf_L buf_mod(
           clk,
           rst,

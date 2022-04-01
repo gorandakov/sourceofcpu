@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-`include "../common.sv"
+`include "../struct.sv"
 
 module stq(
   clk,
@@ -36,7 +36,7 @@ module stq(
   pse0_WQ,pse0_en,
   pse1_WQ,pse1_en,
   wb1_adata,wb1_LSQ,wb1_data,wb1_pbit,wb1_bnkEn,wb1_en,wb1_way,
-  wb0_adata,wb0_LSQ,wb0_data,wb0_pbit,wb0_bnkEn,wb0_en,
+  wb0_adata,wb0_LSQ,wb0_data,wb0_pbit,wb0_bnkEn,wb0_en
   );
   input clk;
 
@@ -312,7 +312,7 @@ module stq(
           chk5_en, chk5_addrEO, chk5_odd1[b], chk5_bytes[b], chk5_subBNK[b], chk5_subBNK2[b], chk5_match[b][31:0], chk5_partial[b][31:0],
           upd0_en0[31:0], 
           upd1_en0[31:0], 
-          free_en[31:0],free[31:0],upd[31:0],passe[31:0],passe_en[31:0]);end
+          free_en[31:0],free[31:0],upd[31:0],passe[31:0],passe_en[31:0]);
 
           stq_buf_L_array arr1_mod(
           clk,
@@ -350,14 +350,14 @@ module stq(
           if (b<4) begin
               WLN0_data[32*b+:32]=WLN0_dataX[32*WLN0_b[b]+:32];
               WLN1_data[32*b+:32]=WLN1_dataX[32*WLN1_b[b]+:32];
-              assign WLN0_b[b]=-(WLN0_adata[`lsaddr_begin0]&3)+b[1:0]; 
-              assign WLN1_b[b]=-(WLN1_adata[`lsaddr_begin0]&3)+b[1:0]; 
-              assign chk0_b[b]=-(chk0_adata[`lsaddr_begin0]&3)+b[1:0]; 
-              assign chk1_b[b]=-(chk1_adata[`lsaddr_begin0]&3)+b[1:0]; 
-              assign chk2_b[b]=-(chk2_adata[`lsaddr_begin0]&3)+b[1:0]; 
-              assign chk3_b[b]=-(chk3_adata[`lsaddr_begin0]&3)+b[1:0]; 
-              assign chk4_b[b]=-(chk4_adata[`lsaddr_begin0]&3)+b[1:0]; 
-              assign chk5_b[b]=-(chk5_adata[`lsaddr_begin0]&3)+b[1:0]; 
+              assign WLN0_b[b]=-(WLN0_adata[`lsaddr_bank0]&3)+b[1:0]; 
+              assign WLN1_b[b]=-(WLN1_adata[`lsaddr_bank0]&3)+b[1:0]; 
+              assign chk0_b[b]=-(chk0_adata[`lsaddr_bank0]&3)+b[1:0]; 
+              assign chk1_b[b]=-(chk1_adata[`lsaddr_bank0]&3)+b[1:0]; 
+              assign chk2_b[b]=-(chk2_adata[`lsaddr_bank0]&3)+b[1:0]; 
+              assign chk3_b[b]=-(chk3_adata[`lsaddr_bank0]&3)+b[1:0]; 
+              assign chk4_b[b]=-(chk4_adata[`lsaddr_bank0]&3)+b[1:0]; 
+              assign chk5_b[b]=-(chk5_adata[`lsaddr_bank0]&3)+b[1:0]; 
               assign upd0_b[b]=-(upd0_begin0&3)+b[1:0]; 
               assign upd1_b[b]=-(upd1_begin0&3)+b[1:0]; 
               assign Rupd0_b[b]=(upd0_begin0&3)+b[1:0]; 
@@ -407,42 +407,42 @@ module stq(
   
   assign chk0_banks=(chk0_adata[`lsaddr_sz]==5'h11 || chk0_adata[`lsaddr_sz]==5'h10 || chk0_adata[`lsaddr_low]==2'b0) ?
     chk0_adata[`lsaddr_banks] : lowt(chk0_adata[`lsaddr_banks]);
-  assign chk0_odd0[2:0]=(chk0_adata[`lsaddr_sz]==5'h11 || chk0_adata[`lsaddr_sz]==5'h10) ? {2'b0,chk0_odd} : {chk0_adata{`lsaddr_low],chk0_odd}; 
+  assign chk0_odd0[2:0]=(chk0_adata[`lsaddr_sz]==5'h11 || chk0_adata[`lsaddr_sz]==5'h10) ? {2'b0,chk0_odd} : {chk0_adata[`lsaddr_low],chk0_odd}; 
   assign chk0_odd0[3]=chk0_adata[`lsaddr_sz]==5'hf;
 
   assign chk1_banks=(chk1_adata[`lsaddr_sz]==5'h11 || chk1_adata[`lsaddr_sz]==5'h10 || chk1_adata[`lsaddr_low]==2'b0) ?
     chk1_adata[`lsaddr_banks] : lowt(chk1_adata[`lsaddr_banks]);
-  assign chk1_odd0[2:0]=(chk1_adata[`lsaddr_sz]==5'h11 || chk1_adata[`lsaddr_sz]==5'h10) ? {2'b0,chk1_odd} : {chk1_adata{`lsaddr_low],chk1_odd}; 
+  assign chk1_odd0[2:0]=(chk1_adata[`lsaddr_sz]==5'h11 || chk1_adata[`lsaddr_sz]==5'h10) ? {2'b0,chk1_odd} : {chk1_adata[`lsaddr_low],chk1_odd}; 
   assign chk1_odd0[3]=chk1_adata[`lsaddr_sz]==5'hf;
 
   assign chk2_banks=(chk2_adata[`lsaddr_sz]==5'h11 || chk2_adata[`lsaddr_sz]==5'h10 || chk2_adata[`lsaddr_low]==2'b0) ?
     chk2_adata[`lsaddr_banks] : lowt(chk2_adata[`lsaddr_banks]);
-  assign chk2_odd0[2:0]=(chk2_adata[`lsaddr_sz]==5'h11 || chk2_adata[`lsaddr_sz]==5'h10) ? {2'b0,chk2_odd} : {chk2_adata{`lsaddr_low],chk2_odd}; 
+  assign chk2_odd0[2:0]=(chk2_adata[`lsaddr_sz]==5'h11 || chk2_adata[`lsaddr_sz]==5'h10) ? {2'b0,chk2_odd} : {chk2_adata[`lsaddr_low],chk2_odd}; 
   assign chk2_odd0[3]=chk2_adata[`lsaddr_sz]==5'hf;
 
   assign chk3_banks=(chk3_adata[`lsaddr_sz]==5'h11 || chk3_adata[`lsaddr_sz]==5'h10 || chk3_adata[`lsaddr_low]==2'b0) ?
     chk3_adata[`lsaddr_banks] : lowt(chk3_adata[`lsaddr_banks]);
-  assign chk3_odd0[2:0]=(chk3_adata[`lsaddr_sz]==5'h11 || chk3_adata[`lsaddr_sz]==5'h10) ? {2'b0,chk3_odd} : {chk3_adata{`lsaddr_low],chk3_odd}; 
+  assign chk3_odd0[2:0]=(chk3_adata[`lsaddr_sz]==5'h11 || chk3_adata[`lsaddr_sz]==5'h10) ? {2'b0,chk3_odd} : {chk3_adata[`lsaddr_low],chk3_odd}; 
   assign chk3_odd0[3]=chk3_adata[`lsaddr_sz]==5'hf;
 
   assign chk4_banks=(chk4_adata[`lsaddr_sz]==5'h11 || chk4_adata[`lsaddr_sz]==5'h10 || chk4_adata[`lsaddr_low]==2'b0) ?
     chk4_adata[`lsaddr_banks] : lowt(chk4_adata[`lsaddr_banks]);
-  assign chk4_odd0[2:0]=(chk4_adata[`lsaddr_sz]==5'h11 || chk4_adata[`lsaddr_sz]==5'h10) ? {2'b0,chk4_odd} : {chk4_adata{`lsaddr_low],chk4_odd}; 
+  assign chk4_odd0[2:0]=(chk4_adata[`lsaddr_sz]==5'h11 || chk4_adata[`lsaddr_sz]==5'h10) ? {2'b0,chk4_odd} : {chk4_adata[`lsaddr_low],chk4_odd}; 
   assign chk4_odd0[3]=chk4_adata[`lsaddr_sz]==5'hf;
 
   assign chk5_banks=(chk5_adata[`lsaddr_sz]==5'h11 || chk5_adata[`lsaddr_sz]==5'h10 || chk5_adata[`lsaddr_low]==2'b0) ?
     chk5_adata[`lsaddr_banks] : lowt(chk5_adata[`lsaddr_banks]);
-  assign chk5_odd0[2:0]=(chk5_adata[`lsaddr_sz]==5'h11 || chk5_adata[`lsaddr_sz]==5'h10) ? {2'b0,chk5_odd} : {chk5_adata{`lsaddr_low],chk5_odd}; 
+  assign chk5_odd0[2:0]=(chk5_adata[`lsaddr_sz]==5'h11 || chk5_adata[`lsaddr_sz]==5'h10) ? {2'b0,chk5_odd} : {chk5_adata[`lsaddr_low],chk5_odd}; 
   assign chk5_odd0[3]=chk5_adata[`lsaddr_sz]==5'hf;
   
   assign wrt0_banks=(wrt0_adata[`lsaddr_sz]==5'h11 || wrt0_adata[`lsaddr_sz]==5'h10 || wrt0_adata[`lsaddr_low]==2'b0) ?
     wrt0_adata[`lsaddr_banks] : lowt(wrt0_adata[`lsaddr_banks]);
-  assign wrt0_odd0[2:0]=(wrt0_adata[`lsaddr_sz]==5'h11 || wrt0_adata[`lsaddr_sz]==5'h10) ? {2'b0,wrt0_odd} : {wrt0_adata{`lsaddr_low],wrt0_odd}; 
+  assign wrt0_odd0[2:0]=(wrt0_adata[`lsaddr_sz]==5'h11 || wrt0_adata[`lsaddr_sz]==5'h10) ? {2'b0,wrt0_odd} : {wrt0_adata[`lsaddr_low],wrt0_odd}; 
   assign wrt0_odd0[3]=wrt0_adata[`lsaddr_sz]==5'hf;
 
   assign wrt1_banks=(wrt1_adata[`lsaddr_sz]==5'h11 || wrt1_adata[`lsaddr_sz]==5'h10 || wrt1_adata[`lsaddr_low]==2'b0) ?
     wrt1_adata[`lsaddr_banks] : lowt(wrt1_adata[`lsaddr_banks]);
-  assign wrt1_odd0[2:0]=(wrt1_adata[`lsaddr_sz]==5'h11 || wrt1_adata[`lsaddr_sz]==5'h10) ? {2'b0,wrt1_odd} : {wrt1_adata{`lsaddr_low],wrt1_odd}; 
+  assign wrt1_odd0[2:0]=(wrt1_adata[`lsaddr_sz]==5'h11 || wrt1_adata[`lsaddr_sz]==5'h10) ? {2'b0,wrt1_odd} : {wrt1_adata[`lsaddr_low],wrt1_odd}; 
   assign wrt1_odd0[3]=wrt1_adata[`lsaddr_sz]==5'hf;
   
   assign chk0_banks=chk0_adata[`lsaddr_banks];
@@ -491,8 +491,8 @@ module stq(
   stq_adata bgn_mod(
   clk,
   rst,
-  wrt0_en,wrt0_WQ,wrt0_adata[`lsaddr_begin0],
-  wrt1_en,wrt1_WQ,wrt1_adata[`lsaddr_begin0],
+  wrt0_en,wrt0_WQ,wrt0_adata[`lsaddr_bank0],
+  wrt1_en,wrt1_WQ,wrt1_adata[`lsaddr_bank0],
   upd0_WQ,upd0_begin0,
   upd1_WQ,upd1_begin0);
 endmodule

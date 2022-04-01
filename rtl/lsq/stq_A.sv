@@ -216,7 +216,7 @@ module stq_buf_A_array(
   
   generate
       genvar t;
-      for(t=0;t<BUF_COUNT;t=t+1) begin buf_gen
+      for(t=0;t<BUF_COUNT;t=t+1) begin :  buf_gen
           stq_buf_A buf_mod(
           clk,
           rst,
