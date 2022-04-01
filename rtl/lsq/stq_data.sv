@@ -27,7 +27,7 @@ module stq_data(
   chk5_en,chk5_data,
   chk6_en,chk6_data,
   chk7_en,chk7_data
-  )
+  );
   parameter WIDTH=32;
   input clk;
   input rst;
@@ -82,7 +82,7 @@ module stq_data_array(
   chk5_en,chk5_data,
   chk6_en,chk6_data,
   chk7_en,chk7_data
-  )
+  );
   parameter WIDTH=32;
   localparam BUF_COUNT=64;
   input clk;
@@ -120,7 +120,7 @@ module stq_data_array(
         wire [WIDTH-1:0] chk6_dataK;
         wire [WIDTH-1:0] chk7_dataK;
         for(row=0;row<8;row=row+1) begin : row_gen
-            stq_data(
+            stq_data buf_mod(
             clk,
             rst,
             wrt0_en[bank*8+row],wrt0_data,
