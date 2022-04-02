@@ -2609,9 +2609,9 @@ module backend(
   .newR0(newRF[0]),.newR1(newRF[1]),.newR2(newRF[2]),
   .newR3(newRF[3]),.newR4(newRF[4]),.newR5(newRF[5]),
   .newR6(newRF[6]),.newR7(newRF[7]),.newR8(newRF[8]),
-  .rs0i0_en(rs0i0_allocR&~rs1_alloc),.rs1i0_en(rs1i0_allocR&~rs1_alloc),.rs2i0_en(rs2i0_allocR&~rs1_alloc),
-  .rs0i1_en(rs0i1_allocR&~rs1_alloc),.rs1i1_en(rs1i1_allocR&~rs1_alloc),.rs2i1_en(rs2i1_allocR&~rs1_alloc),
-  .rs0i2_en(rs0i2_allocR&~rs1_alloc),.rs1i2_en(rs1i2_allocR&~rs1_alloc),.rs2i2_en(rs2i2_allocR&~rs1_alloc)
+  .rs0i0_en(rs0i0_allocR_reg&~rs0i0_alloc_reg),.rs1i0_en(rs1i0_allocR_reg&~rs1i0_alloc_reg),.rs2i0_en(rs2i0_allocR_reg&~rs2i0_alloc_reg),
+  .rs0i1_en(rs0i1_allocR_reg&~rs0i1_alloc_reg),.rs1i1_en(rs1i1_allocR_reg&~rs1i1_alloc_reg),.rs2i1_en(rs2i1_allocR_reg&~rs2i1_alloc_reg),
+  .rs0i2_en(rs0i2_allocR_reg&~rs0i2_alloc_reg),.rs1i2_en(rs1i2_allocR_reg&~rs1i2_alloc_reg),.rs2i2_en(rs2i2_allocR_reg&~rs2i2_alloc_reg)
   );
   
   

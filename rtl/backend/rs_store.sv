@@ -115,6 +115,7 @@ module WQ_wakeUP_logic_array(
           isData[x]
           );
       end
+  endgenerate
 endmodule
 
 module rss_buf(

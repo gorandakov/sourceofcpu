@@ -348,8 +348,8 @@ module stq(
           );
           
           if (b<4) begin
-              WLN0_data[32*b+:32]=WLN0_dataX[32*WLN0_b[b]+:32];
-              WLN1_data[32*b+:32]=WLN1_dataX[32*WLN1_b[b]+:32];
+              assign WLN0_data[32*b+:32]=WLN0_dataX[32*WLN0_b[b]+:32];
+              assign WLN1_data[32*b+:32]=WLN1_dataX[32*WLN1_b[b]+:32];
               assign WLN0_b[b]=-(WLN0_adata[`lsaddr_bank0]&3)+b[1:0]; 
               assign WLN1_b[b]=-(WLN1_adata[`lsaddr_bank0]&3)+b[1:0]; 
               assign chk0_b[b]=-(chk0_adata[`lsaddr_bank0]&3)+b[1:0]; 
