@@ -202,6 +202,8 @@ module cntrl_find_outcome(
   iret5,iret6,iret7,iret8,
   iret0_rF,iret1_rF,iret2_rF,iret3_rF,iret4_rF,
   iret5_rF,iret6_rF,iret7_rF,iret8_rF,
+  iret0_rFl,iret1_rFl,iret2_rFl,iret3_rFl,iret4_rFl,
+  iret5_rFl,iret6_rFl,iret7_rFl,iret8_rFl,
   iret_clr,
   ijump0Type,ijump0Off,ijump0IP,ijump0BND,ijump0Mask,
   ijump1Type,ijump1Off,ijump1IP,ijump1BND,ijump1Mask,
@@ -388,6 +390,16 @@ module cntrl_find_outcome(
   input [4:0] iret7_rF;
   input [4:0] iret8_rF;
 
+  input [4:0] iret0_rFl;
+  input [4:0] iret1_rFl;
+  input [4:0] iret2_rFl;
+  input [4:0] iret3_rFl;
+  input [4:0] iret4_rFl;
+  input [4:0] iret5_rFl;
+  input [4:0] iret6_rFl;
+  input [4:0] iret7_rFl;
+  input [4:0] iret8_rFl;
+
   input [8:0] iret_clr;
   
   input [4:0] ijump0Type;
@@ -569,6 +581,7 @@ module cntrl_find_outcome(
   wire [8:0] no_retire;
 
   wire [8:0][8:0] retire_rF;
+  wire [8:0][8:0] retire_rFl;
 
   wire [4:0] jump0Type;
   wire [3:0] jump0Pos;
@@ -753,7 +766,7 @@ module cntrl_find_outcome(
 
           assign rTe[j]=reteq ? rT[k] : 6'bz;
 
-          assign flE=reteq && lfl[k] ? retire_rF[j] : 9'bz;	  
+          assign flE=reteq && lfl[k] ? retire_rFl[j] : 9'bz;	  
       end
       assign flE=~lfl[k] ? 9'b0 : 9'bz;
       assign flTE=lfl[k] ? flE : 9'bz;
@@ -873,6 +886,16 @@ module cntrl_find_outcome(
   assign retire_rF[6]=retire6_rF;
   assign retire_rF[7]=retire7_rF;
   assign retire_rF[8]=retire8_rF;
+
+  assign retire_rFl[0]=retire0_rFl;
+  assign retire_rFl[1]=retire1_rFl;
+  assign retire_rFl[2]=retire2_rFl;
+  assign retire_rFl[3]=retire3_rFl;
+  assign retire_rFl[4]=retire4_rFl;
+  assign retire_rFl[5]=retire5_rFl;
+  assign retire_rFl[6]=retire6_rFl;
+  assign retire_rFl[7]=retire7_rFl;
+  assign retire_rFl[8]=retire8_rFl;
 
   assign jump0JMask=(jump0JmpInd==2'd0 && ~jump0_taken) ? 4'he|{4{lastIP}} : 4'bz;
   assign jump0JMask=(jump0JmpInd==2'd1 && ~jump0_taken) ? 4'hc|{4{lastIP}} : 4'bz;
@@ -997,6 +1020,8 @@ module cntrl_find_outcome(
   
   assign bob_wdata[`bob_freeregs]={iret8_rF,iret7_rF,iret6_rF,iret5_rF,
 	  iret4_rF,iret3_rF,iret2_rF,iret1_rF,iret0_rF};
+  assign bob_wdata[`bob_freeregsS]={iret8_rFl,iret7_rFl,iret6_rFl,iret5_rFl,
+	  iret4_rFl,iret3_rFl,iret2_rFl,iret1_rFl,iret0_rFl};
   assign rd_after_spec=bob_rdata[`bob_aspl];
   assign bob_wdata[`bob_attr]=instr_attr;
   assign attr=bob_rdata[`bob_attr];
@@ -1004,6 +1029,9 @@ module cntrl_find_outcome(
   assign {retire8_rF[8:4],retire7_rF[8:4],retire6_rF[8:4],retire5_rF[8:4],
 	  retire4_rF[8:4],retire3_rF[8:4],retire2_rF[8:4],retire1_rF[8:4],retire0_rF[8:4]}=
 	  bob_rdata[`bob_freeregs];
+  assign {retire8_rFl[8:4],retire7_rFl[8:4],retire6_rFl[8:4],retire5_rFl[8:4],
+	  retire4_rFl[8:4],retire3_rFl[8:4],retire2_rFl[8:4],retire1_rFl[8:4],retire0_rFl[8:4]}=
+	  bob_rdata[`bob_freeregsS];
 
   assign bob_wdata[`bob_ipOff0_9]={instr9_IPOff,instr8_IPOff,instr7_IPOff,instr6_IPOff,
 	  instr5_IPOff,instr4_IPOff,instr3_IPOff,instr2_IPOff,instr1_IPOff,instr0_IPOff};
@@ -1108,6 +1136,16 @@ module cntrl_find_outcome(
   assign retire2_rF[3:0]=4'd2;
   assign retire1_rF[3:0]=4'd1;
   assign retire0_rF[3:0]=4'd0;
+
+  assign retire8_rFl[3:0]=4'd8;
+  assign retire7_rFl[3:0]=4'd7;
+  assign retire6_rFl[3:0]=4'd6;
+  assign retire5_rFl[3:0]=4'd5;
+  assign retire4_rFl[3:0]=4'd4;
+  assign retire3_rFl[3:0]=4'd3;
+  assign retire2_rFl[3:0]=4'd2;
+  assign retire1_rFl[3:0]=4'd1;
+  assign retire0_rFl[3:0]=4'd0;
 
   assign mem_match=mem_II_upper==retire_addr_reg;
   assign mem_II_upper_out=retire_addr_reg;
