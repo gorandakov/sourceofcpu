@@ -285,7 +285,10 @@ module get_clear_reg(
   allocS,clrS,
   clrR0,clrR1,clrR2,
   clrR3,clrR4,clrR5,
-  clrR6,clrR7,clrR8
+  clrR6,clrR7,clrR8,
+  clrRS0,clrRS1,clrRS2,
+  clrRS3,clrRS4,clrRS5,
+  clrRS6,clrRS7,clrRS8
   );
 
   localparam REG_WIDTH=`reg_addr_width;

@@ -887,16 +887,6 @@ module cntrl_find_outcome(
   assign retire_rF[7]=retire7_rF;
   assign retire_rF[8]=retire8_rF;
 
-  assign retire_rFl[0]=retire0_rFl;
-  assign retire_rFl[1]=retire1_rFl;
-  assign retire_rFl[2]=retire2_rFl;
-  assign retire_rFl[3]=retire3_rFl;
-  assign retire_rFl[4]=retire4_rFl;
-  assign retire_rFl[5]=retire5_rFl;
-  assign retire_rFl[6]=retire6_rFl;
-  assign retire_rFl[7]=retire7_rFl;
-  assign retire_rFl[8]=retire8_rFl;
-
   assign jump0JMask=(jump0JmpInd==2'd0 && ~jump0_taken) ? 4'he|{4{lastIP}} : 4'bz;
   assign jump0JMask=(jump0JmpInd==2'd1 && ~jump0_taken) ? 4'hc|{4{lastIP}} : 4'bz;
   assign jump0JMask=(jump0JmpInd==2'd2 && ~jump0_taken) ? 4'h8|{4{lastIP}} : 4'bz;
@@ -1029,8 +1019,8 @@ module cntrl_find_outcome(
   assign {retire8_rF[8:4],retire7_rF[8:4],retire6_rF[8:4],retire5_rF[8:4],
 	  retire4_rF[8:4],retire3_rF[8:4],retire2_rF[8:4],retire1_rF[8:4],retire0_rF[8:4]}=
 	  bob_rdata[`bob_freeregs];
-  assign {retire8_rFl[8:4],retire7_rFl[8:4],retire6_rFl[8:4],retire5_rFl[8:4],
-	  retire4_rFl[8:4],retire3_rFl[8:4],retire2_rFl[8:4],retire1_rFl[8:4],retire0_rFl[8:4]}=
+  assign {retire_rFl[8][8:4],retire_rFl[7][8:4],retire_rFl[6][8:4],retire_rFl[5][8:4],
+	  retire_rFl[4][8:4],retire_rFl[3][8:4],retire_rFl[2][8:4],retire_rFl[1][8:4],retire_rFl[0][8:4]}=
 	  bob_rdata[`bob_freeregsS];
 
   assign bob_wdata[`bob_ipOff0_9]={instr9_IPOff,instr8_IPOff,instr7_IPOff,instr6_IPOff,
@@ -1137,15 +1127,15 @@ module cntrl_find_outcome(
   assign retire1_rF[3:0]=4'd1;
   assign retire0_rF[3:0]=4'd0;
 
-  assign retire8_rFl[3:0]=4'd8;
-  assign retire7_rFl[3:0]=4'd7;
-  assign retire6_rFl[3:0]=4'd6;
-  assign retire5_rFl[3:0]=4'd5;
-  assign retire4_rFl[3:0]=4'd4;
-  assign retire3_rFl[3:0]=4'd3;
-  assign retire2_rFl[3:0]=4'd2;
-  assign retire1_rFl[3:0]=4'd1;
-  assign retire0_rFl[3:0]=4'd0;
+  assign retire_rFl[8][3:0]=4'd8;
+  assign retire_rFl[7][3:0]=4'd7;
+  assign retire_rFl[6][3:0]=4'd6;
+  assign retire_rFl[5][3:0]=4'd5;
+  assign retire_rFl[4][3:0]=4'd4;
+  assign retire_rFl[3][3:0]=4'd3;
+  assign retire_rFl[2][3:0]=4'd2;
+  assign retire_rFl[1][3:0]=4'd1;
+  assign retire_rFl[0][3:0]=4'd0;
 
   assign mem_match=mem_II_upper==retire_addr_reg;
   assign mem_II_upper_out=retire_addr_reg;
