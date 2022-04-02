@@ -1084,6 +1084,8 @@ module backend(
 
   wire [8:0][REG_WIDTH-1:0] newR;
   reg [REG_WIDTH-1:0] newR_reg[8:0];
+  wire [8:0][REG_WIDTH-1:0] newRF;
+  reg [REG_WIDTH-1:0] newRF_reg[8:0];
 
   wire [8:0][FN_WIDTH-1:0] newU;
   wire [8:0][1:0] newD;
@@ -1092,9 +1094,11 @@ module backend(
 
 
   wire [8:0][REG_WIDTH-1:0] clrR;
+  wire [8:0][REG_WIDTH-1:0] clrRS;
   wire [8:0] clr;
   wire [8:0] clrS;
   reg [REG_WIDTH-1:0] clrR_reg[8:0];
+  reg [REG_WIDTH-1:0] clrRS_reg[8:0];
   reg [8:0] clr_reg;
   reg [8:0] clrS_reg;
 
@@ -1678,6 +1682,7 @@ module backend(
   wire [2:0][32:0] outDataC;
   wire [8:0][5:0] outDataS;
   wire [8:0][REG_WIDTH-1:0] outReg;
+  wire [8:0][REG_WIDTH-1:0] outRegS;
   wire [8:0][OPERATION_WIDTH-1:0] outOp;
   wire [8:0][9:0] outII;
   wire [8:0][3:0] outEn;
@@ -1981,84 +1986,102 @@ module backend(
     
   wire [5:0] retire0_rT;
   wire [8:0] retire0_rF;
+  wire [8:0] retire0_rFl;
   wire retire0_enG;
   wire retire0_enV;
   wire retire0_enF;
   wire [5:0] retire1_rT;
   wire [8:0] retire1_rF;
+  wire [8:0] retire1_rFl;
   wire retire1_enG;
   wire retire1_enV;
   wire retire1_enF;
   wire [5:0] retire2_rT;
   wire [8:0] retire2_rF;
+  wire [8:0] retire2_rFl;
   wire retire2_enG;
   wire retire2_enV;
   wire retire2_enF;
   wire [5:0] retire3_rT;
   wire [8:0] retire3_rF;
+  wire [8:0] retire3_rFl;
   wire retire3_enG;
   wire retire3_enV;
   wire retire3_enF;
   wire [5:0] retire4_rT;
   wire [8:0] retire4_rF;
+  wire [8:0] retire4_rFl;
   wire retire4_enG;
   wire retire4_enV;
   wire retire4_enF;
   wire [5:0] retire5_rT;
   wire [8:0] retire5_rF;
+  wire [8:0] retire5_rFl;
   wire retire5_enG;
   wire retire5_enV;
   wire retire5_enF;
   wire [5:0] retire6_rT;
   wire [8:0] retire6_rF;
+  wire [8:0] retire6_rFl;
   wire retire6_enG;
   wire retire6_enV;
   wire retire6_enF;
   wire [5:0] retire7_rT;
   wire [8:0] retire7_rF;
+  wire [8:0] retire7_rFl;
   wire retire7_enG;
   wire retire7_enV;
   wire retire7_enF;
   wire [5:0] retire8_rT;
   wire [8:0] retire8_rF;
+  wire [8:0] retire8_rFl;
   wire retire8_enG;
   wire retire8_enV;
   wire retire8_enF;
 
   reg [5:0] retire0_rT_reg;
   reg [8:0] retire0_rF_reg;
+  reg [8:0] retire0_rFl_reg;
   reg retire0_enV_reg;
   reg retire0_enF_reg;
   reg [5:0] retire1_rT_reg;
   reg [8:0] retire1_rF_reg;
+  reg [8:0] retire1_rFl_reg;
   reg retire1_enV_reg;
   reg retire1_enF_reg;
   reg [5:0] retire2_rT_reg;
   reg [8:0] retire2_rF_reg;
+  reg [8:0] retire2_rFl_reg;
   reg retire2_enV_reg;
   reg retire2_enF_reg;
   reg [5:0] retire3_rT_reg;
   reg [8:0] retire3_rF_reg;
+  reg [8:0] retire3_rFl_reg;
   reg retire3_enV_reg;
   reg retire3_enF_reg;
   reg [5:0] retire4_rT_reg;
   reg [8:0] retire4_rF_reg;
+  reg [8:0] retire4_rFl_reg;
   reg retire4_enV_reg;
   reg retire4_enF_reg;
   reg [5:0] retire5_rT_reg;
   reg [8:0] retire5_rF_reg;
+  reg [8:0] retire5_rFl_reg;
   reg retire5_enV_reg;
   reg retire5_enF_reg;
   reg [5:0] retire6_rT_reg;
   reg [8:0] retire6_rF_reg;
+  reg [8:0] retire6_rFl_reg;
   reg retire6_enV_reg;
   reg retire6_enF_reg;
   reg [5:0] retire7_rT_reg;
   reg [8:0] retire7_rF_reg;
+  reg [8:0] retire7_rFl_reg;
   reg retire7_enV_reg;
   reg retire7_enF_reg;
   reg [5:0] retire8_rT_reg;
   reg [8:0] retire8_rF_reg;
+  reg [8:0] retire8_rFl_reg;
   reg retire8_enV_reg;
   reg retire8_enF_reg;
 
@@ -5396,6 +5419,9 @@ dcache1 L1D_mod(
   .iret0_rF(clrR_reg[0][8:4]),.iret1_rF(clrR_reg[1][8:4]),.iret2_rF(clrR_reg[2][8:4]),
   .iret3_rF(clrR_reg[3][8:4]),.iret4_rF(clrR_reg[4][8:4]),.iret5_rF(clrR_reg[5][8:4]),
   .iret6_rF(clrR_reg[6][8:4]),.iret7_rF(clrR_reg[7][8:4]),.iret8_rF(clrR_reg[8][8:4]),
+  .iret0_rFl(clrRS_reg[0][8:4]),.iret1_rFl(clrRS_reg[1][8:4]),.iret2_rFl(clrRS_reg[2][8:4]),
+  .iret3_rFl(clrRS_reg[3][8:4]),.iret4_rFl(clrRS_reg[4][8:4]),.iret5_rFl(clrRS_reg[5][8:4]),
+  .iret6_rFl(clrRS_reg[6][8:4]),.iret7_rFl(clrRS_reg[7][8:4]),.iret8_rFl(clrRS_reg[8][8:4]),
   .iret_clr(clr_reg),
   .ijump0Type(jump0Type_reg2),.ijump0Off(jump0Pos_reg2),
   .ijump0IP(jump0IP_reg2[43:1]),.ijump0Mask(jump0Mask_reg2),.ijump0BND(jump0IP_reg2[63:44]),
@@ -5881,6 +5907,7 @@ dcache1 L1D_mod(
           WopB_reg<=13'b0;
           for(k=0;k<9;k=k+1) begin
               clrR_reg[k]<=9'b0;
+              clrRS_reg[k]<=9'b0;
               rs_const[k]<={DATA_WIDTH{1'B0}};
               rs_const_reg[k]<={DATA_WIDTH{1'B0}};
 	      rs_IPRel[k]<=1'b0;
@@ -5905,6 +5932,7 @@ dcache1 L1D_mod(
 	      retAF_reg2[k]<=1'b0;
 	      retBF_reg2[k]<=1'b0;
               newR_reg[k]<={REG_WIDTH{1'B0}};
+              newRF_reg[k]<={REG_WIDTH{1'B0}};
               rs_en[k]<=1'b0;
               rs_en_reg[k]<=1'b0;
               funA_reg[k]<=10'b0;
@@ -6565,6 +6593,7 @@ dcache1 L1D_mod(
           WopB_reg<=WopB;
           for(k=0;k<9;k=k+1) begin
               clrR_reg[k]<=clrR[k];
+              clrRS_reg[k]<=clrRS[k];
               rs_const_reg[k]<=rs_const[k];
               rs_index_reg[k]<=rs_index[k];
               rs_operation_reg[k]<=rs_operation[k];
@@ -6596,6 +6625,7 @@ dcache1 L1D_mod(
 	      retBF_reg2[k]<=retBF_reg[k];
               regS_reg[k]<=regS[k];
               newR_reg[k]<=newR[k];
+              newRF_reg[k]<=newRF[k];
               rs_en_reg[k]<=rs_en[k];
               funA_reg[k]<=rs_rA_useF[k] ? funAF[k] : funA[k];
               funB_reg[k]<=rs_rB_useF[k] ? funBF[k] : funB[k];
@@ -7387,38 +7417,47 @@ dcache1 L1D_mod(
       if (rst) begin
 	  retire0_rT_reg<=6'b0;
 	  retire0_rF_reg<=9'b0;
+          retire0_rFl_reg<=9'b0;
 	  retire0_enV_reg<=1'b0;
 	  retire0_enF_reg<=1'b0;
 	  retire1_rT_reg<=6'b0;
 	  retire1_rF_reg<=9'b0;
+          retire1_rFl_reg<=9'b0;
 	  retire1_enV_reg<=1'b0;
 	  retire1_enF_reg<=1'b0;
 	  retire2_rT_reg<=6'b0;
 	  retire2_rF_reg<=9'b0;
+          retire2_rFl_reg<=9'b0;
 	  retire2_enV_reg<=1'b0;
 	  retire2_enF_reg<=1'b0;
 	  retire3_rT_reg<=6'b0;
 	  retire3_rF_reg<=9'b0;
+          retire3_rFl_reg<=9'b0;
 	  retire3_enV_reg<=1'b0;
 	  retire3_enF_reg<=1'b0;
 	  retire4_rT_reg<=6'b0;
 	  retire4_rF_reg<=9'b0;
+          retire4_rFl_reg<=9'b0;
 	  retire4_enV_reg<=1'b0;
 	  retire4_enF_reg<=1'b0;
 	  retire5_rT_reg<=6'b0;
 	  retire5_rF_reg<=9'b0;
+          retire5_rFl_reg<=9'b0;
 	  retire5_enV_reg<=1'b0;
 	  retire5_enF_reg<=1'b0;
 	  retire6_rT_reg<=6'b0;
 	  retire6_rF_reg<=9'b0;
+          retire6_rFl_reg<=9'b0;
 	  retire6_enV_reg<=1'b0;
 	  retire6_enF_reg<=1'b0;
 	  retire7_rT_reg<=6'b0;
 	  retire7_rF_reg<=9'b0;
+          retire7_rFl_reg<=9'b0;
 	  retire7_enV_reg<=1'b0;
 	  retire7_enF_reg<=1'b0;
 	  retire8_rT_reg<=6'b0;
 	  retire8_rF_reg<=9'b0;
+          retire8_rFl_reg<=9'b0;
 	  retire8_enV_reg<=1'b0;
 	  retire8_enF_reg<=1'b0;
 	  
@@ -7453,38 +7492,47 @@ dcache1 L1D_mod(
       end else begin
 	  retire0_rT_reg<=retire0_rT;
 	  retire0_rF_reg<=retire0_rF;
+          retire0_rFl_reg<=retire0_rFl;
 	  retire0_enV_reg<=retire0_enV;
 	  retire0_enF_reg<=retire0_enF;
 	  retire1_rT_reg<=retire1_rT;
 	  retire1_rF_reg<=retire1_rF;
+          retire1_rFl_reg<=retire1_rFl;
 	  retire1_enV_reg<=retire1_enV;
 	  retire1_enF_reg<=retire1_enF;
 	  retire2_rT_reg<=retire2_rT;
 	  retire2_rF_reg<=retire2_rF;
+          retire2_rFl_reg<=retire2_rFl;
 	  retire2_enV_reg<=retire2_enV;
 	  retire2_enF_reg<=retire2_enF;
 	  retire3_rT_reg<=retire3_rT;
 	  retire3_rF_reg<=retire3_rF;
+          retire3_rFl_reg<=retire3_rFl;
 	  retire3_enV_reg<=retire3_enV;
 	  retire3_enF_reg<=retire3_enF;
 	  retire4_rT_reg<=retire4_rT;
 	  retire4_rF_reg<=retire4_rF;
+          retire4_rFl_reg<=retire4_rFl;
 	  retire4_enV_reg<=retire4_enV;
 	  retire4_enF_reg<=retire4_enF;
 	  retire5_rT_reg<=retire5_rT;
 	  retire5_rF_reg<=retire5_rF;
+          retire5_rFl_reg<=retire5_rFl;
 	  retire5_enV_reg<=retire5_enV;
 	  retire5_enF_reg<=retire5_enF;
 	  retire6_rT_reg<=retire6_rT;
 	  retire6_rF_reg<=retire6_rF;
+          retire6_rFl_reg<=retire6_rFl;
 	  retire6_enV_reg<=retire6_enV;
 	  retire6_enF_reg<=retire6_enF;
 	  retire7_rT_reg<=retire7_rT;
 	  retire7_rF_reg<=retire7_rF;
+          retire7_rFl_reg<=retire7_rFl;
 	  retire7_enV_reg<=retire7_enV;
 	  retire7_enF_reg<=retire7_enF;
 	  retire8_rT_reg<=retire8_rT;
 	  retire8_rF_reg<=retire8_rF;
+          retire8_rFl_reg<=retire8_rFl;
 	  retire8_enV_reg<=retire8_enV;
 	  retire8_enF_reg<=retire8_enF;
 	  

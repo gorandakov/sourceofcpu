@@ -895,7 +895,7 @@ module rss_D_array(
           wire [3:0] outDataEn1a;
           wire outThread1a;
           for(k=0;k<8;k=k+1) begin : buffers_gen
-              rss_buf buf_mod(
+              rss_D_buf buf_mod(
               clk,
               dataRst,nonDataRst,rst_thread,
               stall,
