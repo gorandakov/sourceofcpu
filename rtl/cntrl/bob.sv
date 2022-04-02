@@ -1,6 +1,6 @@
 `include "../struct.sv"
 
-module bob_ram(
+module bob_ram0(
   clk,
   read_clkEn,
   read_addr, read_data,
@@ -8,7 +8,7 @@ module bob_ram(
   );
   
   parameter ADDR_WIDTH=`bob_addr_width;
-  parameter DATA_WIDTH=`bob_width;
+  parameter DATA_WIDTH=`bob_width/4+1;
   parameter ADDR_COUNT=`bob_count;
   
   input clk;
@@ -35,6 +35,56 @@ module bob_ram(
     end
     
 endmodule
+module bob_ram(
+  clk,
+  read_clkEn,
+  read_addr, read_data,
+  write_addr, write_data, write_wen
+  );
+  
+  parameter ADDR_WIDTH=`bob_addr_width;
+  parameter DATA_WIDTH=`bob_width;
+  parameter ADDR_COUNT=`bob_count;
+  
+  input clk;
+  
+  input read_clkEn;
+  input [ADDR_WIDTH-1:0] read_addr;
+  output [DATA_WIDTH-1:0] read_data;
+  
+  input [ADDR_WIDTH-1:0] write_addr;
+  input [DATA_WIDTH-1:0] write_data;
+  input write_wen;
+  wire dummyW0,dummyW1,dummyW2,dummyW3;
+  bob_ram0 ram0(
+  clk,
+  read_clkEn,
+  read_addr, {dummyW0,read_data[DATA_WIDTH/4-1:0]},
+  write_addr, {1'b0,write_data[DATA_WIDTH/4-1:0]}, 
+  write_wen
+  );
+  bob_ram0 ram1(
+  clk,
+  read_clkEn,
+  read_addr, {dummyW1,read_data[DATA_WIDTH/2-1:DATA_WIDTH/4]},
+  write_addr, {1'b0,write_data[DATA_WIDTH/2-1:DATA_WIDTH/4]}, 
+  write_wen
+  );
+  bob_ram0 ram2(
+  clk,
+  read_clkEn,
+  read_addr, {dummyW2,read_data[DATA_WIDTH*3/4-1:DATA_WIDTH/2]},
+  write_addr, {1'b0,write_data[DATA_WIDTH*3/4-1:DATA_WIDTH/2]}, 
+  write_wen
+  );
+  bob_ram0 ram3S(
+  clk,
+  read_clkEn,
+  read_addr, {read_data[DATA_WIDTH-1:DATA_WIDTH*3/4]},
+  write_addr, {write_data[DATA_WIDTH-1:DATA_WIDTH*3/4]}, 
+  write_wen
+  );
+endmodule  
 
 module bob_addr(
   clk,

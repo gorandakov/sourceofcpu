@@ -113,7 +113,8 @@
 `define bob_attr 517:514
 `define bob_attrJ0 521:518
 `define bob_attrJ1 525:522
-`define bob_width 526
+`define bob_freeregsS 570:526
+`define bob_width 571
 
 `define attr_km 0
 `define attr_vm 1
