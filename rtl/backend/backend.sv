@@ -1069,6 +1069,8 @@ module backend(
   
   wire stall_alloc;
   wire doStall_alloc;
+  wire stall_alloc2;
+  wire doStall_alloc2;
   wire [3:0] doStall_rs;
   wire [3:0] stall_rs;
   wire stall_LSQ;
@@ -2624,7 +2626,7 @@ module backend(
   .doStall(doStall_alloc2),
   .except(except),.ethread(1'b0),.eboth(1'b0),
   .thread(thread_reg),
-  .ret_en(retFl_enG),
+  .ret_en(retfl_enG),
   .ret_thread(1'b0),
   .ret_rno0(retire0_rFl_reg[8:4]),.ret_rno1(retire1_rFl_reg[8:4]),.ret_rno2(retire2_rFl_reg[8:4]),
   .ret_rno3(retire3_rFl_reg[8:4]),.ret_rno4(retire4_rFl_reg[8:4]),.ret_rno5(retire5_rFl_reg[8:4]),
@@ -5007,7 +5009,7 @@ module backend(
   .mem_II_stall(bDoStall_rqSpit),
   .mem_II_stall2(bDoStall_rqSpit0),
   .doStall_rs(doStall_rs),.stall_cntrl(stall_cntrl), 
-  .doStall_alloc(doStall_alloc),.doStall_cntrl(doStall_cntrl),
+  .doStall_alloc(doStall_alloc|doStall_alloc2),.doStall_cntrl(doStall_cntrl),
   .doStall_WQ(doStall_WQ),.stall_WQ(stall_WQ),
   .doRetire_d(retM_do_retire),
   .xbreak(retM_xbreak),
@@ -5487,21 +5489,21 @@ dcache1 L1D_mod(
   .has_xbreak(retM_xbreak_has)
   );
  
-  assign stall_alloc=|{doStall_rs[3:0],doStall_LSQ,doStall_LDQ,doStall_STQ,doStall_cntrl,doStall_WQ};
+  assign stall_alloc=|{doStall_rs[3:0],doStall_LSQ,doStall_LDQ,doStall_STQ,doStall_cntrl,doStall_WQ,doStall_alloc2};
   assign doStall=doStall_alloc | (|{doStall_rs[3:0]}) | doStall_LSQ | doStall_LDQ | doStall_STQ | doStall_cntrl | doStall_WQ;
   assign stall_rs[0]=doStall_alloc | doStall_rs[1] | doStall_rs[2] | 
-    doStall_rs[3] | doStall_LSQ | doStall_LDQ | doStall_STQ | doStall_cntrl | doStall_WQ;
+    doStall_rs[3] | doStall_LSQ | doStall_LDQ | doStall_STQ | doStall_cntrl | doStall_WQ | doStall_alloc2;
   assign stall_rs[1]=doStall_alloc | doStall_rs[0] | doStall_rs[2] |
-    doStall_rs[3] | doStall_LSQ | doStall_LDQ | doStall_STQ | doStall_cntrl | doStall_WQ;
+    doStall_rs[3] | doStall_LSQ | doStall_LDQ | doStall_STQ | doStall_cntrl | doStall_WQ | doStall_alloc2;
   assign stall_rs[2]=doStall_alloc | doStall_rs[1] | doStall_rs[0] | 
-    doStall_rs[3] | doStall_LSQ | doStall_LDQ | doStall_STQ | doStall_cntrl | doStall_WQ;
+    doStall_rs[3] | doStall_LSQ | doStall_LDQ | doStall_STQ | doStall_cntrl | doStall_WQ | doStall_alloc2;
   assign stall_rs[3]=doStall_alloc | doStall_rs[1] | doStall_rs[0] |
-    doStall_rs[2] | doStall_LSQ | doStall_LDQ | doStall_STQ | doStall_cntrl | doStall_WQ;
-  assign stall_LSQ=|{doStall_rs[3:0],doStall_alloc,doStall_cntrl,doStall_LDQ,doStall_STQ | doStall_WQ};
-  assign stall_cntrl=|{doStall_rs[3:0],doStall_alloc,doStall_LSQ,doStall_LDQ,doStall_STQ | doStall_WQ};
-  assign stall_LDQ=|{doStall_rs[3:0],doStall_alloc,doStall_cntrl,doStall_LSQ,doStall_STQ | doStall_WQ};
-  assign stall_STQ=|{doStall_rs[3:0],doStall_alloc,doStall_cntrl,doStall_LSQ,doStall_LDQ | doStall_WQ};
-  assign stall_WQ=|{doStall_rs[3:0],doStall_alloc,doStall_cntrl,doStall_LSQ,doStall_LDQ,doStall_STQ};
+    doStall_rs[2] | doStall_LSQ | doStall_LDQ | doStall_STQ | doStall_cntrl | doStall_WQ | doStall_alloc2;
+  assign stall_LSQ=|{doStall_rs[3:0],doStall_alloc,doStall_cntrl,doStall_LDQ,doStall_STQ | doStall_WQ | doStall_alloc2};
+  assign stall_cntrl=|{doStall_rs[3:0],doStall_alloc,doStall_LSQ,doStall_LDQ,doStall_STQ | doStall_WQ | doStall_alloc2};
+  assign stall_LDQ=|{doStall_rs[3:0],doStall_alloc,doStall_cntrl,doStall_LSQ,doStall_STQ | doStall_WQ | doStall_alloc2};
+  assign stall_STQ=|{doStall_rs[3:0],doStall_alloc,doStall_cntrl,doStall_LSQ,doStall_LDQ | doStall_WQ | doStall_alloc2};
+  assign stall_WQ=|{doStall_rs[3:0],doStall_alloc,doStall_cntrl,doStall_LSQ,doStall_LDQ,doStall_STQ,doStall_alloc2};
 
   assign aStall_STQ=1'b0;
   assign aStall_LSQ=aDoStall_STQ;
