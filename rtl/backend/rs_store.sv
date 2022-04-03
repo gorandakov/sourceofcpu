@@ -310,9 +310,7 @@ module rss_buf(
   DFF port1B_mod(clk,port1B_en,port1B_d,port1B_q); 
   
   DFF portReady0_mod(clk,1'b1,portReady0_d,portReady0_q);
-  DFF portReady1_mod(clk,1'b1,portReady1_d,portReady1_q);
   DFF portReady2_mod(clk,1'b1,portReady2_d,portReady2_q);
-  DFF portReady3_mod(clk,1'b1,portReady3_d,portReady3_q);
 
   assign dataAPending_gather=isDataA;
   assign dataBPending_gather=isDataB;
@@ -325,9 +323,7 @@ module rss_buf(
   assign unFwdCheck=fwdCheck0 & ~FU0Hit || fwdCheck1 & ~FU1Hit || fwdCheck2 & ~FU2Hit || fwdCheck3 & ~FU3Hit;
 
   assign portReady0=portReady0_q;
-  assign portReady1=portReady1_q;
   assign portReady2=portReady2_q;
-  assign portReady3=portReady3_q;
   
   assign unCheckA=(fuFwdA==4'd0 && ~FU0Hit) | (fuFwdA==4'd1 && ~FU1Hit) | (fuFwdA==4'd2 && ~FU2Hit) | (fuFwdA==4'd3 && ~FU3Hit);
   assign unCheckB=(fuFwdB==4'd0 && ~FU0Hit) | (fuFwdB==4'd1 && ~FU1Hit) | (fuFwdB==4'd2 && ~FU2Hit) | (fuFwdB==4'd3 && ~FU3Hit);
@@ -434,9 +430,7 @@ module rss_buf(
   assign isReady1B=dataAPending_gather | ~dataAPending1_d;
   
   assign portReady0_d=isReady0 & port0A_d & ~unFwdCheck & new_stall_n;
-  assign portReady1_d=isReady1A & port1B_d & ~unFwdCheck & new_stall_n;
   assign portReady2_d=isReady0 & port0B_d & ~unFwdCheck & new_stall_n;
-  assign portReady3_d=isReady1B & port1A_d & ~unFwdCheck & new_stall_n;
 
 // free bit
   DFF bufFree_mod(clk,bufFree_en,bufFree_d,bufFree);

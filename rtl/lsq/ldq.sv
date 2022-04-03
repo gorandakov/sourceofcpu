@@ -134,23 +134,23 @@ module ldq_buf(
   reg confl;
   reg confl_smp;
   
-  wire [3:0] chkBankL;
-  wire [3:0] chkBankH;
-  wire [3:0] chkMatchE;
-  wire [3:0] chkMatchO;
+  wire [2:0] chkBankL;
+  wire [2:0] chkBankH;
+  wire [2:0] chkMatchE;
+  wire [2:0] chkMatchO;
 
   wire chkMatch3;
 
-  wire [3:0]   chkIsOH={chkIsOH3,chkIsOH2,chkIsOH1,chkIsOH0};
-  wire [3:0]   chkIsOL={chkIsOL3,chkIsOL2,chkIsOL1,chkIsOL0};
-  wire [3:0]   chkIsEH={chkIsEH3,chkIsEH2,chkIsEH1,chkIsEH0};
-  wire [3:0]   chkIsEL={chkIsEL3,chkIsEL2,chkIsEL1,chkIsEL0};
+  wire [2:0]   chkIsOH={chkIsOH3,chkIsOH1,chkIsOH0};
+  wire [2:0]   chkIsOL={chkIsOL3,chkIsOL1,chkIsOL0};
+  wire [2:0]   chkIsEH={chkIsEH3,chkIsEH1,chkIsEH0};
+  wire [2:0]   chkIsEL={chkIsEL3,chkIsEL1,chkIsEL0};
   
-  wire [3:0] chkMatch;
+  wire [2:0] chkMatch;
   
-  wire [3:0] chkBlow[3:0];
+  wire [3:0] chkBlow[2:0];
   
-  wire chkMatch0,chkMatch1,chkMatch2;
+  wire chkMatch0,chkMatch1;
  
   assign chkBankL[0]= (banks[15:0]&chkBanks0[15:0])!=0;
   assign chkBankH[0]= (banks[31:16]&chkBanks0[31:16])!=0;
@@ -162,25 +162,19 @@ module ldq_buf(
   assign chkMatchE[1]=chkAddrE1==addrE;   
   assign chkMatchO[1]=chkAddrO1==addrO;   
 
-  assign chkBankL[2]=(banks[15:0]&chkBanks2[15:0])!=0;
-  assign chkBankH[2]=(banks[31:16]&chkBanks2[31:16])!=0;
-  assign chkMatchE[2]=chkAddrE2==addrE;   
-  assign chkMatchO[2]=chkAddrO2==addrO;   
-
-  assign chkBankL[3]=|banks[15:0];
-  assign chkBankH[3]=|banks[31:16];
-  assign chkMatchE[3]=chkAddrE3==addrE;   
-  assign chkMatchO[3]=chkAddrO3==addrO;  
+  assign chkBankL[2]=|banks[15:0];
+  assign chkBankH[2]=|banks[31:16];
+  assign chkMatchE[2]=chkAddrE3==addrE;   
+  assign chkMatchO[2]=chkAddrO3==addrO;  
 
   assign chkBlow[0]=chkBlow0; 
   assign chkBlow[1]=chkBlow1; 
-  assign chkBlow[2]=chkBlow2; 
-  assign chkBlow[3]=4'hf; 
+  assign chkBlow[2]=4'hf; 
   
   assign chkMatch0=chkMatch[0]&~free&chkEn0;
   assign chkMatch1=chkMatch[1]&~free&chkEn1;
 //  assign chkMatch2=chkMatch[2]&~free&chkEn2;
-  assign chkMatch3=chkMatch[3]&~free&chkEn3;
+  assign chkMatch3=chkMatch[2]&~free&chkEn3;
 
   assign freeConfl0=(((freeII0==II && confl!=0)  && freeII0[9:4]==II[9:4]) && ~free) &freeEn0;
   assign freeConfl1=(((freeII1==II && confl!=0)  && freeII1[9:4]==II[9:4]) && ~free) &freeEn1;
@@ -189,7 +183,7 @@ module ldq_buf(
   assign freeConflSmp1=(freeII1==II && confl_smp) & freeEn1;
   generate
       genvar k;
-      for(k=0;k<4;k=k+1) begin : chk_gen
+      for(k=0;k<3;k=k+1) begin : chk_gen
           ldq_chk_confl chk_mod(
           isOH,isEH,isOL,isEL,
           chkIsOH[k],chkIsEH[k],chkIsOL[k],chkIsEL[k],
@@ -540,29 +534,29 @@ module ldq_array(
   wire [BUF_COUNT-1:0] freeConflSmp0_buf;
   wire [BUF_COUNT-1:0] freeConflSmp1_buf;
 
-  wire [3:0] chk0BankL;
-  wire [3:0] chk0BankH;
-  wire [3:0] chk0MatchE;
-  wire [3:0] chk0MatchO;
+  wire [2:0] chk0BankL;
+  wire [2:0] chk0BankH;
+  wire [2:0] chk0MatchE;
+  wire [2:0] chk0MatchO;
 
   wire chkMatch0;
  
-  wire [3:0] chk1BankL;
-  wire [3:0] chk1BankH;
-  wire [3:0] chk1MatchE;
-  wire [3:0] chk1MatchO;
+  wire [2:0] chk1BankL;
+  wire [2:0] chk1BankH;
+  wire [2:0] chk1MatchE;
+  wire [2:0] chk1MatchO;
 
   wire chkMatch1;
 
-  wire [3:0]   chkIsOH={chkIsOH3,chkIsOH2,chkIsOH1,chkIsOH0};
-  wire [3:0]   chkIsOL={chkIsOL3,chkIsOL2,chkIsOL1,chkIsOL0};
-  wire [3:0]   chkIsEH={chkIsEH3,chkIsEH2,chkIsEH1,chkIsEH0};
-  wire [3:0]   chkIsEL={chkIsEL3,chkIsEL2,chkIsEL1,chkIsEL0};
+  wire [2:0]   chkIsOH={chkIsOH3,chkIsOH1,chkIsOH0};
+  wire [2:0]   chkIsOL={chkIsOL3,chkIsOL1,chkIsOL0};
+  wire [2:0]   chkIsEH={chkIsEH3,chkIsEH1,chkIsEH0};
+  wire [2:0]   chkIsEL={chkIsEL3,chkIsEL1,chkIsEL0};
   
-  wire [3:0] chk1Match;
-  wire [3:0] chk0Match;
+  wire [2:0] chk1Match;
+  wire [2:0] chk0Match;
   
-  wire [3:0] chkBlow[3:0];
+  wire [3:0] chkBlow[2:0];
 
   assign chk0BankL[0]= (newBanks0[15:0]&chkBanks0[15:0])!=0;
   assign chk0BankH[0]= (newBanks0[31:16]&chkBanks0[31:16])!=0;
@@ -574,19 +568,19 @@ module ldq_array(
   assign chk0MatchE[1]=chkAddrE1==newAddrE0;   
   assign chk0MatchO[1]=chkAddrO1==newAddrO0;   
 
-  assign chk0BankL[3]=|newBanks0[15:0];
-  assign chk0BankH[3]=|newBanks0[31:16];
-  assign chk0MatchE[3]=chkAddrE3==newAddrE0;   
-  assign chk0MatchO[3]=chkAddrO3==newAddrO0;  
+  assign chk0BankL[2]=|newBanks0[15:0];
+  assign chk0BankH[2]=|newBanks0[31:16];
+  assign chk0MatchE[2]=chkAddrE3==newAddrE0;   
+  assign chk0MatchO[2]=chkAddrO3==newAddrO0;  
 
   assign chkBlow[0]=chkBlow0; 
   assign chkBlow[1]=chkBlow1; 
-  assign chkBlow[3]=4'hf; 
+  assign chkBlow[2]=4'hf; 
   
   assign chkMatch0=
     chk0Match[0]&chkEn0 ||
     chk0Match[1]&chkEn1 ||
-    chk0Match[3]&chkEn3;
+    chk0Match[2]&chkEn3;
 
   assign chk1BankL[0]= (newBanks1[15:0]&chkBanks0[15:0])!=0;
   assign chk1BankH[0]= (newBanks1[31:16]&chkBanks0[31:16])!=0;
@@ -598,10 +592,10 @@ module ldq_array(
   assign chk1MatchE[1]=chkAddrE1==newAddrE1;   
   assign chk1MatchO[1]=chkAddrO1==newAddrO1;   
 
-  assign chk1BankL[3]=|newBanks1[15:0];
-  assign chk1BankH[3]=|newBanks1[31:16];
-  assign chk1MatchE[3]=chkAddrE3==newAddrE1;   
-  assign chk1MatchO[3]=chkAddrO3==newAddrO1;  
+  assign chk1BankL[2]=|newBanks1[15:0];
+  assign chk1BankH[2]=|newBanks1[31:16];
+  assign chk1MatchE[2]=chkAddrE3==newAddrE1;   
+  assign chk1MatchO[2]=chkAddrO3==newAddrO1;  
 
   assign chkMatch1=
     chk1Match[0]&chkEn0 ||
@@ -611,7 +605,7 @@ module ldq_array(
 
   generate
       genvar k;
-      for(k=0;k<4;k=k+1) begin : chk_gen
+      for(k=0;k<3;k=k+1) begin : chk_gen
           ldq_chk_confl chk0_mod(
           newIsOH0,newIsEH0,newIsOL0,newIsEL0,
           chkIsOH[k],chkIsEH[k],chkIsOL[k],chkIsEL[k],
@@ -783,7 +777,7 @@ module ldq(
         ldq_array ldq_mod(
         .clk(clk),
         .rst(rst),
-	.except(except),.except_thread(except_thread),.aStall(~chk_en_reg | aStall),
+	.except(except),.except_thread(except_thread),.aStall(~chk_en | aStall),
         .newAddrE0(new_data[k][`lsaddr_addrE]),.newAddrO0(new_data[k][`lsaddr_addrO]),
           .newBanks0(new_data[k][`lsaddr_banks]),.newBlow0(new_data[k][`lsaddr_blow]),
           .newII0(new_data[k][`lsaddr_II]),
@@ -814,7 +808,7 @@ module ldq(
 	.freeEn1(cnt_chk[k][2] & chk_enP),.freeConfl1(conflP[k+3]),.freeConflSmp1(confl_smpP[k+3]),
         .free()
         );
-        popcnt10_or_more cpop_mod({4'b0,chkbits_reg[k]},cnt_chk[k]);
+        popcnt10_or_more cpop_mod({4'b0,chkbits[k]},cnt_chk[k]);
         
         ldq_up_down stall_mod(
         .clk(clk),
