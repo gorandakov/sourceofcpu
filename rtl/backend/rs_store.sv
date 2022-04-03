@@ -1252,6 +1252,8 @@ module rs_s(
   
   
   wire [BUF_COUNT-1:0] bufFree;
+  wire [BUF_COUNT-1:0] bufFreeA;
+  wire [BUF_COUNT-1:0] bufFreeB;
   
   wire [BUF_COUNT-1:0] newRsSelect0;
   wire [BUF_COUNT-1:0] newRsSelect1;
@@ -1426,7 +1428,7 @@ module rs_s(
   rsAlloc3 alloc_mod(
   clk,
   rsAlloc0,rsAlloc1,rsAlloc2,
-  bufFree,
+  bufFree&bufFreeA&bufFreeB,
   newRsSelect0,
   newRsSelect1,
   newRsSelect2,
