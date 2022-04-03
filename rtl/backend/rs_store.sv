@@ -205,56 +205,43 @@ module rss_buf(
 
  
 
-  wire [8:0] portNo_new;
+  wire [3:0] portNo_new;
 
-  wire port0A_d;
-  wire port0A_en;
-  wire port0A_q;
+  wire port0_d;
+  wire port0_en;
+  wire port0_q;
 
-  wire port1A_d;
-  wire port1A_en;
-  wire port1A_q;
+  wire port2_d;
+  wire port2_en;
+  wire port2_q;
 
-  wire port0B_d;
-  wire port0B_en;
-  wire port0B_q;
+ 
 
-  wire port1B_d;
-  wire port1B_en;
-  wire port1B_q;
+  wire [REG_WIDTH-1:0] regA_q;
+  wire [REG_WIDTH-1:0] regA_d;
 
-  wire dataAPunding_new,dataAPunding_q; 
-  wire dataBPunding_new,dataBPunding_q; 
+  wire [REG_WIDTH-1:0] regB_q;
+  wire [REG_WIDTH-1:0] regB_d;
 
 
   wire newRsSelectAny=newRsSelect0 | newRsSelect1 | newRsSelect2;
 
-  wire dataAPending0_en;
-  wire dataAPending0_d;
-  wire dataAPending0_q;
+  wire dataAPending_en;
+  wire dataAPending_d;
+  wire dataAPending_q;
   wire dataAPending_gather;
-  wire dataAPending0_new;
+  wire dataAPending_new;
 
-  wire dataBPending0_en;
-  wire dataBPending0_d;
-  wire dataBPending0_q;
+  wire dataBPending_en;
+  wire dataBPending_d;
+  wire dataBPending_q;
   wire dataBPending_gather;
-  wire dataBPending0_new;
+  wire dataBPending_new;
 
-  wire dataAPending1_en;
-  wire dataAPending1_d;
-  wire dataAPending1_q;
-  wire dataAPending1_new;
-
-  wire dataBPending1_en;
-  wire dataBPending1_d;
-  wire dataBPending1_q;
-  wire dataBPending1_new;
- 
 // wires - end new data
 
 // wires - gather data
-  wire isReady0,isReady1A,isReady1B;
+  wire isReady;
 // wires - free bit
   wire bufFree_d;
   wire bufFree_en;
@@ -274,44 +261,30 @@ module rss_buf(
   wire forgetUpdate;
   
   wire thread_q;
-  wire FPA_q;
-  wire VecA_q;
-  wire FPB_q;
-  wire VecB_q;
+  wire FP_q;
+  wire Vec_q;
   
   wire nonDataRst0;
   
   wire new_stall_n;
     
   assign stall_n=~stall;  
-  assign nonDataRst0=rst_thread ? nonDataRst & thread_q || dataRst : nonDataRst &~thread_q || dataRst;
+  assign nonDataRst0=(rst_thread) ? nonDataRst & thread_q || dataRst : nonDataRst &~thread_q || dataRst;
 //new data input into buffer 
   assign new_stall_n=~(newRsSelectAny & stall);
 
 
   DFF thread_mod(clk,newRsSelectAny|dataRst,new_thread&~dataRst,thread_q);
-  DFF FPA_mod(clk,newRsSelectAny|dataRst,portNo_new[4]&~dataRst,FPA_q);
-  DFF VecA_mod(clk,newRsSelectAny|dataRst,portNo_new[3]&~dataRst,VecA_q);
-  DFF FPB_mod(clk,newRsSelectAny|dataRst,portNo_new[6]&~dataRst,FPB_q);
-  DFF VecB_mod(clk,newRsSelectAny|dataRst,portNo_new[5]&~dataRst,VecB_q);
   
-  DFF dataA0Pending_mod(clk,dataAPending0_en,dataAPending0_d,dataAPending0_q);
-  DFF dataB0Pending_mod(clk,dataBPending0_en,dataBPending0_d,dataBPending0_q);
-  DFF dataA1Pending_mod(clk,dataAPending1_en,dataAPending1_d,dataAPending1_q);
-  DFF dataB1Pending_mod(clk,dataBPending1_en,dataBPending1_d,dataBPending1_q);
-
-// "Punding" registers contain bits to indicate whether an agu register should be zeroed on output 
-  DFF dataAPunding_mod(clk,newRsSelectAny & ~stall,dataAPunding_new,dataAPunding_q);
-  DFF dataBPunding_mod(clk,newRsSelectAny & ~stall,dataBPunding_new,dataBPunding_q);
- 
-  DFF port0A_mod(clk,port0A_en,port0A_d,port0A_q);
-  DFF port1A_mod(clk,port1A_en,port1A_d,port1A_q); 
-  DFF port0B_mod(clk,port0B_en,port0B_d,port0B_q);
-  DFF port1B_mod(clk,port1B_en,port1B_d,port1B_q); 
+  DFF dataAPending_mod(clk,dataAPending_en,dataAPending_d,dataAPending_q);
+  DFF dataBPending_mod(clk,dataBPending_en,dataBPending_d,dataBPending_q);
+  
+  DFF port0_mod(clk,port0_en,port0_d,port0_q);
+  DFF port2_mod(clk,port2_en,port2_d,port2_q);
   
   DFF portReady0_mod(clk,1'b1,portReady0_d,portReady0_q);
   DFF portReady2_mod(clk,1'b1,portReady2_d,portReady2_q);
-
+  
   assign dataAPending_gather=isDataA;
   assign dataBPending_gather=isDataB;
 
@@ -331,93 +304,50 @@ module rss_buf(
   assign portNo_new=(newRsSelect0 & ~stall) ? newPort0 : 9'bz;
   assign portNo_new=(newRsSelect1 & ~stall) ? newPort1 : 9'bz;
   assign portNo_new=(newRsSelect2 & ~stall) ? newPort2 : 9'bz;
-  assign portNo_new=(newRsSelectAny & ~stall) ? 9'bz : 9'b0;
+  assign portNo_new=(newRsSelectAny & ~stall) ? 9'bz : 4'b0;
 
 
-  assign port0A_en=stall_n & newRsSelectAny || outRsSelect0 &~unFwdCheck || nonDataRst0;
-  assign port1A_en=stall_n & newRsSelectAny || outRsSelect3 &~unFwdCheck || nonDataRst0;
-  assign port0B_en=stall_n & newRsSelectAny || outRsSelect2 &~unFwdCheck || nonDataRst0;
-  assign port1B_en=stall_n & newRsSelectAny || outRsSelect1 &~unFwdCheck || nonDataRst0;
-  assign port0A_d=newRsSelectAny ? (portNo_new[2:1]==2'd0) & ~nonDataRst0 :
-    port0A_q & (~outRsSelect0  | unFwdCheck)  & ~nonDataRst0;
-  assign port1A_d=newRsSelectAny ? (portNo_new[1:0]==2'b10 || portNo_new[2] & portNo_new[7]) & ~nonDataRst0 :
-    port1A_q & (~outRsSelect3 | unFwdCheck)  & ~nonDataRst0;
-  assign port0B_d=newRsSelectAny ? (portNo_new[2:1]==2'b01) & ~nonDataRst0 :
-    port0B_q & (~outRsSelect2  | unFwdCheck)  & ~nonDataRst0;
-  assign port1B_d=newRsSelectAny ? (portNo_new[1:0]==2'b0 || portNo_new[2] & portNo_new[8]) & ~nonDataRst0 :
-    port1B_q & (~outRsSelect1 | unFwdCheck)  & ~nonDataRst0;
+  assign port0_en=stall_n & newRsSelectAny || outRsSelect0 &~unFwdCheck || nonDataRst0;
+  assign port2_en=stall_n & newRsSelectAny || outRsSelect2 &~unFwdCheck || nonDataRst0;
+  assign port0_d=newRsSelectAny ? (portNo_new[2:0]==3'b01) & ~nonDataRst0 :
+    port0_q & (~outRsSelect0  | unFwdCheck)  & ~nonDataRst0;
+  assign port2_d=newRsSelectAny ? (portNo_new[2:0]==3'b11) & ~nonDataRst0 : 
+    port2_q & (~outRsSelect2 | unFwdCheck)  & ~nonDataRst0;
   
-  assign dataAPunding_new=~portNo_new[2] && ~portNo_new[1] | portNo_new[0];
-  assign dataBPunding_new=~portNo_new[2] &&  portNo_new[1] | portNo_new[0];
 
 
-  assign dataAPending0_new=(newRsSelect0 & ~stall) ? newANeeded0 && ~portNo_new[2] 
-    && ~portNo_new[1] | portNo_new[0]  : 1'bz;
-  assign dataAPending0_new=(newRsSelect1 & ~stall) ? newANeeded1 && ~portNo_new[2] 
-    && ~portNo_new[1] | portNo_new[0]  : 1'bz;
-  assign dataAPending0_new=(newRsSelect2 & ~stall) ? newANeeded2 && ~portNo_new[2] 
-    && ~portNo_new[1] | portNo_new[0]  : 1'bz;
-  assign dataAPending0_new=(newRsSelectAny & ~stall) ? 1'bz : 1'b0;
+  assign dataAPending_new=(newRsSelect0 & ~stall) ? newANeeded0 : 1'bz;
+  assign dataAPending_new=(newRsSelect1 & ~stall) ? newANeeded1 : 1'bz;
+  assign dataAPending_new=(newRsSelect2 & ~stall) ? newANeeded2 : 1'bz;
+  assign dataAPending_new=(newRsSelectAny & ~stall) ? 1'bz : 1'b0;
   
-  assign dataAPending0_en=newRsSelectAny | nonDataRst0 | unCheckA || dataAPending_gather ;
-  assign dataAPending0_d=newRsSelectAny ? dataAPending0_new & ~nonDataRst0 & stall_n & ~dataAPending_gather:
-    (~dataAPending_gather & dataAPending0_q || unCheckA) & ~nonDataRst0;
+  assign dataAPending_en=newRsSelectAny | nonDataRst0 | unCheckA || dataAPending_gather ;
+  assign dataAPending_d=newRsSelectAny ? dataAPending_new & ~nonDataRst0 & stall_n & ~dataAPending_gather:
+    (~dataAPending_gather & dataAPending_q || unCheckA) & ~nonDataRst0;
   
-  assign dataBPending0_new=(newRsSelect0 & ~stall) ? newBNeeded0 && ~portNo_new[2] 
-    && portNo_new[1] | portNo_new[0]  : 1'bz;
-  assign dataBPending0_new=(newRsSelect1 & ~stall) ? newBNeeded1 && ~portNo_new[2] 
-    && portNo_new[1] | portNo_new[0]  : 1'bz;
-  assign dataBPending0_new=(newRsSelect2 & ~stall) ? newBNeeded2 && ~portNo_new[2] 
-    && portNo_new[1] | portNo_new[0]  : 1'bz;
-  assign dataBPending0_new=(newRsSelectAny & ~stall) ? 1'bz : 1'b0;
+  assign dataBPending_new=(newRsSelect0 & ~stall) ? newBNeeded0 : 1'bz;
+  assign dataBPending_new=(newRsSelect1 & ~stall) ? newBNeeded1 : 1'bz;
+  assign dataBPending_new=(newRsSelect2 & ~stall) ? newBNeeded2 : 1'bz;
+  assign dataBPending_new=(newRsSelectAny & ~stall) ? 1'bz : 1'b0;
 
-  assign dataBPending0_en=newRsSelectAny  | nonDataRst0 | unCheckB || dataBPending_gather;
-  assign dataBPending0_d=newRsSelectAny ? dataBPending0_new & ~nonDataRst0 & stall_n & ~dataBPending_gather:
-    (~dataBPending_gather & dataBPending0_q || unCheckB) & ~nonDataRst0;
+  assign dataBPending_en=newRsSelectAny  | nonDataRst0 | unCheckB || dataBPending_gather;
+  assign dataBPending_d=newRsSelectAny ? dataBPending_new & ~nonDataRst0 & stall_n & ~dataBPending_gather:
+    (~dataBPending_gather & dataBPending_q || unCheckB) & ~nonDataRst0;
 
 
-    
-  assign dataAPending1_new=(newRsSelect0 & ~stall) ? newANeeded0 && (portNo_new[2] 
-    || portNo_new[1:0]==2'b10)  : 1'bz;
-  assign dataAPending1_new=(newRsSelect1 & ~stall) ? newANeeded1 && (portNo_new[2] 
-    || portNo_new[1:0]==2'b10)  : 1'bz;
-  assign dataAPending1_new=(newRsSelect2 & ~stall) ? newANeeded2 && (portNo_new[2] 
-    || portNo_new[1:0]==2'b10)  : 1'bz;
-  assign dataAPending1_new=(newRsSelectAny & ~stall) ? 1'bz : 1'b0;
-  
-  assign dataAPending1_en=newRsSelectAny | nonDataRst0 | unCheckA || dataAPending_gather ;
-  assign dataAPending1_d=newRsSelectAny ? dataAPending1_new & ~nonDataRst0 & stall_n & ~dataAPending_gather:
-    (~dataAPending_gather & dataAPending1_q || unCheckA) & ~nonDataRst0;
-  
-  assign dataBPending1_new=(newRsSelect0 & ~stall) ? newBNeeded0 && (portNo_new[2] 
-    || portNo_new[1:0]==2'b00)  : 1'bz;
-  assign dataBPending1_new=(newRsSelect1 & ~stall) ? newBNeeded1 && (portNo_new[2] 
-    || portNo_new[1:0]==2'b00)  : 1'bz;
-  assign dataBPending1_new=(newRsSelect2 & ~stall) ? newBNeeded2 && (portNo_new[2] 
-    || portNo_new[1:0]==2'b00)  : 1'bz;
-  assign dataBPending1_new=(newRsSelectAny & ~stall) ? 1'bz : 1'b0;
-  
-  assign dataBPending1_en=newRsSelectAny | nonDataRst0 | unCheckB || dataBPending_gather ;
-  assign dataBPending1_d=newRsSelectAny ? dataBPending1_new & ~nonDataRst0 & stall_n & ~dataBPending_gather:
-    (~dataBPending_gather & dataBPending1_q || unCheckB) & ~nonDataRst0;
-
-
-	
 // end new data input into buffer
 
 // output from buffer
 
 //outputs use inverting 3-state buffer, because it's faster and smaller than non-inverting
 // issue port 0 -agu
-  assign outDataEn0=outRsSelect0 ? {4{~unFwdCheck}} &{3'B1,1'b1} : 4'bz;
+  assign outDataEn0=outRsSelect0 ? {4{~unFwdCheck}} &{3'b1,1'b1} : 4'bz;
   assign outThread0=outRsSelect0 ? thread_q : 1'bz;
-  assign outZeroB0=outRsSelect0 ? ~dataAPunding_q : 1'bz;
   
   
 // issue port 2 - agu 2
-  assign outDataEn2=outRsSelect2 ? {4{~unFwdCheck}} &{3'B1,1'b1} : 4'bz;
+  assign outDataEn2=outRsSelect2 ? {4{~unFwdCheck}} &{3'b1,1'b1} : 4'bz;
   assign outThread2=outRsSelect2 ? thread_q : 1'bz;
-  assign outZeroA2=outRsSelect2 ? ~dataBPunding_q : 1'bz;
 
 
 // end data output
@@ -425,19 +355,17 @@ module rss_buf(
 
 //  assign isReady=~dataAPending_d & ~dataBPending_d & ~dataDPending_d & ~dataSPending_d;
 
-  assign isReady0=dataAPending_gather | ~dataAPending0_d && dataBPending_gather | ~dataBPending0_d;
-  assign isReady1A=dataBPending_gather | ~dataBPending1_d;
-  assign isReady1B=dataAPending_gather | ~dataAPending1_d;
+  assign isReady=dataAPending_gather | ~dataAPending_d && dataBPending_gather | ~dataBPending_d;
   
-  assign portReady0_d=isReady0 & port0A_d & ~unFwdCheck & new_stall_n;
-  assign portReady2_d=isReady0 & port0B_d & ~unFwdCheck & new_stall_n;
+  assign portReady0_d=isReady & port0_d & ~unFwdCheck & new_stall_n;
+  assign portReady2_d=isReady & port2_d & ~unFwdCheck & new_stall_n;
 
 // free bit
   DFF bufFree_mod(clk,bufFree_en,bufFree_d,bufFree);
   
-  assign bufFree_en=stall_n & newRsSelectAny || (outRsSelect0 | outRsSelect1 | outRsSelect2 | outRsSelect3
+  assign bufFree_en=stall_n & newRsSelectAny || (outRsSelect0 | outRsSelect1 | outRsSelect2
     && ~unFwdCheck) || nonDataRst0;
-  assign bufFree_d=~port0A_d & ~port1A_d & ~port0B_d & ~port1B_d || nonDataRst0;
+  assign bufFree_d=~newRsSelectAny || nonDataRst0;
   
 endmodule
 
