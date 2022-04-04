@@ -432,10 +432,10 @@
 `define lsaddr_pconfl 144
 `define lsaddr_except 145
 `define lsaddr_mtype 147:146
-`define lsaddr_WQ 155:148
-`define lsaddr_blow 159:156
-`define lsaddr_etype 163:160
-`define lsaddr_width 164
+`define lsaddr_WQ 153:148
+`define lsaddr_blow 157:154
+`define lsaddr_etype 161:158
+`define lsaddr_width 162
 `define lsaddr_II_low 111:108
 
 `define lsqshare_wrt0 2:0
