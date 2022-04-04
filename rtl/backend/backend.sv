@@ -1689,7 +1689,7 @@ module backend(
   wire [8:0][9:0] outII;
   wire [8:0][3:0] outEn;
   wire [2:0][8:0] outLSQ;
-  wire [2:0][7:0] outWQ;
+  wire [2:0][5:0] outWQ;
   wire [8:0][3:0] fuFwdA;
   wire [8:0][3:0] fuFwdB;
   wire [8:0][3:0] fuFwdS;
@@ -1745,7 +1745,7 @@ module backend(
   wire [1:0][CONST_WIDTH-1:0] WoutDataC;
   wire [1:0][OPERATION_WIDTH-1:0] WoutOp;
   wire [1:0][9:0] WoutII;
-  wire [1:0][7:0] WoutWQ;
+  wire [1:0][5:0] WoutWQ;
   wire [1:0][3:0] WfuFwdA;
   wire [1:0][3:0] WfuFwdB;
   wire [1:0][3:0] WfuuFwdA;
@@ -1777,7 +1777,7 @@ module backend(
   wire [1:0][3:0] WDoutDataEn;
   reg [3:0] WDoutDataEn_reg[1:0];
   reg [3:0] WDoutDataEn_reg2[1:0];
-  wire [1:0][7:0] WDoutWQ;
+  wire [1:0][5:0] WDoutWQ;
   wire [1:0]WDoutThread;
   wire [1:0][SIMD_WIDTH-1:0] WDoutDataVH;
   wire [1:0][SIMD_WIDTH-1:0] WDoutDataVL;
@@ -1803,11 +1803,11 @@ module backend(
   reg  [3:0] WDfxDataEn_reg3[1:0];
   reg  [3:0] WDfxDataEn_reg4[1:0];
   wire [1:0][8:0] WDfxLSQ;
-  wire [1:0][7:0] WDfxWQ;
-  reg  [7:0] WDfxWQ_reg[1:0];
-  reg  [7:0] WDfxWQ_reg2[1:0];
-  reg  [7:0] WDfxWQ_reg3[1:0];
-  reg  [7:0] WDfxWQ_reg4[1:0];
+  wire [1:0][5:0] WDfxWQ;
+  reg  [5:0] WDfxWQ_reg[1:0];
+  reg  [5:0] WDfxWQ_reg2[1:0];
+  reg  [5:0] WDfxWQ_reg3[1:0];
+  reg  [5:0] WDfxWQ_reg4[1:0];
   wire [1:0] WDfxThr;
  
   wire [1:0][135:0] lsw_wdataF0;
@@ -2152,8 +2152,8 @@ module backend(
   wire [2:0] LSQ_lsqB;
   wire [3:0] LSQ_indA;
   wire [3:0] LSQ_indB;
-  wire [7:0] LSQ_wqA;
-  wire [7:0] LSQ_wqB;
+  wire [5:0] LSQ_wqA;
+  wire [5:0] LSQ_wqB;
   wire [2:0] Wswp;
   wire [OPERATION_WIDTH-1:0] WopA;
   wire [OPERATION_WIDTH-1:0] WopB;
@@ -2161,8 +2161,8 @@ module backend(
   reg [2:0] LSQ_lsqB_reg;
   reg [3:0] LSQ_indA_reg;
   reg [3:0] LSQ_indB_reg;
-  reg [7:0] LSQ_wqA_reg;
-  reg [7:0] LSQ_wqB_reg;
+  reg [5:0] LSQ_wqA_reg;
+  reg [5:0] LSQ_wqB_reg;
   reg [2:0] Wswp_reg;
   reg [OPERATION_WIDTH-1:0] WopA_reg;
   reg [OPERATION_WIDTH-1:0] WopB_reg;
@@ -2190,10 +2190,10 @@ module backend(
   wire bDoStall_rqSpit;
   wire bDoStall_rqSpit0;
   
-  wire [2:0][7:0] WQR;
-  wire [2:0][7:0] WQS;
-  reg [7:0] WQS_reg[2:0];
-  reg [7:0] WQR_reg[2:0];
+  wire [2:0][5:0] WQR;
+  wire [2:0][5:0] WQS;
+  reg [5:0] WQS_reg[2:0];
+  reg [5:0] WQR_reg[2:0];
   
   wire aStall_STQ;
   wire aDoStall_STQ;
@@ -5887,12 +5887,12 @@ dcache1 L1D_mod(
           wrtII0_reg<=4'b0;
           wrtII1_reg<=4'b0;
           wrtII2_reg<=4'b0;
-          WQR_reg[0]<=8'd0;
-          WQR_reg[1]<=8'd0;
-          WQR_reg[2]<=8'd0;
-          WQS_reg[0]<=8'd0;
-          WQS_reg[1]<=8'd0;
-          WQS_reg[2]<=8'd0;
+          WQR_reg[0]<=6'd0;
+          WQR_reg[1]<=6'd0;
+          WQR_reg[2]<=6'd0;
+          WQS_reg[0]<=6'd0;
+          WQS_reg[1]<=6'd0;
+          WQS_reg[2]<=6'd0;
           lsi_cnt_reg<=6'b0;
           ldq_new_mask_reg<=6'b0; 
           wrt0_reg<=6'h3f;
@@ -5902,8 +5902,8 @@ dcache1 L1D_mod(
           LSQ_lsqB_reg<=3'h7;
           LSQ_indA_reg<=4'hf;
           LSQ_indB_reg<=4'hf;
-          LSQ_wqA_reg<=8'b0;
-          LSQ_wqB_reg<=8'b0;
+          LSQ_wqA_reg<=6'b0;
+          LSQ_wqB_reg<=6'b0;
           Wswp_reg<=3'b0;
           WopA_reg<=13'b0;
           WopB_reg<=13'b0;
@@ -7342,10 +7342,10 @@ dcache1 L1D_mod(
 	      dc_rdataA_reg2[v]<=136'b0;
           end
           for(v=0;v<=1;v=v+1) begin
-             WDfxWQ_reg[v]<=8'b0;
-             WDfxWQ_reg2[v]<=8'b0;
-             WDfxWQ_reg3[v]<=8'b0;
-             WDfxWQ_reg4[v]<=8'b0;
+             WDfxWQ_reg[v]<=6'b0;
+             WDfxWQ_reg2[v]<=6'b0;
+             WDfxWQ_reg3[v]<=6'b0;
+             WDfxWQ_reg4[v]<=6'b0;
              WDfxII_reg[v]<=10'b0;
              WDfxII_reg2[v]<=10'b0;
              WDfxII_reg3[v]<=10'b0;

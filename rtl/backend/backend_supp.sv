@@ -793,11 +793,11 @@ module get_wSwp(
   input [3:0] ind2;
   output [3:0] indA;
   output [3:0] indB;
-  input [7:0] wq0;
-  input [7:0] wq1;
-  input [7:0] wq2;
-  output [7:0] wqA;
-  output [7:0] wqB;
+  input [5:0] wq0;
+  input [5:0] wq1;
+  input [5:0] wq2;
+  output [5:0] wqA;
+  output [5:0] wqB;
   
   
   wire [2:0] lsiA_;
@@ -855,10 +855,10 @@ module get_wSwp(
   assign indA=stol_swp ? indB_ : indA_;
   assign indB=stol_swp ? indA_ : indB_;
   
-  assign {wqA_,wqB_}=stol[0] ? {wq1,wq2} : 16'bz;
-  assign {wqA_,wqB_}=stol[1] ? {wq2,wq0} : 16'bz;
-  assign {wqA_,wqB_}=stol[2] ? {wq0,wq1} : 16'bz;
-  assign {wqA_,wqB_}=(!stol) ? {wq0,wq1} : 16'bz;
+  assign {wqA_,wqB_}=stol[0] ? {wq1,wq2} : 12'bz;
+  assign {wqA_,wqB_}=stol[1] ? {wq2,wq0} : 12'bz;
+  assign {wqA_,wqB_}=stol[2] ? {wq0,wq1} : 12'bz;
+  assign {wqA_,wqB_}=(!stol) ? {wq0,wq1} : 12'bz;
   
   assign wqA=stol_swp ? wqB_ : wqA_;
   assign wqB=stol_swp ? wqA_ : wqB_;
@@ -1237,19 +1237,19 @@ module alloc_WQ(
   input [5:0] lsi0;
   input [5:0] lsi1;
   input [5:0] lsi2;
-  output [7:0] WQr0;
-  output [7:0] WQr1;
-  output [7:0] WQr2;
-  output [7:0] WQs0;
-  output [7:0] WQs1;
-  output [7:0] WQs2;
+  output [5:0] WQr0;
+  output [5:0] WQr1;
+  output [5:0] WQr2;
+  output [5:0] WQs0;
+  output [5:0] WQs1;
+  output [5:0] WQs2;
   input free0;
-  input [7:0] freeWQ0;
+  input [5:0] freeWQ0;
   input free1;
-  input [7:0] freeWQ1;
+  input [5:0] freeWQ1;
 
   wire [5:0] wrt[2:0];
-  wire [7:0] WQ[2:0];
+  wire [5:0] WQ[2:0];
   reg [6:0] addr_low;
   reg [6:0] addr_hi;
   wire [6:0] addr_low1;
@@ -1267,10 +1267,6 @@ module alloc_WQ(
   reg pos;
   wire [3:0] wrcnt;
 //  wire [3:-2] cncnt;
-  reg [119:0] busyA;
-  reg [119:0] busyB;
-  reg [119:0] thrdA;
-  reg [119:0] thrdB;
 
 
   integer k;
@@ -1279,9 +1275,9 @@ module alloc_WQ(
     genvar p,q;
     for(p=0;p<6;p=p+1) begin
         for(q=0;q<3;q=q+1) begin
-	    assign WQr0=(wrt[q][p] && lsi0[p] && !(&lsi0[1:0]) & !(&wrt[q][1:0])) ? WQ[q] : 8'bz;
-	    assign WQr1=(wrt[q][p] && lsi1[p] && !(&lsi1[1:0]) & !(&wrt[q][1:0])) ? WQ[q] : 8'bz;
-	    assign WQr2=(wrt[q][p] && lsi2[p] && !(&lsi2[1:0]) & !(&wrt[q][1:0])) ? WQ[q] : 8'bz;
+	    assign WQr0=(wrt[q][p] && lsi0[p] && !(&lsi0[1:0]) & !(&wrt[q][1:0])) ? WQ[q] : 6'bz;
+	    assign WQr1=(wrt[q][p] && lsi1[p] && !(&lsi1[1:0]) & !(&wrt[q][1:0])) ? WQ[q] : 6'bz;
+	    assign WQr2=(wrt[q][p] && lsi2[p] && !(&lsi2[1:0]) & !(&wrt[q][1:0])) ? WQ[q] : 6'bz;
 	end
     end
   endgenerate
@@ -1294,9 +1290,9 @@ module alloc_WQ(
   assign wrt[1]=wrt1;
   assign wrt[2]=wrt2;
   
-  assign WQr0=((lsi0!=wrt0 && lsi0!=wrt1 && lsi0!=wrt2) || lsi0[4:0]==5'h1f) ? 8'h7f  : 8'bz;
-  assign WQr1=((lsi1!=wrt0 && lsi1!=wrt1 && lsi1!=wrt2) || lsi1[4:0]==5'h1f) ? 8'h7f  : 8'bz;
-  assign WQr2=((lsi2!=wrt0 && lsi2!=wrt1 && lsi2!=wrt2) || lsi2[4:0]==5'h1f) ? 8'h7f  : 8'bz;
+  assign WQr0=((lsi0!=wrt0 && lsi0!=wrt1 && lsi0!=wrt2) || lsi0[4:0]==5'h1f) ? 6'h1f  : 6'bz;
+  assign WQr1=((lsi1!=wrt0 && lsi1!=wrt1 && lsi1!=wrt2) || lsi1[4:0]==5'h1f) ? 6'h1f  : 6'bz;
+  assign WQr2=((lsi2!=wrt0 && lsi2!=wrt1 && lsi2!=wrt2) || lsi2[4:0]==5'h1f) ? 6'h1f  : 6'bz;
 
   assign WQ[0]=pos ? {addr_low,1'b1} : {addr_low,1'b0};
   assign WQ[1]=pos ? {addr_hi,1'b0} : {addr_low,1'b1};
@@ -1306,31 +1302,31 @@ module alloc_WQ(
   assign WQs1=WQ[1];
   assign WQs2=WQ[2];
 
-  assign doStall=newEn&&busyA[xaddr_low]|busyB[xaddr_low]|busyA[xaddr_hi]|busyB[xaddr_hi];
+  assign doStall=1'b0;//newEn&&busyA[xaddr_low]|busyB[xaddr_low]|busyA[xaddr_hi]|busyB[xaddr_hi];
 
   assign addr_hi2[0]=addr_hi[0];
   assign addr_low2[0]=addr_low[0];
 
-  assign addr_hi1=(addr_hi==7'd119) ? 7'b0 : 7'bz;
-  assign addr_low1=(addr_low==7'd119) ? 7'b0 : 7'bz;
-  assign addr_hi2[6:1]=(addr_hi[6:1]==6'd59) ? 6'b0 : 6'bz;
-  assign addr_low2[6:1]=(addr_low[6:1]==6'd59) ? 6'b0 : 6'bz;
+  assign addr_hi1=(addr_hi==7'd63) ? 7'b0 : 7'bz;
+  assign addr_low1=(addr_low==7'd63) ? 7'b0 : 7'bz;
+  assign addr_hi2[6:1]=(addr_hi[6:1]==6'd31) ? 6'b0 : 6'bz;
+  assign addr_low2[6:1]=(addr_low[6:1]==6'd31) ? 6'b0 : 6'bz;
 
   assign xaddr_hi2[0]=xaddr_hi[0];
   assign xaddr_low2[0]=xaddr_low[0];
 
-  assign xaddr_hi1=(xaddr_hi==7'd119) ? 7'b0 : 7'bz;
-  assign xaddr_low1=(xaddr_low==7'd119) ? 7'b0 : 7'bz;
-  assign xaddr_hi2[6:1]=(xaddr_hi[6:1]==6'd59) ? 6'b0 : 6'bz;
-  assign xaddr_low2[6:1]=(xaddr_low[6:1]==6'd59) ? 6'b0 : 6'bz;
-  adder_inc #(7) hiAdd1_mod(addr_hi,addr_hi1,addr_hi!=7'd119,);
-  adder_inc #(7) lowAdd1_mod(addr_low,addr_low1,addr_low!=7'd119,);
-  adder_inc #(6) hiAdd2_mod(addr_hi[6:1],addr_hi2[6:1],addr_hi[6:1]!=6'd59,);
-  adder_inc #(6) lowAdd2_mod(addr_low[6:1],addr_low2[6:1],addr_low[6:1]!=6'd59,);
-  adder_inc #(7) hiAddx1_mod(xaddr_hi,xaddr_hi1,xaddr_hi!=7'd119,);
-  adder_inc #(7) lowAddx1_mod(xaddr_low,xaddr_low1,xaddr_low!=7'd119,);
-  adder_inc #(6) hiAddx2_mod(xaddr_hi[6:1],xaddr_hi2[6:1],xaddr_hi[6:1]!=6'd59,);
-  adder_inc #(6) lowAddx2_mod(xaddr_low[6:1],xaddr_low2[6:1],xaddr_low[6:1]!=6'd59,);
+  assign xaddr_hi1=(xaddr_hi==7'd63) ? 7'b0 : 7'bz;
+  assign xaddr_low1=(xaddr_low==7'd63) ? 7'b0 : 7'bz;
+  assign xaddr_hi2[6:1]=(xaddr_hi[6:1]==6'd31) ? 6'b0 : 6'bz;
+  assign xaddr_low2[6:1]=(xaddr_low[6:1]==6'd31) ? 6'b0 : 6'bz;
+  adder_inc #(7) hiAdd1_mod(addr_hi,addr_hi1,addr_hi!=7'd63,);
+  adder_inc #(7) lowAdd1_mod(addr_low,addr_low1,addr_low!=7'd63,);
+  adder_inc #(6) hiAdd2_mod(addr_hi[6:1],addr_hi2[6:1],addr_hi[6:1]!=6'd31,);
+  adder_inc #(6) lowAdd2_mod(addr_low[6:1],addr_low2[6:1],addr_low[6:1]!=6'd31,);
+  adder_inc #(7) hiAddx1_mod(xaddr_hi,xaddr_hi1,xaddr_hi!=7'd63,);
+  adder_inc #(7) lowAddx1_mod(xaddr_low,xaddr_low1,xaddr_low!=7'd63,);
+  adder_inc #(6) hiAddx2_mod(xaddr_hi[6:1],xaddr_hi2[6:1],xaddr_hi[6:1]!=6'd31,);
+  adder_inc #(6) lowAddx2_mod(xaddr_low[6:1],xaddr_low2[6:1],xaddr_low[6:1]!=6'd31,);
   popcnt3 cpop_mod(~{&wrt0[1:0],&wrt1[1:0],&wrt2[1:0]}&{3{~stall&~doStall&newEn}},wrcnt);
   always @(posedge clk) begin
       if (rst) begin
@@ -1339,10 +1335,6 @@ module alloc_WQ(
           xaddr_low<=7'd48;
           xaddr_hi<=7'd49;
           pos<=1'b0;
-	  thrdA<=120'b0;
-	  busyA<=120'b0;
-	  thrdB<=120'b0;
-	  busyB<=120'b0;
       end else if (~stall & ~doStall & newEn) begin
        //verilator lint_off CASEINCOMPLETE
           casex({~{&wrt0[1:0],&wrt1[1:0],&wrt2[1:0]},pos})
@@ -1361,31 +1353,6 @@ module alloc_WQ(
           endcase
        //verilator lint_on CASEINCOMPLETE
           if (wrcnt[1] | wrcnt[3]) pos<=~pos;
-          if (pos) begin
-	      if (wrcnt[3:1]) thrdB[addr_low]<=newThr;
-	      if (wrcnt[3:2]) thrdA[addr_hi]<=newThr;
-	      if (wrcnt[3])   thrdB[addr_hi]<=newThr;
-	      if (wrcnt[3:1]) busyB[addr_low]<=1'b1;
-	      if (wrcnt[3:2]) busyA[addr_hi]<=1'b1;
-	      if (wrcnt[3])   busyB[addr_hi]<=1'b1;
-          end else begin
-	      if (wrcnt[3:1]) thrdA[addr_low]<=newThr;
-	      if (wrcnt[3:2]) thrdB[addr_low]<=newThr;
-	      if (wrcnt[3])   thrdA[addr_hi]<=newThr;
-	      if (wrcnt[3:1]) busyA[addr_low]<=1'b1;
-	      if (wrcnt[3:2]) busyB[addr_low]<=1'b1;
-	      if (wrcnt[3])   busyA[addr_hi]<=1'b1;
-          end
-      end
-      if (free0&&~freeWQ0[0]) busyA[freeWQ0[7:1]]<=1'b0;
-      else if (free1&&~freeWQ1[0]) busyA[freeWQ1[7:1]]<=1'b0;
-      if (free0&&freeWQ0[0]) busyB[freeWQ0[7:1]]<=1'b0;
-      else if (free1&&freeWQ1[0]) busyB[freeWQ1[7:1]]<=1'b0;
-      if (except) begin
-          for(k=0;k<48;k=k+1) begin
-	      if (except_thread==thrdA[k] || ~except_both) busyA[k]<=1'b0;
-	      if (except_thread==thrdB[k] || ~except_both) busyB[k]<=1'b0;
-          end
       end
   end
 endmodule
