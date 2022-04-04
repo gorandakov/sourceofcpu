@@ -363,7 +363,7 @@ module rss_buf(
 // free bit
   DFF bufFree_mod(clk,bufFree_en,bufFree_d,bufFree);
   
-  assign bufFree_en=stall_n & newRsSelectAny || (outRsSelect0 | outRsSelect1 | outRsSelect2
+  assign bufFree_en=stall_n & newRsSelectAny || (outRsSelect0 | outRsSelect2
     && ~unFwdCheck) || nonDataRst0;
   assign bufFree_d=~newRsSelectAny || nonDataRst0;
   
@@ -393,7 +393,8 @@ module rss_D_buf(
   localparam CONST_WIDTH=32;
   localparam FLAGS_WIDTH=`flags_width;
   localparam ROB_WIDTH=10;  
-  
+  parameter [0:0] B=0;
+
   input clk;
   input dataRst;
   input nonDataRst;
@@ -528,8 +529,8 @@ module rss_D_buf(
   
   DFF portReady1_mod(clk,1'b1,portReady1_d,portReady1_q);
 
-  assign dataAPending_gather=isDataA;
-  assign dataBPending_gather=isDataB;
+  assign dataAPending1_gather=isDataA;
+  assign dataBPending1_gather=isDataB;
 
   assign fwdCheck0=fuFwdA==4'd0; 
   assign fwdCheck1=fuFwdA==4'd1; 
@@ -561,18 +562,18 @@ module rss_D_buf(
   assign dataAPending1_new=(newRsSelect2 & ~stall) ? newANeeded2 && (portNo_new[2])  : 1'bz;
   assign dataAPending1_new=(newRsSelectAny & ~stall) ? 1'bz : 1'b0;
   
-  assign dataAPending1_en=newRsSelectAny | nonDataRst0 | unCheckA || dataAPending_gather ;
-  assign dataAPending1_d=newRsSelectAny ? dataAPending1_new & ~nonDataRst0 & stall_n & ~dataAPending_gather:
-    (~dataAPending_gather & dataAPending1_q || unCheckA) & ~nonDataRst0;
+  assign dataAPending1_en=newRsSelectAny | nonDataRst0 | unCheckA || dataAPending1_gather ;
+  assign dataAPending1_d=newRsSelectAny ? dataAPending1_new & ~nonDataRst0 & stall_n & ~dataAPending1_gather:
+    (~dataAPending1_gather & dataAPending1_q || unCheckA) & ~nonDataRst0;
   
   assign dataBPending1_new=(newRsSelect0 & ~stall) ? newBNeeded0 && (portNo_new[2])  : 1'bz;
   assign dataBPending1_new=(newRsSelect1 & ~stall) ? newBNeeded1 && (portNo_new[2])  : 1'bz;
   assign dataBPending1_new=(newRsSelect2 & ~stall) ? newBNeeded2 && (portNo_new[2])  : 1'bz;
   assign dataBPending1_new=(newRsSelectAny & ~stall) ? 1'bz : 1'b0;
   
-  assign dataBPending1_en=newRsSelectAny | nonDataRst0 | | dataBPending_gather ;
-  assign dataBPending1_d=newRsSelectAny ? dataBPending1_new & ~nonDataRst0 & stall_n & ~dataBPending_gather:
-    (~dataBPending_gather & dataBPending1_q) & ~nonDataRst0;
+  assign dataBPending1_en=newRsSelectAny | nonDataRst0 | | dataBPending1_gather ;
+  assign dataBPending1_d=newRsSelectAny ? dataBPending1_new & ~nonDataRst0 & stall_n & ~dataBPending1_gather:
+    (~dataBPending1_gather & dataBPending1_q) & ~nonDataRst0;
 
 
 	
@@ -587,8 +588,8 @@ module rss_D_buf(
 
 //  assign isReady=~dataAPending_d & ~dataBPending_d & ~dataDPending_d & ~dataSPending_d;
 
-  assign isReady1A=dataBPending_gather | ~dataBPending1_d;
-  assign isReady1B=dataAPending_gather | ~dataAPending1_d;
+  assign isReady1A=dataBPending1_gather | ~dataBPending1_d;
+  assign isReady1B=dataAPending1_gather | ~dataAPending1_d;
   
   assign portReady1_d=isReady1A & port1B_d & ~unFwdCheck & new_stall_n;
 
@@ -766,7 +767,8 @@ module rss_D_array(
   localparam FLAGS_WIDTH=`flags_width;
   localparam ROB_WIDTH=10;  
   localparam BUF_COUNT=32;
-  
+  parameter [0:0] B=1'b0;
+
   input clk;
   input dataRst;
   input nonDataRst;
@@ -817,7 +819,7 @@ module rss_D_array(
           wire [3:0] outDataEn1a;
           wire outThread1a;
           for(k=0;k<8;k=k+1) begin : buffers_gen
-              rss_D_buf buf_mod(
+              rss_D_buf #(B) buf_mod(
               clk,
               dataRst,nonDataRst,rst_thread,
               stall,
@@ -1363,7 +1365,7 @@ module rs_s(
   bufFreeA
   );
   
-  rss_D_array rs1_mod(
+  rss_D_array #(1'b1) rs1_mod(
   clk,
   dataRst,nonDataRst,rst_thread,
   stall|doStall,

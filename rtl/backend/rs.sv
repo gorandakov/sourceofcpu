@@ -1254,6 +1254,9 @@ module rs_wakeUpS_logic_array(
   input [REG_WIDTH-1:0] FUreg5;
   input FU5wen;
 
+  input FU6wen;
+  input FU7wen;
+  input FU8wen;
 
 
 
