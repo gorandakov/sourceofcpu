@@ -382,7 +382,7 @@ module ldq_up_down(
   stall,
   doStall
   );
-  parameter STALL_CNT=31;
+  parameter STALL_CNT=39;
   localparam WIDTH=6;
 
   input clk;
@@ -463,7 +463,7 @@ module ldq_array(
   localparam BANK_COUNT=32;
   localparam II_WIDTH=10;
   localparam ADDR_WIDTH=4;
-  localparam BUF_COUNT=24;
+  localparam BUF_COUNT=40;
 //  localparam STALL_CNT=19;
   
   input clk;
@@ -684,7 +684,7 @@ module ldq(
   localparam II_WIDTH=10;
   localparam PADDR_WIDTH=44;
   localparam SPADDR_WIDTH=44-20;
-  localparam BUF_COUNT=24;
+  localparam BUF_COUNT=40;
 
   input clk;
   input rst;
