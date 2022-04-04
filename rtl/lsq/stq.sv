@@ -20,6 +20,8 @@ module stq(
   clk,
   rst,
   excpt,
+  stall,
+  doStall,
   aStall,
   aDoStall,
   chk0_adata,chk0_en,chk0_LSQ,
@@ -31,8 +33,8 @@ module stq(
   wrt0_adata,wrt0_en,wrt0_LSQ,
   wrt1_adata,wrt1_en,wrt1_LSQ,
   confl,confl_SMP,confl_X,
-  upd0_WQ,upd0_en,upd0_data,upd0_pbit,upd0_sz,
-  upd1_WQ,upd1_en,upd1_data,upd1_pbit,upd1_sz,
+  upd0_WQ,upd0_en,upd0_data,upd0_pbit,//upd0_sz,
+  upd1_WQ,upd1_en,upd1_data,upd1_pbit,//upd1_sz,
   pse0_WQ,pse0_en,
   pse1_WQ,pse1_en,
   wb1_adata,wb1_LSQ,wb1_data,wb1_pbit,wb1_bnkEn,wb1_en,wb1_way,
@@ -43,6 +45,9 @@ module stq(
   input rst;
 
   input excpt;
+
+  input stall;
+  output doStall;
 
   input aStall;
 
@@ -88,13 +93,13 @@ module stq(
   input upd0_en;
   input [135:0] upd0_data;
   input [1:0] upd0_pbit;
-  input [4:0] upd0_sz;
+//  input [4:0] upd0_sz;
 
   input [7:0] upd1_WQ;
   input upd1_en;
   input [135:0] upd1_data;
   input [1:0] upd1_pbit;
-  input [4:0] upd1_sz;
+//  input [4:0] upd1_sz;
 
   input [7:0] pse0_WQ;
   input pse0_en;

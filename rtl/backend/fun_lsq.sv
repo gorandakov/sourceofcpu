@@ -286,6 +286,32 @@ module fun_lsq(
       p3_adata_x[`lsaddr_pconfl]=PSTQ_match[3];
   end
   
+  stq stq_mod(
+  clk,
+  rst,
+  excpt,
+  STQ_stall,
+  STQ_doStall,
+  STQ_aStall,
+  STQ_aDoStall,
+  LSQ_dataA0,LSQ_enA[0],/**/chk0_LSQ,
+  LSQ_dataA1,LSQ_enA[1],/**/chk1_LSQ,
+  LSQ_dataA2,LSQ_enA[2],/**/chk2_LSQ,
+  LSQ_dataA3,LSQ_enA[3],/**/chk3_LSQ,
+  LSQ_dataA4,LSQ_enA[4],/**/chk4_LSQ,
+  LSQ_dataA5,LSQ_enA[5],/**/chk5_LSQ,  
+  p4_adata,p4_en,p4_LSQ,
+  p5_adata,p5_en,p5_LSQ,
+  LDQ_ldconfl,LDQ_insconfl,LDQ_conflX,
+  lsw_wq0,lsw_rs_en0[0],lsw_wdata0,lsw_pdata0,
+  lsw_wq1,lsw_rs_en1[0],lsw_wdata1,lsw_pdata1,
+  pse0_WQ,pse0_en,
+  pse1_WQ,pse1_en,
+  wb1_adata,wb1_LSQ,wb1_data,wb1_pbit,wb1_bnkEn,wb1_en,wb1_way,
+  wb0_adata,wb0_LSQ,wb0_data,wb0_pbit,wb0_bnkEn,wb0_en
+  );
+  .InpWQA(lsw_wq0),.InpEnA(lsw_rs_en0[0]),.InpDataA({lsw_pdata0,lsw_wdata0}),
+  .InpWQB(lsw_wq1),.InpEnB(lsw_rs_en1[0]),.InpDataB({lsw_pdata1,lsw_wdata1})
 
   storq storq_mod(
   .clk(clk),
