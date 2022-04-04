@@ -89,22 +89,22 @@ module stq(
   input [5:0] confl_SMP;
   input [5:0] confl_X;
 
-  input [7:0] upd0_WQ;
+  input [5:0] upd0_WQ;
   input upd0_en;
   input [135:0] upd0_data;
   input [1:0] upd0_pbit;
 //  input [4:0] upd0_sz;
 
-  input [7:0] upd1_WQ;
+  input [5:0] upd1_WQ;
   input upd1_en;
   input [135:0] upd1_data;
   input [1:0] upd1_pbit;
 //  input [4:0] upd1_sz;
 
-  input [7:0] pse0_WQ;
+  input [5:0] pse0_WQ;
   input pse0_en;
 
-  input [7:0] pse1_WQ;
+  input [5:0] pse1_WQ;
   input pse1_en;
 
   output [`lsaddr_width-1:0] wb1_adata;
