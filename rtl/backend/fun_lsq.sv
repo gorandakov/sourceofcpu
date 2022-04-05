@@ -307,8 +307,8 @@ module fun_lsq(
   lsw_wq1,lsw_rs_en1[0],lsw_wdata1,lsw_pdata1,
   pse0_WQ,pse0_en,
   pse1_WQ,pse1_en,
-  wb1_adata,wb1_LSQ,wb1_data,wb1_pbit,wb1_bnkEn,wb1_en,wb1_way,
-  wb0_adata,wb0_LSQ,wb0_data,wb0_pbit,wb0_bnkEn,wb0_en
+  wb1_adata,wb1_LSQ,wb1_data,wb1_pbit,wb1_brdbanks,wb1_en,,//wb1_way
+  wb0_adata,wb0_LSQ,wb0_data,wb0_pbit,wb0_brdbanks,wb0_en
   );
 
   wire aStall_LSQ;
