@@ -171,8 +171,8 @@ module stq_buf_A_array(
   input [WIDTH-1:0] wrt0_addrO;
 
   input [BUF_COUNT-1:0] wrt1_en;
-  input [WIDTH-1:0] wrt0_addrE;
-  input [WIDTH-1:0] wrt0_addrO;
+  input [WIDTH-1:0] wrt1_addrE;
+  input [WIDTH-1:0] wrt1_addrO;
 
   input chk0_en;
   output [BUF_COUNT-1:0] [1:0] chk0_addrEO;
