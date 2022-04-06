@@ -174,6 +174,19 @@ module fu_alu(
   reg [5:0] FUS7_reg;
   reg [5:0] FUS8_reg;
   reg [5:0] FUS9_reg;
+  
+  reg [3:0]           u1_S_fufwd_reg;
+  reg [3:0]           u1_S_fuufwd_reg;
+  reg [3:0]           u2_S_fufwd_reg;
+  reg [3:0]           u2_S_fuufwd_reg;
+  reg [3:0]           u3_S_fufwd_reg;
+  reg [3:0]           u3_S_fuufwd_reg;
+  reg [3:0]           u4_S_fufwd_reg;
+  reg [3:0]           u4_S_fuufwd_reg;
+  reg [3:0]           u5_S_fufwd_reg;
+  reg [3:0]           u5_S_fuufwd_reg;
+  reg [3:0]           u6_S_fufwd_reg;
+  reg [3:0]           u6_S_fuufwd_reg;
 
   wire [64:0] uu_A1;
   wire [64:0] uu_B1;
@@ -450,11 +463,11 @@ module fu_alu(
   FU9,FU9_reg
   );
   
-  rs_write_forward #(6) u1_S_fwd(
+  rs_writeiS_forward #(6) u1_S_fwd(
   clk,rst,
   ~u1_clkEn,
   u1_S,uu_S1,
-  u1_S_fufwd,u1_S_fuufwd,
+  u1_S_fufwd_reg,u1_S_fuufwd_reg,
   FUS1,FUS1_reg,
   FUS2,FUS2_reg,
   FUS3,FUS3_reg,
@@ -467,11 +480,11 @@ module fu_alu(
   FUS9,FUS9_reg
   );
 
-  rs_write_forward #(6) u2_S_fwd(
+  rs_writeiS_forward #(6) u2_S_fwd(
   clk,rst,
   ~u2_clkEn,
   u2_S,uu_S2,
-  u2_S_fufwd,u2_S_fuufwd,
+  u2_S_fufwd_reg,u2_S_fuufwd_reg,
   FUS1,FUS1_reg,
   FUS2,FUS2_reg,
   FUS3,FUS3_reg,
@@ -485,11 +498,11 @@ module fu_alu(
   );
 
 
-  rs_write_forward #(6) u3_S_fwd(
+  rs_writeiS_forward #(6) u3_S_fwd(
   clk,rst,
   ~u3_clkEn,
   u3_S,uu_S3,
-  u3_S_fufwd,u3_S_fuufwd,
+  u3_S_fufwd_reg,u3_S_fuufwd_reg,
   FUS1,FUS1_reg,
   FUS2,FUS2_reg,
   FUS3,FUS3_reg,
@@ -503,11 +516,11 @@ module fu_alu(
   );
 
 
-  rs_write_forward #(6) u4_S_fwd(
+  rs_writeiS_forward #(6) u4_S_fwd(
   clk,rst,
   ~u4_clkEn,
   u4_S,uu_S4,
-  u4_S_fufwd,u4_S_fuufwd,
+  u4_S_fufwd_reg,u4_S_fuufwd_reg,
   FUS1,FUS1_reg,
   FUS2,FUS2_reg,
   FUS3,FUS3_reg,
@@ -521,11 +534,11 @@ module fu_alu(
   );
 
 
-  rs_write_forward #(6) u5_S_fwd(
+  rs_writeiS_forward #(6) u5_S_fwd(
   clk,rst,
   ~u5_clkEn,
   u5_S,uu_S5,
-  u5_S_fufwd,u5_S_fuufwd,
+  u5_S_fufwd_reg,u5_S_fuufwd_reg,
   FUS1,FUS1_reg,
   FUS2,FUS2_reg,
   FUS3,FUS3_reg,
@@ -539,11 +552,11 @@ module fu_alu(
   );
 
 
-  rs_write_forward #(6) u6_S_fwd(
+  rs_writeiS_forward #(6) u6_S_fwd(
   clk,rst,
   ~u6_clkEn,
   u6_S,uu_S6,
-  u6_S_fufwd,u6_S_fuufwd,
+  u6_S_fufwd_reg,u6_S_fuufwd_reg,
   FUS1,FUS1_reg,
   FUS2,FUS2_reg,
   FUS3,FUS3_reg,
@@ -703,6 +716,18 @@ module fu_alu(
       u6_op_reg3<=u6_op_reg2;
       u6_op_reg4<=u6_op_reg3;
 
+      u1_S_fufwd_reg<= u1_S_fufwd;
+      u1_S_fuufwd_reg<=u1_S_fuufwd;
+      u2_S_fufwd_reg<= u2_S_fufwd;
+      u2_S_fuufwd_reg<=u2_S_fuufwd;
+      u3_S_fufwd_reg<= u3_S_fufwd;
+      u3_S_fuufwd_reg<=u3_S_fuufwd;
+      u4_S_fufwd_reg<= u4_S_fufwd;
+      u4_S_fuufwd_reg<=u4_S_fuufwd;
+      u5_S_fufwd_reg<= u5_S_fufwd;
+      u5_S_fuufwd_reg<=u5_S_fuufwd;
+      u6_S_fufwd_reg<= u6_S_fufwd;
+      u7_S_fuufwd_reg<=u6_S_fuufwd;
 
       if(u2_op==`op_shl64 || u2_op==`op_shr64 || u2_op==`op_sar64)
           u2_sz<=4'b1000; else u2_sz<=4'b0100;
