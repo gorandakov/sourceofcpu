@@ -173,11 +173,8 @@ module fun_lsq(
   output doStall_LSQ;
  
   wire stall_STQ;
-  wire aStall_STQ,lStall_STQ;
+  wire aStall_STQ;
   wire aDoStall_STQ;
- // wire lStall_STQ;
-  wire lDoStall_STQ;
-  wire lDoStall_lsfw;
   wire [`lsqshare_width-1:0] LSQ_shr_dataA;
   wire [`lsaddr_width-1:0] LSQ_dataA0;
   wire [`lsaddr_width-1:0] LSQ_dataA1;
@@ -289,30 +286,29 @@ module fun_lsq(
   stq stq_mod(
   clk,
   rst,
-  excpt,
-  STQ_stall,
-  STQ_doStall,
-  STQ_aStall,
-  STQ_aDoStall,
-  LSQ_dataA0,LSQ_enA[0],/**/chk0_LSQ,
-  LSQ_dataA1,LSQ_enA[1],/**/chk1_LSQ,
-  LSQ_dataA2,LSQ_enA[2],/**/chk2_LSQ,
-  LSQ_dataA3,LSQ_enA[3],/**/chk3_LSQ,
-  LSQ_dataA4,LSQ_enA[4],/**/chk4_LSQ,
-  LSQ_dataA5,LSQ_enA[5],/**/chk5_LSQ,  
+  except,
+  stall_STQ,
+  doStall_STQ,
+  aStall_STQ,
+  aDoStall_STQ,
+  LSQ_dataA0,LSQ_enA[0],//chk0_LSQ,
+  LSQ_dataA1,LSQ_enA[1],//chk1_LSQ,
+  LSQ_dataA2,LSQ_enA[2],//chk2_LSQ,
+  LSQ_dataA3,LSQ_enA[3],//chk3_LSQ,
+  LSQ_dataA4,LSQ_enA[4],//chk4_LSQ,
+  LSQ_dataA5,LSQ_enA[5],//chk5_LSQ,  
   p4_adata,p4_en,p4_LSQ,
   p5_adata,p5_en,p5_LSQ,
-  LDQ_ldconfl,LDQ_insconfl,LDQ_conflX,
+  LDQ_ldconfl,LDQ_insconfl,LDQ_ldconflX,
   lsw_wq0,lsw_rs_en0[0],lsw_wdata0,lsw_pdata0,
   lsw_wq1,lsw_rs_en1[0],lsw_wdata1,lsw_pdata1,
-  pse0_WQ,pse0_en,
-  pse1_WQ,pse1_en,
+  LSQ_shr_data[`lsqshare_wrt0]!=3'd7,
+  LSQ_shr_data[`lsqshare_wrt1]!=3'd7,
   wb1_adata,wb1_LSQ,wb1_data,wb1_pbit,wb1_brdbanks,wb1_en,,//wb1_way
   wb0_adata,wb0_LSQ,wb0_data,wb0_pbit,wb0_brdbanks,wb0_en
   );
 
   wire aStall_LSQ;
-  wire lStall;
   wire stall_LDQ;
   wire [5:0] LDQ_ldconfl;
   wire [5:0] LDQ_insconfl;
@@ -335,7 +331,6 @@ module fun_lsq(
   wire [1:0] wreq_has;
   wire stall_LSQ;
   wire [5:0] LSQ_upper;
-  wire lStall_lsfw;
   wire wreq_stall;
 
   assign PSTQ_has_store=PSTQ_data_shr!=6'h3f;
@@ -344,7 +339,7 @@ module fun_lsq(
   .clk(clk),
   .rst(rst),
   .except(except),.except_thread(1'b0),
-  .aStall(aStall_LSQ|lStall),
+  .aStall(aStall_LSQ),
   .stall(stall_LDQ),.doStall(doStall_LDQ),
   .new0_data(p0_adata_x),.new0_rsEn(p0_rsEn),
    .new0_isFlag(p0_adata_x[`lsaddr_flag]),.new0_thread(1'b0),
@@ -381,7 +376,7 @@ module fun_lsq(
   .doRsPause(WDoRsPause),
   .except(except),
   .except_thread(1'b0),
-  .aStall(aStall_LSQ&~lStall),
+  .aStall(aStall_LSQ),
 
   .readA_clkEn(LSQ_rdy_A&~aStall_LSQ),
   .readA_rdy(LSQ_rdy_A),
@@ -521,9 +516,6 @@ module fun_lsq(
 
   assign aStall_STQ=1'b0;
   assign aStall_LSQ=aDoStall_STQ;
-  assign lStall_STQ=lDoStall_lsfw;
-  assign lStall_lsfw=1'b0;//lDoStall_STQ;
-  assign lStall=lDoStall_lsfw|lDoStall_STQ;
 
   assign wreq_en[0]=~wreq_stall & wreq_has[0] & sdata_rdy[0];
   assign wreq_en[1]=~wreq_stall && wreq_has[1] && sdata_rdy[0] && sdata_rdy[1] && 

@@ -24,19 +24,19 @@ module stq(
   doStall,
   aStall,
   aDoStall,
-  chk0_adata,chk0_en,chk0_LSQ,
-  chk1_adata,chk1_en,chk1_LSQ,
-  chk2_adata,chk2_en,chk2_LSQ,
-  chk3_adata,chk3_en,chk3_LSQ,
-  chk4_adata,chk4_en,chk4_LSQ,
-  chk5_adata,chk5_en,chk5_LSQ,  
+  chk0_adata,chk0_en,//chk0_LSQ,
+  chk1_adata,chk1_en,//chk1_LSQ,
+  chk2_adata,chk2_en,//chk2_LSQ,
+  chk3_adata,chk3_en,//chk3_LSQ,
+  chk4_adata,chk4_en,//chk4_LSQ,
+  chk5_adata,chk5_en,//chk5_LSQ,  
   wrt0_adata,wrt0_en,wrt0_LSQ,
   wrt1_adata,wrt1_en,wrt1_LSQ,
   confl,confl_SMP,confl_X,
   upd0_WQ,upd0_en,upd0_data,upd0_pbit,//upd0_sz,
   upd1_WQ,upd1_en,upd1_data,upd1_pbit,//upd1_sz,
-  pse0_WQ,pse0_en,
-  pse1_WQ,pse1_en,
+  pse0_en,
+  pse1_en,
   wb1_adata,wb1_LSQ,wb1_data,wb1_pbit,wb1_bnkEn,wb1_en,wb1_way,
   wb0_adata,wb0_LSQ,wb0_data,wb0_pbit,wb0_bnkEn,wb0_en
   );
@@ -55,27 +55,21 @@ module stq(
 
   input [`lsaddr_width-1:0] chk0_adata;
   input chk0_en;
-  input [8:0] chk0_LSQ;
 
   input [`lsaddr_width-1:0] chk1_adata;
   input chk1_en;
-  input [8:0] chk1_LSQ;
 
   input [`lsaddr_width-1:0] chk2_adata;
   input chk2_en;
-  input [8:0] chk2_LSQ;
 
   input [`lsaddr_width-1:0] chk3_adata;
   input chk3_en;
-  input [8:0] chk3_LSQ;
 
   input [`lsaddr_width-1:0] chk4_adata;
   input chk4_en;
-  input [8:0] chk4_LSQ;
 
   input [`lsaddr_width-1:0] chk5_adata;
   input chk5_en;
-  input [8:0] chk5_LSQ;
   
   input [`lsaddr_width-1:0] wrt0_adata;
   input wrt0_en;
@@ -101,10 +95,8 @@ module stq(
   input [1:0] upd1_pbit;
 //  input [4:0] upd1_sz;
 
-  input [5:0] pse0_WQ;
   input pse0_en;
 
-  input [5:0] pse1_WQ;
   input pse1_en;
 
   output [`lsaddr_width-1:0] wb1_adata;
@@ -121,6 +113,11 @@ module stq(
   output [1:0] wb0_pbit;
   output [4:0] wb0_bnkEn;
   output wb0_en;
+  
+  reg [5:0] pse0_WQ;
+  reg [5:0] pse1_WQ;
+  wire [5:0] pse1_WQ_inc;
+  wire [5:0] pse1_WQ_inc2;
   
   wire [7:0] chk0_subBNK;
   wire [7:0] chk1_subBNK;
@@ -500,4 +497,23 @@ module stq(
   wrt1_en,wrt1_WQ,wrt1_adata[`lsaddr_bank0],
   upd0_WQ,upd0_begin0,
   upd1_WQ,upd1_begin0);
+
+  adder_inc #(6) inc_pse_mod(pse1_WQ,pse1_WQ_inc,1'b1,);
+  adder_inc #(5) inc_pse_mod(pse1_WQ[5:1],pse1_WQ_inc2[5:1],1'b1,);
+  assign pse1_WQ_inc2[0]=pse1_WQ[0];
+
+  always @(posedge clk) begin
+      if (rst) begin
+	  pse0_WQ<=6'd0;
+	  pse1_WQ<=6'd0;
+      end else begin
+	  if (!stall && !doStall && pse0_en && ~pse1_en) begin
+	      pse0_WQ<=pse1_WQ;
+	      pse1_WQ<=pse1_WQ_inc;
+	  end else if (!stall && !doStall && pse0_en) begin
+	      pse0_WQ<=pse1_WQ_inc;
+	      pse1_WQ<=pse1_WQ_inc2;
+	  end
+      end
+  end
 endmodule
