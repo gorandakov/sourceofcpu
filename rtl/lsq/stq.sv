@@ -38,7 +38,9 @@ module stq(
   pse0_en,
   pse1_en,
   wb1_adata,wb1_LSQ,wb1_data,wb1_pbit,wb1_bnkEn,wb1_en,wb1_way,
-  wb0_adata,wb0_LSQ,wb0_data,wb0_pbit,wb0_bnkEn,wb0_en
+  wb0_adata,wb0_LSQ,wb0_data,wb0_pbit,wb0_bnkEn,wb0_en,
+  WLN0_en,WLN0_adata,WLN0_data,WLN0_pbit,
+  WLN1_en,WLN1_adata,WLN1_data,WLN1_pbit
   );
   input clk;
 
@@ -114,10 +116,26 @@ module stq(
   output [4:0] wb0_bnkEn;
   output wb0_en;
   
+  output WLN0_en;
+  output [`lsaddr_width-1:0] WLN0_adata;
+  output [135:0] WLN0_data;
+  output [1:0] WLN0_pbit;
+  
+  output WLN1_en;
+  output [`lsaddr_width-1:0] WLN1_adata;
+  output [135:0] WLN1_data;
+  output [1:0] WLN1_pbit;
+  
   reg [5:0] pse0_WQ;
   reg [5:0] pse1_WQ;
   wire [5:0] pse1_WQ_inc;
   wire [5:0] pse1_WQ_inc2;
+  
+  wire [135:0] WLN0_dataX;
+  wire [135:0] WLN1_dataX;
+
+  wire [5:0] WLN0_WQ;
+  wire [5:0] WLN1_WQ;
   
   wire [7:0] chk0_subBNK;
   wire [7:0] chk1_subBNK;
@@ -192,7 +210,9 @@ module stq(
   wire [135:0] chk5_data;
   wire [135:0] WLN0_data;
   wire [135:0] WLN1_data;
-  
+ 
+  wire [5:0][`lsaddr_width-1:0] chk_adata;
+
   wire [7:0][63:0] chk0_match;
   wire [7:0][63:0] chk1_match;
   wire [7:0][63:0] chk2_match;
@@ -455,11 +475,18 @@ module stq(
   assign chk5_banks=chk5_adata[`lsaddr_banks];
   assign wrt0_banks=wrt0_adata[`lsaddr_banks];
   assign wrt1_banks=wrt1_adata[`lsaddr_banks];
+
+  assign chk_adata[0]=chk0_adata;
+  assign chk_adata[1]=chk1_adata;
+  assign chk_adata[2]=chk2_adata;
+  assign chk_adata[3]=chk3_adata;
+  assign chk_adata[4]=chk4_adata;
+  assign chk_adata[5]=chk5_adata;
   
   stq_buf_A_array A0_mod(
   clk,
   rst,
-  stallA,
+  aStall|aDoStall,
   excpt,
   wrt0_en0[31:0], wrt0_adata[`lsaddr_addrE], wrt0_adata[`lsaddr_addrO], 
   wrt1_en0[31:0], wrt1_adata[`lsaddr_addrE], wrt1_adata[`lsaddr_addrO], 
@@ -476,7 +503,7 @@ module stq(
   stq_buf_A_array A1_mod(
   clk,
   rst,
-  stallA,
+  aStall|aDoStall,
   excpt,
   wrt0_en0[63:32], wrt0_adata[`lsaddr_addrE], wrt0_adata[`lsaddr_addrO], 
   wrt1_en0[63:32], wrt1_adata[`lsaddr_addrE], wrt1_adata[`lsaddr_addrO], 

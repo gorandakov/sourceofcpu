@@ -1653,7 +1653,7 @@ module rs_s(
 
   WQ_wakeUP_logic_array WQLA_mod(
   clk,
-  rst,
+  dataRst|nonDataRst,
   stall,
   newWQA0,newRsSelect0,newPort0[2]&newPort0[6],
   newWQA1,newRsSelect1,newPort1[2]&newPort1[6],
@@ -1664,7 +1664,7 @@ module rs_s(
   
   WQ_wakeUP_logic_array WQLB_mod(
   clk,
-  rst,
+  dataRst|nonDataRst,
   stall,
   newWQB0,newRsSelect0,newPort0[2]&newPort0[7],
   newWQB1,newRsSelect1,newPort1[2]&newPort1[7],

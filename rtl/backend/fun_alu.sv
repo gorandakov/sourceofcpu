@@ -727,7 +727,7 @@ module fu_alu(
       u5_S_fufwd_reg<= u5_S_fufwd;
       u5_S_fuufwd_reg<=u5_S_fuufwd;
       u6_S_fufwd_reg<= u6_S_fufwd;
-      u7_S_fuufwd_reg<=u6_S_fuufwd;
+      u6_S_fuufwd_reg<=u6_S_fuufwd;
 
       if(u2_op==`op_shl64 || u2_op==`op_shr64 || u2_op==`op_sar64)
           u2_sz<=4'b1000; else u2_sz<=4'b0100;
