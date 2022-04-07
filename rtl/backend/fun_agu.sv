@@ -191,7 +191,7 @@ module agu_block(
   input [8:0]  u1_reg;
   input [8:0]  u1_LSQ_no;
   input [9:0]  u1_II_no;
-  input [7:0]  u1_WQ_no;
+  input [5:0]  u1_WQ_no;
   input        u1_lsflag;
   input        u1_clkEn;
   input [3:0]  u1_attr;
@@ -206,7 +206,7 @@ module agu_block(
   input [8:0]  u2_reg;
   input [8:0]  u2_LSQ_no;
   input [9:0]  u2_II_no;
-  input [7:0]  u2_WQ_no;
+  input [5:0]  u2_WQ_no;
   input        u2_lsflag;
   input        u2_clkEn;
   input [3:0]  u2_attr;
@@ -221,7 +221,7 @@ module agu_block(
   input [8:0]  u3_reg;
   input [8:0]  u3_LSQ_no;
   input [9:0]  u3_II_no;
-  input [7:0]  u3_WQ_no;
+  input [5:0]  u3_WQ_no;
   input        u3_lsflag;
   input        u3_clkEn;
   input [3:0]  u3_attr;
@@ -236,7 +236,7 @@ module agu_block(
   input [8:0]  u4_reg;
   input [8:0]  u4_LSQ_no;
   input [9:0]  u4_II_no;
-  input [7:0]  u4_WQ_no;
+  input [5:0]  u4_WQ_no;
   input        u4_lsflag;
   input        u4_clkEn;
   input [3:0]  u4_attr;
@@ -251,7 +251,7 @@ module agu_block(
   input [8:0]  u5_reg;
   input [8:0]  u5_LSQ_no;
   input [9:0]  u5_II_no;
-  input [7:0]  u5_WQ_no;
+  input [5:0]  u5_WQ_no;
   input        u5_lsflag;
   input        u5_clkEn;
   input [3:0]  u5_attr;
@@ -539,7 +539,7 @@ module agu_block(
   wire [4:0] rec_beginA;
   wire [8:0] rec_LSQ;
   wire [9:0] rec_II;
-  wire [7:0] rec_WQ;
+  wire [5:0] rec_WQ;
   wire [1:0] rec_type;
   wire [4:0] rec_brdbnk;
   wire [127+8:0] rec_data;
@@ -807,7 +807,7 @@ module agu_block(
   reg [8:0]  u1_reg_reg;
   reg [8:0]  u1_LSQ_no_reg;
   reg [9:0]  u1_II_no_reg;
-  reg [7:0]  u1_WQ_no_reg;
+  reg [5:0]  u1_WQ_no_reg;
   reg        u1_lsflag_reg;
   reg [63:0] u1_const_reg;
   reg [3:0]  u1_attr_reg;
@@ -818,7 +818,7 @@ module agu_block(
   reg [8:0]  u2_reg_reg;
   reg [8:0]  u2_LSQ_no_reg;
   reg [9:0]  u2_II_no_reg;
-  reg [7:0]  u2_WQ_no_reg;
+  reg [5:0]  u2_WQ_no_reg;
   reg        u2_lsflag_reg;
   reg [63:0] u2_const_reg;
   reg [3:0]  u2_attr_reg;
@@ -829,7 +829,7 @@ module agu_block(
   reg [8:0]  u3_reg_reg;
   reg [8:0]  u3_LSQ_no_reg;
   reg [9:0]  u3_II_no_reg;
-  reg [7:0]  u3_WQ_no_reg;
+  reg [5:0]  u3_WQ_no_reg;
   reg        u3_lsflag_reg;
   reg [63:0] u3_const_reg;
   reg [3:0]  u3_attr_reg;
@@ -840,7 +840,7 @@ module agu_block(
   reg [8:0]  u4_reg_reg;
   reg [8:0]  u4_LSQ_no_reg;
   reg [9:0]  u4_II_no_reg;
-  reg [7:0]  u4_WQ_no_reg;
+  reg [5:0]  u4_WQ_no_reg;
   reg        u4_lsflag_reg;
   reg [63:0] u4_const_reg;
   reg [3:0]  u4_attr_reg;
@@ -851,7 +851,7 @@ module agu_block(
   reg [8:0]  u5_reg_reg;
   reg [8:0]  u5_LSQ_no_reg;
   reg [9:0]  u5_II_no_reg;
-  reg [7:0]  u5_WQ_no_reg;
+  reg [5:0]  u5_WQ_no_reg;
   reg        u5_lsflag_reg;
   reg [63:0] u5_const_reg;
   reg [3:0]  u5_attr_reg;
@@ -862,7 +862,7 @@ module agu_block(
   reg [8:0]  u1_reg_reg2;
   reg [8:0]  u1_LSQ_no_reg2;
   reg [9:0]  u1_II_no_reg2;
-  reg [7:0]  u1_WQ_no_reg2;
+  reg [5:0]  u1_WQ_no_reg2;
   reg        u1_lsflag_reg2;
 
   reg        u2_clkEn_reg2;
@@ -871,7 +871,7 @@ module agu_block(
   reg [8:0]  u2_reg_reg2;
   reg [8:0]  u2_LSQ_no_reg2;
   reg [9:0]  u2_II_no_reg2;
-  reg [7:0]  u2_WQ_no_reg2;
+  reg [5:0]  u2_WQ_no_reg2;
   reg        u2_lsflag_reg2;
   
   reg        u3_clkEn_reg2;
@@ -880,7 +880,7 @@ module agu_block(
   reg [8:0]  u3_reg_reg2;
   reg [8:0]  u3_LSQ_no_reg2;
   reg [9:0]  u3_II_no_reg2;
-  reg [7:0]  u3_WQ_no_reg2;
+  reg [5:0]  u3_WQ_no_reg2;
   reg        u3_lsflag_reg2;
   
   reg        u4_clkEn_reg2;
@@ -889,7 +889,7 @@ module agu_block(
   reg [8:0]  u4_reg_reg2;
   reg [8:0]  u4_LSQ_no_reg2;
   reg [9:0]  u4_II_no_reg2;
-  reg [7:0]  u4_WQ_no_reg2;
+  reg [5:0]  u4_WQ_no_reg2;
   reg        u4_lsflag_reg2;
   
   reg        u5_clkEn_reg2;
@@ -898,7 +898,7 @@ module agu_block(
   reg [8:0]  u5_reg_reg2;
   reg [8:0]  u5_LSQ_no_reg2;
   reg [9:0]  u5_II_no_reg2;
-  reg [7:0]  u5_WQ_no_reg2;
+  reg [5:0]  u5_WQ_no_reg2;
   reg        u5_lsflag_reg2;
   
   wire        mOpX0_en;
@@ -916,7 +916,7 @@ module agu_block(
   wire [1:0]  mOpX0_type;
   wire [8:0]  mOpX0_LSQ;
   wire [9:0]  mOpX0_II;
-  wire [7:0]  mOpX0_WQ;
+  wire [5:0]  mOpX0_WQ;
   wire        mOpX0_lsflag;
   wire        mOpX0_lsfwd;
   wire [3:0]  mOpX0_attr;
@@ -941,7 +941,7 @@ module agu_block(
   reg [8:0]  mOpX0_register_reg;
   reg [8:0]  mOpX0_LSQ_reg;
   reg [9:0]  mOpX0_II_reg;
-  reg [7:0]  mOpX0_WQ_reg;
+  reg [5:0]  mOpX0_WQ_reg;
 
   wire        mOp0_en,mOp0_sec;
   wire [43:0] mOp0_addrMain;
@@ -958,7 +958,7 @@ module agu_block(
   wire [1:0]  mOp0_type;
   wire [8:0]  mOp0_LSQ;
   wire [9:0]  mOp0_II;
-  wire [7:0]  mOp0_WQ;
+  wire [5:0]  mOp0_WQ;
   wire        mOp0_lsflag;
   wire [3:0]  mOp0_attr;
   reg        mOpX0_lsfwd_reg;
@@ -978,7 +978,7 @@ module agu_block(
   wire [1:0]  mOpX1_type;
   wire [8:0]  mOpX1_LSQ;
   wire [9:0]  mOpX1_II;
-  wire [7:0]  mOpX1_WQ;
+  wire [5:0]  mOpX1_WQ;
   wire        mOpX1_lsflag;
   wire        mOpX1_lsfwd;
   wire [3:0]  mOpX1_attr;
@@ -999,7 +999,7 @@ module agu_block(
   reg [8:0]  mOpX1_register_reg;
   reg [8:0]  mOpX1_LSQ_reg;
   reg [9:0]  mOpX1_II_reg;
-  reg [7:0]  mOpX1_WQ_reg;
+  reg [5:0]  mOpX1_WQ_reg;
   reg        mOp1_sec_reg2;
   reg        mOp1_sec_reg3;
   
@@ -1018,7 +1018,7 @@ module agu_block(
   wire [1:0]  mOp1_type;
   wire [8:0]  mOp1_LSQ;
   wire [9:0]  mOp1_II;
-  wire [7:0]  mOp1_WQ;
+  wire [5:0]  mOp1_WQ;
   wire        mOp1_lsflag;
   wire [3:0]  mOp1_attr;
   reg        mOpX1_lsfwd_reg;
@@ -1038,7 +1038,7 @@ module agu_block(
   wire [1:0]  mOpX2_type;
   wire [8:0]  mOpX2_LSQ;
   wire [9:0]  mOpX2_II;
-  wire [7:0]  mOpX2_WQ;
+  wire [5:0]  mOpX2_WQ;
   wire        mOpX2_lsflag;
   wire        mOpX2_lsfwd;
   wire [3:0]  mOpX2_attr;
@@ -1059,7 +1059,7 @@ module agu_block(
   reg [8:0]  mOpX2_register_reg;
   reg [8:0]  mOpX2_LSQ_reg;
   reg [9:0]  mOpX2_II_reg;
-  reg [7:0]  mOpX2_WQ_reg;
+  reg [5:0]  mOpX2_WQ_reg;
   reg        mOp2_sec_reg2;
   reg        mOp2_sec_reg3;
   
@@ -1078,7 +1078,7 @@ module agu_block(
   wire [1:0]  mOp2_type;
   wire [8:0]  mOp2_LSQ;
   wire [9:0]  mOp2_II;
-  wire [7:0]  mOp2_WQ;
+  wire [5:0]  mOp2_WQ;
   wire        mOp2_lsflag;
   wire [3:0]  mOp2_attr;
   reg        mOpX2_lsfwd_reg;
@@ -1098,7 +1098,7 @@ module agu_block(
   wire [1:0]  mOpX3_type;
   wire [8:0]  mOpX3_LSQ;
   wire [9:0]  mOpX3_II;
-  wire [7:0]  mOpX3_WQ;
+  wire [5:0]  mOpX3_WQ;
   wire        mOpX3_lsflag;
   wire [3:0]  mOpX3_attr;
   reg mOpX3_lsflag_reg, mOpX3_lsflag_reg2, mOpX3_lsflag_reg3;
@@ -1122,7 +1122,7 @@ module agu_block(
   reg [8:0]  mOpX3_register_reg3;
   reg [8:0]  mOpX3_LSQ_reg;
   reg [9:0]  mOpX3_II_reg;
-  reg [7:0]  mOpX3_WQ_reg;
+  reg [5:0]  mOpX3_WQ_reg;
   
   wire        mOp3_en,mOp3_sec;
   wire [43:0] mOp3_addrMain;
@@ -1139,7 +1139,7 @@ module agu_block(
   wire [1:0]  mOp3_type;
   wire [8:0]  mOp3_LSQ;
   wire [9:0]  mOp3_II;
-  wire [7:0]  mOp3_WQ;
+  wire [5:0]  mOp3_WQ;
   wire        mOp3_lsflag;
   wire        mOp3_lsfwd;
   wire [3:0]  mOp3_attr;
@@ -1159,7 +1159,7 @@ module agu_block(
   wire [1:0]  mOpX4_type;
   wire [8:0]  mOpX4_LSQ;
   wire [9:0]  mOpX4_II;
-  wire [7:0]  mOpX4_WQ;
+  wire [5:0]  mOpX4_WQ;
   wire        mOpX4_lsflag;
   wire [3:0]  mOpX4_attr;
   reg        mOpX4_en_reg;
@@ -1178,7 +1178,7 @@ module agu_block(
   reg [1:0]  mOpX4_type_reg;
   reg [8:0]  mOpX4_LSQ_reg;
   reg [9:0]  mOpX4_II_reg;
-  reg [7:0]  mOpX4_WQ_reg;
+  reg [5:0]  mOpX4_WQ_reg;
   reg        mOpX4_lsflag_reg;
   
   
@@ -1197,7 +1197,7 @@ module agu_block(
   wire [1:0]  mOp4_type;
   wire [8:0]  mOp4_LSQ;
   wire [9:0]  mOp4_II;
-  wire [7:0]  mOp4_WQ;
+  wire [5:0]  mOp4_WQ;
   wire        mOp4_lsflag;
   wire [3:0]  mOp4_attr;
 
@@ -1216,7 +1216,7 @@ module agu_block(
   wire [1:0]  mOpX5_type;
   wire [8:0]  mOpX5_LSQ;
   wire [9:0]  mOpX5_II;
-  wire [7:0]  mOpX5_WQ;
+  wire [5:0]  mOpX5_WQ;
   wire        mOpX5_lsflag;
   wire [3:0]  mOpX5_attr;
   reg        mOpX5_en_reg;
@@ -1233,7 +1233,7 @@ module agu_block(
   reg [1:0]  mOpX5_type_reg;
   reg [8:0]  mOpX5_LSQ_reg;
   reg [9:0]  mOpX5_II_reg;
-  reg [7:0]  mOpX5_WQ_reg;
+  reg [5:0]  mOpX5_WQ_reg;
   reg        mOpX5_lsflag_reg;
   
   wire        mOp5_en,mOp5_sec,mOp5_ptrdiff;
@@ -1251,7 +1251,7 @@ module agu_block(
   wire [1:0]  mOp5_type;
   wire [8:0]  mOp5_LSQ;
   wire [9:0]  mOp5_II;
-  wire [7:0]  mOp5_WQ;
+  wire [5:0]  mOp5_WQ;
   wire        mOp5_lsflag;
   wire [3:0]  mOp5_attr;
 

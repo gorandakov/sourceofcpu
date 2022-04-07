@@ -51,7 +51,9 @@ module stq_data(
   output [WIDTH-1:0] chk6_data;
   input chk7_en;
   output [WIDTH-1:0] chk7_data;
-  
+ 
+  reg [WIDTH-1:0] data;
+
   assign chk0_data=chk0_en ? data : {WIDTH{1'bz}};
   assign chk1_data=chk1_en ? data : {WIDTH{1'bz}};
   assign chk2_data=chk2_en ? data : {WIDTH{1'bz}};

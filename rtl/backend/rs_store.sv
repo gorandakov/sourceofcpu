@@ -950,7 +950,7 @@ module rs_s(
   localparam BUF_COUNT=`rs_buf_count;
   localparam II_WIDTH=10;  
   localparam FN_WIDTH=10;
-  localparam WQ_WIDTH=8;
+  localparam WQ_WIDTH=6;
   localparam ATTR_WIDTH=4;
 
   input clk;

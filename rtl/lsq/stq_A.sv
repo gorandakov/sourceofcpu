@@ -43,8 +43,8 @@ module stq_buf_A(
   input [WIDTH-1:0] wrt0_addrO;
 
   input wrt1_en;
-  input [WIDTH-1:0] wrt0_addrE;
-  input [WIDTH-1:0] wrt0_addrO;
+  input [WIDTH-1:0] wrt1_addrE;
+  input [WIDTH-1:0] wrt1_addrO;
 
   input chk0_en;
   output [1:0] chk0_addrEO;
@@ -88,7 +88,7 @@ module stq_buf_A(
   
   reg [WIDTH-1:0] addrE;
   reg [WIDTH-1:0] addrO;
-  reg upd;
+//  reg upd;
   
   assign chk0_addrEO[0]=chk0_addrE==addrE && ~free && ~passe;
   assign chk1_addrEO[0]=chk1_addrE==addrE && ~free && ~passe;

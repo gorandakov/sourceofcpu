@@ -604,8 +604,8 @@ module stq(
   upd0_WQ,upd0_begin0,
   upd1_WQ,upd1_begin0);
 
-  adder_inc #(6) inc_pse_mod(pse1_WQ,pse1_WQ_inc,1'b1,);
-  adder_inc #(5) inc_pse_mod(pse1_WQ[5:1],pse1_WQ_inc2[5:1],1'b1,);
+  adder_inc #(6) inc_pseA_mod(pse1_WQ,pse1_WQ_inc,1'b1,);
+  adder_inc #(5) inc_pseB_mod(pse1_WQ[5:1],pse1_WQ_inc2[5:1],1'b1,);
   assign pse1_WQ_inc2[0]=pse1_WQ[0];
 
   always @(posedge clk) begin

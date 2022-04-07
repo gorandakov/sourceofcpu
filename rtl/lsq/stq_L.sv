@@ -118,7 +118,13 @@ module stq_buf_L(
   reg [3:0] subBNK;
   reg [3:0] subBNK2;
   reg [3:0] odd;
-  reg upd;
+//  reg upd;
+  wire chk0_match0;
+  wire chk1_match0;
+  wire chk2_match0;
+  wire chk3_match0;
+  wire chk4_match0;
+  wire chk5_match0;
   
   assign chk0_match0=chk0_addrEO[chk0_odd] && (chk0_subBNK2&subBNK2)!=0 && chk0_odd[0]==odd[0];
   assign chk1_match0=chk1_addrEO[chk1_odd] && (chk1_subBNK2&subBNK2)!=0 && chk1_odd[0]==odd[0];
