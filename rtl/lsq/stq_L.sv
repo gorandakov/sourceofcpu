@@ -113,7 +113,7 @@ module stq_buf_L(
   output reg passe;
   input passe_en;
   
-  reg [WIDTH-1:0] addrEO;
+//  reg [WIDTH-1:0] addrEO;
   reg [3:0] bytes;
   reg [3:0] subBNK;
   reg [3:0] subBNK2;
@@ -143,7 +143,7 @@ module stq_buf_L(
 
   always @(posedge clk) begin
       if (rst) begin
-          addrEO<=0;
+  //        addrEO<=0;
           bytes<=0;
           subBNK<=0;
           subBNK2<=0;
@@ -153,7 +153,7 @@ module stq_buf_L(
           odd<=4'b0;
       end else begin
           if (wrt0_en) begin
-              addrEO<=wrt0_addrEO;
+//              addrEO<=wrt0_addrEO;
               bytes<=wrt0_bytes;
               subBNK<=wrt0_subBNK;
               subBNK2<=wrt0_subBNK2;
@@ -163,7 +163,7 @@ module stq_buf_L(
               passe<=1'b0;
           end
           if (wrt1_en) begin
-              addrEO<=wrt1_addrEO;
+//              addrEO<=wrt1_addrEO;
               bytes<=wrt1_bytes;
               subBNK<=wrt1_subBNK;
               subBNK2<=wrt1_subBNK2;

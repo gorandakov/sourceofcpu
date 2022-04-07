@@ -340,6 +340,8 @@ module stq(
       input [4:0] sz;
       input [31:0] banks;
       input [1:0] index;
+      reg [31:0] first;
+      reg [31:0] last;
       begin
           first=banks&~{banks[30:0],banks[31]};
           last=banks&~{banks[0],banks[31:0]};

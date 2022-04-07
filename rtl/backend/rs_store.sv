@@ -468,11 +468,13 @@ module rss_D_buf(
   wire dataAPending1_d;
   wire dataAPending1_q;
   wire dataAPending1_new;
+  wire dataAPending1_gather;
 
   wire dataBPending1_en;
   wire dataBPending1_d;
   wire dataBPending1_q;
   wire dataBPending1_new;
+  wire dataBPending1_gather;
  
 // wires - end new data
 
