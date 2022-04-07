@@ -297,6 +297,8 @@ module fun_lsq(
   LSQ_dataA3,LSQ_enA[3],//chk3_LSQ,
   LSQ_dataA4,LSQ_enA[4],//chk4_LSQ,
   LSQ_dataA5,LSQ_enA[5],//chk5_LSQ,  
+  LSQ_rdy_A,
+  LSQ_shr_dataA,
   p4_adata,p4_en,p4_LSQ,
   p5_adata,p5_en,p5_LSQ,
   LDQ_ldconfl,LDQ_insconfl,LDQ_ldconflX,
