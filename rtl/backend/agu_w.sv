@@ -86,7 +86,7 @@ module sagu(
   input [REG_WIDTH-1:0] regno;
   input [8:0] LSQ_no;
   input [9:0] II_no;
-  input [7:0] WQ_no;
+  input [5:0] WQ_no;
   input thread;
   input lsflag;
   input [63:0] cmplxAddr;
@@ -100,7 +100,7 @@ module sagu(
   output [1:0] mOp_type;
   output [8:0] mOp_LSQ;
   output [9:0] mOp_II;
-  output [7:0] mOp_WQ;
+  output [5:0] mOp_WQ;
   output [3:0] mOp_attr;
   output [PADDR_WIDTH-1:8] mOp_addrEven;
   output [PADDR_WIDTH-1:8] mOp_addrOdd;
@@ -210,7 +210,7 @@ module sagu(
   reg [REG_WIDTH-1:0] regno_reg;
   reg [8:0] LSQ_no_reg;
   reg [9:0] II_no_reg;
-  reg [7:0] WQ_no_reg;
+  reg [5:0] WQ_no_reg;
   reg thread_reg;
   reg lsflag_reg;
 
@@ -454,7 +454,7 @@ module sagu(
               regno_reg<={REG_WIDTH{1'B0}};
               LSQ_no_reg<=9'b0;
               II_no_reg<=10'b0;
-              WQ_no_reg<=8'b0;
+              WQ_no_reg<=6'b0;
 	      attr2_reg<=4'b0;
               thread_reg<=1'b0;
               lsflag_reg<=1'b0;

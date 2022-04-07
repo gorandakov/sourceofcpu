@@ -245,7 +245,7 @@ module agucam(
   localparam TLB_DWIDTH=`dtlbData_width;
   localparam BANK_COUNT=32;
   localparam REG_WIDTH=`reg_addr_width;
-  localparam WQ_WIDTH=8;
+  localparam WQ_WIDTH=6;
  
   input clk;
   input rst;
@@ -265,7 +265,7 @@ module agucam(
   input [4:0] mOp0_bank0;
   input [8:0] mOp0_LSQ;
   input [9:0] mOp0_II;
-  input [7:0] mOp0_WQ;
+  input [5:0] mOp0_WQ;
   input mOp0_thread;
   input mOp0_lsflag;
   input [3:0] mOp0_attr;
@@ -281,7 +281,7 @@ module agucam(
   input [4:0] mOp1_bank0;
   input [8:0] mOp1_LSQ;
   input [9:0] mOp1_II;
-  input [7:0] mOp1_WQ;
+  input [5:0] mOp1_WQ;
   input mOp1_thread;
   input mOp1_lsflag;
   input [3:0] mOp1_attr;
@@ -297,7 +297,7 @@ module agucam(
   input [4:0] mOp2_bank0;
   input [8:0] mOp2_LSQ;
   input [9:0] mOp2_II;
-  input [7:0] mOp2_WQ;
+  input [5:0] mOp2_WQ;
   input mOp2_thread;
   input mOp2_lsflag;
   input [3:0] mOp2_attr;
@@ -314,7 +314,7 @@ module agucam(
   input mOp3_split;
   input [4:0] mOp3_bank0;
   input [9:0] mOp3_II;
-  input [7:0] mOp3_WQ;
+  input [5:0] mOp3_WQ;
   input [135:0] mOp3_data;
   input [4:0] mOp3_bread;
   input [1:0] mOp3_pbit;
@@ -334,7 +334,7 @@ module agucam(
   output [4:0] mOpR_bank0;
   output [8:0] mOpR_LSQ;
   output [9:0] mOpR_II;
-  output [7:0] mOpR_WQ;
+  output [5:0] mOpR_WQ;
   output mOpR_thread;
   output mOpR_lsflag;
   output [4:0] mOpR_bread;
@@ -499,7 +499,7 @@ module agucam(
   assign mOpR_bank0=(!conflFound) ? 5'b0 : 5'BZ;
 //  assign mOpR_data=(!conflFound) ? 136'b0 : 136'BZ;
   assign mOpR_II=(!conflFound) ? 10'b0 : 10'BZ;
-  assign mOpR_WQ=(!conflFound) ? 8'b0 : 8'BZ;
+  assign mOpR_WQ=(!conflFound) ? 6'b0 : 6'BZ;
   assign mOpR_thread=(!conflFound) ? 1'b0 : 1'BZ;
   assign mOpR_LSQ=(!conflFound) ? 9'b0 : 9'BZ;
   assign mOpR_lsflag=(!conflFound) ? 1'b0 : 1'BZ;
@@ -529,7 +529,7 @@ module agucam(
   assign mOpR_bank0=sel[3] ? read_mop3[`mOpX_bank0] : 5'BZ;
   assign mOpR_LSQ=sel[3] ? 9'b0 : 9'BZ;
   assign mOpR_II=sel[3] ? read_mop3[`mOpX_II] : 10'BZ;
-  assign mOpR_WQ=sel[3] ? read_mop3[`mOpX_WQ] : 8'BZ;
+  assign mOpR_WQ=sel[3] ? read_mop3[`mOpX_WQ] : 6'BZ;
   assign mOpR_thread=sel[3] ? 1'b0 : 1'BZ;
   assign mOpR_lsflag=sel[3] ? 1'b0 : 1'BZ;
   assign thrmask=sel[3] ? 1'b0 : 1'bz;
@@ -555,7 +555,7 @@ module agucam(
         assign mOpR_bank0=sel[k] ? read_mop[k][`mOp_bank0] : 5'BZ;
         assign mOpR_LSQ=sel[k] ? read_mop[k][`mOp_LSQ] : 9'BZ;
         assign mOpR_II=sel[k] ? read_mop[k][`mOp_II] : 10'BZ;
-        assign mOpR_WQ=sel[k] ? read_mop[k][`mOp_WQ] : 8'BZ;
+        assign mOpR_WQ=sel[k] ? read_mop[k][`mOp_WQ] : 6'BZ;
         assign mOpR_thread=sel[k] ? read_mop[k][`mOp_thread] : 1'BZ;
         assign mOpR_lsflag=sel[k] ? read_mop[k][`mOp_lsflag] : 1'BZ;
         assign thrmask=sel[k] ? (read_mop[k][`mOp_thread]) | (~read_mop[k][`mOp_thread]) : 1'bz;

@@ -113,7 +113,7 @@ module agu_r(
   input [8:0] mOp0_regNo;
   input [8:0] mOp0_LSQ;
   input [9:0] mOp0_II;
-  input [7:0] mOp0_WQ;
+  input [5:0] mOp0_WQ;
   input [3:0] mOp0_attr;
   input reqtlb_en;
   input [29:0] reqtlb_addr;
@@ -149,7 +149,7 @@ module agu_r(
   output [8:0] mOp_regNo;
   output [8:0] mOp_LSQ;
   output [9:0] mOp_II;
-  output [7:0] mOp_WQ;
+  output [5:0] mOp_WQ;
   output mOp_lsfwd;
   output [1:0] mOp_type;
   output [3+1:0] mOp_bread;
@@ -197,7 +197,7 @@ module agu_r(
   reg [8:0] mOp0_regNo_reg;
   reg [8:0] mOp0_LSQ_reg;
   reg [9:0] mOp0_II_reg;
-  reg [7:0] mOp0_WQ_reg;
+  reg [5:0] mOp0_WQ_reg;
   reg [3:0] mOp0_attr_reg;
   reg [PADDR_WIDTH-9:0] mOp0_addrEven_reg;
   reg [PADDR_WIDTH-9:0] mOp0_addrOdd_reg;
@@ -288,7 +288,7 @@ module agu_r(
   assign mOp_regNo=(~req_bus) ? mOp0_regNo_reg : 9'bz;
   assign mOp_LSQ=(~req_bus) ? mOp0_LSQ_reg : 9'bz;
   assign mOp_II=(~req_bus) ? mOp0_II_reg : 10'bz;
-  assign mOp_WQ=(~req_bus) ? mOp0_WQ_reg : 8'bz;
+  assign mOp_WQ=(~req_bus) ? mOp0_WQ_reg : 6'bz;
 //  assign mOp_thread=(~req_bus) ? mOp0_thread_reg : 1'bz;
   assign mOp_lsflag=(~req_bus) ? mOp0_lsflag_reg : 1'bz;
   assign mOp_lsfwd=(~req_bus) ? mOp0_lsfwd_reg : 1'b0;
@@ -502,7 +502,7 @@ module agu_r(
           mOp0_regNo_reg<=9'b0;
 	  mOp0_LSQ_reg<=9'b0;
 	  mOp0_II_reg<=10'b0;
-	  mOp0_WQ_reg<=8'b0;
+	  mOp0_WQ_reg<=6'b0;
 	  mOp0_attr_reg<=4'b0;
           mOp0_addrEven_reg<=36'b0;
           mOp0_addrOdd_reg<=36'b0;

@@ -131,7 +131,7 @@ module wtmiss(
   localparam TLB_DWIDTH=`dtlbData_width;
   localparam BANK_COUNT=32;
   localparam REG_WIDTH=`reg_addr_width;
-  localparam WQ_WIDTH=8;
+  localparam WQ_WIDTH=6;
   localparam TLB_IP_WIDTH=52;
  
   input clk;
@@ -154,7 +154,7 @@ module wtmiss(
   input mOp0_split;
   input [8:0] mOp0_LSQ;
   input [9:0] mOp0_II;
-  input [7:0] mOp0_WQ;
+  input [5:0] mOp0_WQ;
   input [3:0] mOp0_attr;
   input mOp0_lsflag;
 
@@ -170,7 +170,7 @@ module wtmiss(
   output mOp0_split_o;
   output [8:0] mOp0_LSQ_o;
   output [9:0] mOp0_II_o;
-  output [7:0] mOp0_WQ_o;
+  output [5:0] mOp0_WQ_o;
   output mOp0_lsflag_o;
 
   input miss1;
@@ -186,7 +186,7 @@ module wtmiss(
   input mOp1_split;
   input [8:0] mOp1_LSQ;
   input [9:0] mOp1_II;
-  input [7:0] mOp1_WQ;
+  input [5:0] mOp1_WQ;
   input [3:0] mOp1_attr;
   input mOp1_lsflag;
   
@@ -201,7 +201,7 @@ module wtmiss(
   output mOp1_split_o;
   output [8:0] mOp1_LSQ_o;
   output [9:0] mOp1_II_o;
-  output [7:0] mOp1_WQ_o;
+  output [5:0] mOp1_WQ_o;
   output mOp1_lsflag_o;
   
   output [VADDR_WIDTH-1:0] mEx0_addr;
