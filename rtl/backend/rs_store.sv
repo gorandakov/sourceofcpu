@@ -409,17 +409,17 @@ module rss_D_buf(
   input newANeeded0;
   input newBNeeded0;
   input newRsSelect0;
-  input [8:0] newPort0;
+  input [6:0] newPort0;
 
   input newANeeded1;
   input newBNeeded1;
   input newRsSelect1;
-  input [8:0] newPort1;  
+  input [6:0] newPort1;  
 
   input newANeeded2;
   input newBNeeded2;
   input newRsSelect2;
-  input [8:0] newPort2;  
+  input [6:0] newPort2;  
 
 // output data to functional units
 
@@ -545,9 +545,9 @@ module rss_D_buf(
   
   assign unCheckA=(fuFwdA==4'd0 && ~FU0Hit) | (fuFwdA==4'd1 && ~FU1Hit) | (fuFwdA==4'd2 && ~FU2Hit) | (fuFwdA==4'd3 && ~FU3Hit);
 
-  assign portNo_new=(newRsSelect0 & ~stall) ? newPort0 : 9'bz;
-  assign portNo_new=(newRsSelect1 & ~stall) ? newPort1 : 9'bz;
-  assign portNo_new=(newRsSelect2 & ~stall) ? newPort2 : 9'bz;
+  assign portNo_new=(newRsSelect0 & ~stall) ? {newBNeeded0,newANeeded0,newPort0} : 9'bz;
+  assign portNo_new=(newRsSelect1 & ~stall) ? {newBNeeded1,newANeeded1,newPort1} : 9'bz;
+  assign portNo_new=(newRsSelect2 & ~stall) ? {newBNeeded2,newANeeded2,newPort2} : 9'bz;
   assign portNo_new=(newRsSelectAny & ~stall) ? 9'bz : 9'b0;
 
 
@@ -1657,9 +1657,9 @@ module rs_s(
   clk,
   dataRst|nonDataRst,
   stall,
-  newWQA0,newRsSelect0,newPort0[2]&newPort0[6],
-  newWQA1,newRsSelect1,newPort1[2]&newPort1[6],
-  newWQA2,newRsSelect2,newPort2[2]&newPort2[6],
+  newWQA0,newRsSelect0,newPort0[2]&newANeeded0,
+  newWQA1,newRsSelect1,newPort1[2]&newANeeded1,
+  newWQA2,newRsSelect2,newPort2[2]&newANeeded2,
   FUWQ0,FUWQen0,
   FUWQ1,FUWQen1,
   isDataWQA);
@@ -1668,9 +1668,9 @@ module rs_s(
   clk,
   dataRst|nonDataRst,
   stall,
-  newWQB0,newRsSelect0,newPort0[2]&newPort0[7],
-  newWQB1,newRsSelect1,newPort1[2]&newPort1[7],
-  newWQB2,newRsSelect2,newPort2[2]&newPort2[7],
+  newWQB0,newRsSelect0,newPort0[2]&newBNeeded0,
+  newWQB1,newRsSelect1,newPort1[2]&newBNeeded1,
+  newWQB2,newRsSelect2,newPort2[2]&newBNeeded2,
   FUWQ0,FUWQen0,
   FUWQ1,FUWQen1,
   isDataWQB);
