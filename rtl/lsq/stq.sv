@@ -24,6 +24,8 @@ module stq(
   doStall,
   aStall,
   aDoStall,
+  rsStall,
+  rsDoStall,
   chk0_adata,chk0_en,//chk0_LSQ,
   chk1_adata,chk1_en,//chk1_LSQ,
   chk2_adata,chk2_en,//chk2_LSQ,
@@ -56,6 +58,9 @@ module stq(
   input aStall;
 
   output aDoStall;
+
+  input rsStall;
+  output reg rsDoStall;
 
   input [`lsaddr_width-1:0] chk0_adata;
   input chk0_en;
@@ -308,6 +313,12 @@ module stq(
   wire [63:0] free;
 
   wire [5:0] rdy=~confl&~confl_SMP&{chk5_en,chk4_en,chk3_en,chk2_en,chk1_en,chk0_en};
+  wire [5:0] chk_wb={chk5_adata[`lsaddr_flag] & chk5_en,chk4_adata[`lsaddr_flag] & chk4_en,chk3_adata[`lsaddr_flag] & chk3_en,
+      chk2_adata[`lsaddr_flag] & chk2_en,chk1_adata[`lsaddr_flag] & chk1_en,chk0_adata[`lsaddr_flag] & chk0_en};
+  wire [5:0] chk_wb0;
+  wire [5:0] chk_wb1;
+  wire chk_wb0_has,chk_wb1_has,chk_wb2_has;
+  reg [5:0] chk_mask;
   
   function [31:0] lowt;
       input [31:0] data;
@@ -625,6 +636,7 @@ module stq(
       if (rst) begin
 	  pse0_WQ<=6'd0;
 	  pse1_WQ<=6'd0;
+	  chk_mask<=6'd0;
       end else begin
 	  if (!stall && !doStall && pse0_en && ~pse1_en) begin
 	      pse0_WQ<=pse1_WQ;
@@ -632,6 +644,11 @@ module stq(
 	  end else if (!stall && !doStall && pse0_en) begin
 	      pse0_WQ<=pse1_WQ_inc;
 	      pse1_WQ<=pse1_WQ_inc2;
+	  end
+	  if (!aStall && !aDoStall && chk_en) begin
+	      chk_mask<=6'd0;
+	  end else if (!rs_stall) begin
+	      chk_mask<=chk_mask|chk_wb0|chk_wb1;
 	  end
       end
   end
