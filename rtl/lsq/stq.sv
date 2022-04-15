@@ -25,7 +25,7 @@ module stq(
   aStall,
   aDoStall,
   rsStall,
-  rsDoStall,
+  rsDoStall,//needs to get registered again outside module
   chk0_adata,chk0_en,//chk0_LSQ,
   chk1_adata,chk1_en,//chk1_LSQ,
   chk2_adata,chk2_en,//chk2_LSQ,
@@ -60,7 +60,7 @@ module stq(
   output aDoStall;
 
   input rsStall;
-  output reg rsDoStall;
+  output reg [3:0] rsDoStall;
 
   input [`lsaddr_width-1:0] chk0_adata;
   input chk0_en;
@@ -82,7 +82,7 @@ module stq(
 
   input chk_rdy;
 
-  input [`lsaddr_width-1:0] LSQ_shr_data;
+  input [`lsqshare_width-1:0] LSQ_shr_data;
   
   input [`lsaddr_width-1:0] wrt0_adata;
   input wrt0_en;
@@ -512,9 +512,9 @@ module stq(
 	  assign wb1_adata=chk_wb1[a] ? chk_adata[a] : {`lsaddr_width{1'bz}};
       end
   endgenerate
-  assign wb0_adata=chk_wb_has ? {`lsaddr_width{1'bz}} : {`lsaddr_width{1'b0}};
+  assign wb0_adata=chk_wb0_has ? {`lsaddr_width{1'bz}} : {`lsaddr_width{1'b0}};
   assign wb1_adata=chk_wb1_has ? {`lsaddr_width{1'bz}} : {`lsaddr_width{1'b0}};
-  assign wb0_en=chk_wb_has;
+  assign wb0_en=chk_wb0_has;
   assign wb1_en=chk_wb1_has;
 
   assign aDoStall=|chk0_partial || |chk1_partial || |chk2_partial || |chk3_partial || |chk4_partial || |chk5_partial || chk_wb2_has;
@@ -581,10 +581,10 @@ module stq(
   assign chk_adata[4]=chk4_adata;
   assign chk_adata[5]=chk5_adata;
 
-  bit_find_first_bit #(6) first_wb_mod(chk_wb&~chk_wb_mask,chk_wb0,chk_wb0_has);
-  bit_find_first_bit #(6) first_wb1_mod(chk_wb&~chk_wb0&~chk_wb_mask,chk_wb1,chk_wb1_has);
+  bit_find_first_bit #(6) first_wb_mod(chk_wb&~chk_mask,chk_wb0,chk_wb0_has);
+  bit_find_first_bit #(6) first_wb1_mod(chk_wb&~chk_wb0&~chk_mask,chk_wb1,chk_wb1_has);
 
-  assign chk_wb2_has=(chk_wb&~chk_wb0&~chk_wb_mask&~chk_wb1)!=6'd0;
+  assign chk_wb2_has=(chk_wb&~chk_wb0&~chk_mask&~chk_wb1)!=6'd0;
   
   stq_buf_A_array A0_mod(
   clk,
@@ -645,11 +645,15 @@ module stq(
 	      pse0_WQ<=pse1_WQ_inc;
 	      pse1_WQ<=pse1_WQ_inc2;
 	  end
-	  if (!aStall && !aDoStall && chk_en) begin
+	  if (!aStall && !aDoStall && chk_rdy) begin
 	      chk_mask<=6'd0;
-	  end else if (!rs_stall) begin
+	  end else if (!rsStall) begin
 	      chk_mask<=chk_mask|chk_wb0|chk_wb1;
 	  end
+	  rsDoStall[0]<=wb1_en && wb1_way==2'd0;
+	  rsDoStall[1]<=wb1_en && wb1_way==2'd1;
+	  rsDoStall[2]<=wb1_en && wb1_way==2'd2;
+	  rsDoStall[3]<=wb0_en;
       end
   end
 endmodule
