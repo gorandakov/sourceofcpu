@@ -338,10 +338,10 @@
 `define mOp_II 83:74
 `define mOp_thread 84
 `define mOp_lsflag 85
-`define mOp_WQ 93:86
-`define mOp_type 95:94
-`define mOp_attr 99:96
-`define mOp_width 100
+`define mOp_WQ 91:86
+`define mOp_type 93:92
+`define mOp_attr 97:94
+`define mOp_width 98
 
 `define mOpX_addrEven 35:0
 `define mOpX_addrOdd 71:36
@@ -353,12 +353,12 @@
 `define mOpX_bank0 86:82
 `define mOpX_regNo 95:87
 `define mOpX_II 105:96
-`define mOpX_WQ 113:106
-`define mOpX_bread 118:114
-`define mOpX_mtype 120:119
-`define mOpX_pbit 122:121
-`define mOpX_dummy 123
-`define mOpX_width 124
+`define mOpX_WQ 111:106
+`define mOpX_bread 116:112
+`define mOpX_mtype 118:117
+`define mOpX_pbit 120:119
+`define mOpX_dummy 121
+`define mOpX_width 122
 
 
 `define mOpC_addrEven 35:0
@@ -403,13 +403,13 @@
 `define mOp2_II 73:64
 `define mOp2_thread 74
 `define mOp2_lsflag 75
-`define mOp2_WQ 83:76
-`define mOp2_banks 115:84
-`define mOp2_odd 116
-`define mOp2_addr_low 118:117
-`define mOp2_type 120:119
-`define mOp2_attr 124:121
-`define mOp2_width 125
+`define mOp2_WQ 81:76
+`define mOp2_banks 113:82
+`define mOp2_odd 114
+`define mOp2_addr_low 116:115
+`define mOp2_type 118:117
+`define mOp2_attr 122:119
+`define mOp2_width 123
 
 `define lsaddr_addrE 35:0
 `define lsaddr_addrO 71:36

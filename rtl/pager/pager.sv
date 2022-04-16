@@ -77,7 +77,7 @@ module pager(
   output [REG_WIDTH-1:0] mOp_register;
   output [8:0] mOp_LSQ;
   output [9:0] mOp_II;
-  output [7:0] mOp_WQ;
+  output [5:0] mOp_WQ;
   output [PADDR_WIDTH-1:8] mOp_addrEven;
   output [PADDR_WIDTH-1:8] mOp_addrOdd;
   output [4:0] mOp_sz;
@@ -204,7 +204,7 @@ module pager(
   assign mOp_register=((stageA|{4'b0,stageB})!=0 && ~stageA_running && ~bus_hold) ? 9'h1fc : 9'bz;
   assign mOp_LSQ=((stageA|{4'b0,stageB})!=0 && ~stageA_running && ~bus_hold) ? 9'h07 : 9'bz; 
   assign mOp_II=((stageA|{4'b0,stageB})!=0 && ~stageA_running && ~bus_hold) ? 10'h0 : 10'bz; 
-  assign mOp_WQ=((stageA|{4'b0,stageB})!=0 && ~stageA_running && ~bus_hold) ? 8'h0 : 8'bz; 
+  assign mOp_WQ=((stageA|{4'b0,stageB})!=0 && ~stageA_running && ~bus_hold) ? 6'h0 : 6'bz; 
   assign mOp_addrEven=((stageA|{4'b0,stageB})!=0 && ~stageA_running && ~bus_hold) ? 
     {ptr[43:13],addrE} : 36'bz;
   assign mOp_addrOdd= ((stageA|{4'b0,stageB})!=0 && ~stageA_running && ~bus_hold) ? 

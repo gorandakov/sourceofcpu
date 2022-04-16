@@ -785,17 +785,17 @@ module rss_D_array(
   input newANeeded0;
   input newBNeeded0;
   input [BUF_COUNT-1:0] newRsSelect0;
-  input [8:0] newPort0;
+  input [6:0] newPort0;
 
   input newANeeded1;
   input newBNeeded1;
   input [BUF_COUNT-1:0] newRsSelect1;
-  input [8:0] newPort1;  
+  input [6:0] newPort1;  
 
   input newANeeded2;
   input newBNeeded2;
   input [BUF_COUNT-1:0] newRsSelect2;
-  input [8:0] newPort2;  
+  input [6:0] newPort2;  
 
 // output data to functional units
 
@@ -1356,9 +1356,9 @@ module rs_s(
   FU0Hit,FU1Hit,FU2Hit,FU3Hit,
   new_thread,
 // wires to store new values in a buffer
-  newANeeded0,1'b1,newRsSelect0,{newEnB0,newEnA0,newPort0},
-  newANeeded1,1'b1,newRsSelect1,{newEnB1,newEnA1,newPort1},
-  newANeeded2,1'b1,newRsSelect2,{newEnB2,newEnA2,newPort2},
+  newANeeded0,1'b1,newRsSelect0,newPort0,
+  newANeeded1,1'b1,newRsSelect1,newPort1,
+  newANeeded2,1'b1,newRsSelect2,newPort2,
 // wires to get values out of buffer
   outRsSelect[1],outBank[1],rsFound[1],portReady[1],outDataEn1,outThread1,//data
   fuFwdA,
@@ -1374,9 +1374,9 @@ module rs_s(
   FU0Hit,FU1Hit,FU2Hit,FU3Hit,
   new_thread,
 // wires to store new values in a buffer
-  newBNeeded0,1'b1,newRsSelect0,{newEnB0,newEnA0,newPort0},
-  newBNeeded1,1'b1,newRsSelect1,{newEnB1,newEnA1,newPort1},
-  newBNeeded2,1'b1,newRsSelect2,{newEnB2,newEnA2,newPort2},
+  newBNeeded0,1'b1,newRsSelect0,newPort0,
+  newBNeeded1,1'b1,newRsSelect1,newPort1,
+  newBNeeded2,1'b1,newRsSelect2,newPort2,
 // wires to get values out of buffer
   outRsSelect[3],outBank[3],rsFound[3],portReady[3],outDataEn3,outThread3,//data 2
   fuFwdB,
