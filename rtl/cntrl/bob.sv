@@ -45,7 +45,7 @@ module bob_ram(
   parameter ADDR_WIDTH=`bob_addr_width;
   parameter DATA_WIDTH=`bob_width;
   parameter ADDR_COUNT=`bob_count;
-  
+
   input clk;
   
   input read_clkEn;
@@ -56,6 +56,7 @@ module bob_ram(
   input [DATA_WIDTH-1:0] write_data;
   input write_wen;
   wire dummyW0,dummyW1,dummyW2,dummyW3;
+  //verilator lint_off WIDTH
   bob_ram0 ram0(
   clk,
   read_clkEn,
@@ -84,6 +85,7 @@ module bob_ram(
   write_addr, {write_data[DATA_WIDTH-1:DATA_WIDTH*3/4]}, 
   write_wen
   );
+  //verilator lint_on WIDTH
 endmodule  
 
 module bob_addr(
