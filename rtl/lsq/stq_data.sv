@@ -122,7 +122,7 @@ module stq_data_array(
         wire [WIDTH-1:0] chk6_dataK;
         wire [WIDTH-1:0] chk7_dataK;
         for(row=0;row<8;row=row+1) begin : row_gen
-            stq_data buf_mod(
+            stq_data #(WIDTH) buf_mod(
             clk,
             rst,
             wrt0_en[bank*8+row],wrt0_data,

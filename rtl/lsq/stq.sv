@@ -277,12 +277,12 @@ module stq(
   wire [7:0][3:0] wrt0_bytes;
   wire [7:0][3:0] wrt1_bytes;
 
-  wire [1:0] chk0_addrEO;
-  wire [1:0] chk1_addrEO;
-  wire [1:0] chk2_addrEO;
-  wire [1:0] chk3_addrEO;
-  wire [1:0] chk4_addrEO;
-  wire [1:0] chk5_addrEO;
+  wire [31:0][1:0] chk0_addrEO;
+  wire [31:0][1:0] chk1_addrEO;
+  wire [31:0][1:0] chk2_addrEO;
+  wire [31:0][1:0] chk3_addrEO;
+  wire [31:0][1:0] chk4_addrEO;
+  wire [31:0][1:0] chk5_addrEO;
 
   wire [3:0][63:0] chk0_firstA;
   wire [3:0][63:0] chk1_firstA;
@@ -416,12 +416,12 @@ module stq(
           excpt,
           wrt0_en0, wrt0_odd1[b], wrt0_bytes[b], wrt0_subBNK[b], wrt0_subBNK2[b],
           wrt1_en0, wrt1_odd1[b], wrt1_bytes[b], wrt1_subBNK[b], wrt1_subBNK2[b],
-          chk0_en, chk0_addrEO, chk0_odd1[b], chk0_bytes[b], chk0_subBNK[b], chk0_subBNK2[b], chk0_match[b][31:0], chk0_partial[b][31:0],
-          chk1_en, chk1_addrEO, chk1_odd1[b], chk1_bytes[b], chk1_subBNK[b], chk1_subBNK2[b], chk1_match[b][31:0], chk1_partial[b][31:0],
-          chk2_en, chk2_addrEO, chk2_odd1[b], chk2_bytes[b], chk2_subBNK[b], chk2_subBNK2[b], chk2_match[b][31:0], chk2_partial[b][31:0],
-          chk3_en, chk3_addrEO, chk3_odd1[b], chk3_bytes[b], chk3_subBNK[b], chk3_subBNK2[b], chk3_match[b][31:0], chk3_partial[b][31:0],
-          chk4_en, chk4_addrEO, chk4_odd1[b], chk4_bytes[b], chk4_subBNK[b], chk4_subBNK2[b], chk4_match[b][31:0], chk4_partial[b][31:0],
-          chk5_en, chk5_addrEO, chk5_odd1[b], chk5_bytes[b], chk5_subBNK[b], chk5_subBNK2[b], chk5_match[b][31:0], chk5_partial[b][31:0],
+          chk0_en, chk0_addrEO[31:0], chk0_odd1[b], chk0_bytes[b], chk0_subBNK[b], chk0_subBNK2[b], chk0_match[b][31:0], chk0_partial[b][31:0],
+          chk1_en, chk1_addrEO[31:0], chk1_odd1[b], chk1_bytes[b], chk1_subBNK[b], chk1_subBNK2[b], chk1_match[b][31:0], chk1_partial[b][31:0],
+          chk2_en, chk2_addrEO[31:0], chk2_odd1[b], chk2_bytes[b], chk2_subBNK[b], chk2_subBNK2[b], chk2_match[b][31:0], chk2_partial[b][31:0],
+          chk3_en, chk3_addrEO[31:0], chk3_odd1[b], chk3_bytes[b], chk3_subBNK[b], chk3_subBNK2[b], chk3_match[b][31:0], chk3_partial[b][31:0],
+          chk4_en, chk4_addrEO[31:0], chk4_odd1[b], chk4_bytes[b], chk4_subBNK[b], chk4_subBNK2[b], chk4_match[b][31:0], chk4_partial[b][31:0],
+          chk5_en, chk5_addrEO[31:0], chk5_odd1[b], chk5_bytes[b], chk5_subBNK[b], chk5_subBNK2[b], chk5_match[b][31:0], chk5_partial[b][31:0],
           upd0_en0[31:0], 
           upd1_en0[31:0], 
           free_en[31:0],free[31:0],upd[31:0],passe[31:0],passe_en[31:0]);
@@ -433,12 +433,12 @@ module stq(
           excpt,
           wrt0_en0, wrt0_odd[b], wrt0_bytes[b], wrt0_subBNK[b], wrt0_subBNK2[b],
           wrt1_en0, wrt1_odd[b], wrt1_bytes[b], wrt1_subBNK[b], wrt1_subBNK2[b],
-          chk0_en, chk0_addrEO, chk0_odd[b], chk0_bytes[b], chk0_subBNK[b], chk0_subBNK2[b], chk0_match[b][63:32], chk0_partial[b][63:32],
-          chk1_en, chk1_addrEO, chk1_odd[b], chk1_bytes[b], chk1_subBNK[b], chk1_subBNK2[b], chk1_match[b][63:32], chk1_partial[b][63:32],
-          chk2_en, chk2_addrEO, chk2_odd[b], chk2_bytes[b], chk2_subBNK[b], chk2_subBNK2[b], chk2_match[b][63:32], chk2_partial[b][63:32],
-          chk3_en, chk3_addrEO, chk3_odd[b], chk3_bytes[b], chk3_subBNK[b], chk3_subBNK2[b], chk3_match[b][63:32], chk3_partial[b][63:32],
-          chk4_en, chk4_addrEO, chk4_odd[b], chk4_bytes[b], chk4_subBNK[b], chk4_subBNK2[b], chk4_match[b][63:32], chk4_partial[b][63:32],
-          chk5_en, chk5_addrEO, chk5_odd[b], chk5_bytes[b], chk5_subBNK[b], chk5_subBNK2[b], chk5_match[b][63:32], chk5_partial[b][63:32],
+          chk0_en, chk0_addrEO[63:32], chk0_odd[b], chk0_bytes[b], chk0_subBNK[b], chk0_subBNK2[b], chk0_match[b][63:32], chk0_partial[b][63:32],
+          chk1_en, chk1_addrEO[63:32], chk1_odd[b], chk1_bytes[b], chk1_subBNK[b], chk1_subBNK2[b], chk1_match[b][63:32], chk1_partial[b][63:32],
+          chk2_en, chk2_addrEO[63:32], chk2_odd[b], chk2_bytes[b], chk2_subBNK[b], chk2_subBNK2[b], chk2_match[b][63:32], chk2_partial[b][63:32],
+          chk3_en, chk3_addrEO[63:32], chk3_odd[b], chk3_bytes[b], chk3_subBNK[b], chk3_subBNK2[b], chk3_match[b][63:32], chk3_partial[b][63:32],
+          chk4_en, chk4_addrEO[63:32], chk4_odd[b], chk4_bytes[b], chk4_subBNK[b], chk4_subBNK2[b], chk4_match[b][63:32], chk4_partial[b][63:32],
+          chk5_en, chk5_addrEO[63:32], chk5_odd[b], chk5_bytes[b], chk5_subBNK[b], chk5_subBNK2[b], chk5_match[b][63:32], chk5_partial[b][63:32],
           upd0_en0[63:32], 
           upd1_en0[63:32], 
           free_en[63:32],free[63:32],upd[63:32],passe[63:32],passe_en[63:32]);
@@ -599,8 +599,8 @@ module stq(
   chk3_en, chk3_addrEO[31:0], chk3_adata[`lsaddr_addrE], chk3_adata[`lsaddr_addrO],
   chk4_en, chk4_addrEO[31:0], chk4_adata[`lsaddr_addrE], chk4_adata[`lsaddr_addrO],
   chk5_en, chk5_addrEO[31:0], chk5_adata[`lsaddr_addrE], chk5_adata[`lsaddr_addrO],
-  upd0_en[31:0], 
-  upd1_en[31:0], 
+  upd0_en0[31:0], 
+  upd1_en0[31:0], 
   free_en[31:0],,,,passe_en[31:0]);
 
   stq_buf_A_array A1_mod(
@@ -616,15 +616,15 @@ module stq(
   chk3_en, chk3_addrEO[63:32], chk3_adata[`lsaddr_addrE], chk3_adata[`lsaddr_addrO],
   chk4_en, chk4_addrEO[63:32], chk4_adata[`lsaddr_addrE], chk4_adata[`lsaddr_addrO],
   chk5_en, chk5_addrEO[63:32], chk5_adata[`lsaddr_addrE], chk5_adata[`lsaddr_addrO],
-  upd0_en[63:32], 
-  upd1_en[63:32], 
+  upd0_en0[63:32], 
+  upd1_en0[63:32], 
   free_en[63:32],,,,passe_en[63:32]);
   
   stq_adata bgn_mod(
   clk,
   rst,
-  wrt0_en,wrt0_WQ,wrt0_adata[`lsaddr_bank0],
-  wrt1_en,wrt1_WQ,wrt1_adata[`lsaddr_bank0],
+  wrt0_en,wrt0_adata[`lsaddr_WQ],wrt0_adata[`lsaddr_bank0],
+  wrt1_en,wrt1_adata[`lsaddr_WQ],wrt1_adata[`lsaddr_bank0],
   upd0_WQ,upd0_begin0,
   upd1_WQ,upd1_begin0);
 

@@ -827,7 +827,7 @@ module lsq_req(
   reg flipB;
   reg flipA_reg;
   reg flipA_REH;
-  reg [4:0] readA_addr_REH;
+  reg [5:0] readA_addr_REH;
 
   wire [5:0] readA_flip;
   wire [5:0] readA_enItem;
@@ -921,13 +921,13 @@ module lsq_req(
   assign readB_rdy=(readB_flip&readB_enItem)==({6{flipB}}&readB_enItem) && enableB && ~init;
   
   assign readB_addr_d=(foundB|foundBN) ? 6'bz : write_addr_shr;
-  assign readA_addr_d=(foundA|foundAN) ? 5'bz : write_addr_shr[4:0];
+  assign readA_addr_d=(foundA|foundAN) ? 6'bz : write_addr_shr;
   
  
   assign readA_clkEn0=(readA_flip[0]&readA_enItem[0])==flipA && enableA;
  
-  assign doStall=validA[write_addr_shr[4:0]] || validB[write_addr_shr[5:0]] ||
-    validA_next[write_addr_shr[4:0]] || validB_next[write_addr_shr[5:0]];
+  assign doStall=validA[write_addr_shr] || validB[write_addr_shr[5:0]] ||
+    validA_next[write_addr_shr] || validB_next[write_addr_shr[5:0]];
   
   assign doRsPause[0]=write4_wen_REGA|write4_wen_REGB|write4_wen_REGC;
   assign doRsPause[1]=write5_wen_REGA|write5_wen_REGB|write5_wen_REGC;
@@ -959,10 +959,10 @@ module lsq_req(
     read2B_xdata[`lsqxcept_smpdep],read1B_xdata[`lsqxcept_smpdep],
     read0B_xdata[`lsqxcept_smpdep]};
 
-  assign write4_aux[2]=write4_addr[8:3]!={flipA,readA_addr} && write4_addr[8:3]!={flipA_REH,readA_addr_REH} && enableA;
-  assign write4_aux[1:0]={2{write4_addr[8:3]!={flipA,readA_addr} && enableA}};
-  assign write5_aux[2]=write5_addr[8:3]!={flipA,readA_addr} && write5_addr[8:3]!={flipA_REH,readA_addr_REH} && enableA;
-  assign write5_aux[1:0]={2{write5_addr[8:3]!={flipA,readA_addr} && enableA}};
+  assign write4_aux[2]=write4_addr[8:3]!=readA_addr && write4_addr[8:3]!=readA_addr_REH && enableA;
+  assign write4_aux[1:0]={2{write4_addr[8:3]!=readA_addr && enableA}};
+  assign write5_aux[2]=write5_addr[8:3]!=readA_addr && write5_addr[8:3]!=readA_addr_REH && enableA;
+  assign write5_aux[1:0]={2{write5_addr[8:3]!=readA_addr && enableA}};
 
   assign readA_st={
     read5A_data[`lsaddr_st],
@@ -1057,7 +1057,7 @@ module lsq_req(
   readB_clkEn | reenabB,
   readB_addr_d,
   read_dataY,
-  init ? initCount : {flipA_reg,readA_addr_reg},
+  init ? initCount : readA_addr_reg,
   write_dataY|{YDATA_WIDTH{init}},
   readA_clkEn_reg||readA_clkEn0_reg||init,
   write_addr_shr,{YDATA_WIDTH{~write_addr_shr[5]}},write_wen_shr&~doStall&~stall&~init&~except
@@ -1069,7 +1069,7 @@ module lsq_req(
   readA_clkEn | reenabA,
   readA_addr_d,
   read_data_shr_ram,
-  init ? initCount[4:0] : write_addr_shr[4:0],
+  init ? initCount[5:0] : write_addr_shr[5:0],
   write_data_shr|{SDATA_WIDTH{init}},
   write_wen_shr&~doStall&~stall&~except||init
   );
@@ -1421,13 +1421,13 @@ module lsq_req(
 	  flipA_reg<=1'b0;
 	  readA_rdy_reg<=1'b0;
 	  write_addr_shr<=6'd0;
-	  threadA<=32'b0;
+	  threadA<=64'b0;
 	  threadB<=64'b0;
-	  threadA_next<=32'b0;
+	  threadA_next<=64'b0;
 	  threadB_next<=64'b0;
-	  readA_addr<=5'd0;
+	  readA_addr<=6'd0;
 	  readB_addr<=6'd0;
-	  readA_addr_reg<=5'd0;
+	  readA_addr_reg<=6'd0;
 	  flipA<=1'b0;
 	  flipB<=1'b0;
           exceptA_fix<=1'b0;
@@ -1505,7 +1505,7 @@ module lsq_req(
               end
 
               threadB[write_addr_shr]<=write_thread_shr;
-              threadA[write_addr_shr[4:0]]<=write_thread_shr;
+              threadA[write_addr_shr]<=write_thread_shr;
 
               if (curA==0) curA[write_addr_shr[5:0]]=1'b1;
               if (curB==0) curB[write_addr_shr[5:0]]=1'b1;

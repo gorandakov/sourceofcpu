@@ -12,7 +12,7 @@ module stq_adata(
   input [5:0] wrt0_WQ;
   input [4:0] wrt0_adata;
   input wrt1_en;
-  input wrt1_WQ;
+  input [5:0] wrt1_WQ;
   input [4:0] wrt1_adata;
   input [5:0] upd0_WQ;
   output [4:0] upd0_adata;
