@@ -142,8 +142,8 @@ module stq(
   wire [5:0] pse1_WQ_inc;
   wire [5:0] pse1_WQ_inc2;
   
-  wire [135:0] WLN0_dataX;
-  wire [135:0] WLN1_dataX;
+  wire [139:0] WLN0_dataX;
+  wire [139:0] WLN1_dataX;
 
   wire [5:0] WLN0_WQ;
   wire [5:0] WLN1_WQ;
@@ -213,12 +213,12 @@ module stq(
   wire [63:0] free;
   wire [63:0] upd;
   
-  wire [135:0] chk0_data;
-  wire [135:0] chk1_data;
-  wire [135:0] chk2_data;
-  wire [135:0] chk3_data;
-  wire [135:0] chk4_data;
-  wire [135:0] chk5_data;
+  wire [139:0] chk0_data;
+  wire [139:0] chk1_data;
+  wire [139:0] chk2_data;
+  wire [139:0] chk3_data;
+  wire [139:0] chk4_data;
+  wire [139:0] chk5_data;
   wire [135:0] WLN0_data;
   wire [135:0] WLN1_data;
  
@@ -443,25 +443,42 @@ module stq(
           upd1_en0[63:32], 
           free_en[63:32],free[63:32],upd[63:32],passe[63:32],passe_en[63:32]);
           
+          wire [32+~b[0]-1:0] WLN0_dataX0;
+          wire [32+~b[0]-1:0] WLN1_dataX0;
+          wire [32+~b[0]-1:0] chk0_data0;
+          wire [32+~b[0]-1:0] chk0_data1;
+          wire [32+~b[0]-1:0] chk0_data2;
+          wire [32+~b[0]-1:0] chk0_data3;
+          wire [32+~b[0]-1:0] chk0_data4;
+          wire [32+~b[0]-1:0] chk0_data5;
+
           if (b<4)
           stq_data_array #(32+~b[0]) dat_mod(
           clk,
           rst,
           upd0_en0,{upd0_pbit[upd0_b[b][1]],upd0_data[32*Rupd0_b[b]+:32]},
           upd1_en0,{upd1_pbit[upd1_b[b][1]],upd1_data[32*Rupd1_b[b]+:32]},
-          chk0_match_first[b],chk0_data[32*b+:32],
-          chk1_match_first[b],chk1_data[32*b+:32],
-          chk2_match_first[b],chk2_data[32*b+:32],
-          chk3_match_first[b],chk3_data[32*b+:32],
-          chk4_match_first[b],chk4_data[32*b+:32],
-          chk5_match_first[b],chk5_data[32*b+:32],
-          WLN0_match[b],{WLN0_pbit[WLN0_b[b]],WLN0_dataX[32*b+:32]},
-          WLN1_match[b],{WLN1_pbit[WLN1_b[b]],WLN1_dataX[32*b+:32]}
+          chk0_match_first[b],chk0_data0,
+          chk1_match_first[b],chk1_data0,
+          chk2_match_first[b],chk2_data0,
+          chk3_match_first[b],chk3_data0,
+          chk4_match_first[b],chk4_data0,
+          chk5_match_first[b],chk5_data0,
+          WLN0_match[b],WLN0_dataX0,
+          WLN1_match[b],WLN1_dataX0
           );
           
           if (b<4) begin
-              assign WLN0_data[32*b+:32]=WLN0_dataX[32*WLN0_b[b]+:32];
-              assign WLN1_data[32*b+:32]=WLN1_dataX[32*WLN1_b[b]+:32];
+	      assign WLN0_dataX[33*b+:33]=WLN0_dataX0;
+	      assign WLN1_dataX[33*b+:33]=WLN1_dataX0;
+	      assign chk0_data[33*b+:33]=chk0_data0;
+	      assign chk1_data[33*b+:33]=chk1_data0;
+	      assign chk2_data[33*b+:33]=chk2_data0;
+	      assign chk3_data[33*b+:33]=chk3_data0;
+	      assign chk4_data[33*b+:33]=chk4_data0;
+	      assign chk5_data[33*b+:33]=chk5_data0;
+              assign WLN0_data[32*b+:32]=WLN0_dataX[33*WLN0_b[b]+:32];
+              assign WLN1_data[32*b+:32]=WLN1_dataX[33*WLN1_b[b]+:32];
               assign WLN0_b[b]=-(WLN0_adata[`lsaddr_bank0]&3)+b[1:0]; 
               assign WLN1_b[b]=-(WLN1_adata[`lsaddr_bank0]&3)+b[1:0]; 
               assign chk0_b[b]=-(chk0_adata[`lsaddr_bank0]&3)+b[1:0]; 
@@ -474,22 +491,38 @@ module stq(
               assign upd1_b[b]=-(upd1_begin0&3)+b[1:0]; 
               assign Rupd0_b[b]=(upd0_begin0&3)+b[1:0]; 
               assign Rupd1_b[b]=(upd1_begin0&3)+b[1:0]; 
+	      assign WLN0_pbit[WLN0_b[b][1]]=WLN0_b[b][0] ? 1'bz : WLN0_dataX[33*b+32+:1];
+	      assign WLN1_pbit[WLN1_b[b][1]]=WLN1_b[b][0] ? 1'bz : WLN1_dataX[33*b+32+:1];
           end
+	  wire [7:0] chk0_data1;
+	  wire [7:0] chk1_data1;
+	  wire [7:0] chk2_data1;
+	  wire [7:0] chk3_data1;
+	  wire [7:0] chk4_data1;
+	  wire [7:0] chk5_data1;
           if (b==3)
           stq_data_array #(8) datX_mod(
           clk,
           rst,
           upd0_en0,upd0_data[135:128],
           upd1_en0,upd1_data[135:128],
-          chk0_match_first[chk0_b[b]],chk0_data[135:128],
-          chk1_match_first[chk1_b[b]],chk1_data[135:128],
-          chk2_match_first[chk2_b[b]],chk2_data[135:128],
-          chk3_match_first[chk3_b[b]],chk3_data[135:128],
-          chk4_match_first[chk4_b[b]],chk4_data[135:128],
-          chk5_match_first[chk5_b[b]],chk5_data[135:128],
+          chk0_match_first[chk0_b[b]],chk0_data1,
+          chk1_match_first[chk1_b[b]],chk1_data1,
+          chk2_match_first[chk2_b[b]],chk2_data1,
+          chk3_match_first[chk3_b[b]],chk3_data1,
+          chk4_match_first[chk4_b[b]],chk4_data1,
+          chk5_match_first[chk5_b[b]],chk5_data1,
           WLN0_match[b],WLN0_data[135:128],
           WLN1_match[b],WLN1_data[135:128]
           );
+	  if (b==3) begin
+              assign chk0_data[139:32]=chk0_data1;
+              assign chk1_data[139:32]=chk1_data1;
+              assign chk2_data[139:32]=chk2_data1;
+              assign chk3_data[139:32]=chk3_data1;
+              assign chk4_data[139:32]=chk4_data1;
+              assign chk5_data[139:32]=chk5_data1;
+	  end
 
       end
       for(x=0;x<64;x=x+1) begin : X
