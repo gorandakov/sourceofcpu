@@ -16,6 +16,7 @@ module smallInstr_decoder(
   rA,rA_use,
   rB,rB_use,useBConst,//useBSmall,
   rC,rC_use,useCRet,
+  rA_ptr,rB_ptr,rC_ptr,
   constant,
 //  smallConst,
   rT,rT_use,
@@ -91,6 +92,9 @@ module smallInstr_decoder(
   output useCRet;
   output useBConst;
 //  output reg useBSmall;//small constant use; used for call/pop/push
+  output rA_ptr;
+  output rB_ptr;
+  output rC_ptr;
   output [64:0] constant;
 //  output reg [3:0] smallConst; //signed
   output [REG_WIDTH-1:0] rT;
@@ -360,6 +364,9 @@ module smallInstr_decoder(
   assign isShlAddMulLike=opcode_main==8'd210 || opcode_main==8'd211;
   assign isPtrSec=opcode_main==8'd212;
   assign isJalR=opcode_main==8'd213;
+
+  assign isPtrALU=opcode_main[7:3]==5'h1c;
+  assign isPtrPtrALU=opcode_main[7:3]==5'h1e;
 
   assign isBasicFPUScalarA=opcode_main==8'hf0 && instr[13:12]==2'b0;
   assign isBasicFPUScalarB=opcode_main==8'hf0 && instr[13:12]==2'b1;
