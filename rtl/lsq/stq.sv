@@ -442,18 +442,19 @@ module stq(
           upd0_en0[63:32], 
           upd1_en0[63:32], 
           free_en[63:32],free[63:32],upd[63:32],passe[63:32],passe_en[63:32]);
-          
-          wire [32+~b[0]-1:0] WLN0_dataX0;
-          wire [32+~b[0]-1:0] WLN1_dataX0;
-          wire [32+~b[0]-1:0] chk0_data0;
-          wire [32+~b[0]-1:0] chk0_data1;
-          wire [32+~b[0]-1:0] chk0_data2;
-          wire [32+~b[0]-1:0] chk0_data3;
-          wire [32+~b[0]-1:0] chk0_data4;
-          wire [32+~b[0]-1:0] chk0_data5;
-
+         
+          if (b<4) begin 
+              wire [32+!b[0]-1:0] WLN0_dataX0;
+              wire [32+!b[0]-1:0] WLN1_dataX0;
+              wire [32+!b[0]-1:0] chk0_data0;
+              wire [32+!b[0]-1:0] chk0_data1;
+              wire [32+!b[0]-1:0] chk0_data2;
+              wire [32+!b[0]-1:0] chk0_data3;
+              wire [32+!b[0]-1:0] chk0_data4;
+              wire [32+!b[0]-1:0] chk0_data5;
+          end
           if (b<4)
-          stq_data_array #(32+~b[0]) dat_mod(
+          stq_data_array #(32+!b[0]) dat_mod(
           clk,
           rst,
           upd0_en0,{upd0_pbit[upd0_b[b][1]],upd0_data[32*Rupd0_b[b]+:32]},
