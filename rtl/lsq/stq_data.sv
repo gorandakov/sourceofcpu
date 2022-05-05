@@ -94,22 +94,30 @@ module stq_data_array(
   input [BUF_COUNT-1:0] wrt1_en;
   input [WIDTH-1:0] wrt1_data;
   input [BUF_COUNT-1:0] chk0_en;
-  output [WIDTH-1:0] chk0_data;
+  output reg [WIDTH-1:0] chk0_data;
   input [BUF_COUNT-1:0] chk1_en;
-  output [WIDTH-1:0] chk1_data;
+  output reg [WIDTH-1:0] chk1_data;
   input [BUF_COUNT-1:0] chk2_en;
-  output [WIDTH-1:0] chk2_data;
+  output reg [WIDTH-1:0] chk2_data;
   input [BUF_COUNT-1:0] chk3_en;
-  output [WIDTH-1:0] chk3_data;
+  output reg [WIDTH-1:0] chk3_data;
   input [BUF_COUNT-1:0] chk4_en;
-  output [WIDTH-1:0] chk4_data;
+  output reg [WIDTH-1:0] chk4_data;
   input [BUF_COUNT-1:0] chk5_en;
-  output [WIDTH-1:0] chk5_data;
+  output reg [WIDTH-1:0] chk5_data;
   input [BUF_COUNT-1:0] chk6_en;
-  output [WIDTH-1:0] chk6_data;
+  output reg [WIDTH-1:0] chk6_data;
   input [BUF_COUNT-1:0] chk7_en;
-  output [WIDTH-1:0] chk7_data;
+  output reg [WIDTH-1:0] chk7_data;
   
+  wire [WIDTH-1:0] chk0_data0;
+  wire [WIDTH-1:0] chk1_data0;
+  wire [WIDTH-1:0] chk2_data0;
+  wire [WIDTH-1:0] chk3_data0;
+  wire [WIDTH-1:0] chk4_data0;
+  wire [WIDTH-1:0] chk5_data0;
+  wire [WIDTH-1:0] chk6_data0;
+  wire [WIDTH-1:0] chk7_data0;
   generate
     genvar bank,row;
     for(bank=0;bank<8;bank=bank+1) begin : bnk_gen
@@ -137,31 +145,39 @@ module stq_data_array(
             chk7_en[bank*8+row],chk7_dataK
             );
         end
-        assign chk0_dataK=|chk0_en[bank*8+:8] ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-        assign chk1_dataK=|chk1_en[bank*8+:8] ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-        assign chk2_dataK=|chk2_en[bank*8+:8] ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-        assign chk3_dataK=|chk3_en[bank*8+:8] ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-        assign chk4_dataK=|chk4_en[bank*8+:8] ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-        assign chk5_dataK=|chk5_en[bank*8+:8] ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-        assign chk6_dataK=|chk6_en[bank*8+:8] ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-        assign chk7_dataK=|chk7_en[bank*8+:8] ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+        assign chk0_dataK=(|chk0_en[bank*8+:8]) ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+        assign chk1_dataK=(|chk1_en[bank*8+:8]) ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+        assign chk2_dataK=(|chk2_en[bank*8+:8]) ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+        assign chk3_dataK=(|chk3_en[bank*8+:8]) ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+        assign chk4_dataK=(|chk4_en[bank*8+:8]) ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+        assign chk5_dataK=(|chk5_en[bank*8+:8]) ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+        assign chk6_dataK=(|chk6_en[bank*8+:8]) ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+        assign chk7_dataK=(|chk7_en[bank*8+:8]) ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
 
-        assign chk0_data=|chk0_en[bank*8+:8] ? chk0_dataK : {WIDTH{1'BZ}};
-        assign chk1_data=|chk1_en[bank*8+:8] ? chk1_dataK : {WIDTH{1'BZ}};
-        assign chk2_data=|chk2_en[bank*8+:8] ? chk2_dataK : {WIDTH{1'BZ}};
-        assign chk3_data=|chk3_en[bank*8+:8] ? chk3_dataK : {WIDTH{1'BZ}};
-        assign chk4_data=|chk4_en[bank*8+:8] ? chk4_dataK : {WIDTH{1'BZ}};
-        assign chk5_data=|chk5_en[bank*8+:8] ? chk5_dataK : {WIDTH{1'BZ}};
-        assign chk6_data=|chk6_en[bank*8+:8] ? chk6_dataK : {WIDTH{1'BZ}};
-        assign chk7_data=|chk7_en[bank*8+:8] ? chk7_dataK : {WIDTH{1'BZ}};
+        assign chk0_data0=(|chk0_en[bank*8+:8]) ? chk0_dataK : {WIDTH{1'BZ}};
+        assign chk1_data0=(|chk1_en[bank*8+:8]) ? chk1_dataK : {WIDTH{1'BZ}};
+        assign chk2_data0=(|chk2_en[bank*8+:8]) ? chk2_dataK : {WIDTH{1'BZ}};
+        assign chk3_data0=(|chk3_en[bank*8+:8]) ? chk3_dataK : {WIDTH{1'BZ}};
+        assign chk4_data0=(|chk4_en[bank*8+:8]) ? chk4_dataK : {WIDTH{1'BZ}};
+        assign chk5_data0=(|chk5_en[bank*8+:8]) ? chk5_dataK : {WIDTH{1'BZ}};
+        assign chk6_data0=(|chk6_en[bank*8+:8]) ? chk6_dataK : {WIDTH{1'BZ}};
+        assign chk7_data0=(|chk7_en[bank*8+:8]) ? chk7_dataK : {WIDTH{1'BZ}};
     end
   endgenerate
-  assign chk0_data=|chk0_en ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-  assign chk1_data=|chk1_en ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-  assign chk2_data=|chk2_en ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-  assign chk3_data=|chk3_en ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-  assign chk4_data=|chk4_en ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-  assign chk5_data=|chk5_en ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-  assign chk6_data=|chk6_en ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-  assign chk7_data=|chk7_en ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+  assign chk0_data0=(chk0_en!=64'b0) ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+  assign chk1_data0=(chk1_en!=64'b0) ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+  assign chk2_data0=(chk2_en!=64'b0) ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+  assign chk3_data0=(chk3_en!=64'b0) ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+  assign chk4_data0=(chk4_en!=64'b0) ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+  assign chk5_data0=(chk5_en!=64'b0) ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+  assign chk6_data0=(chk6_en!=64'b0) ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+  assign chk7_data0=(chk7_en!=64'b0) ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+  always @* begin
+      chk0_data=chk0_data0;
+      chk1_data=chk1_data0;
+      chk2_data=chk2_data0;
+      chk3_data=chk3_data0;
+      chk4_data=chk4_data0;
+      chk5_data=chk5_data0;
+  end
 endmodule  

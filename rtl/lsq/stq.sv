@@ -265,8 +265,8 @@ module stq(
   wire [7:0] chk3_odd;
   wire [7:0] chk4_odd;
   wire [7:0] chk5_odd;
-  wire [7:0] wrt0_odd;
-  wire [7:0] wrt1_odd;
+  wire wrt0_odd;
+  wire wrt1_odd;
 
   wire [7:0][3:0] chk0_bytes;
   wire [7:0][3:0] chk1_bytes;
@@ -319,6 +319,7 @@ module stq(
   wire [5:0] chk_wb1;
   wire chk_wb0_has,chk_wb1_has,chk_wb2_has;
   reg [5:0] chk_mask;
+  reg [63:0] mask;
   
   function [31:0] lowt;
       input [31:0] data;
@@ -368,6 +369,14 @@ module stq(
           endcase
       end
   endfunction
+      wire [3:0][32:0] WLN0_dataX0;
+      wire [3:0][32:0] WLN1_dataX0;
+      wire [3:0][32:0] chk0_data0;
+      wire [3:0][32:0] chk1_data0;
+      wire [3:0][32:0] chk2_data0;
+      wire [3:0][32:0] chk3_data0;
+      wire [3:0][32:0] chk4_data0;
+      wire [3:0][32:0] chk5_data0;
   generate
       genvar a,b,x;
       for(b=0;b<8;b=b+1) begin : L
@@ -443,41 +452,33 @@ module stq(
           upd1_en0[63:32], 
           free_en[63:32],free[63:32],upd[63:32],passe[63:32],passe_en[63:32]);
          
-          if (b<4) begin 
-              wire [32+!b[0]-1:0] WLN0_dataX0;
-              wire [32+!b[0]-1:0] WLN1_dataX0;
-              wire [32+!b[0]-1:0] chk0_data0;
-              wire [32+!b[0]-1:0] chk0_data1;
-              wire [32+!b[0]-1:0] chk0_data2;
-              wire [32+!b[0]-1:0] chk0_data3;
-              wire [32+!b[0]-1:0] chk0_data4;
-              wire [32+!b[0]-1:0] chk0_data5;
-          end
+	  //verilator lint_off WIDTH
           if (b<4)
           stq_data_array #(32+!b[0]) dat_mod(
           clk,
           rst,
           upd0_en0,{upd0_pbit[upd0_b[b][1]],upd0_data[32*Rupd0_b[b]+:32]},
           upd1_en0,{upd1_pbit[upd1_b[b][1]],upd1_data[32*Rupd1_b[b]+:32]},
-          chk0_match_first[b],chk0_data0,
-          chk1_match_first[b],chk1_data0,
-          chk2_match_first[b],chk2_data0,
-          chk3_match_first[b],chk3_data0,
-          chk4_match_first[b],chk4_data0,
-          chk5_match_first[b],chk5_data0,
-          WLN0_match[b],WLN0_dataX0,
-          WLN1_match[b],WLN1_dataX0
+          chk0_match_first[b],chk0_data0[b],
+          chk1_match_first[b],chk1_data0[b],
+          chk2_match_first[b],chk2_data0[b],
+          chk3_match_first[b],chk3_data0[b],
+          chk4_match_first[b],chk4_data0[b],
+          chk5_match_first[b],chk5_data0[b],
+          WLN0_match[b],WLN0_dataX0[b],
+          WLN1_match[b],WLN1_dataX0[b]
           );
+	  //verilator lint_on WIDTH
           
           if (b<4) begin
-	      assign WLN0_dataX[33*b+:33]=WLN0_dataX0;
-	      assign WLN1_dataX[33*b+:33]=WLN1_dataX0;
-	      assign chk0_data[33*b+:33]=chk0_data0;
-	      assign chk1_data[33*b+:33]=chk1_data0;
-	      assign chk2_data[33*b+:33]=chk2_data0;
-	      assign chk3_data[33*b+:33]=chk3_data0;
-	      assign chk4_data[33*b+:33]=chk4_data0;
-	      assign chk5_data[33*b+:33]=chk5_data0;
+	      assign WLN0_dataX[33*b+:33]=WLN0_dataX0[b];
+	      assign WLN1_dataX[33*b+:33]=WLN1_dataX0[b];
+	      assign chk0_data[33*b+:33]=chk0_data0[b];
+	      assign chk1_data[33*b+:33]=chk1_data0[b];
+	      assign chk2_data[33*b+:33]=chk2_data0[b];
+	      assign chk3_data[33*b+:33]=chk3_data0[b];
+	      assign chk4_data[33*b+:33]=chk4_data0[b];
+	      assign chk5_data[33*b+:33]=chk5_data0[b];
               assign WLN0_data[32*b+:32]=WLN0_dataX[33*WLN0_b[b]+:32];
               assign WLN1_data[32*b+:32]=WLN1_dataX[33*WLN1_b[b]+:32];
               assign WLN0_b[b]=-(WLN0_adata[`lsaddr_bank0]&3)+b[1:0]; 
@@ -550,6 +551,9 @@ module stq(
   assign wb1_adata=chk_wb1_has ? {`lsaddr_width{1'bz}} : {`lsaddr_width{1'b0}};
   assign wb0_en=chk_wb0_has;
   assign wb1_en=chk_wb1_has;
+
+  assign wrt0_odd=wrt0_adata[`lsaddr_odd];
+  assign wrt1_odd=wrt1_adata[`lsaddr_odd];
 
   assign aDoStall=|chk0_partial || |chk1_partial || |chk2_partial || |chk3_partial || |chk4_partial || |chk5_partial || chk_wb2_has;
   assign WLN0_en=LSQ_shr_data[`lsqshare_wrt0]==3'd7 ? 1'b0 : 1'bz;
@@ -671,13 +675,17 @@ module stq(
 	  pse0_WQ<=6'd0;
 	  pse1_WQ<=6'd0;
 	  chk_mask<=6'd0;
+	  mask<=64'b0;
       end else begin
 	  if (!stall && !doStall && pse0_en && ~pse1_en) begin
 	      pse0_WQ<=pse1_WQ;
 	      pse1_WQ<=pse1_WQ_inc;
+	      mask[pse0_WQ]<=~mask[pse0_WQ];
 	  end else if (!stall && !doStall && pse0_en) begin
 	      pse0_WQ<=pse1_WQ_inc;
 	      pse1_WQ<=pse1_WQ_inc2;
+	      mask[pse0_WQ]<=~mask[pse0_WQ];
+	      mask[pse1_WQ]<=~mask[pse1_WQ];
 	  end
 	  if (!aStall && !aDoStall && chk_rdy) begin
 	      chk_mask<=6'd0;
