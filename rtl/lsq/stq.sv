@@ -172,14 +172,14 @@ module stq(
   wire [3:0] chk5_odd0;
   wire [3:0] wrt0_odd0;
   wire [3:0] wrt1_odd0;
-  wire [3:0] chk0_odd1;
-  wire [3:0] chk1_odd1;
-  wire [3:0] chk2_odd1;
-  wire [3:0] chk3_odd1;
-  wire [3:0] chk4_odd1;
-  wire [3:0] chk5_odd1;
-  wire [3:0] wrt0_odd1;
-  wire [3:0] wrt1_odd1;
+  wire [7:0][3:0] chk0_odd1;
+  wire [7:0][3:0] chk1_odd1;
+  wire [7:0][3:0] chk2_odd1;
+  wire [7:0][3:0] chk3_odd1;
+  wire [7:0][3:0] chk4_odd1;
+  wire [7:0][3:0] chk5_odd1;
+  wire [7:0][3:0] wrt0_odd1;
+  wire [7:0][3:0] wrt1_odd1;
   wire [63:0][1:0] chk0_addrOE;
   wire [63:0][1:0] chk1_addrOE;
   wire [63:0][1:0] chk2_addrOE;
@@ -442,12 +442,12 @@ module stq(
           excpt,
           wrt0_en0, wrt0_odd1[b], wrt0_bytes[b], wrt0_subBNK[b], wrt0_subBNK2[b],
           wrt1_en0, wrt1_odd1[b], wrt1_bytes[b], wrt1_subBNK[b], wrt1_subBNK2[b],
-          chk0_en, chk0_addrEO[63:32], chk0_odd[b], chk0_bytes[b], chk0_subBNK[b], chk0_subBNK2[b], chk0_match[b][63:32], chk0_partial[b][63:32],
-          chk1_en, chk1_addrEO[63:32], chk1_odd[b], chk1_bytes[b], chk1_subBNK[b], chk1_subBNK2[b], chk1_match[b][63:32], chk1_partial[b][63:32],
-          chk2_en, chk2_addrEO[63:32], chk2_odd[b], chk2_bytes[b], chk2_subBNK[b], chk2_subBNK2[b], chk2_match[b][63:32], chk2_partial[b][63:32],
-          chk3_en, chk3_addrEO[63:32], chk3_odd[b], chk3_bytes[b], chk3_subBNK[b], chk3_subBNK2[b], chk3_match[b][63:32], chk3_partial[b][63:32],
-          chk4_en, chk4_addrEO[63:32], chk4_odd[b], chk4_bytes[b], chk4_subBNK[b], chk4_subBNK2[b], chk4_match[b][63:32], chk4_partial[b][63:32],
-          chk5_en, chk5_addrEO[63:32], chk5_odd[b], chk5_bytes[b], chk5_subBNK[b], chk5_subBNK2[b], chk5_match[b][63:32], chk5_partial[b][63:32],
+          chk0_en, chk0_addrEO[63:32], chk0_odd1[b], chk0_bytes[b], chk0_subBNK[b], chk0_subBNK2[b], chk0_match[b][63:32], chk0_partial[b][63:32],
+          chk1_en, chk1_addrEO[63:32], chk1_odd1[b], chk1_bytes[b], chk1_subBNK[b], chk1_subBNK2[b], chk1_match[b][63:32], chk1_partial[b][63:32],
+          chk2_en, chk2_addrEO[63:32], chk2_odd1[b], chk2_bytes[b], chk2_subBNK[b], chk2_subBNK2[b], chk2_match[b][63:32], chk2_partial[b][63:32],
+          chk3_en, chk3_addrEO[63:32], chk3_odd1[b], chk3_bytes[b], chk3_subBNK[b], chk3_subBNK2[b], chk3_match[b][63:32], chk3_partial[b][63:32],
+          chk4_en, chk4_addrEO[63:32], chk4_odd1[b], chk4_bytes[b], chk4_subBNK[b], chk4_subBNK2[b], chk4_match[b][63:32], chk4_partial[b][63:32],
+          chk5_en, chk5_addrEO[63:32], chk5_odd1[b], chk5_bytes[b], chk5_subBNK[b], chk5_subBNK2[b], chk5_match[b][63:32], chk5_partial[b][63:32],
           upd0_en0[63:32], 
           upd1_en0[63:32], 
           free_en[63:32],free[63:32],upd[63:32],passe[63:32],passe_en[63:32]);
@@ -465,8 +465,8 @@ module stq(
           chk3_match_first[b],chk3_data0[b],
           chk4_match_first[b],chk4_data0[b],
           chk5_match_first[b],chk5_data0[b],
-          WLN0_match[b],WLN0_dataX0[b],
-          WLN1_match[b],WLN1_dataX0[b]
+          WLN0_match,WLN0_dataX0[b],
+          WLN1_match,WLN1_dataX0[b]
           );
 	  //verilator lint_on WIDTH
           
@@ -481,6 +481,7 @@ module stq(
 	      assign chk5_data[33*b+:33]=chk5_data0[b];
               assign WLN0_data[32*b+:32]=WLN0_dataX[33*WLN0_b[b]+:32];
               assign WLN1_data[32*b+:32]=WLN1_dataX[33*WLN1_b[b]+:32];
+	      //verilator lint_off WIDTH
               assign WLN0_b[b]=-(WLN0_adata[`lsaddr_bank0]&3)+b[1:0]; 
               assign WLN1_b[b]=-(WLN1_adata[`lsaddr_bank0]&3)+b[1:0]; 
               assign chk0_b[b]=-(chk0_adata[`lsaddr_bank0]&3)+b[1:0]; 
@@ -489,10 +490,11 @@ module stq(
               assign chk3_b[b]=-(chk3_adata[`lsaddr_bank0]&3)+b[1:0]; 
               assign chk4_b[b]=-(chk4_adata[`lsaddr_bank0]&3)+b[1:0]; 
               assign chk5_b[b]=-(chk5_adata[`lsaddr_bank0]&3)+b[1:0]; 
-              assign upd0_b[b]=-(upd0_begin0&3)+b[1:0]; 
-              assign upd1_b[b]=-(upd1_begin0&3)+b[1:0]; 
-              assign Rupd0_b[b]=(upd0_begin0&3)+b[1:0]; 
-              assign Rupd1_b[b]=(upd1_begin0&3)+b[1:0]; 
+	      //verilator lint_on WIDTH
+              assign upd0_b[b]=-(upd0_begin0[1:0]&3)+b[1:0]; 
+              assign upd1_b[b]=-(upd1_begin0[1:0]&3)+b[1:0]; 
+              assign Rupd0_b[b]=(upd0_begin0[1:0]&3)+b[1:0]; 
+              assign Rupd1_b[b]=(upd1_begin0[1:0]&3)+b[1:0]; 
 	      assign WLN0_pbit[WLN0_b[b][1]]=WLN0_b[b][0] ? 1'bz : WLN0_dataX[33*b+32+:1];
 	      assign WLN1_pbit[WLN1_b[b][1]]=WLN1_b[b][0] ? 1'bz : WLN1_dataX[33*b+32+:1];
           end
@@ -514,16 +516,16 @@ module stq(
           chk3_match_first[chk3_b[b]],chk3_data1,
           chk4_match_first[chk4_b[b]],chk4_data1,
           chk5_match_first[chk5_b[b]],chk5_data1,
-          WLN0_match[b],WLN0_data[135:128],
-          WLN1_match[b],WLN1_data[135:128]
+          WLN0_match,WLN0_data[135:128],
+          WLN1_match,WLN1_data[135:128]
           );
 	  if (b==3) begin
-              assign chk0_data[139:32]=chk0_data1;
-              assign chk1_data[139:32]=chk1_data1;
-              assign chk2_data[139:32]=chk2_data1;
-              assign chk3_data[139:32]=chk3_data1;
-              assign chk4_data[139:32]=chk4_data1;
-              assign chk5_data[139:32]=chk5_data1;
+              assign chk0_data[139:132]=chk0_data1;
+              assign chk1_data[139:132]=chk1_data1;
+              assign chk2_data[139:132]=chk2_data1;
+              assign chk3_data[139:132]=chk3_data1;
+              assign chk4_data[139:132]=chk4_data1;
+              assign chk5_data[139:132]=chk5_data1;
 	  end
 
       end

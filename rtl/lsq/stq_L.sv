@@ -41,21 +41,21 @@ module stq_buf_L(
   input wrt0_en;
   input [3:0] wrt0_odd;
   input [3:0] wrt0_bytes;
-  input [3:0] wrt0_subBNK;
-  input [3:0] wrt0_subBNK2;
+  input wrt0_subBNK;
+  input wrt0_subBNK2;
 
   input wrt1_en;
   input [3:0] wrt1_odd;
   input [3:0] wrt1_bytes;
-  input [3:0] wrt1_subBNK;
-  input [3:0] wrt1_subBNK2;
+  input wrt1_subBNK;
+  input wrt1_subBNK2;
 
   input chk0_en;
   input [WIDTH-1:0] chk0_addrEO;
   input [3:0] chk0_odd;
   input [3:0] chk0_bytes;
-  input [3:0] chk0_subBNK;
-  input [3:0] chk0_subBNK2;
+  input chk0_subBNK;
+  input chk0_subBNK2;
   output chk0_match;
   output chk0_partial;
 
@@ -63,8 +63,8 @@ module stq_buf_L(
   input [WIDTH-1:0] chk1_addrEO;
   input [3:0] chk1_odd;
   input [3:0] chk1_bytes;
-  input [3:0] chk1_subBNK;
-  input [3:0] chk1_subBNK2;
+  input chk1_subBNK;
+  input chk1_subBNK2;
   output chk1_match;
   output chk1_partial;
 
@@ -72,8 +72,8 @@ module stq_buf_L(
   input [WIDTH-1:0] chk2_addrEO;
   input [3:0] chk2_odd;
   input [3:0] chk2_bytes;
-  input [3:0] chk2_subBNK;
-  input [3:0] chk2_subBNK2;
+  input chk2_subBNK;
+  input chk2_subBNK2;
   output chk2_match;
   output chk2_partial;
 
@@ -81,8 +81,8 @@ module stq_buf_L(
   input [WIDTH-1:0] chk3_addrEO;
   input [3:0] chk3_odd;
   input [3:0] chk3_bytes;
-  input [3:0] chk3_subBNK;
-  input [3:0] chk3_subBNK2;
+  input chk3_subBNK;
+  input chk3_subBNK2;
   output chk3_match;
   output chk3_partial;
 
@@ -90,8 +90,8 @@ module stq_buf_L(
   input [WIDTH-1:0] chk4_addrEO;
   input [3:0] chk4_odd;
   input [3:0] chk4_bytes;
-  input [3:0] chk4_subBNK;
-  input [3:0] chk4_subBNK2;
+  input chk4_subBNK;
+  input chk4_subBNK2;
   output chk4_match;
   output chk4_partial;
 
@@ -99,8 +99,8 @@ module stq_buf_L(
   input [WIDTH-1:0] chk5_addrEO;
   input [3:0] chk5_odd;
   input [3:0] chk5_bytes;
-  input [3:0] chk5_subBNK;
-  input [3:0] chk5_subBNK2;
+  input chk5_subBNK;
+  input chk5_subBNK2;
   output chk5_match;
   output chk5_partial;
 
@@ -115,8 +115,8 @@ module stq_buf_L(
   
 //  reg [WIDTH-1:0] addrEO;
   reg [3:0] bytes;
-  reg [3:0] subBNK;
-  reg [3:0] subBNK2;
+  reg subBNK;
+  reg subBNK2;
   reg [3:0] odd;
 //  reg upd;
   wire chk0_match0;
@@ -222,21 +222,21 @@ module stq_buf_L_array(
   input [BUF_COUNT-1:0] wrt0_en;
   input [3:0] wrt0_odd;
   input [3:0] wrt0_bytes;
-  input [3:0] wrt0_subBNK;
-  input [3:0] wrt0_subBNK2;
+  input wrt0_subBNK;
+  input wrt0_subBNK2;
 
   input [BUF_COUNT-1:0] wrt1_en;
   input [3:0] wrt1_odd;
   input [3:0] wrt1_bytes;
-  input [3:0] wrt1_subBNK;
-  input [3:0] wrt1_subBNK2;
+  input wrt1_subBNK;
+  input wrt1_subBNK2;
 
   input chk0_en;
   input [BUF_COUNT-1:0][WIDTH-1:0] chk0_addrEO;
   input [3:0] chk0_odd;
   input [3:0] chk0_bytes;
-  input [3:0] chk0_subBNK;
-  input [3:0] chk0_subBNK2;
+  input chk0_subBNK;
+  input chk0_subBNK2;
   output [BUF_COUNT-1:0] chk0_match;
   output [BUF_COUNT-1:0] chk0_partial;
 
@@ -244,8 +244,8 @@ module stq_buf_L_array(
   input [BUF_COUNT-1:0][WIDTH-1:0] chk1_addrEO;
   input [3:0] chk1_odd;
   input [3:0] chk1_bytes;
-  input [3:0] chk1_subBNK;
-  input [3:0] chk1_subBNK2;
+  input chk1_subBNK;
+  input chk1_subBNK2;
   output [BUF_COUNT-1:0] chk1_match;
   output [BUF_COUNT-1:0] chk1_partial;
 
@@ -253,8 +253,8 @@ module stq_buf_L_array(
   input [BUF_COUNT-1:0][WIDTH-1:0] chk2_addrEO;
   input [3:0] chk2_odd;
   input [3:0] chk2_bytes;
-  input [3:0] chk2_subBNK;
-  input [3:0] chk2_subBNK2;
+  input chk2_subBNK;
+  input chk2_subBNK2;
   output [BUF_COUNT-1:0] chk2_match;
   output [BUF_COUNT-1:0] chk2_partial;
 
@@ -262,8 +262,8 @@ module stq_buf_L_array(
   input [BUF_COUNT-1:0][WIDTH-1:0] chk3_addrEO;
   input [3:0] chk3_odd;
   input [3:0] chk3_bytes;
-  input [3:0] chk3_subBNK;
-  input [3:0] chk3_subBNK2;
+  input chk3_subBNK;
+  input chk3_subBNK2;
   output [BUF_COUNT-1:0] chk3_match;
   output [BUF_COUNT-1:0] chk3_partial;
 
@@ -271,8 +271,8 @@ module stq_buf_L_array(
   input [BUF_COUNT-1:0][WIDTH-1:0] chk4_addrEO;
   input [3:0] chk4_odd;
   input [3:0] chk4_bytes;
-  input [3:0] chk4_subBNK;
-  input [3:0] chk4_subBNK2;
+  input chk4_subBNK;
+  input chk4_subBNK2;
   output [BUF_COUNT-1:0] chk4_match;
   output [BUF_COUNT-1:0] chk4_partial;
 
@@ -280,8 +280,8 @@ module stq_buf_L_array(
   input [BUF_COUNT-1:0][WIDTH-1:0] chk5_addrEO;
   input [3:0] chk5_odd;
   input [3:0] chk5_bytes;
-  input [3:0] chk5_subBNK;
-  input [3:0] chk5_subBNK2;
+  input chk5_subBNK;
+  input chk5_subBNK2;
   output [BUF_COUNT-1:0] chk5_match;
   output [BUF_COUNT-1:0] chk5_partial;
 
