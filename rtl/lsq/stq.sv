@@ -259,12 +259,12 @@ module stq(
   wire [3:0][1:0] Rupd0_b;
   wire [3:0][1:0] Rupd1_b;
 
-  wire [7:0] chk0_odd;
-  wire [7:0] chk1_odd;
-  wire [7:0] chk2_odd;
-  wire [7:0] chk3_odd;
-  wire [7:0] chk4_odd;
-  wire [7:0] chk5_odd;
+  wire chk0_odd;
+  wire chk1_odd;
+  wire chk2_odd;
+  wire chk3_odd;
+  wire chk4_odd;
+  wire chk5_odd;
   wire wrt0_odd;
   wire wrt1_odd;
 
@@ -554,6 +554,12 @@ module stq(
 
   assign wrt0_odd=wrt0_adata[`lsaddr_odd];
   assign wrt1_odd=wrt1_adata[`lsaddr_odd];
+  assign chk0_odd=chk0_adata[`lsaddr_odd];
+  assign chk1_odd=chk1_adata[`lsaddr_odd];
+  assign chk2_odd=chk2_adata[`lsaddr_odd];
+  assign chk3_odd=chk3_adata[`lsaddr_odd];
+  assign chk4_odd=chk4_adata[`lsaddr_odd];
+  assign chk5_odd=chk5_adata[`lsaddr_odd];
 
   assign aDoStall=|chk0_partial || |chk1_partial || |chk2_partial || |chk3_partial || |chk4_partial || |chk5_partial || chk_wb2_has;
   assign WLN0_en=LSQ_shr_data[`lsqshare_wrt0]==3'd7 ? 1'b0 : 1'bz;
