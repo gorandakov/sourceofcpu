@@ -126,12 +126,12 @@ module stq_buf_L(
   wire chk4_match0;
   wire chk5_match0;
   
-  assign chk0_match0=chk0_addrEO[chk0_odd] && (chk0_subBNK2&subBNK2)!=0 && chk0_odd[0]==odd[0];
-  assign chk1_match0=chk1_addrEO[chk1_odd] && (chk1_subBNK2&subBNK2)!=0 && chk1_odd[0]==odd[0];
-  assign chk2_match0=chk2_addrEO[chk2_odd] && (chk2_subBNK2&subBNK2)!=0 && chk2_odd[0]==odd[0];
-  assign chk3_match0=chk3_addrEO[chk3_odd] && (chk3_subBNK2&subBNK2)!=0 && chk3_odd[0]==odd[0];
-  assign chk4_match0=chk4_addrEO[chk4_odd] && (chk4_subBNK2&subBNK2)!=0 && chk4_odd[0]==odd[0];
-  assign chk5_match0=chk5_addrEO[chk5_odd] && (chk5_subBNK2&subBNK2)!=0 && chk5_odd[0]==odd[0];
+  assign chk0_match0=chk0_addrEO[chk0_odd[0]] && (chk0_subBNK2&subBNK2)!=0 && chk0_odd[0]==odd[0];
+  assign chk1_match0=chk1_addrEO[chk1_odd[0]] && (chk1_subBNK2&subBNK2)!=0 && chk1_odd[0]==odd[0];
+  assign chk2_match0=chk2_addrEO[chk2_odd[0]] && (chk2_subBNK2&subBNK2)!=0 && chk2_odd[0]==odd[0];
+  assign chk3_match0=chk3_addrEO[chk3_odd[0]] && (chk3_subBNK2&subBNK2)!=0 && chk3_odd[0]==odd[0];
+  assign chk4_match0=chk4_addrEO[chk4_odd[0]] && (chk4_subBNK2&subBNK2)!=0 && chk4_odd[0]==odd[0];
+  assign chk5_match0=chk5_addrEO[chk5_odd[0]] && (chk5_subBNK2&subBNK2)!=0 && chk5_odd[0]==odd[0];
   
   assign chk0_match=chk0_match0 && chk0_en && ~free && ~passe && (chk0_bytes&~bytes)==0 && upd && chk0_odd==odd && (chk0_subBNK&subBNK)!=0;
   assign chk1_match=chk1_match0 && chk1_en && ~free && ~passe && (chk1_bytes&~bytes)==0 && upd && chk1_odd==odd && (chk1_subBNK&subBNK)!=0;

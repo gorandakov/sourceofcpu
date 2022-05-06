@@ -48,10 +48,10 @@ module WQ_wakeUP_logic(
   assign WQ_d=newRsSelect2 ? newWQ2 : 6'bz;
   assign WQ_d=~newRsSelectAny ? WQ : 6'bz;
   
-  assign port_en_d=newRsSelect0&~stall ? newPortEn0&~isData : 6'bz;
-  assign port_en_d=newRsSelect1&~stall ? newPortEn1&~isData : 6'bz;
-  assign port_en_d=newRsSelect2&~stall ? newPortEn2&~isData : 6'bz;
-  assign port_en_d=~newRsSelectAny|stall ? port_en&~isData : 6'bz;
+  assign port_en_d=newRsSelect0&~stall ? newPortEn0&~isData : 1'bz;
+  assign port_en_d=newRsSelect1&~stall ? newPortEn1&~isData : 1'bz;
+  assign port_en_d=newRsSelect2&~stall ? newPortEn2&~isData : 1'bz;
+  assign port_en_d=~newRsSelectAny|stall ? port_en&~isData : 1'bz;
   
   assign eq[0]=(WQ==FUWQ0) & FUWQen0 & port_en & ~newRsSelect0 & ~newRsSelect1 & ~newRsSelect2;
   assign eq[1]=(WQ==FUWQ1) & FUWQen1 & port_en & ~newRsSelect0 & ~newRsSelect1 & ~newRsSelect2;
@@ -205,7 +205,7 @@ module rss_buf(
 
  
 
-  wire [3:0] portNo_new;
+  wire [8:0] portNo_new;
 
   wire port0_d;
   wire port0_en;
@@ -304,7 +304,7 @@ module rss_buf(
   assign portNo_new=(newRsSelect0 & ~stall) ? newPort0 : 9'bz;
   assign portNo_new=(newRsSelect1 & ~stall) ? newPort1 : 9'bz;
   assign portNo_new=(newRsSelect2 & ~stall) ? newPort2 : 9'bz;
-  assign portNo_new=(newRsSelectAny & ~stall) ? 9'bz : 4'b0;
+  assign portNo_new=(newRsSelectAny & ~stall) ? 9'bz : 9'b0;
 
 
   assign port0_en=stall_n & newRsSelectAny || outRsSelect0 &~unFwdCheck || nonDataRst0;
@@ -393,7 +393,7 @@ module rss_D_buf(
   localparam CONST_WIDTH=32;
   localparam FLAGS_WIDTH=`flags_width;
   localparam ROB_WIDTH=10;  
-  parameter [0:0] B=0;
+  parameter [31:0] B=32'b0;
 
   input clk;
   input dataRst;
@@ -769,7 +769,7 @@ module rss_D_array(
   localparam FLAGS_WIDTH=`flags_width;
   localparam ROB_WIDTH=10;  
   localparam BUF_COUNT=32;
-  parameter [0:0] B=1'b0;
+  parameter [31:0] B=32'b0;
 
   input clk;
   input dataRst;
@@ -1367,7 +1367,7 @@ module rs_s(
   bufFreeA
   );
   
-  rss_D_array #(1'b1) rs1_mod(
+  rss_D_array #(1) rs1_mod(
   clk,
   dataRst,nonDataRst,rst_thread,
   stall|doStall,

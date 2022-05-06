@@ -600,7 +600,7 @@ module ldq_array(
   assign chkMatch1=
     chk1Match[0]&chkEn0 ||
     chk1Match[1]&chkEn1 ||
-    chk1Match[3]&chkEn3;
+    chk1Match[2]&chkEn3;
 
 
   generate

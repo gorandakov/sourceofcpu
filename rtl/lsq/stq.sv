@@ -335,7 +335,7 @@ module stq(
       reg [31:0] last;
       begin
           first=banks&~{banks[30:0],banks[31]};
-          last=banks&~{banks[0],banks[31:0]};
+          last=banks&~{banks[0],banks[31:1]};
           case (index)
               2'd0: begin
               end
@@ -356,7 +356,7 @@ module stq(
       reg [31:0] last;
       begin
           first=banks&~{banks[30:0],banks[31]};
-          last=banks&~{banks[0],banks[31:0]};
+          last=banks&~{banks[0],banks[31:1]};
           case (index)
               2'd0: begin
               end
@@ -380,51 +380,51 @@ module stq(
   generate
       genvar a,b,x;
       for(b=0;b<8;b=b+1) begin : L
-          assign chk0_subBNK[b]={chk0_banks[24+b],chk0_banks[16+b],chk0_banks[8+b],chk0_banks[0+b]};
+          assign chk0_subBNK[b]=|{chk0_banks[24+b],chk0_banks[16+b],chk0_banks[8+b],chk0_banks[0+b]};
           assign chk0_odd1[b]=chk0_banks[24+b] && |chk0_banks[3:0] ? chk0_odd0^4'b1 : chk0_odd0;
 
-          assign chk1_subBNK[b]={chk1_banks[24+b],chk1_banks[16+b],chk1_banks[8+b],chk1_banks[0+b]};
+          assign chk1_subBNK[b]=|{chk1_banks[24+b],chk1_banks[16+b],chk1_banks[8+b],chk1_banks[0+b]};
           assign chk1_odd1[b]=chk1_banks[24+b] && |chk1_banks[3:0] ? chk1_odd0^4'b1 : chk1_odd0;
 
-          assign chk2_subBNK[b]={chk2_banks[24+b],chk2_banks[16+b],chk2_banks[8+b],chk2_banks[0+b]};
+          assign chk2_subBNK[b]=|{chk2_banks[24+b],chk2_banks[16+b],chk2_banks[8+b],chk2_banks[0+b]};
           assign chk2_odd1[b]=chk2_banks[24+b] && |chk2_banks[3:0] ? chk2_odd0^4'b1 : chk2_odd0;
 
-          assign chk3_subBNK[b]={chk3_banks[24+b],chk3_banks[16+b],chk3_banks[8+b],chk3_banks[0+b]};
+          assign chk3_subBNK[b]=|{chk3_banks[24+b],chk3_banks[16+b],chk3_banks[8+b],chk3_banks[0+b]};
           assign chk3_odd1[b]=chk3_banks[24+b] && |chk3_banks[3:0] ? chk3_odd0^4'b1 : chk3_odd0;
 
-          assign chk4_subBNK[b]={chk4_banks[24+b],chk4_banks[16+b],chk4_banks[8+b],chk4_banks[0+b]};
+          assign chk4_subBNK[b]=|{chk4_banks[24+b],chk4_banks[16+b],chk4_banks[8+b],chk4_banks[0+b]};
           assign chk4_odd1[b]=chk4_banks[24+b] && |chk4_banks[3:0] ? chk4_odd0^4'b1 : chk4_odd0;
 
-          assign chk5_subBNK[b]={chk5_banks[24+b],chk5_banks[16+b],chk5_banks[8+b],chk5_banks[0+b]};
+          assign chk5_subBNK[b]=|{chk5_banks[24+b],chk5_banks[16+b],chk5_banks[8+b],chk5_banks[0+b]};
           assign chk5_odd1[b]=chk5_banks[24+b] && |chk5_banks[3:0] ? chk5_odd0^4'b1 : chk5_odd0;
           
-          assign wrt0_subBNK[b]={wrt0_banks[24+b],wrt0_banks[16+b],wrt0_banks[8+b],wrt0_banks[0+b]};
+          assign wrt0_subBNK[b]=|{wrt0_banks[24+b],wrt0_banks[16+b],wrt0_banks[8+b],wrt0_banks[0+b]};
           assign wrt0_odd1[b]=wrt0_banks[24+b] && |wrt0_banks[3:0] ? wrt0_odd0^4'b1 : wrt0_odd0;
 
-          assign wrt1_subBNK[b]={wrt1_banks[24+b],wrt1_banks[16+b],wrt1_banks[8+b],wrt1_banks[0+b]};
+          assign wrt1_subBNK[b]=|{wrt1_banks[24+b],wrt1_banks[16+b],wrt1_banks[8+b],wrt1_banks[0+b]};
           assign wrt1_odd1[b]=wrt1_banks[24+b] && |wrt1_banks[3:0] ? wrt1_odd0^4'b1 : wrt1_odd0;
 
-          assign chk0_subBNK2[b]={chk0_banks2[24+b],chk0_banks2[16+b],chk0_banks2[8+b],chk0_banks2[0+b]};
-          assign chk1_subBNK2[b]={chk1_banks2[24+b],chk1_banks2[16+b],chk1_banks2[8+b],chk1_banks2[0+b]};
-          assign chk2_subBNK2[b]={chk2_banks2[24+b],chk2_banks2[16+b],chk2_banks2[8+b],chk2_banks2[0+b]};
-          assign chk3_subBNK2[b]={chk3_banks2[24+b],chk3_banks2[16+b],chk3_banks2[8+b],chk3_banks2[0+b]};
-          assign chk4_subBNK2[b]={chk4_banks2[24+b],chk4_banks2[16+b],chk4_banks2[8+b],chk4_banks2[0+b]};
-          assign chk5_subBNK2[b]={chk5_banks2[24+b],chk5_banks2[16+b],chk5_banks2[8+b],chk5_banks2[0+b]};
-          assign wrt0_subBNK2[b]={wrt0_banks2[24+b],wrt0_banks2[16+b],wrt0_banks2[8+b],wrt0_banks2[0+b]};
-          assign wrt1_subBNK2[b]={wrt1_banks2[24+b],wrt1_banks2[16+b],wrt1_banks2[8+b],wrt1_banks2[0+b]};
+          assign chk0_subBNK2[b]=|{chk0_banks2[24+b],chk0_banks2[16+b],chk0_banks2[8+b],chk0_banks2[0+b]};
+          assign chk1_subBNK2[b]=|{chk1_banks2[24+b],chk1_banks2[16+b],chk1_banks2[8+b],chk1_banks2[0+b]};
+          assign chk2_subBNK2[b]=|{chk2_banks2[24+b],chk2_banks2[16+b],chk2_banks2[8+b],chk2_banks2[0+b]};
+          assign chk3_subBNK2[b]=|{chk3_banks2[24+b],chk3_banks2[16+b],chk3_banks2[8+b],chk3_banks2[0+b]};
+          assign chk4_subBNK2[b]=|{chk4_banks2[24+b],chk4_banks2[16+b],chk4_banks2[8+b],chk4_banks2[0+b]};
+          assign chk5_subBNK2[b]=|{chk5_banks2[24+b],chk5_banks2[16+b],chk5_banks2[8+b],chk5_banks2[0+b]};
+          assign wrt0_subBNK2[b]=|{wrt0_banks2[24+b],wrt0_banks2[16+b],wrt0_banks2[8+b],wrt0_banks2[0+b]};
+          assign wrt1_subBNK2[b]=|{wrt1_banks2[24+b],wrt1_banks2[16+b],wrt1_banks2[8+b],wrt1_banks2[0+b]};
 
           if (b<4) begin
               bit_find_last_bit #(64) chkBit0A(chk0_match[b]&mask,chk0_firstA[b],chk0_hasA[b]);
               bit_find_last_bit #(64) chkBit0B(chk0_match[b]&~mask,chk0_firstB[b],chk0_hasB[b]);
-              assign chk0_match_first[b]=chk0_hasA[b] ? chk0_firstA : chk0_firstB;
+              assign chk0_match_first[b]=chk0_hasA[b] ? chk0_firstA[b] : chk0_firstB[b];
           end
           stq_buf_L_array arr0_mod(
           clk,
           rst,
           aStall|aDoStall,
           excpt,
-          wrt0_en0, wrt0_odd1[b], wrt0_bytes[b], wrt0_subBNK[b], wrt0_subBNK2[b],
-          wrt1_en0, wrt1_odd1[b], wrt1_bytes[b], wrt1_subBNK[b], wrt1_subBNK2[b],
+          wrt0_en0[31:0], wrt0_odd1[b], wrt0_bytes[b], wrt0_subBNK[b], wrt0_subBNK2[b],
+          wrt1_en0[31:0], wrt1_odd1[b], wrt1_bytes[b], wrt1_subBNK[b], wrt1_subBNK2[b],
           chk0_en, chk0_addrEO[31:0], chk0_odd1[b], chk0_bytes[b], chk0_subBNK[b], chk0_subBNK2[b], chk0_match[b][31:0], chk0_partial[b][31:0],
           chk1_en, chk1_addrEO[31:0], chk1_odd1[b], chk1_bytes[b], chk1_subBNK[b], chk1_subBNK2[b], chk1_match[b][31:0], chk1_partial[b][31:0],
           chk2_en, chk2_addrEO[31:0], chk2_odd1[b], chk2_bytes[b], chk2_subBNK[b], chk2_subBNK2[b], chk2_match[b][31:0], chk2_partial[b][31:0],
@@ -440,8 +440,8 @@ module stq(
           rst,
           aStall|aDoStall,
           excpt,
-          wrt0_en0, wrt0_odd1[b], wrt0_bytes[b], wrt0_subBNK[b], wrt0_subBNK2[b],
-          wrt1_en0, wrt1_odd1[b], wrt1_bytes[b], wrt1_subBNK[b], wrt1_subBNK2[b],
+          wrt0_en0[63:32], wrt0_odd1[b], wrt0_bytes[b], wrt0_subBNK[b], wrt0_subBNK2[b],
+          wrt1_en0[63:32], wrt1_odd1[b], wrt1_bytes[b], wrt1_subBNK[b], wrt1_subBNK2[b],
           chk0_en, chk0_addrEO[63:32], chk0_odd1[b], chk0_bytes[b], chk0_subBNK[b], chk0_subBNK2[b], chk0_match[b][63:32], chk0_partial[b][63:32],
           chk1_en, chk1_addrEO[63:32], chk1_odd1[b], chk1_bytes[b], chk1_subBNK[b], chk1_subBNK2[b], chk1_match[b][63:32], chk1_partial[b][63:32],
           chk2_en, chk2_addrEO[63:32], chk2_odd1[b], chk2_bytes[b], chk2_subBNK[b], chk2_subBNK2[b], chk2_match[b][63:32], chk2_partial[b][63:32],
