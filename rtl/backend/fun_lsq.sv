@@ -219,9 +219,9 @@ module fun_lsq(
   wire                       stqd_rdyA1;
   wire                       stqd_rdyB0;
   wire                       stqd_rdyB1;
-  wire [127+8:0]               dc_wdataP[1:0];
+  wire [1:0][127+8:0]               dc_wdataP;
   reg  [127+8:0]               dc_wdataP_reg[1:0];
-  wire [1:0]                   dc_pdataP[1:0];
+  wire [1:0][1:0]                   dc_pdataP;
   reg  [1:0]                   dc_pdataP_reg[1:0];
   wire [1:0] sdata_rdy;
   wire [5:0] retM_II_in;
@@ -313,7 +313,9 @@ module fun_lsq(
   LSQ_shr_data[`lsqshare_wrt0]!=3'd7,
   LSQ_shr_data[`lsqshare_wrt1]!=3'd7,
   wb1_adata,wb1_LSQ,wb1_data,wb1_pbit,wb1_brdbanks,wb1_en,,//wb1_way
-  wb0_adata,wb0_LSQ,wb0_data,wb0_pbit,wb0_brdbanks,wb0_en
+  wb0_adata,wb0_LSQ,wb0_data,wb0_pbit,wb0_brdbanks,wb0_en,
+  wreq_en[0],wreq_data[0],dc_wdataP[0],dc_pdataP[0],
+  wreq_en[1],wreq_data[1],dc_wdataP[1],dc_pdataP[1]
   );
 
   wire aStall_LSQ;
@@ -328,7 +330,7 @@ module fun_lsq(
   wire retB_en;
   wire retB_clkEn;
   wire mem_II_stall;
-  wire [`lsaddr_width-1:0] wreq_data[1:0];
+  wire [1:0][`lsaddr_width-1:0] wreq_data;
   reg [`lsaddr_width-1:0] wreq_data_reg[1:0];
   wire [1:0] wreq_en;
   reg [1:0] wreq_en_reg;
