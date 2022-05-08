@@ -705,20 +705,23 @@ module stq(
 	  pse0_WQ<=6'd0;
 	  pse1_WQ<=6'd0;
 	  chk_mask<=6'd0;
-	  mask<=64'b0;
+	  mask=64'b0;
+	  rsDoStall<=4'b0000;
       end else begin
 	  if (!stall && !doStall && pse0_en && ~pse1_en) begin
 	      pse0_WQ<=pse1_WQ;
 	      pse1_WQ<=pse1_WQ_inc;
-	      mask[pse0_WQ]<=~mask[pse0_WQ];
+	      mask[pse0_WQ]=~mask[pse0_WQ];
 	  end else if (!stall && !doStall && pse0_en) begin
 	      pse0_WQ<=pse1_WQ_inc;
 	      pse1_WQ<=pse1_WQ_inc2;
-	      mask[pse0_WQ]<=~mask[pse0_WQ];
-	      mask[pse1_WQ]<=~mask[pse1_WQ];
+	      mask[pse0_WQ]=~mask[pse0_WQ];
+	      mask[pse1_WQ]=~mask[pse1_WQ];
 	  end
 	  if (!aStall && !aDoStall && chk_rdy) begin
 	      chk_mask<=6'd0;
+	      if (WLN0_adata[`lsaddr_WQ]==63 && WLN0_en) mask=~mask;
+	      if (WLN1_adata[`lsaddr_WQ]==63 && WLN1_en) mask=~mask;
 	  end else if (!(|rsDoStall & rsStall)) begin
 	      chk_mask<=chk_mask|chk_wb0|chk_wb1;
 	  end
