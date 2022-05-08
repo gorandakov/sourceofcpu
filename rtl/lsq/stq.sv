@@ -563,7 +563,8 @@ module stq(
   assign chk4_odd=chk4_adata[`lsaddr_odd];
   assign chk5_odd=chk5_adata[`lsaddr_odd];
 
-  assign aDoStall=|chk0_partial || |chk1_partial || |chk2_partial || |chk3_partial || |chk4_partial || |chk5_partial || chk_wb2_has;
+  assign aDoStall=|chk0_partial || |chk1_partial || |chk2_partial || |chk3_partial || |chk4_partial || |chk5_partial || chk_wb2_has ||
+	  |rsDoStall & rsStall;
   assign WLN0_en=LSQ_shr_data[`lsqshare_wrt0]==3'd7 ? 1'b0 : 1'bz;
   assign WLN1_en=LSQ_shr_data[`lsqshare_wrt1]==3'd7 ? 1'b0 : 1'bz;
   assign WLN0_adata=LSQ_shr_data[`lsqshare_wrt0]==3'd7 ? {`lsaddr_width{1'b0}} : {`lsaddr_width{1'bz}};
@@ -697,13 +698,15 @@ module stq(
 	  end
 	  if (!aStall && !aDoStall && chk_rdy) begin
 	      chk_mask<=6'd0;
-	  end else if (!rsStall) begin
+	  end else if (!(|rsDoStall & rsStall)) begin
 	      chk_mask<=chk_mask|chk_wb0|chk_wb1;
 	  end
-	  rsDoStall[0]<=wb1_en && wb1_way==2'd0;
-	  rsDoStall[1]<=wb1_en && wb1_way==2'd1;
-	  rsDoStall[2]<=wb1_en && wb1_way==2'd2;
-	  rsDoStall[3]<=wb0_en;
+	  if (!(|rsDoStall & rsStall)) begin
+	      rsDoStall[0]<=wb1_en && wb1_way==2'd0;
+	      rsDoStall[1]<=wb1_en && wb1_way==2'd1;
+	      rsDoStall[2]<=wb1_en && wb1_way==2'd2;
+	      rsDoStall[3]<=wb0_en;
+          end
       end
   end
 endmodule
