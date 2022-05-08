@@ -69,78 +69,6 @@ module agucam_ram(
 endmodule
 
 
-//read-during-write behaviour: write first
-module agucam_extra_ram0(
-  clk,
-  rst,
-  read_clkEn,
-  read_addr,
-  read_data,
-  write_addr,
-  write_data,
-  write_wen
-  );
-
-  localparam DATA_WIDTH=(2+`mOpX_width+135+1)/2;
-  localparam ADDR_WIDTH=3;
-  localparam ADDR_COUNT=8;
-
-  input clk;
-  input rst;
-  input read_clkEn;
-  input [ADDR_WIDTH-1:0] read_addr;
-  output [DATA_WIDTH-1:0] read_data;
-  input [ADDR_WIDTH-1:0] write_addr;
-  input [DATA_WIDTH-1:0] write_data;
-  input write_wen;
-
-  reg [DATA_WIDTH-1:0] ram [7:0];
-  reg [ADDR_WIDTH-1:0] read_addr_reg;
-  
-  assign read_data=ram[read_addr_reg];
-
-  always @(posedge clk)
-    begin
-      if (rst) read_addr_reg<={ADDR_WIDTH{1'b0}};
-      else if (read_clkEn) read_addr_reg<=read_addr;
-      if (write_wen) ram[write_addr]<=write_data;
-    end
-
-endmodule
-
-module agucam_extra_ram(
-  clk,
-  rst,
-  read_clkEn,
-  read_addr,
-  read_data,
-  write_addr,
-  write_data,
-  write_wen
-  );
-
-  localparam DATA_WIDTH=2+`mOpX_width+135+1;
-  localparam ADDR_WIDTH=3;
-  localparam ADDR_COUNT=8;
-
-  input clk;
-  input rst;
-  input read_clkEn;
-  input [ADDR_WIDTH-1:0] read_addr;
-  output [DATA_WIDTH-1:0] read_data;
-  input [ADDR_WIDTH-1:0] write_addr;
-  input [DATA_WIDTH-1:0] write_data;
-  input write_wen;
-
-  agucam_extra_ram0 ramA(clk,rst,read_clkEn,read_addr,read_data[DATA_WIDTH/2-1:
-    0],write_addr,write_data[DATA_WIDTH/2-1:0],write_wen);
-  agucam_extra_ram0 ramB(clk,rst,read_clkEn,read_addr,read_data[DATA_WIDTH-1:
-    DATA_WIDTH/2],write_addr,write_data[DATA_WIDTH-1:DATA_WIDTH/2],write_wen);
-endmodule
-
-
-
-
 
 module agucam(
   clk,
@@ -149,6 +77,7 @@ module agucam(
   except_thread,
   read_clkEn,
   doSkip,
+  rsStall,
   conflict0,
   mOp0_addrMain,
   mOp0_regNo,
@@ -192,22 +121,6 @@ module agucam(
   mOp2_lsflag,
   mOp2_attr,
 
-  conflict3,
-  mOp3_addrEven,
-  mOp3_addrOdd,
-  mOp3_regNo,
-  mOp3_type,
-  mOp3_odd,
-  mOp3_low,
-  mOp3_sz,
-  mOp3_split,
-  mOp3_bank0,
-  mOp3_II,
-  mOp3_WQ,
-  mOp3_data,
-  mOp3_pbit,
-  mOp3_bread,
-
   mOpR_addrMain,
   mOpR_lsfw,
   mOpR_addrEven,
@@ -226,9 +139,6 @@ module agucam(
   mOpR_WQ,
   mOpR_thread,
   mOpR_lsflag,
-  mOpR_bread,
-  mOpR_data,
-  mOpR_pbit,
   mOpR_attr
   );
 
@@ -253,6 +163,7 @@ module agucam(
   input except_thread;
   input read_clkEn;
   output reg doSkip;
+  input rsStall;
 
   input conflict0;
   input [VADDR_WIDTH-1:0] mOp0_addrMain;
@@ -337,10 +248,7 @@ module agucam(
   output [5:0] mOpR_WQ;
   output mOpR_thread;
   output mOpR_lsflag;
-  output [4:0] mOpR_bread;
-  output [135:0] mOpR_data;
   output [3:0] mOpR_attr;
-  output [1:0] mOpR_pbit;
 
   wire [3:0] curConfl;
  // wire [3:0] write_confl;
@@ -362,14 +270,11 @@ module agucam(
   wire wen;
   
   wire [MOP_WIDTH-1:0] write_mop[2:0];
-  wire [MOPX_WIDTH-1:0] write_mop3;
   wire [DATA_WIDTH-1:0] write_dataA;
   wire [MDATA_WIDTH-1:0] write_dataB;
   wire [MOP_WIDTH-1:0] read_mop[2:0];
-  wire [MOPX_WIDTH-1:0] read_mop3;
   wire [DATA_WIDTH-1:0] read_dataA;
   wire [MDATA_WIDTH-1:0] read_dataB;
-  wire [135:0] read_mop3_data;
 
   wire [VADDR_WIDTH-1:0] mOpR_addrMain;
  // wire [VADDR_WIDTH-1:0] mOpR_addrNext;
@@ -377,11 +282,9 @@ module agucam(
 //  wire pageIsNext;
   
  
-  reg [3:0] confl_mask;
+  reg [2:0] confl_mask;
 
   reg [MOP_WIDTH-1:0] write_mop_reg[2:0];
-  reg [MOPX_WIDTH-1:0] write_mop3_reg;
-  reg [135:0] write_mop3_data_reg;
 
   reg init;
   reg [2:0] initCount;
@@ -405,12 +308,10 @@ module agucam(
 
   wire excpt_fwd; 
   wire thrmask;
-  wire [3:0] in_mask;
+  wire [2:0] in_mask;
   
-  assign mOpR_data=read_mop3_data;
   assign write_dataA={conflict1&in_mask[1],conflict0&in_mask[0],write_mop_reg[2],write_mop_reg[1],write_mop_reg[0]};
-  assign write_dataB={conflict3&in_mask[3],conflict2&in_mask[2],write_mop3_reg,write_mop3_data_reg};
-  assign wen=conflict0&in_mask[0]||conflict1&in_mask[1]||conflict2&in_mask[2]||conflict3&in_mask[3];
+  assign wen=conflict0&in_mask[0]||conflict1&in_mask[1]||conflict2&in_mask[2];
   assign write_addr_d=(~wen & ~rst) ? write_addr : 3'bz; 
   
   assign write_addr_d=rst ? 3'b0:3'bz;
@@ -418,10 +319,8 @@ module agucam(
   assign in_mask[0]=~except;
   assign in_mask[1]=~except;
   assign in_mask[2]=~except;
-  assign in_mask[3]=~except;
   
   assign {read_conflA[1:0],read_mop[2],read_mop[1],read_mop[0]}=(wen & count[0]) ? write_dataA : read_dataA;
-  assign {read_conflA[3:2],read_mop3,read_mop3_data}=(wen && count[0]) ? write_dataB : read_dataB;
 
   assign write_mop[0][`mOp_addrMain]=mOp0_addrMain;
   assign write_mop[0][`mOp_reg]=     mOp0_regNo;
@@ -466,20 +365,6 @@ module agucam(
   assign write_mop[2][`mOp_lsflag]=  mOp2_lsflag;
   assign write_mop[2][`mOp_attr]=    mOp2_attr;
 
-  assign write_mop3[`mOpX_addrEven]=mOp3_addrEven;
-  assign write_mop3[`mOpX_addrOdd]= mOp3_addrOdd;
-  assign write_mop3[`mOpX_regNo]=     mOp3_regNo;
-  assign write_mop3[`mOpX_mtype]=    mOp3_type;
-  assign write_mop3[`mOpX_sz]=      mOp3_sz;
-  assign write_mop3[`mOpX_st]=      1'b0;
-  assign write_mop3[`mOpX_split]=   mOp3_split;
-  assign write_mop3[`mOpX_bank0]=   mOp3_bank0;
-  assign write_mop3[`mOpX_II]=      mOp3_II;
-  assign write_mop3[`mOpX_WQ]=      mOp3_WQ;
-  assign write_mop3[`mOpX_odd]=     mOp3_odd;
-  assign write_mop3[`mOpX_low]=     mOp3_low;
-  assign write_mop3[`mOpX_pbit]=    mOp3_pbit;
-  assign write_mop3[`mOpX_bread]=   mOp3_bread;
 //  assign write_mop3[`mOpX_thr]=  1'b0; //fixme: not thread safe
 
   assign mOpR_en=(|sel) && ~init && (cmore[1]|wen) && ~excpt_fwd && read_clkEn;
@@ -492,7 +377,6 @@ module agucam(
   assign mOpR_sz=(!conflFound) ? 5'B0 : 5'BZ;
   assign mOpR_odd=(!conflFound) ? 1'B0 : 1'BZ;
   assign mOpR_low=(!conflFound) ? 2'B0 : 2'BZ;
-  assign mOpR_bread=(!conflFound) ? 5'B0 : 5'BZ;
   assign mOpR_invtlb=(!conflFound) ? 1'B0 : 1'BZ;
   assign mOpR_split=(!conflFound) ? 1'B0 : 1'BZ;
   assign mOpR_bank0=(!conflFound) ? 5'b0 : 5'BZ;
@@ -506,37 +390,12 @@ module agucam(
   assign thrmask=(!conflFound) ? 1'b1 : 1'BZ;
   assign mOpR_lsfw=(!conflFound) ? 1'b0 : 1'BZ;
   assign mOpR_attr=(!conflFound) ? 4'b0 : 4'BZ;
-  assign mOpR_pbit=(!conflFound) ? 2'b0 : 2'BZ;
   
   assign read_confl[0]=(wen & count[0]) ? read_conflA[0] : read_conflA[0] && valid[read_mop[0][`mOp_thread]][read_addr];
   assign read_confl[1]=(wen & count[0]) ? read_conflA[1] : read_conflA[1] && valid[read_mop[1][`mOp_thread]][read_addr];
   assign read_confl[2]=(wen & count[0]) ? read_conflA[2] : read_conflA[2] && valid[read_mop[2][`mOp_thread]][read_addr];
-  assign read_confl[3]=(wen & count[0]) ? read_conflA[3] : read_conflA[3] && valid[1'b0][read_addr];
   
-  assign curConfl=read_confl&(confl_mask|{4{count[0]&&wen}});
-
-  assign mOpR_addrMain=sel[3] ? {VADDR_WIDTH{1'B0}} : {VADDR_WIDTH{1'BZ}};
-  assign mOpR_addrEven=sel[3] ? read_mop3[`mOpX_addrEven] : 36'bz;
-  assign mOpR_addrOdd=sel[3] ? read_mop3[`mOpX_addrOdd] : 36'bz;
-  assign mOpR_odd=sel[3] ? read_mop3[`mOpX_odd] : 1'bz;
-  assign mOpR_low=sel[3] ? read_mop3[`mOpX_low] : 2'bz;
-  assign mOpR_bread=sel[3] ? read_mop3[`mOpX_bread] : 5'bz;
-  assign mOpR_regNo=sel[3] ? read_mop3[`mOpX_regNo] : {REG_WIDTH{1'BZ}};
-  assign mOpR_type=sel[3] ? read_mop3[`mOpX_mtype] : 2'BZ;
-  assign mOpR_sz=sel[3] ? read_mop3[`mOpX_sz] : 5'BZ;
-  assign mOpR_invtlb=sel[3] ? read_mop3[`mOpX_st] : 1'BZ;
-  assign mOpR_split=sel[3] ? read_mop3[`mOpX_split] : 1'BZ;
-  assign mOpR_bank0=sel[3] ? read_mop3[`mOpX_bank0] : 5'BZ;
-  assign mOpR_LSQ=sel[3] ? 9'b0 : 9'BZ;
-  assign mOpR_II=sel[3] ? read_mop3[`mOpX_II] : 10'BZ;
-  assign mOpR_WQ=sel[3] ? read_mop3[`mOpX_WQ] : 6'BZ;
-  assign mOpR_thread=sel[3] ? 1'b0 : 1'BZ;
-  assign mOpR_lsflag=sel[3] ? 1'b0 : 1'BZ;
-  assign thrmask=sel[3] ? 1'b0 : 1'bz;
-  assign mOpR_lsfw=sel[3] ? 1'b1 : 1'bz;
-  assign mOpR_bread=sel[3] ? read_mop3[`mOpX_bread] : 5'BZ;
-  assign mOpR_attr=sel[3] ? 4'b0 : 4'BZ;
-  assign mOpR_pbit=sel[3] ? read_mop3[`mOpX_pbit] : 2'BZ;
+  assign curConfl=read_confl&(confl_mask|{3{count[0]&&wen}});
 
   generate
     genvar p,k;
@@ -546,7 +405,6 @@ module agucam(
         assign mOpR_addrOdd=sel[k] ? 36'b0 : 36'bz;
         assign mOpR_odd=sel[k] ? 1'b0 : 1'bz;
         assign mOpR_low=sel[k] ? 2'b0 : 2'bz;
-        assign mOpR_bread=sel[k] ? 5'b0 : 5'bz;
         assign mOpR_regNo=sel[k] ? read_mop[k][`mOp_reg] : {REG_WIDTH{1'BZ}};
         assign mOpR_type=sel[k] ? read_mop[k][`mOp_type] : 2'BZ;
         assign mOpR_sz=sel[k] ? read_mop[k][`mOp_sz] : 5'BZ;
@@ -561,7 +419,6 @@ module agucam(
         assign thrmask=sel[k] ? (read_mop[k][`mOp_thread]) | (~read_mop[k][`mOp_thread]) : 1'bz;
         assign mOpR_lsfw=sel[k] ? 1'b0 : 1'bz;
         assign mOpR_attr=sel[k] ? read_mop[k][`mOp_attr] : 4'bz;
-        assign mOpR_pbit=sel[k] ? 2'b0 : 2'bz;
     end
     for(p=0;p<8;p=p+1) begin
 	assign read_addrU_d=(rdxvalid0[p] || rdvalid1[p] & drvalid0_found &
@@ -614,21 +471,10 @@ module agucam(
   wen|init
   );
 
-  agucam_extra_ram ramB_mod(
-  clk,
-  rst,
-  doStep,
-  read_addr_d,
-  read_dataB,
-  init ? initCount : write_addr,
-  write_dataB&{MDATA_WIDTH{~init}},
-  wen|init
-  );
-
   adder_inc #(3) initAdd_mod(initCount,initCount_next,1'b1,);
   
   assign doStep=((curConfl==4'b0001 || curConfl==4'b0010 || curConfl==4'b0100 || curConfl==4'b1000) 
-    && read_clkEn && cmore[1]|wen)|excpt_fwd;
+    && read_clkEn && cmore[1]|wen && !rsStall)|excpt_fwd;
   assign excpt_fwd=except;// && ((rdvalid0 & valid[~except_thread])!=0 || ((rdvalid1 & valid[~except_thread])!=0 && ~drvalid0_found)!=0);
 
   always @(posedge clk)
@@ -642,7 +488,7 @@ module agucam(
 	      vOn_next=1'b0;
 	      vMask=8'b0;
 	      vMaskN=8'b0;
-	  end else begin
+	  end else if (!rsStall) begin
 	      if (wen && ~doStep|cmore[1]) begin
 	            valid[0][write_addr]<=1'b1;
 		    if (vMask!=0&&write_addr==0) begin
@@ -689,7 +535,7 @@ module agucam(
 	  if (rst) confl_mask<=4'b1111;
 	  else if (doStep &~init || except)  begin
 	      confl_mask<=4'b1111;
-	  end else if (~init) begin
+	  end else if (~initi && !rsStall) begin
 	      if (cmore[1] && read_clkEn) confl_mask<=confl_mask&~sel;
 	      else if (wen && count[0]) begin
 	         if (read_clkEn) confl_mask<=~sel;
@@ -698,16 +544,15 @@ module agucam(
 	  end
 	  if (rst) read_addr<=3'b0;
 	  else if (doStep) read_addr<=read_addr_d;
-	  write_addr<=write_addr_d;
+	  if (!rsStall) write_addr<=write_addr_d;
 	  if (rst) doSkip<=1'b0;
 	  else if (cmore[STALL_COUNT-1]) doSkip<=1'b1;
 	  else if (count[0]) doSkip<=1'b0;
-
-	  write_mop_reg[0]<=write_mop[0];
-	  write_mop_reg[1]<=write_mop[1];
-	  write_mop_reg[2]<=write_mop[2];
-	  write_mop3_reg<=write_mop3;
-          write_mop3_data_reg<=mOp3_data;
+          if (!rsStall) begin
+	      write_mop_reg[0]<=write_mop[0];
+	      write_mop_reg[1]<=write_mop[1];
+	      write_mop_reg[2]<=write_mop[2];
+          end
 	  
 
 	  if (rst) begin
