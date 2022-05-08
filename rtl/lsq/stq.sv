@@ -342,7 +342,7 @@ module stq(
 	      case(sz)
 		  5'h10:get_ld_bytes[low]=1'b1;
 		  5'h11:begin
-			  get_ld_byes[low]=1'b1;
+			  get_ld_bytes[low]=1'b1;
 			  if (low!=2'b11) get_ld_bytes[low+1]=1'b1;
 		  end
 	          default:get_ld_bytes=4'b1111;
