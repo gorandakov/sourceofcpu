@@ -925,9 +925,6 @@ module backend(
 */
   wire [67:0] XI_dataS;
 
-  wire rsStall;
-  wire [3:0] rsDoStall;
-
   wire [2:0] useBConstW;
   wire [2:0] useAConstW;
   wire [2:0] rs_rAW_use;
@@ -4248,11 +4245,11 @@ module backend(
   .FUS7(FUS8),
   .FUS8(FUS9),
 // 1 if buffer is free  
-  .pause0(miss_holds_agu|pause_agu|miss_pause_agu|bus_holds_agu|bus_holds_agu_reg|insBus_io|rsDoStall[m]),
+  .pause0(miss_holds_agu|pause_agu|miss_pause_agu|bus_holds_agu|bus_holds_agu_reg|insBus_io),
   .foundAlt1(~(&nDataAlt[m])|(|fxFRT_alten[m])),.foundAlt2(fxFRT_pause[m])
   );
   
- 
+  
 
 
 
@@ -4561,8 +4558,6 @@ module backend(
   end
   
   endgenerate
-  
-  assign rsStall=miss_holds_agu|pause_agu|miss_pause_agu|bus_holds_agu|bus_holds_agu_reg|insBus_io; 
   
   rs_s storeRs(
   .clk(clk),
@@ -5032,9 +5027,7 @@ module backend(
   .MSI_exp_addr(MSI_exp_addr_reg),.MSI_en(MSI_exp_en_reg),.lsq_index(LSQ_upper),
   .doStall_STQ(doStall_STQ),
   .doStall_LDQ(doStall_LDQ),
-  .doStall_LSQ(doStall_LSQ),
-  .rsStall(rsStall),
-  .rsDoStall(rsDoStall)
+  .doStall_LSQ(doStall_LSQ) 
   );
 
   fun_fpu_BOTH fpu_mod(
