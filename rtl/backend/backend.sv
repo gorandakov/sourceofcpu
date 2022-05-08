@@ -4799,6 +4799,7 @@ module backend(
   .excpt_gate(),
   .excpt_in_vm(),
   .excpt_in_km(),
+  .rsStall(rsDoStall),//input
   .pause_agu(pause_agu),
   .miss_holds_agu(miss_holds_agu),
   .miss_pause_agu(miss_pause_agu),

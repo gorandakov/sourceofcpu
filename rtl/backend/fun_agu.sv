@@ -6,6 +6,7 @@ module agu_block(
   excpt_gate,
   excpt_in_vm,
   excpt_in_km,
+  rsStall,
   pause_agu,
   miss_holds_agu,
   miss_pause_agu,
@@ -175,6 +176,7 @@ module agu_block(
   input excpt_gate;
   input excpt_in_vm;
   input excpt_in_km;
+  input [3:0] rsStall;
   output pause_agu;
   output miss_holds_agu;
   output miss_pause_agu;
@@ -1300,7 +1302,7 @@ module agu_block(
 
   rs_write_forward #(65) nxtBase1(
   clk,rst,
-  ~u1_clkEn,
+  ~u1_clkEn|rsPause[0],
   u1_base,uu_base1,
   u1_base_fufwd,u1_base_fuufwd,
   FU0,FU0_reg,
@@ -1317,7 +1319,7 @@ module agu_block(
   
   rs_write_forward #(65) nxtIndex1(
   clk,rst,
-  ~u1_clkEn,
+  ~u1_clkEn|rsPause[0],
   u1_index,uu_index1,
   u1_index_fufwd,u1_index_fuufwd,
   FU0,FU0_reg,
@@ -1334,7 +1336,7 @@ module agu_block(
   
   rs_write_forward #(65) nxtBase2(
   clk,rst,
-  ~u2_clkEn,
+  ~u2_clkEn|rsPause[1],
   u2_base,uu_base2,
   u2_base_fufwd,u2_base_fuufwd,
   FU0,FU0_reg,
@@ -1351,7 +1353,7 @@ module agu_block(
   
   rs_write_forward #(65) nxtIndex2(
   clk,rst,
-  ~u2_clkEn,
+  ~u2_clkEn|rsPause[1],
   u2_index,uu_index2,
   u2_index_fufwd,u2_index_fuufwd,
   FU0,FU0_reg,
@@ -1369,7 +1371,7 @@ module agu_block(
   
   rs_write_forward #(65) nxtBase3(
   clk,rst,
-  ~u3_clkEn,
+  ~u3_clkEn|rsPause[2],
   u3_base,uu_base3,
   u3_base_fufwd,u3_base_fuufwd,
   FU0,FU0_reg,
@@ -1386,7 +1388,7 @@ module agu_block(
   
   rs_write_forward #(65) nxtIndex3(
   clk,rst,
-  ~u3_clkEn,
+  ~u3_clkEn|rsPause[2],
   u3_index,uu_index3,
   u3_index_fufwd,u3_index_fuufwd,
   FU0,FU0_reg,
@@ -1701,6 +1703,7 @@ module agu_block(
   rst,
   except,
   u1_attr,
+  rsStall[0],
   u1_clkEn,
   ,
   bus_holds_agu|miss_holds_agu,
@@ -1768,6 +1771,7 @@ module agu_block(
   rst,
   except,
   u2_attr,
+  rsStall[1],
   u2_clkEn,
   ,
   bus_holds_agu|miss_holds_agu,
@@ -1835,6 +1839,7 @@ module agu_block(
   rst,
   except,
   u3_attr,
+  rsStall[2],
   u3_clkEn,
   ,
   bus_holds_agu|miss_holds_agu,
@@ -1904,6 +1909,7 @@ module agu_block(
   .except_thread(1'b0),
   .read_clkEn(~Em_tlb_req_en && ~rec_stall &&~bus_holds_agu_reg &&~miss_holds_agu_reg),// && ~miss_pause_agu),
   .doSkip(pause_agu),
+  .rsStall(rsStall[3]),
   .conflict0(p0_conflict | p0_tlbmiss_reg),
   .mOp0_lsflag(mOp0_lsflag),
   .mOp0_thread(1'b0),
@@ -1946,28 +1952,12 @@ module agu_block(
   .mOp2_II(mOp2_II),
   .mOp2_WQ(mOp2_WQ),
   .mOp2_attr(mOp2_attr),
-  .conflict3(lso_xdataA_reg[`lsfxdata_has]), //store to load forwarding
-//  .mOp3_lsflag(lso_adata[`lsaddr_flag]),
-  .mOp3_addrEven(lso_adata[`lsaddr_addrE]),
-  .mOp3_addrOdd(lso_adata[`lsaddr_addrO]),
-  .mOp3_odd(lso_adata[`lsaddr_odd]),
-  .mOp3_low(lso_adata[`lsaddr_low]),
-  .mOp3_regNo({lso_adata[`lsaddr_reg_hi],lso_adata[`lsaddr_reg_low]}),
-  .mOp3_sz(lso_adata[`lsaddr_sz]),
-  .mOp3_split(lso_adata[`lsaddr_split]),
-  .mOp3_bank0(lso_adata[`lsaddr_bank0]),
-  .mOp3_II(lso_adata[`lsaddr_II]),
-  .mOp3_WQ(lso_adata[`lsaddr_WQ]),
-  .mOp3_type(lso_adata[`lsaddr_mtype]),
-  .mOp3_data(lso_data),
-  .mOp3_pbit(lso_pbit),
-  .mOp3_bread(lso_bnkread),
  
   .mOpR_lsflag(rec_lsflag),
   .mOpR_addrMain(rec_addr),
   .mOpR_addrEven(rec_addrE),
   .mOpR_addrOdd(rec_addrO),
-  .mOpR_lsfw(rec_lsfwd),
+ // .mOpR_lsfw(rec_lsfwd),
   .mOpR_odd(rec_odd),
   .mOpR_low(rec_addr_low),
   .mOpR_regNo(rec_register),
@@ -1981,10 +1971,7 @@ module agu_block(
   .mOpR_WQ(rec_WQ),
   .mOpR_attr(rec_attr),
   .mOpR_type(rec_type),
-  .mOpR_thread(),
-  .mOpR_bread(rec_brdbnk),
-  .mOpR_data(rec_data),
-  .mOpR_pbit(rec_pbit)
+  .mOpR_thread()
   );
   
   agu_r rec_agu_mod(
@@ -1994,12 +1981,13 @@ module agu_block(
   .doStall(rec_stall),
   .bus_hold(bus_holds_agu_reg|miss_holds_agu_reg),
   .pause_miss(miss_pause_agu),
+  .rsPause(rsPause[3]),
   .mOp0_en(rec_en),
   .mOp0_thread(1'b0),
   .mOp0_addrMain(rec_addr),
   .mOp0_addrEven(rec_addrE),
   .mOp0_addrOdd(rec_addrO),
-  .mOp0_lsfwd(rec_lsfwd),
+  .mOp0_lsfwd(1'b0),
   .mOp0_odd(rec_odd),
   .mOp0_addr_low(rec_addr_low),
   .mOp0_bread(rec_brdbnk),
@@ -2069,16 +2057,16 @@ module agu_block(
   );
 
   assign miss0=~FU0Hit & mOpX0_en_reg3 & ~p0_conflict_reg2 & 
-    ~bus_holds_agu_reg4 & ~mOpX0_lsflag_reg3 & 
+    ~bus_holds_agu_reg4 &  
     (mOpX0_type_reg3!=2'b10) & ~except & ~mOp0_sec_reg3 & ~alt_bus_hold_reg4;
   assign miss1=~FU1Hit & mOpX1_en_reg3 & ~p1_conflict_reg2 & 
-    ~bus_holds_agu_reg4 & ~mOpX1_lsflag_reg3 & 
+    ~bus_holds_agu_reg4 &  
     (mOpX1_type_reg3!=2'b10) & ~except & ~mOp1_sec_reg3 & ~alt_bus_hold_reg4;
   assign miss2=~FU2Hit & mOpX2_en_reg3 & ~p2_conflict_reg2 & 
-    ~bus_holds_agu_reg4 & ~mOpX2_lsflag_reg3 & 
+    ~bus_holds_agu_reg4 &  
     (mOpX2_type_reg3!=2'b10) & ~except & ~mOp2_sec_reg3 & ~alt_bus_hold_reg4;
   assign miss3=~FU3Hit & mOpX3_en_reg3 & ~alt_bus_hold_reg4 & 
-    ~bus_holds_agu_reg4 & ~mOpX3_lsflag_reg3 & (~except || mOpX3_register_reg3==9'h1fc);
+    ~bus_holds_agu_reg4 & (~except || mOpX3_register_reg3==9'h1fc);
   
   assign wr0_hit={mOpY4_hit && mOpY4_odd_o_reg3 | mOpY4_split_o_reg3,mOpY4_hit && ~mOpY4_odd_o_reg3 | mOpY4_split_o_reg3};
   assign wr0_addrE=mOpY4_addrEven_o_reg3;
@@ -2137,6 +2125,26 @@ module agu_block(
   miss_holds_agu,
  // miss_unlock,
   now_flushing,
+  lso_bnkread,
+  lso_data,
+  lso_pbit,
+  lso2_wb_en,
+  1'b0,
+  lso_adata[`lsaddr_addrE],
+  lso_adata[`lsaddr_addrO],
+  lso_adata[`lsaddr_sz],
+  1'b0,
+  lso_adata[`lsaddr_banks],
+  lso_adata[`lsaddr_bank0],
+  lso_adata[`lsaddr_odd],
+  lso_adata[`lsaddr_low],
+  lso_adata[`lsaddr_split],
+  {lso_adata[`lsaddr_reg_hi],lso_adata[`lsaddr_reg_low]},
+  lso2_adata[`lsaddr_mtype],
+  9'b0,//lso2_adata[`lsaddr_LSQ],
+  lso_adata[`lsaddr_II],
+  lso_adata[`lsaddr_WQ],
+  lso_adata[`lsaddr_flag],
   lso2_wb_en,
   lso2_bnkread,
   lso2_data,
@@ -2662,36 +2670,41 @@ module agu_block(
 
       p4_mex_en_reg<=p4_mex_en;
       p5_mex_en_reg<=p5_mex_en;
+      if (~rsStall[0]) begin
+          u1_clkEn_reg<=u1_clkEn;
+          u1_op_reg<=u1_op;
+          u1_sh_reg<=u1_sh;
+          u1_reg_reg<=u1_reg;
+          u1_LSQ_no_reg<=u1_LSQ_no;
+          u1_II_no_reg<=u1_II_no;
+          u1_WQ_no_reg<=u1_WQ_no;
+          u1_lsflag_reg<=u1_lsflag;
+          u1_const_reg<={{31{u1_const[32]}},u1_const};
+      end
 
-      u1_clkEn_reg<=u1_clkEn;
-      u1_op_reg<=u1_op;
-      u1_sh_reg<=u1_sh;
-      u1_reg_reg<=u1_reg;
-      u1_LSQ_no_reg<=u1_LSQ_no;
-      u1_II_no_reg<=u1_II_no;
-      u1_WQ_no_reg<=u1_WQ_no;
-      u1_lsflag_reg<=u1_lsflag;
-      u1_const_reg<={{31{u1_const[32]}},u1_const};
-
-      u2_clkEn_reg<=u2_clkEn;
-      u2_op_reg<=u2_op;
-      u2_sh_reg<=u2_sh;
-      u2_reg_reg<=u2_reg;
-      u2_LSQ_no_reg<=u2_LSQ_no;
-      u2_II_no_reg<=u2_II_no;
-      u2_WQ_no_reg<=u2_WQ_no;
-      u2_lsflag_reg<=u2_lsflag;
-      u2_const_reg<={{31{u2_const[32]}},u2_const};
-
-      u3_clkEn_reg<=u3_clkEn;
-      u3_op_reg<=u3_op;
-      u3_sh_reg<=u3_sh;
-      u3_reg_reg<=u3_reg;
-      u3_LSQ_no_reg<=u3_LSQ_no;
-      u3_II_no_reg<=u3_II_no;
-      u3_WQ_no_reg<=u3_WQ_no;
-      u3_lsflag_reg<=u3_lsflag;
-      u3_const_reg<={{31{u3_const[32]}},u3_const};
+      if (~rsStall[1]) begin
+          u2_clkEn_reg<=u2_clkEn;
+          u2_op_reg<=u2_op;
+          u2_sh_reg<=u2_sh;
+          u2_reg_reg<=u2_reg;
+          u2_LSQ_no_reg<=u2_LSQ_no;
+          u2_II_no_reg<=u2_II_no;
+          u2_WQ_no_reg<=u2_WQ_no;
+          u2_lsflag_reg<=u2_lsflag;
+          u2_const_reg<={{31{u2_const[32]}},u2_const};
+      end
+      
+      if (~rsStall[2]) begin
+          u3_clkEn_reg<=u3_clkEn;
+          u3_op_reg<=u3_op;
+          u3_sh_reg<=u3_sh;
+          u3_reg_reg<=u3_reg;
+          u3_LSQ_no_reg<=u3_LSQ_no;
+          u3_II_no_reg<=u3_II_no;
+          u3_WQ_no_reg<=u3_WQ_no;
+          u3_lsflag_reg<=u3_lsflag;
+          u3_const_reg<={{31{u3_const[32]}},u3_const};
+      end
 
       u4_clkEn_reg<=u4_clkEn;
       u4_op_reg<=u4_op;
@@ -2712,33 +2725,39 @@ module agu_block(
       u5_WQ_no_reg<=u5_WQ_no;
       u5_lsflag_reg<=u5_lsflag;
       u5_const_reg<={{31{u5_const[32]}},u5_const};
-      
-      u1_clkEn_reg2<=u1_clkEn_reg & ~except;
-      u1_op_reg2<=u1_op_reg;
-      u1_sh_reg2<=u1_sh_reg;
-      u1_reg_reg2<=u1_reg_reg;
-      u1_LSQ_no_reg2<=u1_LSQ_no_reg;
-      u1_II_no_reg2<=u1_II_no_reg;
-      u1_WQ_no_reg2<=u1_WQ_no_reg;
-      u1_lsflag_reg2<=u1_lsflag_reg;
 
-      u2_clkEn_reg2<=u2_clkEn_reg & ~except;
-      u2_op_reg2<=u2_op_reg;
-      u2_sh_reg2<=u2_sh_reg;
-      u2_reg_reg2<=u2_reg_reg;
-      u2_LSQ_no_reg2<=u2_LSQ_no_reg;
-      u2_II_no_reg2<=u2_II_no_reg;
-      u2_WQ_no_reg2<=u2_WQ_no_reg;
-      u2_lsflag_reg2<=u2_lsflag_reg;
+      if (~rsStall[0]) begin      
+          u1_clkEn_reg2<=u1_clkEn_reg & ~except;
+          u1_op_reg2<=u1_op_reg;
+          u1_sh_reg2<=u1_sh_reg;
+          u1_reg_reg2<=u1_reg_reg;
+          u1_LSQ_no_reg2<=u1_LSQ_no_reg;
+          u1_II_no_reg2<=u1_II_no_reg;
+          u1_WQ_no_reg2<=u1_WQ_no_reg;
+          u1_lsflag_reg2<=u1_lsflag_reg;
+      end
 
-      u3_clkEn_reg2<=u3_clkEn_reg & ~except;
-      u3_op_reg2<=u3_op_reg;
-      u3_sh_reg2<=u3_sh_reg;
-      u3_reg_reg2<=u3_reg_reg;
-      u3_LSQ_no_reg2<=u3_LSQ_no_reg;
-      u3_II_no_reg2<=u3_II_no_reg;
-      u3_WQ_no_reg2<=u3_WQ_no_reg;
-      u3_lsflag_reg2<=u3_lsflag_reg;
+      if (~rsStall[1]) begin      
+          u2_clkEn_reg2<=u2_clkEn_reg & ~except;
+          u2_op_reg2<=u2_op_reg;
+          u2_sh_reg2<=u2_sh_reg;
+          u2_reg_reg2<=u2_reg_reg;
+          u2_LSQ_no_reg2<=u2_LSQ_no_reg;
+          u2_II_no_reg2<=u2_II_no_reg;
+          u2_WQ_no_reg2<=u2_WQ_no_reg;
+          u2_lsflag_reg2<=u2_lsflag_reg;
+      end
+
+      if (~rsStall[2]) begin      
+          u3_clkEn_reg2<=u3_clkEn_reg & ~except;
+          u3_op_reg2<=u3_op_reg;
+          u3_sh_reg2<=u3_sh_reg;
+          u3_reg_reg2<=u3_reg_reg;
+          u3_LSQ_no_reg2<=u3_LSQ_no_reg;
+          u3_II_no_reg2<=u3_II_no_reg;
+          u3_WQ_no_reg2<=u3_WQ_no_reg;
+          u3_lsflag_reg2<=u3_lsflag_reg;
+      end
 
       u4_clkEn_reg2<=u4_clkEn_reg & ~except;
       u4_op_reg2<=u4_op_reg;
@@ -2758,128 +2777,144 @@ module agu_block(
       u5_WQ_no_reg2<=u5_WQ_no_reg;
       u5_lsflag_reg2<=u5_lsflag_reg;
      
-      mOp0_sec_reg<=mOp0_sec&~now_flushing;
-      mOp1_sec_reg<=mOp1_sec&~now_flushing;
-      mOp2_sec_reg<=mOp2_sec&~now_flushing;
+      if (~rsStall[0]) mOp0_sec_reg<=mOp0_sec&~now_flushing;
+      if (~rsStall[1]) mOp1_sec_reg<=mOp1_sec&~now_flushing;
+      if (~rsStall[2]) mOp2_sec_reg<=mOp2_sec&~now_flushing;
       mOp4_sec_reg<=mOp4_sec;
       mOp5_sec_reg<=mOp5_sec;
 
-      mOp0_sec_reg2<=mOp0_sec_reg;
-      mOp1_sec_reg2<=mOp1_sec_reg;
-      mOp2_sec_reg2<=mOp2_sec_reg;
-      mOp0_sec_reg3<=mOp0_sec_reg2;
-      mOp1_sec_reg3<=mOp1_sec_reg2;
-      mOp2_sec_reg3<=mOp2_sec_reg2;
+      if (~rsStall[0]) mOp0_sec_reg2<=mOp0_sec_reg;
+      if (~rsStall[1]) mOp1_sec_reg2<=mOp1_sec_reg;
+      if (~rsStall[2]) mOp2_sec_reg2<=mOp2_sec_reg;
+      if (~rsStall[0]) mOp0_sec_reg3<=mOp0_sec_reg2;
+      if (~rsStall[1]) mOp1_sec_reg3<=mOp1_sec_reg2;
+      if (~rsStall[2]) mOp2_sec_reg3<=mOp2_sec_reg2;
 
-      mOp0_rsEn_reg<=mOp0_rsEn;
-      mOp1_rsEn_reg<=mOp1_rsEn;
-      mOp2_rsEn_reg<=mOp2_rsEn;
-      mOp3_rsEn_reg<=mOp3_rsEn;
+      if (~rsStall[0]) mOp0_rsEn_reg<=mOp0_rsEn;
+      if (~rsStall[1]) mOp1_rsEn_reg<=mOp1_rsEn;
+      if (~rsStall[2]) mOp2_rsEn_reg<=mOp2_rsEn;
+      if (~rsStall[3]) mOp3_rsEn_reg<=mOp3_rsEn;
 
-      mOpX0_en_reg     <=mOpX0_en;
-      mOpX0_lsflag_reg <=mOpX0_lsflag;
-      mOpX0_type_reg   <=mOpX0_type;
-      mOpX0_en_reg2    <=mOpX0_en_reg & ~except;
-      mOpX0_lsflag_reg2<=mOpX0_lsflag_reg;
-      mOpX0_type_reg2  <=mOpX0_type_reg;
-      mOpX0_en_reg3    <=mOpX0_en_reg2 & ~except;
-      mOpX0_lsflag_reg3<=mOpX0_lsflag_reg2;
-      mOpX0_type_reg3  <=mOpX0_type_reg2;
+      if (~rsStall[0]) begin
+          mOpX0_en_reg     <=mOpX0_en;
+          mOpX0_lsflag_reg <=mOpX0_lsflag;
+          mOpX0_type_reg   <=mOpX0_type;
+          mOpX0_en_reg2    <=mOpX0_en_reg & ~except;
+          mOpX0_lsflag_reg2<=mOpX0_lsflag_reg;
+          mOpX0_type_reg2  <=mOpX0_type_reg;
+          mOpX0_en_reg3    <=mOpX0_en_reg2 & ~except;
+          mOpX0_lsflag_reg3<=mOpX0_lsflag_reg2;
+          mOpX0_type_reg3  <=mOpX0_type_reg2;
+      end
 
-      mOpX1_en_reg     <=mOpX1_en;
-      mOpX1_lsflag_reg <=mOpX1_lsflag;
-      mOpX1_type_reg   <=mOpX1_type;
-      mOpX1_en_reg2    <=mOpX1_en_reg & ~except;
-      mOpX1_lsflag_reg2<=mOpX1_lsflag_reg;
-      mOpX1_type_reg2  <=mOpX1_type_reg;
-      mOpX1_en_reg3    <=mOpX1_en_reg2 & ~except;
-      mOpX1_lsflag_reg3<=mOpX1_lsflag_reg2;
-      mOpX1_type_reg3  <=mOpX1_type_reg2;
+      if (~rsStall[1]) begin
+          mOpX1_en_reg     <=mOpX1_en;
+          mOpX1_lsflag_reg <=mOpX1_lsflag;
+          mOpX1_type_reg   <=mOpX1_type;
+          mOpX1_en_reg2    <=mOpX1_en_reg & ~except;
+          mOpX1_lsflag_reg2<=mOpX1_lsflag_reg;
+          mOpX1_type_reg2  <=mOpX1_type_reg;
+          mOpX1_en_reg3    <=mOpX1_en_reg2 & ~except;
+          mOpX1_lsflag_reg3<=mOpX1_lsflag_reg2;
+          mOpX1_type_reg3  <=mOpX1_type_reg2;
+      end
 
-      mOpX2_en_reg     <=mOpX2_en;
-      mOpX2_lsflag_reg <=mOpX2_lsflag;
-      mOpX2_type_reg   <=mOpX2_type;
-      mOpX2_en_reg2    <=mOpX2_en_reg & ~except;
-      mOpX2_lsflag_reg2<=mOpX2_lsflag_reg;
-      mOpX2_type_reg2  <=mOpX2_type_reg;
-      mOpX2_en_reg3    <=mOpX2_en_reg2 & ~except;
-      mOpX2_lsflag_reg3<=mOpX2_lsflag_reg2;
-      mOpX2_type_reg3  <=mOpX2_type_reg2;
+      if (~rsStall[2]) begin
+          mOpX2_en_reg     <=mOpX2_en;
+          mOpX2_lsflag_reg <=mOpX2_lsflag;
+          mOpX2_type_reg   <=mOpX2_type;
+          mOpX2_en_reg2    <=mOpX2_en_reg & ~except;
+          mOpX2_lsflag_reg2<=mOpX2_lsflag_reg;
+          mOpX2_type_reg2  <=mOpX2_type_reg;
+          mOpX2_en_reg3    <=mOpX2_en_reg2 & ~except;
+          mOpX2_lsflag_reg3<=mOpX2_lsflag_reg2;
+          mOpX2_type_reg3  <=mOpX2_type_reg2;
+      end
 
-      mOpX3_en_reg     <=mOpX3_en;
-      mOpX3_lsflag_reg <=mOpX3_lsflag;
-      mOpX3_type_reg   <=mOpX3_type;
-      mOpX3_en_reg2    <=mOpX3_en_reg & (~except || mOpX3_register_reg==9'h1fc);
-      mOpX3_lsflag_reg2<=mOpX3_lsflag_reg;
-      mOpX3_type_reg2  <=mOpX3_type_reg;
-      mOpX3_en_reg3    <=mOpX3_en_reg2 & (~except || mOpX3_register_reg2==9'h1fc);
-      mOpX3_lsflag_reg3<=mOpX3_lsflag_reg2;
-      mOpX3_type_reg3  <=mOpX3_type_reg2;
-      mOpX3_lsfwd_reg  <=mOpX3_lsfwd;
+      if (~rsStall[3]) begin
+          mOpX3_en_reg     <=mOpX3_en;
+          mOpX3_lsflag_reg <=mOpX3_lsflag;
+          mOpX3_type_reg   <=mOpX3_type;
+          mOpX3_en_reg2    <=mOpX3_en_reg & (~except || mOpX3_register_reg==9'h1fc);
+          mOpX3_lsflag_reg2<=mOpX3_lsflag_reg;
+          mOpX3_type_reg2  <=mOpX3_type_reg;
+          mOpX3_en_reg3    <=mOpX3_en_reg2 & (~except || mOpX3_register_reg2==9'h1fc);
+          mOpX3_lsflag_reg3<=mOpX3_lsflag_reg2;
+          mOpX3_type_reg3  <=mOpX3_type_reg2;
+          mOpX3_lsfwd_reg  <=mOpX3_lsfwd;
+      end
 
-      mOpX0_addrEven_reg<=mOpX0_addrEven;
-      mOpX0_addrOdd_reg<=mOpX0_addrOdd;
-      mOpX0_sz_reg<=mOpX0_sz;
-      mOpX0_banks_reg<=mOpX0_banks;
-      mOpX0_bank0_reg<=mOpX0_bank0;
-      mOpX0_odd_reg<=mOpX0_odd;
-      mOpX0_low_reg<=mOpX0_low;
-      mOpX0_split_reg<=mOpX0_split;
-      mOpX0_register_reg<=mOpX0_register;
-      mOpX0_LSQ_reg<=mOpX0_LSQ;
-      mOpX0_II_reg<=mOpX0_II;
-      mOpX0_WQ_reg<=mOpX0_WQ;
-      mOpX0_lsfwd_reg  <=mOpX0_lsfwd;
+      if (~rsStall[0]) begin
+          mOpX0_addrEven_reg<=mOpX0_addrEven;
+          mOpX0_addrOdd_reg<=mOpX0_addrOdd;
+          mOpX0_sz_reg<=mOpX0_sz;
+          mOpX0_banks_reg<=mOpX0_banks;
+          mOpX0_bank0_reg<=mOpX0_bank0;
+          mOpX0_odd_reg<=mOpX0_odd;
+          mOpX0_low_reg<=mOpX0_low;
+          mOpX0_split_reg<=mOpX0_split;
+          mOpX0_register_reg<=mOpX0_register;
+          mOpX0_LSQ_reg<=mOpX0_LSQ;
+          mOpX0_II_reg<=mOpX0_II;
+          mOpX0_WQ_reg<=mOpX0_WQ;
+          mOpX0_lsfwd_reg  <=mOpX0_lsfwd;
+      end
 
-      mOpX1_addrEven_reg<=mOpX1_addrEven;
-      mOpX1_addrOdd_reg<=mOpX1_addrOdd;
-      mOpX1_sz_reg<=mOpX1_sz;
-      mOpX1_banks_reg<=mOpX1_banks;
-      mOpX1_bank0_reg<=mOpX1_bank0;
-      mOpX1_odd_reg<=mOpX1_odd;
-      mOpX1_low_reg<=mOpX1_low;
-      mOpX1_split_reg<=mOpX1_split;
-      mOpX1_register_reg<=mOpX1_register;
-      mOpX1_LSQ_reg<=mOpX1_LSQ;
-      mOpX1_II_reg<=mOpX1_II;
-      mOpX1_WQ_reg<=mOpX1_WQ;
-      mOpX1_lsfwd_reg  <=mOpX1_lsfwd;
+      if (~rsStall[1]) begin
+          mOpX1_addrEven_reg<=mOpX1_addrEven;
+          mOpX1_addrOdd_reg<=mOpX1_addrOdd;
+          mOpX1_sz_reg<=mOpX1_sz;
+          mOpX1_banks_reg<=mOpX1_banks;
+          mOpX1_bank0_reg<=mOpX1_bank0;
+          mOpX1_odd_reg<=mOpX1_odd;
+          mOpX1_low_reg<=mOpX1_low;
+          mOpX1_split_reg<=mOpX1_split;
+          mOpX1_register_reg<=mOpX1_register;
+          mOpX1_LSQ_reg<=mOpX1_LSQ;
+          mOpX1_II_reg<=mOpX1_II;
+          mOpX1_WQ_reg<=mOpX1_WQ;
+          mOpX1_lsfwd_reg  <=mOpX1_lsfwd;
+      end
 
-      mOpX2_addrEven_reg<=mOpX2_addrEven;
-      mOpX2_addrOdd_reg<=mOpX2_addrOdd;
-      mOpX2_sz_reg<=mOpX2_sz;
-      mOpX2_banks_reg<=mOpX2_banks;
-      mOpX2_bank0_reg<=mOpX2_bank0;
-      mOpX2_odd_reg<=mOpX2_odd;
-      mOpX2_low_reg<=mOpX2_low;
-      mOpX2_split_reg<=mOpX2_split;
-      mOpX2_register_reg<=mOpX2_register;
-      mOpX2_LSQ_reg<=mOpX2_LSQ;
-      mOpX2_II_reg<=mOpX2_II;
-      mOpX2_WQ_reg<=mOpX2_WQ;
-      mOpX2_brdread_reg<=mOpX2_brdread;
-      mOpX2_data_reg<=mOpX2_data;
-      mOpX2_pbit_reg<=mOpX2_pbit;
-      mOpX2_lsfwd_reg  <=mOpX3_lsfwd;
+      if (~rsStall[2]) begin
+          mOpX2_addrEven_reg<=mOpX2_addrEven;
+          mOpX2_addrOdd_reg<=mOpX2_addrOdd;
+          mOpX2_sz_reg<=mOpX2_sz;
+          mOpX2_banks_reg<=mOpX2_banks;
+          mOpX2_bank0_reg<=mOpX2_bank0;
+          mOpX2_odd_reg<=mOpX2_odd;
+          mOpX2_low_reg<=mOpX2_low;
+          mOpX2_split_reg<=mOpX2_split;
+          mOpX2_register_reg<=mOpX2_register;
+          mOpX2_LSQ_reg<=mOpX2_LSQ;
+          mOpX2_II_reg<=mOpX2_II;
+          mOpX2_WQ_reg<=mOpX2_WQ;
+          mOpX2_brdread_reg<=mOpX2_brdread;
+          mOpX2_data_reg<=mOpX2_data;
+          mOpX2_pbit_reg<=mOpX2_pbit;
+          mOpX2_lsfwd_reg  <=mOpX3_lsfwd;
+      end
 
-      mOpX3_addrEven_reg<=mOpX3_addrEven;
-      mOpX3_addrOdd_reg<=mOpX3_addrOdd;
-      mOpX3_sz_reg<=mOpX3_sz;
-      mOpX3_invtlb_reg<=mOpX3_invtlb;
-      mOpX3_banks_reg<=mOpX3_banks;
-      mOpX3_bank0_reg<=mOpX3_bank0;
-      mOpX3_odd_reg<=mOpX3_odd;
-      mOpX3_low_reg<=mOpX3_low;
-      mOpX3_split_reg<=mOpX3_split;
-      mOpX3_register_reg<=mOpX3_register;
-      mOpX3_register_reg2<=mOpX3_register_reg;
-      mOpX3_register_reg3<=mOpX3_register_reg2;
-      mOpX3_LSQ_reg<=mOpX3_LSQ;
-      mOpX3_II_reg<=mOpX3_II;
-      mOpX3_WQ_reg<=mOpX3_WQ;
-      mOpX3_brdread_reg<=mOpX3_brdread;
-      mOpX3_data_reg<=mOpX3_data;
-      mOpX3_pbit_reg<=mOpX3_pbit;
+      if (~rsStall[3]) begin
+          mOpX3_addrEven_reg<=mOpX3_addrEven;
+          mOpX3_addrOdd_reg<=mOpX3_addrOdd;
+          mOpX3_sz_reg<=mOpX3_sz;
+          mOpX3_invtlb_reg<=mOpX3_invtlb;
+          mOpX3_banks_reg<=mOpX3_banks;
+          mOpX3_bank0_reg<=mOpX3_bank0;
+          mOpX3_odd_reg<=mOpX3_odd;
+          mOpX3_low_reg<=mOpX3_low;
+          mOpX3_split_reg<=mOpX3_split;
+          mOpX3_register_reg<=mOpX3_register;
+          mOpX3_register_reg2<=mOpX3_register_reg;
+          mOpX3_register_reg3<=mOpX3_register_reg2;
+          mOpX3_LSQ_reg<=mOpX3_LSQ;
+          mOpX3_II_reg<=mOpX3_II;
+          mOpX3_WQ_reg<=mOpX3_WQ;
+          mOpX3_brdread_reg<=mOpX3_brdread;
+          mOpX3_data_reg<=mOpX3_data;
+          mOpX3_pbit_reg<=mOpX3_pbit;
+       end
 
       mOpX4_en_reg<=mOpX4_en & ~except;
       mOpX4_addrEven_reg<=mOpX4_addrEven;
@@ -2913,35 +2948,35 @@ module agu_block(
       mOpX5_WQ_reg<=mOpX5_WQ;
       mOpX5_lsflag_reg<=mOpX5_lsflag;
 
-      p0_cmplxAddr<=p0_cmplxAddr_d;
-      p1_cmplxAddr<=p1_cmplxAddr_d;
-      p2_cmplxAddr<=p2_cmplxAddr_d;
-      p3_cmplxAddr<=p3_cmplxAddr_d;
+      if (~rsStall[0]) p0_cmplxAddr<=p0_cmplxAddr_d;
+      if (~rsStall[1]) p1_cmplxAddr<=p1_cmplxAddr_d;
+      if (~rsStall[2]) p2_cmplxAddr<=p2_cmplxAddr_d;
+      if (~rsStall[3]) p3_cmplxAddr<=p3_cmplxAddr_d;
       p4_cmplxAddr<=p4_cmplxAddr_d;
       p5_cmplxAddr<=p5_cmplxAddr_d;
 
-      p0_conflict_reg<=p0_conflict;
-      p1_conflict_reg<=p1_conflict;
-      p2_conflict_reg<=p2_conflict;
-      p0_conflict_reg2<=p0_conflict_reg;
-      p1_conflict_reg2<=p1_conflict_reg;
-      p2_conflict_reg2<=p2_conflict_reg;
+      if (~rsStall[0]) p0_conflict_reg<=p0_conflict;
+      if (~rsStall[1]) p1_conflict_reg<=p1_conflict;
+      if (~rsStall[2]) p2_conflict_reg<=p2_conflict;
+      if (~rsStall[0]) p0_conflict_reg2<=p0_conflict_reg;
+      if (~rsStall[1]) p1_conflict_reg2<=p1_conflict_reg;
+      if (~rsStall[2]) p2_conflict_reg2<=p2_conflict_reg;
 
-      p0_tlbmiss_reg<=p0_tlbmiss;
-      p1_tlbmiss_reg<=p1_tlbmiss;
-      p2_tlbmiss_reg<=p2_tlbmiss;
+      if (~rsStall[0]) p0_tlbmiss_reg<=p0_tlbmiss;
+      if (~rsStall[1]) p1_tlbmiss_reg<=p1_tlbmiss;
+      if (~rsStall[2]) p2_tlbmiss_reg<=p2_tlbmiss;
 
-      p0_sec_in_reg<=p0_sec_in;
-      p1_sec_in_reg<=p1_sec_in;
-      p2_sec_in_reg<=p2_sec_in;
-      p3_sec_in_reg<=p3_sec_in;
+      if (~rsStall[0]) p0_sec_in_reg<=p0_sec_in;
+      if (~rsStall[1]) p1_sec_in_reg<=p1_sec_in;
+      if (~rsStall[2]) p2_sec_in_reg<=p2_sec_in;
+      if (~rsStall[3]) p3_sec_in_reg<=p3_sec_in;
       p4_sec_in_reg<=p4_sec_in;
       p5_sec_in_reg<=p5_sec_in;
 
-      p0_ndiff_reg<=p0_ndiff;
-      p1_ndiff_reg<=p1_ndiff;
-      p2_ndiff_reg<=p2_ndiff;
-      p3_ndiff_reg<=p3_ndiff;
+      if (~rsStall[0]) p0_ndiff_reg<=p0_ndiff;
+      if (~rsStall[1]) p1_ndiff_reg<=p1_ndiff;
+      if (~rsStall[2]) p2_ndiff_reg<=p2_ndiff;
+      if (~rsStall[3]) p3_ndiff_reg<=p3_ndiff;
       p4_ndiff_reg<=p4_ndiff;
       p5_ndiff_reg<=p5_ndiff;
 
@@ -3041,14 +3076,14 @@ module agu_block(
       mOpY5_pbit_o_reg3<=mOpY5_pbit_o_reg2;
       mOpY5_d128_o_reg3<=mOpY5_d128_o_reg2;
 
-      p0_en_reg<=p0_en;
-      p1_en_reg<=p1_en;
-      p2_en_reg<=p2_en;
-      p3_en_reg<=p3_en;
-      p0_adata_reg<=p0_adata;
-      p1_adata_reg<=p1_adata;
-      p2_adata_reg<=p2_adata;
-      p3_adata_reg<=p3_adata;
+      if (~rsStall[0]) p0_en_reg<=p0_en;
+      if (~rsStall[1]) p1_en_reg<=p1_en;
+      if (~rsStall[2]) p2_en_reg<=p2_en;
+      if (~rsStall[3]) p3_en_reg<=p3_en;
+      if (~rsStall[0]) p0_adata_reg<=p0_adata;
+      if (~rsStall[1]) p1_adata_reg<=p1_adata;
+      if (~rsStall[2]) p2_adata_reg<=p2_adata;
+      if (~rsStall[3]) p3_adata_reg<=p3_adata;
 
       mcam_addr_reg<=mcam_addr;
       mcam_st_reg<=mcam_st;
