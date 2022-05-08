@@ -10,6 +10,7 @@ module agu(
  // except_in_vm,
 //  except_in_km,
   attr,
+  rsStall,
   read_clkEn,
   doStall,
   bus_hold,
@@ -85,6 +86,7 @@ module agu(
   input rst;
   input except;
   input [3:0] attr;
+  input rsStall;
   input read_clkEn;
   output doStall;
   input bus_hold;
@@ -490,7 +492,7 @@ module agu(
              // cmplxAddr_reg<=64'b0;
               pageFault_t_reg<=2'b0;
               fault_cann_reg<=1'b0;
-          end else begin
+          end else if (!rsStall) begin
              // cmplxAddr_reg<=cmplxAddr;
               pageFault_t_reg<=pageFault_t;
               fault_cann_reg<=fault_cann;
@@ -510,7 +512,7 @@ module agu(
               thread_reg2<=1'b0;
               lsflag_reg<=1'b0;
 	    end
-	  else
+	  else if (!rsStall)
 	    begin
 	      //proc_reg<=proc;
 	      //proc_reg2<=proc_reg;
@@ -527,12 +529,12 @@ module agu(
 	  if (rst) begin
 	      bus_hold_reg<=1'b0;
 	      bus_hold_reg2<=1'b0;
-	  end else begin
+	  end else if (!rsStall) begin
 	      bus_hold_reg<=bus_hold;
 	      bus_hold_reg2<=bus_hold_reg;
 	  end
 	  if (rst) bit_confl_reg<=32'b0;
-	  else bit_confl_reg<=bit_confl;
+	  else if (!rsStall) bit_confl_reg<=bit_confl;
 	  
 	  if (rst) begin
 	      read_clkEn_reg<=1'b0;
@@ -541,7 +543,7 @@ module agu(
               except_reg2<=1'b0;
               //except_thread_reg<=1'b0;
               //except_thread_reg2<=1'b0;
-	  end else begin 
+	  end else if (!rsStall) begin 
               read_clkEn_reg<=read_clkEn && rcn_mask[0] & ~except_reg;
               read_clkEn_reg2<=read_clkEn_reg && rcn_mask[1];
               except_reg<=except;
@@ -571,7 +573,7 @@ module agu(
 	      end
 	      mflags[`mflags_cpl]<=attr[`attr_km] ? 2'b0 : 2'b11;
 	      mflags[`mflags_sec]<=attr[`attr_sec];
-          end else begin
+          end else if (!rsStall) begin
 	      if (~attr[`attr_vm]) begin
 		  proc<=pproc;
 		  sproc<=0;
