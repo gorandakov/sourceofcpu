@@ -425,6 +425,15 @@ module stq(
           assign wrt0_subBNK2[b]=|{wrt0_banks2[24+b],wrt0_banks2[16+b],wrt0_banks2[8+b],wrt0_banks2[0+b]};
           assign wrt1_subBNK2[b]=|{wrt1_banks2[24+b],wrt1_banks2[16+b],wrt1_banks2[8+b],wrt1_banks2[0+b]};
 
+	  assign chk0_bytes[b]=get_ld_bytes(chk0_adata[`lsaddr_sz],chk0_subBNK,b[2:0],chk0_adata[`lsaddr_low]);
+	  assign chk1_bytes[b]=get_ld_bytes(chk1_adata[`lsaddr_sz],chk1_subBNK,b[2:0],chk1_adata[`lsaddr_low]);
+	  assign chk2_bytes[b]=get_ld_bytes(chk2_adata[`lsaddr_sz],chk2_subBNK,b[2:0],chk2_adata[`lsaddr_low]);
+	  assign chk3_bytes[b]=get_ld_bytes(chk3_adata[`lsaddr_sz],chk3_subBNK,b[2:0],chk3_adata[`lsaddr_low]);
+	  assign chk4_bytes[b]=get_ld_bytes(chk4_adata[`lsaddr_sz],chk4_subBNK,b[2:0],chk4_adata[`lsaddr_low]);
+	  assign chk5_bytes[b]=get_ld_bytes(chk5_adata[`lsaddr_sz],chk5_subBNK,b[2:0],chk5_adata[`lsaddr_low]);
+	  assign wrt0_bytes[b]=get_ld_bytes(wrt0_adata[`lsaddr_sz],wrt0_subBNK,b[2:0],wrt0_adata[`lsaddr_low]);
+	  assign wrt1_bytes[b]=get_ld_bytes(wrt1_adata[`lsaddr_sz],wrt1_subBNK,b[2:0],wrt1_adata[`lsaddr_low]);
+
           if (b<4) begin
               bit_find_last_bit #(64) chkBit0A(chk0_match[b]&mask,chk0_firstA[b],chk0_hasA[b]);
               bit_find_last_bit #(64) chkBit0B(chk0_match[b]&~mask,chk0_firstB[b],chk0_hasB[b]);
