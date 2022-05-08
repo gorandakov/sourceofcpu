@@ -7,6 +7,7 @@ module agu_r(
   doStall,
   bus_hold,
   pause_miss,
+  rsStall,
   mOp0_en,
   mOp0_thread,
   mOp0_lsflag,
@@ -92,6 +93,7 @@ module agu_r(
   output doStall;
   input bus_hold;
   input pause_miss;
+  input rsStall;
   input mOp0_en;
   input mOp0_thread;
   input mOp0_lsflag;
@@ -515,7 +517,7 @@ module agu_r(
           addrMain_tlb<=65'b0;
       end else if (except) begin
           mOp0_en_reg<=1'b0;
-      end else if (~doStall) begin
+      end else if (~doStall&&!rsStall) begin
           mOp0_en_reg<=mOp0_en & ~(except);
           if (mOp0_en & ~req_bus || extern_feed & ~req_bus & (mOp0_type_reg==2'b10)) begin
               mOp0_thread_reg<=mOp0_thread;
@@ -689,7 +691,7 @@ module agu_r(
          // cmplxAddr_reg<=64'b0;
           pageFault_t_reg<=2'b0;
           fault_cann_reg<=1'b0;
-      end else begin
+      end else if (!rsStall) begin
          // cmplxAddr_reg<=cmplxAddr;
           pageFault_t_reg<=pageFault_t;
           fault_cann_reg<=fault_cann;
