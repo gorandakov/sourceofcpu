@@ -135,6 +135,26 @@ module missQ(
   do_bus_hold,
 //  do_unlock,
   nowfl,
+  mOpZ_brdread,
+  mOpZ_data,
+  mOpZ_pbit,
+  mOpZ_en,
+  mOpZ_thread,
+  mOpZ_addrEven,
+  mOpZ_addrOdd,
+  mOpZ_sz,
+  mOpZ_st,
+  mOpZ_banks,
+  mOpZ_bank0,
+  mOpZ_odd,
+  mOpZ_addr_low,
+  mOpZ_split,
+  mOpZ_register,
+  mOpZ_ctype,
+  mOpZ_LSQ,
+  mOpZ_II,
+  mOpZ_WQ,
+  mOpZ_lsflag,
   WB_fwd,
   mOpW_brdread,
   mOpW_data,
@@ -442,6 +462,28 @@ module missQ(
   output do_bus_hold;
   reg do_unlock;
   output nowfl;
+  
+  input [4:0] mOpZ_brdread;
+  input [127+8:0] mOpZ_data;
+  input [1:0] mOpZ_pbit;
+
+  input mOpZ_en;
+  input mOpZ_thread;
+  input [PADDR_WIDTH-1:8] mOpZ_addrEven;
+  input [PADDR_WIDTH-1:8] mOpZ_addrOdd;
+  input [4:0] mOpZ_sz;
+  input mOpZ_st;
+  input [BANK_COUNT-1:0] mOpZ_banks;
+  input [4:0] mOpZ_bank0;
+  input mOpZ_odd;
+  input [1:0] mOpZ_addr_low;
+  input mOpZ_split;
+  input [REG_WIDTH-1:0] mOpZ_register;
+  input [1:0] mOpZ_ctype;
+  input [8:0] mOpZ_LSQ;
+  input [9:0] mOpZ_II;
+  input [5:0] mOpZ_WQ;
+  input mOpZ_lsflag;
   
   input [2:0] WB_fwd;
   input [4:0] mOpW_brdread;
