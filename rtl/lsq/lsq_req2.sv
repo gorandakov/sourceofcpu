@@ -621,6 +621,19 @@ module lsq_req(
   output [DATA_WIDTH-1:0]  read5A_data;
   output read5A_enOut;
 
+  output [135:0] read0A_DATA;
+  output [1:0]   read0A_dEn;
+  output [135:0] read1A_DATA;
+  output [1:0]   read1A_dEn;
+  output [135:0] read2A_DATA;
+  output [1:0]   read2A_dEn;
+  output [135:0] read3A_DATA;
+  output [1:0]   read3A_dEn;
+  output [135:0] read4A_DATA;
+  output [1:0]   read4A_dEn;
+  output [135:0] read5A_DATA;
+  output [1:0]   read5A_dEn;
+
   input [5:0] readA_conflIn_l;
   input [5:0] readA_conflInMSI;
 
@@ -1035,7 +1048,7 @@ module lsq_req(
   write_addr_shr[5:0],{DATA_WIDTH{~write_addr_shr[5]}},write_wen_shr&~doStall&~stall&~init&~except
   );
   
-  lsq_req_block toC_mod(
+  lsq_req_block #(136) toC_mod(
   clk,
   rst,
 
@@ -1128,6 +1141,36 @@ module lsq_req(
   adder_inc #(6) wrAdd_mod(write_addr_shr,write_addr_shr_next,1'b1,);
 
   adder_inc #(6) initAdd_mod(initCount,initCount_next,1'b1,);
+
+  assign read0A_dEn[0]=(write0_addr_reg2=={read_addr,3'd0} && write0_wen_reg2 && FU0Hit) ||
+      (write1_addr_reg2=={read_addr,3'd0} && write1_wen_reg2 && FU1Hit) || 
+      (write2_addr_reg2=={read_addr,3'd0} && write2_wen_reg2 && FU2Hit);
+  assign read0A_dEn[1]=(write3_addr_reg2=={read_addr,3'd0} && write3_wen_reg2 && FU3Hit);
+
+  assign read1A_dEn[0]=(write0_addr_reg2=={read_addr,3'd1} && write0_wen_reg2 && FU0Hit) ||
+      (write1_addr_reg2=={read_addr,3'd1} && write1_wen_reg2 && FU1Hit) || 
+      (write2_addr_reg2=={read_addr,3'd1} && write2_wen_reg2 && FU2Hit);
+  assign read1A_dEn[1]=(write3_addr_reg2=={read_addr,3'd1} && write3_wen_reg2 && FU3Hit);
+
+  assign read2A_dEn[0]=(write0_addr_reg2=={read_addr,3'd2} && write0_wen_reg2 && FU0Hit) ||
+      (write1_addr_reg2=={read_addr,3'd2} && write1_wen_reg2 && FU1Hit) || 
+      (write2_addr_reg2=={read_addr,3'd2} && write2_wen_reg2 && FU2Hit);
+  assign read2A_dEn[1]=(write3_addr_reg2=={read_addr,3'd2} && write3_wen_reg2 && FU3Hit);
+
+  assign read3A_dEn[0]=(write0_addr_reg2=={read_addr,3'd3} && write0_wen_reg2 && FU0Hit) ||
+      (write1_addr_reg2=={read_addr,3'd3} && write1_wen_reg2 && FU1Hit) || 
+      (write2_addr_reg2=={read_addr,3'd3} && write2_wen_reg2 && FU2Hit);
+  assign read3A_dEn[1]=(write3_addr_reg2=={read_addr,3'd3} && write3_wen_reg2 && FU3Hit);
+
+  assign read4A_dEn[0]=(write0_addr_reg2=={read_addr,3'd4} && write0_wen_reg2 && FU0Hit) ||
+      (write1_addr_reg2=={read_addr,3'd4} && write1_wen_reg2 && FU1Hit) || 
+      (write2_addr_reg2=={read_addr,3'd4} && write2_wen_reg2 && FU2Hit);
+  assign read4A_dEn[1]=(write3_addr_reg2=={read_addr,3'd4} && write3_wen_reg2 && FU3Hit);
+
+  assign read5A_dEn[0]=(write0_addr_reg2=={read_addr,3'd5} && write0_wen_reg2 && FU0Hit) ||
+      (write1_addr_reg2=={read_addr,3'd5} && write1_wen_reg2 && FU1Hit) || 
+      (write2_addr_reg2=={read_addr,3'd5} && write2_wen_reg2 && FU2Hit);
+  assign read5A_dEn[1]=(write3_addr_reg2=={read_addr,3'd5} && write3_wen_reg2 && FU3Hit);
 
   always @(posedge clk) begin
       if (&read0A_data && read0A_enOut) $display("SS0");
