@@ -546,13 +546,6 @@ module lsq_req(
   read3A_data,read3A_enOut,
   read4A_data,read4A_enOut,
   read5A_data,read5A_enOut,
-
-  read0A_DATA,read0A_dEn,
-  read1A_DATA,read1A_dEn,
-  read2A_DATA,read2A_dEn,
-  read3A_DATA,read3A_dEn,
-  read4A_DATA,read4A_dEn,
-  read5A_DATA,read5A_dEn,
   
   readA_conflIn_l,
   readA_conflInMSI,
@@ -1034,30 +1027,6 @@ module lsq_req(
   init ? {initCount[5:0],3'd5} : write5_addr[8:0],write5_data|{DATA_WIDTH{init}},write5_wen ||init,
   write_addr_shr[5:0],{DATA_WIDTH{~write_addr_shr[5]}},write_wen_shr&~doStall&~stall&~init&~except
   );
-  
-  lsq_req_block toC_mod(
-  clk,
-  rst,
-
-  readA_clkEn | reenabA,
-  readA_addr_d,
-  read0A_DATA,
-  read1A_DATA,
-  read2A_DATA,
-  read3A_DATA,
-  read4A_DATA,
-  read5A_DATA,
-
-
-  init ? {initCount[5:0],3'd0} : write0_addr_reg2[8:0],FU0_data|{DATA_WIDTH{init}},write0_wen_reg2 & FU0Hit || init,
-  init ? {initCount[5:0],3'd1} : write1_addr_reg2[8:0],FU1_data|{DATA_WIDTH{init}},write1_wen_reg2 & FU1Hit || init,
-  init ? {initCount[5:0],3'd2} : write2_addr_reg2[8:0],FU2_data|{DATA_WIDTH{init}},write2_wen_reg2 & FU2Hit || init,
-  init ? {initCount[5:0],3'd3} : write3_addr_reg2[8:0],FU3_data|{DATA_WIDTH{init}},write3_wen_reg2 & FU3Hit || init,
-  init ? {initCount[5:0],3'd4} : write4_addr_reg2[8:0],{DATA_WIDTH{init}},init,
-  init ? {initCount[5:0],3'd5} : write5_addr_reg2[8:0],{DATA_WIDTH{init}},init,
-  write_addr_shr[5:0],{DATA_WIDTH{~write_addr_shr[5]}},write_wen_shr&~doStall&~stall&~init&~except
-  );
-
 
   lsq_ex_block toB_mod(
   clk,
