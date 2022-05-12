@@ -254,18 +254,6 @@ module fun_lsq(
   wire [`lsaddr_width-1:0] p1_pos_dataA2;
   wire p1_pos_en2;
 
-  wire [135:0] dat0_LSQ;
-  wire [1:0]   chk0_LSQ;
-  wire [135:0] dat1_LSQ;
-  wire [1:0]   chk1_LSQ;
-  wire [135:0] dat2_LSQ;
-  wire [1:0]   chk2_LSQ;
-  wire [135:0] dat3_LSQ;
-  wire [1:0]   chk3_LSQ;
-  wire [135:0] dat4_LSQ;
-  wire [1:0]   chk4_LSQ;
-  wire [135:0] dat5_LSQ;
-  wire [1:0]   chk5_LSQ;
 /*  wire [9:0] wret_II0;
   wire wret_en0;
   wire [9:0] wret_II1;
@@ -309,12 +297,12 @@ module fun_lsq(
   aDoStall_STQ,
   rsStall,
   rsDoStall,
-  LSQ_dataA0,LSQ_enA[0],chk0_LSQ,
-  LSQ_dataA1,LSQ_enA[1],chk1_LSQ,
-  LSQ_dataA2,LSQ_enA[2],chk2_LSQ,
-  LSQ_dataA3,LSQ_enA[3],chk3_LSQ,
-  LSQ_dataA4,LSQ_enA[4],chk4_LSQ,
-  LSQ_dataA5,LSQ_enA[5],chk5_LSQ,  
+  LSQ_dataA0,LSQ_enA[0],//chk0_LSQ,
+  LSQ_dataA1,LSQ_enA[1],//chk1_LSQ,
+  LSQ_dataA2,LSQ_enA[2],//chk2_LSQ,
+  LSQ_dataA3,LSQ_enA[3],//chk3_LSQ,
+  LSQ_dataA4,LSQ_enA[4],//chk4_LSQ,
+  LSQ_dataA5,LSQ_enA[5],//chk5_LSQ,  
   LSQ_rdy_A,
   LSQ_shr_dataA,
   p4_adata,p4_en,p4_LSQ,
@@ -409,13 +397,6 @@ module fun_lsq(
   .read3A_data(LSQ_dataA3),.read3A_enOut(LSQ_enA[3]),
   .read4A_data(LSQ_dataA4),.read4A_enOut(LSQ_enA[4]),
   .read5A_data(LSQ_dataA5),.read5A_enOut(LSQ_enA[5]),
-
-  .read0A_DATA(dat0_LSQ),.read0A_enD(chk0_LSQ),
-  .read1A_DATA(dat1_LSQ),.read1A_enD(chk1_LSQ),
-  .read2A_DATA(dat2_LSQ),.read2A_enD(chk2_LSQ),
-  .read3A_DATA(dat3_LSQ),.read3A_enD(chk3_LSQ),
-  .read4A_DATA(dat4_LSQ),.read4A_enD(chk4_LSQ),
-  .read5A_DATA(dat5_LSQ),.read5A_enD(chk5_LSQ),
   
   .readA_conflIn_l(LDQ_ldconfl),
   .readA_conflInMSI(LDQ_insconfl),
