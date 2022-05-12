@@ -26,12 +26,12 @@ module stq(
   aDoStall,
   rsStall,
   rsDoStall,//needs to get registered again outside module
-  chk0_adata,chk0_en,chk0_enD,
-  chk1_adata,chk1_en,chk1_enD,
-  chk2_adata,chk2_en,chk2_enD,
-  chk3_adata,chk3_en,chk3_enD,
-  chk4_adata,chk4_en,chk4_enD,
-  chk5_adata,chk5_en,chk5_enD, 
+  chk0_adata,chk0_en,//chk0_LSQ,
+  chk1_adata,chk1_en,//chk1_LSQ,
+  chk2_adata,chk2_en,//chk2_LSQ,
+  chk3_adata,chk3_en,//chk3_LSQ,
+  chk4_adata,chk4_en,//chk4_LSQ,
+  chk5_adata,chk5_en,//chk5_LSQ, 
   chk_rdy,
   LSQ_shr_data, 
   wrt0_adata,wrt0_en,wrt0_LSQ,
@@ -64,27 +64,21 @@ module stq(
 
   input [`lsaddr_width-1:0] chk0_adata;
   input chk0_en;
-  input [1:0] chk0_enD;
 
   input [`lsaddr_width-1:0] chk1_adata;
   input chk1_en;
-  input [1:0] chk1_enD;
 
   input [`lsaddr_width-1:0] chk2_adata;
   input chk2_en;
-  input [1:0] chk2_enD;
 
   input [`lsaddr_width-1:0] chk3_adata;
   input chk3_en;
-  input [1:0] chk3_enD;
 
   input [`lsaddr_width-1:0] chk4_adata;
   input chk4_en;
-  input [1:0] chk4_enD;
 
   input [`lsaddr_width-1:0] chk5_adata;
   input chk5_en;
-  input [1:0] chk5_enD;
 
   input chk_rdy;
 
@@ -655,8 +649,7 @@ module stq(
   assign chk_adata[4]=chk4_adata;
   assign chk_adata[5]=chk5_adata;
 
-  bit_find_first_bit #(6) first_wb_mod(chk_wb&~chk_mask&
-	  ~{chk5_enD[1],chk4_enD[1],chk3_enD[1],chk2_enD[1],chk1_enD[1],chk0_enD[1]},chk_wb0,chk_wb0_has);
+  bit_find_first_bit #(6) first_wb_mod(chk_wb&~chk_mask,chk_wb0,chk_wb0_has);
   bit_find_first_bit #(6) first_wb1_mod(chk_wb&~chk_wb0&~chk_mask,chk_wb1,chk_wb1_has);
 
   assign chk_wb2_has=(chk_wb&~chk_wb0&~chk_mask&~chk_wb1)!=6'd0;
