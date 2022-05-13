@@ -266,6 +266,9 @@ module fun_lsq(
   wire [1:0]   chk4_LSQ;
   wire [135:0] dat5_LSQ;
   wire [1:0]   chk5_LSQ;
+
+  wire [5:0] wb0_chk;
+  wire [5:0] wb1_chk;
 /*  wire [9:0] wret_II0;
   wire wret_en0;
   wire [9:0] wret_II1;
@@ -324,8 +327,8 @@ module fun_lsq(
   lsw_wq1,lsw_rs_en1[0],lsw_wdata1,lsw_pdata1,
   LSQ_shr_data[`lsqshare_wrt0]!=3'd7,
   LSQ_shr_data[`lsqshare_wrt1]!=3'd7,
-  wb1_adata,wb1_LSQ,wb1_data,wb1_pbit,wb1_brdbanks,wb1_en,,//wb1_way
-  wb0_adata,wb0_LSQ,wb0_data,wb0_pbit,wb0_brdbanks,wb0_en,
+  wb1_adata,wb1_LSQ,wb1_data,wb1_pbit,wb1_brdbanks,wb1_en,,wb1_chk,//wb1_way
+  wb0_adata,wb0_LSQ,wb0_data,wb0_pbit,wb0_brdbanks,wb0_en,wb0_chk,
   wreq_en[0],wreq_data[0],dc_wdataP[0],dc_pdataP[0],
   wreq_en[1],wreq_data[1],dc_wdataP[1],dc_pdataP[1]
   );
@@ -356,6 +359,22 @@ module fun_lsq(
   wire wreq_stall;
 
   assign PSTQ_has_store=PSTQ_data_shr!=6'h3f;
+
+  assign wb0_data=wb0_chk[0] ? dat0_LSQ : 136'bz;
+  assign wb0_data=wb0_chk[1] ? dat1_LSQ : 136'bz;
+  assign wb0_data=wb0_chk[2] ? dat2_LSQ : 136'bz;
+  assign wb0_data=wb0_chk[3] ? dat3_LSQ : 136'bz;
+  assign wb0_data=wb0_chk[4] ? dat4_LSQ : 136'bz;
+  assign wb0_data=wb0_chk[5] ? dat5_LSQ : 136'bz;
+  assign wb0_data=|wb0_chk ? 136'bz : 136'b0;
+
+  assign wb1_data=wb1_chk[0] ? dat0_LSQ : 136'bz;
+  assign wb1_data=wb1_chk[1] ? dat1_LSQ : 136'bz;
+  assign wb1_data=wb1_chk[2] ? dat2_LSQ : 136'bz;
+  assign wb1_data=wb1_chk[3] ? dat3_LSQ : 136'bz;
+  assign wb1_data=wb1_chk[4] ? dat4_LSQ : 136'bz;
+  assign wb1_data=wb1_chk[5] ? dat5_LSQ : 136'bz;
+  assign wb1_data=|wb1_chk ? 136'bz : 136'b0;
 
   ldq ldq_mod(
   .clk(clk),
