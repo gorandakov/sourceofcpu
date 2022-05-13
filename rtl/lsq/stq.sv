@@ -41,8 +41,8 @@ module stq(
   upd1_WQ,upd1_en,upd1_data,upd1_pbit,//upd1_sz,
   pse0_en,
   pse1_en,
-  wb1_adata,wb1_LSQ,wb1_data,wb1_pbit,wb1_bnkEn,wb1_en,wb1_way,
-  wb0_adata,wb0_LSQ,wb0_data,wb0_pbit,wb0_bnkEn,wb0_en,
+  wb1_adata,wb1_LSQ,wb1_data,wb1_pbit,wb1_bnkEn,wb1_en,wb1_chk,
+  wb0_adata,wb0_LSQ,wb0_data,wb0_pbit,wb0_bnkEn,wb0_en,wb0_chk,wb0_way,
   WLN0_en,WLN0_adata,WLN0_data,WLN0_pbit,
   WLN1_en,WLN1_adata,WLN1_data,WLN1_pbit
   );
@@ -124,7 +124,7 @@ module stq(
   output [1:0] wb1_pbit;
   output [3:0] wb1_bnkEn;
   output wb1_en;
-  output [1:0] wb1_way;
+  output [5:0] wb1_chk;
 
   output [`lsaddr_width-1:0] wb0_adata;
   output [8:0] wb0_LSQ;
@@ -132,6 +132,8 @@ module stq(
   output [1:0] wb0_pbit;
   output [3:0] wb0_bnkEn;
   output wb0_en;
+  output wb0_chk;
+  output [1:0] wb0_way;
   
   output WLN0_en;
   output [`lsaddr_width-1:0] WLN0_adata;
@@ -581,6 +583,9 @@ module stq(
   assign wb0_en=chk_wb0_has;
   assign wb1_en=chk_wb1_has;
 
+  assign wb0_chk=chk_wb0;
+  assign wb1_chk=chk_wb1;
+
   assign wrt0_odd=wrt0_adata[`lsaddr_odd];
   assign wrt1_odd=wrt1_adata[`lsaddr_odd];
   assign chk0_odd=chk0_adata[`lsaddr_odd];
@@ -733,10 +738,10 @@ module stq(
 	      chk_mask<=chk_mask|chk_wb0|chk_wb1;
 	  end
 	  if (!(|rsDoStall & rsStall)) begin
-	      rsDoStall[0]<=wb1_en && wb1_way==2'd0;
-	      rsDoStall[1]<=wb1_en && wb1_way==2'd1;
-	      rsDoStall[2]<=wb1_en && wb1_way==2'd2;
-	      rsDoStall[3]<=wb0_en;
+	      rsDoStall[0]<=wb1_en && wb0_way==2'd0;
+	      rsDoStall[1]<=wb1_en && wb0_way==2'd1;
+	      rsDoStall[2]<=wb1_en && wb0_way==2'd2;
+	      rsDoStall[3]<=wb1_en;
           end
       end
   end
