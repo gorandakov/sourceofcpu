@@ -488,12 +488,12 @@ module stq(
           rst,
           upd0_en0,{upd0_pbit[upd0_b[b][1]],upd0_data[32*Rupd0_b[b]+:32]},
           upd1_en0,{upd1_pbit[upd1_b[b][1]],upd1_data[32*Rupd1_b[b]+:32]},
-          chk0_match_first[b],chk0_data0[b],
-          chk1_match_first[b],chk1_data0[b],
-          chk2_match_first[b],chk2_data0[b],
-          chk3_match_first[b],chk3_data0[b],
-          chk4_match_first[b],chk4_data0[b],
-          chk5_match_first[b],chk5_data0[b],
+          chk0_match_first[chk0_b[b]],chk0_data0[b],
+          chk1_match_first[chk1_b[b]],chk1_data0[b],
+          chk2_match_first[chk2_b[b]],chk2_data0[b],
+          chk3_match_first[chk3_b[b]],chk3_data0[b],
+          chk4_match_first[chk4_b[b]],chk4_data0[b],
+          chk5_match_first[chk5_b[b]],chk5_data0[b],
           WLN0_match,WLN0_dataX0[b],
           WLN1_match,WLN1_dataX0[b]
           );
@@ -502,12 +502,12 @@ module stq(
           if (b<4) begin
 	      assign WLN0_dataX[33*b+:33]=WLN0_dataX0[b];
 	      assign WLN1_dataX[33*b+:33]=WLN1_dataX0[b];
-	      assign chk0_data[33*b+:33]=chk0_data0[b];
-	      assign chk1_data[33*b+:33]=chk1_data0[b];
-	      assign chk2_data[33*b+:33]=chk2_data0[b];
-	      assign chk3_data[33*b+:33]=chk3_data0[b];
-	      assign chk4_data[33*b+:33]=chk4_data0[b];
-	      assign chk5_data[33*b+:33]=chk5_data0[b];
+	      assign chk_data[0][33*b+:33]=chk0_data0[b];
+	      assign chk_data[1][33*b+:33]=chk1_data0[b];
+	      assign chk_data[2][33*b+:33]=chk2_data0[b];
+	      assign chk_data[3][33*b+:33]=chk3_data0[b];
+	      assign chk_data[4][33*b+:33]=chk4_data0[b];
+	      assign chk_data[5][33*b+:33]=chk5_data0[b];
               assign WLN0_data[32*b+:32]=WLN0_dataX[33*WLN0_b[b]+:32];
               assign WLN1_data[32*b+:32]=WLN1_dataX[33*WLN1_b[b]+:32];
 	      //verilator lint_off WIDTH
@@ -576,6 +576,20 @@ module stq(
           assign WLN1_WQ=LSQ_shr_data[`lsqshare_wrt1]==a ? chk_adata[a][`lsaddr_WQ] : {6{1'bz}};
 	  assign wb0_adata=chk_wb[a] ? chk_adata[a] : {`lsaddr_width{1'bz}};
 	  assign wb1_adata=chk_wb1[a] ? chk_adata[a] : {`lsaddr_width{1'bz}};
+	  assign wb0_data[31:0]=chk_wb[a] ? chk_data[a][31:0] : {32{1'bz}};
+	  assign wb1_data[31:0]=chk_wb1[a] ? chk_data[a][31:0] : {32{1'bz}};
+	  assign wb0_data[63:32]=chk_wb[a] ? chk_data[a][64:33] : {32{1'bz}};
+	  assign wb1_data[63:32]=chk_wb1[a] ? chk_data[a][64:33] : {32{1'bz}};
+	  assign wb0_data[95:64]=chk_wb[a] ? chk_data[a][97:66] : {32{1'bz}};
+	  assign wb1_data[95:64]=chk_wb1[a] ? chk_data[a][97:66] : {32{1'bz}};
+	  assign wb0_data[127:96]=chk_wb[a] ? chk_data[a][130:99] : {32{1'bz}};
+	  assign wb1_data[127:96]=chk_wb1[a] ? chk_data[a][130:99] : {32{1'bz}};
+	  assign wb0_data[135:128]=chk_wb[a] ? chk_data[a][139:132] : 8'bz;
+	  assign wb1_data[135:128]=chk_wb1[a] ? chk_data[a][139:132] : 8'bz;
+	  assign wb0_pbit[0]=chk_wb[a] ? chk_data[a][32] : 1'bz;
+	  assign wb1_pbit[0]=chk_wb1[a] ? chk_data[a][32] : 1'bz;
+	  assign wb0_pbit[1]=chk_wb[a] ? chk_data[a][98] 1'bz;
+	  assign wb1_pbit[1]=chk_wb1[a] ? chk_data[a][98] : 1'bz;
       end
   endgenerate
   assign wb0_adata=chk_wb0_has ? {`lsaddr_width{1'bz}} : {`lsaddr_width{1'b0}};
