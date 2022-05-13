@@ -22,8 +22,8 @@ module fun_lsq(
   st_stall,
   st0_adata,st0_en,st0_bank1,st0_bgn_ben,st0_end_ben,st0_data,st0_pbit,
   st1_adata,st1_en,st1_bank1,st1_bgn_ben,st1_end_ben,st1_data,st1_pbit,
-  wb0_adata,wb0_LSQ,wb0_en,wb0_ret,wb0_data,wb0_brdbanks,wb0_pbit,
-  wb1_adata,wb1_LSQ,wb1_en,wb1_ret,wb1_data,wb1_brdbanks,wb1_pbit,
+  wb0_adata,wb0_LSQ,wb0_en,wb0_ret,wb0_data,wb0_sdata,wb0_brdbanks,wb0_pbit,
+  wb1_adata,wb1_LSQ,wb1_en,wb1_ret,wb1_data,wb1_sdata,wb1_brdbanks,wb1_pbit,
   mem_II_upper,
   mem_II_upper_in,
   mem_II_bits_fine,
@@ -115,6 +115,7 @@ module fun_lsq(
   output                     wb0_en;
   output [12:0]              wb0_ret;
   output [127+8:0]           wb0_data;
+  output [127+8:0]           wb0_sdata;
   output [3:0]               wb0_brdbanks;
   output [1:0]               wb0_pbit;
   output [`lsaddr_width-1:0] wb1_adata;
@@ -122,6 +123,7 @@ module fun_lsq(
   output                     wb1_en;
   output [12:0]              wb1_ret;
   output [127+8:0]           wb1_data;
+  output [127+8:0]           wb1_sdata;
   output [3:0]               wb1_brdbanks;
   output [1:0]               wb1_pbit;
   
@@ -376,6 +378,9 @@ module fun_lsq(
   assign wb1_data=wb1_chk[5] ? dat5_LSQ : 136'bz;
   assign wb1_data=|wb1_chk ? 136'bz : 136'b0;
 
+  assign wb0_sdata=wreq_data[0];
+  assign wb1_sdata=wreq_data[1];
+
   ldq ldq_mod(
   .clk(clk),
   .rst(rst),
@@ -483,10 +488,10 @@ module fun_lsq(
   .rsEn0(p0_rsEn&&~p0_lsfwd),.rsEn1(p1_rsEn&&~p1_lsfwd),.rsEn2(p2_rsEn&&~p2_lsfwd),.rsEn3(p3_rsEn&&~p3_lsfwd)
   );  
   
-  wrtdata_combine wcomb0_mod(.data(dc_wdataP_reg[0]),.pdata(dc_pdataP_reg[0]),.en(1'b1),
-    .odata(st0_data),.opdata(st0_pbit),.low(wreq_data_reg[0][`lsaddr_low]),.sz(wreq_data_reg[0][`lsaddr_sz]));
-  wrtdata_combine wcomb1_mod(.data(dc_wdataP_reg[1]),.pdata(dc_pdataP_reg[1]),.en(1'b1),
-      .odata(st1_data),.opdata(st1_pbit),.low(wreq_data_reg[1][`lsaddr_low]),.sz(wreq_data_reg[1][`lsaddr_sz]));
+  wrtdata_combine wcomb0_mod(.data(dc_wdataP[0]),.pdata(dc_pdataP[0]),.en(1'b1),
+    .odata(st0_data),.opdata(st0_pbit),.low(wreq_data[0][`lsaddr_low]),.sz(wreq_data[0][`lsaddr_sz]));
+  wrtdata_combine wcomb1_mod(.data(dc_wdataP[1]),.pdata(dc_pdataP[1]),.en(1'b1),
+      .odata(st1_data),.opdata(st1_pbit),.low(wreq_data[1][`lsaddr_low]),.sz(wreq_data[1][`lsaddr_sz]));
 
   
   wire [127+8:0]           wb1_dataA;
