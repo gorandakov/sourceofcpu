@@ -76,12 +76,12 @@ module stq_data_array(
   rst,
   wrt0_en,wrt0_data,
   wrt1_en,wrt1_data,
-  chk0_en,chk0_data,
-  chk1_en,chk1_data,
-  chk2_en,chk2_data,
-  chk3_en,chk3_data,
-  chk4_en,chk4_data,
-  chk5_en,chk5_data,
+  chk0_en,chk0_data,chk0_pre0,chk0_pre1,
+  chk1_en,chk1_data,chk1_pre0,chk1_pre1,
+  chk2_en,chk2_data,chk2_pre0,chk2_pre1,
+  chk3_en,chk3_data,chk3_pre0,chk3_pre1,
+  chk4_en,chk4_data,chk4_pre0,chk4_pre1,
+  chk5_en,chk5_data,chk5_pre0,chk5_pre1,
   chk6_en,chk6_data,
   chk7_en,chk7_data
   );
@@ -96,15 +96,21 @@ module stq_data_array(
   input [BUF_COUNT-1:0] chk0_en;
   output reg [WIDTH-1:0] chk0_data;
   input [BUF_COUNT-1:0] chk1_en;
+  input chk0_pre0,chk0_pre1;
   output reg [WIDTH-1:0] chk1_data;
+  input chk1_pre0,chk1_pre1;
   input [BUF_COUNT-1:0] chk2_en;
   output reg [WIDTH-1:0] chk2_data;
+  input chk2_pre0,chk2_pre1;
   input [BUF_COUNT-1:0] chk3_en;
   output reg [WIDTH-1:0] chk3_data;
+  input chk3_pre0,chk3_pre1;
   input [BUF_COUNT-1:0] chk4_en;
   output reg [WIDTH-1:0] chk4_data;
+  input chk4_pre0,chk4_pre1;
   input [BUF_COUNT-1:0] chk5_en;
   output reg [WIDTH-1:0] chk5_data;
+  input chk5_pre0,chk5_pre1;
   input [BUF_COUNT-1:0] chk6_en;
   output reg [WIDTH-1:0] chk6_data;
   input [BUF_COUNT-1:0] chk7_en;
@@ -118,6 +124,13 @@ module stq_data_array(
   wire [WIDTH-1:0] chk5_data0;
   wire [WIDTH-1:0] chk6_data0;
   wire [WIDTH-1:0] chk7_data0;
+  
+  wire [WIDTH-1:0] chk0_data1;
+  wire [WIDTH-1:0] chk1_data1;
+  wire [WIDTH-1:0] chk2_data1;
+  wire [WIDTH-1:0] chk3_data1;
+  wire [WIDTH-1:0] chk4_data1;
+  wire [WIDTH-1:0] chk5_data1;
   generate
     genvar bank,row;
     for(bank=0;bank<8;bank=bank+1) begin : bnk_gen
@@ -164,14 +177,39 @@ module stq_data_array(
         assign chk7_data0=(|chk7_en[bank*8+:8]) ? chk7_dataK : {WIDTH{1'BZ}};
     end
   endgenerate
-  assign chk0_data0=(chk0_en!=64'b0) ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-  assign chk1_data0=(chk1_en!=64'b0) ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-  assign chk2_data0=(chk2_en!=64'b0) ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-  assign chk3_data0=(chk3_en!=64'b0) ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-  assign chk4_data0=(chk4_en!=64'b0) ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-  assign chk5_data0=(chk5_en!=64'b0) ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+  assign chk0_data0=(chk0_en!=64'b0) ? {WIDTH{1'BZ}} : chk0_data1;
+  assign chk1_data0=(chk1_en!=64'b0) ? {WIDTH{1'BZ}} : chk1_data1;
+  assign chk2_data0=(chk2_en!=64'b0) ? {WIDTH{1'BZ}} : chk2_data1;
+  assign chk3_data0=(chk3_en!=64'b0) ? {WIDTH{1'BZ}} : chk3_data1;
+  assign chk4_data0=(chk4_en!=64'b0) ? {WIDTH{1'BZ}} : chk4_data1;
+  assign chk5_data0=(chk5_en!=64'b0) ? {WIDTH{1'BZ}} : chk5_data1;
   assign chk6_data0=(chk6_en!=64'b0) ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
   assign chk7_data0=(chk7_en!=64'b0) ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+
+  assign chk0_data1=chk0_pre1 ?               chk7_data0 : {WIDTH{1'bz}};
+  assign chk0_data1=chk0_pre0 & ~chk0_pre1 ?  chk6_data0 : {WIDTH{1'bz}};
+  assign chk0_data1=~chk0_pre0 & ~chk0_pre1 ? {WIDTH{1'B0}} : {WIDTH{1'bZ}};
+
+  assign chk1_data1=chk1_pre1 ?               chk7_data0 : {WIDTH{1'bz}};
+  assign chk1_data1=chk1_pre0 & ~chk1_pre1 ?  chk6_data0 : {WIDTH{1'bz}};
+  assign chk1_data1=~chk1_pre0 & ~chk1_pre1 ? {WIDTH{1'B0}} : {WIDTH{1'bZ}};
+
+  assign chk2_data1=chk2_pre1 ?               chk7_data0 : {WIDTH{1'bz}};
+  assign chk2_data1=chk2_pre0 & ~chk2_pre1 ?  chk6_data0 : {WIDTH{1'bz}};
+  assign chk2_data1=~chk2_pre0 & ~chk2_pre1 ? {WIDTH{1'B0}} : {WIDTH{1'bZ}};
+
+  assign chk3_data1=chk3_pre1 ?               chk7_data0 : {WIDTH{1'bz}};
+  assign chk3_data1=chk3_pre0 & ~chk3_pre1 ?  chk6_data0 : {WIDTH{1'bz}};
+  assign chk3_data1=~chk3_pre0 & ~chk3_pre1 ? {WIDTH{1'B0}} : {WIDTH{1'bZ}};
+
+  assign chk4_data1=chk4_pre1 ?               chk7_data0 : {WIDTH{1'bz}};
+  assign chk4_data1=chk4_pre0 & ~chk4_pre1 ?  chk6_data0 : {WIDTH{1'bz}};
+  assign chk4_data1=~chk4_pre0 & ~chk4_pre1 ? {WIDTH{1'B0}} : {WIDTH{1'bZ}};
+
+  assign chk5_data1=chk5_pre1 ?               chk7_data0 : {WIDTH{1'bz}};
+  assign chk5_data1=chk5_pre0 & ~chk5_pre1 ?  chk6_data0 : {WIDTH{1'bz}};
+  assign chk5_data1=~chk5_pre0 & ~chk5_pre1 ? {WIDTH{1'B0}} : {WIDTH{1'bZ}};
+
   always @* begin
       chk0_data=chk0_data0;
       chk1_data=chk1_data0;
