@@ -1082,7 +1082,7 @@ module missQ(
   assign mOp3_banks_o=now_flushing  ?    rdbanks[3] : 32'bz;
   assign mOp3_banks_o=alt_bus_hold  ? 32'b0 : 32'bz;
   assign mOp3_banks_o=~now_flushing & ~alt_bus_hold  ? mOp3_banks : 32'bz;
-  assign mOp3_bank3_o=now_flushing  ?    read_mop[3][`mOp1_bank3] : 5'bz; 
+  assign mOp3_bank3_o=now_flushing  ?    read_mop[3][`mOp1_bank0] : 5'bz; 
   assign mOp3_bank3_o=~now_flushing  ? mOp3_bank0 : 5'bz; 
   assign mOp3_register_o=now_flushing  ? read_mop[3][`mOp1_regNo] : 9'bz;
   assign mOp3_register_o=alt_bus_hold  ? 9'h1ef : 9'bz;

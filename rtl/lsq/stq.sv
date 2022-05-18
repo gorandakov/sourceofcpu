@@ -221,12 +221,7 @@ module stq(
   wire [63:0] free;
   wire [63:0] upd;
   
-  wire [139:0] chk0_data;
-  wire [139:0] chk1_data;
-  wire [139:0] chk2_data;
-  wire [139:0] chk3_data;
-  wire [139:0] chk4_data;
-  wire [139:0] chk5_data;
+  wire [5:0][139:0] chk_data;
   wire [135:0] WLN0_data;
   wire [135:0] WLN1_data;
  
@@ -488,12 +483,12 @@ module stq(
           rst,
           upd0_en0,{upd0_pbit[upd0_b[b][1]],upd0_data[32*Rupd0_b[b]+:32]},
           upd1_en0,{upd1_pbit[upd1_b[b][1]],upd1_data[32*Rupd1_b[b]+:32]},
-          chk0_match_first[chk0_b[b]],chk0_data0[b],
-          chk1_match_first[chk1_b[b]],chk1_data0[b],
-          chk2_match_first[chk2_b[b]],chk2_data0[b],
-          chk3_match_first[chk3_b[b]],chk3_data0[b],
-          chk4_match_first[chk4_b[b]],chk4_data0[b],
-          chk5_match_first[chk5_b[b]],chk5_data0[b],
+          chk0_match_first[chk0_b[b]],chk0_data0[b],chk0_pre0,chk0_pre1,
+          chk1_match_first[chk1_b[b]],chk1_data0[b],chk1_pre0,chk1_pre1,
+          chk2_match_first[chk2_b[b]],chk2_data0[b],chk2_pre0,chk2_pre1,
+          chk3_match_first[chk3_b[b]],chk3_data0[b],chk3_pre0,chk3_pre1,
+          chk4_match_first[chk4_b[b]],chk4_data0[b],chk4_pre0,chk4_pre1,
+          chk5_match_first[chk5_b[b]],chk5_data0[b],chk5_pre0,chk5_pre1,
           WLN0_match,WLN0_dataX0[b],
           WLN1_match,WLN1_dataX0[b]
           );
@@ -539,22 +534,22 @@ module stq(
           rst,
           upd0_en0,upd0_data[135:128],
           upd1_en0,upd1_data[135:128],
-          chk0_match_first[chk0_b[b]],chk0_data1,
-          chk1_match_first[chk1_b[b]],chk1_data1,
-          chk2_match_first[chk2_b[b]],chk2_data1,
-          chk3_match_first[chk3_b[b]],chk3_data1,
-          chk4_match_first[chk4_b[b]],chk4_data1,
-          chk5_match_first[chk5_b[b]],chk5_data1,
+          chk0_match_first[chk0_b[b]],chk0_data1,chk0_pre0,chk0_pre1,
+          chk1_match_first[chk1_b[b]],chk1_data1,chk1_pre0,chk1_pre1,
+          chk2_match_first[chk2_b[b]],chk2_data1,chk2_pre0,chk2_pre1,
+          chk3_match_first[chk3_b[b]],chk3_data1,chk3_pre0,chk3_pre1,
+          chk4_match_first[chk4_b[b]],chk4_data1,chk4_pre0,chk4_pre1,
+          chk5_match_first[chk5_b[b]],chk5_data1,chk5_pre0,chk5_pre1,
           WLN0_match,WLN0_data[135:128],
           WLN1_match,WLN1_data[135:128]
           );
 	  if (b==3) begin
-              assign chk0_data[139:132]=chk0_data1;
-              assign chk1_data[139:132]=chk1_data1;
-              assign chk2_data[139:132]=chk2_data1;
-              assign chk3_data[139:132]=chk3_data1;
-              assign chk4_data[139:132]=chk4_data1;
-              assign chk5_data[139:132]=chk5_data1;
+              assign chk_data[0][139:132]=chk0_data1;
+              assign chk_data[1][139:132]=chk1_data1;
+              assign chk_data[2][139:132]=chk2_data1;
+              assign chk_data[3][139:132]=chk3_data1;
+              assign chk_data[4][139:132]=chk4_data1;
+              assign chk_data[5][139:132]=chk5_data1;
 	  end
 
       end
@@ -588,12 +583,15 @@ module stq(
 	  assign wb1_data[135:128]=chk_wb1[a] ? chk_data[a][139:132] : 8'bz;
 	  assign wb0_pbit[0]=chk_wb[a] ? chk_data[a][32] : 1'bz;
 	  assign wb1_pbit[0]=chk_wb1[a] ? chk_data[a][32] : 1'bz;
-	  assign wb0_pbit[1]=chk_wb[a] ? chk_data[a][98] 1'bz;
+	  assign wb0_pbit[1]=chk_wb[a] ? chk_data[a][98] : 1'bz;
 	  assign wb1_pbit[1]=chk_wb1[a] ? chk_data[a][98] : 1'bz;
       end
   endgenerate
   assign wb0_adata=chk_wb0_has ? {`lsaddr_width{1'bz}} : {`lsaddr_width{1'b0}};
   assign wb1_adata=chk_wb1_has ? {`lsaddr_width{1'bz}} : {`lsaddr_width{1'b0}};
+  assign wb0_data=chk_wb0_has ? 136'bz : 136'b0;
+  assign wb1_data=chk_wb1_has ? 136'bz : 136'b0;
+
   assign wb0_en=chk_wb0_has;
   assign wb1_en=chk_wb1_has;
 
