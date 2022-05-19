@@ -118,18 +118,18 @@ module stq(
 
   input pse1_en;
 
-  output [`lsaddr_width-1:0] wb1_adata;
+  output reg [`lsaddr_width-1:0] wb1_adata;
   output [8:0] wb1_LSQ;
   output [135:0] wb1_data;
-  output [1:0] wb1_pbit;
+  output reg [1:0] wb1_pbit;
   output [3:0] wb1_bnkEn;
   output wb1_en;
   output [5:0] wb1_chk;
 
-  output [`lsaddr_width-1:0] wb0_adata;
+  output reg [`lsaddr_width-1:0] wb0_adata;
   output [8:0] wb0_LSQ;
   output [135:0] wb0_data;
-  output [1:0] wb0_pbit;
+  output reg [1:0] wb0_pbit;
   output [3:0] wb0_bnkEn;
   output wb0_en;
   output wb0_chk;
@@ -569,28 +569,51 @@ module stq(
           assign WLN1_adata=LSQ_shr_data[`lsqshare_wrt1]==a ? chk_adata[a] : {`lsaddr_width{1'bz}};
           assign WLN0_WQ=LSQ_shr_data[`lsqshare_wrt0]==a ? chk_adata[a][`lsaddr_WQ] : {6{1'bz}};
           assign WLN1_WQ=LSQ_shr_data[`lsqshare_wrt1]==a ? chk_adata[a][`lsaddr_WQ] : {6{1'bz}};
-	  assign wb0_adata=chk_wb[a] ? chk_adata[a] : {`lsaddr_width{1'bz}};
-	  assign wb1_adata=chk_wb1[a] ? chk_adata[a] : {`lsaddr_width{1'bz}};
-	  assign wb0_data[31:0]=chk_wb[a] ? chk_data[a][31:0] : {32{1'bz}};
-	  assign wb1_data[31:0]=chk_wb1[a] ? chk_data[a][31:0] : {32{1'bz}};
-	  assign wb0_data[63:32]=chk_wb[a] ? chk_data[a][64:33] : {32{1'bz}};
-	  assign wb1_data[63:32]=chk_wb1[a] ? chk_data[a][64:33] : {32{1'bz}};
-	  assign wb0_data[95:64]=chk_wb[a] ? chk_data[a][97:66] : {32{1'bz}};
-	  assign wb1_data[95:64]=chk_wb1[a] ? chk_data[a][97:66] : {32{1'bz}};
-	  assign wb0_data[127:96]=chk_wb[a] ? chk_data[a][130:99] : {32{1'bz}};
-	  assign wb1_data[127:96]=chk_wb1[a] ? chk_data[a][130:99] : {32{1'bz}};
-	  assign wb0_data[135:128]=chk_wb[a] ? chk_data[a][139:132] : 8'bz;
-	  assign wb1_data[135:128]=chk_wb1[a] ? chk_data[a][139:132] : 8'bz;
-	  assign wb0_pbit[0]=chk_wb[a] ? chk_data[a][32] : 1'bz;
-	  assign wb1_pbit[0]=chk_wb1[a] ? chk_data[a][32] : 1'bz;
-	  assign wb0_pbit[1]=chk_wb[a] ? chk_data[a][98] : 1'bz;
-	  assign wb1_pbit[1]=chk_wb1[a] ? chk_data[a][98] : 1'bz;
+	  assign wb0_adataW=chk_wb[a] ? chk_adata[a] : {`lsaddr_width{1'bz}};
+	  assign wb1_adataW=chk_wb1[a] ? chk_adata[a] : {`lsaddr_width{1'bz}};
+	  assign wb0_dataW[31:0]=chk_wb[a] ? chk_data[a][31:0] : {32{1'bz}};
+	  assign wb1_dataW[31:0]=chk_wb1[a] ? chk_data[a][31:0] : {32{1'bz}};
+	  assign wb0_dataW[63:32]=chk_wb[a] ? chk_data[a][64:33] : {32{1'bz}};
+	  assign wb1_dataW[63:32]=chk_wb1[a] ? chk_data[a][64:33] : {32{1'bz}};
+	  assign wb0_dataW[95:64]=chk_wb[a] ? chk_data[a][97:66] : {32{1'bz}};
+	  assign wb1_dataW[95:64]=chk_wb1[a] ? chk_data[a][97:66] : {32{1'bz}};
+	  assign wb0_dataW[127:96]=chk_wb[a] ? chk_data[a][130:99] : {32{1'bz}};
+	  assign wb1_dataW[127:96]=chk_wb1[a] ? chk_data[a][130:99] : {32{1'bz}};
+	  assign wb0_dataW[135:128]=chk_wb[a] ? chk_data[a][139:132] : 8'bz;
+	  assign wb1_dataW[135:128]=chk_wb1[a] ? chk_data[a][139:132] : 8'bz;
+	  assign wb0_pbitW[0]=chk_wb[a] ? chk_data[a][32] : 1'bz;
+	  assign wb1_pbitW[0]=chk_wb1[a] ? chk_data[a][32] : 1'bz;
+	  assign wb0_pbitW[1]=chk_wb[a] ? chk_data[a][98] : 1'bz;
+	  assign wb1_pbitW[1]=chk_wb1[a] ? chk_data[a][98] : 1'bz;
       end
   endgenerate
-  assign wb0_adata=chk_wb0_has ? {`lsaddr_width{1'bz}} : {`lsaddr_width{1'b0}};
-  assign wb1_adata=chk_wb1_has ? {`lsaddr_width{1'bz}} : {`lsaddr_width{1'b0}};
-  assign wb0_data=chk_wb0_has ? 136'bz : 136'b0;
-  assign wb1_data=chk_wb1_has ? 136'bz : 136'b0;
+  assign wb0_adataW=chk_wb0_has ? {`lsaddr_width{1'bz}} : {`lsaddr_width{1'b0}};
+  assign wb1_adataW=chk_wb1_has ? {`lsaddr_width{1'bz}} : {`lsaddr_width{1'b0}};
+  assign wb0_dataW=chk_wb0_has ? 136'bz : 136'b0;
+  assign wb1_dataW=chk_wb1_has ? 136'bz : 136'b0;
+  assign wb0_pbitW=chk_wb0_has ? 2'bz : 2'b0;
+  assign wb1_pbitW=chk_wb1_has ? 2'bz : 2'b0;
+
+
+  assign wb0_data[31:0]=wb0_adata[`lsaddr_sz]==5'h10 && wb0_adata[`lsaddr_low]==2'd1 ? {24'b0,wb0_dataW_reg[15:8]} :32'bz;
+  assign wb0_data[31:0]=wb0_adata[`lsaddr_sz]==5'h10 && wb0_adata[`lsaddr_low]==2'd2 ? {24'b0,wb0_dataW_reg[23:16]} :32'bz;
+  assign wb0_data[31:0]=wb0_adata[`lsaddr_sz]==5'h10 && wb0_adata[`lsaddr_low]==2'd3 ? {24'b0,wb0_dataW_reg[31:24]} :32'bz;
+  assign wb0_data[31:0]=wb0_adata[`lsaddr_sz]==5'h11 && wb0_adata[`lsaddr_low]==2'd1 ? {16'b0,wb0_dataW_reg[23:8]} :32'bz;
+  assign wb0_data[31:0]=wb0_adata[`lsaddr_sz]==5'h11 && wb0_adata[`lsaddr_low]==2'd2 ? {16'b0,wb0_dataW_reg[31:16]} :32'bz;
+  assign wb0_data[31:0]=wb0_adata[`lsaddr_sz]==5'h11 && wb0_adata[`lsaddr_low]==2'd3 ? {16'b0,wb0_dataW_reg[39:24]} :32'bz;
+  assign wb0_data[31:0]=wb0_adata[`lsaddr_sz]!=5'h10 || wb0_adata[`lsaddr_sz]!=5'h11 || wb0_adata[`lsaddr_low]==2'd0 ? 
+      wb0_dataW[31:0] :32'bz;
+  assign wb0_data[135:32]=wb0_dataW_reg[135:32];
+
+  assign wb1_data[31:0]=wb1_adata[`lsaddr_sz]==5'h10 && wb1_adata[`lsaddr_low]==2'd1 ? {24'b0,wb1_dataW_reg[15:8]} :32'bz;
+  assign wb1_data[31:0]=wb1_adata[`lsaddr_sz]==5'h10 && wb1_adata[`lsaddr_low]==2'd2 ? {24'b0,wb1_dataW_reg[23:16]} :32'bz;
+  assign wb1_data[31:0]=wb1_adata[`lsaddr_sz]==5'h10 && wb1_adata[`lsaddr_low]==2'd3 ? {24'b0,wb1_dataW_reg[31:24]} :32'bz;
+  assign wb1_data[31:0]=wb1_adata[`lsaddr_sz]==5'h11 && wb1_adata[`lsaddr_low]==2'd1 ? {16'b0,wb1_dataW_reg[23:8]} :32'bz;
+  assign wb1_data[31:0]=wb1_adata[`lsaddr_sz]==5'h11 && wb1_adata[`lsaddr_low]==2'd2 ? {16'b0,wb1_dataW_reg[31:16]} :32'bz;
+  assign wb1_data[31:0]=wb1_adata[`lsaddr_sz]==5'h11 && wb1_adata[`lsaddr_low]==2'd3 ? {16'b0,wb1_dataW_reg[39:24]} :32'bz;
+  assign wb1_data[31:0]=wb1_adata[`lsaddr_sz]!=5'h10 || wb1_adata[`lsaddr_sz]!=5'h11 || wb1_adata[`lsaddr_low]==2'd0 ? 
+      wb1_dataW[31:0] :32'bz;
+  assign wb1_data[135:32]=wb1_dataW_reg[135:32];
 
   assign wb0_en=chk_wb0_has;
   assign wb1_en=chk_wb1_has;
@@ -731,7 +754,11 @@ module stq(
 	  chk_mask<=6'd0;
 	  mask=64'b0;
 	  rsDoStall<=4'b0000;
+	  wb0_adata<=0;
+	  wb1_adata<=0;
       end else begin
+	  wb0_adata<=wb0_adataW;
+	  wb1_adata<=wb1_adataW;
 	  if (!stall && !doStall && pse0_en && ~pse1_en) begin
 	      pse0_WQ<=pse1_WQ;
 	      pse1_WQ<=pse1_WQ_inc;
@@ -756,5 +783,9 @@ module stq(
 	      rsDoStall[3]<=wb1_en;
           end
       end
+      wb0_dataW_reg<=wb0_dataW;
+      wb1_dataW_reg<=wb1_dataW;
+      wb0_pbit<=wb0_pbitW;
+      wb1_pbit<=wb1_pbitW;
   end
 endmodule
