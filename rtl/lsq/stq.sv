@@ -134,7 +134,7 @@ module stq(
   output reg [16:0] wb0_bnkEn;
   output reg [16:0] wb0_bnkEnS;
   output wb0_en;
-  output wb0_chk;
+  output [5:0] wb0_chk;
   output [1:0] wb0_way;
   
   output WLN0_en;
@@ -619,10 +619,10 @@ module stq(
 	  assign wb1_pbitW[0]=chk_wb1[a] ? chk_data[a][32] : 1'bz;
 	  assign wb0_pbitW[1]=chk_wb[a] ? chk_data[a][98] : 1'bz;
 	  assign wb1_pbitW[1]=chk_wb1[a] ? chk_data[a][98] : 1'bz;
-	  assign wb0_bytesW=chk_wb[a] ?  chk_bytes[a]&{17{~|chk_enD[a]}} : 17'bz;
-	  assign wb1_bytesW=chk_wb1[a] ? chk_bytes[a]&{17{~|chk_enD[a]}} : 17'bz;
-	  assign wb0_bytesX=chk_wb[a] ?  chk_bytes[a]&{17{|chk_enD[a]}} : 17'bz;
-	  assign wb1_bytesX=chk_wb1[a] ? chk_bytes[a]&{17{|chk_enD[a]}} : 17'bz;
+	  assign wb0_bytesW=chk_wb[a] ?  chk_bytes[a]&{17{~|chk_enD[a]&~chk_wb0_has}} : 17'bz;
+	  assign wb1_bytesW=chk_wb1[a] ? chk_bytes[a]&{17{~|chk_enD[a]&~chk_wb1_has}} : 17'bz;
+	  assign wb0_bytesX=chk_wb[a] ?  chk_bytes[a]&{17{|chk_enD[a]|chk_wb0_has}} : 17'bz;
+	  assign wb1_bytesX=chk_wb1[a] ? chk_bytes[a]&{17{|chk_enD[a]|chk_wb1_has}} : 17'bz;
       end
   endgenerate
   assign wb0_adataW=chk_wb0_has ? {`lsaddr_width{1'bz}} : {`lsaddr_width{1'b0}};
