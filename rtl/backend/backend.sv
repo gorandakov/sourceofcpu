@@ -1002,7 +1002,8 @@ module backend(
   wire                     lso_en;
   wire [12:0]              lso_ret;
   wire [127+8:0]           lso_data;
-  wire [3:0]               lso_bnkread;
+  wire [16:0]               lso_bnkread;
+  wire [16:0]               lso_bnkread2;
   wire [1:0]               lso_pbit;
   wire [`lsaddr_width-1:0] lso2_adata;
   wire [8:0]               lso2_LSQ;
@@ -1010,7 +1011,8 @@ module backend(
   wire [12:0]              lso2_ret;
   wire [127+8:0]           lso2_data;
   wire [1:0]               lso2_pbit;
-  wire [3:0]               lso2_bnkread;
+  wire [16:0]               lso2_bnkread;
+  wire [16:0]               lso2_bnkread2;
   
   wire [2:0][IN_REG_WIDTH-1:0] rrfAW;
   wire [2:0][IN_REG_WIDTH-1:0] rrfBW;
@@ -4921,13 +4923,6 @@ module backend(
   .mOpY5_pbit_o(dc_pdata[1]),
   .mOpY5_type_o(),
   .mOpY5_II_o(),
-  .lso_adata(lso_adata),.lso_xdataA({lso_en,11'b0}),.lso_data(lso_data),.lso_bnkread({lso_bnkread[3],lso_bnkread}),
-  .lso_pbit(lso_pbit),
-  .lso2_adata(lso2_adata),.lso2_xdataA({lso2_en,11'b0}),.lso2_data(lso2_data),.lso2_bnkread({lso2_bnkread[3],lso2_bnkread}),
-  .lso2_pbit(lso2_pbit),
-  .lso2_wb_en({lso2_en && (lso2_adata[`lsaddr_reg_low]==2 || lso2_adata[`lsaddr_reg_low]==5 || lso2_adata[`lsaddr_reg_low]==8 ),
-    lso2_en && (lso2_adata[`lsaddr_reg_low]==1 || lso2_adata[`lsaddr_reg_low]==4 || lso2_adata[`lsaddr_reg_low]==7 ),
-    lso2_en && (lso2_adata[`lsaddr_reg_low]==0 || lso2_adata[`lsaddr_reg_low]==3 || lso2_adata[`lsaddr_reg_low]==6 )}),
   .p0_adata(lsr_wr_data[0]),.p0_banks(),.p0_LSQ(dc_LSQ[0]),
     .p0_en(dc_rdEn[0]),.p0_rsEn(dc_rsEn[0]),.p0_secq(),.p0_ret(p_ret[0]),.p0_repl(p_repl[0]),.p0_lsfwd(p_lsfwd[0]),
   .p1_adata(lsr_wr_data[1]),.p1_banks(),.p1_LSQ(dc_LSQ[1]),
@@ -5002,9 +4997,9 @@ module backend(
   .st1_adata(st1_adata),.st1_en(st1_en),.st1_bank1(st1_bank1),.st1_bgn_ben(st1_bgn_ben),.st1_end_ben(st1_end_ben),.st1_data(st1_data),
   .st1_pbit(st1_pbit),
   .wb0_adata(lso_adata),.wb0_LSQ(lso_LSQ),.wb0_en(lso_en),.wb0_ret(),.wb0_data(lso_data),.wb0_brdbanks(lso_bnkread),
-  .wb0_pbit(lso_pbit),
+  .wb0_brdbanks2(lso_bnkread2),.wb0_pbit(lso_pbit),
   .wb1_adata(lso2_adata),.wb1_LSQ(lso2_LSQ),.wb1_en(lso2_en),.wb1_ret(),.wb1_data(lso2_data),.wb1_brdbanks(lso2_bnkread),
-  .wb1_pbit(lso2_pbit),
+  .wb1_brdbanks2(lso2_bnkread2),.wb1_pbit(lso2_pbit),
   .mem_II_upper(retM_II0),
   .mem_II_upper_in(retM_II),
   .mem_II_bits_fine(retM_fine),
@@ -5550,36 +5545,37 @@ dcache1 L1D_mod(
   assign FUwen[1]=FUwen1;
   assign FUwen[2]=FUwen2;
   assign FUwen[3]=FUwen3;
-  
-  assign FU[0][63:32]=(~p_lsfwd_reg2[0] | p2_brdbanks_reg2[1]) ? dc_rdataA[0][63:32]:
-        p2_data_reg2[63:32];  
-  assign FU[0][31:0]= (~p_lsfwd_reg2[0] | p2_brdbanks_reg2[0]) ? dc_rdataA[0][31:0]:
-          p2_data_reg2[31:0];  
-  assign FU[0][64]=(~p_lsfwd_reg2[0] | p2_brdbanks_reg2[0]) ? dc_pbitA[0][0] : p2_pdata_reg2[0];
 
-  assign FU[1][63:32]=(~p_lsfwd_reg2[1] | p2_brdbanks_reg2[1]) ? dc_rdataA[1][63:32]:
-        p2_data_reg2[63:32];  
-  assign FU[1][31:0]= (~p_lsfwd_reg2[1] | p2_brdbanks_reg2[0]) ? dc_rdataA[1][31:0]:
-          p2_data_reg2[31:0];  
-  assign FU[1][64]=(~p_lsfwd_reg2[1] | p2_brdbanks_reg2[0]) ? dc_pbitA[1][0] : p2_pdata_reg2[0];
+  generate
+      genvar q;
+      for (q=0;q<8;q=q+1) begin : data_general
+          assign FU[0][7+8*q:8*q]=lso_brdbanks2[q] & lso_way[0]||~lso_en ? dc_rdataA[0][7+8*q:8*q] : 8'bz;
+          assign FU[0][7+8*q:8*q]=lso_brdbanks[q] && lso_way[0] && ~lso_en ? lso_data[7+8*q:8*q] : 8'bz;
+          assign FU[0][7+8*q:8*q]=(~lso_brdbanks2[q] & ~lso_brdbanks[q] || ~lso_way[0]) &&~lso_en ? 8'b0 : 8'bz;
+          assign FU[1][7+8*q:8*q]=lso_brdbanks2[q] & lso_way[1]||~lso_en ? dc_rdataA[0][7+8*q:8*q] : 8'bz;
+          assign FU[1][7+8*q:8*q]=lso_brdbanks[q] && lso_way[1] && ~lso_en ? lso_data[7+8*q:8*q] : 8'bz;
+          assign FU[1][7+8*q:8*q]=(~lso_brdbanks2[q] & ~lso_brdbanks[q] || ~lso_way[1]) &&~lso_en ? 8'b0 : 8'bz;
+          assign FU[2][7+8*q:8*q]=lso_brdbanks2[q] & lso_way[2]||~lso_en ? dc_rdataA[0][7+8*q:8*q] : 8'bz;
+          assign FU[2][7+8*q:8*q]=lso_brdbanks[q] && lso_way[2] && ~lso_en ? lso_data[7+8*q:8*q] : 8'bz;
+          assign FU[2][7+8*q:8*q]=(~lso_brdbanks2[q] & ~lso_brdbanks[q] || ~lso_way[2]) &&~lso_en ? 8'b0 : 8'bz;
+          assign FU[3][7+8*q:8*q]=lso2_brdbanks2[q] ||~lso2_en ? dc_rdataA[0][7+8*q:8*q] : 8'bz;
+          assign FU[3][7+8*q:8*q]=lso2_brdbanks[q] && ~lso2_en ? lso2_data[7+8*q:8*q] : 8'bz;
+          assign FU[3][7+8*q:8*q]=(~lso2_brdbanks2[q] & ~lso2_brdbanks[q]) &&~lso2_en ? 8'b0 : 8'bz;
+      end
+  endgenerate
+  assign FU[0][64]=lso_brdbanks2[16] & lso_way[0] || lso_en              ? dc_pdataA[0][0] : 8'bz;
+  assign FU[0][64]=lso_brdbanks[16]  & lso_way[0] && ~lso_en             ? lso_pbit[0] : 8'bz;
+  assign FU[0][64]=(~lso_brdbanks2[16] & ~lso_brdbanks[16] || ~lso_way[0]) && ~lso_en ? 1'b0 : 1'bz;
+  assign FU[1][64]=lso_brdbanks2[16] & lso_way[1] || lso_en              ? dc_pdataA[0][0] : 8'bz;
+  assign FU[1][64]=lso_brdbanks[16]  & lso_way[1] && ~lso_en             ? lso_pbit[0] : 8'bz;
+  assign FU[1][64]=(~lso_brdbanks2[16] & ~lso_brdbanks[16] || ~lso_way[1]) && ~lso_en ? 1'b0 : 1'bz;
+  assign FU[2][64]=lso_brdbanks2[16] & lso_way[2] || lso_en              ? dc_pdataA[0][0] : 8'bz;
+  assign FU[2][64]=lso_brdbanks[16]  & lso_way[2] && ~lso_en             ? lso_pbit[0] : 8'bz;
+  assign FU[2][64]=(~lso_brdbanks2[16] & ~lso_brdbanks[16] || ~lso_way[2]) && ~lso_en ? 1'b0 : 1'bz;
+  assign FU[3][64]=lso2_brdbanks2[16] || lso2_en              ? dc_pdataA[0][0] : 8'bz;
+  assign FU[3][64]=lso2_brdbanks[16]  && ~lso2_en             ? lso2_pbit[0] : 8'bz;
+  assign FU[3][64]=(~lso2_brdbanks2[16] & ~lso2_brdbanks[16]) && ~lso2_en ? 1'b0 : 1'bz;
 
-  assign FU[2][63:32]=(~p_lsfwd_reg2[2] | p2_brdbanks_reg2[1]) ? dc_rdataA[2][63:32]:
-        p2_data_reg2[63:32];  
-  assign FU[2][31:0]= (~p_lsfwd_reg2[2] | p2_brdbanks_reg2[0]) ? dc_rdataA[2][31:0]:
-          p2_data_reg2[31:0];  
-  assign FU[2][64]=(~p_lsfwd_reg2[2] | p2_brdbanks_reg2[0]) ? dc_pbitA[2][0] : p2_pdata_reg2[0];
-
-  //assign FU[0]=dc_rdataA[0][63:0];
-  //assign FU[1]=dc_rdataA[1][63:0];
-  //assign FU[2]=dc_rdataA[2][63:0];
-  //assign FU[3]=dc_rdataA[3];
-
-  assign FU[3][63:32]=(~p_lsfwd_reg2[3] | p3_brdbanks_reg2[1] && ~insBus_io_reg3) ? dc_rdataA[3][63:32]:
-        p3_data_reg2[63:32];  
-  assign FU[3][31:0]= (~p_lsfwd_reg2[3] | p3_brdbanks_reg2[0] && ~insBus_io_reg3) ? dc_rdataA[3][31:0]:
-          p3_data_reg2[31:0];  
-  assign FU[3][64]=(~p_lsfwd_reg2[3] | p3_brdbanks_reg2[0] && ~insBus_io_reg3) ? dc_pbitA[3][0] : p3_pdata_reg2[0];
-  
 
 //  assign FU0=dc_rdataA[0][63:0];
 //  assign FU1=dc_rdataA[1][63:0];
