@@ -25,7 +25,7 @@ module lsq_req_ram(
 
 
   input [ADDR_WIDTH-1:0] read_addr;
-  output [DATA_WIDTH-1:0] read_data;
+  output reg [DATA_WIDTH-1:0] read_data;
   input read_clkEn;
   
 
@@ -63,21 +63,33 @@ module lsq_req_ram(
 
   reg [ADDR_WIDTH-1:0] read_addr_reg;
 
-  assign read_data=ram[read_addr_reg];
+ // assign read_data=ram[read_addr_reg];
 
 
-  always @(posedge clk)
+  always @(negedge clk)
     begin
       if (rst)
         begin
-          read_addr_reg<={ADDR_WIDTH{1'b0}};
+ //         read_addr_reg<={ADDR_WIDTH{1'b0}};
         end
       else
       begin
-        if (read_clkEn)
-            read_addr_reg<=read_addr;
+ //       if (read_clkEn)
+ //           read_addr_reg<=read_addr;
       end
       
+      if (rst) begin
+	  read_data<=0;
+      end else begin
+	  read_data<=ram[read_addr];
+          if (write0_wen) read_data<=write0_data;
+          if (write1_wen) read_data<=write1_data;
+          if (write2_wen) read_data<=write2_data;
+          if (write3_wen) read_data<=write3_data;
+          if (write4_wen) read_data<=write4_data;
+          if (write5_wen) read_data<=write5_data;
+          if (write6_wen) read_data<=write6_data;
+      end
 
       if (write0_wen) ram[write0_addr]<=write0_data;
       if (write1_wen) ram[write1_addr]<=write1_data;
@@ -86,6 +98,7 @@ module lsq_req_ram(
       if (write4_wen) ram[write4_addr]<=write4_data;
       if (write5_wen) ram[write5_addr]<=write5_data;
       if (write6_wen) ram[write6_addr]<=write6_data;
+      
     end      
     
 endmodule
