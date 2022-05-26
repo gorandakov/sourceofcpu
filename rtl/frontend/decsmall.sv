@@ -1129,10 +1129,14 @@ module smallInstr_decoder(
       pport[16]=PORT_ALU;
       puseBConst[16]=1'b0;
       pflags_write[16]=1'b0;
-      casex({instr[0],isPtrSec})
-      2'b00: poperation[16]=`op_sadd_even;
-      2'b10: poperation[16]=`op_sadd_odd;
-      2'bx1: begin poperation[16]=`op_sec64; pport[16]=PORT_MUL; end
+      casex({instr[28],instr[29],instr[0],isPtrSec})
+      4'b0x00: poperation[16]=`op_sadd_even;
+      4'b0x10: poperation[16]=`op_sadd_odd;
+      4'b1x00: begin poperation[16]=`op_cloop_even; pjumptype[16]={1'b0,4'h0}; end 
+      4'b1x10: begin poperation[16]=`op_cloop_odd; pjumptype[16]={1'b0,4'h0}; end
+      4'b00x1: begin poperation[16]=`op_sec64; pport[16]=PORT_MUL; end
+      4'b01x1: begin poperation[16]=`op_swp32; pport[16]=PORT_MUL; end
+      4'b11x1: begin poperation[16]=`op_swp64; pport[16]=PORT_MUL; end
       endcase
       prA_use[16]=1'b1;
       prB_use[16]=1'b1;
@@ -1143,15 +1147,18 @@ module smallInstr_decoder(
       poperation[16][12]=1'b1;    
       prA[16]={instr[17],instr[11:8]};
       prB[16]=instr[16:12];
-      if (instr[29:23]!=0) perror[16]=1;
+      if (instr[27:23]!=0) perror[16]=1;
       prA[16]={instr[17],instr[11:8]};
       prT[16]=instr[16:12];
       prB[16]=instr[22:18];
       if (magic[1:0]!=2'b01) perror[16]=1'b1;
-      if (isPtrSec && instr[29]) begin
-	  pport[16]=PORT_MUL;
-	  poperation[16]=instr[30] ? `op_swp32 : `op_swp64;
-	  if (instr[31]) perror[16]=1'b1;
+      if (!isPtrSec && instr[28]) begin
+	  prA[16]=5'd2;
+	  puseBConst[16]=1'b1;
+	  pconstant[16]=64'h-1;
+	  prT[16]=5'd2;
+	  perror[16]=1'b0;
+	  //jump imm={instr[27:8],1'b0}
       end
     
       trien[17]=magic[0] & isBaseSpecLoad;

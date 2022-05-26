@@ -109,6 +109,7 @@ module jump_decoder(
   assign isRet=(opcode_main==8'd182 && instr[15:13]==3'd3)&magic[0];
   assign subIsCJ=(opcode_main[5:2]==4'b1100)&~magic[0];
   assign isJalR=opcode_main==8'd213 && magic[0];
+  assign isShlAddMulLike=(opcode_main==8'd210 || opcode_main==8'd211) && magic[1:0]==2'b01;
 
  // assign isCmpTestExtra=(opcode_main==198 && magic[1:0]==2'b01 && instr[31:29]==3'd1)&magic[0];
   
@@ -161,6 +162,9 @@ module jump_decoder(
       end else if (isRet) begin
           popCallStack=1'b1;
           jumpType=5'b10001;
+      end else if (isShlAddMulLike&&instr[28]) 
+          jumptype={1'b0,4'h0};
+	  constant={{39{instr[27]}},instr[27:8],1'b0};
       end else if (isBasicSysInstr) begin
 //          if (instr[15:8]==8'hff && ~magic[0]) halt=1'b1;
           if (instr[15:13]==3'b0) begin
