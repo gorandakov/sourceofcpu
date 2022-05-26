@@ -191,7 +191,7 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
   
   assign valRes1=(operation[11] || ~nDataAlt || (~logic_en && ~spec1_en && ~spec2_en)) ? 
     64'b0: 64'bz;
-  assign add_en=(~(|operation[7:3])|(operation[7:1]==7'd30) && ~operation[11] && ~ (operation[1])) && nDataAlt;
+  assign add_en=(~(|operation[7:3])|(operation[7:1]==7'd30) && ~operation[11] && ~ (operation[1])|~(operation[2])) && nDataAlt;
   assign add8_en=1'b0;
   assign sahf_en=~operation[11] && operation[7:0]==`op_sahf && nDataAlt;
   assign shift_en=(operation[7:2]==6'd5 || operation[7:2]==6'd6 || operation[7:2]==6'd7) && nDataAlt && ~operation[11];
@@ -284,9 +284,9 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
     .sub(sub),
     .en(add_en),
     .sxtEn(operation[7:0]==`op_add16 || operation[7:0]==`op_sub16),
-    .ben({(operation[7:0]==`op_add64 || operation[7:0]==`op_sub64 || operation[7:1]==7'd30) && 
+    .ben({(operation[7:0]==`op_add64 || operation[7:0]==`op_sub64 || operation[7:1]==7'd30 || operation[7:1]==7'd1) && 
     ~is_ptr && ~(val1[64]&val2[64]&is_sub||val2[64]&is_sub),
-    (operation[7:0]==`op_add64 || operation[7:0]==`op_sub64 || operation[7:1]==7'd30)
+    (operation[7:0]==`op_add64 || operation[7:0]==`op_sub64 || operation[7:1]==7'd30 || operation[7:1]==7'd1)
       }),
     .cout(carryAdd64),
     .cout4(carryAdd4LL),
@@ -315,7 +315,7 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
 // flag assignment mux
   assign flags_COASZP=((retOp==`op_add64) && isFlags_reg) ? {carryAdd64_reg&~is_ptr_reg,flagAdd64_OF_reg&~is_ptr_reg,carryAdd4LL_reg&~is_ptr_reg,valRes_reg[63],flag64_ZF_reg,flag8_PF_reg} : 6'bz;
   assign flags_COASZP=((retOp==`op_add32) && isFlags_reg) ? {carryAdd32_reg,flagAdd32_OF_reg,carryAdd4LL_reg,valRes_reg[31],flag32_ZF_reg,flag8_PF_reg} : 6'bz;
-  assign flags_COASZP=((retOp==`op_add16) && isFlags_reg) ? {carryAdd32_reg,flagAdd32_OF_reg,carryAdd4LL_reg,valRes_reg[31],flag32_ZF_reg,flag8_PF_reg} : 6'bz;
+  assign flags_COASZP=((retOp[7:1]==7'd1) && isFlags_reg) ? {4'b0,~flag64_ZF_reg&doJmp_reg,1'b0} : 6'bz;
   
   assign flags_COASZP=((retOp==`op_sub64) && isFlags_reg) ? {is_ptr_sub ? ~carryAdd44_reg : ~carryAdd64_reg & ~is_ptr_reg,is_ptr_sub ? flagSub44_OF_reg : flagSub64_OF_reg&~is_ptr_reg,
 	  ~carryAdd4LL_reg&~is_ptr_reg,is_ptr_sub ? valRes_reg[43] : valRes_reg[63],flag64_ZF_reg,flag8_PF_reg} : 6'bz;
