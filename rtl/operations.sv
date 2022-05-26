@@ -4,8 +4,8 @@
 //3-op basic instructions
 `define op_add64 0
 `define op_add32 1
-`define op_add16 2
-`define op_add8  3
+`define op_cloop_even 2
+`define op_cloop_odd  3
 
 `define op_sub64 4
 `define op_sub32 5
