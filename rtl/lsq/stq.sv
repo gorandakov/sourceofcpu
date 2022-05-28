@@ -246,6 +246,13 @@ module stq(
   wire [4:0] upd0_begin0;
   wire [4:0] upd1_begin0;
 
+  wire chk0_pre0,chk0_pre1;
+  wire chk0_pre1,chk1_pre1;
+  wire chk0_pre2,chk2_pre1;
+  wire chk0_pre3,chk3_pre1;
+  wire chk0_pre4,chk4_pre1;
+  wire chk0_pre5,chk5_pre1;
+
   wire [7:0][63:0] chk0_match;
   wire [7:0][63:0] chk1_match;
   wire [7:0][63:0] chk2_match;
@@ -669,6 +676,26 @@ module stq(
   assign chk3_odd=chk3_adata[`lsaddr_odd];
   assign chk4_odd=chk4_adata[`lsaddr_odd];
   assign chk5_odd=chk5_adata[`lsaddr_odd];
+
+  assign chk0_pre0=1'b0;
+  assign chk0_pre1=1'b0;
+
+  assign chk1_pre0=LSQ_shr_data[`lsqshare_wrt0]==3'd0;
+  assign chk1_pre1=1'b0;
+
+  assign chk2_pre0=LSQ_shr_data[`lsqshare_wrt0+1]==2'b0;
+  assign chk2_pre1=LSQ_shr_data[`lsqshare_wrt1+1]==2'b0;
+
+  assign chk3_pre0=LSQ_shr_data[`lsqshare_wrt0+1]==2'b0 || LSQ_shr_data[`lsqshare_wrt0]==3'd2;
+  assign chk3_pre1=LSQ_shr_data[`lsqshare_wrt1+1]==2'b0 || LSQ_shr_data[`lsqshare_wrt1]==3'd2;
+ 
+  assign chk4_pre0=LSQ_shr_data[`lsqshare_wrt0+2]==1'b0;
+  assign chk4_pre1=LSQ_shr_data[`lsqshare_wrt1+2]==1'b0;
+
+  assign chk5_pre0=LSQ_shr_data[`lsqshare_wrt0+2]==1'b0 || LSQ_shr_data[`lsqshare_wrt0]==3'd4;
+  assign chk5_pre1=LSQ_shr_data[`lsqshare_wrt1+2]==1'b0 || LSQ_shr_data[`lsqshare_wrt1]==3'd4;
+ 
+
 
   assign aDoStall=|chk0_partial || |chk1_partial || |chk2_partial || |chk3_partial || |chk4_partial || |chk5_partial || chk_wb2_has ||
 	  |rsDoStall & rsStall;
