@@ -123,8 +123,6 @@ module agu_block(
   mOpY5_pbit_o,
   mOpY5_type_o,
   mOpY5_II_o,
-  lso_adata,lso_xdataA,lso_data,lso_bnkread,lso_pbit,
-  lso2_adata,lso2_xdataA,lso2_data,lso2_bnkread,lso2_wb_en,lso2_pbit,
   p0_adata,p0_banks,p0_LSQ,p0_en,p0_rsEn,p0_secq,p0_ret,p0_repl,p0_lsfwd,
   p1_adata,p1_banks,p1_LSQ,p1_en,p1_rsEn,p1_secq,p1_ret,p1_repl,p1_lsfwd,
   p2_adata,p2_banks,p2_LSQ,p2_en,p2_rsEn,p2_secq,p2_ret,p2_repl,p2_lsfwd,p2_data,p2_pbit,p2_brdbanks,
@@ -342,17 +340,6 @@ module agu_block(
   output [1:0]  mOpY5_type_o;
   output [9:0]  mOpY5_II_o;
   output [1:0]  mOpY5_pbit_o;
-  input [`lsaddr_width-1:0] lso_adata;
-  input [`lsfxdata_width-1:0] lso_xdataA;
-  input [127+8:0] lso_data;
-  input [3+1:0]   lso_bnkread;
-  input [1:0] lso_pbit;
-  input [`lsaddr_width-1:0] lso2_adata;
-  input [`lsfxdata_width-1:0] lso2_xdataA;
-  input [127+8:0] lso2_data;
-  input [3+1:0]   lso2_bnkread;
-  input [2:0] lso2_wb_en;
-  input [1:0] lso2_pbit;
   output [`lsaddr_width-1:0] p0_adata;
   output [31:0]p0_banks;
   output [8:0] p0_LSQ;
@@ -1727,8 +1714,6 @@ module agu_block(
   p0_pageFault,
   p0_faultCode,
   p0_faultNo,
-  lso2_wb_en[0],
-  lso2_adata[`lsaddr_banks],
   mOp0_register,
   mOp0_type,
   mOp0_LSQ,
@@ -1795,8 +1780,6 @@ module agu_block(
   p1_pageFault,
   p1_faultCode,
   p1_faultNo,
-  lso2_wb_en[1],
-  lso2_adata[`lsaddr_banks],
   mOp1_register,
   mOp1_type,
   mOp1_LSQ,
@@ -1863,8 +1846,6 @@ module agu_block(
   p2_pageFault,
   p2_faultCode,
   p2_faultNo,
-  lso2_wb_en[2],
-  lso2_adata[`lsaddr_banks],
   mOp2_register,
   mOp2_type,
   mOp2_LSQ,
@@ -1957,7 +1938,7 @@ module agu_block(
   .mOpR_addrMain(rec_addr),
   .mOpR_addrEven(rec_addrE),
   .mOpR_addrOdd(rec_addrO),
- // .mOpR_lsfw(rec_lsfwd),
+  .mOpR_lsfw(rec_lsfwd),
   .mOpR_odd(rec_odd),
   .mOpR_low(rec_addr_low),
   .mOpR_regNo(rec_register),
@@ -1981,7 +1962,7 @@ module agu_block(
   .doStall(rec_stall),
   .bus_hold(bus_holds_agu_reg|miss_holds_agu_reg),
   .pause_miss(miss_pause_agu),
-  .rsPause(rsPause[3]),
+  .rsStall(rsPause[3]),
   .mOp0_en(rec_en),
   .mOp0_thread(1'b0),
   .mOp0_addrMain(rec_addr),
@@ -2125,47 +2106,6 @@ module agu_block(
   miss_holds_agu,
  // miss_unlock,
   now_flushing,
-  lso_bnkread,
-  lso_data,
-  lso_pbit,
-  lso2_wb_en,
-  1'b0,
-  lso_adata[`lsaddr_addrE],
-  lso_adata[`lsaddr_addrO],
-  lso_adata[`lsaddr_sz],
-  1'b0,
-  lso_adata[`lsaddr_banks],
-  lso_adata[`lsaddr_bank0],
-  lso_adata[`lsaddr_odd],
-  lso_adata[`lsaddr_low],
-  lso_adata[`lsaddr_split],
-  {lso_adata[`lsaddr_reg_hi],lso_adata[`lsaddr_reg_low]},
-  lso2_adata[`lsaddr_mtype],
-  9'b0,//lso2_adata[`lsaddr_LSQ],
-  lso_adata[`lsaddr_II],
-  lso_adata[`lsaddr_WQ],
-  lso_adata[`lsaddr_flag],
-  lso2_wb_en,
-  lso2_bnkread,
-  lso2_data,
-  lso2_pbit,
-  |lso2_wb_en,
-  1'b0,
-  lso2_adata[`lsaddr_addrE],
-  lso2_adata[`lsaddr_addrO],
-  lso2_adata[`lsaddr_sz],
-  1'b0,
-  lso2_adata[`lsaddr_banks],
-  lso2_adata[`lsaddr_bank0],
-  lso2_adata[`lsaddr_odd],
-  lso2_adata[`lsaddr_low],
-  lso2_adata[`lsaddr_split],
-  {lso2_adata[`lsaddr_reg_hi],lso2_adata[`lsaddr_reg_low]},
-  lso2_adata[`lsaddr_mtype],
-  9'b0,//lso2_adata[`lsaddr_LSQ],
-  lso2_adata[`lsaddr_II],
-  lso2_adata[`lsaddr_WQ],
-  lso2_adata[`lsaddr_flag],
   miss0,
   mOp0_en,
   1'b0,

@@ -162,7 +162,7 @@ module jump_decoder(
       end else if (isRet) begin
           popCallStack=1'b1;
           jumpType=5'b10001;
-      end else if (isShlAddMulLike&&instr[28]) 
+      end else if (isShlAddMulLike&&instr[28]) begin 
           jumptype={1'b0,4'h0};
 	  constant={{39{instr[27]}},instr[27:8],1'b0};
       end else if (isBasicSysInstr) begin

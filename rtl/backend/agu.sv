@@ -34,8 +34,6 @@ module agu(
   pageFault,
   faultCode,
   faultNo,
-  wb_en,
-  wb_banks,
   mOp_register,
   mOp_type,
   mOp_LSQ,
@@ -110,8 +108,6 @@ module agu(
   output pageFault;
   output [7:0] faultCode;
   output [8:0] faultNo;
-  input wb_en;
-  input [31:0] wb_banks;
   output [REG_WIDTH-1:0] mOp_register;
   output [1:0] mOp_type;
   output [8:0] mOp_LSQ;
@@ -352,13 +348,13 @@ module agu(
     31'bz;
 //todo: add read_clkEn to pageFault
   assign pageFault_t=(addrNext[13]) ? (fault_tlb | ({2{split}} & fault_tlb_next)) & {2{tlb_hit}} : fault_tlb & {2{tlb_hit}};
-  assign pageFault=(pageFault_t_reg!=0) | fault_cann_reg && read_clkEn_reg2 && ~bus_hold_reg2 && ~wb_en;
+  assign pageFault=(pageFault_t_reg!=0) | fault_cann_reg && read_clkEn_reg2 && ~bus_hold_reg2;
   assign fault_cann=~cout_secq;
-  assign faultNo=fault_cann_reg | (pageFault_t_reg!=0) && ~bus_hold_reg2 && ~wb_en ? {6'd11,1'b0,2'd1} : {6'd0,1'b0,2'd2};
+  assign faultNo=fault_cann_reg | (pageFault_t_reg!=0) && ~bus_hold_reg2 ? {6'd11,1'b0,2'd1} : {6'd0,1'b0,2'd2};
   assign faultCode={3'b0,fault_cann_reg,pageFault_t_reg[1],2'b0,pageFault_t_reg[0]};
   assign mOp_addrMain={addrTlb[30:0],addrMain[12:0]};
   
-  assign tlbMiss=read_clkEn_reg&~tlb_hit&~fault_cann & rcn_mask[1] & ~wb_en;
+  assign tlbMiss=read_clkEn_reg&~tlb_hit&~fault_cann & rcn_mask[1];
   
   assign addrMain=cmplxAddr[12:0];
   
@@ -390,7 +386,7 @@ module agu(
   
   assign doStall=1'b0;
 
-  assign mOp_rsEn=read_clkEn_reg &tlb_hit & rcn_mask[1] & ~wb_en;
+  assign mOp_rsEn=read_clkEn_reg &tlb_hit & rcn_mask[1];
     
   assign rcn_mask={~(except),~(except)};
 //  assign proc=pproc[thread];
@@ -473,7 +469,7 @@ module agu(
       for (i=0;i<32;i=i+1)
        /* verilator lint_off WIDTH */
        begin
-          banks0[i]=wb_en ? wb_banks[i] : bank0==i || 
+          banks0[i]=bank0==i || 
           ((opsize==6 || opsize==3 || opsize[2] || (stepOver && opsize==2) || 
             (stepOver2 && opsize==1)) && bank0==((i-1)&5'h1f)) ||
           (((opsize==3 && stepOver) || opsize[2] || opsize==6 ) && bank0==((i-2)&5'h1f)) || 
