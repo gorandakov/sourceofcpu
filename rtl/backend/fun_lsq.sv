@@ -15,10 +15,10 @@ module fun_lsq(
   p3_adata,p3_LSQ,p3_en,p3_rsEn,p3_smpc,p3_lsfwd,
   p4_adata,p4_LSQ,p4_en,
   p5_adata,p5_LSQ,p5_en,
-  FU0Hit,
-  FU1Hit,
-  FU2Hit,
-  FU3Hit,
+  FU0Hit,FU0Data,
+  FU1Hit,FU1Data,
+  FU2Hit,FU2Data,
+  FU3Hit,FU3Data,
   st_stall,
   st0_adata,st0_en,st0_bank1,st0_bgn_ben,st0_end_ben,st0_data,st0_pbit,
   st1_adata,st1_en,st1_bank1,st1_bgn_ben,st1_end_ben,st1_data,st1_pbit,
@@ -95,6 +95,10 @@ module fun_lsq(
   input [8:0]               p5_LSQ;
   input                     p5_en;
   input FU0Hit,FU1Hit,FU2Hit,FU3Hit;
+  input [135:0] FU0Data;
+  input [135:0] FU1Data;
+  input [135:0] FU2Data;
+  input [135:0] FU3Data;
   input st_stall;
   output [`lsaddr_width-1:0] st0_adata;
   output                     st0_en;
@@ -484,6 +488,7 @@ module fun_lsq(
   .write5_addr(p5_LSQ),.write5_data(p5_adata),.write5_xdata({p5_adata[`lsaddr_II],p5_adata[`lsaddr_except],2'b0,p5_adata[`lsaddr_etype]}),
   .write5_thr(1'b0),.write5_wen(p5_en),
   .FU0Hit(FU0Hit),.FU1Hit(FU1Hit),.FU2Hit(FU2Hit),.FU3Hit(FU3Hit),
+  .FU0Data(FU0Data),.FU1Data(FU1Data),.FU2Data(FU2Data),.FU3Data(FU3Data),
   .smpc0(p0_smpc),.smpc1(p1_smpc),.smpc2(p2_smpc),.smpc3(p3_smpc),
   .rsEn0(p0_rsEn&&~p0_lsfwd),.rsEn1(p1_rsEn&&~p1_lsfwd),.rsEn2(p2_rsEn&&~p2_lsfwd),.rsEn3(p3_rsEn&&~p3_lsfwd)
   );  

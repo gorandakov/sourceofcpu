@@ -242,16 +242,30 @@ module stq(
   wire [`lsaddr_width-1:0] wb1_adataW;
   reg  [`lsaddr_width-1:0] wb0_adataW_reg;
   reg  [`lsaddr_width-1:0] wb1_adataW_reg;
+  wire [135:0] wb0_dataW;
+  wire [135:0] wb1_dataW;
+  reg [135:0] wb0_dataW_reg;
+  reg [135:0] wb1_dataW_reg;
+
 
   wire [4:0] upd0_begin0;
   wire [4:0] upd1_begin0;
 
   wire chk0_pre0,chk0_pre1;
-  wire chk0_pre1,chk1_pre1;
-  wire chk0_pre2,chk2_pre1;
-  wire chk0_pre3,chk3_pre1;
-  wire chk0_pre4,chk4_pre1;
-  wire chk0_pre5,chk5_pre1;
+  wire chk1_pre0,chk1_pre1;
+  wire chk2_pre0,chk2_pre1;
+  wire chk3_pre0,chk3_pre1;
+  wire chk4_pre0,chk4_pre1;
+  wire chk5_pre0,chk5_pre1;
+
+  wire [7:0] chk0_match_has;
+  wire [7:0] chk1_match_has;
+  wire [7:0] chk2_match_has;
+  wire [7:0] chk3_match_has;
+  wire [7:0] chk4_match_has;
+  wire [7:0] chk5_match_has;
+
+  wire [5:0][1:0] chk_enD;
 
   wire [7:0][63:0] chk0_match;
   wire [7:0][63:0] chk1_match;

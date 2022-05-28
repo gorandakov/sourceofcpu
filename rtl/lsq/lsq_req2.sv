@@ -595,6 +595,7 @@ module lsq_req(
   write4_addr,write4_data,write4_xdata,write4_thr,write4_wen,
   write5_addr,write5_data,write5_xdata,write5_thr,write5_wen,
   FU0Hit,FU1Hit,FU2Hit,FU3Hit,
+  FU0Data,FU1Data,FU2Data,FU3Data,
   smpc0,smpc1,smpc2,smpc3,
   rsEn0,rsEn1,rsEn2,rsEn3
   );
@@ -711,6 +712,10 @@ module lsq_req(
   input write5_wen;
   
   input FU0Hit,FU1Hit,FU2Hit,FU3Hit;
+  input [135:0] FU0Data;
+  input [135:0] FU1Data;
+  input [135:0] FU2Data;
+  input [135:0] FU3Data;
   input smpc0,smpc1,smpc2,smpc3;
   input rsEn0,rsEn1,rsEn2,rsEn3;
   
@@ -1075,10 +1080,10 @@ module lsq_req(
   read5A_DATA,
 
 
-  init ? {initCount[5:0],3'd0} : write0_addr_reg2[8:0],FU0_data|{DATA_WIDTH{init}},write0_wen_reg2 & FU0Hit || init,
-  init ? {initCount[5:0],3'd1} : write1_addr_reg2[8:0],FU1_data|{DATA_WIDTH{init}},write1_wen_reg2 & FU1Hit || init,
-  init ? {initCount[5:0],3'd2} : write2_addr_reg2[8:0],FU2_data|{DATA_WIDTH{init}},write2_wen_reg2 & FU2Hit || init,
-  init ? {initCount[5:0],3'd3} : write3_addr_reg2[8:0],FU3_data|{DATA_WIDTH{init}},write3_wen_reg2 & FU3Hit || init,
+  init ? {initCount[5:0],3'd0} : write0_addr_reg2[8:0],FU0Data|{DATA_WIDTH{init}},write0_wen_reg2 & FU0Hit || init,
+  init ? {initCount[5:0],3'd1} : write1_addr_reg2[8:0],FU1Data|{DATA_WIDTH{init}},write1_wen_reg2 & FU1Hit || init,
+  init ? {initCount[5:0],3'd2} : write2_addr_reg2[8:0],FU2Data|{DATA_WIDTH{init}},write2_wen_reg2 & FU2Hit || init,
+  init ? {initCount[5:0],3'd3} : write3_addr_reg2[8:0],FU3Data|{DATA_WIDTH{init}},write3_wen_reg2 & FU3Hit || init,
   init ? {initCount[5:0],3'd4} : write4_addr_reg2[8:0],{DATA_WIDTH{init}},init,
   init ? {initCount[5:0],3'd5} : write5_addr_reg2[8:0],{DATA_WIDTH{init}},init,
   write_addr_shr[5:0],{DATA_WIDTH{~write_addr_shr[5]}},write_wen_shr&~doStall&~stall&~init&~except

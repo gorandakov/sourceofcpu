@@ -4990,10 +4990,10 @@ module backend(
   .p3_adata(lsr_wr_data[3]),.p3_LSQ(dc_LSQ[3]),.p3_en(dc_rdEn[3]),.p3_rsEn(dc_rsEn[3]),.p3_smpc(p_repl[3]),.p3_lsfwd(p_lsfwd[3]),
   .p4_adata(lsr_wr_data[4]),.p4_LSQ(p_LSQ[4]),.p4_en(dc_wrEn[0]),
   .p5_adata(lsr_wr_data[5]),.p5_LSQ(p_LSQ[5]),.p5_en(dc_wrEn[1]),
-  .FU0Hit(FU0Hit),
-  .FU1Hit(FU1Hit),
-  .FU2Hit(FU2Hit),
-  .FU3Hit(FU3Hit),
+  .FU0Hit(FU0Hit),.FU0Data(dc_rdataA[0]),//not rdat[0]
+  .FU1Hit(FU1Hit),.FU1Data(dc_rdataA[1]),//
+  .FU2Hit(FU2Hit),.FU2Data(dc_rdataA[2]),//
+  .FU3Hit(FU3Hit),.FU3Data(dc_rdataA[3]),//
   .st_stall(miss_pause_agu_reg2|bus_holds_agu_reg2),
   .st0_adata(st0_adata),.st0_en(st0_en),.st0_bank1(st0_bank1),.st0_bgn_ben(st0_bgn_ben),.st0_end_ben(st0_end_ben),.st0_data(st0_data),
   .st0_pbit(st0_pbit),
