@@ -434,12 +434,12 @@ module fun_lsq(
   .read4A_data(LSQ_dataA4),.read4A_enOut(LSQ_enA[4]),
   .read5A_data(LSQ_dataA5),.read5A_enOut(LSQ_enA[5]),
 
-  .read0A_DATA(dat0_LSQ),.read0A_enD(chk0_LSQ),
-  .read1A_DATA(dat1_LSQ),.read1A_enD(chk1_LSQ),
-  .read2A_DATA(dat2_LSQ),.read2A_enD(chk2_LSQ),
-  .read3A_DATA(dat3_LSQ),.read3A_enD(chk3_LSQ),
-  .read4A_DATA(dat4_LSQ),.read4A_enD(chk4_LSQ),
-  .read5A_DATA(dat5_LSQ),.read5A_enD(chk5_LSQ),
+  .read0A_DATA(dat0_LSQ),.read0A_dEn(chk0_LSQ),
+  .read1A_DATA(dat1_LSQ),.read1A_dEn(chk1_LSQ),
+  .read2A_DATA(dat2_LSQ),.read2A_dEn(chk2_LSQ),
+  .read3A_DATA(dat3_LSQ),.read3A_dEn(chk3_LSQ),
+  .read4A_DATA(dat4_LSQ),.read4A_dEn(chk4_LSQ),
+  .read5A_DATA(dat5_LSQ),.read5A_dEn(chk5_LSQ),
   
   .readA_conflIn_l(LDQ_ldconfl),
   .readA_conflInMSI(LDQ_insconfl),

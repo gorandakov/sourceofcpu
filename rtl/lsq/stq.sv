@@ -41,8 +41,8 @@ module stq(
   upd1_WQ,upd1_en,upd1_data,upd1_pbit,//upd1_sz,
   pse0_en,
   pse1_en,
-  wb1_adata,wb1_LSQ,wb1_data,wb1_pbit,wb1_bnkEn,wb1_en,wb1_chk,
-  wb0_adata,wb0_LSQ,wb0_data,wb0_pbit,wb0_bnkEn,wb0_en,wb0_chk,wb0_way,
+  wb1_adata,wb1_LSQ,wb1_data,wb1_pbit,wb1_bnkEn,wb1_bnkEnS,wb1_en,wb1_chk,
+  wb0_adata,wb0_LSQ,wb0_data,wb0_pbit,wb0_bnkEn,wb0_bnkEnS,wb0_en,wb0_chk,wb0_way,
   WLN0_en,WLN0_adata,WLN0_data,WLN0_pbit,
   WLN1_en,WLN1_adata,WLN1_data,WLN1_pbit
   );
