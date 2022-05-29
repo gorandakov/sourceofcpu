@@ -122,8 +122,8 @@ module stq(
   output [8:0] wb1_LSQ;
   output [135:0] wb1_data;
   output reg [1:0] wb1_pbit;
-  output reg [16:0] wb1_bnkEn;
-  output reg [16:0] wb1_bnkEnS;
+  output [16:0] wb1_bnkEn;
+  output [16:0] wb1_bnkEnS;
   output wb1_en;
   output [5:0] wb1_chk;
 
@@ -131,8 +131,8 @@ module stq(
   output [8:0] wb0_LSQ;
   output [135:0] wb0_data;
   output reg [1:0] wb0_pbit;
-  output reg [16:0] wb0_bnkEn;
-  output reg [16:0] wb0_bnkEnS;
+  output [16:0] wb0_bnkEn;
+  output [16:0] wb0_bnkEnS;
   output wb0_en;
   output [5:0] wb0_chk;
   output [1:0] wb0_way;
@@ -640,10 +640,10 @@ module stq(
 	  assign wb1_pbitW[0]=chk_wb1[a] ? chk_data[a][32] : 1'bz;
 	  assign wb0_pbitW[1]=chk_wb[a] ? chk_data[a][98] : 1'bz;
 	  assign wb1_pbitW[1]=chk_wb1[a] ? chk_data[a][98] : 1'bz;
-	  assign wb0_bytesW=chk_wb[a] ?  chk_bytes[a]&{17{~|chk_enD[a]&~chk_wb0_has}} : 17'bz;
-	  assign wb1_bytesW=chk_wb1[a] ? chk_bytes[a]&{17{~|chk_enD[a]&~chk_wb1_has}} : 17'bz;
-	  assign wb0_bytesX=chk_wb[a] ?  chk_bytes[a]&{17{|chk_enD[a]|chk_wb0_has}} : 17'bz;
-	  assign wb1_bytesX=chk_wb1[a] ? chk_bytes[a]&{17{|chk_enD[a]|chk_wb1_has}} : 17'bz;
+	  assign wb0_bnkEn=chk_wb_reg2[a] ?  chk_bytes_reg2[a]&{17{~|chk_enD[a]&~chk_wb0_has_reg2}} : 17'bz;
+	  assign wb1_bnkEn=chk_wb1_reg2[a] ? chk_bytes_reg2[a]&{17{~|chk_enD[a]&~chk_wb1_has_reg2}} : 17'bz;
+	  assign wb0_bnkEnS=chk_wb_reg2[a] ?  chk_bytes_reg2[a]&{17{|chk_enD[a]|chk_wb0_has_reg2}} : 17'bz;
+	  assign wb1_bnkEnS=chk_wb1_reg2[a] ? chk_bytes_reg2[a]&{17{|chk_enD[a]|chk_wb1_has_reg2}} : 17'bz;
       end
   endgenerate
   assign wb0_adataW=chk_wb0_has ? {`lsaddr_width{1'bz}} : {`lsaddr_width{1'b0}};
@@ -652,8 +652,10 @@ module stq(
   assign wb1_dataW=chk_wb1_has ? 136'bz : 136'b0;
   assign wb0_pbitW=chk_wb0_has ? 2'bz : 2'b0;
   assign wb1_pbitW=chk_wb1_has ? 2'bz : 2'b0;
-  assign wb0_bytesW=chk_wb0_has ? 17'bz : 17'b0;
-  assign wb1_bytesW=chk_wb1_has ? 17'bz : 17'b0;
+  assign wb0_bnkEn=chk_wb0_has_reg2 ? 17'bz : 17'b0;
+  assign wb1_bnkEn=chk_wb1_has_reg2 ? 17'bz : 17'b0;
+  assign wb0_bnkEnS=chk_wb0_has_reg2 ? 17'bz : 17'b0;
+  assign wb1_bnkEns=chk_wb1_has_reg2 ? 17'bz : 17'b0;
 
 
   assign wb0_data[31:0]=wb0_adata[`lsaddr_sz]==5'h10 && wb0_adata[`lsaddr_low]==2'd1 ? {24'b0,wb0_dataW_reg[15:8]} :32'bz;
@@ -868,9 +870,5 @@ module stq(
       wb1_dataW_reg<=wb1_dataW;
       wb0_pbit<=wb0_pbitW;
       wb1_pbit<=wb1_pbitW;
-      wb0_bnkEn<=wb0_bytesW;
-      wb1_bnkEn<=wb1_bytesW;
-      wb0_bnkEnS<=wb0_bytesX;
-      wb1_bnkEnS<=wb1_bytesX;
   end
 endmodule
