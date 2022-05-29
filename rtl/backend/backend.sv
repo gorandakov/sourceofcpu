@@ -1018,6 +1018,8 @@ module backend(
   wire [1:0]               lso2_pbit;
   wire [16:0]               lso2_bnkread;
   wire [16:0]               lso2_bnkread2;
+  reg  [1:0]               lso_pbit_reg;
+  reg  [1:0]               lso2_pbit_reg;
   
   wire [2:0][IN_REG_WIDTH-1:0] rrfAW;
   wire [2:0][IN_REG_WIDTH-1:0] rrfBW;
@@ -7631,12 +7633,16 @@ dcache1 L1D_mod(
 	  lso2_en_reg<=0;
 	  lso_data_reg<=0;
 	  lso2_data_reg<=0;
+	  lso_pbit_reg<=0;
+	  lso2_pbit_reg<=0;
       end else begin
 	  lso_en_reg<=lso_en;
 	  lso_way_reg<=lso_way;
 	  lso2_en_reg<=0;
 	  lso_data_reg<=lso_data;
 	  lso2_data_reg<=lso2_data;
+	  lso_pbit_reg<=lso_pbit;
+	  lso2_pbit_reg<=lso2_pbit;
       end
   end
  
