@@ -71,7 +71,8 @@ module jump_decoder(
   wire isRet;
   
   wire isJalR;
-  
+ 
+  wire isShlAddMulLike; 
   wire isBasicSysInstr;
   
   reg error;
@@ -163,7 +164,7 @@ module jump_decoder(
           popCallStack=1'b1;
           jumpType=5'b10001;
       end else if (isShlAddMulLike&&instr[28]) begin 
-          jumptype={1'b0,4'h0};
+          jumpType={1'b0,4'h0};
 	  constant={{39{instr[27]}},instr[27:8],1'b0};
       end else if (isBasicSysInstr) begin
 //          if (instr[15:8]==8'hff && ~magic[0]) halt=1'b1;

@@ -158,16 +158,16 @@ module stq(
   wire [5:0] WLN0_WQ;
   wire [5:0] WLN1_WQ;
 	  
-  reg [5:0] wb0_chk_reg;
-  reg [5:0] wb0_chk_reg2;
-  reg  wb0_chk_has_reg;
-  reg  wb0_chk_has_reg2;
+  reg [5:0] chk_wb0_reg;
+  reg [5:0] chk_wb0_reg2;
+  reg  chk_wb0_has_reg;
+  reg  chk_wb0_has_reg2;
   reg [5:0][16:0] chk_bytes_reg;
   reg [5:0][16:0] chk_bytes_reg2;
-  reg [5:0] wb1_chk_reg;
-  reg [5:0] wb1_chk_reg2;
-  reg  wb1_chk_has_reg;
-  reg  wb1_chk_has_reg2;
+  reg [5:0] chk_wb1_reg;
+  reg [5:0] chk_wb1_reg2;
+  reg  chk_wb1_has_reg;
+  reg  chk_wb1_has_reg2;
   
   wire [7:0] chk0_subBNK;
   wire [7:0] chk1_subBNK;
@@ -651,9 +651,9 @@ module stq(
 	  assign wb1_pbitW[0]=chk_wb1[a] ? chk_data[a][32] : 1'bz;
 	  assign wb0_pbitW[1]=chk_wb[a] ? chk_data[a][98] : 1'bz;
 	  assign wb1_pbitW[1]=chk_wb1[a] ? chk_data[a][98] : 1'bz;
-	  assign wb0_bnkEn=chk_wb_reg2[a] ?  chk_bytes_reg2[a]&{17{~|chk_enD[a]&~chk_wb0_has_reg2}} : 17'bz;
+	  assign wb0_bnkEn=chk_wb0_reg2[a] ?  chk_bytes_reg2[a]&{17{~|chk_enD[a]&~chk_wb0_has_reg2}} : 17'bz;
 	  assign wb1_bnkEn=chk_wb1_reg2[a] ? chk_bytes_reg2[a]&{17{~|chk_enD[a]&~chk_wb1_has_reg2}} : 17'bz;
-	  assign wb0_bnkEnS=chk_wb_reg2[a] ?  chk_bytes_reg2[a]&{17{|chk_enD[a]|chk_wb0_has_reg2}} : 17'bz;
+	  assign wb0_bnkEnS=chk_wb0_reg2[a] ?  chk_bytes_reg2[a]&{17{|chk_enD[a]|chk_wb0_has_reg2}} : 17'bz;
 	  assign wb1_bnkEnS=chk_wb1_reg2[a] ? chk_bytes_reg2[a]&{17{|chk_enD[a]|chk_wb1_has_reg2}} : 17'bz;
       end
   endgenerate
@@ -666,7 +666,7 @@ module stq(
   assign wb0_bnkEn=chk_wb0_has_reg2 ? 17'bz : 17'b0;
   assign wb1_bnkEn=chk_wb1_has_reg2 ? 17'bz : 17'b0;
   assign wb0_bnkEnS=chk_wb0_has_reg2 ? 17'bz : 17'b0;
-  assign wb1_bnkEns=chk_wb1_has_reg2 ? 17'bz : 17'b0;
+  assign wb1_bnkEnS=chk_wb1_has_reg2 ? 17'bz : 17'b0;
 
 
   assign wb0_data[31:0]=wb0_adata[`lsaddr_sz]==5'h10 && wb0_adata[`lsaddr_low]==2'd1 ? {24'b0,wb0_dataW_reg[15:8]} :32'bz;
@@ -850,18 +850,16 @@ module stq(
 	  rsDoStall<=4'b0000;
 	  wb0_adata<=0;
 	  wb1_adata<=0;
-	  wb0_chk_reg<=0;
-	  wb0_chk_reg2<=0;
-	  wb0_chk_has_reg<=0;
-	  wb0_chk_has_reg2<=0;
-	  wb0_bytes_reg<=0;
-	  wb0_bytes_reg2<=0;
-	  wb1_chk_reg<=0;
-	  wb1_chk_reg2<=0;
-	  wb1_chk_has_reg<=0;
-	  wb1_chk_has_reg2<=0;
-	  wb1_bytes_reg<=0;
-	  wb1_bytes_reg2<=0;
+	  chk_wb0_reg<=0;
+	  chk_wb0_reg2<=0;
+	  chk_wb0_has_reg<=0;
+	  chk_wb0_has_reg2<=0;
+	  chk_bytes_reg<=0;
+	  chk_bytes_reg2<=0;
+	  chk_wb1_reg<=0;
+	  chk_wb1_reg2<=0;
+	  chk_wb1_has_reg<=0;
+	  chk_wb1_has_reg2<=0;
       end else begin
 	  wb0_adata<=wb0_adataW;
 	  wb1_adata<=wb1_adataW;
@@ -888,18 +886,16 @@ module stq(
 	      rsDoStall[2]<=wb1_en && wb0_way==2'd2;
 	      rsDoStall[3]<=wb1_en;
           end
-	  wb0_chk_reg<=wb0_chk;
-	  wb0_chk_reg2<=wb0_chk_reg;
-	  wb0_chk_has_reg<=wb0_chk_has;
-	  wb0_chk_has_reg2<=wb0_chk_has_reg;
-	  wb0_bytes_reg<=wb0_bytes;
-	  wb0_bytes_reg2<=wb0_bytes_reg;
-	  wb1_chk_reg<=wb1_chk;
-	  wb1_chk_reg2<=wb1_chk_reg;
-	  wb1_chk_has_reg<=wb1_chk_has;
-	  wb1_chk_has_reg2<=wb1_chk_has_reg;
-	  wb1_bytes_reg<=wb1_bytes;
-	  wb1_bytes_reg2<=wb1_bytes_reg;
+	  chk_wb0_reg<=chk_wb0;
+	  chk_wb0_reg2<=chk_wb0_reg;
+	  chk_wb0_has_reg<=chk_wb0_has;
+	  chk_wb0_has_reg2<=chk_wb0_has_reg;
+	  chk_bytes_reg<=chk_bytes;
+	  chk_bytes_reg2<=chk_bytes_reg;
+	  chk_wb1_reg<=chk_wb1;
+	  chk_wb1_reg2<=chk_wb1_reg;
+	  chk_wb1_has_reg<=chk_wb1_has;
+	  chk_wb1_has_reg2<=chk_wb1_has_reg;
       end
       wb0_dataW_reg<=wb0_dataW;
       wb1_dataW_reg<=wb1_dataW;
