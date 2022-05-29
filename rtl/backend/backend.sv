@@ -5565,7 +5565,7 @@ dcache1 L1D_mod(
           assign FU[3][7+8*q:8*q]=lso2_brdbanks[q] && ~lso2_en_reg ? lso2_data_reg[7+8*q:8*q] : 8'bz;
           assign FU[3][7+8*q:8*q]=(~lso2_brdbanks2[q] & ~lso2_brdbanks[q]) &&~lso2_en_reg ? 8'b0 : 8'bz;
       end
-      for (q1=0;q1<16;q1=q1+1) begin : data_general
+      for (q1=0;q1<17;q1=q1+1) begin : data_general
           assign dc_rdat[0][7+8*q1:8*q1]=lso_brdbanks2[q1] & lso_way_reg[0]||~lso_en_reg ? dc_rdataA[0][7+8*q1:8*q1] : 8'bz;
           assign dc_rdat[0][7+8*q1:8*q1]=lso_brdbanks[q1] && lso_way_reg[0] && ~lso_en_reg ? lso_data_reg[7+8*q1:8*q1] : 8'bz;
           assign dc_rdat[0][7+8*q1:8*q1]=(~lso_brdbanks2[q1] & ~lso_brdbanks[q1] || ~lso_way_reg[0]) &&~lso_en_reg ? 8'b0 : 8'bz;
@@ -5580,44 +5580,44 @@ dcache1 L1D_mod(
           assign dc_rdat[3][7+8*q1:8*q1]=(~lso2_brdbanks2[q1] & ~lso2_brdbanks[q1]) &&~lso2_en_reg ? 8'b0 : 8'bz;
       end
   endgenerate
-  assign FU[0][64]=lso_brdbanks2[16] & lso_way_reg[0] || lso_en_reg              ? dc_pdataA[0][0] : 1'bz;
-  assign FU[0][64]=lso_brdbanks[16]  & lso_way_reg[0] && ~lso_en_reg             ? lso_pbit_reg[0] : 1'bz;
-  assign FU[0][64]=(~lso_brdbanks2[16] & ~lso_brdbanks[16] || ~lso_way_reg[0]) && ~lso_en_reg ? 1'b0 : 1'bz;
-  assign FU[1][64]=lso_brdbanks2[16] & lso_way_reg[1] || lso_en_reg              ? dc_pdataA[1][0] : 1'bz;
-  assign FU[1][64]=lso_brdbanks[16]  & lso_way_reg[1] && ~lso_en_reg             ? lso_pbit_reg[0] : 1'bz;
-  assign FU[1][64]=(~lso_brdbanks2[16] & ~lso_brdbanks[16] || ~lso_way_reg[1]) && ~lso_en_reg ? 1'b0 : 1'bz;
-  assign FU[2][64]=lso_brdbanks2[16] & lso_way_reg[2] || lso_en_reg              ? dc_pdataA[2][0] : 1'bz;
-  assign FU[2][64]=lso_brdbanks[16]  & lso_way_reg[2] && ~lso_en_reg             ? lso_pbit_reg[0] : 1'bz;
-  assign FU[2][64]=(~lso_brdbanks2[16] & ~lso_brdbanks[16] || ~lso_way_reg[2]) && ~lso_en_reg ? 1'b0 : 1'bz;
-  assign FU[3][64]=lso2_brdbanks2[16] || lso2_en_reg              ? dc_pdataA[3][0] : 1'bz;
-  assign FU[3][64]=lso2_brdbanks[16]  && ~lso2_en_reg             ? lso2_pbit_reg[0] : 1'bz;
-  assign FU[3][64]=(~lso2_brdbanks2[16] & ~lso2_brdbanks[16]) && ~lso2_en_reg ? 1'b0 : 1'bz;
+  assign FU[0][64]=lso_brdbanks2[0] & lso_way_reg[0] || lso_en_reg              ? dc_pdataA[0][0] : 1'bz;
+  assign FU[0][64]=lso_brdbanks[0]  & lso_way_reg[0] && ~lso_en_reg             ? lso_pbit_reg[0] : 1'bz;
+  assign FU[0][64]=(~lso_brdbanks2[0] & ~lso_brdbanks[0] || ~lso_way_reg[0]) && ~lso_en_reg ? 1'b0 : 1'bz;
+  assign FU[1][64]=lso_brdbanks2[0] & lso_way_reg[1] || lso_en_reg              ? dc_pdataA[1][0] : 1'bz;
+  assign FU[1][64]=lso_brdbanks[0]  & lso_way_reg[1] && ~lso_en_reg             ? lso_pbit_reg[0] : 1'bz;
+  assign FU[1][64]=(~lso_brdbanks2[0] & ~lso_brdbanks[0] || ~lso_way_reg[1]) && ~lso_en_reg ? 1'b0 : 1'bz;
+  assign FU[2][64]=lso_brdbanks2[0] & lso_way_reg[2] || lso_en_reg              ? dc_pdataA[2][0] : 1'bz;
+  assign FU[2][64]=lso_brdbanks[0]  & lso_way_reg[2] && ~lso_en_reg             ? lso_pbit_reg[0] : 1'bz;
+  assign FU[2][64]=(~lso_brdbanks2[0] & ~lso_brdbanks[0] || ~lso_way_reg[2]) && ~lso_en_reg ? 1'b0 : 1'bz;
+  assign FU[3][64]=lso2_brdbanks2[0] || lso2_en_reg              ? dc_pdataA[3][0] : 1'bz;
+  assign FU[3][64]=lso2_brdbanks[0]  && ~lso2_en_reg             ? lso2_pbit_reg[0] : 1'bz;
+  assign FU[3][64]=(~lso2_brdbanks2[0] & ~lso2_brdbanks[0]) && ~lso2_en_reg ? 1'b0 : 1'bz;
 
-  assign dc_pdat[0][0]=lso_brdbanks2[16] & lso_way_reg[0] || lso_en_reg              ? dc_pdataA[0][0] : 1'bz;
-  assign dc_pdat[0][0]=lso_brdbanks[16]  & lso_way_reg[0] && ~lso_en_reg             ? lso_pbit_reg[0] : 1'bz;
-  assign dc_pdat[0][0]=(~lso_brdbanks2[16] & ~lso_brdbanks[16] || ~lso_way_reg[0]) && ~lso_en_reg ? 1'b0 : 1'bz;
-  assign dc_pdat[1][0]=lso_brdbanks2[16] & lso_way_reg[1] || lso_en_reg              ? dc_pdataA[1][0] : 1'bz;
-  assign dc_pdat[1][0]=lso_brdbanks[16]  & lso_way_reg[1] && ~lso_en_reg             ? lso_pbit_reg[0] : 1'bz;
-  assign dc_pdat[1][0]=(~lso_brdbanks2[16] & ~lso_brdbanks[16] || ~lso_way_reg[1]) && ~lso_en_reg ? 1'b0 : 1'bz;
-  assign dc_pdat[2][0]=lso_brdbanks2[16] & lso_way_reg[2] || lso_en_reg              ? dc_pdataA[2][0] : 1'bz;
-  assign dc_pdat[2][0]=lso_brdbanks[16]  & lso_way_reg[2] && ~lso_en_reg             ? lso_pbit_reg[0] : 1'bz;
-  assign dc_pdat[2][0]=(~lso_brdbanks2[16] & ~lso_brdbanks[16] || ~lso_way_reg[2]) && ~lso_en_reg ? 1'b0 : 1'bz;
-  assign dc_pdat[3][0]=lso2_brdbanks2[16] || lso2_en_reg              ? dc_pdataA[3][0] : 1'bz;
-  assign dc_pdat[3][0]=lso2_brdbanks[16]  && ~lso2_en_reg             ? lso2_pbit_reg[0] : 1'bz;
-  assign dc_pdat[3][0]=(~lso2_brdbanks2[16] & ~lso2_brdbanks[16]) && ~lso2_en_reg ? 1'b0 : 1'bz;
+  assign dc_pdat[0][0]=lso_brdbanks2[0] & lso_way_reg[0] || lso_en_reg              ? dc_pdataA[0][0] : 1'bz;
+  assign dc_pdat[0][0]=lso_brdbanks[0]  & lso_way_reg[0] && ~lso_en_reg             ? lso_pbit_reg[0] : 1'bz;
+  assign dc_pdat[0][0]=(~lso_brdbanks2[0] & ~lso_brdbanks[0] || ~lso_way_reg[0]) && ~lso_en_reg ? 1'b0 : 1'bz;
+  assign dc_pdat[1][0]=lso_brdbanks2[0] & lso_way_reg[1] || lso_en_reg              ? dc_pdataA[1][0] : 1'bz;
+  assign dc_pdat[1][0]=lso_brdbanks[0]  & lso_way_reg[1] && ~lso_en_reg             ? lso_pbit_reg[0] : 1'bz;
+  assign dc_pdat[1][0]=(~lso_brdbanks2[0] & ~lso_brdbanks[0] || ~lso_way_reg[1]) && ~lso_en_reg ? 1'b0 : 1'bz;
+  assign dc_pdat[2][0]=lso_brdbanks2[0] & lso_way_reg[2] || lso_en_reg              ? dc_pdataA[2][0] : 1'bz;
+  assign dc_pdat[2][0]=lso_brdbanks[0]  & lso_way_reg[2] && ~lso_en_reg             ? lso_pbit_reg[0] : 1'bz;
+  assign dc_pdat[2][0]=(~lso_brdbanks2[0] & ~lso_brdbanks[0] || ~lso_way_reg[2]) && ~lso_en_reg ? 1'b0 : 1'bz;
+  assign dc_pdat[3][0]=lso2_brdbanks2[0] || lso2_en_reg              ? dc_pdataA[3][0] : 1'bz;
+  assign dc_pdat[3][0]=lso2_brdbanks[0]  && ~lso2_en_reg             ? lso2_pbit_reg[0] : 1'bz;
+  assign dc_pdat[3][0]=(~lso2_brdbanks2[0] & ~lso2_brdbanks[0]) && ~lso2_en_reg ? 1'b0 : 1'bz;
 
-  assign dc_pdat[0][1]=lso_brdbanks2[16] & lso_way_reg[0] || lso_en_reg              ? dc_pdataA[0][1] : 1'bz;
-  assign dc_pdat[0][1]=lso_brdbanks[16]  & lso_way_reg[0] && ~lso_en_reg             ? lso_pbit_reg[1] : 1'bz;
-  assign dc_pdat[0][1]=(~lso_brdbanks2[16] & ~lso_brdbanks[16] || ~lso_way_reg[0]) && ~lso_en_reg ? 1'b0 : 1'bz;
-  assign dc_pdat[1][1]=lso_brdbanks2[16] & lso_way_reg[1] || lso_en_reg              ? dc_pdataA[1][1] : 1'bz;
-  assign dc_pdat[1][1]=lso_brdbanks[16]  & lso_way_reg[1] && ~lso_en_reg             ? lso_pbit_reg[1] : 1'bz;
-  assign dc_pdat[1][1]=(~lso_brdbanks2[16] & ~lso_brdbanks[16] || ~lso_way_reg[1]) && ~lso_en_reg ? 1'b0 : 1'bz;
-  assign dc_pdat[2][1]=lso_brdbanks2[16] & lso_way_reg[2] || lso_en_reg              ? dc_pdataA[2][1] : 1'bz;
-  assign dc_pdat[2][1]=lso_brdbanks[16]  & lso_way_reg[2] && ~lso_en_reg             ? lso_pbit_reg[1] : 1'bz;
-  assign dc_pdat[2][1]=(~lso_brdbanks2[16] & ~lso_brdbanks[16] || ~lso_way_reg[2]) && ~lso_en_reg ? 1'b0 : 1'bz;
-  assign dc_pdat[3][1]=lso2_brdbanks2[16] || lso2_en_reg              ? dc_pdataA[3][1] : 1'bz;
-  assign dc_pdat[3][1]=lso2_brdbanks[16]  && ~lso2_en_reg             ? lso2_pbit_reg[1] : 1'bz;
-  assign dc_pdat[3][1]=(~lso2_brdbanks2[16] & ~lso2_brdbanks[16]) && ~lso2_en_reg ? 1'b0 : 1'bz;
+  assign dc_pdat[0][1]=lso_brdbanks2[2] & lso_way_reg[0] || lso_en_reg              ? dc_pdataA[0][1] : 1'bz;
+  assign dc_pdat[0][1]=lso_brdbanks[2]  & lso_way_reg[0] && ~lso_en_reg             ? lso_pbit_reg[1] : 1'bz;
+  assign dc_pdat[0][1]=(~lso_brdbanks2[2] & ~lso_brdbanks[2] || ~lso_way_reg[0]) && ~lso_en_reg ? 1'b0 : 1'bz;
+  assign dc_pdat[1][1]=lso_brdbanks2[2] & lso_way_reg[1] || lso_en_reg              ? dc_pdataA[1][1] : 1'bz;
+  assign dc_pdat[1][1]=lso_brdbanks[2]  & lso_way_reg[1] && ~lso_en_reg             ? lso_pbit_reg[1] : 1'bz;
+  assign dc_pdat[1][1]=(~lso_brdbanks2[2] & ~lso_brdbanks[2] || ~lso_way_reg[1]) && ~lso_en_reg ? 1'b0 : 1'bz;
+  assign dc_pdat[2][1]=lso_brdbanks2[2] & lso_way_reg[2] || lso_en_reg              ? dc_pdataA[2][1] : 1'bz;
+  assign dc_pdat[2][1]=lso_brdbanks[2]  & lso_way_reg[2] && ~lso_en_reg             ? lso_pbit_reg[1] : 1'bz;
+  assign dc_pdat[2][1]=(~lso_brdbanks2[2] & ~lso_brdbanks[2] || ~lso_way_reg[2]) && ~lso_en_reg ? 1'b0 : 1'bz;
+  assign dc_pdat[3][1]=lso2_brdbanks2[2] || lso2_en_reg              ? dc_pdataA[3][1] : 1'bz;
+  assign dc_pdat[3][1]=lso2_brdbanks[2]  && ~lso2_en_reg             ? lso2_pbit_reg[1] : 1'bz;
+  assign dc_pdat[3][1]=(~lso2_brdbanks2[2] & ~lso2_brdbanks[2]) && ~lso2_en_reg ? 1'b0 : 1'bz;
 
 //  assign FU0=dc_rdataA[0][63:0];
 //  assign FU1=dc_rdataA[1][63:0];

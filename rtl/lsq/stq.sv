@@ -157,6 +157,17 @@ module stq(
 
   wire [5:0] WLN0_WQ;
   wire [5:0] WLN1_WQ;
+	  
+  reg [5:0] wb0_chk_reg;
+  reg [5:0] wb0_chk_reg2;
+  reg  wb0_chk_has_reg;
+  reg  wb0_chk_has_reg2;
+  reg [5:0][16:0] chk_bytes_reg;
+  reg [5:0][16:0] chk_bytes_reg2;
+  reg [5:0] wb1_chk_reg;
+  reg [5:0] wb1_chk_reg2;
+  reg  wb1_chk_has_reg;
+  reg  wb1_chk_has_reg2;
   
   wire [7:0] chk0_subBNK;
   wire [7:0] chk1_subBNK;
@@ -839,6 +850,18 @@ module stq(
 	  rsDoStall<=4'b0000;
 	  wb0_adata<=0;
 	  wb1_adata<=0;
+	  wb0_chk_reg<=0;
+	  wb0_chk_reg2<=0;
+	  wb0_chk_has_reg<=0;
+	  wb0_chk_has_reg2<=0;
+	  wb0_bytes_reg<=0;
+	  wb0_bytes_reg2<=0;
+	  wb1_chk_reg<=0;
+	  wb1_chk_reg2<=0;
+	  wb1_chk_has_reg<=0;
+	  wb1_chk_has_reg2<=0;
+	  wb1_bytes_reg<=0;
+	  wb1_bytes_reg2<=0;
       end else begin
 	  wb0_adata<=wb0_adataW;
 	  wb1_adata<=wb1_adataW;
@@ -865,6 +888,18 @@ module stq(
 	      rsDoStall[2]<=wb1_en && wb0_way==2'd2;
 	      rsDoStall[3]<=wb1_en;
           end
+	  wb0_chk_reg<=wb0_chk;
+	  wb0_chk_reg2<=wb0_chk_reg;
+	  wb0_chk_has_reg<=wb0_chk_has;
+	  wb0_chk_has_reg2<=wb0_chk_has_reg;
+	  wb0_bytes_reg<=wb0_bytes;
+	  wb0_bytes_reg2<=wb0_bytes_reg;
+	  wb1_chk_reg<=wb1_chk;
+	  wb1_chk_reg2<=wb1_chk_reg;
+	  wb1_chk_has_reg<=wb1_chk_has;
+	  wb1_chk_has_reg2<=wb1_chk_has_reg;
+	  wb1_bytes_reg<=wb1_bytes;
+	  wb1_bytes_reg2<=wb1_bytes_reg;
       end
       wb0_dataW_reg<=wb0_dataW;
       wb1_dataW_reg<=wb1_dataW;
