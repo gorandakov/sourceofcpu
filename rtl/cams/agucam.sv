@@ -213,23 +213,6 @@ module agucam(
   input mOp2_lsflag;
   input [3:0] mOp2_attr;
 
-  input conflict3;
-  input [PADDR_WIDTH-9:0] mOp3_addrEven;
-  input [PADDR_WIDTH-9:0] mOp3_addrOdd;
-  input [REG_WIDTH-1:0] mOp3_regNo;
-  input [1:0] mOp3_type;
-  input mOp3_odd;
-  input [1:0] mOp3_low;
-  input [4:0] mOp3_sz;
-  //input mOp3_invtlb;
-  input mOp3_split;
-  input [4:0] mOp3_bank0;
-  input [9:0] mOp3_II;
-  input [5:0] mOp3_WQ;
-  input [135:0] mOp3_data;
-  input [4:0] mOp3_bread;
-  input [1:0] mOp3_pbit;
-
   output [VADDR_WIDTH-1:0] mOpR_addrMain;
   output [PADDR_WIDTH-9:0] mOpR_addrEven;
   output [PADDR_WIDTH-9:0] mOpR_addrOdd;
@@ -535,7 +518,7 @@ module agucam(
 	  if (rst) confl_mask<=4'b1111;
 	  else if (doStep &~init || except)  begin
 	      confl_mask<=4'b1111;
-	  end else if (~initi && !rsStall) begin
+	  end else if (~init && !rsStall) begin
 	      if (cmore[1] && read_clkEn) confl_mask<=confl_mask&~sel;
 	      else if (wen && count[0]) begin
 	         if (read_clkEn) confl_mask<=~sel;

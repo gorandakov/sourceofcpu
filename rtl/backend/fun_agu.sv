@@ -1289,7 +1289,7 @@ module agu_block(
 
   rs_write_forward #(65) nxtBase1(
   clk,rst,
-  ~u1_clkEn|rsPause[0],
+  ~u1_clkEn|rsStall[0],
   u1_base,uu_base1,
   u1_base_fufwd,u1_base_fuufwd,
   FU0,FU0_reg,
@@ -1306,7 +1306,7 @@ module agu_block(
   
   rs_write_forward #(65) nxtIndex1(
   clk,rst,
-  ~u1_clkEn|rsPause[0],
+  ~u1_clkEn|rsStall[0],
   u1_index,uu_index1,
   u1_index_fufwd,u1_index_fuufwd,
   FU0,FU0_reg,
@@ -1323,7 +1323,7 @@ module agu_block(
   
   rs_write_forward #(65) nxtBase2(
   clk,rst,
-  ~u2_clkEn|rsPause[1],
+  ~u2_clkEn|rsStall[1],
   u2_base,uu_base2,
   u2_base_fufwd,u2_base_fuufwd,
   FU0,FU0_reg,
@@ -1340,7 +1340,7 @@ module agu_block(
   
   rs_write_forward #(65) nxtIndex2(
   clk,rst,
-  ~u2_clkEn|rsPause[1],
+  ~u2_clkEn|rsStall[1],
   u2_index,uu_index2,
   u2_index_fufwd,u2_index_fuufwd,
   FU0,FU0_reg,
@@ -1358,7 +1358,7 @@ module agu_block(
   
   rs_write_forward #(65) nxtBase3(
   clk,rst,
-  ~u3_clkEn|rsPause[2],
+  ~u3_clkEn|rsStall[2],
   u3_base,uu_base3,
   u3_base_fufwd,u3_base_fuufwd,
   FU0,FU0_reg,
@@ -1375,7 +1375,7 @@ module agu_block(
   
   rs_write_forward #(65) nxtIndex3(
   clk,rst,
-  ~u3_clkEn|rsPause[2],
+  ~u3_clkEn|rsStall[2],
   u3_index,uu_index3,
   u3_index_fufwd,u3_index_fuufwd,
   FU0,FU0_reg,
@@ -1962,7 +1962,7 @@ module agu_block(
   .doStall(rec_stall),
   .bus_hold(bus_holds_agu_reg|miss_holds_agu_reg),
   .pause_miss(miss_pause_agu),
-  .rsStall(rsPause[3]),
+  .rsStall(rsStall[3]),
   .mOp0_en(rec_en),
   .mOp0_thread(1'b0),
   .mOp0_addrMain(rec_addr),
@@ -2924,7 +2924,6 @@ module agu_block(
       miss_holds_agu_reg<=miss_holds_agu;
       miss_holds_agu_reg2<=miss_holds_agu_reg;
       bus_holds_agu_reg2<=bus_holds_agu_reg;
-      lso_xdataA_reg<=lso_xdataA;
       alt_bus_hold_reg<=alt_bus_hold;
       alt_bus_addr_reg<=alt_bus_addr;
       alt_bus_hold_reg2<=alt_bus_hold_reg;
