@@ -1137,6 +1137,7 @@ module smallInstr_decoder(
       4'b00x1: begin poperation[16]=`op_sec64|4096; pport[16]=PORT_MUL; end
       4'b01x1: begin poperation[16]=`op_swp32|4096; pport[16]=PORT_MUL; end
       4'b11x1: begin poperation[16]=`op_swp64|4096; pport[16]=PORT_MUL; end
+      default: begin perror[16]=1'b1; end
       endcase
       prA_use[16]=1'b1;
       prB_use[16]=1'b1;

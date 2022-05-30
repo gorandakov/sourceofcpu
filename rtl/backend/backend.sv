@@ -5635,10 +5635,10 @@ dcache1 L1D_mod(
  
  // assign dc_rdReg[3]=rec_register_reg;
   
-  assign FUreg[0]=lso_way[0] & lso_en[0] ? {lso_adata[`lsaddr_reg_hi],lso_adata[`lsaddr_reg_low]} : dc_rdReg_reg[0];
-  assign FUreg[1]=lso_way[1] & lso_en[0] ? {lso_adata[`lsaddr_reg_hi],lso_adata[`lsaddr_reg_low]} : dc_rdReg_reg[1];
-  assign FUreg[2]=lso_way[2] & lso_en[0] ? {lso_adata[`lsaddr_reg_hi],lso_adata[`lsaddr_reg_low]} : dc_rdReg_reg[2];
-  assign FUreg[3]=lso2_en[0] ? {lso2_adata[`lsaddr_reg_hi],lso2_adata[`lsaddr_reg_low]} : dc_rdReg_reg[3];
+  assign FUreg[0]=lso_way[0] & lso_en ? {lso_adata[`lsaddr_reg_hi],lso_adata[`lsaddr_reg_low]} : dc_rdReg_reg[0];
+  assign FUreg[1]=lso_way[1] & lso_en ? {lso_adata[`lsaddr_reg_hi],lso_adata[`lsaddr_reg_low]} : dc_rdReg_reg[1];
+  assign FUreg[2]=lso_way[2] & lso_en ? {lso_adata[`lsaddr_reg_hi],lso_adata[`lsaddr_reg_low]} : dc_rdReg_reg[2];
+  assign FUreg[3]=lso2_en ? {lso2_adata[`lsaddr_reg_hi],lso2_adata[`lsaddr_reg_low]} : dc_rdReg_reg[3];
 
   assign FU0Hit=FU0HitP;
   assign FU1Hit=FU1HitP;
@@ -7395,7 +7395,7 @@ dcache1 L1D_mod(
               dc_rsEn_reg[v]<=1'b0;
 	      dc_LSQ_reg[v]<=9'b0;
 	      dc_rdataA_reg[v]<=136'b0;
-	      dc_pdataA_reg[v]<=136'b0;
+	      dc_pdataA_reg[v]<=2'b0;
 	      dc_rdataA_reg2[v]<=136'b0;
           end
           for(v=0;v<=1;v=v+1) begin

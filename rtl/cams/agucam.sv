@@ -233,11 +233,11 @@ module agucam(
   output mOpR_lsflag;
   output [3:0] mOpR_attr;
 
-  wire [3:0] curConfl;
+  wire [2:0] curConfl;
  // wire [3:0] write_confl;
-  wire [3:0] read_conflA;
-  wire [3:0] read_confl;
-  wire [3:0] sel;  
+  wire [2:0] read_conflA;
+  wire [2:0] read_confl;
+  wire [2:0] sel;  
   wire conflFound;
   wire doStep;
   
@@ -441,7 +441,7 @@ module agucam(
   popcnt10_or_more cntM_mod({2'b0,valid[0]|valid[1]},cmore);
 
   
-  bit_find_first_bit #(4) findConfl_mod(curConfl,sel,conflFound);
+  bit_find_first_bit #(3) findConfl_mod(curConfl,sel,conflFound);
 
   agucam_ram ramA_mod(
   clk,
@@ -456,7 +456,7 @@ module agucam(
 
   adder_inc #(3) initAdd_mod(initCount,initCount_next,1'b1,);
   
-  assign doStep=((curConfl==4'b0001 || curConfl==4'b0010 || curConfl==4'b0100 || curConfl==4'b1000) 
+  assign doStep=((curConfl==3'b001 || curConfl==3'b010 || curConfl==3'b100) 
     && read_clkEn && cmore[1]|wen && !rsStall)|excpt_fwd;
   assign excpt_fwd=except;// && ((rdvalid0 & valid[~except_thread])!=0 || ((rdvalid1 & valid[~except_thread])!=0 && ~drvalid0_found)!=0);
 
@@ -515,9 +515,9 @@ module agucam(
 	          else valid[0]<=8'b0;
 	      end
 	  end
-	  if (rst) confl_mask<=4'b1111;
+	  if (rst) confl_mask<=3'b111;
 	  else if (doStep &~init || except)  begin
-	      confl_mask<=4'b1111;
+	      confl_mask<=3'b111;
 	  end else if (~init && !rsStall) begin
 	      if (cmore[1] && read_clkEn) confl_mask<=confl_mask&~sel;
 	      else if (wen && count[0]) begin
