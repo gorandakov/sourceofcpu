@@ -12,7 +12,7 @@ module agucam_ram0(
   write_wen
   );
 
-  localparam DATA_WIDTH=(2+3*`mOp_width)/2;
+  localparam DATA_WIDTH=(3+3*`mOp_width)/2;
   localparam ADDR_WIDTH=3;
   localparam ADDR_COUNT=8;
 
@@ -50,7 +50,7 @@ module agucam_ram(
   write_wen
   );
 
-  localparam DATA_WIDTH=2+3*`mOp_width;
+  localparam DATA_WIDTH=3+3*`mOp_width;
   localparam ADDR_WIDTH=3;
   localparam ADDR_COUNT=8;
   input clk;
@@ -144,7 +144,7 @@ module agucam(
 
   localparam DEPTH=8;
   localparam ADDR_WIDTH=3;
-  localparam DATA_WIDTH=2+3*`mOp_width;
+  localparam DATA_WIDTH=3+3*`mOp_width;
   localparam MOP_WIDTH=`mOp_width;
   localparam MOPX_WIDTH=`mOpX_width;
   localparam MDATA_WIDTH=2+MOPX_WIDTH+128+8;
@@ -293,7 +293,8 @@ module agucam(
   wire thrmask;
   wire [2:0] in_mask;
   
-  assign write_dataA={conflict1&in_mask[1],conflict0&in_mask[0],write_mop_reg[2],write_mop_reg[1],write_mop_reg[0]};
+  assign write_dataA={conflict2&in_mask[2],conflict1&in_mask[1],conflict0&in_mask[0],
+	  write_mop_reg[2],write_mop_reg[1],write_mop_reg[0]};
   assign wen=conflict0&in_mask[0]||conflict1&in_mask[1]||conflict2&in_mask[2];
   assign write_addr_d=(~wen & ~rst) ? write_addr : 3'bz; 
   
@@ -303,7 +304,7 @@ module agucam(
   assign in_mask[1]=~except;
   assign in_mask[2]=~except;
   
-  assign {read_conflA[1:0],read_mop[2],read_mop[1],read_mop[0]}=(wen & count[0]) ? write_dataA : read_dataA;
+  assign {read_conflA[2:0],read_mop[2],read_mop[1],read_mop[0]}=(wen & count[0]) ? write_dataA : read_dataA;
 
   assign write_mop[0][`mOp_addrMain]=mOp0_addrMain;
   assign write_mop[0][`mOp_reg]=     mOp0_regNo;
