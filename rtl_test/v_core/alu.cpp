@@ -1568,399 +1568,142 @@ addie:
             break;
 
             case 20:
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"salq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
-	    else snprintf(asmtext,sizeof asmtext,"shlq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
 
             res0=((__int128) A)<<(B&0x3f);
             res1=res=res0;
             flg64(res0);
-	    if (has_mem_) {
-		rtn=false;
-		(*(this-1))=*this;
-	    }
             break;
 
             case 21:
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"sall %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
-	    else snprintf(asmtext,sizeof asmtext,"shll $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
 
             res0=((__int128) A0x)<<(B0x&0x3f);
             res2=res=res0&0xffffffffull;
             flg32(res0);
-	    if (has_mem_) {
-		rtn=false;
-		(*(this-1))=*this;
-	    }
             break;
 
             case 24:
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"shrq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
-	    else snprintf(asmtext,sizeof asmtext,"shrq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
 
             res0=(B&0x3f) ?((__int128)  A) >>((B&0x3f)-1) :((__int128)  A)<<1;
             res1=res=(res0>>1);
             flg64(((res0>>1)&0xffffffffffffffffull)|((res0&0x1) ? one<<1:0));
-	    if (has_mem_) {
-		rtn=false;
-		(*(this-1))=*this;
-	    }
             break;
 
             case 25:
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"shrl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
-	    else snprintf(asmtext,sizeof asmtext,"shrl $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
 
             res0=(B0x&0x3f) ?((__int128)A0x) >>((B0x&0x3f)-1) :((__int128)  A0x)<<1;
             res=(res0>>1)&0xffffffffull;
             flg32(((res0>>1)&0xffffffffu)|((res0&0x1)<<32));
-	    if (has_mem_) {
-		rtn=false;
-		(*(this-1))=*this;
-	    }
             break;
 
             case 28:
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"sarq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
-	    else snprintf(asmtext,sizeof asmtext,"sarq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
 
             res0=(B&0x3f) ?((__int128) A1) >>((B&0x3f)-1) :((__int128)  A1)<<1;
             res1=res=(res0>>1);
             flg64(((res0>>1)&0xffffffffffffffffull)|((res0&0x1) ? one<<1 : 0));
-	    if (has_mem_) {
-		rtn=false;
-		(*(this-1))=*this;
-	    }
             break;
 
             case 29:
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"sarl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
-	    else snprintf(asmtext,sizeof asmtext,"sarl $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
 
             res0=(B0x&0x3f) ? ((__int128) A0) >>((B0x&0x3f)-1) :((__int128) A0)<<1;
             res2=res=(res0>>1)&0xffffffffull;
             flg32(((res0>>1)&0xffffffffu)|((res0&0x1)<<32));
-	    if (has_mem_) {
-		rtn=false;
-		(*(this-1))=*this;
-	    }
             break;
  
             case 32:
-	    if (has_mem_==2) {
-		(this-1)->gen_memw(NULL,8,mem,memp,addr,A,A_p);
-		snprintf((*(this-1)).asmtext,sizeof (asmtext), "copyq %%%s, mem+%li(%rip)\n",reg65[rA],addr);
-		(this-1)->rT=-1;
-		(this-1)->flags=flags_in;
-		rtn=false;
-		break;
-	    } else if (has_mem_) {
-		(this-1)->gen_mem(NULL,8,mem,memp,addr);
-		snprintf((*(this-1)).asmtext,sizeof (asmtext), "copyq mem+%li(%rip), %%%s\n",addr,reg65[rT]);
-                (*(this-1)).rT=rT;
-		rtn=false;
-                (this-1)->flags=flags_in;
-		break;
-	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"copyq %%%s,  %%%s\n",reg65[rB],reg65[rT]);
-	    else snprintf(asmtext,sizeof asmtext,"copyq $%i, %%%s\n",(int) B,reg65[rT]);
             res=B;
             flags=flags_in;
             break;
 
             case 33:
-	    if (has_mem_==2) {
-		(this-1)->gen_memw(NULL,4,mem,memp,addr,A,A_p);
-		snprintf((*(this-1)).asmtext,sizeof (asmtext), "copyl %%%s, mem+%li(%rip)\n",reg32[rA],addr);
-		(this-1)->rT=-1;
-		(this-1)->flags=flags_in;
-		rtn=false;
-		break;
-	    } else if (has_mem_) {
-		(this-1)->gen_mem(NULL,4,mem,memp,addr);
-		snprintf((*(this-1)).asmtext,sizeof (asmtext), "copyl mem+%li(%rip), %%%s\n",addr,reg32[rT]);
-                (*(this-1)).rT=rT;
-		rtn=false;
-                (this-1)->flags=flags_in;
-		break;
-	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"copyl %%%s,  %%%s\n",reg32[rB],reg32[rT]);
-	    else snprintf(asmtext,sizeof asmtext,"copyl $%i, %%%s\n",(int) B,reg32[rT]);
             res=B&0xffffffffull;
             flags=flags_in;
             break;
 
             case 34:
-	    if (has_mem_==2) {
-		(this-1)->gen_memw(NULL,2,mem,memp,addr,A,A_p);
-		snprintf((*(this-1)).asmtext,sizeof (asmtext), "copyw %%%s, mem+%li(%rip)\n",reg16[rA],addr);
-		(this-1)->rT=-1;
-		(this-1)->flags=flags_in;
-		rtn=false;
-		break;
-	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"copyw %%%s,  %%%s\n",reg16[rB],reg16[rT]);
-	    else snprintf(asmtext,sizeof asmtext,"copyw $%i, %%%s\n",(int) B,reg16[rT]);
 	    rA=rT;
 	    A=contx->reg_gen[rA];
             res=(B&0xffffull)|(A&0xffffffffffff0000ull);
             flags=flags_in;
-	    if (has_mem_) {
-		rtn=false;
-		(*(this-1))=*this;
-	    }
             break;
 
             case 35:
-	    if (rB<0) {
-		rB=rand()&0x1f;
-		B=contx->reg_gen[rB];
-		B_p=contx->reg_genP[rB];
-	    }
-	    if (has_mem_==2) {
-		(this-1)->gen_memw(NULL,1,mem,memp,addr,A,A_p);
-		snprintf((*(this-1)).asmtext,sizeof (asmtext), "copyb %%%s, mem+%li(%rip)\n",reg8[rA],addr);
-		(this-1)->rT=-1;
-		(this-1)->flags=flags_in;
-		rtn=false;
-		break;
-	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"copyb %%%s,  %%%s\n",reg8[rB+((op&1024)>>5)],reg8[rT+((op&256)>>3)]);
-	    else snprintf(asmtext,sizeof asmtext,"copyb $%i, %%%s\n",(int) B,reg8[rT]);
-	    rA=rT;
-	    A=contx->reg_gen[rA];
             if (op&256) res=(A&0xffffffffffff00ffull)| ((op&1024) ? B&0xff00ull :
                 (B&0xffull)<<8);
             else res=(A&0xffffffffffffff00ull)| ((op&1024) ? (B&0xff00ull)>>8 :
                 B&0xffull);
             flags=flags_in;
-	    if (has_mem_) {
-		rtn=false;
-		(*(this-1))=*this;
-	    }
             break;
 
             case 36:
-	    if (has_mem_) {
-		(this-1)->gen_mem(NULL,1,mem,memp,addr);
-		snprintf((*(this-1)).asmtext,sizeof (asmtext), "copyzbl mem+%li(%rip), %%%s\n",addr,reg32[rT]);
-                (*(this-1)).rT=rT;
-		rtn=false;
-		(*(this-1)).flags=flags_in;
-		break;
-	    } else if (rB<0) {
-		rB=rand()&0x1f;
-		B=contx->reg_gen[rB];
-		B_p=contx->reg_genP[rB];
-	    }
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"copyzbl %%%s,  %%%s\n",reg8[rB],reg32[rT]);
-	    else snprintf(asmtext,sizeof asmtext,"copyzbl $%i, %%%s\n",(int) B,reg32[rT]);
             res=B&0xffull;
             flags=flags_in;
             break;
 
             case 37:
-	    if (has_mem_) {
-		(this-1)->gen_mem(NULL,2,mem,memp,addr);
-		snprintf((*(this-1)).asmtext,sizeof (asmtext), "copyzwl mem+%li(%rip), %%%s\n",addr,reg32[rT]);
-                (*(this-1)).rT=rT;
-		rtn=false;
-		(*(this-1)).flags=flags_in;
-		break;
-	    } else if (rB<0) {
-		rB=rand()&0x1f;
-		B=contx->reg_gen[rB];
-		B_p=contx->reg_genP[rB];
-	    }
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"copyzwl %%%s,  %%%s\n",reg16[rB],reg32[rT]);
-	    else snprintf(asmtext,sizeof asmtext,"copyzwl $%i, %%%s\n",(int) B,reg32[rT]);
             res=B&0xffffull;
             flags=flags_in;
             break;
 
             case 39:
-	    if (rB<0) {
-		rB=rand()&0x1f;
-		B=contx->reg_gen[rB];
-		B_p=contx->reg_genP[rB];
-	    }
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"copysbq %%%s,  %%%s\n",reg8[rB],reg65[rT]);
-	    else snprintf(asmtext,sizeof asmtext,"copysbq $%i, %%%s\n",(int) B,reg65[rT]);
             res=(B&0x80) ? B|0xffffffffffffff00ull : B&0xffull;
             flags=flags_in;
-	    if (has_mem_) {
-		rtn=false;
-		(*(this-1))=*this;
-	    }
             break;
 
             case 40:
-	    if (rB<0) {
-		rB=rand()&0x1f;
-		B=contx->reg_gen[rB];
-		B_p=contx->reg_genP[rB];
-	    }
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"copyswq %%%s,  %%%s\n",reg16[rB],reg65[rT]);
-	    else snprintf(asmtext,sizeof asmtext,"copyswq $%i, %%%s\n",(int) B,reg65[rT]);
             res=(B&0x8000) ? B|0xffffffffffff0000ull : B&0xffffull;
             flags=flags_in;
-	    if (has_mem_) {
-		rtn=false;
-		(*(this-1))=*this;
-	    }
             break;
 
             case 41:
-	    if (rB<0) {
-		rB=rand()&0x1f;
-		B=contx->reg_gen[rB];
-		B_p=contx->reg_genP[rB];
-	    }
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"copyslq %%%s,  %%%s\n",reg32[rB],reg65[rT]);
-	    else snprintf(asmtext,sizeof asmtext,"copyslq $%i, %%%s\n",(int) B,reg65[rT]);
             res=(B&0x80000000) ? B|0xffffffff00000000ull : B&0xffffffffull;
             flags=flags_in;
-	    if (has_mem_) {
-		rtn=false;
-		(*(this-1))=*this;
-	    }
             break;
 
             case 42:
-	    if (rB<0) {
-		rB=rand()&0x1f;
-		B=contx->reg_gen[rB];
-		B_p=contx->reg_genP[rB];
-		B0=B;
-		B0x=B;
-	    }
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"copysbl %%%s,  %%%s\n",reg8[rB],reg32[rT]);
-	    else snprintf(asmtext,sizeof asmtext,"copysbl $%i, %%%s\n",(int) B,reg32[rT]);
             res=(B0&0x80) ? B0x|0xffffff00ull : B0x&0xffull;
             flags=flags_in;
-	    if (has_mem_) {
-		rtn=false;
-		(*(this-1))=*this;
-	    }
             break;
 
             case 43:
-	    if (rB<0) {
-		rB=rand()&0x1f;
-		B=contx->reg_gen[rB];
-		B_p=contx->reg_genP[rB];
-		B0=B;
-		B0x=B;
-	    }
-	    if (rB>=0) snprintf(asmtext,sizeof asmtext,"copyswl %%%s,  %%%s\n",reg16[rB],reg32[rT]);
-	    else snprintf(asmtext,sizeof asmtext,"copyswl $%i, %%%s\n",(int) B,reg32[rT]);
             res=(B0&0x8000) ? B0x|0xffff0000ull : B0x&0xffffull;
             flags=flags_in;
-	    if (has_mem_) {
-		rtn=false;
-		(*(this-1))=*this;
-	    }
             break;
 
             case 48:
             case 49:
-            op|=rand()&0x700;
-	    if (rB<0) {
-		rB=rand()&0x1f;
-		B=contx->reg_gen[rB];
-		B_p=contx->reg_genP[rB];
-	    }
-	    snprintf(asmtext,sizeof asmtext,"cmov%sq %%%s, %%%s, %%%s\n",COND(op),reg65[rB],reg65[rA],reg65[rT]);
 
             res=testj(((op&0x700)>>7)|(op&0x1)) ? B : A;
             res_p=testj(((op&0x700)>>7)|(op&0x1)) ? B_p : A_p;
             flags=flags_in;
-	    if (has_mem_) {
-		rtn=false;
-		(*(this-1))=*this;
-	    }
             break;
             
             case 50:
             case 51:
-            op|=rand()&0x700;
-            op|=rand()&0x700;
-	    if (rB<0) {
-		rB=rand()&0x1f;
-		B=contx->reg_gen[rB];
-		B_p=contx->reg_genP[rB];
-		B0=B;
-		B0x=B;
-	    }
-	    snprintf(asmtext,sizeof asmtext,"cmov%sl %%%s, %%%s, %%%s\n",COND(op),reg32[rB],reg32[rA],reg32[rT]);
             res=testj(((op&0x700)>>7)|(op&0x1)) ? B0x : A0x;
             flags=flags_in;
-	    if (has_mem_) {
-		rtn=false;
-		(*(this-1))=*this;
-	    }
             break;
             
             
             case 52:
             case 53:
-            op|=rand()&0x700;
-	    if (rB<0) {
-		rB=rand()&0x1f;
-		B=contx->reg_gen[rB];
-		B_p=contx->reg_genP[rB];
-	    }
-	    snprintf(asmtext,sizeof asmtext,"clahf%sl %%%s\n",COND(op),reg32[rA]);
             res=0;
             flags=testj(((op&0x700)>>7)|(op&0x1)) ? A&0x3f : flags_in;
-	    rT=-1;
-	    if (has_mem_) {
-		rtn=false;
-		(*(this-1))=*this;
-	    }
             break;
 
             case 54:
             case 55:
-            op|=rand()&0x700;
-	    if (rB<0) {
-		rB=rand()&0x1f;
-		B=contx->reg_gen[rB];
-		B_p=contx->reg_genP[rB];
-	    }
-	    snprintf(asmtext,sizeof asmtext,"cset%sl %%%s\n",COND(op),reg32[rT]);
             res=testj(((op&0x700)>>7)|(op&0x1));
             flags=flags_in;
-	    if (has_mem_) {
-		rtn=false;
-		(*(this-1))=*this;
-	    }
             break;
 
             case 56:
-	    if (rB<0) {
-		rB=rand()&0x1f;
-		B=contx->reg_gen[rB];
-		B_p=contx->reg_genP[rB];
-	    }
-	    snprintf(asmtext,sizeof asmtext,"sahfl %%%s\n",reg32[rT]);
             res=flags_in&0x3f;
             flags=flags_in;
-	    if (has_mem_) {
-		rtn=false;
-		(*(this-1))=*this;
-	    }
             break;
 
             case 57:
-	    if (rB<0) {
-		rB=rand()&0x1f;
-		B=contx->reg_gen[rB];
-		B_p=contx->reg_genP[rB];
-	    }
-	    snprintf(asmtext,sizeof asmtext,"lahfl %%%s\n",reg32[rA]);
             res=0;
             flags=A&0x3f;
-	    rT=-1;
-	    if (has_mem_) {
-		rtn=false;
-		(*(this-1))=*this;
-	    }
             break;
         }
     } else if (!alt) {
