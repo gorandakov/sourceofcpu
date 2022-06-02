@@ -442,7 +442,7 @@ class req {
     unsigned has_alu;
     char asmtext[64];
     bool gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,int has_mem_,char *mem,char *pmem);
-    bool exec(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,int has_mem_,char *mem,char *pmem);
+    bool exec(req *prev1,hcont *contx,char *mem,char *pmem);
     void gen_init(int rT,int dom,unsigned long long int val,int val_p);
     void gen_mem(req* prev1,unsigned code,char * mem,char *memp,unsigned long long addr);
     void gen_memw(req* prev1,unsigned code,char * mem,char *memp,unsigned long long addr,unsigned long long res, char res_p);
@@ -1351,43 +1351,14 @@ addie:
     return rtn;
 }
     
-bool req::exec(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,int has_mem_,char *mem,char *memp) {
-    alt=alt_;
-    mul=mul_;
-    excpt=-1;
-    bool rtn=has_mem_;
-    if (!alt && !mul && !can_shift) op=OPS_REGL[rand()%(sizeof OPS_REGL/2)];
-    if (!alt && !mul && can_shift)  op=OPS_S_REGL[rand()%(sizeof OPS_S_REGL/2)];
-    if (!alt && mul) op=OPS_M_REGL[rand()%(sizeof OPS_M_REGL/2)]|0x800;
-    if (alt) op=rand()&0x1ffff;
+bool req::exec(req *prev1,hcont *contx,char *mem,char *memp) {
     res_p=0;
-    rA=rand()&0x1f;
-    rB=rand()&0x1f;
-    rT=rand()&0x1f;
-    if (has_mem_ && rT==16) rT=17;
-    if (has_mem_ && rA==16) rA=17;
-    if (has_mem_) addr=lrand48()%(MEMRGN_DATA_SZ-8);
-    if (rand()&1) {
-        B=lrand48()&0xffffffff;
-	B_p=0;
-	rA&=0xf;
-	rT&=0xf;
-	rB=-1;
-    } else if (rand()&1) {
-	B=(lrand48()&0x1fff)-0x1000;
-	B_p=0;
-	rB=-1;
-    } else {
-	B=contx->reg_gen[rB];
-	B_p=contx->reg_genP[rB];
-    }
-    A=contx->reg_gen[rA];
-    A_p=contx->reg_genP[rA];
-    asmtext[0]=0;
+    res=0;
+    A=contx->reg_gen[rA&0x1f];
+    A_p=contx->reg_genP[rA&0x1f];
+    B=contx->reg_gen[rB&0x1f];
+    B_p=contx->reg_genP[rB&0x1f];
     flags_in=contx->flags;
-
-    has_alu=1;
-    //has_mem=0;
     if (!alt && !mul) {
         __int128 res0;
         int A0=A,B0=B,res2;
@@ -1397,7 +1368,6 @@ bool req::exec(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,int
         unsigned long long pttr=A_p ? A : B;
 	bool no_O=false;
 	int mmem=0;
-	if (has_mem_) mmem=lrand48()%3;
         switch(op&0xff) {
             case 0:
 
@@ -1785,21 +1755,13 @@ addie:
             break;
         }
     }
-    en=rand()&0xff!=0;
     if (!(op&0x1000)) contx->flags=flags;
-    if (has_mem_ && ((*(this-1)).rT>=0)) {
-	contx->reg_gen[(*(this-1)).rT]=(*(this-1)).res;
-	contx->reg_genP[(*(this-1)).rT]=(*(this-1)).res_p;
-    }
-    if ((rtn||!has_mem_) && (rT>=0) && has_mem_!=2) {
+    if ((rT>=0)) {
 	contx->reg_gen[rT]=res;
 	contx->reg_genP[rT]=res_p;
     }
-    if (has_mem_==2 && rtn) {
-	rT=16;
-	contx->reg_gen[rT]=res;
-	contx->reg_genP[rT]=res_p;
-        (this+1)->gen_memw(NULL,(this-1)->op,mem,memp,addr,res,res_p);
+    if (has_mem==2) {
+        (this)->gen_memw(NULL,(this)->op,mem,memp,addr,res,res_p);
     }
     return rtn;
 }
