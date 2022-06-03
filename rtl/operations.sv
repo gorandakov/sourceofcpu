@@ -9,8 +9,8 @@
 
 `define op_sub64 4
 `define op_sub32 5
-`define op_cmp16 6
-`define op_cmp8  7 
+`define op_sub16 6
+`define op_sub8  7 
 
 `define op_and64 8
 `define op_and32 9

@@ -12,7 +12,7 @@ module agucam_ram0(
   write_wen
   );
 
-  localparam DATA_WIDTH=(3+3*`mOp_width)/2+1;
+  localparam DATA_WIDTH=(3+3*`mOp_width)/2;
   localparam ADDR_WIDTH=3;
   localparam ADDR_COUNT=8;
 
@@ -62,12 +62,10 @@ module agucam_ram(
   input [DATA_WIDTH-1:0] write_data;
   input write_wen;
 
-  //verilator lint_off WIDTH
   agucam_ram0 ramA(clk,rst,read_clkEn,read_addr,read_data[DATA_WIDTH/2-1:0],
     write_addr,write_data[DATA_WIDTH/2-1:0],write_wen);
   agucam_ram0 ramB(clk,rst,read_clkEn,read_addr,read_data[DATA_WIDTH-1:
     DATA_WIDTH/2],write_addr,write_data[DATA_WIDTH-1:DATA_WIDTH/2],write_wen);
-  //verilator lint_on WIDTH
 endmodule
 
 
