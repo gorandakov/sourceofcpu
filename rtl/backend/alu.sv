@@ -107,8 +107,6 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
   reg flagSub64_OF_reg;
   reg flagSub44_OF_reg;
   reg flagSub32_OF_reg;
-  reg flagSub16_OF_reg;
-  reg flagSub8_OF_reg;
 
   wire [5:0] flags_COASZP;
 
@@ -455,8 +453,6 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
 	  flagSub64_OF_reg<=1'b0;
           flagSub32_OF_reg<=1'b0;
 	  flagSub44_OF_reg<=1'b0;
-          flagSub16_OF_reg<=1'b0;
-          flagSub8_OF_reg<=1'b0;
         end
       else
         begin
@@ -525,8 +521,6 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
 	  flagSub64_OF_reg<=flagSub64_OF;
           flagSub32_OF_reg<=flagSub32_OF;
 	  flagSub44_OF_reg<=flagSub44_OF;
-          flagSub16_OF_reg<=flagSub32_OF;
-          flagSub8_OF_reg<=flagSub32_OF;
 
         end
     end
