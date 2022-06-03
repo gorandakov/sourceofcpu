@@ -1192,7 +1192,10 @@ module lsq_req(
       (write2_addr_reg2=={readA_addr,3'd5} && write2_wen_reg2 && FU2Hit);
   assign read5A_dEn[1]=(write3_addr_reg2=={readA_addr,3'd5} && write3_wen_reg2 && FU3Hit);
 
-  always @(negedge clk) begin
+  always @* begin
+      flipA=readA_addr_d[5];
+  end
+  always @(posedge clk) begin
       if (rst) begin
           validA=64'b0;
           validA_next=64'b0;
@@ -1214,11 +1217,11 @@ module lsq_req(
           if (foundA && readA_clkEn) begin
               validA=validA & ~curA;
               curA=firstA;
-	      flipA<=readA_addr_d[5];
+	    //  flipA<=readA_addr_d[5];
           end else if (readA_clkEn) begin //no new entries
               validA=validA & ~curA;
               curA=64'b0;
-	      flipA<=readA_addr_d[5];
+	    //  flipA<=readA_addr_d[5];
               if (~onSameValidA) begin
                   validA=validA_next;
                   validA_next=64'b0;
@@ -1254,7 +1257,7 @@ module lsq_req(
 	      validA_next=64'b0;
               curA=64'b0;
               exceptA_fix<=1'b0;
-              flipA<=write_addr_shr[5];
+              //flipA<=write_addr_shr[5];
               onSameValidA<=1'b1;
 	  end
 	  
