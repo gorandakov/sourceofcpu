@@ -118,7 +118,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   assign isBasicShiftExcept=magic[1:0]==2'b01 && |instr[29:25];
   
   assign isBasicCmpTest=(opcode_main[7:1]==7'd23 || opcode_main[7:2]==6'd12 ||
-    opcode_main[7:1]==7'd26) && magic[0];
+    opcode_main[7:1]==7'd26 || opcode_main[7:2]==6'd54) && magic[0];
 
   assign isBaseSpecLoad=(opcode_main==8'd54 || opcode_main==8'd202) && magic[0];
   assign isBaseIndexSpecLoad=(opcode_main==8'd55 || opcode_main==8'd203) && magic[0];

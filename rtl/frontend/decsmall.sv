@@ -315,7 +315,7 @@ module smallInstr_decoder(
   assign isBasicShiftExcept=magic[1:0]==2'b01 && instr[29:25]!=5'b0;
   
   assign isBasicCmpTest=opcode_main[7:1]==7'd23 || opcode_main[7:2]==6'd12 ||
-    opcode_main[7:1]==7'd26;
+    opcode_main[7:1]==7'd26 || opcode_main[7:2]==6'd54;
 
   assign isBaseSpecLoad=opcode_main==8'd54 || opcode_main==8'd202;
   assign isBaseIndexSpecLoad=opcode_main==8'd55 || opcode_main==8'd203;
@@ -360,6 +360,7 @@ module smallInstr_decoder(
   assign isShlAddMulLike=opcode_main==8'd210 || opcode_main==8'd211;
   assign isPtrSec=opcode_main==8'd212;
   assign isJalR=opcode_main==8'd213;
+  //216-219=cmp16,cmp8
 
   assign isBasicFPUScalarA=opcode_main==8'hf0 && instr[13:12]==2'b0;
   assign isBasicFPUScalarB=opcode_main==8'hf0 && instr[13:12]==2'b1;
@@ -1105,6 +1106,8 @@ module smallInstr_decoder(
       case(opcode_main)
       46,47: poperation[15]=`op_sub64;
       48,49: poperation[15]=`op_sub32;
+      216,217: poperation[15]=`op_cmp16;
+      218,219: poperation[15]=`op_cmp8;
       50,51: poperation[15]=`op_and64;
       52,53: poperation[15]=`op_and32;
       default: perror[15]=1;
