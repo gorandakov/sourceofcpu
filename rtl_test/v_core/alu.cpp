@@ -1359,7 +1359,21 @@ bool req::exec(req *prev1,hcont *contx,char *mem,char *memp) {
     B=contx->reg_gen[rB&0x1f];
     B_p=contx->reg_genP[rB&0x1f];
     flags_in=contx->flags;
-    if (!alt && !mul) {
+    if (has_mem==1) {
+	unsigned long rez;
+	unsigned rez_p;
+        gen_mem(NULL,op,mem,memp,addr,rez,rez_p);
+	res=rez;
+	res_p=rez_p;
+        contx->reg_gen[rT&0x1f]=res;
+        contx->reg_genP[rT&0x1f]=res_p;
+	return
+    } else if (has_mem==2) {
+        res=contx->reg_gen[rA&0x1f];
+        res_p=contx->reg_genP[rA&0x1f];
+        gen_memw(NULL,op,mem,memp,addr,res,res_p);
+	return;
+    } else if (!alt && !mul) {
         __int128 res0;
         int A0=A,B0=B,res2;
         unsigned A0x=A,B0x=B;
