@@ -38,6 +38,10 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
   wire flag32_ZF;
   reg flag64_ZF_reg;
   reg flag32_ZF_reg;
+  wire flag16_ZF;
+  wire flag8_ZF;
+  reg flag16_ZF_reg;
+  reg flag8_ZF_reg;
         
   wire flag8_PF;
   reg flag8_PF_reg;
@@ -292,7 +296,7 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
       }),
     .cout(carryAdd64),
     .cout4(carryAdd4LL),
-    .cout8(carryAdd8LL),
+    .cout8LL(carryAdd8LL),
     .cout16(carryAdd16),
     .cout32(carryAdd32),
     .cout_sec(cin_seq),
@@ -305,6 +309,8 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
  
   assign flag64_ZF=(valRes[63:0]==64'b0);
   assign flag32_ZF=(valRes[31:0]==32'b0);
+  assign flag16_ZF=(valRes[15:0]==16'b0);
+  assign flag8_ZF=(valRes[7:0]==8'b0);
 
   
   assign flag8_PF=~^(valRes[7:0]);
@@ -316,7 +322,7 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
   assign flagSub64_OF=val1[63] & ~val2[63] & ~valRes[63] | ~val1[63] & val2[63] & valRes[63];  
   assign flagSub32_OF=val1[31] & ~val2[31] & ~valRes[31] | ~val1[31] & val2[31] & valRes[31];  
   assign flagSub16_OF=val1[15] & ~val2[15] & ~valRes[15] | ~val1[15] & val2[15] & valRes[15];  
-  assign flagSub8LL_OF=val1[7] & ~val2[7] & ~valRes[7] | ~val1[7] & val2[7] & valRes[7];  
+  assign flagSub8_OF=val1[7] & ~val2[7] & ~valRes[7] | ~val1[7] & val2[7] & valRes[7];  
    
 // flag assignment mux
   assign flags_COASZP=((retOp==`op_add64) && isFlags_reg) ? {carryAdd64_reg&~is_ptr_reg,flagAdd64_OF_reg&~is_ptr_reg,carryAdd4LL_reg&~is_ptr_reg,valRes_reg[63],flag64_ZF_reg,flag8_PF_reg} : 6'bz;
@@ -327,7 +333,7 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
 	  ~carryAdd4LL_reg&~is_ptr_reg,is_ptr_sub ? valRes_reg[43] : valRes_reg[63],flag64_ZF_reg,flag8_PF_reg} : 6'bz;
   assign flags_COASZP=((retOp==`op_sub32) && isFlags_reg) ? {~carryAdd32_reg,flagSub32_OF_reg,~carryAdd4LL_reg,valRes_reg[31],flag32_ZF_reg,flag8_PF_reg} : 6'bz;
   assign flags_COASZP=((retOp==`op_cmp16) && isFlags_reg) ? {~carryAdd16_reg,flagSub16_OF_reg,~carryAdd4LL_reg,valRes_reg[15],flag16_ZF_reg,flag8_PF_reg} : 6'bz;
-  assign flags_COASZP=((retOp==`op_cmp8) && isFlags_reg) ? {~carryAdd8LL_reg,flagSub8LL_OF_reg,~carryAdd4LL_reg,valRes_reg[7],flag8_ZF_reg,flag8_PF_reg} : 6'bz;
+  assign flags_COASZP=((retOp==`op_cmp8) && isFlags_reg) ? {~carryAdd8LL_reg,flagSub8_OF_reg,~carryAdd4LL_reg,valRes_reg[7],flag8_ZF_reg,flag8_PF_reg} : 6'bz;
 
 //inc/dec
   assign flags_COASZP=((retOp==(`op_add64|`op_tgt8)) && isFlags_reg) ? {valS_reg[5],flagAdd64_OF_reg,carryAdd4LL_reg,valRes_reg[63],flag64_ZF_reg,flag8_PF_reg} : 6'bz;
@@ -454,6 +460,8 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
           
 	  flag64_ZF_reg<=1'b0;
           flag32_ZF_reg<=1'b0;
+	  flag16_ZF_reg<=1'b0;
+          flag8_ZF_reg<=1'b0;
           flag8_PF_reg<=1'b0;
 	  flagAdd64_OF_reg<=1'b0;
           flagAdd32_OF_reg<=1'b0;
@@ -524,6 +532,8 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
 	  //$display("LL ",logic_en_reg," ",val1_sign65," ",val2_sign65," ",is_ptr_reg," ",cin_seq_reg);
 	  flag64_ZF_reg<=flag64_ZF;
           flag32_ZF_reg<=flag32_ZF;
+	  flag16_ZF_reg<=flag16_ZF;
+          flag8_ZF_reg<=flag8_ZF;
           flag8_PF_reg<=flag8_PF;
 	  flagAdd64_OF_reg<=flagAdd64_OF;
           flagAdd32_OF_reg<=flagAdd32_OF;
