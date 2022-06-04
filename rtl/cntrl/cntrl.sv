@@ -250,7 +250,9 @@ module cntrl_find_outcome(
   
   doRetire_d,
   xbreak,
-  has_xbreak
+  has_xbreak,
+  IRQ_can,
+  IRQ_trigger
   );
   localparam RET_WIDTH=`except_width;
   localparam BOB_WIDTH=`bob_width;
@@ -537,6 +539,9 @@ module cntrl_find_outcome(
   output doRetire_d;
   output [9:0] xbreak;
   output has_xbreak;
+
+  output IRQ_can;
+  input IRQ_trigger;
 
   wire mem_match;
   wire [9:0][RET_WIDTH-1:0] ret_data; 
