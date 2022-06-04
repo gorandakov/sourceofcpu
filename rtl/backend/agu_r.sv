@@ -330,7 +330,7 @@ module agu_r(
   assign fault_tlb={mflags[`mflags_cpl]==2'd3 && tlb_data[`dtlbData_sys], ~tlb_data[`dtlbData_na]}; 
   assign fault_tlb_next={mflags[`mflags_cpl]==2'd3 && tlb_data_next[`dtlbData_sys],  ~tlb_data_next[`dtlbData_na]}; 
 
-  assign mOp_rsEn=mOp0_en_reg & tlb_hit & ~pause_miss_reg2 & ~bus_hold & & ~mOp0_lsfwd_reg & ~(mOp0_type_reg==2'b10); 
+  assign mOp_rsEn=mOp0_en_reg & tlb_hit & ~pause_miss_reg2 & ~bus_hold & ~tlb_proceed & ~mOp0_lsfwd_reg & ~(mOp0_type_reg==2'b10); 
 //dummy page walker
   assign reqtlb_ack=~reqtlb_en & ~reqC_tlbEn & tlb_proceed & req_can & reqtlb_next & ~tlb_in_flight;
 /*  assign writeTlb_wenH=1'b0;
@@ -552,6 +552,8 @@ module agu_r(
 	      end
 	      mflags[`mflags_cpl]<=mOp0_attr[`attr_km] ? 2'b0 : 2'b11;
 	      mflags[`mflags_sec]<=mOp0_attr[`attr_sec];//muha-srankk
+          end else begin
+	      if (mOpR_en && !req_bus) mOp0_en_reg<=1'b0;
           end
       end 
       if (rst) begin
