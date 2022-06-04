@@ -300,9 +300,9 @@ module agu_r(
   assign mOp_pbit=(~req_bus) ? mOp0_pbit_reg : 2'b0;
  
   assign mOp_en=(~req_bus) ? mOp0_en_reg & (tlb_hit|mOp0_lsfwd_reg|tlb_is_inv) & ~req_bus & ~except &
-    ~pause_miss_reg2 & ~reqtlb_en & ~reqC_tlbEn & ~tlb_proceed & ~bus_hold & (mOp0_type_reg!=2'b10) : 1'bz; 
+    ~pause_miss_reg2 & ~tlb_proceed & ~bus_hold & (mOp0_type_reg!=2'b10) : 1'bz; 
   assign mOp_ioEn=(~req_bus) ? mOp0_en_reg & (tlb_hit|mOp0_lsfwd_reg) & ~req_bus & ~except &
-    ~pause_miss_reg2 & ~reqtlb_en & ~reqC_tlbEn & ~tlb_proceed & ~bus_hold & (mOp0_type_reg==2'b10) : 1'b0; 
+    ~pause_miss_reg2 & ~tlb_proceed & ~bus_hold & (mOp0_type_reg==2'b10) : 1'b0; 
 
   assign doStall=mOp0_en_reg & ~(tlb_hit|mOp0_lsfwd_reg|tlb_is_inv) || bus_hold || pause_miss_reg2 || tlb_proceed ||
   reqtlb_en || reqC_tlbEn || req_bus;
@@ -330,7 +330,7 @@ module agu_r(
   assign fault_tlb={mflags[`mflags_cpl]==2'd3 && tlb_data[`dtlbData_sys], ~tlb_data[`dtlbData_na]}; 
   assign fault_tlb_next={mflags[`mflags_cpl]==2'd3 && tlb_data_next[`dtlbData_sys],  ~tlb_data_next[`dtlbData_na]}; 
 
-  assign mOp_rsEn=mOp0_en_reg & tlb_hit & ~pause_miss_reg2 & ~bus_hold & ~reqtlb_en_reg & ~mOp0_lsfwd_reg & ~(mOp0_type_reg==2'b10); 
+  assign mOp_rsEn=mOp0_en_reg & tlb_hit & ~pause_miss_reg2 & ~bus_hold & & ~mOp0_lsfwd_reg & ~(mOp0_type_reg==2'b10); 
 //dummy page walker
   assign reqtlb_ack=~reqtlb_en & ~reqC_tlbEn & tlb_proceed & req_can & reqtlb_next & ~tlb_in_flight;
 /*  assign writeTlb_wenH=1'b0;
