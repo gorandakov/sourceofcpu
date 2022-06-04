@@ -1685,6 +1685,8 @@ module agu_block(
   );
           
 
+  LFSR16_1 oO_mod(clk,rst,other_flip);
+
   agu #(0) agu0(
   clk,
   rst,
