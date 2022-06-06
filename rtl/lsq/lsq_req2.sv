@@ -1114,10 +1114,10 @@ module lsq_req(
       write2_wen_reg2 & FU2Hit || init,
   init ? {initCount,3'd3} : write3_addr_reg2[8:0],{write3_addr_reg2[8],smpc3_reg2,write3_xdata_reg2}|{XDATA_WIDTH{init}},
       write3_wen_reg2 & FU3Hit || init,
-  init ? {initCount,3'd4} : write4_addr_reg2[8:0],{write4_addr_reg2[8],1'b0,write4_xdata_reg2}|{XDATA_WIDTH{init}},
-      write4_wen_reg2 || init,
-  init ? {initCount,3'd5} : write5_addr_reg2[8:0],{write5_addr_reg2[8],1'b0,write5_xdata_reg2}|{XDATA_WIDTH{init}},
-      write5_wen_reg2 || init,
+  init ? {initCount,3'd4} : write4_addr[8:0],{write4_addr[8],1'b0,write4_xdata}|{XDATA_WIDTH{init}},
+      write4_wen || init,
+  init ? {initCount,3'd5} : write5_addr[8:0],{write5_addr[8],1'b0,write5_xdata}|{XDATA_WIDTH{init}},
+      write5_wen || init,
   write_addr_shr,{XDATA_WIDTH{~write_addr_shr[5]}},write_wen_shr&~doStall&~stall&~init&~except
   );
 

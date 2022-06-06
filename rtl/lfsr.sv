@@ -36,7 +36,7 @@ module LFSR16_1(
   parameter [15:0] INITVAL=16'he45b;
   input clk;
   input rst;
-  output reg [5:0] OUT;
+  output reg OUT;
   
 
   wire OUT_a;
