@@ -1236,6 +1236,18 @@ module cntrl_find_outcome(
 	  if (initcount==6'd47) init<=1'b0;
       end
       if (rst) begin
+	  excpt_fpu=11'b0;
+      end else if (csrss_en && csrss_no==`csr_fpu) begin
+	  excpt_fpu=csrss_data[10:0];
+      end else begin
+	  if (ret0_dataF[RET_WIDTH-1]) excpt_fpu=excpt_fpu|ret0_dataF[13:3]; 
+	  if (ret1_dataF[RET_WIDTH-1]) excpt_fpu=excpt_fpu|ret1_dataF[13:3]; 
+	  if (ret2_dataF[RET_WIDTH-1]) excpt_fpu=excpt_fpu|ret2_dataF[13:3]; 
+	  if (ret3_dataF[RET_WIDTH-1]) excpt_fpu=excpt_fpu|ret3_dataF[13:3]; 
+	  if (ret4_dataF[RET_WIDTH-1]) excpt_fpu=excpt_fpu|ret4_dataF[13:3]; 
+	  if (ret5_dataF[RET_WIDTH-1]) excpt_fpu=excpt_fpu|ret5_dataF[13:3]; 
+      end
+      if (rst) begin
           retire0_rT<=6'd0;
           retire1_rT<=6'd0;
           retire2_rT<=6'd0;
