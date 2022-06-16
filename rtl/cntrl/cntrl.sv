@@ -231,14 +231,12 @@ module cntrl_find_outcome(
   jupd1_en,jupdt1_en,jupd1_ght_en,
   jupd1_addr,jupd1_baddr,
   jupd1_sc,jupd1_tk,
-  ret0_addr,ret0_data,ret0_wen,
-  ret1_addr,ret1_data,ret1_wen,
-  ret2_addr,ret2_data,ret2_wen,
-  ret3_addr,ret3_data,ret3_wen,
-  ret4_addr,ret4_data,ret4_wen,
-  ret5_addr,ret5_data,ret5_wen,ret5_IP,ret5_IP_en,
-  ret6_addr,ret6_data,ret6_wen,
-  ret7_addr,ret7_data,ret7_wen,
+  ret0_addr,ret0_data,ret0_dataF,ret0_wen,
+  ret1_addr,ret1_data,ret1_dataF,ret1_wen,
+  ret2_addr,ret2_data,ret2_dataF,ret2_wen,
+  ret3_addr,ret3_data,ret3_dataF,ret3_wen,
+  ret4_addr,ret4_data,ret4_dataF,ret4_wen,
+  ret5_addr,ret5_data,ret5_dataF,ret5_wen,ret5_IP,ret5_IP_en,
   mem_II_upper,
   mem_II_upper_out,
   mem_II_bits_fine,
@@ -500,30 +498,30 @@ module cntrl_find_outcome(
   
   input [9:0] 			ret0_addr;
   input [RET_WIDTH-1:0] 	ret0_data;
+  input [RET_WIDTH-1:0] 	ret0_dataF;
   input 			ret0_wen;
   input [9:0] 			ret1_addr;
   input [RET_WIDTH-1:0] 	ret1_data;
+  input [RET_WIDTH-1:0] 	ret1_dataF;
   input 			ret1_wen;
   input [9:0] 			ret2_addr;
   input [RET_WIDTH-1:0] 	ret2_data;
+  input [RET_WIDTH-1:0] 	ret2_dataF;
   input 			ret2_wen;
   input [9:0] 			ret3_addr;
   input [RET_WIDTH-1:0] 	ret3_data;
+  input [RET_WIDTH-1:0] 	ret3_dataF;
   input 			ret3_wen;
   input [9:0] 			ret4_addr;
   input [RET_WIDTH-1:0] 	ret4_data;
+  input [RET_WIDTH-1:0] 	ret4_dataF;
   input 			ret4_wen;
   input [9:0] 			ret5_addr;
   input [RET_WIDTH-1:0] 	ret5_data;
+  input [RET_WIDTH-1:0] 	ret5_dataF;
   input 			ret5_wen;
   input [64:0]			ret5_IP;
   input				ret5_IP_en;
-  input [9:0] 			ret6_addr;
-  input [RET_WIDTH-1:0] 	ret6_data;
-  input 			ret6_wen;
-  input [9:0] 			ret7_addr;
-  input [RET_WIDTH-1:0] 	ret7_data;
-  input 			ret7_wen;
 
   input [5:0] mem_II_upper;
   output [5:0] mem_II_upper_out;
@@ -952,12 +950,15 @@ module cntrl_find_outcome(
 
   assign csrss_no_d=(break_jump0) ? jump0IP[15:0] : 16'bz;
   assign csrss_no_d=(break_jump1) ? jump1IP[15:0] : 16'bz;
-  assign csrss_no_d=(~break_jump0 & ~break_jump1) ? 16'd`csr_retIP : 16'bz;
+  assign csrss_no_d=(break_exceptn) ? 16'd`csr_retIP : 16'bz;
+  assign csrss_no_d=(~break_jump0 & ~break_jump1 & ~break_exceptn) ? 16'd`csr_excpt_fpu : 16'bz;
   assign csrss_en_d=(break_jump0) ? jump0Type==5'b11001 && has_some && ~mem_II_stall : 1'bz;
   assign csrss_en_d=(break_jump1) ? jump1Type==5'b11001 && has_some && ~mem_II_stall : 1'bz;
   assign csrss_en_d=(break_exceptn) ? has_some & ~mem_II_stall : 1'bz;
-  assign csrss_en_d=(~break_jump0 & ~break_jump1 & ~break_exceptn) ? 1'b0 : 1'bz;
-  assign csrss_data_d=(break_exceptn) ? {1'b0,attr[0],attr[1],is_after_spec,attr[3],12'b0,4'b0,breakIP,1'b0} : indir_IP;
+  assign csrss_en_d=(~break_jump0 & ~break_jump1 & ~break_exceptn) ? 1'b1 : 1'bz;
+  assign csrss_data_d=(break_exceptn) ? {1'b0,attr[0],attr[1],is_after_spec,attr[3],12'b0,4'b0,breakIP,1'b0} : 65'bz;
+  assign csrss_data_d=(~break_exceptn & has_indir & indir_ready & has_some) ? indir_IP : 65'bz;
+  assign csrss_data_d=(~break_exceptn & ~(has_indir & indir_ready & has_some)) ? {49'b0,5'b0,excpt_fpu} : 65'bz;
   assign baseIP_d=(jump0_in & jump0_taken &~break_exceptn &~break_replay &~break_replayS) ? {jump0BND,jump0IP} : 6_3'bz;
   assign baseIP_d=(jump1_in & jump1_taken &~break_exceptn &~break_replay &~break_replayS) ? {jump1BND,jump1IP} : 63'bz;
   assign baseIP_d=(break_exceptn) ? {baseIP[62:43],excpt_handlerIP} : 63'bz;
@@ -1182,8 +1183,6 @@ module cntrl_find_outcome(
   .write3_addr(ret3_addr),.write3_data(ret3_data),.write3_wen(ret3_wen),
   .write4_addr(ret4_addr),.write4_data(ret4_data),.write4_wen(ret4_wen),
   .write5_addr(ret5_addr),.write5_data(ret5_data),.write5_wen(ret5_wen),
-  .write6_addr(ret6_addr),.write6_data(ret6_data),.write6_wen(ret6_wen),
-  .write7_addr(ret7_addr),.write7_data(ret7_data),.write7_wen(ret7_wen),
   
   .writeInit_addr(init ? initcount : new_addr),.writeInit_wen((new_en && ~stall && ~doStall)|init),
   .writeInit_data0({13'b0,instr0_en|init ? 2'd0 : 2'd2}),

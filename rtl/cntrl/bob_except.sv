@@ -14,9 +14,7 @@ module bob_except_ram(
   write3_addr,write3_data,write3_wen,
   write4_addr,write4_data,write4_wen,
   write5_addr,write5_data,write5_wen,
-  write6_addr,write6_data,write6_wen,
-  write7_addr,write7_data,write7_wen,
-  write8_addr,write8_data,write8_wen
+  write6_addr,write6_data,write6_wen
   );
   
   localparam ADDR_WIDTH=6;
@@ -58,14 +56,6 @@ module bob_except_ram(
   input [ADDR_WIDTH-1:0] write6_addr;
   input [DATA_WIDTH-1:0] write6_data;
   input write6_wen;
-
-  input [ADDR_WIDTH-1:0] write7_addr;
-  input [DATA_WIDTH-1:0] write7_data;
-  input write7_wen;
-
-  input [ADDR_WIDTH-1:0] write8_addr;
-  input [DATA_WIDTH-1:0] write8_data;
-  input write8_wen;
 
 
   reg [DATA_WIDTH-1:0] ram [ADDR_COUNT-1:0];
@@ -113,8 +103,6 @@ module bob_except(
   write3_addr,write3_data,write3_wen,
   write4_addr,write4_data,write4_wen,
   write5_addr,write5_data,write5_wen,
-  write6_addr,write6_data,write6_wen,
-  write7_addr,write7_data,write7_wen,
   writeInit_addr,writeInit_wen,
   writeInit_data0,
   writeInit_data1,
@@ -173,14 +161,6 @@ module bob_except(
   input [DATA_WIDTH-1:0] write5_data;
   input write5_wen;
 
-  input [ADDR_WIDTH-1:0] write6_addr;
-  input [DATA_WIDTH-1:0] write6_data;
-  input write6_wen;
-
-  input [ADDR_WIDTH-1:0] write7_addr;
-  input [DATA_WIDTH-1:0] write7_data;
-  input write7_wen;
-
 
 
   input [5:0] writeInit_addr;
@@ -216,8 +196,6 @@ module bob_except(
         write3_addr[9:4],write3_data,write3_wen && write3_addr[3:0]==k,
         write4_addr[9:4],write4_data,write4_wen && write4_addr[3:0]==k,
         write5_addr[9:4],write5_data,write5_wen && write5_addr[3:0]==k,
-        write6_addr[9:4],write6_data,write6_wen && write6_addr[3:0]==k,
-        write7_addr[9:4],write7_data,write7_wen && write7_addr[3:0]==k,
         writeInit_addr,writeInit_data[k],writeInit_wen
         );
     end
