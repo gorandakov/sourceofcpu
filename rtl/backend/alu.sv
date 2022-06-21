@@ -219,6 +219,10 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
   assign valRes1[63:32]=((operation[11:0]==`op_xor32) && nDataAlt) ? 32'b0  : 32'bz;   
   assign valRes1[31:0]=((operation[11:0]==`op_xor32 || operation[11:0]==`op_xor64) && nDataAlt) ? val_xor[31:0] : 32'bz;   
   
+  assign valRes1[63:32]=((operation[11:0]==`op_nxor64) && nDataAlt) ? ~val_xor[63:32] : 32'bz;   
+  assign valRes1[63:32]=((operation[11:0]==`op_nxor32) && nDataAlt) ? 32'b0  : 32'bz;   
+  assign valRes1[31:0]=((operation[11:0]==`op_nxor32 || operation[11:0]==`op_nxor64) && nDataAlt) ? ~val_xor[31:0] : 32'bz;   
+  
 
   assign valRes1[63:32]=((operation[11:0]==`op_mov64) && nDataAlt) ? val2[63:32] : 32'bz;   
   assign valRes1[63:32]=((operation[11:0]==`op_mov32) && nDataAlt) ? 32'b0 : 32'bz;   
@@ -272,8 +276,11 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
   assign valRes1[63:32]=((smallOP==`op_cmov64 || smallOP==`op_cmovn64) && ~operation[11] && ~doJmp) ? val1[63:32] : 32'bz;
 
   assign valRes1[7:0]=((smallOP==`op_cset || smallOP==`op_csetn) && ~operation[11]) ? {7'b0,doJmp} : 8'bz;
+  assign valRes1[7:0]=((smallOP==`op_csand || smallOP==`op_csandn) && ~operation[11]) ? {7'b0,doJmp&val1[0]} : 8'bz;
+  assign valRes1[7:0]=((smallOP==`op_csor || smallOP==`op_csor_n) && ~operation[11]) ? {7'b0,doJmp|val1[0]} : 8'bz;
 
-  assign valRes1[63:8]=((smallOP==`op_cset || smallOP==`op_csetn) && ~operation[11]) ? 56'b0 : 56'bz;
+  assign valRes1[63:8]=((smallOP==`op_cset || smallOP==`op_csetn ||
+      smallOP==`op_csand || smallOP==`op_csandn || smallOP==`op_csor || smallOP==`op_csor_n) && ~operation[11]) ? 56'b0 : 56'bz;
  
   assign is_ptr=val1[64]|val2[64]|(operation[11:0]==12'd58) && ~(val1[64]&val2[64]&is_sub||val2[64]&is_sub) && add_en|logic_en|
     (cmov_en&&(doJmp&val2[64]||~doJmp&val1[64]))|(operation[11:0]==12'd58)|(operation[11:0]==`op_mov64) && 
@@ -345,13 +352,10 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
   assign flags_COASZP=((retOp==(`op_sub64|`op_ra8)) && isFlags_reg) ? {|val1One_reg,flagSub64_OF_reg,~carryAdd4LL_reg,valRes_reg[63],flag64_ZF_reg,flag8_PF_reg} : 6'bz;
   assign flags_COASZP=((retOp==(`op_sub32|`op_ra8)) && isFlags_reg) ? {|val1One_reg[2:0],flagSub32_OF_reg,~carryAdd4LL_reg,valRes_reg[31],flag32_ZF_reg,flag8_PF_reg} : 6'bz;
 //end neg
-  assign flags_COASZP=((retOp==`op_and64) | (retOp==`op_or64) | (retOp==`op_xor64) && isFlags_reg) ? 
+  assign flags_COASZP=((retOp==`op_and64) | (retOp==`op_or64) | (retOp==`op_xor64) | (retOp==`op_nxor64) && isFlags_reg) ? 
     {3'b000,valRes_reg[63],flag64_ZF_reg,flag8_PF_reg} : 6'bz;
-  assign flags_COASZP=((retOp==`op_and32) | (retOp==`op_or32) | (retOp==`op_xor32) && isFlags_reg) ?
-    {3'b000,valRes_reg[31],flag32_ZF_reg,flag8_PF_reg} : 6'bz;
-
-  assign flags_COASZP=retOp==`op_and8  || retOp==`op_xor8 || retOp==`op_or8 
-   || retOp==`op_and16  || retOp==`op_xor16 || retOp==`op_or16  ? 6'b0 : 6'bz;
+  assign flags_COASZP=((retOp==`op_and32) | (retOp==`op_or32) | (retOp==`op_xor32) | (retOp[7:1]==7'd5) | (retOp[7:1]==7'd7)
+     | (retOp==`op_nxor64) && isFlags_reg) ? {3'b000,valRes_reg[31],flag32_ZF_reg,flag8_PF_reg} : 6'bz;
 
   assign flags_COASZP=((|retOp[7:5]) && retOp[7:0]!=`op_lahf && retOp[7:0]!=`op_clahf && retOp[7:0]!=`op_clahfn &&
 	  ~retOp[11]) ? 6'b0 : 6'bz;
