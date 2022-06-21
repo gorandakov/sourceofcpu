@@ -24,8 +24,8 @@
 
 `define op_xor64 16
 `define op_xor32 17
-`define op_xor16 18
-`define op_xor8  19
+`define op_nxor64 18
+`define op_nxor32  19
 
 `define op_shl64 20
 `define op_shl32 21
