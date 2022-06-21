@@ -208,7 +208,8 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   isBasicFPUScalarCmp && !|instr[13:11],
   isBasicFPUScalarCmp2 && !|instr[13:11],
   subIsMovOrExt,
-  isLeaIPRel
+  isLeaIPRel,
+  isJalR
   };
   
   assign clsPos0=opcode_main==8'hff && instr[15:13]==3'd1 && magic[0] && instr[31:16]==`csr_FPU;

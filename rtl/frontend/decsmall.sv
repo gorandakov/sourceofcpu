@@ -1565,19 +1565,21 @@ module smallInstr_decoder(
       end
 	  
       trien[31]=magic[0] & isJalR;
-      pport[31]=PORT_MUL;
+      pport[31]=PORT_ALU;
       prA_use[31]=1'b1;
-      prB_use[31]=1'b1;
-      prT_use[31]=1'b0;
+      prB_use[31]=1'b0;
+      prT_use[31]=1'b1;
       puseRs[31]=1'b1;
       prAlloc[31]=1'b1;
-      puseBConst[31]=1'b1;
+      puseBConst[31]=1'b0;
       prA[31]={instr[17],instr[11:8]};
-      pflags_write[31]=1'b0;
-      poperation[31][7:0]=`op_add64;
-      poperation[31][11]=1'b1;
-      poperation[31][12]=1'b1;
-      pjumpType[31]=5'h11;
+      prT[31]={instr[16],instr[15:12]};
+      pflags_write[31]=instr[23];
+      poperation[31][10:8]=instr[21:19];
+      poperation[31][0]=instr[18];
+      poperation[31][7:1]=instr[22] ? 7'd5 : 7'd7;
+      poperation[31][12]=~instr[23];
+      perror[31]=instr[31:24]!=8'b0;
  
       trien[32]=magic[0] & isSimdInt;
       puseRs[32]=1'b1;
