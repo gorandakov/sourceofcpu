@@ -231,12 +231,12 @@ module cntrl_find_outcome(
   jupd1_en,jupdt1_en,jupd1_ght_en,
   jupd1_addr,jupd1_baddr,
   jupd1_sc,jupd1_tk,
-  ret0_addr,ret0_data,ret0_dataF,ret0_wen,
-  ret1_addr,ret1_data,ret1_dataF,ret1_wen,
-  ret2_addr,ret2_data,ret2_dataF,ret2_wen,
-  ret3_addr,ret3_data,ret3_dataF,ret3_wen,
-  ret4_addr,ret4_data,ret4_dataF,ret4_wen,
-  ret5_addr,ret5_data,ret5_dataF,ret5_wen,ret5_IP,ret5_IP_en,
+  ret0_addr,ret0_data,ret0_wen,
+  ret1_addr,ret1_data,ret1_wen,
+  ret2_addr,ret2_data,ret2_wen,
+  ret3_addr,ret3_data,ret3_wen,
+  ret4_addr,ret4_data,ret4_wen,
+  ret5_addr,ret5_data,ret5_wen,ret5_IP,ret5_IP_en,
   mem_II_upper,
   mem_II_upper_out,
   mem_II_bits_fine,
@@ -498,27 +498,21 @@ module cntrl_find_outcome(
   
   input [9:0] 			ret0_addr;
   input [RET_WIDTH-1:0] 	ret0_data;
-  input [RET_WIDTH-1:0] 	ret0_dataF;
   input 			ret0_wen;
   input [9:0] 			ret1_addr;
   input [RET_WIDTH-1:0] 	ret1_data;
-  input [RET_WIDTH-1:0] 	ret1_dataF;
   input 			ret1_wen;
   input [9:0] 			ret2_addr;
   input [RET_WIDTH-1:0] 	ret2_data;
-  input [RET_WIDTH-1:0] 	ret2_dataF;
   input 			ret2_wen;
   input [9:0] 			ret3_addr;
   input [RET_WIDTH-1:0] 	ret3_data;
-  input [RET_WIDTH-1:0] 	ret3_dataF;
   input 			ret3_wen;
   input [9:0] 			ret4_addr;
   input [RET_WIDTH-1:0] 	ret4_data;
-  input [RET_WIDTH-1:0] 	ret4_dataF;
   input 			ret4_wen;
   input [9:0] 			ret5_addr;
   input [RET_WIDTH-1:0] 	ret5_data;
-  input [RET_WIDTH-1:0] 	ret5_dataF;
   input 			ret5_wen;
   input [64:0]			ret5_IP;
   input				ret5_IP_en;
@@ -1239,13 +1233,17 @@ module cntrl_find_outcome(
 	  excpt_fpu=11'b0;
       end else if (csrss_en && csrss_no==`csr_fpu) begin
 	  excpt_fpu=csrss_data[10:0];
-      end else begin
-	  if (ret0_dataF[RET_WIDTH-1]) excpt_fpu=excpt_fpu|ret0_dataF[13:3]; 
-	  if (ret1_dataF[RET_WIDTH-1]) excpt_fpu=excpt_fpu|ret1_dataF[13:3]; 
-	  if (ret2_dataF[RET_WIDTH-1]) excpt_fpu=excpt_fpu|ret2_dataF[13:3]; 
-	  if (ret3_dataF[RET_WIDTH-1]) excpt_fpu=excpt_fpu|ret3_dataF[13:3]; 
-	  if (ret4_dataF[RET_WIDTH-1]) excpt_fpu=excpt_fpu|ret4_dataF[13:3]; 
-	  if (ret5_dataF[RET_WIDTH-1]) excpt_fpu=excpt_fpu|ret5_dataF[13:3]; 
+      end else if (has_some) begin
+	  if (~xbreak[0]&fpudone[0]) excpt_fpu=excpt_fpu|ret[0][13:3]; 
+	  if (~xbreak[1]&fpudone[1]) excpt_fpu=excpt_fpu|ret[0][13:3]; 
+	  if (~xbreak[2]&fpudone[2]) excpt_fpu=excpt_fpu|ret[0][13:3]; 
+	  if (~xbreak[3]&fpudone[3]) excpt_fpu=excpt_fpu|ret[0][13:3]; 
+	  if (~xbreak[4]&fpudone[4]) excpt_fpu=excpt_fpu|ret[0][13:3]; 
+	  if (~xbreak[5]&fpudone[5]) excpt_fpu=excpt_fpu|ret[0][13:3]; 
+	  if (~xbreak[6]&fpudone[6]) excpt_fpu=excpt_fpu|ret[0][13:3]; 
+	  if (~xbreak[7]&fpudone[7]) excpt_fpu=excpt_fpu|ret[0][13:3]; 
+	  if (~xbreak[8]&fpudone[8]) excpt_fpu=excpt_fpu|ret[0][13:3]; 
+	  if (~xbreak[9]&fpudone[9]) excpt_fpu=excpt_fpu|ret[0][13:3]; 
       end
       if (rst) begin
           retire0_rT<=6'd0;
