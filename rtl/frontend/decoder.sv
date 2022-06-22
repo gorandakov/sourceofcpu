@@ -257,6 +257,7 @@ module decoder_aux_const(
       `csr_PCR_reg_save:	csr_PCR_reg_save<=csrss_data;
       `csr_mflags:		csr_mflags<=csrss_data[63:0];
       `csr_FPU:			csr_fpu<=csrss_data[63:0];
+      `csr_excpt_fpu:		csr_fpu[10:0]<=csrss_data[10:0];
       `csr_page:		csr_page<=csrss_data[63:0];
       `csr_vmpage:		csr_vmpage<=csrss_data[63:0];
       //`csr_cpage:		csr_cpage<=csrss_data;

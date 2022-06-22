@@ -20,6 +20,7 @@
 `define csr_ptr_intersect 33
 `define csr_restrict_lower 34
 `define csr_restrict_upper 35
+`define csr_excpt_fpu 1036
 `define mflags_cpl 1:0
 `define mflags_vm 2
 `define mflags_pg 3
