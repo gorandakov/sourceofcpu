@@ -5,22 +5,22 @@ module fu_alu(
   clk,
   rst,
   except,
-  u1_A,u1_B,u1_S,u1_op,u1_ret,u1_rten,u1_clkEn,
+  u1_A,u1_B,u1_S,u1_C,u1_op,u1_ret,u1_rten,u1_clkEn,
     u1_A_fufwd,u1_A_fuufwd,u1_B_fufwd,u1_B_fuufwd,
     u1_S_fufwd,u1_S_fuufwd,
-  u2_A,u2_B,u2_S,u2_op,u2_ret,u2_rten,u2_clkEn,
+  u2_A,u2_B,u2_S,u2_C,u2_op,u2_ret,u2_rten,u2_clkEn,
     u2_A_fufwd,u2_A_fuufwd,u2_B_fufwd,u2_B_fuufwd,
     u2_S_fufwd,u2_S_fuufwd,
-  u3_A,u3_B,u3_S,u3_op,u3_ret,u3_rten,u3_clkEn,
+  u3_A,u3_B,u3_S,u3_C,u3_op,u3_ret,u3_rten,u3_clkEn,
     u3_A_fufwd,u3_A_fuufwd,u3_B_fufwd,u3_B_fuufwd,
     u3_S_fufwd,u3_S_fuufwd,
-  u4_A,u4_B,u4_S,u4_op,u4_ret,u4_rten,u4_clkEn,
+  u4_A,u4_B,u4_S,u4_C,u4_op,u4_ret,u4_rten,u4_clkEn,
     u4_A_fufwd,u4_A_fuufwd,u4_B_fufwd,u4_B_fuufwd,
     u4_S_fufwd,u4_S_fuufwd,
-  u5_A,u5_B,u5_S,u5_nDataAlt,u5_op,u5_ret,u5_rten,u5_clkEn,
+  u5_A,u5_B,u5_S,u5_C,u5_nDataAlt,u5_op,u5_ret,u5_rten,u5_clkEn,
     u5_A_fufwd,u5_A_fuufwd,u5_B_fufwd,u5_B_fuufwd,
     u5_S_fufwd,u5_S_fuufwd,
-  u6_A,u6_B,u6_S,u6_op,u6_ret,u6_rten,u6_clkEn,
+  u6_A,u6_B,u6_S,u6_C,u6_op,u6_ret,u6_rten,u6_clkEn,
     u6_A_fufwd,u6_A_fuufwd,u6_B_fufwd,u6_B_fuufwd,
     u6_S_fufwd,u6_S_fuufwd,
   FU0, FU1,  FU2,  FU3,
@@ -42,6 +42,7 @@ module fu_alu(
   input [64:0]          u1_A;
   input [64:0]          u1_B;
   input [5:0]           u1_S;
+  input [32:0]          u1_C;
   input [12:0]          u1_op;
   output [8:0]          u1_ret;
   output                u1_rten;
@@ -56,6 +57,7 @@ module fu_alu(
   input [64:0]          u2_A;
   input [64:0]          u2_B;
   input [5:0]           u2_S;
+  input [32:0]          u2_C;
   input [12:0]          u2_op;
   output [8:0]          u2_ret;
   output                u2_rten;
@@ -70,6 +72,7 @@ module fu_alu(
   input [64:0]          u3_A;
   input [64:0]          u3_B;
   input [5:0]           u3_S;
+  input [32:0]          u3_C;
   input [12:0]          u3_op;
   output [8:0]          u3_ret;
   output                u3_rten;
@@ -84,6 +87,7 @@ module fu_alu(
   input [64:0]          u4_A;
   input [64:0]          u4_B;
   input [5:0]           u4_S;
+  input [32:0]          u4_C;
   input [12:0]          u4_op;
   output [8:0]          u4_ret;
   output                u4_rten;
@@ -98,6 +102,7 @@ module fu_alu(
   input [64:0]          u5_A;
   input [64:0]          u5_B;
   input [5:0]           u5_S;
+  input [32:0]          u5_C;
   input                 u5_nDataAlt;
   input [12:0]          u5_op;
   output [8:0]          u5_ret;
@@ -200,6 +205,13 @@ module fu_alu(
   wire [64:0] uu_B5;
   wire [64:0] uu_A6;
   wire [64:0] uu_B6;
+
+  reg [32:0] u1_C_reg;
+  reg [32:0] u2_C_reg;
+  reg [32:0] u3_C_reg;
+  reg [32:0] u4_C_reg;
+  reg [32:0] u5_C_reg;
+  reg [32:0] u6_C_reg;
 
   wire [5:0] uu_S1;
   wire [5:0] uu_S2;
@@ -572,19 +584,19 @@ module fu_alu(
 
 
   alu alu0(clk,rst,except,1'b0,1'b0,u1_op_reg,u1_isSub_reg,u1_clkEn_reg,1'b1,
-    u1_ret,u1_rten,uu_A1,uu_B1,uu_S1,FU4);
+    u1_ret,u1_rten,uu_A1,uu_B1,u1_C_reg,uu_S1,FU4);
   alu #(1'b0)  alu1(clk,rst,except,1'b0,1'b0,u2_op_reg,u2_isSub_reg,u2_clkEn_reg,1'b1,
-    u2_ret,u2_rten,uu_A2,uu_B2,uu_S2,FU7);
+    u2_ret,u2_rten,uu_A2,uu_B2,u2_C_reg,uu_S2,FU7);
   
   alu alu2(clk,rst,except,1'b0,1'b0,u3_op_reg,u3_isSub_reg,u3_clkEn_reg,1'b1,
-    u3_ret,u3_rten,uu_A3,uu_B3,uu_S3,FU5);
+    u3_ret,u3_rten,uu_A3,uu_B3,u3_C_reg,uu_S3,FU5);
   alu #(1'b0)  alu3(clk,rst,except,1'b0,1'b0,u4_op_reg,u4_isSub_reg,u4_clkEn_reg,1'b1,
-    u4_ret,u4_rten,uu_A4,uu_B4,uu_S4,FU8);
+    u4_ret,u4_rten,uu_A4,uu_B4,u4_C_reg,uu_S4,FU8);
   
   alu alu4(clk,rst,except,1'b0,1'b0,u5_op_reg,u5_isSub_reg,u5_clkEn_reg,u5_nDataAlt&&(&nDataAlt),
-    u5_ret,u5_rten,uu_A5,uu_B5,uu_S5,FU6);
+    u5_ret,u5_rten,uu_A5,uu_B5,u5_C_reg,uu_S5,FU6);
   alu #(1'b0)  alu5(clk,rst,except,1'b0,1'b0,u6_op_reg,u6_isSub_reg,u6_clkEn_reg,1'b1,
-    u6_ret,u6_rten,uu_A6,uu_B6,uu_S6,FU9);
+    u6_ret,u6_rten,uu_A6,uu_B6,u6_C_reg,uu_S6,FU9);
   
   alu_shift sh2_alu(
   clk,
@@ -705,6 +717,13 @@ module fu_alu(
       u4_clkEn_reg<=u4_clkEn;
       u5_clkEn_reg<=u5_clkEn;
       u6_clkEn_reg<=u6_clkEn;
+
+      u1_C_reg<=u1_C;
+      u2_C_reg<=u2_C;
+      u3_C_reg<=u3_C;
+      u4_C_reg<=u4_C;
+      u5_C_reg<=u5_C;
+      u6_C_reg<=u6_C;
 
       u1_op_reg<=u1_op;
       u2_op_reg<=u2_op;

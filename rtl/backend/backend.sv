@@ -5489,6 +5489,7 @@ dcache1 L1D_mod(
   .ret5_addr(fret_en[5] ? outII_reg7[8] : outII_reg2[8]),
     .ret5_data(fret_en[5] ? {1'b0,fret[5]} : {6'b0,FUS_alu[5],ex_alu[5]}/*h*/),
     .ret5_wen(fret_en[5]|enS_alu[5]),
+  .ret5_IP(FU_reg[9]),.ret5_IP_en(alu_jupdate),
   .mem_II_upper(retM_II0),
   .mem_II_upper_out(retM_II),
   .mem_II_bits_fine(retM_fine),

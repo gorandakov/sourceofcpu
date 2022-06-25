@@ -359,7 +359,7 @@ module smallInstr_decoder(
 
   assign isShlAddMulLike=opcode_main==8'd210 || opcode_main==8'd211;
   assign isPtrSec=opcode_main==8'd212;
-  assign isJalR=opcode_main==8'd213;
+  assign isJalR=opcode_main==8'd213 || opcode_main==8'd214;
   //216-219=cmp16,cmp8
 
   assign isBasicFPUScalarA=opcode_main==8'hf0 && instr[13:12]==2'b0;
@@ -1159,7 +1159,7 @@ module smallInstr_decoder(
       if (!isPtrSec && instr[28]) begin
 	  prA[16]=5'd2;
 	  puseBConst[16]=1'b1;
-	  pconstant[16]=64'h-1;
+	  pconstant[16]=64'hffff_ffff_ffff_ffff;
 	  prT[16]=5'd2;
 	  perror[16]=1'b0;
 	  //jump imm={instr[27:8],1'b0}
@@ -1567,7 +1567,7 @@ module smallInstr_decoder(
       trien[31]=magic[0] & isJalR;
       pport[31]=PORT_ALU;
       prA_use[31]=1'b1;
-      prB_use[31]=instr[31];
+      prB_use[31]=~instr[0];
       prT_use[31]=1'b1;
       puseRs[31]=1'b1;
       prAlloc[31]=1'b1;
@@ -1580,11 +1580,12 @@ module smallInstr_decoder(
       poperation[31][0]=instr[18];
       poperation[31][7:1]=instr[22] ? 7'd5 : 7'd7;
       poperation[31][12]=~instr[23];
-      if (instr[31]) begin
+      if (~instr[0]) begin
 	  poperation[31]=instr[0] ? `op_nxor32 : `op_nxor64;
 	  pflags_write[31]=1'b1;
       end else begin
 	  perror[31]=instr[31:24]==8'd0;
+	  if (magic[1:0]!=2'b01) perror[31]=1'b1;
       end
  
       trien[32]=magic[0] & isSimdInt;
