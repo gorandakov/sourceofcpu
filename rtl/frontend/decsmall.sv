@@ -908,6 +908,7 @@ module smallInstr_decoder(
                prT[9]={1'b0,instr[15:12]};
                prB[9]=5'd31;
 	       if (~opcode_main[0]) pconstant[9]={instr[47:16],{32{instr[16]}}};
+	       perror[9]=1'b0;
            end
        end else begin
            if (magic[1:0]==2'b01) begin
