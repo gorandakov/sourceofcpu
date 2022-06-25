@@ -359,7 +359,7 @@ module smallInstr_decoder(
 
   assign isShlAddMulLike=opcode_main==8'd210 || opcode_main==8'd211;
   assign isPtrSec=opcode_main==8'd212;
-  assign isJalR=opcode_main==8'd213 || opcode_main==8'd214;
+  assign isJalR=opcode_main==8'd213 || opcode_main==8'd214 || opcode_main==8'd215;
   //216-219=cmp16,cmp8
 
   assign isBasicFPUScalarA=opcode_main==8'hf0 && instr[13:12]==2'b0;
@@ -1567,7 +1567,7 @@ module smallInstr_decoder(
       trien[31]=magic[0] & isJalR;
       pport[31]=PORT_ALU;
       prA_use[31]=1'b1;
-      prB_use[31]=~instr[0];
+      prB_use[31]=opcode_main!=8'd213;
       prT_use[31]=1'b1;
       puseRs[31]=1'b1;
       prAlloc[31]=1'b1;
