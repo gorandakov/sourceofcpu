@@ -24,7 +24,7 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
   output retEn;
   input [64:0] val1;
   input [64:0] val2;
-  input [63:0] lpconst;
+  input [64:0] lpconst;
   input [5:0] valS;//flag
   output [64:0] valRes;  
   

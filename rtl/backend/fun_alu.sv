@@ -42,7 +42,7 @@ module fu_alu(
   input [64:0]          u1_A;
   input [64:0]          u1_B;
   input [5:0]           u1_S;
-  input [63:0]          u1_C;
+  input [64:0]          u1_C;
   input [12:0]          u1_op;
   output [8:0]          u1_ret;
   output                u1_rten;
@@ -57,7 +57,7 @@ module fu_alu(
   input [64:0]          u2_A;
   input [64:0]          u2_B;
   input [5:0]           u2_S;
-  input [63:0]          u2_C;
+  input [64:0]          u2_C;
   input [12:0]          u2_op;
   output [8:0]          u2_ret;
   output                u2_rten;
@@ -72,7 +72,7 @@ module fu_alu(
   input [64:0]          u3_A;
   input [64:0]          u3_B;
   input [5:0]           u3_S;
-  input [63:0]          u3_C;
+  input [64:0]          u3_C;
   input [12:0]          u3_op;
   output [8:0]          u3_ret;
   output                u3_rten;
@@ -87,7 +87,7 @@ module fu_alu(
   input [64:0]          u4_A;
   input [64:0]          u4_B;
   input [5:0]           u4_S;
-  input [63:0]          u4_C;
+  input [64:0]          u4_C;
   input [12:0]          u4_op;
   output [8:0]          u4_ret;
   output                u4_rten;
@@ -102,7 +102,7 @@ module fu_alu(
   input [64:0]          u5_A;
   input [64:0]          u5_B;
   input [5:0]           u5_S;
-  input [63:0]          u5_C;
+  input [64:0]          u5_C;
   input                 u5_nDataAlt;
   input [12:0]          u5_op;
   output [8:0]          u5_ret;
@@ -118,7 +118,7 @@ module fu_alu(
   input [64:0]          u6_A;
   input [64:0]          u6_B;
   input [5:0]           u6_S;
-  input [63:0]          u6_C;
+  input [64:0]          u6_C;
   input [12:0]          u6_op;
   output [8:0]          u6_ret;
   output                u6_rten;
@@ -207,12 +207,12 @@ module fu_alu(
   wire [64:0] uu_A6;
   wire [64:0] uu_B6;
 
-  reg [63:0] u1_C_reg;
-  reg [63:0] u2_C_reg;
-  reg [63:0] u3_C_reg;
-  reg [63:0] u4_C_reg;
-  reg [63:0] u5_C_reg;
-  reg [63:0] u6_C_reg;
+  reg [64:0] u1_C_reg;
+  reg [64:0] u2_C_reg;
+  reg [64:0] u3_C_reg;
+  reg [64:0] u4_C_reg;
+  reg [64:0] u5_C_reg;
+  reg [64:0] u6_C_reg;
 
   wire [5:0] uu_S1;
   wire [5:0] uu_S2;
