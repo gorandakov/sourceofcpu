@@ -2114,7 +2114,7 @@ module rs(
     newANeeded1,newBNeeded1,newSNeeded1,newReg1,newRegSimd1,newOp1,newPort1,
     newInstrIndex1,newLSQ1,rsAlloc1,newGazumpA1,newGazumpB1,newGazumpS1,
     newFunitA1,newFunitB1,newFunitS1,newLSFlag1,newAttr1,
-  newDataA2,newDataB2,newDataS2,newRegA2,newRegB2,newRegS2,
+  newDataA2,newDataB2,newDataC2,newDataS2,newRegA2,newRegB2,newRegS2,
     newANeeded2,newBNeeded2,newSNeeded2,newReg2,newRegSimd2,newOp2,newPort2,
     newInstrIndex2,rsAlloc2,newGazumpA2,newGazumpB2,newGazumpS2,
     newFunitA2,newFunitB2,newFunitS2,newAttr2,
@@ -2122,10 +2122,10 @@ module rs(
   outDataA0,outDataB0,outDataC0,outReg0,outOp0,outInstrIndex0,outWQ0,outLSFlag0,
     outFuFwdA0,outFuFwdB0,outFuuFwdA0,outFuuFwdB0,outLSQ0,outDataEn0,outThread0,//agu
     outAttr0,
-  outDataA1,outDataB1,outDataS1,outReg1,outRegSimd1,outOp1,outInstrIndex1,
+  outDataA1,outDataB1,outDataC1,outDataS1,outReg1,outRegSimd1,outOp1,outInstrIndex1,
     outFuFwdA1,outFuFwdB1,outFuFwdS1,outFuuFwdA1,outFuuFwdB1,
     outFuuFwdS1,outDataEn1,outThread1,outAttr1,//alu 1
-  outDataA2,outDataB2,outDataS2,outReg2,outRegSimd2,outOp2,outInstrIndex2,
+  outDataA2,outDataB2,outDataC2,outDataS2,outReg2,outRegSimd2,outOp2,outInstrIndex2,
     outFuFwdA2,outFuFwdB2,outFuFwdS2,outFuuFwdA2,outFuuFwdB2,
     outFuuFwdS2,outDataEn2,outThread2,outAttr2,//alu 2
 // wires from functional units  
@@ -2264,6 +2264,7 @@ module rs(
   input [DATA_WIDTH-1:0]       newDataA2;
   input [DATA_WIDTH-1:0]       newDataB2;
   input [FLAGS_WIDTH-1:0]       newDataS2;
+  input [CONST_WIDTH-1:0]       newDataC2;
   input [REG_WIDTH-1:0] newRegA2; 
   input [REG_WIDTH-1:0] newRegB2; 
   input [REG_WIDTH-1:0] newRegS2; 
@@ -2305,6 +2306,7 @@ module rs(
     
   output wire [DATA_WIDTH-1:0]       outDataA1;
   output wire [DATA_WIDTH-1:0]       outDataB1;
+  output wire [CONST_WIDTH-1:0]       outDataC1;
   output wire [FLAGS_WIDTH-1:0]       outDataS1;
   output wire [REG_WIDTH-1:0] outReg1;
   output wire [REG_WIDTH-1:0] outRegSimd1;
@@ -2322,6 +2324,7 @@ module rs(
 
   output wire [DATA_WIDTH-1:0]       outDataA2;
   output wire [DATA_WIDTH-1:0]       outDataB2;
+  output wire [CONST_WIDTH-1:0]       outDataC2;
   output wire [FLAGS_WIDTH-1:0]       outDataS2;
   output wire [REG_WIDTH-1:0] outReg2;
   output wire [REG_WIDTH-1:0] outRegSimd2;
@@ -2914,11 +2917,11 @@ module rs(
   clk,dataRst,stall|doStall,
   newRsSelect0,newDataC0,
   newRsSelect1,newDataC1,
-  32'B0,{CONST_WIDTH{1'B0}},
+  newRsSelect2,newDataC2,
   
   outRsSelect[0],outBank[0],rsFoundNZ[0],outDataC0,
-  32'b0,4'B0,1'b1,,
-  32'b0,4'B0,1'b1,
+  outRsSelect[1],outBank[1],rsFoundNZ[1],outDataC1,
+  outRsSelect[2],outBank[2],rsFoundNZ[2],outDataC2
   );
   
   rs_nonWakeUp_array #(OPERATION_WIDTH) op_mod(
