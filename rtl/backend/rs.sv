@@ -1668,7 +1668,7 @@ module rs_buf(
   localparam REG_WIDTH=`reg_addr_width;
   localparam OPERATION_WIDTH=`operation_width;
   localparam LSQ_WIDTH=`lsqRsNo_width;
-  localparam CONST_WIDTH=32;
+  localparam CONST_WIDTH=64;
   localparam FLAGS_WIDTH=`flags_width;
   localparam ROB_WIDTH=10;  
   
@@ -1972,7 +1972,7 @@ module rs_array(
   localparam REG_WIDTH=`reg_addr_width;
   localparam OPERATION_WIDTH=`operation_width;
   localparam LSQ_WIDTH=`lsqRsNo_width;
-  localparam CONST_WIDTH=32;
+  localparam CONST_WIDTH=64;
   localparam FLAGS_WIDTH=`flags_width;
   localparam ROB_WIDTH=10;  
   localparam BUF_COUNT=32;
@@ -2194,7 +2194,7 @@ module rs(
   localparam REG_WIDTH=`reg_addr_width;
   localparam OPERATION_WIDTH=`operation_width;
   localparam LSQ_WIDTH=`lsqRsNo_width;
-  localparam CONST_WIDTH=33;
+  localparam CONST_WIDTH=64;
   localparam FLAGS_WIDTH=6;  
   localparam BUF_COUNT=`rs_buf_count;
   localparam II_WIDTH=10;  

@@ -205,7 +205,7 @@ module smallInstr_decoder(
   
   reg keep2instr;
   
-  wire [31:0] constantDef;
+  wire [63:0] constantDef;
 
   wire [12:0] class_;
 
@@ -286,9 +286,10 @@ module smallInstr_decoder(
   assign opcode_main=instr[7:0];
   assign opcode_sub=instr[5:0];
   
-  assign constantDef=(magic[1:0]==2'b11) ? instr[47:16] : 32'bz;
-  assign constantDef=(magic[1:0]==2'b01) ? {{18{instr[31]}},instr[31:18]} : 32'bz;
-  assign constantDef=(~magic[0]) ? {26'b0,~instr[6] && instr[11:8]==4'b0,instr[6],instr[11:8]} : 32'bz;
+  assign constantDef=(magic==4'b1111) ? instr[79:16] : 64'bz;
+  assign constantDef=(magic[1:0]==2'b11) ? {{32{instr[47]}},instr[47:16]} : 32'bz;
+  assign constantDef=(magic[1:0]==2'b01) ? {{32{instr[31]}},{18{instr[31]}},instr[31:18]} : 32'bz;
+  assign constantDef=(~magic[0]) ? {32'b0,26'b0,~instr[6] && instr[11:8]==4'b0,instr[6],instr[11:8]} : 32'bz;
  
   assign reor_en_out=isFPUreor&&~reor_error;
   assign reor_val_out=instr[31:8];
@@ -607,8 +608,7 @@ module smallInstr_decoder(
           prT_use[tt]=1'b0;
           prC_use[tt]=1'b0;
           pport[tt]=4'b0;
-          pconstant[tt][31:0]=constantDef;
-          pconstant[tt][63:32]={32{constant[31]}};
+          pconstant[tt]=constantDef;
           //pconstant[tt][64]=1'b0;
      //     pisBigConst[tt]=magic[2:0]==3'b111;
           pthisSpecLoad[tt]=1'b0;    
@@ -1583,6 +1583,17 @@ module smallInstr_decoder(
       if (~instr[0]) begin
 	  poperation[31]=instr[0] ? `op_nxor32 : `op_nxor64;
 	  pflags_write[31]=1'b1;
+	  if (~instr[0] && magic==4'b1111) perror[31]==1'b0;
+           end else if (magic[3:0]==4'b0111) begin
+               prA[31]={instr[48],instr[11:8]};
+               prT[31]={instr[48],instr[11:8]};
+               prB[31]={instr[49],instr[15:12]};
+	       perror[31]==32'b0;
+           end else if (magic[1:0]==2'b11) begin
+               prA[31]={1'b0,instr[11:8]};
+               prT[31]={1'b0,instr[11:8]};
+               prB[31]={1'b0,instr[15:12]};
+           end
       end else begin
 	  perror[31]=instr[31:24]==8'd0;
 	  if (magic[1:0]!=2'b01) perror[31]=1'b1;

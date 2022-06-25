@@ -611,6 +611,8 @@ module cntrl_find_outcome(
   wire both_threads;
   wire thread0,thread1;
 
+  reg [10:0] excpt_fpu;
+
   wire retire_thread;
   reg retire_thread_reg;
 
@@ -1231,19 +1233,19 @@ module cntrl_find_outcome(
       end
       if (rst) begin
 	  excpt_fpu=11'b0;
-      end else if (csrss_en && csrss_no==`csr_fpu) begin
+      end else if (csrss_en && csrss_no==`csr_FPU) begin
 	  excpt_fpu=csrss_data[10:0];
       end else if (has_some) begin
-	  if (~xbreak[0]&fpudone[0]) excpt_fpu=excpt_fpu|ret[0][13:3]; 
-	  if (~xbreak[1]&fpudone[1]) excpt_fpu=excpt_fpu|ret[0][13:3]; 
-	  if (~xbreak[2]&fpudone[2]) excpt_fpu=excpt_fpu|ret[0][13:3]; 
-	  if (~xbreak[3]&fpudone[3]) excpt_fpu=excpt_fpu|ret[0][13:3]; 
-	  if (~xbreak[4]&fpudone[4]) excpt_fpu=excpt_fpu|ret[0][13:3]; 
-	  if (~xbreak[5]&fpudone[5]) excpt_fpu=excpt_fpu|ret[0][13:3]; 
-	  if (~xbreak[6]&fpudone[6]) excpt_fpu=excpt_fpu|ret[0][13:3]; 
-	  if (~xbreak[7]&fpudone[7]) excpt_fpu=excpt_fpu|ret[0][13:3]; 
-	  if (~xbreak[8]&fpudone[8]) excpt_fpu=excpt_fpu|ret[0][13:3]; 
-	  if (~xbreak[9]&fpudone[9]) excpt_fpu=excpt_fpu|ret[0][13:3]; 
+	  if (~xbreak[0]&fpudone[0]) excpt_fpu=excpt_fpu|ret_data[0][13:3]; 
+	  if (~xbreak[1]&fpudone[1]) excpt_fpu=excpt_fpu|ret_data[1][13:3]; 
+	  if (~xbreak[2]&fpudone[2]) excpt_fpu=excpt_fpu|ret_data[2][13:3]; 
+	  if (~xbreak[3]&fpudone[3]) excpt_fpu=excpt_fpu|ret_data[3][13:3]; 
+	  if (~xbreak[4]&fpudone[4]) excpt_fpu=excpt_fpu|ret_data[4][13:3]; 
+	  if (~xbreak[5]&fpudone[5]) excpt_fpu=excpt_fpu|ret_data[5][13:3]; 
+	  if (~xbreak[6]&fpudone[6]) excpt_fpu=excpt_fpu|ret_data[6][13:3]; 
+	  if (~xbreak[7]&fpudone[7]) excpt_fpu=excpt_fpu|ret_data[7][13:3]; 
+	  if (~xbreak[8]&fpudone[8]) excpt_fpu=excpt_fpu|ret_data[8][13:3]; 
+	  if (~xbreak[9]&fpudone[9]) excpt_fpu=excpt_fpu|ret_data[9][13:3]; 
       end
       if (rst) begin
           retire0_rT<=6'd0;

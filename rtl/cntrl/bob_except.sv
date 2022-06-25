@@ -73,8 +73,6 @@ module bob_except_ram(
       if (write4_wen) ram[write4_addr]<=write4_data;
       if (write5_wen) ram[write5_addr]<=write5_data;
       if (write6_wen) ram[write6_addr]<=write6_data;
-      if (write7_wen) ram[write7_addr]<=write7_data;
-      if (write8_wen) ram[write8_addr]<=write8_data;
       
       if (read_burst) read_addr_reg<=read_addr;
     end    
