@@ -2108,7 +2108,7 @@ bool get_check(Vheptane_core *top, req *reqs,unsigned long long &ip) {
 	}
 	insn_posR++;
 	insn_posR&=0x3f;
-	if (top->heptane_core__DOT__except) {
+	if (top->heptane_core__DOT__except && !top->heptane_core__DOT__except_due_jump) {
             printf("except %li, %li\n",count,ip);
 	    rtn=false;
 	}
