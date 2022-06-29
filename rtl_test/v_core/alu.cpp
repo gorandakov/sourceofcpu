@@ -2110,7 +2110,7 @@ bool get_check(Vheptane_core *top, req *reqs,unsigned long long &ip) {
 	insn_posR&=0x3f;
 	if (top->heptane_core__DOT__except && !top->heptane_core__DOT__except_due_jump) {
             printf("except %li, %li\n",count,ip);
-	    rtn=false;
+	    //rtn=false;
 	}
 	else printf("ret %li, \t%li, %x, fl:0x%x\n",count,ip+count,retII,get_retfl_data(top));
 	for(x=0;x<count;x++) {
