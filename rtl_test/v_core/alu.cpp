@@ -2108,8 +2108,9 @@ bool get_check(Vheptane_core *top, req *reqs,unsigned long long &ip) {
 	}
 	insn_posR++;
 	insn_posR&=0x3f;
-	if (top->heptane_core__DOT__except && !top->heptane_core__DOT__except_due_jump) {
+	if (top->heptane_core__DOT__except) {
             printf("except %li, %li\n",count,ip);
+	    insn_posW=insn_posR;
 	    //rtn=false;
 	}
 	else printf("ret %li, \t%li, %x, fl:0x%x\n",count,ip+count,retII,get_retfl_data(top));
