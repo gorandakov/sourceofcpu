@@ -17,6 +17,7 @@ module fun_fpusqr0(
   outII,
   outOp,
   FUreg,
+  FUSreg,
   FUwen,
   outAltData,
   FUF0,FUF1,FUF2,
@@ -62,6 +63,7 @@ module fun_fpusqr0(
   output [9:0] outII;
   output [12:0] outOp;
   output [8:0] FUreg;
+  output [8:0] FUSreg;
   output FUwen;
   output [2*SIMD_WIDTH-1:0] outAltData;
 
@@ -399,6 +401,8 @@ module fun_fpusqr0(
 	    rtOp[n] : {13{1'bz}};
 	  assign FUreg=(fxFRT_alten[n] && (!|(({fxFRT_alten,4'b0}>>n)&8'hf)) & ~rst) ?
 	    rtReg[n] : {REG_WIDTH{1'bz}};
+	  assign FUSreg=(fxFRT_alten[n] && (!|(({fxFRT_alten,4'b0}>>n)&8'hf)) & ~rst) ?
+	    9'h1ff : {REG_WIDTH{1'bz}};
 	  assign FUwen=(fxFRT_alten[n] && (!|(({fxFRT_alten,4'b0}>>n)&8'hf)) & ~rst) ?
 	    1'b1 : 1'bz;
 

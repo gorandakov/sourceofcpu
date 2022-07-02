@@ -18,6 +18,7 @@ module fun_fpusqr(
   outII,
   outOp,
   FUreg,
+  FUSreg,
   FUwen,
   outAltData,
   FUFH0,FUFH1,FUFH2,
@@ -71,6 +72,7 @@ module fun_fpusqr(
   output [9:0] outII;
   output [12:0] outOp;
   output [8:0] FUreg;
+  output [8:0] FUSreg;
   output FUwen;
   output [2*SIMD_WIDTH-1:0] outAltData;
 
@@ -182,6 +184,7 @@ module fun_fpusqr(
   outII,
   outOp,
   FUreg,
+  FUSreg,
   FUwen,
   outAltDataL,
   FUFL0,FUFL1,FUFL2,

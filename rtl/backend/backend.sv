@@ -1439,6 +1439,7 @@ module backend(
 //functional units
   wire [9:0][DATA_WIDTH-1:0] FU;
   wire [9:0][REG_WIDTH-1:0] FUreg;
+  wire [9:0][REG_WIDTH-1:0] FUSreg;
   wire [9:0]FUwen;
   reg FUwen0;
   reg FUwen1;
@@ -1552,14 +1553,19 @@ module backend(
   reg [DATA_WIDTH-1:0] FU_reg2[9:0];
 
   reg [REG_WIDTH-1:0] FUreg_reg[9:0];
+  reg [REG_WIDTH-1:0] FUSreg_reg[9:0];
   reg FUwen_reg[9:0];
   reg [REG_WIDTH-1:0] FUreg_reg2[9:0];
+  reg [REG_WIDTH-1:0] FUSreg_reg2[9:0];
   reg FUwen_reg2[9:0];
   reg [REG_WIDTH-1:0] FUreg_reg3[9:0];
+  reg [REG_WIDTH-1:0] FUSreg_reg3[9:0];
   reg FUwen_reg3[9:0];
   reg [REG_WIDTH-1:0] FUreg_reg4[9:0];
+  reg [REG_WIDTH-1:0] FUSreg_reg4[9:0];
   reg FUwen_reg4[9:0];
   reg [REG_WIDTH-1:0] FUreg_reg5[9:0];
+  reg [REG_WIDTH-1:0] FUSreg_reg5[9:0];
   reg FUwen_reg5[9:0];
   reg [REG_WIDTH-1:0] FUreg_reg6[9:0];
   reg FUwen_reg6[9:0];
@@ -1722,10 +1728,12 @@ module backend(
   wire [9:0]  outIIX;
   wire [12:0] outOpX;
   wire [8:0]  outRegX;
+  wire [8:0]  outRegSX;
   reg [3:0]  outEnX_reg;
   reg [9:0]  outIIX_reg;
   reg [12:0] outOpX_reg;
   reg [8:0]  outRegX_reg;
+  reg [8:0]  outRegSX_reg;
 
   reg [5:5][SIMD_WIDTH-1:0] outDataAVH_reg;
   reg [5:5][SIMD_WIDTH-1:0] outDataBVH_reg;
@@ -4117,15 +4125,15 @@ module backend(
 
   .retireRead0_addr(retfl_rF),.retireRead0_data(retfl_data),
 
-  .write0_addr_reg(FUreg_reg2[4]),.write0_data_reg(FUS4_reg),.write0_wen_reg(FUwen_reg2[4] && ex_alu[0][2] ),
-  .write1_addr_reg(FUreg_reg2[5]),.write1_data_reg(FUS5_reg),.write1_wen_reg(FUwen_reg2[5] && ex_alu[2][2] ),
-  .write2_addr_reg(FUreg_reg2[6]),.write2_data_reg(FUS6_reg),.write2_wen_reg(FUwen_reg2[6] && ex_alu[4][2] ),
-  .write3_addr_reg(FUreg_reg2[7]),.write3_data_reg(FUS7_reg),.write3_wen_reg(FUwen_reg2[7] && ex_alu[1][2]),
-  .write4_addr_reg(FUreg_reg2[8]),.write4_data_reg(FUS8_reg),.write4_wen_reg(FUwen_reg2[8] && ex_alu[3][2]),
-  .write5_addr_reg(FUreg_reg2[9]),.write5_data_reg(FUS9_reg),.write5_wen_reg(FUwen_reg2[9] && ex_alu[5][2] ),
-  .write6_addr_reg(FUreg_reg5[4]),.write6_data_reg(FUS1_reg),.write6_wen_reg(FUwen_reg5[4] && fsret[0][2]),
-  .write7_addr_reg(FUreg_reg5[5]),.write7_data_reg(FUS2_reg),.write7_wen_reg(FUwen_reg5[5] && fsret[2][2]),
-  .write8_addr_reg(FUreg_reg5[6]),.write8_data_reg(FUS3_reg),.write8_wen_reg(FUwen_reg5[6] && fsret[4][2]),
+  .write0_addr_reg(FUSreg_reg2[4]),.write0_data_reg(FUS4_reg),.write0_wen_reg(FUwen_reg2[4] && ex_alu[0][2] ),
+  .write1_addr_reg(FUSreg_reg2[5]),.write1_data_reg(FUS5_reg),.write1_wen_reg(FUwen_reg2[5] && ex_alu[2][2] ),
+  .write2_addr_reg(FUSreg_reg2[6]),.write2_data_reg(FUS6_reg),.write2_wen_reg(FUwen_reg2[6] && ex_alu[4][2] ),
+  .write3_addr_reg(FUSreg_reg2[7]),.write3_data_reg(FUS7_reg),.write3_wen_reg(FUwen_reg2[7] && ex_alu[1][2]),
+  .write4_addr_reg(FUSreg_reg2[8]),.write4_data_reg(FUS8_reg),.write4_wen_reg(FUwen_reg2[8] && ex_alu[3][2]),
+  .write5_addr_reg(FUSreg_reg2[9]),.write5_data_reg(FUS9_reg),.write5_wen_reg(FUwen_reg2[9] && ex_alu[5][2] ),
+  .write6_addr_reg(FUSreg_reg5[4]),.write6_data_reg(FUS1_reg),.write6_wen_reg(FUwen_reg5[4] && fsret[0][2]),
+  .write7_addr_reg(FUSreg_reg5[5]),.write7_data_reg(FUS2_reg),.write7_wen_reg(FUwen_reg5[5] && fsret[2][2]),
+  .write8_addr_reg(FUSreg_reg5[6]),.write8_data_reg(FUS3_reg),.write8_wen_reg(FUwen_reg5[6] && fsret[4][2]),
   .newAddr0(clrRS_reg[0][8:4]),.newEn0(clrS_reg[0]),
   .newAddr1(clrRS_reg[1][8:4]),.newEn1(clrS_reg[1]),
   .newAddr2(clrRS_reg[2][8:4]),.newEn2(clrS_reg[2]),
@@ -5188,6 +5196,7 @@ module backend(
   .outII(outIIX),
   .outOp(outOpX),
   .FUreg(outRegX),
+  .FUSreg(outRegSX),
   .FUwen(),
   .outAltData({sqrDatH[67:0],sqrDatL[67:0]}),
   .FUFH0(FUFH[0]),.FUFH1(FUFH[1]),.FUFH2(FUFH[2]),
@@ -5221,6 +5230,7 @@ module backend(
   assign outII[7]=sqrDatEn_reg ? outIIX_reg :10'bz;
   assign outOp[7]=sqrDatEn_reg ? outOpX_reg :13'bz;
   assign outReg[7]=sqrDatEn_reg ? outRegX_reg : 9'bz;
+  assign outRegS[7]=sqrDatEn_reg ? outRegSX_reg : 9'bz;
 
   get_LDQ_new_en ldq_new_mod(
   rs_port[0],rs_ldst_flg[0], 
@@ -5561,6 +5571,13 @@ dcache1 L1D_mod(
   assign FUwen[1]=FUwen1;
   assign FUwen[2]=FUwen2;
   assign FUwen[3]=FUwen3;
+  
+  assign FUSreg[4]=outRegS[3*0+1];
+  assign FUSreg[5]=outRegS[3*1+1];
+  assign FUSreg[6]=outRegS[3*2+1];
+  assign FUSreg[7]=outRegS[3*0+2];
+  assign FUSreg[8]=outRegS[3*1+2];
+  assign FUSreg[9]=outRegS[3*2+2];
 
   generate
       genvar q,q1;
@@ -6942,6 +6959,7 @@ dcache1 L1D_mod(
 	  outIIX_reg<=10'hf;
 	  outOpX_reg<=13'b0;
 	  outRegX_reg<=9'b0;
+	  outRegSX_reg<=9'b0;
           outDataAVH_reg<={SIMD_WIDTH{1'b0}};
           outDataBVH_reg<={SIMD_WIDTH{1'b0}};
           outDataAVL_reg<={SIMD_WIDTH{1'b0}};
@@ -7014,6 +7032,7 @@ dcache1 L1D_mod(
 	  outIIX_reg<=outIIX;
 	  outOpX_reg<=outOpX;
 	  outRegX_reg<=outRegX;
+	  outRegSX_reg<=outRegSX;
           outDataAVH_reg<=outDataAVH[5];
           outDataBVH_reg<=outDataBVH[5];
           outDataAVL_reg<=outDataAVL[5];
@@ -7253,6 +7272,11 @@ dcache1 L1D_mod(
               FU_reg[f]<={DATA_WIDTH{1'B0}};
               FU_reg2[f]<={DATA_WIDTH{1'B0}};
               FUreg_reg[f]<={REG_WIDTH{1'B0}};
+              FUreg_reg2[f]<={REG_WIDTH{1'B0}};
+              FUreg_reg3[f]<={REG_WIDTH{1'B0}};
+              FUreg_reg4[f]<={REG_WIDTH{1'B0}};
+              FUreg_reg5[f]<={REG_WIDTH{1'B0}};
+              FUreg_reg[f]<={REG_WIDTH{1'B0}};
               FUwen_reg[f]<=1'b0;
               FUreg_reg2[f]<={REG_WIDTH{1'B0}};
               FUwen_reg2[f]<=1'b0;
@@ -7322,6 +7346,7 @@ dcache1 L1D_mod(
               FU_reg[f]<=FU[f];
               FU_reg2[f]<=FU_reg[f];
               if (FUwen[f]) FUreg_reg[f]<=FUreg[f];
+              if (FUwen[f]) FUSreg_reg[f]<=FUSreg[f];
               FUwen_reg[f]<=FUwen[f];
               FUreg_reg2[f]<=FUreg_reg[f];
               FUwen_reg2[f]<=FUwen_reg[f];
@@ -7335,6 +7360,10 @@ dcache1 L1D_mod(
               FUwen_reg6[f]<=FUwen_reg5[f];
               FUreg_reg7[f]<=FUreg_reg6[f];
               FUwen_reg7[f]<=FUwen_reg6[f];
+              FUSreg_reg2[f]<=FUSreg_reg[f];
+              FUSreg_reg3[f]<=FUSreg_reg2[f];
+              FUSreg_reg4[f]<=FUSreg_reg3[f];
+              FUSreg_reg5[f]<=FUSreg_reg4[f];
 	      FUVH_reg[f]<=FUVH[f];
 	      FUVL_reg[f]<=FUVL[f];
 	      if (f<4) FUVLX_reg[f]<=FUVLX[f];
