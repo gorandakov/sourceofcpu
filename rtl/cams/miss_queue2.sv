@@ -1078,7 +1078,7 @@ module missQ(
   assign mOp3_addr_low_no=~now_flushing  ? mOp3_addr_low : 2'bz; 
   assign mOp3_odd_no=now_flushing  ? read_mop[3][`mOp1_odd] : 1'bz; 
   assign mOp3_odd_no=~now_flushing & ~alt_bus_hold  ? mOp3_odd : 1'bz;
-  assign mOp3_odd_no=alt_bus_hold ? alt_bus_addr[3] : 1'bz;
+  assign mOp3_odd_no=alt_bus_hold ? alt_bus_addr[0] : 1'bz;
   assign mOp3_banks_no=now_flushing  ?    rdbanks[3] : 32'bz;
   assign mOp3_banks_no=alt_bus_hold  ? 32'b0 : 32'bz;
   assign mOp3_banks_no=~now_flushing & ~alt_bus_hold  ? mOp3_banks : 32'bz;
