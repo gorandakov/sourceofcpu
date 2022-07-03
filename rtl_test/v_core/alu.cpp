@@ -2361,8 +2361,11 @@ void gen_prog(req *reqs,int count, FILE *f,hcont *contx,char *mem,char *pmem) {
    
    for(n=32;n<(count-2);n++) {
 	   int p;
-	   if ((p=(lrand48()&3))==2) {
+	   if ((p=(lrand48()&3))==3) {
                reqs[n].gen(false, false, lrand48()&1, NULL,contx,0,NULL,NULL);
+	       fprintf(f,"%s",reqs[n].asmtext);
+	   else if (p==2) {
+               reqs[n].gen(false, true, false, NULL,contx,0,NULL,NULL);
 	       fprintf(f,"%s",reqs[n].asmtext);
 	   } else if (p)  {
                if (reqs[n+1].gen(false, false, false, NULL,contx,1,mem,pmem)) n++;
