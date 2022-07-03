@@ -7031,8 +7031,8 @@ dcache1 L1D_mod(
 	  outEnX_reg<=outEnX;
 	  outIIX_reg<=outIIX;
 	  outOpX_reg<=outOpX;
-	  outRegX_reg<=(outOp_reg4[8][11]&outEn_reg4[8][11]&outEn_reg4[8][11]) ? outReg_reg3[8] : outRegX;
-	  outRegSX_reg<=(outOp_reg4[8][11]&outEn_reg4[8][11]&outEn_reg4[8][11]) ? outRegS_reg3[8] : outRegSX;
+	  outRegX_reg<=(outOp_reg4[8][11]&outEn_reg4[8][1]&outEn_reg4[8][0]) ? outReg_reg3[8] : outRegX;
+	  outRegSX_reg<=(outOp_reg4[8][11]&outEn_reg4[8][1]&outEn_reg4[8][0]) ? FUSreg_reg3[9] : outRegSX;
           outDataAVH_reg<=outDataAVH[5];
           outDataBVH_reg<=outDataBVH[5];
           outDataAVL_reg<=outDataAVL[5];

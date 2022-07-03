@@ -211,6 +211,7 @@ module fun_fpusqr(
   ,//II
   ,//Op
   ,//FUreg
+  ,//FUSreg
   ,//FUwen
   outAltDataH,
   FUFH0,FUFH1,FUFH2,

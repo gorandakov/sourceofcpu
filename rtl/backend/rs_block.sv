@@ -198,7 +198,7 @@ module rs_writeiS_forward(
   input stall;
   
   input [DATA_WIDTH-1:0] oldData;
-  output reg [DATA_WIDTH-1:0] newData;
+  output [DATA_WIDTH-1:0] newData;
   input [3:0] fuFwd;
   input [3:0] fuuFwd;
   
@@ -226,6 +226,7 @@ module rs_writeiS_forward(
   wire [DATA_WIDTH-1:0] newData_d;
   wire [DATA_WIDTH-1:0] newDataFu_d;
   wire [DATA_WIDTH-1:0] newDataFuu_d;
+  reg [DATA_WIDTH-1:0] oldData_reg;
   
   assign newDataFu_d=(fuFwd==4'd0) ? FU0 : {DATA_WIDTH{1'BZ}};  
   assign newDataFuu_d=(fuuFwd==4'd0) ? FU0_reg : {DATA_WIDTH{1'BZ}};  
@@ -249,9 +250,13 @@ module rs_writeiS_forward(
   assign newDataFuu_d=(fuuFwd[3] && |fuuFwd[2:0]) ? FU9_reg : {DATA_WIDTH{1'BZ}};  
 
 
-  assign newData=({fuFwd,fuuFwd}==8'hff) ? oldData : {DATA_WIDTH{1'BZ}};  
+  assign newData=({fuFwd,fuuFwd}==8'hff) ? oldData_reg : {DATA_WIDTH{1'BZ}};  
   assign newData=(fuFwd!=4'hf) ? newDataFu_d : {DATA_WIDTH{1'BZ}};  
   assign newData=(fuuFwd!=4'hf) ? newDataFuu_d : {DATA_WIDTH{1'BZ}};  
+
+  always @(posedge clk) begin
+	  oldData_reg<=oldData;
+  end
 
 endmodule
 
