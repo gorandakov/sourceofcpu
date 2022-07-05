@@ -294,7 +294,7 @@ module fun_fpu(
   assign HH_data=gxDataBFL_reg[0];
   //verilator lint_on WIDTH
 
-  if (!ISADD && !INDEX[1]) fpucadd cadd2L_mod(
+  if (!ISADD) fpucadd cadd2L_mod(
   .clk(clk),
   .rst(rst),
   .A({fxDataAFL_reg[0][65],fxDataAFL_reg[0][15+68:68],
@@ -311,14 +311,14 @@ module fun_fpu(
   .res(FOOF[0][67:0]),
   .res_hi(FOOF[0][68+15:68]),
   .isDBL(fxFCADD_dbl|H),
-  .raise(fxFCADD_raise),
+  .raise(fxFADD_raise),
   .fpcsr(fpcsr[31:0]),
   .is_rndD(fxFCADD_rndD),
   .is_rndS(fxFCADD_rndS)
   );
   
   
-  if (!ISADD&&~INDEX[1]) fperm #(1) fperm1CL_mod(
+  if (!ISADD) fperm #(1) fperm1CL_mod(
   .clk(clk),
   .rst(rst),
   .en(~(H? fxFCADD_dbl:fxFCADD_dblext)&~fxFCADD_sn),
@@ -343,7 +343,7 @@ module fun_fpu(
 	      assign FUF6=|ALT_INP_reg ? {S+SIMD_WIDTH{1'BZ}} : FOOF_reg[0];
 	      assign FUF6=ALT_INP_reg[0] ? ALTDATA0 : {S+SIMD_WIDTH{1'BZ}};
 	      assign FUF6=ALT_INP_reg[1] ? ALTDATA1 : {S+SIMD_WIDTH{1'BZ}};
-	      assign FUF9=FOOF_reg[1];
+	      assign FUF9=FOOF_reg[0];
       end
   endgenerate
 
