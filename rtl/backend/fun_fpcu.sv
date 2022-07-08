@@ -384,7 +384,7 @@ module fun_fpu(
   .res(FOOF[1][67:0]),
   .res_hi(FOOF[1][68+15:68]),
   .isDBL(fxFCADD_dbl|H),
-  .raise(fxFADD_raise),
+  .raise(fxFCADD_raise),
   .fpcsr(fpcsr[31:0]),
   .is_rndD(fxFCADD_rndD),
   .is_rndS(fxFCADD_rndS)
@@ -418,7 +418,7 @@ module fun_fpu(
 	      assign FUF6=|ALT_INP_reg ? {S+SIMD_WIDTH{1'BZ}} : FOOF_reg[0];
 	      assign FUF6=ALT_INP_reg[0] ? ALTDATA0 : {S+SIMD_WIDTH{1'BZ}};
 	      assign FUF6=ALT_INP_reg[1] ? ALTDATA1 : {S+SIMD_WIDTH{1'BZ}};
-	      assign FUF9=FOOF_reg[0];
+	      assign FUF9=FOOF_reg[1];
       end
   endgenerate
 
