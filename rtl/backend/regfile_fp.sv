@@ -6,7 +6,7 @@
 
 //regfile_ram read during write behaviour: write first; untiled memory
 //WARNING: data output needs to be updated even if no clkEn; clkEn is only for the addresses.
-module regfile_ram(
+module regfileF_ram(
   clk,
   rst,
   retire_clkEn,
@@ -15,18 +15,12 @@ module regfile_ram(
   read1_addr,read1_data,read1_clkEn,
   read2_addr,read2_data,read2_clkEn,
   read3_addr,read3_data,read3_clkEn,
-  read4_addr,read4_data,read4_clkEn,
-  read5_addr,read5_data,read5_clkEn,
-  read6_addr,read6_data,read6_clkEn,
-  read7_addr,read7_data,read7_clkEn,
-  read8_addr,read8_data,read8_clkEn,
 
   retireRead_addr,retireRead_data,
 
   write0_addr,write0_data,write0_wen,
   write1_addr,write1_data,write1_wen,
-  write2_addr,write2_data,write2_wen,
-  write3_addr,write3_data,write3_wen
+  write2_addr,write2_data,write2_wen
   );
 
   parameter DATA_WIDTH=`alu_width;
@@ -54,26 +48,6 @@ module regfile_ram(
   output [DATA_WIDTH-1:0] read3_data;
   input read3_clkEn;
 
-  input [ADDR_WIDTH-1:0] read4_addr;
-  output [DATA_WIDTH-1:0] read4_data;
-  input read4_clkEn;
-
-  input [ADDR_WIDTH-1:0] read5_addr;
-  output [DATA_WIDTH-1:0] read5_data;
-  input read5_clkEn;
-
-  input [ADDR_WIDTH-1:0] read6_addr;
-  output [DATA_WIDTH-1:0] read6_data;
-  input read6_clkEn;
-
-  input [ADDR_WIDTH-1:0] read7_addr;
-  output [DATA_WIDTH-1:0] read7_data;
-  input read7_clkEn;
-
-  input [ADDR_WIDTH-1:0] read8_addr;
-  output [DATA_WIDTH-1:0] read8_data;
-  input read8_clkEn;
-
 
   input [ADDR_WIDTH-1:0] retireRead_addr;
   output [DATA_WIDTH-1:0] retireRead_data;
@@ -91,22 +65,12 @@ module regfile_ram(
   input [DATA_WIDTH-1:0] write2_data;
   input write2_wen;
 
-  input [ADDR_WIDTH-1:0] write3_addr;
-  input [DATA_WIDTH-1:0] write3_data;
-  input write3_wen;
-  
-
   reg [DATA_WIDTH-1:0] ram [ADDR_COUNT-1:0];
 
   reg [ADDR_WIDTH-1:0] read0_addr_reg;
   reg [ADDR_WIDTH-1:0] read1_addr_reg;
   reg [ADDR_WIDTH-1:0] read2_addr_reg;
   reg [ADDR_WIDTH-1:0] read3_addr_reg;
-  reg [ADDR_WIDTH-1:0] read4_addr_reg;
-  reg [ADDR_WIDTH-1:0] read5_addr_reg;
-  reg [ADDR_WIDTH-1:0] read6_addr_reg;
-  reg [ADDR_WIDTH-1:0] read7_addr_reg;
-  reg [ADDR_WIDTH-1:0] read8_addr_reg;
 
   reg [ADDR_WIDTH-1:0] retireRead_addr_reg;
 
@@ -114,11 +78,6 @@ module regfile_ram(
   assign read1_data=ram[read1_addr_reg];
   assign read2_data=ram[read2_addr_reg];
   assign read3_data=ram[read3_addr_reg];
-  assign read4_data=ram[read4_addr_reg];
-  assign read5_data=ram[read5_addr_reg];
-  assign read6_data=ram[read6_addr_reg];
-  assign read7_data=ram[read7_addr_reg];
-  assign read8_data=ram[read8_addr_reg];
 
 
   assign retireRead_data=ram[retireRead_addr_reg][DATA_WIDTH-1:0];
@@ -131,11 +90,6 @@ module regfile_ram(
           read1_addr_reg<={ADDR_WIDTH{1'b0}};
           read2_addr_reg<={ADDR_WIDTH{1'b0}};
           read3_addr_reg<={ADDR_WIDTH{1'b0}};
-          read4_addr_reg<={ADDR_WIDTH{1'b0}};
-          read5_addr_reg<={ADDR_WIDTH{1'b0}};
-          read6_addr_reg<={ADDR_WIDTH{1'b0}};
-          read7_addr_reg<={ADDR_WIDTH{1'b0}};
-          read8_addr_reg<={ADDR_WIDTH{1'b0}};
           retireRead_addr_reg<={ADDR_WIDTH{1'b0}};
         end
       else
@@ -148,16 +102,6 @@ module regfile_ram(
             read2_addr_reg<=read2_addr;
         if (read3_clkEn)
             read3_addr_reg<=read3_addr;
-        if (read4_clkEn)
-            read4_addr_reg<=read4_addr;
-        if (read5_clkEn)
-            read5_addr_reg<=read5_addr;
-        if (read6_clkEn)
-            read6_addr_reg<=read6_addr;
-        if (read7_clkEn)
-            read7_addr_reg<=read7_addr;
-        if (read8_clkEn)
-            read8_addr_reg<=read8_addr;
       end
       
       if (retire_clkEn & ~rst)
