@@ -4653,12 +4653,20 @@ module backend(
     .outLSQ0(WoutLSQ[0]),.outDataEn0(WoutDataEn[0]),.outThread0(WoutThread[0]),.outWQ0(WoutWQ[0]),
     .outLSFlag0(WoutLSflag[0]),//agu
     .outAttr0(WoutAttr[0]),
+  .outDataB1(WDoutData[0]),.outOp1(WDoutOp[0]),.outInstrIndex1(WDoutII[0]),
+    .outFuFwdB1(WDoutFuFwd[0]),.outFuuFwdB1(WDoutFuuFwd[0]),.outLSQ1(WDoutLSQ[0]),
+    .outDataEn1(WDoutDataEn[0]),.outThread1(WDoutThread[0]),.outWQ1(WDoutWQ[0]),//data
+    .outAttr1(),
   .outDataA2(WoutDataA[1]),.outDataB2(WoutDataB[1]),.outDataC2(WoutDataC[1]),
     .outOp2(WoutOp[1]),.outInstrIndex2(WoutII[1]),
     .outFuFwdA2(WfuFwdA[1]),.outFuFwdB2(WfuFwdB[1]),.outFuuFwdA2(WfuuFwdA[1]),.outFuuFwdB2(WfuuFwdB[1]),
     .outLSQ2(WoutLSQ[1]),.outDataEn2(WoutDataEn[1]),.outThread2(WoutThread[1]),.outWQ2(WoutWQ[1]),
     .outLSFlag2(WoutLSflag[1]),//agu
     .outAttr2(WoutAttr[1]),
+  .outDataA3(WDoutData[1]),.outOp3(WDoutOp[1]),.outInstrIndex3(WDoutII[1]),
+    .outFuFwdA3(WDoutFuFwd[1]),.outFuuFwdA3(WDoutFuuFwd[1]),.outLSQ3(WDoutLSQ[1]),
+    .outDataEn3(WDoutDataEn[1]),.outThread3(WDoutThread[1]),.outWQ3(WDoutWQ[1]),//data
+    .outAttr3(),
 // wires from functional units  
   .FU0(FU_reg[0]),.FUreg0(FUreg[0]),.FUwen0(FUwen[0]),
   .FU1(FU_reg[1]),.FUreg1(FUreg[1]),.FUwen1(FUwen[1]),
@@ -4669,8 +4677,82 @@ module backend(
   .FU6(FU_reg[6]),.FUreg6(FUreg[6]),.FUwen6(FUwen[6]),
   .FU7(FU_reg[7]),.FUreg7(FUreg[7]),.FUwen7(FUwen[7]),
   .FU8(FU_reg[8]),.FUreg8(FUreg[8]),.FUwen8(FUwen[8]),
-  .FU9(FU_reg[9]),.FUreg9(FUreg[9]),.FUwen9(FUwen[9])
+  .FU9(FU_reg[9]),.FUreg9(FUreg[9]),.FUwen9(FUwen[9]),
+
+  .FUWQ0(lsr_wr_data[4][`lsaddr_WQ]), .FUWQen0(dc_wrEn[0]),
+  .FUWQ1(lsr_wr_data[5][`lsaddr_WQ]), .FUWQen1(dc_wrEn[1]),
+  
+  .newDataVA0H(dataAVH[0]),.newDataVB0H(dataBVH[0]),.newDataVA0L(dataAVL[0]),.newDataVB0L(dataBVL[0]),
+  .newDataFA0H(dataAFH[0]),.newDataFB0H(dataBFH[0]),.newDataFA0L(dataAFL[0]),.newDataFB0L(dataBFL[0]),
+  .newDataVA1H(dataAVH[1]),.newDataVB1H(dataBVH[1]),.newDataVA1L(dataAVL[1]),.newDataVB1L(dataBVL[1]),
+  .newDataFA1H(dataAFH[1]),.newDataFB1H(dataBFH[1]),.newDataFA1L(dataAFL[1]),.newDataFB1L(dataBFL[1]),
+  .newDataVA2H(dataAVH[2]),.newDataVB2H(dataBVH[2]),.newDataVA2L(dataAVL[2]),.newDataVB2L(dataBVL[2]),
+  .newDataFA2H(dataAFH[2]),.newDataFB2H(dataBFH[2]),.newDataFA2L(dataAFL[2]),.newDataFB2L(dataBFL[2]),
+
+  .outDataVB1H(WDoutDataVH[0]),.outDataVB1L(WDoutDataVL[0]),
+  .outDataFB1H(WDoutDataFH[0]),.outDataFB1L(WDoutDataFL[0]),
+  .outDataVA3H(WDoutDataVH[1]),.outDataVA3L(WDoutDataVL[1]),
+  .outDataFA3H(WDoutDataFH[1]),.outDataFA3L(WDoutDataFL[1]),
+
+  .FUV0H(FUVH[0]),.FUV0L(FUVL[0]),.FUF0H(FUFH[0]),.FUF0L(FUFL[0]),
+  .FUV1H(FUVH[1]),.FUV1L(FUVL[1]),.FUF1H(FUFH[1]),.FUF1L(FUFL[1]),
+  .FUV2H(FUVH[2]),.FUV2L(FUVL[2]),.FUF2H(FUFH[2]),.FUF2L(FUFL[2]),
+  .FUV3H(FUVH[3]),.FUV3L(FUVL[3]),.FUF3H(FUFH[3]),.FUF3L(FUFL[3]),
+  .FUV4H(FUVH[4]),.FUV4L(FUVL[4]),.FUF4H(FUFH[4]),.FUF4L(FUFL[4]),
+  .FUV5H(FUVH[5]),.FUV5L(FUVL[5]),.FUF5H(FUFH[5]),.FUF5L(FUFL[5]),
+  .FUV6H(FUVH[6]),.FUV6L(FUVL[6]),.FUF6H(FUFH[6]),.FUF6L(FUFL[6]),
+  .FUV7H(FUVH[7]),.FUV7L(FUVL[7]),.FUF7H(FUFH[7]),.FUF7L(FUFL[7]),
+  .FUV8H(FUVH[8]),.FUV8L(FUVL[8]),.FUF8H(FUFH[8]),.FUF8L(FUFL[8]),
+  .FUV9H(FUVH[9]),.FUV9L(FUVL[9]),.FUF9H(FUFH[9]),.FUF9L(FUFL[9])
   );
+  /*in_flip_rt #(2*SIMD_WIDTH+9+10) rtDatA_mod(
+    .clk(clk),.rst(rst),.in_en(fxFRT_en),.pause(fxFRT_pause[2]),
+    .d_in({outII_reg3[8],outReg_reg3[8],fxDataAFH[5],fxDataAFL[5]}),
+    .d_out({frtII,frtReg,rtDataA}),
+    .dout_en((fxFRT_can[0] & ~fxFRT_don_reg[0] & ~fxFRT_don_reg2[0] & ~fxFRT_don_reg2[0] & ~fxFRT_don_reg3[0]) |
+     (fxFRT_can[1] & ~fxFRT_don_reg[1] & ~fxFRT_don_reg2[1] & ~fxFRT_don_reg2[1] & ~fxFRT_don_reg3[1]) |
+     (fxFRT_can[2] & ~fxFRT_don_reg[2] & ~fxFRT_don_reg2[2] & ~fxFRT_don_reg2[2] & ~fxFRT_don_reg3[2]) |
+     (fxFRT_can[3] & ~fxFRT_don_reg[3] & ~fxFRT_don_reg2[3] & ~fxFRT_don_reg2[3] & ~fxFRT_don_reg3[3])),.do_(fxFRT_do));
+  in_flip_rt #(13+2*SIMD_WIDTH) rtDatB_mod(
+    .clk(clk),.rst(rst),.in_en(fxFRT_en),.pause(),
+    .d_in({outOp_reg3[8],gxDataBFH[4],gxDataBFL[4]}),
+    .d_out({frtOp,rtDataB}),
+    .dout_en((fxFRT_can[0] & ~fxFRT_don_reg[0] & ~fxFRT_don_reg2[0] & ~fxFRT_don_reg2[0] & ~fxFRT_don_reg3[0]) |
+     (fxFRT_can[1] & ~fxFRT_don_reg[1] & ~fxFRT_don_reg2[1] & ~fxFRT_don_reg2[1] & ~fxFRT_don_reg3[1]) |
+     (fxFRT_can[2] & ~fxFRT_don_reg[2] & ~fxFRT_don_reg2[2] & ~fxFRT_don_reg2[2] & ~fxFRT_don_reg3[2]) |
+     (fxFRT_can[3] & ~fxFRT_don_reg[3] & ~fxFRT_don_reg2[3] & ~fxFRT_don_reg2[3] & ~fxFRT_don_reg3[3])),.do_());
+  imul imul_mod(
+  .clk(clk),
+  .rst(rst),
+  .clkEn(~(|fxFRT_alten_reg3[2])),
+  .op_prev(outOp[3*2+2]),
+  .en(outEn_reg[3*2+2][1:0]==2'b11 && outOp_reg[3*2+2][11]), //needs adjsutment if idiv implemented 
+  .R(fxDataA[3*2+2]),.C(fxDataB[3*2+2]),
+  .alt(nDataAlt[2][0]),
+  .Res(FUMUL)
+ );
+);*/
+/*
+  assign nDataAlt[0]=3'b111;
+  assign nDataAlt[1]=3'b111;
+//  assign nDataAlt[2][1]=2'b1;
+  
+  assign FUFL[6]=~nDataAlt_reg5[2][2] ? {FUTYPE_reg6,FUCVT2_reg6[65:0]} : 68'bz;
+  assign FUFH[6]=~nDataAlt_reg5[2][2] ? {FUTYPE_reg6,50'b0,FUCVT2_reg6[81:66]} : 68'bz;
+
+  assign FUX_alu[2]=(|fxFRT_alten_reg6[2]) ? 6'b0 : 6'bz;
+  assign FUX_alu[2]=gxFADD_en_reg2[2] ? FOOS_reg2[2] : 6'bz;
+  assign FUX_alu[2]=(~(|fxFRT_alten_reg6[2]) && ~gxFADD_en_reg2[2]) ? FUS_alu_reg4[4] : 64'bz;
+  assign exx_alu[2]=(|fxFRT_alten_reg6[2]) ? 3'd2 : 3'bz;
+  assign exx_alu[2]=gxFADD_en_reg2[2] ? 3'd6 : 3'bz;
+  assign exx_alu[2]=(~(|fxFRT_alten_reg6[2]) && ~gxFADD_en_reg2[2]) ? ex_alu_reg4[4] : 3'bz;;
+  assign FUX_alu[1]=gxFADD_en_reg2[1] ? FOOS_reg2[1] : FUS_alu_reg4[2];
+  assign exx_alu[1]=gxFADD_en_reg2[1] ? 3'd6 : ex_alu_reg4[2];
+  assign FUX_alu[0]=gxFADD_en_reg2[0] ? FOOS_reg2[0] : FUS_alu_reg4[0];
+  assign exx_alu[0]=gxFADD_en_reg2[0] ? 3'd6 : ex_alu_reg4[0];
+
+  assign fxFRT_pause[0]=1'b0;
+  assign fxFRT_pause[1]=1'b0;*/
 
   assign rrfAW[0]=Wswp[0] ? rs0i0_rB_reg : rs0i0_rA_reg;
   assign rrfAW[1]=Wswp[1] ? rs1i0_rB_reg : rs1i0_rA_reg;
