@@ -4125,15 +4125,15 @@ module backend(
 
   .retireRead0_addr(retfl_rF),.retireRead0_data(retfl_data),
 
-  .write0_addr_reg(FUSreg_reg2[4]),.write0_data_reg(FUS4),.write0_wen_reg(FUwen_reg2[4] && ex_alu[0][2]),
-  .write1_addr_reg(FUSreg_reg2[5]),.write1_data_reg(FUS5),.write1_wen_reg(FUwen_reg2[5] && ex_alu[2][2]),
-  .write2_addr_reg(FUSreg_reg2[6]),.write2_data_reg(FUS6),.write2_wen_reg(FUwen_reg2[6] && ex_alu[4][2]),
-  .write3_addr_reg(FUSreg_reg2[7]),.write3_data_reg(FUS7),.write3_wen_reg(FUwen_reg2[7] && ex_alu[1][2]),
-  .write4_addr_reg(FUSreg_reg2[8]),.write4_data_reg(FUS8),.write4_wen_reg(FUwen_reg2[8] && ex_alu[3][2]),
-  .write5_addr_reg(FUSreg_reg2[9]),.write5_data_reg(FUS9),.write5_wen_reg(FUwen_reg2[9] && ex_alu[5][2]),
-  .write6_addr_reg(FUSreg_reg5[4]),.write6_data_reg(FUS1),.write6_wen_reg(FUwen_reg5[4] && fsret[0][2]),
-  .write7_addr_reg(FUSreg_reg5[5]),.write7_data_reg(FUS2),.write7_wen_reg(FUwen_reg5[5] && fsret[2][2]),
-  .write8_addr_reg(FUSreg_reg5[6]),.write8_data_reg(FUS3),.write8_wen_reg(FUwen_reg5[6] && fsret[4][2]),
+  .write0_addr_reg(FUSreg_reg[4]),.write0_data_reg(FUS4),.write0_wen_reg(FUwen_reg[4] && ~outOp_reg[3*0+1][12] && outEn_reg[3*0+1][1]),
+  .write1_addr_reg(FUSreg_reg[5]),.write1_data_reg(FUS5),.write1_wen_reg(FUwen_reg[5] && ~outOp_reg[3*1+1][12] && outEn_reg[3*1+1][1]),
+  .write2_addr_reg(FUSreg_reg[6]),.write2_data_reg(FUS6),.write2_wen_reg(FUwen_reg[6] && ~outOp_reg[3*2+1][12] && outEn_reg[3*2+1][1]),
+  .write3_addr_reg(FUSreg_reg[7]),.write3_data_reg(FUS7),.write3_wen_reg(FUwen_reg[7] && ~outOp_reg[3*0+2][12] && outEn_reg[3*0+2][1]),
+  .write4_addr_reg(FUSreg_reg[8]),.write4_data_reg(FUS8),.write4_wen_reg(FUwen_reg[8] && ~outOp_reg[3*1+2][12] && outEn_reg[3*1+2][1]),
+  .write5_addr_reg(FUSreg_reg[9]),.write5_data_reg(FUS9),.write5_wen_reg(FUwen_reg[9] && ~outOp_reg[3*2+2][12] && outEn_reg[3*2+2][1]),
+  .write6_addr_reg(FUSreg_reg4[4]),.write6_data_reg(FUS1),.write6_wen_reg(FUwen_reg4[4] && fsret[0][2]),
+  .write7_addr_reg(FUSreg_reg4[5]),.write7_data_reg(FUS2),.write7_wen_reg(FUwen_reg4[5] && fsret[2][2]),
+  .write8_addr_reg(FUSreg_reg4[6]),.write8_data_reg(FUS3),.write8_wen_reg(FUwen_reg4[6] && fsret[4][2]),
   .newAddr0(clrRS_reg[0][8:4]),.newEn0(clrS_reg[0]),
   .newAddr1(clrRS_reg[1][8:4]),.newEn1(clrS_reg[1]),
   .newAddr2(clrRS_reg[2][8:4]),.newEn2(clrS_reg[2]),
@@ -4266,7 +4266,7 @@ module backend(
   .FUS5(FUS6),.FUSreg5(outRegS[3*2+1]),.FUSwen5(outEn[3*2+1][1]&~outOp[3*2+1][12]),
   .FUS6(FUS7),.FUSreg6(outRegS[3*0+2]),.FUSwen6(outEn[3*0+2][1]&~outOp[3*0+2][12]),
   .FUS7(FUS8),.FUSreg7(outRegS[3*1+2]),.FUSwen7(outEn[3*1+2][1]&~outOp[3*1+2][12]),
-  .FUS8(FUS9),.FUSreg8(outRegS[3*2+2]),.FUSwen8(outEn[3*2+2][1]&~outOp[3*2+2][12]&~outOp[3*2+2][11]),
+  .FUS8(FUS9),.FUSreg8(outRegS[3*2+2]),.FUSwen8(outEn[3*2+2][1]&~outOp[3*2+2][12]),
 // 1 if buffer is free  
   .pause0(miss_holds_agu|pause_agu|miss_pause_agu|bus_holds_agu|bus_holds_agu_reg|insBus_io|rsDoStall[m]),
   .foundAlt1(~(&nDataAlt[m])|(|fxFRT_alten[m])),.foundAlt2(fxFRT_pause[m])
