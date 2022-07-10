@@ -1214,7 +1214,7 @@ module cntrl_find_outcome(
   adder_inc #(6) initAdd_mod(initcount,initcount_d,1'b1,);
   
   adder_inc #(43-8) baseAdd_mod(baseIP[42:8],baseIP_d[42:8],break_prejmp_tick & ~(jump0_in&jump0_taken) & 
-     ~(jump1_in&jump1_taken) & ~break_exceptn,);
+     ~(jump1_in&jump1_taken) & ~break_exceptn,);//use addsub_agu
 
   bit_find_first_bit #(10) break_mod(~(done|fpudone)|jump0_misPred|jump1_misPred,break_,has_break);
   bit_find_first_bit_tail #(10) xbreak_mod(~(done|fpudone)|{jump0_misPred[8:0]|jump1_misPred[8:0],1'b0},xbreak,has_xbreak);
@@ -1326,7 +1326,7 @@ module cntrl_find_outcome(
           csrss_en<=1'b0;
           csrss_data<=65'b0;
 
-	  baseIP<=63'b0;
+	  baseIP<=63'h7c0ef80000000000;
 
           retire_addr_reg<=6'd0;
 	  

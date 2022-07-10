@@ -2170,7 +2170,7 @@ no_srch:;
     retire=top->heptane_core__DOT__bck_mod__DOT__retM_do_retire;
     retII=top->heptane_core__DOT__bck_mod__DOT__cntrl_unit_mod__DOT__retire_addr_reg;
     if (top->heptane_core__DOT__iAvail) printf("iAvail 0x%x, \t0x%x, \t0x%x, \t0x%x\n",top->heptane_core__DOT__iAvail,top->heptane_core__DOT__instrEn,top->heptane_core__DOT__dec_mod__DOT__cls_ALU,top->heptane_core__DOT__dec_mod__DOT__cls_shift);
-    if (top->heptane_core__DOT__instrEn && top->heptane_core__DOT__bck_mod__DOT__stall_rs==0 && 
+    if (top->heptane_core__DOT__instrEn && top->heptane_core__DOT__bck_mod__DOT__stall_rs==0 && !top->heptane_core__DOT__except && 
 		    top->heptane_core__DOT__bck_mod__DOT__doStall_rs==0) {
 	k=0;
 	while (top->heptane_core__DOT__instrEn&(1<<k)) {k++;}
@@ -2187,10 +2187,16 @@ no_srch:;
     if (top->heptane_core__DOT__bck_mod__DOT__outEn&0x111111111ul) {
 	printf("outEn 0x%lx\n",top->heptane_core__DOT__bck_mod__DOT__outEn);
     }
+    bool bflag123=false;
     for(k=0;k<9;k++) {
         if (top->heptane_core__DOT__bck_mod__DOT__rs_en_reg[k] && !(top->heptane_core__DOT__bck_mod__DOT__stall_rs|
 				top->heptane_core__DOT__bck_mod__DOT__doStall_rs)) {
-	    printf("rs_en_reg 0x%x, \t0x%x\n",k,top->heptane_core__DOT__bck_mod__DOT__rs_port_sch[k]);
+	    if (!bflag123 && top->heptane_core__DOT__bck_mod__DOT__rs_alt_reg) {
+	        printf("rs_en__reg 0x%x, \t0x%x\n",k,top->heptane_core__DOT__bck_mod__DOT__rs_port_sch[k]);
+		bflag123=true;
+	    } else {
+	        printf("rs_en_reg 0x%x, \t0x%x\n",k,top->heptane_core__DOT__bck_mod__DOT__rs_port_sch[k]);
+	    }
         }
     }
     for(k=0;k<6;k++) {

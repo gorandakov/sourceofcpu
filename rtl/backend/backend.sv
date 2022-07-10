@@ -715,7 +715,7 @@ module backend(
   input [3:0] rs2i2_flagDep;
   input rs2i2_lastFl;
   input rs2i2_mul;
-  input rs2i1_flag_wr;
+  input rs2i2_flag_wr;
   
   input [IN_REG_WIDTH-1:0] instr0_rT;
   input instr0_en;
