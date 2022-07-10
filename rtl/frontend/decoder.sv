@@ -1431,6 +1431,7 @@ module decoder(
   rs0i1_lastFl,
   rs0i1_lsi,
   rs0i1_ldst_flag,
+  rs0i1_flag_wr,
 
   rs0i2_rA,rs0i2_rA_use,rs0i2_rA_useF,rs0i2_rA_isV,rs0i2_rA_isAnyV,rs0i2_useAConst,
   rs0i2_rB,rs0i2_rB_use,rs0i2_rB_useF,rs0i2_rB_isV,rs0i2_rB_isAnyV,rs0i2_useBConst,
@@ -1447,6 +1448,7 @@ module decoder(
   rs0i2_allocR,
   rs0i2_flagDep,
   rs0i2_lastFl,
+  rs0i2_flag_wr,
 
   rs1i0_rA,rs1i0_rA_use,rs1i0_rA_useF,rs1i0_rA_isV,rs1i0_rA_isAnyV,
   rs1i0_rB,rs1i0_rB_use,rs1i0_rB_useF,rs1i0_rB_isV,rs1i0_rB_isAnyV,rs1i0_useBConst,
@@ -1484,6 +1486,7 @@ module decoder(
   rs1i1_lastFl,
   rs1i1_lsi,
   rs1i1_ldst_flag,
+  rs1i1_flag_wr,
 
   rs1i2_rA,rs1i2_rA_use,rs1i2_rA_useF,rs1i2_rA_isV,rs1i2_rA_isAnyV,rs1i2_useAConst,
   rs1i2_rB,rs1i2_rB_use,rs1i2_rB_useF,rs1i2_rB_isV,rs1i2_rB_isAnyV,rs1i2_useBConst,
@@ -1500,6 +1503,7 @@ module decoder(
   rs1i2_allocR,
   rs1i2_flagDep,
   rs1i2_lastFl,
+  rs1i2_flag_wr,
 
   rs2i0_rA,rs2i0_rA_use,rs2i0_rA_useF,rs2i0_rA_isV,rs2i0_rA_isAnyV,
   rs2i0_rB,rs2i0_rB_use,rs2i0_rB_useF,rs2i0_rB_isV,rs2i0_rB_isAnyV,rs2i0_useBConst,
@@ -1537,6 +1541,7 @@ module decoder(
   rs2i1_lastFl,
   rs2i1_lsi,
   rs2i1_ldst_flag,
+  rs2i1_flag_wr,
 
   rs2i2_rA,rs2i2_rA_use,rs2i2_rA_useF,rs2i2_rA_isV,rs2i2_rA_isAnyV,rs2i2_useAConst,
   rs2i2_rB,rs2i2_rB_use,rs2i2_rB_useF,rs2i2_rB_isV,rs2i2_rB_isAnyV,rs2i2_useBConst,
@@ -1554,6 +1559,7 @@ module decoder(
   rs2i2_flagDep,
   rs2i2_lastFl,
   rs2i2_mul,
+  rs2i2_flag_wr,
 //end reordered small instructions
 //begin instructions in program order
   instr0_rT, 
@@ -1808,6 +1814,7 @@ module decoder(
   output rs0i1_lastFl;
   output [5:0]  rs0i1_lsi;
   output rs0i1_ldst_flag;
+  output rs0i1_flag_wr;
   
   output [IN_REG_WIDTH-1:0] rs0i2_rA;
   output rs0i2_rA_use;
@@ -1837,6 +1844,7 @@ module decoder(
   output rs0i2_allocR;
   output [3:0] rs0i2_flagDep;
   output rs0i2_lastFl;
+  output rs0i2_flag_wr;
   
   output [IN_REG_WIDTH-1:0] rs1i0_rA;
   output rs1i0_rA_use;
@@ -1899,6 +1907,7 @@ module decoder(
   output rs1i1_lastFl;
   output [5:0]  rs1i1_lsi;
   output rs1i1_ldst_flag;
+  output rs1i1_flag_wr;
 
   output [IN_REG_WIDTH-1:0] rs1i2_rA;
   output rs1i2_rA_use;
@@ -1928,6 +1937,7 @@ module decoder(
   output rs1i2_allocR;
   output [3:0] rs1i2_flagDep;
   output rs1i2_lastFl;
+  output rs1i2_flag_wr;
 
   output [IN_REG_WIDTH-1:0] rs2i0_rA;
   output rs2i0_rA_use;
@@ -1990,6 +2000,7 @@ module decoder(
   output rs2i1_lastFl;
   output [5:0]  rs2i1_lsi;
   output rs2i1_ldst_flag;
+  output rs2i1_flag_wr;
 
   output [IN_REG_WIDTH-1:0] rs2i2_rA;
   output rs2i2_rA_use;
@@ -2020,6 +2031,7 @@ module decoder(
   output [3:0] rs2i2_flagDep;
   output rs2i2_lastFl;
   output rs2i2_mul;
+  output rs2i2_flag_wr;
 
   
   output [IN_REG_WIDTH-1:0] instr0_rT;
@@ -2356,6 +2368,7 @@ module decoder(
   wire [8:0] rs_rB_isAnyV;  
   wire [8:0][9:0] rs_index;
   wire [5:0][5:0] rs_lsi;
+  wire [8:0] rs_flagWr;
 
   wire [2:0] rs_alt;
   wire [8:0] rs_allocR;
@@ -2559,6 +2572,7 @@ module decoder(
           rs_allocR[k],
           rs_lastFl[k],
           rs_flDep[k],
+	  rs_flagWr[k],
           rs_rA_isV[k],
           rs_rB_isV[k],
           rs_rT_isV[k],
@@ -2572,6 +2586,7 @@ module decoder(
           allocF,
           dec_allocR_reg,
           flag_lastWr,
+	  dec_wrFlags_reg,
           dec_rA_isV_reg,
           dec_rB_isV_reg,
           dec_rT_isV_reg,
@@ -3162,6 +3177,7 @@ module decoder(
   assign rs0i1_lastFl=rs_lastFl[3];
   assign rs0i1_lsi=rs_lsi[3];
   assign rs0i1_ldst_flag=rs_ldst_flag[3];
+  assign rs0i1_flag_wr=rs_flagWr[3];
 
   assign rs0i2_operation=rs_operation[6];
   assign rs0i2_rA=rs_rA[6];
@@ -3190,6 +3206,7 @@ module decoder(
   assign rs0i2_allocR=rs_allocR[6];
   assign rs0i2_flagDep=rs_flDep[6];
   assign rs0i2_lastFl=rs_lastFl[6];
+  assign rs0i2_flag_wr=rs_flagWr[6];
 
   assign rs1i0_operation=rs_operation[1];
   assign rs1i0_rA=rs_rA[1];
@@ -3250,6 +3267,7 @@ module decoder(
   assign rs1i1_lastFl=rs_lastFl[4];
   assign rs1i1_lsi=rs_lsi[4];
   assign rs1i1_ldst_flag=rs_ldst_flag[4];
+  assign rs1i1_flag_wr=rs_flagWr[4];
 
   assign rs1i2_operation=rs_operation[7];
   assign rs1i2_rA=rs_rA[7];
@@ -3278,6 +3296,7 @@ module decoder(
   assign rs1i2_allocR=rs_allocR[7];
   assign rs1i2_flagDep=rs_flDep[7];
   assign rs1i2_lastFl=rs_lastFl[7];
+  assign rs1i2_flag_wr=rs_flagWr[7];
 
   assign rs2i0_operation=rs_operation[2];
   assign rs2i0_rA=rs_rA[2];
@@ -3338,6 +3357,7 @@ module decoder(
   assign rs2i1_lastFl=rs_lastFl[5];
   assign rs2i1_lsi=rs_lsi[5];
   assign rs2i1_ldst_flag=rs_ldst_flag[5];
+  assign rs2i1_flag_wr=rs_flagWr[5];
 
   assign rs2i2_operation=rs_operation[8];
   assign rs2i2_rA=rs_rA[8];
@@ -3366,6 +3386,7 @@ module decoder(
   assign rs2i2_allocR=rs_allocR[8];
   assign rs2i2_flagDep=rs_flDep[8];
   assign rs2i2_lastFl=rs_lastFl[8];
+  assign rs2i2_flag_wr=rs_flagWr[8];
   
 
   assign instr0_rT=	dec_rT_reg[0];
