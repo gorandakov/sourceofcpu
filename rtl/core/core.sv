@@ -226,6 +226,7 @@ module heptane_core(
   wire rs0i1_lastFl;
   wire [5:0] rs0i1_lsi;
   wire rs0i1_ldst_flag;
+  wire rs0i1_flag_wr;
   
   wire [IN_REG_WIDTH-1:0] rs0i2_rA;
   wire rs0i2_rA_use;
@@ -255,6 +256,7 @@ module heptane_core(
   wire rs0i2_allocR;
   wire [3:0] rs0i2_flagDep;
   wire rs0i2_lastFl;
+  wire rs0i2_flag_wr;
   
   wire [IN_REG_WIDTH-1:0] rs1i0_rA;
   wire rs1i0_rA_use;
@@ -318,6 +320,7 @@ module heptane_core(
   wire rs1i1_lastFl;
   wire [5:0] rs1i1_lsi;
   wire rs1i1_ldst_flag;
+  wire rs1i1_flag_wr;
 
   wire [IN_REG_WIDTH-1:0] rs1i2_rA;
   wire rs1i2_rA_use;
@@ -347,6 +350,7 @@ module heptane_core(
   wire rs1i2_allocR;
   wire [3:0] rs1i2_flagDep;
   wire rs1i2_lastFl;
+  wire rs1i2_flag_wr;
 
   wire [IN_REG_WIDTH-1:0] rs2i0_rA;
   wire rs2i0_rA_use;
@@ -410,6 +414,7 @@ module heptane_core(
   wire rs2i1_lastFl;
   wire [5:0] rs2i1_lsi;
   wire rs2i1_ldst_flag;
+  wire rs2i1_flag_wr;
 
   wire [IN_REG_WIDTH-1:0] rs2i2_rA;
   wire rs2i2_rA_use;
@@ -440,6 +445,7 @@ module heptane_core(
   wire [3:0] rs2i2_flagDep;
   wire rs2i2_lastFl;
   wire rs2i2_mul;
+  wire rs2i2_flag_wr;
 
   wire [IN_REG_WIDTH-1:0] instr0_rT;
   wire instr0_en;
@@ -1238,6 +1244,7 @@ module heptane_core(
   rs0i1_lastFl,
   rs0i1_lsi,
   rs0i1_ldst_flag,
+  rs0i1_flag_wr,
 
   rs0i2_rA,rs0i2_rA_use,rs0i2_rA_useF,rs0i2_rA_isV,rs0i2_rA_isAnyV,rs0i2_useAConst,
   rs0i2_rB,rs0i2_rB_use,rs0i2_rB_useF,rs0i2_rB_isV,rs0i2_rB_isAnyV,rs0i2_useBConst,
@@ -1254,6 +1261,7 @@ module heptane_core(
   rs0i2_allocR,
   rs0i2_flagDep,
   rs0i2_lastFl,
+  rs0i2_flag_wr,
 
   rs1i0_rA,rs1i0_rA_use,rs1i0_rA_useF,rs1i0_rA_isV,rs1i0_rA_isAnyV,
   rs1i0_rB,rs1i0_rB_use,rs1i0_rB_useF,rs1i0_rB_isV,rs1i0_rB_isAnyV,rs1i0_useBConst,
@@ -1291,6 +1299,7 @@ module heptane_core(
   rs1i1_lastFl,
   rs1i1_lsi,
   rs1i1_ldst_flag,
+  rs1i1_flag_wr,
 
   rs1i2_rA,rs1i2_rA_use,rs1i2_rA_useF,rs1i2_rA_isV,rs1i2_rA_isAnyV,rs1i2_useAConst,
   rs1i2_rB,rs1i2_rB_use,rs1i2_rB_useF,rs1i2_rB_isV,rs1i2_rB_isAnyV,rs1i2_useBConst,
@@ -1307,6 +1316,7 @@ module heptane_core(
   rs1i2_allocR,
   rs1i2_flagDep,
   rs1i2_lastFl,
+  rs1i2_flag_wr,
 
   rs2i0_rA,rs2i0_rA_use,rs2i0_rA_useF,rs2i0_rA_isV,rs2i0_rA_isAnyV,
   rs2i0_rB,rs2i0_rB_use,rs2i0_rB_useF,rs2i0_rB_isV,rs2i0_rB_isAnyV,rs2i0_useBConst,
@@ -1344,6 +1354,7 @@ module heptane_core(
   rs2i1_lastFl,
   rs2i1_lsi,
   rs2i1_ldst_flag,
+  rs2i1_flag_wr,
 
   rs2i2_rA,rs2i2_rA_use,rs2i2_rA_useF,rs2i2_rA_isV,rs2i2_rA_isAnyV,rs2i2_useAConst,
   rs2i2_rB,rs2i2_rB_use,rs2i2_rB_useF,rs2i2_rB_isV,rs2i2_rB_isAnyV,rs2i2_useBConst,
@@ -1361,6 +1372,7 @@ module heptane_core(
   rs2i2_flagDep,
   rs2i2_lastFl,
   rs2i2_mul,
+  rs2i2_flag_wr,
 
 //end reordered small instructions
 //begin instructions in program order
@@ -1559,6 +1571,7 @@ module heptane_core(
   rs0i1_lastFl,
   rs0i1_lsi,
   rs0i1_ldst_flag,
+  rs0i1_flag_wr,
 
   rs0i2_rA,rs0i2_rA_use,rs0i2_rA_useF,rs0i2_rA_isV,rs0i2_rA_isAnyV,rs0i2_useAConst,
   rs0i2_rB,rs0i2_rB_use,rs0i2_rB_useF,rs0i2_rB_isV,rs0i2_rB_isAnyV,rs0i2_useBConst,
@@ -1575,6 +1588,7 @@ module heptane_core(
   rs0i2_allocR,
   rs0i2_flagDep,
   rs0i2_lastFl,
+  rs0i2_flag_wr,
 
   rs1i0_rA,rs1i0_rA_use,rs1i0_rA_useF,rs1i0_rA_isV,rs1i0_rA_isAnyV,
   rs1i0_rB,rs1i0_rB_use,rs1i0_rB_useF,rs1i0_rB_isV,rs1i0_rB_isAnyV,rs1i0_useBConst,
@@ -1612,6 +1626,7 @@ module heptane_core(
   rs1i1_lastFl,
   rs1i1_lsi,
   rs1i1_ldst_flag,
+  rs1i1_flag_wr,
 
   rs1i2_rA,rs1i2_rA_use,rs1i2_rA_useF,rs1i2_rA_isV,rs1i2_rA_isAnyV,rs1i2_useAConst,
   rs1i2_rB,rs1i2_rB_use,rs1i2_rB_useF,rs1i2_rB_isV,rs1i2_rB_isAnyV,rs1i2_useBConst,
@@ -1628,6 +1643,7 @@ module heptane_core(
   rs1i2_allocR,
   rs1i2_flagDep,
   rs1i2_lastFl,
+  rs1i2_flag_wr,
 
   rs2i0_rA,rs2i0_rA_use,rs2i0_rA_useF,rs2i0_rA_isV,rs2i0_rA_isAnyV,
   rs2i0_rB,rs2i0_rB_use,rs2i0_rB_useF,rs2i0_rB_isV,rs2i0_rB_isAnyV,rs2i0_useBConst,
@@ -1665,6 +1681,7 @@ module heptane_core(
   rs2i1_lastFl,
   rs2i1_lsi,
   rs2i1_ldst_flag,
+  rs2i1_flag_wr,
 
   rs2i2_rA,rs2i2_rA_use,rs2i2_rA_useF,rs2i2_rA_isV,rs2i2_rA_isAnyV,rs2i2_useAConst,
   rs2i2_rB,rs2i2_rB_use,rs2i2_rB_useF,rs2i2_rB_isV,rs2i2_rB_isAnyV,rs2i2_useBConst,
@@ -1682,6 +1699,7 @@ module heptane_core(
   rs2i2_flagDep,
   rs2i2_lastFl,
   rs2i2_mul,
+  rs2i2_flag_wr,
 //end reordered small instructions
 //begin instructions in program order
   instr0_rT, 
