@@ -302,6 +302,7 @@ module decoder_reorder_mux(
   rAlloc,
   lastFl,
   flDep,
+  flWr,
   rA_isV,
   rB_isV,
   rT_isV,
@@ -316,6 +317,7 @@ module decoder_reorder_mux(
   dec_allocF,
   dec_rAlloc,
   dec_lastFl,
+  dec_flWr,
   dec_rA_isV,
   dec_rB_isV,
   dec_rT_isV,
@@ -584,6 +586,7 @@ module decoder_reorder_mux(
   output rAlloc;
   output lastFl;
   output [3:0] flDep;
+  output flWr;
   output rA_isV;
   output rB_isV;
   output rT_isV;
@@ -598,6 +601,7 @@ module decoder_reorder_mux(
   input [9:0] dec_allocF;
   input [9:0] dec_rAlloc;
   input [9:0] dec_lastFl;
+  input [9:0] dec_flWr;
   input [9:0] dec_rA_isV;
   input [9:0] dec_rB_isV;
   input [9:0] dec_rT_isV;
@@ -1294,6 +1298,18 @@ module decoder_reorder_mux(
   assign lastFl=(sel[8] & ~sel[1]) ? dec_lastFl[8] : 1'BZ;
   assign lastFl=(sel[9] & ~sel[1]) ? dec_lastFl[9] : 1'BZ;
   assign lastFl=(&sel[1:0]) ? 1'b0 : 1'bz;
+
+  assign flWr=(sel[0] & ~sel[1]) ? dec_flWr[0] : 1'BZ;
+  assign flWr=(sel[1] & ~sel[0]) ? dec_flWr[1] : 1'BZ;
+  assign flWr=(sel[2] & ~sel[1]) ? dec_flWr[2] : 1'BZ;
+  assign flWr=(sel[3] & ~sel[1]) ? dec_flWr[3] : 1'BZ;
+  assign flWr=(sel[4] & ~sel[1]) ? dec_flWr[4] : 1'BZ;
+  assign flWr=(sel[5] & ~sel[1]) ? dec_flWr[5] : 1'BZ;
+  assign flWr=(sel[6] & ~sel[1]) ? dec_flWr[6] : 1'BZ;
+  assign flWr=(sel[7] & ~sel[1]) ? dec_flWr[7] : 1'BZ;
+  assign flWr=(sel[8] & ~sel[1]) ? dec_flWr[8] : 1'BZ;
+  assign flWr=(sel[9] & ~sel[1]) ? dec_flWr[9] : 1'BZ;
+  assign flWr=(&sel[1:0]) ? 1'b0 : 1'bz;
 
   assign flDep=(sel[0] & ~sel[1]) ? dec0_flDep : 4'BZ;
   assign flDep=(sel[1] & ~sel[0]) ? dec1_flDep : 4'BZ;
