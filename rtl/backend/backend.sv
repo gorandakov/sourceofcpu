@@ -71,6 +71,7 @@ module backend(
   rs0i1_lastFl,
   rs0i1_lsi,
   rs0i1_ldst_flg,
+  rs0i1_flag_wr,
 
   rs0i2_rA,rs0i2_rA_use,rs0i2_rA_useF,rs0i2_rA_isV,rs0i2_rA_isAnyV,rs0i2_useAConst,
   rs0i2_rB,rs0i2_rB_use,rs0i2_rB_useF,rs0i2_rB_isV,rs0i2_rB_isAnyV,rs0i2_useBConst,
@@ -87,6 +88,7 @@ module backend(
   rs0i2_allocR,
   rs0i2_flagDep,
   rs0i2_lastFl,
+  rs0i2_flag_wr,
 
   rs1i0_rA,rs1i0_rA_use,rs1i0_rA_useF,rs1i0_rA_isV,rs1i0_rA_isAnyV,
   rs1i0_rB,rs1i0_rB_use,rs1i0_rB_useF,rs1i0_rB_isV,rs1i0_rB_isAnyV,rs1i0_useBConst,
@@ -124,6 +126,7 @@ module backend(
   rs1i1_lastFl,
   rs1i1_lsi,
   rs1i1_ldst_flg,
+  rs1i1_flag_wr,
 
   rs1i2_rA,rs1i2_rA_use,rs1i2_rA_useF,rs1i2_rA_isV,rs1i2_rA_isAnyV,rs1i2_useAConst,
   rs1i2_rB,rs1i2_rB_use,rs1i2_rB_useF,rs1i2_rB_isV,rs1i2_rB_isAnyV,rs1i2_useBConst,
@@ -140,6 +143,7 @@ module backend(
   rs1i2_allocR,
   rs1i2_flagDep,
   rs1i2_lastFl,
+  rs1i2_flag_wr,
 
   rs2i0_rA,rs2i0_rA_use,rs2i0_rA_useF,rs2i0_rA_isV,rs2i0_rA_isAnyV,
   rs2i0_rB,rs2i0_rB_use,rs2i0_rB_useF,rs2i0_rB_isV,rs2i0_rB_isAnyV,rs2i0_useBConst,
@@ -177,6 +181,7 @@ module backend(
   rs2i1_lastFl,
   rs2i1_lsi,
   rs2i1_ldst_flg,
+  rs2i1_flag_wr,
 
   rs2i2_rA,rs2i2_rA_use,rs2i2_rA_useF,rs2i2_rA_isV,rs2i2_rA_isAnyV,rs2i2_useAConst,
   rs2i2_rB,rs2i2_rB_use,rs2i2_rB_useF,rs2i2_rB_isV,rs2i2_rB_isAnyV,rs2i2_useBConst,
@@ -194,6 +199,7 @@ module backend(
   rs2i2_flagDep,
   rs2i2_lastFl,
   rs2i2_mul,
+  rs2i2_flag_wr,
 //end reordered small instructions
 //begin instructions in program order
   instr0_rT, 
@@ -492,6 +498,7 @@ module backend(
   input rs0i1_lastFl;
   input [5:0] rs0i1_lsi;  
   input rs0i1_ldst_flg; 
+  input rs0i1_flag_wr;
   
   input [IN_REG_WIDTH-1:0] rs0i2_rA;
   input rs0i2_rA_use;
@@ -521,6 +528,7 @@ module backend(
   input rs0i2_allocR;
   input [3:0] rs0i2_flagDep;
   input rs0i2_lastFl;
+  input rs0i2_flag_wr;
   
   input [IN_REG_WIDTH-1:0] rs1i0_rA;
   input rs1i0_rA_use;
@@ -583,6 +591,7 @@ module backend(
   input rs1i1_lastFl;
   input [5:0] rs1i1_lsi;  
   input rs1i1_ldst_flg; 
+  input rs1i1_flag_wr;
 
   input [IN_REG_WIDTH-1:0] rs1i2_rA;
   input rs1i2_rA_use;
@@ -612,6 +621,7 @@ module backend(
   input rs1i2_allocR;
   input [3:0] rs1i2_flagDep;
   input rs1i2_lastFl;
+  input rs1i2_flag_wr;
 
   input [IN_REG_WIDTH-1:0] rs2i0_rA;
   input rs2i0_rA_use;
@@ -674,6 +684,7 @@ module backend(
   input rs2i1_lastFl;
   input [5:0] rs2i1_lsi;  
   input rs2i1_ldst_flg; 
+  input rs2i1_flag_wr;
 
   input [IN_REG_WIDTH-1:0] rs2i2_rA;
   input rs2i2_rA_use;
@@ -704,6 +715,7 @@ module backend(
   input [3:0] rs2i2_flagDep;
   input rs2i2_lastFl;
   input rs2i2_mul;
+  input rs2i1_flag_wr;
   
   input [IN_REG_WIDTH-1:0] instr0_rT;
   input instr0_en;
@@ -1288,6 +1300,13 @@ module backend(
   reg rs1i2_lastFl_reg;
   reg rs2i1_lastFl_reg;
   reg rs2i2_lastFl_reg;
+
+  reg rs0i1_flag_wr_reg;
+  reg rs0i2_flag_wr_reg;
+  reg rs1i1_flag_wr_reg;
+  reg rs1i2_flag_wr_reg;
+  reg rs2i1_flag_wr_reg;
+  reg rs2i2_flag_wr_reg;
 
   reg [OPERATION_WIDTH-1:0] rs_operation[8:0];
   reg [OPERATION_WIDTH-1:0] rs_operation_reg[8:0];
@@ -2658,9 +2677,9 @@ module backend(
   .newR0(newRF[0]),.newR1(newRF[1]),.newR2(newRF[2]),
   .newR3(newRF[3]),.newR4(newRF[4]),.newR5(newRF[5]),
   .newR6(newRF[6]),.newR7(newRF[7]),.newR8(newRF[8]),
-  .rs0i0_en(rs0i0_allocR_reg&~rs0i0_alloc_reg),.rs1i0_en(rs1i0_allocR_reg&~rs1i0_alloc_reg),.rs2i0_en(rs2i0_allocR_reg&~rs2i0_alloc_reg),
-  .rs0i1_en(rs0i1_allocR_reg&~rs0i1_alloc_reg),.rs1i1_en(rs1i1_allocR_reg&~rs1i1_alloc_reg),.rs2i1_en(rs2i1_allocR_reg&~rs2i1_alloc_reg),
-  .rs0i2_en(rs0i2_allocR_reg&~rs0i2_alloc_reg),.rs1i2_en(rs1i2_allocR_reg&~rs1i2_alloc_reg),.rs2i2_en(rs2i2_allocR_reg&~rs2i2_alloc_reg)
+  .rs0i0_en(1'b0),.rs1i0_en(1'b0),.rs2i0_en(1'b0),
+  .rs0i1_en(rs0i1_flag_wr_reg),.rs1i1_en(rs1i1_flag_wr_reg),.rs2i1_en(rs2i1_flag_wr_reg),
+  .rs0i2_en(rs0i2_flag_wr_reg),.rs1i2_en(rs1i2_flag_wr_reg),.rs2i2_en(rs2i2_flag_wr_reg)
   );
   
   
@@ -5855,6 +5874,13 @@ dcache1 L1D_mod(
           rs2i1_lastFl_reg<=1'b0;
           rs2i2_lastFl_reg<=1'b0;
 
+          rs0i1_flag_wr_reg<=1'b0;
+          rs0i2_flag_wr_reg<=1'b0;
+          rs1i1_flag_wr_reg<=1'b0;
+          rs1i2_flag_wr_reg<=1'b0;
+          rs2i1_flag_wr_reg<=1'b0;
+          rs2i2_flag_wr_reg<=1'b0;
+
           rs_ldst_flg<=9'b0;
           rs_ldst_flg_reg<=9'b0;
 
@@ -6217,6 +6243,13 @@ dcache1 L1D_mod(
           rs1i2_lastFl_reg<=rs1i2_lastFl;
           rs2i1_lastFl_reg<=rs2i1_lastFl;
           rs2i2_lastFl_reg<=rs2i2_lastFl;
+
+          rs0i1_flag_wr_reg<=rs0i1_flag_wr;
+          rs0i2_flag_wr_reg<=rs0i2_flag_wr;
+          rs1i1_flag_wr_reg<=rs1i1_flag_wr;
+          rs1i2_flag_wr_reg<=rs1i2_flag_wr;
+          rs2i1_flag_wr_reg<=rs2i1_flag_wr;
+          rs2i2_flag_wr_reg<=rs2i2_flag_wr;
 
           rs_ldst_flg[0]<=rs0i0_ldst_flg;
           rs_ldst_flg[1]<=rs0i1_ldst_flg;
