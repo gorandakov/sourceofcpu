@@ -171,8 +171,8 @@ module ldq_buf(
   assign chkBlow[1]=chkBlow1; 
   assign chkBlow[2]=4'hf; 
   
-  assign chkMatch0=chkMatch[0]&~free&chkEn0&~(chkII0[9:4]==II[9:4] && II[3:0]<chkII0[3:0]);
-  assign chkMatch1=chkMatch[1]&~free&chkEn1&~(chkII1[9:4]==II[9:4] && II[3:0] <chkII1[3:0]);
+  assign chkMatch0=chkMatch[0]&~free&chkEn0;
+  assign chkMatch1=chkMatch[1]&~free&chkEn1;
 //  assign chkMatch2=chkMatch[2]&~free&chkEn2;
   assign chkMatch3=chkMatch[2]&~free&chkEn3;
 
