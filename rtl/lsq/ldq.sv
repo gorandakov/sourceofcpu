@@ -247,7 +247,7 @@ module ldq_buf(
       end else begin
           if (freeEnX0 && freeII0==II && ~aStall) free<=1'b1;
           if (freeEnX1 && freeII1==II && ~aStall) free<=1'b1;
-          confl<=confl || chkMatch0 || chkMatch1 || chkMatch3;
+          confl<=confl || (chkMatch0 || chkMatch1) & ~aStall || chkMatch3;
           confl_smp<=confl_smp | chkMatch3;
       end
   end
