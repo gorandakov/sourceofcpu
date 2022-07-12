@@ -734,6 +734,20 @@ module ldq(
   input [PADDR_WIDTH-8:0] expun_addr;
   input expun_en;
 
+  reg [DATA_WIDTH-1:0] chk0_dataA_reg;
+  reg chk0_enA_reg;
+  reg [DATA_WIDTH-1:0] chk1_dataA_reg;
+  reg chk1_enA_reg;
+  reg [DATA_WIDTH-1:0] chk2_dataA_reg;
+  reg chk2_enA_reg;
+  reg [DATA_WIDTH-1:0] chk3_dataA_reg;
+  reg chk3_enA_reg;
+  reg [DATA_WIDTH-1:0] chk4_dataA_reg;
+  reg chk4_enA_reg;
+  reg [DATA_WIDTH-1:0] chk5_dataA_reg;
+  reg chk5_enA_reg;
+  reg [SHRDATA_WIDTH-1:0] chk_data_shr_reg;
+  reg chk_en_reg,chk_enP_reg;
   wire [2:0] doStall_rs;
   wire [DATA_WIDTH-1:0] chkL0_data;
   wire [DATA_WIDTH-1:0] chkL1_data;
@@ -769,7 +783,7 @@ module ldq(
   reg init;
   reg [7:0] initcount;
   wire [7:0] initcount_new;
-  wire [5:0] chk_enA={chk5_enA,chk4_enA,chk3_enA,chk2_enA,chk1_enA,chk0_enA};
+  wire [5:0] chk_enA={chk5_enA_reg,chk4_enA_reg,chk3_enA_reg,chk2_enA_reg,chk1_enA_reg,chk0_enA_reg};
   reg [5:0] chk_enA_reg;
   wire chkL0_en,chkL1_en,chkL2_en;
   
@@ -779,7 +793,7 @@ module ldq(
         ldq_array ldq_mod(
         .clk(clk),
         .rst(rst),
-	.except(except),.except_thread(except_thread),.aStall(~chk_en | aStall),
+	.except(except),.except_thread(except_thread),.aStall(~chk_en_reg | aStall),
         .newAddrE0(new_data[k][`lsaddr_addrE]),.newAddrO0(new_data[k][`lsaddr_addrO]),
           .newBanks0(new_data[k][`lsaddr_banks]),.newBlow0(new_data[k][`lsaddr_blow]),
           .newII0(new_data[k][`lsaddr_II]),
@@ -804,10 +818,10 @@ module ldq(
         .chkAddrE3(expun_addr_reg[44-8:1]),.chkAddrO3(expun_addr_reg[44-8:1]), 
 	   .chkIsOH3(expun_addr_reg[0]),.chkIsEH3(~expun_addr_reg[0]),
 	   .chkIsOL3(expun_addr_reg[0]),.chkIsEL3(~expun_addr_reg[0]),.chkEn3(expun_en_reg),
-        .freeII0(chk_II[k]),.freeMask0(chk_mask[k]),.freeEnX0(cnt_chk[k][1] & chk_en & ~aStall),
-	.freeEn0(cnt_chk[k][1] & chk_enP),.freeConfl0(conflP[k]),.freeConflSmp0(confl_smpP[k]),
-        .freeII1(chk_II[k+3]),.freeMask1(chk_mask[k+3]),.freeEnX1(cnt_chk[k][2] & chk_en & ~aStall),
-	.freeEn1(cnt_chk[k][2] & chk_enP),.freeConfl1(conflP[k+3]),.freeConflSmp1(confl_smpP[k+3]),
+        .freeII0(chk_II[k]),.freeMask0(chk_mask[k]),.freeEnX0(cnt_chk[k][1] & chk_en_reg & ~aStall),
+	.freeEn0(cnt_chk[k][1] & chk_enP_reg),.freeConfl0(conflP[k]),.freeConflSmp0(confl_smpP[k]),
+        .freeII1(chk_II[k+3]),.freeMask1(chk_mask[k+3]),.freeEnX1(cnt_chk[k][2] & chk_en_reg & ~aStall),
+	.freeEn1(cnt_chk[k][2] & chk_enP_reg),.freeConfl1(conflP[k+3]),.freeConflSmp1(confl_smpP[k+3]),
         .free()
         );
         popcnt10_or_more cpop_mod({4'b0,chkbits[k]},cnt_chk[k]);
@@ -819,21 +833,21 @@ module ldq(
         .except_thread(except_thread),
         .newEn0(newI_mask[k]&newI_en&~stall&~doStall),.newEn1(newI_mask[k+3]&newI_en&~stall&~doStall),
         .newThread(newI_thr),
-        .freeEn0(cnt_chk[k][1] & chk_en & ~aStall),
-        .freeEn1(cnt_chk[k][2] & chk_en & ~aStall),.freeThread(1'b0),
+        .freeEn0(cnt_chk[k][1] & chk_en_reg & ~aStall),
+        .freeEn1(cnt_chk[k][2] & chk_en_reg & ~aStall),.freeThread(1'b0),
         .stall(stall),
         .doStall(doStall_rs[k])
         );
     end
     for(p=0;p<6;p=p+1) begin
-        assign chkL0_data=(chk_data_shr[`lsqshare_wrt0]==p) ? chk_dataA[p] : {DATA_WIDTH{1'bz}}; 
-        assign chkL1_data=(chk_data_shr[`lsqshare_wrt1]==p) ? chk_dataA[p] : {DATA_WIDTH{1'bz}}; 
+        assign chkL0_data=(chk_data_shr_reg[`lsqshare_wrt0]==p) ? chk_dataA[p] : {DATA_WIDTH{1'bz}}; 
+        assign chkL1_data=(chk_data_shr_reg[`lsqshare_wrt1]==p) ? chk_dataA[p] : {DATA_WIDTH{1'bz}}; 
 
-        assign chkL0_en=(chk_data_shr[`lsqshare_wrt0]==p) ? chk_enA[p] : 1'bz; 
-        assign chkL1_en=(chk_data_shr[`lsqshare_wrt1]==p) ? chk_enA[p] : 1'bz; 
+        assign chkL0_en=(chk_data_shr_reg[`lsqshare_wrt0]==p) ? chk_enA[p] : 1'bz; 
+        assign chkL1_en=(chk_data_shr_reg[`lsqshare_wrt1]==p) ? chk_enA[p] : 1'bz; 
         
-        assign chkL0_mask=(chk_data_shr[`lsqshare_wrt0]==p) ? 6'b111110<<p : 6'bz; 
-        assign chkL1_mask=(chk_data_shr[`lsqshare_wrt1]==p) ? 6'b111110<<p  : 6'bz; 
+        assign chkL0_mask=(chk_data_shr_reg[`lsqshare_wrt0]==p) ? 6'b111110<<p : 6'bz; 
+        assign chkL1_mask=(chk_data_shr_reg[`lsqshare_wrt1]==p) ? 6'b111110<<p  : 6'bz; 
 
 	assign confl_X[p]=chk_dataA[p][`lsaddr_mtype]==2'b10 && ~chk_dataA[p][`lsaddr_flag];
         
@@ -888,25 +902,25 @@ module ldq(
 
 
 
-  assign chkL0_data=(chk_data_shr[`lsqshare_wrt0]==3'd7) ? {DATA_WIDTH{1'B0}} : {DATA_WIDTH{1'bz}}; 
-  assign chkL1_data=(chk_data_shr[`lsqshare_wrt1]==3'd7) ? {DATA_WIDTH{1'B0}} : {DATA_WIDTH{1'bz}}; 
+  assign chkL0_data=(chk_data_shr_reg[`lsqshare_wrt0]==3'd7) ? {DATA_WIDTH{1'B0}} : {DATA_WIDTH{1'bz}}; 
+  assign chkL1_data=(chk_data_shr_reg[`lsqshare_wrt1]==3'd7) ? {DATA_WIDTH{1'B0}} : {DATA_WIDTH{1'bz}}; 
 
-  assign chkL0_en=(chk_data_shr[`lsqshare_wrt0]==3'd7) ? 1'B0 : 1'bz; 
-  assign chkL1_en=(chk_data_shr[`lsqshare_wrt1]==3'd7) ? 1'B0 : 1'bz; 
+  assign chkL0_en=(chk_data_shr_reg[`lsqshare_wrt0]==3'd7) ? 1'B0 : 1'bz; 
+  assign chkL1_en=(chk_data_shr_reg[`lsqshare_wrt1]==3'd7) ? 1'B0 : 1'bz; 
  
-  assign chkL0_mask=(chk_data_shr[`lsqshare_wrt0]==3'd7) ? 6'B0 : 6'bz; 
-  assign chkL1_mask=(chk_data_shr[`lsqshare_wrt1]==3'd7) ? 6'B0 : 6'bz; 
+  assign chkL0_mask=(chk_data_shr_reg[`lsqshare_wrt0]==3'd7) ? 6'B0 : 6'bz; 
+  assign chkL1_mask=(chk_data_shr_reg[`lsqshare_wrt1]==3'd7) ? 6'B0 : 6'bz; 
 
   assign new3_reg_low=new_data[3][`lsaddr_reg_low];
 
   assign doStall=|doStall_rs;
 
-  assign chk_dataA[0]=chk0_dataA;
-  assign chk_dataA[1]=chk1_dataA;
-  assign chk_dataA[2]=chk2_dataA;
-  assign chk_dataA[3]=chk3_dataA;
-  assign chk_dataA[4]=chk4_dataA;
-  assign chk_dataA[5]=chk5_dataA;
+  assign chk_dataA[0]=chk0_dataA_reg;
+  assign chk_dataA[1]=chk1_dataA_reg;
+  assign chk_dataA[2]=chk2_dataA_reg;
+  assign chk_dataA[3]=chk3_dataA_reg;
+  assign chk_dataA[4]=chk4_dataA_reg;
+  assign chk_dataA[5]=chk5_dataA_reg;
 
   assign new_data[0]=new0_data;
   assign new_data[1]=new1_data;
@@ -934,11 +948,26 @@ module ldq(
         for(u=0;u<6;u=u+1) begin
             II_save[u]=chk_dataA[u][`lsaddr_II];
         end
-        chkEn0=chk_data_shr[`lsqshare_wrt0]!=3'd7 && chkL0_en;
-        chkEn1=chk_data_shr[`lsqshare_wrt1]!=3'd7 && chkL1_en;
+        chkEn0=chk_data_shr_reg[`lsqshare_wrt0]!=3'd7 && chkL0_en;
+        chkEn1=chk_data_shr_reg[`lsqshare_wrt1]!=3'd7 && chkL1_en;
   end
   
   always @(posedge clk) begin
+    chk0_dataA_reg<=chk0_dataA;;
+    chk0_enA_reg<=chk0_enA;;
+    chk1_dataA_reg<=chk1_dataA;;
+    chk1_enA_reg<=chk1_enA;;
+    chk2_dataA_reg<=chk2_dataA;;
+    chk2_enA_reg<=chk2_enA;;
+    chk3_dataA_reg<=chk3_dataA;;
+    chk3_enA_reg<=chk3_enA;;
+    chk4_dataA_reg<=chk4_dataA;;
+    chk4_enA_reg<=chk4_enA;;
+    chk5_dataA_reg<=chk5_dataA;;
+    chk5_enA_reg<=chk5_enA;;
+    chk_data_shr_reg<=chk_data_shr;;
+    chk_en_reg<=chk_en;
+    chk_enP_reg<=chk_enP;
     if (rst) begin
         init<=1'b1;
         initcount<=8'd0;
@@ -952,7 +981,7 @@ module ldq(
     end else if (~init && ~aStall) begin
         expun_addr_reg<=expun_addr;
         expun_en_reg<=expun_en;
-    end else if (~init && ~chk_en) begin
+    end else if (~init && ~chk_en_reg) begin
         expun_addr_reg<=expun_addr;
         expun_en_reg<=expun_en;
     end
