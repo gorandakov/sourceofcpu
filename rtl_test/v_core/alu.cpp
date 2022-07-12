@@ -7,7 +7,6 @@
 #include <sys/mman.h>
 #include <fcntl.h>
 #include "Vheptane_core.h"
-#include "Vheptane_core_rs.h"
 #include "verilated.h"
 #include "../inc/ptr.h"
 #include "contx.h"
@@ -37,8 +36,6 @@ struct lsent {
     unsigned short sh;
     unsigned short sz;
 };
-
-int mysched[12][32]={};
 
 lsent load_op[]={
     0xa0,0,1, //inv tlb
@@ -443,8 +440,6 @@ class req {
     unsigned offset;
     unsigned has_mem;
     unsigned has_alu;
-    int sched;
-    int sched_index;
     char asmtext[64];
     bool gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,int has_mem_,char *mem,char *pmem);
     bool exec(req *prev1,hcont *contx,char *mem,char *pmem);
@@ -480,8 +475,6 @@ bool req::gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,int 
     alt=alt_;
     mul=mul_;
     excpt=-1;
-    sched=-1;
-    sched_index=-1;
     bool rtn=has_mem_;
     if (!alt && !mul && !can_shift) op=OPS_REGL[rand()%(sizeof OPS_REGL/2)];
     if (!alt && !mul && can_shift)  op=OPS_S_REGL[rand()%(sizeof OPS_S_REGL/2)];
@@ -2103,7 +2096,6 @@ bool get_check(Vheptane_core *top, req *reqs,unsigned long long &ip) {
     static int insn_count[64];
     static int insn_posR=0,insn_posW=0;
     static unsigned retII=0;
-    static int posRR=0;
     if (retire) {
 	for(k=0;k<10;k++) {
 	    if (xbreak&(1<<k)) break;
@@ -2196,7 +2188,6 @@ no_srch:;
 	printf("outEn 0x%lx\n",top->heptane_core__DOT__bck_mod__DOT__outEn);
     }
     bool bflag123=false;
-    int maxRR=0;
     for(k=0;k<9;k++) {
         if (top->heptane_core__DOT__bck_mod__DOT__rs_en_reg[k] && !(top->heptane_core__DOT__bck_mod__DOT__stall_rs|
 				top->heptane_core__DOT__bck_mod__DOT__doStall_rs)) {
@@ -2206,43 +2197,8 @@ no_srch:;
 	    } else {
 	        printf("rs_en_reg 0x%x, \t0x%x\n",k,top->heptane_core__DOT__bck_mod__DOT__rs_port_sch[k]);
 	    }
-	    int index=top->heptane_core__DOT__bck_mod__DOT__rs_index_reg[k];
-	    if (index==15) continue;
-	    if (k>3 || !((top->heptane_core__DOT__bck_mod__DOT__rs_alt_reg>>(k%3))&1)) {
-		    //load/alu
-		    reqs[posRR+index].sched_index=k;
-		    switch (k/3) {
-			case 0: reqs[posRR+index].sched=top->__PVT__heptane_core__DOT__bck_mod__DOT__main_rs_gen__BRA__0__KET____DOT__rs0_mod->__PVT__newRsSelect0;
-			if (k%3==1) reqs[posRR+index].sched=top->__PVT__heptane_core__DOT__bck_mod__DOT__main_rs_gen__BRA__0__KET____DOT__rs0_mod->__PVT__newRsSelect1; 
-			if (k%3==2) reqs[posRR+index].sched=top->__PVT__heptane_core__DOT__bck_mod__DOT__main_rs_gen__BRA__0__KET____DOT__rs0_mod->__PVT__newRsSelect2;
-		        break;
-			case 1: reqs[posRR+index].sched=top->__PVT__heptane_core__DOT__bck_mod__DOT__main_rs_gen__BRA__1__KET____DOT__rs0_mod->__PVT__newRsSelect0;
-			if (k%3==1) reqs[posRR+index].sched=top->__PVT__heptane_core__DOT__bck_mod__DOT__main_rs_gen__BRA__1__KET____DOT__rs0_mod->__PVT__newRsSelect1; 
-			if (k%3==2) reqs[posRR+index].sched=top->__PVT__heptane_core__DOT__bck_mod__DOT__main_rs_gen__BRA__1__KET____DOT__rs0_mod->__PVT__newRsSelect2;
-			break;
-			case 2: reqs[posRR+index].sched=top->__PVT__heptane_core__DOT__bck_mod__DOT__main_rs_gen__BRA__2__KET____DOT__rs0_mod->__PVT__newRsSelect0;
-			if (k%3==1) reqs[posRR+index].sched=top->__PVT__heptane_core__DOT__bck_mod__DOT__main_rs_gen__BRA__2__KET____DOT__rs0_mod->__PVT__newRsSelect1; 
-			if (k%3==2) reqs[posRR+index].sched=top->__PVT__heptane_core__DOT__bck_mod__DOT__main_rs_gen__BRA__2__KET____DOT__rs0_mod->__PVT__newRsSelect2;
-		    }
-		    int n;
-		    for (n=0;n<32;n++) if ((reqs[posRR+index].sched>>n)&1) break;
-		    mysched[reqs[posRR+index].sched_index][n]=posRR+index;
-	    } else {
-		    //store
-		    reqs[posRR+index].sched_index=k+9;
-		    switch (k/3) {
-			case 0: reqs[posRR+index].sched=top->heptane_core__DOT__bck_mod__DOT__storeRs__DOT__newRsSelect0;break;
-			case 1: reqs[posRR+index].sched=top->heptane_core__DOT__bck_mod__DOT__storeRs__DOT__newRsSelect1;break;
-			case 2: reqs[posRR+index].sched=top->heptane_core__DOT__bck_mod__DOT__storeRs__DOT__newRsSelect2;
-		    }
-		    int n;
-		    for (n=0;n<32;n++) if ((reqs[posRR+index].sched>>n)&1) break;
-		    mysched[reqs[posRR+index].sched_index][n]=posRR+index;
-	    }
-	    maxRR=(index+1)>maxRR ? index+1 : maxRR;
         }
     }
-    posRR+=maxRR;
     for(k=0;k<6;k++) {
 	if (top->heptane_core__DOT__bck_mod__DOT__fret_en&(1<<k)) {
 	    unsigned long long val;
