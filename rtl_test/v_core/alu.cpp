@@ -579,7 +579,7 @@ addie:
             
             case 1:
 	    if (has_mem_==2) {
-		(this-1)->gen_mem(NULL,8,mem,memp,addr);
+		(this-1)->gen_mem(NULL,4,mem,memp,addr);
 		rA=16;
 		A0x=A=(this-1)->res;
 		A_p=(this-1)->res_p;
@@ -649,7 +649,7 @@ addie:
             
             case 5:
 	    if (has_mem_==2) {
-		(this-1)->gen_mem(NULL,8,mem,memp,addr);
+		(this-1)->gen_mem(NULL,4,mem,memp,addr);
 		rA=16;
 		A=(this-1)->res;
 		A_p=(this-1)->res_p;
@@ -713,7 +713,7 @@ addie:
 
             case 9:
 	    if (has_mem_==2) {
-		(this-1)->gen_mem(NULL,8,mem,memp,addr);
+		(this-1)->gen_mem(NULL,4,mem,memp,addr);
 		rA=16;
 		A=(this-1)->res;
 		A_p=(this-1)->res_p;
@@ -774,7 +774,7 @@ addie:
 
             case 13:
 	    if (has_mem_==2) {
-		(this-1)->gen_mem(NULL,8,mem,memp,addr);
+		(this-1)->gen_mem(NULL,4,mem,memp,addr);
 		rA=16;
 		A=(this-1)->res;
 		A_p=(this-1)->res_p;
@@ -835,7 +835,7 @@ addie:
 
             case 17:
 	    if (has_mem_==2) {
-		(this-1)->gen_mem(NULL,8,mem,memp,addr);
+		(this-1)->gen_mem(NULL,4,mem,memp,addr);
 		rA=16;
 		A=(this-1)->res;
 		A_p=(this-1)->res_p;
