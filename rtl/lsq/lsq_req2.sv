@@ -82,13 +82,13 @@ module lsq_req_ram(
 	  read_data<=0;
       end else begin
 	  read_data<=ram[read_addr];
-          if (write0_wen) read_data<=write0_data;
-          if (write1_wen) read_data<=write1_data;
-          if (write2_wen) read_data<=write2_data;
-          if (write3_wen) read_data<=write3_data;
-          if (write4_wen) read_data<=write4_data;
-          if (write5_wen) read_data<=write5_data;
-          if (write6_wen) read_data<=write6_data;
+          if (write0_wen && write0_addr==read_addr) read_data<=write0_data;
+          if (write1_wen && write1_addr==read_addr) read_data<=write1_data;
+          if (write2_wen && write2_addr==read_addr) read_data<=write2_data;
+          if (write3_wen && write3_addr==read_addr) read_data<=write3_data;
+          if (write4_wen && write4_addr==read_addr) read_data<=write4_data;
+          if (write5_wen && write5_addr==read_addr) read_data<=write5_data;
+          if (write6_wen && write6_addr==read_addr) read_data<=write6_data;
       end
 
       if (write0_wen) ram[write0_addr]<=write0_data;
