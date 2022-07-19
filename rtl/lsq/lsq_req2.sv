@@ -80,7 +80,7 @@ module lsq_req_ram(
       
       if (rst) begin
 	  read_data<=0;
-      end else begin
+      end else if (read_clkEn) begin
 	  read_data<=ram[read_addr];
           if (write0_wen && write0_addr==read_addr) read_data<=write0_data;
           if (write1_wen && write1_addr==read_addr) read_data<=write1_data;
