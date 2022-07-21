@@ -1149,7 +1149,7 @@ module lsq_req(
   );
   
   bit_find_first_bit #(2*ADDR_COUNT) lastB_mod(validB&~curB,firstB,foundB);
-  bit_find_first_bit #(2*ADDR_COUNT) lastA_mod(validA&~curA,firstA,foundA);
+  bit_find_first_bit #(2*ADDR_COUNT) lastA_mod(validA,firstA,foundA);
 
   bit_find_first_bit #(2*ADDR_COUNT) lastBN_mod(validB_next,firstBN,foundBN);
   bit_find_first_bit #(2*ADDR_COUNT) lastAN_mod(validA_next,firstAN,foundAN);
