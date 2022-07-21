@@ -651,7 +651,7 @@ addie:
 	    if (has_mem_==2) {
 		(this-1)->gen_mem(NULL,4,mem,memp,addr);
 		rA=16;
-		A=(this-1)->res;
+		A0x=A=(this-1)->res;
 		A_p=(this-1)->res_p;
 		if (rB>=0)
 		    snprintf(asmtext,sizeof (asmtext), "subl %%%s, mem+%li(%rip)\n",reg32[rB],addr);
@@ -715,7 +715,7 @@ addie:
 	    if (has_mem_==2) {
 		(this-1)->gen_mem(NULL,4,mem,memp,addr);
 		rA=16;
-		A=(this-1)->res;
+		A0x=A=(this-1)->res;
 		A_p=(this-1)->res_p;
 		if (rB>=0)
 		    snprintf(asmtext,sizeof (asmtext), "andl %%%s, mem+%li(%rip)\n",reg32[rB],addr);
@@ -776,7 +776,7 @@ addie:
 	    if (has_mem_==2) {
 		(this-1)->gen_mem(NULL,4,mem,memp,addr);
 		rA=16;
-		A=(this-1)->res;
+		A0x=A=(this-1)->res;
 		A_p=(this-1)->res_p;
 		if (rB>=0)
 		    snprintf(asmtext,sizeof (asmtext), "orl %%%s, mem+%li(%rip)\n",reg32[rB],addr);
@@ -837,7 +837,7 @@ addie:
 	    if (has_mem_==2) {
 		(this-1)->gen_mem(NULL,4,mem,memp,addr);
 		rA=16;
-		A=(this-1)->res;
+		A0x=A=(this-1)->res;
 		A_p=(this-1)->res_p;
 		if (rB>=0)
 		    snprintf(asmtext,sizeof (asmtext), "xorl %%%s, mem+%li(%rip)\n",reg32[rB],addr);
