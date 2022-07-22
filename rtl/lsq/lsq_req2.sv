@@ -855,6 +855,8 @@ module lsq_req(
   */
   wire enableA;
   wire enableB;
+  wire enableA0;
+  wire enableB0;
 
   reg flipA;
   reg flipB;
@@ -924,8 +926,9 @@ module lsq_req(
   endfunction
   assign enableA=(validA)!=0 || (validA_next)!=0;
   assign enableB=(curB&validB)!=0;
+  assign enableA0=(curA&validA)!=0;
 
-  assign reenabA=~enableA&write_wen_shr&~stall&~doStall&~except;
+  assign reenabA=~enableA0&write_wen_shr&~stall&~doStall&~except;
   assign reenabB=~enableB&write_wen_shr&~stall&~doStall&~except;
   
 //  assign onSameValidA=onSameValidA0 | toflipA;
