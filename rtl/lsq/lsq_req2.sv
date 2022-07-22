@@ -1016,13 +1016,7 @@ module lsq_req(
     read1A_data[`lsaddr_flag],
     read0A_data[`lsaddr_flag]};
 
-  assign readA_pconfl={
-    read5A_data[`lsaddr_pconfl],
-    read4A_data[`lsaddr_pconfl],
-    read3A_data[`lsaddr_pconfl],
-    read2A_data[`lsaddr_pconfl],
-    read1A_data[`lsaddr_pconfl],
-    read0A_data[`lsaddr_pconfl]};
+  assign readA_pconfl={6'b0};
 
   assign readA_unal={
     read5A_data[`lsaddr_low]!=2'b00 || sz_unal(read5A_data[`lsaddr_sz]),
