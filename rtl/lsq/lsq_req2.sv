@@ -922,7 +922,7 @@ module lsq_req(
         up_to_first_zero[5]=&arg[5:0];
     end
   endfunction
-  assign enableA=(curA&validA)!=0;
+  assign enableA=(validA)!=0 || (validA_next)!=0;
   assign enableB=(curB&validB)!=0;
 
   assign reenabA=~enableA&write_wen_shr&~stall&~doStall&~except;
