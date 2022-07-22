@@ -432,14 +432,14 @@ module lsq_shared_ram(
   input write_wen;
 
   reg [DATA_WIDTH-1:0] ram [ADDR_COUNT-1:0];
-  reg [ADDR_WIDTH-1:0] read_addr_reg;
+  //reg [ADDR_WIDTH-1:0] read_addr_reg;
   
-  assign read_data=ram[read_addr_reg];
+  assign read_data=ram[read_addr];
 
   always @(posedge clk)
     begin
-      if (rst) read_addr_reg<={ADDR_WIDTH{1'b0}};
-      else if (read_clkEn) read_addr_reg<=read_addr;
+      //if (rst) read_addr_reg<={ADDR_WIDTH{1'b0}};
+      //else if (read_clkEn) read_addr_reg<=read_addr;
       if (write_wen) ram[write_addr]<=write_data;
     end
 
