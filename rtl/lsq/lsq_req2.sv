@@ -953,14 +953,14 @@ module lsq_req(
   assign readA_enItem=read_data_shr[`lsqshare_used];
   assign readB_enItem=read_data_shrB[`lsqshare_usedB];
   
-  assign readA_rdy=(readA_flip&readA_enItem)==({6{flipA}}&readA_enItem) && enableA && ~init;
-  assign readB_rdy=(readB_flip&readB_enItem)==({6{flipB}}&readB_enItem) && enableB && ~init;
+  assign readA_rdy=((readA_flip~^{6{flipA}})&readA_enItem)==(readA_enItem) && enableA && ~init;
+  assign readB_rdy=((readB_flip~^{6{flipB}})&readB_enItem)==(readB_enItem) && enableB && ~init;
   
   assign readB_addr_d=(foundB|foundBN) ? 6'bz : write_addr_shr;
   assign readA_addr_d=(foundA|foundAN) ? 6'bz : write_addr_shr;
   
  
-  assign readA_clkEn0=(readA_flip[0]&readA_enItem[0])==flipA && enableA;
+  assign readA_clkEn0=((readA_flip[0]~^flipA)&readA_enItem[0])==readA_enItem[0] && enableA;
  
   assign doStall=validA_reg[write_addr_shr] || validB[write_addr_shr[5:0]] ||
     validA_next_reg[write_addr_shr] || validB_next[write_addr_shr[5:0]];
