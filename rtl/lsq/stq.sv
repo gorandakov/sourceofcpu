@@ -746,7 +746,7 @@ module stq(
 
 
   assign aDoStall=|chk0_partial || |chk1_partial || |chk2_partial || |chk3_partial || |chk4_partial || |chk5_partial || chk_wb2_has ||
-	  |rsDoStall & rsStall;
+	  |rsDoStall | rsStall;
   assign WLN0_en=LSQ_shr_data[`lsqshare_wrt0]==3'd7 ? 1'b0 : 1'bz;
   assign WLN1_en=LSQ_shr_data[`lsqshare_wrt1]==3'd7 ? 1'b0 : 1'bz;
   assign WLN0_adata=LSQ_shr_data[`lsqshare_wrt0]==3'd7 ? {`lsaddr_width{1'b0}} : {`lsaddr_width{1'bz}};

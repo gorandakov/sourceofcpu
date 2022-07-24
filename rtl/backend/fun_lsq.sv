@@ -575,15 +575,11 @@ module fun_lsq(
   assign stall_WQ=|{doStall_rs[3:0],doStall_alloc,doStall_cntrl,doStall_LSQ,doStall_LDQ,doStall_STQ};
   assign stall=|{doStall_rs[3:0],doStall_alloc,doStall_cntrl,doStall_LSQ,doStall_LDQ,doStall_STQ | doStall_WQ};
 
-  assign aStall_STQ=1'b0;
-  assign aStall_LSQ=aDoStall_STQ;
-
-  assign wreq_en[0]=~wreq_stall & wreq_has[0] & sdata_rdy[0];
-  assign wreq_en[1]=~wreq_stall && wreq_has[1] && sdata_rdy[0] && sdata_rdy[1] && 
-    (wreq_data[0][`lsaddr_banks]&wreq_data[1][`lsaddr_banks])==0;
+  assign aStall_STQ=wreq_stall;
+  assign aStall_LSQ=aDoStall_STQ|wreq_stall;
 
 
-  assign wreq_stall=bus_holds_agu_reg2|miss_holds_agu_reg2|miss_pause_agu_reg2|insert_isData_reg2|st_stall_reg;
+  assign wreq_stall=bus_holds_agu_reg2|miss_holds_agu_reg2|miss_pause_agu_reg2|insert_isData_reg2;
       
   assign st0_adata=wreq_data_reg[0];
   assign st0_en=wreq_en_reg[0];
