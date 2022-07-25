@@ -278,7 +278,7 @@ module frontend1(
   reg bus_match0_reg3;
   reg bus_match0_reg4;
   
-  wire [11:0] pre_instrEn;
+  wire [13:0] pre_instrEn;
   wire [INSTR_WIDTH-1:0] pre_instr0;
   wire [INSTR_WIDTH-1:0] pre_instr1;
   wire [INSTR_WIDTH-1:0] pre_instr2;
@@ -291,8 +291,10 @@ module frontend1(
   wire [INSTR_WIDTH-1:0] pre_instr9;
   wire [INSTR_WIDTH-1:0] pre_instr10;
   wire [INSTR_WIDTH-1:0] pre_instr11;
+  wire [INSTR_WIDTH-1:0] pre_instr12;
+  wire [INSTR_WIDTH-1:0] pre_instr12;
 
-  reg [12:0] pre_instrEn_reg;
+  reg [14:0] pre_instrEn_reg;
   reg [INSTR_WIDTH-1:0] pre_instr0_reg;
   reg [INSTR_WIDTH-1:0] pre_instr1_reg;
   reg [INSTR_WIDTH-1:0] pre_instr2_reg;
@@ -305,19 +307,21 @@ module frontend1(
   reg [INSTR_WIDTH-1:0] pre_instr9_reg;
   reg [INSTR_WIDTH-1:0] pre_instr10_reg;
   reg [INSTR_WIDTH-1:0] pre_instr11_reg;
+  reg [INSTR_WIDTH-1:0] pre_instr12_reg;
+  reg [INSTR_WIDTH-1:0] pre_instr13_reg;
 
-  wire [11:0][3:0] pre_off;
-  reg [3:0] pre_off_reg[11:0];
+  wire [13:0][3:0] pre_off;
+  reg [3:0] pre_off_reg[13:0];
   
-  wire [11:0][3:0] pre_magic;
-  reg  [3:0] pre_magic_reg[11:0];
-  wire [11:0][`instrQ_width-1:0] pre_other;
+  wire [13:0][3:0] pre_magic;
+  reg  [3:0] pre_magic_reg[13:0];
+  wire [13:0][`instrQ_width-1:0] pre_other;
 //  reg [`instrQ_width-1:0] pre_other_reg[11:0];
   
   wire pre_isAvx;
   reg pre_isAvx_reg;
-  wire [11:0][CLS_WIDTH-1:0] pre_class;
-  reg [CLS_WIDTH-1:0] pre_class_reg[11:0];
+  wire [13:0][CLS_WIDTH-1:0] pre_class;
+  reg [CLS_WIDTH-1:0] pre_class_reg[13:0];
   wire pre_has_jumps;
  // wire [3:0] jFirst;
  // wire [4:0] jmpCount;
@@ -490,8 +494,8 @@ module frontend1(
   wire [`ZERO:0]  btb_jlnpos3;
   wire [`ZERO:0] btb_jlnjpos3;
   wire btb_in_link,btb_in_ret;
-  wire [11:0] pre_jbefore;
-  wire [11:0] pre_jbefore0;
+  wire [13:0] pre_jbefore;
+  wire [13:0] pre_jbefore0;
   wire [3:0] last_off;
   wire [3:0][3:0] btb_joff;
   reg [3:0] last_off_reg;
@@ -742,7 +746,7 @@ module frontend1(
           );
   
       end
-      for (j=0;j<12;j=j+1) begin
+      for (j=0;j<14;j=j+1) begin
           wire [3:0] isJ;
           assign pre_other[j][`instrQ_magic]=~pre_magic_reg[j];
           assign pre_other[j][`instrQ_srcIPOff]={cc_base_off,pre_off_reg[j]};
@@ -1085,16 +1089,16 @@ module frontend1(
     .startOff(cc_read_IP_reg2[4:1]),
     .instr0(pre_instr0),.instr1(pre_instr1),.instr2(pre_instr2),.instr3(pre_instr3),
     .instr4(pre_instr4),.instr5(pre_instr5),.instr6(pre_instr6),.instr7(pre_instr7),
-    .instr8(pre_instr8),.instr9(pre_instr9),.instr10(pre_instr10),.instr11(pre_instr11),
+    .instr8(pre_instr8),.instr9(pre_instr9),.instr10(pre_instr10),.instr11(pre_instr11),.instr12(pre_instr12),.instr13(pre_instr13),
     .magic0(pre_magic[0]),.magic1(pre_magic[1]),.magic2(pre_magic[2]),.magic3(pre_magic[3]),
     .magic4(pre_magic[4]),.magic5(pre_magic[5]),.magic6(pre_magic[6]),.magic7(pre_magic[7]),
-    .magic8(pre_magic[8]),.magic9(pre_magic[9]),.magic10(pre_magic[10]),.magic11(pre_magic[11]),
+    .magic8(pre_magic[8]),.magic9(pre_magic[9]),.magic10(pre_magic[10]),.magic11(pre_magic[11]),.magic12(pre_magic[12]),.magic13(pre_magic[13]),
     .off0(pre_off[0]),.off1(pre_off[1]),.off2(pre_off[2]),.off3(pre_off[3]),
     .off4(pre_off[4]),.off5(pre_off[5]),.off6(pre_off[6]),.off7(pre_off[7]),
-    .off8(pre_off[8]),.off9(pre_off[9]),.off10(pre_off[10]),.off11(pre_off[11]),
+    .off8(pre_off[8]),.off9(pre_off[9]),.off10(pre_off[10]),.off11(pre_off[11]),.off12(pre_off[12]),.off13(pre_off[13]),
     .class0(pre_class[0]),.class1(pre_class[1]),.class2(pre_class[2]),.class3(pre_class[3]),
     .class4(pre_class[4]),.class5(pre_class[5]),.class6(pre_class[6]),.class7(pre_class[7]),
-    .class8(pre_class[8]),.class9(pre_class[9]),.class10(pre_class[10]),.class11(pre_class[11]),
+    .class8(pre_class[8]),.class9(pre_class[9]),.class10(pre_class[10]),.class11(pre_class[11]),.class12(pre_class[12]),.class13(pre_class[13]),
     .instrEn(pre_instrEn),
     .isAvx(pre_isAvx),
     .hasJumps(pre_has_jumps),
@@ -1114,7 +1118,7 @@ module frontend1(
   instrQ instrQ_mod(
   .clk(clk),
   .rst(rst),
-  .write_instrEn(pre_instrEn_reg[11:0]&pre_jbefore),
+  .write_instrEn(pre_instrEn_reg[13:0]&pre_jbefore),
   .write_thread(1'b0),
   .write_wen(instrFed_reg&~btbFStall&~btbFStall_reg&~btbFStall_reg2&~btbFStall_reg3&~btbFStall_recover_reg2&~jq_fstall&~fmstall),
   .doFStall(iq_fstall),
@@ -1132,6 +1136,8 @@ module frontend1(
   .write_instr9(pre_instr9_reg),.write_other9(pre_other[9]),
   .write_instr10(pre_instr10_reg),.write_other10(pre_other[10]),
   .write_instr11(pre_instr11_reg),.write_other11(pre_other[11]),
+  .write_instr12(pre_instr12_reg),.write_other12(pre_other[12]),
+  .write_instr13(pre_instr13_reg),.write_other13(pre_other[13]),
   .read_thread(1'b0),
   .read_clkEn(~stall),
   .read_instrEn(instrEat),
@@ -1583,7 +1589,7 @@ module frontend1(
           bus_match0_reg2<=1'b0;
           bus_match0_reg3<=1'b0;
           bus_match0_reg4<=1'b0;
-          pre_instrEn_reg<=13'b0;
+          pre_instrEn_reg<=15'b0;
           pre_instr0_reg<={INSTR_WIDTH{1'B0}};
           pre_instr1_reg<={INSTR_WIDTH{1'B0}};
           pre_instr2_reg<={INSTR_WIDTH{1'B0}};
@@ -1596,8 +1602,10 @@ module frontend1(
           pre_instr9_reg<={INSTR_WIDTH{1'B0}};
           pre_instr10_reg<={INSTR_WIDTH{1'B0}};
           pre_instr11_reg<={INSTR_WIDTH{1'B0}};
+          pre_instr12_reg<={INSTR_WIDTH{1'B0}};
+          pre_instr13_reg<={INSTR_WIDTH{1'B0}};
 	  pre_isAvx_reg<=1'b0;
-          for (n=0;n<12;n=n+1) begin
+          for (n=0;n<14;n=n+1) begin
               pre_off_reg[n]<=4'b0;
               pre_magic_reg[n]<=4'B0;
               pre_class_reg[n]<={CLS_WIDTH{1'B0}};
@@ -1865,8 +1873,10 @@ module frontend1(
           pre_instr9_reg<=pre_instr9;
           pre_instr10_reg<=pre_instr10;
           pre_instr11_reg<=pre_instr11;
+          pre_instr12_reg<=pre_instr12;
+          pre_instr13_reg<=pre_instr13;
 	  pre_isAvx_reg<=pre_isAvx;
-          for (n=0;n<12;n=n+1) begin
+          for (n=0;n<14;n=n+1) begin
               pre_off_reg[n]<=pre_off[n];
               pre_magic_reg[n]<=pre_magic[n];
               pre_class_reg[n]<=pre_class[n];
@@ -1996,8 +2006,10 @@ module frontend1(
           pre_instr9_reg<=pre_instr9;
           pre_instr10_reg<=pre_instr10;
           pre_instr11_reg<=pre_instr11;
+          pre_instr12_reg<=pre_instr12;
+          pre_instr13_reg<=pre_instr13;
 	  pre_isAvx_reg<=pre_isAvx;
-          for (n=0;n<12;n=n+1) begin
+          for (n=0;n<14;n=n+1) begin
               pre_off_reg[n]<=pre_off[n];
               pre_magic_reg[n]<=pre_magic[n];
               pre_class_reg[n]<=pre_class[n];
