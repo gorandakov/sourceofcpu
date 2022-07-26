@@ -599,11 +599,11 @@ module fun_lsq(
 	wreq_en_reg<=2'b0;
 	wreq_data_reg[0]<=0;
 	wreq_data_reg[1]<=0;
-	wreq_wdataP_reg[0]<=0;
-	wreq_wdataP_reg[1]<=0;
-	wreq_pdataP_reg[0]<=0;
-	wreq_pdataP_reg[1]<=0;
-    else if (!wreq_stall) begin
+	dc_wdataP_reg[0]<=0;
+	dc_wdataP_reg[1]<=0;
+	dc_pdataP_reg[0]<=0;
+	dc_pdataP_reg[1]<=0;
+    end else if (!wreq_stall) begin
         wreq_en_reg<=wreq_en;
         wreq_data_reg[0]<=wreq_data[0];
         wreq_data_reg[1]<=wreq_data[1];
@@ -611,6 +611,8 @@ module fun_lsq(
         dc_wdataP_reg[1]<=dc_wdataP[1];
         dc_pdataP_reg[0]<=dc_pdataP[0];
         dc_pdataP_reg[1]<=dc_pdataP[1];
+    end else begin
+        wreq_en_reg<=2'b0;
     end
   end
 
