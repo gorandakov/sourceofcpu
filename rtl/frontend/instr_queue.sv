@@ -18,8 +18,6 @@ module instrQ_buf(
   write_addr9,write_instr9,write_other9,
   write_addr10,write_instr10,write_other10,
   write_addr11,write_instr11,write_other11,
-  write_addr12,write_instr12,write_other12,
-  write_addr13,write_instr13,write_other13,
   read_thread,
   read_clkEn,
   read_addr0,read_instr0,read_other0,
@@ -42,7 +40,7 @@ module instrQ_buf(
   
   input clk;
   input rst;
-  input [13:0] write_instrEn;
+  input [11:0] write_instrEn;
   input write_thread;
   input write_wen;
   input [WADDR_WIDTH-1:0] write_addr0;
@@ -81,12 +79,6 @@ module instrQ_buf(
   input [WADDR_WIDTH-1:0] write_addr11;
   input [WIDTH-1:0] write_instr11;
   input [OTHER-1:0] write_other11;
-  input [WADDR_WIDTH-1:0] write_addr12;
-  input [WIDTH-1:0] write_instr12;
-  input [OTHER-1:0] write_other12;
-  input [WADDR_WIDTH-1:0] write_addr13;
-  input [WIDTH-1:0] write_instr13;
-  input [OTHER-1:0] write_other13;
 
   input read_thread;
   input read_clkEn;
@@ -130,7 +122,7 @@ module instrQ_buf(
   wire [OTHER-1:0] other_rd;
   wire [WIDTH-1:0] instr_wr;
   wire [OTHER-1:0] other_wr;
-  wire [13:0] instr_wren;
+  wire [11:0] instr_wren;
   wire instr_wrAny;
 
   assign instr_rd=instr[read_thread];
@@ -170,8 +162,6 @@ module instrQ_buf(
   assign instr_wren[9]=write_addr9==INDEX && write_instrEn[9];
   assign instr_wren[10]=write_addr10==INDEX && write_instrEn[10];
   assign instr_wren[11]=write_addr11==INDEX && write_instrEn[11];
-  assign instr_wren[12]=write_addr12==INDEX && write_instrEn[12];
-  assign instr_wren[13]=write_addr13==INDEX && write_instrEn[13];
  //verilator lint_on WIDTH
   
   assign instr_wr=instr_wren[0] ? write_instr0 : {WIDTH{1'BZ}};
@@ -186,8 +176,6 @@ module instrQ_buf(
   assign instr_wr=instr_wren[9] ? write_instr9 : {WIDTH{1'BZ}};
   assign instr_wr=instr_wren[10] ? write_instr10 : {WIDTH{1'BZ}};
   assign instr_wr=instr_wren[11] ? write_instr11 : {WIDTH{1'BZ}};
-  assign instr_wr=instr_wren[12] ? write_instr12 : {WIDTH{1'BZ}};
-  assign instr_wr=instr_wren[13] ? write_instr13 : {WIDTH{1'BZ}};
   assign instr_wr=(!instr_wrAny) ? {WIDTH{1'B0}} : {WIDTH{1'BZ}};  
 
   assign other_wr=instr_wren[0] ? write_other0 : {OTHER{1'BZ}};
@@ -202,8 +190,6 @@ module instrQ_buf(
   assign other_wr=instr_wren[9] ? write_other9 : {OTHER{1'BZ}};
   assign other_wr=instr_wren[10] ? write_other10 : {OTHER{1'BZ}};
   assign other_wr=instr_wren[11] ? write_other11 : {OTHER{1'BZ}};
-  assign other_wr=instr_wren[12] ? write_other12 : {OTHER{1'BZ}};
-  assign other_wr=instr_wren[13] ? write_other13 : {OTHER{1'BZ}};
   assign other_wr=(!instr_wrAny) ? {OTHER{1'B0}} : {OTHER{1'BZ}};  
 
   assign instr_wrAny=|instr_wren;
