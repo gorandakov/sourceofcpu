@@ -635,7 +635,7 @@ module instrQ(
   instrQ_box box_mod(
   clk,
   rst,
-  write_instrEn|{11'b0,init},
+  (write_instrEn|{11'b0,init})&{12{write_wen}},
   init ? initCount[0] : write_thread,
   (write_wen & ~doFStall) | init,
   init ? initCount[6:1] : write_addr[0],
@@ -666,8 +666,10 @@ module instrQ(
   read_addr_d[9],read_instrZ9,read_otherZ9
   );
   
-  instrQ_upDown busy0_mod(busy[0],busy_d[0],~write_wen | write_thread | doFStall,write_instrEn,~read_clkEn | read_thread_reg,read_instrEn,doFStall0);
-  instrQ_upDown busy1_mod(busy[1],busy_d[1],~write_wen | ~write_thread | doFStall,write_instrEn,~read_clkEn | ~read_thread_reg,read_instrEn,doFStall1);
+  instrQ_upDown busy0_mod(busy[0],busy_d[0],~write_wen | write_thread | doFStall,write_instrEn&{12{write_wen}},
+	  ~read_clkEn | read_thread_reg,read_instrEn,doFStall0);
+  instrQ_upDown busy1_mod(busy[1],busy_d[1],~write_wen | ~write_thread | doFStall,write_instrEn&{12{write_wen}},
+	  ~read_clkEn | ~read_thread_reg,read_instrEn,doFStall1);
   
   adder_inc #(7) initAdd_mod(initCount,initCount_d,1'b1,);
   

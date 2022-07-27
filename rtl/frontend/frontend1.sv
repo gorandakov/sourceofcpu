@@ -1768,6 +1768,7 @@ module frontend1(
 	  btbx_cond_reg4<=4'b0;
 	  cc_base_IP<=cc_read_IP_d;
 	  miss_IP<=cc_read_IP_d;
+          pre_instrEn_reg<=13'b0;
       end else if (~fstall) begin
           //ixcept_reg<=1'b0;
           //ixceptLDConfl_reg<=1'b0;
