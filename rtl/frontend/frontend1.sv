@@ -1118,7 +1118,7 @@ module frontend1(
   .write_thread(1'b0),
   .write_wen(instrFed_reg&~btbFStall&~btbFStall_reg&~btbFStall_reg2&~btbFStall_reg3&~btbFStall_recover_reg2&~jq_fstall&~fmstall),
   .doFStall(iq_fstall),
-  .except(uxcept|ixcept),
+  .except(uxcept|ixcept|except),
   .except_thread(1'b0),
   .write_instr0(pre_instr0_reg),.write_other0(pre_other[0]),
   .write_instr1(pre_instr1_reg),.write_other1(pre_other[1]),
@@ -1151,7 +1151,7 @@ module frontend1(
   instrQextra jmp_queue_mod(
   .clk(clk),
   .rst(rst),
-  .except(uxcept|ixcept),
+  .except(uxcept|ixcept|except),
   .except_thread(ixceptThread),
   .fStall(iq_fstall|fmstall|btbFStall|btbFStall_reg|btbFStall_reg2|btbFStall_reg3|btbFStall_recover_reg2),
   .doFStall(jq_fstall),
