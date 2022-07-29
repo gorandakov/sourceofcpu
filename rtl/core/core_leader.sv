@@ -8,8 +8,9 @@ module heptane_core(
   rbusOut_signals,rbusOut_src_req,rbusOut_dst_req,rbusOut_address,rbusOut_can,rbusOut_want,rbusOut_sz,rbusOut_bank0,rbusOut_low,
   rbusDIn_signals,rbusDIn_src_req,rbusDIn_dst_req,rbusDIn_data,rbusDIn_dataPTR,
   rbusDOut_signals,rbusDOut_src_req,rbusDOut_dst_req,rbusDOut_data,rbusDOut_dataPTR,rbusDOut_can,rbusDOut_want,rbusDOut_replay,
-  extIP_in,
-  extIP_addr
+  extIP_en,
+  extIP_addr0,
+  extIP_addr1
 );
   parameter [4:0] BUS_ID=0;
   localparam PHYS_WIDTH=44;
@@ -54,8 +55,9 @@ module heptane_core(
   input rbusDOut_can;
   output rbusDOut_want;
   output rbusDOut_replay;
-  input extIP_in;
-  input [64:0] extIP_addr;
+  output reg extIP_en;
+  output reg [64:0] extIP_addr0;
+  output reg [64:0] extIP_addr1;
 
  
  // reg [63:0] r02_data;
