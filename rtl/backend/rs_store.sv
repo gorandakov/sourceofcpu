@@ -1327,8 +1327,6 @@ module rs_s(
   assign newIsVB[1]=newPort1[5] && (newPort1[2:0]==3'b000 || newPort1[2]);
   assign newIsVB[2]=newPort2[5] && (newPort2[2:0]==3'b000 || newPort2[2]);
 
-  assign outDataB0=outDataB0P&{65{~outZeroB0}};
-  assign outDataA2=outDataA2P&{65{~outZeroA2}};
 
   rss_array rs_mod(
   clk,
@@ -1501,7 +1499,7 @@ module rs_s(
   FU7,FU8,FU9,
   outRsSelect[0],outBank[0],rsFound[0],outDataA0,
   outRsSelect[3],outBank[3],rsFound[3],outDataA3,
-  outRsSelect[2],outBank[2],rsFound[2],outDataA2P
+  outRsSelect[2],outBank[2],rsFound[2],outDataA2
   );
   
   rs_wakeUp_data_array #(DATA_WIDTH) dataB_G_mod(
@@ -1513,7 +1511,7 @@ module rs_s(
   FU0,FU1,FU2,FU3,
   FU4,FU5,FU6,
   FU7,FU8,FU9,
-  outRsSelect[0],outBank[0],rsFound[0],outDataB0P,
+  outRsSelect[0],outBank[0],rsFound[0],outDataB0,
   outRsSelect[1],outBank[1],rsFound[1],outDataB1,
   outRsSelect[2],outBank[2],rsFound[2],outDataB2
   );
