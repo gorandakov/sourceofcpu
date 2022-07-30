@@ -6457,18 +6457,12 @@ dcache1 L1D_mod(
           depA_reg[8:7]<=(depA[8:7]& rs_rA_use[8:7]) | (depAF[8:7] & rs_rA_useF[8:7]) ;
           depB_reg[8:7]<=(depB[8:7]& rs_rB_use[8:7] & ~rs_useBConst[8:7]) | 
 	     (depBF[8:7]& rs_rB_useF[8:7] & ~rs_useBConst[8:7]);
-          depA_reg[0]<=(~Wswp[0]) ? (depA[0]& rs_rA_use[0]) | (depAF[0] & rs_rA_useF[0]) :
-             (depB[0]& rs_rB_use[0] & ~rs_useBConst[0]) |(depBF[0]& rs_rB_useF[0] & ~rs_useBConst[0]);
-          depB_reg[0]<=Wswp[0] ? (depA[0]& rs_rA_use[0]) | (depAF[0] & rs_rA_useF[0]) :
-             (depB[0]& rs_rB_use[0] & ~rs_useBConst[0]) |(depBF[0]& rs_rB_useF[0] & ~rs_useBConst[0]);
-          depA_reg[3]<=(~Wswp[1]) ? (depA[3]& rs_rA_use[3]) | (depAF[3] & rs_rA_useF[3]) :
-             (depB[3]& rs_rB_use[3] & ~rs_useBConst[3]) |(depBF[3]& rs_rB_useF[3] & ~rs_useBConst[3]);
-          depB_reg[3]<=Wswp[1] ? (depA[3]& rs_rA_use[3]) | (depAF[3] & rs_rA_useF[3]) :
-             (depB[3]& rs_rB_use[3] & ~rs_useBConst[3]) |(depBF[3]& rs_rB_useF[3] & ~rs_useBConst[3]);
-          depA_reg[6]<=(~Wswp[2]) ? (depA[6]& rs_rA_use[6]) | (depAF[6] & rs_rA_useF[6]) :
-             (depB[6]& rs_rB_use[6] & ~rs_useBConst[6]) |(depBF[6]& rs_rB_useF[6] & ~rs_useBConst[6]);
-          depB_reg[6]<=Wswp[2] ? (depA[6]& rs_rA_use[6]) | (depAF[6] & rs_rA_useF[6]) :
-             (depB[6]& rs_rB_use[6] & ~rs_useBConst[6]) |(depBF[6]& rs_rB_useF[6] & ~rs_useBConst[6]);
+          depA_reg[0]<=(depA[0]& rs_rA_use[0]) | (depAF[0] & rs_rA_useF[0]);
+          depB_reg[0]<=(depB[0]& rs_rB_use[0] & ~rs_useBConst[0] & ~rs_IPRel[0]) |(depBF[0]& rs_rB_useF[0] & ~rs_useBConst[0] & ~rs_IPRel[0]);
+          depA_reg[3]<=(depA[3]& rs_rA_use[3]) | (depAF[3] & rs_rA_useF[3]);
+          depB_reg[3]<=(depB[3]& rs_rB_use[3] & ~rs_useBConst[3] & ~rs_IPRel[3]) |(depBF[3]& rs_rB_useF[3] & ~rs_useBConst[3] & ~rs_IPRel[3]);
+          depA_reg[6]<=(depA[6]& rs_rA_use[6]) | (depAF[6] & rs_rA_useF[6]);
+          depB_reg[6]<=(depB[6]& rs_rB_use[6] & ~rs_useBConst[6] & ~rs_IPRel[6]) |(depBF[6]& rs_rB_useF[6] & ~rs_useBConst[6] & ~rs_IPRel[6]);
               
           rs_rA_use<=
              {rs2i2_rA_use,rs2i1_rA_use,rs2i0_rA_use,
