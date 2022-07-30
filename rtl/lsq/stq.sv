@@ -37,8 +37,8 @@ module stq(
   wrt0_adata,wrt0_en,wrt0_LSQ,
   wrt1_adata,wrt1_en,wrt1_LSQ,
   confl,confl_SMP,confl_X,
-  upd0_WQ,upd0_en,upd0_data,upd0_pbit,//upd0_sz,
-  upd1_WQ,upd1_en,upd1_data,upd1_pbit,//upd1_sz,
+  upd0_WQ,upd0_en,upd0_data,upd0_pbit,//upd0_sz,//store data
+  upd1_WQ,upd1_en,upd1_data,upd1_pbit,//upd1_sz,//store data 2
   pse0_en,
   pse1_en,
   wb1_adata,wb1_LSQ,wb1_data,wb1_pbit,wb1_bnkEn,wb1_bnkEnS,wb1_en,wb1_chk,
@@ -641,8 +641,8 @@ module stq(
 
       end
       for(x=0;x<64;x=x+1) begin : X
-          assign WLN0_match[x]=WLN0_adata[`lsaddr_WQ]==x && WLN0_en;
-          assign WLN1_match[x]=WLN1_adata[`lsaddr_WQ]==x && WLN1_en;
+          assign WLN0_match[x]=pse0_WQ==x && WLN0_en;
+          assign WLN1_match[x]=pse1_WQ==x && WLN1_en;
           assign wrt0_en0[x]=wrt0_adata[`lsaddr_WQ]==x && wrt0_en;
           assign wrt1_en0[x]=wrt1_adata[`lsaddr_WQ]==x && wrt1_en;
           assign upd0_en0[x]=upd0_WQ==x && upd0_en;
@@ -650,12 +650,6 @@ module stq(
           assign passe_en[x]=(pse0_WQ==x && pse0_en) || (pse1_WQ==x && pse1_en);
       end
       for(a=0;a<6;a=a+1) begin : wrt
-          assign WLN0_en=LSQ_shr_data[`lsqshare_wrt0]==a ? &rdy[a:0] & chk_rdy : 1'bz;
-          assign WLN1_en=LSQ_shr_data[`lsqshare_wrt1]==a ? &rdy[a:0] & chk_rdy : 1'bz;
-          assign WLN0_adata=LSQ_shr_data[`lsqshare_wrt0]==a ? chk_adata[a] : {`lsaddr_width{1'bz}};
-          assign WLN1_adata=LSQ_shr_data[`lsqshare_wrt1]==a ? chk_adata[a] : {`lsaddr_width{1'bz}};
-          assign WLN0_WQ=LSQ_shr_data[`lsqshare_wrt0]==a ? chk_adata[a][`lsaddr_WQ] : {6{1'bz}};
-          assign WLN1_WQ=LSQ_shr_data[`lsqshare_wrt1]==a ? chk_adata[a][`lsaddr_WQ] : {6{1'bz}};
 	  assign wb0_adataW=chk_wb[a] ? chk_adata[a] : {`lsaddr_width{1'bz}};
 	  assign wb1_adataW=chk_wb1[a] ? chk_adata[a] : {`lsaddr_width{1'bz}};
 	  assign wb0_dataW[31:0]=chk_wb[a] ? chk_data[a][31:0] : {32{1'bz}};
@@ -747,8 +741,8 @@ module stq(
 
   assign aDoStall=|chk0_partial || |chk1_partial || |chk2_partial || |chk3_partial || |chk4_partial || |chk5_partial || chk_wb2_has ||
 	  |rsDoStall | rsStall;
-  assign WLN0_en=LSQ_shr_data[`lsqshare_wrt0]==3'd7 ? 1'b0 : 1'bz;
-  assign WLN1_en=LSQ_shr_data[`lsqshare_wrt1]==3'd7 ? 1'b0 : 1'bz;
+  assign WLN0_en=pse0_en;
+  assign WLN1_en=pse1_en;
   assign WLN0_adata=LSQ_shr_data[`lsqshare_wrt0]==3'd7 ? {`lsaddr_width{1'b0}} : {`lsaddr_width{1'bz}};
   assign WLN1_adata=LSQ_shr_data[`lsqshare_wrt1]==3'd7 ? {`lsaddr_width{1'b0}} : {`lsaddr_width{1'bz}};
   assign WLN0_WQ=LSQ_shr_data[`lsqshare_wrt0]==3'd7 ? 6'b0 : 6'bz;
@@ -896,8 +890,8 @@ module stq(
 	  end
 	  if (!aStall && !aDoStall && chk_rdy) begin
 	      chk_mask<=6'd0;
-	      if (WLN0_adata[`lsaddr_WQ]==63 && WLN0_en) mask=~mask;
-	      if (WLN1_adata[`lsaddr_WQ]==63 && WLN1_en) mask=~mask;
+	 //     if (pse0==63 && WLN0_en) mask=~mask;
+	 //     if (pse1==63 && WLN1_en) mask=~mask;
 	  end else if (!(|rsDoStall & rsStall)) begin
 	      chk_mask<=chk_mask|chk_wb0|chk_wb1;
 	  end
