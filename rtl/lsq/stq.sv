@@ -654,8 +654,8 @@ module stq(
 
       end
       for(x=0;x<64;x=x+1) begin : X
-          assign WLN0_match[x]=pse0_WQ==x && WLN0_en;
-          assign WLN1_match[x]=pse1_WQ==x && WLN1_en;
+          assign WLN0_match[x]=WLN0_WQ==x && WLN0_en;
+          assign WLN1_match[x]=WLN1_WQ==x && WLN1_en;
           assign wrt0_en0[x]=wrt0_adata[`lsaddr_WQ]==x && wrt0_en;
           assign wrt1_en0[x]=wrt1_adata[`lsaddr_WQ]==x && wrt1_en;
           assign upd0_en0[x]=upd0_WQ==x && upd0_en;
