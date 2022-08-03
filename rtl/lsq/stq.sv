@@ -747,12 +747,12 @@ module stq(
 
   assign aDoStall=|chk0_partial || |chk1_partial || |chk2_partial || |chk3_partial || |chk4_partial || |chk5_partial || chk_wb2_has ||
 	  |rsDoStall | rsStall;
-  assign WLN0_en=pse0_en;
-  assign WLN1_en=pse1_en;
+  assign WLN0_en=upd[WLN0_WQ];
+  assign WLN1_en=upd[WLN1_WQ];
   //assign WLN0_adata=LSQ_shr_data[`lsqshare_wrt0]==3'd7 ? {`lsaddr_width{1'b0}} : {`lsaddr_width{1'bz}};
   //assign WLN1_adata=LSQ_shr_data[`lsqshare_wrt1]==3'd7 ? {`lsaddr_width{1'b0}} : {`lsaddr_width{1'bz}};
-  //assign WLN0_WQ=LSQ_shr_data[`lsqshare_wrt0]==3'd7 ? 6'b0 : 6'bz;
- // assign WLN1_WQ=LSQ_shr_data[`lsqshare_wrt1]==3'd7 ? 6'b0 : 6'bz;
+  assign WLN0_WQ=WLN0_adata[`lsaddr_WQ];
+  assign WLN1_WQ=WLN1_adata[`lsaddr_WQ];
   
   assign WNL0_en=LSQ_shr_data[`lsqshare_wrt0]==3'd7 ? 1'b0 : 1'bz;
   assign WNL1_en=LSQ_shr_data[`lsqshare_wrt1]==3'd7 ? 1'b0 : 1'bz;
@@ -856,6 +856,33 @@ module stq(
   upd0_en0[63:32], 
   upd1_en0[63:32], 
   free_en[63:32],,,,passe_en[63:32]);
+
+  stq_adata_ram ramA_mod(
+  clk,
+  rst,
+  WLN_clkEn,
+  ~WLN0_WQ[0] ? WLN0_WQ[5:1] : WLN1_WQ[5:1],
+  {WLN0_adata0,WLN0_en0},
+  WNL0_en & ~aStall & ~aDoStall,
+  ~WLN0_WQ[0] ? WNL0_WQ[5:1] : WNL1_WQ[5:1],
+  ~WNL0_WQ[0] ? {WNL0_adata,WNL0_en} : {WNL1_adata,WNL1_en}
+  );
+
+  assign WLN0_adata=~WLN0_WQ[0] ? WLN0_adata0 : WLN1_adata0;
+  assign WLN0_en=~WLN0_WQ[0] ? WLN0_en0 & upd[WLN0_WQ] : WLN1_en0 & upd[WLN1_WQ];
+  assign WLN1_adata=WLN0_WQ[0] ? WLN0_adata0 : WLN1_adata0;
+  assign WLN1_en=WLN0_WQ[0] ? WLN0_en0 & upd[WLN0_WQ] : WLN1_en0 & upd[WLN1_WQ];
+  
+  stq_adata_ram ramB_mod(
+  clk,
+  rst,
+  WLN_clkEn,
+  ~WLN0_WQ[0] ? WLN1_WQ[5:1] : WLN0_WQ[5:1],,
+  {WLN1_adata0,WLN1_en0},
+  WNL0_en & ~aStall & ~aDoStall,
+  ~WNL0_WQ[0] ? WNL1_WQ[5:1] : WNL0_WQ[5:1],
+  ~WNL0_WQ[0] ? {WNL1_adata,WNL1_en} : {WNL0_adata,WNL0_en}
+  );
   
   stq_adata bgn_mod(
   clk,
@@ -868,6 +895,9 @@ module stq(
   adder_inc #(6) inc_pseA_mod(pse1_WQ,pse1_WQ_inc,1'b1,);
   adder_inc #(5) inc_pseB_mod(pse1_WQ[5:1],pse1_WQ_inc2[5:1],1'b1,);
   assign pse1_WQ_inc2[0]=pse1_WQ[0];
+  adder_inc #(6) inc_WLNA_mod(WLN0_WQ,WLN0_WQ_inc,1'b1,);
+  adder_inc #(5) inc_WLNB_mod(WLN0_WQ[5:1],WLN0_WQ_inc2[5:1],1'b1,);
+  assign WLN0_WQ_inc2[0]=WLN0_WQ[0];
 
   always @(posedge clk) begin
       if (rst) begin
