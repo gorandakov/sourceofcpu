@@ -316,6 +316,7 @@ module fun_lsq(
   doStall_STQ,
   aStall_STQ,
   aDoStall_STQ,
+  wreq_stall,
   rsStall,
   rsDoStall,
   LSQ_dataA0,LSQ_enA[0],chk0_LSQ,

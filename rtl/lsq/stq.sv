@@ -24,6 +24,7 @@ module stq(
   doStall,
   aStall,
   aDoStall,
+  st_stall,
   rsStall,
   rsDoStall,//needs to get registered again outside module
   chk0_adata,chk0_en,chk0_enD,
@@ -58,6 +59,8 @@ module stq(
   input aStall;
 
   output aDoStall;
+
+  input st_stall;
 
   input rsStall;
   output reg [3:0] rsDoStall;
@@ -155,8 +158,18 @@ module stq(
   wire [139:0] WLN0_dataX;
   wire [139:0] WLN1_dataX;
 
-  wire [5:0] WLN0_WQ;
-  wire [5:0] WLN1_WQ;
+  reg [5:0] WLN0_WQ;
+  reg [5:0] WLN1_WQ;
+  wire [5:0] WNL0_WQ;
+  wire [5:0] WNL1_WQ;
+  wire [`lsaddr_width-1:0] WLN0_adata0;
+  wire [`lsaddr_width-1:0] WLN1_adata0;
+  wire WLN0_en0;
+  wire WLN1_en0;
+  wire [`lsaddr_width-1:0] WNL0_adata0;
+  wire [`lsaddr_width-1:0] WNL1_adata0;
+  wire WNL0_en;
+  wire WNL1_en;
 	  
   reg [5:0] chk_wb0_reg;
   reg [5:0] chk_wb0_reg2;
@@ -895,14 +908,16 @@ module stq(
   adder_inc #(6) inc_pseA_mod(pse1_WQ,pse1_WQ_inc,1'b1,);
   adder_inc #(5) inc_pseB_mod(pse1_WQ[5:1],pse1_WQ_inc2[5:1],1'b1,);
   assign pse1_WQ_inc2[0]=pse1_WQ[0];
-  adder_inc #(6) inc_WLNA_mod(WLN0_WQ,WLN0_WQ_inc,1'b1,);
-  adder_inc #(5) inc_WLNB_mod(WLN0_WQ[5:1],WLN0_WQ_inc2[5:1],1'b1,);
-  assign WLN0_WQ_inc2[0]=WLN0_WQ[0];
+  adder_inc #(6) inc_WLNA_mod(WLN1_WQ,WLN1_WQ_inc,1'b1,);
+  adder_inc #(5) inc_WLNB_mod(WLN1_WQ[5:1],WLN1_WQ_inc2[5:1],1'b1,);
+  assign WLN1_WQ_inc2[0]=WLN1_WQ[0];
 
   always @(posedge clk) begin
       if (rst) begin
 	  pse0_WQ<=6'd0;
 	  pse1_WQ<=6'd0;
+	  WLN0_WQ<=6'd0;
+	  WLN1_WQ<=6'd0;
 	  chk_mask<=6'd0;
 	  mask=64'b0;
 	  rsDoStall<=4'b0000;
@@ -931,10 +946,19 @@ module stq(
 	      mask[pse0_WQ]=~mask[pse0_WQ];
 	      mask[pse1_WQ]=~mask[pse1_WQ];
 	  end
+	  if (!st_stall) begin
+	      if (WLN0==63 && WLN0_en) mask=~mask;
+	      if (WLN1==63 && WLN1_en) mask=~mask;
+	  end
+	  if (!st_stall &&  WLN0_en && ~WLN1_en) begin
+	      WLN0_WQ<=WLN1_WQ;
+	      WLN1_WQ<=WLN1_WQ_inc;
+	  end else if (!st_stall && WLN0_en) begin
+	      WLN0_WQ<=WLN1_WQ_inc;
+	      WLN1_WQ<=WLN1_WQ_inc2;
+	  end
 	  if (!aStall && !aDoStall && chk_rdy) begin
 	      chk_mask<=6'd0;
-	 //     if (pse0==63 && WLN0_en) mask=~mask;
-	 //     if (pse1==63 && WLN1_en) mask=~mask;
 	  end else if (!(|rsDoStall & rsStall)) begin
 	      chk_mask<=chk_mask|chk_wb0|chk_wb1;
 	  end
