@@ -154,6 +154,8 @@ module stq(
   reg [5:0] pse1_WQ;
   wire [5:0] pse1_WQ_inc;
   wire [5:0] pse1_WQ_inc2;
+  wire [5:0] WLN1_WQ_inc;
+  wire [5:0] WLN1_WQ_inc2;
   
   wire [139:0] WLN0_dataX;
   wire [139:0] WLN1_dataX;
@@ -166,8 +168,8 @@ module stq(
   wire [`lsaddr_width-1:0] WLN1_adata0;
   wire WLN0_en0;
   wire WLN1_en0;
-  wire [`lsaddr_width-1:0] WNL0_adata0;
-  wire [`lsaddr_width-1:0] WNL1_adata0;
+  wire [`lsaddr_width-1:0] WNL0_adata;
+  wire [`lsaddr_width-1:0] WNL1_adata;
   wire WNL0_en;
   wire WNL1_en;
 	  
@@ -760,12 +762,10 @@ module stq(
 
   assign aDoStall=|chk0_partial || |chk1_partial || |chk2_partial || |chk3_partial || |chk4_partial || |chk5_partial || chk_wb2_has ||
 	  |rsDoStall | rsStall;
-  assign WLN0_en=upd[WLN0_WQ];
-  assign WLN1_en=upd[WLN1_WQ];
+//  assign WLN0_en=upd[WLN0_WQ];
+//  assign WLN1_en=upd[WLN1_WQ];
   //assign WLN0_adata=LSQ_shr_data[`lsqshare_wrt0]==3'd7 ? {`lsaddr_width{1'b0}} : {`lsaddr_width{1'bz}};
   //assign WLN1_adata=LSQ_shr_data[`lsqshare_wrt1]==3'd7 ? {`lsaddr_width{1'b0}} : {`lsaddr_width{1'bz}};
-  assign WLN0_WQ=WLN0_adata[`lsaddr_WQ];
-  assign WLN1_WQ=WLN1_adata[`lsaddr_WQ];
   
   assign WNL0_en=LSQ_shr_data[`lsqshare_wrt0]==3'd7 ? 1'b0 : 1'bz;
   assign WNL1_en=LSQ_shr_data[`lsqshare_wrt1]==3'd7 ? 1'b0 : 1'bz;
@@ -873,7 +873,7 @@ module stq(
   stq_adata_ram ramA_mod(
   clk,
   rst,
-  WLN_clkEn,
+  ~st_stall & WLN0_en,
   ~WLN0_WQ[0] ? WLN0_WQ[5:1] : WLN1_WQ[5:1],
   {WLN0_adata0,WLN0_en0},
   WNL0_en & ~aStall & ~aDoStall,
@@ -882,19 +882,19 @@ module stq(
   );
 
   assign WLN0_adata=~WLN0_WQ[0] ? WLN0_adata0 : WLN1_adata0;
-  assign WLN0_en=~WLN0_WQ[0] ? WLN0_en0 & upd[WLN0_WQ] : WLN1_en0 & upd[WLN1_WQ];
+  assign WLN0_en=~WLN0_WQ[0] ? WLN0_en0 & upd[WLN0_WQ] & ~mask[WLN0_WQ] : WLN1_en0 & upd[WLN1_WQ] & ~mask[WLN1_WQ];
   assign WLN1_adata=WLN0_WQ[0] ? WLN0_adata0 : WLN1_adata0;
-  assign WLN1_en=WLN0_WQ[0] ? WLN0_en0 & upd[WLN0_WQ] : WLN1_en0 & upd[WLN1_WQ];
+  assign WLN1_en=WLN0_WQ[0] ? WLN0_en0 & upd[WLN0_WQ] & ~mask[WLN0_WQ] : WLN1_en0 & upd[WLN1_WQ] & ~mask[WLN1_WQ];
   
   stq_adata_ram ramB_mod(
   clk,
   rst,
-  WLN_clkEn,
-  ~WLN0_WQ[0] ? WLN1_WQ[5:1] : WLN0_WQ[5:1],,
+  ~st_stall & WLN0_en,
+  ~WLN0_WQ[0] ? WLN1_WQ[5:1] : WLN0_WQ[5:1],
   {WLN1_adata0,WLN1_en0},
   WNL0_en & ~aStall & ~aDoStall,
   ~WNL0_WQ[0] ? WNL1_WQ[5:1] : WNL0_WQ[5:1],
-  ~WNL0_WQ[0] ? {WNL1_adata,WNL1_en} : {WNL0_adata,WNL0_en}
+  ~WNL0_WQ[0]  ? {WNL1_adata,WNL1_en} : {WNL0_adata,WNL0_en}
   );
   
   stq_adata bgn_mod(
@@ -936,26 +936,30 @@ module stq(
       end else begin
 	  wb0_adata<=wb0_adataW;
 	  wb1_adata<=wb1_adataW;
-	  if (!stall && !doStall && pse0_en && ~pse1_en) begin
+	  if (!stall && !doStall && pse0_en && ~pse1_en & ~excpt) begin
 	      pse0_WQ<=pse1_WQ;
 	      pse1_WQ<=pse1_WQ_inc;
-	      mask[pse0_WQ]=~mask[pse0_WQ];
-	  end else if (!stall && !doStall && pse0_en) begin
+	      mask[pse0_WQ]=1'b1;
+	  end else if (!stall && !doStall && pse0_en && ~excpt) begin
 	      pse0_WQ<=pse1_WQ_inc;
 	      pse1_WQ<=pse1_WQ_inc2;
-	      mask[pse0_WQ]=~mask[pse0_WQ];
-	      mask[pse1_WQ]=~mask[pse1_WQ];
-	  end
-	  if (!st_stall) begin
-	      if (WLN0==63 && WLN0_en) mask=~mask;
-	      if (WLN1==63 && WLN1_en) mask=~mask;
+	      mask[pse0_WQ]=1'b1;
+	      mask[pse1_WQ]=1'b1;
 	  end
 	  if (!st_stall &&  WLN0_en && ~WLN1_en) begin
 	      WLN0_WQ<=WLN1_WQ;
 	      WLN1_WQ<=WLN1_WQ_inc;
+	      mask[WLN0_WQ]=1'b0;
 	  end else if (!st_stall && WLN0_en) begin
 	      WLN0_WQ<=WLN1_WQ_inc;
 	      WLN1_WQ<=WLN1_WQ_inc2;
+	      mask[WLN0_WQ]=1'b0;
+	      mask[WLN1_WQ]=1'b0;
+	  end
+	  if (excpt) begin
+	      mask<=64'b0;
+	      WLN0_WQ<=pse0_WQ;
+	      WLN1_WQ<=pse1_WQ;
 	  end
 	  if (!aStall && !aDoStall && chk_rdy) begin
 	      chk_mask<=6'd0;
