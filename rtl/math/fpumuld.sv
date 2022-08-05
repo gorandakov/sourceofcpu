@@ -119,6 +119,13 @@ module fpucadd(clk,rst,A,A_alt,B,and1,or1,copyA,en,rmode,res,res_hi,isDBL,fpcsr,
  //tbd: enable bit 
   fpucadd_compress compr_mod(clk,A[63:0],B[63:0],part0,part1,or1,and1);
   adder #(128) prodAdd_mod(part0,part1,prod,1'b0,1'b1,,,,);
+  adder #(64) praddA_mod(part0[105:42],part1[105:42],prod_pr[105:42],cinA_pr,1'b1,,,,);
+  adder #(32) praddB_mod(part0[41:10],part1[41:10],prod_pr[41:10],cinB_pr,1'b1,cinA_pr,,,);
+  adder #(8) praddC_mod(part0[9:2],part1[9:2],prod_pr[9:2],cinC_pr,1'b1,cinB_pr,,,);
+  adder #(2) praddB_mod(part0[1:0],part1[1:0],prod_pr[1:0],cinC_pr,1'b1,1'b1,,,);
+  shifter_D_low({1'b1,dataLR[51:0]},expdiffCP,CP_en,prod_sh[105:0],sh_tail);
+  shifter_D_high(prod_pr,expdiff,~CP_en,prod_sh[105:0],sh_tail);
+  assign prod_cx=CP_en ? {1'b1,dataLR[51:0],53'b0} : prod_pr;
 
   adder2oi #(64) resAddE_mod(enbit_ext,prod_reg[126:63],rndbit_ext,{res[63:33],res[31:0],dummy1_1},{dummy1_2,res[63:33],res[31:0]},1'b0,
       prod_reg[127] & EXT_rnd1 & ~spec_any & en_reg3 ||
