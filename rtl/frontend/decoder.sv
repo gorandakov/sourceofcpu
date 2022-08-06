@@ -14,6 +14,7 @@ module decoder_permitted_i(
   mul,
   sys,
   pos0,
+  FPU,
   iAvail,
   stall,
   halt,
@@ -31,6 +32,7 @@ module decoder_permitted_i(
   input [9:0] mul;
   input [9:0] sys;
   input [9:0] pos0;
+  input [9:0] FPU;
   input [9:0] iAvail;
   input stall;
   input halt;
@@ -49,6 +51,7 @@ module decoder_permitted_i(
   wire [9:0][9:0] lsas_cnt;
   wire [9:0][9:0] ldst_cnt;
   wire [9:0][9:0] alu_shift_cnt;
+  wire [9:0][9:0] FPU_dke;
   
   wire [9:0] storeL_has;
   wire [9:0] permA;
@@ -64,6 +67,7 @@ module decoder_permitted_i(
           popcnt10_or_less indir_mod(indir & ((10'd2<<k)-10'd1),indir_cnt[k]);
           popcnt10_or_less load_mod(load & ((10'd2<<k)-10'd1),load_cnt[k]);
           popcnt10_or_less alu_mod(alu & ((10'd2<<k)-10'd1),alu_cnt[k]);
+          popcnt10_or_less alu_mod(FPU & ((10'd2<<k)-10'd1),FPU_dke[k]);
           popcnt10_or_less shift_mod(shift & ((10'd2<<k)-10'd1),shift_cnt[k]);
           popcnt10_or_less alu_shift_mod((alu|shift) & ((10'd2<<k)-10'd1),alu_shift_cnt[k]);
           popcnt10_or_less store_mod(store & ((10'd2<<k)-10'd1),store_cnt[k]);
@@ -87,9 +91,9 @@ module decoder_permitted_i(
           assign permB[k]=branch_cnt[k][2] & taken_cnt[k][1] & indir_cnt[k][1];
           
           if (k>0)
-              assign permC[k]=(|(sys[k:0])) ? sys[k-1:0]==0 && pos0[k]==0 : pos0[k]==0;
+              assign permC[k]=(|(sys[k:0])) ? sys[k-1:0]==0 && pos0[k]==0 && FPU_dke[k][3] : pos0[k]==0 && FPU_dke[k][3];
           else
-              assign permC[k]=(pos0[0] && allret)==0;
+              assign permC[k]=(pos0[0] && allret)==0 && FPU_dke[k][3];
       end
   endgenerate
   
@@ -2984,6 +2988,7 @@ module decoder(
   .mul(cls_mul),
   .sys(cls_sys),
   .pos0(cls_pos0),
+  .FPU(cls_FPU),
   .iAvail(iAvail),
   .stall(stall),
   .halt(dec_halt[0]),
