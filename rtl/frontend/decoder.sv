@@ -67,7 +67,7 @@ module decoder_permitted_i(
           popcnt10_or_less indir_mod(indir & ((10'd2<<k)-10'd1),indir_cnt[k]);
           popcnt10_or_less load_mod(load & ((10'd2<<k)-10'd1),load_cnt[k]);
           popcnt10_or_less alu_mod(alu & ((10'd2<<k)-10'd1),alu_cnt[k]);
-          popcnt10_or_less aluf_mod(FPU & ((10'd2<<k)-10'd1),FPU_dke[k]);
+          popcnt10_or_less alu_mod(FPU & ((10'd2<<k)-10'd1),FPU_dke[k]);
           popcnt10_or_less shift_mod(shift & ((10'd2<<k)-10'd1),shift_cnt[k]);
           popcnt10_or_less alu_shift_mod((alu|shift) & ((10'd2<<k)-10'd1),alu_shift_cnt[k]);
           popcnt10_or_less store_mod(store & ((10'd2<<k)-10'd1),store_cnt[k]);

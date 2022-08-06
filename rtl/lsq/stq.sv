@@ -957,7 +957,7 @@ module stq(
 	      mask[WLN1_WQ]=1'b0;
 	  end
 	  if (excpt) begin
-	      mask=64'b0;
+	      mask<=64'b0;
 	      WLN0_WQ<=pse0_WQ;
 	      WLN1_WQ<=pse1_WQ;
 	  end
