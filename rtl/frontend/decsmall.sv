@@ -182,6 +182,8 @@ module smallInstr_decoder(
   wire isShlAddMulLike;
   wire isPtrSec;
   wire isJalR;
+  wire isLzCnt;
+  wire isTzCnt;
   wire isBasicFPUScalarA;
   wire isBasicFPUScalarB;
   wire isBasicFPUScalarC;
@@ -362,6 +364,8 @@ module smallInstr_decoder(
   assign isPtrSec=opcode_main==8'd212;
   assign isJalR=opcode_main==8'd213 || opcode_main==8'd214 || opcode_main==8'd215;
   //216-219=cmp16,cmp8
+  assign isLzCnt=opcode_main==8'd220 && instr[31:18]==14'b0;
+  assign isTzCnt=opcode_main=8'd220 && instr[31:18]==14'b01;
 
   assign isBasicFPUScalarA=opcode_main==8'hf0 && instr[13:12]==2'b0;
   assign isBasicFPUScalarB=opcode_main==8'hf0 && instr[13:12]==2'b1;
