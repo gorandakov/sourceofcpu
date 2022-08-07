@@ -1342,7 +1342,7 @@ module smallInstr_decoder(
       if (magic[0]) perror[24]=1;
       pjumpType[24]=5'b10001;
       
-      trien[25]=magic[0] && isCall|isCallPrep|isRet;
+      trien[25]=magic[0] && isCall|isCallPrep|isRet|isLzCnt|isTzCnt;
       if (isCall) begin
           pport[25]=PORT_STORE; //warning: need indirect call
           prB[25]=REG_SP;
@@ -1368,6 +1368,16 @@ module smallInstr_decoder(
           pconstant[25]={{47{instr[31]}},instr[31:16],1'b0};
           prT[25]=instr[12:8];
           poperation[25][7:0]=mode64 ? `op_add64 : `op_add32;
+          puseRs[25]=1'b1;
+          poperation[25][12]=1'b1;
+      end else if (isLzCnt|isTzCnt) begin
+          pport[25]=PORT_ALU;
+          prB_use[25]=1'b1;
+          prA_use[25]=1'b0;
+          prT_use[25]=1'b1;
+          prT[25]={instr[16],instr[11:8]};
+	  prB[25]={instr[17],instr[15:12]}
+          poperation[25][7:0]=isLzCnt ? `op_LzCnt|2048 : `op_TzCnt|2048;
           puseRs[25]=1'b1;
           poperation[25][12]=1'b1;
       end else begin 
