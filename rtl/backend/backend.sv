@@ -3274,7 +3274,7 @@ module backend(
   .retire_clkEn(1'b1),
 
   .read0_addr(regB[0]),.read0_data(dataB[0]),
-    .read0_oe(~retB[0]|rs0i0_useBConst|~rs_rB_use[0]),.read0_match(gazumpBG[0]),
+    .read0_oe(~retB[0]|rs0i0_useBConst_reg|~rs_rB_use[0]),.read0_match(gazumpBG[0]),
   .read1_addr(regB[1]),.read1_data(dataB[1]),
     .read1_oe(~retB[1]|rs0i1_useBConst_reg|~rs_rB_use[1]),.read1_match(gazumpBG[1]),
   .read2_addr(regB[2]),.read2_data(dataB[2]),
