@@ -802,80 +802,27 @@ module regfile_ram_block(
   assign write2_data_ram[2]=write9_data;
   assign write2_wen_ram[2]=write9_wen;
    
-  assign read0_dataP[0]=((read0_addr_reg[3:0]!=4'd0 && read0_addr_reg[3:0]!=4'd1 &&
-    read0_addr_reg[3:0]!=4'd2) || read0_constEn_reg) ? read0_const_reg : {DATA_WIDTH{1'BZ}};
-  assign read0_dataP[1]=((read0_addr_reg[3:0]!=4'd3 && read0_addr_reg[3:0]!=4'd4 &&
-    read0_addr_reg[3:0]!=4'd5) || read0_constEn_reg) ? read0_dataP[0] : {DATA_WIDTH{1'BZ}};
-  assign read0_dataP[2]=((read0_addr_reg[3:0]!=4'd6 && read0_addr_reg[3:0]!=4'd7 &&
-    read0_addr_reg[3:0]!=4'd8) || read0_constEn_reg) ? read0_dataP[1] : {DATA_WIDTH{1'BZ}};
-
-  assign read1_dataP[0]=((read1_addr_reg[3:0]!=4'd0 && read1_addr_reg[3:0]!=4'd1 &&
-    read1_addr_reg[3:0]!=4'd2) || read1_constEn_reg) ? read1_const_reg : {DATA_WIDTH{1'BZ}};
-  assign read1_dataP[1]=((read1_addr_reg[3:0]!=4'd3 && read1_addr_reg[3:0]!=4'd4 &&
-    read1_addr_reg[3:0]!=4'd5) || read1_constEn_reg) ? read1_dataP[0] : {DATA_WIDTH{1'BZ}};
-  assign read1_dataP[2]=((read1_addr_reg[3:0]!=4'd6 && read1_addr_reg[3:0]!=4'd7 &&
-    read1_addr_reg[3:0]!=4'd8) || read1_constEn_reg) ? read1_dataP[1] : {DATA_WIDTH{1'BZ}};
-
-  assign read2_dataP[0]=((read2_addr_reg[3:0]!=4'd0 && read2_addr_reg[3:0]!=4'd1 &&
-    read2_addr_reg[3:0]!=4'd2) || read2_constEn_reg) ? read2_const_reg : {DATA_WIDTH{1'BZ}};
-  assign read2_dataP[1]=((read2_addr_reg[3:0]!=4'd3 && read2_addr_reg[3:0]!=4'd4 &&
-    read2_addr_reg[3:0]!=4'd5) || read2_constEn_reg) ? read2_dataP[0] : {DATA_WIDTH{1'BZ}};
-  assign read2_dataP[2]=((read2_addr_reg[3:0]!=4'd6 && read2_addr_reg[3:0]!=4'd7 &&
-    read2_addr_reg[3:0]!=4'd8) || read2_constEn_reg) ? read2_dataP[1] : {DATA_WIDTH{1'BZ}};
-
-  assign read3_dataP[0]=((read3_addr_reg[3:0]!=4'd0 && read3_addr_reg[3:0]!=4'd1 &&
-    read3_addr_reg[3:0]!=4'd2) || read3_constEn_reg) ? read3_const_reg : {DATA_WIDTH{1'BZ}};
-  assign read3_dataP[1]=((read3_addr_reg[3:0]!=4'd3 && read3_addr_reg[3:0]!=4'd4 &&
-    read3_addr_reg[3:0]!=4'd5) || read3_constEn_reg) ? read3_dataP[0] : {DATA_WIDTH{1'BZ}};
-  assign read3_dataP[2]=((read3_addr_reg[3:0]!=4'd6 && read3_addr_reg[3:0]!=4'd7 &&
-    read3_addr_reg[3:0]!=4'd8) || read3_constEn_reg) ? read3_dataP[1] : {DATA_WIDTH{1'BZ}};
-
-  assign read4_dataP[0]=((read4_addr_reg[3:0]!=4'd0 && read4_addr_reg[3:0]!=4'd1 &&
-    read4_addr_reg[3:0]!=4'd2) || read4_constEn_reg) ? read4_const_reg : {DATA_WIDTH{1'BZ}};
-  assign read4_dataP[1]=((read4_addr_reg[3:0]!=4'd3 && read4_addr_reg[3:0]!=4'd4 &&
-    read4_addr_reg[3:0]!=4'd5) || read4_constEn_reg) ? read4_dataP[0] : {DATA_WIDTH{1'BZ}};
-  assign read4_dataP[2]=((read4_addr_reg[3:0]!=4'd6 && read4_addr_reg[3:0]!=4'd7 &&
-    read4_addr_reg[3:0]!=4'd8) || read4_constEn_reg) ? read4_dataP[1] : {DATA_WIDTH{1'BZ}};
-
-  assign read5_dataP[0]=((read5_addr_reg[3:0]!=4'd0 && read5_addr_reg[3:0]!=4'd1 &&
-    read5_addr_reg[3:0]!=4'd2) || read5_constEn_reg) ? read5_const_reg : {DATA_WIDTH{1'BZ}};
-  assign read5_dataP[1]=((read5_addr_reg[3:0]!=4'd3 && read5_addr_reg[3:0]!=4'd4 &&
-    read5_addr_reg[3:0]!=4'd5) || read5_constEn_reg) ? read5_dataP[0] : {DATA_WIDTH{1'BZ}};
-  assign read5_dataP[2]=((read5_addr_reg[3:0]!=4'd6 && read5_addr_reg[3:0]!=4'd7 &&
-    read5_addr_reg[3:0]!=4'd8) || read5_constEn_reg) ? read5_dataP[1] : {DATA_WIDTH{1'BZ}};
-
-  assign read6_dataP[0]=((read6_addr_reg[3:0]!=4'd0 && read6_addr_reg[3:0]!=4'd1 &&
-    read6_addr_reg[3:0]!=4'd2) || read6_constEn_reg) ? read6_const_reg : {DATA_WIDTH{1'BZ}};
-  assign read6_dataP[1]=((read6_addr_reg[3:0]!=4'd3 && read6_addr_reg[3:0]!=4'd4 &&
-    read6_addr_reg[3:0]!=4'd5) || read6_constEn_reg) ? read6_dataP[0] : {DATA_WIDTH{1'BZ}};
-  assign read6_dataP[2]=((read6_addr_reg[3:0]!=4'd6 && read6_addr_reg[3:0]!=4'd7 &&
-    read6_addr_reg[3:0]!=4'd8) || read6_constEn_reg) ? read6_dataP[1] : {DATA_WIDTH{1'BZ}};
-
-  assign read7_dataP[0]=((read7_addr_reg[3:0]!=4'd0 && read7_addr_reg[3:0]!=4'd1 &&
-    read7_addr_reg[3:0]!=4'd2) || read7_constEn_reg) ? read7_const_reg : {DATA_WIDTH{1'BZ}};
-  assign read7_dataP[1]=((read7_addr_reg[3:0]!=4'd3 && read7_addr_reg[3:0]!=4'd4 &&
-    read7_addr_reg[3:0]!=4'd5) || read7_constEn_reg) ? read7_dataP[0] : {DATA_WIDTH{1'BZ}};
-  assign read7_dataP[2]=((read7_addr_reg[3:0]!=4'd6 && read7_addr_reg[3:0]!=4'd7 &&
-    read7_addr_reg[3:0]!=4'd8) || read7_constEn_reg) ? read7_dataP[1] : {DATA_WIDTH{1'BZ}};
-
-  assign read8_dataP[0]=((read8_addr_reg[3:0]!=4'd0 && read8_addr_reg[3:0]!=4'd1 &&
-    read8_addr_reg[3:0]!=4'd2) || read8_constEn_reg) ? read8_const_reg : {DATA_WIDTH{1'BZ}};
-  assign read8_dataP[1]=((read8_addr_reg[3:0]!=4'd3 && read8_addr_reg[3:0]!=4'd4 &&
-    read8_addr_reg[3:0]!=4'd5) || read8_constEn_reg) ? read8_dataP[0] : {DATA_WIDTH{1'BZ}};
-  assign read8_dataP[2]=((read8_addr_reg[3:0]!=4'd6 && read8_addr_reg[3:0]!=4'd7 &&
-    read8_addr_reg[3:0]!=4'd8) || read8_constEn_reg) ? read8_dataP[1] : {DATA_WIDTH{1'BZ}};
+  assign read0_dataP[0]= read0_constEn_reg ? read0_const_reg : {DATA_WIDTH{1'BZ}};
+  assign read1_dataP[0]= read1_constEn_reg ? read1_const_reg : {DATA_WIDTH{1'BZ}};
+  assign read2_dataP[0]= read2_constEn_reg ? read2_const_reg : {DATA_WIDTH{1'BZ}};
+  assign read3_dataP[0]= read3_constEn_reg ? read3_const_reg : {DATA_WIDTH{1'BZ}};
+  assign read4_dataP[0]= read4_constEn_reg ? read4_const_reg : {DATA_WIDTH{1'BZ}};
+  assign read5_dataP[0]= read5_constEn_reg ? read5_const_reg : {DATA_WIDTH{1'BZ}};
+  assign read6_dataP[0]= read6_constEn_reg ? read6_const_reg : {DATA_WIDTH{1'BZ}};
+  assign read7_dataP[0]= read7_constEn_reg ? read7_const_reg : {DATA_WIDTH{1'BZ}};
+  assign read8_dataP[0]= read8_constEn_reg ? read8_const_reg : {DATA_WIDTH{1'BZ}};
 
   adder_inc #(ADDR_WIDTH-4) initInc_mod(initRegCount[ADDR_WIDTH-1:4],initRegCount_next,1'b1,);
 
-  assign read0_data=read0_dataP[2]; 
-  assign read1_data=read1_dataP[2]; 
-  assign read2_data=read2_dataP[2]; 
-  assign read3_data=read3_dataP[2]; 
-  assign read4_data=read4_dataP[2]; 
-  assign read5_data=read5_dataP[2]; 
-  assign read6_data=read6_dataP[2]; 
-  assign read7_data=read7_dataP[2]; 
-  assign read8_data=read8_dataP[2]; 
+  assign read0_data=read0_dataP[0]; 
+  assign read1_data=read1_dataP[0]; 
+  assign read2_data=read2_dataP[0]; 
+  assign read3_data=read3_dataP[0]; 
+  assign read4_data=read4_dataP[0]; 
+  assign read5_data=read5_dataP[0]; 
+  assign read6_data=read6_dataP[0]; 
+  assign read7_data=read7_dataP[0]; 
+  assign read8_data=read8_dataP[0]; 
   
   generate
     for(x=0;x<=8;x=x+1)
@@ -888,15 +835,15 @@ module regfile_ram_block(
           read_clkEn,
           retire_clkEn,
 
-          read0_addr,read0_dataP[x/3],
-          read1_addr,read1_dataP[x/3],
-          read2_addr,read2_dataP[x/3],
-          read3_addr,read3_dataP[x/3],
-          read4_addr,read4_dataP[x/3],
-          read5_addr,read5_dataP[x/3],
-          read6_addr,read6_dataP[x/3],
-          read7_addr,read7_dataP[x/3],
-          read8_addr,read8_dataP[x/3],
+          read0_addr,read0_dataP[0],
+          read1_addr,read1_dataP[0],
+          read2_addr,read2_dataP[0],
+          read3_addr,read3_dataP[0],
+          read4_addr,read4_dataP[0],
+          read5_addr,read5_dataP[0],
+          read6_addr,read6_dataP[0],
+          read7_addr,read7_dataP[0],
+          read8_addr,read8_dataP[0],
 
           read0_constEn,
           read1_constEn,
