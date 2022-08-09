@@ -663,6 +663,7 @@ module stq(
           assign upd0_en0[x]=upd0_WQ==x && upd0_en;
           assign upd1_en0[x]=upd1_WQ==x && upd1_en;
           assign passe_en[x]=(pse0_WQ==x && pse0_en) || (pse1_WQ==x && pse1_en);
+	  assign free_en[x]==(WLN0_WQ==x && WLN0_en && !st_stall) || (WLN1_WQ==x && WLN1_en && !st_stall)
       end
       for(a=0;a<6;a=a+1) begin : wrt
           assign WNL0_en=LSQ_shr_data[`lsqshare_wrt0]==a ? &rdy[a:0] & chk_rdy : 1'bz;
@@ -882,9 +883,9 @@ module stq(
   );
 
   assign WLN0_adata=~WLN0_WQ[0] ? WLN0_adata0 : WLN1_adata0;
-  assign WLN0_en=~WLN0_WQ[0] ? WLN0_en0 & upd[WLN0_WQ] & ~mask[WLN0_WQ] : WLN1_en0 & upd[WLN1_WQ] & ~mask[WLN1_WQ];
+  assign WLN0_en=~WLN0_WQ[0] ? WLN0_en0 & upd[WLN0_WQ] & mask[WLN0_WQ] : WLN1_en0 & upd[WLN1_WQ] & mask[WLN1_WQ];
   assign WLN1_adata=WLN0_WQ[0] ? WLN0_adata0 : WLN1_adata0;
-  assign WLN1_en=WLN0_WQ[0] ? WLN0_en0 & upd[WLN0_WQ] & ~mask[WLN0_WQ] : WLN1_en0 & upd[WLN1_WQ] & ~mask[WLN1_WQ];
+  assign WLN1_en=WLN0_WQ[0] ? WLN0_en0 & upd[WLN0_WQ] & mask[WLN0_WQ] : WLN1_en0 & upd[WLN1_WQ] & mask[WLN1_WQ];
   
   stq_adata_ram ramB_mod(
   clk,
