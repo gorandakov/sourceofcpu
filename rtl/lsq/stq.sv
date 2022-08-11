@@ -38,6 +38,7 @@ module stq(
   wrt0_adata,wrt0_en,wrt0_LSQ,
   wrt1_adata,wrt1_en,wrt1_LSQ,
   confl,confl_SMP,confl_X,
+  confl_out,
   upd0_WQ,upd0_en,upd0_data,upd0_pbit,//upd0_sz,//store data
   upd1_WQ,upd1_en,upd1_data,upd1_pbit,//upd1_sz,//store data 2
   pse0_en,
@@ -104,6 +105,7 @@ module stq(
   input [5:0] confl;
   input [5:0] confl_SMP;
   input [5:0] confl_X;
+  output reg [5:0] confl_out;
 
   input [5:0] upd0_WQ;
   input upd0_en;
@@ -159,6 +161,8 @@ module stq(
   
   wire [139:0] WLN0_dataX;
   wire [139:0] WLN1_dataX;
+
+  wire [5:0] confl0;
 
   reg [5:0] WLN0_WQ;
   reg [5:0] WLN1_WQ;
@@ -663,7 +667,7 @@ module stq(
           assign upd0_en0[x]=upd0_WQ==x && upd0_en;
           assign upd1_en0[x]=upd1_WQ==x && upd1_en;
           assign passe_en[x]=(pse0_WQ==x && pse0_en) || (pse1_WQ==x && pse1_en);
-	  assign free_en[x]==(WLN0_WQ==x && WLN0_en && !st_stall) || (WLN1_WQ==x && WLN1_en && !st_stall)
+	  assign free_en[x]=(WLN0_WQ==x && WLN0_en && !st_stall) || (WLN1_WQ==x && WLN1_en && !st_stall);
       end
       for(a=0;a<6;a=a+1) begin : wrt
           assign WNL0_en=LSQ_shr_data[`lsqshare_wrt0]==a ? &rdy[a:0] & chk_rdy : 1'bz;
@@ -763,6 +767,12 @@ module stq(
 
   assign aDoStall=|chk0_partial || |chk1_partial || |chk2_partial || |chk3_partial || |chk4_partial || |chk5_partial || chk_wb2_has ||
 	  |rsDoStall | rsStall;
+  assign confl0[0]=(|chk0_partial || |chk0_match) && chk0_en && !chk_adata[0][`lsaddr_lsflag] && !chk_adata[0][`lsaddr_st];
+  assign confl0[1]=(|chk1_partial || |chk1_match) && chk1_en && !chk_adata[1][`lsaddr_lsflag] && !chk_adata[1][`lsaddr_st];
+  assign confl0[2]=(|chk2_partial || |chk2_match) && chk2_en && !chk_adata[2][`lsaddr_lsflag] && !chk_adata[2][`lsaddr_st];
+  assign confl0[3]=(|chk3_partial || |chk3_match) && chk3_en && !chk_adata[3][`lsaddr_lsflag] && !chk_adata[3][`lsaddr_st];
+  assign confl0[4]=(|chk4_partial || |chk4_match) && chk4_en && !chk_adata[4][`lsaddr_lsflag] && !chk_adata[4][`lsaddr_st];
+  assign confl0[5]=(|chk5_partial || |chk5_match) && chk5_en && !chk_adata[5][`lsaddr_lsflag] && !chk_adata[5][`lsaddr_st];
 //  assign WLN0_en=upd[WLN0_WQ];
 //  assign WLN1_en=upd[WLN1_WQ];
   //assign WLN0_adata=LSQ_shr_data[`lsqshare_wrt0]==3'd7 ? {`lsaddr_width{1'b0}} : {`lsaddr_width{1'bz}};
@@ -915,6 +925,7 @@ module stq(
 
   always @(posedge clk) begin
       if (rst) begin
+	  confl_out<=6'b0;
 	  pse0_WQ<=6'd0;
 	  pse1_WQ<=6'd0;
 	  WLN0_WQ<=6'd0;
@@ -935,6 +946,7 @@ module stq(
 	  chk_wb1_has_reg<=0;
 	  chk_wb1_has_reg2<=0;
       end else begin
+	  confl_out<=confl0;
 	  wb0_adata<=wb0_adataW;
 	  wb1_adata<=wb1_adataW;
 	  if (!stall && !doStall && pse0_en && ~pse1_en & ~excpt) begin
