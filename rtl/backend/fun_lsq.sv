@@ -195,7 +195,7 @@ module fun_lsq(
   wire [5:0] LSQ_enA;
   wire LSQ_rdy_A;
   wire LSQ_rdy_AP;
-  wire [5:0] STQ_confl;
+  wire [5:0] STQ_ldconfl;
   wire [3:0] PSTQ_match;
   wire [`lsaddr_width-1:0] PSTQ_data[2:0];
   wire [2:0] PSTQ_en;
@@ -330,6 +330,7 @@ module fun_lsq(
   p4_adata,p4_en,p4_LSQ,
   p5_adata,p5_en,p5_LSQ,
   LDQ_ldconfl,LDQ_insconfl,LDQ_ldconflX,
+  STQ_ldconfl,
   lsw_wq0,lsw_rs_en0[0],lsw_wdata0,lsw_pdata0,
   lsw_wq1,lsw_rs_en1[0],lsw_wdata1,lsw_pdata1,
   LSQ_shr_data[`lsqshare_wrt0]!=3'd7,
@@ -449,7 +450,7 @@ module fun_lsq(
   .read4A_DATA(dat4_LSQ),.read4A_dEn(chk4_LSQ),
   .read5A_DATA(dat5_LSQ),.read5A_dEn(chk5_LSQ),
   
-  .readA_conflIn_l(LDQ_ldconfl),
+  .readA_conflIn_l(LDQ_ldconfl|STQ_ldconfl),
   .readA_conflInMSI(LDQ_insconfl),
   //.readA_conflIn_s(STQ_confl), //purpose??
 
