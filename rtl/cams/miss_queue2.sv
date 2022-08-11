@@ -14,8 +14,8 @@ module missQ_ram(
   );
 
   localparam DATA_WIDTH=2+2*`mOp1_width;
-  localparam ADDR_WIDTH=4;
-  localparam ADDR_COUNT=16;
+  localparam ADDR_WIDTH=5;
+  localparam ADDR_COUNT=32;
 
   input clk;
   input rst;
@@ -53,8 +53,8 @@ module missQ_data_ram(
   );
 
   localparam DATA_WIDTH=2*128;
-  localparam ADDR_WIDTH=4;
-  localparam ADDR_COUNT=16;
+  localparam ADDR_WIDTH=5;
+  localparam ADDR_COUNT=32;
 
   input clk;
   input rst;
@@ -91,8 +91,8 @@ module missQ_datax_ram(
   );
 
   localparam DATA_WIDTH=2*128+16+10+4;
-  localparam ADDR_WIDTH=4;
-  localparam ADDR_COUNT=16;
+  localparam ADDR_WIDTH=5;
+  localparam ADDR_COUNT=32;
 
   input clk;
   input rst;
@@ -393,11 +393,11 @@ module missQ(
   alt_bus_addr
   );
 
-  localparam DEPTH=16;
-  localparam ADDR_WIDTH=4;
+  localparam DEPTH=32;
+  localparam ADDR_WIDTH=5;
   localparam DATA_WIDTH=2+2*`mOp1_width;
   localparam MOP_WIDTH=`mOp1_width;
-  localparam STALL_COUNT=10;
+  localparam STALL_COUNT=20;//up to 26
   localparam VADDR_WIDTH=64;
   localparam PADDR_WIDTH=44;
   localparam OPERATION_WIDTH=`operation_width;
@@ -712,7 +712,7 @@ module missQ(
   reg [ADDR_WIDTH:0] countF;
   wire [ADDR_WIDTH:0] countF_d;
   wire wen;
-  wire [3:0] write_addr_dec;
+  wire [4:0] write_addr_dec;
   
   wire [MOP_WIDTH-1:0] write_mop[5:0];
   wire [DATA_WIDTH-1:0] write_dataA;
@@ -882,8 +882,8 @@ module missQ(
   integer r,q;
   
   reg init;
-  reg [3:0] initCount;
-  wire [3:0] initCount_next;
+  reg [4:0] initCount;
+  wire [4:0] initCount_next;
   
   wire [5:0] read_thread; 
   wire [5:0] thrinhibitconfl;
@@ -905,15 +905,15 @@ module missQ(
   
   assign wen=miss0&~thrreginh[3][0]||miss1&~thrreginh[3][1]||miss2&~thrreginh[3][2]||
       miss3&~thrreginh[3][3]||miss4&~thrreginh[3][4]||miss5&~thrreginh[3][5];
-  assign read_addr_d=~doStep & ~begin_flush & ~rst ? read_addr : 4'bz; 
-  assign read_addr_d=begin_flush &~rst ? read_addr_begin : 4'bz;
-  assign write_addr_d=~wen & ~rst ? write_addr : 4'bz; 
-  assign count_d=~wen & (~now_flushing|alt_bus_hold) &~rst ? count : 5'bz;
-  assign count_d=wen & now_flushing & ~alt_bus_hold &~rst ? count : 5'bz;
+  assign read_addr_d=~doStep & ~begin_flush & ~rst ? read_addr : 5'bz; 
+  assign read_addr_d=begin_flush &~rst ? read_addr_begin : 5'bz;
+  assign write_addr_d=~wen & ~rst ? write_addr : 5'bz; 
+  assign count_d=~wen & (~now_flushing|alt_bus_hold) &~rst ? count : 6'bz;
+  assign count_d=wen & now_flushing & ~alt_bus_hold &~rst ? count : 6'bz;
   
-  assign read_addr_d=rst ? 4'b0:4'bz;
-  assign write_addr_d=rst ? 4'b0:4'bz;
-  assign count_d=rst ? 5'b0 : 5'bz;
+  assign read_addr_d=rst ? 5'b0:5'bz;
+  assign write_addr_d=rst ? 5'b0:5'bz;
+  assign count_d=rst ? 6'b0 : 6'bz;
   
   assign {read_confl[1:0],read_mop[1],read_mop[0]}=read_dataA;
   assign {read_confl[3:2],read_mop[3],read_mop[2]}=read_dataB;
@@ -1295,19 +1295,19 @@ module missQ(
     end
   endgenerate
   
-  adder_inc #(4) read_inc_mod(read_addr,read_addr_d,doStep &~begin_flush &~rst);
-  adder_inc #(4) write_inc_mod(write_addr,write_addr_d,wen&~rst);
-  adder_inc #(5) count_inc_mod(count,count_d,(~now_flushing|alt_bus_hold) & wen & ~rst);
-  adder #(5) count_dec_mod(count,5'b11111,count_d,1'b0,now_flushing & ~alt_bus_hold & ~wen & ~rst);
+  adder_inc #(5) read_inc_mod(read_addr,read_addr_d,doStep &~begin_flush &~rst);
+  adder_inc #(5) write_inc_mod(write_addr,write_addr_d,wen&~rst);
+  adder_inc #(6) count_inc_mod(count,count_d,(~now_flushing|alt_bus_hold) & wen & ~rst);
+  adder #(6) count_dec_mod(count,5'b11111,count_d,1'b0,now_flushing & ~alt_bus_hold & ~wen & ~rst);
   //adder #(4) wrEndAdd_mod(write_addr,4'hf,write_addr_end_d,1'b0,1'b1);
-  adder #(5) coundF_dec_mod(countF,5'b11111,countF_d,1'b0,1'b1); 
-  adder_inc #(4) initAdd_mod(initCount,initCount_next,1'b1);
+  adder #(6) coundF_dec_mod(countF,5'b11111,countF_d,1'b0,1'b1); 
+  adder_inc #(5) initAdd_mod(initCount,initCount_next,1'b1);
 
   
   bit_find_first_bit #(6) findConfl_mod(curConfl,sel,conflFound);
 
-  get_carry #(5) cmpSkip_mod(count,~STALL_COUNT[4:0],1'b1,doSkip_d);
-  adder #(4) write_dec_mod(write_addr,4'hf,write_addr_dec,1'b0,1'b1);
+  get_carry #(6) cmpSkip_mod(count,~STALL_COUNT[5:0],1'b1,doSkip_d);
+  adder #(5) write_dec_mod(write_addr,5'h1f,write_addr_dec,1'b0,1'b1);
   
 
   missQ_ram ramA_mod(
@@ -1439,7 +1439,7 @@ module missQ(
 	  write_addr<=write_addr_d;
 	  count<=count_d;
 	  if (rst) begin
-	     read_addr_begin<=4'b0;
+	     read_addr_begin<=5'b0;
              sticky_begin<=1'b0;
 	  end else if (wen && !count) begin
 	      read_addr_begin<=write_addr;
@@ -1452,8 +1452,8 @@ module missQ(
           end
 
 	  if (rst) begin
-	     write_addr_end<=4'b0;
-	     write_addr_end2<=4'b0;
+	     write_addr_end<=5'b0;
+	     write_addr_end2<=5'b0;
 	  end else if (wen && ~locked|do_unlock|(flush_end&&~alt_bus_hold)) begin
 	      write_addr_end<=write_addr;
 	      write_addr_end2<=write_addr_d;
