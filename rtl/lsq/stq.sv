@@ -765,14 +765,16 @@ module stq(
  
 
 
-  assign aDoStall=|chk0_partial || |chk1_partial || |chk2_partial || |chk3_partial || |chk4_partial || |chk5_partial || chk_wb2_has ||
+  assign aDoStall=(|chk0_partial && chk_adata[0][`lsaddr_flag]) || (|chk1_partial && chk_adata[1][`lsaddr_flag]) ||
+	  (|chk2_partial && chk_adata[2][`lsaddr_flag]) || (|chk3_partial && chk_adata[3][`lsaddr_flag]) ||
+	  (|chk4_partial && chk_adata[4][`lsaddr_flag]) || (|chk5_partial && chk_adata[5][`lsaddr_flag]) || chk_wb2_has ||
 	  |rsDoStall | rsStall;
-  assign confl0[0]=(|chk0_partial || |chk0_match) && chk0_en && !chk_adata[0][`lsaddr_lsflag] && !chk_adata[0][`lsaddr_st];
-  assign confl0[1]=(|chk1_partial || |chk1_match) && chk1_en && !chk_adata[1][`lsaddr_lsflag] && !chk_adata[1][`lsaddr_st];
-  assign confl0[2]=(|chk2_partial || |chk2_match) && chk2_en && !chk_adata[2][`lsaddr_lsflag] && !chk_adata[2][`lsaddr_st];
-  assign confl0[3]=(|chk3_partial || |chk3_match) && chk3_en && !chk_adata[3][`lsaddr_lsflag] && !chk_adata[3][`lsaddr_st];
-  assign confl0[4]=(|chk4_partial || |chk4_match) && chk4_en && !chk_adata[4][`lsaddr_lsflag] && !chk_adata[4][`lsaddr_st];
-  assign confl0[5]=(|chk5_partial || |chk5_match) && chk5_en && !chk_adata[5][`lsaddr_lsflag] && !chk_adata[5][`lsaddr_st];
+  assign confl0[0]=(|chk0_partial || |chk0_match) && chk0_en && !chk_adata[0][`lsaddr_flag] && !chk_adata[0][`lsaddr_st];
+  assign confl0[1]=(|chk1_partial || |chk1_match) && chk1_en && !chk_adata[1][`lsaddr_flag] && !chk_adata[1][`lsaddr_st];
+  assign confl0[2]=(|chk2_partial || |chk2_match) && chk2_en && !chk_adata[2][`lsaddr_flag] && !chk_adata[2][`lsaddr_st];
+  assign confl0[3]=(|chk3_partial || |chk3_match) && chk3_en && !chk_adata[3][`lsaddr_flag] && !chk_adata[3][`lsaddr_st];
+  assign confl0[4]=(|chk4_partial || |chk4_match) && chk4_en && !chk_adata[4][`lsaddr_flag] && !chk_adata[4][`lsaddr_st];
+  assign confl0[5]=(|chk5_partial || |chk5_match) && chk5_en && !chk_adata[5][`lsaddr_flag] && !chk_adata[5][`lsaddr_st];
 //  assign WLN0_en=upd[WLN0_WQ];
 //  assign WLN1_en=upd[WLN1_WQ];
   //assign WLN0_adata=LSQ_shr_data[`lsqshare_wrt0]==3'd7 ? {`lsaddr_width{1'b0}} : {`lsaddr_width{1'bz}};
