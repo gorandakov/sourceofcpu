@@ -340,43 +340,43 @@ module stq_buf_L_array(
   assign wrt0_match5=chk5_addrEO[wrt0_odd[0]] && (wrt0_subBNK2&chk5_subBNK2)!=0 && wrt0_odd[0]==chk5_odd[0];
   assign wrt1_match5=chk5_addrEO[wrt1_odd[0]] && (wrt1_subBNK2&chk5_subBNK2)!=0 && wrt1_odd[0]==chk5_odd[0];
   
-  assign chk0_matchW[0]=wrt0_match0 && chk0_en &&(chk0_bytes&~wrt0_bytes)==0 && (upd&wrt0_en)!=32'b0 &&
+  assign chk0_matchW[0]=wrt0_match0 && chk0_en && wrt0_en &&(chk0_bytes&~wrt0_bytes)==0 && (upd&wrt0_en)!=32'b0 &&
 	  chk0_odd==wrt0_odd && (chk0_subBNK&wrt0_subBNK)!=0;
-  assign chk1_matchW[0]=wrt0_match1 && chk1_en &&(chk1_bytes&~wrt0_bytes)==0 && (upd&wrt0_en)!=32'b0 &&
+  assign chk1_matchW[0]=wrt0_match1 && chk1_en && wrt0_en &&(chk1_bytes&~wrt0_bytes)==0 && (upd&wrt0_en)!=32'b0 &&
 	  chk1_odd==wrt0_odd && (chk1_subBNK&wrt0_subBNK)!=0;
-  assign chk2_matchW[0]=wrt0_match2 && chk2_en &&(chk2_bytes&~wrt0_bytes)==0 && (upd&wrt0_en)!=32'b0 &&
+  assign chk2_matchW[0]=wrt0_match2 && chk2_en && wrt0_en &&(chk2_bytes&~wrt0_bytes)==0 && (upd&wrt0_en)!=32'b0 &&
 	  chk2_odd==wrt0_odd && (chk2_subBNK&wrt0_subBNK)!=0;
-  assign chk3_matchW[0]=wrt0_match3 && chk3_en &&(chk3_bytes&~wrt0_bytes)==0 && (upd&wrt0_en)!=32'b0 &&
+  assign chk3_matchW[0]=wrt0_match3 && chk3_en && wrt0_en &&(chk3_bytes&~wrt0_bytes)==0 && (upd&wrt0_en)!=32'b0 &&
 	  chk3_odd==wrt0_odd && (chk3_subBNK&wrt0_subBNK)!=0;
-  assign chk4_matchW[0]=wrt0_match4 && chk4_en &&(chk4_bytes&~wrt0_bytes)==0 && (upd&wrt0_en)!=32'b0 &&
+  assign chk4_matchW[0]=wrt0_match4 && chk4_en && wrt0_en &&(chk4_bytes&~wrt0_bytes)==0 && (upd&wrt0_en)!=32'b0 &&
 	  chk4_odd==wrt0_odd && (chk4_subBNK&wrt0_subBNK)!=0;
-  assign chk5_matchW[0]=wrt0_match5 && chk5_en &&(chk5_bytes&~wrt0_bytes)==0 && (upd&wrt0_en)!=32'b0 &&
+  assign chk5_matchW[0]=wrt0_match5 && chk5_en && wrt0_en &&(chk5_bytes&~wrt0_bytes)==0 && (upd&wrt0_en)!=32'b0 &&
 	  chk5_odd==wrt0_odd && (chk5_subBNK&wrt0_subBNK)!=0;
 
-  assign chk0_partialW[0]=wrt0_match0 && chk0_en && ((chk0_bytes&~wrt0_bytes)!=0 || (upd&wrt0_en)==32'b0);
-  assign chk1_partialW[0]=wrt0_match1 && chk1_en && ((chk1_bytes&~wrt0_bytes)!=0 || (upd&wrt0_en)==32'b0);
-  assign chk2_partialW[0]=wrt0_match2 && chk2_en && ((chk2_bytes&~wrt0_bytes)!=0 || (upd&wrt0_en)==32'b0);
-  assign chk3_partialW[0]=wrt0_match3 && chk3_en && ((chk3_bytes&~wrt0_bytes)!=0 || (upd&wrt0_en)==32'b0);
-  assign chk4_partialW[0]=wrt0_match4 && chk4_en && ((chk4_bytes&~wrt0_bytes)!=0 || (upd&wrt0_en)==32'b0);
-  assign chk5_partialW[0]=wrt0_match5 && chk5_en && ((chk5_bytes&~wrt0_bytes)!=0 || (upd&wrt0_en)==32'b0);
+  assign chk0_partialW[0]=wrt0_match0 && chk0_en && wrt0_en && ((chk0_bytes&~wrt0_bytes)!=0 || (upd&wrt0_en)==32'b0);
+  assign chk1_partialW[0]=wrt0_match1 && chk1_en && wrt0_en && ((chk1_bytes&~wrt0_bytes)!=0 || (upd&wrt0_en)==32'b0);
+  assign chk2_partialW[0]=wrt0_match2 && chk2_en && wrt0_en && ((chk2_bytes&~wrt0_bytes)!=0 || (upd&wrt0_en)==32'b0);
+  assign chk3_partialW[0]=wrt0_match3 && chk3_en && wrt0_en && ((chk3_bytes&~wrt0_bytes)!=0 || (upd&wrt0_en)==32'b0);
+  assign chk4_partialW[0]=wrt0_match4 && chk4_en && wrt0_en && ((chk4_bytes&~wrt0_bytes)!=0 || (upd&wrt0_en)==32'b0);
+  assign chk5_partialW[0]=wrt0_match5 && chk5_en && wrt0_en && ((chk5_bytes&~wrt0_bytes)!=0 || (upd&wrt0_en)==32'b0);
   
-  assign chk0_matchW[1]=wrt1_match0 && chk0_en &&(chk0_bytes&~wrt1_bytes)==0 && (upd&wrt1_en)!=32'b0 &&
+  assign chk0_matchW[1]=wrt1_match0 && chk0_en && wrt1_en &&(chk0_bytes&~wrt1_bytes)==0 && (upd&wrt1_en)!=32'b0 &&
 	  chk0_odd==wrt1_odd && (chk0_subBNK&wrt1_subBNK)!=0;
-  assign chk1_matchW[1]=wrt1_match1 && chk1_en &&(chk1_bytes&~wrt1_bytes)==0 && (upd&wrt1_en)!=32'b0 &&
+  assign chk1_matchW[1]=wrt1_match1 && chk1_en && wrt1_en &&(chk1_bytes&~wrt1_bytes)==0 && (upd&wrt1_en)!=32'b0 &&
 	  chk1_odd==wrt1_odd && (chk1_subBNK&wrt1_subBNK)!=0;
-  assign chk2_matchW[1]=wrt1_match2 && chk2_en &&(chk2_bytes&~wrt1_bytes)==0 && (upd&wrt1_en)!=32'b0 &&
+  assign chk2_matchW[1]=wrt1_match2 && chk2_en && wrt1_en &&(chk2_bytes&~wrt1_bytes)==0 && (upd&wrt1_en)!=32'b0 &&
 	  chk2_odd==wrt1_odd && (chk2_subBNK&wrt1_subBNK)!=0;
-  assign chk3_matchW[1]=wrt1_match3 && chk3_en &&(chk3_bytes&~wrt1_bytes)==0 && (upd&wrt1_en)!=32'b0 &&
+  assign chk3_matchW[1]=wrt1_match3 && chk3_en && wrt1_en &&(chk3_bytes&~wrt1_bytes)==0 && (upd&wrt1_en)!=32'b0 &&
 	  chk3_odd==wrt1_odd && (chk3_subBNK&wrt1_subBNK)!=0;
-  assign chk4_matchW[1]=wrt1_match4 && chk4_en &&(chk4_bytes&~wrt1_bytes)==0 && (upd&wrt1_en)!=32'b0 &&
+  assign chk4_matchW[1]=wrt1_match4 && chk4_en && wrt1_en &&(chk4_bytes&~wrt1_bytes)==0 && (upd&wrt1_en)!=32'b0 &&
 	  chk4_odd==wrt1_odd && (chk4_subBNK&wrt1_subBNK)!=0;
-  assign chk5_matchW[1]=wrt1_match5 && chk5_en &&(chk5_bytes&~wrt1_bytes)==0 && (upd&wrt1_en)!=32'b0 &&
+  assign chk5_matchW[1]=wrt1_match5 && chk5_en && wrt1_en &&(chk5_bytes&~wrt1_bytes)==0 && (upd&wrt1_en)!=32'b0 &&
 	  chk5_odd==wrt1_odd && (chk5_subBNK&wrt1_subBNK)!=0;
 
-  assign chk0_partialW[1]=wrt1_match0 && chk0_en && ((chk0_bytes&~wrt1_bytes)!=0 || (upd&wrt1_en)==32'b0);
-  assign chk1_partialW[1]=wrt1_match1 && chk1_en && ((chk1_bytes&~wrt1_bytes)!=0 || (upd&wrt1_en)==32'b0);
-  assign chk2_partialW[1]=wrt1_match2 && chk2_en && ((chk2_bytes&~wrt1_bytes)!=0 || (upd&wrt1_en)==32'b0);
-  assign chk3_partialW[1]=wrt1_match3 && chk3_en && ((chk3_bytes&~wrt1_bytes)!=0 || (upd&wrt1_en)==32'b0);
-  assign chk4_partialW[1]=wrt1_match4 && chk4_en && ((chk4_bytes&~wrt1_bytes)!=0 || (upd&wrt1_en)==32'b0);
-  assign chk5_partialW[1]=wrt1_match5 && chk5_en && ((chk5_bytes&~wrt1_bytes)!=0 || (upd&wrt1_en)==32'b0);
+  assign chk0_partialW[1]=wrt1_match0 && chk0_en && wrt1_en && ((chk0_bytes&~wrt1_bytes)!=0 || (upd&wrt1_en)==32'b0);
+  assign chk1_partialW[1]=wrt1_match1 && chk1_en && wrt1_en && ((chk1_bytes&~wrt1_bytes)!=0 || (upd&wrt1_en)==32'b0);
+  assign chk2_partialW[1]=wrt1_match2 && chk2_en && wrt1_en && ((chk2_bytes&~wrt1_bytes)!=0 || (upd&wrt1_en)==32'b0);
+  assign chk3_partialW[1]=wrt1_match3 && chk3_en && wrt1_en && ((chk3_bytes&~wrt1_bytes)!=0 || (upd&wrt1_en)==32'b0);
+  assign chk4_partialW[1]=wrt1_match4 && chk4_en && wrt1_en && ((chk4_bytes&~wrt1_bytes)!=0 || (upd&wrt1_en)==32'b0);
+  assign chk5_partialW[1]=wrt1_match5 && chk5_en && wrt1_en && ((chk5_bytes&~wrt1_bytes)!=0 || (upd&wrt1_en)==32'b0);
 endmodule
