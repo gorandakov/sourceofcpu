@@ -889,7 +889,7 @@ module missQ(
   wire [5:0] thrinhibitconfl;
   reg [5:0] thrreginh[3:1];
 
-  reg [15:0] validR;//note validR is different from miss_queue.sv; it means 1 for not cleared by except (block read replays if 0)
+  reg [31:0] validR;//note validR is different from miss_queue.sv; it means 1 for not cleared by except (block read replays if 0)
   
   wire [4:0] dummy5;
   wire [1:0] mOp4_dupl_dummy;
@@ -1284,7 +1284,7 @@ module missQ(
   assign curConfl=read_confl&confl_mask;
 
   assign rdwr_match2=read_addr==write_addr_end;
-  assign rdwr_match=countF==5'd1;
+  assign rdwr_match=countF==6'd1;
   assign flush_end=rdwr_match && now_flushing;
 
   assign mOp_write_clear=begin_flush;
@@ -1463,10 +1463,10 @@ module missQ(
 	  end
 
 	  if (rst) begin
-	      validR=16'b0;
+	      validR=32'b0;
 	  end else if (wen|except) begin
 	      if (wen) validR[write_addr]=1'b1;
-	      if (except) validR=16'b0;
+	      if (except) validR=32'b0;
 	  end
 	  
           if (rst) doSkip<=1'b0;
