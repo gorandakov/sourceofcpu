@@ -631,7 +631,7 @@ module addsub_alu(a,b,out,sub,en,sxtEn,ben,cout,cout4,cout8LL,cout16,cout32,cout
   input [5:0] sub;
   input en;
   input sxtEn;
-  input [1:0] ben;
+  input [3:0] ben;
   output cout;
   output cout4;
   output cout8LL;
@@ -698,7 +698,7 @@ module addsub_alu(a,b,out,sub,en,sxtEn,ben,cout,cout4,cout8LL,cout16,cout32,cout
   
   genvar i;
   
-  assign bitEn={{20{ben[1]&en}},{12{ben[0]&en}},{32{en}}};
+  assign bitEn={{20{ben[3]&en}},{12{ben[2]&en}}.{16{ben[1]&en}},{8{ben[0]&en}},{8{en}}};
   
   
   assign cin=sub[1];
@@ -712,7 +712,7 @@ module addsub_alu(a,b,out,sub,en,sxtEn,ben,cout,cout4,cout8LL,cout16,cout32,cout
 
   assign err=a[64] & b[64] & ~sub[1] || ~a[64] & b[64] & sub[1] || a[64] & ~sub[3] || b[64] & ~sub[0];
 
-  assign is_ptr=a[64]|b[64] && ~(a[64]&b[64]&sub[1]) && ben==2'b01;
+  assign is_ptr=a[64]|b[64] && ~(a[64]&b[64]&sub[1]) && ben==4'b0111;
 
   assign out[64]=en ? is_ptr : 1'bz;
 
@@ -860,8 +860,12 @@ module addsub_alu(a,b,out,sub,en,sxtEn,ben,cout,cout4,cout8LL,cout16,cout32,cout
 	
 	if (1)
 	  begin
-	    assign out[63:44]=(en&~ben[1]) ? exbits : 20'bz; 
-	    assign out[43:32]=(en&~ben[0]) ? 12'b0:12'bz; 
+	    assign out[63:44]=(en&~ben[3]&ben[1]) ? exbits : 20'bz; 
+	    assign out[43:32]=(en&~ben[2]&ben[1]) ? 12'b0:12'bz; 
+	    assign out[63:44]=(en&~ben[3]&~ben[1]) ? a[63:44] : 20'bz; 
+	    assign out[43:32]=(en&~ben[2]&~ben[1]) ? a[43:32] :12'bz; 
+	    assign out[31:16]=(en&~ben[1]) ? a[31:16] :16'bz; 
+	    assign out[15:8]=(en&~ben[0]) ? a[15:8] :8'bz; 
           //  assign out[63:32]=(X[31] & sxtEn) ? {32{~C1[31]}} : {32{1'bz}};
           //  assign out[63:32]=(nX[31] & sxtEn) ? {32{~nC1[31]}} : {32{1'bz}};
 	  end
