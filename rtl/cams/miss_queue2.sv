@@ -1841,10 +1841,10 @@ module missQ(
           end
           if (rst) begin
               init<=1'b1;
-              initCount<=4'd0;
+              initCount<=5'd0;
           end else if (init) begin
               initCount<=initCount_next;
-              if (initCount==4'hf) init<=1'b0;
+              if (initCount==5'h1f) init<=1'b0;
           end
     end
   
