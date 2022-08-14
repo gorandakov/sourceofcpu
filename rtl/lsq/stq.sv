@@ -244,6 +244,8 @@ module stq(
   wire [31:0] WNL1_banks2;
   wire [63:0] WLN0_match;
   wire [63:0] WLN1_match;
+  wire [63:0] WNL0_en0;
+  wire [63:0] WNL1_en0;
   wire [63:0] wrt0_en0;
   wire [63:0] wrt1_en0;
   wire [63:0] upd0_en0;
@@ -559,8 +561,8 @@ module stq(
           rst,
           aStall|aDoStall,
           excpt,
-          WNL0_en0[31:0], WNL0_odd1[b], WNL0_bytes[b], WNL0_subBNK[b], WNL0_subBNK2[b],
-          WNL1_en0[31:0], WNL1_odd1[b], WNL1_bytes[b], WNL1_subBNK[b], WNL1_subBNK2[b],
+          WNL0_en0[31:0], WNL0_en, WNL0_WQ, WNL0_odd1[b], WNL0_bytes[b], WNL0_subBNK[b], WNL0_subBNK2[b],
+          WNL1_en0[31:0], WNL1_en, WNL1_WQ, WNL1_odd1[b], WNL1_bytes[b], WNL1_subBNK[b], WNL1_subBNK2[b],
           chk0_en, chk0_addrEO[31:0], chk0_odd1[b], chk0_bytes[b], chk0_subBNK[b], chk0_subBNK2[b], chk0_match[b][31:0], chk0_partial[b][31:0],
 	  chk0_matchW[b],chk0_partialW[b],chk0_pre0,chk0_pre1,
           chk1_en, chk1_addrEO[31:0], chk1_odd1[b], chk1_bytes[b], chk1_subBNK[b], chk1_subBNK2[b], chk1_match[b][31:0], chk1_partial[b][31:0],
@@ -582,8 +584,8 @@ module stq(
           rst,
           aStall|aDoStall,
           excpt,
-          WNL0_en0[63:32], WNL0_odd1[b], WNL0_bytes[b], WNL0_subBNK[b], WNL0_subBNK2[b],
-          WNL1_en0[63:32], WNL1_odd1[b], WNL1_bytes[b], WNL1_subBNK[b], WNL1_subBNK2[b],
+          WNL0_en0[63:32], WNL0_en, WNL0_WQ, WNL0_odd1[b], WNL0_bytes[b], WNL0_subBNK[b], WNL0_subBNK2[b],
+          WNL1_en0[63:32], WNL1_en, WNL1_WQ, WNL1_odd1[b], WNL1_bytes[b], WNL1_subBNK[b], WNL1_subBNK2[b],
           chk0_en, chk0_addrEO[63:32], chk0_odd1[b], chk0_bytes[b], chk0_subBNK[b], chk0_subBNK2[b], chk0_match[b][63:32], chk0_partial[b][63:32],
 	  chk0_matchW2[b],chk0_partialW2[b],chk0_pre0,chk0_pre1,
           chk1_en, chk1_addrEO[63:32], chk1_odd1[b], chk1_bytes[b], chk1_subBNK[b], chk1_subBNK2[b], chk1_match[b][63:32], chk1_partial[b][63:32],
@@ -698,6 +700,8 @@ module stq(
       for(x=0;x<64;x=x+1) begin : X
           assign WLN0_match[x]=WLN0_WQ==x && WLN0_en;
           assign WLN1_match[x]=WLN1_WQ==x && WLN1_en;
+          assign WNL0_en0[x]=WNL0_WQ==x && WNL0_en;
+          assign WNL1_en0[x]=WNL1_WQ==x && WNL1_en;
           assign wrt0_en0[x]=wrt0_adata[`lsaddr_WQ]==x && wrt0_en;
           assign wrt1_en0[x]=wrt1_adata[`lsaddr_WQ]==x && wrt1_en;
           assign upd0_en0[x]=upd0_WQ==x && upd0_en;
