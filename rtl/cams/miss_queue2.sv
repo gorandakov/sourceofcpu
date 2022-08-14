@@ -1298,9 +1298,9 @@ module missQ(
   adder_inc #(5) read_inc_mod(read_addr,read_addr_d,doStep &~begin_flush &~rst);
   adder_inc #(5) write_inc_mod(write_addr,write_addr_d,wen&~rst);
   adder_inc #(6) count_inc_mod(count,count_d,(~now_flushing|alt_bus_hold) & wen & ~rst);
-  adder #(6) count_dec_mod(count,5'b11111,count_d,1'b0,now_flushing & ~alt_bus_hold & ~wen & ~rst);
+  adder #(6) count_dec_mod(count,6'b111111,count_d,1'b0,now_flushing & ~alt_bus_hold & ~wen & ~rst);
   //adder #(4) wrEndAdd_mod(write_addr,4'hf,write_addr_end_d,1'b0,1'b1);
-  adder #(6) coundF_dec_mod(countF,5'b11111,countF_d,1'b0,1'b1); 
+  adder #(6) coundF_dec_mod(countF,6'b111111,countF_d,1'b0,1'b1); 
   adder_inc #(5) initAdd_mod(initCount,initCount_next,1'b1);
 
   
