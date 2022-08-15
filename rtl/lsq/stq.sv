@@ -706,7 +706,7 @@ module stq(
           assign wrt1_en0[x]=wrt1_adata[`lsaddr_WQ]==x && wrt1_en;
           assign upd0_en0[x]=upd0_WQ==x && upd0_en;
           assign upd1_en0[x]=upd1_WQ==x && upd1_en;
-          assign passe_en[x]=(pse0_WQ==x && pse0_en) || (pse1_WQ==x && pse1_en);
+          assign passe_en[x]=(WNL0_WQ==x && WNL0_en) || (WNL1_WQ==x && WNL1_en);
 	  assign free_en[x]=(WLN0_WQ==x && WLN0_en && !st_stall) || (WLN1_WQ==x && WLN1_en && !st_stall);
       end
       for(a=0;a<6;a=a+1) begin : wrt
