@@ -238,6 +238,8 @@ module cntrl_find_outcome(
   ret4_addr,ret4_data,ret4_wen,
   ret5_addr,ret5_data,ret5_wen,ret5_IP,ret5_IP_en,
   mem_II_upper,
+  mem_II_upper2,
+  has_stores,
   mem_II_upper_out,
   mem_II_bits_fine,
   mem_II_bits_ldconfl,
@@ -518,6 +520,8 @@ module cntrl_find_outcome(
   input				ret5_IP_en;
 
   input [5:0] mem_II_upper;
+  input [5:0] mem_II_upper2;
+  input has_stores;
   output [5:0] mem_II_upper_out;
   input [9:0] mem_II_bits_fine;
   input [9:0] mem_II_bits_ldconfl;
