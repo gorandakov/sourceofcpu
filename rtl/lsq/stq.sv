@@ -30,6 +30,7 @@ module stq(
   do_retire,
   ret_xbreak,
   ret_II,
+  ret_II_out,
   chk0_adata,chk0_en,chk0_enD,
   chk1_adata,chk1_en,chk1_enD,
   chk2_adata,chk2_en,chk2_enD,
@@ -72,6 +73,7 @@ module stq(
   input do_retire;
   input [15:0] ret_xbreak;
   input [5:0] ret_II;
+  output [5:0] ret_II_out;
 
   input [`lsaddr_width-1:0] chk0_adata;
   input chk0_en;
@@ -839,7 +841,9 @@ module stq(
   assign WNL1_adata=LSQ_shr_data[`lsqshare_wrt1]==3'd7 ? {`lsaddr_width{1'b0}} : {`lsaddr_width{1'bz}};
   assign WNL0_WQ=LSQ_shr_data[`lsqshare_wrt0]==3'd7 ? 6'b0 : 6'bz;
   assign WNL1_WQ=LSQ_shr_data[`lsqshare_wrt1]==3'd7 ? 6'b0 : 6'bz;
-  
+ 
+  assign ret_II_out=WLN0_adata[`lsaddr_II+4];
+
   assign chk0_banks=(chk0_adata[`lsaddr_sz]==5'h11 || chk0_adata[`lsaddr_sz]==5'h10 || chk0_adata[`lsaddr_low]==2'b0) ?
     chk0_adata[`lsaddr_banks] : lowt(chk0_adata[`lsaddr_banks]);
   assign chk0_odd0[2:0]=(chk0_adata[`lsaddr_sz]==5'h11 || chk0_adata[`lsaddr_sz]==5'h10) ? {2'b0,chk0_odd} : {chk0_adata[`lsaddr_low],chk0_odd}; 

@@ -25,6 +25,7 @@ module fun_lsq(
   wb0_adata,wb0_LSQ,wb0_en,wb0_ret,wb0_data,wb0_brdbanks,wb0_brdbanks2,wb0_pbit,
   wb1_adata,wb1_LSQ,wb1_en,wb1_ret,wb1_data,wb1_brdbanks,wb1_brdbanks2,wb1_pbit,
   mem_II_upper,
+  mem_II_upper2,
   mem_II_upper_in,
   mem_II_bits_fine,
   mem_II_bits_ldconfl,
@@ -132,6 +133,7 @@ module fun_lsq(
   output [1:0]               wb1_pbit;
   
   output [5:0]   mem_II_upper;
+  output [5:0]   mem_II_upper2;
   input  [5:0]   mem_II_upper_in;
   output [9:0]   mem_II_bits_fine;
   output [9:0]   mem_II_bits_ldconfl;
@@ -322,6 +324,7 @@ module fun_lsq(
   doRetire_d,
   {6'b0,xbreak},
   mem_II_upper_in,
+  mem_II_upper2,
   LSQ_dataA0,LSQ_enA[0],chk0_LSQ,
   LSQ_dataA1,LSQ_enA[1],chk1_LSQ,
   LSQ_dataA2,LSQ_enA[2],chk2_LSQ,
