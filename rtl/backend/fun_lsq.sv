@@ -384,7 +384,7 @@ module fun_lsq(
   assign wb0_data=wb0_chk[5] ? dat5_LSQ : 136'bz;
   assign wb0_data=|wb0_chk ? 136'bz : 136'b0;
 
-  assign mem_II_stall=1'b0;
+  assign mem_II_stall=wreq_stall;
   assign mem_II_stall2=1'b0;
 
   assign wb1_data=wb1_chk[0] ? dat0_LSQ : 136'bz;
