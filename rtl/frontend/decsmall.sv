@@ -250,7 +250,7 @@ module smallInstr_decoder(
   reg phalt[TRICNT_TOP-1:0];
   
   wire [64:0] qconstant[12:0];
-  wire [12:0] qtrien;
+  wire [13:0] qtrien;
   
   reg [4:0] pjumpType[TRICNT_TOP-1:0];
   
@@ -395,6 +395,8 @@ module smallInstr_decoder(
   assign qtrien   [11]=trien    [13];
   assign qconstant[12]={~pisIPRel[19],pconstant[19]};
   assign qtrien   [12]=trien[19];
+  assign qconstant[13]={1'b0,pconstant[14]};
+  assign qtrien   [13]=trien    [14];
   assign qconstant[0]={1'b0,pconstant[0]};
   assign qtrien   [0]=qtrien[11:1]==11'b0;
   
@@ -403,7 +405,7 @@ module smallInstr_decoder(
  
   generate
       genvar p,q,m;
-      for(m=0;m<13;m=m+1) begin : triconst_gen
+      for(m=0;m<14;m=m+1) begin : triconst_gen
 	  assign constant=qtrien[m] ? qconstant[m] : 65'bz;
       end
       for(p=0;p<5;p=p+1) begin
@@ -1084,6 +1086,8 @@ module smallInstr_decoder(
       pport[14]=PORT_ALU;
       pflags_use[14]=1'b1;
       poperation[14][12:11]=2'b10;
+      puseBConst[14]=instr[29];
+      pconstant[14]={63'b0,instr[30]};
       case(instr[28:26])
       0: begin poperation[14][7:0]=`op_clahf; prB_use[14]=1'b0; prT_use[14]=1'b0;
              pflags_write[14]=1'b1; pflags_use[14]=1'b1; poperation[14][12]=1'b0;  end
