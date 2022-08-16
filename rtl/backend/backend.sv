@@ -5057,7 +5057,7 @@ module backend(
   .mem_II_bits_except(retM_excpt),
   .mem_II_bits_ret(retM_ret),
   .mem_II_exbitsx6(),
-  .mem_II_stall(bDoStall_rqSpit&retM_has_store),
+  .mem_II_stall(bDoStall_rqSpit),
   .mem_II_stall2(bDoStall_rqSpit0),
   .doStall_rs(doStall_rs),.stall_cntrl(stall_cntrl), 
   .doStall_alloc(doStall_alloc|doStall_alloc2),.doStall_cntrl(doStall_cntrl),
@@ -5538,7 +5538,7 @@ dcache1 L1D_mod(
   .mem_II_bits_waitconfl(retM_waitconfl),
   .mem_II_bits_except(retM_excpt),
   .mem_II_bits_ret(retM_ret),
-  .mem_II_stall(bDoStall_rqSpit|bDoStall_rqSpit0), 
+  .mem_II_stall(bDoStall_rqSpit|bDoStall_rqSpit0 && retM_has_store), 
   .doRetire_d(retM_do_retire),
   .xbreak(retM_xbreak),
   .has_xbreak(retM_xbreak_has)
