@@ -27,6 +27,8 @@ module stq(
   st_stall,
   rsStall,
   rsDoStall,//needs to get registered again outside module
+  do_retire,
+  ret_xbreak,
   chk0_adata,chk0_en,chk0_enD,
   chk1_adata,chk1_en,chk1_enD,
   chk2_adata,chk2_en,chk2_enD,
@@ -65,6 +67,9 @@ module stq(
 
   input rsStall;
   output reg [3:0] rsDoStall;
+
+  input do_retire;
+  input [9:0] ret_xbreak;
 
   input [`lsaddr_width-1:0] chk0_adata;
   input chk0_en;
