@@ -26,6 +26,7 @@ module fun_lsq(
   wb1_adata,wb1_LSQ,wb1_en,wb1_ret,wb1_data,wb1_brdbanks,wb1_brdbanks2,wb1_pbit,
   mem_II_upper,
   mem_II_upper2,
+  has_store,
   mem_II_upper_in,
   mem_II_bits_fine,
   mem_II_bits_ldconfl,
@@ -134,6 +135,7 @@ module fun_lsq(
   
   output [5:0]   mem_II_upper;
   output [5:0]   mem_II_upper2;
+  output has_store;
   input  [5:0]   mem_II_upper_in;
   output [9:0]   mem_II_bits_fine;
   output [9:0]   mem_II_bits_ldconfl;
@@ -555,6 +557,8 @@ module fun_lsq(
   .except(except),
   .except_thread(1'b0)
   );
+
+  assign has_store=retM_data_shr[`lsqshare_wrt0]!=3'd7;
 
 
 

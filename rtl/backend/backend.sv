@@ -2249,6 +2249,8 @@ module backend(
 
   wire [5:0] retM_II;
   wire [5:0] retM_II0;
+  wire [5:0] retM_II1;
+  wire retM_has_store;
   wire [9:0] retM_ret;
   wire [9:0] retM_fine;
   wire [9:0] retM_ldconfl;
@@ -5046,6 +5048,8 @@ module backend(
   .wb1_adata(lso2_adata),.wb1_LSQ(lso2_LSQ),.wb1_en(lso2_en),.wb1_ret(),.wb1_data(lso2_data),.wb1_brdbanks(lso2_bnkread),
   .wb1_brdbanks2(lso2_bnkread2),.wb1_pbit(lso2_pbit),
   .mem_II_upper(retM_II0),
+  .mem_II_upper2(retM_II1),
+  .has_store(retM_has_store),
   .mem_II_upper_in(retM_II),
   .mem_II_bits_fine(retM_fine),
   .mem_II_bits_ldconfl(retM_ldconfl),
@@ -5526,6 +5530,8 @@ dcache1 L1D_mod(
     .ret5_wen(fret_en[5]|enS_alu[5]),
   .ret5_IP(FU_reg[9]),.ret5_IP_en(alu_jupdate),
   .mem_II_upper(retM_II0),
+  .mem_II_upper2(retM_II1),
+  .has_stores(retM_has_store),
   .mem_II_upper_out(retM_II),
   .mem_II_bits_fine(retM_fine),
   .mem_II_bits_ldconfl(retM_ldconfl),
