@@ -408,7 +408,7 @@ module stq(
   wire [63:0] free_en;
   wire [63:0] free;
 
-  wire [5:0] rdy={chk5_en,chk4_en,chk3_en,chk2_en,chk1_en,chk0_en};
+  wire [5:0] rdy=~confl&~confl_SMP&{chk5_en,chk4_en,chk3_en,chk2_en,chk1_en,chk0_en};
   wire [5:0] chk_wb={chk5_adata[`lsaddr_flag] & chk5_en,chk4_adata[`lsaddr_flag] & chk4_en,chk3_adata[`lsaddr_flag] & chk3_en,
       chk2_adata[`lsaddr_flag] & chk2_en,chk1_adata[`lsaddr_flag] & chk1_en,chk0_adata[`lsaddr_flag] & chk0_en};
   wire [5:0] chk_wb0;
