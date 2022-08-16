@@ -29,6 +29,7 @@ module stq(
   rsDoStall,//needs to get registered again outside module
   do_retire,
   ret_xbreak,
+  ret_II,
   chk0_adata,chk0_en,chk0_enD,
   chk1_adata,chk1_en,chk1_enD,
   chk2_adata,chk2_en,chk2_enD,
@@ -69,7 +70,8 @@ module stq(
   output reg [3:0] rsDoStall;
 
   input do_retire;
-  input [9:0] ret_xbreak;
+  input [15:0] ret_xbreak;
+  input [5:0] ret_II;
 
   input [`lsaddr_width-1:0] chk0_adata;
   input chk0_en;
@@ -946,9 +948,11 @@ module stq(
   );
 
   assign WLN0_adata=~WLN0_WQ[0] ? WLN0_adata0 : WLN1_adata0;
-  assign WLN0_en=~WLN0_WQ[0] ? WLN0_en0 & upd[WLN0_WQ] & mask2[WLN0_WQ] : WLN1_en0 & upd[WLN1_WQ] & mask2[WLN1_WQ];
+  assign WLN0_en=~WLN0_WQ[0] ? WLN0_en0 & upd[WLN0_WQ] & mask2[WLN0_WQ] && ret_II==WLN0_adata[`lsaddr_II+4] && ~ret_xbreak[WLN0_adata[-6+`lsaddr_II] :
+	  WLN1_en0 & upd[WLN1_WQ] & mask2[WLN1_WQ] && ret_II==WLN1_adata[`lsaddr_II+4] && ~ret_xbreak[WLN1_adata[-6+`lsaddr_II];
   assign WLN1_adata=WLN0_WQ[0] ? WLN0_adata0 : WLN1_adata0;
-  assign WLN1_en=WLN0_WQ[0] ? WLN0_en0 & upd[WLN0_WQ] & mask2[WLN0_WQ] : WLN1_en0 & upd[WLN1_WQ] & mask2[WLN1_WQ];
+  assign WLN1_en=WLN0_WQ[0] ? WLN0_en0 & upd[WLN0_WQ] & mask2[WLN0_WQ] && ret_II==WLN0_adata[`lsaddr_II+4] && ~ret_xbreak[WLN0_adata[-6+`lsaddr_II] :
+	  WLN1_en0 & upd[WLN1_WQ] & mask2[WLN1_WQ] && ret_II==WLN1_adata[`lsaddr_II+4] && ~ret_xbreak[WLN1_adata[-6+`lsaddr_II;
   
   stq_adata_ram ramB_mod(
   clk,
