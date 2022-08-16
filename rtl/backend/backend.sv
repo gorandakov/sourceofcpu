@@ -5057,7 +5057,7 @@ module backend(
   .mem_II_bits_except(retM_excpt),
   .mem_II_bits_ret(retM_ret),
   .mem_II_exbitsx6(),
-  .mem_II_stall(bDoStall_rqSpit),
+  .mem_II_stall(bDoStall_rqSpit&retM_has_store),
   .mem_II_stall2(bDoStall_rqSpit0),
   .doStall_rs(doStall_rs),.stall_cntrl(stall_cntrl), 
   .doStall_alloc(doStall_alloc|doStall_alloc2),.doStall_cntrl(doStall_cntrl),

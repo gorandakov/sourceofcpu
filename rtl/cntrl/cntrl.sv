@@ -1138,7 +1138,7 @@ module cntrl_find_outcome(
   assign retire_rFl[1][3:0]=4'd1;
   assign retire_rFl[0][3:0]=4'd0;
 
-  assign mem_match=mem_II_upper==retire_addr_reg && ~has_stores|(mem_II_upper2==retire_addr_reg);
+  assign mem_match=mem_II_upper==retire_addr_reg && ~has_stores|(mem_II_upper2==retire_addr_reg)|(mem_II_upper!=mem_II_upper2);
   assign mem_II_upper_out=retire_addr_reg;
 
   bob_ram bob_mod(

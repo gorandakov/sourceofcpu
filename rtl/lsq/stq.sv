@@ -425,6 +425,8 @@ module stq(
   wire chk_wb0_has,chk_wb1_has,chk_wb2_has;
   reg [5:0] chk_mask;
   reg [63:0] mask;
+  reg [63:0] nmask;
+  reg [63:0] mask2;
   
   function [31:0] lowt;
       input [31:0] data;
@@ -946,17 +948,19 @@ module stq(
   ~st_stall & WLN0_en,
   ~WLN0_WQ[0] ? WLN0_WQ[5:1] : WLN1_WQ[5:1],
   {WLN0_adata0,WLN0_en0},
-  WNL0_en & ~aStall & ~aDoStall,
+  (~WLN0_WQ[0] ? WNL0_en:WNL1_en) & ~aStall & ~aDoStall,
   ~WLN0_WQ[0] ? WNL0_WQ[5:1] : WNL1_WQ[5:1],
   ~WNL0_WQ[0] ? {WNL0_adata,WNL0_en} : {WNL1_adata,WNL1_en}
   );
 
   assign WLN0_adata=~WLN0_WQ[0] ? WLN0_adata0 : WLN1_adata0;
-  assign WLN0_en=~WLN0_WQ[0] ? WLN0_en0 & upd[WLN0_WQ] & mask2[WLN0_WQ] && ret_II==WLN0_adata[`lsaddr_II+4] && ~ret_xbreak[WLN0_adata[-6+`lsaddr_II] :
-	  WLN1_en0 & upd[WLN1_WQ] & mask2[WLN1_WQ] && ret_II==WLN1_adata[`lsaddr_II+4] && ~ret_xbreak[WLN1_adata[-6+`lsaddr_II];
+  assign WLN0_en=~WLN0_WQ[0] ? WLN0_en0 & upd[WLN0_WQ] & mask2[WLN0_WQ] && ret_II==WLN0_adata[`lsaddr_II+4] && 
+	  ~ret_xbreak[WLN0_adata[-6+`lsaddr_II]] :
+	  WLN1_en0 & upd[WLN1_WQ] & mask2[WLN1_WQ] && ret_II==WLN1_adata[`lsaddr_II+4] && ~ret_xbreak[WLN1_adata[-6+`lsaddr_II]];
   assign WLN1_adata=WLN0_WQ[0] ? WLN0_adata0 : WLN1_adata0;
-  assign WLN1_en=WLN0_WQ[0] ? WLN0_en0 & upd[WLN0_WQ] & mask2[WLN0_WQ] && ret_II==WLN0_adata[`lsaddr_II+4] && ~ret_xbreak[WLN0_adata[-6+`lsaddr_II] :
-	  WLN1_en0 & upd[WLN1_WQ] & mask2[WLN1_WQ] && ret_II==WLN1_adata[`lsaddr_II+4] && ~ret_xbreak[WLN1_adata[-6+`lsaddr_II;
+  assign WLN1_en=WLN0_WQ[0] ? WLN0_en0 & upd[WLN0_WQ] & mask2[WLN0_WQ] && ret_II==WLN0_adata[`lsaddr_II+4] && 
+	  ~ret_xbreak[WLN0_adata[-6+`lsaddr_II]] :
+	  WLN1_en0 & upd[WLN1_WQ] & mask2[WLN1_WQ] && ret_II==WLN1_adata[`lsaddr_II+4] && ~ret_xbreak[WLN1_adata[-6+`lsaddr_II]];
   
   stq_adata_ram ramB_mod(
   clk,
@@ -964,7 +968,7 @@ module stq(
   ~st_stall & WLN0_en,
   ~WLN0_WQ[0] ? WLN1_WQ[5:1] : WLN0_WQ[5:1],
   {WLN1_adata0,WLN1_en0},
-  WNL0_en & ~aStall & ~aDoStall,
+  (~WLN0_WQ[0] ? WNL1_en:WNL0_en) & ~aStall & ~aDoStall,
   ~WNL0_WQ[0] ? WNL1_WQ[5:1] : WNL0_WQ[5:1],
   ~WNL0_WQ[0]  ? {WNL1_adata,WNL1_en} : {WNL0_adata,WNL0_en}
   );
@@ -1041,7 +1045,7 @@ module stq(
 	      mask2[WLN1_WQ]=1'b0;
 	      mask[WLN0_WQ]=1'b0;
 	      mask[WLN1_WQ]=1'b0;
-	      if (WLN0_WQ==63 || WLN1_WQ==63)) begin mask=nmask; nmask=64'b0; end
+	      if (WLN0_WQ==63 || WLN1_WQ==63) begin mask=nmask; nmask=64'b0; end
 	  end
 	  if (excpt) begin
 	      mask=64'b0;
