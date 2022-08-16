@@ -941,9 +941,9 @@ module stq(
   );
 
   assign WLN0_adata=~WLN0_WQ[0] ? WLN0_adata0 : WLN1_adata0;
-  assign WLN0_en=~WLN0_WQ[0] ? WLN0_en0 & upd[WLN0_WQ] & mask[WLN0_WQ] : WLN1_en0 & upd[WLN1_WQ] & mask[WLN1_WQ];
+  assign WLN0_en=~WLN0_WQ[0] ? WLN0_en0 & upd[WLN0_WQ] & mask2[WLN0_WQ] : WLN1_en0 & upd[WLN1_WQ] & mask2[WLN1_WQ];
   assign WLN1_adata=WLN0_WQ[0] ? WLN0_adata0 : WLN1_adata0;
-  assign WLN1_en=WLN0_WQ[0] ? WLN0_en0 & upd[WLN0_WQ] & mask[WLN0_WQ] : WLN1_en0 & upd[WLN1_WQ] & mask[WLN1_WQ];
+  assign WLN1_en=WLN0_WQ[0] ? WLN0_en0 & upd[WLN0_WQ] & mask2[WLN0_WQ] : WLN1_en0 & upd[WLN1_WQ] & mask2[WLN1_WQ];
   
   stq_adata_ram ramB_mod(
   clk,
@@ -970,7 +970,7 @@ module stq(
   adder_inc #(6) inc_WLNA_mod(WLN1_WQ,WLN1_WQ_inc,1'b1,);
   adder_inc #(5) inc_WLNB_mod(WLN1_WQ[5:1],WLN1_WQ_inc2[5:1],1'b1,);
   assign WLN1_WQ_inc2[0]=WLN1_WQ[0];
-  always @(free) $display("stq_free: %x",free);
+  always @(free) $display("stq_free: %x,%x",free,upd);
   always @(posedge clk) begin
       if (rst) begin
 	  confl_out<=6'b0;
@@ -980,6 +980,8 @@ module stq(
 	  WLN1_WQ<=6'd1;
 	  chk_mask<=6'd0;
 	  mask=64'b0;
+	  mask2=64'b0;
+	  nmask=64'b0;
 	  rsDoStall<=4'b0000;
 	  wb0_adata<=0;
 	  wb1_adata<=0;
@@ -1000,25 +1002,38 @@ module stq(
 	  if (!stall && !doStall && pse0_en && ~pse1_en & ~excpt) begin
 	      pse0_WQ<=pse1_WQ;
 	      pse1_WQ<=pse1_WQ_inc;
-	      mask[pse0_WQ]=1'b1;
+	      if (!mask[63]) mask[pse0_WQ]=1'b1; else nmask[pse0_WQ]=1'b1;
 	  end else if (!stall && !doStall && pse0_en && ~excpt) begin
 	      pse0_WQ<=pse1_WQ_inc;
 	      pse1_WQ<=pse1_WQ_inc2;
-	      mask[pse0_WQ]=1'b1;
-	      mask[pse1_WQ]=1'b1;
+	      if (!mask[63]) mask[pse0_WQ]=1'b1; else nmask[pse0_WQ]=1'b1;
+	      if (!mask[62]) mask[pse1_WQ]=1'b1; else nmask[pse1_WQ]=1'b1;
+	  end
+	  if (!aStall && !aDoStall && WNL0_en && ~WNL1_en & ~excpt) begin
+	      mask2[WNL0_WQ]=1'b1;
+	  end else if (!aStall && !aDoStall && WNL0_en && ~excpt) begin
+	      mask2[WNL0_WQ]=1'b1;
+	      mask2[WNL1_WQ]=1'b1;
 	  end
 	  if (!st_stall &&  WLN0_en && ~WLN1_en) begin
 	      WLN0_WQ<=WLN1_WQ;
 	      WLN1_WQ<=WLN1_WQ_inc;
+	      mask2[WLN0_WQ]=1'b0;
 	      mask[WLN0_WQ]=1'b0;
+	      if (WLN0_WQ==63) begin mask=nmask; nmask=64'b0; end
 	  end else if (!st_stall && WLN0_en) begin
 	      WLN0_WQ<=WLN1_WQ_inc;
 	      WLN1_WQ<=WLN1_WQ_inc2;
+	      mask2[WLN0_WQ]=1'b0;
+	      mask2[WLN1_WQ]=1'b0;
 	      mask[WLN0_WQ]=1'b0;
 	      mask[WLN1_WQ]=1'b0;
+	      if (WLN0_WQ==63 || WLN1_WQ==63)) begin mask=nmask; nmask=64'b0; end
 	  end
 	  if (excpt) begin
 	      mask=64'b0;
+	      mask2=64'b0;
+	      nmask=64'b0;
 	      WLN0_WQ<=pse0_WQ;
 	      WLN1_WQ<=pse1_WQ;
 	  end
