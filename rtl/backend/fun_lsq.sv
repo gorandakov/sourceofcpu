@@ -531,7 +531,7 @@ module fun_lsq(
   lsq_decide_ret help_to_retire_mod(
   .clk(clk),
   .rst(rst),
-  .bStall(mem_II_stall||mem_II_stall2),
+  .bStall((mem_II_stall||mem_II_stall2)&&has_store),
   .dataB_ret_mask(ret_xenab),
   .dataB_ld_confl(ret_xldconfl),
   .dataB_wait_confl(ret_xsmpconfl),
