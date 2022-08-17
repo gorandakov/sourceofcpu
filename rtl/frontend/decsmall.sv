@@ -249,7 +249,7 @@ module smallInstr_decoder(
   reg pinstr_fsimd[TRICNT_TOP-1:0];
   reg phalt[TRICNT_TOP-1:0];
   
-  wire [64:0] qconstant[12:0];
+  wire [64:0] qconstant[13:0];
   wire [13:0] qtrien;
   
   reg [4:0] pjumpType[TRICNT_TOP-1:0];
