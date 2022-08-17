@@ -2363,7 +2363,8 @@ module agu_block(
   mOpR_dupl,
   mOpR_stall,
   alt_bus_hold_reg,
-  alt_bus_addr_reg
+  alt_bus_addr_reg,
+  alt_bus_hold_reg3
   );
  
   msiq msiq_mod(
