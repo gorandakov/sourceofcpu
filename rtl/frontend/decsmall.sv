@@ -1078,7 +1078,7 @@ module smallInstr_decoder(
       prA[14]={instr[17],instr[11:8]};
       prT[14]=instr[16:12];
       prB[14]=instr[22:18];
-      prA_use[14]=1'b1;
+      prA_use[14]=!instr[30];
       prB_use[14]=1'b1;
       prT_use[14]=1'b1;
       puseRs[14]=1'b1;
