@@ -390,7 +390,8 @@ module missQ(
   mOpR_dupl,
   rdwr_match2,
   alt_bus_hold,
-  alt_bus_addr
+  alt_bus_addr,
+  alt_bus_hold_reg3
   );
 
   localparam DEPTH=32;
@@ -690,6 +691,7 @@ module missQ(
   output rdwr_match2;
   input alt_bus_hold;
   input [36:0] alt_bus_addr;
+  input alt_bus_hold_reg3;
   wire [5:0] curConfl;
 //  wire [5:0] write_confl;
   wire [5:0] read_confl;
@@ -903,8 +905,8 @@ module missQ(
   assign write_dxdata={mOp3_pbit_reg[3],mOp3_data_reg[3],mOp3_brdbanks_reg[3],mOp2_pbit_reg[3],mOp2_data_reg[3],mOp2_brdread_reg[3]}
     &{DXDATA_WIDTH{~init}};
   
-  assign wen=miss0&~thrreginh[3][0]||miss1&~thrreginh[3][1]||miss2&~thrreginh[3][2]||
-      miss3&~thrreginh[3][3]||miss4&~thrreginh[3][4]||miss5&~thrreginh[3][5];
+  assign wen=(miss0&~thrreginh[3][0]||miss1&~thrreginh[3][1]||miss2&~thrreginh[3][2]||
+      miss3&~thrreginh[3][3]||miss4&~thrreginh[3][4]||miss5&~thrreginh[3][5])&~alt_bus_hold_reg3;
   assign read_addr_d=~doStep & ~begin_flush & ~rst ? read_addr : 5'bz; 
   assign read_addr_d=begin_flush &~rst ? read_addr_begin : 5'bz;
   assign write_addr_d=~wen & ~rst ? write_addr : 5'bz; 
