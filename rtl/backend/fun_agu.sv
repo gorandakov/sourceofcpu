@@ -1289,7 +1289,7 @@ module agu_block(
 
   rs_write_forward #(65) nxtBase1(
   clk,rst,
-  ~u1_clkEn|(rsStall[0]&~now_flushing),
+  ~u1_clkEn|(rsStall[0]&~now_flushing&~alt_bus_hold_reg),
   u1_base,uu_base1,
   u1_base_fufwd,u1_base_fuufwd,
   FU0,FU0_reg,
@@ -1306,7 +1306,7 @@ module agu_block(
   
   rs_write_forward #(65) nxtIndex1(
   clk,rst,
-  ~u1_clkEn|(rsStall[0]&~now_flushing),
+  ~u1_clkEn|(rsStall[0]&~now_flushing&~alt_bus_hold_reg),
   u1_index,uu_index1,
   u1_index_fufwd,u1_index_fuufwd,
   FU0,FU0_reg,
@@ -1323,7 +1323,7 @@ module agu_block(
   
   rs_write_forward #(65) nxtBase2(
   clk,rst,
-  ~u2_clkEn|(rsStall[1]&~now_flushing),
+  ~u2_clkEn|(rsStall[1]&~now_flushing&~alt_bus_hold_reg),
   u2_base,uu_base2,
   u2_base_fufwd,u2_base_fuufwd,
   FU0,FU0_reg,
@@ -1340,7 +1340,7 @@ module agu_block(
   
   rs_write_forward #(65) nxtIndex2(
   clk,rst,
-  ~u2_clkEn|(rsStall[1]&~now_flushing),
+  ~u2_clkEn|(rsStall[1]&~now_flushing&~alt_bus_hold_reg),
   u2_index,uu_index2,
   u2_index_fufwd,u2_index_fuufwd,
   FU0,FU0_reg,
@@ -1358,7 +1358,7 @@ module agu_block(
   
   rs_write_forward #(65) nxtBase3(
   clk,rst,
-  ~u3_clkEn|(rsStall[2]&~now_flushing),
+  ~u3_clkEn|(rsStall[2]&~now_flushing&~alt_bus_hold_reg),
   u3_base,uu_base3,
   u3_base_fufwd,u3_base_fuufwd,
   FU0,FU0_reg,
@@ -1375,7 +1375,7 @@ module agu_block(
   
   rs_write_forward #(65) nxtIndex3(
   clk,rst,
-  ~u3_clkEn|(rsStall[2]&~now_flushing),
+  ~u3_clkEn|(rsStall[2]&~now_flushing&~alt_bus_hold_reg),
   u3_index,uu_index3,
   u3_index_fufwd,u3_index_fuufwd,
   FU0,FU0_reg,
@@ -2613,7 +2613,7 @@ module agu_block(
 
       p4_mex_en_reg<=p4_mex_en;
       p5_mex_en_reg<=p5_mex_en;
-      if (~(rsStall[0]&~now_flushing)) begin
+      if (~(rsStall[0]&~now_flushing&~alt_bus_hold_reg)) begin
           u1_clkEn_reg<=u1_clkEn;
           u1_op_reg<=u1_op;
           u1_sh_reg<=u1_sh;
@@ -2625,7 +2625,7 @@ module agu_block(
           u1_const_reg<={{31{u1_const[32]}},u1_const};
       end
 
-      if (~(rsStall[1]&~now_flushing)) begin
+      if (~(rsStall[1]&~now_flushing&~alt_bus_hold_reg)) begin
           u2_clkEn_reg<=u2_clkEn;
           u2_op_reg<=u2_op;
           u2_sh_reg<=u2_sh;
@@ -2637,7 +2637,7 @@ module agu_block(
           u2_const_reg<={{31{u2_const[32]}},u2_const};
       end
       
-      if (~(rsStall[2]&~now_flushing)) begin
+      if (~(rsStall[2]&~now_flushing&~alt_bus_hold_reg)) begin
           u3_clkEn_reg<=u3_clkEn;
           u3_op_reg<=u3_op;
           u3_sh_reg<=u3_sh;
@@ -2669,7 +2669,7 @@ module agu_block(
       u5_lsflag_reg<=u5_lsflag;
       u5_const_reg<={{31{u5_const[32]}},u5_const};
 
-      if (~(rsStall[0]&~now_flushing)) begin      
+      if (~(rsStall[0]&~now_flushing&~alt_bus_hold_reg)) begin      
           u1_clkEn_reg2<=u1_clkEn_reg & ~except;
           u1_op_reg2<=u1_op_reg;
           u1_sh_reg2<=u1_sh_reg;
@@ -2680,7 +2680,7 @@ module agu_block(
           u1_lsflag_reg2<=u1_lsflag_reg;
       end
 
-      if (~(rsStall[1]&~now_flushing)) begin      
+      if (~(rsStall[1]&~now_flushing&~alt_bus_hold_reg)) begin      
           u2_clkEn_reg2<=u2_clkEn_reg & ~except;
           u2_op_reg2<=u2_op_reg;
           u2_sh_reg2<=u2_sh_reg;
@@ -2691,7 +2691,7 @@ module agu_block(
           u2_lsflag_reg2<=u2_lsflag_reg;
       end
 
-      if (~(rsStall[2]&~now_flushing)) begin      
+      if (~(rsStall[2]&~now_flushing&~alt_bus_hold_reg)) begin      
           u3_clkEn_reg2<=u3_clkEn_reg & ~except;
           u3_op_reg2<=u3_op_reg;
           u3_sh_reg2<=u3_sh_reg;
@@ -2720,25 +2720,25 @@ module agu_block(
       u5_WQ_no_reg2<=u5_WQ_no_reg;
       u5_lsflag_reg2<=u5_lsflag_reg;
      
-      if (~(rsStall[0]&~now_flushing)) mOp0_sec_reg<=mOp0_sec&~now_flushing;
-      if (~(rsStall[1]&~now_flushing)) mOp1_sec_reg<=mOp1_sec&~now_flushing;
-      if (~(rsStall[2]&~now_flushing)) mOp2_sec_reg<=mOp2_sec&~now_flushing;
+      if (~(rsStall[0]&~now_flushing&~alt_bus_hold_reg)) mOp0_sec_reg<=mOp0_sec&~now_flushing&~alt_bus_hold_reg;
+      if (~(rsStall[1]&~now_flushing&~alt_bus_hold_reg)) mOp1_sec_reg<=mOp1_sec&~now_flushing&~alt_bus_hold_reg;
+      if (~(rsStall[2]&~now_flushing&~alt_bus_hold_reg)) mOp2_sec_reg<=mOp2_sec&~now_flushing&~alt_bus_hold_reg;
       mOp4_sec_reg<=mOp4_sec;
       mOp5_sec_reg<=mOp5_sec;
 
-      if (~(rsStall[0]&~now_flushing)) mOp0_sec_reg2<=mOp0_sec_reg;
-      if (~(rsStall[1]&~now_flushing)) mOp1_sec_reg2<=mOp1_sec_reg;
-      if (~(rsStall[2]&~now_flushing)) mOp2_sec_reg2<=mOp2_sec_reg;
-      if (~(rsStall[0]&~now_flushing)) mOp0_sec_reg3<=mOp0_sec_reg2;
-      if (~(rsStall[1]&~now_flushing)) mOp1_sec_reg3<=mOp1_sec_reg2;
-      if (~(rsStall[2]&~now_flushing)) mOp2_sec_reg3<=mOp2_sec_reg2;
+      if (~(rsStall[0]&~now_flushing&~alt_bus_hold_reg)) mOp0_sec_reg2<=mOp0_sec_reg;
+      if (~(rsStall[1]&~now_flushing&~alt_bus_hold_reg)) mOp1_sec_reg2<=mOp1_sec_reg;
+      if (~(rsStall[2]&~now_flushing&~alt_bus_hold_reg)) mOp2_sec_reg2<=mOp2_sec_reg;
+      if (~(rsStall[0]&~now_flushing&~alt_bus_hold_reg)) mOp0_sec_reg3<=mOp0_sec_reg2;
+      if (~(rsStall[1]&~now_flushing&~alt_bus_hold_reg)) mOp1_sec_reg3<=mOp1_sec_reg2;
+      if (~(rsStall[2]&~now_flushing&~alt_bus_hold_reg)) mOp2_sec_reg3<=mOp2_sec_reg2;
 
-      if (~(rsStall[0]&~now_flushing)) mOp0_rsEn_reg<=mOp0_rsEn;
-      if (~(rsStall[1]&~now_flushing)) mOp1_rsEn_reg<=mOp1_rsEn;
-      if (~(rsStall[2]&~now_flushing)) mOp2_rsEn_reg<=mOp2_rsEn;
-      if (~(rsStall[3]&~now_flushing)) mOp3_rsEn_reg<=mOp3_rsEn;
+      if (~(rsStall[0]&~now_flushing&~alt_bus_hold_reg)) mOp0_rsEn_reg<=mOp0_rsEn;
+      if (~(rsStall[1]&~now_flushing&~alt_bus_hold_reg)) mOp1_rsEn_reg<=mOp1_rsEn;
+      if (~(rsStall[2]&~now_flushing&~alt_bus_hold_reg)) mOp2_rsEn_reg<=mOp2_rsEn;
+      if (~(rsStall[3]&~now_flushing&~alt_bus_hold_reg)) mOp3_rsEn_reg<=mOp3_rsEn;
 
-      if (~(rsStall[0]&~now_flushing)) begin
+      if (~(rsStall[0]&~now_flushing&~alt_bus_hold_reg)) begin
           mOpX0_en_reg     <=mOpX0_en;
           mOpX0_lsflag_reg <=mOpX0_lsflag;
           mOpX0_type_reg   <=mOpX0_type;
@@ -2750,7 +2750,7 @@ module agu_block(
           mOpX0_type_reg3  <=mOpX0_type_reg2;
       end
 
-      if (~(rsStall[1]&~now_flushing)) begin
+      if (~(rsStall[1]&~now_flushing&~alt_bus_hold_reg)) begin
           mOpX1_en_reg     <=mOpX1_en;
           mOpX1_lsflag_reg <=mOpX1_lsflag;
           mOpX1_type_reg   <=mOpX1_type;
@@ -2762,7 +2762,7 @@ module agu_block(
           mOpX1_type_reg3  <=mOpX1_type_reg2;
       end
 
-      if (~(rsStall[2]&~now_flushing)) begin
+      if (~(rsStall[2]&~now_flushing&~alt_bus_hold_reg)) begin
           mOpX2_en_reg     <=mOpX2_en;
           mOpX2_lsflag_reg <=mOpX2_lsflag;
           mOpX2_type_reg   <=mOpX2_type;
@@ -2774,7 +2774,7 @@ module agu_block(
           mOpX2_type_reg3  <=mOpX2_type_reg2;
       end
 
-      if (~(rsStall[3]&~now_flushing)) begin
+      if (~(rsStall[3]&~now_flushing&~alt_bus_hold_reg)) begin
           mOpX3_en_reg     <=mOpX3_en;
           mOpX3_lsflag_reg <=mOpX3_lsflag;
           mOpX3_type_reg   <=mOpX3_type;
@@ -2787,7 +2787,7 @@ module agu_block(
           mOpX3_lsfwd_reg  <=mOpX3_lsfwd;
       end
 
-      if (~(rsStall[0]&~now_flushing)) begin
+      if (~(rsStall[0]&~now_flushing&~alt_bus_hold_reg)) begin
           mOpX0_addrEven_reg<=mOpX0_addrEven;
           mOpX0_addrOdd_reg<=mOpX0_addrOdd;
           mOpX0_sz_reg<=mOpX0_sz;
@@ -2803,7 +2803,7 @@ module agu_block(
           mOpX0_lsfwd_reg  <=mOpX0_lsfwd;
       end
 
-      if (~(rsStall[1]&~now_flushing)) begin
+      if (~(rsStall[1]&~now_flushing&~alt_bus_hold_reg)) begin
           mOpX1_addrEven_reg<=mOpX1_addrEven;
           mOpX1_addrOdd_reg<=mOpX1_addrOdd;
           mOpX1_sz_reg<=mOpX1_sz;
@@ -2819,7 +2819,7 @@ module agu_block(
           mOpX1_lsfwd_reg  <=mOpX1_lsfwd;
       end
 
-      if (~(rsStall[2]&~now_flushing)) begin
+      if (~(rsStall[2]&~now_flushing&~alt_bus_hold_reg)) begin
           mOpX2_addrEven_reg<=mOpX2_addrEven;
           mOpX2_addrOdd_reg<=mOpX2_addrOdd;
           mOpX2_sz_reg<=mOpX2_sz;
@@ -2838,7 +2838,7 @@ module agu_block(
           mOpX2_lsfwd_reg  <=mOpX3_lsfwd;
       end
 
-      if (~(rsStall[3]&~now_flushing)) begin
+      if (~(rsStall[3]&~now_flushing&~alt_bus_hold_reg)) begin
           mOpX3_addrEven_reg<=mOpX3_addrEven;
           mOpX3_addrOdd_reg<=mOpX3_addrOdd;
           mOpX3_sz_reg<=mOpX3_sz;
@@ -2891,35 +2891,35 @@ module agu_block(
       mOpX5_WQ_reg<=mOpX5_WQ;
       mOpX5_lsflag_reg<=mOpX5_lsflag;
 
-      if (~(rsStall[0]&~now_flushing)) p0_cmplxAddr<=p0_cmplxAddr_d;
-      if (~(rsStall[1]&~now_flushing)) p1_cmplxAddr<=p1_cmplxAddr_d;
-      if (~(rsStall[2]&~now_flushing)) p2_cmplxAddr<=p2_cmplxAddr_d;
-      if (~(rsStall[3]&~now_flushing)) p3_cmplxAddr<=p3_cmplxAddr_d;
+      if (~(rsStall[0]&~now_flushing&~alt_bus_hold_reg)) p0_cmplxAddr<=p0_cmplxAddr_d;
+      if (~(rsStall[1]&~now_flushing&~alt_bus_hold_reg)) p1_cmplxAddr<=p1_cmplxAddr_d;
+      if (~(rsStall[2]&~now_flushing&~alt_bus_hold_reg)) p2_cmplxAddr<=p2_cmplxAddr_d;
+      if (~(rsStall[3]&~now_flushing&~alt_bus_hold_reg)) p3_cmplxAddr<=p3_cmplxAddr_d;
       p4_cmplxAddr<=p4_cmplxAddr_d;
       p5_cmplxAddr<=p5_cmplxAddr_d;
 
-      if (~(rsStall[0]&~now_flushing)) p0_conflict_reg<=p0_conflict;
-      if (~(rsStall[1]&~now_flushing)) p1_conflict_reg<=p1_conflict;
-      if (~(rsStall[2]&~now_flushing)) p2_conflict_reg<=p2_conflict;
-      if (~(rsStall[0]&~now_flushing)) p0_conflict_reg2<=p0_conflict_reg;
-      if (~(rsStall[1]&~now_flushing)) p1_conflict_reg2<=p1_conflict_reg;
-      if (~(rsStall[2]&~now_flushing)) p2_conflict_reg2<=p2_conflict_reg;
+      if (~(rsStall[0]&~now_flushing&~alt_bus_hold_reg)) p0_conflict_reg<=p0_conflict;
+      if (~(rsStall[1]&~now_flushing&~alt_bus_hold_reg)) p1_conflict_reg<=p1_conflict;
+      if (~(rsStall[2]&~now_flushing&~alt_bus_hold_reg)) p2_conflict_reg<=p2_conflict;
+      if (~(rsStall[0]&~now_flushing&~alt_bus_hold_reg)) p0_conflict_reg2<=p0_conflict_reg;
+      if (~(rsStall[1]&~now_flushing&~alt_bus_hold_reg)) p1_conflict_reg2<=p1_conflict_reg;
+      if (~(rsStall[2]&~now_flushing&~alt_bus_hold_reg)) p2_conflict_reg2<=p2_conflict_reg;
 
-      if (~(rsStall[0]&~now_flushing)) p0_tlbmiss_reg<=p0_tlbmiss;
-      if (~(rsStall[1]&~now_flushing)) p1_tlbmiss_reg<=p1_tlbmiss;
-      if (~(rsStall[2]&~now_flushing)) p2_tlbmiss_reg<=p2_tlbmiss;
+      if (~(rsStall[0]&~now_flushing&~alt_bus_hold_reg)) p0_tlbmiss_reg<=p0_tlbmiss;
+      if (~(rsStall[1]&~now_flushing&~alt_bus_hold_reg)) p1_tlbmiss_reg<=p1_tlbmiss;
+      if (~(rsStall[2]&~now_flushing&~alt_bus_hold_reg)) p2_tlbmiss_reg<=p2_tlbmiss;
 
-      if (~(rsStall[0]&~now_flushing)) p0_sec_in_reg<=p0_sec_in;
-      if (~(rsStall[1]&~now_flushing)) p1_sec_in_reg<=p1_sec_in;
-      if (~(rsStall[2]&~now_flushing)) p2_sec_in_reg<=p2_sec_in;
-      if (~(rsStall[3]&~now_flushing)) p3_sec_in_reg<=p3_sec_in;
+      if (~(rsStall[0]&~now_flushing&~alt_bus_hold_reg)) p0_sec_in_reg<=p0_sec_in;
+      if (~(rsStall[1]&~now_flushing&~alt_bus_hold_reg)) p1_sec_in_reg<=p1_sec_in;
+      if (~(rsStall[2]&~now_flushing&~alt_bus_hold_reg)) p2_sec_in_reg<=p2_sec_in;
+      if (~(rsStall[3]&~now_flushing&~alt_bus_hold_reg)) p3_sec_in_reg<=p3_sec_in;
       p4_sec_in_reg<=p4_sec_in;
       p5_sec_in_reg<=p5_sec_in;
 
-      if (~(rsStall[0]&~now_flushing)) p0_ndiff_reg<=p0_ndiff;
-      if (~(rsStall[1]&~now_flushing)) p1_ndiff_reg<=p1_ndiff;
-      if (~(rsStall[2]&~now_flushing)) p2_ndiff_reg<=p2_ndiff;
-      if (~(rsStall[3]&~now_flushing)) p3_ndiff_reg<=p3_ndiff;
+      if (~(rsStall[0]&~now_flushing&~alt_bus_hold_reg)) p0_ndiff_reg<=p0_ndiff;
+      if (~(rsStall[1]&~now_flushing&~alt_bus_hold_reg)) p1_ndiff_reg<=p1_ndiff;
+      if (~(rsStall[2]&~now_flushing&~alt_bus_hold_reg)) p2_ndiff_reg<=p2_ndiff;
+      if (~(rsStall[3]&~now_flushing&~alt_bus_hold_reg)) p3_ndiff_reg<=p3_ndiff;
       p4_ndiff_reg<=p4_ndiff;
       p5_ndiff_reg<=p5_ndiff;
 
@@ -3018,14 +3018,14 @@ module agu_block(
       mOpY5_pbit_o_reg3<=mOpY5_pbit_o_reg2;
       mOpY5_d128_o_reg3<=mOpY5_d128_o_reg2;
 
-      if (~(rsStall[0]&~now_flushing)) p0_en_reg<=p0_en;
-      if (~(rsStall[1]&~now_flushing)) p1_en_reg<=p1_en;
-      if (~(rsStall[2]&~now_flushing)) p2_en_reg<=p2_en;
-      if (~(rsStall[3]&~now_flushing)) p3_en_reg<=p3_en;
-      if (~(rsStall[0]&~now_flushing)) p0_adata_reg<=p0_adata;
-      if (~(rsStall[1]&~now_flushing)) p1_adata_reg<=p1_adata;
-      if (~(rsStall[2]&~now_flushing)) p2_adata_reg<=p2_adata;
-      if (~(rsStall[3]&~now_flushing)) p3_adata_reg<=p3_adata;
+      if (~(rsStall[0]&~now_flushing&~alt_bus_hold_reg)) p0_en_reg<=p0_en;
+      if (~(rsStall[1]&~now_flushing&~alt_bus_hold_reg)) p1_en_reg<=p1_en;
+      if (~(rsStall[2]&~now_flushing&~alt_bus_hold_reg)) p2_en_reg<=p2_en;
+      if (~(rsStall[3]&~now_flushing&~alt_bus_hold_reg)) p3_en_reg<=p3_en;
+      if (~(rsStall[0]&~now_flushing&~alt_bus_hold_reg)) p0_adata_reg<=p0_adata;
+      if (~(rsStall[1]&~now_flushing&~alt_bus_hold_reg)) p1_adata_reg<=p1_adata;
+      if (~(rsStall[2]&~now_flushing&~alt_bus_hold_reg)) p2_adata_reg<=p2_adata;
+      if (~(rsStall[3]&~now_flushing&~alt_bus_hold_reg)) p3_adata_reg<=p3_adata;
 
       mcam_addr_reg<=mcam_addr;
       mcam_st_reg<=mcam_st;
