@@ -19,10 +19,10 @@
 
 unsigned short OPS_REGL[]={0,1,4,5,8,9,12,13,16,17,32|4096,33|4096,34|4096,
 35|4096,36|4096,37|4096,39|4096,40|4096,41|4096,42|4096,43|4096,48|4096,49|4096,
-50|4096,51|4096,52,53,54|4096,55|4096,56|4096,57,4|65536,5|65536,4|32768,5|32768,8|65536,9|65536};
+50|4096,51|4096,52,53,54|4096,55|4096,56|4096,57,4|16384,5|16384,4|32768,5|32768,8|16384,9|16384};
 unsigned short OPS_S_REGL[]={0,1,4,5,8,9,12,13,16,17,20,21,24,25,28,29,32|4096,
 33|4096,34|4096,35|4096,36|4096,37|4096,39|4096,40|4096,41|4096,42|4096,43|4096,48|4096,49|4096,50|4096,51|4096,52,53,54|4096,55|4096,56|4096,57,
-4|65536,5|65536,4|32768,5|32768,8|65536,9|65536};
+4|16384,5|16384,4|32768,5|32768,8|16384,9|16384};
 unsigned short OPS_M_REGL[]={1,2,3,5,7,9,10,11,12|4096,13|4096,14|4096,
 12|4096|1024,13|4096|1024,14|4096|1024};
 
@@ -247,7 +247,7 @@ lsent store_op[]={
     0x35b,3,8,
     0x35f,3,17*/
 };
-char *reg8[]={
+char reg8[][8]={
 "r0b",
 "r1b",
 "r2b",
@@ -315,7 +315,7 @@ char *reg8[]={
 };
 
 
-char *reg16[]={
+char reg16[][8]={
 "r0w",
 "r1w",
 "r2w",
@@ -351,7 +351,7 @@ char *reg16[]={
 };
 
 
-char *reg32[]={
+char reg32[][8]={
 "r0d",
 "r1d",
 "r2d",
@@ -386,7 +386,7 @@ char *reg32[]={
 "r31d"
 };
 
-char *reg65[]={
+char reg65[][8]={
 "r0",
 "r1",
 "r2",
@@ -517,6 +517,7 @@ bool req::gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,int 
         unsigned long long pttr=A_p ? A : B;
 	bool no_O=false;
 	int mmem=0;
+	char cmpstr[32];
 	if (has_mem_) mmem=lrand48()%3;
         switch(op&0xff) {
             case 0:
@@ -605,6 +606,15 @@ addie:
             break;
 
             case 4:
+	    if ((op&16384) && has_mem!=2) {
+		rT=-1;
+		strcpy(cmpstr,"cmpq");
+	    } else if ((op&32768) && has_mem!=2) {
+		rT=-1;
+		strcpy(cmpstr,"cmpb");
+	    } else {
+		strcpy(cmpstr,"subq");
+	    }
 	    if (has_mem_==2) {
 		(this-1)->gen_mem(NULL,8,mem,memp,addr);
 		rA=16;
@@ -619,9 +629,25 @@ addie:
 		rB=16;
 		B=(this-1)->res;
 		B_p=(this-1)->res_p;
-		snprintf(asmtext,sizeof (asmtext), "subq mem+%li(%rip), %%%s, %%%s\n",addr,reg65[rA],reg65[rT]);
-	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"subq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
-	    else snprintf(asmtext,sizeof asmtext,"subq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
+		if (cmpstr[0]=='c') {
+		    if (op&32768) {
+			A=(signed char) A;
+			B=(signed char) B;
+			A_p=0;
+			B_p=0;
+		    }
+		    snprintf(asmtext,sizeof (asmtext), "%s mem+%li(%rip), %%%s\n",cmpstr,addr,(op&32768) ? reg8[rA] : reg65[rA]);
+		} else {
+		    snprintf(asmtext,sizeof (asmtext), "subq mem+%li(%rip), %%%s, %%%s\n",addr,reg65[rA],reg65[rT]);
+		}
+	    } else if (cmpstr[0]=='c') {
+		if (rB>=0) snprintf(asmtext,sizeof asmtext,"%s %%%s, %%%s\n",cmpstr,(op&32768) ? reg8[rB] : reg65[rB],
+				(op&32768) ? reg8[rA] : reg65[rA]);
+	        else snprintf(asmtext,sizeof asmtext,"%s $%i, %%%s\n",cmpstr,(int) B,(op&32768) ? reg8[rA] : reg65[rA]);
+	    } else {
+		if (rB>=0) snprintf(asmtext,sizeof asmtext,"subq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
+	        else snprintf(asmtext,sizeof asmtext,"subq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
+	    }
 
             res0=((unsigned __int128) A)+((unsigned __int128)~B)+(one>>63);
 	    if (A_p && !B_p) {
@@ -648,6 +674,15 @@ addie:
             break;
             
             case 5:
+	    if ((op&16384) && has_mem!=2) {
+		rT=-1;
+		strcpy(cmpstr,"cmpl");
+	    } else if ((op&32768) && has_mem!=2) {
+		rT=-1;
+		strcpy(cmpstr,"cmpw");
+	    } else {
+		strcpy(cmpstr,"subl");
+	    }
 	    if (has_mem_==2) {
 		(this-1)->gen_mem(NULL,4,mem,memp,addr);
 		rA=16;
@@ -662,9 +697,25 @@ addie:
 		rB=16;
 		B0x=B=(this-1)->res;
 		B_p=(this-1)->res_p;
-		snprintf(asmtext,sizeof (asmtext), "subl mem+%li(%rip), %%%s, %%%s\n",addr,reg32[rA],reg32[rT]);
-	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"subl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
-	    else snprintf(asmtext,sizeof asmtext,"subl $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
+		if (cmpstr[0]=='c') {
+		    if (op&32768) {
+			A0x=(signed short) A0x;
+			B0x=(signed short) B0x;
+			A_p=0;
+			B_p=0;
+		    }
+		    snprintf(asmtext,sizeof (asmtext), "%s mem+%li(%rip)\n",cmpstr,addr,(op&16384) ? reg32[rA] : reg16[rA]);
+		} else {
+		    snprintf(asmtext,sizeof (asmtext), "subl mem+%li(%rip), %%%s, %%%s\n",addr,reg32[rA],reg32[rT]);
+		}
+	    } else if (cmpstr[0]=='c') {
+	        if (rB>=0) snprintf(asmtext,sizeof asmtext,"%s %%%s, %%%s\n",cmpstr,(op&32768) ? reg16[rB] : reg32[rB],
+				(op&32768) ? reg16[rA] : reg32[rA]);
+		else snprintf(asmtext,sizeof asmtext,"%s $%i, %%%s\n",cmpstr,(int) B,(op&32768) ? reg16[rA] : reg32[rA]);
+	    } else {
+	        if (rB>=0) snprintf(asmtext,sizeof asmtext,"subl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
+		else snprintf(asmtext,sizeof asmtext,"subl $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
+	    }
 
             res0=((unsigned __int128) A0x)+((unsigned __int128) ~B0x)+1;
             res2=res=res0&0xffffffffull;
