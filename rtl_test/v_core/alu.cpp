@@ -625,7 +625,21 @@ addie:
 		else
 		    snprintf(asmtext,sizeof (asmtext), "subq $%i, mem+%li(%rip)\n",B,addr);
 	    } else  if (has_mem_) {
-		(this-1)->gen_mem(NULL,8,mem,memp,addr);
+		(this-1)->gen_mem(NULL,(op&32768) ? 1 : 8,mem,memp,addr);
+		if (cmpstr[0]=='c' && lrand48()&1) {
+		    rA=16;
+		    A=(this-1)->res;
+		    A_p=(this-1)->res_p;
+		    if (op&32768) {
+			A=(signed char) A;
+			B=(signed char) B;
+			A_p=0;
+			B_p=0;
+		    }
+		    if (rB>=0) snprintf(asmtext,sizeof (asmtext), "%s %%%s, mem+%li(%rip)\n",cmpstr,(op&32768) ? reg8[rB] : reg65[rB],addr);
+		    else snprintf(asmtext,sizeof (asmtext), "%s %%%li, mem+%li(%rip)\n",cmpstr,B,addr);
+	            goto subie;
+		}
 		rB=16;
 		B=(this-1)->res;
 		B_p=(this-1)->res_p;
@@ -648,7 +662,7 @@ addie:
 		if (rB>=0) snprintf(asmtext,sizeof asmtext,"subq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
 	        else snprintf(asmtext,sizeof asmtext,"subq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
 	    }
-
+            subbie:
             res0=((unsigned __int128) A)+((unsigned __int128)~B)+(one>>63);
 	    if (A_p && !B_p) {
                 res0=(((unsigned __int128) A)+(((unsigned __int128)~B)+(one>>63))&0xffffffffffful)|
