@@ -662,7 +662,7 @@ addie:
 		if (rB>=0) snprintf(asmtext,sizeof asmtext,"subq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
 	        else snprintf(asmtext,sizeof asmtext,"subq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
 	    }
-            subbie:
+            subie:
             res0=((unsigned __int128) A)+((unsigned __int128)~B)+(one>>63);
 	    if (A_p && !B_p) {
                 res0=(((unsigned __int128) A)+(((unsigned __int128)~B)+(one>>63))&0xffffffffffful)|
@@ -746,7 +746,7 @@ addie:
 		else snprintf(asmtext,sizeof asmtext,"subl $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
 	    }
 
-subbie32:
+subie32:
             res0=((unsigned __int128) A0x)+((unsigned __int128) ~B0x)+1;
             res2=res=res0&0xffffffffull;
             flg32(res0^0x100000000ll);
@@ -756,6 +756,12 @@ subbie32:
             break;
 
             case 8:
+	    if ((op&16384) && has_mem!=2) {
+		rT=-1;
+		strcpy(cmpstr,"testq");
+	    } else {
+		strcpy(cmpstr,"andq");
+	    }
 	    if (has_mem_==2) {
 		(this-1)->gen_mem(NULL,8,mem,memp,addr);
 		rA=16;
@@ -767,13 +773,28 @@ subbie32:
 		    snprintf(asmtext,sizeof (asmtext), "andq $%i, mem+%li(%rip)\n",B,addr);
 	    } else if (has_mem_) {
 		(this-1)->gen_mem(NULL,8,mem,memp,addr);
+		if (cmpstr[0]=='t' && lrand48()&1) {
+		    rA=16;
+		    A=(this-1)->res;
+		    A_p=(this-1)->res_p;
+		    if (rB>=0) snprintf(asmtext,sizeof (asmtext), "%s %%%s, mem+%li(%rip)\n",cmpstr,reg65[rB],addr);
+		    else snprintf(asmtext,sizeof (asmtext), "%s %%%li, mem+%li(%rip)\n",cmpstr,B,addr);
+	            goto andff;
+		}
 		rB=16;
 		B=(this-1)->res;
 		B_p=(this-1)->res_p;
-		snprintf(asmtext,sizeof (asmtext), "andq mem+%li(%rip), %%%s, %%%s\n",addr,reg65[rA],reg65[rT]);
+		if (cmpstr[0]=='t') {
+		    snprintf(asmtext,sizeof (asmtext), "%s mem+%li(%rip), %%%s\n",cmpstr,addr,reg65[rA]);
+		} else {
+		    rB=16;
+		    B=(this-1)->res;
+		    B_p=(this-1)->res_p;
+		    snprintf(asmtext,sizeof (asmtext), "andq mem+%li(%rip), %%%s, %%%s\n",addr,reg65[rA],reg65[rT]);
+		}
 	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"andq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"andq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
-
+andff:
             res1=res=res0=A&B;
 	    if (A_p && B_p) excpt=11;
 	    if (A_p && !B_p) { 
@@ -793,6 +814,12 @@ subbie32:
             break;
 
             case 9:
+	    if ((op&16384) && has_mem!=2) {
+		rT=-1;
+		strcpy(cmpstr,"testl");
+	    } else {
+		strcpy(cmpstr,"andl");
+	    }
 	    if (has_mem_==2) {
 		(this-1)->gen_mem(NULL,4,mem,memp,addr);
 		rA=16;
@@ -804,13 +831,30 @@ subbie32:
 		    snprintf(asmtext,sizeof (asmtext), "andl $%i, mem+%li(%rip)\n",B,addr);
 	    } else if (has_mem_) {
 		(this-1)->gen_mem(NULL,4,mem,memp,addr);
+		if (cmpstr[0]=='t' && lrand48()&1) {
+		    rA=16;
+		    A=(this-1)->res;
+		    A_p=(this-1)->res_p;
+		    A0x=A;
+		    if (rB>=0) snprintf(asmtext,sizeof (asmtext), "%s %%%s, mem+%li(%rip)\n",cmpstr,reg32[rB],addr);
+		    else snprintf(asmtext,sizeof (asmtext), "%s %%%li, mem+%li(%rip)\n",cmpstr,B,addr);
+	            goto andffl;
+		}
 		rB=16;
-		B0x=B=(this-1)->res;
+		B=(this-1)->res;
 		B_p=(this-1)->res_p;
-		snprintf(asmtext,sizeof (asmtext), "andl mem+%li(%rip), %%%s, %%%s\n",addr,reg32[rA],reg32[rT]);
+		B0x=B;
+		if (cmpstr[0]=='t') {
+		    snprintf(asmtext,sizeof (asmtext), "%s mem+%li(%rip), %%%s\n",cmpstr,addr,reg32[rA]);
+		} else {
+		    rB=16;
+		    B0x=B=(this-1)->res;
+		    B_p=(this-1)->res_p;
+		    snprintf(asmtext,sizeof (asmtext), "andl mem+%li(%rip), %%%s, %%%s\n",addr,reg32[rA],reg32[rT]);
+		}
 	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"andl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"andl $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
-
+andffl:
             res0=A0x&B0x;
             res2=res=res0&0xffffffffull;
             flg32(res);
