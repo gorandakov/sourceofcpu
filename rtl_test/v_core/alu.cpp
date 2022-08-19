@@ -637,7 +637,7 @@ addie:
 			B_p=0;
 		    }
 		    if (rB>=0) snprintf(asmtext,sizeof (asmtext), "%s %%%s, mem+%li(%rip)\n",cmpstr,(op&32768) ? reg8[rB] : reg65[rB],addr);
-		    else snprintf(asmtext,sizeof (asmtext), "%s %%%li, mem+%li(%rip)\n",cmpstr,B,addr);
+		    else snprintf(asmtext,sizeof (asmtext), "%s $%li, mem+%li(%rip)\n",cmpstr,B,addr);
 	            goto subie;
 		}
 		rB=16;
@@ -720,7 +720,7 @@ addie:
 			B_p=0;
 		    }
 		    if (rB>=0) snprintf(asmtext,sizeof (asmtext), "%s %%%s, mem+%li(%rip)\n",cmpstr,(op&32768) ? reg16[rB] : reg32[rB],addr);
-		    else snprintf(asmtext,sizeof (asmtext), "%s %%%li, mem+%i(%rip)\n",cmpstr,B0x,addr);
+		    else snprintf(asmtext,sizeof (asmtext), "%s $%i, mem+%i(%rip)\n",cmpstr,B0x,addr);
 	            goto subie32;
 		}
 		rB=16;
@@ -733,7 +733,7 @@ addie:
 			A_p=0;
 			B_p=0;
 		    }
-		    snprintf(asmtext,sizeof (asmtext), "%s mem+%li(%rip)\n",cmpstr,addr,(op&16384) ? reg32[rA] : reg16[rA]);
+		    snprintf(asmtext,sizeof (asmtext), "%s mem+%li(%rip), %%%s\n",cmpstr,addr,(op&16384) ? reg32[rA] : reg16[rA]);
 		} else {
 		    snprintf(asmtext,sizeof (asmtext), "subl mem+%li(%rip), %%%s, %%%s\n",addr,reg32[rA],reg32[rT]);
 		}
@@ -778,7 +778,7 @@ subie32:
 		    A=(this-1)->res;
 		    A_p=(this-1)->res_p;
 		    if (rB>=0) snprintf(asmtext,sizeof (asmtext), "%s %%%s, mem+%li(%rip)\n",cmpstr,reg65[rB],addr);
-		    else snprintf(asmtext,sizeof (asmtext), "%s %%%li, mem+%li(%rip)\n",cmpstr,B,addr);
+		    else snprintf(asmtext,sizeof (asmtext), "%s $%li, mem+%li(%rip)\n",cmpstr,B,addr);
 	            goto andff;
 		}
 		rB=16;
@@ -837,7 +837,7 @@ andff:
 		    A_p=(this-1)->res_p;
 		    A0x=A;
 		    if (rB>=0) snprintf(asmtext,sizeof (asmtext), "%s %%%s, mem+%li(%rip)\n",cmpstr,reg32[rB],addr);
-		    else snprintf(asmtext,sizeof (asmtext), "%s %%%li, mem+%li(%rip)\n",cmpstr,B,addr);
+		    else snprintf(asmtext,sizeof (asmtext), "%s $%li, mem+%li(%rip)\n",cmpstr,B,addr);
 	            goto andffl;
 		}
 		rB=16;
