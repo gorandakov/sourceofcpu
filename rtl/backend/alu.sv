@@ -288,7 +288,7 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
     (cmov_en&&(doJmp&val2[64]||~doJmp&val1[64]))|(operation[11:0]==12'd58)|(operation[11:0]==`op_mov64) && 
     ((operation[1:0]==2'b0 && operation[7:5]==3'b0|(operation[7:2]==6'b001000))||cmov_en||operation[11:1]==11'd29);
 
-  assign is_sub=operation[7:0]==`op_sub64 || operation[7:0]==`op_sub32 || operation[7:0]==`op_cmp16 || operation[7:0]==`op_cmp8;
+  assign is_sub=operation[7:0]==`op_sub64;
 
   assign ptr=val1[64] ? val1[63:0] : val2[63:0];
   
