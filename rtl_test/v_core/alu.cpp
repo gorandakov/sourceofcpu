@@ -2476,15 +2476,15 @@ void gen_memrgn(char *mem,char *pmem) {
     int n;
     for(n=0;n<(MEMRGN_DATA_SZ/8);n++) {
 	unsigned long long *xmem=(unsigned long long *) (mem+8*n+MEMRGN_DATA);
-        if ((lrand48()%3)==1) {
-	    pmem[n/8+MEMRGN_DATA/64]|=1<<(n&0x7);
-	    *xmem=lrand48()&0xfffffffffff;
-	    *xmem|=0xf80ff00000000000ul;	    
-	} else {
+     //   if ((lrand48()%3)==1) {
+//	    pmem[n/8+MEMRGN_DATA/64]|=1<<(n&0x7);
+//	    *xmem=lrand48()&0xfffffffffff;
+//	    *xmem|=0xf80ff00000000000ul;	    
+//	} else {
 	    pmem[n/8+MEMRGN_DATA/64]&=~(1<<(n&0x7));
 	    *xmem=lrand48()&0xfffffffffff;
 	    *xmem|=lrand48()<<44;	    
-	}
+//	}
     }
 }
 
