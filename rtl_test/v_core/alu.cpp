@@ -631,8 +631,9 @@ addie:
 		    A=(this-1)->res;
 		    A_p=(this-1)->res_p;
 		    if (op&32768) {
-			A=(signed char) A;
-			B=(signed char) B;
+			signed char sc;
+			A=sc=A;
+			B=sc=B;
 			A_p=0;
 			B_p=0;
 		    }
@@ -645,8 +646,9 @@ addie:
 		B_p=(this-1)->res_p;
 		if (cmpstr[0]=='c') {
 		    if (op&32768) {
-			A=(signed char) A;
-			B=(signed char) B;
+			signed char x1;
+			A=x1= A;
+			B=x1= B;
 			A_p=0;
 			B_p=0;
 		    }
@@ -655,6 +657,13 @@ addie:
 		    snprintf(asmtext,sizeof (asmtext), "subq mem+%li(%rip), %%%s, %%%s\n",addr,reg65[rA],reg65[rT]);
 		}
 	    } else if (cmpstr[0]=='c') {
+		if (op&32768) {
+		    signed char x1;
+		    A=x1= A;
+		    B=x1= B;
+		    A_p=0;
+		    B_p=0;
+		}
 		if (rB>=0) snprintf(asmtext,sizeof asmtext,"%s %%%s, %%%s\n",cmpstr,(op&32768) ? reg8[rB] : reg65[rB],
 				(op&32768) ? reg8[rA] : reg65[rA]);
 	        else snprintf(asmtext,sizeof asmtext,"%s $%i, %%%s\n",cmpstr,(int) B,(op&32768) ? reg8[rA] : reg65[rA]);
@@ -714,8 +723,9 @@ addie:
 		    A_p=(this-1)->res_p;
 		    A0x=A;
 		    if (op&32768) {
-			A0x=(signed short) A0x;
-			B0x=(signed short) B0x;
+			signed short s2;
+			A0x=s2= A0x;
+			B0x=s2= B0x;
 			A_p=0;
 			B_p=0;
 		    }
@@ -728,8 +738,9 @@ addie:
 		B_p=(this-1)->res_p;
 		if (cmpstr[0]=='c') {
 		    if (op&32768) {
-			A0x=(signed short) A0x;
-			B0x=(signed short) B0x;
+			signed short p1;
+			A0x=p1= A0x;
+			B0x=p1= B0x;
 			A_p=0;
 			B_p=0;
 		    }
@@ -738,6 +749,13 @@ addie:
 		    snprintf(asmtext,sizeof (asmtext), "subl mem+%li(%rip), %%%s, %%%s\n",addr,reg32[rA],reg32[rT]);
 		}
 	    } else if (cmpstr[0]=='c') {
+		if (op&32768) {
+		    signed short s2;
+		    A0x=s2= A0x;
+		    B0x=s2= B0x;
+		    A_p=0;
+		    B_p=0;
+		}
 	        if (rB>=0) snprintf(asmtext,sizeof asmtext,"%s %%%s, %%%s\n",cmpstr,(op&32768) ? reg16[rB] : reg32[rB],
 				(op&32768) ? reg16[rA] : reg32[rA]);
 		else snprintf(asmtext,sizeof asmtext,"%s $%i, %%%s\n",cmpstr,(int) B,(op&32768) ? reg16[rA] : reg32[rA]);
