@@ -707,7 +707,22 @@ addie:
 		else
 		    snprintf(asmtext,sizeof (asmtext), "subl $%i, mem+%li(%rip)\n",B,addr);
 	    } else if (has_mem_) {
-		(this-1)->gen_mem(NULL,4,mem,memp,addr);
+		(this-1)->gen_mem(NULL,(op&32768) ? 2 : 4,mem,memp,addr);
+		if (cmpstr[0]=='c' && lrand48()&1) {
+		    rA=16;
+		    A=(this-1)->res;
+		    A_p=(this-1)->res_p;
+		    A0x=A;
+		    if (op&32768) {
+			A0x=(signed short) A0x;
+			B0x=(signed short) B0x;
+			A_p=0;
+			B_p=0;
+		    }
+		    if (rB>=0) snprintf(asmtext,sizeof (asmtext), "%s %%%s, mem+%li(%rip)\n",cmpstr,(op&32768) ? reg16[rB] : reg32[rB],addr);
+		    else snprintf(asmtext,sizeof (asmtext), "%s %%%li, mem+%i(%rip)\n",cmpstr,B0x,addr);
+	            goto subie32;
+		}
 		rB=16;
 		B0x=B=(this-1)->res;
 		B_p=(this-1)->res_p;
@@ -731,6 +746,7 @@ addie:
 		else snprintf(asmtext,sizeof asmtext,"subl $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
 	    }
 
+subbie32:
             res0=((unsigned __int128) A0x)+((unsigned __int128) ~B0x)+1;
             res2=res=res0&0xffffffffull;
             flg32(res0^0x100000000ll);
