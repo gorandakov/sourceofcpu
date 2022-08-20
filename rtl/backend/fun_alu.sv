@@ -777,8 +777,8 @@ module fu_alu(
 	  u1_isSub_reg[4]=~u1_op[9] && ~u1_op[10];
 	  u1_isSub_reg[5]=u1_op[10];
       end else begin
-	  u1_isSub_reg[0]=u1_op[7:0]!=`op_sub64 && u1_op[7:0]!=`op_sub32;
-	  u1_isSub_reg[1]=u1_op[7:0]==`op_sub64 || u1_op[7:0]==`op_sub32;
+	  u1_isSub_reg[0]=u1_op[7:0]!=`op_sub64 && u1_op[7:0]!=`op_sub32  && u1_op[7:0]!=`op_cmp16 && u1_op[7:0]!=`op_cmp8;
+	  u1_isSub_reg[1]=u1_op[7:0]==`op_sub64 || u1_op[7:0]==`op_sub32  || u1_op[7:0]==`op_cmp16 || u1_op[7:0]==`op_cmp8;
 	  u1_isSub_reg[2]=1'b0;
 	  u1_isSub_reg[5:3]=3'd1;
       end
@@ -790,8 +790,8 @@ module fu_alu(
 	  u2_isSub_reg[4]=~u2_op[9] && ~u2_op[10];
 	  u2_isSub_reg[5]=u2_op[10];
       end else begin
-	  u2_isSub_reg[0]=u2_op[7:0]!=`op_sub64 && u2_op[7:0]!=`op_sub32;
-	  u2_isSub_reg[1]=u2_op[7:0]==`op_sub64 || u2_op[7:0]==`op_sub32;
+	  u2_isSub_reg[0]=u2_op[7:0]!=`op_sub64 && u2_op[7:0]!=`op_sub32 && u2_op[7:0]!=`op_cmp16 && u2_op[7:0]!=`op_cmp8;
+	  u2_isSub_reg[1]=u2_op[7:0]==`op_sub64 || u2_op[7:0]==`op_sub32  || u2_op[7:0]==`op_cmp16 || u2_op[7:0]==`op_cmp8;
 	  u2_isSub_reg[2]=1'b0;
 	  u2_isSub_reg[5:3]=3'd1;
       end
@@ -803,8 +803,8 @@ module fu_alu(
 	  u3_isSub_reg[4]=~u3_op[9] && ~u3_op[10];
 	  u3_isSub_reg[5]=u3_op[10];
       end else begin
-	  u3_isSub_reg[0]=u3_op[7:0]!=`op_sub64 && u3_op[7:0]!=`op_sub32;
-	  u3_isSub_reg[1]=u3_op[7:0]==`op_sub64 || u3_op[7:0]==`op_sub32;
+	  u3_isSub_reg[0]=u3_op[7:0]!=`op_sub64 && u3_op[7:0]!=`op_sub32 && u3_op[7:0]!=`op_cmp16 && u3_op[7:0]!=`op_cmp8;
+	  u3_isSub_reg[1]=u3_op[7:0]==`op_sub64 || u3_op[7:0]==`op_sub32 || u3_op[7:0]==`op_cmp16 || u3_op[7:0]==`op_cmp8;
 	  u3_isSub_reg[2]=1'b0;
 	  u3_isSub_reg[5:3]=3'd1;
       end
@@ -816,8 +816,8 @@ module fu_alu(
 	  u4_isSub_reg[4]=~u4_op[9] && ~u4_op[10];
 	  u4_isSub_reg[5]=u4_op[10];
       end else begin
-	  u4_isSub_reg[0]=u4_op[7:0]!=`op_sub64 && u4_op[7:0]!=`op_sub32;
-	  u4_isSub_reg[1]=u4_op[7:0]==`op_sub64 || u4_op[7:0]==`op_sub32;
+	  u4_isSub_reg[0]=u4_op[7:0]!=`op_sub64 && u4_op[7:0]!=`op_sub32 && u4_op[7:0]!=`op_cmp16 && u4_op[7:0]!=`op_cmp8;
+	  u4_isSub_reg[1]=u4_op[7:0]==`op_sub64 || u4_op[7:0]==`op_sub32  || u4_op[7:0]==`op_cmp16 || u4_op[7:0]==`op_cmp8;
 	  u4_isSub_reg[2]=1'b0;
 	  u4_isSub_reg[5:3]=3'd1;
       end
@@ -829,8 +829,8 @@ module fu_alu(
 	  u5_isSub_reg[4]=~u5_op[9] && ~u5_op[10];
 	  u5_isSub_reg[5]=u5_op[10];
       end else begin
-	  u5_isSub_reg[0]=u5_op[7:0]!=`op_sub64 && u5_op[7:0]!=`op_sub32;
-	  u5_isSub_reg[1]=u5_op[7:0]==`op_sub64 || u5_op[7:0]==`op_sub32;
+	  u5_isSub_reg[0]=u5_op[7:0]!=`op_sub64 && u5_op[7:0]!=`op_sub32 && u5_op[7:0]!=`op_cmp16 && u5_op[7:0]!=`op_cmp8;
+	  u5_isSub_reg[1]=u5_op[7:0]==`op_sub64 || u5_op[7:0]==`op_sub32 || u5_op[7:0]==`op_cmp16 || u5_op[7:0]==`op_cmp8;
 	  u5_isSub_reg[2]=1'b0;
 	  u5_isSub_reg[5:3]=3'd1;
       end
@@ -842,8 +842,8 @@ module fu_alu(
 	  u6_isSub_reg[4]=~u6_op[9] && ~u6_op[10];
 	  u6_isSub_reg[5]=u6_op[10];
       end else begin
-	  u6_isSub_reg[0]=u6_op[7:0]!=`op_sub64 && u6_op[7:0]!=`op_sub32;
-	  u6_isSub_reg[1]=u6_op[7:0]==`op_sub64 || u6_op[7:0]==`op_sub32;
+	  u6_isSub_reg[0]=u6_op[7:0]!=`op_sub64 && u6_op[7:0]!=`op_sub32 && u6_op[7:0]!=`op_cmp16 && u6_op[7:0]!=`op_cmp8;
+	  u6_isSub_reg[1]=u6_op[7:0]==`op_sub64 || u6_op[7:0]==`op_sub32  || u6_op[7:0]==`op_cmp16 || u6_op[7:0]==`op_cmp8;
 	  u6_isSub_reg[2]=1'b0;
 	  u6_isSub_reg[5:3]=3'd1;
       end
