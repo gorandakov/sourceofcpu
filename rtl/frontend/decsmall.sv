@@ -1074,7 +1074,7 @@ module smallInstr_decoder(
       if (opcode_main[0] &&opcode_main[7:4]==4'b0111 && opcode_main[3])
           perror[13]=1;
       
-      trien[14]=isCmov;//
+      trien[14]=magic[0] & isCmov;//
       prA[14]={instr[17],instr[11:8]};
       prT[14]=instr[16:12];
       prB[14]=instr[22:18];
@@ -1716,7 +1716,7 @@ module smallInstr_decoder(
           default: perror[34]=1;
       endcase
       
-      trien[35]=(isBasicSysInstr);
+      trien[35]=(magic[0] && isBasicSysInstr);
          // if (instr[15:8]==8'hff && ~magic[0]) halt=1'b1;
       if (instr[15:13]==3'b0) begin //write CSR
         // constant=instr[31:16];
