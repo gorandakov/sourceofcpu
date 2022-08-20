@@ -2497,7 +2497,7 @@ void gen_prog(req *reqs,int count, FILE *f,hcont *contx,char *mem,char *pmem) {
    fprintf(f,"_start:\n");
    for(n=0;n<31;n++) {
        if (n!=6) reqs[n].gen_init(n,0,lrand48()|(lrand48()<<48),0);
-       else reqs[n].gen_init(n,0,0xf80fc00008000000,1);
+       else reqs[n].gen_init(n,0,0xf80fe00008000000,1);
        fprintf(f,"%s",reqs[n].asmtext);
        contx->reg_gen[n]=reqs[n].res;
        contx->reg_genP[n]=reqs[n].res_p;
