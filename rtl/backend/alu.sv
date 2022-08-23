@@ -2,9 +2,11 @@
 `include "../operations.sv"
 
 
+//hard macro with no ability to discern valResN is deletable; can compile with
+//p&r tool 
 
-
-module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,retData,retEn,val1,val2,lpconst,valS,valRes);
+module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,retData,retDataN,retEn,val1,val2,lpconst,val1N,val2N,lpconstN,
+	valS,valSN,valRes,valResN);
 
   localparam REG_WIDTH=`reg_addr_width;
   localparam OPERATION_WIDTH=`operation_width;
@@ -20,13 +22,19 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
   input [5:0] sub; //high power fat wire
   input dataEn;//1=coming data from rs
   input nDataAlt;//0=feeding data through multiclk unit
-  output wire [EXCEPT_WIDTH-1:0] retData;
+  inout [EXCEPT_WIDTH-1:0] retData;
+  output [EXCEPT_WIDTH-1:0] retDataN;
   output retEn;
   input [64:0] val1;
   input [64:0] val2;
   input [64:0] lpconst;
+  input [64:0] val1N;
+  input [64:0] val2N;
+  input [64:0] lpconstN;
   input [5:0] valS;//flag
-  output [64:0] valRes;  
+  inout [64:0] valRes;  
+  input [5:0] valSN;//flag
+  output [64:0] valResN;  
   
 
   reg [64:0] valRes_reg;
@@ -178,12 +186,13 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
   assign val1One[2]=|val1[31:16];
   assign val1One[3]=|val1[63:32];
   
-  assign val_or={is_ptr ? ptr[63:44] : val1[63:44]|val2[63:44],val1[43:0]|val2[43:0]};
-  assign val_xor={is_ptr ? ptr[63:44] : val1[63:44]^val2[63:44],val1[43:0]^val2[43:0]};
-  assign val_and={is_ptr ? ptr[63:44] : val1[63:44]&val2[63:44],val1[43:0]&val2[43:0]};
+  assign val_or={is_ptr ? ptr[63:44] : val1[63:44]|val2[63:44]|~val1N[63:44],val1[43:0]|val2[43:0]|~val1N[43:0]};
+  assign val_xor={is_ptr ? ptr[63:44] : val1[63:44]^val2[63:44],val1[43:0]^val2[43:0]^{36'b0,val1N[64]&val1[64],val2N[64]&val2N[64],valS&valSN}};
+  assign val_and={is_ptr ? ptr[63:44] : val1[63:44]&val2[63:44]&~val2N[63:44],val1[43:0]&val2[43:0]&~val2N[43:0]};
   
   assign valRes=(add_en||shift_en&~NOSHIFT||~nDataAlt) ? 65'bz : {is_ptr,valRes2};
   assign valRes2[63:0]=(operation[11] || ~nDataAlt) ? 64'b0: 64'bz;
+  assign valResN=~valRes;
   
   assign valRes2[63:0]=(~add8_en & ~sahf_en && nDataAlt) ? valRes1 : 64'bz;
   assign valRes2[63:8]=(add8_en|sahf_en && nDataAlt) ? 56'b0 : 56'bz;
@@ -382,6 +391,8 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
   assign retEn=nDataAlt_reg ? dataEn_reg & ~retOp[11] &~thrinh_reg : 1'bz; 
 
   assign thrinh=(thread^~except_thread && except) || (thread^~except_thread_reg && except_reg);
+
+  assign retDataN=~retData;
 
   always @* begin
       case (retOp[10:9])
