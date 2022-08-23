@@ -6,27 +6,29 @@
 
 //regfile_ram read during write behaviour: write first; untiled memory
 //WARNING: data output needs to be updated even if no clkEn; clkEn is only for the addresses.
+//compile this into a separate hard macro (only regfile_ram)
+//one cell per ram entry
 module regfile_ram(
   clk,
   rst,
   retire_clkEn,
 
-  read0_addr,read0_data,read0_clkEn,
-  read1_addr,read1_data,read1_clkEn,
-  read2_addr,read2_data,read2_clkEn,
-  read3_addr,read3_data,read3_clkEn,
-  read4_addr,read4_data,read4_clkEn,
-  read5_addr,read5_data,read5_clkEn,
-  read6_addr,read6_data,read6_clkEn,
-  read7_addr,read7_data,read7_clkEn,
-  read8_addr,read8_data,read8_clkEn,
+  read0_addr,read0_data,read0_dataN,read0_clkEn,
+  read1_addr,read1_data,read1_dataN,read1_clkEn,
+  read2_addr,read2_data,read2_dataN,read2_clkEn,
+  read3_addr,read3_data,read3_dataN,read3_clkEn,
+  read4_addr,read4_data,read4_dataN,read4_clkEn,
+  read5_addr,read5_data,read5_dataN,read5_clkEn,
+  read6_addr,read6_data,read6_dataN,read6_clkEn,
+  read7_addr,read7_data,read7_dataN,read7_clkEn,
+  read8_addr,read8_data,read8_dataN,read8_clkEn,
 
-  retireRead_addr,retireRead_data,
+  retireRead_addr,retireRead_data,retireRead_dataN,
 
-  write0_addr,write0_data,write0_wen,
-  write1_addr,write1_data,write1_wen,
-  write2_addr,write2_data,write2_wen,
-  write3_addr,write3_data,write3_wen
+  write0_addr,write0_data,write0_dataN,write0_wen,
+  write1_addr,write1_data,write1_dataN,write1_wen,
+  write2_addr,write2_data,write2_dataN,write2_wen,
+  write3_addr,write3_data,write3_dataN,write3_wen
   );
 
   parameter DATA_WIDTH=`alu_width;
@@ -40,59 +42,73 @@ module regfile_ram(
 
   input [ADDR_WIDTH-1:0] read0_addr;
   output [DATA_WIDTH-1:0] read0_data;
+  output [DATA_WIDTH-1:0] read0_dataN;
   input read0_clkEn;
   
   input [ADDR_WIDTH-1:0] read1_addr;
   output [DATA_WIDTH-1:0] read1_data;
+  output [DATA_WIDTH-1:0] read1_dataN;
   input read1_clkEn;
 
   input [ADDR_WIDTH-1:0] read2_addr;
   output [DATA_WIDTH-1:0] read2_data;
+  output [DATA_WIDTH-1:0] read2_dataN;
   input read2_clkEn;
 
   input [ADDR_WIDTH-1:0] read3_addr;
   output [DATA_WIDTH-1:0] read3_data;
+  output [DATA_WIDTH-1:0] read3_dataN;
   input read3_clkEn;
 
   input [ADDR_WIDTH-1:0] read4_addr;
   output [DATA_WIDTH-1:0] read4_data;
+  output [DATA_WIDTH-1:0] read4_dataN;
   input read4_clkEn;
 
   input [ADDR_WIDTH-1:0] read5_addr;
   output [DATA_WIDTH-1:0] read5_data;
+  output [DATA_WIDTH-1:0] read5_dataN;
   input read5_clkEn;
 
   input [ADDR_WIDTH-1:0] read6_addr;
   output [DATA_WIDTH-1:0] read6_data;
+  output [DATA_WIDTH-1:0] read6_dataN;
   input read6_clkEn;
 
   input [ADDR_WIDTH-1:0] read7_addr;
   output [DATA_WIDTH-1:0] read7_data;
+  output [DATA_WIDTH-1:0] read7_dataN;
   input read7_clkEn;
 
   input [ADDR_WIDTH-1:0] read8_addr;
   output [DATA_WIDTH-1:0] read8_data;
+  output [DATA_WIDTH-1:0] read9_dataN;
   input read8_clkEn;
 
 
   input [ADDR_WIDTH-1:0] retireRead_addr;
   output [DATA_WIDTH-1:0] retireRead_data;
+  output [DATA_WIDTH-1:0] retireRead_dataN;
 
 
   input [ADDR_WIDTH-1:0] write0_addr;
   input [DATA_WIDTH-1:0] write0_data;
+  input [DATA_WIDTH-1:0] write0_dataN;
   input write0_wen;
 
   input [ADDR_WIDTH-1:0] write1_addr;
   input [DATA_WIDTH-1:0] write1_data;
+  input [DATA_WIDTH-1:0] write1_dataN;
   input write1_wen;
 
   input [ADDR_WIDTH-1:0] write2_addr;
   input [DATA_WIDTH-1:0] write2_data;
+  input [DATA_WIDTH-1:0] write2_dataN;
   input write2_wen;
 
   input [ADDR_WIDTH-1:0] write3_addr;
   input [DATA_WIDTH-1:0] write3_data;
+  input [DATA_WIDTH-1:0] write3_dataN;
   input write3_wen;
   
 
@@ -120,8 +136,18 @@ module regfile_ram(
   assign read7_data=ram[read7_addr_reg];
   assign read8_data=ram[read8_addr_reg];
 
+  assign read0_dataN=~ram[read0_addr_reg];
+  assign read1_dataN=~ram[read1_addr_reg];
+  assign read2_dataN=~ram[read2_addr_reg];
+  assign read3_dataN=~ram[read3_addr_reg];
+  assign read4_dataN=~ram[read4_addr_reg];
+  assign read5_dataN=~ram[read5_addr_reg];
+  assign read6_dataN=~ram[read6_addr_reg];
+  assign read7_dataN=~ram[read7_addr_reg];
+  assign read8_dataN=~ram[read8_addr_reg];
 
   assign retireRead_data=ram[retireRead_addr_reg][DATA_WIDTH-1:0];
+  assign retireRead_dataN=~ram[retireRead_addr_reg][DATA_WIDTH-1:0];
 
   always @(posedge clk)
     begin
