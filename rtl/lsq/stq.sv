@@ -682,8 +682,6 @@ module stq(
           if (b<4) begin
 	      assign WLN0_dataX[33*b+:33]=WLN0_dataX0[b];
 	      assign WLN1_dataX[33*b+:33]=WLN1_dataX0[b];
-	      assign WLN0_dataXN[33*b+:33]=WLN0_dataXN0[b];
-	      assign WLN1_dataXN[33*b+:33]=WLN1_dataXN0[b];
 	      assign chk_data[0][33*b+:33]=chk0_data0[chk0_b[b]];
 	      assign chk_data[1][33*b+:33]=chk1_data0[chk1_b[b]];
 	      assign chk_data[2][33*b+:33]=chk2_data0[chk2_b[b]];
@@ -698,8 +696,6 @@ module stq(
 	      assign chk_bytes[5][4*b+:4]=chk5_bytes[chk5_b[b]] & {4{chk5_match_has[chk5_b[b]]}};
               assign WLN0_data[32*b+:32]=WLN0_dataX[33*WLN0_b[b]+:32];
               assign WLN1_data[32*b+:32]=WLN1_dataX[33*WLN1_b[b]+:32];
-              assign WLN0_dataN[32*b+:32]=WLN0_dataXN[33*WLN0_b[b]+:32];
-              assign WLN1_dataN[32*b+:32]=WLN1_dataXN[33*WLN1_b[b]+:32];
 	      //verilator lint_off WIDTH
               assign WLN0_b[b]=-(WLN0_adata[`lsaddr_bank0]&3)+b[1:0]; 
               assign WLN1_b[b]=-(WLN1_adata[`lsaddr_bank0]&3)+b[1:0]; 
@@ -965,14 +961,14 @@ module stq(
   rst,
   aStall|aDoStall,
   excpt,
-  wrt0_en0[31:0], wrt0_adata[`lsaddr_addrE], wrt0_adataN[`lsaddr_addrE], wrt0_adata[`lsaddr_addrO], wrt0_adataN[`lsaddr_addrO], 
-  wrt1_en0[31:0], wrt1_adata[`lsaddr_addrE], wrt1_adataN[`lsaddr_addrE], wrt1_adata[`lsaddr_addrO], wrt1_adataN[`lsaddr_addrO], 
-  chk0_en, chk0_addrEO[31:0], chk0_adata[`lsaddr_addrE], chk0_adataN[`lsaddr_addrE], chk0_adata[`lsaddr_addrO], chk0_adataN[`lsaddr_addrO],
-  chk1_en, chk1_addrEO[31:0], chk1_adata[`lsaddr_addrE], chk1_adataN[`lsaddr_addrE], chk1_adata[`lsaddr_addrO], chk1_adataN[`lsaddr_addrO],
-  chk2_en, chk2_addrEO[31:0], chk2_adata[`lsaddr_addrE], chk2_adataN[`lsaddr_addrE], chk2_adata[`lsaddr_addrO], chk2_adataN[`lsaddr_addrO],
-  chk3_en, chk3_addrEO[31:0], chk3_adata[`lsaddr_addrE], chk3_adataN[`lsaddr_addrE], chk3_adata[`lsaddr_addrO], chk3_adataN[`lsaddr_addrO],
-  chk4_en, chk4_addrEO[31:0], chk4_adata[`lsaddr_addrE], chk4_adataN[`lsaddr_addrE], chk4_adata[`lsaddr_addrO], chk4_adataN[`lsaddr_addrO],
-  chk5_en, chk5_addrEO[31:0], chk5_adata[`lsaddr_addrE], chk5_adataN[`lsaddr_addrE], chk5_adata[`lsaddr_addrO], chk5_adataN[`lsaddr_addrO],
+  wrt0_en0[31:0], wrt0_adata[`lsaddr_addrE], wrt0_adata[`lsaddr_addrO], 
+  wrt1_en0[31:0], wrt1_adata[`lsaddr_addrE], wrt1_adata[`lsaddr_addrO], 
+  chk0_en, chk0_addrEO[31:0], chk0_adata[`lsaddr_addrE], chk0_adata[`lsaddr_addrO],
+  chk1_en, chk1_addrEO[31:0], chk1_adata[`lsaddr_addrE], chk1_adata[`lsaddr_addrO],
+  chk2_en, chk2_addrEO[31:0], chk2_adata[`lsaddr_addrE], chk2_adata[`lsaddr_addrO],
+  chk3_en, chk3_addrEO[31:0], chk3_adata[`lsaddr_addrE], chk3_adata[`lsaddr_addrO],
+  chk4_en, chk4_addrEO[31:0], chk4_adata[`lsaddr_addrE], chk4_adata[`lsaddr_addrO],
+  chk5_en, chk5_addrEO[31:0], chk5_adata[`lsaddr_addrE], chk5_adata[`lsaddr_addrO],
   upd0_en0[31:0], 
   upd1_en0[31:0], 
   free_en[31:0],,,,passe_en[31:0]);
@@ -982,14 +978,14 @@ module stq(
   rst,
   aStall|aDoStall,
   excpt,
-  wrt0_en0[63:32], wrt0_adata[`lsaddr_addrE], wrt0_adataN[`lsaddr_addrE], wrt0_adata[`lsaddr_addrO], wrt0_adataN[`lsaddr_addrO], 
-  wrt1_en0[63:32], wrt1_adata[`lsaddr_addrE], wrt1_adataN[`lsaddr_addrE], wrt1_adata[`lsaddr_addrO], wrt1_adataN[`lsaddr_addrO], 
-  chk0_en, chk0_addrEO[63:32], chk0_adata[`lsaddr_addrE], chk0_adataN[`lsaddr_addrE], chk0_adata[`lsaddr_addrO], chk0_adataN[`lsaddr_addrO],
-  chk1_en, chk1_addrEO[63:32], chk1_adata[`lsaddr_addrE], chk1_adataN[`lsaddr_addrE], chk1_adata[`lsaddr_addrO], chk1_adataN[`lsaddr_addrO],
-  chk2_en, chk2_addrEO[63:32], chk2_adata[`lsaddr_addrE], chk2_adataN[`lsaddr_addrE], chk2_adata[`lsaddr_addrO], chk2_adataN[`lsaddr_addrO],
-  chk3_en, chk3_addrEO[63:32], chk3_adata[`lsaddr_addrE], chk3_adataN[`lsaddr_addrE], chk3_adata[`lsaddr_addrO], chk3_adataN[`lsaddr_addrO],
-  chk4_en, chk4_addrEO[63:32], chk4_adata[`lsaddr_addrE], chk4_adataN[`lsaddr_addrE], chk4_adata[`lsaddr_addrO], chk4_adataN[`lsaddr_addrO],
-  chk5_en, chk5_addrEO[63:32], chk5_adata[`lsaddr_addrE], chk5_adataN[`lsaddr_addrE], chk5_adata[`lsaddr_addrO], chk5_adataN[`lsaddr_addrO],
+  wrt0_en0[63:32], wrt0_adata[`lsaddr_addrE], wrt0_adata[`lsaddr_addrO], 
+  wrt1_en0[63:32], wrt1_adata[`lsaddr_addrE], wrt1_adata[`lsaddr_addrO], 
+  chk0_en, chk0_addrEO[63:32], chk0_adata[`lsaddr_addrE], chk0_adata[`lsaddr_addrO],
+  chk1_en, chk1_addrEO[63:32], chk1_adata[`lsaddr_addrE], chk1_adata[`lsaddr_addrO],
+  chk2_en, chk2_addrEO[63:32], chk2_adata[`lsaddr_addrE], chk2_adata[`lsaddr_addrO],
+  chk3_en, chk3_addrEO[63:32], chk3_adata[`lsaddr_addrE], chk3_adata[`lsaddr_addrO],
+  chk4_en, chk4_addrEO[63:32], chk4_adata[`lsaddr_addrE], chk4_adata[`lsaddr_addrO],
+  chk5_en, chk5_addrEO[63:32], chk5_adata[`lsaddr_addrE], chk5_adata[`lsaddr_addrO],
   upd0_en0[63:32], 
   upd1_en0[63:32], 
   free_en[63:32],,,,passe_en[63:32]);
@@ -1000,20 +996,16 @@ module stq(
   ~st_stall & WLN0_en,
   ~WLN0_WQ[0] ? WLN0_WQ[5:1] : WLN1_WQ[5:1],
   {WLN0_adata0,WLN0_en0},
-  {WLN0_adataN0,WLN0_enN0},
   (~WLN0_WQ[0] ? WNL0_en:WNL1_en) & ~aStall & ~aDoStall,
   ~WLN0_WQ[0] ? WNL0_WQ[5:1] : WNL1_WQ[5:1],
-  ~WNL0_WQ[0] ? {WNL0_adata,WNL0_en} : {WNL1_adata,WNL1_en},
-  ~WNL0_WQ[0] ? ~{WNL0_adata,WNL0_en} : ~{WNL1_adata,WNL1_en}
+  ~WNL0_WQ[0] ? {WNL0_adata,WNL0_en} : {WNL1_adata,WNL1_en}
   );
 
   assign WLN0_adata=~WLN0_WQ[0] ? WLN0_adata0 : WLN1_adata0;
-  assign WLN0_adataN=~WLN0_WQ[0] ? WLN0_adataN0 : WLN1_adataN0;
   assign WLN0_en=~WLN0_WQ[0] ? WLN0_en0 & upd[WLN0_WQ] & mask2[WLN0_WQ] && ret_II==WLN0_adata[`lsaddr_II+4] && 
 	  ~ret_xbreak[WLN0_adata[-6+`lsaddr_II]] :
 	  WLN1_en0 & upd[WLN1_WQ] & mask2[WLN1_WQ] && ret_II==WLN1_adata[`lsaddr_II+4] && ~ret_xbreak[WLN1_adata[-6+`lsaddr_II]];
   assign WLN1_adata=WLN0_WQ[0] ? WLN0_adata0 : WLN1_adata0;
-  assign WLN1_adataN=WLN0_WQ[0] ? WLN0_adataN0 : WLN1_adataN0;
   assign WLN1_en=WLN0_WQ[0] ? WLN0_en0 & upd[WLN0_WQ] & mask2[WLN0_WQ] && ret_II==WLN0_adata[`lsaddr_II+4] && 
 	  ~ret_xbreak[WLN0_adata[-6+`lsaddr_II]] :
 	  WLN1_en0 & upd[WLN1_WQ] & mask2[WLN1_WQ] && ret_II==WLN1_adata[`lsaddr_II+4] && ~ret_xbreak[WLN1_adata[-6+`lsaddr_II]];
@@ -1023,12 +1015,10 @@ module stq(
   rst,
   ~st_stall & WLN0_en,
   ~WLN0_WQ[0] ? WLN1_WQ[5:1] : WLN0_WQ[5:1],
-  {WLN1_adata1,WLN1_en1},
-  {WLN1_adataN1,WLN1_enN1},
+  {WLN1_adata0,WLN1_en0},
   (~WLN0_WQ[0] ? WNL1_en:WNL0_en) & ~aStall & ~aDoStall,
   ~WNL0_WQ[0] ? WNL1_WQ[5:1] : WNL0_WQ[5:1],
-  ~WNL0_WQ[0]  ? {WNL1_adata,WNL1_en} : {WNL0_adata,WNL0_en},
-  ~WNL0_WQ[0]  ? ~{WNL1_adata,WNL1_en} : ~{WNL0_adata,WNL0_en}
+  ~WNL0_WQ[0]  ? {WNL1_adata,WNL1_en} : {WNL0_adata,WNL0_en}
   );
   
   stq_adata bgn_mod(
