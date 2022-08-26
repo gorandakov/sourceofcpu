@@ -1614,10 +1614,6 @@ module backend(
   wire [8:0][DATA_WIDTH-1:0] dataB;
   wire [2:0][DATA_WIDTH-1:0] WdataA;
   wire [2:0][DATA_WIDTH-1:0] WdataB;
-  wire [8:0][DATA_WIDTH-1:0] dataAN;
-  wire [8:0][DATA_WIDTH-1:0] dataBN;
-  wire [2:0][DATA_WIDTH-1:0] WdataAN;
-  wire [2:0][DATA_WIDTH-1:0] WdataBN;
   wire [8:0] inflA;
   wire [8:0] inflB;
   wire [2:0] WinflA;
@@ -1659,30 +1655,15 @@ module backend(
   wire [8:0][SIMD_WIDTH-1:0] dataBFH;
   wire [8:0][16+SIMD_WIDTH-1:0] dataBFL;
 
-  wire [8:0][SIMD_WIDTH-1:0] dataAVHN;
-  wire [8:0][SIMD_WIDTH-1:0] dataAVLN;
-  wire [8:0][SIMD_WIDTH-1:0] dataAFHN;
-  wire [8:0][16+SIMD_WIDTH-1:0] dataAFLN;
-
-  wire [8:0][SIMD_WIDTH-1:0] dataBVHN;
-  wire [8:0][SIMD_WIDTH-1:0] dataBVLN;
-  wire [8:0][SIMD_WIDTH-1:0] dataBFHN;
-  wire [8:0][16+SIMD_WIDTH-1:0] dataBFLN;
-
   wire [2:0][SIMD_WIDTH-1:0] WdataAVH;
   wire [2:0][SIMD_WIDTH-1:0] WdataAVL;
   wire [2:0][SIMD_WIDTH-1:0] WdataAFH;
   wire [2:0][16+SIMD_WIDTH-1:0] WdataAFL;
 
-  wire [2:0][SIMD_WIDTH-1:0] WdataAVHN;
-  wire [2:0][SIMD_WIDTH-1:0] WdataAVLN;
-  wire [2:0][SIMD_WIDTH-1:0] WdataAFHN;
-  wire [2:0][16+SIMD_WIDTH-1:0] WdataAFLN;
-
-  wire [2:0][SIMD_WIDTH-1:0] WdataBVHN;
-  wire [2:0][SIMD_WIDTH-1:0] WdataBVLN;
-  wire [2:0][SIMD_WIDTH-1:0] WdataBFHN;
-  wire [2:0][16+SIMD_WIDTH-1:0] WdataBFLN;
+  wire [2:0][SIMD_WIDTH-1:0] WdataBVH;
+  wire [2:0][SIMD_WIDTH-1:0] WdataBVL;
+  wire [2:0][SIMD_WIDTH-1:0] WdataBFH;
+  wire [2:0][16+SIMD_WIDTH-1:0] WdataBFL;
 
   wire [8:0][DATA_WIDTH-1:0] ret_dataA;
   wire [8:0][DATA_WIDTH-1:0] ret_dataB;
@@ -1696,19 +1677,6 @@ module backend(
   wire [8:0][SIMD_WIDTH-1:0] ret_dataBVL;
   wire [8:0][SIMD_WIDTH-1:0] ret_dataBFH;
   wire [8:0][16+SIMD_WIDTH-1:0] ret_dataBFL;
-
-  wire [8:0][DATA_WIDTH-1:0] ret_dataAN;
-  wire [8:0][DATA_WIDTH-1:0] ret_dataBN;
-  
-  wire [8:0][SIMD_WIDTH-1:0] ret_dataAVHN;
-  wire [8:0][SIMD_WIDTH-1:0] ret_dataAVLN;
-  wire [8:0][SIMD_WIDTH-1:0] ret_dataAFHN;
-  wire [8:0][16+SIMD_WIDTH-1:0] ret_dataAFLN;
-
-  wire [8:0][SIMD_WIDTH-1:0] ret_dataBVHN;
-  wire [8:0][SIMD_WIDTH-1:0] ret_dataBVLN;
-  wire [8:0][SIMD_WIDTH-1:0] ret_dataBFHN;
-  wire [8:0][16+SIMD_WIDTH-1:0] ret_dataBFLN;
 
   wire [8:0] depA;
   wire [8:0] depB;
@@ -1752,18 +1720,6 @@ module backend(
   wire [5:0][16+SIMD_WIDTH-1:0] outDataBFL;
   wire [8:0][64:0] outDataC;
   wire [8:0][5:0] outDataS;
-  wire [8:0][DATA_WIDTH-1:0] outDataAN;
-  wire [8:0][DATA_WIDTH-1:0] outDataBN;
-  wire [5:0][SIMD_WIDTH-1:0] outDataAVHN;
-  wire [5:0][SIMD_WIDTH-1:0] outDataBVHN;
-  wire [5:0][SIMD_WIDTH-1:0] outDataAVLN;
-  wire [5:0][SIMD_WIDTH-1:0] outDataBVLN;
-  wire [5:0][SIMD_WIDTH-1:0] outDataAFHN;
-  wire [5:0][SIMD_WIDTH-1:0] outDataBFHN;
-  wire [5:0][16+SIMD_WIDTH-1:0] outDataAFLN;
-  wire [5:0][16+SIMD_WIDTH-1:0] outDataBFLN;
-  wire [8:0][64:0] outDataCN;
-  wire [8:0][5:0] outDataSN;
   wire [8:0][REG_WIDTH-1:0] outReg;
   wire [8:0][REG_WIDTH-1:0] outRegS;
   wire [8:0][OPERATION_WIDTH-1:0] outOp;
@@ -1807,15 +1763,6 @@ module backend(
   reg [5:5][16+SIMD_WIDTH-1:0] outDataAFL_reg;
   reg [5:5][16+SIMD_WIDTH-1:0] outDataBFL_reg;
   
-  reg [5:5][SIMD_WIDTH-1:0] outDataAVHN_reg;
-  reg [5:5][SIMD_WIDTH-1:0] outDataBVHN_reg;
-  reg [5:5][SIMD_WIDTH-1:0] outDataAVLN_reg;
-  reg [5:5][SIMD_WIDTH-1:0] outDataBVLN_reg;
-  reg [5:5][SIMD_WIDTH-1:0] outDataAFHN_reg;
-  reg [5:5][SIMD_WIDTH-1:0] outDataBFHN_reg;
-  reg [5:5][16+SIMD_WIDTH-1:0] outDataAFLN_reg;
-  reg [5:5][16+SIMD_WIDTH-1:0] outDataBFLN_reg;
-  
   reg [3:0] fuFwdA_reg[8:0];
   reg [3:0] fuFwdB_reg[8:0];
   reg [3:0] fuFwdA_reg2[8:0];
@@ -1835,9 +1782,6 @@ module backend(
   wire [1:0][DATA_WIDTH-1:0] WoutDataA;
   wire [1:0][DATA_WIDTH-1:0] WoutDataB;
   wire [1:0][CONST_WIDTH-1:0] WoutDataC;
-  wire [1:0][DATA_WIDTH-1:0] WoutDataAN;
-  wire [1:0][DATA_WIDTH-1:0] WoutDataBN;
-  wire [1:0][CONST_WIDTH-1:0] WoutDataCN;
   wire [1:0][OPERATION_WIDTH-1:0] WoutOp;
   wire [1:0][9:0] WoutII;
   wire [1:0][5:0] WoutWQ;
@@ -1857,7 +1801,6 @@ module backend(
   
   
   wire [1:0][DATA_WIDTH-1:0] WDoutData;
-  wire [1:0][DATA_WIDTH-1:0] WDoutDataN;
   wire [1:0][OPERATION_WIDTH-1:0] WDoutOp;
   reg [1:0][OPERATION_WIDTH-1:0] WDoutOp_reg;
   reg [1:0][OPERATION_WIDTH-1:0] WDoutOp_reg2;
@@ -1879,10 +1822,6 @@ module backend(
   wire [1:0][SIMD_WIDTH-1:0] WDoutDataVL;
   wire [1:0][SIMD_WIDTH-1:0] WDoutDataFH;
   wire [1:0][16+SIMD_WIDTH-1:0] WDoutDataFL;
-  wire [1:0][SIMD_WIDTH-1:0] WDoutDataVHN;
-  wire [1:0][SIMD_WIDTH-1:0] WDoutDataVLN;
-  wire [1:0][SIMD_WIDTH-1:0] WDoutDataFHN;
-  wire [1:0][16+SIMD_WIDTH-1:0] WDoutDataFLN;
   
   wire [1:0][DATA_WIDTH-1:0] WDfxData;
   reg  [DATA_WIDTH-1:0] WDfxData_reg[1:0];
@@ -1893,14 +1832,6 @@ module backend(
   wire [1:0][SIMD_WIDTH-1:0] WDfxDataFH;
   wire [1:0][16+SIMD_WIDTH-1:0] WDfxDataFL;
   wire [1:0][OPERATION_WIDTH-1:0] WDfxOp;
-  wire [1:0][DATA_WIDTH-1:0] WDfxDataN;
-  reg  [DATA_WIDTH-1:0] WDfxDataN_reg[1:0];
-  reg  [DATA_WIDTH-1:0] WDfxDataN_reg2[1:0];
-  reg  [DATA_WIDTH-1:0] WDfxDataN_reg3[1:0];
-  wire [1:0][SIMD_WIDTH-1:0] WDfxDataVHN;
-  wire [1:0][SIMD_WIDTH-1:0] WDfxDataVLN;
-  wire [1:0][SIMD_WIDTH-1:0] WDfxDataFHN;
-  wire [1:0][16+SIMD_WIDTH-1:0] WDfxDataFLN;
   wire [1:0][9:0] WDfxII;
   reg [9:0] WDfxII_reg[1:0];
   reg [9:0] WDfxII_reg2[1:0];
@@ -1993,9 +1924,7 @@ module backend(
   wire [3:0] dc_rdEn; 
   wire [3:0] dc_rsEn; 
   wire [3:0][127+8:0] dc_rdataA;
-  wire [3:0][127+8:0] dc_rdataAN;
   wire [3:0][127+8:0] dc_rdat;
-  wire [3:0][127+8:0] dc_rdatN;
   wire [3:0][1:0] dc_pdataA;
   wire [3:0][1:0] dc_pdat;
   reg [3:0][1:0] dc_pdataA_reg;
@@ -2006,8 +1935,6 @@ module backend(
 
   reg [127+8:0] dc_rdataA_reg[3:0];
   reg [127+8:0] dc_rdataA_reg2[3:0];
-  reg [127+8:0] dc_rdataAN_reg[3:0];
-  reg [127+8:0] dc_rdataAN_reg2[3:0];
   
   reg [3:0] dc_rdEn_reg; 
   reg [3:0] dc_rdEn_reg2; 
@@ -2019,8 +1946,6 @@ module backend(
 
   wire [1:0][PADDR_WIDTH-9:0] dc_wrAddrE;
   wire [1:0][PADDR_WIDTH-9:0] dc_wrAddrO;
-  wire [1:0][PADDR_WIDTH-9:0] dc_wrAddrEN;
-  wire [1:0][PADDR_WIDTH-9:0] dc_wrAddrON;
   wire [1:0][31:0] dc_wrBanks;
   wire [1:0] dc_wrEn; 
   reg [1:0] dc_wrEn_reg; 
@@ -2029,7 +1954,8 @@ module backend(
   wire [1:0] dc_odd_wr;
   wire [1:0] dc_split_wr;
   wire [1:0][5*32-1:0] dc_wdata;
-  wire [1:0][5*32-1:0] dc_wdataN;
+  wire [1:0][4*32-1:0] dc_wdataP;
+  reg [4*32-1:0] dc_wdataP_reg[1:0];
   wire [1:0][4:0] dc_wrBegin;
   wire [1:0][4:0] dc_size_wr;
   wire [1:0][1:0] dc_wrHitCl;
@@ -2051,22 +1977,16 @@ module backend(
   wire [5:0] p_repl;
   wire [3:0] p_lsfwd;
   wire [127+8:0]p2_data;
-  wire [127+8:0]p2_dataN;
   wire [1:0]    p2_pdata;
   wire    [4:0] p2_brdbanks;
   wire [127+8:0]p3_data;
-  wire [127+8:0]p3_dataN;
   wire [1:0]    p3_pdata;
   wire    [4:0] p3_brdbanks;
   wire [3:0][13:0] p_ret;
   reg [127+8:0]p2_data_reg;
   reg [127+8:0]p2_data_reg2;
-  reg [127+8:0]p2_dataN_reg;
-  reg [127+8:0]p2_dataN_reg2;
   reg [127+8:0]p3_data_reg;
   reg [127+8:0]p3_data_reg2;
-  reg [127+8:0]p3_dataN_reg;
-  reg [127+8:0]p3_dataN_reg2;
   reg [1:0]  p2_pdata_reg;
   reg [1:0]  p2_pdata_reg2;
   reg [1:0]  p3_pdata_reg;
@@ -2099,13 +2019,9 @@ module backend(
 
   wire [SIMD_WIDTH-1:0]    sqrDatH;
   wire [SIMD_WIDTH-1+16:0] sqrDatL;
-  wire [SIMD_WIDTH-1:0]    sqrDatNH;
-  wire [SIMD_WIDTH-1+16:0] sqrDatNL;
   wire [3:0]               sqrDatEn;
   reg  [SIMD_WIDTH-1:0]    sqrDatH_reg;
   reg  [SIMD_WIDTH-1+16:0] sqrDatL_reg;
-  reg  [SIMD_WIDTH-1:0]    sqrDatNH_reg;
-  reg  [SIMD_WIDTH-1+16:0] sqrDatNL_reg;
   reg                      sqrDatEn_reg;
 //  wire [3:0][47:0] wxdata;
 
@@ -2790,23 +2706,23 @@ module backend(
   .read_clkEn(~doStall),
   .retire_clkEn(1'b1),
 
-  .read0_addr(regA[0]),.read0_data(dataA[0]), .read0_dataN(dataAN[0]),
+  .read0_addr(regA[0]),.read0_data(dataA[0]),
     .read0_oe(~retA[0]|~rs_rA_use[0]),.read0_match(gazumpAG[0]),
-  .read1_addr(regA[1]),.read1_data(dataA[1]), .read1_dataN(dataAN[1]),
+  .read1_addr(regA[1]),.read1_data(dataA[1]),
     .read1_oe(~retA[1]|~rs_rA_use[1]),.read1_match(gazumpAG[1]),
-  .read2_addr(regA[2]),.read2_data(dataA[2]), .read2_dataN(dataAN[2]),
+  .read2_addr(regA[2]),.read2_data(dataA[2]),
     .read2_oe(~retA[2]|~rs_rA_use[2]),.read2_match(gazumpAG[2]),
-  .read3_addr(regA[3]),.read3_data(dataA[3]), .read3_dataN(dataAN[3]),
+  .read3_addr(regA[3]),.read3_data(dataA[3]),
     .read3_oe(~retA[3]|~rs_rA_use[3]),.read3_match(gazumpAG[3]),
-  .read4_addr(regA[4]),.read4_data(dataA[4]), .read4_dataN(dataAN[4]),
+  .read4_addr(regA[4]),.read4_data(dataA[4]),
     .read4_oe(~retA[4]|~rs_rA_use[4]),.read4_match(gazumpAG[4]),
-  .read5_addr(regA[5]),.read5_data(dataA[5]), .read5_dataN(dataAN[5]),
+  .read5_addr(regA[5]),.read5_data(dataA[5]),
     .read5_oe(~retA[5]|~rs_rA_use[5]),.read5_match(gazumpAG[5]),
-  .read6_addr(regA[6]),.read6_data(dataA[6]), .read6_dataN(dataAN[6]),
+  .read6_addr(regA[6]),.read6_data(dataA[6]),
     .read6_oe(~retA[6]|~rs_rA_use[6]),.read6_match(gazumpAG[6]),
-  .read7_addr(regA[7]),.read7_data(dataA[7]), .read7_dataN(dataAN[7]),
+  .read7_addr(regA[7]),.read7_data(dataA[7]),
     .read7_oe(~retA[7]|~rs_rA_use[7]),.read7_match(gazumpAG[7]),
-  .read8_addr(regA[8]),.read8_data(dataA[8]), .read8_dataN(dataAN[8]),
+  .read8_addr(regA[8]),.read8_data(dataA[8]),
     .read8_oe(~retA[8]|~rs_rA_use[8]),.read8_match(gazumpAG[8]),
 
   .read0_constEn(~rs_rA_use[0]),
@@ -2860,23 +2776,23 @@ module backend(
   .read0_match(),.read1_match(),.read2_match(),
   .read3_match(),.read4_match(),.read5_match(),
   .read6_match(),.read7_match(),.read8_match(),
-  .read0_addr(regAF_reg[0]),.read0_data(dataAVH[0]), .read0_dataN(dataAVHN[0]),
+  .read0_addr(regAF_reg[0]),.read0_data(dataAVH[0]),
     .read0_oe(~retAF_reg[0]|~rs_rA_useF_reg[0]),
-  .read1_addr(regAF_reg[1]),.read1_data(dataAVH[1]), .read1_dataN(dataAVHN[1]),
+  .read1_addr(regAF_reg[1]),.read1_data(dataAVH[1]),
     .read1_oe(~retAF_reg[1]|~rs_rA_useF_reg[1]),
-  .read2_addr(regAF_reg[2]),.read2_data(dataAVH[2]), .read2_dataN(dataAVHN[2]),
+  .read2_addr(regAF_reg[2]),.read2_data(dataAVH[2]),
     .read2_oe(~retAF_reg[2]|~rs_rA_useF_reg[2]),
-  .read3_addr(regAF_reg[3]),.read3_data(dataAVH[3]), .read3_dataN(dataAVHN[3]),
+  .read3_addr(regAF_reg[3]),.read3_data(dataAVH[3]),
     .read3_oe(~retAF_reg[3]|~rs_rA_useF_reg[1]),
-  .read4_addr(regAF_reg[4]),.read4_data(dataAVH[4]), .read4_dataN(dataAVHN[4]),
+  .read4_addr(regAF_reg[4]),.read4_data(dataAVH[4]),
     .read4_oe(~retAF_reg[4]|~rs_rA_useF_reg[4]),
-  .read5_addr(regAF_reg[5]),.read5_data(dataAVH[5]), .read5_dataN(dataAVHN[5]),
+  .read5_addr(regAF_reg[5]),.read5_data(dataAVH[5]),
     .read5_oe(~retAF_reg[5]|~rs_rA_useF_reg[5]),
-  .read6_addr(regAF_reg[6]),.read6_data(dataAVH[6]), .read6_dataN(dataAVHN[6]),
+  .read6_addr(regAF_reg[6]),.read6_data(dataAVH[6]),
     .read6_oe(~retAF_reg[6]|~rs_rA_useF_reg[6]),
-  .read7_addr(regAF_reg[7]),.read7_data(dataAVH[7]), .read7_dataN(dataAVHN[7]),
+  .read7_addr(regAF_reg[7]),.read7_data(dataAVH[7]),
     .read7_oe(~retAF_reg[7]|~rs_rA_useF_reg[7]),
-  .read8_addr(regAF_reg[8]),.read8_data(dataAVH[8]), .read8_dataN(dataAVHN[8]),
+  .read8_addr(regAF_reg[8]),.read8_data(dataAVH[8]),
     .read8_oe(~retAF_reg[8]|~rs_rA_useF_reg[8]),
 
   .read0_constEn(~rs_rA_useF_reg[0]),
@@ -2930,23 +2846,23 @@ module backend(
   .read0_match(),.read1_match(),.read2_match(),
   .read3_match(),.read4_match(),.read5_match(),
   .read6_match(),.read7_match(),.read8_match(),
-  .read0_addr(regAF_reg[0]),.read0_data(dataAVL[0]), .read0_dataN(dataAVLN[0]),
+  .read0_addr(regAF_reg[0]),.read0_data(dataAVL[0]),
     .read0_oe(~retAF_reg[0]|~rs_rA_useF_reg[0]),
-  .read1_addr(regAF_reg[1]),.read1_data(dataAVL[1]), .read1_dataN(dataAVLN[1]),
+  .read1_addr(regAF_reg[1]),.read1_data(dataAVL[1]),
     .read1_oe(~retAF_reg[1]|~rs_rA_useF_reg[1]),
-  .read2_addr(regAF_reg[2]),.read2_data(dataAVL[2]), .read2_dataN(dataAVLN[2]),
+  .read2_addr(regAF_reg[2]),.read2_data(dataAVL[2]),
     .read2_oe(~retAF_reg[2]|~rs_rA_useF_reg[2]),
-  .read3_addr(regAF_reg[3]),.read3_data(dataAVL[3]), .read3_dataN(dataAVLN[3]),
+  .read3_addr(regAF_reg[3]),.read3_data(dataAVL[3]),
     .read3_oe(~retAF_reg[3]|~rs_rA_useF_reg[3]),
-  .read4_addr(regAF_reg[4]),.read4_data(dataAVL[4]), .read4_dataN(dataAVLN[4]),
+  .read4_addr(regAF_reg[4]),.read4_data(dataAVL[4]),
     .read4_oe(~retAF_reg[4]|~rs_rA_useF_reg[4]),
-  .read5_addr(regAF_reg[5]),.read5_data(dataAVL[5]), .read5_dataN(dataAVLN[5]),
+  .read5_addr(regAF_reg[5]),.read5_data(dataAVL[5]),
     .read5_oe(~retAF_reg[5]|~rs_rA_useF_reg[5]),
-  .read6_addr(regAF_reg[6]),.read6_data(dataAVL[6]), .read6_dataN(dataAVLN[6]),
+  .read6_addr(regAF_reg[6]),.read6_data(dataAVL[6]),
     .read6_oe(~retAF_reg[6]|~rs_rA_useF_reg[6]),
-  .read7_addr(regAF_reg[7]),.read7_data(dataAVL[7]), .read7_dataN(dataAVLN[7]),
+  .read7_addr(regAF_reg[7]),.read7_data(dataAVL[7]),
     .read7_oe(~retAF_reg[7]|~rs_rA_useF_reg[7]),
-  .read8_addr(regAF_reg[8]),.read8_data(dataAVL[8]), .read8_dataN(dataAVLN[8]),
+  .read8_addr(regAF_reg[8]),.read8_data(dataAVL[8]),
     .read8_oe(~retAF_reg[8]|~rs_rA_useF_reg[8]),
 
   .read0_constEn(~rs_rA_useF_reg[0]),
@@ -3052,23 +2968,23 @@ module backend(
   .read0_match(),.read1_match(),.read2_match(),
   .read3_match(),.read4_match(),.read5_match(),
   .read6_match(),.read7_match(),.read8_match(),
-  .read0_addr(regAF_reg2[0]),.read0_data(dataAFH[0]), .read0_dataN(dataAFHN[0]),
+  .read0_addr(regAF_reg2[0]),.read0_data(dataAFH[0]),
     .read0_oe(~retAF_reg2[0]|~rs_rA_useF_reg2[0]),
-  .read1_addr(regAF_reg2[1]),.read1_data(dataAFH[1]), .read1_dataN(dataAFHN[1]),
+  .read1_addr(regAF_reg2[1]),.read1_data(dataAFH[1]),
     .read1_oe(~retAF_reg2[1]|~rs_rA_useF_reg2[1]),
-  .read2_addr(regAF_reg2[2]),.read2_data(dataAFH[2]), .read2_dataN(dataAFHN[2]),
+  .read2_addr(regAF_reg2[2]),.read2_data(dataAFH[2]),
     .read2_oe(~retAF_reg2[2]|~rs_rA_useF_reg2[2]),
-  .read3_addr(regAF_reg2[3]),.read3_data(dataAFH[3]), .read3_dataN(dataAFHN[3]),
+  .read3_addr(regAF_reg2[3]),.read3_data(dataAFH[3]),
     .read3_oe(~retAF_reg2[3]|~rs_rA_useF_reg2[3]),
-  .read4_addr(regAF_reg2[4]),.read4_data(dataAFH[4]), .read4_dataN(dataAFHN[4]),
+  .read4_addr(regAF_reg2[4]),.read4_data(dataAFH[4]),
     .read4_oe(~retAF_reg2[4]|~rs_rA_useF_reg2[4]),
-  .read5_addr(regAF_reg2[5]),.read5_data(dataAFH[5]), .read5_dataN(dataAFHN[5]),
+  .read5_addr(regAF_reg2[5]),.read5_data(dataAFH[5]),
     .read5_oe(~retAF_reg2[5]|~rs_rA_useF_reg2[5]),
-  .read6_addr(regAF_reg2[6]),.read6_data(dataAFH[6]), .read6_dataN(dataAFHN[6]),
+  .read6_addr(regAF_reg2[6]),.read6_data(dataAFH[6]),
     .read6_oe(~retAF_reg2[6]|~rs_rA_useF_reg2[6]),
-  .read7_addr(regAF_reg2[7]),.read7_data(dataAFH[7]), .read7_dataN(dataAFHN[7]),
+  .read7_addr(regAF_reg2[7]),.read7_data(dataAFH[7]),
     .read7_oe(~retAF_reg2[7]|~rs_rA_useF_reg2[7]),
-  .read8_addr(regAF_reg2[8]),.read8_data(dataAFH[8]), .read8_dataN(dataAFHN[8]),
+  .read8_addr(regAF_reg2[8]),.read8_data(dataAFH[8]),
     .read8_oe(~retAF_reg2[8]|~rs_rA_useF_reg2[8]),
 
   .read0_constEn(~rs_rA_useF_reg2[0]),
@@ -3123,23 +3039,23 @@ module backend(
   .read0_match(),.read1_match(),.read2_match(),
   .read3_match(),.read4_match(),.read5_match(),
   .read6_match(),.read7_match(),.read8_match(),
-  .read0_addr(regAF_reg2[0]),.read0_data(dataAFL[0]), .read0_dataN(dataAFLN[0]),
+  .read0_addr(regAF_reg2[0]),.read0_data(dataAFL[0]),
     .read0_oe(~retAF_reg2[0]|~rs_rA_useF_reg2[0]),
-  .read1_addr(regAF_reg2[1]),.read1_data(dataAFL[1]), .read1_dataN(dataAFLN[1]),
+  .read1_addr(regAF_reg2[1]),.read1_data(dataAFL[1]),
     .read1_oe(~retAF_reg2[1]|~rs_rA_useF_reg2[1]),
-  .read2_addr(regAF_reg2[2]),.read2_data(dataAFL[2]), .read2_dataN(dataAFLN[2]),
+  .read2_addr(regAF_reg2[2]),.read2_data(dataAFL[2]),
     .read2_oe(~retAF_reg2[2]|~rs_rA_useF_reg2[2]),
-  .read3_addr(regAF_reg2[3]),.read3_data(dataAFL[3]), .read3_dataN(dataAFLN[3]),
+  .read3_addr(regAF_reg2[3]),.read3_data(dataAFL[3]),
     .read3_oe(~retAF_reg2[3]|~rs_rA_useF_reg2[3]),
-  .read4_addr(regAF_reg2[4]),.read4_data(dataAFL[4]), .read4_dataN(dataAFLN[4]),
+  .read4_addr(regAF_reg2[4]),.read4_data(dataAFL[4]),
     .read4_oe(~retAF_reg2[4]|~rs_rA_useF_reg2[4]),
-  .read5_addr(regAF_reg2[5]),.read5_data(dataAFL[5]), .read5_dataN(dataAFLN[5]),
+  .read5_addr(regAF_reg2[5]),.read5_data(dataAFL[5]),
     .read5_oe(~retAF_reg2[5]|~rs_rA_useF_reg2[5]),
-  .read6_addr(regAF_reg2[6]),.read6_data(dataAFL[6]), .read6_dataN(dataAFLN[6]),
+  .read6_addr(regAF_reg2[6]),.read6_data(dataAFL[6]),
     .read6_oe(~retAF_reg2[6]|~rs_rA_useF_reg2[6]),
-  .read7_addr(regAF_reg2[7]),.read7_data(dataAFL[7]), .read7_dataN(dataAFLN[7]),
+  .read7_addr(regAF_reg2[7]),.read7_data(dataAFL[7]),
     .read7_oe(~retAF_reg2[7]|~rs_rA_useF_reg2[7]),
-  .read8_addr(regAF_reg2[8]),.read8_data(dataAFL[8]), .read8_dataN(dataAFLN[8]),
+  .read8_addr(regAF_reg2[8]),.read8_data(dataAFL[8]),
     .read8_oe(~retAF_reg2[8]|~rs_rA_useF_reg2[8]),
 
   .read0_constEn(~rs_rA_useF_reg2[0]),
@@ -3359,23 +3275,23 @@ module backend(
   .read_clkEn(~doStall),
   .retire_clkEn(1'b1),
 
-  .read0_addr(regB[0]),.read0_data(dataB[0]), .read0_dataN(dataBN[0]),
+  .read0_addr(regB[0]),.read0_data(dataB[0]),
     .read0_oe(~retB[0]|rs0i0_useBConst_reg|~rs_rB_use[0]),.read0_match(gazumpBG[0]),
-  .read1_addr(regB[1]),.read1_data(dataB[1]), .read1_dataN(dataBN[1]),
+  .read1_addr(regB[1]),.read1_data(dataB[1]),
     .read1_oe(~retB[1]|rs0i1_useBConst_reg|~rs_rB_use[1]),.read1_match(gazumpBG[1]),
-  .read2_addr(regB[2]),.read2_data(dataB[2]), .read2_dataN(dataBN[2]),
+  .read2_addr(regB[2]),.read2_data(dataB[2]),
     .read2_oe(~retB[2]|rs0i2_useBConst_reg|~rs_rB_use[2]),.read2_match(gazumpBG[2]),
-  .read3_addr(regB[3]),.read3_data(dataB[3]), .read3_dataN(dataBN[3]),
+  .read3_addr(regB[3]),.read3_data(dataB[3]),
     .read3_oe(~retB[3]|rs1i0_useBConst_reg|~rs_rB_use[3]),.read3_match(gazumpBG[3]),
-  .read4_addr(regB[4]),.read4_data(dataB[4]), .read4_dataN(dataBN[4]),
+  .read4_addr(regB[4]),.read4_data(dataB[4]),
     .read4_oe(~retB[4]|rs1i1_useBConst_reg|~rs_rB_use[4]),.read4_match(gazumpBG[4]),
-  .read5_addr(regB[5]),.read5_data(dataB[5]), .read5_dataN(dataBN[5]),
+  .read5_addr(regB[5]),.read5_data(dataB[5]),
     .read5_oe(~retB[5]|rs1i2_useBConst_reg|~rs_rB_use[5]),.read5_match(gazumpBG[5]),
-  .read6_addr(regB[6]),.read6_data(dataB[6]), .read6_dataN(dataBN[6]),
+  .read6_addr(regB[6]),.read6_data(dataB[6]),
     .read6_oe(~retB[6]|rs2i0_useBConst_reg|~rs_rB_use[6]),.read6_match(gazumpBG[6]),
-  .read7_addr(regB[7]),.read7_data(dataB[7]), .read7_dataN(dataBN[7]),
+  .read7_addr(regB[7]),.read7_data(dataB[7]),
     .read7_oe(~retB[7]|rs2i1_useBConst_reg|~rs_rB_use[7]),.read7_match(gazumpBG[7]),
-  .read8_addr(regB[8]),.read8_data(dataB[8]), .read8_dataN(dataBN[8]),
+  .read8_addr(regB[8]),.read8_data(dataB[8]),
     .read8_oe(~retB[8]|rs2i2_useBConst_reg|~rs_rB_use[8]),.read8_match(gazumpBG[8]),
 
   .read0_constEn(rs0i0_useBConst_reg|~rs_rB_use[0]),
@@ -3429,23 +3345,23 @@ module backend(
   .read0_match(),.read1_match(),.read2_match(),
   .read3_match(),.read4_match(),.read5_match(),
   .read6_match(),.read7_match(),.read8_match(),
-  .read0_addr(regBF_reg[0]),.read0_data(dataBVH[0]), .read0_dataN(dataBVHN[0]),
+  .read0_addr(regBF_reg[0]),.read0_data(dataBVH[0]),
     .read0_oe(~retBF_reg[0]|~rs_rB_useF_reg[0]),
-  .read1_addr(regBF_reg[1]),.read1_data(dataBVH[1]), .read1_dataN(dataBVHN[1]),
+  .read1_addr(regBF_reg[1]),.read1_data(dataBVH[1]),
     .read1_oe(~retBF_reg[1]|~rs_rB_useF_reg[1]),
-  .read2_addr(regBF_reg[2]),.read2_data(dataBVH[2]), .read2_dataN(dataBVHN[2]),
+  .read2_addr(regBF_reg[2]),.read2_data(dataBVH[2]),
     .read2_oe(~retBF_reg[2]|~rs_rB_useF_reg[2]),
-  .read3_addr(regBF_reg[3]),.read3_data(dataBVH[3]), .read3_dataN(dataBVHN[3]),
+  .read3_addr(regBF_reg[3]),.read3_data(dataBVH[3]),
     .read3_oe(~retBF_reg[3]|~rs_rB_useF_reg[3]),
-  .read4_addr(regBF_reg[4]),.read4_data(dataBVH[4]), .read4_dataN(dataBVHN[4]),
+  .read4_addr(regBF_reg[4]),.read4_data(dataBVH[4]),
     .read4_oe(~retBF_reg[4]|~rs_rB_useF_reg[4]),
-  .read5_addr(regBF_reg[5]),.read5_data(dataBVH[5]), .read5_dataN(dataBVHN[5]),
+  .read5_addr(regBF_reg[5]),.read5_data(dataBVH[5]),
     .read5_oe(~retBF_reg[5]|~rs_rB_useF_reg[5]),
-  .read6_addr(regBF_reg[6]),.read6_data(dataBVH[6]), .read6_dataN(dataBVHN[6]),
+  .read6_addr(regBF_reg[6]),.read6_data(dataBVH[6]),
     .read6_oe(~retBF_reg[6]|~rs_rB_useF_reg[6]),
-  .read7_addr(regBF_reg[7]),.read7_data(dataBVH[7]), .read7_dataN(dataBVHN[7]),
+  .read7_addr(regBF_reg[7]),.read7_data(dataBVH[7]),
     .read7_oe(~retBF_reg[7]|~rs_rB_useF_reg[7]),
-  .read8_addr(regBF_reg[8]),.read8_data(dataBVH[8]), .read8_dataN(dataBVHN[8]),
+  .read8_addr(regBF_reg[8]),.read8_data(dataBVH[8]),
     .read8_oe(~retBF_reg[8]|~rs_rB_useF_reg[8]),
 
   .read0_constEn(~rs_rB_useF_reg[0]),
@@ -3499,23 +3415,23 @@ module backend(
   .read0_match(),.read1_match(),.read2_match(),
   .read3_match(),.read4_match(),.read5_match(),
   .read6_match(),.read7_match(),.read8_match(),
-  .read0_addr(regBF_reg[0]),.read0_data(dataBVL[0]), .read0_dataN(dataBVLN[0]),
+  .read0_addr(regBF_reg[0]),.read0_data(dataBVL[0]),
     .read0_oe(~retBF_reg[0]|~rs_rB_useF_reg[0]),
-  .read1_addr(regBF_reg[1]),.read1_data(dataBVL[1]), .read1_dataN(dataBVLN[1]),
+  .read1_addr(regBF_reg[1]),.read1_data(dataBVL[1]),
     .read1_oe(~retBF_reg[1]|~rs_rB_useF_reg[1]),
-  .read2_addr(regBF_reg[2]),.read2_data(dataBVL[2]), .read2_dataN(dataBVLN[2]),
+  .read2_addr(regBF_reg[2]),.read2_data(dataBVL[2]),
     .read2_oe(~retBF_reg[2]|~rs_rB_useF_reg[2]),
-  .read3_addr(regBF_reg[3]),.read3_data(dataBVL[3]), .read3_dataN(dataBVLN[3]),
+  .read3_addr(regBF_reg[3]),.read3_data(dataBVL[3]),
     .read3_oe(~retBF_reg[3]|~rs_rB_useF_reg[3]),
-  .read4_addr(regBF_reg[4]),.read4_data(dataBVL[4]), .read4_dataN(dataBVLN[4]),
+  .read4_addr(regBF_reg[4]),.read4_data(dataBVL[4]),
     .read4_oe(~retBF_reg[4]|~rs_rB_useF_reg[4]),
-  .read5_addr(regBF_reg[5]),.read5_data(dataBVL[5]), .read5_dataN(dataBVLN[5]),
+  .read5_addr(regBF_reg[5]),.read5_data(dataBVL[5]),
     .read5_oe(~retBF_reg[5]|~rs_rB_useF_reg[5]),
-  .read6_addr(regBFW_reg[2]),.read6_data(dataBVL[6]), .read6_dataN(dataBVLN[6]),
+  .read6_addr(regBFW_reg[2]),.read6_data(dataBVL[6]),
     .read6_oe(~retBF_reg[6]|~rs_rB_useF_reg[6]),
-  .read7_addr(regBF_reg[7]),.read7_data(dataBVL[7]), .read7_dataN(dataBVLN[7]),
+  .read7_addr(regBF_reg[7]),.read7_data(dataBVL[7]),
     .read7_oe(~retBF_reg[7]|~rs_rB_useF_reg[7]),
-  .read8_addr(regBF_reg[8]),.read8_data(dataBVL[8]), .read8_dataN(dataBVLN[8]),
+  .read8_addr(regBF_reg[8]),.read8_data(dataBVL[8]),
     .read8_oe(~retBF_reg[8]|~rs_rB_useF_reg[8]),
 
   .read0_constEn(~rs_rB_useF_reg[0]),
@@ -3621,23 +3537,23 @@ module backend(
   .read0_match(),.read1_match(),.read2_match(),
   .read3_match(),.read4_match(),.read5_match(),
   .read6_match(),.read7_match(),.read8_match(),
-  .read0_addr(regBF_reg2[0]),.read0_data(dataBFH[0]), .read0_dataN(dataBFHN[0]),
+  .read0_addr(regBF_reg2[0]),.read0_data(dataBFH[0]),
     .read0_oe(~retBF_reg2[0]|~rs_rB_useF_reg2[0]),
-  .read1_addr(regBF_reg2[1]),.read1_data(dataBFH[1]), .read1_dataN(dataBFHN[1]),
+  .read1_addr(regBF_reg2[1]),.read1_data(dataBFH[1]),
     .read1_oe(~retBF_reg2[1]|~rs_rB_useF_reg2[1]),
-  .read2_addr(regBF_reg2[2]),.read2_data(dataBFH[2]), .read2_dataN(dataBFHN[2]),
+  .read2_addr(regBF_reg2[2]),.read2_data(dataBFH[2]),
     .read2_oe(~retBF_reg2[2]|~rs_rB_useF_reg2[2]),
-  .read3_addr(regBF_reg2[3]),.read3_data(dataBFH[3]), .read3_dataN(dataBFHN[3]),
+  .read3_addr(regBF_reg2[3]),.read3_data(dataBFH[3]),
     .read3_oe(~retBF_reg2[3]|~rs_rB_useF_reg2[3]),
-  .read4_addr(regBF_reg2[4]),.read4_data(dataBFH[4]), .read4_dataN(dataBFHN[4]),
+  .read4_addr(regBF_reg2[4]),.read4_data(dataBFH[4]),
     .read4_oe(~retBF_reg2[4]|~rs_rB_useF_reg2[4]),
-  .read5_addr(regBF_reg2[5]),.read5_data(dataBFH[5]), .read5_dataN(dataBFHN[5]),
+  .read5_addr(regBF_reg2[5]),.read5_data(dataBFH[5]),
     .read5_oe(~retBF_reg2[5]|~rs_rB_useF_reg2[5]),
-  .read6_addr(regBF_reg2[6]),.read6_data(dataBFH[6]), .read6_dataN(dataBFHN[6]),
+  .read6_addr(regBF_reg2[6]),.read6_data(dataBFH[6]),
     .read6_oe(~retBF_reg2[6]|~rs_rB_useF_reg2[6]),
-  .read7_addr(regBF_reg2[7]),.read7_data(dataBFH[7]), .read7_dataN(dataBFHN[7]),
+  .read7_addr(regBF_reg2[7]),.read7_data(dataBFH[7]),
     .read7_oe(~retBF_reg2[7]|~rs_rB_useF_reg2[7]),
-  .read8_addr(regBF_reg2[8]),.read8_data(dataBFH[8]), .read8_dataN(dataBFHN[8]),
+  .read8_addr(regBF_reg2[8]),.read8_data(dataBFH[8]),
     .read8_oe(~retBF_reg2[8]|~rs_rB_useF_reg2[8]),
 
   .read0_constEn(~rs_rB_useF_reg2[0]),
@@ -3691,23 +3607,23 @@ module backend(
   .read0_match(),.read1_match(),.read2_match(),
   .read3_match(),.read4_match(),.read5_match(),
   .read6_match(),.read7_match(),.read8_match(),
-  .read0_addr(regBF_reg2[0]),.read0_data(dataBFL[0]), .read0_dataN(dataBFLN[0]),
+  .read0_addr(regBF_reg2[0]),.read0_data(dataBFL[0]),
     .read0_oe(~retBF_reg2[0]|~rs_rB_useF_reg2[0]),
-  .read1_addr(regBF_reg2[1]),.read1_data(dataBFL[1]), .read1_dataN(dataBFLN[1]),
+  .read1_addr(regBF_reg2[1]),.read1_data(dataBFL[1]),
     .read1_oe(~retBF_reg2[1]|~rs_rB_useF_reg2[1]),
-  .read2_addr(regBF_reg2[2]),.read2_data(dataBFL[2]), .read2_dataN(dataBFLN[2]),
+  .read2_addr(regBF_reg2[2]),.read2_data(dataBFL[2]),
     .read2_oe(~retBF_reg2[2]|~rs_rB_useF_reg2[2]),
-  .read3_addr(regBF_reg2[3]),.read3_data(dataBFL[3]), .read3_dataN(dataBFLN[3]),
+  .read3_addr(regBF_reg2[3]),.read3_data(dataBFL[3]),
     .read3_oe(~retBF_reg2[3]|~rs_rB_useF_reg2[3]),
-  .read4_addr(regBF_reg2[4]),.read4_data(dataBFL[4]), .read4_dataN(dataBFLN[4]),
+  .read4_addr(regBF_reg2[4]),.read4_data(dataBFL[4]),
     .read4_oe(~retBF_reg2[4]|~rs_rB_useF_reg2[4]),
-  .read5_addr(regBF_reg2[5]),.read5_data(dataBFL[5]), .read5_dataN(dataBFLN[5]),
+  .read5_addr(regBF_reg2[5]),.read5_data(dataBFL[5]),
     .read5_oe(~retBF_reg2[5]|~rs_rB_useF_reg2[5]),
-  .read6_addr(regBF_reg2[6]),.read6_data(dataBFL[6]), .read6_dataN(dataBFLN[6]),
+  .read6_addr(regBF_reg2[6]),.read6_data(dataBFL[6]),
     .read6_oe(~retBF_reg2[6]|~rs_rB_useF_reg2[6]),
-  .read7_addr(regBF_reg2[7]),.read7_data(dataBFL[7]), .read7_dataN(dataBFLN[7]),
+  .read7_addr(regBF_reg2[7]),.read7_data(dataBFL[7]),
     .read7_oe(~retBF_reg2[7]|~rs_rB_useF_reg2[7]),
-  .read8_addr(regBF_reg2[8]),.read8_data(dataBFL[8]), .read8_dataN(dataBFLN[8]),
+  .read8_addr(regBF_reg2[8]),.read8_data(dataBFL[8]),
     .read8_oe(~retBF_reg2[8]|~rs_rB_useF_reg2[8]),
 
   .read0_constEn(~rs_rB_useF_reg2[0]),
@@ -3951,15 +3867,15 @@ module backend(
   .clk(clk),
   .rst(rst),
   .read_clkEn(~doStall),
-  .read0_addr(rs0i0_rA_reg),.read0_data(dataA[0]), .read0_dataN(dataAN[0]),.read0_oe(retA[0]&rs_rA_use[0]),
-  .read1_addr(rs0i1_rA_reg),.read1_data(dataA[1]), .read1_dataN(dataAN[1]),.read1_oe(retA[1]&rs_rA_use[1]),
-  .read2_addr(rs0i2_rA_reg),.read2_data(dataA[2]), .read2_dataN(dataAN[2]),.read2_oe(retA[2]&rs_rA_use[2]),
-  .read3_addr(rs1i0_rA_reg),.read3_data(dataA[3]), .read3_dataN(dataAN[3]),.read3_oe(retA[3]&rs_rA_use[3]),
-  .read4_addr(rs1i1_rA_reg),.read4_data(dataA[4]), .read4_dataN(dataAN[4]),.read4_oe(retA[4]&rs_rA_use[4]),
-  .read5_addr(rs1i2_rA_reg),.read5_data(dataA[5]), .read5_dataN(dataAN[5]),.read5_oe(retA[5]&rs_rA_use[5]),
-  .read6_addr(rs2i0_rA_reg),.read6_data(dataA[6]), .read6_dataN(dataAN[6]),.read6_oe(retA[6]&rs_rA_use[6]),
-  .read7_addr(rs2i1_rA_reg),.read7_data(dataA[7]), .read7_dataN(dataAN[7]),.read7_oe(retA[7]&rs_rA_use[7]),
-  .read8_addr(rs2i2_rA_reg),.read8_data(dataA[8]), .read8_dataN(dataAN[8]),.read8_oe(retA[8]&rs_rA_use[8]),
+  .read0_addr(rs0i0_rA_reg),.read0_data(dataA[0]),.read0_oe(retA[0]&rs_rA_use[0]),
+  .read1_addr(rs0i1_rA_reg),.read1_data(dataA[1]),.read1_oe(retA[1]&rs_rA_use[1]),
+  .read2_addr(rs0i2_rA_reg),.read2_data(dataA[2]),.read2_oe(retA[2]&rs_rA_use[2]),
+  .read3_addr(rs1i0_rA_reg),.read3_data(dataA[3]),.read3_oe(retA[3]&rs_rA_use[3]),
+  .read4_addr(rs1i1_rA_reg),.read4_data(dataA[4]),.read4_oe(retA[4]&rs_rA_use[4]),
+  .read5_addr(rs1i2_rA_reg),.read5_data(dataA[5]),.read5_oe(retA[5]&rs_rA_use[5]),
+  .read6_addr(rs2i0_rA_reg),.read6_data(dataA[6]),.read6_oe(retA[6]&rs_rA_use[6]),
+  .read7_addr(rs2i1_rA_reg),.read7_data(dataA[7]),.read7_oe(retA[7]&rs_rA_use[7]),
+  .read8_addr(rs2i2_rA_reg),.read8_data(dataA[8]),.read8_oe(retA[8]&rs_rA_use[8]),
   .write0_addr(retire0_rT),.write0_data(ret_dataA[0]),.write0_wen(retire0_enG),
   .write1_addr(retire1_rT),.write1_data(ret_dataA[1]),.write1_wen(retire1_enG),
   .write2_addr(retire2_rT),.write2_data(ret_dataA[2]),.write2_wen(retire2_enG),
@@ -3977,15 +3893,15 @@ module backend(
   .clk(clk),
   .rst(rst),
   .read_clkEn(~doStall),
-  .read0_addr(rs0i0_rA_reg2),.read0_data(dataAVH[0]), .read0_dataN(dataAVHN[0]),.read0_oe(retAF_reg[0]&rs_rA_useF_reg[0]),
-  .read1_addr(rs0i1_rA_reg2),.read1_data(dataAVH[1]), .read1_dataN(dataAVHN[1]),.read1_oe(retAF_reg[1]&rs_rA_useF_reg[1]),
-  .read2_addr(rs0i2_rA_reg2),.read2_data(dataAVH[2]), .read2_dataN(dataAVHN[2]),.read2_oe(retAF_reg[2]&rs_rA_useF_reg[2]),
-  .read3_addr(rs1i0_rA_reg2),.read3_data(dataAVH[3]), .read3_dataN(dataAVHN[3]),.read3_oe(retAF_reg[3]&rs_rA_useF_reg[3]),
-  .read4_addr(rs1i1_rA_reg2),.read4_data(dataAVH[4]), .read4_dataN(dataAVHN[4]),.read4_oe(retAF_reg[4]&rs_rA_useF_reg[4]),
-  .read5_addr(rs1i2_rA_reg2),.read5_data(dataAVH[5]), .read5_dataN(dataAVHN[5]),.read5_oe(retAF_reg[5]&rs_rA_useF_reg[5]),
-  .read6_addr(rs2i0_rA_reg2),.read6_data(dataAVH[6]), .read6_dataN(dataAVHN[6]),.read6_oe(retAF_reg[6]&rs_rA_useF_reg[6]),
-  .read7_addr(rs2i1_rA_reg2),.read7_data(dataAVH[7]), .read7_dataN(dataAVHN[7]),.read7_oe(retAF_reg[7]&rs_rA_useF_reg[7]),
-  .read8_addr(rs2i2_rA_reg2),.read8_data(dataAVH[8]), .read8_dataN(dataAVHN[8]),.read8_oe(retAF_reg[8]&rs_rA_useF_reg[8]),
+  .read0_addr(rs0i0_rA_reg2),.read0_data(dataAVH[0]),.read0_oe(retAF_reg[0]&rs_rA_useF_reg[0]),
+  .read1_addr(rs0i1_rA_reg2),.read1_data(dataAVH[1]),.read1_oe(retAF_reg[1]&rs_rA_useF_reg[1]),
+  .read2_addr(rs0i2_rA_reg2),.read2_data(dataAVH[2]),.read2_oe(retAF_reg[2]&rs_rA_useF_reg[2]),
+  .read3_addr(rs1i0_rA_reg2),.read3_data(dataAVH[3]),.read3_oe(retAF_reg[3]&rs_rA_useF_reg[3]),
+  .read4_addr(rs1i1_rA_reg2),.read4_data(dataAVH[4]),.read4_oe(retAF_reg[4]&rs_rA_useF_reg[4]),
+  .read5_addr(rs1i2_rA_reg2),.read5_data(dataAVH[5]),.read5_oe(retAF_reg[5]&rs_rA_useF_reg[5]),
+  .read6_addr(rs2i0_rA_reg2),.read6_data(dataAVH[6]),.read6_oe(retAF_reg[6]&rs_rA_useF_reg[6]),
+  .read7_addr(rs2i1_rA_reg2),.read7_data(dataAVH[7]),.read7_oe(retAF_reg[7]&rs_rA_useF_reg[7]),
+  .read8_addr(rs2i2_rA_reg2),.read8_data(dataAVH[8]),.read8_oe(retAF_reg[8]&rs_rA_useF_reg[8]),
   .write0_addr(retire0_rT),.write0_data(ret_dataAVH[0]),.write0_wen(retire0_enV),
   .write1_addr(retire1_rT),.write1_data(ret_dataAVH[1]),.write1_wen(retire1_enV),
   .write2_addr(retire2_rT),.write2_data(ret_dataAVH[2]),.write2_wen(retire2_enV),
@@ -4003,15 +3919,15 @@ module backend(
   .clk(clk),
   .rst(rst),
   .read_clkEn(~doStall),
-  .read0_addr(rs0i0_rA_reg2),.read0_data(dataAVL[0]), .read0_dataN(dataAVLN[0]),.read0_oe(retAF_reg[0]&rs_rA_useF_reg[0]),
-  .read1_addr(rs0i1_rA_reg2),.read1_data(dataAVL[1]), .read1_dataN(dataAVLN[1]),.read1_oe(retAF_reg[1]&rs_rA_useF_reg[1]),
-  .read2_addr(rs0i2_rA_reg2),.read2_data(dataAVL[2]), .read2_dataN(dataAVLN[2]),.read2_oe(retAF_reg[2]&rs_rA_useF_reg[2]),
-  .read3_addr(rs1i0_rA_reg2),.read3_data(dataAVL[3]), .read3_dataN(dataAVLN[3]),.read3_oe(retAF_reg[3]&rs_rA_useF_reg[3]),
-  .read4_addr(rs1i1_rA_reg2),.read4_data(dataAVL[4]), .read4_dataN(dataAVLN[4]),.read4_oe(retAF_reg[4]&rs_rA_useF_reg[4]),
-  .read5_addr(rs1i2_rA_reg2),.read5_data(dataAVL[5]), .read5_dataN(dataAVLN[5]),.read5_oe(retAF_reg[5]&rs_rA_useF_reg[5]),
-  .read6_addr(rs2i0_rA_reg2),.read6_data(dataAVL[6]), .read6_dataN(dataAVLN[6]),.read6_oe(retAF_reg[6]&rs_rA_useF_reg[6]),
-  .read7_addr(rs2i1_rA_reg2),.read7_data(dataAVL[7]), .read7_dataN(dataAVLN[7]),.read7_oe(retAF_reg[7]&rs_rA_useF_reg[7]),
-  .read8_addr(rs2i2_rA_reg2),.read8_data(dataAVL[8]), .read8_dataN(dataAVLN[8]),.read8_oe(retAF_reg[8]&rs_rA_useF_reg[8]),
+  .read0_addr(rs0i0_rA_reg2),.read0_data(dataAVL[0]),.read0_oe(retAF_reg[0]&rs_rA_useF_reg[0]),
+  .read1_addr(rs0i1_rA_reg2),.read1_data(dataAVL[1]),.read1_oe(retAF_reg[1]&rs_rA_useF_reg[1]),
+  .read2_addr(rs0i2_rA_reg2),.read2_data(dataAVL[2]),.read2_oe(retAF_reg[2]&rs_rA_useF_reg[2]),
+  .read3_addr(rs1i0_rA_reg2),.read3_data(dataAVL[3]),.read3_oe(retAF_reg[3]&rs_rA_useF_reg[3]),
+  .read4_addr(rs1i1_rA_reg2),.read4_data(dataAVL[4]),.read4_oe(retAF_reg[4]&rs_rA_useF_reg[4]),
+  .read5_addr(rs1i2_rA_reg2),.read5_data(dataAVL[5]),.read5_oe(retAF_reg[5]&rs_rA_useF_reg[5]),
+  .read6_addr(rs2i0_rA_reg2),.read6_data(dataAVL[6]),.read6_oe(retAF_reg[6]&rs_rA_useF_reg[6]),
+  .read7_addr(rs2i1_rA_reg2),.read7_data(dataAVL[7]),.read7_oe(retAF_reg[7]&rs_rA_useF_reg[7]),
+  .read8_addr(rs2i2_rA_reg2),.read8_data(dataAVL[8]),.read8_oe(retAF_reg[8]&rs_rA_useF_reg[8]),
   .write0_addr(retire0_rT),.write0_data(ret_dataAVL[0]),.write0_wen(retire0_enV),
   .write1_addr(retire1_rT),.write1_data(ret_dataAVL[1]),.write1_wen(retire1_enV),
   .write2_addr(retire2_rT),.write2_data(ret_dataAVL[2]),.write2_wen(retire2_enV),
@@ -4030,15 +3946,15 @@ module backend(
   .clk(clk),
   .rst(rst),
   .read_clkEn(~doStall),
-  .read0_addr(rs0i0_rA_reg3),.read0_data(dataAFH[0]), .read0_dataN(dataAFHN[0]),.read0_oe(retAF_reg2[0]&rs_rAW_useF_reg2[0]),
-  .read1_addr(rs0i1_rA_reg3),.read1_data(dataAFH[1]), .read1_dataN(dataAFHN[1]),.read1_oe(retAF_reg2[1]&rs_rA_useF_reg2[1]),
-  .read2_addr(rs0i2_rA_reg3),.read2_data(dataAFH[2]), .read2_dataN(dataAFHN[2]),.read2_oe(retAF_reg2[2]&rs_rA_useF_reg2[2]),
-  .read3_addr(rs1i0_rA_reg3),.read3_data(dataAFH[3]), .read3_dataN(dataAFHN[3]),.read3_oe(retAF_reg2[3]&rs_rA_useF_reg2[3]),
-  .read4_addr(rs1i1_rA_reg3),.read4_data(dataAFH[4]), .read4_dataN(dataAFHN[4]),.read4_oe(retAF_reg2[4]&rs_rA_useF_reg2[4]),
-  .read5_addr(rs1i2_rA_reg3),.read5_data(dataAFH[5]), .read5_dataN(dataAFHN[5]),.read5_oe(retAF_reg2[5]&rs_rA_useF_reg2[5]),
-  .read6_addr(rs2i0_rA_reg3),.read6_data(dataAFH[6]), .read6_dataN(dataAFHN[6]),.read6_oe(retAF_reg2[3]&rs_rA_useF_reg2[3]),
-  .read7_addr(rs2i1_rA_reg3),.read7_data(dataAFH[7]), .read7_dataN(dataAFHN[7]),.read7_oe(retAF_reg2[7]&rs_rA_useF_reg2[7]),
-  .read8_addr(rs2i2_rA_reg3),.read8_data(dataAFH[8]), .read8_dataN(dataAFHN[8]),.read8_oe(retAF_reg2[8]&rs_rA_useF_reg2[8]),
+  .read0_addr(rs0i0_rA_reg3),.read0_data(dataAFH[0]),.read0_oe(retAF_reg2[0]&rs_rAW_useF_reg2[0]),
+  .read1_addr(rs0i1_rA_reg3),.read1_data(dataAFH[1]),.read1_oe(retAF_reg2[1]&rs_rA_useF_reg2[1]),
+  .read2_addr(rs0i2_rA_reg3),.read2_data(dataAFH[2]),.read2_oe(retAF_reg2[2]&rs_rA_useF_reg2[2]),
+  .read3_addr(rs1i0_rA_reg3),.read3_data(dataAFH[3]),.read3_oe(retAF_reg2[3]&rs_rA_useF_reg2[3]),
+  .read4_addr(rs1i1_rA_reg3),.read4_data(dataAFH[4]),.read4_oe(retAF_reg2[4]&rs_rA_useF_reg2[4]),
+  .read5_addr(rs1i2_rA_reg3),.read5_data(dataAFH[5]),.read5_oe(retAF_reg2[5]&rs_rA_useF_reg2[5]),
+  .read6_addr(rs2i0_rA_reg3),.read6_data(dataAFH[6]),.read6_oe(retAF_reg2[3]&rs_rA_useF_reg2[3]),
+  .read7_addr(rs2i1_rA_reg3),.read7_data(dataAFH[7]),.read7_oe(retAF_reg2[7]&rs_rA_useF_reg2[7]),
+  .read8_addr(rs2i2_rA_reg3),.read8_data(dataAFH[8]),.read8_oe(retAF_reg2[8]&rs_rA_useF_reg2[8]),
   .write0_addr(retire0_rT),.write0_data(ret_dataAFH[0]),.write0_wen(retire0_enF),
   .write1_addr(retire1_rT),.write1_data(ret_dataAFH[1]),.write1_wen(retire1_enF),
   .write2_addr(retire2_rT),.write2_data(ret_dataAFH[2]),.write2_wen(retire2_enF),
@@ -4056,15 +3972,15 @@ module backend(
   .clk(clk),
   .rst(rst),
   .read_clkEn(~doStall),
-  .read0_addr(rs0i0_rA_reg3),.read0_data(dataAFL[0]), .read0_dataN(dataAFLN[0]),.read0_oe(retAF_reg2[0]&rs_rA_useF_reg2[0]),
-  .read1_addr(rs0i1_rA_reg3),.read1_data(dataAFL[1]), .read1_dataN(dataAFLN[1]),.read1_oe(retAF_reg2[1]&rs_rA_useF_reg2[1]),
-  .read2_addr(rs0i2_rA_reg3),.read2_data(dataAFL[2]), .read2_dataN(dataAFLN[2]),.read2_oe(retAF_reg2[2]&rs_rA_useF_reg2[2]),
-  .read3_addr(rs1i0_rA_reg3),.read3_data(dataAFL[3]), .read3_dataN(dataAFLN[3]),.read3_oe(retAF_reg2[3]&rs_rA_useF_reg2[3]),
-  .read4_addr(rs1i1_rA_reg3),.read4_data(dataAFL[4]), .read4_dataN(dataAFLN[4]),.read4_oe(retAF_reg2[4]&rs_rA_useF_reg2[4]),
-  .read5_addr(rs1i2_rA_reg3),.read5_data(dataAFL[5]), .read5_dataN(dataAFLN[5]),.read5_oe(retAF_reg2[5]&rs_rA_useF_reg2[5]),
-  .read6_addr(rs2i0_rA_reg3),.read6_data(dataAFL[6]), .read6_dataN(dataAFLN[6]),.read6_oe(retAF_reg2[6]&rs_rA_useF_reg2[6]),
-  .read7_addr(rs2i1_rA_reg3),.read7_data(dataAFL[7]), .read7_dataN(dataAFLN[7]),.read7_oe(retAF_reg2[7]&rs_rA_useF_reg2[7]),
-  .read8_addr(rs2i2_rA_reg3),.read8_data(dataAFL[8]), .read8_dataN(dataAFLN[8]),.read8_oe(retAF_reg2[8]&rs_rA_useF_reg2[8]),
+  .read0_addr(rs0i0_rA_reg3),.read0_data(dataAFL[0]),.read0_oe(retAF_reg2[0]&rs_rA_useF_reg2[0]),
+  .read1_addr(rs0i1_rA_reg3),.read1_data(dataAFL[1]),.read1_oe(retAF_reg2[1]&rs_rA_useF_reg2[1]),
+  .read2_addr(rs0i2_rA_reg3),.read2_data(dataAFL[2]),.read2_oe(retAF_reg2[2]&rs_rA_useF_reg2[2]),
+  .read3_addr(rs1i0_rA_reg3),.read3_data(dataAFL[3]),.read3_oe(retAF_reg2[3]&rs_rA_useF_reg2[3]),
+  .read4_addr(rs1i1_rA_reg3),.read4_data(dataAFL[4]),.read4_oe(retAF_reg2[4]&rs_rA_useF_reg2[4]),
+  .read5_addr(rs1i2_rA_reg3),.read5_data(dataAFL[5]),.read5_oe(retAF_reg2[5]&rs_rA_useF_reg2[5]),
+  .read6_addr(rs2i0_rA_reg3),.read6_data(dataAFL[6]),.read6_oe(retAF_reg2[6]&rs_rA_useF_reg2[6]),
+  .read7_addr(rs2i1_rA_reg3),.read7_data(dataAFL[7]),.read7_oe(retAF_reg2[7]&rs_rA_useF_reg2[7]),
+  .read8_addr(rs2i2_rA_reg3),.read8_data(dataAFL[8]),.read8_oe(retAF_reg2[8]&rs_rA_useF_reg2[8]),
   .write0_addr(retire0_rT),.write0_data(ret_dataAFL[0]),.write0_wen(retire0_enF),
   .write1_addr(retire1_rT),.write1_data(ret_dataAFL[1]),.write1_wen(retire1_enF),
   .write2_addr(retire2_rT),.write2_data(ret_dataAFL[2]),.write2_wen(retire2_enF),
@@ -4082,23 +3998,23 @@ module backend(
   .clk(clk),
   .rst(rst),
   .read_clkEn(~doStall),
-  .read0_addr(rs0i0_rB_reg),.read0_data(dataB[0]), .read0_dataN(dataBN[0]),
+  .read0_addr(rs0i0_rB_reg),.read0_data(dataB[0]),
     .read0_oe(retB[0]&~rs_useBConst[0]&rs_rB_use[0]),
-  .read1_addr(rs0i1_rB_reg),.read1_data(dataB[1]), .read1_dataN(dataBN[1]),
+  .read1_addr(rs0i1_rB_reg),.read1_data(dataB[1]),
     .read1_oe(retB[1]&~rs0i1_useBConst_reg&rs_rB_use[1]),
-  .read2_addr(rs0i2_rB_reg),.read2_data(dataB[2]), .read2_dataN(dataBN[2]),
+  .read2_addr(rs0i2_rB_reg),.read2_data(dataB[2]),
     .read2_oe(retB[2]&~rs0i2_useBConst_reg&rs_rB_use[2]),
-  .read3_addr(rs1i0_rB_reg),.read3_data(dataB[3]), .read3_dataN(dataBN[3]),
+  .read3_addr(rs1i0_rB_reg),.read3_data(dataB[3]),
     .read3_oe(retB[3]&~rs_useBConst[3]&rs_rB_use[3]),
-  .read4_addr(rs1i1_rB_reg),.read4_data(dataB[4]), .read4_dataN(dataBN[4]),
+  .read4_addr(rs1i1_rB_reg),.read4_data(dataB[4]),
     .read4_oe(retB[4]&~rs1i1_useBConst_reg&rs_rB_use[4]),
-  .read5_addr(rs1i2_rB_reg),.read5_data(dataB[5]), .read5_dataN(dataBN[5]),
+  .read5_addr(rs1i2_rB_reg),.read5_data(dataB[5]),
     .read5_oe(retB[5]&~rs1i2_useBConst_reg&rs_rB_use[5]),
-  .read6_addr(rs2i0_rB_reg),.read6_data(dataB[6]), .read6_dataN(dataBN[6]),
+  .read6_addr(rs2i0_rB_reg),.read6_data(dataB[6]),
     .read6_oe(retB[6]&~rs_useBConst[6]&rs_rB_use[6]),
-  .read7_addr(rs2i1_rB_reg),.read7_data(dataB[7]), .read7_dataN(dataBN[7]),
+  .read7_addr(rs2i1_rB_reg),.read7_data(dataB[7]),
     .read7_oe(retB[7]&~rs2i1_useBConst_reg&rs_rB_use[7]),
-  .read8_addr(rs2i2_rB_reg),.read8_data(dataB[8]), .read8_dataN(dataBN[8]),
+  .read8_addr(rs2i2_rB_reg),.read8_data(dataB[8]),
     .read8_oe(retB[8]&~rs2i2_useBConst_reg&rs_rB_use[8]),
   .write0_addr(retire0_rT),.write0_data(ret_dataB[0]),.write0_wen(retire0_enG),
   .write1_addr(retire1_rT),.write1_data(ret_dataB[1]),.write1_wen(retire1_enG),
@@ -4118,15 +4034,15 @@ module backend(
   .clk(clk),
   .rst(rst),
   .read_clkEn(~doStall),
-  .read0_addr(rs0i0_rB_reg2),.read0_data(dataBVH[0]), .read0_dataN(dataBVHN[0]),.read0_oe(retBF_reg[0]&rs_rB_useF_reg[0]),
-  .read1_addr(rs0i1_rB_reg2),.read1_data(dataBVH[1]), .read1_dataN(dataBVHN[1]),.read1_oe(retBF_reg[1]&rs_rB_useF_reg[1]),
-  .read2_addr(rs0i2_rB_reg2),.read2_data(dataBVH[2]), .read2_dataN(dataBVHN[2]),.read2_oe(retBF_reg[2]&rs_rB_useF_reg[2]),
-  .read3_addr(rs0i1_rB_reg2),.read3_data(dataBVH[3]), .read3_dataN(dataBVHN[3]),.read3_oe(retBF_reg[3]&rs_rB_useF_reg[3]),
-  .read4_addr(rs1i1_rB_reg2),.read4_data(dataBVH[4]), .read4_dataN(dataBVHN[4]),.read4_oe(retBF_reg[4]&rs_rB_useF_reg[4]),
-  .read5_addr(rs1i2_rB_reg2),.read5_data(dataBVH[5]), .read5_dataN(dataBVHN[5]),.read5_oe(retBF_reg[5]&rs_rB_useF_reg[5]),
-  .read6_addr(rs2i0_rB_reg2),.read6_data(dataBVH[6]), .read6_dataN(dataBVHN[6]),.read6_oe(retBF_reg[6]&rs_rB_useF_reg[6]),
-  .read7_addr(rs2i1_rB_reg2),.read7_data(dataBVH[7]), .read7_dataN(dataBVHN[7]),.read7_oe(retBF_reg[7]&rs_rB_useF_reg[7]),
-  .read8_addr(rs2i2_rB_reg2),.read8_data(dataBVH[8]), .read8_dataN(dataBVHN[8]),.read8_oe(retBF_reg[8]&rs_rB_useF_reg[8]),
+  .read0_addr(rs0i0_rB_reg2),.read0_data(dataBVH[0]),.read0_oe(retBF_reg[0]&rs_rB_useF_reg[0]),
+  .read1_addr(rs0i1_rB_reg2),.read1_data(dataBVH[1]),.read1_oe(retBF_reg[1]&rs_rB_useF_reg[1]),
+  .read2_addr(rs0i2_rB_reg2),.read2_data(dataBVH[2]),.read2_oe(retBF_reg[2]&rs_rB_useF_reg[2]),
+  .read3_addr(rs0i1_rB_reg2),.read3_data(dataBVH[3]),.read3_oe(retBF_reg[3]&rs_rB_useF_reg[3]),
+  .read4_addr(rs1i1_rB_reg2),.read4_data(dataBVH[4]),.read4_oe(retBF_reg[4]&rs_rB_useF_reg[4]),
+  .read5_addr(rs1i2_rB_reg2),.read5_data(dataBVH[5]),.read5_oe(retBF_reg[5]&rs_rB_useF_reg[5]),
+  .read6_addr(rs2i0_rB_reg2),.read6_data(dataBVH[6]),.read6_oe(retBF_reg[6]&rs_rB_useF_reg[6]),
+  .read7_addr(rs2i1_rB_reg2),.read7_data(dataBVH[7]),.read7_oe(retBF_reg[7]&rs_rB_useF_reg[7]),
+  .read8_addr(rs2i2_rB_reg2),.read8_data(dataBVH[8]),.read8_oe(retBF_reg[8]&rs_rB_useF_reg[8]),
   .write0_addr(retire0_rT),.write0_data(ret_dataBVH[0]),.write0_wen(retire0_enV),
   .write1_addr(retire1_rT),.write1_data(ret_dataBVH[1]),.write1_wen(retire1_enV),
   .write2_addr(retire2_rT),.write2_data(ret_dataBVH[2]),.write2_wen(retire2_enV),
@@ -4144,15 +4060,15 @@ module backend(
   .clk(clk),
   .rst(rst),
   .read_clkEn(~doStall),
-  .read0_addr(rs0i0_rB_reg2),.read0_data(dataBVL[0]), .read0_dataN(dataBVLN[0]),.read0_oe(retBF_reg[0]&rs_rB_useF_reg[0]),
-  .read1_addr(rs0i1_rB_reg2),.read1_data(dataBVL[1]), .read1_dataN(dataBVLN[1]),.read1_oe(retBF_reg[1]&rs_rB_useF_reg[1]),
-  .read2_addr(rs0i2_rB_reg2),.read2_data(dataBVL[2]), .read2_dataN(dataBVLN[2]),.read2_oe(retBF_reg[2]&rs_rB_useF_reg[2]),
-  .read3_addr(rs1i0_rB_reg2),.read3_data(dataBVL[3]), .read3_dataN(dataBVLN[3]),.read3_oe(retBF_reg[3]&rs_rB_useF_reg[3]),
-  .read4_addr(rs1i1_rB_reg2),.read4_data(dataBVL[4]), .read4_dataN(dataBVLN[4]),.read4_oe(retBF_reg[4]&rs_rB_useF_reg[4]),
-  .read5_addr(rs1i2_rB_reg2),.read5_data(dataBVL[5]), .read5_dataN(dataBVLN[5]),.read5_oe(retBF_reg[5]&rs_rB_useF_reg[5]),
-  .read6_addr(rs2i0_rB_reg2),.read6_data(dataBVL[6]), .read6_dataN(dataBVLN[6]),.read6_oe(retBF_reg[6]&rs_rB_useF_reg[6]),
-  .read7_addr(rs2i1_rB_reg2),.read7_data(dataBVL[7]), .read7_dataN(dataBVLN[7]),.read7_oe(retBF_reg[7]&rs_rB_useF_reg[7]),
-  .read8_addr(rs2i2_rB_reg2),.read8_data(dataBVL[8]), .read8_dataN(dataBVLN[8]),.read8_oe(retBF_reg[8]&rs_rB_useF_reg[8]),
+  .read0_addr(rs0i0_rB_reg2),.read0_data(dataBVL[0]),.read0_oe(retBF_reg[0]&rs_rB_useF_reg[0]),
+  .read1_addr(rs0i1_rB_reg2),.read1_data(dataBVL[1]),.read1_oe(retBF_reg[1]&rs_rB_useF_reg[1]),
+  .read2_addr(rs0i2_rB_reg2),.read2_data(dataBVL[2]),.read2_oe(retBF_reg[2]&rs_rB_useF_reg[2]),
+  .read3_addr(rs1i0_rB_reg2),.read3_data(dataBVL[3]),.read3_oe(retBF_reg[3]&rs_rB_useF_reg[3]),
+  .read4_addr(rs1i1_rB_reg2),.read4_data(dataBVL[4]),.read4_oe(retBF_reg[4]&rs_rB_useF_reg[4]),
+  .read5_addr(rs1i2_rB_reg2),.read5_data(dataBVL[5]),.read5_oe(retBF_reg[5]&rs_rB_useF_reg[5]),
+  .read6_addr(rs2i0_rB_reg2),.read6_data(dataBVL[6]),.read6_oe(retBF_reg[6]&rs_rB_useF_reg[6]),
+  .read7_addr(rs2i1_rB_reg2),.read7_data(dataBVL[7]),.read7_oe(retBF_reg[7]&rs_rB_useF_reg[7]),
+  .read8_addr(rs2i2_rB_reg2),.read8_data(dataBVL[8]),.read8_oe(retBF_reg[8]&rs_rB_useF_reg[8]),
   .write0_addr(retire0_rT),.write0_data(ret_dataBVL[0]),.write0_wen(retire0_enV),
   .write1_addr(retire1_rT),.write1_data(ret_dataBVL[1]),.write1_wen(retire1_enV),
   .write2_addr(retire2_rT),.write2_data(ret_dataBVL[2]),.write2_wen(retire2_enV),
@@ -4171,15 +4087,15 @@ module backend(
   .clk(clk),
   .rst(rst),
   .read_clkEn(~doStall),
-  .read0_addr(rs0i0_rB_reg3),.read0_data(dataBFH[0]), .read0_dataN(dataBFHN[0]),.read0_oe(retBF_reg2[0]&rs_rB_useF_reg2[0]),
-  .read1_addr(rs0i1_rB_reg3),.read1_data(dataBFH[1]), .read1_dataN(dataBFHN[1]),.read1_oe(retBF_reg2[1]&rs_rB_useF_reg2[1]),
-  .read2_addr(rs0i2_rB_reg3),.read2_data(dataBFH[2]), .read2_dataN(dataBFHN[2]),.read2_oe(retBF_reg2[2]&rs_rB_useF_reg2[2]),
-  .read3_addr(rs1i0_rB_reg3),.read3_data(dataBFH[3]), .read3_dataN(dataBFHN[3]),.read3_oe(retBF_reg2[3]&rs_rB_useF_reg2[3]),
-  .read4_addr(rs1i1_rB_reg3),.read4_data(dataBFH[4]), .read4_dataN(dataBFHN[4]),.read4_oe(retBF_reg2[4]&rs_rB_useF_reg2[4]),
-  .read5_addr(rs1i2_rB_reg3),.read5_data(dataBFH[5]), .read5_dataN(dataBFHN[5]),.read5_oe(retBF_reg2[5]&rs_rB_useF_reg2[5]),
-  .read6_addr(rs2i0_rB_reg3),.read6_data(dataBFH[6]), .read6_dataN(dataBFHN[6]),.read6_oe(retBF_reg2[6]&rs_rB_useF_reg2[6]),
-  .read7_addr(rs2i1_rB_reg3),.read7_data(dataBFH[7]), .read7_dataN(dataBFHN[7]),.read7_oe(retBF_reg2[7]&rs_rB_useF_reg2[7]),
-  .read8_addr(rs2i2_rB_reg3),.read8_data(dataBFH[8]), .read8_dataN(dataBFHN[8]),.read8_oe(retBF_reg2[8]&rs_rB_useF_reg2[8]),
+  .read0_addr(rs0i0_rB_reg3),.read0_data(dataBFH[0]),.read0_oe(retBF_reg2[0]&rs_rB_useF_reg2[0]),
+  .read1_addr(rs0i1_rB_reg3),.read1_data(dataBFH[1]),.read1_oe(retBF_reg2[1]&rs_rB_useF_reg2[1]),
+  .read2_addr(rs0i2_rB_reg3),.read2_data(dataBFH[2]),.read2_oe(retBF_reg2[2]&rs_rB_useF_reg2[2]),
+  .read3_addr(rs1i0_rB_reg3),.read3_data(dataBFH[3]),.read3_oe(retBF_reg2[3]&rs_rB_useF_reg2[3]),
+  .read4_addr(rs1i1_rB_reg3),.read4_data(dataBFH[4]),.read4_oe(retBF_reg2[4]&rs_rB_useF_reg2[4]),
+  .read5_addr(rs1i2_rB_reg3),.read5_data(dataBFH[5]),.read5_oe(retBF_reg2[5]&rs_rB_useF_reg2[5]),
+  .read6_addr(rs2i0_rB_reg3),.read6_data(dataBFH[6]),.read6_oe(retBF_reg2[6]&rs_rB_useF_reg2[6]),
+  .read7_addr(rs2i1_rB_reg3),.read7_data(dataBFH[7]),.read7_oe(retBF_reg2[7]&rs_rB_useF_reg2[7]),
+  .read8_addr(rs2i2_rB_reg3),.read8_data(dataBFH[8]),.read8_oe(retBF_reg2[8]&rs_rB_useF_reg2[8]),
   .write0_addr(retire0_rT),.write0_data(ret_dataBFH[0]),.write0_wen(retire0_enF),
   .write1_addr(retire1_rT),.write1_data(ret_dataBFH[1]),.write1_wen(retire1_enF),
   .write2_addr(retire2_rT),.write2_data(ret_dataBFH[2]),.write2_wen(retire2_enF),
@@ -4197,15 +4113,15 @@ module backend(
   .clk(clk),
   .rst(rst),
   .read_clkEn(~doStall),
-  .read0_addr(rs0i0_rB_reg3),.read0_data(dataBFL[0]), .read0_dataN(dataBFLN[0]),.read0_oe(retBF_reg2[0]&rs_rB_useF_reg2[0]),
-  .read1_addr(rs0i1_rB_reg3),.read1_data(dataBFL[1]), .read1_dataN(dataBFLN[1]),.read1_oe(retBF_reg2[1]&rs_rB_useF_reg2[1]),
-  .read2_addr(rs0i2_rB_reg3),.read2_data(dataBFL[2]), .read2_dataN(dataBFLN[2]),.read2_oe(retBF_reg2[2]&rs_rB_useF_reg2[2]),
-  .read3_addr(rs1i0_rB_reg3),.read3_data(dataBFL[3]), .read3_dataN(dataBFLN[3]),.read3_oe(retBF_reg2[3]&rs_rB_useF_reg2[3]),
-  .read4_addr(rs1i1_rB_reg3),.read4_data(dataBFL[4]), .read4_dataN(dataBFLN[4]),.read4_oe(retBF_reg2[4]&rs_rB_useF_reg2[4]),
-  .read5_addr(rs1i2_rB_reg3),.read5_data(dataBFL[5]), .read5_dataN(dataBFLN[5]),.read5_oe(retBF_reg2[5]&rs_rB_useF_reg2[5]),
-  .read6_addr(rs2i0_rB_reg3),.read6_data(dataBFL[6]), .read6_dataN(dataBFLN[6]),.read6_oe(retBF_reg2[6]&rs_rB_useF_reg2[6]),
-  .read7_addr(rs2i1_rB_reg3),.read7_data(dataBFL[7]), .read7_dataN(dataBFLN[7]),.read7_oe(retBF_reg2[7]&rs_rB_useF_reg2[7]),
-  .read8_addr(rs2i2_rB_reg3),.read8_data(dataBFL[8]), .read8_dataN(dataBFLN[8]),.read8_oe(retBF_reg2[8]&rs_rB_useF_reg2[8]),
+  .read0_addr(rs0i0_rB_reg3),.read0_data(dataBFL[0]),.read0_oe(retBF_reg2[0]&rs_rB_useF_reg2[0]),
+  .read1_addr(rs0i1_rB_reg3),.read1_data(dataBFL[1]),.read1_oe(retBF_reg2[1]&rs_rB_useF_reg2[1]),
+  .read2_addr(rs0i2_rB_reg3),.read2_data(dataBFL[2]),.read2_oe(retBF_reg2[2]&rs_rB_useF_reg2[2]),
+  .read3_addr(rs1i0_rB_reg3),.read3_data(dataBFL[3]),.read3_oe(retBF_reg2[3]&rs_rB_useF_reg2[3]),
+  .read4_addr(rs1i1_rB_reg3),.read4_data(dataBFL[4]),.read4_oe(retBF_reg2[4]&rs_rB_useF_reg2[4]),
+  .read5_addr(rs1i2_rB_reg3),.read5_data(dataBFL[5]),.read5_oe(retBF_reg2[5]&rs_rB_useF_reg2[5]),
+  .read6_addr(rs2i0_rB_reg3),.read6_data(dataBFL[6]),.read6_oe(retBF_reg2[6]&rs_rB_useF_reg2[6]),
+  .read7_addr(rs2i1_rB_reg3),.read7_data(dataBFL[7]),.read7_oe(retBF_reg2[7]&rs_rB_useF_reg2[7]),
+  .read8_addr(rs2i2_rB_reg3),.read8_data(dataBFL[8]),.read8_oe(retBF_reg2[8]&rs_rB_useF_reg2[8]),
   .write0_addr(retire0_rT),.write0_data(ret_dataBFL[0]),.write0_wen(retire0_enF),
   .write1_addr(retire1_rT),.write1_data(ret_dataBFL[1]),.write1_wen(retire1_enF),
   .write2_addr(retire2_rT),.write2_data(ret_dataBFL[2]),.write2_wen(retire2_enF),
