@@ -956,8 +956,6 @@ module backend(
  
   wire write_clear;
 
-  wire [5:0] PUKE;
-
   reg insBus_io_reg;
   reg insBus_io_reg2;
   reg insBus_io_reg3;
@@ -3962,13 +3960,13 @@ module backend(
   .read6_addr(rs2i0_rA_reg),.read6_data(dataA[6]), .read6_dataN(dataAN[6]),.read6_oe(retA[6]&rs_rA_use[6]),
   .read7_addr(rs2i1_rA_reg),.read7_data(dataA[7]), .read7_dataN(dataAN[7]),.read7_oe(retA[7]&rs_rA_use[7]),
   .read8_addr(rs2i2_rA_reg),.read8_data(dataA[8]), .read8_dataN(dataAN[8]),.read8_oe(retA[8]&rs_rA_use[8]),
-  .write0_addr(retire0_rT),.write0_data(ret_dataA[0]),.write0_wen(retire0_enG&(PUKE!=6'hf0)),
+  .write0_addr(retire0_rT),.write0_data(ret_dataA[0]),.write0_wen(retire0_enG),
   .write1_addr(retire1_rT),.write1_data(ret_dataA[1]),.write1_wen(retire1_enG),
   .write2_addr(retire2_rT),.write2_data(ret_dataA[2]),.write2_wen(retire2_enG),
-  .write3_addr(retire3_rT),.write3_data(ret_dataA[3]),.write3_wen(retire3_enG&(PUKE!=6'hf4)),
+  .write3_addr(retire3_rT),.write3_data(ret_dataA[3]),.write3_wen(retire3_enG),
   .write4_addr(retire4_rT),.write4_data(ret_dataA[4]),.write4_wen(retire4_enG),
   .write5_addr(retire5_rT),.write5_data(ret_dataA[5]),.write5_wen(retire5_enG),
-  .write6_addr(retire6_rT),.write6_data(ret_dataA[6]),.write6_wen(retire6_enG&(PUKE!=6'h15)),
+  .write6_addr(retire6_rT),.write6_data(ret_dataA[6]),.write6_wen(retire6_enG),
   .write7_addr(retire7_rT),.write7_data(ret_dataA[7]),.write7_wen(retire7_enG),
   .write8_addr(retire8_rT),.write8_data(ret_dataA[8]),.write8_wen(retire8_enG),
   .read_thread(thread_reg),
@@ -4102,13 +4100,13 @@ module backend(
     .read7_oe(retB[7]&~rs2i1_useBConst_reg&rs_rB_use[7]),
   .read8_addr(rs2i2_rB_reg),.read8_data(dataB[8]), .read8_dataN(dataBN[8]),
     .read8_oe(retB[8]&~rs2i2_useBConst_reg&rs_rB_use[8]),
-  .write0_addr(retire0_rT),.write0_data(ret_dataB[0]),.write0_wen(retire0_enG&(PUKE!=6'hf0)),
+  .write0_addr(retire0_rT),.write0_data(ret_dataB[0]),.write0_wen(retire0_enG),
   .write1_addr(retire1_rT),.write1_data(ret_dataB[1]),.write1_wen(retire1_enG),
   .write2_addr(retire2_rT),.write2_data(ret_dataB[2]),.write2_wen(retire2_enG),
-  .write3_addr(retire3_rT),.write3_data(ret_dataB[3]),.write3_wen(retire3_enG&(PUKE!=6'hf4)),
+  .write3_addr(retire3_rT),.write3_data(ret_dataB[3]),.write3_wen(retire3_enG),
   .write4_addr(retire4_rT),.write4_data(ret_dataB[4]),.write4_wen(retire4_enG),
   .write5_addr(retire5_rT),.write5_data(ret_dataB[5]),.write5_wen(retire5_enG),
-  .write6_addr(retire6_rT),.write6_data(ret_dataB[6]),.write6_wen(retire6_enG&(PUKE!=6'h15)),
+  .write6_addr(retire6_rT),.write6_data(ret_dataB[6]),.write6_wen(retire6_enG),
   .write7_addr(retire7_rT),.write7_data(ret_dataB[7]),.write7_wen(retire7_enG),
   .write8_addr(retire8_rT),.write8_data(ret_dataB[8]),.write8_wen(retire8_enG),
   .read_thread(thread_reg),
@@ -4271,12 +4269,6 @@ module backend(
   .rs2i2_flagDep(rs2i2_flagDep_reg2),
   .srcFlight(inflS&&gazumpS[9:0]==10'b0),
   .infl(Sinfl)
-  );
- 
-  LFSR16_6 puke_mod(
-  clk,
-  rst,
-  PUKE
   );
   
   
