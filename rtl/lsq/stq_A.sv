@@ -16,26 +16,23 @@ limitations under the License.
 
 
 
-
-
 module stq_buf_A(
   clk,
   rst,
   stallA,
   excpt,
-  wrt0_en, wrt0_addrE, wrt0_addrEInv, wrt0_addrO, wrt0_addrOInv, 
-  wrt1_en, wrt1_addrE, wrt1_addrEInv, wrt1_addrO, wrt1_addrOInv, 
-  chk0_en, chk0_addrEO,  chk0_addrE, chk0_addrEInv, chk0_addrO, chk0_addrOInv,,
-  chk1_en, chk1_addrEO,  chk1_addrE, chk1_addrEInv, chk1_addrO, chk1_addrOInv,,
-  chk2_en, chk2_addrEO,  chk2_addrE, chk2_addrEInv, chk2_addrO, chk2_addrOInv,,
-  chk3_en, chk3_addrEO,  chk3_addrE, chk3_addrEInv, chk3_addrO, chk3_addrOInv,,
-  chk4_en, chk4_addrEO,  chk4_addrE, chk4_addrEInv, chk4_addrO, chk4_addrOInv,,
-  chk5_en, chk5_addrEO,  chk5_addrE, chk5_addrEInv, chk5_addrO, chk5_addrOInv,,
+  wrt0_en, wrt0_addrE, wrt0_addrO, 
+  wrt1_en, wrt1_addrE, wrt1_addrO, 
+  chk0_en, chk0_addrEO, chk0_addrE, chk0_addrO,
+  chk1_en, chk1_addrEO, chk1_addrE, chk1_addrO,
+  chk2_en, chk2_addrEO, chk2_addrE, chk2_addrO,
+  chk3_en, chk3_addrEO, chk3_addrE, chk3_addrO,
+  chk4_en, chk4_addrEO, chk4_addrE, chk4_addrO,
+  chk5_en, chk5_addrEO, chk5_addrE, chk5_addrO,
   upd0_en, 
   upd1_en, 
   free_en,free,upd,passe,passe_en);
   localparam WIDTH=36;
-  parameter [0:0] ODD=0;
   input clk;
   input rst;
   input stallA;
@@ -44,57 +41,40 @@ module stq_buf_A(
   input wrt0_en;
   input [WIDTH-1:0] wrt0_addrE;
   input [WIDTH-1:0] wrt0_addrO;
-  input [WIDTH-1:0] wrt0_addrEInv;
-  input [WIDTH-1:0] wrt0_addrOInv;
-
 
   input wrt1_en;
   input [WIDTH-1:0] wrt1_addrE;
   input [WIDTH-1:0] wrt1_addrO;
-  input [WIDTH-1:0] wrt1_addrEInv;
-  input [WIDTH-1:0] wrt1_addrOInv;
 
   input chk0_en;
   output [1:0] chk0_addrEO;
   input [WIDTH-1:0] chk0_addrE;
   input [WIDTH-1:0] chk0_addrO;
-  input [WIDTH-1:0] chk0_addrEInv;
-  input [WIDTH-1:0] chk0_addrOInv;
 
   input chk1_en;
   output [1:0] chk1_addrEO;
   input [WIDTH-1:0] chk1_addrE;
   input [WIDTH-1:0] chk1_addrO;
-  input [WIDTH-1:0] chk1_addrEInv;
-  input [WIDTH-1:0] chk1_addrOInv;
   
   input chk2_en;
   output [1:0] chk2_addrEO;
   input [WIDTH-1:0] chk2_addrE;
   input [WIDTH-1:0] chk2_addrO;
-  input [WIDTH-1:0] chk2_addrEInv;
-  input [WIDTH-1:0] chk2_addrOInv;
   
   input chk3_en;
   output [1:0] chk3_addrEO;
   input [WIDTH-1:0] chk3_addrE;
   input [WIDTH-1:0] chk3_addrO;
-  input [WIDTH-1:0] chk3_addrEInv;
-  input [WIDTH-1:0] chk3_addrOInv;
   
   input chk4_en;
   output [1:0] chk4_addrEO;
   input [WIDTH-1:0] chk4_addrE;
   input [WIDTH-1:0] chk4_addrO;
-  input [WIDTH-1:0] chk4_addrEInv;
-  input [WIDTH-1:0] chk4_addrOInv;
   
   input chk5_en;
   output [1:0] chk5_addrEO;
   input [WIDTH-1:0] chk5_addrE;
   input [WIDTH-1:0] chk5_addrO;
-  input [WIDTH-1:0] chk5_addrEInv;
-  input [WIDTH-1:0] chk5_addrOInv;
 
 
   input upd0_en;
@@ -109,56 +89,39 @@ module stq_buf_A(
   reg [WIDTH-1:0] addrE;
   reg [WIDTH-1:0] addrO;
 //  reg upd;
- 
-  generate
-      if (!ODD) begin : even
-          assign chk0_addrEO[0]=chk0_addrE==addrE && ~free && ~passe;
-          assign chk1_addrEO[0]=chk1_addrE==addrE && ~free && ~passe;
-          assign chk2_addrEO[0]=chk2_addrE==addrE && ~free && ~passe;
-          assign chk3_addrEO[0]=chk3_addrE==addrE && ~free && ~passe;
-          assign chk4_addrEO[0]=chk4_addrE==addrE && ~free && ~passe;
-          assign chk5_addrEO[0]=chk5_addrE==addrE && ~free && ~passe;
+  
+  assign chk0_addrEO[0]=chk0_addrE==addrE && ~free && ~passe;
+  assign chk1_addrEO[0]=chk1_addrE==addrE && ~free && ~passe;
+  assign chk2_addrEO[0]=chk2_addrE==addrE && ~free && ~passe;
+  assign chk3_addrEO[0]=chk3_addrE==addrE && ~free && ~passe;
+  assign chk4_addrEO[0]=chk4_addrE==addrE && ~free && ~passe;
+  assign chk5_addrEO[0]=chk5_addrE==addrE && ~free && ~passe;
 
-          assign chk0_addrEO[1]=chk0_addrO==addrO && ~free && ~passe;
-          assign chk1_addrEO[1]=chk1_addrO==addrO && ~free && ~passe;
-          assign chk2_addrEO[1]=chk2_addrO==addrO && ~free && ~passe;
-          assign chk3_addrEO[1]=chk3_addrO==addrO && ~free && ~passe;
-          assign chk4_addrEO[1]=chk4_addrO==addrO && ~free && ~passe;
-          assign chk5_addrEO[1]=chk5_addrO==addrO && ~free && ~passe;
-      end else begin :odd
-          assign chk0_addrEO[0]=chk0_addrEInv==addrE && ~free && ~passe;
-          assign chk1_addrEO[0]=chk1_addrEInv==addrE && ~free && ~passe;
-          assign chk2_addrEO[0]=chk2_addrEInv==addrE && ~free && ~passe;
-          assign chk3_addrEO[0]=chk3_addrEInv==addrE && ~free && ~passe;
-          assign chk4_addrEO[0]=chk4_addrEInv==addrE && ~free && ~passe;
-          assign chk5_addrEO[0]=chk5_addrEInv==addrE && ~free && ~passe;
+  assign chk0_addrEO[1]=chk0_addrO==addrO && ~free && ~passe;
+  assign chk1_addrEO[1]=chk1_addrO==addrO && ~free && ~passe;
+  assign chk2_addrEO[1]=chk2_addrO==addrO && ~free && ~passe;
+  assign chk3_addrEO[1]=chk3_addrO==addrO && ~free && ~passe;
+  assign chk4_addrEO[1]=chk4_addrO==addrO && ~free && ~passe;
+  assign chk5_addrEO[1]=chk5_addrO==addrO && ~free && ~passe;
 
-          assign chk0_addrEO[1]=chk0_addrOInv==addrO && ~free && ~passe;
-          assign chk1_addrEO[1]=chk1_addrOInv==addrO && ~free && ~passe;
-          assign chk2_addrEO[1]=chk2_addrOInv==addrO && ~free && ~passe;
-          assign chk3_addrEO[1]=chk3_addrOInv==addrO && ~free && ~passe;
-          assign chk4_addrEO[1]=chk4_addrOInv==addrO && ~free && ~passe;
-          assign chk5_addrEO[1]=chk5_addrOInv==addrO && ~free && ~passe;
-      end
-  endgenerate
   always @(posedge clk) begin
       if (rst) begin
-          addrE<={36{ODD}};
-          addrO<={36{ODD}};
+          addrE<=0;
+          addrO<=0;
           free<=1'b1;
           upd<=1'b1;
           passe<=1'b0;
       end else begin
           if (wrt0_en) begin
-              addrE<=ODD ? wrt0_addrEInv : wrt0_addrE;
-              addrO<=ODD ? wrt0_addrOInv : wrt0_addrO;
+              addrE<=wrt0_addrE;
+              addrO<=wrt0_addrO;
               free<=1'b0;
               //upd<=1'b0;
               passe<=1'b0;
           end
           if (wrt1_en) begin
-              addrE<=ODD ? wrt1_addrEInv : wrt1_addrE;
-              addrO<=ODD ? wrt1_addrOInv : wrt1_addrO;
+              addrE<=wrt1_addrE;
+              addrO<=wrt1_addrO;
               free<=1'b0;
               //upd<=1'b0;
               passe<=1'b0;
@@ -180,21 +143,19 @@ module stq_buf_A(
       end
   end
 endmodule
-
-
 module stq_buf_A_array(
   clk,
   rst,
   stallA,
   excpt,
-  wrt0_en, wrt0_addrE, wrt0_addrEInv, wrt0_addrO, wrt0_addrOInv, 
-  wrt1_en, wrt1_addrE, wrt1_addrEInv, wrt1_addrO, wrt1_addrOInv, 
-  chk0_en, chk0_addrEO, chk0_addrE, chk0_addrEInv, chk0_addrO, chk0_addrOInv,
-  chk1_en, chk1_addrEO, chk1_addrE, chk1_addrEInv, chk1_addrO, chk1_addrOInv,
-  chk2_en, chk2_addrEO, chk2_addrE, chk2_addrEInv, chk2_addrO, chk2_addrOInv,
-  chk3_en, chk3_addrEO, chk3_addrE, chk3_addrEInv, chk3_addrO, chk3_addrOInv,
-  chk4_en, chk4_addrEO, chk4_addrE, chk4_addrEInv, chk4_addrO, chk4_addrOInv,
-  chk5_en, chk5_addrEO, chk5_addrE, chk5_addrEInv, chk5_addrO, chk5_addrOInv,
+  wrt0_en, wrt0_addrE, wrt0_addrO, 
+  wrt1_en, wrt1_addrE, wrt1_addrO, 
+  chk0_en, chk0_addrEO, chk0_addrE, chk0_addrO,
+  chk1_en, chk1_addrEO, chk1_addrE, chk1_addrO,
+  chk2_en, chk2_addrEO, chk2_addrE, chk2_addrO,
+  chk3_en, chk3_addrEO, chk3_addrE, chk3_addrO,
+  chk4_en, chk4_addrEO, chk4_addrE, chk4_addrO,
+  chk5_en, chk5_addrEO, chk5_addrE, chk5_addrO,
   upd0_en, 
   upd1_en, 
   free_en,free,upd,passe,passe_en);
@@ -208,56 +169,40 @@ module stq_buf_A_array(
   input [BUF_COUNT-1:0] wrt0_en;
   input [WIDTH-1:0] wrt0_addrE;
   input [WIDTH-1:0] wrt0_addrO;
-  input [WIDTH-1:0] wrt0_addrEInv;
-  input [WIDTH-1:0] wrt0_addrOInv;
 
   input [BUF_COUNT-1:0] wrt1_en;
   input [WIDTH-1:0] wrt1_addrE;
   input [WIDTH-1:0] wrt1_addrO;
-  input [WIDTH-1:0] wrt1_addrEInv;
-  input [WIDTH-1:0] wrt1_addrOInv;
 
   input chk0_en;
   output [BUF_COUNT-1:0] [1:0] chk0_addrEO;
   input [WIDTH-1:0] chk0_addrE;
   input [WIDTH-1:0] chk0_addrO;
-  input [WIDTH-1:0] chk0_addrEInv;
-  input [WIDTH-1:0] chk0_addrOInv;
 
   input chk1_en;
   output [BUF_COUNT-1:0] [1:0] chk1_addrEO;
   input [WIDTH-1:0] chk1_addrE;
   input [WIDTH-1:0] chk1_addrO;
-  input [WIDTH-1:0] chk1_addrEInv;
-  input [WIDTH-1:0] chk1_addrOInv;
   
   input chk2_en;
   output [BUF_COUNT-1:0] [1:0] chk2_addrEO;
   input [WIDTH-1:0] chk2_addrE;
   input [WIDTH-1:0] chk2_addrO;
-  input [WIDTH-1:0] chk2_addrEInv;
-  input [WIDTH-1:0] chk2_addrOInv;
   
   input chk3_en;
   output [BUF_COUNT-1:0] [1:0] chk3_addrEO;
   input [WIDTH-1:0] chk3_addrE;
   input [WIDTH-1:0] chk3_addrO;
-  input [WIDTH-1:0] chk3_addrEInv;
-  input [WIDTH-1:0] chk3_addrOInv;
   
   input chk4_en;
   output [BUF_COUNT-1:0] [1:0] chk4_addrEO;
   input [WIDTH-1:0] chk4_addrE;
   input [WIDTH-1:0] chk4_addrO;
-  input [WIDTH-1:0] chk4_addrEInv;
-  input [WIDTH-1:0] chk4_addrOInv;
   
   input chk5_en;
   output [BUF_COUNT-1:0] [1:0] chk5_addrEO;
   input [WIDTH-1:0] chk5_addrE;
   input [WIDTH-1:0] chk5_addrO;
-  input [WIDTH-1:0] chk5_addrEInv;
-  input [WIDTH-1:0] chk5_addrOInv;
 
 
   input [BUF_COUNT-1:0] upd0_en;
@@ -277,14 +222,14 @@ module stq_buf_A_array(
           rst,
           stallA,
           excpt,
-          wrt0_en[t], wrt0_addrE, wrt0_addrEInv, wrt0_addrO, wrt0_addrOInv, 
-          wrt1_en[t], wrt1_addrE, wrt1_addrEInv, wrt1_addrO, wrt1_addrOInv, 
-          chk0_en, chk0_addrEO[t], chk0_addrE, chk0_addrEInv, chk0_addrO, chk0_addrOInv,
-          chk1_en, chk1_addrEO[t], chk1_addrE, chk1_addrEInv, chk1_addrO, chk1_addrOInv,
-          chk2_en, chk2_addrEO[t], chk2_addrE, chk2_addrEInv, chk2_addrO, chk2_addrOInv,
-          chk3_en, chk3_addrEO[t], chk3_addrE, chk3_addrEInv, chk3_addrO, chk3_addrOInv,
-          chk4_en, chk4_addrEO[t], chk4_addrE, chk4_addrEInv, chk4_addrO, chk4_addrOInv,
-          chk5_en, chk5_addrEO[t], chk5_addrE, chk5_addrEInv, chk5_addrO, chk5_addrOInv,
+          wrt0_en[t], wrt0_addrE, wrt0_addrO, 
+          wrt1_en[t], wrt1_addrE, wrt1_addrO, 
+          chk0_en, chk0_addrEO[t], chk0_addrE, chk0_addrO,
+          chk1_en, chk1_addrEO[t], chk1_addrE, chk1_addrO,
+          chk2_en, chk2_addrEO[t], chk2_addrE, chk2_addrO,
+          chk3_en, chk3_addrEO[t], chk3_addrE, chk3_addrO,
+          chk4_en, chk4_addrEO[t], chk4_addrE, chk4_addrO,
+          chk5_en, chk5_addrEO[t], chk5_addrE, chk5_addrO,
           upd0_en[t], 
           upd1_en[t], 
           free_en[t],free[t],upd[t],passe[t],passe_en[t]);
