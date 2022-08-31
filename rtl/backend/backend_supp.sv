@@ -414,9 +414,9 @@ module get_clear_reg(
           rs1_hasR[k]=(newR3[3:0]==k*3+1 && alloc[3]) || (newR4[3:0]==k*3+1 && alloc[4]) || (newR5[3:0]==k*3+1 && alloc[5]);
           rs2_hasR[k]=(newR6[3:0]==k*3+2 && alloc[6]) || (newR7[3:0]==k*3+2 && alloc[7]) || (newR8[3:0]==k*3+2 && alloc[8]);
 
-          rs0_hasS[k]=(newR0[3:0]==k*3 && allocS[0]) || (newR1[3:0]==k*3 && allocS[1]) || (newR2[3:0]==k*3 && allocS[2]);
-          rs1_hasS[k]=(newR3[3:0]==k*3+1 && allocS[3]) || (newR4[3:0]==k*3+1 && allocS[4]) || (newR5[3:0]==k*3+1 && allocS[5]);
-          rs2_hasS[k]=(newR6[3:0]==k*3+2 && allocS[6]) || (newR7[3:0]==k*3+2 && allocS[7]) || (newR8[3:0]==k*3+2 && allocS[8]);
+          rs0_hasS[k]=(newRF0[3:0]==k*3 && allocS[0]) || (newRF1[3:0]==k*3 && allocS[1]) || (newRF2[3:0]==k*3 && allocS[2]);
+          rs1_hasS[k]=(newRF3[3:0]==k*3+1 && allocS[3]) || (newRF4[3:0]==k*3+1 && allocS[4]) || (newRF5[3:0]==k*3+1 && allocS[5]);
+          rs2_hasS[k]=(newRF6[3:0]==k*3+2 && allocS[6]) || (newRF7[3:0]==k*3+2 && allocS[7]) || (newRF8[3:0]==k*3+2 && allocS[8]);
           
 	  rs0_newRF[k]=9'd0;
           if (newRF0[3:0]==k*3 && allocS[0]) rs0_newRF[k]=newRF0;
