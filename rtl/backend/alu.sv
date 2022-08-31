@@ -4,7 +4,7 @@
 
 
 
-module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,retData,retEn,val1,val2,lpconst,valS,valRes);
+module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,retData,retEn,val1,val2,valS,valRes);
 
   localparam REG_WIDTH=`reg_addr_width;
   localparam OPERATION_WIDTH=`operation_width;
@@ -24,7 +24,6 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
   output retEn;
   input [64:0] val1;
   input [64:0] val2;
-  input [64:0] lpconst;
   input [5:0] valS;//flag
   output [64:0] valRes;  
   
@@ -220,10 +219,10 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
   assign valRes1[63:32]=((operation[11:0]==`op_xor32) && nDataAlt) ? 32'b0  : 32'bz;   
   assign valRes1[31:0]=((operation[11:0]==`op_xor32 || operation[11:0]==`op_xor64) && nDataAlt) ? val_xor[31:0] : 32'bz;   
   
-  assign valRes1[63:32]=((operation[11:0]==`op_nxor64) && nDataAlt) ? (val1[63:32]&~lpconst[63:32])|(val2[63:32]&lpconst[63:32]) : 32'bz;   
+  assign valRes1[63:32]=((operation[11:0]==`op_nxor64) && nDataAlt) ? (~val_xor[63:32]) : 32'bz;   
   assign valRes1[63:32]=((operation[11:0]==`op_nxor32) && nDataAlt) ? 32'b0  : 32'bz;   
   assign valRes1[31:0]=((operation[11:0]==`op_nxor32 || operation[11:0]==`op_nxor64) && nDataAlt) ? 
-	  (val1[31:0]&~lpconst[31:0])|(val2[31:0]&lpconst[31:0]) : 32'bz;   
+	  (~val_xor[31:0]) : 32'bz;   
   
 
   assign valRes1[63:32]=((operation[11:0]==`op_mov64) && nDataAlt) ? val2[63:32] : 32'bz;   
