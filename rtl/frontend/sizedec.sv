@@ -156,7 +156,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   
   assign isShlAddMulLike=(opcode_main==8'd210 || opcode_main==8'd211) && magic[0];
   assign isPtrSec=opcode_main==8'd212 && magic[0];
-  assign isJalR=(opcode_main==8'd213 || opcode_main==8'd214 || opcode_main==8'd215 ) && magic[0];
+  assign isJalR=(opcode_main==8'd213) && magic[0];
   
   assign isBasicFPUScalarA=opcode_main==8'hf0 && instr[13:12]==2'b0 && magic[0];
   assign isBasicFPUScalarB=opcode_main==8'hf0 && instr[13:12]==2'b1 && magic[0];
