@@ -102,19 +102,31 @@ module cntrl_get_IP(
   excpt,
   nextIP
   );
-  input [42:0] baseIP;
+  input [62:0] baseIP;
   input [8:0] srcIPOff;
   input [2:0] magicO;
   input last;
   input excpt;
-  output [42:0] nextIP;
+  output [62:0] nextIP;
   
   wire [4:0] par0;
   wire [4:0] par1;
+  wire [63:0] val2;
+  wire cout_sec;
+  wire ndiff;
   
-  adder #(43-4) last_add(baseIP[42:4],{34'b0,srcIPOff[8:4]},nextIP[42:4],last&~excpt,1'b1,,,,);
   adder_CSA #(4) csa_mod(baseIP[3:0],srcIPOff[3:0],~{1'b0,magicO},par0,par1);
   adder #(4) nlast_add_small(par0[3:0],par1[3:0],nextIP[3:0],1'b1,excpt,,,,);
+  add_agu adder_mod(
+  {1'b1,baseIP,1'b0},{1'b0,54'b0,srcIPOff[8:4],5'b0},{32'b0,last&~excpt},
+  val2,
+  cout_sec,
+  ndiff,
+  1'b1,
+  4'h1
+  );
+
+  assign nextIP[62:4]=val2[63:5];
 
   assign nextIP[3:0]=(last&~excpt) ? 4'd0 : 4'bz;
   assign nextIP[3:0]=(~last&~excpt) ? srcIPOff[3:0] : 4'bz;
@@ -607,7 +619,8 @@ module cntrl_find_outcome(
   wire [9:0][5:0] nextFlags;
   
   wire [42:0] breakIP;
-  wire [9:0][42:0] nextIP;
+  wire [62:43] bbaseIP;
+  wire [9:0][62:0] nextIP;
   wire [19:0] jupd0_IP;
   wire [19:0] jupd1_IP;
   wire lastIP;
@@ -828,12 +841,14 @@ module cntrl_find_outcome(
       .flags9(ret_data[9][`except_flags])
       );
 
-      wire [42:0] from_IP;
-      assign from_IP=(~tk_after[k]) ? baseIP[42:0] : 43'bz;
-      assign from_IP=(tk_after[k] & jump0Pred) ? jump0IP[42:0] : 43'bz;
-      assign from_IP=(tk_after[k] & jump1Pred) ? jump1IP[42:0] : 43'bz;
+      wire [62:0] from_IP;
+      assign from_IP=(~tk_after[k]) ? baseIP[62:0] : 63'bz;
+      assign from_IP=(tk_after[k] & jump0Pred) ? jump0IP[62:0] : 63'bz;
+      assign from_IP=(tk_after[k] & jump1Pred) ? jump1IP[62:0] : 63'bz;
 
-      assign breakIP=break_[k] ? nextIP[k] : 43'bz;
+      assign breakIP=break_[k] ? nextIP[k][42:0] : 43'bz;
+      assign bbaseIP=break_[k] ? nextIP[k][62:43] : 20'bz;
+
       assign lastIP=break_[k] ? last_instr[k] : 1'bz;
       assign is_after_spec=break_[k] ? rd_after_spec[k] : 1'bz;
 
@@ -859,6 +874,7 @@ module cntrl_find_outcome(
   assign jupd1_IP=(jump1Pos==4'hf) ? 20'b0 : 20'bz;
   
   assign breakIP=has_break ? 43'bz : 43'b0;
+  assign bbaseIP=has_break ? 20'bz : 20'b0;
   assign excpt_code=has_break ? 8'bz : 8'b0;
   assign lastIP=has_break ? 1'bz : 1'b0;
       
