@@ -260,9 +260,13 @@ module stq(
   wire [63:0] upd0_en0;
   wire [63:0] upd1_en0;
   wire [63:0] passe_en;
-  wire [63:0] passe;
-  wire [63:0] free;
-  wire [63:0] upd;
+  wire [64:0] passe;
+  wire [64:0] free;
+  wire [64:0] upd;
+
+  assign passe[64]=1'b0;
+  assign free[64]=1'b0;
+  assign upd[64]=1'b0;
   
   wire [5:0][139:0] chk_data;
   wire [5:0][1:0] chk_pbit;
@@ -1001,13 +1005,13 @@ module stq(
   );
 
   assign WLN0_adata=~WLN0_WQ[0] ? WLN0_adata0 : WLN1_adata0;
-  assign WLN0_en=~WLN0_WQ[0] ? WLN0_en0 & upd[WLN0_WQ] & mask2[WLN0_WQ] && ret_II==WLN0_adata[`lsaddr_II+4] && 
-	  ~ret_xbreak[WLN0_adata[-6+`lsaddr_II]] :
-	  WLN1_en0 & upd[WLN1_WQ] & mask2[WLN1_WQ] && ret_II==WLN1_adata[`lsaddr_II+4] && ~ret_xbreak[WLN1_adata[-6+`lsaddr_II]];
+  assign WLN0_en=~WLN0_WQ[0] ? WLN0_en0 & upd[{1'b0,WLN0_WQ}] & mask2[WLN0_WQ] && ret_II==WLN0_adata[`lsaddr_II+4] && 
+	  ret_xbreak[WLN0_adata[-6+`lsaddr_II]] :
+	  WLN1_en0 & upd[{1'b0,WLN1_WQ}] & mask2[WLN1_WQ] && ret_II==WLN1_adata[`lsaddr_II+4] && ret_xbreak[WLN1_adata[-6+`lsaddr_II]];
   assign WLN1_adata=WLN0_WQ[0] ? WLN0_adata0 : WLN1_adata0;
-  assign WLN1_en=WLN0_WQ[0] ? WLN0_en0 & upd[WLN0_WQ] & mask2[WLN0_WQ] && ret_II==WLN0_adata[`lsaddr_II+4] && 
-	  ~ret_xbreak[WLN0_adata[-6+`lsaddr_II]] :
-	  WLN1_en0 & upd[WLN1_WQ] & mask2[WLN1_WQ] && ret_II==WLN1_adata[`lsaddr_II+4] && ~ret_xbreak[WLN1_adata[-6+`lsaddr_II]];
+  assign WLN1_en=WLN0_WQ[0] ? WLN0_en0 & upd[{1'b0,WLN0_WQ}] & mask2[WLN0_WQ] && ret_II==WLN0_adata[`lsaddr_II+4] && 
+	  ret_xbreak[WLN0_adata[-6+`lsaddr_II]] :
+	  WLN1_en0 & upd[{1'b0,WLN1_WQ}] & mask2[WLN1_WQ] && ret_II==WLN1_adata[`lsaddr_II+4] && ret_xbreak[WLN1_adata[-6+`lsaddr_II]];
   
   stq_adata_ram ramB_mod(
   clk,
