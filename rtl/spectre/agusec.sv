@@ -59,10 +59,10 @@ module agusec_check_upper3(
 
   assign pos_ack[1]=((do_pos) && ~on_hi && diff) || max ; //c==1
   assign pos_ack[0]=do_pos & ~(~diff && on_hi)|| (do_pos2) & ~on_hi & (diff) || max; //c==0
-  assign pos_ack[2]=do_pos3;
+  assign pos_ack[2]=do_pos3 | max;
   assign neg_ack[0]=(do_neg) && on_hi && diff; //c==0
   assign neg_ack[1]=do_neg & ~(~diff && on_hi) || (do_neg2|do_neg1) & on_hi & diff; //c==1
-  assign neg_ack[2]=do_neg3;
+  assign neg_ack[2]=do_neg3 | max;
 
   assign pos_flip[0]=(do_pos2 && ~do_pos && ~on_hi && diff && ~max) || (~diff && ~on_hi && do_pos2 && ~do_pos && ~max);
   assign pos_flip[1]=(do_pos & ~on_hi & diff & ~max) || (~diff && ~on_hi && do_pos && ~max);
