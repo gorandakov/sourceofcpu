@@ -5617,6 +5617,18 @@ dcache1 L1D_mod(
           assign FU[3][7+8*q:8*q]=lso2_bnkread2[q] ||~lso2_en_reg ? dc_rdataA[3][7+8*q:8*q] : 8'bz;
           assign FU[3][7+8*q:8*q]=lso2_bnkread[q] && ~lso2_en_reg ? lso2_data_reg[7+8*q:8*q] : 8'bz;
           assign FU[3][7+8*q:8*q]=(~lso2_bnkread2[q] & ~lso2_bnkread[q]) &&~lso2_en_reg ? 8'b0 : 8'bz;
+          assign FU_N[0][7+8*q:8*q]=lso_bnkread2[q] & lso_way_reg[0]||~lso_en_reg ? dc_rdataA_N[0][7+8*q:8*q] : 8'bz;
+          assign FU_N[0][7+8*q:8*q]=lso_bnkread[q] && lso_way_reg[0] && ~lso_en_reg ? lso_data_N_reg[7+8*q:8*q] : 8'bz;
+          assign FU_N[0][7+8*q:8*q]=(~lso_bnkread2[q] & ~lso_bnkread[q] || ~lso_way_reg[0]) &&~lso_en_reg ? 8'b11111111 : 8'bz;
+          assign FU_N[1][7+8*q:8*q]=lso_bnkread2[q] & lso_way_reg[1]||~lso_en_reg ? dc_rdataA_N[1][7+8*q:8*q] : 8'bz;
+          assign FU_N[1][7+8*q:8*q]=lso_bnkread[q] && lso_way_reg[1] && ~lso_en_reg ? lso_data_N_reg[7+8*q:8*q] : 8'bz;
+          assign FU_N[1][7+8*q:8*q]=(~lso_bnkread2[q] & ~lso_bnkread[q] || ~lso_way_reg[1]) &&~lso_en_reg ? 8'b11111111 : 8'bz;
+          assign FU_N[2][7+8*q:8*q]=lso_bnkread2[q] & lso_way_reg[2]||~lso_en_reg ? dc_rdataA_N[2][7+8*q:8*q] : 8'bz;
+          assign FU_N[2][7+8*q:8*q]=lso_bnkread[q] && lso_way_reg[2] && ~lso_en_reg ? lso_data_N_reg[7+8*q:8*q] : 8'bz;
+          assign FU_N[2][7+8*q:8*q]=(~lso_bnkread2[q] & ~lso_bnkread[q] || ~lso_way_reg[2]) &&~lso_en_reg ? 8'b11111111 : 8'bz;
+          assign FU_N[3][7+8*q:8*q]=lso2_bnkread2[q] ||~lso2_en_reg ? dc_rdataA_N[3][7+8*q:8*q] : 8'bz;
+          assign FU_N[3][7+8*q:8*q]=lso2_bnkread[q] && ~lso2_en_reg ? lso2_data_N_reg[7+8*q:8*q] : 8'bz;
+          assign FU_N[3][7+8*q:8*q]=(~lso2_bnkread2[q] & ~lso2_bnkread[q]) &&~lso2_en_reg ? 8'b11111111 : 8'bz;
       end
       for (q1=0;q1<17;q1=q1+1) begin : data_general
           assign dc_rdat[0][7+8*q1:8*q1]=lso_bnkread2[q1] & lso_way_reg[0]||~lso_en_reg ? dc_rdataA[0][7+8*q1:8*q1] : 8'bz;
@@ -5631,6 +5643,19 @@ dcache1 L1D_mod(
           assign dc_rdat[3][7+8*q1:8*q1]=lso2_bnkread2[q1] ||~lso2_en_reg ? dc_rdataA[3][7+8*q1:8*q1] : 8'bz;
           assign dc_rdat[3][7+8*q1:8*q1]=lso2_bnkread[q1] && ~lso2_en_reg ? lso2_data_reg[7+8*q1:8*q1] : 8'bz;
           assign dc_rdat[3][7+8*q1:8*q1]=(~lso2_bnkread2[q1] & ~lso2_bnkread[q1]) &&~lso2_en_reg ? 8'b0 : 8'bz;
+          
+	  assign dc_rdat_N[0][7+8*q1:8*q1]=lso_bnkread2[q1] & lso_way_reg[0]||~lso_en_reg ? dc_rdataA_N[0][7+8*q1:8*q1] : 8'bz;
+          assign dc_rdat_N[0][7+8*q1:8*q1]=lso_bnkread[q1] && lso_way_reg[0] && ~lso_en_reg ? lso_data_N_reg[7+8*q1:8*q1] : 8'bz;
+          assign dc_rdat_N[0][7+8*q1:8*q1]=(~lso_bnkread2[q1] & ~lso_bnkread[q1] || ~lso_way_reg[0]) &&~lso_en_reg ? 8'b11111111 : 8'bz;
+          assign dc_rdat_N[1][7+8*q1:8*q1]=lso_bnkread2[q1] & lso_way_reg[1]||~lso_en_reg ? dc_rdataA_N[1][7+8*q1:8*q1] : 8'bz;
+          assign dc_rdat_N[1][7+8*q1:8*q1]=lso_bnkread[q1] && lso_way_reg[1] && ~lso_en_reg ? lso_data_N_reg[7+8*q1:8*q1] : 8'bz;
+          assign dc_rdat_N[1][7+8*q1:8*q1]=(~lso_bnkread2[q1] & ~lso_bnkread[q1] || ~lso_way_reg[1]) &&~lso_en_reg ? 8'b11111111 : 8'bz;
+          assign dc_rdat_N[2][7+8*q1:8*q1]=lso_bnkread2[q1] & lso_way_reg[2]||~lso_en_reg ? dc_rdataA_N[2][7+8*q1:8*q1] : 8'bz;
+          assign dc_rdat_N[2][7+8*q1:8*q1]=lso_bnkread[q1] && lso_way_reg[2] && ~lso_en_reg ? lso_data_N_reg[7+8*q1:8*q1] : 8'bz;
+          assign dc_rdat_N[2][7+8*q1:8*q1]=(~lso_bnkread2[q1] & ~lso_bnkread[q1] || ~lso_way_reg[2]) &&~lso_en_reg ? 8'b11111111 : 8'bz;
+          assign dc_rdat_N[3][7+8*q1:8*q1]=lso2_bnkread2[q1] ||~lso2_en_reg ? dc_rdataA_N[3][7+8*q1:8*q1] : 8'bz;
+          assign dc_rdat_N[3][7+8*q1:8*q1]=lso2_bnkread[q1] && ~lso2_en_reg ? lso2_data_N_reg[7+8*q1:8*q1] : 8'bz;
+          assign dc_rdat_N[3][7+8*q1:8*q1]=(~lso2_bnkread2[q1] & ~lso2_bnkread[q1]) &&~lso2_en_reg ? 8'b11111111 : 8'bz;
       end
   endgenerate
   assign FU[0][64]=lso_bnkread2[0] & lso_way_reg[0] || lso_en_reg              ? dc_pdataA[0][0] : 1'bz;
@@ -7459,8 +7484,10 @@ dcache1 L1D_mod(
               dc_rsEn_reg[v]<=1'b0;
 	      dc_LSQ_reg[v]<=9'b0;
 	      dc_rdataA_reg[v]<=136'b0;
+	      dc_rdataA_N_reg[v]<=136'b0;
 	      dc_pdataA_reg[v]<=2'b0;
 	      dc_rdataA_reg2[v]<=136'b0;
+	      dc_rdataA_N_reg2[v]<=136'b0;
           end
           for(v=0;v<=1;v=v+1) begin
              WDfxWQ_reg[v]<=6'b0;
@@ -7498,8 +7525,10 @@ dcache1 L1D_mod(
                   dc_rsEn_reg[v]<=dc_rsEn[v];
 	          dc_LSQ_reg[v]<=dc_LSQ[v];
 	          dc_rdataA_reg[v]<=dc_rdat[v];
+	          dc_rdataA_N_reg[v]<=dc_rdat_N[v];
 	          dc_pdataA_reg[v]<=dc_pdat[v];
 	          dc_rdataA_reg2[v]<=dc_rdataA_reg[v];
+	          dc_rdataA_N_reg2[v]<=dc_rdataA_N_reg[v];
               end
           end
           for(v=0;v<=1;v=v+1) begin
