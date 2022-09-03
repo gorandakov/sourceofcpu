@@ -4492,6 +4492,7 @@ module backend(
           .newData(WDfxData[n]),
           .fuFwd(WDoutFuFwd[n]),.fuuFwd(WDoutFuuFwd[n]),
           .stall(~WDoutDataEn[n][1]),
+	  .FUN0(FU_N[0]),.FUN1(FU_N[1]),.FUN2(FU_N[2]),.FUN3(FU_N[3]),
           .FU0(FU[0]),.FU0_reg(FU_reg[0]),
           .FU1(FU[1]),.FU1_reg(FU_reg[1]),
           .FU2(FU[2]),.FU2_reg(FU_reg[2]),
@@ -4511,6 +4512,7 @@ module backend(
           .newData(WDfxDataVH[n]),
           .fuFwd(WDoutFuFwd_reg[n]),.fuuFwd(WDoutFuuFwd_reg[n]),
           .stall(~WDoutDataEn_reg[n][2]),
+	  .FUN0(FUVH_N[0]),.FUN1(FUVH_N[1]),.FUN2(FUVH_N[2]),.FUN3(FUVH_N[3]),
           .FU0(FUVH[0]),.FU0_reg(FUVH_reg[0]),
           .FU1(FUVH[1]),.FU1_reg(FUVH_reg[1]),
           .FU2(FUVH[2]),.FU2_reg(FUVH_reg[2]),
@@ -4530,6 +4532,7 @@ module backend(
           .newData(WDfxDataVL[n]),
           .fuFwd(WDoutFuFwd_reg[n]),.fuuFwd(WDoutFuuFwd_reg[n]),
           .stall(~WDoutDataEn_reg[n][2]),
+	  .FUN0(FUVL_N[0]),.FUN1(FUVL_N[1]),.FUN2(FUVL_N[2]),.FUN3(FUVL_N[3]),
           .FU0(FUVL[0]),.FU0_reg(FUVL_reg[0]),
           .FU1(FUVL[1]),.FU1_reg(FUVL_reg[1]),
           .FU2(FUVL[2]),.FU2_reg(FUVL_reg[2]),
@@ -4549,6 +4552,7 @@ module backend(
           .newData(WDfxDataFH[n]),
           .fuFwd(WDoutFuFwd_reg2[n]),.fuuFwd(WDoutFuuFwd_reg2[n]),
           .stall(~WDoutDataEn_reg2[n][3]),
+	  .FUN0(FUFH_N[0]),.FUN1(FUFH_N[1]),.FUN2(FUFH_N[2]),.FUN3(FUFH_N[3]),
           .FU0(FUFH[0]),.FU0_reg(FUFH_reg[0]),
           .FU1(FUFH[1]),.FU1_reg(FUFH_reg[1]),
           .FU2(FUFH[2]),.FU2_reg(FUFH_reg[2]),
@@ -4568,6 +4572,7 @@ module backend(
           .newData(WDfxDataFL[n]),
           .fuFwd(WDoutFuFwd_reg2[n]),.fuuFwd(WDoutFuuFwd_reg2[n]),
           .stall(~WDoutDataEn_reg2[n][3]),
+	  .FUN0(FUFL_N[0]),.FUN1(FUFL_N[1]),.FUN2(FUFL_N[2]),.FUN3(FUFL_N[3]),
           .FU0(FUFL[0]),.FU0_reg(FUFL_reg[0]),
           .FU1(FUFL[1]),.FU1_reg(FUFL_reg[1]),
           .FU2(FUFL[2]),.FU2_reg(FUFL_reg[2]),
@@ -4844,6 +4849,7 @@ module backend(
   .FU0(FU[0]), .FU1(FU[1]),  .FU2(FU[2]),  .FU3(FU[3]),
   .FU4(FU[4]), .FU5(FU[5]),  .FU6(FU[6]),  .FU7(FU[7]),
   .FU8(FU[8]), .FU9(FU[9]),
+  .FNU0(FU_N[0]),.FNU1(FU_N[1]),.FNU2(FU_N[2]),.FNU3(FU_N[3]),
   .FUS1(FUS1),  .FUS2(FUS2),  .FUS3(FUS3),
   .FUS4(FUS4), .FUS5(FUS5),  .FUS6(FUS6),  .FUS7(FUS7),
   .FUS8(FUS8),.FUS9(FUS9),
@@ -5002,6 +5008,7 @@ module backend(
   .p_bankNone(dc_bankNone),
   .FU0Hit(FU0Hit),.FU1Hit(FU1Hit),.FU2Hit(FU2Hit),.FU3Hit(FU3Hit),
   .FU0(FU[0]),.FU1(FU[1]),.FU2(FU[2]),.FU3(FU[3]),.FU4(FU[4]),.FU5(FU[5]),.FU6(FU[6]),.FU7(FU[7]),.FU8(FU[8]),.FU9(FU[9]),
+  .FNU0(FU_N[0]),.FNU1(FU_N[1]),.FNU2(FU_N[2]),.FNU3(FU_N[3]),
   .FUreg3_reg(FUreg_reg5[3]),.dc_rdataA(dc_rdataA[3]),//is it really reg5?
   .msi_exp_addr(MSI_exp_addr_reg),.msi_en(MSI_exp_en_reg),.msi_out_clear(),//msi_out_clear=can do msi en; todo - make replace last buffer rather than wait + redu
   .csrss_en(csrss_en),.csrss_addr(csrss_no),.csrss_data(csrss_data[63:0]),
@@ -5062,9 +5069,9 @@ module backend(
   .st1_adata(st1_adata),.st1_en(st1_en),.st1_bank1(st1_bank1),.st1_bgn_ben(st1_bgn_ben),.st1_end_ben(st1_end_ben),.st1_data(st1_data),
   .st1_pbit(st1_pbit),
   .wb0_adata(lso_adata),.wb0_LSQ(lso_LSQ),.wb0_en(lso_en),.wb0_ret(),.wb0_data(lso_data),.wb0_brdbanks(lso_bnkread),
-  .wb0_brdbanks2(lso_bnkread2),.wb0_pbit(lso_pbit),
+  .wb0_brdbanks2(lso_bnkread2),.wb0_pbit(lso_pbit),.wb0_dataN(lso_dataN),
   .wb1_adata(lso2_adata),.wb1_LSQ(lso2_LSQ),.wb1_en(lso2_en),.wb1_ret(),.wb1_data(lso2_data),.wb1_brdbanks(lso2_bnkread),
-  .wb1_brdbanks2(lso2_bnkread2),.wb1_pbit(lso2_pbit),
+  .wb1_brdbanks2(lso2_bnkread2),.wb1_pbit(lso2_pbit),.wb1_dataN(lso2_dataN),
   .mem_II_upper(retM_II0),
   .mem_II_upper2(retM_II1),
   .has_store(retM_has_store),
@@ -5142,8 +5149,10 @@ module backend(
   .FUFL3(FUFL[3]),.FUFL4(FUFL[4]),.FUFL5(FUFL[5]),
   .FUFL6(FUFL[6]),.FUFL7(FUFL[7]),.FUFL8(FUFL[8]),
   .FUFL9(FUFL[9]),
-  .ALTDATAH0(sqrDatH_reg),.ALTDATAH1({FUTYPE_reg,66'b0}),
-  .ALTDATAL0(sqrDatL_reg),.ALTDATAL1({FUCVT2_reg[15+66:66],FUTYPE_reg,FUCVT2_reg[65:0]}),
+  .FUFH0_n(FUFH_N[0]),.FUFH1_n(FUFH_N[1]),.FUFH2_n(FUFH_N[2]),.FUFH3_n(FUFH_N[3]),
+  .FUFL0_m(FUFL_N[0]),.FUFL1_m(FUFL_N[1]),.FUFL2_m(FUFL_N[2]),.FUFL3_m(FUFL_N[3]),
+  .ALTDATAH0({sqrDatFl_reg[67:66],66'b0}),.ALTDATAH1({FUTYPE_reg,66'b0}),
+  .ALTDATAL0(sqrDatFL_reg),.ALTDATAL1({FUCVT2_reg[15+66:66],FUTYPE_reg,FUCVT2_reg[65:0]}),
   .ALT_INP({dalt[1],sqrDatEn_reg}),
   .FUS_alu0(FUS_alu_reg2[0]),.FUS_alu1(FUS_alu_reg5[1]),
   .FUS_alu2(FUS_alu_reg2[2]),.FUS_alu3(FUS_alu_reg5[3]),
@@ -5213,8 +5222,10 @@ module backend(
   .FUFL3(FUVL[3]),.FUFL4(FUVL[4]),.FUFL5(FUVL[5]),
   .FUFL6(FUVL[6]),.FUFL7(FUVL[7]),.FUFL8(FUVL[8]),
   .FUFL9(FUVL[9]),
-  .ALTDATAH0(sqrDatH_reg),.ALTDATAH1({FUTYPE,66'b0}),
-  .ALTDATAL0(sqrDatL_reg[67:0]),.ALTDATAL1({FUTYPE,FUCVT2[65:0]}),
+  .FUFH0_n(FUVH_N[0]),.FUFH1_n(FUVH_N[1]),.FUFH2_n(FUVH_N[2]),.FUFH3_n(FUVH_N[3]),
+  .FUFL0_m(FUVL_N[0]),.FUFL1_m(FUVL_N[1]),.FUFL2_m(FUVL_N[2]),.FUFL3_m(FUVL_N[3]),
+  .ALTDATAH0({`ptype_sngl,66'b0}),.ALTDATAH1({FUTYPE,66'b0}),
+  .ALTDATAL0(sqrDatVL_reg[67:0]),.ALTDATAL1({FUTYPE,FUCVT2[65:0]}),
   .ALT_INP({dalt[1],sqrDatEn_reg}),
   .FOOFL0(FOOFL1),.FOOFL1(FOOFL2),.FOOFL2(FOOFL3),
   .XI_dataS(XI_dataS)
@@ -5239,23 +5250,18 @@ module backend(
   .FUreg(outRegX),
   .FUSreg(outRegSX),
   .FUwen(),
-  .outAltData({sqrDatH[67:0],sqrDatL[67:0]}),
-  .FUFH0(FUFH[0]),.FUFH1(FUFH[1]),.FUFH2(FUFH[2]),
-  .FUFH3(FUFH[3]),.FUFH4(FUFH[4]),.FUFH5(FUFH[5]),
-  .FUFH6(FUFH[6]),.FUFH7(FUFH[7]),.FUFH8(FUFH[8]),
-  .FUFH9(FUFH[9]),
+  .outAltDataF(sqrDatFL),
+  .outAltDataV(sqrDatVL),
   .FUFL0(FUFL[0]),.FUFL1(FUFL[1]),.FUFL2(FUFL[2]),
   .FUFL3(FUFL[3]),.FUFL4(FUFL[4]),.FUFL5(FUFL[5]),
   .FUFL6(FUFL[6]),.FUFL7(FUFL[7]),.FUFL8(FUFL[8]),
   .FUFL9(FUFL[9]),
-  .FUVH0(FUVH[0]),.FUVH1(FUVH[1]),.FUVH2(FUVH[2]),
-  .FUVH3(FUVH[3]),.FUVH4(FUVH[4]),.FUVH5(FUVH[5]),
-  .FUVH6(FUVH[6]),.FUVH7(FUVH[7]),.FUVH8(FUVH[8]),
-  .FUVH9(FUVH[9]),
   .FUVL0(FUVL[0]),.FUVL1(FUVL[1]),.FUVL2(FUVL[2]),
   .FUVL3(FUVL[3]),.FUVL4(FUVL[4]),.FUVL5(FUVL[5]),
   .FUVL6(FUVL[6]),.FUVL7(FUVL[7]),.FUVL8(FUVL[8]),
   .FUVL9(FUVL[9]),
+  .FUVL0_n(FUVL_N[0]),.FUVL1_n(FUVL_N[1]),.FUVL2_n(FUVL_N[2]),.FUVL3_n(FUVL_N[3]),
+  .FUFL0_m(FUFL_N[0]),.FUFL1_m(FUFL_N[1]),.FUFL2_m(FUFL_N[2]),.FUFL3_m(FUFL_N[3]),
   .fxFRT_alten(sqrDatEn),
   .fxFRT_pause(fxFRT_pause),
   .u1_II(outII_reg3[8]),
@@ -5265,7 +5271,6 @@ module backend(
   assign fxFRT_alten[2]={3'b0,sqrDatEn_reg};
   assign fxFRT_alten[0]=4'b0;
   assign fxFRT_alten[1]=4'b0;
-  assign sqrDatL[68+15:68]=sqrDatH[15:0];
 
   assign outEn[7]=sqrDatEn_reg ? outEnX_reg : 4'bz;
   assign outII[7]=sqrDatEn_reg ? outIIX_reg :10'bz;
@@ -7216,8 +7221,8 @@ dcache1 L1D_mod(
 	  fret_reg[3]<=14'b0;
 	  fret_reg[4]<=14'b0;
 	  fret_reg[5]<=14'b0;
-	  sqrDatL_reg<=0;
-	  sqrDatH_reg<=0;
+	  sqrDatFL_reg<=0;
+	  sqrDatVL_reg<=0;
 	  sqrDatEn_reg<=1'b0;
       end else begin
           bus_holds_agu<=insert_isData;
@@ -7340,8 +7345,8 @@ dcache1 L1D_mod(
 	  fret_reg[3]<=fret[3];
 	  fret_reg[4]<=fret[4];
 	  fret_reg[5]<=fret[5];
-	  sqrDatL_reg<=sqrDatL;
-	  sqrDatH_reg<=sqrDatH;
+	  sqrDatFL_reg<=sqrDatFL;
+	  sqrDatVL_reg<=sqrDatVL;
 	  sqrDatEn_reg<=|sqrDatEn || outOp_reg4[8][11]&outEn_reg4[8][1]&outEn_reg4[8][0];
       end
       
