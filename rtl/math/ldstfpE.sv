@@ -1,17 +1,24 @@
 `include "../struct.sv"
 
 module LDE2NativeE(
-  A,
+  A,An,
   en,
-  res
+  res,
+  res_n
   );
   input [79:0] A;
+  input [79:0] An;
   input en;
   output [80:0] res;
+  output [80:0] res_n;
   //assign except=A[78:64]==0 && A[63:0];//denormal
   assign res=(A[78:64]!=0 && A[78:64]!=15'hefff && en) ? {~A[78],A[79],A[77:64],A[78],A[63:0]} : 81'bz;
   assign res=(A[78:64]==15'hefff && en) ? {A[79:65],A[62:0]!=63'b0,A[78],A[63:0]} : 81'bz;
   assign res=(A[78:64]==0 && en) ? 81'b0 :  81'bz;//denormal loaded as zero for extended format
+  
+  assign res_n=(A[78:64]!=0 && A[78:64]!=15'hefff && en) ? {~An[78],An[79],An[77:64],An[78],An[63:0]} : 81'bz;
+  assign res_n=(A[78:64]==15'hefff && en) ? {An[79:65],An[62:0]!=63'b0,An[78],An[63:0]} : 81'bz;
+  assign res_n=(A[78:64]==0 && en) ? ~81'b0 :  81'bz;//denormal loaded as zero for extended format
 endmodule
 
 module stNativeE2E(

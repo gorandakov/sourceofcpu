@@ -2,15 +2,18 @@
 
 //exponent in ext is 16'b8011111...exp
 module ldD2nativeD(
-  A,
+  A,Ax,
   en,
   to_dbl,to_ext,
-  res);
+  res,
+  res_x);
   input [63:0] A;
+  input [63:0] Ax;
   input en;
   input to_dbl;
   input to_ext;
   output [80:0] res;
+  output [80:0] res_x;
 
   wire [51:0] denor;
   wire [51:0] last;
@@ -55,21 +58,26 @@ module ldD2nativeD(
 
   assign res[64:0]=(en&to_dbl) ? resX : 65'bz;
   assign {res[64],res[80:65],res[63:0]}=(en&to_ext) ? resY : 81'bz;
+  
+  assign res_x[64:0]=(en&to_dbl) ? ~resX : 65'bz;
+  assign {res_x[64],res_x[80:65],res[63:0]}=(en&to_ext) ? ~resY : 81'bz;
 endmodule
 
 module ldS2nativeS(
-  A,
+  A,Ax,
   en,
   to_sngl,
   to_dbl,
   to_ext,
-  res);
+  res,res_x);
   input [31:0] A;
+  input [31:0] Ax;
   input en;
   input to_sngl;
   input to_dbl;
   input to_ext;
   output [81:0] res;
+  output [81:0] res_x;
 
   wire [22:0] denor;
   wire [22:0] last;
@@ -120,6 +128,9 @@ module ldS2nativeS(
   assign res[32:0]=(en&to_sngl) ? resX : 33'bz;
   assign res[65:0]=(en&to_dbl) ? {resY[64:32],1'b0,resY[31:0]} : 66'bz;
   assign res[81:0]=(en&to_ext) ? {resZ[80:65],resZ[64],resZ[63:32],1'b0,resZ[31:0]} : 82'bz;
+  assign res_x[32:0]=(en&to_sngl) ? ~resX : 33'bz;
+  assign res_x[65:0]=(en&to_dbl) ? ~{resY[64:32],1'b0,resY[31:0]} : 66'bz;
+  assign res_x[81:0]=(en&to_ext) ? ~{resZ[80:65],resZ[64],resZ[63:32],1'b0,resZ[31:0]} : 82'bz;
 endmodule
 
 module stNativeD2D(A,en,from_dbl,from_ext,res);
