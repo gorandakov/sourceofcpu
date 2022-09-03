@@ -4365,31 +4365,46 @@ module backend(
 
  //   assign wxdata[n]={get_last_bank(dc_size_reg3[n],dc_rdataA[n]),dc_rdataA[n][23:0]};
 
-      ldD2nativeD lddbl_hi_mod(dc_rdataA_reg2[n][127:64],fxLD_dbl_reg[n],fxLD_dbl_t_reg[n],1'b0,{FUFLD_dummy[n],
-	      FUFH[n][65:33],FUFH[n][31:0]});
-      LDE2NativeE ldedbl_mod({dc_rdataA_reg2[n][79:0]},fxLD_ext_reg[n],{FUFL[n][15+68:68],FUFL[n][65:33],FUFL[n][31:0]});
+      ldD2nativeD lddbl_hi_mod(dc_rdataA_reg2[n][127:64],dc_rdataA_N_reg2[n][127:64],fxLD_dbl_reg[n],fxLD_dbl_t_reg[n],1'b0,
+	      {FUFLD_dummy[n],FUFH[n][65:33],FUFH[n][31:0]},{FUFLD_dummy_N[n],FUFH_N[n][65:33],FUFH_N[n][31:0]});
+      LDE2NativeE ldedbl_mod({dc_rdataA_reg2[n][79:0]},dc_rdataA_N_reg2[n][79:0],fxLD_ext_reg[n],
+	      {FUFL[n][15+68:68],FUFL[n][65:33],FUFL[n][31:0]},{FUFL_N[n][15+68:68],FUFL_N[n][65:33],FUFL_N[n][31:0]});
       assign FUFH[n][32]=fxLD_dblext[n] ? 1'b0 : 1'bz;
-      ldD2nativeD lddbl_lo_mod(dc_rdataA_reg2[n][63:0],fxLD_dbl_reg[n],fxLD_dbl_t_reg[n],fxLD_ext_t_reg[n],{FUFL[n][15+68:68],
-	      FUFL[n][65:33],FUFL[n][31:0]});
+      assign FUFH_N[n][32]=fxLD_dblext[n] ? 1'b1 : 1'bz;
+      ldD2nativeD lddbl_lo_mod(dc_rdataA_reg2[n][63:0],dc_rdataA_N_reg2[n][63:0],fxLD_dbl_reg[n],fxLD_dbl_t_reg[n],fxLD_ext_t_reg[n],
+	      {FUFL[n][15+68:68],FUFL[n][65:33],FUFL[n][31:0]},{FUFL_N[n][15+68:68],FUFL_N[n][65:33],FUFL_N[n][31:0]});
       assign FUFL[n][32]=fxLD_dblext[n] ? 1'b0 : 1'bz;
-      ldS2nativeS ldsngl_ll(dc_rdataA_reg[n][31:0],fxLD_sin[n],fxLD_sngl_t[n],fxLD_dbl_t[n],fxLD_ext_t[n],{FUVLX[n][15:0],
-	      FUVL[n][65:0]});
-      ldS2nativeS ldsngl_lh(dc_rdataA_reg[n][63:32],fxLD_sin[n],fxLD_sngl_t[n],1'b0,1'b0,{FUVLD_dummy[n],FUVL[n][65:33]});
-      ldS2nativeS ldsngl_hl(dc_rdataA_reg[n][95:64],fxLD_sin[n],fxLD_sngl_t[n],fxLD_dbl_t[n] && ~fxLD_spair_t[n],1'b0,{FUFLD_dummy1[n],
-	      FUVH[n][65:0]});
-      ldS2nativeS ldsngl_hh(dc_rdataA_reg[n][127:96],fxLD_sin[n],fxLD_sngl_t[n],1'b0,1'b0,{FUVLD_dummy1[n],FUVH[n][65:33]});
-      ldS2nativeS ldsngl_hl2(dc_rdataA_reg[n][63:32],fxLD_sin[n],1'b0,fxLD_dbl_t[n] && fxLD_spair_t[n],1'b0,{FUFLD_dummy2[n],
-	      FUVH[n][65:0]});
+      assign FUFL_N[n][32]=fxLD_dblext[n] ? 1'b1 : 1'bz;
+      ldS2nativeS ldsngl_ll(dc_rdataA_reg[n][31:0],dc_rdataA_N_reg[n][31:0],fxLD_sin[n],fxLD_sngl_t[n],fxLD_dbl_t[n],fxLD_ext_t[n],
+	      {FUVLX[n][15:0],FUVL[n][65:0]},{FUVLX_N[n][15:0],FUVL_N[n][65:0]});
+      ldS2nativeS ldsngl_lh(dc_rdataA_reg[n][63:32],dc_rdataA_N_reg[n][63:32],fxLD_sin[n],fxLD_sngl_t[n],1'b0,1'b0,
+	      {FUVLD_dummy[n],FUVL[n][65:33]},{FUVLD_dummy_N[n],FUVL_N[n][65:33]});
+      ldS2nativeS ldsngl_hl(dc_rdataA_reg[n][95:64],dc_rdataA_N_reg[n][95:64],fxLD_sin[n],fxLD_sngl_t[n],fxLD_dbl_t[n] && ~fxLD_spair_t[n],1'b0,
+	      {FUFLD_dummy1[n],FUVH[n][65:0]},{FUFLD_dummy1_N[n],FUVH_N[n][65:0]});
+      ldS2nativeS ldsngl_hh(dc_rdataA_reg[n][127:96],dc_rdataA_N_reg[n][127:96],fxLD_sin[n],fxLD_sngl_t[n],1'b0,1'b0,
+	      {FUVLD_dummy1[n],FUVH[n][65:33]},{FUVLD_dummy1_N[n],FUVH_N[n][65:33]});
+      ldS2nativeS ldsngl_hl2(dc_rdataA_reg[n][63:32],dc_rdataA_N_reg[n][63:32],fxLD_sin[n],1'b0,fxLD_dbl_t[n] && fxLD_spair_t[n],1'b0,
+	      {FUFLD_dummy2[n],FUVH[n][65:0]},{FUFLD_dummy2_N[n],FUVH_N[n][65:0]});
       assign FUFH[n][65:0]=(fxLD_ext_t[n]) ? 66'b0 : 66'bz; 
       assign FUFH[n][67:66]=fxLD_ext_t_reg[n] ? `ptype_ext : 2'bz;
       assign FUFH[n][67:66]=fxLD_dbl_t_reg[n] ? `ptype_dbl : 2'bz;
       assign FUFH[n][67:66]=fxLD_sngl_t_reg[n] ? `ptype_sngl : 2'bz;
+      
+      assign FUFH_N[n][65:0]=(fxLD_ext_t[n]) ? ~66'b0 : 66'bz; 
+      assign FUFH_N[n][67:66]=fxLD_ext_t_reg[n] ? ~`ptype_ext : 2'bz;
+      assign FUFH_N[n][67:66]=fxLD_dbl_t_reg[n] ? ~`ptype_dbl : 2'bz;
+      assign FUFH_N[n][67:66]=fxLD_sngl_t_reg[n] ? ~`ptype_sngl : 2'bz;
 
       assign FUFL[n][67:66]=FUFH[n][67:66];
+      assign FUFL_N[n][67:66]=FUFH_N[n][67:66];
 
       assign {FUFL[n][15+68:68],FUFL[n][65:0]} =fxLD_ext_t_reg[n] & fxLD_sin_reg[n] ? {FUVLX_reg[n][15:0],FUVL_reg[n][65:0]} : 82'bz;
       assign {FUFL[n][15+68:68],FUFL[n][65:0]} =fxLD_dbl_t_reg[n] & fxLD_sin_reg[n] ? {16'b0,FUVL_reg[n][65:0]} : 82'bz;
       assign {FUFH[n][65:0]} =fxLD_dbl_t_reg[n] & fxLD_sin_reg[n] ? {FUVH_reg[n][65:0]} : 66'bz;
+       
+      assign {FUFL_N[n][15+68:68],FUFL_N[n][65:0]} =fxLD_ext_t_reg[n] & fxLD_sin_reg[n] ? ~{FUVLX_reg[n][15:0],FUVL_reg[n][65:0]} : 82'bz;
+      assign {FUFL_N[n][15+68:68],FUFL_N[n][65:0]} =fxLD_dbl_t_reg[n] & fxLD_sin_reg[n] ? ~{16'b0,FUVL_reg[n][65:0]} : 82'bz;
+      assign {FUFH_N[n][65:0]} =fxLD_dbl_t_reg[n] & fxLD_sin_reg[n] ? ~{FUVH_reg[n][65:0]} : 66'bz;
        
       assign FUVL[n][65:0]=fxLD_sngl_t[n] | fxLD_dbl_t[n] ? 66'bz : {dc_pdataA_reg[n][0],dc_rdataA_reg[n][63:32],1'b0,
 	      dc_rdataA_reg[n][31:0]}; 
@@ -4398,6 +4413,13 @@ module backend(
       assign FUVL[n][67:66]=fxLD_sngl_t[n] ? `ptype_sngl : `ptype_int;
       assign FUVH[n][67:66]=fxLD_sngl_t[n] ? `ptype_sngl : `ptype_int;
 
+      assign FUVL_N[n][65:0]=fxLD_sngl_t[n] | fxLD_dbl_t[n] ? 66'bz : {~dc_pdataA_reg[n][0],dc_rdataA_N_reg[n][63:32],1'b0,
+	      dc_rdataA_N_reg[n][31:0]}; 
+      assign FUVH_N[n][65:0]=fxLD_sngl_t[n] | fxLD_dbl_t[n] ? 66'bz : {~dc_pdataA_reg[n][1],dc_rdataA_N_reg[n][127:96],1'b0,
+	      dc_rdataA_N_reg[n][95:64]}; 
+      assign FUVL_N[n][67:66]=fxLD_sngl_t[n] ? ~`ptype_sngl : ~`ptype_int;
+      assign FUVH_N[n][67:66]=fxLD_sngl_t[n] ? ~`ptype_sngl : ~`ptype_int;
+      
       if (n<2) begin : Wfwd
 
           assign lsw_wdata[n]=|WDfxDataEn_reg3[n][3:2] ? lsw_wdataF_reg[n] : {64'b0,8'b0,WDfxData_reg3[n][63:0]};
