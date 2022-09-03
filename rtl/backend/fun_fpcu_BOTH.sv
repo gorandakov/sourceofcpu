@@ -32,6 +32,8 @@ module fun_fpu_BOTH(
   FUFL3,FUFL4,FUFL5,
   FUFL6,FUFL7,FUFL8,
   FUFL9,
+  FUFH0_n,FUFH1_n,FUFH2_n,FUFH3_n,
+  FUFL0_m,FUFL1_m,FUFL2_m,FUFL3_m,
   ALTDATAH0,ALTDATAH1,
   ALTDATAL0,ALTDATAL1,
   ALT_INP,
@@ -164,6 +166,15 @@ module fun_fpu_BOTH(
   input [16+67:0] ALTDATAL1;
   input [67:0] ALTDATAH0;
   input [67:0] ALTDATAH1;
+  
+  input [67:0] FUFH0_n;
+  input [67:0] FUFH1_n;
+  input [67:0] FUFH2_n;
+  input [67:0] FUFH3_n;
+  input [16+67:0] FUFL0_m;
+  input [16+67:0] FUFL1_m;
+  input [16+67:0] FUFL2_m;
+  input [16+67:0] FUFL3_m;
 
   input [5:0] FUS_alu0;
   input [5:0] FUS_alu1;
@@ -295,6 +306,7 @@ module fun_fpu_BOTH(
   FUFH3,FUFH4,FUFH5,
   FUFH6,FUFH7,FUFH8,
   FUFH9,
+  FUFH0_n,FUFH1_n,FUFH2_n,FUFH3_n,
   ALTDATAH0,ALTDATAH1,
   ALT_INP,
   FUS_alu0,FUS_alu1,
@@ -340,6 +352,7 @@ module fun_fpu_BOTH(
   FUFL3,FUFL4,FUFL5,
   FUFL6,FUFL7,FUFL8,
   FUFL9,
+  FUFL0_m,FUFL1_m,FUFL2_m,FUFL3_m,
   ALTDATAL0,ALTDATAL1,
   ALT_INP,
   FUS_alu0,FUS_alu1,

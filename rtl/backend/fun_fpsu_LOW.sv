@@ -28,6 +28,7 @@ module fun_fpuSL(
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
   FUF9,
+  FUF0N,FUF1M,FUF2N,FUF3M,
   ALTDATA0,ALTDATA1,
   ALT_INP,
   FOOSL0_out,
@@ -132,6 +133,12 @@ module fun_fpuSL(
   input [1:0] ALT_INP;
   input [67:0] ALTDATA0;
   input [67:0] ALTDATA1;
+  
+  input [16+67:0] FUF0N;
+  input [16+67:0] FUF1M;
+  input [16+67:0] FUF2N;
+  input [16+67:0] FUF3M;
+
  
   output [5:0] FOOSL0_out;
   output [5:0] FOOSL1_out;
@@ -153,6 +160,7 @@ module fun_fpuSL(
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
   FUF9,
+  FUF0N,FUF1M,FUF2N,FUF3M,
   68'b0,68'b0,
   2'b0,
   FOOSL0_out,
@@ -172,6 +180,7 @@ module fun_fpuSL(
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
   FUF9,
+  FUF0N,FUF1M,FUF2N,FUF3M,
   68'b0,68'b0,
   2'b0,
   FOOSL1_out,
@@ -191,6 +200,7 @@ module fun_fpuSL(
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
   FUF9,
+  FUF0N,FUF1M,FUF2N,FUF3M,
   ALTDATA0,ALTDATA1,
   ALT_INP,
   FOOSL2_out,
