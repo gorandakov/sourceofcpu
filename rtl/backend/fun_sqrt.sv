@@ -24,17 +24,14 @@ module fun_fpusqr0(
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
   FUF9,
-  FUV0,FUV1,FUV2,
-  FUV3,FUV4,FUV5,
-  FUV6,FUV7,FUV8,
-  FUV9,
+  FUF0_n,FUF1_m,FUF2_n,FUF3_n,
   fxFRT_alten,
   fxFRT_pause
   );
   //parameter [1:0] INDEX=2'd2;
   parameter [0:0] H=1'b0;
   localparam SIMD_WIDTH=68; //half width
-  localparam S={27'b0,~H,4'b0};
+  localparam S=1'b0;
   localparam REG_WIDTH=9;
   input clk;
   input rst;
@@ -67,17 +64,6 @@ module fun_fpusqr0(
   output FUwen;
   output [2*SIMD_WIDTH-1:0] outAltData;
 
-  input [67:0] FUV0;
-  input [67:0] FUV1;
-  input [67:0] FUV2;
-  input [67:0] FUV3;
-  input [67:0] FUV4;
-  input [67:0] FUV5;
-  inout [67:0] FUV6;
-  input [67:0] FUV7;
-  input [67:0] FUV8;
-  input [67:0] FUV9;
-
   input [S+67:0] FUF0;
   input [S+67:0] FUF1;
   input [S+67:0] FUF2;
@@ -88,6 +74,10 @@ module fun_fpusqr0(
   input [S+67:0] FUF7;
   input [S+67:0] FUF8;
   input [S+67:0] FUF9;
+  input [S+67:0] FUF0_n;
+  input [S+67:0] FUF1_m;
+  input [S+67:0] FUF2_n;
+  input [S+67:0] FUF3_n;
   output [3:0] fxFRT_alten;//very fat wire
   output [3:0]      fxFRT_pause;//same here
 
@@ -208,6 +198,7 @@ module fun_fpusqr0(
   ~u1_en[3],
   u1_A,uu_A1,
   u1_fufwd_A_reg,u1_fuufwd_A_reg,
+  FUF0_n,FUF1_m,FUF2_n,FUF3_n,
   FUF0,FUF0_reg,
   FUF1,FUF1_reg,
   FUF2,FUF2_reg,
@@ -225,6 +216,7 @@ module fun_fpusqr0(
   ~u1_en[3],
   u1_B,uu_B1,
   u1_fufwd_B_reg,u1_fuufwd_B_reg,
+  FUF0_n,FUF1_m,FUF2_n,FUF3_n,
   FUF0,FUF0_reg,
   FUF1,FUF1_reg,
   FUF2,FUF2_reg,
@@ -237,41 +229,6 @@ module fun_fpusqr0(
   FUF9,FUF9_reg
   );
   
-  rs_write_forward #(68) u1_Av_fwd(
-  clk,rst,
-  ~u1_en[2],
-  u1_Av,uu_Av1,
-  u1_fufwd_A,u1_fuufwd_A,
-  FUV0,FUV0_reg,
-  FUV1,FUV1_reg,
-  FUV2,FUV2_reg,
-  FUV3,FUV3_reg,
-  FUV4,FUV4_reg,
-  FUV5,FUV5_reg,
-  FUV6,FUV6_reg,
-  FUV7,FUV7_reg,
-  FUV8,FUV8_reg,
-  FUV9,FUV9_reg
-  );
-  
-  rs_write_forward #(68) u1_Bv_fwd(
-  clk,rst,
-  ~u1_en[2],
-  u1_Bv,uu_Bv1,
-  u1_fufwd_B,u1_fuufwd_B,
-  FUV0,FUV0_reg,
-  FUV1,FUV1_reg,
-  FUV2,FUV2_reg,
-  FUV3,FUV3_reg,
-  FUV4,FUV4_reg,
-  FUV5,FUV5_reg,
-  FUV6,FUV6_reg,
-  FUV7,FUV7_reg,
-  FUV8,FUV8_reg,
-  FUV9,FUV9_reg
-  );
-  
-
 /*
   assign fraise2[m]=fxFCADD_sn_reg5[m] ?
     (fxFCADD_raise_s_reg[0]|fxFCADD_raise_s_reg[1])&fpcsr[21:11] :
@@ -411,7 +368,7 @@ module fun_fpusqr0(
       end
   endgenerate 
 
-  assign outAltData=fxFRT_alten_reg5==4'b0 ? {2*SIMD_WIDTH{1'b0}} : {2*SIMD_WIDTH{1'bz}};
+  assign outAltData=fxFRT_alten_reg5==4'b0 ? {S+SIMD_WIDTH{1'b0}} : {S+SIMD_WIDTH{1'bz}};
 
   always @(posedge clk) begin
       if (rst) begin
@@ -499,8 +456,8 @@ module fun_fpusqr0(
 	  frtReg_reg<=frtReg;
           frtII_reg<=frtII;
           frtOp_reg<=frtOp;
-	  uu_Av_reg<=uu_Av1;
-	  uu_Bv_reg<=uu_Bv1;
+	  uu_Av_reg<=uu_A1;
+	  uu_Bv_reg<=uu_B1;
 	  u1_regNo_reg<=u1_regNo;
 	  u1_op_reg<=u1_op;
 	  u1_II_reg<=u1_II;
@@ -509,17 +466,6 @@ module fun_fpusqr0(
           u1_fuufwd_A_reg<=u1_fuufwd_A;
           u1_fufwd_B_reg<=u1_fufwd_B;
           u1_fuufwd_B_reg<=u1_fuufwd_B;
-
-	  FUV0_reg<=FUV0;
-	  FUV1_reg<=FUV1;
-	  FUV2_reg<=FUV2;
-	  FUV3_reg<=FUV3;
-	  FUV4_reg<=FUV4;
-	  FUV5_reg<=FUV5;
-	  FUV6_reg<=FUV6;
-	  FUV7_reg<=FUV7;
-	  FUV8_reg<=FUV8;
-	  FUV9_reg<=FUV9;
 
 	  FUF0_reg<=FUF0;
 	  FUF1_reg<=FUF1;

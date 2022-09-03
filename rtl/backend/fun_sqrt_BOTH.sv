@@ -21,14 +21,6 @@ module fun_fpusqr(
   FUSreg,
   FUwen,
   outAltData,
-  FUFH0,FUFH1,FUFH2,
-  FUFH3,FUFH4,FUFH5,
-  FUFH6,FUFH7,FUFH8,
-  FUFH9,
-  FUVH0,FUVH1,FUVH2,
-  FUVH3,FUVH4,FUVH5,
-  FUVH6,FUVH7,FUVH8,
-  FUVH9,
   FUFL0,FUFL1,FUFL2,
   FUFL3,FUFL4,FUFL5,
   FUFL6,FUFL7,FUFL8,
@@ -37,6 +29,8 @@ module fun_fpusqr(
   FUVL3,FUVL4,FUVL5,
   FUVL6,FUVL7,FUVL8,
   FUVL9,
+  FUVL0_n,FUVL1_n,FUVL2_n,FUVL3_n,
+  FUFL0_m,FUFL1_m,FUFL2_m,FUFL3_m,
   fxFRT_alten,
   fxFRT_pause
   );
@@ -74,18 +68,8 @@ module fun_fpusqr(
   output [8:0] FUreg;
   output [8:0] FUSreg;
   output FUwen;
-  output [2*SIMD_WIDTH-1:0] outAltData;
-
-  input [67:0] FUVH0;
-  input [67:0] FUVH1;
-  input [67:0] FUVH2;
-  input [67:0] FUVH3;
-  input [67:0] FUVH4;
-  input [67:0] FUVH5;
-  inout [67:0] FUVH6;
-  input [67:0] FUVH7;
-  input [67:0] FUVH8;
-  input [67:0] FUVH9;
+  output [16+SIMD_WIDTH-1:0] outAltDataF;
+  output [SIMD_WIDTH-1:0] outAltDataV;
 
   input [67:0] FUVL0;
   input [67:0] FUVL1;
@@ -97,17 +81,10 @@ module fun_fpusqr(
   input [67:0] FUVL7;
   input [67:0] FUVL8;
   input [67:0] FUVL9;
-
-  input [67:0] FUFH0;
-  input [67:0] FUFH1;
-  input [67:0] FUFH2;
-  input [67:0] FUFH3;
-  input [67:0] FUFH4;
-  input [67:0] FUFH5;
-  inout [67:0] FUFH6;
-  input [67:0] FUFH7;
-  input [67:0] FUFH8;
-  input [67:0] FUFH9;
+  input [67:0] FUVL0_n;
+  input [67:0] FUVL1_n;
+  input [67:0] FUVL2_n;
+  input [67:0] FUVL3_n;
 
   input [S+67:0] FUFL0;
   input [S+67:0] FUFL1;
@@ -119,6 +96,10 @@ module fun_fpusqr(
   input [S+67:0] FUFL7;
   input [S+67:0] FUFL8;
   input [S+67:0] FUFL9;
+  input [S+67:0] FUFL0_m;
+  input [S+67:0] FUFL1_m;
+  input [S+67:0] FUFL2_m;
+  input [S+67:0] FUFL3_m;
   
   output [3:0] fxFRT_alten;
   output [3:0]      fxFRT_pause;
@@ -169,7 +150,6 @@ module fun_fpusqr(
   no,
   en);
 */
-  assign outAltData=outOp==`fop_sqrtDH || outOp==`fop_divDH ? outAltDataH : outAltDataL;
 
   fun_fpusqr0 sqr_low(
   clk,
@@ -186,18 +166,16 @@ module fun_fpusqr(
   FUreg,
   FUSreg,
   FUwen,
-  outAltDataL,
+  outAltDataF,
   FUFL0,FUFL1,FUFL2,
   FUFL3,FUFL4,FUFL5,
   FUFL6,FUFL7,FUFL8,
   FUFL9,
-  FUVL0,FUVL1,FUVL2,
-  FUVL3,FUVL4,FUVL5,
-  FUVL6,FUVL7,FUVL8,
-  FUVL9,
+  FUFL0_m,FUFL1_m,FUFL2_m,FUFL3_m,
   fxFRT_alten,
   fxFRT_pause
   );
+ 
   fun_fpusqr0 #(1) sqr_hi(
   clk,
   rst,except,
@@ -213,15 +191,12 @@ module fun_fpusqr(
   ,//FUreg
   ,//FUSreg
   ,//FUwen
-  outAltDataH,
-  FUFH0,FUFH1,FUFH2,
-  FUFH3,FUFH4,FUFH5,
-  FUFH6,FUFH7,FUFH8,
-  FUFH9,
-  FUVH0,FUVH1,FUVH2,
-  FUVH3,FUVH4,FUVH5,
-  FUVH6,FUVH7,FUVH8,
-  FUVH9,
+  outAltDataV,
+  FUVL0,FUVL1,FUVL2,
+  FUVL3,FUVL4,FUVL5,
+  FUVL6,FUVL7,FUVL8,
+  FUVL9,
+  FUVL0_n,FUVL1_n,FUVL2_n,FUVL3_n,
   ,
   
   );
