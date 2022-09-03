@@ -1379,6 +1379,8 @@ module dcache1(
           end
           assign  write_data[b*32+:32]=(|{wr0,wr1}) ? 32'BZ : 
             busIns_data[(b%16)*32+:32];
+          assign  write_dataM[b*32+:32]=(|{wr0,wr1}) ? 32'BZ : 
+            ~busIns_data[(b%16)*32+:32];
   /*        assign bank_hit[b]=read_bankHit_way[0][b] | read_bankHit_way[1][b] | read_bankHit_way[2][b] | 
             read_bankHit_way[3][b] | read_bankHit_way[4][b] | read_bankHit_way[5][b] |  
             read_bankHit_way[6][b] | read_bankHit_way[7][b]; */

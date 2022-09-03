@@ -1924,6 +1924,7 @@ module backend(
   wire [3:0] dc_rdEn; 
   wire [3:0] dc_rsEn; 
   wire [3:0][127+8:0] dc_rdataA;
+  wire [3:0][127+8:0] dc_rdataA_N;
   wire [3:0][127+8:0] dc_rdat;
   wire [3:0][1:0] dc_pdataA;
   wire [3:0][1:0] dc_pdat;
@@ -1954,6 +1955,7 @@ module backend(
   wire [1:0] dc_odd_wr;
   wire [1:0] dc_split_wr;
   wire [1:0][5*32-1:0] dc_wdata;
+  wire [1:0][5*32-1:0] dc_wdata_N;
   wire [1:0][4*32-1:0] dc_wdataP;
   reg [4*32-1:0] dc_wdataP_reg[1:0];
   wire [1:0][4:0] dc_wrBegin;
@@ -5340,25 +5342,25 @@ dcache1 L1D_mod(
   .read_addrE0(lsr_wr_data[0][`lsaddr_addrE]), .read_addrO0(lsr_wr_data[0][`lsaddr_addrO]), 
     .read_bank0(lsr_wr_data[0][`lsaddr_banks]), .read_clkEn0(dc_rdEn[0]), .read_hit0(FU0HitP),
     .read_hitCl0(dc_rdHitCl[0]),.read_odd0(lsr_wr_data[0][`lsaddr_odd]), 
-    .read_split0(lsr_wr_data[0][`lsaddr_split]), .read_dataA0(dc_rdataA[0]), 
+    .read_split0(lsr_wr_data[0][`lsaddr_split]), .read_dataA0(dc_rdataA[0]), .read_NdataA0(dc_rdataA_N[0]),
     .read_beginA0(lsr_wr_data[0][`lsaddr_bank0]), .read_low0(lsr_wr_data[0][`lsaddr_low]), 
     .read_sz0(lsr_wr_data[0][`lsaddr_sz]),.read_pbit0(dc_pdataA[0]),
   .read_addrE1(lsr_wr_data[1][`lsaddr_addrE]), .read_addrO1(lsr_wr_data[1][`lsaddr_addrO]), 
     .read_bank1(lsr_wr_data[1][`lsaddr_banks]), .read_clkEn1(dc_rdEn[1]), .read_hit1(FU1HitP),   
     .read_hitCl1(dc_rdHitCl[1]),.read_odd1(lsr_wr_data[1][`lsaddr_odd]), 
-    .read_split1(lsr_wr_data[1][`lsaddr_split]), .read_dataA1(dc_rdataA[1]), 
+    .read_split1(lsr_wr_data[1][`lsaddr_split]), .read_dataA1(dc_rdataA[1]), .read_NdataA1(dc_rdataA_N[1]), 
     .read_beginA1(lsr_wr_data[1][`lsaddr_bank0]), .read_low1(lsr_wr_data[1][`lsaddr_low]), 
     .read_sz1(lsr_wr_data[1][`lsaddr_sz]),.read_pbit1(dc_pdataA[1]),
   .read_addrE2(lsr_wr_data[2][`lsaddr_addrE]), .read_addrO2(lsr_wr_data[2][`lsaddr_addrO]), 
     .read_bank2(lsr_wr_data[2][`lsaddr_banks]), .read_clkEn2(dc_rdEn[2]), .read_hit2(FU2HitP),   
     .read_hitCl2(dc_rdHitCl[2]),.read_odd2(lsr_wr_data[2][`lsaddr_odd]), 
-    .read_split2(lsr_wr_data[2][`lsaddr_split]), .read_dataA2(dc_rdataA[2]),
+    .read_split2(lsr_wr_data[2][`lsaddr_split]), .read_dataA2(dc_rdataA[2]), .read_NdataA2(dc_rdataA_N[2]),
     .read_beginA2(lsr_wr_data[2][`lsaddr_bank0]), .read_low2(lsr_wr_data[2][`lsaddr_low]), 
     .read_sz2(lsr_wr_data[2][`lsaddr_sz]),.read_pbit2(dc_pdataA[2]),
   .read_addrE3(lsr_wr_data[3][`lsaddr_addrE]), .read_addrO3(lsr_wr_data[3][`lsaddr_addrO]), 
     .read_bank3(lsr_wr_data[3][`lsaddr_banks]), .read_clkEn3(dc_rdEn[3]), .read_hit3(FU3HitP),   
     .read_hitCl3(dc_rdHitCl[3]),.read_odd3(lsr_wr_data[3][`lsaddr_odd]), 
-    .read_split3(lsr_wr_data[3][`lsaddr_split]), .read_dataA3(dc_rdataA[3]),
+    .read_split3(lsr_wr_data[3][`lsaddr_split]), .read_dataA3(dc_rdataA[3]), .read_NdataA3(dc_rdataA_N[3]),
     .read_beginA3(lsr_wr_data[3][`lsaddr_bank0]), .read_low3(lsr_wr_data[3][`lsaddr_low]), 
     .read_sz3(lsr_wr_data[3][`lsaddr_sz]),.read_pbit3(dc_pdataA[3]),
   .read_bankNoRead(dc_bankNone),
@@ -5382,6 +5384,7 @@ dcache1 L1D_mod(
   .write_bgnBen0(dc_wrBGN_BNK[0]),
   .write_endBen0(dc_wrEND_BNK[0]),
   .write_data0(dc_wdata[0]),
+  .write_dataM0(dc_wdata_N[0]),
   .write_addrE1(dc_wrAddrE[1]),
   .write_addrO1(dc_wrAddrO[1]),
   .write_bank1(dc_wrBanks[1]),
@@ -5398,6 +5401,7 @@ dcache1 L1D_mod(
   .write_bgnBen1(dc_wrBGN_BNK[1]),
   .write_endBen1(dc_wrEND_BNK[1]),
   .write_data1(dc_wdata[1]),
+  .write_data1(dc_wdata_N[1]),
   .write_clear(write_clear),
   .insert_en(insert_isData_reg3),
   .insert_exclusive(insBus_exclusive_reg3),

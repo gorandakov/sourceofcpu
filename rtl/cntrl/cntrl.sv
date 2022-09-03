@@ -118,7 +118,7 @@ module cntrl_get_IP(
   adder_CSA #(4) csa_mod(baseIP[3:0],srcIPOff[3:0],~{1'b0,magicO},par0,par1);
   adder #(4) nlast_add_small(par0[3:0],par1[3:0],nextIP[3:0],1'b1,excpt,,,,);
   add_agu adder_mod(
-  {1'b1,baseIP,1'b0},{1'b0,54'b0,srcIPOff[8:4],5'b0},{32'b0,last&~excpt},
+  {1'b1,baseIP,1'b0},{63'b0,last&~excpt},{1'b0,54'b0,srcIPOff[8:4],5'b0},
   val2,
   cout_sec,
   ndiff,
@@ -663,7 +663,7 @@ module cntrl_find_outcome(
   wire [5:0] initcount_d;
   reg init;
 
-  wire [42:0] excpt_handlerIP;
+  wire [62:0] excpt_handlerIP;
   wire [7:0] excpt_code;
   wire jump0Pred;
   wire jump1Pred;
@@ -690,6 +690,7 @@ module cntrl_find_outcome(
   wire [9:0] rvec;
   wire [9:0] last_instr;
 
+  wire [63:0] base_add;
   wire is_after_spec;
   wire [9:0] rd_after_spec;
   reg [62:0] baseIP;
@@ -717,7 +718,7 @@ module cntrl_find_outcome(
   wire [64:0] csrss_data_d;
 
   reg [42:0] archReg_xcpt_retIP		[1:0];
-  reg [42:0] archReg_xcpt_handlerIP	[1:0];
+  reg [62:0] archReg_xcpt_handlerIP;
   reg [15:0] archReg_proc		[1:0];
  // reg [7:0]  archReg_xcpt_code		[1:0];
   
@@ -843,8 +844,8 @@ module cntrl_find_outcome(
 
       wire [62:0] from_IP;
       assign from_IP=(~tk_after[k]) ? baseIP[62:0] : 63'bz;
-      assign from_IP=(tk_after[k] & jump0Pred) ? jump0IP[62:0] : 63'bz;
-      assign from_IP=(tk_after[k] & jump1Pred) ? jump1IP[62:0] : 63'bz;
+      assign from_IP=(tk_after[k] & jump0Pred) ? {jump0BND,jump0IP[42:0]} : 63'bz;
+      assign from_IP=(tk_after[k] & jump1Pred) ? {jump1BND,jump1IP[42:0]} : 63'bz;
 
       assign breakIP=break_[k] ? nextIP[k][42:0] : 43'bz;
       assign bbaseIP=break_[k] ? nextIP[k][62:43] : 20'bz;
@@ -929,7 +930,7 @@ module cntrl_find_outcome(
   assign update_btb_addr_j0[0]=  jump0BtbWay;
   assign update_btb_addr_j0[10:1]=jupd0_IP[13:4];
   
-  assign excpt_handlerIP=archReg_xcpt_handlerIP[retire_thread_reg];
+  assign excpt_handlerIP=archReg_xcpt_handlerIP;
       
   assign isGen=rgen & ~rvec;
   assign isVec=rvec;
@@ -979,7 +980,7 @@ module cntrl_find_outcome(
   assign csrss_data_d=(~break_exceptn & ~(has_indir & indir_ready & has_some)) ? {49'b0,5'b0,excpt_fpu} : 65'bz;
   assign baseIP_d=(jump0_in & jump0_taken &~break_exceptn &~break_replay &~break_replayS) ? {jump0BND,jump0IP} : 6_3'bz;
   assign baseIP_d=(jump1_in & jump1_taken &~break_exceptn &~break_replay &~break_replayS) ? {jump1BND,jump1IP} : 63'bz;
-  assign baseIP_d=(break_exceptn) ? {baseIP[62:43],excpt_handlerIP} : 63'bz;
+  assign baseIP_d=(break_exceptn) ? {excpt_handlerIP[62:11],excpt_code[5:0],5'b0} : 63'bz;
   assign baseIP_d=break_replay || ~(jump0_in&jump0_taken) & ~(jump1_in&jump1_taken) & (break_jump0||
       break_jump1) ? {baseIP[62:43],breakIP} : 63'bz;
   assign baseIP_d=break_prejmp_ntick & ~(jump0_in&jump0_taken) & ~(jump1_in&jump1_taken) 
@@ -1235,8 +1236,16 @@ module cntrl_find_outcome(
 
   adder_inc #(6) initAdd_mod(initcount,initcount_d,1'b1,);
   
-  adder_inc #(43-8) baseAdd_mod(baseIP[42:8],baseIP_d[42:8],break_prejmp_tick & ~(jump0_in&jump0_taken) & 
-     ~(jump1_in&jump1_taken) & ~break_exceptn,);//use addsub_agu
+  add_agu baseAdd_mod(
+  {1'b1,baseIP[62:8],9'b0},64'h100,65'b0,
+  base_add,
+  ,//sec
+  ,//ndiff
+  1'b1,
+  4'h1
+  );
+
+  assign baseIP_d[62:8]=break_prejmp_tick & ~(jump0_in&jump0_taken) &~(jump1_in&jump1_taken) & ~break_exceptn ? base_add[63:9] : 55'bz;
 
   bit_find_first_bit #(10) break_mod(~(done|fpudone)|jump0_misPred|jump1_misPred,break_,has_break);
   bit_find_first_bit_tail #(10) xbreak_mod(~(done|fpudone)|{jump0_misPred[8:0]|jump1_misPred[8:0],1'b0},xbreak,has_xbreak);
@@ -1453,6 +1462,9 @@ module cntrl_find_outcome(
 	  retcnt<=(doRetire_d&~init) ? retcnt_d : 4'd1;
 	  retclr<={9{doRetire_d&~init}} & retclrP;
 
+	  if (csrss_en && csrss_no==`csr_excIP) begin
+              archReg_xcpt_handlerIP<=csrss_data[63:1];
+	  end
           if (break_exceptn && has_some && indir_ready) begin
 	      archReg_xcpt_retIP[retire_thread_reg]<=breakIP;	
 //	      archReg_xcpt_code[retire_thread_reg]<=excpt_code;	
