@@ -131,6 +131,7 @@ module agu_block(
   p5_adata,p5_LSQ,p5_en,p5_secq,p5_ret,
   p_bankNone,
   FU0Hit,FU1Hit,FU2Hit,FU3Hit,
+  FNU0,FNU1,FNU2,FNU3,
   FU0,FU1,FU2,FU3,FU4,FU5,FU6,FU7,FU8,FU9,
   FUreg3_reg,dc_rdataA,
   msi_exp_addr,msi_en,msi_out_clear,//msi_out_clear=can do msi en
@@ -407,6 +408,12 @@ module agu_block(
   input [64:0] FU7;
   input [64:0] FU8;
   input [64:0] FU9;
+
+  input [64:0] FNU3;
+  input [64:0] FNU2;
+  input [64:0] FNU1;
+  input [64:0] FNU0;
+
   input [8:0] FUreg3_reg;
   input [127+8:0] dc_rdataA;
   
@@ -1292,6 +1299,7 @@ module agu_block(
   ~u1_clkEn|(rsStall[0]&~now_flushing&~alt_bus_hold_reg),
   u1_base,uu_base1,
   u1_base_fufwd,u1_base_fuufwd,
+  FNU0,FNU1,FNU2,FNU3,
   FU0,FU0_reg,
   FU1,FU1_reg,
   FU2,FU2_reg,
@@ -1309,6 +1317,7 @@ module agu_block(
   ~u1_clkEn|(rsStall[0]&~now_flushing&~alt_bus_hold_reg),
   u1_index,uu_index1,
   u1_index_fufwd,u1_index_fuufwd,
+  FNU0,FNU1,FNU2,FNU3,
   FU0,FU0_reg,
   FU1,FU1_reg,
   FU2,FU2_reg,
@@ -1326,6 +1335,7 @@ module agu_block(
   ~u2_clkEn|(rsStall[1]&~now_flushing&~alt_bus_hold_reg),
   u2_base,uu_base2,
   u2_base_fufwd,u2_base_fuufwd,
+  FNU0,FNU1,FNU2,FNU3,
   FU0,FU0_reg,
   FU1,FU1_reg,
   FU2,FU2_reg,
@@ -1343,6 +1353,7 @@ module agu_block(
   ~u2_clkEn|(rsStall[1]&~now_flushing&~alt_bus_hold_reg),
   u2_index,uu_index2,
   u2_index_fufwd,u2_index_fuufwd,
+  FNU0,FNU1,FNU2,FNU3,
   FU0,FU0_reg,
   FU1,FU1_reg,
   FU2,FU2_reg,
@@ -1361,6 +1372,7 @@ module agu_block(
   ~u3_clkEn|(rsStall[2]&~now_flushing&~alt_bus_hold_reg),
   u3_base,uu_base3,
   u3_base_fufwd,u3_base_fuufwd,
+  FNU0,FNU1,FNU2,FNU3,
   FU0,FU0_reg,
   FU1,FU1_reg,
   FU2,FU2_reg,
@@ -1378,6 +1390,7 @@ module agu_block(
   ~u3_clkEn|(rsStall[2]&~now_flushing&~alt_bus_hold_reg),
   u3_index,uu_index3,
   u3_index_fufwd,u3_index_fuufwd,
+  FNU0,FNU1,FNU2,FNU3,
   FU0,FU0_reg,
   FU1,FU1_reg,
   FU2,FU2_reg,
@@ -1396,6 +1409,7 @@ module agu_block(
   ~u4_clkEn,
   u4_base,uu_base4,
   u4_base_fufwd,u4_base_fuufwd,
+  FNU0,FNU1,FNU2,FNU3,
   FU0,FU0_reg,
   FU1,FU1_reg,
   FU2,FU2_reg,
@@ -1413,6 +1427,7 @@ module agu_block(
   ~u4_clkEn,
   u4_index,uu_index4,
   u4_index_fufwd,u4_index_fuufwd,
+  FNU0,FNU1,FNU2,FNU3,
   FU0,FU0_reg,
   FU1,FU1_reg,
   FU2,FU2_reg,
@@ -1431,6 +1446,7 @@ module agu_block(
   ~u5_clkEn,
   u5_base,uu_base5,
   u5_base_fufwd,u5_base_fuufwd,
+  FNU0,FNU1,FNU2,FNU3,
   FU0,FU0_reg,
   FU1,FU1_reg,
   FU2,FU2_reg,
@@ -1448,6 +1464,7 @@ module agu_block(
   ~u5_clkEn,
   u5_index,uu_index5,
   u5_index_fufwd,u5_index_fuufwd,
+  FNU0,FNU1,FNU2,FNU3,
   FU0,FU0_reg,
   FU1,FU1_reg,
   FU2,FU2_reg,

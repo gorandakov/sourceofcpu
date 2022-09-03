@@ -1,12 +1,15 @@
 `include "../struct.sv"
 
-
+//compile rs_write_forward to multiple hard macros with 1 horizontal x2 wire
+//allign bit spacing with corresponding functional unit
+//do not delete "redundant" inputs
 
 module rs_write_forward(
   clk,rst,
   stall,
   oldData,newData,
   fuFwd,fuuFwd,
+  FUN0,FUN1,FUN2,FUN3,
   FU0,FU0_reg,
   FU1,FU1_reg,
   FU2,FU2_reg,
@@ -48,18 +51,23 @@ module rs_write_forward(
   input [DATA_WIDTH-1:0] FU8_reg;
   input [DATA_WIDTH-1:0] FU9;
   input [DATA_WIDTH-1:0] FU9_reg;
+  
+  input [DATA_WIDTH-1:0] FUN0;
+  input [DATA_WIDTH-1:0] FUN1;
+  input [DATA_WIDTH-1:0] FUN2;
+  input [DATA_WIDTH-1:0] FUN3;
 
   wire [DATA_WIDTH-1:0] newData_d;
   wire [DATA_WIDTH-1:0] newDataFu_d;
   wire [DATA_WIDTH-1:0] newDataFuu_d;
   
-  assign newDataFu_d=(fuFwd==4'd0) ? FU0 : {DATA_WIDTH{1'BZ}};  
+  assign newDataFu_d=(fuFwd==4'd0) ? FU0|~FUN0 : {DATA_WIDTH{1'BZ}};  
   assign newDataFuu_d=(fuuFwd==4'd0) ? FU0_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd1) ? FU1 : {DATA_WIDTH{1'BZ}};  
+  assign newDataFu_d=(fuFwd==4'd1) ? FU1|~FUN1 : {DATA_WIDTH{1'BZ}};  
   assign newDataFuu_d=(fuuFwd==4'd1) ? FU1_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd2) ? FU2 : {DATA_WIDTH{1'BZ}};  
+  assign newDataFu_d=(fuFwd==4'd2) ? FU2|~FUN2 : {DATA_WIDTH{1'BZ}};  
   assign newDataFuu_d=(fuuFwd==4'd2) ? FU2_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd3) ? FU3 : {DATA_WIDTH{1'BZ}};  
+  assign newDataFu_d=(fuFwd==4'd3) ? FU3|~FUN3 : {DATA_WIDTH{1'BZ}};  
   assign newDataFuu_d=(fuuFwd==4'd3) ? FU3_reg : {DATA_WIDTH{1'BZ}};  
   assign newDataFu_d=(fuFwd==4'd4) ? FU4 : {DATA_WIDTH{1'BZ}};  
   assign newDataFuu_d=(fuuFwd==4'd4) ? FU4_reg : {DATA_WIDTH{1'BZ}};  
