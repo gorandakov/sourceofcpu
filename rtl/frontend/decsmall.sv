@@ -166,7 +166,10 @@ module smallInstr_decoder(
   wire isCall;
   wire isCallPrep;
   wire isRet;
-  
+ 
+  wire subIsBasicXOR;
+  wire isBasicXOR;
+
   wire isMovOrExtA,isMovOrExtB;
   wire isMovOrExtExcept;
   wire isLeaIPRel;
@@ -297,6 +300,7 @@ module smallInstr_decoder(
       opcode_main[7:0]==8'b10110000 && !instr[10]) || ({instr[1],instr[15:12]}==5'd15 &&                      
       opcode_main[7:2]==6'd15 && !instr[0]);
   assign subIsBasicALU=opcode_sub[5:4]==2'b0 || opcode_sub[5:2]==4'b0100;
+  assign subIsBasicXOR=opcode_sub[5:2]==4'b0100;//not a separate class
   assign subIsBasicShift=~opcode_sub[5] && ~subIsBasicALU && opcode_sub[0];
   assign subIsFPUE=opcode_sub==6'b010100 && ~magic[0]; 
   assign subIsFPUSngl=(opcode_sub==6'b010110 || opcode_sub==6'b011000) && opcode_main[7:6]!=2'b11;
@@ -309,6 +313,7 @@ module smallInstr_decoder(
   assign subIsFPUPD=(opcode_sub[5:3]==3'b111 && opcode_sub[5:1]!=5'b11100);
 
   assign isBasicALU=(opcode_main[7:5]==3'b0 || opcode_main[7:3]==5'b00100) & ~opcode_main[2];
+  assign isBasicXOR=(opcode_main[7:3]==5'b00100) & ~opcode_main[2];//not a seprarate class
   assign isBasicMUL=(opcode_main[7:5]==3'b0 || opcode_main[7:3]==5'b00100) & opcode_main[2];
   assign isBasicALUExcept=~opcode_main[0] && (magic[1:0]==2'b01 && instr[28:23]!=6'b0);  
   assign isBasicShift=opcode_main[7:1]==7'd20 || opcode_main[7:1]==7'd21 ||
@@ -662,7 +667,7 @@ module smallInstr_decoder(
       prT_use[0]=1'b1;
       puseRs[0]=1'b1;
       prAlloc[0]=1'b1;
-      pport[0]=subIsBasicShift ? PORT_SHIFT : PORT_ALU;
+      pport[0]=subIsBasicShift|subIsBasicXOR ? PORT_SHIFT : PORT_ALU;
       pflags_write[0]=1'b1;
       if (~prevSpecLoad) begin
           prA[0]={instr[6],instr[11:8]};
@@ -892,7 +897,7 @@ module smallInstr_decoder(
        prT_use[9]=1'b1;
        puseRs[9]=1'b1;
        prAlloc[9]=1'b1;
-       pport[9]=PORT_ALU;
+       pport[9]=isBasicXOR ? PORT_SHIFT : PORT_ALU;
           
        if (opcode_main[0]||magic[1:0]==2'b11) begin
            if (magic[1:0]==2'b01) begin

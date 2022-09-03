@@ -36,6 +36,9 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   wire subIsFPUSngl;
   wire subIsSIMD;
   wire subIsLinkRet;
+  wire subIsBasicXOR;
+  wire isBasicXOR;
+
   
   wire isBasicALU;
   wire isBasicALUExcept;
@@ -102,6 +105,8 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   assign subIsCJ=opcode_sub[5:2]==4'b1100 && ~magic[0];
   assign subIsFPUD=(opcode_sub[5:2]==4'b1101 || opcode_sub[5:1]==5'b11100) & ~magic[0];
   assign subIsFPUPD=(opcode_sub[5:3]==3'b111 && opcode_sub[5:1]!=5'b11100) & ~magic[0];
+  assign subIsBasicXOR=opcode_sub[5:2]==4'b0100;//not a separate class
+  assign isBasicXOR=(opcode_main[7:3]==5'b00100) & ~opcode_main[2];//not a seprarate class
   
  
   assign isBasicSysInstr=opcode_main==8'hff&&magic[0]; 
@@ -186,7 +191,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   };
   
   assign clsALU=|{
-  isBasicALU & ~isBasicALUExcept,
+  isBasicALU & ~isBasicALUExcept & ~isBasicXOR,
   isBasicCmpTest,
   isBasicCJump & magic[0],
   isSelfTestCJump,
@@ -200,7 +205,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   subIsFPUE & !(opcode_main[7:6]==2'b0),
   subIsSIMD,
   isSimdInt && ((instr[13:9]==5'd0 && ~instr[16]) || (instr[13:9]==5'd5 && ~instr[16]) || (instr[13:8]==6'b11 && instr[16])),
-  subIsBasicALU,subIsCmpTest,subIsLinkRet,
+  subIsBasicALU & ~subIsBasicXOR,subIsCmpTest,subIsLinkRet,
   opcode_main==8'hff && instr[15:13]==3'd1 && magic[0],
   isBasicFPUScalarA && instr[13:9]!=5'd2 && instr[13:8]!=6'd8,
   isBasicFPUScalarB && instr[13:8]!=6'd18 && instr[13:8]!=6'd21,
@@ -219,6 +224,8 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
     || subIsFPUE &(opcode_main[7:6]==2'b0) || isSimdInt & instr[16] ||
     (isSimdInt && ~((instr[13:9]==5'd0 && ~instr[16]) || (instr[13:9]==5'd5 && ~instr[16]) ||
      (instr[13:8]==6'b11 && instr[16]))) || 
+    isBasicALU & ~isBasicALUExcept & isBasicXOR ||
+    subIsBasicALU & subIsBasicXOR ||
     (isBasicFPUScalarA && ~(instr[13:9]!=5'd2 && instr[13:8]!=6'd8)) ||
     (isBasicFPUScalarB && ~(instr[13:8]!=6'd18 && instr[13:8]!=6'd21));
   
