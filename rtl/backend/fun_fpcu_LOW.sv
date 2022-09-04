@@ -49,7 +49,8 @@ module fun_fpuL(
   XI_dataS,
   fxFRT_alten_reg3,
   daltX,
-  FUCVT1
+  FUCVT1,
+  outA,outB
   );
   localparam [0:0] H=1'b0;
   localparam SIMD_WIDTH=68; //half width
@@ -181,6 +182,8 @@ module fun_fpuL(
   input fxFRT_alten_reg3;
   output daltX;
   output [63:0] FUCVT1;
+  output [16+67:0] outA;
+  output [16+67:0] outB;
 
   wire [15+68:0] XI_dataD;
   reg [3:0] u5_en_reg;
@@ -210,7 +213,7 @@ module fun_fpuL(
   fxFADD0_raise_s,
   fxFCADD1_raise_s,
   FOOSH0_in,
-  FOOSH0_out,
+  FOOSH0_out,,,
   );
 
   fun_fpu #(1,0) fpu1_mod(
@@ -235,7 +238,7 @@ module fun_fpuL(
   fxFADD2_raise_s,
   fxFCADD3_raise_s,
   FOOSH1_in,
-  FOOSH1_out,
+  FOOSH1_out,,,
   );
 
   fun_fpu #(2,0) fpu2_mod(
@@ -261,7 +264,8 @@ module fun_fpuL(
   fxFCADD5_raise_s,
   FOOSH2_in,
   FOOSH2_out,
-  XI_dataD
+  XI_dataD,
+  outA,outB
   );
  
   cvt_FP_I_mod fp2i_mod(

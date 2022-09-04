@@ -54,7 +54,9 @@ module fun_fpu_BOTH(
   XI_dataS,
   fxFRT_alten_reg3,
   daltX,
-  FUCVT1
+  FUCVT1,
+  outAH,outBH,
+  outAL,outBL
   );
   localparam [0:0] H=1'b1;
   localparam SIMD_WIDTH=68; //half width
@@ -207,6 +209,11 @@ module fun_fpu_BOTH(
   input fxFRT_alten_reg3;
   output daltX;
   output [63:0] FUCVT1;
+  
+  output [67:0] outAH;
+  output [67:0] outBH;
+  output [16+67:0] outAL;
+  output [16+67:0] outBL;
 
   wire [67:0] u1_Ax;
   wire [67:0] u1_Bx;

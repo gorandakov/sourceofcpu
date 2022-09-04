@@ -25,7 +25,9 @@ module fun_fpu(
   fxFCADD_raise_s,
   FOOSH_in,
   FOOSH_out,
-  HH_data
+  HH_data,
+  outA,
+  outB
   );
   parameter [1:0] INDEX=2'd2;
   parameter [0:0] H=1'b0;
@@ -87,6 +89,9 @@ module fun_fpu(
   input [5:0] FOOSH_in;
   output [5:0] FOOSH_out;
   output [S+67:0] HH_data;
+
+  output [S+67:0] outA;
+  output [S+67:0] outB;
 
   wire [1:0][16+67:0] FOOF;
   reg [1:0][S+67:0] FOOF_reg;
@@ -428,6 +433,8 @@ module fun_fpu(
 	      assign FUF6=ALT_INP_reg[0] ? ALTDATA0 : {S+SIMD_WIDTH{1'BZ}};
 	      assign FUF6=ALT_INP_reg[1] ? ALTDATA1 : {S+SIMD_WIDTH{1'BZ}};
 	      assign FUF9=FOOF_reg[1];
+	      assign outA=uu_A2;
+	      assign outB=gxDataBFL[0][S+67:0];
       end
   endgenerate
 
