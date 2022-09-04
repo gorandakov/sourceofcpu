@@ -1461,7 +1461,7 @@ module backend(
   reg [2:0] wrtO2_reg;
 //functional units
   wire [9:0][DATA_WIDTH-1:0] FU;
-  wire [3:0][DATA_WIDTH-1:0] FU_N;
+  wire [7:0][DATA_WIDTH-1:0] FU_N;
   wire [9:0][REG_WIDTH-1:0] FUreg;
   wire [9:0][REG_WIDTH-1:0] FUSreg;
   wire [9:0]FUwen;
@@ -4520,6 +4520,7 @@ module backend(
           .fuFwd(WDoutFuFwd[n]),.fuuFwd(WDoutFuuFwd[n]),
           .stall(~WDoutDataEn[n][1]),
 	  .FUN0(FU_N[0]),.FUN1(FU_N[1]),.FUN2(FU_N[2]),.FUN3(FU_N[3]),
+	  .FUN6(FU_N[4]),.FUN7(FU_N[5]),.FUN8(FU_N[6]),.FUN9(FU_N[7]),
           .FU0(FU[0]),.FU0_reg(FU_reg[0]),
           .FU1(FU[1]),.FU1_reg(FU_reg[1]),
           .FU2(FU[2]),.FU2_reg(FU_reg[2]),
@@ -4532,7 +4533,7 @@ module backend(
           .FU9(FU[9]),.FU9_reg(FU_reg[9])
           );
 
-          rs_write_forward #(SIMD_WIDTH) fwdDAVH_mod(
+          rs_write_forwardF #(SIMD_WIDTH) fwdDAVH_mod(
           .clk(clk),
           .rst(rst),
           .oldData(WDoutDataVH[n]),
@@ -4552,7 +4553,7 @@ module backend(
           .FU9(FUVH[9]),.FU9_reg(FUVH_reg[9])
           );
         
-          rs_write_forward #(SIMD_WIDTH) fwdDBVL_mod(
+          rs_write_forwardF #(SIMD_WIDTH) fwdDBVL_mod(
           .clk(clk),
           .rst(rst),
           .oldData(WDoutDataVL[n]),
@@ -4572,7 +4573,7 @@ module backend(
           .FU9(FUVL[9]),.FU9_reg(FUVL_reg[9])
           );
         
-          rs_write_forward #(SIMD_WIDTH) fwdDAFH_mod(
+          rs_write_forwardF #(SIMD_WIDTH) fwdDAFH_mod(
           .clk(clk),
           .rst(rst),
           .oldData(WDoutDataFH[n]),
@@ -4592,7 +4593,7 @@ module backend(
           .FU9(FUFH[9]),.FU9_reg(FUFH_reg[9])
           );
         
-          rs_write_forward #(16+SIMD_WIDTH) fwdDBFL_mod(
+          rs_write_forwardF #(16+SIMD_WIDTH) fwdDBFL_mod(
           .clk(clk),
           .rst(rst),
           .oldData(WDoutDataFL[n]),
@@ -4877,6 +4878,7 @@ module backend(
   .FU4(FU[4]), .FU5(FU[5]),  .FU6(FU[6]),  .FU7(FU[7]),
   .FU8(FU[8]), .FU9(FU[9]),
   .FNU0(FU_N[0]),.FNU1(FU_N[1]),.FNU2(FU_N[2]),.FNU3(FU_N[3]),
+  .FUN6(FU_N[4]),.FUN7(FU_N[5]),.FUN8(FU_N[6]),.FUN9(FU_N[7]),
   .FUS1(FUS1),  .FUS2(FUS2),  .FUS3(FUS3),
   .FUS4(FUS4), .FUS5(FUS5),  .FUS6(FUS6),  .FUS7(FUS7),
   .FUS8(FUS8),.FUS9(FUS9),
@@ -5038,6 +5040,7 @@ module backend(
   .FU0Hit(FU0Hit),.FU1Hit(FU1Hit),.FU2Hit(FU2Hit),.FU3Hit(FU3Hit),
   .FU0(FU[0]),.FU1(FU[1]),.FU2(FU[2]),.FU3(FU[3]),.FU4(FU[4]),.FU5(FU[5]),.FU6(FU[6]),.FU7(FU[7]),.FU8(FU[8]),.FU9(FU[9]),
   .FNU0(FU_N[0]),.FNU1(FU_N[1]),.FNU2(FU_N[2]),.FNU3(FU_N[3]),
+  .FUN6(FU_N[4]),.FUN7(FU_N[5]),.FUN8(FU_N[6]),.FUN9(FU_N[7]),
   .FUreg3_reg(FUreg_reg5[3]),.dc_rdataA(dc_rdataA[3]),//is it really reg5?
   .msi_exp_addr(MSI_exp_addr_reg),.msi_en(MSI_exp_en_reg),.msi_out_clear(),//msi_out_clear=can do msi en; todo - make replace last buffer rather than wait + redu
   .csrss_en(csrss_en),.csrss_addr(csrss_no),.csrss_data(csrss_data[63:0]),

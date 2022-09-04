@@ -134,6 +134,7 @@ module agu_block(
   p_bankNone,
   FU0Hit,FU1Hit,FU2Hit,FU3Hit,
   FNU0,FNU1,FNU2,FNU3,
+  FNU6,FNU7,FNU8,FNU9,
   FU0,FU1,FU2,FU3,FU4,FU5,FU6,FU7,FU8,FU9,
   FUreg3_reg,dc_rdataA,
   msi_exp_addr,msi_en,msi_out_clear,//msi_out_clear=can do msi en
@@ -412,6 +413,10 @@ module agu_block(
   input [64:0] FU7;
   input [64:0] FU8;
   input [64:0] FU9;
+  input [64:0] FNU6;
+  input [64:0] FNU7;
+  input [64:0] FNU8;
+  input [64:0] FNU9;
 
   input [64:0] FNU3;
   input [64:0] FNU2;
@@ -1304,6 +1309,7 @@ module agu_block(
   u1_base,uu_base1,
   u1_base_fufwd,u1_base_fuufwd,
   FNU0,FNU1,FNU2,FNU3,
+  FNU6,FNU7,FNU8,FNU9,
   FU0,FU0_reg,
   FU1,FU1_reg,
   FU2,FU2_reg,
@@ -1322,6 +1328,7 @@ module agu_block(
   u1_index,uu_index1,
   u1_index_fufwd,u1_index_fuufwd,
   FNU0,FNU1,FNU2,FNU3,
+  FNU6,FNU7,FNU8,FNU9,
   FU0,FU0_reg,
   FU1,FU1_reg,
   FU2,FU2_reg,
@@ -1340,6 +1347,7 @@ module agu_block(
   u2_base,uu_base2,
   u2_base_fufwd,u2_base_fuufwd,
   FNU0,FNU1,FNU2,FNU3,
+  FNU6,FNU7,FNU8,FNU9,
   FU0,FU0_reg,
   FU1,FU1_reg,
   FU2,FU2_reg,
@@ -1358,6 +1366,7 @@ module agu_block(
   u2_index,uu_index2,
   u2_index_fufwd,u2_index_fuufwd,
   FNU0,FNU1,FNU2,FNU3,
+  FNU6,FNU7,FNU8,FNU9,
   FU0,FU0_reg,
   FU1,FU1_reg,
   FU2,FU2_reg,
@@ -1377,6 +1386,7 @@ module agu_block(
   u3_base,uu_base3,
   u3_base_fufwd,u3_base_fuufwd,
   FNU0,FNU1,FNU2,FNU3,
+  FNU6,FNU7,FNU8,FNU9,
   FU0,FU0_reg,
   FU1,FU1_reg,
   FU2,FU2_reg,
@@ -1395,6 +1405,7 @@ module agu_block(
   u3_index,uu_index3,
   u3_index_fufwd,u3_index_fuufwd,
   FNU0,FNU1,FNU2,FNU3,
+  FNU6,FNU7,FNU8,FNU9,
   FU0,FU0_reg,
   FU1,FU1_reg,
   FU2,FU2_reg,
@@ -1414,6 +1425,7 @@ module agu_block(
   u4_base,uu_base4,
   u4_base_fufwd,u4_base_fuufwd,
   FNU0,FNU1,FNU2,FNU3,
+  FNU6,FNU7,FNU8,FNU9,
   FU0,FU0_reg,
   FU1,FU1_reg,
   FU2,FU2_reg,
@@ -1432,6 +1444,7 @@ module agu_block(
   u4_index,uu_index4,
   u4_index_fufwd,u4_index_fuufwd,
   FNU0,FNU1,FNU2,FNU3,
+  FNU6,FNU7,FNU8,FNU9,
   FU0,FU0_reg,
   FU1,FU1_reg,
   FU2,FU2_reg,
@@ -1451,6 +1464,7 @@ module agu_block(
   u5_base,uu_base5,
   u5_base_fufwd,u5_base_fuufwd,
   FNU0,FNU1,FNU2,FNU3,
+  FNU6,FNU7,FNU8,FNU9,
   FU0,FU0_reg,
   FU1,FU1_reg,
   FU2,FU2_reg,
@@ -1469,6 +1483,7 @@ module agu_block(
   u5_index,uu_index5,
   u5_index_fufwd,u5_index_fuufwd,
   FNU0,FNU1,FNU2,FNU3,
+  FNU6,FNU7,FNU8,FNU9,
   FU0,FU0_reg,
   FU1,FU1_reg,
   FU2,FU2_reg,

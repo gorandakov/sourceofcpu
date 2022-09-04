@@ -2,9 +2,11 @@
 `include "../operations.sv"
 
 
+//compile alu into hard macro with 1 horizontal x2 wire
+//do not delete redundant output
+//place next to alu_shift in alu-shift combo
 
-
-module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,retData,retEn,val1,val2,valS,valRes);
+module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,retData,retEn,val1,val2,valS,valRes,valRes_N);
 
   localparam REG_WIDTH=`reg_addr_width;
   localparam OPERATION_WIDTH=`operation_width;
@@ -25,8 +27,11 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
   input [64:0] val1;
   input [64:0] val2;
   input [5:0] valS;//flag
-  output [64:0] valRes;  
+  inout  [64:0] valRes;  
+  output [64:0] valRes_N;  
   
+
+  assign valRes_N=~valRes;
 
   reg [64:0] valRes_reg;
 

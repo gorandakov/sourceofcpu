@@ -24,6 +24,7 @@ module fu_alu(
     u6_A_fufwd,u6_A_fuufwd,u6_B_fufwd,u6_B_fuufwd,
     u6_S_fufwd,u6_S_fuufwd,
   FNU0,FNU1,FNU2,FNU3,
+  FNU6,FNU7,FNU8,FNU9,
   FU0, FU1,  FU2,  FU3,
   FU4, FU5,  FU6,  FU7,
   FU8, FU9,
@@ -135,6 +136,10 @@ module fu_alu(
   inout [64:0] FU7;
   inout [64:0] FU8;
   inout [64:0] FU9;
+  inout [64:0] FNU6;
+  inout [64:0] FNU7;
+  inout [64:0] FNU8;
+  inout [64:0] FNU9;
 
   input [64:0] FNU0;
   input [64:0] FNU1;
@@ -266,6 +271,7 @@ module fu_alu(
   u1_A,uu_A1,
   u1_A_fufwd,u1_A_fuufwd,
   FNU0,FNU1,FNU2,FNU3,
+  FNU6,FNU7,FNU8,FNU9,
   FU0,FU0_reg,
   FU1,FU1_reg,
   FU2,FU2_reg,
@@ -284,6 +290,7 @@ module fu_alu(
   u1_B,uu_B1,
   u1_B_fufwd,u1_B_fuufwd,
   FNU0,FNU1,FNU2,FNU3,
+  FNU6,FNU7,FNU8,FNU9,
   FU0,FU0_reg,
   FU1,FU1_reg,
   FU2,FU2_reg,
@@ -303,6 +310,7 @@ module fu_alu(
   u2_A,uu_A2,
   u2_A_fufwd,u2_A_fuufwd,
   FNU0,FNU1,FNU2,FNU3,
+  FNU6,FNU7,FNU8,FNU9,
   FU0,FU0_reg,
   FU1,FU1_reg,
   FU2,FU2_reg,
@@ -321,6 +329,7 @@ module fu_alu(
   u2_B,uu_B2,
   u2_B_fufwd,u2_B_fuufwd,
   FNU0,FNU1,FNU2,FNU3,
+  FNU6,FNU7,FNU8,FNU9,
   FU0,FU0_reg,
   FU1,FU1_reg,
   FU2,FU2_reg,
@@ -340,6 +349,7 @@ module fu_alu(
   u3_A,uu_A3,
   u3_A_fufwd,u3_A_fuufwd,
   FNU0,FNU1,FNU2,FNU3,
+  FNU6,FNU7,FNU8,FNU9,
   FU0,FU0_reg,
   FU1,FU1_reg,
   FU2,FU2_reg,
@@ -358,6 +368,7 @@ module fu_alu(
   u3_B,uu_B3,
   u3_B_fufwd,u3_B_fuufwd,
   FNU0,FNU1,FNU2,FNU3,
+  FNU6,FNU7,FNU8,FNU9,
   FU0,FU0_reg,
   FU1,FU1_reg,
   FU2,FU2_reg,
@@ -377,6 +388,7 @@ module fu_alu(
   u4_A,uu_A4,
   u4_A_fufwd,u4_A_fuufwd,
   FNU0,FNU1,FNU2,FNU3,
+  FNU6,FNU7,FNU8,FNU9,
   FU0,FU0_reg,
   FU1,FU1_reg,
   FU2,FU2_reg,
@@ -395,6 +407,7 @@ module fu_alu(
   u4_B,uu_B4,
   u4_B_fufwd,u4_B_fuufwd,
   FNU0,FNU1,FNU2,FNU3,
+  FNU6,FNU7,FNU8,FNU9,
   FU0,FU0_reg,
   FU1,FU1_reg,
   FU2,FU2_reg,
@@ -414,6 +427,7 @@ module fu_alu(
   u5_A,uu_A5,
   u5_A_fufwd,u5_A_fuufwd,
   FNU0,FNU1,FNU2,FNU3,
+  FNU6,FNU7,FNU8,FNU9,
   FU0,FU0_reg,
   FU1,FU1_reg,
   FU2,FU2_reg,
@@ -432,6 +446,7 @@ module fu_alu(
   u5_B,uu_B5,
   u5_B_fufwd,u5_B_fuufwd,
   FNU0,FNU1,FNU2,FNU3,
+  FNU6,FNU7,FNU8,FNU9,
   FU0,FU0_reg,
   FU1,FU1_reg,
   FU2,FU2_reg,
@@ -451,6 +466,7 @@ module fu_alu(
   u6_A,uu_A6,
   u6_A_fufwd,u6_A_fuufwd,
   FNU0,FNU1,FNU2,FNU3,
+  FNU6,FNU7,FNU8,FNU9,
   FU0,FU0_reg,
   FU1,FU1_reg,
   FU2,FU2_reg,
@@ -469,6 +485,7 @@ module fu_alu(
   u6_B,uu_B6,
   u6_B_fufwd,u6_B_fuufwd,
   FNU0,FNU1,FNU2,FNU3,
+  FNU6,FNU7,FNU8,FNU9,
   FU0,FU0_reg,
   FU1,FU1_reg,
   FU2,FU2_reg,
@@ -590,19 +607,19 @@ module fu_alu(
 
 
   alu alu0(clk,rst,except,1'b0,1'b0,u1_op_reg,u1_isSub_reg,u1_clkEn_reg,1'b1,
-    u1_ret,u1_rten,uu_A1,uu_B1,uu_S1,FU4);
+    u1_ret,u1_rten,uu_A1,uu_B1,uu_S1,FU4,);
   alu #(1'b0)  alu1(clk,rst,except,1'b0,1'b0,u2_op_reg,u2_isSub_reg,u2_clkEn_reg,1'b1,
-    u2_ret,u2_rten,uu_A2,uu_B2,uu_S2,FU7);
+    u2_ret,u2_rten,uu_A2,uu_B2,uu_S2,FU7,FNU7);
   
   alu alu2(clk,rst,except,1'b0,1'b0,u3_op_reg,u3_isSub_reg,u3_clkEn_reg,1'b1,
-    u3_ret,u3_rten,uu_A3,uu_B3,uu_S3,FU5);
+    u3_ret,u3_rten,uu_A3,uu_B3,uu_S3,FU5,);
   alu #(1'b0)  alu3(clk,rst,except,1'b0,1'b0,u4_op_reg,u4_isSub_reg,u4_clkEn_reg,1'b1,
-    u4_ret,u4_rten,uu_A4,uu_B4,uu_S4,FU8);
+    u4_ret,u4_rten,uu_A4,uu_B4,uu_S4,FU8,FNU8);
   
   alu alu4(clk,rst,except,1'b0,1'b0,u5_op_reg,u5_isSub_reg,u5_clkEn_reg,u5_nDataAlt&&(&nDataAlt),
-    u5_ret,u5_rten,uu_A5,uu_B5,uu_S5,FU6);
+    u5_ret,u5_rten,uu_A5,uu_B5,uu_S5,FU6,FNU6);
   alu #(1'b0)  alu5(clk,rst,except,1'b0,1'b0,u6_op_reg,u6_isSub_reg,u6_clkEn_reg,1'b1,
-    u6_ret,u6_rten,uu_A6,uu_B6,uu_S6,FU9);
+    u6_ret,u6_rten,uu_A6,uu_B6,uu_S6,FU9,FNU9);
   
   alu_shift sh2_alu(
   clk,
@@ -672,6 +689,8 @@ module fu_alu(
  
   assign FU6=(~&nDataAlt) ? FUMUL : 65'bz;
   assign FU6=(~u5_nDataAlt) ? {1'b0,FUCVTIN} : 65'bz;
+  assign FNU6=(~&nDataAlt) ? ~FUMUL : 65'bz;
+  assign FNU6=(~u5_nDataAlt) ? ~{1'b0,FUCVTIN} : 65'bz;
   
   assign u5_ret=(~u5_nDataAlt_reg|(~nDataAlt_reg[1])) ? {6'b0,1'b0,2'd2} : 
     9'bz; 
