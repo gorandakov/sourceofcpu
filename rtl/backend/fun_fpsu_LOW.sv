@@ -34,7 +34,8 @@ module fun_fpuSL(
   FOOSL0_out,
   FOOSL1_out,
   FOOSL2_out,
-  XI_dataS
+  XI_dataS,
+  outPlnA,outPlnB
   );
   localparam [0:0] H=1'b0;
   localparam SIMD_WIDTH=68; //half width
@@ -146,6 +147,9 @@ module fun_fpuSL(
 
   output [67:0] XI_dataS;
 
+  output [67:0] outPlnA;
+  output [67:0] outPlnB;
+
   fun_fpsu #(0,0) fpu0_mod(
   clk,
   rst,
@@ -163,7 +167,7 @@ module fun_fpuSL(
   FUF0N,FUF1M,FUF2N,FUF3M,
   68'b0,68'b0,
   2'b0,
-  FOOSL0_out,
+  FOOSL0_out,,,
   );
 
   fun_fpsu #(1,0) fpu1_mod(
@@ -183,7 +187,7 @@ module fun_fpuSL(
   FUF0N,FUF1M,FUF2N,FUF3M,
   68'b0,68'b0,
   2'b0,
-  FOOSL1_out,
+  FOOSL1_out,,,
   );
 
   fun_fpsu #(2,0) fpu2_mod(
@@ -204,7 +208,9 @@ module fun_fpuSL(
   ALTDATA0,ALTDATA1,
   ALT_INP,
   FOOSL2_out,
-  XI_dataS
+  XI_dataS,
+  outPlnA,
+  outPlnB
   );
 
 endmodule

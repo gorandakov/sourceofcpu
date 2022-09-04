@@ -34,6 +34,7 @@ module fun_fpsu_BOTH(
   FUFL9,
   FUFH0_n,FUFH1_n,FUFH2_n,FUFH3_n,
   FUFL0_m,FUFL1_m,FUFL2_m,FUFL3_m,
+  MRKAH,MRKBH,MRKAL,BRKBL,
   ALTDATAH0,ALTDATAH1,
   ALTDATAL0,ALTDATAL1,
   ALT_INP,
@@ -163,6 +164,11 @@ module fun_fpsu_BOTH(
   output [5:0] FOOFL0;
   output [5:0] FOOFL1;
   output [5:0] FOOFL2;
+  
+  output [67:0] MRKAH;
+  output [67:0] MRKBH;
+  output [67:0] MRKAL;
+  output [67:0] BRKBL;
 
   output [67:0] XI_dataS;
   
@@ -245,7 +251,7 @@ module fun_fpsu_BOTH(
   FUFH9,
   FUFH0_n,FUFH1_n,FUFH2_n,FUFH3_n,
   ALTDATAH0,ALTDATAH1,
-  ALT_INP,,,,
+  ALT_INP,,,,,MRKAH,MRKBH
   );
 
   fun_fpuSL lfpc_mod(
@@ -278,7 +284,8 @@ module fun_fpsu_BOTH(
   ALTDATAL0,ALTDATAL1,
   ALT_INP,
   FOOFL0,FOOFL1,FOOFL2,
-  XI_dataS
+  XI_dataS,
+  MRKAL,BRKBL
   );
 
 endmodule
