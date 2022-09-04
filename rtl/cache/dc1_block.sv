@@ -1363,7 +1363,7 @@ module dcache1(
       for (b=0;b<BANK_COUNT;b=b+1) begin
           dc1_strip_par strip_mod(read_dataP_reg2[b*DATA_WIDTH+:DATA_WIDTH],read_data_strip[b*32+:32]);
           dc1_get_par wrEcc_mod(write_data_reg2[b*32+:32],write_data_ecc[b*DATA_WIDTH+:DATA_WIDTH]); 
-          dc1_get_par wrEcc_mod(~write_dataM_reg2[b*32+:32],write_dataM0_ecc[b*DATA_WIDTH+:DATA_WIDTH]); 
+          dc1_get_par wrEcc2_mod(~write_dataM_reg2[b*32+:32],write_dataM0_ecc[b*DATA_WIDTH+:DATA_WIDTH]); 
 
 	  assign write_dataM_ecc[b*DATA_WIDTH+:DATA_WIDTH]=~write_dataM0_ecc[b*DATA_WIDTH+:DATA_WIDTH];
           

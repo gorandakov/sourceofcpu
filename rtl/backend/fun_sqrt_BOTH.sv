@@ -10,7 +10,6 @@ module fun_fpusqr(
   ul_A,ul_B,ul_Av,ul_Bv,
   uh_A,uh_B,uh_Av,uh_Bv,
   u1_en,u1_op,
-  u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
 //  u1_ret,u1_ret_en,
   u1_regNo,u1_II,
   en_early,op_early,
@@ -20,17 +19,8 @@ module fun_fpusqr(
   FUreg,
   FUSreg,
   FUwen,
-  outAltData,
-  FUFL0,FUFL1,FUFL2,
-  FUFL3,FUFL4,FUFL5,
-  FUFL6,FUFL7,FUFL8,
-  FUFL9,
-  FUVL0,FUVL1,FUVL2,
-  FUVL3,FUVL4,FUVL5,
-  FUVL6,FUVL7,FUVL8,
-  FUVL9,
-  FUVL0_n,FUVL1_n,FUVL2_n,FUVL3_n,
-  FUFL0_m,FUFL1_m,FUFL2_m,FUFL3_m,
+  outAltDataF,
+  outAltDataV,
   fxFRT_alten,
   fxFRT_pause
   );
@@ -52,10 +42,6 @@ module fun_fpusqr(
   input [67:0] uh_Bv;
   input [3:0] u1_en;
   input [12:0] u1_op;
-  input [3:0] u1_fufwd_A;
-  input [3:0] u1_fuufwd_A;
-  input [3:0] u1_fufwd_B;
-  input [3:0] u1_fuufwd_B;
 //  output [13:0] u1_ret;
 //  output u1_ret_en;
   input [8:0] u1_regNo;
@@ -71,35 +57,6 @@ module fun_fpusqr(
   output [16+SIMD_WIDTH-1:0] outAltDataF;
   output [SIMD_WIDTH-1:0] outAltDataV;
 
-  input [67:0] FUVL0;
-  input [67:0] FUVL1;
-  input [67:0] FUVL2;
-  input [67:0] FUVL3;
-  input [67:0] FUVL4;
-  input [67:0] FUVL5;
-  inout [67:0] FUVL6;
-  input [67:0] FUVL7;
-  input [67:0] FUVL8;
-  input [67:0] FUVL9;
-  input [67:0] FUVL0_n;
-  input [67:0] FUVL1_n;
-  input [67:0] FUVL2_n;
-  input [67:0] FUVL3_n;
-
-  input [S+67:0] FUFL0;
-  input [S+67:0] FUFL1;
-  input [S+67:0] FUFL2;
-  input [S+67:0] FUFL3;
-  input [S+67:0] FUFL4;
-  input [S+67:0] FUFL5;
-  inout [S+67:0] FUFL6;
-  input [S+67:0] FUFL7;
-  input [S+67:0] FUFL8;
-  input [S+67:0] FUFL9;
-  input [S+67:0] FUFL0_m;
-  input [S+67:0] FUFL1_m;
-  input [S+67:0] FUFL2_m;
-  input [S+67:0] FUFL3_m;
   
   output [3:0] fxFRT_alten;
   output [3:0]      fxFRT_pause;
@@ -126,40 +83,13 @@ module fun_fpusqr(
   wire [2*SIMD_WIDTH-1:0] outAltDataL;
   wire [2*SIMD_WIDTH-1:0] outAltDataH;
 
-  /*assign fraise2[m]=fxFCADD_sn_reg5[m] ?
-    (fxFCADD_raise_s_reg[0]|fxFCADD_raise_s_reg[1])&fpcsr[21:11] :
-    (fxFCADD_raise_reg)&fpcsr[21:11];
-  assign fmask2[m]=fxFCADD_sn_reg5[m] ?
-    (fxFCADD_raise_s_reg[0]|fxFCADD_raise_s_reg[1]) :
-    (fxFCADD_raise_reg);
-  fexcpt fexcpt2_mod(fraise2_reg,{5'b0,FUS_alu1,ex_alu1},
-    fmaks2_reg,|outEn_reg6[2][3:2],u2_ret,u2_ret_en);
-  assign fraise3[m]=fxFADD_sn_reg5[m] ?
-    (fxFADD_raise_s_reg2[0]|fxFADD_raise_s_reg2[1])&fpcsr[21:11] :
-    (fxFADD_raise_reg)&fpcsr[21:11];
-  assign fmask3[m]=fxFADD_sn_reg5[m] ?
-    (fxFADD_raise_s_reg[0]|fxFADD_raise_s_reg[1]) :
-    (fxFADD_raise_reg);
-  fexcpt fexcpt3_mod(fraise3_reg,{5'b0,FUS_alu0,ex_alu0},
-    fmaks3_reg,|outEn_reg6[1][3:2],u1_ret,u1_ret_en);*/
-/*module fexcpt(
-  mask,
-  in,
-  in_mask,
-  in_en,
-  no,
-  en);
-*/
-
-  fun_fpusqr0 sqr_low(
+  fun_fpusqr0 #(1) sqr_low(
   clk,
   rst,except,
   fpcsr,
-  ul_A,ul_B,ul_Av,ul_Bv,u1_en,u1_op,
-  u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
+  ul_A,ul_B,uh_A,uh_B,u1_en,u1_op,
   ,,u1_regNo,u1_II,
   en_early,op_early,
-  u1_Bx,u1_Bxo,
   outEn,
   outII,
   outOp,
@@ -167,24 +97,17 @@ module fun_fpusqr(
   FUSreg,
   FUwen,
   outAltDataF,
-  FUFL0,FUFL1,FUFL2,
-  FUFL3,FUFL4,FUFL5,
-  FUFL6,FUFL7,FUFL8,
-  FUFL9,
-  FUFL0_m,FUFL1_m,FUFL2_m,FUFL3_m,
   fxFRT_alten,
   fxFRT_pause
   );
  
-  fun_fpusqr0 #(1) sqr_hi(
+  fun_fpusqr0 #(0) sqr_hi(
   clk,
   rst,except,
   fpcsr,
-  uh_A,uh_B,uh_Av,uh_Bv,u1_en,u1_op,
-  u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
+  uh_Av,uh_Bv,ul_Av,ul_Bv,u1_en,u1_op,
   ,,u1_regNo,u1_II,
   en_early,op_early,
-  u1_Bxo,u1_Bx,
   ,//En
   ,//II
   ,//Op
@@ -192,11 +115,6 @@ module fun_fpusqr(
   ,//FUSreg
   ,//FUwen
   outAltDataV,
-  FUVL0,FUVL1,FUVL2,
-  FUVL3,FUVL4,FUVL5,
-  FUVL6,FUVL7,FUVL8,
-  FUVL9,
-  FUVL0_n,FUVL1_n,FUVL2_n,FUVL3_n,
   ,
   
   );

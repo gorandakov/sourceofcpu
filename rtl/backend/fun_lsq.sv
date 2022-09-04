@@ -22,8 +22,8 @@ module fun_lsq(
   st_stall,
   st0_adata,st0_en,st0_bank1,st0_bgn_ben,st0_end_ben,st0_data,st0_pbit,
   st1_adata,st1_en,st1_bank1,st1_bgn_ben,st1_end_ben,st1_data,st1_pbit,
-  wb0_adata,wb0_LSQ,wb0_en,wb0_ret,wb0_data,wb0_brdbanks,wb0_brdbanks2,wb0_pbit,
-  wb1_adata,wb1_LSQ,wb1_en,wb1_ret,wb1_data,wb1_brdbanks,wb1_brdbanks2,wb1_pbit,
+  wb0_adata,wb0_LSQ,wb0_en,wb0_ret,wb0_data,wb0_dataN,wb0_brdbanks,wb0_brdbanks2,wb0_pbit,
+  wb1_adata,wb1_LSQ,wb1_en,wb1_ret,wb1_data,wb1_dataN,wb1_brdbanks,wb1_brdbanks2,wb1_pbit,
   mem_II_upper,
   mem_II_upper2,
   has_store,
@@ -121,6 +121,7 @@ module fun_lsq(
   output                     wb0_en;
   output [12:0]              wb0_ret;
   output [127+8:0]           wb0_data;
+  output [127+8:0]           wb0_dataN;
   output [16:0]               wb0_brdbanks;
   output [16:0]               wb0_brdbanks2;
   output [1:0]               wb0_pbit;
@@ -129,6 +130,7 @@ module fun_lsq(
   output                     wb1_en;
   output [12:0]              wb1_ret;
   output [127+8:0]           wb1_data;
+  output [127+8:0]           wb1_dataN;
   output [16:0]               wb1_brdbanks;
   output [16:0]               wb1_brdbanks2;
   output [1:0]               wb1_pbit;
@@ -343,8 +345,8 @@ module fun_lsq(
   lsw_wq1,lsw_rs_en1[0],lsw_wdata1,lsw_pdata1,
   LSQ_shr_data[`lsqshare_wrt0]!=3'd7,
   LSQ_shr_data[`lsqshare_wrt1]!=3'd7,
-  wb1_adata,wb1_LSQ,wb1_data,wb1_pbit,wb1_brdbanks,wb1_brdbanks2,wb1_en,wb1_chk,//wb1_way
-  wb0_adata,wb0_LSQ,wb0_data,wb0_pbit,wb0_brdbanks,wb0_brdbanks2,wb0_en,wb0_chk,,
+  wb1_adata,wb1_LSQ,wb1_data,wb1_dataN,wb1_pbit,wb1_brdbanks,wb1_brdbanks2,wb1_en,wb1_chk,//wb1_way
+  wb0_adata,wb0_LSQ,wb0_data,wb0_dataN,wb0_pbit,wb0_brdbanks,wb0_brdbanks2,wb0_en,wb0_chk,,
   wreq_en[0],wreq_data[0],dc_wdataP[0],dc_pdataP[0],
   wreq_en[1],wreq_data[1],dc_wdataP[1],dc_pdataP[1]
   );

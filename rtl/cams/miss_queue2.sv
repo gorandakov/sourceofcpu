@@ -117,7 +117,8 @@ module missQ_datax_ram(
 
 endmodule
 
-
+//compile missQ to hard macro without deleting the redundant data outputs
+//take into consideration the spacing of the bits in the LSQ unit
 
 //verilator lint_off PINMISSING
 //verilator lint_off WIDTH
@@ -330,6 +331,7 @@ module missQ(
   mOp4_addr_low_no,
   mOp4_split_no,
   mOp4_data_no,
+  mOp4_dataN_no,
   mOp4_pbit_no,
   mOp4_ctype_no,
   mOp4_II_no,
@@ -370,6 +372,7 @@ module missQ(
   mOp5_addr_low_no,
   mOp5_split_no,
   mOp5_data_no,
+  mOp5_dataN_no,
   mOp5_pbit_no,
   mOp5_ctype_no,
   mOp5_II_no,
@@ -627,6 +630,7 @@ module missQ(
   output mOp4_split_no;
 //  output [1:0] mOp4_clHit_no;
   output [159:0] mOp4_data_no;
+  output [159:0] mOp4_dataN_no;
   output [1:0] mOp4_pbit_no;
   output [1:0] mOp4_ctype_no;
   output [9:0] mOp4_II_no;
@@ -669,6 +673,7 @@ module missQ(
   output mOp5_split_no;
   //output [1:0] mOp5_clHit_no;
   output [159:0] mOp5_data_no;
+  output [159:0] mOp5_dataN_no;
   output [1:0] mOp5_pbit_no;
   output [1:0] mOp5_ctype_no;
   output [9:0] mOp5_II_no;
@@ -1125,6 +1130,7 @@ module missQ(
   assign mOp4_banks_no=alt_bus_hold ? 32'hffff_ffff : 32'bz;
   assign mOp4_banks_no=~now_flushing & ~alt_bus_hold ? mOp4_banks : 32'bz;
   assign mOp4_data_no=now_flushing ? {read_ddata[127:0],read_mop[4][`mOp1_banks]} : mOp4_data;
+  assign mOp4_dataN_no=now_flushing ? ~{read_ddata[127:0],read_mop[4][`mOp1_banks]} : ~mOp4_data;
   assign mOp4_ctype_no=now_flushing ? read_mop[4][`mOp1_type] : 2'bz;
   assign mOp4_ctype_no=alt_bus_hold ? 2'b0 : 2'bz;
   assign mOp4_ctype_no=~alt_bus_hold & ~now_flushing ? mOp4_ctype : 2'bz;
@@ -1156,6 +1162,7 @@ module missQ(
   assign mOp5_banks_no=alt_bus_hold ? 32'b0 : 32'bz;
   assign mOp5_banks_no=~now_flushing & ~alt_bus_hold ? mOp5_banks : 32'bz;
   assign mOp5_data_no=now_flushing ? {read_ddata[255:128],read_mop[5][`mOp1_banks]} : mOp5_data;
+  assign mOp5_dataN_no=now_flushing ? ~{read_ddata[255:128],read_mop[5][`mOp1_banks]} :~mOp5_data;
   assign mOp5_ctype_no=now_flushing ? read_mop[5][`mOp1_type] : 2'bz;
   assign mOp5_ctype_no=alt_bus_hold ? 2'b0 : 2'bz;
   assign mOp5_ctype_no=~alt_bus_hold & ~now_flushing ? mOp5_ctype : 2'bz;

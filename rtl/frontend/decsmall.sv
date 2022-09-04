@@ -909,7 +909,7 @@ module smallInstr_decoder(
                prT[9]={instr[49],instr[15:12]};
                prB[9]=5'd31;
                perror[9]=0;
-	       if (~opcode_main[0]) pconstant[9]={32'b0,instr[47:16]]};
+	       if (~opcode_main[0]) pconstant[9]={32'b0,instr[47:16]};
            end else begin
                prA[9]={1'b0,instr[11:8]};
                prT[9]={1'b0,instr[15:12]};

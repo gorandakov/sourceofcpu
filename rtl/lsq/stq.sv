@@ -16,6 +16,9 @@ limitations under the License.
 
 `include "../struct.sv"
 
+//compile stq to hard macro with 1x horizontal x2 wire and 1x vertical x2 wire
+//do not delete redundant outputs
+
 module stq(
   clk,
   rst,
@@ -47,8 +50,8 @@ module stq(
   upd1_WQ,upd1_en,upd1_data,upd1_pbit,//upd1_sz,//store data 2
   pse0_en,
   pse1_en,
-  wb1_adata,wb1_LSQ,wb1_data,wb1_pbit,wb1_bnkEn,wb1_bnkEnS,wb1_en,wb1_chk,
-  wb0_adata,wb0_LSQ,wb0_data,wb0_pbit,wb0_bnkEn,wb0_bnkEnS,wb0_en,wb0_chk,wb0_way,
+  wb1_adata,wb1_LSQ,wb1_data,wb1_dataN,wb1_pbit,wb1_bnkEn,wb1_bnkEnS,wb1_en,wb1_chk,
+  wb0_adata,wb0_LSQ,wb0_data,wb0_dataN,wb0_pbit,wb0_bnkEn,wb0_bnkEnS,wb0_en,wb0_chk,wb0_way,
   WLN0_en,WLN0_adata,WLN0_data,WLN0_pbit,
   WLN1_en,WLN1_adata,WLN1_data,WLN1_pbit
   );
@@ -135,6 +138,7 @@ module stq(
   output reg [`lsaddr_width-1:0] wb1_adata;
   output [8:0] wb1_LSQ;
   output [135:0] wb1_data;
+  output [135:0] wb1_dataN;
   output reg [1:0] wb1_pbit;
   output [16:0] wb1_bnkEn;
   output [16:0] wb1_bnkEnS;
@@ -144,6 +148,7 @@ module stq(
   output reg [`lsaddr_width-1:0] wb0_adata;
   output [8:0] wb0_LSQ;
   output [135:0] wb0_data;
+  output [135:0] wb0_dataN;
   output reg [1:0] wb0_pbit;
   output [16:0] wb0_bnkEn;
   output [16:0] wb0_bnkEnS;
@@ -831,6 +836,9 @@ module stq(
   assign wb1_data[31:0]=wb1_adata[`lsaddr_sz]!=5'h10 || wb1_adata[`lsaddr_sz]!=5'h11 || wb1_adata[`lsaddr_low]==2'd0 ? 
       wb1_dataW[31:0] :32'bz;
   assign wb1_data[135:32]=wb1_dataW_reg[135:32];
+
+  assign wb0_dataN=~wb0_data;
+  assign wb1_dataN=~wb1_data;
 
   assign wb0_en=chk_wb0_has;
   assign wb1_en=chk_wb1_has;

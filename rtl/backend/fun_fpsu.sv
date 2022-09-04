@@ -56,6 +56,10 @@ module fun_fpsu(
   output u2_ret_en;
  
 
+  input [S+67:0] FUF0N;
+  input [S+67:0] FUF1M;
+  input [S+67:0] FUF2N;
+  input [S+67:0] FUF3N;
   input [S+67:0] FUF0;
   input [S+67:0] FUF1;
   input [S+67:0] FUF2;

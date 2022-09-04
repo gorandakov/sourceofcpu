@@ -134,10 +134,10 @@ module fun_fpuSL(
   input [67:0] ALTDATA0;
   input [67:0] ALTDATA1;
   
-  input [16+67:0] FUF0N;
-  input [16+67:0] FUF1M;
-  input [16+67:0] FUF2N;
-  input [16+67:0] FUF3M;
+  input [67:0] FUF0N;
+  input [67:0] FUF1M;
+  input [67:0] FUF2N;
+  input [67:0] FUF3M;
 
  
   output [5:0] FOOSL0_out;
