@@ -159,7 +159,7 @@ module fcmpd(clk,rst,
   assign res_x_Z=~res_x_unord && (A_x_zero&B_x_zero) | (extA==extB&&A_x_s==B_x_s&&x_fEQl|
     A_x_infty);
 
-  assign flags={res_C,1'b0,1'b0,res_S,res_Z,res_unord};
+  assign flags={~res_C,res_unord,1'b0,res_S,res_Z,res_unord};
 
   assign res_pkd[67:0]=ven_reg ? {vtype_reg,{33{vres_reg[1]}},{33{vres_reg[0]}}} : 68'bz; 
   always @(negedge clk) begin
