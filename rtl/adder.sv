@@ -723,11 +723,11 @@ module addsub_alu(a,b,out,sub,en,sxtEn,ben,cout,cout4,cout8LL,cout16,cout32,cout
   agusec_check_upper3 hin_mod(ptr,unptr,{39'b0,cin},pos_ack,neg_ack,
     pos_flip,neg_flip,ndiff);
   
-  nand_array #(WIDTH) nG0_mod(a[63:0],xb,nG0);
-  nor_array #(WIDTH)  nP0_mod(a[63:0],xb,nP0);
+  nand_array #(WIDTH) nG0_mod(xa[63:0],xb,nG0);
+  nor_array #(WIDTH)  nP0_mod(xa[63:0],xb,nP0);
   
-  xor_array #(WIDTH) X_mod (a[63:0],xb,X);
-  nxor_array #(WIDTH) nX_mod (a[63:0],xb,nX);
+  xor_array #(WIDTH) X_mod (xa[63:0],xb,X);
+  nxor_array #(WIDTH) nX_mod (xa[63:0],xb,nX);
 
   assign C1={C[WIDTH-2:0],sub[1]};
   assign nC1[WIDTH-1:1]=nC[WIDTH-2:0];
@@ -820,8 +820,11 @@ module addsub_alu(a,b,out,sub,en,sxtEn,ben,cout,cout4,cout8LL,cout16,cout32,cout
       end
     else if (WIDTH>16)
       begin
-        aoi21_array #(WIDTH) nC_mod(P5,{WIDTH{cin}},G5,nC);
-        not_array #(WIDTH) C_mod(nC,C);
+	      //THIS BIT SPECIFIC TO ALU
+        aoi21_array #(32) nC_mod(P5,{32{cin}},G5,nC[31:0]);
+        not_array #(32) C_mod(nC[31:0],C[31:0]);
+        aoi21_array #(32) nC_mod(P5,{32{C[31]}},G5,nC[63:32]);
+        not_array #(32) C_mod(nC[63:32],C[63:32]);
       end
 
     if (WIDTH>64)
