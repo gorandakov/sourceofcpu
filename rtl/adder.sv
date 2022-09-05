@@ -742,12 +742,19 @@ module addsub_alu(a,b,out,sub,en,sxtEn,ben,cout,cout4,cout8LL,cout16,cout32,cout
   assign xa=sub[4] ? {a[61:0],2'b0} : 64'bz;
   assign xa=sub[5] ? {a[60:0],3'b0} : 64'bz;
 
+  assign XU[31:0]=X[31:0];
+  assign nXU[31:0]=nX[31:0];
+
+  assign XU[63:32]=X[63:32] | {32{sxtEn}};
+  assign nXU[63:32]=nX[63:32] & {32{~sxtEn}};
+
+
   generate
         
     for (i=0;i<WIDTH;i=i+1)
       begin : out_gen
-        assign out[i]=(X[i] & bitEn[i]) ? ~C1[i] : 1'bz;
-        assign out[i]=(nX[i] & bitEn[i]) ? ~nC1[i] : 1'bz;
+        assign out[i]=(XU[i] & bitEn[i]) ? ~C1[i] : 1'bz;
+        assign out[i]=(nXU[i] & bitEn[i]) ? ~nC1[i] : 1'bz;
       end 
     if (WIDTH>1)
       begin
