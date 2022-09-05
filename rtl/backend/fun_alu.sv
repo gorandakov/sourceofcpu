@@ -265,9 +265,10 @@ module fu_alu(
   reg [8:0] u6_ret_reg2;
   reg [8:0] u6_ret_reg3;
 
-  rs_write_forward #(65) u1_A_fwd(
+  rs_write_forward_ALU #(0,65) u1_A_fwd(
   clk,rst,
   ~u1_clkEn,
+  (u1_op[7:0]==`op_add64 || u1_op[7:0]==`op_sub64) && u1_op8,
   u1_A,uu_A1,
   u1_A_fufwd,u1_A_fuufwd,
   FNU0,FNU1,FNU2,FNU3,
@@ -284,9 +285,10 @@ module fu_alu(
   FU9,FU9_reg
   );
   
-  rs_write_forward #(65) u1_B_fwd(
+  rs_write_forward_ALU #(1,65) u1_B_fwd(
   clk,rst,
   ~u1_clkEn,
+  (u1_op[7:0]==`op_add64 || u1_op[7:0]==`op_sub64) && u1_op8,
   u1_B,uu_B1,
   u1_B_fufwd,u1_B_fuufwd,
   FNU0,FNU1,FNU2,FNU3,
@@ -304,9 +306,10 @@ module fu_alu(
   );
   
   
-  rs_write_forward #(65) u2_A_fwd(
+  rs_write_forward_ALU #(0,65) u2_A_fwd(
   clk,rst,
   ~u2_clkEn,
+  (u2_op[7:0]==`op_add64 || u2_op[7:0]==`op_sub64) && u2_op8,
   u2_A,uu_A2,
   u2_A_fufwd,u2_A_fuufwd,
   FNU0,FNU1,FNU2,FNU3,
@@ -323,9 +326,10 @@ module fu_alu(
   FU9,FU9_reg
   );
   
-  rs_write_forward #(65) u2_B_fwd(
+  rs_write_forward_ALU #(1,65) u2_B_fwd(
   clk,rst,
   ~u2_clkEn,
+  (u2_op[7:0]==`op_add64 || u2_op[7:0]==`op_sub64) && u2_op8,
   u2_B,uu_B2,
   u2_B_fufwd,u2_B_fuufwd,
   FNU0,FNU1,FNU2,FNU3,
@@ -343,9 +347,10 @@ module fu_alu(
   );
   
   
-  rs_write_forward #(65) u3_A_fwd(
+  rs_write_forward_ALU #(0,65) u3_A_fwd(
   clk,rst,
   ~u3_clkEn,
+  (u3_op[7:0]==`op_add64 || u3_op[7:0]==`op_sub64) && u3_op8,
   u3_A,uu_A3,
   u3_A_fufwd,u3_A_fuufwd,
   FNU0,FNU1,FNU2,FNU3,
@@ -362,9 +367,10 @@ module fu_alu(
   FU9,FU9_reg
   );
   
-  rs_write_forward #(65) u3_B_fwd(
+  rs_write_forward_ALU #(1,65) u3_B_fwd(
   clk,rst,
   ~u3_clkEn,
+  (u3_op[7:0]==`op_add64 || u3_op[7:0]==`op_sub64) && u3_op8,
   u3_B,uu_B3,
   u3_B_fufwd,u3_B_fuufwd,
   FNU0,FNU1,FNU2,FNU3,
@@ -382,9 +388,10 @@ module fu_alu(
   );
   
   
-  rs_write_forward #(65) u4_A_fwd(
+  rs_write_forward_ALU #(0,65) u4_A_fwd(
   clk,rst,
   ~u4_clkEn,
+  (u4_op[7:0]==`op_add64 || u4_op[7:0]==`op_sub64) && u4_op8,
   u4_A,uu_A4,
   u4_A_fufwd,u4_A_fuufwd,
   FNU0,FNU1,FNU2,FNU3,
@@ -401,9 +408,10 @@ module fu_alu(
   FU9,FU9_reg
   );
   
-  rs_write_forward #(65) u4_B_fwd(
+  rs_write_forward_ALU #(1,65) u4_B_fwd(
   clk,rst,
   ~u4_clkEn,
+  (u4_op[7:0]==`op_add64 || u4_op[7:0]==`op_sub64) && u4_op8,
   u4_B,uu_B4,
   u4_B_fufwd,u4_B_fuufwd,
   FNU0,FNU1,FNU2,FNU3,
@@ -421,9 +429,10 @@ module fu_alu(
   );
   
   
-  rs_write_forward #(65) u5_A_fwd(
+  rs_write_forward_ALU #(0,65) u5_A_fwd(
   clk,rst,
   ~u5_clkEn,
+  (u5_op[7:0]==`op_add64 || u5_op[7:0]==`op_sub64) && u5_op8,
   u5_A,uu_A5,
   u5_A_fufwd,u5_A_fuufwd,
   FNU0,FNU1,FNU2,FNU3,
@@ -440,9 +449,10 @@ module fu_alu(
   FU9,FU9_reg
   );
   
-  rs_write_forward #(65) u5_B_fwd(
+  rs_write_forward_ALU #(1,65) u5_B_fwd(
   clk,rst,
   ~u5_clkEn,
+  (u5_op[7:0]==`op_add64 || u5_op[7:0]==`op_sub64) && u5_op8,
   u5_B,uu_B5,
   u5_B_fufwd,u5_B_fuufwd,
   FNU0,FNU1,FNU2,FNU3,
@@ -460,9 +470,10 @@ module fu_alu(
   );
   
   
-  rs_write_forward #(65) u6_A_fwd(
+  rs_write_forward_ALU #(0,65) u6_A_fwd(
   clk,rst,
   ~u6_clkEn,
+  (u6_op[7:0]==`op_add64 || u6_op[7:0]==`op_sub64) && u6_op8,
   u6_A,uu_A6,
   u6_A_fufwd,u6_A_fuufwd,
   FNU0,FNU1,FNU2,FNU3,
@@ -479,9 +490,10 @@ module fu_alu(
   FU9,FU9_reg
   );
   
-  rs_write_forward #(65) u6_B_fwd(
+  rs_write_forward_ALU #(1,65) u6_B_fwd(
   clk,rst,
   ~u6_clkEn,
+  (u6_op[7:0]==`op_add64 || u6_op[7:0]==`op_sub64) && u6_op8,
   u6_B,uu_B6,
   u6_B_fufwd,u6_B_fuufwd,
   FNU0,FNU1,FNU2,FNU3,
