@@ -365,7 +365,7 @@ module smallInstr_decoder(
 
   assign isShlAddMulLike=opcode_main==8'd210 || opcode_main==8'd211;
   assign isPtrSec=opcode_main==8'd212;
-  assign isJalR=opcode_main==8'd213;// || opcode_main==8'd214 || opcode_main==8'd215;
+  assign isJalR=opcode_main==8'd213 || opcode_main==8'd214 || opcode_main==8'd215 || opcode_main==8'd220 || opcode_main==8'd221;
   //216-219=cmp16,cmp8
 
   assign isBasicFPUScalarA=opcode_main==8'hf0 && instr[13:12]==2'b0;
@@ -1574,23 +1574,40 @@ module smallInstr_decoder(
       end
 	  
       trien[31]=magic[0] & isJalR;
-      pport[31]=PORT_ALU;
-      prA_use[31]=1'b1;
-      prB_use[31]=opcode_main!=8'd213;
-      prT_use[31]=1'b1;
-      puseRs[31]=1'b1;
-      prAlloc[31]=1'b1;
-      puseBConst[31]=1'b0;
-      prA[31]={instr[17],instr[11:8]};
-      prT[31]={instr[16],instr[15:12]};
-      prB[31]=instr[22:18];
-      pflags_write[31]=instr[23];
-      poperation[31][10:8]=instr[21:19];
-      poperation[31][0]=instr[18];
-      poperation[31][7:1]=instr[22] ? 7'd5 : 7'd7;
-      poperation[31][12]=~instr[23];
-      perror[31]=instr[31:24]==8'd0;
-      if (magic[1:0]!=2'b01) perror[31]=1'b1;
+      if (opcode_main==8'd123) begin
+          pport[31]=PORT_ALU;
+          prA_use[31]=1'b1;
+          prB_use[31]=opcode_main!=8'd213;
+          prT_use[31]=1'b1;
+          puseRs[31]=1'b1;
+          prAlloc[31]=1'b1;
+          puseBConst[31]=1'b0;
+          prA[31]={instr[17],instr[11:8]};
+          prT[31]={instr[16],instr[15:12]};
+          prB[31]=instr[22:18];
+          pflags_write[31]=instr[23];
+          poperation[31][10:8]=instr[21:19];
+          poperation[31][0]=instr[18];
+          poperation[31][7:1]=instr[22] ? 7'd5 : 7'd7;
+          poperation[31][12]=~instr[23];
+          perror[31]=instr[31:24]==8'd0;
+          if (magic[1:0]!=2'b01) perror[31]=1'b1;
+      end else begin
+          pport[31]=PORT_ALU;
+          prA_use[31]=1'b1;
+          prB_use[31]=1'b1;
+          prT_use[31]=1'b1;
+          puseRs[31]=1'b1;
+          prAlloc[31]=1'b1;
+          puseBConst[31]=opcode_main[0];
+          prA[31]={instr[17],instr[11:8]};
+          prT[31]={instr[16],instr[15:12]};
+          prB[31]=instr[22:18];
+          poperation[31][7:0]=opcode_main[7:1]==7'd107 ? `op_add64 : `op_sub64;
+          poperation[31][12]=1'b1;
+	  poperation[31][8]=1'b1;
+          if (magic[1:0]!=2'b01) perror[31]=1'b1;
+      end
  
       trien[32]=magic[0] & isSimdInt;
       puseRs[32]=1'b1;
