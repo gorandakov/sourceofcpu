@@ -258,20 +258,28 @@ module stq(
   wire [31:0] WNL1_banks2;
   wire [63:0] WLN0_match;
   wire [63:0] WLN1_match;
-  wire [63:0] WNL0_en0;
-  wire [63:0] WNL1_en0;
-  wire [63:0] wrt0_en0;
-  wire [63:0] wrt1_en0;
-  wire [63:0] upd0_en0;
-  wire [63:0] upd1_en0;
-  wire [63:0] passe_en;
+  wire [64:0] WNL0_en0;
+  wire [64:0] WNL1_en0;
+  wire [64:0] wrt0_en0;
+  wire [64:0] wrt1_en0;
+  wire [64:0] upd0_en0;
+  wire [64:0] upd1_en0;
+  wire [64:0] passe_en;
   wire [64:0] passe;
   wire [64:0] free;
   wire [64:0] upd;
 
   assign passe[64]=1'b0;
+  assign passe_en[64]=1'b0;
   assign free[64]=1'b0;
   assign upd[64]=1'b0;
+  assign free_en[64]=1'b0;
+  assign WNL0_en0[64]=1'b0;
+  assign WNL1_en0[64]=1'b0;
+  assign wrt0_en0[64]=1'b0;
+  assign wrt1_en0[64]=1'b0;
+  assign upd0_en0[64]=1'b0;
+  assign upd1_en0[64]=1'b0;
   
   wire [5:0][139:0] chk_data;
   wire [5:0][1:0] chk_pbit;
@@ -423,8 +431,8 @@ module stq(
   wire [3:0] chk4_hasB;
   wire [3:0] chk5_hasB;
 
-  wire [63:0] free_en;
-  wire [63:0] free;
+  wire [64:0] free_en;
+  wire [64:0] free;
 
   wire [5:0] rdy={chk5_en,chk4_en,chk3_en,chk2_en,chk1_en,chk0_en};
   wire [5:0] chk_wb={chk5_adata[`lsaddr_flag] & chk5_en,chk4_adata[`lsaddr_flag] & chk4_en,chk3_adata[`lsaddr_flag] & chk3_en,
