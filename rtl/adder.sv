@@ -231,8 +231,8 @@ module adder_seq(a,b,out,c_s,cin,en,cout,cout8,cout16,cout32);
       begin
         oai21_array #(32) C_mod(nP6[31:0],{32{~cin}},nG6[31:0],C[31:0]);
         not_array #(32) nC_mod(C[31:0],nC[31:0]);
-        oai21_array #(WIDTH-32) C_mod(nP6[WIDTH-1:32],{32{nC[31]}},nG6[WIDTH-1:32],C[WIDTH-1:32]);
-        not_array #(WIDTH-32) nC_mod(C[WIDTH-1:32],nC[WIDTH-1:32]);
+        oai21_array #(WIDTH-32) Cx_mod(nP6[WIDTH-1:32],{32{nC[31]}},nG6[WIDTH-1:32],C[WIDTH-1:32]);
+        not_array #(WIDTH-32) nCx_mod(C[WIDTH-1:32],nC[WIDTH-1:32]);
       end
       
     if (WIDTH>=8) assign cout8=C[7];
@@ -404,8 +404,10 @@ module adder(a,b,out,cin,en,cout,cout8,cout16,cout32);
       end
     else if (WIDTH>32)
       begin
-        oai21_array #(WIDTH) C_mod(nP6,{WIDTH{~cin}},nG6,C[WIDTH-1:0]);
-        not_array #(WIDTH) nC_mod(C,nC);
+        oai21_array #(32) C_mod(nP6[31:0],{32{~cin}},nG6[31:0],C[31:0]);
+        not_array #(32) nC_mod(C[31:0],nC[31:0]);
+        oai21_array #(WIDTH-32) Cx_mod(nP6[WIDTH-1:32],{32{nC[31]}},nG6[WIDTH-1:32],C[WIDTH-1:32]);
+        not_array #(WIDTH-32) nCx_mod(C[WIDTH-1:32],nC[WIDTH-1:32]);
       end
       
     if (WIDTH>=8) assign cout8=C[7];
@@ -592,8 +594,10 @@ module addsub_alu0(a,b,out,sub,en,ben,cout,cout4,cout8,cout16,cout32);
       end
     else if (WIDTH>32)
       begin
-        oai21_array #(WIDTH) C_mod(nP6,{WIDTH{~cin}},nG6,C);
-        not_array #(WIDTH) nC_mod(C,nC);
+        oai21_array #(32) C_mod(nP6[31:0],{32{~cin}},nG6[31:0],C[31:0]);
+        not_array #(32) nC_mod(C[31:0],nC[31:0]);
+        oai21_array #(WIDTH-32) Cx_mod(nP6[WIDTH-1:32],{32{nC[31]}},nG6[WIDTH-1:32],C[WIDTH-1:32]);
+        not_array #(WIDTH-32) nCx_mod(C[WIDTH-1:32],nC[WIDTH-1:32]);
       end
       
     if (WIDTH>=4) assign cout4=C[3];
@@ -847,8 +851,8 @@ module addsub_alu(a,b,out,sub,en,sxtEn,ben,cout,cout4,cout8LL,cout16,cout32,cout
       begin
         oai21_array #(32) C_mod(nP6[31:0],{32{~cin}},nG6[31:0],C[31:0]);
         not_array #(32) nC_mod(C[31:0],nC[31:0]);
-        oai21_array #(WIDTH-32) C_mod(nP6[WIDTH-1:32],{32{nC[31]}},nG6[WIDTH-1:32],C[WIDTH-1:32]);
-        not_array #(WIDTH-32) nC_mod(C[WIDTH-1:32],nC[WIDTH-1:32]);
+        oai21_array #(WIDTH-32) Cx_mod(nP6[WIDTH-1:32],{32{nC[31]}},nG6[WIDTH-1:32],C[WIDTH-1:32]);
+        not_array #(WIDTH-32) nCx_mod(C[WIDTH-1:32],nC[WIDTH-1:32]);
       end
       
     if (WIDTH>=4) assign cout4=C[3];
@@ -1213,8 +1217,10 @@ module get_carry(a,b,cin,cout); //cout=a bigger or equal than b if b inv, cin=1
       end
     else if (WIDTH>32)
       begin
-        oai21_array #(WIDTH) C_mod(nP6,{WIDTH{~cin}},nG6,C);
-        not_array #(WIDTH) nC_mod(C,nC);
+        oai21_array #(32) C_mod(nP6[31:0],{32{~cin}},nG6[31:0],C[31:0]);
+        not_array #(32) nC_mod(C[31:0],nC[31:0]);
+        oai21_array #(WIDTH-32) Cx_mod(nP6[WIDTH-1:32],{32{nC[31]}},nG6[WIDTH-1:32],C[WIDTH-1:32]);
+        not_array #(WIDTH-32) nCx_mod(C[WIDTH-1:32],nC[WIDTH-1:32]);
       end
       
     
@@ -1473,8 +1479,10 @@ module adder_pipe2o(clk,a,b,out1,out2,cin,en1,en2,cout,cout8,cout16,cout32);
       end
     else if (WIDTH>32)
       begin
-        oai21_array #(WIDTH) C_mod(nP6,{WIDTH{~cin}},nG6,C);
-        not_array #(WIDTH) nC_mod(C,nC);
+        oai21_array #(32) C_mod(nP6[31:0],{32{~cin}},nG6[31:0],C[31:0]);
+        not_array #(32) nC_mod(C[31:0],nC[31:0]);
+        oai21_array #(WIDTH-32) Cx_mod(nP6[WIDTH-1:32],{32{nC[31]}},nG6[WIDTH-1:32],C[WIDTH-1:32]);
+        not_array #(WIDTH-32) nCx_mod(C[WIDTH-1:32],nC[WIDTH-1:32]);
       end
       
     if (WIDTH>=8) assign cout8=C[7];
@@ -1670,8 +1678,10 @@ module adder2oM(a,b,out0,out1,out2,cin,en0,en1,low32,cout,cout8,cout16,cout32);
       end
     else if (WIDTH>32)
       begin
-        oai21_array #(WIDTH) C_mod(nP6,{WIDTH{~cin}},nG6,C);
-        not_array #(WIDTH) nC_mod(C,nC);
+        oai21_array #(32) C_mod(nP6[31:0],{32{~cin}},nG6[31:0],C[31:0]);
+        not_array #(32) nC_mod(C[31:0],nC[31:0]);
+        oai21_array #(WIDTH-32) Cx_mod(nP6[WIDTH-1:32],{32{nC[31]}},nG6[WIDTH-1:32],C[WIDTH-1:32]);
+        not_array #(WIDTH-32) nCx_mod(C[WIDTH-1:32],nC[WIDTH-1:32]);
       end
       
     if (WIDTH>=8) assign cout8=C[7];
@@ -1850,8 +1860,10 @@ module adder2oi(biten,a,b,out0,out1,cin,en0,en1,cout,cout8,cout16,cout32);
       end
     else if (WIDTH>32)
       begin
-        oai21_array #(WIDTH) C_mod(nP6,{WIDTH{~cin}},nG6,C);
-        not_array #(WIDTH) nC_mod(C,nC);
+        oai21_array #(32) C_mod(nP6[31:0],{32{~cin}},nG6[31:0],C[31:0]);
+        not_array #(32) nC_mod(C[31:0],nC[31:0]);
+        oai21_array #(WIDTH-32) Cx_mod(nP6[WIDTH-1:32],{32{nC[31]}},nG6[WIDTH-1:32],C[WIDTH-1:32]);
+        not_array #(WIDTH-32) nCx_mod(C[WIDTH-1:32],nC[WIDTH-1:32]);
       end
       
     if (WIDTH>=8) assign cout8=C[7];
@@ -2025,8 +2037,10 @@ module adder2o(a,b,out0,out1,cin,en0,en1,cout,cout8,cout16,cout32);
       end
     else if (WIDTH>32)
       begin
-        oai21_array #(WIDTH) C_mod(nP6,{WIDTH{~cin}},nG6,C);
-        not_array #(WIDTH) nC_mod(C,nC);
+        oai21_array #(32) C_mod(nP6[31:0],{32{~cin}},nG6[31:0],C[31:0]);
+        not_array #(32) nC_mod(C[31:0],nC[31:0]);
+        oai21_array #(WIDTH-32) Cx_mod(nP6[WIDTH-1:32],{32{nC[31]}},nG6[WIDTH-1:32],C[WIDTH-1:32]);
+        not_array #(WIDTH-32) nCx_mod(C[WIDTH-1:32],nC[WIDTH-1:32]);
       end
       
     if (WIDTH>=8) assign cout8=C[7];
@@ -2225,10 +2239,14 @@ module adder2c(a,b,out0,out1,cin0,cin1,en0,en1,cout0,cout1,cout0_53,cout1_53);
       end
     else if (WIDTH>32)
       begin
-        oai21_array #(WIDTH) Ca_mod(nP6,{WIDTH{~cin0}},nG6,Ca[WIDTH-1:0]);
-        not_array #(WIDTH) nCa_mod(Ca,nCa);
-        oai21_array #(WIDTH) Cb_mod(nP6,{WIDTH{~cin1}},nG6,Cb[WIDTH-1:0]);
-        not_array #(WIDTH) nCb_mod(Cb,nCb);
+        oai21_array #(32) Ca_mod(nP6[31:0],{32{~cin0}},nG6[31:0],Ca[31:0]);
+        not_array #(32) nCa_mod(Ca[31:0],nCa[31:0]);
+        oai21_array #(WIDTH-32) Cxa_mod(nP6[WIDTH-1:32],{32{nCa[31]}},nG6[WIDTH-1:32],Ca[WIDTH-1:32]);
+        not_array #(WIDTH-32) nCxa_mod(Ca[WIDTH-1:32],nCa[WIDTH-1:32]);
+        oai21_array #(32) Cb_mod(nP6[31:0],{32{~cin1}},nG6[31:0],Cb[31:0]);
+        not_array #(32) nCb_mod(Cb[31:0],nCb[31:0]);
+        oai21_array #(WIDTH-32) Cxb_mod(nP6[WIDTH-1:32],{32{nCb[31]}},nG6[WIDTH-1:32],Cb[WIDTH-1:32]);
+        not_array #(WIDTH-32) nCxb_mod(C[WIDTH-1:32],nCb[WIDTH-1:32]);
       end
       
 
@@ -2401,8 +2419,10 @@ module adder2ox(a,b,out0,out1,cin,en0,en1,cout,cout8,cout16,cout32);
       end
     else if (WIDTH>32)
       begin
-        oai21_array #(WIDTH) C_mod(nP6,{WIDTH{~cin}},nG6,C);
-        not_array #(WIDTH) nC_mod(C,nC);
+        oai21_array #(32) C_mod(nP6[31:0],{32{~cin}},nG6[31:0],C[31:0]);
+        not_array #(32) nC_mod(C[31:0],nC[31:0]);
+        oai21_array #(WIDTH-32) Cx_mod(nP6[WIDTH-1:32],{32{nC[31]}},nG6[WIDTH-1:32],C[WIDTH-1:32]);
+        not_array #(WIDTH-32) nCx_mod(C[WIDTH-1:32],nC[WIDTH-1:32]);
       end
       
     if (WIDTH>=8) assign cout8=C[7];
@@ -2607,10 +2627,14 @@ module adder2c_pipe(clk,a,b,out0,out1,cin0,cin1,en0,en1,cout0,cout1,cout0_53,cou
       end
     else if (WIDTH>32)
       begin
-        oai21_array #(WIDTH) Ca_mod(nP6,{WIDTH{~cin0}},nG6,Ca[WIDTH-1:0]);
-        not_array #(WIDTH) nCa_mod(Ca,nCa);
-        oai21_array #(WIDTH) Cb_mod(nP6,{WIDTH{~cin1}},nG6,Cb[WIDTH-1:0]);
-        not_array #(WIDTH) nCb_mod(Cb,nCb);
+        oai21_array #(32) Ca_mod(nP6[31:0],{32{~cin0}},nG6[31:0],Ca[31:0]);
+        not_array #(32) nCa_mod(Ca[31:0],nCa[31:0]);
+        oai21_array #(WIDTH-32) Cxa_mod(nP6[WIDTH-1:32],{32{nCa[31]}},nG6[WIDTH-1:32],Ca[WIDTH-1:32]);
+        not_array #(WIDTH-32) nCxa_mod(Ca[WIDTH-1:32],nCa[WIDTH-1:32]);
+        oai21_array #(32) Cb_mod(nP6[31:0],{32{~cin1}},nG6[31:0],Cb[31:0]);
+        not_array #(32) nCb_mod(Cb[31:0],nCb[31:0]);
+        oai21_array #(WIDTH-32) Cxb_mod(nP6[WIDTH-1:32],{32{nCb[31]}},nG6[WIDTH-1:32],Cb[WIDTH-1:32]);
+        not_array #(WIDTH-32) nCxb_mod(C[WIDTH-1:32],nCb[WIDTH-1:32]);
       end
       
 
