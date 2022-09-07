@@ -229,8 +229,10 @@ module adder_seq(a,b,out,c_s,cin,en,cout,cout8,cout16,cout32);
       end
     else if (WIDTH>32)
       begin
-        oai21_array #(WIDTH) C_mod(nP6,{WIDTH{~cin}},nG6,C[WIDTH-1:0]);
-        not_array #(WIDTH) nC_mod(C,nC);
+        oai21_array #(32) C_mod(nP6[31:0],{32{~cin}},nG6[31:0],C[31:0]);
+        not_array #(32) nC_mod(C[31:0],nC[31:0]);
+        oai21_array #(WIDTH-32) C_mod(nP6[WIDTH-1:32],{32{nC[31]}},nG6[WIDTH-1:32],C[WIDTH-1:32]);
+        not_array #(WIDTH-32) nC_mod(C[WIDTH-1:32],nC[WIDTH-1:32]);
       end
       
     if (WIDTH>=8) assign cout8=C[7];
@@ -827,11 +829,8 @@ module addsub_alu(a,b,out,sub,en,sxtEn,ben,cout,cout4,cout8LL,cout16,cout32,cout
       end
     else if (WIDTH>16)
       begin
-	      //THIS BIT SPECIFIC TO ALU
-        aoi21_array #(32) nC_mod(P5,{32{cin}},G5,nC[31:0]);
-        not_array #(32) C_mod(nC[31:0],C[31:0]);
-        aoi21_array #(32) nC_mod(P5,{32{C[31]}},G5,nC[63:32]);
-        not_array #(32) C_mod(nC[63:32],C[63:32]);
+        aoi21_array #(32) nC_mod(P5,{WIDTH{cin}},G5,nC);
+        not_array #(32) C_mod(nC,C);
       end
 
     if (WIDTH>64)
@@ -846,8 +845,10 @@ module addsub_alu(a,b,out,sub,en,sxtEn,ben,cout,cout4,cout8LL,cout16,cout32,cout
       end
     else if (WIDTH>32)
       begin
-        oai21_array #(WIDTH) C_mod(nP6,{WIDTH{~cin}},nG6,C);
-        not_array #(WIDTH) nC_mod(C,nC);
+        oai21_array #(32) C_mod(nP6[31:0],{32{~cin}},nG6[31:0],C[31:0]);
+        not_array #(32) nC_mod(C[31:0],nC[31:0]);
+        oai21_array #(WIDTH-32) C_mod(nP6[WIDTH-1:32],{32{nC[31]}},nG6[WIDTH-1:32],C[WIDTH-1:32]);
+        not_array #(WIDTH-32) nC_mod(C[WIDTH-1:32],nC[WIDTH-1:32]);
       end
       
     if (WIDTH>=4) assign cout4=C[3];
