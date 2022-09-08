@@ -767,9 +767,9 @@ module rs_wakeUp_data(
   FU0,FU1,FU2,FU3,
   FU4,FU5,FU6,
   FU7,FU8,FU9,
-  outRsSelect0,outData0,
-  outRsSelect1,outData1,
-  outRsSelect2,outData2
+  outRsSelect0,outData0,outDataN0,
+  outRsSelect1,outData1,outDataN1,
+  outRsSelect2,outData2,outDataN2
   );
 
   parameter WIDTH=`alu_width;
@@ -845,7 +845,9 @@ module rs_wakeUp_data(
     
 endmodule
 
-
+//insturct compiler not to delete the redundant outputs of
+//rs_wakeUp_data_array
+//route outputs with x1 wire layers
 module rs_wakeUp_data_array(
   clk,rst,stall,
   newRsSelect0,newData0,
@@ -855,9 +857,9 @@ module rs_wakeUp_data_array(
   FU0,FU1,FU2,FU3,
   FU4,FU5,FU6,
   FU7,FU8,FU9,
-  outRsSelect0,outBank0,outFound0,outData0,
-  outRsSelect1,outBank1,outFound1,outData1,
-  outRsSelect2,outBank2,outFound2,outData2
+  outRsSelect0,outBank0,outFound0,outData0,outDataN0,
+  outRsSelect1,outBank1,outFound1,outData1,outDataN1,
+  outRsSelect2,outBank2,outFound2,outData2,outDataN2
   );
 
   parameter WIDTH=`alu_width+1;
@@ -889,14 +891,17 @@ module rs_wakeUp_data_array(
   input [3:0] outBank0;
   input outFound0;
   output [WIDTH-1:0] outData0;
+  output [WIDTH-1:0] outDataN0;
   input [BUF_COUNT-1:0] outRsSelect1;
   input [3:0] outBank1;
   input outFound1;
   output [WIDTH-1:0] outData1;
+  output [WIDTH-1:0] outDataN1;
   input [BUF_COUNT-1:0] outRsSelect2;
   input [3:0] outBank2;
   input outFound2;
   output [WIDTH-1:0] outData2;
+  output [WIDTH-1:0] outDataN2;
 
   generate
       genvar j,k;
@@ -933,21 +938,20 @@ module rs_wakeUp_data_array(
   assign outData0=outFound0 ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
   assign outData1=outFound1 ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
   assign outData2=outFound2 ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+
+  assign outDataN0=~outData0;
+  assign outDataN0=~outData1;
+  assign outDataN0=~outData2;
+
   
 endmodule
 
 
-//has error
 module rs_wakeUpS_logic(
   clk,rst,stall,
   isData,
   outEq,
   buffree,
-//  FU0Hit,FU1Hit,FU2Hit,FU3Hit,
-//  FUreg0,FU0wen,
-//  FUreg1,FU1wen,
-//  FUreg2,FU2wen,
-//  FUreg3,FU3wen,
   FUreg4,FU4wen,
   FUreg5,FU5wen,
   FUreg6,FU6wen,
@@ -2119,13 +2123,13 @@ module rs(
     newInstrIndex2,rsAlloc2,newGazumpA2,newGazumpB2,newGazumpS2,
     newFunitA2,newFunitB2,newFunitS2,newAttr2,
 // wires to get values out of buffer
-  outDataA0,outDataB0,outDataC0,outReg0,outOp0,outInstrIndex0,outWQ0,outLSFlag0,
+  outDataA0,outDataNA0,outDataB0,outDataNB0,outDataC0,outReg0,outOp0,outInstrIndex0,outWQ0,outLSFlag0,
     outFuFwdA0,outFuFwdB0,outFuuFwdA0,outFuuFwdB0,outLSQ0,outDataEn0,outThread0,//agu
     outAttr0,
-  outDataA1,outDataB1,outDataC1,outDataS1,outReg1,outRegSimd1,outOp1,outInstrIndex1,
+  outDataA1,outDataNA1,outDataB1,outDataNB1,outDataC1,outDataS1,outReg1,outRegSimd1,outOp1,outInstrIndex1,
     outFuFwdA1,outFuFwdB1,outFuFwdS1,outFuuFwdA1,outFuuFwdB1,
     outFuuFwdS1,outDataEn1,outThread1,outAttr1,//alu 1
-  outDataA2,outDataB2,outDataC2,outDataS2,outReg2,outRegSimd2,outOp2,outInstrIndex2,
+  outDataA2,outDataNA2,outDataB2,outDataNB2,outDataC2,outDataS2,outReg2,outRegSimd2,outOp2,outInstrIndex2,
     outFuFwdA2,outFuFwdB2,outFuFwdS2,outFuuFwdA2,outFuuFwdB2,
     outFuuFwdS2,outDataEn2,outThread2,outAttr2,//alu 2
 // wires from functional units  
@@ -2146,11 +2150,11 @@ module rs(
   newDataFA1H,newDataFB1H,newDataFA1L,newDataFB1L,
   newDataFA2H,newDataFB2H,newDataFA2L,newDataFB2L,
 
-  outDataVA1H,outDataVB1H,outDataVA1L,outDataVB1L,
-  outDataVA2H,outDataVB2H,outDataVA2L,outDataVB2L,
+  outDataVA1H,outDataNVA1H,outDataVB1H,outDataNVB1H,outDataVA1L,outDataNVA1L,outDataVB1L,outDataNVB1L,
+  outDataVA2H,outDataNVA2H,outDataVB2H,outDataNVB2H,outDataVA2L,outDataNVA2L,outDataVB2L,outDataNVB2L,
 
-  outDataFA1H,outDataFB1H,outDataFA1L,outDataFB1L,
-  outDataFA2H,outDataFB2H,outDataFA2L,outDataFB2L,
+  outDataFA1H,outDataNFA1H,outDataFB1H,outDataNFB1H,outDataFA1L,outDataNFA1L,outDataFB1L,outDataNFB1L,
+  outDataFA2H,outDataNFA2H,outDataFB2H,outDataNFB2H,outDataFA2L,outDataNFA2L,outDataFB2L,outDataNFB2L,
 
   FUV0H,FUV0L,
   FUV1H,FUV1L,
@@ -2194,7 +2198,7 @@ module rs(
   localparam REG_WIDTH=`reg_addr_width;
   localparam OPERATION_WIDTH=`operation_width;
   localparam LSQ_WIDTH=`lsqRsNo_width;
-  localparam CONST_WIDTH=65;
+  localparam CONST_WIDTH=33;
   localparam FLAGS_WIDTH=6;  
   localparam BUF_COUNT=`rs_buf_count;
   localparam II_WIDTH=10;  
@@ -2289,6 +2293,8 @@ module rs(
 
   output wire [DATA_WIDTH-1:0]       outDataA0;
   output wire [DATA_WIDTH-1:0]       outDataB0;//b USED AS BASE REG
+  output wire [DATA_WIDTH-1:0]       outDataNA0;
+  output wire [DATA_WIDTH-1:0]       outDataNB0;//b USED AS BASE REG
   output wire [CONST_WIDTH-1:0]       outDataC0;
   output wire [REG_WIDTH-1:0] outReg0;
   output wire [OPERATION_WIDTH-1:0]   outOp0;
@@ -2306,7 +2312,8 @@ module rs(
     
   output wire [DATA_WIDTH-1:0]       outDataA1;
   output wire [DATA_WIDTH-1:0]       outDataB1;
-  output wire [CONST_WIDTH-1:0]       outDataC1;
+  output wire [DATA_WIDTH-1:0]       outDataNA1;
+  output wire [DATA_WIDTH-1:0]       outDataNB1;
   output wire [FLAGS_WIDTH-1:0]       outDataS1;
   output wire [REG_WIDTH-1:0] outReg1;
   output wire [REG_WIDTH-1:0] outRegSimd1;
@@ -2324,7 +2331,8 @@ module rs(
 
   output wire [DATA_WIDTH-1:0]       outDataA2;
   output wire [DATA_WIDTH-1:0]       outDataB2;
-  output wire [CONST_WIDTH-1:0]       outDataC2;
+  output wire [DATA_WIDTH-1:0]       outDataNA2;
+  output wire [DATA_WIDTH-1:0]       outDataNB2;
   output wire [FLAGS_WIDTH-1:0]       outDataS2;
   output wire [REG_WIDTH-1:0] outReg2;
   output wire [REG_WIDTH-1:0] outRegSimd2;
@@ -2423,6 +2431,26 @@ module rs(
   output [SIMD_WIDTH-1:0] outDataFB2H;
   output [16+SIMD_WIDTH-1:0] outDataFA2L;
   output [16+SIMD_WIDTH-1:0] outDataFB2L;
+  
+  output [SIMD_WIDTH-1:0] outDataNVA1H;
+  output [SIMD_WIDTH-1:0] outDataNVB1H;
+  output [SIMD_WIDTH-1:0] outDataNVA1L;
+  output [SIMD_WIDTH-1:0] outDataNVB1L;
+  
+  output [SIMD_WIDTH-1:0] outDataNVA2H;
+  output [SIMD_WIDTH-1:0] outDataNVB2H;
+  output [SIMD_WIDTH-1:0] outDataNVA2L;
+  output [SIMD_WIDTH-1:0] outDataNVB2L;
+  
+  output [SIMD_WIDTH-1:0] outDataNFA1H;
+  output [SIMD_WIDTH-1:0] outDataNFB1H;
+  output [16+SIMD_WIDTH-1:0] outDataNFA1L;
+  output [16+SIMD_WIDTH-1:0] outDataNFB1L;
+  
+  output [SIMD_WIDTH-1:0] outDataNFA2H;
+  output [SIMD_WIDTH-1:0] outDataNFB2H;
+  output [16+SIMD_WIDTH-1:0] outDataNFA2L;
+  output [16+SIMD_WIDTH-1:0] outDataNFB2L;
   
   input [SIMD_WIDTH-1:0] FUV0H;
   input [SIMD_WIDTH-1:0] FUV0L;
@@ -2764,9 +2792,9 @@ module rs(
   FU0,FU1,FU2,FU3,
   FU4,FU5,FU6,
   FU7,FU8,FU9,
-  outRsSelect[0],outBank[0],rsFoundNZ[0],outDataA0,
-  outRsSelect[1],outBank[1],rsFoundNZ[1],outDataA1,
-  outRsSelect[2],outBank[2],rsFoundNZ[2],outDataA2
+  outRsSelect[0],outBank[0],rsFoundNZ[0],outDataA0,outDataNA0,
+  outRsSelect[1],outBank[1],rsFoundNZ[1],outDataA1,outDataNA1,
+  outRsSelect[2],outBank[2],rsFoundNZ[2],outDataA2,outDataNA2
   );
 
   rs_wakeUp_data_array genB_mod(
@@ -2778,9 +2806,9 @@ module rs(
   FU0,FU1,FU2,FU3,
   FU4,FU5,FU6,
   FU7,FU8,FU9,
-  outRsSelect[0],outBank[0],rsFoundNZ[0],outDataB0,
-  outRsSelect[1],outBank[1],rsFoundNZ[1],outDataB1,
-  outRsSelect[2],outBank[2],rsFoundNZ[2],outDataB2
+  outRsSelect[0],outBank[0],rsFoundNZ[0],outDataB0,outDataNB0,
+  outRsSelect[1],outBank[1],rsFoundNZ[1],outDataB1,outDataNB1,
+  outRsSelect[2],outBank[2],rsFoundNZ[2],outDataB2,outDataNB2
   );
 
   rs_wakeUp_data_array #(6) genC(
@@ -2806,9 +2834,9 @@ module rs(
   FUV0H,FUV1H,FUV2H,FUV3H,
   FUV4H,FUV5H,FUV6H,
   FUV7H,FUV8H,FUV9H,
-  32'b0,4'b0,1'b0,,
-  outRsSelect_reg[1],outBank_reg[1],rsFoundNZ_reg[1],outDataVA1H,
-  outRsSelect_reg[2],outBank_reg[2],rsFoundNZ_reg[2],outDataVA2H
+  32'b0,4'b0,1'b0,,,
+  outRsSelect_reg[1],outBank_reg[1],rsFoundNZ_reg[1],outDataVA1H,outDataNVA1H,
+  outRsSelect_reg[2],outBank_reg[2],rsFoundNZ_reg[2],outDataVA2H,outDataNVA2H
   );
   
   rs_wakeUp_data_array #(SIMD_WIDTH) dataA_VL_mod(
@@ -2820,9 +2848,9 @@ module rs(
   FUV0L,FUV1L,FUV2L,FUV3L,
   FUV4L,FUV5L,FUV6L,
   FUV7L,FUV8L,FUV9L,
-  32'b0,4'b0,1'b0,,
-  outRsSelect_reg[1],outBank_reg[1],rsFoundNZ_reg[1],outDataVA1L,
-  outRsSelect_reg[2],outBank_reg[2],rsFoundNZ_reg[2],outDataVA2L
+  32'b0,4'b0,1'b0,,,
+  outRsSelect_reg[1],outBank_reg[1],rsFoundNZ_reg[1],outDataVA1L,outDataNVA1L,
+  outRsSelect_reg[2],outBank_reg[2],rsFoundNZ_reg[2],outDataVA2L,outDataNVA2L
   );
   
   
@@ -2835,9 +2863,9 @@ module rs(
   FUV0H,FUV1H,FUV2H,FUV3H,
   FUV4H,FUV5H,FUV6H,
   FUV7H,FUV8H,FUV9H,
-  32'b0,4'b0,1'b0,,
-  outRsSelect_reg[1],outBank_reg[1],rsFoundNZ_reg[1],outDataVB1H,
-  outRsSelect_reg[2],outBank_reg[2],rsFoundNZ_reg[2],outDataVB2H
+  32'b0,4'b0,1'b0,,,
+  outRsSelect_reg[1],outBank_reg[1],rsFoundNZ_reg[1],outDataVB1H,outDataNVB1H,
+  outRsSelect_reg[2],outBank_reg[2],rsFoundNZ_reg[2],outDataVB2H,outDataNVB2H
   );
 
   rs_wakeUp_data_array #(SIMD_WIDTH) dataB_VL_mod(
@@ -2849,9 +2877,9 @@ module rs(
   FUV0L,FUV1L,FUV2L,FUV3L,
   FUV4L,FUV5L,FUV6L,
   FUV7L,FUV8L,FUV9L,
-  32'b0,4'b0,1'b0,,
-  outRsSelect_reg[1],outBank_reg[1],rsFoundNZ_reg[1],outDataVB1L,
-  outRsSelect_reg[2],outBank_reg[2],rsFoundNZ_reg[2],outDataVB2L
+  32'b0,4'b0,1'b0,,,
+  outRsSelect_reg[1],outBank_reg[1],rsFoundNZ_reg[1],outDataVB1L,outDataNVB1L,
+  outRsSelect_reg[2],outBank_reg[2],rsFoundNZ_reg[2],outDataVB2L,outDataNVB2L
   );
 
   rs_wakeUp_data_array #(SIMD_WIDTH) dataA_FH_mod(
@@ -2863,9 +2891,9 @@ module rs(
   FUF0H,FUF1H,FUF2H,FUF3H,
   FUF4H,FUF5H,FUF6H,
   FUF7H,FUF8H,FUF9H,
-  32'b0,4'b0,1'b0,,
-  outRsSelect_reg2[1],outBank_reg2[1],rsFoundNZ_reg2[1],outDataFA1H,
-  outRsSelect_reg2[2],outBank_reg2[2],rsFoundNZ_reg2[2],outDataFA2H
+  32'b0,4'b0,1'b0,,,
+  outRsSelect_reg2[1],outBank_reg2[1],rsFoundNZ_reg2[1],outDataFA1H,outDataNFA1H,
+  outRsSelect_reg2[2],outBank_reg2[2],rsFoundNZ_reg2[2],outDataFA2H,outDataNFA2H
   );
   
   rs_wakeUp_data_array #(16+SIMD_WIDTH) dataA_FL_mod(
@@ -2877,9 +2905,9 @@ module rs(
   FUF0L,FUF1L,FUF2L,FUF3L,
   FUF4L,FUF5L,FUF6L,
   FUF7L,FUF8L,FUF9L,
-  32'b0,4'b0,1'b0,,
-  outRsSelect_reg2[1],outBank_reg2[1],rsFoundNZ_reg2[1],outDataFA1L,
-  outRsSelect_reg2[2],outBank_reg2[2],rsFoundNZ_reg2[2],outDataFA2L
+  32'b0,4'b0,1'b0,,,
+  outRsSelect_reg2[1],outBank_reg2[1],rsFoundNZ_reg2[1],outDataFA1L,outDataNFA1L,
+  outRsSelect_reg2[2],outBank_reg2[2],rsFoundNZ_reg2[2],outDataFA2L,outDataNFA2L
   );
   
   
@@ -2892,9 +2920,9 @@ module rs(
   FUF0H,FUF1H,FUF2H,FUF3H,
   FUF4H,FUF5H,FUF6H,
   FUF7H,FUF8H,FUF9H,
-  32'b0,4'b0,1'b0,,
-  outRsSelect_reg2[1],outBank_reg2[1],rsFoundNZ_reg2[1],outDataFB1H,
-  outRsSelect_reg2[2],outBank_reg2[2],rsFoundNZ_reg2[2],outDataFB2H
+  32'b0,4'b0,1'b0,,,
+  outRsSelect_reg2[1],outBank_reg2[1],rsFoundNZ_reg2[1],outDataFB1H,outDataNFB1H,
+  outRsSelect_reg2[2],outBank_reg2[2],rsFoundNZ_reg2[2],outDataFB2H,outDataNFB2H
   );
 
   rs_wakeUp_data_array #(16+SIMD_WIDTH) dataB_FL_mod(
@@ -2906,9 +2934,9 @@ module rs(
   FUF0L,FUF1L,FUF2L,FUF3L,
   FUF4L,FUF5L,FUF6L,
   FUF7L,FUF8L,FUF9L,
-  32'b0,4'b0,1'b0,,
-  outRsSelect_reg2[1],outBank_reg2[1],rsFoundNZ_reg2[1],outDataFB1L,
-  outRsSelect_reg2[2],outBank_reg2[2],rsFoundNZ_reg2[2],outDataFB2L
+  32'b0,4'b0,1'b0,,,
+  outRsSelect_reg2[1],outBank_reg2[1],rsFoundNZ_reg2[1],outDataFB1L,outDataNFB1L,
+  outRsSelect_reg2[2],outBank_reg2[2],rsFoundNZ_reg2[2],outDataFB2L,outDataNFB2L
   );
 
   
@@ -2920,8 +2948,8 @@ module rs(
   newRsSelect2,newDataC2,
   
   outRsSelect[0],outBank[0],rsFoundNZ[0],outDataC0,
-  outRsSelect[1],outBank[1],rsFoundNZ[1],outDataC1,
-  outRsSelect[2],outBank[2],rsFoundNZ[2],outDataC2
+  outRsSelect[1],outBank[1],rsFoundNZ[1],,
+  outRsSelect[2],outBank[2],rsFoundNZ[2],
   );
   
   rs_nonWakeUp_array #(OPERATION_WIDTH) op_mod(
