@@ -147,7 +147,7 @@ module fun_fpusqr0(
   
   in_flip_rt #(S+SIMD_WIDTH+9+10) rtDatA_mod(
     .clk(clk),.rst(rst),.in_en(fxFRT_en),.pause(fxFRT_pause[2]),
-    .d_in({u1_II_reg,u1_regNo_reg,u1_op_reg==(`op_sqrtDH|2048) || u1_op_reg==(`op_divDH|2048) ? uh_A : ul_A}),
+    .d_in({u1_II_reg,u1_regNo_reg,u1_op_reg==(`fop_sqrtDH|2048) || u1_op_reg==(`fop_divDH|2048) ? uh_A : ul_A}),
     .d_out({frtII,frtReg,rtDataA}),
     .dout_en((fxFRT_can[0] & ~fxFRT_don_reg[0] & ~fxFRT_don_reg2[0] & ~fxFRT_don_reg2[0] & ~fxFRT_don_reg3[0]) |
      (fxFRT_can[1] & ~fxFRT_don_reg[1] & ~fxFRT_don_reg2[1] & ~fxFRT_don_reg2[1] & ~fxFRT_don_reg3[1]) |
@@ -155,7 +155,7 @@ module fun_fpusqr0(
      (fxFRT_can[3] & ~fxFRT_don_reg[3] & ~fxFRT_don_reg2[3] & ~fxFRT_don_reg2[3] & ~fxFRT_don_reg3[3])),.do_(fxFRT_do));
   in_flip_rt #(13+S+SIMD_WIDTH) rtDatB_mod(
     .clk(clk),.rst(rst),.in_en(fxFRT_en),.pause(),
-    .d_in({u1_op_reg,u1_op_reg==(`op_sqrtDH|2048) || u1_op_reg==(`op_divDH|2048) ? uh_B : ul_B}}),
+    .d_in({u1_op_reg,u1_op_reg==(`fop_sqrtDH|2048) || u1_op_reg==(`fop_divDH|2048) ? uh_B : ul_B}),
     .d_out({frtOp,rtDataB}),
     .dout_en((fxFRT_can[0] & ~fxFRT_don_reg[0] & ~fxFRT_don_reg2[0] & ~fxFRT_don_reg2[0] & ~fxFRT_don_reg3[0]) |
      (fxFRT_can[1] & ~fxFRT_don_reg[1] & ~fxFRT_don_reg2[1] & ~fxFRT_don_reg2[1] & ~fxFRT_don_reg3[1]) |

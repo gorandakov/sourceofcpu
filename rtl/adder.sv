@@ -399,9 +399,9 @@ module adder(a,b,out,cin,en,cout,cout8,cout16,cout32);
         //oai21_array #(WIDTH-64) G7_mod(nP6[WIDTH-1:64],nG6[WIDTH-65:0],nG6[WIDTH-1:64],G7[WIDTH-1:64]);
         //not_array #(64) G7_tail_mod(nG6[63:0],G7[63:0]);
 
-        oai21_array #(64) nC_mod(nP6[63:0],{WIDTH{~cin}}[63:0],nG6[63:0],C[63:0]);
+        oai21_array #(64) nC_mod(nP6[63:0],{WIDTH{~cin}},nG6[63:0],C[63:0]);
         not_array #(64) C_mod(C[63:0],nC[63:0]);
-        oai21_array #(WIDTH-64) nC_mod(nP6[WIDTH-1:64],{WIDTH{nC[63]}}[WIDTH-1:64],nG6[WIDTH-1:64],C[WIDTH-1:64]);
+        oai21_array #(WIDTH-64) nC_mod(nP6[WIDTH-1:64],{WIDTH{nC[63]}},nG6[WIDTH-1:64],C[WIDTH-1:64]);
         not_array #(WIDTH-64) C_mod(C[WIDTH-1:64],nC);
       end
     else if (WIDTH>32)
@@ -1675,9 +1675,9 @@ module adder2oM(a,b,out0,out1,out2,cin,en0,en1,low32,cout,cout8,cout16,cout32);
         //oai21_array #(WIDTH-64) G7_mod(nP6[WIDTH-1:64],nG6[WIDTH-65:0],nG6[WIDTH-1:64],G7[WIDTH-1:64]);
         //not_array #(64) G7_tail_mod(nG6[63:0],G7[63:0]);
 
-        oai21_array #(64) nC_mod(nP6[63:0],{WIDTH{~cin}}[63:0],nG6[63:0],C[63:0]);
+        oai21_array #(64) nC_mod(nP6[63:0],{WIDTH{~cin}},nG6[63:0],C[63:0]);
         not_array #(64) C_mod(C[63:0],nC[63:0]);
-        oai21_array #(WIDTH-64) nC_mod(nP6[WIDTH-1:64],{WIDTH{nC[63]}}[WIDTH-1:64],nG6[WIDTH-1:64],C[WIDTH-1:64]);
+        oai21_array #(WIDTH-64) nC_mod(nP6[WIDTH-1:64],{WIDTH{nC[63]}},nG6[WIDTH-1:64],C[WIDTH-1:64]);
         not_array #(WIDTH-64) C_mod(C[WIDTH-1:64],nC);
       end
     else if (WIDTH>32)
@@ -2036,9 +2036,9 @@ module adder2o(a,b,out0,out1,cin,en0,en1,cout,cout8,cout16,cout32);
         //oai21_array #(WIDTH-64) G7_mod(nP6[WIDTH-1:64],nG6[WIDTH-65:0],nG6[WIDTH-1:64],G7[WIDTH-1:64]);
         //not_array #(64) G7_tail_mod(nG6[63:0],G7[63:0]);
 
-        oai21_array #(64) nC_mod(nP6[63:0],{WIDTH{~cin}}[63:0],nG6[63:0],C[63:0]);
+        oai21_array #(64) nC_mod(nP6[63:0],{WIDTH{~cin}},nG6[63:0],C[63:0]);
         not_array #(64) C_mod(C[63:0],nC[63:0]);
-        oai21_array #(WIDTH-64) nC_mod(nP6[WIDTH-1:64],{WIDTH{nC[63]}}[WIDTH-1:64],nG6[WIDTH-1:64],C[WIDTH-1:64]);
+        oai21_array #(WIDTH-64) nC_mod(nP6[WIDTH-1:64],{WIDTH{nC[63]}},nG6[WIDTH-1:64],C[WIDTH-1:64]);
         not_array #(WIDTH-64) C_mod(C[WIDTH-1:64],nC);
       end
     else if (WIDTH>32)

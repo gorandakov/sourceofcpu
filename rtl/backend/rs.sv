@@ -2126,10 +2126,10 @@ module rs(
   outDataA0,outDataNA0,outDataB0,outDataNB0,outDataC0,outReg0,outOp0,outInstrIndex0,outWQ0,outLSFlag0,
     outFuFwdA0,outFuFwdB0,outFuuFwdA0,outFuuFwdB0,outLSQ0,outDataEn0,outThread0,//agu
     outAttr0,
-  outDataA1,outDataNA1,outDataB1,outDataNB1,outDataC1,outDataS1,outReg1,outRegSimd1,outOp1,outInstrIndex1,
+  outDataA1,outDataNA1,outDataB1,outDataNB1,outDataS1,outReg1,outRegSimd1,outOp1,outInstrIndex1,
     outFuFwdA1,outFuFwdB1,outFuFwdS1,outFuuFwdA1,outFuuFwdB1,
     outFuuFwdS1,outDataEn1,outThread1,outAttr1,//alu 1
-  outDataA2,outDataNA2,outDataB2,outDataNB2,outDataC2,outDataS2,outReg2,outRegSimd2,outOp2,outInstrIndex2,
+  outDataA2,outDataNA2,outDataB2,outDataNB2,outDataS2,outReg2,outRegSimd2,outOp2,outInstrIndex2,
     outFuFwdA2,outFuFwdB2,outFuFwdS2,outFuuFwdA2,outFuuFwdB2,
     outFuuFwdS2,outDataEn2,outThread2,outAttr2,//alu 2
 // wires from functional units  
