@@ -1622,6 +1622,8 @@ module backend(
 
   wire [8:0][DATA_WIDTH-1:0] dataA;
   wire [8:0][DATA_WIDTH-1:0] dataB;
+  wire [8:0][DATA_WIDTH-1:0] dataNA;
+  wire [8:0][DATA_WIDTH-1:0] dataNB;
   wire [2:0][DATA_WIDTH-1:0] WdataA;
   wire [2:0][DATA_WIDTH-1:0] WdataB;
   wire [8:0] inflA;
@@ -1674,6 +1676,26 @@ module backend(
   wire [2:0][SIMD_WIDTH-1:0] WdataBVL;
   wire [2:0][SIMD_WIDTH-1:0] WdataBFH;
   wire [2:0][16+SIMD_WIDTH-1:0] WdataBFL;
+
+  wire [8:0][SIMD_WIDTH-1:0] dataNAVH;
+  wire [8:0][SIMD_WIDTH-1:0] dataNAVL;
+  wire [8:0][SIMD_WIDTH-1:0] dataNAFH;
+  wire [8:0][16+SIMD_WIDTH-1:0] dataNAFL;
+
+  wire [8:0][SIMD_WIDTH-1:0] dataNBVH;
+  wire [8:0][SIMD_WIDTH-1:0] dataNBVL;
+  wire [8:0][SIMD_WIDTH-1:0] dataNBFH;
+  wire [8:0][16+SIMD_WIDTH-1:0] dataNBFL;
+
+  wire [2:0][SIMD_WIDTH-1:0] WdataNAVH;
+  wire [2:0][SIMD_WIDTH-1:0] WdataNAVL;
+  wire [2:0][SIMD_WIDTH-1:0] WdataNAFH;
+  wire [2:0][16+SIMD_WIDTH-1:0] WdataNAFL;
+
+  wire [2:0][SIMD_WIDTH-1:0] WdataNBVH;
+  wire [2:0][SIMD_WIDTH-1:0] WdataNBVL;
+  wire [2:0][SIMD_WIDTH-1:0] WdataNBFH;
+  wire [2:0][16+SIMD_WIDTH-1:0] WdataNBFL;
 
   wire [8:0][DATA_WIDTH-1:0] ret_dataA;
   wire [8:0][DATA_WIDTH-1:0] ret_dataB;
@@ -1736,6 +1758,16 @@ module backend(
   wire [5:0][SIMD_WIDTH-1:0] outDataBFH;
   wire [5:0][16+SIMD_WIDTH-1:0] outDataAFL;
   wire [5:0][16+SIMD_WIDTH-1:0] outDataBFL;
+  wire [8:0][DATA_WIDTH-1:0] outDataNA;
+  wire [8:0][DATA_WIDTH-1:0] outDataNB;
+  wire [5:0][SIMD_WIDTH-1:0] outDataNAVH;
+  wire [5:0][SIMD_WIDTH-1:0] outDataNBVH;
+  wire [5:0][SIMD_WIDTH-1:0] outDataNAVL;
+  wire [5:0][SIMD_WIDTH-1:0] outDataNBVL;
+  wire [5:0][SIMD_WIDTH-1:0] outDataNAFH;
+  wire [5:0][SIMD_WIDTH-1:0] outDataNBFH;
+  wire [5:0][16+SIMD_WIDTH-1:0] outDataNAFL;
+  wire [5:0][16+SIMD_WIDTH-1:0] outDataNBFL;
   wire [8:0][64:0] outDataC;
   wire [8:0][5:0] outDataS;
   wire [8:0][REG_WIDTH-1:0] outReg;
