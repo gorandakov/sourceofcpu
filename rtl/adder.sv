@@ -401,8 +401,8 @@ module adder(a,b,out,cin,en,cout,cout8,cout16,cout32);
 
         oai21_array #(64) nC_mod(nP6[63:0],{WIDTH{~cin}},nG6[63:0],C[63:0]);
         not_array #(64) C_mod(C[63:0],nC[63:0]);
-        oai21_array #(WIDTH-64) nC_mod(nP6[WIDTH-1:64],{WIDTH{nC[63]}},nG6[WIDTH-1:64],C[WIDTH-1:64]);
-        not_array #(WIDTH-64) C_mod(C[WIDTH-1:64],nC);
+        oai21_array #(WIDTH-64) nCx_mod(nP6[WIDTH-1:64],{WIDTH{nC[63]}},nG6[WIDTH-1:64],C[WIDTH-1:64]);
+        not_array #(WIDTH-64) Cx_mod(C[WIDTH-1:64],nC);
       end
     else if (WIDTH>32)
       begin
@@ -1677,8 +1677,8 @@ module adder2oM(a,b,out0,out1,out2,cin,en0,en1,low32,cout,cout8,cout16,cout32);
 
         oai21_array #(64) nC_mod(nP6[63:0],{WIDTH{~cin}},nG6[63:0],C[63:0]);
         not_array #(64) C_mod(C[63:0],nC[63:0]);
-        oai21_array #(WIDTH-64) nC_mod(nP6[WIDTH-1:64],{WIDTH{nC[63]}},nG6[WIDTH-1:64],C[WIDTH-1:64]);
-        not_array #(WIDTH-64) C_mod(C[WIDTH-1:64],nC);
+        oai21_array #(WIDTH-64) nCx_mod(nP6[WIDTH-1:64],{WIDTH{nC[63]}},nG6[WIDTH-1:64],C[WIDTH-1:64]);
+        not_array #(WIDTH-64) Cx_mod(C[WIDTH-1:64],nC);
       end
     else if (WIDTH>32)
       begin
@@ -2038,8 +2038,8 @@ module adder2o(a,b,out0,out1,cin,en0,en1,cout,cout8,cout16,cout32);
 
         oai21_array #(64) nC_mod(nP6[63:0],{WIDTH{~cin}},nG6[63:0],C[63:0]);
         not_array #(64) C_mod(C[63:0],nC[63:0]);
-        oai21_array #(WIDTH-64) nC_mod(nP6[WIDTH-1:64],{WIDTH{nC[63]}},nG6[WIDTH-1:64],C[WIDTH-1:64]);
-        not_array #(WIDTH-64) C_mod(C[WIDTH-1:64],nC);
+        oai21_array #(WIDTH-64) nCx_mod(nP6[WIDTH-1:64],{WIDTH{nC[63]}},nG6[WIDTH-1:64],C[WIDTH-1:64]);
+        not_array #(WIDTH-64) Cx_mod(C[WIDTH-1:64],nC);
       end
     else if (WIDTH>32)
       begin

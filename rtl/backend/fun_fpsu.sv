@@ -207,7 +207,7 @@ module fun_fpsu(
   reg [3:0] u2_en_reg6;
   reg [3:0] u2_en_reg7;
 
-  rs_write_forward #(S+68) u1_A_fwd(
+  rs_write_forwardF #(S+68) u1_A_fwd(
   clk,rst,
   ~u1_en[3],
   u1_A,uu_A1,
@@ -225,7 +225,7 @@ module fun_fpsu(
   FUF9,FUF9_reg
   );
   
-  rs_write_forward #(S+68) u1_B_fwd(
+  rs_write_forwardF #(S+68) u1_B_fwd(
   clk,rst,
   ~u1_en[3],
   u1_B,uu_B1,
@@ -243,7 +243,7 @@ module fun_fpsu(
   FUF9,FUF9_reg
   );
   
-  rs_write_forward #(S+68) u2_A_fwd(
+  rs_write_forwardF #(S+68) u2_A_fwd(
   clk,rst,
   ~u2_en[3],
   u2_A,uu_A2,
@@ -261,7 +261,7 @@ module fun_fpsu(
   FUF9,FUF9_reg
   );
   
-  rs_write_forward #(S+68) u2_B_fwd(
+  rs_write_forwardF #(S+68) u2_B_fwd(
   clk,rst,
   ~u2_en[3],
   u2_B,uu_B2,

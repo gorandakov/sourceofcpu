@@ -4820,10 +4820,10 @@ module backend(
   .newDataVA2H(dataAVH[2]),.newDataVB2H(dataBVH[2]),.newDataVA2L(dataAVL[2]),.newDataVB2L(dataBVL[2]),
   .newDataFA2H(dataAFH[2]),.newDataFB2H(dataBFH[2]),.newDataFA2L(dataAFL[2]),.newDataFB2L(dataBFL[2]),
 
-  .outDataVB1H(WDoutDataVH[0]),.outDataVB1L(WDoutDataVL[0]),
-  .outDataFB1H(WDoutDataFH[0]),.outDataFB1L(WDoutDataFL[0]),
-  .outDataVA3H(WDoutDataVH[1]),.outDataVA3L(WDoutDataVL[1]),
-  .outDataFA3H(WDoutDataFH[1]),.outDataFA3L(WDoutDataFL[1]),
+  .outDataVB1H(WDoutDataVH[0]),.outDataNVB1H(WDoutDataNVH[0]),.outDataVB1L(WDoutDataVL[0]),.outDataNVB1L(WDoutDataNVL[0]),
+  .outDataFB1H(WDoutDataFH[0]),.outDataNFB1H(WDoutDataNFH[0]),.outDataFB1L(WDoutDataFL[0]),.outDataNFB1L(WDoutDataNFL[0]),
+  .outDataVA3H(WDoutDataVH[1]),.outDataNVA3H(WDoutDataNVH[1]),.outDataVA3L(WDoutDataVL[1]),.outDataNVA3L(WDoutDataNVL[1]),
+  .outDataFA3H(WDoutDataFH[1]),.outDataNFA3H(WDoutDataNFH[1]),.outDataFA3L(WDoutDataFL[1]),.outDataNFA3L(WDoutDataNFL[1]),
 
   .FUV0H(FUVH[0]),.FUV0L(FUVL[0]),.FUF0H(FUFH[0]),.FUF0L(FUFL[0]),
   .FUV1H(FUVH[1]),.FUV1L(FUVL[1]),.FUF1H(FUFH[1]),.FUF1L(FUFL[1]),
