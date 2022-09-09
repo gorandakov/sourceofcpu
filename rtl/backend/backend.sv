@@ -1831,6 +1831,8 @@ module backend(
   
   wire [1:0][DATA_WIDTH-1:0] WoutDataA;
   wire [1:0][DATA_WIDTH-1:0] WoutDataB;
+  wire [1:0][DATA_WIDTH-1:0] WoutDataNA;
+  wire [1:0][DATA_WIDTH-1:0] WoutDataNB;
   wire [1:0][CONST_WIDTH-1:0] WoutDataC;
   wire [1:0][OPERATION_WIDTH-1:0] WoutOp;
   wire [1:0][9:0] WoutII;
@@ -1851,6 +1853,7 @@ module backend(
   
   
   wire [1:0][DATA_WIDTH-1:0] WDoutData;
+  wire [1:0][DATA_WIDTH-1:0] WDoutDataN;
   wire [1:0][OPERATION_WIDTH-1:0] WDoutOp;
   reg [1:0][OPERATION_WIDTH-1:0] WDoutOp_reg;
   reg [1:0][OPERATION_WIDTH-1:0] WDoutOp_reg2;
@@ -1872,6 +1875,10 @@ module backend(
   wire [1:0][SIMD_WIDTH-1:0] WDoutDataVL;
   wire [1:0][SIMD_WIDTH-1:0] WDoutDataFH;
   wire [1:0][16+SIMD_WIDTH-1:0] WDoutDataFL;
+  wire [1:0][SIMD_WIDTH-1:0] WDoutDataNVH;
+  wire [1:0][SIMD_WIDTH-1:0] WDoutDataNVL;
+  wire [1:0][SIMD_WIDTH-1:0] WDoutDataNFH;
+  wire [1:0][16+SIMD_WIDTH-1:0] WDoutDataNFL;
   
   wire [1:0][DATA_WIDTH-1:0] WDfxData;
   reg  [DATA_WIDTH-1:0] WDfxData_reg[1:0];
@@ -4561,7 +4568,7 @@ module backend(
           rs_write_forward #(DATA_WIDTH) fwdDA_mod(
           .clk(clk),
           .rst(rst),
-          .oldData(WDoutData[n]),
+          .oldData(WDoutData[n]|~WDoutDataN[n]),
           .newData(WDfxData[n]),
           .fuFwd(WDoutFuFwd[n]),.fuuFwd(WDoutFuuFwd[n]),
           .stall(~WDoutDataEn[n][1]),
@@ -4582,7 +4589,7 @@ module backend(
           rs_write_forwardF #(SIMD_WIDTH) fwdDAVH_mod(
           .clk(clk),
           .rst(rst),
-          .oldData(WDoutDataVH[n]),
+          .oldData(WDoutDataVH[n]|~WDoutDataNVH[n]),
           .newData(WDfxDataVH[n]),
           .fuFwd(WDoutFuFwd_reg[n]),.fuuFwd(WDoutFuuFwd_reg[n]),
           .stall(~WDoutDataEn_reg[n][2]),
@@ -4602,7 +4609,7 @@ module backend(
           rs_write_forwardF #(SIMD_WIDTH) fwdDBVL_mod(
           .clk(clk),
           .rst(rst),
-          .oldData(WDoutDataVL[n]),
+          .oldData(WDoutDataVL[n]|~WDoutDataNVL[n]),
           .newData(WDfxDataVL[n]),
           .fuFwd(WDoutFuFwd_reg[n]),.fuuFwd(WDoutFuuFwd_reg[n]),
           .stall(~WDoutDataEn_reg[n][2]),
@@ -4622,7 +4629,7 @@ module backend(
           rs_write_forwardF #(SIMD_WIDTH) fwdDAFH_mod(
           .clk(clk),
           .rst(rst),
-          .oldData(WDoutDataFH[n]),
+          .oldData(WDoutDataFH[n]|~WDoutDataNFH[n]),
           .newData(WDfxDataFH[n]),
           .fuFwd(WDoutFuFwd_reg2[n]),.fuuFwd(WDoutFuuFwd_reg2[n]),
           .stall(~WDoutDataEn_reg2[n][3]),
@@ -4642,7 +4649,7 @@ module backend(
           rs_write_forwardF #(16+SIMD_WIDTH) fwdDBFL_mod(
           .clk(clk),
           .rst(rst),
-          .oldData(WDoutDataFL[n]),
+          .oldData(WDoutDataFL[n]|~WDoutDataNFL[n]),
           .newData(WDfxDataFL[n]),
           .fuFwd(WDoutFuFwd_reg2[n]),.fuuFwd(WDoutFuuFwd_reg2[n]),
           .stall(~WDoutDataEn_reg2[n][3]),
