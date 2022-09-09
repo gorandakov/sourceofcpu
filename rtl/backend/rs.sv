@@ -767,9 +767,9 @@ module rs_wakeUp_data(
   FU0,FU1,FU2,FU3,
   FU4,FU5,FU6,
   FU7,FU8,FU9,
-  outRsSelect0,outData0,outDataN0,
-  outRsSelect1,outData1,outDataN1,
-  outRsSelect2,outData2,outDataN2
+  outRsSelect0,outData0,
+  outRsSelect1,outData1,
+  outRsSelect2,outData2
   );
 
   parameter WIDTH=`alu_width;
@@ -2820,9 +2820,9 @@ module rs(
   FUS0,FUS1,FUS2,6'b0,
   FUS3,FUS4,FUS5,
   FUS6,FUS7,FUS8,
-  32'b0,4'b0,1'b0,,
-  outRsSelect[1],outBank[1],rsFoundNZ[1],outDataS1,
-  outRsSelect[2],outBank[2],rsFoundNZ[2],outDataS2
+  32'b0,4'b0,1'b0,,,
+  outRsSelect[1],outBank[1],rsFoundNZ[1],outDataS1,,
+  outRsSelect[2],outBank[2],rsFoundNZ[2],outDataS2,
   );
 
   rs_wakeUp_data_array #(SIMD_WIDTH) dataA_VH_mod(

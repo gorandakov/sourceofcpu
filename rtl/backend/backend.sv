@@ -4771,23 +4771,23 @@ module backend(
     .newLSFlag2(rs_ldst_flg[4]),
     .newAttr2(newAttr_reg2),
 // wires to get values out of buffer
-  .outDataA0(WoutDataB[0]),.outDataB0(WoutDataA[0]),.outDataC0(WoutDataC[0]),
+  .outDataA0(WoutDataB[0]),.outDataNA0(WoutDataNB[0]),.outDataB0(WoutDataA[0]),.outDataNB0(WoutDataNA[0]),.outDataC0(WoutDataC[0]),
     .outOp0(WoutOp[0]),.outInstrIndex0(WoutII[0]),
     .outFuFwdA0(WfuFwdB[0]),.outFuFwdB0(WfuFwdA[0]),.outFuuFwdA0(WfuuFwdB[0]),.outFuuFwdB0(WfuuFwdA[0]),
     .outLSQ0(WoutLSQ[0]),.outDataEn0(WoutDataEn[0]),.outThread0(WoutThread[0]),.outWQ0(WoutWQ[0]),
     .outLSFlag0(WoutLSflag[0]),//agu
     .outAttr0(WoutAttr[0]),
-  .outDataB1(WDoutData[0]),.outOp1(WDoutOp[0]),.outInstrIndex1(WDoutII[0]),
+  .outDataB1(WDoutData[0]),.outDataNB1(WDoutDataN[0]),.outOp1(WDoutOp[0]),.outInstrIndex1(WDoutII[0]),
     .outFuFwdB1(WDoutFuFwd[0]),.outFuuFwdB1(WDoutFuuFwd[0]),.outLSQ1(WDoutLSQ[0]),
     .outDataEn1(WDoutDataEn[0]),.outThread1(WDoutThread[0]),.outWQ1(WDoutWQ[0]),//data
     .outAttr1(),
-  .outDataA2(WoutDataA[1]),.outDataB2(WoutDataB[1]),.outDataC2(WoutDataC[1]),
+  .outDataA2(WoutDataA[1]),.outDataNA2(WoutDataNA[1]),.outDataB2(WoutDataB[1]),.outDataNB2(WoutDataNB[1]),.outDataC2(WoutDataC[1]),
     .outOp2(WoutOp[1]),.outInstrIndex2(WoutII[1]),
     .outFuFwdA2(WfuFwdA[1]),.outFuFwdB2(WfuFwdB[1]),.outFuuFwdA2(WfuuFwdA[1]),.outFuuFwdB2(WfuuFwdB[1]),
     .outLSQ2(WoutLSQ[1]),.outDataEn2(WoutDataEn[1]),.outThread2(WoutThread[1]),.outWQ2(WoutWQ[1]),
     .outLSFlag2(WoutLSflag[1]),//agu
     .outAttr2(WoutAttr[1]),
-  .outDataA3(WDoutData[1]),.outOp3(WDoutOp[1]),.outInstrIndex3(WDoutII[1]),
+  .outDataA3(WDoutData[1]),.outDataNA3(WDoutDataN[1]),.outOp3(WDoutOp[1]),.outInstrIndex3(WDoutII[1]),
     .outFuFwdA3(WDoutFuFwd[1]),.outFuuFwdA3(WDoutFuuFwd[1]),.outLSQ3(WDoutLSQ[1]),
     .outDataEn3(WDoutDataEn[1]),.outThread3(WDoutThread[1]),.outWQ3(WDoutWQ[1]),//data
     .outAttr3(),
@@ -4924,7 +4924,7 @@ module backend(
   .FU4(FU[4]), .FU5(FU[5]),  .FU6(FU[6]),  .FU7(FU[7]),
   .FU8(FU[8]), .FU9(FU[9]),
   .FNU0(FU_N[0]),.FNU1(FU_N[1]),.FNU2(FU_N[2]),.FNU3(FU_N[3]),
-  .FUN6(FU_N[4]),.FUN7(FU_N[5]),.FUN8(FU_N[6]),.FUN9(FU_N[7]),
+  .FNU6(FU_N[4]),.FNU7(FU_N[5]),.FNU8(FU_N[6]),.FNU9(FU_N[7]),
   .FUS1(FUS1),  .FUS2(FUS2),  .FUS3(FUS3),
   .FUS4(FUS4), .FUS5(FUS5),  .FUS6(FUS6),  .FUS7(FUS7),
   .FUS8(FUS8),.FUS9(FUS9),
@@ -5086,7 +5086,7 @@ module backend(
   .FU0Hit(FU0Hit),.FU1Hit(FU1Hit),.FU2Hit(FU2Hit),.FU3Hit(FU3Hit),
   .FU0(FU[0]),.FU1(FU[1]),.FU2(FU[2]),.FU3(FU[3]),.FU4(FU[4]),.FU5(FU[5]),.FU6(FU[6]),.FU7(FU[7]),.FU8(FU[8]),.FU9(FU[9]),
   .FNU0(FU_N[0]),.FNU1(FU_N[1]),.FNU2(FU_N[2]),.FNU3(FU_N[3]),
-  .FUN6(FU_N[4]),.FUN7(FU_N[5]),.FUN8(FU_N[6]),.FUN9(FU_N[7]),
+  .FNU6(FU_N[4]),.FNU7(FU_N[5]),.FNU8(FU_N[6]),.FNU9(FU_N[7]),
   .FUreg3_reg(FUreg_reg5[3]),.dc_rdataA(dc_rdataA[3]),//is it really reg5?
   .msi_exp_addr(MSI_exp_addr_reg),.msi_en(MSI_exp_en_reg),.msi_out_clear(),//msi_out_clear=can do msi en; todo - make replace last buffer rather than wait + redu
   .csrss_en(csrss_en),.csrss_addr(csrss_no),.csrss_data(csrss_data[63:0]),
