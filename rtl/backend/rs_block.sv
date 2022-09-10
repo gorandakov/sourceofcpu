@@ -97,7 +97,7 @@ module rs_write_forward_ALU(
   assign newData_d[64]=({fuFwd,fuuFwd}==8'hff) ? oldData[64] : 1'BZ;  
   assign newData_d[64]=(fuFwd!=4'hf) ? newDataFu_d[64] : 1'BZ;  
   assign newData_d[64]=(fuuFwd!=4'hf) ? newDataFuu_d[64] : 1'BZ;  
-  assign newData_d[63:32]=({fuFwd,fuuFwd}==8'hff && ~stxEn) ? oldData[63:32] : {32{1'BZ}};  
+  assign newData_d[63:32]=({fuFwd,fuuFwd}==8'hff && ~sxtEn) ? oldData[63:32] : {32{1'BZ}};  
   assign newData_d[63:32]=(fuFwd!=4'hf && ~sxtEn) ? newDataFu_d[63:32] : {32{1'BZ}};  
   assign newData_d[63:32]=(fuuFwd!=4'hf || sxtEn) ? (newDataFuu_d[63:32]|{32{D&sxtEn}})&{32{D|~sxtEn}} : {32{1'BZ}};  
 
