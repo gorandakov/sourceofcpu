@@ -173,7 +173,6 @@ module fun_fpusqr0(
    && ~fxFRT_can[2]|fxFRT_don_reg[2]|fxFRT_don_reg2[2]|fxFRT_don_reg3[2] 
    && fxFRT_can[3] && ~fxFRT_don_reg[3]&&~fxFRT_don_reg2[3]&&~fxFRT_don_reg3[3];
 
-  assign u1_Bx=uu_B1[67:0];
 
   assign fxFRT_expA=fxFRT_dbl ? {rtDataA_reg[65],{4{~rtDataA_reg[65]&&|{rtDataA_reg[65],rtDataA_reg[63:53]}}},
     rtDataA_reg[63:53]} : 16'bz;

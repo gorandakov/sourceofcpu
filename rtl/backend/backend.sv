@@ -5326,7 +5326,7 @@ module backend(
   .except(except),
   .fpcsr(fpcsr[31:0]),
   .ul_A(ouDataAFL),.ul_B(ouDataBFL),.ul_Av(ouDataAVL),.ul_Bv(ouDataBVL),
-  .uh_A(utDataAFH),.uh_B(utDataBFH),.uh_Av(ouDataAVH),.uh_Bv(utDataBVH),
+  .uh_A(utDataAFH),.uh_B(utDataBFH),.uh_Av(utDataAVH),.uh_Bv(utDataBVH),
   .u1_en(outEn_reg3[8]),.u1_op(outOp_reg3[8]),
  // .u1_ret(fsret[6]),.u1_ret_en(fsretEn6),
   //.u1_dataH(sqrDatH),.u1_dataL(sqrDatL),.u1_dataEn(sqrDatEn),

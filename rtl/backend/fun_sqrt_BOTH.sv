@@ -74,6 +74,11 @@ module fun_fpusqr(
   //wire [15:0] u1_Bx=u1_BH[15:0];
   //wire [15:0] u2_Bx=u2_BH[15:0];
   integer k;
+  
+  reg [67:0] ul_Av_reg;
+  reg [67:0] ul_Bv_reg;
+  reg [67:0] uh_Av_reg;
+  reg [67:0] uh_Bv_reg;
 
   reg [1:0] ALT_INP_reg;
 
@@ -105,7 +110,7 @@ module fun_fpusqr(
   clk,
   rst,except,
   fpcsr,
-  uh_Av,uh_Bv,ul_Av,ul_Bv,u1_en,u1_op,
+  uh_Av_reg,uh_Bv_reg,ul_Av_reg,ul_Bv_reg,u1_en,u1_op,
   ,,u1_regNo,u1_II,
   en_early,op_early,
   ,//En
@@ -120,6 +125,10 @@ module fun_fpusqr(
   );
   
   always @(posedge clk) begin
+      ul_Av_reg<=ul_Av;
+      uh_Av_reg<=uh_Av;
+      ul_Bv_reg<=ul_Bv;
+      uh_Bv_reg<=uh_Bv;
   end
 
 endmodule
