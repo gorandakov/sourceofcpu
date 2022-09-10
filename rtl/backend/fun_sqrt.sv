@@ -7,7 +7,7 @@ module fun_fpusqr0(
   rst,
   except,
   fpcsr,
-  u1_A,u1_B,u1_Av,u1_Bv,u1_en,u1_op,
+  uh_A,uh_B,ul_A,ul_B,u1_en,u1_op,
   u1_ret,u1_ret_en,
   u1_regNo,u1_II,
   en_early,op_early,
@@ -30,10 +30,10 @@ module fun_fpusqr0(
   input rst;
   input except;
   input [31:0] fpcsr;
-  input [S+67:0] u1_A;
-  input [S+67:0] u1_B;
-  input [S+67:0] u1_Av;
-  input [S+67:0] u1_Bv;
+  input [S+67:0] uh_A;
+  input [S+67:0] uh_B;
+  input [S+67:0] ul_A;
+  input [S+67:0] ul_B;
   input [3:0] u1_en;
   input [12:0] u1_op;
   output [13:0] u1_ret;
@@ -352,21 +352,6 @@ module fun_fpusqr0(
 	  u1_op_reg<=u1_op;
 	  u1_II_reg<=u1_II;
 	  u1_en_reg<=u1_en;
-          u1_fufwd_A_reg<=u1_fufwd_A;
-          u1_fuufwd_A_reg<=u1_fuufwd_A;
-          u1_fufwd_B_reg<=u1_fufwd_B;
-          u1_fuufwd_B_reg<=u1_fuufwd_B;
-
-	  FUF0_reg<=FUF0;
-	  FUF1_reg<=FUF1;
-	  FUF2_reg<=FUF2;
-	  FUF3_reg<=FUF3;
-	  FUF4_reg<=FUF4;
-	  FUF5_reg<=FUF5;
-	  FUF6_reg<=FUF6;
-	  FUF7_reg<=FUF7;
-	  FUF8_reg<=FUF8;
-	  FUF9_reg<=FUF9;
 
 	  if (|fxFRT_don_reg2) begin
               rtDataA_reg<=rtDataA;
