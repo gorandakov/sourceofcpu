@@ -92,7 +92,7 @@ module fun_fpusqr(
   clk,
   rst,except,
   fpcsr,
-  ul_A,ul_B,uh_A,uh_B,u1_en,u1_op,
+  {16'b0,uh_A},{16'b0,uh_B},ul_A,ul_B,u1_en,u1_op,
   ,,u1_regNo,u1_II,
   en_early,op_early,
   outEn,

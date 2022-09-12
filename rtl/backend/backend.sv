@@ -1768,7 +1768,7 @@ module backend(
   wire [5:0][SIMD_WIDTH-1:0] outDataNBFH;
   wire [5:0][16+SIMD_WIDTH-1:0] outDataNAFL;
   wire [5:0][16+SIMD_WIDTH-1:0] outDataNBFL;
-  wire [8:0][64:0] outDataC;
+  wire [8:0][32:0] outDataC;
   wire [8:0][5:0] outDataS;
   wire [8:0][REG_WIDTH-1:0] outReg;
   wire [8:0][REG_WIDTH-1:0] outRegS;
@@ -2079,11 +2079,11 @@ module backend(
 
   wire [5:0][`lsaddr_width-1:0] lsr_wr_data;
 
-  wire [SIMD_WIDTH-1:0]    sqrDatFL;
-  wire [SIMD_WIDTH-1+16:0] sqrDatVL;
+  wire [SIMD_WIDTH-1+16:0]    sqrDatFL;
+  wire [SIMD_WIDTH-1:0] sqrDatVL;
   wire [3:0]               sqrDatEn;
-  reg  [SIMD_WIDTH-1:0]    sqrDatFL_reg;
-  reg  [SIMD_WIDTH-1+16:0] sqrDatVL_reg;
+  reg  [SIMD_WIDTH-1+16:0]    sqrDatFL_reg;
+  reg  [SIMD_WIDTH-1:0] sqrDatVL_reg;
   reg                      sqrDatEn_reg;
 //  wire [3:0][47:0] wxdata;
 
@@ -5236,7 +5236,7 @@ module backend(
   .FUFL9(FUFL[9]),
   .FUFH0_n(FUFH_N[0]),.FUFH1_n(FUFH_N[1]),.FUFH2_n(FUFH_N[2]),.FUFH3_n(FUFH_N[3]),
   .FUFL0_m(FUFL_N[0]),.FUFL1_m(FUFL_N[1]),.FUFL2_m(FUFL_N[2]),.FUFL3_m(FUFL_N[3]),
-  .ALTDATAH0({sqrDatFL_reg[67:66],66'b0}),.ALTDATAH1({FUTYPE_reg,66'b0}),
+  .ALTDATAH0(sqrDatFL_reg[67:0]),.ALTDATAH1({FUTYPE_reg,66'b0}),
   .ALTDATAL0(sqrDatFL_reg),.ALTDATAL1({FUCVT2_reg[15+66:66],FUTYPE_reg,FUCVT2_reg[65:0]}),
   .ALT_INP({dalt[1],sqrDatEn_reg}),
   .FUS_alu0(FUS_alu_reg2[0]),.FUS_alu1(FUS_alu_reg5[1]),
@@ -5311,7 +5311,7 @@ module backend(
   .FUFL9(FUVL[9]),
   .FUFH0_n(FUVH_N[0]),.FUFH1_n(FUVH_N[1]),.FUFH2_n(FUVH_N[2]),.FUFH3_n(FUVH_N[3]),
   .FUFL0_m(FUVL_N[0]),.FUFL1_m(FUVL_N[1]),.FUFL2_m(FUVL_N[2]),.FUFL3_m(FUVL_N[3]),
-  .ALTDATAH0({`ptype_sngl,66'b0}),.ALTDATAH1({FUTYPE,66'b0}),
+  .ALTDATAH0(sqrDatVL_reg[67:0]),.ALTDATAH1({FUTYPE,66'b0}),
   .ALTDATAL0(sqrDatVL_reg[67:0]),.ALTDATAL1({FUTYPE,FUCVT2[65:0]}),
   .ALT_INP({dalt[1],sqrDatEn_reg}),
   .FOOFL0(FOOFL1),.FOOFL1(FOOFL2),.FOOFL2(FOOFL3),

@@ -6,7 +6,7 @@
 //do not delete redundant output
 //place next to alu_shift in alu-shift combo
 
-module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,retData,retEn,val1,val2,valS,valRes,valRes_N);
+module alu(clk,rst,except,except_thread,thread,operation,cond,sub,dataEn,nDataAlt,retData,retEn,val1,val2,valS,valRes,valRes_N);
 
   localparam REG_WIDTH=`reg_addr_width;
   localparam OPERATION_WIDTH=`operation_width;
@@ -19,6 +19,7 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
   input except_thread;
   input thread;
   input [OPERATION_WIDTH-1:0] operation;
+  input [4:0] cond;
   input [5:0] sub; //high power fat wire
   input dataEn;//1=coming data from rs
   input nDataAlt;//0=feeding data through multiclk unit
@@ -138,7 +139,8 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
   wire [4:0] jumpType; 
   wire doJmp;
   reg doJmp_reg;
-  
+  wire doJmp2;
+
   wire add_en;
   wire shift_en;
   wire add8_en;
@@ -186,12 +188,13 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
   assign val_xor={is_ptr ? ptr[63:44] : val1[63:44]^val2[63:44],val1[43:0]^val2[43:0]};
   assign val_and={is_ptr ? ptr[63:44] : val1[63:44]&val2[63:44],val1[43:0]&val2[43:0]};
   
-  assign valRes=(add_en||shift_en&~NOSHIFT||~nDataAlt) ? 65'bz : {is_ptr,valRes2};
+  assign nDataAlt2=nDataAlt && doJmp2 | ~cond[4];
+  assign valRes=(add_en||shift_en&~NOSHIFT||~nDataAlt)&~(doJmp2&cond[4]) ? 65'bz : {nDataAlt & ~nDataAlt2 ? val1[64] : is_ptr,valRes2};
   assign valRes2[63:0]=(operation[11] || ~nDataAlt) ? 64'b0: 64'bz;
-  
-  assign valRes2[63:0]=(~add8_en & ~sahf_en && nDataAlt) ? valRes1 : 64'bz;
-  assign valRes2[63:8]=(add8_en|sahf_en && nDataAlt) ? 56'b0 : 56'bz;
-  assign valRes2[7:0]=(add8_en|sahf_en && nDataAlt) ? valRes8 : 8'bz;
+  assign valRes2[63:0]=nDataAlt & ~nDataAlt2 ? val1[63:0] : 64'bz;
+  assign valRes2[63:0]=(~add8_en & ~sahf_en && nDataAlt2) ? valRes1 : 64'bz;
+  assign valRes2[63:8]=(add8_en|sahf_en && nDataAlt2) ? 56'b0 : 56'bz;
+  assign valRes2[7:0]=(add8_en|sahf_en && nDataAlt2) ? valRes8 : 8'bz;
 
   assign valRes8=(sahf_en) ? 8'bz : 8'b0;
   assign valRes8=sahf_en ? {2'b0,valS} : 8'bz;
@@ -318,6 +321,7 @@ module alu(clk,rst,except,except_thread,thread,operation,sub,dataEn,nDataAlt,ret
     );
 
   except_jump_cmp jcmp_mod (valS,jumpType,doJmp);
+  except_jump_cmp jcmp_mod (valS,cond[3:0],doJmp2);
   
  
   assign flag64_ZF=(valRes[63:0]==64'b0);
