@@ -189,7 +189,7 @@ module alu(clk,rst,except,except_thread,thread,operation,cond,sub,dataEn,nDataAl
   assign val_and={is_ptr ? ptr[63:44] : val1[63:44]&val2[63:44],val1[43:0]&val2[43:0]};
   
   assign nDataAlt2=nDataAlt && doJmp2 | ~cond[4];
-  assign valRes=(add_en||shift_en&~NOSHIFT||~nDataAlt)&~(doJmp2&cond[4]) ? 65'bz : {nDataAlt & ~nDataAlt2 ? val1[64] : is_ptr,valRes2};
+  assign valRes=(add_en||shift_en&~NOSHIFT||~nDataAlt)&~(~doJmp2|~cond[4]) ? 65'bz : {nDataAlt & ~nDataAlt2 ? val1[64] : is_ptr,valRes2};
   assign valRes2[63:0]=(operation[11] || ~nDataAlt) ? 64'b0: 64'bz;
   assign valRes2[63:0]=nDataAlt & ~nDataAlt2 ? val1[63:0] : 64'bz;
   assign valRes2[63:0]=(~add8_en & ~sahf_en && nDataAlt2) ? valRes1 : 64'bz;

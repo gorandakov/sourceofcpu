@@ -10,6 +10,7 @@ module alu_shift(
   except,
   except_thread,
   operation,
+  cond,
   sz,bit_en,arith,dir,
   dataEn,
   nDataAlt,
@@ -29,6 +30,7 @@ module alu_shift(
   input except;
   input except_thread;
   input [OPERATION_WIDTH-1:0] operation;
+  input [4:0] cond;
   input [3:0] sz;
   input [3:0] bit_en;
   input arith;
@@ -43,6 +45,7 @@ module alu_shift(
   
   wire is_shift;
   wire is_8H;
+  wire doJmp;
   wire [63:0] valres0;
   wire [7:0] valres1;  
   reg is_shift_reg;
@@ -68,8 +71,10 @@ module alu_shift(
   coutR,
   coutL
   );
+  
+  except_jump_cmp jcmp_mod (valS,cond[3:0],doJmp);
 
-  assign valRes=is_shift ? valres0 : 64'bz;
+  assign valRes=is_shift & ~(cond[4]&~doJmp) ? valres0 : 64'bz;
 
   assign retData[`except_flags]=is_shift_reg ? flags_COASZP : 6'bz;
 
