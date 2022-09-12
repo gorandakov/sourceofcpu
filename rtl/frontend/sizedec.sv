@@ -75,6 +75,8 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   wire isAddNoFlExtra;
   wire isShiftNoFl;
 
+  wire isCexALU;
+
   wire isSimdInt; 
   wire isFPUreor;
 
@@ -162,6 +164,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   assign isShlAddMulLike=(opcode_main==8'd210 || opcode_main==8'd211) && magic[0];
   assign isPtrSec=opcode_main==8'd212 && magic[0];
   assign isJalR=(opcode_main==8'd213 || opcode_main==8'd214 || opcode_main==8'd215 || opcode_main==8'd220 || opcode_main==8'd221) && magic[0];
+  assign isCexALU=opcode_main==8'd222 && magic[0];
   
   assign isBasicFPUScalarA=opcode_main==8'hf0 && instr[13:12]==2'b0 && magic[0];
   assign isBasicFPUScalarB=opcode_main==8'hf0 && instr[13:12]==2'b1 && magic[0];
@@ -192,6 +195,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   
   assign clsALU=|{
   isBasicALU & ~isBasicALUExcept & ~isBasicXOR,
+  isCexALU & ~instr[12] & ~instr[10],
   isBasicCmpTest,
   isBasicCJump & magic[0],
   isSelfTestCJump,
@@ -220,6 +224,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   assign clsPos0=opcode_main==8'hff && instr[15:13]==3'd1 && magic[0] && instr[31:16]==`csr_FPU;
   
   assign clsShift=isBasicShift & ~isBasicShiftExcept || subIsBasicShift || subIsFPUD & (opcode_sub[5:1]==5'b11100) ||
+    isCexALU & ~instr[12] & instr[10] ||
     subIsFPUPD & (opcode_sub[5:1]==5'b11101) || subIsFPUSngl &(opcode_main[7:6]==2'b0)
     || subIsFPUE &(opcode_main[7:6]==2'b0) || isSimdInt & instr[16] ||
     (isSimdInt && ~((instr[13:9]==5'd0 && ~instr[16]) || (instr[13:9]==5'd5 && ~instr[16]) ||
@@ -264,6 +269,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   assign clsMul=|{
     isBasicMUL,
     isPtrSec,
+    isCexALU & instr[12],
     opcode_main==8'hff && ~instr[15] && ~instr[13] && magic[0],
     isBasicFPUScalarC && !|instr[13:11],
      isBasicFPUScalarCmp && |instr[13:11],

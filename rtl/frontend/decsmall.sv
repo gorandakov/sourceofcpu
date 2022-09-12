@@ -180,7 +180,8 @@ module smallInstr_decoder(
   wire isBasicAddNoFl;
   wire isAddNoFlExtra;
   wire isShiftNoFl;
-  
+  wire isCexALU;
+
   wire isBasicMUL;
   wire isSimdInt;
   wire isFPUreor;
@@ -228,6 +229,7 @@ module smallInstr_decoder(
   reg [REG_WIDTH-2:0] prC[TRICNT_TOP-1:0];
   reg prC_use[TRICNT_TOP-1:0];
   reg puseCRet[TRICNT_TOP-1:0];
+  reg [4:0] palucond[TRICNT_TOP-1:0];
   reg puseBConst[TRICNT_TOP-1:0];
 //  output reg useBSmall;//small constant use; used for call/pop/push
   reg [63:0] pconstant[TRICNT_TOP-1:0];
@@ -369,6 +371,7 @@ module smallInstr_decoder(
   assign isPtrSec=opcode_main==8'd212;
   assign isJalR=opcode_main==8'd213 || opcode_main==8'd214 || opcode_main==8'd215 || opcode_main==8'd220 || opcode_main==8'd221;
   //216-219=cmp16,cmp8
+  assign isCexALU=opcode_main==8'd222;
 
   assign isBasicFPUScalarA=opcode_main==8'hf0 && instr[13:12]==2'b0;
   assign isBasicFPUScalarB=opcode_main==8'hf0 && instr[13:12]==2'b1;
@@ -404,6 +407,8 @@ module smallInstr_decoder(
   assign qtrien   [12]=trien[19];
   assign qconstant[13]={1'b0,pconstant[14]};
   assign qtrien   [13]=trien    [14];
+  assign qconstant[14]={1'b0,pconstant[31]};
+  assign qtrien   [14]=trien    [31];
   assign qconstant[0]={1'b0,pconstant[0]};
   assign qtrien   [0]=qtrien[11:1]==11'b0;
   
@@ -412,7 +417,7 @@ module smallInstr_decoder(
  
   generate
       genvar p,q,m;
-      for(m=0;m<14;m=m+1) begin : triconst_gen
+      for(m=0;m<15;m=m+1) begin : triconst_gen
 	  assign constant=qtrien[m] ? qconstant[m] : 65'bz;
       end
       for(p=0;p<5;p=p+1) begin
@@ -424,6 +429,7 @@ module smallInstr_decoder(
           wire [REG_WIDTH-2:0] krC;
           wire krC_use;
           wire kuseCRet;
+	  wire [4:0] kalucond;
           wire kuseBConst;
     //  output reg useBSmall;//small constant use; used for call/pop/push
           wire [64:0] kconstant;
@@ -477,6 +483,7 @@ module smallInstr_decoder(
 	      assign kuseBConst=trien[p*8+q] ? puseBConst[p*8+q] : 1'bz;
 //	      assign kthisSpecLoad=trien[p*8+q] ? pthisSpecLoad[p*8+q] : 1'bz;
 	      assign kisIPRel=trien[p*8+q] ? pisIPRel[p*8+q] : 1'bz;
+	      assign kalucond=trien[p*8+q] ? palucond[p*8+q] : 5'bz;
 	      assign kflags_use=trien[p*8+q] ? pflags_use[p*8+q] : 1'bz;
 	      assign kflags_write=trien[p*8+q] ? pflags_write[p*8+q] : 1'bz;
 	      assign kflags_wrFPU=trien[p*8+q] ? pflags_wrFPU[p*8+q] : 1'bz;
@@ -509,6 +516,7 @@ module smallInstr_decoder(
 	  assign kuseBConst=(~|trien[p*8+:8]) ? 1'b0 : 1'bz;
 //	  assign kthisSpecLoad=(~|trien[p*8+:8]) ? 1'b0 : 1'bz;
 	  assign kisIPRel=(~|trien[p*8+:8]) ? 1'b0 : 1'bz;
+	  assign kalucond=(~|trien[p*8+:8]) ? 5'b0 : 5'bz;
 	  assign kflags_use=(~|trien[p*8+:8]) ? 1'b0 : 1'bz;
 	  assign kflags_write=(~|trien[p*8+:8]) ? 1'b0 : 1'bz;
 	  assign kflags_wrFPU=(~|trien[p*8+:8]) ? 1'b0 : 1'bz;
@@ -541,6 +549,7 @@ module smallInstr_decoder(
 	  assign useBConst=(|trien[p*8+:8]) ? kuseBConst : 1'bz;
 //	  assign thisSpecLoad=(|trien[p*8+:8]) ? kthisSpecLoad : 1'bz;
 	  assign isIPRel=(|trien[p*8+:8]) ? kisIPRel : 1'bz;
+	  assign alucond=(|trien[p*8+:8]) ? kalucond : 5'bz;
 	  assign flags_use=(|trien[p*8+:8]) ? kflags_use : 1'bz;
 	  assign flags_write=(|trien[p*8+:8]) ? kflags_write : 1'bz;
 	  assign flags_wrFPU=(|trien[p*8+:8]) ? kflags_wrFPU : 1'bz;
@@ -576,6 +585,7 @@ module smallInstr_decoder(
   assign useBConst=(~|trien) ? 1'b0 : 1'bz;
 //  assign thisSpecLoad=(~|trien) ? 1'b0 : 1'bz;
   assign isIPRel=(~|trien) ? 1'b0 : 1'bz;
+  assign alucond=(~|trien) ? 5'b0 : 5'bz;
   assign flags_use=(~|trien) ? 1'b0 : 1'bz;
   assign flags_write=(~|trien) ? 1'b0 : 1'bz;
   assign flags_wrFPU=(~|trien) ? 1'b0 : 1'bz;
@@ -622,6 +632,7 @@ module smallInstr_decoder(
      //     pisBigConst[tt]=magic[2:0]==3'b111;
           pthisSpecLoad[tt]=1'b0;    
           pisIPRel[tt]=1'b0;
+	  palucond[tt]=5'b0;
           puseCRet[tt]=1'b0;
           prA_useF[tt]=1'b0;
           prB_useF[tt]=1'b0;
@@ -1578,6 +1589,9 @@ module smallInstr_decoder(
       trien[31]=magic[0] & (isJalR|isCexALU);
       if (isCexALU) begin
           pport[31]=PORT_ALU;
+	  if (instr[12]) pport[31]=PORT_MUL;
+	  else if (instr[10])
+	      pport[31]=PORT_SHIFT;
 	  prA_use[31]=1'b1;
 	  prB_use[31]=1'b1;
 	  prT_use[31]=1'b1;
