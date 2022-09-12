@@ -379,7 +379,7 @@ module backend(
 //  wbBus_req
   );
   localparam DATA_WIDTH=65;
-  localparam OPERATION_WIDTH=`operation_width;
+  localparam OPERATION_WIDTH=`operation_width+5;
   localparam RRF_WIDTH=6;
   localparam IN_REG_WIDTH=6;
   localparam PORT_WIDTH=4;
@@ -1834,7 +1834,7 @@ module backend(
   wire [1:0][DATA_WIDTH-1:0] WoutDataNA;
   wire [1:0][DATA_WIDTH-1:0] WoutDataNB;
   wire [1:0][CONST_WIDTH-1:0] WoutDataC;
-  wire [1:0][OPERATION_WIDTH-1:0] WoutOp;
+  wire [1:0][OPERATION_WIDTH-6:0] WoutOp;
   wire [1:0][9:0] WoutII;
   wire [1:0][5:0] WoutWQ;
   wire [1:0][3:0] WfuFwdA;
@@ -4729,8 +4729,8 @@ module backend(
   .newDataA0(dataA[0]),.newDataB0(dataB[0]),.newDataC0(rs_const_reg[0][32:0]&{33{~rs_useBConst_reg[0]}}),
     .newRegA0(WregA[0]),.newRegB0(WregB[0]),
     .newANeeded0(WinflA[0]),.newBNeeded0(WinflB[0]),
-    .newOpA0((rs_lsi_reg[0]!=3'd7) ? rs_operation_reg[0] : WopA_reg),
-    .newOpB0((rs_lsi_reg[0]!=3'd7) ? rs_operation_reg[0] : WopB_reg),
+    .newOpA0((rs_lsi_reg[0]!=3'd7) ? rs_operation_reg[0][12:0] : WopA_reg[12:0]),
+    .newOpB0((rs_lsi_reg[0]!=3'd7) ? rs_operation_reg[0][12:0] : WopB_reg[12:0]),
     .newPort0(Wport_reg[0]),
     .newEnA0(rs_enAW_reg[0]),.newEnB0(rs_enBW_reg[0]),
     .newInstrIndexA0((rs_lsi_reg[0]!=3'd7) ? {II_upper,rs_index_reg[0]} : {II_upper,LSQ_indA_reg}),
@@ -4746,8 +4746,8 @@ module backend(
   .newDataA1(dataA[3]),.newDataB1(dataB[3]),.newDataC1(rs_const_reg[3][32:0]&{33{~rs_useBConst_reg[3]}}),
     .newRegA1(WregA[1]),.newRegB1(WregB[1]),
     .newANeeded1(WinflA[1]),.newBNeeded1(WinflB[1]),
-    .newOpA1((rs_lsi_reg[1]!=3'd7) ? rs_operation_reg[3] : WopA_reg),
-    .newOpB1((rs_lsi_reg[1]!=3'd7) ? rs_operation_reg[3] : WopB_reg),
+    .newOpA1((rs_lsi_reg[1]!=3'd7) ? rs_operation_reg[3][12:0] : WopA_reg[12:0]),
+    .newOpB1((rs_lsi_reg[1]!=3'd7) ? rs_operation_reg[3][12:0] : WopB_reg[12:0]),
     .newPort1(Wport_reg[1]),
     .newEnA1(rs_enAW_reg[1]),.newEnB1(rs_enBW_reg[1]),
     .newInstrIndexA1((rs_lsi_reg[1]!=3'd7) ? {II_upper,rs_index_reg[3]} : {II_upper,LSQ_indA_reg}),
@@ -4763,8 +4763,8 @@ module backend(
   .newDataA2(dataA[6]),.newDataB2(dataB[6]),.newDataC2(rs_const_reg[6][32:0]&{33{~rs_useBConst_reg[6]}}),
     .newRegA2(WregA[2]),.newRegB2(WregB[2]),
     .newANeeded2(WinflA[2]),.newBNeeded2(WinflB[2]),
-    .newOpA2((rs_lsi_reg[2]!=3'd7) ? rs_operation_reg[6] : WopA_reg),
-    .newOpB2((rs_lsi_reg[2]!=3'd7) ? rs_operation_reg[6] : WopB_reg),
+    .newOpA2((rs_lsi_reg[2]!=3'd7) ? rs_operation_reg[6][12:0] : WopA_reg[12:0]),
+    .newOpB2((rs_lsi_reg[2]!=3'd7) ? rs_operation_reg[6][12:0] : WopB_reg[12:0]),
     .newPort2(Wport_reg[2]),
     .newEnA2(rs_enAW_reg[2]),.newEnB2(rs_enBW_reg[2]),
     .newInstrIndexA2((rs_lsi_reg[2]!=3'd7) ? {II_upper,rs_index_reg[6]} : {II_upper,LSQ_indA_reg}),
@@ -4963,21 +4963,21 @@ module backend(
   .u1_base(outDataB[0]|~outDataNB[0]),.u1_index(outDataA[0]|~outDataNA[0]),.u1_const(outDataC[0][32:0]),
   .u1_base_fufwd(fuFwdB[0]),.u1_base_fuufwd(fuuFwdB[0]),
   .u1_index_fufwd(fuFwdA[0]),.u1_index_fuufwd(fuuFwdA[0]),
-  .u1_op(outOp[0]),.u1_reg(outReg[0]),
+  .u1_op(outOp[0][12:0]),.u1_reg(outReg[0]),
   .u1_LSQ_no(outLSQ[0]),.u1_II_no(outII[0]),.u1_WQ_no(outWQ[0]),
   .u1_lsflag(outLSflag[0]),.u1_clkEn(outEn[0][0]),
   .u1_attr(outAttr[0]),
   .u2_base(outDataB[3]|~outDataNB[3]),.u2_index(outDataA[3]|~outDataNA[3]),.u2_const(outDataC[3][32:0]),
   .u2_base_fufwd(fuFwdB[3]),.u2_base_fuufwd(fuuFwdB[3]),
   .u2_index_fufwd(fuFwdA[3]),.u2_index_fuufwd(fuuFwdA[3]),
-  .u2_op(outOp[3]),.u2_reg(outReg[3]),
+  .u2_op(outOp[3][12:0]),.u2_reg(outReg[3]),
   .u2_LSQ_no(outLSQ[1]),.u2_II_no(outII[3]),.u2_WQ_no(outWQ[1]),
   .u2_lsflag(outLSflag[1]),.u2_clkEn(outEn[3][0]),
   .u2_attr(outAttr[3]),
   .u3_base(outDataB[6]|~outDataNB[6]),.u3_index(outDataA[6]|~outDataNA[6]),.u3_const(outDataC[6][32:0]),
   .u3_base_fufwd(fuFwdB[6]),.u3_base_fuufwd(fuuFwdB[6]),
   .u3_index_fufwd(fuFwdA[6]),.u3_index_fuufwd(fuuFwdA[6]),
-  .u3_op(outOp[6]),.u3_reg(outReg[6]),
+  .u3_op(outOp[6][12:0]),.u3_reg(outReg[6]),
   .u3_LSQ_no(outLSQ[2]),.u3_II_no(outII[6]),.u3_WQ_no(outWQ[2]),
   .u3_lsflag(outLSflag[2]),.u3_clkEn(outEn[6][0]),
   .u3_attr(outAttr[6]),
