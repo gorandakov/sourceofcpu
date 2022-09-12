@@ -4,7 +4,7 @@
 `include "../fpoperations.sv"
 `include "../intop.sv"
 
-
+//instruct compiler not to delete constantN
 module smallInstr_decoder(
   clk,
   rst,
@@ -18,6 +18,7 @@ module smallInstr_decoder(
   rC,rC_use,useCRet,
   alucond,
   constant,
+  constantN,
 //  smallConst,
   rT,rT_use,
   port,
@@ -94,6 +95,7 @@ module smallInstr_decoder(
   output useBConst;
 //  output reg useBSmall;//small constant use; used for call/pop/push
   output [64:0] constant;
+  output [64:0] constantN;
 //  output reg [3:0] smallConst; //signed
   output [REG_WIDTH-1:0] rT;
   output rT_use;
@@ -256,8 +258,8 @@ module smallInstr_decoder(
   reg pinstr_fsimd[TRICNT_TOP-1:0];
   reg phalt[TRICNT_TOP-1:0];
   
-  wire [64:0] qconstant[13:0];
-  wire [13:0] qtrien;
+  wire [64:0] qconstant[14:0];
+  wire [14:0] qtrien;
   
   reg [4:0] pjumpType[TRICNT_TOP-1:0];
   
@@ -297,6 +299,8 @@ module smallInstr_decoder(
   assign constantDef=(magic[1:0]==2'b11) ? {{32{instr[47]}},instr[47:16]} : 64'bz;
   assign constantDef=(magic[1:0]==2'b01) ? {{32{instr[31]}},{18{instr[31]}},instr[31:18]} : 64'bz;
   assign constantDef=(~magic[0]) ? {32'b0,26'b0,~instr[6] && instr[11:8]==4'b0,instr[6],instr[11:8]} : 64'bz;
+
+  assign constantN=~constant;
  
   assign reor_en_out=isFPUreor&&~reor_error;
   assign reor_val_out=instr[31:8];

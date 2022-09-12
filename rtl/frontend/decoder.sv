@@ -2210,6 +2210,7 @@ module decoder(
   wire [9:0]dec_rC_useF;
   wire [9:0] dec_useCRet;
   wire [9:0][64:0] dec_constant;
+  wire [9:0][64:0] dec_constantN;
   wire [9:0][REG_WIDTH-1:0] dec_rT;
   wire [9:0]dec_rT_use;
   wire [9:0]dec_rT_useF;
@@ -2276,6 +2277,7 @@ module decoder(
   reg 				dec_rC_useF_reg[9:0];
   reg [9:0]			dec_useCRet_reg;
   reg [64:0] 			dec_constant_reg[9:0];
+  reg [64:0] 			dec_constantN_reg[9:0];
   reg [REG_WIDTH-1:0] 		dec_rT_reg[9:0];
   reg 				dec_rT_use_reg[9:0];
   reg 				dec_rT_useF_reg[9:0];
@@ -2469,11 +2471,13 @@ module decoder(
           .rB(dec_rB[k]),.rB_use(dec_rB_use[k]),.useBConst(dec_useBConst[k]),
           .rC(dec_rC[k]),.rC_use(dec_rC_use[k]),.useCRet(dec_useCRet[k]),
           .constant(dec_constant[k]),
+          .constantN(dec_constantN[k]),
           .rT(dec_rT[k]),.rT_use(dec_rT_use[k]),
           .port(dec_port[k]),
           .useRs(dec_useRs[k]),
           .rA_useF(dec_rA_useF[k]),.rB_useF(dec_rB_useF[k]),.rT_useF(dec_rT_useF[k]),.rC_useF(dec_rC_useF[k]),
           .rA_isV(dec_rA_isV[k]),.rB_isV(dec_rB_isV[k]),.rT_isV(dec_rT_isV[k]),
+	  .alucond(dec_alucond[k]),
 //          .clr64,.clr128,
 //          .chain,
           .flags_use(dec_useFlags[k]),
@@ -2547,7 +2551,8 @@ module decoder(
           adder #(9) srcAddA5_mod({afterTick[k],dec_srcIPOff[k]},9'd5,dec_srcIPOffA[k],1'b0,dec_magic[k][3:0]==4'b1111,,,,);
 
           
-          adder #(33) srcXAdd_mod({23'b0,dec_srcIPOffA_reg[k],1'b0   },{dec_constant_reg[k][31],dec_constant_reg[k][31:0]},dec_srcIPOffx[k],1'b0, 1'b1,,,,);
+          adder #(33) srcXAdd_mod({23'b0,dec_srcIPOffA_reg[k],1'b0   },{dec_constant_reg[k][31],dec_constant_reg[k][31:0]}|
+		  ~{dec_constantN_reg[k][31],dec_constantN_reg[k][31:0]},dec_srcIPOffx[k],1'b0, 1'b1,,,,);
 
 	  popcnt10 jpop_mod(cls_jump_reg&iUsed_reg,{dummy8_1,btbl_step});
 	  adder #(43) csrAdd_mod({34'b0,dec_srcIPOffA_reg[k]},baseIP[42:0],csrss_retIP_data[43:1],1'b0,csrss_retIP_en_reg[k],,,,);
@@ -2695,16 +2700,16 @@ module decoder(
           dec_useBConst_reg[8],
           dec_useBConst_reg[9],
 
-          dec_constant_reg[0],
-          dec_constant_reg[1],
-          dec_constant_reg[2],
-          dec_constant_reg[3],
-          dec_constant_reg[4],
-          dec_constant_reg[5],
-          dec_constant_reg[6],
-          dec_constant_reg[7],
-          dec_constant_reg[8],
-          dec_constant_reg[9],
+          dec_constant_reg[0]|~dec_constantN_reg[0],
+          dec_constant_reg[1]|~dec_constantN_reg[1],
+          dec_constant_reg[2]|~dec_constantN_reg[2],
+          dec_constant_reg[3]|~dec_constantN_reg[3],
+          dec_constant_reg[4]|~dec_constantN_reg[4],
+          dec_constant_reg[5]|~dec_constantN_reg[5],
+          dec_constant_reg[6]|~dec_constantN_reg[6],
+          dec_constant_reg[7]|~dec_constantN_reg[7],
+          dec_constant_reg[8]|~dec_constantN_reg[8],
+          dec_constant_reg[9]|~dec_constantN_reg[9],
           
           aux_const,
           cls_sys_reg,
@@ -3527,6 +3532,7 @@ module decoder(
               dec_rC_useF_reg[n]<=1'b0;
               dec_useCRet_reg[n]<=1'b0;
               dec_constant_reg[n]<=65'b0;
+              dec_constantN_reg[n]<=65'b0;
               dec_rT_reg[n]<={REG_WIDTH{1'b0}};
               dec_rT_use_reg[n]<=1'b0;
               dec_rT_useF_reg[n]<=1'b0;
@@ -3603,6 +3609,7 @@ module decoder(
               dec_rC_useF_reg[n]<=dec_rC_useF[n] && iUsed[n];
               dec_useCRet_reg[n]<=dec_useCRet[n] && iUsed[n];
               dec_constant_reg[n]<=dec_constant[n];
+              dec_constantN_reg[n]<=dec_constantN[n];
               dec_rT_reg[n]<=dec_rT[n];
               dec_rT_use_reg[n]<=dec_rT_use[n] && iUsed[n] && ~except;
               dec_rT_useF_reg[n]<=dec_rT_useF[n] && iUsed[n] && ~except;
