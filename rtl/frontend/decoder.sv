@@ -552,7 +552,7 @@ module decoder_reorder_mux(
 
   dec_afterTaken
   );
-  parameter OPERATION_WIDTH=`operation_width;
+  parameter OPERATION_WIDTH=`operation_width+5;
   parameter REG_WIDTH=6;
   
   input [9:0] avail;
@@ -2198,6 +2198,7 @@ module decoder(
   wire [9:0][INSTRQ_WIDTH-1:0] instQ;
   
   wire [9:0][OPERATION_WIDTH-1:0] dec_operation;
+  wire [9:0][4:0] dec_alucond;
   wire [9:0][REG_WIDTH-1:0] dec_rA;
   wire [9:0]dec_rA_use;
   wire [9:0]dec_rA_useF;
@@ -2264,6 +2265,7 @@ module decoder(
   wire [3:0] baseAttr;
 
   reg [OPERATION_WIDTH-1:0] 	dec_operation_reg[9:0];
+  reg [4:0]			dec_alucond_reg;
   reg [REG_WIDTH-1:0] 		dec_rA_reg[9:0];
   reg 				dec_rA_use_reg[9:0];
   reg 				dec_rA_useF_reg[9:0];
@@ -2601,16 +2603,16 @@ module decoder(
           dec_rT_isV_reg,
           cls_flag_reg,
           
-          dec_operation_reg[0],
-          dec_operation_reg[1],
-          dec_operation_reg[2],
-          dec_operation_reg[3],
-          dec_operation_reg[4],
-          dec_operation_reg[5],
-          dec_operation_reg[6],
-          dec_operation_reg[7],
-          dec_operation_reg[8],
-          dec_operation_reg[9],
+          {dec_alucond_reg[0],dec_operation_reg[0]},
+          {dec_alucond_reg[1],dec_operation_reg[1]},
+          {dec_alucond_reg[2],dec_operation_reg[2]},
+          {dec_alucond_reg[3],dec_operation_reg[3]},
+          {dec_alucond_reg[4],dec_operation_reg[4]},
+          {dec_alucond_reg[5],dec_operation_reg[5]},
+          {dec_alucond_reg[6],dec_operation_reg[6]},
+          {dec_alucond_reg[7],dec_operation_reg[7]},
+          {dec_alucond_reg[8],dec_operation_reg[8]},
+          {dec_alucond_reg[9],dec_operation_reg[9]},
 
           dep_rA[0],
           dep_rA[1],
@@ -3520,6 +3522,7 @@ module decoder(
       if (rst) begin
           for (n=0;n<10;n=n+1) begin
               dec_operation_reg[n]<={OPERATION_WIDTH{1'b0}};
+	      dec_alucond_reg[n]<=5'b0;
               dec_rA_reg[n]<={REG_WIDTH{1'b0}};
               dec_rA_use_reg[n]<=1'b0;
               dec_rA_useF_reg[n]<=1'b0;
@@ -3596,6 +3599,7 @@ module decoder(
       else if (~stall||except) begin
           for (n=0;n<10;n=n+1) begin
               dec_operation_reg[n]<=dec_operation[n];
+	      dec_alucond_reg[n]<=dec_alucond[n];
               dec_rA_reg[n]<=dec_rA[n];
               dec_rA_use_reg[n]<=dec_rA_use[n] && iUsed[n];
               dec_rA_useF_reg[n]<=dec_rA_useF[n] && iUsed[n];
