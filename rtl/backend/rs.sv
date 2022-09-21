@@ -580,9 +580,9 @@ module rs_wakeUp_logic_array(
   assign FUreg[13]=FUreg4_reg2;
   assign FUreg[14]=FUreg5_reg2;
   assign FUreg[15]=FUreg6_reg2;
-  assign FUreg[16]=FUreg7_reg4;
-  assign FUreg[17]=FUreg8_reg4;
-  assign FUreg[18]=FUreg9_reg4;
+  assign FUreg[16]=FUreg7_reg3;
+  assign FUreg[17]=FUreg8_reg3;
+  assign FUreg[18]=FUreg9_reg3;
 
   assign FUwen[0]=FU0wen;
   assign FUwen[1]=FU1wen;
@@ -600,9 +600,9 @@ module rs_wakeUp_logic_array(
   assign FUwen[13]=FU4wen_reg2;
   assign FUwen[14]=FU5wen_reg2;
   assign FUwen[15]=FU6wen_reg2;
-  assign FUwen[16]=FU7wen_reg4;
-  assign FUwen[17]=FU8wen_reg4;
-  assign FUwen[18]=FU9wen_reg4;
+  assign FUwen[16]=FU7wen_reg3;
+  assign FUwen[17]=FU8wen_reg3;
+  assign FUwen[18]=FU9wen_reg3;
   
   generate
       genvar j,k,p,q;
@@ -636,9 +636,9 @@ module rs_wakeUp_logic_array(
               FUreg4_reg2,FU4wen_reg,
               FUreg5_reg2,FU5wen_reg,
               FUreg6_reg2,FU6wen_reg,
-              FUreg7_reg4,FU7wen_reg4,
-              FUreg8_reg4,FU8wen_reg4,
-              FUreg9_reg4,FU9wen_reg4,
+              FUreg7_reg3,FU7wen_reg3,
+              FUreg8_reg3,FU8wen_reg3,
+              FUreg9_reg3,FU9wen_reg3,
               newRsSelect0[k+8*j],newReg0,newFunit0,newGazump0,newIsFP0,newIsV0,newEQ[0],
               newRsSelect1[k+8*j],newReg1,newFunit1,newGazump1,newIsFP1,newIsV1,newEQ[1],
               newRsSelect2[k+8*j],newReg2,newFunit2,newGazump2,newIsFP2,newIsV2,newEQ[2],
