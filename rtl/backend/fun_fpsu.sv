@@ -33,6 +33,7 @@ module fun_fpsu(
   FUF6,FUF7,FUF8,
   FUF9,
   FUF0N,FUF1M,FUF2N,FUF3N,
+  FUF6N,FUF7M,FUF8N,FUF9N,
   ALTDATA0,ALTDATA1,
   ALT_INP,
   FOOSL_out,
@@ -73,6 +74,10 @@ module fun_fpsu(
   output u2_ret_en;
  
 
+  inout [S+67:0] FUF6N;
+  inout [S+67:0] FUF7M;
+  inout [S+67:0] FUF8N;
+  inout [S+67:0] FUF9N;
   input [S+67:0] FUF0N;
   input [S+67:0] FUF1M;
   input [S+67:0] FUF2N;
@@ -223,12 +228,13 @@ module fun_fpsu(
   reg [3:0] u2_en_reg6;
   reg [3:0] u2_en_reg7;
 
-  rs_write_forwardF #(S+68) u1_A_fwd(
+  rs_write_forward #(S+68) u1_A_fwd(
   clk,rst,
   ~u1_en[3],
   u1_A,uu_A1,
   u1_fufwd_A,u1_fuufwd_A,
   FUF0N,FUF1M,FUF2N,FUF3N,
+  FUF6N,FUF7M,FUF8N,FUF9N,
   FUF0,FUF0_reg,
   FUF1,FUF1_reg,
   FUF2,FUF2_reg,
@@ -241,12 +247,13 @@ module fun_fpsu(
   FUF9,FUF9_reg
   );
   
-  rs_write_forwardF #(S+68) u1_B_fwd(
+  rs_write_forward #(S+68) u1_B_fwd(
   clk,rst,
   ~u1_en[3],
   u1_B,uu_B1,
   u1_fufwd_B,u1_fuufwd_B,
   FUF0N,FUF1M,FUF2N,FUF3N,
+  FUF6N,FUF7M,FUF8N,FUF9N,
   FUF0,FUF0_reg,
   FUF1,FUF1_reg,
   FUF2,FUF2_reg,
@@ -259,12 +266,13 @@ module fun_fpsu(
   FUF9,FUF9_reg
   );
   
-  rs_write_forwardF #(S+68) u2_A_fwd(
+  rs_write_forward #(S+68) u2_A_fwd(
   clk,rst,
   ~u2_en[3],
   u2_A,uu_A2,
   u2_fufwd_A,u2_fuufwd_A,
   FUF0N,FUF1M,FUF2N,FUF3N,
+  FUF6N,FUF7M,FUF8N,FUF9N,
   FUF0,FUF0_reg,
   FUF1,FUF1_reg,
   FUF2,FUF2_reg,
@@ -277,12 +285,13 @@ module fun_fpsu(
   FUF9,FUF9_reg
   );
   
-  rs_write_forwardF #(S+68) u2_B_fwd(
+  rs_write_forward #(S+68) u2_B_fwd(
   clk,rst,
   ~u2_en[3],
   u2_B,uu_B2,
   u2_fufwd_B,u2_fuufwd_B,
   FUF0N,FUF1M,FUF2N,FUF3N,
+  FUF6N,FUF7M,FUF8N,FUF9N,
   FUF0,FUF0_reg,
   FUF1,FUF1_reg,
   FUF2,FUF2_reg,
@@ -440,16 +449,24 @@ module fun_fpsu(
       if (INDEX==0) begin
 	      assign FUF4=FOOF_reg[0];
 	      assign FUF7=FOOF_reg[1];
+	      assign FUF4N=~FOOF_reg[0];
+	      assign FUF7M=~FOOF_reg[1];
       end
       if (INDEX==1) begin
 	      assign FUF5=FOOF_reg[0];
 	      assign FUF8=FOOF_reg[1];
+	      assign FUF5N=~FOOF_reg[0];
+	      assign FUF8N=~FOOF_reg[1];
       end
       if (INDEX==2) begin
 	      assign FUF6=|ALT_INP_reg ? {S+SIMD_WIDTH{1'BZ}} : FOOF_reg[0];
 	      assign FUF6=ALT_INP_reg[0] ? ALTDATA0 : {S+SIMD_WIDTH{1'BZ}};
 	      assign FUF6=ALT_INP_reg[1] ? ALTDATA1 : {S+SIMD_WIDTH{1'BZ}};
 	      assign FUF9=FOOF_reg[1];
+	      assign FUF6N=|ALT_INP_reg ? {S+SIMD_WIDTH{1'BZ}} : ~FOOF_reg[0];
+	      assign FUF6N=ALT_INP_reg[0] ? ~ALTDATA0 : {S+SIMD_WIDTH{1'BZ}};
+	      assign FUF6N=ALT_INP_reg[1] ? ~ALTDATA1 : {S+SIMD_WIDTH{1'BZ}};
+	      assign FUF9N=~FOOF_reg[1];
 	      assign plnA=uu_A2;
 	      assign plnB=gxDataBFL[0][67:0];
       end

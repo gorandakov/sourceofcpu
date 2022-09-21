@@ -85,10 +85,10 @@ module fun_fpu(
   input [S+67:0] FUF2N;
   input [S+67:0] FUF3N;
 
-  input [S+67:0] FUF6N;
-  input [S+67:0] FUF7M;
-  input [S+67:0] FUF8N;
-  input [S+67:0] FUF9N;
+  inout [S+67:0] FUF6N;
+  inout [S+67:0] FUF7M;
+  inout [S+67:0] FUF8N;
+  inout [S+67:0] FUF9N;
 
   input [S+67:0] FUF0;
   input [S+67:0] FUF1;
