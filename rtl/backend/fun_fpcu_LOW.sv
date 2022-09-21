@@ -46,6 +46,7 @@ module fun_fpuL(
   FUF6,FUF7,FUF8,
   FUF9,
   FUF0N,FUF1M,FUF2N,FUF3M,
+  FUF6N,FUF7M,FUF8N,FUF9M,
   ALTDATA0,ALTDATA1,
   ALT_INP,
   FUS_alu0,FUS_alu1,
@@ -171,6 +172,11 @@ module fun_fpuL(
   input [16+67:0] ALTDATA0;
   input [16+67:0] ALTDATA1;
   
+  inout [16+67:0] FUF6N;
+  inout [16+67:0] FUF7M;
+  inout [16+67:0] FUF8N;
+  inout [16+67:0] FUF9M;
+
   input [5:0] FUS_alu0;
   input [5:0] FUS_alu1;
   input [5:0] FUS_alu2;
@@ -223,6 +229,7 @@ module fun_fpuL(
   FUF6,FUF7,FUF8,
   FUF9,
   FUF0N,FUF1M,FUF2N,FUF3M,
+  FUF6N,FUF7M,FUF8N,FUF9M,
   84'b0,84'b0,
   2'b0,
   FUS_alu0,FUS_alu1,
@@ -248,6 +255,7 @@ module fun_fpuL(
   FUF6,FUF7,FUF8,
   FUF9,
   FUF0N,FUF1M,FUF2N,FUF3M,
+  FUF6N,FUF7M,FUF8N,FUF9M,
   84'b0,84'b0,
   2'b0,
   FUS_alu2,FUS_alu3,
@@ -273,6 +281,7 @@ module fun_fpuL(
   FUF6,FUF7,FUF8,
   FUF9,
   FUF0N,FUF1M,FUF2N,FUF3M,
+  FUF6N,FUF7M,FUF8N,FUF9M,
   ALTDATA0,ALTDATA1,
   ALT_INP,
   FUS_alu4,FUS_alu5,

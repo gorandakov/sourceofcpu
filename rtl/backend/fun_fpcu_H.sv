@@ -46,6 +46,7 @@ module fun_fpuH(
   FUF6,FUF7,FUF8,
   FUF9,
   FUF0N,FUF1N,FUF2N,FUF3N,
+  FUF6N,FUF7N,FUF8N,FUF9N,
   ALTDATA0,ALTDATA1,
   ALT_INP,
   FUS_alu0,FUS_alu1,
@@ -153,6 +154,11 @@ module fun_fpuH(
   input [67:0] FUF2N;
   input [67:0] FUF3N;
 
+  input [67:0] FUF6N;
+  input [67:0] FUF7N;
+  input [67:0] FUF8N;
+  input [67:0] FUF9N;
+
   input [67:0] FUF0;
   input [67:0] FUF1;
   input [67:0] FUF2;
@@ -210,6 +216,7 @@ module fun_fpuH(
   FUF6,FUF7,FUF8,
   FUF9,
   FUF0N,FUF1N,FUF2N,FUF3N,
+  FUF6N,FUF7N,FUF8N,FUF9N,
   68'b0,68'b0,
   2'b0,
   FUS_alu0,FUS_alu1,
@@ -235,6 +242,7 @@ module fun_fpuH(
   FUF6,FUF7,FUF8,
   FUF9,
   FUF0N,FUF1N,FUF2N,FUF3N,
+  FUF6N,FUF7N,FUF8N,FUF9N,
   68'b0,68'b0,
   2'b0,
   FUS_alu2,FUS_alu3,
@@ -260,6 +268,7 @@ module fun_fpuH(
   FUF6,FUF7,FUF8,
   FUF9,
   FUF0N,FUF1N,FUF2N,FUF3N,
+  FUF6N,FUF7N,FUF8N,FUF9N,
   ALTDATA0,ALTDATA1,
   ALT_INP,
   FUS_alu4,FUS_alu5,
