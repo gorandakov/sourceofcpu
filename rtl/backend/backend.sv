@@ -6162,8 +6162,8 @@ dcache1 L1D_mod(
           LSQ_wqA_reg<=6'b0;
           LSQ_wqB_reg<=6'b0;
           Wswp_reg<=3'b0;
-          WopA_reg<=13'b0;
-          WopB_reg<=13'b0;
+          WopA_reg<=18'b0;
+          WopB_reg<=18'b0;
           for(k=0;k<9;k=k+1) begin
               clrR_reg[k]<=9'b0;
               clrRS_reg[k]<=9'b0;
@@ -7138,7 +7138,7 @@ dcache1 L1D_mod(
           fxAlt2_reg3<=1'b0;*/
 	  outEnX_reg<=4'b0;
 	  outIIX_reg<=10'hf;
-	  outOpX_reg<=13'b0;
+	  outOpX_reg<=18'b0;
 	  outRegX_reg<=9'b0;
 	  outRegSX_reg<=9'b0;
           outDataAVH_reg<={SIMD_WIDTH{1'b0}};
@@ -7635,9 +7635,9 @@ dcache1 L1D_mod(
              WDoutFuuFwd_reg2[v]<=4'hf;
              WDoutDataEn_reg[v]<=4'b0;
              WDoutDataEn_reg2[v]<=4'b0;
-	     WDoutOp_reg[v]<=13'b0;
-	     WDoutOp_reg2[v]<=13'b0;
-	     WDoutOp_reg3[v]<=13'b0;
+	     WDoutOp_reg[v]<=18'b0;
+	     WDoutOp_reg2[v]<=18'b0;
+	     WDoutOp_reg3[v]<=18'b0;
              lsw_wdataF_reg[v]<=136'b0;
              lsw_wdataV_reg[v]<=136'b0;
              Wagu_blockRS_reg[v]<=1'b0;
