@@ -1629,7 +1629,7 @@ module smallInstr_decoder(
 	      prT[31]=instr[23:18];
 	      palucond[31]={1'b1,instr[17:14]};
 	      poperation[31][8]=instr[13];
-	  end else if magic[2] begin
+	  end else if (magic[2]) begin
 	      prA[31]=instr[52:48];
 	      prT[31]=instr[52:48];
 	      palucond[31]={1'b1,instr[56:53]};

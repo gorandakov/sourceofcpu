@@ -450,13 +450,11 @@ module fun_fpu(
       if (INDEX==0) begin
 	      assign FUF4=FOOF_reg[0];
 	      assign FUF7=FOOF_reg[1];
-	      assign FUF4N=~FOOF_reg[0];
 	      assign FUF7M=~FOOF_reg[1];
       end
       if (INDEX==1) begin
 	      assign FUF5=FOOF_reg[0];
 	      assign FUF8=FOOF_reg[1];
-	      assign FUF5N=~FOOF_reg[0];
 	      assign FUF8N=~FOOF_reg[1];
       end
       if (INDEX==2) begin

@@ -2283,7 +2283,7 @@ module decoder(
   wire [3:0] baseAttr;
 
   reg [OPERATION_WIDTH-1:0] 	dec_operation_reg[9:0];
-  reg [4:0]			dec_alucond_reg;
+  reg [4:0]			dec_alucond_reg[9:0];
   reg [REG_WIDTH-1:0] 		dec_rA_reg[9:0];
   reg 				dec_rA_use_reg[9:0];
   reg 				dec_rA_useF_reg[9:0];

@@ -149,7 +149,8 @@ module alu(clk,rst,except,except_thread,thread,operation,cond,sub,dataEn,nDataAl
   wire [63:0] val_and;
   wire [63:0] val_or;
   wire [63:0] val_xor;
-  
+ 
+  wire nDataAlt2; 
   wire [3:0] val1One;
   reg [3:0] val1One_reg;
  
@@ -338,7 +339,7 @@ module alu(clk,rst,except,except_thread,thread,operation,cond,sub,dataEn,nDataAl
     );
 
   except_jump_cmp jcmp_mod (valS,jumpType,doJmp);
-  except_jump_cmp jcmp_mod (valS,cond[3:0],doJmp2);
+  except_jump_cmp jcmp2_mod (valS,cond[3:0],doJmp2);
   
  
   assign flag64_ZF=(valRes[63:0]==64'b0);
