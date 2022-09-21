@@ -8,4 +8,6 @@ load/store cams in rtl/lsq
 reservation station, main backend, regfiles in rtl/backend
 control unit in rtl/cntrl
 frontend+decoder in rtl/frontend
+NOTE: Architectrual changes pending. The ISA on the website is out of date
+
 
