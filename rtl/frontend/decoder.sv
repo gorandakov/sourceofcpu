@@ -1717,7 +1717,7 @@ module decoder(
   csrss_no,csrss_en,csrss_data
   );
   localparam DATA_WIDTH=`alu_width+1;
-  localparam OPERATION_WIDTH=`operation_width;
+  localparam OPERATION_WIDTH=`operation_width+5;
   localparam RRF_WIDTH=6;
   localparam IN_REG_WIDTH=6;
   localparam PORT_WIDTH=4;
@@ -2215,7 +2215,7 @@ module decoder(
   wire [9:0][INSTR_WIDTH-1:0] inst;
   wire [9:0][INSTRQ_WIDTH-1:0] instQ;
   
-  wire [9:0][OPERATION_WIDTH-1:0] dec_operation;
+  wire [9:0][OPERATION_WIDTH-6:0] dec_operation;
   wire [9:0][4:0] dec_alucond;
   wire [9:0][REG_WIDTH-1:0] dec_rA;
   wire [9:0]dec_rA_use;
@@ -2282,7 +2282,7 @@ module decoder(
 //  wire dec_aspecR_d;
   wire [3:0] baseAttr;
 
-  reg [OPERATION_WIDTH-1:0] 	dec_operation_reg[9:0];
+  reg [OPERATION_WIDTH-6:0] 	dec_operation_reg[9:0];
   reg [4:0]			dec_alucond_reg[9:0];
   reg [REG_WIDTH-1:0] 		dec_rA_reg[9:0];
   reg 				dec_rA_use_reg[9:0];
@@ -3539,7 +3539,7 @@ module decoder(
     begin
       if (rst) begin
           for (n=0;n<10;n=n+1) begin
-              dec_operation_reg[n]<={OPERATION_WIDTH{1'b0}};
+              dec_operation_reg[n]<={OPERATION_WIDTH-5{1'b0}};
 	      dec_alucond_reg[n]<=5'b0;
               dec_rA_reg[n]<={REG_WIDTH{1'b0}};
               dec_rA_use_reg[n]<=1'b0;

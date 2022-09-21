@@ -35,7 +35,7 @@ module heptane_core(
   localparam DATA_WIDTH=65*4;
   localparam INSTR_WIDTH=80;
   localparam IN_REG_WIDTH=6;
-  localparam OPERATION_WIDTH=`operation_width;
+  localparam OPERATION_WIDTH=`operation_width+5;
   localparam PORT_WIDTH=4;
   localparam RS_WIDTH=65;
   localparam REQ_WIDTH=10;
