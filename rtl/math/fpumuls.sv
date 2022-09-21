@@ -108,8 +108,8 @@ module fpumuls(clk,rst,A,B,copyA,en,rmode,res,raise,fpcsr);
   adder #(48) prodAdd_mod(part0,part1,prod,1'b0,1'b1,,,,);
 
   adder2o #(24) resAddD_mod(prod_reg[46:23],rndbit_dbl,{res[22:0],dummy1_3},{dummy1_4,res[22:0]},1'b0,
-      prod_reg[47] & DBL_rnd1 & en_reg3 & ~spec_any || ~prod_reg[47] & DBL_rnd0 & DBL_rnflip0 & en_reg3 & ~spec_any,
-      ~prod_reg[47] & DBL_rnd0 & ~DBL_rnflip0 & en_reg3 & ~spec_any,,,,);
+      prod_reg[47] & DBL_rnd1 & en_reg2 & ~spec_any || ~prod_reg[47] & DBL_rnd0 & DBL_rnflip0 & en_reg2 & ~spec_any,
+      ~prod_reg[47] & DBL_rnd0 & ~DBL_rnflip0 & en_reg2 & ~spec_any,,,,);
 
   adder_CSA #(9) extAdd_mod(expA,expB,-BIAS,expart0,expart1);
   adder2c #(10) expAdd2_mod(expart0,expart1,exp_exp,exp_exp1,1'b0,1'b1,1'b1,1'b1,,,,);
@@ -137,22 +137,22 @@ module fpumuls(clk,rst,A,B,copyA,en,rmode,res,raise,fpcsr);
     ~(~exp1_non_denor_IEEE & fpcsr_reg[`csrfpu_daz] || exp_exp1_reg[9]) ? exp_exp1_reg : 10'bz;
 
 
-  assign res[22:0]=(prod_reg[47] & ~DBL_rnd1 & ~spec_any & en_reg3) ? prod_reg[46:24]:23'bz;
-  assign res[22:0]=(~prod_reg[47] & ~DBL_rnd0 & ~spec_any & en_reg3) ? prod_reg[45:23]:23'bz;
+  assign res[22:0]=(prod_reg[47] & ~DBL_rnd1 & ~spec_any & en_reg2) ? prod_reg[46:24]:23'bz;
+  assign res[22:0]=(~prod_reg[47] & ~DBL_rnd0 & ~spec_any & en_reg2) ? prod_reg[45:23]:23'bz;
    
-  assign {res[32],res[31:23]}=(prod_reg[47] & ~spec_any & en_reg3) ? {exp_exp1_reg3[8],sgn_reg3,exp_exp1_reg3[7:0]} : 10'bz;
-  assign {res[32],res[31:23]}=(~prod_reg[47] & ~spec_any & en_reg3) ? {exp_exp_reg3[8],sgn_reg3,exp_exp_reg3[7:0]} : 10'bz;
+  assign {res[32],res[31:23]}=(prod_reg[47] & ~spec_any & en_reg2) ? {exp_exp1_reg2[8],sgn_reg2,exp_exp1_reg2[7:0]} : 10'bz;
+  assign {res[32],res[31:23]}=(~prod_reg[47] & ~spec_any & en_reg2) ? {exp_exp_reg2[8],sgn_reg2,exp_exp_reg2[7:0]} : 10'bz;
 
   assign expon=(prod_reg[47] & ~spec_any) ? 
-    {~DBL_rnbit1 & ~ DBL_tail1,exp_exp1_reg3[9],exp1_non_denor_IEEE_reg2,exp1_oor_IEEE_reg2,exp1_oor_reg2} : 5'bz;
+    {~DBL_rnbit1 & ~ DBL_tail1,exp_exp1_reg2[9],exp1_non_denor_IEEE_reg2,exp1_oor_IEEE_reg2,exp1_oor_reg2} : 5'bz;
   assign expon=(~prod_reg[47] & ~spec_any) ? 
-    {~DBL_rnbit0 & ~ DBL_tail0,exp_exp_reg3[9],exp_non_denor_IEEE_reg2,exp_oor_IEEE_reg2,exp_oor_reg2} : 5'bz;
+    {~DBL_rnbit0 & ~ DBL_tail0,exp_exp_reg2[9],exp_non_denor_IEEE_reg2,exp_oor_IEEE_reg2,exp_oor_reg2} : 5'bz;
   assign expon=spec_any ? 5'd4 : 5'bz; 
  
  
-  assign res[31]=(~spec_any & en_reg3) ? sgn_reg3 : 1'bz;
+  assign res[31]=(~spec_any & en_reg2) ? sgn_reg2 : 1'bz;
   
-  assign res=(spec_any & en_reg3) ? res_spec : 33'bz;
+  assign res=(spec_any & en_reg2) ? res_spec : 33'bz;
 
   assign DBL_rnbit0=prod_reg[22];
   assign DBL_tail0=|prod_reg[21:0];
@@ -191,17 +191,17 @@ module fpumuls(clk,rst,A,B,copyA,en,rmode,res,raise,fpcsr);
 
   assign sgn=A[31]^B[31];
   
-  assign res_spec=spec_A_reg3 ? A_reg3 : 33'bz;
-  assign res_spec=spec_snan_reg3 ? {10'h3ff,23'b1} : 33'bz;
-  assign res_spec=spec_qnan_reg3 ? {10'h3ff,23'h400001} : 33'bz;
-  assign res_spec=spec_infty_reg3 ? {1'b1,sgn_reg3,8'hfe,23'b0} : 33'bz;
+  assign res_spec=spec_A_reg2 ? A_reg2 : 33'bz;
+  assign res_spec=spec_snan_reg2 ? {10'h3ff,23'b1} : 33'bz;
+  assign res_spec=spec_qnan_reg2 ? {10'h3ff,23'h400001} : 33'bz;
+  assign res_spec=spec_infty_reg2 ? {1'b1,sgn_reg2,8'hfe,23'b0} : 33'bz;
   assign res_spec=spec_any ?  33'bz :  33'b0;
 
-  assign raise[`csrfpu_inv_excpt]=spec_snan_reg3;
-  assign raise[`csrfpu_under_excpt]=sgn_reg3 && expon[0];
-  assign raise[`csrfpu_under_ieee_excpt]=sgn_reg3 && expon[1];
-  assign raise[`csrfpu_over_excpt]=~sgn_reg3 && expon[0];
-  assign raise[`csrfpu_over_ieee_excpt]=~sgn_reg3 && expon[1];
+  assign raise[`csrfpu_inv_excpt]=spec_snan_reg2;
+  assign raise[`csrfpu_under_excpt]=sgn_reg2 && expon[0];
+  assign raise[`csrfpu_under_ieee_excpt]=sgn_reg2 && expon[1];
+  assign raise[`csrfpu_over_excpt]=~sgn_reg2 && expon[0];
+  assign raise[`csrfpu_over_ieee_excpt]=~sgn_reg2 && expon[1];
   assign raise[`csrfpu_denor_ieee_excpt]=~expon[2] | expon[3];
   assign raise[`csrfpu_denor_excpt]=expon[3];
   assign raise[`csrfpu_inexact_excpt]=expon[4] | expon[3];
@@ -209,6 +209,10 @@ module fpumuls(clk,rst,A,B,copyA,en,rmode,res,raise,fpcsr);
   assign raise[`csrfpu_denor_consume_excpt]=1'b0;//only for logic op
   assign raise[`csrfpu_denor_produce_excpt]=1'b0;// ==//==
 
+  always @(*) begin
+      spec_any=spec_zero_reg2|spec_infty_reg2|spec_snan_reg2|spec_qnan_reg2|spec_A;
+      prod_reg=prod;
+  end
   always @(negedge clk)
 
   begin
@@ -216,8 +220,8 @@ module fpumuls(clk,rst,A,B,copyA,en,rmode,res,raise,fpcsr);
       exp_exp1_reg<=exp_exp1;
       exp_exp_reg2<=exp_exp_d;
       exp_exp1_reg2<=exp_exp1_d;
-      exp_exp_reg3<=exp_exp_reg2;
-      exp_exp1_reg3<=exp_exp1_reg2;
+//      exp_exp_reg3<=exp_exp_reg2;
+//      exp_exp1_reg3<=exp_exp1_reg2;
       exp_oor_reg<=exp_oor;
       exp1_oor_reg<=exp1_oor;
       exp_oor_IEEE_reg<=exp_oor_IEEE;
@@ -232,7 +236,7 @@ module fpumuls(clk,rst,A,B,copyA,en,rmode,res,raise,fpcsr);
       exp1_non_denor_IEEE_reg2<=exp1_non_denor_IEEE_reg;
       sgn_reg<=sgn;
       sgn_reg2<=sgn_reg;
-      sgn_reg3<=sgn_reg2;
+  //    sgn_reg3<=sgn_reg2;
       spec_zero_reg<=spec_zero;
       spec_infty_reg<=spec_infty;
       spec_snan_reg<=spec_snan;
@@ -243,23 +247,21 @@ module fpumuls(clk,rst,A,B,copyA,en,rmode,res,raise,fpcsr);
       spec_snan_reg2<=spec_snan_reg;
       spec_qnan_reg2<=spec_qnan_reg;
       spec_A_reg2<=spec_A_reg;
-      spec_zero_reg3<=spec_zero_reg2;
-      spec_infty_reg3<=spec_infty_reg2;
-      spec_snan_reg3<=spec_snan_reg2;
-      spec_qnan_reg3<=spec_qnan_reg2;
-      spec_A_reg3<=spec_A_reg2;
-      spec_any<=spec_zero_reg2|spec_infty_reg2|spec_snan_reg2|spec_qnan_reg2|spec_A;
+  //    spec_zero_reg3<=spec_zero_reg2;
+  //    spec_infty_reg3<=spec_infty_reg2;
+  //    spec_snan_reg3<=spec_snan_reg2;
+  //    spec_qnan_reg3<=spec_qnan_reg2;
+  //    spec_A_reg3<=spec_A_reg2;
       exp_max<=10'h1fe;
       exp_max_IEEE<=10'h17f;
       exp_denor_IEEE<=10'h81;
       fpcsr_reg<=fpcsr;
       A_reg<=A;
       A_reg2<=A_reg;
-      A_reg3<=A_reg2;
-      prod_reg<=prod;
+ //     A_reg3<=A_reg2;
       en_reg<=en;
       en_reg2<=en_reg;
-      en_reg3<=en_reg2;
+ //     en_reg3<=en_reg2;
       case(rmode)
         ROUND_TRUNC: begin isrnd_even<=1'b0; isrnd_zero<=1'b1; isrnd_plus<=1'b0; end
         ROUND_ROUND: begin isrnd_even<=1'b0; isrnd_zero<=1'b0; isrnd_plus<=1'b0; end
