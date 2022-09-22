@@ -1622,11 +1622,11 @@ module smallInstr_decoder(
 	  prAlloc[31]=1'b1;
 	  pflags_write[31]=1'b0;
 	  poperation[31][12]=1'b1;
-	  poperation[7:0]={3'b0,instr[10:8],instr[12:11]};
+	  poperation[31][7:0]={3'b0,instr[10:8],instr[12:11]};
 	  if (magic[1:0]==2'b01) begin
-	      prA[31]=instr[23:18];
+	      prA[31]=instr[22:18];
 	      prB[31]=instr[28:24];
-	      prT[31]=instr[23:18];
+	      prT[31]=instr[22:18];
 	      palucond[31]={1'b1,instr[17:14]};
 	      poperation[31][8]=instr[13];
 	  end else if (magic[2]) begin

@@ -682,8 +682,8 @@ module stq(
           stq_data_array #(32+!b[0]) dat_mod(
           clk,
           rst,
-          upd0_en0,{upd0_pbit[upd0_b[b][1]],upd0_data[32*Rupd0_b[b]+:32]},
-          upd1_en0,{upd1_pbit[upd1_b[b][1]],upd1_data[32*Rupd1_b[b]+:32]},
+          upd0_en0[63:0],{upd0_pbit[upd0_b[b][1]],upd0_data[32*Rupd0_b[b]+:32]},
+          upd1_en0[63:0],{upd1_pbit[upd1_b[b][1]],upd1_data[32*Rupd1_b[b]+:32]},
           chk0_match_first[b],chk0_data0[b],chk0_pre0,chk0_pre1,
           chk1_match_first[b],chk1_data0[b],chk1_pre0,chk1_pre1,
           chk2_match_first[b],chk2_data0[b],chk2_pre0,chk2_pre1,
@@ -739,8 +739,8 @@ module stq(
           stq_data_array #(8) datX_mod(
           clk,
           rst,
-          upd0_en0,upd0_data[135:128],
-          upd1_en0,upd1_data[135:128],
+          upd0_en0[63:0],upd0_data[135:128],
+          upd1_en0[63:0],upd1_data[135:128],
           chk0_match_first[chk0_b[b]],chk0_data1,chk0_pre0,chk0_pre1,
           chk1_match_first[chk1_b[b]],chk1_data1,chk1_pre0,chk1_pre1,
           chk2_match_first[chk2_b[b]],chk2_data1,chk2_pre0,chk2_pre1,
