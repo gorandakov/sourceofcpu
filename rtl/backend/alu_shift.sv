@@ -88,7 +88,7 @@ module alu_shift(
   coutL
   );
   
-  except_jump_cmp jcmp_mod (valS,cond[3:0],doJmp);
+  except_jump_cmp jcmp_mod (valS,{1'b0,cond[3:0]},doJmp);
 
   assign valRes=is_shift & ~(cond[4]&~doJmp) ? valres0 : 64'bz;
 

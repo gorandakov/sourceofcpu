@@ -732,7 +732,7 @@ module fu_alu(
   .clk(clk),
   .rst(rst),
   .clkEn(~(|fxFRT_alten_reg3)),
-  .op_prev(u6_op),
+  .op_prev(u6_op[12:0]),
   .en(u6_clkEn_reg && u6_op_reg[11] && (u6_op_reg[7:0]==1 || u6_op_reg[7:0]
     ==2 || u6_op_reg[7:0]==3 || u6_op_reg[7:0]==9 || u6_op_reg[7:0]==10 ||
     u6_op_reg[7:0]==11 || u6_op_reg[7:0]==5 || u6_op_reg[7:0]==7)),  

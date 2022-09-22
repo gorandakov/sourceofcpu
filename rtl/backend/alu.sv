@@ -339,7 +339,7 @@ module alu(clk,rst,except,except_thread,thread,operation,cond,sub,dataEn,nDataAl
     );
 
   except_jump_cmp jcmp_mod (valS,jumpType,doJmp);
-  except_jump_cmp jcmp2_mod (valS,cond[3:0],doJmp2);
+  except_jump_cmp jcmp2_mod (valS,{1'b0,cond[3:0]},doJmp2);
   
  
   assign flag64_ZF=(valRes[63:0]==64'b0);
