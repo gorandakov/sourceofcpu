@@ -107,10 +107,10 @@ module decoder_permitted_i(
           assign permB[k]=branch_cnt[k][2] & taken_cnt[k][1] & indir_cnt[k][1];
           
           if (k>0)
-              assign permC[k]=(|(sys[k:0])) ? sys[k-1:0]==0 && pos0[k]==0 && FPU_dke[k][3] : pos0[k]==0 && FPU_dke[k][3];
+              assign permC[k]=(|(sys[k:0])) ? sys[k-1:0]==0 && pos0[k]==0 && FPU_dke[k][6] : pos0[k]==0 && FPU_dke[k][6];
               //assign permC[k]=(|(sys[k:0])) ? sys[k-1:0]==0 && pos0[k]==0 && FPU_dke[k][6] : pos0[k]==0 && FPU_dke[k][6];
           else
-              assign permC[k]=(pos0[0] && allret)==0 && FPU_dke[k][3];
+              assign permC[k]=(pos0[0] && allret)==0 && FPU_dke[k][6];
               //assign permC[k]=(pos0[0] && allret)==0 && FPU_dke[k][6];
       end
   endgenerate
