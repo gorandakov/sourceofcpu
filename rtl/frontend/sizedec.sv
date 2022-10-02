@@ -623,7 +623,7 @@ module predecoder_get(
     
     always @*
       begin
-        instrEnd={4'b0,btail[16],bundle[254:240],1'b1}|{4'b0,~bundle[254:240],2'b10};
+        instrEnd={4'b0,btail[16],bundle[254:240],1'b1};
         error=cntEnd3[13] || startOff==15;
         isAvx=bundle[255];
         jerror=~lcnt_or_less[1] || ~jcnt_or_less[4];
