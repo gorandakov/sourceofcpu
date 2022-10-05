@@ -276,8 +276,8 @@ void dmigen::gen_ptbl() {
     for(n=0;n<rng_cnt;n++) {
         unsigned long addr=rng_addr[n];
         for(n1=0;n1<rng_size[n];n1++) {
-            unsigned long pe,*ppe,val;
-            ppe=(unsigned long *) (mem+ptbl_off+((addr>>30)&0x3ff8ul));
+            unsigned long long pe,*ppe,val;
+            ppe=(unsigned long long *) (mem+ptbl_off+((addr>>30)&0x3ff8ul));
             pe=*ppe;
             extract(pe,page_na,val);
             if (!val) {
@@ -286,7 +286,7 @@ void dmigen::gen_ptbl() {
                 pe=(off&0xffffffffffffe000ul)|(rng_perm[n]&0xfffu);//huge pages??
                 *ppe=pe;
             }
-            ppe=(unsigned long *) (mem+(pe&0xfffffffe000ull)+((addr>>20)&0x1ff8ul));
+            ppe=(unsigned long long *) (mem+(pe&0xfffffffe000ull)+((addr>>20)&0x1ff8ul));
             pe=*ppe;
             extract(pe,page_na,val);
             if (rng_perm[n]&0x8000u) { //huge page
@@ -299,7 +299,7 @@ void dmigen::gen_ptbl() {
                 pe=(off&0xffffffffffffe000ul)|(rng_perm[n]&0xfffu);
                 *ppe=pe;
             }
-            ppe=(unsigned long *) (mem+(pe&0xfffffffe000ull)+((addr>>10)&0x1ff8ul));
+            ppe=(unsigned long long *) (mem+(pe&0xfffffffe000ull)+((addr>>10)&0x1ff8ul));
             pe=*ppe;
             extract(pe,page_na,val);
             if ((!val) && !(rng_perm[n]&0x2000)) {
@@ -351,7 +351,7 @@ bool has_req() {
 void sched(Vfun_lsq *top, int exc) {
     unsigned n,n2;
     unsigned vals[6];
-    unsigned long val,ind,ii;
+    unsigned long long val,ind,ii;
     bool found=false;
     static std::mt19937 rndgen(def_seed); 
     static std::uniform_int_distribution<unsigned> dist384(0,383);
@@ -905,7 +905,7 @@ bool get_check(Vfun_lsq *top, int exc) {
     unsigned n,n2;
     bool flag;
     unsigned LSQ;
-    unsigned long val,ii;
+    unsigned long long val,ii;
     bool ret=false,err=false;
     static unsigned LS_pos0,LS_pos1;
     int bytes1;
@@ -1214,7 +1214,7 @@ void lsreq::poke2(char * data1) {
 
 bool dmigen::gen_bndl(lsreq reqZ[6],Vfun_lsq *top,bool no_alloc) {
     unsigned int n,cnt_st=0,rng,pge,sh,a;
-    unsigned long addr,val,base,imm,index;
+    unsigned long long addr,val,base,imm,index;
     unsigned cnt=lrand48()%6+1;
     unsigned map_size=0;
     unsigned usb=0;
@@ -1487,16 +1487,16 @@ bool dmigen::gen_bndl(lsreq reqZ[6],Vfun_lsq *top,bool no_alloc) {
 
 
 unsigned long dmigen::get_phys(unsigned long virt) {
-    unsigned long pe,*ppe,val,addr=virt;
-    ppe=(unsigned long *) (mem+ptbl_off+((addr>>30)&0x3ff8ul));
+    unsigned long long pe,*ppe,val,addr=virt;
+    ppe=(unsigned long long *) (mem+ptbl_off+((addr>>30)&0x3ff8ul));
     pe=*ppe;
     extract(pe,page_na,val);
     if (!val) return 0;
-    ppe=(unsigned long *) (mem+(pe&0xfffffffe000ull)+((addr>>20)&0x1ff8ul));
+    ppe=(unsigned long long *) (mem+(pe&0xfffffffe000ull)+((addr>>20)&0x1ff8ul));
     pe=*ppe;
     extract(pe,page_na,val);
     if (!val) return 0;
-    ppe=(unsigned long *) (mem+(pe&0xfffffffe000ull)+((addr>>10)&0x1ff8ul));
+    ppe=(unsigned long long *) (mem+(pe&0xfffffffe000ull)+((addr>>10)&0x1ff8ul));
     pe=*ppe;
     extract(pe,page_na,val);
     if (!val) return 0;
@@ -1517,7 +1517,7 @@ bool lsreq::chk(dmigen &gen,unsigned mop[],unsigned short lsq,
     unsigned short ret,bool *err) {
     bool odd=(vaddr&0x80)>>7;
     bool split=((vaddr&0x7f)+bytes)>0x80;
-    unsigned long val,phys=gen.get_phys(vaddr),
+    unsigned long long val,phys=gen.get_phys(vaddr),
 		  phys2=gen.get_phys(vaddr+bytes-1);
     extract_e(mop,lsaddr_WQ,val);
     if (val!=WQ && (op&1)) return false;
@@ -1726,8 +1726,8 @@ _begin:
 	   err=err||get_check(top,exc);
 	   err=err||get_check_ret(top,retired,exc);
            for(n=0;n<6;n++) if (reqs[gen.POS][n].en) break;
-           if (n==6 && !exc && top->fun_lsq__DOT__LSQ_upper!=gen.POS) {
-	       printf("LU %x:%x\n",top->fun_lsq__DOT__LSQ_upper,gen.POS);
+           if (n==6 && !exc && top->lsq_index!=gen.POS) {
+	       printf("LU %x:%x\n",top->lsq_index,gen.POS);
            } 
            gen.gen_bndl(reqs[gen.POS],top,n!=6 || exc!=0);
 
