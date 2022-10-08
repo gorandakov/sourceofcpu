@@ -248,14 +248,14 @@ lsent store_op[]={
     0x35f,3,17*/
 };
 char reg8[][8]={
-"r0b",
-"r1b",
-"r2b",
-"r3b",
-"r4b",
-"r5b",
-"r5b",
-"r7b",
+"al",
+"bl",
+"cl",
+"dl",
+"spl",
+"bpl",
+"sil",
+"dil",
 "r8b",
 "r9b",
 "r10b",
@@ -280,14 +280,14 @@ char reg8[][8]={
 "r29b",
 "r30b",
 "r31b",
-"r0h",
-"r1h",
-"r2h",
-"r3h",
-"r4h",
-"r5h",
-"r6h",
-"r7h",
+"ah",
+"bh",
+"ch",
+"dh",
+"sph",
+"bph",
+"sih",
+"dih",
 "r8h",
 "r9h",
 "r10h",
@@ -316,14 +316,14 @@ char reg8[][8]={
 
 
 char reg16[][8]={
-"r0w",
-"r1w",
-"r2w",
-"r3w",
-"r4w",
-"r5w",
-"r6w",
-"r7w",
+"ax",
+"bx",
+"cx",
+"dx",
+"sp",
+"bp",
+"si",
+"di",
 "r8w",
 "r9w",
 "r10w",
@@ -352,14 +352,14 @@ char reg16[][8]={
 
 
 char reg32[][8]={
-"r0d",
-"r1d",
-"r2d",
-"r3d",
-"r4d",
-"r5d",
-"r6d",
-"r7d",
+"eax",
+"ebx",
+"ecx",
+"edx",
+"esp",
+"ebp",
+"esi",
+"edi",
 "r8d",
 "r9d",
 "r10d",
@@ -387,14 +387,14 @@ char reg32[][8]={
 };
 
 char reg65[][8]={
-"r0",
-"r1",
-"r2",
-"r3",
-"r4",
-"r5",
-"r6",
-"r7",
+"rax",
+"rbx",
+"rcx",
+"rdx",
+"rsp",
+"rbp",
+"rsi",
+"rdi",
 "r8",
 "r9",
 "r10",
@@ -2539,6 +2539,7 @@ int main(int argc, char *argv[]) {
     Verilated::commandArgs(argc, argv);
     Vheptane_core *top=new Vheptane_core();
     Verilated::assertOn(false);
+    Verilated::traceEverOn(true);
     int initcount=10;
     int cyc=0;
     unsigned long long ip=0;
