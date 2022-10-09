@@ -956,8 +956,8 @@ module rs_wakeUp_data_array(
   assign outData2=outFound2 ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
 
   assign outDataN0=~outData0;
-  assign outDataN0=~outData1;
-  assign outDataN0=~outData2;
+  assign outDataN1=~outData1;
+  assign outDataN2=~outData2;
 
   
 endmodule
