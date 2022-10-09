@@ -2035,6 +2035,11 @@ module heptane_core(
         L1_expAddr_en_reg5<=L1_expAddr_en_reg5;
     end
   end
+  
+  initial begin
+    $dumpfile("~/.hsim/dump.fst");
+    $dumpvars;
+  end
 endmodule
 
 

@@ -1054,7 +1054,7 @@ module stq(
   adder_inc #(6) inc_WLNA_mod(WLN1_WQ,WLN1_WQ_inc,1'b1,);
   adder_inc #(5) inc_WLNB_mod(WLN1_WQ[5:1],WLN1_WQ_inc2[5:1],1'b1,);
   assign WLN1_WQ_inc2[0]=WLN1_WQ[0];
-  always @(free) $display("stq_free: %x,%x",free,upd);
+ // always @(free) $display("stq_free: %x,%x",free,upd);
   always @(posedge clk) begin
       if (rst) begin
 	  confl_out<=6'b0;
