@@ -2578,7 +2578,7 @@ int main(int argc, char *argv[]) {
     if (argc==2 && !strcmp(argv[1],"-asm")) exit(0);
     char mname[256];
     mname[0]=0;
-    snprintf(mname,256,"%s/.hsim/hsim.bin",getenv("HOME"));
+    snprintf(mname,256,"./hsim.bin");
     int fd=open(mname,O_RDONLY);
     if (fd>=0) {
 	struct stat s;
