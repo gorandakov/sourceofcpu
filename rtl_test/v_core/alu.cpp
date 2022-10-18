@@ -686,8 +686,8 @@ addie:
 	    }
 	    if (!A_p && B_p) excpt=11;
 	    res_p=0;
-            if (!(A_p && B_p)) flg64(res0^(one<<1));
-	    else flgPTR(res0^(one>>19));
+            if (!(A_p && B_p)) flg64(res0);
+	    else flgPTR(res0);
             B1=B;
 
             if (!(A_p && B_p)) flags|=((A1>=0&&B1<0&&res1<0) || (A1<0&&B1>0&&res1>0))<<4;
@@ -767,7 +767,7 @@ addie:
 subie32:
             res0=((unsigned __int128) A0x)+((unsigned __int128) ~B0x)+1;
             res2=res=res0&0xffffffffull;
-            flg32(res0^0x100000000ll);
+            flg32(res0);
 	    B0=B;
             flags|=((A0>=0&&B0<0&&res2<0) || (A0<0&&B0>0&&res2>0))<<4;
             flags|=(((A&0xf)-(B&0xf))&0x10)>>1;
@@ -1599,8 +1599,8 @@ addie:
 	    }
 	    if (!A_p && B_p) excpt=11;
 	    res_p=0;
-            if (!(A_p && B_p)) flg64(res0^(one<<1));
-	    else flgPTR(res0^(one>>19));
+            if (!(A_p && B_p)) flg64(res0);
+	    else flgPTR(res0);
             B1=B;
 
             if (!(A_p && B_p)) flags|=((A1>=0&&B1<0&&res1<0) || (A1<0&&B1>0&&res1>0))<<4;
@@ -1613,7 +1613,7 @@ addie:
 
             res0=((unsigned __int128) A0x)+((unsigned __int128) ~B0x)+1;
             res2=res=res0&0xffffffffull;
-            flg32(res0^0x100000000ll);
+            flg32(res0);
 	    B0=B;
             flags|=((A0>=0&&B0<0&&res2<0) || (A0<0&&B0>0&&res2>0))<<4;
             flags|=(((A&0xf)-(B&0xf))&0x10)>>1;
@@ -1970,19 +1970,13 @@ void req::gen_memw(req* prev1,unsigned code,char *mem,char *memp,unsigned long l
 
 
 void req::flg64(__int128 r) {
-    flags=((r>>59)&0x20)|((r>>61)&0x4)|(((unsigned long long) r==0)<<1)|
-      (1^(r&0x1)^((r&0x2)>>1)^((r&0x4)>>2)^((r&0x8)>>3)^((r&0x10)>>4)^
-      ((r&0x20)>>5)^((r&0x40)>>6)^((r&0x80)>>7));
+    flags=((r>>59)&0x20)|((r>>61)&0x4)|(((unsigned long long) r==0)<<1);
 }
 void req::flgPTR(__int128 r) {
-    flags=((r>>39)&0x20)|((r>>41)&0x4)|(((unsigned long long) r==0)<<1)|
-      (1^(r&0x1)^((r&0x2)>>1)^((r&0x4)>>2)^((r&0x8)>>3)^((r&0x10)>>4)^
-      ((r&0x20)>>5)^((r&0x40)>>6)^((r&0x80)>>7));
+    flags=((r>>39)&0x20)|((r>>41)&0x4)|(((unsigned long long) r==0)<<1);
 }
 void req::flg32(__int128 r) {
-    flags=((r>>27)&0x20)|((r>>29)&0x4)|(((unsigned) r==0)<<1)|
-      (1^(r&0x1)^((r&0x2)>>1)^((r&0x4)>>2)^((r&0x8)>>3)^((r&0x10)>>4)^
-      ((r&0x20)>>5)^((r&0x40)>>6)^((r&0x80)>>7));
+    flags=((r>>27)&0x20)|((r>>29)&0x4)|(((unsigned) r==0)<<1);
 }
 void req::flgM64(unsigned long long r,bool big) {
     flags=(((r&0xffffffff00000000ull)!=0)<<5) | (((r&0xffffffff80000000ull)!=
@@ -2008,10 +2002,10 @@ bool req::testj(int code) {
         case 1: return (flags_in&0x2)==0;
         case 2: return (flags_in&0x4)!=0;
         case 3: return (flags_in&0x4)==0;
-        case 4: return (flags_in&0x22)==0;
-        case 5: return (flags_in&0x22)!=0;
-        case 6: return (flags_in&0x20)==0;
-        case 7: return (flags_in&0x20)!=0;
+        case 4: return (flags_in&0x22)==0x20;
+        case 5: return (flags_in&0x22)!=20;
+        case 6: return (flags_in&0x20)==0x20;
+        case 7: return (flags_in&0x20)!=0x20;
         case 8: return !((((flags_in&0x4)!=0)^((flags_in&0x10)!=0))||
         ((flags_in&0x2)!=0));
         case 9: return ((((flags_in&0x4)!=0)^((flags_in&0x10)!=0))||
@@ -2021,7 +2015,7 @@ bool req::testj(int code) {
         case 12: return (flags_in&0x10)!=0;
         case 13: return (flags_in&0x10)==0;
         case 14: return (flags_in&0x1)!=0;
-        case 15: return (flags_in&0x1)==0;
+        case 15: return true;
     }
 }
 
