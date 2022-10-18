@@ -388,12 +388,12 @@ module stq(
   wire [7:0][3:0] WNL0_bytes;
   wire [7:0][3:0] WNL1_bytes;
 
-  wire [31:0][1:0] chk0_addrEO;
-  wire [31:0][1:0] chk1_addrEO;
-  wire [31:0][1:0] chk2_addrEO;
-  wire [31:0][1:0] chk3_addrEO;
-  wire [31:0][1:0] chk4_addrEO;
-  wire [31:0][1:0] chk5_addrEO;
+  wire [63:0][1:0] chk0_addrEO;
+  wire [63:0][1:0] chk1_addrEO;
+  wire [63:0][1:0] chk2_addrEO;
+  wire [63:0][1:0] chk3_addrEO;
+  wire [63:0][1:0] chk4_addrEO;
+  wire [63:0][1:0] chk5_addrEO;
 
   wire [3:0][63:0] chk0_firstA;
   wire [3:0][63:0] chk1_firstA;
@@ -420,8 +420,8 @@ module stq(
   wire [3:0] chk4_hasB;
   wire [3:0] chk5_hasB;
 
-  wire [64:0] free_en;
-  wire [64:0] free;
+  wire [63:0] free_en;
+  wire [63:0] free;
 
   wire [5:0] rdy={chk5_en,chk4_en,chk3_en,chk2_en,chk1_en,chk0_en};
   wire [5:0] chk_wb={chk5_adata[`lsaddr_flag] & chk5_en,chk4_adata[`lsaddr_flag] & chk4_en,chk3_adata[`lsaddr_flag] & chk3_en,
@@ -924,34 +924,17 @@ module stq(
   rst,
   aStall|aDoStall,
   excpt,
-  wrt0_en0[31:0], wrt0_adata[`lsaddr_addrE], wrt0_adata[`lsaddr_addrO], 
-  wrt1_en0[31:0], wrt1_adata[`lsaddr_addrE], wrt1_adata[`lsaddr_addrO], 
-  chk0_en, chk0_addrEO[31:0], chk0_adata[`lsaddr_addrE], chk0_adata[`lsaddr_addrO],
-  chk1_en, chk1_addrEO[31:0], chk1_adata[`lsaddr_addrE], chk1_adata[`lsaddr_addrO],
-  chk2_en, chk2_addrEO[31:0], chk2_adata[`lsaddr_addrE], chk2_adata[`lsaddr_addrO],
-  chk3_en, chk3_addrEO[31:0], chk3_adata[`lsaddr_addrE], chk3_adata[`lsaddr_addrO],
-  chk4_en, chk4_addrEO[31:0], chk4_adata[`lsaddr_addrE], chk4_adata[`lsaddr_addrO],
-  chk5_en, chk5_addrEO[31:0], chk5_adata[`lsaddr_addrE], chk5_adata[`lsaddr_addrO],
-  upd0_en0[31:0], 
-  upd1_en0[31:0], 
-  free_en[31:0],,,,passe_en[31:0]);
-
-  stq_buf_A_array A1_mod(
-  clk,
-  rst,
-  aStall|aDoStall,
-  excpt,
-  wrt0_en0[63:32], wrt0_adata[`lsaddr_addrE], wrt0_adata[`lsaddr_addrO], 
-  wrt1_en0[63:32], wrt1_adata[`lsaddr_addrE], wrt1_adata[`lsaddr_addrO], 
-  chk0_en, chk0_addrEO[63:32], chk0_adata[`lsaddr_addrE], chk0_adata[`lsaddr_addrO],
-  chk1_en, chk1_addrEO[63:32], chk1_adata[`lsaddr_addrE], chk1_adata[`lsaddr_addrO],
-  chk2_en, chk2_addrEO[63:32], chk2_adata[`lsaddr_addrE], chk2_adata[`lsaddr_addrO],
-  chk3_en, chk3_addrEO[63:32], chk3_adata[`lsaddr_addrE], chk3_adata[`lsaddr_addrO],
-  chk4_en, chk4_addrEO[63:32], chk4_adata[`lsaddr_addrE], chk4_adata[`lsaddr_addrO],
-  chk5_en, chk5_addrEO[63:32], chk5_adata[`lsaddr_addrE], chk5_adata[`lsaddr_addrO],
-  upd0_en0[63:32], 
-  upd1_en0[63:32], 
-  free_en[63:32],,,,passe_en[63:32]);
+  wrt0_en0, wrt0_adata[`lsaddr_addrE], wrt0_adata[`lsaddr_addrO], 
+  wrt1_en0, wrt1_adata[`lsaddr_addrE], wrt1_adata[`lsaddr_addrO], 
+  chk0_en, chk0_addrEO, chk0_adata[`lsaddr_addrE], chk0_adata[`lsaddr_addrO],
+  chk1_en, chk1_addrEO, chk1_adata[`lsaddr_addrE], chk1_adata[`lsaddr_addrO],
+  chk2_en, chk2_addrEO, chk2_adata[`lsaddr_addrE], chk2_adata[`lsaddr_addrO],
+  chk3_en, chk3_addrEO, chk3_adata[`lsaddr_addrE], chk3_adata[`lsaddr_addrO],
+  chk4_en, chk4_addrEO, chk4_adata[`lsaddr_addrE], chk4_adata[`lsaddr_addrO],
+  chk5_en, chk5_addrEO, chk5_adata[`lsaddr_addrE], chk5_adata[`lsaddr_addrO],
+  upd0_en0, 
+  upd1_en0, 
+  free_en,,,,passe_en);
 
   stq_adata_ram ramA_mod(
   clk,
@@ -965,13 +948,13 @@ module stq(
   );
 
   assign WLN0_adata=~WLN0_WQ[0] ? WLN0_adata0 : WLN1_adata0;
-  assign WLN0_en=~WLN0_WQ[0] ? WLN0_en0 & upd[{1'b0,WLN0_WQ}] & mask2[WLN0_WQ] && ret_II==WLN0_adata[`lsaddr_II+4] && 
+  assign WLN0_en=~WLN0_WQ[0] ? WLN0_en0 & upd[WLN0_WQ] & mask2[WLN0_WQ] && ret_II==WLN0_adata[`lsaddr_II+4] && 
 	  ret_xbreak[WLN0_adata[-6+`lsaddr_II]] :
-	  WLN1_en0 & upd[{1'b0,WLN1_WQ}] & mask2[WLN1_WQ] && ret_II==WLN1_adata[`lsaddr_II+4] && ret_xbreak[WLN1_adata[-6+`lsaddr_II]];
+	  WLN1_en0 & upd[WLN1_WQ] & mask2[WLN1_WQ] && ret_II==WLN1_adata[`lsaddr_II+4] && ret_xbreak[WLN1_adata[-6+`lsaddr_II]];
   assign WLN1_adata=WLN0_WQ[0] ? WLN0_adata0 : WLN1_adata0;
-  assign WLN1_en=WLN0_WQ[0] ? WLN0_en0 & upd[{1'b0,WLN0_WQ}] & mask2[WLN0_WQ] && ret_II==WLN0_adata[`lsaddr_II+4] && 
+  assign WLN1_en=WLN0_WQ[0] ? WLN0_en0 & upd[WLN0_WQ] & mask2[WLN0_WQ] && ret_II==WLN0_adata[`lsaddr_II+4] && 
 	  ret_xbreak[WLN0_adata[-6+`lsaddr_II]] :
-	  WLN1_en0 & upd[{1'b0,WLN1_WQ}] & mask2[WLN1_WQ] && ret_II==WLN1_adata[`lsaddr_II+4] && ret_xbreak[WLN1_adata[-6+`lsaddr_II]];
+	  WLN1_en0 & upd[WLN1_WQ] & mask2[WLN1_WQ] && ret_II==WLN1_adata[`lsaddr_II+4] && ret_xbreak[WLN1_adata[-6+`lsaddr_II]];
   
   stq_adata_ram ramB_mod(
   clk,

@@ -160,7 +160,7 @@ module stq_buf_A_array(
   upd1_en, 
   free_en,free,upd,passe,passe_en);
   localparam WIDTH=36;
-  localparam BUF_COUNT=32;
+  localparam BUF_COUNT=64;
   input clk;
   input rst;
   input stallA;
