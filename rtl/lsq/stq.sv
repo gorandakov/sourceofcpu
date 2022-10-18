@@ -258,28 +258,17 @@ module stq(
   wire [31:0] WNL1_banks2;
   wire [63:0] WLN0_match;
   wire [63:0] WLN1_match;
-  wire [64:0] WNL0_en0;
-  wire [64:0] WNL1_en0;
-  wire [64:0] wrt0_en0;
-  wire [64:0] wrt1_en0;
-  wire [64:0] upd0_en0;
-  wire [64:0] upd1_en0;
-  wire [64:0] passe_en;
-  wire [64:0] passe;
-  wire [64:0] free;
-  wire [64:0] upd;
+  wire [63:0] WNL0_en0;
+  wire [63:0] WNL1_en0;
+  wire [63:0] wrt0_en0;
+  wire [63:0] wrt1_en0;
+  wire [63:0] upd0_en0;
+  wire [63:0] upd1_en0;
+  wire [63:0] passe_en;
+  wire [63:0] passe;
+  wire [63:0] free;
+  wire [63:0] upd;
 
-  assign passe[64]=1'b0;
-  assign passe_en[64]=1'b0;
-  assign free[64]=1'b0;
-  assign upd[64]=1'b0;
-  assign free_en[64]=1'b0;
-  assign WNL0_en0[64]=1'b0;
-  assign WNL1_en0[64]=1'b0;
-  assign wrt0_en0[64]=1'b0;
-  assign wrt1_en0[64]=1'b0;
-  assign upd0_en0[64]=1'b0;
-  assign upd1_en0[64]=1'b0;
   
   wire [5:0][139:0] chk_data;
   wire [5:0][1:0] chk_pbit;
@@ -590,92 +579,47 @@ module stq(
               rst,
               aStall|aDoStall,
               excpt,
-              WNL0_en0[31:0], WNL0_en, WNL0_WQ, WNL0_odd1[b], WNL0_bytes[b], WNL0_subBNK[b], WNL0_subBNK2[b],
-              WNL1_en0[31:0], WNL1_en, WNL1_WQ, WNL1_odd1[b], WNL1_bytes[b], WNL1_subBNK[b], WNL1_subBNK2[b],
-              chk0_en, chk0_addrEO[31:0], chk0_odd1[b], chk0_bytes[b], chk0_subBNK[b], chk0_subBNK2[b], chk0_match[b][31:0], chk0_partial[b][31:0],
+              WNL0_en0, WNL0_en, WNL0_WQ, WNL0_odd1[b], WNL0_bytes[b], WNL0_subBNK[b], WNL0_subBNK2[b],
+              WNL1_en0, WNL1_en, WNL1_WQ, WNL1_odd1[b], WNL1_bytes[b], WNL1_subBNK[b], WNL1_subBNK2[b],
+              chk0_en, chk0_addrEO, chk0_odd1[b], chk0_bytes[b], chk0_subBNK[b], chk0_subBNK2[b], chk0_match[b], chk0_partial[b],
 	      chk0_matchW[b],chk0_partialW[b],chk0_pre0,chk0_pre1,
-              chk1_en, chk1_addrEO[31:0], chk1_odd1[b], chk1_bytes[b], chk1_subBNK[b], chk1_subBNK2[b], chk1_match[b][31:0], chk1_partial[b][31:0],
+              chk1_en, chk1_addrEO, chk1_odd1[b], chk1_bytes[b], chk1_subBNK[b], chk1_subBNK2[b], chk1_match[b], chk1_partial[b],
 	      chk1_matchW[b],chk1_partialW[b],chk1_pre0,chk1_pre1,
-              chk2_en, chk2_addrEO[31:0], chk2_odd1[b], chk2_bytes[b], chk2_subBNK[b], chk2_subBNK2[b], chk2_match[b][31:0], chk2_partial[b][31:0],
+              chk2_en, chk2_addrEO, chk2_odd1[b], chk2_bytes[b], chk2_subBNK[b], chk2_subBNK2[b], chk2_match[b], chk2_partial[b],
 	      chk2_matchW[b],chk2_partialW[b],chk2_pre0,chk2_pre1,
-              chk3_en, chk3_addrEO[31:0], chk3_odd1[b], chk3_bytes[b], chk3_subBNK[b], chk3_subBNK2[b], chk3_match[b][31:0], chk3_partial[b][31:0],
+              chk3_en, chk3_addrEO, chk3_odd1[b], chk3_bytes[b], chk3_subBNK[b], chk3_subBNK2[b], chk3_match[b], chk3_partial[b],
 	      chk3_matchW[b],chk3_partialW[b],chk3_pre0,chk3_pre1,
-              chk4_en, chk4_addrEO[31:0], chk4_odd1[b], chk4_bytes[b], chk4_subBNK[b], chk4_subBNK2[b], chk4_match[b][31:0], chk4_partial[b][31:0],
+              chk4_en, chk4_addrEO, chk4_odd1[b], chk4_bytes[b], chk4_subBNK[b], chk4_subBNK2[b], chk4_match[b], chk4_partial[b],
 	      chk4_matchW[b],chk4_partialW[b],chk4_pre0,chk4_pre1,
-              chk5_en, chk5_addrEO[31:0], chk5_odd1[b], chk5_bytes[b], chk5_subBNK[b], chk5_subBNK2[b], chk5_match[b][31:0], chk5_partial[b][31:0],
+              chk5_en, chk5_addrEO, chk5_odd1[b], chk5_bytes[b], chk5_subBNK[b], chk5_subBNK2[b], chk5_match[b], chk5_partial[b],
 	      chk5_matchW[b],chk5_partialW[b],chk5_pre0,chk5_pre1,
-              upd0_en0[31:0], 
-              upd1_en0[31:0], 
-              free_en[31:0],free[31:0],upd[31:0],passe[31:0],passe_en[31:0]);
+              upd0_en0, 
+              upd1_en0, 
+              free_en,free,upd,passe,passe_en);
 
-              stq_buf_L_array arr1_mod(
-              clk,
-              rst,
-              aStall|aDoStall,
-              excpt,
-              WNL0_en0[63:32], WNL0_en, WNL0_WQ, WNL0_odd1[b], WNL0_bytes[b], WNL0_subBNK[b], WNL0_subBNK2[b],
-              WNL1_en0[63:32], WNL1_en, WNL1_WQ, WNL1_odd1[b], WNL1_bytes[b], WNL1_subBNK[b], WNL1_subBNK2[b],
-              chk0_en, chk0_addrEO[63:32], chk0_odd1[b], chk0_bytes[b], chk0_subBNK[b], chk0_subBNK2[b], chk0_match[b][63:32], chk0_partial[b][63:32],
-	      chk0_matchW2[b],chk0_partialW2[b],chk0_pre0,chk0_pre1,
-              chk1_en, chk1_addrEO[63:32], chk1_odd1[b], chk1_bytes[b], chk1_subBNK[b], chk1_subBNK2[b], chk1_match[b][63:32], chk1_partial[b][63:32],
-	      chk1_matchW2[b],chk1_partialW2[b],chk1_pre0,chk1_pre1,
-              chk2_en, chk2_addrEO[63:32], chk2_odd1[b], chk2_bytes[b], chk2_subBNK[b], chk2_subBNK2[b], chk2_match[b][63:32], chk2_partial[b][63:32],
-	      chk2_matchW2[b],chk2_partialW2[b],chk2_pre0,chk2_pre1,
-              chk3_en, chk3_addrEO[63:32], chk3_odd1[b], chk3_bytes[b], chk3_subBNK[b], chk3_subBNK2[b], chk3_match[b][63:32], chk3_partial[b][63:32],
-	      chk3_matchW2[b],chk3_partialW2[b],chk3_pre0,chk3_pre1,
-              chk4_en, chk4_addrEO[63:32], chk4_odd1[b], chk4_bytes[b], chk4_subBNK[b], chk4_subBNK2[b], chk4_match[b][63:32], chk4_partial[b][63:32],
-	      chk4_matchW2[b],chk4_partialW2[b],chk4_pre0,chk4_pre1,
-              chk5_en, chk5_addrEO[63:32], chk5_odd1[b], chk5_bytes[b], chk5_subBNK[b], chk5_subBNK2[b], chk5_match[b][63:32], chk5_partial[b][63:32],
-	      chk5_matchW2[b],chk5_partialW2[b],chk5_pre0,chk5_pre1,
-              upd0_en0[63:32], 
-              upd1_en0[63:32], 
-              free_en[63:32],free[63:32],upd[63:32],passe[63:32],passe_en[63:32]);
           end else begin : wout_free
               stq_buf_L_array arr0_mod(
               clk,
               rst,
               aStall|aDoStall,
               excpt,
-              WNL0_en0[31:0], WNL0_en, WNL0_WQ, WNL0_odd1[b], WNL0_bytes[b], WNL0_subBNK[b], WNL0_subBNK2[b],
-              WNL1_en0[31:0], WNL1_en, WNL1_WQ, WNL1_odd1[b], WNL1_bytes[b], WNL1_subBNK[b], WNL1_subBNK2[b],
-              chk0_en, chk0_addrEO[31:0], chk0_odd1[b], chk0_bytes[b], chk0_subBNK[b], chk0_subBNK2[b], chk0_match[b][31:0], chk0_partial[b][31:0],
+              WNL0_en0, WNL0_en, WNL0_WQ, WNL0_odd1[b], WNL0_bytes[b], WNL0_subBNK[b], WNL0_subBNK2[b],
+              WNL1_en0, WNL1_en, WNL1_WQ, WNL1_odd1[b], WNL1_bytes[b], WNL1_subBNK[b], WNL1_subBNK2[b],
+              chk0_en, chk0_addrEO, chk0_odd1[b], chk0_bytes[b], chk0_subBNK[b], chk0_subBNK2[b], chk0_match[b], chk0_partial[b],
 	      chk0_matchW[b],chk0_partialW[b],chk0_pre0,chk0_pre1,
-              chk1_en, chk1_addrEO[31:0], chk1_odd1[b], chk1_bytes[b], chk1_subBNK[b], chk1_subBNK2[b], chk1_match[b][31:0], chk1_partial[b][31:0],
+              chk1_en, chk1_addrEO, chk1_odd1[b], chk1_bytes[b], chk1_subBNK[b], chk1_subBNK2[b], chk1_match[b], chk1_partial[b],
 	      chk1_matchW[b],chk1_partialW[b],chk1_pre0,chk1_pre1,
-              chk2_en, chk2_addrEO[31:0], chk2_odd1[b], chk2_bytes[b], chk2_subBNK[b], chk2_subBNK2[b], chk2_match[b][31:0], chk2_partial[b][31:0],
+              chk2_en, chk2_addrEO, chk2_odd1[b], chk2_bytes[b], chk2_subBNK[b], chk2_subBNK2[b], chk2_match[b], chk2_partial[b],
 	      chk2_matchW[b],chk2_partialW[b],chk2_pre0,chk2_pre1,
-              chk3_en, chk3_addrEO[31:0], chk3_odd1[b], chk3_bytes[b], chk3_subBNK[b], chk3_subBNK2[b], chk3_match[b][31:0], chk3_partial[b][31:0],
+              chk3_en, chk3_addrEO, chk3_odd1[b], chk3_bytes[b], chk3_subBNK[b], chk3_subBNK2[b], chk3_match[b], chk3_partial[b],
 	      chk3_matchW[b],chk3_partialW[b],chk3_pre0,chk3_pre1,
-              chk4_en, chk4_addrEO[31:0], chk4_odd1[b], chk4_bytes[b], chk4_subBNK[b], chk4_subBNK2[b], chk4_match[b][31:0], chk4_partial[b][31:0],
+              chk4_en, chk4_addrEO, chk4_odd1[b], chk4_bytes[b], chk4_subBNK[b], chk4_subBNK2[b], chk4_match[b], chk4_partial[b],
 	      chk4_matchW[b],chk4_partialW[b],chk4_pre0,chk4_pre1,
-              chk5_en, chk5_addrEO[31:0], chk5_odd1[b], chk5_bytes[b], chk5_subBNK[b], chk5_subBNK2[b], chk5_match[b][31:0], chk5_partial[b][31:0],
+              chk5_en, chk5_addrEO, chk5_odd1[b], chk5_bytes[b], chk5_subBNK[b], chk5_subBNK2[b], chk5_match[b], chk5_partial[b],
 	      chk5_matchW[b],chk5_partialW[b],chk5_pre0,chk5_pre1,
-              upd0_en0[31:0], 
-              upd1_en0[31:0], 
-              free_en[31:0],,,,passe_en[31:0]);
-
-              stq_buf_L_array arr1_mod(
-              clk,
-              rst,
-              aStall|aDoStall,
-              excpt,
-              WNL0_en0[63:32], WNL0_en, WNL0_WQ, WNL0_odd1[b], WNL0_bytes[b], WNL0_subBNK[b], WNL0_subBNK2[b],
-              WNL1_en0[63:32], WNL1_en, WNL1_WQ, WNL1_odd1[b], WNL1_bytes[b], WNL1_subBNK[b], WNL1_subBNK2[b],
-              chk0_en, chk0_addrEO[63:32], chk0_odd1[b], chk0_bytes[b], chk0_subBNK[b], chk0_subBNK2[b], chk0_match[b][63:32], chk0_partial[b][63:32],
-	      chk0_matchW2[b],chk0_partialW2[b],chk0_pre0,chk0_pre1,
-              chk1_en, chk1_addrEO[63:32], chk1_odd1[b], chk1_bytes[b], chk1_subBNK[b], chk1_subBNK2[b], chk1_match[b][63:32], chk1_partial[b][63:32],
-	      chk1_matchW2[b],chk1_partialW2[b],chk1_pre0,chk1_pre1,
-              chk2_en, chk2_addrEO[63:32], chk2_odd1[b], chk2_bytes[b], chk2_subBNK[b], chk2_subBNK2[b], chk2_match[b][63:32], chk2_partial[b][63:32],
-	      chk2_matchW2[b],chk2_partialW2[b],chk2_pre0,chk2_pre1,
-              chk3_en, chk3_addrEO[63:32], chk3_odd1[b], chk3_bytes[b], chk3_subBNK[b], chk3_subBNK2[b], chk3_match[b][63:32], chk3_partial[b][63:32],
-	      chk3_matchW2[b],chk3_partialW2[b],chk3_pre0,chk3_pre1,
-              chk4_en, chk4_addrEO[63:32], chk4_odd1[b], chk4_bytes[b], chk4_subBNK[b], chk4_subBNK2[b], chk4_match[b][63:32], chk4_partial[b][63:32],
-	      chk4_matchW2[b],chk4_partialW2[b],chk4_pre0,chk4_pre1,
-              chk5_en, chk5_addrEO[63:32], chk5_odd1[b], chk5_bytes[b], chk5_subBNK[b], chk5_subBNK2[b], chk5_match[b][63:32], chk5_partial[b][63:32],
-	      chk5_matchW2[b],chk5_partialW2[b],chk5_pre0,chk5_pre1,
-              upd0_en0[63:32], 
-              upd1_en0[63:32], 
-              free_en[63:32],,,,passe_en[63:32]);
+              upd0_en0, 
+              upd1_en0, 
+              free_en,,,,passe_en);
 	  end
 	  //verilator lint_off WIDTH
           if (b<4)

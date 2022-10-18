@@ -213,7 +213,7 @@ module stq_buf_L_array(
   upd1_en, 
   free_en,free,upd,passe,passe_en);
   localparam WIDTH=2;
-  localparam BUF_COUNT=32;//2 rows of 32
+  localparam BUF_COUNT=64;
   input clk;
   input rst;
   input stallA;
