@@ -2243,63 +2243,6 @@ bool get_check(Vheptane_core *top, req *reqs,unsigned long long &ip) {
     static int insn_count[64];
     static int insn_posR=0,insn_posW=0;
     static unsigned retII=0;
-    static long long II_A[48][10];
-    static long long II_B[48][10];
-    static int II_FLIN[48][10];
-    static int II_OP[48][10];
-    int n;
-    for(n=0;n<9;n++) {
-	if (top->heptane_core__DOT__bck_mod__DOT__outEn_reg[n]) {
-            int II=top->heptane_core__DOT__bck_mod__DOT__outII_reg[n];
-	    if (n%3) { //ALU
-		switch (n) {
-		    case 1:
-		    II_A[II>>4][II&0xf]=top->heptane_core__DOT__bck_mod__DOT__alu_ALIGNED__DOT__uu_A1[0]+
-			    (top->heptane_core__DOT__bck_mod__DOT__alu_ALIGNED__DOT__uu_A1[1]<<32);
-		    II_B[II>>4][II&0xf]=top->heptane_core__DOT__bck_mod__DOT__alu_ALIGNED__DOT__uu_B1[0]+
-			    (top->heptane_core__DOT__bck_mod__DOT__alu_ALIGNED__DOT__uu_B1[1]<<32);
-		    II_FLIN[II>>4][II&0xf]=top->heptane_core__DOT__bck_mod__DOT__alu_ALIGNED__DOT__uu_S1;
-                    break;
-		    case 2:
-		    II_A[II>>4][II&0xf]=top->heptane_core__DOT__bck_mod__DOT__alu_ALIGNED__DOT__uu_A2[0]+
-			    (top->heptane_core__DOT__bck_mod__DOT__alu_ALIGNED__DOT__uu_A2[1]<<32);
-		    II_B[II>>4][II&0xf]=top->heptane_core__DOT__bck_mod__DOT__alu_ALIGNED__DOT__uu_B2[0]+
-			    (top->heptane_core__DOT__bck_mod__DOT__alu_ALIGNED__DOT__uu_B2[1]<<32);
-		    II_FLIN[II>>4][II&0xf]=top->heptane_core__DOT__bck_mod__DOT__alu_ALIGNED__DOT__uu_S2;
-                    break;
-		    case 4:
-		    II_A[II>>4][II&0xf]=top->heptane_core__DOT__bck_mod__DOT__alu_ALIGNED__DOT__uu_A3[0]+
-			    (top->heptane_core__DOT__bck_mod__DOT__alu_ALIGNED__DOT__uu_A3[1]<<32);
-		    II_B[II>>4][II&0xf]=top->heptane_core__DOT__bck_mod__DOT__alu_ALIGNED__DOT__uu_B3[0]+
-			    (top->heptane_core__DOT__bck_mod__DOT__alu_ALIGNED__DOT__uu_B3[1]<<32);
-		    II_FLIN[II>>4][II&0xf]=top->heptane_core__DOT__bck_mod__DOT__alu_ALIGNED__DOT__uu_S3;
-                    break;
-		    case 5:
-		    II_A[II>>4][II&0xf]=top->heptane_core__DOT__bck_mod__DOT__alu_ALIGNED__DOT__uu_A4[0]+
-			    (top->heptane_core__DOT__bck_mod__DOT__alu_ALIGNED__DOT__uu_A4[1]<<32);
-		    II_B[II>>4][II&0xf]=top->heptane_core__DOT__bck_mod__DOT__alu_ALIGNED__DOT__uu_B4[0]+
-			    (top->heptane_core__DOT__bck_mod__DOT__alu_ALIGNED__DOT__uu_B4[1]<<32);
-		    II_FLIN[II>>4][II&0xf]=top->heptane_core__DOT__bck_mod__DOT__alu_ALIGNED__DOT__uu_S4;
-                    break;
-		    case 7:
-		    II_A[II>>4][II&0xf]=top->heptane_core__DOT__bck_mod__DOT__alu_ALIGNED__DOT__uu_A5[0]+
-			    (top->heptane_core__DOT__bck_mod__DOT__alu_ALIGNED__DOT__uu_A5[1]<<32);
-		    II_B[II>>4][II&0xf]=top->heptane_core__DOT__bck_mod__DOT__alu_ALIGNED__DOT__uu_B5[0]+
-			    (top->heptane_core__DOT__bck_mod__DOT__alu_ALIGNED__DOT__uu_B5[1]<<32);
-		    II_FLIN[II>>4][II&0xf]=top->heptane_core__DOT__bck_mod__DOT__alu_ALIGNED__DOT__uu_S5;
-                    break;
-		    case 8:
-		    II_A[II>>4][II&0xf]=top->heptane_core__DOT__bck_mod__DOT__alu_ALIGNED__DOT__uu_A6[0]+
-			    (top->heptane_core__DOT__bck_mod__DOT__alu_ALIGNED__DOT__uu_A6[1]<<32);
-		    II_B[II>>4][II&0xf]=top->heptane_core__DOT__bck_mod__DOT__alu_ALIGNED__DOT__uu_B6[0]+
-			    (top->heptane_core__DOT__bck_mod__DOT__alu_ALIGNED__DOT__uu_B6[1]<<32);
-		    II_FLIN[II>>4][II&0xf]=top->heptane_core__DOT__bck_mod__DOT__alu_ALIGNED__DOT__uu_S6;
-                    break;
-		}
-	    } else {
-	    }
-	}
-    }
     if (retire) {
 	for(k=0;k<10;k++) {
 	    if (xbreak&(1<<k)) break;
