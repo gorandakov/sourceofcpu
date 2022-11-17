@@ -70,13 +70,13 @@ module heptane_core(
   output rbusDOut_replay;
 
  
- // reg [63:0] r02_data;
+ // reg [64:0] r02_data;
  // reg r02_en;
 /*  wire [5:0] wrtII=bck_mod.PSTQ_en[0] ? bck_mod.PSTQ_data[0][117:112] : bck_mod.PSTQ_data[1][117:112];
   wire [5:0] dataAII=bck_mod.LSQ_dataA0[117:112];
-  reg [63:0] wdata_reg[1:0];
-  reg [63:0] wdata_reg2[1:0];
-  reg [63:0] wdata_reg3[1:0];
+  reg [64:0] wdata_reg[1:0];
+  reg [64:0] wdata_reg2[1:0];
+  reg [64:0] wdata_reg3[1:0];
 */
 //  reg clk=1'b0;
 //  reg clkX=1'b1;
@@ -663,10 +663,10 @@ module heptane_core(
   reg dc2_io_en_reg3;
   reg dc2_io_en_reg4;
   reg dc2_io_en_reg5;
-  wire [63:0] dc2_dataIO;
-  reg [63:0] dc2_dataIO_reg;
-  reg [63:0] dc2_dataIO_reg2;
-  reg [63:0] dc2_dataIO_reg3;
+  wire [64:0] dc2_dataIO;
+  reg [64:0] dc2_dataIO_reg;
+  reg [64:0] dc2_dataIO_reg2;
+  reg [64:0] dc2_dataIO_reg3;
   wire dc2_rdEn;
   reg dc2_rdEn_reg;
   reg dc2_rdEn_reg2;

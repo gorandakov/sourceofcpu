@@ -232,7 +232,7 @@ module ctlb(
   input write_wen;
   input csrss_en;
   input [15:0] csrss_addr;
-  input [63:0] csrss_data;
+  input [64:0] csrss_data;
   
   wire [3:0][1:0] newLRU;
   wire [3:0][1:0] oldLRU;
@@ -247,7 +247,7 @@ module ctlb(
   wire [39:0] dummy_pproc;
   wire [23:0] vmproc;
   wire [39:0] dummy_vmproc;
-  wire [63:0] mflags;
+  wire [64:0] mflags;
 
   reg [IP_WIDTH-1:0] addr_reg;
   

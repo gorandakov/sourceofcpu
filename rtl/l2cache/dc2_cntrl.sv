@@ -417,7 +417,7 @@ module dc2_cntrl(
   output readI_dupl;
   output readI_want_excl;
   output readI_io;
-  output [63:0] readI_dataIO;
+  output [64:0] readI_dataIO;
   output readI_ins_A,readI_ins_B;
   input miss_en;
   input [36:0] miss_addr;
@@ -436,7 +436,7 @@ module dc2_cntrl(
   input [`rbusD_width-1:0] rbusD_signals;
   input [9:0] rbusD_src_req;
   input [9:0] rbusD_dst_req;
-  input [63:0] rbusD_data64;
+  input [64:0] rbusD_data64;
 //  output rbusD_en_out;
 
   wire [36:0] rbusD_addr_out;
@@ -466,7 +466,7 @@ module dc2_cntrl(
   wire [4:0] cntM_minus;
   wire [4:0] read_addrM_d;
   wire [4:0] write_addrM_d;
-  reg [63:0] rbusD_data64_reg;
+  reg [64:0] rbusD_data64_reg;
 
   wire [159:0] read_data0;
   wire [159:0] read_data1;
@@ -525,7 +525,7 @@ module dc2_cntrl(
   wire [36:0] read_addr_C2;
   wire [4:0] read_req_C2;
   reg read_io_C2;
-  reg [63:0] read_data_C2;
+  reg [64:0] read_data_C2;
   wire [36:0] missR_addr;
   wire [4:0] missR_req;
   wire missR_io;

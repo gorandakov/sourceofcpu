@@ -204,7 +204,7 @@ module fun_fpuL(
   input [67:0] XI_dataS;
   input fxFRT_alten_reg3;
   output daltX;
-  output [63:0] FUCVT1;
+  output [64:0] FUCVT1;
   output [16+67:0] outA;
   output [16+67:0] outB;
 

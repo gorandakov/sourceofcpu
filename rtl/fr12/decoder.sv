@@ -150,12 +150,12 @@ module decoder_aux_const(
   input [31:0] instr7; 
   input [31:0] instr8; 
   input [31:0] instr9; 
-  output reg [63:0] aux_const;
+  output reg [64:0] aux_const;
   output reg aux_can_jump;
   output reg aux_can_read;
   input [15:0] csrss_no;
   input csrss_en;
-  input [63:0] csrss_data;
+  input [64:0] csrss_data;
   input [10:0] fpE_set;
   input fpE_en;
 
@@ -164,23 +164,23 @@ module decoder_aux_const(
   wire cls_sys_has;
   wire [15:0] aux0;
   reg [15:0] aux0_reg;
-  reg [63:0] csr_retIP;
-  reg [63:0] csr_excStackSave;
-  reg [63:0] csr_excStack;
-  reg [63:0] csr_PCR;
-  reg [63:0] csr_PCR_reg_save;
-  reg [63:0] csr_mflags;
-  reg [63:0] csr_fpu;
-  reg [63:0] csr_page;
-  reg [63:0] csr_vmpage;
-  reg [63:0] csr_cpage;
-  reg [63:0] csr_spage;
-  reg [63:0] csr_excTbl;
-  reg [63:0] csr_syscall;
-  reg [63:0] csr_vmcall;
-  reg [63:0] csr_cpage_mask;
-  reg [63:0] csr_indir_tbl;
-  reg [63:0] csr_indir_mask;
+  reg [64:0] csr_retIP;
+  reg [64:0] csr_excStackSave;
+  reg [64:0] csr_excStack;
+  reg [64:0] csr_PCR;
+  reg [64:0] csr_PCR_reg_save;
+  reg [64:0] csr_mflags;
+  reg [64:0] csr_fpu;
+  reg [64:0] csr_page;
+  reg [64:0] csr_vmpage;
+  reg [64:0] csr_cpage;
+  reg [64:0] csr_spage;
+  reg [64:0] csr_excTbl;
+  reg [64:0] csr_syscall;
+  reg [64:0] csr_vmcall;
+  reg [64:0] csr_cpage_mask;
+  reg [64:0] csr_indir_tbl;
+  reg [64:0] csr_indir_mask;
   assign iconst[0]=instr0[31:16];
   assign iconst[1]=instr1[31:16];
   assign iconst[2]=instr2[31:16];
@@ -579,7 +579,7 @@ module decoder_reorder_mux(
   output rB_use;
   output rB_useF;
   output useBConst;
-  output [63:0] constant;
+  output [64:0] constant;
   output [REG_WIDTH-1:0] rT;
   output rT_use;
   output rT_useF;
@@ -709,17 +709,17 @@ module decoder_reorder_mux(
   input dec8_useBConst;
   input dec9_useBConst;
 
-  input [63:0] dec0_constant;
-  input [63:0] dec1_constant;
-  input [63:0] dec2_constant;
-  input [63:0] dec3_constant;
-  input [63:0] dec4_constant;
-  input [63:0] dec5_constant;
-  input [63:0] dec6_constant;
-  input [63:0] dec7_constant;
-  input [63:0] dec8_constant;
-  input [63:0] dec9_constant;
-  input [63:0] aux_constant;
+  input [64:0] dec0_constant;
+  input [64:0] dec1_constant;
+  input [64:0] dec2_constant;
+  input [64:0] dec3_constant;
+  input [64:0] dec4_constant;
+  input [64:0] dec5_constant;
+  input [64:0] dec6_constant;
+  input [64:0] dec7_constant;
+  input [64:0] dec8_constant;
+  input [64:0] dec9_constant;
+  input [64:0] aux_constant;
 
   input [9:0] dec_cls_sys;
 
@@ -836,8 +836,8 @@ module decoder_reorder_mux(
   
   input [9:0] dec_afterTaken;
 
-  wire [63:0] constantA;
-  wire [63:0] constantB;
+  wire [64:0] constantA;
+  wire [64:0] constantB;
   wire [REG_WIDTH-1:0] rA1;
   wire [REG_WIDTH-1:0] rA2;
   wire [REG_WIDTH-1:0] rA3;
@@ -2131,7 +2131,7 @@ module decoder(
   
   input [15:0] csrss_no;
   input csrss_en;
-  input [63:0] csrss_data;
+  input [64:0] csrss_data;
   
   reg last_trce;
 
@@ -2150,7 +2150,7 @@ module decoder(
   wire [9:0]dec_rC_use;
   wire [9:0]dec_rC_useF;
   wire [9:0] dec_useCRet;
-  wire [9:0][63:0] dec_constant;
+  wire [9:0][64:0] dec_constant;
   wire [9:0][REG_WIDTH-1:0] dec_rT;
   wire [9:0]dec_rT_use;
   wire [9:0]dec_rT_useF;
@@ -2215,7 +2215,7 @@ module decoder(
   reg 				dec_rC_use_reg[9:0];
   reg 				dec_rC_useF_reg[9:0];
   reg [9:0]			dec_useCRet_reg;
-  reg [63:0] 			dec_constant_reg[9:0];
+  reg [64:0] 			dec_constant_reg[9:0];
   reg [REG_WIDTH-1:0] 		dec_rT_reg[9:0];
   reg 				dec_rT_use_reg[9:0];
   reg 				dec_rT_useF_reg[9:0];
@@ -2299,7 +2299,7 @@ module decoder(
   wire [8:0]rs_rB_use;
   wire [8:0]rs_rB_useF;
   wire [8:0]rs_useBConst;
-  wire [8:0][63:0] rs_constant;
+  wire [8:0][64:0] rs_constant;
   wire [8:0][REG_WIDTH-1:0] rs_rT;
   wire [8:0]rs_rT_use;
   wire [8:0]rs_rT_useF;
@@ -2365,7 +2365,7 @@ module decoder(
   wire jump0_any;
   wire jump1_any;
   
-  wire [63:0] aux_const;
+  wire [64:0] aux_const;
 
   generate 
       genvar k;

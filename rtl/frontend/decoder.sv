@@ -169,30 +169,30 @@ module decoder_aux_const(
   input [10:0] fpE_set;
   input fpE_en;
   input altEn;
-  input [63:0] altData;
+  input [64:0] altData;
 
   wire [15:0] iconst[9:0];
   wire [9:0] cls_sys_first;
   wire cls_sys_has;
   wire [15:0] aux0;
   reg [15:0] aux0_reg;
-  reg [63:0] csr_retIP;
+  reg [64:0] csr_retIP;
   reg [64:0] csr_excStackSave;
   reg [64:0] csr_excStack;
   reg [64:0] csr_PCR;
   reg [64:0] csr_PCR_reg_save;
-  reg [63:0] csr_mflags;
-  reg [63:0] csr_fpu;
-  reg [63:0] csr_page;
-  reg [63:0] csr_vmpage;
-  reg [63:0] csr_cpage;
-  reg [63:0] csr_spage;
-  reg [63:0] csr_excTbl;
-  reg [63:0] csr_syscall;
-  reg [63:0] csr_vmcall;
-  reg [63:0] csr_cpage_mask;
-  reg [63:0] csr_indir_tbl;
-  reg [63:0] csr_indir_mask;
+  reg [64:0] csr_mflags;
+  reg [64:0] csr_fpu;
+  reg [64:0] csr_page;
+  reg [64:0] csr_vmpage;
+  reg [64:0] csr_cpage;
+  reg [64:0] csr_spage;
+  reg [64:0] csr_excTbl;
+  reg [64:0] csr_syscall;
+  reg [64:0] csr_vmcall;
+  reg [64:0] csr_cpage_mask;
+  reg [64:0] csr_indir_tbl;
+  reg [64:0] csr_indir_mask;
   assign iconst[0]=instr0[31:16];
   assign iconst[1]=instr1[31:16];
   assign iconst[2]=instr2[31:16];
@@ -856,7 +856,7 @@ module decoder_reorder_mux(
   input [9:0] dec_afterTaken;
 
   wire [64:0] constantA;
-  wire [63:0] constantB;
+  wire [64:0] constantB;
   wire [REG_WIDTH-1:0] rA1;
   wire [REG_WIDTH-1:0] rA2;
   wire [REG_WIDTH-1:0] rA3;
@@ -2207,7 +2207,7 @@ module decoder(
   input [64:0] csrss_data;
   
   wire [9:0] csrss_retIP_en;
-  wire [63:0] csrss_retIP_data;
+  wire [64:0] csrss_retIP_data;
   reg  [9:0] csrss_retIP_en_reg;
 
   reg last_trce;

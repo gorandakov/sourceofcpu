@@ -76,7 +76,7 @@ module fadds(
   wire [23:0] opBs;
   reg [23:0] opBs1_reg;
   reg [23:0] opA_reg;
-//  reg [63:0] opB_reg;
+//  reg [64:0] opB_reg;
   wire [24:0] partM0;
   wire [24:0] partM1;
   wire [24:0] partMs0;
@@ -401,7 +401,7 @@ module fadds(
 
   endgenerate
 
-//  adder2c #(64) fracCmp(fracxfrmA(A[63:0],isDBL,isSingle,isSngDbl),fracxfrmB(~Bx,isDBL,isSingle,isSngDbl),
+//  adder2c #(64) fracCmp(fracxfrmA(A[64:0],isDBL,isSingle,isSngDbl),fracxfrmB(~Bx,isDBL,isSingle,isSngDbl),
 //      ,,1'b1,1'b1,1'b1,1'b1,moreAFE,,moreAFD,);
   fpuadd_renorS renor_mod(
   .A(resS1_reg),

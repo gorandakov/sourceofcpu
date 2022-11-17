@@ -857,13 +857,13 @@ module backend(
   input [4:0] jump0Type;
   input [3:0] jump0Pos;
   input jump0Pred;
-  input [63:0] jump0IP;
+  input [64:0] jump0IP;
   input [3:0] jump0Mask;
   input [3:0] jump0Attr;
   input [4:0] jump1Type;
   input [3:0] jump1Pos;
   input jump1Pred;
-  input [63:0] jump1IP;
+  input [64:0] jump1IP;
   input [3:0] jump1Mask;
   input [3:0] jump1Attr;
   input jump0TbufWay;
@@ -1392,13 +1392,13 @@ module backend(
   reg [4:0] jump0Type_reg;
   reg [3:0] jump0Pos_reg;
   reg jump0Pred_reg;
-  reg [63:0] jump0IP_reg;
+  reg [64:0] jump0IP_reg;
   reg [3:0] jump0Attr_reg;
   reg [3:0] jump0Mask_reg;
   reg [4:0] jump1Type_reg;
   reg [3:0] jump1Pos_reg;
   reg jump1Pred_reg;
-  reg [63:0] jump1IP_reg;
+  reg [64:0] jump1IP_reg;
   reg [3:0] jump1Attr_reg;
   reg [3:0] jump1Mask_reg;
   reg [9:0] instr_fsimd_reg;
@@ -1439,13 +1439,13 @@ module backend(
   reg [4:0] jump0Type_reg2;
   reg [3:0] jump0Pos_reg2;
   reg jump0Pred_reg2;
-  reg [63:0] jump0IP_reg2;
+  reg [64:0] jump0IP_reg2;
   reg [3:0] jump0Attr_reg2;
   reg [3:0] jump0Mask_reg2;
   reg [4:0] jump1Type_reg2;
   reg [3:0] jump1Pos_reg2;
   reg jump1Pred_reg2;
-  reg [63:0] jump1IP_reg2;
+  reg [64:0] jump1IP_reg2;
   reg [3:0] jump1Attr_reg2;
   reg [3:0] jump1Mask_reg2;
   reg [9:0] instr_fsimd_reg2;
@@ -2352,7 +2352,7 @@ module backend(
   wire [64:0] csrss_data;
  
   wire [5:0][15:0] dummyFH;
-  wire [63:0] fpcsr;
+  wire [64:0] fpcsr;
 
   reg wrStall_reg;
 

@@ -1534,13 +1534,13 @@ module csrss_watch(
   csrss_en,
   data_out);
   parameter [15:0] ADDR=16'b0;
-  parameter [63:0] INITVAL=64'b0;
+  parameter [64:0] INITVAL=64'b0;
   input clk;
   input rst;
   input [15:0] csrss_addr;
-  input [63:0] csrss_data;
+  input [64:0] csrss_data;
   input csrss_en;
-  output reg [63:0] data_out;
+  output reg [64:0] data_out;
 
   always @(posedge clk) begin
     if (rst) begin

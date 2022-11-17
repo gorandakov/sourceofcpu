@@ -108,7 +108,7 @@ module smallInstr_decoder(
   output useCRet;
   output useBConst;
 //  output reg useBSmall;//small constant use; used for call/pop/push
-  output [63:0] constant;
+  output [64:0] constant;
 //  output reg [3:0] smallConst; //signed
   output [REG_WIDTH-1:0] rT;
   output rT_use;
@@ -167,7 +167,7 @@ module smallInstr_decoder(
   reg puseCRet[TRICNT_TOP-1:0];
   reg puseBConst[TRICNT_TOP-1:0];
 //  output reg useBSmall;//small constant use; used for call/pop/push
-  reg [63:0] pconstant[TRICNT_TOP-1:0];
+  reg [64:0] pconstant[TRICNT_TOP-1:0];
 //  output reg [3:0] smallConst; //signed
   reg [REG_WIDTH-1:0] prT[TRICNT_TOP-1:0];
   reg prT_use[TRICNT_TOP-1:0];
@@ -191,7 +191,7 @@ module smallInstr_decoder(
   reg pinstr_fsimd[TRICNT_TOP-1:0];
   reg phalt[TRICNT_TOP-1:0];
   
-  wire [63:0] qconstant[11:0];
+  wire [64:0] qconstant[11:0];
   wire [11:0] qtrien;
   
   reg [4:0] pjumpType[TRICNT_TOP-1:0];
@@ -250,7 +250,7 @@ module smallInstr_decoder(
           wire kuseCRet;
           wire kuseBConst;
     //  output reg useBSmall;//small constant use; used for call/pop/push
-          wire [63:0] kconstant;
+          wire [64:0] kconstant;
     //  output reg [3:0] smallConst; //signed
           wire [REG_WIDTH-2:0] krT;
           wire krT_use;

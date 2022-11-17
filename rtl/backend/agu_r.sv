@@ -146,7 +146,7 @@ module agu_r(
   input [15:0] csrss_no;
   input csrss_en;
   input csrss_thread;
-  input [63:0] csrss_data;
+  input [64:0] csrss_data;
 
   output pageFault;
   output [7:0] faultCode;
@@ -270,7 +270,7 @@ module agu_r(
   reg [23:0] sproc;
   reg [23:0] pproc;
   reg [23:0] vproc;
-  reg [63:0] mflags;
+  reg [64:0] mflags;
 
   wire [1:0] fault_tlb;
   wire [1:0] fault_tlb_next;

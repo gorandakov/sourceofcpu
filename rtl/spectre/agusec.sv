@@ -17,7 +17,7 @@ limitations under the License.
 `include "../struct.sv"
 
 module agusec_check_upper3(
-  input [63:0] ptr,
+  input [64:0] ptr,
   input [39:0] A,
   input [39:0] B,
   output [2:0] pos_ack,
@@ -144,7 +144,7 @@ module agusec_check_upper3(
 endmodule
 
 module agusec_range(
-  input [63:0] ptr,
+  input [64:0] ptr,
   input cin_secq,
   input diff,
   output cout_secq);

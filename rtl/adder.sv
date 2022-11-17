@@ -706,7 +706,7 @@ module addsub_alu(a,b,out,sub,en,sxtEn,ben,cout,cout4,cout8LL,cout16,cout32,cout
   wire [WIDTH-1:0] bitEn;
 
   wire [39:0] unptr;
-  wire [63:0] ptr;
+  wire [64:0] ptr;
   wire [2:0] pos_ack;
   wire [2:0] neg_ack;
   wire [1:0] pos_flip;
@@ -1259,10 +1259,10 @@ module add_agu(
   );
   parameter WIDTH=44;
   input [64:0] a;//base
-  input [63:0] b;
+  input [64:0] b;
   input [64:0] c; //index
-  //output [63:0] ptr;
-  output [63:0] out;
+  //output [64:0] ptr;
+  output [64:0] out;
   output cout_sec;
   output ndiff;
   input en;
@@ -1288,8 +1288,8 @@ module add_agu(
 
   wire [43:0] c_s;
 
-  wire [63:0] ptr=(c[64] & shift[0]) ? c[63:0] : a[63:0];
-  wire [63:0] unptr=(c[64] & shift[0]) ? a[63:0] : c[63:0];
+  wire [64:0] ptr=(c[64] & shift[0]) ? c[63:0] : a[63:0];
+  wire [64:0] unptr=(c[64] & shift[0]) ? a[63:0] : c[63:0];
 
   genvar k;
   

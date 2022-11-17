@@ -113,7 +113,7 @@ module agu(
   input [5:0] WQ_no;
   input thread;
   input lsflag;
-  input [63:0] cmplxAddr;
+  input [64:0] cmplxAddr;
   input cin_secq;
   input ptrdiff;
   input [BANK_COUNT-1:0] other0_banks;
@@ -159,7 +159,7 @@ module agu(
   input [15:0] csrss_no;
   input csrss_en;
   input csrss_thr;
-  input [63:0] csrss_data;
+  input [64:0] csrss_data;
 
   reg [2:0] opsize;
   wire hasIndex;
@@ -232,8 +232,8 @@ module agu(
   reg [23:0] vproc;
   //reg [23:0] proc_reg;
   //reg [23:0] proc_reg2;
-  reg [63:0] mflags;
-  wire [63:0] mflags0; 
+  reg [64:0] mflags;
+  wire [64:0] mflags0; 
   integer i;
   
 //  reg [ADDR_WIDTH-1:48] cmplxAddr_reg;

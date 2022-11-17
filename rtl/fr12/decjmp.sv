@@ -60,7 +60,7 @@ module jump_decoder(
   input [11:0] class_;
   input isAvx;
   
-  output reg [63:0] constant;
+  output reg [64:0] constant;
   
   output reg pushCallStack;
   output reg popCallStack;

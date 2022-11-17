@@ -230,7 +230,7 @@ module smallInstr_decoder(
   
   reg keep2instr;
   
-  wire [63:0] constantDef;
+  wire [64:0] constantDef;
 
   wire [12:0] class_;
 
@@ -251,7 +251,7 @@ module smallInstr_decoder(
   reg [4:0] palucond[TRICNT_TOP-1:0];
   reg puseBConst[TRICNT_TOP-1:0];
 //  output reg useBSmall;//small constant use; used for call/pop/push
-  reg [63:0] pconstant[TRICNT_TOP-1:0];
+  reg [64:0] pconstant[TRICNT_TOP-1:0];
 //  output reg [3:0] smallConst; //signed
   reg [REG_WIDTH-2:0] prT[TRICNT_TOP-1:0];
   reg prT_use[TRICNT_TOP-1:0];
