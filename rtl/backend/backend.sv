@@ -4589,7 +4589,7 @@ module backend(
           .newData(WDfxData[n]),
           .fuFwd(WDoutFuFwd[n]),.fuuFwd(WDoutFuuFwd[n]),
           .stall(~WDoutDataEn[n][1]),
-	  .FUN0(FU_N[0]),.FUN1(FU_N[1]),.FUN2(FU_N[2]),.FUN3(FU_N[3]),.FNU4(FU_N[4]),.FNU5(FU_N[5]),
+	  .FUN0(FU_N[0]),.FUN1(FU_N[1]),.FUN2(FU_N[2]),.FUN3(FU_N[3]),.FUN4(FU_N[4]),.FUN5(FU_N[5]),
 	  .FUN6(FU_N[6]),.FUN7(FU_N[7]),.FUN8(FU_N[8]),.FUN9(FU_N[9]),
           .FU0(FU[0]),.FU0_reg(FU_reg[0]),
           .FU1(FU[1]),.FU1_reg(FU_reg[1]),
