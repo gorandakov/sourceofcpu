@@ -182,6 +182,8 @@ module rs_write_forward(
   input [DATA_WIDTH-1:0] FUN1;
   input [DATA_WIDTH-1:0] FUN2;
   input [DATA_WIDTH-1:0] FUN3;
+  input [DATA_WIDTH-1:0] FUN4;
+  input [DATA_WIDTH-1:0] FUN5;
 
   input [DATA_WIDTH-1:0] FUN6;
   input [DATA_WIDTH-1:0] FUN7;
