@@ -49,8 +49,8 @@ module fun_fpsu_BOTH(
   FUFL3,FUFL4,FUFL5,
   FUFL6,FUFL7,FUFL8,
   FUFL9,
-  FUFH0_n,FUFH1_n,FUFH2_n,FUFH3_n,
-  FUFL0_m,FUFL1_m,FUFL2_m,FUFL3_m,
+  FUFH0_n,FUFH1_n,FUFH2_n,FUFH3_n,FUFH4_n,FUFH5_n,
+  FUFL0_m,FUFL1_m,FUFL2_m,FUFL3_m,FUFL4_m,FUFL5_m,
   FUFH6_n,FUFH7_n,FUFH8_n,FUFH9_n,
   FUFL6_m,FUFL7_m,FUFL8_m,FUFL9_m,
   MRKAH,MRKBH,MRKAL,BRKBL,
@@ -151,6 +151,10 @@ module fun_fpsu_BOTH(
   input [67:0] FUFL1_m;
   input [67:0] FUFL2_m;
   input [67:0] FUFL3_m;
+  input [67:0] FUFL4_m;
+  input [67:0] FUFL5_m;
+  input [67:0] FUFH4_n;
+  input [67:0] FUFH5_n;
 
   inout [67:0] FUFH6_n;
   inout [67:0] FUFH7_n;
@@ -278,7 +282,7 @@ module fun_fpsu_BOTH(
   FUFH3,FUFH4,FUFH5,
   FUFH6,FUFH7,FUFH8,
   FUFH9,
-  FUFH0_n,FUFH1_n,FUFH2_n,FUFH3_n,
+  FUFH0_n,FUFH1_n,FUFH2_n,FUFH3_n,FUFH4_n,FUFH5_n,
   FUFH6_n,FUFH7_n,FUFH8_n,FUFH9_n,
   ALTDATAH0,ALTDATAH1,
   ALT_INP,,,,,MRKAH,MRKBH
@@ -310,7 +314,7 @@ module fun_fpsu_BOTH(
   FUFL3,FUFL4,FUFL5,
   FUFL6,FUFL7,FUFL8,
   FUFL9,
-  FUFL0_m,FUFL1_m,FUFL2_m,FUFL3_m,
+  FUFL0_m,FUFL1_m,FUFL2_m,FUFL3_m,FUFL4_m,FUFL5_m,
   FUFL6_m,FUFL7_m,FUFL8_m,FUFL9_m,
   ALTDATAL0,ALTDATAL1,
   ALT_INP,

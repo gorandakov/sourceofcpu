@@ -32,7 +32,7 @@ module fun_fpsu(
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
   FUF9,
-  FUF0N,FUF1M,FUF2N,FUF3N,
+  FUF0N,FUF1M,FUF2N,FUF3N,FUF4N,FUF5N,
   FUF6N,FUF7M,FUF8N,FUF9N,
   ALTDATA0,ALTDATA1,
   ALT_INP,
@@ -82,6 +82,8 @@ module fun_fpsu(
   input [S+67:0] FUF1M;
   input [S+67:0] FUF2N;
   input [S+67:0] FUF3N;
+  input [S+67:0] FUF4N;
+  input [S+67:0] FUF5N;
   input [S+67:0] FUF0;
   input [S+67:0] FUF1;
   input [S+67:0] FUF2;
@@ -233,7 +235,7 @@ module fun_fpsu(
   ~u1_en[3],
   u1_A,uu_A1,
   u1_fufwd_A,u1_fuufwd_A,
-  FUF0N,FUF1M,FUF2N,FUF3N,
+  FUF0N,FUF1M,FUF2N,FUF3N,FUF4N,FUF5N,
   FUF6N,FUF7M,FUF8N,FUF9N,
   FUF0,FUF0_reg,
   FUF1,FUF1_reg,
@@ -252,7 +254,7 @@ module fun_fpsu(
   ~u1_en[3],
   u1_B,uu_B1,
   u1_fufwd_B,u1_fuufwd_B,
-  FUF0N,FUF1M,FUF2N,FUF3N,
+  FUF0N,FUF1M,FUF2N,FUF3N,FUF4N,FUF5N,
   FUF6N,FUF7M,FUF8N,FUF9N,
   FUF0,FUF0_reg,
   FUF1,FUF1_reg,
@@ -271,7 +273,7 @@ module fun_fpsu(
   ~u2_en[3],
   u2_A,uu_A2,
   u2_fufwd_A,u2_fuufwd_A,
-  FUF0N,FUF1M,FUF2N,FUF3N,
+  FUF0N,FUF1M,FUF2N,FUF3N,FUF4N,FUF5N,
   FUF6N,FUF7M,FUF8N,FUF9N,
   FUF0,FUF0_reg,
   FUF1,FUF1_reg,
@@ -290,7 +292,7 @@ module fun_fpsu(
   ~u2_en[3],
   u2_B,uu_B2,
   u2_fufwd_B,u2_fuufwd_B,
-  FUF0N,FUF1M,FUF2N,FUF3N,
+  FUF0N,FUF1M,FUF2N,FUF3N,FUF4N,FUF5N,
   FUF6N,FUF7M,FUF8N,FUF9N,
   FUF0,FUF0_reg,
   FUF1,FUF1_reg,
