@@ -26,7 +26,7 @@ module rs_write_forward_ALU(
   sxtEn,
   oldData,newData,
   fuFwd,fuuFwd,
-  FUN0,FUN1,FUN2,FUN3,
+  FUN0,FUN1,FUN2,FUN3,FUN4,FUN5,
   FUN6,FUN7,FUN8,FUN9,
   FU0,FU0_reg,
   FU1,FU1_reg,
@@ -76,6 +76,8 @@ module rs_write_forward_ALU(
   input [DATA_WIDTH-1:0] FUN1;
   input [DATA_WIDTH-1:0] FUN2;
   input [DATA_WIDTH-1:0] FUN3;
+  input [DATA_WIDTH-1:0] FUN4;
+  input [DATA_WIDTH-1:0] FUN5;
 
   input [DATA_WIDTH-1:0] FUN6;
   input [DATA_WIDTH-1:0] FUN7;
@@ -94,9 +96,9 @@ module rs_write_forward_ALU(
   assign newDataFuu_d=(fuuFwd==4'd2) ? FU2_reg : {DATA_WIDTH{1'BZ}};  
   assign newDataFu_d=(fuFwd==4'd3) ? FU3|~FUN3 : {DATA_WIDTH{1'BZ}};  
   assign newDataFuu_d=(fuuFwd==4'd3) ? FU3_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd4) ? FU4 : {DATA_WIDTH{1'BZ}};  
+  assign newDataFu_d=(fuFwd==4'd4) ? FU4|~FUN4 : {DATA_WIDTH{1'BZ}};  
   assign newDataFuu_d=(fuuFwd==4'd4) ? FU4_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd5) ? FU5 : {DATA_WIDTH{1'BZ}};  
+  assign newDataFu_d=(fuFwd==4'd5) ? FU5|~FUN4 : {DATA_WIDTH{1'BZ}};  
   assign newDataFuu_d=(fuuFwd==4'd5) ? FU5_reg : {DATA_WIDTH{1'BZ}};  
   assign newDataFu_d=(fuFwd==4'd6) ? FU6|~FUN6 : {DATA_WIDTH{1'BZ}};  
   assign newDataFuu_d=(fuuFwd==4'd6) ? FU6_reg : {DATA_WIDTH{1'BZ}};  
@@ -132,7 +134,7 @@ module rs_write_forward(
   stall,
   oldData,newData,
   fuFwd,fuuFwd,
-  FUN0,FUN1,FUN2,FUN3,
+  FUN0,FUN1,FUN2,FUN3,FUN4,FUN5,
   FUN6,FUN7,FUN8,FUN9,
   FU0,FU0_reg,
   FU1,FU1_reg,
@@ -198,9 +200,9 @@ module rs_write_forward(
   assign newDataFuu_d=(fuuFwd==4'd2) ? FU2_reg : {DATA_WIDTH{1'BZ}};  
   assign newDataFu_d=(fuFwd==4'd3) ? FU3|~FUN3 : {DATA_WIDTH{1'BZ}};  
   assign newDataFuu_d=(fuuFwd==4'd3) ? FU3_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd4) ? FU4 : {DATA_WIDTH{1'BZ}};  
+  assign newDataFu_d=(fuFwd==4'd4) ? FU4|~FUN4 : {DATA_WIDTH{1'BZ}};  
   assign newDataFuu_d=(fuuFwd==4'd4) ? FU4_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd5) ? FU5 : {DATA_WIDTH{1'BZ}};  
+  assign newDataFu_d=(fuFwd==4'd5) ? FU5|~FUN5 : {DATA_WIDTH{1'BZ}};  
   assign newDataFuu_d=(fuuFwd==4'd5) ? FU5_reg : {DATA_WIDTH{1'BZ}};  
   assign newDataFu_d=(fuFwd==4'd6) ? FU6|~FUN6 : {DATA_WIDTH{1'BZ}};  
   assign newDataFuu_d=(fuuFwd==4'd6) ? FU6_reg : {DATA_WIDTH{1'BZ}};  
@@ -229,7 +231,7 @@ module rs_write_forwardF(
   stall,
   oldData,newData,
   fuFwd,fuuFwd,
-  FUN0,FUN1,FUN2,FUN3,
+  FUN0,FUN1,FUN2,FUN3,FUN4,FUN5,
   FU0,FU0_reg,
   FU1,FU1_reg,
   FU2,FU2_reg,
