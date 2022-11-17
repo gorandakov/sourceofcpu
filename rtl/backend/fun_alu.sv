@@ -163,8 +163,8 @@ module fu_alu(
   input [64:0] FNU2;
   input [64:0] FNU3;
 
-  input [64:0] FNU4;
-  input [64:0] FNU5;
+  inout [64:0] FNU4;
+  inout [64:0] FNU5;
 
   input [5:0] FUS1;
   input [5:0] FUS2;
@@ -639,12 +639,12 @@ module fu_alu(
 
 
   alu alu0(clk,rst,except,1'b0,1'b0,u1_op_reg[12:0],u1_op_reg[17:13],u1_isSub_reg,u1_clkEn_reg,1'b1,
-    u1_ret,u1_rten,uu_A1,uu_B1,uu_S1,FU4,);
+    u1_ret,u1_rten,uu_A1,uu_B1,uu_S1,FU4,FNU4);
   alu #(1'b0)  alu1(clk,rst,except,1'b0,1'b0,u2_op_reg[12:0],u2_op_reg[17:13],u2_isSub_reg,u2_clkEn_reg,1'b1,
     u2_ret,u2_rten,uu_A2,uu_B2,uu_S2,FU7,FNU7);
   
   alu alu2(clk,rst,except,1'b0,1'b0,u3_op_reg[12:0],u3_op_reg[17:13],u3_isSub_reg,u3_clkEn_reg,1'b1,
-    u3_ret,u3_rten,uu_A3,uu_B3,uu_S3,FU5,);
+    u3_ret,u3_rten,uu_A3,uu_B3,uu_S3,FU5,FNU5);
   alu #(1'b0)  alu3(clk,rst,except,1'b0,1'b0,u4_op_reg[12:0],u4_op_reg[17:13],u4_isSub_reg,u4_clkEn_reg,1'b1,
     u4_ret,u4_rten,uu_A4,uu_B4,uu_S4,FU8,FNU8);
   
