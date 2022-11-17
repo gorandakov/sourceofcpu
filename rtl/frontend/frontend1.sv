@@ -69,7 +69,7 @@ module frontend1(
   localparam PHYS_WIDTH=44;
   localparam VIRT_WIDTH=64;
   localparam IP_WIDTH=64;
-  localparam [64:0] INIT_IP=64'hf80ff00000000000;
+  localparam [63:0] INIT_IP=64'hf80ff00000000000;
   localparam [3:0] INIT_ATTR=4'b0;
   localparam BUS_BANK=32;
   localparam BUS_WIDTH=BUS_BANK*16;
@@ -157,7 +157,7 @@ module frontend1(
   
   input csrss_en;
   input [15:0] csrss_addr;
-  input [64:0] csrss_data;
+  input [63:0] csrss_data;
   
   input [36:0] MSI_expAddr;
   input MSI_expAddr_en;
@@ -173,8 +173,8 @@ module frontend1(
 
   wire do_seq_any,do_seq_miss;
 
-  wire [64:0] cc_read_IP_d;
-//  wire [64:0] tr_read_IP_d;
+  wire [63:0] cc_read_IP_d;
+//  wire [63:0] tr_read_IP_d;
   wire do_seq;
   reg do_seq_reg;
   reg do_seq_reg2;
@@ -184,16 +184,16 @@ module frontend1(
   reg miss_now;
   reg tlbMiss_now;
   reg miss_now_reg;
-  reg [64:0] cc_read_IP;
-  reg [64:0] cc_read_IP_reg;
-  reg [64:0] cc_read_IP_reg2;
-  reg [64:0] cc_read_IP_reg3;
-  reg [64:0] cc_read_IP_reg4;
-  reg [64:0] cc_read_IP_reg5;
+  reg [63:0] cc_read_IP;
+  reg [63:0] cc_read_IP_reg;
+  reg [63:0] cc_read_IP_reg2;
+  reg [63:0] cc_read_IP_reg3;
+  reg [63:0] cc_read_IP_reg4;
+  reg [63:0] cc_read_IP_reg5;
  // reg [47:0] cc_read_IP_REG3;
  // reg [47:0] cc_read_IP_REG4;
-  reg  [64:0] cc_base_IP;
-  wire [64:0] cc_base_IP_d;
+  reg  [63:0] cc_base_IP;
+  wire [63:0] cc_base_IP_d;
   wire [8:0] cc_base_dummy9;
   wire [8:0] cc_base_dummy9dec;
   wire cc_base_sec;
@@ -214,7 +214,7 @@ module frontend1(
 
   wire [3:0] cc_attr_d;
   wire [3:0] ixceptAttr;
-  reg [64:0] miss_IP;
+  reg [63:0] miss_IP;
   //reg [47:0] link_IP;
   reg [23:0] proc;
   reg kmode;
@@ -386,8 +386,8 @@ module frontend1(
     
   wire [3:0][3:0] jmp_off;
   reg [3:0] jmp_off_reg[3:0];
-  wire [3:0][64:0] jdec_const;
-  reg [64:0] jdec_const_reg[3:0];
+  wire [3:0][63:0] jdec_const;
+  reg [63:0] jdec_const_reg[3:0];
   wire [3:0] jdec_bkjump;
   wire [3:0][INSTR_WIDTH-1:0] jmp_instr;
   wire [3:0][3:0] jmp_magic;
@@ -537,7 +537,7 @@ module frontend1(
   wire [3:0] btb_predB;
   wire [3:0] btb_predA;
   wire [3:0] btb_cond;
-  wire [64:0] btb_tgt;
+  wire [63:0] btb_tgt;
   wire [62:0] btb_tgt0;
   wire [62:0] btb_tgt1;
   wire [62:0] btb_tgt2;
@@ -589,7 +589,7 @@ module frontend1(
   reg [5:0] iqe_jcnt_reg2;
 
 
-  wire [64:0] btbx_tgt;
+  wire [63:0] btbx_tgt;
   wire [4:0]       btbx_jlink0;
   wire [`ZERO:0]  btbx_jlnpos0;
   wire [`ZERO:0] btbx_jlnjpos0;
@@ -681,7 +681,7 @@ module frontend1(
 //  wire instrEn2=instr
   wire jumpTK_btb_fstall;
   reg jumpTK_en;
-  reg [64:0] jumpTK_addr;
+  reg [63:0] jumpTK_addr;
   reg [3:0] jumpTK_attr;
 
   wire [3:0] btb_attr0;

@@ -234,12 +234,12 @@ module stq(
   wire [7:0][3:0] chk5_odd1;
   wire [7:0][3:0] WNL0_odd1;
   wire [7:0][3:0] WNL1_odd1;
-  wire [64:0][1:0] chk0_addrOE;
-  wire [64:0][1:0] chk1_addrOE;
-  wire [64:0][1:0] chk2_addrOE;
-  wire [64:0][1:0] chk3_addrOE;
-  wire [64:0][1:0] chk4_addrOE;
-  wire [64:0][1:0] chk5_addrOE;
+  wire [63:0][1:0] chk0_addrOE;
+  wire [63:0][1:0] chk1_addrOE;
+  wire [63:0][1:0] chk2_addrOE;
+  wire [63:0][1:0] chk3_addrOE;
+  wire [63:0][1:0] chk4_addrOE;
+  wire [63:0][1:0] chk5_addrOE;
   wire [31:0] chk0_banks;
   wire [31:0] chk1_banks;
   wire [31:0] chk2_banks;
@@ -256,18 +256,18 @@ module stq(
   wire [31:0] chk5_banks2;
   wire [31:0] WNL0_banks2;
   wire [31:0] WNL1_banks2;
-  wire [64:0] WLN0_match;
-  wire [64:0] WLN1_match;
-  wire [64:0] WNL0_en0;
-  wire [64:0] WNL1_en0;
-  wire [64:0] wrt0_en0;
-  wire [64:0] wrt1_en0;
-  wire [64:0] upd0_en0;
-  wire [64:0] upd1_en0;
-  wire [64:0] passe_en;
-  wire [64:0] passe;
-  wire [64:0] free;
-  wire [64:0] upd;
+  wire [63:0] WLN0_match;
+  wire [63:0] WLN1_match;
+  wire [63:0] WNL0_en0;
+  wire [63:0] WNL1_en0;
+  wire [63:0] wrt0_en0;
+  wire [63:0] wrt1_en0;
+  wire [63:0] upd0_en0;
+  wire [63:0] upd1_en0;
+  wire [63:0] passe_en;
+  wire [63:0] passe;
+  wire [63:0] free;
+  wire [63:0] upd;
 
   
   wire [5:0][139:0] chk_data;
@@ -314,24 +314,24 @@ module stq(
 
   wire [5:0][1:0] chk_enD;
 
-  wire [7:0][64:0] chk0_match;
-  wire [7:0][64:0] chk1_match;
-  wire [7:0][64:0] chk2_match;
-  wire [7:0][64:0] chk3_match;
-  wire [7:0][64:0] chk4_match;
-  wire [7:0][64:0] chk5_match;
-  wire [7:0][64:0] chk0_partial;
-  wire [7:0][64:0] chk1_partial;
-  wire [7:0][64:0] chk2_partial;
-  wire [7:0][64:0] chk3_partial;
-  wire [7:0][64:0] chk4_partial;
-  wire [7:0][64:0] chk5_partial;
-  wire [3:0][64:0] chk0_match_first;
-  wire [3:0][64:0] chk1_match_first;
-  wire [3:0][64:0] chk2_match_first;
-  wire [3:0][64:0] chk3_match_first;
-  wire [3:0][64:0] chk4_match_first;
-  wire [3:0][64:0] chk5_match_first;
+  wire [7:0][63:0] chk0_match;
+  wire [7:0][63:0] chk1_match;
+  wire [7:0][63:0] chk2_match;
+  wire [7:0][63:0] chk3_match;
+  wire [7:0][63:0] chk4_match;
+  wire [7:0][63:0] chk5_match;
+  wire [7:0][63:0] chk0_partial;
+  wire [7:0][63:0] chk1_partial;
+  wire [7:0][63:0] chk2_partial;
+  wire [7:0][63:0] chk3_partial;
+  wire [7:0][63:0] chk4_partial;
+  wire [7:0][63:0] chk5_partial;
+  wire [3:0][63:0] chk0_match_first;
+  wire [3:0][63:0] chk1_match_first;
+  wire [3:0][63:0] chk2_match_first;
+  wire [3:0][63:0] chk3_match_first;
+  wire [3:0][63:0] chk4_match_first;
+  wire [3:0][63:0] chk5_match_first;
   wire [7:0][1:0] chk0_matchW;
   wire [7:0][1:0] chk1_matchW;
   wire [7:0][1:0] chk2_matchW;
@@ -388,25 +388,25 @@ module stq(
   wire [7:0][3:0] WNL0_bytes;
   wire [7:0][3:0] WNL1_bytes;
 
-  wire [64:0][1:0] chk0_addrEO;
-  wire [64:0][1:0] chk1_addrEO;
-  wire [64:0][1:0] chk2_addrEO;
-  wire [64:0][1:0] chk3_addrEO;
-  wire [64:0][1:0] chk4_addrEO;
-  wire [64:0][1:0] chk5_addrEO;
+  wire [63:0][1:0] chk0_addrEO;
+  wire [63:0][1:0] chk1_addrEO;
+  wire [63:0][1:0] chk2_addrEO;
+  wire [63:0][1:0] chk3_addrEO;
+  wire [63:0][1:0] chk4_addrEO;
+  wire [63:0][1:0] chk5_addrEO;
 
-  wire [3:0][64:0] chk0_firstA;
-  wire [3:0][64:0] chk1_firstA;
-  wire [3:0][64:0] chk2_firstA;
-  wire [3:0][64:0] chk3_firstA;
-  wire [3:0][64:0] chk4_firstA;
-  wire [3:0][64:0] chk5_firstA;
-  wire [3:0][64:0] chk0_firstB;
-  wire [3:0][64:0] chk1_firstB;
-  wire [3:0][64:0] chk2_firstB;
-  wire [3:0][64:0] chk3_firstB;
-  wire [3:0][64:0] chk4_firstB;
-  wire [3:0][64:0] chk5_firstB;
+  wire [3:0][63:0] chk0_firstA;
+  wire [3:0][63:0] chk1_firstA;
+  wire [3:0][63:0] chk2_firstA;
+  wire [3:0][63:0] chk3_firstA;
+  wire [3:0][63:0] chk4_firstA;
+  wire [3:0][63:0] chk5_firstA;
+  wire [3:0][63:0] chk0_firstB;
+  wire [3:0][63:0] chk1_firstB;
+  wire [3:0][63:0] chk2_firstB;
+  wire [3:0][63:0] chk3_firstB;
+  wire [3:0][63:0] chk4_firstB;
+  wire [3:0][63:0] chk5_firstB;
   wire [3:0] chk0_hasA;
   wire [3:0] chk1_hasA;
   wire [3:0] chk2_hasA;
@@ -420,8 +420,8 @@ module stq(
   wire [3:0] chk4_hasB;
   wire [3:0] chk5_hasB;
 
-  wire [64:0] free_en;
-  wire [64:0] free;
+  wire [63:0] free_en;
+  wire [63:0] free;
 
   wire [5:0] rdy={chk5_en,chk4_en,chk3_en,chk2_en,chk1_en,chk0_en};
   wire [5:0] chk_wb={chk5_adata[`lsaddr_flag] & chk5_en,chk4_adata[`lsaddr_flag] & chk4_en,chk3_adata[`lsaddr_flag] & chk3_en,
@@ -430,9 +430,9 @@ module stq(
   wire [5:0] chk_wb1;
   wire chk_wb0_has,chk_wb1_has,chk_wb2_has;
   reg [5:0] chk_mask;
-  reg [64:0] mask;
-  reg [64:0] nmask;
-  reg [64:0] mask2;
+  reg [63:0] mask;
+  reg [63:0] nmask;
+  reg [63:0] mask2;
   
   function [31:0] lowt;
       input [31:0] data;

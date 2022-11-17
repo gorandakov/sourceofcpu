@@ -17,8 +17,8 @@ limitations under the License.
 module icompr(clk,clkEn,R,C,A_out,B_out,and1,is_sig,sig,sm_sig);
   input clk;
   input clkEn;
-  input [64:0] R;
-  input [64:0] C;
+  input [63:0] R;
+  input [63:0] C;
   output [127:0] A_out;
   output [127:0] B_out;
   input and1;
@@ -11226,133 +11226,133 @@ module icompr(clk,clkEn,R,C,A_out,B_out,and1,is_sig,sig,sm_sig);
   wire HA_cout_563;
   wire HA_cout_564;
   wire HA_cout_565;
-  wire [64:0] inp_0;
+  wire [63:0] inp_0;
 
-  wire [64:0] inp_1;
+  wire [63:0] inp_1;
 
-  wire [64:0] inp_2;
+  wire [63:0] inp_2;
 
-  wire [64:0] inp_3;
+  wire [63:0] inp_3;
 
-  wire [64:0] inp_4;
+  wire [63:0] inp_4;
 
-  wire [64:0] inp_5;
+  wire [63:0] inp_5;
 
-  wire [64:0] inp_6;
+  wire [63:0] inp_6;
 
-  wire [64:0] inp_7;
+  wire [63:0] inp_7;
 
-  wire [64:0] inp_8;
+  wire [63:0] inp_8;
 
-  wire [64:0] inp_9;
+  wire [63:0] inp_9;
 
-  wire [64:0] inp_10;
+  wire [63:0] inp_10;
 
-  wire [64:0] inp_11;
+  wire [63:0] inp_11;
 
-  wire [64:0] inp_12;
+  wire [63:0] inp_12;
 
-  wire [64:0] inp_13;
+  wire [63:0] inp_13;
 
-  wire [64:0] inp_14;
+  wire [63:0] inp_14;
 
-  wire [64:0] inp_15;
+  wire [63:0] inp_15;
 
-  wire [64:0] inp_16;
+  wire [63:0] inp_16;
 
-  wire [64:0] inp_17;
+  wire [63:0] inp_17;
 
-  wire [64:0] inp_18;
+  wire [63:0] inp_18;
 
-  wire [64:0] inp_19;
+  wire [63:0] inp_19;
 
-  wire [64:0] inp_20;
+  wire [63:0] inp_20;
 
-  wire [64:0] inp_21;
+  wire [63:0] inp_21;
 
-  wire [64:0] inp_22;
+  wire [63:0] inp_22;
 
-  wire [64:0] inp_23;
+  wire [63:0] inp_23;
 
-  wire [64:0] inp_24;
+  wire [63:0] inp_24;
 
-  wire [64:0] inp_25;
+  wire [63:0] inp_25;
 
-  wire [64:0] inp_26;
+  wire [63:0] inp_26;
 
-  wire [64:0] inp_27;
+  wire [63:0] inp_27;
 
-  wire [64:0] inp_28;
+  wire [63:0] inp_28;
 
-  wire [64:0] inp_29;
+  wire [63:0] inp_29;
 
-  wire [64:0] inp_30;
+  wire [63:0] inp_30;
 
-  wire [64:0] inp_31;
+  wire [63:0] inp_31;
 
-  wire [64:0] inp_32;
+  wire [63:0] inp_32;
 
-  wire [64:0] inp_33;
+  wire [63:0] inp_33;
 
-  wire [64:0] inp_34;
+  wire [63:0] inp_34;
 
-  wire [64:0] inp_35;
+  wire [63:0] inp_35;
 
-  wire [64:0] inp_36;
+  wire [63:0] inp_36;
 
-  wire [64:0] inp_37;
+  wire [63:0] inp_37;
 
-  wire [64:0] inp_38;
+  wire [63:0] inp_38;
 
-  wire [64:0] inp_39;
+  wire [63:0] inp_39;
 
-  wire [64:0] inp_40;
+  wire [63:0] inp_40;
 
-  wire [64:0] inp_41;
+  wire [63:0] inp_41;
 
-  wire [64:0] inp_42;
+  wire [63:0] inp_42;
 
-  wire [64:0] inp_43;
+  wire [63:0] inp_43;
 
-  wire [64:0] inp_44;
+  wire [63:0] inp_44;
 
-  wire [64:0] inp_45;
+  wire [63:0] inp_45;
 
-  wire [64:0] inp_46;
+  wire [63:0] inp_46;
 
-  wire [64:0] inp_47;
+  wire [63:0] inp_47;
 
-  wire [64:0] inp_48;
+  wire [63:0] inp_48;
 
-  wire [64:0] inp_49;
+  wire [63:0] inp_49;
 
-  wire [64:0] inp_50;
+  wire [63:0] inp_50;
 
-  wire [64:0] inp_51;
+  wire [63:0] inp_51;
 
-  wire [64:0] inp_52;
+  wire [63:0] inp_52;
 
-  wire [64:0] inp_53;
+  wire [63:0] inp_53;
 
-  wire [64:0] inp_54;
+  wire [63:0] inp_54;
 
-  wire [64:0] inp_55;
+  wire [63:0] inp_55;
 
-  wire [64:0] inp_56;
+  wire [63:0] inp_56;
 
-  wire [64:0] inp_57;
+  wire [63:0] inp_57;
 
-  wire [64:0] inp_58;
+  wire [63:0] inp_58;
 
-  wire [64:0] inp_59;
+  wire [63:0] inp_59;
 
-  wire [64:0] inp_60;
+  wire [63:0] inp_60;
 
-  wire [64:0] inp_61;
+  wire [63:0] inp_61;
 
-  wire [64:0] inp_62;
+  wire [63:0] inp_62;
 
-  wire [64:0] inp_63;
+  wire [63:0] inp_63;
 
   assign inp_0[62:32]=C[62:32] & {31{R[0]}} & {31{and1}};
   assign inp_0[30:0]=C[30:0] & {31{R[0]}};

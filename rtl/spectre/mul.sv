@@ -17,9 +17,9 @@ limitations under the License.
 module agusec_mul(
   A,B,res);
 
-  input [64:0] A;
+  input [63:0] A;
   input [11:0] B;
-  output [64:0] res;
+  output [63:0] res;
 
   wire [7:0] low;
   wire C;

@@ -144,7 +144,7 @@ module frontend1(
   
   input csrss_en;
   input [15:0] csrss_addr;
-  input [64:0] csrss_data;
+  input [63:0] csrss_data;
 
   wire [DATA_WIDTH/2-1:0] read_data;
   wire [14:0] read_dataX;
@@ -350,8 +350,8 @@ module frontend1(
     
   wire [3:0][3:0] jmp_off;
   reg [3:0] jmp_off_reg[3:0];
-  wire [3:0][64:0] jdec_const;
-  reg [64:0] jdec_const_reg[3:0];
+  wire [3:0][63:0] jdec_const;
+  reg [63:0] jdec_const_reg[3:0];
   wire [3:0] jdec_bkjump;
   wire [3:0][INSTR_WIDTH-1:0] jmp_instr;
   wire [3:0][3:0] jmp_magic;

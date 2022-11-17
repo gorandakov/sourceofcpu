@@ -180,7 +180,7 @@ module fu_alu(
 
   output [83:0] fcvtout;
   output [1:0] DataAlt;
-  input [64:0] FUCVTIN;
+  input [63:0] FUCVTIN;
 
   reg [1:0] nDataAlt;
   reg [1:0] nDataAlt_reg;

@@ -24,8 +24,8 @@ module ldD2nativeD(
   to_dbl,to_ext,
   res,
   res_x);
-  input [64:0] A;
-  input [64:0] Ax;
+  input [63:0] A;
+  input [63:0] Ax;
   input en;
   input to_dbl;
   input to_ext;
@@ -74,10 +74,10 @@ module ldD2nativeD(
   assign resY=(A[62:52]==0 && A_z) ? {1'b0,A[63],15'b0,1'b0,denor,11'b0} :  81'bz;
 
   assign res[64:0]=(en&to_dbl) ? resX : 65'bz;
-  assign {res[64],res[80:65],res[64:0]}=(en&to_ext) ? resY : 81'bz;
+  assign {res[64],res[80:65],res[63:0]}=(en&to_ext) ? resY : 81'bz;
   
   assign res_x[64:0]=(en&to_dbl) ? ~resX : 65'bz;
-  assign {res_x[64],res_x[80:65],res[64:0]}=(en&to_ext) ? ~resY : 81'bz;
+  assign {res_x[64],res_x[80:65],res[63:0]}=(en&to_ext) ? ~resY : 81'bz;
 endmodule
 
 module ldS2nativeS(
@@ -157,7 +157,7 @@ module stNativeD2D(A,en,from_dbl,from_ext,res);
   input en; 
   input from_dbl;
   input from_ext;
-  output [64:0] res;
+  output [63:0] res;
 
   wire [15:0] expA=from_dbl ? {A[64],{4{~A[64]}},A[62:52]} : {A[64],A[79:65]};
   wire [15:0] expOff;

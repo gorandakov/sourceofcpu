@@ -90,7 +90,7 @@ module pager(
   input [15:0] csrss_no;
   input csrss_thread;
   input csrss_en;
-  input [64:0] csrss_data;
+  input [63:0] csrss_data;
   output [REG_WIDTH-1:0] mOp_register;
   output [8:0] mOp_LSQ;
   output [9:0] mOp_II;
@@ -122,18 +122,18 @@ module pager(
   //reg [1:0] pg;
   //reg [1:0] vm;
   //reg [1:0] codeInVm;
-  reg [64:0] mflags;
-  reg [64:0] PTR[1:0];
-  reg [64:0] VPTR[1:0];
-  reg [64:0] CPTR;
-  reg [64:0] CMSK;
-  reg [64:0] IPTR;
-  reg [64:0] IMSK;
-  reg [64:0] ptr;
-  reg [64:0] ptr2;
-  reg [64:0] ptrB;
+  reg [63:0] mflags;
+  reg [63:0] PTR[1:0];
+  reg [63:0] VPTR[1:0];
+  reg [63:0] CPTR;
+  reg [63:0] CMSK;
+  reg [63:0] IPTR;
+  reg [63:0] IMSK;
+  reg [63:0] ptr;
+  reg [63:0] ptr2;
+  reg [63:0] ptrB;
   reg do_ptr2;
-  reg [64:0] SPTR;
+  reg [63:0] SPTR;
   reg [20:0] sptr;
   reg [11:0] stageA;
   reg [7:0] stageB;
@@ -170,7 +170,7 @@ module pager(
   reg [PERM_WIDTH-1:0] permReq;
   wire all_shr=finalXtra0[`page_global] && finalHug0|finalXtra1[`page_global]
   &&  permReq[`permreq_code]|finalXtra2[`page_global];
-  reg [64:0] data_in_reg;
+  reg [63:0] data_in_reg;
   reg new_inv_reg;
 
   assign writeTlb_data0[`dtlbData_sys]=finalXtra0[`page_sys];  

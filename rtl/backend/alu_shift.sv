@@ -55,19 +55,19 @@ module alu_shift(
   input nDataAlt;//0=feeding data through multiclk unit
   output wire [EXCEPT_WIDTH-1:0] retData;
   input [5:0] valS;
-  input [64:0] val1;
-  input [64:0] val2;
-  output [64:0] valRes;
+  input [63:0] val1;
+  input [63:0] val2;
+  output [63:0] valRes;
   
   wire is_shift;
   wire is_8H;
   wire doJmp;
-  wire [64:0] valres0;
+  wire [63:0] valres0;
   wire [7:0] valres1;  
   reg is_shift_reg;
   reg [3:0] coutL_reg;
   reg coutR_reg;
-  reg [64:0] valres0_reg;
+  reg [63:0] valres0_reg;
   reg dir_reg;
   wire coutR;
   wire [3:0] coutL;

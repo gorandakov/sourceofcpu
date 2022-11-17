@@ -106,7 +106,7 @@ module sagu(
   input [5:0] WQ_no;
   input thread;
   input lsflag;
-  input [64:0] cmplxAddr;
+  input [63:0] cmplxAddr;
   input cin_secq;
   input ptrdiff;
   output tlbMiss;
@@ -145,7 +145,7 @@ module sagu(
   input [15:0] csrss_no;
   input csrss_en;
   input csrss_thr;
-  input [64:0] csrss_data;
+  input [63:0] csrss_data;
 
   reg [2:0] opsize;
   wire hasIndex;
@@ -245,8 +245,8 @@ module sagu(
 
   wire [4:0] lastSz;
 
-  reg [64:0] mflags;
-  wire [64:0] mflags0;
+  reg [63:0] mflags;
+  wire [63:0] mflags0;
   reg [23:0] pproc;  
   reg [23:0] sproc;  
   reg [23:0] proc;

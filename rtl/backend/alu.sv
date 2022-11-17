@@ -53,9 +53,9 @@ module alu(clk,rst,except,except_thread,thread,operation,cond,sub,dataEn,nDataAl
 
   reg [64:0] valRes_reg;
 
-  wire [64:0] valRes1;  
+  wire [63:0] valRes1;  
   wire [7:0] valRes8;
-  wire [64:0] valRes2;  
+  wire [63:0] valRes2;  
 
   wire flag64_ZF;
   wire flag32_ZF;
@@ -146,9 +146,9 @@ module alu(clk,rst,except,except_thread,thread,operation,cond,sub,dataEn,nDataAl
   wire [7:0] smallOP;
   reg nDataAlt_reg;
 
-  wire [64:0] val_and;
-  wire [64:0] val_or;
-  wire [64:0] val_xor;
+  wire [63:0] val_and;
+  wire [63:0] val_or;
+  wire [63:0] val_xor;
  
   wire nDataAlt2; 
   wire [3:0] val1One;
@@ -182,8 +182,8 @@ module alu(clk,rst,except,except_thread,thread,operation,cond,sub,dataEn,nDataAl
   reg cin_seq_reg;
   wire is_ptr,is_sub;
   wire cout_seq;
-  wire [64:0] ptr;
-  reg [64:0] ptr_reg;
+  wire [63:0] ptr;
+  reg [63:0] ptr_reg;
   reg is_ptr_reg;
   reg is_ptr_sub;
 

@@ -240,7 +240,7 @@ module fun_fpu_BOTH(
   input [67:0] XI_dataS;
   input fxFRT_alten_reg3;
   output daltX;
-  output [64:0] FUCVT1;
+  output [63:0] FUCVT1;
   
   output [67:0] outAH;
   output [67:0] outBH;
