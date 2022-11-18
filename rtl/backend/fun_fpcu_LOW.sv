@@ -157,8 +157,8 @@ module fun_fpuL(
   input [16+67:0] FUF1M;
   input [16+67:0] FUF2N;
   input [16+67:0] FUF3M;
-  input [16+67:0] FUF4N;
-  input [16+67:0] FUF5N;
+  inout [16+67:0] FUF4N;
+  inout [16+67:0] FUF5N;
 
   input [16+67:0] FUF0;
   input [16+67:0] FUF1;

@@ -153,8 +153,8 @@ module fun_fpuH(
   input [67:0] FUF1N;
   input [67:0] FUF2N;
   input [67:0] FUF3N;
-  input [67:0] FUF4N;
-  input [67:0] FUF5N;
+  inout [67:0] FUF4N;
+  inout [67:0] FUF5N;
 
   inout [67:0] FUF6N;
   inout [67:0] FUF7N;

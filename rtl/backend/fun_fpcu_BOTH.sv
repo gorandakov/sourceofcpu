@@ -196,10 +196,10 @@ module fun_fpu_BOTH(
   input [16+67:0] FUFL1_m;
   input [16+67:0] FUFL2_m;
   input [16+67:0] FUFL3_m;
-  input [16+67:0] FUFL4_m;
-  input [16+67:0] FUFL5_m;
-  input [67:0] FUFH4_n;
-  input [67:0] FUFH5_n;
+  inout [16+67:0] FUFL4_m;
+  inout [16+67:0] FUFL5_m;
+  inout [67:0] FUFH4_n;
+  inout [67:0] FUFH5_n;
 
   inout [67:0] FUFH6_n;
   inout [67:0] FUFH7_n;

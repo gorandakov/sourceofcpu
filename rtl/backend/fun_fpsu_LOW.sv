@@ -161,8 +161,8 @@ module fun_fpuSL(
   input [67:0] FUF1M;
   input [67:0] FUF2N;
   input [67:0] FUF3M;
-  input [67:0] FUF4N;
-  input [67:0] FUF5N;
+  inout [67:0] FUF4N;
+  inout [67:0] FUF5N;
 
  
   output [5:0] FOOSL0_out;
