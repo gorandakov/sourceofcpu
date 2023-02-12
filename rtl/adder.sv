@@ -920,6 +920,7 @@ module adder_inc(a,out,en,cout);
   input en;
   output cout;
   
+  wire [WIDTH-1:0] outX;
 
   wire [WIDTH-1:0] P0;
   wire [WIDTH-1:0] nP1;
@@ -944,12 +945,14 @@ module adder_inc(a,out,en,cout);
   assign nC1={nP[WIDTH-2:0],1'b0};
   
   assign cout=P[WIDTH-1];
+
+  assign out=outX;
   
   generate
     for (i=0;i<WIDTH;i=i+1)
       begin : out_gen
-        assign out[i]=(a[i] & en) ? ~C1[i] : 1'bz;
-        assign out[i]=(~a[i] & en) ? ~nC1[i] : 1'bz;
+        assign outX[i]=(a[i] & en) ? ~C1[i] : 1'bz;
+        assign outX[i]=(~a[i] & en) ? ~nC1[i] : 1'bz;
       end 
 
     if (WIDTH>1)
@@ -1161,8 +1164,8 @@ module get_carry(a,b,cin,cout); //cout=a bigger or equal than b if b inv, cin=1
       end
     else
       begin
-        oai21_array #(WIDTH) C_mod(nP0,{WIDTH{~cin}},nG0,C);
-        not_array #(WIDTH) nC_mod(C,nC);
+        oai21_array #(WIDTH) C1_mod(nP0,{WIDTH{~cin}},nG0,C);
+        not_array #(WIDTH) nC1_mod(C,nC);
       end
     if (WIDTH>2)
       begin
@@ -1173,8 +1176,8 @@ module get_carry(a,b,cin,cout); //cout=a bigger or equal than b if b inv, cin=1
       end
     else if (WIDTH>1)
       begin
-        aoi21_array #(WIDTH) nC_mod(P1,{WIDTH{cin}},G1,nC);
-        not_array #(WIDTH) C_mod(nC,C);
+        aoi21_array #(WIDTH) nC2_mod(P1,{WIDTH{cin}},G1,nC);
+        not_array #(WIDTH) C2_mod(nC,C);
       end
 
     if (WIDTH>4)
@@ -1186,8 +1189,8 @@ module get_carry(a,b,cin,cout); //cout=a bigger or equal than b if b inv, cin=1
       end
     else if (WIDTH>2)
       begin
-        oai21_array #(WIDTH) C_mod(nP2,{WIDTH{~cin}},nG2,C);
-        not_array #(WIDTH) nC_mod(C,nC);
+        oai21_array #(WIDTH) C3_mod(nP2,{WIDTH{~cin}},nG2,C);
+        not_array #(WIDTH) nC3_mod(C,nC);
       end
     if (WIDTH>8)
       begin
@@ -1198,8 +1201,8 @@ module get_carry(a,b,cin,cout); //cout=a bigger or equal than b if b inv, cin=1
       end
     else if (WIDTH>4)
       begin
-        aoi21_array #(WIDTH) nC_mod(P3,{WIDTH{cin}},G3,nC);
-        not_array #(WIDTH) C_mod(nC,C);
+        aoi21_array #(WIDTH) nC4_mod(P3,{WIDTH{cin}},G3,nC);
+        not_array #(WIDTH) C4_mod(nC,C);
       end
 
     if (WIDTH>16)
@@ -1211,8 +1214,8 @@ module get_carry(a,b,cin,cout); //cout=a bigger or equal than b if b inv, cin=1
       end
     else if (WIDTH>8)
       begin
-        oai21_array #(WIDTH) C_mod(nP4,{WIDTH{~cin}},nG4,C);
-        not_array #(WIDTH) nC_mod(C,nC);
+        oai21_array #(WIDTH) C5_mod(nP4,{WIDTH{~cin}},nG4,C);
+        not_array #(WIDTH) nC5_mod(C,nC);
       end
     if (WIDTH>32)
       begin
@@ -1223,8 +1226,8 @@ module get_carry(a,b,cin,cout); //cout=a bigger or equal than b if b inv, cin=1
       end
     else if (WIDTH>16)
       begin
-        aoi21_array #(WIDTH) nC_mod(P5,{WIDTH{cin}},G5,nC);
-        not_array #(WIDTH) C_mod(nC,C);
+        aoi21_array #(WIDTH) nC6_mod(P5,{WIDTH{cin}},G5,nC);
+        not_array #(WIDTH) C6_mod(nC,C);
       end
 
     if (WIDTH>64)
@@ -1234,8 +1237,8 @@ module get_carry(a,b,cin,cout); //cout=a bigger or equal than b if b inv, cin=1
         oai21_array #(WIDTH-64) G7_mod(nP6[WIDTH-1:64],nG6[WIDTH-65:0],nG6[WIDTH-1:64],G7[WIDTH-1:64]);
         not_array #(64) G7_tail_mod(nG6[63:0],G7[63:0]);
 
-        aoi21_array #(WIDTH) nC_mod(P7,{WIDTH{cin}},G7,nC);
-        not_array #(WIDTH) C_mod(nC,C);
+        aoi21_array #(WIDTH) nC7_mod(P7,{WIDTH{cin}},G7,nC);
+        not_array #(WIDTH) C7_mod(nC,C);
       end
     else if (WIDTH>32)
       begin

@@ -126,6 +126,7 @@ module cntrl_get_IP(
   input excpt;
   output [62:0] nextIP;
   
+  wire [62:0] nextIP0;
   wire [4:0] par0;
   wire [4:0] par1;
   wire [63:0] val2;
@@ -143,8 +144,10 @@ module cntrl_get_IP(
   4'h1
   );
 
-  assign nextIP=(last&~excpt) ? {val2[63:5],4'd0} : 4'bz;
-  assign nextIP=(~last&~excpt) ? {val2[63:5],srcIPOff[3:0]} : 4'bz;
+  assign nextIP0=(last&~excpt) ? {val2[63:5],4'd0} : 63'bz;
+  assign nextIP0=(~last&~excpt) ? {val2[63:5],srcIPOff[3:0]} : 63'bz;
+
+  assign nextIP=nextIP0;
 
 endmodule
 
