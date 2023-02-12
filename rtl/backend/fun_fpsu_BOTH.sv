@@ -218,6 +218,34 @@ module fun_fpsu_BOTH(
   wire [67:0] u5_Bx;
   wire [67:0] u6_Ax;
   wire [67:0] u6_Bx;
+  
+  wire  [67:0] FUFH4X;
+  wire  [67:0] FUFH5X;
+  wire  [67:0] FUFH6X;
+  wire  [67:0] FUFH7X;
+  wire  [67:0] FUFH8X;
+  wire  [67:0] FUFH9X;
+
+  assign FUFH4=FUFH4X;
+  assign FUFH5=FUFH5X;
+  assign FUFH6=FUFH6X;
+  assign FUFH7=FUFH7X;
+  assign FUFH8=FUFH8X;
+  assign FUFH9=FUFH9X;
+
+  wire  [67:0] FUFL4X;
+  wire  [67:0] FUFL5X;
+  wire  [67:0] FUFL6X;
+  wire  [67:0] FUFL7X;
+  wire  [67:0] FUFL8X;
+  wire  [67:0] FUFL9X;
+
+  assign FUFL4=FUFL4X;
+  assign FUFL5=FUFL5X;
+  assign FUFL6=FUFL6X;
+  assign FUFL7=FUFL7X;
+  assign FUFL8=FUFL8X;
+  assign FUFL9=FUFL9X;
 
   wire [13:0] u1_retH;
   wire u1_ret_enH;
