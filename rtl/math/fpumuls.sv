@@ -38,6 +38,9 @@ module fpumuls(clk,rst,A,B,copyA,en,rmode,res,raise,fpcsr);
   input [31:0] fpcsr;
   
   
+  wire [32:0] res_X;
+
+  assign res=res_X;
   //reg [80:0] A_reg;
  // reg [80:0] B_reg;
   wire [47:0] part0;
@@ -107,7 +110,7 @@ module fpumuls(clk,rst,A,B,copyA,en,rmode,res,raise,fpcsr);
     part0,part1);
   adder #(48) prodAdd_mod(part0,part1,prod,1'b0,1'b1,,,,);
 
-  adder2o #(24) resAddD_mod(prod_reg[46:23],rndbit_dbl,{res[22:0],dummy1_3},{dummy1_4,res[22:0]},1'b0,
+  adder2o #(24) resAddD_mod(prod_reg[46:23],rndbit_dbl,{res_X[22:0],dummy1_3},{dummy1_4,res_X[22:0]},1'b0,
       prod_reg[47] & DBL_rnd1 & en_reg2 & ~spec_any || ~prod_reg[47] & DBL_rnd0 & DBL_rnflip0 & en_reg2 & ~spec_any,
       ~prod_reg[47] & DBL_rnd0 & ~DBL_rnflip0 & en_reg2 & ~spec_any,,,,);
 
@@ -137,11 +140,11 @@ module fpumuls(clk,rst,A,B,copyA,en,rmode,res,raise,fpcsr);
     ~(~exp1_non_denor_IEEE & fpcsr_reg[`csrfpu_daz] || exp_exp1_reg[9]) ? exp_exp1_reg : 10'bz;
 
 
-  assign res[22:0]=(prod_reg[47] & ~DBL_rnd1 & ~spec_any & en_reg2) ? prod_reg[46:24]:23'bz;
-  assign res[22:0]=(~prod_reg[47] & ~DBL_rnd0 & ~spec_any & en_reg2) ? prod_reg[45:23]:23'bz;
+  assign res_X[22:0]=(prod_reg[47] & ~DBL_rnd1 & ~spec_any & en_reg2) ? prod_reg[46:24]:23'bz;
+  assign res_X[22:0]=(~prod_reg[47] & ~DBL_rnd0 & ~spec_any & en_reg2) ? prod_reg[45:23]:23'bz;
    
-  assign {res[32],res[31:23]}=(prod_reg[47] & ~spec_any & en_reg2) ? {exp_exp1_reg2[8],sgn_reg2,exp_exp1_reg2[7:0]} : 10'bz;
-  assign {res[32],res[31:23]}=(~prod_reg[47] & ~spec_any & en_reg2) ? {exp_exp_reg2[8],sgn_reg2,exp_exp_reg2[7:0]} : 10'bz;
+  assign {res_X[32],res_X[31:23]}=(prod_reg[47] & ~spec_any & en_reg2) ? {exp_exp1_reg2[8],sgn_reg2,exp_exp1_reg2[7:0]} : 10'bz;
+  assign {res_X[32],res_X[31:23]}=(~prod_reg[47] & ~spec_any & en_reg2) ? {exp_exp_reg2[8],sgn_reg2,exp_exp_reg2[7:0]} : 10'bz;
 
   assign expon=(prod_reg[47] & ~spec_any) ? 
     {~DBL_rnbit1 & ~ DBL_tail1,exp_exp1_reg2[9],exp1_non_denor_IEEE_reg2,exp1_oor_IEEE_reg2,exp1_oor_reg2} : 5'bz;
@@ -150,9 +153,9 @@ module fpumuls(clk,rst,A,B,copyA,en,rmode,res,raise,fpcsr);
   assign expon=spec_any ? 5'd4 : 5'bz; 
  
  
-  assign res[31]=(~spec_any & en_reg2) ? sgn_reg2 : 1'bz;
+  assign res_X[31]=(~spec_any & en_reg2) ? sgn_reg2 : 1'bz;
   
-  assign res=(spec_any & en_reg2) ? res_spec : 33'bz;
+  assign res_X=(spec_any & en_reg2) ? res_spec : 33'bz;
 
   assign DBL_rnbit0=prod_reg[22];
   assign DBL_tail0=|prod_reg[21:0];
@@ -216,6 +219,7 @@ module fpumuls(clk,rst,A,B,copyA,en,rmode,res,raise,fpcsr);
   always @(negedge clk)
 
   begin
+  //    if (res_X!=res_X) $display("res z muls");
       exp_exp_reg<=exp_exp;
       exp_exp1_reg<=exp_exp1;
       exp_exp_reg2<=exp_exp_d;

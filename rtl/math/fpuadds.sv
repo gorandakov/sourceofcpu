@@ -62,6 +62,10 @@ module fadds(
 //if no isDBL, set one op low bits to 0, other to one depening on rounding
 //width
 
+  wire [32:0] res_X;
+
+  assign res=res_X;
+
   wire sxor;
   reg sxor_reg;
   wire a_more;
@@ -242,19 +246,19 @@ module fadds(
   assign altpath=(expdiffA==0 || expdiffA==1 || expdiffB==1) && sxor;
   assign rndpath=(expdiffA==1 || expdiffB==1) && sxor;
   
-  assign res[22:0]=(renor_simple & ~spec_any & en_reg) ? renorS[22:0] : 23'bz;
-  assign {res[32],res[30:23]}=(renor_simple & ~spec_any & en_reg) ? renorE : 9'bz;
+  assign res_X[22:0]=(renor_simple & ~spec_any & en_reg) ? renorS[22:0] : 23'bz;
+  assign {res_X[32],res_X[30:23]}=(renor_simple & ~spec_any & en_reg) ? renorE : 9'bz;
   
-  assign res[22:0]=(renor_round & ~spec_any & en_reg) ? renorSR[22:0] : 23'bz;
-  assign {res[32],res[30:23]}=(renor_round & en_reg & ~spec_any) ? renorER : 9'bz;
+  assign res_X[22:0]=(renor_round & ~spec_any & en_reg) ? renorSR[22:0] : 23'bz;
+  assign {res_X[32],res_X[30:23]}=(renor_round & en_reg & ~spec_any) ? renorER : 9'bz;
 
-  assign res[31]=(renor_simple & en_reg & ~spec_any) ? A_s1_reg : 1'bz;
-  assign res[31]=(renor_round & en_reg & ~spec_any) ? A_s1_reg : 1'bz;
+  assign res_X[31]=(renor_simple & en_reg & ~spec_any) ? A_s1_reg : 1'bz;
+  assign res_X[31]=(renor_round & en_reg & ~spec_any) ? A_s1_reg : 1'bz;
   
 
-  assign res=(~renor_simple && ~renor_round &&  isDBL_reg && ~spec_any && en_reg) ? resX : 33'bz;
+  assign res_X=(~renor_simple && ~renor_round &&  isDBL_reg && ~spec_any && en_reg) ? resX : 33'bz;
 
-  assign res=(spec_any & en_reg) ? res_spec[32:0] : 33'bz;  
+  assign res_X=(spec_any & en_reg) ? res_spec[32:0] : 33'bz;  
 
   assign res_spec=spec_A_reg ? A_reg : 33'bz;
   assign res_spec=spec_B_reg ? B_reg : 33'bz;

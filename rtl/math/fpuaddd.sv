@@ -66,6 +66,12 @@ module fadd(
 //need to clear/set bits 63-54 if isDBL and corresponging conditions
 //if no isDBL, set one op low bits to 0, other to one depening on rounding
 //width
+  wire [67:0] res_X;
+  wire [15:0] res_X_hi;
+
+  assign res=res_X;
+  assign res_hi=res_X_hi;
+
   function [63:0] fracxfrm0;
       input [63:0] op;
       input dbl;
@@ -280,29 +286,29 @@ module fadd(
   assign altpath=(expdiffA==0 || expdiffA==1 || expdiffB==1) && sxor;
   assign rndpath=(expdiffA==1 || expdiffB==1) && sxor;
  
-  assign res[67:66]=en_reg ? `ptype_dbl : 2'bz;
+  assign res_X[67:66]=en_reg ? `ptype_dbl : 2'bz;
 
-  assign res[64:0]=(renor_simple & ~isDBL_reg & ~spec_any & en_reg) ? {renorS[63:32],1'b0,renorS[31:0]} : 65'bz;
-  assign res[52:0]=(renor_simple & isDBL_reg & ~spec_any & en_reg) ? {renorS[62:43],1'b0,renorS[42:11]} : 53'bz;
-  assign {res[65],res_hi[14:0]}=(renor_simple & ~isDBL_reg & ~spec_any & en_reg) ? renorE : 16'bz;
-  assign {res[65],res[63:53]}=(renor_simple & isDBL_reg & ~spec_any & en_reg) ? {renorE[15],renorE[10:0]} : 12'bz;
+  assign res_X[64:0]=(renor_simple & ~isDBL_reg & ~spec_any & en_reg) ? {renorS[63:32],1'b0,renorS[31:0]} : 65'bz;
+  assign res_X[52:0]=(renor_simple & isDBL_reg & ~spec_any & en_reg) ? {renorS[62:43],1'b0,renorS[42:11]} : 53'bz;
+  assign {res_X[65],res_X_hi[14:0]}=(renor_simple & ~isDBL_reg & ~spec_any & en_reg) ? renorE : 16'bz;
+  assign {res_X[65],res_X[63:53]}=(renor_simple & isDBL_reg & ~spec_any & en_reg) ? {renorE[15],renorE[10:0]} : 12'bz;
   
-  assign res[64:0]=(renor_round & ~isDBL_reg & ~spec_any & en_reg) ? {renorSR[63:32],1'b0,renorSR[31:0]} : 65'bz;
-  assign res[52:0]=(renor_round & isDBL_reg & ~spec_any & en_reg) ? {renorSR[62:43],1'b0,renorSR[42:11]} : 53'bz;
-  assign {res[65],res_hi[14:0]}=(renor_round & ~isDBL_reg & en_reg & ~spec_any) ? renorER : 16'bz;
-  assign {res[65],res[63:53]}=(renor_round & isDBL_reg & en_reg & ~spec_any) ? {renorER[11],renorER[10:0]} : 12'bz;
+  assign res_X[64:0]=(renor_round & ~isDBL_reg & ~spec_any & en_reg) ? {renorSR[63:32],1'b0,renorSR[31:0]} : 65'bz;
+  assign res_X[52:0]=(renor_round & isDBL_reg & ~spec_any & en_reg) ? {renorSR[62:43],1'b0,renorSR[42:11]} : 53'bz;
+  assign {res_X[65],res_X_hi[14:0]}=(renor_round & ~isDBL_reg & en_reg & ~spec_any) ? renorER : 16'bz;
+  assign {res_X[65],res_X[63:53]}=(renor_round & isDBL_reg & en_reg & ~spec_any) ? {renorER[11],renorER[10:0]} : 12'bz;
 
-  assign res_hi[15]=(renor_simple & ~isDBL_reg & en_reg & ~spec_any) ? A_s1_reg : 1'bz;
-  assign res[15]=(renor_round & ~isDBL_reg & en_reg & ~spec_any) ? A_s1_reg : 1'bz;
-  assign res[64]=(renor_simple & isDBL_reg & en_reg & ~spec_any) ? A_s1_reg : 1'bz;
-  assign res[64]=(renor_round & isDBL_reg & en_reg & ~spec_any) ? A_s1_reg : 1'bz;
+  assign res_X_hi[15]=(renor_simple & ~isDBL_reg & en_reg & ~spec_any) ? A_s1_reg : 1'bz;
+  assign res_X[15]=(renor_round & ~isDBL_reg & en_reg & ~spec_any) ? A_s1_reg : 1'bz;
+  assign res_X[64]=(renor_simple & isDBL_reg & en_reg & ~spec_any) ? A_s1_reg : 1'bz;
+  assign res_X[64]=(renor_round & isDBL_reg & en_reg & ~spec_any) ? A_s1_reg : 1'bz;
   
 
-  assign {res[65],res_hi,res[64:0]}=(~renor_simple && ~renor_round && ~isDBL_reg && ~spec_any && en_reg) ? {resY[80:32],1'b0,resY[31:0]} : 82'bz;
-  assign res[65:0]=(~renor_simple && ~renor_round &&  isDBL_reg && ~spec_any && en_reg) ? {resX[64:32],1'b0,resX[31:0]} : 66'bz;
+  assign {res_X[65],res_X_hi,res_X[64:0]}=(~renor_simple && ~renor_round && ~isDBL_reg && ~spec_any && en_reg) ? {resY[80:32],1'b0,resY[31:0]} : 82'bz;
+  assign res_X[65:0]=(~renor_simple && ~renor_round &&  isDBL_reg && ~spec_any && en_reg) ? {resX[64:32],1'b0,resX[31:0]} : 66'bz;
 
-  assign {res[65],res[64:0]}=(spec_any & en_reg) ? {res_spec[80],res_spec[63:32],1'b0,res_spec[31:0]} : 66'bz;  
-  assign res_hi=(spec_any & ~isDBL_reg & en_reg) ? {res_spec[79:64]} : 16'bz;  
+  assign {res_X[65],res_X[64:0]}=(spec_any & en_reg) ? {res_spec[80],res_spec[63:32],1'b0,res_spec[31:0]} : 66'bz;  
+  assign res_X_hi=(spec_any & ~isDBL_reg & en_reg) ? {res_spec[79:64]} : 16'bz;  
 
   assign res_spec=spec_A_reg ? A_reg : 81'bz;
   assign res_spec=spec_B_reg ? B_reg : 81'bz;
