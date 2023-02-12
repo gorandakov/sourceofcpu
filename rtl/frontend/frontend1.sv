@@ -17,7 +17,6 @@ limitations under the License.
 `include "../struct.sv"
 
 
-/*verilator hier_block*/
 module frontend1(
   clk,
   rst,
@@ -78,6 +77,7 @@ module frontend1(
   localparam INSTR_WIDTH=80;
   localparam CLS_WIDTH=13;
   parameter [4:0] BUS_ID=0;
+/*verilator hier_block*/
  
   input clk;
   input rst;

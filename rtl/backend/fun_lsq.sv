@@ -17,7 +17,6 @@ limitations under the License.
 
 `include "../struct.sv"
   
-/*verilator hier_block*/
 module fun_lsq(
   clk,
   rst,
@@ -74,6 +73,7 @@ module fun_lsq(
   doStall_LDQ,
   doStall_LSQ 
   );
+/*verilator hier_block*/
 
   input clk;
   input rst;

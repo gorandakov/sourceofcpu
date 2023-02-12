@@ -143,10 +143,8 @@ module cntrl_get_IP(
   4'h1
   );
 
-  assign nextIP[62:4]=val2[63:5];
-
-  assign nextIP[3:0]=(last&~excpt) ? 4'd0 : 4'bz;
-  assign nextIP[3:0]=(~last&~excpt) ? srcIPOff[3:0] : 4'bz;
+  assign nextIP=(last&~excpt) ? {val2[63:5],4'd0} : 4'bz;
+  assign nextIP=(~last&~excpt) ? {val2[63:5],srcIPOff[3:0]} : 4'bz;
 
 endmodule
 
@@ -191,7 +189,6 @@ module cntrl_get_retcnt(
   
 endmodule
 
-/*verilator hier_block*/
 module cntrl_find_outcome(
   clk,rst,
   stall,doStall,
@@ -284,6 +281,7 @@ module cntrl_find_outcome(
   );
   localparam RET_WIDTH=`except_width;
   localparam BOB_WIDTH=`bob_width;
+/*verilator hier_block*/
 
   input clk;
   input rst;

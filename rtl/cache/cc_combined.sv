@@ -19,7 +19,6 @@ limitations under the License.
 
 
 
-/*verilator hier_block*/
 module cc_comb (
   clk,
   rst,
@@ -42,6 +41,7 @@ module cc_comb (
   expun_addr,
   expun_wen
   );  
+/*verilator hier_block*/
   
   localparam DATA_WIDTH=65*16;
   localparam ADDR_WIDTH=6;

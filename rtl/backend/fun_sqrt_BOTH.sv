@@ -19,7 +19,6 @@ limitations under the License.
 `include "../fpoperations.sv"
 `include "../csrss_no.sv"
 
-/*verilator hier_block*/
 module fun_fpusqr(
   clk,
   rst,
@@ -46,6 +45,7 @@ module fun_fpusqr(
   parameter [0:0] H=1'b0;
   localparam SIMD_WIDTH=68; //half width
   localparam  S={27'b0,~H,4'b0};
+/*verilator hier_block*/
   input clk;
   input rst;
   input except;

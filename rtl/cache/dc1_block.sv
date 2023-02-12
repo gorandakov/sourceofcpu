@@ -898,7 +898,6 @@ endmodule
 //between
 //do not delete the inverted io
 
-/*verilator hier_block*/
 module dcache1(
   clk,
   rst,
@@ -969,6 +968,7 @@ module dcache1(
   localparam LINE_WIDTH=DATA_WIDTH*BANK_COUNT;
   localparam RAM_ADDR_WIDTH=`dcache1_addr_width;
   localparam WLINE_WIDTH=1024;
+/*verilator hier_block*/
   
   input clk;
   input rst;

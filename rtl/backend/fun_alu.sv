@@ -17,7 +17,6 @@ limitations under the License.
 
 `include "../struct.sv"
 `include "../operations.sv"
-/*verilator hier_block*/
 module fu_alu(
   clk,
   rst,
@@ -53,6 +52,7 @@ module fu_alu(
   DataAlt,
   FUCVTIN
   );
+/*verilator hier_block*/
 
   input clk;
   input rst;

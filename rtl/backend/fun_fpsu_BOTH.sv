@@ -19,7 +19,6 @@ limitations under the License.
 `include "../fpoperations.sv"
 `include "../csrss_no.sv"
 
-/*verilator hier_block*/
 module fun_fpsu_BOTH(
   clk,
   rst,
@@ -63,6 +62,7 @@ module fun_fpsu_BOTH(
   );
   localparam [0:0] H=1'b1;
   localparam SIMD_WIDTH=68; //half width
+/*verilator hier_block*/
   input clk;
   input rst;
   input [31:0] fpcsr;

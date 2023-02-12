@@ -17,7 +17,6 @@ limitations under the License.
 
 `include "../struct.sv"
 
-/*verilator hier_block*/
 module agu_block(
   clk, rst,
   except,
@@ -188,6 +187,7 @@ module agu_block(
   wrStall
   );
   parameter [4:0] BUS_ID=5'd0;
+/*verilator hier_block*/
 
   input clk;
   input rst;
