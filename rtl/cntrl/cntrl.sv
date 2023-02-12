@@ -191,6 +191,7 @@ module cntrl_get_retcnt(
   
 endmodule
 
+/*verilator hier_block*/
 module cntrl_find_outcome(
   clk,rst,
   stall,doStall,

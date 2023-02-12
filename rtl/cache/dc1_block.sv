@@ -898,6 +898,7 @@ endmodule
 //between
 //do not delete the inverted io
 
+/*verilator hier_block*/
 module dcache1(
   clk,
   rst,

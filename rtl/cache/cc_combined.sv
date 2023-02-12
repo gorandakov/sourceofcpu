@@ -19,7 +19,7 @@ limitations under the License.
 
 
 
-
+/*verilator hier_block*/
 module cc_comb (
   clk,
   rst,

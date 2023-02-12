@@ -19,6 +19,7 @@ limitations under the License.
 `include "../fpoperations.sv"
 `include "../csrss_no.sv"
 
+/*verilator hier_block*/
 module fun_fpu_BOTH(
   clk,
   rst,

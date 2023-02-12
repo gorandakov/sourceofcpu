@@ -1379,6 +1379,7 @@ module decoder_jpos(
 
 endmodule
 
+/*verilator hier_block*/
 module decoder(
   clk,
   rst,

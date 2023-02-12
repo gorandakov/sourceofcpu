@@ -17,6 +17,7 @@ limitations under the License.
 `include "../struct.sv"
 
 
+/*verilator hier_block*/
 module frontend1(
   clk,
   rst,
