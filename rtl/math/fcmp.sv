@@ -43,6 +43,9 @@ module fcmpd(clk,rst,
   wire A_s,B_s;
   wire [1:0] A_h,B_h;
   wire[15:0] emsk;
+  
+  wire [67:0] res_pkd_X;
+  assign res_pkd=res_pkd_X;
 
   wire res_unord;
   wire res_S,res_C,res_Z;
@@ -178,7 +181,7 @@ module fcmpd(clk,rst,
 
   assign flags={~res_C,res_unord,1'b0,res_S,res_Z,res_unord};
 
-  assign res_pkd[67:0]=ven_reg ? {vtype_reg,{33{vres_reg[1]}},{33{vres_reg[0]}}} : 68'bz; 
+  assign res_pkd_X[67:0]=ven_reg ? {vtype_reg,{33{vres_reg[1]}},{33{vres_reg[0]}}} : 68'bz; 
   always @(negedge clk) begin
     if (rst) vres_reg<=2'b0;
     else vres_reg<=vres;

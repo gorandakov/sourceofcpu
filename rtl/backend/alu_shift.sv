@@ -60,6 +60,7 @@ module alu_shift(
   output [63:0] valRes;
   
   wire [63:0] valRes_X;
+  wire [EXCEPT_WIDTH-1:0] retData_X;
   wire is_shift;
   wire is_8H;
   wire doJmp;
@@ -76,6 +77,8 @@ module alu_shift(
   reg [3:0] sz_reg;
 
   assign valRes=valRes_X;
+
+  assign retData=retData_X;
  
   assign is_shift=(operation[7:2]==6'd5 || operation[7:2]==6'd6 || operation[7:2]==6'd7) && nDataAlt && ~operation[11];
   
@@ -95,7 +98,7 @@ module alu_shift(
 
   assign valRes_X=is_shift & ~(cond[4]&~doJmp) ? valres0 : 64'bz;
 
-  assign retData[`except_flags]=is_shift_reg ? flags_COASZP : 6'bz;
+  assign retData_X[`except_flags]=is_shift_reg ? flags_COASZP : 6'bz;
 
   assign flags_COASZP={ dir_reg ? coutR_reg : ((coutL_reg&sz_reg)!=0),1'b0,1'b0,
 	  sz_reg[3] ? valres0_reg[63] : valres0_reg[31],~(|valres0_reg[31:0])&&

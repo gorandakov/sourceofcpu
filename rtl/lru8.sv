@@ -34,6 +34,9 @@ module lru_single0(
   input init;
   input en;
   
+  wire [WIDTH-1:0] newLRU_X;
+  assign newLRU=newLRU_X;
+  
   wire hitThis;
   wire hitThisOrAfter;
   wire hitBefore;
@@ -44,11 +47,11 @@ module lru_single0(
   assign hitAfter=hitThisOrAfter & ~hitThis;
   assign hitBefore=~hitThisOrAfter;
   
-  assign newLRU=(hitThis & ~init &en) ? {WIDTH{1'B0}} : {WIDTH{1'BZ}};
-  assign newLRU=(hitAfter & ~init &en) ? lru : {WIDTH{1'BZ}};
-  assign newLRU=(hitBefore & ~init &en)? lru_next : {WIDTH{1'BZ}};
-  assign newLRU=init ? INITVAL : {WIDTH{1'BZ}};
-  assign newLRU=(~en & ~init) ? lru : {WIDTH{1'BZ}};
+  assign newLRU_X=(hitThis & ~init &en) ? {WIDTH{1'B0}} : {WIDTH{1'BZ}};
+  assign newLRU_X=(hitAfter & ~init &en) ? lru : {WIDTH{1'BZ}};
+  assign newLRU_X=(hitBefore & ~init &en)? lru_next : {WIDTH{1'BZ}};
+  assign newLRU_X=init ? INITVAL : {WIDTH{1'BZ}};
+  assign newLRU_X=(~en & ~init) ? lru : {WIDTH{1'BZ}};
   
   generate
       if (WIDTH>1) begin : adders_gen
@@ -81,6 +84,9 @@ module lru_single(
   input en;
 
   wire [COUNT-1:0][WIDTH-1:0] newLRUa;
+  wire [WIDTH-1:0] newLRU_X;
+
+  assign newLRU=newLRU_X;
   
   genvar k;
   
@@ -94,11 +100,11 @@ module lru_single(
         init,
         en
         );	
-        assign newLRU= (hitLRU==k && ~init)  ? newLRUa[k] : {WIDTH{1'BZ}};		
+        assign newLRU_X= (hitLRU==k && ~init)  ? newLRUa[k] : {WIDTH{1'BZ}};		
 	  end
   endgenerate
   
-  assign newLRU=init ? INITVAL : {WIDTH{1'bz}};
+  assign newLRU_X=init ? INITVAL : {WIDTH{1'bz}};
   
 endmodule
 

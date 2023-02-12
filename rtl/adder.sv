@@ -751,7 +751,7 @@ module addsub_alu(a,b,out,sub,en,sxtEn,ben,cout,cout4,cout8LL,cout16,cout32,cout
 
   assign is_ptr=a[64]|b[64] && ~(a[64]&b[64]&sub[1]) && ben==2'b01;
 
-  assign out[64]=en ? is_ptr : 1'bz;
+  assign out_X[64]=en ? is_ptr : 1'bz;
 
   assign exbits=is_ptr ? ptr[63:44]^{19'b0,pos_flip[cout_sec0]|
   neg_flip[cout_sec0]} : 20'b0;
@@ -2201,7 +2201,7 @@ module adder2c(a,b,out0,out1,cin0,cin1,en0,en1,cout0,cout1,cout0_53,cout1_53);
   assign cout1=Cb[WIDTH-1];
   
   generate
-    if (WIDTH>=53) begin
+    if (WIDTH>=53) begin : c53
         assign cout0_53=Ca[52];
         assign cout1_53=Cb[52];
     end
