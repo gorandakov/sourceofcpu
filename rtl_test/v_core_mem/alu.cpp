@@ -17,12 +17,8 @@
 #define get64(a) ((((unsigned long long) a[1])<<32)|(unsigned long long) a[0])
 #define set64i(a,b,c) a[0]=b;a[1]=b>>32;a[2]=c;
 
-unsigned short OPS_REGL[]={0,1,4,5,8,9,12,13,16,17,32|4096,33|4096,34|4096,
-35|4096,36|4096,37|4096,39|4096,40|4096,41|4096,42|4096,43|4096,48|4096,49|4096,
-50|4096,51|4096,52,53,54|4096,55|4096,56|4096,57,4|16384,5|16384,4|32768,5|32768,8|16384,9|16384};
-unsigned short OPS_S_REGL[]={0,1,4,5,8,9,12,13,16,17,20,21,24,25,28,29,32|4096,
-33|4096,34|4096,35|4096,36|4096,37|4096,39|4096,40|4096,41|4096,42|4096,43|4096,48|4096,49|4096,50|4096,51|4096,52,53,54|4096,55|4096,56|4096,57,
-4|16384,5|16384,4|32768,5|32768,8|16384,9|16384};
+unsigned short OPS_REGL[]={32|4096,33|4096,36|4096,37|4096};//load
+unsigned short OPS_S_REGL[]={32|4096,33|4096,34|4096,35|4096};//store
 unsigned short OPS_M_REGL[]={1,2,3,5,7,9,10,11,12|4096,13|4096,14|4096,
 12|4096|1024,13|4096|1024,14|4096|1024};
 
@@ -2514,17 +2510,11 @@ void gen_prog(req *reqs,int count, FILE *f,hcont *contx,char *mem,char *pmem) {
    
    for(n=32;n<(count-2);n++) {
 	   int p;
-	   if ((p=(lrand48()&3))==2) {
-               reqs[n].gen(false, false, lrand48()&1, NULL,contx,0,NULL,NULL);
-	       fprintf(f,"%s",reqs[n].asmtext);
-//	   else if (p==2) {
-//               reqs[n].gen(false, true, false, NULL,contx,0,NULL,NULL);
-//	       fprintf(f,"%s",reqs[n].asmtext);
-	   } else if (p)  {
+	   if ((p=(lrand48()&1))==1) {
                if (reqs[n+1].gen(false, false, false, NULL,contx,1,mem,pmem)) n++;
 	       fprintf(f,"%s",reqs[n].asmtext);
 	   } else {
-               if (reqs[n+1].gen(false, false, false, NULL,contx,2,mem,pmem)) {
+               if (reqs[n+1].gen(false, false, true , NULL,contx,2,mem,pmem)) {
 		   n+=2;
 	           fprintf(f,"%s",reqs[n-1].asmtext);
 	       } else {
