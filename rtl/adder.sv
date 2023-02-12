@@ -279,6 +279,7 @@ module adder(a,b,out,cin,en,cout,cout8,cout16,cout32);
   output cout16;
   output cout32;
   
+  wire [WIDTH-1:0] outX;
 
   wire [WIDTH-1:0] nP0;
   wire [WIDTH-1:0] nG0;
@@ -327,12 +328,14 @@ module adder(a,b,out,cin,en,cout,cout8,cout16,cout32);
   not_array #(1) C1_mod (cin,nC1[0]);
   
   assign cout=C[WIDTH-1];
+
+  assign out=outX;
   
   generate
     for (i=0;i<WIDTH;i=i+1)
       begin : out_gen
-        assign out[i]=(X[i] & en) ? ~C1[i] : 1'bz;
-        assign out[i]=(nX[i] & en) ? ~nC1[i] : 1'bz;
+        assign outX[i]=(X[i] & en) ? ~C1[i] : 1'bz;
+        assign outX[i]=(nX[i] & en) ? ~nC1[i] : 1'bz;
       end 
     if (WIDTH>1)
       begin
