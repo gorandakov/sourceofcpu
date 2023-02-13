@@ -4914,11 +4914,6 @@ module backend(
   assign rrfBW[1]=(~Wswp[1]) ? rs1i0_rB_reg : rs1i0_rA_reg;
   assign rrfBW[2]=(~Wswp[2]) ? rs2i0_rB_reg : rs2i0_rA_reg;
       
-  assign FU[6]=(~&nDataAlt_alu) ? FUMUL : 65'bz;
-  assign FU[6]=(~nDataAlt_reg[2][1]) ? {1'b0,FUCVT1[63:0]} : 65'bz;
-  assign FNU[6]=(~&nDataAlt_alu) ? ~FUMUL : 65'bz;
-  assign FNU[6]=(~nDataAlt_reg[2][1]) ? ~{1'b0,FUCVT1[63:0]} : 65'bz;
-
   fu_alu alu_ALIGNED(
   .clk(clk),
   .rst(rst),
@@ -4964,9 +4959,7 @@ module backend(
   .fxFRT_alten_reg(|fxFRT_alten_reg[2]),
   .fcvtout({FUTYPE,FUCVT2}), //might need less than 6 regs due to internal regs
   .DataAlt(dalt),
-  .FUCVTIN(FUCVT1[63:0]),
-  .FUMUL(FUMUL),
-  .nDataAlt(nDataAlt_alu)
+  .FUCVTIN(FUCVT1[63:0])
   ); 
 
   assign nDataAlt[2][2]=~dalt[1];

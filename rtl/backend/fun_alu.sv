@@ -50,9 +50,7 @@ module fu_alu(
   fxFRT_alten_reg,
   fcvtout,
   DataAlt,
-  FUCVTIN,
-  FUMUL,
-  nDataAlt
+  FUCVTIN
   );
 /*verilator hier_block*/
 
@@ -149,24 +147,24 @@ module fu_alu(
   input [64:0] FU1;
   input [64:0] FU2;
   input [64:0] FU3;
-  input [64:0] FU4;
-  input [64:0] FU5;
-  input [64:0] FU6;
-  input [64:0] FU7;
-  input [64:0] FU8;
-  input [64:0] FU9;
-  input [64:0] FNU6;
-  input [64:0] FNU7;
-  input [64:0] FNU8;
-  input [64:0] FNU9;
+  output [64:0] FU4;
+  output [64:0] FU5;
+  output [64:0] FU6;
+  output [64:0] FU7;
+  output [64:0] FU8;
+  output [64:0] FU9;
+  output [64:0] FNU6;
+  output [64:0] FNU7;
+  output [64:0] FNU8;
+  output [64:0] FNU9;
 
   input [64:0] FNU0;
   input [64:0] FNU1;
   input [64:0] FNU2;
   input [64:0] FNU3;
 
-  input [64:0] FNU4;
-  input [64:0] FNU5;
+  output [64:0] FNU4;
+  output [64:0] FNU5;
 
   input [5:0] FUS1;
   input [5:0] FUS2;
@@ -183,9 +181,8 @@ module fu_alu(
   output [83:0] fcvtout;
   output [1:0] DataAlt;
   input [63:0] FUCVTIN;
-  output [64:0] FUMUL;
 
-  output reg [1:0] nDataAlt;
+  reg [1:0] nDataAlt;
 
   reg [1:0] nDataAlt_reg;
   reg u5_nDataAlt_reg;
@@ -722,6 +719,13 @@ module fu_alu(
   );
 
   assign fcvtout={FUCVT2_0[81:66],FUTYPE_0,FUCVT2_0[65:0]};
+  
+  
+  assign FU6=(~&nDataAlt) ? FUMUL : 65'bz;
+  assign FU6=(~u5_nDataAlt]) ? {1'b0,FUCVTIN} : 65'bz;
+  assign FNU6=(~&nDataAlt) ? ~FUMUL : 65'bz;
+  assign FNU6=(~u5_nDataAlt) ? ~{1'b0,FUCVTIN} : 65'bz;
+
  
   
   assign u5_ret=(~u5_nDataAlt_reg|(~nDataAlt_reg[1])) ? {6'b0,1'b0,2'd2} : 
