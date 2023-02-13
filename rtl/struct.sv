@@ -340,7 +340,9 @@ limitations under the License.
 `define ctlb_validN 66
 `define ctlb_lru 68:67 
 `define ctlb_data 103:69
-`define ctlb_width 104
+`define ctlb_native_stops 151:104
+`define ctlb_ucode_stops 175:152
+`define ctlb_width 176
 
 
 
