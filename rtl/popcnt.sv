@@ -187,17 +187,21 @@ module popcnt10(
 
   wire [5:0] cntA;
   wire [5:0] cntB;
+  
+  wire [10:0] cnt_X;
+
+  assign cnt=cnt_X;
 
   popcnt5 cntA_mod(bits[4:0],cntA);
   popcnt5 cntB_mod(bits[9:5],cntB);
 
 
-  assign cnt=cntA[0] ? {5'b0,cntB} : 11'bz;
-  assign cnt=cntA[1] ? {4'b0,cntB,1'b0} : 11'bz;
-  assign cnt=cntA[2] ? {3'b0,cntB,2'b0} : 11'bz;
-  assign cnt=cntA[3] ? {2'b0,cntB,3'b0} : 11'bz;
-  assign cnt=cntA[4] ? {1'b0,cntB,4'b0} : 11'bz;
-  assign cnt=cntA[5] ? {cntB,5'b0} : 11'bz;
+  assign cnt_X=cntA[0] ? {5'b0,cntB} : 11'bz;
+  assign cnt_X=cntA[1] ? {4'b0,cntB,1'b0} : 11'bz;
+  assign cnt_X=cntA[2] ? {3'b0,cntB,2'b0} : 11'bz;
+  assign cnt_X=cntA[3] ? {2'b0,cntB,3'b0} : 11'bz;
+  assign cnt_X=cntA[4] ? {1'b0,cntB,4'b0} : 11'bz;
+  assign cnt_X=cntA[5] ? {cntB,5'b0} : 11'bz;
   
 endmodule
 
@@ -212,16 +216,19 @@ module popcnt15(
   wire [5:0] cntA;
   wire [10:0] cntB;
 
+  wire [15:0] cnt_X;
+
+  assign cnt=cnt_X;
   popcnt5 cntA_mod(bits[4:0],cntA);
   popcnt10 cntB_mod(bits[14:5],cntB);
 
 
-  assign cnt=cntA[0] ? {5'b0,cntB} : 16'bz;
-  assign cnt=cntA[1] ? {4'b0,cntB,1'b0} : 16'bz;
-  assign cnt=cntA[2] ? {3'b0,cntB,2'b0} : 16'bz;
-  assign cnt=cntA[3] ? {2'b0,cntB,3'b0} : 16'bz;
-  assign cnt=cntA[4] ? {1'b0,cntB,4'b0} : 16'bz;
-  assign cnt=cntA[5] ? {cntB,5'b0} : 16'bz;
+  assign cnt_X=cntA[0] ? {5'b0,cntB} : 16'bz;
+  assign cnt_X=cntA[1] ? {4'b0,cntB,1'b0} : 16'bz;
+  assign cnt_X=cntA[2] ? {3'b0,cntB,2'b0} : 16'bz;
+  assign cnt_X=cntA[3] ? {2'b0,cntB,3'b0} : 16'bz;
+  assign cnt_X=cntA[4] ? {1'b0,cntB,4'b0} : 16'bz;
+  assign cnt_X=cntA[5] ? {cntB,5'b0} : 16'bz;
   
 endmodule
 
@@ -235,17 +242,20 @@ module popcnt16(
   wire [6:0] cntA;
   wire [10:0] cntB;
 
+  wire [16:0] cnt_X;
+
+  assign cnt=cnt_X;
   popcnt6 cntA_mod(bits[5:0],cntA);
   popcnt10 cntB_mod(bits[15:6],cntB);
 
 
-  assign cnt=cntA[0] ? {6'b0,cntB} : 17'bz;
-  assign cnt=cntA[1] ? {5'b0,cntB,1'b0} : 17'bz;
-  assign cnt=cntA[2] ? {4'b0,cntB,2'b0} : 17'bz;
-  assign cnt=cntA[3] ? {3'b0,cntB,3'b0} : 17'bz;
-  assign cnt=cntA[4] ? {2'b0,cntB,4'b0} : 17'bz;
-  assign cnt=cntA[5] ? {1'b0,cntB,5'b0} : 17'bz;
-  assign cnt=cntA[6] ? {cntB,6'b0} : 17'bz;
+  assign cnt_X=cntA[0] ? {6'b0,cntB} : 17'bz;
+  assign cnt_X=cntA[1] ? {5'b0,cntB,1'b0} : 17'bz;
+  assign cnt_X=cntA[2] ? {4'b0,cntB,2'b0} : 17'bz;
+  assign cnt_X=cntA[3] ? {3'b0,cntB,3'b0} : 17'bz;
+  assign cnt_X=cntA[4] ? {2'b0,cntB,4'b0} : 17'bz;
+  assign cnt_X=cntA[5] ? {1'b0,cntB,5'b0} : 17'bz;
+  assign cnt_X=cntA[6] ? {cntB,6'b0} : 17'bz;
   
 endmodule
 
@@ -308,17 +318,20 @@ module popcnt10_or_less(
 
   wire [5:0] cntA;
   wire [4:0] cntB;
+  wire [9:0] cnt_X;
+
+  assign cnt=cnt_X;
 
   popcnt5 cntA_mod(bits[4:0],cntA);
   popcnt5_or_less cntB_mod(bits[9:5],cntB);
 
 
-  assign cnt=cntA[0] ? {5'b11111,cntB} : 10'bz;
-  assign cnt=cntA[1] ? {4'b1111,cntB,1'b0} : 10'bz;
-  assign cnt=cntA[2] ? {3'b111,cntB,2'b0} : 10'bz;
-  assign cnt=cntA[3] ? {2'b11,cntB,3'b0} : 10'bz;
-  assign cnt=cntA[4] ? {1'b1,cntB,4'b0} : 10'bz;
-  assign cnt=cntA[5] ? {cntB,5'b0} : 10'bz;
+  assign cnt_X=cntA[0] ? {5'b11111,cntB} : 10'bz;
+  assign cnt_X=cntA[1] ? {4'b1111,cntB,1'b0} : 10'bz;
+  assign cnt_X=cntA[2] ? {3'b111,cntB,2'b0} : 10'bz;
+  assign cnt_X=cntA[3] ? {2'b11,cntB,3'b0} : 10'bz;
+  assign cnt_X=cntA[4] ? {1'b1,cntB,4'b0} : 10'bz;
+  assign cnt_X=cntA[5] ? {cntB,5'b0} : 10'bz;
   
 endmodule
 
@@ -333,17 +346,20 @@ module popcnt15_or_less(
 
   wire [5:0] cntA;
   wire [9:0] cntB;
+  wire [14:0] cnt_X;
+
+  assign cnt=cnt_X;
 
   popcnt5 cntA_mod(bits[4:0],cntA);
   popcnt10_or_less cntB_mod(bits[14:5],cntB);
 
 
-  assign cnt=cntA[0] ? {5'b11111,cntB} : 15'bz;
-  assign cnt=cntA[1] ? {4'b1111,cntB,1'b0} : 15'bz;
-  assign cnt=cntA[2] ? {3'b111,cntB,2'b0} : 15'bz;
-  assign cnt=cntA[3] ? {2'b11,cntB,3'b0} : 15'bz;
-  assign cnt=cntA[4] ? {1'b1,cntB,4'b0} : 15'bz;
-  assign cnt=cntA[5] ? {cntB,5'b0} : 15'bz;
+  assign cnt_X=cntA[0] ? {5'b11111,cntB} : 15'bz;
+  assign cnt_X=cntA[1] ? {4'b1111,cntB,1'b0} : 15'bz;
+  assign cnt_X=cntA[2] ? {3'b111,cntB,2'b0} : 15'bz;
+  assign cnt_X=cntA[3] ? {2'b11,cntB,3'b0} : 15'bz;
+  assign cnt_X=cntA[4] ? {1'b1,cntB,4'b0} : 15'bz;
+  assign cnt_X=cntA[5] ? {cntB,5'b0} : 15'bz;
   
 endmodule
 
@@ -356,18 +372,21 @@ module popcnt16_or_less(
 
   wire [6:0] cntA;
   wire [9:0] cntB;
+  wire [15:0] cnt_X;
+
+  assign cnt=cnt_X;
 
   popcnt6 cntA_mod(bits[5:0],cntA);
   popcnt10_or_less cntB_mod(bits[15:6],cntB);
 
 
-  assign cnt=cntA[0] ? {6'b111111,cntB} : 16'bz;
-  assign cnt=cntA[1] ? {5'b11111,cntB,1'b0} : 16'bz;
-  assign cnt=cntA[2] ? {4'b1111,cntB,2'b0} : 16'bz;
-  assign cnt=cntA[3] ? {3'b111,cntB,3'b0} : 16'bz;
-  assign cnt=cntA[4] ? {2'b11,cntB,4'b0} : 16'bz;
-  assign cnt=cntA[5] ? {1'b1,cntB,5'b0} : 16'bz;
-  assign cnt=cntA[6] ? {cntB,6'b0} : 16'bz;
+  assign cnt_X=cntA[0] ? {6'b111111,cntB} : 16'bz;
+  assign cnt_X=cntA[1] ? {5'b11111,cntB,1'b0} : 16'bz;
+  assign cnt_X=cntA[2] ? {4'b1111,cntB,2'b0} : 16'bz;
+  assign cnt_X=cntA[3] ? {3'b111,cntB,3'b0} : 16'bz;
+  assign cnt_X=cntA[4] ? {2'b11,cntB,4'b0} : 16'bz;
+  assign cnt_X=cntA[5] ? {1'b1,cntB,5'b0} : 16'bz;
+  assign cnt_X=cntA[6] ? {cntB,6'b0} : 16'bz;
   
 endmodule
 
@@ -429,17 +448,20 @@ module popcnt10_or_more(
 
   wire [5:0] cntA;
   wire [5:1] cntB;
+  wire [9:0] cnt_X;
+
+  assign cnt=cnt_X;
 
   popcnt5 cntA_mod(bits[4:0],cntA);
   popcnt5_or_more cntB_mod(bits[9:5],cntB);
 
 
-  assign cnt=cntA[0] ? {5'b0,cntB} : 10'bz;
-  assign cnt=cntA[1] ? {4'b0,cntB,1'b1} : 10'bz;
-  assign cnt=cntA[2] ? {3'b0,cntB,2'b11} : 10'bz;
-  assign cnt=cntA[3] ? {2'b0,cntB,3'b111} : 10'bz;
-  assign cnt=cntA[4] ? {1'b0,cntB,4'b1111} : 10'bz;
-  assign cnt=cntA[5] ? {cntB,5'b11111} : 10'bz;
+  assign cnt_X=cntA[0] ? {5'b0,cntB} : 10'bz;
+  assign cnt_X=cntA[1] ? {4'b0,cntB,1'b1} : 10'bz;
+  assign cnt_X=cntA[2] ? {3'b0,cntB,2'b11} : 10'bz;
+  assign cnt_X=cntA[3] ? {2'b0,cntB,3'b111} : 10'bz;
+  assign cnt_X=cntA[4] ? {1'b0,cntB,4'b1111} : 10'bz;
+  assign cnt_X=cntA[5] ? {cntB,5'b11111} : 10'bz;
   
 endmodule
 
@@ -454,17 +476,20 @@ module popcnt15_or_more(
 
   wire [5:0] cntA;
   wire [10:1] cntB;
+  wire [14:0] cnt_X;
+
+  assign cnt=cnt_X;
 
   popcnt5 cntA_mod(bits[4:0],cntA);
   popcnt10_or_more cntB_mod(bits[14:5],cntB);
 
 
-  assign cnt=cntA[0] ? {5'b0,cntB} : 15'bz;
-  assign cnt=cntA[1] ? {4'b0,cntB,1'b1} : 15'bz;
-  assign cnt=cntA[2] ? {3'b0,cntB,2'b11} : 15'bz;
-  assign cnt=cntA[3] ? {2'b0,cntB,3'b111} : 15'bz;
-  assign cnt=cntA[4] ? {1'b0,cntB,4'b1111} : 15'bz;
-  assign cnt=cntA[5] ? {cntB,5'b11111} : 15'bz;
+  assign cnt_X=cntA[0] ? {5'b0,cntB} : 15'bz;
+  assign cnt_X=cntA[1] ? {4'b0,cntB,1'b1} : 15'bz;
+  assign cnt_X=cntA[2] ? {3'b0,cntB,2'b11} : 15'bz;
+  assign cnt_X=cntA[3] ? {2'b0,cntB,3'b111} : 15'bz;
+  assign cnt_X=cntA[4] ? {1'b0,cntB,4'b1111} : 15'bz;
+  assign cnt_X=cntA[5] ? {cntB,5'b11111} : 15'bz;
   
 endmodule
 
@@ -478,18 +503,21 @@ module popcnt16_or_more(
 
   wire [6:0] cntA;
   wire [10:1] cntB;
+  wire [15:0] cnt_X;
+
+  assign cnt=cnt_X;
 
   popcnt6 cntA_mod(bits[5:0],cntA);
   popcnt10_or_more cntB_mod(bits[15:6],cntB);
 
 
-  assign cnt=cntA[0] ? {6'b0,cntB} : 16'bz;
-  assign cnt=cntA[1] ? {5'b0,cntB,1'b1} : 16'bz;
-  assign cnt=cntA[2] ? {4'b0,cntB,2'b11} : 16'bz;
-  assign cnt=cntA[3] ? {3'b0,cntB,3'b111} : 16'bz;
-  assign cnt=cntA[4] ? {2'b0,cntB,4'b1111} : 16'bz;
-  assign cnt=cntA[5] ? {1'b0,cntB,5'b11111} : 16'bz;
-  assign cnt=cntA[6] ? {cntB,6'b111111} : 16'bz;
+  assign cnt_X=cntA[0] ? {6'b0,cntB} : 16'bz;
+  assign cnt_X=cntA[1] ? {5'b0,cntB,1'b1} : 16'bz;
+  assign cnt_X=cntA[2] ? {4'b0,cntB,2'b11} : 16'bz;
+  assign cnt_X=cntA[3] ? {3'b0,cntB,3'b111} : 16'bz;
+  assign cnt_X=cntA[4] ? {2'b0,cntB,4'b1111} : 16'bz;
+  assign cnt_X=cntA[5] ? {1'b0,cntB,5'b11111} : 16'bz;
+  assign cnt_X=cntA[6] ? {cntB,6'b111111} : 16'bz;
   
 endmodule
 

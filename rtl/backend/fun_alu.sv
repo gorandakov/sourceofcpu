@@ -722,7 +722,7 @@ module fu_alu(
   
   
   assign FU6=(~&nDataAlt) ? FUMUL : 65'bz;
-  assign FU6=(~u5_nDataAlt]) ? {1'b0,FUCVTIN} : 65'bz;
+  assign FU6=(~u5_nDataAlt) ? {1'b0,FUCVTIN} : 65'bz;
   assign FNU6=(~&nDataAlt) ? ~FUMUL : 65'bz;
   assign FNU6=(~u5_nDataAlt) ? ~{1'b0,FUCVTIN} : 65'bz;
 

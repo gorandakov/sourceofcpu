@@ -107,6 +107,11 @@ module fun_fpsu(
   wire [5:0] FOOSL;
   reg [5:0] FOOSL_reg;
 
+  
+  wire [S+67:0] FUF6_X;
+  wire [S+67:0] FUF6N_X;
+
+  
   reg  gxFADD_hi;
   reg  gxFADD_en;
   reg  gxFADD_en_reg;
@@ -461,14 +466,16 @@ module fun_fpsu(
 	      assign FUF8N=~FOOF_reg[1];
       end
       if (INDEX==2) begin
-	      assign FUF6=|ALT_INP_reg ? {S+SIMD_WIDTH{1'BZ}} : FOOF_reg[0];
-	      assign FUF6=ALT_INP_reg[0] ? ALTDATA0 : {S+SIMD_WIDTH{1'BZ}};
-	      assign FUF6=ALT_INP_reg[1] ? ALTDATA1 : {S+SIMD_WIDTH{1'BZ}};
+	      assign FUF6_X=|ALT_INP_reg ? {S+SIMD_WIDTH{1'BZ}} : FOOF_reg[0];
+	      assign FUF6_X=ALT_INP_reg[0] ? ALTDATA0 : {S+SIMD_WIDTH{1'BZ}};
+	      assign FUF6_X=ALT_INP_reg[1] ? ALTDATA1 : {S+SIMD_WIDTH{1'BZ}};
 	      assign FUF9=FOOF_reg[1];
-	      assign FUF6N=|ALT_INP_reg ? {S+SIMD_WIDTH{1'BZ}} : ~FOOF_reg[0];
-	      assign FUF6N=ALT_INP_reg[0] ? ~ALTDATA0 : {S+SIMD_WIDTH{1'BZ}};
-	      assign FUF6N=ALT_INP_reg[1] ? ~ALTDATA1 : {S+SIMD_WIDTH{1'BZ}};
+	      assign FUF6N_X=|ALT_INP_reg ? {S+SIMD_WIDTH{1'BZ}} : ~FOOF_reg[0];
+	      assign FUF6N_X=ALT_INP_reg[0] ? ~ALTDATA0 : {S+SIMD_WIDTH{1'BZ}};
+	      assign FUF6N_X=ALT_INP_reg[1] ? ~ALTDATA1 : {S+SIMD_WIDTH{1'BZ}};
 	      assign FUF9N=~FOOF_reg[1];
+	      assign FUF6=FUF6_X;
+	      assign FUF6N=FUF6N_X;
 	      assign plnA=uu_A2;
 	      assign plnB=gxDataBFL[0][67:0];
       end

@@ -152,19 +152,19 @@ module fun_fpsu_BOTH(
   input [67:0] FUFL1_m;
   input [67:0] FUFL2_m;
   input [67:0] FUFL3_m;
-  inout [67:0] FUFL4_m;
-  inout [67:0] FUFL5_m;
-  inout [67:0] FUFH4_n;
-  inout [67:0] FUFH5_n;
+  output [67:0] FUFL4_m;
+  output [67:0] FUFL5_m;
+  output [67:0] FUFH4_n;
+  output [67:0] FUFH5_n;
 
-  inout [67:0] FUFH6_n;
-  inout [67:0] FUFH7_n;
-  inout [67:0] FUFH8_n;
-  inout [67:0] FUFH9_n;
-  inout [67:0] FUFL6_m;
-  inout [67:0] FUFL7_m;
-  inout [67:0] FUFL8_m;
-  inout [67:0] FUFL9_m;
+  output [67:0] FUFH6_n;
+  output [67:0] FUFH7_n;
+  output [67:0] FUFH8_n;
+  output [67:0] FUFH9_n;
+  output [67:0] FUFL6_m;
+  output [67:0] FUFL7_m;
+  output [67:0] FUFL8_m;
+  output [67:0] FUFL9_m;
 
 
 
@@ -172,23 +172,23 @@ module fun_fpsu_BOTH(
   input [67:0] FUFH1;
   input [67:0] FUFH2;
   input [67:0] FUFH3;
-  inout [67:0] FUFH4;
-  inout [67:0] FUFH5;
-  inout [67:0] FUFH6;
-  inout [67:0] FUFH7;
-  inout [67:0] FUFH8;
-  inout [67:0] FUFH9;
+  output [67:0] FUFH4;
+  output [67:0] FUFH5;
+  output [67:0] FUFH6;
+  output [67:0] FUFH7;
+  output [67:0] FUFH8;
+  output [67:0] FUFH9;
   
   input [67:0] FUFL0;
   input [67:0] FUFL1;
   input [67:0] FUFL2;
   input [67:0] FUFL3;
-  inout [67:0] FUFL4;
-  inout [67:0] FUFL5;
-  inout [67:0] FUFL6;
-  inout [67:0] FUFL7;
-  inout [67:0] FUFL8;
-  inout [67:0] FUFL9;
+  output [67:0] FUFL4;
+  output [67:0] FUFL5;
+  output [67:0] FUFL6;
+  output [67:0] FUFL7;
+  output [67:0] FUFL8;
+  output [67:0] FUFL9;
   input [1:0] ALT_INP;
   input [67:0] ALTDATAL0;
   input [67:0] ALTDATAL1;
@@ -219,7 +219,7 @@ module fun_fpsu_BOTH(
   wire [67:0] u6_Ax;
   wire [67:0] u6_Bx;
   
-  wire  [67:0] FUFH4X;
+  /*wire  [67:0] FUFH4X;
   wire  [67:0] FUFH5X;
   wire  [67:0] FUFH6X;
   wire  [67:0] FUFH7X;
@@ -246,7 +246,7 @@ module fun_fpsu_BOTH(
   assign FUFL7=FUFL7X;
   assign FUFL8=FUFL8X;
   assign FUFL9=FUFL9X;
-
+*/
   wire [13:0] u1_retH;
   wire u1_ret_enH;
   wire [13:0] u2_retH;
