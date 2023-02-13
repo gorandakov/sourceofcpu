@@ -1571,6 +1571,9 @@ module fexcpt(
   wire [10:0] first;
   wire en0;
   wire [13:0] no0;
+  wire [13:0] no_X;
+
+  assign no=no_X;
   
 
   bit_find_first_bit #(11) first_mod(mask,first,en0);
@@ -1582,9 +1585,9 @@ module fexcpt(
     end
   endgenerate
 
-  assign no=in_en & ~en0 ? {in_mask,3'd3} : 14'bz;
-  assign no=in_en & en0 ? no0 : 14'bz;
-  assign no=~in_en ? {5'b0,in} : 14'bz;
+  assign no_X=in_en & ~en0 ? {in_mask,3'd3} : 14'bz;
+  assign no_X=in_en & en0 ? no0 : 14'bz;
+  assign no_X=~in_en ? {5'b0,in} : 14'bz;
   assign no0=en0 ? 14'bz : 14'b0;
   assign en=in_en | (in[1:0]!=2'd0);
 endmodule

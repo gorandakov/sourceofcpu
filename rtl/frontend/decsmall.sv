@@ -150,6 +150,41 @@ module smallInstr_decoder(
   wire [7:0] srcIPOff;
 //  wire isAvx;
   wire [7:0] opcode_main;
+  
+  wire [4:0] jumpType_X;
+  assign jumpType=jumpType_X;
+  wire [OPERATION_WIDTH-1:0] operation_X; assign operation=operation_X;
+  wire [REG_WIDTH-1:0] rA_X; assign rA=rA_X;
+  wire rA_use_X; assign rA_use=rA_use_X;
+  wire [REG_WIDTH-1:0] rB_X; assign rB=rB_X;
+  wire rB_use_X; assign rB_use=rB_use_X;
+  wire [REG_WIDTH-1:0] rC_X; assign rC=rC_X;
+  wire rC_use_X; assign rC_use=rC_use_X;
+  wire useCRet_X; assign useCRet=useCRet_X;
+  wire [4:0] alucond_X; assign alucond=alucond_X;
+  wire useBConst_X; assign useBConst=useBConst_X;
+
+  wire [REG_WIDTH-1:0] rT_X; assign rT=rT_X;
+  wire rT_use_X; assign rT_use=rT_use_X;
+  wire [3:0] port_X; assign port=port_X;
+  wire useRs_X; assign useRs=useRs_X;
+  wire rA_useF_X; assign rA_useF=rA_useF_X;
+  wire rB_useF_X; assign rB_useF=rB_useF_X;
+  wire rT_useF_X; assign rT_useF=rT_useF_X;
+  wire rC_useF_X; assign rC_useF=rC_useF_X;
+  wire maskOp_X; assign maskOp=maskOp_X;
+  wire rA_isV_X; assign rA_isV=rA_isV_X;
+  wire rB_isV_X; assign rB_isV=rB_isV_X;
+  wire rT_isV_X; assign rT_isV=rT_isV_X;
+  wire rBT_copyV_X; assign rBT_copyV=rBT_copyV_X;
+  wire flags_use_X; assign flags_use=flags_use_X;
+  wire flags_write_X; assign flags_write=flags_write_X;
+  wire instr_fsimd_X; assign instr_fsimd=instr_fsimd_X;
+  wire halt_X; assign halt=halt_X;
+  
+  wire isIPRel_X; assign isIPRel=isIPRel_X;
+  wire rAlloc_X; assign rAlloc=rAlloc_X;
+  wire error_X; assign error=error_X;
 
   reg [31:0] fpu_reor;
 
@@ -238,7 +273,7 @@ module smallInstr_decoder(
 
   reg isBigConst;
   
-  wire flags_wrFPU;
+  wire flags_wrFPU_X;
 
   reg [OPERATION_WIDTH-1:0] poperation[TRICNT_TOP-1:0];
   reg [REG_WIDTH-2:0] prA[TRICNT_TOP-1:0];
@@ -548,74 +583,74 @@ module smallInstr_decoder(
 	  assign kjumpType=(~|trien[p*8+:8]) ? 5'b10000 : 5'bz;
 	  assign koperation=(~|trien[p*8+:8]) ? 13'b0 : 13'bz;
 	      
-	  assign rA=(|trien[p*8+:8]) ? {1'b0,krA} : 6'bz;
-	  assign rB=(|trien[p*8+:8]) ? {1'b0,krB} : 6'bz;
-	  assign rC=(|trien[p*8+:8]) ? {1'b0,krC} : 6'bz;
-	  assign rT=(|trien[p*8+:8]) ? {1'b0,krT} : 6'bz;
-	  assign rA_use=(|trien[p*8+:8]) ? krA_use : 1'bz;
-	  assign rB_use=(|trien[p*8+:8]) ? krB_use : 1'bz;
-	  assign rC_use=(|trien[p*8+:8]) ? krC_use : 1'bz;
-	  assign rT_use=(|trien[p*8+:8]) ? krT_use : 1'bz;
-	  assign rA_useF=(|trien[p*8+:8]) ? krA_useF : 1'bz;
-	  assign rB_useF=(|trien[p*8+:8]) ? krB_useF : 1'bz;
-	  assign rC_useF=(|trien[p*8+:8]) ? krC_useF : 1'bz;
-	  assign maskOp=(|trien[p*8+:8]) ? kmaskOp : 1'bz;
-	  assign rT_useF=(|trien[p*8+:8]) ? krT_useF : 1'bz;
-	  assign rA_isV=(|trien[p*8+:8]) ? krA_isV : 1'bz;
-	  assign rB_isV=(|trien[p*8+:8]) ? krB_isV : 1'bz;
+	  assign rA_X=(|trien[p*8+:8]) ? {1'b0,krA} : 6'bz;
+	  assign rB_X=(|trien[p*8+:8]) ? {1'b0,krB} : 6'bz;
+	  assign rC_X=(|trien[p*8+:8]) ? {1'b0,krC} : 6'bz;
+	  assign rT_X=(|trien[p*8+:8]) ? {1'b0,krT} : 6'bz;
+	  assign rA_use_X=(|trien[p*8+:8]) ? krA_use : 1'bz;
+	  assign rB_use_X=(|trien[p*8+:8]) ? krB_use : 1'bz;
+	  assign rC_use_X=(|trien[p*8+:8]) ? krC_use : 1'bz;
+	  assign rT_use_X=(|trien[p*8+:8]) ? krT_use : 1'bz;
+	  assign rA_useF_X=(|trien[p*8+:8]) ? krA_useF : 1'bz;
+	  assign rB_useF_X=(|trien[p*8+:8]) ? krB_useF : 1'bz;
+	  assign rC_useF_X=(|trien[p*8+:8]) ? krC_useF : 1'bz;
+	  assign maskOp_X=(|trien[p*8+:8]) ? kmaskOp : 1'bz;
+	  assign rT_useF_X=(|trien[p*8+:8]) ? krT_useF : 1'bz;
+	  assign rA_isV_X=(|trien[p*8+:8]) ? krA_isV : 1'bz;
+	  assign rB_isV_X=(|trien[p*8+:8]) ? krB_isV : 1'bz;
 	//  assign rC_isV=(|trien[p*8+:8]) ? krC_isV : 1'bz;
-	  assign rT_isV=(|trien[p*8+:8]) ? krT_isV : 1'bz;
-	  assign useRs=(|trien[p*8+:8]) ? kuseRs : 1'bz;
-	  assign rAlloc=(|trien[p*8+:8]) ? krAlloc : 1'bz;
-	  assign useBConst=(|trien[p*8+:8]) ? kuseBConst : 1'bz;
+	  assign rT_isV_X=(|trien[p*8+:8]) ? krT_isV : 1'bz;
+	  assign useRs_X=(|trien[p*8+:8]) ? kuseRs : 1'bz;
+	  assign rAlloc_X=(|trien[p*8+:8]) ? krAlloc : 1'bz;
+	  assign useBConst_X=(|trien[p*8+:8]) ? kuseBConst : 1'bz;
 //	  assign thisSpecLoad=(|trien[p*8+:8]) ? kthisSpecLoad : 1'bz;
-	  assign isIPRel=(|trien[p*8+:8]) ? kisIPRel : 1'bz;
-	  assign alucond=(|trien[p*8+:8]) ? kalucond : 5'bz;
-	  assign flags_use=(|trien[p*8+:8]) ? kflags_use : 1'bz;
-	  assign flags_write=(|trien[p*8+:8]) ? kflags_write : 1'bz;
-	  assign flags_wrFPU=(|trien[p*8+:8]) ? kflags_wrFPU : 1'bz;
-	  assign rBT_copyV=(|trien[p*8+:8]) ? krBT_copyV : 1'bz;
-	  assign instr_fsimd=(|trien[p*8+:8]) ? kinstr_fsimd : 1'bz;
-	  assign error=(|trien[p*8+:8]) ? kerror : 1'bz;
-	  assign port=(|trien[p*8+:8]) ? kport : 4'bz;
-	  assign jumpType=(|trien[p*8+:8]) ? kjumpType : 5'bz;
-	  assign operation=(|trien[p*8+:8]) ? koperation : 13'bz;
+	  assign isIPRel_X=(|trien[p*8+:8]) ? kisIPRel : 1'bz;
+	  assign alucond_X=(|trien[p*8+:8]) ? kalucond : 5'bz;
+	  assign flags_use_X=(|trien[p*8+:8]) ? kflags_use : 1'bz;
+	  assign flags_write_X=(|trien[p*8+:8]) ? kflags_write : 1'bz;
+	  assign flags_wrFPU_X=(|trien[p*8+:8]) ? kflags_wrFPU : 1'bz;
+	  assign rBT_copyV_X=(|trien[p*8+:8]) ? krBT_copyV : 1'bz;
+	  assign instr_fsimd_X=(|trien[p*8+:8]) ? kinstr_fsimd : 1'bz;
+	  assign error_X=(|trien[p*8+:8]) ? kerror : 1'bz;
+	  assign port_X=(|trien[p*8+:8]) ? kport : 4'bz;
+	  assign jumpType_X=(|trien[p*8+:8]) ? kjumpType : 5'bz;
+	  assign operation_X=(|trien[p*8+:8]) ? koperation : 13'bz;
       end
 
   endgenerate 
   
-  assign rA=(~|trien) ? 6'b0 : 6'bz;
-  assign rB=(~|trien) ? 6'b0 : 6'bz;
-  assign rC=(~|trien) ? 6'b0 : 6'bz;
-  assign rT=(~|trien) ? 6'b0 : 6'bz;
-  assign rA_use=(~|trien) ? 1'b0 : 1'bz;
-  assign rB_use=(~|trien) ? 1'b0 : 1'bz;
-  assign rC_use=(~|trien) ? 1'b0 : 1'bz;
-  assign rT_use=(~|trien) ? 1'b0 : 1'bz;
-  assign rA_useF=(~|trien) ? 1'b0 : 1'bz;
-  assign rB_useF=(~|trien) ? 1'b0 : 1'bz;
-  assign rC_useF=(~|trien) ? 1'b0 : 1'bz;
-  assign maskOp=(~|trien) ? 1'b0 : 1'bz;
-  assign rT_useF=(~|trien) ? 1'b0 : 1'bz;
-  assign rA_isV=(~|trien) ? 1'b0 : 1'bz;
-  assign rB_isV=(~|trien) ? 1'b0 : 1'bz;
+  assign rA_X=(~|trien) ? 6'b0 : 6'bz;
+  assign rB_X=(~|trien) ? 6'b0 : 6'bz;
+  assign rC_X=(~|trien) ? 6'b0 : 6'bz;
+  assign rT_X=(~|trien) ? 6'b0 : 6'bz;
+  assign rA_use_X=(~|trien) ? 1'b0 : 1'bz;
+  assign rB_use_X=(~|trien) ? 1'b0 : 1'bz;
+  assign rC_use_X=(~|trien) ? 1'b0 : 1'bz;
+  assign rT_use_X=(~|trien) ? 1'b0 : 1'bz;
+  assign rA_useF_X=(~|trien) ? 1'b0 : 1'bz;
+  assign rB_useF_X=(~|trien) ? 1'b0 : 1'bz;
+  assign rC_useF_X=(~|trien) ? 1'b0 : 1'bz;
+  assign maskOp_X=(~|trien) ? 1'b0 : 1'bz;
+  assign rT_useF_X=(~|trien) ? 1'b0 : 1'bz;
+  assign rA_isV_X=(~|trien) ? 1'b0 : 1'bz;
+  assign rB_isV_X=(~|trien) ? 1'b0 : 1'bz;
 //  assign rC_isV=(~|trien) ? 1'b0 : 1'bz;
-  assign rT_isV=(~|trien) ? 1'b0 : 1'bz;
-  assign useRs=(~|trien) ? 1'b0 : 1'bz;
-  assign rAlloc=(~|trien) ? 1'b0 : 1'bz;
-  assign useBConst=(~|trien) ? 1'b0 : 1'bz;
+  assign rT_isV_X=(~|trien) ? 1'b0 : 1'bz;
+  assign useRs_X=(~|trien) ? 1'b0 : 1'bz;
+  assign rAlloc_X=(~|trien) ? 1'b0 : 1'bz;
+  assign useBConst_X=(~|trien) ? 1'b0 : 1'bz;
 //  assign thisSpecLoad=(~|trien) ? 1'b0 : 1'bz;
-  assign isIPRel=(~|trien) ? 1'b0 : 1'bz;
-  assign alucond=(~|trien) ? 5'b0 : 5'bz;
-  assign flags_use=(~|trien) ? 1'b0 : 1'bz;
-  assign flags_write=(~|trien) ? 1'b0 : 1'bz;
-  assign flags_wrFPU=(~|trien) ? 1'b0 : 1'bz;
-  assign rBT_copyV=(~|trien) ? 1'b0 : 1'bz;
-  assign instr_fsimd=(~|trien) ? 1'b0 : 1'bz;
-  assign error=(~|trien) ? 1'b1 : 1'bz;
-  assign port=(~|trien) ? PORT_LOAD : 4'bz;
-  assign jumpType=(~|trien) ? 5'b10000 : 5'bz;
-  assign operation=(~|trien) ? 13'hff : 13'bz;
+  assign isIPRel_X=(~|trien) ? 1'b0 : 1'bz;
+  assign alucond_X=(~|trien) ? 5'b0 : 5'bz;
+  assign flags_use_X=(~|trien) ? 1'b0 : 1'bz;
+  assign flags_write_X=(~|trien) ? 1'b0 : 1'bz;
+  assign flags_wrFPU_X=(~|trien) ? 1'b0 : 1'bz;
+  assign rBT_copyV_X=(~|trien) ? 1'b0 : 1'bz;
+  assign instr_fsimd_X=(~|trien) ? 1'b0 : 1'bz;
+  assign error_X=(~|trien) ? 1'b1 : 1'bz;
+  assign port_X=(~|trien) ? PORT_LOAD : 4'bz;
+  assign jumpType_X=(~|trien) ? 5'b10000 : 5'bz;
+  assign operation_X=(~|trien) ? 13'hff : 13'bz;
   
  
   always @(posedge clk) begin

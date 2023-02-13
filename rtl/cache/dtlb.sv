@@ -300,6 +300,9 @@ module dtlb(
   wire [7:0] read_hit_way;
   wire [7:0] read_hitL_way;
 
+  wire [2:0] read_way_X;
+
+  assign read_way=read_way_X;
   
   wire [OUTDATA_WIDTH-1:0] read_data0;
   wire [OUTDATA_WIDTH-1:0] read_data1;
@@ -327,7 +330,7 @@ module dtlb(
         .read_data0(read_data0),
         .read_data1(read_data1),
         .read_data2(read_data2),
-        .read_way(read_way),
+        .read_way(read_way_X),
         .read_lru(lru_way[k]),
         .read_lruW(lru_wayW[k]),
         .read_hit(read_hit_way[k]),
@@ -372,7 +375,7 @@ module dtlb(
   assign read_data1=read_hit ? {OUTDATA_WIDTH{1'BZ}} : {OUTDATA_WIDTH{1'B0}};
   assign read_data2=read_hit ? {OUTDATA_WIDTH{1'BZ}} : {OUTDATA_WIDTH{1'B0}};
 
-  assign read_way=read_hit ? 3'BZ : 3'B0;
+  assign read_way_X=read_hit ? 3'BZ : 3'B0;
   
   assign read_data=(~addr[0]) ? read_data0 : read_data1;
   

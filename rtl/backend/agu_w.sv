@@ -174,6 +174,10 @@ module sagu(
   wire [4:0] bankL1;
   wire [1:0] pageFault_t;
   reg  [1:0] pageFault_t_reg;
+  
+  wire mOp_split_X;
+
+  assign mOp_split=mOp_split_X;
 
   wire [12:0] addrMain;
   wire [13:0] addrNext;
@@ -275,17 +279,17 @@ module sagu(
   assign lastSz[2]=opsize==3 && stepOver;
   assign lastSz[4:3]=2'b0;
   assign lastSz[0]=(opsize==0) || (opsize==1 & ~stepOver2) || (opsize==2 & ~stepOver);  
-  assign mOp_split=(opsize==1) ?
+  assign mOp_split_X=(opsize==1) ?
     bank0==5'h1f && stepOver2 : 1'bz;
-  assign mOp_split=(opsize==2) ?
+  assign mOp_split_X=(opsize==2) ?
     bank0==5'h1f && stepOver : 1'bz;
-  assign mOp_split=(opsize==3) ?
+  assign mOp_split_X=(opsize==3) ?
     bank0==5'h1f || (bank0==5'h1e && stepOver) : 1'bz;
-  assign mOp_split=(opsize==4) ?
+  assign mOp_split_X=(opsize==4) ?
     bank0[4:1]==4'hf || (bank0==5'h1d && stepOver2) : 1'bz;
-  assign mOp_split=(opsize==5 || opsize==6) ?
+  assign mOp_split_X=(opsize==5 || opsize==6) ?
     bank0[4:2]==3'h7 && (bank0[1:0]!=0 || stepOver || opsize==6) : 1'bz;
-  assign mOp_split=(opsize==0) ? 1'b0 : 1'bz;
+  assign mOp_split_X=(opsize==0) ? 1'b0 : 1'bz;
   
   assign all_banks=banks0;
 
