@@ -390,6 +390,37 @@ module popcnt16_or_less(
   
 endmodule
 
+module popcnt25_or_less(
+  bits,
+  cnt);
+
+  input [24:0] bits;
+  output [24:0] cnt;
+
+  wire [10:0] cntA;
+  wire [15:0] cntB;
+  wire [24:0] cnt_X;
+
+  assign cnt=cnt_X;
+
+  popcnt10 cntA_mod(bits[9:0],cntA);
+  popcnt15_or_less cntB_mod(bits[24:10],cntB);
+
+
+  assign cnt_X=cntA[0] ? {10'b1111111111,cntB} : 25'bz;
+  assign cnt_X=cntA[1] ? {9'b111111111,cntB,1'b0} : 25'bz;
+  assign cnt_X=cntA[2] ? {8'b11111111,cntB,2'b0} : 25'bz;
+  assign cnt_X=cntA[3] ? {7'b1111111,cntB,3'b0} : 25'bz;
+  assign cnt_X=cntA[4] ? {6'b111111,cntB,4'b0} : 25'bz;
+  assign cnt_X=cntA[5] ? {5'b11111,cntB,5'b0} : 25'bz;
+  assign cnt_X=cntA[6] ? {4'b1111,cntB,6'b0} : 25'bz;
+  assign cnt_X=cntA[7] ? {3'b111,cntB,7'b0} : 25'bz;
+  assign cnt_X=cntA[8] ? {2'b11,cntB,8'b0} : 25'bz;
+  assign cnt_X=cntA[9] ? {1'b1,cntB,9'b0} : 25'bz;
+  assign cnt_X=cntA[10]? {cntB,10'b0} : 25'bz;
+  
+endmodule
+
 
 module popcnt5_or_more(
   bits,
@@ -518,6 +549,37 @@ module popcnt16_or_more(
   assign cnt_X=cntA[4] ? {2'b0,cntB,4'b1111} : 16'bz;
   assign cnt_X=cntA[5] ? {1'b0,cntB,5'b11111} : 16'bz;
   assign cnt_X=cntA[6] ? {cntB,6'b111111} : 16'bz;
+  
+endmodule
+
+module popcnt25_or_more(
+  bits,
+  cnt);
+
+  input [24:0] bits;
+  output [24:0] cnt;
+
+  wire [10:0] cntA;
+  wire [15:1] cntB;
+  wire [24:0] cnt_X;
+
+  assign cnt=cnt_X;
+
+  popcnt10 cntA_mod(bits[9:0],cntA);
+  popcnt15_or_more cntB_mod(bits[24:10],cntB);
+
+
+  assign cnt_X=cntA[0] ? {10'b0,cntB} : 25'bz;
+  assign cnt_X=cntA[1] ? {9'b0,cntB,1'b1} : 25'bz;
+  assign cnt_X=cntA[2] ? {8'b0,cntB,2'b11} : 25'bz;
+  assign cnt_X=cntA[3] ? {7'b0,cntB,3'b111} : 25'bz;
+  assign cnt_X=cntA[4] ? {6'b0,cntB,4'b1111} : 25'bz;
+  assign cnt_X=cntA[5] ? {5'b0,cntB,5'b11111} : 25'bz;
+  assign cnt_X=cntA[6] ? {4'b0,cntB,6'b111111} : 25'bz;
+  assign cnt_X=cntA[7] ? {3'b0,cntB,7'b1111111} : 25'bz;
+  assign cnt_X=cntA[8] ? {2'b0,cntB,8'b11111111} : 25'bz;
+  assign cnt_X=cntA[9] ? {1'b0,cntB,9'b111111111} : 25'bz;
+  assign cnt_X=cntA[10] ? {cntB,10'b1111111111} : 25'bz;
   
 endmodule
 
