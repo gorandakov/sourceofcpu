@@ -71,7 +71,7 @@ module cc_ram_block(
   );
 
   parameter INDEX=0;
-  localparam DATA_WIDTH=65*6;
+  localparam DATA_WIDTH=65*8;
   `ifdef ICACHE_256K
   localparam ADDR_WIDTH=8;
   localparam ADDR_COUNT=256;
@@ -91,7 +91,7 @@ module cc_ram_block(
 
   generate
     genvar t;
-    for(t=0;t<3;t=t+1) begin : ram_gen
+    for(t=0;t<4;t=t+1) begin : ram_gen
         cc_ram ram_mod(
         clk,
         rst,
@@ -117,7 +117,7 @@ module ccX_ram(
   write_wen
   );
 
-  localparam DATA_WIDTH=50;
+  localparam DATA_WIDTH=60;
   `ifdef ICACHE_256K
   localparam ADDR_WIDTH=8;
   localparam ADDR_COUNT=256;
@@ -172,7 +172,7 @@ module ccRam_way(
   Err
   );
 
-  localparam DATA_WIDTH=65*12;
+  localparam DATA_WIDTH=65*16;
   `ifdef ICACHE_256K
   localparam ADDR_WIDTH=8;
   `else
@@ -187,7 +187,7 @@ module ccRam_way(
   input rst;
   input read_clkEn;
   input [IP_WIDTH-6:0] read_IP;
-  input [4:0] read_IP_low;
+  input [3:0] read_IP_low;
   input read_set_flag;
   output [DATA_WIDTH-1:0] read_data;
   input [DATA_WIDTH-1:0] read_data_in;
@@ -374,9 +374,9 @@ module ccRam_way(
     
   always @* begin
       writeX_data=readX_data_ram;
-      for (k=0;k<2;k=k+1)
-          for (j=0;j<25;j=j+1) begin
-              writeX_data[k*25+j]=writeX_data[k*25+j]||(read_set_flag_reg && read_IP_low_reg==j[4:0] 
+      for (k=0;k<4;k=k+1)
+          for (j=0;j<15;j=j+1) begin
+              writeX_data[k*15+j]=writeX_data[k*15+j]||(read_set_flag_reg && read_IP_low_reg==j[3:0] 
                 && read_IP_reg[1:0]==k[1:0]);
           end
   end
@@ -389,7 +389,7 @@ module ccRam_way(
           write_data_reg<={DATA_WIDTH{1'B0}};
           read_clkEn_reg<=1'b0;
           read_set_flag_reg<=1'b0;
-          read_IP_low_reg<=5'b0;
+          read_IP_low_reg<=4'b0;
           read_IP_reg<=10'b0;
       end
       else begin
@@ -452,7 +452,7 @@ module ccRam_half(
   tagErr
   );
 
-  localparam DATA_WIDTH=65*12;
+  localparam DATA_WIDTH=65*16;
   `ifdef ICACHE_256K
   localparam ADDR_WIDTH=8;
   `else 
@@ -464,7 +464,7 @@ module ccRam_half(
   input clk;
   input rst;
   input read_clkEn;
-  input [IP_WIDTH-1:0] read_IP;
+  input [IP_WIDTH-2:0] read_IP;
   input read_set_flag;
   output [DATA_WIDTH-1:0] read_data;
   output [59:0] read_dataX;
@@ -498,8 +498,8 @@ module ccRam_half(
           .clk(clk),
           .rst(rst),
           .read_clkEn(read_clkEn),
-          .read_IP(read_IP[IP_WIDTH-1:5]),
-          .read_IP_low(read_IP[4:0]),
+          .read_IP(read_IP[IP_WIDTH-2:4]),
+          .read_IP_low(read_IP[3:0]),
           .read_set_flag(read_set_flag),
           .read_data(read_dataP[k]),
           .read_data_in(read_dataP[k-1]),
