@@ -213,6 +213,12 @@ module rss_buf(
 // wires - new data
   
   
+  wire [3:0] outDataEn0_X; assign outDataEn0=outDataEn0_X;
+  wire outThread0_X; assign outThread0=outThread0_X;
+  wire outZeroB0_X; assign outZeroB0=outZeroB0_X;
+  wire [3:0] outDataEn2_X; assign outDataEn2=outDataEn2_X;
+  wire outThread2_X; assign outThread2=outThread2_X;
+  wire outZeroA2_X; assign outZeroA2=outZeroA2_X;
 
   wire portReady0_d;
   wire portReady0_q;
@@ -358,13 +364,15 @@ module rss_buf(
 
 //outputs use inverting 3-state buffer, because it's faster and smaller than non-inverting
 // issue port 0 -agu
-  assign outDataEn0=outRsSelect0 ? {4{~unFwdCheck}} &{3'b1,1'b1} : 4'bz;
-  assign outThread0=outRsSelect0 ? thread_q : 1'bz;
+  assign outDataEn0_X=outRsSelect0 ? {4{~unFwdCheck}} &{3'b1,1'b1} : 4'bz;
+  assign outThread0_X=outRsSelect0 ? thread_q : 1'bz;
+  assign outZeroB0_X=outRsSelect0 ? 1'b0 : 1'bz;
   
   
 // issue port 2 - agu 2
-  assign outDataEn2=outRsSelect2 ? {4{~unFwdCheck}} &{3'b1,1'b1} : 4'bz;
-  assign outThread2=outRsSelect2 ? thread_q : 1'bz;
+  assign outDataEn2_X=outRsSelect2 ? {4{~unFwdCheck}} &{3'b1,1'b1} : 4'bz;
+  assign outThread2_X=outRsSelect2 ? thread_q : 1'bz;
+  assign outZeroA2_X=outRsSelect2 ? 1'b0 : 1'bz;
 
 
 // end data output
@@ -457,6 +465,8 @@ module rss_D_buf(
 // wires - new data
   
   
+  wire [3:0] outDataEn1_X; assign outDataEn1=outDataEn1_X;
+  wire outThread1_X; assign outThread1=outThread1_X;
 
 
   wire portReady1_d;
@@ -598,8 +608,8 @@ module rss_D_buf(
 	
   
 // issue port 1 - data
-  assign outDataEn1=outRsSelect1 ? {4{~unFwdCheck}} &{FPB_q,VecB_q,~FPB_q&~VecB_q,1'b1} : 4'bz;
-  assign outThread1=outRsSelect1 ? thread_q : 1'bz;
+  assign outDataEn1_X=outRsSelect1 ? {4{~unFwdCheck}} &{FPB_q,VecB_q,~FPB_q&~VecB_q,1'b1} : 4'bz;
+  assign outThread1_X=outRsSelect1 ? thread_q : 1'bz;
  
   
 // end data output
@@ -706,6 +716,12 @@ module rss_array(
   output [BUF_COUNT-1:0]  bufFree;
 // wires
 // wires - new data
+  wire [3:0] outDataEn0_X; assign outDataEn0=outDataEn0_X;
+  wire outThread0_X; assign outThread0=outThread0_X;
+  wire outZeroB0_X; assign outZeroB0=outZeroB0_X;
+  wire [3:0] outDataEn2_X; assign outDataEn2=outDataEn2_X;
+  wire outThread2_X; assign outThread0=outThread2_X;
+  wire outZeroA2_X; assign outZeroA2=outZeroA2_X;
   generate
       genvar k,j;
       for (j=0;j<4;j=j+1) begin : banks_gen
@@ -736,27 +752,27 @@ module rss_array(
           end
           assign outDataEn0a=outRsBank0[j] ? 4'bz : 4'b0;
           assign outDataEn2a=outRsBank2[j] ? 4'bz : 4'b0;
-          assign outDataEn0=outRsBank0[j] ? outDataEn0a : 4'bz;
-          assign outDataEn2=outRsBank2[j] ? outDataEn2a : 4'bz;
+          assign outDataEn0_X=outRsBank0[j] ? outDataEn0a : 4'bz;
+          assign outDataEn2_X=outRsBank2[j] ? outDataEn2a : 4'bz;
           assign outThread0a=outRsBank0[j] ? 1'bz : 1'b0;
           assign outThread2a=outRsBank2[j] ? 1'bz : 1'b0;
-          assign outThread0=outRsBank0[j] ? outThread0a : 1'bz;
-          assign outThread2=outRsBank2[j] ? outThread2a : 1'bz;
+          assign outThread0_X=outRsBank0[j] ? outThread0a : 1'bz;
+          assign outThread2_X=outRsBank2[j] ? outThread2a : 1'bz;
           assign outZeroB0a=outRsBank0[j] ? 1'bz : 1'b0;
           assign outZeroA2a=outRsBank2[j] ? 1'bz : 1'b0;
-          assign outZeroB0=outRsBank0[j] ? outZeroB0a : 1'bz;
-          assign outZeroA2=outRsBank2[j] ? outZeroA2a : 1'bz;
+          assign outZeroB0_X=outRsBank0[j] ? outZeroB0a : 1'bz;
+          assign outZeroA2_X=outRsBank2[j] ? outZeroA2a : 1'bz;
       end
   endgenerate
 
-  assign outDataEn0=outFound0 ? 4'bz : 4'b0;
-  assign outDataEn2=outFound2 ? 4'bz : 4'b0;
+  assign outDataEn0_X=outFound0 ? 4'bz : 4'b0;
+  assign outDataEn2_X=outFound2 ? 4'bz : 4'b0;
 
-  assign outThread0=outFound0 ? 1'bz : 1'b0;
-  assign outThread2=outFound2 ? 1'bz : 1'b0;
+  assign outThread0_X=outFound0 ? 1'bz : 1'b0;
+  assign outThread2_X=outFound2 ? 1'bz : 1'b0;
 
-  assign outZeroB0=outFound0 ? 1'bz : 1'b0;
-  assign outZeroA2=outFound2 ? 1'bz : 1'b0;
+  assign outZeroB0_X=outFound0 ? 1'bz : 1'b0;
+  assign outZeroA2_X=outFound2 ? 1'bz : 1'b0;
 
 endmodule
 
@@ -832,6 +848,8 @@ module rss_D_array(
   output [BUF_COUNT-1:0]  bufFree;
 // wires
 // wires - new data
+  wire [3:0] outDataEn1_X; assign outDataEn1=outDataEn1_X;
+  wire outThread1_X; assign outThread1=outThread1_X;
   generate
       genvar k,j;
       for (j=0;j<4;j=j+1) begin : banks_gen
@@ -857,15 +875,15 @@ module rss_D_array(
               );
           end
           assign outDataEn1a=outRsBank1[j] ? 4'bz : 4'b0;
-          assign outDataEn1=outRsBank1[j] ? outDataEn1a : 4'bz;
+          assign outDataEn1_X=outRsBank1[j] ? outDataEn1a : 4'bz;
           assign outThread1a=outRsBank1[j] ? 1'bz : 1'b0;
-          assign outThread1=outRsBank1[j] ? outThread1a : 1'bz;
+          assign outThread1_X=outRsBank1[j] ? outThread1a : 1'bz;
       end
   endgenerate
 
-  assign outDataEn1=outFound1 ? 4'bz : 4'b0;
+  assign outDataEn1_X=outFound1 ? 4'bz : 4'b0;
 
-  assign outThread1=outFound1 ? 1'bz : 1'b0;
+  assign outThread1_X=outFound1 ? 1'bz : 1'b0;
 
 endmodule
 
