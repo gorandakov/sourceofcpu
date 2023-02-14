@@ -819,6 +819,9 @@ module rs_wakeUp_data(
   input outRsSelect2;
   output [WIDTH-1:0] outData2;
   
+  wire [WIDTH-1:0] outData0_X; assign outData0=outData0_X;
+  wire [WIDTH-1:0] outData1_X; assign outData1=outData1_X;
+  wire [WIDTH-1:0] outData2_X; assign outData2=outData2_X;
 
   wire data_en;
   wire [WIDTH-1:0] data_d;
@@ -850,9 +853,9 @@ module rs_wakeUp_data(
   assign data_d=(data_en & ~(stall && newRsSelect0|newRsSelect1|newRsSelect2) || rst) ? {WIDTH{1'bz}} : data_q;
   assign data_d=(|outEq[4:0] && outEq[5]) ? data_d1 : {WIDTH{1'BZ}};
   assign data_d=(|outEq[4:0] && ~outEq[5]) ? data_d0 : {WIDTH{1'BZ}};
-  assign outData0=outRsSelect0 ? data_q : {WIDTH{1'bz}};
-  assign outData1=outRsSelect1 ? data_q : {WIDTH{1'bz}};
-  assign outData2=outRsSelect2 ? data_q : {WIDTH{1'bz}};
+  assign outData0_X=outRsSelect0 ? data_q : {WIDTH{1'bz}};
+  assign outData1_X=outRsSelect1 ? data_q : {WIDTH{1'bz}};
+  assign outData2_X=outRsSelect2 ? data_q : {WIDTH{1'bz}};
 
   always @(posedge clk)
     begin
@@ -919,6 +922,13 @@ module rs_wakeUp_data_array(
   output [WIDTH-1:0] outData2;
   output [WIDTH-1:0] outDataN2;
 
+  wire [WIDTH-1:0] outData0_X; assign outData0=outData0_X;
+  wire [WIDTH-1:0] outDataN0_X; assign outDataN0=outDataN0_X;
+  wire [WIDTH-1:0] outData1_X; assign outData1=outData1_X;
+  wire [WIDTH-1:0] outDataN1_X; assign outDataN1=outDataN1_X;
+  wire [WIDTH-1:0] outData2_X; assign outData2=outData2_X;
+  wire [WIDTH-1:0] outDataN2_X; assign outDataN2=outDataN2_X;
+
   generate
       genvar j,k;
       for (j=0;j<4;j=j+1) begin : tile_gen
@@ -941,9 +951,9 @@ module rs_wakeUp_data_array(
               outRsSelect2[k+8*j],outData2k
               );
           end
-          assign outData0=outBank0[j] ? outData0k : {WIDTH{1'BZ}};
-          assign outData1=outBank1[j] ? outData1k : {WIDTH{1'BZ}};
-          assign outData2=outBank2[j] ? outData2k : {WIDTH{1'BZ}};
+          assign outData0_X=outBank0[j] ? outData0k : {WIDTH{1'BZ}};
+          assign outData1_X=outBank1[j] ? outData1k : {WIDTH{1'BZ}};
+          assign outData2_X=outBank2[j] ? outData2k : {WIDTH{1'BZ}};
 
           assign outData0k=outBank0[j] ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
           assign outData1k=outBank1[j] ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
@@ -951,9 +961,9 @@ module rs_wakeUp_data_array(
       end
   endgenerate
 
-  assign outData0=outFound0 ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-  assign outData1=outFound1 ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-  assign outData2=outFound2 ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+  assign outData0_X=outFound0 ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+  assign outData1_X=outFound1 ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+  assign outData2_X=outFound2 ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
 
   assign outDataN0=~outData0;
   assign outDataN1=~outData1;
@@ -1525,6 +1535,9 @@ module rs_nonWakeUp_DFF(
   wire [WIDTH-1:0] data_d;
   reg [WIDTH-1:0] data_q;
 
+  wire [WIDTH-1:0] outData0_X; assign outData0=outData0_X;
+  wire [WIDTH-1:0] outData1_X; assign outData1=outData1_X;
+  wire [WIDTH-1:0] outData2_X; assign outData2=outData2_X;
 
   assign data_en=|{newRsSelect0,newRsSelect1,newRsSelect2,rst};
 
@@ -1536,9 +1549,9 @@ module rs_nonWakeUp_DFF(
 
   assign data_d=(data_en & ~stall) ? {WIDTH{1'bz}} : data_q;
   
-  assign outData0=(outRsSelect0) ? data_q : {WIDTH{1'bz}};
-  assign outData1=(outRsSelect1) ? data_q : {WIDTH{1'bz}};
-  assign outData2=(outRsSelect2) ? data_q : {WIDTH{1'bz}};
+  assign outData0_X=(outRsSelect0) ? data_q : {WIDTH{1'bz}};
+  assign outData1_X=(outRsSelect1) ? data_q : {WIDTH{1'bz}};
+  assign outData2_X=(outRsSelect2) ? data_q : {WIDTH{1'bz}};
 
   always @(posedge clk)
     begin
@@ -1583,6 +1596,10 @@ module rs_nonWakeUp_array(
   input [3:0] outBank2;
   input outFound2;
   output [WIDTH-1:0] outData2;
+  
+  wire [WIDTH-1:0] outData0_X; assign outData0=outData0_X;
+  wire [WIDTH-1:0] outData1_X; assign outData1=outData1_X;
+  wire [WIDTH-1:0] outData2_X; assign outData2=outData2_X;
 
   generate
       genvar j,k;
@@ -1603,9 +1620,9 @@ module rs_nonWakeUp_array(
               outRsSelect2[k+8*j],outData2k
               );
           end
-          assign outData0=outBank0[j] ? outData0k : {WIDTH{1'BZ}};
-          assign outData1=outBank1[j] ? outData1k : {WIDTH{1'BZ}};
-          assign outData2=outBank2[j] ? outData2k : {WIDTH{1'BZ}};
+          assign outData0_X=outBank0[j] ? outData0k : {WIDTH{1'BZ}};
+          assign outData1_X=outBank1[j] ? outData1k : {WIDTH{1'BZ}};
+          assign outData2_X=outBank2[j] ? outData2k : {WIDTH{1'BZ}};
 
           assign outData0k=outBank0[j] ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
           assign outData1k=outBank1[j] ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
@@ -1613,9 +1630,9 @@ module rs_nonWakeUp_array(
       end
   endgenerate
 
-  assign outData0=outFound0 ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-  assign outData1=outFound1 ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-  assign outData2=outFound2 ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+  assign outData0_X=outFound0 ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+  assign outData1_X=outFound1 ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+  assign outData2_X=outFound2 ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
   
 endmodule
 
