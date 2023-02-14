@@ -969,6 +969,7 @@ module rs_s(
   localparam FN_WIDTH=10;
   localparam WQ_WIDTH=6;
   localparam ATTR_WIDTH=4;
+/*verilator hier_block*/ 
 
   input clk;
   input dataRst;

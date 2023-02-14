@@ -1453,6 +1453,7 @@ module dcache2_block(
   localparam ADDR_WIDTH=36;
   localparam DATA_WIDTH=32;
   parameter [1:0] ID=0;
+/*verilator hier_block*/ 
 
   input clk;
   input rst;

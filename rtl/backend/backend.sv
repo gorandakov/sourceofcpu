@@ -4968,7 +4968,10 @@ module backend(
   assign nDataAlt[1]=3'b111;
 
   assign insert_isData=insBus_req[9:5]==BUS_ID && !insBus_req[4] && insBus_en;
- 
+
+  wire [43:0] reqBus_addrX;
+  assign reqBus_addr=reqBus_addrX[43:7];
+
   agu_block #(BUS_ID) agu_aligned(
   .clk(clk), .rst(rst),
   .except(except),
@@ -5121,7 +5124,7 @@ module backend(
   .req_addr(req_addr),.req_tlbAttr(req_tlbAttr),.req_tlbEn(req_tlbEn),
   .bus_tlb_data(bus_tlb_data),.bus_tlb_en(bus_tlb_en),
   .reqBus_en(reqBus_en),
-  .reqBus_addr(reqBus_addr),
+  .reqBus_addr(reqBus_addrX),
   .reqBus_req(reqBus_req),
   .reqBus_want_excl(reqBus_want_excl),
   .reqBus_dupl(reqBus_dupl),

@@ -192,6 +192,7 @@ module rrf(
   parameter EXTRA=0;
   localparam ADDR_WIDTH=6;
   localparam ADDR_COUNT=32+16*EXTRA;
+/*verilator hier_block*/ 
   
   input clk;
   input rst;

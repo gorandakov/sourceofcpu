@@ -1290,7 +1290,7 @@ module regfile(
   );
   parameter DATA_WIDTH=`alu_width;
   localparam ADDR_WIDTH=`reg_addr_width;
- 
+/*verilator hier_block*/ 
   
   input clk;
   input rst;

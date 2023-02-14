@@ -176,6 +176,7 @@ module regfile_get_gazump(
   );
   localparam ADDR_WIDTH=`reg_addr_width;
   input clk,rst,read_clkEn;
+/*verilator hier_block*/ 
   
   input [ADDR_WIDTH-1:0] read0_addr;
   input read0_constEn;
