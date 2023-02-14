@@ -3744,6 +3744,9 @@ module decoder_find_single_dep(
   input chk_useF;
   output [REG_WIDTH-1:0] dep;
 
+  wire [REG_WIDTH-1:0] dep_X;
+
+  assign dep=dep_X;
 
   wire hasDep,hasDepF;
     
@@ -3786,16 +3789,16 @@ module decoder_find_single_dep(
   bit_find_last_bit #(9) findBit_mod(allDeps,bitDep,hasDep);
   bit_find_last_bit #(9) findBitF_mod(allDepsF,bitDepF,hasDepF);
   
-  assign dep=(bitDep[0] | bitDepF[0]) ? {{REG_WIDTH-4{1'b1}},4'd0} : {REG_WIDTH{1'bz}};
-  assign dep=(bitDep[1] | bitDepF[1]) ? {{REG_WIDTH-4{1'b1}},4'd1} : {REG_WIDTH{1'bz}};
-  assign dep=(bitDep[2] | bitDepF[2]) ? {{REG_WIDTH-4{1'b1}},4'd2} : {REG_WIDTH{1'bz}};
-  assign dep=(bitDep[3] | bitDepF[3]) ? {{REG_WIDTH-4{1'b1}},4'd3} : {REG_WIDTH{1'bz}};
-  assign dep=(bitDep[4] | bitDepF[4]) ? {{REG_WIDTH-4{1'b1}},4'd4} : {REG_WIDTH{1'bz}};
-  assign dep=(bitDep[5] | bitDepF[5]) ? {{REG_WIDTH-4{1'b1}},4'd5} : {REG_WIDTH{1'bz}};
-  assign dep=(bitDep[6] | bitDepF[6]) ? {{REG_WIDTH-4{1'b1}},4'd6} : {REG_WIDTH{1'bz}};
-  assign dep=(bitDep[7] | bitDepF[7]) ? {{REG_WIDTH-4{1'b1}},4'd7} : {REG_WIDTH{1'bz}};
-  assign dep=(bitDep[8] | bitDepF[8]) ? {{REG_WIDTH-4{1'b1}},4'd8} : {REG_WIDTH{1'bz}};
-  assign dep=(hasDep|hasDepF) ? {REG_WIDTH{1'bz}} : chkReg;
+  assign dep_X=(bitDep[0] | bitDepF[0]) ? {{REG_WIDTH-4{1'b1}},4'd0} : {REG_WIDTH{1'bz}};
+  assign dep_X=(bitDep[1] | bitDepF[1]) ? {{REG_WIDTH-4{1'b1}},4'd1} : {REG_WIDTH{1'bz}};
+  assign dep_X=(bitDep[2] | bitDepF[2]) ? {{REG_WIDTH-4{1'b1}},4'd2} : {REG_WIDTH{1'bz}};
+  assign dep_X=(bitDep[3] | bitDepF[3]) ? {{REG_WIDTH-4{1'b1}},4'd3} : {REG_WIDTH{1'bz}};
+  assign dep_X=(bitDep[4] | bitDepF[4]) ? {{REG_WIDTH-4{1'b1}},4'd4} : {REG_WIDTH{1'bz}};
+  assign dep_X=(bitDep[5] | bitDepF[5]) ? {{REG_WIDTH-4{1'b1}},4'd5} : {REG_WIDTH{1'bz}};
+  assign dep_X=(bitDep[6] | bitDepF[6]) ? {{REG_WIDTH-4{1'b1}},4'd6} : {REG_WIDTH{1'bz}};
+  assign dep_X=(bitDep[7] | bitDepF[7]) ? {{REG_WIDTH-4{1'b1}},4'd7} : {REG_WIDTH{1'bz}};
+  assign dep_X=(bitDep[8] | bitDepF[8]) ? {{REG_WIDTH-4{1'b1}},4'd8} : {REG_WIDTH{1'bz}};
+  assign dep_X=(hasDep|hasDepF) ? {REG_WIDTH{1'bz}} : chkReg;
 endmodule
 
 
@@ -3900,18 +3903,22 @@ module decoder_flag_dep(
 
   wire [8:0] last;
   wire found;
+  
+  wire [3:0] dep_X;
+
+  assign dep=dep_X;
 
   bit_find_last_bit #(9) last_mod(instr_write_0_8,last,found);
   
   generate
       genvar k;
       for(k=0;k<=8;k=k+1) begin
-          assign dep=(doRead & last[k]) ? k[3:0] : 4'bz;
+          assign dep_X=(doRead & last[k]) ? k[3:0] : 4'bz;
       end
   endgenerate
   
-  assign dep=(doRead & ~found) ? 4'he : 4'bz;
-  assign dep=(~doRead) ? 4'hd : 4'bz;
+  assign dep_X=(doRead & ~found) ? 4'he : 4'bz;
+  assign dep_X=(~doRead) ? 4'hd : 4'bz;
   
 endmodule
 
