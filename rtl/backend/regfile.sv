@@ -1130,6 +1130,7 @@ module regfile_zero_cycle_write(
   input [DATA_WIDTH-1:0] write8_data_reg;
   input [DATA_WIDTH-1:0] write9_data_reg;
   
+  wire [DATA_WIDTH-1:0] read_data_new_X; assign read_data_new=read_data_new_X;
   
   wire match_r0;
   wire match_r1;
@@ -1152,18 +1153,18 @@ module regfile_zero_cycle_write(
 
   assign match=|{match_r0,match_r1,match_r2,match_r3,match_r4,match_r5,match_r6,match_r7,match_r8,match_r9};
 
-  assign read_data_new=(match_r0 & read_oe_reg) ? write0_data_reg : {DATA_WIDTH{1'bz}};
-  assign read_data_new=(match_r1 & read_oe_reg) ? write1_data_reg : {DATA_WIDTH{1'bz}};
-  assign read_data_new=(match_r2 & read_oe_reg) ? write2_data_reg : {DATA_WIDTH{1'bz}};
-  assign read_data_new=(match_r3 & read_oe_reg) ? write3_data_reg : {DATA_WIDTH{1'bz}};
-  assign read_data_new=(match_r4 & read_oe_reg) ? write4_data_reg : {DATA_WIDTH{1'bz}};
-  assign read_data_new=(match_r5 & read_oe_reg) ? write5_data_reg : {DATA_WIDTH{1'bz}};
-  assign read_data_new=(match_r6 & read_oe_reg) ? write6_data_reg : {DATA_WIDTH{1'bz}};
-  assign read_data_new=(match_r7 & read_oe_reg) ? write7_data_reg : {DATA_WIDTH{1'bz}};
-  assign read_data_new=(match_r8 & read_oe_reg) ? write8_data_reg : {DATA_WIDTH{1'bz}};
-  assign read_data_new=(match_r9 & read_oe_reg) ? write9_data_reg : {DATA_WIDTH{1'bz}};
+  assign read_data_new_X=(match_r0 & read_oe_reg) ? write0_data_reg : {DATA_WIDTH{1'bz}};
+  assign read_data_new_X=(match_r1 & read_oe_reg) ? write1_data_reg : {DATA_WIDTH{1'bz}};
+  assign read_data_new_X=(match_r2 & read_oe_reg) ? write2_data_reg : {DATA_WIDTH{1'bz}};
+  assign read_data_new_X=(match_r3 & read_oe_reg) ? write3_data_reg : {DATA_WIDTH{1'bz}};
+  assign read_data_new_X=(match_r4 & read_oe_reg) ? write4_data_reg : {DATA_WIDTH{1'bz}};
+  assign read_data_new_X=(match_r5 & read_oe_reg) ? write5_data_reg : {DATA_WIDTH{1'bz}};
+  assign read_data_new_X=(match_r6 & read_oe_reg) ? write6_data_reg : {DATA_WIDTH{1'bz}};
+  assign read_data_new_X=(match_r7 & read_oe_reg) ? write7_data_reg : {DATA_WIDTH{1'bz}};
+  assign read_data_new_X=(match_r8 & read_oe_reg) ? write8_data_reg : {DATA_WIDTH{1'bz}};
+  assign read_data_new_X=(match_r9 & read_oe_reg) ? write9_data_reg : {DATA_WIDTH{1'bz}};
 
-  assign read_data_new=(match | ~read_oe_reg) ? {DATA_WIDTH{1'bz}} : read_data_ram;
+  assign read_data_new_X=(match | ~read_oe_reg) ? {DATA_WIDTH{1'bz}} : read_data_ram;
   
   assign match_w[0]=read_addr_reg==write0_addr_reg && write0_wen_reg &&
      ~read_constEn_reg && read_oe_reg;
