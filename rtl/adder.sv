@@ -272,7 +272,6 @@ endmodule
 
 module adder(a,b,out,cin,en,cout,cout8,cout16,cout32);
   parameter WIDTH=32;
-  /*verilator hier_block*/
   input [WIDTH-1:0] a;
   input [WIDTH-1:0] b;
   output [WIDTH-1:0] out;
@@ -925,7 +924,6 @@ endmodule
 
 module adder_inc(a,out,en,cout);
   parameter WIDTH=32;
-  /*verilator hier_block*/
   input [WIDTH-1:0] a;
   output [WIDTH-1:0] out;
   input en;
@@ -1117,7 +1115,6 @@ endmodule
 
 module get_carry(a,b,cin,cout); //cout=a bigger or equal than b if b inv, cin=1
   parameter WIDTH=32;
-  /*verilator hier_block*/
   input [WIDTH-1:0] a;
   input [WIDTH-1:0] b;
   input cin;
@@ -1276,7 +1273,6 @@ module add_agu(
   shift
   );
   parameter WIDTH=44;
-  /*verilator hier_block*/
   input [64:0] a;//base
   input [63:0] b;
   input [64:0] c; //index
@@ -1555,7 +1551,6 @@ endmodule
 
 module adder2oM(a,b,out0,out1,out2,cin,en0,en1,low32,cout,cout8,cout16,cout32);
   parameter WIDTH=32;
-  /*verilator hier_block*/
   input [WIDTH-1:0] a;
   input [WIDTH-1:0] b;
   output [WIDTH-1:0] out0;
@@ -1945,7 +1940,6 @@ endmodule
 
 module adder2o(a,b,out0,out1,cin,en0,en1,cout,cout8,cout16,cout32);
   parameter WIDTH=32;
-  /*verilator hier_block*/
   input [WIDTH-1:0] a;
   input [WIDTH-1:0] b;
   output [WIDTH-1:0] out0;
@@ -2133,7 +2127,6 @@ endmodule
 
 module adder2c(a,b,out0,out1,cin0,cin1,en0,en1,cout0,cout1,cout0_53,cout1_53);
   parameter WIDTH=32;
-  /*verilator hier_block*/
   input [WIDTH-1:0] a;
   input [WIDTH-1:0] b;
   output [WIDTH-1:0] out0;
@@ -2344,7 +2337,6 @@ endmodule
 
 module adder2ox(a,b,out0,out1,cin,en0,en1,cout,cout8,cout16,cout32);
   parameter WIDTH=32;
-  /*verilator hier_block*/
   input [WIDTH:0] a;
   input [WIDTH:0] b;
   output [WIDTH:0] out0;

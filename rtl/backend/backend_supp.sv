@@ -36,7 +36,7 @@ module reg_alloc(
   rs0i2_en,rs1i2_en,rs2i2_en
   );
   localparam REG_WIDTH=`reg_addr_width;
-  
+ /*verilator hier_block*/ 
   input clk;
   input rst;
   input stall;
@@ -1237,6 +1237,7 @@ module alloc_WQ(
   free0,freeWQ0,
   free1,freeWQ1
   );
+ /*verilator hier_block*/ 
 
   input clk;
   input rst;

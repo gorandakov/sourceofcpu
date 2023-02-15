@@ -2198,11 +2198,11 @@ no_srch:;
 	pos+=count;
     }
     xbreak=top->heptane_core__DOT__bck_mod__DOT__retM_xbreak;
-    retire=top->heptane_core__DOT__bck_mod__DOT__retM_do_retire;
     if (retire) {
 	    retII++;
             if (retII>47) retII=0;
     }
+    retire=top->heptane_core__DOT__bck_mod__DOT__retM_do_retire;
     if (top->heptane_core__DOT__iAvail) printf("iAvail 0x%x, \t0x%x\n",top->heptane_core__DOT__iAvail,top->heptane_core__DOT__instrEn);
     if (top->heptane_core__DOT__instrEn && top->heptane_core__DOT__bck_mod__DOT__stall_rs==0 && !top->heptane_core__DOT__except && 
 		    top->heptane_core__DOT__bck_mod__DOT__doStall_rs==0) {
@@ -2473,12 +2473,12 @@ int main(int argc, char *argv[]) {
 	perror("open() ");
     }
     prog_locate(reqs,(unsigned char *)mem);
+    Verilated::traceEverOn(true);
     req_set(top,reqs,mem,memp);
     top->eval();
     top->clk=1;
     top->eval();
     top->clk=0;
-    top->eval();
     top->eval();
     top->rst=0;
     while(!Verilated::gotFinish()) {
