@@ -423,45 +423,45 @@ module regfile_ram_placeholder(
   write3_addr[8:5],write3_data,ram_write3B_wen
   );
   
-  assign read0_data=read0A_en ? ram_read0A_data : {DATA_WIDTH{1'bz}};
-  assign read1_data=read1A_en ? ram_read1A_data : {DATA_WIDTH{1'bz}};
-  assign read2_data=read2A_en ? ram_read2A_data : {DATA_WIDTH{1'bz}};
-  assign read3_data=read3A_en ? ram_read3A_data : {DATA_WIDTH{1'bz}};
-  assign read4_data=read4A_en ? ram_read4A_data : {DATA_WIDTH{1'bz}};
-  assign read5_data=read5A_en ? ram_read5A_data : {DATA_WIDTH{1'bz}};
-  assign read6_data=read6A_en ? ram_read6A_data : {DATA_WIDTH{1'bz}};
-  assign read7_data=read7A_en ? ram_read7A_data : {DATA_WIDTH{1'bz}};
-  assign read8_data=read8A_en ? ram_read8A_data : {DATA_WIDTH{1'bz}};
+  assign read0_data=read0A_en ? ram_read0A_data : {DATA_WIDTH{{1{1'bz}}}};
+  assign read1_data=read1A_en ? ram_read1A_data : {DATA_WIDTH{{1{1'bz}}}};
+  assign read2_data=read2A_en ? ram_read2A_data : {DATA_WIDTH{{1{1'bz}}}};
+  assign read3_data=read3A_en ? ram_read3A_data : {DATA_WIDTH{{1{1'bz}}}};
+  assign read4_data=read4A_en ? ram_read4A_data : {DATA_WIDTH{{1{1'bz}}}};
+  assign read5_data=read5A_en ? ram_read5A_data : {DATA_WIDTH{{1{1'bz}}}};
+  assign read6_data=read6A_en ? ram_read6A_data : {DATA_WIDTH{{1{1'bz}}}};
+  assign read7_data=read7A_en ? ram_read7A_data : {DATA_WIDTH{{1{1'bz}}}};
+  assign read8_data=read8A_en ? ram_read8A_data : {DATA_WIDTH{{1{1'bz}}}};
 
-  assign read0_data=read0B_en ? ram_read0B_data : {DATA_WIDTH{1'bz}};
-  assign read1_data=read1B_en ? ram_read1B_data : {DATA_WIDTH{1'bz}};
-  assign read2_data=read2B_en ? ram_read2B_data : {DATA_WIDTH{1'bz}};
-  assign read3_data=read3B_en ? ram_read3B_data : {DATA_WIDTH{1'bz}};
-  assign read4_data=read4B_en ? ram_read4B_data : {DATA_WIDTH{1'bz}};
-  assign read5_data=read5B_en ? ram_read5B_data : {DATA_WIDTH{1'bz}};
-  assign read6_data=read6B_en ? ram_read6B_data : {DATA_WIDTH{1'bz}};
-  assign read7_data=read7B_en ? ram_read7B_data : {DATA_WIDTH{1'bz}};
-  assign read8_data=read8B_en ? ram_read8B_data : {DATA_WIDTH{1'bz}};
+  assign read0_data=read0B_en ? ram_read0B_data : {DATA_WIDTH{{1{1'bz}}}};
+  assign read1_data=read1B_en ? ram_read1B_data : {DATA_WIDTH{{1{1'bz}}}};
+  assign read2_data=read2B_en ? ram_read2B_data : {DATA_WIDTH{{1{1'bz}}}};
+  assign read3_data=read3B_en ? ram_read3B_data : {DATA_WIDTH{{1{1'bz}}}};
+  assign read4_data=read4B_en ? ram_read4B_data : {DATA_WIDTH{{1{1'bz}}}};
+  assign read5_data=read5B_en ? ram_read5B_data : {DATA_WIDTH{{1{1'bz}}}};
+  assign read6_data=read6B_en ? ram_read6B_data : {DATA_WIDTH{{1{1'bz}}}};
+  assign read7_data=read7B_en ? ram_read7B_data : {DATA_WIDTH{{1{1'bz}}}};
+  assign read8_data=read8B_en ? ram_read8B_data : {DATA_WIDTH{{1{1'bz}}}};
   
-  assign read0_dataN=read0A_en ? ~ram_read0A_data : {DATA_WIDTH{1'bz}};
-  assign read1_dataN=read1A_en ? ~ram_read1A_data : {DATA_WIDTH{1'bz}};
-  assign read2_dataN=read2A_en ? ~ram_read2A_data : {DATA_WIDTH{1'bz}};
-  assign read3_dataN=read3A_en ? ~ram_read3A_data : {DATA_WIDTH{1'bz}};
-  assign read4_dataN=read4A_en ? ~ram_read4A_data : {DATA_WIDTH{1'bz}};
-  assign read5_dataN=read5A_en ? ~ram_read5A_data : {DATA_WIDTH{1'bz}};
-  assign read6_dataN=read6A_en ? ~ram_read6A_data : {DATA_WIDTH{1'bz}};
-  assign read7_dataN=read7A_en ? ~ram_read7A_data : {DATA_WIDTH{1'bz}};
-  assign read8_dataN=read8A_en ? ~ram_read8A_data : {DATA_WIDTH{1'bz}};
+  assign read0_dataN=read0A_en ? ~ram_read0A_data : {DATA_WIDTH{{1{1'bz}}}};
+  assign read1_dataN=read1A_en ? ~ram_read1A_data : {DATA_WIDTH{{1{1'bz}}}};
+  assign read2_dataN=read2A_en ? ~ram_read2A_data : {DATA_WIDTH{{1{1'bz}}}};
+  assign read3_dataN=read3A_en ? ~ram_read3A_data : {DATA_WIDTH{{1{1'bz}}}};
+  assign read4_dataN=read4A_en ? ~ram_read4A_data : {DATA_WIDTH{{1{1'bz}}}};
+  assign read5_dataN=read5A_en ? ~ram_read5A_data : {DATA_WIDTH{{1{1'bz}}}};
+  assign read6_dataN=read6A_en ? ~ram_read6A_data : {DATA_WIDTH{{1{1'bz}}}};
+  assign read7_dataN=read7A_en ? ~ram_read7A_data : {DATA_WIDTH{{1{1'bz}}}};
+  assign read8_dataN=read8A_en ? ~ram_read8A_data : {DATA_WIDTH{{1{1'bz}}}};
 
-  assign read0_dataN=read0B_en ? ~ram_read0B_data : {DATA_WIDTH{1'bz}};
-  assign read1_dataN=read1B_en ? ~ram_read1B_data : {DATA_WIDTH{1'bz}};
-  assign read2_dataN=read2B_en ? ~ram_read2B_data : {DATA_WIDTH{1'bz}};
-  assign read3_dataN=read3B_en ? ~ram_read3B_data : {DATA_WIDTH{1'bz}};
-  assign read4_dataN=read4B_en ? ~ram_read4B_data : {DATA_WIDTH{1'bz}};
-  assign read5_dataN=read5B_en ? ~ram_read5B_data : {DATA_WIDTH{1'bz}};
-  assign read6_dataN=read6B_en ? ~ram_read6B_data : {DATA_WIDTH{1'bz}};
-  assign read7_dataN=read7B_en ? ~ram_read7B_data : {DATA_WIDTH{1'bz}};
-  assign read8_dataN=read8B_en ? ~ram_read8B_data : {DATA_WIDTH{1'bz}};
+  assign read0_dataN=read0B_en ? ~ram_read0B_data : {DATA_WIDTH{{1{1'bz}}}};
+  assign read1_dataN=read1B_en ? ~ram_read1B_data : {DATA_WIDTH{{1{1'bz}}}};
+  assign read2_dataN=read2B_en ? ~ram_read2B_data : {DATA_WIDTH{{1{1'bz}}}};
+  assign read3_dataN=read3B_en ? ~ram_read3B_data : {DATA_WIDTH{{1{1'bz}}}};
+  assign read4_dataN=read4B_en ? ~ram_read4B_data : {DATA_WIDTH{{1{1'bz}}}};
+  assign read5_dataN=read5B_en ? ~ram_read5B_data : {DATA_WIDTH{{1{1'bz}}}};
+  assign read6_dataN=read6B_en ? ~ram_read6B_data : {DATA_WIDTH{{1{1'bz}}}};
+  assign read7_dataN=read7B_en ? ~ram_read7B_data : {DATA_WIDTH{{1{1'bz}}}};
+  assign read8_dataN=read8B_en ? ~ram_read8B_data : {DATA_WIDTH{{1{1'bz}}}};
   
   assign retireRead_data=retA_en ? retireReadA_data : retireReadB_data;
   
@@ -849,25 +849,25 @@ module regfile_ram_block(
   assign write2_data_ram[2]=write9_data;
   assign write2_wen_ram[2]=write9_wen;
    
-  assign read0_data= read0_constEn_reg ? read0_const_reg : {DATA_WIDTH{1'BZ}};
-  assign read1_data= read1_constEn_reg ? read1_const_reg : {DATA_WIDTH{1'BZ}};
-  assign read2_data= read2_constEn_reg ? read2_const_reg : {DATA_WIDTH{1'BZ}};
-  assign read3_data= read3_constEn_reg ? read3_const_reg : {DATA_WIDTH{1'BZ}};
-  assign read4_data= read4_constEn_reg ? read4_const_reg : {DATA_WIDTH{1'BZ}};
-  assign read5_data= read5_constEn_reg ? read5_const_reg : {DATA_WIDTH{1'BZ}};
-  assign read6_data= read6_constEn_reg ? read6_const_reg : {DATA_WIDTH{1'BZ}};
-  assign read7_data= read7_constEn_reg ? read7_const_reg : {DATA_WIDTH{1'BZ}};
-  assign read8_data= read8_constEn_reg ? read8_const_reg : {DATA_WIDTH{1'BZ}};
+  assign read0_data= read0_constEn_reg ? read0_const_reg : {DATA_WIDTH{{1{1'bz}}}};
+  assign read1_data= read1_constEn_reg ? read1_const_reg : {DATA_WIDTH{{1{1'bz}}}};
+  assign read2_data= read2_constEn_reg ? read2_const_reg : {DATA_WIDTH{{1{1'bz}}}};
+  assign read3_data= read3_constEn_reg ? read3_const_reg : {DATA_WIDTH{{1{1'bz}}}};
+  assign read4_data= read4_constEn_reg ? read4_const_reg : {DATA_WIDTH{{1{1'bz}}}};
+  assign read5_data= read5_constEn_reg ? read5_const_reg : {DATA_WIDTH{{1{1'bz}}}};
+  assign read6_data= read6_constEn_reg ? read6_const_reg : {DATA_WIDTH{{1{1'bz}}}};
+  assign read7_data= read7_constEn_reg ? read7_const_reg : {DATA_WIDTH{{1{1'bz}}}};
+  assign read8_data= read8_constEn_reg ? read8_const_reg : {DATA_WIDTH{{1{1'bz}}}};
 
-  assign read0_dataN= read0_constEn_reg ? ~read0_const_reg : {DATA_WIDTH{1'BZ}};
-  assign read1_dataN= read1_constEn_reg ? ~read1_const_reg : {DATA_WIDTH{1'BZ}};
-  assign read2_dataN= read2_constEn_reg ? ~read2_const_reg : {DATA_WIDTH{1'BZ}};
-  assign read3_dataN= read3_constEn_reg ? ~read3_const_reg : {DATA_WIDTH{1'BZ}};
-  assign read4_dataN= read4_constEn_reg ? ~read4_const_reg : {DATA_WIDTH{1'BZ}};
-  assign read5_dataN= read5_constEn_reg ? ~read5_const_reg : {DATA_WIDTH{1'BZ}};
-  assign read6_dataN= read6_constEn_reg ? ~read6_const_reg : {DATA_WIDTH{1'BZ}};
-  assign read7_dataN= read7_constEn_reg ? ~read7_const_reg : {DATA_WIDTH{1'BZ}};
-  assign read8_dataN= read8_constEn_reg ? ~read8_const_reg : {DATA_WIDTH{1'BZ}};
+  assign read0_dataN= read0_constEn_reg ? ~read0_const_reg : {DATA_WIDTH{{1{1'bz}}}};
+  assign read1_dataN= read1_constEn_reg ? ~read1_const_reg : {DATA_WIDTH{{1{1'bz}}}};
+  assign read2_dataN= read2_constEn_reg ? ~read2_const_reg : {DATA_WIDTH{{1{1'bz}}}};
+  assign read3_dataN= read3_constEn_reg ? ~read3_const_reg : {DATA_WIDTH{{1{1'bz}}}};
+  assign read4_dataN= read4_constEn_reg ? ~read4_const_reg : {DATA_WIDTH{{1{1'bz}}}};
+  assign read5_dataN= read5_constEn_reg ? ~read5_const_reg : {DATA_WIDTH{{1{1'bz}}}};
+  assign read6_dataN= read6_constEn_reg ? ~read6_const_reg : {DATA_WIDTH{{1{1'bz}}}};
+  assign read7_dataN= read7_constEn_reg ? ~read7_const_reg : {DATA_WIDTH{{1{1'bz}}}};
+  assign read8_dataN= read8_constEn_reg ? ~read8_const_reg : {DATA_WIDTH{{1{1'bz}}}};
 
   adder_inc #(ADDR_WIDTH-4) initInc_mod(initRegCount[ADDR_WIDTH-1:4],initRegCount_next,1'b1,);
 
@@ -1153,18 +1153,18 @@ module regfile_zero_cycle_write(
 
   assign match=|{match_r0,match_r1,match_r2,match_r3,match_r4,match_r5,match_r6,match_r7,match_r8,match_r9};
 
-  assign read_data_new_X=(match_r0 & read_oe_reg) ? write0_data_reg : {DATA_WIDTH{1'bz}};
-  assign read_data_new_X=(match_r1 & read_oe_reg) ? write1_data_reg : {DATA_WIDTH{1'bz}};
-  assign read_data_new_X=(match_r2 & read_oe_reg) ? write2_data_reg : {DATA_WIDTH{1'bz}};
-  assign read_data_new_X=(match_r3 & read_oe_reg) ? write3_data_reg : {DATA_WIDTH{1'bz}};
-  assign read_data_new_X=(match_r4 & read_oe_reg) ? write4_data_reg : {DATA_WIDTH{1'bz}};
-  assign read_data_new_X=(match_r5 & read_oe_reg) ? write5_data_reg : {DATA_WIDTH{1'bz}};
-  assign read_data_new_X=(match_r6 & read_oe_reg) ? write6_data_reg : {DATA_WIDTH{1'bz}};
-  assign read_data_new_X=(match_r7 & read_oe_reg) ? write7_data_reg : {DATA_WIDTH{1'bz}};
-  assign read_data_new_X=(match_r8 & read_oe_reg) ? write8_data_reg : {DATA_WIDTH{1'bz}};
-  assign read_data_new_X=(match_r9 & read_oe_reg) ? write9_data_reg : {DATA_WIDTH{1'bz}};
+  assign read_data_new_X=(match_r0 & read_oe_reg) ? write0_data_reg : {DATA_WIDTH{{1{1'bz}}}};
+  assign read_data_new_X=(match_r1 & read_oe_reg) ? write1_data_reg : {DATA_WIDTH{{1{1'bz}}}};
+  assign read_data_new_X=(match_r2 & read_oe_reg) ? write2_data_reg : {DATA_WIDTH{{1{1'bz}}}};
+  assign read_data_new_X=(match_r3 & read_oe_reg) ? write3_data_reg : {DATA_WIDTH{{1{1'bz}}}};
+  assign read_data_new_X=(match_r4 & read_oe_reg) ? write4_data_reg : {DATA_WIDTH{{1{1'bz}}}};
+  assign read_data_new_X=(match_r5 & read_oe_reg) ? write5_data_reg : {DATA_WIDTH{{1{1'bz}}}};
+  assign read_data_new_X=(match_r6 & read_oe_reg) ? write6_data_reg : {DATA_WIDTH{{1{1'bz}}}};
+  assign read_data_new_X=(match_r7 & read_oe_reg) ? write7_data_reg : {DATA_WIDTH{{1{1'bz}}}};
+  assign read_data_new_X=(match_r8 & read_oe_reg) ? write8_data_reg : {DATA_WIDTH{{1{1'bz}}}};
+  assign read_data_new_X=(match_r9 & read_oe_reg) ? write9_data_reg : {DATA_WIDTH{{1{1'bz}}}};
 
-  assign read_data_new_X=(match | ~read_oe_reg) ? {DATA_WIDTH{1'bz}} : read_data_ram;
+  assign read_data_new_X=(match | ~read_oe_reg) ? {DATA_WIDTH{{1{1'bz}}}} : read_data_ram;
   
   assign match_w[0]=read_addr_reg==write0_addr_reg && write0_wen_reg &&
      ~read_constEn_reg && read_oe_reg;

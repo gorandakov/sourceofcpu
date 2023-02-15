@@ -721,19 +721,19 @@ module fu_alu(
   assign fcvtout={FUCVT2_0[81:66],FUTYPE_0,FUCVT2_0[65:0]};
   
   
-  assign FU6=(~&nDataAlt) ? FUMUL : 65'bz;
-  assign FU6=(~u5_nDataAlt) ? {1'b0,FUCVTIN} : 65'bz;
-  assign FNU6=(~&nDataAlt) ? ~FUMUL : 65'bz;
-  assign FNU6=(~u5_nDataAlt) ? ~{1'b0,FUCVTIN} : 65'bz;
+  assign FU6=(~&nDataAlt) ? FUMUL : {65{1'bz}};
+  assign FU6=(~u5_nDataAlt) ? {1'b0,FUCVTIN} : {65{1'bz}};
+  assign FNU6=(~&nDataAlt) ? ~FUMUL : {65{1'bz}};
+  assign FNU6=(~u5_nDataAlt) ? ~{1'b0,FUCVTIN} : {65{1'bz}};
 
  
   
   assign u5_ret=(~u5_nDataAlt_reg|(~nDataAlt_reg[1])) ? {6'b0,1'b0,2'd2} : 
-    9'bz; 
+    {9{1'bz}}; 
   assign u5_ret=u5_nDataAlt_reg&~nDataAlt_reg[0] ? {MULFL,~u6_op_reg4[12],
-    2'd2} : 9'bz; 
+    2'd2} : {9{1'bz}}; 
   assign u5_rten=(~u5_nDataAlt_reg|(~&nDataAlt_reg)) ? 1'b1 : 
-    1'bz; 
+    {1{1'bz}}; 
 
   imul imul_mod(
   .clk(clk),

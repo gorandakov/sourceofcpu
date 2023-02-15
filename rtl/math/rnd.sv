@@ -47,5 +47,5 @@ module fprnd(
 
   adder #(64) rnd_mod(Ax,rbit,res0,1'b0,do_rnd,cout);
 
-  assign res0=~do_rnd ? Ax : 64'bz;
+  assign res0=~do_rnd ? Ax : {64{1'bz}};
 endmodule

@@ -303,9 +303,9 @@ module ldq_up_down0(
   assign dec[1]=freeEn0 ^ freeEn1 && ~en_xtra && freeMatch;
   assign dec[2]=freeEn0 & freeEn1 && ~en_xtra && freeMatch;
 
-  assign cpop=dec[0] ? {inc,2'b0} : 5'bz;
-  assign cpop=dec[1] ? {1'b0,inc,1'b0} : 5'bz;
-  assign cpop=dec[2] ? {2'b0,inc} : 5'bz;
+  assign cpop=dec[0] ? {inc,2'b0} : {5{1'bz}};
+  assign cpop=dec[1] ? {1'b0,inc,1'b0} : {5{1'bz}};
+  assign cpop=dec[2] ? {2'b0,inc} : {5{1'bz}};
 
   generate
 
@@ -321,7 +321,7 @@ module ldq_up_down0(
 
   endgenerate
   
-  assign cnt_d=(en_xtra & en_z) ? 6'd0 : 6'bz;
+  assign cnt_d=(en_xtra & en_z) ? 6'd0 : {6{1'bz}};
 
 endmodule
 
@@ -364,13 +364,13 @@ module ldq_up_down1(
   assign dec[1]=freeEn0 ^ freeEn1 && freeMatch;
   assign dec[2]=freeEn0 & freeEn1 && freeMatch;
 
-  assign cpop=dec[0] ? {inc,2'b0} : 5'bz;
-  assign cpop=dec[1] ? {1'b0,inc,1'b0} : 5'bz;
-  assign cpop=dec[2] ? {2'b0,inc} : 5'bz;
+  assign cpop=dec[0] ? {inc,2'b0} : {5{1'bz}};
+  assign cpop=dec[1] ? {1'b0,inc,1'b0} : {5{1'bz}};
+  assign cpop=dec[2] ? {2'b0,inc} : {5{1'bz}};
 
-  assign cnt_d=(~en_xtra0 & ~en_xtra1) ? cnt_d1 : 6'bz;
-  assign cnt_d=en_xtra0 ? cnt_d2 : 6'bz;
-  assign cnt_d=en_xtra1 ? cnt_d3 : 6'bz;
+  assign cnt_d=(~en_xtra0 & ~en_xtra1) ? cnt_d1 : {6{1'bz}};
+  assign cnt_d=en_xtra0 ? cnt_d2 : {6{1'bz}};
+  assign cnt_d=en_xtra1 ? cnt_d3 : {6{1'bz}};
 
   generate
 
@@ -857,14 +857,14 @@ module ldq(
         );
     end
     for(p=0;p<6;p=p+1) begin
-        assign chkL0_data=(chk_data_shr_reg[`lsqshare_wrt0]==p) ? chk_dataA[p] : {DATA_WIDTH{1'bz}}; 
-        assign chkL1_data=(chk_data_shr_reg[`lsqshare_wrt1]==p) ? chk_dataA[p] : {DATA_WIDTH{1'bz}}; 
+        assign chkL0_data=(chk_data_shr_reg[`lsqshare_wrt0]==p) ? chk_dataA[p] : {DATA_WIDTH{{1{1'bz}}}}; 
+        assign chkL1_data=(chk_data_shr_reg[`lsqshare_wrt1]==p) ? chk_dataA[p] : {DATA_WIDTH{{1{1'bz}}}}; 
 
-        assign chkL0_en=(chk_data_shr_reg[`lsqshare_wrt0]==p) ? chk_enA[p] : 1'bz; 
-        assign chkL1_en=(chk_data_shr_reg[`lsqshare_wrt1]==p) ? chk_enA[p] : 1'bz; 
+        assign chkL0_en=(chk_data_shr_reg[`lsqshare_wrt0]==p) ? chk_enA[p] : {1{1'bz}}; 
+        assign chkL1_en=(chk_data_shr_reg[`lsqshare_wrt1]==p) ? chk_enA[p] : {1{1'bz}}; 
         
-        assign chkL0_mask=(chk_data_shr_reg[`lsqshare_wrt0]==p) ? 6'b111110<<p : 6'bz; 
-        assign chkL1_mask=(chk_data_shr_reg[`lsqshare_wrt1]==p) ? 6'b111110<<p  : 6'bz; 
+        assign chkL0_mask=(chk_data_shr_reg[`lsqshare_wrt0]==p) ? 6'b111110<<p : {6{1'bz}}; 
+        assign chkL1_mask=(chk_data_shr_reg[`lsqshare_wrt1]==p) ? 6'b111110<<p  : {6{1'bz}}; 
 
 	assign confl_X[p]=chk_dataA[p][`lsaddr_mtype]==2'b10 && ~chk_dataA[p][`lsaddr_flag];
         
@@ -873,60 +873,60 @@ module ldq(
               chk_dataA[p][`lsaddr_reg_low]==(4'd3+l[3:0]) || chk_dataA[p][`lsaddr_reg_low]==(4'd6+l[3:0])) &&
               chk_enA[p] && ~chk_dataA[p][`lsaddr_st];
  
-            if (p!=0) assign chk_II[l]=(chkbits[l][p] && chkbits[l][p-1:0]==0) ? II_save[p] : 10'bz;
-            else assign chk_II[l]=(chkbits[l][p]) ? II_save[p] : 10'bz;
-            if (p!=0) assign chk_II[l+3]=(chkbits[l][p] && chkbits[l][p-1:0]!=0) ? II_save[p] : 10'bz;
+            if (p!=0) assign chk_II[l]=(chkbits[l][p] && chkbits[l][p-1:0]==0) ? II_save[p] : {10{1'bz}};
+            else assign chk_II[l]=(chkbits[l][p]) ? II_save[p] : {10{1'bz}};
+            if (p!=0) assign chk_II[l+3]=(chkbits[l][p] && chkbits[l][p-1:0]!=0) ? II_save[p] : {10{1'bz}};
 
-            if (p!=0) assign chk_mask[l]=(chkbits[l][p] && chkbits[l][p-1:0]==0) ? 6'b1<<p : 6'bz;
-            else assign chk_mask[l]=(chkbits[l][p]) ? 6'b1<<p : 6'bz;
-            if (p!=0) assign chk_mask[l+3]=(chkbits[l][p] && chkbits[l][p-1:0]!=0) ? 6'b1<<p : 6'bz;
+            if (p!=0) assign chk_mask[l]=(chkbits[l][p] && chkbits[l][p-1:0]==0) ? 6'b1<<p : {6{1'bz}};
+            else assign chk_mask[l]=(chkbits[l][p]) ? 6'b1<<p : {6{1'bz}};
+            if (p!=0) assign chk_mask[l+3]=(chkbits[l][p] && chkbits[l][p-1:0]!=0) ? 6'b1<<p : {6{1'bz}};
 
-            if (p!=0) assign confl[p]=(chkbits[l][p] && chkbits[l][p-1:0]==0) ? conflP[l]|confl_X[p] : 1'bz;
-            else assign confl[p]=(chkbits[l][p]) ? conflP[l]|confl_X[p] : 1'bz;
-            if (p!=0) assign confl[p]=(chkbits[l][p] && chkbits[l][p-1:0]!=0) ? conflP[l+3]|confl_X[p] : 1'bz;
+            if (p!=0) assign confl[p]=(chkbits[l][p] && chkbits[l][p-1:0]==0) ? conflP[l]|confl_X[p] : {1{1'bz}};
+            else assign confl[p]=(chkbits[l][p]) ? conflP[l]|confl_X[p] : {1{1'bz}};
+            if (p!=0) assign confl[p]=(chkbits[l][p] && chkbits[l][p-1:0]!=0) ? conflP[l+3]|confl_X[p] : {1{1'bz}};
             
-            if (p!=0) assign conflX[p]=(chkbits[l][p] && chkbits[l][p-1:0]==0) ? confl_X[p] : 1'bz;
-            else assign conflX[p]=(chkbits[l][p]) ? confl_X[p] : 1'bz;
-            if (p!=0) assign conflX[p]=(chkbits[l][p] && chkbits[l][p-1:0]!=0) ? confl_X[p] : 1'bz;
+            if (p!=0) assign conflX[p]=(chkbits[l][p] && chkbits[l][p-1:0]==0) ? confl_X[p] : {1{1'bz}};
+            else assign conflX[p]=(chkbits[l][p]) ? confl_X[p] : {1{1'bz}};
+            if (p!=0) assign conflX[p]=(chkbits[l][p] && chkbits[l][p-1:0]!=0) ? confl_X[p] : {1{1'bz}};
             
-            if (p!=0) assign confl_smp[p]=(chkbits[l][p] && chkbits[l][p-1:0]==0) ? confl_smpP[l] : 1'bz;
-            else assign confl_smp[p]=(chkbits[l][p]) ? confl_smpP[l] : 1'bz;
-            if (p!=0) assign confl_smp[p]=(chkbits[l][p] && chkbits[l][p-1:0]!=0) ? confl_smpP[l+3] : 1'bz;
+            if (p!=0) assign confl_smp[p]=(chkbits[l][p] && chkbits[l][p-1:0]==0) ? confl_smpP[l] : {1{1'bz}};
+            else assign confl_smp[p]=(chkbits[l][p]) ? confl_smpP[l] : {1{1'bz}};
+            if (p!=0) assign confl_smp[p]=(chkbits[l][p] && chkbits[l][p-1:0]!=0) ? confl_smpP[l+3] : {1{1'bz}};
             
-           /* if (p) assign chk_ret[l]=(chkbits_reg[l][p] && !chkbits_reg[l][p-1:0]) ? ret_mask[II_save[p][3:0]] : 10'bz;
-            else assign chk_ret[l]=(chkbits_reg[l][p]) ? ret_mask[II_save[p][3:0]] : 10'bz;
-            if (p) assign chk_ret[l+3]=(chkbits_reg[l][p] && chkbits_reg[l][p-1:0]) ? ret_mask[II_save[p][3:0]] : 10'bz;*/
+           /* if (p) assign chk_ret[l]=(chkbits_reg[l][p] && !chkbits_reg[l][p-1:0]) ? ret_mask[II_save[p][3:0]] : {10{1'bz}};
+            else assign chk_ret[l]=(chkbits_reg[l][p]) ? ret_mask[II_save[p][3:0]] : {10{1'bz}};
+            if (p) assign chk_ret[l+3]=(chkbits_reg[l][p] && chkbits_reg[l][p-1:0]) ? ret_mask[II_save[p][3:0]] : {10{1'bz}};*/
         end
-        assign confl[p]=(chkbits[0][p] || chkbits[1][p] || chkbits[2][p]) ? 1'bz : 1'b0; 
-        assign conflX[p]=(chkbits[0][p] || chkbits[1][p] || chkbits[2][p]) ? 1'bz : 1'b0; 
-        assign confl_smp[p]=(chkbits[0][p] || chkbits[1][p] || chkbits[2][p]) ? 1'bz : 1'b0; 
+        assign confl[p]=(chkbits[0][p] || chkbits[1][p] || chkbits[2][p]) ? {1{1'bz}} : 1'b0; 
+        assign conflX[p]=(chkbits[0][p] || chkbits[1][p] || chkbits[2][p]) ? {1{1'bz}} : 1'b0; 
+        assign confl_smp[p]=(chkbits[0][p] || chkbits[1][p] || chkbits[2][p]) ? {1{1'bz}} : 1'b0; 
     end
   endgenerate
   
-  assign chk_II[0]=chkbits[0]!=0 ? 10'bz : 10'hf;
-  assign chk_II[1]=chkbits[1]!=0 ? 10'bz : 10'hf;
-  assign chk_II[2]=chkbits[2]!=0 ? 10'bz : 10'hf;
-  assign chk_II[3]=cnt_chk[0][2] ? 10'bz : 10'hf;
-  assign chk_II[4]=cnt_chk[1][2] ? 10'bz : 10'hf;
-  assign chk_II[5]=cnt_chk[2][2] ? 10'bz : 10'hf;
+  assign chk_II[0]=chkbits[0]!=0 ? {10{1'bz}} : 10'hf;
+  assign chk_II[1]=chkbits[1]!=0 ? {10{1'bz}} : 10'hf;
+  assign chk_II[2]=chkbits[2]!=0 ? {10{1'bz}} : 10'hf;
+  assign chk_II[3]=cnt_chk[0][2] ? {10{1'bz}} : 10'hf;
+  assign chk_II[4]=cnt_chk[1][2] ? {10{1'bz}} : 10'hf;
+  assign chk_II[5]=cnt_chk[2][2] ? {10{1'bz}} : 10'hf;
 
-  assign chk_mask[0]=chkbits[0]!=0 ? 6'bz : 6'b0;
-  assign chk_mask[1]=chkbits[1]!=0 ? 6'bz : 6'b0;
-  assign chk_mask[2]=chkbits[2]!=0 ? 6'bz : 6'b0;
-  assign chk_mask[3]=cnt_chk[0][2] ? 6'bz : 6'b0;
-  assign chk_mask[4]=cnt_chk[1][2] ? 6'bz : 6'b0;
-  assign chk_mask[5]=cnt_chk[2][2] ? 6'bz : 6'b0;
+  assign chk_mask[0]=chkbits[0]!=0 ? {6{1'bz}} : 6'b0;
+  assign chk_mask[1]=chkbits[1]!=0 ? {6{1'bz}} : 6'b0;
+  assign chk_mask[2]=chkbits[2]!=0 ? {6{1'bz}} : 6'b0;
+  assign chk_mask[3]=cnt_chk[0][2] ? {6{1'bz}} : 6'b0;
+  assign chk_mask[4]=cnt_chk[1][2] ? {6{1'bz}} : 6'b0;
+  assign chk_mask[5]=cnt_chk[2][2] ? {6{1'bz}} : 6'b0;
 
 
 
-  assign chkL0_data=(chk_data_shr_reg[`lsqshare_wrt0]==3'd7) ? {DATA_WIDTH{1'B0}} : {DATA_WIDTH{1'bz}}; 
-  assign chkL1_data=(chk_data_shr_reg[`lsqshare_wrt1]==3'd7) ? {DATA_WIDTH{1'B0}} : {DATA_WIDTH{1'bz}}; 
+  assign chkL0_data=(chk_data_shr_reg[`lsqshare_wrt0]==3'd7) ? {DATA_WIDTH{1'B0}} : {DATA_WIDTH{{1{1'bz}}}}; 
+  assign chkL1_data=(chk_data_shr_reg[`lsqshare_wrt1]==3'd7) ? {DATA_WIDTH{1'B0}} : {DATA_WIDTH{{1{1'bz}}}}; 
 
-  assign chkL0_en=(chk_data_shr_reg[`lsqshare_wrt0]==3'd7) ? 1'B0 : 1'bz; 
-  assign chkL1_en=(chk_data_shr_reg[`lsqshare_wrt1]==3'd7) ? 1'B0 : 1'bz; 
+  assign chkL0_en=(chk_data_shr_reg[`lsqshare_wrt0]==3'd7) ? 1'B0 : {1{1'bz}}; 
+  assign chkL1_en=(chk_data_shr_reg[`lsqshare_wrt1]==3'd7) ? 1'B0 : {1{1'bz}}; 
  
-  assign chkL0_mask=(chk_data_shr_reg[`lsqshare_wrt0]==3'd7) ? 6'B0 : 6'bz; 
-  assign chkL1_mask=(chk_data_shr_reg[`lsqshare_wrt1]==3'd7) ? 6'B0 : 6'bz; 
+  assign chkL0_mask=(chk_data_shr_reg[`lsqshare_wrt0]==3'd7) ? 6'B0 : {6{1'bz}}; 
+  assign chkL1_mask=(chk_data_shr_reg[`lsqshare_wrt1]==3'd7) ? 6'B0 : {6{1'bz}}; 
 
   assign new3_reg_low=new_data[3][`lsaddr_reg_low];
 

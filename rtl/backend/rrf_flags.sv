@@ -101,7 +101,7 @@ module rrf_flag(
   reg read0_oe_reg;
 
   
-  assign read0_data=read0_oe_reg ? {1'b0,read_data_ram} : {DATA_WIDTH+1{1'BZ}};
+  assign read0_data=read0_oe_reg ? {1'b0,read_data_ram} : {DATA_WIDTH+1{{1{1'bz}}}};
   
   always @(posedge clk)
     begin

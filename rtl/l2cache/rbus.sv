@@ -72,18 +72,18 @@ module rbus(
   assign prev_out_can=(~rbus_rdyOutA&&~rbus_rdyOutB&&!(&busy))||
      ~rbusPrev_signals[`rbus_used];
 
-  assign rbusOut_signals=busy[0] ? rbusIn0_signals_reg : {`rbus_width{1'bz}};
-  assign rbusOut_src_req=busy[0] ? rbusIn0_src_req_reg : 10'bz;
-  assign rbusOut_dst_req=busy[0] ? rbusIn0_dst_req_reg : 10'bz;
-  assign rbusOut_address=busy[0] ? rbusIn0_address_reg : 37'bz;
-  assign rbusOut_signals=(~busy[0] & busy[1]) ? rbusIn1_signals_reg : {`rbus_width{1'bz}};
-  assign rbusOut_src_req=(~busy[0] & busy[1]) ? rbusIn1_src_req_reg : 10'bz;
-  assign rbusOut_dst_req=(~busy[0] & busy[1]) ? rbusIn1_dst_req_reg : 10'bz;
-  assign rbusOut_address=(~busy[0] & busy[1]) ? rbusIn1_address_reg : 37'bz;
-  assign rbusOut_signals=(!busy) ? rbusPrev_signals_reg : {`rbus_width{1'bz}};
-  assign rbusOut_src_req=(!busy) ? rbusPrev_src_req_reg : 10'bz;
-  assign rbusOut_dst_req=(!busy) ? rbusPrev_dst_req_reg : 10'bz;
-  assign rbusOut_address=(!busy) ? rbusPrev_address_reg : 37'bz;
+  assign rbusOut_signals=busy[0] ? rbusIn0_signals_reg : {`rbus_width{{1{1'bz}}}};
+  assign rbusOut_src_req=busy[0] ? rbusIn0_src_req_reg : {10{1'bz}};
+  assign rbusOut_dst_req=busy[0] ? rbusIn0_dst_req_reg : {10{1'bz}};
+  assign rbusOut_address=busy[0] ? rbusIn0_address_reg : {37{1'bz}};
+  assign rbusOut_signals=(~busy[0] & busy[1]) ? rbusIn1_signals_reg : {`rbus_width{{1{1'bz}}}};
+  assign rbusOut_src_req=(~busy[0] & busy[1]) ? rbusIn1_src_req_reg : {10{1'bz}};
+  assign rbusOut_dst_req=(~busy[0] & busy[1]) ? rbusIn1_dst_req_reg : {10{1'bz}};
+  assign rbusOut_address=(~busy[0] & busy[1]) ? rbusIn1_address_reg : {37{1'bz}};
+  assign rbusOut_signals=(!busy) ? rbusPrev_signals_reg : {`rbus_width{{1{1'bz}}}};
+  assign rbusOut_src_req=(!busy) ? rbusPrev_src_req_reg : {10{1'bz}};
+  assign rbusOut_dst_req=(!busy) ? rbusPrev_dst_req_reg : {10{1'bz}};
+  assign rbusOut_address=(!busy) ? rbusPrev_address_reg : {37{1'bz}};
   always @(posedge clk) begin
       if (rst) begin
       end else begin
@@ -261,18 +261,18 @@ module rbusD(
   adder_inc #(5) readBAdd_mod(read_addrB,read_addrB_d,read_addrB!=5'd23,);  
   adder #(5) cntBSub_mod(cntB,5'h1f,cntB_minus,1'b0,1'b1,,,,);
 
-  assign rbusOut_signals=busy[0] ? rbusIn0_signals_reg : {`rbus_width{1'bz}};
-  assign rbusOut_src_req=busy[0] ? rbusIn0_src_req_reg : 10'bz;
-  assign rbusOut_dst_req=busy[0] ? rbusIn0_dst_req_reg : 10'bz;
-  assign rbusOut_data=busy[0] ? rbusIn0_data_reg : 512'bz;
-  assign rbusOut_signals=(~busy[0] & busy[1]) ? rbusIn1_signals_reg : {`rbus_width{1'bz}};
-  assign rbusOut_src_req=(~busy[0] & busy[1]) ? rbusIn1_src_req_reg : 10'bz;
-  assign rbusOut_dst_req=(~busy[0] & busy[1]) ? rbusIn1_dst_req_reg : 10'bz;
-  assign rbusOut_data=(~busy[0] & busy[1]) ? rbusIn1_data_reg : 512'bz;
-  assign rbusOut_signals=(!busy) ? rbusPrev_signals_reg : {`rbus_width{1'bz}};
-  assign rbusOut_src_req=(!busy) ? rbusPrev_src_req_reg : 10'bz;
-  assign rbusOut_dst_req=(!busy) ? rbusPrev_dst_req_reg : 10'bz;
-  assign rbusOut_data=(!busy) ? rbusPrev_data_reg : 512'bz;
+  assign rbusOut_signals=busy[0] ? rbusIn0_signals_reg : {`rbus_width{{1{1'bz}}}};
+  assign rbusOut_src_req=busy[0] ? rbusIn0_src_req_reg : {10{1'bz}};
+  assign rbusOut_dst_req=busy[0] ? rbusIn0_dst_req_reg : {10{1'bz}};
+  assign rbusOut_data=busy[0] ? rbusIn0_data_reg : {512{1'bz}};
+  assign rbusOut_signals=(~busy[0] & busy[1]) ? rbusIn1_signals_reg : {`rbus_width{{1{1'bz}}}};
+  assign rbusOut_src_req=(~busy[0] & busy[1]) ? rbusIn1_src_req_reg : {10{1'bz}};
+  assign rbusOut_dst_req=(~busy[0] & busy[1]) ? rbusIn1_dst_req_reg : {10{1'bz}};
+  assign rbusOut_data=(~busy[0] & busy[1]) ? rbusIn1_data_reg : {512{1'bz}};
+  assign rbusOut_signals=(!busy) ? rbusPrev_signals_reg : {`rbus_width{{1{1'bz}}}};
+  assign rbusOut_src_req=(!busy) ? rbusPrev_src_req_reg : {10{1'bz}};
+  assign rbusOut_dst_req=(!busy) ? rbusPrev_dst_req_reg : {10{1'bz}};
+  assign rbusOut_data=(!busy) ? rbusPrev_data_reg : {512{1'bz}};
   always @(posedge clk) begin
       if (rst) begin
       end else begin

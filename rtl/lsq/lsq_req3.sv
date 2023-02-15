@@ -937,8 +937,8 @@ module lsq_req(
   assign readA_rdy=(readA_flip&readA_enItem)==({6{flipA}}&readA_enItem) && enableA && ~init;
   assign readB_rdy=(readB_flip&readB_enItem)==({6{flipB}}&readB_enItem) && enableB && ~init;
   
-  assign readB_addr_d=(foundB|foundBN) ? 6'bz : write_addr_shr;
-  assign readA_addr_d=(foundA|foundAN) ? 6'bz : write_addr_shr;
+  assign readB_addr_d=(foundB|foundBN) ? {6{1'bz}} : write_addr_shr;
+  assign readA_addr_d=(foundA|foundAN) ? {6{1'bz}} : write_addr_shr;
   
  
   assign readA_clkEn0=(readA_flip[0]&readA_enItem[0])==flipA && enableA;
@@ -1016,9 +1016,9 @@ module lsq_req(
   generate
       genvar k;
       for(k=0;k<32;k=k+1) begin : addrB_gen
-          assign readB_addr_d=(firstB[k] || firstB[k+32] || ~foundB & (firstBN[k]|firstBN[k+32])) ? {~firstB[k]&foundB||~firstBN[k]&~foundB,k[4:0]} : 6'bz;
-          assign readA_addr_d=(firstA[k] || firstA[k+32] || ~foundA & (firstAN[k]|firstAN[k+32])) ? {~firstA[k]&foundA||~firstAN[k]&~foundA,k[4:0]} : 6'bz;
-          //assign readA_addr_d=(firstA[k] || ~foundA & firstAN[k]) ? k : 5'bz;
+          assign readB_addr_d=(firstB[k] || firstB[k+32] || ~foundB & (firstBN[k]|firstBN[k+32])) ? {~firstB[k]&foundB||~firstBN[k]&~foundB,k[4:0]} : {6{1'bz}};
+          assign readA_addr_d=(firstA[k] || firstA[k+32] || ~foundA & (firstAN[k]|firstAN[k+32])) ? {~firstA[k]&foundA||~firstAN[k]&~foundA,k[4:0]} : {6{1'bz}};
+          //assign readA_addr_d=(firstA[k] || ~foundA & firstAN[k]) ? k : {5{1'bz}};
       end
   endgenerate
   

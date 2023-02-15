@@ -88,37 +88,37 @@ module rs_write_forward_ALU(
   wire [DATA_WIDTH-1:0] newDataFu_d;
   wire [DATA_WIDTH-1:0] newDataFuu_d;
   
-  assign newDataFu_d=(fuFwd==4'd0) ? FU0|~FUN0 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd0) ? FU0_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd1) ? FU1|~FUN1 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd1) ? FU1_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd2) ? FU2|~FUN2 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd2) ? FU2_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd3) ? FU3|~FUN3 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd3) ? FU3_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd4) ? FU4|~FUN4 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd4) ? FU4_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd5) ? FU5|~FUN4 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd5) ? FU5_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd6) ? FU6|~FUN6 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd6) ? FU6_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd7) ? FU7|~FUN7 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd7) ? FU7_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd8) ? FU8|~FUN8 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd8) ? FU8_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd[3] && |fuFwd[2:0]) ? FU9|~FUN9 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd[3] && |fuuFwd[2:0]) ? FU9_reg : {DATA_WIDTH{1'BZ}};  
+  assign newDataFu_d=(fuFwd==4'd0) ? FU0|~FUN0 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd0) ? FU0_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd==4'd1) ? FU1|~FUN1 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd1) ? FU1_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd==4'd2) ? FU2|~FUN2 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd2) ? FU2_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd==4'd3) ? FU3|~FUN3 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd3) ? FU3_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd==4'd4) ? FU4|~FUN4 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd4) ? FU4_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd==4'd5) ? FU5|~FUN4 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd5) ? FU5_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd==4'd6) ? FU6|~FUN6 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd6) ? FU6_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd==4'd7) ? FU7|~FUN7 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd7) ? FU7_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd==4'd8) ? FU8|~FUN8 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd8) ? FU8_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd[3] && |fuFwd[2:0]) ? FU9|~FUN9 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd[3] && |fuuFwd[2:0]) ? FU9_reg : {DATA_WIDTH{{1{1'bz}}}};  
 
 
-  assign newData_d[31:0]=({fuFwd,fuuFwd}==8'hff) ? oldData[31:0] : {32{1'BZ}};  
-  assign newData_d[31:0]=(fuFwd!=4'hf) ? newDataFu_d[31:0] : {32{1'BZ}};  
-  assign newData_d[31:0]=(fuuFwd!=4'hf) ? newDataFuu_d[31:0] : {32{1'BZ}};  
-  assign newData_d[64]=({fuFwd,fuuFwd}==8'hff) ? oldData[64] : 1'BZ;  
-  assign newData_d[64]=(fuFwd!=4'hf) ? newDataFu_d[64] : 1'BZ;  
-  assign newData_d[64]=(fuuFwd!=4'hf) ? newDataFuu_d[64] : 1'BZ;  
-  assign newData_d[63:32]=({fuFwd,fuuFwd}==8'hff && ~sxtEn) ? oldData[63:32] : {32{1'BZ}};  
-  assign newData_d[63:32]=(fuFwd!=4'hf && ~sxtEn) ? newDataFu_d[63:32] : {32{1'BZ}};  
-  assign newData_d[63:32]=(fuuFwd!=4'hf || sxtEn) ? (newDataFuu_d[63:32]|{32{D&sxtEn}})&{32{D|~sxtEn}} : {32{1'BZ}};  
+  assign newData_d[31:0]=({fuFwd,fuuFwd}==8'hff) ? oldData[31:0] : {32{{1{1'bz}}}};  
+  assign newData_d[31:0]=(fuFwd!=4'hf) ? newDataFu_d[31:0] : {32{{1{1'bz}}}};  
+  assign newData_d[31:0]=(fuuFwd!=4'hf) ? newDataFuu_d[31:0] : {32{{1{1'bz}}}};  
+  assign newData_d[64]=({fuFwd,fuuFwd}==8'hff) ? oldData[64] : {1{1'bz}};  
+  assign newData_d[64]=(fuFwd!=4'hf) ? newDataFu_d[64] : {1{1'bz}};  
+  assign newData_d[64]=(fuuFwd!=4'hf) ? newDataFuu_d[64] : {1{1'bz}};  
+  assign newData_d[63:32]=({fuFwd,fuuFwd}==8'hff && ~sxtEn) ? oldData[63:32] : {32{{1{1'bz}}}};  
+  assign newData_d[63:32]=(fuFwd!=4'hf && ~sxtEn) ? newDataFu_d[63:32] : {32{{1{1'bz}}}};  
+  assign newData_d[63:32]=(fuuFwd!=4'hf || sxtEn) ? (newDataFuu_d[63:32]|{32{D&sxtEn}})&{32{D|~sxtEn}} : {32{{1{1'bz}}}};  
 
   always @(posedge clk) 
   begin
@@ -194,31 +194,31 @@ module rs_write_forward(
   wire [DATA_WIDTH-1:0] newDataFu_d;
   wire [DATA_WIDTH-1:0] newDataFuu_d;
   
-  assign newDataFu_d=(fuFwd==4'd0) ? FU0|~FUN0 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd0) ? FU0_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd1) ? FU1|~FUN1 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd1) ? FU1_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd2) ? FU2|~FUN2 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd2) ? FU2_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd3) ? FU3|~FUN3 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd3) ? FU3_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd4) ? FU4|~FUN4 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd4) ? FU4_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd5) ? FU5|~FUN5 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd5) ? FU5_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd6) ? FU6|~FUN6 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd6) ? FU6_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd7) ? FU7|~FUN7 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd7) ? FU7_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd8) ? FU8|~FUN8 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd8) ? FU8_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd[3] && |fuFwd[2:0]) ? FU9|~FUN9 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd[3] && |fuuFwd[2:0]) ? FU9_reg : {DATA_WIDTH{1'BZ}};  
+  assign newDataFu_d=(fuFwd==4'd0) ? FU0|~FUN0 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd0) ? FU0_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd==4'd1) ? FU1|~FUN1 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd1) ? FU1_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd==4'd2) ? FU2|~FUN2 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd2) ? FU2_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd==4'd3) ? FU3|~FUN3 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd3) ? FU3_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd==4'd4) ? FU4|~FUN4 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd4) ? FU4_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd==4'd5) ? FU5|~FUN5 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd5) ? FU5_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd==4'd6) ? FU6|~FUN6 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd6) ? FU6_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd==4'd7) ? FU7|~FUN7 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd7) ? FU7_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd==4'd8) ? FU8|~FUN8 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd8) ? FU8_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd[3] && |fuFwd[2:0]) ? FU9|~FUN9 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd[3] && |fuuFwd[2:0]) ? FU9_reg : {DATA_WIDTH{{1{1'bz}}}};  
 
 
-  assign newData_d=({fuFwd,fuuFwd}==8'hff) ? oldData : {DATA_WIDTH{1'BZ}};  
-  assign newData_d=(fuFwd!=4'hf) ? newDataFu_d : {DATA_WIDTH{1'BZ}};  
-  assign newData_d=(fuuFwd!=4'hf) ? newDataFuu_d : {DATA_WIDTH{1'BZ}};  
+  assign newData_d=({fuFwd,fuuFwd}==8'hff) ? oldData : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newData_d=(fuFwd!=4'hf) ? newDataFu_d : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newData_d=(fuuFwd!=4'hf) ? newDataFuu_d : {DATA_WIDTH{{1{1'bz}}}};  
 
   always @(posedge clk) 
   begin
@@ -285,31 +285,31 @@ module rs_write_forwardF(
   wire [DATA_WIDTH-1:0] newDataFu_d;
   wire [DATA_WIDTH-1:0] newDataFuu_d;
   
-  assign newDataFu_d=(fuFwd==4'd0) ? FU0|~FUN0 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd0) ? FU0_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd1) ? FU1|~FUN1 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd1) ? FU1_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd2) ? FU2|~FUN2 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd2) ? FU2_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd3) ? FU3|~FUN3 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd3) ? FU3_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd4) ? FU4 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd4) ? FU4_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd5) ? FU5 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd5) ? FU5_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd6) ? FU6 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd6) ? FU6_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd7) ? FU7 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd7) ? FU7_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd8) ? FU8 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd8) ? FU8_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd[3] && |fuFwd[2:0]) ? FU9 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd[3] && |fuuFwd[2:0]) ? FU9_reg : {DATA_WIDTH{1'BZ}};  
+  assign newDataFu_d=(fuFwd==4'd0) ? FU0|~FUN0 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd0) ? FU0_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd==4'd1) ? FU1|~FUN1 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd1) ? FU1_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd==4'd2) ? FU2|~FUN2 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd2) ? FU2_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd==4'd3) ? FU3|~FUN3 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd3) ? FU3_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd==4'd4) ? FU4 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd4) ? FU4_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd==4'd5) ? FU5 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd5) ? FU5_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd==4'd6) ? FU6 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd6) ? FU6_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd==4'd7) ? FU7 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd7) ? FU7_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd==4'd8) ? FU8 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd8) ? FU8_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd[3] && |fuFwd[2:0]) ? FU9 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd[3] && |fuuFwd[2:0]) ? FU9_reg : {DATA_WIDTH{{1{1'bz}}}};  
 
 
-  assign newData_d=({fuFwd,fuuFwd}==8'hff) ? oldData : {DATA_WIDTH{1'BZ}};  
-  assign newData_d=(fuFwd!=4'hf) ? newDataFu_d : {DATA_WIDTH{1'BZ}};  
-  assign newData_d=(fuuFwd!=4'hf) ? newDataFuu_d : {DATA_WIDTH{1'BZ}};  
+  assign newData_d=({fuFwd,fuuFwd}==8'hff) ? oldData : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newData_d=(fuFwd!=4'hf) ? newDataFu_d : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newData_d=(fuuFwd!=4'hf) ? newDataFuu_d : {DATA_WIDTH{{1{1'bz}}}};  
 
   always @(posedge clk) 
   begin
@@ -373,32 +373,32 @@ module rs_write_forward_JALR(
   wire [DATA_WIDTH-1:0] newDataFu_d;
   wire [DATA_WIDTH-1:0] newDataFuu_d;
   
-  assign newDataFu_d=(fuFwd==4'd0) ? FU0 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd0 && ~auxEn) ? FU0_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd1) ? FU1 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd1 && ~auxEn) ? FU1_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd2) ? FU2 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd2 && ~auxEn) ? FU2_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd3) ? FU3 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd3 && ~auxEn) ? FU3_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd4) ? FU4 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd4 && ~auxEn) ? FU4_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd5) ? FU5 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd5 && ~auxEn) ? FU5_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd6) ? FU6 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd6 && ~auxEn) ? FU6_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd7) ? FU7 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd7 && ~auxEn) ? FU7_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd8) ? FU8 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd8) && ~auxEn ? FU8_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd[3] && |fuFwd[2:0]) ? FU9 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd[3] && |fuuFwd[2:0] && ~auxEn) ? FU9_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(auxEn) ? auxData : {DATA_WIDTH{1'BZ}};  
+  assign newDataFu_d=(fuFwd==4'd0) ? FU0 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd0 && ~auxEn) ? FU0_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd==4'd1) ? FU1 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd1 && ~auxEn) ? FU1_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd==4'd2) ? FU2 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd2 && ~auxEn) ? FU2_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd==4'd3) ? FU3 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd3 && ~auxEn) ? FU3_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd==4'd4) ? FU4 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd4 && ~auxEn) ? FU4_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd==4'd5) ? FU5 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd5 && ~auxEn) ? FU5_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd==4'd6) ? FU6 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd6 && ~auxEn) ? FU6_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd==4'd7) ? FU7 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd7 && ~auxEn) ? FU7_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd==4'd8) ? FU8 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd8) && ~auxEn ? FU8_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd[3] && |fuFwd[2:0]) ? FU9 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd[3] && |fuuFwd[2:0] && ~auxEn) ? FU9_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(auxEn) ? auxData : {DATA_WIDTH{{1{1'bz}}}};  
 
 
-  assign newData_d=({fuFwd,fuuFwd}==8'hff) ? oldData : {DATA_WIDTH{1'BZ}};  
-  assign newData_d=(fuFwd!=4'hf) ? newDataFu_d : {DATA_WIDTH{1'BZ}};  
-  assign newData_d=(fuuFwd!=4'hf) ? newDataFuu_d : {DATA_WIDTH{1'BZ}};  
+  assign newData_d=({fuFwd,fuuFwd}==8'hff) ? oldData : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newData_d=(fuFwd!=4'hf) ? newDataFu_d : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newData_d=(fuuFwd!=4'hf) ? newDataFuu_d : {DATA_WIDTH{{1{1'bz}}}};  
 
   always @(posedge clk) 
   begin
@@ -461,31 +461,31 @@ module rs_writeiS_forward(
   wire [DATA_WIDTH-1:0] newDataFuu_d;
   reg [DATA_WIDTH-1:0] oldData_reg;
   
-  assign newDataFu_d=(fuFwd==4'd0) ? FU0 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd0) ? FU0_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd1) ? FU1 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd1) ? FU1_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd2) ? FU2 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd2) ? FU2_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd3) ? FU3 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd3) ? FU3_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd4) ? FU4 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd4) ? FU4_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd5) ? FU5 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd5) ? FU5_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd6) ? FU6 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd6) ? FU6_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd7) ? FU7 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd7) ? FU7_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd==4'd8) ? FU8 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd==4'd8) ? FU8_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd[3] && |fuFwd[2:0]) ? FU9 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd[3] && |fuuFwd[2:0]) ? FU9_reg : {DATA_WIDTH{1'BZ}};  
+  assign newDataFu_d=(fuFwd==4'd0) ? FU0 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd0) ? FU0_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd==4'd1) ? FU1 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd1) ? FU1_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd==4'd2) ? FU2 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd2) ? FU2_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd==4'd3) ? FU3 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd3) ? FU3_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd==4'd4) ? FU4 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd4) ? FU4_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd==4'd5) ? FU5 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd5) ? FU5_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd==4'd6) ? FU6 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd6) ? FU6_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd==4'd7) ? FU7 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd7) ? FU7_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd==4'd8) ? FU8 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd==4'd8) ? FU8_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd[3] && |fuFwd[2:0]) ? FU9 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd[3] && |fuuFwd[2:0]) ? FU9_reg : {DATA_WIDTH{{1{1'bz}}}};  
 
 
-  assign newData=({fuFwd,fuuFwd}==8'hff) ? oldData_reg : {DATA_WIDTH{1'BZ}};  
-  assign newData=(fuFwd!=4'hf) ? newDataFu_d : {DATA_WIDTH{1'BZ}};  
-  assign newData=(fuuFwd!=4'hf) ? newDataFuu_d : {DATA_WIDTH{1'BZ}};  
+  assign newData=({fuFwd,fuuFwd}==8'hff) ? oldData_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newData=(fuFwd!=4'hf) ? newDataFu_d : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newData=(fuuFwd!=4'hf) ? newDataFuu_d : {DATA_WIDTH{{1{1'bz}}}};  
 
   always @(posedge clk) begin
 	  oldData_reg<=oldData;
@@ -676,33 +676,33 @@ module rs_write_forward_nxt(
   reg [3:0] fuFwd_reg;
   reg [3:0] fuuFwd_reg;
   
-  assign newDataFu_d=(fuFwd_reg==4'd0) ? FU0 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd_reg==4'd0) ? FU0_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd_reg==4'd1) ? FU1 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd_reg==4'd1) ? FU1_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd_reg==4'd2) ? FU2 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd_reg==4'd2) ? FU2_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd_reg==4'd3) ? FU3 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd_reg==4'd3) ? FU3_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd_reg==4'd4) ? FU4 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd_reg==4'd4) ? FU4_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd_reg==4'd5) ? FU5 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd_reg==4'd5) ? FU5_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd_reg==4'd6) ? FU6 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd_reg==4'd6) ? FU6_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd_reg==4'd7) ? FU7 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd_reg==4'd7) ? FU7_reg : {DATA_WIDTH{1'BZ}};  
-  assign newDataFu_d=(fuFwd_reg==4'd8) ? FU8 : {DATA_WIDTH{1'BZ}};  
-  assign newDataFuu_d=(fuuFwd_reg==4'd8) ? FU8_reg : {DATA_WIDTH{1'BZ}};  
+  assign newDataFu_d=(fuFwd_reg==4'd0) ? FU0 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd_reg==4'd0) ? FU0_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd_reg==4'd1) ? FU1 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd_reg==4'd1) ? FU1_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd_reg==4'd2) ? FU2 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd_reg==4'd2) ? FU2_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd_reg==4'd3) ? FU3 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd_reg==4'd3) ? FU3_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd_reg==4'd4) ? FU4 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd_reg==4'd4) ? FU4_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd_reg==4'd5) ? FU5 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd_reg==4'd5) ? FU5_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd_reg==4'd6) ? FU6 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd_reg==4'd6) ? FU6_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd_reg==4'd7) ? FU7 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd_reg==4'd7) ? FU7_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFu_d=(fuFwd_reg==4'd8) ? FU8 : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newDataFuu_d=(fuuFwd_reg==4'd8) ? FU8_reg : {DATA_WIDTH{{1{1'bz}}}};  
   assign newDataFu_d=(fuFwd_reg[3] && fuFwd_reg[2:0]!=0) ? FU9 : 
-    {DATA_WIDTH{1'BZ}};  
+    {DATA_WIDTH{{1{1'bz}}}};  
   assign newDataFuu_d=(fuuFwd_reg[3] && fuuFwd_reg[2:0]!=0) ? FU9_reg : 
-    {DATA_WIDTH{1'BZ}};  
+    {DATA_WIDTH{{1{1'bz}}}};  
 
 
-  assign newData=({fuFwd_reg,fuuFwd_reg}==8'hff) ? oldData_reg : {DATA_WIDTH{1'BZ}};  
-  assign newData=(fuFwd_reg!=4'hf) ? newDataFu_d : {DATA_WIDTH{1'BZ}};  
-  assign newData=(fuuFwd_reg!=4'hf) ? newDataFuu_d : {DATA_WIDTH{1'BZ}};  
+  assign newData=({fuFwd_reg,fuuFwd_reg}==8'hff) ? oldData_reg : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newData=(fuFwd_reg!=4'hf) ? newDataFu_d : {DATA_WIDTH{{1{1'bz}}}};  
+  assign newData=(fuuFwd_reg!=4'hf) ? newDataFuu_d : {DATA_WIDTH{{1{1'bz}}}};  
 
   always @(posedge clk) begin 
       if (rst) oldData_reg<={DATA_WIDTH{1'B0}};

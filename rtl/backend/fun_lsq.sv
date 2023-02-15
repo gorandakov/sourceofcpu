@@ -396,24 +396,24 @@ module fun_lsq(
 
   assign PSTQ_has_store=PSTQ_data_shr!=6'h3f;
 
-  assign wb0_data=wb0_chk[0] ? dat0_LSQ : 136'bz;
-  assign wb0_data=wb0_chk[1] ? dat1_LSQ : 136'bz;
-  assign wb0_data=wb0_chk[2] ? dat2_LSQ : 136'bz;
-  assign wb0_data=wb0_chk[3] ? dat3_LSQ : 136'bz;
-  assign wb0_data=wb0_chk[4] ? dat4_LSQ : 136'bz;
-  assign wb0_data=wb0_chk[5] ? dat5_LSQ : 136'bz;
-  assign wb0_data=|wb0_chk ? 136'bz : 136'b0;
+  assign wb0_data=wb0_chk[0] ? dat0_LSQ : {136{1'bz}};
+  assign wb0_data=wb0_chk[1] ? dat1_LSQ : {136{1'bz}};
+  assign wb0_data=wb0_chk[2] ? dat2_LSQ : {136{1'bz}};
+  assign wb0_data=wb0_chk[3] ? dat3_LSQ : {136{1'bz}};
+  assign wb0_data=wb0_chk[4] ? dat4_LSQ : {136{1'bz}};
+  assign wb0_data=wb0_chk[5] ? dat5_LSQ : {136{1'bz}};
+  assign wb0_data=|wb0_chk ? {136{1'bz}} : 136'b0;
 
   assign mem_II_stall=wreq_stall;
   assign mem_II_stall2=1'b0;
 
-  assign wb1_data=wb1_chk[0] ? dat0_LSQ : 136'bz;
-  assign wb1_data=wb1_chk[1] ? dat1_LSQ : 136'bz;
-  assign wb1_data=wb1_chk[2] ? dat2_LSQ : 136'bz;
-  assign wb1_data=wb1_chk[3] ? dat3_LSQ : 136'bz;
-  assign wb1_data=wb1_chk[4] ? dat4_LSQ : 136'bz;
-  assign wb1_data=wb1_chk[5] ? dat5_LSQ : 136'bz;
-  assign wb1_data=|wb1_chk ? 136'bz : 136'b0;
+  assign wb1_data=wb1_chk[0] ? dat0_LSQ : {136{1'bz}};
+  assign wb1_data=wb1_chk[1] ? dat1_LSQ : {136{1'bz}};
+  assign wb1_data=wb1_chk[2] ? dat2_LSQ : {136{1'bz}};
+  assign wb1_data=wb1_chk[3] ? dat3_LSQ : {136{1'bz}};
+  assign wb1_data=wb1_chk[4] ? dat4_LSQ : {136{1'bz}};
+  assign wb1_data=wb1_chk[5] ? dat5_LSQ : {136{1'bz}};
+  assign wb1_data=|wb1_chk ? {136{1'bz}} : 136'b0;
 
 //  assign wb0_sdata=wreq_data[0];
 //  assign wb1_sdata=wreq_data[1];

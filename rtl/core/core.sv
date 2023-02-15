@@ -841,56 +841,56 @@ module heptane_core(
   
 //  assign read_data_strip={read_data[258:195],read_data[193:130],read_data[128:65],read_data[63:0]};
   
-  assign dc2_rdataB=dc2_rhitB0 ? dc2_rdataB0[511:0] : 512'bz;
-  assign dc2_rdataB=dc2_rhitB0_reg ? dc2_rdataB0_reg[1023:512] : 512'bz;
-  assign dc2_rdataB=dc2_rhitB1 ? dc2_rdataB1[511:0] : 512'bz;
-  assign dc2_rdataB=dc2_rhitB1_reg ? dc2_rdataB1_reg[1023:512] : 512'bz;
+  assign dc2_rdataB=dc2_rhitB0 ? dc2_rdataB0[511:0] : {512{1'bz}};
+  assign dc2_rdataB=dc2_rhitB0_reg ? dc2_rdataB0_reg[1023:512] : {512{1'bz}};
+  assign dc2_rdataB=dc2_rhitB1 ? dc2_rdataB1[511:0] : {512{1'bz}};
+  assign dc2_rdataB=dc2_rhitB1_reg ? dc2_rdataB1_reg[1023:512] : {512{1'bz}};
   assign dc2_rdataB=(dc2_rhitB0 | dc2_rhitB0_reg | dc2_rhitB1 | dc2_rhitB1_reg) ?
-    512'bz : 512'b0;
+    {512{1'bz}} : 512'b0;
       
-  assign dc2_rdataA=dc2_rhitA0 ? dc2_rdataA0[511:0] : 512'bz;
-  assign dc2_rdataA=dc2_rhitA0_reg ? dc2_rdataA0_reg[1023:512] : 512'bz;
-  assign dc2_rdataA=dc2_io_en_reg3 ? {448'b0,dc2_dataIO_reg3} : 512'bz;
-  assign dc2_rdataA=(dc2_rhitA0 | dc2_rhitA0_reg | dc2_io_en_reg3 ) ? 512'bz : 512'b0;
+  assign dc2_rdataA=dc2_rhitA0 ? dc2_rdataA0[511:0] : {512{1'bz}};
+  assign dc2_rdataA=dc2_rhitA0_reg ? dc2_rdataA0_reg[1023:512] : {512{1'bz}};
+  assign dc2_rdataA=dc2_io_en_reg3 ? {448'b0,dc2_dataIO_reg3} : {512{1'bz}};
+  assign dc2_rdataA=(dc2_rhitA0 | dc2_rhitA0_reg | dc2_io_en_reg3 ) ? {512{1'bz}} : 512'b0;
  
   assign dc2_rdata=(dc2_rhitA0 | dc2_rhitA0_reg | dc2_io_en_reg3) ? dc2_rdataA : dc2_rdataB;
   
-  assign dc2_rdataExpB=dc2_rhitExpB0 ? dc2_rdataExpB0[511:0] : 512'bz;
-  assign dc2_rdataExpB=dc2_rhitExpB0_reg ? dc2_rdataExpB0_reg[1023:512] : 512'bz;
-  assign dc2_rdataExpB=dc2_rhitExpB1 ? dc2_rdataExpB1[511:0] : 512'bz;
-  assign dc2_rdataExpB=dc2_rhitExpB1_reg ? dc2_rdataExpB1_reg[1023:512] : 512'bz;
+  assign dc2_rdataExpB=dc2_rhitExpB0 ? dc2_rdataExpB0[511:0] : {512{1'bz}};
+  assign dc2_rdataExpB=dc2_rhitExpB0_reg ? dc2_rdataExpB0_reg[1023:512] : {512{1'bz}};
+  assign dc2_rdataExpB=dc2_rhitExpB1 ? dc2_rdataExpB1[511:0] : {512{1'bz}};
+  assign dc2_rdataExpB=dc2_rhitExpB1_reg ? dc2_rdataExpB1_reg[1023:512] : {512{1'bz}};
   assign dc2_rdataExpB=(dc2_rhitExpB0 | dc2_rhitExpB0_reg | dc2_rhitExpB1 | dc2_rhitExpB1_reg) ?
-    512'bz : 512'b0;
+    {512{1'bz}} : 512'b0;
       
-  assign dc2_rdataExpA=dc2_rhitExpA0 ? dc2_rdataExpA0[511:0] : 512'bz;
-  assign dc2_rdataExpA=dc2_rhitExpA0_reg ? dc2_rdataExpA0_reg[1023:512] : 512'bz;
-  assign dc2_rdataExpA=dc2_io_en_reg3 ? {448'b0,dc2_dataIO_reg3} : 512'bz;
-  assign dc2_rdataExpA=(dc2_rhitExpA0 | dc2_rhitExpA0_reg | dc2_io_en_reg3 ) ? 512'bz : 512'b0;
+  assign dc2_rdataExpA=dc2_rhitExpA0 ? dc2_rdataExpA0[511:0] : {512{1'bz}};
+  assign dc2_rdataExpA=dc2_rhitExpA0_reg ? dc2_rdataExpA0_reg[1023:512] : {512{1'bz}};
+  assign dc2_rdataExpA=dc2_io_en_reg3 ? {448'b0,dc2_dataIO_reg3} : {512{1'bz}};
+  assign dc2_rdataExpA=(dc2_rhitExpA0 | dc2_rhitExpA0_reg | dc2_io_en_reg3 ) ? {512{1'bz}} : 512'b0;
  
   assign dc2_rdataExp=(dc2_rhitExpA0 | dc2_rhitExpA0_reg | dc2_io_en_reg3) ? dc2_rdataExpA : dc2_rdataExpB;
   
 //  assign stall=1'b0;
-  assign dc2_rLRUB=dc2_rhitB0 ? dc2_rLRUB0 :  5'bz;
-  assign dc2_rLRUB=dc2_rhitB1 ? dc2_rLRUB1 :  5'bz;
-  assign dc2_rLRUB=(~dc2_rhitB1 & ~dc2_rhitB1) ? 5'b0 :  5'bz;
+  assign dc2_rLRUB=dc2_rhitB0 ? dc2_rLRUB0 :  {5{1'bz}};
+  assign dc2_rLRUB=dc2_rhitB1 ? dc2_rLRUB1 :  {5{1'bz}};
+  assign dc2_rLRUB=(~dc2_rhitB1 & ~dc2_rhitB1) ? 5'b0 :  {5{1'bz}};
       
   assign dc2_rLRUA= dc2_rLRUA0 & {5{dc2_rhitA0}};
  
   assign dc2_rLRU=dc2_rhitA0 ? dc2_rLRUA : dc2_rLRUB;
 
 
-  assign dc2_rDirB=dc2_rhitB0 ? dc2_rDirB0 :  1'bz;
-  assign dc2_rDirB=dc2_rhitB1 ? dc2_rDirB1 :  1'bz;
-  assign dc2_rDirB=(~dc2_rhitB1 & ~dc2_rhitB1) ? 1'b0 :  1'bz;
+  assign dc2_rDirB=dc2_rhitB0 ? dc2_rDirB0 :  {1{1'bz}};
+  assign dc2_rDirB=dc2_rhitB1 ? dc2_rDirB1 :  {1{1'bz}};
+  assign dc2_rDirB=(~dc2_rhitB1 & ~dc2_rhitB1) ? 1'b0 :  {1{1'bz}};
       
   assign dc2_rDirA= dc2_rDirA0 & dc2_rhitA0;
  
   assign dc2_rDir=dc2_rhitA0 ? dc2_rDirA : dc2_rDirB;
 
 
-  assign dc2_rExclB=dc2_rhitB0 ? dc2_rExclB0 :  1'bz;
-  assign dc2_rExclB=dc2_rhitB1 ? dc2_rExclB1 :  1'bz;
-  assign dc2_rExclB=(~dc2_rhitB1 & ~dc2_rhitB1) ? 1'b0 :  1'bz;
+  assign dc2_rExclB=dc2_rhitB0 ? dc2_rExclB0 :  {1{1'bz}};
+  assign dc2_rExclB=dc2_rhitB1 ? dc2_rExclB1 :  {1{1'bz}};
+  assign dc2_rExclB=(~dc2_rhitB1 & ~dc2_rhitB1) ? 1'b0 :  {1{1'bz}};
       
   assign dc2_rExclA= dc2_rExclA0 & dc2_rhitA0;
  
@@ -2036,10 +2036,10 @@ module heptane_core(
     end
   end
   
- // initial begin
- //   $dumpfile("~/.hsim/dump.fst");
- //   $dumpvars;
- // end
+  initial begin
+    $dumpfile("~/dump.fst");
+    $dumpvars;
+  end
 endmodule
 
 

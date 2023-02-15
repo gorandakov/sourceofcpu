@@ -202,51 +202,51 @@ module ght_bank(
     assign curJump[2]=(read_addr[7:6] ^ INDEX[2:1])==2'd2 && read_addr[0]==INDEX[0];
     assign curJump[3]=(read_addr[7:6] ^ INDEX[2:1])==2'd3 && read_addr[0]==INDEX[0];
     
-    assign otherPred0X=(curJump[0] & ~AbtbPred[0] & jumpMask[0]) ? GHT0_sc : 2'bz;
-    assign otherPred0X=(curJump[0] & AbtbPred[0] || ~jumpMask[0]) ? (Abtb_sc0|{GHTx_upper0,1'b0})&{1'b1,jumpMask[0]} : 2'bz;
+    assign otherPred0X=(curJump[0] & ~AbtbPred[0] & jumpMask[0]) ? GHT0_sc : {2{1'bz}};
+    assign otherPred0X=(curJump[0] & AbtbPred[0] || ~jumpMask[0]) ? (Abtb_sc0|{GHTx_upper0,1'b0})&{1'b1,jumpMask[0]} : {2{1'bz}};
     
-    assign otherPred1X=(curJump[1] & ~AbtbPred[1] && jumpMask[1:0]==2'b10) ? GHT1_sc[1] : 2'bz;
-    assign otherPred1X=(curJump[1] & ~AbtbPred[1] && jumpMask[1:0]==2'b11) ? GHT1_sc[0] : 2'bz;
-    assign otherPred1X=(curJump[1] & AbtbPred[1] || ~jumpMask[1]) ? (Abtb_sc1|{GHTx_upper1,1'b0})&{1'b1,jumpMask[1]} : 2'bz;
+    assign otherPred1X=(curJump[1] & ~AbtbPred[1] && jumpMask[1:0]==2'b10) ? GHT1_sc[1] : {2{1'bz}};
+    assign otherPred1X=(curJump[1] & ~AbtbPred[1] && jumpMask[1:0]==2'b11) ? GHT1_sc[0] : {2{1'bz}};
+    assign otherPred1X=(curJump[1] & AbtbPred[1] || ~jumpMask[1]) ? (Abtb_sc1|{GHTx_upper1,1'b0})&{1'b1,jumpMask[1]} : {2{1'bz}};
     
-    assign otherPred2X=(curJump[2] & ~AbtbPred[2] && jumpMask[2:0]==3'b100) ? GHT2_sc[2] : 2'bz;
-    assign otherPred2X=(curJump[2] & ~AbtbPred[2] && jumpMask[2:0]==3'b110) ? GHT2_sc[1] : 2'bz;
-    assign otherPred2X=(curJump[2] & ~AbtbPred[2] && jumpMask[2:0]==3'b111) ? GHT2_sc[0] : 2'bz;
-    assign otherPred2X=(curJump[2] & AbtbPred[2] || ~jumpMask[2]) ? (Abtb_sc2|{GHTx_upper2,1'b0})&{1'b1,jumpMask[2]} : 2'bz;
+    assign otherPred2X=(curJump[2] & ~AbtbPred[2] && jumpMask[2:0]==3'b100) ? GHT2_sc[2] : {2{1'bz}};
+    assign otherPred2X=(curJump[2] & ~AbtbPred[2] && jumpMask[2:0]==3'b110) ? GHT2_sc[1] : {2{1'bz}};
+    assign otherPred2X=(curJump[2] & ~AbtbPred[2] && jumpMask[2:0]==3'b111) ? GHT2_sc[0] : {2{1'bz}};
+    assign otherPred2X=(curJump[2] & AbtbPred[2] || ~jumpMask[2]) ? (Abtb_sc2|{GHTx_upper2,1'b0})&{1'b1,jumpMask[2]} : {2{1'bz}};
 
-    assign otherPred3X=(curJump[3] & ~AbtbPred[3] && jumpMask[3:0]==4'b1000) ? GHT3_sc[3] : 2'bz;
-    assign otherPred3X=(curJump[3] & ~AbtbPred[3] && jumpMask[3:0]==4'b1100) ? GHT3_sc[2] : 2'bz;
-    assign otherPred3X=(curJump[3] & ~AbtbPred[3] && jumpMask[3:0]==4'b1110) ? GHT3_sc[1] : 2'bz;
-    assign otherPred3X=(curJump[3] & ~AbtbPred[3] && jumpMask[3:0]==4'b1111) ? GHT3_sc[0] : 2'bz;
-    assign otherPred3X=(curJump[3] & AbtbPred[3]  || ~jumpMask[3]) ? (Abtb_sc3|{GHTx_upper3,1'b0})&{1'b1,jumpMask[3]} : 2'bz;
+    assign otherPred3X=(curJump[3] & ~AbtbPred[3] && jumpMask[3:0]==4'b1000) ? GHT3_sc[3] : {2{1'bz}};
+    assign otherPred3X=(curJump[3] & ~AbtbPred[3] && jumpMask[3:0]==4'b1100) ? GHT3_sc[2] : {2{1'bz}};
+    assign otherPred3X=(curJump[3] & ~AbtbPred[3] && jumpMask[3:0]==4'b1110) ? GHT3_sc[1] : {2{1'bz}};
+    assign otherPred3X=(curJump[3] & ~AbtbPred[3] && jumpMask[3:0]==4'b1111) ? GHT3_sc[0] : {2{1'bz}};
+    assign otherPred3X=(curJump[3] & AbtbPred[3]  || ~jumpMask[3]) ? (Abtb_sc3|{GHTx_upper3,1'b0})&{1'b1,jumpMask[3]} : {2{1'bz}};
 
-    assign AotherPred0=curJump[0] ?otherPred0X : 2'bz;
-    assign AotherPred1=curJump[1] ?otherPred1X : 2'bz;
-    assign AotherPred2=curJump[2] ?otherPred2X : 2'bz;
-    assign AotherPred3=curJump[3] ?otherPred3X : 2'bz;
+    assign AotherPred0=curJump[0] ?otherPred0X : {2{1'bz}};
+    assign AotherPred1=curJump[1] ?otherPred1X : {2{1'bz}};
+    assign AotherPred2=curJump[2] ?otherPred2X : {2{1'bz}};
+    assign AotherPred3=curJump[3] ?otherPred3X : {2{1'bz}};
 //b way
-    assign otherPred0W=(curJump[0] & ~BbtbPred[0] & jumpMask[0]) ? GHT0_sc : 2'bz;
-    assign otherPred0W=(curJump[0] & BbtbPred[0] || ~jumpMask[0]) ? (Bbtb_sc0|{GHTx_upper0,1'b0})&{1'b1,jumpMask[0]} : 2'bz;
+    assign otherPred0W=(curJump[0] & ~BbtbPred[0] & jumpMask[0]) ? GHT0_sc : {2{1'bz}};
+    assign otherPred0W=(curJump[0] & BbtbPred[0] || ~jumpMask[0]) ? (Bbtb_sc0|{GHTx_upper0,1'b0})&{1'b1,jumpMask[0]} : {2{1'bz}};
     
-    assign otherPred1W=(curJump[1] & ~BbtbPred[1] && jumpMask[1:0]==2'b10) ? GHT1_sc[1] : 2'bz;
-    assign otherPred1W=(curJump[1] & ~BbtbPred[1] && jumpMask[1:0]==2'b11) ? GHT1_sc[0] : 2'bz;
-    assign otherPred1W=(curJump[1] & BbtbPred[1] || ~jumpMask[1]) ? (Bbtb_sc1|{GHTx_upper1,1'b0})&{1'b1,jumpMask[1]} : 2'bz;
+    assign otherPred1W=(curJump[1] & ~BbtbPred[1] && jumpMask[1:0]==2'b10) ? GHT1_sc[1] : {2{1'bz}};
+    assign otherPred1W=(curJump[1] & ~BbtbPred[1] && jumpMask[1:0]==2'b11) ? GHT1_sc[0] : {2{1'bz}};
+    assign otherPred1W=(curJump[1] & BbtbPred[1] || ~jumpMask[1]) ? (Bbtb_sc1|{GHTx_upper1,1'b0})&{1'b1,jumpMask[1]} : {2{1'bz}};
     
-    assign otherPred2W=(curJump[2] & ~BbtbPred[2] && jumpMask[2:0]==3'b100) ? GHT2_sc[2] : 2'bz;
-    assign otherPred2W=(curJump[2] & ~BbtbPred[2] && jumpMask[2:0]==3'b110) ? GHT2_sc[1] : 2'bz;
-    assign otherPred2W=(curJump[2] & ~BbtbPred[2] && jumpMask[2:0]==3'b111) ? GHT2_sc[0] : 2'bz;
-    assign otherPred2W=(curJump[2] & BbtbPred[2] || ~jumpMask[2]) ? (Bbtb_sc2|{GHTx_upper2,1'b0})&{1'b1,jumpMask[2]} : 2'bz;
+    assign otherPred2W=(curJump[2] & ~BbtbPred[2] && jumpMask[2:0]==3'b100) ? GHT2_sc[2] : {2{1'bz}};
+    assign otherPred2W=(curJump[2] & ~BbtbPred[2] && jumpMask[2:0]==3'b110) ? GHT2_sc[1] : {2{1'bz}};
+    assign otherPred2W=(curJump[2] & ~BbtbPred[2] && jumpMask[2:0]==3'b111) ? GHT2_sc[0] : {2{1'bz}};
+    assign otherPred2W=(curJump[2] & BbtbPred[2] || ~jumpMask[2]) ? (Bbtb_sc2|{GHTx_upper2,1'b0})&{1'b1,jumpMask[2]} : {2{1'bz}};
 
-    assign otherPred3W=(curJump[3] & ~BbtbPred[3] && jumpMask[3:0]==4'b1000) ? GHT3_sc[3] : 2'bz;
-    assign otherPred3W=(curJump[3] & ~BbtbPred[3] && jumpMask[3:0]==4'b1100) ? GHT3_sc[2] : 2'bz;
-    assign otherPred3W=(curJump[3] & ~BbtbPred[3] && jumpMask[3:0]==4'b1110) ? GHT3_sc[1] : 2'bz;
-    assign otherPred3W=(curJump[3] & ~BbtbPred[3] && jumpMask[3:0]==4'b1111) ? GHT3_sc[0] : 2'bz;
-    assign otherPred3W=(curJump[3] & BbtbPred[3]  || ~jumpMask[3]) ? (Bbtb_sc3|{GHTx_upper3,1'b0})&{1'b1,jumpMask[3]} : 2'bz;
+    assign otherPred3W=(curJump[3] & ~BbtbPred[3] && jumpMask[3:0]==4'b1000) ? GHT3_sc[3] : {2{1'bz}};
+    assign otherPred3W=(curJump[3] & ~BbtbPred[3] && jumpMask[3:0]==4'b1100) ? GHT3_sc[2] : {2{1'bz}};
+    assign otherPred3W=(curJump[3] & ~BbtbPred[3] && jumpMask[3:0]==4'b1110) ? GHT3_sc[1] : {2{1'bz}};
+    assign otherPred3W=(curJump[3] & ~BbtbPred[3] && jumpMask[3:0]==4'b1111) ? GHT3_sc[0] : {2{1'bz}};
+    assign otherPred3W=(curJump[3] & BbtbPred[3]  || ~jumpMask[3]) ? (Bbtb_sc3|{GHTx_upper3,1'b0})&{1'b1,jumpMask[3]} : {2{1'bz}};
     
-    assign BotherPred0=curJump[0] ?otherPred0W : 2'bz;
-    assign BotherPred1=curJump[1] ?otherPred1W : 2'bz;
-    assign BotherPred2=curJump[2] ?otherPred2W : 2'bz;
-    assign BotherPred3=curJump[3] ?otherPred3W : 2'bz;
+    assign BotherPred0=curJump[0] ?otherPred0W : {2{1'bz}};
+    assign BotherPred1=curJump[1] ?otherPred1W : {2{1'bz}};
+    assign BotherPred2=curJump[2] ?otherPred2W : {2{1'bz}};
+    assign BotherPred3=curJump[3] ?otherPred3W : {2{1'bz}};
 
     assign GHT1_sc[1]=GHT0_sc;
     assign GHT2_sc[2]=GHT0_sc;
@@ -270,51 +270,51 @@ module ght_bank(
 
     assign GHTx_sc0=GHT0_sc;
     assign GHTx_sc1=jumpMask[0] ? GHT1_sc[0] : GHT1_sc[1];
-    assign GHTx_sc2=jumpMask[0] ? GHT2_sc[0] : 2'bz;
-    assign GHTx_sc2=(jumpMask[1:0]==2'b10) ? GHT2_sc[1] : 2'bz;
-    assign GHTx_sc2=(!|jumpMask[1:0]) ? GHT2_sc[2] : 2'bz;
-    assign GHTx_sc3=jumpMask[0] ? GHT3_sc[0] : 2'bz;
-    assign GHTx_sc3=(jumpMask[1:0]==2'b10) ? GHT3_sc[1] : 2'bz;
-    assign GHTx_sc3=(jumpMask[2:0]==3'b100) ? GHT3_sc[2] : 2'bz;
-    assign GHTx_sc3=(!|jumpMask[2:0]) ? GHT3_sc[3] : 2'bz;
+    assign GHTx_sc2=jumpMask[0] ? GHT2_sc[0] : {2{1'bz}};
+    assign GHTx_sc2=(jumpMask[1:0]==2'b10) ? GHT2_sc[1] : {2{1'bz}};
+    assign GHTx_sc2=(!|jumpMask[1:0]) ? GHT2_sc[2] : {2{1'bz}};
+    assign GHTx_sc3=jumpMask[0] ? GHT3_sc[0] : {2{1'bz}};
+    assign GHTx_sc3=(jumpMask[1:0]==2'b10) ? GHT3_sc[1] : {2{1'bz}};
+    assign GHTx_sc3=(jumpMask[2:0]==3'b100) ? GHT3_sc[2] : {2{1'bz}};
+    assign GHTx_sc3=(!|jumpMask[2:0]) ? GHT3_sc[3] : {2{1'bz}};
 
-    assign GHTx_sc=curJump[0] ? GHTx_sc0 : 2'bz;
-    assign GHTx_sc=curJump[1] ? GHTx_sc1 : 2'bz;
-    assign GHTx_sc=curJump[2] ? GHTx_sc2 : 2'bz;
-    assign GHTx_sc=curJump[3] ? GHTx_sc3 : 2'bz;
-    assign GHTx_sc=curJump!=0 ? 2'bz : 2'b11;
+    assign GHTx_sc=curJump[0] ? GHTx_sc0 : {2{1'bz}};
+    assign GHTx_sc=curJump[1] ? GHTx_sc1 : {2{1'bz}};
+    assign GHTx_sc=curJump[2] ? GHTx_sc2 : {2{1'bz}};
+    assign GHTx_sc=curJump[3] ? GHTx_sc3 : {2{1'bz}};
+    assign GHTx_sc=curJump!=0 ? {2{1'bz}} : 2'b11;
     
     assign GHTx_addr0=read_addr[15:8];
     assign GHTx_addr1=jumpMask[0] ? read1_addr[0] : read1_addr[1];
-    assign GHTx_addr2=jumpMask[0] ? read2_addr[0] : 8'bz;
-    assign GHTx_addr2=(jumpMask[1:0]==2'b10) ? read2_addr[1] : 8'bz;
-    assign GHTx_addr2=(!|jumpMask[1:0]) ? read2_addr[2] : 8'bz;
-    assign GHTx_addr3=jumpMask[0] ? read3_addr[0] : 8'bz;
-    assign GHTx_addr3=(jumpMask[1:0]==2'b10) ? read3_addr[1] : 8'bz;
-    assign GHTx_addr3=(jumpMask[2:0]==3'b100) ? read3_addr[2] : 8'bz;
-    assign GHTx_addr3=(!|jumpMask[2:0]) ? read3_addr[3] : 8'bz;
+    assign GHTx_addr2=jumpMask[0] ? read2_addr[0] : {8{1'bz}};
+    assign GHTx_addr2=(jumpMask[1:0]==2'b10) ? read2_addr[1] : {8{1'bz}};
+    assign GHTx_addr2=(!|jumpMask[1:0]) ? read2_addr[2] : {8{1'bz}};
+    assign GHTx_addr3=jumpMask[0] ? read3_addr[0] : {8{1'bz}};
+    assign GHTx_addr3=(jumpMask[1:0]==2'b10) ? read3_addr[1] : {8{1'bz}};
+    assign GHTx_addr3=(jumpMask[2:0]==3'b100) ? read3_addr[2] : {8{1'bz}};
+    assign GHTx_addr3=(!|jumpMask[2:0]) ? read3_addr[3] : {8{1'bz}};
 
-    assign GHTx_addr=curJump[0] ? GHTx_addr0 : 8'bz;
-    assign GHTx_addr=curJump[1] ? GHTx_addr1 : 8'bz;
-    assign GHTx_addr=curJump[2] ? GHTx_addr2 : 8'bz;
-    assign GHTx_addr=curJump[3] ? GHTx_addr3 : 8'bz;
-    assign GHTx_addr=curJump!=0 ? 8'bz : 8'b0;
+    assign GHTx_addr=curJump[0] ? GHTx_addr0 : {8{1'bz}};
+    assign GHTx_addr=curJump[1] ? GHTx_addr1 : {8{1'bz}};
+    assign GHTx_addr=curJump[2] ? GHTx_addr2 : {8{1'bz}};
+    assign GHTx_addr=curJump[3] ? GHTx_addr3 : {8{1'bz}};
+    assign GHTx_addr=curJump!=0 ? {8{1'bz}} : 8'b0;
 
-    assign GHTx_en=curJump[0] ? jumpMask[0] : 1'bz;
-    assign GHTx_en=curJump[1] ? (|jumpMask[1:0]) & jumpMask[1] : 1'bz;
-    assign GHTx_en=curJump[2] ? (|jumpMask[2:0]) & jumpMask[2] : 1'bz;
-    assign GHTx_en=curJump[3] ? (|jumpMask[3:0]) & jumpMask[3] : 1'bz;
-    assign GHTx_en=curJump!=0 ? 1'bz : 1'b0;
+    assign GHTx_en=curJump[0] ? jumpMask[0] : {1{1'bz}};
+    assign GHTx_en=curJump[1] ? (|jumpMask[1:0]) & jumpMask[1] : {1{1'bz}};
+    assign GHTx_en=curJump[2] ? (|jumpMask[2:0]) & jumpMask[2] : {1{1'bz}};
+    assign GHTx_en=curJump[3] ? (|jumpMask[3:0]) & jumpMask[3] : {1{1'bz}};
+    assign GHTx_en=curJump!=0 ? {1{1'bz}} : 1'b0;
 
     assign GHTx_upper0=upper0;
     assign GHTx_upper1=jumpMask[0] ? upper1 : upper0;
-    assign GHTx_upper2=jumpMask[0] ? upper2 : 1'bz;
-    assign GHTx_upper2=(jumpMask[1:0]==2'b10) ? upper1 : 1'bz;
-    assign GHTx_upper2=(!|jumpMask[1:0]) ? upper0 : 1'bz;
-    assign GHTx_upper3=jumpMask[0] ? upper3 : 1'bz;
-    assign GHTx_upper3=(jumpMask[1:0]==2'b10) ? upper2 : 1'bz;
-    assign GHTx_upper3=(jumpMask[2:0]==3'b100) ? upper1 : 1'bz;
-    assign GHTx_upper3=(!|jumpMask[2:0]) ? upper0 : 1'bz;
+    assign GHTx_upper2=jumpMask[0] ? upper2 : {1{1'bz}};
+    assign GHTx_upper2=(jumpMask[1:0]==2'b10) ? upper1 : {1{1'bz}};
+    assign GHTx_upper2=(!|jumpMask[1:0]) ? upper0 : {1{1'bz}};
+    assign GHTx_upper3=jumpMask[0] ? upper3 : {1{1'bz}};
+    assign GHTx_upper3=(jumpMask[1:0]==2'b10) ? upper2 : {1{1'bz}};
+    assign GHTx_upper3=(jumpMask[2:0]==3'b100) ? upper1 : {1{1'bz}};
+    assign GHTx_upper3=(!|jumpMask[2:0]) ? upper0 : {1{1'bz}};
 
     sel_ght_entry sel_mod(read_data,read_addr[15:8],upper0,GHT0_sc);
     sel_ght_entry sel1_mod(read_data,read1_addr[0],upper1,GHT1_sc[0]);
@@ -393,9 +393,9 @@ module sel_ght_entry(entry,addr,update,sc);
         for (k=0;k<16;k=k+1) begin
             wire [1:0] sc0;
             for(p=0;p<16;p=p+1) begin
-                assign sc0=( p[3:0]==addr[3:0]) ? entry[2*(k*16+p)+:2] : 2'bz;
+                assign sc0=( p[3:0]==addr[3:0]) ? entry[2*(k*16+p)+:2] : {2{1'bz}};
             end
-            assign sc1=(k[3:0]==addr[7:4]) ? sc0 : 2'bz;
+            assign sc1=(k[3:0]==addr[7:4]) ? sc0 : {2{1'bz}};
         end
     endgenerate
 endmodule
@@ -549,22 +549,22 @@ module ght(
             write_wen[k],
             init
             );
-            assign write_addr[k]=(has_saved && writeS_way==k && ~init) ? writeS_addr : 16'bz;    
-            assign write_addr[k]=(~has_saved && write0_way==k && write0_wen && ~init ) ? write0_addr : 16'bz;    
+            assign write_addr[k]=(has_saved && writeS_way==k && ~init) ? writeS_addr : {16{1'bz}};    
+            assign write_addr[k]=(~has_saved && write0_way==k && write0_wen && ~init ) ? write0_addr : {16{1'bz}};    
             assign write_addr[k]=(~has_saved && !(write0_way==k) && write1_way==k && write1_wen && ~init ) ? 
-                write1_addr : 16'bz;
-            assign write_addr[k]=init ? {10'b0,initCount,1'b0} : 16'bz;    
+                write1_addr : {16{1'bz}};
+            assign write_addr[k]=init ? {10'b0,initCount,1'b0} : {16{1'bz}};    
 
-            assign write_sc[k]=(has_saved && writeS_way==k) ? writeS_sc : 2'bz;    
-            assign write_sc[k]=(~has_saved && write0_way==k && write0_wen) ? write0_sc : 2'bz;    
+            assign write_sc[k]=(has_saved && writeS_way==k) ? writeS_sc : {2{1'bz}};    
+            assign write_sc[k]=(~has_saved && write0_way==k && write0_wen) ? write0_sc : {2{1'bz}};    
             assign write_sc[k]=(~has_saved && !(write0_way==k) && write1_way==k && write1_wen) ? 
-                write1_sc : 2'bz;    
+                write1_sc : {2{1'bz}};    
 
             assign write_wen[k]=(has_saved && writeS_way==k) || (~has_saved && write0_way==k && write0_wen) ||
                 (~has_saved && !(write0_way==k) && write1_way==k && write1_wen); 
                 
-            assign write_addr[k]=(write_wen[k]|init) ? 16'bz : 16'b0;
-            assign write_sc[k]=write_wen[k] ? 2'bz : 2'b0;
+            assign write_addr[k]=(write_wen[k]|init) ? {16{1'bz}} : 16'b0;
+            assign write_sc[k]=write_wen[k] ? {2{1'bz}} : 2'b0;
         end
     endgenerate
 

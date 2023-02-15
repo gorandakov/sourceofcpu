@@ -466,13 +466,13 @@ module fun_fpsu(
 	      assign FUF8N=~FOOF_reg[1];
       end
       if (INDEX==2) begin
-	      assign FUF6_X=|ALT_INP_reg ? {S+SIMD_WIDTH{1'BZ}} : FOOF_reg[0];
-	      assign FUF6_X=ALT_INP_reg[0] ? ALTDATA0 : {S+SIMD_WIDTH{1'BZ}};
-	      assign FUF6_X=ALT_INP_reg[1] ? ALTDATA1 : {S+SIMD_WIDTH{1'BZ}};
+	      assign FUF6_X=|ALT_INP_reg ? {S+SIMD_WIDTH{{1{1'bz}}}} : FOOF_reg[0];
+	      assign FUF6_X=ALT_INP_reg[0] ? ALTDATA0 : {S+SIMD_WIDTH{{1{1'bz}}}};
+	      assign FUF6_X=ALT_INP_reg[1] ? ALTDATA1 : {S+SIMD_WIDTH{{1{1'bz}}}};
 	      assign FUF9=FOOF_reg[1];
-	      assign FUF6N_X=|ALT_INP_reg ? {S+SIMD_WIDTH{1'BZ}} : ~FOOF_reg[0];
-	      assign FUF6N_X=ALT_INP_reg[0] ? ~ALTDATA0 : {S+SIMD_WIDTH{1'BZ}};
-	      assign FUF6N_X=ALT_INP_reg[1] ? ~ALTDATA1 : {S+SIMD_WIDTH{1'BZ}};
+	      assign FUF6N_X=|ALT_INP_reg ? {S+SIMD_WIDTH{{1{1'bz}}}} : ~FOOF_reg[0];
+	      assign FUF6N_X=ALT_INP_reg[0] ? ~ALTDATA0 : {S+SIMD_WIDTH{{1{1'bz}}}};
+	      assign FUF6N_X=ALT_INP_reg[1] ? ~ALTDATA1 : {S+SIMD_WIDTH{{1{1'bz}}}};
 	      assign FUF9N=~FOOF_reg[1];
 	      assign FUF6=FUF6_X;
 	      assign FUF6N=FUF6N_X;
@@ -482,7 +482,7 @@ module fun_fpsu(
   endgenerate
 
 //  if (m!=2) assign FUFL[4+m]=FOOFL_reg[2*m+0];
-//  else assign FUFL[4+m]=fxFRT_alten_reg5[2]||~nDataAlt_reg5[2][2] ? {SIMD_WIDTH{1'BZ}} : FOOFL_reg[2*m+0];
+//  else assign FUFL[4+m]=fxFRT_alten_reg5[2]||~nDataAlt_reg5[2][2] ? {SIMD_WIDTH{{1{1'bz}}}} : FOOFL_reg[2*m+0];
 //  assign FUFL[7+m]=FOOFL_reg[2*m+1];
 
   always @(negedge clk) begin

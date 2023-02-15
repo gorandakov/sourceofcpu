@@ -222,8 +222,8 @@ module dcache1_tag(
   assign errH=err_tag0;
   assign errL=err_tag1;
   
- // assign read_excl[0]=(read_hitH_odd  | read_hitL_odd) ? tagR1_exclusive : 1'bz; 
- // assign read_excl[1]=(read_hitH_even  | read_hitL_even) ? tagR0_exclusive : 1'bz; 
+ // assign read_excl[0]=(read_hitH_odd  | read_hitL_odd) ? tagR1_exclusive : {1{1'bz}}; 
+ // assign read_excl[1]=(read_hitH_even  | read_hitL_even) ? tagR0_exclusive : {1{1'bz}}; 
   
   assign read_hit_odd=hit_odd;
   assign read_hit_even=hit_even;
@@ -236,9 +236,9 @@ module dcache1_tag(
   end
   
   assign wb_addr=write_hit ? (
-    read_odd_reg ? {tagR1_IP,1'b1} : {tagR0_IP,1'b1}) : {PADDR_WIDTH-7{1'bz}};
+    read_odd_reg ? {tagR1_IP,1'b1} : {tagR0_IP,1'b1}) : {PADDR_WIDTH-7{{1{1'bz}}}};
   assign wb_valid=write_hit ? (
-    read_odd_reg ? tagR1_valid : tagR0_valid) : 1'bz;
+    read_odd_reg ? tagR1_valid : tagR0_valid) : {1{1'bz}};
   always @(negedge clk) begin
       if (rst) begin
           read_addrOdd_reg<=36'b0;

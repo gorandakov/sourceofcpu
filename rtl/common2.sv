@@ -61,9 +61,9 @@ module muxx3(out,hitA,wf,inA,inB,inF);
   input [WIDTH-1:0] inB;
   input [WIDTH-1:0] inF;
 
-  assign out=(hitA & ~wf) ? inA : {WIDTH{1'BZ}};
-  assign out=(~hitA & ~wf) ? inB : {WIDTH{1'BZ}};
-  assign out=wf ? inF : {WIDTH{1'BZ}};
+  assign out=(hitA & ~wf) ? inA : {WIDTH{{1{1'bz}}}};
+  assign out=(~hitA & ~wf) ? inB : {WIDTH{{1{1'bz}}}};
+  assign out=wf ? inF : {WIDTH{{1{1'bz}}}};
 
 endmodule
 

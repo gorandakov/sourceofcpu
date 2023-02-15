@@ -36,22 +36,22 @@ module bnd(
 
   adder #(44) sub0_mod(B[43:0],~A[43:0],DA,1'b1,B[64],cout0,,,);
   adder #(44) add0_mod(B[43:0],A[43:0],DB,1'b1,~B[64],,,,);
-  assign DA=~B[64] ? B[43:0] : 44'bz;
-  assign DB=B[64] ? B[43:0] : 44'bz;
+  assign DA=~B[64] ? B[43:0] : {44{1'bz}};
+  assign DB=B[64] ? B[43:0] : {44{1'bz}};
 
   bit_find_last_bit #(32) ls_mod(DA_reg[43:12],first,has);
   generate
     genvar p;
     for(p=0;p<8;p=p+1) begin
         assign sh[2:0]=first[7-p]|first[15-p]|first[23-p]|first[31-p]|(p==0 &&
-        ~has) ? p[2:0] : 3'bz;
+        ~has) ? p[2:0] : {3{1'bz}};
     end
   endgenerate
 
-  assign sh[4:3]=~|DA_reg[43-:24] ? 2'b0 : 2'bz;
-  assign sh[4:3]=~|DA_reg[43-:16] ? 2'b1 : 2'bz;
-  assign sh[4:3]=~|DA_reg[43-:8] ? 2'b10 : 2'bz;
-  assign sh[4:3]=|DA_reg[43-:8] ? 2'b11 : 2'bz;
+  assign sh[4:3]=~|DA_reg[43-:24] ? 2'b0 : {2{1'bz}};
+  assign sh[4:3]=~|DA_reg[43-:16] ? 2'b1 : {2{1'bz}};
+  assign sh[4:3]=~|DA_reg[43-:8] ? 2'b10 : {2{1'bz}};
+  assign sh[4:3]=|DA_reg[43-:8] ? 2'b11 : {2{1'bz}};
 
   agusec_shift8 shfB(sh_reg,DB_reg2[43:4],hi_rng);
   agusec_shift8 shfA(sh_reg,A_reg2[43:4],lo_rng);

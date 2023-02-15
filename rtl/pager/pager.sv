@@ -218,36 +218,36 @@ module pager(
   assign writeTlb_low=addr_orig[13];
   assign req_bus=(stageA|{4'b0,stageB})!=0 && ~stageA_running && ~bus_hold;
   
-  assign mOp_register=((stageA|{4'b0,stageB})!=0 && ~stageA_running && ~bus_hold) ? 9'h1fc : 9'bz;
-  assign mOp_LSQ=((stageA|{4'b0,stageB})!=0 && ~stageA_running && ~bus_hold) ? 9'h07 : 9'bz; 
-  assign mOp_II=((stageA|{4'b0,stageB})!=0 && ~stageA_running && ~bus_hold) ? 10'h0 : 10'bz; 
-  assign mOp_WQ=((stageA|{4'b0,stageB})!=0 && ~stageA_running && ~bus_hold) ? 6'h0 : 6'bz; 
+  assign mOp_register=((stageA|{4'b0,stageB})!=0 && ~stageA_running && ~bus_hold) ? 9'h1fc : {9{1'bz}};
+  assign mOp_LSQ=((stageA|{4'b0,stageB})!=0 && ~stageA_running && ~bus_hold) ? 9'h07 : {9{1'bz}}; 
+  assign mOp_II=((stageA|{4'b0,stageB})!=0 && ~stageA_running && ~bus_hold) ? 10'h0 : {10{1'bz}}; 
+  assign mOp_WQ=((stageA|{4'b0,stageB})!=0 && ~stageA_running && ~bus_hold) ? 6'h0 : {6{1'bz}}; 
   assign mOp_addrEven=((stageA|{4'b0,stageB})!=0 && ~stageA_running && ~bus_hold) ? 
-    {ptr[43:13],addrE} : 36'bz;
+    {ptr[43:13],addrE} : {36{1'bz}};
   assign mOp_addrOdd= ((stageA|{4'b0,stageB})!=0 && ~stageA_running && ~bus_hold) ? 
-    {ptr[43:13],addrO} : 36'bz;
+    {ptr[43:13],addrO} : {36{1'bz}};
 //  assign mOp_addrMain= stageA|{4'b0,stageB} && ~stageA_running && ~bus_hold ? 
-//    64'b0 : 64'bz;
+//    64'b0 : {64{1'bz}};
   assign mOp_sz= ((stageA|{4'b0,stageB})!=0 && ~stageA_running && ~bus_hold) ? 
-    (stageA[3] ? 5'h0 : 5'h13) : 5'bz;
+    (stageA[3] ? 5'h0 : 5'h13) : {5{1'bz}};
 //  assign mOp_en= ((stageA|{4'b0,stageB})!=0 && ~stageA_running && ~bus_hold) ? 
-//    1'b0 : 1'bz;
+//    1'b0 : {1{1'bz}};
   assign mOp_en= ((stageA|{4'b0,stageB})!=0 && ~stageA_running && ~bus_hold) ? 
-    1'b1 : 1'bz;
+    1'b1 : {1{1'bz}};
 //  assign mOp_thread= ((stageA|{4'b0,stageB})!=0 && ~stageA_running && ~bus_hold) ? 
-//    thread : 1'bz;
+//    thread : {1{1'bz}};
   assign mOp_lsflag= ((stageA|{4'b0,stageB})!=0 && ~stageA_running && ~bus_hold) ? 
-    1'b1 : 1'bz;
+    1'b1 : {1{1'bz}};
   assign mOp_banks= ((stageA|{4'b0,stageB})!=0 && ~stageA_running && ~bus_hold) ? 
-      banks : 32'bz;
+      banks : {32{1'bz}};
   assign mOp_bank0= ((stageA|{4'b0,stageB})!=0 && ~stageA_running && ~bus_hold) ? 
-    {addr[36:33],1'b0} : 5'bz;
+    {addr[36:33],1'b0} : {5{1'bz}};
   assign mOp_odd= ((stageA|{4'b0,stageB})!=0 && ~stageA_running && ~bus_hold) ? 
-    addr[37] : 1'bz;
+    addr[37] : {1{1'bz}};
   assign mOp_addr_low= ((stageA|{4'b0,stageB})!=0 && ~stageA_running && ~bus_hold) ? 
-    2'b0 : 2'bz;
+    2'b0 : {2{1'bz}};
   assign mOp_split= ((stageA|{4'b0,stageB})!=0 && ~stageA_running && ~bus_hold) ? 
-    1'b0 : 1'bz;
+    1'b0 : {1{1'bz}};
 
   adder_inc #(34) addrB_mod(new_addr[47:14],addr_inc_d[47:14],1'b1,);
   adder_inc #(25) addrBH_mod(new_addr[47:23],addr_inc2_d[47:23],1'b1,);

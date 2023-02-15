@@ -113,8 +113,8 @@ module dwtlb_way(
   
   assign write_wen_ram=(write_wen_reg && INDEX==write_way) || read_clkEn_reg;
   
-  assign read_data0=read_hit ? read_data_ram[`dwtlb_data1] : {OUTDATA_WIDTH{1'BZ}};
-  assign read_data1=read_hit ? read_data_ram[`dwtlb_data2] : {OUTDATA_WIDTH{1'BZ}};
+  assign read_data0=read_hit ? read_data_ram[`dwtlb_data1] : {OUTDATA_WIDTH{{1{1'bz}}}};
+  assign read_data1=read_hit ? read_data_ram[`dwtlb_data2] : {OUTDATA_WIDTH{{1{1'bz}}}};
   assign write_data_new[`dwtlb_ip]=addr_reg;
   assign write_data_new[`dwtlb_valid]=1'b1;
   assign write_data_new[`dwtlb_data1]=write_data0_reg;

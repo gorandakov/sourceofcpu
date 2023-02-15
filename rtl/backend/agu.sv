@@ -284,11 +284,11 @@ module agu(
           end
 /*          if (INDEX==2) begin
               assign bit_confl[p]=(otherness && ~other_flip && !(other1_banks[p] & all_banks[p]))
-                ? 1'b1 : 1'bz;
+                ? 1'b1 : {1{1'bz}};
               assign bit_confl[p]=(otherness && other_flip && !(other0_banks[p] & all_banks[p]))
-                ? 1'b1 : 1'bz;
-              assign bit_confl[p]=((~other_flip && (other1_banks[p] & all_banks[p])) || ~otherness) ? 1'b0 : 1'bz;
-              assign bit_confl[p]=((other_flip && (other0_banks[p] & all_banks[p])) || ~otherness) ? 1'b0 : 1'bz;
+                ? 1'b1 : {1{1'bz}};
+              assign bit_confl[p]=((~other_flip && (other1_banks[p] & all_banks[p])) || ~otherness) ? 1'b0 : {1{1'bz}};
+              assign bit_confl[p]=((other_flip && (other0_banks[p] & all_banks[p])) || ~otherness) ? 1'b0 : {1{1'bz}};
           end*/
           assign mOp_banks[p]=(all_banks[p] & read_clkEn_reg) & bit_confl[p]; 
       end
@@ -312,39 +312,39 @@ module agu(
   assign lastSz[4:3]=2'b0;
   assign lastSz[0]=(opsize==0) || (opsize==1 & ~stepOver2) || (opsize==2 & ~stepOver);  
   assign mOp_split=(opsize==1) ?
-    bank0==5'h1f && stepOver2 : 1'bz;
+    bank0==5'h1f && stepOver2 : {1{1'bz}};
   assign mOp_split=(opsize==2) ?
-    bank0==5'h1f && stepOver : 1'bz;
+    bank0==5'h1f && stepOver : {1{1'bz}};
   assign mOp_split=(opsize==3) ?
-    bank0==5'h1f || (bank0==5'h1e && stepOver) : 1'bz;
+    bank0==5'h1f || (bank0==5'h1e && stepOver) : {1{1'bz}};
   assign mOp_split=(opsize==4) ?
-    bank0[4:1]==4'hf || (bank0==5'h1d && stepOver2) : 1'bz;
+    bank0[4:1]==4'hf || (bank0==5'h1d && stepOver2) : {1{1'bz}};
   assign mOp_split=(opsize==5||opsize==6) ?
-    bank0[4:2]==3'h7 && (bank0[1:0]!=0 || stepOver || opsize==6) : 1'bz;
-  assign mOp_split=(opsize==0) ? 1'b0 : 1'bz;
+    bank0[4:2]==3'h7 && (bank0[1:0]!=0 || stepOver || opsize==6) : {1{1'bz}};
+  assign mOp_split=(opsize==0) ? 1'b0 : {1{1'bz}};
   
   assign all_banks=banks0;
 
   assign split=(opsize==1) ?
-    bank0==5'h1f && stepOver2 : 1'bz;
+    bank0==5'h1f && stepOver2 : {1{1'bz}};
   assign split=(opsize==2) ?
-    bank0==5'h1f && stepOver : 1'bz;
+    bank0==5'h1f && stepOver : {1{1'bz}};
   assign split=(opsize==3) ?
-    bank0==5'h1f || (bank0==5'h1e && stepOver) : 1'bz;
+    bank0==5'h1f || (bank0==5'h1e && stepOver) : {1{1'bz}};
   assign split=(opsize==4) ?
-    bank0[4:1]==4'hf || (bank0==5'h1d && stepOver2) : 1'bz;
+    bank0[4:1]==4'hf || (bank0==5'h1d && stepOver2) : {1{1'bz}};
   assign split=(opsize==5 || opsize==6) ?
-    bank0[4:2]==3'h7 && (bank0[1:0]!=0 || stepOver || opsize==6) : 1'bz;
-  assign split=(opsize==0) ? 1'b0 : 1'bz;
+    bank0[4:2]==3'h7 && (bank0[1:0]!=0 || stepOver || opsize==6) : {1{1'bz}};
+  assign split=(opsize==0) ? 1'b0 : {1{1'bz}};
 
   assign conflict=(((|(~bit_confl_reg))||mOp_type_reg==2'b10) && ~bus_hold_reg2 && 
     read_clkEn_reg2 && ~fault_cann_reg);
   
   
-  assign mOp_addrEven[12:8]=(addrMain[7] ) ? addrNext[12:8] : 5'bz;
-  assign mOp_addrEven[12:8]=(~addrMain[7]) ? addrMain[12:8] : 5'bz;
-  assign mOp_addrOdd[12:8]=(addrMain[7] ) ? addrMain[12:8] : 5'bz;
-  assign mOp_addrOdd[12:8]=(~addrMain[7]) ? addrNext[12:8] : 5'bz;
+  assign mOp_addrEven[12:8]=(addrMain[7] ) ? addrNext[12:8] : {5{1'bz}};
+  assign mOp_addrEven[12:8]=(~addrMain[7]) ? addrMain[12:8] : {5{1'bz}};
+  assign mOp_addrOdd[12:8]=(addrMain[7] ) ? addrMain[12:8] : {5{1'bz}};
+  assign mOp_addrOdd[12:8]=(~addrMain[7]) ? addrNext[12:8] : {5{1'bz}};
   
   assign mOp_odd=addrMain[7];
   assign mOp_addr_low=addrMain[1:0];
@@ -356,13 +356,13 @@ module agu(
 
   assign mOp_type=tlb_data[`dtlbData_type];
   assign mOp_addrEven[43:13]=(addrMain[7] && addrNext[13]) ? tlb_data_next[`dtlbData_phys] :
-    31'bz;
+    {31{1'bz}};
   assign mOp_addrEven[43:13]=(~(addrMain[7] && addrNext[13] )) ?  tlb_data[`dtlbData_phys] :
-    31'bz;
+    {31{1'bz}};
   assign mOp_addrOdd[43:13]=(~(~addrMain[7] && addrNext[13] ) ) ? tlb_data[`dtlbData_phys] : 
-    31'bz;
+    {31{1'bz}};
   assign mOp_addrOdd[43:13]=(~addrMain[7] && addrNext[13] ) ? tlb_data_next[`dtlbData_phys] :
-    31'bz;
+    {31{1'bz}};
 //todo: add read_clkEn to pageFault
   assign pageFault_t=(addrNext[13]) ? (fault_tlb | ({2{split}} & fault_tlb_next)) & {2{tlb_hit}} : fault_tlb & {2{tlb_hit}};
   assign pageFault=(pageFault_t_reg!=0) | fault_cann_reg && read_clkEn_reg2 && ~bus_hold_reg2;

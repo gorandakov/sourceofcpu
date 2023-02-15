@@ -50,34 +50,34 @@ module ldD2nativeD(
               for(l1=0;l1<((l==6) ? 4 : 8);l1=l1+1) begin
 	          wire [11:0] natExp=12'h3ff-l*8-l1;
 		  //verilator lint_off WIDTH
-                  assign denorK=last[l*8+l1] ? A[l*8+l1:0]<<(52-(l*8+l1)) : 52'bz;
+                  assign denorK=last[l*8+l1] ? A[l*8+l1:0]<<(52-(l*8+l1)) : {52{1'bz}};
 		  //verilator lint_on WIDTH
-		  assign expK=last[l*8+l1]? natExp : 12'bz;
+		  assign expK=last[l*8+l1]? natExp : {12{1'bz}};
 	      end
-	      assign denorK=lastB[l] ? 52'bz :  52'b0;
-	      assign denor=lastB[l] ? denorK : 52'bz;
-	      assign expK=lastB[l] ? 12'bz :  12'b0;
-	      assign exp=lastB[l] ? expK : 12'bz;
+	      assign denorK=lastB[l] ? {52{1'bz}} :  52'b0;
+	      assign denor=lastB[l] ? denorK : {52{1'bz}};
+	      assign expK=lastB[l] ? {12{1'bz}} :  12'b0;
+	      assign exp=lastB[l] ? expK : {12{1'bz}};
       end
-      assign denor=has ? 52'bz : 52'b0;
-      assign exp=has ? 12'bz : 12'b0;
+      assign denor=has ? {52{1'bz}} : 52'b0;
+      assign exp=has ? {12{1'bz}} : 12'b0;
   endgenerate
 
   assign A_z=A[51:0]==52'b0;
-  assign resX=(A[62:52]==0 && ~A_z) ? {exp[11],A[63],exp[10:0],denor} :  65'bz;
-  assign resX=(A[62:52]!=0 && A[62:52]!=11'h7ff) ? {A[62],A[63],~A[62],A[61:0]} : 65'bz;
-  assign resX=(A[62:52]==11'h7ff && A_z) ? {A[62],A[63],A[62:53],~A_z,A[51:0]} : 65'bz;
-  assign resX=(A[62:52]==0 && A_z) ? {1'b0,A[63],11'b0,denor} :  65'bz;
-  assign resY=(A[62:52]==0 && ~A_z) ? {exp[11],A[63],{4{~exp[11]}},exp[10:0],1'b0,denor,11'b0} :  81'bz;
-  assign resY=(A[62:52]!=0 && A[62:52]!=11'h7ff) ? {A[62],A[63],{5{~A[62]}},A[61:52],1'b1,A[51:0],11'b0} : 81'bz;
-  assign resY=(A[62:52]==11'h7ff) ? {A[62],A[63],{5{A[62]}},A[61:53],~A_z,1'b1,A[51:0],11'b0} : 81'bz;
-  assign resY=(A[62:52]==0 && A_z) ? {1'b0,A[63],15'b0,1'b0,denor,11'b0} :  81'bz;
+  assign resX=(A[62:52]==0 && ~A_z) ? {exp[11],A[63],exp[10:0],denor} :  {65{1'bz}};
+  assign resX=(A[62:52]!=0 && A[62:52]!=11'h7ff) ? {A[62],A[63],~A[62],A[61:0]} : {65{1'bz}};
+  assign resX=(A[62:52]==11'h7ff && A_z) ? {A[62],A[63],A[62:53],~A_z,A[51:0]} : {65{1'bz}};
+  assign resX=(A[62:52]==0 && A_z) ? {1'b0,A[63],11'b0,denor} :  {65{1'bz}};
+  assign resY=(A[62:52]==0 && ~A_z) ? {exp[11],A[63],{4{~exp[11]}},exp[10:0],1'b0,denor,11'b0} :  {81{1'bz}};
+  assign resY=(A[62:52]!=0 && A[62:52]!=11'h7ff) ? {A[62],A[63],{5{~A[62]}},A[61:52],1'b1,A[51:0],11'b0} : {81{1'bz}};
+  assign resY=(A[62:52]==11'h7ff) ? {A[62],A[63],{5{A[62]}},A[61:53],~A_z,1'b1,A[51:0],11'b0} : {81{1'bz}};
+  assign resY=(A[62:52]==0 && A_z) ? {1'b0,A[63],15'b0,1'b0,denor,11'b0} :  {81{1'bz}};
 
-  assign res[64:0]=(en&to_dbl) ? resX : 65'bz;
-  assign {res[64],res[80:65],res[63:0]}=(en&to_ext) ? resY : 81'bz;
+  assign res[64:0]=(en&to_dbl) ? resX : {65{1'bz}};
+  assign {res[64],res[80:65],res[63:0]}=(en&to_ext) ? resY : {81{1'bz}};
   
-  assign res_x[64:0]=(en&to_dbl) ? ~resX : 65'bz;
-  assign {res_x[64],res_x[80:65],res[63:0]}=(en&to_ext) ? ~resY : 81'bz;
+  assign res_x[64:0]=(en&to_dbl) ? ~resX : {65{1'bz}};
+  assign {res_x[64],res_x[80:65],res[63:0]}=(en&to_ext) ? ~resY : {81{1'bz}};
 endmodule
 
 module ldS2nativeS(
@@ -116,38 +116,38 @@ module ldS2nativeS(
               for(l1=0;l1<((l==2) ? 7 : 8);l1=l1+1) begin
 	          wire [11:0] natExp=12'h3ff-l*8-l1;
 		  //verilator lint_off WIDTH
-                  assign denorK=last[l*8+l1] ? A[l*8+l1:0]<<(23-(l*8+l1)) : 23'bz;
+                  assign denorK=last[l*8+l1] ? A[l*8+l1:0]<<(23-(l*8+l1)) : {23{1'bz}};
 		  //verilator lint_on WIDTH
-		  assign expK=last[l*8+l1]? natExp : 12'bz;
+		  assign expK=last[l*8+l1]? natExp : {12{1'bz}};
 	      end
-	      assign denorK=lastB[l] ? 23'bz :  23'b0;
-	      assign denor=lastB[l] ? denorK : 23'bz;
-	      assign expK=lastB[l] ? 12'bz :  12'b0;
-	      assign exp=lastB[l] ? expK : 12'bz;
+	      assign denorK=lastB[l] ? {23{1'bz}} :  23'b0;
+	      assign denor=lastB[l] ? denorK : {23{1'bz}};
+	      assign expK=lastB[l] ? {12{1'bz}} :  12'b0;
+	      assign exp=lastB[l] ? expK : {12{1'bz}};
       end
-      assign denor=has ? 23'bz : 23'b0;
-      assign exp=has ? 12'bz : 12'b0;
+      assign denor=has ? {23{1'bz}} : 23'b0;
+      assign exp=has ? {12{1'bz}} : 12'b0;
   endgenerate
 
   assign A_z=A[22:0]==23'b0;
-  assign resX=(A[30:23]==0 && ~A_z) ? {exp[8],A[31],exp[7:0],denor} :  33'bz;
-  assign resX=(A[30:23]!=0 && A[30:23]!=8'hff) ? {A[30],A[31],~A[30],A[29:0]} : 33'bz;
-  assign resX=(A[30:23]==8'hff) ? {A[30],A[31],A[30:24],~A_z,A[22:0]} : 33'bz;
-  assign resX=(A[30:23]==0 && A_z) ? {1'b0,A[31],8'b0,denor} :  33'bz;
-  assign resY=(A[30:23]==0 && ~A_z) ? {exp[8],A[31],{3{~exp[8]}},exp[7:0],denor,29'b0} :  65'bz;
-  assign resY=(A[30:23]!=0 && A[30:23]!=8'hff) ? {A[30],A[31],{4{~A[30]}},A[29:0],29'b0} : 65'bz;
-  assign resY=(A[30:23]==8'hff) ? {A[30],A[31],{4{A[30]}},A[29:24],~A_z,A[22:0],29'b0} : 65'bz;
-  assign resY=(A[30:23]==0 && A_z) ? {1'b0,A[31],11'b0,denor,29'b0} :  65'bz;
-  assign resZ=(A[30:23]==0 && ~A_z) ? {exp[8],A[31],{7{~exp[8]}},exp[7:0],1'b0,denor,40'b0} :  81'bz;
-  assign resZ=(A[30:23]!=0 && A[30:23]!=8'hff)  ? {A[30],A[31],{8{~A[30]}},A[29:23],1'b1,A[22:0],40'b0} : 81'bz;
-  assign resZ=(A[30:23]==8'hff) ? {A[30],A[31],{8{A[30]}},A[29:24],~A_z,1'b1,A[22:0],40'b0} : 81'bz;
-  assign resZ=(A[30:23]==0 && A_z) ? {1'b0,A[31],15'b0,1'b0,denor,40'b0} :  81'bz;
-  assign res[32:0]=(en&to_sngl) ? resX : 33'bz;
-  assign res[65:0]=(en&to_dbl) ? {resY[64:32],1'b0,resY[31:0]} : 66'bz;
-  assign res[81:0]=(en&to_ext) ? {resZ[80:65],resZ[64],resZ[63:32],1'b0,resZ[31:0]} : 82'bz;
-  assign res_x[32:0]=(en&to_sngl) ? ~resX : 33'bz;
-  assign res_x[65:0]=(en&to_dbl) ? ~{resY[64:32],1'b0,resY[31:0]} : 66'bz;
-  assign res_x[81:0]=(en&to_ext) ? ~{resZ[80:65],resZ[64],resZ[63:32],1'b0,resZ[31:0]} : 82'bz;
+  assign resX=(A[30:23]==0 && ~A_z) ? {exp[8],A[31],exp[7:0],denor} :  {33{1'bz}};
+  assign resX=(A[30:23]!=0 && A[30:23]!=8'hff) ? {A[30],A[31],~A[30],A[29:0]} : {33{1'bz}};
+  assign resX=(A[30:23]==8'hff) ? {A[30],A[31],A[30:24],~A_z,A[22:0]} : {33{1'bz}};
+  assign resX=(A[30:23]==0 && A_z) ? {1'b0,A[31],8'b0,denor} :  {33{1'bz}};
+  assign resY=(A[30:23]==0 && ~A_z) ? {exp[8],A[31],{3{~exp[8]}},exp[7:0],denor,29'b0} :  {65{1'bz}};
+  assign resY=(A[30:23]!=0 && A[30:23]!=8'hff) ? {A[30],A[31],{4{~A[30]}},A[29:0],29'b0} : {65{1'bz}};
+  assign resY=(A[30:23]==8'hff) ? {A[30],A[31],{4{A[30]}},A[29:24],~A_z,A[22:0],29'b0} : {65{1'bz}};
+  assign resY=(A[30:23]==0 && A_z) ? {1'b0,A[31],11'b0,denor,29'b0} :  {65{1'bz}};
+  assign resZ=(A[30:23]==0 && ~A_z) ? {exp[8],A[31],{7{~exp[8]}},exp[7:0],1'b0,denor,40'b0} :  {81{1'bz}};
+  assign resZ=(A[30:23]!=0 && A[30:23]!=8'hff)  ? {A[30],A[31],{8{~A[30]}},A[29:23],1'b1,A[22:0],40'b0} : {81{1'bz}};
+  assign resZ=(A[30:23]==8'hff) ? {A[30],A[31],{8{A[30]}},A[29:24],~A_z,1'b1,A[22:0],40'b0} : {81{1'bz}};
+  assign resZ=(A[30:23]==0 && A_z) ? {1'b0,A[31],15'b0,1'b0,denor,40'b0} :  {81{1'bz}};
+  assign res[32:0]=(en&to_sngl) ? resX : {33{1'bz}};
+  assign res[65:0]=(en&to_dbl) ? {resY[64:32],1'b0,resY[31:0]} : {66{1'bz}};
+  assign res[81:0]=(en&to_ext) ? {resZ[80:65],resZ[64],resZ[63:32],1'b0,resZ[31:0]} : {82{1'bz}};
+  assign res_x[32:0]=(en&to_sngl) ? ~resX : {33{1'bz}};
+  assign res_x[65:0]=(en&to_dbl) ? ~{resY[64:32],1'b0,resY[31:0]} : {66{1'bz}};
+  assign res_x[81:0]=(en&to_ext) ? ~{resZ[80:65],resZ[64],resZ[63:32],1'b0,resZ[31:0]} : {82{1'bz}};
 endmodule
 
 module stNativeD2D(A,en,from_dbl,from_ext,res);
@@ -176,18 +176,18 @@ module stNativeD2D(A,en,from_dbl,from_ext,res);
   adder #(16) expAddO_mod(expA,~OVFL,,1'b1,1'b1,is_overflow,,,);
 
   assign is_nan=&expA;
-  assign res=(~is_zero && ~ is_overflow && ~is_den && en) ? {sgn,A[64],expA[9:0],A_1[51:0]} : 64'bz;
-  assign res=(is_den && ~is_zero && en) ? {sgn,11'b0,shf1} : 64'bz;
-  assign res=(is_zero && en) ? {sgn,63'b0} : 64'bz;
-  assign res=(is_overflow && ~is_nan && en) ? {sgn,11'h7ff,52'b0} : 64'bz; 
-  assign res=(is_nan && en) ? {sgn,11'h7ff,A_1[51:0]} : 64'bz;
+  assign res=(~is_zero && ~ is_overflow && ~is_den && en) ? {sgn,A[64],expA[9:0],A_1[51:0]} : {64{1'bz}};
+  assign res=(is_den && ~is_zero && en) ? {sgn,11'b0,shf1} : {64{1'bz}};
+  assign res=(is_zero && en) ? {sgn,63'b0} : {64{1'bz}};
+  assign res=(is_overflow && ~is_nan && en) ? {sgn,11'h7ff,52'b0} : {64{1'bz}}; 
+  assign res=(is_nan && en) ? {sgn,11'h7ff,A_1[51:0]} : {64{1'bz}};
   generate
     genvar k;
     for(k=0;k<8;k=k+1) begin : shifker_gen
 	//verilator lint_off WIDTH
-        assign shf0=(expOff[5:3]==k) ? {1'b1,A_1[51:0]}>>(k*8) : 52'bz; 
+        assign shf0=(expOff[5:3]==k) ? {1'b1,A_1[51:0]}>>(k*8) : {52{1'bz}}; 
 	//verilator lint_on WIDTH
-	assign shf1=(expOff[2:0]==k) ? shf0>>k : 52'bz;
+	assign shf1=(expOff[2:0]==k) ? shf0>>k : {52{1'bz}};
     end
   endgenerate
 endmodule
@@ -215,35 +215,35 @@ module stNativeS2S(A,en,from_sngl,from_dbl,from_ext,res);
   wire [22:0] shf1;
   
   
-  assign expA=from_dbl ? {A[64],{4{~A[64]}},A[62:52]} : 16'bz;
-  assign expA=from_ext ? {A[64],A[79:65]} : 16'bz;
-  assign expA=from_sngl ? {A[32],{7{~A[32]}},A[30:23]} : 16'bz;
+  assign expA=from_dbl ? {A[64],{4{~A[64]}},A[62:52]} : {16{1'bz}};
+  assign expA=from_ext ? {A[64],A[79:65]} : {16{1'bz}};
+  assign expA=from_sngl ? {A[32],{7{~A[32]}},A[30:23]} : {16{1'bz}};
   
-  assign A_1=from_dbl ? A[51:29] : 23'bz;
-  assign A_1=from_ext?  A[62:40] : 23'bz;
-  assign A_1=from_sngl ? A[22:0] : 23'bz;
+  assign A_1=from_dbl ? A[51:29] : {23{1'bz}};
+  assign A_1=from_ext?  A[62:40] : {23{1'bz}};
+  assign A_1=from_sngl ? A[22:0] : {23{1'bz}};
 
-  assign sgn=from_dbl ? A[63] : 1'bz;
-  assign sgn=from_ext ? A[80] : 1'bz;
-  assign sgn=from_sngl? A[31] : 1'bz;
+  assign sgn=from_dbl ? A[63] : {1{1'bz}};
+  assign sgn=from_ext ? A[80] : {1{1'bz}};
+  assign sgn=from_sngl? A[31] : {1{1'bz}};
 
   adder #(16) expAddD_mod(DEN,~expA,expOff,1'b1,1'b1,is_den,,,);
   adder #(16) expAddZ_mod(DEN-16'd22,~expA,expOff1,1'b1,1'b1,is_zero,,,);
   adder #(16) expAddO_mod(expA,~OVFL,,1'b1,1'b1,is_overflow,,,);
 
   assign is_nan=&expA;
-  assign res=(~is_zero && ~ is_overflow && ~is_den && en) ? {sgn,expA[15],expA[6:0],A_1[22:0]} : 32'bz;
-  assign res=(is_den && ~is_zero && en) ? {sgn,8'b0,shf1} : 32'bz;
-  assign res=(is_zero && en) ? {sgn,31'b0} : 32'bz;
-  assign res=(is_overflow && ~is_nan && en) ? {sgn,8'hff,23'b0} : 32'bz; 
-  assign res=(is_nan && en) ? {sgn,8'hff,A[22:0]|23'b1} : 32'bz;
+  assign res=(~is_zero && ~ is_overflow && ~is_den && en) ? {sgn,expA[15],expA[6:0],A_1[22:0]} : {32{1'bz}};
+  assign res=(is_den && ~is_zero && en) ? {sgn,8'b0,shf1} : {32{1'bz}};
+  assign res=(is_zero && en) ? {sgn,31'b0} : {32{1'bz}};
+  assign res=(is_overflow && ~is_nan && en) ? {sgn,8'hff,23'b0} : {32{1'bz}}; 
+  assign res=(is_nan && en) ? {sgn,8'hff,A[22:0]|23'b1} : {32{1'bz}};
   generate
     genvar k;
     for(k=0;k<8;k=k+1) begin : shifker_gen
 	//verilator lint_off WIDTH
-        assign shf0=(expOff[5:3]==k) ? {1'b1,A_1[22:0]}>>(k*8) : 23'bz; 
+        assign shf0=(expOff[5:3]==k) ? {1'b1,A_1[22:0]}>>(k*8) : {23{1'bz}}; 
 	//verilator lint_on WIDTH
-	assign shf1=(expOff[2:0]==k) ? shf0>>k : 23'bz;
+	assign shf1=(expOff[2:0]==k) ? shf0>>k : {23{1'bz}};
     end
   endgenerate
 endmodule

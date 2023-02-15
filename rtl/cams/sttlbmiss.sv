@@ -303,10 +303,10 @@ module wtmiss(
   assign mOp0_attr_o=(enOut_reg|enOutNull) ?       read_mop_reg[0][`mOp2_attr] : mOp0_attr;
   assign mOp0_odd_o=(enOut_reg|enOutNull) ?      read_mop_reg[0][`mOp2_odd] : mOp0_odd;
   assign mOp0_addr_low_o=(enOut_reg|enOutNull) ? read_mop_reg[0][`mOp2_addr_low] : mOp0_addr_low;
-  //assign mOp0_st=(enOut_reg|enOutNull) ?       read_mop_reg[0][`mOp2_st] : 1'bz;
+  //assign mOp0_st=(enOut_reg|enOutNull) ?       read_mop_reg[0][`mOp2_st] : {1{1'bz}};
   assign mOp0_banks_o=(enOut_reg|enOutNull) ?    read_mop_reg[0][`mOp2_banks] : mOp0_banks;
   assign mOp0_bank0_o=(enOut_reg|enOutNull) ?    read_mop_reg[0][`mOp2_bank0] : mOp0_bank0;
-  //assign mOp0_bank1=(enOut_reg|enOutNull) ?    read_mop_reg[0][`mOp_bank1] : 5'bz;
+  //assign mOp0_bank1=(enOut_reg|enOutNull) ?    read_mop_reg[0][`mOp_bank1] : {5{1'bz}};
   assign mOp0_split_o=(enOut_reg|enOutNull) ?    read_mop_reg[0][`mOp2_split] : mOp0_split;
   assign mOp0_LSQ_o=(enOut_reg|enOutNull) ?      read_mop_reg[0][`mOp2_LSQ] : mOp0_LSQ;
   assign mOp0_type_o=(enOut_reg|enOutNull) ?     read_mop_reg[0][`mOp2_type] : mOp0_type;
@@ -314,9 +314,9 @@ module wtmiss(
   assign mOp0_WQ_o=(enOut_reg|enOutNull) ?       read_mop_reg[0][`mOp2_WQ] : mOp0_WQ;
   assign mOp0_lsflag_o=(enOut_reg|enOutNull) ?   read_mop_reg[0][`mOp2_lsflag] : mOp0_lsflag;
   assign mOp0_en_o=enOut_reg ?   rdmiss_reg[0] & ~invalid[0][read_addr_reg] && 
-	 pause_reg==0 && ~except: 1'bz;
-  assign mOp0_en_o=enOutNull ?   1'b0 : 1'bz;
-  assign mOp0_en_o=~enOut_reg & ~enOutNull ? mOp0_en : 1'bz;
+	 pause_reg==0 && ~except: {1{1'bz}};
+  assign mOp0_en_o=enOutNull ?   1'b0 : {1{1'bz}};
+  assign mOp0_en_o=~enOut_reg & ~enOutNull ? mOp0_en : {1{1'bz}};
   assign mEx0_addr=RaddrMain[0];
   assign mEx0_en=enOut & (pause==0) & rdmiss[0] & ~invalid[0][read_addr] & ~except;
  
@@ -325,10 +325,10 @@ module wtmiss(
   assign mOp1_attr_o=(enOut_reg|enOutNull) ?       read_mop_reg[1][`mOp2_attr] : mOp1_attr;
   assign mOp1_odd_o=(enOut_reg|enOutNull) ?      read_mop_reg[1][`mOp2_odd] : mOp1_odd;
   assign mOp1_addr_low_o=(enOut_reg|enOutNull) ? read_mop_reg[1][`mOp2_addr_low] : mOp1_addr_low;
- // assign mOp1_st=(enOut_reg|enOutNull) ?       read_mop_reg[1][`mOp_st] : 1'bz;
+ // assign mOp1_st=(enOut_reg|enOutNull) ?       read_mop_reg[1][`mOp_st] : {1{1'bz}};
   assign mOp1_banks_o=(enOut_reg|enOutNull) ?    read_mop_reg[1][`mOp2_banks] : mOp1_banks;
   assign mOp1_bank0_o=(enOut_reg|enOutNull) ?    read_mop_reg[1][`mOp2_bank0] : mOp1_bank0;
-//  assign mOp1_bank1=(enOut_reg|enOutNull) ?    read_mop_reg[1][`mOp_bank1] : 5'bz;
+//  assign mOp1_bank1=(enOut_reg|enOutNull) ?    read_mop_reg[1][`mOp_bank1] : {5{1'bz}};
   assign mOp1_split_o=(enOut_reg|enOutNull) ?    read_mop_reg[1][`mOp2_split] : mOp1_split;
   assign mOp1_LSQ_o=(enOut_reg|enOutNull) ?      read_mop_reg[1][`mOp2_LSQ] : mOp1_LSQ;
   assign mOp1_type_o=(enOut_reg|enOutNull) ?     read_mop_reg[1][`mOp2_type] : mOp1_type;
@@ -336,9 +336,9 @@ module wtmiss(
   assign mOp1_WQ_o=(enOut_reg|enOutNull) ?       read_mop_reg[1][`mOp2_WQ] : mOp1_WQ;
   assign mOp1_lsflag_o=(enOut_reg|enOutNull) ?   read_mop_reg[1][`mOp2_lsflag] : mOp1_lsflag;
   assign mOp1_en_o=enOut_reg ?   rdmiss_reg[1] & ~invalid[0][read_addr_reg] &&
-	 pause_reg==0 && ~except : 1'bz;
-  assign mOp1_en_o=enOutNull ?   1'b0 : 1'bz;
-  assign mOp1_en_o=~enOut_reg & ~enOutNull ? mOp1_en : 1'bz;
+	 pause_reg==0 && ~except : {1{1'bz}};
+  assign mOp1_en_o=enOutNull ?   1'b0 : {1{1'bz}};
+  assign mOp1_en_o=~enOut_reg & ~enOutNull ? mOp1_en : {1{1'bz}};
   assign mEx1_addr=RaddrMain[1];
   assign mEx1_en=enOut & (pause==0) & rdmiss[1] & ~invalid[0][read_addr] & ~except;
  

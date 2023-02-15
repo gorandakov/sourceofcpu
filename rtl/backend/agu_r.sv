@@ -286,30 +286,30 @@ module agu_r(
 
   wire new_miss;
 
-  assign mOp_addrEven[12:8]=(~mOp0_lsfwd_reg & ~req_bus & addrMain[7]) ? addrNext[12:8] : 5'bz;
-  assign mOp_addrEven[12:8]=(~mOp0_lsfwd_reg & ~req_bus & ~addrMain[7]) ? addrMain[12:8] : 5'bz;
-  assign mOp_addrEven=(mOp0_lsfwd_reg & ~req_bus) ? mOp0_addrEven_reg : 36'bz;
-  assign mOp_addrOdd[12:8]=(~mOp0_lsfwd_reg & ~req_bus & ~addrMain[7]) ? addrNext[12:8] : 5'bz;
-  assign mOp_addrOdd[12:8]=(~mOp0_lsfwd_reg & ~req_bus & addrMain[7]) ? addrMain[12:8] : 5'bz;
-  assign mOp_addrOdd=(mOp0_lsfwd_reg & ~req_bus) ? mOp0_addrOdd_reg : 36'bz;
+  assign mOp_addrEven[12:8]=(~mOp0_lsfwd_reg & ~req_bus & addrMain[7]) ? addrNext[12:8] : {5{1'bz}};
+  assign mOp_addrEven[12:8]=(~mOp0_lsfwd_reg & ~req_bus & ~addrMain[7]) ? addrMain[12:8] : {5{1'bz}};
+  assign mOp_addrEven=(mOp0_lsfwd_reg & ~req_bus) ? mOp0_addrEven_reg : {36{1'bz}};
+  assign mOp_addrOdd[12:8]=(~mOp0_lsfwd_reg & ~req_bus & ~addrMain[7]) ? addrNext[12:8] : {5{1'bz}};
+  assign mOp_addrOdd[12:8]=(~mOp0_lsfwd_reg & ~req_bus & addrMain[7]) ? addrMain[12:8] : {5{1'bz}};
+  assign mOp_addrOdd=(mOp0_lsfwd_reg & ~req_bus) ? mOp0_addrOdd_reg : {36{1'bz}};
   assign addrNext[6:0]=addrMain[6:0];
   assign addrMain[13:0]=mOp0_addrMain_reg[13:0];
-  assign mOp_addr_low=(~mOp0_lsfwd_reg & ~req_bus) ? addrMain[1:0] : 2'bz;
-  assign mOp_addr_low=(mOp0_lsfwd_reg & ~req_bus) ? mOp0_addr_low_reg : 2'bz;
-  assign mOp_odd=(~mOp0_lsfwd_reg & ~req_bus) ? addrMain[7] : 1'bz;
-  assign mOp_odd=(mOp0_lsfwd_reg & ~req_bus) ? mOp0_odd_reg : 1'bz;
-  assign mOp_banks=(~req_bus & mOp0_en_reg & (tlb_hit|mOp0_lsfwd_reg)) ? banks0 : 32'bz;
-  assign mOp_banks=(~req_bus & ~(mOp0_en_reg & (tlb_hit|mOp0_lsfwd_reg))) ? 32'b0 : 32'bz;
-  assign mOp_bank0=(~req_bus) ? mOp0_bank0_reg : 5'bz;
-  assign mOp_split=(~req_bus) ? mOp0_split_reg : 1'bz;
-  assign mOp_sz=(~req_bus) ? mOp0_sz_reg : 5'bz;
-  assign mOp_st=(~req_bus) ? mOp0_st_reg : 1'bz;
-  assign mOp_regNo=(~req_bus) ? mOp0_regNo_reg : 9'bz;
-  assign mOp_LSQ=(~req_bus) ? mOp0_LSQ_reg : 9'bz;
-  assign mOp_II=(~req_bus) ? mOp0_II_reg : 10'bz;
-  assign mOp_WQ=(~req_bus) ? mOp0_WQ_reg : 6'bz;
-//  assign mOp_thread=(~req_bus) ? mOp0_thread_reg : 1'bz;
-  assign mOp_lsflag=(~req_bus) ? mOp0_lsflag_reg : 1'bz;
+  assign mOp_addr_low=(~mOp0_lsfwd_reg & ~req_bus) ? addrMain[1:0] : {2{1'bz}};
+  assign mOp_addr_low=(mOp0_lsfwd_reg & ~req_bus) ? mOp0_addr_low_reg : {2{1'bz}};
+  assign mOp_odd=(~mOp0_lsfwd_reg & ~req_bus) ? addrMain[7] : {1{1'bz}};
+  assign mOp_odd=(mOp0_lsfwd_reg & ~req_bus) ? mOp0_odd_reg : {1{1'bz}};
+  assign mOp_banks=(~req_bus & mOp0_en_reg & (tlb_hit|mOp0_lsfwd_reg)) ? banks0 : {32{1'bz}};
+  assign mOp_banks=(~req_bus & ~(mOp0_en_reg & (tlb_hit|mOp0_lsfwd_reg))) ? 32'b0 : {32{1'bz}};
+  assign mOp_bank0=(~req_bus) ? mOp0_bank0_reg : {5{1'bz}};
+  assign mOp_split=(~req_bus) ? mOp0_split_reg : {1{1'bz}};
+  assign mOp_sz=(~req_bus) ? mOp0_sz_reg : {5{1'bz}};
+  assign mOp_st=(~req_bus) ? mOp0_st_reg : {1{1'bz}};
+  assign mOp_regNo=(~req_bus) ? mOp0_regNo_reg : {9{1'bz}};
+  assign mOp_LSQ=(~req_bus) ? mOp0_LSQ_reg : {9{1'bz}};
+  assign mOp_II=(~req_bus) ? mOp0_II_reg : {10{1'bz}};
+  assign mOp_WQ=(~req_bus) ? mOp0_WQ_reg : {6{1'bz}};
+//  assign mOp_thread=(~req_bus) ? mOp0_thread_reg : {1{1'bz}};
+  assign mOp_lsflag=(~req_bus) ? mOp0_lsflag_reg : {1{1'bz}};
   assign mOp_lsfwd=(~req_bus) ? mOp0_lsfwd_reg : 1'b0;
   assign mOp_type=(~req_bus) ? mOp0_type_reg : 2'b00;
   assign mOp_bread=(~req_bus) ? mOp0_bread_reg|{5{~mOp0_lsfwd_reg}} : 5'b1111;
@@ -317,7 +317,7 @@ module agu_r(
   assign mOp_pbit=(~req_bus) ? mOp0_pbit_reg : 2'b0;
  
   assign mOp_en=(~req_bus) ? mOp0_en_reg & (tlb_hit|mOp0_lsfwd_reg|tlb_is_inv) & ~req_bus & ~except &
-    ~pause_miss_reg2 & ~tlb_proceed & ~bus_hold & (mOp0_type_reg!=2'b10) : 1'bz; 
+    ~pause_miss_reg2 & ~tlb_proceed & ~bus_hold & (mOp0_type_reg!=2'b10) : {1{1'bz}}; 
   assign mOp_ioEn=(~req_bus) ? mOp0_en_reg & (tlb_hit|mOp0_lsfwd_reg) & ~req_bus & ~except &
     ~pause_miss_reg2 & ~tlb_proceed & ~bus_hold & (mOp0_type_reg==2'b10) : 1'b0; 
 
@@ -330,13 +330,13 @@ module agu_r(
   assign tlb_clkEn=mOp0_en_reg | reqtlb_en_reg;
 
   assign mOp_addrEven[43:13]=(~mOp0_lsfwd_reg & ~req_bus && ~page_carry | ~addrMain[7]) ? 
-    tlb_data[`dtlbData_phys] : 31'bz;
+    tlb_data[`dtlbData_phys] : {31{1'bz}};
   assign mOp_addrEven[43:13]=(~mOp0_lsfwd_reg & ~req_bus && page_carry && addrMain[7]) ?
-    tlb_data_next[`dtlbData_phys] : 31'bz;
+    tlb_data_next[`dtlbData_phys] : {31{1'bz}};
   assign mOp_addrOdd[43:13]=(~mOp0_lsfwd_reg & ~req_bus && ~page_carry | addrMain[7]) ? 
-    tlb_data[`dtlbData_phys] : 31'bz;
+    tlb_data[`dtlbData_phys] : {31{1'bz}};
   assign mOp_addrOdd[43:13]=(~mOp0_lsfwd_reg & ~req_bus && page_carry && ~addrMain[7]) ?
-    tlb_data_next[`dtlbData_phys] : 31'bz;
+    tlb_data_next[`dtlbData_phys] : {31{1'bz}};
   
   assign pageFault_t=(page_carry) ? (fault_tlb | ({2{mOp_split}} & fault_tlb_next)) & {2{tlb_hit}} : fault_tlb & {2{tlb_hit}};
   assign pageFault=(pageFault_t_reg!=0) | fault_cann_reg && mOp_en_reg && ~bus_hold_reg;

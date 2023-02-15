@@ -584,13 +584,13 @@ module frontend1(
           assign write_data[65*(k+4)+:64]=bus_data_reg[64*(k+4)+:64];
           assign write_data[65*(k+4)+64]=^bus_data_reg[64*(k+4)+:64];
                     
-          assign jmp_moff[k]=jmp_magic[k][0] ? 4'd1 : 4'bz;
-          assign jmp_moff[k]=(jmp_magic[k][1:0]==2'b10) ? 4'd2 : 4'bz;
-          assign jmp_moff[k]=(jmp_magic[k][2:0]==3'b100) ? 4'd3 : 4'bz;
-          assign jmp_moff[k]=(jmp_magic[k][3:0]==4'b1000) ? 4'd4 : 4'bz;
-          assign jmp_moff[k]=(jmp_magic[k]==4'b0) ? 4'd5 : 5'bz;
+          assign jmp_moff[k]=jmp_magic[k][0] ? 4'd1 : {4{1'bz}};
+          assign jmp_moff[k]=(jmp_magic[k][1:0]==2'b10) ? 4'd2 : {4{1'bz}};
+          assign jmp_moff[k]=(jmp_magic[k][2:0]==3'b100) ? 4'd3 : {4{1'bz}};
+          assign jmp_moff[k]=(jmp_magic[k][3:0]==4'b1000) ? 4'd4 : {4{1'bz}};
+          assign jmp_moff[k]=(jmp_magic[k]==4'b0) ? 4'd5 : {5{1'bz}};
           
-          assign last_off=taken[k] ? btbx_joff[k] : 4'bz;
+          assign last_off=taken[k] ? btbx_joff[k] : {4{1'bz}};
           
           assign jdec_bkjump[k]=jdec_const_reg[k][63];
           
@@ -627,28 +627,28 @@ module frontend1(
           else assign pre_other[j][`instrQ_srcTick]=cc_read_IP_reg4[47:13]!=cc_read_IP_reg5[47:13] &&
 	     do_seq_reg5 && pre_instrEn_reg[j]&&pre_jbefore[j]; 
           assign pre_other[j][`instrQ_class]=pre_class_reg[j];
-          //assign pre_other[j][`instrQ_taken]=btb_hasTK_reg3 ? 1'bz : 1'b0;
+          //assign pre_other[j][`instrQ_taken]=btb_hasTK_reg3 ? {1{1'bz}} : 1'b0;
           assign pre_other[j][`instrQ_taken]=(taken_reg4 & isJ) !=4'b0;
           assign isJ[0]=pre_off_reg[j]==btbx_joff_reg4[0] && pre_class_reg[j][`iclass_jump];
           assign isJ[1]=pre_off_reg[j]==btbx_joff_reg4[1] && pre_class_reg[j][`iclass_jump];
           assign isJ[2]=pre_off_reg[j]==btbx_joff_reg4[2] && pre_class_reg[j][`iclass_jump];
           assign isJ[3]=pre_off_reg[j]==btbx_joff_reg4[3] && pre_class_reg[j][`iclass_jump];
-          assign pre_other[j][`instrQ_jmp_ind]=isJ[0] ? 2'd0 : 2'bz;
-          assign pre_other[j][`instrQ_jmp_ind]=isJ[1] ? 2'd1 : 2'bz;
-          assign pre_other[j][`instrQ_jmp_ind]=isJ[2] ? 2'd2 : 2'bz;
-          assign pre_other[j][`instrQ_jmp_ind]=isJ[3] ? 2'd3 : 2'bz;
-          assign pre_other[j][`instrQ_jmp_ind]=isJ ? 2'bz : 2'd0;
+          assign pre_other[j][`instrQ_jmp_ind]=isJ[0] ? 2'd0 : {2{1'bz}};
+          assign pre_other[j][`instrQ_jmp_ind]=isJ[1] ? 2'd1 : {2{1'bz}};
+          assign pre_other[j][`instrQ_jmp_ind]=isJ[2] ? 2'd2 : {2{1'bz}};
+          assign pre_other[j][`instrQ_jmp_ind]=isJ[3] ? 2'd3 : {2{1'bz}};
+          assign pre_other[j][`instrQ_jmp_ind]=isJ ? {2{1'bz}} : 2'd0;
           assign pre_other[j][`instrQ_btb_way]=btbxx_way_reg;
-          assign pre_other[j][`instrQ_ght_addr]=(startx_reg4&{1'b1,isJ} || !isJ) ? GHT_reg4 : 8'bz;
-          assign pre_other[j][`instrQ_ght_addr]=(startx_reg4[2:0]&isJ[3:1]) ? {GHT_reg4[6:0],1'b0} : 8'bz;
-          assign pre_other[j][`instrQ_ght_addr]=(startx_reg4[1:0]&isJ[3:2]) ? {GHT_reg4[5:0],2'b0} : 8'bz;
-          assign pre_other[j][`instrQ_ght_addr]=(startx_reg4[0]&isJ[3]) ? {GHT_reg4[4:0],3'b0} : 8'bz;
+          assign pre_other[j][`instrQ_ght_addr]=(startx_reg4&{1'b1,isJ} || !isJ) ? GHT_reg4 : {8{1'bz}};
+          assign pre_other[j][`instrQ_ght_addr]=(startx_reg4[2:0]&isJ[3:1]) ? {GHT_reg4[6:0],1'b0} : {8{1'bz}};
+          assign pre_other[j][`instrQ_ght_addr]=(startx_reg4[1:0]&isJ[3:2]) ? {GHT_reg4[5:0],2'b0} : {8{1'bz}};
+          assign pre_other[j][`instrQ_ght_addr]=(startx_reg4[0]&isJ[3]) ? {GHT_reg4[4:0],3'b0} : {8{1'bz}};
 	  assign pre_other[j][`instrQ_lastInstr]=pre_instrEn_reg[j]&&~pre_instrEn_reg[j+1];
-	  assign pre_other[j][`instrQ_sc]=isJ[0] ? predx_sc0_reg4 : 2'bz;
-	  assign pre_other[j][`instrQ_sc]=isJ[1] ? predx_sc1_reg4 : 2'bz;
-	  assign pre_other[j][`instrQ_sc]=isJ[2] ? predx_sc2_reg4 : 2'bz;
-	  assign pre_other[j][`instrQ_sc]=isJ[3] ? predx_sc3_reg4 : 2'bz;
-	  assign pre_other[j][`instrQ_sc]=isJ ? 2'bz : 2'b0;
+	  assign pre_other[j][`instrQ_sc]=isJ[0] ? predx_sc0_reg4 : {2{1'bz}};
+	  assign pre_other[j][`instrQ_sc]=isJ[1] ? predx_sc1_reg4 : {2{1'bz}};
+	  assign pre_other[j][`instrQ_sc]=isJ[2] ? predx_sc2_reg4 : {2{1'bz}};
+	  assign pre_other[j][`instrQ_sc]=isJ[3] ? predx_sc3_reg4 : {2{1'bz}};
+	  assign pre_other[j][`instrQ_sc]=isJ ? {2{1'bz}} : 2'b0;
 //	  assign pre_other[j][`instrQ_avx]=pre_isAvx_reg;
 	  assign pre_other[j][`instrQ_btbMiss]=~btb_can_ins_reg4;
 	  assign pre_other[j][`instrQ_btb_only]=isJ&btbx_cond_reg4==4'b0;
@@ -665,18 +665,18 @@ module frontend1(
   
   assign instrFed=instrEn_reg3 && (cc_read_hit && tlb_match);
   
-  assign cc_base_IP_d=(~do_seq_reg) ? cc_read_IP : 48'bz;
-  assign cc_base_IP_d=(do_seq_reg & ~cc_base_tick) ? cc_base_IP : 48'bz;
-  assign cc_base_IP_d[12:0]=(do_seq_reg & cc_base_tick) ? cc_base_IP[12:0] : 13'bz;
-  assign {cc_base_tick,cc_base_off}=(~do_seq_reg) ? 9'b0 : 9'bz;
+  assign cc_base_IP_d=(~do_seq_reg) ? cc_read_IP : {48{1'bz}};
+  assign cc_base_IP_d=(do_seq_reg & ~cc_base_tick) ? cc_base_IP : {48{1'bz}};
+  assign cc_base_IP_d[12:0]=(do_seq_reg & cc_base_tick) ? cc_base_IP[12:0] : {13{1'bz}};
+  assign {cc_base_tick,cc_base_off}=(~do_seq_reg) ? 9'b0 : {9{1'bz}};
   
-  assign cc_read_IP_d[4:0]=(~init & do_seq_any & ~jumpTK_en & ~fmstall) ? 5'b0 : 5'bz;
-  assign cc_read_IP_d=(~init & btb_hasTK & ~miss_recover & ~miss_now & ~jumpTK_en & ~(ixcept|uxcept) & ~fmstall) ? btbx_tgt : 48'bz;
-  assign cc_read_IP_d=(~init & miss_recover & ~jumpTK_en & ~(ixcept|uxcept) & ~fmstall) ? miss_IP : 48'bz;
-  assign cc_read_IP_d=(~init & (ixcept|uxcept) ) ? {ixceptIP,1'b0} : 48'bz;
-  assign cc_read_IP_d=(~init & ~jumpTK_en & ~(ixcept|uxcept) & ~miss_now & btb_in_ret & ~fmstall) ? {rstack_dataR,1'b0} : 48'bz;
-  assign cc_read_IP_d=~init & ~(ixcept|uxcept) & jumpTK_en & ~fmstall? jumpTK_addr : 48'bz;
-  assign cc_read_IP_d=(init || fmstall & ~(ixcept|uxcept)) ? cc_read_IP : 48'bz;
+  assign cc_read_IP_d[4:0]=(~init & do_seq_any & ~jumpTK_en & ~fmstall) ? 5'b0 : {5{1'bz}};
+  assign cc_read_IP_d=(~init & btb_hasTK & ~miss_recover & ~miss_now & ~jumpTK_en & ~(ixcept|uxcept) & ~fmstall) ? btbx_tgt : {48{1'bz}};
+  assign cc_read_IP_d=(~init & miss_recover & ~jumpTK_en & ~(ixcept|uxcept) & ~fmstall) ? miss_IP : {48{1'bz}};
+  assign cc_read_IP_d=(~init & (ixcept|uxcept) ) ? {ixceptIP,1'b0} : {48{1'bz}};
+  assign cc_read_IP_d=(~init & ~jumpTK_en & ~(ixcept|uxcept) & ~miss_now & btb_in_ret & ~fmstall) ? {rstack_dataR,1'b0} : {48{1'bz}};
+  assign cc_read_IP_d=~init & ~(ixcept|uxcept) & jumpTK_en & ~fmstall? jumpTK_addr : {48{1'bz}};
+  assign cc_read_IP_d=(init || fmstall & ~(ixcept|uxcept)) ? cc_read_IP : {48{1'bz}};
   
   assign bus_match={BUS_ID,1'b1}==bus_slot[9:4] & bus_en;
   assign write_IP={req_addrR,2'b0};
@@ -687,11 +687,11 @@ module frontend1(
 
   assign btb_hasTK=|(btbx_jmask&{predx_sc3[0],predx_sc2[0],predx_sc1[0],predx_sc0[0]});
 
-  assign btb_tgt=taken[0] ? {btb_tgt0,1'b0} : 48'bz;
-  assign btb_tgt=taken[1] ? {btb_tgt1,1'b0} : 48'bz;
-  assign btb_tgt=taken[2] ? {btb_tgt2,1'b0} : 48'bz;
-  assign btb_tgt=taken[3] ? {btb_tgt3,1'b0} : 48'bz;
-  assign btb_tgt=btb_hasTK ? 48'bz : 48'b0;  
+  assign btb_tgt=taken[0] ? {btb_tgt0,1'b0} : {48{1'bz}};
+  assign btb_tgt=taken[1] ? {btb_tgt1,1'b0} : {48{1'bz}};
+  assign btb_tgt=taken[2] ? {btb_tgt2,1'b0} : {48{1'bz}};
+  assign btb_tgt=taken[3] ? {btb_tgt3,1'b0} : {48{1'bz}};
+  assign btb_tgt=btb_hasTK ? {48{1'bz}} : 48'b0;  
 
 
   assign btbx_tgt=btb_tgt;
@@ -702,37 +702,37 @@ module frontend1(
   
   assign rstack_dataW=cc_read_IP[47:1];
   
-  assign last_off=btb_hasTK ? 4'bz : 4'he;
+  assign last_off=btb_hasTK ? {4{1'bz}} : 4'he;
  
   assign jlninx=jlnin; 
 
-  assign btb_in_link=taken[3] ? jlninx && btbx_jlink[3:0]!=4'hf : 1'bz;
-  assign btb_in_link=taken[2] ? jlninx && btbx_jlink[3:0]!=4'hf && btbx_jlnpos!=2'b11 : 1'bz;
-  assign btb_in_link=taken[1] ? jlninx && btbx_jlink[3:0]!=4'hf && ~btbx_jlnpos[1] : 1'bz;
-  assign btb_in_link=taken[0] ? jlninx && btbx_jlink[3:0]!=4'hf && btbx_jlnpos==2'b0 : 1'bz;
-  assign btb_in_link=(~btb_hasTK) ? jlninx && btbx_jlink[3:0]!=4'hf : 1'bz;//if no jump taken then link is last instr in bundle
+  assign btb_in_link=taken[3] ? jlninx && btbx_jlink[3:0]!=4'hf : {1{1'bz}};
+  assign btb_in_link=taken[2] ? jlninx && btbx_jlink[3:0]!=4'hf && btbx_jlnpos!=2'b11 : {1{1'bz}};
+  assign btb_in_link=taken[1] ? jlninx && btbx_jlink[3:0]!=4'hf && ~btbx_jlnpos[1] : {1{1'bz}};
+  assign btb_in_link=taken[0] ? jlninx && btbx_jlink[3:0]!=4'hf && btbx_jlnpos==2'b0 : {1{1'bz}};
+  assign btb_in_link=(~btb_hasTK) ? jlninx && btbx_jlink[3:0]!=4'hf : {1{1'bz}};//if no jump taken then link is last instr in bundle
 
-  assign btb_in_ret=taken[3] ? btbx_jlink[4:0]==5'h1f && btbx_jlnpos==2'd3: 1'bz;
-  assign btb_in_ret=taken[2] ? btbx_jlink[4:0]==5'h1f && btbx_jlnpos==2'd2 : 1'bz;
-  assign btb_in_ret=taken[1] ? btbx_jlink[4:0]==5'h1f && btbx_jlnpos==2'd1 : 1'bz;
-  assign btb_in_ret=taken[0] ? btbx_jlink[4:0]==5'h1f && btbx_jlnpos==2'd0 : 1'bz;
-  assign btb_in_ret=(~btb_hasTK) ? 1'b0 : 1'bz;
+  assign btb_in_ret=taken[3] ? btbx_jlink[4:0]==5'h1f && btbx_jlnpos==2'd3: {1{1'bz}};
+  assign btb_in_ret=taken[2] ? btbx_jlink[4:0]==5'h1f && btbx_jlnpos==2'd2 : {1{1'bz}};
+  assign btb_in_ret=taken[1] ? btbx_jlink[4:0]==5'h1f && btbx_jlnpos==2'd1 : {1{1'bz}};
+  assign btb_in_ret=taken[0] ? btbx_jlink[4:0]==5'h1f && btbx_jlnpos==2'd0 : {1{1'bz}};
+  assign btb_in_ret=(~btb_hasTK) ? 1'b0 : {1{1'bz}};
 
  // assign link_IP_d[0]=1'b0;
   
   //lnk_isRet_reg & lnk_jpos[0] not possible
-  assign lnk_lnpos=(lnk_isRet_reg & lnk_jpos[1]) ? 2'd0 : 2'bz;
-  assign lnk_lnpos=(lnk_isRet_reg & lnk_jpos[2]) ? 2'd1 : 2'bz;
-  assign lnk_lnpos=(lnk_isRet_reg & lnk_jpos[3]) ? 2'd2 : 2'bz;
-  assign lnk_lnpos=(lnk_isRet_reg & lnk_jpos[4]) ? 2'd3 : 2'bz;
+  assign lnk_lnpos=(lnk_isRet_reg & lnk_jpos[1]) ? 2'd0 : {2{1'bz}};
+  assign lnk_lnpos=(lnk_isRet_reg & lnk_jpos[2]) ? 2'd1 : {2{1'bz}};
+  assign lnk_lnpos=(lnk_isRet_reg & lnk_jpos[3]) ? 2'd2 : {2{1'bz}};
+  assign lnk_lnpos=(lnk_isRet_reg & lnk_jpos[4]) ? 2'd3 : {2{1'bz}};
 
-  assign lnk_lnpos=(~lnk_isRet_reg & lnk_jpos[0]) ? 2'd0 : 2'bz;
-  assign lnk_lnpos=(~lnk_isRet_reg & lnk_jpos[1]) ? 2'd1 : 2'bz;
-  assign lnk_lnpos=(~lnk_isRet_reg & lnk_jpos[2]) ? 2'd2 : 2'bz;
-  assign lnk_lnpos=(~lnk_isRet_reg & lnk_jpos[3]) ? 2'd3 : 2'bz;
-  assign lnk_lnpos=(~lnk_isRet_reg & lnk_jpos[4]) ? 2'd3 : 2'bz;
+  assign lnk_lnpos=(~lnk_isRet_reg & lnk_jpos[0]) ? 2'd0 : {2{1'bz}};
+  assign lnk_lnpos=(~lnk_isRet_reg & lnk_jpos[1]) ? 2'd1 : {2{1'bz}};
+  assign lnk_lnpos=(~lnk_isRet_reg & lnk_jpos[2]) ? 2'd2 : {2{1'bz}};
+  assign lnk_lnpos=(~lnk_isRet_reg & lnk_jpos[3]) ? 2'd3 : {2{1'bz}};
+  assign lnk_lnpos=(~lnk_isRet_reg & lnk_jpos[4]) ? 2'd3 : {2{1'bz}};
   
-  assign lnk_lnpos=lnk_jpos ? 2'bz : 2'b0;
+  assign lnk_lnpos=lnk_jpos ? {2{1'bz}} : 2'b0;
   
   
   assign tlb_phys=tlb_data_reg3[`ctlbData_phys];
@@ -744,18 +744,18 @@ module frontend1(
 
   assign IP_phys={tlb_data[`ctlbData_phys],cc_read_IP[11:0]};
 
-  assign req_addr=req_en0 ? {tlb_phys_reg,cc_read_IP_reg4[11:7]} : 37'bz;
-  assign req_slot=req_en0 ? {BUS_ID,2'b10,miss_slot} : 10'bz;
+  assign req_addr=req_en0 ? {tlb_phys_reg,cc_read_IP_reg4[11:7]} : {37{1'bz}};
+  assign req_slot=req_en0 ? {BUS_ID,2'b10,miss_slot} : {10{1'bz}};
   assign req_en0=miss_now & ~tlbMiss_now & miss_seq & IP_chg_reg4;
   assign req_en=req_en0 & (~cc_read_hit & tlb_match || ~miss_now_reg) &~fstall;
   
   assign req_en1=miss_now & tlbMiss_now & miss_seq;
   assign req_tlbEn=req_en1 & ~fstall;
-  assign req_addr=req_en1 ? cc_read_IP_reg3[47:12] : 37'bz;
-  assign req_slot=req_en1 ? {BUS_ID,2'b10,miss_slot} : 10'bz;
+  assign req_addr=req_en1 ? cc_read_IP_reg3[47:12] : {37{1'bz}};
+  assign req_slot=req_en1 ? {BUS_ID,2'b10,miss_slot} : {10{1'bz}};
 
-  assign req_addr=(~req_en0 & ~req_en1) ?  37'b0 : 37'bz;
-  assign req_slot=(~req_en0 & ~req_en1) ? 10'b0 : 10'bz;
+  assign req_addr=(~req_en0 & ~req_en1) ?  37'b0 : {37{1'bz}};
+  assign req_slot=(~req_en0 & ~req_en1) ? 10'b0 : {10{1'bz}};
   
   assign miss_recover=(bus_match0_reg2 && ~miss_seq && !dreq_reg3)|| bus_tlb_match_reg3;
 
@@ -779,27 +779,27 @@ module frontend1(
   assign btb_hold_except=btbFStall || btbFStall_reg || btbFStall_reg2 || btbFStall_reg3;
   
   assign GHT_d=start[0] & predy_sc0[0] || start[1] & predy_sc1[0] ||
-    start[2] & predy_sc2[0] || start[3] & predy_sc3[0] ? {GHT[6:0],1'b1} : 8'bz;
+    start[2] & predy_sc2[0] || start[3] & predy_sc3[0] ? {GHT[6:0],1'b1} : {8{1'bz}};
   assign GHT_d=start[0] & ~predy_sc0[0] & predy_sc1[0] ||
     start[1] & ~predy_sc1[0] & predy_sc2[0] ||
-    start[2] & ~predy_sc2[0] & predy_sc3[0] ? {GHT[5:0],2'b01} : 8'bz;
+    start[2] & ~predy_sc2[0] & predy_sc3[0] ? {GHT[5:0],2'b01} : {8{1'bz}};
   assign GHT_d=start[0] & ~predy_sc0[0] & ~predy_sc1[0] & predy_sc2[0] ||
-    start[1] & ~predy_sc1[0] & ~predy_sc2[0] & predy_sc3[0]  ? {GHT[4:0],3'b001} : 8'bz;
+    start[1] & ~predy_sc1[0] & ~predy_sc2[0] & predy_sc3[0]  ? {GHT[4:0],3'b001} : {8{1'bz}};
   assign GHT_d=(start[0] & ~predy_sc0[0] & ~predy_sc1[0] & ~predy_sc2[0] & predy_sc3[0]) ? 
-    {GHT[3:0],4'b0001} : 8'bz;
+    {GHT[3:0],4'b0001} : {8{1'bz}};
   assign GHT_d=(~predy_sc0[0] & ~predy_sc1[0] & ~predy_sc2[0] & ~predy_sc3[0]) && 
     (start[3] & btb_has3 || start[2]&btb_has2&~btb_has3||
-    start[1]&btb_has1&~btb_has2||start[0]&btb_has0&~btb_has1) ? {GHT[6:0],1'b0} : 8'bz;
+    start[1]&btb_has1&~btb_has2||start[0]&btb_has0&~btb_has1) ? {GHT[6:0],1'b0} : {8{1'bz}};
   assign GHT_d=(~predy_sc0[0] & ~predy_sc1[0] & ~predy_sc2[0] & ~predy_sc3[0]) && 
     (start[2] & btb_has3 || start[1] & btb_has2 & ~btb_has3 || start[0] & btb_has1 & ~btb_has2) ? 
-    {GHT[5:0],2'b0} : 8'bz;
+    {GHT[5:0],2'b0} : {8{1'bz}};
   assign GHT_d=(~predy_sc0[0] & ~predy_sc1[0] & ~predy_sc2[0] & ~predy_sc3[0]) && 
-    (start[1] & btb_has3 || start[0] & btb_has2 & ~btb_has3) ? {GHT[4:0],3'b0} : 8'bz;
+    (start[1] & btb_has3 || start[0] & btb_has2 & ~btb_has3) ? {GHT[4:0],3'b0} : {8{1'bz}};
   assign GHT_d=(~predy_sc0[0] & ~predy_sc1[0] & ~predy_sc2[0] & ~predy_sc3[0]) && 
-    (start[0] & btb_has3) ? {GHT[3:0],4'b0} : 8'bz;
+    (start[0] & btb_has3) ? {GHT[3:0],4'b0} : {8{1'bz}};
   assign GHT_d=start[4]||((~predy_sc0[0] & ~predy_sc1[0] & ~predy_sc2[0] & ~predy_sc3[0]) && 
     (start[0] & ~btb_has0 || start[1] & ~btb_has1 || start[2] & ~btb_has2 || start[3] & ~btb_has3)) ? 
-    GHT : 8'bz;
+    GHT : {8{1'bz}};
 
 
 //  assign GHTx=4'b0;
@@ -832,22 +832,22 @@ module frontend1(
   assign btbx_jlink=btb_jlink;
   assign btbx_jlnpos=btb_jlnpos;
 
-  assign jdec_link=lnk_isRet_reg ? 16'h1f : 16'bz;
+  assign jdec_link=lnk_isRet_reg ? 16'h1f : {16{1'bz}};
   
   assign lnk_offIn=lnk_offIn_cc;
  
   assign fmstall= btb_way ? (btb_jmask&{btb_has3,btb_has2,btb_has1,btb_has0})!=
     btb_chmaskB && btb_hit && btb_hasTK_reg|ixcept_reg && ~uxcept: 
     (btb_jmask&{btb_has3,btb_has2,btb_has1,btb_has0})!=btb_chmaskA && btb_hit && btb_hasTK_reg|ixcept_reg && ~uxcept;
-  assign iqe_jbits=taken_reg[0] ? {3'b0,btbx_jmask_reg[0]} : 4'bz;
-  assign iqe_jbits=taken_reg[1] ? {2'b0,btbx_jmask_reg[1:0]} : 4'bz;
-  assign iqe_jbits=taken_reg[2] ? {1'b0,btbx_jmask_reg[2:0]} : 4'bz;
-  assign iqe_jbits=taken_reg[3] || (!taken_reg) ? btbx_jmask_reg : 4'bz;
+  assign iqe_jbits=taken_reg[0] ? {3'b0,btbx_jmask_reg[0]} : {4{1'bz}};
+  assign iqe_jbits=taken_reg[1] ? {2'b0,btbx_jmask_reg[1:0]} : {4{1'bz}};
+  assign iqe_jbits=taken_reg[2] ? {1'b0,btbx_jmask_reg[2:0]} : {4{1'bz}};
+  assign iqe_jbits=taken_reg[3] || (!taken_reg) ? btbx_jmask_reg : {4{1'bz}};
   
-  assign iqe_jbitZ=taken_REG[0] ? {3'b0,btbx_jmask_REG[0]} : 4'bz;
-  assign iqe_jbitZ=taken_REG[1] ? {2'b0,btbx_jmask_REG[1:0]} : 4'bz;
-  assign iqe_jbitZ=taken_REG[2] ? {1'b0,btbx_jmask_REG[2:0]} : 4'bz;
-  assign iqe_jbitZ=taken_REG[3] || (!taken_REG) ? btbx_jmask_REG : 4'bz;
+  assign iqe_jbitZ=taken_REG[0] ? {3'b0,btbx_jmask_REG[0]} : {4{1'bz}};
+  assign iqe_jbitZ=taken_REG[1] ? {2'b0,btbx_jmask_REG[1:0]} : {4{1'bz}};
+  assign iqe_jbitZ=taken_REG[2] ? {1'b0,btbx_jmask_REG[2:0]} : {4{1'bz}};
+  assign iqe_jbitZ=taken_REG[3] || (!taken_REG) ? btbx_jmask_REG : {4{1'bz}};
 
   assign btbx_cond=btb_cond;
 

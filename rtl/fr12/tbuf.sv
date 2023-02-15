@@ -163,7 +163,7 @@ module freq_update(freq,new_freq);
   output [6:0] new_freq;
   
   adder_inc #(7) ifreq_mod(freq,new_freq,freq!=7'h7f,);
-  assign new_freq=(freq==7'h7f) ? 7'h7f : 7'bz;  
+  assign new_freq=(freq==7'h7f) ? 7'h7f : {7{1'bz}};  
 endmodule
 
 module sc_update(sc,taken,new_sc);
@@ -509,12 +509,12 @@ module tbuf_way(
   assign upd_j3[0]=~has_saved && update_use_reg[0] && update_addr0_reg[12:11]==2'd3 && ~update_dis[0];
   assign upd_j3[1]=~has_saved && update_use_reg[1] && update_addr1_reg[12:11]==2'd3 && ~update_dis[1];
 
-  assign update_addr_new=( upd_id0 & ~init) ? update_addr0_reg[10:1] : 10'bz;
-  assign update_addr_new=( upd_id1 & ~init) ? update_addr1_reg[10:1] : 10'bz;
-  assign update_addr_new=( upd_idS & ~init) ? saved_addr0[10:1] : 10'bz;
+  assign update_addr_new=( upd_id0 & ~init) ? update_addr0_reg[10:1] : {10{1'bz}};
+  assign update_addr_new=( upd_id1 & ~init) ? update_addr1_reg[10:1] : {10{1'bz}};
+  assign update_addr_new=( upd_idS & ~init) ? saved_addr0[10:1] : {10{1'bz}};
   assign update_addr_new=( ~upd_id0 && ~upd_id1 &&~upd_idS && ~init )
-    ? 10'b0 : 10'bz;
-  assign update_addr_new= init ? init_count : 10'bz;
+    ? 10'b0 : {10{1'bz}};
+  assign update_addr_new= init ? init_count : {10{1'bz}};
   
   assign update_addr=update_addr_new;
   
@@ -539,35 +539,35 @@ module tbuf_way(
   assign read_freq3=extra_data[`btbExtra_freq3];
   
   
-  assign extra_update[`btbExtra_freq0]=upd_j0_reg ? updW_freq0 : 7'bz; 
-  assign extra_update[`btbExtra_freq1]=upd_j1_reg ? updW_freq1 : 7'bz; 
-  assign extra_update[`btbExtra_freq2]=upd_j2_reg ? updW_freq2 : 7'bz; 
-  assign extra_update[`btbExtra_freq3]=upd_j3_reg ? updW_freq3 : 7'bz; 
+  assign extra_update[`btbExtra_freq0]=upd_j0_reg ? updW_freq0 : {7{1'bz}}; 
+  assign extra_update[`btbExtra_freq1]=upd_j1_reg ? updW_freq1 : {7{1'bz}}; 
+  assign extra_update[`btbExtra_freq2]=upd_j2_reg ? updW_freq2 : {7{1'bz}}; 
+  assign extra_update[`btbExtra_freq3]=upd_j3_reg ? updW_freq3 : {7{1'bz}}; 
 
-  assign extra_update[`btbExtra_freq0]=sve_j0 ? updS_freq0 : 7'bz; 
-  assign extra_update[`btbExtra_freq1]=sve_j1 ? updS_freq1 : 7'bz; 
-  assign extra_update[`btbExtra_freq2]=sve_j2 ? updS_freq2 : 7'bz; 
-  assign extra_update[`btbExtra_freq3]=sve_j3 ? updS_freq3 : 7'bz; 
+  assign extra_update[`btbExtra_freq0]=sve_j0 ? updS_freq0 : {7{1'bz}}; 
+  assign extra_update[`btbExtra_freq1]=sve_j1 ? updS_freq1 : {7{1'bz}}; 
+  assign extra_update[`btbExtra_freq2]=sve_j2 ? updS_freq2 : {7{1'bz}}; 
+  assign extra_update[`btbExtra_freq3]=sve_j3 ? updS_freq3 : {7{1'bz}}; 
 
-  assign extra_update[`btbExtra_freq0]=(!upd_j0_reg && !sve_j0) ? upd_freq0 : 7'bz; 
-  assign extra_update[`btbExtra_freq1]=(!upd_j1_reg && !sve_j1) ? upd_freq1 : 7'bz; 
-  assign extra_update[`btbExtra_freq2]=(!upd_j2_reg && !sve_j2) ? upd_freq2 : 7'bz; 
-  assign extra_update[`btbExtra_freq3]=(!upd_j3 && !sve_j3) ? upd_freq3 : 7'bz; 
+  assign extra_update[`btbExtra_freq0]=(!upd_j0_reg && !sve_j0) ? upd_freq0 : {7{1'bz}}; 
+  assign extra_update[`btbExtra_freq1]=(!upd_j1_reg && !sve_j1) ? upd_freq1 : {7{1'bz}}; 
+  assign extra_update[`btbExtra_freq2]=(!upd_j2_reg && !sve_j2) ? upd_freq2 : {7{1'bz}}; 
+  assign extra_update[`btbExtra_freq3]=(!upd_j3 && !sve_j3) ? upd_freq3 : {7{1'bz}}; 
 
-  assign extra_update[`btbExtra_satCount0]=upd_j0_reg ? updW_sc0 : 2'bz; 
-  assign extra_update[`btbExtra_satCount1]=upd_j1_reg ? updW_sc1 : 2'bz; 
-  assign extra_update[`btbExtra_satCount0]=upd_j2_reg ? updW_sc2 : 2'bz; 
-  assign extra_update[`btbExtra_satCount0]=upd_j3_reg ? updW_sc3 : 2'bz; 
+  assign extra_update[`btbExtra_satCount0]=upd_j0_reg ? updW_sc0 : {2{1'bz}}; 
+  assign extra_update[`btbExtra_satCount1]=upd_j1_reg ? updW_sc1 : {2{1'bz}}; 
+  assign extra_update[`btbExtra_satCount0]=upd_j2_reg ? updW_sc2 : {2{1'bz}}; 
+  assign extra_update[`btbExtra_satCount0]=upd_j3_reg ? updW_sc3 : {2{1'bz}}; 
 
-  assign extra_update[`btbExtra_satCount0]=sve_j0 ? updS_sc0 : 2'bz; 
-  assign extra_update[`btbExtra_satCount1]=sve_j1 ? updS_sc1 : 2'bz; 
-  assign extra_update[`btbExtra_satCount0]=sve_j2 ? updS_sc2 : 2'bz; 
-  assign extra_update[`btbExtra_satCount0]=sve_j3 ? updS_sc3 : 2'bz; 
+  assign extra_update[`btbExtra_satCount0]=sve_j0 ? updS_sc0 : {2{1'bz}}; 
+  assign extra_update[`btbExtra_satCount1]=sve_j1 ? updS_sc1 : {2{1'bz}}; 
+  assign extra_update[`btbExtra_satCount0]=sve_j2 ? updS_sc2 : {2{1'bz}}; 
+  assign extra_update[`btbExtra_satCount0]=sve_j3 ? updS_sc3 : {2{1'bz}}; 
 
-  assign extra_update[`btbExtra_satCount0]=(!upd_j0_reg && !sve_j0) ? upd_sc0 : 2'bz; 
-  assign extra_update[`btbExtra_satCount1]=(!upd_j1_reg && !sve_j1) ? upd_sc1 : 2'bz; 
-  assign extra_update[`btbExtra_satCount2]=(!upd_j2_reg && !sve_j2) ? upd_sc2 : 2'bz; 
-  assign extra_update[`btbExtra_satCount3]=(!upd_j3_reg && !sve_j3) ? upd_sc3 : 2'bz; 
+  assign extra_update[`btbExtra_satCount0]=(!upd_j0_reg && !sve_j0) ? upd_sc0 : {2{1'bz}}; 
+  assign extra_update[`btbExtra_satCount1]=(!upd_j1_reg && !sve_j1) ? upd_sc1 : {2{1'bz}}; 
+  assign extra_update[`btbExtra_satCount2]=(!upd_j2_reg && !sve_j2) ? upd_sc2 : {2{1'bz}}; 
+  assign extra_update[`btbExtra_satCount3]=(!upd_j3_reg && !sve_j3) ? upd_sc3 : {2{1'bz}}; 
 
   assign extra_dataW=(write_insert|init) ? extra_insert : extra_update; 
 //  assign write_data=init ? {DATA_WIDTH{1'B0}} : write_dataW;
@@ -627,97 +627,97 @@ module tbuf_way(
   assign IP_match=read_src==nextIP_reg[63:15];
   assign read_hit=IP_match && read_valid && ~init && HALF==nextIP_reg[14];
   
-  assign way_hit=oen ? read_LRU : 1'bz;
+  assign way_hit=oen ? read_LRU : {1{1'bz}};
   
-  assign tgt0O=(oen) ? read_tgt0 : {TGTIP_WIDTH-1{1'BZ}};
-  assign tgt1O=(oen) ? read_tgt1 : {TGTIP_WIDTH-1{1'BZ}};
-  assign tgt2O=(oen) ? read_tgt2 : {TGTIP_WIDTH-1{1'BZ}};
-  assign tgt3O=(oen) ? read_tgt3 : {TGTIP_WIDTH-1{1'BZ}};
+  assign tgt0O=(oen) ? read_tgt0 : {TGTIP_WIDTH-1{{1{1'bz}}}};
+  assign tgt1O=(oen) ? read_tgt1 : {TGTIP_WIDTH-1{{1{1'bz}}}};
+  assign tgt2O=(oen) ? read_tgt2 : {TGTIP_WIDTH-1{{1{1'bz}}}};
+  assign tgt3O=(oen) ? read_tgt3 : {TGTIP_WIDTH-1{{1{1'bz}}}};
   
-  assign way=oen ? WAY : 1'bz;
+  assign way=oen ? WAY : {1{1'bz}};
   
-  assign has0=oen ? read_off0!=4'hf : 1'bz;
-  assign has1=oen ? read_off1!=4'hf : 1'bz;
-  assign has2=oen ? read_off2!=4'hf : 1'bz;
-  assign has3=oen ? read_off3!=4'hf : 1'bz;
+  assign has0=oen ? read_off0!=4'hf : {1{1'bz}};
+  assign has1=oen ? read_off1!=4'hf : {1{1'bz}};
+  assign has2=oen ? read_off2!=4'hf : {1{1'bz}};
+  assign has3=oen ? read_off3!=4'hf : {1{1'bz}};
 
-  assign off0=oen ? read_off0 : 4'bz;
-  assign off1=oen ? read_off1 : 4'bz;
-  assign off2=oen ? read_off2 : 4'bz;
-  assign off3=oen ? read_off3 : 4'bz;
+  assign off0=oen ? read_off0 : {4{1'bz}};
+  assign off1=oen ? read_off1 : {4{1'bz}};
+  assign off2=oen ? read_off2 : {4{1'bz}};
+  assign off3=oen ? read_off3 : {4{1'bz}};
 
-  assign tbuf_pred[0]=oen ? ~read_freq0[6] | ~read_cond[0] : 1'bz;
-  assign tbuf_pred[1]=oen ? ~read_freq1[6] | ~read_cond[1] : 1'bz;
-  assign tbuf_pred[2]=oen ? ~read_freq2[6] | ~read_cond[2] : 1'bz;
-  assign tbuf_pred[3]=oen ? ~read_freq3[6] | ~read_cond[3] : 1'bz;
+  assign tbuf_pred[0]=oen ? ~read_freq0[6] | ~read_cond[0] : {1{1'bz}};
+  assign tbuf_pred[1]=oen ? ~read_freq1[6] | ~read_cond[1] : {1{1'bz}};
+  assign tbuf_pred[2]=oen ? ~read_freq2[6] | ~read_cond[2] : {1{1'bz}};
+  assign tbuf_pred[3]=oen ? ~read_freq3[6] | ~read_cond[3] : {1{1'bz}};
 
-  assign jmp_mask0=oen ? read_jmask0 : 4'bz;
-  assign jmp_mask1=oen ? read_jmask1 : 4'bz;
-  assign jmp_mask2=oen ? read_jmask2 : 4'bz;
-  assign jmp_mask3=oen ? read_jmask3 : 4'bz;
+  assign jmp_mask0=oen ? read_jmask0 : {4{1'bz}};
+  assign jmp_mask1=oen ? read_jmask1 : {4{1'bz}};
+  assign jmp_mask2=oen ? read_jmask2 : {4{1'bz}};
+  assign jmp_mask3=oen ? read_jmask3 : {4{1'bz}};
 
-  assign cond=oen ? read_cond : 4'bz;
+  assign cond=oen ? read_cond : {4{1'bz}};
   
-  assign indir=oen ? read_indir : 4'bz;
-  assign link=oen ? read_link : 4'bz;
-  assign lnpos=oen ? read_lnpos : 4'bz;
-  assign lnoff=oen ? lnoff0 : 4'bz;
+  assign indir=oen ? read_indir : {4{1'bz}};
+  assign link=oen ? read_link : {4{1'bz}};
+  assign lnpos=oen ? read_lnpos : {4{1'bz}};
+  assign lnoff=oen ? lnoff0 : {4{1'bz}};
   
-  assign jmp_mask[0]=oen ? j0_after && read_off0!=4'hf : 1'bz;
-  assign jmp_mask[1]=oen ? j1_after && read_off1!=4'hf : 1'bz;
-  assign jmp_mask[2]=oen ? j2_after && read_off2!=4'hf : 1'bz;
-  assign jmp_mask[3]=oen ? j3_after && read_off3!=4'hf : 1'bz;
+  assign jmp_mask[0]=oen ? j0_after && read_off0!=4'hf : {1{1'bz}};
+  assign jmp_mask[1]=oen ? j1_after && read_off1!=4'hf : {1{1'bz}};
+  assign jmp_mask[2]=oen ? j2_after && read_off2!=4'hf : {1{1'bz}};
+  assign jmp_mask[3]=oen ? j3_after && read_off3!=4'hf : {1{1'bz}};
   
-  assign sc0=oen ? sc0P | ~read_cond : 2'bz;
-  assign sc1=oen ? sc1P | ~read_cond : 2'bz;
-  assign sc2=oen ? sc2P | ~read_cond : 2'bz;
-  assign sc3=oen ? sc3P | ~read_cond : 2'bz;
+  assign sc0=oen ? sc0P | ~read_cond : {2{1'bz}};
+  assign sc1=oen ? sc1P | ~read_cond : {2{1'bz}};
+  assign sc2=oen ? sc2P | ~read_cond : {2{1'bz}};
+  assign sc3=oen ? sc3P | ~read_cond : {2{1'bz}};
 
-//  assign read_hitLRU=read_hit ? read_LRU : 1'bz;
+//  assign read_hitLRU=read_hit ? read_LRU : {1{1'bz}};
   //
 
-  assign way=(read_write_fwd & HALF) ? WAY : 1'bz;
+  assign way=(read_write_fwd & HALF) ? WAY : {1{1'bz}};
   
-  assign has0=(read_write_fwd & HALF) ? write_off0_rex!=4'hf : 1'bz;
-  assign has1=(read_write_fwd & HALF) ? write_off1_rex!=4'hf : 1'bz;
-  assign has2=(read_write_fwd & HALF) ? write_off2_rex!=4'hf : 1'bz;
-  assign has3=(read_write_fwd & HALF) ? write_off3_rex!=4'hf : 1'bz;
+  assign has0=(read_write_fwd & HALF) ? write_off0_rex!=4'hf : {1{1'bz}};
+  assign has1=(read_write_fwd & HALF) ? write_off1_rex!=4'hf : {1{1'bz}};
+  assign has2=(read_write_fwd & HALF) ? write_off2_rex!=4'hf : {1{1'bz}};
+  assign has3=(read_write_fwd & HALF) ? write_off3_rex!=4'hf : {1{1'bz}};
 
-  assign off0=(read_write_fwd & HALF) ? write_off0_rex : 4'bz;
-  assign off1=(read_write_fwd & HALF) ? write_off1_rex : 4'bz;
-  assign off2=(read_write_fwd & HALF) ? write_off2_rex : 4'bz;
-  assign off3=(read_write_fwd & HALF) ? write_off3_rex : 4'bz;
+  assign off0=(read_write_fwd & HALF) ? write_off0_rex : {4{1'bz}};
+  assign off1=(read_write_fwd & HALF) ? write_off1_rex : {4{1'bz}};
+  assign off2=(read_write_fwd & HALF) ? write_off2_rex : {4{1'bz}};
+  assign off3=(read_write_fwd & HALF) ? write_off3_rex : {4{1'bz}};
 
-  assign tbuf_pred[0]=(read_write_fwd & HALF) ? 1'b1 : 1'bz;
-  assign tbuf_pred[1]=(read_write_fwd & HALF) ? 1'b1 : 1'bz;
-  assign tbuf_pred[2]=(read_write_fwd & HALF) ? 1'b1 : 1'bz;
-  assign tbuf_pred[3]=(read_write_fwd & HALF) ? 1'b1 : 1'bz;
+  assign tbuf_pred[0]=(read_write_fwd & HALF) ? 1'b1 : {1{1'bz}};
+  assign tbuf_pred[1]=(read_write_fwd & HALF) ? 1'b1 : {1{1'bz}};
+  assign tbuf_pred[2]=(read_write_fwd & HALF) ? 1'b1 : {1{1'bz}};
+  assign tbuf_pred[3]=(read_write_fwd & HALF) ? 1'b1 : {1{1'bz}};
 
-  assign cond=(read_write_fwd & HALF) ? write_cond_rex : 4'bz;
+  assign cond=(read_write_fwd & HALF) ? write_cond_rex : {4{1'bz}};
   
-  assign indir=(read_write_fwd & HALF) ? write_indir_rex : 4'bz;
-  assign link=(read_write_fwd & HALF) ? write_link_rex : 4'bz;
-  assign lnpos=(read_write_fwd & HALF) ? write_lnpos_rex : 4'bz;
-  assign lnoff=(read_write_fwd & HALF) ? write_lnoff_rex : 4'bz;
+  assign indir=(read_write_fwd & HALF) ? write_indir_rex : {4{1'bz}};
+  assign link=(read_write_fwd & HALF) ? write_link_rex : {4{1'bz}};
+  assign lnpos=(read_write_fwd & HALF) ? write_lnpos_rex : {4{1'bz}};
+  assign lnoff=(read_write_fwd & HALF) ? write_lnoff_rex : {4{1'bz}};
   
-  assign jmp_mask[0]=(read_write_fwd & HALF) ? j0_afterW && write_off0_rex!=4'hf : 1'bz;
-  assign jmp_mask[1]=(read_write_fwd & HALF) ? j1_afterW && write_off1_rex!=4'hf : 1'bz;
-  assign jmp_mask[2]=(read_write_fwd & HALF) ? j2_afterW && write_off2_rex!=4'hf : 1'bz;
-  assign jmp_mask[3]=(read_write_fwd & HALF) ? j3_afterW && write_off3_rex!=4'hf : 1'bz;
+  assign jmp_mask[0]=(read_write_fwd & HALF) ? j0_afterW && write_off0_rex!=4'hf : {1{1'bz}};
+  assign jmp_mask[1]=(read_write_fwd & HALF) ? j1_afterW && write_off1_rex!=4'hf : {1{1'bz}};
+  assign jmp_mask[2]=(read_write_fwd & HALF) ? j2_afterW && write_off2_rex!=4'hf : {1{1'bz}};
+  assign jmp_mask[3]=(read_write_fwd & HALF) ? j3_afterW && write_off3_rex!=4'hf : {1{1'bz}};
   
-  assign sc0=(read_write_fwd & HALF) ? {2{write_cond_rex[0]}} : 2'bz;
-  assign sc1=(read_write_fwd & HALF) ? {2{write_cond_rex[1]}} : 2'bz;
-  assign sc2=(read_write_fwd & HALF) ? {2{write_cond_rex[2]}} : 2'bz;
-  assign sc3=(read_write_fwd & HALF) ? {2{write_cond_rex[3]}} : 2'bz;
+  assign sc0=(read_write_fwd & HALF) ? {2{write_cond_rex[0]}} : {2{1'bz}};
+  assign sc1=(read_write_fwd & HALF) ? {2{write_cond_rex[1]}} : {2{1'bz}};
+  assign sc2=(read_write_fwd & HALF) ? {2{write_cond_rex[2]}} : {2{1'bz}};
+  assign sc3=(read_write_fwd & HALF) ? {2{write_cond_rex[3]}} : {2{1'bz}};
 
-//  assign read_hitLRU=read_hit ? read_LRU : 1'bz;
+//  assign read_hitLRU=read_hit ? read_LRU : {1{1'bz}};
   
   assign ram_wen=write_wen & read_hit || write_insert & (write_way==WAY) || 
     (mStall && ~write_wen && ~write_insert && taken_reg && ~except_reg);
 
-  assign write_data=(write_insert|write_wen && ~init) ? write_dataW : {DATA_WIDTH{1'BZ}};
-  assign write_data=(~write_insert & ~write_wen & ~init) ? {write_LRU_reg,write_dataJ} : {DATA_WIDTH{1'BZ}};
-  assign write_data=init ? {WAY,{DATA_WIDTH-1{1'B0}}} : {DATA_WIDTH{1'BZ}};
+  assign write_data=(write_insert|write_wen && ~init) ? write_dataW : {DATA_WIDTH{{1{1'bz}}}};
+  assign write_data=(~write_insert & ~write_wen & ~init) ? {write_LRU_reg,write_dataJ} : {DATA_WIDTH{{1{1'bz}}}};
+  assign write_data=init ? {WAY,{DATA_WIDTH-1{1'B0}}} : {DATA_WIDTH{{1{1'bz}}}};
 
 //up to here.
 //dataJ includes taken and computed jmask.
@@ -738,9 +738,9 @@ module tbuf_way(
   assign sve_taken[2]=|(sve_j2 & saved_tk);
   assign sve_taken[3]=|(sve_j3 & saved_tk);
 
-  assign write_addr=(~init  & ~mStall) ? IP_wbits : 10'bz;
-  assign write_addr=init ? init_count : 10'bz;
-  assign write_addr=(mStall & ~init) ? IP_wbits_reg : 10'bz;
+  assign write_addr=(~init  & ~mStall) ? IP_wbits : {10{1'bz}};
+  assign write_addr=init ? init_count : {10{1'bz}};
+  assign write_addr=(mStall & ~init) ? IP_wbits_reg : {10{1'bz}};
   
   always @* begin
       write_dataJ=btb_data_reg;
@@ -1068,7 +1068,7 @@ module tbuf_way_2(
   reg write_way_reg,write_insert_reg,write_wen_reg;
   
   assign read_hit=read_hit0 | read_hit1 | (read_write_fwd && write_way_reg==WAY) ;
-  assign way_hit=read_write_fwd ? write_way_reg==WAY : 1'bz;
+  assign way_hit=read_write_fwd ? write_way_reg==WAY : {1{1'bz}};
 
 
     tbuf_way #(WAY,1'b0) way0(
@@ -1524,12 +1524,12 @@ module tbuf(
   assign jump2_jmask=jump_mask2; 
   assign jump3_jmask=jump_mask3;
  
-  assign jump_mask=(taken_reg[0] && ~except_jmask_en_reg) ? jump_mask0_reg : 4'bz;
-  assign jump_mask=(taken_reg[1:0]==2'b10 && ~except_jmask_en_reg) ? jump_mask1_reg : 4'bz;
-  assign jump_mask=(taken_reg[2:0]==3'b100 && ~except_jmask_en_reg) ? jump_mask2_reg : 4'bz;
-  assign jump_mask=(taken_reg==4'b1000 && ~except_jmask_en_reg) ? jump_mask3_reg : 4'bz;
-  assign jump_mask=(taken_reg==4'b0 && ~except_jmask_en_reg) ? 4'hf : 4'bz;
-  assign jump_mask=(except_jmask_en_reg) ? except_jmask_reg : 4'bz;
+  assign jump_mask=(taken_reg[0] && ~except_jmask_en_reg) ? jump_mask0_reg : {4{1'bz}};
+  assign jump_mask=(taken_reg[1:0]==2'b10 && ~except_jmask_en_reg) ? jump_mask1_reg : {4{1'bz}};
+  assign jump_mask=(taken_reg[2:0]==3'b100 && ~except_jmask_en_reg) ? jump_mask2_reg : {4{1'bz}};
+  assign jump_mask=(taken_reg==4'b1000 && ~except_jmask_en_reg) ? jump_mask3_reg : {4{1'bz}};
+  assign jump_mask=(taken_reg==4'b0 && ~except_jmask_en_reg) ? 4'hf : {4{1'bz}};
+  assign jump_mask=(except_jmask_en_reg) ? except_jmask_reg : {4{1'bz}};
 
   assign chk_mask=read_hit_A ? chk_maskA : chk_maskB;
 

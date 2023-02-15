@@ -244,20 +244,20 @@ module rs_wakeUp_logic(
   assign funit0[9:7]=funit_d[9:7] & {3{~isFP_d & ~isV_d}};
   assign funit0[15:10]=funit_d[9:4] & {6{isFP_d | isV_d}};
   
-  assign gazump=(newRsSelect0 & ~stall) ? newGazump0 : 11'bz;
-  assign gazump=(newRsSelect1 & ~stall) ? newGazump1 : 11'bz;
-  assign gazump=(newRsSelect2 & ~stall) ? newGazump2 : 11'bz;
-  assign gazump=(~newRsSelect0 & ~newRsSelect1 & ~newRsSelect2 || stall) ? 11'b10000000000 : 11'bz;
+  assign gazump=(newRsSelect0 & ~stall) ? newGazump0 : {11{1'bz}};
+  assign gazump=(newRsSelect1 & ~stall) ? newGazump1 : {11{1'bz}};
+  assign gazump=(newRsSelect2 & ~stall) ? newGazump2 : {11{1'bz}};
+  assign gazump=(~newRsSelect0 & ~newRsSelect1 & ~newRsSelect2 || stall) ? 11'b10000000000 : {11{1'bz}};
 
-  assign isFP_d=(newRsSelect0 & ~stall) ? newIsFP0 : 1'bz;
-  assign isFP_d=(newRsSelect1 & ~stall) ? newIsFP1 : 1'bz;
-  assign isFP_d=(newRsSelect2 & ~stall) ? newIsFP2 : 1'bz;
-  assign isFP_d=(~newRsSelect0 & ~newRsSelect1 & ~newRsSelect2 || stall) ? isFP : 1'bz;
+  assign isFP_d=(newRsSelect0 & ~stall) ? newIsFP0 : {1{1'bz}};
+  assign isFP_d=(newRsSelect1 & ~stall) ? newIsFP1 : {1{1'bz}};
+  assign isFP_d=(newRsSelect2 & ~stall) ? newIsFP2 : {1{1'bz}};
+  assign isFP_d=(~newRsSelect0 & ~newRsSelect1 & ~newRsSelect2 || stall) ? isFP : {1{1'bz}};
 
-  assign isV_d=(newRsSelect0 & ~stall) ? newIsV0 : 1'bz;
-  assign isV_d=(newRsSelect1 & ~stall) ? newIsV1 : 1'bz;
-  assign isV_d=(newRsSelect2 & ~stall) ? newIsV2 : 1'bz;
-  assign isV_d=(~newRsSelect0 & ~newRsSelect1 & ~newRsSelect2 || stall) ? isV : 1'bz;
+  assign isV_d=(newRsSelect0 & ~stall) ? newIsV0 : {1{1'bz}};
+  assign isV_d=(newRsSelect1 & ~stall) ? newIsV1 : {1{1'bz}};
+  assign isV_d=(newRsSelect2 & ~stall) ? newIsV2 : {1{1'bz}};
+  assign isV_d=(~newRsSelect0 & ~newRsSelect1 & ~newRsSelect2 || stall) ? isV : {1{1'bz}};
   
   assign eq[0]=(register==Treg0) & Twen0 & ~newRsSelect0 & ~newRsSelect1 & ~newRsSelect2 & eq_mask[0];
   assign eq[1]=(register==Treg1) & Twen1 & ~newRsSelect0 & ~newRsSelect1 & ~newRsSelect2 & eq_mask[1];
@@ -268,62 +268,62 @@ module rs_wakeUp_logic(
   assign isData=|eq_new;
 /*  assign isDataV=(|{eq_new&&funM,eq_new&&funAdd,eq_reg&&funMul});
   assign isDataF=(|{eq_new&&funM,eq_reg2&&funAdd,eq_reg4&&funMul});
-  assign isData=isFP_d ? isDataF : 1'bz;
-  assign isData=isV_d ? isDataV : 1'bz;
-  assign isData=(~isFP_d & ~isV_d) ? isDataI : 1'bz;
+  assign isData=isFP_d ? isDataF : {1{1'bz}};
+  assign isData=isV_d ? isDataV : {1{1'bz}};
+  assign isData=(~isFP_d & ~isV_d) ? isDataI : {1{1'bz}};
 */  
-  assign fuFwd_d=(eq_new[0] & funit_d[0]) ? 4'd0 : 4'bz;
-  assign fuFwd_d=(eq_new[0] & funit_d[1]) ? 4'd1 : 4'bz;
-  assign fuFwd_d=(eq_new[0] & funit_d[2]) ? 4'd2 : 4'bz;
-  assign fuFwd_d=(eq_new[1] & funit_d[3]) ? 4'd3 : 4'bz;
-  assign fuFwd_d=(eq_new[0] & funit_d[4]) ? 4'd4 : 4'bz;
-  assign fuFwd_d=(eq_new[0] & funit_d[5]) ? 4'd5 : 4'bz;
-  assign fuFwd_d=(eq_new[0] & funit_d[6]) ? 4'd6 : 4'bz;
-  assign fuFwd_d=(eq_new[0] & funit_d[7]) ? 4'd7 : 4'bz;
-  assign fuFwd_d=(eq_new[0] & funit_d[8]) ? 4'd8 : 4'bz;
-  assign fuFwd_d=(eq_new[0] & funit_d[9]) ? 4'd9 : 4'bz;
-  assign fuFwd_d=(eq_new[0]|(eq_new[1]&funit_d[3])&&~rst) ? 4'bz : 4'd15;
+  assign fuFwd_d=(eq_new[0] & funit_d[0]) ? 4'd0 : {4{1'bz}};
+  assign fuFwd_d=(eq_new[0] & funit_d[1]) ? 4'd1 : {4{1'bz}};
+  assign fuFwd_d=(eq_new[0] & funit_d[2]) ? 4'd2 : {4{1'bz}};
+  assign fuFwd_d=(eq_new[1] & funit_d[3]) ? 4'd3 : {4{1'bz}};
+  assign fuFwd_d=(eq_new[0] & funit_d[4]) ? 4'd4 : {4{1'bz}};
+  assign fuFwd_d=(eq_new[0] & funit_d[5]) ? 4'd5 : {4{1'bz}};
+  assign fuFwd_d=(eq_new[0] & funit_d[6]) ? 4'd6 : {4{1'bz}};
+  assign fuFwd_d=(eq_new[0] & funit_d[7]) ? 4'd7 : {4{1'bz}};
+  assign fuFwd_d=(eq_new[0] & funit_d[8]) ? 4'd8 : {4{1'bz}};
+  assign fuFwd_d=(eq_new[0] & funit_d[9]) ? 4'd9 : {4{1'bz}};
+  assign fuFwd_d=(eq_new[0]|(eq_new[1]&funit_d[3])&&~rst) ? {4{1'bz}} : 4'd15;
 
-  assign gzFwd=gazump[0] ? 4'd0 : 4'bz;
-  assign gzFwd=gazump[1] ? 4'd1 : 4'bz;
-  assign gzFwd=gazump[2] ? 4'd2 : 4'bz;
-  assign gzFwd=gazump[3] ? 4'd3 : 4'bz;
-  assign gzFwd=gazump[4] ? 4'd4 : 4'bz;
-  assign gzFwd=gazump[5] ? 4'd5 : 4'bz;
-  assign gzFwd=gazump[6] ? 4'd6 : 4'bz;
-  assign gzFwd=gazump[7] ? 4'd7 : 4'bz;
-  assign gzFwd=gazump[8] ? 4'd8 : 4'bz;
-  assign gzFwd=gazump[9] ? 4'd9 : 4'bz;
-  assign gzFwd=gazump[10] ? 4'd15 : 4'bz;
+  assign gzFwd=gazump[0] ? 4'd0 : {4{1'bz}};
+  assign gzFwd=gazump[1] ? 4'd1 : {4{1'bz}};
+  assign gzFwd=gazump[2] ? 4'd2 : {4{1'bz}};
+  assign gzFwd=gazump[3] ? 4'd3 : {4{1'bz}};
+  assign gzFwd=gazump[4] ? 4'd4 : {4{1'bz}};
+  assign gzFwd=gazump[5] ? 4'd5 : {4{1'bz}};
+  assign gzFwd=gazump[6] ? 4'd6 : {4{1'bz}};
+  assign gzFwd=gazump[7] ? 4'd7 : {4{1'bz}};
+  assign gzFwd=gazump[8] ? 4'd8 : {4{1'bz}};
+  assign gzFwd=gazump[9] ? 4'd9 : {4{1'bz}};
+  assign gzFwd=gazump[10] ? 4'd15 : {4{1'bz}};
 
   assign outEq={|outEq0[9:5],outEq0[9:5]|outEq0[4:0]};
 
-  assign outFuFwd0_X=outRsSelect0 ? fuFwd : {4{1'bz}};
-  assign outFuFwd1_X=outRsSelect1 ? fuFwd : {4{1'bz}};
-  assign outFuFwd2_X=outRsSelect2 ? fuFwd : {4{1'bz}};
+  assign outFuFwd0_X=outRsSelect0 ? fuFwd : {4{{1{1'bz}}}};
+  assign outFuFwd1_X=outRsSelect1 ? fuFwd : {4{{1{1'bz}}}};
+  assign outFuFwd2_X=outRsSelect2 ? fuFwd : {4{{1{1'bz}}}};
 
-  assign outFuuFwd0_X=outRsSelect0 ? fuuFwd : {4{1'bz}};
-  assign outFuuFwd1_X=outRsSelect1 ? fuuFwd : {4{1'bz}};
-  assign outFuuFwd2_X=outRsSelect2 ? fuuFwd : {4{1'bz}};
+  assign outFuuFwd0_X=outRsSelect0 ? fuuFwd : {4{{1{1'bz}}}};
+  assign outFuuFwd1_X=outRsSelect1 ? fuuFwd : {4{{1{1'bz}}}};
+  assign outFuuFwd2_X=outRsSelect2 ? fuuFwd : {4{{1{1'bz}}}};
 
-  assign register_d=(newRsSelect0 & ~rst & ~stall) ? newReg0 : {REG_WIDTH{1'bz}};
-  assign register_d=(newRsSelect1 & ~rst & ~stall) ? newReg1 : {REG_WIDTH{1'bz}};
-  assign register_d=(newRsSelect2 & ~rst & ~stall) ? newReg2 : {REG_WIDTH{1'bz}};
-  assign register_d=rst ? {REG_WIDTH{1'b1}} : {REG_WIDTH{1'bz}};
-  assign register_d=(~newRsSelect0 & ~newRsSelect1 & ~newRsSelect2 & ~rst || stall &~rst) ? register : {REG_WIDTH{1'bz}};
+  assign register_d=(newRsSelect0 & ~rst & ~stall) ? newReg0 : {REG_WIDTH{{1{1'bz}}}};
+  assign register_d=(newRsSelect1 & ~rst & ~stall) ? newReg1 : {REG_WIDTH{{1{1'bz}}}};
+  assign register_d=(newRsSelect2 & ~rst & ~stall) ? newReg2 : {REG_WIDTH{{1{1'bz}}}};
+  assign register_d=rst ? {REG_WIDTH{1'b1}} : {REG_WIDTH{{1{1'bz}}}};
+  assign register_d=(~newRsSelect0 & ~newRsSelect1 & ~newRsSelect2 & ~rst || stall &~rst) ? register : {REG_WIDTH{{1{1'bz}}}};
 
-  assign funit_d=(newRsSelect0 & ~rst & ~stall) ? newFunit0 : {FN_WIDTH{1'bz}};
-  assign funit_d=(newRsSelect1 & ~rst & ~stall) ? newFunit1 : {FN_WIDTH{1'bz}};
-  assign funit_d=(newRsSelect2 & ~rst & ~stall) ? newFunit2 : {FN_WIDTH{1'bz}};
-  assign funit_d=rst ? 10'b1001 : {FN_WIDTH{1'bz}};
-  assign funit_d=(~newRsSelect0 & ~newRsSelect1 & ~newRsSelect2 & ~rst || stall &~rst) ? funit : {FN_WIDTH{1'bz}};
+  assign funit_d=(newRsSelect0 & ~rst & ~stall) ? newFunit0 : {FN_WIDTH{{1{1'bz}}}};
+  assign funit_d=(newRsSelect1 & ~rst & ~stall) ? newFunit1 : {FN_WIDTH{{1{1'bz}}}};
+  assign funit_d=(newRsSelect2 & ~rst & ~stall) ? newFunit2 : {FN_WIDTH{{1{1'bz}}}};
+  assign funit_d=rst ? 10'b1001 : {FN_WIDTH{{1{1'bz}}}};
+  assign funit_d=(~newRsSelect0 & ~newRsSelect1 & ~newRsSelect2 & ~rst || stall &~rst) ? funit : {FN_WIDTH{{1{1'bz}}}};
 
   generate
     genvar n;
     for(n=0;n<=16;n=n+1) begin : treg_gen
-	if (n!=3) assign Treg0=funit0[n] ? FUreg[n] : 9'bz;
+	if (n!=3) assign Treg0=funit0[n] ? FUreg[n] : {9{1'bz}};
 	else assign Treg1=FUreg[3];
-	if (n!=3) assign Twen0=funit0[n] ? FUwen[n] : 1'bz;
+	if (n!=3) assign Twen0=funit0[n] ? FUwen[n] : {1{1'bz}};
 	else assign Twen1=FUwen[3] & funit[3];
     end
   endgenerate
@@ -664,22 +664,22 @@ module rs_wakeUp_logic_array(
           end
           
           
-          assign outFuFwd0_X=outBank0[j] ? outFuFwd0k : 4'bz;
-          assign outFuFwd1_X=outBank1[j] ? outFuFwd1k : 4'bz;
-          assign outFuFwd2_X=outBank2[j] ? outFuFwd2k : 4'bz;
+          assign outFuFwd0_X=outBank0[j] ? outFuFwd0k : {4{1'bz}};
+          assign outFuFwd1_X=outBank1[j] ? outFuFwd1k : {4{1'bz}};
+          assign outFuFwd2_X=outBank2[j] ? outFuFwd2k : {4{1'bz}};
 
-          assign outFuuFwd0_X=outBank0[j] ? outFuuFwd0k : 4'bz;
-          assign outFuuFwd1_X=outBank1[j] ? outFuuFwd1k : 4'bz;
-          assign outFuuFwd2_X=outBank2[j] ? outFuuFwd2k : 4'bz;
+          assign outFuuFwd0_X=outBank0[j] ? outFuuFwd0k : {4{1'bz}};
+          assign outFuuFwd1_X=outBank1[j] ? outFuuFwd1k : {4{1'bz}};
+          assign outFuuFwd2_X=outBank2[j] ? outFuuFwd2k : {4{1'bz}};
 
           
-          assign outFuFwd0k=outBank0[j] ? 4'bz : 4'hf;
-          assign outFuFwd1k=outBank1[j] ? 4'bz : 4'hf;
-          assign outFuFwd2k=outBank2[j] ? 4'bz : 4'hf;
+          assign outFuFwd0k=outBank0[j] ? {4{1'bz}} : 4'hf;
+          assign outFuFwd1k=outBank1[j] ? {4{1'bz}} : 4'hf;
+          assign outFuFwd2k=outBank2[j] ? {4{1'bz}} : 4'hf;
 
-          assign outFuuFwd0k=outBank0[j] ? 4'bz : 4'hf;
-          assign outFuuFwd1k=outBank1[j] ? 4'bz : 4'hf;
-          assign outFuuFwd2k=outBank2[j] ? 4'bz : 4'hf;
+          assign outFuuFwd0k=outBank0[j] ? {4{1'bz}} : 4'hf;
+          assign outFuuFwd1k=outBank1[j] ? {4{1'bz}} : 4'hf;
+          assign outFuuFwd2k=outBank2[j] ? {4{1'bz}} : 4'hf;
       end
       for(p=0;p<3;p=p+1) begin : newEQ_gen
           assign newEQ[p][0]=(register[p]==Treg0[p]) & Twen0[p];
@@ -692,22 +692,22 @@ module rs_wakeUp_logic_array(
           assign funit0[p][18:13]=funit[p][9:4] & {6{isFP[p]}};
 
 	  for(q=0;q<19;q=q+1) begin : funit_gen
-	      if (q!=3) assign Treg0[p]=funit0[p][q] ? FUreg[q] : 9'bz;
+	      if (q!=3) assign Treg0[p]=funit0[p][q] ? FUreg[q] : {9{1'bz}};
 	      else assign Treg1[p]=FUreg[3];
-	      if (q!=3) assign Twen0[p]=funit0[p][q] ? FUwen[q] : 1'bz;
+	      if (q!=3) assign Twen0[p]=funit0[p][q] ? FUwen[q] : {1{1'bz}};
 	      else assign Twen1[p]=FUwen[3] & funit[p][3];
 	  end
       end
   endgenerate
 
          
-  assign outFuFwd0_X=outFound0 ? 4'bz : 4'hf;
-  assign outFuFwd1_X=outFound1 ? 4'bz : 4'hf;
-  assign outFuFwd2_X=outFound2 ? 4'bz : 4'hf;
+  assign outFuFwd0_X=outFound0 ? {4{1'bz}} : 4'hf;
+  assign outFuFwd1_X=outFound1 ? {4{1'bz}} : 4'hf;
+  assign outFuFwd2_X=outFound2 ? {4{1'bz}} : 4'hf;
 
-  assign outFuuFwd0_X=outFound0 ? 4'bz : 4'hf;
-  assign outFuuFwd1_X=outFound1 ? 4'bz : 4'hf;
-  assign outFuuFwd2_X=outFound2 ? 4'bz : 4'hf;
+  assign outFuuFwd0_X=outFound0 ? {4{1'bz}} : 4'hf;
+  assign outFuuFwd1_X=outFound1 ? {4{1'bz}} : 4'hf;
+  assign outFuuFwd2_X=outFound2 ? {4{1'bz}} : 4'hf;
  
   always @(posedge clk) begin
     if (rst) begin
@@ -846,30 +846,30 @@ module rs_wakeUp_data(
 
   assign data_en=|{outEq,newRsSelect0,newRsSelect1,newRsSelect2};
 
-  assign data_d0=outEq[0] ? FU0 : {WIDTH{1'bz}};
-  assign data_d0=outEq[1] ? FU1 : {WIDTH{1'bz}};
-  assign data_d0=outEq[2] ? FU2 : {WIDTH{1'bz}};
-  assign data_d0=outEq[3] ? FU3 : {WIDTH{1'bz}};
-  assign data_d0=outEq[4] ? FU4 : {WIDTH{1'bz}};
-  assign data_d0=|outEq[4:0] ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-  assign data_d1=outEq[0] ? FU5 : {WIDTH{1'bz}};
-  assign data_d1=outEq[1] ? FU6 : {WIDTH{1'bz}};
-  assign data_d1=outEq[2] ? FU7 : {WIDTH{1'bz}};
-  assign data_d1=outEq[3] ? FU8 : {WIDTH{1'bz}};
-  assign data_d1=outEq[4] ? FU9 : {WIDTH{1'bz}};
-  assign data_d1=|outEq[4:0] ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-  assign data_d=(newRsSelect0 & ~rst & ~stall) ? newData0 : {WIDTH{1'bz}};
-  assign data_d=(newRsSelect1 & ~rst & ~stall) ? newData1 : {WIDTH{1'bz}};
-  assign data_d=(newRsSelect2 & ~rst & ~stall) ? newData2 : {WIDTH{1'bz}};
+  assign data_d0=outEq[0] ? FU0 : {WIDTH{{1{1'bz}}}};
+  assign data_d0=outEq[1] ? FU1 : {WIDTH{{1{1'bz}}}};
+  assign data_d0=outEq[2] ? FU2 : {WIDTH{{1{1'bz}}}};
+  assign data_d0=outEq[3] ? FU3 : {WIDTH{{1{1'bz}}}};
+  assign data_d0=outEq[4] ? FU4 : {WIDTH{{1{1'bz}}}};
+  assign data_d0=|outEq[4:0] ? {WIDTH{{1{1'bz}}}} : {WIDTH{1'B0}};
+  assign data_d1=outEq[0] ? FU5 : {WIDTH{{1{1'bz}}}};
+  assign data_d1=outEq[1] ? FU6 : {WIDTH{{1{1'bz}}}};
+  assign data_d1=outEq[2] ? FU7 : {WIDTH{{1{1'bz}}}};
+  assign data_d1=outEq[3] ? FU8 : {WIDTH{{1{1'bz}}}};
+  assign data_d1=outEq[4] ? FU9 : {WIDTH{{1{1'bz}}}};
+  assign data_d1=|outEq[4:0] ? {WIDTH{{1{1'bz}}}} : {WIDTH{1'B0}};
+  assign data_d=(newRsSelect0 & ~rst & ~stall) ? newData0 : {WIDTH{{1{1'bz}}}};
+  assign data_d=(newRsSelect1 & ~rst & ~stall) ? newData1 : {WIDTH{{1{1'bz}}}};
+  assign data_d=(newRsSelect2 & ~rst & ~stall) ? newData2 : {WIDTH{{1{1'bz}}}};
 
-  assign data_d=rst ? {WIDTH{1'b0}} : {WIDTH{1'bz}};
+  assign data_d=rst ? {WIDTH{1'b0}} : {WIDTH{{1{1'bz}}}};
 
-  assign data_d=(data_en & ~(stall && newRsSelect0|newRsSelect1|newRsSelect2) || rst) ? {WIDTH{1'bz}} : data_q;
-  assign data_d=(|outEq[4:0] && outEq[5]) ? data_d1 : {WIDTH{1'BZ}};
-  assign data_d=(|outEq[4:0] && ~outEq[5]) ? data_d0 : {WIDTH{1'BZ}};
-  assign outData0_X=outRsSelect0 ? data_q : {WIDTH{1'bz}};
-  assign outData1_X=outRsSelect1 ? data_q : {WIDTH{1'bz}};
-  assign outData2_X=outRsSelect2 ? data_q : {WIDTH{1'bz}};
+  assign data_d=(data_en & ~(stall && newRsSelect0|newRsSelect1|newRsSelect2) || rst) ? {WIDTH{{1{1'bz}}}} : data_q;
+  assign data_d=(|outEq[4:0] && outEq[5]) ? data_d1 : {WIDTH{{1{1'bz}}}};
+  assign data_d=(|outEq[4:0] && ~outEq[5]) ? data_d0 : {WIDTH{{1{1'bz}}}};
+  assign outData0_X=outRsSelect0 ? data_q : {WIDTH{{1{1'bz}}}};
+  assign outData1_X=outRsSelect1 ? data_q : {WIDTH{{1{1'bz}}}};
+  assign outData2_X=outRsSelect2 ? data_q : {WIDTH{{1{1'bz}}}};
 
   always @(posedge clk)
     begin
@@ -965,19 +965,19 @@ module rs_wakeUp_data_array(
               outRsSelect2[k+8*j],outData2k
               );
           end
-          assign outData0_X=outBank0[j] ? outData0k : {WIDTH{1'BZ}};
-          assign outData1_X=outBank1[j] ? outData1k : {WIDTH{1'BZ}};
-          assign outData2_X=outBank2[j] ? outData2k : {WIDTH{1'BZ}};
+          assign outData0_X=outBank0[j] ? outData0k : {WIDTH{{1{1'bz}}}};
+          assign outData1_X=outBank1[j] ? outData1k : {WIDTH{{1{1'bz}}}};
+          assign outData2_X=outBank2[j] ? outData2k : {WIDTH{{1{1'bz}}}};
 
-          assign outData0k=outBank0[j] ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-          assign outData1k=outBank1[j] ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-          assign outData2k=outBank2[j] ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+          assign outData0k=outBank0[j] ? {WIDTH{{1{1'bz}}}} : {WIDTH{1'B0}};
+          assign outData1k=outBank1[j] ? {WIDTH{{1{1'bz}}}} : {WIDTH{1'B0}};
+          assign outData2k=outBank2[j] ? {WIDTH{{1{1'bz}}}} : {WIDTH{1'B0}};
       end
   endgenerate
 
-  assign outData0_X=outFound0 ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-  assign outData1_X=outFound1 ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-  assign outData2_X=outFound2 ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+  assign outData0_X=outFound0 ? {WIDTH{{1{1'bz}}}} : {WIDTH{1'B0}};
+  assign outData1_X=outFound1 ? {WIDTH{{1{1'bz}}}} : {WIDTH{1'B0}};
+  assign outData2_X=outFound2 ? {WIDTH{{1{1'bz}}}} : {WIDTH{1'B0}};
 
   assign outDataN0=~outData0;
   assign outDataN1=~outData1;
@@ -1146,13 +1146,13 @@ module rs_wakeUpS_logic(
   assign funAdd=|funit_d[6:4];
   assign funMul=|funit_d[9:7];
   
-  assign gazump=(newRsSelect1 & ~stall) ? newGazump1 : 11'bz;
-  assign gazump=(newRsSelect2  & ~stall) ? newGazump2 : 11'bz;
-  assign gazump=(~newRsSelect1 & ~newRsSelect2 || stall) ? 11'b10000000000 : 11'bz;
+  assign gazump=(newRsSelect1 & ~stall) ? newGazump1 : {11{1'bz}};
+  assign gazump=(newRsSelect2  & ~stall) ? newGazump2 : {11{1'bz}};
+  assign gazump=(~newRsSelect1 & ~newRsSelect2 || stall) ? 11'b10000000000 : {11{1'bz}};
 
-  assign isFP_d=(newRsSelect1 & ~stall) ? newIsFP1 : 1'bz;
-  assign isFP_d=(newRsSelect2 & ~stall) ? newIsFP2 : 1'bz;
-  assign isFP_d=(~newRsSelect1 & ~newRsSelect2 || stall) ? isFP : 1'bz;
+  assign isFP_d=(newRsSelect1 & ~stall) ? newIsFP1 : {1{1'bz}};
+  assign isFP_d=(newRsSelect2 & ~stall) ? newIsFP2 : {1{1'bz}};
+  assign isFP_d=(~newRsSelect1 & ~newRsSelect2 || stall) ? isFP : {1{1'bz}};
 
   assign eq[0]=(register==Treg0) & Twen0 & ~newRsSelect1 & ~newRsSelect2 &eq_mask[0];
   assign eq[1]=(register==Treg1) & Twen1 & ~newRsSelect1 & ~newRsSelect2 &eq_mask[1];
@@ -1162,54 +1162,54 @@ module rs_wakeUpS_logic(
   assign isDataI=|eq_new;
   assign isData=isDataI;
 
-  assign fuFwd_d=(eq_new[0] & funit_d[0]) ? 4'd0 : 4'bz;
-  assign fuFwd_d=(eq_new[0] & funit_d[1]) ? 4'd1 : 4'bz;
-  assign fuFwd_d=(eq_new[0] & funit_d[2]) ? 4'd2 : 4'bz;
- // assign fuFwd_d=(eq_new[1] & funit[3]) ? 4'd3 : 4'bz;
-  assign fuFwd_d=(eq_new[0] & funit_d[4]) ? 4'd4 : 4'bz;
-  assign fuFwd_d=(eq_new[0] & funit_d[5]) ? 4'd5 : 4'bz;
-  assign fuFwd_d=(eq_new[0] & funit_d[6]) ? 4'd6 : 4'bz;
-  assign fuFwd_d=(eq_new[0] & funit_d[7]) ? 4'd7 : 4'bz;
-  assign fuFwd_d=(eq_new[0] & funit_d[8]) ? 4'd8 : 4'bz;
-  assign fuFwd_d=(eq_new[0] & funit_d[9]) ? 4'd9 : 4'bz;
-  assign fuFwd_d=(eq_new[0]&~rst) ? 4'bz : 4'd15;
+  assign fuFwd_d=(eq_new[0] & funit_d[0]) ? 4'd0 : {4{1'bz}};
+  assign fuFwd_d=(eq_new[0] & funit_d[1]) ? 4'd1 : {4{1'bz}};
+  assign fuFwd_d=(eq_new[0] & funit_d[2]) ? 4'd2 : {4{1'bz}};
+ // assign fuFwd_d=(eq_new[1] & funit[3]) ? 4'd3 : {4{1'bz}};
+  assign fuFwd_d=(eq_new[0] & funit_d[4]) ? 4'd4 : {4{1'bz}};
+  assign fuFwd_d=(eq_new[0] & funit_d[5]) ? 4'd5 : {4{1'bz}};
+  assign fuFwd_d=(eq_new[0] & funit_d[6]) ? 4'd6 : {4{1'bz}};
+  assign fuFwd_d=(eq_new[0] & funit_d[7]) ? 4'd7 : {4{1'bz}};
+  assign fuFwd_d=(eq_new[0] & funit_d[8]) ? 4'd8 : {4{1'bz}};
+  assign fuFwd_d=(eq_new[0] & funit_d[9]) ? 4'd9 : {4{1'bz}};
+  assign fuFwd_d=(eq_new[0]&~rst) ? {4{1'bz}} : 4'd15;
 
-  assign gzFwd=gazump[0] ? 4'd0 : 4'bz;
-  assign gzFwd=gazump[1] ? 4'd1 : 4'bz;
-  assign gzFwd=gazump[2] ? 4'd2 : 4'bz;
-  assign gzFwd=gazump[3] ? 4'd3 : 4'bz;
-  assign gzFwd=gazump[4] ? 4'd4 : 4'bz;
-  assign gzFwd=gazump[5] ? 4'd5 : 4'bz;
-  assign gzFwd=gazump[6] ? 4'd6 : 4'bz;
-  assign gzFwd=gazump[7] ? 4'd7 : 4'bz;
-  assign gzFwd=gazump[8] ? 4'd8 : 4'bz;
-  assign gzFwd=gazump[9] ? 4'd9 : 4'bz;
-  assign gzFwd=gazump[10] ? 4'd15 : 4'bz;
+  assign gzFwd=gazump[0] ? 4'd0 : {4{1'bz}};
+  assign gzFwd=gazump[1] ? 4'd1 : {4{1'bz}};
+  assign gzFwd=gazump[2] ? 4'd2 : {4{1'bz}};
+  assign gzFwd=gazump[3] ? 4'd3 : {4{1'bz}};
+  assign gzFwd=gazump[4] ? 4'd4 : {4{1'bz}};
+  assign gzFwd=gazump[5] ? 4'd5 : {4{1'bz}};
+  assign gzFwd=gazump[6] ? 4'd6 : {4{1'bz}};
+  assign gzFwd=gazump[7] ? 4'd7 : {4{1'bz}};
+  assign gzFwd=gazump[8] ? 4'd8 : {4{1'bz}};
+  assign gzFwd=gazump[9] ? 4'd9 : {4{1'bz}};
+  assign gzFwd=gazump[10] ? 4'd15 : {4{1'bz}};
 
   assign outEq={|outEq0[9:5],outEq0[9:5]|{outEq0[4:1],1'b0}};
 
-  assign outFuFwd1_X=outRsSelect1 ? fuFwd : {4{1'bz}};
-  assign outFuFwd2_X=outRsSelect2 ? fuFwd : {4{1'bz}};
+  assign outFuFwd1_X=outRsSelect1 ? fuFwd : {4{{1{1'bz}}}};
+  assign outFuFwd2_X=outRsSelect2 ? fuFwd : {4{{1{1'bz}}}};
 
-  assign outFuuFwd1_X=outRsSelect1 ? fuuFwd : {4{1'bz}};
-  assign outFuuFwd2_X=outRsSelect2 ? fuuFwd : {4{1'bz}};
+  assign outFuuFwd1_X=outRsSelect1 ? fuuFwd : {4{{1{1'bz}}}};
+  assign outFuuFwd2_X=outRsSelect2 ? fuuFwd : {4{{1{1'bz}}}};
 
-  assign register_d=(newRsSelect1 & ~rst & ~stall) ? newReg1 : {REG_WIDTH{1'bz}};
-  assign register_d=(newRsSelect2 & ~rst & ~stall) ? newReg2 : {REG_WIDTH{1'bz}};
-  assign register_d=rst ? {REG_WIDTH{1'b1}} : {REG_WIDTH{1'bz}};
-  assign register_d=(~newRsSelect1 & ~newRsSelect2 & ~rst || stall &~rst) ? register : {REG_WIDTH{1'bz}};
+  assign register_d=(newRsSelect1 & ~rst & ~stall) ? newReg1 : {REG_WIDTH{{1{1'bz}}}};
+  assign register_d=(newRsSelect2 & ~rst & ~stall) ? newReg2 : {REG_WIDTH{{1{1'bz}}}};
+  assign register_d=rst ? {REG_WIDTH{1'b1}} : {REG_WIDTH{{1{1'bz}}}};
+  assign register_d=(~newRsSelect1 & ~newRsSelect2 & ~rst || stall &~rst) ? register : {REG_WIDTH{{1{1'bz}}}};
 
-  assign funit_d=(newRsSelect1 & ~rst & ~stall) ? newFunit1 : {FN_WIDTH{1'bz}};
-  assign funit_d=(newRsSelect2 & ~rst & ~stall) ? newFunit2 : {FN_WIDTH{1'bz}};
-  assign funit_d=rst ? 10'b1 : {FN_WIDTH{1'bz}};
-  assign funit_d=(~newRsSelect1 & ~newRsSelect2 & ~rst || stall &~rst) ? funit : {FN_WIDTH{1'bz}};
+  assign funit_d=(newRsSelect1 & ~rst & ~stall) ? newFunit1 : {FN_WIDTH{{1{1'bz}}}};
+  assign funit_d=(newRsSelect2 & ~rst & ~stall) ? newFunit2 : {FN_WIDTH{{1{1'bz}}}};
+  assign funit_d=rst ? 10'b1 : {FN_WIDTH{{1{1'bz}}}};
+  assign funit_d=(~newRsSelect1 & ~newRsSelect2 & ~rst || stall &~rst) ? funit : {FN_WIDTH{{1{1'bz}}}};
   
   generate
     genvar n;
     for(n=0;n<10;n=n+1) begin : treg_gen
-	if (n!=3) assign Treg0=funit[n] ? FUreg[n] : 9'bz;
+	if (n!=3) assign Treg0=funit[n] ? FUreg[n] : {9{1'bz}};
 	else assign Treg1=FUreg[3];
-	if (n!=3) assign Twen0=funit[n] ? FUwen[n] : 1'bz;
+	if (n!=3) assign Twen0=funit[n] ? FUwen[n] : {1{1'bz}};
 	else assign Twen1=FUwen[3] & funit[3];
     end
   endgenerate
@@ -1456,37 +1456,37 @@ module rs_wakeUpS_logic_array(
           end
           
           
-          assign outFuFwd1_X=outBank1[j] ? outFuFwd1k : 4'bz;
-          assign outFuFwd2_X=outBank2[j] ? outFuFwd2k : 4'bz;
+          assign outFuFwd1_X=outBank1[j] ? outFuFwd1k : {4{1'bz}};
+          assign outFuFwd2_X=outBank2[j] ? outFuFwd2k : {4{1'bz}};
 
-          assign outFuuFwd1_X=outBank1[j] ? outFuuFwd1k : 4'bz;
-          assign outFuuFwd2_X=outBank2[j] ? outFuuFwd2k : 4'bz;
+          assign outFuuFwd1_X=outBank1[j] ? outFuuFwd1k : {4{1'bz}};
+          assign outFuuFwd2_X=outBank2[j] ? outFuuFwd2k : {4{1'bz}};
 
           
-          assign outFuFwd1k=outBank1[j] ? 4'bz : 4'hf;
-          assign outFuFwd2k=outBank2[j] ? 4'bz : 4'hf;
+          assign outFuFwd1k=outBank1[j] ? {4{1'bz}} : 4'hf;
+          assign outFuFwd2k=outBank2[j] ? {4{1'bz}} : 4'hf;
 
-          assign outFuuFwd1k=outBank1[j] ? 4'bz : 4'hf;
-          assign outFuuFwd2k=outBank2[j] ? 4'bz : 4'hf;
+          assign outFuuFwd1k=outBank1[j] ? {4{1'bz}} : 4'hf;
+          assign outFuuFwd2k=outBank2[j] ? {4{1'bz}} : 4'hf;
       end
       for(p=1;p<3;p=p+1) begin : newEQ_gen
           assign newEQ[p][0]=(register[p]==Treg0[p]) & Twen0[p];
           assign newEQ[p][1]=(register[p]==Treg1[p]) & Twen1[p];
 	  for(q=0;q<10;q=q+1) begin : funit_gen
-	      if (q!=3) assign Treg0[p]=funit[p][q] ? FUreg[q] : 9'bz;
+	      if (q!=3) assign Treg0[p]=funit[p][q] ? FUreg[q] : {9{1'bz}};
 	      else assign Treg1[p]=FUreg[3];
-	      if (q!=3) assign Twen0[p]=funit[p][q] ? FUwen[q] : 1'bz;
+	      if (q!=3) assign Twen0[p]=funit[p][q] ? FUwen[q] : {1{1'bz}};
 	      else assign Twen1[p]=FUwen[3] & funit[p][3];
 	  end
       end
   endgenerate
 
          
-  assign outFuFwd1_X=outFound1 ? 4'bz : 4'hf;
-  assign outFuFwd2_X=outFound2 ? 4'bz : 4'hf;
+  assign outFuFwd1_X=outFound1 ? {4{1'bz}} : 4'hf;
+  assign outFuFwd2_X=outFound2 ? {4{1'bz}} : 4'hf;
 
-  assign outFuuFwd1_X=outFound1 ? 4'bz : 4'hf;
-  assign outFuuFwd2_X=outFound2 ? 4'bz : 4'hf;
+  assign outFuuFwd1_X=outFound1 ? {4{1'bz}} : 4'hf;
+  assign outFuuFwd2_X=outFound2 ? {4{1'bz}} : 4'hf;
  
   always @(posedge clk) begin
     FUreg0_reg<=FUreg0;
@@ -1565,17 +1565,17 @@ module rs_nonWakeUp_DFF(
 
   assign data_en=|{newRsSelect0,newRsSelect1,newRsSelect2,rst};
 
-  assign data_d=(newRsSelect0 & ~rst & ~stall) ? newData0 : {WIDTH{1'bz}};
-  assign data_d=(newRsSelect1 & ~rst & ~stall) ? newData1 : {WIDTH{1'bz}};
-  assign data_d=(newRsSelect2 & ~rst & ~stall) ? newData2 : {WIDTH{1'bz}};
+  assign data_d=(newRsSelect0 & ~rst & ~stall) ? newData0 : {WIDTH{{1{1'bz}}}};
+  assign data_d=(newRsSelect1 & ~rst & ~stall) ? newData1 : {WIDTH{{1{1'bz}}}};
+  assign data_d=(newRsSelect2 & ~rst & ~stall) ? newData2 : {WIDTH{{1{1'bz}}}};
 
-  assign data_d=rst ? {WIDTH{1'b0}} : {WIDTH{1'bz}};
+  assign data_d=rst ? {WIDTH{1'b0}} : {WIDTH{{1{1'bz}}}};
 
-  assign data_d=(data_en & ~stall) ? {WIDTH{1'bz}} : data_q;
+  assign data_d=(data_en & ~stall) ? {WIDTH{{1{1'bz}}}} : data_q;
   
-  assign outData0_X=(outRsSelect0) ? data_q : {WIDTH{1'bz}};
-  assign outData1_X=(outRsSelect1) ? data_q : {WIDTH{1'bz}};
-  assign outData2_X=(outRsSelect2) ? data_q : {WIDTH{1'bz}};
+  assign outData0_X=(outRsSelect0) ? data_q : {WIDTH{{1{1'bz}}}};
+  assign outData1_X=(outRsSelect1) ? data_q : {WIDTH{{1{1'bz}}}};
+  assign outData2_X=(outRsSelect2) ? data_q : {WIDTH{{1{1'bz}}}};
 
   always @(posedge clk)
     begin
@@ -1644,19 +1644,19 @@ module rs_nonWakeUp_array(
               outRsSelect2[k+8*j],outData2k
               );
           end
-          assign outData0_X=outBank0[j] ? outData0k : {WIDTH{1'BZ}};
-          assign outData1_X=outBank1[j] ? outData1k : {WIDTH{1'BZ}};
-          assign outData2_X=outBank2[j] ? outData2k : {WIDTH{1'BZ}};
+          assign outData0_X=outBank0[j] ? outData0k : {WIDTH{{1{1'bz}}}};
+          assign outData1_X=outBank1[j] ? outData1k : {WIDTH{{1{1'bz}}}};
+          assign outData2_X=outBank2[j] ? outData2k : {WIDTH{{1{1'bz}}}};
 
-          assign outData0k=outBank0[j] ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-          assign outData1k=outBank1[j] ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-          assign outData2k=outBank2[j] ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+          assign outData0k=outBank0[j] ? {WIDTH{{1{1'bz}}}} : {WIDTH{1'B0}};
+          assign outData1k=outBank1[j] ? {WIDTH{{1{1'bz}}}} : {WIDTH{1'B0}};
+          assign outData2k=outBank2[j] ? {WIDTH{{1{1'bz}}}} : {WIDTH{1'B0}};
       end
   endgenerate
 
-  assign outData0_X=outFound0 ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-  assign outData1_X=outFound1 ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-  assign outData2_X=outFound2 ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+  assign outData0_X=outFound0 ? {WIDTH{{1{1'bz}}}} : {WIDTH{1'B0}};
+  assign outData1_X=outFound1 ? {WIDTH{{1{1'bz}}}} : {WIDTH{1'B0}};
+  assign outData2_X=outFound2 ? {WIDTH{{1{1'bz}}}} : {WIDTH{1'B0}};
   
 endmodule
 
@@ -1688,13 +1688,13 @@ module rs_nonWakeUp_datad_DFF(
 
   assign data_en=|{newRsSelect0,newRsSelect1,newRsSelect2,rst};
 
-  assign data_d=(newRsSelect0 & ~rst & ~stall) ? ~newData0 : {WIDTH{1'bz}};
-  assign data_d=(newRsSelect1 & ~rst & ~stall) ? ~newData1 : {WIDTH{1'bz}};
-  assign data_d=(newRsSelect2 & ~rst & ~stall) ? ~newData2 : {WIDTH{1'bz}};
+  assign data_d=(newRsSelect0 & ~rst & ~stall) ? ~newData0 : {WIDTH{{1{1'bz}}}};
+  assign data_d=(newRsSelect1 & ~rst & ~stall) ? ~newData1 : {WIDTH{{1{1'bz}}}};
+  assign data_d=(newRsSelect2 & ~rst & ~stall) ? ~newData2 : {WIDTH{{1{1'bz}}}};
 
-  assign data_d=rst ? {WIDTH{1'b1}} : {WIDTH{1'bz}};
+  assign data_d=rst ? {WIDTH{1'b1}} : {WIDTH{{1{1'bz}}}};
 
-  assign data_d=(data_en & ~stall) ? {WIDTH{1'bz}} : data_q;
+  assign data_d=(data_en & ~stall) ? {WIDTH{{1{1'bz}}}} : data_q;
 
   always @(posedge clk)
     begin
@@ -1926,10 +1926,10 @@ module rs_buf(
   assign unCheckA=(fuFwdA==4'd0 && ~FU0Hit) | (fuFwdA==4'd1 && ~FU1Hit) | (fuFwdA==4'd2 && ~FU2Hit) | (fuFwdA==4'd3 && ~FU3Hit);
   assign unCheckB=(fuFwdB==4'd0 && ~FU0Hit) | (fuFwdB==4'd1 && ~FU1Hit) | (fuFwdB==4'd2 && ~FU2Hit) | (fuFwdB==4'd3 && ~FU3Hit);
 
-  assign portNo_new=(newRsSelect0 & ~stall) ? newPort0 : 4'bz;
-  assign portNo_new=(newRsSelect1 & ~stall) ? newPort1 : 4'bz;
-  assign portNo_new=(newRsSelect2 & ~stall) ? newPort2 : 4'bz;
-  assign portNo_new=(newRsSelectAny & ~stall) ? 4'bz : 4'b0;
+  assign portNo_new=(newRsSelect0 & ~stall) ? newPort0 : {4{1'bz}};
+  assign portNo_new=(newRsSelect1 & ~stall) ? newPort1 : {4{1'bz}};
+  assign portNo_new=(newRsSelect2 & ~stall) ? newPort2 : {4{1'bz}};
+  assign portNo_new=(newRsSelectAny & ~stall) ? {4{1'bz}} : 4'b0;
 
 
   assign port0_en=stall_n & newRsSelectAny || outRsSelect0 &~unFwdCheck || nonDataRst0;
@@ -1944,29 +1944,29 @@ module rs_buf(
   
 
 
-  assign dataAPending_new=(newRsSelect0 & ~stall) ? newANeeded0 : 1'bz;
-  assign dataAPending_new=(newRsSelect1 & ~stall) ? newANeeded1 : 1'bz;
-  assign dataAPending_new=(newRsSelect2 & ~stall) ? newANeeded2 : 1'bz;
-  assign dataAPending_new=(newRsSelectAny & ~stall) ? 1'bz : 1'b0;
+  assign dataAPending_new=(newRsSelect0 & ~stall) ? newANeeded0 : {1{1'bz}};
+  assign dataAPending_new=(newRsSelect1 & ~stall) ? newANeeded1 : {1{1'bz}};
+  assign dataAPending_new=(newRsSelect2 & ~stall) ? newANeeded2 : {1{1'bz}};
+  assign dataAPending_new=(newRsSelectAny & ~stall) ? {1{1'bz}} : 1'b0;
   
   assign dataAPending_en=newRsSelectAny | nonDataRst0 | unCheckA || dataAPending_gather ;
   assign dataAPending_d=newRsSelectAny ? dataAPending_new & ~nonDataRst0 & stall_n & ~dataAPending_gather:
     (~dataAPending_gather & dataAPending_q || unCheckA) & ~nonDataRst0;
   
-  assign dataBPending_new=(newRsSelect0 & ~stall) ? newBNeeded0 : 1'bz;
-  assign dataBPending_new=(newRsSelect1 & ~stall) ? newBNeeded1 : 1'bz;
-  assign dataBPending_new=(newRsSelect2 & ~stall) ? newBNeeded2 : 1'bz;
-  assign dataBPending_new=(newRsSelectAny & ~stall) ? 1'bz : 1'b0;
+  assign dataBPending_new=(newRsSelect0 & ~stall) ? newBNeeded0 : {1{1'bz}};
+  assign dataBPending_new=(newRsSelect1 & ~stall) ? newBNeeded1 : {1{1'bz}};
+  assign dataBPending_new=(newRsSelect2 & ~stall) ? newBNeeded2 : {1{1'bz}};
+  assign dataBPending_new=(newRsSelectAny & ~stall) ? {1{1'bz}} : 1'b0;
 
   assign dataBPending_en=newRsSelectAny  | nonDataRst0 | unCheckB || dataBPending_gather;
   assign dataBPending_d=newRsSelectAny ? dataBPending_new & ~nonDataRst0 & stall_n & ~dataBPending_gather:
     (~dataBPending_gather & dataBPending_q || unCheckB) & ~nonDataRst0;
 
 
-  assign dataSPending_new=(newRsSelect0 & ~stall) ? newSNeeded0 : 1'bz;
-  assign dataSPending_new=(newRsSelect1 & ~stall) ? newSNeeded1 : 1'bz;
-  assign dataSPending_new=(newRsSelect2 & ~stall) ? newSNeeded2 : 1'bz;
-  assign dataSPending_new=(newRsSelectAny & ~stall) ? 1'bz : 1'b0;
+  assign dataSPending_new=(newRsSelect0 & ~stall) ? newSNeeded0 : {1{1'bz}};
+  assign dataSPending_new=(newRsSelect1 & ~stall) ? newSNeeded1 : {1{1'bz}};
+  assign dataSPending_new=(newRsSelect2 & ~stall) ? newSNeeded2 : {1{1'bz}};
+  assign dataSPending_new=(newRsSelectAny & ~stall) ? {1{1'bz}} : 1'b0;
 
   assign dataSPending_en=newRsSelectAny  | nonDataRst0 || dataSPending_gather;
   assign dataSPending_d=newRsSelectAny ? dataSPending_new & ~nonDataRst0 & stall_n & ~dataSPending_gather:
@@ -1978,17 +1978,17 @@ module rs_buf(
 
 //outputs use inverting 3-state buffer, because it's faster and smaller than non-inverting
 // issue port 0 -agu
-  assign outDataEn0_X=outRsSelect0 ? {4{~unFwdCheck}} &{FP_q,Vec_q,~FP_q&~Vec_q,1'b1} : 4'bz;
-  assign outThread0_X=outRsSelect0 ? thread_q : 1'bz;
+  assign outDataEn0_X=outRsSelect0 ? {4{~unFwdCheck}} &{FP_q,Vec_q,~FP_q&~Vec_q,1'b1} : {4{1'bz}};
+  assign outThread0_X=outRsSelect0 ? thread_q : {1{1'bz}};
   
 // issue port 1 - alu 1
-  assign outDataEn1_X=outRsSelect1 ? {4{~unFwdCheck}} &{FP_q,Vec_q,~FP_q&~Vec_q,1'b1} : 4'bz;
-  assign outThread1_X=outRsSelect1 ? thread_q : 1'bz;
+  assign outDataEn1_X=outRsSelect1 ? {4{~unFwdCheck}} &{FP_q,Vec_q,~FP_q&~Vec_q,1'b1} : {4{1'bz}};
+  assign outThread1_X=outRsSelect1 ? thread_q : {1{1'bz}};
  
   
 // issue port 2 - alu 2
-  assign outDataEn2_X=outRsSelect2 ? {4{~unFwdCheck}} &{FP_q,Vec_q,~FP_q&~Vec_q,1'b1} : 4'bz;
-  assign outThread2_X=outRsSelect2 ? thread_q : 1'bz;
+  assign outDataEn2_X=outRsSelect2 ? {4{~unFwdCheck}} &{FP_q,Vec_q,~FP_q&~Vec_q,1'b1} : {4{1'bz}};
+  assign outThread2_X=outRsSelect2 ? thread_q : {1{1'bz}};
 
 
 // end data output
@@ -2144,28 +2144,28 @@ module rs_array(
           bufFree[j*8+k]
           );
       end
-      assign outDataEn0a=outRsBank0[j] ? 4'bz : 4'b0;
-      assign outDataEn1a=outRsBank1[j] ? 4'bz : 4'b0;
-      assign outDataEn2a=outRsBank2[j] ? 4'bz : 4'b0;
-      assign outDataEn0_X=outRsBank0[j] ? outDataEn0a : 4'bz;
-      assign outDataEn1_X=outRsBank1[j] ? outDataEn1a : 4'bz;
-      assign outDataEn2_X=outRsBank2[j] ? outDataEn2a : 4'bz;
-      assign outThread0a=outRsBank0[j] ? 1'bz : 1'b0;
-      assign outThread1a=outRsBank1[j] ? 1'bz : 1'b0;
-      assign outThread2a=outRsBank2[j] ? 1'bz : 1'b0;
-      assign outThread0_X=outRsBank0[j] ? outThread0a : 1'bz;
-      assign outThread1_X=outRsBank1[j] ? outThread1a : 1'bz;
-      assign outThread2_X=outRsBank2[j] ? outThread2a : 1'bz;
+      assign outDataEn0a=outRsBank0[j] ? {4{1'bz}} : 4'b0;
+      assign outDataEn1a=outRsBank1[j] ? {4{1'bz}} : 4'b0;
+      assign outDataEn2a=outRsBank2[j] ? {4{1'bz}} : 4'b0;
+      assign outDataEn0_X=outRsBank0[j] ? outDataEn0a : {4{1'bz}};
+      assign outDataEn1_X=outRsBank1[j] ? outDataEn1a : {4{1'bz}};
+      assign outDataEn2_X=outRsBank2[j] ? outDataEn2a : {4{1'bz}};
+      assign outThread0a=outRsBank0[j] ? {1{1'bz}} : 1'b0;
+      assign outThread1a=outRsBank1[j] ? {1{1'bz}} : 1'b0;
+      assign outThread2a=outRsBank2[j] ? {1{1'bz}} : 1'b0;
+      assign outThread0_X=outRsBank0[j] ? outThread0a : {1{1'bz}};
+      assign outThread1_X=outRsBank1[j] ? outThread1a : {1{1'bz}};
+      assign outThread2_X=outRsBank2[j] ? outThread2a : {1{1'bz}};
       end
   endgenerate
 
-  assign outDataEn0_X=outFound0 ? 4'bz : 4'b0;
-  assign outDataEn1_X=outFound1 ? 4'bz : 4'b0;
-  assign outDataEn2_X=outFound2 ? 4'bz : 4'b0;
+  assign outDataEn0_X=outFound0 ? {4{1'bz}} : 4'b0;
+  assign outDataEn1_X=outFound1 ? {4{1'bz}} : 4'b0;
+  assign outDataEn2_X=outFound2 ? {4{1'bz}} : 4'b0;
 
-  assign outThread0_X=outFound0 ? 1'bz : 1'b0;
-  assign outThread1_X=outFound1 ? 1'bz : 1'b0;
-  assign outThread2_X=outFound2 ? 1'bz : 1'b0;
+  assign outThread0_X=outFound0 ? {1{1'bz}} : 1'b0;
+  assign outThread1_X=outFound1 ? {1{1'bz}} : 1'b0;
+  assign outThread2_X=outFound2 ? {1{1'bz}} : 1'b0;
 
 endmodule
 

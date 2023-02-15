@@ -60,15 +60,15 @@ module WQ_wakeUP_logic(
 
   assign newRsSelectAny=newRsSelect0|newRsSelect1|newRsSelect2;
 
-  assign WQ_d=newRsSelect0 ? newWQ0 : 6'bz;
-  assign WQ_d=newRsSelect1 ? newWQ1 : 6'bz;
-  assign WQ_d=newRsSelect2 ? newWQ2 : 6'bz;
-  assign WQ_d=~newRsSelectAny ? WQ : 6'bz;
+  assign WQ_d=newRsSelect0 ? newWQ0 : {6{1'bz}};
+  assign WQ_d=newRsSelect1 ? newWQ1 : {6{1'bz}};
+  assign WQ_d=newRsSelect2 ? newWQ2 : {6{1'bz}};
+  assign WQ_d=~newRsSelectAny ? WQ : {6{1'bz}};
   
-  assign port_en_d=newRsSelect0&~stall ? newPortEn0&~isData : 1'bz;
-  assign port_en_d=newRsSelect1&~stall ? newPortEn1&~isData : 1'bz;
-  assign port_en_d=newRsSelect2&~stall ? newPortEn2&~isData : 1'bz;
-  assign port_en_d=~newRsSelectAny|stall ? port_en&~isData : 1'bz;
+  assign port_en_d=newRsSelect0&~stall ? newPortEn0&~isData : {1{1'bz}};
+  assign port_en_d=newRsSelect1&~stall ? newPortEn1&~isData : {1{1'bz}};
+  assign port_en_d=newRsSelect2&~stall ? newPortEn2&~isData : {1{1'bz}};
+  assign port_en_d=~newRsSelectAny|stall ? port_en&~isData : {1{1'bz}};
   
   assign eq[0]=(WQ==FUWQ0) & FUWQen0 & port_en & ~newRsSelect0 & ~newRsSelect1 & ~newRsSelect2;
   assign eq[1]=(WQ==FUWQ1) & FUWQen1 & port_en & ~newRsSelect0 & ~newRsSelect1 & ~newRsSelect2;
@@ -324,10 +324,10 @@ module rss_buf(
   assign unCheckA=(fuFwdA==4'd0 && ~FU0Hit) | (fuFwdA==4'd1 && ~FU1Hit) | (fuFwdA==4'd2 && ~FU2Hit) | (fuFwdA==4'd3 && ~FU3Hit);
   assign unCheckB=(fuFwdB==4'd0 && ~FU0Hit) | (fuFwdB==4'd1 && ~FU1Hit) | (fuFwdB==4'd2 && ~FU2Hit) | (fuFwdB==4'd3 && ~FU3Hit);
 
-  assign portNo_new=(newRsSelect0 & ~stall) ? newPort0 : 9'bz;
-  assign portNo_new=(newRsSelect1 & ~stall) ? newPort1 : 9'bz;
-  assign portNo_new=(newRsSelect2 & ~stall) ? newPort2 : 9'bz;
-  assign portNo_new=(newRsSelectAny & ~stall) ? 9'bz : 9'b0;
+  assign portNo_new=(newRsSelect0 & ~stall) ? newPort0 : {9{1'bz}};
+  assign portNo_new=(newRsSelect1 & ~stall) ? newPort1 : {9{1'bz}};
+  assign portNo_new=(newRsSelect2 & ~stall) ? newPort2 : {9{1'bz}};
+  assign portNo_new=(newRsSelectAny & ~stall) ? {9{1'bz}} : 9'b0;
 
 
   assign port0_en=stall_n & newRsSelectAny || outRsSelect0 &~unFwdCheck || nonDataRst0;
@@ -339,19 +339,19 @@ module rss_buf(
   
 
 
-  assign dataAPending_new=(newRsSelect0 & ~stall) ? newANeeded0 : 1'bz;
-  assign dataAPending_new=(newRsSelect1 & ~stall) ? newANeeded1 : 1'bz;
-  assign dataAPending_new=(newRsSelect2 & ~stall) ? newANeeded2 : 1'bz;
-  assign dataAPending_new=(newRsSelectAny & ~stall) ? 1'bz : 1'b0;
+  assign dataAPending_new=(newRsSelect0 & ~stall) ? newANeeded0 : {1{1'bz}};
+  assign dataAPending_new=(newRsSelect1 & ~stall) ? newANeeded1 : {1{1'bz}};
+  assign dataAPending_new=(newRsSelect2 & ~stall) ? newANeeded2 : {1{1'bz}};
+  assign dataAPending_new=(newRsSelectAny & ~stall) ? {1{1'bz}} : 1'b0;
   
   assign dataAPending_en=newRsSelectAny | nonDataRst0 | unCheckA || dataAPending_gather ;
   assign dataAPending_d=newRsSelectAny ? dataAPending_new & ~nonDataRst0 & stall_n & ~dataAPending_gather:
     (~dataAPending_gather & dataAPending_q || unCheckA) & ~nonDataRst0;
   
-  assign dataBPending_new=(newRsSelect0 & ~stall) ? newBNeeded0 : 1'bz;
-  assign dataBPending_new=(newRsSelect1 & ~stall) ? newBNeeded1 : 1'bz;
-  assign dataBPending_new=(newRsSelect2 & ~stall) ? newBNeeded2 : 1'bz;
-  assign dataBPending_new=(newRsSelectAny & ~stall) ? 1'bz : 1'b0;
+  assign dataBPending_new=(newRsSelect0 & ~stall) ? newBNeeded0 : {1{1'bz}};
+  assign dataBPending_new=(newRsSelect1 & ~stall) ? newBNeeded1 : {1{1'bz}};
+  assign dataBPending_new=(newRsSelect2 & ~stall) ? newBNeeded2 : {1{1'bz}};
+  assign dataBPending_new=(newRsSelectAny & ~stall) ? {1{1'bz}} : 1'b0;
 
   assign dataBPending_en=newRsSelectAny  | nonDataRst0 | unCheckB || dataBPending_gather;
   assign dataBPending_d=newRsSelectAny ? dataBPending_new & ~nonDataRst0 & stall_n & ~dataBPending_gather:
@@ -364,15 +364,15 @@ module rss_buf(
 
 //outputs use inverting 3-state buffer, because it's faster and smaller than non-inverting
 // issue port 0 -agu
-  assign outDataEn0_X=outRsSelect0 ? {4{~unFwdCheck}} &{3'b1,1'b1} : 4'bz;
-  assign outThread0_X=outRsSelect0 ? thread_q : 1'bz;
-  assign outZeroB0_X=outRsSelect0 ? 1'b0 : 1'bz;
+  assign outDataEn0_X=outRsSelect0 ? {4{~unFwdCheck}} &{3'b1,1'b1} : {4{1'bz}};
+  assign outThread0_X=outRsSelect0 ? thread_q : {1{1'bz}};
+  assign outZeroB0_X=outRsSelect0 ? 1'b0 : {1{1'bz}};
   
   
 // issue port 2 - agu 2
-  assign outDataEn2_X=outRsSelect2 ? {4{~unFwdCheck}} &{3'b1,1'b1} : 4'bz;
-  assign outThread2_X=outRsSelect2 ? thread_q : 1'bz;
-  assign outZeroA2_X=outRsSelect2 ? 1'b0 : 1'bz;
+  assign outDataEn2_X=outRsSelect2 ? {4{~unFwdCheck}} &{3'b1,1'b1} : {4{1'bz}};
+  assign outThread2_X=outRsSelect2 ? thread_q : {1{1'bz}};
+  assign outZeroA2_X=outRsSelect2 ? 1'b0 : {1{1'bz}};
 
 
 // end data output
@@ -572,10 +572,10 @@ module rss_D_buf(
   
   assign unCheckA=(fuFwdA==4'd0 && ~FU0Hit) | (fuFwdA==4'd1 && ~FU1Hit) | (fuFwdA==4'd2 && ~FU2Hit) | (fuFwdA==4'd3 && ~FU3Hit);
 
-  assign portNo_new=(newRsSelect0 & ~stall) ? {newBNeeded0,newANeeded0,newPort0} : 9'bz;
-  assign portNo_new=(newRsSelect1 & ~stall) ? {newBNeeded1,newANeeded1,newPort1} : 9'bz;
-  assign portNo_new=(newRsSelect2 & ~stall) ? {newBNeeded2,newANeeded2,newPort2} : 9'bz;
-  assign portNo_new=(newRsSelectAny & ~stall) ? 9'bz : 9'b0;
+  assign portNo_new=(newRsSelect0 & ~stall) ? {newBNeeded0,newANeeded0,newPort0} : {9{1'bz}};
+  assign portNo_new=(newRsSelect1 & ~stall) ? {newBNeeded1,newANeeded1,newPort1} : {9{1'bz}};
+  assign portNo_new=(newRsSelect2 & ~stall) ? {newBNeeded2,newANeeded2,newPort2} : {9{1'bz}};
+  assign portNo_new=(newRsSelectAny & ~stall) ? {9{1'bz}} : 9'b0;
 
 
   assign port1A_en=stall_n & newRsSelectAny || outRsSelect1 &~unFwdCheck || nonDataRst0;
@@ -586,19 +586,19 @@ module rss_D_buf(
     port1B_q & (~outRsSelect1 | unFwdCheck)  & ~nonDataRst0;
   
 
-  assign dataAPending1_new=(newRsSelect0 & ~stall) ? newANeeded0 && (portNo_new[2])  : 1'bz;
-  assign dataAPending1_new=(newRsSelect1 & ~stall) ? newANeeded1 && (portNo_new[2])  : 1'bz;
-  assign dataAPending1_new=(newRsSelect2 & ~stall) ? newANeeded2 && (portNo_new[2])  : 1'bz;
-  assign dataAPending1_new=(newRsSelectAny & ~stall) ? 1'bz : 1'b0;
+  assign dataAPending1_new=(newRsSelect0 & ~stall) ? newANeeded0 && (portNo_new[2])  : {1{1'bz}};
+  assign dataAPending1_new=(newRsSelect1 & ~stall) ? newANeeded1 && (portNo_new[2])  : {1{1'bz}};
+  assign dataAPending1_new=(newRsSelect2 & ~stall) ? newANeeded2 && (portNo_new[2])  : {1{1'bz}};
+  assign dataAPending1_new=(newRsSelectAny & ~stall) ? {1{1'bz}} : 1'b0;
   
   assign dataAPending1_en=newRsSelectAny | nonDataRst0 | unCheckA || dataAPending1_gather ;
   assign dataAPending1_d=newRsSelectAny ? dataAPending1_new & ~nonDataRst0 & stall_n & ~dataAPending1_gather:
     (~dataAPending1_gather & dataAPending1_q || unCheckA) & ~nonDataRst0;
   
-  assign dataBPending1_new=(newRsSelect0 & ~stall) ? newBNeeded0 && (portNo_new[2])  : 1'bz;
-  assign dataBPending1_new=(newRsSelect1 & ~stall) ? newBNeeded1 && (portNo_new[2])  : 1'bz;
-  assign dataBPending1_new=(newRsSelect2 & ~stall) ? newBNeeded2 && (portNo_new[2])  : 1'bz;
-  assign dataBPending1_new=(newRsSelectAny & ~stall) ? 1'bz : 1'b0;
+  assign dataBPending1_new=(newRsSelect0 & ~stall) ? newBNeeded0 && (portNo_new[2])  : {1{1'bz}};
+  assign dataBPending1_new=(newRsSelect1 & ~stall) ? newBNeeded1 && (portNo_new[2])  : {1{1'bz}};
+  assign dataBPending1_new=(newRsSelect2 & ~stall) ? newBNeeded2 && (portNo_new[2])  : {1{1'bz}};
+  assign dataBPending1_new=(newRsSelectAny & ~stall) ? {1{1'bz}} : 1'b0;
   
   assign dataBPending1_en=newRsSelectAny | nonDataRst0 | | dataBPending1_gather ;
   assign dataBPending1_d=newRsSelectAny ? dataBPending1_new & ~nonDataRst0 & stall_n & ~dataBPending1_gather:
@@ -608,8 +608,8 @@ module rss_D_buf(
 	
   
 // issue port 1 - data
-  assign outDataEn1_X=outRsSelect1 ? {4{~unFwdCheck}} &{FPB_q,VecB_q,~FPB_q&~VecB_q,1'b1} : 4'bz;
-  assign outThread1_X=outRsSelect1 ? thread_q : 1'bz;
+  assign outDataEn1_X=outRsSelect1 ? {4{~unFwdCheck}} &{FPB_q,VecB_q,~FPB_q&~VecB_q,1'b1} : {4{1'bz}};
+  assign outThread1_X=outRsSelect1 ? thread_q : {1{1'bz}};
  
   
 // end data output
@@ -750,29 +750,29 @@ module rss_array(
               bufFree[j*8+k]
               );
           end
-          assign outDataEn0a=outRsBank0[j] ? 4'bz : 4'b0;
-          assign outDataEn2a=outRsBank2[j] ? 4'bz : 4'b0;
-          assign outDataEn0_X=outRsBank0[j] ? outDataEn0a : 4'bz;
-          assign outDataEn2_X=outRsBank2[j] ? outDataEn2a : 4'bz;
-          assign outThread0a=outRsBank0[j] ? 1'bz : 1'b0;
-          assign outThread2a=outRsBank2[j] ? 1'bz : 1'b0;
-          assign outThread0_X=outRsBank0[j] ? outThread0a : 1'bz;
-          assign outThread2_X=outRsBank2[j] ? outThread2a : 1'bz;
-          assign outZeroB0a=outRsBank0[j] ? 1'bz : 1'b0;
-          assign outZeroA2a=outRsBank2[j] ? 1'bz : 1'b0;
-          assign outZeroB0_X=outRsBank0[j] ? outZeroB0a : 1'bz;
-          assign outZeroA2_X=outRsBank2[j] ? outZeroA2a : 1'bz;
+          assign outDataEn0a=outRsBank0[j] ? {4{1'bz}} : 4'b0;
+          assign outDataEn2a=outRsBank2[j] ? {4{1'bz}} : 4'b0;
+          assign outDataEn0_X=outRsBank0[j] ? outDataEn0a : {4{1'bz}};
+          assign outDataEn2_X=outRsBank2[j] ? outDataEn2a : {4{1'bz}};
+          assign outThread0a=outRsBank0[j] ? {1{1'bz}} : 1'b0;
+          assign outThread2a=outRsBank2[j] ? {1{1'bz}} : 1'b0;
+          assign outThread0_X=outRsBank0[j] ? outThread0a : {1{1'bz}};
+          assign outThread2_X=outRsBank2[j] ? outThread2a : {1{1'bz}};
+          assign outZeroB0a=outRsBank0[j] ? {1{1'bz}} : 1'b0;
+          assign outZeroA2a=outRsBank2[j] ? {1{1'bz}} : 1'b0;
+          assign outZeroB0_X=outRsBank0[j] ? outZeroB0a : {1{1'bz}};
+          assign outZeroA2_X=outRsBank2[j] ? outZeroA2a : {1{1'bz}};
       end
   endgenerate
 
-  assign outDataEn0_X=outFound0 ? 4'bz : 4'b0;
-  assign outDataEn2_X=outFound2 ? 4'bz : 4'b0;
+  assign outDataEn0_X=outFound0 ? {4{1'bz}} : 4'b0;
+  assign outDataEn2_X=outFound2 ? {4{1'bz}} : 4'b0;
 
-  assign outThread0_X=outFound0 ? 1'bz : 1'b0;
-  assign outThread2_X=outFound2 ? 1'bz : 1'b0;
+  assign outThread0_X=outFound0 ? {1{1'bz}} : 1'b0;
+  assign outThread2_X=outFound2 ? {1{1'bz}} : 1'b0;
 
-  assign outZeroB0_X=outFound0 ? 1'bz : 1'b0;
-  assign outZeroA2_X=outFound2 ? 1'bz : 1'b0;
+  assign outZeroB0_X=outFound0 ? {1{1'bz}} : 1'b0;
+  assign outZeroA2_X=outFound2 ? {1{1'bz}} : 1'b0;
 
 endmodule
 
@@ -874,16 +874,16 @@ module rss_D_array(
               bufFree[j*8+k]
               );
           end
-          assign outDataEn1a=outRsBank1[j] ? 4'bz : 4'b0;
-          assign outDataEn1_X=outRsBank1[j] ? outDataEn1a : 4'bz;
-          assign outThread1a=outRsBank1[j] ? 1'bz : 1'b0;
-          assign outThread1_X=outRsBank1[j] ? outThread1a : 1'bz;
+          assign outDataEn1a=outRsBank1[j] ? {4{1'bz}} : 4'b0;
+          assign outDataEn1_X=outRsBank1[j] ? outDataEn1a : {4{1'bz}};
+          assign outThread1a=outRsBank1[j] ? {1{1'bz}} : 1'b0;
+          assign outThread1_X=outRsBank1[j] ? outThread1a : {1{1'bz}};
       end
   endgenerate
 
-  assign outDataEn1_X=outFound1 ? 4'bz : 4'b0;
+  assign outDataEn1_X=outFound1 ? {4{1'bz}} : 4'b0;
 
-  assign outThread1_X=outFound1 ? 1'bz : 1'b0;
+  assign outThread1_X=outFound1 ? {1{1'bz}} : 1'b0;
 
 endmodule
 
