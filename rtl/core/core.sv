@@ -2036,10 +2036,10 @@ module heptane_core(
     end
   end
   
-  initial begin
-    $dumpfile("~/dump.fst");
-    $dumpvars;
-  end
+//  initial begin
+//    $dumpfile("~/dump.fst");
+//    $dumpvars;
+//  end
 endmodule
 
 

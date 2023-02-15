@@ -2473,7 +2473,7 @@ int main(int argc, char *argv[]) {
 	perror("open() ");
     }
     prog_locate(reqs,(unsigned char *)mem);
-    Verilated::traceEverOn(true);
+//    Verilated::traceEverOn(true);
     req_set(top,reqs,mem,memp);
     top->eval();
     top->clk=1;
