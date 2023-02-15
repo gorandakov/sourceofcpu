@@ -117,15 +117,15 @@ module rrf_buf(
   
   assign data=~data0;
   
-  assign read0_data=(read0_addr==INDEX) ? ~data : {DATA_WIDTH{{1{1'bz}}}};
-  assign read1_data=(read1_addr==INDEX) ? ~data : {DATA_WIDTH{{1{1'bz}}}};
-  assign read2_data=(read2_addr==INDEX) ? ~data : {DATA_WIDTH{{1{1'bz}}}};
-  assign read3_data=(read3_addr==INDEX) ? ~data : {DATA_WIDTH{{1{1'bz}}}};
-  assign read4_data=(read4_addr==INDEX) ? ~data : {DATA_WIDTH{{1{1'bz}}}};
-  assign read5_data=(read5_addr==INDEX) ? ~data : {DATA_WIDTH{{1{1'bz}}}};
-  assign read6_data=(read6_addr==INDEX) ? ~data : {DATA_WIDTH{{1{1'bz}}}};
-  assign read7_data=(read7_addr==INDEX) ? ~data : {DATA_WIDTH{{1{1'bz}}}};
-  assign read8_data=(read8_addr==INDEX) ? ~data : {DATA_WIDTH{{1{1'bz}}}};
+  assign read0_data=(read0_addr==INDEX) ? ~data : {DATA_WIDTH{1'BZ}};
+  assign read1_data=(read1_addr==INDEX) ? ~data : {DATA_WIDTH{1'BZ}};
+  assign read2_data=(read2_addr==INDEX) ? ~data : {DATA_WIDTH{1'BZ}};
+  assign read3_data=(read3_addr==INDEX) ? ~data : {DATA_WIDTH{1'BZ}};
+  assign read4_data=(read4_addr==INDEX) ? ~data : {DATA_WIDTH{1'BZ}};
+  assign read5_data=(read5_addr==INDEX) ? ~data : {DATA_WIDTH{1'BZ}};
+  assign read6_data=(read6_addr==INDEX) ? ~data : {DATA_WIDTH{1'BZ}};
+  assign read7_data=(read7_addr==INDEX) ? ~data : {DATA_WIDTH{1'BZ}};
+  assign read8_data=(read8_addr==INDEX) ? ~data : {DATA_WIDTH{1'BZ}};
   
   assign write0_hit=write0_wen && write0_addr==INDEX;
   assign write1_hit=write1_wen && write1_addr==INDEX;
@@ -139,16 +139,16 @@ module rrf_buf(
   assign write_hit=write0_hit | write1_hit | write2_hit | write3_hit | write4_hit
     | write5_hit | write6_hit  | write7_hit | write8_hit;
 
-  assign wData=(write0_hit) ? write0_data : {DATA_WIDTH{{1{1'bz}}}};
-  assign wData=(write1_hit) ? write1_data : {DATA_WIDTH{{1{1'bz}}}};
-  assign wData=(write2_hit) ? write2_data : {DATA_WIDTH{{1{1'bz}}}};
-  assign wData=(write3_hit) ? write3_data : {DATA_WIDTH{{1{1'bz}}}};
-  assign wData=(write4_hit) ? write4_data : {DATA_WIDTH{{1{1'bz}}}};
-  assign wData=(write5_hit) ? write5_data : {DATA_WIDTH{{1{1'bz}}}};
-  assign wData=(write6_hit) ? write6_data : {DATA_WIDTH{{1{1'bz}}}};
-  assign wData=(write7_hit) ? write7_data : {DATA_WIDTH{{1{1'bz}}}};
-  assign wData=(write8_hit) ? write8_data : {DATA_WIDTH{{1{1'bz}}}};
-  assign wData=(write_hit) ? {DATA_WIDTH{{1{1'bz}}}} : {DATA_WIDTH{1'B0}};
+  assign wData=(write0_hit) ? write0_data : {DATA_WIDTH{1'BZ}};
+  assign wData=(write1_hit) ? write1_data : {DATA_WIDTH{1'BZ}};
+  assign wData=(write2_hit) ? write2_data : {DATA_WIDTH{1'BZ}};
+  assign wData=(write3_hit) ? write3_data : {DATA_WIDTH{1'BZ}};
+  assign wData=(write4_hit) ? write4_data : {DATA_WIDTH{1'BZ}};
+  assign wData=(write5_hit) ? write5_data : {DATA_WIDTH{1'BZ}};
+  assign wData=(write6_hit) ? write6_data : {DATA_WIDTH{1'BZ}};
+  assign wData=(write7_hit) ? write7_data : {DATA_WIDTH{1'BZ}};
+  assign wData=(write8_hit) ? write8_data : {DATA_WIDTH{1'BZ}};
+  assign wData=(write_hit) ? {DATA_WIDTH{1'BZ}} : {DATA_WIDTH{1'B0}};
 
   always @(posedge clk)
     begin
@@ -302,15 +302,15 @@ module rrf(
 
   genvar bufNo,tileNo;
   
-/*  assign read0_data=(read0_oe_reg) ? read0_data_ram : {DATA_WIDTH{{1{1'bz}}}};
-  assign read1_data=(read1_oe_reg) ? read1_data_ram : {DATA_WIDTH{{1{1'bz}}}};
-  assign read2_data=(read2_oe_reg) ? read2_data_ram : {DATA_WIDTH{{1{1'bz}}}};
-  assign read3_data=(read3_oe_reg) ? read3_data_ram : {DATA_WIDTH{{1{1'bz}}}};
-  assign read4_data=(read4_oe_reg) ? read4_data_ram : {DATA_WIDTH{{1{1'bz}}}};
-  assign read5_data=(read5_oe_reg) ? read5_data_ram : {DATA_WIDTH{{1{1'bz}}}};
-  assign read6_data=(read6_oe_reg) ? read6_data_ram : {DATA_WIDTH{{1{1'bz}}}};
-  assign read7_data=(read7_oe_reg) ? read7_data_ram : {DATA_WIDTH{{1{1'bz}}}};
-  assign read8_data=(read8_oe_reg) ? read8_data_ram : {DATA_WIDTH{{1{1'bz}}}};
+/*  assign read0_data=(read0_oe_reg) ? read0_data_ram : {DATA_WIDTH{1'BZ}};
+  assign read1_data=(read1_oe_reg) ? read1_data_ram : {DATA_WIDTH{1'BZ}};
+  assign read2_data=(read2_oe_reg) ? read2_data_ram : {DATA_WIDTH{1'BZ}};
+  assign read3_data=(read3_oe_reg) ? read3_data_ram : {DATA_WIDTH{1'BZ}};
+  assign read4_data=(read4_oe_reg) ? read4_data_ram : {DATA_WIDTH{1'BZ}};
+  assign read5_data=(read5_oe_reg) ? read5_data_ram : {DATA_WIDTH{1'BZ}};
+  assign read6_data=(read6_oe_reg) ? read6_data_ram : {DATA_WIDTH{1'BZ}};
+  assign read7_data=(read7_oe_reg) ? read7_data_ram : {DATA_WIDTH{1'BZ}};
+  assign read8_data=(read8_oe_reg) ? read8_data_ram : {DATA_WIDTH{1'BZ}};
 */  
   always @(posedge clk)
     begin
@@ -401,24 +401,24 @@ module rrf(
         write_thread
         );
     end
-        assign read0_data=(read0_addr_reg[5:4]==tileNo && read0_oe_reg) ? read0_data_ramA : {DATA_WIDTH{{1{1'bz}}}};
-        assign read1_data=(read1_addr_reg[5:4]==tileNo && read1_oe_reg) ? read1_data_ramA : {DATA_WIDTH{{1{1'bz}}}};
-        assign read2_data=(read2_addr_reg[5:4]==tileNo && read2_oe_reg) ? read2_data_ramA : {DATA_WIDTH{{1{1'bz}}}};
-        assign read3_data=(read3_addr_reg[5:4]==tileNo && read3_oe_reg) ? read3_data_ramA : {DATA_WIDTH{{1{1'bz}}}};
-        assign read4_data=(read4_addr_reg[5:4]==tileNo && read4_oe_reg) ? read4_data_ramA : {DATA_WIDTH{{1{1'bz}}}};
-        assign read5_data=(read5_addr_reg[5:4]==tileNo && read5_oe_reg) ? read5_data_ramA : {DATA_WIDTH{{1{1'bz}}}};
-        assign read6_data=(read6_addr_reg[5:4]==tileNo && read6_oe_reg) ? read6_data_ramA : {DATA_WIDTH{{1{1'bz}}}};
-        assign read7_data=(read7_addr_reg[5:4]==tileNo && read7_oe_reg) ? read7_data_ramA : {DATA_WIDTH{{1{1'bz}}}};
-        assign read8_data=(read8_addr_reg[5:4]==tileNo && read8_oe_reg) ? read8_data_ramA : {DATA_WIDTH{{1{1'bz}}}};
-        assign read0_dataN=(read0_addr_reg[5:4]==tileNo && read0_oe_reg) ? ~read0_data_ramA : {DATA_WIDTH{{1{1'bz}}}};
-        assign read1_dataN=(read1_addr_reg[5:4]==tileNo && read1_oe_reg) ? ~read1_data_ramA : {DATA_WIDTH{{1{1'bz}}}};
-        assign read2_dataN=(read2_addr_reg[5:4]==tileNo && read2_oe_reg) ? ~read2_data_ramA : {DATA_WIDTH{{1{1'bz}}}};
-        assign read3_dataN=(read3_addr_reg[5:4]==tileNo && read3_oe_reg) ? ~read3_data_ramA : {DATA_WIDTH{{1{1'bz}}}};
-        assign read4_dataN=(read4_addr_reg[5:4]==tileNo && read4_oe_reg) ? ~read4_data_ramA : {DATA_WIDTH{{1{1'bz}}}};
-        assign read5_dataN=(read5_addr_reg[5:4]==tileNo && read5_oe_reg) ? ~read5_data_ramA : {DATA_WIDTH{{1{1'bz}}}};
-        assign read6_dataN=(read6_addr_reg[5:4]==tileNo && read6_oe_reg) ? ~read6_data_ramA : {DATA_WIDTH{{1{1'bz}}}};
-        assign read7_dataN=(read7_addr_reg[5:4]==tileNo && read7_oe_reg) ? ~read7_data_ramA : {DATA_WIDTH{{1{1'bz}}}};
-        assign read8_dataN=(read8_addr_reg[5:4]==tileNo && read8_oe_reg) ? ~read8_data_ramA : {DATA_WIDTH{{1{1'bz}}}};
+        assign read0_data=(read0_addr_reg[5:4]==tileNo && read0_oe_reg) ? read0_data_ramA : {DATA_WIDTH{1'BZ}};
+        assign read1_data=(read1_addr_reg[5:4]==tileNo && read1_oe_reg) ? read1_data_ramA : {DATA_WIDTH{1'BZ}};
+        assign read2_data=(read2_addr_reg[5:4]==tileNo && read2_oe_reg) ? read2_data_ramA : {DATA_WIDTH{1'BZ}};
+        assign read3_data=(read3_addr_reg[5:4]==tileNo && read3_oe_reg) ? read3_data_ramA : {DATA_WIDTH{1'BZ}};
+        assign read4_data=(read4_addr_reg[5:4]==tileNo && read4_oe_reg) ? read4_data_ramA : {DATA_WIDTH{1'BZ}};
+        assign read5_data=(read5_addr_reg[5:4]==tileNo && read5_oe_reg) ? read5_data_ramA : {DATA_WIDTH{1'BZ}};
+        assign read6_data=(read6_addr_reg[5:4]==tileNo && read6_oe_reg) ? read6_data_ramA : {DATA_WIDTH{1'BZ}};
+        assign read7_data=(read7_addr_reg[5:4]==tileNo && read7_oe_reg) ? read7_data_ramA : {DATA_WIDTH{1'BZ}};
+        assign read8_data=(read8_addr_reg[5:4]==tileNo && read8_oe_reg) ? read8_data_ramA : {DATA_WIDTH{1'BZ}};
+        assign read0_dataN=(read0_addr_reg[5:4]==tileNo && read0_oe_reg) ? ~read0_data_ramA : {DATA_WIDTH{1'BZ}};
+        assign read1_dataN=(read1_addr_reg[5:4]==tileNo && read1_oe_reg) ? ~read1_data_ramA : {DATA_WIDTH{1'BZ}};
+        assign read2_dataN=(read2_addr_reg[5:4]==tileNo && read2_oe_reg) ? ~read2_data_ramA : {DATA_WIDTH{1'BZ}};
+        assign read3_dataN=(read3_addr_reg[5:4]==tileNo && read3_oe_reg) ? ~read3_data_ramA : {DATA_WIDTH{1'BZ}};
+        assign read4_dataN=(read4_addr_reg[5:4]==tileNo && read4_oe_reg) ? ~read4_data_ramA : {DATA_WIDTH{1'BZ}};
+        assign read5_dataN=(read5_addr_reg[5:4]==tileNo && read5_oe_reg) ? ~read5_data_ramA : {DATA_WIDTH{1'BZ}};
+        assign read6_dataN=(read6_addr_reg[5:4]==tileNo && read6_oe_reg) ? ~read6_data_ramA : {DATA_WIDTH{1'BZ}};
+        assign read7_dataN=(read7_addr_reg[5:4]==tileNo && read7_oe_reg) ? ~read7_data_ramA : {DATA_WIDTH{1'BZ}};
+        assign read8_dataN=(read8_addr_reg[5:4]==tileNo && read8_oe_reg) ? ~read8_data_ramA : {DATA_WIDTH{1'BZ}};
     end
   endgenerate
 

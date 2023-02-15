@@ -1530,8 +1530,8 @@ module agu_block(
   add_agu aadd5(uu_base5,u5_const_reg,uu_index5,p5_cmplxAddr_d,p5_sec_in,
     p5_ndiff,~p5_mex_en,u5_sh_reg);
 
-  assign p4_cmplxAddr_d=p4_mex_en ? {5'b11111,7'b0,7'h7f,1'b1,p4_mex_addr} : {64{1'bz}};
-  assign p5_cmplxAddr_d=p5_mex_en ? {5'b11111,7'b0,7'h7f,1'b1,p5_mex_addr} : {64{1'bz}};
+  assign p4_cmplxAddr_d=p4_mex_en ? {5'b11111,7'b0,7'h7f,1'b1,p4_mex_addr} : 64'bz;
+  assign p5_cmplxAddr_d=p5_mex_en ? {5'b11111,7'b0,7'h7f,1'b1,p5_mex_addr} : 64'bz;
 
   sagu Wagu_mod(
   .clk(clk),

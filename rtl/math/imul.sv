@@ -83,23 +83,23 @@ module imul(
   assign resp=~^Res_reg[7:0];
 
   assign flg=and1_reg4 && ~upper_reg4 ? {|dummy2_reg,~(&dummy2_reg&Res_reg[63]
-    || ~|dummy2_reg&~Res_reg[63]),1'b0,Res_reg[63],resz,resp} : {6{1'bz}}; 
+    || ~|dummy2_reg&~Res_reg[63]),1'b0,Res_reg[63],resz,resp} : 6'bz; 
   assign flg=and1_reg4 && upper_reg4 ? {|Res_reg,~(&Res_reg&dummy_reg[63]
-    || ~|Res_reg&~dummy_reg[63]),1'b0,Res_reg[63],resz&~|dummy_reg,~^dummy_reg[7:0]} : {6{1'bz}}; 
+    || ~|Res_reg&~dummy_reg[63]),1'b0,Res_reg[63],resz&~|dummy_reg,~^dummy_reg[7:0]} : 6'bz; 
   assign flg=~and1_reg4 && ~short_reg4 ? {|Res_reg[63:32],~(&Res_reg[63:31]||
-   ~|Res_reg[63:31]),1'b0,Res_reg[63],resz,resp} : {6{1'bz}};
+   ~|Res_reg[63:31]),1'b0,Res_reg[63],resz,resp} : 6'bz;
   assign flg=~and1_reg4 && short_reg4 ? {|resx_reg,~(&resx_reg&Res_reg[31] ||
-    ~|resx_reg&~Res_reg[31]),1'b0,Res_reg[31],resz,resp} : {6{1'bz}};
+    ~|resx_reg&~Res_reg[31]),1'b0,Res_reg[31],resz,resp} : 6'bz;
 
- // assign Res[64]=~bnd_reg3 ? 1'b0 : {1{1'bz}};
- // assign Res=bnd_reg3 ? resB : {65{1'bz}};
+ // assign Res[64]=~bnd_reg3 ? 1'b0 : 1'bz;
+ // assign Res=bnd_reg3 ? resB : 65'bz;
 
   icompr cmp_mod(clk,clkEn,R[63:0],C[63:0],A_out,B_out,and1,is_sig,sig,sm_sig);
   adder2oM #(128) add_mod(A_out_reg,B_out_reg,{dummy2,Res[63:0]},{Res[63:0],dummy},
     resx,1'b0,~upper_reg3&~is_sec_reg3,upper_reg3,short_reg3,,,,);
 
-  assign Res[64:0]=is_sec_reg3 ? {ptr_reg2,sec_res_reg2} : {1'b0,{64{1'bz}}};
-  assign Res[63:0]=is_swp_reg3 ? swp_res_reg2 : {64{1'bz}};
+  assign Res[64:0]=is_sec_reg3 ? {ptr_reg2,sec_res_reg2} : {1'b0,64'bz};
+  assign Res[63:0]=is_swp_reg3 ? swp_res_reg2 : 64'bz;
   assign swp_res=is_swp[0] ? {32'b0,R[7:0],R[15:8],R[23:16],R[31:24]}: 
 	  {R[7:0],R[15:8],R[23:16],R[31:24],R[39:32],R[47:40],R[55:48],R[63:56]};
 

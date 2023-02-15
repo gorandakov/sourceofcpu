@@ -239,13 +239,13 @@ module dcache2_bank(
   reg read_odd_reg;
   reg ins_hit_reg;
 
-  assign read_dataP=(read_en_reg|ins_hit_reg && ~read_odd_reg) ? read_data_ram[0] : {DATA_WIDTH{{1{1'bz}}}};
-  assign read_dataP=(read_en_reg|ins_hit_reg && read_odd_reg) ? read_data_ram[1] : {DATA_WIDTH{{1{1'bz}}}};
-  assign read_dataP=(~(read_en_reg|ins_hit_reg)) ? {DATA_WIDTH{1'B0}} : {DATA_WIDTH{{1{1'bz}}}};  
+  assign read_dataP=(read_en_reg|ins_hit_reg && ~read_odd_reg) ? read_data_ram[0] : {DATA_WIDTH{1'bz}};
+  assign read_dataP=(read_en_reg|ins_hit_reg && read_odd_reg) ? read_data_ram[1] : {DATA_WIDTH{1'bz}};
+  assign read_dataP=(~(read_en_reg|ins_hit_reg)) ? {DATA_WIDTH{1'B0}} : {DATA_WIDTH{1'BZ}};  
 
-  assign read_dataxP=(read_en_reg|ins_hit_reg && ~read_odd_reg) ? read_datax_ram[0] : {DATA_WIDTH{{1{1'bz}}}};
-  assign read_dataxP=(read_en_reg|ins_hit_reg && read_odd_reg) ? read_datax_ram[1] : {DATA_WIDTH{{1{1'bz}}}};
-  assign read_dataxP=(~(read_en_reg|ins_hit_reg)) ? {DATA_WIDTH{1'B0}} : {DATA_WIDTH{{1{1'bz}}}};  
+  assign read_dataxP=(read_en_reg|ins_hit_reg && ~read_odd_reg) ? read_datax_ram[0] : {DATA_WIDTH{1'bz}};
+  assign read_dataxP=(read_en_reg|ins_hit_reg && read_odd_reg) ? read_datax_ram[1] : {DATA_WIDTH{1'bz}};
+  assign read_dataxP=(~(read_en_reg|ins_hit_reg)) ? {DATA_WIDTH{1'B0}} : {DATA_WIDTH{1'BZ}};  
 
   generate
     if (~TOP) begin
@@ -260,13 +260,13 @@ module dcache2_bank(
   assign write_addrO=write_bankEn0 ? write_addrO0 : write_addrO1;
   assign write_bankEn=write_bankEn0 | write_bankEn1;
  
-  assign write_ben=(write_bankEn0 && write_begin0==INDEX) ? write_bBen0 : {4{1'bz}};
-  assign write_ben=(write_bankEn0 && write_end0==INDEX) ?   write_enBen0 : {4{1'bz}};
-  assign write_ben=((write_bankEn0 && write_begin0!=INDEX && write_end0!=INDEX)) ? 4'b1111 : {4{1'bz}};
-  assign write_ben=(write_bankEn1 && write_begin1==INDEX) ? write_bBen1 : {4{1'bz}};
-  assign write_ben=(write_bankEn1 && write_end1==INDEX) ?   write_enBen1 : {4{1'bz}};
-  assign write_ben=(write_bankEn1 && write_begin1!=INDEX && write_end1!=INDEX) ? 4'b1111 : {4{1'bz}};
-  assign write_ben=(~write_bankEn1 && ~write_bankEn0) ? 4'b0 : {4{1'bz}};
+  assign write_ben=(write_bankEn0 && write_begin0==INDEX) ? write_bBen0 : 4'bz;
+  assign write_ben=(write_bankEn0 && write_end0==INDEX) ?   write_enBen0 : 4'bz;
+  assign write_ben=((write_bankEn0 && write_begin0!=INDEX && write_end0!=INDEX)) ? 4'b1111 : 4'bz;
+  assign write_ben=(write_bankEn1 && write_begin1==INDEX) ? write_bBen1 : 4'bz;
+  assign write_ben=(write_bankEn1 && write_end1==INDEX) ?   write_enBen1 : 4'bz;
+  assign write_ben=(write_bankEn1 && write_begin1!=INDEX && write_end1!=INDEX) ? 4'b1111 : 4'bz;
+  assign write_ben=(~write_bankEn1 && ~write_bankEn0) ? 4'b0 : 4'bz;
   
   
   dcache2_ram_box ramE_mod(
@@ -539,17 +539,17 @@ module dcache2_bitx_bank(
   reg read_odd_reg;
   reg ins_hit_reg;
 
-  assign read_dataP=(read_en_reg|ins_hit_reg && ~write_addrE0_reg[7]  && ~read_odd_reg) ? read_data_ram[0][15:0] : {DATA_WIDTH{{1{1'bz}}}};
-  assign read_dataP=(read_en_reg|ins_hit_reg && ~write_addrE0_reg[7] && read_odd_reg) ? read_data_ram[1][15:0] : {DATA_WIDTH{{1{1'bz}}}};
-  assign read_dataP=(read_en_reg|ins_hit_reg && write_addrE0_reg[7]  && ~read_odd_reg) ? read_data_ram[0][31:16] : {DATA_WIDTH{{1{1'bz}}}};
-  assign read_dataP=(read_en_reg|ins_hit_reg && write_addrE0_reg[7] && read_odd_reg) ? read_data_ram[1][31:16] : {DATA_WIDTH{{1{1'bz}}}};
-  assign read_dataP=(~(read_en_reg|ins_hit_reg)) ? {DATA_WIDTH{1'B0}} : {DATA_WIDTH{{1{1'bz}}}};  
+  assign read_dataP=(read_en_reg|ins_hit_reg && ~write_addrE0_reg[7]  && ~read_odd_reg) ? read_data_ram[0][15:0] : {DATA_WIDTH{1'bz}};
+  assign read_dataP=(read_en_reg|ins_hit_reg && ~write_addrE0_reg[7] && read_odd_reg) ? read_data_ram[1][15:0] : {DATA_WIDTH{1'bz}};
+  assign read_dataP=(read_en_reg|ins_hit_reg && write_addrE0_reg[7]  && ~read_odd_reg) ? read_data_ram[0][31:16] : {DATA_WIDTH{1'bz}};
+  assign read_dataP=(read_en_reg|ins_hit_reg && write_addrE0_reg[7] && read_odd_reg) ? read_data_ram[1][31:16] : {DATA_WIDTH{1'bz}};
+  assign read_dataP=(~(read_en_reg|ins_hit_reg)) ? {DATA_WIDTH{1'B0}} : {DATA_WIDTH{1'BZ}};  
 
-  assign read_dataxP=(read_en_reg|ins_hit_reg && ~write_addrE0_reg[7] && ~read_odd_reg) ? read_datax_ram[0][15:0] : {DATA_WIDTH{{1{1'bz}}}};
-  assign read_dataxP=(read_en_reg|ins_hit_reg && ~write_addrE0_reg[7] && read_odd_reg) ? read_datax_ram[1][15:0] : {DATA_WIDTH{{1{1'bz}}}};
-  assign read_dataxP=(read_en_reg|ins_hit_reg && write_addrE0_reg[7] && ~read_odd_reg) ? read_datax_ram[0][31:16] : {DATA_WIDTH{{1{1'bz}}}};
-  assign read_dataxP=(read_en_reg|ins_hit_reg && write_addrE0_reg[7] && read_odd_reg) ? read_datax_ram[1][31:16] : {DATA_WIDTH{{1{1'bz}}}};
-  assign read_dataxP=(~(read_en_reg|ins_hit_reg)) ? {DATA_WIDTH{1'B0}} : {DATA_WIDTH{{1{1'bz}}}};  
+  assign read_dataxP=(read_en_reg|ins_hit_reg && ~write_addrE0_reg[7] && ~read_odd_reg) ? read_datax_ram[0][15:0] : {DATA_WIDTH{1'bz}};
+  assign read_dataxP=(read_en_reg|ins_hit_reg && ~write_addrE0_reg[7] && read_odd_reg) ? read_datax_ram[1][15:0] : {DATA_WIDTH{1'bz}};
+  assign read_dataxP=(read_en_reg|ins_hit_reg && write_addrE0_reg[7] && ~read_odd_reg) ? read_datax_ram[0][31:16] : {DATA_WIDTH{1'bz}};
+  assign read_dataxP=(read_en_reg|ins_hit_reg && write_addrE0_reg[7] && read_odd_reg) ? read_datax_ram[1][31:16] : {DATA_WIDTH{1'bz}};
+  assign read_dataxP=(~(read_en_reg|ins_hit_reg)) ? {DATA_WIDTH{1'B0}} : {DATA_WIDTH{1'BZ}};  
 
   generate
     if (~TOP) begin
@@ -1600,10 +1600,10 @@ module dcache2_block(
           for(q=0;q<5;q=q+1) begin : wroff_gen
               assign wr0[q]=((b-q)&5'h1f)==write_begin0_reg && write0_clkEn_reg && write_bankEn0_reg[b];
               assign wr1[q]=((b-q)&5'h1f)==write_begin1_reg && write1_clkEn_reg && write_bankEn1_reg[b];
-              assign write_data[b*32+:32]=wr0[q] ? write_data0_reg[q*32+:32] : {32{1'bz}};
-              assign write_data[b*32+:32]=wr1[q] ? write_data1_reg[q*32+:32] : {32{1'bz}};
+              assign write_data[b*32+:32]=wr0[q] ? write_data0_reg[q*32+:32] : 32'BZ;
+              assign write_data[b*32+:32]=wr1[q] ? write_data1_reg[q*32+:32] : 32'BZ;
           end
-          assign  write_data[b*32+:32]=(|{wr0,wr1}) ? {32{1'bz}} : 
+          assign  write_data[b*32+:32]=(|{wr0,wr1}) ? 32'BZ : 
             busIns_data_reg[(b%16)*32+:32];
      end
   endgenerate

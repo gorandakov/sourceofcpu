@@ -315,9 +315,9 @@ module agucam(
   assign write_dataA={conflict2&in_mask[2],conflict1&in_mask[1],conflict0&in_mask[0],
 	  write_mop_reg[2],write_mop_reg[1],write_mop_reg[0]};
   assign wen=conflict0&in_mask[0]||conflict1&in_mask[1]||conflict2&in_mask[2];
-  assign write_addr_d=(~wen & ~rst) ? write_addr : {3{1'bz}}; 
+  assign write_addr_d=(~wen & ~rst) ? write_addr : 3'bz; 
   
-  assign write_addr_d=rst ? 3'b0:{3{1'bz}};
+  assign write_addr_d=rst ? 3'b0:3'bz;
   
   assign in_mask[0]=~except;
   assign in_mask[1]=~except;
@@ -372,27 +372,27 @@ module agucam(
 
   assign mOpR_en=(|sel) && ~init && (cmore[1]|wen) && ~excpt_fwd && read_clkEn;
 
-  assign mOpR_addrMain=(!conflFound) ? {VADDR_WIDTH{1'B0}} : {VADDR_WIDTH{{1{1'bz}}}};
-  assign mOpR_addrEven=(!conflFound) ? {PADDR_WIDTH-8{1'B0}} : {PADDR_WIDTH-8{{1{1'bz}}}};
-  assign mOpR_addrOdd=(!conflFound) ? {PADDR_WIDTH-8{1'B0}} : {PADDR_WIDTH-8{{1{1'bz}}}};
-  assign mOpR_regNo=(!conflFound) ? {REG_WIDTH{1'B0}} : {REG_WIDTH{{1{1'bz}}}};
-  assign mOpR_type=(!conflFound) ? 2'B0 : {2{1'bz}};
-  assign mOpR_sz=(!conflFound) ? 5'B0 : {5{1'bz}};
-  assign mOpR_odd=(!conflFound) ? 1'B0 : {1{1'bz}};
-  assign mOpR_low=(!conflFound) ? 2'B0 : {2{1'bz}};
-  assign mOpR_invtlb=(!conflFound) ? 1'B0 : {1{1'bz}};
-  assign mOpR_split=(!conflFound) ? 1'B0 : {1{1'bz}};
-  assign mOpR_bank0=(!conflFound) ? 5'b0 : {5{1'bz}};
-  assign mOpR_bank0=(!conflFound) ? 5'b0 : {5{1'bz}};
-//  assign mOpR_data=(!conflFound) ? 136'b0 : {136{1'bz}};
-  assign mOpR_II=(!conflFound) ? 10'b0 : {10{1'bz}};
-  assign mOpR_WQ=(!conflFound) ? 6'b0 : {6{1'bz}};
-  assign mOpR_thread=(!conflFound) ? 1'b0 : {1{1'bz}};
-  assign mOpR_LSQ=(!conflFound) ? 9'b0 : {9{1'bz}};
-  assign mOpR_lsflag=(!conflFound) ? 1'b0 : {1{1'bz}};
-  assign thrmask=(!conflFound) ? 1'b1 : {1{1'bz}};
-  assign mOpR_lsfw=(!conflFound) ? 1'b0 : {1{1'bz}};
-  assign mOpR_attr=(!conflFound) ? 4'b0 : {4{1'bz}};
+  assign mOpR_addrMain=(!conflFound) ? {VADDR_WIDTH{1'B0}} : {VADDR_WIDTH{1'BZ}};
+  assign mOpR_addrEven=(!conflFound) ? {PADDR_WIDTH-8{1'B0}} : {PADDR_WIDTH-8{1'BZ}};
+  assign mOpR_addrOdd=(!conflFound) ? {PADDR_WIDTH-8{1'B0}} : {PADDR_WIDTH-8{1'BZ}};
+  assign mOpR_regNo=(!conflFound) ? {REG_WIDTH{1'B0}} : {REG_WIDTH{1'BZ}};
+  assign mOpR_type=(!conflFound) ? 2'B0 : 2'BZ;
+  assign mOpR_sz=(!conflFound) ? 5'B0 : 5'BZ;
+  assign mOpR_odd=(!conflFound) ? 1'B0 : 1'BZ;
+  assign mOpR_low=(!conflFound) ? 2'B0 : 2'BZ;
+  assign mOpR_invtlb=(!conflFound) ? 1'B0 : 1'BZ;
+  assign mOpR_split=(!conflFound) ? 1'B0 : 1'BZ;
+  assign mOpR_bank0=(!conflFound) ? 5'b0 : 5'BZ;
+  assign mOpR_bank0=(!conflFound) ? 5'b0 : 5'BZ;
+//  assign mOpR_data=(!conflFound) ? 136'b0 : 136'BZ;
+  assign mOpR_II=(!conflFound) ? 10'b0 : 10'BZ;
+  assign mOpR_WQ=(!conflFound) ? 6'b0 : 6'BZ;
+  assign mOpR_thread=(!conflFound) ? 1'b0 : 1'BZ;
+  assign mOpR_LSQ=(!conflFound) ? 9'b0 : 9'BZ;
+  assign mOpR_lsflag=(!conflFound) ? 1'b0 : 1'BZ;
+  assign thrmask=(!conflFound) ? 1'b1 : 1'BZ;
+  assign mOpR_lsfw=(!conflFound) ? 1'b0 : 1'BZ;
+  assign mOpR_attr=(!conflFound) ? 4'b0 : 4'BZ;
   
   assign read_confl[0]=(wen & count[0]) ? read_conflA[0] : read_conflA[0] && valid[read_mop[0][`mOp_thread]][read_addr];
   assign read_confl[1]=(wen & count[0]) ? read_conflA[1] : read_conflA[1] && valid[read_mop[1][`mOp_thread]][read_addr];
@@ -403,42 +403,42 @@ module agucam(
   generate
     genvar p,k;
     for(k=0;k<=2;k=k+1) begin
-        assign mOpR_addrMain=sel[k] ? read_mop[k][`mOp_addrMain] : {VADDR_WIDTH{{1{1'bz}}}};
-        assign mOpR_addrEven=sel[k] ? 36'b0 : {36{1'bz}};
-        assign mOpR_addrOdd=sel[k] ? 36'b0 : {36{1'bz}};
-        assign mOpR_odd=sel[k] ? 1'b0 : {1{1'bz}};
-        assign mOpR_low=sel[k] ? 2'b0 : {2{1'bz}};
-        assign mOpR_regNo=sel[k] ? read_mop[k][`mOp_reg] : {REG_WIDTH{{1{1'bz}}}};
-        assign mOpR_type=sel[k] ? read_mop[k][`mOp_type] : {2{1'bz}};
-        assign mOpR_sz=sel[k] ? read_mop[k][`mOp_sz] : {5{1'bz}};
-        assign mOpR_invtlb=sel[k] ? read_mop[k][`mOp_st] : {1{1'bz}};
-        assign mOpR_split=sel[k] ? read_mop[k][`mOp_split] : {1{1'bz}};
-        assign mOpR_bank0=sel[k] ? read_mop[k][`mOp_bank0] : {5{1'bz}};
-        assign mOpR_LSQ=sel[k] ? read_mop[k][`mOp_LSQ] : {9{1'bz}};
-        assign mOpR_II=sel[k] ? read_mop[k][`mOp_II] : {10{1'bz}};
-        assign mOpR_WQ=sel[k] ? read_mop[k][`mOp_WQ] : {6{1'bz}};
-        assign mOpR_thread=sel[k] ? read_mop[k][`mOp_thread] : {1{1'bz}};
-        assign mOpR_lsflag=sel[k] ? read_mop[k][`mOp_lsflag] : {1{1'bz}};
-        assign thrmask=sel[k] ? (read_mop[k][`mOp_thread]) | (~read_mop[k][`mOp_thread]) : {1{1'bz}};
-        assign mOpR_lsfw=sel[k] ? 1'b0 : {1{1'bz}};
-        assign mOpR_attr=sel[k] ? read_mop[k][`mOp_attr] : {4{1'bz}};
+        assign mOpR_addrMain=sel[k] ? read_mop[k][`mOp_addrMain] : {VADDR_WIDTH{1'BZ}};
+        assign mOpR_addrEven=sel[k] ? 36'b0 : 36'bz;
+        assign mOpR_addrOdd=sel[k] ? 36'b0 : 36'bz;
+        assign mOpR_odd=sel[k] ? 1'b0 : 1'bz;
+        assign mOpR_low=sel[k] ? 2'b0 : 2'bz;
+        assign mOpR_regNo=sel[k] ? read_mop[k][`mOp_reg] : {REG_WIDTH{1'BZ}};
+        assign mOpR_type=sel[k] ? read_mop[k][`mOp_type] : 2'BZ;
+        assign mOpR_sz=sel[k] ? read_mop[k][`mOp_sz] : 5'BZ;
+        assign mOpR_invtlb=sel[k] ? read_mop[k][`mOp_st] : 1'BZ;
+        assign mOpR_split=sel[k] ? read_mop[k][`mOp_split] : 1'BZ;
+        assign mOpR_bank0=sel[k] ? read_mop[k][`mOp_bank0] : 5'BZ;
+        assign mOpR_LSQ=sel[k] ? read_mop[k][`mOp_LSQ] : 9'BZ;
+        assign mOpR_II=sel[k] ? read_mop[k][`mOp_II] : 10'BZ;
+        assign mOpR_WQ=sel[k] ? read_mop[k][`mOp_WQ] : 6'BZ;
+        assign mOpR_thread=sel[k] ? read_mop[k][`mOp_thread] : 1'BZ;
+        assign mOpR_lsflag=sel[k] ? read_mop[k][`mOp_lsflag] : 1'BZ;
+        assign thrmask=sel[k] ? (read_mop[k][`mOp_thread]) | (~read_mop[k][`mOp_thread]) : 1'bz;
+        assign mOpR_lsfw=sel[k] ? 1'b0 : 1'bz;
+        assign mOpR_attr=sel[k] ? read_mop[k][`mOp_attr] : 4'bz;
     end
     for(p=0;p<8;p=p+1) begin
 	assign read_addrU_d=(rdxvalid0[p] || rdvalid1[p] & drvalid0_found &
-        ~drxvalid_0_found || rdxvalid1[p] & ~drvalid0_found & ~drxvalid_0_found) ? p[2:0] : {3{1'bz}};
-//	assign read_addrA_d=(rdvalidA0[p] || rdvalidA1[p] & ~drvalidA0_found) ? p[2:0] : {3{1'bz}};
-//	assign read_addrB_d=(rdvalidB0[p] || rdvalidB1[p] & ~drvalidB0_found) ? p[2:0] : {3{1'bz}};
+        ~drxvalid_0_found || rdxvalid1[p] & ~drvalid0_found & ~drxvalid_0_found) ? p[2:0] : 3'bz;
+//	assign read_addrA_d=(rdvalidA0[p] || rdvalidA1[p] & ~drvalidA0_found) ? p[2:0] : 3'bz;
+//	assign read_addrB_d=(rdvalidB0[p] || rdvalidB1[p] & ~drvalidB0_found) ? p[2:0] : 3'bz;
     end
     assign read_addrU_d=(~drxvalid_0_found && ~drxvalid_1_found &&
-     ~(drvalid0_found && drvalid1_found)) && cmore[1] ? write_addr : {3{1'bz}};
+     ~(drvalid0_found && drvalid1_found)) && cmore[1] ? write_addr : 3'bz;
     assign read_addrU_d=(~drxvalid_0_found && ~drxvalid_1_found &&
-     ~(drvalid0_found && drvalid1_found)) && ~cmore[1] ? write_addr_inc : {3{1'bz}};
-   // assign read_addrA_d=(~drvalidA0_found && ~drvalidA1_found) ? write_addr : {3{1'bz}};
-   // assign read_addrB_d=(~drvalidB0_found && ~drvalidB1_found) ? write_addr : {3{1'bz}};
+     ~(drvalid0_found && drvalid1_found)) && ~cmore[1] ? write_addr_inc : 3'bz;
+   // assign read_addrA_d=(~drvalidA0_found && ~drvalidA1_found) ? write_addr : 3'bz;
+   // assign read_addrB_d=(~drvalidB0_found && ~drvalidB1_found) ? write_addr : 3'bz;
 
     assign read_addr_d=excpt_fwd ? write_addr : read_addrU_d;
-  //  assign read_addr_d=(except && except_thread) ? read_addrA_d : {3{1'bz}};
-  //  assign read_addr_d=(except && ~except_thread) ? read_addrB_d : {3{1'bz}};
+  //  assign read_addr_d=(except && except_thread) ? read_addrA_d : 3'bz;
+  //  assign read_addr_d=(except && ~except_thread) ? read_addrB_d : 3'bz;
   endgenerate
   
 //  adder_inc #(3) read_inc_mod(read_addr,read_addr_d,doStep &~rst);

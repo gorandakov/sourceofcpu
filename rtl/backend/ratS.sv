@@ -168,26 +168,26 @@ module rat_flags_buf(
     match_ret4[1],match_ret5[1],match_ret6[1],match_ret7[1],match_ret8[1]};
 	
 
-  assign robAddr_d=(writeNew1_wen & ~rst) ? writeNew1_data : {ROB_ADDR_WIDTH{{1{1'bz}}}};
-  assign robAddr_d=(writeNew2_wen & ~rst) ? writeNew2_data : {ROB_ADDR_WIDTH{{1{1'bz}}}};
-  assign robAddr_d=(writeNew4_wen & ~rst) ? writeNew4_data : {ROB_ADDR_WIDTH{{1{1'bz}}}};
-  assign robAddr_d=(writeNew5_wen & ~rst) ? writeNew5_data : {ROB_ADDR_WIDTH{{1{1'bz}}}};
-  assign robAddr_d=(writeNew7_wen & ~rst) ? writeNew7_data : {ROB_ADDR_WIDTH{{1{1'bz}}}};
-  assign robAddr_d=(writeNew8_wen & ~rst) ? writeNew8_data : {ROB_ADDR_WIDTH{{1{1'bz}}}};
+  assign robAddr_d=(writeNew1_wen & ~rst) ? writeNew1_data : {ROB_ADDR_WIDTH{1'bz}};
+  assign robAddr_d=(writeNew2_wen & ~rst) ? writeNew2_data : {ROB_ADDR_WIDTH{1'bz}};
+  assign robAddr_d=(writeNew4_wen & ~rst) ? writeNew4_data : {ROB_ADDR_WIDTH{1'bz}};
+  assign robAddr_d=(writeNew5_wen & ~rst) ? writeNew5_data : {ROB_ADDR_WIDTH{1'bz}};
+  assign robAddr_d=(writeNew7_wen & ~rst) ? writeNew7_data : {ROB_ADDR_WIDTH{1'bz}};
+  assign robAddr_d=(writeNew8_wen & ~rst) ? writeNew8_data : {ROB_ADDR_WIDTH{1'bz}};
 
-  assign robAddr_d=(rst | ~match_new) ? {ROB_ADDR_WIDTH{1'b0}} : {ROB_ADDR_WIDTH{{1{1'bz}}}};
+  assign robAddr_d=(rst | ~match_new) ? {ROB_ADDR_WIDTH{1'b0}} : {ROB_ADDR_WIDTH{1'bz}};
 
   assign retired_d[0]=match_ret[0] & ~(match_new & read_clkEn) || rst || retireAll; 
   assign retired_d[1]=match_ret[1] & ~(match_new & read_clkEn) || rst || retireAll; 
 
-  assign funit_d=(writeNew1_wen & ~rst) ? writeNew1_funit : {FN_WIDTH{{1{1'bz}}}};
-  assign funit_d=(writeNew2_wen & ~rst) ? writeNew2_funit : {FN_WIDTH{{1{1'bz}}}};
-  assign funit_d=(writeNew4_wen & ~rst) ? writeNew4_funit : {FN_WIDTH{{1{1'bz}}}};
-  assign funit_d=(writeNew5_wen & ~rst) ? writeNew5_funit : {FN_WIDTH{{1{1'bz}}}};
-  assign funit_d=(writeNew7_wen & ~rst) ? writeNew7_funit : {FN_WIDTH{{1{1'bz}}}};
-  assign funit_d=(writeNew8_wen & ~rst) ? writeNew8_funit : {FN_WIDTH{{1{1'bz}}}};
+  assign funit_d=(writeNew1_wen & ~rst) ? writeNew1_funit : {FN_WIDTH{1'bz}};
+  assign funit_d=(writeNew2_wen & ~rst) ? writeNew2_funit : {FN_WIDTH{1'bz}};
+  assign funit_d=(writeNew4_wen & ~rst) ? writeNew4_funit : {FN_WIDTH{1'bz}};
+  assign funit_d=(writeNew5_wen & ~rst) ? writeNew5_funit : {FN_WIDTH{1'bz}};
+  assign funit_d=(writeNew7_wen & ~rst) ? writeNew7_funit : {FN_WIDTH{1'bz}};
+  assign funit_d=(writeNew8_wen & ~rst) ? writeNew8_funit : {FN_WIDTH{1'bz}};
 
-  assign funit_d=(rst | ~match_new) ? 10'b1001 : {FN_WIDTH{{1{1'bz}}}};
+  assign funit_d=(rst | ~match_new) ? 10'b1001 : {FN_WIDTH{1'bz}};
 
   assign read0_data=robAddr[read_thread];  
 
@@ -264,27 +264,27 @@ module rat_flags_dep(
   input [FN_WIDTH-1:0] newU8;
 
 
-  assign data=(addr==rs0i0_index)? newR0 : {ROB_ADDR_WIDTH{{1{1'bz}}}};
-  assign data=(addr==rs0i1_index)? newR1 : {ROB_ADDR_WIDTH{{1{1'bz}}}};
-  assign data=(addr==rs0i2_index)? newR2 : {ROB_ADDR_WIDTH{{1{1'bz}}}};
-  assign data=(addr==rs1i0_index)? newR3 : {ROB_ADDR_WIDTH{{1{1'bz}}}};
-  assign data=(addr==rs1i1_index)? newR4 : {ROB_ADDR_WIDTH{{1{1'bz}}}};
-  assign data=(addr==rs1i2_index)? newR5 : {ROB_ADDR_WIDTH{{1{1'bz}}}};
-  assign data=(addr==rs2i0_index)? newR6 : {ROB_ADDR_WIDTH{{1{1'bz}}}};
-  assign data=(addr==rs2i1_index)? newR7 : {ROB_ADDR_WIDTH{{1{1'bz}}}};
-  assign data=(addr==rs2i2_index)? newR8 : {ROB_ADDR_WIDTH{{1{1'bz}}}};
+  assign data=(addr==rs0i0_index)? newR0 : {ROB_ADDR_WIDTH{1'bz}};
+  assign data=(addr==rs0i1_index)? newR1 : {ROB_ADDR_WIDTH{1'bz}};
+  assign data=(addr==rs0i2_index)? newR2 : {ROB_ADDR_WIDTH{1'bz}};
+  assign data=(addr==rs1i0_index)? newR3 : {ROB_ADDR_WIDTH{1'bz}};
+  assign data=(addr==rs1i1_index)? newR4 : {ROB_ADDR_WIDTH{1'bz}};
+  assign data=(addr==rs1i2_index)? newR5 : {ROB_ADDR_WIDTH{1'bz}};
+  assign data=(addr==rs2i0_index)? newR6 : {ROB_ADDR_WIDTH{1'bz}};
+  assign data=(addr==rs2i1_index)? newR7 : {ROB_ADDR_WIDTH{1'bz}};
+  assign data=(addr==rs2i2_index)? newR8 : {ROB_ADDR_WIDTH{1'bz}};
 
-  assign funit=(addr==rs0i0_index)? newU0 : {FN_WIDTH{{1{1'bz}}}};
-  assign funit=(addr==rs0i1_index)? newU1 : {FN_WIDTH{{1{1'bz}}}};
-  assign funit=(addr==rs0i2_index)? newU2 : {FN_WIDTH{{1{1'bz}}}};
-  assign funit=(addr==rs1i0_index)? newU3 : {FN_WIDTH{{1{1'bz}}}};
-  assign funit=(addr==rs1i1_index)? newU4 : {FN_WIDTH{{1{1'bz}}}};
-  assign funit=(addr==rs1i2_index)? newU5 : {FN_WIDTH{{1{1'bz}}}};
-  assign funit=(addr==rs2i0_index)? newU6 : {FN_WIDTH{{1{1'bz}}}};
-  assign funit=(addr==rs2i1_index)? newU7 : {FN_WIDTH{{1{1'bz}}}};
-  assign funit=(addr==rs2i2_index)? newU8 : {FN_WIDTH{{1{1'bz}}}};
+  assign funit=(addr==rs0i0_index)? newU0 : {FN_WIDTH{1'bz}};
+  assign funit=(addr==rs0i1_index)? newU1 : {FN_WIDTH{1'bz}};
+  assign funit=(addr==rs0i2_index)? newU2 : {FN_WIDTH{1'bz}};
+  assign funit=(addr==rs1i0_index)? newU3 : {FN_WIDTH{1'bz}};
+  assign funit=(addr==rs1i1_index)? newU4 : {FN_WIDTH{1'bz}};
+  assign funit=(addr==rs1i2_index)? newU5 : {FN_WIDTH{1'bz}};
+  assign funit=(addr==rs2i0_index)? newU6 : {FN_WIDTH{1'bz}};
+  assign funit=(addr==rs2i1_index)? newU7 : {FN_WIDTH{1'bz}};
+  assign funit=(addr==rs2i2_index)? newU8 : {FN_WIDTH{1'bz}};
 
-  assign retired=(addr!=4'he && addr!=4'hd) ? 1'b0 : {1{1'bz}};
+  assign retired=(addr!=4'he && addr!=4'hd) ? 1'b0 : 1'bz;
 endmodule
 
 
@@ -493,11 +493,11 @@ module rat_flags(
         newU0,newU1,newU2,newU3,newU4,newU5,newU6,newU7,newU8
         );
         assign read_data[k]=(read_addr_reg[k]==4'he || read_addr_reg[k]==4'hd) ?
-          read_data_buf : {ROB_ADDR_WIDTH{{1{1'bz}}}};
+          read_data_buf : {ROB_ADDR_WIDTH{1'BZ}};
         assign read_fun[k]=(read_addr_reg[k]==4'he || read_addr_reg[k]==4'hd) ?
-          read_fun_buf : {FN_WIDTH{{1{1'bz}}}};
-        assign read_retired[k]=(read_addr_reg[k]==4'he) ? read_retired_buf : {1{1'bz}};
-        assign read_retired[k]=(read_addr_reg[k]==4'hd) ? 1'b1 : {1{1'bz}};
+          read_fun_buf : {FN_WIDTH{1'BZ}};
+        assign read_retired[k]=(read_addr_reg[k]==4'he) ? read_retired_buf : 1'BZ;
+        assign read_retired[k]=(read_addr_reg[k]==4'hd) ? 1'b1 : 1'BZ;
     end
 
   endgenerate

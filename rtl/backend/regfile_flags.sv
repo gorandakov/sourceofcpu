@@ -205,11 +205,11 @@ module regfileFl_ram_placeholder(
   write3_addr[3:0],write3_wen && write3_addr[4]
   );
 
-  assign read0_data=readA_en ? ram_readA_data : {1+DATA_WIDTH{{1{1'bz}}}};
-  assign read0_data=readB_en ? ram_readB_data : {1+DATA_WIDTH{{1{1'bz}}}};
+  assign read0_data=readA_en ? ram_readA_data : {1+DATA_WIDTH{1'bz}};
+  assign read0_data=readB_en ? ram_readB_data : {1+DATA_WIDTH{1'bz}};
 
-  assign retireRead_data=retA_en ? retireReadA_data : {DATA_WIDTH{{1{1'bz}}}};
-  assign retireRead_data=retB_en ? retireReadB_data : {DATA_WIDTH{{1{1'bz}}}};
+  assign retireRead_data=retA_en ? retireReadA_data : {DATA_WIDTH{1'bz}};
+  assign retireRead_data=retB_en ? retireReadB_data : {DATA_WIDTH{1'bz}};
 
   assign ram_write0_wen=write0_wen & (write0_addr[3:0]==INDEX);
   assign ram_write1_wen=write1_wen & (write1_addr[3:0]==INDEX);

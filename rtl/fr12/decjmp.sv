@@ -106,9 +106,9 @@ module jump_decoder(
 
   assign opcode_main=instr[7:0];
   
-  assign constantDef=(magic[1:0]==2'b11) ? {instr[47:17],1'b0} : {32{1'bz}};
-  assign constantDef=(magic[1:0]==2'b01) ? {{17{instr[31]}},instr[31:18],1'b0} : {32{1'bz}};
-  assign constantDef=(~magic[0]) ? {instr[7],instr[15:12]} : {32{1'bz}};
+  assign constantDef=(magic[1:0]==2'b11) ? {instr[47:17],1'b0} : 32'bz;
+  assign constantDef=(magic[1:0]==2'b01) ? {{17{instr[31]}},instr[31:18],1'b0} : 32'bz;
+  assign constantDef=(~magic[0]) ? {instr[7],instr[15:12]} : 32'bz;
   
   
   assign isBasicCmpTest=(opcode_main[7:1]==7'd23 || opcode_main[7:2]==6'd12 ||

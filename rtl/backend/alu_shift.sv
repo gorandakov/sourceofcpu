@@ -96,9 +96,9 @@ module alu_shift(
   
   except_jump_cmp jcmp_mod (valS,{1'b0,cond[3:0]},doJmp);
 
-  assign valRes_X=is_shift & ~(cond[4]&~doJmp) ? valres0 : {64{1'bz}};
+  assign valRes_X=is_shift & ~(cond[4]&~doJmp) ? valres0 : 64'bz;
 
-  assign retData_X[`except_flags]=is_shift_reg ? flags_COASZP : {6{1'bz}};
+  assign retData_X[`except_flags]=is_shift_reg ? flags_COASZP : 6'bz;
 
   assign flags_COASZP={ dir_reg ? coutR_reg : ((coutL_reg&sz_reg)!=0),1'b0,1'b0,
 	  sz_reg[3] ? valres0_reg[63] : valres0_reg[31],~(|valres0_reg[31:0])&&

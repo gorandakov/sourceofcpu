@@ -124,7 +124,7 @@ module ttag(
       end
   endgenerate
 
-  assign read_IP_next=read_enOut ? {44{1'bz}} : 44'b0;
+  assign read_IP_next=read_enOut ? 44'bz : 44'b0;
 
   assign write_data[`ttag_IP_lower]=write_IP_reg[6:0];
   assign write_data[`ttag_IP_upper]=write_IP_reg[43:14];

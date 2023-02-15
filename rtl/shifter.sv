@@ -65,42 +65,42 @@ module shlr(
  
         for(b=0;b<WIDTH/8;b=b+1) begin : upper_gen2
 	    assign val_int[a*8+:8]=(eq[b-a]) ?
-	        ~valP0[(b)*8+:8] : {8{1'bz}};
+	        ~valP0[(b)*8+:8] : 8'bz;
 	    assign valres[a*8+:8]=(ben && dir && eq2[b]) ?
-	        ~val_int[a*8+b+:8] : {8{1'bz}};
+	        ~val_int[a*8+b+:8] : 8'bz;
 	    assign valres[a*8+:8]=(~dir && eq2[b] && ben) ?
-	        ~val_int[a*8-b+:8] : {8{1'bz}};
+	        ~val_int[a*8-b+:8] : 8'bz;
         end
-        if (a!=0) assign coutR0=(eq[a]) ? ~valP0[8*a-1] : {1{1'bz}};
-        else assign coutR0=(eq[a]) ? 1'b1 : {1{1'bz}};
-        if (a!=0) assign coutL0_8=(eq[-a]) ? ~valP0[WIDTH-a*8] : {1{1'bz}};
-        else assign coutL0_8=(eq[-a]) ? 1'b1 : {1{1'bz}};
-        if (a!=0&&a<4) assign coutL0_4=(eq[-a]) ? ~valP0[32-a*8] : {1{1'bz}};
-        else assign coutL0_4=(eq[-a]) ? 1'b1 : {1{1'bz}};
+        if (a!=0) assign coutR0=(eq[a]) ? ~valP0[8*a-1] : 1'bz;
+        else assign coutR0=(eq[a]) ? 1'b1 : 1'bz;
+        if (a!=0) assign coutL0_8=(eq[-a]) ? ~valP0[WIDTH-a*8] : 1'bz;
+        else assign coutL0_8=(eq[-a]) ? 1'b1 : 1'bz;
+        if (a!=0&&a<4) assign coutL0_4=(eq[-a]) ? ~valP0[32-a*8] : 1'bz;
+        else assign coutL0_4=(eq[-a]) ? 1'b1 : 1'bz;
         
-        if (a!=0) assign coutR=(eq2[a]) ? ~val_int[a-1] : {1{1'bz}};
-        else assign coutR=(eq2[a]) ? ~coutR0 : {1{1'bz}};
-        if (a!=0) assign coutL[3]=(eq2[a]) ? ~val_int[WIDTH-a] : {1{1'bz}};
-        else assign coutL[3]=(eq2[a]) ? ~coutL0_8 : {1{1'bz}};
-        assign coutL[2]=(eq2[a]) ? ~val_int[32-a] : {1{1'bz}};
+        if (a!=0) assign coutR=(eq2[a]) ? ~val_int[a-1] : 1'bz;
+        else assign coutR=(eq2[a]) ? ~coutR0 : 1'bz;
+        if (a!=0) assign coutL[3]=(eq2[a]) ? ~val_int[WIDTH-a] : 1'bz;
+        else assign coutL[3]=(eq2[a]) ? ~coutL0_8 : 1'bz;
+        assign coutL[2]=(eq2[a]) ? ~val_int[32-a] : 1'bz;
     end
   endgenerate
   
   assign coutL[1:0]=2'b0;
   
   
-  assign val_int[0+:8]= ((eq&15'b0000000_0_1111111)!=0) ? {8{~fill_bit}} : {8{1'bz}};
-  assign val_int[8+:8]= ((eq&15'b1000000_0_0111111)!=0) ? {8{~fill_bit}} : {8{1'bz}};
-  assign val_int[16+:8]=((eq&15'b1100000_0_0011111)!=0) ? {8{~fill_bit}} : {8{1'bz}};
-  assign val_int[24+:8]=((eq&15'b1110000_0_0001111)!=0) ? {8{~fill_bit}} : {8{1'bz}};
-  assign val_int[32+:8]=((eq&15'b1111000_0_0000111)!=0) ? {8{~fill_bit}} : {8{1'bz}};
-  assign val_int[40+:8]=((eq&15'b1111100_0_0000011)!=0) ? {8{~fill_bit}} : {8{1'bz}};
-  assign val_int[48+:8]=((eq&15'b1111110_0_0000001)!=0) ? {8{~fill_bit}} : {8{1'bz}};
-  assign val_int[56+:8]=((eq&15'b1111111_0_0000000)!=0) ? {8{~fill_bit}} : {8{1'bz}};
+  assign val_int[0+:8]= ((eq&15'b0000000_0_1111111)!=0) ? {8{~fill_bit}} : 8'bz;
+  assign val_int[8+:8]= ((eq&15'b1000000_0_0111111)!=0) ? {8{~fill_bit}} : 8'bz;
+  assign val_int[16+:8]=((eq&15'b1100000_0_0011111)!=0) ? {8{~fill_bit}} : 8'bz;
+  assign val_int[24+:8]=((eq&15'b1110000_0_0001111)!=0) ? {8{~fill_bit}} : 8'bz;
+  assign val_int[32+:8]=((eq&15'b1111000_0_0000111)!=0) ? {8{~fill_bit}} : 8'bz;
+  assign val_int[40+:8]=((eq&15'b1111100_0_0000011)!=0) ? {8{~fill_bit}} : 8'bz;
+  assign val_int[48+:8]=((eq&15'b1111110_0_0000001)!=0) ? {8{~fill_bit}} : 8'bz;
+  assign val_int[56+:8]=((eq&15'b1111111_0_0000000)!=0) ? {8{~fill_bit}} : 8'bz;
   
-  assign coutR0=((eq&15'b0000000_0_1111111)!=0) ? 1'b1 : {1{1'bz}};
-  assign coutL0_8=((eq&15'b1111111_0_0000000)!=0) ? 1'b1 : {1{1'bz}};
-  assign coutL0_4=((eq&15'b1111111_0_0001111)!=0) ? 1'b1 : {1{1'bz}};
+  assign coutR0=((eq&15'b0000000_0_1111111)!=0) ? 1'b1 : 1'bz;
+  assign coutL0_8=((eq&15'b1111111_0_0000000)!=0) ? 1'b1 : 1'bz;
+  assign coutL0_4=((eq&15'b1111111_0_0001111)!=0) ? 1'b1 : 1'bz;
 
   assign valP0[31:0]=val0[31:0];
   assign valP0[63:32]=(sz[3]) ? val0[63:32] : {32{fill_bit}};
@@ -108,11 +108,11 @@ module shlr(
   assign val_int[-1:-8]={8{~fill_bit}};
   assign val_int[WIDTH+7:WIDTH]={8{~fill_bit}};
 
-  assign valres[63:32]=bit_en[2] ? {32{1'bz}} : 32'b0;
+  assign valres[63:32]=bit_en[2] ? 32'bz : 32'b0;
 
-  assign fill_bit=(sz[2] & arith) ? val0[31] : {1{1'bz}};
-  assign fill_bit=(sz[3] & arith) ? val0[63] : {1{1'bz}};
-  assign fill_bit=(~arith) ? 1'b0 : {1{1'bz}};
+  assign fill_bit=(sz[2] & arith) ? val0[31] : 1'bz;
+  assign fill_bit=(sz[3] & arith) ? val0[63] : 1'bz;
+  assign fill_bit=(~arith) ? 1'b0 : 1'bz;
 
 endmodule
 
@@ -147,18 +147,18 @@ module shlr8(
 	assign eq[a]=val1==a;
  
 	assign valres=(dir && eq[a]) ?
-	    valP0[a+:8] : {8{1'bz}};
+	    valP0[a+:8] : 8'bz;
 	assign valres=(~dir && eq[a]) ?
-	    valP0[-a+:8] : {8{1'bz}};
-        if (a) assign coutR=(dir & eq[a]) ? valP0[a-1] : {1{1'bz}};
-        else assign coutR=(dir & eq[a]) ? 1'b0 : {1{1'bz}};
-        if (a) assign coutL=(~dir & eq[a]) ? valP0[WIDTH-a] : {1{1'bz}};
-        else assign coutL=(~dir & eq[a]) ? 1'b0 : {1{1'bz}};
+	    valP0[-a+:8] : 8'bz;
+        if (a) assign coutR=(dir & eq[a]) ? valP0[a-1] : 1'bz;
+        else assign coutR=(dir & eq[a]) ? 1'b0 : 1'bz;
+        if (a) assign coutL=(~dir & eq[a]) ? valP0[WIDTH-a] : 1'bz;
+        else assign coutL=(~dir & eq[a]) ? 1'b0 : 1'bz;
         
     end
   endgenerate
 
-  assign valres=(|val1[5:3]) ? {8{fill_bit}} : {8{1'bz}};
+  assign valres=(|val1[5:3]) ? {8{fill_bit}} : 8'bz;
   
   assign valP0[7:0]=val0[7:0];
 
@@ -185,11 +185,11 @@ module rotate8x4(
   generate
       genvar l;
       for(l=0;l<8;l=l+1) begin
-          assign data0=(l==shf4) ? din[l*4+:4] : {4{1'bz}};
-          assign data1=(l==shf4) ? din[((l+1)&3'd7)*4+:4] : {4{1'bz}};
+          assign data0=(l==shf4) ? din[l*4+:4] : 4'bz;
+          assign data1=(l==shf4) ? din[((l+1)&3'd7)*4+:4] : 4'bz;
           if (l<4) begin
 	      //verilator lint_off WIDTH
-              assign dout=(l==shf[1:0]) ? {data1,data0}>>l : {5{1'bz}};
+              assign dout=(l==shf[1:0]) ? {data1,data0}>>l : 5'bz;
 	      //verilator lint_on WIDTH
           end
       end
@@ -232,8 +232,8 @@ module agusec_shift8(
     genvar p;
     for(p=0;p<=7;p=p+1) begin
         if (p<4)
-        assign bits_med=(ptr_ext[4:3]==p) ? bits[p*8+:16] : {16{1'bz}};
-        assign bits_out=(ptr_ext[2:0]==p) ? bits_med[p+:8] : {8{1'bz}};
+        assign bits_med=(ptr_ext[4:3]==p) ? bits[p*8+:16] : 16'bz;
+        assign bits_out=(ptr_ext[2:0]==p) ? bits_med[p+:8] : 8'bz;
     end
   endgenerate
 

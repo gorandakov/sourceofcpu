@@ -111,7 +111,7 @@ module dcache_dirty(
   generate
       genvar k;
       for (k=0;k<4;k=k+1) begin
-          assign read_dirty0=(read_addr0_reg[5:3]==k) ? read_data0[k] : {1{1'bz}};
+          assign read_dirty0=(read_addr0_reg[5:3]==k) ? read_data0[k] : 1'bz;
           
           assign write_data0[k]=write_addr0[5:3]==k && write_wen0 && (insert_dirty|~insert);
           assign write_data1[k]=write_addr1[5:3]==k && write_wen1;

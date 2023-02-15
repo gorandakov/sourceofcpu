@@ -129,12 +129,12 @@ module reg_alloc(
         for(a=0;a<4;a=a+1) begin
             wire [4:0] rAllOc_first_rk;
             for(b=0;b<8;b=b+1) begin
-                assign rAllOc_first_rk=rAllOc_first[l][a*8+b] ? a*8+b : {5{1'bz}};
+                assign rAllOc_first_rk=rAllOc_first[l][a*8+b] ? a*8+b : 5'bz;
             end
-            assign rAllOc_first_rk=(~rAllOc_first_b[l][a]) ? 5'b0 : {5{1'bz}};
-            assign rAllOc_first_r[l]=rAllOc_first_b[l][a] ? rAllOc_first_rk : {5{1'bz}};
+            assign rAllOc_first_rk=(~rAllOc_first_b[l][a]) ? 5'b0 : 5'bz;
+            assign rAllOc_first_r[l]=rAllOc_first_b[l][a] ? rAllOc_first_rk : 5'bz;
         end
-        assign rAllOc_first_r[l]=rAllOc_has[l] ? {5{1'bz}} : 5'b0;
+        assign rAllOc_first_r[l]=rAllOc_has[l] ? 5'bz : 5'b0;
     end
   endgenerate
 
@@ -158,10 +158,10 @@ module reg_alloc(
   popcnt3_or_more pop1m_mod({rs1i0_en,rs1i1_en,rs1i2_en},pop3_or_more[1]);
   popcnt3_or_more pop2m_mod({rs2i0_en,rs2i1_en,rs2i2_en},pop3_or_more[2]);
   
-  assign pos_d=pop_max[3] ? pos : {2{1'bz}};
-  assign pos_d=pop_max[0] ? pos : {2{1'bz}};
-  assign pos_d=pop_max[1] ? pos_1 : {2{1'bz}};
-  assign pos_d=pop_max[2] ? pos_2 : {2{1'bz}};
+  assign pos_d=pop_max[3] ? pos : 2'bz;
+  assign pos_d=pop_max[0] ? pos : 2'bz;
+  assign pos_d=pop_max[1] ? pos_1 : 2'bz;
+  assign pos_d=pop_max[2] ? pos_2 : 2'bz;
 
   assign ret_rno[0]=ret_rno0;
   assign ret_rno[1]=ret_rno1;
@@ -842,39 +842,39 @@ module get_wSwp(
   assign stol[1]=lsi1==3'd7;
   assign stol[2]=lsi2==3'd7;
   
-  assign stol_swp=stol[0] ? Wswp0[1] : {1{1'bz}};
-  assign stol_swp=stol[1] ? Wswp0[2] : {1{1'bz}};
-  assign stol_swp=stol[2] ? Wswp0[0] : {1{1'bz}};
-  assign stol_swp=stol ? {1{1'bz}} : 1'b0;
+  assign stol_swp=stol[0] ? Wswp0[1] : 1'bz;
+  assign stol_swp=stol[1] ? Wswp0[2] : 1'bz;
+  assign stol_swp=stol[2] ? Wswp0[0] : 1'bz;
+  assign stol_swp=stol ? 1'bz : 1'b0;
   
-  assign {lsiA_,lsiB_}=stol[0] ? {lsi1,lsi2} : {6{1'bz}};
-  assign {lsiA_,lsiB_}=stol[1] ? {lsi2,lsi0} : {6{1'bz}};
-  assign {lsiA_,lsiB_}=stol[2] ? {lsi0,lsi1} : {6{1'bz}};
-  assign {lsiA_,lsiB_}=(!stol) ? {lsi0,lsi1} : {6{1'bz}};
+  assign {lsiA_,lsiB_}=stol[0] ? {lsi1,lsi2} : 6'bz;
+  assign {lsiA_,lsiB_}=stol[1] ? {lsi2,lsi0} : 6'bz;
+  assign {lsiA_,lsiB_}=stol[2] ? {lsi0,lsi1} : 6'bz;
+  assign {lsiA_,lsiB_}=(!stol) ? {lsi0,lsi1} : 6'bz;
   
   assign lsiA=stol_swp ? lsiB_ : lsiA_;
   assign lsiB=stol_swp ? lsiA_ : lsiB_;
 
-  assign {opA_,opB_}=stol[0] ? {op1,op2} : {26{1'bz}};
-  assign {opA_,opB_}=stol[1] ? {op2,op0} : {26{1'bz}};
-  assign {opA_,opB_}=stol[2] ? {op0,op1} : {26{1'bz}};
-  assign {opA_,opB_}=(!stol) ? {op0,op1} : {26{1'bz}};
+  assign {opA_,opB_}=stol[0] ? {op1,op2} : 26'bz;
+  assign {opA_,opB_}=stol[1] ? {op2,op0} : 26'bz;
+  assign {opA_,opB_}=stol[2] ? {op0,op1} : 26'bz;
+  assign {opA_,opB_}=(!stol) ? {op0,op1} : 26'bz;
   
   assign opA=stol_swp ? opB_ : opA_;
   assign opB=stol_swp ? opA_ : opB_;
 
-  assign {indA_,indB_}=stol[0] ? {ind1,ind2} : {8{1'bz}};
-  assign {indA_,indB_}=stol[1] ? {ind2,ind0} : {8{1'bz}};
-  assign {indA_,indB_}=stol[2] ? {ind0,ind1} : {8{1'bz}};
-  assign {indA_,indB_}=(!stol) ? {ind0,ind1} : {8{1'bz}};
+  assign {indA_,indB_}=stol[0] ? {ind1,ind2} : 8'bz;
+  assign {indA_,indB_}=stol[1] ? {ind2,ind0} : 8'bz;
+  assign {indA_,indB_}=stol[2] ? {ind0,ind1} : 8'bz;
+  assign {indA_,indB_}=(!stol) ? {ind0,ind1} : 8'bz;
   
   assign indA=stol_swp ? indB_ : indA_;
   assign indB=stol_swp ? indA_ : indB_;
   
-  assign {wqA_,wqB_}=stol[0] ? {wq1,wq2} : {12{1'bz}};
-  assign {wqA_,wqB_}=stol[1] ? {wq2,wq0} : {12{1'bz}};
-  assign {wqA_,wqB_}=stol[2] ? {wq0,wq1} : {12{1'bz}};
-  assign {wqA_,wqB_}=(!stol) ? {wq0,wq1} : {12{1'bz}};
+  assign {wqA_,wqB_}=stol[0] ? {wq1,wq2} : 12'bz;
+  assign {wqA_,wqB_}=stol[1] ? {wq2,wq0} : 12'bz;
+  assign {wqA_,wqB_}=stol[2] ? {wq0,wq1} : 12'bz;
+  assign {wqA_,wqB_}=(!stol) ? {wq0,wq1} : 12'bz;
   
   assign wqA=stol_swp ? wqB_ : wqA_;
   assign wqB=stol_swp ? wqA_ : wqB_;
@@ -1115,9 +1115,9 @@ module backend_reorder_free_regs(
 	  wire [8:0] instr_eq;
 	  for(k=0;k<8;k=k+1) begin
 	      assign instr_eq[k]=rs_index[k]==j;
-	      assign instr_reg[j]=instr_eq[k] ? rs_reg[k] : {9{1'bz}};
+	      assign instr_reg[j]=instr_eq[k] ? rs_reg[k] : 9'bz;
           end
-	  assign instr_reg[j]=instr_eq ? {9{1'bz}} : 9'h000;
+	  assign instr_reg[j]=instr_eq ? 9'bz : 9'h000;
       end
   endgenerate
 endmodule
@@ -1194,22 +1194,22 @@ module get_wrtII(
     genvar p,q;
     for(p=0;p<6;p=p+1) begin
         for(q=0;q<3;q=q+1) begin
-            assign wrtII0=(wrt0[p] && ~wrt0[p^1] && lsi[q][p] && ~(&lsi[q][1:0])) ? II[q] : {4{1'bz}};
-            assign wrtII1=(wrt1[p] && ~wrt1[p^1] && lsi[q][p] && ~(&lsi[q][1:0])) ? II[q] : {4{1'bz}};
-            assign wrtII2=(wrt2[p] && ~wrt2[p^1] && lsi[q][p] && ~(&lsi[q][1:0])) ? II[q] : {4{1'bz}};
+            assign wrtII0=(wrt0[p] && ~wrt0[p^1] && lsi[q][p] && ~(&lsi[q][1:0])) ? II[q] : 4'bz;
+            assign wrtII1=(wrt1[p] && ~wrt1[p^1] && lsi[q][p] && ~(&lsi[q][1:0])) ? II[q] : 4'bz;
+            assign wrtII2=(wrt2[p] && ~wrt2[p^1] && lsi[q][p] && ~(&lsi[q][1:0])) ? II[q] : 4'bz;
 	end
-        assign wrtO0=(wrt0[p] && ~wrt0[p^1]) ? p[2:0] : {3{1'bz}};
-        assign wrtO1=(wrt1[p] && ~wrt1[p^1]) ? p[2:0] : {3{1'bz}};
-        assign wrtO2=(wrt2[p] && ~wrt2[p^1]) ? p[2:0] : {3{1'bz}};
+        assign wrtO0=(wrt0[p] && ~wrt0[p^1]) ? p[2:0] : 3'bz;
+        assign wrtO1=(wrt1[p] && ~wrt1[p^1]) ? p[2:0] : 3'bz;
+        assign wrtO2=(wrt2[p] && ~wrt2[p^1]) ? p[2:0] : 3'bz;
     end
   endgenerate
-  assign wrtII0=(&wrt0[1:0]) ? 4'hf : {4{1'bz}};
-  assign wrtII1=(&wrt1[1:0]) ? 4'hf : {4{1'bz}};
-  assign wrtII2=(&wrt2[1:0]) ? 4'hf : {4{1'bz}};
+  assign wrtII0=(&wrt0[1:0]) ? 4'hf : 4'bz;
+  assign wrtII1=(&wrt1[1:0]) ? 4'hf : 4'bz;
+  assign wrtII2=(&wrt2[1:0]) ? 4'hf : 4'bz;
 
-  assign wrtO0=(&wrt0[1:0]) ? 3'd7 : {3{1'bz}};
-  assign wrtO1=(&wrt1[1:0]) ? 3'd7 : {3{1'bz}};
-  assign wrtO2=(&wrt2[1:0]) ? 3'd7 : {3{1'bz}};
+  assign wrtO0=(&wrt0[1:0]) ? 3'd7 : 3'bz;
+  assign wrtO1=(&wrt1[1:0]) ? 3'd7 : 3'bz;
+  assign wrtO2=(&wrt2[1:0]) ? 3'd7 : 3'bz;
 
   assign lsi[0]=lsi0;
   assign lsi[1]=lsi1;
@@ -1292,24 +1292,24 @@ module alloc_WQ(
     genvar p,q;
     for(p=0;p<6;p=p+1) begin
         for(q=0;q<3;q=q+1) begin
-	    assign WQr0=(wrt[q][p] && lsi0[p] && !(&lsi0[1:0]) & !(&wrt[q][1:0])) ? WQ[q] : {6{1'bz}};
-	    assign WQr1=(wrt[q][p] && lsi1[p] && !(&lsi1[1:0]) & !(&wrt[q][1:0])) ? WQ[q] : {6{1'bz}};
-	    assign WQr2=(wrt[q][p] && lsi2[p] && !(&lsi2[1:0]) & !(&wrt[q][1:0])) ? WQ[q] : {6{1'bz}};
+	    assign WQr0=(wrt[q][p] && lsi0[p] && !(&lsi0[1:0]) & !(&wrt[q][1:0])) ? WQ[q] : 6'bz;
+	    assign WQr1=(wrt[q][p] && lsi1[p] && !(&lsi1[1:0]) & !(&wrt[q][1:0])) ? WQ[q] : 6'bz;
+	    assign WQr2=(wrt[q][p] && lsi2[p] && !(&lsi2[1:0]) & !(&wrt[q][1:0])) ? WQ[q] : 6'bz;
 	end
     end
   endgenerate
 
-//  assign cncnt=(~free0) ? {wrcnt,2'b0} : {6{1'bz}};
-//  assign cncnt=(free0 & ~free1) ? {1'b0,wrcnt,1'b0} : {6{1'bz}};
-//  assign cncnt=(free0 & free1) ? {2'b0,wrcnt} : {6{1'bz}};
+//  assign cncnt=(~free0) ? {wrcnt,2'b0} : 6'bz;
+//  assign cncnt=(free0 & ~free1) ? {1'b0,wrcnt,1'b0} : 6'bz;
+//  assign cncnt=(free0 & free1) ? {2'b0,wrcnt} : 6'bz;
 
   assign wrt[0]=wrt0;
   assign wrt[1]=wrt1;
   assign wrt[2]=wrt2;
   
-  assign WQr0=((lsi0!=wrt0 && lsi0!=wrt1 && lsi0!=wrt2) || lsi0[4:0]==5'h1f) ? 6'h1f  : {6{1'bz}};
-  assign WQr1=((lsi1!=wrt0 && lsi1!=wrt1 && lsi1!=wrt2) || lsi1[4:0]==5'h1f) ? 6'h1f  : {6{1'bz}};
-  assign WQr2=((lsi2!=wrt0 && lsi2!=wrt1 && lsi2!=wrt2) || lsi2[4:0]==5'h1f) ? 6'h1f  : {6{1'bz}};
+  assign WQr0=((lsi0!=wrt0 && lsi0!=wrt1 && lsi0!=wrt2) || lsi0[4:0]==5'h1f) ? 6'h1f  : 6'bz;
+  assign WQr1=((lsi1!=wrt0 && lsi1!=wrt1 && lsi1!=wrt2) || lsi1[4:0]==5'h1f) ? 6'h1f  : 6'bz;
+  assign WQr2=((lsi2!=wrt0 && lsi2!=wrt1 && lsi2!=wrt2) || lsi2[4:0]==5'h1f) ? 6'h1f  : 6'bz;
 
   assign WQ[0]=pos ? {addr_low,1'b1} : {addr_low,1'b0};
   assign WQ[1]=pos ? {addr_hi,1'b0} : {addr_low,1'b1};
@@ -1324,18 +1324,18 @@ module alloc_WQ(
   assign addr_hi2[0]=addr_hi[0];
   assign addr_low2[0]=addr_low[0];
 
-  assign addr_hi1=(addr_hi==7'd63) ? 7'b0 : {7{1'bz}};
-  assign addr_low1=(addr_low==7'd63) ? 7'b0 : {7{1'bz}};
-  assign addr_hi2[6:1]=(addr_hi[6:1]==6'd31) ? 6'b0 : {6{1'bz}};
-  assign addr_low2[6:1]=(addr_low[6:1]==6'd31) ? 6'b0 : {6{1'bz}};
+  assign addr_hi1=(addr_hi==7'd63) ? 7'b0 : 7'bz;
+  assign addr_low1=(addr_low==7'd63) ? 7'b0 : 7'bz;
+  assign addr_hi2[6:1]=(addr_hi[6:1]==6'd31) ? 6'b0 : 6'bz;
+  assign addr_low2[6:1]=(addr_low[6:1]==6'd31) ? 6'b0 : 6'bz;
 
   assign xaddr_hi2[0]=xaddr_hi[0];
   assign xaddr_low2[0]=xaddr_low[0];
 
-  assign xaddr_hi1=(xaddr_hi==7'd63) ? 7'b0 : {7{1'bz}};
-  assign xaddr_low1=(xaddr_low==7'd63) ? 7'b0 : {7{1'bz}};
-  assign xaddr_hi2[6:1]=(xaddr_hi[6:1]==6'd31) ? 6'b0 : {6{1'bz}};
-  assign xaddr_low2[6:1]=(xaddr_low[6:1]==6'd31) ? 6'b0 : {6{1'bz}};
+  assign xaddr_hi1=(xaddr_hi==7'd63) ? 7'b0 : 7'bz;
+  assign xaddr_low1=(xaddr_low==7'd63) ? 7'b0 : 7'bz;
+  assign xaddr_hi2[6:1]=(xaddr_hi[6:1]==6'd31) ? 6'b0 : 6'bz;
+  assign xaddr_low2[6:1]=(xaddr_low[6:1]==6'd31) ? 6'b0 : 6'bz;
   adder_inc #(7) hiAdd1_mod(addr_hi,addr_hi1,addr_hi!=7'd63,);
   adder_inc #(7) lowAdd1_mod(addr_low,addr_low1,addr_low!=7'd63,);
   adder_inc #(6) hiAdd2_mod(addr_hi[6:1],addr_hi2[6:1],addr_hi[6:1]!=6'd31,);
@@ -1390,8 +1390,8 @@ module wrtdata_combine(data,pdata,en,odata,opdata,low,sz);
       genvar c,d;
       for(c=0;c<4;c=c+1) begin : low_gen
 	  //verilator lint_off WIDTH
-          if (c) assign odata=(en && low==c) ? {data,{c{8'b0}}} : {160{1'bz}};
-          else assign odata=(en && low==c) ? data : {160{1'bz}};
+          if (c) assign odata=(en && low==c) ? {data,{c{8'b0}}} : 160'bz;
+          else assign odata=(en && low==c) ? data : 160'bz;
 	  //verilator lint_on WIDTH
       end
   endgenerate
@@ -1582,14 +1582,14 @@ module fexcpt(
   generate
     genvar t;
     for(t=0;t<11;t=t+1) begin
-        assign no0=first[t] ? {t[10:0],3'd3} : {14{1'bz}};
+        assign no0=first[t] ? {t[10:0],3'd3} : 14'bz;
     end
   endgenerate
 
-  assign no_X=in_en & ~en0 ? {in_mask,3'd3} : {14{1'bz}};
-  assign no_X=in_en & en0 ? no0 : {14{1'bz}};
-  assign no_X=~in_en ? {5'b0,in} : {14{1'bz}};
-  assign no0=en0 ? {14{1'bz}} : 14'b0;
+  assign no_X=in_en & ~en0 ? {in_mask,3'd3} : 14'bz;
+  assign no_X=in_en & en0 ? no0 : 14'bz;
+  assign no_X=~in_en ? {5'b0,in} : 14'bz;
+  assign no0=en0 ? 14'bz : 14'b0;
   assign en=in_en | (in[1:0]!=2'd0);
 endmodule
 //verilator lint_on WIDTH

@@ -143,11 +143,11 @@ module cc_comb (
   assign read_dataXP[3]=~({15{read_hit1B}} & read_dataX0_reg[59:45]); 
 
 
-/*  assign read_dataYP=read_hit0A ? read_dataY0_reg[17:0] : {18{1'bz}}; 
-  assign read_dataYP=read_hit1A ? read_dataY0_reg[35:18] : {18{1'bz}}; 
-  assign read_dataYP=read_hit0B ? read_dataY0_reg[53:36] : {18{1'bz}}; 
-  assign read_dataYP=read_hit1B ? read_dataY0_reg[71:54] : {18{1'bz}}; 
-  assign read_dataYP=read_hitP ? {18{1'bz}} : 18'B0;
+/*  assign read_dataYP=read_hit0A ? read_dataY0_reg[17:0] : 18'BZ; 
+  assign read_dataYP=read_hit1A ? read_dataY0_reg[35:18] : 18'BZ; 
+  assign read_dataYP=read_hit0B ? read_dataY0_reg[53:36] : 18'BZ; 
+  assign read_dataYP=read_hit1B ? read_dataY0_reg[71:54] : 18'BZ; 
+  assign read_dataYP=read_hitP ? 18'BZ : 18'B0;
   */
   
 

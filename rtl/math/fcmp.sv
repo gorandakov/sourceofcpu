@@ -70,20 +70,20 @@ module fcmpd(clk,rst,
   reg ven_reg;
   reg [1:0] vtype_reg;
 
-  assign vres[0]=cmod==0 ? flags[5] : {1{1'bz}};
-  assign vres[0]=cmod==1 ? ~flags[5] : {1{1'bz}};
-  assign vres[0]=cmod==2 ? flags[1] : {1{1'bz}};
-  assign vres[0]=cmod==3 ? ~flags[1] : {1{1'bz}};
+  assign vres[0]=cmod==0 ? flags[5] : 1'bz;
+  assign vres[0]=cmod==1 ? ~flags[5] : 1'bz;
+  assign vres[0]=cmod==2 ? flags[1] : 1'bz;
+  assign vres[0]=cmod==3 ? ~flags[1] : 1'bz;
 
-  assign vres[1]=cmod==0 && ~paired ? flags[5] : {1{1'bz}};
-  assign vres[1]=cmod==1 && ~paired ? ~flags[5] : {1{1'bz}};
-  assign vres[1]=cmod==2 && ~paired ? flags[1] : {1{1'bz}};
-  assign vres[1]=cmod==3 && ~paired? ~flags[1] : {1{1'bz}};
-  assign vres1=cmod==0 ? flags_other[5] : {1{1'bz}};
-  assign vres1=cmod==1 ? ~flags_other[5] : {1{1'bz}};
-  assign vres1=cmod==2 ? flags_other[1] : {1{1'bz}};
-  assign vres1=cmod==3 ? ~flags_other[1] : {1{1'bz}};
-  assign vres[1]=paired ? vres1 : {1{1'bz}};
+  assign vres[1]=cmod==0 && ~paired ? flags[5] : 1'bz;
+  assign vres[1]=cmod==1 && ~paired ? ~flags[5] : 1'bz;
+  assign vres[1]=cmod==2 && ~paired ? flags[1] : 1'bz;
+  assign vres[1]=cmod==3 && ~paired? ~flags[1] : 1'bz;
+  assign vres1=cmod==0 ? flags_other[5] : 1'bz;
+  assign vres1=cmod==1 ? ~flags_other[5] : 1'bz;
+  assign vres1=cmod==2 ? flags_other[1] : 1'bz;
+  assign vres1=cmod==3 ? ~flags_other[1] : 1'bz;
+  assign vres[1]=paired ? vres1 : 1'bz;
   function [63:0] fracxfrm;
     input [63:0] d_in;
     input sngl;
@@ -115,30 +115,30 @@ module fcmpd(clk,rst,
 
   assign fEQl=fracxfrm({A[64:33],A[31:0]},isSng,isDbl,isExt)==
     fracxfrm({B[64:33],B[31:0]},isSng,isDbl,isExt);
-  assign extA=isExt ? {A[81],A[79:65]} : {16{1'bz}};
-  assign extA=isDbl ? {A[81],{4{~A[81]}},A[63:53]} : {16{1'bz}};
-  assign extA=(~isDbl&~isExt) ? {A[32],{7{~A[32]}},A[30:23]} : {16{1'bz}};
-  assign extB=isExt ? {B[81],B[79:65]} : {16{1'bz}};
-  assign extB=isDbl ? {B[81],{4{~B[81]}},B[63:53]} : {16{1'bz}};
-  assign extB=(~isDbl & ~isExt) ? {B[32],{7{~B[32]}},B[30:23]} : {16{1'bz}};
+  assign extA=isExt ? {A[81],A[79:65]} : 16'bz;
+  assign extA=isDbl ? {A[81],{4{~A[81]}},A[63:53]} : 16'bz;
+  assign extA=(~isDbl&~isExt) ? {A[32],{7{~A[32]}},A[30:23]} : 16'bz;
+  assign extB=isExt ? {B[81],B[79:65]} : 16'bz;
+  assign extB=isDbl ? {B[81],{4{~B[81]}},B[63:53]} : 16'bz;
+  assign extB=(~isDbl & ~isExt) ? {B[32],{7{~B[32]}},B[30:23]} : 16'bz;
 
-  assign emsk=isExt ? 16'hffff : {16{1'bz}};
-  assign emsk=isDbl ? 16'h87ff : {16{1'bz}};
-  assign emsk=(~isDbl&~isExt) ? 16'h80ff : {16{1'bz}};
+  assign emsk=isExt ? 16'hffff : 16'bz;
+  assign emsk=isDbl ? 16'h87ff : 16'bz;
+  assign emsk=(~isDbl&~isExt) ? 16'h80ff : 16'bz;
 
-  assign A_s=isExt ? A[80] : {1{1'bz}};
-  assign A_s=isDbl ? A[64] : {1{1'bz}};
-  assign A_s=(~isDbl & ~isExt) ? A[31] : {1{1'bz}};
-  assign B_s=isExt ? B[80] : {1{1'bz}};
-  assign B_s=isDbl ? B[64] : {1{1'bz}};
-  assign B_s=(~isDbl & ~isExt) ? B[31] : {1{1'bz}};
+  assign A_s=isExt ? A[80] : 1'bz;
+  assign A_s=isDbl ? A[64] : 1'bz;
+  assign A_s=(~isDbl & ~isExt) ? A[31] : 1'bz;
+  assign B_s=isExt ? B[80] : 1'bz;
+  assign B_s=isDbl ? B[64] : 1'bz;
+  assign B_s=(~isDbl & ~isExt) ? B[31] : 1'bz;
 
-  assign A_h=isExt ? {|A[61:0],A[62]} : {2{1'bz}};
-  assign A_h=isDbl ? {|A[50:0],A[51]} : {2{1'bz}};
-  assign A_h=(~isDbl & ~isExt) ? {|A[21:0],A[22]} : {2{1'bz}};
-  assign B_h=isExt ? {|B[61:0],B[62]} : {2{1'bz}};
-  assign B_h=isDbl ? {|B[50:0],B[51]} : {2{1'bz}};
-  assign B_h=(~isDbl & ~isExt) ? {|B[21:0],B[22]} : {2{1'bz}};
+  assign A_h=isExt ? {|A[61:0],A[62]} : 2'bz;
+  assign A_h=isDbl ? {|A[50:0],A[51]} : 2'bz;
+  assign A_h=(~isDbl & ~isExt) ? {|A[21:0],A[22]} : 2'bz;
+  assign B_h=isExt ? {|B[61:0],B[62]} : 2'bz;
+  assign B_h=isDbl ? {|B[50:0],B[51]} : 2'bz;
+  assign B_h=(~isDbl & ~isExt) ? {|B[21:0],B[22]} : 2'bz;
   
 //  assign A_x_h={|A[54:33],A[55]};
 //  assign B_x_h={|B[54:33],B[55]};
@@ -181,7 +181,7 @@ module fcmpd(clk,rst,
 
   assign flags={~res_C,res_unord,1'b0,res_S,res_Z,res_unord};
 
-  assign res_pkd_X[67:0]=ven_reg ? {vtype_reg,{33{vres_reg[1]}},{33{vres_reg[0]}}} : {68{1'bz}}; 
+  assign res_pkd_X[67:0]=ven_reg ? {vtype_reg,{33{vres_reg[1]}},{33{vres_reg[0]}}} : 68'bz; 
   always @(negedge clk) begin
     if (rst) vres_reg<=2'b0;
     else vres_reg<=vres;

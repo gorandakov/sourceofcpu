@@ -260,13 +260,13 @@ module ccRam_way(
   endgenerate
 
   `ifdef ICACHE_256K
-  assign writeX_addr=init ? initCount : {8{1'bz}};
-  assign writeX_addr=(~init & read_clkEn_reg) ? read_IP_reg[9:2] : {8{1'bz}};
-  assign writeX_addr=(~init & ~read_clkEn_reg) ? write_IP_reg[9:2] : {8{1'bz}};
+  assign writeX_addr=init ? initCount : 8'bz;
+  assign writeX_addr=(~init & read_clkEn_reg) ? read_IP_reg[9:2] : 8'bz;
+  assign writeX_addr=(~init & ~read_clkEn_reg) ? write_IP_reg[9:2] : 8'bz;
   `else
-  assign writeX_addr=init ? initCount : {7{1'bz}};
-  assign writeX_addr=(~init & read_clkEn_reg) ? read_IP_reg[8:2] : {7{1'bz}};
-  assign writeX_addr=(~init & ~read_clkEn_reg) ? write_IP_reg[8:2] : {7{1'bz}};
+  assign writeX_addr=init ? initCount : 7'bz;
+  assign writeX_addr=(~init & read_clkEn_reg) ? read_IP_reg[8:2] : 7'bz;
+  assign writeX_addr=(~init & ~read_clkEn_reg) ? write_IP_reg[8:2] : 7'bz;
   `endif
 
   assign chkCL_hit=read_hitC0;

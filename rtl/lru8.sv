@@ -47,11 +47,11 @@ module lru_single0(
   assign hitAfter=hitThisOrAfter & ~hitThis;
   assign hitBefore=~hitThisOrAfter;
   
-  assign newLRU_X=(hitThis & ~init &en) ? {WIDTH{1'B0}} : {WIDTH{{1{1'bz}}}};
-  assign newLRU_X=(hitAfter & ~init &en) ? lru : {WIDTH{{1{1'bz}}}};
-  assign newLRU_X=(hitBefore & ~init &en)? lru_next : {WIDTH{{1{1'bz}}}};
-  assign newLRU_X=init ? INITVAL : {WIDTH{{1{1'bz}}}};
-  assign newLRU_X=(~en & ~init) ? lru : {WIDTH{{1{1'bz}}}};
+  assign newLRU_X=(hitThis & ~init &en) ? {WIDTH{1'B0}} : {WIDTH{1'BZ}};
+  assign newLRU_X=(hitAfter & ~init &en) ? lru : {WIDTH{1'BZ}};
+  assign newLRU_X=(hitBefore & ~init &en)? lru_next : {WIDTH{1'BZ}};
+  assign newLRU_X=init ? INITVAL : {WIDTH{1'BZ}};
+  assign newLRU_X=(~en & ~init) ? lru : {WIDTH{1'BZ}};
   
   generate
       if (WIDTH>1) begin : adders_gen
@@ -100,11 +100,11 @@ module lru_single(
         init,
         en
         );	
-        assign newLRU_X= (hitLRU==k && ~init)  ? newLRUa[k] : {WIDTH{{1{1'bz}}}};		
+        assign newLRU_X= (hitLRU==k && ~init)  ? newLRUa[k] : {WIDTH{1'BZ}};		
 	  end
   endgenerate
   
-  assign newLRU_X=init ? INITVAL : {WIDTH{{1{1'bz}}}};
+  assign newLRU_X=init ? INITVAL : {WIDTH{1'bz}};
   
 endmodule
 
@@ -146,14 +146,14 @@ module lru_double(
   assign hitBefore1=~hitThisOrAfterA ^ (~hitThisOrAfterB & isDouble);
   assign hitBefore2=~hitThisOrAfterA & ~hitThisOrAfterB & isDouble;
   
-  assign newLRU=(hitThisA & ~init &en) ? {WIDTH{1'B0}} : {WIDTH{{1{1'bz}}}};
-  assign newLRU=(hitThisB & ~init &en & isDouble) ? 1 : {WIDTH{{1{1'bz}}}};
+  assign newLRU=(hitThisA & ~init &en) ? {WIDTH{1'B0}} : {WIDTH{1'BZ}};
+  assign newLRU=(hitThisB & ~init &en & isDouble) ? 1 : {WIDTH{1'BZ}};
 
-  assign newLRU=(hitAfter & ~init &en) ? lru : {WIDTH{{1{1'bz}}}};
-  assign newLRU=(hitBefore1 & ~init &en)? lru_next : {WIDTH{{1{1'bz}}}};
-  assign newLRU=(hitBefore2 & ~init &en)? lru_next2 : {WIDTH{{1{1'bz}}}};
-  assign newLRU=init ? INITVAL : {WIDTH{{1{1'bz}}}};
-  assign newLRU=(~en & ~init) ? lru : {WIDTH{{1{1'bz}}}};
+  assign newLRU=(hitAfter & ~init &en) ? lru : {WIDTH{1'BZ}};
+  assign newLRU=(hitBefore1 & ~init &en)? lru_next : {WIDTH{1'BZ}};
+  assign newLRU=(hitBefore2 & ~init &en)? lru_next2 : {WIDTH{1'BZ}};
+  assign newLRU=init ? INITVAL : {WIDTH{1'BZ}};
+  assign newLRU=(~en & ~init) ? lru : {WIDTH{1'BZ}};
   
   assign lru_next2[0]=lru[0];
   

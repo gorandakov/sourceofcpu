@@ -157,8 +157,8 @@ module rt2_fp(
 	 wire [136:0] par1;
 	 wire [136:0] par2;
 	 for(d_ind=0;d_ind<16;d_ind=d_ind+1) begin
-	     assign Se_arg2[Se_ind]=P_en[d_ind] ? d_ind*Se_ind*32+Se_ind*Se_ind : {14{1'bz}};
-	     assign Se_arg[Se_ind]=P_en[d_ind] ? d_ind*Se_ind : {8{1'bz}};
+	     assign Se_arg2[Se_ind]=P_en[d_ind] ? d_ind*Se_ind*32+Se_ind*Se_ind : 14'bz;
+	     assign Se_arg[Se_ind]=P_en[d_ind] ? d_ind*Se_ind : 8'bz;
 	 end
    //  assign square[Se_ind*8-8+:8]=Se_ind*Se_ind;
 	 adder #(72) Se_add({Se[Se_ind][59:-8],4'b0},{60'b0,3'b0,Se_arg_reg[Se_ind],1'b0},Se_d[Se_ind],1'b0,1'b1,,,,);
@@ -168,15 +168,15 @@ module rt2_fp(
 	 adder2o #(8) P8_add(par1[7:0],par2[7:0],P_out[Se_ind][7:0],P_d[7:0],1'b0,1'b1,P_en[Se_ind],P_cout[Se_ind],,,);
 	 if (Se_ind<15) assign P_en[Se_ind]=P8_out[Se_ind][7] & ~P8_out[Se_ind+1][7];
 	 else assign P_en[Se_ind]=P8_out[Se_ind][7]; 
-	 assign new_digit=P_en[Se_ind] ? Se_ind[3:0] : {4{1'bz}};
+	 assign new_digit=P_en[Se_ind] ? Se_ind[3:0] : 4'bz;
      end
  endgenerate
  
  
 
  assign P_en[0]=~P8_out[1][7];
- assign P_d=P_en[0] ? P[135:0] : {136{1'bz}};
- assign new_digit=P_en[0] ? 4'd0 : {4{1'bz}};
+ assign P_d=P_en[0] ? P[135:0] : 136'bz;
+ assign new_digit=P_en[0] ? 4'd0 : 4'bz;
 
  assign minus_norm=~normA;
 
@@ -211,18 +211,18 @@ module rt2_fp(
   EXT_rnd && type_reg==1 && EXT_lead,,,,);
  adder #(64) digg0Add(digits[66:3],64'b1,{result_X[64:33],result_X[31:0]},1'b0,
    EXT_rnd && type_reg==1 && ~EXT_lead,,,,);
- assign {result_X[64:33],result_X[31:0]}=(type_reg==1  && ~EXT_rnd && EXT_lead) ? digits[67:4] : {64{1'bz}};
- assign {result_X[64:33],result_X[31:0]}=(type_reg==1  && ~EXT_rnd && ~EXT_lead) ? digits[66:3] : {64{1'bz}};
+ assign {result_X[64:33],result_X[31:0]}=(type_reg==1  && ~EXT_rnd && EXT_lead) ? digits[67:4] : 64'bz;
+ assign {result_X[64:33],result_X[31:0]}=(type_reg==1  && ~EXT_rnd && ~EXT_lead) ? digits[66:3] : 64'bz;
  assign {result_X[65],result_X[SIMD_WIDTH+14:SIMD_WIDTH]}=type_reg==1 && 
-   is_root_reg ? {exp_inc[16],exp_inc[15:1]} : {16{1'bz}}; 
- assign result_X[SIMD_WIDTH+15]=(type_reg==1 & is_root_reg) ? 1'b0 : {1{1'bz}};
+   is_root_reg ? {exp_inc[16],exp_inc[15:1]} : 16'bz; 
+ assign result_X[SIMD_WIDTH+15]=(type_reg==1 & is_root_reg) ? 1'b0 : 1'bz;
  assign {result_X[65],result_X[SIMD_WIDTH+14:SIMD_WIDTH]}=type_reg==1 &&
-   ~is_root_reg ? {exp2[15],exp2[14:0]} : {16{1'bz}}; 
+   ~is_root_reg ? {exp2[15],exp2[14:0]} : 16'bz; 
  assign result_X[SIMD_WIDTH+15]=type_reg==1 & ~is_root_reg
-   ? nsignA_reg^nsignB_reg : {1{1'bz}};
- assign result_X[67:66]=(type_reg==1) ? 2'd`ptype_ext : {2{1'bz}};
+   ? nsignA_reg^nsignB_reg : 1'bz;
+ assign result_X[67:66]=(type_reg==1) ? 2'd`ptype_ext : 2'bz;
  assign result_X[SIMD_WIDTH+67:SIMD_WIDTH+66]=type_reg==1 
-   ? 2'd`ptype_ext : {2{1'bz}};
+   ? 2'd`ptype_ext : 2'bz;
  
  adder2o #(52) digg1Add_E(digits[54:3],rndbits[54:3],{result_X[52:33],result_X[31:0]},
   {result_X[SIMD_WIDTH+52:SIMD_WIDTH+33],result_X[SIMD_WIDTH+31:SIMD_WIDTH]},1'b0,
@@ -230,81 +230,81 @@ module rt2_fp(
  adder2o #(52) digg0Add_E(digits[53:2],rndbits[54:3],{result_X[52:33],result_X[31:0]},
    {result_X[SIMD_WIDTH+52:SIMD_WIDTH+33],result_X[SIMD_WIDTH+31:SIMD_WIDTH]},1'b0,
    DBL_rnd && type_reg==0 && ~DBL_lead,DBL_rnd && type_reg==4 && ~DBL_lead,,,,);
- assign {result_X[52:33],result_X[31:0]}=(type_reg==0  && ~DBL_rnd && DBL_lead) ? digits[54:3] : {52{1'bz}};
- assign {result_X[52:33],result_X[31:0]}=(type_reg==0  && ~DBL_rnd && ~DBL_lead) ? digits[53:2] : {52{1'bz}};
+ assign {result_X[52:33],result_X[31:0]}=(type_reg==0  && ~DBL_rnd && DBL_lead) ? digits[54:3] : 52'bz;
+ assign {result_X[52:33],result_X[31:0]}=(type_reg==0  && ~DBL_rnd && ~DBL_lead) ? digits[53:2] : 52'bz;
  assign {result_X[SIMD_WIDTH+52:SIMD_WIDTH+33],result_X[SIMD_WIDTH+31:SIMD_WIDTH]}=
-   (type_reg==4  && ~DBL_rnd && DBL_lead) ? digits[54:3] : {52{1'bz}};
+   (type_reg==4  && ~DBL_rnd && DBL_lead) ? digits[54:3] : 52'bz;
  assign {result_X[SIMD_WIDTH+52:SIMD_WIDTH+33],result_X[SIMD_WIDTH+31:SIMD_WIDTH]}=
-   (type_reg==4  && ~DBL_rnd && ~DBL_lead) ? digits[53:2] : {52{1'bz}};
- assign {result_X[65],result_X[63:53]}=(type_reg==0 && is_root_reg) ? {exp_inc[16],exp_inc[11:1]} : {12{1'bz}}; 
- assign result_X[64]=(type_reg==0 & is_root_reg) ? 1'b0 : {1{1'bz}};
- assign {result_X[65],result_X[63:53]}=(type_reg==0 && ~is_root_reg) ? {exp2[15],exp2[10:0]} : {12{1'bz}}; 
- assign result_X[64]=(type_reg==0 & ~is_root_reg) ? nsignA_reg^nsignB_reg : {1{1'bz}};
+   (type_reg==4  && ~DBL_rnd && ~DBL_lead) ? digits[53:2] : 52'bz;
+ assign {result_X[65],result_X[63:53]}=(type_reg==0 && is_root_reg) ? {exp_inc[16],exp_inc[11:1]} : 12'bz; 
+ assign result_X[64]=(type_reg==0 & is_root_reg) ? 1'b0 : 1'bz;
+ assign {result_X[65],result_X[63:53]}=(type_reg==0 && ~is_root_reg) ? {exp2[15],exp2[10:0]} : 12'bz; 
+ assign result_X[64]=(type_reg==0 & ~is_root_reg) ? nsignA_reg^nsignB_reg : 1'bz;
  assign {result_X[SIMD_WIDTH+65],result_X[SIMD_WIDTH+63:SIMD_WIDTH+53]}=(type_reg==4
-   && is_root_reg) ? {exp_inc[16],exp_inc[11:1]} : {12{1'bz}}; 
- assign result_X[SIMD_WIDTH+64]=(type_reg==4 & is_root_reg) ? 1'b0 : {1{1'bz}};
+   && is_root_reg) ? {exp_inc[16],exp_inc[11:1]} : 12'bz; 
+ assign result_X[SIMD_WIDTH+64]=(type_reg==4 & is_root_reg) ? 1'b0 : 1'bz;
  assign {result_X[SIMD_WIDTH+65],result_X[SIMD_WIDTH+63:SIMD_WIDTH+53]}=(type_reg==4
-   && ~is_root_reg) ? {exp2[15],exp2[10:0]} : {12{1'bz}}; 
- assign result_X[SIMD_WIDTH+64]=(type_reg==4 & ~is_root_reg) ? nsignA_reg^nsignB_reg : {1{1'bz}};
- assign result_X[67:66]=(type_reg==0 || type_reg==4) ? 2'd`ptype_dbl : {2{1'bz}};
- assign result_X[SIMD_WIDTH+67:SIMD_WIDTH+66]=(type_reg==0 || type_reg==4) ? 2'd`ptype_dbl : {2{1'bz}};
- assign result_X[65:0]=(type_reg==4) ? 66'b0 : {66{1'bz}};
+   && ~is_root_reg) ? {exp2[15],exp2[10:0]} : 12'bz; 
+ assign result_X[SIMD_WIDTH+64]=(type_reg==4 & ~is_root_reg) ? nsignA_reg^nsignB_reg : 1'bz;
+ assign result_X[67:66]=(type_reg==0 || type_reg==4) ? 2'd`ptype_dbl : 2'bz;
+ assign result_X[SIMD_WIDTH+67:SIMD_WIDTH+66]=(type_reg==0 || type_reg==4) ? 2'd`ptype_dbl : 2'bz;
+ assign result_X[65:0]=(type_reg==4) ? 66'b0 : 66'bz;
  assign result_X[SIMD_WIDTH+65:SIMD_WIDTH+16]=(type_reg==0||
-   type_reg==2 || type_reg==1) ? 50'b0 : {50{1'bz}};
+   type_reg==2 || type_reg==1) ? 50'b0 : 50'bz;
  assign result_X[SIMD_WIDTH+15:SIMD_WIDTH]=(type_reg==0||
-   type_reg==2) ? 16'b0 : {16{1'bz}};
- assign result_X[32]=(type_reg==0) ? 1'b0 : {1{1'bz}};
- assign result_X[SIMD_WIDTH+32]=(type_reg==4) ? 1'b0 : {1{1'bz}};
+   type_reg==2) ? 16'b0 : 16'bz;
+ assign result_X[32]=(type_reg==0) ? 1'b0 : 1'bz;
+ assign result_X[SIMD_WIDTH+32]=(type_reg==4) ? 1'b0 : 1'bz;
 
  adder #(23) digg1Add_S(digits[26:4],{22'b0,1'b1},result_X[22:0],1'b0,SNGL_rnd && type_reg==2 && SNGL_lead,,,,);
  adder #(23) digg0Add_S(digits[25:3],{22'b0,1'b1},result_X[22:0],1'b0,SNGL_rnd && type_reg==2 && ~SNGL_lead,,,,);
- assign result_X[22:0]=(type_reg==2  && ~SNGL_rnd && SNGL_lead) ? digits[26:4] : {23{1'bz}};
- assign result_X[22:0]=(type_reg==2  && ~SNGL_rnd && ~SNGL_lead) ? digits[25:3] : {23{1'bz}};
- assign {result_X[32],result_X[30:23]}=(type_reg==2 && is_root_reg) ? {exp_inc[16],exp_inc[8:1]} : {9{1'bz}}; 
- assign result_X[31]=(type_reg==2 & is_root_reg) ? 1'b0 : {1{1'bz}};
- assign {result_X[32],result_X[30:23]}=(type_reg==2 && ~is_root_reg) ? {exp2[15],exp2[7:0]} : {9{1'bz}}; 
- assign result_X[31]=(type_reg==2 & ~is_root_reg) ? nsignA_reg^nsignB_reg : {1{1'bz}};
- assign result_X[67:66]=(type_reg==2) ? 2'd`ptype_sngl : {2{1'bz}};
- assign result_X[SIMD_WIDTH+67:SIMD_WIDTH+66]=(type_reg==2) ? 2'd`ptype_sngl : {2{1'bz}};
-// assign result_X[2*SIMD_WIDTH:0]=(type_reg==4) ? 66'b0 : {66{1'bz}};
- assign result_X[65:33]=(type_reg==2) ? 33'b0 : {33{1'bz}};
+ assign result_X[22:0]=(type_reg==2  && ~SNGL_rnd && SNGL_lead) ? digits[26:4] : 23'bz;
+ assign result_X[22:0]=(type_reg==2  && ~SNGL_rnd && ~SNGL_lead) ? digits[25:3] : 23'bz;
+ assign {result_X[32],result_X[30:23]}=(type_reg==2 && is_root_reg) ? {exp_inc[16],exp_inc[8:1]} : 9'bz; 
+ assign result_X[31]=(type_reg==2 & is_root_reg) ? 1'b0 : 1'bz;
+ assign {result_X[32],result_X[30:23]}=(type_reg==2 && ~is_root_reg) ? {exp2[15],exp2[7:0]} : 9'bz; 
+ assign result_X[31]=(type_reg==2 & ~is_root_reg) ? nsignA_reg^nsignB_reg : 1'bz;
+ assign result_X[67:66]=(type_reg==2) ? 2'd`ptype_sngl : 2'bz;
+ assign result_X[SIMD_WIDTH+67:SIMD_WIDTH+66]=(type_reg==2) ? 2'd`ptype_sngl : 2'bz;
+// assign result_X[2*SIMD_WIDTH:0]=(type_reg==4) ? 66'b0 : 66'bz;
+ assign result_X[65:33]=(type_reg==2) ? 33'b0 : 33'bz;
 
 
  adder #(17) expAdd_mod(expA_reg,17'h7fff,exp_incy,1'b0,1'b1,,,,);
  adder_CSA #(16) exp2CSA_mod(expA_reg[15:0],~expB_reg[15:0],BIAS[15:0],e2p0,e2p1);
  adder2c #(17) exp2Add_mod(e2p0,e2p1,exp2x,exp2x,1'b0,1'b1,~ANY_lead&&expA_reg!=0,ANY_lead&&expA_reg!=0,,,,);
- assign exp2x=( expA_reg==0) ? 0 : {17{1'bz}};
- assign exp2=(A_nan||B_nan||B_zero&A_zero||A_infty&B_infty) ? 17'hffff: {17{1'bz}};
+ assign exp2x=( expA_reg==0) ? 0 : 17'bz;
+ assign exp2=(A_nan||B_nan||B_zero&A_zero||A_infty&B_infty) ? 17'hffff: 17'bz;
  assign exp2=(A_infty&~B_infty&~B_nan||~A_infty&~A_nan&B_zero||(exp2[16]^exp2[15])&ANY_xbit2||
-       (exp2x==ANY_enan&&~A_nan&&~B_nan)) ? 17'hfffe : {17{1'bz}};
- assign exp2=(A_zero&~B_nan||B_infty&~A_nan&~A_infty||~exp2x_cmp&~exp2[16]&~A_nan&~B_nan&~B_zero&~A_infty) ? 17'h0 : {17{1'bz}};
+       (exp2x==ANY_enan&&~A_nan&&~B_nan)) ? 17'hfffe : 17'bz;
+ assign exp2=(A_zero&~B_nan||B_infty&~A_nan&~A_infty||~exp2x_cmp&~exp2[16]&~A_nan&~B_nan&~B_zero&~A_infty) ? 17'h0 : 17'bz;
 
- assign exp_inc=specR_zero ? 17'b0 : {17{1'bz}};
- assign exp_inc=specR_infty ? 17'hfffe : {17{1'bz}};
+ assign exp_inc=specR_zero ? 17'b0 : 17'bz;
+ assign exp_inc=specR_infty ? 17'hfffe : 17'bz;
 
- assign exp_inc=specR_nan ? 17'hffff : {17{1'bz}};
+ assign exp_inc=specR_nan ? 17'hffff : 17'bz;
 
- assign exp_inc=specR_nan|specR_infty|specR_zero ? {17{1'bz}} : exp_incy;
+ assign exp_inc=specR_nan|specR_infty|specR_zero ? 17'bz : exp_incy;
 
  assign exp2=~A_nan&&~B_nan&&~A_infty&&~B_infty&&~A_zero&&~B_zero&&!~exp2x_cmp&~exp2[16]&&!(exp2[16]^exp2[15])&ANY_xbit2&&
-	 !(exp2x==ANY_enan&&~A_nan&&~B_nan) ? exp2x : {17{1'bz}};//bottle
+	 !(exp2x==ANY_enan&&~A_nan&&~B_nan) ? exp2x : 17'bz;//bottle
 
  get_carry #(17) exp2cmp_mod(exp2x,~ANY_denor,1'b1,exp2x_cmp);
  get_carry #(17) exp2tycmp_mod(exp_incy,~ANY_denor,1'b1,exp2y_cmp);
 
- assign ANY_denor=type_reg[1:0]==2'b0 ? 17'hbfff-17'd53 : {17{1'bz}};
- assign ANY_denor=type_reg==3'b1 ? 17'hbfff-17'd64 : {17{1'bz}};
- assign ANY_denor=type_reg[1:0]!=2'b0 && type_reg!=3'd1 ? 17'hbfff-17'd24 : {17{1'bz}};
+ assign ANY_denor=type_reg[1:0]==2'b0 ? 17'hbfff-17'd53 : 17'bz;
+ assign ANY_denor=type_reg==3'b1 ? 17'hbfff-17'd64 : 17'bz;
+ assign ANY_denor=type_reg[1:0]!=2'b0 && type_reg!=3'd1 ? 17'hbfff-17'd24 : 17'bz;
 
  assign ANY_enan=17'hffff;
 
- assign ANY_lead=type_reg[1:0]==2'b0 ? DBL_lead : {1{1'bz}};
- assign ANY_lead=type_reg==3'b1 ? EXT_lead : {1{1'bz}};
- assign ANY_lead=type_reg[1:0]!=2'b0 && type_reg!=3'd1 ? SNGL_lead : {1{1'bz}};
+ assign ANY_lead=type_reg[1:0]==2'b0 ? DBL_lead : 1'bz;
+ assign ANY_lead=type_reg==3'b1 ? EXT_lead : 1'bz;
+ assign ANY_lead=type_reg[1:0]!=2'b0 && type_reg!=3'd1 ? SNGL_lead : 1'bz;
 
- assign ANY_xbit2=type_reg[1:0]==2'b0 ? exp2[10] : {1{1'bz}};
- assign ANY_xbit2=type_reg==3'b1 ? exp2[14] : {1{1'bz}};
- assign ANY_xbit2=type_reg[1:0]!=2'b0 && type_reg!=3'd1 ? exp2[7] : {1{1'bz}};
+ assign ANY_xbit2=type_reg[1:0]==2'b0 ? exp2[10] : 1'bz;
+ assign ANY_xbit2=type_reg==3'b1 ? exp2[14] : 1'bz;
+ assign ANY_xbit2=type_reg[1:0]!=2'b0 && type_reg!=3'd1 ? exp2[7] : 1'bz;
 
   sdupmass pm_mod(
   normB[63:0],

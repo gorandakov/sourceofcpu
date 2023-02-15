@@ -587,8 +587,8 @@ module dc2_cntrl(
   assign read_clkEnM1=rbusD_signals_reg[`rbusD_used] && (rbusD_signals_reg[`rbusD_mem_reply] &&
     rbusD_dst_req_reg[9:5]==ID)|rbusD_signals_reg[`rbusD_expun]; //cl insert
   assign read_M1_exp=rbusD_signals_reg[`rbusD_used] && rbusD_signals_reg[`rbusD_expun];
-  assign writeI_addrE0=read_clkEnC1 ? read_addr1[36:1] : {36{1'bz}};
-  assign writeI_addrO0=read_clkEnC1 ? read_addr1[36:1] : {36{1'bz}};
+  assign writeI_addrE0=read_clkEnC1 ? read_addr1[36:1] : 36'bz;
+  assign writeI_addrO0=read_clkEnC1 ? read_addr1[36:1] : 36'bz;
   assign writeI_bankEn0=(read_clkEnC2|read_clkEnC1|read_clkEnC|read_clkEnM1) ? 
     32'hffffffff : read_mop[0][`mOpC_banks];
   assign writeI_begin0=(read_clkEnC2|read_clkEnC1|read_clkEnC|read_clkEnM1) ? 5'd0 : read_mop[0][`mOpC_begin];
@@ -597,14 +597,14 @@ module dc2_cntrl(
   assign writeI_enBen0=(read_clkEnC2|read_clkEnC1|read_clkEnC|read_clkEnM1) ? 4'hf : read_mop[0][`mOpC_endben];
   assign writeI_pbit0=(read_clkEnC2|read_clkEnC1|read_clkEnC|read_clkEnM1) ? 2'b0 : read_mop[0][`mOpC_pbit];
   assign writeI_d128_0=(read_clkEnC2|read_clkEnC1|read_clkEnC|read_clkEnM1) ? 1'b0 : read_mop[0][`mOpC_d128];
-  assign writeI_odd0=read_clkEnC1 ? read_addr1[0] : {1{1'bz}};
-  assign writeI_split0=read_clkEnC1 ? 1'b0 : {1{1'bz}};
+  assign writeI_odd0=read_clkEnC1 ? read_addr1[0] : 1'bz;
+  assign writeI_split0=read_clkEnC1 ? 1'b0 : 1'bz;
   assign writeI_data0=read_data0;
   assign {writeI_hitO0,writeI_hitE0}=( read_clkEnC2|read_clkEnC1|read_clkEnC|read_clkEnM1) ?
     {writeI_odd0,~writeI_odd0} &{2{~read_clkEnM1}} : read_hit[0] & {2{read_clkEn}};
 
-  assign writeI_addrE1=read_clkEnC1 ? read_addr1[36:1] : {36{1'bz}};
-  assign writeI_addrO1=read_clkEnC1 ? read_addr1[36:1] : {36{1'bz}};
+  assign writeI_addrE1=read_clkEnC1 ? read_addr1[36:1] : 36'bz;
+  assign writeI_addrO1=read_clkEnC1 ? read_addr1[36:1] : 36'bz;
   assign writeI_bankEn1=(read_clkEnC1|read_clkEnC) ? 32'h0 : read_mop[1][`mOpC_banks];
   assign writeI_begin1=(read_clkEnC1|read_clkEnC) ? 5'd1 : read_mop[1][`mOpC_begin];
   assign writeI_end1=(read_clkEnC1|read_clkEnC) ? 5'd1 : read_mop[1][`mOpC_end];
@@ -612,68 +612,68 @@ module dc2_cntrl(
   assign writeI_enBen1=(read_clkEnC1|read_clkEnC) ? 4'hf : read_mop[1][`mOpC_endben];
   assign writeI_pbit1=(read_clkEnC1|read_clkEnC) ? 2'b0 : read_mop[1][`mOpC_pbit];
   assign writeI_d128_1=(read_clkEnC1|read_clkEnC) ? 1'b0 : read_mop[1][`mOpC_d128];
-  assign writeI_odd1=read_clkEnC1 ? read_addr1[0] : {1{1'bz}};
-  assign writeI_split1=read_clkEnC1 ? 1'b0 : {1{1'bz}};
+  assign writeI_odd1=read_clkEnC1 ? read_addr1[0] : 1'bz;
+  assign writeI_split1=read_clkEnC1 ? 1'b0 : 1'bz;
   assign writeI_data1=read_data1;
   assign {writeI_hitO1,writeI_hitE1}=( read_clkEnC1|read_clkEnC|read_clkEnM1) ? 2'b0 : read_hit[1] & {2{read_clkEn}};
 
-  assign writeI_addrE0=read_clkEn ? read_mop[0][`mOpC_addrEven] : {36{1'bz}};
-  assign writeI_addrO0=read_clkEn ? read_mop[0][`mOpC_addrOdd] : {36{1'bz}};
-  assign writeI_addrE1=read_clkEn ? read_mop[1][`mOpC_addrEven] : {36{1'bz}};
-  assign writeI_addrO1=read_clkEn ? read_mop[1][`mOpC_addrOdd] : {36{1'bz}};
-  assign writeI_odd0=read_clkEn ? read_mop[0][`mOpC_odd] : {1{1'bz}};
-  assign writeI_split0=read_clkEn ? read_mop[0][`mOpC_split] : {1{1'bz}};
-  assign writeI_odd1=read_clkEn ? read_mop[1][`mOpC_odd] : {1{1'bz}};
-  assign writeI_split1=read_clkEn ? read_mop[1][`mOpC_split] : {1{1'bz}};
+  assign writeI_addrE0=read_clkEn ? read_mop[0][`mOpC_addrEven] : 36'bz;
+  assign writeI_addrO0=read_clkEn ? read_mop[0][`mOpC_addrOdd] : 36'bz;
+  assign writeI_addrE1=read_clkEn ? read_mop[1][`mOpC_addrEven] : 36'bz;
+  assign writeI_addrO1=read_clkEn ? read_mop[1][`mOpC_addrOdd] : 36'bz;
+  assign writeI_odd0=read_clkEn ? read_mop[0][`mOpC_odd] : 1'bz;
+  assign writeI_split0=read_clkEn ? read_mop[0][`mOpC_split] : 1'bz;
+  assign writeI_odd1=read_clkEn ? read_mop[1][`mOpC_odd] : 1'bz;
+  assign writeI_split1=read_clkEn ? read_mop[1][`mOpC_split] : 1'bz;
 
 
-  assign writeI_addrE0=read_clkEnM1&~read_M1_exp ? rbusD_addr_out[36:1] : {36{1'bz}};
-  assign writeI_addrO0=read_clkEnM1&~read_M1_exp ? rbusD_addr_out[36:1] : {36{1'bz}};
-  assign writeI_addrE1=read_clkEnM1&~read_M1_exp ? rbusD_addr_out[36:1] : {36{1'bz}};
-  assign writeI_addrO1=read_clkEnM1&~read_M1_exp ? rbusD_addr_out[36:1] : {36{1'bz}};
-  assign writeI_odd0=read_clkEnM1&~read_M1_exp ? rbusD_addr_out[0] : {1{1'bz}};
-  assign writeI_split0=read_clkEnM1&~read_M1_exp ? 1'b0 : {1{1'bz}};
-  assign writeI_odd1=read_clkEnM1&~read_M1_exp ? rbusD_addr_out[0] : {1{1'bz}};
-  assign writeI_split1=read_clkEnM1&~read_M1_exp ? 1'b0 : {1{1'bz}};
+  assign writeI_addrE0=read_clkEnM1&~read_M1_exp ? rbusD_addr_out[36:1] : 36'bz;
+  assign writeI_addrO0=read_clkEnM1&~read_M1_exp ? rbusD_addr_out[36:1] : 36'bz;
+  assign writeI_addrE1=read_clkEnM1&~read_M1_exp ? rbusD_addr_out[36:1] : 36'bz;
+  assign writeI_addrO1=read_clkEnM1&~read_M1_exp ? rbusD_addr_out[36:1] : 36'bz;
+  assign writeI_odd0=read_clkEnM1&~read_M1_exp ? rbusD_addr_out[0] : 1'bz;
+  assign writeI_split0=read_clkEnM1&~read_M1_exp ? 1'b0 : 1'bz;
+  assign writeI_odd1=read_clkEnM1&~read_M1_exp ? rbusD_addr_out[0] : 1'bz;
+  assign writeI_split1=read_clkEnM1&~read_M1_exp ? 1'b0 : 1'bz;
   
-  assign writeI_addrE0=read_clkEnM1&read_M1_exp ? rbusD_data64_reg[36:1] : {36{1'bz}};
-  assign writeI_addrO0=read_clkEnM1&read_M1_exp ? rbusD_data64_reg[36:1] : {36{1'bz}};
-  assign writeI_addrE1=read_clkEnM1&read_M1_exp ? rbusD_data64_reg[36:1] : {36{1'bz}};
-  assign writeI_addrO1=read_clkEnM1&read_M1_exp ? rbusD_data64_reg[36:1] : {36{1'bz}};
-  assign writeI_odd0=read_clkEnM1&read_M1_exp ? rbusD_data64_reg[0] : {1{1'bz}};
-  assign writeI_split0=read_clkEnM1&read_M1_exp ? 1'b0 : {1{1'bz}};
-  assign writeI_odd1=read_clkEnM1&read_M1_exp ? rbusD_data64_reg[0] : {1{1'bz}};
-  assign writeI_split1=read_clkEnM1&read_M1_exp ? 1'b0 : {1{1'bz}};
+  assign writeI_addrE0=read_clkEnM1&read_M1_exp ? rbusD_data64_reg[36:1] : 36'bz;
+  assign writeI_addrO0=read_clkEnM1&read_M1_exp ? rbusD_data64_reg[36:1] : 36'bz;
+  assign writeI_addrE1=read_clkEnM1&read_M1_exp ? rbusD_data64_reg[36:1] : 36'bz;
+  assign writeI_addrO1=read_clkEnM1&read_M1_exp ? rbusD_data64_reg[36:1] : 36'bz;
+  assign writeI_odd0=read_clkEnM1&read_M1_exp ? rbusD_data64_reg[0] : 1'bz;
+  assign writeI_split0=read_clkEnM1&read_M1_exp ? 1'b0 : 1'bz;
+  assign writeI_odd1=read_clkEnM1&read_M1_exp ? rbusD_data64_reg[0] : 1'bz;
+  assign writeI_split1=read_clkEnM1&read_M1_exp ? 1'b0 : 1'bz;
   
   
-  assign writeI_addrE0=read_clkEnC2 ? read_addr_C2[36:1] : {36{1'bz}};
-  assign writeI_addrO0=read_clkEnC2 ? read_addr_C2[36:1] : {36{1'bz}};
-  assign writeI_addrE1=read_clkEnC2 ? read_addr_C2[36:1] : {36{1'bz}};
-  assign writeI_addrO1=read_clkEnC2 ? read_addr_C2[36:1] : {36{1'bz}};
-  assign writeI_odd0=read_clkEnC2 ? read_addr_C2[0] : {1{1'bz}};
-  assign writeI_split0=read_clkEnC2 ? 1'b0 : {1{1'bz}};
-  assign writeI_odd1=read_clkEnC2 ? read_addr_C2[0] : {1{1'bz}};
-  assign writeI_split1=read_clkEnC2 ? 1'b0 : {1{1'bz}};
+  assign writeI_addrE0=read_clkEnC2 ? read_addr_C2[36:1] : 36'bz;
+  assign writeI_addrO0=read_clkEnC2 ? read_addr_C2[36:1] : 36'bz;
+  assign writeI_addrE1=read_clkEnC2 ? read_addr_C2[36:1] : 36'bz;
+  assign writeI_addrO1=read_clkEnC2 ? read_addr_C2[36:1] : 36'bz;
+  assign writeI_odd0=read_clkEnC2 ? read_addr_C2[0] : 1'bz;
+  assign writeI_split0=read_clkEnC2 ? 1'b0 : 1'bz;
+  assign writeI_odd1=read_clkEnC2 ? read_addr_C2[0] : 1'bz;
+  assign writeI_split1=read_clkEnC2 ? 1'b0 : 1'bz;
   
-  assign writeI_addrE0=(read_clkEnC1|read_clkEnM1|read_clkEn|read_clkEnC2) ? {36{1'bz}} : read_addr_C[36:1];
-  assign writeI_addrO0=(read_clkEnC1|read_clkEnM1|read_clkEn|read_clkEnC2) ? {36{1'bz}} : read_addr_C[36:1];
-  assign writeI_addrE1=(read_clkEnC1|read_clkEnM1|read_clkEn|read_clkEnC2) ? {36{1'bz}} : read_addr_C[36:1];
-  assign writeI_addrO1=(read_clkEnC1|read_clkEnM1|read_clkEn|read_clkEnC2) ? {36{1'bz}} : read_addr_C[36:1];
-  assign writeI_odd0=(read_clkEnC1|read_clkEnM1|read_clkEn|read_clkEnC2) ? {1{1'bz}} : 1'b0;
-  assign writeI_split0=(read_clkEnC1|read_clkEnM1|read_clkEn|read_clkEnC2) ? {1{1'bz}} : 1'b0;
-  assign writeI_odd1=(read_clkEnC1|read_clkEnM1|read_clkEn|read_clkEnC2) ? {1{1'bz}} : 1'b0;
-  assign writeI_split1=(read_clkEnC1|read_clkEnM1|read_clkEn|read_clkEnC2) ? {1{1'bz}} : 1'b0;
+  assign writeI_addrE0=(read_clkEnC1|read_clkEnM1|read_clkEn|read_clkEnC2) ? 36'bz : read_addr_C[36:1];
+  assign writeI_addrO0=(read_clkEnC1|read_clkEnM1|read_clkEn|read_clkEnC2) ? 36'bz : read_addr_C[36:1];
+  assign writeI_addrE1=(read_clkEnC1|read_clkEnM1|read_clkEn|read_clkEnC2) ? 36'bz : read_addr_C[36:1];
+  assign writeI_addrO1=(read_clkEnC1|read_clkEnM1|read_clkEn|read_clkEnC2) ? 36'bz : read_addr_C[36:1];
+  assign writeI_odd0=(read_clkEnC1|read_clkEnM1|read_clkEn|read_clkEnC2) ? 1'bz : 1'b0;
+  assign writeI_split0=(read_clkEnC1|read_clkEnM1|read_clkEn|read_clkEnC2) ? 1'bz : 1'b0;
+  assign writeI_odd1=(read_clkEnC1|read_clkEnM1|read_clkEn|read_clkEnC2) ? 1'bz : 1'b0;
+  assign writeI_split1=(read_clkEnC1|read_clkEnM1|read_clkEn|read_clkEnC2) ? 1'bz : 1'b0;
   
   assign readI_en=read_clkEnC2 | read_clkEnC1 | read_clkEnC | read_clkEnM1;
   assign readI_en2=read_clkEnC2 | read_clkEnC1 | read_clkEnC;
-  assign readI_odd=read_clkEnC1 ? read_addr1[0] : {1{1'bz}}; 
-  assign readI_odd=read_clkEnC ? read_addr_C[0] : {1{1'bz}};
-  assign readI_odd=read_clkEnC2 ? read_addr_C2[0] : {1{1'bz}};
-  assign readI_odd=(~read_clkEnC1 & ~read_clkEnC & ~read_clkEnC2) ? rbusD_addr_out[0] : {1{1'bz}}; 
-  assign readI_req=read_clkEnC1 ? read_req1 : {5{1'bz}};
-  assign readI_req=read_clkEnC ? read_reqC : {5{1'bz}};
-  assign readI_req=read_clkEnC2 ? read_req_C2 : {5{1'bz}};
-  assign readI_req=(~read_clkEnC1 & ~read_clkEnC & ~read_clkEnC2) ? rbusD_dst_req_reg[4:0] : {5{1'bz}};
+  assign readI_odd=read_clkEnC1 ? read_addr1[0] : 1'bz; 
+  assign readI_odd=read_clkEnC ? read_addr_C[0] : 1'bz;
+  assign readI_odd=read_clkEnC2 ? read_addr_C2[0] : 1'bz;
+  assign readI_odd=(~read_clkEnC1 & ~read_clkEnC & ~read_clkEnC2) ? rbusD_addr_out[0] : 1'bz; 
+  assign readI_req=read_clkEnC1 ? read_req1 : 5'bz;
+  assign readI_req=read_clkEnC ? read_reqC : 5'bz;
+  assign readI_req=read_clkEnC2 ? read_req_C2 : 5'bz;
+  assign readI_req=(~read_clkEnC1 & ~read_clkEnC & ~read_clkEnC2) ? rbusD_dst_req_reg[4:0] : 5'bz;
   assign readI_code=read_clkEnC;
   assign readI_io=read_clkEnC2 && read_io_C2;
   assign readI_dataIO=read_data_C2;
@@ -732,10 +732,10 @@ module dc2_cntrl(
   
   adder_inc #(5) initAdd_mod(initCount,initCount_next,1'b1,);
 
-  assign write_addrM_d=(write_addrM==5'd23) ? 5'd0 : {5{1'bz}};
-  assign read_addrM_d=(read_addrM==5'd23) ? 5'd0 : {5{1'bz}};
-  assign write_addrC2_d=(write_addrC2==5'd23) ? 5'd0 : {5{1'bz}};
-  assign read_addrC2_d=(read_addrC2==5'd23) ? 5'd0 : {5{1'bz}};
+  assign write_addrM_d=(write_addrM==5'd23) ? 5'd0 : 5'bz;
+  assign read_addrM_d=(read_addrM==5'd23) ? 5'd0 : 5'bz;
+  assign write_addrC2_d=(write_addrC2==5'd23) ? 5'd0 : 5'bz;
+  assign read_addrC2_d=(read_addrC2==5'd23) ? 5'd0 : 5'bz;
 
   assign wen_C2=read_clkEnM1 && ~rbusD_signals_reg[`rbusD_second];
   

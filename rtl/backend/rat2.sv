@@ -255,62 +255,62 @@ module rat_buf(
   assign match_rd8=read8_addr==INDEX;
 
 
-  assign robAddr_d=(match_new0 & ~rst) ? ~writeNew0_data : {ROB_ADDR_WIDTH{{1{1'bz}}}};
-  assign robAddr_d=(match_new1 & ~rst) ? ~writeNew1_data : {ROB_ADDR_WIDTH{{1{1'bz}}}};
-  assign robAddr_d=(match_new2 & ~rst) ? ~writeNew2_data : {ROB_ADDR_WIDTH{{1{1'bz}}}};
-  assign robAddr_d=(match_new3 & ~rst) ? ~writeNew3_data : {ROB_ADDR_WIDTH{{1{1'bz}}}};
-  assign robAddr_d=(match_new4 & ~rst) ? ~writeNew4_data : {ROB_ADDR_WIDTH{{1{1'bz}}}};
-  assign robAddr_d=(match_new5 & ~rst) ? ~writeNew5_data : {ROB_ADDR_WIDTH{{1{1'bz}}}};
-  assign robAddr_d=(match_new6 & ~rst) ? ~writeNew6_data : {ROB_ADDR_WIDTH{{1{1'bz}}}};
-  assign robAddr_d=(match_new7 & ~rst) ? ~writeNew7_data : {ROB_ADDR_WIDTH{{1{1'bz}}}};
-  assign robAddr_d=(match_new8 & ~rst) ? ~writeNew8_data : {ROB_ADDR_WIDTH{{1{1'bz}}}};
+  assign robAddr_d=(match_new0 & ~rst) ? ~writeNew0_data : {ROB_ADDR_WIDTH{1'bz}};
+  assign robAddr_d=(match_new1 & ~rst) ? ~writeNew1_data : {ROB_ADDR_WIDTH{1'bz}};
+  assign robAddr_d=(match_new2 & ~rst) ? ~writeNew2_data : {ROB_ADDR_WIDTH{1'bz}};
+  assign robAddr_d=(match_new3 & ~rst) ? ~writeNew3_data : {ROB_ADDR_WIDTH{1'bz}};
+  assign robAddr_d=(match_new4 & ~rst) ? ~writeNew4_data : {ROB_ADDR_WIDTH{1'bz}};
+  assign robAddr_d=(match_new5 & ~rst) ? ~writeNew5_data : {ROB_ADDR_WIDTH{1'bz}};
+  assign robAddr_d=(match_new6 & ~rst) ? ~writeNew6_data : {ROB_ADDR_WIDTH{1'bz}};
+  assign robAddr_d=(match_new7 & ~rst) ? ~writeNew7_data : {ROB_ADDR_WIDTH{1'bz}};
+  assign robAddr_d=(match_new8 & ~rst) ? ~writeNew8_data : {ROB_ADDR_WIDTH{1'bz}};
 
-  assign robAddr_d=(rst | ~match_new) ? {ROB_ADDR_WIDTH{1'b1}} : {ROB_ADDR_WIDTH{{1{1'bz}}}};
+  assign robAddr_d=(rst | ~match_new) ? {ROB_ADDR_WIDTH{1'b1}} : {ROB_ADDR_WIDTH{1'bz}};
 
   assign retired_d[0]=~(match_ret & ~ret_thread & ~(match_new & read_clkEn) || rst || retireAll & ~retireAll_thread); 
   assign retired_d[1]=~(match_ret & ret_thread & ~(match_new & read_clkEn) || rst || retireAll & retireAll_thread); 
 
-  assign funit_d=(match_new0 & ~rst) ? ~writeNew0_fun : {FN_WIDTH{{1{1'bz}}}};
-  assign funit_d=(match_new1 & ~rst) ? ~writeNew1_fun : {FN_WIDTH{{1{1'bz}}}};
-  assign funit_d=(match_new2 & ~rst) ? ~writeNew2_fun : {FN_WIDTH{{1{1'bz}}}};
-  assign funit_d=(match_new3 & ~rst) ? ~writeNew3_fun : {FN_WIDTH{{1{1'bz}}}};
-  assign funit_d=(match_new4 & ~rst) ? ~writeNew4_fun : {FN_WIDTH{{1{1'bz}}}};
-  assign funit_d=(match_new5 & ~rst) ? ~writeNew5_fun : {FN_WIDTH{{1{1'bz}}}};
-  assign funit_d=(match_new6 & ~rst) ? ~writeNew6_fun : {FN_WIDTH{{1{1'bz}}}};
-  assign funit_d=(match_new7 & ~rst) ? ~writeNew7_fun : {FN_WIDTH{{1{1'bz}}}};
-  assign funit_d=(match_new8 & ~rst) ? ~writeNew8_fun : {FN_WIDTH{{1{1'bz}}}};
+  assign funit_d=(match_new0 & ~rst) ? ~writeNew0_fun : {FN_WIDTH{1'bz}};
+  assign funit_d=(match_new1 & ~rst) ? ~writeNew1_fun : {FN_WIDTH{1'bz}};
+  assign funit_d=(match_new2 & ~rst) ? ~writeNew2_fun : {FN_WIDTH{1'bz}};
+  assign funit_d=(match_new3 & ~rst) ? ~writeNew3_fun : {FN_WIDTH{1'bz}};
+  assign funit_d=(match_new4 & ~rst) ? ~writeNew4_fun : {FN_WIDTH{1'bz}};
+  assign funit_d=(match_new5 & ~rst) ? ~writeNew5_fun : {FN_WIDTH{1'bz}};
+  assign funit_d=(match_new6 & ~rst) ? ~writeNew6_fun : {FN_WIDTH{1'bz}};
+  assign funit_d=(match_new7 & ~rst) ? ~writeNew7_fun : {FN_WIDTH{1'bz}};
+  assign funit_d=(match_new8 & ~rst) ? ~writeNew8_fun : {FN_WIDTH{1'bz}};
 
-  assign funit_d=(rst | ~match_new) ? 10'b0111111111 : {FN_WIDTH{{1{1'bz}}}};
+  assign funit_d=(rst | ~match_new) ? 10'b0111111111 : {FN_WIDTH{1'bz}};
 
-  assign read0_data=match_rd0 ? ~robAddr_rd : {ROB_ADDR_WIDTH{{1{1'bz}}}};  
-  assign read1_data=match_rd1 ? ~robAddr_rd : {ROB_ADDR_WIDTH{{1{1'bz}}}};  
-  assign read2_data=match_rd2 ? ~robAddr_rd : {ROB_ADDR_WIDTH{{1{1'bz}}}};  
-  assign read3_data=match_rd3 ? ~robAddr_rd : {ROB_ADDR_WIDTH{{1{1'bz}}}};  
-  assign read4_data=match_rd4 ? ~robAddr_rd : {ROB_ADDR_WIDTH{{1{1'bz}}}};  
-  assign read5_data=match_rd5 ? ~robAddr_rd : {ROB_ADDR_WIDTH{{1{1'bz}}}};  
-  assign read6_data=match_rd6 ? ~robAddr_rd : {ROB_ADDR_WIDTH{{1{1'bz}}}};  
-  assign read7_data=match_rd7 ? ~robAddr_rd : {ROB_ADDR_WIDTH{{1{1'bz}}}};  
-  assign read8_data=match_rd8 ? ~robAddr_rd : {ROB_ADDR_WIDTH{{1{1'bz}}}};  
+  assign read0_data=match_rd0 ? ~robAddr_rd : {ROB_ADDR_WIDTH{1'bz}};  
+  assign read1_data=match_rd1 ? ~robAddr_rd : {ROB_ADDR_WIDTH{1'bz}};  
+  assign read2_data=match_rd2 ? ~robAddr_rd : {ROB_ADDR_WIDTH{1'bz}};  
+  assign read3_data=match_rd3 ? ~robAddr_rd : {ROB_ADDR_WIDTH{1'bz}};  
+  assign read4_data=match_rd4 ? ~robAddr_rd : {ROB_ADDR_WIDTH{1'bz}};  
+  assign read5_data=match_rd5 ? ~robAddr_rd : {ROB_ADDR_WIDTH{1'bz}};  
+  assign read6_data=match_rd6 ? ~robAddr_rd : {ROB_ADDR_WIDTH{1'bz}};  
+  assign read7_data=match_rd7 ? ~robAddr_rd : {ROB_ADDR_WIDTH{1'bz}};  
+  assign read8_data=match_rd8 ? ~robAddr_rd : {ROB_ADDR_WIDTH{1'bz}};  
 
-  assign read0_fun=match_rd0 ? ~funit_rd : {FN_WIDTH{{1{1'bz}}}};  
-  assign read1_fun=match_rd1 ? ~funit_rd : {FN_WIDTH{{1{1'bz}}}};  
-  assign read2_fun=match_rd2 ? ~funit_rd : {FN_WIDTH{{1{1'bz}}}};  
-  assign read3_fun=match_rd3 ? ~funit_rd : {FN_WIDTH{{1{1'bz}}}};  
-  assign read4_fun=match_rd4 ? ~funit_rd : {FN_WIDTH{{1{1'bz}}}};  
-  assign read5_fun=match_rd5 ? ~funit_rd : {FN_WIDTH{{1{1'bz}}}};  
-  assign read6_fun=match_rd6 ? ~funit_rd : {FN_WIDTH{{1{1'bz}}}};  
-  assign read7_fun=match_rd7 ? ~funit_rd : {FN_WIDTH{{1{1'bz}}}};  
-  assign read8_fun=match_rd8 ? ~funit_rd : {FN_WIDTH{{1{1'bz}}}};  
+  assign read0_fun=match_rd0 ? ~funit_rd : {FN_WIDTH{1'bz}};  
+  assign read1_fun=match_rd1 ? ~funit_rd : {FN_WIDTH{1'bz}};  
+  assign read2_fun=match_rd2 ? ~funit_rd : {FN_WIDTH{1'bz}};  
+  assign read3_fun=match_rd3 ? ~funit_rd : {FN_WIDTH{1'bz}};  
+  assign read4_fun=match_rd4 ? ~funit_rd : {FN_WIDTH{1'bz}};  
+  assign read5_fun=match_rd5 ? ~funit_rd : {FN_WIDTH{1'bz}};  
+  assign read6_fun=match_rd6 ? ~funit_rd : {FN_WIDTH{1'bz}};  
+  assign read7_fun=match_rd7 ? ~funit_rd : {FN_WIDTH{1'bz}};  
+  assign read8_fun=match_rd8 ? ~funit_rd : {FN_WIDTH{1'bz}};  
 
-  assign read0_retired=match_rd0 ? ~retired_rd : {1{1'bz}};  
-  assign read1_retired=match_rd1 ? ~retired_rd : {1{1'bz}};  
-  assign read2_retired=match_rd2 ? ~retired_rd : {1{1'bz}};  
-  assign read3_retired=match_rd3 ? ~retired_rd : {1{1'bz}};  
-  assign read4_retired=match_rd4 ? ~retired_rd : {1{1'bz}};  
-  assign read5_retired=match_rd5 ? ~retired_rd : {1{1'bz}};  
-  assign read6_retired=match_rd6 ? ~retired_rd : {1{1'bz}};  
-  assign read7_retired=match_rd7 ? ~retired_rd : {1{1'bz}};  
-  assign read8_retired=match_rd8 ? ~retired_rd : {1{1'bz}};
+  assign read0_retired=match_rd0 ? ~retired_rd : 1'bz;  
+  assign read1_retired=match_rd1 ? ~retired_rd : 1'bz;  
+  assign read2_retired=match_rd2 ? ~retired_rd : 1'bz;  
+  assign read3_retired=match_rd3 ? ~retired_rd : 1'bz;  
+  assign read4_retired=match_rd4 ? ~retired_rd : 1'bz;  
+  assign read5_retired=match_rd5 ? ~retired_rd : 1'bz;  
+  assign read6_retired=match_rd6 ? ~retired_rd : 1'bz;  
+  assign read7_retired=match_rd7 ? ~retired_rd : 1'bz;  
+  assign read8_retired=match_rd8 ? ~retired_rd : 1'bz;
   
   assign robAddr_rd=robAddr[read_thread];
   assign robAddr_ret=robAddr[ret_thread];  
@@ -395,28 +395,28 @@ module rat_dep(
   input [FN_WIDTH-1:0] newU8;
 
 
-  assign data=(addr=={2'b11,rs0i0_index})? newR0 : {ROB_ADDR_WIDTH{{1{1'bz}}}};
-  assign data=(addr=={2'b11,rs0i1_index})? newR1 : {ROB_ADDR_WIDTH{{1{1'bz}}}};
-  assign data=(addr=={2'b11,rs0i2_index})? newR2 : {ROB_ADDR_WIDTH{{1{1'bz}}}};
-  assign data=(addr=={2'b11,rs1i0_index})? newR3 : {ROB_ADDR_WIDTH{{1{1'bz}}}};
-  assign data=(addr=={2'b11,rs1i1_index})? newR4 : {ROB_ADDR_WIDTH{{1{1'bz}}}};
-  assign data=(addr=={2'b11,rs1i2_index})? newR5 : {ROB_ADDR_WIDTH{{1{1'bz}}}};
-  assign data=(addr=={2'b11,rs2i0_index})? newR6 : {ROB_ADDR_WIDTH{{1{1'bz}}}};
-  assign data=(addr=={2'b11,rs2i1_index})? newR7 : {ROB_ADDR_WIDTH{{1{1'bz}}}};
-  assign data=(addr=={2'b11,rs2i2_index})? newR8 : {ROB_ADDR_WIDTH{{1{1'bz}}}};
+  assign data=(addr=={2'b11,rs0i0_index})? newR0 : {ROB_ADDR_WIDTH{1'bz}};
+  assign data=(addr=={2'b11,rs0i1_index})? newR1 : {ROB_ADDR_WIDTH{1'bz}};
+  assign data=(addr=={2'b11,rs0i2_index})? newR2 : {ROB_ADDR_WIDTH{1'bz}};
+  assign data=(addr=={2'b11,rs1i0_index})? newR3 : {ROB_ADDR_WIDTH{1'bz}};
+  assign data=(addr=={2'b11,rs1i1_index})? newR4 : {ROB_ADDR_WIDTH{1'bz}};
+  assign data=(addr=={2'b11,rs1i2_index})? newR5 : {ROB_ADDR_WIDTH{1'bz}};
+  assign data=(addr=={2'b11,rs2i0_index})? newR6 : {ROB_ADDR_WIDTH{1'bz}};
+  assign data=(addr=={2'b11,rs2i1_index})? newR7 : {ROB_ADDR_WIDTH{1'bz}};
+  assign data=(addr=={2'b11,rs2i2_index})? newR8 : {ROB_ADDR_WIDTH{1'bz}};
 
-  assign retired=addr[5:4]==2'b11 ? 1'b0 : {1{1'bz}};
+  assign retired=addr[5:4]==2'b11 ? 1'b0 : 1'bz;
   assign isDep=addr[5:4]==2'b11;
 
-  assign funit=(addr=={2'b11,rs0i0_index})? newU0 : {FN_WIDTH{{1{1'bz}}}};
-  assign funit=(addr=={2'b11,rs0i1_index})? newU1 : {FN_WIDTH{{1{1'bz}}}};
-  assign funit=(addr=={2'b11,rs0i2_index})? newU2 : {FN_WIDTH{{1{1'bz}}}};
-  assign funit=(addr=={2'b11,rs1i0_index})? newU3 : {FN_WIDTH{{1{1'bz}}}};
-  assign funit=(addr=={2'b11,rs1i1_index})? newU4 : {FN_WIDTH{{1{1'bz}}}};
-  assign funit=(addr=={2'b11,rs1i2_index})? newU5 : {FN_WIDTH{{1{1'bz}}}};
-  assign funit=(addr=={2'b11,rs2i0_index})? newU6 : {FN_WIDTH{{1{1'bz}}}};
-  assign funit=(addr=={2'b11,rs2i1_index})? newU7 : {FN_WIDTH{{1{1'bz}}}};
-  assign funit=(addr=={2'b11,rs2i2_index})? newU8 : {FN_WIDTH{{1{1'bz}}}};
+  assign funit=(addr=={2'b11,rs0i0_index})? newU0 : {FN_WIDTH{1'bz}};
+  assign funit=(addr=={2'b11,rs0i1_index})? newU1 : {FN_WIDTH{1'bz}};
+  assign funit=(addr=={2'b11,rs0i2_index})? newU2 : {FN_WIDTH{1'bz}};
+  assign funit=(addr=={2'b11,rs1i0_index})? newU3 : {FN_WIDTH{1'bz}};
+  assign funit=(addr=={2'b11,rs1i1_index})? newU4 : {FN_WIDTH{1'bz}};
+  assign funit=(addr=={2'b11,rs1i2_index})? newU5 : {FN_WIDTH{1'bz}};
+  assign funit=(addr=={2'b11,rs2i0_index})? newU6 : {FN_WIDTH{1'bz}};
+  assign funit=(addr=={2'b11,rs2i1_index})? newU7 : {FN_WIDTH{1'bz}};
+  assign funit=(addr=={2'b11,rs2i2_index})? newU8 : {FN_WIDTH{1'bz}};
   
 endmodule
 
@@ -697,35 +697,35 @@ module rat(
 	  ret_thread
         );
     end
-        assign read_data[0]=(read_addr_reg[0][5:3]==l) ? read_dataA[0] : {ROB_ADDR_WIDTH{{1{1'bz}}}};
-        assign read_data[1]=(read_addr_reg[1][5:3]==l) ? read_dataA[1] : {ROB_ADDR_WIDTH{{1{1'bz}}}};
-        assign read_data[2]=(read_addr_reg[2][5:3]==l) ? read_dataA[2] : {ROB_ADDR_WIDTH{{1{1'bz}}}};
-        assign read_data[3]=(read_addr_reg[3][5:3]==l) ? read_dataA[3] : {ROB_ADDR_WIDTH{{1{1'bz}}}};
-        assign read_data[4]=(read_addr_reg[4][5:3]==l) ? read_dataA[4] : {ROB_ADDR_WIDTH{{1{1'bz}}}};
-        assign read_data[5]=(read_addr_reg[5][5:3]==l) ? read_dataA[5] : {ROB_ADDR_WIDTH{{1{1'bz}}}};
-        assign read_data[6]=(read_addr_reg[6][5:3]==l) ? read_dataA[6] : {ROB_ADDR_WIDTH{{1{1'bz}}}};
-        assign read_data[7]=(read_addr_reg[7][5:3]==l) ? read_dataA[7] : {ROB_ADDR_WIDTH{{1{1'bz}}}};
-        assign read_data[8]=(read_addr_reg[8][5:3]==l) ? read_dataA[8] : {ROB_ADDR_WIDTH{{1{1'bz}}}};
+        assign read_data[0]=(read_addr_reg[0][5:3]==l) ? read_dataA[0] : {ROB_ADDR_WIDTH{1'BZ}};
+        assign read_data[1]=(read_addr_reg[1][5:3]==l) ? read_dataA[1] : {ROB_ADDR_WIDTH{1'BZ}};
+        assign read_data[2]=(read_addr_reg[2][5:3]==l) ? read_dataA[2] : {ROB_ADDR_WIDTH{1'BZ}};
+        assign read_data[3]=(read_addr_reg[3][5:3]==l) ? read_dataA[3] : {ROB_ADDR_WIDTH{1'BZ}};
+        assign read_data[4]=(read_addr_reg[4][5:3]==l) ? read_dataA[4] : {ROB_ADDR_WIDTH{1'BZ}};
+        assign read_data[5]=(read_addr_reg[5][5:3]==l) ? read_dataA[5] : {ROB_ADDR_WIDTH{1'BZ}};
+        assign read_data[6]=(read_addr_reg[6][5:3]==l) ? read_dataA[6] : {ROB_ADDR_WIDTH{1'BZ}};
+        assign read_data[7]=(read_addr_reg[7][5:3]==l) ? read_dataA[7] : {ROB_ADDR_WIDTH{1'BZ}};
+        assign read_data[8]=(read_addr_reg[8][5:3]==l) ? read_dataA[8] : {ROB_ADDR_WIDTH{1'BZ}};
 
-        assign read_retired[0]=(read_addr_reg[0][5:3]==l) ? read_retiredA[0] : {1{1'bz}};
-        assign read_retired[1]=(read_addr_reg[1][5:3]==l) ? read_retiredA[1] : {1{1'bz}};
-        assign read_retired[2]=(read_addr_reg[2][5:3]==l) ? read_retiredA[2] : {1{1'bz}};
-        assign read_retired[3]=(read_addr_reg[3][5:3]==l) ? read_retiredA[3] : {1{1'bz}};
-        assign read_retired[4]=(read_addr_reg[4][5:3]==l) ? read_retiredA[4] : {1{1'bz}};
-        assign read_retired[5]=(read_addr_reg[5][5:3]==l) ? read_retiredA[5] : {1{1'bz}};
-        assign read_retired[6]=(read_addr_reg[6][5:3]==l) ? read_retiredA[6] : {1{1'bz}};
-        assign read_retired[7]=(read_addr_reg[7][5:3]==l) ? read_retiredA[7] : {1{1'bz}};
-        assign read_retired[8]=(read_addr_reg[8][5:3]==l) ? read_retiredA[8] : {1{1'bz}};
+        assign read_retired[0]=(read_addr_reg[0][5:3]==l) ? read_retiredA[0] : 1'BZ;
+        assign read_retired[1]=(read_addr_reg[1][5:3]==l) ? read_retiredA[1] : 1'BZ;
+        assign read_retired[2]=(read_addr_reg[2][5:3]==l) ? read_retiredA[2] : 1'BZ;
+        assign read_retired[3]=(read_addr_reg[3][5:3]==l) ? read_retiredA[3] : 1'BZ;
+        assign read_retired[4]=(read_addr_reg[4][5:3]==l) ? read_retiredA[4] : 1'BZ;
+        assign read_retired[5]=(read_addr_reg[5][5:3]==l) ? read_retiredA[5] : 1'BZ;
+        assign read_retired[6]=(read_addr_reg[6][5:3]==l) ? read_retiredA[6] : 1'BZ;
+        assign read_retired[7]=(read_addr_reg[7][5:3]==l) ? read_retiredA[7] : 1'BZ;
+        assign read_retired[8]=(read_addr_reg[8][5:3]==l) ? read_retiredA[8] : 1'BZ;
 
-        assign read_fun[0]=(read_addr_reg[0][5:3]==l) ? read_funA[0] : {FN_WIDTH{{1{1'bz}}}};
-        assign read_fun[1]=(read_addr_reg[1][5:3]==l) ? read_funA[1] : {FN_WIDTH{{1{1'bz}}}};
-        assign read_fun[2]=(read_addr_reg[2][5:3]==l) ? read_funA[2] : {FN_WIDTH{{1{1'bz}}}};
-        assign read_fun[3]=(read_addr_reg[3][5:3]==l) ? read_funA[3] : {FN_WIDTH{{1{1'bz}}}};
-        assign read_fun[4]=(read_addr_reg[4][5:3]==l) ? read_funA[4] : {FN_WIDTH{{1{1'bz}}}};
-        assign read_fun[5]=(read_addr_reg[5][5:3]==l) ? read_funA[5] : {FN_WIDTH{{1{1'bz}}}};
-        assign read_fun[6]=(read_addr_reg[6][5:3]==l) ? read_funA[6] : {FN_WIDTH{{1{1'bz}}}};
-        assign read_fun[7]=(read_addr_reg[7][5:3]==l) ? read_funA[7] : {FN_WIDTH{{1{1'bz}}}};
-        assign read_fun[8]=(read_addr_reg[8][5:3]==l) ? read_funA[8] : {FN_WIDTH{{1{1'bz}}}};
+        assign read_fun[0]=(read_addr_reg[0][5:3]==l) ? read_funA[0] : {FN_WIDTH{1'BZ}};
+        assign read_fun[1]=(read_addr_reg[1][5:3]==l) ? read_funA[1] : {FN_WIDTH{1'BZ}};
+        assign read_fun[2]=(read_addr_reg[2][5:3]==l) ? read_funA[2] : {FN_WIDTH{1'BZ}};
+        assign read_fun[3]=(read_addr_reg[3][5:3]==l) ? read_funA[3] : {FN_WIDTH{1'BZ}};
+        assign read_fun[4]=(read_addr_reg[4][5:3]==l) ? read_funA[4] : {FN_WIDTH{1'BZ}};
+        assign read_fun[5]=(read_addr_reg[5][5:3]==l) ? read_funA[5] : {FN_WIDTH{1'BZ}};
+        assign read_fun[6]=(read_addr_reg[6][5:3]==l) ? read_funA[6] : {FN_WIDTH{1'BZ}};
+        assign read_fun[7]=(read_addr_reg[7][5:3]==l) ? read_funA[7] : {FN_WIDTH{1'BZ}};
+        assign read_fun[8]=(read_addr_reg[8][5:3]==l) ? read_funA[8] : {FN_WIDTH{1'BZ}};
         
     end
     for (k=0;k<=8;k=k+1)

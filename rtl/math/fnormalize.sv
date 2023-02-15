@@ -55,9 +55,9 @@ module normalizeD(
 	get_carry #(3) cmpUP_mod(offset_reg[5:3],~t[2:0],1'b1,coUP[t]);
 	get_carry #(3) cmpDN_mod(offset_reg[2:0],~t[2:0],1'b1,coDN[t]);
 	assign eqUP[t]=t==offset_reg[5:3];
-	assign the_mask[8*t+:8]=~eqUP[t] & coUP[t] ? 8'b0 : {8{1'bz}};
-	assign the_mask[8*t+:8]=eqUP[t] ? submask : {8{1'bz}};
-	assign the_mask[8*t+:8]=~coUP[t] ? 8'hff : {8{1'bz}}
+	assign the_mask[8*t+:8]=~eqUP[t] & coUP[t] ? 8'b0 : 8'bz;
+	assign the_mask[8*t+:8]=eqUP[t] ? submask : 8'bz;
+	assign the_mask[8*t+:8]=~coUP[t] ? 8'hff : 8'bz
 	assign submask[t]=coDN[t];
     end
   endgenerate

@@ -139,7 +139,7 @@ module bob_addr(
   adder_inc #(6) add2_mod(cnt,cnt_inc,1'b1,);
   adder_inc #(6) add3_mod(new_addr,new_addr_d,new_addr!=6'd47,);
 
-  assign new_addr_d=new_addr==6'd47 ? 6'd0 : {6{1'bz}};
+  assign new_addr_d=new_addr==6'd47 ? 6'd0 : 6'bz;
 
   adder #(6) add4_mod(cnt,6'h3f,cnt_dec,1'b0,1'b1,,,,);
 

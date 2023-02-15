@@ -57,18 +57,18 @@ module cvt_FP_I_mod(
   wire coUP,coNUP;
   reg coUP_reg,coNUP_reg;
 
-  assign shift=isEXT ? {A[81],A[79:65]} : {16{1'bz}};
-  assign shift=isDBL ? {A[81],{4{~A[81]}},A[63:53]} : {16{1'bz}};
-  assign shift=isSNG ? {A[32],{7{~A[32]}},A[30:23]} : {16{1'bz}};
-  assign shift=verbatim ? BIAS+16'd63 : {16{1'bz}};
-  assign bits=isEXT ? {A[64:33],A[31:0]} : {64{1'bz}};
-  assign bits=isDBL ? {1'b1,A[52:33],A[31:0],11'b0} : {64{1'bz}};
-  assign bits=isSNG ? {1'b1,A[22:0],40'b0} : {64{1'bz}};
-  assign bits=verbatim ? {A[64:33],A[31:0]} : {64{1'bz}};
-  assign sign=isEXT ? A[80] : {1{1'bz}};
-  assign sign=isDBL ? A[64] : {1{1'bz}};
-  assign sign=isSNG ? A[31] : {1{1'bz}};
-  assign sign=verbatim ? 1'b0 : {1{1'bz}};
+  assign shift=isEXT ? {A[81],A[79:65]} : 16'bz;
+  assign shift=isDBL ? {A[81],{4{~A[81]}},A[63:53]} : 16'bz;
+  assign shift=isSNG ? {A[32],{7{~A[32]}},A[30:23]} : 16'bz;
+  assign shift=verbatim ? BIAS+16'd63 : 16'bz;
+  assign bits=isEXT ? {A[64:33],A[31:0]} : 64'bz;
+  assign bits=isDBL ? {1'b1,A[52:33],A[31:0],11'b0} : 64'bz;
+  assign bits=isSNG ? {1'b1,A[22:0],40'b0} : 64'bz;
+  assign bits=verbatim ? {A[64:33],A[31:0]} : 64'bz;
+  assign sign=isEXT ? A[80] : 1'bz;
+  assign sign=isDBL ? A[64] : 1'bz;
+  assign sign=isSNG ? A[31] : 1'bz;
+  assign sign=verbatim ? 1'b0 : 1'bz;
 
   assign alt=~(clkEn & en);
   get_carry #(16) cmpShift_mod(shift,~(BIAS+16'd64),1'b1,coUP);
@@ -76,24 +76,24 @@ module cvt_FP_I_mod(
 
   adder_inc #(64) inv_mod(~bits,bits2,sign,);
 
-  assign bits2=~sign ? bits : {64{1'bz}};
+  assign bits2=~sign ? bits : 64'bz;
 
-  assign res[31:0]=coUP_reg ? 32'b0 : {32{1'bz}};
-  assign res=coNUP_reg ? {64{sign_reg}} : {64{1'bz}};
-  assign res[31:0]=(~coUP_reg&~coNUP_reg) ? val[31:0] : {32{1'bz}};
-  assign res[63:32]=coUP_reg|is32b_reg ? 32'b0 : {32{1'bz}};
-  assign res[63:32]=(~coUP_reg&~coNUP_reg&~is32b_reg) ? val[63:32] : {32{1'bz}};
+  assign res[31:0]=coUP_reg ? 32'b0 : 32'bz;
+  assign res=coNUP_reg ? {64{sign_reg}} : 64'bz;
+  assign res[31:0]=(~coUP_reg&~coNUP_reg) ? val[31:0] : 32'bz;
+  assign res[63:32]=coUP_reg|is32b_reg ? 32'b0 : 32'bz;
+  assign res[63:32]=(~coUP_reg&~coNUP_reg&~is32b_reg) ? val[63:32] : 32'bz;
 
   generate
     genvar k;
     for(k=0;k<8;k=k+1) begin : shifter_gen
 	    //verilator lint_off WIDTH
-	assign val_imm=(shift[7:3]==k[4:0]) ? {{64{sign}},bits2}>>((7-k)*8) : {72{1'bz}};
-	assign val_imm=(shift[7:3]==(k[4:0]+5'd16)) ? {{8{sign}},bits2}<<(k*8+8) : {72{1'bz}};
+	assign val_imm=(shift[7:3]==k[4:0]) ? {{64{sign}},bits2}>>((7-k)*8) : 72'bz;
+	assign val_imm=(shift[7:3]==(k[4:0]+5'd16)) ? {{8{sign}},bits2}<<(k*8+8) : 72'bz;
 	assign val=(shift_reg[2:0]==k) ?
-	       	{val_imm_reg,1'b0}>>(7-k) : {64{1'bz}};
+	       	{val_imm_reg,1'b0}>>(7-k) : 64'bz;
     end
-        assign val=(shift_reg[7]) ? val_imm_reg>>7 : {64{1'bz}};
+        assign val=(shift_reg[7]) ? val_imm_reg>>7 : 64'bz;
 	   //verilator lint_on WIDTH
   endgenerate
 

@@ -48,15 +48,15 @@ module fperm(
 
   generate
     if (!C) begin
-        assign res=en_reg? res0_reg : {68{1'bz}};
+        assign res=en_reg? res0_reg : 68'bz;
     end else begin
-        assign res=en_reg3? res0_reg3 : {68{1'bz}};
+        assign res=en_reg3? res0_reg3 : 68'bz;
     end
   endgenerate
-  assign resX=(copyA & ~swpSngl) ? A : {68{1'bz}};
-  assign resX=(~copyA & ~swpSngl) ? B : {68{1'bz}};
-  assign resX=(copyA & swpSngl) ? {A[67:66],A[32:0],A[65:33]} : {68{1'bz}};
-  assign resX=(~copyA & swpSngl) ? {B[67:66],B[32:0],B[65:33]} : {68{1'bz}};
+  assign resX=(copyA & ~swpSngl) ? A : 68'bz;
+  assign resX=(~copyA & ~swpSngl) ? B : 68'bz;
+  assign resX=(copyA & swpSngl) ? {A[67:66],A[32:0],A[65:33]} : 68'bz;
+  assign resX=(~copyA & swpSngl) ? {B[67:66],B[32:0],B[65:33]} : 68'bz;
   assign res0=dupSngl ?{resX[67:66],resX[32:0],resX[32:0]} : resX; 
   always @(negedge clk) begin
     res0_reg<=res0;

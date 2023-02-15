@@ -354,15 +354,15 @@ module reginfl_ram_placeholder(
   write4_addr[4:0],ram_write4_wen
   );
 
-  assign read0_data=read0_en ? ram_read0_data : {DATA_WIDTH{{1{1'bz}}}};
-  assign read1_data=read1_en ? ram_read1_data : {DATA_WIDTH{{1{1'bz}}}};
-  assign read2_data=read2_en ? ram_read2_data : {DATA_WIDTH{{1{1'bz}}}};
-  assign read3_data=read3_en ? ram_read3_data : {DATA_WIDTH{{1{1'bz}}}};
-  assign read4_data=read4_en ? ram_read4_data : {DATA_WIDTH{{1{1'bz}}}};
-  assign read5_data=read5_en ? ram_read5_data : {DATA_WIDTH{{1{1'bz}}}};
-  assign read6_data=read6_en ? ram_read6_data : {DATA_WIDTH{{1{1'bz}}}};
-  assign read7_data=read7_en ? ram_read7_data : {DATA_WIDTH{{1{1'bz}}}};
-  assign read8_data=read8_en ? ram_read8_data : {DATA_WIDTH{{1{1'bz}}}};
+  assign read0_data=read0_en ? ram_read0_data : {DATA_WIDTH{1'bz}};
+  assign read1_data=read1_en ? ram_read1_data : {DATA_WIDTH{1'bz}};
+  assign read2_data=read2_en ? ram_read2_data : {DATA_WIDTH{1'bz}};
+  assign read3_data=read3_en ? ram_read3_data : {DATA_WIDTH{1'bz}};
+  assign read4_data=read4_en ? ram_read4_data : {DATA_WIDTH{1'bz}};
+  assign read5_data=read5_en ? ram_read5_data : {DATA_WIDTH{1'bz}};
+  assign read6_data=read6_en ? ram_read6_data : {DATA_WIDTH{1'bz}};
+  assign read7_data=read7_en ? ram_read7_data : {DATA_WIDTH{1'bz}};
+  assign read8_data=read8_en ? ram_read8_data : {DATA_WIDTH{1'bz}};
 
   
   assign ram_write0_wen=write0_wen && write0_addr[3:0]==INDEX;
@@ -625,15 +625,15 @@ module reginfl_ram_block(
   assign write2_wen_ram[2]=write9_wen;
    
   
-  assign read0_data=read0_constEn_reg ? 1'b0 : {DATA_WIDTH{{1{1'bz}}}};
-  assign read1_data=read1_constEn_reg ? 1'b0 : {DATA_WIDTH{{1{1'bz}}}};
-  assign read2_data=read2_constEn_reg ? 1'b0 : {DATA_WIDTH{{1{1'bz}}}};
-  assign read3_data=read3_constEn_reg ? 1'b0 : {DATA_WIDTH{{1{1'bz}}}};
-  assign read4_data=read4_constEn_reg ? 1'b0 : {DATA_WIDTH{{1{1'bz}}}};
-  assign read5_data=read5_constEn_reg ? 1'b0 : {DATA_WIDTH{{1{1'bz}}}};
-  assign read6_data=read6_constEn_reg ? 1'b0 : {DATA_WIDTH{{1{1'bz}}}};
-  assign read7_data=read7_constEn_reg ? 1'b0 : {DATA_WIDTH{{1{1'bz}}}};
-  assign read8_data=read8_constEn_reg ? 1'b0 : {DATA_WIDTH{{1{1'bz}}}};
+  assign read0_data=read0_constEn_reg ? 1'b0 : {DATA_WIDTH{1'BZ}};
+  assign read1_data=read1_constEn_reg ? 1'b0 : {DATA_WIDTH{1'BZ}};
+  assign read2_data=read2_constEn_reg ? 1'b0 : {DATA_WIDTH{1'BZ}};
+  assign read3_data=read3_constEn_reg ? 1'b0 : {DATA_WIDTH{1'BZ}};
+  assign read4_data=read4_constEn_reg ? 1'b0 : {DATA_WIDTH{1'BZ}};
+  assign read5_data=read5_constEn_reg ? 1'b0 : {DATA_WIDTH{1'BZ}};
+  assign read6_data=read6_constEn_reg ? 1'b0 : {DATA_WIDTH{1'BZ}};
+  assign read7_data=read7_constEn_reg ? 1'b0 : {DATA_WIDTH{1'BZ}};
+  assign read8_data=read8_constEn_reg ? 1'b0 : {DATA_WIDTH{1'BZ}};
 
   assign newAddr[0]=newAddr0;
   assign newAddr[1]=newAddr1;
@@ -882,13 +882,13 @@ module reginfl_zero_cycle_write(
 
   wire [10:0] match_w;
 
-  assign read_data_new=(init & OE_IN) ? 1'b0 : {1{1'bz}};
+  assign read_data_new=(init & OE_IN) ? 1'b0 : 1'bz;
   
   assign match=|{match_r0,match_r1,match_r2,match_r3,match_r4,match_r5,match_r6,match_r7,match_r8,match_r9};
 
-  assign read_data_new=(match & read_oe_reg) ? 1'b0 : {1{1'bz}};
+  assign read_data_new=(match & read_oe_reg) ? 1'b0 : 1'bz;
 
-  assign read_data_new=(match | ~read_oe_reg) ? {1{1'bz}} : read_data_ram & match_w[10] & ~read_constEn_reg;
+  assign read_data_new=(match | ~read_oe_reg) ? 1'bz : read_data_ram & match_w[10] & ~read_constEn_reg;
   
   assign match_w[0]=read_addr_reg==write0_addr_reg && write0_wen_reg &&
      ~read_constEn_reg && read_oe_reg;
