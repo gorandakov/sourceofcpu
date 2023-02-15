@@ -2076,8 +2076,8 @@ void req_set(Vheptane_core *top,req *reqs,char *mem,char *memp) {
 	top->heptane_core__DOT__req_slot_reg);
 //    if (bmr) printf("insert 0x%lx\n",
 //	top->heptane_core__DOT__front_mod__DOT__cc_mod__DOT__write_IP_reg);
-    if (top->heptane_core__DOT__front_mod__DOT__bus_match_reg) bmr=1;
-    else bmr=0;
+   // if (top->heptane_core__DOT__front_mod__DOT__bus_match_reg) bmr=1;
+   // else bmr=0;
     if (top->heptane_core__DOT__insBus_en) 
 	    printf("insBus 0x%x, 0x%#8x%#8x%#8x%#8x, %i\n",top->heptane_core__DOT__dc2_req_rd_reg5,
 	top->heptane_core__DOT__dc2_rdata_reg[3],top->heptane_core__DOT__dc2_rdata_reg[2],
@@ -2144,7 +2144,7 @@ bool get_check(Vheptane_core *top, req *reqs,unsigned long long &ip) {
 	    insn_posW=insn_posR;
 	    //rtn=false;
 	}
-	else printf("ret %li, \t%li, %x, fl:0x%x\n",count,ip+count,retII,get_retfl_data(top));
+	else printf("ret %li, \t%li, %x\n",count,ip+count,retII);
 	for(x=0;x<count;x++) {
 	    if (reqs[ip+x].rT<0) goto no_srch;
 	    if (x<(count-1)) for(k=x+1;k<count;k=k+1) if (reqs[ip+x].rT==reqs[ip+k].rT || reqs[ip+x].rT<0) goto no_srch;
@@ -2199,8 +2199,11 @@ no_srch:;
     }
     xbreak=top->heptane_core__DOT__bck_mod__DOT__retM_xbreak;
     retire=top->heptane_core__DOT__bck_mod__DOT__retM_do_retire;
-    retII=top->heptane_core__DOT__bck_mod__DOT__cntrl_unit_mod__DOT__retire_addr_reg;
-    if (top->heptane_core__DOT__iAvail) printf("iAvail 0x%x, \t0x%x, \t0x%x, \t0x%x\n",top->heptane_core__DOT__iAvail,top->heptane_core__DOT__instrEn,top->heptane_core__DOT__dec_mod__DOT__cls_ALU,top->heptane_core__DOT__dec_mod__DOT__cls_shift);
+    if (retire) {
+	    retII++;
+            if (retII>47) retII=0;
+    }
+    if (top->heptane_core__DOT__iAvail) printf("iAvail 0x%x, \t0x%x\n",top->heptane_core__DOT__iAvail,top->heptane_core__DOT__instrEn);
     if (top->heptane_core__DOT__instrEn && top->heptane_core__DOT__bck_mod__DOT__stall_rs==0 && !top->heptane_core__DOT__except && 
 		    top->heptane_core__DOT__bck_mod__DOT__doStall_rs==0) {
 	k=0;
@@ -2486,7 +2489,6 @@ int main(int argc, char *argv[]) {
         top->clk=0;
         top->eval();
 	//usleep(5000);
-        if (top->heptane_core__DOT__front_mod__DOT__cc_mod__DOT__cc_mod__DOT__wayMod_gen__BRA__7__KET____DOT__way_mod__DOT__tag_mod__DOT__init_reg2) printf("dinit7 0x%x\n",top->heptane_core__DOT__front_mod__DOT__cc_mod__DOT__cc_mod__DOT__wayMod_gen__BRA__7__KET____DOT__way_mod__DOT__tag_mod__DOT__write_NRU);
         top->rbusOut_can=1;
         if (!initcount) {
             req_set(top,reqs,mem,memp);
