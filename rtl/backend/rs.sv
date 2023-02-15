@@ -1110,6 +1110,11 @@ module rs_wakeUpS_logic(
   wire sel;
 
   wire funM,funAdd,funMul;
+  
+  wire [3:0] outFuFwd2_X; assign outFuFwd2=outFuFwd2_X;
+  wire [3:0] outFuuFwd2_X; assign outFuuFwd2=outFuuFwd2_X;
+  wire [3:0] outFuFwd1_X; assign outFuFwd1=outFuFwd1_X;
+  wire [3:0] outFuuFwd1_X; assign outFuuFwd1=outFuuFwd1_X;
 
   reg [9:1] outEq0;
   
@@ -1183,11 +1188,11 @@ module rs_wakeUpS_logic(
 
   assign outEq={|outEq0[9:5],outEq0[9:5]|{outEq0[4:1],1'b0}};
 
-  assign outFuFwd1=outRsSelect1 ? fuFwd : {4{1'bz}};
-  assign outFuFwd2=outRsSelect2 ? fuFwd : {4{1'bz}};
+  assign outFuFwd1_X=outRsSelect1 ? fuFwd : {4{1'bz}};
+  assign outFuFwd2_X=outRsSelect2 ? fuFwd : {4{1'bz}};
 
-  assign outFuuFwd1=outRsSelect1 ? fuuFwd : {4{1'bz}};
-  assign outFuuFwd2=outRsSelect2 ? fuuFwd : {4{1'bz}};
+  assign outFuuFwd1_X=outRsSelect1 ? fuuFwd : {4{1'bz}};
+  assign outFuuFwd2_X=outRsSelect2 ? fuuFwd : {4{1'bz}};
 
   assign register_d=(newRsSelect1 & ~rst & ~stall) ? newReg1 : {REG_WIDTH{1'bz}};
   assign register_d=(newRsSelect2 & ~rst & ~stall) ? newReg2 : {REG_WIDTH{1'bz}};
@@ -1343,6 +1348,11 @@ module rs_wakeUpS_logic_array(
   wire [8:0] FUreg[9:0];
   wire [9:0] FUwen;
   
+  wire [3:0] outFuFwd1_X; assign outFuFwd1=outFuFwd1_X;
+  wire [3:0] outFuuFwd1_X; assign outFuuFwd1=outFuuFwd1_X;
+  wire [3:0] outFuFwd2_X; assign outFuFwd2=outFuFwd2_X;
+  wire [3:0] outFuuFwd2_X; assign outFuuFwd2=outFuuFwd2_X;
+  
   reg [REG_WIDTH-1:0] FUreg0_reg;
   reg FU0wen_reg;
   reg [REG_WIDTH-1:0] FUreg1_reg;
@@ -1446,11 +1456,11 @@ module rs_wakeUpS_logic_array(
           end
           
           
-          assign outFuFwd1=outBank1[j] ? outFuFwd1k : 4'bz;
-          assign outFuFwd2=outBank2[j] ? outFuFwd2k : 4'bz;
+          assign outFuFwd1_X=outBank1[j] ? outFuFwd1k : 4'bz;
+          assign outFuFwd2_X=outBank2[j] ? outFuFwd2k : 4'bz;
 
-          assign outFuuFwd1=outBank1[j] ? outFuuFwd1k : 4'bz;
-          assign outFuuFwd2=outBank2[j] ? outFuuFwd2k : 4'bz;
+          assign outFuuFwd1_X=outBank1[j] ? outFuuFwd1k : 4'bz;
+          assign outFuuFwd2_X=outBank2[j] ? outFuuFwd2k : 4'bz;
 
           
           assign outFuFwd1k=outBank1[j] ? 4'bz : 4'hf;
@@ -1472,11 +1482,11 @@ module rs_wakeUpS_logic_array(
   endgenerate
 
          
-  assign outFuFwd1=outFound1 ? 4'bz : 4'hf;
-  assign outFuFwd2=outFound2 ? 4'bz : 4'hf;
+  assign outFuFwd1_X=outFound1 ? 4'bz : 4'hf;
+  assign outFuFwd2_X=outFound2 ? 4'bz : 4'hf;
 
-  assign outFuuFwd1=outFound1 ? 4'bz : 4'hf;
-  assign outFuuFwd2=outFound2 ? 4'bz : 4'hf;
+  assign outFuuFwd1_X=outFound1 ? 4'bz : 4'hf;
+  assign outFuuFwd2_X=outFound2 ? 4'bz : 4'hf;
  
   always @(posedge clk) begin
     FUreg0_reg<=FUreg0;
