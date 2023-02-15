@@ -56,11 +56,11 @@ module in_flip_rt(
   generate
     genvar k;
     for(k=0;k<CNT;k=k+1) begin
-	assign d_out=firstN_reg2[k] ? data[k] : {WIDTH{1'bz}};
+	assign d_out=firstN_reg2[k] ? data[k] : 'z;
     end
   endgenerate
 
-  assign d_out=hasN_reg2 ? {WIDTH{1'bz}} : d_in;
+  assign d_out=hasN_reg2 ? 'z : d_in;
   assign do_=dout_en && in_en|hasN;
   assign pause=~dout_en && ~cntFree_or_less[1];
 

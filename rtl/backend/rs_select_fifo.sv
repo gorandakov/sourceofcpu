@@ -207,15 +207,15 @@ module rsSelectFifo(
   assign hasMultipleH=hasDataH && portReadyH!=firstH;
   assign hasMultiple=portReadyM!=first;     
   
-  assign rsSelect=(~portEn) ? {BUF_COUNT{1'B0}} : {BUF_COUNT{1'BZ}};
-  assign rsSelect=(portEn & hasDataH & firstFoundH1) ? firstH1 : {BUF_COUNT{1'BZ}};
-  assign rsSelect=(portEn & hasDataH & ~firstFoundH1) ? 32'b0 : {BUF_COUNT{1'BZ}};
-  assign rsSelect=(portEn & ~hasDataH) ? first : {BUF_COUNT{1'BZ}};
+  assign rsSelect=(~portEn) ? {BUF_COUNT{1'B0}} : 'z;
+  assign rsSelect=(portEn & hasDataH & firstFoundH1) ? firstH1 : 'z;
+  assign rsSelect=(portEn & hasDataH & ~firstFoundH1) ? 32'b0 : 'z;
+  assign rsSelect=(portEn & ~hasDataH) ? first : 'z;
 
-  assign rsShelect=(~portEn) ? {BUF_COUNT{1'B0}} : {BUF_COUNT{1'BZ}};
-  assign rsShelect=(portEn & hasDataH & firstFoundH1) ? firstH1 : {BUF_COUNT{1'BZ}};
-  assign rsShelect=(portEn & hasDataH & ~firstFoundH1) ? firstH : {BUF_COUNT{1'BZ}};
-  assign rsShelect=(portEn & ~hasDataH) ? first : {BUF_COUNT{1'BZ}};
+  assign rsShelect=(~portEn) ? {BUF_COUNT{1'B0}} : 'z;
+  assign rsShelect=(portEn & hasDataH & firstFoundH1) ? firstH1 : 'z;
+  assign rsShelect=(portEn & hasDataH & ~firstFoundH1) ? firstH : 'z;
+  assign rsShelect=(portEn & ~hasDataH) ? first : 'z;
 
   assign rsSel8=(~portEn) ? 4'B0 : 4'BZ;
   assign rsSel8=(portEn & hasDataH & firstFoundH1) ? first8H1 : 4'BZ;
@@ -327,15 +327,15 @@ module rsSelectFifo48(
   assign hasMultipleH=hasDataH && portReadyH!=firstH;
   assign hasMultiple=portReadyM!=first;     
   
-  assign rsSelect=(~portEn) ? {BUF_COUNT{1'B0}} : {BUF_COUNT{1'BZ}};
-  assign rsSelect=(portEn & hasDataH & firstFoundH1) ? firstH1 : {BUF_COUNT{1'BZ}};
-  assign rsSelect=(portEn & hasDataH & ~firstFoundH1) ? 48'b0 : {BUF_COUNT{1'BZ}};
-  assign rsSelect=(portEn & ~hasDataH) ? first : {BUF_COUNT{1'BZ}};
+  assign rsSelect=(~portEn) ? {BUF_COUNT{1'B0}} : 'z;
+  assign rsSelect=(portEn & hasDataH & firstFoundH1) ? firstH1 : 'z;
+  assign rsSelect=(portEn & hasDataH & ~firstFoundH1) ? 48'b0 : 'z;
+  assign rsSelect=(portEn & ~hasDataH) ? first : 'z;
 
-  assign rsShelect=(~portEn) ? {BUF_COUNT{1'B0}} : {BUF_COUNT{1'BZ}};
-  assign rsShelect=(portEn & hasDataH & firstFoundH1) ? firstH1 : {BUF_COUNT{1'BZ}};
-  assign rsShelect=(portEn & hasDataH & ~firstFoundH1) ? firstH : {BUF_COUNT{1'BZ}};
-  assign rsShelect=(portEn & ~hasDataH) ? first : {BUF_COUNT{1'BZ}};
+  assign rsShelect=(~portEn) ? {BUF_COUNT{1'B0}} : 'z;
+  assign rsShelect=(portEn & hasDataH & firstFoundH1) ? firstH1 : 'z;
+  assign rsShelect=(portEn & hasDataH & ~firstFoundH1) ? firstH : 'z;
+  assign rsShelect=(portEn & ~hasDataH) ? first : 'z;
 
   assign rsSel8=(~portEn) ? 6'B0 : 6'BZ;
   assign rsSel8=(portEn & hasDataH & firstFoundH1) ? first8H1 : 6'BZ;

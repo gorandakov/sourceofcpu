@@ -38,14 +38,14 @@ module add_sat(
   adder2o #(WIDTH) add_mod(A,Bx,res,res1,is_subcmp,en,1'b1,cout,,,);
   assign en=is_simpl || is_sat&~is_sign&~is_sub&~cout||is_sat&~is_sign&is_sub&cout||
   is_sat&is_sign&~ovfl_A||is_sat&is_sign&~ovfl_S;
-  assign res_X=(is_sat&~is_sign&~is_sub&cout) ? {WIDTH{1'B1}} : {WIDTH{1'Bz}};
-  assign res_X=(is_sat&~is_sign&is_sub&~cout) ? {WIDTH{1'B0}} : {WIDTH{1'Bz}};
-  assign res_X=(is_sat&is_sign&ovfl_A) ? {WIDTH{1'B1}} : {WIDTH{1'Bz}};
-  assign res_X=(is_sat&is_sign&ovfl_S) ? {WIDTH{1'B0}} : {WIDTH{1'Bz}};
+  assign res_X=(is_sat&~is_sign&~is_sub&cout) ? {WIDTH{1'B1}} : 'z;
+  assign res_X=(is_sat&~is_sign&is_sub&~cout) ? {WIDTH{1'B0}} : 'z;
+  assign res_X=(is_sat&is_sign&ovfl_A) ? {WIDTH{1'B1}} : 'z;
+  assign res_X=(is_sat&is_sign&ovfl_S) ? {WIDTH{1'B0}} : 'z;
   assign min0=(is_sign && res1[WIDTH-1] ^ (ovfl_A|ovfl_S)) ||
       (~is_sign & ~cout);
-  assign res_X=(is_min&min0 ||is_max&~min0) ? A : {WIDTH{1'BZ}};
-  assign res_X=(is_min&min0 ||is_max&~min0) ? A : {WIDTH{1'BZ}};
+  assign res_X=(is_min&min0 ||is_max&~min0) ? A : 'z;
+  assign res_X=(is_min&min0 ||is_max&~min0) ? A : 'z;
   assign ovfl_S=A[WIDTH-1] & Bx[WIDTH-1] & ~res1[WIDTH-1];
   assign ovfl_A=~A[WIDTH-1] & ~Bx[WIDTH-1] & res1[WIDTH-1];
 
@@ -53,7 +53,7 @@ module add_sat(
 
   except_jump_cmp jcmp_mod(flags,{1'b0,jump_type},do_jmp);
 
-  assign res_X=is_cmp ? {WIDTH{do_jmp}}:{WIDTH{1'BZ}};
+  assign res_X=is_cmp ? {WIDTH{do_jmp}}:'z;
 
 endmodule
 

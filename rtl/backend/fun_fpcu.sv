@@ -476,7 +476,7 @@ module fun_fpu(
   endgenerate
 
 //  if (m!=2) assign FUFL[4+m]=FOOFL_reg[2*m+0];
-//  else assign FUFL[4+m]=fxFRT_alten_reg5[2]||~nDataAlt_reg5[2][2] ? {SIMD_WIDTH{1'BZ}} : FOOFL_reg[2*m+0];
+//  else assign FUFL[4+m]=fxFRT_alten_reg5[2]||~nDataAlt_reg5[2][2] ? 'z : FOOFL_reg[2*m+0];
 //  assign FUFL[7+m]=FOOFL_reg[2*m+1];
 
   assign u1_Ax=uu_B1[67:0];

@@ -258,13 +258,13 @@ module fun_fpusqr0(
 	  assign outEn=(fxFRT_alten[n] && (!|(({fxFRT_alten,4'b0}>>n)&8'hf)) & ~rst)?
 	    4'b1001 : 4'bz;
 	  assign outII=(fxFRT_alten[n] && (!|(({fxFRT_alten,4'b0}>>n)&8'hf)) & ~rst) ?
-	    rtII[n] : {10{1'bz}};
+	    rtII[n] : 'z;
 	  assign outOp=(fxFRT_alten[n] && (!|(({fxFRT_alten,4'b0}>>n)&8'hf)) & ~rst) ?
-	    rtOp[n] : {13{1'bz}};
+	    rtOp[n] : 'z;
 	  assign FUreg=(fxFRT_alten[n] && (!|(({fxFRT_alten,4'b0}>>n)&8'hf)) & ~rst) ?
-	    rtReg[n] : {REG_WIDTH{1'bz}};
+	    rtReg[n] : 'z;
 	  assign FUSreg=(fxFRT_alten[n] && (!|(({fxFRT_alten,4'b0}>>n)&8'hf)) & ~rst) ?
-	    9'h1ff : {REG_WIDTH{1'bz}};
+	    9'h1ff : 'z;
 	  assign FUwen=(fxFRT_alten[n] && (!|(({fxFRT_alten,4'b0}>>n)&8'hf)) & ~rst) ?
 	    1'b1 : 1'bz;
 

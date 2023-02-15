@@ -372,10 +372,10 @@ module agucam(
 
   assign mOpR_en=(|sel) && ~init && (cmore[1]|wen) && ~excpt_fwd && read_clkEn;
 
-  assign mOpR_addrMain=(!conflFound) ? {VADDR_WIDTH{1'B0}} : {VADDR_WIDTH{1'BZ}};
+  assign mOpR_addrMain=(!conflFound) ? {VADDR_WIDTH{1'B0}} : 'z;
   assign mOpR_addrEven=(!conflFound) ? {PADDR_WIDTH-8{1'B0}} : {PADDR_WIDTH-8{1'BZ}};
   assign mOpR_addrOdd=(!conflFound) ? {PADDR_WIDTH-8{1'B0}} : {PADDR_WIDTH-8{1'BZ}};
-  assign mOpR_regNo=(!conflFound) ? {REG_WIDTH{1'B0}} : {REG_WIDTH{1'BZ}};
+  assign mOpR_regNo=(!conflFound) ? {REG_WIDTH{1'B0}} : 'z;
   assign mOpR_type=(!conflFound) ? 2'B0 : 2'BZ;
   assign mOpR_sz=(!conflFound) ? 5'B0 : 5'BZ;
   assign mOpR_odd=(!conflFound) ? 1'B0 : 1'BZ;
@@ -403,12 +403,12 @@ module agucam(
   generate
     genvar p,k;
     for(k=0;k<=2;k=k+1) begin
-        assign mOpR_addrMain=sel[k] ? read_mop[k][`mOp_addrMain] : {VADDR_WIDTH{1'BZ}};
+        assign mOpR_addrMain=sel[k] ? read_mop[k][`mOp_addrMain] : 'z;
         assign mOpR_addrEven=sel[k] ? 36'b0 : 36'bz;
         assign mOpR_addrOdd=sel[k] ? 36'b0 : 36'bz;
         assign mOpR_odd=sel[k] ? 1'b0 : 1'bz;
         assign mOpR_low=sel[k] ? 2'b0 : 2'bz;
-        assign mOpR_regNo=sel[k] ? read_mop[k][`mOp_reg] : {REG_WIDTH{1'BZ}};
+        assign mOpR_regNo=sel[k] ? read_mop[k][`mOp_reg] : 'z;
         assign mOpR_type=sel[k] ? read_mop[k][`mOp_type] : 2'BZ;
         assign mOpR_sz=sel[k] ? read_mop[k][`mOp_sz] : 5'BZ;
         assign mOpR_invtlb=sel[k] ? read_mop[k][`mOp_st] : 1'BZ;

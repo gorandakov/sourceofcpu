@@ -203,17 +203,17 @@ module instrQextra(
   reg [4:0] cnt[1:0];
   wire [1:0][4:0] cnt_d;
 
-  assign write_data0x=write_start[0] ? write_data0 : {DATA_WIDTH{1'bz}};
-  assign write_data0x=write_start[1] ? write_data1 : {DATA_WIDTH{1'bz}};
-  assign write_data0x=write_start[2] ? write_data2 : {DATA_WIDTH{1'bz}};
-  assign write_data0x=|write_start[4:3] ? write_data3 : {DATA_WIDTH{1'bz}};
+  assign write_data0x=write_start[0] ? write_data0 : 'z;
+  assign write_data0x=write_start[1] ? write_data1 : 'z;
+  assign write_data0x=write_start[2] ? write_data2 : 'z;
+  assign write_data0x=|write_start[4:3] ? write_data3 : 'z;
 
-  assign write_data1x=write_start[0] ? write_data1 : {DATA_WIDTH{1'bz}};
-  assign write_data1x=write_start[1] ? write_data2 : {DATA_WIDTH{1'bz}};
-  assign write_data1x=|write_start[4:2] ? write_data3 : {DATA_WIDTH{1'bz}};
+  assign write_data1x=write_start[0] ? write_data1 : 'z;
+  assign write_data1x=write_start[1] ? write_data2 : 'z;
+  assign write_data1x=|write_start[4:2] ? write_data3 : 'z;
   
-  assign write_data2x=write_start[0] ? write_data2 : {DATA_WIDTH{1'bz}};
-  assign write_data2x=|write_start[4:1] ? write_data3 : {DATA_WIDTH{1'bz}};
+  assign write_data2x=write_start[0] ? write_data2 : 'z;
+  assign write_data2x=|write_start[4:1] ? write_data3 : 'z;
   
   assign write_data3x=write_data3;
 

@@ -48,12 +48,12 @@ module cntrl_speedup(
   reg [ADDR_WIDTH-1:0] read_addr_reg;
   integer k,k1;
 
-  assign read_data0=match[0] ? data[0] : {DATA_WIDTH{1'bz}};
-  assign read_data0=match[1] ? data[1] : {DATA_WIDTH{1'bz}};
-  assign read_data0=match[2] ? data[2] : {DATA_WIDTH{1'bz}};
-  assign read_data0=match[3] ? data[3] : {DATA_WIDTH{1'bz}};
-  assign read_data0=match[4] ? data[4] : {DATA_WIDTH{1'bz}};
-  assign read_data0=(!match[4:0]) ? data[5] : {DATA_WIDTH{1'bz}};
+  assign read_data0=match[0] ? data[0] : 'z;
+  assign read_data0=match[1] ? data[1] : 'z;
+  assign read_data0=match[2] ? data[2] : 'z;
+  assign read_data0=match[3] ? data[3] : 'z;
+  assign read_data0=match[4] ? data[4] : 'z;
+  assign read_data0=(!match[4:0]) ? data[5] : 'z;
   assign read_data=(match) ? read_data0 : read_data_in;
 
   always @* begin

@@ -239,13 +239,13 @@ module dcache2_bank(
   reg read_odd_reg;
   reg ins_hit_reg;
 
-  assign read_dataP=(read_en_reg|ins_hit_reg && ~read_odd_reg) ? read_data_ram[0] : {DATA_WIDTH{1'bz}};
-  assign read_dataP=(read_en_reg|ins_hit_reg && read_odd_reg) ? read_data_ram[1] : {DATA_WIDTH{1'bz}};
-  assign read_dataP=(~(read_en_reg|ins_hit_reg)) ? {DATA_WIDTH{1'B0}} : {DATA_WIDTH{1'BZ}};  
+  assign read_dataP=(read_en_reg|ins_hit_reg && ~read_odd_reg) ? read_data_ram[0] : 'z;
+  assign read_dataP=(read_en_reg|ins_hit_reg && read_odd_reg) ? read_data_ram[1] : 'z;
+  assign read_dataP=(~(read_en_reg|ins_hit_reg)) ? {DATA_WIDTH{1'B0}} : 'z;  
 
-  assign read_dataxP=(read_en_reg|ins_hit_reg && ~read_odd_reg) ? read_datax_ram[0] : {DATA_WIDTH{1'bz}};
-  assign read_dataxP=(read_en_reg|ins_hit_reg && read_odd_reg) ? read_datax_ram[1] : {DATA_WIDTH{1'bz}};
-  assign read_dataxP=(~(read_en_reg|ins_hit_reg)) ? {DATA_WIDTH{1'B0}} : {DATA_WIDTH{1'BZ}};  
+  assign read_dataxP=(read_en_reg|ins_hit_reg && ~read_odd_reg) ? read_datax_ram[0] : 'z;
+  assign read_dataxP=(read_en_reg|ins_hit_reg && read_odd_reg) ? read_datax_ram[1] : 'z;
+  assign read_dataxP=(~(read_en_reg|ins_hit_reg)) ? {DATA_WIDTH{1'B0}} : 'z;  
 
   generate
     if (~TOP) begin
@@ -539,17 +539,17 @@ module dcache2_bitx_bank(
   reg read_odd_reg;
   reg ins_hit_reg;
 
-  assign read_dataP=(read_en_reg|ins_hit_reg && ~write_addrE0_reg[7]  && ~read_odd_reg) ? read_data_ram[0][15:0] : {DATA_WIDTH{1'bz}};
-  assign read_dataP=(read_en_reg|ins_hit_reg && ~write_addrE0_reg[7] && read_odd_reg) ? read_data_ram[1][15:0] : {DATA_WIDTH{1'bz}};
-  assign read_dataP=(read_en_reg|ins_hit_reg && write_addrE0_reg[7]  && ~read_odd_reg) ? read_data_ram[0][31:16] : {DATA_WIDTH{1'bz}};
-  assign read_dataP=(read_en_reg|ins_hit_reg && write_addrE0_reg[7] && read_odd_reg) ? read_data_ram[1][31:16] : {DATA_WIDTH{1'bz}};
-  assign read_dataP=(~(read_en_reg|ins_hit_reg)) ? {DATA_WIDTH{1'B0}} : {DATA_WIDTH{1'BZ}};  
+  assign read_dataP=(read_en_reg|ins_hit_reg && ~write_addrE0_reg[7]  && ~read_odd_reg) ? read_data_ram[0][15:0] : 'z;
+  assign read_dataP=(read_en_reg|ins_hit_reg && ~write_addrE0_reg[7] && read_odd_reg) ? read_data_ram[1][15:0] : 'z;
+  assign read_dataP=(read_en_reg|ins_hit_reg && write_addrE0_reg[7]  && ~read_odd_reg) ? read_data_ram[0][31:16] : 'z;
+  assign read_dataP=(read_en_reg|ins_hit_reg && write_addrE0_reg[7] && read_odd_reg) ? read_data_ram[1][31:16] : 'z;
+  assign read_dataP=(~(read_en_reg|ins_hit_reg)) ? {DATA_WIDTH{1'B0}} : 'z;  
 
-  assign read_dataxP=(read_en_reg|ins_hit_reg && ~write_addrE0_reg[7] && ~read_odd_reg) ? read_datax_ram[0][15:0] : {DATA_WIDTH{1'bz}};
-  assign read_dataxP=(read_en_reg|ins_hit_reg && ~write_addrE0_reg[7] && read_odd_reg) ? read_datax_ram[1][15:0] : {DATA_WIDTH{1'bz}};
-  assign read_dataxP=(read_en_reg|ins_hit_reg && write_addrE0_reg[7] && ~read_odd_reg) ? read_datax_ram[0][31:16] : {DATA_WIDTH{1'bz}};
-  assign read_dataxP=(read_en_reg|ins_hit_reg && write_addrE0_reg[7] && read_odd_reg) ? read_datax_ram[1][31:16] : {DATA_WIDTH{1'bz}};
-  assign read_dataxP=(~(read_en_reg|ins_hit_reg)) ? {DATA_WIDTH{1'B0}} : {DATA_WIDTH{1'BZ}};  
+  assign read_dataxP=(read_en_reg|ins_hit_reg && ~write_addrE0_reg[7] && ~read_odd_reg) ? read_datax_ram[0][15:0] : 'z;
+  assign read_dataxP=(read_en_reg|ins_hit_reg && ~write_addrE0_reg[7] && read_odd_reg) ? read_datax_ram[1][15:0] : 'z;
+  assign read_dataxP=(read_en_reg|ins_hit_reg && write_addrE0_reg[7] && ~read_odd_reg) ? read_datax_ram[0][31:16] : 'z;
+  assign read_dataxP=(read_en_reg|ins_hit_reg && write_addrE0_reg[7] && read_odd_reg) ? read_datax_ram[1][31:16] : 'z;
+  assign read_dataxP=(~(read_en_reg|ins_hit_reg)) ? {DATA_WIDTH{1'B0}} : 'z;  
 
   generate
     if (~TOP) begin

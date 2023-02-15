@@ -857,8 +857,8 @@ module ldq(
         );
     end
     for(p=0;p<6;p=p+1) begin
-        assign chkL0_data=(chk_data_shr_reg[`lsqshare_wrt0]==p) ? chk_dataA[p] : {DATA_WIDTH{1'bz}}; 
-        assign chkL1_data=(chk_data_shr_reg[`lsqshare_wrt1]==p) ? chk_dataA[p] : {DATA_WIDTH{1'bz}}; 
+        assign chkL0_data=(chk_data_shr_reg[`lsqshare_wrt0]==p) ? chk_dataA[p] : 'z; 
+        assign chkL1_data=(chk_data_shr_reg[`lsqshare_wrt1]==p) ? chk_dataA[p] : 'z; 
 
         assign chkL0_en=(chk_data_shr_reg[`lsqshare_wrt0]==p) ? chk_enA[p] : 1'bz; 
         assign chkL1_en=(chk_data_shr_reg[`lsqshare_wrt1]==p) ? chk_enA[p] : 1'bz; 
@@ -919,8 +919,8 @@ module ldq(
 
 
 
-  assign chkL0_data=(chk_data_shr_reg[`lsqshare_wrt0]==3'd7) ? {DATA_WIDTH{1'B0}} : {DATA_WIDTH{1'bz}}; 
-  assign chkL1_data=(chk_data_shr_reg[`lsqshare_wrt1]==3'd7) ? {DATA_WIDTH{1'B0}} : {DATA_WIDTH{1'bz}}; 
+  assign chkL0_data=(chk_data_shr_reg[`lsqshare_wrt0]==3'd7) ? {DATA_WIDTH{1'B0}} : 'z; 
+  assign chkL1_data=(chk_data_shr_reg[`lsqshare_wrt1]==3'd7) ? {DATA_WIDTH{1'B0}} : 'z; 
 
   assign chkL0_en=(chk_data_shr_reg[`lsqshare_wrt0]==3'd7) ? 1'B0 : 1'bz; 
   assign chkL1_en=(chk_data_shr_reg[`lsqshare_wrt1]==3'd7) ? 1'B0 : 1'bz; 

@@ -298,25 +298,25 @@ module rs_wakeUp_logic(
 
   assign outEq={|outEq0[9:5],outEq0[9:5]|outEq0[4:0]};
 
-  assign outFuFwd0_X=outRsSelect0 ? fuFwd : {4{1'bz}};
-  assign outFuFwd1_X=outRsSelect1 ? fuFwd : {4{1'bz}};
-  assign outFuFwd2_X=outRsSelect2 ? fuFwd : {4{1'bz}};
+  assign outFuFwd0_X=outRsSelect0 ? fuFwd : 'z;
+  assign outFuFwd1_X=outRsSelect1 ? fuFwd : 'z;
+  assign outFuFwd2_X=outRsSelect2 ? fuFwd : 'z;
 
-  assign outFuuFwd0_X=outRsSelect0 ? fuuFwd : {4{1'bz}};
-  assign outFuuFwd1_X=outRsSelect1 ? fuuFwd : {4{1'bz}};
-  assign outFuuFwd2_X=outRsSelect2 ? fuuFwd : {4{1'bz}};
+  assign outFuuFwd0_X=outRsSelect0 ? fuuFwd : 'z;
+  assign outFuuFwd1_X=outRsSelect1 ? fuuFwd : 'z;
+  assign outFuuFwd2_X=outRsSelect2 ? fuuFwd : 'z;
 
-  assign register_d=(newRsSelect0 & ~rst & ~stall) ? newReg0 : {REG_WIDTH{1'bz}};
-  assign register_d=(newRsSelect1 & ~rst & ~stall) ? newReg1 : {REG_WIDTH{1'bz}};
-  assign register_d=(newRsSelect2 & ~rst & ~stall) ? newReg2 : {REG_WIDTH{1'bz}};
-  assign register_d=rst ? {REG_WIDTH{1'b1}} : {REG_WIDTH{1'bz}};
-  assign register_d=(~newRsSelect0 & ~newRsSelect1 & ~newRsSelect2 & ~rst || stall &~rst) ? register : {REG_WIDTH{1'bz}};
+  assign register_d=(newRsSelect0 & ~rst & ~stall) ? newReg0 : 'z;
+  assign register_d=(newRsSelect1 & ~rst & ~stall) ? newReg1 : 'z;
+  assign register_d=(newRsSelect2 & ~rst & ~stall) ? newReg2 : 'z;
+  assign register_d=rst ? {REG_WIDTH{1'b1}} : 'z;
+  assign register_d=(~newRsSelect0 & ~newRsSelect1 & ~newRsSelect2 & ~rst || stall &~rst) ? register : 'z;
 
-  assign funit_d=(newRsSelect0 & ~rst & ~stall) ? newFunit0 : {FN_WIDTH{1'bz}};
-  assign funit_d=(newRsSelect1 & ~rst & ~stall) ? newFunit1 : {FN_WIDTH{1'bz}};
-  assign funit_d=(newRsSelect2 & ~rst & ~stall) ? newFunit2 : {FN_WIDTH{1'bz}};
-  assign funit_d=rst ? 10'b1001 : {FN_WIDTH{1'bz}};
-  assign funit_d=(~newRsSelect0 & ~newRsSelect1 & ~newRsSelect2 & ~rst || stall &~rst) ? funit : {FN_WIDTH{1'bz}};
+  assign funit_d=(newRsSelect0 & ~rst & ~stall) ? newFunit0 : 'z;
+  assign funit_d=(newRsSelect1 & ~rst & ~stall) ? newFunit1 : 'z;
+  assign funit_d=(newRsSelect2 & ~rst & ~stall) ? newFunit2 : 'z;
+  assign funit_d=rst ? 10'b1001 : 'z;
+  assign funit_d=(~newRsSelect0 & ~newRsSelect1 & ~newRsSelect2 & ~rst || stall &~rst) ? funit : 'z;
 
   generate
     genvar n;
@@ -846,30 +846,30 @@ module rs_wakeUp_data(
 
   assign data_en=|{outEq,newRsSelect0,newRsSelect1,newRsSelect2};
 
-  assign data_d0=outEq[0] ? FU0 : {WIDTH{1'bz}};
-  assign data_d0=outEq[1] ? FU1 : {WIDTH{1'bz}};
-  assign data_d0=outEq[2] ? FU2 : {WIDTH{1'bz}};
-  assign data_d0=outEq[3] ? FU3 : {WIDTH{1'bz}};
-  assign data_d0=outEq[4] ? FU4 : {WIDTH{1'bz}};
-  assign data_d0=|outEq[4:0] ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-  assign data_d1=outEq[0] ? FU5 : {WIDTH{1'bz}};
-  assign data_d1=outEq[1] ? FU6 : {WIDTH{1'bz}};
-  assign data_d1=outEq[2] ? FU7 : {WIDTH{1'bz}};
-  assign data_d1=outEq[3] ? FU8 : {WIDTH{1'bz}};
-  assign data_d1=outEq[4] ? FU9 : {WIDTH{1'bz}};
-  assign data_d1=|outEq[4:0] ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-  assign data_d=(newRsSelect0 & ~rst & ~stall) ? newData0 : {WIDTH{1'bz}};
-  assign data_d=(newRsSelect1 & ~rst & ~stall) ? newData1 : {WIDTH{1'bz}};
-  assign data_d=(newRsSelect2 & ~rst & ~stall) ? newData2 : {WIDTH{1'bz}};
+  assign data_d0=outEq[0] ? FU0 : 'z;
+  assign data_d0=outEq[1] ? FU1 : 'z;
+  assign data_d0=outEq[2] ? FU2 : 'z;
+  assign data_d0=outEq[3] ? FU3 : 'z;
+  assign data_d0=outEq[4] ? FU4 : 'z;
+  assign data_d0=|outEq[4:0] ? 'z : {WIDTH{1'B0}};
+  assign data_d1=outEq[0] ? FU5 : 'z;
+  assign data_d1=outEq[1] ? FU6 : 'z;
+  assign data_d1=outEq[2] ? FU7 : 'z;
+  assign data_d1=outEq[3] ? FU8 : 'z;
+  assign data_d1=outEq[4] ? FU9 : 'z;
+  assign data_d1=|outEq[4:0] ? 'z : {WIDTH{1'B0}};
+  assign data_d=(newRsSelect0 & ~rst & ~stall) ? newData0 : 'z;
+  assign data_d=(newRsSelect1 & ~rst & ~stall) ? newData1 : 'z;
+  assign data_d=(newRsSelect2 & ~rst & ~stall) ? newData2 : 'z;
 
-  assign data_d=rst ? {WIDTH{1'b0}} : {WIDTH{1'bz}};
+  assign data_d=rst ? {WIDTH{1'b0}} : 'z;
 
-  assign data_d=(data_en & ~(stall && newRsSelect0|newRsSelect1|newRsSelect2) || rst) ? {WIDTH{1'bz}} : data_q;
-  assign data_d=(|outEq[4:0] && outEq[5]) ? data_d1 : {WIDTH{1'BZ}};
-  assign data_d=(|outEq[4:0] && ~outEq[5]) ? data_d0 : {WIDTH{1'BZ}};
-  assign outData0_X=outRsSelect0 ? data_q : {WIDTH{1'bz}};
-  assign outData1_X=outRsSelect1 ? data_q : {WIDTH{1'bz}};
-  assign outData2_X=outRsSelect2 ? data_q : {WIDTH{1'bz}};
+  assign data_d=(data_en & ~(stall && newRsSelect0|newRsSelect1|newRsSelect2) || rst) ? 'z : data_q;
+  assign data_d=(|outEq[4:0] && outEq[5]) ? data_d1 : 'z;
+  assign data_d=(|outEq[4:0] && ~outEq[5]) ? data_d0 : 'z;
+  assign outData0_X=outRsSelect0 ? data_q : 'z;
+  assign outData1_X=outRsSelect1 ? data_q : 'z;
+  assign outData2_X=outRsSelect2 ? data_q : 'z;
 
   always @(posedge clk)
     begin
@@ -965,19 +965,19 @@ module rs_wakeUp_data_array(
               outRsSelect2[k+8*j],outData2k
               );
           end
-          assign outData0_X=outBank0[j] ? outData0k : {WIDTH{1'BZ}};
-          assign outData1_X=outBank1[j] ? outData1k : {WIDTH{1'BZ}};
-          assign outData2_X=outBank2[j] ? outData2k : {WIDTH{1'BZ}};
+          assign outData0_X=outBank0[j] ? outData0k : 'z;
+          assign outData1_X=outBank1[j] ? outData1k : 'z;
+          assign outData2_X=outBank2[j] ? outData2k : 'z;
 
-          assign outData0k=outBank0[j] ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-          assign outData1k=outBank1[j] ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-          assign outData2k=outBank2[j] ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+          assign outData0k=outBank0[j] ? 'z : {WIDTH{1'B0}};
+          assign outData1k=outBank1[j] ? 'z : {WIDTH{1'B0}};
+          assign outData2k=outBank2[j] ? 'z : {WIDTH{1'B0}};
       end
   endgenerate
 
-  assign outData0_X=outFound0 ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-  assign outData1_X=outFound1 ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-  assign outData2_X=outFound2 ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+  assign outData0_X=outFound0 ? 'z : {WIDTH{1'B0}};
+  assign outData1_X=outFound1 ? 'z : {WIDTH{1'B0}};
+  assign outData2_X=outFound2 ? 'z : {WIDTH{1'B0}};
 
   assign outDataN0=~outData0;
   assign outDataN1=~outData1;
@@ -1188,21 +1188,21 @@ module rs_wakeUpS_logic(
 
   assign outEq={|outEq0[9:5],outEq0[9:5]|{outEq0[4:1],1'b0}};
 
-  assign outFuFwd1_X=outRsSelect1 ? fuFwd : {4{1'bz}};
-  assign outFuFwd2_X=outRsSelect2 ? fuFwd : {4{1'bz}};
+  assign outFuFwd1_X=outRsSelect1 ? fuFwd : 'z;
+  assign outFuFwd2_X=outRsSelect2 ? fuFwd : 'z;
 
-  assign outFuuFwd1_X=outRsSelect1 ? fuuFwd : {4{1'bz}};
-  assign outFuuFwd2_X=outRsSelect2 ? fuuFwd : {4{1'bz}};
+  assign outFuuFwd1_X=outRsSelect1 ? fuuFwd : 'z;
+  assign outFuuFwd2_X=outRsSelect2 ? fuuFwd : 'z;
 
-  assign register_d=(newRsSelect1 & ~rst & ~stall) ? newReg1 : {REG_WIDTH{1'bz}};
-  assign register_d=(newRsSelect2 & ~rst & ~stall) ? newReg2 : {REG_WIDTH{1'bz}};
-  assign register_d=rst ? {REG_WIDTH{1'b1}} : {REG_WIDTH{1'bz}};
-  assign register_d=(~newRsSelect1 & ~newRsSelect2 & ~rst || stall &~rst) ? register : {REG_WIDTH{1'bz}};
+  assign register_d=(newRsSelect1 & ~rst & ~stall) ? newReg1 : 'z;
+  assign register_d=(newRsSelect2 & ~rst & ~stall) ? newReg2 : 'z;
+  assign register_d=rst ? {REG_WIDTH{1'b1}} : 'z;
+  assign register_d=(~newRsSelect1 & ~newRsSelect2 & ~rst || stall &~rst) ? register : 'z;
 
-  assign funit_d=(newRsSelect1 & ~rst & ~stall) ? newFunit1 : {FN_WIDTH{1'bz}};
-  assign funit_d=(newRsSelect2 & ~rst & ~stall) ? newFunit2 : {FN_WIDTH{1'bz}};
-  assign funit_d=rst ? 10'b1 : {FN_WIDTH{1'bz}};
-  assign funit_d=(~newRsSelect1 & ~newRsSelect2 & ~rst || stall &~rst) ? funit : {FN_WIDTH{1'bz}};
+  assign funit_d=(newRsSelect1 & ~rst & ~stall) ? newFunit1 : 'z;
+  assign funit_d=(newRsSelect2 & ~rst & ~stall) ? newFunit2 : 'z;
+  assign funit_d=rst ? 10'b1 : 'z;
+  assign funit_d=(~newRsSelect1 & ~newRsSelect2 & ~rst || stall &~rst) ? funit : 'z;
   
   generate
     genvar n;
@@ -1565,17 +1565,17 @@ module rs_nonWakeUp_DFF(
 
   assign data_en=|{newRsSelect0,newRsSelect1,newRsSelect2,rst};
 
-  assign data_d=(newRsSelect0 & ~rst & ~stall) ? newData0 : {WIDTH{1'bz}};
-  assign data_d=(newRsSelect1 & ~rst & ~stall) ? newData1 : {WIDTH{1'bz}};
-  assign data_d=(newRsSelect2 & ~rst & ~stall) ? newData2 : {WIDTH{1'bz}};
+  assign data_d=(newRsSelect0 & ~rst & ~stall) ? newData0 : 'z;
+  assign data_d=(newRsSelect1 & ~rst & ~stall) ? newData1 : 'z;
+  assign data_d=(newRsSelect2 & ~rst & ~stall) ? newData2 : 'z;
 
-  assign data_d=rst ? {WIDTH{1'b0}} : {WIDTH{1'bz}};
+  assign data_d=rst ? {WIDTH{1'b0}} : 'z;
 
-  assign data_d=(data_en & ~stall) ? {WIDTH{1'bz}} : data_q;
+  assign data_d=(data_en & ~stall) ? 'z : data_q;
   
-  assign outData0_X=(outRsSelect0) ? data_q : {WIDTH{1'bz}};
-  assign outData1_X=(outRsSelect1) ? data_q : {WIDTH{1'bz}};
-  assign outData2_X=(outRsSelect2) ? data_q : {WIDTH{1'bz}};
+  assign outData0_X=(outRsSelect0) ? data_q : 'z;
+  assign outData1_X=(outRsSelect1) ? data_q : 'z;
+  assign outData2_X=(outRsSelect2) ? data_q : 'z;
 
   always @(posedge clk)
     begin
@@ -1644,19 +1644,19 @@ module rs_nonWakeUp_array(
               outRsSelect2[k+8*j],outData2k
               );
           end
-          assign outData0_X=outBank0[j] ? outData0k : {WIDTH{1'BZ}};
-          assign outData1_X=outBank1[j] ? outData1k : {WIDTH{1'BZ}};
-          assign outData2_X=outBank2[j] ? outData2k : {WIDTH{1'BZ}};
+          assign outData0_X=outBank0[j] ? outData0k : 'z;
+          assign outData1_X=outBank1[j] ? outData1k : 'z;
+          assign outData2_X=outBank2[j] ? outData2k : 'z;
 
-          assign outData0k=outBank0[j] ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-          assign outData1k=outBank1[j] ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-          assign outData2k=outBank2[j] ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+          assign outData0k=outBank0[j] ? 'z : {WIDTH{1'B0}};
+          assign outData1k=outBank1[j] ? 'z : {WIDTH{1'B0}};
+          assign outData2k=outBank2[j] ? 'z : {WIDTH{1'B0}};
       end
   endgenerate
 
-  assign outData0_X=outFound0 ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-  assign outData1_X=outFound1 ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
-  assign outData2_X=outFound2 ? {WIDTH{1'BZ}} : {WIDTH{1'B0}};
+  assign outData0_X=outFound0 ? 'z : {WIDTH{1'B0}};
+  assign outData1_X=outFound1 ? 'z : {WIDTH{1'B0}};
+  assign outData2_X=outFound2 ? 'z : {WIDTH{1'B0}};
   
 endmodule
 
@@ -1688,13 +1688,13 @@ module rs_nonWakeUp_datad_DFF(
 
   assign data_en=|{newRsSelect0,newRsSelect1,newRsSelect2,rst};
 
-  assign data_d=(newRsSelect0 & ~rst & ~stall) ? ~newData0 : {WIDTH{1'bz}};
-  assign data_d=(newRsSelect1 & ~rst & ~stall) ? ~newData1 : {WIDTH{1'bz}};
-  assign data_d=(newRsSelect2 & ~rst & ~stall) ? ~newData2 : {WIDTH{1'bz}};
+  assign data_d=(newRsSelect0 & ~rst & ~stall) ? ~newData0 : 'z;
+  assign data_d=(newRsSelect1 & ~rst & ~stall) ? ~newData1 : 'z;
+  assign data_d=(newRsSelect2 & ~rst & ~stall) ? ~newData2 : 'z;
 
-  assign data_d=rst ? {WIDTH{1'b1}} : {WIDTH{1'bz}};
+  assign data_d=rst ? {WIDTH{1'b1}} : 'z;
 
-  assign data_d=(data_en & ~stall) ? {WIDTH{1'bz}} : data_q;
+  assign data_d=(data_en & ~stall) ? 'z : data_q;
 
   always @(posedge clk)
     begin

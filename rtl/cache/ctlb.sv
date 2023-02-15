@@ -133,7 +133,7 @@ module ctlb_way(
   assign write_wen_ram=(write_wen && read_lru==2'b11) || read_clkEn&~fStall&~write_wen;
   
   assign tlb_data=read_data_ram[`ctlb_data];
-  assign read_data=read_hit ? read_data_ram[`ctlb_data] : {OUTDATA_WIDTH{1'BZ}};
+  assign read_data=read_hit ? read_data_ram[`ctlb_data] : 'z;
   assign write_data_new[`ctlb_ip]=addr;
   assign write_data_new[`ctlb_valid]=~write_tr;
   assign write_data_new[`ctlb_validN]=write_tr;
@@ -154,9 +154,9 @@ module ctlb_way(
   assign write_data_same[`ctlb_lru]=newLRU;
   
   
-  assign write_data_ram=write_wen & ~init ? write_data_new : {DATA_WIDTH{1'BZ}};
-  assign write_data_ram=~write_wen & ~init ? write_data_same : {DATA_WIDTH{1'BZ}};
-  assign write_data_ram=init ? write_data_init : {DATA_WIDTH{1'BZ}};
+  assign write_data_ram=write_wen & ~init ? write_data_new : 'z;
+  assign write_data_ram=~write_wen & ~init ? write_data_same : 'z;
+  assign write_data_ram=init ? write_data_init : 'z;
   
   ctlb_ram ram_mod(
   .clk(clk),
@@ -255,7 +255,7 @@ module ctlb(
 
   assign read_hit=(|read_hit_way) & ~init_pending;
   assign hitLRU=read_hit ? 2'bz : 2'b00;
-  assign read_data=read_hit ? {OUTDATA_WIDTH{1'BZ}} : {OUTDATA_WIDTH{1'B0}};
+  assign read_data=read_hit ? 'z : {OUTDATA_WIDTH{1'B0}};
 
   generate
     genvar k;

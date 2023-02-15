@@ -180,9 +180,9 @@ module dtlb_way(
   || init || write_wen & write_xstant & ~force_way_off  & (read_hitL|
   force_way_on);
   
-  assign read_data0=read_hitL ? read_data_ram[`dtlb_data1] : {OUTDATA_WIDTH{1'BZ}};
-  assign read_data1=read_hitL ? read_data_ram[`dtlb_data2] : {OUTDATA_WIDTH{1'BZ}};
-  assign read_data2=read_hitL ? read_data_ram[`dtlb_data3] : {OUTDATA_WIDTH{1'BZ}};
+  assign read_data0=read_hitL ? read_data_ram[`dtlb_data1] : 'z;
+  assign read_data1=read_hitL ? read_data_ram[`dtlb_data2] : 'z;
+  assign read_data2=read_hitL ? read_data_ram[`dtlb_data3] : 'z;
 
   assign read_way=read_hit ? WAYNO[2:0] : 3'bz;
 
@@ -371,9 +371,9 @@ module dtlb(
 //  assign read_2M[0]=read_data[`dtlbData_subpage];;
 //  assign read_2M[1]=read_data_next[`dtlbData_subpage];;
   
-  assign read_data0=read_hit ? {OUTDATA_WIDTH{1'BZ}} : {OUTDATA_WIDTH{1'B0}};
-  assign read_data1=read_hit ? {OUTDATA_WIDTH{1'BZ}} : {OUTDATA_WIDTH{1'B0}};
-  assign read_data2=read_hit ? {OUTDATA_WIDTH{1'BZ}} : {OUTDATA_WIDTH{1'B0}};
+  assign read_data0=read_hit ? 'z : {OUTDATA_WIDTH{1'B0}};
+  assign read_data1=read_hit ? 'z : {OUTDATA_WIDTH{1'B0}};
+  assign read_data2=read_hit ? 'z : {OUTDATA_WIDTH{1'B0}};
 
   assign read_way_X=read_hit ? 3'BZ : 3'B0;
   

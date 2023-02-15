@@ -97,8 +97,8 @@ module cntrl_jump_upto(
         assign mispred_x[k]=(jumpTaken_x[k] ^ jumpPredTk) | (indirMismatch && jumpType==5'h11) | jumpTbufMiss && INDEX==jumpIndex;
         assign jumpTaken=(flagLast[k] && INDEX==jumpIndex) ? jumpTaken_x[k]&~jumpTbufMiss : 1'bz;
         assign jumpMisPred=flagLast[k] ? mispred_x[k] : 1'bz; 
-        assign flagOut=(flagLast[k] && INDEX==jumpIndex) ? flags[k] : {WIDTH{1'BZ}};
-        assign flagOutN=flagLast[k] ? flags[k] : {WIDTH{1'BZ}};
+        assign flagOut=(flagLast[k] && INDEX==jumpIndex) ? flags[k] : 'z;
+        assign flagOutN=flagLast[k] ? flags[k] : 'z;
     end
   endgenerate
 
@@ -106,8 +106,8 @@ module cntrl_jump_upto(
   assign mispred_0=(jumpTaken_0 ^ jumpPredTk) | (indirMismatch && jumpType==5'h11) && INDEX==jumpIndex;
   assign jumpTaken=(~nFlagIsPrev  && INDEX==jumpIndex) ? jumpTaken_0 : 1'bz;
   assign jumpMisPred=(~nFlagIsPrev) ? mispred_0 : 1'bz; 
-  assign flagOut=(~nFlagIsPrev && INDEX==jumpIndex) ? prevFlags : {WIDTH{1'BZ}};
-  assign flagOutN=(~nFlagIsPrev) ? prevFlags : {WIDTH{1'BZ}};
+  assign flagOut=(~nFlagIsPrev && INDEX==jumpIndex) ? prevFlags : 'z;
+  assign flagOutN=(~nFlagIsPrev) ? prevFlags : 'z;
 
 endmodule
 

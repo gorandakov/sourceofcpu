@@ -188,17 +188,17 @@ module dcache1_bank(
 //  assign onE=~read_odd0_reg & read_bankEn0_reg || ~read_odd1_reg & read_bankEn1_reg || ~read_odd2_reg & read_bankEn2_reg || ~read_odd3_reg & read_bankEn3_reg;
 //  assign onO=read_odd0_reg & read_bankEn0_reg || read_odd1_reg & read_bankEn1_reg || read_odd2_reg & read_bankEn2_reg || read_odd3_reg & read_bankEn3_reg;
 
-  assign read_addr[0]=read_bankEn0 ? read_addrE0 : {ADDR_WIDTH{1'bz}};
-  assign read_addr[0]=read_bankEn1 ? read_addrE1 : {ADDR_WIDTH{1'bz}};
-  assign read_addr[0]=read_bankEn2 ? read_addrE2 : {ADDR_WIDTH{1'bz}};
-  assign read_addr[0]=read_bankEn3 ? read_addrE3 : {ADDR_WIDTH{1'bz}};
-  assign read_addr[0]=none_bankEn ? {ADDR_WIDTH{1'b0}} : {ADDR_WIDTH{1'bz}};
+  assign read_addr[0]=read_bankEn0 ? read_addrE0 : 'z;
+  assign read_addr[0]=read_bankEn1 ? read_addrE1 : 'z;
+  assign read_addr[0]=read_bankEn2 ? read_addrE2 : 'z;
+  assign read_addr[0]=read_bankEn3 ? read_addrE3 : 'z;
+  assign read_addr[0]=none_bankEn ? {ADDR_WIDTH{1'b0}} : 'z;
 
-  assign read_addr[1]=read_bankEn0 ? read_addrO0 : {ADDR_WIDTH{1'bz}};
-  assign read_addr[1]=read_bankEn1 ? read_addrO1 : {ADDR_WIDTH{1'bz}};
-  assign read_addr[1]=read_bankEn2 ? read_addrO2 : {ADDR_WIDTH{1'bz}};
-  assign read_addr[1]=read_bankEn3 ? read_addrO3 : {ADDR_WIDTH{1'bz}};
-  assign read_addr[1]=none_bankEn ? {ADDR_WIDTH{1'b0}} : {ADDR_WIDTH{1'bz}};
+  assign read_addr[1]=read_bankEn0 ? read_addrO0 : 'z;
+  assign read_addr[1]=read_bankEn1 ? read_addrO1 : 'z;
+  assign read_addr[1]=read_bankEn2 ? read_addrO2 : 'z;
+  assign read_addr[1]=read_bankEn3 ? read_addrO3 : 'z;
+  assign read_addr[1]=none_bankEn ? {ADDR_WIDTH{1'b0}} : 'z;
 
   assign write_addrE=write_bankEn0 ? write_addrE0 : write_addrE1;
   assign write_addrO=write_bankEn0 ? write_addrO0 : write_addrO1;
@@ -240,15 +240,15 @@ module dcache1_bank(
   
   generate
     if (~TOP) begin
-        assign read_dataP=(enE & ~ins_hit) ? read_data_ram[0] : {DATA_WIDTH{1'bz}};
-        assign read_dataP=(enO & ~ins_hit) ? read_data_ram[1] : {DATA_WIDTH{1'bz}};
-        assign read_dataP=(~bank_hit | ins_hit) ? {DATA_WIDTH{1'B0}} : {DATA_WIDTH{1'BZ}};
+        assign read_dataP=(enE & ~ins_hit) ? read_data_ram[0] : 'z;
+        assign read_dataP=(enO & ~ins_hit) ? read_data_ram[1] : 'z;
+        assign read_dataP=(~bank_hit | ins_hit) ? {DATA_WIDTH{1'B0}} : 'z;
   
         assign read_data=~(read_dataP|read_data_in);  
     end else begin
-        assign read_dataP=(enE & ~ins_hit) ? ~read_data_ram[0] : {DATA_WIDTH{1'bz}};
-        assign read_dataP=(enO & ~ins_hit) ? ~read_data_ram[1] : {DATA_WIDTH{1'bz}};
-        assign read_dataP=(~bank_hit | ins_hit) ? {DATA_WIDTH{1'B1}} : {DATA_WIDTH{1'BZ}};
+        assign read_dataP=(enE & ~ins_hit) ? ~read_data_ram[0] : 'z;
+        assign read_dataP=(enO & ~ins_hit) ? ~read_data_ram[1] : 'z;
+        assign read_dataP=(~bank_hit | ins_hit) ? {DATA_WIDTH{1'B1}} : 'z;
   
         assign read_data=~(read_dataP&read_data_in);  
     end

@@ -85,11 +85,11 @@ module prefix(
     end
   endgenerate
 
-  assign pref=first[0] ? {PREF{1'b0}} : {PREF{1'bz}};
-  assign pref=first[1] ? prefx[0] : {PREF{1'bz}};
-  assign pref=first[2] ? prefx[0]|prefx[1] : {PREF{1'bz}};
-  assign pref=first[3] ? prefx[0]|prefx[1]|prefx[2] : {PREF{1'bz}};
-  assign pref=~has ? prefx[0]|prefx[1]|prefx[2]|prefx[3] : {PREF{1'bz}};
+  assign pref=first[0] ? {PREF{1'b0}} : 'z;
+  assign pref=first[1] ? prefx[0] : 'z;
+  assign pref=first[2] ? prefx[0]|prefx[1] : 'z;
+  assign pref=first[3] ? prefx[0]|prefx[1]|prefx[2] : 'z;
+  assign pref=~has ? prefx[0]|prefx[1]|prefx[2]|prefx[3] : 'z;
 
   assign prf_bytes=~(first | {first[2:0],1'b0} | {first[1:0],2'b0} | 
 	  {first[0],3'b0}; 

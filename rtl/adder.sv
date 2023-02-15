@@ -908,8 +908,8 @@ module addsub_alu(a,b,out,sub,en,sxtEn,ben,cout,cout4,cout8LL,cout16,cout32,cout
 	  begin
 	    assign out_X[63:44]=(en&~ben[1]) ? exbits : 20'bz; 
 	    assign out_X[43:32]=(en&~ben[0]) ? 12'b0:12'bz; 
-          //  assign out[63:32]=(X[31] & sxtEn) ? {32{~C1[31]}} : {32{1'bz}};
-          //  assign out[63:32]=(nX[31] & sxtEn) ? {32{~nC1[31]}} : {32{1'bz}};
+          //  assign out[63:32]=(X[31] & sxtEn) ? {32{~C1[31]}} : 'z;
+          //  assign out[63:32]=(nX[31] & sxtEn) ? {32{~nC1[31]}} : 'z;
 	  end
     
   endgenerate

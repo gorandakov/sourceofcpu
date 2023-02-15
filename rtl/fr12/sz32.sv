@@ -101,7 +101,7 @@ module sz32(
 	      wire [5:0] first;
 	      wire has;
 	      sz_submod8({{k{2'b11}},sizes[WIDTH_IN_BYTES*2-1:k*2]},bitz[k]);
-	      assign bits=offsz[k] ? bitz[WIDTH_IN_BYTES-1:0]<<k : {WIDTH_IN_BYTES{1'bz}};
+	      assign bits=offsz[k] ? bitz[WIDTH_IN_BYTES-1:0]<<k : 'z;
 	      bit_find_first_bit #(6) find_mmod(bitz[WIDTH_IN_BYTES+5-k:WIDTH_IN_BYTES-k],first,has);
 	      assign outsz=offsz[k] ? first : 6'bz;
 	  end

@@ -902,9 +902,9 @@ module tbuf_way(
   assign ram_wen=write_wen & read_hit || write_insert & (write_way==WAY) || 
     (mStall && ~write_wen && ~write_insert && taken_reg!=0 && ~except_reg);
 
-  assign write_data=(write_insert|write_wen && ~init) ? write_dataW : {DATA_WIDTH{1'BZ}};
-  assign write_data=(~write_insert & ~write_wen & ~init) ? {write_LRU_reg,write_dataJ} : {DATA_WIDTH{1'BZ}};
-  assign write_data=init ? {WAY,{DATA_WIDTH-1{1'B0}}} : {DATA_WIDTH{1'BZ}};
+  assign write_data=(write_insert|write_wen && ~init) ? write_dataW : 'z;
+  assign write_data=(~write_insert & ~write_wen & ~init) ? {write_LRU_reg,write_dataJ} : 'z;
+  assign write_data=init ? {WAY,{DATA_WIDTH-1{1'B0}}} : 'z;
 
 //up to here.
 //dataJ includes taken and computed jmask.
