@@ -41,7 +41,6 @@ module cc_comb (
   expun_addr,
   expun_wen
   );  
-/*verilator hier_block*/
   
   localparam DATA_WIDTH=65*16;
   localparam ADDR_WIDTH=6;
