@@ -303,9 +303,9 @@ assign readB_data_ramx[1]=un_ECC(readB_data_ram[1]);
 
 always @* begin
   read0_pbit=read0_data_ramx[read0_odd_reg][{1'b0,read0_addrEO_reg[read0_odd_reg][ADDR_WIDTH+4],read0_addr_reg[3:0]}+:2];
-  read0_pbit=read1_data_ramx[read1_odd_reg][{1'b0,read1_addrEO_reg[read1_odd_reg][ADDR_WIDTH+4],read1_addr_reg[3:0]}+:2];
-  read0_pbit=read2_data_ramx[read2_odd_reg][{1'b0,read2_addrEO_reg[read2_odd_reg][ADDR_WIDTH+4],read2_addr_reg[3:0]}+:2];
-  read0_pbit=read3_data_ramx[read3_odd_reg][{1'b0,read3_addrEO_reg[read3_odd_reg][ADDR_WIDTH+4],read3_addr_reg[3:0]}+:2];
+  read1_pbit=read1_data_ramx[read1_odd_reg][{1'b0,read1_addrEO_reg[read1_odd_reg][ADDR_WIDTH+4],read1_addr_reg[3:0]}+:2];
+  read2_pbit=read2_data_ramx[read2_odd_reg][{1'b0,read2_addrEO_reg[read2_odd_reg][ADDR_WIDTH+4],read2_addr_reg[3:0]}+:2];
+  read3_pbit=read3_data_ramx[read3_odd_reg][{1'b0,read3_addrEO_reg[read3_odd_reg][ADDR_WIDTH+4],read3_addr_reg[3:0]}+:2];
   if (read0_addr_reg[3:0]==4'hf) read0_pbit[1]=read0_data_ramx[~read0_odd_reg][0];
   if (read1_addr_reg[3:0]==4'hf) read1_pbit[1]=read1_data_ramx[~read1_odd_reg][0];
   if (read2_addr_reg[3:0]==4'hf) read2_pbit[1]=read2_data_ramx[~read2_odd_reg][0];
