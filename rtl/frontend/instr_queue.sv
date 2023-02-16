@@ -186,7 +186,8 @@ module instrQ_buf(
   assign read_other8_X=read_en[8] ? other_rd : 'z;
   assign read_instr9_X=read_en[9] ? instr_rd : 'z;
   assign read_other9_X=read_en[9] ? other_rd : 'z;
- 
+
+  //verilator lint_off WIDTH 
   assign instr_wren[0]=write_addr0==INDEX && write_instrEn[0];
   assign instr_wren[1]=write_addr1==INDEX && write_instrEn[1];
   assign instr_wren[2]=write_addr2==INDEX && write_instrEn[2];
@@ -199,6 +200,7 @@ module instrQ_buf(
   assign instr_wren[9]=write_addr9==INDEX && write_instrEn[9];
   assign instr_wren[10]=write_addr10==INDEX && write_instrEn[10];
   assign instr_wren[11]=write_addr11==INDEX && write_instrEn[11];
+  //verilator lint_on WIDTH 
   
   assign instr_wr=instr_wren[0] ? write_instr0 : 'z;
   assign instr_wr=instr_wren[1] ? write_instr1 : 'z;
@@ -515,6 +517,7 @@ module instrQ_box(
               read_en7[k]<=read_addr7[5:3]==k[2:0];
               read_en8[k]<=read_addr8[5:3]==k[2:0];
               read_en9[k]<=read_addr9[5:3]==k[2:0];
+	      $display("read_en0 ",read_en0," read_addr0 ",read_addr0);
           end
       end
   
@@ -805,12 +808,14 @@ module instrQ_bndAdd(addr,addr_new,cnt);
   output [5:0] addr_new;
   input [CNT_COUNT:0] cnt;
   
+  wire [5:0] addr_new_X; assign addr_new=addr_new_X;
+  
   generate
     genvar n;
     for (n=0;n<=CNT_COUNT;n=n+1) begin : add_gen
          wire [5:0] addr1;
          adder #(6) add_mod(addr,n[5:0],addr1,1'b0,1'b1,,,,);
-        assign addr_new=cnt[n] ? addr1 &{~{2{&addr1[5:4]}},4'b1111} : 6'bz;
+        assign addr_new_X=cnt[n] ? addr1 &{~{2{&addr1[5:4]}},4'b1111} : 6'bz;
     end
   endgenerate
 endmodule
