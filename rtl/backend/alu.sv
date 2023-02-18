@@ -272,6 +272,8 @@ module alu(clk,rst,except,except_thread,thread,operation,cond,sub,dataEn,nDataAl
   assign valRes1[15:0]=((operation[11:0]=={1'b0,3'b111,8'd`op_mov8}) && nDataAlt) ? {val2[15:8],val1[7:0]} : 16'bz;   
   assign valRes1[15:0]=((operation[11:0]=={1'b0,3'b001,8'd`op_mov8}) && nDataAlt) ? {val1[15:8],val2[31:24]} : 16'bz;   
   assign valRes1[15:0]=((operation[11:0]=={1'b0,3'b101,8'd`op_mov8}) && nDataAlt) ? {val2[31:24],val1[7:0]]} : 16'bz;   
+  assign valRes1[15:0]=((operation[11:0]=={1'b0,3'b010,8'd`op_mov8}) && nDataAlt) ? 16'b0 : 16'bz;   
+  assign valRes1[15:0]=((operation[11:0]=={1'b0,3'b110,8'd`op_mov8}) && nDataAlt) ? 16'b0 : 16'bz;   
   
 
   assign valRes1[63:32]=(((operation[11:0]==`op_zxt16_64) || (operation[7:0]==`op_zxt8_64 && ~operation[11]))
