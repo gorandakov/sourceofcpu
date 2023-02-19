@@ -198,7 +198,7 @@ module fun_fpsu(
 
   reg [1:0] ALT_INP_reg;
 
-  reg [3:0] gxFADD_sz;
+  reg [1:0] gxFADD_sz;
   reg gxFADD_srch;
 
   wire [1:0][67:0] gxDataBFL;
@@ -616,7 +616,7 @@ module fun_fpsu(
         fxFADD_raise_reg[k]<=fxFADD_raise[k];
     end
       gxFADD_en=u1_op_reg[0] && u1_en_reg[2] && u1_op_reg[7:0]==`fop_cmpDH || u1_op_reg[7:0]==`fop_cmpDL || u1_op_reg[7:0]==`fop_cmpE || u1_op_reg[7:0]==`fop_cmpS;
-      gxFADD_srch<=u1_op_reg[7:0]=`fop_cmpDH && u1_op_reg[10];
+      gxFADD_srch<=u1_op_reg[7:0]==`fop_cmpDH && u1_op_reg[10];
       gxFADD_ord=u1_op_reg[10];
       gxFADD_hi=u1_op_reg[7:0]==`fop_cmpDH;
       gxFADD_ext=u1_op_reg[7:0]==`fop_cmpE;

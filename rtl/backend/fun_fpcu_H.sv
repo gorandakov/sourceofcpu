@@ -23,22 +23,22 @@ module fun_fpuH(
   clk,
   rst,
   fpcsr,
-  u1_A,u1_B,u1_Bx,u1_Bxo,u1_en,u1_op,
+  u1_A,u1_B,u1_Bx,u1_Ax,u1_en,u1_op,
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
   u1_ret,u1_ret_en,
-  u2_A,u2_B,u2_Bx,u2_Bxo,u2_en,u2_op,
+  u2_A,u2_B,u2_Bx,u2_Ax,u2_en,u2_op,
   u2_fufwd_A,u2_fuufwd_A,u2_fufwd_B,u2_fuufwd_B,
   u2_ret,u2_ret_en,
-  u3_A,u3_B,u3_Bx,u3_Bxo,u3_en,u3_op,
+  u3_A,u3_B,u3_Bx,u3_Ax,u3_en,u3_op,
   u3_fufwd_A,u3_fuufwd_A,u3_fufwd_B,u3_fuufwd_B,
   u3_ret,u3_ret_en,
-  u4_A,u4_B,u4_Bx,u4_Bxo,u4_en,u4_op,
+  u4_A,u4_B,u4_Bx,u4_Ax,u4_en,u4_op,
   u4_fufwd_A,u4_fuufwd_A,u4_fufwd_B,u4_fuufwd_B,
   u4_ret,u4_ret_en,
-  u5_A,u5_B,u5_Bx,u5_Bxo,u5_en,u5_op,
+  u5_A,u5_B,u5_Bx,u5_Ax,u5_en,u5_op,
   u5_fufwd_A,u5_fuufwd_A,u5_fufwd_B,u5_fuufwd_B,
   u5_ret,u5_ret_en,
-  u6_A,u6_B,u6_Bx,u6_Bxo,u6_en,u6_op,
+  u6_A,u6_B,u6_Bx,u6_Ax,u6_en,u6_op,
   u6_fufwd_A,u6_fuufwd_A,u6_fufwd_B,u6_fuufwd_B,
   u6_ret,u6_ret_en,
   FUF0,FUF1,FUF2,
@@ -73,8 +73,8 @@ module fun_fpuH(
   input [31:0] fpcsr;
   input [67:0] u1_A;
   input [67:0] u1_B;
-  input [67:0] u1_Bx;
-  output [67:0] u1_Bxo;
+  output [67:0] u1_Ax;
+  output [67:0] u1_Bx;
   input [3:0] u1_en;
   input [12:0] u1_op;
   input [3:0] u1_fufwd_A;
@@ -86,8 +86,8 @@ module fun_fpuH(
 
   input [67:0] u2_A;
   input [67:0] u2_B;
-  input [67:0] u2_Bx;
-  output [67:0] u2_Bxo;
+  output [67:0] u2_Ax;
+  output [67:0] u2_Bx;
   input [3:0] u2_en;
   input [12:0] u2_op;
   input [3:0] u2_fufwd_A;
@@ -99,8 +99,8 @@ module fun_fpuH(
  
   input [67:0] u3_A;
   input [67:0] u3_B;
-  input [67:0] u3_Bx;
-  output [67:0] u3_Bxo;
+  output [67:0] u3_Ax;
+  output [67:0] u3_Bx;
   input [3:0] u3_en;
   input [12:0] u3_op;
   input [3:0] u3_fufwd_A;
@@ -112,8 +112,8 @@ module fun_fpuH(
 
   input [67:0] u4_A;
   input [67:0] u4_B;
-  input [67:0] u4_Bx;
-  output [67:0] u4_Bxo;
+  output [67:0] u4_Ax;
+  output [67:0] u4_Bx;
   input [3:0] u4_en;
   input [12:0] u4_op;
   input [3:0] u4_fufwd_A;
@@ -125,8 +125,8 @@ module fun_fpuH(
  
   input [67:0] u5_A;
   input [67:0] u5_B;
-  input [67:0] u5_Bx;
-  output [67:0] u5_Bxo;
+  output [67:0] u5_Ax;
+  output [67:0] u5_Bx;
   input [3:0] u5_en;
   input [12:0] u5_op;
   input [3:0] u5_fufwd_A;
@@ -138,8 +138,8 @@ module fun_fpuH(
 
   input [67:0] u6_A;
   input [67:0] u6_B;
-  input [67:0] u6_Bx;
-  output [67:0] u6_Bxo;
+  output [67:0] u6_Ax;
+  output [67:0] u6_Bx;
   input [3:0] u6_en;
   input [12:0] u6_op;
   input [3:0] u6_fufwd_A;
@@ -203,7 +203,7 @@ module fun_fpuH(
   output [67:0] outA;
   output [67:0] outB;
 
-  fun_fpu #(0,1) fpu0_mod(
+  /*fun_fpu #(0,1) fpu0_mod(
   clk,
   rst,
   fpcsr,
@@ -280,5 +280,33 @@ module fun_fpuH(
   FOOSH2_in,
   FOOSH2_out,,outA,outB
   );
+*/
 
+  assign FUF4=68'b0; 
+  assign FUF5=68'b0; 
+  assign FUF6=68'b0; 
+  assign FUF7=68'b0; 
+  assign FUF8=68'b0; 
+  assign FUF9=68'b0; 
+  
+  assign FUF4N={68{1'b1}}; 
+  assign FUF5N={68{1'b1}}; 
+  assign FUF6N={68{1'b1}}; 
+  assign FUF7N={68{1'b1}}; 
+  assign FUF8N={68{1'b1}}; 
+  assign FUF9N={68{1'b1}}; 
+
+  assign u1_ret=14'd2;
+  assign u2_ret=14'd2;
+  assign u3_ret=14'd2;
+  assign u4_ret=14'd2;
+  assign u5_ret=14'd2;
+  assign u6_ret=14'd2;
+
+  assign u1_ret_en=1'b0;
+  assign u2_ret_en=1'b0;
+  assign u3_ret_en=1'b0;
+  assign u4_ret_en=1'b0;
+  assign u5_ret_en=1'b0;
+  assign u6_ret_en=1'b0;
 endmodule

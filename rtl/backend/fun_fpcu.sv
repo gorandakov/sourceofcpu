@@ -616,7 +616,7 @@ module fun_fpu(
       fxFADD_raise_s_reg<=fxFADD_raise_s;
       gxFADD_en=u1_en_reg[0] && u1_en_reg[3] && u1_op_reg[7:0]==`fop_cmpDH || u1_op_reg[7:0]==`fop_cmpDL || u1_op_reg[7:0]==`fop_cmpE || 
 	      u1_op_reg[7:0]==`fop_cmpS;
-      gxFADD_srch<=u1_op_reg[7:0]=`fop_cmpDH && u1_op_reg[10];
+      gxFADD_srch<=u1_op_reg[7:0]==`fop_cmpDH && u1_op_reg[10];
       gxFADD_ord=u1_op_reg[10];
       gxFADD_hi=u1_op_reg[7:0]==`fop_cmpDH;
       gxFADD_ext=u1_op_reg[7:0]==`fop_cmpE;

@@ -985,7 +985,7 @@ module backend(
   wire [3:0] dc_thr=4'b0;
 
   wire [5:0][13:0] fret;
-  wire [5:0] fret_en;
+  wire [5:0] fret_en/* verilator public */;
   reg  [5:0][13:0] fret_reg;
   wire [5:0][13:0] fsret;
 
@@ -1335,7 +1335,7 @@ module backend(
 
   reg [3:0] rs_port[8:0];
   reg [3:0] rs_port_reg[8:0];
-  reg [3:0] rs_port_sch[8:0];
+  reg [3:0] rs_port_sch[8:0]/* verilator public */;
   
   reg [3:0] rs_index[8:0];
   reg [3:0] rs_index_reg[8:0];
@@ -1360,7 +1360,7 @@ module backend(
   reg [2:0] rs_lsi_reg[5:0];
 
   reg [2:0] rs_alt;
-  reg [2:0] rs_alt_reg;
+  reg [2:0] rs_alt_reg/* verilator public */;
 
   reg [8:0] rs_rA_isV;
   reg [8:0] rs_rA_isAnyV;
@@ -1568,9 +1568,9 @@ module backend(
 
   
   wire FU0Hit,FU1Hit,FU2Hit,FU3Hit;
-  wire FU0HitP,FU1HitP,FU2HitP,FU3HitP;
-  reg FU0Hit_reg,FU1Hit_reg,FU2Hit_reg,FU3Hit_reg;
-  reg FU0Hit_reg2,FU1Hit_reg2,FU2Hit_reg2,FU3Hit_reg2;
+  wire FU0HitP,FU1HitP,FU2HitP,FU3HitP/* verilator public */;
+  reg FU0Hit_reg,FU1Hit_reg,FU2Hit_reg,FU3Hit_reg/* verilator public */;
+  reg FU0Hit_reg2,FU1Hit_reg2,FU2Hit_reg2,FU3Hit_reg2/* verilator public */;
 //  wire FU0HitP,FU1HitP,FU2HitP,FU3HitP;
   reg [3:0] fxLD_dbl;
   reg [3:0] fxLD_ext;
@@ -1599,9 +1599,9 @@ module backend(
   reg [DATA_WIDTH-1:0] FU_reg[9:0];
   reg [DATA_WIDTH-1:0] FU_reg2[9:0];
 
-  reg [REG_WIDTH-1:0] FUreg_reg[9:0];
+  reg [REG_WIDTH-1:0] FUreg_reg[9:0]/* verilator public */;
   reg [REG_WIDTH-1:0] FUSreg_reg[9:0];
-  reg FUwen_reg[9:0];
+  reg FUwen_reg[9:0]/* verilator public */;
   reg [REG_WIDTH-1:0] FUreg_reg2[9:0];
   reg [REG_WIDTH-1:0] FUSreg_reg2[9:0];
   reg FUwen_reg2[9:0];
@@ -1792,7 +1792,7 @@ module backend(
   wire [8:0][REG_WIDTH-1:0] outRegS;
   wire [8:0][OPERATION_WIDTH-1:0] outOp;
   wire [8:0][9:0] outII;
-  wire [8:0][3:0] outEn;
+  wire [8:0][3:0] outEn/* verilator public */;
   wire [2:0][8:0] outLSQ;
   wire [2:0][5:0] outWQ;
   wire [8:0][3:0] fuFwdA;
@@ -1935,7 +1935,7 @@ module backend(
   wire [1:0][1:0] lsw_pdata;
 
   wire pause_agu;
-  wire miss_pause_agu;
+  wire miss_pause_agu/* verilator public */;
   reg miss_pause_agu_reg;
   reg miss_pause_agu_reg2;
   wire [2:0] agu_blockRS;
@@ -1966,10 +1966,10 @@ module backend(
   reg [9:0] outII_reg[8:0];
   reg [9:0] outII_reg2[8:0];
   reg [9:0] outII_reg3[8:0];
-  reg [9:0] outII_reg4[8:0];
+  reg [9:0] outII_reg4[8:0]/* verilator public */;
   reg [9:0] outII_reg5[8:0];
   reg [9:0] outII_reg6[8:0];
-  reg [9:0] outII_reg7[8:0];
+  reg [9:0] outII_reg7[8:0]/* verilator public */;
   reg [9:0] outII_reg8[8:0];
   reg [9:0] outII_reg9[8:0];
   reg [9:0] outII_reg10[8:0];
@@ -1996,7 +1996,7 @@ module backend(
   reg bus_holds_agu,bus_holds_agu_reg,bus_holds_agu_reg2;
   reg bus_holds_agu_reg3,bus_holds_agu_reg4,bus_holds_agu_reg5;
   
-  wire [3:0] dc_rdEn; 
+  wire [3:0] dc_rdEn/* verilator public */; 
   wire [3:0] dc_rsEn; 
   wire [3:0][127+8:0] dc_rdataA;
   wire [3:0][127+8:0] dc_rdataA_N;
@@ -5765,7 +5765,7 @@ dcache1 L1D_mod(
           assign FU_N[3][7+8*q:8*q]=lso2_bnkread[q] && ~lso2_en_reg ? lso2_dataN_reg[7+8*q:8*q] : 8'bz;
           assign FU_N[3][7+8*q:8*q]=(~lso2_bnkread2[q] & ~lso2_bnkread[q]) &&~lso2_en_reg ? 8'b11111111 : 8'bz;
       end
-      for (q1=0;q1<17;q1=q1+1) begin : data_general
+      for (q1=0;q1<17;q1=q1+1) begin : data_general2
           assign dc_rdat[0][7+8*q1:8*q1]=lso_bnkread2[q1] & lso_way_reg[0]||~lso_en_reg ? dc_rdataA[0][7+8*q1:8*q1] : 8'bz;
           assign dc_rdat[0][7+8*q1:8*q1]=lso_bnkread[q1] && lso_way_reg[0] && ~lso_en_reg ? lso_data_reg[7+8*q1:8*q1] : 8'bz;
           assign dc_rdat[0][7+8*q1:8*q1]=(~lso_bnkread2[q1] & ~lso_bnkread[q1] || ~lso_way_reg[0]) &&~lso_en_reg ? 8'b0 : 8'bz;

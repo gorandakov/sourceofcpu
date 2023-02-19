@@ -38,7 +38,7 @@ module alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,da
   input [OPERATION_WIDTH-1:0] operation;
   input [4:0] cond;
   input [5:0] sub; //high power fat wire
-  input cary_sub; //invert carry out from add instruction
+  input cary_invert; //invert carry out from add instruction
   input dataEn;//1=coming data from rs
   input nDataAlt;//0=feeding data through multiclk unit
   output wire [EXCEPT_WIDTH-1:0] retData;
@@ -263,16 +263,16 @@ module alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,da
   assign valRes1[63:32]=((operation[11:0]==`op_mov16 || (operation[7:0]==`op_mov8)&~operation[11]) && nDataAlt) ? val1[63:32] : 32'bz;   
   assign valRes1[31:16]=((operation[11:0]==`op_mov32 || operation[11:0]==`op_mov64) && nDataAlt) ? val2[31:16] : 16'bz;   
   assign valRes1[31:16]=((operation[11:0]==`op_mov16 || (operation[7:0]==`op_mov8)&~operation[11]) && nDataAlt) ? val1[31:16] : 16'bz;   
-  assign valRes1[15:0]=(((operation[9:0]==`op_mov16) && ~operation[10]) || operation[11:0]==`op_mov32 || operation[11:0]==`op_mov64) && nDataAlt) ?
+  assign valRes1[15:0]=((((operation[9:0]==`op_mov16) && ~operation[10]) || operation[11:0]==`op_mov32 || operation[11:0]==`op_mov64) && nDataAlt) ?
     val2[15:0] : 16'bz;   
-  assign valRes1[15:0]=(((operation[9:0]==`op_mov16) && operation[10])) && nDataAlt) ?
+  assign valRes1[15:0]=((((operation[9:0]==`op_mov16) && operation[10])) && nDataAlt) ?
     val2[31:16] : 16'bz;   
   assign valRes1[15:0]=((operation[11:0]=={1'b0,3'b000,8'd`op_mov8}) && nDataAlt) ? {val1[15:8],val2[7:0]} : 16'bz;   
   assign valRes1[15:0]=((operation[11:0]=={1'b0,3'b011,8'd`op_mov8}) && nDataAlt) ? {val1[15:8],val2[15:8]} : 16'bz;   
   assign valRes1[15:0]=((operation[11:0]=={1'b0,3'b100,8'd`op_mov8}) && nDataAlt) ? {val2[7:0],val1[7:0]} : 16'bz;   
   assign valRes1[15:0]=((operation[11:0]=={1'b0,3'b111,8'd`op_mov8}) && nDataAlt) ? {val2[15:8],val1[7:0]} : 16'bz;   
   assign valRes1[15:0]=((operation[11:0]=={1'b0,3'b001,8'd`op_mov8}) && nDataAlt) ? {val1[15:8],val2[31:24]} : 16'bz;   
-  assign valRes1[15:0]=((operation[11:0]=={1'b0,3'b101,8'd`op_mov8}) && nDataAlt) ? {val2[31:24],val1[7:0]]} : 16'bz;   
+  assign valRes1[15:0]=((operation[11:0]=={1'b0,3'b101,8'd`op_mov8}) && nDataAlt) ? {val2[31:24],val1[7:0]} : 16'bz;   
   assign valRes1[15:0]=((operation[11:0]=={1'b0,3'b010,8'd`op_mov8}) && nDataAlt) ? 16'b0 : 16'bz;   
   assign valRes1[15:0]=((operation[11:0]=={1'b0,3'b110,8'd`op_mov8}) && nDataAlt) ? 16'b0 : 16'bz;   
   
