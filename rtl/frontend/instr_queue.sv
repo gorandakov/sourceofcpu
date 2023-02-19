@@ -517,8 +517,8 @@ module instrQ_box(
               read_en7[k]<=read_addr7[5:3]==k[2:0];
               read_en8[k]<=read_addr8[5:3]==k[2:0];
               read_en9[k]<=read_addr9[5:3]==k[2:0];
-	      $display("read_en0 ",read_en0," read_addr0 ",read_addr0);
           end
+	      $display("read_en0 ",read_en0," read_addr0 ",read_addr0);
       end
   
   end
@@ -776,6 +776,7 @@ module instrQ(
           if (write_thread) write_addrB[k]<=write_addrB_d[k];
           else write_addrA[k]<=write_addrA_d[k];
       end
+      if (write_wen & ~doFStall)	  $display("write_instr0 ",write_instr0," write_addrA[0]");
       if (rst) begin
           busy[0]<=6'd0;
           busy[1]<=6'd0;

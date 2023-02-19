@@ -95,11 +95,11 @@ module decoder_permitted_i(
           assign storeL_has[k]=(storeL & ((10'd2<<k)-10'd1))!=0;
           
           assign permA[k]=(~storeL_has[k] & mul_cnt[k][0]) ? load_cnt[k][6] & alu_cnt[k][6] & shift_cnt[k][3] & 
-            store_cnt[k][3] & ldst_cnt[k][6] & alu_shift_cnt[k][6] & lsas_cnt[k][9] : 1'bz; 
+            store_cnt[k][2] & ldst_cnt[k][5] & alu_shift_cnt[k][6] & lsas_cnt[k][9] : 1'bz; 
           assign permA[k]=(storeL_has[k] & mul_cnt[k][0]) ? load_cnt[k][5] & alu_cnt[k][6] & shift_cnt[k][3] & 
             store_cnt[k][2] & ldst_cnt[k][5] & alu_shift_cnt[k][6] & lsas_cnt[k][8] : 1'bz; 
           assign permA[k]=(~storeL_has[k] & mul_cnt[k][1]) ? load_cnt[k][3] & alu_cnt[k][4] && shift_cnt[k][3] & 
-            store_cnt[k][3] & lsas_cnt[k][7] & alu_shift_cnt[k][4] & ldst_cnt[k][5] : 1'bz; 
+            store_cnt[k][2] & lsas_cnt[k][7] & alu_shift_cnt[k][4] & ldst_cnt[k][5] : 1'bz; 
           assign permA[k]=(storeL_has[k] && mul_cnt[k][1]) ? load_cnt[k][3] & alu_cnt[k][4] && shift_cnt[k][3] & 
             store_cnt[k][2] & lsas_cnt[k][6] & alu_shift_cnt[k][4] & ldst_cnt[k][4]: 1'bz; 
           assign permA[k]=mul_more_cnt[k][2] ? 1'b0 : 1'bz;
