@@ -144,6 +144,8 @@ module fun_fpu(
   reg fxAlt2_reg2;
   reg fxAlt2_reg3;*/
   reg  fxFADD_dbl;
+  reg  gxFADD_srch;
+  reg [1:0] gxFADD_sz;
   reg  fxFADD_ext;
   reg  fxFADD_sin;
   reg  fxFADD_sn_reg;
@@ -373,6 +375,8 @@ module fun_fpu(
   .isExt(H ? 1'b0: gxFADD_ext),.isDbl(gxFADD_dbl),.isSng(H? gxFADD_sn:gxFADD_sin),
   .afm(1'b0),.flags(FOOSH),
   .paired(gxFADD_pkdS),
+  .int_srch(gxFADD_srch),
+  .srch_sz(gxFADD_sz),
   .vec(gxFADD_pkdD),
   .jumpType(5'b0),
   .cmod(u1_op_reg2[1:0]),
@@ -445,8 +449,8 @@ module fun_fpu(
   .res(FOOF[1][67:0]));
  
   generate
-      if (H) assign gxDataBFL[1]=u1_op_reg[9] ? u1_Bx : uu_B1;
-      else assign gxDataBFL[1]=u1_op_reg[8] ? {uu_B1[68+15:68],u1_Bx} : uu_B1;
+      if (H) assign gxDataBFL[1]=u1_op_reg[9]|u1_op_reg[10] ? u1_Bx : uu_B1;
+      else assign gxDataBFL[1]=u1_op_reg[8]|u1_op_reg[10] ? {uu_B1[68+15:68],u1_Bx} : uu_B1;
       if (H) assign gxDataBFL[0]=u2_op_reg[9] ? u2_Bx : uu_B2;
       else assign gxDataBFL[0]=u2_op_reg[8] ? {uu_B2[68+15:68],u2_Bx} : uu_B2;
       if (INDEX==0) begin
@@ -492,6 +496,7 @@ module fun_fpu(
     fxFADD_sn_reg2<=fxFADD_sn_reg;
     FOOSH_reg<=FOOSH;
     gxFADD_pkdD_reg<=H? !gxFADD_sn:!gxFADD_sin;
+    gxFADD_sz<=u1_op_reg[10:9];
     if (rst) begin
 	  fxFADD_dbl=1'b1;
 	  fxFADD_dblext=1'b1;
@@ -525,6 +530,7 @@ module fun_fpu(
 	      fxDataAXL_reg[k]<={S+SIMD_WIDTH{1'B0}};
 	      gxDataBXL_reg[k]<={S+SIMD_WIDTH{1'B0}};
 	  end
+	  gxFADD_srch<=1'b0;
     end else begin
 	      fxFADD_dbl=u1_op_reg[7:0]==`fop_addDL ||
 	        u1_op_reg[7:0]==`fop_addDH ||
@@ -608,8 +614,9 @@ module fun_fpu(
       fxFADD_raise_reg<=fxFADD_raise;
       fxFCADD_raise_s_reg<=fxFCADD_raise_s;
       fxFADD_raise_s_reg<=fxFADD_raise_s;
-      gxFADD_en=u1_op_reg[0] && u1_en_reg[3] && u1_op_reg[7:0]==`fop_cmpDH || u1_op_reg[7:0]==`fop_cmpDL || u1_op_reg[7:0]==`fop_cmpE || 
+      gxFADD_en=u1_en_reg[0] && u1_en_reg[3] && u1_op_reg[7:0]==`fop_cmpDH || u1_op_reg[7:0]==`fop_cmpDL || u1_op_reg[7:0]==`fop_cmpE || 
 	      u1_op_reg[7:0]==`fop_cmpS;
+      gxFADD_srch<=u1_op_reg[7:0]=`fop_cmpDH && u1_op_reg[10];
       gxFADD_ord=u1_op_reg[10];
       gxFADD_hi=u1_op_reg[7:0]==`fop_cmpDH;
       gxFADD_ext=u1_op_reg[7:0]==`fop_cmpE;
