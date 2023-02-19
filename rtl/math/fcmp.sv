@@ -19,18 +19,22 @@ limitations under the License.
 
 
 module fcmpd(clk,rst,
-  A,B,ord,invExcpt,isExt,isDbl,isSng,afm,flags,paired,vec,jumpType,
+  A,B,Bx,ord,invExcpt,isExt,isDbl,isSng,afm,flags,paired,int_srch,srch_sz,vec,jumpType,
   cmod,res_pkd);
+  parameter HAS_SRCH=0;
   input clk;
   input rst;
   input [81:0] A;
   input [81:0] B;
+  input [67:0] Bx;
   input ord;
   input invExcpt;
   input isExt,isDbl,isSng;
   input afm; //alternative flag mode
   output [5:0] flags;
   input paired;
+  input int_srch;
+  input srch_sz;
   input vec;
   input [4:0] jumpType;
   input [1:0] cmod;
@@ -69,6 +73,19 @@ module fcmpd(clk,rst,
   reg [1:0] vres_reg;
   reg ven_reg;
   reg [1:0] vtype_reg;
+  wire [3:0][15:0] srchbits;
+  wire [15:0] s_first;
+  wire s_has;
+
+  assign srchbits[0]={Bx[64],Bx[56],Bx[48],Bx[40],Bx[32],Bx[23],Bx[15],Bx[7],
+	  B[64],B[56],B[48],B[40],B[32],B[23],B[15],B[7]};
+  assign srchbits[1]={Bx[64],1'b0  ,Bx[48],1'b0  ,Bx[32],1'b0  ,Bx[15],1'b0 ,
+	  B[64], 1'b0],B[48],1'b0,B[32],1'b0,B[15],1'b0};
+  assign srchbits[2]={Bx[64],              3'b0  ,Bx[32],              3'b0,
+	  B[64],3'b0,B[32],3'b0};
+  assign srchbits[3]={7'b0,Bx[7],7'b0,B[7]};
+
+  bit_find_first_bit #(16) srch_mod(srchbits[srch_sz],s_first,s_has);
 
   assign vres[0]=cmod==0 ? flags[5] : 1'bz;
   assign vres[0]=cmod==1 ? ~flags[5] : 1'bz;
@@ -179,7 +196,7 @@ module fcmpd(clk,rst,
   assign res_x_Z=~res_x_unord && (A_x_zero&B_x_zero) | (extA==extB&&A_x_s==B_x_s&&x_fEQl|
     A_x_infty);
 
-  assign flags={~res_C,res_unord,1'b0,res_S,res_Z,res_unord};
+  assign flags=int_srch ? {s_has,s_first,^res_first[1:0]} : {~res_C,res_unord,1'b0,res_S,res_Z,res_unord};
 
   assign res_pkd_X[67:0]=ven_reg ? {vtype_reg,{33{vres_reg[1]}},{33{vres_reg[0]}}} : 68'bz; 
   always @(negedge clk) begin
