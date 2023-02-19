@@ -23,7 +23,7 @@ limitations under the License.
 //do not delete redundant output
 //place next to alu_shift in alu-shift combo
 
-module alu(clk,rst,except,except_thread,thread,operation,cond,sub,dataEn,nDataAlt,retData,retEn,val1,val2,valS,valRes,valRes_N);
+module alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,dataEn,nDataAlt,retData,retEn,val1,val2,valS,valRes,valRes_N);
 
   localparam REG_WIDTH=`reg_addr_width;
   localparam OPERATION_WIDTH=`operation_width;
@@ -38,6 +38,7 @@ module alu(clk,rst,except,except_thread,thread,operation,cond,sub,dataEn,nDataAl
   input [OPERATION_WIDTH-1:0] operation;
   input [4:0] cond;
   input [5:0] sub; //high power fat wire
+  input cary_sub; //invert carry out from add instruction
   input dataEn;//1=coming data from rs
   input nDataAlt;//0=feeding data through multiclk unit
   output wire [EXCEPT_WIDTH-1:0] retData;
@@ -512,9 +513,9 @@ module alu(clk,rst,except,except_thread,thread,operation,cond,sub,dataEn,nDataAl
           isFlags_reg<=isFlags;
           retOp<=operation;
 
-          carryAdd64_reg<=carryAdd64;
-          carryAdd44_reg<=carryAdd44;
-          carryAdd32_reg<=carryAdd32;
+          carryAdd64_reg<=carryAdd64^(operation[7:0]==`op_add64 && cary_invert);
+          carryAdd44_reg<=carryAdd44^(operation[7:0]==`op_add64 && cary_invert);
+          carryAdd32_reg<=carryAdd32^(operation[7:0]==`op_add32 && cary_invert);
           carryAdd16_reg<=carryAdd16;
           carryAdd4LL_reg <=carryAdd4LL;
           carryAdd4HL_reg <=carryAdd4HL;

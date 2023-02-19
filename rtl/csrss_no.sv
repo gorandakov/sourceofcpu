@@ -50,6 +50,7 @@ limitations under the License.
 `define mflags_locked 18
 `define mflags_set_ptr_can 19
 `define mflags_sec 19
+`define mflags_sub_carry_invert 20
 
 
 `define csrfpu_inv_excpt 0
