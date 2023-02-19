@@ -19,7 +19,7 @@ limitations under the License.
 
 
 module fcmpd(clk,rst,
-  A,B,Bx,ord,invExcpt,isExt,isDbl,isSng,afm,flags,paired,int_srch,srch_sz,vec,jumpType,
+  A,B,ord,invExcpt,isExt,isDbl,isSng,afm,flags,paired,int_srch,srch_sz,vec,jumpType,
   cmod,res_pkd);
   parameter HAS_SRCH=0;
   input clk;
@@ -77,13 +77,13 @@ module fcmpd(clk,rst,
   wire [15:0] s_first;
   wire s_has;
 
-  assign srchbits[0]={Bx[64],Bx[56],Bx[48],Bx[40],Bx[32],Bx[23],Bx[15],Bx[7],
-	  B[64],B[56],B[48],B[40],B[32],B[23],B[15],B[7]};
-  assign srchbits[1]={Bx[64],1'b0  ,Bx[48],1'b0  ,Bx[32],1'b0  ,Bx[15],1'b0 ,
-	  B[64], 1'b0],B[48],1'b0,B[32],1'b0,B[15],1'b0};
-  assign srchbits[2]={Bx[64],              3'b0  ,Bx[32],              3'b0,
-	  B[64],3'b0,B[32],3'b0};
-  assign srchbits[3]={7'b0,Bx[7],7'b0,B[7]};
+  assign srchbits[0]={B[64],B[56],B[48],B[40],B[32],B[23],B[15],B[7],
+	  A[64],A[56],A[48],A[40],A[32],A[23],A[15],A[7]};
+  assign srchbits[1]={B[64],1'b0  ,B[48],1'b0  ,B[32],1'b0  ,B[15],1'b0 ,
+	  A[64], 1'b0],A[48],1'b0,A[32],1'b0,A[15],1'b0};
+  assign srchbits[2]={B[64],              3'b0  ,B[32],              3'b0,
+	  A[64],3'b0,A[32],3'b0};
+  assign srchbits[3]={7'b0,B[7],7'b0,A[7]};
 
   bit_find_first_bit #(16) srch_mod(srchbits[srch_sz],s_first,s_has);
 
