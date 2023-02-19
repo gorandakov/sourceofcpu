@@ -1902,7 +1902,7 @@ module smallInstr_decoder(
       prAlloc[37]=1'b1;
       pflags_write[37]=1'b1;
       poperation[37][9:8]={2{instr[16]}};
-      poperation[37][10]=instr[10]; //ordered
+      poperation[37][10]=instr[10]; //lin search
       case(instr[13:8])
           6'd32,6'd36: begin poperation[37][7:0]=`fop_cmpDH; pport[37]=PORT_FADD; end
           6'd33,6'd37: begin poperation[37][7:0]=`fop_cmpDL; pport[37]=PORT_FADD; end
