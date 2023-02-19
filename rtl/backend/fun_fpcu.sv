@@ -371,7 +371,7 @@ module fun_fpu(
     fxDataAFL_reg[0][31:0]}),
   .B({gxDataBFL_reg[1][65],gxDataBFL_reg[1][15+68:68],gxDataBFL_reg[1][64:32],
     gxDataBFL_reg[1][31:0]}),
-  .ord(gxFADD_ord),.invExcpt(fpcsr[`csrfpu_inv_excpt]),
+  .ord(1'b1),.invExcpt(fpcsr[`csrfpu_inv_excpt]),
   .isExt(H ? 1'b0: gxFADD_ext),.isDbl(gxFADD_dbl),.isSng(H? gxFADD_sn:gxFADD_sin),
   .afm(1'b0),.flags(FOOSH),
   .paired(gxFADD_pkdS),

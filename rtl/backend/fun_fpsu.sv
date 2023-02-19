@@ -376,7 +376,7 @@ module fun_fpsu(
   .rst(rst),
   .A({16'b0,fxDataAXL_reg[0][65:0]}),
   .B({16'b0,gxDataBXL_reg[1][65:0]}),
-  .ord(gxFADD_ord),.invExcpt(fpcsr[`csrfpu_inv_excpt]),
+  .ord(1'b1),.invExcpt(fpcsr[`csrfpu_inv_excpt]),
   .isExt(H ? 1'b0: gxFADD_ext),.isDbl(gxFADD_dbl),.isSng(H? gxFADD_sn:gxFADD_sin),
   .afm(1'b0),.flags(FOOSL),
   .paired(gxFADD_pkdS),
