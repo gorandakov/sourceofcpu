@@ -376,7 +376,7 @@ module fun_fpsu(
   .rst(rst),
   .A({16'b0,fxDataAXL_reg[0][65:0]}),
   .B({16'b0,gxDataBXL_reg[1][65:0]}),
-  .ord(1'b1),.invExcpt(fpcsr[`csrfpu_inv_excpt]),
+  .ord(gxFADD_ord),.invExcpt(fpcsr[`csrfpu_inv_excpt]),
   .isExt(H ? 1'b0: gxFADD_ext),.isDbl(gxFADD_dbl),.isSng(H? gxFADD_sn:gxFADD_sin),
   .afm(1'b0),.flags(FOOSL),
   .paired(gxFADD_pkdS),
@@ -454,8 +454,8 @@ module fun_fpsu(
   .res(FOOF[1]));
  
   generate
-      if (H) assign gxDataBFL[1]=u1_op_reg[9]|u1_op_reg[10] ? u1_Bx : uu_B1;
-      else assign gxDataBFL[1]=u1_op_reg[8]|u1_op_reg[10] ? {u1_Bx} : uu_B1;
+      if (H) assign gxDataBFL[1]=u1_op_reg[9] ? u1_Bx : uu_B1;
+      else assign gxDataBFL[1]=u1_op_reg[8] ? {u1_Bx} : uu_B1;
       if (H) assign gxDataBFL[0]=u2_op_reg[9] ? u2_Bx : uu_B2;
       else assign gxDataBFL[0]=u2_op_reg[8] ? {u2_Bx} : uu_B2;
       if (INDEX==0) begin
@@ -499,7 +499,7 @@ module fun_fpsu(
     fxFADD_sn_reg<=fxFADD_sin;
     fxFADD_sn_reg2<=fxFADD_sn_reg;
     FOOSL_reg<=FOOSL;
-    gxFADD_sz<=u1_op_reg[9:8];
+    gxFADD_sz<=u1_op_reg[1:0];
     if (rst) begin
 	  fxFADD_dbl=1'b1;
 	  fxFADD_dblext=1'b1;
@@ -615,8 +615,8 @@ module fun_fpsu(
         fxFCADD_raise_reg[k]<=fxFCADD_raise[k];
         fxFADD_raise_reg[k]<=fxFADD_raise[k];
     end
-      gxFADD_en=u1_op_reg[0] && u1_en_reg[2] && u1_op_reg[7:0]==`fop_cmpDH || u1_op_reg[7:0]==`fop_cmpDL || u1_op_reg[7:0]==`fop_cmpE || u1_op_reg[7:0]==`fop_cmpS;
-      gxFADD_srch<=u1_op_reg[7:0]==`fop_cmpDH && u1_op_reg[10];
+      gxFADD_en=u1_op_reg[0] && u1_en_reg[2] && u1_op_reg[7:0]==`fop_cmpDH || u1_op_reg[7:0]==`fop_cmpDL || u1_op_reg[7:0]==`fop_cmpE || u1_op_reg[7:0]==`fop_cmpS || {u1_op_reg[7:2],2'b0}==`fop_linsrch;
+      gxFADD_srch<={u1_op_reg[7:2],2'b0}==`fop_linsrch;
       gxFADD_ord=u1_op_reg[10];
       gxFADD_hi=u1_op_reg[7:0]==`fop_cmpDH;
       gxFADD_ext=u1_op_reg[7:0]==`fop_cmpE;

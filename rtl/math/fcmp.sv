@@ -26,7 +26,6 @@ module fcmpd(clk,rst,
   input rst;
   input [81:0] A;
   input [81:0] B;
-  input [67:0] Bx;
   input ord;
   input invExcpt;
   input isExt,isDbl,isSng;
@@ -34,7 +33,7 @@ module fcmpd(clk,rst,
   output [5:0] flags;
   input paired;
   input int_srch;
-  input srch_sz;
+  input [1:0] srch_sz;
   input vec;
   input [4:0] jumpType;
   input [1:0] cmod;
@@ -77,10 +76,12 @@ module fcmpd(clk,rst,
   wire [15:0] s_first;
   wire s_has;
 
+  wire [3:0] res_first;
+
   assign srchbits[0]={B[64],B[56],B[48],B[40],B[32],B[23],B[15],B[7],
 	  A[64],A[56],A[48],A[40],A[32],A[23],A[15],A[7]};
   assign srchbits[1]={B[64],1'b0  ,B[48],1'b0  ,B[32],1'b0  ,B[15],1'b0 ,
-	  A[64], 1'b0],A[48],1'b0,A[32],1'b0,A[15],1'b0};
+	  A[64], 1'b0,A[48],1'b0,A[32],1'b0,A[15],1'b0};
   assign srchbits[2]={B[64],              3'b0  ,B[32],              3'b0,
 	  A[64],3'b0,A[32],3'b0};
   assign srchbits[3]={7'b0,B[7],7'b0,A[7]};
@@ -126,6 +127,14 @@ module fcmpd(clk,rst,
   get_carry #(9) x_cmpA_mod(x_extA,~x_extB,1'b1,x_COA);
   get_carry #(9) _xcmpB_mod(~x_extA,x_extB,1'b1,x_COB);
 
+  generate
+    genvar p;
+    for(p=0;p<16;p=p+1) begin
+	assign res_first=s_first[p] ? p[3:0] : 4'bz;
+    end
+    assign res_first=s_has ? 4'bz : 4'b0;
+
+  endgenerate
   assign x_fEQl=A[55:33]==B[55:33];
   assign A_x_s=A[64];
   assign B_x_s=B[64];
@@ -196,7 +205,7 @@ module fcmpd(clk,rst,
   assign res_x_Z=~res_x_unord && (A_x_zero&B_x_zero) | (extA==extB&&A_x_s==B_x_s&&x_fEQl|
     A_x_infty);
 
-  assign flags=int_srch ? {s_has,s_first,^res_first[1:0]} : {~res_C,res_unord,1'b0,res_S,res_Z,res_unord};
+  assign flags=int_srch ? {s_has,res_first,^res_first[1:0]} : {~res_C,res_unord,1'b0,res_S,res_Z,res_unord};
 
   assign res_pkd_X[67:0]=ven_reg ? {vtype_reg,{33{vres_reg[1]}},{33{vres_reg[0]}}} : 68'bz; 
   always @(negedge clk) begin

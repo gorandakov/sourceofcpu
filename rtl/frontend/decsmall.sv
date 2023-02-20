@@ -247,6 +247,7 @@ module smallInstr_decoder(
   wire isBasicFPUScalarC;
   wire isBasicFPUScalarCmp;
   wire isBasicFPUScalarCmp2;
+  wire isBasicFPUScalarCmp3;
   
   wire isBasicSysInstr;
 
@@ -434,6 +435,7 @@ module smallInstr_decoder(
   assign isBasicFPUScalarC=opcode_main==8'hf0 && instr[15:12]==4'd2;
   assign isBasicFPUScalarCmp=opcode_main==8'hf0 && instr[15:12]==4'd6;
   assign isBasicFPUScalarCmp2=opcode_main==8'hf0 && instr[15:12]==4'd10;
+  assign isBasicFPUScalarCmp3=opcode_main==8'hf0 && instr[15:12]==4'd12;
   
   assign isBasicSysInstr=opcode_main==8'hff;
   
@@ -1948,6 +1950,26 @@ module smallInstr_decoder(
 	    prA_useF[38]=1'b0; prB_useF[38]=1'b0; prB_use[38]=1'b1; end
 	    //add select instruction single,double
 	  default: perror[38]=1;
+      endcase
+      
+      trien[39]=magic[0] & isBasicFPUScalarCmp2;
+      puseRs[39]=1'b1;
+      if (magic[1:0]!=2'b01) perror[39]=1;
+      prA[39]=instr[21:17];
+      prB[39]=instr[26:22];
+      prT_useF[39]=1'b1;
+      prT[39]=instr[31:27];
+      prA_useF[39]=1'b1;
+      prB_useF[39]=1'b1;
+      prAlloc[39]=1'b1;
+      pflags_write[39]=1'b1;
+      poperation[39][10]=instr[16]; //signed/single
+      case(instr[13:8])
+	  6'd32: begin poperation[39][7:0]=`fop_linsrch; pport[39]=PORT_FADD; end
+	  6'd33: begin poperation[39][7:0]=`fop_linsrch+1; pport[39]=PORT_FADD; end
+	  6'd34: begin poperation[39][7:0]=`fop_linsrch+2; pport[39]=PORT_FADD; end
+	  6'd35: begin poperation[39][7:0]=`fop_linsrch+3; pport[39]=PORT_FADD; end
+	  default: perror[39]=1;
       endcase
   end
 
