@@ -668,7 +668,9 @@ module frontend1(
 //  reg tr_half,tr_half_reg,tr_half_reg2;
 
   wire jlnin,jlnint,jlninx;  
-      
+  
+  wire [511:0] bus_data_cvt;
+
   wire [5:0] lpar30;
   wire [5:0] lpar31;
   wire [5:0] lpar20;
@@ -716,10 +718,10 @@ module frontend1(
           wire par0,par1;
           //front_strip_ECC ecc0_mod(bus_data_reg[39*2*k+:39],write_data[65*k+:32],par0);
           //front_strip_ECC ecc1_mod(bus_data_reg[39*2*k+39+:39],write_data[65*k+32+:32],par1);
-          assign write_data[65*k+:64]=bus_data_reg[64*k+:64];
-          assign write_data[65*k+64]=^bus_data_reg[64*k+:64];
-          assign write_data[65*(k+4)+:64]=bus_data_reg[64*(k+4)+:64];
-          assign write_data[65*(k+4)+64]=^bus_data_reg[64*(k+4)+:64];
+          assign write_data[65*k+:64]=bus_data_cvt[64*k+:64];
+          assign write_data[65*k+64]=^bus_data_cvt[64*k+:64];
+          assign write_data[65*(k+4)+:64]=bus_data_cvt[64*(k+4)+:64];
+          assign write_data[65*(k+4)+64]=^bus_data_cvt[64*(k+4)+:64];
                     
           assign jmp_moff[k]=jmp_magic[k][0] ? 4'd1 : 4'bz;
           assign jmp_moff[k]=(jmp_magic[k][1:0]==2'b10) ? 4'd2 : 4'bz;
@@ -797,6 +799,9 @@ module frontend1(
           assign pre_jbefore[j]=pre_jbefore0[j];
       end
   endgenerate
+
+  insconv ins0_mod(bus_data_reg[255:0],bus_data_cvt[255:0]);
+  insconv ins2_mod(bus_data_reg[511:256],bus_data_cvt[511:256]);
   
   assign bus_match0=bus_en && bus_slot=={BUS_ID,5'b10000};
   
