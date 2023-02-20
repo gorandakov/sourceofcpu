@@ -281,6 +281,7 @@ module smallInstr_decoder(
   reg prA_use[TRICNT_TOP-1:0];
   reg [REG_WIDTH-2:0] prB[TRICNT_TOP-1:0];
   reg prBE[TRICNT_TOP-1:0];
+  reg prAX[TRICNT_TOP-1:0];
   reg prTE[TRICNT_TOP-1:0];
   reg prB_use[TRICNT_TOP-1:0];
   reg [REG_WIDTH-2:0] prC[TRICNT_TOP-1:0];
@@ -496,7 +497,7 @@ module smallInstr_decoder(
     //  output reg useBSmall;//small constant use; used for call/pop/push
           wire [64:0] kconstant;
     //  output reg [3:0] smallConst; //signed
-          wire [REG_WIDTH-2:0] krT;
+          wire [REG_WIDTH-1:0] krT;
           wire krT_use;
           wire [3:0] kport;
           wire kuseRs;
@@ -523,7 +524,7 @@ module smallInstr_decoder(
           wire kerror;
           wire [4:0] kjumpType;
 	  for(q=0;q<8;q=q+1) begin : tri_gen
-	      assign krA=trien[p*8+q] ? prA[p*8+q] : 5'bz;
+	      assign krA=trien[p*8+q] ? {prAX[p*8+q],prA[p*8+q]} : 6'bz;
 	      assign krB=trien[p*8+q] ? {prBE[p*8+q],prB[p*8+q]} : 6'bz;
 	      assign krC=trien[p*8+q] ? prC[p*8+q] : 5'bz;
 	      assign krT=trien[p*8+q] ? {prTE[p*8+q],prT[p*8+q]} : 6'bz;
@@ -556,10 +557,10 @@ module smallInstr_decoder(
 	      assign kjumpType=trien[p*8+q] ? pjumpType[p*8+q] : 5'bz;
 	      assign koperation=trien[p*8+q] ? poperation[p*8+q] : 13'bz;
 	  end
-	  assign krA=(~|trien[p*8+:8]) ? 5'b0 : 5'bz;
+	  assign krA=(~|trien[p*8+:8]) ? 6'b0 : 6'bz;
 	  assign krB=(~|trien[p*8+:8]) ? 6'b0 : 6'bz;
 	  assign krC=(~|trien[p*8+:8]) ? 5'b0 : 5'bz;
-	  assign krT=(~|trien[p*8+:8]) ? 5'b0 : 5'bz;
+	  assign krT=(~|trien[p*8+:8]) ? 6'b0 : 6'bz;
 	  assign krA_use=(~|trien[p*8+:8]) ? 1'b0 : 1'bz;
 	  assign krB_use=(~|trien[p*8+:8]) ? 1'b0 : 1'bz;
 	  assign krC_use=(~|trien[p*8+:8]) ? 1'b0 : 1'bz;
@@ -589,7 +590,7 @@ module smallInstr_decoder(
 	  assign kjumpType=(~|trien[p*8+:8]) ? 5'b10000 : 5'bz;
 	  assign koperation=(~|trien[p*8+:8]) ? 13'b0 : 13'bz;
 	      
-	  assign rA_X=(|trien[p*8+:8]) ? {1'b0,krA} : 6'bz;
+	  assign rA_X=(|trien[p*8+:8]) ? {krA} : 6'bz;
 	  assign rB_X=(|trien[p*8+:8]) ? {krB} : 6'bz;
 	  assign rC_X=(|trien[p*8+:8]) ? {1'b0,krC} : 6'bz;
 	  assign rT_X=(|trien[p*8+:8]) ? {krT} : 6'bz;
@@ -685,6 +686,8 @@ module smallInstr_decoder(
           prC[tt]=5'd0;
           prT[tt]=5'd0;
 	  prBE[tt]=1'b0;
+	  prTE[tt]=1'b0;
+	  prAX[tt]=1'b0;
           prA_use[tt]=1'b0;
           prB_use[tt]=1'b0;
           prT_use[tt]=1'b0;
@@ -1779,7 +1782,15 @@ module smallInstr_decoder(
       
       trien[33]=magic[0] & isBasicFPUScalarA;
       puseRs[33]=1'b1;
-      if (magic[1:0]!=2'b01) perror[33]=1;
+      if (magic[2:0]==3'b011) begin
+          prAX[33]=instr[32]; if (instr[32]) prA[33][4:1]=4'b0;
+	  prBE[33]=instr[33]; if (instr[33]) prB[33][4:1]=4'b0;
+	  prTE[33]=instr[34]; if (instr[34]) prT[33][4:1]=4'b0;
+	  pcalu[33]=instr[39:35];
+	  //prndmod[33]=instr[42:0]
+      end else if (magic[1:0]!=2'b01) begin
+	  perror[33]=1;
+      end
       prA[33]=instr[21:17];
       prB[33]=instr[26:22];
       prT[33]=instr[31:27];
@@ -1804,10 +1815,18 @@ module smallInstr_decoder(
       
       trien[34]=magic[0] & isBasicFPUScalarB;
       puseRs[34]=1'b1;
-      if (magic[1:0]!=2'b01) perror[34]=1;
       prA[34]=instr[21:17];
       prB[34]=instr[26:22];
       prT[34]=instr[31:27];
+      if (magic[2:0]==3'b011) begin
+          prAX[34]=instr[32]; if (instr[32]) prA[34][4:1]=4'b0;
+	  prBE[34]=instr[33]; if (instr[33]) prB[34][4:1]=4'b0;
+	  prTE[34]=instr[34]; if (instr[34]) prT[34][4:1]=4'b0;
+	  pcalu[34]=instr[39:35];
+	  //prndmod[33]=instr[42:0]
+      end else if (magic[1:0]!=2'b01) begin
+	  perror[34]=1;
+      end
       prT_useF[34]=1'b1;
       prA_useF[34]=1'b1;
       prB_useF[34]=1'b1;
@@ -1879,6 +1898,15 @@ module smallInstr_decoder(
       prA[36]=instr[21:17];
       prB[36]=instr[26:22];
       prT[36]=instr[31:27];
+      if (magic[2:0]==3'b011) begin
+          prAX[36]=instr[32]; if (instr[32]) prA[36][4:1]=4'b0;
+	  prBE[36]=instr[33]; if (instr[33]) prB[36][4:1]=4'b0;
+	  prTE[36]=instr[34]; if (instr[34]) prT[36][4:1]=4'b0;
+	  pcalu[36]=instr[39:35];
+	  //prndmod[33]=instr[42:0]
+      end else if (magic[1:0]!=2'b01) begin
+	  perror[36]=1;
+      end
       prT_useF[36]=1'b1;
       prA_useF[36]=1'b1;
       prB_useF[36]=1'b1;
