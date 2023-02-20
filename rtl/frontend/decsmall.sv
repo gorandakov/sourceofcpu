@@ -280,6 +280,7 @@ module smallInstr_decoder(
   reg [REG_WIDTH-2:0] prA[TRICNT_TOP-1:0];
   reg prA_use[TRICNT_TOP-1:0];
   reg [REG_WIDTH-2:0] prB[TRICNT_TOP-1:0];
+  reg prBE[TRICNT_TOP-1:0];
   reg prB_use[TRICNT_TOP-1:0];
   reg [REG_WIDTH-2:0] prC[TRICNT_TOP-1:0];
   reg prC_use[TRICNT_TOP-1:0];
@@ -467,6 +468,8 @@ module smallInstr_decoder(
   assign qtrien   [13]=trien    [14];
   assign qconstant[14]={1'b0,pconstant[31]};
   assign qtrien   [14]=trien    [31];
+  assign qconstant[15]={1'b0,pconstant[39]};
+  assign qtrien   [15]=trien    [39];
   assign qconstant[0]={1'b0,pconstant[0]};
   assign qtrien   [0]=qtrien[11:1]==11'b0;
   
@@ -475,14 +478,14 @@ module smallInstr_decoder(
  
   generate
       genvar p,q,m;
-      for(m=0;m<15;m=m+1) begin : triconst_gen
+      for(m=0;m<16;m=m+1) begin : triconst_gen
 	  assign constant=qtrien[m] ? qconstant[m] : 65'bz;
       end
       for(p=0;p<5;p=p+1) begin
           wire [OPERATION_WIDTH-1:0] koperation;
           wire [REG_WIDTH-2:0] krA;
           wire krA_use;
-          wire [REG_WIDTH-2:0] krB;
+          wire [REG_WIDTH-1:0] krB;
           wire krB_use;
           wire [REG_WIDTH-2:0] krC;
           wire krC_use;
@@ -520,7 +523,7 @@ module smallInstr_decoder(
           wire [4:0] kjumpType;
 	  for(q=0;q<8;q=q+1) begin : tri_gen
 	      assign krA=trien[p*8+q] ? prA[p*8+q] : 5'bz;
-	      assign krB=trien[p*8+q] ? prB[p*8+q] : 5'bz;
+	      assign krB=trien[p*8+q] ? {prBE[p*8+q],prB[p*8+q]} : 6'bz;
 	      assign krC=trien[p*8+q] ? prC[p*8+q] : 5'bz;
 	      assign krT=trien[p*8+q] ? prT[p*8+q] : 5'bz;
 	      assign krA_use=trien[p*8+q] ? prA_use[p*8+q] : 1'bz;
@@ -553,7 +556,7 @@ module smallInstr_decoder(
 	      assign koperation=trien[p*8+q] ? poperation[p*8+q] : 13'bz;
 	  end
 	  assign krA=(~|trien[p*8+:8]) ? 5'b0 : 5'bz;
-	  assign krB=(~|trien[p*8+:8]) ? 5'b0 : 5'bz;
+	  assign krB=(~|trien[p*8+:8]) ? 6'b0 : 6'bz;
 	  assign krC=(~|trien[p*8+:8]) ? 5'b0 : 5'bz;
 	  assign krT=(~|trien[p*8+:8]) ? 5'b0 : 5'bz;
 	  assign krA_use=(~|trien[p*8+:8]) ? 1'b0 : 1'bz;
@@ -586,7 +589,7 @@ module smallInstr_decoder(
 	  assign koperation=(~|trien[p*8+:8]) ? 13'b0 : 13'bz;
 	      
 	  assign rA_X=(|trien[p*8+:8]) ? {1'b0,krA} : 6'bz;
-	  assign rB_X=(|trien[p*8+:8]) ? {1'b0,krB} : 6'bz;
+	  assign rB_X=(|trien[p*8+:8]) ? {krB} : 6'bz;
 	  assign rC_X=(|trien[p*8+:8]) ? {1'b0,krC} : 6'bz;
 	  assign rT_X=(|trien[p*8+:8]) ? {1'b0,krT} : 6'bz;
 	  assign rA_use_X=(|trien[p*8+:8]) ? krA_use : 1'bz;
@@ -680,6 +683,7 @@ module smallInstr_decoder(
           prB[tt]=5'd0;
           prC[tt]=5'd0;
           prT[tt]=5'd0;
+	  prBE[tt]=1'b0;
           prA_use[tt]=1'b0;
           prB_use[tt]=1'b0;
           prT_use[tt]=1'b0;
@@ -1957,7 +1961,7 @@ module smallInstr_decoder(
       if (magic[1:0]!=2'b01) perror[39]=1;
       prA[39]=instr[21:17];
       prB[39]=instr[26:22];
-      prT_useF[39]=1'b1;
+      prT_useF[39]=1'b0;
       prT[39]=instr[31:27];
       prA_useF[39]=1'b1;
       prB_useF[39]=1'b1;
@@ -1969,6 +1973,22 @@ module smallInstr_decoder(
 	  6'd33: begin poperation[39][7:0]=`fop_linsrch+1; pport[39]=PORT_FADD; end
 	  6'd34: begin poperation[39][7:0]=`fop_linsrch+2; pport[39]=PORT_FADD; end
 	  6'd35: begin poperation[39][7:0]=`fop_linsrch+3; pport[39]=PORT_FADD; end
+	  6'd36: begin
+	      prA_useF[39]=1'b0;
+	      prB_useF[39]=1'b0;
+	      prT_useF[39]=1'b0;
+	      prA_use[39]=1'b1;
+	      prB_use[39]=1'b1;
+	      prT_use[39]=1'b1;
+	      pport[39]=PORT_LOAD;
+	      prB[39][4:1]=5'b0;
+	      prBE[39]=1'b1;
+	      poperaton[39][7:0]={4'b110,1'b1,instr[23]};
+	      poperation[39][9:8]={1'b1,instr[24]}; 
+	      poperation[39][12:10]=2'b0;
+	      pconstant[39]={60'b0,instr[26:25],2'b0};
+	      pflags_write[39]=1'b0;
+	  end
 	  default: perror[39]=1;
       endcase
   end
