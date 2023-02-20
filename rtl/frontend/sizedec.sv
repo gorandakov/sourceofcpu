@@ -106,6 +106,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   wire isBasicFPUScalarC;
   wire isBasicFPUScalarCmp;
   wire isBasicFPUScalarCmp2;
+  wire isBasicFPUScalarCmp3;
 
   wire isBasicSysInstr;
   
@@ -188,6 +189,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   assign isBasicFPUScalarC=opcode_main==8'hf0 && instr[15:12]==4'd2 && magic[0];
   assign isBasicFPUScalarCmp=opcode_main==8'hf0 && instr[15:12]==4'd6 && magic[0];
   assign isBasicFPUScalarCmp2=opcode_main==8'hf0 && instr[15:12]==4'ha && magic[0];
+  assign isBasicFPUScalarCmp3=opcode_main==8'hf0 && instr[15:12]==4'd12;
 
   assign isCallPrep=(opcode_main==8'd199) && magic[0];
   
@@ -231,8 +233,9 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   isBasicFPUScalarA && instr[13:9]!=5'd2 && instr[13:8]!=6'd8,
   isBasicFPUScalarB && instr[13:8]!=6'd18 && instr[13:8]!=6'd21,
   isBasicFPUScalarC && |instr[13:11],
-  isBasicFPUScalarCmp && !|instr[13:11],
-  isBasicFPUScalarCmp2 && !|instr[13:11],
+  isBasicFPUScalarCmp && instr[13:11]==5'b10000,
+  isBasicFPUScalarCmp2 && instr[13:11]==5'b10000,
+  isBasicFPUScalarCmp3 && instr[13:10]==4'b1000;
   subIsMovOrExt,
   isLeaIPRel,
   isJalR
@@ -256,7 +259,8 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   isBaseIndexLoadStore & ~opcode_main[0],  
   isBaseSpecLoad,
   isBaseIndexSpecLoad,
-  isImmLoadStore && ~opcode_main[0]
+  isImmLoadStore && ~opcode_main[0],
+  isBasicFPUScalarCmp3 && instr[13:8]==6'b100100//tlb jump table load gen purp
   };
 
   assign clsStore=|{
@@ -288,9 +292,9 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
     isPtrSec,
     isCexALU & instr[12],
     opcode_main==8'hff && ~instr[15] && ~instr[13] && magic[0],
-    isBasicFPUScalarC && !|instr[13:11],
-     isBasicFPUScalarCmp && |instr[13:11],
-     isBasicFPUScalarCmp2 && |instr[13:11]
+    isBasicFPUScalarC && instr[13:11]==4'b100,
+     isBasicFPUScalarCmp && |instr[12:11],
+     isBasicFPUScalarCmp2 && |instr[12:11]
   };
   
   assign clsSys=isBasicSysInstr|isFPUreor;

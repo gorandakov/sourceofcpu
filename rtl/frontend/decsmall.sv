@@ -1779,6 +1779,15 @@ module smallInstr_decoder(
           poperation[32][7:0]=8'hff;//mov 128 bit untyped
 	  if (instr[21:17]!=0) perror[32]=1;
       end
+      if (magic[2:0]==3'b011) begin
+          prAX[32]=instr[32]; if (instr[32]) prA[32][4:1]=4'b0;
+	  prBE[32]=instr[33]; if (instr[33]) prB[32][4:1]=4'b0;
+	  prTE[32]=instr[34]; if (instr[34]) prT[32][4:1]=4'b0;
+	  pcalu[32]=instr[39:35];
+	  //prndmod[33]=instr[42:0]
+      end else if (magic[1:0]!=2'b01) begin
+	  perror[32]=1;
+      end
       
       trien[33]=magic[0] & isBasicFPUScalarA;
       puseRs[33]=1'b1;
@@ -1935,6 +1944,15 @@ module smallInstr_decoder(
       prA[37]=instr[21:17];
       prB[37]=instr[26:22];
       prT[37]=instr[31:27];
+      if (magic[2:0]==3'b011) begin
+          prAX[37]=instr[32]; if (instr[32]) prA[37][4:1]=4'b0;
+	  prBE[37]=instr[33]; if (instr[33]) prB[37][4:1]=4'b0;
+	  prTE[37]=instr[34]; if (instr[34]) prT[37][4:1]=4'b0;
+	  pcalu[37]=instr[39:35];
+	  //prndmod[33]=instr[42:0]
+      end else if (magic[1:0]!=2'b01) begin
+	  perror[36]=1;
+      end
       prT_useF[37]=1'b0;
       prA_useF[37]=1'b1;
       prB_useF[37]=1'b1;
@@ -1964,6 +1982,15 @@ module smallInstr_decoder(
       prB[38]=instr[26:22];
       prT_useF[38]=1'b1;
       prT[38]=instr[31:27];
+      if (magic[2:0]==3'b011) begin
+          prAX[38]=instr[32]; if (instr[32]) prA[38][4:1]=4'b0;
+	  prBE[38]=instr[33]; if (instr[33]) prB[38][4:1]=4'b0;
+	  prTE[38]=instr[34]; if (instr[34]) prT[38][4:1]=4'b0;
+	  pcalu[38]=instr[39:35];
+	  //prndmod[33]=instr[42:0]
+      end else if (magic[1:0]!=2'b01) begin
+	  perror[38]=1;
+      end
       prA_useF[38]=1'b1;
       prB_useF[38]=1'b1;
       prAlloc[38]=1'b1;
@@ -1996,6 +2023,15 @@ module smallInstr_decoder(
       prB[39]=instr[26:22];
       prT_useF[39]=1'b0;
       prT[39]=instr[31:27];
+      if (magic[2:0]==3'b011) begin
+          prAX[39]=instr[32]; if (instr[32]) prA[39][4:1]=4'b0;
+	  prBE[39]=instr[33]; if (instr[33]) prB[39][4:1]=4'b0;
+	  prTE[39]=instr[34]; if (instr[34]) prT[39][4:1]=4'b0;
+	  pcalu[39]=instr[39:35];
+	  //prndmod[33]=instr[42:0]
+      end else if (magic[1:0]!=2'b01) begin
+	  perror[39]=1;
+      end
       prA_useF[39]=1'b1;
       prB_useF[39]=1'b1;
       prAlloc[39]=1'b1;
