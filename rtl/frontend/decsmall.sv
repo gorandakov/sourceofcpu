@@ -281,6 +281,7 @@ module smallInstr_decoder(
   reg prA_use[TRICNT_TOP-1:0];
   reg [REG_WIDTH-2:0] prB[TRICNT_TOP-1:0];
   reg prBE[TRICNT_TOP-1:0];
+  reg prTE[TRICNT_TOP-1:0];
   reg prB_use[TRICNT_TOP-1:0];
   reg [REG_WIDTH-2:0] prC[TRICNT_TOP-1:0];
   reg prC_use[TRICNT_TOP-1:0];
@@ -483,7 +484,7 @@ module smallInstr_decoder(
       end
       for(p=0;p<5;p=p+1) begin
           wire [OPERATION_WIDTH-1:0] koperation;
-          wire [REG_WIDTH-2:0] krA;
+          wire [REG_WIDTH-1:0] krA;
           wire krA_use;
           wire [REG_WIDTH-1:0] krB;
           wire krB_use;
@@ -525,7 +526,7 @@ module smallInstr_decoder(
 	      assign krA=trien[p*8+q] ? prA[p*8+q] : 5'bz;
 	      assign krB=trien[p*8+q] ? {prBE[p*8+q],prB[p*8+q]} : 6'bz;
 	      assign krC=trien[p*8+q] ? prC[p*8+q] : 5'bz;
-	      assign krT=trien[p*8+q] ? prT[p*8+q] : 5'bz;
+	      assign krT=trien[p*8+q] ? {prTE[p*8+q],prT[p*8+q]} : 6'bz;
 	      assign krA_use=trien[p*8+q] ? prA_use[p*8+q] : 1'bz;
 	      assign krB_use=trien[p*8+q] ? prB_use[p*8+q] : 1'bz;
 	      assign krC_use=trien[p*8+q] ? prC_use[p*8+q] : 1'bz;
@@ -591,7 +592,7 @@ module smallInstr_decoder(
 	  assign rA_X=(|trien[p*8+:8]) ? {1'b0,krA} : 6'bz;
 	  assign rB_X=(|trien[p*8+:8]) ? {krB} : 6'bz;
 	  assign rC_X=(|trien[p*8+:8]) ? {1'b0,krC} : 6'bz;
-	  assign rT_X=(|trien[p*8+:8]) ? {1'b0,krT} : 6'bz;
+	  assign rT_X=(|trien[p*8+:8]) ? {krT} : 6'bz;
 	  assign rA_use_X=(|trien[p*8+:8]) ? krA_use : 1'bz;
 	  assign rB_use_X=(|trien[p*8+:8]) ? krB_use : 1'bz;
 	  assign rC_use_X=(|trien[p*8+:8]) ? krC_use : 1'bz;
@@ -1492,6 +1493,10 @@ module smallInstr_decoder(
           prT[26]={instr[17],instr[11:8]};
           prB[26]=instr[16:12];
           pconstant[26]={{51{instr[30]}},instr[30:18]};
+	  if (!instr[31]) begin
+	      prTE[26]=instr[18];
+	      prBE[26]=instr[19];
+	  end
           if (opcode_main[7:0]==8'd186) begin
               poperation[26][8]=instr[30];
               poperation[26][9]=instr[30];
