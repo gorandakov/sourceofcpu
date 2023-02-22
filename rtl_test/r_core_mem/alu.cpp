@@ -2039,10 +2039,10 @@ void req_set(Vheptane_core *top,req *reqs,char *mem,char *memp) {
 	top->rbusDIn_signals=signals;
 	top->rbusDIn_dst_req=src[pos_R];
 	if (!R) {
-	    memcpy((char *) &(top->rbusDIn_data),mem+(addr[pos_R]<<7),64);
+	    memcpy((char *) top->rbusDIn_data,mem+(addr[pos_R]<<7),64);
 	    top->rbusDIn_dataPTR=mem[addr[pos_R]<<1];
 	} else {
-	    memcpy((char *) &(top->rbusDIn_data),mem+((addr[pos_R]<<7)+64),64);
+	    memcpy((char *) top->rbusDIn_data,mem+((addr[pos_R]<<7)+64),64);
 	    top->rbusDIn_dataPTR=mem[(addr[pos_R]<<1)+1];
 	    top->rbusDIn_signals|=1<<(rbusD_second);
 	}
@@ -2060,27 +2060,29 @@ void req_set(Vheptane_core *top,req *reqs,char *mem,char *memp) {
             goto end_DOut;
 	}
 	if (!(top->rbusDOut_signals&(1<<(rbusD_second)))) {
-	    memcpy(mem+(addr[pos_R]<<7),(char *) &(top->rbusDOut_data),64);
+	    memcpy(mem+(addr[pos_R]<<7),(char *) top->rbusDOut_data,64);
 	    mem[addr[pos_R]<<1]=top->rbusDIn_dataPTR;
         } else {
-	    memcpy(mem+((addr[pos_R]<<7)+64),(char *) &(top->rbusDOut_data),64);
+	    memcpy(mem+((addr[pos_R]<<7)+64),(char *) top->rbusDOut_data,64);
 	    mem[(addr[pos_R]<<1)+1]=top->rbusDIn_dataPTR;
 	}
         end_DOut:;
     }
     top->rbusOut_can=1;
     if (top->rbusOut_want) printf("want 0x%lx,\t%i,\t%i\n",top->rbusOut_address,pos,pos_R);
-//    if (top->heptane_core__DOT__req_en_reg) printf("wantR 0x%lx,\t%i\n",top->heptane_core__DOT__req_addr_reg,
-//	top->heptane_core__DOT__req_slot_reg);
+    if (top->heptane_core__DOT__dc2_rdEnX_reg4) printf("dc2_rdEnX_reg4 0x%lx, 0x%x\n",top->heptane_core__DOT__dc2_rd_addr_reg3,
+		    top->heptane_core__DOT__dc2_req_rd_reg4);
+    if (top->heptane_core__DOT__req_en_reg) printf("wantR 0x%lx,\t%i\n",top->heptane_core__DOT__req_addr_reg,
+	top->heptane_core__DOT__req_slot_reg);
 //    if (bmr) printf("insert 0x%lx\n",
 //	top->heptane_core__DOT__front_mod__DOT__cc_mod__DOT__write_IP_reg);
    // if (top->heptane_core__DOT__front_mod__DOT__bus_match_reg) bmr=1;
    // else bmr=0;
-//    if (top->heptane_core__DOT__insBus_en) 
-//	    printf("insBus 0x%x, 0x%#8x%#8x%#8x%#8x, %i\n",top->heptane_core__DOT__dc2_req_rd_reg5,
-//	top->heptane_core__DOT__dc2_rdata_reg[3],top->heptane_core__DOT__dc2_rdata_reg[2],
-//	top->heptane_core__DOT__dc2_rdata_reg[1],top->heptane_core__DOT__dc2_rdata_reg[0],
-//	top->heptane_core__DOT__dc2_rhitB1_reg);
+    if (top->heptane_core__DOT__insBus_en) 
+	    printf("insBus 0x%x, 0x%#8x%#8x%#8x%#8x, %i\n",top->heptane_core__DOT__dc2_req_rd_reg5,
+	top->heptane_core__DOT__dc2_rdata_reg[3],top->heptane_core__DOT__dc2_rdata_reg[2],
+	top->heptane_core__DOT__dc2_rdata_reg[1],top->heptane_core__DOT__dc2_rdata_reg[0],
+	top->heptane_core__DOT__dc2_rhitB1_reg);
     static int idr=0;
   /*  if (top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__alt_bus_hold_reg2) {
 	printf("ABH -> 0x%lx,0x%lx,o 0x%x,is_ins 0x%x:0x%x\n",
@@ -2100,20 +2102,20 @@ void req_set(Vheptane_core *top,req *reqs,char *mem,char *memp) {
     if (top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__mOpX2_addrEven_reg==0x20001d && top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__mOpX2_en_reg) {
 	printf(" ");
     }*/
-//    idr=top->heptane_core__DOT__bck_mod__DOT__insert_isData_reg3;
-//    if (!top->heptane_core__DOT__insBus_en && top->heptane_core__DOT__dc2_rhit) printf("insBusX 0x%x, 0x%#8x%#8x%#8x%#8x, %i\n",top->heptane_core__DOT__dc2_req_rd_reg5,
-//	top->heptane_core__DOT__dc2_rdata_reg[3],top->heptane_core__DOT__dc2_rdata_reg[2],
-//	top->heptane_core__DOT__dc2_rdata_reg[1],top->heptane_core__DOT__dc2_rdata_reg[0],
-//	top->heptane_core__DOT__dc2_rhitB1_reg);
+    idr=top->heptane_core__DOT__bck_mod__DOT__insert_isData_reg3;
+    if (!top->heptane_core__DOT__insBus_en && top->heptane_core__DOT__dc2_rhit) printf("insBusX 0x%x, 0x%#8x%#8x%#8x%#8x, %i\n",top->heptane_core__DOT__dc2_req_rd_reg5,
+	top->heptane_core__DOT__dc2_rdata_reg[3],top->heptane_core__DOT__dc2_rdata_reg[2],
+	top->heptane_core__DOT__dc2_rdata_reg[1],top->heptane_core__DOT__dc2_rdata_reg[0],
+	top->heptane_core__DOT__dc2_rhitB1_reg);
    /* if (top->heptane_core__DOT__front_mod__DOT__cc_mod__DOT__cc_write_wen_reg2)
 	    printf("wenR\n");*/
-//    if (top->heptane_core__DOT__rinsBus_A||top->heptane_core__DOT__rinsBus_B) {
-//	    printf("insburst 0x%8x%8x%8x%8x, %i, 0x%lx\n",top->heptane_core__DOT__rbusDIn_data_reg[3],
-//	top->heptane_core__DOT__rbusDIn_data_reg[2],top->heptane_core__DOT__rbusDIn_data_reg[1],
-//	top->heptane_core__DOT__rbusDIn_data_reg[0],top->heptane_core__DOT__dc2_rdOdd,top->heptane_core__DOT__dc2_addrE0);
-//	    if (top->heptane_core__DOT__dc2_hitE0||top->heptane_core__DOT__dc2_hitO0||top->heptane_core__DOT__dc2_hitE1||
+    if (top->heptane_core__DOT__rinsBus_A||top->heptane_core__DOT__rinsBus_B) {
+	    printf("insburst 0x%8x%8x%8x%8x, %i, 0x%lx\n",top->heptane_core__DOT__rbusDIn_data_reg[3],
+	top->heptane_core__DOT__rbusDIn_data_reg[2],top->heptane_core__DOT__rbusDIn_data_reg[1],
+	top->heptane_core__DOT__rbusDIn_data_reg[0],top->heptane_core__DOT__dc2_rdOdd,top->heptane_core__DOT__dc2_addrE0);
+	    if (top->heptane_core__DOT__dc2_hitE0||top->heptane_core__DOT__dc2_hitO0||top->heptane_core__DOT__dc2_hitE1||
 		top->heptane_core__DOT__dc2_hitO1) printf("shmupd\n");
-//    }
+    }
 }
 
 bool get_check(Vheptane_core *top, req *reqs,unsigned long long &ip) {
