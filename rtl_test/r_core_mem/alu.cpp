@@ -7,6 +7,8 @@
 #include <sys/mman.h>
 #include <fcntl.h>
 #include "Vheptane_core.h"
+#include "Vheptane_core_heptane_core.h"
+#include "Vheptane_core_backend.h"
 #include "verilated.h"
 #include "../inc/ptr.h"
 #include "contx.h"
@@ -2039,10 +2041,10 @@ void req_set(Vheptane_core *top,req *reqs,char *mem,char *memp) {
 	top->rbusDIn_signals=signals;
 	top->rbusDIn_dst_req=src[pos_R];
 	if (!R) {
-	    memcpy((char *) top->rbusDIn_data,mem+(addr[pos_R]<<7),64);
+	    memcpy((char *) &top->rbusDIn_data[0],mem+(addr[pos_R]<<7),64);
 	    top->rbusDIn_dataPTR=mem[addr[pos_R]<<1];
 	} else {
-	    memcpy((char *) top->rbusDIn_data,mem+((addr[pos_R]<<7)+64),64);
+	    memcpy((char *) &top->rbusDIn_data[0],mem+((addr[pos_R]<<7)+64),64);
 	    top->rbusDIn_dataPTR=mem[(addr[pos_R]<<1)+1];
 	    top->rbusDIn_signals|=1<<(rbusD_second);
 	}
@@ -2060,61 +2062,61 @@ void req_set(Vheptane_core *top,req *reqs,char *mem,char *memp) {
             goto end_DOut;
 	}
 	if (!(top->rbusDOut_signals&(1<<(rbusD_second)))) {
-	    memcpy(mem+(addr[pos_R]<<7),(char *) top->rbusDOut_data,64);
+	    memcpy(mem+(addr[pos_R]<<7),(char *) &top->rbusDOut_data[0],64);
 	    mem[addr[pos_R]<<1]=top->rbusDIn_dataPTR;
         } else {
-	    memcpy(mem+((addr[pos_R]<<7)+64),(char *) top->rbusDOut_data,64);
+	    memcpy(mem+((addr[pos_R]<<7)+64),(char *) &top->rbusDOut_data[0],64);
 	    mem[(addr[pos_R]<<1)+1]=top->rbusDIn_dataPTR;
 	}
         end_DOut:;
     }
     top->rbusOut_can=1;
     if (top->rbusOut_want) printf("want 0x%lx,\t%i,\t%i\n",top->rbusOut_address,pos,pos_R);
-    if (top->heptane_core__DOT__dc2_rdEnX_reg4) printf("dc2_rdEnX_reg4 0x%lx, 0x%x\n",top->heptane_core__DOT__dc2_rd_addr_reg3,
-		    top->heptane_core__DOT__dc2_req_rd_reg4);
-    if (top->heptane_core__DOT__req_en_reg) printf("wantR 0x%lx,\t%i\n",top->heptane_core__DOT__req_addr_reg,
-	top->heptane_core__DOT__req_slot_reg);
+    if (top->heptane_core->dc2_rdEnX_reg4) printf("dc2_rdEnX_reg4 0x%lx, 0x%x\n",top->heptane_core->dc2_rd_addr_reg3,
+		    top->heptane_core->dc2_req_rd_reg4);
+    if (top->heptane_core->req_en_reg) printf("wantR 0x%lx,\t%i\n",top->heptane_core->req_addr_reg,
+	top->heptane_core->req_slot_reg);
 //    if (bmr) printf("insert 0x%lx\n",
-//	top->heptane_core__DOT__front_mod__DOT__cc_mod__DOT__write_IP_reg);
-   // if (top->heptane_core__DOT__front_mod__DOT__bus_match_reg) bmr=1;
+//	top->heptane_core->front_mod->cc_mod->write_IP_reg);
+   // if (top->heptane_core->front_mod->bus_match_reg) bmr=1;
    // else bmr=0;
-    if (top->heptane_core__DOT__insBus_en) 
-	    printf("insBus 0x%x, 0x%#8x%#8x%#8x%#8x, %i\n",top->heptane_core__DOT__dc2_req_rd_reg5,
-	top->heptane_core__DOT__dc2_rdata_reg[3],top->heptane_core__DOT__dc2_rdata_reg[2],
-	top->heptane_core__DOT__dc2_rdata_reg[1],top->heptane_core__DOT__dc2_rdata_reg[0],
-	top->heptane_core__DOT__dc2_rhitB1_reg);
+    if (top->heptane_core->insBus_en) 
+	    printf("insBus 0x%x, 0x%#8x%#8x%#8x%#8x, %i\n",top->heptane_core->dc2_req_rd_reg5,
+	top->heptane_core->dc2_rdata_reg[3],top->heptane_core->dc2_rdata_reg[2],
+	top->heptane_core->dc2_rdata_reg[1],top->heptane_core->dc2_rdata_reg[0],
+	top->heptane_core->dc2_rhitB1_reg);
     static int idr=0;
-  /*  if (top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__alt_bus_hold_reg2) {
+  /*  if (top->heptane_core->bck_mod->agu_aligned->alt_bus_hold_reg2) {
 	printf("ABH -> 0x%lx,0x%lx,o 0x%x,is_ins 0x%x:0x%x\n",
-			top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__mOpX0_addrEven_reg,
-			top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__mOpX0_addrOdd_reg,
-                        top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__mOpX0_odd_reg,
+			top->heptane_core->bck_mod->agu_aligned->mOpX0_addrEven_reg,
+			top->heptane_core->bck_mod->agu_aligned->mOpX0_addrOdd_reg,
+                        top->heptane_core->bck_mod->agu_aligned->mOpX0_odd_reg,
 			idr,
-	((top->heptane_core__DOT__bck_mod__DOT__L1D_mod__DOT__ways_gen__BRA__0__KET____DOT__way_mod__DOT__ins_hit&1)<<0)|
-	((top->heptane_core__DOT__bck_mod__DOT__L1D_mod__DOT__ways_gen__BRA__1__KET____DOT__way_mod__DOT__ins_hit&1)<<1)|
-	((top->heptane_core__DOT__bck_mod__DOT__L1D_mod__DOT__ways_gen__BRA__2__KET____DOT__way_mod__DOT__ins_hit&1)<<2)|
-	((top->heptane_core__DOT__bck_mod__DOT__L1D_mod__DOT__ways_gen__BRA__3__KET____DOT__way_mod__DOT__ins_hit&1)<<3)|
-	((top->heptane_core__DOT__bck_mod__DOT__L1D_mod__DOT__ways_gen__BRA__4__KET____DOT__way_mod__DOT__ins_hit&1)<<4)|
-	((top->heptane_core__DOT__bck_mod__DOT__L1D_mod__DOT__ways_gen__BRA__5__KET____DOT__way_mod__DOT__ins_hit&1)<<5)|
-	((top->heptane_core__DOT__bck_mod__DOT__L1D_mod__DOT__ways_gen__BRA__6__KET____DOT__way_mod__DOT__ins_hit&1)<<6)|
-	((top->heptane_core__DOT__bck_mod__DOT__L1D_mod__DOT__ways_gen__BRA__7__KET____DOT__way_mod__DOT__ins_hit&1)<<7));
+	((top->heptane_core->bck_mod->L1D_mod->ways_gen__BRA__0__KET__->way_mod->ins_hit&1)<<0)|
+	((top->heptane_core->bck_mod->L1D_mod->ways_gen__BRA__1__KET__->way_mod->ins_hit&1)<<1)|
+	((top->heptane_core->bck_mod->L1D_mod->ways_gen__BRA__2__KET__->way_mod->ins_hit&1)<<2)|
+	((top->heptane_core->bck_mod->L1D_mod->ways_gen__BRA__3__KET__->way_mod->ins_hit&1)<<3)|
+	((top->heptane_core->bck_mod->L1D_mod->ways_gen__BRA__4__KET__->way_mod->ins_hit&1)<<4)|
+	((top->heptane_core->bck_mod->L1D_mod->ways_gen__BRA__5__KET__->way_mod->ins_hit&1)<<5)|
+	((top->heptane_core->bck_mod->L1D_mod->ways_gen__BRA__6__KET__->way_mod->ins_hit&1)<<6)|
+	((top->heptane_core->bck_mod->L1D_mod->ways_gen__BRA__7__KET__->way_mod->ins_hit&1)<<7));
     }
-    if (top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__mOpX2_addrEven_reg==0x20001d && top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__mOpX2_en_reg) {
+    if (top->heptane_core->bck_mod->agu_aligned->mOpX2_addrEven_reg==0x20001d && top->heptane_core->bck_mod->agu_aligned->mOpX2_en_reg) {
 	printf(" ");
     }*/
-    idr=top->heptane_core__DOT__bck_mod__DOT__insert_isData_reg3;
-    if (!top->heptane_core__DOT__insBus_en && top->heptane_core__DOT__dc2_rhit) printf("insBusX 0x%x, 0x%#8x%#8x%#8x%#8x, %i\n",top->heptane_core__DOT__dc2_req_rd_reg5,
-	top->heptane_core__DOT__dc2_rdata_reg[3],top->heptane_core__DOT__dc2_rdata_reg[2],
-	top->heptane_core__DOT__dc2_rdata_reg[1],top->heptane_core__DOT__dc2_rdata_reg[0],
-	top->heptane_core__DOT__dc2_rhitB1_reg);
-   /* if (top->heptane_core__DOT__front_mod__DOT__cc_mod__DOT__cc_write_wen_reg2)
+    idr=top->heptane_core->bck_mod->insert_isData_reg3;
+    if (!top->heptane_core->insBus_en && top->heptane_core->dc2_rhit) printf("insBusX 0x%x, 0x%#8x%#8x%#8x%#8x, %i\n",top->heptane_core->dc2_req_rd_reg5,
+	top->heptane_core->dc2_rdata_reg[3],top->heptane_core->dc2_rdata_reg[2],
+	top->heptane_core->dc2_rdata_reg[1],top->heptane_core->dc2_rdata_reg[0],
+	top->heptane_core->dc2_rhitB1_reg);
+   /* if (top->heptane_core->front_mod->cc_mod->cc_write_wen_reg2)
 	    printf("wenR\n");*/
-    if (top->heptane_core__DOT__rinsBus_A||top->heptane_core__DOT__rinsBus_B) {
-	    printf("insburst 0x%8x%8x%8x%8x, %i, 0x%lx\n",top->heptane_core__DOT__rbusDIn_data_reg[3],
-	top->heptane_core__DOT__rbusDIn_data_reg[2],top->heptane_core__DOT__rbusDIn_data_reg[1],
-	top->heptane_core__DOT__rbusDIn_data_reg[0],top->heptane_core__DOT__dc2_rdOdd,top->heptane_core__DOT__dc2_addrE0);
-	    if (top->heptane_core__DOT__dc2_hitE0||top->heptane_core__DOT__dc2_hitO0||top->heptane_core__DOT__dc2_hitE1||
-		top->heptane_core__DOT__dc2_hitO1) printf("shmupd\n");
+    if (top->heptane_core->rinsBus_A||top->heptane_core->rinsBus_B) {
+	    printf("insburst 0x%8x%8x%8x%8x, %i, 0x%lx\n",top->heptane_core->rbusDIn_data_reg[3],
+	top->heptane_core->rbusDIn_data_reg[2],top->heptane_core->rbusDIn_data_reg[1],
+	top->heptane_core->rbusDIn_data_reg[0],top->heptane_core->dc2_rdOdd,top->heptane_core->dc2_addrE0);
+	    if (top->heptane_core->dc2_hitE0||top->heptane_core->dc2_hitO0||top->heptane_core->dc2_hitE1||
+		top->heptane_core->dc2_hitO1) printf("shmupd\n");
     }
 }
 
@@ -2131,15 +2133,15 @@ bool get_check(Vheptane_core *top, req *reqs,unsigned long long &ip) {
 	for(k=0;k<10;k++) {
 	    if (xbreak&(1<<k)) break;
 	}
-	count=(top->heptane_core__DOT__except && top->heptane_core__DOT__except_due_jump) ? k+1 : k;
+	count=(top->heptane_core->except && top->heptane_core->except_due_jump) ? k+1 : k;
 	if (count==10) count=insn_count[insn_posR];
-	if (count!=insn_count[insn_posR] && !top->heptane_core__DOT__except) {
+	if (count!=insn_count[insn_posR] && !top->heptane_core->except) {
 	    printf("wrong count at %li, 0x%x\n",ip,retII);
 	    rtn=false;
 	}
 	insn_posR++;
 	insn_posR&=0x3f;
-	if (top->heptane_core__DOT__except) {
+	if (top->heptane_core->except) {
             printf("except %li, %li\n",count,ip);
 	    insn_posW=insn_posR;
 	    //rtn=false;
@@ -2150,35 +2152,35 @@ bool get_check(Vheptane_core *top, req *reqs,unsigned long long &ip) {
 	    if (x<(count-1)) for(k=x+1;k<count;k=k+1) if (reqs[ip+x].rT==reqs[ip+k].rT || reqs[ip+x].rT<0) goto no_srch;
 	    for(k=0;k<9;k=k+1) {
 		unsigned long long val,valp;
-		extract_e(top->heptane_core__DOT__bck_mod__DOT__ret_dataA,65*k,65*k+63,val);
-		extract_e(top->heptane_core__DOT__bck_mod__DOT__ret_dataA,65*k+64,65*k+64,valp);
+		extract_e(top->heptane_core->bck_mod->ret_dataA,65*k,65*k+63,val);
+		extract_e(top->heptane_core->bck_mod->ret_dataA,65*k+64,65*k+64,valp);
 		switch(k) {
-		    case 0: if (top->heptane_core__DOT__bck_mod__DOT__retire0_rT!=reqs[ip+x].rT ||
-					    !top->heptane_core__DOT__bck_mod__DOT__retire0_enG) continue;
+		    case 0: if (top->heptane_core->bck_mod->retire0_rT!=reqs[ip+x].rT ||
+					    !top->heptane_core->bck_mod->retire0_enG) continue;
 			    break;
-		    case 1: if (top->heptane_core__DOT__bck_mod__DOT__retire1_rT!=reqs[ip+x].rT ||
-					    !top->heptane_core__DOT__bck_mod__DOT__retire1_enG) continue;
+		    case 1: if (top->heptane_core->bck_mod->retire1_rT!=reqs[ip+x].rT ||
+					    !top->heptane_core->bck_mod->retire1_enG) continue;
 			    break;
-		    case 2: if (top->heptane_core__DOT__bck_mod__DOT__retire2_rT!=reqs[ip+x].rT ||
-					    !top->heptane_core__DOT__bck_mod__DOT__retire2_enG) continue;
+		    case 2: if (top->heptane_core->bck_mod->retire2_rT!=reqs[ip+x].rT ||
+					    !top->heptane_core->bck_mod->retire2_enG) continue;
 			    break;
-		    case 3: if (top->heptane_core__DOT__bck_mod__DOT__retire3_rT!=reqs[ip+x].rT ||
-					    !top->heptane_core__DOT__bck_mod__DOT__retire3_enG) continue;
+		    case 3: if (top->heptane_core->bck_mod->retire3_rT!=reqs[ip+x].rT ||
+					    !top->heptane_core->bck_mod->retire3_enG) continue;
 			    break;
-		    case 4: if (top->heptane_core__DOT__bck_mod__DOT__retire4_rT!=reqs[ip+x].rT ||
-					    !top->heptane_core__DOT__bck_mod__DOT__retire4_enG) continue;
+		    case 4: if (top->heptane_core->bck_mod->retire4_rT!=reqs[ip+x].rT ||
+					    !top->heptane_core->bck_mod->retire4_enG) continue;
 			    break;
-		    case 5: if (top->heptane_core__DOT__bck_mod__DOT__retire5_rT!=reqs[ip+x].rT ||
-					    !top->heptane_core__DOT__bck_mod__DOT__retire5_enG) continue;
+		    case 5: if (top->heptane_core->bck_mod->retire5_rT!=reqs[ip+x].rT ||
+					    !top->heptane_core->bck_mod->retire5_enG) continue;
 			    break;
-		    case 6: if (top->heptane_core__DOT__bck_mod__DOT__retire6_rT!=reqs[ip+x].rT ||
-					    !top->heptane_core__DOT__bck_mod__DOT__retire6_enG) continue;
+		    case 6: if (top->heptane_core->bck_mod->retire6_rT!=reqs[ip+x].rT ||
+					    !top->heptane_core->bck_mod->retire6_enG) continue;
 			    break;
-		    case 7: if (top->heptane_core__DOT__bck_mod__DOT__retire7_rT!=reqs[ip+x].rT ||
-					    !top->heptane_core__DOT__bck_mod__DOT__retire7_enG) continue;
+		    case 7: if (top->heptane_core->bck_mod->retire7_rT!=reqs[ip+x].rT ||
+					    !top->heptane_core->bck_mod->retire7_enG) continue;
 			    break;
-		    case 8: if (top->heptane_core__DOT__bck_mod__DOT__retire8_rT!=reqs[ip+x].rT ||
-					    !top->heptane_core__DOT__bck_mod__DOT__retire8_enG) continue;
+		    case 8: if (top->heptane_core->bck_mod->retire8_rT!=reqs[ip+x].rT ||
+					    !top->heptane_core->bck_mod->retire8_enG) continue;
 			    break;
 		}
 		if (reqs[ip+x].res!=val || reqs[ip+x].res_p!=valp) {
@@ -2197,86 +2199,86 @@ no_srch:;
 	ip+=count;
 	pos+=count;
     }
-    xbreak=top->heptane_core__DOT__bck_mod__DOT__retM_xbreak;
+    xbreak=top->heptane_core->bck_mod->retM_xbreak;
     if (retire) {
 	    retII++;
             if (retII>47) retII=0;
     }
-    retire=top->heptane_core__DOT__bck_mod__DOT__retM_do_retire;
-    if (top->heptane_core__DOT__iAvail) printf("iAvail 0x%x, \t0x%x\n",top->heptane_core__DOT__iAvail,top->heptane_core__DOT__instrEn);
-    if (top->heptane_core__DOT__instrEn && top->heptane_core__DOT__bck_mod__DOT__stall_rs==0 && !top->heptane_core__DOT__except && 
-		    top->heptane_core__DOT__bck_mod__DOT__doStall_rs==0) {
+    retire=top->heptane_core->bck_mod->retM_do_retire;
+    if (top->heptane_core->iAvail) printf("iAvail 0x%x, \t0x%x\n",top->heptane_core->iAvail,top->heptane_core->instrEn);
+    if (top->heptane_core->instrEn && top->heptane_core->bck_mod->stall_rs==0 && !top->heptane_core->except && 
+		    top->heptane_core->bck_mod->doStall_rs==0) {
 	k=0;
-	while (top->heptane_core__DOT__instrEn&(1<<k)) {k++;}
+	while (top->heptane_core->instrEn&(1<<k)) {k++;}
 	insn_count[insn_posW++]=k;
 	insn_posW&=0x3f;
     }
    // for(k=0;k<6;k++) {
-	if (top->heptane_core__DOT__bck_mod__DOT__enS_alu) {
-	    printf("ALU 0x%x, fl 0x%lx, ret 0x%x\n",top->heptane_core__DOT__bck_mod__DOT__enS_alu,
-		top->heptane_core__DOT__bck_mod__DOT__FUS_alu,
-		top->heptane_core__DOT__bck_mod__DOT__ex_alu);
+	if (top->heptane_core->bck_mod->enS_alu) {
+	    printf("ALU 0x%x, fl 0x%lx, ret 0x%x\n",top->heptane_core->bck_mod->enS_alu,
+		top->heptane_core->bck_mod->FUS_alu,
+		top->heptane_core->bck_mod->ex_alu);
 	}
   //  }
-    if (top->heptane_core__DOT__bck_mod__DOT__outEn&0x111111111ul) {
-	printf("outEn 0x%lx\n",top->heptane_core__DOT__bck_mod__DOT__outEn);
+    if (top->heptane_core->bck_mod->outEn&0x111111111ul) {
+	printf("outEn 0x%lx\n",top->heptane_core->bck_mod->outEn);
     }
     bool bflag123=false;
     for(k=0;k<9;k++) {
-        if (top->heptane_core__DOT__bck_mod__DOT__rs_en_reg[k] && !(top->heptane_core__DOT__bck_mod__DOT__stall_rs|
-				top->heptane_core__DOT__bck_mod__DOT__doStall_rs)) {
-	    if (!bflag123 && top->heptane_core__DOT__bck_mod__DOT__rs_alt_reg) {
-	        printf("rs_en__reg 0x%x, \t0x%x\n",k,top->heptane_core__DOT__bck_mod__DOT__rs_port_sch[k]);
+        if (top->heptane_core->bck_mod->rs_en_reg[k] && !(top->heptane_core->bck_mod->stall_rs|
+				top->heptane_core->bck_mod->doStall_rs)) {
+	    if (!bflag123 && top->heptane_core->bck_mod->rs_alt_reg) {
+	        printf("rs_en__reg 0x%x, \t0x%x\n",k,top->heptane_core->bck_mod->rs_port_sch[k]);
 		bflag123=true;
 	    } else {
-	        printf("rs_en_reg 0x%x, \t0x%x\n",k,top->heptane_core__DOT__bck_mod__DOT__rs_port_sch[k]);
+	        printf("rs_en_reg 0x%x, \t0x%x\n",k,top->heptane_core->bck_mod->rs_port_sch[k]);
 	    }
         }
     }
     for(k=0;k<6;k++) {
-	if (top->heptane_core__DOT__bck_mod__DOT__fret_en&(1<<k)) {
+	if (top->heptane_core->bck_mod->fret_en&(1<<k)) {
 	    unsigned long long val;
 	    int k2;
 	    k2=(k>>1)*3+1+(k&1);
-	    extract_e(top->heptane_core__DOT__bck_mod__DOT__fret,14*k,14*k+13,val);
-	    if ((k&1)==0) printf("fsret %i,\t0x%x, \t0x%x\n",k,val,top->heptane_core__DOT__bck_mod__DOT__outII_reg4[k2]);
-	    if ((k&1)==1) printf("fsret %i,\t0x%x, \t0x%x\n",k,val,top->heptane_core__DOT__bck_mod__DOT__outII_reg7[k2]);
+	    extract_e(top->heptane_core->bck_mod->fret,14*k,14*k+13,val);
+	    if ((k&1)==0) printf("fsret %i,\t0x%x, \t0x%x\n",k,val,top->heptane_core->bck_mod->outII_reg4[k2]);
+	    if ((k&1)==1) printf("fsret %i,\t0x%x, \t0x%x\n",k,val,top->heptane_core->bck_mod->outII_reg7[k2]);
 	}
     }
- /*   if (top->heptane_core__DOT__front_mod__DOT__cc_mod__DOT____Vcellout__stHit_mod__read_data&0x100) {
+ /*   if (top->heptane_core->front_mod->cc_mod->__Vcellout__stHit_mod__read_data&0x100) {
 	printf("fetch ");
 	for(k=3;k>=0;k--) {
 	   unsigned long long val;
-	   extract_e(top->heptane_core__DOT__front_mod__DOT__read_data,65*k,65*k+63,val);
+	   extract_e(top->heptane_core->front_mod->read_data,65*k,65*k+63,val);
 	   printf("%#16lx",val);
 	}
-	if (!top->heptane_core__DOT__front_mod__DOT__instrEn_reg3) printf(" err ");
-	printf(" 0x%lx\n",top->heptane_core__DOT__front_mod__DOT__IP_phys_reg3);
+	if (!top->heptane_core->front_mod->instrEn_reg3) printf(" err ");
+	printf(" 0x%lx\n",top->heptane_core->front_mod->IP_phys_reg3);
     }
-    if (top->heptane_core__DOT__front_mod__DOT__bus_tlb_match_reg) {
-	printf("TLBIN 0x%lx -> 0x%lx\n",top->heptane_core__DOT__front_mod__DOT__tlb_IP<<13,
-	    top->heptane_core__DOT__front_mod__DOT__bus_tlb_data_reg);
+    if (top->heptane_core->front_mod->bus_tlb_match_reg) {
+	printf("TLBIN 0x%lx -> 0x%lx\n",top->heptane_core->front_mod->tlb_IP<<13,
+	    top->heptane_core->front_mod->bus_tlb_data_reg);
     }*/
-    if (top->heptane_core__DOT__bck_mod__DOT__FUwen_reg[0]|top->heptane_core__DOT__bck_mod__DOT__FUwen_reg[1]|
-	top->heptane_core__DOT__bck_mod__DOT__FUwen_reg[2]|top->heptane_core__DOT__bck_mod__DOT__FUwen_reg[3]) {
-	printf("FUwen_reg 0x%x, 0x%x : 0x%x,0x%x,0x%x,0x%x\n",top->heptane_core__DOT__bck_mod__DOT__FUwen_reg[0] | 
-	(top->heptane_core__DOT__bck_mod__DOT__FUwen_reg[1]<<1) |(top->heptane_core__DOT__bck_mod__DOT__FUwen_reg[2]<<2)|
-	(top->heptane_core__DOT__bck_mod__DOT__FUwen_reg[3]<<3),
-	top->heptane_core__DOT__bck_mod__DOT__FU0HitP | (top->heptane_core__DOT__bck_mod__DOT__FU1HitP<<1) |
-	(top->heptane_core__DOT__bck_mod__DOT__FU2HitP<<2) |(top->heptane_core__DOT__bck_mod__DOT__FU3HitP<<3),
-	top->heptane_core__DOT__bck_mod__DOT__FUreg_reg[0],
-	top->heptane_core__DOT__bck_mod__DOT__FUreg_reg[1],
-	top->heptane_core__DOT__bck_mod__DOT__FUreg_reg[2],
-	top->heptane_core__DOT__bck_mod__DOT__FUreg_reg[3]
+    if (top->heptane_core->bck_mod->FUwen_reg[0]|top->heptane_core->bck_mod->FUwen_reg[1]|
+	top->heptane_core->bck_mod->FUwen_reg[2]|top->heptane_core->bck_mod->FUwen_reg[3]) {
+	printf("FUwen_reg 0x%x, 0x%x : 0x%x,0x%x,0x%x,0x%x\n",top->heptane_core->bck_mod->FUwen_reg[0] | 
+	(top->heptane_core->bck_mod->FUwen_reg[1]<<1) |(top->heptane_core->bck_mod->FUwen_reg[2]<<2)|
+	(top->heptane_core->bck_mod->FUwen_reg[3]<<3),
+	top->heptane_core->bck_mod->FU0HitP | (top->heptane_core->bck_mod->FU1HitP<<1) |
+	(top->heptane_core->bck_mod->FU2HitP<<2) |(top->heptane_core->bck_mod->FU3HitP<<3),
+	top->heptane_core->bck_mod->FUreg_reg[0],
+	top->heptane_core->bck_mod->FUreg_reg[1],
+	top->heptane_core->bck_mod->FUreg_reg[2],
+	top->heptane_core->bck_mod->FUreg_reg[3]
 	);
     }
-    if (top->heptane_core__DOT__bck_mod__DOT__miss_pause_agu) {
+    if (top->heptane_core->bck_mod->miss_pause_agu) {
 	printf("miss_pause_agu\n");
-	if (top->heptane_core__DOT__bck_mod__DOT__outEn&1) printf("outEn0\n");
-	if (top->heptane_core__DOT__bck_mod__DOT__outEn&8) printf("outEn3\n");
-	if (top->heptane_core__DOT__bck_mod__DOT__outEn&64) printf("outEn6\n");
+	if (top->heptane_core->bck_mod->outEn&1) printf("outEn0\n");
+	if (top->heptane_core->bck_mod->outEn&8) printf("outEn3\n");
+	if (top->heptane_core->bck_mod->outEn&64) printf("outEn6\n");
     }
-    if (top->heptane_core__DOT__bck_mod__DOT__dc_rdEn) {
+    if (top->heptane_core->bck_mod->dc_rdEn) {
 	printf("");
     }
     return rtn;
