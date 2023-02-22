@@ -1783,7 +1783,7 @@ module smallInstr_decoder(
           prAX[32]=instr[32]; if (instr[32]) prA[32][4:1]=4'b0;
 	  prBE[32]=instr[33]; if (instr[33]) prB[32][4:1]=4'b0;
 	  prTE[32]=instr[34]; if (instr[34]) prT[32][4:1]=4'b0;
-	  pcalu[32]=instr[39:35];
+	  palucond[32]=instr[39:35];
 	  //prndmod[33]=instr[42:0]
       end else if (magic[1:0]!=2'b01) begin
 	  perror[32]=1;
@@ -1795,7 +1795,7 @@ module smallInstr_decoder(
           prAX[33]=instr[32]; if (instr[32]) prA[33][4:1]=4'b0;
 	  prBE[33]=instr[33]; if (instr[33]) prB[33][4:1]=4'b0;
 	  prTE[33]=instr[34]; if (instr[34]) prT[33][4:1]=4'b0;
-	  pcalu[33]=instr[39:35];
+	  palucond[33]=instr[39:35];
 	  //prndmod[33]=instr[42:0]
       end else if (magic[1:0]!=2'b01) begin
 	  perror[33]=1;
@@ -1831,7 +1831,7 @@ module smallInstr_decoder(
           prAX[34]=instr[32]; if (instr[32]) prA[34][4:1]=4'b0;
 	  prBE[34]=instr[33]; if (instr[33]) prB[34][4:1]=4'b0;
 	  prTE[34]=instr[34]; if (instr[34]) prT[34][4:1]=4'b0;
-	  pcalu[34]=instr[39:35];
+	  palucond[34]=instr[39:35];
 	  //prndmod[33]=instr[42:0]
       end else if (magic[1:0]!=2'b01) begin
 	  perror[34]=1;
@@ -1911,7 +1911,7 @@ module smallInstr_decoder(
           prAX[36]=instr[32]; if (instr[32]) prA[36][4:1]=4'b0;
 	  prBE[36]=instr[33]; if (instr[33]) prB[36][4:1]=4'b0;
 	  prTE[36]=instr[34]; if (instr[34]) prT[36][4:1]=4'b0;
-	  pcalu[36]=instr[39:35];
+	  palucond[36]=instr[39:35];
 	  //prndmod[33]=instr[42:0]
       end else if (magic[1:0]!=2'b01) begin
 	  perror[36]=1;
@@ -1948,7 +1948,7 @@ module smallInstr_decoder(
           prAX[37]=instr[32]; if (instr[32]) prA[37][4:1]=4'b0;
 	  prBE[37]=instr[33]; if (instr[33]) prB[37][4:1]=4'b0;
 	  prTE[37]=instr[34]; if (instr[34]) prT[37][4:1]=4'b0;
-	  pcalu[37]=instr[39:35];
+	  palucond[37]=instr[39:35];
 	  //prndmod[33]=instr[42:0]
       end else if (magic[1:0]!=2'b01) begin
 	  perror[36]=1;
@@ -1986,7 +1986,7 @@ module smallInstr_decoder(
           prAX[38]=instr[32]; if (instr[32]) prA[38][4:1]=4'b0;
 	  prBE[38]=instr[33]; if (instr[33]) prB[38][4:1]=4'b0;
 	  prTE[38]=instr[34]; if (instr[34]) prT[38][4:1]=4'b0;
-	  pcalu[38]=instr[39:35];
+	  palucond[38]=instr[39:35];
 	  //prndmod[33]=instr[42:0]
       end else if (magic[1:0]!=2'b01) begin
 	  perror[38]=1;
@@ -2016,7 +2016,7 @@ module smallInstr_decoder(
 	  default: perror[38]=1;
       endcase
       
-      trien[39]=magic[0] & isBasicFPUScalarCmp2;
+      trien[39]=magic[0] & isBasicFPUScalarCmp3;
       puseRs[39]=1'b1;
       if (magic[1:0]!=2'b01) perror[39]=1;
       prA[39]=instr[21:17];
@@ -2027,7 +2027,7 @@ module smallInstr_decoder(
           prAX[39]=instr[32]; if (instr[32]) prA[39][4:1]=4'b0;
 	  prBE[39]=instr[33]; if (instr[33]) prB[39][4:1]=4'b0;
 	  prTE[39]=instr[34]; if (instr[34]) prT[39][4:1]=4'b0;
-	  pcalu[39]=instr[39:35];
+	  palucond[39]=instr[39:35];
 	  //prndmod[33]=instr[42:0]
       end else if (magic[1:0]!=2'b01) begin
 	  perror[39]=1;
@@ -2052,7 +2052,7 @@ module smallInstr_decoder(
 	      pport[39]=PORT_LOAD;
 	      prB[39][4:1]=5'b0;
 	      prBE[39]=1'b1;
-	      poperaton[39][7:0]={4'b110,1'b1,instr[23]};
+	      poperation[39][7:0]={4'b110,1'b1,instr[23]};
 	      poperation[39][9:8]={1'b1,instr[24]}; 
 	      poperation[39][12:10]=2'b0;
 	      pconstant[39]={60'b0,instr[26:25],2'b0};
