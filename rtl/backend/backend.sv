@@ -2241,7 +2241,7 @@ module backend(
   wire insert_isData;
   reg insert_isData_reg;
   reg insert_isData_reg2;
-  reg insert_isData_reg3;
+  reg insert_isData_reg3/*verilator public*/;
   reg insert_isData_reg4;
   reg insert_isData_reg5;
   reg insert_isData_reg6;
