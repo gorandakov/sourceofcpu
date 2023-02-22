@@ -18,21 +18,6 @@ limitations under the License.
 `include "../fpoperations.sv"
 `include "../struct.sv"
 
-module get_carry_53(
-  A,B,cin,cout);
-  input [52:0] A;
-  input [52:0] B;
-  input cin;
-  output cout;
-
-  wire c16;
-  wire c4;
-  wire c1;
-
-  get_carry #(32) cry32_mod(A[52:21],B[52:21],c16,cout);
-  get_carry #(16) cry16_mod(A[20:5],B[20:5],c4,c16);
-  get_carry #(5) cry5_mod(A[4:0],B[4:0],cin,c4);
-endmodule
 module fadd(
   clk,
   rst,
