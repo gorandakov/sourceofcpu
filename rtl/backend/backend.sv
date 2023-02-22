@@ -984,10 +984,10 @@ module backend(
 
   wire [3:0] dc_thr=4'b0;
 
-  wire [5:0][13:0] fret;
+  wire [5:0][13:0] fret/*verilator public*/;
   wire [5:0] fret_en/* verilator public */;
-  reg  [5:0][13:0] fret_reg;
-  wire [5:0][13:0] fsret;
+  reg  [5:0][13:0] fret_reg/*verilator public*/;
+  wire [5:0][13:0] fsret/*verilator public*/;
 
   wire [5:0] FOOFL1;
   wire [5:0] FOOFL2;
@@ -1116,8 +1116,8 @@ module backend(
   wire doStall_alloc;
   wire stall_alloc2;
   wire doStall_alloc2;
-  wire [3:0] doStall_rs;
-  wire [3:0] stall_rs;
+  wire [3:0] doStall_rs/*verilator public*/;
+  wire [3:0] stall_rs/*verilator public*/;
   wire stall_LSQ;
   wire doStall_LSQ;
   wire stall_cntrl;
@@ -1276,7 +1276,7 @@ module backend(
   reg [8:0] rs_afterTK;
 
   reg rs_en[8:0];
-  reg rs_en_reg[8:0];
+  reg rs_en_reg[8:0]/*verilator public*/;
   reg [2:0] rs_enA;
   reg [2:0] rs_enB;
   reg [2:0] rs_enA_reg;
@@ -1517,10 +1517,10 @@ module backend(
   wire [3:0][15:0] FUVLX;
   reg  [3:0][15:0] FUVLX_reg;
 
-  wire [5:0][DATA_WIDTH-1:0] FU_alu;
-  wire [5:0][5:0] FUS_alu;
-  wire [5:0][2:0] ex_alu;
-  wire [5:0] enS_alu;
+  wire [5:0][DATA_WIDTH-1:0] FU_alu/*verilator public*/;
+  wire [5:0][5:0] FUS_alu/*verilator public*/;
+  wire [5:0][2:0] ex_alu/*verilator public*/;
+  wire [5:0] enS_alu/*verilator public*/;
   wire [2:0][5:0] FUX_alu;
   wire [2:0][2:0] exx_alu;
   reg [5:0] FUS_alu_reg[5:0];
@@ -1568,9 +1568,9 @@ module backend(
 
   
   wire FU0Hit,FU1Hit,FU2Hit,FU3Hit;
-  wire FU0HitP,FU1HitP,FU2HitP,FU3HitP/* verilator public */;
-  reg FU0Hit_reg,FU1Hit_reg,FU2Hit_reg,FU3Hit_reg/* verilator public */;
-  reg FU0Hit_reg2,FU1Hit_reg2,FU2Hit_reg2,FU3Hit_reg2/* verilator public */;
+  wire FU0HitP/*verilator public*/,FU1HitP/*verilator public*/,FU2HitP/*verilator public*/,FU3HitP/* verilator public */;
+  reg FU0Hit_reg/*verilator public*/,FU1Hit_reg/*verilator public*/,FU2Hit_reg/*verilator public*/,FU3Hit_reg/* verilator public */;
+  reg FU0Hit_reg2/*verilator public*/,FU1Hit_reg2/*verilator public*/,FU2Hit_reg2/*verilator public*/,FU3Hit_reg2/* verilator public */;
 //  wire FU0HitP,FU1HitP,FU2HitP,FU3HitP;
   reg [3:0] fxLD_dbl;
   reg [3:0] fxLD_ext;
@@ -1715,7 +1715,7 @@ module backend(
   wire [2:0][SIMD_WIDTH-1:0] WdataNBFH;
   wire [2:0][16+SIMD_WIDTH-1:0] WdataNBFL;
 
-  wire [8:0][DATA_WIDTH-1:0] ret_dataA;
+  wire [8:0][DATA_WIDTH-1:0] ret_dataA/*verilator public*/;
   wire [8:0][DATA_WIDTH-1:0] ret_dataB;
   
   wire [8:0][SIMD_WIDTH-1:0] ret_dataAVH;
@@ -2108,58 +2108,58 @@ module backend(
   wire [8:0][3:0] instr_ret;
   reg  [3:0] instr_ret_reg[8:0];
     
-  wire [5:0] retire0_rT;
+  wire [5:0] retire0_rT/*verilator public*/;
   wire [8:0] retire0_rF;
   wire [8:0] retire0_rFl;
-  wire retire0_enG;
+  wire retire0_enG/*verilator public*/;
   wire retire0_enV;
   wire retire0_enF;
-  wire [5:0] retire1_rT;
+  wire [5:0] retire1_rT/*verilator public*/;
   wire [8:0] retire1_rF;
   wire [8:0] retire1_rFl;
-  wire retire1_enG;
+  wire retire1_enG/*verilator public*/;
   wire retire1_enV;
   wire retire1_enF;
-  wire [5:0] retire2_rT;
+  wire [5:0] retire2_rT/*verilator public*/;
   wire [8:0] retire2_rF;
   wire [8:0] retire2_rFl;
-  wire retire2_enG;
+  wire retire2_enG/*verilator public*/;
   wire retire2_enV;
   wire retire2_enF;
-  wire [5:0] retire3_rT;
+  wire [5:0] retire3_rT/*verilator public*/;
   wire [8:0] retire3_rF;
   wire [8:0] retire3_rFl;
-  wire retire3_enG;
+  wire retire3_enG/*verilator public*/;
   wire retire3_enV;
   wire retire3_enF;
-  wire [5:0] retire4_rT;
+  wire [5:0] retire4_rT/*verilator public*/;
   wire [8:0] retire4_rF;
   wire [8:0] retire4_rFl;
-  wire retire4_enG;
+  wire retire4_enG/*verilator public*/;
   wire retire4_enV;
   wire retire4_enF;
-  wire [5:0] retire5_rT;
+  wire [5:0] retire5_rT/*verilator public*/;
   wire [8:0] retire5_rF;
   wire [8:0] retire5_rFl;
-  wire retire5_enG;
+  wire retire5_enG/*verilator public*/;
   wire retire5_enV;
   wire retire5_enF;
-  wire [5:0] retire6_rT;
+  wire [5:0] retire6_rT/*verilator public*/;
   wire [8:0] retire6_rF;
   wire [8:0] retire6_rFl;
-  wire retire6_enG;
+  wire retire6_enG/*verilator public*/;
   wire retire6_enV;
   wire retire6_enF;
-  wire [5:0] retire7_rT;
+  wire [5:0] retire7_rT/*verilator public*/;
   wire [8:0] retire7_rF;
   wire [8:0] retire7_rFl;
-  wire retire7_enG;
+  wire retire7_enG/*verilator public*/;
   wire retire7_enV;
   wire retire7_enF;
-  wire [5:0] retire8_rT;
+  wire [5:0] retire8_rT/*verilator public*/;
   wire [8:0] retire8_rF;
   wire [8:0] retire8_rFl;
-  wire retire8_enG;
+  wire retire8_enG/*verilator public*/;
   wire retire8_enV;
   wire retire8_enF;
 
@@ -2327,23 +2327,23 @@ module backend(
   wire lDoStall_STQ;
   wire lStall;
 
-  wire [5:0] retM_II;
-  wire [5:0] retM_II0;
-  wire [5:0] retM_II1;
-  wire retM_has_store;
-  wire [9:0] retM_ret;
-  wire [9:0] retM_fine;
-  wire [9:0] retM_ldconfl;
-  wire [9:0] retM_waitconfl;
-  wire [9:0] retM_excpt;
+  wire [5:0] retM_II/*verilator public*/;
+  wire [5:0] retM_II0/*verilator public*/;
+  wire [5:0] retM_II1/*verilator public*/;
+  wire retM_has_store/*verilator public*/;
+  wire [9:0] retM_ret/*verilator public*/;
+  wire [9:0] retM_fine/*verilator public*/;
+  wire [9:0] retM_ldconfl/*verilator public*/;
+  wire [9:0] retM_waitconfl/*verilator public*/;
+  wire [9:0] retM_excpt/*verilator public*/;
  // wire [39:0]retM_exbits;
-  wire retM_do_retire;
-  wire [`lsqshare_width-1:0] retM_data_shr;
-  reg [`lsqshare_width-1:0] retM_data_shr_reg;
+  wire retM_do_retire/*verilator public*/;
+  wire [`lsqshare_width-1:0] retM_data_shr/*verilator public*/;
+  reg [`lsqshare_width-1:0] retM_data_shr_reg/*verilator public*/;
   //reg retM_ret_ret;
-  wire [9:0] retM_xbreak;
-  wire retM_stall;
-  wire retM_xbreak_has; 
+  wire [9:0] retM_xbreak/*verilator public*/;
+  wire retM_stall/*verilator public*/;
+  wire retM_xbreak_has/*verilator public*/; 
 
   
   wire [83:0] fpE_one={16'b0,2'd`ptype_ext,1'b1,65'h1_0000_0000_0000_0000};
