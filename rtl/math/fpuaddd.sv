@@ -118,14 +118,16 @@ module fadd(
   wire a_more;
   wire [63:0] opA;
   wire [63:0] opB;
+  wire [63:0] opAx;
+  wire [63:0] opBx;
   wire moreAD,moreAE;
   wire [15:0] expdiffA;
   wire [15:0] expdiffB;
   wire [15:0] expdiff;
   reg  [15:0] expdiff_reg;
-  wire [63:0] opBs1;
-  wire [63:0] opBs;
-  reg [63:0] opBs1_reg;
+  wire [63+53:0] opBs1;
+  wire [63+53:0] opBs;
+  reg [63+53:0] opBs1_reg;
   reg [63:0] opA_reg;
 //  reg [63:0] opB_reg;
   wire [64:0] partM0;
@@ -270,6 +272,13 @@ module fadd(
   assign opB=(~sxor & a_more) ?  fracxfrm0(B[63:0],isDBL) : 64'bz;
   assign opB=(~sxor & ~a_more) ?  fracxfrm0(A[63:0],isDBL) : 64'bz;
   
+  assign opAx=a_more ?  {A_alt,11'b0} : 64'bz;
+  assign opBx=(sxor & a_more) ?  ~64'b0 : 64'bz;
+  assign opAx=(~a_more) ?  64'b0 : 64'bz;
+  assign opBx=(sxor & ~a_more) ?  ~{A_alt,11'b0} : 64'bz;
+  assign opBx=(~sxor & a_more) ?  64'b0 : 64'bz;
+  assign opBx=(~sxor & ~a_more) ?  {A_alt,11'b0} : 64'bz;
+  
   assign opA_exp=(a_more & ~isDBL) ? {A[80],A[78:64]} : 16'bz;
   assign opA_exp=(a_more & isDBL) ? {A[80],{4{~A[80]}},A[62:52]} : 16'bz;
   assign opA_exp=(~a_more & ~isDBL) ? {B[80],B[78:64]} : 16'bz;
@@ -279,8 +288,8 @@ module fadd(
   
 //  assign Bx=is_alt ? B_alt : B;
 
-  assign opBs1=expoor ? {64{sxor_reg}} : 64'bz;
-  assign opBs=expoor_reg ? {64{sxor_reg}} : 64'bz;
+  assign opBs1=expoor ? {64+53{sxor_reg}} : 64'bz;
+  assign opBs=expoor_reg ? {64+53{sxor_reg}} : 64'bz;
   assign res_rnbit=expoor_reg ? xop1_reg[1]^(res_andtail&sxor_reg) : 1'bz;
 //  assign res_rnbitC=expoor_reg ?  : 1'bz;
   assign res_rnbitL=expoor_reg ? xop1_reg[0]^(res_andtailL&sxor_reg) : 1'bz;
@@ -471,34 +480,35 @@ module fadd(
   assign res_andtailC=&{andtailBs_c,andtailBs1_c_reg};
   assign res_andtailL=&{andtailBs_L,andtailBs1_L_reg};
 
+  assign opBz=expdiff[6] ? {opBx,53'b0} : {opB,53'b0};
   
   generate
       genvar k;
       for(k=0;k<8;k=k+1) begin
-          if (k!=0) assign {opBs1,xop1[1:0]}=(expdiff[5:3]==k && ~expoor) ? {{k*8{sxor}},opB[63:k*8-2]} : 66'bz;
+          if (k!=0) assign {opBs1,xop1[1:0]}=(expdiff[5:3]==k && ~expoor) ? {{k*8{sxor}},opBz[63+53:k*8-2]} : 119'bz;
           else begin
-              assign opBs1=(expdiff[5:3]==k && ~expoor) ? {{k*8{sxor}},opB[63:k*8]} : 64'bz;
-              assign xop1[1:0]=(expdiff[5:3]==3'b0 && ~expoor) ? 2'b0 : 2'bz;
-              assign xop1[1:0]=(expdiff==16'h40) ? opB[63:62] : 2'bz;
-              assign xop1[1:0]=(expdiff==16'h41) ? {sxor,opB[63]} : 2'bz;
+              assign opBs1=(expdiff[5:3]==k && ~expoor) ? {{k*8{sxor}},opBz[63+53:k*8]} : 64'bz;
+              assign xop1[1:0]=(expdiff[6:3]==3'b0 && ~expoor) ? 2'b0 : 2'bz;
+              assign xop1[1:0]=(expdiff==16'h80) ? opB[63+53:62+53] : 2'bz;
+              assign xop1[1:0]=(expdiff==16'h81) ? {sxor,opB[63+53]} : 2'bz;
           end
           if (k<8) begin 
               wire e_more,e_eq,e_eq2;
               get_carry #(4) cmp8_mod(~(k[3:0]+4'b1),expdiff[6:3],1'b1,e_more);
               assign e_eq=expdiff[5:3]==(k+1) && expdiff[2:0]==3'b0;
               assign e_eq2=expdiff[5:3]==(k+1) && expdiff[2:1]==2'b0;
-              assign tailBs1[k]=e_more|expoor && (|{opB[k*8+:7],opB[k*8+7]&~e_eq});
-              assign tailBs1_c[k]=e_more|expoor && |opB[k*8+:8];
-              assign tailBs1_L[k]=e_more|expoor && (|{opB[k*8+:6],opB[k*8+6+:2]&~{e_eq2,e_eq}});
-              assign andtailBs1[k]=~e_more&~expoor || (&{opB[k*8+:7],opB[k*8+7]|e_eq});
-              assign andtailBs1_c[k]=~e_more&~expoor || &opB[k*8+:8];
-              assign andtailBs1_L[k]=~e_more&~expoor || (&{opB[k*8+:6],opB[k*8+6+:2]|{e_eq2,e_eq}});
+              assign tailBs1[k]=e_more|expoor && (|{opBz[53+k*8+:7],opBz[53+k*8+7]&~e_eq});
+              assign tailBs1_c[k]=e_more|expoor && |opBz[53+k*8+:8];
+              assign tailBs1_L[k]=e_more|expoor && (|{opBz[53+k*8+:6],opBz[53+k*8+6+:2]&~{e_eq2,e_eq}});
+              assign andtailBs1[k]=~e_more&~expoor || (&{opBz[53+k*8+:7],opBz[53+k*8+7]|e_eq});
+              assign andtailBs1_c[k]=~e_more&~expoor || &opBz[53+k*8+:8];
+              assign andtailBs1_L[k]=~e_more&~expoor || (&{opBz[53+k*8+:6],opBz[53+k*8+6+:2]|{e_eq2,e_eq}});
              // assign rnbit_s1[k]=e_eq;
           end
           
           //wire [7:0] expdiffeq;
           //assign expdiffeq[k]=expdiff[2:0]==k[2:0];
-	      assign opBs=expdiffeq[k] ? {{k{sxor_reg}},opBs1_reg[63:k]} : 64'bz;
+	      assign opBs=expdiffeq[k] ? {{k{sxor_reg}},opBs1_reg[63+53:k]} : 117'bz;
 	      assign res_rnbit=expdiffeq[k] ? xop1_reg[k+1]^(res_andtail&sxor_reg) : 1'bz;
 	      assign res_rnbitL=expdiffeq[k] ? xop1_reg[k]^(res_andtailL&sxor_reg) : 1'bz;
 	   //   assign res_rnbitC=expdiffeq[k] ? xop1_reg[k+1] : 1'bz;
@@ -507,12 +517,12 @@ module fadd(
               get_carry #(4) cmp8_mod(~(k[3:0]+4'b1),{1'b0,expdiff_reg[2:0]},1'b1,e_more);
               assign e_eq=expdiff_reg[2:0]==(k+1);
               assign e_eq2=expdiff_reg[2:0]==(k+2);
-              assign tailBs[k]=e_more & opBs1_reg[k] & ~e_eq;
-              assign tailBs_c[k]=e_more & opBs1_reg[k];
-              assign tailBs_L[k]=e_more & opBs1_reg[k] & ~e_eq & ~e_eq2;
-              assign andtailBs[k]=~e_more | opBs1_reg[k] | e_eq;
-              assign andtailBs_c[k]=~e_more | opBs1_reg[k];
-              assign andtailBs_L[k]=~e_more | opBs1_reg[k] | e_eq | e_eq2;
+              assign tailBs[k]=e_more & opBs1_reg[53+k] & ~e_eq;
+              assign tailBs_c[k]=e_more & opBs1_reg[53+k];
+              assign tailBs_L[k]=e_more & opBs1_reg[53+k] & ~e_eq & ~e_eq2;
+              assign andtailBs[k]=~e_more | opBs1_reg[53+k] | e_eq;
+              assign andtailBs_c[k]=~e_more | opBs1_reg[53+k];
+              assign andtailBs_L[k]=~e_more | opBs1_reg[53+k] | e_eq | e_eq2;
            //   assign rnbit_s[k]=e_eq;
           end
       end
