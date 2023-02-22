@@ -91,9 +91,9 @@ module heptane_core(
   wire req_en;
   wire req_tlbEn;
   wire [3:0] req_tlbAttr;
-  reg [37:0] req_addr_reg;
-  reg [9:0] req_slot_reg;
-  reg req_en_reg;
+  reg [37:0] req_addr_reg/*verilator public*/;
+  reg [9:0] req_slot_reg/*verilator public*/;
+  reg req_en_reg/*verilator public*/;
 
   wire [`ctlbData_width-1:0] bus_tlb_data;
   reg [9:0] bus_tlb_slot;
@@ -103,7 +103,7 @@ module heptane_core(
   wire instrFed;
   wire [255:0] read_data_strip;
   
-  wire except;
+  wire except/*verilator public*/;
   wire fp_excpt_en;
   wire [10:0] fp_excpt_set; 
   wire [VIRT_WIDTH-2:0] exceptIP;
@@ -113,7 +113,7 @@ module heptane_core(
   wire exceptBoth;
   wire [5:0] exceptTrceAddr=6'b0;
   wire [4:0] exceptTrceAddrLow=5'b0;
-  wire except_due_jump;
+  wire except_due_jump/*verilator public*/;
   wire [7:0] except_ght;
   wire except_flag;
   wire except_jmask_en;
@@ -160,9 +160,9 @@ module heptane_core(
   wire [`instrQ_width-1:0] extra9;
 
 
-  wire [9:0] instrEn;
-  wire [9:0] iAvail;
-  wire stall;
+  wire [9:0] instrEn/*verilator public*/;
+  wire [9:0] iAvail/*verilator public*/;
+  wire stall/*verilator public*/;
 
   wire [2:0] btbl_step;
   wire [62:0] btbl_IP0;
@@ -612,15 +612,15 @@ module heptane_core(
   wire csrss_en;
   wire [64:0] csrss_data;
   
-  wire insBus_en;
+  wire insBus_en/*verilator public*/;
   wire insBus_io;
-  wire [REQ_WIDTH-1:0] insBus_req;
+  wire [REQ_WIDTH-1:0] insBus_req/*verilator public*/;
   wire insBus_dirty;
   wire insBus_exclusive;
   wire [511:0] insBus_data;
   wire [7:0] insBus_dataPTR;
 
-  wire rinsBus_A,rinsBus_B;
+  wire rinsBus_A/*verilator public*/,rinsBus_B/*verilator public*/;
 
   wire reqBus_en;
   wire [43:7] reqBus_addr;
@@ -676,14 +676,14 @@ module heptane_core(
   reg dc2_rdEnX_reg;
   reg dc2_rdEnX_reg2;
   reg dc2_rdEnX_reg3;
-  reg dc2_rdEnX_reg4;
-  wire dc2_rdOdd;
+  reg dc2_rdEnX_reg4/*verilator public*/;
+  wire dc2_rdOdd/*verilator public*/;
   wire [4:0] dc2_req_rd;
   reg [4:0] dc2_req_rd_reg;
   reg [4:0] dc2_req_rd_reg2;
   reg [4:0] dc2_req_rd_reg3;
-  reg [4:0] dc2_req_rd_reg4;
-  reg [4:0] dc2_req_rd_reg5;
+  reg [4:0] dc2_req_rd_reg4/*verilator public*/;
+  reg [4:0] dc2_req_rd_reg5/*verilator public*/;
   wire dc2_dupl_rd;
   reg dc2_dupl_rd_reg;
   reg dc2_dupl_rd_reg2;
@@ -732,8 +732,8 @@ module heptane_core(
   wire [7:0] dc2_rdataExpPTRB;
   wire [7:0] dc2_rdataExpPTR;
   reg  [7:0] dc2_rdataExpPTR_reg;
-  wire dc2_hitE0,dc2_hitO0;
-  wire [35:0] dc2_addrE0;
+  wire dc2_hitE0/*verilator public*/,dc2_hitO0/*verilator public*/;
+  wire [35:0] dc2_addrE0/*verilator public*/;
   wire [35:0] dc2_addrO0;
   wire [31:0] dc2_bankEn0; 
   wire [4:0] dc2_begin0;
@@ -744,7 +744,7 @@ module heptane_core(
   wire [159:0] dc2_data0;
   wire [1:0]   dc2_pbit0;
   wire         dc2_d128_0;
-  wire dc2_hitE1,dc2_hitO1;
+  wire dc2_hitE1/*verilator public*/,dc2_hitO1/*verilator public*/;
   wire [35:0] dc2_addrE1;
   wire [35:0] dc2_addrO1;
   wire [31:0] dc2_bankEn1; 
@@ -756,8 +756,8 @@ module heptane_core(
   wire [159:0] dc2_data1;
   wire [1:0]   dc2_pbit1;
   wire         dc2_d128_1;
-  wire dc2_rhitB0,dc2_rhitB1,dc2_rhitA0;
-  reg dc2_rhitB0_reg,dc2_rhitB1_reg,dc2_rhitA0_reg;
+  wire dc2_rhitB0/*verilator public*/,dc2_rhitB1/*verilator public*/,dc2_rhitA0/*verilator public*/;
+  reg dc2_rhitB0_reg/*verilator public*/,dc2_rhitB1_reg/*verilator public*/,dc2_rhitA0_reg/*verilator public*/;
   wire [4:0] dc2_rLRUA;
   wire [4:0] dc2_rLRUA0;
   wire [4:0] dc2_rLRUB;
@@ -777,7 +777,7 @@ module heptane_core(
   wire dc2_rExclB0;
   wire dc2_rExclB1;
   wire dc2_rExcl;
-  reg dc2_rhit;
+  reg dc2_rhit/*verilator public*/;
 
   reg dc2_rhitExp;
   reg dc2_rhitExp_reg;
@@ -791,17 +791,17 @@ module heptane_core(
   reg [36:0] dc2_rd_addr;
   reg [36:0] dc2_rd_addr_reg;
   reg [36:0] dc2_rd_addr_reg2;
-  reg [36:0] dc2_rd_addr_reg3;
+  reg [36:0] dc2_rd_addr_reg3/*verilator public*/;
   reg [`rbusD_width-1:0] rbusDIn_signals_reg;
 //  reg [9:0] rbusDIn_src_req_reg;
 //  reg [9:0] rbusDIn_dst_req_reg;
-  reg [511:0] rbusDIn_data_reg;
+  reg [511:0] rbusDIn_data_reg/*verilator public*/;
   reg [7:0] rbusDIn_dataPTR_reg;
   reg dc2_rDir_reg;
   reg dc2_rExcl_reg;
   reg dc2_rDir_reg2;
   reg dc2_rExcl_reg2;
-  reg [511:0] dc2_rdata_reg;
+  reg [511:0] dc2_rdata_reg/*verilator public*/;
   reg [511:0] dc2_rdataExp_reg;
 
   wire [35:0] L1_expAddr;
