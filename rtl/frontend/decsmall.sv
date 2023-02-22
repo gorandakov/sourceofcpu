@@ -314,8 +314,8 @@ module smallInstr_decoder(
   reg pinstr_fsimd[TRICNT_TOP-1:0];
   reg phalt[TRICNT_TOP-1:0];
   
-  wire [64:0] qconstant[14:0];
-  wire [14:0] qtrien;
+  wire [64:0] qconstant[15:0];
+  wire [15:0] qtrien;
   
   reg [4:0] pjumpType[TRICNT_TOP-1:0];
   
@@ -2050,11 +2050,11 @@ module smallInstr_decoder(
 	      prB_use[39]=1'b1;
 	      prT_use[39]=1'b1;
 	      pport[39]=PORT_LOAD;
-	      prB[39][4:1]=5'b0;
+	      prB[39][4:1]=4'b0;
 	      prBE[39]=1'b1;
-	      poperation[39][7:0]={4'b110,1'b1,instr[23]};
+	      poperation[39][7:0]={2'b01,5'b10001,instr[23]};
 	      poperation[39][9:8]={1'b1,instr[24]}; 
-	      poperation[39][12:10]=2'b0;
+	      poperation[39][12:10]=3'b0;
 	      pconstant[39]={60'b0,instr[26:25],2'b0};
 	      pflags_write[39]=1'b0;
 	  end

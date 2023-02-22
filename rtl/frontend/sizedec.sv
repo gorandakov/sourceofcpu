@@ -232,7 +232,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   opcode_main==8'hff && instr[15:13]==3'd1 && magic[0],
   isBasicFPUScalarA && instr[13:9]!=5'd2 && instr[13:8]!=6'd8,
   isBasicFPUScalarB && instr[13:8]!=6'd18 && instr[13:8]!=6'd21,
-  isBasicFPUScalarC && |instr[13:11],
+  isBasicFPUScalarC && |instr[12:11],
   isBasicFPUScalarCmp && instr[13:11]==3'b100,
   isBasicFPUScalarCmp2 && instr[13:10]==4'b1000,
   isBasicFPUScalarCmp3 && instr[13:10]==4'b1000,
@@ -292,7 +292,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
     isPtrSec,
     isCexALU & instr[12],
     opcode_main==8'hff && ~instr[15] && ~instr[13] && magic[0],
-    isBasicFPUScalarC && instr[13:11]==4'b100,
+    isBasicFPUScalarC && instr[13:11]==3'b100,
      isBasicFPUScalarCmp && |instr[12:11],
      isBasicFPUScalarCmp2 && |instr[12:10]
   };
