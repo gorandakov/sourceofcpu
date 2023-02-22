@@ -4742,6 +4742,10 @@ module backend(
   .newDataVA2L(dataAVL[3*m+2]|~dataNAVL[3*m+2]),.newDataVB2L(dataBVL[3*m+2]|~dataNBVL[3*m+2]),
   .newDataFA2H(dataAFH[3*m+2]|~dataNAFH[3*m+2]),.newDataFB2H(dataBFH[3*m+2]|~dataNBFH[3*m+2]),
   .newDataFA2L(dataAFL[3*m+2]|~dataNAFL[3*m+2]),.newDataFB2L(dataBFL[3*m+2]|~dataNBFL[3*m+2]),
+  .newDataVA2HX(dataAViH[3*m+2]|~dataNAVH[3*m+2]),
+  .newDataVA2LX(dataAViL[3*m+2]|~dataNAVL[3*m+2]),
+  .newDataFA2HX(dataAFiH[3*m+2]|~dataNAFH[3*m+2]),
+  .newDataFA2LX(dataAFiL[3*m+2]|~dataNAFL[3*m+2]),
 
   .outDataVA1H(outDataAVH[2*m+0]),.outDataNVA1H(outDataNAVH[2*m+0]),.outDataVB1H(outDataBVH[2*m+0]),.outDataNVB1H(outDataNBVH[2*m+0]),
   .outDataVA1L(outDataAVL[2*m+0]),.outDataNVA1L(outDataNAVL[2*m+0]),.outDataVB1L(outDataBVL[2*m+0]),.outDataNVB1L(outDataNBVL[2*m+0]),
@@ -4751,6 +4755,11 @@ module backend(
   .outDataVA2L(outDataAVL[2*m+1]),.outDataNVA2L(outDataNAVL[2*m+1]),.outDataVB2L(outDataBVL[2*m+1]),.outDataNVB2L(outDataNBVL[2*m+1]),
   .outDataFA2H(outDataAFH[2*m+1]),.outDataNFA2H(outDataNAFH[2*m+1]),.outDataFB2H(outDataBFH[2*m+1]),.outDataNFB2H(outDataNBFH[2*m+1]),
   .outDataFA2L(outDataAFL[2*m+1]),.outDataNFA2L(outDataNAFL[2*m+1]),.outDataFB2L(outDataBFL[2*m+1]),.outDataNFB2L(outDataNBFL[2*m+1]),
+  .outDataVA2HX(outDataAViH[2*m+1]),.outDataNVA2HX(outDataNAViH[2*m+1]),
+  .outDataVA2LX(outDataAViL[2*m+1]),.outDataNVA2LX(outDataNAViL[2*m+1]),
+  .outDataFA2HX(outDataAFiH[2*m+1]),.outDataNFA2HX(outDataNAFiH[2*m+1]),
+  .outDataFA2LX(outDataAFiL[2*m+1]),.outDataNFA2LX(outDataNAFiL[2*m+1]),
+
 
   .FUV0H(FUVH_reg[0]),.FUV0L(FUVL_reg[0]),.FUF0H(FUFH_reg[0]),.FUF0L(FUFL_reg[0]),
   .FUV1H(FUVH_reg[1]),.FUV1L(FUVL_reg[1]),.FUF1H(FUFH_reg[1]),.FUF1L(FUFL_reg[1]),
@@ -4762,6 +4771,9 @@ module backend(
   .FUV7H(FUVH_reg[7]),.FUV7L(FUVL_reg[7]),.FUF7H(FUFH_reg[7]),.FUF7L(FUFL_reg[7]),
   .FUV8H(FUVH_reg[8]),.FUV8L(FUVL_reg[8]),.FUF8H(FUFH_reg[8]),.FUF8L(FUFL_reg[8]),
   .FUV9H(FUVH_reg[9]),.FUV9L(FUVL_reg[9]),.FUF9H(FUFH_reg[9]),.FUF9L(FUFL_reg[9]),
+  .FUV7HX(FUViH_reg[7]),.FUV7LX(FUViL_reg[7]),.FUF7HX(FUFiH_reg[7]),.FUF7LX(FUFiL_reg[7]),
+  .FUV8HX(FUViH_reg[8]),.FUV8LX(FUViL_reg[8]),.FUF8HX(FUFiH_reg[8]),.FUF8LX(FUFiL_reg[8]),
+  .FUV9HX(FUViH_reg[9]),.FUV9LX(FUViL_reg[9]),.FUF9HX(FUFiH_reg[9]),.FUF9LX(FUFiL_reg[9]),
 
   .FUS0(FUS1),.FUSreg0(outRegS[3*0+1]),.FUSwen0(1'b0),
   .FUS1(FUS2),.FUSreg1(outRegS[3*1+1]),.FUSwen1(1'b0),
@@ -5670,7 +5682,7 @@ module backend(
   .fxFCADD3_raise_s(fsret[3][10:0]),
   .fxFADD4_raise_s(fsret[4][10:0]),
   .fxFCADD5_raise_s(fsret[5][10:0]),
-  .FUS0(FUS1),.FUS1(FUS2),.FUS2(FUS3),
+  .FUS0(FUS1),.FUS1(FUS2),.FUS2(FUS3),//WARNING: need outputs for fpcmp / linsrch enable signals
   .FOOSL0(FOOFL1),.FOOSL1(FOOFL2),.FOOSL2(FOOFL3),
   .XI_dataS(XI_dataS),
   .fxFRT_alten_reg3(|fxFRT_alten_reg3[2]),
