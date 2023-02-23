@@ -97,10 +97,10 @@ module rrf_buf(
   input [DATA_WIDTH-1:0] write8_data;
   input                  write8_wen;
 
-  input [1:0] read_thread;
-  input [1:0] write_thread;
+  input read_thread;
+  input write_thread;
 
-  reg [DATA_WIDTH-1:0] data0[2:0];
+  reg [DATA_WIDTH-1:0] data0;
   wire [DATA_WIDTH-1:0] data;
   wire [DATA_WIDTH-1:0] wData;
 
@@ -115,7 +115,7 @@ module rrf_buf(
   wire write8_hit;
   wire write_hit;
   
-  assign data=~data0[read_thread];
+  assign data=~data0;
   
   assign read0_data=(read0_addr==INDEX) ? ~data : 'z;
   assign read1_data=(read1_addr==INDEX) ? ~data : 'z;
@@ -155,7 +155,7 @@ module rrf_buf(
 	  if (rst) begin data0<={DATA_WIDTH{1'B0}}; end
 	  else 
 	    begin
-		  if (write_hit) data0[write_thread]<=wData;
+		  if (write_hit) data0<=wData;
 		end
     end	
 	
@@ -264,8 +264,8 @@ module rrf(
   input [DATA_WIDTH-1:0] write8_data;
   input                  write8_wen;
   
-  input [1:0] read_thread;
-  input [1:0] write_thread;
+  input read_thread;
+  input write_thread;
 
   reg [ADDR_WIDTH-1:0] read0_addr_reg;
   reg [ADDR_WIDTH-1:0] read1_addr_reg;
@@ -277,7 +277,7 @@ module rrf(
   reg [ADDR_WIDTH-1:0] read7_addr_reg;
   reg [ADDR_WIDTH-1:0] read8_addr_reg;
   
-  reg [1:0] read_thread_reg;
+  reg read_thread_reg;
 
 /*  wire [DATA_WIDTH-1:0] read0_data_ram;
   wire [DATA_WIDTH-1:0] read1_data_ram;
@@ -326,7 +326,7 @@ module rrf(
 		  read7_addr_reg<={ADDR_WIDTH{1'B0}};
 		  read8_addr_reg<={ADDR_WIDTH{1'B0}};
 
-		  read_thread_reg<=2'b0;
+		  read_thread_reg<=1'b0;
 		  
 		  read0_oe_reg<=1'b1;
 		  read1_oe_reg<=1'b1;
