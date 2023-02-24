@@ -19,9 +19,12 @@ limitations under the License.
 module cc_ram(
   clk,
   rst,
-  read_clkEn,
-  read_addr,
-  read_data,
+  readO_clkEn,
+  readO_addr,
+  readO_data,
+  readE_clkEn,
+  readE_addr,
+  readE_data,
   write_addr,
   write_data,
   write_wen,
@@ -39,9 +42,12 @@ module cc_ram(
 
   input clk;
   input rst;
-  input read_clkEn;
-  input [ADDR_WIDTH-1:0] read_addr;
-  output [DATA_WIDTH-1:0] read_data;
+  input readO_clkEn;
+  input [ADDR_WIDTH-1:0] readO_addr;
+  output [DATA_WIDTH-1:0] readO_data;
+  input readE_clkEn;
+  input [ADDR_WIDTH-1:0] readE_addr;
+  output [DATA_WIDTH-1:0] readE_data;
   input [ADDR_WIDTH-1:0] write_addr;
   input [DATA_WIDTH-1:0] write_data;
   input write_wen;
@@ -49,14 +55,18 @@ module cc_ram(
   integer k;
 
   reg [DATA_WIDTH-1:0] ram [ADDR_COUNT-1:0];
-  reg [ADDR_WIDTH-1:0] read_addr_reg;
+  reg [ADDR_WIDTH-1:0] read0_addr_reg;
+  reg [ADDR_WIDTH-1:0] read1_addr_reg;
   
-  assign read_data=ram[read_addr_reg];
+  assign read_dataO=ram[read0_addr_reg];
+  assign read_dataE=ram[read1_addr_reg];
 
   always @(negedge clk)
     begin
-      if (rst) read_addr_reg<={ADDR_WIDTH{1'b0}};
-      else if (read_clkEn) read_addr_reg<=read_addr;
+      if (rst) read0_addr_reg<={ADDR_WIDTH{1'b0}};
+      else if (readO_clkEn) read0_addr_reg<=read_addrO;
+      if (rst) read1_addr_reg<={ADDR_WIDTH{1'b0}};
+      else if (readE_clkEn) read1_addr_reg<=read_addrE;
       for(k=0;k<4;k=k+1) if (write_wen && write_ben[k]) ram[write_addr][9*k+:9]<=write_data[9*k+:9];
     end
 
@@ -65,9 +75,12 @@ endmodule
 module cc_ram_block(
   clk,
   rst,
-  read_clkEn,
-  read_addr,
-  read_data,
+  readO_clkEn,
+  readO_addr,
+  readO_data,
+  readE_clkEn,
+  readE_addr,
+  readE_data,
   write_addr,
   write_data,
   write_wen,
@@ -86,9 +99,12 @@ module cc_ram_block(
 
   input clk;
   input rst;
-  input read_clkEn;
-  input [ADDR_WIDTH-1:0] read_addr;
-  output [DATA_WIDTH-1:0] read_data;
+  input readO_clkEn;
+  input [ADDR_WIDTH-1:0] readO_addr;
+  output [DATA_WIDTH-1:0] readO_data;
+  input readE_clkEn;
+  input [ADDR_WIDTH-1:0] readE_addr;
+  output [DATA_WIDTH-1:0] readE_data;
   input [ADDR_WIDTH-1:0] write_addr;
   input [DATA_WIDTH-1:0] write_data;
   input write_wen;
