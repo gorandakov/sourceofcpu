@@ -42,7 +42,7 @@ module rrf_buf(
   write_thread
   );
   
-  parameter [3:0] INDEX=0;
+  parameter INDEX=0;
   parameter DATA_WIDTH=`alu_width;
   parameter ADDR_WIDTH=4;
   
@@ -117,25 +117,25 @@ module rrf_buf(
   
   assign data=~data0;
   
-  assign read0_data=(read0_addr==INDEX) ? ~data : 'z;
-  assign read1_data=(read1_addr==INDEX) ? ~data : 'z;
-  assign read2_data=(read2_addr==INDEX) ? ~data : 'z;
-  assign read3_data=(read3_addr==INDEX) ? ~data : 'z;
-  assign read4_data=(read4_addr==INDEX) ? ~data : 'z;
-  assign read5_data=(read5_addr==INDEX) ? ~data : 'z;
-  assign read6_data=(read6_addr==INDEX) ? ~data : 'z;
-  assign read7_data=(read7_addr==INDEX) ? ~data : 'z;
-  assign read8_data=(read8_addr==INDEX) ? ~data : 'z;
+  assign read0_data=(read0_addr==INDEX[ADDR_WIDTH-1:0]) ? ~data : 'z;
+  assign read1_data=(read1_addr==INDEX[ADDR_WIDTH-1:0]) ? ~data : 'z;
+  assign read2_data=(read2_addr==INDEX[ADDR_WIDTH-1:0]) ? ~data : 'z;
+  assign read3_data=(read3_addr==INDEX[ADDR_WIDTH-1:0]) ? ~data : 'z;
+  assign read4_data=(read4_addr==INDEX[ADDR_WIDTH-1:0]) ? ~data : 'z;
+  assign read5_data=(read5_addr==INDEX[ADDR_WIDTH-1:0]) ? ~data : 'z;
+  assign read6_data=(read6_addr==INDEX[ADDR_WIDTH-1:0]) ? ~data : 'z;
+  assign read7_data=(read7_addr==INDEX[ADDR_WIDTH-1:0]) ? ~data : 'z;
+  assign read8_data=(read8_addr==INDEX[ADDR_WIDTH-1:0]) ? ~data : 'z;
   
-  assign write0_hit=write0_wen && write0_addr==INDEX;
-  assign write1_hit=write1_wen && write1_addr==INDEX;
-  assign write2_hit=write2_wen && write2_addr==INDEX;
-  assign write3_hit=write3_wen && write3_addr==INDEX;
-  assign write4_hit=write4_wen && write4_addr==INDEX;
-  assign write5_hit=write5_wen && write5_addr==INDEX;
-  assign write6_hit=write6_wen && write6_addr==INDEX;
-  assign write7_hit=write7_wen && write7_addr==INDEX;
-  assign write8_hit=write8_wen && write8_addr==INDEX;
+  assign write0_hit=write0_wen && write0_addr==INDEX[ADDR_WIDTH-1:0];
+  assign write1_hit=write1_wen && write1_addr==INDEX[ADDR_WIDTH-1:0];
+  assign write2_hit=write2_wen && write2_addr==INDEX[ADDR_WIDTH-1:0];
+  assign write3_hit=write3_wen && write3_addr==INDEX[ADDR_WIDTH-1:0];
+  assign write4_hit=write4_wen && write4_addr==INDEX[ADDR_WIDTH-1:0];
+  assign write5_hit=write5_wen && write5_addr==INDEX[ADDR_WIDTH-1:0];
+  assign write6_hit=write6_wen && write6_addr==INDEX[ADDR_WIDTH-1:0];
+  assign write7_hit=write7_wen && write7_addr==INDEX[ADDR_WIDTH-1:0];
+  assign write8_hit=write8_wen && write8_addr==INDEX[ADDR_WIDTH-1:0];
   assign write_hit=write0_hit | write1_hit | write2_hit | write3_hit | write4_hit
     | write5_hit | write6_hit  | write7_hit | write8_hit;
 

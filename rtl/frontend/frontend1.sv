@@ -309,32 +309,32 @@ module frontend1(
   wire [INSTR_WIDTH-1:0] pre_instr10;
   wire [INSTR_WIDTH-1:0] pre_instr11;
 
-  reg [12:0] pre_instrEn_reg;
-  reg [INSTR_WIDTH-1:0] pre_instr0_reg;
-  reg [INSTR_WIDTH-1:0] pre_instr1_reg;
-  reg [INSTR_WIDTH-1:0] pre_instr2_reg;
-  reg [INSTR_WIDTH-1:0] pre_instr3_reg;
-  reg [INSTR_WIDTH-1:0] pre_instr4_reg;
-  reg [INSTR_WIDTH-1:0] pre_instr5_reg;
-  reg [INSTR_WIDTH-1:0] pre_instr6_reg;
-  reg [INSTR_WIDTH-1:0] pre_instr7_reg;
-  reg [INSTR_WIDTH-1:0] pre_instr8_reg;
-  reg [INSTR_WIDTH-1:0] pre_instr9_reg;
-  reg [INSTR_WIDTH-1:0] pre_instr10_reg;
-  reg [INSTR_WIDTH-1:0] pre_instr11_reg;
+  reg [12:0] pre_instrEn_reg/*verilator public*/;
+  reg [INSTR_WIDTH-1:0] pre_instr0_reg/*verilator public*/;
+  reg [INSTR_WIDTH-1:0] pre_instr1_reg/*verilator public*/;
+  reg [INSTR_WIDTH-1:0] pre_instr2_reg/*verilator public*/;
+  reg [INSTR_WIDTH-1:0] pre_instr3_reg/*verilator public*/;
+  reg [INSTR_WIDTH-1:0] pre_instr4_reg/*verilator public*/;
+  reg [INSTR_WIDTH-1:0] pre_instr5_reg/*verilator public*/;
+  reg [INSTR_WIDTH-1:0] pre_instr6_reg/*verilator public*/;
+  reg [INSTR_WIDTH-1:0] pre_instr7_reg/*verilator public*/;
+  reg [INSTR_WIDTH-1:0] pre_instr8_reg/*verilator public*/;
+  reg [INSTR_WIDTH-1:0] pre_instr9_reg/*verilator public*/;
+  reg [INSTR_WIDTH-1:0] pre_instr10_reg/*verilator public*/;
+  reg [INSTR_WIDTH-1:0] pre_instr11_reg/*verilator public*/;
 
-  wire [11:0][3:0] pre_off;
-  reg [3:0] pre_off_reg[11:0];
+  wire [11:0][3:0] pre_off/*verilator public*/;
+  reg [3:0] pre_off_reg[11:0]/*verilator public*/;
   
-  wire [11:0][3:0] pre_magic;
-  reg  [3:0] pre_magic_reg[11:0];
-  wire [11:0][`instrQ_width-1:0] pre_other;
+  wire [11:0][3:0] pre_magic/*verilator public*/;
+  reg  [3:0] pre_magic_reg[11:0]/*verilator public*/;
+  wire [11:0][`instrQ_width-1:0] pre_other/*verilator public*/;
 //  reg [`instrQ_width-1:0] pre_other_reg[11:0];
   
   wire pre_isAvx;
   reg pre_isAvx_reg;
   wire [11:0][CLS_WIDTH-1:0] pre_class;
-  reg [CLS_WIDTH-1:0] pre_class_reg[11:0];
+  reg [CLS_WIDTH-1:0] pre_class_reg[11:0]/*verilator public*/;
   wire pre_has_jumps;
  // wire [3:0] jFirst;
  // wire [4:0] jmpCount;
