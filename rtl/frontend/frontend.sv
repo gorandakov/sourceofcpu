@@ -1132,7 +1132,7 @@ module frontend1(
   .wrStall(wrStall)
   );  
 
-  assign wrDoStall=bus_match_reg2;
+  assign wrDoStall=bus_match_reg;
 
   ctlb tlb_mod(
   .clk(clk),
