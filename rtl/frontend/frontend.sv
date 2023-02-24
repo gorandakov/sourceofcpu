@@ -64,23 +64,18 @@ module frontend1(
   MSI_expAddr_hit,
   expun_addr,
   expun_wen,
-  wr0_hit,
-  wr0_addrE,wr0_addrO,
-  wr0_banks,
-  wr0_begin,wr0_end,
-  wr0_bgn_ben,wr0_end_ben,
-  wr0_odd,wr0_split,
-  wr0_data,
-  wr0_pbit,wr0_d128,
-  wr1_hit,
-  wr1_addrE,wr1_addrO,
-  wr1_banks,
-  wr1_begin,wr1_end,
-  wr1_bgn_ben,wr1_end_ben,
-  wr1_odd,wr1_split,
-  wr1_data,
-  wr1_pbit,wr1_d128,
-  wrStall,wrDoStall
+  read_clkEn_cc,
+  read_set_flag_cc,
+  fstall_cc,
+  except_cc,
+  cc_read_IP_cc,
+  cc_read_hit_cc,
+  cc_read_tagErr_cc,
+  read_data_cc,
+  read_dataX_cc,
+  write_IP_cc,
+  cc_write_wen_cc,
+  cc_invalidate_cc
   );
 
   localparam PHYS_WIDTH=44;
@@ -184,32 +179,19 @@ module frontend1(
   output [36:0] expun_addr;
   output expun_wen;
   
-  input [1:0] wr0_hit;
-  input [35:0] wr0_addrE;
-  input [35:0] wr0_addrO;
-  input [31:0] wr0_banks;
-  input [4:0] wr0_begin;
-  input [4:0] wr0_end;
-  input [3:0] wr0_bgn_ben;
-  input [3:0] wr0_end_ben;
-  input wr0_odd,wr0_split;
-  input [159:0] wr0_data;
-  input [1:0] wr0_pbit;
-  input       wr0_d128;
-  input [1:0] wr1_hit;
-  input [35:0] wr1_addrE;
-  input [35:0] wr1_addrO;
-  input [31:0] wr1_banks;
-  input [4:0] wr1_begin;
-  input [4:0] wr1_end;
-  input [3:0] wr1_bgn_ben;
-  input [3:0] wr1_end_ben;
-  input [159:0] wr1_data;
-  input [1:0] wr1_pbit;
-  input       wr1_d128;
-  input wr1_odd,wr1_split;
-  input wrStall;
-  output wrDoStall;
+  output read_clkEn_cc;
+  output read_set_flag_cc;
+  output fstall_cc;
+  output except_cc;
+  output [IP_WIDTH-1:0] cc_read_IP_cc;
+  input cc_read_hit_cc;
+  input [7:0] cc_read_tagErr_cc;
+  input [DATA_WIDTH/4-1:0] read_data_cc;
+  input [14:0] read_dataX_cc;
+  output [IP_WIDTH-1:0] write_IP_cc;
+  output cc_write_wen_cc;
+  output cc_invalidate_cc;
+
 
   wire [DATA_WIDTH/2-1:0] read_data;
   wire [14:0] read_dataX;
@@ -1093,45 +1075,18 @@ module frontend1(
   popcnt5 wjcnt_mod({1'b0,iqe_jbits},iqe_jcnt);
   popcnt5 wjcnD_mod({1'b0,iqe_jbitZ},iqe_jcnD);
 
-  cc_comb cc_mod(
-  .clk(clk),
-  .rst(rst),
-  .read_clkEn(instrEn),
-  .read_set_flag(read_set_flag_reg),
-  .fstall(fstall),
-  .except(ixcept),
-  .cc_read_IP(IP_phys_reg),
-  .cc_read_hit(cc_read_hit),
-  .cc_read_tagErr(cc_tagErr),
-  .read_data(read_data),
-  .read_dataX(read_dataX),
-  .write_IP({write_IP,5'b0}),
-  .cc_write_wen(bus_match_reg),
-  .cc_invalidate(1'b0),
-  .write_data(write_data),
-  .chkCL_IP({MSI_expAddr,7'b0}),
-  .chkCL_clkEn(MSI_expAddr_en),
-  .chkCL_hit(MSI_expAddr_hit),
-  .expun_addr(expun_addr),
-  .expun_wen(expun_wen),
-  .wr0_hit(wr0_hit),
-  .wr0_addrE(wr0_addrE),.wr0_addrO(wr0_addrO),
-  .wr0_banks(wr0_banks),
-  .wr0_begin(wr0_begin),.wr0_end(wr0_end),
-  .wr0_bgn_ben(wr0_bgn_ben),.wr0_end_ben(wr0_end_ben),
-  .wr0_odd(wr0_odd),.wr0_split(wr0_split),
-  .wr0_data(wr0_data),
-  .wr0_pbit(wr0_pbit),.wr0_d128(wr0_d128),
-  .wr1_hit(wr1_hit),
-  .wr1_addrE(wr1_addrE),.wr1_addrO(wr1_addrO),
-  .wr1_banks(wr1_banks),
-  .wr1_begin(wr1_begin),.wr1_end(wr1_end),
-  .wr1_bgn_ben(wr1_bgn_ben),.wr1_end_ben(wr1_end_ben),
-  .wr1_odd(wr1_odd),.wr1_split(wr1_split),
-  .wr1_data(wr1_data),
-  .wr1_pbit(wr1_pbit),.wr1_d128(wr1_d128),
-  .wrStall(wrStall)
-  );  
+  assign read_clkEn_cc=instrEn;
+  assign read_set_flag_cc=read_set_flag_reg;
+  assign fstall_cc=fstall;
+  assign except_cc=ixcept;
+  assign cc_read_IP_cc=IP_phys_reg;
+  assign cc_read_hit=cc_read_hit_cc;
+  assign cc_tagErr=cc_read_tagErr_cc;
+  assign read_data=read_data_cc;
+  assign read_dataX=read_dataX_cc;
+  assign write_IP_cc=write_IP;
+  assign cc_write_wen_cc=bus_match_reg;
+  assign cc_invalidate=1'b0,
 
   assign wrDoStall=bus_match_reg;
 
