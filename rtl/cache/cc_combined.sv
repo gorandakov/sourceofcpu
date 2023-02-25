@@ -162,7 +162,7 @@ module cc_comb (
   .read_hit(cc_read_hit0),
   .expun_hit(cc_expun_hit0),
   .chkCL_IP(chkCL_IP[43:5]),
-  .chkCL_clkEn(chkCL_clkEn_reg),
+  .chkCL_clkEn(chkCL_clkEn),
   .chkCL_hit(chkCL_hit),
   .write_IP(write_IP_reg2[IP_WIDTH-1:5]),
   .write_data(write_data_reg2),

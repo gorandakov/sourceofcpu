@@ -192,7 +192,7 @@ module ccTag(
   assign tag_valid=read_data[`cc1Tag_valid];
 
   assign read_err=^read_data;
-  assign read_hit=tag_valid && tag_paddr==read_phys_addr_reg && ~init;
+  assign read_hit=tag_valid && tag_paddr==read_phys_addr_reg && ~init && read_clkEn_reg;
   
   assign write_data_way=(invalidate_reg | init_reg) ? {DATA_WIDTH{1'B0}} : write_data_new;
   
