@@ -24,17 +24,16 @@ module cc_ram(
   read_data,
   write_addr,
   write_data,
-  write_wen,
-  write_ben
+  write_wen
   );
 
-  localparam DATA_WIDTH=36;
+  localparam DATA_WIDTH=65*2;
   `ifdef ICACHE_256K
+  localparam ADDR_WIDTH=8;
+  localparam ADDR_COUNT=256;
+  `else
   localparam ADDR_WIDTH=7;
   localparam ADDR_COUNT=128;
-  `else
-  localparam ADDR_WIDTH=6;
-  localparam ADDR_COUNT=64;
   `endif
 
   input clk;
@@ -45,8 +44,6 @@ module cc_ram(
   input [ADDR_WIDTH-1:0] write_addr;
   input [DATA_WIDTH-1:0] write_data;
   input write_wen;
-  input [3:0] write_ben;
-  integer k;
 
   reg [DATA_WIDTH-1:0] ram [ADDR_COUNT-1:0];
   reg [ADDR_WIDTH-1:0] read_addr_reg;
@@ -57,7 +54,7 @@ module cc_ram(
     begin
       if (rst) read_addr_reg<={ADDR_WIDTH{1'b0}};
       else if (read_clkEn) read_addr_reg<=read_addr;
-      for(k=0;k<4;k=k+1) if (write_wen && write_ben[k]) ram[write_addr][9*k+:9]<=write_data[9*k+:9];
+      if (write_wen) ram[write_addr]<=write_data;
     end
 
 endmodule
@@ -70,18 +67,17 @@ module cc_ram_block(
   read_data,
   write_addr,
   write_data,
-  write_wen,
-  write_ben
+  write_wen
   );
 
   parameter INDEX=0;
-  localparam DATA_WIDTH=72*8;
+  localparam DATA_WIDTH=65*8;
   `ifdef ICACHE_256K
+  localparam ADDR_WIDTH=8;
+  localparam ADDR_COUNT=256;
+  `else
   localparam ADDR_WIDTH=7;
   localparam ADDR_COUNT=128;
-  `else
-  localparam ADDR_WIDTH=6;
-  localparam ADDR_COUNT=64;
   `endif
 
   input clk;
@@ -92,21 +88,19 @@ module cc_ram_block(
   input [ADDR_WIDTH-1:0] write_addr;
   input [DATA_WIDTH-1:0] write_data;
   input write_wen;
-  input [15:0][3:0] write_ben;
 
   generate
     genvar t;
-    for(t=0;t<16;t=t+1) begin : ram_gen
+    for(t=0;t<4;t=t+1) begin : ram_gen
         cc_ram ram_mod(
         clk,
         rst,
         read_clkEn,
         read_addr,
-        read_data[36*t+:36],
+        read_data[130*t+:130],
         write_addr,
-        write_data[36*t+:36],
-        write_wen,
-	write_ben[t]
+        write_data[130*t+:130],
+        write_wen
         );
     end
   endgenerate
@@ -125,11 +119,11 @@ module ccX_ram(
 
   localparam DATA_WIDTH=60;
   `ifdef ICACHE_256K
+  localparam ADDR_WIDTH=8;
+  localparam ADDR_COUNT=256;
+  `else
   localparam ADDR_WIDTH=7;
   localparam ADDR_COUNT=128;
-  `else
-  localparam ADDR_WIDTH=6;
-  localparam ADDR_COUNT=64;
   `endif
 
   input clk;
