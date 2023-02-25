@@ -249,9 +249,9 @@ module fun_lsq(
   wire                       stqd_rdyA1;
   wire                       stqd_rdyB0;
   wire                       stqd_rdyB1;
-  wire [1:0][127+8:0]               dc_wdataP;
+  wire [127+8:0]               dc_wdataP[1:0];
   reg  [127+8:0]               dc_wdataP_reg[1:0];
-  wire [1:0][1:0]                   dc_pdataP;
+  wire [1:0]                   dc_pdataP[1:0];
   reg  [1:0]                   dc_pdataP_reg[1:0];
   wire [1:0] sdata_rdy;
   wire [5:0] retM_II_in;
@@ -381,7 +381,7 @@ module fun_lsq(
   wire retB_en;
   wire retB_clkEn;
   wire mem_II_stall;
-  wire [1:0][`lsaddr_width-1:0] wreq_data;
+  wire [`lsaddr_width-1:0] wreq_data[1:0];
   reg [`lsaddr_width-1:0] wreq_data_reg[1:0];
   wire [1:0] wreq_en;
   reg [1:0] wreq_en_reg;

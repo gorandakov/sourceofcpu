@@ -233,7 +233,7 @@ module rs_write_forwardF(
   stall,
   oldData,newData,
   fuFwd,fuuFwd,
-  FUN0,FUN1,FUN2,FUN3,FUN4,FUN5,
+  FUN0,FUN1,FUN2,FUN3,
   FU0,FU0_reg,
   FU1,FU1_reg,
   FU2,FU2_reg,
