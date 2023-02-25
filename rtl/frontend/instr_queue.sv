@@ -470,27 +470,27 @@ module instrQ_box(
       end
   endgenerate
 
-  assign read_instr0_X=|read_en0[m] ? 'z : '0;
-  assign read_instr1_X=|read_en1[m] ? 'z : '0;
-  assign read_instr2_X=|read_en2[m] ? 'z : '0;
-  assign read_instr3_X=|read_en3[m] ? 'z : '0;
-  assign read_instr4_X=|read_en4[m] ? 'z : '0;
-  assign read_instr5_X=|read_en5[m] ? 'z : '0;
-  assign read_instr6_X=|read_en6[m] ? 'z : '0;
-  assign read_instr7_X=|read_en7[m] ? 'z : '0;
-  assign read_instr8_X=|read_en8[m] ? 'z : '0;
-  assign read_instr9_X=|read_en9[m] ? 'z : '0;
+  assign read_instr0_X=|read_en0 ? 'z : '0;
+  assign read_instr1_X=|read_en1 ? 'z : '0;
+  assign read_instr2_X=|read_en2 ? 'z : '0;
+  assign read_instr3_X=|read_en3 ? 'z : '0;
+  assign read_instr4_X=|read_en4 ? 'z : '0;
+  assign read_instr5_X=|read_en5 ? 'z : '0;
+  assign read_instr6_X=|read_en6 ? 'z : '0;
+  assign read_instr7_X=|read_en7 ? 'z : '0;
+  assign read_instr8_X=|read_en8 ? 'z : '0;
+  assign read_instr9_X=|read_en9 ? 'z : '0;
   
-  assign read_other0_X=|read_en0[m] ? 'z : '0;
-  assign read_other1_X=|read_en1[m] ? 'z : '0;
-  assign read_other2_X=|read_en2[m] ? 'z : '0;
-  assign read_other3_X=|read_en3[m] ? 'z : '0;
-  assign read_other4_X=|read_en4[m] ? 'z : '0;
-  assign read_other5_X=|read_en5[m] ? 'z : '0;
-  assign read_other6_X=|read_en6[m] ? 'z : '0;
-  assign read_other7_X=|read_en7[m] ? 'z : '0;
-  assign read_other8_X=|read_en8[m] ? 'z : '0;
-  assign read_other9_X=|read_en9[m] ? 'z : '0;
+  assign read_other0_X=|read_en0 ? 'z : '0;
+  assign read_other1_X=|read_en1 ? 'z : '0;
+  assign read_other2_X=|read_en2 ? 'z : '0;
+  assign read_other3_X=|read_en3 ? 'z : '0;
+  assign read_other4_X=|read_en4 ? 'z : '0;
+  assign read_other5_X=|read_en5 ? 'z : '0;
+  assign read_other6_X=|read_en6 ? 'z : '0;
+  assign read_other7_X=|read_en7 ? 'z : '0;
+  assign read_other8_X=|read_en8 ? 'z : '0;
+  assign read_other9_X=|read_en9 ? 'z : '0;
   
   always @(posedge clk) begin
   
