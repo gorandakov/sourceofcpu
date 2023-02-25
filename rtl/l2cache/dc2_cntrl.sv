@@ -708,12 +708,11 @@ module dc2_cntrl(
   assign rbus_bank0=missR_bank0;
   assign rbus_low=missR_low;
 
-  wire [4:0] NSC=~STALL_CNT;
   adder_inc #(5) cntAdd_mod(cnt,cnt_plus,1'b1,);
   adder_inc #(4) wrtAdd_mod(write_addr,write_addr_d,1'b1,);  
   adder_inc #(4) readAdd_mod(read_addr0,read_addr0_d,1'b1,);  
   adder #(5) cntSub_mod(cnt,5'h1f,cnt_minus,1'b0,1'b1,,,,);
-  get_carry #(5) cmp_mod(cnt,NSC,1'b1,doSkip);
+  get_carry #(5) cmp_mod(cnt,~STALL_CNT[4:0],1'b1,doSkip);
   adder_inc #(4) cntCAdd_mod(cntC,cntC_plus,1'b1,);
   adder_inc #(3) wrtCAdd_mod(write_addrC,write_addrC_d,1'b1,);  
   adder_inc #(3) readCAdd_mod(read_addrC,read_addrC_d,1'b1,);  

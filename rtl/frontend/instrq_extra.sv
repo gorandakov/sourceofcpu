@@ -218,7 +218,7 @@ module instrQextra(
   assign write_data3x=write_data3;
 
   
-  get_carry #(5) cmp_mod(cnt[read_thread],5'h12,1'b1,doFStall);
+  get_carry #(5) cmp_mod(cnt[read_thread],~5'd13,1'b1,doFStall);
 
   iqe_inc_addr incR00_mod(read_addr0[0],read_addr0_d[0],{2'b0,read_cnt},~stall & ~read_thread);
   iqe_inc_addr incR01_mod(read_addr0[1],read_addr0_d[1],{2'b0,read_cnt},~stall &  read_thread);

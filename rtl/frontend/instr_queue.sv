@@ -685,9 +685,8 @@ module instrQ(
           instrQ_bndAdd #(10) rdAddr1_mod(read_addrB[r],read_addrB_d[r],
             {read_instrEn&~{1'b0,read_instrEn[9:1]},read_instrEn==10'b0});
           assign read_addr_d[r]=read_thread ? read_addrB_d[r] : read_addrA_d[r];
-         
-	  wire [5:0] cmpval=~(r[5:0]+6'd1); 
-          get_carry #(6) cmp_mod(busy[read_thread_reg],cmpval,1'b1,read_avail[r]);
+          
+          get_carry #(6) cmp_mod(busy[read_thread_reg],~(r[5:0]+6'd1),1'b1,read_avail[r]);
       end
   endgenerate
   
@@ -777,8 +776,7 @@ module instrQ(
           if (write_thread) write_addrB[k]<=write_addrB_d[k];
           else write_addrA[k]<=write_addrA_d[k];
       end
-      if (write_wen & ~doFStall)	  $display("write_instr0 ",write_instr0," write_addrA[0] ",write_addrA[0], " busy ",busy_d[0],
-	      " read_clkEn ",read_clkEn);
+      if (write_wen & ~doFStall)	  $display("write_instr0 ",write_instr0," write_addrA[0]");
       if (rst) begin
           busy[0]<=6'd0;
           busy[1]<=6'd0;
@@ -863,5 +861,5 @@ module instrQ_upDown(addr,addr_new,fstall,inEn,stall,outEn,doFStall);
       end
   endgenerate
   
-  get_carry #(6) cmp_mod(6'hda,addr,1'b1,doFStall);
+  get_carry #(6) cmp_mod(~6'd37,addr,1'b1,doFStall);
 endmodule
