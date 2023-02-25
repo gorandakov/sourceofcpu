@@ -1112,27 +1112,8 @@ module frontend1(
   .chkCL_clkEn(MSI_expAddr_en),
   .chkCL_hit(MSI_expAddr_hit),
   .expun_addr(expun_addr),
-  .expun_wen(expun_wen),
-  .wr0_hit(wr0_hit),
-  .wr0_addrE(wr0_addrE),.wr0_addrO(wr0_addrO),
-  .wr0_banks(wr0_banks),
-  .wr0_begin(wr0_begin),.wr0_end(wr0_end),
-  .wr0_bgn_ben(wr0_bgn_ben),.wr0_end_ben(wr0_end_ben),
-  .wr0_odd(wr0_odd),.wr0_split(wr0_split),
-  .wr0_data(wr0_data),
-  .wr0_pbit(wr0_pbit),.wr0_d128(wr0_d128),
-  .wr1_hit(wr1_hit),
-  .wr1_addrE(wr1_addrE),.wr1_addrO(wr1_addrO),
-  .wr1_banks(wr1_banks),
-  .wr1_begin(wr1_begin),.wr1_end(wr1_end),
-  .wr1_bgn_ben(wr1_bgn_ben),.wr1_end_ben(wr1_end_ben),
-  .wr1_odd(wr1_odd),.wr1_split(wr1_split),
-  .wr1_data(wr1_data),
-  .wr1_pbit(wr1_pbit),.wr1_d128(wr1_d128),
-  .wrStall(wrStall)
+  .expun_wen(expun_wen)
   );  
-
-  assign wrDoStall=bus_match_reg2;
 
   ctlb tlb_mod(
   .clk(clk),
