@@ -292,9 +292,9 @@ module dtlb(
   input [2:0] force_way;
   
   wire [2:0] hitLru;
-  wire [7:0][2:0] lru_way;
-  wire [7:0][2:0] newLru;
-  wire [7:0][2:0] lru_wayW;
+  wire [2:0] lru_way[7:0];
+  wire [2:0] newLru[7:0];
+  wire [2:0] lru_wayW[7:0];
   wire [2:0] hitLruW;
 
   wire [7:0] read_hit_way;

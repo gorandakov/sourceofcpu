@@ -1054,12 +1054,12 @@ module backend(
   reg  [1:0]               lso_pbit_reg;
   reg  [1:0]               lso2_pbit_reg;
   
-  wire [2:0][IN_REG_WIDTH-1:0] rrfAW;
-  wire [2:0][IN_REG_WIDTH-1:0] rrfBW;
-  wire [2:0][REG_WIDTH-1:0] regAW;
-  wire [2:0][REG_WIDTH-1:0] regBW;
-  wire [2:0][REG_WIDTH-1:0] regAWF;
-  wire [2:0][REG_WIDTH-1:0] regBFW;
+  wire [IN_REG_WIDTH-1:0] rrfAW[2:0];
+  wire [IN_REG_WIDTH-1:0] rrfBW[2:0];
+  wire [REG_WIDTH-1:0] regAW[2:0];
+  wire [REG_WIDTH-1:0] regBW[2:0];
+  wire [REG_WIDTH-1:0] regAWF[2:0];
+  wire [REG_WIDTH-1:0] regBFW[2:0];
   wire [2:0] retAW;
   wire [2:0] retBW;
   wire [2:0] retAWF;
@@ -1088,11 +1088,11 @@ module backend(
   reg [2:0] isAWV_reg;
   reg [2:0] isBVW_reg;
 
-  wire [8:0][REG_WIDTH-1:0] regA;
-  wire [8:0][REG_WIDTH-1:0] regB;
-  wire [8:0][REG_WIDTH-1:0] regAF;
-  wire [8:0][REG_WIDTH-1:0] regBF;
-  wire [8:0][REG_WIDTH-1:0] regS;
+  wire [REG_WIDTH-1:0] regA[8:0];
+  wire [REG_WIDTH-1:0] regB[8:0];
+  wire [REG_WIDTH-1:0] regAF[8:0];
+  wire [REG_WIDTH-1:0] regBF[8:0];
+  wire [REG_WIDTH-1:0] regS[8:0];
   reg [REG_WIDTH-1:0] regA_reg[8:0];
   reg [REG_WIDTH-1:0] regB_reg[8:0];
   reg [REG_WIDTH-1:0] regS_reg[8:0];
@@ -1100,8 +1100,8 @@ module backend(
   reg [REG_WIDTH-1:0] regBF_reg[8:0];
   reg [REG_WIDTH-1:0] regAF_reg2[8:0];
   reg [REG_WIDTH-1:0] regBF_reg2[8:0];
-  wire [2:0][REG_WIDTH-1:0] WregA;
-  wire [2:0][REG_WIDTH-1:0] WregB;
+  wire [REG_WIDTH-1:0] WregA[2:0];
+  wire [REG_WIDTH-1:0] WregB[2:0];
   wire [8:0] retA;
   wire [8:0] retB;
   wire [8:0] retAF;
@@ -1129,19 +1129,19 @@ module backend(
   wire stall_WQ;
   wire doStall_WQ;
 
-  wire [8:0][REG_WIDTH-1:0] newR;
+  wire [REG_WIDTH-1:0] newR[8:0];
   reg [REG_WIDTH-1:0] newR_reg[8:0];
-  wire [8:0][REG_WIDTH-1:0] newRF;
+  wire [REG_WIDTH-1:0] newRF[8:0];
   reg [REG_WIDTH-1:0] newRF_reg[8:0];
 
-  wire [8:0][FN_WIDTH-1:0] newU;
-  wire [8:0][1:0] newD;
+  wire [FN_WIDTH-1:0] newU[8:0];
+  wire [1:0] newD[8:0];
 
 //  reg [REG_WIDTH-1:0] newU_reg[8:0];
 
 
-  wire [8:0][REG_WIDTH-1:0] clrR;
-  wire [8:0][REG_WIDTH-1:0] clrRS;
+  wire [REG_WIDTH-1:0] clrR[8:0];
+  wire [REG_WIDTH-1:0] clrRS[8:0];
   wire [8:0] clr;
   wire [8:0] clrS;
   reg [REG_WIDTH-1:0] clrR_reg[8:0];
@@ -1271,7 +1271,7 @@ module backend(
   
   reg [DATA_WIDTH-1:0] rs_const[8:0];
   reg [DATA_WIDTH-1:0] rs_const_reg[8:0];
-  wire [8:0][DATA_WIDTH-1:0] rs_const_new;
+  wire [DATA_WIDTH-1:0] rs_const_new[8:0];
   reg [8:0] rs_IPRel;
   reg [8:0] rs_afterTK;
 
@@ -1477,10 +1477,10 @@ module backend(
   reg [2:0] wrtO1_reg;
   reg [2:0] wrtO2_reg;
 //functional units
-  wire [9:0][DATA_WIDTH-1:0] FU;
-  wire [9:0][DATA_WIDTH-1:0] FU_N;
-  wire [9:0][REG_WIDTH-1:0] FUreg;
-  wire [9:0][REG_WIDTH-1:0] FUSreg;
+  wire [DATA_WIDTH-1:0] FU[9:0];
+  wire [DATA_WIDTH-1:0] FU_N[9:0];
+  wire [REG_WIDTH-1:0] FUreg[9:0];
+  wire [REG_WIDTH-1:0] FUSreg[9:0];
   wire [9:0]FUwen;
   reg FUwen0;
   reg FUwen1;
@@ -1503,26 +1503,26 @@ module backend(
   reg  [1:0] FUTYPE_reg4;
   reg  [1:0] FUTYPE_reg5;
   reg  [1:0] FUTYPE_reg6;
-  wire [9:0][SIMD_WIDTH-1:0] FUVH;
-  wire [9:0][SIMD_WIDTH-1:0] FUVL;
-  wire [9:0][SIMD_WIDTH-1:0] FUFH;
-  wire [9:0][16+SIMD_WIDTH-1:0] FUFL;
-  wire [9:0][SIMD_WIDTH-1:0] FUVH_N;
-  wire [9:0][SIMD_WIDTH-1:0] FUVL_N;
-  wire [9:0][SIMD_WIDTH-1:0] FUFH_N;
-  wire [9:0][16+SIMD_WIDTH-1:0] FUFL_N;
-  wire [5:0][SIMD_WIDTH-1:0] FOOFH;
-  wire [5:0][16+SIMD_WIDTH-1:0] FOOFL;
-  wire [3:0][15:0] FUVLX_N;
-  wire [3:0][15:0] FUVLX;
+  wire [SIMD_WIDTH-1:0] FUVH[9:0];
+  wire [SIMD_WIDTH-1:0] FUVL[9:0];
+  wire [SIMD_WIDTH-1:0] FUFH[9:0];
+  wire [16+SIMD_WIDTH-1:0] FUFL[9:0];
+  wire [SIMD_WIDTH-1:0] FUVH_N[9:0];
+  wire [SIMD_WIDTH-1:0] FUVL_N[9:0];
+  wire [SIMD_WIDTH-1:0] FUFH_N[9:0];
+  wire [16+SIMD_WIDTH-1:0] FUFL_N[9:0];
+  wire [SIMD_WIDTH-1:0] FOOFH[5:0];
+  wire [16+SIMD_WIDTH-1:0] FOOFL[5:0];
+  wire [15:0] FUVLX_N[3:0];
+  wire [15:0] FUVLX[3:0];
   reg  [3:0][15:0] FUVLX_reg;
 
   wire [5:0][DATA_WIDTH-1:0] FU_alu/*verilator public*/;
   wire [5:0][5:0] FUS_alu/*verilator public*/;
   wire [5:0][2:0] ex_alu/*verilator public*/;
   wire [5:0] enS_alu/*verilator public*/;
-  wire [2:0][5:0] FUX_alu;
-  wire [2:0][2:0] exx_alu;
+  wire [5:0] FUX_alu[2:0];
+  wire [2:0] exx_alu[2:0];
   reg [5:0] FUS_alu_reg[5:0];
   reg [2:0] ex_alu_reg[5:0];
   reg [5:0] enS_alu_reg;
@@ -1590,11 +1590,11 @@ module backend(
   reg [3:0] fxLD_spair_t_reg;
   
   
-  wire [2:0][3:0] fxFRT_alten;
+  wire [3:0] fxFRT_alten[2:0];
   wire [3:0]      fxFRT_pause;
-  reg [2:0][3:0] fxFRT_alten_reg;
-  reg [2:0][3:0] fxFRT_alten_reg2;
-  reg [2:0][3:0] fxFRT_alten_reg3;
+  reg [3:0] fxFRT_alten_reg[2:0];
+  reg [3:0] fxFRT_alten_reg2[2:0];
+  reg [3:0] fxFRT_alten_reg3[2:0];
   
   reg [DATA_WIDTH-1:0] FU_reg[9:0];
   reg [DATA_WIDTH-1:0] FU_reg2[9:0];
@@ -1638,28 +1638,28 @@ module backend(
   reg [5:0] FUS9_reg;
 
 
-  wire [8:0][DATA_WIDTH-1:0] dataA;
-  wire [8:0][DATA_WIDTH-1:0] dataB;
-  wire [8:0][DATA_WIDTH-1:0] dataNA;
-  wire [8:0][DATA_WIDTH-1:0] dataNB;
-  wire [2:0][DATA_WIDTH-1:0] WdataA;
-  wire [2:0][DATA_WIDTH-1:0] WdataB;
+  wire [DATA_WIDTH-1:0] dataA[8:0];
+  wire [DATA_WIDTH-1:0] dataB[8:0];
+  wire [DATA_WIDTH-1:0] dataNA[8:0];
+  wire [DATA_WIDTH-1:0] dataNB[8:0];
+  wire [DATA_WIDTH-1:0] WdataA[2:0];
+  wire [DATA_WIDTH-1:0] WdataB[2:0];
   wire [8:0] inflA;
   wire [8:0] inflB;
   wire [2:0] WinflA;
   wire [2:0] WinflB;
   wire inflS;
   wire [8:0] Sinfl;
-  wire [8:0][10:0] gazumpA;
-  wire [8:0][10:0] gazumpB;
-  wire [2:0][10:0] WgazumpA;
-  wire [2:0][10:0] WgazumpB;
-  wire [8:0][10:0] gazumpAG;
-  wire [8:0][10:0] gazumpBG;
-  wire [8:0][10:0] gazumpAV;
-  wire [8:0][10:0] gazumpBV;
-  wire [8:0][10:0] gazumpFA;
-  wire [8:0][10:0] gazumpFB;
+  wire [10:0] gazumpA[8:0];
+  wire [10:0] gazumpB[8:0];
+  wire [10:0] WgazumpA[2:0];
+  wire [10:0] WgazumpB[2:0];
+  wire [10:0] gazumpAG[8:0];
+  wire [10:0] gazumpBG[8:0];
+  wire [10:0] gazumpAV[8:0];
+  wire [10:0] gazumpBV[8:0];
+  wire [10:0] gazumpFA[8:0];
+  wire [10:0] gazumpFB[8:0];
   wire [10:0] gazumpS;
   wire [5:0] dataS;
   
@@ -1672,61 +1672,61 @@ module backend(
   reg [8:0] isAF_reg;
   reg [8:0] isBF_reg;
 
-  wire [2:0][6:0] Wport;
+  wire [6:0] Wport[2:0];
   reg [6:0] Wport_reg[2:0];
   
-  wire [8:0][SIMD_WIDTH-1:0] dataAVH;
-  wire [8:0][SIMD_WIDTH-1:0] dataAVL;
-  wire [8:0][SIMD_WIDTH-1:0] dataAFH;
-  wire [8:0][16+SIMD_WIDTH-1:0] dataAFL;
+  wire [SIMD_WIDTH-1:0] dataAVH[8:0];
+  wire [SIMD_WIDTH-1:0] dataAVL[8:0];
+  wire [SIMD_WIDTH-1:0] dataAFH[8:0];
+  wire [16+SIMD_WIDTH-1:0] dataAFL[8:0];
 
-  wire [8:0][SIMD_WIDTH-1:0] dataBVH;
-  wire [8:0][SIMD_WIDTH-1:0] dataBVL;
-  wire [8:0][SIMD_WIDTH-1:0] dataBFH;
-  wire [8:0][16+SIMD_WIDTH-1:0] dataBFL;
+  wire [SIMD_WIDTH-1:0] dataBVH[8:0];
+  wire [SIMD_WIDTH-1:0] dataBVL[8:0];
+  wire [SIMD_WIDTH-1:0] dataBFH[8:0];
+  wire [16+SIMD_WIDTH-1:0] dataBFL[8:0];
 
-  wire [2:0][SIMD_WIDTH-1:0] WdataAVH;
-  wire [2:0][SIMD_WIDTH-1:0] WdataAVL;
-  wire [2:0][SIMD_WIDTH-1:0] WdataAFH;
-  wire [2:0][16+SIMD_WIDTH-1:0] WdataAFL;
+  wire [SIMD_WIDTH-1:0] WdataAVH[2:0];
+  wire [SIMD_WIDTH-1:0] WdataAVL[2:0];
+  wire [SIMD_WIDTH-1:0] WdataAFH[2:0];
+  wire [16+SIMD_WIDTH-1:0] WdataAFL[2:0];
 
-  wire [2:0][SIMD_WIDTH-1:0] WdataBVH;
-  wire [2:0][SIMD_WIDTH-1:0] WdataBVL;
-  wire [2:0][SIMD_WIDTH-1:0] WdataBFH;
-  wire [2:0][16+SIMD_WIDTH-1:0] WdataBFL;
+  wire [SIMD_WIDTH-1:0] WdataBVH[2:0];
+  wire [SIMD_WIDTH-1:0] WdataBVL[2:0];
+  wire [SIMD_WIDTH-1:0] WdataBFH[2:0];
+  wire [16+SIMD_WIDTH-1:0] WdataBFL[2:0];
 
-  wire [8:0][SIMD_WIDTH-1:0] dataNAVH;
-  wire [8:0][SIMD_WIDTH-1:0] dataNAVL;
-  wire [8:0][SIMD_WIDTH-1:0] dataNAFH;
-  wire [8:0][16+SIMD_WIDTH-1:0] dataNAFL;
+  wire [SIMD_WIDTH-1:0] dataNAVH[8:0];
+  wire [SIMD_WIDTH-1:0] dataNAVL[8:0];
+  wire [SIMD_WIDTH-1:0] dataNAFH[8:0];
+  wire [16+SIMD_WIDTH-1:0] dataNAFL[8:0];
 
-  wire [8:0][SIMD_WIDTH-1:0] dataNBVH;
-  wire [8:0][SIMD_WIDTH-1:0] dataNBVL;
-  wire [8:0][SIMD_WIDTH-1:0] dataNBFH;
-  wire [8:0][16+SIMD_WIDTH-1:0] dataNBFL;
+  wire [SIMD_WIDTH-1:0] dataNBVH[8:0];
+  wire [SIMD_WIDTH-1:0] dataNBVL[8:0];
+  wire [SIMD_WIDTH-1:0] dataNBFH[8:0];
+  wire [16+SIMD_WIDTH-1:0] dataNBFL[8:0];
 
-  wire [2:0][SIMD_WIDTH-1:0] WdataNAVH;
-  wire [2:0][SIMD_WIDTH-1:0] WdataNAVL;
-  wire [2:0][SIMD_WIDTH-1:0] WdataNAFH;
-  wire [2:0][16+SIMD_WIDTH-1:0] WdataNAFL;
+  wire [SIMD_WIDTH-1:0] WdataNAVH[2:0];
+  wire [SIMD_WIDTH-1:0] WdataNAVL[2:0];
+  wire [SIMD_WIDTH-1:0] WdataNAFH[2:0];
+  wire [16+SIMD_WIDTH-1:0] WdataNAFL[2:0];
 
-  wire [2:0][SIMD_WIDTH-1:0] WdataNBVH;
-  wire [2:0][SIMD_WIDTH-1:0] WdataNBVL;
-  wire [2:0][SIMD_WIDTH-1:0] WdataNBFH;
-  wire [2:0][16+SIMD_WIDTH-1:0] WdataNBFL;
+  wire [SIMD_WIDTH-1:0] WdataNBVH[2:0];
+  wire [SIMD_WIDTH-1:0] WdataNBVL[2:0];
+  wire [SIMD_WIDTH-1:0] WdataNBFH[2:0];
+  wire [16+SIMD_WIDTH-1:0] WdataNBFL[2:0];
 
   wire [8:0][DATA_WIDTH-1:0] ret_dataA/*verilator public*/;
-  wire [8:0][DATA_WIDTH-1:0] ret_dataB;
+  wire [DATA_WIDTH-1:0] ret_dataB[8:0];
   
-  wire [8:0][SIMD_WIDTH-1:0] ret_dataAVH;
-  wire [8:0][SIMD_WIDTH-1:0] ret_dataAVL;
-  wire [8:0][SIMD_WIDTH-1:0] ret_dataAFH;
-  wire [8:0][16+SIMD_WIDTH-1:0] ret_dataAFL;
+  wire [SIMD_WIDTH-1:0] ret_dataAVH[8:0];
+  wire [SIMD_WIDTH-1:0] ret_dataAVL[8:0];
+  wire [SIMD_WIDTH-1:0] ret_dataAFH[8:0];
+  wire [16+SIMD_WIDTH-1:0] ret_dataAFL[8:0];
 
-  wire [8:0][SIMD_WIDTH-1:0] ret_dataBVH;
-  wire [8:0][SIMD_WIDTH-1:0] ret_dataBVL;
-  wire [8:0][SIMD_WIDTH-1:0] ret_dataBFH;
-  wire [8:0][16+SIMD_WIDTH-1:0] ret_dataBFL;
+  wire [SIMD_WIDTH-1:0] ret_dataBVH[8:0];
+  wire [SIMD_WIDTH-1:0] ret_dataBVL[8:0];
+  wire [SIMD_WIDTH-1:0] ret_dataBFH[8:0];
+  wire [16+SIMD_WIDTH-1:0] ret_dataBFL[8:0];
 
   wire [8:0] depA;
   wire [8:0] depB;
@@ -1735,22 +1735,22 @@ module backend(
   reg [8:0] depA_reg;
   reg [8:0] depB_reg;
   
-  wire [8:0][FN_WIDTH-1:0] funA;
-  wire [8:0][FN_WIDTH-1:0] funB;
-  wire [8:0][FN_WIDTH-1:0] funAF;
-  wire [8:0][FN_WIDTH-1:0] funBF;
+  wire [FN_WIDTH-1:0] funA[8:0];
+  wire [FN_WIDTH-1:0] funB[8:0];
+  wire [FN_WIDTH-1:0] funAF[8:0];
+  wire [FN_WIDTH-1:0] funBF[8:0];
   reg [FN_WIDTH-1:0] funA_reg[8:0];
   reg [FN_WIDTH-1:0] funB_reg[8:0];
-  wire [2:0][FN_WIDTH-1:0] WfunA;
-  wire [2:0][FN_WIDTH-1:0] WfunB;
+  wire [FN_WIDTH-1:0] WfunA[2:0];
+  wire [FN_WIDTH-1:0] WfunB[2:0];
 
-  wire [8:0][FN_WIDTH-1:0] funS;
+  wire [FN_WIDTH-1:0] funS[8:0];
   reg [FN_WIDTH-1:0] funS_reg[8:0];
 
-  wire [8:0][1:0] domA;
-  wire [8:0][1:0] domB;
- // wire [8:0][1:0] domAF;
- // wire [8:0][1:0] domBF;
+  wire [1:0] domA[8:0];
+  wire [1:0] domB[8:0];
+ // wire [1:0] domAF[8:0];
+ // wire [1:0] domBF[8:0];
 
   reg [1:0] domA_reg[8:0];
   reg [1:0] domB_reg[8:0];
@@ -1766,50 +1766,50 @@ module backend(
   wire [67:0] ouDataAVL;
   wire [67:0] utDataAVH;
   wire [67:0] utDataBVH;
-  wire [8:0][DATA_WIDTH-1:0] outDataA;
-  wire [8:0][DATA_WIDTH-1:0] outDataB;
-  wire [5:0][SIMD_WIDTH-1:0] outDataAVH;
-  wire [5:0][SIMD_WIDTH-1:0] outDataBVH;
-  wire [5:0][SIMD_WIDTH-1:0] outDataAVL;
-  wire [5:0][SIMD_WIDTH-1:0] outDataBVL;
-  wire [5:0][SIMD_WIDTH-1:0] outDataAFH;
-  wire [5:0][SIMD_WIDTH-1:0] outDataBFH;
-  wire [5:0][16+SIMD_WIDTH-1:0] outDataAFL;
-  wire [5:0][16+SIMD_WIDTH-1:0] outDataBFL;
-  wire [8:0][DATA_WIDTH-1:0] outDataNA;
-  wire [8:0][DATA_WIDTH-1:0] outDataNB;
-  wire [5:0][SIMD_WIDTH-1:0] outDataNAVH;
-  wire [5:0][SIMD_WIDTH-1:0] outDataNBVH;
-  wire [5:0][SIMD_WIDTH-1:0] outDataNAVL;
-  wire [5:0][SIMD_WIDTH-1:0] outDataNBVL;
-  wire [5:0][SIMD_WIDTH-1:0] outDataNAFH;
-  wire [5:0][SIMD_WIDTH-1:0] outDataNBFH;
-  wire [5:0][16+SIMD_WIDTH-1:0] outDataNAFL;
-  wire [5:0][16+SIMD_WIDTH-1:0] outDataNBFL;
-  wire [8:0][32:0] outDataC;
-  wire [8:0][5:0] outDataS;
-  wire [8:0][REG_WIDTH-1:0] outReg;
-  wire [8:0][REG_WIDTH-1:0] outRegS;
-  wire [8:0][OPERATION_WIDTH-1:0] outOp;
-  wire [8:0][9:0] outII;
+  wire [DATA_WIDTH-1:0] outDataA[8:0];
+  wire [DATA_WIDTH-1:0] outDataB[8:0];
+  wire [SIMD_WIDTH-1:0] outDataAVH[5:0];
+  wire [SIMD_WIDTH-1:0] outDataBVH[5:0];
+  wire [SIMD_WIDTH-1:0] outDataAVL[5:0];
+  wire [SIMD_WIDTH-1:0] outDataBVL[5:0];
+  wire [SIMD_WIDTH-1:0] outDataAFH[5:0];
+  wire [SIMD_WIDTH-1:0] outDataBFH[5:0];
+  wire [16+SIMD_WIDTH-1:0] outDataAFL[5:0];
+  wire [16+SIMD_WIDTH-1:0] outDataBFL[5:0];
+  wire [DATA_WIDTH-1:0] outDataNA[8:0];
+  wire [DATA_WIDTH-1:0] outDataNB[8:0];
+  wire [SIMD_WIDTH-1:0] outDataNAVH[5:0];
+  wire [SIMD_WIDTH-1:0] outDataNBVH[5:0];
+  wire [SIMD_WIDTH-1:0] outDataNAVL[5:0];
+  wire [SIMD_WIDTH-1:0] outDataNBVL[5:0];
+  wire [SIMD_WIDTH-1:0] outDataNAFH[5:0];
+  wire [SIMD_WIDTH-1:0] outDataNBFH[5:0];
+  wire [16+SIMD_WIDTH-1:0] outDataNAFL[5:0];
+  wire [16+SIMD_WIDTH-1:0] outDataNBFL[5:0];
+  wire [32:0] outDataC[8:0];
+  wire [5:0] outDataS[8:0];
+  wire [REG_WIDTH-1:0] outReg[8:0];
+  wire [REG_WIDTH-1:0] outRegS[8:0];
+  wire [OPERATION_WIDTH-1:0] outOp[8:0];
+  wire [9:0] outII[8:0];
   wire [8:0][3:0] outEn/* verilator public */;
-  wire [2:0][8:0] outLSQ;
-  wire [2:0][5:0] outWQ;
-  wire [8:0][3:0] fuFwdA;
-  wire [8:0][3:0] fuFwdB;
-  wire [8:0][3:0] fuFwdS;
-  wire [8:0][3:0] fuuFwdA;
-  wire [8:0][3:0] fuuFwdB;
-  wire [8:0][3:0] fuuFwdS;
+  wire [8:0] outLSQ[2:0];
+  wire [5:0] outWQ[2:0];
+  wire [3:0] fuFwdA[8:0];
+  wire [3:0] fuFwdB[8:0];
+  wire [3:0] fuFwdS[8:0];
+  wire [3:0] fuuFwdA[8:0];
+  wire [3:0] fuuFwdB[8:0];
+  wire [3:0] fuuFwdS[8:0];
   wire [8:0] outThr;
-  wire [8:0][3:0] outAttr;
+  wire [3:0] outAttr[8:0];
   wire [2:0] outLSflag;
-  wire [2:0][3:0] fuFwdAH;
-  wire [2:0][3:0] fuFwdBH;
-  wire [2:0][3:0] fuuFwdAH;
-  wire [2:0][3:0] fuuFwdBH;
+  wire [3:0] fuFwdAH[2:0];
+  wire [3:0] fuFwdBH[2:0];
+  wire [3:0] fuuFwdAH[2:0];
+  wire [3:0] fuuFwdBH[2:0];
   
-  wire [2:0][3:0] outShiftSize;
+  wire [3:0] outShiftSize[2:0];
  
   wire [3:0]  outEnX;
   wire [9:0]  outIIX;
@@ -1822,14 +1822,14 @@ module backend(
   reg [8:0]  outRegX_reg;
   reg [8:0]  outRegSX_reg;
 
-  reg [5:5][SIMD_WIDTH-1:0] outDataAVH_reg;
-  reg [5:5][SIMD_WIDTH-1:0] outDataBVH_reg;
-  reg [5:5][SIMD_WIDTH-1:0] outDataAVL_reg;
-  reg [5:5][SIMD_WIDTH-1:0] outDataBVL_reg;
-  reg [5:5][SIMD_WIDTH-1:0] outDataAFH_reg;
-  reg [5:5][SIMD_WIDTH-1:0] outDataBFH_reg;
-  reg [5:5][16+SIMD_WIDTH-1:0] outDataAFL_reg;
-  reg [5:5][16+SIMD_WIDTH-1:0] outDataBFL_reg;
+  reg [SIMD_WIDTH-1:0] outDataAVH_reg[5:5];
+  reg [SIMD_WIDTH-1:0] outDataBVH_reg[5:5];
+  reg [SIMD_WIDTH-1:0] outDataAVL_reg[5:5];
+  reg [SIMD_WIDTH-1:0] outDataBVL_reg[5:5];
+  reg [SIMD_WIDTH-1:0] outDataAFH_reg[5:5];
+  reg [SIMD_WIDTH-1:0] outDataBFH_reg[5:5];
+  reg [16+SIMD_WIDTH-1:0] outDataAFL_reg[5:5];
+  reg [16+SIMD_WIDTH-1:0] outDataBFL_reg[5:5];
   
   reg [3:0] fuFwdA_reg[8:0];
   reg [3:0] fuFwdB_reg[8:0];
@@ -1847,92 +1847,92 @@ module backend(
   wire retFl;
 //  wire [FN_WIDTH-1:0] funFl;
   
-  wire [1:0][DATA_WIDTH-1:0] WoutDataA;
-  wire [1:0][DATA_WIDTH-1:0] WoutDataB;
-  wire [1:0][DATA_WIDTH-1:0] WoutDataNA;
-  wire [1:0][DATA_WIDTH-1:0] WoutDataNB;
-  wire [1:0][CONST_WIDTH-1:0] WoutDataC;
-  wire [1:0][OPERATION_WIDTH-6:0] WoutOp;
-  wire [1:0][9:0] WoutII;
-  wire [1:0][5:0] WoutWQ;
-  wire [1:0][3:0] WfuFwdA;
-  wire [1:0][3:0] WfuFwdB;
-  wire [1:0][3:0] WfuuFwdA;
-  wire [1:0][3:0] WfuuFwdB;
-  wire [1:0][8:0] WoutLSQ;
-  wire [1:0][3:0] WoutDataEn;
+  wire [DATA_WIDTH-1:0] WoutDataA[1:0];
+  wire [DATA_WIDTH-1:0] WoutDataB[1:0];
+  wire [DATA_WIDTH-1:0] WoutDataNA[1:0];
+  wire [DATA_WIDTH-1:0] WoutDataNB[1:0];
+  wire [CONST_WIDTH-1:0] WoutDataC[1:0];
+  wire [OPERATION_WIDTH-6:0] WoutOp[1:0];
+  wire [9:0] WoutII[1:0];
+  wire [5:0] WoutWQ[1:0];
+  wire [3:0] WfuFwdA[1:0];
+  wire [3:0] WfuFwdB[1:0];
+  wire [3:0] WfuuFwdA[1:0];
+  wire [3:0] WfuuFwdB[1:0];
+  wire [8:0] WoutLSQ[1:0];
+  wire [3:0] WoutDataEn[1:0];
   wire [1:0]WoutThread;
-  wire [1:0][3:0] WoutShiftSize;
+  wire [3:0] WoutShiftSize[1:0];
   wire [1:0]Wagu_blockRS;
   reg Wagu_blockRS_reg[1:0];
   wire alu_jupdate=enS_alu[5];
   wire [1:0] WoutLSflag;
-  wire [1:0][3:0] WoutAttr;
+  wire [3:0] WoutAttr[1:0];
   
   
-  wire [1:0][DATA_WIDTH-1:0] WDoutData;
-  wire [1:0][DATA_WIDTH-1:0] WDoutDataN;
-  wire [1:0][OPERATION_WIDTH-6:0] WDoutOp;
-  reg [1:0][OPERATION_WIDTH-6:0] WDoutOp_reg;
-  reg [1:0][OPERATION_WIDTH-6:0] WDoutOp_reg2;
-  reg [1:0][OPERATION_WIDTH-6:0] WDoutOp_reg3;
-  wire [1:0][9:0] WDoutII;
-  wire [1:0][3:0] WDoutFuFwd;
-  wire [1:0][3:0] WDoutFuuFwd;
+  wire [DATA_WIDTH-1:0] WDoutData[1:0];
+  wire [DATA_WIDTH-1:0] WDoutDataN[1:0];
+  wire [OPERATION_WIDTH-6:0] WDoutOp[1:0];
+  reg [OPERATION_WIDTH-6:0] WDoutOp_reg[1:0];
+  reg [OPERATION_WIDTH-6:0] WDoutOp_reg2[1:0];
+  reg [OPERATION_WIDTH-6:0] WDoutOp_reg3[1:0];
+  wire [9:0] WDoutII[1:0];
+  wire [3:0] WDoutFuFwd[1:0];
+  wire [3:0] WDoutFuuFwd[1:0];
   reg [3:0] WDoutFuFwd_reg[1:0];
   reg [3:0] WDoutFuuFwd_reg[1:0];
   reg [3:0] WDoutFuFwd_reg2[1:0];
   reg [3:0] WDoutFuuFwd_reg2[1:0];
-  wire [1:0][8:0] WDoutLSQ;
-  wire [1:0][3:0] WDoutDataEn;
+  wire [8:0] WDoutLSQ[1:0];
+  wire [3:0] WDoutDataEn[1:0];
   reg [3:0] WDoutDataEn_reg[1:0];
   reg [3:0] WDoutDataEn_reg2[1:0];
-  wire [1:0][5:0] WDoutWQ;
+  wire [5:0] WDoutWQ[1:0];
   wire [1:0]WDoutThread;
-  wire [1:0][SIMD_WIDTH-1:0] WDoutDataVH;
-  wire [1:0][SIMD_WIDTH-1:0] WDoutDataVL;
-  wire [1:0][SIMD_WIDTH-1:0] WDoutDataFH;
-  wire [1:0][16+SIMD_WIDTH-1:0] WDoutDataFL;
-  wire [1:0][SIMD_WIDTH-1:0] WDoutDataNVH;
-  wire [1:0][SIMD_WIDTH-1:0] WDoutDataNVL;
-  wire [1:0][SIMD_WIDTH-1:0] WDoutDataNFH;
-  wire [1:0][16+SIMD_WIDTH-1:0] WDoutDataNFL;
+  wire [SIMD_WIDTH-1:0] WDoutDataVH[1:0];
+  wire [SIMD_WIDTH-1:0] WDoutDataVL[1:0];
+  wire [SIMD_WIDTH-1:0] WDoutDataFH[1:0];
+  wire [16+SIMD_WIDTH-1:0] WDoutDataFL[1:0];
+  wire [SIMD_WIDTH-1:0] WDoutDataNVH[1:0];
+  wire [SIMD_WIDTH-1:0] WDoutDataNVL[1:0];
+  wire [SIMD_WIDTH-1:0] WDoutDataNFH[1:0];
+  wire [16+SIMD_WIDTH-1:0] WDoutDataNFL[1:0];
   
-  wire [1:0][DATA_WIDTH-1:0] WDfxData;
+  wire [DATA_WIDTH-1:0] WDfxData[1:0];
   reg  [DATA_WIDTH-1:0] WDfxData_reg[1:0];
   reg  [DATA_WIDTH-1:0] WDfxData_reg2[1:0];
   reg  [DATA_WIDTH-1:0] WDfxData_reg3[1:0];
-  wire [1:0][SIMD_WIDTH-1:0] WDfxDataVH;
-  wire [1:0][SIMD_WIDTH-1:0] WDfxDataVL;
-  wire [1:0][SIMD_WIDTH-1:0] WDfxDataFH;
-  wire [1:0][16+SIMD_WIDTH-1:0] WDfxDataFL;
-  wire [1:0][OPERATION_WIDTH-1:0] WDfxOp;
-  wire [1:0][9:0] WDfxII;
+  wire [SIMD_WIDTH-1:0] WDfxDataVH[1:0];
+  wire [SIMD_WIDTH-1:0] WDfxDataVL[1:0];
+  wire [SIMD_WIDTH-1:0] WDfxDataFH[1:0];
+  wire [16+SIMD_WIDTH-1:0] WDfxDataFL[1:0];
+  wire [OPERATION_WIDTH-1:0] WDfxOp[1:0];
+  wire [9:0] WDfxII[1:0];
   reg [9:0] WDfxII_reg[1:0];
   reg [9:0] WDfxII_reg2[1:0];
   reg [9:0] WDfxII_reg3[1:0];
-  wire [1:0][3:0] WDfxDataEn;
+  wire [3:0] WDfxDataEn[1:0];
   reg  [3:0] WDfxDataEn_reg[1:0];
   reg  [3:0] WDfxDataEn_reg2[1:0];
   reg  [3:0] WDfxDataEn_reg3[1:0];
   reg  [3:0] WDfxDataEn_reg4[1:0];
-  wire [1:0][8:0] WDfxLSQ;
-  wire [1:0][5:0] WDfxWQ;
+  wire [8:0] WDfxLSQ[1:0];
+  wire [5:0] WDfxWQ[1:0];
   reg  [5:0] WDfxWQ_reg[1:0];
   reg  [5:0] WDfxWQ_reg2[1:0];
   reg  [5:0] WDfxWQ_reg3[1:0];
   reg  [5:0] WDfxWQ_reg4[1:0];
   wire [1:0] WDfxThr;
  
-  wire [1:0][135:0] lsw_wdataF0;
-  wire [1:0][135:0] lsw_wdataF1;
-  wire [1:0][135:0] lsw_wdataF;
+  wire [135:0] lsw_wdataF0[1:0];
+  wire [135:0] lsw_wdataF1[1:0];
+  wire [135:0] lsw_wdataF[1:0];
   reg [135:0] lsw_wdataF_reg[1:0];
-  wire [1:0][135:0] lsw_wdataV;
-  wire [1:0][127:0] lsw_wdataV0;
+  wire [135:0] lsw_wdataV[1:0];
+  wire [127:0] lsw_wdataV0[1:0];
   reg [135:0] lsw_wdataV_reg[1:0];
-  wire [1:0][135:0] lsw_wdata; 
-  wire [1:0][1:0] lsw_pdata;
+  wire [135:0] lsw_wdata[1:0]; 
+  wire [1:0] lsw_pdata[1:0];
 
   wire pause_agu;
   wire miss_pause_agu/* verilator public */;
@@ -1943,14 +1943,14 @@ module backend(
   reg miss_holds_agu_reg;
   reg miss_holds_agu_reg2;
  
-  wire [5:4][8:0] p_LSQ; 
+  wire [8:0] p_LSQ[5:4]; 
   
-  wire [2:0][2:0] nDataAlt;
-  reg [2:0][2:0] nDataAlt_reg;
-  reg [2:0][2:0] nDataAlt_reg2;
-  reg [2:0][2:0] nDataAlt_reg3;
-  reg [2:0][2:0] nDataAlt_reg4;
-  reg [2:0][2:0] nDataAlt_reg5;
+  wire [2:0] nDataAlt[2:0];
+  reg [2:0] nDataAlt_reg[2:0];
+  reg [2:0] nDataAlt_reg2[2:0];
+  reg [2:0] nDataAlt_reg3[2:0];
+  reg [2:0] nDataAlt_reg4[2:0];
+  reg [2:0] nDataAlt_reg5[2:0];
 
   reg [REG_WIDTH-1:0] outReg_reg[8:0];
   reg [REG_WIDTH-1:0] outReg_reg2[8:0];
@@ -1998,17 +1998,17 @@ module backend(
   
   wire [3:0] dc_rdEn/* verilator public */; 
   wire [3:0] dc_rsEn; 
-  wire [3:0][127+8:0] dc_rdataA;
-  wire [3:0][127+8:0] dc_rdataA_N;
-  wire [3:0][127+8:0] dc_rdat;
-  wire [3:0][127+8:0] dc_rdat_N;
-  wire [3:0][1:0] dc_pdataA;
-  wire [3:0][1:0] dc_pdat;
-  reg [3:0][1:0] dc_pdataA_reg;
-  wire [3:0][1:0] dc_rdHitCl;
+  wire [127+8:0] dc_rdataA[3:0];
+  wire [127+8:0] dc_rdataA_N[3:0];
+  wire [127+8:0] dc_rdat[3:0];
+  wire [127+8:0] dc_rdat_N[3:0];
+  wire [1:0] dc_pdataA[3:0];
+  wire [1:0] dc_pdat[3:0];
+  reg [1:0] dc_pdataA_reg[3:0];
+  wire [1:0] dc_rdHitCl[3:0];
 //  wire [3:0] dc_store;
   wire [31:0] dc_bankNone;
-  wire [3:0][8:0] dc_LSQ;
+  wire [8:0] dc_LSQ[3:0];
 
   reg [127+8:0] dc_rdataA_reg[3:0];
   reg [127+8:0] dc_rdataA_reg2[3:0];
@@ -2021,11 +2021,11 @@ module backend(
   reg [3:0] dc_rsEn_reg; 
   reg [8:0] dc_LSQ_reg[3:0];
 
-  reg [3:0][8:0] dc_rdReg_reg;
+  reg [8:0] dc_rdReg_reg[3:0];
 
-  wire [1:0][PADDR_WIDTH-9:0] dc_wrAddrE;
-  wire [1:0][PADDR_WIDTH-9:0] dc_wrAddrO;
-  wire [1:0][31:0] dc_wrBanks;
+  wire [PADDR_WIDTH-9:0] dc_wrAddrE[1:0];
+  wire [PADDR_WIDTH-9:0] dc_wrAddrO[1:0];
+  wire [31:0] dc_wrBanks[1:0];
   wire [1:0] dc_wrEn; 
   reg [1:0] dc_wrEn_reg; 
   reg [1:0] dc_wrEn_reg2; 
@@ -2036,23 +2036,23 @@ module backend(
   wire [1:0][5*32-1:0] dc_wdata_N;
   wire [1:0][4*32-1:0] dc_wdataP;
   reg [4*32-1:0] dc_wdataP_reg[1:0];
-  wire [1:0][4:0] dc_wrBegin;
-  wire [1:0][4:0] dc_size_wr;
-  wire [1:0][1:0] dc_wrHitCl;
-  wire [1:0][1:0] dc_wrDuplCl;
-  wire [1:0][1:0] dc_wspecdata;
-  wire [1:0][9:0] dc_II_wr;
+  wire [4:0] dc_wrBegin[1:0];
+  wire [4:0] dc_size_wr[1:0];
+  wire [1:0] dc_wrHitCl[1:0];
+  wire [1:0] dc_wrDuplCl[1:0];
+  wire [1:0] dc_wspecdata[1:0];
+  wire [9:0] dc_II_wr[1:0];
   reg [9:0] dc_II_wr_reg[1:0];
   reg [9:0] dc_II_wr_reg2[1:0];
   reg [9:0] dc_II_wr_reg3[1:0];
   wire [1:0] dc_wrHit;
-  wire [1:0][4:0] dc_wrEnd;
-  wire [1:0][3:0] dc_wrBGN_BNK;
-  wire [1:0][3:0] dc_wrEND_BNK;
-  wire [1:0][1:0] dc_wr_low;
-  wire [1:0][1:0] dc_wrTyp;
-  wire [1:0][4:0] dc_wrSZ;
-  wire [1:0][1:0] dc_pdata;
+  wire [4:0] dc_wrEnd[1:0];
+  wire [3:0] dc_wrBGN_BNK[1:0];
+  wire [3:0] dc_wrEND_BNK[1:0];
+  wire [1:0] dc_wr_low[1:0];
+  wire [1:0] dc_wrTyp[1:0];
+  wire [4:0] dc_wrSZ[1:0];
+  wire [1:0] dc_pdata[1:0];
 
   wire [5:0] p_repl;
   wire [3:0] p_lsfwd;
@@ -2062,7 +2062,7 @@ module backend(
   wire [127+8:0]p3_data;
   wire [1:0]    p3_pdata;
   wire    [4:0] p3_brdbanks;
-  wire [3:0][13:0] p_ret;
+  wire [13:0] p_ret[3:0];
   reg [127+8:0]p2_data_reg;
   reg [127+8:0]p2_data_reg2;
   reg [127+8:0]p3_data_reg;
@@ -2103,9 +2103,9 @@ module backend(
   reg  [SIMD_WIDTH-1+16:0]    sqrDatFL_reg;
   reg  [SIMD_WIDTH-1:0] sqrDatVL_reg;
   reg                      sqrDatEn_reg;
-//  wire [3:0][47:0] wxdata;
+//  wire [47:0] wxdata[3:0];
 
-  wire [8:0][3:0] instr_ret;
+  wire [3:0] instr_ret[8:0];
   reg  [3:0] instr_ret_reg[8:0];
     
   wire [5:0] retire0_rT/*verilator public*/;
@@ -2312,8 +2312,8 @@ module backend(
   wire bDoStall_rqSpit;
   wire bDoStall_rqSpit0;
   
-  wire [2:0][5:0] WQR;
-  wire [2:0][5:0] WQS;
+  wire [5:0] WQR[2:0];
+  wire [5:0] WQS[2:0];
   reg [5:0] WQS_reg[2:0];
   reg [5:0] WQR_reg[2:0];
   
@@ -2352,7 +2352,7 @@ module backend(
   wire csrss_en,csrss_thread;
   wire [64:0] csrss_data;
  
-  wire [5:0][15:0] dummyFH;
+  wire [15:0] dummyFH[5:0];
   wire [63:0] fpcsr;
 
   reg wrStall_reg;
@@ -4447,16 +4447,16 @@ module backend(
 
   end
  
-  wire [3:0][15:0] FUFLD_dummy;
-  wire [3:0][15:0] FUFLD_dummy1;
-  wire [3:0][15:0] FUFLD_dummy2;
-  wire [3:0][15+33:0] FUVLD_dummy;
-  wire [3:0][15+33:0] FUVLD_dummy1;
-  wire [3:0][15:0] FUFLD_dummy_N;
-  wire [3:0][15:0] FUFLD_dummy1_N;
-  wire [3:0][15:0] FUFLD_dummy2_N;
-  wire [3:0][15+33:0] FUVLD_dummy_N;
-  wire [3:0][15+33:0] FUVLD_dummy1_N;
+  wire [15:0] FUFLD_dummy[3:0];
+  wire [15:0] FUFLD_dummy1[3:0];
+  wire [15:0] FUFLD_dummy2[3:0];
+  wire [15+33:0] FUVLD_dummy[3:0];
+  wire [15+33:0] FUVLD_dummy1[3:0];
+  wire [15:0] FUFLD_dummy_N[3:0];
+  wire [15:0] FUFLD_dummy1_N[3:0];
+  wire [15:0] FUFLD_dummy2_N[3:0];
+  wire [15+33:0] FUVLD_dummy_N[3:0];
+  wire [15+33:0] FUVLD_dummy1_N[3:0];
 
 
   for(n=0;n<4;n=n+1) begin

@@ -1111,9 +1111,9 @@ module reginfl(
   input [4:0] newAddr8;
   input newEn8;
 
-  wire [8:0][DATA_WIDTH-1:0] ram_read_data;
-  wire [8:0][DATA_WIDTH-1:0] read_data;
-  wire [8:0][ADDR_WIDTH-1:0] read_addr;
+  wire [DATA_WIDTH-1:0] ram_read_data[8:0];
+  wire [DATA_WIDTH-1:0] read_data[8:0];
+  wire [ADDR_WIDTH-1:0] read_addr[8:0];
 
 
   wire read_constEn[8:0];
