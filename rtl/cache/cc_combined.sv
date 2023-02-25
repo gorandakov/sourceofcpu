@@ -39,24 +39,7 @@ module cc_comb (
   chkCL_clkEn,
   chkCL_hit,
   expun_addr,
-  expun_wen,
-  wr0_hit,
-  wr0_addrE,wr0_addrO,
-  wr0_banks,
-  wr0_begin,wr0_end,
-  wr0_bgn_ben,wr0_end_ben,
-  wr0_odd,wr0_split,
-  wr0_data,
-  wr0_pbit,wr0_d128,
-  wr1_hit,
-  wr1_addrE,wr1_addrO,
-  wr1_banks,
-  wr1_begin,wr1_end,
-  wr1_bgn_ben,wr1_end_ben,
-  wr1_odd,wr1_split,
-  wr1_data,
-  wr1_pbit,wr1_d128,
-  wrStall,wrDoStall
+  expun_wen
   );  
   
   localparam DATA_WIDTH=65*16;
@@ -86,31 +69,6 @@ module cc_comb (
   output chkCL_hit;
   output [36:0] expun_addr;
   output expun_wen;
-  input [1:0] wr0_hit;
-  input [35:0] wr0_addrE;
-  input [35:0] wr0_addrO;
-  input [31:0] wr0_banks;
-  input [4:0] wr0_begin;
-  input [4:0] wr0_end;
-  input [3:0] wr0_bgn_ben;
-  input [3:0] wr0_end_ben;
-  input wr0_odd,wr0_split;
-  input [159:0] wr0_data;
-  input [1:0] wr0_pbit;
-  input       wr0_d128;
-  input [1:0] wr1_hit;
-  input [35:0] wr1_addrE;
-  input [35:0] wr1_addrO;
-  input [31:0] wr1_banks;
-  input [4:0] wr1_begin;
-  input [4:0] wr1_end;
-  input [3:0] wr1_bgn_ben;
-  input [3:0] wr1_end_ben;
-  input [159:0] wr1_data;
-  input [1:0] wr1_pbit;
-  input       wr1_d128;
-  input wr1_odd,wr1_split;
-  input wrStall;
   
   wire [DATA_WIDTH-1:0] read_data0;
   wire [DATA_WIDTH-1:0] cc_read_data0;
