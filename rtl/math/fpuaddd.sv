@@ -682,8 +682,11 @@ module fpuadd_renor(
       else if ((7-t)==1) assign A_outE=A_firstE[t] ? {A_medE[63-(7-t):0],Ax} : 64'bz;
 	  else assign A_outE=A_firstE[t] ? A_medE : 64'bz;
 
-          adder2c #(13) upperAdd_mod(exp[15:3],~t[12:0],adde8_nc[t],adde8_c[t],1'b0,1'b1,1'b1,1'b1,,,,);
-          adder2c #(3)  lowerAdd_mod(exp[2:0],~t[2:0],adde1_nc[t],adde1_c[t],1'b0,1'b1,1'b1,1'b1,
+	  wire [12:0] t13=~t[12:0];
+	  wire [2:0] t3=~t[2:0];
+
+          adder2c #(13) upperAdd_mod(exp[15:3],t13,adde8_nc[t],adde8_c[t],1'b0,1'b1,1'b1,1'b1,,,,);
+          adder2c #(3)  lowerAdd_mod(exp[2:0],~t3,adde1_nc[t],adde1_c[t],1'b0,1'b1,1'b1,1'b1,
             addeCO_nc[t],addeCO_c[t],,);
           
           assign xadde1_nc=A_firstE[t] ? adde1_nc[7-t] : 3'bz;
