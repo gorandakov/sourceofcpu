@@ -1056,7 +1056,7 @@ module dmisscam(
   assign cmpEnE5[0]=fill_en5[0];
  
   assign fill_en=fill_en_way;
-  assign fill_match=|(fill_match_o[0]|fill_match_o[1]|fill_match_o[2]|fill_match_o[3]|fill_match_o[4]|fill_match_o[5]);
+  assign fill_match=|fill_match_o;
   assign has_free=found;
  // assign fill_req=read_en!=16'b0 ? 4'bz : 4'b0;
   assign ins_addr_o=ins_en ? 37'bz : 37'b0;
