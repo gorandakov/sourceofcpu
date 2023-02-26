@@ -234,8 +234,8 @@ module ctlb(
   input [15:0] csrss_addr;
   input [63:0] csrss_data;
   
-  wire [3:0][1:0] newLRU;
-  wire [3:0][1:0] oldLRU;
+  wire [1:0] newLRU[3:0];
+  wire [1:0] oldLRU[3:0];
   wire [1:0] hitLRU;
   wire [3:0] read_hit_way;
   reg init_pending;

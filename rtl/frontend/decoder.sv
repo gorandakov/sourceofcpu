@@ -55,19 +55,19 @@ module decoder_permitted_i(
   input allret;
   output [9:0] perm;
 
-  wire [9:0][9:0] branch_cnt;
-  wire [9:0][9:0] taken_cnt;
-  wire [9:0][9:0] indir_cnt;
-  wire [9:0][9:0] alu_cnt;
-  wire [9:0][9:0] shift_cnt;
-  wire [9:0][9:0] load_cnt;
-  wire [9:0][9:0] store_cnt;
-  wire [9:0][10:0] mul_cnt;
-  wire [9:0][10:1] mul_more_cnt;
-  wire [9:0][9:0] lsas_cnt;
-  wire [9:0][9:0] ldst_cnt;
-  wire [9:0][9:0] alu_shift_cnt;
-  wire [9:0][9:0] FPU_dke;
+  wire [9:0] branch_cnt[9:0];
+  wire [9:0] taken_cnt[9:0];
+  wire [9:0] indir_cnt[9:0];
+  wire [9:0] alu_cnt[9:0];
+  wire [9:0] shift_cnt[9:0];
+  wire [9:0] load_cnt[9:0];
+  wire [9:0] store_cnt[9:0];
+  wire [10:0] mul_cnt[9:0];
+  wire [10:1] mul_more_cnt[9:0];
+  wire [9:0] lsas_cnt[9:0];
+  wire [9:0] ldst_cnt[9:0];
+  wire [9:0] alu_shift_cnt[9:0];
+  wire [9:0] FPU_dke[9:0];
   
   wire [9:0] storeL_has;
   wire [9:0] permA;
@@ -2249,35 +2249,35 @@ module decoder(
 
   reg last_trce;
 
-  wire [9:0][INSTR_WIDTH-1:0] inst;
-  wire [9:0][INSTRQ_WIDTH-1:0] instQ;
+  wire [INSTR_WIDTH-1:0] inst[9:0];
+  wire [INSTRQ_WIDTH-1:0] instQ[9:0];
   
-  wire [9:0][OPERATION_WIDTH-6:0] dec_operation;
-  wire [9:0][4:0] dec_alucond;
-  wire [9:0][REG_WIDTH-1:0] dec_rA;
+  wire [OPERATION_WIDTH-6:0] dec_operation[9:0];
+  wire [4:0] dec_alucond[9:0];
+  wire [REG_WIDTH-1:0] dec_rA[9:0];
   wire [9:0]dec_rA_use;
   wire [9:0]dec_rA_useF;
-  wire [9:0][REG_WIDTH-1:0] dec_rB;
+  wire [REG_WIDTH-1:0] dec_rB[9:0];
   wire [9:0]dec_rB_use;
   wire [9:0]dec_rB_useF;
   wire [9:0]dec_useBConst;
-  wire [9:0][REG_WIDTH-1:0] dec_rC;
+  wire [REG_WIDTH-1:0] dec_rC[9:0];
   wire [9:0]dec_rC_use;
   wire [9:0]dec_rC_useF;
   wire [9:0] dec_useCRet;
-  wire [9:0][64:0] dec_constant;
-  wire [9:0][64:0] dec_constantN;
-  wire [9:0][REG_WIDTH-1:0] dec_rT;
+  wire [64:0] dec_constant[9:0];
+  wire [64:0] dec_constantN[9:0];
+  wire [REG_WIDTH-1:0] dec_rT[9:0];
   wire [9:0]dec_rT_use;
   wire [9:0]dec_rT_useF;
-  wire [9:0][3:0] dec_port;
+  wire [3:0] dec_port[9:0];
   wire [9:0]dec_useRs;
   wire [9:0]dec_halt;
 
   wire [9:0] dec_btbWay;
-  wire [9:0][1:0] dec_jmpInd;
-  wire [9:0][7:0] dec_ght;
-  wire [9:0][1:0] dec_sc;
+  wire [1:0] dec_jmpInd[9:0];
+  wire [7:0] dec_ght[9:0];
+  wire [1:0] dec_sc[9:0];
   wire [9:0] dec_miss;
   wire [9:0] dec_tbufOnly;
 
@@ -2291,10 +2291,10 @@ module decoder(
 
   wire [9:0] dec_fsimd;
 
-  wire [9:0][7:0] dec_srcIPOff;
+  wire [7:0] dec_srcIPOff[9:0];
   reg  [8:0] dec_srcIPOff_reg[9:0];
-  wire [9:0][8:0] dec_srcIPOffA;
-  wire [9:0][32:0] dec_srcIPOffx;
+  wire [8:0] dec_srcIPOffA[9:0];
+  wire [32:0] dec_srcIPOffx[9:0];
   
   reg [8:0] dec_srcIPOffA_reg[9:0];
 
@@ -2309,7 +2309,7 @@ module decoder(
   wire has_taken;
   wire has_tick;
 
-  wire [9:0][3:0] dec_magic;
+  wire [3:0] dec_magic[9:0];
   wire [9:0] dec_last;
   wire [9:-1] dec_lspec;
 //  wire [9:-1] dec_aspec;
@@ -2366,9 +2366,9 @@ module decoder(
 
   wire [IP_WIDTH-1:0] taken_srcIP;
 
-  wire [9:0][REG_WIDTH-1:0] dep_rA;
-  wire [9:0][REG_WIDTH-1:0] dep_rB;
-  wire [9:0][REG_WIDTH-1:0] dep_rC;
+  wire [REG_WIDTH-1:0] dep_rA[9:0];
+  wire [REG_WIDTH-1:0] dep_rB[9:0];
+  wire [REG_WIDTH-1:0] dep_rC[9:0];
 
   wire [9:0] dec_afterTaken;
   reg [9:0] dec_afterTaken_reg;
@@ -2407,20 +2407,20 @@ module decoder(
   
   reg [9:0] iUsed_reg;
 
-  wire [8:0][OPERATION_WIDTH-1:0] rs_operation;
-  wire [8:0][REG_WIDTH-1:0] rs_rA;
+  wire [OPERATION_WIDTH-1:0] rs_operation[8:0];
+  wire [REG_WIDTH-1:0] rs_rA[8:0];
   wire [8:0]rs_rA_use;
   wire [8:0]rs_rA_useF;
   wire [8:0]rs_useAConst;
-  wire [8:0][REG_WIDTH-1:0] rs_rB;
+  wire [REG_WIDTH-1:0] rs_rB[8:0];
   wire [8:0]rs_rB_use;
   wire [8:0]rs_rB_useF;
   wire [8:0]rs_useBConst;
-  wire [8:0][64:0] rs_constant;
-  wire [8:0][REG_WIDTH-1:0] rs_rT;
+  wire [64:0] rs_constant[8:0];
+  wire [REG_WIDTH-1:0] rs_rT[8:0];
   wire [8:0]rs_rT_use;
   wire [8:0]rs_rT_useF;
-  wire [8:0][3:0] rs_port;
+  wire [3:0] rs_port[8:0];
   wire [8:0]rs_useRs;
   wire [8:0] rs_afterTaken;
   wire [8:0] rs_IPRel;
@@ -2429,8 +2429,8 @@ module decoder(
   wire [8:0] rs_rT_isV;  
   wire [8:0] rs_rA_isAnyV;  
   wire [8:0] rs_rB_isAnyV;  
-  wire [8:0][9:0] rs_index;
-  wire [5:0][5:0] rs_lsi;
+  wire [9:0] rs_index[8:0];
+  wire [5:0] rs_lsi[5:0];
   wire [8:0] rs_flagWr;
 
   wire [2:0] rs_alt;
@@ -2470,11 +2470,11 @@ module decoder(
   wire [9:0] dec_useFlags;
   reg [9:0] dec_useFlags_reg;
   
-  wire [9:0][3:0] flag_dep;
+  wire [3:0] flag_dep[9:0];
   wire [9:0] flag_lastWr;
   
   wire [8:0] rs_lastFl;
-  wire [8:0][3:0] rs_flDep;
+  wire [3:0] rs_flDep[8:0];
 
   wire [7:0] dummy8_1;
   wire [9:0] jump0_bit;

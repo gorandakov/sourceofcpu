@@ -496,9 +496,9 @@ module rs_wakeUp_logic_array(
   wire [3:0] outFuFwd2_X; assign outFuFwd2=outFuFwd2_X;
   wire [3:0] outFuuFwd2_X; assign outFuuFwd2=outFuuFwd2_X;
 
-  wire [2:0][8:0] Treg0;
+  wire [8:0] Treg0[2:0];
   wire [2:0] Twen0;
-  wire [2:0][8:0] Treg1;
+  wire [8:0] Treg1[2:0];
   wire [2:0] Twen1;
 
   wire [8:0] FUreg[18:0];
@@ -1340,9 +1340,9 @@ module rs_wakeUpS_logic_array(
   wire [8:0] register[2:1];
   wire [9:0] funit[2:1];
 
-  wire [2:1][8:0] Treg0;
+  wire [8:0] Treg0[2:1];
   wire [2:1] Twen0;
-  wire [2:1][8:0] Treg1;
+  wire [8:0] Treg1[2:1];
   wire [2:1] Twen1;
 
   wire [8:0] FUreg[9:0];
@@ -2625,9 +2625,9 @@ module rs(
   wire [BUF_COUNT-1:0] newRsSelect1;
   wire [BUF_COUNT-1:0] newRsSelect2;
   
-  wire [2:0][BUF_COUNT-1:0] outRsSelect;
+  wire [BUF_COUNT-1:0] outRsSelect[2:0];
   wire [BUF_COUNT-1:0] portReady[2:0];
-  wire [2:0][3:0] outBank;
+  wire [3:0] outBank[2:0];
   wire [2:0] portEn;
   wire [2:0] rsFound;
   wire [2:0] rsFoundNZ;

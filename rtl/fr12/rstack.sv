@@ -89,10 +89,10 @@ module ret_stack(
   reg [ADDR_WIDTH-1:0] read_addr[1:0];
   reg [ADDR_WIDTH-1:0] write_addr[1:0];
   reg [ADDR_WIDTH-1:0] write_addr_reg;
-  wire [1:0][ADDR_WIDTH-1:0] read_addr_inc;
-  wire [1:0][ADDR_WIDTH-1:0] write_addr_inc;
-  wire [1:0][ADDR_WIDTH-1:0] read_addr_dec;
-  wire [1:0][ADDR_WIDTH-1:0] write_addr_dec;
+  wire [ADDR_WIDTH-1:0] read_addr_inc[1:0];
+  wire [ADDR_WIDTH-1:0] write_addr_inc[1:0];
+  wire [ADDR_WIDTH-1:0] read_addr_dec[1:0];
+  wire [ADDR_WIDTH-1:0] write_addr_dec[1:0];
   wire [DATA_WIDTH-1:0] write_data_new;
   wire [DATA_WIDTH-1:0] read_data_ram;
 
