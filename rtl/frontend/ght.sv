@@ -496,8 +496,8 @@ module ght(
     wire save0;
     wire save1;
     
-    wire [7:0][1:0] write_sc;
-    wire [7:0][15:0] write_addr;
+    wire [1:0] write_sc[7:0];
+    wire [15:0] write_addr[7:0];
     wire [7:0]write_wen;
 
     wire [1:0] otherPred0a;

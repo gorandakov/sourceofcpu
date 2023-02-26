@@ -333,7 +333,7 @@ module frontend1(
   
   wire pre_isAvx;
   reg pre_isAvx_reg;
-  wire [11:0][CLS_WIDTH-1:0] pre_class;
+  wire [CLS_WIDTH-1:0] pre_class[11:0];
   reg [CLS_WIDTH-1:0] pre_class_reg[11:0]/*verilator public*/;
   wire pre_has_jumps;
  // wire [3:0] jFirst;
@@ -385,18 +385,18 @@ module frontend1(
   reg btbFStall_recover_reg;
   reg btbFStall_recover_reg2;
     
-  wire [3:0][3:0] jmp_off;
+  wire [3:0] jmp_off[3:0];
   reg [3:0] jmp_off_reg[3:0];
-  wire [3:0][63:0] jdec_const;
+  wire [63:0] jdec_const[3:0];
   reg [63:0] jdec_const_reg[3:0];
   wire [3:0] jdec_bkjump;
-  wire [3:0][INSTR_WIDTH-1:0] jmp_instr;
-  wire [3:0][3:0] jmp_magic;
-  wire [3:0][CLS_WIDTH-1:0] jmp_class;
+  wire [INSTR_WIDTH-1:0] jmp_instr[3:0];
+  wire [3:0] jmp_magic[3:0];
+  wire [CLS_WIDTH-1:0] jmp_class[3:0];
   wire [3:0] jdec_push;
   wire [3:0] jdec_pop;
-  wire [3:0][4:0] jdec_type;
-  wire [3:0][3:0] jdec_attr;
+  wire [4:0] jdec_type[3:0];
+  wire [3:0] jdec_attr[3:0];
   wire [4:0] jdec_link0;
   wire [4:0] jdec_link1;
   wire [4:0] jdec_link2;
@@ -404,15 +404,15 @@ module frontend1(
   wire btb_way;
   reg  btb_way_reg;
   reg  btb_way_reg2;
-  wire [3:0][3:0] jmp_moff;
+  wire [3:0] jmp_moff[3:0];
   reg [3:0] jmp_moff_reg[3:0];
-  wire [3:0][43:1] jmp_par0;
-  wire [3:0][43:1] jmp_par1;
-  wire [3:0][43:1] jmp_tpar0;
-  wire [3:0][43:1] jmp_tpar1;
-  wire [3:0][63:1] jdec_target;
+  wire [43:1] jmp_par0[3:0];
+  wire [43:1] jmp_par1[3:0];
+  wire [43:1] jmp_tpar0[3:0];
+  wire [43:1] jmp_tpar1[3:0];
+  wire [63:1] jdec_target[3:0];
   wire [3:0] jdec_sec;
-  wire [3:0][3:0] jmp_mask;
+  wire [3:0] jmp_mask[3:0];
   reg [3:0] jmp_mask_reg[3:0];
   reg [3:0] jmp_mask_reg2[3:0];
   reg [3:0] jmp_mask_reg3[3:0];
@@ -510,7 +510,7 @@ module frontend1(
   wire [11:0] pre_jbefore;
   wire [11:0] pre_jbefore0;
   wire [3:0] last_off;
-  wire [3:0][3:0] btb_joff;
+  wire [3:0] btb_joff[3:0];
   reg [3:0] last_off_reg;
   reg [3:0] last_off_reg2;
   reg [3:0] last_off_reg3;
@@ -603,7 +603,7 @@ module frontend1(
   wire [4:0]       btbx_jlink3;
   wire [`ZERO:0]  btbx_jlnpos3;
   wire [`ZERO:0] btbx_jlnjpos3;
-  wire [3:0][3:0] btbx_joff;
+  wire [3:0] btbx_joff[3:0];
   reg  [3:0] btbx_joff_reg[3:0];
   reg  [3:0] btbx_joff_reg2[3:0];
   reg  [3:0] btbx_joff_reg3[3:0];

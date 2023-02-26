@@ -558,10 +558,10 @@ module fpuadd_renorS(
   wire [2:0] xadde1_nc;
   wire xaddeCO_c;
   wire xaddeCO_nc;
-  wire [2:0][5:0] adde8_c;
-  wire [2:0][5:0] adde8_nc;
-  wire [7:0][2:0] adde1_c;
-  wire [7:0][2:0] adde1_nc;
+  wire [5:0] adde8_c[2:0];
+  wire [5:0] adde8_nc[2:0];
+  wire [2:0] adde1_c[7:0];
+  wire [2:0] adde1_nc[7:0];
   wire [7:0] addeCO_nc;
   wire [7:0] addeCO_c;
   wire [8:0] exp_outE;

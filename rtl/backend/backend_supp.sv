@@ -91,11 +91,11 @@ module reg_alloc(
 
 
   reg [31:0] rAllOc[8:0];
-  wire [8:0][31:0] rAllOc_first;
-  wire [8:0][31:0] rAllOc_free;
+  wire [31:0] rAllOc_first[8:0];
+  wire [31:0] rAllOc_free[8:0];
   wire [8:0] rAllOc_has;
-  wire [8:0][3:0] rAllOc_first_b;
-  wire [8:0][4:0] rAllOc_first_r;
+  wire [3:0] rAllOc_first_b[8:0];
+  wire [4:0] rAllOc_first_r[8:0];
   reg [31:0] rThread[8:0];
 
   integer k;
