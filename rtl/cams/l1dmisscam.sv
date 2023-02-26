@@ -439,14 +439,14 @@ module dmisscam(
   wire [15:0] first;
   wire found;
   wire[15:0]              fill_dupl;
-  wire [15:0] [4:0]       fill_sz;
+  wire  [4:0]       fill_sz[15:0];
   wire[15:0]              fill_odd;
   wire[15:0]              fill_io;
   wire[15:0]              fill_st;
   wire[15:0]              fill_split;
-  wire [15:0] [4:0]       fill_bbank;
-  wire [15:0] [1:0]       fill_low;
-  wire [15:0][36:0]       fill_addr;
+  wire [4:0]       fill_bbank[15:0];
+  wire [1:0]              fill_low[15:0];
+  wire [36:0]             fill_addr[15:0];
   wire [15:0] fill_en;
  
   wire [15:0] read_en_way;

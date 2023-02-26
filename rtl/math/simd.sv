@@ -80,7 +80,7 @@ module simd_non_socialiste(
 
   reg out8,out16,out32,out64,outL;
   wire [63:0] resD[4:1];
-  reg  [4:1][63:0] resD_reg;
+  reg  [63:0] resD_reg[4:1];
   reg is_sign,is_sat,is_min,is_max,is_sub,is_simpl,is_subcmp,is_cmp;
   reg [3:0] jump_type;
   reg[63:0] A_reg;
