@@ -759,8 +759,16 @@ module stq(
   endgenerate
   assign wb0_adataW=chk_wb0_has ? {`lsaddr_width{1'bz}} : {`lsaddr_width{1'b0}};
   assign wb1_adataW=chk_wb1_has ? {`lsaddr_width{1'bz}} : {`lsaddr_width{1'b0}};
-  assign wb0_dataW=chk_wb0_has ? 136'bz : 136'b0;
-  assign wb1_dataW=chk_wb1_has ? 136'bz : 136'b0;
+  assign wb0_dataW[31:0]=chk_wb0_has ? 32'bz : 32'b0;
+  assign wb1_dataW[31:0]=chk_wb1_has ? 32'bz : 32'b0;
+  assign wb0_dataW[63:32]=chk_wb0_has ? 32'bz : 32'b0;
+  assign wb1_dataW[63:32]=chk_wb1_has ? 32'bz : 32'b0;
+  assign wb0_dataW[95:64]=chk_wb0_has ? 32'bz : 32'b0;
+  assign wb1_dataW[95:64]=chk_wb1_has ? 32'bz : 32'b0;
+  assign wb0_dataW[127:96]=chk_wb0_has ? 32'bz : 32'b0;
+  assign wb1_dataW[127:96]=chk_wb1_has ? 32'bz : 32'b0;
+  assign wb0_dataW[135:128]=chk_wb0_has ? 8'bz : 8'b0;
+  assign wb1_dataW[135:128]=chk_wb1_has ? 8'bz : 8'b0;
   assign wb0_pbitW[0]=chk_wb0_has ? 1'bz : 1'b0;
   assign wb1_pbitW[0]=chk_wb1_has ? 1'bz : 1'b0;
   assign wb0_pbitW[1]=chk_wb0_has ? 1'bz : 1'b0;

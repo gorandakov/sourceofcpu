@@ -849,7 +849,7 @@ module instrQ_upDown(addr,addr_new,fstall,inEn,stall,outEn,doFStall);
   assign cnt[1]=|(cntIn[11:1]&cntOut[10:0]);
   assign cnt[2]=|(cntIn[12:2]&cntOut[10:0]);
   
-  assign cnt[-1]=|(cntIn[9:0]&cntOut[10:1]);
+  //assign cnt[-1]=|(cntIn[9:0]&cntOut[10:1]);
   generate
       genvar k,j;
       for(k=0;k<10;k=k+1) begin 

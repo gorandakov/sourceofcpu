@@ -2,4 +2,10 @@ read -sv ../../rtl/adder.sv ../../rtl/bitselect.sv ../../rtl/common2.sv ../../rt
 
 hierarchy -top heptane_core
 tribuf -merge
-write_cxxrtl -Og -noflatten -noproc output_cpp/core_og.cpp
+techmap
+proc_clean
+proc_rmdead
+proc_prune
+proc_init
+
+write_simplec -i64 output_cpp/core_og.cpp
