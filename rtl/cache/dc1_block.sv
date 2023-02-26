@@ -160,8 +160,8 @@ module dcache1_bank(
   input ins_hit;
   input init;
   
-  wire [ADDR_WIDTH-1:0] read_addr[1:0];
-  wire [DATA_WIDTH-1:0] read_data_ram[1:0];
+  wire [1:0][ADDR_WIDTH-1:0] read_addr;
+  wire [1:0][DATA_WIDTH-1:0] read_data_ram;
   wire enE,enO;
   wire onE,onO;
   wire [DATA_WIDTH-1:0] read_dataP;
@@ -1270,9 +1270,9 @@ module dcache1(
   wire [255:0] rxdata6[3:0];
   wire [255:0] rxdata7[3:0];
   wire [255:0] rxdata[3:0];
-  wire [127+8:0] rddata1[3:0];
+  wire [3:0][127+8:0] rddata1;
 //  wire [4:0] rdcan[3:0];
-  wire [127+8:0] read_dataA[3:0];
+  wire [3:0][127+8:0] read_dataA;
   reg [5:0] mskdata1[3:0];
   reg [4:0] read_sz[3:0];
   reg [4:0] read_sz_reg[3:0];

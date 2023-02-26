@@ -83,7 +83,7 @@ module lru_single(
   input init;
   input en;
 
-  wire [WIDTH-1:0] newLRUa[COUNT-1:0];
+  wire [COUNT-1:0][WIDTH-1:0] newLRUa;
   wire [WIDTH-1:0] newLRU_X;
 
   assign newLRU=newLRU_X;

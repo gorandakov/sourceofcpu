@@ -402,7 +402,7 @@ module predecoder_get(
 
     reg [19:-1] instrEnd;
     
-    wire [16:0] cntEnd[15:-2];
+    wire [15:-2][16:0] cntEnd;
     wire [15:-1] mask;
  
     wire [15:0] cntEnd2;
@@ -413,7 +413,7 @@ module predecoder_get(
 
     wire [14:0] is_jmp;
     reg [14:0] is_jmp_reg;
-    wire [15:0] cntJEnd[15:-1];
+    wire [15:-1][15:0] cntJEnd;
     wire [14:0] jcnt_or_less;
     wire [15:1] jcnt_or_more;
     
@@ -422,7 +422,7 @@ module predecoder_get(
     reg [14:0] is_lnk_reg;
     wire [14:0] first_lnk;
     wire has_lnk;
-    wire [15:0] LNK[15:0];
+    wire [15:0][15:0] LNK;
     wire [14:0] lcnt_or_less;
     wire [15:0] is_ret0;
     wire [14:0] is_ret;

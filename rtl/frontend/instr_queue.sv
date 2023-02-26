@@ -408,8 +408,8 @@ module instrQ_box(
       genvar l,m;
       
       for (m=0;m<6;m=m+1) begin : tile_gen
-          wire [WIDTH-1:0] read_instrm[9:0];
-          wire [OTHER-1:0] read_otherm[9:0];
+          wire [9:0][WIDTH-1:0] read_instrm;
+          wire [9:0][OTHER-1:0] read_otherm;
           
           for (l=0;l<8;l=l+1) begin : buf_gen
               instrQ_buf #(l+m*8,l==0) buf_mod(
@@ -646,21 +646,21 @@ module instrQ(
   wire [OTHER-1:0] read_otherZ9;
   
   reg [ADDR_WIDTH-1:0] write_addrA[11:0];
-  wire [ADDR_WIDTH-1:0] write_addrA_d[11:0];
+  wire [11:0][ADDR_WIDTH-1:0] write_addrA_d;
   reg [ADDR_WIDTH-1:0] write_addrB[11:0];
-  wire [ADDR_WIDTH-1:0] write_addrB_d[11:0];
+  wire [11:0][ADDR_WIDTH-1:0] write_addrB_d;
   wire [ADDR_WIDTH-1:0] write_addr[11:0];
 
   reg [ADDR_WIDTH-1:0] read_addrA[9:0];
-  wire [ADDR_WIDTH-1:0] read_addrA_d[9:0];
+  wire [9:0][ADDR_WIDTH-1:0] read_addrA_d;
   reg [ADDR_WIDTH-1:0] read_addrB[9:0];
-  wire [ADDR_WIDTH-1:0] read_addrB_d[9:0];
+  wire [9:0][ADDR_WIDTH-1:0] read_addrB_d;
   wire [ADDR_WIDTH-1:0] read_addr_d[9:0];
 
   integer k;
   
   reg [5:0] busy[1:0];
-  wire [5:0] busy_d[1:0];
+  wire [1:0][5:0] busy_d;
   wire doFStall0,doFStall1;
   
   reg read_thread_reg;
