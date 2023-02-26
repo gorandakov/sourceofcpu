@@ -2,4 +2,7 @@ read -sv ../../rtl/adder.sv ../../rtl/bitselect.sv ../../rtl/common2.sv ../../rt
 
 hierarchy -top heptane_core
 
+proc
+tribuf
+memory
 write_cxxrtl -Og output_cpp/core_og.cpp
