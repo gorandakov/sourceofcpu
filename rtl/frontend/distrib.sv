@@ -125,17 +125,17 @@ module distrib(
   wire [9:0] shift_cnt_or_less;
 
 
-  wire [10:0] load_cntA[9:-1];
-  wire [10:0] alu_cntA[9:-1];
-  wire [10:0] shift_cntA[9:-1];
-  wire [10:0] store_cntA[9:-1];
-  wire [10:0] ldst_cntA[9:-1];
+  wire [9:-1][10:0] load_cntA;
+  wire [9:-1][10:0] alu_cntA;
+  wire [9:-1][10:0] shift_cntA;
+  wire [9:-1][10:0] store_cntA;
+  wire [9:-1][10:0] ldst_cntA;
   
 
-  wire [POS_WIDTH-1:0] load_index[9:0];
-  wire [POS_WIDTH-1:0] alu_index[9:0];
-  wire [POS_WIDTH-1:0] shift_index[9:0];
-  wire [POS_WIDTH-1:0] store_index[9:0];
+  wire [9:0][POS_WIDTH-1:0] load_index;
+  wire [9:0][POS_WIDTH-1:0] alu_index;
+  wire [9:0][POS_WIDTH-1:0] shift_index;
+  wire [9:0][POS_WIDTH-1:0] store_index;
   
   wire [POS_WIDTH-1:0] mul_index;
  

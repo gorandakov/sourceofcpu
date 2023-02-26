@@ -569,17 +569,17 @@ module regfile_ram_block(
   reg [DATA_WIDTH-1:0] read5_const_reg;
   
   reg [ADDR_WIDTH-1:0]  read0_addr_reg;
-  wire [DATA_WIDTH-1:0] read0_dataP[2:0];
+  wire [2:0][DATA_WIDTH-1:0] read0_dataP;
   reg [ADDR_WIDTH-1:0]  read1_addr_reg;
-  wire [DATA_WIDTH-1:0] read1_dataP[2:0];
+  wire [2:0][DATA_WIDTH-1:0] read1_dataP;
   reg [ADDR_WIDTH-1:0]  read2_addr_reg;
-  wire [DATA_WIDTH-1:0] read2_dataP[2:0];
+  wire [2:0][DATA_WIDTH-1:0] read2_dataP;
   reg [ADDR_WIDTH-1:0]  read3_addr_reg;
-  wire [DATA_WIDTH-1:0] read3_dataP[2:0];
+  wire [2:0][DATA_WIDTH-1:0] read3_dataP;
   reg [ADDR_WIDTH-1:0]  read4_addr_reg;
-  wire [DATA_WIDTH-1:0] read4_dataP[2:0];
+  wire [2:0][DATA_WIDTH-1:0] read4_dataP;
   reg [ADDR_WIDTH-1:0]  read5_addr_reg;
-  wire [DATA_WIDTH-1:0] read5_dataP[2:0];
+  wire [2:0][DATA_WIDTH-1:0] read5_dataP;
 
   reg read0_constEn_reg;
   reg read1_constEn_reg;
@@ -1200,12 +1200,12 @@ module regfile(
   input [DATA_WIDTH-1:0] write9_data_reg;
   input write9_wen_reg;
 
-  wire [DATA_WIDTH-1:0] ram_read_data[5:0];
-  wire [DATA_WIDTH-1:0] read_data[5:0];
-  wire [ADDR_WIDTH-1:0] read_addr[5:0];
-  wire [DATA_WIDTH-1:0] ram_retireRead_data[8:0];
-  wire [DATA_WIDTH-1:0] retireRead_data[8:0];
-  wire [ADDR_WIDTH-1:0] retireRead_addr[8:0];
+  wire [5:0][DATA_WIDTH-1:0] ram_read_data;
+  wire [5:0][DATA_WIDTH-1:0] read_data;
+  wire [5:0][ADDR_WIDTH-1:0] read_addr;
+  wire [8:0][DATA_WIDTH-1:0] ram_retireRead_data;
+  wire [8:0][DATA_WIDTH-1:0] retireRead_data;
+  wire [8:0][ADDR_WIDTH-1:0] retireRead_addr;
 
 
   wire read_constEn[5:0];
