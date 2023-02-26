@@ -860,6 +860,8 @@ module instrQ_upDown(addr,addr_new,fstall,inEn,stall,outEn,doFStall);
           adder #(6) add_mod(addr,j[5:0],addr_new,1'b0,cnt[j],,,,);
       end
   endgenerate
-  
+  always @* begin
+      $display("cnt 0x%x, cntIn 0x%x, cntOut 0x%x",cnt,cntIn,cntOut);
+  end 
   get_carry #(6) cmp_mod(~6'd37,addr,1'b1,doFStall);
 endmodule
