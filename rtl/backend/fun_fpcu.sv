@@ -118,8 +118,8 @@ module fun_fpu(
   output [S+67:0] outA;
   output [S+67:0] outB;
 
-  wire [16+67:0] FOOF[1:0];
-  reg [S+67:0] FOOF_reg[1:0];
+  wire [1:0][16+67:0] FOOF;
+  reg [1:0][S+67:0] FOOF_reg;
   wire [5:0] FOOSH;
   reg [5:0] FOOSH_reg;
   reg [5:0] FOOSH_reg2;
@@ -211,13 +211,13 @@ module fun_fpu(
 
   reg [1:0] ALT_INP_reg;
 
-  wire [S+67:0] gxDataBFL[1:0];
-  reg [16+67:0] gxDataBFL_reg[1:0];
-  reg [16+67:0] fxDataAFL_reg[1:0];
-  reg [S+67:0] gxDataBFL_REG[1:0];
-  reg [S+67:0] fxDataAFL_REG[1:0];
-  reg [S+67:0] gxDataBXL_reg[1:0];
-  reg [S+67:0] fxDataAXL_reg[1:0];
+  wire [1:0][S+67:0] gxDataBFL;
+  reg [1:0][16+67:0] gxDataBFL_reg;
+  reg [1:0][16+67:0] fxDataAFL_reg;
+  reg [1:0][S+67:0] gxDataBFL_REG;
+  reg [1:0][S+67:0] fxDataAFL_REG;
+  reg [1:0][S+67:0] gxDataBXL_reg;
+  reg [1:0][S+67:0] fxDataAXL_reg;
 
   wire [S+67:0] uu_A1;
   wire [S+67:0] uu_A2;

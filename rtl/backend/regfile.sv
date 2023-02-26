@@ -1441,14 +1441,14 @@ module regfile(
   input [DATA_WIDTH-1:0] write9_data_reg;
   input write9_wen_reg;
 
-  wire [DATA_WIDTH-1:0] ram_read_data[8:0];
-  wire [DATA_WIDTH-1:0] ram_read_dataN[8:0];
-  wire [DATA_WIDTH-1:0] read_data[8:0];
-  wire [DATA_WIDTH-1:0] read_dataN[8:0];
-  wire [ADDR_WIDTH-1:0] read_addr[8:0];
-  wire [DATA_WIDTH-1:0] ram_retireRead_data[8:0];
-  wire [DATA_WIDTH-1:0] retireRead_data[8:0];
-  wire [ADDR_WIDTH-1:0] retireRead_addr[8:0];
+  wire [8:0][DATA_WIDTH-1:0] ram_read_data;
+  wire [8:0][DATA_WIDTH-1:0] ram_read_dataN;
+  wire [8:0][DATA_WIDTH-1:0] read_data;
+  wire [8:0][DATA_WIDTH-1:0] read_dataN;
+  wire [8:0][ADDR_WIDTH-1:0] read_addr;
+  wire [8:0][DATA_WIDTH-1:0] ram_retireRead_data;
+  wire [8:0][DATA_WIDTH-1:0] retireRead_data;
+  wire [8:0][ADDR_WIDTH-1:0] retireRead_addr;
 
 
   wire read_constEn[8:0];

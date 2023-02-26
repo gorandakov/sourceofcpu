@@ -436,9 +436,9 @@ module rat_flags(
   wire read_retired_buf;
   wire [FN_WIDTH-1:0] read_fun_buf;
 
-  wire [ROB_ADDR_WIDTH-1:0] read_data[8:0];
+  wire [8:0][ROB_ADDR_WIDTH-1:0] read_data;
   wire [8:0]read_retired;
-  wire [FN_WIDTH-1:0] read_fun[8:0];
+  wire [8:0][FN_WIDTH-1:0] read_fun;
   
   reg [RAT_ADDR_WIDTH-1:0] read_addr_reg[8:0];
   reg read_thread_reg;

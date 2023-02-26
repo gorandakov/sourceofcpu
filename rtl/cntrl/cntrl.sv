@@ -566,7 +566,7 @@ module cntrl_find_outcome(
   output has_xbreak;
 
   wire mem_match;
-  wire [RET_WIDTH-1:0] ret_data[9:0]; 
+  wire [9:0][RET_WIDTH-1:0] ret_data; 
   wire [3:0] ret[9:0];
   wire [9:0] flagSet;
   wire [9:0] pending;
@@ -581,14 +581,14 @@ module cntrl_find_outcome(
   wire break_replay,break_replayS;
   wire break_jump0;
   wire break_jump1;
-  wire [9:0] ret_prev[9:0];
-  wire [9:0] ret_prevG[9:0];
-  wire [9:0] ret_prevV[9:0];
-  wire [9:0] ret_prevF[9:0];
+  wire [9:0][9:0] ret_prev;
+  wire [9:0][9:0] ret_prevG;
+  wire [9:0][9:0] ret_prevV;
+  wire [9:0][9:0] ret_prevF;
   wire [9:0] xbreak0;
   wire [9:0] break_;
-  wire [5:0] rT[9:0];
-  wire [5:0] rTe[8:0];
+  wire [9:0][5:0] rT;
+  wire [8:0][5:0] rTe;
   wire [9:0] jump0_misPred;
   wire [9:0] jump1_misPred;
   wire indirMismatch;
@@ -600,15 +600,15 @@ module cntrl_find_outcome(
   wire [BOB_WIDTH-1:0] bob_wdata;
   wire [BOB_WIDTH-1:0] bob_rdata;
   
-  wire [8:0] IPOff[9:0];
-  wire [2:0] magicO[9:0];
+  wire [9:0][8:0] IPOff;
+  wire [9:0][2:0] magicO;
   wire [8:0] retireG;
   wire [8:0] retireV;
   wire [8:0] retireF;
   wire [8:0] no_retire;
 
-  wire [8:0] retire_rF[8:0];
-  wire [8:0] retire_rFl[8:0];
+  wire [8:0][8:0] retire_rF;
+  wire [8:0][8:0] retire_rFl;
 
   wire [4:0] jump0Type;
   wire [3:0] jump0Pos;
@@ -635,11 +635,11 @@ module cntrl_find_outcome(
   wire jump1_taken;
   wire [5:0] jump1_flags;
 
-  wire [5:0] nextFlags[9:0];
+  wire [9:0][5:0] nextFlags;
   
   wire [42:0] breakIP;
   wire [62:43] bbaseIP;
-  wire [62:0] nextIP[9:0];
+  wire [9:0][62:0] nextIP;
   wire [19:0] jupd0_IP;
   wire [19:0] jupd1_IP;
   wire lastIP;
