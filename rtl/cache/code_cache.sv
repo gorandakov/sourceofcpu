@@ -483,10 +483,10 @@ module ccRam_half(
   wire [7:0] read_hit_way;
   wire [7:0] expun_hit_way;
   
-  wire [DATA_WIDTH-1:0] read_dataP[7:-1];
-  wire [59:0] read_dataXP[7:-1];
-  wire [2:0] read_NRUP[7:-1];
-  wire [36:0] expun_addrP[7:-1];
+  wire [DATA_WIDTH-1:0] read_dataP[8:0];
+  wire [59:0] read_dataXP[8:0];
+  wire [2:0] read_NRUP[8:0];
+  wire [36:0] expun_addrP[8:0];
 
   reg [2:0] read_NRU_reg;
  
@@ -501,19 +501,19 @@ module ccRam_half(
           .read_IP(read_IP[IP_WIDTH-2:4]),
           .read_IP_low(read_IP[3:0]),
           .read_set_flag(read_set_flag),
-          .read_data(read_dataP[k]),
-          .read_data_in(read_dataP[k-1]),
-          .read_dataX(read_dataXP[k]),
-          .read_dataX_in(read_dataXP[k-1]),
-          .expun_addr(expun_addrP[k]),
-          .expun_addr_in(expun_addrP[k-1]),
+          .read_data(read_dataP[k+1]),
+          .read_data_in(read_dataP[k]),
+          .read_dataX(read_dataXP[k+1]),
+          .read_dataX_in(read_dataXP[k]),
+          .expun_addr(expun_addrP[k+1]),
+          .expun_addr_in(expun_addrP[k]),
           .read_hit(read_hit_way[k]),
 	  .expun_hit(expun_hit_way[k]),
           .chkCL_IP(chkCL_IP),
           .chkCL_clkEn(chkCL_clkEn),
           .chkCL_hit(chkCL_hit_way[k]),
-          .read_NRU(read_NRUP[k]),
-          .read_NRU_in(read_NRUP[k-1]),
+          .read_NRU(read_NRUP[k+1]),
+          .read_NRU_in(read_NRUP[k]),
 	  .read_NRU_reg(read_NRU_reg),
           .write_IP(write_IP),
           .write_data(write_data),
@@ -529,18 +529,18 @@ module ccRam_half(
   assign expun_hit=|expun_hit_way;
   assign chkCL_hit=|chkCL_hit_way;
 
-  assign read_dataP[-1]=0;
-  assign read_dataXP[-1]=0;
-  assign read_NRUP[-1]=0;
-  assign expun_addrP[-1]=0;
+  assign read_dataP[0]=0;
+  assign read_dataXP[0]=0;
+  assign read_NRUP[0]=0;
+  assign expun_addrP[0]=0;
 
-  assign read_data=read_dataP[7];
-  assign read_dataX=read_dataXP[7];
-  assign expun_addr=expun_addrP[7];
+  assign read_data=read_dataP[8];
+  assign read_dataX=read_dataXP[8];
+  assign expun_addr=expun_addrP[8];
   
 
   always @(*) begin
-    read_NRU_reg=read_NRUP[7];
+    read_NRU_reg=read_NRUP[8];
   end
 
 endmodule
