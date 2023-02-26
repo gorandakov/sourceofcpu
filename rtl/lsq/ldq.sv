@@ -417,7 +417,7 @@ module ldq_up_down(
   input stall;
   output doStall;
 
-  wire [WIDTH-1:0] cnt_d[2:0];
+  wire [2:0][WIDTH-1:0] cnt_d;
   reg  [2:0][WIDTH-1:0] cnt;
   assign doStall=cnt[2]==STALL_CNT || cnt[2]==(STALL_CNT+1);
   
@@ -772,15 +772,15 @@ module ldq(
   wire [5:0] chkL0_mask;
   wire [5:0] chkL1_mask;
   wire [5:0] chkL2_mask;
-  wire [5:0] chk_mask[5:0];
-  wire [II_WIDTH-1:0] chk_II[5:0];
-  reg [II_WIDTH-1:0] II_save[5:0];
-  wire [5:0] chkbits[2:0];
-  wire [10:1] cnt_chk[2:0];
+  wire [5:0][5:0] chk_mask;
+  wire [5:0][II_WIDTH-1:0] chk_II;
+  reg [5:0][II_WIDTH-1:0] II_save;
+  wire [2:0][5:0] chkbits;
+  wire [2:0][10:1] cnt_chk;
   
   integer u;
-  wire [DATA_WIDTH-1:0] chk_dataA[5:0];
-  wire [DATA_WIDTH-1:0] new_data[3:0];
+  wire [5:0][DATA_WIDTH-1:0] chk_dataA;
+  wire [3:0][DATA_WIDTH-1:0] new_data;
   wire [3:0] new_rsEn;
   wire [3:0] new_thread;
   wire [3:0] new_isFlag;

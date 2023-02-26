@@ -72,7 +72,7 @@ module fcmpd(clk,rst,
   reg [1:0] vres_reg;
   reg ven_reg;
   reg [1:0] vtype_reg;
-  wire [15:0] srchbits[3:0];
+  wire [3:0][15:0] srchbits;
   wire [15:0] s_first;
   wire s_has;
 

@@ -79,10 +79,10 @@ module fun_fpusqr(
   output [3:0] fxFRT_alten;
   output [3:0]      fxFRT_pause;
 
-  wire [10:0] fxFCADD_raise[1:0];
+  wire [1:0][10:0] fxFCADD_raise;
   reg [10:0] fxFCADD_raise_reg[1:0];
   reg [10:0] fxFCADD_raise_s_reg[1:0];
-  wire [10:0] fxFADD_raise[1:0];
+  wire [1:0][10:0] fxFADD_raise;
   reg [10:0] fxFADD_raise_reg[1:0];
   reg [10:0] fxFADD_raise_s_reg[1:0];
   wire [10:0] fraise2;

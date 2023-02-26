@@ -604,10 +604,10 @@ module rat(
   genvar i,k,l;
 
 
-  wire [ROB_ADDR_WIDTH-1:0] read_data[8:0];
+  wire [8:0][ROB_ADDR_WIDTH-1:0] read_data;
   wire [8:0]read_retired;
   wire [8:0]read_isDep;
-  wire [FN_WIDTH-1:0] read_fun[8:0];
+  wire [8:0][FN_WIDTH-1:0] read_fun;
 
   reg read_thread_reg;
   
@@ -653,9 +653,9 @@ module rat(
 
   generate
     for (l=0;l<4+2*EXTRA;l=l+1) begin : tile_gen
-        wire [ROB_ADDR_WIDTH-1:0] read_dataA[8:0];
+        wire [8:0][ROB_ADDR_WIDTH-1:0] read_dataA;
         wire [8:0] read_retiredA;
-        wire [FN_WIDTH-1:0] read_funA[8:0];
+        wire [8:0][FN_WIDTH-1:0] read_funA;
     for (i=0;i<8;i=i+1) begin : buffers
         rat_buf #(i) buf_mod(
           clk,
