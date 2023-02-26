@@ -125,11 +125,11 @@ module distrib(
   wire [9:0] shift_cnt_or_less;
 
 
-  wire [10:0] load_cntA[10:0];
-  wire [10:0] alu_cntA[10:0];
-  wire [10:0] shift_cntA[10:0];
-  wire [10:0] store_cntA[10:0];
-  wire [10:0] ldst_cntA[10:0];
+  wire [10:0] load_cntA[9:-1];
+  wire [10:0] alu_cntA[9:-1];
+  wire [10:0] shift_cntA[9:-1];
+  wire [10:0] store_cntA[9:-1];
+  wire [10:0] ldst_cntA[9:-1];
   
 
   wire [POS_WIDTH-1:0] load_index[9:0];
@@ -262,31 +262,31 @@ module distrib(
           popcnt10 store_mod(store & ((10'd2<<k)-10'd1),store_cntA[k]);
           popcnt10 ldst_mod((load|store) & ((10'd2<<k)-10'd1),ldst_cntA[k]);
           for (j=0;j<10;j=j+1) begin
-              assign load_index[j][k]=load_cntA[k+1][j+1]&load_cntA[k][j] || load_cnt_or_less[j];
-              assign alu_index[j][k]=alu_cntA[k+1][j+1]&alu_cntA[k][j] || alu_cnt_or_less[j];
-              assign shift_index[j][k]=shift_cntA[k+1][j+1]&shift_cntA[k][j] || shift_cnt_or_less[j];
-              assign store_index[j][k]=store_cntA[k+1][j+1]&store_cntA[k][j] || store_cnt_or_less[j];
+              assign load_index[j][k]=load_cntA[k][j+1]&load_cntA[k-1][j] || load_cnt_or_less[j];
+              assign alu_index[j][k]=alu_cntA[k][j+1]&alu_cntA[k-1][j] || alu_cnt_or_less[j];
+              assign shift_index[j][k]=shift_cntA[k][j+1]&shift_cntA[k-1][j] || shift_cnt_or_less[j];
+              assign store_index[j][k]=store_cntA[k][j+1]&store_cntA[k-1][j] || store_cnt_or_less[j];
           end
-          assign wrt0=(store_cntA[k+1][1] && store_cntA[k][0]) ? ldst_cntA[k+1][6:1] : 6'bz;
-          assign wrt1=(store_cntA[k+1][2] && store_cntA[k][1]) ? ldst_cntA[k+1][6:1] : 6'bz;
-          assign wrt2=(store_cntA[k+1][3] && store_cntA[k][2]) ? ldst_cntA[k+1][6:1] : 6'bz;
-          assign lsi_P0=(store_index[0][k] && ~store_index[0][k^1]) ? ldst_cntA[k+1][6:1] : 6'bz;
-          assign lsi_P1=(store_index[1][k] && ~store_index[1][k^1]) ? ldst_cntA[k+1][6:1] : 6'bz;
-          assign lsi_P2=(store_index[2][k] && ~store_index[2][k^1]) ? ldst_cntA[k+1][6:1] : 6'bz;
-          assign lsi_Q0=(load_index[0][k] && ~load_index[0][k^1]) ? ldst_cntA[k+1][6:1] : 6'bz;
-          assign lsi_Q1=(load_index[1][k] && ~load_index[1][k^1]) ? ldst_cntA[k+1][6:1] : 6'bz;
-          assign lsi_Q2=(load_index[2][k] && ~load_index[2][k^1]) ? ldst_cntA[k+1][6:1] : 6'bz;
-          assign lsi_Q3=(load_index[3][k] && ~load_index[3][k^1]) ? ldst_cntA[k+1][6:1] : 6'bz;
-          assign lsi_Q4=(load_index[4][k] && ~load_index[4][k^1]) ? ldst_cntA[k+1][6:1] : 6'bz;
-          assign lsi_Q5=(load_index[5][k] && ~load_index[5][k^1]) ? ldst_cntA[k+1][6:1] : 6'bz;
+          assign wrt0=(store_cntA[k][1] && store_cntA[k-1][0]) ? ldst_cntA[k][6:1] : 6'bz;
+          assign wrt1=(store_cntA[k][2] && store_cntA[k-1][1]) ? ldst_cntA[k][6:1] : 6'bz;
+          assign wrt2=(store_cntA[k][3] && store_cntA[k-1][2]) ? ldst_cntA[k][6:1] : 6'bz;
+          assign lsi_P0=(store_index[0][k] && ~store_index[0][k^1]) ? ldst_cntA[k][6:1] : 6'bz;
+          assign lsi_P1=(store_index[1][k] && ~store_index[1][k^1]) ? ldst_cntA[k][6:1] : 6'bz;
+          assign lsi_P2=(store_index[2][k] && ~store_index[2][k^1]) ? ldst_cntA[k][6:1] : 6'bz;
+          assign lsi_Q0=(load_index[0][k] && ~load_index[0][k^1]) ? ldst_cntA[k][6:1] : 6'bz;
+          assign lsi_Q1=(load_index[1][k] && ~load_index[1][k^1]) ? ldst_cntA[k][6:1] : 6'bz;
+          assign lsi_Q2=(load_index[2][k] && ~load_index[2][k^1]) ? ldst_cntA[k][6:1] : 6'bz;
+          assign lsi_Q3=(load_index[3][k] && ~load_index[3][k^1]) ? ldst_cntA[k][6:1] : 6'bz;
+          assign lsi_Q4=(load_index[4][k] && ~load_index[4][k^1]) ? ldst_cntA[k][6:1] : 6'bz;
+          assign lsi_Q5=(load_index[5][k] && ~load_index[5][k^1]) ? ldst_cntA[k][6:1] : 6'bz;
       end
   endgenerate
   
-  assign load_cntA[0]=11'd1;
-  assign shift_cntA[0]=11'd1;
-  assign alu_cntA[0]=11'd1;
-  assign store_cntA[0]=11'd1;
-  assign ldst_cntA[0]=11'd1;
+  assign load_cntA[-1]=11'd1;
+  assign shift_cntA[-1]=11'd1;
+  assign alu_cntA[-1]=11'd1;
+  assign store_cntA[-1]=11'd1;
+  assign ldst_cntA[-1]=11'd1;
 
   assign lsi_P0=store_cnt_or_less[0] ? 6'h3f : 6'bz;
   assign lsi_P1=store_cnt_or_less[1] ? 6'h3f : 6'bz;

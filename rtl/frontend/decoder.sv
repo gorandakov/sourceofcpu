@@ -2281,7 +2281,7 @@ module decoder(
   wire [9:0] dec_miss;
   wire [9:0] dec_tbufOnly;
 
-  wire [4:0] dec_jumpType[9:0];
+  wire [9:0][4:0] 		dec_jumpType;
 
   wire [9:0] dec_taken;
   
@@ -2374,7 +2374,7 @@ module decoder(
   reg [9:0] dec_afterTaken_reg;
   
   
-  wire [`iclass_width-1:0] instCls[9:0];
+  wire [9:0][`iclass_width-1:0] instCls;
   wire [9:0] cls_indir;
   wire [9:0] cls_jump;
   wire [9:0] cls_ALU;

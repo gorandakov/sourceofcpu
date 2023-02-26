@@ -1518,11 +1518,11 @@ module dcache2_block(
   wire [8:0] read_imm_way;
   reg [8:0] read_imm_way_reg;
   wire read_hit_any;
-  wire [(32*DATA_WIDTH)-1:0] read_dataP[9:0];
-  wire [32*DATA_WIDTH-1:0] read_dataxP[9:0];
-  wire [15:0] read_dataPtrP[9:0];
-  wire [15:0] read_dataPtrxP[9:0];
-  wire [4:0] read_LRUp[9:0];
+  wire [32*DATA_WIDTH-1:0] read_dataP[8:-1];
+  wire [32*DATA_WIDTH-1:0] read_dataxP[8:-1];
+  wire [15:0] read_dataPtrP[8:-1];
+  wire [15:0] read_dataPtrxP[8:-1];
+  wire [4:0] read_LRUp[8:-1];
   reg read_en_reg,read_en_reg2,read_en_reg3;
   reg [4:0] write_begin0_reg;
   reg [4:0] write_begin1_reg;
@@ -1540,9 +1540,9 @@ module dcache2_block(
   reg ins_hit_reg2;
   wire read_imm_any;
 //  reg ins_hit_reg3;
-  wire [1:0] read_dirP[9:0];
-  wire [1:0] read_exclP[9:0];
-  wire [36:0] read_expAddrP[9:0];
+  wire [1:0] read_dirP[8:-1];
+  wire [1:0] read_exclP[8:-1];
+  wire [36:0] read_expAddrP[8:-1];
   reg [7:0] write_dataPTR_reg;
   reg [15:0] write_dataPTR_reg2;
   generate
@@ -1553,14 +1553,14 @@ module dcache2_block(
           rst,
           read_en,
           read_odd,
-          read_dataP[k+1],
           read_dataP[k],
-          read_dataxP[k+1],
+          read_dataP[k-1],
           read_dataxP[k],
-          read_dataPtrP[k+1],
+          read_dataxP[k-1],
           read_dataPtrP[k],
-          read_dataPtrxP[k+1],
+          read_dataPtrP[k-1],
           read_dataPtrxP[k],
+          read_dataPtrxP[k-1],
           read_hit_way[k],
 	  read_imm_way[k],
           write0_clkEn,
@@ -1585,8 +1585,8 @@ module dcache2_block(
           insert,
           insert_excl,insert_dirty,insert_dupl,
           hit_LRU,
-	  read_LRUp[k+1],read_dirP[k+1],read_exclP[k+1],read_expAddrP[k+1],
 	  read_LRUp[k],read_dirP[k],read_exclP[k],read_expAddrP[k],
+	  read_LRUp[k-1],read_dirP[k-1],read_exclP[k-1],read_expAddrP[k-1],
           read_expAddr_en,
           expun_cc_addr,
           expun_cc_en,
@@ -1608,14 +1608,14 @@ module dcache2_block(
      end
   endgenerate
 
-  assign read_dataP[0][511:0]=512'b0;
-  assign read_dataP[0][1023:512]=512'b0;
-  assign read_dataxP[0][511:0]=512'b0;
-  assign read_dataxP[0][1023:512]=512'b0;
-  assign read_LRUp[0]={ID,3'b0};
-  assign read_dirP[0]=2'b0;
-  assign read_exclP[0]=2'b0;
-  assign read_expAddrP[0]=37'b0;
+  assign read_dataP[-1][511:0]=512'b0;
+  assign read_dataP[-1][1023:512]=512'b0;
+  assign read_dataxP[-1][511:0]=512'b0;
+  assign read_dataxP[-1][1023:512]=512'b0;
+  assign read_LRUp[-1]={ID,3'b0};
+  assign read_dirP[-1]=2'b0;
+  assign read_exclP[-1]=2'b0;
+  assign read_expAddrP[-1]=37'b0;
   assign read_hit_any=|read_hit_way_reg;
   assign read_imm_any=|read_imm_way_reg;
 
@@ -1672,9 +1672,9 @@ module dcache2_block(
           write_bankEn1_reg<=write_bankEn1;
           
         //  read_hit_any<=(|read_hit_way) && ~ins_hit_reg;
-          read_data<=~read_dataP[9];
-          read_dataX<=~read_dataxP[9];
-          read_LRU<=~read_LRUp[9];
+          read_data<=~read_dataP[8];
+          read_dataX<=~read_dataxP[8];
+          read_LRU<=~read_LRUp[8];
           read_en_reg<=read_en;
           read_en_reg2<=read_en_reg;
           read_en_reg3<=read_en_reg2;
@@ -1685,9 +1685,9 @@ module dcache2_block(
           read_imm_way_reg<=read_imm_way;
           hit_any<=(|read_hit_way_reg);
           imm_any<=(|read_imm_way_reg);
-          read_dir<=~read_dirP[9][0];
-          read_excl<=~read_exclP[9][0];
-          read_expAddrOut<=~read_expAddrP[9];
+          read_dir<=~read_dirP[8][0];
+          read_excl<=~read_exclP[8][0];
+          read_expAddrOut<=~read_expAddrP[8];
       end
   end
 endmodule
