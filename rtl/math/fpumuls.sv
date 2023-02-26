@@ -155,7 +155,9 @@ module fpumuls(clk,rst,A,B,copyA,en,rmode,res,raise,fpcsr);
  
   assign res_X[31]=(~spec_any & en_reg2) ? sgn_reg2 : 1'bz;
   
-  assign res_X=(spec_any & en_reg2) ? res_spec : 33'bz;
+  assign res_X[22:0]=(spec_any & en_reg2) ? res_spec[22:0] : 23'bz;
+  assign res_X[32:23]=(spec_any & en_reg2) ? res_spec[32:23] : 10'bz;
+  assign res_X[31]=(spec_any & en_reg2) ? res_spec[31] : 1'bz;
 
   assign DBL_rnbit0=prod_reg[22];
   assign DBL_tail0=|prod_reg[21:0];
