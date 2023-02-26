@@ -444,7 +444,7 @@ limitations under the License.
 `define lsaddr_st 133
 `define lsaddr_sz 138:134
 `define lsaddr_reg_low 142:139
-`define lsaddr_flag 143:143
+`define lsaddr_flag 143
 `define lsaddr_pconfl 144
 `define lsaddr_except 145
 `define lsaddr_mtype 147:146

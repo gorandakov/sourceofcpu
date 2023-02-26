@@ -857,7 +857,7 @@ module ratV(
 
   generate
     for (l=0;l<4+2*EXTRA;l=l+1) begin : tile_gen
-        wire  [ROB_ADDR_WIDTH-1:0] read_dataA[8:0];
+        wire [8:0] [ROB_ADDR_WIDTH-1:0] read_dataA;
         wire [8:0] read_retiredA;
         wire [FN_WIDTH-1:0] read_funA[8:0];
         wire [1:0] read_domA[8:0];
