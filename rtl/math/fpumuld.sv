@@ -199,7 +199,8 @@ module fpucadd(clk,rst,A,A_alt,B,and1,or1,copyA,en,rmode,res,res_hi,isDBL,fpcsr,
   assign expon=spec_any ? 5'd4 : 5'bz; 
 
   assign {res_X[65],res_X[64:33],res_X[31:0]}=(spec_any & en_reg2) ? {res_spec[80],res_spec[63:0]} : 65'bz;
-  assign res_X_hi=(spec_any & ~isDBL_reg2 & en_reg2) ? res_spec[79:64] : 16'bz;
+  assign res_X_hi[14:0]=(spec_any & ~isDBL_reg2 & en_reg2) ? res_spec[78:64] : 15'bz;
+  assign res_X_hi[15]=(spec_any & ~isDBL_reg2 & en_reg2) ? res_spec[79] : 1'bz;
   
   assign res_X[67:66]=en_reg2 ? `ptype_dbl : 2'bz;
   assign res_X[32]=en_reg2 ? 1'b0 : 1'bz;

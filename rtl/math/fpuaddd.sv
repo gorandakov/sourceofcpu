@@ -308,7 +308,8 @@ module fadd(
   assign res_X[65:0]=(~renor_simple && ~renor_round &&  isDBL_reg && ~spec_any && en_reg) ? {resX[64:32],1'b0,resX[31:0]} : 66'bz;
 
   assign {res_X[65],res_X[64:0]}=(spec_any & en_reg) ? {res_spec[80],res_spec[63:32],1'b0,res_spec[31:0]} : 66'bz;  
-  assign res_X_hi=(spec_any & ~isDBL_reg & en_reg) ? {res_spec[79:64]} : 16'bz;  
+  assign res_X_hi[14:0]=(spec_any & ~isDBL_reg & en_reg) ? {res_spec[78:64]} : 15'bz;  
+  assign res_X_hi[15]=(spec_any & ~isDBL_reg & en_reg) ? {res_spec[79]} : 1'bz;  
 
   assign res_spec=spec_A_reg ? A_reg : 81'bz;
   assign res_spec=spec_B_reg ? B_reg : 81'bz;
