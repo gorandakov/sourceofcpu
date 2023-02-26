@@ -418,7 +418,7 @@ module ldq_up_down(
   output doStall;
 
   wire [WIDTH-1:0] cnt_d[2:0];
-  reg  [WIDTH-1:0] cnt[2:0];
+  reg  [2:0][WIDTH-1:0] cnt;
   assign doStall=cnt[2]==STALL_CNT || cnt[2]==(STALL_CNT+1);
   
   ldq_up_down0 ud0_mod(

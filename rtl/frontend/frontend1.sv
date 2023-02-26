@@ -323,12 +323,12 @@ module frontend1(
   reg [INSTR_WIDTH-1:0] pre_instr10_reg/*verilator public*/;
   reg [INSTR_WIDTH-1:0] pre_instr11_reg/*verilator public*/;
 
-  wire [3:0] pre_off[11:0]/*verilator public*/;
+  wire [11:0][3:0] pre_off/*verilator public*/;
   reg [3:0] pre_off_reg[11:0]/*verilator public*/;
   
-  wire [3:0] pre_magic[11:0]/*verilator public*/;
+  wire [11:0][3:0] pre_magic/*verilator public*/;
   reg  [3:0] pre_magic_reg[11:0]/*verilator public*/;
-  wire [`instrQ_width-1:0] pre_other[11:0]/*verilator public*/;
+  wire [11:0][`instrQ_width-1:0] pre_other/*verilator public*/;
 //  reg [`instrQ_width-1:0] pre_other_reg[11:0];
   
   wire pre_isAvx;
