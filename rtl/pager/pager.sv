@@ -403,7 +403,7 @@ module pager(
               end else begin
                   finalXtra2<=13'b0;
                   finalXtra1<=13'b0;
-                  finalXtra0<=13'0;
+                  finalXtra0<=13'b0;
                   stageA<=12'b0;
                   stageB<=8'b0;
               end

@@ -175,32 +175,32 @@ module stq_buf_A_array(
   input [WIDTH-1:0] wrt1_addrO;
 
   input chk0_en;
-  output [BUF_COUNT-1:0] [1:0] chk0_addrEO;
+  output [BUF_COUNT*2-1:0] chk0_addrEO;
   input [WIDTH-1:0] chk0_addrE;
   input [WIDTH-1:0] chk0_addrO;
 
   input chk1_en;
-  output [BUF_COUNT-1:0] [1:0] chk1_addrEO;
+  output [BUF_COUNT*2-1:0] chk1_addrEO;
   input [WIDTH-1:0] chk1_addrE;
   input [WIDTH-1:0] chk1_addrO;
   
   input chk2_en;
-  output [BUF_COUNT-1:0] [1:0] chk2_addrEO;
+  output [BUF_COUNT*2-1:0] chk2_addrEO;
   input [WIDTH-1:0] chk2_addrE;
   input [WIDTH-1:0] chk2_addrO;
   
   input chk3_en;
-  output [BUF_COUNT-1:0] [1:0] chk3_addrEO;
+  output [BUF_COUNT*2-1:0] chk3_addrEO;
   input [WIDTH-1:0] chk3_addrE;
   input [WIDTH-1:0] chk3_addrO;
   
   input chk4_en;
-  output [BUF_COUNT-1:0] [1:0] chk4_addrEO;
+  output [BUF_COUNT*2-1:0] chk4_addrEO;
   input [WIDTH-1:0] chk4_addrE;
   input [WIDTH-1:0] chk4_addrO;
   
   input chk5_en;
-  output [BUF_COUNT-1:0] [1:0] chk5_addrEO;
+  output [BUF_COUNT*2-1:0] chk5_addrEO;
   input [WIDTH-1:0] chk5_addrE;
   input [WIDTH-1:0] chk5_addrO;
 
@@ -224,12 +224,12 @@ module stq_buf_A_array(
           excpt,
           wrt0_en[t], wrt0_addrE, wrt0_addrO, 
           wrt1_en[t], wrt1_addrE, wrt1_addrO, 
-          chk0_en, chk0_addrEO[t], chk0_addrE, chk0_addrO,
-          chk1_en, chk1_addrEO[t], chk1_addrE, chk1_addrO,
-          chk2_en, chk2_addrEO[t], chk2_addrE, chk2_addrO,
-          chk3_en, chk3_addrEO[t], chk3_addrE, chk3_addrO,
-          chk4_en, chk4_addrEO[t], chk4_addrE, chk4_addrO,
-          chk5_en, chk5_addrEO[t], chk5_addrE, chk5_addrO,
+          chk0_en, chk0_addrEO[2*t+:2], chk0_addrE, chk0_addrO,
+          chk1_en, chk1_addrEO[2*t+:2], chk1_addrE, chk1_addrO,
+          chk2_en, chk2_addrEO[2*t+:2], chk2_addrE, chk2_addrO,
+          chk3_en, chk3_addrEO[2*t+:2], chk3_addrE, chk3_addrO,
+          chk4_en, chk4_addrEO[2*t+:2], chk4_addrE, chk4_addrO,
+          chk5_en, chk5_addrEO[2*t+:2], chk5_addrE, chk5_addrO,
           upd0_en[t], 
           upd1_en[t], 
           free_en[t],free[t],upd[t],passe[t],passe_en[t]);

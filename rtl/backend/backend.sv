@@ -984,10 +984,10 @@ module backend(
 
   wire [3:0] dc_thr=4'b0;
 
-  wire [5:0][13:0] fret/*verilator public*/;
+  wire [13:0] fret[5:0]/*verilator public*/;
   wire [5:0] fret_en/* verilator public */;
-  reg  [5:0][13:0] fret_reg/*verilator public*/;
-  wire [5:0][13:0] fsret/*verilator public*/;
+  reg  [13:0] fret_reg[5:0]/*verilator public*/;
+  wire [13:0] fsret[5:0]/*verilator public*/;
 
   wire [5:0] FOOFL1;
   wire [5:0] FOOFL2;
@@ -1515,11 +1515,11 @@ module backend(
   wire [16+SIMD_WIDTH-1:0] FOOFL[5:0];
   wire [15:0] FUVLX_N[3:0];
   wire [15:0] FUVLX[3:0];
-  reg  [3:0][15:0] FUVLX_reg;
+  reg  [15:0] FUVLX_reg[3:0];
 
-  wire [5:0][DATA_WIDTH-1:0] FU_alu/*verilator public*/;
-  wire [5:0][5:0] FUS_alu/*verilator public*/;
-  wire [5:0][2:0] ex_alu/*verilator public*/;
+  wire [DATA_WIDTH-1:0] FU_alu[5:0]/*verilator public*/;
+  wire [5:0] FUS_alu[5:0]/*verilator public*/;
+  wire [2:0] ex_alu[5:0]/*verilator public*/;
   wire [5:0] enS_alu/*verilator public*/;
   wire [5:0] FUX_alu[2:0];
   wire [2:0] exx_alu[2:0];
@@ -1715,7 +1715,7 @@ module backend(
   wire [SIMD_WIDTH-1:0] WdataNBFH[2:0];
   wire [16+SIMD_WIDTH-1:0] WdataNBFL[2:0];
 
-  wire [8:0][DATA_WIDTH-1:0] ret_dataA/*verilator public*/;
+  wire [DATA_WIDTH-1:0] ret_dataA[8:0]/*verilator public*/;
   wire [DATA_WIDTH-1:0] ret_dataB[8:0];
   
   wire [SIMD_WIDTH-1:0] ret_dataAVH[8:0];
@@ -1792,7 +1792,7 @@ module backend(
   wire [REG_WIDTH-1:0] outRegS[8:0];
   wire [OPERATION_WIDTH-1:0] outOp[8:0];
   wire [9:0] outII[8:0];
-  wire [8:0][3:0] outEn/* verilator public */;
+  wire [3:0] outEn[8:0]/* verilator public */;
   wire [8:0] outLSQ[2:0];
   wire [5:0] outWQ[2:0];
   wire [3:0] fuFwdA[8:0];
@@ -2032,9 +2032,9 @@ module backend(
   reg [1:0] dc_wrEn_reg3; 
   wire [1:0] dc_odd_wr;
   wire [1:0] dc_split_wr;
-  wire [1:0][5*32-1:0] dc_wdata;
-  wire [1:0][5*32-1:0] dc_wdata_N;
-  wire [1:0][4*32-1:0] dc_wdataP;
+  wire [5*32-1:0] dc_wdata[1:0];
+  wire [5*32-1:0] dc_wdata_N[1:0];
+  wire [4*32-1:0] dc_wdataP[1:0];
   reg [4*32-1:0] dc_wdataP_reg[1:0];
   wire [4:0] dc_wrBegin[1:0];
   wire [4:0] dc_size_wr[1:0];
@@ -2095,7 +2095,7 @@ module backend(
   reg wt_pause_agu_reg;
   reg wt_pause_agu_reg2;
 
-  wire [5:0][`lsaddr_width-1:0] lsr_wr_data;
+  wire [`lsaddr_width-1:0] lsr_wr_data[5:0];
 
   wire [SIMD_WIDTH-1+16:0]    sqrDatFL;
   wire [SIMD_WIDTH-1:0] sqrDatVL;
@@ -2307,7 +2307,7 @@ module backend(
 
   wire STQ_confl_finish=1'b0;
   wire [5:0] STQ_confl;
-  wire [1:0][3*32-1:0] STQ_confls;
+  wire [3*32-1:0] STQ_confls[1:0];
 
   wire bDoStall_rqSpit;
   wire bDoStall_rqSpit0;
@@ -7151,14 +7151,14 @@ dcache1 L1D_mod(
 	  outOpX_reg<=18'b0;
 	  outRegX_reg<=9'b0;
 	  outRegSX_reg<=9'b0;
-          outDataAVH_reg<={SIMD_WIDTH{1'b0}};
-          outDataBVH_reg<={SIMD_WIDTH{1'b0}};
-          outDataAVL_reg<={SIMD_WIDTH{1'b0}};
-          outDataBVL_reg<={SIMD_WIDTH{1'b0}};
-          outDataAFH_reg<={SIMD_WIDTH{1'b0}};
-          outDataBFH_reg<={SIMD_WIDTH{1'b0}};
-          outDataAFL_reg<={16+SIMD_WIDTH{1'b0}};
-          outDataBFL_reg<={16+SIMD_WIDTH{1'b0}};
+          outDataAVH_reg[5]<={SIMD_WIDTH{1'b0}};
+          outDataBVH_reg[5]<={SIMD_WIDTH{1'b0}};
+          outDataAVL_reg[5]<={SIMD_WIDTH{1'b0}};
+          outDataBVL_reg[5]<={SIMD_WIDTH{1'b0}};
+          outDataAFH_reg[5]<={SIMD_WIDTH{1'b0}};
+          outDataBFH_reg[5]<={SIMD_WIDTH{1'b0}};
+          outDataAFL_reg[5]<={16+SIMD_WIDTH{1'b0}};
+          outDataBFL_reg[5]<={16+SIMD_WIDTH{1'b0}};
       end else begin
           for (k=0;k<9;k=k+1) if (k>3 || !rsDoStall[k]) begin
               outReg_reg[k]<=outReg[k];
@@ -7224,14 +7224,14 @@ dcache1 L1D_mod(
 	  outOpX_reg<={5'b0,outOpX};
 	  outRegX_reg<=(outOp_reg4[8][11]&outEn_reg4[8][1]&outEn_reg4[8][0]) ? outReg_reg3[8] : outRegX;
 	  outRegSX_reg<=(outOp_reg4[8][11]&outEn_reg4[8][1]&outEn_reg4[8][0]) ? FUSreg_reg3[9] : outRegSX;
-          outDataAVH_reg<=outDataAVH[5];
-          outDataBVH_reg<=outDataBVH[5];
-          outDataAVL_reg<=outDataAVL[5];
-          outDataBVL_reg<=outDataBVL[5];
-          outDataAFH_reg<=outDataAFH[5];
-          outDataBFH_reg<=outDataBFH[5];
-          outDataAFL_reg<=outDataAFL[5];
-          outDataBFL_reg<=outDataBFL[5];
+          outDataAVH_reg[5]<=outDataAVH[5];
+          outDataBVH_reg[5]<=outDataBVH[5];
+          outDataAVL_reg[5]<=outDataAVL[5];
+          outDataBVL_reg[5]<=outDataBVL[5];
+          outDataAFH_reg[5]<=outDataAFH[5];
+          outDataBFH_reg[5]<=outDataBFH[5];
+          outDataAFL_reg[5]<=outDataAFL[5];
+          outDataBFL_reg[5]<=outDataBFL[5];
     
       end
       
