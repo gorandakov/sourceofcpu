@@ -284,7 +284,7 @@ module stq(
   wire [135:0] WLN0_data;
   wire [135:0] WLN1_data;
 
-  wire [`lsaddr_width-1:0] chk_adata[5:0];
+  wire [5:0][`lsaddr_width-1:0] chk_adata;
   wire [`lsaddr_width-1:0] wb0_adataW;
   wire [`lsaddr_width-1:0] wb1_adataW;
   reg  [`lsaddr_width-1:0] wb0_adataW_reg;
@@ -388,12 +388,12 @@ module stq(
   wire [3:0] WNL0_bytes[7:0];
   wire [3:0] WNL1_bytes[7:0];
 
-  wire [127:0]chk0_addrEO;
-  wire [127:0]chk1_addrEO;
-  wire [127:0]chk2_addrEO;
-  wire [127:0]chk3_addrEO;
-  wire [127:0]chk4_addrEO;
-  wire [127:0]chk5_addrEO;
+  wire [1:0] chk0_addrEO[63:0];
+  wire [1:0] chk1_addrEO[63:0];
+  wire [1:0] chk2_addrEO[63:0];
+  wire [1:0] chk3_addrEO[63:0];
+  wire [1:0] chk4_addrEO[63:0];
+  wire [1:0] chk5_addrEO[63:0];
 
   wire [63:0] chk0_firstA[3:0];
   wire [63:0] chk1_firstA[3:0];
@@ -827,25 +827,22 @@ module stq(
  
 
 
-  assign aDoStall=(|chk0_partial[0] | |chk0_partial[1] | |chk0_partialW[0] | |chk0_partialW[1] && chk0_adata[`lsaddr_flag]) ||
-	  (|chk1_partial[0] | |chk1_partial[1] | |chk1_partialW[0] | |chk1_partialW[1] && chk1_adata[`lsaddr_flag]) ||
-	  (|chk2_partial[0] | |chk2_partial[1] | |chk2_partialW[0] | |chk2_partialW[1] && chk2_adata[`lsaddr_flag]) || 
-	  (|chk3_partial[0] | |chk3_partial[1] | |chk3_partialW[0] | |chk3_partialW[1] && chk3_adata[`lsaddr_flag]) ||
-	  (|chk4_partial[0] | |chk4_partial[1] | |chk4_partialW[0] | |chk4_partialW[1] && chk4_adata[`lsaddr_flag]) || 
-	  (|chk5_partial[0] | |chk5_partial[1] | |chk5_partialW[0] | |chk5_partialW[1] && chk5_adata[`lsaddr_flag]) ||
+  assign aDoStall=(|chk0_partial | |chk0_partialW && chk_adata[0][`lsaddr_flag]) || (|chk1_partial | |chk1_partialW && chk_adata[1][`lsaddr_flag]) ||
+	  (|chk2_partial | |chk2_partialW && chk_adata[2][`lsaddr_flag]) || (|chk3_partial | |chk3_partialW && chk_adata[3][`lsaddr_flag]) ||
+	  (|chk4_partial | |chk4_partialW && chk_adata[4][`lsaddr_flag]) || (|chk5_partial | |chk5_partialW && chk_adata[5][`lsaddr_flag]) ||
 	  chk_wb2_has ||  |rsDoStall | rsStall;
-  assign confl0[0]=(|(chk0_partial[0]|chk0_partial[1]) | |(chk0_partialW[0]|chk0_partialW[1]) || |(chk0_match[0]|chk0_match[1]|chk0_match[2]|chk0_match[3]|chk0_match[4]|chk0_match[5]|chk0_match[6]|chk0_match[7]) | |(chk0_matchW[0]|chk0_matchW[1]|chk0_matchW[2]|chk0_matchW[3]|chk0_matchW[4]|chk0_matchW[5]|chk0_matchW[6]|chk0_matchW[7])) && chk0_en && !chk0_adata[`lsaddr_flag] &&
-	  !chk0_adata[`lsaddr_st];
-  assign confl0[1]=(|(chk1_partial[0]|chk0_partial[1]) | |(chk1_partialW[0]|chk0_partialW[1]) || |(chk1_match[0]|chk0_match[1]|chk0_match[2]|chk0_match[3]|chk0_match[4]|chk0_match[5]|chk0_match[6]|chk0_match[7]) | |(chk0_matchW[0]|chk0_matchW[1]|chk0_matchW[2]|chk0_matchW[3]|chk0_matchW[4]|chk0_matchW[5]|chk0_matchW[6]|chk0_matchW[7])) && chk1_en && !chk1_adata[`lsaddr_flag] &&
-	  !chk1_adata[`lsaddr_st];
-  assign confl0[2]=(|(chk2_partial[0]|chk0_partial[1]) | |(chk2_partialW[0]|chk0_partialW[1]) || |(chk2_match[0]|chk0_match[1]|chk0_match[2]|chk0_match[3]|chk0_match[4]|chk0_match[5]|chk0_match[6]|chk0_match[7]) | |(chk0_matchW[0]|chk0_matchW[1]|chk0_matchW[2]|chk0_matchW[3]|chk0_matchW[4]|chk0_matchW[5]|chk0_matchW[6]|chk0_matchW[7])) && chk2_en && !chk2_adata[`lsaddr_flag] &&
-	  !chk2_adata[`lsaddr_st];
-  assign confl0[3]=(|(chk3_partial[0]|chk0_partial[1]) | |(chk3_partialW[0]|chk0_partialW[1]) || |(chk3_match[0]|chk0_match[1]|chk0_match[2]|chk0_match[3]|chk0_match[4]|chk0_match[5]|chk0_match[6]|chk0_match[7]) | |(chk0_matchW[0]|chk0_matchW[1]|chk0_matchW[2]|chk0_matchW[3]|chk0_matchW[4]|chk0_matchW[5]|chk0_matchW[6]|chk0_matchW[7])) && chk3_en && !chk3_adata[`lsaddr_flag] &&
-	  !chk3_adata[`lsaddr_st];
-  assign confl0[4]=(|(chk4_partial[0]|chk0_partial[1]) | |(chk4_partialW[0]|chk0_partialW[1]) || |(chk4_match[0]|chk0_match[1]|chk0_match[2]|chk0_match[3]|chk0_match[4]|chk0_match[5]|chk0_match[6]|chk0_match[7]) | |(chk0_matchW[0]|chk0_matchW[1]|chk0_matchW[2]|chk0_matchW[3]|chk0_matchW[4]|chk0_matchW[5]|chk0_matchW[6]|chk0_matchW[7])) && chk4_en && !chk4_adata[`lsaddr_flag] &&
-	  !chk4_adata[`lsaddr_st];
-  assign confl0[5]=(|(chk5_partial[0]|chk0_partial[1]) | |(chk5_partialW[0]|chk0_partialW[1]) || |(chk5_match[0]|chk0_match[1]|chk0_match[2]|chk0_match[3]|chk0_match[4]|chk0_match[5]|chk0_match[6]|chk0_match[7]) | |(chk0_matchW[0]|chk0_matchW[1]|chk0_matchW[2]|chk0_matchW[3]|chk0_matchW[4]|chk0_matchW[5]|chk0_matchW[6]|chk0_matchW[7])) && chk5_en && !chk5_adata[`lsaddr_flag] &&
-	  !chk5_adata[`lsaddr_st];
+  assign confl0[0]=(|chk0_partial | |chk0_partialW || |chk0_match | |chk0_matchW) && chk0_en && !chk_adata[0][`lsaddr_flag] &&
+	  !chk_adata[0][`lsaddr_st];
+  assign confl0[1]=(|chk1_partial | |chk1_partialW || |chk1_match | |chk0_matchW) && chk1_en && !chk_adata[1][`lsaddr_flag] &&
+	  !chk_adata[1][`lsaddr_st];
+  assign confl0[2]=(|chk2_partial | |chk2_partialW || |chk2_match | |chk0_matchW) && chk2_en && !chk_adata[2][`lsaddr_flag] &&
+	  !chk_adata[2][`lsaddr_st];
+  assign confl0[3]=(|chk3_partial | |chk3_partialW || |chk3_match | |chk0_matchW) && chk3_en && !chk_adata[3][`lsaddr_flag] &&
+	  !chk_adata[3][`lsaddr_st];
+  assign confl0[4]=(|chk4_partial | |chk4_partialW || |chk4_match | |chk0_matchW) && chk4_en && !chk_adata[4][`lsaddr_flag] &&
+	  !chk_adata[4][`lsaddr_st];
+  assign confl0[5]=(|chk5_partial | |chk5_partialW || |chk5_match | |chk0_matchW) && chk5_en && !chk_adata[5][`lsaddr_flag] &&
+	  !chk_adata[5][`lsaddr_st];
 //  assign WLN0_en=upd[WLN0_WQ];
 //  assign WLN1_en=upd[WLN1_WQ];
   //assign WLN0_adata=LSQ_shr_data[`lsqshare_wrt0]==3'd7 ? {`lsaddr_width{1'b0}} : {`lsaddr_width{1'bz}};
@@ -1003,22 +1000,8 @@ module stq(
 	  chk_wb0_reg2<=0;
 	  chk_wb0_has_reg<=0;
 	  chk_wb0_has_reg2<=0;
-	  chk_bytes_reg [0]<=0;
-	  chk_bytes_reg2[0]<=0;
-	  chk_bytes_reg [1]<=0;
-	  chk_bytes_reg2[1]<=0;
-	  chk_bytes_reg [2]<=0;
-	  chk_bytes_reg2[2]<=0;
-	  chk_bytes_reg [3]<=0;
-	  chk_bytes_reg2[3]<=0;
-	  chk_bytes_reg [4]<=0;
-	  chk_bytes_reg2[4]<=0;
-	  chk_bytes_reg [5]<=0;
-	  chk_bytes_reg2[5]<=0;
-	  chk_bytes_reg [6]<=0;
-	  chk_bytes_reg2[6]<=0;
-	  chk_bytes_reg [7]<=0;
-	  chk_bytes_reg2[7]<=0;
+	  chk_bytes_reg<=0;
+	  chk_bytes_reg2<=0;
 	  chk_wb1_reg<=0;
 	  chk_wb1_reg2<=0;
 	  chk_wb1_has_reg<=0;
@@ -1080,22 +1063,8 @@ module stq(
 	  chk_wb0_reg2<=chk_wb0_reg;
 	  chk_wb0_has_reg<=chk_wb0_has;
 	  chk_wb0_has_reg2<=chk_wb0_has_reg;
-	  chk_bytes_reg[0]<=chk_bytes[0];
-	  chk_bytes_reg[1]<=chk_bytes[1];
-	  chk_bytes_reg[2]<=chk_bytes[2];
-	  chk_bytes_reg[3]<=chk_bytes[3];
-	  chk_bytes_reg[4]<=chk_bytes[4];
-	  chk_bytes_reg[5]<=chk_bytes[5];
-	  chk_bytes_reg[6]<=chk_bytes[6];
-	  chk_bytes_reg[7]<=chk_bytes[7];
-	  chk_bytes_reg2[0]<=chk_bytes_reg[0];
-	  chk_bytes_reg2[1]<=chk_bytes_reg[1];
-	  chk_bytes_reg2[2]<=chk_bytes_reg[2];
-	  chk_bytes_reg2[3]<=chk_bytes_reg[3];
-	  chk_bytes_reg2[4]<=chk_bytes_reg[4];
-	  chk_bytes_reg2[5]<=chk_bytes_reg[5];
-	  chk_bytes_reg2[6]<=chk_bytes_reg[6];
-	  chk_bytes_reg2[7]<=chk_bytes_reg[7];
+	  chk_bytes_reg<=chk_bytes;
+	  chk_bytes_reg2<=chk_bytes_reg;
 	  chk_wb1_reg<=chk_wb1;
 	  chk_wb1_reg2<=chk_wb1_reg;
 	  chk_wb1_has_reg<=chk_wb1_has;

@@ -236,7 +236,7 @@ module stq_buf_L_array(
   input [5:0] wrt1_WQ;
 
   input chk0_en;
-  input [BUF_COUNT*2-1:0] chk0_addrEO;
+  input [BUF_COUNT-1:0][WIDTH-1:0] chk0_addrEO;
   input [3:0] chk0_odd;
   input [3:0] chk0_bytes;
   input chk0_subBNK;
@@ -249,7 +249,7 @@ module stq_buf_L_array(
   input chk0_pre1;
 
   input chk1_en;
-  input [BUF_COUNT*2-1:0] chk1_addrEO;
+  input [BUF_COUNT-1:0][WIDTH-1:0] chk1_addrEO;
   input [3:0] chk1_odd;
   input [3:0] chk1_bytes;
   input chk1_subBNK;
@@ -262,7 +262,7 @@ module stq_buf_L_array(
   input chk1_pre1;
 
   input chk2_en;
-  input [BUF_COUNT*2-1:0] chk2_addrEO;
+  input [BUF_COUNT-1:0][WIDTH-1:0] chk2_addrEO;
   input [3:0] chk2_odd;
   input [3:0] chk2_bytes;
   input chk2_subBNK;
@@ -275,7 +275,7 @@ module stq_buf_L_array(
   input chk2_pre1;
 
   input chk3_en;
-  input [BUF_COUNT*2-1:0] chk3_addrEO;
+  input [BUF_COUNT-1:0][WIDTH-1:0] chk3_addrEO;
   input [3:0] chk3_odd;
   input [3:0] chk3_bytes;
   input chk3_subBNK;
@@ -288,7 +288,7 @@ module stq_buf_L_array(
   input chk3_pre1;
 
   input chk4_en;
-  input [BUF_COUNT*2-1:0] chk4_addrEO;
+  input [BUF_COUNT-1:0][WIDTH-1:0] chk4_addrEO;
   input [3:0] chk4_odd;
   input [3:0] chk4_bytes;
   input chk4_subBNK;
@@ -301,7 +301,7 @@ module stq_buf_L_array(
   input chk4_pre1;
 
   input chk5_en;
-  input [BUF_COUNT*2-1:0] chk5_addrEO;
+  input [BUF_COUNT-1:0][WIDTH-1:0] chk5_addrEO;
   input [3:0] chk5_odd;
   input [3:0] chk5_bytes;
   input chk5_subBNK;
@@ -344,29 +344,29 @@ module stq_buf_L_array(
           excpt,
           wrt0_en[t], wrt0_odd, wrt0_bytes, wrt0_subBNK, wrt0_subBNK2, 
           wrt1_en[t], wrt1_odd, wrt1_bytes, wrt1_subBNK, wrt1_subBNK2, 
-          chk0_en, chk0_addrEO[2*t+:2], chk0_odd, chk0_bytes, chk0_subBNK, chk0_subBNK2, chk0_match[t], chk0_partial[t],
-          chk1_en, chk1_addrEO[2*t+:2], chk1_odd, chk1_bytes, chk1_subBNK, chk1_subBNK2, chk1_match[t], chk1_partial[t],
-          chk2_en, chk2_addrEO[2*t+:2], chk2_odd, chk2_bytes, chk2_subBNK, chk2_subBNK2, chk2_match[t], chk2_partial[t],
-          chk3_en, chk3_addrEO[2*t+:2], chk3_odd, chk3_bytes, chk3_subBNK, chk3_subBNK2, chk3_match[t], chk3_partial[t],
-          chk4_en, chk4_addrEO[2*t+:2], chk4_odd, chk4_bytes, chk4_subBNK, chk4_subBNK2, chk4_match[t], chk4_partial[t],
-          chk5_en, chk5_addrEO[2*t+:2], chk5_odd, chk5_bytes, chk5_subBNK, chk5_subBNK2, chk5_match[t], chk5_partial[t],
+          chk0_en, chk0_addrEO[t], chk0_odd, chk0_bytes, chk0_subBNK, chk0_subBNK2, chk0_match[t], chk0_partial[t],
+          chk1_en, chk1_addrEO[t], chk1_odd, chk1_bytes, chk1_subBNK, chk1_subBNK2, chk1_match[t], chk1_partial[t],
+          chk2_en, chk2_addrEO[t], chk2_odd, chk2_bytes, chk2_subBNK, chk2_subBNK2, chk2_match[t], chk2_partial[t],
+          chk3_en, chk3_addrEO[t], chk3_odd, chk3_bytes, chk3_subBNK, chk3_subBNK2, chk3_match[t], chk3_partial[t],
+          chk4_en, chk4_addrEO[t], chk4_odd, chk4_bytes, chk4_subBNK, chk4_subBNK2, chk4_match[t], chk4_partial[t],
+          chk5_en, chk5_addrEO[t], chk5_odd, chk5_bytes, chk5_subBNK, chk5_subBNK2, chk5_match[t], chk5_partial[t],
           upd0_en[t], 
           upd1_en[t], 
           free_en[t],free[t],upd[t],passe[t],passe_en[t]);
       end
   endgenerate
-  assign wrt0_match0=chk0_addrEO[wrt0_WQ*2+wrt0_odd[0]] && (wrt0_subBNK2&chk0_subBNK2)!=0 && wrt0_odd[0]==chk0_odd[0];
-  assign wrt1_match0=chk0_addrEO[wrt1_WQ*2+wrt1_odd[0]] && (wrt1_subBNK2&chk0_subBNK2)!=0 && wrt1_odd[0]==chk0_odd[0];
-  assign wrt0_match1=chk1_addrEO[wrt0_WQ*2+wrt0_odd[0]] && (wrt0_subBNK2&chk1_subBNK2)!=0 && wrt0_odd[0]==chk1_odd[0];
-  assign wrt1_match1=chk1_addrEO[wrt1_WQ*2+wrt1_odd[0]] && (wrt1_subBNK2&chk1_subBNK2)!=0 && wrt1_odd[0]==chk1_odd[0];
-  assign wrt0_match2=chk2_addrEO[wrt0_WQ*2+wrt0_odd[0]] && (wrt0_subBNK2&chk2_subBNK2)!=0 && wrt0_odd[0]==chk2_odd[0];
-  assign wrt1_match2=chk2_addrEO[wrt1_WQ*2+wrt1_odd[0]] && (wrt1_subBNK2&chk2_subBNK2)!=0 && wrt1_odd[0]==chk2_odd[0];
-  assign wrt0_match3=chk3_addrEO[wrt0_WQ*2+wrt0_odd[0]] && (wrt0_subBNK2&chk3_subBNK2)!=0 && wrt0_odd[0]==chk3_odd[0];
-  assign wrt1_match3=chk3_addrEO[wrt1_WQ*2+wrt1_odd[0]] && (wrt1_subBNK2&chk3_subBNK2)!=0 && wrt1_odd[0]==chk3_odd[0];
-  assign wrt0_match4=chk4_addrEO[wrt0_WQ*2+wrt0_odd[0]] && (wrt0_subBNK2&chk4_subBNK2)!=0 && wrt0_odd[0]==chk4_odd[0];
-  assign wrt1_match4=chk4_addrEO[wrt1_WQ*2+wrt1_odd[0]] && (wrt1_subBNK2&chk4_subBNK2)!=0 && wrt1_odd[0]==chk4_odd[0];
-  assign wrt0_match5=chk5_addrEO[wrt0_WQ*2+wrt0_odd[0]] && (wrt0_subBNK2&chk5_subBNK2)!=0 && wrt0_odd[0]==chk5_odd[0];
-  assign wrt1_match5=chk5_addrEO[wrt1_WQ*2+wrt1_odd[0]] && (wrt1_subBNK2&chk5_subBNK2)!=0 && wrt1_odd[0]==chk5_odd[0];
+  assign wrt0_match0=chk0_addrEO[wrt0_WQ][wrt0_odd[0]] && (wrt0_subBNK2&chk0_subBNK2)!=0 && wrt0_odd[0]==chk0_odd[0];
+  assign wrt1_match0=chk0_addrEO[wrt1_WQ][wrt1_odd[0]] && (wrt1_subBNK2&chk0_subBNK2)!=0 && wrt1_odd[0]==chk0_odd[0];
+  assign wrt0_match1=chk1_addrEO[wrt0_WQ][wrt0_odd[0]] && (wrt0_subBNK2&chk1_subBNK2)!=0 && wrt0_odd[0]==chk1_odd[0];
+  assign wrt1_match1=chk1_addrEO[wrt1_WQ][wrt1_odd[0]] && (wrt1_subBNK2&chk1_subBNK2)!=0 && wrt1_odd[0]==chk1_odd[0];
+  assign wrt0_match2=chk2_addrEO[wrt0_WQ][wrt0_odd[0]] && (wrt0_subBNK2&chk2_subBNK2)!=0 && wrt0_odd[0]==chk2_odd[0];
+  assign wrt1_match2=chk2_addrEO[wrt1_WQ][wrt1_odd[0]] && (wrt1_subBNK2&chk2_subBNK2)!=0 && wrt1_odd[0]==chk2_odd[0];
+  assign wrt0_match3=chk3_addrEO[wrt0_WQ][wrt0_odd[0]] && (wrt0_subBNK2&chk3_subBNK2)!=0 && wrt0_odd[0]==chk3_odd[0];
+  assign wrt1_match3=chk3_addrEO[wrt1_WQ][wrt1_odd[0]] && (wrt1_subBNK2&chk3_subBNK2)!=0 && wrt1_odd[0]==chk3_odd[0];
+  assign wrt0_match4=chk4_addrEO[wrt0_WQ][wrt0_odd[0]] && (wrt0_subBNK2&chk4_subBNK2)!=0 && wrt0_odd[0]==chk4_odd[0];
+  assign wrt1_match4=chk4_addrEO[wrt1_WQ][wrt1_odd[0]] && (wrt1_subBNK2&chk4_subBNK2)!=0 && wrt1_odd[0]==chk4_odd[0];
+  assign wrt0_match5=chk5_addrEO[wrt0_WQ][wrt0_odd[0]] && (wrt0_subBNK2&chk5_subBNK2)!=0 && wrt0_odd[0]==chk5_odd[0];
+  assign wrt1_match5=chk5_addrEO[wrt1_WQ][wrt1_odd[0]] && (wrt1_subBNK2&chk5_subBNK2)!=0 && wrt1_odd[0]==chk5_odd[0];
   
   assign chk0_matchW[0]=wrt0_match0 && chk0_en && chk0_pre0 && wrt0_any &&(chk0_bytes&~wrt0_bytes)==0 && (upd&wrt0_en)!=64'b0 &&
 	  chk0_odd==wrt0_odd && (chk0_subBNK&wrt0_subBNK)!=0;
