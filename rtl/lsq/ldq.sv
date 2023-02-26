@@ -349,10 +349,10 @@ module ldq_up_down1(
   wire [2:0] inc;
   wire [2:0] dec;
   wire [2:-2] cpop;
-  wire [6:0] par0a[4:0];
-  wire [6:0] par1a[4:0];
-  wire [6:0] par0b[4:0];
-  wire [6:0] par1b[4:0];
+  wire [6:0] par0a[2:-2];
+  wire [6:0] par1a[2:-2];
+  wire [6:0] par0b[2:-2];
+  wire [6:0] par1b[2:-2];
   wire [5:0] cnt_d1;
   wire [5:0] cnt_d2;
   wire [5:0] cnt_d3;
@@ -380,10 +380,10 @@ module ldq_up_down1(
     end
 
     for(p=-2;p<=2;p=p+1) begin : xtra_gen
-        adder_CSA #(6) csa_mod(cnt,p[5:0],~cnt_extra0,par0a[p+2],par1a[p+2]);
-	adder #(6) xtraadd_mod(par0a[p+2][5:0],par1a[p+2][5:0],cnt_d2,1'b1,cpop[p],,,,);
-        adder_CSA #(6) csa1_mod(cnt,p[5:0],~cnt_extra1,par0b[p+2],par1b[p+2]);
-	adder #(6) xtraadd1_mod(par0b[p+2][5:0],par1b[p+2][5:0],cnt_d3,1'b1,cpop[p],,,,);
+        adder_CSA #(6) csa_mod(cnt,p[5:0],~cnt_extra0,par0a[p],par1a[p]);
+	adder #(6) xtraadd_mod(par0a[p][5:0],par1a[p][5:0],cnt_d2,1'b1,cpop[p],,,,);
+        adder_CSA #(6) csa1_mod(cnt,p[5:0],~cnt_extra1,par0b[p],par1b[p]);
+	adder #(6) xtraadd1_mod(par0b[p][5:0],par1b[p][5:0],cnt_d3,1'b1,cpop[p],,,,);
     end
 
   endgenerate
