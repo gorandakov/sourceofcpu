@@ -102,8 +102,8 @@ module fun_fpsu(
   output [S+67:0] plnA;
   output [S+67:0] plnB;
 
-  wire [1:0][S+67:0] FOOF;
-  reg [1:0][S+67:0] FOOF_reg;
+  wire [S+67:0] FOOF[1:0];
+  reg [S+67:0] FOOF_reg[1:0];
   wire [5:0] FOOSL;
   reg [5:0] FOOSL_reg;
 
@@ -178,10 +178,10 @@ module fun_fpsu(
   reg [1:0] fxFCADD_copyA_nreg;
   reg [1:0] fxFCADD_com_nreg;
   reg  fxFCADD_pswp_nreg;
-  wire [1:0][10:0] fxFCADD_raise;
+  wire [10:0] fxFCADD_raise[1:0];
   reg [10:0] fxFCADD_raise_reg[1:0];
   reg [10:0] fxFCADD_raise_s_reg[1:0];
-  wire [1:0][10:0] fxFADD_raise;
+  wire [10:0] fxFADD_raise[1:0];
   reg [10:0] fxFADD_raise_reg[1:0];
   reg [10:0] fxFADD_raise_s_reg[1:0];
   wire [10:0] fraise2;
@@ -201,12 +201,12 @@ module fun_fpsu(
   reg [1:0] gxFADD_sz;
   reg gxFADD_srch;
 
-  wire [1:0][67:0] gxDataBFL;
-  reg [1:0][67:0] gxDataBFL_reg;
-  reg [1:0][67:0] fxDataAFL_reg;
-  reg [1:0][67:0] fxDataAFL_REG;
-  reg [1:0][67:0] gxDataBXL_reg;
-  reg [1:0][67:0] fxDataAXL_reg;
+  wire [67:0] gxDataBFL[1:0];
+  reg [67:0] gxDataBFL_reg[1:0];
+  reg [67:0] fxDataAFL_reg[1:0];
+  reg [67:0] fxDataAFL_REG[1:0];
+  reg [67:0] gxDataBXL_reg[1:0];
+  reg [67:0] fxDataAXL_reg[1:0];
   reg [3:0] u1_en_reg;
   reg [3:0] u2_en_reg;
   wire [S+67:0] uu_A1;

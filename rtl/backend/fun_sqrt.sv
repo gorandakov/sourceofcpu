@@ -70,10 +70,10 @@ module fun_fpusqr0(
   output [3:0] fxFRT_alten;//very fat wire
   output [3:0]      fxFRT_pause;//same here
 
-  wire [1:0][10:0] fxFCADD_raise;
+  wire [10:0] fxFCADD_raise[1:0];
   reg [10:0] fxFCADD_raise_reg[1:0];
   reg [10:0] fxFCADD_raise_s_reg[1:0];
-  wire [1:0][10:0] fxFADD_raise;
+  wire [10:0] fxFADD_raise[1:0];
   reg [10:0] fxFADD_raise_reg[1:0];
   reg [10:0] fxFADD_raise_s_reg[1:0];
   wire [10:0] fraise2;
@@ -126,16 +126,16 @@ module fun_fpusqr0(
   wire [15:0] fxFRT_expB;
   wire fxFRT_sgnA;
   wire fxFRT_sgnB;
-  wire [3:0][8:0] rtReg;
-  wire [3:0][9:0] rtII;
+  wire [8:0] rtReg[3:0];
+  wire [9:0] rtII[3:0];
   wire [8:0] frtReg;
   wire [9:0] frtII;
   wire [12:0] frtOp;
   reg [8:0] frtReg_reg;
   reg [9:0] frtII_reg;
   reg [12:0] frtOp_reg;
-  wire [3:0][12:0] rtOp;
-  wire [3:0][135:0] rtRes;
+  wire [12:0] rtOp[3:0];
+  wire [135:0] rtRes[3:0];
   reg fxFRT_do,fxFRT_en;
   reg [12:0] u1_op_reg;
   reg [9:0]  u1_II_reg;

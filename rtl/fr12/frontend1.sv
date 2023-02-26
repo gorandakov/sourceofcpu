@@ -288,17 +288,17 @@ module frontend1(
   reg [INSTR_WIDTH-1:0] pre_instr10_reg;
   reg [INSTR_WIDTH-1:0] pre_instr11_reg;
 
-  wire [11:0][3:0] pre_off;
+  wire [3:0] pre_off[11:0];
   reg [3:0] pre_off_reg[11:0];
   
-  wire [11:0][3:0] pre_magic;
+  wire [3:0] pre_magic[11:0];
   reg  [3:0] pre_magic_reg[11:0];
   wire [11:0][`instrQ_width-1:0] pre_other;
 //  reg [`instrQ_width-1:0] pre_other_reg[11:0];
   
   wire pre_isAvx;
   reg pre_isAvx_reg;
-  wire [11:0][CLS_WIDTH-1:0] pre_class;
+  wire [CLS_WIDTH-1:0] pre_class[11:0];
   reg [CLS_WIDTH-1:0] pre_class_reg[11:0];
   wire pre_has_jumps;
  // wire [3:0] jFirst;
@@ -348,29 +348,29 @@ module frontend1(
   reg btbFStall_recover_reg;
   reg btbFStall_recover_reg2;
     
-  wire [3:0][3:0] jmp_off;
+  wire [3:0] jmp_off[3:0];
   reg [3:0] jmp_off_reg[3:0];
-  wire [3:0][63:0] jdec_const;
+  wire [63:0] jdec_const[3:0];
   reg [63:0] jdec_const_reg[3:0];
   wire [3:0] jdec_bkjump;
-  wire [3:0][INSTR_WIDTH-1:0] jmp_instr;
-  wire [3:0][3:0] jmp_magic;
-  wire [3:0][CLS_WIDTH-1:0] jmp_class;
+  wire [INSTR_WIDTH-1:0] jmp_instr[3:0];
+  wire [3:0] jmp_magic[3:0];
+  wire [CLS_WIDTH-1:0] jmp_class[3:0];
   wire [3:0] jdec_push;
   wire [3:0] jdec_pop;
-  wire [3:0][4:0] jdec_type;
+  wire [4:0] jdec_type[3:0];
   wire [15:0] jdec_link;
   wire [2:0] btb_way;
   reg [2:0] btb_way_reg;
   reg [2:0] btb_way_reg2;
-  wire [3:0][3:0] jmp_moff;
+  wire [3:0] jmp_moff[3:0];
   reg [3:0] jmp_moff_reg[3:0];
-  wire [3:0][47:1] jmp_par0;
-  wire [3:0][47:1] jmp_par1;
-  wire [3:0][47:1] jmp_tpar0;
-  wire [3:0][47:1] jmp_tpar1;
-  wire [3:0][47:1] jdec_target;
-  wire [3:0][3:0] jmp_mask;
+  wire [47:1] jmp_par0[3:0];
+  wire [47:1] jmp_par1[3:0];
+  wire [47:1] jmp_tpar0[3:0];
+  wire [47:1] jmp_tpar1[3:0];
+  wire [47:1] jdec_target[3:0];
+  wire [3:0] jmp_mask[3:0];
   reg [3:0] jmp_mask_reg[3:0];
   reg [3:0] jmp_mask_reg2[3:0];
   reg [3:0] jmp_mask_reg3[3:0];
@@ -429,7 +429,7 @@ module frontend1(
   wire [11:0] pre_jbefore;
   wire [11:0] pre_jbefore0;
   wire [3:0] last_off;
-  wire [3:0][3:0] btb_joff;
+  wire [3:0] btb_joff[3:0];
   reg [3:0] last_off_reg;
   reg [3:0] last_off_reg2;
   reg [3:0] last_off_reg3;
@@ -512,7 +512,7 @@ module frontend1(
   wire [47:0] btbx_tgt;
   wire [15:0] btbx_jlink;
   wire [1:0] btbx_jlnpos;
-  wire [3:0][3:0] btbx_joff;
+  wire [3:0] btbx_joff[3:0];
   reg  [3:0] btbx_joff_reg[3:0];
   reg  [3:0] btbx_joff_reg2[3:0];
   reg  [3:0] btbx_joff_reg3[3:0];

@@ -797,11 +797,11 @@ module ratV(
   genvar i,k,l;
 
 
-  wire [8:0][ROB_ADDR_WIDTH-1:0] read_data;
+  wire [ROB_ADDR_WIDTH-1:0] read_data[8:0];
   wire [8:0]read_retired;
   wire [8:0]read_isDep;
-  wire [8:0][FN_WIDTH-1:0] read_fun;
-  wire [8:0][1:0] read_dom;
+  wire [FN_WIDTH-1:0] read_fun[8:0];
+  wire [1:0] read_dom[8:0];
 
   reg read_thread_reg;
   
@@ -859,8 +859,8 @@ module ratV(
     for (l=0;l<4+2*EXTRA;l=l+1) begin : tile_gen
         wire [8:0] [ROB_ADDR_WIDTH-1:0] read_dataA;
         wire [8:0] read_retiredA;
-        wire [8:0][FN_WIDTH-1:0] read_funA;
-        wire [8:0][1:0] read_domA;
+        wire [FN_WIDTH-1:0] read_funA[8:0];
+        wire [1:0] read_domA[8:0];
     for (i=0;i<8;i=i+1) begin : buffers
         ratV_buf #(i) buf_mod(
           clk,

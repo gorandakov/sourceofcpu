@@ -188,12 +188,12 @@ module instrQextra(
   reg [3:0] write_addr2[1:0];
   reg [3:0] write_addr3[1:0];
   
-  wire [1:0][3:0] read_addr0_d;
-  wire [1:0][3:0] read_addr1_d;
-  wire [1:0][3:0] write_addr0_d;
-  wire [1:0][3:0] write_addr1_d;
-  wire [1:0][3:0] write_addr2_d;
-  wire [1:0][3:0] write_addr3_d;
+  wire [3:0] read_addr0_d[1:0];
+  wire [3:0] read_addr1_d[1:0];
+  wire [3:0] write_addr0_d[1:0];
+  wire [3:0] write_addr1_d[1:0];
+  wire [3:0] write_addr2_d[1:0];
+  wire [3:0] write_addr3_d[1:0];
   
   wire [DATA_WIDTH-1:0] write_data0x;
   wire [DATA_WIDTH-1:0] write_data1x;
@@ -201,7 +201,7 @@ module instrQextra(
   wire [DATA_WIDTH-1:0] write_data3x;
 
   reg [4:0] cnt[1:0];
-  wire [1:0][4:0] cnt_d;
+  wire [4:0] cnt_d[1:0];
 
   assign write_data0x=write_start[0] ? write_data0 : 'z;
   assign write_data0x=write_start[1] ? write_data1 : 'z;

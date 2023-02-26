@@ -1317,9 +1317,9 @@ module rs_s(
   wire [BUF_COUNT-1:0] newRsSelect1;
   wire [BUF_COUNT-1:0] newRsSelect2;
   
-  wire [3:0][BUF_COUNT-1:0] outRsSelect;
+  wire [BUF_COUNT-1:0] outRsSelect[3:0];
   wire [BUF_COUNT-1:0] portReady[3:0];
-  wire [3:0][3:0] outBank;
+  wire [3:0] outBank[3:0];
   wire [3:0] portEn;
   wire [3:0] rsFound;
   

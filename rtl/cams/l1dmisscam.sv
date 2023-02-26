@@ -431,7 +431,7 @@ module dmisscam(
   input [1:0]               fill_low5;
 
   wire fill_match;
-  wire [5:0][15:0] fill_match_o;
+  wire [15:0] fill_match_o[5:0];
   wire [15:0] filled;
   wire [15:0] busy;
   wire [15:0] fill_en_way;
