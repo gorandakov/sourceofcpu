@@ -833,7 +833,8 @@ module instrQ_upDown(addr,addr_new,fstall,inEn,stall,outEn,doFStall);
   input [9:0] outEn;
   output doFStall;
   
-  
+ 
+
   wire [12:0] cntIn;
   wire [10:0] cntOut;
   
@@ -861,7 +862,7 @@ module instrQ_upDown(addr,addr_new,fstall,inEn,stall,outEn,doFStall);
       end
   endgenerate
   always @* begin
-      $display("cnt 0x%x, cntIn 0x%x, cntOut 0x%x",cnt,cntIn,cntOut);
+      $display("cnt 0x%x, cntIn 0x%x, cntOut 0x%x, addr_new 0x%x",cnt,cntIn,cntOut,addr_new);
   end 
   get_carry #(6) cmp_mod(~6'd37,addr,1'b1,doFStall);
 endmodule
