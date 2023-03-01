@@ -282,7 +282,6 @@ module adder(a,b,out,cin,en,cout,cout8,cout16,cout32);
   output cout16;
   output cout32;
   
-  wire [WIDTH-1:0] outX;
 
   wire [WIDTH-1:0] nP0;
   wire [WIDTH-1:0] nG0;
@@ -332,13 +331,12 @@ module adder(a,b,out,cin,en,cout,cout8,cout16,cout32);
   
   assign cout=C[WIDTH-1];
 
-  assign out=outX;
   
   generate
     for (i=0;i<WIDTH;i=i+1)
       begin : out_gen
-        assign outX[i]=(X[i] & en) ? ~C1[i] : 1'bz;
-        assign outX[i]=(nX[i] & en) ? ~nC1[i] : 1'bz;
+        assign out[i]=(X[i] & en) ? ~C1[i] : 1'bz;
+        assign out[i]=(nX[i] & en) ? ~nC1[i] : 1'bz;
       end 
     if (WIDTH>1)
       begin
@@ -463,10 +461,6 @@ module addsub_alu0(a,b,out,sub,en,ben,cout,cout4,cout8,cout16,cout32);
   output cout16;
   output cout32;
   
-  wire [WIDTH-1:0] out_X;
-
-  assign out=out_X;
-
   wire [WIDTH-1:0] nP0;
   wire [WIDTH-1:0] nG0;
 
@@ -532,8 +526,8 @@ module addsub_alu0(a,b,out,sub,en,ben,cout,cout4,cout8,cout16,cout32);
         
     for (i=0;i<WIDTH;i=i+1)
       begin : out_gen
-        assign out_X[i]=(X[i] & bitEn[i]) ? ~C1[i] : 1'bz;
-        assign out_X[i]=(nX[i] & bitEn[i]) ? ~nC1[i] : 1'bz;
+        assign out[i]=(X[i] & bitEn[i]) ? ~C1[i] : 1'bz;
+        assign out[i]=(nX[i] & bitEn[i]) ? ~nC1[i] : 1'bz;
       end 
     if (WIDTH>1)
       begin
@@ -642,10 +636,10 @@ module addsub_alu0(a,b,out,sub,en,ben,cout,cout4,cout8,cout16,cout32);
 	
 	if (WIDTH==64)
 	  begin
-	    assign out_X[63:32]=(en&~ben[3]&ben[2]) ? 32'b0:32'bz; 
-	    assign out_X[63:32]=(en&~ben[3]&~ben[2]) ? a[63:32]:32'bz; 
-	    assign out_X[31:16]=(en&~ben[3]&~ben[2]) ? a[31:16]:16'bz; 
-	    assign out_X[15:8]=(en&~ben[2]&~ben[1]) ? a[15:8]:8'bz; 
+	    assign out[63:32]=(en&~ben[3]&ben[2]) ? 32'b0:32'bz; 
+	    assign out[63:32]=(en&~ben[3]&~ben[2]) ? a[63:32]:32'bz; 
+	    assign out[31:16]=(en&~ben[3]&~ben[2]) ? a[31:16]:16'bz; 
+	    assign out[15:8]=(en&~ben[2]&~ben[1]) ? a[15:8]:8'bz; 
 	  end
     
   endgenerate
@@ -675,9 +669,6 @@ module addsub_alu(a,b,out,sub,en,sxtEn,ben,cout,cout4,cout8LL,cout16,cout32,cout
   output ndiff;
   output cout44;
   
-  wire [64:0] out_X;
-
-  assign out=out_X;
 
   wire [WIDTH-1:0] nP0;
   wire [WIDTH-1:0] nG0;
@@ -751,7 +742,7 @@ module addsub_alu(a,b,out,sub,en,sxtEn,ben,cout,cout4,cout8LL,cout16,cout32,cout
 
   assign is_ptr=a[64]|b[64] && ~(a[64]&b[64]&sub[1]) && ben==2'b01;
 
-  assign out_X[64]=en ? is_ptr : 1'bz;
+  assign out[64]=en ? is_ptr : 1'bz;
 
   assign exbits=is_ptr ? ptr[63:44]^{19'b0,pos_flip[cout_sec0]|
   neg_flip[cout_sec0]} : 20'b0;
@@ -790,8 +781,8 @@ module addsub_alu(a,b,out,sub,en,sxtEn,ben,cout,cout4,cout8LL,cout16,cout32,cout
         
     for (i=0;i<WIDTH;i=i+1)
       begin : out_gen
-        assign out_X[i]=(X[i] & bitEn[i]) ? ~C1[i] : 1'bz;
-        assign out_X[i]=(nX[i] & bitEn[i]) ? ~nC1[i] : 1'bz;
+        assign out[i]=(X[i] & bitEn[i]) ? ~C1[i] : 1'bz;
+        assign out[i]=(nX[i] & bitEn[i]) ? ~nC1[i] : 1'bz;
       end 
     if (WIDTH>1)
       begin
@@ -906,8 +897,8 @@ module addsub_alu(a,b,out,sub,en,sxtEn,ben,cout,cout4,cout8LL,cout16,cout32,cout
 	
 	if (1)
 	  begin
-	    assign out_X[63:44]=(en&~ben[1]) ? exbits : 20'bz; 
-	    assign out_X[43:32]=(en&~ben[0]) ? 12'b0:12'bz; 
+	    assign out[63:44]=(en&~ben[1]) ? exbits : 20'bz; 
+	    assign out[43:32]=(en&~ben[0]) ? 12'b0:12'bz; 
           //  assign out[63:32]=(X[31] & sxtEn) ? {32{~C1[31]}} : 'z;
           //  assign out[63:32]=(nX[31] & sxtEn) ? {32{~nC1[31]}} : 'z;
 	  end
@@ -929,7 +920,6 @@ module adder_inc(a,out,en,cout);
   input en;
   output cout;
   
-  wire [WIDTH-1:0] outX;
 
   wire [WIDTH-1:0] P0;
   wire [WIDTH-1:0] nP1;
@@ -955,13 +945,12 @@ module adder_inc(a,out,en,cout);
   
   assign cout=P[WIDTH-1];
 
-  assign out=outX;
   
   generate
     for (i=0;i<WIDTH;i=i+1)
       begin : out_gen
-        assign outX[i]=(a[i] & en) ? ~C1[i] : 1'bz;
-        assign outX[i]=(~a[i] & en) ? ~nC1[i] : 1'bz;
+        assign out[i]=(a[i] & en) ? ~C1[i] : 1'bz;
+        assign out[i]=(~a[i] & en) ? ~nC1[i] : 1'bz;
       end 
 
     if (WIDTH>1)
@@ -1283,9 +1272,6 @@ module add_agu(
   input en;
   input [3:0] shift;
   
-  wire [63:0] out_X;
-
-  assign out=out_X;
 
   wire [WIDTH-1:0] tmp1;
   wire [WIDTH:0] tmp2;
@@ -1346,7 +1332,7 @@ module add_agu(
         assign tmp2[k+1]=(shift[3] & c3[k]) ? orab[k] : 1'bz;
       end
   endgenerate
-  adder_seq #(WIDTH) add_mod(tmp1,tmp2[WIDTH-1:0],out_X[43:0],c_s,1'b0,en,,,,);
+  adder_seq #(WIDTH) add_mod(tmp1,tmp2[WIDTH-1:0],out[43:0],c_s,1'b0,en,,,,);
   assign out_X[63:44]=en ? ptr[63:44] : 20'bz;
   agusec_shift ssh_mod(ptr[`ptr_exp],c_s[43:12],cout_sec0);
   agusec_check_upper3 #(1'b1) chk_mod(ptr,unptr[43:4],b[43:4],{dummy1,pos_ack},{dummy2,neg_ack},,,ndiff);
@@ -1370,12 +1356,6 @@ module adder_pipe2o(clk,a,b,out1,out2,cin,en1,en2,cout,cout8,cout16,cout32);
   output cout16;
   output cout32;
   
-
-  wire [WIDTH-1:0] out1_X;
-  wire [WIDTH-1:0] out2_X;
-
-  assign out1=out1_X;
-  assign out2=out2_X;
 
   wire [WIDTH-1:0] nP0;
   wire [WIDTH-1:0] nG0;
@@ -1431,10 +1411,10 @@ module adder_pipe2o(clk,a,b,out1,out2,cin,en1,en2,cout,cout8,cout16,cout32);
   generate
     for (i=0;i<WIDTH;i=i+1)
       begin : out_gen
-        assign out1_X[i]=(X[i] & en1) ? ~C1[i] : 1'bz;
-        assign out1_X[i]=(nX[i] & en1) ? ~nC1[i] : 1'bz;
-        assign out2_X[i]=(X[i] & en2) ? ~C1[i] : 1'bz;
-        assign out2_X[i]=(nX[i] & en2) ? ~nC1[i] : 1'bz;
+        assign out1[i]=(X[i] & en1) ? ~C1[i] : 1'bz;
+        assign out1[i]=(nX[i] & en1) ? ~nC1[i] : 1'bz;
+        assign out2[i]=(X[i] & en2) ? ~C1[i] : 1'bz;
+        assign out2[i]=(nX[i] & en2) ? ~nC1[i] : 1'bz;
       end 
     if (WIDTH>1)
       begin
@@ -1565,13 +1545,6 @@ module adder2oM(a,b,out0,out1,out2,cin,en0,en1,low32,cout,cout8,cout16,cout32);
   output cout16;
   output cout32;
   
-  wire [WIDTH-1:0] out0_X;
-  wire [WIDTH-1:0] out1_X;
-  wire [31:0] out2_X;
-
-  assign out0=out0_X;
-  assign out1=out1_X;
-  assign out2=out2_X;
 
   wire [WIDTH-1:0] nP0;
   wire [WIDTH-1:0] nG0;
@@ -1625,21 +1598,21 @@ module adder2oM(a,b,out0,out1,out2,cin,en0,en1,low32,cout,cout8,cout16,cout32);
     for (i=0;i<WIDTH;i=i+1)
       begin : out_gen
 	  if (~i[5]) begin
-              assign out0_X[i]=(X[i] & en0) ? ~C1[i] : 1'bz;
-              assign out0_X[i]=(nX[i] & en0) ? ~nC1[i] : 1'bz;
-              assign out1_X[i]=(X[i] & en1) ? ~C1[i] : 1'bz;
-              assign out1_X[i]=(nX[i] & en1) ? ~nC1[i] : 1'bz;
+              assign out0[i]=(X[i] & en0) ? ~C1[i] : 1'bz;
+              assign out0[i]=(nX[i] & en0) ? ~nC1[i] : 1'bz;
+              assign out1[i]=(X[i] & en1) ? ~C1[i] : 1'bz;
+              assign out1[i]=(nX[i] & en1) ? ~nC1[i] : 1'bz;
           end else begin
-              assign out0_X[i]=(X[i] & en0 & ~low32) ? ~C1[i] : 1'bz;
-              assign out0_X[i]=(nX[i] & en0 & ~low32) ? ~nC1[i] : 1'bz;
-	      assign out0_X[i]=(en0 & low32) ? 1'b0 : 1'bz;
-              assign out1_X[i]=(X[i] & en1 & ~low32) ? ~C1[i] : 1'bz;
-              assign out1_X[i]=(nX[i] & en1 & ~low32) ? ~nC1[i] : 1'bz;
-	      assign out1_X[i]=(en1 & low32) ? 1'b0 : 1'bz;
+              assign out0[i]=(X[i] & en0 & ~low32) ? ~C1[i] : 1'bz;
+              assign out0[i]=(nX[i] & en0 & ~low32) ? ~nC1[i] : 1'bz;
+	      assign out0[i]=(en0 & low32) ? 1'b0 : 1'bz;
+              assign out1[i]=(X[i] & en1 & ~low32) ? ~C1[i] : 1'bz;
+              assign out1[i]=(nX[i] & en1 & ~low32) ? ~nC1[i] : 1'bz;
+	      assign out1[i]=(en1 & low32) ? 1'b0 : 1'bz;
 	  end
           if (i>=32 && i<64) begin
-              assign out2_X[i-32]=(X[i] & en0) ? ~C1[i] : 1'bz;
-              assign out2_X[i-32]=(nX[i] & en0) ? ~nC1[i] : 1'bz;
+              assign out2[i-32]=(X[i] & en0) ? ~C1[i] : 1'bz;
+              assign out2[i-32]=(nX[i] & en0) ? ~nC1[i] : 1'bz;
           end
       end 
     if (WIDTH>1)
@@ -1768,12 +1741,6 @@ module adder2oi(biten,a,b,out0,out1,cin,en0,en1,cout,cout8,cout16,cout32);
   output cout32;
   
 
-  wire [WIDTH-1:0] out0_X;
-  wire [WIDTH-1:0] out1_X;
-
-  assign out0=out0_X;
-  assign out1=out1_X;
-
   wire [WIDTH-1:0] nP0;
   wire [WIDTH-1:0] nG0;
 
@@ -1825,12 +1792,12 @@ module adder2oi(biten,a,b,out0,out1,cin,en0,en1,cout,cout8,cout16,cout32);
   generate
     for (i=0;i<WIDTH;i=i+1)
       begin : out_gen
-        assign out0_X[i]=(X[i] & en0 & biten[i]) ? ~C1[i] : 1'bz;
-        assign out0_X[i]=(nX[i] & en0 & biten[i]) ? ~nC1[i] : 1'bz;
-	assign out0_X[i]=(~biten[i]) ? 1'b0 : 1'bz;
-	assign out1_X[i]=(~biten[i]) ? 1'b0 : 1'bz;
-        assign out1_X[i]=(X[i] & en1 & biten[i]) ? ~C1[i] : 1'bz;
-        assign out1_X[i]=(nX[i] & en1 & biten[i]) ? ~nC1[i] : 1'bz;
+        assign out0[i]=(X[i] & en0 & biten[i]) ? ~C1[i] : 1'bz;
+        assign out0[i]=(nX[i] & en0 & biten[i]) ? ~nC1[i] : 1'bz;
+	assign out0[i]=(~biten[i]) ? 1'b0 : 1'bz;
+	assign out1[i]=(~biten[i]) ? 1'b0 : 1'bz;
+        assign out1[i]=(X[i] & en1 & biten[i]) ? ~C1[i] : 1'bz;
+        assign out1[i]=(nX[i] & en1 & biten[i]) ? ~nC1[i] : 1'bz;
       end 
     if (WIDTH>1)
       begin
@@ -1953,13 +1920,6 @@ module adder2o(a,b,out0,out1,cin,en0,en1,cout,cout8,cout16,cout32);
   output cout32;
   
 
-  wire [WIDTH-1:0] out0_X;
-  wire [WIDTH-1:0] out1_X;
-
-  assign out0=out0_X;
-  assign out1=out1_X;
-
-
   wire [WIDTH-1:0] nP0;
   wire [WIDTH-1:0] nG0;
 
@@ -2011,10 +1971,10 @@ module adder2o(a,b,out0,out1,cin,en0,en1,cout,cout8,cout16,cout32);
   generate
     for (i=0;i<WIDTH;i=i+1)
       begin : out_gen
-        assign out0_X[i]=(X[i] & en0) ? ~C1[i] : 1'bz;
-        assign out0_X[i]=(nX[i] & en0) ? ~nC1[i] : 1'bz;
-        assign out1_X[i]=(X[i] & en1) ? ~C1[i] : 1'bz;
-        assign out1_X[i]=(nX[i] & en1) ? ~nC1[i] : 1'bz;
+        assign out0[i]=(X[i] & en0) ? ~C1[i] : 1'bz;
+        assign out0[i]=(nX[i] & en0) ? ~nC1[i] : 1'bz;
+        assign out1[i]=(X[i] & en1) ? ~C1[i] : 1'bz;
+        assign out1[i]=(nX[i] & en1) ? ~nC1[i] : 1'bz;
       end 
     if (WIDTH>1)
       begin
@@ -2137,12 +2097,6 @@ module adder2c(a,b,out0,out1,cin0,cin1,en0,en1,cout0,cout1,cout0_53,cout1_53);
   output cout0_53,cout1_53;
   
 
-  wire [WIDTH-1:0] out0_X;
-  wire [WIDTH-1:0] out1_X;
-
-  assign out0=out0_X;
-  assign out1=out1_X;
-
   wire [WIDTH-1:0] nP0;
   wire [WIDTH-1:0] nG0;
 
@@ -2207,10 +2161,10 @@ module adder2c(a,b,out0,out1,cin0,cin1,en0,en1,cout0,cout1,cout0_53,cout1_53);
     end
     for (i=0;i<WIDTH;i=i+1)
       begin : out_gen
-        assign out0_X[i]=(X[i] & en0) ? ~C1a[i] : 1'bz;
-        assign out0_X[i]=(nX[i] & en0) ? ~nC1a[i] : 1'bz;
-        assign out1_X[i]=(X[i] & en1) ? ~C1b[i] : 1'bz;
-        assign out1_X[i]=(nX[i] & en1) ? ~nC1b[i] : 1'bz;
+        assign out0[i]=(X[i] & en0) ? ~C1a[i] : 1'bz;
+        assign out0[i]=(nX[i] & en0) ? ~nC1a[i] : 1'bz;
+        assign out1[i]=(X[i] & en1) ? ~C1b[i] : 1'bz;
+        assign out1[i]=(nX[i] & en1) ? ~nC1b[i] : 1'bz;
       end 
     if (WIDTH>1)
       begin
@@ -2349,12 +2303,6 @@ module adder2ox(a,b,out0,out1,cin,en0,en1,cout,cout8,cout16,cout32);
   output cout16;
   output cout32;
   
-  wire [WIDTH:0] out0_X;
-  wire [WIDTH:0] out1_X;
-
-  assign out0=out0_X;
-  assign out1=out1_X;
-
   wire [WIDTH-1:0] nP0;
   wire [WIDTH-1:0] nG0;
 
@@ -2406,10 +2354,10 @@ module adder2ox(a,b,out0,out1,cin,en0,en1,cout,cout8,cout16,cout32);
   generate
     for (i=0;i<WIDTH+1;i=i+1)
       begin : out_gen
-        assign out0_X[i]=(X[i] & en0) ? ~C1[i] : 1'bz;
-        assign out0_X[i]=(nX[i] & en0) ? ~nC1[i] : 1'bz;
-        assign out1_X[i]=(X[i] & en1) ? ~C1[i] : 1'bz;
-        assign out1_X[i]=(nX[i] & en1) ? ~nC1[i] : 1'bz;
+        assign out0[i]=(X[i] & en0) ? ~C1[i] : 1'bz;
+        assign out0[i]=(nX[i] & en0) ? ~nC1[i] : 1'bz;
+        assign out1[i]=(X[i] & en1) ? ~C1[i] : 1'bz;
+        assign out1[i]=(nX[i] & en1) ? ~nC1[i] : 1'bz;
       end 
     if (WIDTH>1)
       begin
@@ -2533,12 +2481,6 @@ module adder2c_pipe(clk,a,b,out0,out1,cin0,cin1,en0,en1,cout0,cout1,cout0_53,cou
   output cout0_53,cout1_53;
   
 
-  wire [WIDTH-1:0] out0_X;
-  wire [WIDTH-1:0] out1_X;
-
-  assign out0=out0_X;
-  assign out1=out1_X;
-
   wire [WIDTH-1:0] nP0;
   wire [WIDTH-1:0] nG0;
 
@@ -2606,10 +2548,10 @@ module adder2c_pipe(clk,a,b,out0,out1,cin0,cin1,en0,en1,cout0,cout1,cout0_53,cou
     end
     for (i=0;i<WIDTH;i=i+1)
       begin : out_gen
-        assign out0_X[i]=(X[i] & en0) ? ~C1a[i] : 1'bz;
-        assign out0_X[i]=(nX[i] & en0) ? ~nC1a[i] : 1'bz;
-        assign out1_X[i]=(X[i] & en1) ? ~C1b[i] : 1'bz;
-        assign out1_X[i]=(nX[i] & en1) ? ~nC1b[i] : 1'bz;
+        assign out0[i]=(X[i] & en0) ? ~C1a[i] : 1'bz;
+        assign out0[i]=(nX[i] & en0) ? ~nC1a[i] : 1'bz;
+        assign out1[i]=(X[i] & en1) ? ~C1b[i] : 1'bz;
+        assign out1[i]=(nX[i] & en1) ? ~nC1b[i] : 1'bz;
       end 
     if (WIDTH>1)
       begin
