@@ -142,50 +142,29 @@ module instrQ_buf(
   wire [11:0] instr_wren;
   wire instr_wrAny;
   
-  wire [WIDTH-1:0] read_instr0_X; assign read_instr0=read_instr0_X;
-  wire [OTHER-1:0] read_other0_X; assign read_other0=read_other0_X;
-  wire [WIDTH-1:0] read_instr1_X; assign read_instr1=read_instr1_X;
-  wire [OTHER-1:0] read_other1_X; assign read_other1=read_other1_X;
-  wire [WIDTH-1:0] read_instr2_X; assign read_instr2=read_instr2_X;
-  wire [OTHER-1:0] read_other2_X; assign read_other2=read_other2_X;
-  wire [WIDTH-1:0] read_instr3_X; assign read_instr3=read_instr3_X;
-  wire [OTHER-1:0] read_other3_X; assign read_other3=read_other3_X;
-  wire [WIDTH-1:0] read_instr4_X; assign read_instr4=read_instr4_X;
-  wire [OTHER-1:0] read_other4_X; assign read_other4=read_other4_X;
-  wire [WIDTH-1:0] read_instr5_X; assign read_instr5=read_instr5_X;
-  wire [OTHER-1:0] read_other5_X; assign read_other5=read_other5_X;
-  wire [WIDTH-1:0] read_instr6_X; assign read_instr6=read_instr6_X;
-  wire [OTHER-1:0] read_other6_X; assign read_other6=read_other6_X;
-  wire [WIDTH-1:0] read_instr7_X; assign read_instr7=read_instr7_X;
-  wire [OTHER-1:0] read_other7_X; assign read_other7=read_other7_X;
-  wire [WIDTH-1:0] read_instr8_X; assign read_instr8=read_instr8_X;
-  wire [OTHER-1:0] read_other8_X; assign read_other8=read_other8_X;
-  wire [WIDTH-1:0] read_instr9_X; assign read_instr9=read_instr9_X;
-  wire [OTHER-1:0] read_other9_X; assign read_other9=read_other9_X;
-  
   assign instr_rd=instr[read_thread];
   assign other_rd=other[read_thread];
   
-  assign read_instr0_X=read_en[0] ? instr_rd : 'z;
-  assign read_other0_X=read_en[0] ? other_rd : 'z;
-  assign read_instr1_X=read_en[1] ? instr_rd : 'z;
-  assign read_other1_X=read_en[1] ? other_rd : 'z;
-  assign read_instr2_X=read_en[2] ? instr_rd : 'z;
-  assign read_other2_X=read_en[2] ? other_rd : 'z;
-  assign read_instr3_X=read_en[3] ? instr_rd : 'z;
-  assign read_other3_X=read_en[3] ? other_rd : 'z;
-  assign read_instr4_X=read_en[4] ? instr_rd : 'z;
-  assign read_other4_X=read_en[4] ? other_rd : 'z;
-  assign read_instr5_X=read_en[5] ? instr_rd : 'z;
-  assign read_other5_X=read_en[5] ? other_rd : 'z;
-  assign read_instr6_X=read_en[6] ? instr_rd : 'z;
-  assign read_other6_X=read_en[6] ? other_rd : 'z;
-  assign read_instr7_X=read_en[7] ? instr_rd : 'z;
-  assign read_other7_X=read_en[7] ? other_rd : 'z;
-  assign read_instr8_X=read_en[8] ? instr_rd : 'z;
-  assign read_other8_X=read_en[8] ? other_rd : 'z;
-  assign read_instr9_X=read_en[9] ? instr_rd : 'z;
-  assign read_other9_X=read_en[9] ? other_rd : 'z;
+  assign read_instr0=read_en[0] ? instr_rd : 'z;
+  assign read_other0=read_en[0] ? other_rd : 'z;
+  assign read_instr1=read_en[1] ? instr_rd : 'z;
+  assign read_other1=read_en[1] ? other_rd : 'z;
+  assign read_instr2=read_en[2] ? instr_rd : 'z;
+  assign read_other2=read_en[2] ? other_rd : 'z;
+  assign read_instr3=read_en[3] ? instr_rd : 'z;
+  assign read_other3=read_en[3] ? other_rd : 'z;
+  assign read_instr4=read_en[4] ? instr_rd : 'z;
+  assign read_other4=read_en[4] ? other_rd : 'z;
+  assign read_instr5=read_en[5] ? instr_rd : 'z;
+  assign read_other5=read_en[5] ? other_rd : 'z;
+  assign read_instr6=read_en[6] ? instr_rd : 'z;
+  assign read_other6=read_en[6] ? other_rd : 'z;
+  assign read_instr7=read_en[7] ? instr_rd : 'z;
+  assign read_other7=read_en[7] ? other_rd : 'z;
+  assign read_instr8=read_en[8] ? instr_rd : 'z;
+  assign read_other8=read_en[8] ? other_rd : 'z;
+  assign read_instr9=read_en[9] ? instr_rd : 'z;
+  assign read_other9=read_en[9] ? other_rd : 'z;
 
   //verilator lint_off WIDTH 
   assign instr_wren[0]=write_addr0==INDEX && write_instrEn[0];
@@ -381,27 +360,6 @@ module instrQ_box(
   reg [5:0] read_en8;
   reg [5:0] read_en9;
   
-  wire [WIDTH-1:0] read_instr0_X; assign read_instr0=read_instr0_X;
-  wire [OTHER-1:0] read_other0_X; assign read_other0=read_other0_X;
-  wire [WIDTH-1:0] read_instr1_X; assign read_instr1=read_instr1_X;
-  wire [OTHER-1:0] read_other1_X; assign read_other1=read_other1_X;
-  wire [WIDTH-1:0] read_instr2_X; assign read_instr2=read_instr2_X;
-  wire [OTHER-1:0] read_other2_X; assign read_other2=read_other2_X;
-  wire [WIDTH-1:0] read_instr3_X; assign read_instr3=read_instr3_X;
-  wire [OTHER-1:0] read_other3_X; assign read_other3=read_other3_X;
-  wire [WIDTH-1:0] read_instr4_X; assign read_instr4=read_instr4_X;
-  wire [OTHER-1:0] read_other4_X; assign read_other4=read_other4_X;
-  wire [WIDTH-1:0] read_instr5_X; assign read_instr5=read_instr5_X;
-  wire [OTHER-1:0] read_other5_X; assign read_other5=read_other5_X;
-  wire [WIDTH-1:0] read_instr6_X; assign read_instr6=read_instr6_X;
-  wire [OTHER-1:0] read_other6_X; assign read_other6=read_other6_X;
-  wire [WIDTH-1:0] read_instr7_X; assign read_instr7=read_instr7_X;
-  wire [OTHER-1:0] read_other7_X; assign read_other7=read_other7_X;
-  wire [WIDTH-1:0] read_instr8_X; assign read_instr8=read_instr8_X;
-  wire [OTHER-1:0] read_other8_X; assign read_other8=read_other8_X;
-  wire [WIDTH-1:0] read_instr9_X; assign read_instr9=read_instr9_X;
-  wire [OTHER-1:0] read_other9_X; assign read_other9=read_other9_X;
-  
   
   integer k;
   generate
@@ -446,51 +404,51 @@ module instrQ_box(
           end
           
           
-          assign read_instr0_X=read_en0[m] ? read_instrm[0] : 'z;
-          assign read_instr1_X=read_en1[m] ? read_instrm[1] : 'z;
-          assign read_instr2_X=read_en2[m] ? read_instrm[2] : 'z;
-          assign read_instr3_X=read_en3[m] ? read_instrm[3] : 'z;
-          assign read_instr4_X=read_en4[m] ? read_instrm[4] : 'z;
-          assign read_instr5_X=read_en5[m] ? read_instrm[5] : 'z;
-          assign read_instr6_X=read_en6[m] ? read_instrm[6] : 'z;
-          assign read_instr7_X=read_en7[m] ? read_instrm[7] : 'z;
-          assign read_instr8_X=read_en8[m] ? read_instrm[8] : 'z;
-          assign read_instr9_X=read_en9[m] ? read_instrm[9] : 'z;
+          assign read_instr0=read_en0[m] ? read_instrm[0] : 'z;
+          assign read_instr1=read_en1[m] ? read_instrm[1] : 'z;
+          assign read_instr2=read_en2[m] ? read_instrm[2] : 'z;
+          assign read_instr3=read_en3[m] ? read_instrm[3] : 'z;
+          assign read_instr4=read_en4[m] ? read_instrm[4] : 'z;
+          assign read_instr5=read_en5[m] ? read_instrm[5] : 'z;
+          assign read_instr6=read_en6[m] ? read_instrm[6] : 'z;
+          assign read_instr7=read_en7[m] ? read_instrm[7] : 'z;
+          assign read_instr8=read_en8[m] ? read_instrm[8] : 'z;
+          assign read_instr9=read_en9[m] ? read_instrm[9] : 'z;
 
-          assign read_other0_X=read_en0[m] ? read_otherm[0] : 'z;
-          assign read_other1_X=read_en1[m] ? read_otherm[1] : 'z;
-          assign read_other2_X=read_en2[m] ? read_otherm[2] : 'z;
-          assign read_other3_X=read_en3[m] ? read_otherm[3] : 'z;
-          assign read_other4_X=read_en4[m] ? read_otherm[4] : 'z;
-          assign read_other5_X=read_en5[m] ? read_otherm[5] : 'z;
-          assign read_other6_X=read_en6[m] ? read_otherm[6] : 'z;
-          assign read_other7_X=read_en7[m] ? read_otherm[7] : 'z;
-          assign read_other8_X=read_en8[m] ? read_otherm[8] : 'z;
-          assign read_other9_X=read_en9[m] ? read_otherm[9] : 'z;
+          assign read_other0=read_en0[m] ? read_otherm[0] : 'z;
+          assign read_other1=read_en1[m] ? read_otherm[1] : 'z;
+          assign read_other2=read_en2[m] ? read_otherm[2] : 'z;
+          assign read_other3=read_en3[m] ? read_otherm[3] : 'z;
+          assign read_other4=read_en4[m] ? read_otherm[4] : 'z;
+          assign read_other5=read_en5[m] ? read_otherm[5] : 'z;
+          assign read_other6=read_en6[m] ? read_otherm[6] : 'z;
+          assign read_other7=read_en7[m] ? read_otherm[7] : 'z;
+          assign read_other8=read_en8[m] ? read_otherm[8] : 'z;
+          assign read_other9=read_en9[m] ? read_otherm[9] : 'z;
       end
   endgenerate
 
-  assign read_instr0_X=|read_en0 ? 'z : '0;
-  assign read_instr1_X=|read_en1 ? 'z : '0;
-  assign read_instr2_X=|read_en2 ? 'z : '0;
-  assign read_instr3_X=|read_en3 ? 'z : '0;
-  assign read_instr4_X=|read_en4 ? 'z : '0;
-  assign read_instr5_X=|read_en5 ? 'z : '0;
-  assign read_instr6_X=|read_en6 ? 'z : '0;
-  assign read_instr7_X=|read_en7 ? 'z : '0;
-  assign read_instr8_X=|read_en8 ? 'z : '0;
-  assign read_instr9_X=|read_en9 ? 'z : '0;
+  assign read_instr0=|read_en0 ? 'z : '0;
+  assign read_instr1=|read_en1 ? 'z : '0;
+  assign read_instr2=|read_en2 ? 'z : '0;
+  assign read_instr3=|read_en3 ? 'z : '0;
+  assign read_instr4=|read_en4 ? 'z : '0;
+  assign read_instr5=|read_en5 ? 'z : '0;
+  assign read_instr6=|read_en6 ? 'z : '0;
+  assign read_instr7=|read_en7 ? 'z : '0;
+  assign read_instr8=|read_en8 ? 'z : '0;
+  assign read_instr9=|read_en9 ? 'z : '0;
   
-  assign read_other0_X=|read_en0 ? 'z : '0;
-  assign read_other1_X=|read_en1 ? 'z : '0;
-  assign read_other2_X=|read_en2 ? 'z : '0;
-  assign read_other3_X=|read_en3 ? 'z : '0;
-  assign read_other4_X=|read_en4 ? 'z : '0;
-  assign read_other5_X=|read_en5 ? 'z : '0;
-  assign read_other6_X=|read_en6 ? 'z : '0;
-  assign read_other7_X=|read_en7 ? 'z : '0;
-  assign read_other8_X=|read_en8 ? 'z : '0;
-  assign read_other9_X=|read_en9 ? 'z : '0;
+  assign read_other0=|read_en0 ? 'z : '0;
+  assign read_other1=|read_en1 ? 'z : '0;
+  assign read_other2=|read_en2 ? 'z : '0;
+  assign read_other3=|read_en3 ? 'z : '0;
+  assign read_other4=|read_en4 ? 'z : '0;
+  assign read_other5=|read_en5 ? 'z : '0;
+  assign read_other6=|read_en6 ? 'z : '0;
+  assign read_other7=|read_en7 ? 'z : '0;
+  assign read_other8=|read_en8 ? 'z : '0;
+  assign read_other9=|read_en9 ? 'z : '0;
   
   always @(posedge clk) begin
   
@@ -809,14 +767,13 @@ module instrQ_bndAdd(addr,addr_new,cnt);
   output [5:0] addr_new;
   input [CNT_COUNT:0] cnt;
   
-  wire [5:0] addr_new_X; assign addr_new=addr_new_X;
   
   generate
     genvar n;
     for (n=0;n<=CNT_COUNT;n=n+1) begin : add_gen
          wire [5:0] addr1;
          adder #(6) add_mod(addr,n[5:0],addr1,1'b0,1'b1,,,,);
-        assign addr_new_X=cnt[n] ? addr1 &{~{2{&addr1[5:4]}},4'b1111} : 6'bz;
+        assign addr_new=cnt[n] ? addr1 &{~{2{&addr1[5:4]}},4'b1111} : 6'bz;
     end
   endgenerate
 endmodule
