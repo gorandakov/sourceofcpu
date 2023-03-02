@@ -52,6 +52,7 @@ module rt2_fp(
   localparam [16:0] BIAS=17'h7fff;
   localparam SIMD_WIDTH=68;
   localparam II_WIDTH=10;
+  /*verilator hier_block*/
   input clk;
   input rst;
   input except;

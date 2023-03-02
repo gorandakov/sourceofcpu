@@ -25,6 +25,7 @@ module icompr(clk,clkEn,R,C,A_out,B_out,and1,is_sig,sig,sm_sig);
   input sm_sig;
   input sig;
   input is_sig;
+  /*verilator hier_block*/
   reg REGS_0;
   reg REGS_1;
   reg REGS_2;
