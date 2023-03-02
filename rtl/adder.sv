@@ -268,7 +268,6 @@ endmodule
 
 module adder(a,b,out,cin,en,cout,cout8,cout16,cout32);
   parameter WIDTH=32;
-  /*verilator hier_block*/
   input [WIDTH-1:0] a;
   input [WIDTH-1:0] b;
   output [WIDTH-1:0] out;
@@ -1904,7 +1903,6 @@ endmodule
 
 module adder2o(a,b,out0,out1,cin,en0,en1,cout,cout8,cout16,cout32);
   parameter WIDTH=32;
-  /*verilator hier_block*/
   input [WIDTH-1:0] a;
   input [WIDTH-1:0] b;
   output [WIDTH-1:0] out0;
@@ -2085,7 +2083,6 @@ endmodule
 
 module adder2c(a,b,out0,out1,cin0,cin1,en0,en1,cout0,cout1,cout0_53,cout1_53);
   parameter WIDTH=32;
-  /*verilator hier_block*/
   input [WIDTH-1:0] a;
   input [WIDTH-1:0] b;
   output [WIDTH-1:0] out0;
