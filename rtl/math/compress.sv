@@ -22,7 +22,6 @@ module fpucadd_compress(clk,R,C,A_out,B_out,or1,and1);
   output [127:0] B_out;
   input or1;
   input and1;//and1 inverse of or1
-  /*verilator hier_block*/
   reg REGS_0;
   reg REGS_1;
   reg REGS_2;
