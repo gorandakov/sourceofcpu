@@ -266,19 +266,19 @@ module adder_seq(a,b,out,c_s,cin,en,cout,cout8,cout16,cout32);
 endmodule
 
 
-module adder(a,b,out,cin,cout,cout8,cout16,cout32);
+module adder(a,b,out,cin,en,cout,cout8,cout16,cout32);
   parameter WIDTH=32;
   /*verilator hier_block*/
   input [WIDTH-1:0] a;
   input [WIDTH-1:0] b;
   output [WIDTH-1:0] out;
   input cin;
+  input en;
   output cout;
   output cout8;
   output cout16;
   output cout32;
- 
-  wire en=1'b1; 
+  
 
   wire [WIDTH-1:0] nP0;
   wire [WIDTH-1:0] nG0;
@@ -910,13 +910,13 @@ endmodule
 
 
 
-module adder_inc(a,out,cout);
+module adder_inc(a,out,en,cout);
   parameter WIDTH=32;
   input [WIDTH-1:0] a;
   output [WIDTH-1:0] out;
+  input en;
   output cout;
   
-  wire en=1'b1;
 
   wire [WIDTH-1:0] P0;
   wire [WIDTH-1:0] nP1;
@@ -1339,7 +1339,751 @@ endmodule
 
 
 
-module adder2c(a,b,out0,out1,cin0,cin1,cout0,cout1,cout0_53,cout1_53);
+module adder_pipe2o(clk,a,b,out1,out2,cin,en1,en2,cout,cout8,cout16,cout32);
+  parameter WIDTH=128;
+  input clk;
+  input [WIDTH-1:0] a;
+  input [WIDTH-1:0] b;
+  output [WIDTH-1:0] out1;
+  output [WIDTH-1:0] out2;
+  input cin;
+  input en1,en2;
+  output cout;
+  output cout8;
+  output cout16;
+  output cout32;
+  
+
+  wire [WIDTH-1:0] nP0;
+  wire [WIDTH-1:0] nG0;
+
+  wire [WIDTH-1:0] P1;
+  wire [WIDTH-1:0] G1;
+
+  wire [WIDTH-1:0] nP2;
+  wire [WIDTH-1:0] nG2;
+
+  wire [WIDTH-1:0] P3;
+  wire [WIDTH-1:0] G3;
+
+  wire [WIDTH-1:0] nP4;
+  wire [WIDTH-1:0] nG4;
+
+  reg [WIDTH-1:0] nP4_reg;
+  reg [WIDTH-1:0] nG4_reg;
+
+  wire [WIDTH-1:0] P5;
+  wire [WIDTH-1:0] G5;
+
+  wire [WIDTH-1:0] nP6;
+  wire [WIDTH-1:0] nG6;
+
+  wire [WIDTH-1:0] P7;
+  wire [WIDTH-1:0] G7;
+
+  wire [WIDTH-1:0] C;
+  wire [WIDTH-1:0] nC;
+
+  wire [WIDTH-1:0] X;
+  wire [WIDTH-1:0] nX;
+  
+  wire [WIDTH-1:0] C1;
+  wire [WIDTH-1:0] nC1;
+ 
+  
+  genvar i;
+  
+  nand_array #(WIDTH) nG0_mod(a,b,nG0);
+  nor_array #(WIDTH)  nP0_mod(a,b,nP0);
+  
+  xor_array #(WIDTH) x_mod (a,b,X);
+  nxor_array #(WIDTH) nX_mod (a,b,nX);
+
+  assign C1={C[WIDTH-2:0],cin};
+  assign nC1[WIDTH-1:1]=nC[WIDTH-2:0];
+  not_array #(1) C1_mod (cin,nC1[0]);
+  
+  assign cout=C[WIDTH-1];
+  
+  generate
+    for (i=0;i<WIDTH;i=i+1)
+      begin : out_gen
+        assign out1[i]=(X[i] & en1) ? ~C1[i] : 1'bz;
+        assign out1[i]=(nX[i] & en1) ? ~nC1[i] : 1'bz;
+        assign out2[i]=(X[i] & en2) ? ~C1[i] : 1'bz;
+        assign out2[i]=(nX[i] & en2) ? ~nC1[i] : 1'bz;
+      end 
+    if (WIDTH>1)
+      begin
+        nor_array #(WIDTH-1)  P1_mod(nP0[WIDTH-1:1],nP0[WIDTH-2:0],P1[WIDTH-1:1]);
+        not_array #(1) P1_tail_mod(nP0[0],P1[0]);
+        oai21_array #(WIDTH-1) G1_mod(nP0[WIDTH-1:1],nG0[WIDTH-2:0],nG0[WIDTH-1:1],G1[WIDTH-1:1]);
+        not_array #(1) G1_tail_mod(nG0[0],G1[0]);
+      end
+    else
+      begin
+        oai21_array #(WIDTH) C_mod(nP0,{WIDTH{~cin}},nG0,C);
+        not_array #(WIDTH) nC_mod(C,nC);
+      end
+    if (WIDTH>2)
+      begin
+        nand_array #(WIDTH-2)  nP2_mod(P1[WIDTH-1:2],P1[WIDTH-3:0],nP2[WIDTH-1:2]);
+        not_array #(2) nP2_tail_mod(P1[1:0],nP2[1:0]);
+        aoi21_array #(WIDTH-2) nG2_mod(P1[WIDTH-1:2],G1[WIDTH-3:0],G1[WIDTH-1:2],nG2[WIDTH-1:2]);
+        not_array #(2) nG2_tail_mod(G1[1:0],nG2[1:0]);
+      end
+    else if (WIDTH>1)
+      begin
+        aoi21_array #(WIDTH) nC_mod(P1,{WIDTH{cin}},G1,nC);
+        not_array #(WIDTH) C_mod(nC,C);
+      end
+
+    if (WIDTH>4)
+      begin
+        nor_array #(WIDTH-4)  P3_mod(nP2[WIDTH-1:4],nP2[WIDTH-5:0],P3[WIDTH-1:4]);
+        not_array #(4) P3_tail_mod(nP2[3:0],P3[3:0]);
+        oai21_array #(WIDTH-4) G3_mod(nP2[WIDTH-1:4],nG2[WIDTH-5:0],nG2[WIDTH-1:4],G3[WIDTH-1:4]);
+        not_array #(4) G3_tail_mod(nG2[3:0],G3[3:0]);
+      end
+    else if (WIDTH>2)
+      begin
+        oai21_array #(WIDTH) C_mod(nP2,{WIDTH{~cin}},nG2,C);
+        not_array #(WIDTH) nC_mod(C,nC);
+      end
+    if (WIDTH>8)
+      begin
+        nand_array #(WIDTH-8)  nP4_mod(P3[WIDTH-1:8],P3[WIDTH-9:0],nP4[WIDTH-1:8]);
+        not_array #(8) nP4_tail_mod(P3[7:0],nP4[7:0]);
+        aoi21_array #(WIDTH-8) nG4_mod(P3[WIDTH-1:8],G3[WIDTH-9:0],G3[WIDTH-1:8],nG4[WIDTH-1:8]);
+        not_array #(8) nG4_tail_mod(G3[7:0],nG4[7:0]);
+      end
+    else if (WIDTH>4)
+      begin
+        aoi21_array #(WIDTH) nC_mod(P3,{WIDTH{cin}},G3,nC);
+        not_array #(WIDTH) C_mod(nC,C);
+      end
+
+    if (WIDTH>16)
+      begin
+        nor_array #(WIDTH-16)  P5_mod(nP4_reg[WIDTH-1:16],nP4_reg[WIDTH-17:0],P5[WIDTH-1:16]);
+        not_array #(16) P5_tail_mod(nP4_reg[15:0],P5[15:0]);
+        oai21_array #(WIDTH-16) G5_mod(nP4_reg[WIDTH-1:16],nG4_reg[WIDTH-17:0],nG4_reg[WIDTH-1:16],G5[WIDTH-1:16]);
+        not_array #(16) G5_tail_mod(nG4_reg[15:0],G5[15:0]);
+      end
+    else if (WIDTH>8)
+      begin
+        oai21_array #(WIDTH) C_mod(nP4_reg,{WIDTH{~cin}},nG4_reg,C);
+        not_array #(WIDTH) nC_mod(C,nC);
+      end
+    if (WIDTH>32)
+      begin
+        nand_array #(WIDTH-32)  nP6_mod(P5[WIDTH-1:32],P5[WIDTH-33:0],nP6[WIDTH-1:32]);
+        not_array #(32) nP6_tail_mod(P5[31:0],nP6[31:0]);
+        aoi21_array #(WIDTH-32) nG6_mod(P5[WIDTH-1:32],G5[WIDTH-33:0],G5[WIDTH-1:32],nG6[WIDTH-1:32]);
+        not_array #(32) nG6_tail_mod(G5[31:0],nG6[31:0]);
+      end
+    else if (WIDTH>16)
+      begin
+        aoi21_array #(WIDTH) nC_mod(P5,{WIDTH{cin}},G5,nC);
+        not_array #(WIDTH) C_mod(nC,C);
+      end
+
+    if (WIDTH>64)
+      begin
+        nor_array #(WIDTH-64)  P7_mod(nP6[WIDTH-1:64],nP6[WIDTH-65:0],P7[WIDTH-1:64]);
+        not_array #(64) P7_tail_mod(nP6[63:0],P7[63:0]);
+        oai21_array #(WIDTH-64) G7_mod(nP6[WIDTH-1:64],nG6[WIDTH-65:0],nG6[WIDTH-1:64],G7[WIDTH-1:64]);
+        not_array #(64) G7_tail_mod(nG6[63:0],G7[63:0]);
+
+        aoi21_array #(WIDTH) nC_mod(P7,{WIDTH{cin}},G7,nC);
+        not_array #(WIDTH) C_mod(nC,C);
+      end
+    else if (WIDTH>32)
+      begin
+        aoi21_array #(32) C_mod(P5[31:0],{32{cin}},G5[31:0],nC[31:0]);
+        not_array #(32) nC_mod(nC[31:0],C[31:0]);
+        aoi21_array #(WIDTH-32) Cx_mod(P5[WIDTH-1:32],{WIDTH-32{C[31]}},G5[WIDTH-1:32],nC[WIDTH-1:32]);
+        not_array #(WIDTH-32) nCx_mod(nC[WIDTH-1:32],C[WIDTH-1:32]);
+      end
+      
+    if (WIDTH>=8) assign cout8=C[7];
+    else assign cout8=1'b0;
+
+    if (WIDTH>=16) assign cout16=C[15];
+    else assign cout16=1'b0;
+
+    if (WIDTH>=32) assign cout32=C[31];
+    else assign cout32=1'b0;
+    
+  endgenerate
+  
+  always @(posedge clk)
+  begin
+      nP4_reg<=nP4;
+      nG4_reg<=nG4;
+  end
+  
+endmodule
+
+
+module adder2oM(a,b,out0,out1,out2,cin,en0,en1,low32,cout,cout8,cout16,cout32);
+  parameter WIDTH=32;
+  input [WIDTH-1:0] a;
+  input [WIDTH-1:0] b;
+  output [WIDTH-1:0] out0;
+  output [WIDTH-1:0] out1;
+  output [31:0] out2;
+  input cin;
+  input en0;
+  input en1;
+  input low32;
+  output cout;
+  output cout8;
+  output cout16;
+  output cout32;
+  
+
+  wire [WIDTH-1:0] nP0;
+  wire [WIDTH-1:0] nG0;
+
+  wire [WIDTH-1:0] P1;
+  wire [WIDTH-1:0] G1;
+
+  wire [WIDTH-1:0] nP2;
+  wire [WIDTH-1:0] nG2;
+
+  wire [WIDTH-1:0] P3;
+  wire [WIDTH-1:0] G3;
+
+  wire [WIDTH-1:0] nP4;
+  wire [WIDTH-1:0] nG4;
+
+  wire [WIDTH-1:0] P5;
+  wire [WIDTH-1:0] G5;
+
+  wire [WIDTH-1:0] nP6;
+  wire [WIDTH-1:0] nG6;
+
+  wire [WIDTH-1:0] P7;
+  wire [WIDTH-1:0] G7;
+
+  wire [WIDTH-1:0] C;
+  wire [WIDTH-1:0] nC;
+
+  wire [WIDTH-1:0] X;
+  wire [WIDTH-1:0] nX;
+  
+  wire [WIDTH-1:0] C1;
+  wire [WIDTH-1:0] nC1;
+ 
+  
+  genvar i;
+  
+  nand_array #(WIDTH) nG0_mod(a,b,nG0);
+  nor_array #(WIDTH)  nP0_mod(a,b,nP0);
+  
+  xor_array #(WIDTH) x_mod (a,b,X);
+  nxor_array #(WIDTH) nX_mod(a,b,nX);
+
+  assign C1={C[WIDTH-2:0],cin};
+  assign nC1[WIDTH-1:1]=nC[WIDTH-2:0];
+  not_array #(1) C1_mod (cin,nC1[0]);
+  
+  assign cout=C[WIDTH-1];
+  
+  generate
+    for (i=0;i<WIDTH;i=i+1)
+      begin : out_gen
+	  if (~i[5]) begin
+              assign out0[i]=(X[i] & en0) ? ~C1[i] : 1'bz;
+              assign out0[i]=(nX[i] & en0) ? ~nC1[i] : 1'bz;
+              assign out1[i]=(X[i] & en1) ? ~C1[i] : 1'bz;
+              assign out1[i]=(nX[i] & en1) ? ~nC1[i] : 1'bz;
+          end else begin
+              assign out0[i]=(X[i] & en0 & ~low32) ? ~C1[i] : 1'bz;
+              assign out0[i]=(nX[i] & en0 & ~low32) ? ~nC1[i] : 1'bz;
+	      assign out0[i]=(en0 & low32) ? 1'b0 : 1'bz;
+              assign out1[i]=(X[i] & en1 & ~low32) ? ~C1[i] : 1'bz;
+              assign out1[i]=(nX[i] & en1 & ~low32) ? ~nC1[i] : 1'bz;
+	      assign out1[i]=(en1 & low32) ? 1'b0 : 1'bz;
+	  end
+          if (i>=32 && i<64) begin
+              assign out2[i-32]=(X[i] & en0) ? ~C1[i] : 1'bz;
+              assign out2[i-32]=(nX[i] & en0) ? ~nC1[i] : 1'bz;
+          end
+      end 
+    if (WIDTH>1)
+      begin
+        nor_array #(WIDTH-1)  P1_mod(nP0[WIDTH-1:1],nP0[WIDTH-2:0],P1[WIDTH-1:1]);
+        not_array #(1) P1_tail_mod(nP0[0],P1[0]);
+        oai21_array #(WIDTH-1) G1_mod(nP0[WIDTH-1:1],nG0[WIDTH-2:0],nG0[WIDTH-1:1],G1[WIDTH-1:1]);
+        not_array #(1) G1_tail_mod(nG0[0],G1[0]);
+      end
+    else
+      begin
+        oai21_array #(WIDTH) C_mod(nP0,{WIDTH{~cin}},nG0,C);
+        not_array #(WIDTH) nC_mod(C,nC);
+      end
+    if (WIDTH>2)
+      begin
+        nand_array #(WIDTH-2)  nP2_mod(P1[WIDTH-1:2],P1[WIDTH-3:0],nP2[WIDTH-1:2]);
+        not_array #(2) nP2_tail_mod(P1[1:0],nP2[1:0]);
+        aoi21_array #(WIDTH-2) nG2_mod(P1[WIDTH-1:2],G1[WIDTH-3:0],G1[WIDTH-1:2],nG2[WIDTH-1:2]);
+        not_array #(2) nG2_tail_mod(G1[1:0],nG2[1:0]);
+      end
+    else if (WIDTH>1)
+      begin
+        aoi21_array #(WIDTH) nC_mod(P1,{WIDTH{cin}},G1,nC);
+        not_array #(WIDTH) C_mod(nC,C);
+      end
+
+    if (WIDTH>4)
+      begin
+        nor_array #(WIDTH-4)  P3_mod(nP2[WIDTH-1:4],nP2[WIDTH-5:0],P3[WIDTH-1:4]);
+        not_array #(4) P3_tail_mod(nP2[3:0],P3[3:0]);
+        oai21_array #(WIDTH-4) G3_mod(nP2[WIDTH-1:4],nG2[WIDTH-5:0],nG2[WIDTH-1:4],G3[WIDTH-1:4]);
+        not_array #(4) G3_tail_mod(nG2[3:0],G3[3:0]);
+      end
+    else if (WIDTH>2)
+      begin
+        oai21_array #(WIDTH) C_mod(nP2,{WIDTH{~cin}},nG2,C);
+        not_array #(WIDTH) nC_mod(C,nC);
+      end
+    if (WIDTH>8)
+      begin
+        nand_array #(WIDTH-8)  nP4_mod(P3[WIDTH-1:8],P3[WIDTH-9:0],nP4[WIDTH-1:8]);
+        not_array #(8) nP4_tail_mod(P3[7:0],nP4[7:0]);
+        aoi21_array #(WIDTH-8) nG4_mod(P3[WIDTH-1:8],G3[WIDTH-9:0],G3[WIDTH-1:8],nG4[WIDTH-1:8]);
+        not_array #(8) nG4_tail_mod(G3[7:0],nG4[7:0]);
+      end
+    else if (WIDTH>4)
+      begin
+        aoi21_array #(WIDTH) nC_mod(P3,{WIDTH{cin}},G3,nC);
+        not_array #(WIDTH) C_mod(nC,C);
+      end
+
+    if (WIDTH>16)
+      begin
+        nor_array #(WIDTH-16)  P5_mod(nP4[WIDTH-1:16],nP4[WIDTH-17:0],P5[WIDTH-1:16]);
+        not_array #(16) P5_tail_mod(nP4[15:0],P5[15:0]);
+        oai21_array #(WIDTH-16) G5_mod(nP4[WIDTH-1:16],nG4[WIDTH-17:0],nG4[WIDTH-1:16],G5[WIDTH-1:16]);
+        not_array #(16) G5_tail_mod(nG4[15:0],G5[15:0]);
+      end
+    else if (WIDTH>8)
+      begin
+        oai21_array #(WIDTH) C_mod(nP4,{WIDTH{~cin}},nG4,C);
+        not_array #(WIDTH) nC_mod(C,nC);
+      end
+    if (WIDTH>32)
+      begin
+        nand_array #(WIDTH-32)  nP6_mod(P5[WIDTH-1:32],P5[WIDTH-33:0],nP6[WIDTH-1:32]);
+        not_array #(32) nP6_tail_mod(P5[31:0],nP6[31:0]);
+        aoi21_array #(WIDTH-32) nG6_mod(P5[WIDTH-1:32],G5[WIDTH-33:0],G5[WIDTH-1:32],nG6[WIDTH-1:32]);
+        not_array #(32) nG6_tail_mod(G5[31:0],nG6[31:0]);
+      end
+    else if (WIDTH>16)
+      begin
+        aoi21_array #(WIDTH) nC_mod(P5,{WIDTH{cin}},G5,nC);
+        not_array #(WIDTH) C_mod(nC,C);
+      end
+
+    if (WIDTH>64)
+      begin
+        //nor_array #(WIDTH-64)  P7_mod(nP6[WIDTH-1:64],nP6[WIDTH-65:0],P7[WIDTH-1:64]);
+        //not_array #(64) P7_tail_mod(nP6[63:0],P7[63:0]);
+        //oai21_array #(WIDTH-64) G7_mod(nP6[WIDTH-1:64],nG6[WIDTH-65:0],nG6[WIDTH-1:64],G7[WIDTH-1:64]);
+        //not_array #(64) G7_tail_mod(nG6[63:0],G7[63:0]);
+
+        oai21_array #(64) nC_mod(nP6[63:0],{64{~cin}},nG6[63:0],C[63:0]);
+        not_array #(64) C_mod(C[63:0],nC[63:0]);
+        oai21_array #(WIDTH-64) nCx_mod(nP6[WIDTH-1:64],{WIDTH-64{nC[63]}},nG6[WIDTH-1:64],C[WIDTH-1:64]);
+        not_array #(WIDTH-64) Cx_mod(C[WIDTH-1:64],nC[WIDTH-1:64]);
+      end
+    else if (WIDTH>32)
+      begin
+        aoi21_array #(32) C_mod(P5[31:0],{32{cin}},G5[31:0],nC[31:0]);
+        not_array #(32) nC_mod(nC[31:0],C[31:0]);
+        aoi21_array #(WIDTH-32) Cx_mod(P5[WIDTH-1:32],{WIDTH-32{C[31]}},G5[WIDTH-1:32],nC[WIDTH-1:32]);
+        not_array #(WIDTH-32) nCx_mod(nC[WIDTH-1:32],C[WIDTH-1:32]);
+      end
+      
+    if (WIDTH>=8) assign cout8=C[7];
+    else assign cout8=1'b0;
+
+    if (WIDTH>=16) assign cout16=C[15];
+    else assign cout16=1'b0;
+
+    if (WIDTH>=32) assign cout32=C[31];
+    else assign cout32=1'b0;
+    
+  endgenerate
+  
+     
+endmodule
+
+
+module adder2oi(biten,a,b,out0,out1,cin,en0,en1,cout,cout8,cout16,cout32);
+  parameter WIDTH=32;
+  input [WIDTH-1:0] biten;
+  input [WIDTH-1:0] a;
+  input [WIDTH-1:0] b;
+  output [WIDTH-1:0] out0;
+  output [WIDTH-1:0] out1;
+  input cin;
+  input en0;
+  input en1;
+  output cout;
+  output cout8;
+  output cout16;
+  output cout32;
+  
+
+  wire [WIDTH-1:0] nP0;
+  wire [WIDTH-1:0] nG0;
+
+  wire [WIDTH-1:0] P1;
+  wire [WIDTH-1:0] G1;
+
+  wire [WIDTH-1:0] nP2;
+  wire [WIDTH-1:0] nG2;
+
+  wire [WIDTH-1:0] P3;
+  wire [WIDTH-1:0] G3;
+
+  wire [WIDTH-1:0] nP4;
+  wire [WIDTH-1:0] nG4;
+
+  wire [WIDTH-1:0] P5;
+  wire [WIDTH-1:0] G5;
+
+  wire [WIDTH-1:0] nP6;
+  wire [WIDTH-1:0] nG6;
+
+  wire [WIDTH-1:0] P7;
+  wire [WIDTH-1:0] G7;
+
+  wire [WIDTH-1:0] C;
+  wire [WIDTH-1:0] nC;
+
+  wire [WIDTH-1:0] X;
+  wire [WIDTH-1:0] nX;
+  
+  wire [WIDTH-1:0] C1;
+  wire [WIDTH-1:0] nC1;
+ 
+  
+  genvar i;
+  
+  nand_array #(WIDTH) nG0_mod(a,b,nG0);
+  nor_array #(WIDTH)  nP0_mod(a,b,nP0);
+  
+  xor_array #(WIDTH) x_mod (a,b,X);
+  nxor_array #(WIDTH) nX_mod(a,b,nX);
+
+  assign C1={C[WIDTH-2:0],cin};
+  assign nC1[WIDTH-1:1]=nC[WIDTH-2:0];
+  not_array #(1) C1_mod (cin,nC1[0]);
+  
+  assign cout=C[WIDTH-1];
+  
+  generate
+    for (i=0;i<WIDTH;i=i+1)
+      begin : out_gen
+        assign out0[i]=(X[i] & en0 & biten[i]) ? ~C1[i] : 1'bz;
+        assign out0[i]=(nX[i] & en0 & biten[i]) ? ~nC1[i] : 1'bz;
+	assign out0[i]=(~biten[i]) ? 1'b0 : 1'bz;
+	assign out1[i]=(~biten[i]) ? 1'b0 : 1'bz;
+        assign out1[i]=(X[i] & en1 & biten[i]) ? ~C1[i] : 1'bz;
+        assign out1[i]=(nX[i] & en1 & biten[i]) ? ~nC1[i] : 1'bz;
+      end 
+    if (WIDTH>1)
+      begin
+        nor_array #(WIDTH-1)  P1_mod(nP0[WIDTH-1:1],nP0[WIDTH-2:0],P1[WIDTH-1:1]);
+        not_array #(1) P1_tail_mod(nP0[0],P1[0]);
+        oai21_array #(WIDTH-1) G1_mod(nP0[WIDTH-1:1],nG0[WIDTH-2:0],nG0[WIDTH-1:1],G1[WIDTH-1:1]);
+        not_array #(1) G1_tail_mod(nG0[0],G1[0]);
+      end
+    else
+      begin
+        oai21_array #(WIDTH) C_mod(nP0,{WIDTH{~cin}},nG0,C);
+        not_array #(WIDTH) nC_mod(C,nC);
+      end
+    if (WIDTH>2)
+      begin
+        nand_array #(WIDTH-2)  nP2_mod(P1[WIDTH-1:2],P1[WIDTH-3:0],nP2[WIDTH-1:2]);
+        not_array #(2) nP2_tail_mod(P1[1:0],nP2[1:0]);
+        aoi21_array #(WIDTH-2) nG2_mod(P1[WIDTH-1:2],G1[WIDTH-3:0],G1[WIDTH-1:2],nG2[WIDTH-1:2]);
+        not_array #(2) nG2_tail_mod(G1[1:0],nG2[1:0]);
+      end
+    else if (WIDTH>1)
+      begin
+        aoi21_array #(WIDTH) nC_mod(P1,{WIDTH{cin}},G1,nC);
+        not_array #(WIDTH) C_mod(nC,C);
+      end
+
+    if (WIDTH>4)
+      begin
+        nor_array #(WIDTH-4)  P3_mod(nP2[WIDTH-1:4],nP2[WIDTH-5:0],P3[WIDTH-1:4]);
+        not_array #(4) P3_tail_mod(nP2[3:0],P3[3:0]);
+        oai21_array #(WIDTH-4) G3_mod(nP2[WIDTH-1:4],nG2[WIDTH-5:0],nG2[WIDTH-1:4],G3[WIDTH-1:4]);
+        not_array #(4) G3_tail_mod(nG2[3:0],G3[3:0]);
+      end
+    else if (WIDTH>2)
+      begin
+        oai21_array #(WIDTH) C_mod(nP2,{WIDTH{~cin}},nG2,C);
+        not_array #(WIDTH) nC_mod(C,nC);
+      end
+    if (WIDTH>8)
+      begin
+        nand_array #(WIDTH-8)  nP4_mod(P3[WIDTH-1:8],P3[WIDTH-9:0],nP4[WIDTH-1:8]);
+        not_array #(8) nP4_tail_mod(P3[7:0],nP4[7:0]);
+        aoi21_array #(WIDTH-8) nG4_mod(P3[WIDTH-1:8],G3[WIDTH-9:0],G3[WIDTH-1:8],nG4[WIDTH-1:8]);
+        not_array #(8) nG4_tail_mod(G3[7:0],nG4[7:0]);
+      end
+    else if (WIDTH>4)
+      begin
+        aoi21_array #(WIDTH) nC_mod(P3,{WIDTH{cin}},G3,nC);
+        not_array #(WIDTH) C_mod(nC,C);
+      end
+
+    if (WIDTH>16)
+      begin
+        nor_array #(WIDTH-16)  P5_mod(nP4[WIDTH-1:16],nP4[WIDTH-17:0],P5[WIDTH-1:16]);
+        not_array #(16) P5_tail_mod(nP4[15:0],P5[15:0]);
+        oai21_array #(WIDTH-16) G5_mod(nP4[WIDTH-1:16],nG4[WIDTH-17:0],nG4[WIDTH-1:16],G5[WIDTH-1:16]);
+        not_array #(16) G5_tail_mod(nG4[15:0],G5[15:0]);
+      end
+    else if (WIDTH>8)
+      begin
+        oai21_array #(WIDTH) C_mod(nP4,{WIDTH{~cin}},nG4,C);
+        not_array #(WIDTH) nC_mod(C,nC);
+      end
+    if (WIDTH>32)
+      begin
+        nand_array #(WIDTH-32)  nP6_mod(P5[WIDTH-1:32],P5[WIDTH-33:0],nP6[WIDTH-1:32]);
+        not_array #(32) nP6_tail_mod(P5[31:0],nP6[31:0]);
+        aoi21_array #(WIDTH-32) nG6_mod(P5[WIDTH-1:32],G5[WIDTH-33:0],G5[WIDTH-1:32],nG6[WIDTH-1:32]);
+        not_array #(32) nG6_tail_mod(G5[31:0],nG6[31:0]);
+      end
+    else if (WIDTH>16)
+      begin
+        aoi21_array #(WIDTH) nC_mod(P5,{WIDTH{cin}},G5,nC);
+        not_array #(WIDTH) C_mod(nC,C);
+      end
+
+    if (WIDTH>64)
+      begin
+        nor_array #(WIDTH-64)  P7_mod(nP6[WIDTH-1:64],nP6[WIDTH-65:0],P7[WIDTH-1:64]);
+        not_array #(64) P7_tail_mod(nP6[63:0],P7[63:0]);
+        oai21_array #(WIDTH-64) G7_mod(nP6[WIDTH-1:64],nG6[WIDTH-65:0],nG6[WIDTH-1:64],G7[WIDTH-1:64]);
+        not_array #(64) G7_tail_mod(nG6[63:0],G7[63:0]);
+
+        aoi21_array #(WIDTH) nC_mod(P7,{WIDTH{cin}},G7,nC);
+        not_array #(WIDTH) C_mod(nC,C);
+      end
+    else if (WIDTH>32)
+      begin
+        aoi21_array #(32) C_mod(P5[31:0],{32{cin}},G5[31:0],nC[31:0]);
+        not_array #(32) nC_mod(nC[31:0],C[31:0]);
+        aoi21_array #(WIDTH-32) Cx_mod(P5[WIDTH-1:32],{WIDTH-32{C[31]}},G5[WIDTH-1:32],nC[WIDTH-1:32]);
+        not_array #(WIDTH-32) nCx_mod(nC[WIDTH-1:32],C[WIDTH-1:32]);
+      end
+      
+    if (WIDTH>=8) assign cout8=C[7];
+    else assign cout8=1'b0;
+
+    if (WIDTH>=16) assign cout16=C[15];
+    else assign cout16=1'b0;
+
+    if (WIDTH>=32) assign cout32=C[31];
+    else assign cout32=1'b0;
+    
+  endgenerate
+  
+endmodule
+
+module adder2o(a,b,out0,out1,cin,en0,en1,cout,cout8,cout16,cout32);
+  parameter WIDTH=32;
+  /*verilator hier_block*/
+  input [WIDTH-1:0] a;
+  input [WIDTH-1:0] b;
+  output [WIDTH-1:0] out0;
+  output [WIDTH-1:0] out1;
+  input cin;
+  input en0;
+  input en1;
+  output cout;
+  output cout8;
+  output cout16;
+  output cout32;
+  
+
+  wire [WIDTH-1:0] nP0;
+  wire [WIDTH-1:0] nG0;
+
+  wire [WIDTH-1:0] P1;
+  wire [WIDTH-1:0] G1;
+
+  wire [WIDTH-1:0] nP2;
+  wire [WIDTH-1:0] nG2;
+
+  wire [WIDTH-1:0] P3;
+  wire [WIDTH-1:0] G3;
+
+  wire [WIDTH-1:0] nP4;
+  wire [WIDTH-1:0] nG4;
+
+  wire [WIDTH-1:0] P5;
+  wire [WIDTH-1:0] G5;
+
+  wire [WIDTH-1:0] nP6;
+  wire [WIDTH-1:0] nG6;
+
+  wire [WIDTH-1:0] P7;
+  wire [WIDTH-1:0] G7;
+
+  wire [WIDTH-1:0] C;
+  wire [WIDTH-1:0] nC;
+
+  wire [WIDTH-1:0] X;
+  wire [WIDTH-1:0] nX;
+  
+  wire [WIDTH-1:0] C1;
+  wire [WIDTH-1:0] nC1;
+ 
+  
+  genvar i;
+  
+  nand_array #(WIDTH) nG0_mod(a,b,nG0);
+  nor_array #(WIDTH)  nP0_mod(a,b,nP0);
+  
+  xor_array #(WIDTH) x_mod (a,b,X);
+  nxor_array #(WIDTH) nX_mod(a,b,nX);
+
+  assign C1={C[WIDTH-2:0],cin};
+  assign nC1[WIDTH-1:1]=nC[WIDTH-2:0];
+  not_array #(1) C1_mod (cin,nC1[0]);
+  
+  assign cout=C[WIDTH-1];
+  
+  generate
+    for (i=0;i<WIDTH;i=i+1)
+      begin : out_gen
+        assign out0[i]=(X[i] & en0) ? ~C1[i] : 1'bz;
+        assign out0[i]=(nX[i] & en0) ? ~nC1[i] : 1'bz;
+        assign out1[i]=(X[i] & en1) ? ~C1[i] : 1'bz;
+        assign out1[i]=(nX[i] & en1) ? ~nC1[i] : 1'bz;
+      end 
+    if (WIDTH>1)
+      begin
+        nor_array #(WIDTH-1)  P1_mod(nP0[WIDTH-1:1],nP0[WIDTH-2:0],P1[WIDTH-1:1]);
+        not_array #(1) P1_tail_mod(nP0[0],P1[0]);
+        oai21_array #(WIDTH-1) G1_mod(nP0[WIDTH-1:1],nG0[WIDTH-2:0],nG0[WIDTH-1:1],G1[WIDTH-1:1]);
+        not_array #(1) G1_tail_mod(nG0[0],G1[0]);
+      end
+    else
+      begin
+        oai21_array #(WIDTH) C_mod(nP0,{WIDTH{~cin}},nG0,C);
+        not_array #(WIDTH) nC_mod(C,nC);
+      end
+    if (WIDTH>2)
+      begin
+        nand_array #(WIDTH-2)  nP2_mod(P1[WIDTH-1:2],P1[WIDTH-3:0],nP2[WIDTH-1:2]);
+        not_array #(2) nP2_tail_mod(P1[1:0],nP2[1:0]);
+        aoi21_array #(WIDTH-2) nG2_mod(P1[WIDTH-1:2],G1[WIDTH-3:0],G1[WIDTH-1:2],nG2[WIDTH-1:2]);
+        not_array #(2) nG2_tail_mod(G1[1:0],nG2[1:0]);
+      end
+    else if (WIDTH>1)
+      begin
+        aoi21_array #(WIDTH) nC_mod(P1,{WIDTH{cin}},G1,nC);
+        not_array #(WIDTH) C_mod(nC,C);
+      end
+
+    if (WIDTH>4)
+      begin
+        nor_array #(WIDTH-4)  P3_mod(nP2[WIDTH-1:4],nP2[WIDTH-5:0],P3[WIDTH-1:4]);
+        not_array #(4) P3_tail_mod(nP2[3:0],P3[3:0]);
+        oai21_array #(WIDTH-4) G3_mod(nP2[WIDTH-1:4],nG2[WIDTH-5:0],nG2[WIDTH-1:4],G3[WIDTH-1:4]);
+        not_array #(4) G3_tail_mod(nG2[3:0],G3[3:0]);
+      end
+    else if (WIDTH>2)
+      begin
+        oai21_array #(WIDTH) C_mod(nP2,{WIDTH{~cin}},nG2,C);
+        not_array #(WIDTH) nC_mod(C,nC);
+      end
+    if (WIDTH>8)
+      begin
+        nand_array #(WIDTH-8)  nP4_mod(P3[WIDTH-1:8],P3[WIDTH-9:0],nP4[WIDTH-1:8]);
+        not_array #(8) nP4_tail_mod(P3[7:0],nP4[7:0]);
+        aoi21_array #(WIDTH-8) nG4_mod(P3[WIDTH-1:8],G3[WIDTH-9:0],G3[WIDTH-1:8],nG4[WIDTH-1:8]);
+        not_array #(8) nG4_tail_mod(G3[7:0],nG4[7:0]);
+      end
+    else if (WIDTH>4)
+      begin
+        aoi21_array #(WIDTH) nC_mod(P3,{WIDTH{cin}},G3,nC);
+        not_array #(WIDTH) C_mod(nC,C);
+      end
+
+    if (WIDTH>16)
+      begin
+        nor_array #(WIDTH-16)  P5_mod(nP4[WIDTH-1:16],nP4[WIDTH-17:0],P5[WIDTH-1:16]);
+        not_array #(16) P5_tail_mod(nP4[15:0],P5[15:0]);
+        oai21_array #(WIDTH-16) G5_mod(nP4[WIDTH-1:16],nG4[WIDTH-17:0],nG4[WIDTH-1:16],G5[WIDTH-1:16]);
+        not_array #(16) G5_tail_mod(nG4[15:0],G5[15:0]);
+      end
+    else if (WIDTH>8)
+      begin
+        oai21_array #(WIDTH) C_mod(nP4,{WIDTH{~cin}},nG4,C);
+        not_array #(WIDTH) nC_mod(C,nC);
+      end
+    if (WIDTH>32)
+      begin
+        nand_array #(WIDTH-32)  nP6_mod(P5[WIDTH-1:32],P5[WIDTH-33:0],nP6[WIDTH-1:32]);
+        not_array #(32) nP6_tail_mod(P5[31:0],nP6[31:0]);
+        aoi21_array #(WIDTH-32) nG6_mod(P5[WIDTH-1:32],G5[WIDTH-33:0],G5[WIDTH-1:32],nG6[WIDTH-1:32]);
+        not_array #(32) nG6_tail_mod(G5[31:0],nG6[31:0]);
+      end
+    else if (WIDTH>16)
+      begin
+        aoi21_array #(WIDTH) nC_mod(P5,{WIDTH{cin}},G5,nC);
+        not_array #(WIDTH) C_mod(nC,C);
+      end
+
+    if (WIDTH>64)
+      begin
+        //nor_array #(WIDTH-64)  P7_mod(nP6[WIDTH-1:64],nP6[WIDTH-65:0],P7[WIDTH-1:64]);
+        //not_array #(64) P7_tail_mod(nP6[63:0],P7[63:0]);
+        //oai21_array #(WIDTH-64) G7_mod(nP6[WIDTH-1:64],nG6[WIDTH-65:0],nG6[WIDTH-1:64],G7[WIDTH-1:64]);
+        //not_array #(64) G7_tail_mod(nG6[63:0],G7[63:0]);
+
+        oai21_array #(64) nC_mod(nP6[63:0],{64{~cin}},nG6[63:0],C[63:0]);
+        not_array #(64) C_mod(C[63:0],nC[63:0]);
+        oai21_array #(WIDTH-64) nCx_mod(nP6[WIDTH-1:64],{WIDTH-64{nC[63]}},nG6[WIDTH-1:64],C[WIDTH-1:64]);
+        not_array #(WIDTH-64) Cx_mod(C[WIDTH-1:64],nC[WIDTH-1:64]);
+      end
+    else if (WIDTH>32)
+      begin
+        aoi21_array #(32) C_mod(P5[31:0],{32{cin}},G5[31:0],nC[31:0]);
+        not_array #(32) nC_mod(nC[31:0],C[31:0]);
+        aoi21_array #(WIDTH-32) Cx_mod(P5[WIDTH-1:32],{WIDTH-32{C[31]}},G5[WIDTH-1:32],nC[WIDTH-1:32]);
+        not_array #(WIDTH-32) nCx_mod(nC[WIDTH-1:32],C[WIDTH-1:32]);
+      end
+      
+    if (WIDTH>=8) assign cout8=C[7];
+    else assign cout8=1'b0;
+
+    if (WIDTH>=16) assign cout16=C[15];
+    else assign cout16=1'b0;
+
+    if (WIDTH>=32) assign cout32=C[31];
+    else assign cout32=1'b0;
+    
+  endgenerate
+  
+     
+endmodule
+
+module adder2c(a,b,out0,out1,cin0,cin1,en0,en1,cout0,cout1,cout0_53,cout1_53);
   parameter WIDTH=32;
   /*verilator hier_block*/
   input [WIDTH-1:0] a;
@@ -1347,11 +2091,10 @@ module adder2c(a,b,out0,out1,cin0,cin1,cout0,cout1,cout0_53,cout1_53);
   output [WIDTH-1:0] out0;
   output [WIDTH-1:0] out1;
   input cin0,cin1;
+  input en0,en1;
   output cout0,cout1;
   output cout0_53,cout1_53;
   
-  wire en0=1'b1;
-  wire en1=1'b1;
 
   wire [WIDTH-1:0] nP0;
   wire [WIDTH-1:0] nG0;
@@ -1545,5 +2288,394 @@ module adder2c(a,b,out0,out1,cin0,cin1,cout0,cout1,cout0_53,cout1_53);
 endmodule
 
 
+module adder2ox(a,b,out0,out1,cin,en0,en1,cout,cout8,cout16,cout32);
+  parameter WIDTH=32;
+  input [WIDTH:0] a;
+  input [WIDTH:0] b;
+  output [WIDTH:0] out0;
+  output [WIDTH:0] out1;
+  input cin;
+  input en0;
+  input en1;
+  output cout;
+  output cout8;
+  output cout16;
+  output cout32;
+  
+  wire [WIDTH-1:0] nP0;
+  wire [WIDTH-1:0] nG0;
+
+  wire [WIDTH-1:0] P1;
+  wire [WIDTH-1:0] G1;
+
+  wire [WIDTH-1:0] nP2;
+  wire [WIDTH-1:0] nG2;
+
+  wire [WIDTH-1:0] P3;
+  wire [WIDTH-1:0] G3;
+
+  wire [WIDTH-1:0] nP4;
+  wire [WIDTH-1:0] nG4;
+
+  wire [WIDTH-1:0] P5;
+  wire [WIDTH-1:0] G5;
+
+  wire [WIDTH-1:0] nP6;
+  wire [WIDTH-1:0] nG6;
+
+  wire [WIDTH-1:0] P7;
+  wire [WIDTH-1:0] G7;
+
+  wire [WIDTH-1:0] C;
+  wire [WIDTH-1:0] nC;
+
+  wire [WIDTH:0] X;
+  wire [WIDTH:0] nX;
+  
+  wire [WIDTH:0] C1;
+  wire [WIDTH:0] nC1;
+ 
+  
+  genvar i;
+  
+  nand_array #(WIDTH) nG0_mod(a,b,nG0);
+  nor_array #(WIDTH)  nP0_mod(a,b,nP0);
+  
+  xor_array #(WIDTH+1) x_mod (a,b,X);
+  nxor_array #(WIDTH+1) nX_mod(a,b,nX);
+
+  assign C1={C[WIDTH-1:0],cin};
+  assign nC1[WIDTH:1]=nC[WIDTH-1:0];
+  not_array #(1) C1_mod (cin,nC1[0]);
+  
+  assign cout=C[WIDTH-1];
+  
+  generate
+    for (i=0;i<WIDTH+1;i=i+1)
+      begin : out_gen
+        assign out0[i]=(X[i] & en0) ? ~C1[i] : 1'bz;
+        assign out0[i]=(nX[i] & en0) ? ~nC1[i] : 1'bz;
+        assign out1[i]=(X[i] & en1) ? ~C1[i] : 1'bz;
+        assign out1[i]=(nX[i] & en1) ? ~nC1[i] : 1'bz;
+      end 
+    if (WIDTH>1)
+      begin
+        nor_array #(WIDTH-1)  P1_mod(nP0[WIDTH-1:1],nP0[WIDTH-2:0],P1[WIDTH-1:1]);
+        not_array #(1) P1_tail_mod(nP0[0],P1[0]);
+        oai21_array #(WIDTH-1) G1_mod(nP0[WIDTH-1:1],nG0[WIDTH-2:0],nG0[WIDTH-1:1],G1[WIDTH-1:1]);
+        not_array #(1) G1_tail_mod(nG0[0],G1[0]);
+      end
+    else
+      begin
+        oai21_array #(WIDTH) C_mod(nP0,{WIDTH{~cin}},nG0,C);
+        not_array #(WIDTH) nC_mod(C,nC);
+      end
+    if (WIDTH>2)
+      begin
+        nand_array #(WIDTH-2)  nP2_mod(P1[WIDTH-1:2],P1[WIDTH-3:0],nP2[WIDTH-1:2]);
+        not_array #(2) nP2_tail_mod(P1[1:0],nP2[1:0]);
+        aoi21_array #(WIDTH-2) nG2_mod(P1[WIDTH-1:2],G1[WIDTH-3:0],G1[WIDTH-1:2],nG2[WIDTH-1:2]);
+        not_array #(2) nG2_tail_mod(G1[1:0],nG2[1:0]);
+      end
+    else if (WIDTH>1)
+      begin
+        aoi21_array #(WIDTH) nC_mod(P1,{WIDTH{cin}},G1,nC);
+        not_array #(WIDTH) C_mod(nC,C);
+      end
+
+    if (WIDTH>4)
+      begin
+        nor_array #(WIDTH-4)  P3_mod(nP2[WIDTH-1:4],nP2[WIDTH-5:0],P3[WIDTH-1:4]);
+        not_array #(4) P3_tail_mod(nP2[3:0],P3[3:0]);
+        oai21_array #(WIDTH-4) G3_mod(nP2[WIDTH-1:4],nG2[WIDTH-5:0],nG2[WIDTH-1:4],G3[WIDTH-1:4]);
+        not_array #(4) G3_tail_mod(nG2[3:0],G3[3:0]);
+      end
+    else if (WIDTH>2)
+      begin
+        oai21_array #(WIDTH) C_mod(nP2,{WIDTH{~cin}},nG2,C);
+        not_array #(WIDTH) nC_mod(C,nC);
+      end
+    if (WIDTH>8)
+      begin
+        nand_array #(WIDTH-8)  nP4_mod(P3[WIDTH-1:8],P3[WIDTH-9:0],nP4[WIDTH-1:8]);
+        not_array #(8) nP4_tail_mod(P3[7:0],nP4[7:0]);
+        aoi21_array #(WIDTH-8) nG4_mod(P3[WIDTH-1:8],G3[WIDTH-9:0],G3[WIDTH-1:8],nG4[WIDTH-1:8]);
+        not_array #(8) nG4_tail_mod(G3[7:0],nG4[7:0]);
+      end
+    else if (WIDTH>4)
+      begin
+        aoi21_array #(WIDTH) nC_mod(P3,{WIDTH{cin}},G3,nC);
+        not_array #(WIDTH) C_mod(nC,C);
+      end
+
+    if (WIDTH>16)
+      begin
+        nor_array #(WIDTH-16)  P5_mod(nP4[WIDTH-1:16],nP4[WIDTH-17:0],P5[WIDTH-1:16]);
+        not_array #(16) P5_tail_mod(nP4[15:0],P5[15:0]);
+        oai21_array #(WIDTH-16) G5_mod(nP4[WIDTH-1:16],nG4[WIDTH-17:0],nG4[WIDTH-1:16],G5[WIDTH-1:16]);
+        not_array #(16) G5_tail_mod(nG4[15:0],G5[15:0]);
+      end
+    else if (WIDTH>8)
+      begin
+        oai21_array #(WIDTH) C_mod(nP4,{WIDTH{~cin}},nG4,C);
+        not_array #(WIDTH) nC_mod(C,nC);
+      end
+    if (WIDTH>32)
+      begin
+        nand_array #(WIDTH-32)  nP6_mod(P5[WIDTH-1:32],P5[WIDTH-33:0],nP6[WIDTH-1:32]);
+        not_array #(32) nP6_tail_mod(P5[31:0],nP6[31:0]);
+        aoi21_array #(WIDTH-32) nG6_mod(P5[WIDTH-1:32],G5[WIDTH-33:0],G5[WIDTH-1:32],nG6[WIDTH-1:32]);
+        not_array #(32) nG6_tail_mod(G5[31:0],nG6[31:0]);
+      end
+    else if (WIDTH>16)
+      begin
+        aoi21_array #(WIDTH) nC_mod(P5,{WIDTH{cin}},G5,nC);
+        not_array #(WIDTH) C_mod(nC,C);
+      end
+
+    if (WIDTH>64)
+      begin
+        nor_array #(WIDTH-64)  P7_mod(nP6[WIDTH-1:64],nP6[WIDTH-65:0],P7[WIDTH-1:64]);
+        not_array #(64) P7_tail_mod(nP6[63:0],P7[63:0]);
+        oai21_array #(WIDTH-64) G7_mod(nP6[WIDTH-1:64],nG6[WIDTH-65:0],nG6[WIDTH-1:64],G7[WIDTH-1:64]);
+        not_array #(64) G7_tail_mod(nG6[63:0],G7[63:0]);
+
+        aoi21_array #(WIDTH) nC_mod(P7,{WIDTH{cin}},G7,nC);
+        not_array #(WIDTH) C_mod(nC,C);
+      end
+    else if (WIDTH>32)
+      begin
+        aoi21_array #(32) C_mod(P5[31:0],{32{cin}},G5[31:0],nC[31:0]);
+        not_array #(32) nC_mod(nC[31:0],C[31:0]);
+        aoi21_array #(WIDTH-32) Cx_mod(P5[WIDTH-1:32],{WIDTH-32{C[31]}},G5[WIDTH-1:32],nC[WIDTH-1:32]);
+        not_array #(WIDTH-32) nCx_mod(nC[WIDTH-1:32],C[WIDTH-1:32]);
+      end
+      
+    if (WIDTH>=8) assign cout8=C[7];
+    else assign cout8=1'b0;
+
+    if (WIDTH>=16) assign cout16=C[15];
+    else assign cout16=1'b0;
+
+    if (WIDTH>=32) assign cout32=C[31];
+    else assign cout32=1'b0;
+    
+  endgenerate
+  
+     
+endmodule
+
+
+
+module adder2c_pipe(clk,a,b,out0,out1,cin0,cin1,en0,en1,cout0,cout1,cout0_53,cout1_53);
+  parameter WIDTH=32;
+  input clk;
+  input [WIDTH-1:0] a;
+  input [WIDTH-1:0] b;
+  output [WIDTH-1:0] out0;
+  output [WIDTH-1:0] out1;
+  input cin0,cin1;
+  input en0,en1;
+  output cout0,cout1;
+  output cout0_53,cout1_53;
+  
+
+  wire [WIDTH-1:0] nP0;
+  wire [WIDTH-1:0] nG0;
+
+  wire [WIDTH-1:0] P1;
+  wire [WIDTH-1:0] G1;
+
+  wire [WIDTH-1:0] nP2;
+  wire [WIDTH-1:0] nG2;
+
+  wire [WIDTH-1:0] P3;
+  wire [WIDTH-1:0] G3;
+
+  wire [WIDTH-1:0] nP4;
+  wire [WIDTH-1:0] nG4;
+
+  reg [WIDTH-1:0] nP4_reg;
+  reg [WIDTH-1:0] nG4_reg;
+  
+  wire [WIDTH-1:0] P5;
+  wire [WIDTH-1:0] G5;
+
+  wire [WIDTH-1:0] nP6;
+  wire [WIDTH-1:0] nG6;
+
+  wire [WIDTH-1:0] P7;
+  wire [WIDTH-1:0] G7;
+
+  wire [WIDTH-1:0] Ca;
+  wire [WIDTH-1:0] nCa;
+  wire [WIDTH-1:0] Cb;
+  wire [WIDTH-1:0] nCb;
+
+  wire [WIDTH-1:0] X;
+  wire [WIDTH-1:0] nX;
+  
+  wire [WIDTH-1:0] C1a;
+  wire [WIDTH-1:0] nC1a;
+  wire [WIDTH-1:0] C1b;
+  wire [WIDTH-1:0] nC1b;
+ 
+  
+  genvar i;
+  
+  nand_array #(WIDTH) nG0_mod(a,b,nG0);
+  nor_array #(WIDTH)  nP0_mod(a,b,nP0);
+  
+  xor_array #(WIDTH) x_mod(a,b,X);
+  nxor_array #(WIDTH) nx_mod(a,b,nX);
+
+  assign C1a={Ca[WIDTH-2:0],cin0};
+  assign nC1a[WIDTH-1:1]=nCa[WIDTH-2:0];
+  not_array #(1) C1a_mod (cin0,nC1a[0]);
+  
+  assign C1b={Cb[WIDTH-2:0],cin1};
+  assign nC1b[WIDTH-1:1]=nCb[WIDTH-2:0];
+  not_array #(1) C1b_mod (cin1,nC1b[0]);
+
+  assign cout0=Ca[WIDTH-1];
+  assign cout1=Ca[WIDTH-1];
+  
+  generate
+    if (WIDTH>=53) begin
+        assign cout0_53=Ca[52];
+        assign cout1_53=Cb[52];
+    end
+    for (i=0;i<WIDTH;i=i+1)
+      begin : out_gen
+        assign out0[i]=(X[i] & en0) ? ~C1a[i] : 1'bz;
+        assign out0[i]=(nX[i] & en0) ? ~nC1a[i] : 1'bz;
+        assign out1[i]=(X[i] & en1) ? ~C1b[i] : 1'bz;
+        assign out1[i]=(nX[i] & en1) ? ~nC1b[i] : 1'bz;
+      end 
+    if (WIDTH>1)
+      begin
+        nor_array #(WIDTH-1)  P1_mod(nP0[WIDTH-1:1],nP0[WIDTH-2:0],P1[WIDTH-1:1]);
+        not_array #(1) P1_tail_mod(nP0[0],P1[0]);
+        oai21_array #(WIDTH-1) G1_mod(nP0[WIDTH-1:1],nG0[WIDTH-2:0],nG0[WIDTH-1:1],G1[WIDTH-1:1]);
+        not_array #(1) G1_tail_mod(nG0[0],G1[0]);
+      end
+    else
+      begin
+        oai21_array #(WIDTH) Ca_mod(nP0,{WIDTH{~cin0}},nG0,Ca);
+        not_array #(WIDTH) nCa_mod(Ca,nCa);
+        oai21_array #(WIDTH) Cb_mod(nP0,{WIDTH{~cin1}},nG0,Cb);
+        not_array #(WIDTH) nCb_mod(Cb,nCb);
+      end
+    if (WIDTH>2)
+      begin
+        nand_array #(WIDTH-2)  nP2_mod(P1[WIDTH-1:2],P1[WIDTH-3:0],nP2[WIDTH-1:2]);
+        not_array #(2) nP2_tail_mod(P1[1:0],nP2[1:0]);
+        aoi21_array #(WIDTH-2) nG2_mod(P1[WIDTH-1:2],G1[WIDTH-3:0],G1[WIDTH-1:2],nG2[WIDTH-1:2]);
+        not_array #(2) nG2_tail_mod(G1[1:0],nG2[1:0]);
+      end
+    else if (WIDTH>1)
+      begin
+        aoi21_array #(WIDTH) nCa_mod(P1,{WIDTH{cin0}},G1,nCa);
+        not_array #(WIDTH) Ca_mod(nCa,Ca);
+        aoi21_array #(WIDTH) nCb_mod(P1,{WIDTH{cin1}},G1,nCb);
+        not_array #(WIDTH) Cb_mod(nCb,Cb);
+      end
+
+    if (WIDTH>4)
+      begin
+        nor_array #(WIDTH-4)  P3_mod(nP2[WIDTH-1:4],nP2[WIDTH-5:0],P3[WIDTH-1:4]);
+        not_array #(4) P3_tail_mod(nP2[3:0],P3[3:0]);
+        oai21_array #(WIDTH-4) G3_mod(nP2[WIDTH-1:4],nG2[WIDTH-5:0],nG2[WIDTH-1:4],G3[WIDTH-1:4]);
+        not_array #(4) G3_tail_mod(nG2[3:0],G3[3:0]);
+      end
+    else if (WIDTH>2)
+      begin
+        oai21_array #(WIDTH) Ca_mod(nP2,{WIDTH{~cin0}},nG2,Ca);
+        not_array #(WIDTH) nCa_mod(Ca,nCa);
+        oai21_array #(WIDTH) Cb_mod(nP2,{WIDTH{~cin1}},nG2,Cb);
+        not_array #(WIDTH) nCb_mod(Cb,nCb);
+      end
+    if (WIDTH>8)
+      begin
+        nand_array #(WIDTH-8)  nP4_mod(P3[WIDTH-1:8],P3[WIDTH-9:0],nP4[WIDTH-1:8]);
+        not_array #(8) nP4_tail_mod(P3[7:0],nP4[7:0]);
+        aoi21_array #(WIDTH-8) nG4_mod(P3[WIDTH-1:8],G3[WIDTH-9:0],G3[WIDTH-1:8],nG4[WIDTH-1:8]);
+        not_array #(8) nG4_tail_mod(G3[7:0],nG4[7:0]);
+      end
+    else if (WIDTH>4)
+      begin
+        aoi21_array #(WIDTH) nCa_mod(P3,{WIDTH{cin0}},G3,nCa);
+        not_array #(WIDTH) Ca_mod(nCa,Ca);
+        aoi21_array #(WIDTH) nCb_mod(P3,{WIDTH{cin1}},G3,nCb);
+        not_array #(WIDTH) Cb_mod(nCb,Cb);
+      end
+
+    if (WIDTH>16)
+      begin
+        nor_array #(WIDTH-16)  P5_mod(nP4_reg[WIDTH-1:16],nP4_reg[WIDTH-17:0],P5[WIDTH-1:16]);
+        not_array #(16) P5_tail_mod(nP4_reg[15:0],P5[15:0]);
+        oai21_array #(WIDTH-16) G5_mod(nP4_reg[WIDTH-1:16],nG4_reg[WIDTH-17:0],nG4_reg[WIDTH-1:16],G5[WIDTH-1:16]);
+        not_array #(16) G5_tail_mod(nG4_reg[15:0],G5[15:0]);
+      end
+    else if (WIDTH>8)
+      begin
+        oai21_array #(WIDTH) Ca_mod(nP4_reg,{WIDTH{~cin0}},nG4_reg,Ca);
+        not_array #(WIDTH) nCa_mod(Ca,nCa);
+        oai21_array #(WIDTH) Cb_mod(nP4_reg,{WIDTH{~cin1}},nG4_reg,Cb);
+        not_array #(WIDTH) nCb_mod(Cb,nCb);
+      end
+    if (WIDTH>32)
+      begin
+        nand_array #(WIDTH-32)  nP6_mod(P5[WIDTH-1:32],P5[WIDTH-33:0],nP6[WIDTH-1:32]);
+        not_array #(32) nP6_tail_mod(P5[31:0],nP6[31:0]);
+        aoi21_array #(WIDTH-32) nG6_mod(P5[WIDTH-1:32],G5[WIDTH-33:0],G5[WIDTH-1:32],nG6[WIDTH-1:32]);
+        not_array #(32) nG6_tail_mod(G5[31:0],nG6[31:0]);
+      end
+    else if (WIDTH>16)
+      begin
+        aoi21_array #(WIDTH) nCa_mod(P5,{WIDTH{cin0}},G5,nCa);
+        not_array #(WIDTH) Ca_mod(nCa,Ca);
+        aoi21_array #(WIDTH) nCb_mod(P5,{WIDTH{cin1}},G5,nCb);
+        not_array #(WIDTH) Cb_mod(nCb,Cb);
+      end
+
+    if (WIDTH>64)
+      begin
+        nor_array #(WIDTH-64)  P7_mod(nP6[WIDTH-1:64],nP6[WIDTH-65:0],P7[WIDTH-1:64]);
+        not_array #(64) P7_tail_mod(nP6[63:0],P7[63:0]);
+        oai21_array #(WIDTH-64) G7_mod(nP6[WIDTH-1:64],nG6[WIDTH-65:0],nG6[WIDTH-1:64],G7[WIDTH-1:64]);
+        not_array #(64) G7_tail_mod(nG6[63:0],G7[63:0]);
+
+        aoi21_array #(WIDTH) nCa_mod(P7,{WIDTH{cin0}},G7,nCa[WIDTH-1:0]);
+        not_array #(WIDTH) Ca_mod(nCa,Ca);
+        aoi21_array #(WIDTH) nCb_mod(P7,{WIDTH{cin1}},G7,nCb[WIDTH-1:0]);
+        not_array #(WIDTH) Cb_mod(nCb,Cb);
+      end
+    else if (WIDTH>32)
+      begin
+        aoi21_array #(32) Ca_mod(P5[31:0],{32{cin0}},G5[31:0],nCa[31:0]);
+        not_array #(32) nCa_mod(nCa[31:0],Ca[31:0]);
+        aoi21_array #(WIDTH-32) Cax_mod(P5[WIDTH-1:32],{WIDTH-32{Ca[31]}},G5[WIDTH-1:32],nCa[WIDTH-1:32]);
+        not_array #(WIDTH-32) nCax_mod(nCa[WIDTH-1:32],Ca[WIDTH-1:32]);
+        aoi21_array #(32) Cb_mod(P5[31:0],{32{cin1}},G5[31:0],nCb[31:0]);
+        not_array #(32) nCb_mod(nCb[31:0],Cb[31:0]);
+        aoi21_array #(WIDTH-32) Cbx_mod(P5[WIDTH-1:32],{WIDTH-32{Cb[31]}},G5[WIDTH-1:32],nCb[WIDTH-1:32]);
+        not_array #(WIDTH-32) nCbx_mod(nCb[WIDTH-1:32],Cb[WIDTH-1:32]);
+      end
+      
+
+    if (WIDTH>=53) assign cout0_53=Ca[52];
+    else assign cout0_53=1'b0;
+    if (WIDTH>=53) assign cout1_53=Cb[52];
+    else assign cout1_53=1'b0;
+    
+  endgenerate
+  
+  always @(posedge clk) begin
+    nG4_reg<=nG4;
+    nP4_reg<=nP4;
+  end
+     
+endmodule
 
 
