@@ -102,10 +102,6 @@ module adder_seq(a,b,out,c_s,cin,en,cout,cout8,cout16,cout32);
   output cout16;
   output cout32;
   
-  wire [WIDTH-1:0] out_X;
-
-  assign out=out_X;
-
   wire [WIDTH-1:0] nP0;
   wire [WIDTH-1:0] nG0;
 
@@ -159,8 +155,8 @@ module adder_seq(a,b,out,c_s,cin,en,cout,cout8,cout16,cout32);
   generate
     for (i=0;i<WIDTH;i=i+1)
       begin : out_gen
-        assign out_X[i]=(X[i] & en) ? ~C1[i] : 1'bz;
-        assign out_X[i]=(nX[i] & en) ? ~nC1[i] : 1'bz;
+        assign out[i]=(X[i] & en) ? ~C1[i] : 1'bz;
+        assign out[i]=(nX[i] & en) ? ~nC1[i] : 1'bz;
       end 
     if (WIDTH>1)
       begin
@@ -272,6 +268,7 @@ endmodule
 
 module adder(a,b,out,cin,en,cout,cout8,cout16,cout32);
   parameter WIDTH=32;
+  /*verilator hier_block*/
   input [WIDTH-1:0] a;
   input [WIDTH-1:0] b;
   output [WIDTH-1:0] out;
@@ -1333,7 +1330,7 @@ module add_agu(
       end
   endgenerate
   adder_seq #(WIDTH) add_mod(tmp1,tmp2[WIDTH-1:0],out[43:0],c_s,1'b0,en,,,,);
-  assign out_X[63:44]=en ? ptr[63:44] : 20'bz;
+  assign out[63:44]=en ? ptr[63:44] : 20'bz;
   agusec_shift ssh_mod(ptr[`ptr_exp],c_s[43:12],cout_sec0);
   agusec_check_upper3 #(1'b1) chk_mod(ptr,unptr[43:4],b[43:4],{dummy1,pos_ack},{dummy2,neg_ack},,,ndiff);
 endmodule
@@ -1907,6 +1904,7 @@ endmodule
 
 module adder2o(a,b,out0,out1,cin,en0,en1,cout,cout8,cout16,cout32);
   parameter WIDTH=32;
+  /*verilator hier_block*/
   input [WIDTH-1:0] a;
   input [WIDTH-1:0] b;
   output [WIDTH-1:0] out0;
@@ -2087,6 +2085,7 @@ endmodule
 
 module adder2c(a,b,out0,out1,cin0,cin1,en0,en1,cout0,cout1,cout0_53,cout1_53);
   parameter WIDTH=32;
+  /*verilator hier_block*/
   input [WIDTH-1:0] a;
   input [WIDTH-1:0] b;
   output [WIDTH-1:0] out0;

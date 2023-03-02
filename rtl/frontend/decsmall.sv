@@ -240,7 +240,7 @@ module smallInstr_decoder(
 
   reg isBigConst;
   
-  wire flags_wrFPU_X;
+  wire flags_wrFPU;
 
   reg [OPERATION_WIDTH-1:0] poperation[TRICNT_TOP-1:0];
   reg [REG_WIDTH-2:0] prA[TRICNT_TOP-1:0];
