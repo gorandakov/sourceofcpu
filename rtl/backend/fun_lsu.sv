@@ -1585,14 +1585,14 @@ module agu_block(
   .faultCode(p4_faultCode),
   .faultNo(p4_faultNo),
   //.mOp_noBanks(),
-  .writeTlb_IP(tlb_addr),
-  .writeTlb_wen(tlb_wen),
-  .writeTlb_force_way(tlb_frc_way),
-  .writeTlb_force_way_en(tlb_frc_en),
-  .writeTlb_data0(tlb_data0),
-  .writeTlb_data1(tlb_data1),
-  .writeTlb_data2(tlb_data2),
-  .csrss_no(csrss_addr),.csrss_thr(csrss_thread),.csrss_en(csrss_en),.csrss_data(csrss_data)
+  .csrss_no(csrss_addr),.csrss_thr(csrss_thread),.csrss_en(csrss_en),.csrss_data(csrss_data),
+  ,
+  ,
+  addrTlbR[4],
+  sprocR[4],
+  tlb_data0R[4],
+  tlb_data1R[4],
+  tlb_hitR[4] 
   );
   
   sagu Wagu2_mod(
@@ -1646,14 +1646,15 @@ module agu_block(
   .faultCode(p5_faultCode),
   .faultNo(p5_faultNo),
   //.mOp_noBanks(),
-  .writeTlb_IP(tlb_addr),
-  .writeTlb_wen(tlb_wen),
-  .writeTlb_force_way(tlb_frc_way),
-  .writeTlb_force_way_en(tlb_frc_en),
-  .writeTlb_data0(tlb_data0),
-  .writeTlb_data1(tlb_data1),
-  .writeTlb_data2(tlb_data2),
-  .csrss_no(csrss_addr),.csrss_thr(csrss_thread),.csrss_en(csrss_en),.csrss_data(csrss_data)
+  .csrss_no(csrss_addr),.csrss_thr(csrss_thread),.csrss_en(csrss_en),.csrss_data(csrss_data),
+  ,
+  ,
+  addrTlbR[5],
+  sprocR[5],
+  tlb_data0R[5],
+  tlb_data1R[5],
+  tlb_hitR[5] 
+
   );
           
   wtmiss wtmiss_mod(
@@ -1793,17 +1794,17 @@ module agu_block(
   mOp0_low,
   mOp0_split,
   mOp_noBanks,
-  tlb_addr,
-  tlb_wen,
-  tlb_frc_way,
-  tlb_frc_en,
-  tlb_data0,
-  tlb_data1,
-  tlb_data2,
   csrss_addr,
   csrss_en,
   csrss_thread,
-  csrss_data
+  csrss_data,
+  tlb_clkEnR,
+  cout_secqR,
+  addrTlbR[0],
+  sprocR[0],
+  tlb_data0R[0],
+  tlb_data1R[0],
+  tlb_hitR[0] 
   );
   
   agu #(1) agu1(
@@ -1859,17 +1860,17 @@ module agu_block(
   mOp1_low,
   mOp1_split,
   mOp_noBanks,
-  tlb_addr,
-  tlb_wen,
-  tlb_frc_way,
-  tlb_frc_en,
-  tlb_data0,
-  tlb_data1,
-  tlb_data2,
   csrss_addr,
   csrss_en,
   csrss_thread,
-  csrss_data
+  csrss_data,
+  ,
+  ,
+  addrTlbR[1],
+  sprocR[1],
+  tlb_data0R[1],
+  tlb_data1R[1],
+  tlb_hitR[1] 
   );
 
   agu #(0) agu2(
@@ -1925,17 +1926,18 @@ module agu_block(
   mOp2_low,
   mOp2_split,
   mOp_noBanks,
-  tlb_addr,
-  tlb_wen,
-  tlb_frc_way,
-  tlb_frc_en,
-  tlb_data0,
-  tlb_data1,
-  tlb_data2,
   csrss_addr,
   csrss_en,
   csrss_thread,
-  csrss_data
+  csrss_data,
+  ,
+  ,
+  addrTlbR[2],
+  sprocR[2],
+  tlb_data0R[2],
+  tlb_data1R[2],
+  tlb_hitR[2] 
+
   );
   
   agucam recirculate_mod(
@@ -2090,6 +2092,13 @@ module agu_block(
   .writeTlb_data0(tlb_data0),
   .writeTlb_data1(tlb_data1),
   .writeTlb_data2(tlb_data2)
+  ,
+  ,
+  addrTlbR[3],
+  sprocR[3],
+  tlb_data0R[3],
+  tlb_data1R[3],
+  tlb_hitR[3] 
   );
 
   assign miss0=~FU0Hit & mOpX0_en_reg3 & ~p0_conflict_reg2 & 
