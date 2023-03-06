@@ -1726,7 +1726,6 @@ module decoder(
   localparam INSTRQ_WIDTH=`instrQ_width;
   localparam REG_WIDTH=6;
   localparam IP_WIDTH=64;
-/*verilator hier_block*/
   
   input clk;
   input rst;

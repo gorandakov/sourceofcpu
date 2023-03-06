@@ -339,6 +339,7 @@ module ww(
   baseAttr,
   wrt0,wrt1,wrt2
   );
+/*verilator hier_block*/
 
 frontend1 #(BUS_ID) front_mod(
   clk,

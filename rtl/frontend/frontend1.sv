@@ -77,7 +77,6 @@ module frontend1(
   localparam INSTR_WIDTH=80;
   localparam CLS_WIDTH=13;
   parameter [4:0] BUS_ID=0;
-/*verilator hier_block*/
 /*verilator public_module*/ 
   input clk;
   input rst;
