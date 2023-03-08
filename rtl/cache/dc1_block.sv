@@ -24,9 +24,6 @@ module dcache1_ram(
   read_nClkEn,
   read_addr,
   read_data,
-  readB_nClkEn,
-  readB_addr,
-  readB_data,
   write_addr,
   write_data,
   write_wen,
@@ -46,9 +43,6 @@ module dcache1_ram(
   input read_nClkEn;
   input [ADDR_WIDTH-1:0] read_addr;
   output [DATA_WIDTH-1:0] read_data;
-  input read_nClkEnB;
-  input [ADDR_WIDTH-1:0] read_addrB;
-  output [DATA_WIDTH-1:0] read_dataB;
   input [ADDR_WIDTH-1:0] write_addr;
   input [DATA_WIDTH-1:0] write_data;
   input write_wen;
@@ -56,17 +50,13 @@ module dcache1_ram(
 
   reg [DATA_WIDTH-1:0] ram [ADDR_COUNT-1:0];
   reg [ADDR_WIDTH-1:0] read_addr_reg;
-  reg [ADDR_WIDTH-1:0] read_addrB_reg;
   
   assign read_data=ram[read_addr_reg];
-  assign read_dataB=ram[read_addrB_reg];
 
   always @(negedge clk)
     begin
       if (rst) read_addr_reg<={ADDR_WIDTH{1'b0}};
       else if (!read_nClkEn) read_addr_reg<=read_addr; 
-      if (rst) read_addrB_reg<={ADDR_WIDTH{1'b0}};
-      else if (!read_nClkEnB) read_addrB_reg<=read_addrB; 
       if (write_wen & write_ben[0]) ram[write_addr][8:0]<=write_data[8:0];
       if (write_wen & write_ben[1]) ram[write_addr][17:9]<=write_data[17:9];
       if (write_wen & write_ben[2]) ram[write_addr][26:18]<=write_data[26:18];
@@ -91,10 +81,6 @@ module dcache1_bank(
   read_addrE3, read_hitE3, 
   read_addrO3, read_hitO3, 
   read_bankEn3,read_odd3,
-  code_read_addr,
-  code_read_en,
-  code_read_data,
-  CODE_DATA_IN,
   none_bankEn,
   bank_hit,
   read_data,
@@ -151,10 +137,6 @@ module dcache1_bank(
   output bank_hit;
   output [DATA_WIDTH-1:0] read_data;
   input [DATA_WIDTH-1:0] read_data_in;
-  input [38:0] code_read_addr;
-  input code_read_en;
-  output [DATA_WIDTH-1:0] code_read_data;
-  input [DATA_WIDTH-1:0] CODE_DATA_IN;
 
   input [ADDR_WIDTH-1:0] write_addrE0;
   input write_hitE0; //+1 cycle
@@ -238,9 +220,6 @@ module dcache1_bank(
   .read_nClkEn(none_bankEn),
   .read_addr(read_addr[0]),
   .read_data(read_data_ram[0]),
-  .read_nClkEnB(~code_read_en),
-  .read_addrB(code_read_addr[ADDR_WIDTH:1]),
-  .read_dataB(code_data_ram[0]),
   .write_addr(write_addrE),
   .write_data(write_data),
   .write_wen((write_bankEn && write_hitE0|write_hitE1)|init|(ins_hit&~read_odd0_reg)),
@@ -253,9 +232,6 @@ module dcache1_bank(
   .read_nClkEn(none_bankEn),
   .read_addr(read_addr[1]),
   .read_data(read_data_ram[1]),
-  .read_nClkEnB(~code_read_en),
-  .read_addrB(code_read_addr[ADDR_WIDTH:1]),
-  .read_dataB(code_data_ram[1]),
   .write_addr(write_addrO),
   .write_data(write_data),
   .write_wen((write_bankEn && write_hitO0|write_hitO1)|init|(ins_hit&read_odd0_reg)),
@@ -264,30 +240,17 @@ module dcache1_bank(
   
   generate
     if (~TOP) begin
-        assign code_dataP=code_read_en_reg & ~code_read_addr_reg[0] ? code_data_ram[0] : 'z;
-        assign code_dataP=code_read_en_reg &  code_read_addr_reg[1] ? code_data_ram[1] : 'z;
-        assign code_dataP=~code_read_en_reg ? {DATA_WIDTH{1'B0}} : 'z;
-  
-        assign code_read_data=~(code_dataP|CODE_DATA_IN);  
-
         assign read_dataP=(enE & ~ins_hit) ? read_data_ram[0] : 'z;
         assign read_dataP=(enO & ~ins_hit) ? read_data_ram[1] : 'z;
         assign read_dataP=(~bank_hit | ins_hit) ? {DATA_WIDTH{1'B0}} : 'z;
   
         assign read_data=~(read_dataP|read_data_in);  
     end else begin
-  
-        assign code_read_data=~(code_dataP&CODE_DATA_IN);  
-
         assign read_dataP=(enE & ~ins_hit) ? ~read_data_ram[0] : 'z;
         assign read_dataP=(enO & ~ins_hit) ? ~read_data_ram[1] : 'z;
         assign read_dataP=(~bank_hit | ins_hit) ? {DATA_WIDTH{1'B1}} : 'z;
   
         assign read_data=~(read_dataP&read_data_in);  
-
-        assign code_dataP=code_read_en_reg & ~code_read_addr_reg[0] ? ~code_data_ram[0] : 'z;
-        assign code_dataP=code_read_en_reg &  code_read_addr_reg[1] ? ~code_data_ram[1] : 'z;
-        assign code_dataP=~code_read_en_reg ? {DATA_WIDTH{1'B1}} : 'z;
     end
   endgenerate
   always @(negedge clk)
