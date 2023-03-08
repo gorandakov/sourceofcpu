@@ -63,19 +63,7 @@ module frontend1(
   MSI_expAddr_en,
   MSI_expAddr_hit,
   expun_addr,
-  expun_wen,
-  instrEn,
-  read_set_flag_reg,
-  fstall,
-  ixcept,
-  IP_phys_reg,
-  cc_read_hit,
-  cc_tagErr,
-  read_data,
-  read_dataX,
-  write_IP,
-  bus_match_reg,
-  write_data
+  expun_wen
   );
 
   localparam PHYS_WIDTH=44;
@@ -176,18 +164,6 @@ module frontend1(
   output MSI_expAddr_hit;
   output [36:0] expun_addr;
   output expun_wen;
-  output instrEn;
-  output read_set_flag_reg,
-  output fstall;
-  output ixcept;
-  output [PHYS_WIDTH-1:0] IP_phys_reg;
-  input cc_read_hit,
-  input cc_tagErr;
-  input [DATA_WIDTH/2-1:0] read_data;
-  input [14:0] read_dataX;
-  output [PHYS_WIDTH-1:0] write_IP;
-  output bus_match_reg;
-  output [DATA_WIDTH/2-1:0] write_data;
 
   wire [DATA_WIDTH/2-1:0] read_data;
   wire [14:0] read_dataX;
@@ -1071,6 +1047,28 @@ module frontend1(
   popcnt5 wjcnt_mod({1'b0,iqe_jbits},iqe_jcnt);
   popcnt5 wjcnD_mod({1'b0,iqe_jbitZ},iqe_jcnD);
 
+  cc_comb cc_mod(
+  .clk(clk),
+  .rst(rst),
+  .read_clkEn(instrEn),
+  .read_set_flag(read_set_flag_reg),
+  .fstall(fstall),
+  .except(ixcept),
+  .cc_read_IP(IP_phys_reg),
+  .cc_read_hit(cc_read_hit),
+  .cc_read_tagErr(cc_tagErr),
+  .read_data(read_data),
+  .read_dataX(read_dataX),
+  .write_IP({write_IP,5'b0}),
+  .cc_write_wen(bus_match_reg),
+  .cc_invalidate(1'b0),
+  .write_data(write_data),
+  .chkCL_IP({MSI_expAddr,7'b0}),
+  .chkCL_clkEn(MSI_expAddr_en),
+  .chkCL_hit(MSI_expAddr_hit),
+  .expun_addr(expun_addr),
+  .expun_wen(expun_wen)
+  );  
 
   ctlb tlb_mod(
   .clk(clk),
