@@ -120,6 +120,7 @@ module rt2_fp(
  wire [16:0] exp_incy;
  reg nsignA_reg;
  reg nsignB_reg;
+ reg [14:0] rdy_cnt;
  wire [67:0] normB_11;
  wire [67:0] normB_101;
  wire [67:0] normB_1001;
@@ -361,6 +362,7 @@ module rt2_fp(
 	 perform_stage<=1'b0;
 	 cnt<=5'h1f;
 	 rdy<=1'b1;
+         rdy_cnt<=14'b0;
 	 digits<=68'b0;
 	 type_reg<=3'b0;
 	 isrnd_even<=1'b1;
@@ -420,6 +422,7 @@ module rt2_fp(
 	 perform_stage<=1'b1;
 	 cnt<=step_cnt;
 	 rdy<=1'b0;
+         rdy_cnt<=15'b0;
 	 digits<=68'b0;
 	 type_reg<=type_==3 ? 1 : type_;//int=EXT
 	 nsignA_reg<=nsignA;
@@ -470,7 +473,9 @@ module rt2_fp(
      end
      if ({27'b0,cnt}==(2+1+{31'b0,(type_reg!=2)}) && perform_stage && ~rst) out_en<=1'b1;
      else if (rst|out_can) out_en<=1'b0;
-     if (rdy0_reg2) rdy<=1'b1;
+     if (rdy0_reg2) rdy_cnt<=15'b1;
+     else rdy_cnt<={rdy_cnt[13:0],1'b0};
+     rdy<=rdy_cnt[14];
       
 
  end
