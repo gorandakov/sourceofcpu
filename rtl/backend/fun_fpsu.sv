@@ -25,9 +25,6 @@ module fun_fpsu(
   u1_A,u1_B,u1_Bx,u1_Ax,u1_en,u1_op,
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
   u1_ret,u1_ret_en,
-  u2_A,u2_B,u2_Bx,u2_Ax,u2_en,u2_op,
-  u2_fufwd_A,u2_fuufwd_A,u2_fufwd_B,u2_fuufwd_B,
-  u2_ret,u2_ret_en,
   FUF0,FUF1,FUF2,
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
@@ -60,19 +57,6 @@ module fun_fpsu(
   output [13:0] u1_ret;
   output u1_ret_en;
 
-  input [S+67:0] u2_A;
-  input [S+67:0] u2_B;
-  input [67:0] u2_Bx;
-  output [67:0] u2_Ax;
-  input [3:0] u2_en;
-  input [12:0] u2_op;
-  input [3:0] u2_fufwd_A;
-  input [3:0] u2_fuufwd_A;
-  input [3:0] u2_fufwd_B;
-  input [3:0] u2_fuufwd_B;
-  output [13:0] u2_ret;
-  output u2_ret_en;
- 
 
   inout [S+67:0] FUF6N;
   inout [S+67:0] FUF7M;
@@ -193,7 +177,7 @@ module fun_fpsu(
   reg [10:0] fmask2_reg;
   reg [10:0] fmask3_reg;
   //wire [15:0] u1_Bx=u1_BH[15:0];
-  //wire [15:0] u2_Bx=u2_BH[15:0];
+  //wire [15:0] u1_Bx=u1_BH[15:0];
   integer k;
 
   reg [1:0] ALT_INP_reg;
@@ -230,13 +214,6 @@ module fun_fpsu(
   reg [3:0] u1_en_reg2;
   reg [3:0] u1_en_reg3;
   reg [3:0] u1_en_reg4;
-  reg [12:0] u2_op_reg;
-  reg [3:0] u2_en_reg2;
-  reg [3:0] u2_en_reg3;
-  reg [3:0] u2_en_reg4;
-  reg [3:0] u2_en_reg5;
-  reg [3:0] u2_en_reg6;
-  reg [3:0] u2_en_reg7;
 
   rs_write_forward #(S+68) u1_A_fwd(
   clk,rst,
@@ -278,9 +255,9 @@ module fun_fpsu(
   
   rs_write_forward #(S+68) u2_A_fwd(
   clk,rst,
-  ~u2_en[3],
-  u2_A,uu_A2,
-  u2_fufwd_A,u2_fuufwd_A,
+  ~u1_en[3],
+  u1_A,uu_A2,
+  u1_fufwd_A,u1_fuufwd_A,
   FUF0N,FUF1M,FUF2N,FUF3N,FUF4N,FUF5N,
   FUF6N,FUF7M,FUF8N,FUF9N,
   FUF0,FUF0_reg,
@@ -297,9 +274,9 @@ module fun_fpsu(
   
   rs_write_forward #(S+68) u2_B_fwd(
   clk,rst,
-  ~u2_en[3],
-  u2_B,uu_B2,
-  u2_fufwd_B,u2_fuufwd_B,
+  ~u1_en[3],
+  u1_B,uu_B2,
+  u1_fufwd_B,u1_fuufwd_B,
   FUF0N,FUF1M,FUF2N,FUF3N,FUF4N,FUF5N,
   FUF6N,FUF7M,FUF8N,FUF9N,
   FUF0,FUF0_reg,
@@ -397,7 +374,7 @@ module fun_fpsu(
     (fxFCADD_raise_s_reg[0]|fxFCADD_raise_s_reg[1]) :
     11'b0;
   fexcpt fexcpt2_mod(fraise2_reg,{6'b0,3'b0},
-    fmask2_reg,|u2_en_reg7[3:2]&u2_en_reg7[0],u2_ret,u2_ret_en);
+    fmask2_reg,|u1_en_reg7[3:2]&u1_en_reg7[0],u1_ret,u1_ret_en);
   assign fraise3=fxFADD_sn_reg2 ?
     (fxFADD_raise_reg[0]|fxFADD_raise_reg[1])&fpcsr[21:11] :
     11'b0&fpcsr[21:11];
@@ -456,8 +433,8 @@ module fun_fpsu(
   generate
       if (H) assign gxDataBFL[1]=u1_op_reg[9] ? u1_Bx : uu_B1;
       else assign gxDataBFL[1]=u1_op_reg[8] ? {u1_Bx} : uu_B1;
-      if (H) assign gxDataBFL[0]=u2_op_reg[9] ? u2_Bx : uu_B2;
-      else assign gxDataBFL[0]=u2_op_reg[8] ? {u2_Bx} : uu_B2;
+      if (H) assign gxDataBFL[0]=u1_op_reg[9] ? u1_Bx : uu_B2;
+      else assign gxDataBFL[0]=u1_op_reg[8] ? {u1_Bx} : uu_B2;
       if (INDEX==0) begin
 	      assign FUF4=FOOF_reg[0];
 	      assign FUF4N=~FOOF_reg[0];
@@ -566,31 +543,31 @@ module fun_fpsu(
 	      fxFADD_loSel=u1_op_reg[1:0];
               fxFADD_pcmp<=gxFADD_pkdS | gxFADD_pkdD;
 	      {fxFADD_pswp,fxFADD_com}<=u1_op_reg[10:8];
-	      {fxFCADD_pswp,fxFCADD_com}<=u2_op_reg[10:8];
+	      {fxFCADD_pswp,fxFCADD_com}<=u1_op_reg[10:8];
               fxFADD_dupl<=u1_op_reg[12];
-              fxFCADD_dupl<=u2_op_reg[12];
+              fxFCADD_dupl<=u1_op_reg[12];
 	      
-	      fxFCADD_dbl=u2_op_reg[7:0]==`fop_mulDL ||
-	        u2_op_reg[7:0]==`fop_mulDH ||
-	        u2_op_reg[7:0]==`fop_mulDP || u2_op_reg[7:0]==`fop_rndDSP;
-              fxFCADD_ext=u2_op_reg[7:0]==`fop_mulEE || u2_op_reg[7:0]==`fop_rndES ||
-	        u2_op_reg[7:0]==`fop_rndED;
+	      fxFCADD_dbl=u1_op_reg[7:0]==`fop_mulDL ||
+	        u1_op_reg[7:0]==`fop_mulDH ||
+	        u1_op_reg[7:0]==`fop_mulDP || u1_op_reg[7:0]==`fop_rndDSP;
+              fxFCADD_ext=u1_op_reg[7:0]==`fop_mulEE || u1_op_reg[7:0]==`fop_rndES ||
+	        u1_op_reg[7:0]==`fop_rndED;
               fxFCADD_dblext=fxFCADD_dbl||fxFCADD_ext;
-	      fxFCADD_copyA[1]=u2_op_reg[7:0]==`fop_mulDL;
-	      fxFCADD_copyA[0]=u2_op_reg[7:0]==`fop_mulDH;
+	      fxFCADD_copyA[1]=u1_op_reg[7:0]==`fop_mulDL;
+	      fxFCADD_copyA[0]=u1_op_reg[7:0]==`fop_mulDH;
 	     
-	      fxFCADD_rndD=u2_op_reg[7:0]==`fop_rndED;
-	      fxFCADD_rndS=u2_op_reg[7:0]==`fop_rndES ||
-	        u2_op_reg[7:0]==`fop_rndDSP;
+	      fxFCADD_rndD=u1_op_reg[7:0]==`fop_rndED;
+	      fxFCADD_rndS=u1_op_reg[7:0]==`fop_rndES ||
+	        u1_op_reg[7:0]==`fop_rndDSP;
 
 	      fxFADD_sin=u1_op_reg[7:0]==`fop_addS || u1_op_reg[7:0]==`fop_addSP ||
                   u1_op_reg[7:0]==`fop_subS || u1_op_reg[7:0]==`fop_subSP;
               fxFADD_copySA=(u1_op_reg==`fop_addSP || u1_op_reg[7:0]==`fop_subSP ||
 	          {u1_op_reg[7:2],2'b0}==`fop_logic) ?
 		  {u1_op_reg[10],3'b0}:{2'b11,u1_op_reg[10],1'b0}; 
-	      fxFCADD_sn=u2_op_reg[7:0]==`fop_mulS || u2_op_reg[7:0]==`fop_mulSP;
-              fxFCADD_copyASN=(u2_op_reg==`fop_mulSP) ?
-		  {u2_op_reg[10],3'b0}:{2'b11,u2_op_reg[10],1'b0}; 
+	      fxFCADD_sn=u1_op_reg[7:0]==`fop_mulS || u1_op_reg[7:0]==`fop_mulSP;
+              fxFCADD_copyASN=(u1_op_reg==`fop_mulSP) ?
+		  {u1_op_reg[10],3'b0}:{2'b11,u1_op_reg[10],1'b0}; 
 	      if (fxFADD_dblext) begin
 	          if (~fxFADD_copyA[0]) fxDataAFL_reg[0]<=uu_A1;
 	          if (~fxFADD_copyA[0]) gxDataBFL_reg[1]<=gxDataBFL[1];
@@ -630,22 +607,22 @@ module fun_fpsu(
       u1_op_reg2<=u1_op_reg;
       u1_en_reg2<=u1_en_reg;
       u1_en_reg3<=u1_en_reg2;
-      u2_en_reg2<=u2_en_reg;
-      u2_en_reg3<=u2_en_reg2;
-      u2_en_reg4<=u2_en_reg3;
-      u2_en_reg5<=u2_en_reg4;
-      u2_en_reg6<=u2_en_reg5;
+      u1_en_reg2<=u1_en_reg;
+      u1_en_reg3<=u1_en_reg2;
+      u1_en_reg4<=u1_en_reg3;
+      u1_en_reg5<=u1_en_reg4;
+      u1_en_reg6<=u1_en_reg5;
 
   end
 
   always @(posedge clk) begin
       ALT_INP_reg<=ALT_INP;
       u1_op_reg<=u1_op;
-      u2_op_reg<=u2_op;
+      u1_op_reg<=u1_op;
       u1_en_reg<=u1_en;
-      u2_en_reg<=u2_en;
+      u1_en_reg<=u1_en;
       u1_en_reg4<=u1_en_reg3;
-      u2_en_reg7<=u2_en_reg6;
+      u1_en_reg7<=u1_en_reg6;
       FUF0_reg<=FUF0;
       FUF1_reg<=FUF1;
       FUF2_reg<=FUF2;

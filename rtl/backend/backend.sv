@@ -6873,7 +6873,7 @@ dcache1 L1D_mod(
               else rs_port_sch[k]<=4'd2;
               if (rs_port[k]==PORT_SHIFT || rs_port[k]==PORT_MUL) rs_port_sch[k]<=4'd2;
               if (rs_port[k]==PORT_FADD) rs_port_sch[k]<=4'b1001;
-              if (rs_port[k]==PORT_FMUL) rs_port_sch[k]<=4'b1010;
+              if (rs_port[k]==PORT_FMUL) rs_port_sch[k]<=4'b1001;
               if (rs_port[k]==PORT_FANY) rs_port_sch[k][3]<=1'b1;
               if (rs_port[k]==PORT_VADD) rs_port_sch[k]<=4'b101;
               if (rs_port[k]==PORT_VCMP) rs_port_sch[k]<=4'b110;
