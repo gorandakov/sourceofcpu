@@ -66,17 +66,17 @@ module sagu(
   mOp_addr_low,
   mOp_split,
 //  mOp_noBanks,
-  writeTlb_IP,
-  writeTlb_wen,
-  writeTlb_force_way,
-  writeTlb_force_way_en,
-  writeTlb_data0,
-  writeTlb_data1,
-  writeTlb_data2,
   csrss_no,
   csrss_en,
   csrss_thr,
-  csrss_data
+  csrss_data,
+  tlb_clkEn,
+  cout_secq,
+  addrTlb,
+  sproc,
+  tlb_data0,
+  tlb_data1,
+  tlb_hit,
   );
 
   parameter INDEX=0; //0 1 2 
@@ -135,17 +135,17 @@ module sagu(
   output [1:0] mOp_addr_low;
   output mOp_split;
 //  output [BANK_COUNT-1:0] mOp_noBanks;
-  input [TLB_IP_WIDTH-2:0] writeTlb_IP;
-  input writeTlb_wen;
-  input [2:0] writeTlb_force_way;
-  input writeTlb_force_way_en;
-  input [TLB_DATA_WIDTH-1:0] writeTlb_data0;
-  input [TLB_DATA_WIDTH-1:0] writeTlb_data1;
-  input [TLB_DATA_WIDTH-1:0] writeTlb_data2;
   input [15:0] csrss_no;
   input csrss_en;
   input csrss_thr;
   input [63:0] csrss_data;
+  output tlb_clkEn;
+  output cout_secq;
+  output [TLB_IP_WIDTH-1:0] addrTlb;
+  output [23:0] sproc;
+  input [TLB_DATA_WIDTH-1:0] tlb_data0;
+  input [TLB_DATA_WIDTH-1:0] tlb_data1;
+  input tlb_hit;
 
   reg [2:0] opsize;
   wire hasIndex;
@@ -372,14 +372,6 @@ module sagu(
   dtlb tlb_mod(
   .clk(clk),
   .rst(rst),
-  .read_clkEn(tlb_clkEn),
-  .sec_wren(cout_secq),
-  .addr(addrTlb),
-  .sproc(sproc[20:0]),
-  .read_data(tlb_data0),
-  .read_data_next(tlb_data1),
-  .read_way(),
-  .read_hit(tlb_hit),
   .write_addr(writeTlb_IP),
   .write_data0(writeTlb_data0),
   .write_data1(writeTlb_data1),
