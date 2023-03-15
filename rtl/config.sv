@@ -18,3 +18,5 @@ limitations under the License.
 `define ICACHE_256K
 //comment for 128k cache
 `define DCACHE_256K
+//uncomment for "female"
+`define CPU_FEMALE
