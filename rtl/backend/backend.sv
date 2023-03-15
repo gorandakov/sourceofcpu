@@ -2764,25 +2764,6 @@ module backend(
   .rs0i2_en(rs0i2_flag_wr_reg),.rs1i2_en(rs1i2_flag_wr_reg),.rs2i2_en(rs2i2_flag_wr_reg)
   );
   
-  reg_alloc allock3_mod(
-  .clk(clk),
-  .rst(rst),
-  .stall(stall_alloc),
-  .doStall(doStall_alloc),
-  .except(except),.ethread(1'b0),.eboth(1'b0),
-  .thread(thread_reg),
-  .ret_en(retclrH),
-  .ret_thread(1'b0),
-  .ret_rno0(retire0_rF_reg[8:4]),.ret_rno1(retire1_rF_reg[8:4]),.ret_rno2(retire2_rF_reg[8:4]),
-  .ret_rno3(retire3_rF_reg[8:4]),.ret_rno4(retire4_rF_reg[8:4]),.ret_rno5(retire5_rF_reg[8:4]),
-  .ret_rno6(retire6_rF_reg[8:4]),.ret_rno7(retire7_rF_reg[8:4]),.ret_rno8(retire8_rF_reg[8:4]),
-  .newR0(newRH[0]),.newR1(newRH[1]),.newR2(newRH[2]),
-  .newR3(newRH[3]),.newR4(newRH[4]),.newR5(newRH[5]),
-  .newR6(newRH[6]),.newR7(newRH[7]),.newR8(newRH[8]),
-  .rs0i0_en(rs0i0_allocRH_reg),.rs1i0_en(rs1i0_allocRH_reg),.rs2i0_en(rs2i0_allocRH_reg),
-  .rs0i1_en(rs0i1_allocRH_reg),.rs1i1_en(rs1i1_allocRH_reg),.rs2i1_en(rs2i1_allocRH_reg),
-  .rs0i2_en(rs0i2_allocRH_reg),.rs1i2_en(rs1i2_allocRH_reg),.rs2i2_en(rs2i2_allocRH_reg)
-  );
   
   get_funit funit_mod(
   .rs0i0_index(rs0i0_index_reg),.rs0i0_port(rs_port[0]),
