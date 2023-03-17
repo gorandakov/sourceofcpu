@@ -76,7 +76,7 @@ module sagu(
   sproc,
   tlb_data0,
   tlb_data1,
-  tlb_hit,
+  tlb_hit
   );
 
   parameter INDEX=0; //0 1 2 
@@ -369,20 +369,6 @@ module sagu(
   cout_secq);
  
   
-  dtlb tlb_mod(
-  .clk(clk),
-  .rst(rst),
-  .write_addr(writeTlb_IP),
-  .write_data0(writeTlb_data0),
-  .write_data1(writeTlb_data1),
-  .write_data2(writeTlb_data2),
-  .force_way(writeTlb_force_way),
-  .force_way_en(writeTlb_force_way_en),
-  .write_xstant(writeTlb_force_way_en),
-  .write_invl(writeTlb_force_way_en),
-  .write_wen(writeTlb_wen)
-  );  
-
   always @*
     begin
       case(opsize)

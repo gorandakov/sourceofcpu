@@ -1168,7 +1168,7 @@ module heptane_core(
   MSI_expAddr_hitCC,
   //dec_attr
   expun_fr_addr,
-  expun_fr_en
+  expun_fr_en,
   halt,
   
   1'b1,//all_retired,

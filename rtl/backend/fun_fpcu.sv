@@ -284,7 +284,7 @@ module fun_fpu(
   FUF9,FUF9_reg
   );
   
-  rs_write_forward #(S+68) u1_B_fwd(
+  rs_write_forward #(S+68) u2_B_fwd(
   clk,rst,
   ~u1_en[3],
   u1_B,uu_B2,

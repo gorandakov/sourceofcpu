@@ -1,9 +1,10 @@
+`include "../struct.sv"
 
 module ww(
   clk,
   rst,
   except,
-  {exceptIP,1'b0},
+  exceptIP,
 //
   exceptThread,
   exceptAttr,
@@ -15,9 +16,9 @@ module ww(
   jupd0_en,jupdt0_en,jupd0_ght_en,jupd0_addr,jupd0_baddr,jupd0_sc,jupd0_tk,
   jupd1_en,jupdt1_en,jupd1_ght_en,jupd1_addr,jupd1_baddr,jupd1_sc,jupd1_tk,
 //
-  insBus_data,
-  insBus_req,
-  insBus_en,
+  bus_data,
+  bus_slot,
+  bus_en,
   req_addr,
   req_slot,
   req_en,
@@ -35,7 +36,7 @@ module ww(
   expun_fr_en
   halt,
   
-  1'b1,//all_retired,
+  all_retired,
   fp_excpt_en,
   fp_excpt_set,
 
@@ -340,15 +341,32 @@ module ww(
   wrt0,wrt1,wrt2
   );
 /*verilator hier_block*/
+  localparam OPERATION_WIDTH=`operation_width+5;
+  localparam RRF_WIDTH=6;
+  localparam IN_REG_WIDTH=6;
+  localparam PORT_WIDTH=4;
+  localparam PORT_DEC_WIDTH=3;
+  localparam INSTR_WIDTH=80;
+  localparam INSTRQ_WIDTH=`instrQ_width;
+  localparam REG_WIDTH=6;
+  localparam PHYS_WIDTH=44;
+  localparam VIRT_WIDTH=64;
+  localparam IP_WIDTH=64;
+  localparam [63:0] INIT_IP=64'hf80ff00000000000;
+  localparam [3:0] INIT_ATTR=4'b0;
+  localparam BUS_BANK=32;
+  localparam BUS_WIDTH=BUS_BANK*16;
+  localparam CLS_WIDTH=13;
+  parameter [4:0] BUS_ID=0;
   input clk;
   input rst;
   input except;
   input [VIRT_WIDTH-1:0] exceptIP;
   input exceptThread;
   input [3:0] exceptAttr;
-  input exceptDueJump;
-  input [7:0] exceptJumpGHT;
-  input exceptLDConfl;
+  input except_due_jump;
+  input [7:0] except_ght;
+  input except_flag;
   input [3:0] except_jmask;
   input except_jmask_en;
   input jupd0_en;
@@ -387,7 +405,7 @@ module ww(
   input fp_excpt_en;
   input [10:0] fp_excpt_set;
 
-  output reg bundleFeed;
+  output bundleFeed;
   
 
   output [IN_REG_WIDTH-1:0] rs0i0_rA;
@@ -681,7 +699,7 @@ module ww(
   output [PORT_WIDTH-1:0] instr0_port;
   output [3:0] instr0_magic;
   output instr0_last;
-  output reg instr0_aft_spc;
+  output instr0_aft_spc;
   
   output [IN_REG_WIDTH-1:0] instr1_rT;
   output instr1_en;
@@ -693,7 +711,7 @@ module ww(
   output [PORT_WIDTH-1:0] instr1_port;
   output [3:0] instr1_magic;
   output instr1_last;
-  output reg instr1_aft_spc;
+  output instr1_aft_spc;
   
   output [IN_REG_WIDTH-1:0] instr2_rT;
   output instr2_en;
@@ -705,7 +723,7 @@ module ww(
   output [PORT_WIDTH-1:0] instr2_port;
   output [3:0] instr2_magic;
   output instr2_last;
-  output reg instr2_aft_spc;
+  output instr2_aft_spc;
   
   output [IN_REG_WIDTH-1:0] instr3_rT;
   output instr3_en;
@@ -717,7 +735,7 @@ module ww(
   output [PORT_WIDTH-1:0] instr3_port;
   output [3:0] instr3_magic;
   output instr3_last;
-  output reg instr3_aft_spc;
+  output instr3_aft_spc;
   
   output [IN_REG_WIDTH-1:0] instr4_rT;
   output instr4_en;
@@ -729,7 +747,7 @@ module ww(
   output [PORT_WIDTH-1:0] instr4_port;
   output [3:0] instr4_magic;
   output instr4_last;
-  output reg instr4_aft_spc;
+  output instr4_aft_spc;
   
   output [IN_REG_WIDTH-1:0] instr5_rT;
   output instr5_en;
@@ -741,7 +759,7 @@ module ww(
   output [PORT_WIDTH-1:0] instr5_port;
   output [3:0] instr5_magic;
   output instr5_last;
-  output reg instr5_aft_spc;
+  output instr5_aft_spc;
 
   output [IN_REG_WIDTH-1:0] instr6_rT;
   output instr6_en;
@@ -753,7 +771,7 @@ module ww(
   output [PORT_WIDTH-1:0] instr6_port;
   output [3:0] instr6_magic;
   output instr6_last;
-  output reg instr6_aft_spc;
+  output instr6_aft_spc;
 
   output [IN_REG_WIDTH-1:0] instr7_rT;
   output instr7_en;
@@ -765,7 +783,7 @@ module ww(
   output [PORT_WIDTH-1:0] instr7_port;
   output [3:0] instr7_magic;
   output instr7_last;
-  output reg instr7_aft_spc;
+  output instr7_aft_spc;
 
   output [IN_REG_WIDTH-1:0] instr8_rT;
   output instr8_en;
@@ -777,7 +795,7 @@ module ww(
   output [PORT_WIDTH-1:0] instr8_port;
   output [3:0] instr8_magic;
   output instr8_last;
-  output reg instr8_aft_spc;
+  output instr8_aft_spc;
 
   output [IN_REG_WIDTH-1:0] instr9_rT;
   output instr9_en;
@@ -789,7 +807,7 @@ module ww(
   output [PORT_WIDTH-1:0] instr9_port;
   output [3:0] instr9_magic;
   output instr9_last;
-  output reg instr9_aft_spc;
+  output instr9_aft_spc;
 
   output [4:0] jump0Type;
   output [3:0] jump0Pos;
@@ -820,6 +838,11 @@ module ww(
   input [15:0] csrss_no;
   input csrss_en;
   input [64:0] csrss_data;
+  input [36:0] MSI_expAddr_reg;
+  input MSI_expAddr_en_reg;
+  output MSI_expAddr_hitCC;
+  output [36:0] expun_fr_addr;
+  output expun_fr_wen;
 
 frontend1 #(BUS_ID) front_mod(
   clk,
@@ -837,9 +860,9 @@ frontend1 #(BUS_ID) front_mod(
   jupd0_en,jupdt0_en,jupd0_ght_en,jupd0_addr,jupd0_baddr,jupd0_sc,jupd0_tk,
   jupd1_en,jupdt1_en,jupd1_ght_en,jupd1_addr,jupd1_baddr,jupd1_sc,jupd1_tk,
 //
-  insBus_data,
-  insBus_req,
-  insBus_en,
+  bus_data,
+  bus_slot,
+  bus_en,
   req_addr,
   req_slot,
   req_en,
@@ -1209,3 +1232,4 @@ frontend1 #(BUS_ID) front_mod(
   wrt0,wrt1,wrt2,
   csrss_no,csrss_en,csrss_data
   );
+endmodule
