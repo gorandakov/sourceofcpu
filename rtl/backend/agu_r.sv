@@ -95,7 +95,13 @@ module agu_r(
   writeTlb_force_way_en,
   writeTlb_data0,
   writeTlb_data1,
-  writeTlb_data2
+  writeTlb_data2,
+  cout_secq,
+  addrTlb,
+  sproc,
+  tlb_data0,
+  tlb_data1,
+  tlb_hit 
   );
   
   localparam VADDR_WIDTH=64;
@@ -186,6 +192,13 @@ module agu_r(
   output [TLB_DATA_WIDTH-1:0] writeTlb_data0;
   output [TLB_DATA_WIDTH-1:0] writeTlb_data1;
   output [TLB_DATA_WIDTH-1:0] writeTlb_data2;
+  output tlb_clkEn;
+  output cout_secq;
+  output  [TLB_IP_WIDTH-1:0] addrTlb;
+  output [23:0] sproc;
+  input [TLB_DATA_WIDTH-1:0] tlb_data0;
+  input [TLB_DATA_WIDTH-1:0] tlb_data1;
+  input tlb_hit;
 
   wire tlb_clkEn;
 
@@ -451,28 +464,6 @@ module agu_r(
   //add code invlpg io
   );
   
-  dtlb tlb_mod(
-  .clk(clk),
-  .rst(rst),
-  .read_clkEn(tlb_clkEn&~tlb_proceed),
-  .sec_wren(1'b1),
-  .addr(addrMain_tlb[64:13]),
-  .sproc(addrMain_attr[`attr_vm] ? pproc[20:0]^21'd1: sproc[20:0]),
-  .read_data(tlb_data),
-  .read_data_next(tlb_data_next),
-  .read_way(tlb_way),
-  .read_hit(tlb_hit),
-  .write_addr(writeTlb_IP),
-  .write_data0(writeTlb_data0),
-  .write_data1(writeTlb_data1),
-  .write_data2(writeTlb_data2),
-  .force_way(tlb_way_reg),
-  .force_way_en(writeTlb_wen && tlb_is_inv),
-  .write_xstant(writeTlb_wen && tlb_is_inv),
-  .write_invl(writeTlb_wen && tlb_is_inv),
-  .write_wen(writeTlb_wen)
-  );  
-
     always @*
     begin
       stepOver=|mOp0_addrMain_reg[1:0];
