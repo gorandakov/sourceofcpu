@@ -96,6 +96,7 @@ module agu_r(
   writeTlb_data0,
   writeTlb_data1,
   writeTlb_data2,
+  tlb_clkEn,
   cout_secq,
   addrTlb,
   sproc,
