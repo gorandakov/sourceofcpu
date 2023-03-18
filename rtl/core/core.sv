@@ -137,40 +137,8 @@ module heptane_core(
 
   wire [`ctlbData_width-1:0] bus_tlb_data_d;
 
-  wire [INSTR_WIDTH-1:0] instr0;
-  wire [INSTR_WIDTH-1:0] instr1;
-  wire [INSTR_WIDTH-1:0] instr2;
-  wire [INSTR_WIDTH-1:0] instr3;
-  wire [INSTR_WIDTH-1:0] instr4;
-  wire [INSTR_WIDTH-1:0] instr5;
-  wire [INSTR_WIDTH-1:0] instr6;
-  wire [INSTR_WIDTH-1:0] instr7;
-  wire [INSTR_WIDTH-1:0] instr8;
-  wire [INSTR_WIDTH-1:0] instr9;
-
-  wire [`instrQ_width-1:0] extra0;
-  wire [`instrQ_width-1:0] extra1;
-  wire [`instrQ_width-1:0] extra2;
-  wire [`instrQ_width-1:0] extra3;
-  wire [`instrQ_width-1:0] extra4;
-  wire [`instrQ_width-1:0] extra5;
-  wire [`instrQ_width-1:0] extra6;
-  wire [`instrQ_width-1:0] extra7;
-  wire [`instrQ_width-1:0] extra8;
-  wire [`instrQ_width-1:0] extra9;
-
-
-  wire [9:0] instrEn/*verilator public*/;
-  wire [9:0] iAvail/*verilator public*/;
   wire stall/*verilator public*/;
 
-  wire [2:0] btbl_step;
-  wire [62:0] btbl_IP0;
-  wire [62:0] btbl_IP1;
-  wire [3:0] btbl_mask0;
-  wire [3:0] btbl_mask1;
-  wire [3:0] btbl_attr0;
-  wire [3:0] btbl_attr1;
   
   wire [9:0] iUsed;
   
@@ -1151,6 +1119,8 @@ module heptane_core(
   jupd0_en,jupdt0_en,jupd0_ght_en,jupd0_addr,jupd0_baddr,jupd0_sc,jupd0_tk,
   jupd1_en,jupdt1_en,jupd1_ght_en,jupd1_addr,jupd1_baddr,jupd1_sc,jupd1_tk,
 //
+  stall,
+
   insBus_data,
   insBus_req,
   insBus_en,
