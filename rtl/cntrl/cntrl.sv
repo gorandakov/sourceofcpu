@@ -267,6 +267,9 @@ module cntrl_find_outcome(
   ret3_addr,ret3_data,ret3_wen,
   ret4_addr,ret4_data,ret4_wen,
   ret5_addr,ret5_data,ret5_wen,ret5_IP,ret5_IP_en,
+  ret0F_addr,ret0F_data,ret0F_wen,
+  ret1F_addr,ret1F_data,ret1F_wen,
+  ret2F_addr,ret2F_data,ret2F_wen,
   mem_II_upper,
   mem_II_upper2,
   has_stores,
@@ -549,6 +552,15 @@ module cntrl_find_outcome(
   input 			ret5_wen;
   input [64:0]			ret5_IP;
   input				ret5_IP_en;
+  input [9:0] 			ret0F_addr;
+  input [RET_WIDTH-1:0] 	ret0F_data;
+  input 			ret0F_wen;
+  input [9:0] 			ret1F_addr;
+  input [RET_WIDTH-1:0] 	ret1F_data;
+  input 			ret1F_wen;
+  input [9:0] 			ret2F_addr;
+  input [RET_WIDTH-1:0] 	ret2F_data;
+  input 			ret2F_wen;
 
   input [5:0] mem_II_upper;
   input [5:0] mem_II_upper2;
@@ -1218,6 +1230,9 @@ module cntrl_find_outcome(
   .write0_addr(ret0_addr),.write0_data(ret0_data),.write0_wen(ret0_wen),
   .write1_addr(ret1_addr),.write1_data(ret1_data),.write1_wen(ret1_wen),
   .write2_addr(ret2_addr),.write2_data(ret2_data),.write2_wen(ret2_wen),
+  .write6_addr(ret0F_addr),.write6_data(ret0F_data),.write6_wen(ret0F_wen),
+  .write7_addr(ret1F_addr),.write7_data(ret1F_data),.write7_wen(ret1F_wen),
+  .write8_addr(ret2F_addr),.write8_data(ret2F_data),.write8_wen(ret2F_wen),
   .write3_addr(ret3_addr),.write3_data(ret3_data),.write3_wen(ret3_wen),
   .write4_addr(ret4_addr),.write4_data(ret4_data),.write4_wen(ret4_wen),
   .write5_addr(ret5_addr),.write5_data(ret5_data),.write5_wen(ret5_wen),
