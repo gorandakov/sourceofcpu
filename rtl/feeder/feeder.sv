@@ -33,7 +33,7 @@ module ww(
   MSI_expAddr_hitCC,
   //dec_attr
   expun_fr_addr,
-  expun_fr_en
+  expun_fr_en,
   halt,
   
   all_retired,
@@ -842,7 +842,7 @@ module ww(
   input MSI_expAddr_en_reg;
   output MSI_expAddr_hitCC;
   output [36:0] expun_fr_addr;
-  output expun_fr_wen;
+  output expun_fr_en;
 
 frontend1 #(BUS_ID) front_mod(
   clk,
@@ -924,7 +924,6 @@ frontend1 #(BUS_ID) front_mod(
 
   btbl_attr0,
   btbl_attr1,
-  
   halt,
   
   1'b1,//all_retired,

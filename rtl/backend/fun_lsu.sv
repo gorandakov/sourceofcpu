@@ -187,6 +187,8 @@ module agu_block(
   wrStall
   );
   parameter [4:0] BUS_ID=5'd0;
+  localparam TLB_DATA_WIDTH=`dtlbData_width;
+  localparam TLB_IP_WIDTH=52;
 /*verilator hier_block*/
 
   input clk;
@@ -502,6 +504,14 @@ module agu_block(
   endfunction
   
   wire csrss_thread=1'b0;
+  
+  wire [5:0][TLB_IP_WIDTH-1:0] addrTlbR;
+  wire [5:0][23:0] sprocR;
+  wire [5:0][TLB_DATA_WIDTH-1:0] tlb_data0R;
+  wire [5:0][TLB_DATA_WIDTH-1:0] tlb_data1R;
+  wire [5:0] tlb_hitR;
+  wire tlb_clkEnR;
+  wire cout_secR;
 
   reg [64:0] FU0_reg;
   reg [64:0] FU1_reg;
@@ -1799,7 +1809,7 @@ module agu_block(
   csrss_thread,
   csrss_data,
   tlb_clkEnR,
-  cout_secqR,
+  cout_secR,
   addrTlbR[0],
   sprocR[0],
   tlb_data0R[0],

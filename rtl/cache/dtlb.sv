@@ -47,8 +47,18 @@ module dtlb_ram(
   
   input clk;
   input rst;
-  input [ADDR_WIDTH-1:0] read_addr;
-  output [DATA_WIDTH-1:0] read_data;
+  input [ADDR_WIDTH-1:0] read0_addr;
+  output [DATA_WIDTH-1:0] read0_data;
+  input [ADDR_WIDTH-1:0] read1_addr;
+  output [DATA_WIDTH-1:0] read1_data;
+  input [ADDR_WIDTH-1:0] read2_addr;
+  output [DATA_WIDTH-1:0] read2_data;
+  input [ADDR_WIDTH-1:0] read3_addr;
+  output [DATA_WIDTH-1:0] read3_data;
+  input [ADDR_WIDTH-1:0] read4_addr;
+  output [DATA_WIDTH-1:0] read4_data;
+  input [ADDR_WIDTH-1:0] read5_addr;
+  output [DATA_WIDTH-1:0] read5_data;
   input [ADDR_WIDTH-1:0] write_addr;
   input [DATA_WIDTH-1:0] write_data;
   input write_wen;
@@ -246,7 +256,7 @@ module dtlb_way(
   .read_data(read_lru),
   .write_addr(write_wen ? write_addr[3:0] : (init? initCount : addr[3:0])),
   .write_data(newLRU),
-  .write_wen(read_clkEn&sec_wren||init||write_wen)
+  .write_wen(read_clkEn&R0_sec_wren||init||write_wen)
   );
 
   dtlb_lru_ram ramw_mod(
@@ -256,7 +266,7 @@ module dtlb_way(
   .read_data(write_lru),
   .write_addr(write_wen ? write_addr[3:0] : (init? initCount : addr[3:0])),
   .write_data(newLRU),
-  .write_wen(read_clkEn&sec_wren||init||write_wen)
+  .write_wen(read_clkEn&R0_sec_wren||init||write_wen)
   );
 
   assign read_lruW=write_lru;
