@@ -179,6 +179,17 @@ module fun_fpsu(
   //wire [15:0] u1_Bx=u1_BH[15:0];
   //wire [15:0] u1_Bx=u1_BH[15:0];
   integer k;
+  wire [13:0] u1_retX;
+  wire u1_retX_en;
+  wire [13:0] u1_retY;
+  wire u1_retY_en;
+  reg  [13:0] u1_retX_reg;
+  reg  u1_retX_en_reg;
+  reg  [13:0] u1_retX_reg2;
+  reg  u1_retX_en_reg2;
+  reg  [13:0] u1_retX_reg3;
+  reg  u1_retX_en_reg3;
+
 
   reg [1:0] ALT_INP_reg;
 
@@ -377,7 +388,7 @@ module fun_fpsu(
     (fxFCADD_raise_s_reg[0]|fxFCADD_raise_s_reg[1]) :
     11'b0;
   fexcpt fexcpt2_mod(fraise2_reg,{6'b0,3'b0},
-    fmask2_reg,|u1_en_reg7[3:2]&u1_en_reg7[0],u1_ret,u1_ret_en);
+    fmask2_reg,|u1_en_reg7[3:2]&u1_en_reg7[0],u1_retY,u1_retY_en);
   assign fraise3=fxFADD_sn_reg2 ?
     (fxFADD_raise_reg[0]|fxFADD_raise_reg[1])&fpcsr[21:11] :
     11'b0&fpcsr[21:11];
@@ -385,7 +396,7 @@ module fun_fpsu(
     (fxFADD_raise_reg[0]|fxFADD_raise_reg[1]) :
     11'b0;
   fexcpt fexcpt3_mod(fraise3_reg,{6'b0,3'b0},
-    fmask3_reg,|u1_en_reg4[3:2]&u1_en_reg4[0],u1_ret,u1_ret_en);
+    fmask3_reg,|u1_en_reg4[3:2]&u1_en_reg4[0],u1_retX,u1_retX_en);
 /*module fexcpt(
   mask,
   in,
@@ -395,6 +406,8 @@ module fun_fpsu(
   en);
 */
   assign HH_data=gxDataBXL_reg[0];
+  assign u1_ret=u1_retY|u1_retX_reg3;
+  assign u1_ret_en=u1_retY_en|u1_retX_en_reg3;
 
   fpumuls cadd2H_mod(
   .clk(clk),
@@ -633,6 +646,12 @@ module fun_fpsu(
       FUF2_reg<=FUF2;
       FUF3_reg<=FUF3;
       FUF4_reg<=FUF4;
+      u1_retX_en_reg<=u1_retX_en;
+      u1_retX_en_reg2<=u1_retX_en_reg;
+      u1_retX_en_reg3<=u1_retX_en_reg2;
+      u1_retX_reg<=u1_retX;
+      u1_retX_reg2<=u1_retX_reg;
+      u1_retX_reg3<=u1_retX_reg2;
       FUF5_reg<=FUF5;
       FUF6_reg<=FUF6;
       FUF7_reg<=FUF7;
