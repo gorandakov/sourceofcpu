@@ -4738,7 +4738,12 @@ module backend(
   endgenerate
   
   assign rsStall=miss_holds_agu|pause_agu|miss_pause_agu|bus_holds_agu|bus_holds_agu_reg|insBus_io; 
-  
+  assign fret_en[1]=0;
+  assign fret   [1]=0;
+  assign fret_en[3]=0;
+  assign fret   [3]=0;
+  assign fret_en[5]=0;
+  assign fret   [5]=0;
   rs_s storeRs(
   .clk(clk),
   .dataRst(rst),.nonDataRst(except|rst),.rst_thread(1'b0),
