@@ -108,7 +108,7 @@ module agu_r(
   localparam VADDR_WIDTH=64;
   localparam BANK_COUNT=32;
   localparam PADDR_WIDTH=44;
-  localparam TLB_IP_WIDTH=65-14;
+  localparam TLB_IP_WIDTH=52;
   localparam TLB_DATA_WIDTH=`dtlbData_width;
 
   input clk;
@@ -186,7 +186,7 @@ module agu_r(
   input [8:0] FU3reg;
   input [127+8:0] FU3Data;
   input extern_feed;
-  output [TLB_IP_WIDTH-1:0] writeTlb_IP;
+  output [TLB_IP_WIDTH-2:0] writeTlb_IP;
   output writeTlb_wen;
   output  [2:0] writeTlb_force_way;
   output  writeTlb_force_way_en;

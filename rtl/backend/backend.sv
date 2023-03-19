@@ -4311,13 +4311,13 @@ module backend(
     .newFunitA2(funA_reg[3*m+2]),.newFunitB2(funB_reg[3*m+2]),.newFunitS2(funS_reg[3*m+2]),
     .newAttr2(newAttr_reg2),
 // wires to get values out of buffer
-  .outDataA0(outDataA[3*m+0]),.outDataNA0(outDataNA[3*m+0]),.outDataB0(outDataB[3*m+0]),.outDataNB0(outDataNB[3*m+0]),
+  .outDataA0(outDataA[3*m+0]),.outDataB0(outDataB[3*m+0]),
 	  .outDataC0(outDataC[3*m+0]),.outReg0(outReg[3*m+0]),
     .outOp0(outOp[3*m+0]),.outInstrIndex0(outII[3*m+0]), .outFuFwdA0(fuFwdA[3*m+0]),.outFuFwdB0(fuFwdB[3*m+0]),
     .outFuuFwdA0(fuuFwdA[3*m+0]),.outFuuFwdB0(fuuFwdB[3*m+0]),.outLSQ0(outLSQ[m]),.outDataEn0(outEn[3*m+0]),
     .outThread0(outThr[3*m+0]),.outWQ0(outWQ[m]),.outLSFlag0(outLSflag[m]),
     .outAttr0(outAttr[3*m+0]),//agu
-  .outDataA1(outDataA[3*m+1]),.outDataNA1(outDataNA[3*m+1]),.outDataB1(outDataB[3*m+1]),.outDataNB1(outDataNB[3*m+1]),
+  .outDataA1(outDataA[3*m+1]),.outDataB1(outDataB[3*m+1]),
     .outDataS1(outDataS[3*m+1]),.outReg1(outReg[3*m+1]),
     .outRegSimd1(outRegS[3*m+1]),.outOp1(outOp[3*m+1]),.outInstrIndex1(outII[3*m+1]),
     .outFuFwdA1(fuFwdA[3*m+1]),.outFuFwdB1(fuFwdB[3*m+1]),.outFuFwdS1(fuFwdS[3*m+1]),
@@ -4325,7 +4325,7 @@ module backend(
     .outDataEn1(outEn[3*m+1]),
     .outThread1(outThr[3*m+1]),
     .outAttr1(outAttr[3*m+1]),//alu 1
-  .outDataA2(outDataA[3*m+2]),.outDataNA2(outDataNA[3*m+2]),.outDataB2(outDataB[3*m+2]),.outDataNB2(outDataNB[3*m+2]),
+  .outDataA2(outDataA[3*m+2]),.outDataB2(outDataB[3*m+2]),
     .outDataS2(outDataS[3*m+2]),.outReg2(outReg[3*m+2]),
     .outRegSimd2(outRegS[3*m+2]),.outOp2(outOp[3*m+2]),.outInstrIndex2(outII[3*m+2]),.outFuFwdA2(fuFwdA[3*m+2]),
     .outFuFwdB2(fuFwdB[3*m+2]),.outFuFwdS2(fuFwdS[3*m+2]),.outFuuFwdA2(fuuFwdA[3*m+2]),
@@ -4353,14 +4353,14 @@ module backend(
   .newDataFA2H(dataAFH[3*m+2]|~dataNAFH[3*m+2]),.newDataFB2H(dataBFH[3*m+2]|~dataNBFH[3*m+2]),
   .newDataFA2L(dataAFL[3*m+2]|~dataNAFL[3*m+2]),.newDataFB2L(dataBFL[3*m+2]|~dataNBFL[3*m+2]),
 
-  .outDataVA1H(outDataAVH[2*m+0]),.outDataNVA1H(outDataNAVH[2*m+0]),.outDataVB1H(outDataBVH[2*m+0]),.outDataNVB1H(outDataNBVH[2*m+0]),
-  .outDataVA1L(outDataAVL[2*m+0]),.outDataNVA1L(outDataNAVL[2*m+0]),.outDataVB1L(outDataBVL[2*m+0]),.outDataNVB1L(outDataNBVL[2*m+0]),
-  .outDataFA1H(outDataAFH[2*m+0]),.outDataNFA1H(outDataNAFH[2*m+0]),.outDataFB1H(outDataBFH[2*m+0]),.outDataNFB1H(outDataNBFH[2*m+0]),
-  .outDataFA1L(outDataAFL[2*m+0]),.outDataNFA1L(outDataNAFL[2*m+0]),.outDataFB1L(outDataBFL[2*m+0]),.outDataNFB1L(outDataNBFL[2*m+0]),
-  .outDataVA2H(outDataAVH[2*m+1]),.outDataNVA2H(outDataNAVH[2*m+1]),.outDataVB2H(outDataBVH[2*m+1]),.outDataNVB2H(outDataNBVH[2*m+1]),
-  .outDataVA2L(outDataAVL[2*m+1]),.outDataNVA2L(outDataNAVL[2*m+1]),.outDataVB2L(outDataBVL[2*m+1]),.outDataNVB2L(outDataNBVL[2*m+1]),
-  .outDataFA2H(outDataAFH[2*m+1]),.outDataNFA2H(outDataNAFH[2*m+1]),.outDataFB2H(outDataBFH[2*m+1]),.outDataNFB2H(outDataNBFH[2*m+1]),
-  .outDataFA2L(outDataAFL[2*m+1]),.outDataNFA2L(outDataNAFL[2*m+1]),.outDataFB2L(outDataBFL[2*m+1]),.outDataNFB2L(outDataNBFL[2*m+1]),
+  .outDataVA1H(outDataAVH[2*m+0]),.outDataVB1H(outDataBVH[2*m+0]),
+  .outDataVA1L(outDataAVL[2*m+0]),.outDataVB1L(outDataBVL[2*m+0]),
+  .outDataFA1H(outDataAFH[2*m+0]),.outDataFB1H(outDataBFH[2*m+0]),
+  .outDataFA1L(outDataAFL[2*m+0]),.outDataFB1L(outDataBFL[2*m+0]),
+  .outDataVA2H(outDataAVH[2*m+1]),.outDataVB2H(outDataBVH[2*m+1]),
+  .outDataVA2L(outDataAVL[2*m+1]),.outDataVB2L(outDataBVL[2*m+1]),
+  .outDataFA2H(outDataAFH[2*m+1]),.outDataFB2H(outDataBFH[2*m+1]),
+  .outDataFA2L(outDataAFL[2*m+1]),.outDataFB2L(outDataBFL[2*m+1]),
 
   .FUV0H(FUVH_reg[0]),.FUV0L(FUVL_reg[0]),.FUF0H(FUFH_reg[0]),.FUF0L(FUFL_reg[0]),
   .FUV1H(FUVH_reg[1]),.FUV1L(FUVL_reg[1]),.FUF1H(FUFH_reg[1]),.FUF1L(FUFL_reg[1]),
@@ -4586,7 +4586,7 @@ module backend(
           rs_write_forward #(DATA_WIDTH) fwdDA_mod(
           .clk(clk),
           .rst(rst),
-          .oldData(WDoutData[n]|~WDoutDataN[n]),
+          .oldData(WDoutData[n]),
           .newData(WDfxData[n]),
           .fuFwd(WDoutFuFwd[n]),.fuuFwd(WDoutFuuFwd[n]),
           .stall(~WDoutDataEn[n][1]),
@@ -4607,7 +4607,7 @@ module backend(
           rs_write_forward #(SIMD_WIDTH) fwdDAVH_mod(
           .clk(clk),
           .rst(rst),
-          .oldData(WDoutDataVH[n]|~WDoutDataNVH[n]),
+          .oldData(WDoutDataVH[n]),
           .newData(WDfxDataVH[n]),
           .fuFwd(WDoutFuFwd_reg[n]),.fuuFwd(WDoutFuuFwd_reg[n]),
           .stall(~WDoutDataEn_reg[n][2]),
@@ -4628,7 +4628,7 @@ module backend(
           rs_write_forward #(SIMD_WIDTH) fwdDBVL_mod(
           .clk(clk),
           .rst(rst),
-          .oldData(WDoutDataVL[n]|~WDoutDataNVL[n]),
+          .oldData(WDoutDataVL[n]),
           .newData(WDfxDataVL[n]),
           .fuFwd(WDoutFuFwd_reg[n]),.fuuFwd(WDoutFuuFwd_reg[n]),
           .stall(~WDoutDataEn_reg[n][2]),
@@ -4649,7 +4649,7 @@ module backend(
           rs_write_forward #(SIMD_WIDTH) fwdDAFH_mod(
           .clk(clk),
           .rst(rst),
-          .oldData(WDoutDataFH[n]|~WDoutDataNFH[n]),
+          .oldData(WDoutDataFH[n]),
           .newData(WDfxDataFH[n]),
           .fuFwd(WDoutFuFwd_reg2[n]),.fuuFwd(WDoutFuuFwd_reg2[n]),
           .stall(~WDoutDataEn_reg2[n][3]),
@@ -4670,7 +4670,7 @@ module backend(
           rs_write_forward #(16+SIMD_WIDTH) fwdDBFL_mod(
           .clk(clk),
           .rst(rst),
-          .oldData(WDoutDataFL[n]|~WDoutDataNFL[n]),
+          .oldData(WDoutDataFL[n]),
           .newData(WDfxDataFL[n]),
           .fuFwd(WDoutFuFwd_reg2[n]),.fuuFwd(WDoutFuuFwd_reg2[n]),
           .stall(~WDoutDataEn_reg2[n][3]),
@@ -4805,23 +4805,23 @@ module backend(
     .newLSFlag2(rs_ldst_flg[4]),
     .newAttr2(newAttr_reg2),
 // wires to get values out of buffer
-  .outDataA0(WoutDataB[0]),.outDataNA0(WoutDataNB[0]),.outDataB0(WoutDataA[0]),.outDataNB0(WoutDataNA[0]),.outDataC0(WoutDataC[0]),
+  .outDataA0(WoutDataB[0]),.outDataB0(WoutDataA[0]),.outDataC0(WoutDataC[0]),
     .outOp0(WoutOp[0]),.outInstrIndex0(WoutII[0]),
     .outFuFwdA0(WfuFwdB[0]),.outFuFwdB0(WfuFwdA[0]),.outFuuFwdA0(WfuuFwdB[0]),.outFuuFwdB0(WfuuFwdA[0]),
     .outLSQ0(WoutLSQ[0]),.outDataEn0(WoutDataEn[0]),.outThread0(WoutThread[0]),.outWQ0(WoutWQ[0]),
     .outLSFlag0(WoutLSflag[0]),//agu
     .outAttr0(WoutAttr[0]),
-  .outDataB1(WDoutData[0]),.outDataNB1(WDoutDataN[0]),.outOp1(WDoutOp[0]),.outInstrIndex1(WDoutII[0]),
+  .outDataB1(WDoutData[0]),.outOp1(WDoutOp[0]),.outInstrIndex1(WDoutII[0]),
     .outFuFwdB1(WDoutFuFwd[0]),.outFuuFwdB1(WDoutFuuFwd[0]),.outLSQ1(WDoutLSQ[0]),
     .outDataEn1(WDoutDataEn[0]),.outThread1(WDoutThread[0]),.outWQ1(WDoutWQ[0]),//data
     .outAttr1(),
-  .outDataA2(WoutDataA[1]),.outDataNA2(WoutDataNA[1]),.outDataB2(WoutDataB[1]),.outDataNB2(WoutDataNB[1]),.outDataC2(WoutDataC[1]),
+  .outDataA2(WoutDataA[1]),.outDataB2(WoutDataB[1]),.outDataC2(WoutDataC[1]),
     .outOp2(WoutOp[1]),.outInstrIndex2(WoutII[1]),
     .outFuFwdA2(WfuFwdA[1]),.outFuFwdB2(WfuFwdB[1]),.outFuuFwdA2(WfuuFwdA[1]),.outFuuFwdB2(WfuuFwdB[1]),
     .outLSQ2(WoutLSQ[1]),.outDataEn2(WoutDataEn[1]),.outThread2(WoutThread[1]),.outWQ2(WoutWQ[1]),
     .outLSFlag2(WoutLSflag[1]),//agu
     .outAttr2(WoutAttr[1]),
-  .outDataA3(WDoutData[1]),.outDataNA3(WDoutDataN[1]),.outOp3(WDoutOp[1]),.outInstrIndex3(WDoutII[1]),
+  .outDataA3(WDoutData[1]),.outOp3(WDoutOp[1]),.outInstrIndex3(WDoutII[1]),
     .outFuFwdA3(WDoutFuFwd[1]),.outFuuFwdA3(WDoutFuuFwd[1]),.outLSQ3(WDoutLSQ[1]),
     .outDataEn3(WDoutDataEn[1]),.outThread3(WDoutThread[1]),.outWQ3(WDoutWQ[1]),//data
     .outAttr3(),
@@ -4847,10 +4847,10 @@ module backend(
   .newDataVA2H(dataAVH[2]),.newDataVB2H(dataBVH[2]),.newDataVA2L(dataAVL[2]),.newDataVB2L(dataBVL[2]),
   .newDataFA2H(dataAFH[2]),.newDataFB2H(dataBFH[2]),.newDataFA2L(dataAFL[2]),.newDataFB2L(dataBFL[2]),
 
-  .outDataVB1H(WDoutDataVH[0]),.outDataNVB1H(WDoutDataNVH[0]),.outDataVB1L(WDoutDataVL[0]),.outDataNVB1L(WDoutDataNVL[0]),
-  .outDataFB1H(WDoutDataFH[0]),.outDataNFB1H(WDoutDataNFH[0]),.outDataFB1L(WDoutDataFL[0]),.outDataNFB1L(WDoutDataNFL[0]),
-  .outDataVA3H(WDoutDataVH[1]),.outDataNVA3H(WDoutDataNVH[1]),.outDataVA3L(WDoutDataVL[1]),.outDataNVA3L(WDoutDataNVL[1]),
-  .outDataFA3H(WDoutDataFH[1]),.outDataNFA3H(WDoutDataNFH[1]),.outDataFA3L(WDoutDataFL[1]),.outDataNFA3L(WDoutDataNFL[1]),
+  .outDataVB1H(WDoutDataVH[0]),.outDataVB1L(WDoutDataVL[0]),
+  .outDataFB1H(WDoutDataFH[0]),.outDataFB1L(WDoutDataFL[0]),
+  .outDataVA3H(WDoutDataVH[1]),.outDataVA3L(WDoutDataVL[1]),
+  .outDataFA3H(WDoutDataFH[1]),.outDataFA3L(WDoutDataFL[1]),
 
   .FUV0H(FUVH[0]),.FUV0L(FUVL[0]),.FUF0H(FUFH[0]),.FUF0L(FUFL[0]),
   .FUV1H(FUVH[1]),.FUV1L(FUVL[1]),.FUF1H(FUFH[1]),.FUF1L(FUFL[1]),
@@ -4863,34 +4863,6 @@ module backend(
   .FUV8H(FUVH[8]),.FUV8L(FUVL[8]),.FUF8H(FUFH[8]),.FUF8L(FUFL[8]),
   .FUV9H(FUVH[9]),.FUV9L(FUVL[9]),.FUF9H(FUFH[9]),.FUF9L(FUFL[9])
   );
-  /*in_flip_rt #(2*SIMD_WIDTH+9+10) rtDatA_mod(
-    .clk(clk),.rst(rst),.in_en(fxFRT_en),.pause(fxFRT_pause[2]),
-    .d_in({outII_reg3[8],outReg_reg3[8],fxDataAFH[5],fxDataAFL[5]}),
-    .d_out({frtII,frtReg,rtDataA}),
-    .dout_en((fxFRT_can[0] & ~fxFRT_don_reg[0] & ~fxFRT_don_reg2[0] & ~fxFRT_don_reg2[0] & ~fxFRT_don_reg3[0]) |
-     (fxFRT_can[1] & ~fxFRT_don_reg[1] & ~fxFRT_don_reg2[1] & ~fxFRT_don_reg2[1] & ~fxFRT_don_reg3[1]) |
-     (fxFRT_can[2] & ~fxFRT_don_reg[2] & ~fxFRT_don_reg2[2] & ~fxFRT_don_reg2[2] & ~fxFRT_don_reg3[2]) |
-     (fxFRT_can[3] & ~fxFRT_don_reg[3] & ~fxFRT_don_reg2[3] & ~fxFRT_don_reg2[3] & ~fxFRT_don_reg3[3])),.do_(fxFRT_do));
-  in_flip_rt #(13+2*SIMD_WIDTH) rtDatB_mod(
-    .clk(clk),.rst(rst),.in_en(fxFRT_en),.pause(),
-    .d_in({outOp_reg3[8],gxDataBFH[4],gxDataBFL[4]}),
-    .d_out({frtOp,rtDataB}),
-    .dout_en((fxFRT_can[0] & ~fxFRT_don_reg[0] & ~fxFRT_don_reg2[0] & ~fxFRT_don_reg2[0] & ~fxFRT_don_reg3[0]) |
-     (fxFRT_can[1] & ~fxFRT_don_reg[1] & ~fxFRT_don_reg2[1] & ~fxFRT_don_reg2[1] & ~fxFRT_don_reg3[1]) |
-     (fxFRT_can[2] & ~fxFRT_don_reg[2] & ~fxFRT_don_reg2[2] & ~fxFRT_don_reg2[2] & ~fxFRT_don_reg3[2]) |
-     (fxFRT_can[3] & ~fxFRT_don_reg[3] & ~fxFRT_don_reg2[3] & ~fxFRT_don_reg2[3] & ~fxFRT_don_reg3[3])),.do_());
-  imul imul_mod(
-  .clk(clk),
-  .rst(rst),
-  .clkEn(~(|fxFRT_alten_reg3[2])),
-  .op_prev(outOp[3*2+2]),
-  .en(outEn_reg[3*2+2][1:0]==2'b11 && outOp_reg[3*2+2][11]), //needs adjsutment if idiv implemented 
-  .R(fxDataA[3*2+2]),.C(fxDataB[3*2+2]),
-  .alt(nDataAlt[2][0]),
-  .Res(FUMUL)
- );
-);*/
-/*
   assign nDataAlt[0]=3'b111;
   assign nDataAlt[1]=3'b111;
 //  assign nDataAlt[2][1]=2'b1;
@@ -4926,32 +4898,32 @@ module backend(
   .csrss_addr(csrss_no),
   .csrss_data(csrss_data),
   .csrss_en(csrss_en),
-  .u1_A(outDataA[0+1]|~outDataNA[0+1]),.u1_B(outDataB[0+1]|~outDataNB[0+1]),.u1_S(outDataS[0+1]),.u1_op(outOp[0+1]),
+  .u1_A(outDataA[0+1]),.u1_B(outDataB[0+1]),.u1_S(outDataS[0+1]),.u1_op(outOp[0+1]),
   .u1_ret({FUS_alu[0],ex_alu[0]}),.u1_rten(enS_alu[0]),.u1_clkEn(outEn[0+1][0]&outEn[0+1][1]),
     .u1_A_fufwd(fuFwdA[0+1]),.u1_A_fuufwd(fuuFwdA[0+1]),
     .u1_B_fufwd(fuFwdB[0+1]),.u1_B_fuufwd(fuuFwdB[0+1]),
     .u1_S_fufwd(fuFwdS[0+1]),.u1_S_fuufwd(fuuFwdS[0+1]),
-  .u2_A(outDataA[0+2]|~outDataNA[0+2]),.u2_B(outDataB[0+2]|~outDataNB[0+2]),.u2_S(outDataS[0+2]),.u2_op(outOp[0+2]),
+  .u2_A(outDataA[0+2]),.u2_B(outDataB[0+2]),.u2_S(outDataS[0+2]),.u2_op(outOp[0+2]),
   .u2_ret({FUS_alu[1],ex_alu[1]}),.u2_rten(enS_alu[1]),.u2_clkEn(outEn[0+2][0]&outEn[0+2][1]),
     .u2_A_fufwd(fuFwdA[0+2]),.u2_A_fuufwd(fuuFwdA[0+2]),
     .u2_B_fufwd(fuFwdB[0+2]),.u2_B_fuufwd(fuuFwdB[0+2]),
     .u2_S_fufwd(fuFwdS[0+2]),.u2_S_fuufwd(fuuFwdS[0+2]),
-  .u3_A(outDataA[3+1]|~outDataNA[3+1]),.u3_B(outDataB[3+1]|~outDataNB[3+1]),.u3_S(outDataS[3+1]),.u3_op(outOp[3+1]),
+  .u3_A(outDataA[3+1]),.u3_B(outDataB[3+1]),.u3_S(outDataS[3+1]),.u3_op(outOp[3+1]),
   .u3_ret({FUS_alu[2],ex_alu[2]}),.u3_rten(enS_alu[2]),.u3_clkEn(outEn[3+1][0]&outEn[3+1][1]),
     .u3_A_fufwd(fuFwdA[3+1]),.u3_A_fuufwd(fuuFwdA[3+1]),
     .u3_B_fufwd(fuFwdB[3+1]),.u3_B_fuufwd(fuuFwdB[3+1]),
     .u3_S_fufwd(fuFwdS[3+1]),.u3_S_fuufwd(fuuFwdS[3+1]),
-  .u4_A(outDataA[3+2]|~outDataNA[3+2]),.u4_B(outDataB[3+2]|~outDataNB[3+2]),.u4_S(outDataS[3+2]),.u4_op(outOp[3+2]),
+  .u4_A(outDataA[3+2]),.u4_B(outDataB[3+2]),.u4_S(outDataS[3+2]),.u4_op(outOp[3+2]),
   .u4_ret({FUS_alu[3],ex_alu[3]}),.u4_rten(enS_alu[3]),.u4_clkEn(outEn[3+2][0]&outEn[3+2][1]),
     .u4_A_fufwd(fuFwdA[3+2]),.u4_A_fuufwd(fuuFwdA[3+2]),
     .u4_B_fufwd(fuFwdB[3+2]),.u4_B_fuufwd(fuuFwdB[3+2]),
     .u4_S_fufwd(fuFwdS[3+2]),.u4_S_fuufwd(fuuFwdS[3+2]),
-  .u5_A(outDataA[6+1]|~outDataNA[6+1]),.u5_B(outDataB[6+1]|~outDataNB[6+1]),.u5_S(outDataS[6+1]),.u5_nDataAlt(nDataAlt_reg[2][1]),.u5_op(outOp[6+1]),
+  .u5_A(outDataA[6+1]),.u5_B(outDataB[6+1]),.u5_S(outDataS[6+1]),.u5_nDataAlt(nDataAlt_reg[2][1]),.u5_op(outOp[6+1]),
   .u5_ret({FUS_alu[4],ex_alu[4]}),.u5_rten(enS_alu[4]),.u5_clkEn(outEn[6+1][0]&outEn[6+1][1]),
     .u5_A_fufwd(fuFwdA[6+1]),.u5_A_fuufwd(fuuFwdA[6+1]),
     .u5_B_fufwd(fuFwdB[6+1]),.u5_B_fuufwd(fuuFwdB[6+1]),
     .u5_S_fufwd(fuFwdS[6+1]),.u5_S_fuufwd(fuuFwdS[6+1]),
-  .u6_A(outDataA[6+2]|~outDataNA[6+2]),.u6_B(outDataB[6+2]|~outDataNB[6+2]),.u6_S(outDataS[6+2]),.u6_op(outOp[6+2]),
+  .u6_A(outDataA[6+2]),.u6_B(outDataB[6+2]),.u6_S(outDataS[6+2]),.u6_op(outOp[6+2]),
   .u6_ret({FUS_alu[5],ex_alu[5]}),.u6_rten(enS_alu[5]),.u6_clkEn(outEn[6+2][0]&outEn[6+2][1]),
     .u6_A_fufwd(fuFwdA[6+2]),.u6_A_fuufwd(fuuFwdA[6+2]),
     .u6_B_fufwd(fuFwdB[6+2]),.u6_B_fuufwd(fuuFwdB[6+2]),
@@ -4992,35 +4964,35 @@ module backend(
   .miss_pause_agu(miss_pause_agu),
   .wt_pause_agu(wt_pause_agu),
   .mOp_write_clear(write_clear),
-  .u1_base(outDataB[0]|~outDataNB[0]),.u1_index(outDataA[0]|~outDataNA[0]),.u1_const(outDataC[0][32:0]),
+  .u1_base(outDataB[0]),.u1_index(outDataA[0]),.u1_const(outDataC[0][32:0]),
   .u1_base_fufwd(fuFwdB[0]),.u1_base_fuufwd(fuuFwdB[0]),
   .u1_index_fufwd(fuFwdA[0]),.u1_index_fuufwd(fuuFwdA[0]),
   .u1_op(outOp[0][12:0]),.u1_reg(outReg[0]),
   .u1_LSQ_no(outLSQ[0]),.u1_II_no(outII[0]),.u1_WQ_no(outWQ[0]),
   .u1_lsflag(outLSflag[0]),.u1_clkEn(outEn[0][0]),
   .u1_attr(outAttr[0]),
-  .u2_base(outDataB[3]|~outDataNB[3]),.u2_index(outDataA[3]|~outDataNA[3]),.u2_const(outDataC[3][32:0]),
+  .u2_base(outDataB[3]),.u2_index(outDataA[3]),.u2_const(outDataC[3][32:0]),
   .u2_base_fufwd(fuFwdB[3]),.u2_base_fuufwd(fuuFwdB[3]),
   .u2_index_fufwd(fuFwdA[3]),.u2_index_fuufwd(fuuFwdA[3]),
   .u2_op(outOp[3][12:0]),.u2_reg(outReg[3]),
   .u2_LSQ_no(outLSQ[1]),.u2_II_no(outII[3]),.u2_WQ_no(outWQ[1]),
   .u2_lsflag(outLSflag[1]),.u2_clkEn(outEn[3][0]),
   .u2_attr(outAttr[3]),
-  .u3_base(outDataB[6]|~outDataNB[6]),.u3_index(outDataA[6]|~outDataNA[6]),.u3_const(outDataC[6][32:0]),
+  .u3_base(outDataB[6]),.u3_index(outDataA[6]),.u3_const(outDataC[6][32:0]),
   .u3_base_fufwd(fuFwdB[6]),.u3_base_fuufwd(fuuFwdB[6]),
   .u3_index_fufwd(fuFwdA[6]),.u3_index_fuufwd(fuuFwdA[6]),
   .u3_op(outOp[6][12:0]),.u3_reg(outReg[6]),
   .u3_LSQ_no(outLSQ[2]),.u3_II_no(outII[6]),.u3_WQ_no(outWQ[2]),
   .u3_lsflag(outLSflag[2]),.u3_clkEn(outEn[6][0]),
   .u3_attr(outAttr[6]),
-  .u4_base(WoutDataB[0]|~WoutDataNB[0]),.u4_index(WoutDataA[0]|~WoutDataNA[0]),.u4_const(WoutDataC[0]),
+  .u4_base(WoutDataB[0]),.u4_index(WoutDataA[0]),.u4_const(WoutDataC[0]),
   .u4_base_fufwd(WfuFwdB[0]),.u4_base_fuufwd(WfuuFwdB[0]),
   .u4_index_fufwd(WfuFwdA[0]),.u4_index_fuufwd(WfuuFwdA[0]),
   .u4_op(WoutOp[0]),.u4_reg(9'b0),
   .u4_LSQ_no(WoutLSQ[0]),.u4_II_no(WoutII[0]),.u4_WQ_no(WoutWQ[0]),
   .u4_lsflag(WoutLSflag[0]),.u4_clkEn(WoutDataEn[0][0]),
   .u4_attr(WoutAttr[0]),
-  .u5_base(WoutDataB[1]|~WoutDataNB[1]),.u5_index(WoutDataA[1]|~WoutDataNA[1]),.u5_const(WoutDataC[1]),
+  .u5_base(WoutDataB[1]),.u5_index(WoutDataA[1]),.u5_const(WoutDataC[1]),
   .u5_base_fufwd(WfuFwdB[1]),.u5_base_fuufwd(WfuuFwdB[1]),
   .u5_index_fufwd(WfuFwdA[1]),.u5_index_fuufwd(WfuuFwdA[1]),
   .u5_op(WoutOp[1]),.u5_reg(9'b0),

@@ -381,7 +381,7 @@ module fun_fpu(
   assign fmask2=fxFCADD_sn_reg5 ?
     fxFCADD_raise_s_reg :
     (fxFCADD_raise_reg);
-  fexcpt fexcpt2_mod(fraise2_reg,{6'b0,2'b0},
+  fexcpt fexcpt2_mod(fraise2_reg,{6'b0,3'b0},
     fmask2_reg,|u1_en_reg7[3:2]&u1_en_reg7[0],u1_retY,u1_retY_en);
   assign fraise3=fxFADD_sn_reg2 ?
     fxFADD_raise_s_reg&fpcsr[21:11] :
@@ -389,7 +389,7 @@ module fun_fpu(
   assign fmask3=fxFADD_sn_reg2 ?
     fxFADD_raise_s_reg :
     (fxFADD_raise_reg);
-  fexcpt fexcpt3_mod(fraise3_reg,{6'b0,2'b0},
+  fexcpt fexcpt3_mod(fraise3_reg,{6'b0,3'b0},
     fmask3_reg,|u1_en_reg4[3:2]&u1_en_reg4[0],u1_retX,u1_retX_en);
 
   assign u1_ret=u1_retY|u1_retX_reg3;
@@ -624,8 +624,6 @@ module fun_fpu(
       u1_op_reg2<=u1_op_reg;
       u1_en_reg2<=u1_en_reg;
       u1_en_reg3<=u1_en_reg2;
-      u1_en_reg2<=u1_en_reg;
-      u1_en_reg3<=u1_en_reg2;
       u1_en_reg4<=u1_en_reg3;
       u1_en_reg5<=u1_en_reg4;
       u1_en_reg6<=u1_en_reg5;
@@ -634,12 +632,7 @@ module fun_fpu(
   always @(posedge clk) begin
       ALT_INP_reg<=ALT_INP;
       u1_op_reg<=u1_op;
-      u1_op_reg<=u1_op;
       u1_en_reg<=u1_en;
-      u1_en_reg<=u1_en;
-      u1_en_reg4<=u1_en_reg3;
-      u1_en_reg5<=u1_en_reg4;
-      u1_en_reg6<=u1_en_reg5;
       u1_en_reg7<=u1_en_reg6;
       u1_retX_en_reg<=u1_retX_en;
       u1_retX_en_reg2<=u1_retX_en_reg;

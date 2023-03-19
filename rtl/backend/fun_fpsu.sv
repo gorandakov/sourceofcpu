@@ -623,8 +623,6 @@ module fun_fpsu(
       u1_op_reg2<=u1_op_reg;
       u1_en_reg2<=u1_en_reg;
       u1_en_reg3<=u1_en_reg2;
-      u1_en_reg2<=u1_en_reg;
-      u1_en_reg3<=u1_en_reg2;
       u1_en_reg4<=u1_en_reg3;
       u1_en_reg5<=u1_en_reg4;
       u1_en_reg6<=u1_en_reg5;
@@ -634,12 +632,7 @@ module fun_fpsu(
   always @(posedge clk) begin
       ALT_INP_reg<=ALT_INP;
       u1_op_reg<=u1_op;
-      u1_op_reg<=u1_op;
       u1_en_reg<=u1_en;
-      u1_en_reg<=u1_en;
-      u1_en_reg4<=u1_en_reg3;
-      u1_en_reg5<=u1_en_reg4;
-      u1_en_reg6<=u1_en_reg5;
       u1_en_reg7<=u1_en_reg6;
       FUF0_reg<=FUF0;
       FUF1_reg<=FUF1;
