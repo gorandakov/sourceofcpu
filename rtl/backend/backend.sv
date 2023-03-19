@@ -4863,7 +4863,7 @@ module backend(
   .FUV8H(FUVH[8]),.FUV8L(FUVL[8]),.FUF8H(FUFH[8]),.FUF8L(FUFL[8]),
   .FUV9H(FUVH[9]),.FUV9L(FUVL[9]),.FUF9H(FUFH[9]),.FUF9L(FUFL[9])
   );
-  assign nDataAlt[0]=3'b111;
+/*  assign nDataAlt[0]=3'b111;
   assign nDataAlt[1]=3'b111;
 //  assign nDataAlt[2][1]=2'b1;
   
