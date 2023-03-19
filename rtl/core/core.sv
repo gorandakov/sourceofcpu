@@ -273,6 +273,14 @@ module heptane_core(
   wire rs1i0_ldst_flag;
   wire rs1i0_enA;
   wire rs1i0_enB;
+
+  wire [2:0] btbl_step;
+  wire [62:0] btbl_IP0;
+  wire [62:0] btbl_IP1;
+  wire [3:0] btbl_mask0;
+  wire [3:0] btbl_mask1;
+  wire [3:0] btbl_attr0;
+  wire [3:0] btbl_attr1;
   
   wire [IN_REG_WIDTH-1:0] rs1i1_rA;
   wire rs1i1_rA_use;
@@ -1443,7 +1451,14 @@ module heptane_core(
   instr_fsimd,
   baseIP,
   baseAttr,
-  wrt0,wrt1,wrt2
+  wrt0,wrt1,wrt2,
+  btbl_step,
+  btbl_IP0,
+  btbl_IP1,
+  btbl_mask0,
+  btbl_mask1,
+  btbl_attr0,
+  btbl_attr1
   );
 
   backend bck_mod(

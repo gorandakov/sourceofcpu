@@ -339,7 +339,14 @@ module ww(
   instr_fsimd,
   baseIP,
   baseAttr,
-  wrt0,wrt1,wrt2
+  wrt0,wrt1,wrt2,
+  btbl_step,
+  btbl_IP0,
+  btbl_IP1,
+  btbl_mask0,
+  btbl_mask1,
+  btbl_attr0,
+  btbl_attr1
   );
 /*verilator hier_block*/
   localparam OPERATION_WIDTH=`operation_width+5;
@@ -846,6 +853,14 @@ module ww(
   output MSI_expAddr_hitCC;
   output [36:0] expun_fr_addr;
   output expun_fr_en;
+  output [2:0] btbl_step;
+  output [62:0] btbl_IP0;
+  output [62:0] btbl_IP1;
+  output [3:0] btbl_mask0;
+  output [3:0] btbl_mask1;
+  output [3:0] btbl_attr0;
+  output [3:0] btbl_attr1;
+
   wire [INSTR_WIDTH-1:0] instr0;
   wire [INSTR_WIDTH-1:0] instr1;
   wire [INSTR_WIDTH-1:0] instr2;
