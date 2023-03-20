@@ -52,6 +52,7 @@ module rt2_fp(
   localparam [16:0] BIAS=17'h7fff;
   localparam SIMD_WIDTH=68;
   localparam II_WIDTH=10;
+/*verilator hier_block*/
   input clk;
   input rst;
   input except;
@@ -64,10 +65,10 @@ module rt2_fp(
   input [8:0] reg_in;
   input [II_WIDTH-1:0] outII_in;
   input [12:0] oper_in;
-  input [63:-1] normA;
+  input [64:0] normA;
   input [16:0] expA;
   input nsignA;
-  input [63:-1] normB;
+  input [64:0] normB;
   input [16:0] expB;
   input nsignB;
   output [2*SIMD_WIDTH-1:0] result;
@@ -308,7 +309,7 @@ module rt2_fp(
  assign ANY_xbit2=type_reg[1:0]!=2'b0 && type_reg!=3'd1 ? exp2[7] : 1'bz;
 
   sdupmass pm_mod(
-  normB[63:0],
+  normB[64:1],
   normB_11,
   normB_101,
   normB_1001,
@@ -323,13 +324,13 @@ module rt2_fp(
 
  assign DBL_oor=exp2[14:11]!={4{~exp2[15]}};
   
- assign A_h=|normA[62:0]; 
+ assign A_h=|normA[63:1]; 
 
  assign A_zero=expA_reg==17'b0;
  assign A_infty=~A_h_reg && &expA_reg[15:0];
  assign A_nan=A_h_reg && &expA_reg[15:0];
 
- assign B_h=|normB[62:0]; 
+ assign B_h=|normB[63:1]; 
 
  assign B_zero=expB_reg==17'b0;
  assign B_infty=~B_h_reg && &expB_reg[15:0];
@@ -362,7 +363,7 @@ module rt2_fp(
 	 perform_stage<=1'b0;
 	 cnt<=5'h1f;
 	 rdy<=1'b1;
-         rdy_cnt<=14'b0;
+         rdy_cnt<=15'b0;
 	 digits<=68'b0;
 	 type_reg<=3'b0;
 	 isrnd_even<=1'b1;
@@ -390,10 +391,10 @@ module rt2_fp(
              end
          end else begin
              P<={2'b11,minus_norm[63:0],64'hffff_ffff_ffff_ffff,6'h3f};
-             {SeA[1],Se[1][63:51]}<={1'b0,4'b0,normB[63:0]};
-             {SeA[2],Se[2][63:51]}<={1'b0,3'b0,normB[63:0],1'b0};
-             {SeA[4],Se[4][63:51]}<={1'b0,2'b0,normB[63:0],2'b0};
-             {SeA[8],Se[8][63:51]}<={1'b0,1'b0,normB[63:0],3'b0};
+             {SeA[1],Se[1][63:51]}<={1'b0,4'b0,normB[64:1]};
+             {SeA[2],Se[2][63:51]}<={1'b0,3'b0,normB[64:1],1'b0};
+             {SeA[4],Se[4][63:51]}<={1'b0,2'b0,normB[64:1],2'b0};
+             {SeA[8],Se[8][63:51]}<={1'b0,1'b0,normB[64:1],3'b0};
              {SeA[3],Se[3][63:51]}<={1'b0,normB_11};
              {SeA[6],Se[6][63:51]}<={1'b0,normB_11[66:0],1'b0};
              {SeA[12],Se[12][63:51]}<={1'b0,normB_11[65:0],2'b0};
