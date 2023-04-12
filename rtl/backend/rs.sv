@@ -24,7 +24,7 @@ module rs_wakeUp_logic(
   isData,
   outEq,
   buffree,
-  FU0Hit,FU1Hit,FU2Hit,FU3Hit,
+  FU0Hit,FU1Hit,FU2Hit,
   FUreg0,FU0wen,
   FUreg1,FU1wen,
   FUreg2,FU2wen,
@@ -33,14 +33,11 @@ module rs_wakeUp_logic(
   FUreg5,FU5wen,
   FUreg6,FU6wen,
   FUreg7,FU7wen,
-  FUreg8,FU8wen,
-  FUreg9,FU9wen,
+  FUreg3_reg,FU3wen_reg,
   FUreg4_reg,FU4wen_reg,
   FUreg5_reg,FU5wen_reg,
-  FUreg6_reg,FU6wen_reg,
+  FUreg6_reg4,FU6wen_reg4,
   FUreg7_reg4,FU7wen_reg4,
-  FUreg8_reg4,FU8wen_reg4,
-  FUreg9_reg4,FU9wen_reg4,
   newRsSelect0,newReg0,newFunit0,newGazump0,newIsFP0,newIsV0,newEQ0,
   newRsSelect1,newReg1,newFunit1,newGazump1,newIsFP1,newIsV1,newEQ1,
   newRsSelect2,newReg2,newFunit2,newGazump2,newIsFP2,newIsV2,newEQ2,
@@ -51,7 +48,7 @@ module rs_wakeUp_logic(
   );
   parameter DATA_WIDTH=`alu_width;
   localparam REG_WIDTH=`reg_addr_width;
-  localparam FN_WIDTH=10;
+  localparam FN_WIDTH=8;
 
   input clk;
   input rst;
@@ -62,7 +59,6 @@ module rs_wakeUp_logic(
   input FU0Hit;
   input FU1Hit;
   input FU2Hit;
-  input FU3Hit;
 //functional units inputs/outputs
   input [REG_WIDTH-1:0] FUreg0;
   input FU0wen;
@@ -88,11 +84,8 @@ module rs_wakeUp_logic(
   input [REG_WIDTH-1:0] FUreg7;
   input FU7wen;
 
-  input [REG_WIDTH-1:0] FUreg8;
-  input FU8wen;
-
-  input [REG_WIDTH-1:0] FUreg9;
-  input FU9wen;
+  input [REG_WIDTH-1:0] FUreg3_reg;
+  input FU3wen_reg;
 
   input [REG_WIDTH-1:0] FUreg4_reg;
   input FU4wen_reg;
@@ -100,17 +93,12 @@ module rs_wakeUp_logic(
   input [REG_WIDTH-1:0] FUreg5_reg;
   input FU5wen_reg;
 
-  input [REG_WIDTH-1:0] FUreg6_reg;
-  input FU6wen_reg;
+  input [REG_WIDTH-1:0] FUreg6_reg4;
+  input FU6wen_reg4;
 
   input [REG_WIDTH-1:0] FUreg7_reg4;
   input FU7wen_reg4;
 
-  input [REG_WIDTH-1:0] FUreg8_reg4;
-  input FU8wen_reg4;
-
-  input [REG_WIDTH-1:0] FUreg9_reg4;
-  input FU9wen_reg4;
 
   input newRsSelect0;
   input [REG_WIDTH-1:0] newReg0;
@@ -150,39 +138,37 @@ module rs_wakeUp_logic(
   
   wire [3:0] fuFwd_d;
 // equals wires
-  wire [1:0] eq;
+  wire eq;
 
-  wire [1:0] eq_new;
+  wire eq_new;
 
-  reg [1:0] eq_reg;
+  reg eq_reg;
 //  reg [1:0] eq_reg2;
 //  reg [1:0] eq_reg3;
 //  reg [1:0] eq_reg4;
 //  reg [1:0] eq_reg5;
   
-  reg [1:0] eq_mask;
+  reg eq_mask;
 
-  reg [9:0] outEq0;
+  reg [7:0] outEq0;
 
   wire [REG_WIDTH-1:0] register_d;
   reg [REG_WIDTH-1:0] register;
 
   wire [FN_WIDTH-1:0] funit_d;
   reg [FN_WIDTH-1:0] funit;
-  wire [18:0] funit0;
+  wire [12:0] funit0;
 
   reg [3:0] fuuFwd;
   
-  wire [10:0] gazump;
+  wire [8:0] gazump;
   wire [3:0] gzFwd;
 
   wire [8:0] Treg0;
   wire Twen0;
-  wire [8:0] Treg1;
-  wire Twen1;
 
-  wire [8:0] FUreg[18:0];
-  wire [18:0] FUwen;
+  wire [8:0] FUreg[12:0];
+  wire [12:0] FUwen;
 
   reg isFP;
   wire isFP_d;
@@ -202,14 +188,11 @@ module rs_wakeUp_logic(
   assign FUreg[5]=FUreg5;
   assign FUreg[6]=FUreg6;
   assign FUreg[7]=FUreg7;
-  assign FUreg[8]=FUreg8;
-  assign FUreg[9]=FUreg9;
-  assign FUreg[10]=FUreg4_reg;
-  assign FUreg[11]=FUreg5_reg;
-  assign FUreg[12]=FUreg6_reg;
-  assign FUreg[13]=FUreg7_reg4;
-  assign FUreg[14]=FUreg8_reg4;
-  assign FUreg[15]=FUreg9_reg4;
+  assign FUreg[8]=FUreg3_reg;
+  assign FUreg[9]=FUreg4_reg;
+  assign FUreg[10]=FUreg5_reg;
+  assign FUreg[11]=FUreg6_reg4;
+  assign FUreg[12]=FUreg7_reg4;
 
   assign FUwen[0]=FU0wen;
   assign FUwen[1]=FU1wen;
@@ -219,28 +202,25 @@ module rs_wakeUp_logic(
   assign FUwen[5]=FU5wen;
   assign FUwen[6]=FU6wen;
   assign FUwen[7]=FU7wen;
-  assign FUwen[8]=FU8wen;
-  assign FUwen[9]=FU9wen;
-  assign FUwen[10]=FU4wen_reg;
-  assign FUwen[11]=FU5wen_reg;
-  assign FUwen[12]=FU6wen_reg;
-  assign FUwen[13]=FU7wen_reg4;
-  assign FUwen[14]=FU8wen_reg4;
-  assign FUwen[15]=FU9wen_reg4;
+  assign FUwen[8]=FU3wen_reg;
+  assign FUwen[9]=FU4wen_reg;
+  assign FUwen[10]=FU5wen_reg;
+  assign FUwen[11]=FU6wen_reg4;
+  assign FUwen[12]=FU7wen_reg4;
 
 //  assign funM=|funit_d[2:0];
 //  assign funAdd=|funit_d[6:4];
 //  assign funMul=|funit_d[9:7];
 
-  assign funit0[3:0]=funit_d[3:0];
-  assign funit0[6:4]=funit_d[6:4] & {3{~isFP_d & ~isV_d}};
-  assign funit0[9:7]=funit_d[9:7] & {3{~isFP_d & ~isV_d}};
-  assign funit0[15:10]=funit_d[9:4] & {6{isFP_d | isV_d}};
+  assign funit0[2:0]=funit_d[2:0];
+  assign funit0[5:3]=funit_d[5:3] & {3{~isFP_d & ~isV_d}};
+  assign funit0[7:6]=funit_d[7:6] & {2{~isFP_d & ~isV_d}};
+  assign funit0[12:8]=funit_d[7:3] & {5{isFP_d | isV_d}};
   
-  assign gazump=(newRsSelect0 & ~stall) ? newGazump0 : 11'bz;
-  assign gazump=(newRsSelect1 & ~stall) ? newGazump1 : 11'bz;
-  assign gazump=(newRsSelect2 & ~stall) ? newGazump2 : 11'bz;
-  assign gazump=(~newRsSelect0 & ~newRsSelect1 & ~newRsSelect2 || stall) ? 11'b10000000000 : 11'bz;
+  assign gazump=(newRsSelect0 & ~stall) ? newGazump0 : 9'bz;
+  assign gazump=(newRsSelect1 & ~stall) ? newGazump1 : 9'bz;
+  assign gazump=(newRsSelect2 & ~stall) ? newGazump2 : 9'bz;
+  assign gazump=(~newRsSelect0 & ~newRsSelect1 & ~newRsSelect2 || stall) ? 9'b100000000 : 9'bz;
 
   assign isFP_d=(newRsSelect0 & ~stall) ? newIsFP0 : 1'bz;
   assign isFP_d=(newRsSelect1 & ~stall) ? newIsFP1 : 1'bz;
@@ -253,29 +233,21 @@ module rs_wakeUp_logic(
   assign isV_d=(~newRsSelect0 & ~newRsSelect1 & ~newRsSelect2 || stall) ? isV : 1'bz;
   
   assign eq[0]=(register==Treg0) & Twen0 & ~newRsSelect0 & ~newRsSelect1 & ~newRsSelect2 & eq_mask[0];
-  assign eq[1]=(register==Treg1) & Twen1 & ~newRsSelect0 & ~newRsSelect1 & ~newRsSelect2 & eq_mask[1];
 
-  assign eq_new=eq|({2{newRsSelect0&~stall}}&newEQ0)|({2{newRsSelect1&~stall}}&newEQ1)|
-    ({2{newRsSelect2&~stall}}&newEQ2);
+  assign eq_new=eq|(newRsSelect0&~stall&newEQ0)|(newRsSelect1&~stall&newEQ1)|
+    (newRsSelect2&~stall&newEQ2);
 
-  assign isData=|eq_new;
-/*  assign isDataV=(|{eq_new&&funM,eq_new&&funAdd,eq_reg&&funMul});
-  assign isDataF=(|{eq_new&&funM,eq_reg2&&funAdd,eq_reg4&&funMul});
-  assign isData=isFP_d ? isDataF : 1'bz;
-  assign isData=isV_d ? isDataV : 1'bz;
-  assign isData=(~isFP_d & ~isV_d) ? isDataI : 1'bz;
-*/  
+  assign isData=eq_new;
+
   assign fuFwd_d=(eq_new[0] & funit_d[0]) ? 4'd0 : 4'bz;
   assign fuFwd_d=(eq_new[0] & funit_d[1]) ? 4'd1 : 4'bz;
   assign fuFwd_d=(eq_new[0] & funit_d[2]) ? 4'd2 : 4'bz;
-  assign fuFwd_d=(eq_new[1] & funit_d[3]) ? 4'd3 : 4'bz;
+  assign fuFwd_d=(eq_new[0] & funit_d[3]) ? 4'd3 : 4'bz;
   assign fuFwd_d=(eq_new[0] & funit_d[4]) ? 4'd4 : 4'bz;
   assign fuFwd_d=(eq_new[0] & funit_d[5]) ? 4'd5 : 4'bz;
   assign fuFwd_d=(eq_new[0] & funit_d[6]) ? 4'd6 : 4'bz;
   assign fuFwd_d=(eq_new[0] & funit_d[7]) ? 4'd7 : 4'bz;
-  assign fuFwd_d=(eq_new[0] & funit_d[8]) ? 4'd8 : 4'bz;
-  assign fuFwd_d=(eq_new[0] & funit_d[9]) ? 4'd9 : 4'bz;
-  assign fuFwd_d=(eq_new[0]|(eq_new[1]&funit_d[3])&&~rst) ? 4'bz : 4'd15;
+  assign fuFwd_d=(eq_new[0]&&~rst) ? 4'bz : 4'd15;
 
   assign gzFwd=gazump[0] ? 4'd0 : 4'bz;
   assign gzFwd=gazump[1] ? 4'd1 : 4'bz;
@@ -285,11 +257,9 @@ module rs_wakeUp_logic(
   assign gzFwd=gazump[5] ? 4'd5 : 4'bz;
   assign gzFwd=gazump[6] ? 4'd6 : 4'bz;
   assign gzFwd=gazump[7] ? 4'd7 : 4'bz;
-  assign gzFwd=gazump[8] ? 4'd8 : 4'bz;
-  assign gzFwd=gazump[9] ? 4'd9 : 4'bz;
-  assign gzFwd=gazump[10] ? 4'd15 : 4'bz;
+  assign gzFwd=gazump[8] ? 4'd15 : 4'bz;
 
-  assign outEq={|outEq0[9:5],outEq0[9:5]|outEq0[4:0]};
+  assign outEq={|outEq0[7:4],outEq0[7:4]|outEq0[3:0]};
 
   assign outFuFwd0=outRsSelect0 ? fuFwd : 'z;
   assign outFuFwd1=outRsSelect1 ? fuFwd : 'z;
@@ -313,52 +283,44 @@ module rs_wakeUp_logic(
 
   generate
     genvar n;
-    for(n=0;n<=16;n=n+1) begin : treg_gen
-	if (n!=3) assign Treg0=funit0[n] ? FUreg[n] : 9'bz;
-	else assign Treg1=FUreg[3];
-	if (n!=3) assign Twen0=funit0[n] ? FUwen[n] : 1'bz;
-	else assign Twen1=FUwen[3] & funit[3];
+    for(n=0;n<13;n=n+1) begin : treg_gen
+	assign Treg0=funit0[n] ? FUreg[n] : 9'bz;
+	assign Twen0=funit0[n] ? FUwen[n] : 1'bz;
     end
   endgenerate
   
   always @(posedge clk)
     begin
-	  if (rst)
-	    begin
+	  if (rst) begin
 		  fuFwd<=4'b0;
 		  fuuFwd<=4'b0;
 		  isFP<=1'b0;
 		  isV<=1'b0;
-		  outEq0<=10'b0;
-		  eq_mask<=2'b0;
-		  eq_reg<=2'b0;
-	    end
-          else
-	    begin
+		  outEq0<=8'b0;
+		  eq_mask<=1'b0;
+		  eq_reg<=1'b0;
+	  end else begin
 	      if (newRsSelect0|newRsSelect1|newRsSelect2 && ~stall) begin
-              eq_mask<=2'h3 & ~eq_new;
-          end else begin
-              eq_mask<=(eq_mask & ~eq_new) | {eq_reg[1]&~FU3Hit&funit[3], eq_reg[0]&~FU2Hit&funit[2] || 
-		  eq_reg[0]&~FU1Hit&funit[1] || eq_reg[0]&~FU0Hit&funit[0]};
-          end
-		  fuFwd<=fuFwd_d;
-		  fuuFwd<=gazump[10] ? fuFwd|{4{newRsSelect0|newRsSelect1|newRsSelect2}} : gzFwd;
-		  isFP<=isFP_d;
-		  isV<=isV_d;
-		  eq_reg<=eq_new&(eq_mask|{2{newRsSelect0|newRsSelect1|newRsSelect2 && ~stall}})&{2{~sel}};
+                  eq_mask<=1'h1 & ~eq_new;
+              end else begin
+                  eq_mask<=(eq_mask & ~eq_new) | (eq_reg[0]&~FU2Hit&funit[2] || 
+		  eq_reg[0]&~FU1Hit&funit[1] || eq_reg[0]&~FU0Hit&funit[0]);
+              end
+	      fuFwd<=fuFwd_d;
+	      fuuFwd<=gazump[8] ? fuFwd|{4{newRsSelect0|newRsSelect1|newRsSelect2}} : gzFwd;
+	      isFP<=isFP_d;
+	      isV<=isV_d;
+	      eq_reg<=eq_new&(eq_mask|(newRsSelect0|newRsSelect1|newRsSelect2 && ~stall))&~sel;
 		  
-		  outEq0[0]<=(eq_reg[0]&funit[0]||gazump[0])&FU0Hit&~sel;
-		  outEq0[1]<=(eq_reg[0]&funit[1]||gazump[1])&FU1Hit&~sel;
-		  outEq0[2]<=(eq_reg[0]&funit[2]||gazump[2])&FU2Hit&~sel;
-		  outEq0[3]<=(eq_reg[1]&funit[3]||gazump[3])&FU3Hit&~sel;
-		  outEq0[4]<=(eq_reg[0]&funit[4])|gazump[4]&&~sel;
-		  outEq0[5]<=(eq_reg[0]&funit[5])|gazump[5]&&~sel;
-		  outEq0[6]<=(eq_reg[0]&funit[6])|gazump[6]&&~sel;
-		  outEq0[7]<=(eq_reg[0]&funit[7])|gazump[7]&&~sel;
-		  outEq0[8]<=(eq_reg[0]&funit[8])|gazump[8]&&~sel;
-		  outEq0[9]<=(eq_reg[0]&funit[9])|gazump[9]&&~sel;
-		  
-		end
+	      outEq0[0]<=(eq_reg[0]&funit[0]||gazump[0])&FU0Hit&~sel;
+	      outEq0[1]<=(eq_reg[0]&funit[1]||gazump[1])&FU1Hit&~sel;
+	      outEq0[2]<=(eq_reg[0]&funit[2]||gazump[2])&FU2Hit&~sel;
+	      outEq0[3]<=(eq_reg[1]&funit[3]||gazump[3])&FU3Hit&~sel;
+	      outEq0[4]<=(eq_reg[0]&funit[4])|gazump[4]&&~sel;
+	      outEq0[5]<=(eq_reg[0]&funit[5])|gazump[5]&&~sel;
+	      outEq0[6]<=(eq_reg[0]&funit[6])|gazump[6]&&~sel;
+	      outEq0[7]<=(eq_reg[0]&funit[7])|gazump[7]&&~sel;
+	  end
 	  register<=register_d;
 	  funit<=funit_d;
     end
@@ -371,7 +333,7 @@ module rs_wakeUp_logic_array(
   isData,
   outEq,
   buffree,
-  FU0Hit,FU1Hit,FU2Hit,FU3Hit,
+  FU0Hit,FU1Hit,FU2Hit,
   FUreg0,FU0wen,
   FUreg1,FU1wen,
   FUreg2,FU2wen,
@@ -380,8 +342,6 @@ module rs_wakeUp_logic_array(
   FUreg5,FU5wen,
   FUreg6,FU6wen,
   FUreg7,FU7wen,
-  FUreg8,FU8wen,
-  FUreg9,FU9wen,
   newRsSelect0,newReg0,newFunit0,newGazump0,newIsFP0,newIsV0,
   newRsSelect1,newReg1,newFunit1,newGazump1,newIsFP1,newIsV1,
   newRsSelect2,newReg2,newFunit2,newGazump2,newIsFP2,newIsV2,
@@ -393,20 +353,19 @@ module rs_wakeUp_logic_array(
   parameter DATA_WIDTH=`alu_width;
   localparam REG_WIDTH=`reg_addr_width;
   localparam BUF_COUNT=32;
-  localparam FN_WIDTH=10;
+  localparam FN_WIDTH=8;
    
   input clk;
   input rst;
   input stall;
   output [BUF_COUNT-1:0] isData;
-  output [BUF_COUNT*6-1:0] outEq;
+  output [BUF_COUNT*5-1:0] outEq;
   input [BUF_COUNT-1:0] buffree;
   
 //functional units inputs/outputs
   input FU0Hit;
   input FU1Hit;
   input FU2Hit;
-  input FU3Hit;
 
   input [REG_WIDTH-1:0] FUreg0;
   input FU0wen;
@@ -432,29 +391,23 @@ module rs_wakeUp_logic_array(
   input [REG_WIDTH-1:0] FUreg7;
   input FU7wen;
 
-  input [REG_WIDTH-1:0] FUreg8;
-  input FU8wen;
-
-  input [REG_WIDTH-1:0] FUreg9;
-  input FU9wen;
-
 
   input [BUF_COUNT-1:0] newRsSelect0;
   input [REG_WIDTH-1:0] newReg0;
   input [FN_WIDTH-1:0] newFunit0;
-  input [10:0] newGazump0;
+  input [8:0] newGazump0;
   input newIsFP0,newIsV0;
 
   input [BUF_COUNT-1:0] newRsSelect1;
   input [REG_WIDTH-1:0] newReg1;
   input [FN_WIDTH-1:0] newFunit1;
-  input [10:0] newGazump1;
+  input [8:0] newGazump1;
   input newIsFP1,newIsV1;
 
   input [BUF_COUNT-1:0] newRsSelect2;
   input [REG_WIDTH-1:0] newReg2;
   input [FN_WIDTH-1:0] newFunit2;
-  input [10:0] newGazump2;
+  input [8:0] newGazump2;
   input newIsFP2,newIsV2;
   
   output [BUF_COUNT*4-1:0] fuFwd;
@@ -478,18 +431,19 @@ module rs_wakeUp_logic_array(
   output [3:0] outFuFwd2;
   output [3:0] outFuuFwd2;
 
-  wire [1:0] newEQ[2:0];
+  wire newEQ[2:0];
   wire [8:0] register[2:0];
   wire [9:0] funit[2:0];
   
   wire [2:0][8:0] Treg0;
   wire [2:0] Twen0;
-  wire [2:0][8:0] Treg1;
-  wire [2:0] Twen1;
 
-  wire [8:0] FUreg[18:0];
-  wire [18:0] FUwen;
+  wire [8:0] FUreg[12:0];
+  wire [12:0] FUwen;
   
+  reg [REG_WIDTH-1:0] FUreg3_reg;
+  reg FU3wen_reg;
+
   reg [REG_WIDTH-1:0] FUreg4_reg;
   reg FU4wen_reg;
 
@@ -502,49 +456,25 @@ module rs_wakeUp_logic_array(
   reg [REG_WIDTH-1:0] FUreg7_reg;
   reg FU7wen_reg;
 
-  reg [REG_WIDTH-1:0] FUreg8_reg;
-  reg FU8wen_reg;
-
-  reg [REG_WIDTH-1:0] FUreg9_reg;
-  reg FU9wen_reg;
-
-  reg [REG_WIDTH-1:0] FUreg4_reg2;
-  reg FU4wen_reg2;
-
-  reg [REG_WIDTH-1:0] FUreg5_reg2;
-  reg FU5wen_reg2;
-
   reg [REG_WIDTH-1:0] FUreg6_reg2;
   reg FU6wen_reg2;
 
   reg [REG_WIDTH-1:0] FUreg7_reg2;
   reg FU7wen_reg2;
 
-  reg [REG_WIDTH-1:0] FUreg8_reg2;
-  reg FU8wen_reg2;
-
-  reg [REG_WIDTH-1:0] FUreg9_reg2;
-  reg FU9wen_reg2;
+  reg [REG_WIDTH-1:0] FUreg6_reg3;
+  reg FU6wen_reg3;
 
   reg [REG_WIDTH-1:0] FUreg7_reg3;
   reg FU7wen_reg3;
 
-  reg [REG_WIDTH-1:0] FUreg8_reg3;
-  reg FU8wen_reg3;
-
-  reg [REG_WIDTH-1:0] FUreg9_reg3;
-  reg FU9wen_reg3;
+  reg [REG_WIDTH-1:0] FUreg6_reg4;
+  reg FU6wen_reg4;
 
   reg [REG_WIDTH-1:0] FUreg7_reg4;
   reg FU7wen_reg4;
 
-  reg [REG_WIDTH-1:0] FUreg8_reg4;
-  reg FU8wen_reg4;
-
-  reg [REG_WIDTH-1:0] FUreg9_reg4;
-  reg FU9wen_reg4;
-
-  wire [18:0] funit0[2:0];
+  wire [12:0] funit0[2:0];
   wire [2:0] isFP;
   wire [2:0] isV;
 
@@ -572,17 +502,11 @@ module rs_wakeUp_logic_array(
   assign FUreg[5]=FUreg5;
   assign FUreg[6]=FUreg6;
   assign FUreg[7]=FUreg7;
-  assign FUreg[8]=FUreg8;
-  assign FUreg[9]=FUreg9;
-  assign FUreg[10]=FUreg7_reg;
-  assign FUreg[11]=FUreg8_reg;
-  assign FUreg[12]=FUreg9_reg;
-  assign FUreg[13]=FUreg4_reg2;
-  assign FUreg[14]=FUreg5_reg2;
-  assign FUreg[15]=FUreg6_reg2;
-  assign FUreg[16]=FUreg7_reg3;
-  assign FUreg[17]=FUreg8_reg3;
-  assign FUreg[18]=FUreg9_reg3;
+  assign FUreg[8]=FUreg3_reg;
+  assign FUreg[9]=FUreg4_reg;
+  assign FUreg[10]=FUreg5_reg;
+  assign FUreg[11]=FUreg6_reg4;
+  assign FUreg[12]=FUreg7_reg4;
 
   assign FUwen[0]=FU0wen;
   assign FUwen[1]=FU1wen;
@@ -592,17 +516,11 @@ module rs_wakeUp_logic_array(
   assign FUwen[5]=FU5wen;
   assign FUwen[6]=FU6wen;
   assign FUwen[7]=FU7wen;
-  assign FUwen[8]=FU8wen;
-  assign FUwen[9]=FU9wen;
-  assign FUwen[10]=FU7wen_reg;
-  assign FUwen[11]=FU8wen_reg;
-  assign FUwen[12]=FU9wen_reg;
-  assign FUwen[13]=FU4wen_reg2;
-  assign FUwen[14]=FU5wen_reg2;
-  assign FUwen[15]=FU6wen_reg2;
-  assign FUwen[16]=FU7wen_reg3;
-  assign FUwen[17]=FU8wen_reg3;
-  assign FUwen[18]=FU9wen_reg3;
+  assign FUwen[8]=FU3wen_reg;
+  assign FUwen[9]=FU4wen_reg;
+  assign FUwen[10]=FU5wen_reg;
+  assign FUwen[11]=FU6wen_reg4;
+  assign FUwen[12]=FU7wen_reg4;
   
   generate
       genvar j,k,p,q;
@@ -622,7 +540,7 @@ module rs_wakeUp_logic_array(
               isData[k+8*j],
               outEq[(k+8*j)*6+:6],
               buffree[k+8*j],
-              FU0Hit,FU1Hit,FU2Hit,FU3Hit,
+              FU0Hit,FU1Hit,FU2Hit,
               FUreg0,FU0wen,
               FUreg1,FU1wen,
               FUreg2,FU2wen,
@@ -631,14 +549,11 @@ module rs_wakeUp_logic_array(
               FUreg5,FU5wen,
               FUreg6,FU6wen,
               FUreg7,FU7wen,
-              FUreg8,FU8wen,
-              FUreg9,FU9wen,
-              FUreg4_reg2,FU4wen_reg,
-              FUreg5_reg2,FU5wen_reg,
-              FUreg6_reg2,FU6wen_reg,
-              FUreg7_reg3,FU7wen_reg3,
-              FUreg8_reg3,FU8wen_reg3,
-              FUreg9_reg3,FU9wen_reg3,
+              FUreg3_reg,FU3wen_reg,
+              FUreg4_reg,FU4wen_reg,
+              FUreg5_reg,FU5wen_reg,
+              FUreg6_reg4,FU6wen_reg4,
+              FUreg7_reg4,FU7wen_reg4,
               newRsSelect0[k+8*j],newReg0,newFunit0,newGazump0,newIsFP0,newIsV0,newEQ[0],
               newRsSelect1[k+8*j],newReg1,newFunit1,newGazump1,newIsFP1,newIsV1,newEQ[1],
               newRsSelect2[k+8*j],newReg2,newFunit2,newGazump2,newIsFP2,newIsV2,newEQ[2],
@@ -668,20 +583,17 @@ module rs_wakeUp_logic_array(
           assign outFuuFwd2k=outBank2[j] ? 4'bz : 4'hf;
       end
       for(p=0;p<3;p=p+1) begin : newEQ_gen
-          assign newEQ[p][0]=(register[p]==Treg0[p]) & Twen0[p];
-          assign newEQ[p][1]=(register[p]==Treg1[p]) & Twen1[p];
+          assign newEQ[p]=(register[p]==Treg0[p]) & Twen0[p];
         
-	  assign funit0[p][3:0]=funit[p][3:0];
-          assign funit0[p][6:4]=funit[p][6:4] & {3{~isFP[p]}};
-          assign funit0[p][9:7]=funit[p][9:7] & {3{~isFP[p] & ~isV[p]}};
-          assign funit0[p][12:10]=funit[p][9:7] & {3{isV[p]}};
-          assign funit0[p][18:13]=funit[p][9:4] & {6{isFP[p]}};
+	  assign funit0[p][2:0]=funit[p][2:0];
+          assign funit0[p][5:3]=funit[p][5:3] & {3{~isFP[p]}};
+          assign funit0[p][7:6]=funit[p][7:6] & {2{~isFP[p] & ~isV[p]}};
+          assign funit0[p][10:8]=funit[p][5:3] & {3{isV[p]|isFP[p]}};
+          assign funit0[p][12:11]=funit[p][7:6] & {2{isFP[p]|isV[p]}};
 
-	  for(q=0;q<19;q=q+1) begin : funit_gen
-	      if (q!=3) assign Treg0[p]=funit0[p][q] ? FUreg[q] : 9'bz;
-	      else assign Treg1[p]=FUreg[3];
-	      if (q!=3) assign Twen0[p]=funit0[p][q] ? FUwen[q] : 1'bz;
-	      else assign Twen1[p]=FUwen[3] & funit[p][3];
+	  for(q=0;q<13;q=q+1) begin : funit_gen
+	      assign Treg0[p]=funit0[p][q] ? FUreg[q] : 9'bz;
+	      assign Twen0[p]=funit0[p][q] ? FUwen[q] : 1'bz;
 	  end
       end
   endgenerate
@@ -697,6 +609,8 @@ module rs_wakeUp_logic_array(
  
   always @(posedge clk) begin
     if (rst) begin
+	FUreg3_reg<=9'h1ff;
+	FU3wen_reg<=1'b0;
 	FUreg4_reg<=9'h1ff;
 	FU4wen_reg<=1'b0;
 	FUreg5_reg<=9'h1ff;
@@ -705,35 +619,21 @@ module rs_wakeUp_logic_array(
 	FU6wen_reg<=1'b0;
 	FUreg7_reg<=9'h1ff;
 	FU7wen_reg<=1'b0;
-	FUreg8_reg<=9'h1ff;
-	FU8wen_reg<=1'b0;
-	FUreg9_reg<=9'h1ff;
-	FU9wen_reg<=1'b0;
-	FUreg4_reg2<=9'h1ff;
-	FU4wen_reg2<=1'b0;
-	FUreg5_reg2<=9'h1ff;
-	FU5wen_reg2<=1'b0;
 	FUreg6_reg2<=9'h1ff;
 	FU6wen_reg2<=1'b0;
 	FUreg7_reg2<=9'h1ff;
 	FU7wen_reg2<=1'b0;
-	FUreg8_reg2<=9'h1ff;
-	FU8wen_reg2<=1'b0;
-	FUreg9_reg2<=9'h1ff;
-	FU9wen_reg2<=1'b0;
+	FUreg6_reg3<=9'h1ff;
+	FU6wen_reg3<=1'b0;
 	FUreg7_reg3<=9'h1ff;
 	FU7wen_reg3<=1'b0;
-	FUreg8_reg3<=9'h1ff;
-	FU8wen_reg3<=1'b0;
-	FUreg9_reg3<=9'h1ff;
-	FU9wen_reg3<=1'b0;
+	FUreg6_reg4<=9'h1ff;
+	FU6wen_reg4<=1'b0;
 	FUreg7_reg4<=9'h1ff;
 	FU7wen_reg4<=1'b0;
-	FUreg8_reg4<=9'h1ff;
-	FU8wen_reg4<=1'b0;
-	FUreg9_reg4<=9'h1ff;
-	FU9wen_reg4<=1'b0;
     end else begin
+	FUreg3_reg<=FUreg3;
+	FU3wen_reg<=FU3wen;
 	FUreg4_reg<=FUreg4;
 	FU4wen_reg<=FU4wen;
 	FUreg5_reg<=FUreg5;
@@ -742,34 +642,18 @@ module rs_wakeUp_logic_array(
 	FU6wen_reg<=FU6wen;
 	FUreg7_reg<=FUreg7;
 	FU7wen_reg<=FU7wen;
-	FUreg8_reg<=FUreg8;
-	FU8wen_reg<=FU8wen;
-	FUreg9_reg<=FUreg9;
-	FU9wen_reg<=FU9wen;
-	FUreg4_reg2<=FUreg4_reg;
-	FU4wen_reg2<=FU4wen_reg;
-	FUreg5_reg2<=FUreg5_reg;
-	FU5wen_reg2<=FU5wen_reg;
 	FUreg6_reg2<=FUreg6_reg;
 	FU6wen_reg2<=FU6wen_reg;
 	FUreg7_reg2<=FUreg7_reg;
 	FU7wen_reg2<=FU7wen_reg;
-	FUreg8_reg2<=FUreg8_reg;
-	FU8wen_reg2<=FU8wen_reg;
-	FUreg9_reg2<=FUreg9_reg;
-	FU9wen_reg2<=FU9wen_reg;
 	FUreg7_reg3<=FUreg7_reg2;
 	FU7wen_reg3<=FU7wen_reg2;
-	FUreg8_reg3<=FUreg8_reg2;
-	FU8wen_reg3<=FU8wen_reg2;
-	FUreg9_reg3<=FUreg9_reg2;
-	FU9wen_reg3<=FU9wen_reg2;
+	FUreg6_reg3<=FUreg6_reg2;
+	FU6wen_reg3<=FU6wen_reg2;
 	FUreg7_reg4<=FUreg7_reg3;
 	FU7wen_reg4<=FU7wen_reg3;
-	FUreg8_reg4<=FUreg8_reg3;
-	FU8wen_reg4<=FU8wen_reg3;
-	FUreg9_reg4<=FUreg9_reg3;
-	FU9wen_reg4<=FU9wen_reg3;
+	FUreg6_reg4<=FUreg6_reg3;
+	FU6wen_reg4<=FU6wen_reg3;
     end
   end 
 endmodule
@@ -782,7 +666,7 @@ module rs_wakeUp_data(
   outEq,
   FU0,FU1,FU2,FU3,
   FU4,FU5,FU6,
-  FU7,FU8,FU9,
+  FU7,
   outRsSelect0,outData0,
   outRsSelect1,outData1,
   outRsSelect2,outData2
@@ -801,7 +685,7 @@ module rs_wakeUp_data(
   input [WIDTH-1:0] newData2;
   input outRsSelect0;
   
-  input [5:0] outEq;
+  input [7:0] outEq;
   input [WIDTH-1:0] FU0;
   input [WIDTH-1:0] FU1;
   input [WIDTH-1:0] FU2;
@@ -810,8 +694,6 @@ module rs_wakeUp_data(
   input [WIDTH-1:0] FU5;
   input [WIDTH-1:0] FU6;
   input [WIDTH-1:0] FU7;
-  input [WIDTH-1:0] FU8;
-  input [WIDTH-1:0] FU9;
   
   output [WIDTH-1:0] outData0;
   input outRsSelect1;
@@ -828,18 +710,14 @@ module rs_wakeUp_data(
 
   assign data_en=|{outEq,newRsSelect0,newRsSelect1,newRsSelect2};
 
-  assign data_d0=outEq[0] ? FU0 : 'z;
-  assign data_d0=outEq[1] ? FU1 : 'z;
-  assign data_d0=outEq[2] ? FU2 : 'z;
-  assign data_d0=outEq[3] ? FU3 : 'z;
-  assign data_d0=outEq[4] ? FU4 : 'z;
-  assign data_d0=|outEq[4:0] ? 'z : {WIDTH{1'B0}};
-  assign data_d1=outEq[0] ? FU5 : 'z;
-  assign data_d1=outEq[1] ? FU6 : 'z;
-  assign data_d1=outEq[2] ? FU7 : 'z;
-  assign data_d1=outEq[3] ? FU8 : 'z;
-  assign data_d1=outEq[4] ? FU9 : 'z;
-  assign data_d1=|outEq[4:0] ? 'z : {WIDTH{1'B0}};
+  assign data_d=outEq[0] ? FU0 : 'z;
+  assign data_d=outEq[1] ? FU1 : 'z;
+  assign data_d=outEq[2] ? FU2 : 'z;
+  assign data_d=outEq[3] ? FU3 : 'z;
+  assign data_d=outEq[4] ? FU5 : 'z;
+  assign data_d=outEq[5] ? FU6 : 'z;
+  assign data_d=outEq[6] ? FU7 : 'z;
+  assign data_d=outEq[7] ? FU8 : 'z;
   assign data_d=(newRsSelect0 & ~rst & ~stall) ? newData0 : 'z;
   assign data_d=(newRsSelect1 & ~rst & ~stall) ? newData1 : 'z;
   assign data_d=(newRsSelect2 & ~rst & ~stall) ? newData2 : 'z;
@@ -847,8 +725,6 @@ module rs_wakeUp_data(
   assign data_d=rst ? {WIDTH{1'b0}} : 'z;
 
   assign data_d=(data_en & ~(stall && newRsSelect0|newRsSelect1|newRsSelect2) || rst) ? 'z : data_q;
-  assign data_d=(|outEq[4:0] && outEq[5]) ? data_d1 : 'z;
-  assign data_d=(|outEq[4:0] && ~outEq[5]) ? data_d0 : 'z;
   assign outData0=outRsSelect0 ? data_q : 'z;
   assign outData1=outRsSelect1 ? data_q : 'z;
   assign outData2=outRsSelect2 ? data_q : 'z;
@@ -860,18 +736,15 @@ module rs_wakeUp_data(
     
 endmodule
 
-//insturct compiler not to delete the redundant outputs of
-//rs_wakeUp_data_array
-//route outputs with x1 wire layers
 module rs_wakeUp_data_array(
   clk,rst,stall,
   newRsSelect0,newData0,
   newRsSelect1,newData1,
   newRsSelect2,newData2,
-  outEq,
+  outEq,outEqW,
   FU0,FU1,FU2,FU3,
   FU4,FU5,FU6,
-  FU7,FU8,FU9,
+  FU7,
   outRsSelect0,outBank0,outFound0,outData0,
   outRsSelect1,outBank1,outFound1,outData1,
   outRsSelect2,outBank2,outFound2,outData2
@@ -890,7 +763,8 @@ module rs_wakeUp_data_array(
   input [BUF_COUNT-1:0] newRsSelect2;
   input [WIDTH-1:0] newData2;
   
-  input [6*BUF_COUNT-1:0] outEq;
+  input [5*BUF_COUNT-1:0] outEq;
+  output [5*BUF_COUNT-1:0] outEqW;
   input [WIDTH-1:0] FU0;
   input [WIDTH-1:0] FU1;
   input [WIDTH-1:0] FU2;
@@ -899,8 +773,6 @@ module rs_wakeUp_data_array(
   input [WIDTH-1:0] FU5;
   input [WIDTH-1:0] FU6;
   input [WIDTH-1:0] FU7;
-  input [WIDTH-1:0] FU8;
-  input [WIDTH-1:0] FU9;
   
   input [BUF_COUNT-1:0] outRsSelect0;
   input [3:0] outBank0;
@@ -914,6 +786,8 @@ module rs_wakeUp_data_array(
   input [3:0] outBank2;
   input outFound2;
   output [WIDTH-1:0] outData2;
+  
+  wire [31:0][7:0] outEqR;
 
   generate
       genvar j,k;
@@ -923,15 +797,17 @@ module rs_wakeUp_data_array(
           wire [WIDTH-1:0] outData2k;
           
           for (k=0;k<8;k=k+1) begin : buf_gen
+              assign outEqR[k+8*j]={outEq[(k+8*j)*5+:4]&{4{outEq[(k+8*j)*5+4]}},outEq[(k+8*j)*5+:4]&{4{~outEq[(k+8*j)*5+4]}}};
+              assign outEqW[(k+8*j)*8+:5]={|outEqR[k+8*j][7:4],outEqR[k+8*j][3:0]|outEqR[k+8*j][7:4]};
               rs_wakeUp_data #(WIDTH) buf_mod(
               clk,rst,stall,
               newRsSelect0[k+8*j],newData0,
               newRsSelect1[k+8*j],newData1,
               newRsSelect2[k+8*j],newData2,
-              outEq[(k+8*j)*6+:6],
+              outEqR[k+8*j],
               FU0,FU1,FU2,FU3,
               FU4,FU5,FU6,
-              FU7,FU8,FU9,              
+              FU7,              
               outRsSelect0[k+8*j],outData0k,
               outRsSelect1[k+8*j],outData1k,
               outRsSelect2[k+8*j],outData2k
