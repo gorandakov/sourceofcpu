@@ -872,9 +872,9 @@ module rs_wakeUp_data_array(
   FU0,FU1,FU2,FU3,
   FU4,FU5,FU6,
   FU7,FU8,FU9,
-  outRsSelect0,outBank0,outFound0,outData0,outDataN0,
-  outRsSelect1,outBank1,outFound1,outData1,outDataN1,
-  outRsSelect2,outBank2,outFound2,outData2,outDataN2
+  outRsSelect0,outBank0,outFound0,outData0,
+  outRsSelect1,outBank1,outFound1,outData1,
+  outRsSelect2,outBank2,outFound2,outData2
   );
 
   parameter WIDTH=`alu_width+1;
@@ -2127,10 +2127,10 @@ module rs(
     newANeeded1,newBNeeded1,newSNeeded1,newReg1,newRegSimd1,newOp1,newPort1,
     newInstrIndex1,newLSQ1,rsAlloc1,newGazumpA1,newGazumpB1,newGazumpS1,
     newFunitA1,newFunitB1,newFunitS1,newLSFlag1,newAttr1,
-  newDataA2,newDataB2,newDataC2,newDataS2,newRegA2,newRegB2,newRegS2,
-    newANeeded2,newBNeeded2,newSNeeded2,newReg2,newRegSimd2,newOp2,newPort2,
-    newInstrIndex2,rsAlloc2,newGazumpA2,newGazumpB2,newGazumpS2,
-    newFunitA2,newFunitB2,newFunitS2,newAttr2,
+  newDataA2,newRegA2,
+    newANeeded2,newReg2,newRegSimd2,newOp2,newPort2,
+    newInstrIndex2,rsAlloc2,newGazumpA2,
+    newFunitA2,newAttr2,
 // wires to get values out of buffer
   outDataA0,outDataB0,outDataC0,outReg0,outOp0,outInstrIndex0,outWQ0,outLSFlag0,
     outFuFwdA0,outFuFwdB0,outFuuFwdA0,outFuuFwdB0,outLSQ0,outDataEn0,outThread0,//agu
@@ -2138,9 +2138,9 @@ module rs(
   outDataA1,outDataB1,outDataS1,outReg1,outRegSimd1,outOp1,outInstrIndex1,
     outFuFwdA1,outFuFwdB1,outFuFwdS1,outFuuFwdA1,outFuuFwdB1,
     outFuuFwdS1,outDataEn1,outThread1,outAttr1,//alu 1
-  outDataA2,outDataB2,outDataS2,outReg2,outRegSimd2,outOp2,outInstrIndex2,
-    outFuFwdA2,outFuFwdB2,outFuFwdS2,outFuuFwdA2,outFuuFwdB2,
-    outFuuFwdS2,outDataEn2,outThread2,outAttr2,//alu 2
+  outDataA2,outReg2,outRegSimd2,outOp2,outInstrIndex2,
+    outFuFwdA2,outFuuFwdA2,
+    outDataEn2,outThread2,outAttr2,//stdat
 // wires from functional units  
   FU0,FUreg0,FUwen0,
   FU1,FUreg1,FUwen1,
@@ -2155,15 +2155,19 @@ module rs(
   
   newDataVA1H,newDataVB1H,newDataVA1L,newDataVB1L,
   newDataVA2H,newDataVB2H,newDataVA2L,newDataVB2L,
+  newDataVA3H,newDataVA2L,
 
   newDataFA1H,newDataFB1H,newDataFA1L,newDataFB1L,
   newDataFA2H,newDataFB2H,newDataFA2L,newDataFB2L,
+  newDataFA3H,newDataFA2L,
 
   outDataVA1H,outDataVB1H,outDataVA1L,outDataVB1L,
   outDataVA2H,outDataVB2H,outDataVA2L,outDataVB2L,
+  outDataVA3H,outDataVA2L,
 
   outDataFA1H,outDataFB1H,outDataFA1L,outDataFB1L,
   outDataFA2H,outDataFB2H,outDataFA2L,outDataFB2L,
+  outDataFA3H,outDataFA2L,
 
   FUV0H,FUV0L,
   FUV1H,FUV1L,
@@ -2276,15 +2280,8 @@ module rs(
   input [ATTR_WIDTH-1:0] newAttr1;
 
   input [DATA_WIDTH-1:0]       newDataA2;
-  input [DATA_WIDTH-1:0]       newDataB2;
-  input [FLAGS_WIDTH-1:0]       newDataS2;
-  input [CONST_WIDTH-1:0]       newDataC2;
   input [REG_WIDTH-1:0] newRegA2; 
-  input [REG_WIDTH-1:0] newRegB2; 
-  input [REG_WIDTH-1:0] newRegS2; 
   input newANeeded2;
-  input newBNeeded2;
-  input newSNeeded2;
   input [REG_WIDTH-1:0] newReg2;
   input [REG_WIDTH-1:0] newRegSimd2;
   input [OPERATION_WIDTH-1:0]   newOp2;
@@ -2292,11 +2289,7 @@ module rs(
   input [II_WIDTH-1:0] newInstrIndex2;
   input rsAlloc2;
   input [10:0] newGazumpA2;
-  input [10:0] newGazumpB2;
-  input [10:0] newGazumpS2;
   input [FN_WIDTH-1:0] newFunitA2;
-  input [FN_WIDTH-1:0] newFunitB2;
-  input [FN_WIDTH-1:0] newFunitS2;
   input [ATTR_WIDTH-1:0] newAttr2;
   
 // output data to functional units
@@ -2336,18 +2329,12 @@ module rs(
   output [ATTR_WIDTH-1:0] outAttr1;
 
   output wire [DATA_WIDTH-1:0]       outDataA2;
-  output wire [DATA_WIDTH-1:0]       outDataB2;
-  output wire [FLAGS_WIDTH-1:0]       outDataS2;
   output wire [REG_WIDTH-1:0] outReg2;
   output wire [REG_WIDTH-1:0] outRegSimd2;
   output wire [OPERATION_WIDTH-1:0]   outOp2;
   output wire [II_WIDTH-1:0] outInstrIndex2;
   output [3:0] outFuFwdA2;
-  output [3:0] outFuFwdB2;
-  output [3:0] outFuFwdS2;
   output [3:0] outFuuFwdA2;
-  output [3:0] outFuuFwdB2;
-  output [3:0] outFuuFwdS2;
   output [3:0] outDataEn2;
   output outThread2;
   output [ATTR_WIDTH-1:0] outAttr2;
@@ -2804,9 +2791,9 @@ module rs(
   FUS0,FUS1,FUS2,6'b0,
   FUS3,FUS4,FUS5,
   FUS6,FUS7,FUS8,
-  32'b0,4'b0,1'b0,,,
-  outRsSelect[1],outBank[1],rsFoundNZ[1],outDataS1,,
-  outRsSelect[2],outBank[2],rsFoundNZ[2],outDataS2,
+  32'b0,4'b0,1'b0,,
+  outRsSelect[1],outBank[1],rsFoundNZ[1],outDataS1,
+  outRsSelect[2],outBank[2],rsFoundNZ[2],outDataS2
   );
 
   rs_wakeUp_data_array #(SIMD_WIDTH) dataA_VH_mod(
@@ -2818,7 +2805,7 @@ module rs(
   FUV0H,FUV1H,FUV2H,FUV3H,
   FUV4H,FUV5H,FUV6H,
   FUV7H,FUV8H,FUV9H,
-  32'b0,4'b0,1'b0,,,
+  32'b0,4'b0,1'b0,,
   outRsSelect_reg[1],outBank_reg[1],rsFoundNZ_reg[1],outDataVA1H,
   outRsSelect_reg[2],outBank_reg[2],rsFoundNZ_reg[2],outDataVA2H
   );
@@ -2832,7 +2819,7 @@ module rs(
   FUV0L,FUV1L,FUV2L,FUV3L,
   FUV4L,FUV5L,FUV6L,
   FUV7L,FUV8L,FUV9L,
-  32'b0,4'b0,1'b0,,,
+  32'b0,4'b0,1'b0,,
   outRsSelect_reg[1],outBank_reg[1],rsFoundNZ_reg[1],outDataVA1L,
   outRsSelect_reg[2],outBank_reg[2],rsFoundNZ_reg[2],outDataVA2L
   );
@@ -2847,7 +2834,7 @@ module rs(
   FUV0H,FUV1H,FUV2H,FUV3H,
   FUV4H,FUV5H,FUV6H,
   FUV7H,FUV8H,FUV9H,
-  32'b0,4'b0,1'b0,,,
+  32'b0,4'b0,1'b0,,
   outRsSelect_reg[1],outBank_reg[1],rsFoundNZ_reg[1],outDataVB1H,
   outRsSelect_reg[2],outBank_reg[2],rsFoundNZ_reg[2],outDataVB2H
   );
@@ -2861,7 +2848,7 @@ module rs(
   FUV0L,FUV1L,FUV2L,FUV3L,
   FUV4L,FUV5L,FUV6L,
   FUV7L,FUV8L,FUV9L,
-  32'b0,4'b0,1'b0,,,
+  32'b0,4'b0,1'b0,,
   outRsSelect_reg[1],outBank_reg[1],rsFoundNZ_reg[1],outDataVB1L,
   outRsSelect_reg[2],outBank_reg[2],rsFoundNZ_reg[2],outDataVB2L
   );
@@ -2875,7 +2862,7 @@ module rs(
   FUF0H,FUF1H,FUF2H,FUF3H,
   FUF4H,FUF5H,FUF6H,
   FUF7H,FUF8H,FUF9H,
-  32'b0,4'b0,1'b0,,,
+  32'b0,4'b0,1'b0,,
   outRsSelect_reg2[1],outBank_reg2[1],rsFoundNZ_reg2[1],outDataFA1H,
   outRsSelect_reg2[2],outBank_reg2[2],rsFoundNZ_reg2[2],outDataFA2H
   );
@@ -2889,7 +2876,7 @@ module rs(
   FUF0L,FUF1L,FUF2L,FUF3L,
   FUF4L,FUF5L,FUF6L,
   FUF7L,FUF8L,FUF9L,
-  32'b0,4'b0,1'b0,,,
+  32'b0,4'b0,1'b0,,
   outRsSelect_reg2[1],outBank_reg2[1],rsFoundNZ_reg2[1],outDataFA1L,
   outRsSelect_reg2[2],outBank_reg2[2],rsFoundNZ_reg2[2],outDataFA2L
   );
@@ -2904,7 +2891,7 @@ module rs(
   FUF0H,FUF1H,FUF2H,FUF3H,
   FUF4H,FUF5H,FUF6H,
   FUF7H,FUF8H,FUF9H,
-  32'b0,4'b0,1'b0,,,
+  32'b0,4'b0,1'b0,,
   outRsSelect_reg2[1],outBank_reg2[1],rsFoundNZ_reg2[1],outDataFB1H,
   outRsSelect_reg2[2],outBank_reg2[2],rsFoundNZ_reg2[2],outDataFB2H
   );
@@ -2918,7 +2905,7 @@ module rs(
   FUF0L,FUF1L,FUF2L,FUF3L,
   FUF4L,FUF5L,FUF6L,
   FUF7L,FUF8L,FUF9L,
-  32'b0,4'b0,1'b0,,,
+  32'b0,4'b0,1'b0,,
   outRsSelect_reg2[1],outBank_reg2[1],rsFoundNZ_reg2[1],outDataFB1L,
   outRsSelect_reg2[2],outBank_reg2[2],rsFoundNZ_reg2[2],outDataFB2L
   );
