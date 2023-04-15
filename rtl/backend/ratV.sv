@@ -628,7 +628,6 @@ module ratV(
 //  localparam BUF_COUNT=`rat_count;
   localparam FN_WIDTH=10;
   parameter [0:0] EXTRA=1'b0;
-/*verilator hier_block*/
 
   input clk;
   input rst;

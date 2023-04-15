@@ -872,9 +872,9 @@ module rs_wakeUp_data_array(
   FU0,FU1,FU2,FU3,
   FU4,FU5,FU6,
   FU7,FU8,FU9,
-  outRsSelect0,outBank0,outFound0,outData0,outDataN0,
-  outRsSelect1,outBank1,outFound1,outData1,outDataN1,
-  outRsSelect2,outBank2,outFound2,outData2,outDataN2
+  outRsSelect0,outBank0,outFound0,outData0,
+  outRsSelect1,outBank1,outFound1,outData1,
+  outRsSelect2,outBank2,outFound2,outData2
   );
 
   parameter WIDTH=`alu_width+1;
@@ -2804,9 +2804,9 @@ module rs(
   FUS0,FUS1,FUS2,6'b0,
   FUS3,FUS4,FUS5,
   FUS6,FUS7,FUS8,
-  32'b0,4'b0,1'b0,,,
-  outRsSelect[1],outBank[1],rsFoundNZ[1],outDataS1,,
-  outRsSelect[2],outBank[2],rsFoundNZ[2],outDataS2,
+  32'b0,4'b0,1'b0,,
+  outRsSelect[1],outBank[1],rsFoundNZ[1],outDataS1,
+  outRsSelect[2],outBank[2],rsFoundNZ[2],outDataS2
   );
 
   rs_wakeUp_data_array #(SIMD_WIDTH) dataA_VH_mod(
@@ -2818,7 +2818,7 @@ module rs(
   FUV0H,FUV1H,FUV2H,FUV3H,
   FUV4H,FUV5H,FUV6H,
   FUV7H,FUV8H,FUV9H,
-  32'b0,4'b0,1'b0,,,
+  32'b0,4'b0,1'b0,,
   outRsSelect_reg[1],outBank_reg[1],rsFoundNZ_reg[1],outDataVA1H,
   outRsSelect_reg[2],outBank_reg[2],rsFoundNZ_reg[2],outDataVA2H
   );
@@ -2832,7 +2832,7 @@ module rs(
   FUV0L,FUV1L,FUV2L,FUV3L,
   FUV4L,FUV5L,FUV6L,
   FUV7L,FUV8L,FUV9L,
-  32'b0,4'b0,1'b0,,,
+  32'b0,4'b0,1'b0,,
   outRsSelect_reg[1],outBank_reg[1],rsFoundNZ_reg[1],outDataVA1L,
   outRsSelect_reg[2],outBank_reg[2],rsFoundNZ_reg[2],outDataVA2L
   );
@@ -2847,7 +2847,7 @@ module rs(
   FUV0H,FUV1H,FUV2H,FUV3H,
   FUV4H,FUV5H,FUV6H,
   FUV7H,FUV8H,FUV9H,
-  32'b0,4'b0,1'b0,,,
+  32'b0,4'b0,1'b0,,
   outRsSelect_reg[1],outBank_reg[1],rsFoundNZ_reg[1],outDataVB1H,
   outRsSelect_reg[2],outBank_reg[2],rsFoundNZ_reg[2],outDataVB2H
   );
@@ -2861,7 +2861,7 @@ module rs(
   FUV0L,FUV1L,FUV2L,FUV3L,
   FUV4L,FUV5L,FUV6L,
   FUV7L,FUV8L,FUV9L,
-  32'b0,4'b0,1'b0,,,
+  32'b0,4'b0,1'b0,,
   outRsSelect_reg[1],outBank_reg[1],rsFoundNZ_reg[1],outDataVB1L,
   outRsSelect_reg[2],outBank_reg[2],rsFoundNZ_reg[2],outDataVB2L
   );
@@ -2875,7 +2875,7 @@ module rs(
   FUF0H,FUF1H,FUF2H,FUF3H,
   FUF4H,FUF5H,FUF6H,
   FUF7H,FUF8H,FUF9H,
-  32'b0,4'b0,1'b0,,,
+  32'b0,4'b0,1'b0,,
   outRsSelect_reg2[1],outBank_reg2[1],rsFoundNZ_reg2[1],outDataFA1H,
   outRsSelect_reg2[2],outBank_reg2[2],rsFoundNZ_reg2[2],outDataFA2H
   );
@@ -2889,7 +2889,7 @@ module rs(
   FUF0L,FUF1L,FUF2L,FUF3L,
   FUF4L,FUF5L,FUF6L,
   FUF7L,FUF8L,FUF9L,
-  32'b0,4'b0,1'b0,,,
+  32'b0,4'b0,1'b0,,
   outRsSelect_reg2[1],outBank_reg2[1],rsFoundNZ_reg2[1],outDataFA1L,
   outRsSelect_reg2[2],outBank_reg2[2],rsFoundNZ_reg2[2],outDataFA2L
   );
@@ -2904,7 +2904,7 @@ module rs(
   FUF0H,FUF1H,FUF2H,FUF3H,
   FUF4H,FUF5H,FUF6H,
   FUF7H,FUF8H,FUF9H,
-  32'b0,4'b0,1'b0,,,
+  32'b0,4'b0,1'b0,,
   outRsSelect_reg2[1],outBank_reg2[1],rsFoundNZ_reg2[1],outDataFB1H,
   outRsSelect_reg2[2],outBank_reg2[2],rsFoundNZ_reg2[2],outDataFB2H
   );
@@ -2918,7 +2918,7 @@ module rs(
   FUF0L,FUF1L,FUF2L,FUF3L,
   FUF4L,FUF5L,FUF6L,
   FUF7L,FUF8L,FUF9L,
-  32'b0,4'b0,1'b0,,,
+  32'b0,4'b0,1'b0,,
   outRsSelect_reg2[1],outBank_reg2[1],rsFoundNZ_reg2[1],outDataFB1L,
   outRsSelect_reg2[2],outBank_reg2[2],rsFoundNZ_reg2[2],outDataFB2L
   );
