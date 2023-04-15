@@ -476,7 +476,7 @@ module instrQ_box(
               read_en8[k]<=read_addr8[5:3]==k[2:0];
               read_en9[k]<=read_addr9[5:3]==k[2:0];
           end
-	      $display("read_en0 ",read_en0," read_addr0 ",read_addr0);
+	      //$display("read_en0 ",read_en0," read_addr0 ",read_addr0);
       end
   
   end
@@ -734,7 +734,7 @@ module instrQ(
           if (write_thread) write_addrB[k]<=write_addrB_d[k];
           else write_addrA[k]<=write_addrA_d[k];
       end
-      if (write_wen & ~doFStall)	  $display("write_instr0 ",write_instr0," write_addrA[0]");
+     // if (write_wen & ~doFStall)	  $display("write_instr0 ",write_instr0," write_addrA[0]");
       if (rst) begin
           busy[0]<=6'd0;
           busy[1]<=6'd0;
@@ -818,8 +818,8 @@ module instrQ_upDown(addr,addr_new,fstall,inEn,stall,outEn,doFStall);
           adder #(6) add_mod(addr,j[5:0],addr_new,1'b0,cnt[j],,,,);
       end
   endgenerate
-  always @* begin
-      $display("cnt 0x%x, cntIn 0x%x, cntOut 0x%x, addr_new 0x%x",cnt,cntIn,cntOut,addr_new);
-  end 
+ // always @* begin
+ //     $display("cnt 0x%x, cntIn 0x%x, cntOut 0x%x, addr_new 0x%x",cnt,cntIn,cntOut,addr_new);
+ // end 
   get_carry #(6) cmp_mod(~6'd37,addr,1'b1,doFStall);
 endmodule
