@@ -898,7 +898,7 @@ frontend1 #(BUS_ID) front_mod(
   clk,
   rst,
   except,
-  {exceptIP,1'b0},
+  exceptIP,
 //
   exceptThread,
   exceptAttr,
@@ -951,7 +951,7 @@ frontend1 #(BUS_ID) front_mod(
   rst,
   stall,
   except,
-  {exceptIP,1'b0},
+  exceptIP,
   exceptAttr,
   
   btbl_step,

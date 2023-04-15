@@ -9,6 +9,7 @@
 #include "Vheptane_core.h"
 #include "Vheptane_core_heptane_core.h"
 #include "Vheptane_core_backend.h"
+#include "Vheptane_core_ww.h"
 #include "verilated.h"
 #include "../inc/ptr.h"
 #include "contx.h"
@@ -2205,11 +2206,12 @@ no_srch:;
             if (retII>47) retII=0;
     }
     retire=top->heptane_core->bck_mod->retM_do_retire;
-    if (top->heptane_core->iAvail) printf("iAvail 0x%x, \t0x%x\n",top->heptane_core->iAvail,top->heptane_core->instrEn);
-    if (top->heptane_core->instrEn && top->heptane_core->bck_mod->stall_rs==0 && !top->heptane_core->except && 
+    if (top->heptane_core->ww_mod->iAvail) printf("iAvail 0x%x, \t0x%x\n",top->heptane_core->ww_mod->iAvail,top->heptane_core->
+        ww_mod->instrEn);
+    if (top->heptane_core->ww_mod->instrEn && top->heptane_core->bck_mod->stall_rs==0 && !top->heptane_core->except && 
 		    top->heptane_core->bck_mod->doStall_rs==0) {
 	k=0;
-	while (top->heptane_core->instrEn&(1<<k)) {k++;}
+	while (top->heptane_core->ww_mod->instrEn&(1<<k)) {k++;}
 	insn_count[insn_posW++]=k;
 	insn_posW&=0x3f;
     }
