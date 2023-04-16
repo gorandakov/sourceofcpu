@@ -512,6 +512,7 @@ module agu_block(
   wire [5:0] tlb_hitR;
   wire tlb_clkEnR;
   wire cout_secR;
+  wire [5:0][2:0] tlb_wayR;
 
   reg [64:0] FU0_reg;
   reg [64:0] FU1_reg;
@@ -2108,7 +2109,8 @@ module agu_block(
   sprocR[3],
   tlb_data0R[3],
   tlb_data1R[3],
-  tlb_hitR[3] 
+  tlb_hitR[3],
+  tlb_wayR[3] 
   );
 
   assign miss0=~FU0Hit & mOpX0_en_reg3 & ~p0_conflict_reg2 & 
@@ -2447,13 +2449,13 @@ module agu_block(
   tlb_clkEnR,
   cout_secR,
   addrTlbR,
-  sprocR,
+  sprocR[0],
   tlb_data0R,
   tlb_data1R,
   tlb_wayR,
   tlb_hitR,
   //read_2M,
-  tlb_addr[50:1],
+  tlb_addr,
   tlb_data0,
   tlb_data1,
   tlb_data2,

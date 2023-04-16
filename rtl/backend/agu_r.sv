@@ -102,7 +102,8 @@ module agu_r(
   sproc,
   tlb_data0,
   tlb_data1,
-  tlb_hit 
+  tlb_hit,
+  tlb_way 
   );
   
   localparam VADDR_WIDTH=64;
@@ -200,6 +201,7 @@ module agu_r(
   input [TLB_DATA_WIDTH-1:0] tlb_data0;
   input [TLB_DATA_WIDTH-1:0] tlb_data1;
   input tlb_hit;
+  input [2:0] tlb_way;
 
   wire tlb_clkEn;
 
@@ -366,7 +368,7 @@ module agu_r(
   assign reqtlb_ack=~reqtlb_en & ~reqC_tlbEn & tlb_proceed & req_can & reqtlb_next & ~tlb_in_flight;
 /*  assign writeTlb_wenH=1'b0;
   assign writeTlb_wen=~(mOp0_lsfwd_reg&~reqtlb_en_reg2) && ~tlb_hit_reg && tlb_clkEn_reg;// && ~writeTlb_wen_reg;
-  assign writeTlb_IP=addrMain_tlb_reg[63:13];
+  assign writeTlb_IP=addrMain_tlb_reg[64:14];
   assign writeTlb_data0[`dtlbData_phys]={addrInPage,1'b0};
   assign writeTlb_data0[`dtlbData_sys]=1'b0;  
   assign writeTlb_data0[`dtlbData_na]=1'b0;  

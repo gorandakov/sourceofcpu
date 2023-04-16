@@ -166,8 +166,8 @@ module dtlb_way(
   output [5:0][2:0]               read_way;
   output [2:0] read_lru;
   output [2:0] read_lruW;
-  output read_hit;
-  output read_hitL;
+  output [5:0] read_hit;
+  output [5:0] read_hitL;
   input [VADDR_WIDTH-15:0] write_addr;
   input [OUTDATA_WIDTH-1:0] write_data0;
   input [OUTDATA_WIDTH-1:0] write_data1;
@@ -254,7 +254,7 @@ module dtlb_way(
   .rst(rst),
   .read_addr(addr[0][3:0]),
   .read_data(read_lru),
-  .write_addr(write_wen ? write_addr[3:0] : (init? initCount : addr[3:0])),
+  .write_addr(write_wen ? write_addr[3:0] : (init? initCount : addr[0][3:0])),
   .write_data(newLRU),
   .write_wen(read_clkEn&R0_sec_wren||init||write_wen)
   );
@@ -264,7 +264,7 @@ module dtlb_way(
   .rst(rst),
   .read_addr(write_addr[3:0]),
   .read_data(write_lru),
-  .write_addr(write_wen ? write_addr[3:0] : (init? initCount : addr[3:0])),
+  .write_addr(write_wen ? write_addr[3:0] : (init? initCount : addr[0][3:0])),
   .write_data(newLRU),
   .write_wen(read_clkEn&R0_sec_wren||init||write_wen)
   );
