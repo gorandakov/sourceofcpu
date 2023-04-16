@@ -73,7 +73,7 @@ module fun_lsq(
   doStall_LDQ,
   doStall_LSQ 
   );
-/*verilator hier_block*/
+/*vxerilator hier_block*/
 
   input clk;
   input rst;
@@ -216,9 +216,9 @@ module fun_lsq(
   wire [`lsaddr_width-1:0] LSQ_dataA3;
   wire [`lsaddr_width-1:0] LSQ_dataA4;
   wire [`lsaddr_width-1:0] LSQ_dataA5;
-  wire [5:0] LSQ_enA;
+  wire [5:0] LSQ_enA/*verilator public*/;
   wire LSQ_rdy_A;
-  wire LSQ_rdy_AP;
+  wire LSQ_rdy_AP/*verilator public*/;
   wire [5:0] STQ_ldconfl;
   wire [3:0] PSTQ_match;
   wire [`lsaddr_width-1:0] PSTQ_data[2:0];

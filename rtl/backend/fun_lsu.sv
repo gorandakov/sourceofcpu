@@ -2440,7 +2440,30 @@ module agu_block(
   alt_bus_addr_reg,
   alt_bus_hold_reg3
   );
- 
+
+  dtlb dtlb_mod(
+  clk,
+  rst,
+  tlb_clkEnR,
+  cout_secR,
+  addrTlbR,
+  sprocR,
+  tlb_data0R,
+  tlb_data1R,
+  tlb_wayR,
+  tlb_hitR,
+  //read_2M,
+  tlb_addr[50:1],
+  tlb_data0,
+  tlb_data1,
+  tlb_data2,
+  tlb_wen,
+  tlb_frc_en,
+  tlb_frc_en,
+  tlb_frc_en,
+  tlb_frc_way
+  );
+  
   msiq msiq_mod(
   clk,
   rst,
