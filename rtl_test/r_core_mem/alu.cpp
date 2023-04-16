@@ -10,6 +10,7 @@
 #include "Vheptane_core_heptane_core.h"
 #include "Vheptane_core_backend.h"
 #include "Vheptane_core_ww.h"
+#include "Vheptane_core_fun_lsq.h"
 #include "verilated.h"
 #include "../inc/ptr.h"
 #include "contx.h"
@@ -2282,6 +2283,11 @@ no_srch:;
     }
     if (top->heptane_core->bck_mod->dc_rdEn) {
 	printf("");
+    }
+    if (top->heptane_core->bck_mod->retM_ret) printf("ret 0x%x, fine 0x%x\n",top->heptane_core->bck_mod->retM_ret,
+        top->heptane_core->bck_mod->retM_fine);
+    if (top->heptane_core->bck_mod->LSQ_grouped->LSQ_rdy_AP) {
+        printf("LSQ_enA 0x%x\n",top->heptane_core->bck_mod->LSQ_grouped->LSQ_enA);
     }
     return rtn;
 }
