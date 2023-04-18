@@ -23,9 +23,6 @@ module bob_except_ram(
   read_burst,
   read_addr,
   read_data,
-  readE_burst,
-  readE_addr,
-  readE_data,
   
   write0_addr,write0_data,write0_wen,
   write1_addr,write1_data,write1_wen,
@@ -50,10 +47,6 @@ module bob_except_ram(
   input read_burst;
   input [ADDR_WIDTH-1:0] read_addr;
   output [DATA_WIDTH-1:0] read_data;
-  
-  input readE_burst;
-  input [ADDR_WIDTH-1:0] readE_addr;
-  output [DATA_WIDTH-1:0] readE_data;
   
   input [ADDR_WIDTH-1:0] write0_addr;
   input [DATA_WIDTH-1:0] write0_data;
@@ -98,10 +91,8 @@ module bob_except_ram(
   reg [DATA_WIDTH-1:0] ram [ADDR_COUNT-1:0];
 
   reg [ADDR_WIDTH-1:0] read_addr_reg;
-  reg [ADDR_WIDTH-1:0] readE_addr_reg;
   
   assign read_data=ram[read_addr_reg];
-  assign readE_data=ram[readE_addr_reg];
   
   always @(posedge clk)
     begin
@@ -117,7 +108,6 @@ module bob_except_ram(
       if (write9_wen) ram[write9_addr]<=write9_data;
       
       if (read_burst) read_addr_reg<=read_addr;
-      if (readE_burst) readE_addr_reg<=readE_addr;
     end    
 endmodule
 
@@ -137,19 +127,6 @@ module bob_except(
   read_data7,
   read_data8,
   read_data9,
-  
-  readE_step,
-  readE_addr,
-  readE_data0,
-  readE_data1,
-  readE_data2,
-  readE_data3,
-  readE_data4,
-  readE_data5,
-  readE_data6,
-  readE_data7,
-  readE_data8,
-  readE_data9,
   
   write0_addr,write0_data,write0_wen,
   write1_addr,write1_data,write1_wen,
@@ -193,19 +170,6 @@ module bob_except(
   output [DATA_WIDTH-1:0] read_data7;
   output [DATA_WIDTH-1:0] read_data8;
   output [DATA_WIDTH-1:0] read_data9;
-  
-  input readE_step;
-  input [5:0] readE_addr;
-  output [DATA_WIDTH-1:0] readE_data0;
-  output [DATA_WIDTH-1:0] readE_data1;
-  output [DATA_WIDTH-1:0] readE_data2;
-  output [DATA_WIDTH-1:0] readE_data3;
-  output [DATA_WIDTH-1:0] readE_data4;
-  output [DATA_WIDTH-1:0] readE_data5;
-  output [DATA_WIDTH-1:0] readE_data6;
-  output [DATA_WIDTH-1:0] readE_data7;
-  output [DATA_WIDTH-1:0] readE_data8;
-  output [DATA_WIDTH-1:0] readE_data9;
   
   input [ADDR_WIDTH-1:0] write0_addr;
   input [DATA_WIDTH-1:0] write0_data;
@@ -260,7 +224,6 @@ module bob_except(
  
   wire [DATA_WIDTH-1:0] writeInit_data[9:0];
   wire [DATA_WIDTH-1:0] read_data[9:0];
-  wire [DATA_WIDTH-1:0] readE_data[9:0];
 
   generate
     genvar k;
@@ -272,10 +235,6 @@ module bob_except(
         read_step,
         read_addr,
         read_data[k],
-  
-        readE_step,
-        readE_addr,
-        readE_data[k],
   
         write0_addr[9:4],write0_data,write0_wen && write0_addr[3:0]==k,
         write1_addr[9:4],write1_data,write1_wen && write1_addr[3:0]==k,
@@ -312,16 +271,5 @@ module bob_except(
   assign read_data7=read_data[7];
   assign read_data8=read_data[8];
   assign read_data9=read_data[9];
-
-  assign readE_data0=readE_data[0];
-  assign readE_data1=readE_data[1];
-  assign readE_data2=readE_data[2];
-  assign readE_data3=readE_data[3];
-  assign readE_data4=readE_data[4];
-  assign readE_data5=readE_data[5];
-  assign readE_data6=readE_data[6];
-  assign readE_data7=readE_data[7];
-  assign readE_data8=readE_data[8];
-  assign readE_data9=readE_data[9];
 
 endmodule
