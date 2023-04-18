@@ -208,7 +208,7 @@ module dtlb_way(
         assign read_data1[p]=read_hitL[p] ? read_data_ram[p][`dtlb_data2] : 'z;
         assign read_data2[p]=read_hitL[p] ? read_data_ram[p][`dtlb_data3] : 'z;
 
-        assign read_way=read_hit ? WAYNO[2:0] : 3'bz;
+        assign read_way[p]=read_hit[p] ? WAYNO[2:0] : 3'bz;
 
     end
   endgenerate
@@ -337,12 +337,9 @@ module dtlb(
   wire [7:0][2:0] lru_wayW;
   wire [2:0] hitLruW;
 
-  wire [5:0][7:0] read_hit_way;
-  wire [5:0][7:0] read_hitL_way;
+  wire [7:0][5:0] read_hit_way;
+  wire [7:0][5:0] read_hitL_way;
 
-  wire [5:0][2:0] read_way_X;
-
-  assign read_way=read_way_X;
   
   wire [5:0][OUTDATA_WIDTH-1:0] read_data0;
   wire [5:0][OUTDATA_WIDTH-1:0] read_data1;
@@ -451,12 +448,12 @@ module dtlb(
   assign read_data1[5]=read_hit[5] ? 'z : {OUTDATA_WIDTH{1'B0}};
   assign read_data2[5]=read_hit[5] ? 'z : {OUTDATA_WIDTH{1'B0}};
 
-  assign read_way_X[0]=read_hit[0] ? 3'BZ : 3'B0;
-  assign read_way_X[1]=read_hit[1] ? 3'BZ : 3'B0;
-  assign read_way_X[2]=read_hit[2] ? 3'BZ : 3'B0;
-  assign read_way_X[3]=read_hit[3] ? 3'BZ : 3'B0;
-  assign read_way_X[4]=read_hit[4] ? 3'BZ : 3'B0;
-  assign read_way_X[5]=read_hit[5] ? 3'BZ : 3'B0;
+  assign read_way[0]=read_hit[0] ? 3'BZ : 3'B0;
+  assign read_way[1]=read_hit[1] ? 3'BZ : 3'B0;
+  assign read_way[2]=read_hit[2] ? 3'BZ : 3'B0;
+  assign read_way[3]=read_hit[3] ? 3'BZ : 3'B0;
+  assign read_way[4]=read_hit[4] ? 3'BZ : 3'B0;
+  assign read_way[5]=read_hit[5] ? 3'BZ : 3'B0;
   
   assign read_data[0]=(~addr[0][0]) ? read_data0[0] : read_data1[0];
   assign read_data[1]=(~addr[1][0]) ? read_data0[1] : read_data1[1];
