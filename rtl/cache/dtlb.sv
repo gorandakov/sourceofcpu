@@ -408,12 +408,18 @@ module dtlb(
   
   assign hitLru=read_hitL[0] ? 3'bz : 3'b0;
   
-  assign read_hitL[0]=|read_hit_way[0];
-  assign read_hitL[1]=|read_hit_way[1];
-  assign read_hitL[2]=|read_hit_way[2];
-  assign read_hitL[3]=|read_hit_way[3];
-  assign read_hitL[4]=|read_hit_way[4];
-  assign read_hitL[5]=|read_hit_way[5];
+  assign read_hitL[0]=read_hit_way[0][0]|read_hit_way[1][0]|read_hit_way[2][0]|read_hit_way[3][0]|read_hit_way[4][0]|
+    read_hit_way[5][0]|read_hit_way[6][0]|read_hit_way[7][0];
+  assign read_hitL[1]=read_hit_way[0][1]|read_hit_way[1][1]|read_hit_way[2][1]|read_hit_way[3][1]|read_hit_way[4][1]|
+    read_hit_way[5][1]|read_hit_way[6][1]|read_hit_way[7][1];
+  assign read_hitL[2]=read_hit_way[0][2]|read_hit_way[1][2]|read_hit_way[2][2]|read_hit_way[3][2]|read_hit_way[4][2]|
+    read_hit_way[5][2]|read_hit_way[6][2]|read_hit_way[7][2];
+  assign read_hitL[3]=read_hit_way[0][3]|read_hit_way[1][3]|read_hit_way[2][3]|read_hit_way[3][3]|read_hit_way[4][3]|
+    read_hit_way[5][3]|read_hit_way[6][3]|read_hit_way[7][3];
+  assign read_hitL[4]=read_hit_way[0][4]|read_hit_way[1][4]|read_hit_way[2][4]|read_hit_way[3][4]|read_hit_way[4][4]|
+    read_hit_way[5][4]|read_hit_way[6][4]|read_hit_way[7][4];
+  assign read_hitL[5]=read_hit_way[0][5]|read_hit_way[1][5]|read_hit_way[2][5]|read_hit_way[3][5]|read_hit_way[4][5]|
+    read_hit_way[5][5]|read_hit_way[6][5]|read_hit_way[7][5];//only pretends to be virtuous
 
   assign read_hit[0]=read_hitL[0] && ~init;
   assign read_hit[1]=read_hitL[1] && ~init;

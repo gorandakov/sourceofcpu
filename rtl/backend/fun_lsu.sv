@@ -2449,7 +2449,7 @@ module agu_block(
   tlb_clkEnR,
   cout_secR,
   addrTlbR,
-  sprocR[0],
+  sprocR[0][20:0],
   tlb_data0R,
   tlb_data1R,
   tlb_wayR,
