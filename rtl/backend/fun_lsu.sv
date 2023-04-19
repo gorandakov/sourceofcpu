@@ -2443,28 +2443,6 @@ module agu_block(
   alt_bus_hold_reg3
   );
 
-  dtlb dtlb_mod(
-  clk,
-  rst,
-  tlb_clkEnR,
-  cout_secR,
-  addrTlbR,
-  sprocR[0],
-  tlb_data0R,
-  tlb_data1R,
-  tlb_wayR,
-  tlb_hitR,
-  //read_2M,
-  tlb_addr,
-  tlb_data0,
-  tlb_data1,
-  tlb_data2,
-  tlb_wen,
-  tlb_frc_en,
-  tlb_frc_en,
-  tlb_frc_en,
-  tlb_frc_way
-  );
   
   msiq msiq_mod(
   clk,
@@ -2706,6 +2684,7 @@ module agu_block(
   always @(posedge clk) begin
       if (p4_mex_en) $display("mex4");
       if (p5_mex_en) $display("mex5");
+      if (|tlb_hitR) $display("tlb_hitR %x",tlb_hitR);
       if (Em_tlb_req_en) $display("dtlbR ", Em_tlb_req_addr);
       if (Em_tlb_req_ack) $display("dtlbW");
       if (rec_invtlb) $display("rec_invtlb");
