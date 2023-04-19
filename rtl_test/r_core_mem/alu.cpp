@@ -2289,6 +2289,9 @@ no_srch:;
     if (top->heptane_core->bck_mod->LSQ_grouped->LSQ_rdy_AP) {
         printf("LSQ_enA 0x%x\n",top->heptane_core->bck_mod->LSQ_grouped->LSQ_enA);
     }
+    if (top->heptane_core->bck_mod->dc_rdEn || top->heptane_core->bck_mod->__PVT__dc_wrEn) {
+        printf("dc_rdEn: 0x%x, dc_wrEn 0x%x\n",top->heptane_core->bck_mod->dc_rdEn,top->heptane_core->bck_mod->__PVT__dc_wrEn);
+    }
     return rtn;
 }
 

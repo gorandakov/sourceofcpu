@@ -373,7 +373,7 @@ module dtlb(
         .read_data0(read_data0),
         .read_data1(read_data1),
         .read_data2(read_data2),
-        .read_way(read_way_X),
+        .read_way(read_way),
         .read_lru(lru_way[k]),
         .read_lruW(lru_wayW[k]),
         .read_hit(read_hit_way[k]),
@@ -400,7 +400,7 @@ module dtlb(
         .en(read_clkEn|write_wen)
         );
 
-	assign hitLru=read_hitL_way[0][k] ? lru_way[k] : 3'bz;
+	assign hitLru=read_hitL_way[k][0] ? lru_way[k] : 3'bz;
 	assign hitLruW=3'd7;
 	
       end
