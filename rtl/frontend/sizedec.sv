@@ -172,8 +172,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   
   assign isLeaIPRel=(opcode_main==8'd197) & magic[0];
 
-  assign isCmov=opcode_main==198 && magic[1:0]==2'b01 && instr[31:29]==3'd0;
-//  assign isCmpTestExtra=opcode_main==198 && magic[1:0]==2'b01 && instr[31:29]==3'd1;
+  assign isCmov=opcode_main==198 && magic[1:0]==2'b01;
   
   
   assign isSimdInt=opcode_main==8'd200 && magic[0];

@@ -381,8 +381,7 @@ module smallInstr_decoder(
   
   assign isLeaIPRel=opcode_main==8'd197;
 
-  assign isCmov=opcode_main==198 && magic[1:0]==2'b01 && instr[31:29]==3'd0;
-  assign isCmpTestExtra=opcode_main==198 && magic[1:0]==2'b01 && instr[31:29]==3'd1;
+  assign isCmov=opcode_main==198 && magic[1:0]==2'b01;
   assign isCallPrep=opcode_main==8'd199;
   
  
