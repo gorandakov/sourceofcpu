@@ -2292,6 +2292,9 @@ no_srch:;
     if (top->heptane_core->bck_mod->dc_rdEn || top->heptane_core->bck_mod->__PVT__dc_wrEn) {
         printf("dc_rdEn: 0x%x, dc_wrEn 0x%x\n",top->heptane_core->bck_mod->dc_rdEn,top->heptane_core->bck_mod->__PVT__dc_wrEn);
     }
+    if (top->heptane_core->bck_mod->__PVT__agu_aligned__DOT__tlb_hitR) {
+        printf("tlb_hitR 0x%x\n",top->heptane_core->bck_mod->__PVT__agu_aligned__DOT__tlb_hitR);
+    }
     return rtn;
 }
 
