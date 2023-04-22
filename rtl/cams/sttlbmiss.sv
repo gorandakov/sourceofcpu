@@ -424,7 +424,7 @@ module wtmiss(
       end else begin
           if (pause==0) cnt_reg<=cnt;
           if (pause==0) stepW<={stepW[2:0],miss0|miss1|doSkip};
-          if (miss0|miss1&&(~enOut||pause!=0)&&read_clkEn) begin
+          if (miss0|miss1&&(~enOut||pause!=0)) begin
               doSkip<=1'b1;
               cnt<=cnt_plus;
               write_addr<=write_addr_d;
@@ -440,7 +440,7 @@ module wtmiss(
                   end
 	     
               end
-          end else if (miss0|miss1&&enOut&&read_clkEn&&pause==0) begin
+          end else if (miss0|miss1&&enOut&&pause==0) begin
               doSkip<=1'b1;
               write_addr<=write_addr_d;
               rdm_done<=2'b0;
