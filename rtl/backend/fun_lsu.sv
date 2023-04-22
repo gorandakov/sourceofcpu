@@ -189,7 +189,6 @@ module agu_block(
   parameter [4:0] BUS_ID=5'd0;
   localparam TLB_DATA_WIDTH=`dtlbData_width;
   localparam TLB_IP_WIDTH=52;
-/*verilator hier_block*/
 
   input clk;
   input rst;
