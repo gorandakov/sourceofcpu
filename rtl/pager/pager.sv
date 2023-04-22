@@ -411,7 +411,7 @@ module pager(
       end
       if (rst) new_can<=1'b1;
       else if (new_en&new_can) new_can<=1'b0;
-      else if (stageA==0 && stageB==0) new_can<=1'b1;
+      else if ((stageA==0 && stageB==0)||~mflags[`mflags_pg]) new_can<=1'b1;
       if (rst) ready<=1'b0;
       else if (stageA==0 && stageB==0 && ~new_can) ready<=1'b1;
       else ready<=1'b0;
