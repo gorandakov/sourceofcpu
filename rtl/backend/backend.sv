@@ -70,6 +70,7 @@ module backend(
   rs0i0_ldst_flg,
   rs0i0_enA,
   rs0i0_enB,
+  rs0i0_specld,
 
   rs0i1_rA,rs0i1_rA_use,rs0i1_rA_useF,rs0i1_rA_isV,rs0i1_rA_isAnyV,rs0i1_useAConst,
   rs0i1_rB,rs0i1_rB_use,rs0i1_rB_useF,rs0i1_rB_isV,rs0i1_rB_isAnyV,rs0i1_useBConst,
@@ -89,6 +90,7 @@ module backend(
   rs0i1_lsi,
   rs0i1_ldst_flg,
   rs0i1_flag_wr,
+  rs0i1_specld,
 
   rs0i2_rA,rs0i2_rA_use,rs0i2_rA_useF,rs0i2_rA_isV,rs0i2_rA_isAnyV,rs0i2_useAConst,
   rs0i2_rB,rs0i2_rB_use,rs0i2_rB_useF,rs0i2_rB_isV,rs0i2_rB_isAnyV,rs0i2_useBConst,
@@ -125,6 +127,7 @@ module backend(
   rs1i0_ldst_flg,
   rs1i0_enA,
   rs1i0_enB,
+  rs1i0_specld,
 
   rs1i1_rA,rs1i1_rA_use,rs1i1_rA_useF,rs1i1_rA_isV,rs1i1_rA_isAnyV,rs1i1_useAConst,
   rs1i1_rB,rs1i1_rB_use,rs1i1_rB_useF,rs1i1_rB_isV,rs1i1_rB_isAnyV,rs1i1_useBConst,
@@ -144,6 +147,7 @@ module backend(
   rs1i1_lsi,
   rs1i1_ldst_flg,
   rs1i1_flag_wr,
+  rs1i1_specld,
 
   rs1i2_rA,rs1i2_rA_use,rs1i2_rA_useF,rs1i2_rA_isV,rs1i2_rA_isAnyV,rs1i2_useAConst,
   rs1i2_rB,rs1i2_rB_use,rs1i2_rB_useF,rs1i2_rB_isV,rs1i2_rB_isAnyV,rs1i2_useBConst,
@@ -180,6 +184,7 @@ module backend(
   rs2i0_ldst_flg,
   rs2i0_enA,
   rs2i0_enB,
+  rs2i0_specld,
 
   rs2i1_rA,rs2i1_rA_use,rs2i1_rA_useF,rs2i1_rA_isV,rs2i1_rA_isAnyV,rs2i1_useAConst,
   rs2i1_rB,rs2i1_rB_use,rs2i1_rB_useF,rs2i1_rB_isV,rs2i1_rB_isAnyV,rs2i1_useBConst,
@@ -199,6 +204,7 @@ module backend(
   rs2i1_lsi,
   rs2i1_ldst_flg,
   rs2i1_flag_wr,
+  rs2i1_specld,
 
   rs2i2_rA,rs2i2_rA_use,rs2i2_rA_useF,rs2i2_rA_isV,rs2i2_rA_isAnyV,rs2i2_useAConst,
   rs2i2_rB,rs2i2_rB_use,rs2i2_rB_useF,rs2i2_rB_isV,rs2i2_rB_isAnyV,rs2i2_useBConst,
@@ -483,7 +489,8 @@ module backend(
   input [5:0] rs0i0_lsi; 
   input rs0i0_ldst_flg; 
   input rs0i0_enA;
-  input rs0i0_enB; 
+  input rs0i0_enB;
+  input rs0i0_specld; 
  
   input [IN_REG_WIDTH-1:0] rs0i1_rA;
   input rs0i1_rA_use;
@@ -516,6 +523,7 @@ module backend(
   input [5:0] rs0i1_lsi;  
   input rs0i1_ldst_flg; 
   input rs0i1_flag_wr;
+  input rs0i1_specld;
   
   input [IN_REG_WIDTH-1:0] rs0i2_rA;
   input rs0i2_rA_use;
@@ -577,6 +585,7 @@ module backend(
   input rs1i0_ldst_flg; 
   input rs1i0_enA;
   input rs1i0_enB; 
+  input rs1i0_specld;
   
   input [IN_REG_WIDTH-1:0] rs1i1_rA;
   input rs1i1_rA_use;
@@ -609,6 +618,7 @@ module backend(
   input [5:0] rs1i1_lsi;  
   input rs1i1_ldst_flg; 
   input rs1i1_flag_wr;
+  input rs1i1_specld;
 
   input [IN_REG_WIDTH-1:0] rs1i2_rA;
   input rs1i2_rA_use;
@@ -670,6 +680,7 @@ module backend(
   input rs2i0_ldst_flg; 
   input rs2i0_enA;
   input rs2i0_enB; 
+  input rs2i0_specld;
   
   input [IN_REG_WIDTH-1:0] rs2i1_rA;
   input rs2i1_rA_use;
@@ -702,6 +713,7 @@ module backend(
   input [5:0] rs2i1_lsi;  
   input rs2i1_ldst_flg; 
   input rs2i1_flag_wr;
+  input rs2i1_specld;
 
   input [IN_REG_WIDTH-1:0] rs2i2_rA;
   input rs2i2_rA_use;
