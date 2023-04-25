@@ -213,10 +213,12 @@ module ccRam_way(
 
   reg init;
 
-  wire [DATA_WIDTH-1:0] read_data_ram;
+  wire [DATA_WIDTH-1:0] read_data_ram0;
+  reg [DATA_WIDTH-1:0] read_data_ram;
   reg [IP_WIDTH-6:0] write_IP_reg;
   
-  wire [59:0] readX_data_ram;
+  wire [59:0] readX_data_ram0;
+  reg [59:0] readX_data_ram;
   reg [59:0] writeX_data;
   `ifdef ICACHE_256K
   wire [7:0] writeX_addr;
@@ -280,7 +282,7 @@ module ccRam_way(
   `else
   .read_addr(read_IP[8:2]),
   `endif
-  .read_data(readX_data_ram),
+  .read_data(readX_data_ram0),
   .write_addr(writeX_addr),
   .write_data(init ? 60'b0 : writeX_data),
   .write_wen(write_hit|init|read_clkEn_reg)
@@ -296,7 +298,7 @@ module ccRam_way(
   `else
   .read_addr(read_IP[8:2]),
   `endif
-  .read_data(read_data_ram[DATA_WIDTH/2-1:0]),
+  .read_data(read_data_ram0[DATA_WIDTH/2-1:0]),
   `ifdef ICACHE_256K
   .write_addr(init ? initCount : write_IP_reg[9:2]),
   `else
@@ -315,7 +317,7 @@ module ccRam_way(
   `else
   .read_addr(read_IP[8:2]),
   `endif
-  .read_data(read_data_ram[DATA_WIDTH-1:DATA_WIDTH/2]),
+  .read_data(read_data_ram0[DATA_WIDTH-1:DATA_WIDTH/2]),
   `ifdef ICACHE_256K
   .write_addr(init ? initCount : write_IP_reg[9:2]),
   `else
@@ -383,6 +385,8 @@ module ccRam_way(
   
   always @(negedge clk)
   begin
+      read_data_ram<=read_data_ram0;
+      readX_data_ram<=readX_data_ram0;
       if (rst) begin
           write_IP_reg<=39'b0;
         //  hitNRU_reg<=3'b0;
@@ -426,6 +430,11 @@ module ccRam_way(
 	      write_data_reg[260+128:260+65],write_data_reg[260+63:260+0]});
           $display("WA ",write_IP_reg[9:2]);
       end
+  end
+
+  always @(posedge clk) begin
+      read_data_ram<=~read_data_ram;
+      readX_data_ram<=~readX_data_ram;
   end
     
 endmodule
@@ -479,21 +488,21 @@ module ccRam_half(
   input invalidate;
   output [7:0] tagErr;
   
-  wire [7:0] chkCL_hit_way;
-  wire [7:0] read_hit_way;
-  wire [7:0] expun_hit_way;
+  wire [4:0] chkCL_hit_way;
+  wire [4:0] read_hit_way;
+  wire [4:0] expun_hit_way;
   
-  wire [DATA_WIDTH-1:0] read_dataP[7:-1];
-  wire [59:0] read_dataXP[7:-1];
-  wire [2:0] read_NRUP[7:-1];
-  wire [36:0] expun_addrP[7:-1];
+  wire [DATA_WIDTH-1:0] read_dataP[4:-1];
+  wire [59:0] read_dataXP[4:-1];
+  wire [2:0] read_NRUP[4:-1];
+  wire [36:0] expun_addrP[4:-1];
 
   reg [2:0] read_NRU_reg;
  
   
   generate
       genvar k;
-      for(k=0;k<8;k=k+1) begin : wayMod_gen
+      for(k=0;k<5;k=k+1) begin : wayMod_gen
           ccRam_way #(k) way_mod(
           .clk(clk),
           .rst(rst),
@@ -534,13 +543,13 @@ module ccRam_half(
   assign read_NRUP[-1]=0;
   assign expun_addrP[-1]=0;
 
-  assign read_data=read_dataP[7];
-  assign read_dataX=read_dataXP[7];
-  assign expun_addr=expun_addrP[7];
+  assign read_data=read_dataP[4];
+  assign read_dataX=read_dataXP[4];
+  assign expun_addr=expun_addrP[4];
   
 
   always @(*) begin
-    read_NRU_reg=read_NRUP[7];
+    read_NRU_reg=read_NRUP[4];
   end
 
 endmodule
