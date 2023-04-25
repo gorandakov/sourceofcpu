@@ -1551,11 +1551,7 @@ module agu_block(
   .read_clkEn(u4_clkEn_reg),
   .doStall(),
   .bus_hold(wt_pause_agu_reg), 
-  .mex_addr(p4_mex_addr),
-  .mex_attr(p4_mex_attr),
-  .mex_en(p4_mex_en),
- // .mex_ptrdiff(p4_ptrdiff),
-  .op(p4_mex_en ? {7'b0,p4_mex_sz,1'b1} : u4_op_reg),
+  .op(u4_op_reg),
   .shiftSize(u4_sh_reg),
   .regno(9'b0),
   .LSQ_no(u4_LSQ_no_reg),
@@ -1564,8 +1560,8 @@ module agu_block(
   .thread(1'b0),
   .lsflag(u4_lsflag_reg),
   .cmplxAddr(p4_cmplxAddr),
-  .cin_secq(p4_mex_en_reg ? 1'b1 : p4_sec_in_reg),
-  .ptrdiff(p4_mex_en_reg ? 1'b0 : ~p4_ndiff_reg),
+  .cin_secq(p4_sec_in_reg),
+  .ptrdiff(~p4_ndiff_reg),
   //.conflict(),
   .tlbMiss(p4_tlbmiss),
   .mOp_register(),
@@ -1595,14 +1591,7 @@ module agu_block(
   .faultCode(p4_faultCode),
   .faultNo(p4_faultNo),
   //.mOp_noBanks(),
-  .csrss_no(csrss_addr),.csrss_thr(csrss_thread),.csrss_en(csrss_en),.csrss_data(csrss_data),
-  ,
-  ,
-  addrTlbR[4],
-  sprocR[4],
-  tlb_data0R[4],
-  tlb_data1R[4],
-  tlb_hitR[4] 
+  .csrss_no(csrss_addr),.csrss_thr(csrss_thread),.csrss_en(csrss_en),.csrss_data(csrss_data)
   );
   
   sagu Wagu2_mod(
@@ -1613,10 +1602,7 @@ module agu_block(
   .read_clkEn(u5_clkEn_reg),
   .doStall(),
   .bus_hold(wt_pause_agu_reg), 
-  .mex_addr(p5_mex_addr),
-  .mex_attr(p5_mex_attr),
-  .mex_en(p5_mex_en),
-  .op(p5_mex_en ? {7'b0,p5_mex_sz,1'b1} : u5_op_reg),
+  .op(u5_op_reg),
   .shiftSize(u5_sh_reg),
   .regno(9'b0),
   .LSQ_no(u5_LSQ_no_reg),
@@ -1625,8 +1611,8 @@ module agu_block(
   .thread(1'b0),
   .lsflag(u5_lsflag_reg),
   .cmplxAddr(p5_cmplxAddr),
-  .cin_secq(p5_mex_en_reg ? 1'b1 : p5_sec_in_reg),
-  .ptrdiff(p5_mex_en_reg ? 1'b0 : ~p5_ndiff_reg),
+  .cin_secq(p5_sec_in_reg),
+  .ptrdiff(~p5_ndiff_reg),
   //.conflict(),
   .tlbMiss(p5_tlbmiss),
   .mOp_register(),
@@ -1656,96 +1642,7 @@ module agu_block(
   .faultCode(p5_faultCode),
   .faultNo(p5_faultNo),
   //.mOp_noBanks(),
-  .csrss_no(csrss_addr),.csrss_thr(csrss_thread),.csrss_en(csrss_en),.csrss_data(csrss_data),
-  ,
-  ,
-  addrTlbR[5],
-  sprocR[5],
-  tlb_data0R[5],
-  tlb_data1R[5],
-  tlb_hitR[5] 
-
-  );
-          
-  wtmiss wtmiss_mod(
-  clk,
-  rst,
-  except,
-  1'b0,
-  u4_clkEn_reg2|u5_clkEn_reg2,//mOp5_rsEn|mOp4_rsEn,
-  wt_pause_agu,
-  p4_tlbmiss,
-  mOp4_en,
-  1'b0,
-  mOp4_addrMain,
-  mOp4_type,
-  mOp4_sz,
-  mOp4_banks,
-  mOp4_bank0,
-  mOp4_odd,
-  mOp4_low,
-  mOp4_split,
-  mOp4_LSQ,
-  mOp4_II,
-  mOp4_WQ,
-  mOp4_attr,
-  mOp4_lsflag,
-  mOpX4_en,
-  ,
- // mOp0_addrMain_o,
-  mOpX4_type,
-  mOpX4_sz,
-  mOpX4_banks,
-  mOpX4_bank0,
-  mOpX4_odd,
-  mOpX4_low,
-  mOpX4_split,
-  mOpX4_LSQ,
-  mOpX4_II,
-  mOpX4_WQ,
-  mOpX4_lsflag,
-  p5_tlbmiss,
-  mOp5_en,
-  1'b0,
-  mOp5_addrMain,
-  mOp5_type,
-  mOp5_sz,
-  mOp5_banks,
-  mOp5_bank0,
-  mOp5_odd,
-  mOp5_low,
-  mOp5_split,
-  mOp5_LSQ,
-  mOp5_II,
-  mOp5_WQ,
-  mOp5_attr,
-  mOp5_lsflag,
-  mOpX5_en,
-  mOpX5_thread,
- // mOp1_addrMain_o,
-  mOpX5_type,
-  mOpX5_sz,
-  mOpX5_banks,
-  mOpX5_bank0,
-  mOpX5_odd,
-  mOpX5_low,
-  mOpX5_split,
-  mOpX5_LSQ,
-  mOpX5_II,
-  mOpX5_WQ,
-  mOpX5_lsflag,
-  p4_mex_addr,
-  p4_mex_sz,
-  p4_mex_attr,
-  p4_mex_en,
-  p5_mex_addr,
-  p5_mex_sz,
-  p5_mex_attr,
-  p5_mex_en,
-  Em_tlb_req_en,
-  Em_tlb_req_addr,
-  Em_tlb_req_attr,
-  Em_tlb_req_ack
+  .csrss_no(csrss_addr),.csrss_thr(csrss_thread),.csrss_en(csrss_en),.csrss_data(csrss_data)
   );
           
 
@@ -1807,14 +1704,7 @@ module agu_block(
   csrss_addr,
   csrss_en,
   csrss_thread,
-  csrss_data,
-  tlb_clkEnR,
-  cout_secR,
-  addrTlbR[0],
-  sprocR[0],
-  tlb_data0R[0],
-  tlb_data1R[0],
-  tlb_hitR[0] 
+  csrss_data
   );
   
   agu #(1) agu1(
@@ -1873,14 +1763,7 @@ module agu_block(
   csrss_addr,
   csrss_en,
   csrss_thread,
-  csrss_data,
-  ,
-  ,
-  addrTlbR[1],
-  sprocR[1],
-  tlb_data0R[1],
-  tlb_data1R[1],
-  tlb_hitR[1] 
+  csrss_data
   );
 
   agu #(0) agu2(
@@ -1939,15 +1822,7 @@ module agu_block(
   csrss_addr,
   csrss_en,
   csrss_thread,
-  csrss_data,
-  ,
-  ,
-  addrTlbR[2],
-  sprocR[2],
-  tlb_data0R[2],
-  tlb_data1R[2],
-  tlb_hitR[2] 
-
+  csrss_data
   );
   
   agucam recirculate_mod(
@@ -2053,16 +1928,6 @@ module agu_block(
   .mOp0_WQ(rec_WQ),
   .mOp0_attr(rec_attr),
   .mOp0_lsflag(rec_lsflag),
- 
-  .reqtlb_addr(Em_tlb_req_addr),
-  .reqtlb_attr(Em_tlb_req_attr),
-  .reqtlb_en(Em_tlb_req_en),
-  .reqtlb_ack(Em_tlb_req_ack), 
-  .reqC_addr(req_addr),
-  .reqC_attr(req_tlbAttr),
-  .reqC_tlbEn(req_tlbEn),
-  .busC_tlb_data(bus_tlb_data),
-  .busC_tlb_en(bus_tlb_en),
   .csrss_no(csrss_addr),.csrss_en(csrss_en),.csrss_thread(csrss_thread),.csrss_data(csrss_data),
   .pageFault(p3_pageFault),
   .faultCode(p3_faultCode),
@@ -2094,22 +1959,7 @@ module agu_block(
   .FU3Hit(FU3Hit),
   .FU3reg(FUreg3_reg),
   .FU3Data(dc_rdataA),
-  .extern_feed(p3_io_ack),
-  .writeTlb_IP(tlb_addr),
-  .writeTlb_wen(tlb_wen),
-  .writeTlb_force_way(tlb_frc_way),
-  .writeTlb_force_way_en(tlb_frc_en),
-  .writeTlb_data0(tlb_data0),
-  .writeTlb_data1(tlb_data1),
-  .writeTlb_data2(tlb_data2),
-  ,
-  ,
-  addrTlbR[3],
-  sprocR[3],
-  tlb_data0R[3],
-  tlb_data1R[3],
-  tlb_hitR[3],
-  tlb_wayR[3] 
+  .extern_feed(p3_io_ack)
   );
 
   assign miss0=~FU0Hit & mOpX0_en_reg3 & ~p0_conflict_reg2 & 
@@ -2151,21 +2001,6 @@ module agu_block(
   assign wr1_data=mOpY5_data_o_reg3;
   assign wr1_pbit=mOpY5_pbit_o_reg3;
   assign wr1_d128=mOpY5_d128_o_reg3;
- /* 
-  assign miss_clDo[0]=mOpR_en && ~mOpR_clHit[0] && ~miss_doneEven && ~mOpR_odd|mOpR_split;
-  assign miss_clDo[1]=mOpR_en && ~mOpR_clHit[1] && ~miss_doneOdd &&  mOpR_odd|mOpR_split;
-  
-  assign mcam_addr=miss_clDo[0] ? {mOpR_addrEven,1'b0} : {mOpR_addrOdd,1'b1};
-  assign mcam_cldupl=miss_clDo[0] ? mOpR_dupl[0] : mOpR_dupl[1];
-  assign mcam_st=mOpR_st;
-  assign mcam_sz=mOpR_sz;
-  assign mcam_low=mOpR_addr_low;
-  assign mcam_bank0=mOpR_bank0;
-  assign mcam_io=mOpR_io;
-  assign miss_next=!(&miss_clDo) && mcam_hasfree;
-  
-  assign mcam_do_req=mOpR_en_reg&&~mcam_locked&&~mcam_dupl&&~mcam_replay;
-*/
 
   missQ memmiss(
   clk,
@@ -2442,28 +2277,6 @@ module agu_block(
   alt_bus_hold_reg3
   );
 
-  dtlb dtlb_mod(
-  clk,
-  rst,
-  tlb_clkEnR,
-  cout_secR,
-  addrTlbR,
-  sprocR[0][20:0],
-  tlb_data0R,
-  tlb_data1R,
-  tlb_wayR,
-  tlb_hitR,
-  //read_2M,
-  tlb_addr,
-  tlb_data0,
-  tlb_data1,
-  tlb_data2,
-  tlb_wen,
-  tlb_frc_en,
-  tlb_frc_en,
-  tlb_frc_en,
-  tlb_frc_way
-  );
   
   msiq msiq_mod(
   clk,
@@ -2475,25 +2288,6 @@ module agu_block(
   p3_adata_reg,p3_en,p3_repl,
   msi_exp_addr,msi_en,msi_out_clear);
  
-/* 
-  dmisscam mcam_mod(
-  .clk(clk),
-  .rst(rst),
-  .fill_en(mOpR_en_reg),
-  .fill_en_pre(mOpR_en),
-  .fill_addr(mcam_addr_reg),
-  .fill_st(mcam_st_reg),
-  .fill_req(mcam_req),
-  .ins_en(insert_isData),
-  .ins_req(insBus_req[3:0]),
-  .ins_addr_o(insBus_addr),
-  .has_free(mcam_hasfree),
-  .fill_match(mcam_dupl),
-  .locked(mcam_locked),
-  .begin_replay(mcam_replay),
-  .unlock(miss_unlock)
-  );
-*/
   assign alt_bus_hold=insert_isData_reg2;
   assign alt_bus_addr=insBus_addr_reg2;
 
@@ -2703,14 +2497,6 @@ module agu_block(
   assign p5_ret={1'b0,p5_faultCode[3:0],p5_faultNo};
 
   always @(posedge clk) begin
-      if (p4_mex_en) $display("mex4");
-      if (p5_mex_en) $display("mex5");
-      if (Em_tlb_req_en) $display("dtlbR ", Em_tlb_req_addr);
-      if (Em_tlb_req_ack) $display("dtlbW");
-      if (rec_invtlb) $display("rec_invtlb");
-
-      p4_mex_en_reg<=p4_mex_en;
-      p5_mex_en_reg<=p5_mex_en;
       if (~(rsStall[0]&~now_flushing&~alt_bus_hold_reg)) begin
           u1_clkEn_reg<=u1_clkEn;
           u1_op_reg<=u1_op;
