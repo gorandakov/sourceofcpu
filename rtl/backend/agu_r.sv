@@ -48,15 +48,6 @@ module agu_r(
   mOp0_II,
   mOp0_WQ,
   mOp0_attr,
-  reqtlb_en,
-  reqtlb_addr,
-  reqtlb_attr,
-  reqtlb_ack,
-  reqC_addr,
-  reqC_attr,
-  reqC_tlbEn,
-  busC_tlb_data,
-  busC_tlb_en,
   csrss_no,csrss_en,csrss_thread,csrss_data,
   pageFault,
   faultCode,
@@ -88,22 +79,7 @@ module agu_r(
   FU3Hit,
   FU3reg,
   FU3Data,
-  extern_feed,
-  writeTlb_IP,
-  writeTlb_wen,
-  writeTlb_force_way,
-  writeTlb_force_way_en,
-  writeTlb_data0,
-  writeTlb_data1,
-  writeTlb_data2,
-  tlb_clkEn,
-  cout_secq,
-  addrTlb,
-  sproc,
-  tlb_data0,
-  tlb_data1,
-  tlb_hit,
-  tlb_way 
+  extern_feed
   );
   
   localparam VADDR_WIDTH=64;
@@ -142,15 +118,6 @@ module agu_r(
   input [9:0] mOp0_II;
   input [5:0] mOp0_WQ;
   input [3:0] mOp0_attr;
-  input reqtlb_en;
-  input [29:0] reqtlb_addr;
-  input [3:0] reqtlb_attr;
-  output reqtlb_ack;
-  input [30:0] reqC_addr;
-  input [3:0] reqC_attr;
-  input reqC_tlbEn;
-  output [`ctlbData_width-1:0] busC_tlb_data;
-  output busC_tlb_en;
   input [15:0] csrss_no;
   input csrss_en;
   input csrss_thread;
@@ -187,21 +154,6 @@ module agu_r(
   input [8:0] FU3reg;
   input [127+8:0] FU3Data;
   input extern_feed;
-  output [TLB_IP_WIDTH-2:0] writeTlb_IP;
-  output writeTlb_wen;
-  output  [2:0] writeTlb_force_way;
-  output  writeTlb_force_way_en;
-  output [TLB_DATA_WIDTH-1:0] writeTlb_data0;
-  output [TLB_DATA_WIDTH-1:0] writeTlb_data1;
-  output [TLB_DATA_WIDTH-1:0] writeTlb_data2;
-  output tlb_clkEn;
-  output cout_secq;
-  output  [TLB_IP_WIDTH-1:0] addrTlb;
-  output [23:0] sproc;
-  input [TLB_DATA_WIDTH-1:0] tlb_data0;
-  input [TLB_DATA_WIDTH-1:0] tlb_data1;
-  input tlb_hit;
-  input [2:0] tlb_way;
 
   wire tlb_clkEn;
 
@@ -253,6 +205,8 @@ module agu_r(
   wire [TLB_DATA_WIDTH-1:0] tlb_data;
   wire [TLB_DATA_WIDTH-1:0] tlb_data_next;
   wire tlb_hit;
+
+  assign tlb_hit=1'b1;
   
   wire [13:0] addrMain;
   wire [12:0] addrNext;
@@ -302,12 +256,6 @@ module agu_r(
 
   wire new_miss;
 
-  assign mOp_addrEven[12:8]=(~mOp0_lsfwd_reg & ~req_bus & addrMain[7]) ? addrNext[12:8] : 5'bz;
-  assign mOp_addrEven[12:8]=(~mOp0_lsfwd_reg & ~req_bus & ~addrMain[7]) ? addrMain[12:8] : 5'bz;
-  assign mOp_addrEven=(mOp0_lsfwd_reg & ~req_bus) ? mOp0_addrEven_reg : 36'bz;
-  assign mOp_addrOdd[12:8]=(~mOp0_lsfwd_reg & ~req_bus & ~addrMain[7]) ? addrNext[12:8] : 5'bz;
-  assign mOp_addrOdd[12:8]=(~mOp0_lsfwd_reg & ~req_bus & addrMain[7]) ? addrMain[12:8] : 5'bz;
-  assign mOp_addrOdd=(mOp0_lsfwd_reg & ~req_bus) ? mOp0_addrOdd_reg : 36'bz;
   assign addrNext[6:0]=addrMain[6:0];
   assign addrMain[13:0]=mOp0_addrMain_reg[13:0];
   assign mOp_addr_low=(~mOp0_lsfwd_reg & ~req_bus) ? addrMain[1:0] : 2'bz;
@@ -345,14 +293,8 @@ module agu_r(
   
   assign tlb_clkEn=mOp0_en_reg | reqtlb_en_reg;
 
-  assign mOp_addrEven[43:13]=(~mOp0_lsfwd_reg & ~req_bus && ~page_carry | ~addrMain[7]) ? 
-    tlb_data[`dtlbData_phys] : 31'bz;
-  assign mOp_addrEven[43:13]=(~mOp0_lsfwd_reg & ~req_bus && page_carry && addrMain[7]) ?
-    tlb_data_next[`dtlbData_phys] : 31'bz;
-  assign mOp_addrOdd[43:13]=(~mOp0_lsfwd_reg & ~req_bus && ~page_carry | addrMain[7]) ? 
-    tlb_data[`dtlbData_phys] : 31'bz;
-  assign mOp_addrOdd[43:13]=(~mOp0_lsfwd_reg & ~req_bus && page_carry && ~addrMain[7]) ?
-    tlb_data_next[`dtlbData_phys] : 31'bz;
+  assign mOp_addrEven[43:8]=mOp0_addrEven_reg[43:8];
+  assign mOp_addrEven[43:8]=mOp0_addrOdd_reg[43:8];
   
   assign pageFault_t=(page_carry) ? (fault_tlb | ({2{mOp_split}} & fault_tlb_next)) & {2{tlb_hit}} : fault_tlb & {2{tlb_hit}};
   assign pageFault=(pageFault_t_reg!=0) | fault_cann_reg && mOp_en_reg && ~bus_hold_reg;
@@ -365,107 +307,8 @@ module agu_r(
 
   assign mOp_rsEn=mOp0_en_reg & tlb_hit & ~pause_miss_reg2 & ~bus_hold & ~tlb_proceed & ~mOp0_lsfwd_reg & ~(mOp0_type_reg==2'b10); 
 //dummy page walker
-  assign reqtlb_ack=~reqtlb_en & ~reqC_tlbEn & tlb_proceed & req_can & reqtlb_next & ~tlb_in_flight;
-/*  assign writeTlb_wenH=1'b0;
-  assign writeTlb_wen=reqtlb_en_reg2 && ~tlb_hit_reg && tlb_clkEn_reg;// && ~writeTlb_wen_reg;
-  assign writeTlb_IP=addrMain_tlb_reg[64:14];
-  assign writeTlb_data0[`dtlbData_phys]={addrInPage,1'b0};
-  assign writeTlb_data0[`dtlbData_sys]=1'b0;  
-  assign writeTlb_data0[`dtlbData_na]=1'b0;  
-  assign writeTlb_data0[`dtlbData_ne]=1'b0;  
-  assign writeTlb_data0[`dtlbData_wp]=1'b0;  
-  assign writeTlb_data0[`dtlbData_wrt]=1'b1;  
-  assign writeTlb_data0[`dtlbData_acc]=1'b1;  
-  assign writeTlb_data0[`dtlbData_type]=2'b0;  
-  assign writeTlb_data0[`dtlbData_subpage]=1'b0;  
-  assign writeTlb_data0[`dtlbData_nonmem]=1'b0;  
-  assign writeTlb_data1[`dtlbData_phys]={addrInPage,1'b1};
-  assign writeTlb_data1[`dtlbData_sys]=1'b0;  
-  assign writeTlb_data1[`dtlbData_na]=1'b0;  
-  assign writeTlb_data1[`dtlbData_ne]=1'b0;  
-  assign writeTlb_data1[`dtlbData_wp]=1'b0;  
-  assign writeTlb_data1[`dtlbData_wrt]=1'b1;  
-  assign writeTlb_data1[`dtlbData_acc]=1'b1;  
-  assign writeTlb_data1[`dtlbData_type]=2'b0;  
-  assign writeTlb_data1[`dtlbData_subpage]=1'b0;  
-  assign writeTlb_data1[`dtlbData_nonmem]=1'b0;  
-  assign writeTlb_data2[`dtlbData_phys]={addrOffPage,1'b0};
-  assign writeTlb_data2[`dtlbData_sys]=1'b0;  
-  assign writeTlb_data2[`dtlbData_na]=1'b0;  
-  assign writeTlb_data2[`dtlbData_ne]=1'b0;  
-  assign writeTlb_data2[`dtlbData_wp]=1'b0;  
-  assign writeTlb_data2[`dtlbData_wrt]=1'b1;  
-  assign writeTlb_data2[`dtlbData_acc]=1'b1;  
-  assign writeTlb_data2[`dtlbData_type]=2'b0;  
-  assign writeTlb_data2[`dtlbData_subpage]=1'b0;  
-  assign writeTlb_data2[`dtlbData_nonmem]=1'b0;*/
-  assign addrInPage=addrMain_tlb[43:14];
-
-  assign busC_tlb_data[`ctlbData_phys]=writeTlb_low ? writeTlb_data1[`dtlbData_phys] : writeTlb_data0[`dtlbData_phys];
-  assign busC_tlb_data[`ctlbData_sys]=writeTlb_low ? writeTlb_data1[`dtlbData_sys] : writeTlb_data0[`dtlbData_sys];
-  assign busC_tlb_data[`ctlbData_ne]=writeTlb_low ? writeTlb_data1[`dtlbData_ne] : writeTlb_data0[`dtlbData_ne];
-  assign busC_tlb_data[`ctlbData_na]=writeTlb_low ? writeTlb_data1[`dtlbData_na] : writeTlb_data0[`dtlbData_na];
-  assign busC_tlb_data[`ctlbData_global]=writeTlb_low ? writeTlb_data1[`dtlbData_glo] : writeTlb_data0[`dtlbData_glo];
-
-  assign busC_tlb_en=writeTlb_wenC | writeTlb_wenHC;
-
-  assign new_miss=~tlb_hit & tlb_clkEn & ~mOp0_lsfwd_reg & 
-            ~reqC_tlbEn & mOp0_en_reg & ~tlb_proceed & ~(mOp0_invtlb_reg &
-            tlb_is_inv_reg) || tlb_hit & tlb_clkEn & ~mOp0_lsfwd_reg &
-            ~reqC_tlbEn & mOp0_en_reg & ~tlb_proceed & mOp0_invtlb_reg &
-            ~tlb_is_inv_reg;
-  assign writeTlb_force_way=tlb_way_reg;
-  assign writeTlb_force_way_en=writeTlb_wen && tlb_is_inv;
   adder_inc #(6) addNext_mod(addrMain[12:7],addrNext[12:7],1'b1,page_carry);
 
-  pager pgr_mod(
-  .clk(clk),
-  .rst(rst),
-  .except(except),
-  .bus_hold(bus_hold),
-  .req_bus(req_bus),
-  .new_en(tlb_in_flight),
-  .new_can(req_can),
-  .new_addr({addrMain_tlb[47:14],addrMain_tlb[13]&tlb_is_code,13'b0}),
-  .new_attr(addrMain_attr),
-  .new_indir(1'b0),
-  .new_inv(tlb_is_inv),
-  .new_permReq(tlb_is_code),
-  .csrss_no(csrss_no),
-  .csrss_thread(csrss_thread),
-  .csrss_en(csrss_en),
-  .csrss_data(csrss_data),
-  .mOp_register(mOp_regNo),
-  .mOp_LSQ(mOp_LSQ),
-  .mOp_II(mOp_II),
-  .mOp_WQ(mOp_WQ),
-  .mOp_addrEven(mOp_addrEven),
-  .mOp_addrOdd(mOp_addrOdd),
-//  .mOp_addrMain(mOp_addrMain),
-  .mOp_sz(mOp_sz),
-  .mOp_st(mOp_st),
-  .mOp_en(mOp_en),
-//  .mOp_thread(mOp_thread),
-  .mOp_lsflag(mOp_lsflag),
-  .mOp_banks(mOp_banks),
-//  .mOp_rsBanks(mOp_rsBanks),
-  .mOp_bank0(mOp_bank0),
-  .mOp_odd(mOp_odd),
-  .mOp_addr_low(mOp_addr_low),
-  .mOp_split(mOp_split),
-  .FUHit(FU3Hit),
-  .FUreg(FU3reg),
-  .data_in(FU3Data[127:0]),
-  .writeTlb_IP(writeTlb_IP),
-  .writeTlb_low(writeTlb_low),
-  .writeTlb_wen(writeTlb_wen),
-  .writeTlb_wen_c(writeTlb_wenC),
-  .writeTlb_wenH_c(writeTlb_wenHC),
-  .writeTlb_data0(writeTlb_data0),
-  .writeTlb_data1(writeTlb_data1),
-  .writeTlb_data2(writeTlb_data2)
-  //add code invlpg io
-  );
   
     always @*
     begin
@@ -568,99 +411,6 @@ module agu_r(
           end
       end 
       if (rst) begin
-          tlb_proceed<=1'b0;
-          tlb_is_code<=1'b0;
-          tlb_save<=1'b0;
-          tlb_save2<=1'b0;
-          tlb_is_inv<=1'b0;
-          addrSupp_tlb<=65'b0;
-          addrSupp2_tlb<=65'b0;
-          reqtlb_next<=1'b0;
-          tlb_save_reg<=1'b0;
-          req_can_reg<=1'b0;
-          tlb_in_flight<=1'b0;
-	  tlb_is_inv_reg<=1'b0;
-	  tlb_is_inv_reg2<=1'b0;
-      end else begin
-          tlb_in_flight<=1'b0;
-	  if (!doStall) tlb_is_inv_reg<=1'b0;
-	  else tlb_is_inv_reg<=tlb_is_inv|tlb_is_inv_reg;
-          if (reqtlb_en) begin
-              if (!tlb_proceed) begin
-                  addrMain_tlb<={reqtlb_attr[`attr_vm] ? vproc[20:0] : pproc[20:0] ,reqtlb_addr,14'b0};
-		  addrMain_attr<=reqtlb_attr;
-
-                  tlb_proceed<=1'b1;
-                  tlb_is_code<=1'b0;
-                  reqtlb_next<=1'b1;
-                  tlb_in_flight<=1'b1;
-              end else begin
-                  addrSupp_tlb<={reqtlb_attr[`attr_vm] ? vproc[20:0] : pproc[20:0],reqtlb_addr,14'b0};
-		  addrSupp_attr<=reqtlb_attr;
-                  tlb_save<=1'b1;
-              end
-          end else if (new_miss & !tlb_proceed) begin
-                  addrMain_tlb<={proc[20:0],mOp0_addrMain_reg};
-		  addrMain_attr<=mOp0_attr_reg;
-                  tlb_proceed<=1'b1;
-                  tlb_is_code<=1'b0;
-                  tlb_is_inv<=mOp0_invtlb_reg;
-                  reqtlb_next<=1'b0;
-                  tlb_in_flight<=1'b1;
-          end
-          if (reqC_tlbEn) begin
-              if (!tlb_proceed & ~reqtlb_en) begin
-                  addrMain_tlb<={reqC_attr[`attr_vm] ? vproc[20:0] : pproc[20:0],reqC_addr,13'b0};
-		  addrMain_attr<=reqC_attr;
-                  tlb_proceed<=1'b1;
-                  tlb_is_code<=1'b1;
-                  reqtlb_next<=1'b0;
-                  tlb_in_flight<=1'b1;
-              end else begin
-                  addrSupp2_tlb<={reqC_attr[`attr_vm] ? vproc[20:0] : pproc[20:0],reqC_addr,13'b0};
-		  addrSupp2_attr<=reqC_attr;
-                  tlb_save2<=1'b1;
-                  tlb_is_code<=1'b0;
-              end
-          end 
-          //if (req_can & ~req_can_reg) reqtlb_next<=tlb_save_reg;
-          if (~reqtlb_en & ~reqC_tlbEn & tlb_proceed & req_can & ~tlb_in_flight) begin
-	      $display("dud<");
-              if (!tlb_save && !tlb_save2) begin
-                  addrMain_tlb<={proc[20:0],mOp0_addrMain_reg};
-                  addrMain_attr<=mOp0_attr_reg;
-		  tlb_proceed<=1'b0;
-                  tlb_in_flight<=1'b0;
-                  tlb_is_inv<=1'b0;
-		  reqtlb_next<=1'b0;
-              end else if (tlb_save) begin
-                  addrMain_tlb<=addrSupp_tlb;
-                  addrMain_attr<=addrSupp_attr;
-                  tlb_proceed<=1'b1;
-                  tlb_save<=1'b0;
-                  tlb_is_code<=1'b0;
-                  tlb_in_flight<=1'b1;
-		  reqtlb_next<=1'b1;
-                  //tlb_in_flight<=1'b0;
-		  tlb_is_inv<=1'b0;
-              end else begin
-                  addrMain_tlb<=addrSupp2_tlb;
-                  addrMain_attr<=addrSupp2_attr;
-                  tlb_proceed<=1'b1;
-                  tlb_save2<=1'b0;
-                  tlb_is_code<=1'b1;
-                  tlb_in_flight<=1'b1;
-		  reqtlb_next<=1'b0;
-                  //tlb_in_flight<=1'b0;
-		  tlb_is_inv<=1'b0;
-              end
-          end
-          //if (!doStall) tlb_is_inv<=1'b0;
-          if (tlb_is_inv) $display("tlb_is_inv");
-      end
-      if (rst) begin
-          reqtlb_en_reg<=1'b0;
-          reqtlb_en_reg2<=1'b0;
           tlb_hit_reg<=1'b0; 
 //          addrMain_tlb_reg<={VADDR_WIDTH{1'b0}};
           //reqtlb_addr_reg<=51'b0;
@@ -668,8 +418,6 @@ module agu_r(
 	  mOp_en_reg<=1'b0;
 	  bus_hold_reg<=1'b0;
       end else begin
-          reqtlb_en_reg<=reqtlb_en;
-          reqtlb_en_reg2<=reqtlb_en_reg;
           tlb_hit_reg<=tlb_hit; 
 //          addrMain_tlb_reg<=addrMain_tlb;
           //reqtlb_addr_reg<=reqtlb_addr;

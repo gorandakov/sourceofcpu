@@ -39,6 +39,7 @@ module agu(
   WQ_no,
   thread,
   lsflag,
+  cmplxAddrn,
   cmplxAddr,
   cin_secq,
   ptrdiff,
@@ -78,14 +79,7 @@ module agu(
   csrss_no,
   csrss_en,
   csrss_thr,
-  csrss_data,
-  tlb_clkEn,
-  cout_secq,
-  addrTlb,
-  sproc,
-  tlb_data0,
-  tlb_data1,
-  tlb_hit 
+  csrss_data
   );
 
   parameter INDEX=0; //0 1 2 
@@ -114,6 +108,7 @@ module agu(
   input thread;
   input lsflag;
   input [63:0] cmplxAddr;
+  input [63:0] cmplxAddrN;
   input cin_secq;
   input ptrdiff;
   input [BANK_COUNT-1:0] other0_banks;
@@ -153,13 +148,6 @@ module agu(
   input csrss_en;
   input csrss_thr;
   input [63:0] csrss_data;
-  output tlb_clkEn;
-  output cout_secq;
-  output  [TLB_IP_WIDTH-1:0] addrTlb;
-  output [23:0] sproc;
-  input [TLB_DATA_WIDTH-1:0] tlb_data0;
-  input [TLB_DATA_WIDTH-1:0] tlb_data1;
-  input tlb_hit;
 
   reg [2:0] opsize;
   wire hasIndex;
@@ -199,16 +187,12 @@ module agu(
 //  wire [5:0] CSAbn1;
   
   wire [TLB_IP_WIDTH-1:0] addrTlb;
-  wire [TLB_DATA_WIDTH-1:0] tlb_data0;
-  wire [TLB_DATA_WIDTH-1:0] tlb_data1;
-  wire [TLB_DATA_WIDTH-1:0] tlb_data;
-  wire [TLB_DATA_WIDTH-1:0] tlb_data_next;
-  reg [TLB_DATA_WIDTH-1:0] tlb_data_reg;
   
   wire tlb_clkEn;
   wire tlb_hit;
   wire cout_secq;
   
+  assign tlb_hit=1'b1;
 
   reg read_clkEn_reg;
   reg read_clkEn_reg2;
@@ -355,13 +339,13 @@ module agu(
   assign tlb_data_next=tlb_data1;
 
   assign mOp_type=tlb_data[`dtlbData_type];
-  assign mOp_addrEven[43:13]=(addrMain[7] && addrNext[13]) ? tlb_data_next[`dtlbData_phys] :
+  assign mOp_addrEven[43:13]=(addrMain[7] && addrNext[13]) ? cmplxAddrN[43:13] :
     31'bz;
-  assign mOp_addrEven[43:13]=(~(addrMain[7] && addrNext[13] )) ?  tlb_data[`dtlbData_phys] :
+  assign mOp_addrEven[43:13]=(~(addrMain[7] && addrNext[13] )) ?  cmplxAddr[43:13] :
     31'bz;
-  assign mOp_addrOdd[43:13]=(~(~addrMain[7] && addrNext[13] ) ) ? tlb_data[`dtlbData_phys] : 
+  assign mOp_addrOdd[43:13]=(~(~addrMain[7] && addrNext[13] ) ) ? cmplxAddr[43:13] : 
     31'bz;
-  assign mOp_addrOdd[43:13]=(~addrMain[7] && addrNext[13] ) ? tlb_data_next[`dtlbData_phys] :
+  assign mOp_addrOdd[43:13]=(~addrMain[7] && addrNext[13] ) ? cmplxAddrN :
     31'bz;
 //todo: add read_clkEn to pageFault
   assign pageFault_t=(addrNext[13]) ? (fault_tlb | ({2{split}} & fault_tlb_next)) & {2{tlb_hit}} : fault_tlb & {2{tlb_hit}};
@@ -374,6 +358,7 @@ module agu(
   assign tlbMiss=read_clkEn_reg&~tlb_hit&~fault_cann & rcn_mask[1];
   
   assign addrMain=cmplxAddr[12:0];
+  assign addrNext=cmplxAddrN[12:0];
   
   assign mOp_en= read_clkEn_reg &tlb_hit & rcn_mask[1];
 
@@ -413,7 +398,6 @@ module agu(
   assign fault_tlb={mflags0[`mflags_cpl]==2'd3 && tlb_data[`dtlbData_sys], ~tlb_data[`dtlbData_na]}; 
   assign fault_tlb_next={mflags0[`mflags_cpl]==2'd3 && tlb_data_next[`dtlbData_sys],  ~tlb_data_next[`dtlbData_na]}; 
 
-  adder #(14) nextCAddr_mod({1'b0,cmplxAddr[12:0]},14'b10000000,addrNext,1'b0,1'b1,,,,);
   
   agusec_range rng_mod(
   cmplxAddr,
