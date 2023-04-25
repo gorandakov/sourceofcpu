@@ -89,13 +89,15 @@ module not_array(a,b);
 
 endmodule
 
-module adder_seq(a,b,out,c_s,cin,en,cout,cout8,cout16,cout32);
+module adder_seq(a,b,out,out_next,c_s,cin,cin2,,en,cout,cout8,cout16,cout32);
   parameter WIDTH=44;
   input [WIDTH-1:0] a;
   input [WIDTH-1:0] b;
   output [WIDTH-1:0] out;
+  output [WIDTH-1:0] out_next;
   output [43:0] c_s;
   input cin;
+  input cin2;
   input en;
   output cout;
   output cout8;
@@ -134,6 +136,8 @@ module adder_seq(a,b,out,c_s,cin,en,cout,cout8,cout16,cout32);
   
   wire [WIDTH-1:0] C1;
   wire [WIDTH-1:0] nC1;
+  wire [WIDTH-1:0] C2;
+  wire [WIDTH-1:0] nC2;
 
   assign c_s=C[43:0];
  
@@ -149,6 +153,9 @@ module adder_seq(a,b,out,c_s,cin,en,cout,cout8,cout16,cout32);
   assign C1={C[WIDTH-2:0],cin};
   assign nC1[WIDTH-1:1]=nC[WIDTH-2:0];
   not_array #(1) C1_mod (cin,nC1[0]);
+  assign C2={C[WIDTH-2:0],cin2};
+  assign nC2[WIDTH-1:1]=nC[WIDTH-2:0];
+  not_array #(1) C2_mod (cin2,nC1[0]);
   
   assign cout=C[WIDTH-1];
   
@@ -157,6 +164,8 @@ module adder_seq(a,b,out,c_s,cin,en,cout,cout8,cout16,cout32);
       begin : out_gen
         assign out[i]=(X[i] & en) ? ~C1[i] : 1'bz;
         assign out[i]=(nX[i] & en) ? ~nC1[i] : 1'bz;
+        assign out_next[i]=(X[i] & en) ? ~C2[i] : 1'bz;
+        assign out_next[i]=(nX[i] & en) ? ~nC2[i] : 1'bz;
       end 
     if (WIDTH>1)
       begin
@@ -1255,7 +1264,8 @@ module add_agu(
   cout_sec,
   ndiff,
   en,
-  shift
+  shift,
+  split_double
   );
   parameter WIDTH=44;
   input [64:0] a;//base
@@ -1263,10 +1273,12 @@ module add_agu(
   input [64:0] c; //index
   //output [63:0] ptr;
   output [63:0] out;
+  output [43:0] out_next;
   output cout_sec;
   output ndiff;
   input en;
   input [3:0] shift;
+  input split_double;
   
 
   wire [WIDTH-1:0] tmp1;
@@ -1294,10 +1306,10 @@ module add_agu(
 
   genvar k;
   
-  assign xorab=a[43:0]^b[43:0];
-  assign nxorab=a[43:0]~^b[43:0];
-  assign andab=a[43:0]&b[43:0];
-  assign orab=a[43:0]|b[43:0];
+  assign xorab=(a[43:0]|{41'b0,{3{split_double}}})^b[43:0];
+  assign nxorab=(a[43:0]|{41'b0,{3{split_double}}})~^b[43:0];
+  assign andab=(a[43:0]|{41'b0,{3{split_double}}})&b[43:0];
+  assign orab=(a[43:0]|{41'b0,{3{split_double}}})|b[43:0];
   assign c1={c[42:0],1'b0};
   assign c2={c[41:0],2'b0};
   assign c3={c[40:0],3'b0};
@@ -1328,7 +1340,7 @@ module add_agu(
         assign tmp2[k+1]=(shift[3] & c3[k]) ? orab[k] : 1'bz;
       end
   endgenerate
-  adder_seq #(WIDTH) add_mod(tmp1,tmp2[WIDTH-1:0],out[43:0],c_s,1'b0,en,,,,);
+  adder_seq #(WIDTH) add_mod(tmp1,tmp2[WIDTH-1:0],out[43:0],out_next[43:0],c_s,1'b0,split_double,en,,,,);
   assign out[63:44]=en ? ptr[63:44] : 20'bz;
   agusec_shift ssh_mod(ptr[`ptr_exp],c_s[43:12],cout_sec0);
   agusec_check_upper3 #(1'b1) chk_mod(ptr,unptr[43:4],b[43:4],{dummy1,pos_ack},{dummy2,neg_ack},,,ndiff);
