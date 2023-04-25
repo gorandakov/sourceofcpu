@@ -543,13 +543,13 @@ module ccRam_half(
   assign read_NRUP[-1]=0;
   assign expun_addrP[-1]=0;
 
-  assign read_data=read_dataP[4];
-  assign read_dataX=read_dataXP[4];
-  assign expun_addr=expun_addrP[4];
+  assign read_data=~read_dataP[4];
+  assign read_dataX=~read_dataXP[4];
+  assign expun_addr=~expun_addrP[4];
   
 
   always @(*) begin
-    read_NRU_reg=read_NRUP[4];
+    read_NRU_reg=~read_NRUP[4];
   end
 
 endmodule
