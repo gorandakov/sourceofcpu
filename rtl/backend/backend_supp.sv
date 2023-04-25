@@ -33,10 +33,7 @@ module reg_alloc(
   newR6,newR7,newR8,
   rs0i0_en,rs1i0_en,rs2i0_en,
   rs0i1_en,rs1i1_en,rs2i1_en,
-  rs0i2_en,rs1i2_en,rs2i2_en,
-  rs0i0_spec,rs0i1_spec,
-  rs1i0_spec,rs1i1_spec,
-  rs2i0_spec,rs2i1_spec
+  rs0i2_en,rs1i2_en,rs2i2_en
   );
   localparam REG_WIDTH=`reg_addr_width;
  /*verilator hier_block*/ 
@@ -48,7 +45,7 @@ module reg_alloc(
   input ethread;
   input eboth;
   input thread;
-  input [14:0] ret_en;
+  input [8:0] ret_en;
   input ret_thread;
   input [4:0] ret_rno0;
   input [4:0] ret_rno1;
@@ -59,12 +56,6 @@ module reg_alloc(
   input [4:0] ret_rno6;
   input [4:0] ret_rno7;
   input [4:0] ret_rno8;
-  input [4:0] ret_rno9;
-  input [4:0] ret_rno10;
-  input [4:0] ret_rno11;
-  input [4:0] ret_rno12;
-  input [4:0] ret_rno13;
-  input [4:0] ret_rno14;
   
   output [8:0] newR0;
   output [8:0] newR1;
@@ -79,18 +70,14 @@ module reg_alloc(
   input rs0i0_en,rs1i0_en,rs2i0_en;
   input rs0i1_en,rs1i1_en,rs2i1_en;
   input rs0i2_en,rs1i2_en,rs2i2_en;
-  input rs0i0_spec;
-  input rs0i1_spec;
-  input rs1i0_spec,rs1i1_spec;
-  input rs2i0_spec,rs2i1_spec;
   
   
   reg [1:0] pos;
   reg [4:0] lpos;
   reg [4:0] hpos;
-  reg [REG_WIDTH-1:0] new_reg[14:0];
-  reg [14:0] new_en;
-  reg [14:0] new_enn;
+  reg [REG_WIDTH-1:0] new_reg[8:0];
+  reg [8:0] new_en;
+  reg [8:0] new_enn;
 
   wire [3:0] pop3[2:0];
   wire [3:1] pop3_or_more[2:0];
@@ -100,50 +87,39 @@ module reg_alloc(
   wire [1:0] pos_d;
   reg [1:0] pos_1;
   reg [1:0] pos_2;
-  wire [4:0] ret_rno[14:0];
+  wire [4:0] ret_rno[8:0];
 
 
-  reg [31:0] rAllOc[14:0];
-  wire [14:0][31:0] rAllOc_first;
-  wire [14:0][31:0] rAllOc_free;
-  wire [14:0] rAllOc_has;
-  wire [14:0][3:0] rAllOc_first_b;
-  wire [14:0][4:0] rAllOc_first_r;
-  reg [31:0] rThread[14:0];
+  reg [31:0] rAllOc[8:0];
+  wire [8:0][31:0] rAllOc_first;
+  wire [8:0][31:0] rAllOc_free;
+  wire [8:0] rAllOc_has;
+  wire [8:0][3:0] rAllOc_first_b;
+  wire [8:0][4:0] rAllOc_first_r;
+  reg [31:0] rThread[8:0];
 
   integer k;
   
   function [3*REG_WIDTH-1:0] reg_sel;
-      input [4:0] sel;
+      input [2:0] sel;
       input [REG_WIDTH-1:0] reg0;
       input [REG_WIDTH-1:0] reg1;
       input [REG_WIDTH-1:0] reg2;
-      input [REG_WIDTH-1:0] reg3;
-      input [REG_WIDTH-1:0] reg4;
       case (sel)
-          5'b000: reg_sel={3*REG_WIDTH{1'B0}};
-          5'b001: reg_sel={{2*REG_WIDTH{1'B0}},reg0};
-          5'b1000: reg_sel={{2*REG_WIDTH{1'B0}},reg3};
-          5'b10000: reg_sel={{REG_WIDTH{1'B0}},reg3,{REG_WIDTH{1'B0}}};
-          5'b100: reg_sel={reg0,{2*REG_WIDTH{1'B0}}};
-          5'b011: reg_sel={{REG_WIDTH{1'B0}},reg1,reg0};
-          5'b11000: reg_sel={{REG_WIDTH{1'B0}},reg4,reg3};
-          5'b10001: reg_sel={{REG_WIDTH{1'B0}},reg3,reg0};
-          5'b10010: reg_sel={{REG_WIDTH{1'B0}},reg0,reg3};
-          5'b101: reg_sel={reg1,{REG_WIDTH{1'B0}},reg0};
-          5'b1100: reg_sel={reg0,{REG_WIDTH{1'B0}},reg3};
-          5'b110: reg_sel={reg1,reg0,{REG_WIDTH{1'B0}}};
-          5'b10100: reg_sel={reg0,reg4,{REG_WIDTH{1'B0}}};
-          5'b111: reg_sel={reg2,reg1,reg0};
-          5'b11100: reg_sel={reg0,reg4,reg3};
-          5'b10101: reg_sel={reg1,reg3,reg0};
-          5'b11010: reg_sel={reg1,reg0,reg3};
+          3'b000: reg_sel={3*REG_WIDTH{1'B0}};
+          3'b001: reg_sel={{2*REG_WIDTH{1'B0}},reg0};
+          3'b010: reg_sel={{REG_WIDTH{1'B0}},reg0,{REG_WIDTH{1'B0}}};
+          3'b100: reg_sel={reg0,{2*REG_WIDTH{1'B0}}};
+          3'b011: reg_sel={{REG_WIDTH{1'B0}},reg1,reg0};
+          3'b101: reg_sel={reg1,{REG_WIDTH{1'B0}},reg0};
+          3'b110: reg_sel={reg1,reg0,{REG_WIDTH{1'B0}}};
+          3'b111: reg_sel={reg2,reg1,reg0};
       endcase
   endfunction
 
   generate
     genvar l,q,a,b;
-    for(l=0;l<15;l=l+1) begin : alloc_gen
+    for(l=0;l<9;l=l+1) begin : alloc_gen
         bit_find_first_bit #(32) balloc_mod(rAllOc[l],rAllOc_first[l],rAllOc_has[l]);
         bit_find_first_bit #(4) bballoc_mod({|rAllOc[l][31:24],|rAllOc[l][23:16],
           |rAllOc[l][15:8],|rAllOc[l][7:0]},rAllOc_first_b[l],);
@@ -162,12 +138,9 @@ module reg_alloc(
     end
   endgenerate
 
-  assign {newR2,newR1,newR0}=reg_sel({rs0i2_en,rs0i1_en,rs0i0_en,rs0i1_spec,rs0i0_spec},new_reg[0],new_reg[3],new_reg[6],
-      new_reg[9],new_reg[12]);
-  assign {newR5,newR4,newR3}=reg_sel({rs1i2_en,rs1i1_en,rs1i0_en,rs1i1_spec,rs1i0_spec},new_reg[1],new_reg[4],new_reg[7],
-      new_reg[10],new_reg[13]);
-  assign {newR8,newR7,newR6}=reg_sel({rs2i2_en,rs2i1_en,rs2i0_en,rs2i1_spec,rs2i0_spec},new_reg[2],new_reg[5],new_reg[8],
-      new_reg[11],new_reg[14]);
+  assign {newR2,newR1,newR0}=reg_sel({rs0i2_en,rs0i1_en,rs0i0_en},new_reg[0],new_reg[3],new_reg[6]);
+  assign {newR5,newR4,newR3}=reg_sel({rs1i2_en,rs1i1_en,rs1i0_en},new_reg[1],new_reg[4],new_reg[7]);
+  assign {newR8,newR7,newR6}=reg_sel({rs2i2_en,rs2i1_en,rs2i0_en},new_reg[2],new_reg[5],new_reg[8]);
 
   assign pop_max[3]=pop3[0][3] | pop3[1][3] | pop3[2][3];
   assign pop_max[2]=(pop3[0][2] | pop3[1][2] | pop3[2][2]) && (~pop3[0][3] & ~pop3[1][3] & ~pop3[2][3]); 
@@ -181,9 +154,9 @@ module reg_alloc(
   
   adder_inc #(5) hhpos_one(hpos,hhpos,1'b1,);
   
-  popcnt3_or_more pop0m_mod({rs0i0_en|rs0i0_spec,rs0i1_en|rs0i1_spec,rs0i2_en},pop3_or_more[0]);
-  popcnt3_or_more pop1m_mod({rs1i0_en|rs1i0_spec,rs1i1_en|rs1i1_spec,rs1i2_en},pop3_or_more[1]);
-  popcnt3_or_more pop2m_mod({rs2i0_en|rs2i0_spec,rs2i1_en|rs2i1_spec,rs2i2_en},pop3_or_more[2]);
+  popcnt3_or_more pop0m_mod({rs0i0_en,rs0i1_en,rs0i2_en},pop3_or_more[0]);
+  popcnt3_or_more pop1m_mod({rs1i0_en,rs1i1_en,rs1i2_en},pop3_or_more[1]);
+  popcnt3_or_more pop2m_mod({rs2i0_en,rs2i1_en,rs2i2_en},pop3_or_more[2]);
   
   assign pos_d=pop_max[3] ? pos : 2'bz;
   assign pos_d=pop_max[0] ? pos : 2'bz;
@@ -199,12 +172,6 @@ module reg_alloc(
   assign ret_rno[6]=ret_rno6;
   assign ret_rno[7]=ret_rno7;
   assign ret_rno[8]=ret_rno8;
-  assign ret_rno[9]=ret_rno9;
-  assign ret_rno[10]=ret_rno10;
-  assign ret_rno[11]=ret_rno11;
-  assign ret_rno[12]=ret_rno12;
-  assign ret_rno[13]=ret_rno13;
-  assign ret_rno[14]=ret_rno14;
 
   
   //assign doStall=thread_both ? stall2[thread] : stall1[thread];
@@ -222,18 +189,9 @@ module reg_alloc(
             new_reg[6]={rAllOc_first_r[6],4'd6};
             new_reg[7]={rAllOc_first_r[7],4'd7};
             new_reg[8]={rAllOc_first_r[8],4'd8};
-            new_reg[9]={rAllOc_first_r[9],4'd9};
-            new_reg[10]={rAllOc_first_r[10],4'd10};
-            new_reg[11]={rAllOc_first_r[11],4'd11};
-            new_reg[12]={rAllOc_first_r[12],4'd12};
-            new_reg[13]={rAllOc_first_r[13],4'd13};
-            new_reg[14]={rAllOc_first_r[14],4'd14};
             {new_en[6],new_en[3],new_en[0]}=pop3_or_more[0];
             {new_en[7],new_en[4],new_en[1]}=pop3_or_more[1];
             {new_en[8],new_en[5],new_en[2]}=pop3_or_more[2];
-            {new_en[9],new_en[12]}={rs0i0_spec,rs0i1_spec};
-            {new_en[10],new_en[13]}={rs1i0_spec,rs1i1_spec};
-            {new_en[11],new_en[14]}={rs2i0_spec,rs2i1_spec};
             pos_1=2'd1;
             pos_2=2'd2;
           end
@@ -247,18 +205,9 @@ module reg_alloc(
             new_reg[6]={rAllOc_first_r[0],4'd0};
             new_reg[7]={rAllOc_first_r[1],4'd1};
             new_reg[8]={rAllOc_first_r[2],4'd2};
-            new_reg[12]={rAllOc_first_r[12],4'd12};
-            new_reg[13]={rAllOc_first_r[13],4'd13};
-            new_reg[14]={rAllOc_first_r[14],4'd14};
-            new_reg[9]={rAllOc_first_r[9],4'd9};
-            new_reg[10]={rAllOc_first_r[10],4'd10};
-            new_reg[11]={rAllOc_first_r[11],4'd11};
             {new_en[0],new_en[6],new_en[3]}=pop3_or_more[0];
             {new_en[1],new_en[7],new_en[4]}=pop3_or_more[1];
             {new_en[2],new_en[8],new_en[5]}=pop3_or_more[2];
-            {new_en[12],new_en[9]}={rs0i0_spec,rs0i1_spec};
-            {new_en[13],new_en[10]}={rs1i0_spec,rs1i1_spec};
-            {new_en[14],new_en[11]}={rs2i0_spec,rs2i1_spec};
             pos_1=2'd2;
             pos_2=2'd0;
           end
@@ -272,18 +221,9 @@ module reg_alloc(
             new_reg[6]={rAllOc_first_r[3],4'd3};
             new_reg[7]={rAllOc_first_r[4],4'd4};
             new_reg[8]={rAllOc_first_r[5],4'd5};
-            new_reg[9]={rAllOc_first_r[9],4'd9};
-            new_reg[10]={rAllOc_first_r[10],4'd10};
-            new_reg[11]={rAllOc_first_r[11],4'd11};
-            new_reg[12]={rAllOc_first_r[12],4'd12};
-            new_reg[13]={rAllOc_first_r[13],4'd13};
-            new_reg[14]={rAllOc_first_r[14],4'd14};
             {new_en[3],new_en[0],new_en[6]}=pop3_or_more[0];
             {new_en[4],new_en[1],new_en[7]}=pop3_or_more[1];
             {new_en[5],new_en[2],new_en[8]}=pop3_or_more[2];
-            {new_en[9],new_en[12]}={rs0i0_spec,rs0i1_spec};
-            {new_en[10],new_en[13]}={rs1i0_spec,rs1i1_spec};
-            {new_en[11],new_en[14]}={rs2i0_spec,rs2i1_spec};
             pos_1=2'd0;
             pos_2=2'd1;
           end
@@ -306,12 +246,12 @@ module reg_alloc(
       end
       
       if (rst) begin
-          for(k=0;k<15;k=k+1) begin
+          for(k=0;k<9;k=k+1) begin
               rAllOc[k]<=32'hffff_ffff;
               rThread[k]<=32'b0;
           end
       end else begin
-          for(k=0;k<15;k=k+1) begin
+          for(k=0;k<9;k=k+1) begin
               new_enn[k]=new_en[k] & ~stall & ~doStall;
               rAllOc[k]<=(rAllOc[k] & ~(rAllOc_first[k] & {32{new_enn[k]}})) | rAllOc_free[k] | 
 	        ((rThread[k] ^~ {32{ethread}})&{32{except}}) | {32{~eboth & except}};
