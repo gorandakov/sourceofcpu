@@ -23,7 +23,7 @@ limitations under the License.
 //do not delete redundant output
 //place next to alu_shift in alu-shift combo
 
-module alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,dataEn,nDataAlt,retData,retEn,val1,val2,valS,valRes,valRes_N);
+module alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,dataEn,nDataAlt,retData,retEn,val1,val2,valS,valRes,valRes_1,valRes_N);
 
   localparam REG_WIDTH=`reg_addr_width;
   localparam OPERATION_WIDTH=`operation_width;
@@ -46,14 +46,13 @@ module alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,da
   input [64:0] val1;
   input [64:0] val2;
   input [5:0] valS;//flag
-  inout  [64:0] valRes;  
-  output [64:0] valRes_N;  
+  inout  [64:0] valRes;
+  output reg [64:0] valRes_1;  
+  output reg [64:0] valRes_N;  
   
   wire  [64:0] valRes_X;  
   wire  [64:0] valRes_X_N;  
 
-  assign valRes=valRes_X;
-  assign valRes_N=~valRes;
 
   reg [64:0] valRes_reg;
 
@@ -433,6 +432,15 @@ module alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,da
       endcase
   end  
   
+  always @(negedge clk) begin
+      (*keep*) valRes_1<=valRes;
+      (*keep*) valRes_N<=~valRes;
+  end
+
+  always @(posedge clk) begin
+      (*keep*) valRes_1<=valRes_N;
+      (*keep*) valres_N<=valRes_1;
+  end 
 
   always @(posedge clk)
     begin

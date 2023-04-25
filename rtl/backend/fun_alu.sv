@@ -212,6 +212,13 @@ module fu_alu(
   reg [5:0] FUS7_reg;
   reg [5:0] FUS8_reg;
   reg [5:0] FUS9_reg;
+
+  wire [64:0] fu4;
+  wire [64:0] fu5;
+  wire [64:0] fu6;
+  wire [64:0] fu7;
+  wire [64:0] fu8;
+  wire [64:0] fu9;
   
   reg [3:0]           u1_S_fufwd_reg;
   reg [3:0]           u1_S_fuufwd_reg;
@@ -650,19 +657,19 @@ module fu_alu(
 
 
   alu alu0(clk,rst,except,1'b0,1'b0,u1_op_reg[12:0],u1_op_reg[17:13],u1_isSub_reg,mflags[20],u1_clkEn_reg,1'b1,
-    u1_ret,u1_rten,uu_A1,uu_B1,uu_S1,FU4,FNU4);
+    u1_ret,u1_rten,uu_A1,uu_B1,uu_S1,fu4,FU4,FNU4);
   alu #(1'b0)  alu1(clk,rst,except,1'b0,1'b0,u2_op_reg[12:0],u2_op_reg[17:13],u2_isSub_reg,mflags[20],u2_clkEn_reg,1'b1,
-    u2_ret,u2_rten,uu_A2,uu_B2,uu_S2,FU7,FNU7);
+    u2_ret,u2_rten,uu_A2,uu_B2,uu_S2,fu7,FU7,FNU7);
   
   alu alu2(clk,rst,except,1'b0,1'b0,u3_op_reg[12:0],u3_op_reg[17:13],u3_isSub_reg,mflags[20],u3_clkEn_reg,1'b1,
-    u3_ret,u3_rten,uu_A3,uu_B3,uu_S3,FU5,FNU5);
+    u3_ret,u3_rten,uu_A3,uu_B3,uu_S3,fu5,FU5,FNU5);
   alu #(1'b0)  alu3(clk,rst,except,1'b0,1'b0,u4_op_reg[12:0],u4_op_reg[17:13],u4_isSub_reg,mflags[20],u4_clkEn_reg,1'b1,
-    u4_ret,u4_rten,uu_A4,uu_B4,uu_S4,FU8,FNU8);
+    u4_ret,u4_rten,uu_A4,uu_B4,uu_S4,fu8,FU8,FNU8);
   
   alu alu4(clk,rst,except,1'b0,1'b0,u5_op_reg[12:0],u5_op_reg[17:13],u5_isSub_reg,mflags[20],u5_clkEn_reg,u5_nDataAlt&&(&nDataAlt),
-    u5_ret,u5_rten,uu_A5,uu_B5,uu_S5,FU6,FNU6);
+    u5_ret,u5_rten,uu_A5,uu_B5,uu_S5,fu6,FU6,FNU6);
   alu #(1'b0)  alu5(clk,rst,except,1'b0,1'b0,u6_op_reg[12:0],u6_op_reg[17:13],u6_isSub_reg,mflags[20],u6_clkEn_reg,1'b1,
-    u6_ret,u6_rten,uu_A6,uu_B6,uu_S6,FU9,FNU9);
+    u6_ret,u6_rten,uu_A6,uu_B6,uu_S6,fu9,FU9,FNU9);
   
   alu_shift sh2_alu(
   clk,
@@ -677,7 +684,7 @@ module fu_alu(
   uu_S2,
   uu_A2[63:0],
   uu_B2[63:0],
-  FU7[63:0]
+  fu7[63:0]
   );
   
   alu_shift sh4_alu(
@@ -693,7 +700,7 @@ module fu_alu(
   uu_S4,
   uu_A4[63:0],
   uu_B4[63:0],
-  FU8[63:0]
+  fu8[63:0]
   );
 
   alu_shift sh6_alu(
@@ -709,7 +716,7 @@ module fu_alu(
   uu_S6,
   uu_A6[63:0],
   uu_B6[63:0],
-  FU9[63:0]
+  fu9[63:0]
   );
   
   ifconv_mod g2fp_mod(
@@ -731,10 +738,8 @@ module fu_alu(
   assign fcvtout={FUCVT2_0[81:66],FUTYPE_0,FUCVT2_0[65:0]};
   
   
-  assign FU6=(~&nDataAlt) ? FUMUL : 65'bz;
-  assign FU6=(~u5_nDataAlt) ? {1'b0,FUCVTIN} : 65'bz;
-  assign FNU6=(~&nDataAlt) ? ~FUMUL : 65'bz;
-  assign FNU6=(~u5_nDataAlt) ? ~{1'b0,FUCVTIN} : 65'bz;
+  assign fu6=(~&nDataAlt) ? FUMUL : 65'bz;
+  assign fu6=(~u5_nDataAlt) ? {1'b0,FUCVTIN} : 65'bz;
 
  
   
