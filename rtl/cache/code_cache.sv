@@ -385,8 +385,8 @@ module ccRam_way(
   
   always @(negedge clk)
   begin
-      read_data_ram<=read_data_ram0;
-      readX_data_ram<=readX_data_ram0;
+      read_data_ram<=~read_data_ram;
+      readX_data_ram<=~readX_data_ram;
       if (rst) begin
           write_IP_reg<=39'b0;
         //  hitNRU_reg<=3'b0;
@@ -433,8 +433,8 @@ module ccRam_way(
   end
 
   always @(posedge clk) begin
-      read_data_ram<=~read_data_ram;
-      readX_data_ram<=~readX_data_ram;
+      read_data_ram<=read_data_ram0;
+      readX_data_ram<=readX_data_ram0;
   end
     
 endmodule

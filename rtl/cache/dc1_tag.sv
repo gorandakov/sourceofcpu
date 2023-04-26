@@ -119,8 +119,10 @@ module dcache1_tag(
   wire hit_odd;
   wire hit_even;
   
-  wire [`dc1Tag_width-1:0] tagR0_data;
-  wire [`dc1Tag_width-1:0] tagR1_data;
+  reg [`dc1Tag_width-1:0] tagR0_data;
+  reg [`dc1Tag_width-1:0] tagR1_data;
+  wire [`dc1Tag_width-1:0] tagR0_data0;
+  wire [`dc1Tag_width-1:0] tagR1_data0;
   wire [`dc1Tag_width-1:0] tag_write_data;
   wire [`dc1Tag_width-1:0] tag_same_data;
   
@@ -151,7 +153,7 @@ module dcache1_tag(
   .rst(rst),
   .read_clkEn(read_clkEn),
   .read_addr(read_addrEven[6:0]),
-  .read_data(tagR0_data),
+  .read_data(tagR0_data0),
   `ifdef DCACHE_256K
   .write_addr(init ? initCount : read_addrEven_reg[6:0]),
   `else
@@ -167,7 +169,7 @@ module dcache1_tag(
   .rst(rst),
   .read_clkEn(read_clkEn),
   .read_addr(read_addrOdd[6:0]),
-  .read_data(tagR1_data),
+  .read_data(tagR1_data0),
   `ifdef DCACHE_256K
   .write_addr(init ? initCount : read_addrOdd_reg[6:0]),
   `else
@@ -239,7 +241,14 @@ module dcache1_tag(
     read_odd_reg ? {tagR1_IP,1'b1} : {tagR0_IP,1'b1}) : {PADDR_WIDTH-7{1'bz}};
   assign wb_valid=write_hit ? (
     read_odd_reg ? tagR1_valid : tagR0_valid) : 1'bz;
+  always @(posedge clk) begin
+      tagR0_data<=tagR0_data0;
+      tagR1_data<=tagR1_data0;
+  end
+
   always @(negedge clk) begin
+      tagR0_data<=~tagR0_data;
+      tagR1_data<=~tagR1_data;
       if (rst) begin
           read_addrOdd_reg<=36'b0;
           read_addrEven_reg<=36'b0;

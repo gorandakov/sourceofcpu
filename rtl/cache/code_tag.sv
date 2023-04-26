@@ -272,11 +272,11 @@ module ccTag(
   
   always @(negedge clk)
   begin
-      read_data<=read_data0;
-      read_dataW<=read_dataW0;
-      readW_data<=readW_data0;
-      read_NRUr<=read_NRUr0;
-      read_NRUw<=read_NRUw0;
+      read_data<=~read_data;
+      read_dataW<=~read_dataW;
+      readW_data<=~readW_data;
+      read_NRUr<=~read_NRUr;
+      read_NRUw<=~read_NRUw;
       if (rst) read_clkEn_reg<=1'b0;
       else read_clkEn_reg<=read_clkEn;
       if (rst) read_clkEn_reg2<=1'b0;
@@ -307,11 +307,11 @@ module ccTag(
      // if (read_clkEn_reg) $display("rhit ",read_phys_addr_reg," ",read_hit);
   end
   always @(posedge clk) begin
-      read_data<=~read_data;
-      read_dataW<=~read_dataW;
-      readW_data<=~readW_data;
-      read_NRUr<=~read_NRUr;
-      read_NRUw<=~read_NRUw;
+      read_data<=read_data0;
+      read_dataW<=read_dataW0;
+      readW_data<=readW_data0;
+      read_NRUr<=read_NRUr0;
+      read_NRUw<=read_NRUw0;
   end
 endmodule
 
