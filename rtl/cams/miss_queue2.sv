@@ -743,12 +743,17 @@ module missQ(
   wire [DATA_WIDTH-1:0] write_dataB;
   wire [DATA_WIDTH-1:0] write_dataC;
   wire [MOP_WIDTH-1:0] read_mop[5:0];
-  wire [DATA_WIDTH-1:0] read_dataA;
-  wire [DATA_WIDTH-1:0] read_dataB;
-  wire [DATA_WIDTH-1:0] read_dataC;
-  wire [DDATA_WIDTH-1:0] read_ddata;
+  reg [DATA_WIDTH-1:0] read_dataA;
+  reg [DATA_WIDTH-1:0] read_dataB;
+  reg [DATA_WIDTH-1:0] read_dataC;
+  reg [DDATA_WIDTH-1:0] read_ddata;
+  wire [DATA_WIDTH-1:0] read_dataA0;
+  wire [DATA_WIDTH-1:0] read_dataB0;
+  wire [DATA_WIDTH-1:0] read_dataC0;
+  wire [DDATA_WIDTH-1:0] read_ddata0;
   wire [DDATA_WIDTH-1:0] write_ddata;
-  wire [DXDATA_WIDTH-1:0] read_dxdata;
+  reg [DXDATA_WIDTH-1:0] read_dxdata;
+  wire [DXDATA_WIDTH-1:0] read_dxdata0;
   wire [DXDATA_WIDTH-1:0] write_dxdata;
   
   
@@ -1341,7 +1346,7 @@ module missQ(
   rst,
   doStep|begin_flush,
   read_addr_d,
-  read_dataA,
+  read_dataA0,
   init ? initCount : write_addr,
   write_dataA,
   wen|init
@@ -1352,7 +1357,7 @@ module missQ(
   rst,
   doStep|begin_flush,
   read_addr_d,
-  read_dataB,
+  read_dataB0,
   init ? initCount : write_addr,
   write_dataB,
   wen|init
@@ -1363,7 +1368,7 @@ module missQ(
   rst,
   doStep|begin_flush,
   read_addr_d,
-  read_dataC,
+  read_dataC0,
   init ? initCount : write_addr,
   write_dataC,
   wen|init
@@ -1374,7 +1379,7 @@ module missQ(
   rst,
   doStep|begin_flush,
   read_addr_d,
-  read_ddata,
+  read_ddata0,
   init ? initCount : write_addr,
   write_ddata,
   wen|init
@@ -1385,7 +1390,7 @@ module missQ(
   rst,
   doStep|begin_flush,
   read_addr_d,
-  read_dxdata,
+  read_dxdata0,
   init ? initCount : write_addr,
   write_dxdata,
   wen|init
@@ -1450,9 +1455,20 @@ module missQ(
           ((sz5==5 && stepOver5) && read_mop[5][`mOp1_bank0]==((q-4)&5'h1f)) ;
       end
   end
-  
+  always @(negedge clk) begin
+    read_dataA<=read_dataA0;
+    read_dataB<=read_dataB0;
+    read_dataC<=read_dataC0;
+    read_ddata<=read_ddata0;
+    read_dxdata<=read_dxdata0;
+  end
   always @(posedge clk)
     begin
+        read_dataA<=~read_dataA;
+        read_dataB<=~read_dataB;
+        read_dataC<=~read_dataC;
+        read_ddata<=~read_ddata;
+        read_dxdata<=~read_dxdata;
 	  if (rst) begin
 	      confl_mask<=6'b111111;
 	  end else if ((flush_end&~alt_bus_hold)|doStep) begin
