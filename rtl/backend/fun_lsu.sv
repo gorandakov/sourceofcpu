@@ -1529,16 +1529,19 @@ module agu_block(
   agu_get_shiftSize sh4(u4_op,u4_sh); 
   agu_get_shiftSize sh5(u5_op,u5_sh); 
  
-  add_agu aadd1(uu_base1,u1_const_reg,uu_index1,p0_cmplxAddr_d,p0_cmplxNext_d,p0_sec_in,
-    p0_ndiff,1'b1,u1_sh_reg,u1_128bit);
-  add_agu aadd2(uu_base2,u2_const_reg,uu_index2,p1_cmplxAddr_d,p1_cmplxNext_d,p1_sec_in,
-    p1_ndiff,1'b1,u2_sh_reg,u2_128bit);
-  add_agu aadd3(uu_base3,u3_const_reg,uu_index3,p2_cmplxAddr_d,p2_cmplxNext_d,p2_sec_in,
-    p2_ndiff,1'b1,u3_sh_reg,u3_128bit);
-  add_agu aadd4(uu_base4,u4_const_reg,uu_index4,p4_cmplxAddr_d,p4_cmplxAddrN_d,p4_sec_in,
-    p4_ndiff,~p4_mex_en,u4_sh_reg,u4_128bit);
-  add_agu aadd5(uu_base5,u5_const_reg,uu_index5,p5_cmplxAddr_d,p5_cmplxAddrN_d,p5_sec_in,
-    p5_ndiff,~p5_mex_en,u5_sh_reg,u5_128bit);
+  add_agu aadd1(uu_base1,u1_const_reg,uu_index1,p0_cmplxAddr_d,p0_sec_in,
+    p0_ndiff,1'b1,u1_sh_reg);
+  add_agu aadd2(uu_base2,u2_const_reg,uu_index2,p1_cmplxAddr_d,p1_sec_in,
+    p1_ndiff,1'b1,u2_sh_reg);
+  add_agu aadd3(uu_base3,u3_const_reg,uu_index3,p2_cmplxAddr_d,p2_sec_in,
+    p2_ndiff,1'b1,u3_sh_reg);
+  add_agu aadd4(uu_base4,u4_const_reg,uu_index4,p4_cmplxAddr_d,p4_sec_in,
+    p4_ndiff,~p4_mex_en,u4_sh_reg);
+  add_agu aadd5(uu_base5,u5_const_reg,uu_index5,p5_cmplxAddr_d,p5_sec_in,
+    p5_ndiff,~p5_mex_en,u5_sh_reg);
+
+  assign p4_cmplxAddr_d=p4_mex_en ? {5'b11111,7'b0,7'h7f,1'b1,p4_mex_addr} : 64'bz;
+  assign p5_cmplxAddr_d=p5_mex_en ? {5'b11111,7'b0,7'h7f,1'b1,p5_mex_addr} : 64'bz;
 
   sagu Wagu_mod(
   .clk(clk),
@@ -1557,7 +1560,6 @@ module agu_block(
   .thread(1'b0),
   .lsflag(u4_lsflag_reg),
   .cmplxAddr(p4_cmplxAddr),
-  .cmplxAddrN(p4_cmplxAddrN),
   .cin_secq(p4_sec_in_reg),
   .ptrdiff(~p4_ndiff_reg),
   //.conflict(),
@@ -1609,7 +1611,6 @@ module agu_block(
   .thread(1'b0),
   .lsflag(u5_lsflag_reg),
   .cmplxAddr(p5_cmplxAddr),
-  .cmplxAddrN(p5_cmplxAddrN),
   .cin_secq(p5_sec_in_reg),
   .ptrdiff(~p5_ndiff_reg),
   //.conflict(),
@@ -1665,7 +1666,6 @@ module agu_block(
   1'b0,
   u1_lsflag,
   p0_cmplxAddr_d,
-  p0_cmplxNext_d,
   p0_sec_in,
   ~p0_ndiff,
   mOp1_rsBanks,
@@ -1725,7 +1725,6 @@ module agu_block(
   1'b0,
   u2_lsflag,
   p1_cmplxAddr_d,
-  p1_cmplxNext_d,
   p1_sec_in,
   ~p1_ndiff,
   mOp0_rsBanks,
@@ -1785,7 +1784,6 @@ module agu_block(
   1'b0,
   u3_lsflag,
   p2_cmplxAddr_d,
-  p2_cmplxNext_d,
   p2_sec_in,
   ~p2_ndiff,
   mOp1_rsBanks,
@@ -2503,7 +2501,6 @@ module agu_block(
           u1_clkEn_reg<=u1_clkEn;
           u1_op_reg<=u1_op;
           u1_sh_reg<=u1_sh;
-          u1_128bit<=u1_op[5:1]==0 || u1_op[5:1]==1 || u1_op[5:1]==2;
           u1_reg_reg<=u1_reg;
           u1_LSQ_no_reg<=u1_LSQ_no;
           u1_II_no_reg<=u1_II_no;
@@ -2516,7 +2513,6 @@ module agu_block(
           u2_clkEn_reg<=u2_clkEn;
           u2_op_reg<=u2_op;
           u2_sh_reg<=u2_sh;
-          u2_128bit<=u2_op[5:1]==0 || u2_op[5:1]==1 || u2_op[5:1]==2;
           u2_reg_reg<=u2_reg;
           u2_LSQ_no_reg<=u2_LSQ_no;
           u2_II_no_reg<=u2_II_no;
@@ -2529,7 +2525,6 @@ module agu_block(
           u3_clkEn_reg<=u3_clkEn;
           u3_op_reg<=u3_op;
           u3_sh_reg<=u3_sh;
-          u3_128bit<=u3_op[5:1]==0 || u3_op[5:1]==1 || u3_op[5:1]==2;
           u3_reg_reg<=u3_reg;
           u3_LSQ_no_reg<=u3_LSQ_no;
           u3_II_no_reg<=u3_II_no;
@@ -2541,7 +2536,6 @@ module agu_block(
       u4_clkEn_reg<=u4_clkEn;
       u4_op_reg<=u4_op;
       u4_sh_reg<=u4_sh;
-      u4_128bit<=u4_op[5:1]==0 || u4_op[5:1]==1 || u4_op[5:1]==2;
       u4_reg_reg<=u4_reg;
       u4_LSQ_no_reg<=u4_LSQ_no;
       u4_II_no_reg<=u4_II_no;
@@ -2552,7 +2546,6 @@ module agu_block(
       u5_clkEn_reg<=u5_clkEn;
       u5_op_reg<=u5_op;
       u5_sh_reg<=u5_sh;
-      u5_128bit<=u5_op[5:1]==0 || u5_op[5:1]==1 || u5_op[5:1]==2;
       u5_reg_reg<=u5_reg;
       u5_LSQ_no_reg<=u5_LSQ_no;
       u5_II_no_reg<=u5_II_no;
