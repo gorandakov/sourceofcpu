@@ -26,6 +26,9 @@ module sagu(
   read_clkEn,
   doStall,
   bus_hold,
+  mex_addr,
+  mex_attr,
+  mex_en,
   op,
   shiftSize,
   regno,
@@ -35,7 +38,6 @@ module sagu(
   thread,
   lsflag,
   cmplxAddr,
-  cmplxAddrN,
   cin_secq,
   ptrdiff,
   tlbMiss,
@@ -67,7 +69,14 @@ module sagu(
   csrss_no,
   csrss_en,
   csrss_thr,
-  csrss_data
+  csrss_data,
+  tlb_clkEn,
+  cout_secq,
+  addrTlb,
+  sproc,
+  tlb_data0,
+  tlb_data1,
+  tlb_hit
   );
 
   parameter INDEX=0; //0 1 2 
@@ -86,6 +95,9 @@ module sagu(
   input read_clkEn;
   output doStall;
   input bus_hold;
+  input [43:0] mex_addr;
+  input [3:0] mex_attr;
+  input mex_en;
   input [OPERATION_WIDTH-1:0] op;
   input [3:0] shiftSize;
   input [REG_WIDTH-1:0] regno;
@@ -95,7 +107,6 @@ module sagu(
   input thread;
   input lsflag;
   input [63:0] cmplxAddr;
-  input [63:0] cmplxAddrN;
   input cin_secq;
   input ptrdiff;
   output tlbMiss;
@@ -128,6 +139,13 @@ module sagu(
   input csrss_en;
   input csrss_thr;
   input [63:0] csrss_data;
+  output tlb_clkEn;
+  output cout_secq;
+  output [TLB_IP_WIDTH-1:0] addrTlb;
+  output [23:0] sproc;
+  input [TLB_DATA_WIDTH-1:0] tlb_data0;
+  input [TLB_DATA_WIDTH-1:0] tlb_data1;
+  input tlb_hit;
 
   reg [2:0] opsize;
   wire hasIndex;
@@ -173,11 +191,14 @@ module sagu(
 //  wire [5:0] CSAbn1;
   
   wire [TLB_IP_WIDTH-1:0] addrTlb;
+  wire [TLB_DATA_WIDTH-1:0] tlb_data0;
+  wire [TLB_DATA_WIDTH-1:0] tlb_data1;
+  wire [TLB_DATA_WIDTH-1:0] tlb_data;
+  wire [TLB_DATA_WIDTH-1:0] tlb_data_next;
+  reg [TLB_DATA_WIDTH-1:0] tlb_data_reg;
   
   wire tlb_clkEn;
   wire tlb_hit;
-
-  assign tlb_hit=1'b1;
 
   wire [3:0] attr2; 
 
@@ -289,8 +310,8 @@ module sagu(
 
   assign mOp_type=tlb_data[`dtlbData_type];
   
-  assign mOp_addrEven[43:13]=(addrMain[7] & addrNext[13]) ? cmplxAddrN[43:13] : cmplxAddr[43:13];
-  assign mOp_addrOdd[43:13]=(~(~addrMain[7] & addrNext[13])) ? cmplxAddr[43:13] : cmplxAddrN[43:13];
+  assign mOp_addrEven[43:13]=(addrMain[7] & addrNext[13]) ? tlb_data_next[`dtlbData_phys] : tlb_data[`dtlbData_phys];
+  assign mOp_addrOdd[43:13]=(~(~addrMain[7] & addrNext[13])) ? tlb_data[`dtlbData_phys] : tlb_data_next[`dtlbData_phys];
   
   assign pageFault_t=(addrNext[13]) ? (fault_tlb | ({2{mOp_split}} & fault_tlb_next)) & {2{tlb_hit}} : fault_tlb & {2{tlb_hit}};
   assign pageFault=(pageFault_t_reg!=0) | fault_cann_reg && read_clkEn_reg2|mex_en_reg2 && ~bus_hold_reg2;
@@ -303,7 +324,6 @@ module sagu(
   assign tlbMiss=(read_clkEn_reg)&~tlb_hit&~fault_cann&~except;
   
   assign addrMain=cmplxAddr[11+1:0];
-  assign addrNext=cmplxAddrN[11+1:0];
   
   assign mOp_en=read_clkEn_reg &tlb_hit
    & rcn_mask[1] & ~bus_hold_reg;
@@ -339,6 +359,8 @@ module sagu(
   
   assign fault_tlb={mflags0[`mflags_cpl]==2'd3 && tlb_data[`dtlbData_sys] , ~tlb_data[`dtlbData_na]|~tlb_data[`dtlbData_wp]}; 
   assign fault_tlb_next={mflags0[`mflags_cpl]==2'd3 && tlb_data_next[`dtlbData_sys] , ~tlb_data_next[`dtlbData_na]|~tlb_data_next[`dtlbData_wp]}; 
+
+  adder #(14) nextCAddr_mod({1'b0,cmplxAddr[12:0]},14'b10000000,addrNext,1'b0,1'b1,,,,);
 
   agusec_range rng_mod(
   cmplxAddr,
