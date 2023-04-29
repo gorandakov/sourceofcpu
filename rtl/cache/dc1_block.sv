@@ -1102,15 +1102,15 @@ module dcache1(
   wire [1023:0] write_dataM;
 //  wire [LINE_WIDTH-1:0] read_data;
   
-  wire [LINE_WIDTH-1:0] read_dataP[5:0];
-  wire [LINE_WIDTH-1:0] read_dataPN[5:0];
+  wire [LINE_WIDTH-1:0] read_dataP[8:0];
+  wire [LINE_WIDTH-1:0] read_dataPN[8:0];
   reg [LINE_WIDTH-1:0] read_dataP_reg;
   reg [LINE_WIDTH-1:0] read_dataP_reg2;
   wire [BANK_COUNT*32-1:0] read_data_strip;
-  wire [1:0] read_pbit0P[5:0];
-  wire [1:0] read_pbit1P[5:0];
-  wire [1:0] read_pbit2P[5:0];
-  wire [1:0] read_pbit3P[5:0];
+  wire [1:0] read_pbit0P[8:0];
+  wire [1:0] read_pbit1P[8:0];
+  wire [1:0] read_pbit2P[8:0];
+  wire [1:0] read_pbit3P[8:0];
   
   reg [1:0] read_pbit0P_reg;
   reg [1:0] read_pbit0P_reg2;
@@ -1121,22 +1121,22 @@ module dcache1(
   reg [1:0] read_pbit3P_reg;
   reg [1:0] read_pbit3P_reg2;
 
-  wire [5:0] err_tag[4:0];
+  wire [5:0] err_tag[7:0];
   
   wire recent_in;
-  wire [4:0] recent_out;
+  wire [7:0] recent_out;
 
   wire [5:0] insert_rand;
   
-  wire [BANK_COUNT-1:0] read_bankHit_way[4:0];
+  wire [BANK_COUNT-1:0] read_bankHit_way[7:0];
   wire [BANK_COUNT-1:0] bank_hit;
 
-  wire [4:0] insert_hit_way;
+  wire [7:0] insert_hit_way;
   
-  wire [1:0] read_hit0_way[4:0];
-  wire [1:0] read_hit1_way[4:0];
-  wire [1:0] read_hit2_way[4:0];
-  wire [1:0] read_hit3_way[4:0];
+  wire [1:0] read_hit0_way[7:0];
+  wire [1:0] read_hit1_way[7:0];
+  wire [1:0] read_hit2_way[7:0];
+  wire [1:0] read_hit3_way[7:0];
   
   wire [1:0] read_hitCl0Q;
   wire [1:0] read_hitCl1Q;
@@ -1163,8 +1163,8 @@ module dcache1(
   reg read_hit2P_reg;
   reg read_hit3P_reg;
 
-  wire [1:0] write_hit0_way[4:0];
-  wire [1:0] write_hit1_way[4:0];
+  wire [1:0] write_hit0_way[7:0];
+  wire [1:0] write_hit1_way[7:0];
 
   wire write_hit0P;
   wire write_hit1P;
@@ -1178,8 +1178,8 @@ module dcache1(
   reg [1:0] write_hitCl0P_reg;
   reg [1:0] write_hitCl1P_reg;
   
-  wire [1:0] write_dupl0_way[4:0];
-  wire [1:0] write_dupl1_way[4:0];
+  wire [1:0] write_dupl0_way[7:0];
+  wire [1:0] write_dupl1_way[7:0];
 
   wire [1:0] write_dupl0P;
   wire [1:0] write_dupl1P;
@@ -1287,8 +1287,8 @@ module dcache1(
   reg [4:0] read_sz[3:0];
   reg [4:0] read_sz_reg[3:0];
 
-  wire [4:0] write_back_way;
-  wire [4:0] write_back2_way;
+  wire [7:0] write_back_way;
+  wire [7:0] write_back2_way;
   
   wire write_back;
   wire write_back2;
