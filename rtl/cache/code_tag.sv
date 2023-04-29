@@ -163,9 +163,6 @@ module ccTag(
   wire [DATA_WIDTH-1:0] read_data;
   wire [DATA_WIDTH-1:0] readW_data;
   wire [DATA_WIDTH-1:0] read_dataW;
-  wire [DATA_WIDTH-1:0] read_data0;
-  wire [DATA_WIDTH-1:0] readW_data0;
-  wire [DATA_WIDTH-1:0] read_dataW0;
 
   wire [DATA_WIDTH-1:0] write_data_way;
   wire [DATA_WIDTH-1:0] write_data_new;
@@ -182,8 +179,6 @@ module ccTag(
 
   wire [2:0] read_NRUr;
   wire [2:0] read_NRUw;
-  wire [2:0] read_NRUr0;
-  wire [2:0] read_NRUw0;
   wire [2:0] write_NRU;
   
   reg write_wen_reg;
@@ -222,7 +217,7 @@ module ccTag(
   .rst(rst),
   .read_clkEn(read_clkEn),
   .read_addr(read_phys_addr[7:0]),
-  .read_data(read_data0),
+  .read_data(read_data),
   .write_addr(write_phys_addr_reg[7:0]),
   .write_data(write_data_way),
   .write_wen(write_hit|init_reg)
@@ -233,7 +228,7 @@ module ccTag(
   .rst(rst),
   .read_clkEn(read_clkEn),
   .read_addr(write_phys_addr[7:0]),
-  .read_data(read_dataW0),
+  .read_data(read_dataW),
   .write_addr(write_phys_addr_reg[7:0]),
   .write_data(write_data_way),
   .write_wen(write_hit|init_reg)
@@ -244,7 +239,7 @@ module ccTag(
   .rst(rst),
   .read_clkEn(read_clkEn),
   .read_addr(read_phys_addr[7:0]),
-  .read_data(read_NRUr0),
+  .read_data(read_NRUr),
   .write_addr(read_phys_addr_reg2[7:0]),
   .write_data(write_NRU),
   .write_wen(EXT ? init_reg2 : read_clkEn_reg2|init_reg2)
@@ -255,7 +250,7 @@ module ccTag(
   .rst(rst),
   .read_clkEn(write_wen),
   .read_addr(write_phys_addr[7:0]),
-  .read_data(read_NRUw0),
+  .read_data(read_NRUw),
   .write_addr(read_phys_addr_reg2[7:0]),
   .write_data(write_NRU),
   .write_wen(EXT ? init_reg2 : read_clkEn_reg2|init_reg2)
@@ -272,11 +267,6 @@ module ccTag(
   
   always @(negedge clk)
   begin
-      read_data<=read_data0;
-      read_dataW<=read_dataW0;
-      readW_data<=readW_data0;
-      read_NRUr<=read_NRUr0;
-      read_NRUw<=read_NRUw0;
       if (rst) read_clkEn_reg<=1'b0;
       else read_clkEn_reg<=read_clkEn;
       if (rst) read_clkEn_reg2<=1'b0;
@@ -306,12 +296,6 @@ module ccTag(
       if (write_wen_reg) $display("whit ",write_data_way," lruw ",read_NRUw);
      // if (read_clkEn_reg) $display("rhit ",read_phys_addr_reg," ",read_hit);
   end
-  always @(posedge clk) begin
-      read_data<=~read_data;
-      read_dataW<=~read_dataW;
-      readW_data<=~readW_data;
-      read_NRUr<=~read_NRUr;
-      read_NRUw<=~read_NRUw;
-  end
+  
 endmodule
 
