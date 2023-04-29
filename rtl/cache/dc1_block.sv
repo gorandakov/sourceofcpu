@@ -801,20 +801,13 @@ module dcache1_way(
   
 //  assign write_back=ins_hit[0] && (dirtyE & ~read_odd0_reg || dirtyO & read_odd0_reg);
 //  assign write_back2=(|read_hit0) && read_invalidate_reg && dirtyE | dirtyO;
-
-  always @(posedge clk) begin
+  
+  always @(negedge clk) begin
       read_data<=read_data0;
       read0_pbitP<=read0_pbitP0;
-      read1_pbitP<=read1_pbitP0;
-      read2_pbitP<=read2_pbitP0;
-      read3_pbitP<=read3_pbitP0;
-  end  
-  always @(negedge clk) begin
-      read_data<=~read_data;
-      read0_pbitP<=~read0_pbitP;
-      read1_pbitP<=~read1_pbitP;
-      read2_pbitP<=~read2_pbitP;
-      read3_pbitP<=~read3_pbitP;
+      read1_pbitP<=read0_pbitP1;
+      read2_pbitP<=read0_pbitP2;
+      read3_pbitP<=read0_pbitP3;
       if (rst) begin
           read_odd0_reg<=1'b0;
           read_odd1_reg<=1'b0;
