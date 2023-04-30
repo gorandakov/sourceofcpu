@@ -586,7 +586,7 @@ module agu_r(
 	  if (!doStall) tlb_is_inv_reg<=1'b0;
 	  else tlb_is_inv_reg<=tlb_is_inv|tlb_is_inv_reg;
           if (reqtlb_en) begin
-              if (!tlb_proceed) begin
+              if (!tlb_proceed||req_can & tlb_in_flight) begin
                   addrMain_tlb<={reqtlb_attr[`attr_vm] ? vproc[20:0] : pproc[20:0] ,reqtlb_addr,14'b0};
 		  addrMain_attr<=reqtlb_attr;
 
@@ -599,7 +599,7 @@ module agu_r(
 		  addrSupp_attr<=reqtlb_attr;
                   tlb_save<=1'b1;
               end
-          end else if (new_miss & !tlb_proceed) begin
+          end else if (new_miss & (!tlb_proceed||req_can & tlb_in_flight)) begin
                   addrMain_tlb<={proc[20:0],mOp0_addrMain_reg};
 		  addrMain_attr<=mOp0_attr_reg;
                   tlb_proceed<=1'b1;
@@ -609,7 +609,7 @@ module agu_r(
                   tlb_in_flight<=1'b1;
           end
           if (reqC_tlbEn) begin
-              if (!tlb_proceed & ~reqtlb_en) begin
+              if ((!tlb_proceed||req_can & tlb_in_flight)) & ~reqtlb_en) begin
                   addrMain_tlb<={reqC_attr[`attr_vm] ? vproc[20:0] : pproc[20:0],reqC_addr,13'b0};
 		  addrMain_attr<=reqC_attr;
                   tlb_proceed<=1'b1;
@@ -624,7 +624,7 @@ module agu_r(
               end
           end 
           //if (req_can & ~req_can_reg) reqtlb_next<=tlb_save_reg;
-          if (~reqtlb_en & ~reqC_tlbEn & tlb_proceed & req_can & tlb_in_flight) begin
+          if (~reqtlb_en & ~reqC_tlbEn & tlb_proceed & req_can & tlb_in_flight || (!tlb_proceed && tlb_save|tlb_save2)) begin
 	      $display("dud<");
               if (!tlb_save && !tlb_save2) begin
                   addrMain_tlb<={proc[20:0],mOp0_addrMain_reg};
