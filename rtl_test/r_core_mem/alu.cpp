@@ -2295,6 +2295,15 @@ no_srch:;
     if (top->heptane_core->bck_mod->__PVT__agu_aligned__DOT__tlb_hitR) {
         printf("tlb_hitR 0x%x\n",top->heptane_core->bck_mod->__PVT__agu_aligned__DOT__tlb_hitR);
     }
+    if (top->heptane_core->bck_mod->__PVT__lsi_cnt_reg) {
+        printf("lsi 0x%x, 0x%x, 0x%x, 0x%x\n",top->heptane_core->bck_mod->__PVT__lsi_cnt_reg,
+        top->heptane_core->bck_mod->__PVT__wrtO0_reg,top->heptane_core->bck_mod->__PVT__wrtO1_reg,
+        top->heptane_core->bck_mod->__PVT__wrtO2_reg);
+    }
+    if (top->heptane_core->bck_mod->__PVT__agu_aligned__DOT__wtmiss_mod__DOT__rdm_xdone) {
+        printf("xdone 0x%x, 0x%x\n",top->heptane_core->bck_mod->__PVT__agu_aligned__DOT__wtmiss_mod__DOT__rdm_xdone,
+        top->heptane_core->bck_mod->__PVT__agu_aligned__DOT__wtmiss_mod__DOT__pause);
+    }
     return rtn;
 }
 
