@@ -40,6 +40,8 @@ module agu(
   thread,
   lsflag,
   cmplxAddr,
+  cin_secq,
+  ptrdiff,
   other0_banks,
   other1_banks,
   otherR_banks,
@@ -61,6 +63,7 @@ module agu(
   mOp_sz,
   mOp_st,
   mOp_en,
+  mOp_secq,
   mOp_invtlb,
   mOp_rsEn,
   mOp_thread,
@@ -77,6 +80,7 @@ module agu(
   csrss_thr,
   csrss_data,
   tlb_clkEn,
+  cout_secq,
   addrTlb,
   sproc,
   tlb_data0,
@@ -110,6 +114,8 @@ module agu(
   input thread;
   input lsflag;
   input [63:0] cmplxAddr;
+  input cin_secq;
+  input ptrdiff;
   input [BANK_COUNT-1:0] other0_banks;
   input [BANK_COUNT-1:0] other1_banks;
   input [BANK_COUNT-1:0] otherR_banks;
@@ -131,6 +137,7 @@ module agu(
   output [4:0] mOp_sz;
   output mOp_st;
   output mOp_en;
+  output mOp_secq;
   output mOp_invtlb;
   output mOp_rsEn;
   output mOp_thread;
@@ -147,6 +154,7 @@ module agu(
   input csrss_thr;
   input [63:0] csrss_data;
   output tlb_clkEn;
+  output cout_secq;
   output  [TLB_IP_WIDTH-1:0] addrTlb;
   output [23:0] sproc;
   input [TLB_DATA_WIDTH-1:0] tlb_data0;
@@ -179,9 +187,9 @@ module agu(
   wire [4:0] bankL1;
   reg  [1:0] mOp_type_reg;
   wire split;
-  wire [15:0] addrMain;
-  wire [16:0] addrNext;
-  wire [15:0] dummy0;
+  wire [12:0] addrMain;
+  wire [13:0] addrNext;
+  wire [12:0] dummy0;
 //  wire [12:0] CSAarg1;
 //  wire [12:0] CSAarg2;
 //  wire pageCarry;
@@ -199,6 +207,7 @@ module agu(
   
   wire tlb_clkEn;
   wire tlb_hit;
+  wire cout_secq;
   
 
   reg read_clkEn_reg;
@@ -356,17 +365,20 @@ module agu(
     31'bz;
 //todo: add read_clkEn to pageFault
   assign pageFault_t=(addrNext[13]) ? (fault_tlb | ({2{split}} & fault_tlb_next)) & {2{tlb_hit}} : fault_tlb & {2{tlb_hit}};
-  assign pageFault=(pageFault_t_reg!=0) | read_clkEn_reg2 && ~bus_hold_reg2;
-  assign faultNo= (pageFault_t_reg!=0) && ~bus_hold_reg2 ? {6'd11,1'b0,2'd1} : {6'd0,1'b0,2'd2};
-  assign faultCode={4'b0,pageFault_t_reg[1],2'b0,pageFault_t_reg[0]};
-  assign mOp_addrMain={addrTlb[27:0],addrMain[15:0]};
+  assign pageFault=(pageFault_t_reg!=0) | fault_cann_reg && read_clkEn_reg2 && ~bus_hold_reg2;
+  assign fault_cann=~cout_secq;
+  assign faultNo=fault_cann_reg | (pageFault_t_reg!=0) && ~bus_hold_reg2 ? {6'd11,1'b0,2'd1} : {6'd0,1'b0,2'd2};
+  assign faultCode={3'b0,fault_cann_reg,pageFault_t_reg[1],2'b0,pageFault_t_reg[0]};
+  assign mOp_addrMain={addrTlb[30:0],addrMain[12:0]};
   
   assign tlbMiss=read_clkEn_reg&~tlb_hit&~fault_cann & rcn_mask[1];
   
-  assign addrMain=cmplxAddr[15:0];
+  assign addrMain=cmplxAddr[12:0];
   
   assign mOp_en= read_clkEn_reg &tlb_hit & rcn_mask[1];
 
+  assign mOp_secq=fault_cann & read_clkEn;
+  
   assign mOp_thread=thread_reg;
   
   assign mOp_lsflag=lsflag_reg;
@@ -401,9 +413,36 @@ module agu(
   assign fault_tlb={mflags0[`mflags_cpl]==2'd3 && tlb_data[`dtlbData_sys], ~tlb_data[`dtlbData_na]}; 
   assign fault_tlb_next={mflags0[`mflags_cpl]==2'd3 && tlb_data_next[`dtlbData_sys],  ~tlb_data_next[`dtlbData_na]}; 
 
-  adder #(17) nextCAddr_mod({1'b0,cmplxAddr[15:0]},17'b10000000,addrNext,1'b0,1'b1,,,,);
+  adder #(14) nextCAddr_mod({1'b0,cmplxAddr[12:0]},14'b10000000,addrNext,1'b0,1'b1,,,,);
   
+  agusec_range rng_mod(
+  cmplxAddr,
+  cin_secq,
+  ptrdiff,
+  cout_secq);
 
+/*
+  dtlb tlb_mod(
+  .clk(clk),
+  .rst(rst),
+  .read_clkEn(tlb_clkEn),
+  .sec_wren(cout_secq),
+  .addr(addrTlb),
+  .sproc(sproc[20:0]),
+  .read_data(tlb_data0),
+  .read_data_next(tlb_data1),
+  .read_way(),
+  .read_hit(tlb_hit),
+  */ /*.write_addr(writeTlb_IP),
+  .write_data0(writeTlb_data0),
+  .write_data1(writeTlb_data1),
+  .write_data2(writeTlb_data2),
+  .force_way(writeTlb_force_way),
+  .force_way_en(writeTlb_force_way_en),
+  .write_xstant(writeTlb_force_way_en),
+  .write_invl(writeTlb_force_way_en),
+  .write_wen(writeTlb_wen)
+  );*/  
 
   always @*
     begin
