@@ -365,7 +365,7 @@ module agu_r(
 
   assign mOp_rsEn=mOp0_en_reg & tlb_hit & ~pause_miss_reg2 & ~bus_hold & ~tlb_proceed & ~mOp0_lsfwd_reg & ~(mOp0_type_reg==2'b10); 
 //dummy page walker
-  assign reqtlb_ack=tlb_proceed & req_can & reqtlb_next & ~tlb_in_flight;
+  assign reqtlb_ack=tlb_proceed & req_can & reqtlb_next;
 /*  assign writeTlb_wenH=1'b0;
   assign writeTlb_wen=reqtlb_en_reg2 && ~tlb_hit_reg && tlb_clkEn_reg;// && ~writeTlb_wen_reg;
   assign writeTlb_IP=addrMain_tlb_reg[64:14];
