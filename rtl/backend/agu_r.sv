@@ -213,9 +213,15 @@ module agu_r(
 
   wire tlb_clkEn;
 
-  wire writeTlb_wenC;
-  wire writeTlb_wenHC;
-  wire writeTlb_low;
+  wire [2:0] writeTlb_wenC0;
+  wire [2:0] writeTlb_wenHC0;
+  wire [2:0] writeTlb_low0;
+
+  output [2:0] [TLB_IP_WIDTH-2:0] writeTlb_IP0;
+  output [2:0] writeTlb_wen0;
+  output [2:0] [TLB_DATA_WIDTH-1:0] writeTlb_data00;
+  output [2:0] [TLB_DATA_WIDTH-1:0] writeTlb_data10;
+  output [2:0] [TLB_DATA_WIDTH-1:0] writeTlb_data20;
 
   reg mOp0_en_reg;
   reg mOp0_thread_reg;
@@ -310,6 +316,17 @@ module agu_r(
 
   wire new_miss;
 
+  assign new_en[0]=reqtlb_en;
+  assign new_en[1]=reqC_tlbEn;
+  assign new_en[2]=new_miss;
+  assign new_addr[0]={reqtlb_addr,14'b0};
+  assign new_addr[1]={reqC_addr,13'b0};
+  assign new_addr[2]=mOp0_addrMain_reg;
+  assign new_attr[0]=reqtlb_attr;
+  assign new_attr[1]=reqC_attr;
+  assign new_attr[2]=mOp0_attr_reg;
+  
+
   assign mOp_addrEven[12:8]=(~mOp0_lsfwd_reg & ~req_bus & addrMain[7]) ? addrNext[12:8] : 5'bz;
   assign mOp_addrEven[12:8]=(~mOp0_lsfwd_reg & ~req_bus & ~addrMain[7]) ? addrMain[12:8] : 5'bz;
   assign mOp_addrEven=(mOp0_lsfwd_reg & ~req_bus) ? mOp0_addrEven_reg : 36'bz;
@@ -374,57 +391,38 @@ module agu_r(
   assign mOp_rsEn=mOp0_en_reg & tlb_hit & ~pause_miss_reg2 & ~bus_hold & ~tlb_proceed & ~mOp0_lsfwd_reg & ~(mOp0_type_reg==2'b10); 
 //dummy page walker
   assign reqtlb_ack=tlb_proceed & req_can & reqtlb_next;
-/*  assign writeTlb_wenH=1'b0;
-  assign writeTlb_wen=reqtlb_en_reg2 && ~tlb_hit_reg && tlb_clkEn_reg;// && ~writeTlb_wen_reg;
-  assign writeTlb_IP=addrMain_tlb_reg[64:14];
-  assign writeTlb_data0[`dtlbData_phys]={addrInPage,1'b0};
-  assign writeTlb_data0[`dtlbData_sys]=1'b0;  
-  assign writeTlb_data0[`dtlbData_na]=1'b0;  
-  assign writeTlb_data0[`dtlbData_ne]=1'b0;  
-  assign writeTlb_data0[`dtlbData_wp]=1'b0;  
-  assign writeTlb_data0[`dtlbData_wrt]=1'b1;  
-  assign writeTlb_data0[`dtlbData_acc]=1'b1;  
-  assign writeTlb_data0[`dtlbData_type]=2'b0;  
-  assign writeTlb_data0[`dtlbData_subpage]=1'b0;  
-  assign writeTlb_data0[`dtlbData_nonmem]=1'b0;  
-  assign writeTlb_data1[`dtlbData_phys]={addrInPage,1'b1};
-  assign writeTlb_data1[`dtlbData_sys]=1'b0;  
-  assign writeTlb_data1[`dtlbData_na]=1'b0;  
-  assign writeTlb_data1[`dtlbData_ne]=1'b0;  
-  assign writeTlb_data1[`dtlbData_wp]=1'b0;  
-  assign writeTlb_data1[`dtlbData_wrt]=1'b1;  
-  assign writeTlb_data1[`dtlbData_acc]=1'b1;  
-  assign writeTlb_data1[`dtlbData_type]=2'b0;  
-  assign writeTlb_data1[`dtlbData_subpage]=1'b0;  
-  assign writeTlb_data1[`dtlbData_nonmem]=1'b0;  
-  assign writeTlb_data2[`dtlbData_phys]={addrOffPage,1'b0};
-  assign writeTlb_data2[`dtlbData_sys]=1'b0;  
-  assign writeTlb_data2[`dtlbData_na]=1'b0;  
-  assign writeTlb_data2[`dtlbData_ne]=1'b0;  
-  assign writeTlb_data2[`dtlbData_wp]=1'b0;  
-  assign writeTlb_data2[`dtlbData_wrt]=1'b1;  
-  assign writeTlb_data2[`dtlbData_acc]=1'b1;  
-  assign writeTlb_data2[`dtlbData_type]=2'b0;  
-  assign writeTlb_data2[`dtlbData_subpage]=1'b0;  
-  assign writeTlb_data2[`dtlbData_nonmem]=1'b0;*/
+
   assign addrInPage=addrMain_tlb[43:14];
 
-  assign busC_tlb_data[`ctlbData_phys]=writeTlb_low ? writeTlb_data1[`dtlbData_phys] : writeTlb_data0[`dtlbData_phys];
-  assign busC_tlb_data[`ctlbData_sys]=writeTlb_low ? writeTlb_data1[`dtlbData_sys] : writeTlb_data0[`dtlbData_sys];
-  assign busC_tlb_data[`ctlbData_ne]=writeTlb_low ? writeTlb_data1[`dtlbData_ne] : writeTlb_data0[`dtlbData_ne];
-  assign busC_tlb_data[`ctlbData_na]=writeTlb_low ? writeTlb_data1[`dtlbData_na] : writeTlb_data0[`dtlbData_na];
-  assign busC_tlb_data[`ctlbData_global]=writeTlb_low ? writeTlb_data1[`dtlbData_glo] : writeTlb_data0[`dtlbData_glo];
+  assign busC_tlb_data[`ctlbData_phys]=writeTlb_low[1] ? writeTlb_data1[1][`dtlbData_phys] : writeTlb_data0[1][`dtlbData_phys];
+  assign busC_tlb_data[`ctlbData_sys]=writeTlb_low[1] ? writeTlb_data1[1][`dtlbData_sys] : writeTlb_data0[1][`dtlbData_sys];
+  assign busC_tlb_data[`ctlbData_ne]=writeTlb_low[1] ? writeTlb_data1[1][`dtlbData_ne] : writeTlb_data0[1][`dtlbData_ne];
+  assign busC_tlb_data[`ctlbData_na]=writeTlb_low[1] ? writeTlb_data1[1][`dtlbData_na] : writeTlb_data0[1][`dtlbData_na];
+  assign busC_tlb_data[`ctlbData_global]=writeTlb_low[1] ? writeTlb_data1[1][`dtlbData_glo] : writeTlb_data0[1][`dtlbData_glo];
 
-  assign busC_tlb_en=writeTlb_wenC | writeTlb_wenHC;
+  assign busC_tlb_en=writeTlb_wenC[1] | writeTlb_wenHC[1];
 
   assign new_miss=~tlb_hit & tlb_clkEn & ~mOp0_lsfwd_reg & 
             ~reqC_tlbEn & mOp0_en_reg & ~tlb_proceed & ~(mOp0_invtlb_reg &
             tlb_is_inv_reg) || tlb_hit & tlb_clkEn & ~mOp0_lsfwd_reg &
             ~reqC_tlbEn & mOp0_en_reg & ~tlb_proceed & mOp0_invtlb_reg &
             ~tlb_is_inv_reg;
-  assign writeTlb_force_way=tlb_way_reg;
-  assign writeTlb_force_way_en=writeTlb_wen && tlb_is_inv;
+  assign writeTlb_force_way[2]=tlb_way_reg;
+  assign writeTlb_force_way_en[2]=writeTlb_wen && tlb_is_inv;
+  assign writeTlb_force_way[1]=tlb_way_reg;
+  assign writeTlb_force_way_en[1]=writeTlb_wen && tlb_is_inv;
+  assign writeTlb_force_way[0]=tlb_way_reg;
+  assign writeTlb_force_way_en[0]=writeTlb_wen && tlb_is_inv;
+
   adder_inc #(6) addNext_mod(addrMain[12:7],addrNext[12:7],1'b1,page_carry);
+
+  assign new_inv[0]=1'b0;
+  assign new_inv[1]=1'b0;
+  assign new_inv[2]=tlb_is_inv;
+
+  assign new_permReq[0]=1'b0;
+  assign new_permReq[1]=1'b1;
+  assign new_permReq[2]=1'b0;
 
   pager pgr_mod(
   .clk(clk),
@@ -432,13 +430,13 @@ module agu_r(
   .except(except),
   .bus_hold(bus_hold),
   .req_bus(req_bus),
-  .new_en(tlb_in_flight),
+  .new_en(new_en),
   .new_can(req_can),
-  .new_addr({addrMain_tlb[47:14],addrMain_tlb[13]&tlb_is_code,13'b0}),
-  .new_attr(addrMain_attr),
+  .new_addr(new_addr),
+  .new_attr(new_attr),
   .new_indir(1'b0),
-  .new_inv(tlb_is_inv),
-  .new_permReq(tlb_is_code),
+  .new_inv(new_inv),
+  .new_permReq(new_permReq),
   .csrss_no(csrss_no),
   .csrss_thread(csrss_thread),
   .csrss_en(csrss_en),
@@ -464,14 +462,14 @@ module agu_r(
   .FUHit(FU3Hit),
   .FUreg(FU3reg),
   .data_in(FU3Data[127:0]),
-  .writeTlb_IP(writeTlb_IP),
-  .writeTlb_low(writeTlb_low),
-  .writeTlb_wen(writeTlb_wen),
-  .writeTlb_wen_c(writeTlb_wenC),
-  .writeTlb_wenH_c(writeTlb_wenHC),
-  .writeTlb_data0(writeTlb_data0),
-  .writeTlb_data1(writeTlb_data1),
-  .writeTlb_data2(writeTlb_data2)
+  .writeTlb_IP(writeTlb_IP0),
+  .writeTlb_low(writeTlb_low0),
+  .writeTlb_wen(writeTlb_wen0),
+  .writeTlb_wen_c(writeTlb_wenC0),
+  .writeTlb_wenH_c(writeTlb_wenHC0),
+  .writeTlb_data0(writeTlb_data00),
+  .writeTlb_data1(writeTlb_data10),
+  .writeTlb_data2(writeTlb_data20)
   //add code invlpg io
   );
   
