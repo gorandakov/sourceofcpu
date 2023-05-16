@@ -145,7 +145,7 @@ module dcache1_tag(
   
   wire write_hit1;
   wire write_hit2;
-  
+/* verilator lint_off WIDTH */  
   dcache1_tag_ram tagR0_mod(
   .clk(clk),
   .rst(rst),
@@ -177,7 +177,7 @@ module dcache1_tag(
     tag_same_data&{DATA_WIDTH{~init}}),
   .write_wen(write_hit&read_odd_reg || read_en_reg & (read_odd_reg)||init)
   );  
-
+/* verilator lint_on WIDTH */
   `ifdef DCACHE_256K
   adder_inc #(7) initAdd_mod(initCount,initCount_d,1'b1,);
   `else

@@ -604,6 +604,7 @@ module dcache1_way(
     for (b=0;b<BANK_COUNT;b=b+1) begin : banks
 
        if (b<16) begin : banks_low
+/* verilator lint_off WIDTH */
           dcache1_bank #(b,INDEX[0]) bank_mod(
           clk,
           rst,
@@ -637,7 +638,9 @@ module dcache1_way(
           ins_hit[0],
           init
           );
+/* verilator lint_on WIDTH */
        end else begin : banks_hi
+/* verilator lint_off WIDTH */
           dcache1_bank #(b,INDEX[0]) bank_mod(
           clk,
           rst,
@@ -671,6 +674,7 @@ module dcache1_way(
           ins_hit[0],
           init
           );
+/* verilator lint_on WIDTH */
        end
     end
     for (r=0;r<4;r=r+1) begin : tagR_gen
