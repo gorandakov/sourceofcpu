@@ -187,13 +187,13 @@ module agu_r(
   input [8:0] FU3reg;
   input [127+8:0] FU3Data;
   input extern_feed;
-  output [TLB_IP_WIDTH-2:0] writeTlb_IP;
-  output writeTlb_wen;
-  output  [2:0] writeTlb_force_way;
-  output  writeTlb_force_way_en;
-  output [TLB_DATA_WIDTH-1:0] writeTlb_data0;
-  output [TLB_DATA_WIDTH-1:0] writeTlb_data1;
-  output [TLB_DATA_WIDTH-1:0] writeTlb_data2;
+  output [2:0] [TLB_IP_WIDTH-2:0] writeTlb_IP;
+  output [2:0] writeTlb_wen;
+  output [2:0] [2:0] writeTlb_force_way;
+  output [2:0]  writeTlb_force_way_en;
+  output [2:0] [TLB_DATA_WIDTH-1:0] writeTlb_data0;
+  output [2:0] [TLB_DATA_WIDTH-1:0] writeTlb_data1;
+  output [2:0] [TLB_DATA_WIDTH-1:0] writeTlb_data2;
   output tlb_clkEn;
   output cout_secq;
   output  [TLB_IP_WIDTH-1:0] addrTlb;
@@ -202,6 +202,14 @@ module agu_r(
   input [TLB_DATA_WIDTH-1:0] tlb_data1;
   input tlb_hit;
   input [2:0] tlb_way;
+
+  wire [2:0]new_en;
+  wire reg [2:0] new_can;
+  wire [2:0] [47:0] new_addr;
+  wire [2:0] [3:0] new_attr;
+  wire [2:0] new_indir;
+  wire [2:0] new_inv;
+  wire [2:0] [PERM_WIDTH-1:0] new_permReq;
 
   wire tlb_clkEn;
 
