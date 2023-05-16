@@ -625,7 +625,7 @@ module agu_r(
               end
           end 
           //if (req_can & ~req_can_reg) reqtlb_next<=tlb_save_reg;
-          if (~reqtlb_en & ~reqC_tlbEn & tlb_proceed & req_can & tlb_in_flight || (!tlb_proceed && tlb_save|tlb_save2)) begin
+          if (~reqtlb_en & ~reqC_tlbEn & tlb_proceed & req_can || (!tlb_proceed && tlb_save|tlb_save2)) begin
 	      $display("dud<");
               if (!tlb_save && !tlb_save2) begin
                   addrMain_tlb<={proc[20:0],mOp0_addrMain_reg};
