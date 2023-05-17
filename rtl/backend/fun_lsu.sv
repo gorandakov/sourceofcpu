@@ -1530,15 +1530,15 @@ module agu_block(
   agu_get_shiftSize sh5(u5_op,u5_sh); 
  
   add_agu aadd1(uu_base1,u1_const_reg,uu_index1,p0_cmplxAddr_d,p0_sec_in,
-    p0_ndiff,1'b1,u1_sh_reg);
+    p0_ndiff,1'b1,4'd1);
   add_agu aadd2(uu_base2,u2_const_reg,uu_index2,p1_cmplxAddr_d,p1_sec_in,
-    p1_ndiff,1'b1,u2_sh_reg);
+    p1_ndiff,1'b1,4'd1);
   add_agu aadd3(uu_base3,u3_const_reg,uu_index3,p2_cmplxAddr_d,p2_sec_in,
-    p2_ndiff,1'b1,u3_sh_reg);
+    p2_ndiff,1'b1,4'd1);
   add_agu aadd4(uu_base4,u4_const_reg,uu_index4,p4_cmplxAddr_d,p4_sec_in,
-    p4_ndiff,~p4_mex_en,u4_sh_reg);
+    p4_ndiff,~p4_mex_en,4'd1);
   add_agu aadd5(uu_base5,u5_const_reg,uu_index5,p5_cmplxAddr_d,p5_sec_in,
-    p5_ndiff,~p5_mex_en,u5_sh_reg);
+    p5_ndiff,~p5_mex_en,4'd1);
 
   assign p4_cmplxAddr_d=p4_mex_en ? {5'b11111,7'b0,7'h7f,1'b1,p4_mex_addr} : 64'bz;
   assign p5_cmplxAddr_d=p5_mex_en ? {5'b11111,7'b0,7'h7f,1'b1,p5_mex_addr} : 64'bz;
