@@ -59,6 +59,21 @@ module frontend1(
   btbl_attr0,
   btbl_attr1,
   csrss_en,csrss_addr,csrss_data,
+  cc_instrEn,
+  cc_read_set_flag,
+  cc_fstall,
+  cc_except,
+  cc_IP_phys,
+  cc_read_hit,
+  cc_read_tagErr,
+  cc_read_data,
+  cc_read_dataX,
+  cc_write_IP,
+  cc_write_wen,
+  cc_invalidate,
+  cc_write_data,
+  .expun_addr(expun_addr),
+  .expun_wen(expun_wen)
   MSI_expAddr,
   MSI_expAddr_en,
   MSI_expAddr_hit,
@@ -158,6 +173,21 @@ module frontend1(
   input csrss_en;
   input [15:0] csrss_addr;
   input [63:0] csrss_data;
+  output cc_instrEn=instrEn;
+  output cc_read_set_flag=read_set_flag_reg;
+  output cc_fstall=fstall;
+  output cc_except=ixcept;
+  output [PHYS_WIDTH-1:0] cc_IP_phys=IP_phys_reg;
+  input cc_read_hit;
+  input cc_read_tagErr;
+  input [DATA_WIDTH/2-1:0] cc_read_data;
+  assign read_data=cc_read_data;
+  input [14:0] cc_read_dataX;
+  assign read_dataX=cc_read_dataX;
+  output [VIRT_WIDTH-1:0] cc_write_IP=write_IP;
+  output cc_write_wen=bus_match_reg;
+  output cc_invalidate=1'b0;
+  output [DATA_WIDTH/2-1:0] cc_write_data=write_data;
   
   input [36:0] MSI_expAddr;
   input MSI_expAddr_en;
@@ -1047,28 +1077,8 @@ module frontend1(
   popcnt5 wjcnt_mod({1'b0,iqe_jbits},iqe_jcnt);
   popcnt5 wjcnD_mod({1'b0,iqe_jbitZ},iqe_jcnD);
 
-  cc_comb cc_mod(
-  .clk(clk),
-  .rst(rst),
-  .read_clkEn(instrEn),
-  .read_set_flag(read_set_flag_reg),
-  .fstall(fstall),
-  .except(ixcept),
-  .cc_read_IP(IP_phys_reg),
-  .cc_read_hit(cc_read_hit),
-  .cc_read_tagErr(cc_tagErr),
-  .read_data(read_data),
-  .read_dataX(read_dataX),
-  .write_IP({write_IP,5'b0}),
-  .cc_write_wen(bus_match_reg),
-  .cc_invalidate(1'b0),
-  .write_data(write_data),
-  .chkCL_IP({MSI_expAddr,7'b0}),
-  .chkCL_clkEn(MSI_expAddr_en),
-  .chkCL_hit(MSI_expAddr_hit),
-  .expun_addr(expun_addr),
-  .expun_wen(expun_wen)
-  );  
+//  cc_comb cc_mod(
+//  );  
 
   ctlb tlb_mod(
   .clk(clk),
