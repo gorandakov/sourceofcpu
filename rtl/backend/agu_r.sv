@@ -204,12 +204,14 @@ module agu_r(
   input [2:0] tlb_way;
 
   wire [2:0]new_en;
-  wire reg [2:0] new_can;
+  wire [2:0] new_can;
+  reg [2:0] new_can_reg;
+  reg [2:0] new_can_reg2;
   wire [2:0] [47:0] new_addr;
   wire [2:0] [3:0] new_attr;
   wire [2:0] new_indir;
   wire [2:0] new_inv;
-  wire [2:0] [PERM_WIDTH-1:0] new_permReq;
+  wire [2:0] new_permReq;
 
   wire tlb_clkEn;
 
@@ -219,6 +221,8 @@ module agu_r(
   reg [2:0] writeTlb_low0_reg;
   reg [2:0] writeTlb_wenC0_reg;
   reg [2:0] writeTlb_wenHC0_reg;
+
+  wire writeTlb_low;
 
   wire [2:0] [TLB_IP_WIDTH-2:0] writeTlb_IP0;
   wire [2:0] writeTlb_wen0;
@@ -353,7 +357,7 @@ module agu_r(
   assign writeTlb_data2[0]=reqtlb_ack ? writeTlb_data20_reg[0] : writeTlb_data20_reg[2];
   assign writeTlb_data2[1]=busC_tlb_en ? writeTlb_data20_reg[1] : writeTlb_data20_reg[2];
   assign writeTlb_data2[2]=reqtlb_ack ? writeTlb_data20_reg[0] : writeTlb_data20_reg[2];
-  assign writeTlb_low=busC_tlb_en ? writeTlb_low[1] : writeTlb_low[2];
+  assign writeTlb_low=busC_tlb_en ? writeTlb_low0_reg[1] : writeTlb_low0_reg[2];
  
   assign mOp_addrEven[12:8]=(~mOp0_lsfwd_reg & ~req_bus & addrMain[7]) ? addrNext[12:8] : 5'bz;
   assign mOp_addrEven[12:8]=(~mOp0_lsfwd_reg & ~req_bus & ~addrMain[7]) ? addrMain[12:8] : 5'bz;
@@ -422,11 +426,11 @@ module agu_r(
 
   assign addrInPage=addrMain_tlb[43:14];
 
-  assign busC_tlb_data[`ctlbData_phys]=writeTlb_low[1] ? writeTlb_data1[1][`dtlbData_phys] : writeTlb_data0_reg[1][`dtlbData_phys];
-  assign busC_tlb_data[`ctlbData_sys]=writeTlb_low[1] ? writeTlb_data1[1][`dtlbData_sys] : writeTlb_data0_reg[1][`dtlbData_sys];
-  assign busC_tlb_data[`ctlbData_ne]=writeTlb_low[1] ? writeTlb_data1[1][`dtlbData_ne] : writeTlb_data0_reg[1][`dtlbData_ne];
-  assign busC_tlb_data[`ctlbData_na]=writeTlb_low[1] ? writeTlb_data1[1][`dtlbData_na] : writeTlb_data0_reg[1][`dtlbData_na];
-  assign busC_tlb_data[`ctlbData_global]=writeTlb_low[1] ? writeTlb_data1[1][`dtlbData_glo] : writeTlb_data0_reg[1][`dtlbData_glo];
+  assign busC_tlb_data[`ctlbData_phys]=writeTlb_low[1] ? writeTlb_data1[1][`dtlbData_phys] : writeTlb_data0[1][`dtlbData_phys];
+  assign busC_tlb_data[`ctlbData_sys]=writeTlb_low[1] ? writeTlb_data1[1][`dtlbData_sys] : writeTlb_data0[1][`dtlbData_sys];
+  assign busC_tlb_data[`ctlbData_ne]=writeTlb_low[1] ? writeTlb_data1[1][`dtlbData_ne] : writeTlb_data0[1][`dtlbData_ne];
+  assign busC_tlb_data[`ctlbData_na]=writeTlb_low[1] ? writeTlb_data1[1][`dtlbData_na] : writeTlb_data0[1][`dtlbData_na];
+  assign busC_tlb_data[`ctlbData_global]=writeTlb_low[1] ? writeTlb_data1[1][`dtlbData_glo] : writeTlb_data0[1][`dtlbData_glo];
 
 //  assign busC_tlb_en=writeTlb_wenC[1] | writeTlb_wenHC[1];
 

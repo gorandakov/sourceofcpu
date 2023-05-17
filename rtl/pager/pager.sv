@@ -252,7 +252,7 @@ module pager(
   assign mOp_bank0= |req_bus ? 
     {addr[{req_bus[2],req_bus[1]}][36:33],1'b0} : 5'bz;
   assign mOp_odd= |req_bus ? 
-    addd[{req_bus[2],req_bus[1]}][37] : 1'bz;
+    addr[{req_bus[2],req_bus[1]}][37] : 1'bz;
   assign mOp_addr_low= |req_bus ? 
     2'b0 : 2'bz;
   assign mOp_split= |req_bus ? 
