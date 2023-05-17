@@ -328,22 +328,22 @@ module agu_r(
  
   wire mop_ack;
 
-  assign reqtlb_ack=new_en_reg[0] & new_can[0] || new_can[0] & ~new_can_reg[0]; 
-  assign busC_tlb_en=new_en_reg[1] & new_can[1] || new_can[1] & ~new_can_reg[1]; 
-  assign mop_ack=new_en_reg[2] & new_can[2] || new_can[2] & ~new_can_reg[2]; 
+  assign reqtlb_ack=new_can_reg[0] & ~new_can_reg2[0]; 
+  assign busC_tlb_en=new_can_reg[1] & ~new_can_reg2[1]; 
+  assign mop_ack=new_can_reg[2] & ~new_can_reg2[2]; 
 
   assign writeTlb_IP[0]=reqtlb_ack ? writeTlb_IP0[0] : writeTlb_IP0[2];
   assign writeTlb_IP[1]=busC_tlb_en ? writeTlb_IP0[1] : writeTlb_IP0[2];
-  assign writeTlb_IP[2]=writeTlb_IP0[2];
+  assign writeTlb_IP[2]=reqtlb_ack ? writeTlb_IP0[0] : writeTlb_IP0[2];
   assign writeTlb_data0[0]=reqtlb_ack ? writeTlb_data00[0] : writeTlb_data00[2];
   assign writeTlb_data0[1]=busC_tlb_en ? writeTlb_data00[1] : writeTlb_data00[2];
-  assign writeTlb_data0[2]=writeTlb_data00[2];
+  assign writeTlb_data0[2]=reqtlb_ack ? writeTlb_data00[0] : writeTlb_data00[2];
   assign writeTlb_data1[0]=reqtlb_ack ? writeTlb_data10[0] : writeTlb_data10[2];
   assign writeTlb_data1[1]=busC_tlb_en ? writeTlb_data10[1] : writeTlb_data10[2];
-  assign writeTlb_data1[2]=writeTlb_data10[2];
+  assign writeTlb_data1[2]=reqtlb_ack ? writeTlb_data10[0] : writeTlb_data10[2];
   assign writeTlb_data2[0]=reqtlb_ack ? writeTlb_data20[0] : writeTlb_data20[2];
   assign writeTlb_data2[1]=busC_tlb_en ? writeTlb_data20[1] : writeTlb_data20[2];
-  assign writeTlb_data2[2]=writeTlb_data20[2];
+  assign writeTlb_data2[2]=reqtlb_ack ? writeTlb_data20[0] : writeTlb_data20[2];
   assign writeTlb_low=busC_tlb_en ? writeTlb_low[1] : writeTlb_low[2];
  
   assign mOp_addrEven[12:8]=(~mOp0_lsfwd_reg & ~req_bus & addrMain[7]) ? addrNext[12:8] : 5'bz;
@@ -555,7 +555,7 @@ module agu_r(
           mOp0_en_reg<=1'b0;
       end else if (~doStall&&!rsStall) begin
           mOp0_en_reg<=mOp0_en & ~(except);
-          if (mOp0_en & ~req_bus || extern_feed & ~req_bus & (mOp0_type_reg==2'b10)) begin
+          if (mOp0_en & ~|req_bus || extern_feed & ~|req_bus & (mOp0_type_reg==2'b10)) begin
               mOp0_thread_reg<=mOp0_thread;
               mOp0_lsflag_reg<=mOp0_lsflag;
               mOp0_addrMain_reg<=mOp0_addrMain;
@@ -589,119 +589,16 @@ module agu_r(
 	      mflags[`mflags_cpl]<=mOp0_attr[`attr_km] ? 2'b0 : 2'b11;
 	      mflags[`mflags_sec]<=mOp0_attr[`attr_sec];//muha-srankk
           end else if (!rsStall) begin
-	      if (mOp_en && !req_bus) mOp0_en_reg<=1'b0;
+	      if (mOp_en && !|req_bus) mOp0_en_reg<=1'b0;
           end
       end 
-      if (rst) begin
-          tlb_proceed<=1'b0;
-          tlb_is_code<=1'b0;
-          tlb_save<=1'b0;
-          tlb_save2<=1'b0;
-          tlb_is_inv<=1'b0;
-          addrSupp_tlb<=65'b0;
-          addrSupp2_tlb<=65'b0;
-          reqtlb_next<=1'b0;
-          tlb_save_reg<=1'b0;
-          req_can_reg<=1'b0;
-          tlb_in_flight<=1'b0;
-	  tlb_is_inv_reg<=1'b0;
-	  tlb_is_inv_reg2<=1'b0;
-      end else begin
-          tlb_in_flight<=1'b0;
-	  if (!doStall) tlb_is_inv_reg<=1'b0;
-	  else tlb_is_inv_reg<=tlb_is_inv|tlb_is_inv_reg;
-          if (reqtlb_ack) reqtlb_next<=1'b0;
-          if (reqtlb_en) begin
-              if (!tlb_proceed||req_can & tlb_in_flight) begin
-                  addrMain_tlb<={reqtlb_attr[`attr_vm] ? vproc[20:0] : pproc[20:0] ,reqtlb_addr,14'b0};
-		  addrMain_attr<=reqtlb_attr;
-
-                  tlb_proceed<=1'b1;
-                  tlb_is_code<=1'b0;
-                  reqtlb_next<=1'b1;
-                  tlb_in_flight<=1'b1;
-              end else begin
-                  addrSupp_tlb<={reqtlb_attr[`attr_vm] ? vproc[20:0] : pproc[20:0],reqtlb_addr,14'b0};
-		  addrSupp_attr<=reqtlb_attr;
-                  tlb_save<=1'b1;
-              end
-          end else if (new_miss & (!tlb_proceed||req_can & tlb_in_flight)) begin
-                  addrMain_tlb<={proc[20:0],mOp0_addrMain_reg};
-		  addrMain_attr<=mOp0_attr_reg;
-                  tlb_proceed<=1'b1;
-                  tlb_is_code<=1'b0;
-                  tlb_is_inv<=mOp0_invtlb_reg;
-                  reqtlb_next<=1'b0;
-                  tlb_in_flight<=1'b1;
-          end
-          if (reqC_tlbEn) begin
-              if ((!tlb_proceed||req_can & tlb_in_flight) & ~reqtlb_en) begin
-                  addrMain_tlb<={reqC_attr[`attr_vm] ? vproc[20:0] : pproc[20:0],reqC_addr,13'b0};
-		  addrMain_attr<=reqC_attr;
-                  tlb_proceed<=1'b1;
-                  tlb_is_code<=1'b1;
-                  reqtlb_next<=1'b0;
-                  tlb_in_flight<=1'b1;
-              end else begin
-                  addrSupp2_tlb<={reqC_attr[`attr_vm] ? vproc[20:0] : pproc[20:0],reqC_addr,13'b0};
-		  addrSupp2_attr<=reqC_attr;
-                  tlb_save2<=1'b1;
-                  tlb_is_code<=1'b0;
-              end
-          end 
-          //if (req_can & ~req_can_reg) reqtlb_next<=tlb_save_reg;
-          if (~reqtlb_en & ~reqC_tlbEn & tlb_proceed & req_can || (!tlb_proceed && tlb_save|tlb_save2)) begin
-	      $display("dud<");
-              if (!tlb_save && !tlb_save2) begin
-                  addrMain_tlb<={proc[20:0],mOp0_addrMain_reg};
-                  addrMain_attr<=mOp0_attr_reg;
-		  tlb_proceed<=1'b0;
-                  tlb_in_flight<=1'b0;
-                  tlb_is_inv<=1'b0;
-		  reqtlb_next<=1'b0;
-              end else if (tlb_save) begin
-                  addrMain_tlb<=addrSupp_tlb;
-                  addrMain_attr<=addrSupp_attr;
-                  tlb_proceed<=1'b1;
-                  tlb_save<=1'b0;
-                  tlb_is_code<=1'b0;
-                  tlb_in_flight<=1'b1;
-		  reqtlb_next<=1'b1;
-                  //tlb_in_flight<=1'b0;
-		  tlb_is_inv<=1'b0;
-              end else begin
-                  addrMain_tlb<=addrSupp2_tlb;
-                  addrMain_attr<=addrSupp2_attr;
-                  tlb_proceed<=1'b1;
-                  tlb_save2<=1'b0;
-                  tlb_is_code<=1'b1;
-                  tlb_in_flight<=1'b1;
-		  reqtlb_next<=1'b0;
-                  //tlb_in_flight<=1'b0;
-		  tlb_is_inv<=1'b0;
-              end
-          end
-          //if (!doStall) tlb_is_inv<=1'b0;
-          if (tlb_is_inv) $display("tlb_is_inv");
       end
       if (rst) begin
-          reqtlb_en_reg<=1'b0;
-          reqtlb_en_reg2<=1'b0;
-          tlb_hit_reg<=1'b0; 
-//          addrMain_tlb_reg<={VADDR_WIDTH{1'b0}};
-          //reqtlb_addr_reg<=51'b0;
-          tlb_clkEn_reg<=1'b0;
-	  mOp_en_reg<=1'b0;
-	  bus_hold_reg<=1'b0;
+          new_can_reg<=3'b111;
+          new_can_reg2<=3'b111;
       end else begin
-          reqtlb_en_reg<=reqtlb_en;
-          reqtlb_en_reg2<=reqtlb_en_reg;
-          tlb_hit_reg<=tlb_hit; 
-//          addrMain_tlb_reg<=addrMain_tlb;
-          //reqtlb_addr_reg<=reqtlb_addr;
-          tlb_clkEn_reg<=tlb_clkEn;
-	  mOp_en_reg<=mOp_en && ~req_bus;
-	  bus_hold_reg<=bus_hold;
+          new_can_reg<=new_can;
+          new_can_reg2<=new_can_reg;
       end
      
       if (rst) begin
