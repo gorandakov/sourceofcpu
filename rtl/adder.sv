@@ -1268,7 +1268,7 @@ module add_agu(
   
   wire [3:0] shift;
   
-  assign shift=4'd1;
+  assign shift=4'd8;
 
   wire [WIDTH-1:0] tmp1;
   wire [WIDTH:0] tmp2;
