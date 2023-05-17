@@ -836,6 +836,7 @@ module agu_block(
   reg        u1_clkEn_reg;
   reg [12:0] u1_op_reg;
   reg [3:0]  u1_sh_reg;
+  reg [3:0]  u1_sh2_reg;
   reg [8:0]  u1_reg_reg;
   reg [8:0]  u1_LSQ_no_reg;
   reg [9:0]  u1_II_no_reg;
@@ -847,6 +848,7 @@ module agu_block(
   reg        u2_clkEn_reg;
   reg [12:0] u2_op_reg;
   reg [3:0]  u2_sh_reg;
+  reg [3:0]  u2_sh2_reg;
   reg [8:0]  u2_reg_reg;
   reg [8:0]  u2_LSQ_no_reg;
   reg [9:0]  u2_II_no_reg;
@@ -858,6 +860,7 @@ module agu_block(
   reg        u3_clkEn_reg;
   reg [12:0] u3_op_reg;
   reg [3:0]  u3_sh_reg;
+  reg [3:0]  u3_sh2_reg;
   reg [8:0]  u3_reg_reg;
   reg [8:0]  u3_LSQ_no_reg;
   reg [9:0]  u3_II_no_reg;
@@ -869,6 +872,7 @@ module agu_block(
   reg        u4_clkEn_reg;
   reg [12:0] u4_op_reg;
   reg [3:0]  u4_sh_reg;
+  reg [3:0]  u4_sh2_reg;
   reg [8:0]  u4_reg_reg;
   reg [8:0]  u4_LSQ_no_reg;
   reg [9:0]  u4_II_no_reg;
@@ -880,6 +884,7 @@ module agu_block(
   reg        u5_clkEn_reg;
   reg [12:0] u5_op_reg;
   reg [3:0]  u5_sh_reg;
+  reg [3:0]  u5_sh2_reg;
   reg [8:0]  u5_reg_reg;
   reg [8:0]  u5_LSQ_no_reg;
   reg [9:0]  u5_II_no_reg;
@@ -2715,6 +2720,7 @@ module agu_block(
           u1_clkEn_reg<=u1_clkEn;
           u1_op_reg<=u1_op;
           u1_sh_reg<=u1_sh;
+          u1_sh2_reg<=u1_sh2;
           u1_reg_reg<=u1_reg;
           u1_LSQ_no_reg<=u1_LSQ_no;
           u1_II_no_reg<=u1_II_no;
@@ -2727,6 +2733,7 @@ module agu_block(
           u2_clkEn_reg<=u2_clkEn;
           u2_op_reg<=u2_op;
           u2_sh_reg<=u2_sh;
+          u2_sh2_reg<=u2_sh2;
           u2_reg_reg<=u2_reg;
           u2_LSQ_no_reg<=u2_LSQ_no;
           u2_II_no_reg<=u2_II_no;
@@ -2739,6 +2746,7 @@ module agu_block(
           u3_clkEn_reg<=u3_clkEn;
           u3_op_reg<=u3_op;
           u3_sh_reg<=u3_sh;
+          u3_sh2_reg<=u3_sh2;
           u3_reg_reg<=u3_reg;
           u3_LSQ_no_reg<=u3_LSQ_no;
           u3_II_no_reg<=u3_II_no;
@@ -2750,6 +2758,7 @@ module agu_block(
       u4_clkEn_reg<=u4_clkEn;
       u4_op_reg<=u4_op;
       u4_sh_reg<=u4_sh;
+      u4_sh2_reg<=u4_sh2;
       u4_reg_reg<=u4_reg;
       u4_LSQ_no_reg<=u4_LSQ_no;
       u4_II_no_reg<=u4_II_no;
@@ -2760,6 +2769,7 @@ module agu_block(
       u5_clkEn_reg<=u5_clkEn;
       u5_op_reg<=u5_op;
       u5_sh_reg<=u5_sh;
+      u5_sh2_reg<=u5_sh2;
       u5_reg_reg<=u5_reg;
       u5_LSQ_no_reg<=u5_LSQ_no;
       u5_II_no_reg<=u5_II_no;
