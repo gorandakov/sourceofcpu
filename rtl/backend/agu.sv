@@ -604,10 +604,11 @@ module agu(
 endmodule
 
 
-module agu_get_shiftSize(op,shiftSize);
+module agu_get_shiftSize(op,shiftSize,sh2);
   localparam OPERATION_WIDTH=`operation_width;
   input [OPERATION_WIDTH-1:0] op;
   output reg [3:0] shiftSize;
+  output reg [1:0] sh2;
   always @* begin
       if (op[7:6]==2'b01) begin
           case(op[9:8])
@@ -616,8 +617,10 @@ module agu_get_shiftSize(op,shiftSize);
        2'd2: shiftSize=4'b100;
        2'd3: shiftSize=4'b1000;
           endcase
+          sh2=op[9:8];
       end else begin
           shiftSize=4'b1;
+          sh2=2'b0;
       end
   end
 endmodule
