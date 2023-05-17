@@ -216,12 +216,21 @@ module agu_r(
   wire [2:0] writeTlb_wenC0;
   wire [2:0] writeTlb_wenHC0;
   wire [2:0] writeTlb_low0;
+  reg [2:0] writeTlb_low0_reg;
+  reg [2:0] writeTlb_wenC0_reg;
+  reg [2:0] writeTlb_wenHC0_reg;
 
-  output [2:0] [TLB_IP_WIDTH-2:0] writeTlb_IP0;
-  output [2:0] writeTlb_wen0;
-  output [2:0] [TLB_DATA_WIDTH-1:0] writeTlb_data00;
-  output [2:0] [TLB_DATA_WIDTH-1:0] writeTlb_data10;
-  output [2:0] [TLB_DATA_WIDTH-1:0] writeTlb_data20;
+  wire [2:0] [TLB_IP_WIDTH-2:0] writeTlb_IP0;
+  wire [2:0] writeTlb_wen0;
+  wire [2:0] [TLB_DATA_WIDTH-1:0] writeTlb_data00;
+  wire [2:0] [TLB_DATA_WIDTH-1:0] writeTlb_data10;
+  wire [2:0] [TLB_DATA_WIDTH-1:0] writeTlb_data20;
+
+  reg [2:0] [TLB_IP_WIDTH-2:0] writeTlb_IP0_reg;
+  reg [2:0] writeTlb_wen0_reg;
+  reg [2:0] [TLB_DATA_WIDTH-1:0] writeTlb_data00_reg;
+  reg [2:0] [TLB_DATA_WIDTH-1:0] writeTlb_data10_reg;
+  reg [2:0] [TLB_DATA_WIDTH-1:0] writeTlb_data20_reg;
 
   reg mOp0_en_reg;
   reg mOp0_thread_reg;
@@ -592,7 +601,6 @@ module agu_r(
 	      if (mOp_en && !|req_bus) mOp0_en_reg<=1'b0;
           end
       end 
-      end
       if (rst) begin
           new_can_reg<=3'b111;
           new_can_reg2<=3'b111;
