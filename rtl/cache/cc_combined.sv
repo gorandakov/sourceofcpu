@@ -22,15 +22,24 @@ limitations under the License.
 module cc_comb (
   clk,
   rst,
-  read_clkEn,
-  read_set_flag,
-  fstall,
-  except,
-  cc_read_IP,
-  cc_read_hit,
-  cc_read_tagErr,
-  read_data,
-  read_dataX,
+  readA_clkEn,
+  readA_set_flag,
+  readB_clkEn,
+  readB_set_flag,
+  fstallA,
+  exceptA,
+  cc_readA_IP,
+  cc_readA_hit,
+  cc_readA_tagErr,
+  readA_data,
+  readA_dataX,
+  fstallB,
+  exceptB,
+  cc_readB_IP,
+  cc_readB_hit,
+  cc_readB_tagErr,
+  readB_data,
+  readB_dataX,
   write_IP,
   cc_write_wen,
   cc_invalidate,
@@ -50,15 +59,24 @@ module cc_comb (
 
   input clk;
   input rst;
-  input read_clkEn;
-  input read_set_flag;
-  input fstall;
-  input except;
-  input [IP_WIDTH-1:0] cc_read_IP;
-  output cc_read_hit;
-  output [7:0] cc_read_tagErr;
-  output [DATA_WIDTH/4-1:0] read_data;
-  output [14:0] read_dataX;
+  input readA_clkEn;
+  input readA_set_flag;
+  input fstallA;
+  input exceptA;
+  input [IP_WIDTH-1:0] cc_readA_IP;
+  output cc_readA_hit;
+  output [7:0] cc_readA_tagErr;
+  output [DATA_WIDTH/4-1:0] readA_data;
+  output [14:0] readA_dataX;
+  input readB_clkEn;
+  input readB_set_flag;
+  input fstallB;
+  input exceptB;
+  input [IP_WIDTH-1:0] cc_readB_IP;
+  output cc_readB_hit;
+  output [7:0] cc_readB_tagErr;
+  output [DATA_WIDTH/4-1:0] readB_data;
+  output [14:0] readB_dataX;
   input [IP_WIDTH-1:0] write_IP;
   input cc_write_wen;
   input cc_invalidate;
@@ -70,8 +88,10 @@ module cc_comb (
   output [36:0] expun_addr;
   output expun_wen;
   
-  wire [DATA_WIDTH-1:0] read_data0;
-  wire [DATA_WIDTH-1:0] cc_read_data0;
+  wire [DATA_WIDTH-1:0] readA_data0;
+  wire [DATA_WIDTH-1:0] cc_readA_data0;
+  wire [DATA_WIDTH-1:0] readB_data0;
+  wire [DATA_WIDTH-1:0] cc_readB_data0;
   
   reg [IP_WIDTH-1:0] write_IP_reg;
   reg [DATA_WIDTH-1:0] write_data_reg;
@@ -86,17 +106,24 @@ module cc_comb (
   reg [IP_WIDTH-1:0] write_IP_reg2;
   reg [DATA_WIDTH-1:0] write_data_reg2;
 
-  reg cc_read_hitP;
+  reg cc_readA_hitP;
+  reg cc_readB_hitP;
 
-  reg [DATA_WIDTH-1:0] read_data0_reg;
+  reg [DATA_WIDTH-1:0] readA_data0_reg;
+  reg [DATA_WIDTH-1:0] readB_data0_reg;
   
-  reg [IP_WIDTH-6:0] cc_read_IP_reg;
+  reg [IP_WIDTH-6:0] cc_readA_IP_reg;
+  reg [IP_WIDTH-6:0] cc_readB_IP_reg;
   
   
-  wire [59:0] read_dataX0;
-  wire [59:0] cc_read_dataX0;
-  wire [14:0] read_dataXP[3:0];
-  reg [59:0] read_dataX0_reg;
+  wire [59:0] readA_dataX0;
+  wire [59:0] cc_readA_dataX0;
+  wire [14:0] readA_dataXP[3:0];
+  reg [59:0] readA_dataX0_reg;
+  wire [59:0] readB_dataX0;
+  wire [59:0] cc_readB_dataX0;
+  wire [14:0] readB_dataXP[3:0];
+  reg [59:0] readB_dataX0_reg;
   wire [36:0] cc_exp_addr0;  
   reg [36:0] cc_exp_addr0_reg;  
 //  wire [71:0] read_dataY0;
@@ -105,22 +132,32 @@ module cc_comb (
 
   wire [7:0] writeIP_next;
   
-  wire cc_read_hit0;
+  wire cc_readA_hit0;
+  wire cc_readB_hit0;
   wire [7:0] cc_tagErr;
   wire cc_expun_hit0;
   reg cc_expun_hitP; 
 
-  reg read_hit0A;
-  reg read_hit1A;
-  reg read_hit0B;
-  reg read_hit1B;
-  reg read_hitP;
+  reg readA_hit0A;
+  reg readA_hit1A;
+  reg readA_hit0B;
+  reg readA_hit1B;
+  reg readA_hitP;
+  reg readB_hit0A;
+  reg readB_hit1A;
+  reg readB_hit0B;
+  reg readB_hit1B;
+  reg readB_hitP;
 
-  wire [DATA_WIDTH/4-1:0] read_dataP[3:0];
+  wire [DATA_WIDTH/4-1:0] readA_dataP[3:0];
   
-  reg [7:0] cc_read_tagErrP;
+  reg [7:0] cc_readA_tagErrP;
+  wire [DATA_WIDTH/4-1:0] readB_dataP[3:0];
   
-  reg read_clkEn_reg;
+  reg [7:0] cc_readB_tagErrP;
+  
+  reg readA_clkEn_reg;
+  reg readB_clkEn_reg;
   reg chkCL_clkEn_reg;
   
   reg [1:0] cc_wen_step;
@@ -129,37 +166,49 @@ module cc_comb (
   integer a,b;
   
 
-  assign read_data0=cc_read_data0;
-  assign read_dataX0=cc_read_dataX0;
+  assign readA_data0=cc_readA_data0;
+  assign readA_dataX0=cc_readA_dataX0;
   
-  assign read_dataP[0]=~(({260{~read_hit0A}} | ~read_data0_reg[DATA_WIDTH/4-1:0]) & read_dataP[1]); 
-  assign read_dataP[1]=~(({260{read_hit1A}} &  read_data0_reg[DATA_WIDTH/2-1:DATA_WIDTH/4]) | read_dataP[2]); 
-  assign read_dataP[2]=~(({260{~read_hit0B}} | ~read_data0_reg[DATA_WIDTH/4*3-1:DATA_WIDTH/2]) & read_dataP[3]); 
-  assign read_dataP[3]=~(({260{read_hit1B}} & read_data0_reg[DATA_WIDTH-1:DATA_WIDTH/4*3])); 
+  assign readB_data0=cc_readB_data0;
+  assign readB_dataX0=cc_readB_dataX0;
   
-  assign read_dataXP[0]=~(({15{~read_hit0A}} | ~read_dataX0_reg[14:0]) & read_dataXP[1]); 
-  assign read_dataXP[1]=~(({15{read_hit1A}} & read_dataX0_reg[29:15]) | read_dataXP[2]); 
-  assign read_dataXP[2]=~(({15{~read_hit0B}} | ~read_dataX0_reg[44:30]) & read_dataXP[3]); 
-  assign read_dataXP[3]=~({15{read_hit1B}} & read_dataX0_reg[59:45]); 
+  assign readA_dataP[0]=~(({260{~readA_hit0A}} | ~readA_data0_reg[DATA_WIDTH/4-1:0]) & readA_dataP[1]); 
+  assign readA_dataP[1]=~(({260{readA_hit1A}} &  readA_data0_reg[DATA_WIDTH/2-1:DATA_WIDTH/4]) | readA_dataP[2]); 
+  assign readA_dataP[2]=~(({260{~readA_hit0B}} | ~readA_data0_reg[DATA_WIDTH/4*3-1:DATA_WIDTH/2]) & readA_dataP[3]); 
+  assign readA_dataP[3]=~(({260{readA_hit1B}} & readA_data0_reg[DATA_WIDTH-1:DATA_WIDTH/4*3])); 
+  
+  assign readB_dataP[0]=~(({260{~readB_hit0A}} | ~readB_data0_reg[DATA_WIDTH/4-1:0]) & readB_dataP[1]); 
+  assign readB_dataP[1]=~(({260{readB_hit1A}} &  readB_data0_reg[DATA_WIDTH/2-1:DATA_WIDTH/4]) | readB_dataP[2]); 
+  assign readB_dataP[2]=~(({260{~readB_hit0B}} | ~readB_data0_reg[DATA_WIDTH/4*3-1:DATA_WIDTH/2]) & readB_dataP[3]); 
+  assign readB_dataP[3]=~(({260{readB_hit1B}} & readB_data0_reg[DATA_WIDTH-1:DATA_WIDTH/4*3])); 
+  
+  assign readA_dataXP[0]=~(({15{~readA_hit0A}} | ~readA_dataX0_reg[14:0]) & readA_dataXP[1]); 
+  assign readA_dataXP[1]=~(({15{readA_hit1A}} & readA_dataX0_reg[29:15]) | readA_dataXP[2]); 
+  assign readA_dataXP[2]=~(({15{~readA_hit0B}} | ~readA_dataX0_reg[44:30]) & readA_dataXP[3]); 
+  assign readA_dataXP[3]=~({15{readA_hit1B}} & readA_dataX0_reg[59:45]); 
+
+  assign readB_dataXP[0]=~(({15{~readB_hit0A}} | ~readB_dataX0_reg[14:0]) & readB_dataXP[1]); 
+  assign readB_dataXP[1]=~(({15{readB_hit1A}} & readB_dataX0_reg[29:15]) | readB_dataXP[2]); 
+  assign readB_dataXP[2]=~(({15{~readB_hit0B}} | ~readB_dataX0_reg[44:30]) & readB_dataXP[3]); 
+  assign readB_dataXP[3]=~({15{readB_hit1B}} & readB_dataX0_reg[59:45]); 
 
 
-/*  assign read_dataYP=read_hit0A ? read_dataY0_reg[17:0] : 18'BZ; 
-  assign read_dataYP=read_hit1A ? read_dataY0_reg[35:18] : 18'BZ; 
-  assign read_dataYP=read_hit0B ? read_dataY0_reg[53:36] : 18'BZ; 
-  assign read_dataYP=read_hit1B ? read_dataY0_reg[71:54] : 18'BZ; 
-  assign read_dataYP=read_hitP ? 18'BZ : 18'B0;
-  */
-  
 
   ccRam_half cc_mod(
   .clk(clk),
   .rst(rst),
-  .read_clkEn(read_clkEn_reg),
-  .read_IP(cc_read_IP[43:1]),
-  .read_set_flag(read_set_flag),
-  .read_data(cc_read_data0),
-  .read_dataX(cc_read_dataX0),
-  .read_hit(cc_read_hit0),
+  .readA_clkEn(readA_clkEn_reg),
+  .readA_IP(cc_readA_IP[43:1]),
+  .readA_set_flag(readA_set_flag),
+  .readA_data(cc_readA_data0),
+  .readA_dataX(cc_readA_dataX0),
+  .readA_hit(cc_readA_hit0),
+  .readB_clkEn(readB_clkEn_reg),
+  .readB_IP(cc_readB_IP[43:1]),
+  .readB_set_flag(readB_set_flag),
+  .readB_data(cc_readB_data0),
+  .readB_dataX(cc_readB_dataX0),
+  .readB_hit(cc_readB_hit0),
   .expun_hit(cc_expun_hit0),
   .chkCL_IP(chkCL_IP[43:5]),
   .chkCL_clkEn(chkCL_clkEn),
@@ -175,26 +224,42 @@ module cc_comb (
   cc_fstalle #(4*65) stDat_mod (
   .clk(clk),
   .rst(rst),
-  .except(except),
-  .fstall(fstall),
-  .write_data(read_dataP[0]),
-  .read_data(read_data)
+  .except(exceptA),
+  .fstall(fstallA),
+  .write_data(readA_dataP[0]),
+  .read_data(readA_data)
+  );
+  cc_fstalle #(4*65) stDatB_mod (
+  .clk(clk),
+  .rst(rst),
+  .except(exceptB),
+  .fstall(fstallB),
+  .write_data(readB_dataP[0]),
+  .read_data(readB_data)
   );
 
   cc_fstalle #(15) stDatFl_mod (
   .clk(clk),
   .rst(rst),
-  .except(except),
-  .fstall(fstall),
-  .write_data(read_dataXP[0]),
-  .read_data(read_dataX)
+  .except(exceptA),
+  .fstall(fstallA),
+  .write_data(readA_dataXP[0]),
+  .read_data(readA_dataX)
+  );
+  cc_fstalle #(15) stDatFlB_mod (
+  .clk(clk),
+  .rst(rst),
+  .except(exceptB),
+  .fstall(fstallB),
+  .write_data(readB_dataXP[0]),
+  .read_data(readB_dataX)
   );
 
   cc_fstalle #(37) stAddrExp_mod (
   .clk(clk),
   .rst(rst),
-  .except(except),
-  .fstall(fstall),
+  .except(exceptA|exceptB),
+  .fstall(fstallA|fstallB),
   .write_data(cc_exp_addr0_reg),
   .read_data(expun_addr)
   );
@@ -204,23 +269,12 @@ module cc_comb (
   cc_fstalle #(10) stHit_mod (
   .clk(clk),
   .rst(rst),
-  .except(except),
-  .fstall(fstall),
+  .except(exceptA|exceptB),
+  .fstall(fstallA|fstallB),
   .write_data({cc_expun_hitP,cc_read_hitP,cc_read_tagErrP}),
   .read_data({expun_wen,cc_read_hit,cc_read_tagErr})
   );
 
- // adder #(8) wip_mod(write_IP_reg2[14:7],8'hff,writeIP_next,1'b0,1'b1);
-/*
-  cc_fstalle #(18) stDataY_mod (
-  .clk(clk),
-  .rst(rst),
-  .except(except),
-  .fstall(fstall),
-  .write_data(read_dataYP),
-  .read_data(tr_read_dataY)
-  );
-  */
   always @(negedge clk)
   begin
       if (rst) begin
