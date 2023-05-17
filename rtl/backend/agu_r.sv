@@ -328,22 +328,22 @@ module agu_r(
  
   wire mop_ack;
 
-  assign reqtlb_ack=new_can_reg[0] & ~new_can_reg2[0]; 
-  assign busC_tlb_en=new_can_reg[1] & ~new_can_reg2[1]; 
-  assign mop_ack=new_can_reg[2] & ~new_can_reg2[2]; 
+  assign reqtlb_ack=new_can[0] & ~new_can_reg[0]; 
+  assign busC_tlb_en=new_can[1] & ~new_can_reg[1]; 
+  assign mop_ack=new_can[2] & ~new_can_reg[2]; 
 
-  assign writeTlb_IP[0]=reqtlb_ack ? writeTlb_IP0[0] : writeTlb_IP0[2];
-  assign writeTlb_IP[1]=busC_tlb_en ? writeTlb_IP0[1] : writeTlb_IP0[2];
-  assign writeTlb_IP[2]=reqtlb_ack ? writeTlb_IP0[0] : writeTlb_IP0[2];
-  assign writeTlb_data0[0]=reqtlb_ack ? writeTlb_data00[0] : writeTlb_data00[2];
-  assign writeTlb_data0[1]=busC_tlb_en ? writeTlb_data00[1] : writeTlb_data00[2];
-  assign writeTlb_data0[2]=reqtlb_ack ? writeTlb_data00[0] : writeTlb_data00[2];
-  assign writeTlb_data1[0]=reqtlb_ack ? writeTlb_data10[0] : writeTlb_data10[2];
-  assign writeTlb_data1[1]=busC_tlb_en ? writeTlb_data10[1] : writeTlb_data10[2];
-  assign writeTlb_data1[2]=reqtlb_ack ? writeTlb_data10[0] : writeTlb_data10[2];
-  assign writeTlb_data2[0]=reqtlb_ack ? writeTlb_data20[0] : writeTlb_data20[2];
-  assign writeTlb_data2[1]=busC_tlb_en ? writeTlb_data20[1] : writeTlb_data20[2];
-  assign writeTlb_data2[2]=reqtlb_ack ? writeTlb_data20[0] : writeTlb_data20[2];
+  assign writeTlb_IP[0]=reqtlb_ack ? writeTlb_IP0_reg[0] : writeTlb_IP0_reg[2];
+  assign writeTlb_IP[1]=busC_tlb_en ? writeTlb_IP0_reg[1] : writeTlb_IP0_reg[2];
+  assign writeTlb_IP[2]=reqtlb_ack ? writeTlb_IP0_reg[0] : writeTlb_IP0_reg[2];
+  assign writeTlb_data0[0]=reqtlb_ack ? writeTlb_data00_reg[0] : writeTlb_data00_reg[2];
+  assign writeTlb_data0[1]=busC_tlb_en ? writeTlb_data00_reg[1] : writeTlb_data00_reg[2];
+  assign writeTlb_data0[2]=reqtlb_ack ? writeTlb_data00_reg[0] : writeTlb_data00_reg[2];
+  assign writeTlb_data1[0]=reqtlb_ack ? writeTlb_data10_reg[0] : writeTlb_data10_reg[2];
+  assign writeTlb_data1[1]=busC_tlb_en ? writeTlb_data10_reg[1] : writeTlb_data10_reg[2];
+  assign writeTlb_data1[2]=reqtlb_ack ? writeTlb_data10_reg[0] : writeTlb_data10_reg[2];
+  assign writeTlb_data2[0]=reqtlb_ack ? writeTlb_data20_reg[0] : writeTlb_data20_reg[2];
+  assign writeTlb_data2[1]=busC_tlb_en ? writeTlb_data20_reg[1] : writeTlb_data20_reg[2];
+  assign writeTlb_data2[2]=reqtlb_ack ? writeTlb_data20_reg[0] : writeTlb_data20_reg[2];
   assign writeTlb_low=busC_tlb_en ? writeTlb_low[1] : writeTlb_low[2];
  
   assign mOp_addrEven[12:8]=(~mOp0_lsfwd_reg & ~req_bus & addrMain[7]) ? addrNext[12:8] : 5'bz;
@@ -413,11 +413,11 @@ module agu_r(
 
   assign addrInPage=addrMain_tlb[43:14];
 
-  assign busC_tlb_data[`ctlbData_phys]=writeTlb_low[1] ? writeTlb_data1[1][`dtlbData_phys] : writeTlb_data0[1][`dtlbData_phys];
-  assign busC_tlb_data[`ctlbData_sys]=writeTlb_low[1] ? writeTlb_data1[1][`dtlbData_sys] : writeTlb_data0[1][`dtlbData_sys];
-  assign busC_tlb_data[`ctlbData_ne]=writeTlb_low[1] ? writeTlb_data1[1][`dtlbData_ne] : writeTlb_data0[1][`dtlbData_ne];
-  assign busC_tlb_data[`ctlbData_na]=writeTlb_low[1] ? writeTlb_data1[1][`dtlbData_na] : writeTlb_data0[1][`dtlbData_na];
-  assign busC_tlb_data[`ctlbData_global]=writeTlb_low[1] ? writeTlb_data1[1][`dtlbData_glo] : writeTlb_data0[1][`dtlbData_glo];
+  assign busC_tlb_data[`ctlbData_phys]=writeTlb_low[1] ? writeTlb_data1[1][`dtlbData_phys] : writeTlb_data0_reg[1][`dtlbData_phys];
+  assign busC_tlb_data[`ctlbData_sys]=writeTlb_low[1] ? writeTlb_data1[1][`dtlbData_sys] : writeTlb_data0_reg[1][`dtlbData_sys];
+  assign busC_tlb_data[`ctlbData_ne]=writeTlb_low[1] ? writeTlb_data1[1][`dtlbData_ne] : writeTlb_data0_reg[1][`dtlbData_ne];
+  assign busC_tlb_data[`ctlbData_na]=writeTlb_low[1] ? writeTlb_data1[1][`dtlbData_na] : writeTlb_data0_reg[1][`dtlbData_na];
+  assign busC_tlb_data[`ctlbData_global]=writeTlb_low[1] ? writeTlb_data1[1][`dtlbData_glo] : writeTlb_data0_reg[1][`dtlbData_glo];
 
 //  assign busC_tlb_en=writeTlb_wenC[1] | writeTlb_wenHC[1];
 
@@ -596,9 +596,19 @@ module agu_r(
       if (rst) begin
           new_can_reg<=3'b111;
           new_can_reg2<=3'b111;
+          writeTlb_IP0_reg<=0;
+          writeTlb_data00_reg<=0;
+          writeTlb_data10_reg<=0;
+          writeTlb_data20_reg<=0;
+          writeTlb_low0_reg<=0;
       end else begin
           new_can_reg<=new_can;
           new_can_reg2<=new_can_reg;
+          writeTlb_IP0_reg<=writeTlb_IP0;
+          writeTlb_data00_reg<=writeTlb_data00;
+          writeTlb_data10_reg<=writeTlb_data10;
+          writeTlb_data20_reg<=writeTlb_data20;
+          writeTlb_low0_reg<=writeTlb_low0;
       end
      
       if (rst) begin
