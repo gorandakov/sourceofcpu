@@ -19,9 +19,12 @@ limitations under the License.
 module cc_ram(
   clk,
   rst,
-  read_clkEn,
-  read_addr,
-  read_data,
+  readA_clkEn,
+  readA_addr,
+  readA_data,
+  readB_clkEn,
+  readB_addr,
+  readB_data,
   write_addr,
   write_data,
   write_wen
@@ -38,9 +41,12 @@ module cc_ram(
 
   input clk;
   input rst;
-  input read_clkEn;
-  input [ADDR_WIDTH-1:0] read_addr;
-  output [DATA_WIDTH-1:0] read_data;
+  input readA_clkEn;
+  input [ADDR_WIDTH-1:0] readA_addr;
+  output [DATA_WIDTH-1:0] readA_data;
+  input readB_clkEn;
+  input [ADDR_WIDTH-1:0] readB_addr;
+  output [DATA_WIDTH-1:0] readB_data;
   input [ADDR_WIDTH-1:0] write_addr;
   input [DATA_WIDTH-1:0] write_data;
   input write_wen;
@@ -52,8 +58,10 @@ module cc_ram(
 
   always @(negedge clk)
     begin
-      if (rst) read_addr_reg<={ADDR_WIDTH{1'b0}};
-      else if (read_clkEn) read_addr_reg<=read_addr;
+      if (rst) readA_addr_reg<={ADDR_WIDTH{1'b0}};
+      else if (readA_clkEn&~write_wen) readA_addr_reg<=readA_addr;
+      if (rst) readB_addr_reg<={ADDR_WIDTH{1'b0}};
+      else if (readB_clkEn&~write_wen) readB_addr_reg<=readB_addr;
       if (write_wen) ram[write_addr]<=write_data;
     end
 
@@ -62,9 +70,12 @@ endmodule
 module cc_ram_block(
   clk,
   rst,
-  read_clkEn,
-  read_addr,
-  read_data,
+  readA_clkEn,
+  readA_addr,
+  readA_data,
+  readB_clkEn,
+  readB_addr,
+  readB_data,
   write_addr,
   write_data,
   write_wen
@@ -82,9 +93,12 @@ module cc_ram_block(
 
   input clk;
   input rst;
-  input read_clkEn;
-  input [ADDR_WIDTH-1:0] read_addr;
-  output [DATA_WIDTH-1:0] read_data;
+  input readA_clkEn;
+  input [ADDR_WIDTH-1:0] readA_addr;
+  output [DATA_WIDTH-1:0] readA_data;
+  input readB_clkEn;
+  input [ADDR_WIDTH-1:0] readB_addr;
+  output [DATA_WIDTH-1:0] readB_data;
   input [ADDR_WIDTH-1:0] write_addr;
   input [DATA_WIDTH-1:0] write_data;
   input write_wen;
@@ -95,9 +109,12 @@ module cc_ram_block(
         cc_ram ram_mod(
         clk,
         rst,
-        read_clkEn,
-        read_addr,
-        read_data[130*t+:130],
+        readA_clkEn,
+        readA_addr,
+        readA_data[130*t+:130],
+        readB_clkEn,
+        readB_addr,
+        readB_data[130*t+:130],
         write_addr,
         write_data[130*t+:130],
         write_wen
@@ -109,9 +126,12 @@ endmodule
 module ccX_ram(
   clk,
   rst,
-  read_clkEn,
-  read_addr,
-  read_data,
+  readA_clkEn,
+  readA_addr,
+  readA_data,
+  readB_clkEn,
+  readB_addr,
+  readB_data,
   write_addr,
   write_data,
   write_wen
@@ -128,9 +148,12 @@ module ccX_ram(
 
   input clk;
   input rst;
-  input read_clkEn;
-  input [ADDR_WIDTH-1:0] read_addr;
-  output [DATA_WIDTH-1:0] read_data;
+  input readA_clkEn;
+  input [ADDR_WIDTH-1:0] readA_addr;
+  output [DATA_WIDTH-1:0] readA_data;
+  input readB_clkEn;
+  input [ADDR_WIDTH-1:0] readB_addr;
+  output [DATA_WIDTH-1:0] readB_data;
   input [ADDR_WIDTH-1:0] write_addr;
   input [DATA_WIDTH-1:0] write_data;
   input write_wen;
@@ -142,8 +165,10 @@ module ccX_ram(
 
   always @(negedge clk)
     begin
-      if (rst) read_addr_reg<={ADDR_WIDTH{1'b0}};
-      else if (read_clkEn) read_addr_reg<=read_addr;
+      if (rst) readA_addr_reg<={ADDR_WIDTH{1'b0}};
+      else if (readA_clkEn) readA_addr_reg<=readA_addr;
+      if (rst) readB_addr_reg<={ADDR_WIDTH{1'b0}};
+      else if (readB_clkEn) readB_addr_reg<=readB_addr;
       if (write_wen) ram[write_addr]<=write_data;
     end
 
@@ -153,14 +178,22 @@ endmodule
 module ccRam_way(
   clk,
   rst,
-  read_clkEn,
-  read_IP,
-  read_IP_low,
-  read_set_flag,
-  read_data,read_data_in,
-  read_dataX,read_dataX_in,
-  expun_addr,expun_addr_in,
-  read_hit,read_next_hit,expun_hit,
+  readA_clkEn,
+  readA_IP,
+  readA_IP_low,
+  readA_set_flag,
+  readA_data,readA_data_in,
+  readA_dataX,readA_dataX_in,
+  expunA_addr,expunA_addr_in,
+  readA_hit,readA_next_hit,expunA_hit,
+  readB_clkEn,
+  readB_IP,
+  readB_IP_low,
+  readB_set_flag,
+  readB_data,readB_data_in,
+  readB_dataX,readB_dataX_in,
+  expunB_addr,expunB_addr_in,
+  readB_hit,readB_next_hit,expunB_hit,
   read_NRU,read_NRU_in,read_NRU_reg,
   chkCL_IP,
   chkCL_clkEn,
@@ -185,19 +218,32 @@ module ccRam_way(
 
   input clk;
   input rst;
-  input read_clkEn;
-  input [IP_WIDTH-6:0] read_IP;
-  input [3:0] read_IP_low;
-  input read_set_flag;
-  output [DATA_WIDTH-1:0] read_data;
-  input [DATA_WIDTH-1:0] read_data_in;
-  output [59:0] read_dataX;
-  input [59:0] read_dataX_in;
-  output [36:0] expun_addr;
-  input [36:0] expun_addr_in;
-  output read_hit;
-  output read_next_hit;
-  output expun_hit;
+  input readA_clkEn;
+  input [IP_WIDTH-6:0] readA_IP;
+  input [3:0] readA_IP_low;
+  input readA_set_flag;
+  output [DATA_WIDTH-1:0] readA_data;
+  input [DATA_WIDTH-1:0] readA_data_in;
+  output [59:0] readA_dataX;
+  input [59:0] readA_dataX_in;
+  output [36:0] expunA_addr;
+  input [36:0] expunA_addr_in;
+  output readA_hit;
+  output readA_next_hit;
+  output expunA_hit;
+  input readB_clkEn;
+  input [IP_WIDTH-6:0] readB_IP;
+  input [3:0] readB_IP_low;
+  input readB_set_flag;
+  output [DATA_WIDTH-1:0] readB_data;
+  input [DATA_WIDTH-1:0] readB_data_in;
+  output [59:0] readB_dataX;
+  input [59:0] readB_dataX_in;
+  output [36:0] expunB_addr;
+  input [36:0] expunB_addr_in;
+  output readB_hit;
+  output readB_next_hit;
+  output expunB_hit;
   output [2:0] read_NRU;
   input [2:0] read_NRU_in;
   input [2:0] read_NRU_reg;
@@ -213,10 +259,12 @@ module ccRam_way(
 
   reg init;
 
-  wire [DATA_WIDTH-1:0] read_data_ram;
+  wire [DATA_WIDTH-1:0] readA_data_ram;
+  wire [DATA_WIDTH-1:0] readB_data_ram;
   reg [IP_WIDTH-6:0] write_IP_reg;
   
-  wire [59:0] readX_data_ram;
+  wire [59:0] readXA_data_ram;
+  wire [59:0] readXB_data_ram;
   reg [59:0] writeX_data;
   `ifdef ICACHE_256K
   wire [7:0] writeX_addr;
@@ -224,11 +272,16 @@ module ccRam_way(
   wire [6:0] writeX_addr;
   `endif
   integer k,j;
-  reg read_clkEn_reg;
-  reg read_set_flag_reg;
-  reg [3:0] read_IP_low_reg;
-  reg [9:0] read_IP_reg;
-  wire read_hitC0; 
+  reg readA_clkEn_reg;
+  reg readA_set_flag_reg;
+  reg readB_clkEn_reg;
+  reg readB_set_flag_reg;
+  reg [3:0] readA_IP_low_reg;
+  reg [9:0] readA_IP_reg;
+  wire readA_hitC0; 
+  reg [3:0] readB_IP_low_reg;
+  reg [9:0] readB_IP_reg;
+  wire readB_hitC0; 
   wire write_hit; 
 
   wire [36:0] expun_naddr;
@@ -245,28 +298,30 @@ module ccRam_way(
 
   generate
     if (~INDEX[0]) begin
-        assign read_data=~(({DATA_WIDTH{read_hit}} & read_data_ram) | read_data_in);
-        assign read_dataX=~(({60{read_hit}} & writeX_data[59:0]) | read_dataX_in);
+        assign readA_data=~(({DATA_WIDTH{readA_hit}} & readA_data_ram) | readA_data_in);
+        assign readA_dataX=~(({60{readA_hit}} & writeXA_data[59:0]) | readA_dataX_in);
         assign expun_addr=~(({37{write_hit}} & expun_naddr[36:0]) | expun_addr_in);
-   //     assign read_physOut=~(({32{read_hit}} & read_physOutP)&read_physOut_in);
-   //     assign read_NRU=~(({32{read_hit}} & read_NRUP)&read_NRU_in);
+        assign readB_data=~(({DATA_WIDTH{readB_hit}} & readB_data_ram) | readB_data_in);
+        assign readB_dataX=~(({60{readB_hit}} & writeXB_data[59:0]) | readB_dataX_in);
     end else begin
-        assign read_data=~(~({DATA_WIDTH{read_hit}} & read_data_ram) & read_data_in);
-        assign read_dataX=~(~({60{read_hit}} & writeX_data[59:0]) & read_dataX_in);
+        assign readA_data=~(~({DATA_WIDTH{readA_hit}} & readA_data_ram) & readA_data_in);
+        assign readA_dataX=~(~({60{readA_hit}} & writeXA_data[59:0]) & readA_dataX_in);
         assign expun_addr=~(~({37{write_hit}} & expun_naddr[36:0]) & expun_addr_in);
-   //     assign read_physOut=~(~({32{read_hit}} & read_physOutP)|read_physOut_in);
-   //     assign read_NRU=~(~({32{read_hit}} & read_NRUP)|read_NRU_in);
+        assign readB_data=~(~({DATA_WIDTH{readB_hit}} & readB_data_ram) & readB_data_in);
+        assign readB_dataX=~(~({60{readB_hit}} & writeXB_data[59:0]) & readB_dataX_in);
     end
   endgenerate
 
   `ifdef ICACHE_256K
   assign writeX_addr=init ? initCount : 8'bz;
-  assign writeX_addr=(~init & read_clkEn_reg) ? read_IP_reg[9:2] : 8'bz;
-  assign writeX_addr=(~init & ~read_clkEn_reg) ? write_IP_reg[9:2] : 8'bz;
+  assign writeX_addr=(~init & readA_clkEn_reg) ? readA_IP_reg[9:2] : 8'bz;
+  assign writeX_addr=(~init & readB_clkEn_reg) ? readB_IP_reg[9:2] : 8'bz;
+  assign writeX_addr=(~init & ~readB_clkEn_reg & ~readA_clkEn_reg) ? write_IP_reg[9:2] : 8'bz;
   `else
   assign writeX_addr=init ? initCount : 7'bz;
-  assign writeX_addr=(~init & read_clkEn_reg) ? read_IP_reg[8:2] : 7'bz;
-  assign writeX_addr=(~init & ~read_clkEn_reg) ? write_IP_reg[8:2] : 7'bz;
+  assign writeX_addr=(~init & readA_clkEn_reg) ? readA_IP_reg[8:2] : 7'bz;
+  assign writeX_addr=(~init & readB_clkEn_reg) ? readB_IP_reg[8:2] : 7'bz;
+  assign writeX_addr=(~init & ~readA_clkEn_reg & ~readB_clkEn_reg) ? write_IP_reg[8:2] : 7'bz;
   `endif
 
   assign chkCL_hit=read_hitC0;
@@ -274,13 +329,12 @@ module ccRam_way(
   ccX_ram ramX0_mod(
   .clk(clk),
   .rst(rst),
-  .read_clkEn(read_clkEn),
-  `ifdef ICACHE_256K
-  .read_addr(read_IP[9:2]),
-  `else
-  .read_addr(read_IP[8:2]),
-  `endif
-  .read_data(readX_data_ram),
+  .readA_clkEn(readA_clkEn),
+  .readA_addr(readA_IP[8:2]),
+  .readA_data(readXA_data_ram),
+  .readB_clkEn(readB_clkEn),
+  .readB_addr(readB_IP[8:2]),
+  .readB_data(readXB_data_ram),
   .write_addr(writeX_addr),
   .write_data(init ? 60'b0 : writeX_data),
   .write_wen(write_hit|init|read_clkEn_reg)
@@ -290,18 +344,13 @@ module ccRam_way(
   cc_ram_block #(1) ram0_mod(
   .clk(clk),
   .rst(rst),
-  .read_clkEn(read_clkEn),
-  `ifdef ICACHE_256K
-  .read_addr(read_IP[9:2]),
-  `else
-  .read_addr(read_IP[8:2]),
-  `endif
-  .read_data(read_data_ram[DATA_WIDTH/2-1:0]),
-  `ifdef ICACHE_256K
-  .write_addr(init ? initCount : write_IP_reg[9:2]),
-  `else
+  .readA_clkEn(readA_clkEn),
+  .readA_addr(readA_IP[8:2]),
+  .readA_data(readA_data_ram[DATA_WIDTH/2-1:0]),
+  .readB_clkEn(readB_clkEn),
+  .readB_addr(readB_IP[8:2]),
+  .readB_data(readB_data_ram[DATA_WIDTH/2-1:0]),
   .write_addr(init ? initCount : write_IP_reg[8:2]),
-  `endif
   .write_data(write_data_reg[DATA_WIDTH/2-1:0] & {DATA_WIDTH/2{~init}}),
   .write_wen(write_hit|init)
   );
@@ -309,18 +358,13 @@ module ccRam_way(
   cc_ram_block #(0) ram1_mod(
   .clk(clk),
   .rst(rst),
-  .read_clkEn(read_clkEn),
-  `ifdef ICACHE_256K
-  .read_addr(read_IP[9:2]),
-  `else
-  .read_addr(read_IP[8:2]),
-  `endif
-  .read_data(read_data_ram[DATA_WIDTH-1:DATA_WIDTH/2]),
-  `ifdef ICACHE_256K
-  .write_addr(init ? initCount : write_IP_reg[9:2]),
-  `else
+  .readA_clkEn(readA_clkEn),
+  .readA_addr(readA_IP[8:2]),
+  .readA_data(readA_data_ram[DATA_WIDTH-1:DATA_WIDTH/2]),
+  .readB_clkEn(readB_clkEn),
+  .readB_addr(readB_IP[8:2]),
+  .readB_data(readB_data_ram[DATA_WIDTH-1:DATA_WIDTH/2]),
   .write_addr(init ? initCount : write_IP_reg[8:2]),
-  `endif
   .write_data(write_data_reg[DATA_WIDTH-1:DATA_WIDTH/2] & {DATA_WIDTH/2{~init}}),
   .write_wen(write_hit|init)
   );
@@ -329,10 +373,10 @@ module ccRam_way(
   ccTag #(INDEX) tag_mod(
   .clk(clk),
   .rst(rst),
-  .read_clkEn(read_clkEn),
-  .read_phys_addr(init ? {initCount} : read_IP[38:2]),
-  .read_hit(read_hit),
-  .read_err(Err),
+  .readA_clkEn(readA_clkEn),
+  .readA_phys_addr(init ? {initCount} : readA_IP[38:2]),
+  .readA_hit(readA_hit),
+  .readA_err(ErrA),
   .write_phys_addr(init ? {initCount} : write_IP[38:2]),
   .write_wen(write_wen),
   .invalidate(invalidate),
@@ -342,6 +386,25 @@ module ccRam_way(
   .write_hit(write_hit),
   .write_expun_addr(expun_naddr),
   .write_exp_en(expun_hit),
+  .init(init)
+  );
+  
+  ccTag #(INDEX) tagB_mod(
+  .clk(clk),
+  .rst(rst),
+  .readB_clkEn(readB_clkEn),
+  .readB_phys_addr(init ? {initCount} : readB_IP[38:2]),
+  .readB_hit(readB_hit),
+  .readB_err(ErrB),
+  .write_phys_addr(init ? {initCount} : write_IP[38:2]),
+  .write_wen(write_wen),
+  .invalidate(invalidate),
+  .hitNRU(),
+  .hitNRU_in(),
+  .hitNRU_reg(),
+  .write_hit(write_hit),
+  .write_expun_addr(),
+  .write_exp_en(),
   .init(init)
   );
   
@@ -366,18 +429,15 @@ module ccRam_way(
   );
 //verilator lint_on WIDTH  
   
-  `ifdef ICACHE_256K  
-  adder_inc #(8) initAdd_mod(initCount,initCountNext,1'b1,);
-  `else
   adder_inc #(7) initAdd_mod(initCount,initCountNext,1'b1,);
-  `endif
     
   always @* begin
-      writeX_data=readX_data_ram;
+      writeX_data=readA_clkEn_reg ? readXA_data_ram : readXB_data_ram;
       for (k=0;k<4;k=k+1)
           for (j=0;j<15;j=j+1) begin
-              writeX_data[k*15+j]=writeX_data[k*15+j]||(read_set_flag_reg && read_IP_low_reg==j[3:0] 
-                && read_IP_reg[1:0]==k[1:0]);
+              writeX_data[k*15+j]=writeX_data[k*15+j]||(readA_set_flag_reg && readA_IP_low_reg==j[3:0] 
+                && readA_IP_reg[1:0]==k[1:0])||(readB_set_flag_reg && readB_IP_low_reg==j[3:0]
+                && readB_IP_reg[1:0]==k[1:0]);
           end
   end
   
@@ -387,30 +447,28 @@ module ccRam_way(
           write_IP_reg<=39'b0;
         //  hitNRU_reg<=3'b0;
           write_data_reg<={DATA_WIDTH{1'B0}};
-          read_clkEn_reg<=1'b0;
-          read_set_flag_reg<=1'b0;
-          read_IP_low_reg<=4'b0;
-          read_IP_reg<=10'b0;
+          readA_clkEn_reg<=1'b0;
+          readA_set_flag_reg<=1'b0;
+          readA_IP_low_reg<=4'b0;
+          readA_IP_reg<=10'b0;
+          readB_clkEn_reg<=1'b0;
+          readB_set_flag_reg<=1'b0;
+          readB_IP_low_reg<=4'b0;
+          readB_IP_reg<=10'b0;
       end
       else begin
           write_IP_reg<=write_IP;
         //  hitNRU_reg<=hitNRU;
           write_data_reg<=write_data;
-          read_clkEn_reg<=read_clkEn;
-          read_set_flag_reg<=read_set_flag;
-          read_IP_low_reg<=read_IP_low;
-          read_IP_reg<=read_IP[9:0];
+          readA_clkEn_reg<=readA_clkEn;
+          readA_set_flag_reg<=readA_set_flag;
+          readA_IP_low_reg<=readA_IP_low;
+          readA_IP_reg<=readA_IP[9:0];
+          readB_clkEn_reg<=readB_clkEn;
+          readB_set_flag_reg<=readB_set_flag;
+          readB_IP_low_reg<=readB_IP_low;
+          readB_IP_reg<=readB_IP[9:0];
       end
-      `ifdef ICACHE_256K
-      if (rst) begin
-          init<=1'b1;
-          initCount<=8'b0;
-      end else if (init) begin
-         initCount<=initCountNext;
-         if (initCount==8'd255)
-             init<=1'b0;
-      end
-      `else
       if (rst) begin
           init<=1'b1;
           initCount<=7'b0;
@@ -419,7 +477,6 @@ module ccRam_way(
          if (initCount==7'd127)
              init<=1'b0;
       end
-      `endif
       if (write_hit) begin
 	  $display("WH ",{write_data_reg[258:195],write_data_reg[193:130],write_data_reg[128:65],write_data_reg[63:0]});
 	  $display("WH ",{write_data_reg[260+258:260+195],write_data_reg[260+193:260+130],
