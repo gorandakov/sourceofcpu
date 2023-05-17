@@ -1254,7 +1254,9 @@ module add_agu(
   out,
   cout_sec,
   ndiff,
-  en
+  en,
+  shift,
+  sh2
   );
   parameter WIDTH=44;
   input [64:0] a;//base
@@ -1264,12 +1266,10 @@ module add_agu(
   output [63:0] out;
   output cout_sec;
   output ndiff;
-  input en;
+  input en;  
+  input [3:0] shift;
+  input [1:0] sh2;
   
-  wire [3:0] shift;
-  
-  assign shift=4'd8;
-
   wire [WIDTH-1:0] tmp1;
   wire [WIDTH:0] tmp2;
   wire [WIDTH-1:0] c1;
