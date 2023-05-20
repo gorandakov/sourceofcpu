@@ -249,12 +249,12 @@ module sagu(
 
   wire [4:0] lastSz;
 
-  reg [63:0] mflags;
+  reg [1:0][63:0] mflags;
   wire [63:0] mflags0;
-  reg [23:0] pproc;  
+  reg [1:0][23:0] pproc;  
   reg [23:0] sproc;  
   reg [23:0] proc;
-  reg [23:0] vproc;
+  reg [1:0][23:0] vproc;
   wire split;
   wire [1:0] fault_tlb;
   wire [1:0] fault_tlb_next;
@@ -355,7 +355,7 @@ module sagu(
     
   assign rcn_mask={~(except),~(except)};
   
-  assign mflags0=mflags;
+  assign mflags0=mflags[thread];
   
   assign fault_tlb={mflags0[`mflags_cpl]==2'd3 && tlb_data[`dtlbData_sys] , ~tlb_data[`dtlbData_na]|~tlb_data[`dtlbData_wp]}; 
   assign fault_tlb_next={mflags0[`mflags_cpl]==2'd3 && tlb_data_next[`dtlbData_sys] , ~tlb_data_next[`dtlbData_na]|~tlb_data_next[`dtlbData_wp]}; 
@@ -499,39 +499,34 @@ module sagu(
               //except_thread_reg2<=except_thread_reg;
 	  end
           if (rst) begin
-              pproc<=24'b0;
-              proc<=24'b0;
-              vproc<=24'b0;
-              sproc<=24'b0;
-              mflags<=64'b0;
+              pproc[0]<=24'b0;
+              vproc[0]<=24'b0;
+              mflags[0]<=64'b0;
+              pproc[1]<=24'b0;
+              vproc[1]<=24'b0;
+              mflags[1]<=64'b0;
           end else if (csrss_en) begin
-              case(csrss_no)
-           `csr_page: begin pproc<=csrss_data[63:40]; proc<=csrss_data[63:40]; sproc<=0; end
-           `csr_vmpage: vproc<=csrss_data[63:40];
-           `csr_mflags: mflags<=csrss_data;
+              case(csrss_no[14:0])
+           `csr_page: begin pproc[csrss_no[15]]<=csrss_data[63:40]; end
+           `csr_vmpage: vproc[csrss_no[15]]<=csrss_data[63:40];
+           `csr_mflags: mflags[csrss_no[15]]<=csrss_data;
               endcase
-	      if (~attr2[`attr_vm]) begin
-		  proc<=pproc;
-		  sproc<=0;
-	      end
-	      if (attr2[`attr_vm]) begin
-		  proc<=vproc;
-		  sproc<=pproc^1;
-	      end
-	      mflags[`mflags_cpl]<=attr2[`attr_km] ? 2'b0 : 2'b11;
-	      mflags[`mflags_sec]<=attr2[`attr_sec];//muha-sranks
+	      mflags[csrss_no[15]][`mflags_cpl]<=attr2[`attr_km] ? 2'b0 : 2'b11;
+	      mflags[csrss_no[15]][`mflags_sec]<=attr2[`attr_sec];//muha-sranks
           end else begin
-	      if (~attr2[`attr_vm]) begin
-		  proc<=pproc;
-		  sproc<=0;
-	      end
-	      if (attr2[`attr_vm]) begin
-		  proc<=vproc;
-		  sproc<=pproc^1;
-	      end
-	      mflags[`mflags_cpl]<=attr2[`attr_km] ? 2'b0 : 2'b11;
-	      mflags[`mflags_sec]<=attr2[`attr_sec];
+	      mflags[csrss_no[15]][`mflags_cpl]<=attr2[`attr_km] ? 2'b0 : 2'b11;
+	      mflags[csrss_no[15]][`mflags_sec]<=attr2[`attr_sec];
 	  end
     end
-   
+
+    always @* begin
+	if (~attr2[`attr_vm]) begin
+	    proc=pproc[thread];
+	    sproc=0;
+	end
+	if (attr2[`attr_vm]) begin
+	    proc=vproc[thread];
+	    sproc=pproc[thread]^1;
+	end
+    end   
 endmodule
