@@ -927,7 +927,7 @@ module ww(
   );  
 
 
-frontend1 #(BUS_ID) front_mod(
+frontend1 #(BUS_ID) frontA_mod(
   clk,
   rst,
   except,
@@ -990,7 +990,7 @@ frontend1 #(BUS_ID) front_mod(
   expun_fr_en
   );
   
-frontend1 #(BUS_ID) front_mod(
+frontend1 #(BUS_ID) frontB_mod(
   clk,
   rst,
   except,
@@ -1054,6 +1054,8 @@ frontend1 #(BUS_ID) front_mod(
   );
   
 
+  assign iAvail[0]={10{~thread}} & iAvailX;
+  assign iAvail[1]={10{ thread}} & iAvailX;
   
   decoder decSnake_mod(
   clk,
@@ -1065,25 +1067,25 @@ frontend1 #(BUS_ID) front_mod(
   
   btbl_step,
   
-  iAvail,
-  instrEn,
-  instr0,extra0,
-  instr1,extra1,
-  instr2,extra2,
-  instr3,extra3,
-  instr4,extra4,
-  instr5,extra5,
-  instr6,extra6,
-  instr7,extra7,
-  instr8,extra8,
-  instr9,extra9,
+  iAvailX,
+  instrEn[thread],
+  instr0[thread],extra0[thread],
+  instr1[thread],extra1[thread],
+  instr2[thread],extra2[thread],
+  instr3[thread],extra3[thread],
+  instr4[thread],extra4[thread],
+  instr5[thread],extra5[thread],
+  instr6[thread],extra6[thread],
+  instr7[thread],extra7[thread],
+  instr8[thread],extra8[thread],
+  instr9[thread],extra9[thread],
   
-  btbl_IP0,
-  btbl_IP1,
+  btbl_IP0[thread],
+  btbl_IP1[thread],
 
-  btbl_attr0,
-  btbl_attr1,
-  halt,
+  btbl_attr0[thread],
+  btbl_attr1[thread],
+  halt[thread],
   
   1'b1,//all_retired,
   fp_excpt_en,
@@ -1390,4 +1392,18 @@ frontend1 #(BUS_ID) front_mod(
   wrt0,wrt1,wrt2,
   csrss_no,csrss_en,csrss_data
   );
+
+  always @(posedge clk) begin
+      if (rst) begin
+          thread<=1'b0;
+      end else if (thread_end_A | thread_end_B) begin
+          thread<=thread_end_A;
+      end else if (instrEn[0]!=0 && (instrEn[1]==0 || except && except_thread)) begin
+          thread<=1'b0;
+      end else if (instrEn[1]!=0 && (instrEn[0]==0 || except && !except_thread)) begin
+          thread<=1'b1;
+      end else begin
+          thread<=!thread;
+      end
+  end
 endmodule
