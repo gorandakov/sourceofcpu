@@ -1541,13 +1541,14 @@ module csrss_watch(
   input [15:0] csrss_addr;
   input [63:0] csrss_data;
   input csrss_en;
-  output reg [63:0] data_out;
+  output reg [1:0][63:0] data_out;
 
   always @(posedge clk) begin
     if (rst) begin
-	data_out<=INITVAL;
+	data_out[0]<=INITVAL;
+	data_out[1]<=INITVAL;
     end else if (csrss_en) begin
-	if (ADDR==csrss_addr) data_out<=csrss_data;
+	if (ADDR[14:0]==csrss_addr[14:0] && ~addr[15]) data_out[csrss_addr[15]]<=csrss_data;
     end
   end
 endmodule
