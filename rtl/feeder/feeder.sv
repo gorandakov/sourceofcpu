@@ -861,38 +861,41 @@ module ww(
   output [3:0] btbl_attr0;
   output [3:0] btbl_attr1;
 
-  wire [INSTR_WIDTH-1:0] instr0;
-  wire [INSTR_WIDTH-1:0] instr1;
-  wire [INSTR_WIDTH-1:0] instr2;
-  wire [INSTR_WIDTH-1:0] instr3;
-  wire [INSTR_WIDTH-1:0] instr4;
-  wire [INSTR_WIDTH-1:0] instr5;
-  wire [INSTR_WIDTH-1:0] instr6;
-  wire [INSTR_WIDTH-1:0] instr7;
-  wire [INSTR_WIDTH-1:0] instr8;
-  wire [INSTR_WIDTH-1:0] instr9;
 
-  wire [`instrQ_width-1:0] extra0;
-  wire [`instrQ_width-1:0] extra1;
-  wire [`instrQ_width-1:0] extra2;
-  wire [`instrQ_width-1:0] extra3;
-  wire [`instrQ_width-1:0] extra4;
-  wire [`instrQ_width-1:0] extra5;
-  wire [`instrQ_width-1:0] extra6;
-  wire [`instrQ_width-1:0] extra7;
-  wire [`instrQ_width-1:0] extra8;
-  wire [`instrQ_width-1:0] extra9;
+  reg thread;
 
-  wire [2:0] btbl_step;
-  wire [62:0] btbl_IP0;
-  wire [62:0] btbl_IP1;
-  wire [3:0] btbl_mask0;
-  wire [3:0] btbl_mask1;
-  wire [3:0] btbl_attr0;
-  wire [3:0] btbl_attr1;
+  wire [1:0][INSTR_WIDTH-1:0] instr0;
+  wire [1:0][INSTR_WIDTH-1:0] instr1;
+  wire [1:0][INSTR_WIDTH-1:0] instr2;
+  wire [1:0][INSTR_WIDTH-1:0] instr3;
+  wire [1:0][INSTR_WIDTH-1:0] instr4;
+  wire [1:0][INSTR_WIDTH-1:0] instr5;
+  wire [1:0][INSTR_WIDTH-1:0] instr6;
+  wire [1:0][INSTR_WIDTH-1:0] instr7;
+  wire [1:0][INSTR_WIDTH-1:0] instr8;
+  wire [1:0][INSTR_WIDTH-1:0] instr9;
 
-  wire [9:0] instrEn/*verilator public*/;
-  wire [9:0] iAvail/*verilator public*/;
+  wire [1:0][`instrQ_width-1:0] extra0;
+  wire [1:0][`instrQ_width-1:0] extra1;
+  wire [1:0][`instrQ_width-1:0] extra2;
+  wire [1:0][`instrQ_width-1:0] extra3;
+  wire [1:0][`instrQ_width-1:0] extra4;
+  wire [1:0][`instrQ_width-1:0] extra5;
+  wire [1:0][`instrQ_width-1:0] extra6;
+  wire [1:0][`instrQ_width-1:0] extra7;
+  wire [1:0][`instrQ_width-1:0] extra8;
+  wire [1:0][`instrQ_width-1:0] extra9;
+
+  wire [1:0][2:0] btbl_step;
+  wire [1:0][62:0] btbl_IP0;
+  wire [1:0][62:0] btbl_IP1;
+  wire [1:0][3:0] btbl_mask0;
+  wire [1:0][3:0] btbl_mask1;
+  wire [1:0][3:0] btbl_attr0;
+  wire [1:0][3:0] btbl_attr1;
+
+  wire [1:0][9:0] instrEn/*verilator public*/;
+  wire [1:0][9:0] iAvail/*verilator public*/;
 
   cc_comb code_cache(
   clk,
@@ -1390,7 +1393,8 @@ frontend1 #(BUS_ID) frontB_mod(
   baseIP,
   baseAttr,
   wrt0,wrt1,wrt2,
-  csrss_no,csrss_en,csrss_data
+  csrss_no,csrss_en,csrss_data,
+  thread
   );
 
   always @(posedge clk) begin
