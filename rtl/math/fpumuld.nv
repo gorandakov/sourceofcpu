@@ -96,7 +96,18 @@ module fma(
   assign C_zero=(expC)==12'b0;
   assign C_infty=(expC)==12'hffe;
   assign C_nan=(expC)==12'hfff;
-
+ 
+  assign specxy_snan=AxB_nan_reg2 & ~C_infty_reg2 & invExcpt & ~copyA_reg2 || C_nan_reg2 & ~AxB_infty_reg2 & invExcpt & ~copyA_reg2
+     || AxB_infty_reg2 & C_infty_reg2 & sxor_reg & invExcpt;
+  assign specxy_qnan=AxB_nan_reg2 & ~C_infty_reg2 & ~invExcpt & ~copyA_reg2 || C_nan_reg2 & ~AxB_infty_reg2 & ~invExcpt & ~copyA_reg2
+     || AxB_infty & C_infty_reg2 & sxor & ~invExcpt;
+  assign specxy_pinf=(AxB_infty_reg2 && ~AxB_s && ~C_infty|~B_s && ~copyA_reg2) || (C_infty_reg2 && ~B_s && 
+     ~AxB_infty_reg2|~A_s && ~copyA_reg2);
+  assign specxy_ninf=(AxB_infty_reg2 && A_s && ~C_infty_reg2|B_s && ~copyA_reg2) || (C_infty_reg2 && B_s && 
+     ~AxB_infty_reg2|A_s && ~copyA_reg2);
+  assign specxy_A=(C_zero_reg2 && ~AxB_zero_reg2|~A_s|B_s && ~AxB_nan_reg2 && ~AxB_infty_reg2)||copyA_reg2;
+  assign specxy_B=(AxB_zero_reg2 && ~C_zero_reg2|(~B_s&A_s) && ~C_nan_reg2 && ~C_infty_reg2)&&~copyA_reg2;
+ 
   assign spec_zero=A_zero_reg2&~B_infty_reg2&~copyA_reg2||B_zero_reg2&~A_infty_reg2&~copyA_reg2;
   assign spec_infty=A_infty_reg2&~B_zero_reg2&~copyA_reg2||B_infty_reg2&~A_zero_reg2&~copyA_reg2;
   assign spec_nan=(A_infty_reg2 & B_zero_reg2|| B_infty_reg2 & A_zero_reg2 || 
@@ -113,17 +124,36 @@ module fma(
   assign res_spec=(spec_infty) ? {13'h1ffe,sgn_reg2,52'h0000000000000} : 65'bz;
   assign res_spec=spec_any ?  65'bz :  65'b0;
 
-  assign raise[`csrfpu_inv_excpt]=spec_snan;
-  assign raise[`csrfpu_under_excpt]=sgn_reg2 && expon[0];
-  assign raise[`csrfpu_under_ieee_excpt]=sgn_reg2 && expon[1];
-  assign raise[`csrfpu_over_excpt]=~sgn_reg2 && expon[0];
-  assign raise[`csrfpu_over_ieee_excpt]=~sgn_reg2 && expon[1];
-  assign raise[`csrfpu_denor_ieee_excpt]=~expon[2] | expon[3];
-  assign raise[`csrfpu_denor_excpt]=expon[3];
-  assign raise[`csrfpu_inexact_excpt]=expon[4] | expon[3];
-  assign raise[`csrfpu_inexact_ieee_excpt]=expon[4] | expon[3] | ~expon[2];
-  assign raise[`csrfpu_denor_consume_excpt]=1'b0;//only for logic op
-  assign raise[`csrfpu_denor_produce_excpt]=1'b0;// ==//==
+  assign res_specxy=specxy_A ? A_reg2 : 65'bz;
+  assign res_specxy=specxy_B ? C_reg2 : 65'bz;
+  assign res_specxy=(specxy_snan) ? {13'h1fff,52'h0000000000001} : 65'bz;
+  assign res_specxy=(specxy_qnan) ? {13'h1fff,52'h8000000000001} : 65'bz;
+  assign res_specxy=(specxy_infty) ? {13'h1ffe,sgn_reg2,52'h0000000000000} : 65'bz;
+  assign res_specxy=specxy_any ?  65'bz :  65'b0;
+
+  assign lower[`csrfpu_inv_excpt]=spec_snan;
+  assign lower[`csrfpu_under_excpt]=sgn_reg2 && expon[0];
+  assign lower[`csrfpu_under_ieee_excpt]=sgn_reg2 && expon[1];
+  assign lower[`csrfpu_over_excpt]=~sgn_reg2 && expon[0];
+  assign lower[`csrfpu_over_ieee_excpt]=~sgn_reg2 && expon[1];
+  assign lower[`csrfpu_denor_ieee_excpt]=~expon[2] | expon[3];
+  assign lower[`csrfpu_denor_excpt]=expon[3];
+  assign lower[`csrfpu_inexact_excpt]=expon[4] | expon[3];
+  assign lower[`csrfpu_inexact_ieee_excpt]=expon[4] | expon[3] | ~expon[2];
+  assign lower[`csrfpu_denor_consume_excpt]=1'b0;//only for logic op
+  assign lower[`csrfpu_denor_produce_excpt]=1'b0;// ==//==
+  
+  assign raise[`csrfpu_inv_excpt]=specxy_snan_reg;
+  assign raise[`csrfpu_under_excpt]=A_s1_reg & exp_inc_oor_reg & xpon[1] & ~specxy_any;
+  assign raise[`csrfpu_over_excpt]=~A_s1_reg & exp_inc_oor_reg & xpon[1] & ~specxy_any;
+  assign raise[`csrfpu_under_ieee_excpt]=A_s1_reg & exp_inc_oor_IEEE_reg & xpon[1] & ~specxy_any;
+  assign raise[`csrfpu_over_ieee_excpt]=~A_s1_reg & exp_inc_oor_IEEE_reg & xpon[1] & ~specxy_any;
+  assign raise[`csrfpu_denor_excpt]=~exp_dec_non_denor_reg & xpon[0] & ~specxy_any;
+  assign raise[`csrfpu_denor_ieee_excpt]=~exp_dec_non_denor_IEEE_reg & xpon[0] & ~specxy_any;
+  assign raise[`csrfpu_inexact_excpt]=!|xpon[3:2]; 
+  assign raise[`csrfpu_inexact_ieee_excpt]=!|xpon[3:2]; 
+  assign raise[`csrfpu_denor_consume_excpt]=1'b0;
+  assign raise[`csrfpu_denor_produce_excpt]=1'b0;
 
   //assign choose_A and choose_B
 
