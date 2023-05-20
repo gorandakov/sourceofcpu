@@ -311,9 +311,9 @@ module agu_r(
 
   reg [23:0] proc;
   reg [23:0] sproc;
-  reg [23:0] pproc;
-  reg [23:0] vproc;
-  reg [63:0] mflags;
+  reg [1:0][23:0] pproc;
+  reg [1:0][23:0] vproc;
+  reg [1:0][63:0] mflags;
 
   wire [1:0] fault_tlb;
   wire [1:0] fault_tlb_next;
@@ -631,14 +631,17 @@ module agu_r(
           pause_miss_reg2<=pause_miss_reg;
       end
           if (rst) begin
-              proc<=24'b0;
-              sproc<=24'b0;
-	      mflags<=64'b0;
+              pproc[0]<=24'b0;
+              vproc[0]<=24'b0;
+	      mflags[0]<=64'b0;
+              pproc[1]<=24'b0;
+              vproc[1]<=24'b0;
+	      mflags[1]<=64'b0;
           end else if (csrss_en) begin
-              case(csrss_no)
-           `csr_page: begin pproc<=csrss_data[63:40]; proc<=csrss_data[63:40]; sproc<=0; end
-           `csr_vmpage: vproc<=csrss_data[63:40];
-           `csr_mflags: mflags<=csrss_data;
+              case(csrss_no[14:0])
+           `csr_page: begin pproc[csrss_no[15]]<=csrss_data[63:40]; end
+           `csr_vmpage: vproc[csrss_no[15]]<=csrss_data[63:40];
+           `csr_mflags: mflags[csrss_no[15]]<=csrss_data;
               endcase
 	 end
       if (rst) tlb_way_reg<=3'd0;
@@ -655,5 +658,15 @@ module agu_r(
           fault_cann_reg<=fault_cann;
       end
   end
+    always @* begin
+	if (~mOp0_attr_reg[`attr_vm]) begin
+	    proc=pproc[mOp0_thread_reg];
+	    sproc=0;
+	end
+	if (mOp0_attr_reg[`attr_vm]) begin
+	    proc=vproc[mOp0_thread_reg];
+	    sproc=pproc[mOp0_thread_reg]^1;
+	end
+    end   
 endmodule
 
