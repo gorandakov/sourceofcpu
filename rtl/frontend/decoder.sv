@@ -2210,7 +2210,7 @@ module decoder(
     input thr;
     input [5:0] reeg;
     begin
-        ffx=reeg==6'd16 ? {5'd16,thr} : { 1'b0,thr,reeg[4:0] }; 
+        ffx=reeg==6'd16 ? {5'd16,thr} : { 1'b0,thr^reeg[5],reeg[4:0] }; 
     end
   endfunction
   wire [9:0] csrss_retIP_en;
