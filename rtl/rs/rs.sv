@@ -2294,14 +2294,14 @@ module rs(
     newANeeded0,newBNeeded0,newReg0,newOp0,newPort0,newInstrIndex0,newLSQ0,
     rsAlloc0,newGazumpA0,newGazumpB0,newFunitA0,newFunitB0,newWQ0,newLSFlag0,
     newAttr0,
-  newDataA1,newDataB1,newDataC1,newDataS1,newRegA1,newRegB1,newRegS1,
-    newANeeded1,newBNeeded1,newSNeeded1,newReg1,newRegSimd1,newOp1,newPort1,
-    newInstrIndex1,newLSQ1,rsAlloc1,newGazumpA1,newGazumpB1,newGazumpS1,
-    newFunitA1,newFunitB1,newFunitS1,newLSFlag1,newAttr1,
-  newDataA2,newDataB2,newDataC2,newDataS2,newRegA2,newRegB2,newRegS2,
-    newANeeded2,newBNeeded2,newSNeeded2,newReg2,newRegSimd2,newOp2,newPort2,
-    newInstrIndex2,rsAlloc2,newGazumpA2,newGazumpB2,newGazumpS2,
-    newFunitA2,newFunitB2,newFunitS2,newAttr2,
+  newDataA1,newDataB1,newDataC1,newDataS1,newRegA1,newRegB1,newRegX1,newRegS1,
+    newANeeded1,newBNeeded1,newXNeeded1,newSNeeded1,newReg1,newRegSimd1,newOp1,newPort1,
+    newInstrIndex1,newLSQ1,rsAlloc1,newGazumpA1,newGazumpB1,newGazumpX1,newGazumpS1,
+    newFunitA1,newFunitB1,newFunitX1,newFunitS1,newLSFlag1,newAttr1,
+  newDataA2,newDataB2,newDataC2,newDataS2,newRegA2,newRegB2,newRegX2,newRegS2,
+    newANeeded2,newBNeeded2,newXNeeded2,newSNeeded2,newReg2,newRegSimd2,newOp2,newPort2,
+    newInstrIndex2,rsAlloc2,newGazumpA2,newGazumpB2,newGazumpX2,newGazumpS2,
+    newFunitA2,newFunitB2,newFunitX2,newFunitS2,newAttr2,
 // wires to get values out of buffer
   outDataA0,outDataB0,outDataC0,outReg0,outOp0,outInstrIndex0,outWQ0,outLSFlag0,
     outFuFwdA0,outFuFwdB0,outFuuFwdA0,outFuuFwdB0,outLSQ0,outDataEn0,outThread0,//agu
@@ -2324,17 +2324,17 @@ module rs(
   FU8,FUreg8,FUwen8,
   FU9,FUreg9,FUwen9,
   
-  newDataVA1H,newDataVB1H,newDataVA1L,newDataVB1L,
-  newDataVA2H,newDataVB2H,newDataVA2L,newDataVB2L,
+  newDataVA1H,newDataVB1H,newDataVX1H,newDataVA1L,newDataVB1L,newDataVX1L,
+  newDataVA2H,newDataVB2H,newDataVX2H,newDataVA2L,newDataVB2L,newdataVX2L,
 
-  newDataFA1H,newDataFB1H,newDataFA1L,newDataFB1L,
-  newDataFA2H,newDataFB2H,newDataFA2L,newDataFB2L,
+  newDataFA1H,newDataFB1H,newDataFX1H,newDataFA1L,newDataFB1L,newDataFX1L,
+  newDataFA2H,newDataFB2H,newDataFx2H,newDataFA2L,newDataFB2L,newdataFX2L,
 
-  outDataVA1H,outDataVB1H,outDataVA1L,outDataVB1L,
-  outDataVA2H,outDataVB2H,outDataVA2L,outDataVB2L,
+  outDataVA1H,outDataVB1H,outDataVX1H,outDataVA1L,outDataVB1L,outDataVX1L,
+  outDataVA2H,outDataVB2H,outDataVX2H,outDataVA2L,outDataVB2L,outDataVX2L,
 
-  outDataFA1H,outDataFB1H,outDataFA1L,outDataFB1L,
-  outDataFA2H,outDataFB2H,outDataFA2L,outDataFB2L,
+  outDataFA1H,outDataFB1H,outDataFY1H,outDataFA1L,outDataFB1L,outDataFY1L,
+  outDataFA2H,outDataFB2H,outDataFY1H,outDataFA2L,outDataFB2L,outDataFY2L,
 
   FUV0H,FUV0L,
   FUV1H,FUV1L,
@@ -2343,9 +2343,6 @@ module rs(
   FUV4H,FUV4L,
   FUV5H,FUV5L,
   FUV6H,FUV6L,
-  FUV7H,FUV7L,
-  FUV8H,FUV8L,
-  FUV9H,FUV9L,
   
   FUF0H,FUF0L,
   FUF1H,FUF1L,
@@ -2354,9 +2351,6 @@ module rs(
   FUF4H,FUF4L,
   FUF5H,FUF5L,
   FUF6H,FUF6L,
-  FUF7H,FUF7L,
-  FUF8H,FUF8L,
-  FUF9H,FUF9L,
 
   FUS0,FUS1,FUS2,
   FUS3,FUS4,FUS5,
