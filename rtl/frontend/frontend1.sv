@@ -81,6 +81,7 @@ module frontend1(
   expun_wen
   );
 
+  parameter [0:0] thread;
   localparam PHYS_WIDTH=44;
   localparam VIRT_WIDTH=64;
   localparam IP_WIDTH=64;
@@ -771,7 +772,7 @@ module frontend1(
 	      .c({21'b0,jdec_const_reg[k][43:1],1'b0}),.out({jdec_target[k],par0}),.cout_sec(jdec_sec[k]),.ndiff(),.en(1'b1),
 	      .shift(4'h1));
  
-          jump_decoder jdec_mod(
+          jump_decoder #(thread) jdec_mod(
           .clk(clk),
           .rst(rst),
           .mode64(1'b1),

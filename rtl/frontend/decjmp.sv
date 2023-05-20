@@ -38,6 +38,7 @@ module jump_decoder(
   isIPRel
   );
   
+  parameter [0:0] thread;
   localparam INSTR_WIDTH=80;
   localparam INSTRQ_WIDTH=`instrQ_width;
   localparam EXTRACONST_WIDTH=`extraconst_width;
@@ -187,10 +188,10 @@ module jump_decoder(
           if (instr[15:13]==3'b0) begin
         //  if (magic[0]) error=1;
               jumpType=5'b11001;
-              constant={48'b0,instr[31:16]};
+              constant={48'b0,thread,instr[30:16]};
           end else if (instr[15:13]==3'd2) begin
               jumpType=5'b10001;
-              constant={48'b0,instr[31:16]};
+              constant={48'b0,thread,instr[30:16]};
           end
       end
       

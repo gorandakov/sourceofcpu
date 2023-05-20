@@ -144,8 +144,10 @@ module decoder_aux_const(
   csrss_data,
   fpE_set,
   fpE_en,
+  fpE_thr,
   altEn,
-  altData);
+  altData,
+  thread);
  
   input clk;
   input rst;
@@ -168,48 +170,50 @@ module decoder_aux_const(
   input [64:0] csrss_data;
   input [10:0] fpE_set;
   input fpE_en;
+  input fpE_thr;
   input altEn;
   input [63:0] altData;
+  input thread;
 
-  wire [15:0] iconst[9:0];
+  wire [16:0] iconst[9:0];
   wire [9:0] cls_sys_first;
   wire cls_sys_has;
-  wire [15:0] aux0;
-  reg [15:0] aux0_reg;
-  reg [63:0] csr_retIP;
-  reg [64:0] csr_excStackSave;
-  reg [64:0] csr_excStack;
-  reg [64:0] csr_PCR;
-  reg [64:0] csr_PCR_reg_save;
-  reg [63:0] csr_mflags;
-  reg [63:0] csr_fpu;
-  reg [63:0] csr_page;
-  reg [63:0] csr_vmpage;
-  reg [63:0] csr_cpage;
-  reg [63:0] csr_spage;
-  reg [63:0] csr_excTbl;
-  reg [63:0] csr_syscall;
-  reg [63:0] csr_vmcall;
-  reg [63:0] csr_cpage_mask;
-  reg [63:0] csr_indir_tbl;
-  reg [63:0] csr_indir_mask;
-  assign iconst[0]=instr0[31:16];
-  assign iconst[1]=instr1[31:16];
-  assign iconst[2]=instr2[31:16];
-  assign iconst[3]=instr3[31:16];
-  assign iconst[4]=instr4[31:16];
-  assign iconst[5]=instr5[31:16];
-  assign iconst[6]=instr6[31:16];
-  assign iconst[7]=instr7[31:16];
-  assign iconst[8]=instr8[31:16];
-  assign iconst[9]=instr9[31:16];
+  wire [16:0] aux0;
+  reg [16:0] aux0_reg;
+  reg [1:0][63:0] csr_retIP;
+  reg [1:0][64:0] csr_excStackSave;
+  reg [1:0][64:0] csr_excStack;
+  reg [1:0][64:0] csr_PCR;
+  reg [1:0][64:0] csr_PCR_reg_save;
+  reg [1:0][63:0] csr_mflags;
+  reg [1:0][63:0] csr_fpu;
+  reg [1:0][63:0] csr_page;
+  reg [1:0][63:0] csr_vmpage;
+  reg [1:0][63:0] csr_cpage;
+  reg [1:0][63:0] csr_spage;
+  reg [1:0][63:0] csr_excTbl;
+  reg [1:0][63:0] csr_syscall;
+  reg [1:0][63:0] csr_vmcall;
+  reg [1:0][63:0] csr_cpage_mask;
+  reg [1:0][63:0] csr_indir_tbl;
+  reg [1:0][63:0] csr_indir_mask;
+  assign iconst[0]={thread,instr0[31:16]};
+  assign iconst[1]={thread,instr1[31:16]};
+  assign iconst[2]={thread,instr2[31:16]};
+  assign iconst[3]={thread,instr3[31:16]};
+  assign iconst[4]={thread,instr4[31:16]};
+  assign iconst[5]={thread,instr5[31:16]};
+  assign iconst[6]={thread,instr6[31:16]};
+  assign iconst[7]={thread,instr7[31:16]};
+  assign iconst[8]={thread,instr8[31:16]};
+  assign iconst[9]={thread,instr9[31:16]};
 
-  assign aux0=cls_sys_has ? 16'bz : 16'b0;
+  assign aux0=cls_sys_has ? 17'bz : 17'b0;
 
   generate
     genvar t;
     for(t=0;t<10;t=t+1) begin
-        assign aux0=cls_sys_first[t] ? iconst[t] : 16'bz;
+        assign aux0=cls_sys_first[t] ? iconst[t] : 17'bz;
     end
   endgenerate
   bit_find_first_bit #(10) cls_1_mod(cls_sys,cls_sys_first,cls_sys_has);
@@ -217,85 +221,102 @@ module decoder_aux_const(
   always @* begin
       aux_can_jump=1'b0;
       aux_can_read=1'b1;
-      case(aux0_reg)
-      `csr_retIP: begin	aux_const={1'b0,csr_retIP}; 
+      case(aux0_reg[15:0])
+      `csr_retIP: begin	aux_const={1'b0,csr_retIP[1:0]}; 
           aux_can_jump=csr_mflags[`mflags_cpl]==2'b0;
           aux_can_read=~csr_mflags[`mflags_vm] && 0==csr_mflags[`mflags_cpl]; end
-      `csr_excStackSave: begin aux_const=csr_excStackSave;
+      `csr_excStackSave: begin aux_const=csr_excStackSave[1:0];
         aux_can_read=~csr_mflags[`mflags_vm] && 0==csr_mflags[`mflags_cpl]; end
-      `csr_excStack: begin aux_const=csr_excStack;
+      `csr_excStack: begin aux_const=csr_excStack[1:0];
         aux_can_read=~csr_mflags[`mflags_vm] && 0==csr_mflags[`mflags_cpl]; end
-      `csr_PCR: begin	aux_const=csr_PCR;
+      `csr_PCR: begin	aux_const=csr_PCR[1:0;
         aux_can_read=~csr_mflags[`mflags_vm] && 0==csr_mflags[`mflags_cpl]; end
-      `csr_PCR_reg_save:begin aux_const= csr_PCR_reg_save;
+      `csr_PCR_reg_save:begin aux_const= csr_PCR_reg_save[1:0];
         aux_can_read=~csr_mflags[`mflags_vm] && 0==csr_mflags[`mflags_cpl]; end
-      `csr_mflags: begin	aux_const={1'b0,csr_mflags}; aux_can_read=~csr_mflags[`mflags_vm] && 0==csr_mflags[`mflags_cpl]; end
-      `csr_FPU:			aux_const={1'b0,csr_fpu};
-      `csr_page: begin aux_const={1'b0,csr_page}; aux_can_read=~csr_mflags[`mflags_vm] && 0==csr_mflags[`mflags_cpl]; end
-      `csr_vmpage: begin aux_const={1'b0,csr_vmpage}; aux_can_read=~csr_mflags[`mflags_vm] && 0==csr_mflags[`mflags_cpl]; end
-      //`csr_cpage: begin	aux_const=csr_cpage; aux_can_read=~csr_mflags[`mflags_vm] && !csr_mflags[`mflags_cpl]; end
-      //`csr_spage: begin	aux_const=csr_spage; aux_can_read=~csr_mflags[`mflags_vm] && !csr_mflags[`mflags_cpl]; end
-      `csr_syscall: begin aux_const={1'b0,csr_syscall};
+      `csr_mflags: begin	aux_const={1'b0,csr_mflags[1:0]}; aux_can_read=~csr_mflags[`mflags_vm] && 0==csr_mflags[`mflags_cpl]; end
+      `csr_FPU:			aux_const={1'b0,csr_fpu[1:0]};
+      `csr_page: begin aux_const={1'b0,csr_page[1:0]}; aux_can_read=~csr_mflags[`mflags_vm] && 0==csr_mflags[`mflags_cpl]; end
+      `csr_vmpage: begin aux_const={1'b0,csr_vmpage[1:0]}; aux_can_read=~csr_mflags[`mflags_vm] && 0==csr_mflags[`mflags_cpl]; end
+      //`csr_cpage: begin	aux_const=csr_cpage[1:0]; aux_can_read=~csr_mflags[`mflags_vm] && !csr_mflags[`mflags_cpl]; end
+      //`csr_spage: begin	aux_const=csr_spage[1:0]; aux_can_read=~csr_mflags[`mflags_vm] && !csr_mflags[`mflags_cpl]; end
+      `csr_syscall: begin aux_const={1'b0,csr_syscall[1:0]};
            aux_can_jump=1'b1; 
            aux_can_read=~csr_mflags[`mflags_vm] && csr_mflags[`mflags_cpl]==2'b00; end
-      `csr_vmcall: begin aux_const={1'b0,csr_vmcall}; aux_can_jump=
+      `csr_vmcall: begin aux_const={1'b0,csr_vmcall[1:0]}; aux_can_jump=
 	   csr_mflags[`mflags_vm] && csr_mflags[`mflags_cpl]==2'b00;
            aux_can_read=~csr_mflags[`mflags_vm] && csr_mflags[`mflags_cpl]==2'b00; end
       //`csr_cpage_mask: begin aux_const=csr_cpage_mask; aux_can_read=~csr_mflags[`mflags_vm] && !csr_mflags[`mflags_cpl]; end
-      `csr_indir_table: begin aux_const={1'b0,csr_indir_tbl}; aux_can_read=~csr_mflags[`mflags_vm] && csr_mflags[`mflags_cpl]==0; end
-      `csr_indir_mask: begin aux_const={1'b0,csr_indir_mask}; aux_can_read=~csr_mflags[`mflags_vm] && csr_mflags[`mflags_cpl]==0; end
-      `csr_cl_lock: begin aux_const={64'b0,csr_mflags[18]}; end
+      `csr_indir_table: begin aux_const={1'b0,csr_indir_tbl[1:0]}; aux_can_read=~csr_mflags[`mflags_vm] && csr_mflags[`mflags_cpl]==0; end
+      `csr_indir_mask: begin aux_const={1'b0,csr_indir_mask[1:0]}; aux_can_read=~csr_mflags[`mflags_vm] && csr_mflags[`mflags_cpl]==0; end
+      `csr_cl_lock: begin aux_const={64'b0,csr_mflags[1:0][18]}; end
       default:			aux_const=65'b0;
       endcase
   end
 
   always @(posedge clk) begin
       if (rst) begin
-          csr_retIP<=64'b0;
-	  csr_excStackSave<=65'b0;
-	  csr_excStack<=65'b0;
-	  csr_PCR<=65'b0;
-	  csr_PCR_reg_save<=65'b0;
-          csr_mflags<=64'b0;
-	  aux0_reg<=16'b0;
-	  csr_fpu<=64'h20000;
-          csr_page<=64'b0;
-          csr_vmpage<=64'b0;
-          csr_cpage<=64'b0;
-          csr_spage<=64'b0;
-          csr_syscall<=64'b0;
-          csr_vmcall<=64'b0;
-          csr_cpage_mask<=64'b0;
-          csr_indir_tbl<=64'b0;
-          csr_indir_mask<=64'b0;
+          csr_retIP[0]<=64'b0;
+	  csr_excStackSave[0]<=65'b0;
+	  csr_excStack[0]<=65'b0;
+	  csr_PCR[0]<=65'b0;
+	  csr_PCR_reg_save[0]<=65'b0;
+          csr_mflags[0]<=64'b0;
+	  aux0_reg[0]<=16'b0;
+	  csr_fpu[0]<=64'h20000;
+          csr_page[0]<=64'b0;
+          csr_vmpage[0]<=64'b0;
+          csr_cpage[0]<=64'b0;
+          csr_spage[0]<=64'b0;
+          csr_syscall[0]<=64'b0;
+          csr_vmcall[0]<=64'b0;
+          csr_cpage_mask[0]<=64'b0;
+          csr_indir_tbl[0]<=64'b0;
+          csr_indir_mask[0]<=64'b0;
+          csr_retIP[1]<=64'b0;
+	  csr_excStackSave[1]<=65'b0;
+	  csr_excStack[1]<=65'b0;
+	  csr_PCR[1]<=65'b0;
+	  csr_PCR_reg_save[1]<=65'b0;
+          csr_mflags[1]<=64'b0;
+	  aux0_reg[1]<=16'b0;
+	  csr_fpu[1]<=64'h20000;
+          csr_page[1]<=64'b0;
+          csr_vmpage[1]<=64'b0;
+          csr_cpage[1]<=64'b0;
+          csr_spage[1]<=64'b0;
+          csr_syscall[1]<=64'b0;
+          csr_vmcall[1]<=64'b0;
+          csr_cpage_mask[1]<=64'b0;
+          csr_indir_tbl[1]<=64'b0;
+          csr_indir_mask[1]<=64'b0;
       end else begin
           if (csrss_en && ((csr_mflags[`mflags_cpl]==2'b0 && ~csr_mflags[`mflags_vm]) ||
             csrss_no==`csr_FPU)) begin
-              case(csrss_no)
-      `csr_retIP: 		csr_retIP<=csrss_data[63:0];
-      `csr_excStackSave: 	csr_excStackSave<=csrss_data;
-      `csr_excStack: 		csr_excStack<=csrss_data;
-      `csr_PCR: 		csr_PCR<=csrss_data;
-      `csr_PCR_reg_save:	csr_PCR_reg_save<=csrss_data;
-      `csr_mflags:		csr_mflags<=csrss_data[63:0];
-      `csr_FPU:			csr_fpu<=csrss_data[63:0];
-      `csr_excpt_fpu:		csr_fpu[10:0]<=csrss_data[10:0];
-      `csr_page:		csr_page<=csrss_data[63:0];
-      `csr_vmpage:		csr_vmpage<=csrss_data[63:0];
-      //`csr_cpage:		csr_cpage<=csrss_data;
-      //`csr_spage:		csr_spage<=csrss_data;
-      `csr_syscall:		csr_syscall<=csrss_data[63:0];
-      `csr_vmcall:		csr_vmcall<=csrss_data[63:0];
-      //`csr_cpage_mask:		csr_cpage_mask<=csrss_data;
-      `csr_indir_table:		csr_indir_tbl<=csrss_data[63:0];
-      `csr_indir_mask:          csr_indir_mask<=csrss_data[63:0];
-      `csr_cl_lock:             csr_mflags[18]<=1'b1;
+              case(csrss_no[14:0])
+      `csr_retIP: 		csr_retIP[csrss_no[15]]<=csrss_data[63:0];
+      `csr_excStackSave: 	csr_excStackSave[csrss_no[15]]<=csrss_data;
+      `csr_excStack: 		csr_excStack[csrss_no[15]]<=csrss_data;
+      `csr_PCR: 		csr_PCR[csrss_no[15]]<=csrss_data;
+      `csr_PCR_reg_save:	csr_PCR_reg_save[csrss_no[15]]<=csrss_data;
+      `csr_mflags:		csr_mflags[csrss_no[15]]<=csrss_data[63:0];
+      `csr_FPU:			csr_fpu[csrss_no[15]]<=csrss_data[63:0];
+      `csr_excpt_fpu:		csr_fpu[10:0][csrss_no[15]]<=csrss_data[10:0];
+      `csr_page:		csr_page[csrss_no[15]]<=csrss_data[63:0];
+      `csr_vmpage:		csr_vmpage[csrss_no[15]]<=csrss_data[63:0];
+      //`csr_cpage:		csr_cpage[csrss_no[15]]<=csrss_data;
+      //`csr_spage:		csr_spage[csrss_no[15]]<=csrss_data;
+      `csr_syscall:		csr_syscall[csrss_no[15]]<=csrss_data[63:0];
+      `csr_vmcall:		csr_vmcall[csrss_no[15]]<=csrss_data[63:0];
+      //`csr_cpage_mask:		csr_cpage_mask[csrss_no[15]]<=csrss_data;
+      `csr_indir_table:		csr_indir_tbl[csrss_no[15]]<=csrss_data[63:0];
+      `csr_indir_mask:          csr_indir_mask[csrss_no[15]]<=csrss_data[63:0];
+      `csr_cl_lock:             csr_mflags[18][csrss_no[15]]<=1'b1;
      	      endcase
               aux0_reg<=aux0;
-	      if (altEn) csr_retIP<=altData;
+	      if (altEn) csr_retIP[csrss_no[15]]<=altData;
           end
           if (fpE_en && !csrss_en | (csrss_no!=`csr_FPU)) begin
-              csr_fpu<=csr_fpu | {42'b0,fpE_set,11'b0};
+              csr_fpu[fpE_thr]<=csr_fpu | {42'b0,fpE_set,11'b0};
           end
       end
   end
@@ -1714,7 +1735,8 @@ module decoder(
   baseIP,
   baseAttr,
   wrt0,wrt1,wrt2,
-  csrss_no,csrss_en,csrss_data
+  csrss_no,csrss_en,csrss_data,
+  thread
   );
   localparam DATA_WIDTH=`alu_width+1;
   localparam OPERATION_WIDTH=`operation_width+5;
@@ -2205,7 +2227,8 @@ module decoder(
   input [15:0] csrss_no;
   input csrss_en;
   input [64:0] csrss_data;
-  
+  input thread;
+
   function [5:0] ffx;
     input thr;
     input [5:0] reeg;
