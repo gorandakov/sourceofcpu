@@ -865,6 +865,19 @@ module ww(
   reg thread;
 
   wire miss_now,tlbMiss_now;
+
+  wire [1:0] [37:0] req_addrX;
+  wire [1:0] [9:0] req_slotX;
+  wire [1:0] req_enX;
+  wire [1:0] req_tlbEnX;
+  wire [1:0] [3:0] req_tlbAttrX;
+
+  assign req_addr=req_addX[!req_enX[0]&!req_tlbEnX[0]];
+  assign req_en=req_enX[!req_enX[0]&!req_tlbEnX[0]];
+  assign req_slot=req_slotX[!req_enX[0]&!req_tlbEnX[0]];
+  assign req_tlbEn=req_tlbEnX[!req_enX[0]&!req_tlbEnX[0]];
+  assign req_tlbAttr=req_tlbAttrX[!req_enX[0]&!req_tlbEnX[0]];
+
   wire [1:0][INSTR_WIDTH-1:0] instr0;
   wire [1:0][INSTR_WIDTH-1:0] instr1;
   wire [1:0][INSTR_WIDTH-1:0] instr2;
