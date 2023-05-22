@@ -43,6 +43,7 @@ module frontend1(
   bus_tlb_slot,
   bus_tlb_en,
   miss_now,
+  tlbMiss_now,
   miss_now_in,
   instr0,instr1,instr2,instr3,
   instr4,instr5,instr6,instr7,
@@ -139,6 +140,7 @@ module frontend1(
   input bus_tlb_en;
 
   output miss_now;
+  output tlbMiss_now;
   input miss_now_in;
 
   output [INSTR_WIDTH-1:0] instr0;
