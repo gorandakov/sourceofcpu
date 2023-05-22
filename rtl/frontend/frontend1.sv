@@ -42,6 +42,8 @@ module frontend1(
   bus_tlb_data,
   bus_tlb_slot,
   bus_tlb_en,
+  miss_now,
+  miss_now_in,
   instr0,instr1,instr2,instr3,
   instr4,instr5,instr6,instr7,
   instr8,instr9,
@@ -135,6 +137,9 @@ module frontend1(
   input [`ctlbData_width-1:0] bus_tlb_data;
   input [9:0] bus_tlb_slot;
   input bus_tlb_en;
+
+  output miss_now;
+  input miss_now_in;
 
   output [INSTR_WIDTH-1:0] instr0;
   output [INSTR_WIDTH-1:0] instr1;
@@ -1058,9 +1063,9 @@ module frontend1(
   
   assign lnk_offIn=lnk_offIn_cc;
  
-  assign fmstall= btb_way ? (btb_jmask&{btb_has3,btb_has2,btb_has1,btb_has0})!=
+  assign fmstall= (btb_way ? (btb_jmask&{btb_has3,btb_has2,btb_has1,btb_has0})!=
     btb_chmaskB && btb_hit && btb_hasTK_reg|ixcept_reg && ~uxcept: 
-    (btb_jmask&{btb_has3,btb_has2,btb_has1,btb_has0})!=btb_chmaskA && btb_hit && btb_hasTK_reg|ixcept_reg && ~uxcept;
+    (btb_jmask&{btb_has3,btb_has2,btb_has1,btb_has0})!=btb_chmaskA && btb_hit && btb_hasTK_reg|ixcept_reg && ~uxcept) || miss_now_in;
   assign iqe_jbits=taken_reg[0] ? {3'b0,btbx_jmask_reg[0]} : 4'bz;
   assign iqe_jbits=taken_reg[1] ? {2'b0,btbx_jmask_reg[1:0]} : 4'bz;
   assign iqe_jbits=taken_reg[2] ? {1'b0,btbx_jmask_reg[2:0]} : 4'bz;
