@@ -864,7 +864,7 @@ module ww(
 
   reg thread;
 
-  wire miss_now;
+  wire miss_now,tlbMiss_now;
   wire [1:0][INSTR_WIDTH-1:0] instr0;
   wire [1:0][INSTR_WIDTH-1:0] instr1;
   wire [1:0][INSTR_WIDTH-1:0] instr2;
@@ -950,15 +950,16 @@ frontend1 #(0,BUS_ID) frontA_mod(
   bus_data,
   bus_slot,
   bus_en,
-  req_addr,
-  req_slot,
-  req_en,
-  req_tlbEn,
-  req_tlbAttr,
+  req_addrX[0],
+  req_slotX[0],
+  req_enX[0],
+  req_tlbEnX[0],
+  req_tlbAttr[0],
   bus_tlb_data,
   bus_tlb_slot,
   bus_tlb_en,
   miss_now,
+  tlbMiss_now,
   1'b0,
   instr0[1],instr1[1],instr2[1],instr3[1],
   instr4[1],instr5[1],instr6[1],instr7[1],
@@ -1015,16 +1016,17 @@ frontend1 #(1,BUS_ID) frontB_mod(
   bus_data,
   bus_slot,
   bus_en,
-  req_addr,
-  req_slot,
-  req_en,
-  req_tlbEn,
-  req_tlbAttr,
+  req_addrX[1],
+  req_slotX[1],
+  req_enX[1],
+  req_tlbEnX[1],
+  req_tlbAttr[1],
   bus_tlb_data,
   bus_tlb_slot,
   bus_tlb_en,
   ,
-  miss_now,
+  ,
+  miss_now|tlbMiss_now,
   instr0[0],instr1[0],instr2[0],instr3[0],
   instr4[0],instr5[0],instr6[0],instr7[0],
   instr8[0],instr9[0],
