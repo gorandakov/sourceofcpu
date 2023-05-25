@@ -70,7 +70,7 @@ module smallInstr_decoder(
   reor_val
   );
   
-  localparam INSTR_WIDTH=20;
+  localparam INSTR_WIDTH=80;
   localparam INSTRQ_WIDTH=`instrQ_width;
   localparam EXTRACONST_WIDTH=`extraconst_width;
   localparam OPERATION_WIDTH=`operation_width;
@@ -146,7 +146,7 @@ module smallInstr_decoder(
   input reor_en;
   input [23:0] reor_val;
   //7:0 free 15:8 unfree 39:16 fxch/pop/push 
-  wire magic_isY;
+  wire [3:0] magic;
   wire [7:0] srcIPOff;
 //  wire isAvx;
   wire [7:0] opcode_main;
