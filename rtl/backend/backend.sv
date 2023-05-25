@@ -3034,9 +3034,9 @@ module backend(
   .write4_addr_reg(FUreg_reg2[4]),.write4_wen_reg(FUwen_reg2[4]),
   .write5_addr_reg(FUreg_reg2[5]),.write5_wen_reg(FUwen_reg2[5]),
   .write6_addr_reg(FUreg_reg2[6]),.write6_wen_reg(FUwen_reg2[6]),
-  .write7_addr_reg(FUreg_reg4[7]),.write7_wen_reg(FUwen_reg4[7]),
-  .write8_addr_reg(FUreg_reg4[8]),.write8_wen_reg(FUwen_reg4[8]),
-  .write9_addr_reg(FUreg_reg4[9]),.write9_wen_reg(FUwen_reg4[9])
+  .write7_addr_reg(FUreg_reg3[7]),.write7_wen_reg(FUwen_reg3[7]),
+  .write8_addr_reg(FUreg_reg3[8]),.write8_wen_reg(FUwen_reg3[8]),
+  .write9_addr_reg(FUreg_reg3[9]),.write9_wen_reg(FUwen_reg3[9])
   );
   
   regfile #(SIMD_WIDTH) regAFH_mod(
@@ -3104,9 +3104,9 @@ module backend(
   .write4_addr_reg(FUreg_reg4[4]),.write4_data_reg(FUFH_reg[4]),.write4_wen_reg(FUwen_reg4[4]),
   .write5_addr_reg(FUreg_reg4[5]),.write5_data_reg(FUFH_reg[5]),.write5_wen_reg(FUwen_reg4[5]),
   .write6_addr_reg(FUreg_reg4[6]),.write6_data_reg(FUFH_reg[6]),.write6_wen_reg(FUwen_reg4[6]),
-  .write7_addr_reg(FUreg_reg6[7]),.write7_data_reg(FUFH_reg[7]),.write7_wen_reg(FUwen_reg6[7]),
-  .write8_addr_reg(FUreg_reg6[8]),.write8_data_reg(FUFH_reg[8]),.write8_wen_reg(FUwen_reg6[8]),
-  .write9_addr_reg(FUreg_reg6[9]),.write9_data_reg(FUFH_reg[9]),.write9_wen_reg(FUwen_reg6[9])
+  .write7_addr_reg(FUreg_reg5[7]),.write7_data_reg(FUFH_reg[7]),.write7_wen_reg(FUwen_reg5[7]),
+  .write8_addr_reg(FUreg_reg5[8]),.write8_data_reg(FUFH_reg[8]),.write8_wen_reg(FUwen_reg5[8]),
+  .write9_addr_reg(FUreg_reg5[9]),.write9_data_reg(FUFH_reg[9]),.write9_wen_reg(FUwen_reg5[9])
   );
 
 
@@ -3176,9 +3176,9 @@ module backend(
   .write4_addr_reg(FUreg_reg4[4]),.write4_data_reg(FUFL_reg[4]),.write4_wen_reg(FUwen_reg4[4]),
   .write5_addr_reg(FUreg_reg4[5]),.write5_data_reg(FUFL_reg[5]),.write5_wen_reg(FUwen_reg4[5]),
   .write6_addr_reg(FUreg_reg4[6]),.write6_data_reg(FUFL_reg[6]),.write6_wen_reg(FUwen_reg4[6]),
-  .write7_addr_reg(FUreg_reg6[7]),.write7_data_reg(FUFL_reg[7]),.write7_wen_reg(FUwen_reg6[7]),
-  .write8_addr_reg(FUreg_reg6[8]),.write8_data_reg(FUFL_reg[8]),.write8_wen_reg(FUwen_reg6[8]),
-  .write9_addr_reg(FUreg_reg6[9]),.write9_data_reg(FUFL_reg[9]),.write9_wen_reg(FUwen_reg6[9])
+  .write7_addr_reg(FUreg_reg5[7]),.write7_data_reg(FUFL_reg[7]),.write7_wen_reg(FUwen_reg5[7]),
+  .write8_addr_reg(FUreg_reg5[8]),.write8_data_reg(FUFL_reg[8]),.write8_wen_reg(FUwen_reg5[8]),
+  .write9_addr_reg(FUreg_reg5[9]),.write9_data_reg(FUFL_reg[9]),.write9_wen_reg(FUwen_reg5[9])
   );
 
   reginfl #(1'b1) inflGVA_mod(
@@ -3335,9 +3335,9 @@ module backend(
   .write4_addr_reg(FUreg_reg2[4]),.write4_wen_reg(FUwen_reg2[4]),
   .write5_addr_reg(FUreg_reg2[5]),.write5_wen_reg(FUwen_reg2[5]),
   .write6_addr_reg(FUreg_reg2[6]),.write6_wen_reg(FUwen_reg2[6]),
-  .write7_addr_reg(FUreg_reg4[7]),.write7_wen_reg(FUwen_reg4[7]),
-  .write8_addr_reg(FUreg_reg4[8]),.write8_wen_reg(FUwen_reg4[8]),
-  .write9_addr_reg(FUreg_reg4[9]),.write9_wen_reg(FUwen_reg4[9]),
+  .write7_addr_reg(FUreg_reg3[7]),.write7_wen_reg(FUwen_reg3[7]),
+  .write8_addr_reg(FUreg_reg3[8]),.write8_wen_reg(FUwen_reg3[8]),
+  .write9_addr_reg(FUreg_reg3[9]),.write9_wen_reg(FUwen_reg3[9]),
   .newAddr0(clrR_reg[0][8:4]),.newEn0(clr_reg[0]),
   .newAddr1(clrR_reg[1][8:4]),.newEn1(clr_reg[1]),
   .newAddr2(clrR_reg[2][8:4]),.newEn2(clr_reg[2]),
@@ -3603,9 +3603,9 @@ module backend(
   .write4_addr_reg(FUreg_reg2[4]),.write4_wen_reg(FUwen_reg2[4]),
   .write5_addr_reg(FUreg_reg2[5]),.write5_wen_reg(FUwen_reg2[5]),
   .write6_addr_reg(FUreg_reg2[6]),.write6_wen_reg(FUwen_reg2[6]),
-  .write7_addr_reg(FUreg_reg4[7]),.write7_wen_reg(FUwen_reg4[7]),
-  .write8_addr_reg(FUreg_reg4[8]),.write8_wen_reg(FUwen_reg4[8]),
-  .write9_addr_reg(FUreg_reg4[9]),.write9_wen_reg(FUwen_reg4[9])
+  .write7_addr_reg(FUreg_reg3[7]),.write7_wen_reg(FUwen_reg3[7]),
+  .write8_addr_reg(FUreg_reg3[8]),.write8_wen_reg(FUwen_reg3[8]),
+  .write9_addr_reg(FUreg_reg3[9]),.write9_wen_reg(FUwen_reg3[9])
   );
 
   regfile #(SIMD_WIDTH) regBFH_mod(
@@ -3673,9 +3673,9 @@ module backend(
   .write4_addr_reg(FUreg_reg4[4]),.write4_data_reg(FUFH_reg[4]),.write4_wen_reg(FUwen_reg4[4]),
   .write5_addr_reg(FUreg_reg4[5]),.write5_data_reg(FUFH_reg[5]),.write5_wen_reg(FUwen_reg4[5]),
   .write6_addr_reg(FUreg_reg4[6]),.write6_data_reg(FUFH_reg[6]),.write6_wen_reg(FUwen_reg4[6]),
-  .write7_addr_reg(FUreg_reg6[7]),.write7_data_reg(FUFH_reg[7]),.write7_wen_reg(FUwen_reg6[7]),
-  .write8_addr_reg(FUreg_reg6[8]),.write8_data_reg(FUFH_reg[8]),.write8_wen_reg(FUwen_reg6[8]),
-  .write9_addr_reg(FUreg_reg6[9]),.write9_data_reg(FUFH_reg[9]),.write9_wen_reg(FUwen_reg6[9])
+  .write7_addr_reg(FUreg_reg5[7]),.write7_data_reg(FUFH_reg[7]),.write7_wen_reg(FUwen_reg5[7]),
+  .write8_addr_reg(FUreg_reg5[8]),.write8_data_reg(FUFH_reg[8]),.write8_wen_reg(FUwen_reg5[8]),
+  .write9_addr_reg(FUreg_reg5[9]),.write9_data_reg(FUFH_reg[9]),.write9_wen_reg(FUwen_reg5[9])
   );
 
   regfile #(16+SIMD_WIDTH) regBFL_mod(
@@ -3743,9 +3743,9 @@ module backend(
   .write4_addr_reg(FUreg_reg4[4]),.write4_data_reg(FUFL_reg[4]),.write4_wen_reg(FUwen_reg4[4]),
   .write5_addr_reg(FUreg_reg4[5]),.write5_data_reg(FUFL_reg[5]),.write5_wen_reg(FUwen_reg4[5]),
   .write6_addr_reg(FUreg_reg4[6]),.write6_data_reg(FUFL_reg[6]),.write6_wen_reg(FUwen_reg4[6]),
-  .write7_addr_reg(FUreg_reg6[7]),.write7_data_reg(FUFL_reg[7]),.write7_wen_reg(FUwen_reg6[7]),
-  .write8_addr_reg(FUreg_reg6[8]),.write8_data_reg(FUFL_reg[8]),.write8_wen_reg(FUwen_reg6[8]),
-  .write9_addr_reg(FUreg_reg6[9]),.write9_data_reg(FUFL_reg[9]),.write9_wen_reg(FUwen_reg6[9])
+  .write7_addr_reg(FUreg_reg5[7]),.write7_data_reg(FUFL_reg[7]),.write7_wen_reg(FUwen_reg5[7]),
+  .write8_addr_reg(FUreg_reg5[8]),.write8_data_reg(FUFL_reg[8]),.write8_wen_reg(FUwen_reg5[8]),
+  .write9_addr_reg(FUreg_reg5[9]),.write9_data_reg(FUFL_reg[9]),.write9_wen_reg(FUwen_reg5[9])
   );
 
   reginfl #(1'b1) reginflGVB_mod(
@@ -3901,9 +3901,9 @@ module backend(
   .write4_addr_reg(FUreg_reg2[4]),.write4_wen_reg(FUwen_reg2[4]),
   .write5_addr_reg(FUreg_reg2[5]),.write5_wen_reg(FUwen_reg2[5]),
   .write6_addr_reg(FUreg_reg2[6]),.write6_wen_reg(FUwen_reg2[6]),
-  .write7_addr_reg(FUreg_reg4[7]),.write7_wen_reg(FUwen_reg4[7]),
-  .write8_addr_reg(FUreg_reg4[8]),.write8_wen_reg(FUwen_reg4[8]),
-  .write9_addr_reg(FUreg_reg4[9]),.write9_wen_reg(FUwen_reg4[9]),
+  .write7_addr_reg(FUreg_reg3[7]),.write7_wen_reg(FUwen_reg3[7]),
+  .write8_addr_reg(FUreg_reg3[8]),.write8_wen_reg(FUwen_reg3[8]),
+  .write9_addr_reg(FUreg_reg3[9]),.write9_wen_reg(FUwen_reg3[9]),
   .newAddr0(clrR_reg[0][8:4]),.newEn0(clr_reg[0]),
   .newAddr1(clrR_reg[1][8:4]),.newEn1(clr_reg[1]),
   .newAddr2(clrR_reg[2][8:4]),.newEn2(clr_reg[2]),
