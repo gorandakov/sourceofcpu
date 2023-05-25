@@ -95,7 +95,7 @@ module imul(
  // assign Res=bnd_reg3 ? resB : 65'bz;
 
   icompr cmp_mod(clk,clkEn,R[63:0],C[63:0],A_out,B_out,and1,is_sig,sig,sm_sig);
-  adder2oM #(128) add_mod(A_out_reg,B_out_reg,{dummy2,Res[63:0]},{Res[63:0],dummy},
+  adder2oM #(128) integrate_mod(A_out_reg,B_out_reg,{dummy2,Res[63:0]},{Res[63:0],dummy},
     resx,1'b0,~upper_reg3&~is_sec_reg3,upper_reg3,short_reg3,,,,);
 
   assign Res[64:0]=is_sec_reg3 ? {ptr_reg2,sec_res_reg2} : {1'b0,64'bz};
