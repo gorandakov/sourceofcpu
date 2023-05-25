@@ -211,7 +211,7 @@ module ccTag(
     end
   endgenerate
 
-  assign write_hit=(write_wen_reg && read_NRUw==3'd7) || (invalidate_reg && read_dataW[`cc1Tag_paddr]==write_phys_addr_reg && read_dataW[`cc1Tag_valid]);
+  assign write_hit=(write_wen_reg && read_NRUw==3'd5) || (invalidate_reg && read_dataW[`cc1Tag_paddr]==write_phys_addr_reg && read_dataW[`cc1Tag_valid]);
   ccTag_ram ram_mod(
   .clk(clk),
   .rst(rst),
