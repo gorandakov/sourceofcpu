@@ -1466,9 +1466,9 @@ module smallInstr_decoder(
 	      prBE[26]=instr[19];
 	  end
           if (opcode_main[7:0]==8'd186) begin
-              poperation[26][8]=instr[30];
-              poperation[26][9]=instr[30];
-              poperation[26][10]=instr[29];
+              poperation[26][8]=instr[30];//rT
+              poperation[26][9]=instr[28]^instr[30];
+              poperation[26][10]=instr[29];//rB
           end                  
       end else  begin
           prA[26]=instr[12:8];
