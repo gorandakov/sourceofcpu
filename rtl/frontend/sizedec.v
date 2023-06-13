@@ -327,7 +327,7 @@ endmodule
 module predecoder_get(
     clk,
     rst,
-    bundle,btail,
+    bundle,btail,bstop,
     flag_bits,
     startOff,
     instr0,instr1,instr2,instr3,
@@ -362,7 +362,8 @@ module predecoder_get(
     input clk;
     input rst;
     input [255:0] bundle;
-    input [16:0] btail;
+    input [63:0] btail;
+    input [3:0] bstop;
     input [14:0] flag_bits;
     input [3:0] startOff;
     output [79:0] instr0;
@@ -501,7 +502,7 @@ module predecoder_get(
             popcnt15 cnt_mod(instrEnd[14:0] & ((15'b10<<k)-15'b1) & mask[14:0],cntEnd[k]);
             get_carry #(4) carry_mod(k[3:0],~startOff,1'b1,mask[k]);
  
-            predecoder_class cls_mod(bundle0[k*16+:32],~instrEnd[k+:4],flag_bits0[k],class_[k],
+            predecoder_class cls_mod(bundleF[k*16+:32],~instrEndF[k+:4],flag_bits0[k],class_[k],
               is_lnk0[k],is_ret0[k],LNK[k]);
             popcnt15 cntJ_mod(is_jmp[14:0] & ((15'b10<<k)-15'b1),cntJEnd[k]);
             popcnt15 cntL_mod(is_lnk[14:0] & ((15'b10<<k)-15'b1),lcnt[k]);
@@ -519,7 +520,7 @@ module predecoder_get(
             assign lnkJumps3=lcnt[k][4] & lcnt[k-1][3] ? cntJEnd[k][4:0] : 5'bz;
             
             assign {Jclass0,Jmagic0,Jinstr0,Joff0}= 
-              cntJEnd[k][1] & cntJEnd[k-1][0] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 101'bz;
+              cntJEnd[k][1] & cntJEnd[k-1][0] ? {class_[k], instrEndF[k+:4],bundleF[k*16+:80],k[3:0]} : 101'bz;
             assign {Jclass1,Jmagic1,Jinstr1,Joff1}= 
               cntJEnd[k][2] & cntJEnd[k-1][1] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 101'bz;
             assign {Jclass2,Jmagic2,Jinstr2,Joff2}= 
@@ -568,6 +569,19 @@ module predecoder_get(
     assign cntEnd[-2]=16'd1;
     assign cntJEnd[-1]=16'd1;
     assign lcnt[-1]=16'd1;
+
+    assign bundleF=instr[255] && startOff==0 && bstop[3:2]==2'b01 ? {bundle0[255+48:0],btail[63:48]} : 'z;
+    assign bundleF=instr[255] && startOff==0 && bstop[3:1]==3'b001 ? {bundle0[255+32:0],btail[63:32]} : 'z;
+    assign bundleF=instr[255] && startOff==0 && bstop[3:0]==4'b0001 ? {bundle0[255+16:0],btail[63:16]} : 'z;
+    assign bundleF=instr[255] && startOff==0 && bstop[3:0]==4'b0000 ? {bundle0[255:0],btail[63:0]} : 'z;
+    assign bundleF=(~instr[255] && startOff==0) | instr[3] ? bundle0 : 'z;
+    assign bundleF=instr[255] && startOff==0 && bstop[3:2]==2'b01 ? {bundle0[255+48:0],btail[63:48]} : 'z;
+
+    assign instrEndF=instr[255] && startOff==0 && bstop[3:2]==2'b01 ? {instrEnd[12:0],bstop[3:1],instrEnd[-1]} : 'z;
+    assign instrEndF=instr[255] && startOff==0 && bstop[3:1]==3'b001 ? {instrEnd[13:0],bstop[3:2],instrEnd[-1]} : 'z;
+    assign instrEndF=instr[255] && startOff==0 && bstop[3:0]==4'b0001 ? {instrEnd[14:0],bstop[3],instrEnd[-1]} : 'z;
+    assign instrEndF=instr[255] && startOff==0 && bstop[3:0]==4'b0000 ? {instrEnd[11:0],bstop[3:0],instrEnd[-1]} : 'z;
+    assign instrEndF=(~instr[255] && startOff==0) | instr[3] ? instrEnd : 'z;
     
     assign bundle0={64'b0,btail[15:0],bundle[239:0]};
     
