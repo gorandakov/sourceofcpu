@@ -783,12 +783,12 @@ module smallInstr_decoder(
        poperation[4][8]=opcode_sub[0];
        poperation[4][9]=opcode_sub[0];
        if (~prevSpecLoad) begin
-           prA[4]={1'b1,instr[11:8]};
-           prT[4]={1'b1,instr[11:8]};
+           prA[4]={1'b0,instr[11:8]};
+           prT[4]={1'b0,instr[11:8]};
            prB[4]={instr[7],instr[15:12]};
        end else begin
            prB[4]=5'd15; //not a mistake; fpu spec instr is 15 rather than 16
-           prT[4]={1'b1,instr[11:8]};
+           prT[4]={1'b0,instr[11:8]};
            prA[4]={instr[7],instr[15:12]};
        end
        prA_useF[4]=1'b1;
@@ -813,12 +813,12 @@ module smallInstr_decoder(
        poperation[5][8]=opcode_sub[0];
        poperation[5][9]=opcode_main[6];
        if (~prevSpecLoad) begin
-           prA[5]={1'b1,instr[11:8]};
-           prT[5]={1'b1,instr[11:8]};
+           prA[5]={1'b0,instr[11:8]};
+           prT[5]={1'b0,instr[11:8]};
            prB[5]={instr[7],instr[15:12]};
        end else begin
            prB[5]=5'd15; 
-           prT[5]={1'b1,instr[11:8]};
+           prT[5]={1'b0,instr[11:8]};
            prA[5]={instr[7],instr[15:12]};
        end
        prA_useF[5]=1'b1;
@@ -841,13 +841,13 @@ module smallInstr_decoder(
        prAlloc[6]=1'b1;
        pport[6]=PORT_VADD;
        if (~prevSpecLoad) begin
-           prA[6]={1'b1,instr[11:8]};
-           prT[6]={1'b1,instr[11:8]};
-           prB[6]={1'b1,instr[15:12]};
+           prA[6]={1'b0,instr[11:8]};
+           prT[6]={1'b0,instr[11:8]};
+           prB[6]={1'b0,instr[15:12]};
        end else begin
            prB[6]=5'd15;
-           prT[6]={1'b1,instr[11:8]};
-           prA[6]={1'b1,instr[15:12]};
+           prT[6]={1'b0,instr[11:8]};
+           prA[6]={1'b0,instr[15:12]};
        end
        prA_useF[6]={opcode_sub[2:1],opcode_main[7:6]}!=4'b0111;
        prB_useF[6]=1'b1;
@@ -869,13 +869,13 @@ module smallInstr_decoder(
        puseRs[7]=1'b1;
        prAlloc[7]=1'b1;
        if (~prevSpecLoad) begin
-           prA[7]={1'b1,instr[11:8]};
-           prT[7]={1'b1,instr[11:8]};
-           prB[7]={1'b1,instr[15:12]};
+           prA[7]={1'b0,instr[11:8]};
+           prT[7]={1'b0,instr[11:8]};
+           prB[7]={1'b0,instr[15:12]};
        end else begin
            prB[7]=5'd15; 
-           prT[7]={1'b1,instr[11:8]};
-           prA[7]={1'b1,instr[15:12]};
+           prT[7]={1'b0,instr[11:8]};
+           prA[7]={1'b0,instr[15:12]};
        end
        prA_useF[7]=1'b1;
        prB_useF[7]=1'b1;
