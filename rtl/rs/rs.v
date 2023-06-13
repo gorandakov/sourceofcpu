@@ -1100,7 +1100,7 @@ module rs_wakeUp_data4_array(
           wire [WIDTH-1:0] outData1k;
           
           for (k=0;k<8;k=k+1) begin : buf_gen
-              rs_wakeUp_data #(WIDTH) buf_mod(
+              rs_wakeUp_data3 #(WIDTH) buf_mod(
               clk,rst,stall,
               newRsSelect0[k+8*j],newDataA0,newDataB0,
               newRsSelect1[k+8*j],newDataA1,newDataB1,
@@ -2309,7 +2309,7 @@ module rs(
   outDataA1,outDataB1,outDataS1,outReg1,outRegSimd1,outOp1,outInstrIndex1,
     outFuFwdA1,outFuFwdB1,outFuFwdS1,outFuuFwdA1,outFuuFwdB1,
     outFuuFwdS1,outDataEn1,outThread1,outAttr1,//alu 1
-  outDataA2,outDataB2,outDataC2,outDataS2,outReg2,outRegSimd2,outOp2,outInstrIndex2,
+  outDataA2,outDataB2,outDataS2,outReg2,outRegSimd2,outOp2,outInstrIndex2,
     outFuFwdA2,outFuFwdB2,outFuFwdS2,outFuuFwdA2,outFuuFwdB2,
     outFuuFwdS2,outDataEn2,outThread2,outAttr2,//alu 2
 // wires from functional units  

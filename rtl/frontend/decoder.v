@@ -222,33 +222,33 @@ module decoder_aux_const(
       aux_can_jump=1'b0;
       aux_can_read=1'b1;
       case(aux0_reg[15:0])
-      `csr_retIP: begin	aux_const={1'b0,csr_retIP[1:0]}; 
+      `csr_retIP: begin	aux_const={1'b0,csr_retIP[thread]}; 
           aux_can_jump=csr_mflags[`mflags_cpl]==2'b0;
           aux_can_read=~csr_mflags[`mflags_vm] && 0==csr_mflags[`mflags_cpl]; end
-      `csr_excStackSave: begin aux_const=csr_excStackSave[1:0];
+      `csr_excStackSave: begin aux_const=csr_excStackSave[thread];
         aux_can_read=~csr_mflags[`mflags_vm] && 0==csr_mflags[`mflags_cpl]; end
-      `csr_excStack: begin aux_const=csr_excStack[1:0];
+      `csr_excStack: begin aux_const=csr_excStack[thread];
         aux_can_read=~csr_mflags[`mflags_vm] && 0==csr_mflags[`mflags_cpl]; end
-      `csr_PCR: begin	aux_const=csr_PCR[1:0;
+      `csr_PCR: begin	aux_const=csr_PCR[thread];
         aux_can_read=~csr_mflags[`mflags_vm] && 0==csr_mflags[`mflags_cpl]; end
-      `csr_PCR_reg_save:begin aux_const= csr_PCR_reg_save[1:0];
+      `csr_PCR_reg_save:begin aux_const= csr_PCR_reg_save[thread];
         aux_can_read=~csr_mflags[`mflags_vm] && 0==csr_mflags[`mflags_cpl]; end
-      `csr_mflags: begin	aux_const={1'b0,csr_mflags[1:0]}; aux_can_read=~csr_mflags[`mflags_vm] && 0==csr_mflags[`mflags_cpl]; end
-      `csr_FPU:			aux_const={1'b0,csr_fpu[1:0]};
-      `csr_page: begin aux_const={1'b0,csr_page[1:0]}; aux_can_read=~csr_mflags[`mflags_vm] && 0==csr_mflags[`mflags_cpl]; end
-      `csr_vmpage: begin aux_const={1'b0,csr_vmpage[1:0]}; aux_can_read=~csr_mflags[`mflags_vm] && 0==csr_mflags[`mflags_cpl]; end
-      //`csr_cpage: begin	aux_const=csr_cpage[1:0]; aux_can_read=~csr_mflags[`mflags_vm] && !csr_mflags[`mflags_cpl]; end
-      //`csr_spage: begin	aux_const=csr_spage[1:0]; aux_can_read=~csr_mflags[`mflags_vm] && !csr_mflags[`mflags_cpl]; end
-      `csr_syscall: begin aux_const={1'b0,csr_syscall[1:0]};
+      `csr_mflags: begin	aux_const={1'b0,csr_mflags[thread]}; aux_can_read=~csr_mflags[`mflags_vm] && 0==csr_mflags[`mflags_cpl]; end
+      `csr_FPU:			aux_const={1'b0,csr_fpu[thread]};
+      `csr_page: begin aux_const={1'b0,csr_page[thread]}; aux_can_read=~csr_mflags[`mflags_vm] && 0==csr_mflags[`mflags_cpl]; end
+      `csr_vmpage: begin aux_const={1'b0,csr_vmpage[thread]}; aux_can_read=~csr_mflags[`mflags_vm] && 0==csr_mflags[`mflags_cpl]; end
+      //`csr_cpage: begin	aux_const=csr_cpage[thread]; aux_can_read=~csr_mflags[`mflags_vm] && !csr_mflags[`mflags_cpl]; end
+      //`csr_spage: begin	aux_const=csr_spage[thread]; aux_can_read=~csr_mflags[`mflags_vm] && !csr_mflags[`mflags_cpl]; end
+      `csr_syscall: begin aux_const={1'b0,csr_syscall[thread]};
            aux_can_jump=1'b1; 
            aux_can_read=~csr_mflags[`mflags_vm] && csr_mflags[`mflags_cpl]==2'b00; end
-      `csr_vmcall: begin aux_const={1'b0,csr_vmcall[1:0]}; aux_can_jump=
+      `csr_vmcall: begin aux_const={1'b0,csr_vmcall[thread]}; aux_can_jump=
 	   csr_mflags[`mflags_vm] && csr_mflags[`mflags_cpl]==2'b00;
            aux_can_read=~csr_mflags[`mflags_vm] && csr_mflags[`mflags_cpl]==2'b00; end
       //`csr_cpage_mask: begin aux_const=csr_cpage_mask; aux_can_read=~csr_mflags[`mflags_vm] && !csr_mflags[`mflags_cpl]; end
-      `csr_indir_table: begin aux_const={1'b0,csr_indir_tbl[1:0]}; aux_can_read=~csr_mflags[`mflags_vm] && csr_mflags[`mflags_cpl]==0; end
-      `csr_indir_mask: begin aux_const={1'b0,csr_indir_mask[1:0]}; aux_can_read=~csr_mflags[`mflags_vm] && csr_mflags[`mflags_cpl]==0; end
-      `csr_cl_lock: begin aux_const={64'b0,csr_mflags[1:0][18]}; end
+      `csr_indir_table: begin aux_const={1'b0,csr_indir_tbl[thread]}; aux_can_read=~csr_mflags[`mflags_vm] && csr_mflags[`mflags_cpl]==0; end
+      `csr_indir_mask: begin aux_const={1'b0,csr_indir_mask[thread]}; aux_can_read=~csr_mflags[`mflags_vm] && csr_mflags[`mflags_cpl]==0; end
+      `csr_cl_lock: begin aux_const={64'b0,csr_mflags[thread][18]}; end
       default:			aux_const=65'b0;
       endcase
   end
@@ -1435,6 +1435,7 @@ module decoder(
   all_retired,
   fp_excpt_en,
   fp_excpt_set,
+  fp_excpt_thr,
 
   bundleFeed,
 //begin instructions ordered by rs input port
@@ -3124,8 +3125,10 @@ module decoder(
   .csrss_data(csrss_data),
   .fpE_en(fp_excpt_en),
   .fpE_set(fp_excpt_set),
+  .fpE_thr(fp_excpt_thr),
   .altEn(csrss_retIP_en_reg!=0),
-  .altData(csrss_retIP_data)
+  .altData(csrss_retIP_data),
+  .thread(thread)
 );
 
   decoder_get_baseIP getIP_mod(
@@ -3656,7 +3659,7 @@ module decoder(
               dec_rB_useF_reg[n]<=dec_rB_useF[n] && iUsed[n];
               dec_useBConst_reg[n]<=dec_useBConst[n] && iUsed[n];
               dec_useAConst_reg[n]<=dec_useBConst[n] && iUsed[n] && dec_IPRel[n] && dec_rA_use[n];
-              dec_rC_reg[n]<=ffx{thread,dec_rC[n]};
+              dec_rC_reg[n]<=ffx(thread,dec_rC[n]);
               dec_rC_use_reg[n]<=dec_rC_use[n] && iUsed[n];
               dec_rC_useF_reg[n]<=dec_rC_useF[n] && iUsed[n];
               dec_useCRet_reg[n]<=dec_useCRet[n] && iUsed[n];

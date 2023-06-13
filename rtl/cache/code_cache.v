@@ -186,16 +186,15 @@ module ccRam_way(
   readA_set_flag,
   readA_data,readA_data_in,
   readA_dataX,readA_dataX_in,
-  expunA_addr,expunA_addr_in,
-  readA_hit,readA_next_hit,expunA_hit,
+  expun_addr,expun_addr_in,
+  readA_hit,expun_hit,
   readB_clkEn,
   readB_IP,
   readB_IP_low,
   readB_set_flag,
   readB_data,readB_data_in,
   readB_dataX,readB_dataX_in,
-  expunB_addr,expunB_addr_in,
-  readB_hit,readB_next_hit,expunB_hit,
+  readB_hit,
   read_NRU,read_NRU_in,read_NRU_reg,
   chkCL_IP,
   chkCL_clkEn,
@@ -228,11 +227,10 @@ module ccRam_way(
   input [DATA_WIDTH-1:0] readA_data_in;
   output [59:0] readA_dataX;
   input [59:0] readA_dataX_in;
-  output [36:0] expunA_addr;
-  input [36:0] expunA_addr_in;
+  output [36:0] expun_addr;
+  input [36:0] expun_addr_in;
   output readA_hit;
-  output readA_next_hit;
-  output expunA_hit;
+  output expun_hit;
   input readB_clkEn;
   input [IP_WIDTH-6:0] readB_IP;
   input [3:0] readB_IP_low;
@@ -241,11 +239,7 @@ module ccRam_way(
   input [DATA_WIDTH-1:0] readB_data_in;
   output [59:0] readB_dataX;
   input [59:0] readB_dataX_in;
-  output [36:0] expunB_addr;
-  input [36:0] expunB_addr_in;
   output readB_hit;
-  output readB_next_hit;
-  output expunB_hit;
   output [2:0] read_NRU;
   input [2:0] read_NRU_in;
   input [2:0] read_NRU_reg;
@@ -375,10 +369,10 @@ module ccRam_way(
   ccTag #(INDEX) tag_mod(
   .clk(clk),
   .rst(rst),
-  .readA_clkEn(readA_clkEn),
-  .readA_phys_addr(init ? {initCount} : readA_IP[38:2]),
-  .readA_hit(readA_hit),
-  .readA_err(ErrA),
+  .read_clkEn(readA_clkEn),
+  .read_phys_addr(init ? {initCount} : readA_IP[38:2]),
+  .read_hit(readA_hit),
+  .read_err(ErrA),
   .write_phys_addr(init ? {initCount} : write_IP[38:2]),
   .write_wen(write_wen),
   .invalidate(invalidate),
@@ -394,10 +388,10 @@ module ccRam_way(
   ccTag #(INDEX) tagB_mod(
   .clk(clk),
   .rst(rst),
-  .readB_clkEn(readB_clkEn),
-  .readB_phys_addr(init ? {initCount} : readB_IP[38:2]),
-  .readB_hit(readB_hit),
-  .readB_err(ErrB),
+  .read_clkEn(readB_clkEn),
+  .read_phys_addr(init ? {initCount} : readB_IP[38:2]),
+  .read_hit(readB_hit),
+  .read_err(ErrB),
   .write_phys_addr(init ? {initCount} : write_IP[38:2]),
   .write_wen(write_wen),
   .invalidate(invalidate),
@@ -505,7 +499,7 @@ module ccRam_half(
   readB_data,
   readB_dataX,
   expun_addr,
-  read_hit,expun_hit,
+  readA_hit,readB_hit,expun_hit,
   chkCL_IP,
   chkCL_clkEn,
   chkCL_hit,
@@ -534,7 +528,7 @@ module ccRam_half(
   output [DATA_WIDTH-1:0] readB_data;
   output [59:0] readB_dataX;
   output [36:0] expun_addr;
-  output read_hit,expun_hit;
+  output readA_hit,readB_hit,expun_hit;
   input [IP_WIDTH-6:0] chkCL_IP;
   input chkCL_clkEn;
   output chkCL_hit;
@@ -546,7 +540,7 @@ module ccRam_half(
   
   wire [7:0] chkCL_hit_way;
   wire [7:0] readA_hit_way;
-  wire [7:0] readA_hit_way;
+  wire [7:0] readB_hit_way;
   wire [7:0] expun_hit_way;
   
   wire [DATA_WIDTH-1:0] readA_dataP[7:-1];

@@ -141,7 +141,8 @@ module cntrl_get_IP(
   cout_sec,
   ndiff,
   1'b1,
-  4'h1
+  4'h1,
+  2'h0
   );
 
   assign nextIP0=(last&~excpt) ? {val2[63:5],4'd0} : 63'bz;
@@ -1276,7 +1277,8 @@ module cntrl_find_outcome(
   ,//sec
   ,//ndiff
   1'b1,
-  4'h1
+  4'h1,
+  2'h0
   );
 
   assign baseIP_d[62:8]=break_prejmp_tick & ~(jump0_in&jump0_taken) &~(jump1_in&jump1_taken) & ~break_exceptn ? base_add[63:9] : 55'bz;

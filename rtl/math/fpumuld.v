@@ -42,17 +42,17 @@ module fma(
 
   assign exp_exp_d=exp_oor & ~fpcsr[`csrfpu_clip_IEEE] ? exp_max : 13'b0;
   assign exp_exp_d=exp_oor_IEEE & fpcsr[`csrfpu_clip_IEEE] ? exp_max_IEEE : 13'bz;
-  assign exp_exp_d=~exp_non_denor_IEEE & fpcsr[`csrfpu_daz] || (exp_exp^17'h10000)[16] ? 13'b0 : 13'bz;
+  assign exp_exp_d=~exp_non_denor_IEEE & fpcsr[`csrfpu_daz] || (exp_exp^17'h10000)!=0 ? 13'b0 : 13'bz;
   assign exp_exp_d=~(exp_oor & ~fpcsr[`csrfpu_clip_IEEE]) & 
     ~(exp_oor_IEEE & fpcsr[`csrfpu_clip_IEEE]) & 
-    ~(~exp_non_denor_IEEE & fpcsr[`csrfpu_daz] || (exp_exp^13'h1000)[12]) ? (exp_exp^13'h1000) : 13'bz;
+    ~(~exp_non_denor_IEEE & fpcsr[`csrfpu_daz] || (exp_exp^13'h1000)!=0) ? (exp_exp^13'h1000) : 13'bz;
   
   assign exp_exp1_d=exp1_oor & ~fpcsr[`csrfpu_clip_IEEE] ? exp_max : 13'b0;
   assign exp_exp1_d=exp1_oor_IEEE & fpcsr[`csrfpu_clip_IEEE] ? exp_max_IEEE : 13'bz;
-  assign exp_exp1_d=~exp1_non_denor_IEEE & fpcsr[`csrfpu_daz] || (exp_exp1^17'h1000)[12] ? 13'b0 : 13'bz;
+  assign exp_exp1_d=~exp1_non_denor_IEEE & fpcsr[`csrfpu_daz] || (exp_exp1^17'h1000)!=0 ? 13'b0 : 13'bz;
   assign exp_exp1_d=~(exp1_oor & ~fpcsr[`csrfpu_clip_IEEE]) & 
     ~(exp1_oor_IEEE & fpcsr[`csrfpu_clip_IEEE]) & 
-    ~(~exp1_non_denor_IEEE & fpcsr[`csrfpu_daz] || (exp_exp1^13'h1000)[12]) ? (exp_exp1^13'h1000) : 13'bz;
+    ~(~exp1_non_denor_IEEE & fpcsr[`csrfpu_daz] || (exp_exp1^13'h1000)!=0) ? (exp_exp1^13'h1000) : 13'bz;
 
   compress cmpr_mod(clk,rst,{1'b1,A[51:0]},{1'b1,B[51:0]},prod_part0, prod_part1);
 
@@ -81,21 +81,21 @@ module fma(
  // assign A_h=isDBL ? {|A[51:0]} : {|A[62:0]}; 
  // assign B_h=isDBL ? {|B[51:0]} : {|B[62:0]}; 
 
-  assign A_zero=(expA&emsk)==12'b0;
-  assign A_infty=(expA|~emsk)==12'hfffe;
-  assign A_nan=(expA|~emsk)==12'hffff;
+  assign A_zero=(expA&emsk)==16'b0;
+  assign A_infty=(expA|~emsk)==16'hfffe;
+  assign A_nan=(expA|~emsk)==16'hffff;
   
-  assign B_zero=(expB&emsk)==12'b0;
-  assign B_infty=(expB|~emsk)==12'hfffe;
-  assign B_nan=(expB|~emsk)==12'hffff;
+  assign B_zero=(expB&emsk)==16'b0;
+  assign B_infty=(expB|~emsk)==16'hfffe;
+  assign B_nan=(expB|~emsk)==16'hffff;
 
   assign AxB_zero=A_zero|B_zero;
   assign AxB_infty=A_infty & ~B_zero & ~B_nan || B_infty & ~A_zero & ~A_nany;
   assign AxB_NaN=A_nan & ~B_zero || B_nan & ~A_zero;
 
-  assign C_zero=(expC)==12'b0;
-  assign C_infty=(expC)==12'hffe;
-  assign C_nan=(expC)==12'hfff;
+  assign C_zero=(expC)==16'b0;
+  assign C_infty=(expC)==16'hffe;
+  assign C_nan=(expC)==16'hfff;
  
   assign specxy_snan=AxB_nan_reg2 & ~C_infty_reg2 & invExcpt & ~copyA_reg2 || C_nan_reg2 & ~AxB_infty_reg2 & invExcpt & ~copyA_reg2
      || AxB_infty_reg2 & C_infty_reg2 & sxor_reg & invExcpt;
@@ -157,7 +157,7 @@ module fma(
 
   //assign choose_A and choose_B
 
-  double_normalise(pre_resX,expX,pre_res_out,exp_out);
+  double_normalise nrml_mod(pre_resX,expX,pre_res_out,exp_out);
 
   assign res=en_reg2 ? {sign_out,exp_out,pre_res_out} : 64'bz;
  

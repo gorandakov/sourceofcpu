@@ -17,7 +17,7 @@ limitations under the License.
 
 `include "../struct.sv"
 `include "../csrss_no.sv"
-`include "../exc.sv"
+`include "../exc.v"
 
 module agu(
   clk,

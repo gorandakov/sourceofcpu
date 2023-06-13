@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 
-`include "../common.v"
+`include "../struct.v"
 
 
 //read-during-write behaviour: write first

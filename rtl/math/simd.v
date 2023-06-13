@@ -16,7 +16,7 @@ limitations under the License.
 
 
 `include "../struct.sv"
-`include "../intop.sv"
+`include "../intop.v"
 
 module add_sat(
   A,B,res,is_sign,is_sat,is_min,is_max,is_sub,is_simpl,is_subcmp,is_cmp,jump_type);

@@ -75,8 +75,8 @@ module frontend1(
   cc_write_wen,
   cc_invalidate,
   cc_write_data,
-  .expun_addr(expun_addr),
-  .expun_wen(expun_wen)
+  expun_addr,
+  expun_wen,
   MSI_expAddr,
   MSI_expAddr_en,
   MSI_expAddr_hit,
@@ -777,7 +777,7 @@ module frontend1(
 	  //assign jdec_target[k][63:44]=cc_read_IP_reg3[63:44];
           add_agu add1_mod(.a({1'b1,cc_read_IP_reg3[63:5],jmp_off_reg[k],1'b0}),.b({59'b0,jmp_moff_reg[k],1'b0}),
 	      .c({21'b0,jdec_const_reg[k][43:1],1'b0}),.out({jdec_target[k],par0}),.cout_sec(jdec_sec[k]),.ndiff(),.en(1'b1),
-	      .shift(4'h1));
+	      .shift(4'h1),.sh2(2'h0));
  
           jump_decoder #(thread) jdec_mod(
           .clk(clk),
@@ -1257,7 +1257,7 @@ module frontend1(
   adder #(5) baseTick_mod(cc_read_IP_reg4[9:5],~cc_base_IP[9:5],{cc_base_tick,cc_base_off},1'b1,1'b1,,,,);
  // adder_inc #(35) baseInc_mod(cc_base_IP[43:9],cc_base_IP_d[43:9],do_seq_reg & cc_base_tick,);
   add_agu baseInc_mod(.a({1'b1,cc_base_IP[63:9],9'b0}),.b(64'b0),.c(65'b1000000000),.out({cc_base_IP_d[63:9],cc_base_dummy9}),
-      .cout_sec(cc_base_sec),.ndiff(),.en(do_seq_reg5 && cc_base_tick),.shift(4'h1));
+      .cout_sec(cc_base_sec),.ndiff(),.en(do_seq_reg5 && cc_base_tick),.shift(4'h1),.sh2(2'h0));
  
   tbuf tbuf_mod(
   .clk(clk),

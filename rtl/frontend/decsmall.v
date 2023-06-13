@@ -19,7 +19,7 @@ limitations under the License.
 `include "../operations.sv"
 `include "../memop.sv"
 `include "../fpoperations.sv"
-`include "../intop.sv"
+`include "../intop.v"
 
 //instruct compiler not to delete constantN
 module smallInstr_decoder(
