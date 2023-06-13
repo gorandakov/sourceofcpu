@@ -320,7 +320,7 @@ module smallInstr_decoder(
   assign constantDef=(magic==4'b1111) ? instr[79:16] : 64'bz;
   assign constantDef=(magic[1:0]==2'b11) ? {{32{instr[47]}},instr[47:16]} : 64'bz;
   assign constantDef=(magic[1:0]==2'b01) ? {{32{instr[31]}},{18{instr[31]}},instr[31:18]} : 64'bz;
-  assign constantDef=(~magic[0]) ? {32'b0,26'b0,~instr[6] && instr[11:8]==4'b0,instr[6],instr[11:8]} : 64'bz;
+  assign constantDef=(~magic[0]) ? {32'b0,25'b0,~instr[7] && {instr[6],instr[11:8]}==5'b0,instr[7:6],instr[11:8]} : 64'bz;
 
   assign constantN=~constant;
  
@@ -713,13 +713,17 @@ module smallInstr_decoder(
       prAlloc[0]=1'b1;
       pport[0]=subIsBasicShift|subIsBasicXOR ? PORT_SHIFT : PORT_ALU;
       pflags_write[0]=1'b1;
-      if (~prevSpecLoad) begin
+      if (~prevSpecLoad && opcode_sub[0]|subIsBasicShift) begin
+          prA[0]={1'b0,instr[11:8]};
+          prT[0]={1'b0,instr[11:8]};
+          prB[0]={instr[7],instr[15:12]};
+      end else if (~prevSpecLoad) begin
           prA[0]={instr[6],instr[11:8]};
           prT[0]={instr[6],instr[11:8]};
           prB[0]={instr[7],instr[15:12]};
       end else if (opcode_sub[0]|subIsBasicShift) begin
           prA[0]=5'd16;
-          prT[0]={instr[6],instr[11:8]};
+          prT[0]={1'b0,instr[11:8]};
       end else begin
           prA[0]={instr[6],instr[11:8]};
           prT[0]={instr[7],instr[15:12]};
@@ -743,13 +747,13 @@ module smallInstr_decoder(
 	6'h23: begin poperation[1][7:0]=`op_sub64; poperation[1][8]=1'b1; prA[1]={instr[7],instr[15:12]}; prA_use[1]=1'b1; end
 	6'h24: poperation[1][7:0]=`op_sxt8_32;
 	6'h25: poperation[1][7:0]=`op_sxt16_32;
-	6'h26: begin poperation[1][7:0]=`op_add64; poperation[1][8]=1'b1; prA[1]={instr[7],instr[15:12]}; prA_use[1]=1'b1; end
-	6'h27: begin poperation[1][7:0]=`op_sub64; poperation[1][8]=1'b1; prA[1]={instr[7],instr[15:12]}; prA_use[1]=1'b1; end
+	6'h26: begin poperation[1][7:0]=`op_add64; poperation[1][8]=1'b1; prA[1]={1'b0,instr[15:12]}; prA_use[1]=1'b1; end
+	6'h27: begin poperation[1][7:0]=`op_sub64; poperation[1][8]=1'b1; prA[1]={1'b0,instr[15:12]}; prA_use[1]=1'b1; end
 	6'h28: poperation[1][7:0]=`op_sxt32_64;
        endcase
        //verilator lint_on CASEINCOMPLETE
-       prB[1]={instr[6],instr[11:8]};
-       prT[1]={instr[7],instr[15:12]};
+       prB[1]={instr[6]&&!(opcode_sub==6'h29 || opcode_sub==6'h26 || opcode_sub==6'h27),instr[11:8]};
+       prT[1]={instr[7]&&!(opcode_sub==6'h29 || opcode_sub==6'h26 || opcode_sub==6'h27),instr[15:12]};
 
        trien[2]=~magic[0] & subIsCmpTest;
        puseBConst[2]=opcode_sub[0] & ~(opcode_sub[2:1]==2'h3);
@@ -761,7 +765,7 @@ module smallInstr_decoder(
        pport[2]=PORT_ALU;
        pflags_write[2]=1'b1;
        prB[2]={instr[6],instr[11:8]};
-       prA[2]={instr[7],instr[15:12]};
+       prA[2]={instr[7]&&!(opcode_sub[0] & ~(opcode_sub[2:1]==2'h3)),instr[15:12]};
        //verilator lint_off CASEINCOMPLETE
        case (opcode_sub[2:1])
          2'h1:  poperation[2]=`op_sub64;
