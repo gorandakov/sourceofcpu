@@ -3652,15 +3652,15 @@ module decoder(
               dec_operation_reg[n]<=dec_operation[n];
 	      dec_alucond_reg[n]<=dec_alucond[n];
               dec_rA_reg[n]<=ffx(thread,dec_rA[n]);
-              dec_rA_use_reg[n]<=dec_rA_use[n] && iUsed[n];
+              dec_rA_use_reg[n]<=dec_rA_use[n]&& dec_rA[n]!=31 && iUsed[n];
               dec_rA_useF_reg[n]<=dec_rA_useF[n] && iUsed[n];
               dec_rB_reg[n]<=ffx(thread,dec_rB[n]);
-              dec_rB_use_reg[n]<=dec_rB_use[n] && iUsed[n];
+              dec_rB_use_reg[n]<=dec_rB_use[n] && dec_rB[n]!=31 && iUsed[n];
               dec_rB_useF_reg[n]<=dec_rB_useF[n] && iUsed[n];
               dec_useBConst_reg[n]<=dec_useBConst[n] && iUsed[n];
               dec_useAConst_reg[n]<=dec_useBConst[n] && iUsed[n] && dec_IPRel[n] && dec_rA_use[n];
               dec_rC_reg[n]<=ffx(thread,dec_rC[n]);
-              dec_rC_use_reg[n]<=dec_rC_use[n] && iUsed[n];
+              dec_rC_use_reg[n]<=dec_rC_use[n] && dec_rC[n]!=31 && iUsed[n];
               dec_rC_useF_reg[n]<=dec_rC_useF[n] && iUsed[n];
               dec_useCRet_reg[n]<=dec_useCRet[n] && iUsed[n];
               dec_constant_reg[n]<=dec_constant[n];
