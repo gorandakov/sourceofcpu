@@ -206,6 +206,7 @@ module frontend1(
   wire [DATA_WIDTH/2-1:0] read_data;
   wire [14:0] read_dataX;
   wire [16:0] read_dataY; 
+  wire [DATA_WIDTH/2-1:0] read_data_reg;
   wire instrFed;
   reg instrFed_reg;
 
@@ -1751,6 +1752,7 @@ module frontend1(
 	  IP_phys_reg<=44'b0;
 	  IP_phys_reg2<=44'b0;
 	  IP_phys_reg3<=44'b0;
+          read_data_reg<=0;
       end else if (ixcept) begin
           //ixcept_reg<=1'b1;
           //ixceptLDConfl_reg<=ixceptLDConfl;
@@ -1816,6 +1818,7 @@ module frontend1(
 	  read_set_flag_reg<=read_set_flag;
           cc_read_IP<=cc_read_IP_d;
           cc_attr<=cc_attr_d;
+          read_data_reg<=read_data;
           jumpTK_en<=1'b0;
           if ((~cc_read_hit|~tlb_match) & ~miss_now & instrEn_reg3) begin
               miss_IP<=cc_read_IP_reg3;
@@ -2037,6 +2040,7 @@ module frontend1(
           pre_instr9_reg<=pre_instr9;
           pre_instr10_reg<=pre_instr10;
           pre_instr11_reg<=pre_instr11;
+          read_data_reg<=read_data;
 	  pre_isAvx_reg<=pre_isAvx;
           for (n=0;n<12;n=n+1) begin
               pre_off_reg[n]<=pre_off[n];
