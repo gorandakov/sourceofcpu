@@ -1007,7 +1007,9 @@ frontend1 #(0,BUS_ID) frontA_mod(
   MSI_expAddr_hitCC,
   //dec_attr
   expun_fr_addr,
-  expun_fr_en
+  expun_fr_en,
+  expun_addr,
+  expun_wen
   );
   
 frontend1 #(1,BUS_ID) frontB_mod(
@@ -1073,7 +1075,9 @@ frontend1 #(1,BUS_ID) frontB_mod(
   MSI_expAddr_hitCC,
   //dec_attr
   expun_fr_addr,
-  expun_fr_en
+  expun_fr_en,
+  expun_addr,
+  expun_wen
   );
   
 
@@ -1113,6 +1117,7 @@ frontend1 #(1,BUS_ID) frontB_mod(
   1'b1,//all_retired,
   fp_excpt_en,
   fp_excpt_set,
+  fp_excpt_thr,
 
   bundleFeed,
 //begin instructions ordered by rs input port

@@ -38,7 +38,7 @@ module jump_decoder(
   isIPRel
   );
   
-  parameter [0:0] thread;
+  parameter [0:0] thread=0;
   localparam INSTR_WIDTH=80;
   localparam INSTRQ_WIDTH=`instrQ_width;
   localparam EXTRACONST_WIDTH=`extraconst_width;

@@ -1794,6 +1794,7 @@ module decoder(
   input all_retired;
   input fp_excpt_en;
   input [10:0] fp_excpt_set;
+  input fp_excpt_thr;
 
   output reg bundleFeed;
   

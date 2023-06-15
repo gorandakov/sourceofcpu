@@ -75,8 +75,6 @@ module frontend1(
   cc_write_wen,
   cc_invalidate,
   cc_write_data,
-  expun_addr,
-  expun_wen,
   MSI_expAddr,
   MSI_expAddr_en,
   MSI_expAddr_hit,
@@ -84,7 +82,7 @@ module frontend1(
   expun_wen
   );
 
-  parameter [0:0] thread;
+  parameter [0:0] thread=0;
   localparam PHYS_WIDTH=44;
   localparam VIRT_WIDTH=64;
   localparam IP_WIDTH=64;

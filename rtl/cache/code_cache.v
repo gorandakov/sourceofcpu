@@ -55,7 +55,8 @@ module cc_ram(
   reg [ADDR_WIDTH-1:0] readA_addr_reg;
   reg [ADDR_WIDTH-1:0] readB_addr_reg;
   
-  assign read_data=ram[read_addr_reg];
+  assign readA_data=ram[readA_addr_reg];
+  assign readB_data=ram[readB_addr_reg];
 
   always @(negedge clk)
     begin
@@ -163,7 +164,8 @@ module ccX_ram(
   reg [ADDR_WIDTH-1:0] readA_addr_reg;
   reg [ADDR_WIDTH-1:0] readB_addr_reg;
   
-  assign read_data=ram[read_addr_reg];
+  assign readA_data=ram[readA_addr_reg];
+  assign readB_data=ram[readB_addr_reg];
 
   always @(negedge clk)
     begin
@@ -274,10 +276,9 @@ module ccRam_way(
   reg readB_set_flag_reg;
   reg [3:0] readA_IP_low_reg;
   reg [9:0] readA_IP_reg;
-  wire readA_hitC0; 
+  wire read_hitC0; 
   reg [3:0] readB_IP_low_reg;
   reg [9:0] readB_IP_reg;
-  wire readB_hitC0; 
   wire write_hit; 
 
   wire [36:0] expun_naddr;
@@ -295,16 +296,16 @@ module ccRam_way(
   generate
     if (~INDEX[0]) begin
         assign readA_data=~(({DATA_WIDTH{readA_hit}} & readA_data_ram) | readA_data_in);
-        assign readA_dataX=~(({60{readA_hit}} & writeXA_data[59:0]) | readA_dataX_in);
+        assign readA_dataX=~(({60{readA_hit}} & readA_dataX[59:0]) | readA_dataX_in);
         assign expun_addr=~(({37{write_hit}} & expun_naddr[36:0]) | expun_addr_in);
         assign readB_data=~(({DATA_WIDTH{readB_hit}} & readB_data_ram) | readB_data_in);
-        assign readB_dataX=~(({60{readB_hit}} & writeXB_data[59:0]) | readB_dataX_in);
+        assign readB_dataX=~(({60{readB_hit}} & readB_dataX[59:0]) | readB_dataX_in);
     end else begin
         assign readA_data=~(~({DATA_WIDTH{readA_hit}} & readA_data_ram) & readA_data_in);
-        assign readA_dataX=~(~({60{readA_hit}} & writeXA_data[59:0]) & readA_dataX_in);
+        assign readA_dataX=~(~({60{readA_hit}} & readA_dataX[59:0]) & readA_dataX_in);
         assign expun_addr=~(~({37{write_hit}} & expun_naddr[36:0]) & expun_addr_in);
         assign readB_data=~(~({DATA_WIDTH{readB_hit}} & readB_data_ram) & readB_data_in);
-        assign readB_dataX=~(~({60{readB_hit}} & writeXB_data[59:0]) & readB_dataX_in);
+        assign readB_dataX=~(~({60{readB_hit}} & readB_dataX[59:0]) & readB_dataX_in);
     end
   endgenerate
 
@@ -333,7 +334,7 @@ module ccRam_way(
   .readB_data(readXB_data_ram),
   .write_addr(writeX_addr),
   .write_data(init ? 60'b0 : writeX_data),
-  .write_wen(write_hit|init|read_clkEn_reg)
+  .write_wen(write_hit|init|readA_clkEn_reg|readB_clkEn_reg)
   );
 
 
