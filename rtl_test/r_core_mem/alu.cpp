@@ -527,17 +527,17 @@ bool req::gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,int 
 		A=(this-1)->res;
 		A_p=(this-1)->res_p;
 		if (rB>=0)
-		    snprintf(asmtext,sizeof (asmtext), "addq %%%s, mem+%li(%rip)\n",reg65[rB],addr);
+		    snprintf(asmtext,sizeof (asmtext), "plusq %%%s, mem+%li(%rip)\n",reg65[rB],addr);
 		else
-		    snprintf(asmtext,sizeof (asmtext), "addq $%i, mem+%li(%rip)\n",B,addr);
+		    snprintf(asmtext,sizeof (asmtext), "plusq $%i, mem+%li(%rip)\n",B,addr);
 	    } else if (has_mem_) {
 		(this-1)->gen_mem(NULL,8,mem,memp,addr);
 		rB=16;
 		B=(this-1)->res;
 		B_p=(this-1)->res_p;
-		snprintf(asmtext,sizeof (asmtext), "addq mem+%li(%rip), %%%s, %%%s\n",addr,reg65[rA],reg65[rT]);
-	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"addq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
-	    else snprintf(asmtext,sizeof asmtext,"addq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
+		snprintf(asmtext,sizeof (asmtext), "plusq mem+%li(%rip), %%%s, %%%s\n",addr,reg65[rA],reg65[rT]);
+	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"plusq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"plusq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
 
             res0=((unsigned __int128)  A)+(unsigned __int128) B;
             if (A_p && B_p) excpt=11;
@@ -585,17 +585,17 @@ addie:
 		A0x=A=(this-1)->res;
 		A_p=(this-1)->res_p;
 		if (rB>=0)
-		    snprintf(asmtext,sizeof (asmtext), "addl %%%s, mem+%li(%rip)\n",reg32[rB],addr);
+		    snprintf(asmtext,sizeof (asmtext), "plusl %%%s, mem+%li(%rip)\n",reg32[rB],addr);
 		else
-		    snprintf(asmtext,sizeof (asmtext), "addl $%i, mem+%li(%rip)\n",B,addr);
+		    snprintf(asmtext,sizeof (asmtext), "plusl $%i, mem+%li(%rip)\n",B,addr);
 	    } else if (has_mem_) {
 		(this-1)->gen_mem(NULL,4,mem,memp,addr);
 		rB=16;
 		B0x=B=(this-1)->res;
 		B_p=(this-1)->res_p;
-		snprintf(asmtext,sizeof (asmtext), "addl mem+%li(%rip), %%%s, %%%s\n",addr,reg32[rA],reg32[rT]);
-	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"addl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
-	    else snprintf(asmtext,sizeof asmtext,"addl $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
+		snprintf(asmtext,sizeof (asmtext), "plusl mem+%li(%rip), %%%s, %%%s\n",addr,reg32[rA],reg32[rT]);
+	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"plusl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"plusl $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
 
             res0=((unsigned __int128) A0x)+(unsigned __int128) B0x;
             res2=res=res0&0xffffffffull;
