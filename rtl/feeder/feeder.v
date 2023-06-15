@@ -872,7 +872,7 @@ module ww(
   wire [1:0] req_tlbEnX;
   wire [1:0] [3:0] req_tlbAttrX;
 
-  assign req_addr=req_addX[!req_enX[0]&!req_tlbEnX[0]];
+  assign req_addr=req_addrX[!req_enX[0]&!req_tlbEnX[0]];
   assign req_en=req_enX[!req_enX[0]&!req_tlbEnX[0]];
   assign req_slot=req_slotX[!req_enX[0]&!req_tlbEnX[0]];
   assign req_tlbEn=req_tlbEnX[!req_enX[0]&!req_tlbEnX[0]];
@@ -911,6 +911,20 @@ module ww(
   wire [1:0][9:0] instrEn/*verilator public*/;
   wire [1:0][9:0] iAvail/*verilator public*/;
 
+  wire [1:0] cc_instrEn;
+  wire [1:0] cc_read_set_flag;
+  wire [1:0] cc_fstall;
+  wire [1:0] cc_except;
+  wire [1:0] [PHYS_WIDTH-1:0] cc_IP_phys;
+  wire [1:0] cc_read_hit;
+  wire [1:0] cc_read_tagErr;
+  wire [1:0] [DATA_WIDTH/2-1:0] cc_read_data;
+  wire [1:0] [14:0] cc_read_dataX;
+  wire [VIRT_WIDTH-1:0] cc_write_IP;
+  wire cc_write_wen;
+  wire cc_invalidate;
+  wire [DATA_WIDTH/2-1:0] cc_write_data;
+
   cc_comb code_cache(
   clk,
   rst,
@@ -920,14 +934,14 @@ module ww(
   cc_read_set_flag[1],
   cc_fstall[0],
   cc_except[0],
-  cc_read_IP[0],
+  cc_IP_phys[0],
   cc_read_hit[0],
   cc_read_tagErr[0],
   cc_read_data[0],
   cc_read_dataX[0],
   cc_fstall[1],
   cc_except[1],
-  cc_read_IP[1],
+  cc_IP_phys[1],
   cc_read_hit[1],
   cc_read_tagErr[1],
   cc_read_data[1],

@@ -152,8 +152,7 @@ module cc_comb (
 
   wire [DATA_WIDTH/4-1:0] readA_dataP[3:0];
   
-  reg [7:0] cc_readA_tagErrAP;
-  reg [7:0] cc_readA_tagErrBP;
+  reg [7:0] cc_readA_tagErrP;
   wire [DATA_WIDTH/4-1:0] readB_dataP[3:0];
   
   reg [7:0] cc_readB_tagErrP;
@@ -300,48 +299,68 @@ module cc_comb (
       if (rst) begin
           write_IP_reg2<=44'b0;
 //          write_phys_reg2<=32'b0;
-          read_hitP<=1'b0;
-          cc_read_hitP<=1'b0;
+          readA_hitP<=1'b0;
+          cc_readA_hitP<=1'b0;
+          readA_hitP<=1'b0;
+          cc_readA_hitP<=1'b0;
           cc_expun_hitP<=1'b0;
    //       cc_read_hitNP<=1'b0;
-          read_data0_reg<={DATA_WIDTH{1'b0}};
-          read_dataX0_reg<=60'b0;
+          readA_data0_reg<={DATA_WIDTH{1'b0}};
+          readA_dataX0_reg<=60'b0;
+          readB_data0_reg<={DATA_WIDTH{1'b0}};
+          readB_dataX0_reg<=60'b0;
           write_data_reg2<={DATA_WIDTH{1'B0}};
-          cc_read_tagErrP<=8'b0;
+          cc_readA_tagErrP<=8'b0;
+          cc_readB_tagErrP<=8'b0;
 	  cc_exp_addr0_reg<=37'b0;
      //     cc_read_tagErrNP<=8'b0;
-          read_hit0A<=1'b0;
-          read_hit1A<=1'b0;
-          read_hit0B<=1'b0;
-          read_hit1B<=1'b0;
+          readA_hit0A<=1'b0;
+          readA_hit1A<=1'b0;
+          readA_hit0B<=1'b0;
+          readA_hit1B<=1'b0;
+          readB_hit0A<=1'b0;
+          readB_hit1A<=1'b0;
+          readB_hit0B<=1'b0;
+          readB_hit1B<=1'b0;
   //        read_physOut0_reg<={PHYS_WIDTH-12{1'B0}};
           cc_write_wen_reg2<=1'b0;
           cc_invalidate_reg2<=1'b0;
-          cc_read_IP_reg<=39'b0;
+          cc_readA_IP_reg<=39'b0;
+          cc_readB_IP_reg<=39'b0;
       end
       else begin
           write_IP_reg2<=write_IP_reg;
     //      write_phys_reg2<=write_phys_reg;
-          read_hitP<=cc_read_hit0;
-          cc_read_hitP<=cc_read_hit0;
+          readA_hitP<=cc_readA_hit0;
+          cc_readA_hitP<=cc_readA_hit0;
+          readB_hitP<=cc_readB_hit0;
+          cc_readB_hitP<=cc_readB_hit0;
           cc_expun_hitP<=cc_expun_hit0;
        //   cc_read_hitNP<=cc_read_hitN0;
-          read_data0_reg<=read_data0;
-          read_dataX0_reg<=read_dataX0;
+          readA_data0_reg<=readA_data0;
+          readA_dataX0_reg<=readA_dataX0;
+          readB_data0_reg<=readB_data0;
+          readB_dataX0_reg<=readB_dataX0;
           if (cc_wen_step[0])
               write_data_reg2[DATA_WIDTH/2-1:0]<=write_data_reg[DATA_WIDTH/2-1:0];
           if (cc_wen_step[1])
               write_data_reg2[DATA_WIDTH-1:DATA_WIDTH/2]<=write_data_reg[DATA_WIDTH-1:DATA_WIDTH/2];
-          cc_read_tagErrP<=cc_tagErr;
+          cc_readA_tagErrP<=cc_tagErrA;
+          cc_readB_tagErrP<=cc_tagErrB;
 	  cc_exp_addr0_reg<=cc_exp_addr0;
-          read_hit0A<=cc_read_hit0 & ~cc_read_IP_reg[1] & ~cc_read_IP_reg[0];
-          read_hit1A<=cc_read_hit0 & ~cc_read_IP_reg[1] & cc_read_IP_reg[0];
-          read_hit0B<=cc_read_hit0 & cc_read_IP_reg[1] & ~cc_read_IP_reg[0];
-          read_hit1B<=cc_read_hit0 & cc_read_IP_reg[1] & cc_read_IP_reg[0];
+          readA_hit0A<=cc_readA_hit0 & ~cc_readA_IP_reg[1] & ~cc_readA_IP_reg[0];
+          readA_hit1A<=cc_readA_hit0 & ~cc_readA_IP_reg[1] & cc_readA_IP_reg[0];
+          readA_hit0B<=cc_readA_hit0 & cc_readA_IP_reg[1] & ~cc_readA_IP_reg[0];
+          readA_hit1B<=cc_readA_hit0 & cc_readA_IP_reg[1] & cc_readA_IP_reg[0];
+          readB_hit0A<=cc_readB_hit0 & ~cc_readB_IP_reg[1] & ~cc_readB_IP_reg[0];
+          readB_hit1A<=cc_readB_hit0 & ~cc_readB_IP_reg[1] & cc_readB_IP_reg[0];
+          readB_hit0B<=cc_readB_hit0 & cc_readB_IP_reg[1] & ~cc_readB_IP_reg[0];
+          readB_hit1B<=cc_readB_hit0 & cc_readB_IP_reg[1] & cc_readB_IP_reg[0];
       //    read_physOut0_reg<=read_physOut0;
           cc_write_wen_reg2<=cc_write_wen_reg;
           cc_invalidate_reg2<=cc_invalidate_reg;
-          cc_read_IP_reg<=cc_read_IP[43:5];
+          cc_readA_IP_reg<=cc_readA_IP[43:5];
+          cc_readB_IP_reg<=cc_readB_IP[43:5];
       end
   end
   
@@ -353,7 +372,8 @@ module cc_comb (
           write_data_reg<={DATA_WIDTH{1'B0}};
           cc_write_wen_reg<=1'b0;
           cc_invalidate_reg<=1'b0;
-          read_clkEn_reg<=1'b0;
+          readA_clkEn_reg<=1'b0;
+          readB_clkEn_reg<=1'b0;
 	  chkCL_clkEn_reg<=1'b0;
           cc_wen_step<=2'b0;
       end
@@ -365,7 +385,8 @@ module cc_comb (
           write_data_reg<={2{write_data}};
           cc_write_wen_reg<=cc_wen_step[0];
           cc_invalidate_reg<=cc_invalidate;
-          read_clkEn_reg<=read_clkEn;
+          readA_clkEn_reg<=readA_clkEn;
+          readB_clkEn_reg<=readB_clkEn;
 	  chkCL_clkEn_reg<=chkCL_clkEn;
           cc_wen_step<={cc_wen_step[0],cc_write_wen};
       end
