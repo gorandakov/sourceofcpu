@@ -285,7 +285,7 @@ module cc_comb (
   .read_data({cc_readB_hit,cc_readB_tagErr})
   );
 
-  cc_fstalle #(9) stHitAE_mod (
+  cc_fstalle #(1) stHitAE_mod (
   .clk(clk),
   .rst(rst),
   .except(1'b0),

@@ -223,31 +223,31 @@ module decoder_aux_const(
       aux_can_read=1'b1;
       case(aux0_reg[15:0])
       `csr_retIP: begin	aux_const={1'b0,csr_retIP[thread]}; 
-          aux_can_jump=csr_mflags[`mflags_cpl]==2'b0;
-          aux_can_read=~csr_mflags[`mflags_vm] && 0==csr_mflags[`mflags_cpl]; end
+          aux_can_jump=csr_mflags[thread][`mflags_cpl]==2'b0;
+          aux_can_read=~csr_mflags[thread][`mflags_vm] && 0==csr_mflags[thread][`mflags_cpl]; end
       `csr_excStackSave: begin aux_const=csr_excStackSave[thread];
-        aux_can_read=~csr_mflags[`mflags_vm] && 0==csr_mflags[`mflags_cpl]; end
+        aux_can_read=~csr_mflags[thread][`mflags_vm] && 0==csr_mflags[thread][`mflags_cpl]; end
       `csr_excStack: begin aux_const=csr_excStack[thread];
-        aux_can_read=~csr_mflags[`mflags_vm] && 0==csr_mflags[`mflags_cpl]; end
+        aux_can_read=~csr_mflags[thread][`mflags_vm] && 0==csr_mflags[thread][`mflags_cpl]; end
       `csr_PCR: begin	aux_const=csr_PCR[thread];
-        aux_can_read=~csr_mflags[`mflags_vm] && 0==csr_mflags[`mflags_cpl]; end
+        aux_can_read=~csr_mflags[thread][`mflags_vm] && 0==csr_mflags[thread][`mflags_cpl]; end
       `csr_PCR_reg_save:begin aux_const= csr_PCR_reg_save[thread];
-        aux_can_read=~csr_mflags[`mflags_vm] && 0==csr_mflags[`mflags_cpl]; end
-      `csr_mflags: begin	aux_const={1'b0,csr_mflags[thread]}; aux_can_read=~csr_mflags[`mflags_vm] && 0==csr_mflags[`mflags_cpl]; end
+        aux_can_read=~csr_mflags[thread][`mflags_vm] && 0==csr_mflags[thread][`mflags_cpl]; end
+      `csr_mflags: begin	aux_const={1'b0,csr_mflags[thread]}; aux_can_read=~csr_mflags[thread][`mflags_vm] && 0==csr_mflags[thread][`mflags_cpl]; end
       `csr_FPU:			aux_const={1'b0,csr_fpu[thread]};
-      `csr_page: begin aux_const={1'b0,csr_page[thread]}; aux_can_read=~csr_mflags[`mflags_vm] && 0==csr_mflags[`mflags_cpl]; end
-      `csr_vmpage: begin aux_const={1'b0,csr_vmpage[thread]}; aux_can_read=~csr_mflags[`mflags_vm] && 0==csr_mflags[`mflags_cpl]; end
-      //`csr_cpage: begin	aux_const=csr_cpage[thread]; aux_can_read=~csr_mflags[`mflags_vm] && !csr_mflags[`mflags_cpl]; end
-      //`csr_spage: begin	aux_const=csr_spage[thread]; aux_can_read=~csr_mflags[`mflags_vm] && !csr_mflags[`mflags_cpl]; end
+      `csr_page: begin aux_const={1'b0,csr_page[thread]}; aux_can_read=~csr_mflags[thread][`mflags_vm] && 0==csr_mflags[thread][`mflags_cpl]; end
+      `csr_vmpage: begin aux_const={1'b0,csr_vmpage[thread]}; aux_can_read=~csr_mflags[thread][`mflags_vm] && 0==csr_mflags[thread][`mflags_cpl]; end
+      //`csr_cpage: begin	aux_const=csr_cpage[thread]; aux_can_read=~csr_mflags[thread][`mflags_vm] && !csr_mflags[thread][`mflags_cpl]; end
+      //`csr_spage: begin	aux_const=csr_spage[thread]; aux_can_read=~csr_mflags[thread][`mflags_vm] && !csr_mflags[thread][`mflags_cpl]; end
       `csr_syscall: begin aux_const={1'b0,csr_syscall[thread]};
            aux_can_jump=1'b1; 
-           aux_can_read=~csr_mflags[`mflags_vm] && csr_mflags[`mflags_cpl]==2'b00; end
+           aux_can_read=~csr_mflags[thread][`mflags_vm] && csr_mflags[thread][`mflags_cpl]==2'b00; end
       `csr_vmcall: begin aux_const={1'b0,csr_vmcall[thread]}; aux_can_jump=
-	   csr_mflags[`mflags_vm] && csr_mflags[`mflags_cpl]==2'b00;
-           aux_can_read=~csr_mflags[`mflags_vm] && csr_mflags[`mflags_cpl]==2'b00; end
-      //`csr_cpage_mask: begin aux_const=csr_cpage_mask; aux_can_read=~csr_mflags[`mflags_vm] && !csr_mflags[`mflags_cpl]; end
-      `csr_indir_table: begin aux_const={1'b0,csr_indir_tbl[thread]}; aux_can_read=~csr_mflags[`mflags_vm] && csr_mflags[`mflags_cpl]==0; end
-      `csr_indir_mask: begin aux_const={1'b0,csr_indir_mask[thread]}; aux_can_read=~csr_mflags[`mflags_vm] && csr_mflags[`mflags_cpl]==0; end
+	   csr_mflags[thread][`mflags_vm] && csr_mflags[thread][`mflags_cpl]==2'b00;
+           aux_can_read=~csr_mflags[thread][`mflags_vm] && csr_mflags[thread][`mflags_cpl]==2'b00; end
+      //`csr_cpage_mask: begin aux_const=csr_cpage_mask; aux_can_read=~csr_mflags[thread][`mflags_vm] && !csr_mflags[thread][`mflags_cpl]; end
+      `csr_indir_table: begin aux_const={1'b0,csr_indir_tbl[thread]}; aux_can_read=~csr_mflags[thread][`mflags_vm] && csr_mflags[thread][`mflags_cpl]==0; end
+      `csr_indir_mask: begin aux_const={1'b0,csr_indir_mask[thread]}; aux_can_read=~csr_mflags[thread][`mflags_vm] && csr_mflags[thread][`mflags_cpl]==0; end
       `csr_cl_lock: begin aux_const={64'b0,csr_mflags[thread][18]}; end
       default:			aux_const=65'b0;
       endcase
@@ -261,7 +261,7 @@ module decoder_aux_const(
 	  csr_PCR[0]<=65'b0;
 	  csr_PCR_reg_save[0]<=65'b0;
           csr_mflags[0]<=64'b0;
-	  aux0_reg[0]<=16'b0;
+	  aux0_reg<=16'b0;
 	  csr_fpu[0]<=64'h20000;
           csr_page[0]<=64'b0;
           csr_vmpage[0]<=64'b0;
@@ -278,7 +278,6 @@ module decoder_aux_const(
 	  csr_PCR[1]<=65'b0;
 	  csr_PCR_reg_save[1]<=65'b0;
           csr_mflags[1]<=64'b0;
-	  aux0_reg[1]<=16'b0;
 	  csr_fpu[1]<=64'h20000;
           csr_page[1]<=64'b0;
           csr_vmpage[1]<=64'b0;
@@ -290,7 +289,7 @@ module decoder_aux_const(
           csr_indir_tbl[1]<=64'b0;
           csr_indir_mask[1]<=64'b0;
       end else begin
-          if (csrss_en && ((csr_mflags[`mflags_cpl]==2'b0 && ~csr_mflags[`mflags_vm]) ||
+          if (csrss_en && ((csr_mflags[csrss_no[15]][`mflags_cpl]==2'b0 && ~csr_mflags[csrss_no[15]][`mflags_vm]) ||
             csrss_no==`csr_FPU)) begin
               case(csrss_no[14:0])
       `csr_retIP: 		csr_retIP[csrss_no[15]]<=csrss_data[63:0];
@@ -300,7 +299,7 @@ module decoder_aux_const(
       `csr_PCR_reg_save:	csr_PCR_reg_save[csrss_no[15]]<=csrss_data;
       `csr_mflags:		csr_mflags[csrss_no[15]]<=csrss_data[63:0];
       `csr_FPU:			csr_fpu[csrss_no[15]]<=csrss_data[63:0];
-      `csr_excpt_fpu:		csr_fpu[10:0][csrss_no[15]]<=csrss_data[10:0];
+      `csr_excpt_fpu:		csr_fpu[csrss_no[15]][10:0]<=csrss_data[10:0];
       `csr_page:		csr_page[csrss_no[15]]<=csrss_data[63:0];
       `csr_vmpage:		csr_vmpage[csrss_no[15]]<=csrss_data[63:0];
       //`csr_cpage:		csr_cpage[csrss_no[15]]<=csrss_data;
@@ -310,13 +309,13 @@ module decoder_aux_const(
       //`csr_cpage_mask:		csr_cpage_mask[csrss_no[15]]<=csrss_data;
       `csr_indir_table:		csr_indir_tbl[csrss_no[15]]<=csrss_data[63:0];
       `csr_indir_mask:          csr_indir_mask[csrss_no[15]]<=csrss_data[63:0];
-      `csr_cl_lock:             csr_mflags[18][csrss_no[15]]<=1'b1;
+      `csr_cl_lock:             csr_mflags[csrss_no[15]][18]<=1'b1;
      	      endcase
               aux0_reg<=aux0;
 	      if (altEn) csr_retIP[csrss_no[15]]<=altData;
           end
           if (fpE_en && !csrss_en | (csrss_no!=`csr_FPU)) begin
-              csr_fpu[fpE_thr]<=csr_fpu | {42'b0,fpE_set,11'b0};
+              csr_fpu[fpE_thr]<=csr_fpu[fpE_thr] | {42'b0,fpE_set,11'b0};
           end
       end
   end

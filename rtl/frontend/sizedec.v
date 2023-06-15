@@ -586,10 +586,10 @@ module predecoder_get(
     assign bundleF=(~bundle0[255] && startOff==0) | bstop[3] ? bundle0 : 'z;
     assign bundleF=bundle0[255] && startOff==0 && bstop[3:2]==2'b01 ? {bundle0[255+48:0],btail[63:48]} : 'z;
 
-    assign instrEndF=bundle0[255] && startOff==0 && bstop[3:2]==2'b01 ? {instrEnd[12:0],bstop[3:1],instrEnd[-1]} : 'z;
-    assign instrEndF=bundle0[255] && startOff==0 && bstop[3:1]==3'b001 ? {instrEnd[13:0],bstop[3:2],instrEnd[-1]} : 'z;
-    assign instrEndF=bundle0[255] && startOff==0 && bstop[3:0]==4'b0001 ? {instrEnd[14:0],bstop[3],instrEnd[-1]} : 'z;
-    assign instrEndF=bundle0[255] && startOff==0 && bstop[3:0]==4'b0000 ? {instrEnd[11:0],bstop[3:0],instrEnd[-1]} : 'z;
+    assign instrEndF=bundle0[255] && startOff==0 && bstop[3:2]==2'b01 ? {instrEnd[16:0],bstop[3:1],instrEnd[-1]} : 'z;
+    assign instrEndF=bundle0[255] && startOff==0 && bstop[3:1]==3'b001 ? {instrEnd[17:0],bstop[3:2],instrEnd[-1]} : 'z;
+    assign instrEndF=bundle0[255] && startOff==0 && bstop[3:0]==4'b0001 ? {instrEnd[18:0],bstop[3],instrEnd[-1]} : 'z;
+    assign instrEndF=bundle0[255] && startOff==0 && bstop[3:0]==4'b0000 ? {instrEnd[15:0],bstop[3:0],instrEnd[-1]} : 'z;
     assign instrEndF=(~bundle0[255] && startOff==0) | bstop[3] ? instrEnd : 'z;
     
     assign bundle0={64'b0,btail[15:0],bundle[239:0]};

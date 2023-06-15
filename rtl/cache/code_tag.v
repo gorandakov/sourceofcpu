@@ -216,9 +216,9 @@ module ccTag(
   .clk(clk),
   .rst(rst),
   .read_clkEn(read_clkEn),
-  .read_addr(read_phys_addr[7:0]),
+  .read_addr(read_phys_addr[6:0]),
   .read_data(read_data),
-  .write_addr(write_phys_addr_reg[7:0]),
+  .write_addr(write_phys_addr_reg[6:0]),
   .write_data(write_data_way),
   .write_wen(write_hit|init_reg)
   );
@@ -227,9 +227,9 @@ module ccTag(
   .clk(clk),
   .rst(rst),
   .read_clkEn(read_clkEn),
-  .read_addr(write_phys_addr[7:0]),
+  .read_addr(write_phys_addr[6:0]),
   .read_data(read_dataW),
-  .write_addr(write_phys_addr_reg[7:0]),
+  .write_addr(write_phys_addr_reg[6:0]),
   .write_data(write_data_way),
   .write_wen(write_hit|init_reg)
   );
@@ -238,9 +238,9 @@ module ccTag(
   .clk(clk),
   .rst(rst),
   .read_clkEn(read_clkEn),
-  .read_addr(read_phys_addr[7:0]),
+  .read_addr(read_phys_addr[6:0]),
   .read_data(read_NRUr),
-  .write_addr(read_phys_addr_reg2[7:0]),
+  .write_addr(read_phys_addr_reg2[6:0]),
   .write_data(write_NRU),
   .write_wen(EXT ? init_reg2 : read_clkEn_reg2|init_reg2)
   );
@@ -249,9 +249,9 @@ module ccTag(
   .clk(clk),
   .rst(rst),
   .read_clkEn(write_wen),
-  .read_addr(write_phys_addr[7:0]),
+  .read_addr(write_phys_addr[6:0]),
   .read_data(read_NRUw),
-  .write_addr(read_phys_addr_reg2[7:0]),
+  .write_addr(read_phys_addr_reg2[6:0]),
   .write_data(write_NRU),
   .write_wen(EXT ? init_reg2 : read_clkEn_reg2|init_reg2)
   );

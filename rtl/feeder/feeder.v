@@ -410,7 +410,7 @@ module ww(
   input [`ctlbData_width-1:0] bus_tlb_data;
   input [9:0] bus_tlb_slot;
   input bus_tlb_en;
-  output halt;
+  output [1:0] halt;
 
   input all_retired;
   input fp_excpt_en;
@@ -902,13 +902,13 @@ module ww(
   wire [1:0][`instrQ_width-1:0] extra8;
   wire [1:0][`instrQ_width-1:0] extra9;
 
-  wire [1:0][2:0] btbl_step;
-  wire [1:0][62:0] btbl_IP0;
-  wire [1:0][62:0] btbl_IP1;
-  wire [1:0][3:0] btbl_mask0;
-  wire [1:0][3:0] btbl_mask1;
-  wire [1:0][3:0] btbl_attr0;
-  wire [1:0][3:0] btbl_attr1;
+  wire [1:0][2:0] btbl_stepX;
+  wire [1:0][62:0] btbl_IP0X;
+  wire [1:0][62:0] btbl_IP1X;
+  wire [1:0][3:0] btbl_mask0X;
+  wire [1:0][3:0] btbl_mask1X;
+  wire [1:0][3:0] btbl_attr0X;
+  wire [1:0][3:0] btbl_attr1X;
 
   wire [1:0][9:0] instrEn/*verilator public*/;
   wire [1:0][9:0] iAvail/*verilator public*/;
@@ -922,7 +922,7 @@ module ww(
   wire [1:0] [PHYS_WIDTH-1:0] cc_IP_phys;
   wire [1:0] cc_read_hit;
   wire [1:0] cc_read_tagErr;
-  wire [1:0] [DATA_WIDTH/2-1:0] cc_read_data;
+  wire [1:0] [DATA_WIDTH*4-1:0] cc_read_data;
   wire [1:0] [14:0] cc_read_dataX;
   wire [VIRT_WIDTH-1:0] cc_write_IP;
   wire cc_write_wen;
@@ -1001,11 +1001,11 @@ frontend1 #(0,BUS_ID) frontA_mod(
   instrEn[1],
   iAvail[1],
   stall,
-  btbl_step[1],
-  btbl_IP0[1],
-  btbl_IP1[1],
-  btbl_mask0[1],btbl_mask1[1],
-  btbl_attr0[1],btbl_attr1[1],
+  btbl_stepX[1],
+  btbl_IP0X[1],
+  btbl_IP1X[1],
+  btbl_mask0X[1],btbl_mask1X[1],
+  btbl_attr0X[1],btbl_attr1X[1],
   csrss_en,csrss_no,csrss_data[63:0],
   cc_instrEn[1],
   cc_read_set_flag[1],
@@ -1067,11 +1067,11 @@ frontend1 #(1,BUS_ID) frontB_mod(
   instrEn[0],
   iAvail[0],
   stall,
-  btbl_step[0],
-  btbl_IP0[0],
-  btbl_IP1[0],
-  btbl_mask0[0],btbl_mask1[0],
-  btbl_attr0[0],btbl_attr1[0],
+  btbl_stepX[0],
+  btbl_IP0X[0],
+  btbl_IP1X[0],
+  btbl_mask0X[0],btbl_mask1X[0],
+  btbl_attr0X[0],btbl_attr1X[0],
   csrss_en,csrss_no,csrss_data[63:0],
   cc_instrEn[0],
   cc_read_set_flag[0],
@@ -1097,6 +1097,14 @@ frontend1 #(1,BUS_ID) frontB_mod(
 
   assign iAvail[0]={10{~thread}} & iAvailX;
   assign iAvail[1]={10{ thread}} & iAvailX;
+
+  assign btbl_step=btbl_stepX[thread];
+  assign btbl_IP0=btbl_IP0X[thread];
+  assign btbl_IP1=btbl_IP1X[thread];
+  assign btbl_attr0=btbl_attr0X[thread];
+  assign btbl_attr1=btbl_attr1X[thread];
+  assign btbl_mask0=btbl_mask0X[thread];
+  assign btbl_mask1=btbl_mask1X[thread];
   
   decoder decSnake_mod(
   clk,
@@ -1121,11 +1129,11 @@ frontend1 #(1,BUS_ID) frontB_mod(
   instr8[thread],extra8[thread],
   instr9[thread],extra9[thread],
   
-  btbl_IP0[thread],
-  btbl_IP1[thread],
+  btbl_IP0,
+  btbl_IP1,
 
-  btbl_attr0[thread],
-  btbl_attr1[thread],
+  btbl_attr0,
+  btbl_attr1,
   halt[thread],
   
   1'b1,//all_retired,
