@@ -1,13 +1,24 @@
-module fma(
-  clk,
-  rst,
-  fpcsr,
-  en,
-  en_is_add,
-  en_is_mul,
-  A,B,C,
-  res,
-  raise);
+/*
+Copyright 2022 Goran Dakov
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+
+`include "../struct.sv"
+`include "../fpoperations.sv"
+
+module fpucadd(clk,rst,A,A_alt,B,and1,or1,copyA,en,rmode,res,res_hi,isDBL,fpcsr,raise,is_rndD,is_rndS);
   localparam [15:0] BIAS=16'h7fff;
   localparam ROUND_TRUNC=0;
   localparam ROUND_ROUND=1;
@@ -16,6 +27,84 @@ module fma(
   localparam ROUND_MINUS=4;
   localparam ROUND_UP   =5;
   localparam ROUND_DOWN =6;
+  parameter [0:0] H=0;//"high" nibble
+
+  input clk;
+  input rst;
+  input [80:0] A;
+  input [64:0] A_alt;
+  input [80:0] B;
+  input and1;
+  input or1;
+  input copyA;
+  input en;
+  input [2:0] rmode;
+  output [67:0] res;
+  output [15:0] res_hi;
+  input isDBL;
+  input [31:0] fpcsr;
+  output [10:0] raise;
+  input is_rndD;
+  input is_rndS; 
+  
+  wire [67:0] res_X;
+  wire [15:0] res_X_hi;
+
+  assign res=res_X;
+  assign res_hi=res_X_hi;
+
+  //reg [80:0] A_reg;
+ // reg [80:0] B_reg;
+  wire [127:0] part0;
+  wire [127:0] part1;
+
+  wire [15:0] expA;
+  wire [15:0] expB;
+  wire [16:0] exp_exp;
+  wire [16:0] exp_exp1;
+  wire [16:0] expart0;
+  wire [16:0] expart1;
+  reg isDBL_reg;
+  reg isDBL_reg3;
+  reg en_reg,en_reg2;
+  wire sgn;
+  reg sgn_reg,sgn_reg2;
+  reg [16:0] exp_max;
+  reg [16:0] exp_max_IEEE;
+  reg [16:0] exp_denor;
+  reg [16:0] exp_denor_IEEE;
+  reg [16:0] exp_exp_reg;
+  reg [16:0] exp_exp1_reg;
+  wire [16:0] exp_exp_d;
+  wire [16:0] exp_exp1_d;
+  reg [16:0] exp_exp_reg2;
+  reg [16:0] exp_exp1_reg2;
+  wire exp_oor,exp1_oor,exp_oor_IEEE,exp1_oor_IEEE;
+  wire exp_non_denor_IEEE,exp1_non_denor_IEEE;
+  reg exp_oor_reg,exp1_oor_reg,exp_oor_IEEE_reg,exp1_oor_IEEE_reg;
+  reg exp_non_denor_IEEE_reg,exp1_non_denor_IEEE_reg;
+
+  reg [127:0] prod_reg;
+  wire DBL_rnbit0,DBL_tail0,DBL_rnflip0;
+  wire DBL_rnbitX,DBL_tailX,DBL_rnflipX;
+  wire DBL_rnbit1,DBL_tail1;
+  wire EXT_rnbit0,EXT_tail0,EXT_rnflip0;
+  wire EXT_rnbitX,EXT_tailX,EXT_rnflipX;
+  wire EXT_rnbitY,EXT_tailY,EXT_rnflipY;
+  wire EXT_rnbit1,EXT_tail1;
+  wire DBL_rnd0,DBL_rnd1,DBL_rndX;
+  wire EXT_rnd0,EXT_rnd1,EXT_rndX,EXT_rndY;
+  reg [62:-1] rndbit_ext;
+  reg [51:-1] rndbit_dbl;
+  //wire [62:-1] rndbit_ext={62'b0,prod_reg[127],~prod_reg[127]};
+  //wire [51:-1] rndbit_dbl={51'b0,prod_reg[105],~prod_reg[105]};
+  reg [62:-1] enbit_ext;
+  reg [51:-1] enbit_dbl;
+  reg [31:0] fpcsr_reg;
+  reg [80:0] A_reg;
+  reg [80:0] A_reg2;
+  wire [4:0] expon;
+ // reg [1:0] expon_reg;
 
   wire A_h; 
   wire B_h; 
@@ -28,53 +117,122 @@ module fma(
   reg spec_zero_reg,spec_infty_reg,spec_snan_reg,spec_qnan_reg,spec_A_reg;
   reg spec_zero_reg2,spec_infty_reg2,spec_snan_reg2,spec_qnan_reg2,spec_A_reg2;
   reg spec_any;
-  wire [64:0] res_spec;
+  wire [80:0] res_spec;
+  reg isrnd_zero,isrnd_plus,isrnd_even;
+  wire [127:0] prod;
+  reg is_rndD_reg;
+  reg is_rndS_reg; 
+  reg is_rounder,is_rounderD,is_rounderS; 
+  wire dummy1_1;
+  wire dummy1_2;
+  wire dummy1_3;
+  wire dummy1_4;
+  wire [15:0] emsk=isDBL ? 16'h87ff : 16'hffff;
+//  reg or1,and1;
+ //tbd: enable bit 
+  fpucadd_compress compr_mod(clk,A[63:0],B[63:0],part0,part1,or1,and1);
+  adder #(128) prodAdd_mod(part0,part1,prod,1'b0,1'b1,,,,);
 
-  adder_CSA #(12) extAdd_mod(expA,expB,-BIAS,expart0,expart1);
-  adder2c #(13) expAdd2_mod(expart0,expart1,exp_exp,exp_exp1,1'b0,1'b1,1'b1,1'b1,,,,);
+  adder2oi #(64) resAddE_mod(enbit_ext,prod_reg[126:63],rndbit_ext,{res_X[63:33],res_X[31:0],dummy1_1},{dummy1_2,res_X[63:33],res_X[31:0]},1'b0,
+      prod_reg[127] & EXT_rnd1 & ~spec_any & en_reg ||
+      ~prod_reg[127] & EXT_rnd0 & EXT_rnflip0 & ~isDBL_reg & ~spec_any & en_reg,
+      ~prod_reg[127] & EXT_rnd0 & ~EXT_rnflip0 & ~isDBL_reg & ~spec_any & en_reg,,,,);
+  adder2oi #(53) resAddD_mod(enbit_dbl,prod_reg[104:52],rndbit_dbl,{res_X[52:33],res_X[31:0],dummy1_3},{dummy1_4,res_X[52:33],res_X[31:0]},1'b0,
+      prod_reg[105] & DBL_rnd1 & isDBL_reg & ~spec_any & en_reg ||
+      ~prod_reg[105] & DBL_rnd0 & DBL_rnflip0 & isDBL_reg & ~spec_any & en_reg,
+      ~prod_reg[105] & DBL_rnd0 & ~DBL_rnflip0 & isDBL_reg & ~spec_any & en_reg,,,,);
 
-  get_carry #(13) cmp0_mod(exp_max,~(exp_exp^13'h1000),1'b1,exp_oor);
-  get_carry #(13) cmp1_mod(exp_max,~(exp_exp1^13'h1000),1'b1,exp1_oor);
-  get_carry #(13) cmp2_mod(exp_max_IEEE,~(exp_exp^13'h1000),1'b1,exp_oor_IEEE);
-  get_carry #(13) cmp3_mod(exp_max_IEEE,~(exp_exp1^13'h1000),1'b1,exp1_oor_IEEE);
-  get_carry #(13) cmp4_mod(~exp_denor_IEEE,(exp_exp^13'h1000),1'b1,exp_non_denor_IEEE);
-  get_carry #(13) cmp5_mod(~exp_denor_IEEE,(exp_exp1^13'h1000),1'b1,exp_non_denor_IEEE);
+  
+  adder_CSA #(16) extAdd_mod(expA,expB,-BIAS,expart0,expart1);
+  adder2c #(17) expAdd2_mod(expart0,expart1,exp_exp,exp_exp1,1'b0,1'b1,1'b1,1'b1,,,,);
 
-  assign exp_exp_d=exp_oor & ~fpcsr[`csrfpu_clip_IEEE] ? exp_max : 13'b0;
-  assign exp_exp_d=exp_oor_IEEE & fpcsr[`csrfpu_clip_IEEE] ? exp_max_IEEE : 13'bz;
-  assign exp_exp_d=~exp_non_denor_IEEE & fpcsr[`csrfpu_daz] || (exp_exp^17'h10000)!=0 ? 13'b0 : 13'bz;
+  get_carry #(17) cmp0_mod(exp_max,~(exp_exp^17'h10000),1'b1,exp_oor);
+  get_carry #(17) cmp1_mod(exp_max,~(exp_exp1^17'h10000),1'b1,exp1_oor);
+  get_carry #(17) cmp2_mod(exp_max_IEEE,~(exp_exp^17'h10000),1'b1,exp_oor_IEEE);
+  get_carry #(17) cmp3_mod(exp_max_IEEE,~(exp_exp1^17'h10000),1'b1,exp1_oor_IEEE);
+  get_carry #(17) cmp4_mod(~exp_denor_IEEE,(exp_exp^17'h10000),1'b1,exp_non_denor_IEEE);
+  get_carry #(17) cmp5_mod(~exp_denor_IEEE,(exp_exp1^17'h10000),1'b1,exp_non_denor_IEEE);
+
+  assign exp_exp_d=exp_oor & ~fpcsr[`csrfpu_clip_IEEE] ? exp_max : 17'b0;
+  assign exp_exp_d=exp_oor_IEEE & fpcsr[`csrfpu_clip_IEEE] ? exp_max_IEEE : 17'bz;
+  assign exp_exp_d=~exp_non_denor_IEEE & fpcsr[`csrfpu_daz] || ~exp_exp[16] ? 17'b0 : 17'bz;
   assign exp_exp_d=~(exp_oor & ~fpcsr[`csrfpu_clip_IEEE]) & 
     ~(exp_oor_IEEE & fpcsr[`csrfpu_clip_IEEE]) & 
-    ~(~exp_non_denor_IEEE & fpcsr[`csrfpu_daz] || (exp_exp^13'h1000)!=0) ? (exp_exp^13'h1000) : 13'bz;
+    ~(~exp_non_denor_IEEE & fpcsr[`csrfpu_daz] || ~exp_exp[16]) ? (exp_exp^17'h10000) : 17'bz;
   
-  assign exp_exp1_d=exp1_oor & ~fpcsr[`csrfpu_clip_IEEE] ? exp_max : 13'b0;
-  assign exp_exp1_d=exp1_oor_IEEE & fpcsr[`csrfpu_clip_IEEE] ? exp_max_IEEE : 13'bz;
-  assign exp_exp1_d=~exp1_non_denor_IEEE & fpcsr[`csrfpu_daz] || (exp_exp1^17'h1000)!=0 ? 13'b0 : 13'bz;
+  assign exp_exp1_d=exp1_oor & ~fpcsr[`csrfpu_clip_IEEE] ? exp_max : 17'b0;
+  assign exp_exp1_d=exp1_oor_IEEE & fpcsr[`csrfpu_clip_IEEE] ? exp_max_IEEE : 17'bz;
+  assign exp_exp1_d=~exp1_non_denor_IEEE & fpcsr[`csrfpu_daz] || ~exp_exp1[16] ? 17'b0 : 17'bz;
   assign exp_exp1_d=~(exp1_oor & ~fpcsr[`csrfpu_clip_IEEE]) & 
     ~(exp1_oor_IEEE & fpcsr[`csrfpu_clip_IEEE]) & 
-    ~(~exp1_non_denor_IEEE & fpcsr[`csrfpu_daz] || (exp_exp1^13'h1000)!=0) ? (exp_exp1^13'h1000) : 13'bz;
+    ~(~exp1_non_denor_IEEE & fpcsr[`csrfpu_daz] || ~exp_exp1[16]) ? (exp_exp1^17'h10000) : 17'bz;
 
-  compress cmpr_mod(clk,rst,{1'b1,A[51:0]},{1'b1,B[51:0]},prod_part0, prod_part1);
 
-  assign expon=(prod_reg2[105] & ~spec_any) ?
-    {~DBL_rnbit1 & ~ DBL_tail1,exp_exp1_reg[12],exp1_non_denor_IEEE_reg,exp1_oor_IEEE_reg,exp1_oor_reg} : 5'bz;
-  assign expon=(~prod_reg[105] & ~spec_any) ? 
-    {~DBL_rnbit0 & ~ DBL_tail0,exp_exp_reg[12],exp_non_denor_IEEE_reg,exp_oor_IEEE_reg,exp_oor_reg} : 5'bz;
+  assign {res_X[63:33],res_X[31:0]}=(prod_reg[127] & ~isDBL_reg & ~EXT_rnd1 & ~spec_any & en_reg) ? prod_reg[126:64]:63'bz;
+  assign {res_X[63:33],res_X[31:0]}=(~prod_reg[127] & ~isDBL_reg & ~EXT_rnd0 & ~spec_any & en_reg) ? prod_reg[125:63]:63'bz;
+  assign {res_X[52:33],res_X[31:0]}=(prod_reg[105] & isDBL_reg & ~DBL_rnd1 & ~spec_any & en_reg) ? prod_reg[104:53]:52'bz;
+  assign {res_X[52:33],res_X[31:0]}=(~prod_reg[105] & isDBL_reg & ~DBL_rnd0 & ~spec_any & en_reg) ? prod_reg[103:52]:52'bz;
+   
+  assign {res_X[65],res_X_hi,res_X[64]}=(prod_reg[127] & ~isDBL_reg & ~spec_any & en_reg) ? {exp_exp1_reg[15],sgn_reg,exp_exp1_reg[14:0],1'b1} : 18'bz;
+  assign {res_X[65],res_X_hi,res_X[64]}=(~prod_reg[127] & ~isDBL_reg & ~spec_any & en_reg) ? {exp_exp_reg[15],sgn_reg,exp_exp_reg[14:0],1'b1} : 18'bz;
+  assign {res_X[65],res_X[64:53]}=(prod_reg[105] & isDBL_reg & ~spec_any & en_reg) ? {exp_exp1_reg[15],sgn_reg,exp_exp1_reg[10:0]} : 13'bz;
+  assign {res_X[65],res_X[64:53]}=(~prod_reg[105] & isDBL_reg & ~spec_any & en_reg) ? {exp_exp_reg[15],sgn_reg,exp_exp_reg[10:0]} : 13'bz;
+  
+  assign expon=(prod_reg[127] & ~isDBL_reg & ~spec_any) ? 
+    {~EXT_rnbit1 & ~ EXT_tail1,exp_exp1_reg[16],exp1_non_denor_IEEE_reg,exp1_oor_IEEE_reg,exp1_oor_reg} : 5'bz;
+  assign expon=(~prod_reg[127] & ~isDBL_reg & ~spec_any) ? 
+    {~EXT_rnbit0 & ~ EXT_tail0,exp_exp_reg[16],exp_non_denor_IEEE_reg,exp_oor_IEEE_reg,exp_oor_reg} : 5'bz;
+  assign expon=(prod_reg[105] & isDBL_reg & ~spec_any) ?
+    {~DBL_rnbit1 & ~ DBL_tail1,exp_exp1_reg[16],exp1_non_denor_IEEE_reg,exp1_oor_IEEE_reg,exp1_oor_reg} : 5'bz;
+  assign expon=(~prod_reg[105] & isDBL_reg & ~spec_any) ? 
+    {~DBL_rnbit0 & ~ DBL_tail0,exp_exp_reg[16],exp_non_denor_IEEE_reg,exp_oor_IEEE_reg,exp_oor_reg} : 5'bz;
   assign expon=spec_any ? 5'd4 : 5'bz; 
 
-  adder #(64) prodAddA(prod_part0[106:43],prod_part1[106:43], prod[106:43],c44,1'b1,cout_prod,,,);
-  adder #(43) prodAddB(prod_part0[42:0],prod_part2[42:0],prod[42:0],1'b0,1'b1,c44,,,);
-
-  shifter107 ashf(prod,expdiff_C_AB,prod_shA);
-  shifter107 cshf({1'b1,C_reg[51:0],{54{sxor_reg}}},expdiff_AB_C,prod_shB);
-
-  adder2c #(64) prodAddSHA({64{sxor_reg2}}^prod_shA[106:43],{1'b1,C_reg2[51:0],{12{sxor_reg2}}}, pre_res[106:43],pre_resR[106:43],
-  1'b0,1'b1,,1'b1,cout_prodA,cout_prodAC,,,);
-  assign pre_res[42:0]={43{sxor_reg2}};
-  adder2c #(64) prodAddSHB({64{sxor_reg2}}^prod_shB[106:43],prod_reg2[106:43], pre_resB[106:43],pre_resBR[106:43],
-  c44B,c44BC,pre_resB[106:43],pre_resBC[106:43],cout_prodB,cout_prodBC,,,);
-  adder2c #(43) prodAddSHB({43{sxor_reg2}}^prod_shB[42:0],prod_reg2[42:0],pre_resB[42:0],pre_resBC[42:0],1'b0,1'b1,1'b1,c44B,c44BC,,,);
+  assign {res_X[65],res_X[64:33],res_X[31:0]}=(spec_any & en_reg) ? {res_spec[80],res_spec[63:0]} : 65'bz;
+  assign res_X_hi[14:0]=(spec_any & ~isDBL_reg & en_reg) ? res_spec[78:64] : 15'bz;
+  assign res_X_hi[15]=(spec_any & ~isDBL_reg & en_reg) ? res_spec[79] : 1'bz;
   
+  assign res_X[67:66]=en_reg ? `ptype_dbl : 2'bz;
+  assign res_X[32]=en_reg ? 1'b0 : 1'bz;
+
+  assign DBL_rnbit0=prod_reg[51];
+  assign DBL_tail0=|prod_reg[50:0];
+  assign DBL_rnflip0=&prod_reg[103:52];
+  assign DBL_rnbit1=prod_reg[52];
+  assign DBL_tail1=DBL_tail0|DBL_rnbit0;
+  assign DBL_rnbitX=prod_reg[80];
+  assign DBL_tailX=|prod_reg[79:52];
+  assign DBL_rnflipX=&prod_reg[103:81];
+
+  assign DBL_rnd0=(~is_rounder && ~isrnd_zero && (DBL_rnbit0 & ~(isrnd_even & ~DBL_tail0 & prod_reg[52]) 
+    || (isrnd_plus && DBL_rnbit0 | DBL_tail0))) | DBL_rndX;  
+  assign DBL_rnd1=~isrnd_zero && (DBL_rnbit1 & ~(isrnd_even & ~DBL_tail1 & prod_reg[53]) 
+    || (isrnd_plus && DBL_rnbit1 | DBL_tail1));  
+  assign DBL_rndX=is_rounder && ~isrnd_zero && (DBL_rnbitX & ~(isrnd_even & ~DBL_tailX & prod_reg[52]) 
+    || (isrnd_plus && DBL_rnbitX | DBL_tailX));  
+
+  assign EXT_rnbit0=prod_reg[62];
+  assign EXT_tail0=|prod_reg[61:51]|DBL_tail0;
+  assign EXT_rnflip0=&prod_reg[125:63];
+  assign EXT_rnbit1=prod_reg[63];
+  assign EXT_tail1=|prod_reg[62:51]|DBL_tail0;
+  assign EXT_rnbitX=prod_reg[73];
+  assign EXT_tailX=|prod_reg[72:63];
+  assign EXT_rnflipX=&prod_reg[125:74];
+  assign EXT_rnbitY=prod_reg[102];
+  assign EXT_tailY=|prod_reg[103:63];
+  assign EXT_rnflipY=&prod_reg[125:103];
+  
+  assign EXT_rnd0=(~is_rounder && ~isrnd_zero && (EXT_rnbit0 & ~(isrnd_even & ~EXT_tail0 & prod_reg[63]) 
+    || (isrnd_plus && EXT_rnbit0 | EXT_tail0))) | EXT_rndX | EXT_rndY;  
+  assign EXT_rnd1=~isrnd_zero && (EXT_rnbit1 & ~(isrnd_even & ~EXT_tail1 & prod_reg[64]) 
+    || (isrnd_plus && EXT_rnbit1 | EXT_tail1)); 
+  assign EXT_rndX=is_rounderD && ~isrnd_zero && (EXT_rnbitX & ~(isrnd_even & ~EXT_tailX & prod_reg[63]) 
+    || (isrnd_plus && EXT_rnbitX | EXT_tailX));  
+  assign EXT_rndY=is_rounderS && ~isrnd_zero && (EXT_rnbitY & ~(isrnd_even & ~EXT_tailY & prod_reg[63]) 
+    || (isrnd_plus && EXT_rnbitY | EXT_tailY));  
+  
+    //begin exp/sgn  
   assign expA=isDBL ? {A[80],{4{~A[80]}},A[62:52]} : {A[80],A[78:64]};  
   assign expB=isDBL ? {B[80],{4{~B[80]}},B[62:52]} : {B[80],B[78:64]};
   
@@ -89,81 +247,111 @@ module fma(
   assign B_infty=(expB|~emsk)==16'hfffe;
   assign B_nan=(expB|~emsk)==16'hffff;
 
-  assign AxB_zero=A_zero|B_zero;
-  assign AxB_infty=A_infty & ~B_zero & ~B_nan || B_infty & ~A_zero & ~A_nany;
-  assign AxB_NaN=A_nan & ~B_zero || B_nan & ~A_zero;
-
-  assign C_zero=(expC)==16'b0;
-  assign C_infty=(expC)==16'hffe;
-  assign C_nan=(expC)==16'hfff;
- 
-  assign specxy_snan=AxB_nan_reg2 & ~C_infty_reg2 & invExcpt & ~copyA_reg2 || C_nan_reg2 & ~AxB_infty_reg2 & invExcpt & ~copyA_reg2
-     || AxB_infty_reg2 & C_infty_reg2 & sxor_reg & invExcpt;
-  assign specxy_qnan=AxB_nan_reg2 & ~C_infty_reg2 & ~invExcpt & ~copyA_reg2 || C_nan_reg2 & ~AxB_infty_reg2 & ~invExcpt & ~copyA_reg2
-     || AxB_infty & C_infty_reg2 & sxor & ~invExcpt;
-  assign specxy_pinf=(AxB_infty_reg2 && ~AxB_s && ~C_infty|~B_s && ~copyA_reg2) || (C_infty_reg2 && ~B_s && 
-     ~AxB_infty_reg2|~A_s && ~copyA_reg2);
-  assign specxy_ninf=(AxB_infty_reg2 && A_s && ~C_infty_reg2|B_s && ~copyA_reg2) || (C_infty_reg2 && B_s && 
-     ~AxB_infty_reg2|A_s && ~copyA_reg2);
-  assign specxy_A=(C_zero_reg2 && ~AxB_zero_reg2|~A_s|B_s && ~AxB_nan_reg2 && ~AxB_infty_reg2)||copyA_reg2;
-  assign specxy_B=(AxB_zero_reg2 && ~C_zero_reg2|(~B_s&A_s) && ~C_nan_reg2 && ~C_infty_reg2)&&~copyA_reg2;
- 
-  assign spec_zero=A_zero_reg2&~B_infty_reg2&~copyA_reg2||B_zero_reg2&~A_infty_reg2&~copyA_reg2;
-  assign spec_infty=A_infty_reg2&~B_zero_reg2&~copyA_reg2||B_infty_reg2&~A_zero_reg2&~copyA_reg2;
-  assign spec_nan=(A_infty_reg2 & B_zero_reg2|| B_infty_reg2 & A_zero_reg2 || 
-      A_nan_reg2&~B_infty_reg2&~B_zero_reg2 || B_nan_reg2&~A_infty_reg2&~A_zero_reg2) &~copyA_reg2;
-  assign spec_A=copyA_reg2;
-  assign spec_snan=fpcsr_reg2[`csrfpu_inv_excpt]&spec_nan;
-  assign spec_qnan=~fpcsr_reg2[`csrfpu_inv_excpt]&spec_nan;
+  assign spec_zero=A_zero&~B_infty&~copyA||B_zero&~A_infty&~copyA;
+  assign spec_infty=A_infty&~B_zero&~copyA||B_infty&~A_zero&~copyA;
+  assign spec_nan=(A_infty & B_zero|| B_infty & A_zero || 
+      A_nan&~B_infty&~B_zero || B_nan&~A_infty&~A_zero) &~copyA;
+  assign spec_A=copyA;
+  assign spec_snan=fpcsr[`csrfpu_inv_excpt]&spec_nan;
+  assign spec_qnan=~fpcsr[`csrfpu_inv_excpt]&spec_nan;
 
   assign sgn=isDBL ? A[63]^B[63] : A[79]^B[79];
   
-  assign res_spec=spec_A ? A_reg2 : 65'bz;
-  assign res_spec=(spec_snan) ? {13'h1fff,52'h0000000000001} : 65'bz;
-  assign res_spec=(spec_qnan) ? {13'h1fff,52'h8000000000001} : 65'bz;
-  assign res_spec=(spec_infty) ? {13'h1ffe,sgn_reg2,52'h0000000000000} : 65'bz;
-  assign res_spec=spec_any ?  65'bz :  65'b0;
+  assign res_spec=spec_A_reg ? A_reg : 81'bz;
+  assign res_spec=(spec_snan_reg & ~isDBL_reg) ? {17'h1ffff,64'b1} : 81'bz;
+  assign res_spec=(spec_qnan_reg & ~isDBL_reg) ? {17'h1ffff,64'h8000000000000001} : 81'bz;
+  assign res_spec=(spec_infty_reg & ~isDBL_reg) ? {1'b1,sgn_reg,15'h7ffe,64'b0} : 81'bz;
+  assign res_spec=(spec_snan_reg & isDBL_reg) ? {17'h1ffff,64'hfff0000000000001} : 81'bz;
+  assign res_spec=(spec_qnan_reg & isDBL_reg) ? {17'h1ffff,64'hfff8000000000001} : 81'bz;
+  assign res_spec=(spec_infty_reg & isDBL_reg) ? {17'h1efff,sgn_reg,63'h7fe0000000000000} : 81'bz;
+  assign res_spec=spec_any ?  81'bz :  81'b0;
 
-  assign res_specxy=specxy_A ? A_reg2 : 65'bz;
-  assign res_specxy=specxy_B ? C_reg2 : 65'bz;
-  assign res_specxy=(specxy_snan) ? {13'h1fff,52'h0000000000001} : 65'bz;
-  assign res_specxy=(specxy_qnan) ? {13'h1fff,52'h8000000000001} : 65'bz;
-  assign res_specxy=(specxy_infty) ? {13'h1ffe,sgn_reg2,52'h0000000000000} : 65'bz;
-  assign res_specxy=specxy_any ?  65'bz :  65'b0;
+  assign raise[`csrfpu_inv_excpt]=spec_snan_reg;
+  assign raise[`csrfpu_under_excpt]=sgn_reg && expon[0];
+  assign raise[`csrfpu_under_ieee_excpt]=sgn_reg && expon[1];
+  assign raise[`csrfpu_over_excpt]=~sgn_reg && expon[0];
+  assign raise[`csrfpu_over_ieee_excpt]=~sgn_reg && expon[1];
+  assign raise[`csrfpu_denor_ieee_excpt]=~expon[2] | expon[3];
+  assign raise[`csrfpu_denor_excpt]=expon[3];
+  assign raise[`csrfpu_inexact_excpt]=expon[4] | expon[3];
+  assign raise[`csrfpu_inexact_ieee_excpt]=expon[4] | expon[3] | ~expon[2];
+  assign raise[`csrfpu_denor_consume_excpt]=1'b0;//only for logic op
+  assign raise[`csrfpu_denor_produce_excpt]=1'b0;// ==//==
 
-  assign lower[`csrfpu_inv_excpt]=spec_snan;
-  assign lower[`csrfpu_under_excpt]=sgn_reg2 && expon[0];
-  assign lower[`csrfpu_under_ieee_excpt]=sgn_reg2 && expon[1];
-  assign lower[`csrfpu_over_excpt]=~sgn_reg2 && expon[0];
-  assign lower[`csrfpu_over_ieee_excpt]=~sgn_reg2 && expon[1];
-  assign lower[`csrfpu_denor_ieee_excpt]=~expon[2] | expon[3];
-  assign lower[`csrfpu_denor_excpt]=expon[3];
-  assign lower[`csrfpu_inexact_excpt]=expon[4] | expon[3];
-  assign lower[`csrfpu_inexact_ieee_excpt]=expon[4] | expon[3] | ~expon[2];
-  assign lower[`csrfpu_denor_consume_excpt]=1'b0;//only for logic op
-  assign lower[`csrfpu_denor_produce_excpt]=1'b0;// ==//==
-  
-  assign raise[`csrfpu_inv_excpt]=specxy_snan_reg;
-  assign raise[`csrfpu_under_excpt]=A_s1_reg & exp_inc_oor_reg & xpon[1] & ~specxy_any;
-  assign raise[`csrfpu_over_excpt]=~A_s1_reg & exp_inc_oor_reg & xpon[1] & ~specxy_any;
-  assign raise[`csrfpu_under_ieee_excpt]=A_s1_reg & exp_inc_oor_IEEE_reg & xpon[1] & ~specxy_any;
-  assign raise[`csrfpu_over_ieee_excpt]=~A_s1_reg & exp_inc_oor_IEEE_reg & xpon[1] & ~specxy_any;
-  assign raise[`csrfpu_denor_excpt]=~exp_dec_non_denor_reg & xpon[0] & ~specxy_any;
-  assign raise[`csrfpu_denor_ieee_excpt]=~exp_dec_non_denor_IEEE_reg & xpon[0] & ~specxy_any;
-  assign raise[`csrfpu_inexact_excpt]=!|xpon[3:2]; 
-  assign raise[`csrfpu_inexact_ieee_excpt]=!|xpon[3:2]; 
-  assign raise[`csrfpu_denor_consume_excpt]=1'b0;
-  assign raise[`csrfpu_denor_produce_excpt]=1'b0;
+  always @(*) begin
+      if (~is_rndD_reg & ~is_rndS_reg) begin
+	  rndbit_ext={62'b0,prod_reg[127],~prod_reg[127]};
+          rndbit_dbl={51'b0,prod_reg[105],~prod_reg[105]};
+	  enbit_ext=64'hffff_ffff_ffff_ffff;
+	  enbit_dbl=53'h1f_ffff_ffff_ffff;
+      end else if (is_rndD_reg) begin
+	  rndbit_ext={52'b0,1'b1,11'b0};
+          rndbit_dbl={51'b0,prod_reg[105],~prod_reg[105]};
+	  enbit_ext=64'hffff_ffff_ffff_0000;
+	  enbit_dbl=53'h1f_ffff_ffff_ffff;
+      end else begin
+	  rndbit_ext={23'b0,1'b1,40'b0};
+	  rndbit_dbl={23'b0,1'b1,29'b0};
+	  enbit_ext=64'hffff_ff00_0000_0000;
+	  enbit_dbl=53'h1f_ffff_e000_0000;
+      end
+      spec_any=spec_zero_reg|spec_infty_reg|spec_snan_reg|spec_qnan_reg|spec_A_reg;
+      prod_reg=prod;
+  end
 
-  //assign choose_A and choose_B
+  always @(negedge clk)
 
-  double_normalise nrml_mod(pre_resX,expX,pre_res_out,exp_out);
-
-  assign res=en_reg2 ? {sign_out,exp_out,pre_res_out} : 64'bz;
- 
-  always @(negedge clk) begin
-      prod_part1_reg<=prod_part1;
-      prod_part2_reg<=prod_part2;
+  begin
+ //     if (res_X!=res_X) $display("res z muld");
+      isDBL_reg<=isDBL;
+      isDBL_reg<=isDBL_reg;
+  //    isDBL_reg<=isDBL_reg;
+      en_reg<=en;
+      en_reg<=en_reg;
+ //     en_reg3<=en_reg;
+      is_rndD_reg<=is_rndD;
+      is_rndS_reg<=is_rndS; 
+      is_rndD_reg<=is_rndD_reg;
+      is_rndS_reg<=is_rndS_reg;
+      is_rounder<=is_rndD_reg|is_rndS_reg; 
+      is_rounderD<=is_rndD_reg; 
+      is_rounderS<=is_rndS_reg; 
+//      exp_exp_reg<=exp_exp^17'h10000;
+//      exp_exp1_reg<=exp_exp1^17'h10000;
+      exp_exp_reg<=exp_exp_d;
+      exp_exp1_reg<=exp_exp1_d;
+ //     exp_exp_reg3<=exp_exp_reg;
+ //     exp_exp1_reg3<=exp_exp1_reg;
+      exp_max<=isDBL ? 17'hffe : 17'hfffe;
+      exp_max_IEEE<=isDBL ? 17'hbff : 17'hbfff;
+      exp_denor_IEEE<=isDBL ? 17'h401 : 17'h4001;
+      fpcsr_reg<=fpcsr;
+      sgn_reg<=sgn;
+      sgn_reg<=sgn_reg;
+  //    sgn_reg3<=sgn_reg;
+      spec_zero_reg<=spec_zero;
+      spec_infty_reg<=spec_infty;
+      spec_snan_reg<=spec_snan;
+      spec_qnan_reg<=spec_qnan;
+      spec_A_reg<=spec_A;
+      exp_oor_reg<=exp_oor;
+      exp1_oor_reg<=exp1_oor;
+      exp_oor_IEEE_reg<=exp_oor_IEEE;
+      exp1_oor_IEEE_reg<=exp1_oor_IEEE;
+      exp_non_denor_IEEE_reg<=exp_non_denor_IEEE;
+      exp1_non_denor_IEEE_reg<=exp1_non_denor_IEEE;
+      A_reg<=copyA ? {A_alt[64],16'b0,A_alt[63:0]} : A;
+      case(rmode)
+        ROUND_TRUNC: begin isrnd_even<=1'b0; isrnd_zero<=1'b1; isrnd_plus<=1'b0; end
+        ROUND_ROUND: begin isrnd_even<=1'b0; isrnd_zero<=1'b0; isrnd_plus<=1'b0; end
+        ROUND_EVEN : begin isrnd_even<=1'b1; isrnd_zero<=1'b0; isrnd_plus<=1'b0; end
+        ROUND_PLUS : begin isrnd_even<=1'b0; isrnd_zero<=sgn_reg; isrnd_plus<=1'b0; end
+        ROUND_MINUS: begin isrnd_even<=1'b0; isrnd_zero<=~sgn_reg; isrnd_plus<=1'b0; end
+        ROUND_UP   : begin isrnd_even<=1'b0; isrnd_zero<=sgn_reg; isrnd_plus<=~sgn_reg; end
+        ROUND_DOWN : begin isrnd_even<=1'b0; isrnd_zero<=~sgn_reg; isrnd_plus<=sgn_reg; end
+      endcase
   end
 
 endmodule
+
+

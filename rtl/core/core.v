@@ -106,6 +106,7 @@ module heptane_core(
   wire except/*verilator public*/;
   wire fp_excpt_en;
   wire [10:0] fp_excpt_set; 
+  wire fp_excpt_thr;
   wire [VIRT_WIDTH-2:0] exceptIP;
 
   wire exceptThread;
@@ -1152,6 +1153,7 @@ module heptane_core(
   1'b1,//all_retired,
   fp_excpt_en,
   fp_excpt_set,
+  fp_excpt_thr,
 
   bundleFeed,
 //begin instructions ordered by rs input port

@@ -40,6 +40,7 @@ module ww(
   all_retired,
   fp_excpt_en,
   fp_excpt_set,
+  fp_excpt_thr,
 
   bundleFeed,
 //begin instructions ordered by rs input port
@@ -414,6 +415,7 @@ module ww(
   input all_retired;
   input fp_excpt_en;
   input [10:0] fp_excpt_set;
+  input fp_excpt_thr;
 
   output bundleFeed;
   
@@ -910,6 +912,8 @@ module ww(
 
   wire [1:0][9:0] instrEn/*verilator public*/;
   wire [1:0][9:0] iAvail/*verilator public*/;
+  wire [9:0] iAvailX;
+  wire [9:0] instrEnX;
 
   wire [1:0] cc_instrEn;
   wire [1:0] cc_read_set_flag;
@@ -953,8 +957,8 @@ module ww(
   MSI_expAddr_reg,
   MSI_expAddr_en_reg,
   MSI_expAddr_hitCC,
-  expun_addr,
-  expun_wen
+  expun_fr_addr,
+  expun_fr_en
   );  
 
 
@@ -996,7 +1000,7 @@ frontend1 #(0,BUS_ID) frontA_mod(
   extra8[1],extra9[1],
   instrEn[1],
   iAvail[1],
-  stall|stallX[1],
+  stall,
   btbl_step[1],
   btbl_IP0[1],
   btbl_IP1[1],
@@ -1021,9 +1025,7 @@ frontend1 #(0,BUS_ID) frontA_mod(
   MSI_expAddr_hitCC,
   //dec_attr
   expun_fr_addr,
-  expun_fr_en,
-  expun_addr,
-  expun_wen
+  expun_fr_en
   );
   
 frontend1 #(1,BUS_ID) frontB_mod(
@@ -1064,7 +1066,7 @@ frontend1 #(1,BUS_ID) frontB_mod(
   extra8[0],extra9[0],
   instrEn[0],
   iAvail[0],
-  stall|stallX[0],
+  stall,
   btbl_step[0],
   btbl_IP0[0],
   btbl_IP1[0],
@@ -1089,9 +1091,7 @@ frontend1 #(1,BUS_ID) frontB_mod(
   MSI_expAddr_hitCC,
   //dec_attr
   expun_fr_addr,
-  expun_fr_en,
-  expun_addr,
-  expun_wen
+  expun_fr_en
   );
   
 
@@ -1439,11 +1439,9 @@ frontend1 #(1,BUS_ID) frontB_mod(
   always @(posedge clk) begin
       if (rst) begin
           thread<=1'b0;
-      end else if (thread_end_A | thread_end_B) begin
-          thread<=thread_end_A;
-      end else if (instrEn[0]!=0 && (instrEn[1]==0 || except && except_thread)) begin
+      end else if (instrEn[0]!=0 && (instrEn[1]==0 || except && exceptThread)) begin
           thread<=1'b0;
-      end else if (instrEn[1]!=0 && (instrEn[0]==0 || except && !except_thread)) begin
+      end else if (instrEn[1]!=0 && (instrEn[0]==0 || except && !exceptThread)) begin
           thread<=1'b1;
       end else begin
           thread<=!thread;
