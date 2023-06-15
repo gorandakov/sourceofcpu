@@ -205,7 +205,7 @@ module ccRam_way(
   write_data,
   write_wen,
   invalidate,
-  Err
+  ErrA,ErrB
   );
 
   localparam DATA_WIDTH=65*16;
@@ -253,7 +253,7 @@ module ccRam_way(
   input write_wen;
   input invalidate;
 
-  output Err;
+  output ErrA,ErrB;
 
   reg init;
 
@@ -508,7 +508,7 @@ module ccRam_half(
   write_data,
   write_wen,
   invalidate,
-  tagErr
+  tagErrA,tagErrB
   );
 
   localparam DATA_WIDTH=65*16;
@@ -537,7 +537,8 @@ module ccRam_half(
   input [DATA_WIDTH-1:0] write_data;
   input write_wen;
   input invalidate;
-  output [7:0] tagErr;
+  output [7:0] tagErrA;
+  output [7:0] tagErrB;
   
   wire [7:0] chkCL_hit_way;
   wire [7:0] readA_hit_way;
@@ -591,8 +592,9 @@ module ccRam_half(
           .write_data(write_data),
           .write_wen(write_wen),
           .invalidate(invalidate),
-          .Err(tagErr[k]),
-	  .read_next_hit()
+          .ErrA(tagErrA[k]),
+          .ErrB(tagErrB[k])
+//	  .read_next_hit()
           );
       end
   endgenerate

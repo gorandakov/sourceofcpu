@@ -543,6 +543,12 @@ module agu_block(
   wire [3:0] u3_sh;
   wire [3:0] u4_sh;
   wire [3:0] u5_sh;
+
+  wire [1:0] u1_sh2;
+  wire [1:0] u2_sh2;
+  wire [1:0] u3_sh2;
+  wire [1:0] u4_sh2;
+  wire [1:0] u5_sh2;
   
   wire [50:0] tlb_addr;
   wire tlb_wen;

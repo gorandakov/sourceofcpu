@@ -134,7 +134,8 @@ module cc_comb (
   
   wire cc_readA_hit0;
   wire cc_readB_hit0;
-  wire [7:0] cc_tagErr;
+  wire [7:0] cc_tagErrA;
+  wire [7:0] cc_tagErrB;
   wire cc_expun_hit0;
   reg cc_expun_hitP; 
 
@@ -151,7 +152,8 @@ module cc_comb (
 
   wire [DATA_WIDTH/4-1:0] readA_dataP[3:0];
   
-  reg [7:0] cc_readA_tagErrP;
+  reg [7:0] cc_readA_tagErrAP;
+  reg [7:0] cc_readA_tagErrBP;
   wire [DATA_WIDTH/4-1:0] readB_dataP[3:0];
   
   reg [7:0] cc_readB_tagErrP;
@@ -218,7 +220,8 @@ module cc_comb (
   .write_wen(cc_write_wen_reg2),
   .expun_addr(cc_exp_addr0),
   .invalidate(cc_invalidate_reg2),
-  .tagErr(cc_tagErr)
+  .tagErrA(cc_tagErrA),
+  .tagErrB(cc_tagErrB)
   );
   
   cc_fstalle #(4*65) stDat_mod (
@@ -266,13 +269,30 @@ module cc_comb (
 
 
 
-  cc_fstalle #(10) stHit_mod (
+  cc_fstalle #(9) stHitA_mod (
   .clk(clk),
   .rst(rst),
-  .except(exceptA|exceptB),
-  .fstall(fstallA|fstallB),
-  .write_data({cc_expun_hitP,cc_read_hitP,cc_read_tagErrP}),
-  .read_data({expun_wen,cc_read_hit,cc_read_tagErr})
+  .except(exceptA),
+  .fstall(fstallA),
+  .write_data({cc_readA_hitP,cc_readA_tagErrP}),
+  .read_data({cc_readA_hit,cc_readA_tagErr})
+  );
+  cc_fstalle #(9) stHitB_mod (
+  .clk(clk),
+  .rst(rst),
+  .except(exceptB),
+  .fstall(fstallB),
+  .write_data({cc_readB_hitP,cc_readB_tagErrP}),
+  .read_data({cc_readB_hit,cc_readB_tagErr})
+  );
+
+  cc_fstalle #(9) stHitAE_mod (
+  .clk(clk),
+  .rst(rst),
+  .except(1'b0),
+  .fstall(1'b0),
+  .write_data(cc_expun_hitP),
+  .read_data(expun_wen)
   );
 
   always @(negedge clk)

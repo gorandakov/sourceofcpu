@@ -1548,7 +1548,7 @@ module csrss_watch(
 	data_out[0]<=INITVAL;
 	data_out[1]<=INITVAL;
     end else if (csrss_en) begin
-	if (ADDR[14:0]==csrss_addr[14:0] && ~addr[15]) data_out[csrss_addr[15]]<=csrss_data;
+	if (ADDR[14:0]==csrss_addr[14:0]) data_out[csrss_addr[15]]<=csrss_data;
     end
   end
 endmodule
