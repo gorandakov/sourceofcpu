@@ -4,14 +4,60 @@ module fun_agu(
   stall,
   do_stall,
   do_collapse,
-  ls0_index, ls0_op, ls0_en, ls0_basereg, ls0_indexreg, ls0_offset, ls0_rT, ls0_st_op, ls0_st_en_out,
-  ls1_index, ls1_op, ls1_en, ls1_basereg, ls1_indexreg, ls1_offset, ls1_rT, ls1_st_op, ls1_st_en_out,
+  ls0_index, ls0_op, ls0_en, ls0_basereg, ls0_indexreg, ls0_offset, ls0_rT, ls0_rrel_op, ls0_st_en_out,ls0_lsaddr,
+  ls1_index, ls1_op, ls1_en, ls1_basereg, ls1_indexreg, ls1_offset, ls1_rT, ls1_rrel_op, ls1_st_en_out,ls1_lsaddr,
   alu0_index, alu0_level, alu0_wen, alu0_rT, alu0_data,
   alu1_index, alu1_level, alu1_wen, alu1_rT, alu1_data,
   alu2_index, alu2_level, alu2_wen, alu2_rT, alu2_data,
   ld0_data_out,ld0_en_out,
   ld1_data_out,ld1_en_out
   );
+  input clk;
+  input rst;
+  input stall;
+  output do_stall;
+  output do_collapse;
+  input [1:0] ls0_index;
+  input [5:0] ls0_op; 
+  input       ls0_en; 
+  input [5:0] ls0_basereg;
+  input [5:0] ls0_indexreg; 
+  input [64:0]ls0_offset; 
+  input [5:0] ls0_rT; 
+  input       ls0_rrel_op;
+  output      ls0_st_en_out;
+  output [`lsaddr_width-1:0] ls0_lsaddr;
+  input [1:0] ls1_index;
+  input [5:0] ls1_op; 
+  input       ls1_en; 
+  input [5:0] ls1_basereg;
+  input [5:0] ls1_indexreg; 
+  input [64:0]ls1_offset; 
+  input [5:0] ls1_rT; 
+  input       ls1_rrel_op;
+  output      ls1_st_en_out;
+  output [`lsaddr_width-1:0] ls1_lsaddr;
+
+  input [1:0] alu0_index;
+  input       alu0_level;
+  input       alu0_wen;
+  input [5:0] alu0_rT;
+  input [64:0]alu0_data,
+  input [1:0] alu1_index;
+  input       alu1_level;
+  input       alu1_wen;
+  input [5:0] alu1_rT;
+  input [64:0]alu1_data,
+  input [1:0] alu2_index;
+  input       alu2_level;
+  input       alu2_wen;
+  input [5:0] alu2_rT;
+  input [64:0]alu2_data,
+
+  input [64:0] ld0_data_out;
+  input ld0_en_out;
+  input [64:0] ld1_data_out;
+  input ld1_en_out;
 
   agu agu0(
   clk,
