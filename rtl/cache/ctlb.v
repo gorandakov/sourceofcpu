@@ -202,6 +202,7 @@ module ctlb(
   clk,
   rst,
   read_clkEn,
+  read_thread,
   fStall,
   addr,
   read_data,
@@ -223,6 +224,7 @@ module ctlb(
   input clk;
   input rst;
   input read_clkEn;
+  input read_thread;
   input fStall;
   input [IP_WIDTH-1:0] addr;
   output [OUTDATA_WIDTH-1:0] read_data;
@@ -243,11 +245,11 @@ module ctlb(
   reg init_pending_reg;
   wire [5:0] init_count_d;
   wire [23:0] sproc;
-  wire [23:0] pproc;
-  wire [39:0] dummy_pproc;
-  wire [23:0] vmproc;
-  wire [39:0] dummy_vmproc;
-  wire [63:0] mflags;
+  wire [1:0][23:0] pproc;
+  wire [1:0][39:0] dummy_pproc;
+  wire [1:0][23:0] vmproc;
+  wire [1:0][39:0] dummy_vmproc;
+  wire [1:0][63:0] mflags;
 
   reg [IP_WIDTH-1:0] addr_reg;
   
@@ -294,14 +296,16 @@ module ctlb(
   csrss_addr,
   csrss_data,
   csrss_en,
-  {pproc,dummy_pproc});
+  {pproc[1],dummy_pproc[1],pproc[0],dummy_pproc[0]});
+
   csrss_watch #(`csr_vmpage) csrSproc1_mod(
   clk,
   rst,
   csrss_addr,
   csrss_data,
   csrss_en,
-  {vmproc,dummy_vmproc});
+  {vmproc[1],dummy_vmproc[1],vmproc[0],dummy_vmproc[0]});
+
   csrss_watch #(`csr_mflags) csrSproc2_mod(
   clk,
   rst,
@@ -310,7 +314,7 @@ module ctlb(
   csrss_en,
   mflags);
 
-  assign sproc=mflags[`mflags_vm] ? pproc^{24'd1} : 24'b0;
+  assign sproc=mflags[thread][`mflags_vm] ? pproc[thread]^{24'd1} : 24'b0;
 
 
 

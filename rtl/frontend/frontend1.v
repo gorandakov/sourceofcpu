@@ -190,10 +190,10 @@ module frontend1(
   assign read_data=cc_read_data;
   input [14:0] cc_read_dataX;
   assign read_dataX=cc_read_dataX;
-  output [VIRT_WIDTH-1:0] cc_write_IP=write_IP;
+  output [PHYS_WIDTH-1:0] cc_write_IP={write_IP,5'b0};
   output cc_write_wen=bus_match_reg;
   output cc_invalidate=1'b0;
-  output [DATA_WIDTH/2-1:0] cc_write_data=write_data;
+  output [DATA_WIDTH-1:0] cc_write_data=write_data;
   
   input [36:0] MSI_expAddr;
   input MSI_expAddr_en;
@@ -1092,6 +1092,7 @@ module frontend1(
   .clk(clk),
   .rst(rst),
   .read_clkEn(instrEn || ixcept),
+  .read_thread(thread),
   .fStall(fstall),
   .addr({tlb_IP,13'b0}),
   .read_data(tlb_data),

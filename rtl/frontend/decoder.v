@@ -175,11 +175,11 @@ module decoder_aux_const(
   input [63:0] altData;
   input thread;
 
-  wire [16:0] iconst[9:0];
+  wire [15:0] iconst[9:0];
   wire [9:0] cls_sys_first;
   wire cls_sys_has;
-  wire [16:0] aux0;
-  reg [16:0] aux0_reg;
+  wire [15:0] aux0;
+  reg [15:0] aux0_reg;
   reg [1:0][63:0] csr_retIP;
   reg [1:0][64:0] csr_excStackSave;
   reg [1:0][64:0] csr_excStack;
@@ -197,23 +197,23 @@ module decoder_aux_const(
   reg [1:0][63:0] csr_cpage_mask;
   reg [1:0][63:0] csr_indir_tbl;
   reg [1:0][63:0] csr_indir_mask;
-  assign iconst[0]={thread,instr0[31:16]};
-  assign iconst[1]={thread,instr1[31:16]};
-  assign iconst[2]={thread,instr2[31:16]};
-  assign iconst[3]={thread,instr3[31:16]};
-  assign iconst[4]={thread,instr4[31:16]};
-  assign iconst[5]={thread,instr5[31:16]};
-  assign iconst[6]={thread,instr6[31:16]};
-  assign iconst[7]={thread,instr7[31:16]};
-  assign iconst[8]={thread,instr8[31:16]};
-  assign iconst[9]={thread,instr9[31:16]};
+  assign iconst[0]={thread,instr0[30:16]};
+  assign iconst[1]={thread,instr1[30:16]};
+  assign iconst[2]={thread,instr2[30:16]};
+  assign iconst[3]={thread,instr3[30:16]};
+  assign iconst[4]={thread,instr4[30:16]};
+  assign iconst[5]={thread,instr5[30:16]};
+  assign iconst[6]={thread,instr6[30:16]};
+  assign iconst[7]={thread,instr7[30:16]};
+  assign iconst[8]={thread,instr8[30:16]};
+  assign iconst[9]={thread,instr9[30:16]};
 
-  assign aux0=cls_sys_has ? 17'bz : 17'b0;
+  assign aux0=cls_sys_has ? 16'bz : 16'b0;
 
   generate
     genvar t;
     for(t=0;t<10;t=t+1) begin
-        assign aux0=cls_sys_first[t] ? iconst[t] : 17'bz;
+        assign aux0=cls_sys_first[t] ? iconst[t] : 16'bz;
     end
   endgenerate
   bit_find_first_bit #(10) cls_1_mod(cls_sys,cls_sys_first,cls_sys_has);
@@ -2234,7 +2234,7 @@ module decoder(
     input thr;
     input [5:0] reeg;
     begin
-        ffx=reeg[5:2]==4'd4 ? {3'd4,reeg[1:0],thr} : { 1'b0,thr,reeg[4:0] }; 
+        ffx=reeg[5:2]==4'd4 ? {3'd4,reeg[1:0],thr} : { 1'b0,thr,reeg[3:0] }; 
     end
   endfunction
   wire [9:0] csrss_retIP_en;
