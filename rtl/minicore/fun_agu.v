@@ -6,11 +6,13 @@ module fun_agu(
   do_collapse,
   ls0_index, ls0_op, ls0_en, ls0_basereg, ls0_indexreg, ls0_offset, ls0_rT, ls0_rrel_op, ls0_st_en_out,ls0_lsaddr,
   ls1_index, ls1_op, ls1_en, ls1_basereg, ls1_indexreg, ls1_offset, ls1_rT, ls1_rrel_op, ls1_st_en_out,ls1_lsaddr,
+  ls2_index, ls2_op, ls2_en, ls2_basereg, ls2_indexreg, ls2_offset, ls2_rT, ls2_rrel_op, ls2_st_en_out,ls2_lsaddr,
   alu0_index, alu0_level, alu0_wen, alu0_rT, alu0_data,
   alu1_index, alu1_level, alu1_wen, alu1_rT, alu1_data,
   alu2_index, alu2_level, alu2_wen, alu2_rT, alu2_data,
   ld0_data_out,ld0_en_out,
-  ld1_data_out,ld1_en_out
+  ld1_data_out,ld1_en_out,
+  ld2_data_out,ld2_en_out
   );
   input clk;
   input rst;
@@ -37,6 +39,16 @@ module fun_agu(
   input       ls1_rrel_op;
   output      ls1_st_en_out;
   output [`lsaddr_width-1:0] ls1_lsaddr;
+  input [1:0] ls2_index;
+  input [5:0] ls2_op; 
+  input       ls2_en; 
+  input [5:0] ls2_basereg;
+  input [5:0] ls2_indexreg; 
+  input [64:0]ls2_offset; 
+  input [5:0] ls2_rT; 
+  input       ls2_rrel_op;
+  output      ls2_st_en_out;
+  output [`lsaddr_width-1:0] ls2_lsaddr;
 
   input [1:0] alu0_index;
   input       alu0_level;
@@ -58,6 +70,8 @@ module fun_agu(
   input ld0_en_out;
   input [64:0] ld1_data_out;
   input ld1_en_out;
+  input [64:0] ld2_data_out;
+  input ld2_en_out;
 
   agu agu0(
   clk,
@@ -191,6 +205,72 @@ module fun_agu(
   tlb_hit[1] 
   );
 
+  agu agu2(
+  clk,
+  rst,
+  except,
+  attr[2],
+  rsStall[2],
+  read_clkEn[2],
+  doStall[2],
+  bus_hold[0],
+  op[2],
+  shiftSize[2],
+  regno[2],
+  LSQ_no[2],
+  II_no[2],
+  WQ_no[2],
+  1'b0,//thread
+  1'b0,//lsflag
+  cmplxAddr[2],
+  cin_secq[2],
+  ~ndiff[2],
+  other1_banks[2],
+  other0_banks[2],
+  32'b0,
+  other_flip,
+  conflict[2],
+  tlbMiss[2],
+  pageFault[2],
+  faultCode[2],
+  faultNo[2],
+  mOp_register[2],
+  mOp_type[2],
+  mOp_LSQ[2],
+  mOp_II[2],
+  mOp_WQ[2],
+  mOp_attr[2],
+  mOp_addrEven[2],
+  mOp_addrOdd[2],
+  mOp_addrMain[2],
+  mOp_sz[2],
+  mOp_st[2],
+  mOp_en[2],
+  mOp_secq[2],
+  mOp_invtlb[2],
+  mOp_rsEn[2],
+  mOp_thread[2],
+  mOp_lsflag[2],
+  mOp_banks[2],
+  mOp_rsBanks[2],
+  mOp_bank0[2],
+  mOp_odd[2],
+  mOp_addr_low[2],
+  mOp_split[2],
+  mOp_noBanks[2],
+  csrss_no,
+  csrss_en,
+  csrss_thr,
+  csrss_data,
+  ,
+  cout_secq[2],
+  addrTlb[2],
+  sproc[2],
+  tlb_data0[2],
+  tlb_data1[2],
+  tlb_hit[2] 
+  );
+
   add_agu addr0(
   base[0],offset[0]index[0],
   cmplxAddr[0],
@@ -209,6 +289,16 @@ module fun_agu(
   en[1],
   shift[1],
   sh2[1]
+  );
+  
+  add_agu addr2(
+  base[2],offset[2],index[2],
+  cmplxAddr[2],
+  cin_secq[2],
+  ndiff[2],
+  en[2],
+  shift[2],
+  sh2[2]
   );
   
 

@@ -10,6 +10,7 @@ module alu_block(
   alu2_index,alu2_en,alu2_rA,alu2_rB,alu2_rT,alu2_flwen,alu2_wen,alu2_op,alu2_cond,
   ld0_index,ld0_rT,ld0_wen,
   ld1_index,ld1_rT,ld1_wen,
+  ld2_index,ld2_rT,ld2_wen,
   wrA0_data,wrA0_wen,
   wrA1_data,wrA1_wen,
   wrA2_data,wrA2_wen
@@ -118,7 +119,8 @@ module alu_block(
   write1_addr,valRes,write1_wen,
   write2_addr,valLD0,write2_wen,
   write3_addr,valLD1,write3_wen,
-  write4_addr,valResY,write4_wen
+  write4_addr,valLD2,write4_wen,
+  write5_addr,valResY,write5_wen
   );
 
   always @* begin
@@ -148,8 +150,9 @@ module alu_regfile(
   write0_addr,write0_data,write0_wen,
   write1_addr,write1_data,write1_wen,
   write2_addr,write2_data,write2_wen,
-  write3_addr,write3_data,write3_wen);
-  write4_addr,write4_data,write4_wen);
+  write3_addr,write3_data,write3_wen,
+  write4_addr,write4_data,write4_wen,
+  write5_addr,write5_data,write5_wen);
 
   input clk;
   input rst;
@@ -181,6 +184,9 @@ module alu_regfile(
   input [4:0]   write4_addr;
   input  [65:0] write4_data;
   input         write4_wen;
+  input [4:0]   write5_addr;
+  input  [65:0] write5_data;
+  input         write5_wen;
 
   reg [65:0] ram[19:0];
 
@@ -204,6 +210,7 @@ module alu_regfile(
       if (write2_wen) ram[write2_addr]<=write2_data;
       if (write3_wen) ram[write3_addr]<=write3_data;
       if (write4_wen) ram[write4_addr]<=write4_data;
+      if (write5_wen) ram[write5_addr]<=write5_data;
   end
   always @(negedge clk) begin
       if (!stall) begin

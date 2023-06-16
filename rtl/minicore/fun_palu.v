@@ -1,5 +1,5 @@
 
-module alu_block(
+module palu_block(
   clk,
   rst,
   stall,
@@ -98,11 +98,12 @@ module alu_block(
   readB0_addr,dataB0,
   readB1_addr,dataB1,
   readB2_addr,dataB2,
-  write0_addr,valResX,write0_wen,
+  5'd0,66'b0,1'b0,
   write1_addr,valRes,write1_wen,
   write2_addr,valLD0,write2_wen,
   write3_addr,valLD1,write3_wen,
-  write4_addr,valResY,write4_wen
+  write4_addr,valLD2,write4_wen,
+  write5_addr,valResY,write5_wen
   );
 
   always @* begin
