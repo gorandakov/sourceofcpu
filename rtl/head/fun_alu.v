@@ -23,22 +23,22 @@ module fu_alu(
   except,
   u1_A,u1_B,u1_S,u1_op,u1_ret,u1_rten,u1_clkEn,
     u1_A_fufwd,u1_A_fuufwd,u1_B_fufwd,u1_B_fuufwd,
-    u1_S_fufwd,u1_S_fuufwd,u1_thread,
+    u1_S_fufwd,u1_S_fuufwd,
   u2_A,u2_B,u2_S,u2_op,u2_ret,u2_rten,u2_clkEn,
     u2_A_fufwd,u2_A_fuufwd,u2_B_fufwd,u2_B_fuufwd,
-    u2_S_fufwd,u2_S_fuufwd,u2_thread,
+    u2_S_fufwd,u2_S_fuufwd,
   u3_A,u3_B,u3_S,u3_op,u3_ret,u3_rten,u3_clkEn,
     u3_A_fufwd,u3_A_fuufwd,u3_B_fufwd,u3_B_fuufwd,
-    u3_S_fufwd,u3_S_fuufwd,u3_thread,
+    u3_S_fufwd,u3_S_fuufwd,
   u4_A,u4_B,u4_S,u4_op,u4_ret,u4_rten,u4_clkEn,
     u4_A_fufwd,u4_A_fuufwd,u4_B_fufwd,u4_B_fuufwd,
-    u4_S_fufwd,u4_S_fuufwd,u4_thread,
+    u4_S_fufwd,u4_S_fuufwd,
   u5_A,u5_B,u5_S,u5_nDataAlt,u5_op,u5_ret,u5_rten,u5_clkEn,
     u5_A_fufwd,u5_A_fuufwd,u5_B_fufwd,u5_B_fuufwd,
-    u5_S_fufwd,u5_S_fuufwd,u5_thread,
+    u5_S_fufwd,u5_S_fuufwd,
   u6_A,u6_B,u6_S,u6_op,u6_ret,u6_rten,u6_clkEn,
     u6_A_fufwd,u6_A_fuufwd,u6_B_fufwd,u6_B_fuufwd,
-    u6_S_fufwd,u6_S_fuufwd,u6_thread,
+    u6_S_fufwd,u6_S_fuufwd,
   FNU0,FNU1,FNU2,FNU3,FNU4,FNU5,
   FNU6,FNU7,FNU8,FNU9,
   FU0, FU1,  FU2,  FU3,
@@ -74,7 +74,6 @@ module fu_alu(
   input [3:0]           u1_B_fuufwd;
   input [3:0]           u1_S_fufwd;
   input [3:0]           u1_S_fuufwd;
-  input                 u1_thread;
 
   input [64:0]          u2_A;
   input [64:0]          u2_B;
@@ -89,7 +88,6 @@ module fu_alu(
   input [3:0]           u2_B_fuufwd;
   input [3:0]           u2_S_fufwd;
   input [3:0]           u2_S_fuufwd;
-  input                 u2_thread;
 
   input [64:0]          u3_A;
   input [64:0]          u3_B;
@@ -104,7 +102,6 @@ module fu_alu(
   input [3:0]           u3_B_fuufwd;
   input [3:0]           u3_S_fufwd;
   input [3:0]           u3_S_fuufwd;
-  input                 u3_thread;
 
   input [64:0]          u4_A;
   input [64:0]          u4_B;
@@ -119,7 +116,6 @@ module fu_alu(
   input [3:0]           u4_B_fuufwd;
   input [3:0]           u4_S_fufwd;
   input [3:0]           u4_S_fuufwd;
-  input                 u4_thread;
 
   input [64:0]          u5_A;
   input [64:0]          u5_B;
@@ -135,7 +131,6 @@ module fu_alu(
   input [3:0]           u5_B_fuufwd;
   input [3:0]           u5_S_fufwd;
   input [3:0]           u5_S_fuufwd;
-  input                 u5_thread;
 
   input [64:0]          u6_A;
   input [64:0]          u6_B;
@@ -150,7 +145,6 @@ module fu_alu(
   input [3:0]           u6_B_fuufwd;
   input [3:0]           u6_S_fufwd;
   input [3:0]           u6_S_fuufwd;
-  input                 u6_thread;
 
   input [64:0] FU0;
   input [64:0] FU1;
@@ -280,16 +274,6 @@ module fu_alu(
   reg [12:0] u6_op_reg3;
   reg [12:0] u6_op_reg4;
 
-  reg [17:0] u1_thread_reg;
-  reg [17:0] u2_thread_reg;
-  reg [17:0] u3_thread_reg;
-  reg [17:0] u4_thread_reg;
-  reg [17:0] u5_thread_reg;
-  reg [17:0] u6_thread_reg;
-  reg [12:0] u6_thread_reg2;
-  reg [12:0] u6_thread_reg3;
-  reg [12:0] u6_thread_reg4;
-
   reg [5:0] u1_isSub_reg;
   reg [5:0] u2_isSub_reg;
   reg [5:0] u3_isSub_reg;
@@ -308,7 +292,7 @@ module fu_alu(
   reg [8:0] u6_ret_reg2;
   reg [8:0] u6_ret_reg3;
 
-  wire [1:0][63:0] mflags;
+  wire [63:0] mflags;
 
   csrss_watch #(`csr_mflags,64'h0) mflags_mod(clk,rst,csrss_addr,csrss_data[63:0],csrss_en,mflags);
 
@@ -665,19 +649,19 @@ module fu_alu(
 
 
 
-  alu alu0(clk,rst,except,1'b0,1'b0,u1_op_reg[12:0],u1_op_reg[17:13],u1_isSub_reg,mflags[u1_thread_reg][20],u1_clkEn_reg,1'b1,
+  alu alu0(clk,rst,except,1'b0,1'b0,u1_op_reg[12:0],u1_op_reg[17:13],u1_isSub_reg,mflags[20],u1_clkEn_reg,1'b1,
     u1_ret,u1_rten,uu_A1,uu_B1,uu_S1,FU4,FNU4);
-  alu #(1'b0)  alu1(clk,rst,except,1'b0,1'b0,u2_op_reg[12:0],u2_op_reg[17:13],u2_isSub_reg,mflags[u2_thread_reg][20],u2_clkEn_reg,1'b1,
+  alu #(1'b0)  alu1(clk,rst,except,1'b0,1'b0,u2_op_reg[12:0],u2_op_reg[17:13],u2_isSub_reg,mflags[20],u2_clkEn_reg,1'b1,
     u2_ret,u2_rten,uu_A2,uu_B2,uu_S2,FU7,FNU7);
   
-  alu alu2(clk,rst,except,1'b0,1'b0,u3_op_reg[12:0],u3_op_reg[17:13],u3_isSub_reg,mflags[u3_thread_reg][20],u3_clkEn_reg,1'b1,
+  alu alu2(clk,rst,except,1'b0,1'b0,u3_op_reg[12:0],u3_op_reg[17:13],u3_isSub_reg,mflags[20],u3_clkEn_reg,1'b1,
     u3_ret,u3_rten,uu_A3,uu_B3,uu_S3,FU5,FNU5);
-  alu #(1'b0)  alu3(clk,rst,except,1'b0,1'b0,u4_op_reg[12:0],u4_op_reg[17:13],u4_isSub_reg,mflags[u4_thread_reg][20],u4_clkEn_reg,1'b1,
+  alu #(1'b0)  alu3(clk,rst,except,1'b0,1'b0,u4_op_reg[12:0],u4_op_reg[17:13],u4_isSub_reg,mflags[20],u4_clkEn_reg,1'b1,
     u4_ret,u4_rten,uu_A4,uu_B4,uu_S4,FU8,FNU8);
   
-  alu alu4(clk,rst,except,1'b0,1'b0,u5_op_reg[12:0],u5_op_reg[17:13],u5_isSub_reg,mflags[u5_thread_reg][20], 
-      u5_clkEn_reg,u5_nDataAlt&&(&nDataAlt), u5_ret,u5_rten,uu_A5,uu_B5,uu_S5,FU6,FNU6);
-  alu #(1'b0)  alu5(clk,rst,except,1'b0,1'b0,u6_op_reg[12:0],u6_op_reg[17:13],u6_isSub_reg,mflags[u6_thread_reg][20],u6_clkEn_reg,1'b1,
+  alu alu4(clk,rst,except,1'b0,1'b0,u5_op_reg[12:0],u5_op_reg[17:13],u5_isSub_reg,mflags[20],u5_clkEn_reg,u5_nDataAlt&&(&nDataAlt),
+    u5_ret,u5_rten,uu_A5,uu_B5,uu_S5,FU6,FNU6);
+  alu #(1'b0)  alu5(clk,rst,except,1'b0,1'b0,u6_op_reg[12:0],u6_op_reg[17:13],u6_isSub_reg,mflags[20],u6_clkEn_reg,1'b1,
     u6_ret,u6_rten,uu_A6,uu_B6,uu_S6,FU9,FNU9);
   
   alu_shift sh2_alu(
@@ -814,16 +798,6 @@ module fu_alu(
       u6_op_reg2<=u6_op_reg[12:0];
       u6_op_reg3<=u6_op_reg2;
       u6_op_reg4<=u6_op_reg3;
-
-      u1_thread_reg<=u1_thread;
-      u2_thread_reg<=u2_thread;
-      u3_thread_reg<=u3_thread;
-      u4_thread_reg<=u4_thread;
-      u5_thread_reg<=u5_thread;
-      u6_thread_reg<=u6_thread;
-      u6_thread_reg2<=u6_thread_reg;
-      u6_thread_reg3<=u6_thread_reg2;
-      u6_thread_reg4<=u6_thread_reg3;
 
       u1_S_fufwd_reg<= u1_S_fufwd;
       u1_S_fuufwd_reg<=u1_S_fuufwd;
