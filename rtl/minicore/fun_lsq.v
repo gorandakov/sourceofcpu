@@ -1,4 +1,14 @@
 module fun_lsq(
+  clk,
+  rst,
+  stall,
+  do_stall,
+  except,
+  p0_en,p0_LSQ,p0_lsaddr,
+  p1_en,p1_LSQ,p1_lsaddr,
+  p2_en,p2_LSQ,p2_lsaddr,
+  has_dep,
+  which_dep
   );
 
   lsq_req lsqreq_mod(
