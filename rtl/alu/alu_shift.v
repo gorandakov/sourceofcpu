@@ -103,8 +103,11 @@ module alu_shift(
   assign flags_COASZP={ dir_reg ? coutR_reg : ((coutL_reg&sz_reg)!=0),1'b0,1'b0,
 	  sz_reg[3] ? valres0_reg[63] : valres0_reg[31],~(|valres0_reg[31:0])&&
           (~sz_reg[3]||~(|valres0_reg[63:32])),~^valres0_reg[7:0]};
-
+`ifndef aluneg
   always @(posedge clk) begin
+`else
+  always @(negedge clk) begin
+`endif
       is_shift_reg<=is_shift;
       coutL_reg<=coutL;
       coutR_reg<=coutR;

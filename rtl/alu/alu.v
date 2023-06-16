@@ -437,7 +437,7 @@ module alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,da
   always @(posedge clk)
 `else
   always @(negedge clk)
-`end
+`endif
     begin
 //      $display("flg ",valS," jt ",jumpType," j",doJmp," op ",operation);
       if (rst)
