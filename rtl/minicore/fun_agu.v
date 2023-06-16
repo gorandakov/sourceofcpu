@@ -19,7 +19,7 @@ module fun_agu(
   input stall;
   output do_stall;
   output do_collapse;
-  input [1:0] ls0_index;
+  input [2:0] ls0_index;
   input [5:0] ls0_op; 
   input       ls0_en; 
   input [5:0] ls0_basereg;
@@ -29,7 +29,7 @@ module fun_agu(
   input       ls0_rrel_op;
   output      ls0_st_en_out;
   output [`lsaddr_width-1:0] ls0_lsaddr;
-  input [1:0] ls1_index;
+  input [2:0] ls1_index;
   input [5:0] ls1_op; 
   input       ls1_en; 
   input [5:0] ls1_basereg;
@@ -39,7 +39,7 @@ module fun_agu(
   input       ls1_rrel_op;
   output      ls1_st_en_out;
   output [`lsaddr_width-1:0] ls1_lsaddr;
-  input [1:0] ls2_index;
+  input [2:0] ls2_index;
   input [5:0] ls2_op; 
   input       ls2_en; 
   input [5:0] ls2_basereg;
@@ -50,17 +50,17 @@ module fun_agu(
   output      ls2_st_en_out;
   output [`lsaddr_width-1:0] ls2_lsaddr;
 
-  input [1:0] alu0_index;
+  input [2:0] alu0_index;
   input       alu0_level;
   input       alu0_wen;
   input [5:0] alu0_rT;
   input [64:0]alu0_data,
-  input [1:0] alu1_index;
+  input [2:0] alu1_index;
   input       alu1_level;
   input       alu1_wen;
   input [5:0] alu1_rT;
   input [64:0]alu1_data,
-  input [1:0] alu2_index;
+  input [2:0] alu2_index;
   input       alu2_level;
   input       alu2_wen;
   input [5:0] alu2_rT;

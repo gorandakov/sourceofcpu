@@ -19,7 +19,7 @@ module palu_block(
   input stall;
   output do_stall;
   output [2:0] do_split;
-  input [1:0] alu0_index;
+  input [2:0] alu0_index;
   input       alu0_en;
   input [5:0] alu0_rA;
   input [5:0] alu0_rB;
@@ -28,7 +28,7 @@ module palu_block(
   input       alu0_wen;
   input [12:0]alu0_op;
   input [4:0] alu0_cond;
-  input [1:0] alu1_index;
+  input [2:0] alu1_index;
   input       alu1_en;
   input [5:0] alu1_rA;
   input [5:0] alu1_rB;
@@ -37,7 +37,7 @@ module palu_block(
   input       alu1_wen;
   input [12:0]alu1_op;
   input [4:0] alu1_cond;
-  input [1:0] alu2_index;
+  input [2:0] alu2_index;
   input       alu2_en;
   input [5:0] alu2_rA;
   input [5:0] alu2_rB;
@@ -46,10 +46,10 @@ module palu_block(
   input       alu2_wen;
   input [12:0]alu2_op;
   input [4:0] alu2_cond;
-  input [1:0] ld0_index;
+  input [2:0] ld0_index;
   input [5:0] ld0_rT;
   input ld0_wen'
-  input [1:0] ld1_index;
+  input [2:0] ld1_index;
   input [5:0] ld1_rT;
   input ld1_wen;
   output [64:0] wrA0_data;
