@@ -3,9 +3,13 @@ module alu_block();
 `define aluneg
   alu alu0(clk,rst,except,except_thread,thread,operation[0],cond[0],sub[0],cary_invert[0],dataEn[0],nDataAlt[0],retData[0],retEn[0],
     val1,val2,valS,valRes,valRes_N);
+  alu_shift shf0(clk,rst,except,except_thread,operation[0],cond[0],sz[0],bit_en[0],arith[0],dir[0],dataEn[0],nDataAlt[0],
+    retData[0], valS, val1, val2, valRes);
 `undef aluneg
   alu alu1(clk,rst,except,except_thread,thread,operation_reg[1],cond_reg[1],sub_reg[1],cary_invert_reg[1],dataEn_reg[1],
     nDataAlt_reg[1],retData[1],retEn[1], val1X,val2X,valSX,valResX,valResX_N);
+  alu_shift shf1(clk,rst,except,except_thread,operation_reg[1],cond_reg[1],sz_reg[1],bit_en_reg[1],arith_reg[1],dir_reg[1],
+   dataEn_reg[1],nDataAlt_reg[1], retData[1], valSX, val1X, val2X, valResX);
 
   always @(negedge clk) begin
     if (A_dep_alu[1]) val1X<=valRes;
