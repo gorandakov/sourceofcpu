@@ -314,7 +314,7 @@ module ctlb(
   csrss_en,
   mflags);
 
-  assign sproc=mflags[thread][`mflags_vm] ? pproc[thread]^{24'd1} : 24'b0;
+  assign sproc=mflags[read_thread][`mflags_vm] ? pproc[read_thread]^{24'd1} : 24'b0;
 
 
 
