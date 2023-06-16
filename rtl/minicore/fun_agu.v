@@ -301,5 +301,22 @@ module fun_agu(
   sh2[2]
   );
   
+  alu_regfile regf(
+  clk,
+  rst,
+  stall,
+  readA0_addr,dataA0,
+  readA1_addr,dataA1,
+  readA2_addr,dataA2,
+  readB0_addr,dataB0,
+  readB1_addr,dataB1,
+  readB2_addr,dataB2,
+  5'd0,66'b0,1'b0,
+  write1_addr,valRes[0],write1_wen,
+  write2_addr,valLD0,write2_wen,
+  write3_addr,valLD1,write3_wen,
+  write4_addr,valLD2,write4_wen,
+  write5_addr,valRes[1],write5_wen
+  );
 
 endmodule
