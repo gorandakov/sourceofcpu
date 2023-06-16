@@ -5,6 +5,10 @@ module alu_block();
     val1,val2,valS,valRes,valRes_N);
   alu_shift shf0(clk,rst,except,except_thread,operation[0],cond[0],sz[0],bit_en[0],arith[0],dir[0],dataEn[0],nDataAlt[0],
     retData[0], valS, val1, val2, valRes);
+  alu alu2(clk,rst,except,except_thread,thread,operation[2],cond[2],sub[2],cary_invert[2],dataEn[2],nDataAlt[2],retData[2],retEn[2],
+    val1Y,val2Y,valSY,valResY,valResY_N);
+  alu_shift shf2(clk,rst,except,except_thread,operation[0],cond[0],sz[0],bit_en[0],arith[0],dir[0],dataEn[0],nDataAlt[0],
+    retData[0], valS, val1, val2, valRes);
 `undef aluneg
   alu alu1(clk,rst,except,except_thread,thread,operation_reg[1],cond_reg[1],sub_reg[1],cary_invert_reg[1],dataEn_reg[1],
     nDataAlt_reg[1],retData[1],retEn[1], val1X,val2X,valSX,valResX,valResX_N);
@@ -32,6 +36,12 @@ module alu_block();
     else if (B_dep_ld1[0]) val2<=valLD1;
     else val2<=dataB0;
     valS<=S_dep_alu[0] ? retData[1][8:3] : valSX;
+    (A_dep_ld0[2]) val1Y<=valLD0;
+    else if (A_dep_ld1[2]) val1Y<=valLD1;
+    else val1Y<=dataA2;
+    if (B_dep_ld0[2]) val2Y<=valLD0;
+    else if (B_dep_ld1[2]) val2Y<=valLD1;
+    else val2Y<=dataB2;
   end
 
   alu_regfile regf(
@@ -40,12 +50,16 @@ module alu_block();
   stall,
   readA0_addr,dataA0,
   readA1_addr,dataA1,
+  readA2_addr,dataA2,
   readB0_addr,dataB0,
   readB1_addr,dataB1,
+  readB2_addr,dataB2,
   write0_addr,valResX,write0_wen,
   write1_addr,valRes,write1_wen,
   write2_addr,valLD0,write2_wen,
-  write3_addr,valLD1,write3_wen);
+  write3_addr,valLD1,write3_wen,
+  write4_addr,valResY,write4_wen
+  );
 
 endmodule
 
@@ -55,12 +69,15 @@ module alu_regfile(
   stall,
   readA0_addr,readA0_data,
   readA1_addr,readA1_data,
+  readA2_addr,readA2_data,
   readB0_addr,readB0_data,
   readB1_addr,readB1_data,
+  readB2_addr,readB2_data,
   write0_addr,write0_data,write0_wen,
   write1_addr,write1_data,write1_wen,
   write2_addr,write2_data,write2_wen,
   write3_addr,write3_data,write3_wen);
+  write4_addr,write4_data,write4_wen);
 
   input clk;
   input rst;
@@ -69,10 +86,14 @@ module alu_regfile(
   output [64:0] readA0_data;
   input [4:0]   readA1_addr;
   output [64:0] readA1_data;
+  input [4:0]   readA2_addr;
+  output [64:0] readA2_data;
   input [4:0]   readB0_addr;
   output [64:0] readB0_data;
   input [4:0]   readB1_addr;
   output [64:0] readB1_data;
+  input [4:0]   readB2_addr;
+  output [64:0] readB2_data;
   input [4:0]   write0_addr;
   input  [64:0] write0_data;
   input         write0_wen;
@@ -85,20 +106,32 @@ module alu_regfile(
   input [4:0]   write3_addr;
   input  [64:0] write3_data;
   input         write3_wen;
+  input [4:0]   write4_addr;
+  input  [64:0] write4_data;
+  input         write4_wen;
 
   reg [64:0] ram[19:0];
 
   reg [4:0] readA0_addr_reg;
   reg [4:0] readB0_addr_reg;
+  reg [4:0] readA1_addr_reg;
+  reg [4:0] readB1_addr_reg;
+  reg [4:0] readA2_addr_reg;
+  reg [4:0] readB2_addr_reg;
+
+ 
   
   always @(posedge clk) begin
       if (!stall) begin
           readA0_addr_reg<=readA0_addr;
           readB0_addr_reg<=readB0_addr;
+          readA2_addr_reg<=readA2_addr;
+          readB2_addr_reg<=readB2_addr;
       end
       if (write1_wen) ram[write1_addr]<=write1_data;
       if (write2_wen) ram[write2_addr]<=write2_data;
       if (write3_wen) ram[write3_addr]<=write3_data;
+      if (write4_wen) ram[write4_addr]<=write4_data;
   end
   always @(negedge clk) begin
       if (!stall) begin
