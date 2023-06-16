@@ -292,7 +292,7 @@ module fu_alu(
   reg [8:0] u6_ret_reg2;
   reg [8:0] u6_ret_reg3;
 
-  wire [63:0] mflags;
+  wire [1:0][63:0] mflags;
 
   csrss_watch #(`csr_mflags,64'h0) mflags_mod(clk,rst,csrss_addr,csrss_data[63:0],csrss_en,mflags);
 
@@ -649,19 +649,19 @@ module fu_alu(
 
 
 
-  alu alu0(clk,rst,except,1'b0,1'b0,u1_op_reg[12:0],u1_op_reg[17:13],u1_isSub_reg,mflags[20],u1_clkEn_reg,1'b1,
+  alu alu0(clk,rst,except,1'b0,1'b0,u1_op_reg[12:0],u1_op_reg[17:13],u1_isSub_reg,mflags[0][20],u1_clkEn_reg,1'b1,
     u1_ret,u1_rten,uu_A1,uu_B1,uu_S1,FU4,FNU4);
-  alu #(1'b0)  alu1(clk,rst,except,1'b0,1'b0,u2_op_reg[12:0],u2_op_reg[17:13],u2_isSub_reg,mflags[20],u2_clkEn_reg,1'b1,
+  alu #(1'b0)  alu1(clk,rst,except,1'b0,1'b0,u2_op_reg[12:0],u2_op_reg[17:13],u2_isSub_reg,mflags[0][20],u2_clkEn_reg,1'b1,
     u2_ret,u2_rten,uu_A2,uu_B2,uu_S2,FU7,FNU7);
   
-  alu alu2(clk,rst,except,1'b0,1'b0,u3_op_reg[12:0],u3_op_reg[17:13],u3_isSub_reg,mflags[20],u3_clkEn_reg,1'b1,
+  alu alu2(clk,rst,except,1'b0,1'b0,u3_op_reg[12:0],u3_op_reg[17:13],u3_isSub_reg,mflags[0][20],u3_clkEn_reg,1'b1,
     u3_ret,u3_rten,uu_A3,uu_B3,uu_S3,FU5,FNU5);
-  alu #(1'b0)  alu3(clk,rst,except,1'b0,1'b0,u4_op_reg[12:0],u4_op_reg[17:13],u4_isSub_reg,mflags[20],u4_clkEn_reg,1'b1,
+  alu #(1'b0)  alu3(clk,rst,except,1'b0,1'b0,u4_op_reg[12:0],u4_op_reg[17:13],u4_isSub_reg,mflags[0][20],u4_clkEn_reg,1'b1,
     u4_ret,u4_rten,uu_A4,uu_B4,uu_S4,FU8,FNU8);
   
-  alu alu4(clk,rst,except,1'b0,1'b0,u5_op_reg[12:0],u5_op_reg[17:13],u5_isSub_reg,mflags[20],u5_clkEn_reg,u5_nDataAlt&&(&nDataAlt),
+  alu alu4(clk,rst,except,1'b0,1'b0,u5_op_reg[12:0],u5_op_reg[17:13],u5_isSub_reg,mflags[0][20],u5_clkEn_reg,u5_nDataAlt&&(&nDataAlt),
     u5_ret,u5_rten,uu_A5,uu_B5,uu_S5,FU6,FNU6);
-  alu #(1'b0)  alu5(clk,rst,except,1'b0,1'b0,u6_op_reg[12:0],u6_op_reg[17:13],u6_isSub_reg,mflags[20],u6_clkEn_reg,1'b1,
+  alu #(1'b0)  alu5(clk,rst,except,1'b0,1'b0,u6_op_reg[12:0],u6_op_reg[17:13],u6_isSub_reg,mflags[0][20],u6_clkEn_reg,1'b1,
     u6_ret,u6_rten,uu_A6,uu_B6,uu_S6,FU9,FNU9);
   
   alu_shift sh2_alu(
