@@ -368,7 +368,10 @@ module fun_fpusqr0(
 	  if (|fxFRT_don_reg2) begin
               rtDataA_reg<=rtDataA;
 	      rtDataB_reg<=rtDataB;
-	  end
+	  end else begin
+              rtDataA_reg<='z;
+	      rtDataB_reg<='z;
+          end
       end
   end
 

@@ -582,23 +582,29 @@ module fun_fpu(
 		  {u1_op_reg[10],3'b0}:{2'b11,u1_op_reg[10],1'b0}; 
 	      //verilator lint_off WIDTH
 	      if (fxFADD_dblext) begin
-	          if (~fxFADD_copyA[0]) fxDataAFL_reg[0]<=uu_A1;
-	          if (~fxFADD_copyA[0]) gxDataBFL_reg[1]<=gxDataBFL[1];
+	          if (~fxFADD_copyA[0]) fxDataAFL_reg[0]<=uu_A1; else fxDataAFL_reg[0]<='z;
+	          if (~fxFADD_copyA[0]) gxDataBFL_reg[1]<=gxDataBFL[1]; else gxDataBFL_reg[1]<='z;
 	          fxDataAFL_REG[0]<=uu_A1;
 	      end
 	      if (fxFCADD_dblext) begin
-	          if (~fxFCADD_copyA[0]) fxDataAFL_reg[1]<=uu_A2;
-	          if (~fxFCADD_copyA[0]) gxDataBFL_reg[0]<=gxDataBFL[0];
+	          if (~fxFCADD_copyA[0]) fxDataAFL_reg[1]<=uu_A2; else fxDataAFL_reg[1]<='z;
+	          if (~fxFCADD_copyA[0]) gxDataBFL_reg[0]<=gxDataBFL[0]; else gxDataBFL_reg[0]<='z;
 	          fxDataAFL_REG[1]<=uu_A2;
 	      end
 	      if (~fxFADD_dblext) begin
-	          fxDataAXL_reg[0]<=uu_A1;
-	          gxDataBXL_reg[1]<=gxDataBFL[1];
-	      end
+	          fxDataAXL_reg[0]<=uu_A1; 
+	          gxDataBXL_reg[1]<=gxDataBFL[1]; 
+	      end else begin
+	          fxDataAXL_reg[0]<='z; 
+	          gxDataBXL_reg[1]<='z; 
+              end
 	      if (~fxFCADD_dblext) begin
 	          fxDataAXL_reg[1]<=uu_A2;
 	          gxDataBXL_reg[0]<=gxDataBFL[0];
-	      end
+	      end else begin
+	          fxDataAXL_reg[1]<='z;
+	          gxDataBXL_reg[0]<='z;
+              end
 	      //verilator lint_on WIDTH
     end
     for(k=0;k<2;k=k+1) begin

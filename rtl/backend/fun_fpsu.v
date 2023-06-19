@@ -585,23 +585,29 @@ module fun_fpsu(
               fxFCADD_copyASN=(u1_op_reg==`fop_mulSP) ?
 		  {u1_op_reg[10],3'b0}:{2'b11,u1_op_reg[10],1'b0}; 
 	      if (fxFADD_dblext) begin
-	          if (~fxFADD_copyA[0]) fxDataAFL_reg[0]<=uu_A1;
-	          if (~fxFADD_copyA[0]) gxDataBFL_reg[1]<=gxDataBFL[1];
+	          if (~fxFADD_copyA[0]) fxDataAFL_reg[0]<=uu_A1; else fxDataAFL_reg[0]<='z;
+	          if (~fxFADD_copyA[0]) gxDataBFL_reg[1]<=gxDataBFL[1]; else gxDataBFL_reg[1]<='z;
 	          fxDataAFL_REG[0]<=uu_A1;
 	      end
 	      if (fxFCADD_dblext) begin
-	          if (~fxFCADD_copyA[0]) fxDataAFL_reg[1]<=uu_A2;
-	          if (~fxFCADD_copyA[0]) gxDataBFL_reg[0]<=gxDataBFL[0];
+	          if (~fxFCADD_copyA[0]) fxDataAFL_reg[1]<=uu_A2; else fxDataAFL_reg[1]<='z;
+	          if (~fxFCADD_copyA[0]) gxDataBFL_reg[0]<=gxDataBFL[0]; else gxDataBFL_reg[0]<='z;
 	          fxDataAFL_REG[1]<=uu_A2;
 	      end
 	      if (~fxFADD_dblext) begin
 	          fxDataAXL_reg[0]<=uu_A1;
-	          gDataBXL_reg[1]<=gDataBFL[1];
-	      end
+	          gxDataBXL_reg[1]<=gxDataBFL[1];
+	      end else begin
+	          fxDataAXL_reg[0]<='z;
+	          gxDataBXL_reg[1]<='z;
+              end
 	      if (~fxFCADD_dblext) begin
 	          fxDataAXL_reg[1]<=uu_A2;
-	          gDataBXL_reg[0]<=gDataBFL[0];
-	      end
+	          gxDataBXL_reg[0]<=gxDataBFL[0];
+	      end else begin
+	          fxDataAXL_reg[1]<='z;
+	          gxDataBXL_reg[0]<='z;
+              end
     end
     for(k=0;k<2;k=k+1) begin
         FOOF_reg[k]<=FOOF[k];
