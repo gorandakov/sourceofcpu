@@ -238,6 +238,8 @@ module fu_alu(
   wire [2:0][64:0] uu_B5;
   wire [2:0][64:0] uu_A6;
   wire [2:0][64:0] uu_B6;
+  wire [2:0][64:0] uu_A6m;
+  wire [2:0][64:0] uu_B6m;
 
   wire [5:0] uu_S1;
   wire [5:0] uu_S2;
@@ -368,7 +370,6 @@ module fu_alu(
   ~u1_clkEn || !(u1_op[7:3]==5'b0 || u1_op[7:1]==7'd30),
   ~u1_clkEn || (u1_op[7:3]==5'b0 || u1_op[7:1]==7'd30 || u1_op[7:3]==3 || u1_op[7:2]==5 || u1_op[11]),
   ~u1_clkEn || !(u1_op[7:3]==3 || u1_op[7:2]==5 || u1_op[11]),  
-  ~u2_clkEn,
   (u2_op[7:0]==`op_add64 || u2_op[7:0]==`op_sub64) && u2_op[8],
   u2_B,uu_B2,
   u2_B_fufwd,u2_B_fuufwd,
@@ -392,7 +393,6 @@ module fu_alu(
   ~u1_clkEn || !(u1_op[7:3]==5'b0 || u1_op[7:1]==7'd30),
   ~u1_clkEn || (u1_op[7:3]==5'b0 || u1_op[7:1]==7'd30 || u1_op[7:3]==3 || u1_op[7:2]==5 || u1_op[11]),
   ~u1_clkEn || !(u1_op[7:3]==3 || u1_op[7:2]==5 || u1_op[11]),  
-  ~u3_clkEn,
   (u3_op[7:0]==`op_add64 || u3_op[7:0]==`op_sub64) && u3_op[8],
   u3_A,uu_A3,
   u3_A_fufwd,u3_A_fuufwd,
@@ -415,7 +415,6 @@ module fu_alu(
   ~u1_clkEn || !(u1_op[7:3]==5'b0 || u1_op[7:1]==7'd30),
   ~u1_clkEn || (u1_op[7:3]==5'b0 || u1_op[7:1]==7'd30 || u1_op[7:3]==3 || u1_op[7:2]==5 || u1_op[11]),
   ~u1_clkEn || !(u1_op[7:3]==3 || u1_op[7:2]==5 || u1_op[11]),  
-  ~u3_clkEn,
   (u3_op[7:0]==`op_add64 || u3_op[7:0]==`op_sub64) && u3_op[8],
   u3_B,uu_B3,
   u3_B_fufwd,u3_B_fuufwd,
@@ -439,7 +438,6 @@ module fu_alu(
   ~u1_clkEn || !(u1_op[7:3]==5'b0 || u1_op[7:1]==7'd30),
   ~u1_clkEn || (u1_op[7:3]==5'b0 || u1_op[7:1]==7'd30 || u1_op[7:3]==3 || u1_op[7:2]==5 || u1_op[11]),
   ~u1_clkEn || !(u1_op[7:3]==3 || u1_op[7:2]==5 || u1_op[11]),  
-  ~u4_clkEn,
   (u4_op[7:0]==`op_add64 || u4_op[7:0]==`op_sub64) && u4_op[8],
   u4_A,uu_A4,
   u4_A_fufwd,u4_A_fuufwd,
@@ -462,7 +460,6 @@ module fu_alu(
   ~u1_clkEn || !(u1_op[7:3]==5'b0 || u1_op[7:1]==7'd30),
   ~u1_clkEn || (u1_op[7:3]==5'b0 || u1_op[7:1]==7'd30 || u1_op[7:3]==3 || u1_op[7:2]==5 || u1_op[11]),
   ~u1_clkEn || !(u1_op[7:3]==3 || u1_op[7:2]==5 || u1_op[11]),  
-  ~u4_clkEn,
   (u4_op[7:0]==`op_add64 || u4_op[7:0]==`op_sub64) && u4_op[8],
   u4_B,uu_B4,
   u4_B_fufwd,u4_B_fuufwd,
@@ -486,7 +483,6 @@ module fu_alu(
   ~u1_clkEn || !(u1_op[7:3]==5'b0 || u1_op[7:1]==7'd30),
   ~u1_clkEn || (u1_op[7:3]==5'b0 || u1_op[7:1]==7'd30 || u1_op[7:3]==3 || u1_op[7:2]==5 || u1_op[11]),
   ~u1_clkEn || !(u1_op[7:3]==3 || u1_op[7:2]==5 || u1_op[11]),  
-  ~u5_clkEn,
   (u5_op[7:0]==`op_add64 || u5_op[7:0]==`op_sub64) && u5_op[8],
   u5_A,uu_A5,
   u5_A_fufwd,u5_A_fuufwd,
@@ -509,7 +505,6 @@ module fu_alu(
   ~u1_clkEn || !(u1_op[7:3]==5'b0 || u1_op[7:1]==7'd30),
   ~u1_clkEn || (u1_op[7:3]==5'b0 || u1_op[7:1]==7'd30 || u1_op[7:3]==3 || u1_op[7:2]==5 || u1_op[11]),
   ~u1_clkEn || !(u1_op[7:3]==3 || u1_op[7:2]==5 || u1_op[11]),  
-  ~u5_clkEn,
   (u5_op[7:0]==`op_add64 || u5_op[7:0]==`op_sub64) && u5_op[8],
   u5_B,uu_B5,
   u5_B_fufwd,u5_B_fuufwd,
@@ -533,7 +528,6 @@ module fu_alu(
   ~u1_clkEn || !(u1_op[7:3]==5'b0 || u1_op[7:1]==7'd30),
   ~u1_clkEn || (u1_op[7:3]==5'b0 || u1_op[7:1]==7'd30 || u1_op[7:3]==3 || u1_op[7:2]==5 || u1_op[11]),
   ~u1_clkEn || !(u1_op[7:3]==3 || u1_op[7:2]==5 || u1_op[11]),  
-  ~u6_clkEn,
   (u6_op[7:0]==`op_add64 || u6_op[7:0]==`op_sub64) && u6_op[8],
   u6_A,uu_A6,
   u6_A_fufwd,u6_A_fuufwd,
@@ -556,9 +550,52 @@ module fu_alu(
   ~u1_clkEn || !(u1_op[7:3]==5'b0 || u1_op[7:1]==7'd30),
   ~u1_clkEn || (u1_op[7:3]==5'b0 || u1_op[7:1]==7'd30 || u1_op[7:3]==3 || u1_op[7:2]==5 || u1_op[11]),
   ~u1_clkEn || !(u1_op[7:3]==3 || u1_op[7:2]==5 || u1_op[11]),  
-  ~u6_clkEn,
   (u6_op[7:0]==`op_add64 || u6_op[7:0]==`op_sub64) && u6_op[8],
   u6_B,uu_B6,
+  u6_B_fufwd,u6_B_fuufwd,
+  FNU0,FNU1,FNU2,FNU3,FNU4,FNU5,
+  FNU6,FNU7,FNU8,FNU9,
+  FU0,FU0_reg,
+  FU1,FU1_reg,
+  FU2,FU2_reg,
+  FU3,FU3_reg,
+  FU4,FU4_reg,
+  FU5,FU5_reg,
+  FU6,FU6_reg,
+  FU7,FU7_reg,
+  FU8,FU8_reg,
+  FU9,FU9_reg
+  );
+
+  rs_write_forward_ALU #(0,65) u6_Am_fwd(
+  clk,rst,
+  ~u1_clkEn || !(u1_op[7:3]==5'b0 || u1_op[7:1]==7'd30),
+  ~u1_clkEn || (u1_op[7:3]==5'b0 || u1_op[7:1]==7'd30 || u1_op[7:3]==3 || u1_op[7:2]==5 || u1_op[11]),
+  ~u1_clkEn || !(u1_op[11]),  
+  (u6_op[7:0]==`op_add64 || u6_op[7:0]==`op_sub64) && u6_op[8],
+  u6_Am,uu_A6m,
+  u6_A_fufwd,u6_A_fuufwd,
+  FNU0,FNU1,FNU2,FNU3,FNU4,FNU5,
+  FNU6,FNU7,FNU8,FNU9,
+  FU0,FU0_reg,
+  FU1,FU1_reg,
+  FU2,FU2_reg,
+  FU3,FU3_reg,
+  FU4,FU4_reg,
+  FU5,FU5_reg,
+  FU6,FU6_reg,
+  FU7,FU7_reg,
+  FU8,FU8_reg,
+  FU9,FU9_reg
+  );
+  
+  rs_write_forward_ALU #(1,65) u6_B_fwd(
+  clk,rst,
+  ~u1_clkEn || !(u1_op[7:3]==5'b0 || u1_op[7:1]==7'd30),
+  ~u1_clkEn || (u1_op[7:3]==5'b0 || u1_op[7:1]==7'd30 || u1_op[7:3]==3 || u1_op[7:2]==5 || u1_op[11]),
+  ~u1_clkEn || !(u1_op[11]),  
+  (u6_op[7:0]==`op_add64 || u6_op[7:0]==`op_sub64) && u6_op[8],
+  u6_Bm,uu_B6m,
   u6_B_fufwd,u6_B_fuufwd,
   FNU0,FNU1,FNU2,FNU3,FNU4,FNU5,
   FNU6,FNU7,FNU8,FNU9,
@@ -786,7 +823,7 @@ module fu_alu(
   .en(u6_clkEn_reg && u6_op_reg[11] && (u6_op_reg[7:0]==1 || u6_op_reg[7:0]
     ==2 || u6_op_reg[7:0]==3 || u6_op_reg[7:0]==9 || u6_op_reg[7:0]==10 ||
     u6_op_reg[7:0]==11 || u6_op_reg[7:0]==5 || u6_op_reg[7:0]==7)),  
-  .R(uu_A6),.C(uu_B6),
+  .R(uu_A6m[2]),.C(uu_B6m[2]),
   .alt(DataAlt[0]),
   .Res(FUMUL),
   .flg(MULFL)
