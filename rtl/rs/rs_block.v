@@ -22,7 +22,7 @@ limitations under the License.
 //do not delete "redundant" inputs
 module rs_write_forward_ALU(
   clk,rst,
-  stall,
+  stall_addsub,stall_non_add,stall_shift,
   sxtEn,
   oldData,newData,
   fuFwd,fuuFwd,
@@ -43,11 +43,13 @@ module rs_write_forward_ALU(
   parameter DATA_WIDTH=`alu_width;
   input clk;
   input rst;
-  input stall;
+  input stall_addsub;
+  input stall_non_add;
+  input stall_shift;
   input sxtEn;
   
   input [DATA_WIDTH-1:0] oldData;
-  output reg [DATA_WIDTH-1:0] newData;
+  output reg [2:0][DATA_WIDTH-1:0] newData;
   input [3:0] fuFwd;
   input [3:0] fuuFwd;
   
@@ -122,9 +124,15 @@ module rs_write_forward_ALU(
 
   always @(posedge clk) 
   begin
-      if (rst) newData<={DATA_WIDTH{1'B0}};
-      else if (~stall)
-        newData<=newData_d;
+      if (rst)                 newData[0]<={DATA_WIDTH{1'B0}};
+      else if (~stall_addsub)  newData[0]<=newData_d[0];
+      else                     newData[0]<=65'bz;
+      if (rst)                 newData[1]<={DATA_WIDTH{1'B0}};
+      else if (~stall_non_add) newData[1]<=newData_d[0];
+      else                     newData[1]<=65'bz;
+      if (rst)                 newData[2]<={DATA_WIDTH{1'B0}};
+      else if (~stall_shift)   newData[2]<=newData_d[0];
+      else                     newData[2]<=65'bz;
   end
 endmodule
 
