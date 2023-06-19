@@ -22,6 +22,7 @@ module cc_fstalle(
   rst,
   except,
   fstall,
+  en,
   write_data,
   read_data
   );
@@ -30,6 +31,7 @@ module cc_fstalle(
   input rst;
   input except;
   input fstall;
+  input en;
   input [WIDTH-1:0] write_data;  
   output [WIDTH-1:0] read_data;  
 
@@ -64,7 +66,7 @@ module cc_fstalle(
               if (where2[1]) data2<=write_data;
           end else begin
               dataS<=data2;
-              write_data_reg<=write_data;
+              if (en) write_data_reg<=write_data; else write_data_reg<={WIDTH{1'bz}};
               where1<=3'b001;
               isDataS<=where2[2];
               if (where1[2]) begin

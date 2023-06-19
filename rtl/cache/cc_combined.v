@@ -228,6 +228,7 @@ module cc_comb (
   .rst(rst),
   .except(exceptA),
   .fstall(fstallA),
+  .en(cc_readA_hitP),
   .write_data(readA_dataP[0]),
   .read_data(readA_data)
   );
@@ -236,6 +237,7 @@ module cc_comb (
   .rst(rst),
   .except(exceptB),
   .fstall(fstallB),
+  .en(cc_readB_hitP),
   .write_data(readB_dataP[0]),
   .read_data(readB_data)
   );
@@ -243,6 +245,7 @@ module cc_comb (
   cc_fstalle #(15) stDatFl_mod (
   .clk(clk),
   .rst(rst),
+  .en(cc_readA_hitP),
   .except(exceptA),
   .fstall(fstallA),
   .write_data(readA_dataXP[0]),
@@ -251,6 +254,7 @@ module cc_comb (
   cc_fstalle #(15) stDatFlB_mod (
   .clk(clk),
   .rst(rst),
+  .en(cc_readB_hitP),
   .except(exceptB),
   .fstall(fstallB),
   .write_data(readB_dataXP[0]),
@@ -260,6 +264,7 @@ module cc_comb (
   cc_fstalle #(37) stAddrExp_mod (
   .clk(clk),
   .rst(rst),
+  .en(1'b1),
   .except(exceptA|exceptB),
   .fstall(fstallA|fstallB),
   .write_data(cc_exp_addr0_reg),
@@ -271,6 +276,7 @@ module cc_comb (
   cc_fstalle #(9) stHitA_mod (
   .clk(clk),
   .rst(rst),
+  .en(1'b1),
   .except(exceptA),
   .fstall(fstallA),
   .write_data({cc_readA_hitP,cc_readA_tagErrP}),
@@ -279,6 +285,7 @@ module cc_comb (
   cc_fstalle #(9) stHitB_mod (
   .clk(clk),
   .rst(rst),
+  .en(1'b1),
   .except(exceptB),
   .fstall(fstallB),
   .write_data({cc_readB_hitP,cc_readB_tagErrP}),
@@ -288,6 +295,7 @@ module cc_comb (
   cc_fstalle #(1) stHitAE_mod (
   .clk(clk),
   .rst(rst),
+  .en(1'b1),
   .except(1'b0),
   .fstall(1'b0),
   .write_data(cc_expun_hitP),
