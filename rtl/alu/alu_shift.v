@@ -55,8 +55,8 @@ module alu_shift(
   input nDataAlt;//0=feeding data through multiclk unit
   output wire [EXCEPT_WIDTH-1:0] retData;
   input [5:0] valS;
-  input [63:0] val1;
-  input [63:0] val2;
+  input [2:0][63:0] val1;
+  input [2:0][63:0] val2;
   output [63:0] valRes;
   
   wire [63:0] valRes_X;
@@ -87,8 +87,8 @@ module alu_shift(
   sz,
   dir,
   arith,
-  val1,
-  val2[5:0],
+  val1[2],
+  val2[2][5:0],
   valres0,
   coutR,
   coutL

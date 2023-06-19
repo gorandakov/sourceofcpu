@@ -43,8 +43,8 @@ module alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,da
   input nDataAlt;//0=feeding data through multiclk unit
   output wire [EXCEPT_WIDTH-1:0] retData;
   output retEn;
-  input [64:0] val1;
-  input [64:0] val2;
+  input [2:0][64:0] val1;
+  input [2:0][64:0] val2;
   input [5:0] valS;//flag
   inout  [64:0] valRes;  
   output [64:0] valRes_N;  
@@ -204,19 +204,19 @@ module alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,da
   
   assign isFlags=~operation[12];
   
-  assign val1One[0]=|val1[7:0];
-  assign val1One[1]=|val1[15:8];
-  assign val1One[2]=|val1[31:16];
-  assign val1One[3]=|val1[63:32];
+  assign val1One[0]=|val1[1][7:0];
+  assign val1One[1]=|val1[1][15:8];
+  assign val1One[2]=|val1[1][31:16];
+  assign val1One[3]=|val1[1][63:32];
   
-  assign val_or={is_ptr ? ptr[63:44] : val1[63:44]|val2[63:44],val1[43:0]|val2[43:0]};
-  assign val_xor={is_ptr ? ptr[63:44] : val1[63:44]^val2[63:44],val1[43:0]^val2[43:0]};
-  assign val_and={is_ptr ? ptr[63:44] : val1[63:44]&val2[63:44],val1[43:0]&val2[43:0]};
+  assign val_or={is_ptr ? ptr[63:44] : val1[1][63:44]|val2[1][63:44],val1[1][43:0]|val2[1][43:0]};
+  assign val_xor={is_ptr ? ptr[63:44] : val1[1][63:44]^val2[1][63:44],val1[1][43:0]^val2[1][43:0]};
+  assign val_and={is_ptr ? ptr[63:44] : val1[1][63:44]&val2[1][63:44],val1[1][43:0]&val2[1][43:0]};
   
   assign nDataAlt2=nDataAlt && doJmp2 | ~cond[4];
-  assign valRes_X=(add_en||shift_en&~NOSHIFT||~nDataAlt)&~(~doJmp2|~cond[4]) ? 65'bz : {nDataAlt & ~nDataAlt2 ? val1[64] : is_ptr,valRes2};
+  assign valRes_X=(add_en||shift_en&~NOSHIFT||~nDataAlt)&~(~doJmp2|~cond[4]) ? 65'bz : {nDataAlt & ~nDataAlt2 ? val1[1][64] : is_ptr,valRes2};
   assign valRes2[63:0]=(operation[11] || ~nDataAlt) ? 64'b0: 64'bz;
-  assign valRes2[63:0]=nDataAlt & ~nDataAlt2 ? val1[63:0] : 64'bz;
+  assign valRes2[63:0]=nDataAlt & ~nDataAlt2 ? val1[1][63:0] : 64'bz;
   assign valRes2[63:0]=(~add8_en & ~sahf_en && nDataAlt2) ? valRes1 : 64'bz;
   assign valRes2[63:8]=(add8_en|sahf_en && nDataAlt2) ? 56'b0 : 56'bz;
   assign valRes2[7:0]=(add8_en|sahf_en && nDataAlt2) ? valRes8 : 8'bz;
@@ -258,21 +258,21 @@ module alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,da
 	  (~val_xor[31:0]) : 32'bz;   
   
 
-  assign valRes1[63:32]=((operation[11:0]==`op_mov64) && nDataAlt) ? val2[63:32] : 32'bz;   
+  assign valRes1[63:32]=((operation[11:0]==`op_mov64) && nDataAlt) ? val2[1][63:32] : 32'bz;   
   assign valRes1[63:32]=((operation[11:0]==`op_mov32) && nDataAlt) ? 32'b0 : 32'bz;   
-  assign valRes1[63:32]=((operation[11:0]==`op_mov16 || (operation[7:0]==`op_mov8)&~operation[11]) && nDataAlt) ? val1[63:32] : 32'bz;   
-  assign valRes1[31:16]=((operation[11:0]==`op_mov32 || operation[11:0]==`op_mov64) && nDataAlt) ? val2[31:16] : 16'bz;   
-  assign valRes1[31:16]=((operation[11:0]==`op_mov16 || (operation[7:0]==`op_mov8)&~operation[11]) && nDataAlt) ? val1[31:16] : 16'bz;   
+  assign valRes1[63:32]=((operation[11:0]==`op_mov16 || (operation[7:0]==`op_mov8)&~operation[11]) && nDataAlt) ? val1[1][63:32] : 32'bz;   
+  assign valRes1[31:16]=((operation[11:0]==`op_mov32 || operation[11:0]==`op_mov64) && nDataAlt) ? val2[1][31:16] : 16'bz;   
+  assign valRes1[31:16]=((operation[11:0]==`op_mov16 || (operation[7:0]==`op_mov8)&~operation[11]) && nDataAlt) ? val1[1][31:16] : 16'bz;   
   assign valRes1[15:0]=((((operation[9:0]==`op_mov16) && ~operation[10]) || operation[11:0]==`op_mov32 || operation[11:0]==`op_mov64) && nDataAlt) ?
-    val2[15:0] : 16'bz;   
+    val2[1][15:0] : 16'bz;   
   assign valRes1[15:0]=((((operation[9:0]==`op_mov16) && operation[10])) && nDataAlt) ?
-    val2[31:16] : 16'bz;   
-  assign valRes1[15:0]=((operation[11:0]=={1'b0,3'b000,8'd`op_mov8}) && nDataAlt) ? {val1[15:8],val2[7:0]} : 16'bz;   
-  assign valRes1[15:0]=((operation[11:0]=={1'b0,3'b011,8'd`op_mov8}) && nDataAlt) ? {val1[15:8],val2[15:8]} : 16'bz;   
-  assign valRes1[15:0]=((operation[11:0]=={1'b0,3'b100,8'd`op_mov8}) && nDataAlt) ? {val2[7:0],val1[7:0]} : 16'bz;   
-  assign valRes1[15:0]=((operation[11:0]=={1'b0,3'b111,8'd`op_mov8}) && nDataAlt) ? {val2[15:8],val1[7:0]} : 16'bz;   
-  assign valRes1[15:0]=((operation[11:0]=={1'b0,3'b001,8'd`op_mov8}) && nDataAlt) ? {val1[15:8],val2[31:24]} : 16'bz;   
-  assign valRes1[15:0]=((operation[11:0]=={1'b0,3'b101,8'd`op_mov8}) && nDataAlt) ? {val2[31:24],val1[7:0]} : 16'bz;   
+    val2[1][31:16] : 16'bz;   
+  assign valRes1[15:0]=((operation[11:0]=={1'b0,3'b000,8'd`op_mov8}) && nDataAlt) ? {val1[1][15:8],val2[1][7:0]} : 16'bz;   
+  assign valRes1[15:0]=((operation[11:0]=={1'b0,3'b011,8'd`op_mov8}) && nDataAlt) ? {val1[1][15:8],val2[1][15:8]} : 16'bz;   
+  assign valRes1[15:0]=((operation[11:0]=={1'b0,3'b100,8'd`op_mov8}) && nDataAlt) ? {val2[1][7:0],val1[1][7:0]} : 16'bz;   
+  assign valRes1[15:0]=((operation[11:0]=={1'b0,3'b111,8'd`op_mov8}) && nDataAlt) ? {val2[1][15:8],val1[1][7:0]} : 16'bz;   
+  assign valRes1[15:0]=((operation[11:0]=={1'b0,3'b001,8'd`op_mov8}) && nDataAlt) ? {val1[1][15:8],val2[1][31:24]} : 16'bz;   
+  assign valRes1[15:0]=((operation[11:0]=={1'b0,3'b101,8'd`op_mov8}) && nDataAlt) ? {val2[1][31:24],val1[1][7:0]} : 16'bz;   
   assign valRes1[15:0]=((operation[11:0]=={1'b0,3'b010,8'd`op_mov8}) && nDataAlt) ? 16'b0 : 16'bz;   
   assign valRes1[15:0]=((operation[11:0]=={1'b0,3'b110,8'd`op_mov8}) && nDataAlt) ? 16'b0 : 16'bz;   
   
@@ -281,30 +281,30 @@ module alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,da
     && nDataAlt) ? 32'b0 : 32'bz;   
   assign valRes1[31:16]=((operation[11:0]==`op_zxt16_64 || (operation[7:0]==`op_zxt8_64 && ~operation[11])) && nDataAlt) ? 16'b0 : 16'bz;   
   assign valRes1[15:0]=((operation[11:0]==`op_zxt16_64) && nDataAlt) ?
-    val2[15:0] : 16'bz;
+    val2[1][15:0] : 16'bz;
   assign valRes1[15:8]=((operation[7:0]==`op_zxt8_64) && ~operation[11] && nDataAlt) ? 8'b0 : 8'bz;   
-  assign valRes1[7:0]=((operation[7:0]==`op_zxt8_64) && nDataAlt) ? val2[7:0]: 8'bz;   
+  assign valRes1[7:0]=((operation[7:0]==`op_zxt8_64) && nDataAlt) ? val2[1][7:0]: 8'bz;   
 
   assign cmov_en=~operation[11] && (operation[7:0]==`op_cmov64 || operation[7:0]==`op_cmovn64);
 
   assign valRes1[63:32]=operation[11:0]==`op_sxt16_32 || (operation[7:0]==`op_sxt8_32 && ~operation[11])
     && nDataAlt ? 32'b0 : 32'bz;   
-  assign valRes1[63:32]=((operation[11:0]==`op_sxt16_64) && nDataAlt) ? {32{val2[15]}} : 32'bz;
-  assign valRes1[63:32]=((operation[11:0]==`op_sxt32_64) && nDataAlt) ? {32{val2[31]}} : 32'bz;
-  assign valRes1[63:32]=((operation[7:0]==`op_sxt8_64) && nDataAlt) ? {32{val2[7]}} : 32'bz;
-  assign valRes1[31:16]=(operation[11:0]==`op_sxt32_64 && nDataAlt) ? val2[31:16] : 16'bz;
-  assign valRes1[31:16]=((operation[11:0]==`op_sxt16_32 || operation[11:0]==`op_sxt16_64) && nDataAlt) ? {16{val2[15]}} : 16'bz;
+  assign valRes1[63:32]=((operation[11:0]==`op_sxt16_64) && nDataAlt) ? {32{val2[1][15]}} : 32'bz;
+  assign valRes1[63:32]=((operation[11:0]==`op_sxt32_64) && nDataAlt) ? {32{val2[1][31]}} : 32'bz;
+  assign valRes1[63:32]=((operation[7:0]==`op_sxt8_64) && nDataAlt) ? {32{val2[1][7]}} : 32'bz;
+  assign valRes1[31:16]=(operation[11:0]==`op_sxt32_64 && nDataAlt) ? val2[1][31:16] : 16'bz;
+  assign valRes1[31:16]=((operation[11:0]==`op_sxt16_32 || operation[11:0]==`op_sxt16_64) && nDataAlt) ? {16{val2[1][15]}} : 16'bz;
   assign valRes1[31:8]=((operation[7:0]==`op_sxt8_32 || operation[7:0]==`op_sxt8_64) 
-    && nDataAlt) ? {24{val2[7]}} : 24'bz;
+    && nDataAlt) ? {24{val2[1][7]}} : 24'bz;
   assign valRes1[15:0]=((operation[11:0]==`op_sxt16_32 || operation[11:0]==`op_sxt16_64 || operation[11:0]==`op_sxt32_64)
-    && nDataAlt) ? val2[15:0] : 16'bz;
+    && nDataAlt) ? val2[1][15:0] : 16'bz;
   assign valRes1[7:0]=((operation[7:0]==`op_sxt8_64 || operation[7:0]==`op_sxt8_32)
-    && nDataAlt) ? val2[7:0]: 8'bz;   
+    && nDataAlt) ? val2[1][7:0]: 8'bz;   
   
   assign valRes1[31:0]=((smallOP==`op_cmov64 || smallOP==`op_cmov32 ||
-    smallOP==`op_cmovn32 || smallOP==`op_cmovn64) && ~operation[11] && doJmp) ? val2[31:0] : 32'bz;
+    smallOP==`op_cmovn32 || smallOP==`op_cmovn64) && ~operation[11] && doJmp) ? val2[1][31:0] : 32'bz;
   assign valRes1[31:0]=((smallOP==`op_cmov64 || smallOP==`op_cmov32 ||
-    smallOP==`op_cmovn32 || smallOP==`op_cmovn64) && ~operation[11] && ~doJmp) ? val1[31:0] : 32'bz;
+    smallOP==`op_cmovn32 || smallOP==`op_cmovn64) && ~operation[11] && ~doJmp) ? val1[1][31:0] : 32'bz;
 
   assign valRes1[31:0]=((smallOP==`op_clahf || smallOP==`op_clahfn) && ~operation[11] ) ? 32'b0 : 32'bz;
 
@@ -312,33 +312,33 @@ module alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,da
     smallOP==`op_cmov32 || smallOP==`op_cmovn32) && ~operation[11]) ? 32'b0 : 32'bz;
 
     
-  assign valRes1[63:32]=((smallOP==`op_cmov64 || smallOP==`op_cmovn64) && ~operation[11] && doJmp) ? val2[63:32] : 32'bz;
-  assign valRes1[63:32]=((smallOP==`op_cmov64 || smallOP==`op_cmovn64) && ~operation[11] && ~doJmp) ? val1[63:32] : 32'bz;
+  assign valRes1[63:32]=((smallOP==`op_cmov64 || smallOP==`op_cmovn64) && ~operation[11] && doJmp) ? val2[1][63:32] : 32'bz;
+  assign valRes1[63:32]=((smallOP==`op_cmov64 || smallOP==`op_cmovn64) && ~operation[11] && ~doJmp) ? val1[1][63:32] : 32'bz;
 
   assign valRes1[7:0]=((smallOP==`op_cset || smallOP==`op_csetn) && ~operation[11]) ? {7'b0,doJmp} : 8'bz;
-  assign valRes1[7:0]=((smallOP==`op_csand || smallOP==`op_csandn) && ~operation[11]) ? {7'b0,doJmp&val1[0]} : 8'bz;
-  assign valRes1[7:0]=((smallOP==`op_csor || smallOP==`op_csor_n) && ~operation[11]) ? {7'b0,doJmp|val1[0]} : 8'bz;
+  assign valRes1[7:0]=((smallOP==`op_csand || smallOP==`op_csandn) && ~operation[11]) ? {7'b0,doJmp&val1[1][0]} : 8'bz;
+  assign valRes1[7:0]=((smallOP==`op_csor || smallOP==`op_csor_n) && ~operation[11]) ? {7'b0,doJmp|val1[1][0]} : 8'bz;
 
   assign valRes1[63:8]=((smallOP==`op_cset || smallOP==`op_csetn ||
       smallOP==`op_csand || smallOP==`op_csandn || smallOP==`op_csor || smallOP==`op_csor_n) && ~operation[11]) ? 56'b0 : 56'bz;
  
-  assign is_ptr=val1[64]|val2[64]|(operation[11:0]==12'd58) && ~(val1[64]&val2[64]&is_sub||val2[64]&is_sub) && (add_en&~operation[8])|logic_en|
-    (cmov_en&&(doJmp&val2[64]||~doJmp&val1[64]))|(operation[11:0]==12'd58)|(operation[11:0]==`op_mov64) && 
+  assign is_ptr=val1[0][64]|val2[0][64]|(operation[11:0]==12'd58) && ~(val1[0][64]&val2[0][64]&is_sub||val2[0][64]&is_sub) && (add_en&~operation[8])|logic_en|
+    (cmov_en&&(doJmp&val2[1][64]||~doJmp&val1[1][64]))|(operation[11:0]==12'd58)|(operation[11:0]==`op_mov64) && 
     ((operation[1:0]==2'b0 && operation[7:5]==3'b0|(operation[7:2]==6'b001000))||cmov_en||operation[11:1]==11'd29);
 
   assign is_sub=operation[7:0]==`op_sub64;
 
-  assign ptr=val1[64] ? val1[63:0] : val2[63:0];
+  assign ptr=val1[0][64] ? val1[0][63:0] : val2[0][63:0];
   
   addsub_alu mainAdder_mod(
-    .a(val1),
-    .b(val2),
+    .a(val1[0]),
+    .b(val2[0]),
     .out(valRes_X),
     .sub(sub),
     .en(add_en),
     .sxtEn(operation[8]),
     .ben({(operation[7:0]==`op_add64 || operation[7:0]==`op_sub64 || operation[7:1]==7'd30 || operation[7:1]==7'd1) && 
-    ~is_ptr && ~(val1[64]&val2[64]&is_sub||val2[64]&is_sub),
+    ~is_ptr && ~(val1[0][64]&val2[0][64]&is_sub||val2[0][64]&is_sub),
     (operation[7:0]==`op_add64 || operation[7:0]==`op_sub64 || operation[7:1]==7'd30 || operation[7:1]==7'd1)
       }),
     .cout(carryAdd64),
@@ -363,14 +363,14 @@ module alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,da
   
   assign flag8_PF=~^(valRes[7:0]);
 
-  assign flagAdd64_OF=val1[63] & val2[63] & ~valRes[63] | ~val1[63] & ~val2[63] & valRes[63];  
-  assign flagAdd32_OF=val1[31] & val2[31] & ~valRes[31] | ~val1[31] & ~val2[31] & valRes[31];  
+  assign flagAdd64_OF=val1[0][63] & val2[0][63] & ~valRes[63] | ~val1[0][63] & ~val2[0][63] & valRes[63];  
+  assign flagAdd32_OF=val1[0][31] & val2[0][31] & ~valRes[31] | ~val1[0][31] & ~val2[0][31] & valRes[31];  
 
-  assign flagSub44_OF=val1[43] & ~val2[43] & ~valRes[43] | ~val1[43] & val2[43] & valRes[43];  
-  assign flagSub64_OF=val1[63] & ~val2[63] & ~valRes[63] | ~val1[63] & val2[63] & valRes[63];  
-  assign flagSub32_OF=val1[31] & ~val2[31] & ~valRes[31] | ~val1[31] & val2[31] & valRes[31];  
-  assign flagSub16_OF=val1[15] & ~val2[15] & ~valRes[15] | ~val1[15] & val2[15] & valRes[15];  
-  assign flagSub8_OF=val1[7] & ~val2[7] & ~valRes[7] | ~val1[7] & val2[7] & valRes[7];  
+  assign flagSub44_OF=val1[0][43] & ~val2[0][43] & ~valRes[43] | ~val1[0][43] & val2[0][43] & valRes[43];  
+  assign flagSub64_OF=val1[0][63] & ~val2[0][63] & ~valRes[63] | ~val1[0][63] & val2[0][63] & valRes[63];  
+  assign flagSub32_OF=val1[0][31] & ~val2[0][31] & ~valRes[31] | ~val1[0][31] & val2[0][31] & valRes[31];  
+  assign flagSub16_OF=val1[0][15] & ~val2[0][15] & ~valRes[15] | ~val1[0][15] & val2[0][15] & valRes[15];  
+  assign flagSub8_OF=val1[0][7] & ~val2[0][7] & ~valRes[7] | ~val1[0][7] & val2[0][7] & valRes[7];  
    
 // flag assignment mux
   assign flags_COASZP=((retOp[7:0]==`op_add64 || retOp[7:0]==`op_sub64) && isFlags_reg) ? {carryAdd64_reg&~is_ptr_reg,flagAdd64_OF_reg&~is_ptr_reg,carryAdd4LL_reg&~is_ptr_reg,valRes_reg[63],flag64_ZF_reg,1'b0} : 6'bz;
@@ -530,19 +530,19 @@ module alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,da
           carryAdd8HH_reg <=carryAdd8HH;
         
 
-          val1_sign65<=val1[64];
-          val1_sign44<=val1[43];
-          val1_sign64<=val1[63];
-          val1_sign32<=val1[31];
-          val1_sign16<=val1[15];
-          val1_sign8<=operation[9] ? val1[15] : val1[7];
+          val1_sign65<=val1[~add_en][64];
+          val1_sign44<=val1[~add_en][43];
+          val1_sign64<=val1[~add_en][63];
+          val1_sign32<=val1[~add_en][31];
+          val1_sign16<=val1[~add_en][15];
+          val1_sign8<=operation[9] ? val1[~add_en][15] : val1[~add_en][7];
 
-          val2_sign44<=val2[43];
-          val2_sign65<=val2[64];
-          val2_sign64<=val2[63];
-          val2_sign32<=val2[31];
-          val2_sign16<=val2[15];
-          val2_sign8<=operation[10] ? val2[15] : val2[7];
+          val2_sign44<=val2[~add_en][43];
+          val2_sign65<=val2[~add_en][64];
+          val2_sign64<=val2[~add_en][63];
+          val2_sign32<=val2[~add_en][31];
+          val2_sign16<=val2[~add_en][15];
+          val2_sign8<=operation[10] ? val2[~add_en][15] : val2[~add_en][7];
           
           val1One_reg<=val1One;
           
@@ -564,7 +564,7 @@ module alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,da
           else cin_seq_reg<=cin_seq[1]|cmov_en;
 
           is_ptr_reg<=is_ptr;       
-          is_ptr_sub<=val1[64]&val2[64]&is_sub;
+          is_ptr_sub<=val1[0][64]&val2[0][64]&is_sub;
 
 	  logic_en_reg<=(operation[7:0]==`op_and64) || (operation[7:0]==`op_or64) || (operation[7:0]==`op_xor64);
 	  //$display("LL ",logic_en_reg," ",val1_sign65," ",val2_sign65," ",is_ptr_reg," ",cin_seq_reg);
