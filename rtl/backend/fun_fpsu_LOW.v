@@ -35,8 +35,6 @@ module fun_fpuSL(
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
   FUF9,
-  FUF0N,FUF1M,FUF2N,FUF3M,FUF4N,FUF5N,
-  FUF6N,FUF7M,FUF8N,FUF9M,
   ALTDATA0,ALTDATA1,
   ALT_INP,
   FOOSL0_out,
@@ -89,70 +87,31 @@ module fun_fpuSL(
   output [13:0] u5_ret;
   output u5_ret_en;
   
-  output [67:0] FUF6N;
-  output [67:0] FUF7M;
-  output [67:0] FUF8N;
-  output [67:0] FUF9M;
 
-
-  input [67:0] FUF0;
-  input [67:0] FUF1;
-  input [67:0] FUF2;
-  input [67:0] FUF3;
-  output [67:0] FUF4;
-  output [67:0] FUF5;
-  output [67:0] FUF6;
-  output [67:0] FUF7;
-  output [67:0] FUF8;
-  output [67:0] FUF9;
+  (* register equiload *) input [67:0] FUF0;
+  (* register equiload *) input [67:0] FUF1;
+  (* register equiload *) input [67:0] FUF2;
+  (* register equiload *) input [67:0] FUF3;
+  (* register equiload *) output [67:0] FUF4;
+  (* register equiload *) output [67:0] FUF5;
+  (* register equiload *) output [67:0] FUF6;
+  (* register equiload *) output [67:0] FUF7;
+  (* register equiload *) output [67:0] FUF8;
+  (* register equiload *) output [67:0] FUF9;
   input [1:0] ALT_INP;
   input [67:0] ALTDATA0;
   input [67:0] ALTDATA1;
   
-  input [67:0] FUF0N;
-  input [67:0] FUF1M;
-  input [67:0] FUF2N;
-  input [67:0] FUF3M;
-  output [67:0] FUF4N;
-  output [67:0] FUF5N;
-
  
-  output [5:0] FOOSL0_out;
-  output [5:0] FOOSL1_out;
-  output [5:0] FOOSL2_out;
+  (* register equiload *) output [5:0] FOOSL0_out;
+  (* register equiload *) output [5:0] FOOSL1_out;
+  (* register equiload *) output [5:0] FOOSL2_out;
 
   output [67:0] XI_dataS;
 
   output [67:0] outPlnA;
   output [67:0] outPlnB;
   
-  wire  [67:0] FUF4_X;
-  wire  [67:0] FUF5_X;
-  wire  [67:0] FUF6_X;
-  wire  [67:0] FUF7_X;
-  wire  [67:0] FUF8_X;
-  wire  [67:0] FUF9_X;
-
-  assign FUF4=FUF4_X;
-  assign FUF5=FUF5_X;
-  assign FUF6=FUF6_X;
-  assign FUF7=FUF7_X;
-  assign FUF8=FUF8_X;
-  assign FUF9=FUF9_X;
-
-  wire  [67:0] FUF4N_X;
-  wire  [67:0] FUF5N_X;
-  wire  [67:0] FUF6N_X;
-  wire  [67:0] FUF7M_X;
-  wire  [67:0] FUF8N_X;
-  wire  [67:0] FUF9M_X;
-
-  assign FUF4N=FUF4N_X;
-  assign FUF5N=FUF5N_X;
-  assign FUF6N=FUF6N_X;
-  assign FUF7M=FUF7M_X;
-  assign FUF8N=FUF8N_X;
-  assign FUF9M=FUF9M_X;
 
   fun_fpsu #(0,0) fpu0_mod(
   clk,
@@ -162,11 +121,9 @@ module fun_fpuSL(
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
   u1_ret,u1_ret_en,
   FUF0,FUF1,FUF2,
-  FUF3,FUF4_X,FUF5_X,
-  FUF6_X,FUF7_X,FUF8_X,
-  FUF9_X,
-  FUF0N,FUF1M,FUF2N,FUF3M,FUF4N_X,FUF5N_X,
-  FUF6N_X,FUF7M_X,FUF8N_X,FUF9M_X,
+  FUF3,FUF4,FUF5,
+  FUF6,FUF7,FUF8,
+  FUF9,
   68'b0,68'b0,
   2'b0,
   FOOSL0_out,,,
@@ -180,11 +137,9 @@ module fun_fpuSL(
   u3_fufwd_A,u3_fuufwd_A,u3_fufwd_B,u3_fuufwd_B,
   u3_ret,u3_ret_en,
   FUF0,FUF1,FUF2,
-  FUF3,FUF4_X,FUF5_X,
-  FUF6_X,FUF7_X,FUF8_X,
-  FUF9_X,
-  FUF0N,FUF1M,FUF2N,FUF3M,FUF4N_X,FUF5N_X,
-  FUF6N_X,FUF7M_X,FUF8N_X,FUF9M_X,
+  FUF3,FUF4,FUF5,
+  FUF6,FUF7,FUF8,
+  FUF9,
   68'b0,68'b0,
   2'b0,
   FOOSL1_out,,,
@@ -198,11 +153,9 @@ module fun_fpuSL(
   u5_fufwd_A,u5_fuufwd_A,u5_fufwd_B,u5_fuufwd_B,
   u5_ret,u5_ret_en,
   FUF0,FUF1,FUF2,
-  FUF3,FUF4_X,FUF5_X,
-  FUF6_X,FUF7_X,FUF8_X,
-  FUF9_X,
-  FUF0N,FUF1M,FUF2N,FUF3M,FUF4N_X,FUF5N_X,
-  FUF6N_X,FUF7M_X,FUF8N_X,FUF9M_X,
+  FUF3,FUF4,FUF5,
+  FUF6,FUF7,FUF8,
+  FUF9,
   ALTDATA0,ALTDATA1,
   ALT_INP,
   FOOSL2_out,

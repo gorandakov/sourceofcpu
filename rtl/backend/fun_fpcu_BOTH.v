@@ -40,10 +40,6 @@ module fun_fpu_BOTH(
   FUFL3,FUFL4,FUFL5,
   FUFL6,FUFL7,FUFL8,
   FUFL9,
-  FUFH0_n,FUFH1_n,FUFH2_n,FUFH3_n,FUFH4_n,FUFH5_n,
-  FUFL0_m,FUFL1_m,FUFL2_m,FUFL3_m,FUFL4_m,FUFL5_m,
-  FUFH6_n,FUFH7_n,FUFH8_n,FUFH9_n,
-  FUFL6_m,FUFL7_m,FUFL8_m,FUFL9_m,
   ALTDATAH0,ALTDATAH1,
   ALTDATAL0,ALTDATAL1,
   ALT_INP,
@@ -114,55 +110,33 @@ module fun_fpu_BOTH(
   output u5_ret_en;
 
 
-  input [67:0] FUFH0;
-  input [67:0] FUFH1;
-  input [67:0] FUFH2;
-  input [67:0] FUFH3;
-  output [67:0] FUFH4;
-  output [67:0] FUFH5;
-  output [67:0] FUFH6;
-  output [67:0] FUFH7;
-  output [67:0] FUFH8;
-  output [67:0] FUFH9;
+  (* register equiload *) input [67:0] FUFH0;
+  (* register equiload *) input [67:0] FUFH1;
+  (* register equiload *) input [67:0] FUFH2;
+  (* register equiload *) input [67:0] FUFH3;
+  (* register equiload *) output [67:0] FUFH4;
+  (* register equiload *) output [67:0] FUFH5;
+  (* register equiload *) output [67:0] FUFH6;
+  (* register equiload *) output [67:0] FUFH7;
+  (* register equiload *) output [67:0] FUFH8;
+  (* register equiload *) output [67:0] FUFH9;
   
-  input [16+67:0] FUFL0;
-  input [16+67:0] FUFL1;
-  input [16+67:0] FUFL2;
-  input [16+67:0] FUFL3;
-  output [16+67:0] FUFL4;
-  output [16+67:0] FUFL5;
-  output [16+67:0] FUFL6;
-  output [16+67:0] FUFL7;
-  output [16+67:0] FUFL8;
-  output [16+67:0] FUFL9;
+  (* register equiload *) input [16+67:0] FUFL0;
+  (* register equiload *) input [16+67:0] FUFL1;
+  (* register equiload *) input [16+67:0] FUFL2;
+  (* register equiload *) input [16+67:0] FUFL3;
+  (* register equiload *) output [16+67:0] FUFL4;
+  (* register equiload *) output [16+67:0] FUFL5;
+  (* register equiload *) output [16+67:0] FUFL6;
+  (* register equiload *) output [16+67:0] FUFL7;
+  (* register equiload *) output [16+67:0] FUFL8;
+  (* register equiload *) output [16+67:0] FUFL9;
   input [1:0] ALT_INP;
   input [16+67:0] ALTDATAL0;
   input [16+67:0] ALTDATAL1;
   input [67:0] ALTDATAH0;
   input [67:0] ALTDATAH1;
   
-  input [67:0] FUFH0_n;
-  input [67:0] FUFH1_n;
-  input [67:0] FUFH2_n;
-  input [67:0] FUFH3_n;
-  input [16+67:0] FUFL0_m;
-  input [16+67:0] FUFL1_m;
-  input [16+67:0] FUFL2_m;
-  input [16+67:0] FUFL3_m;
-  output [16+67:0] FUFL4_m;
-  output [16+67:0] FUFL5_m;
-  output [67:0] FUFH4_n;
-  output [67:0] FUFH5_n;
-
-  output [67:0] FUFH6_n;
-  output [67:0] FUFH7_n;
-  output [67:0] FUFH8_n;
-  output [67:0] FUFH9_n;
-  output [16+67:0] FUFL6_m;
-  output [16+67:0] FUFL7_m;
-  output [16+67:0] FUFL8_m;
-  output [16+67:0] FUFL9_m;
-
   input [5:0] FUS_alu0;
   input [5:0] FUS_alu1;
   input [5:0] FUS_alu2;
@@ -182,13 +156,13 @@ module fun_fpu_BOTH(
   input [10:0] fxFADD4_raise_s;
   input [10:0] fxFCADD5_raise_s;
 
-  output [5:0] FUS0;
-  output [5:0] FUS1;
-  output [5:0] FUS2;
+  (* register equiload *) output [5:0] FUS0;
+  (* register equiload *) output [5:0] FUS1;
+  (* register equiload *) output [5:0] FUS2;
 
-  input [5:0] FOOSL0;
-  input [5:0] FOOSL1;
-  input [5:0] FOOSL2;
+  (* register equiload *) input [5:0] FOOSL0;
+  (* register equiload *) input [5:0] FOOSL1;
+  (* register equiload *) input [5:0] FOOSL2;
   
   input [67:0] XI_dataS;
   input fxFRT_alten_reg3;
@@ -283,8 +257,6 @@ module fun_fpu_BOTH(
   FUFH3,FUFH4,FUFH5,
   FUFH6,FUFH7,FUFH8,
   FUFH9,
-  FUFH0_n,FUFH1_n,FUFH2_n,FUFH3_n,FUFH4_n,FUFH5_n,
-  FUFH6_n,FUFH7_n,FUFH8_n,FUFH9_n,
   ALTDATAH0,ALTDATAH1,
   ALT_INP,
   FUS_alu0,FUS_alu1,
@@ -322,8 +294,6 @@ module fun_fpu_BOTH(
   FUFL3,FUFL4,FUFL5,
   FUFL6,FUFL7,FUFL8,
   FUFL9,
-  FUFL0_m,FUFL1_m,FUFL2_m,FUFL3_m,FUFL4_m,FUFL5_m,
-  FUFL6_m,FUFL7_m,FUFL8_m,FUFL9_m,
   ALTDATAL0,ALTDATAL1,
   ALT_INP,
   FUS_alu0,FUS_alu1,

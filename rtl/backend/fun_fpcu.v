@@ -30,8 +30,6 @@ module fun_fpu(
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
   FUF9,
-  FUF0N,FUF1M,FUF2N,FUF3N,FUF4N,FUF5N,
-  FUF6N,FUF7M,FUF8N,FUF9N,
   ALTDATA0,ALTDATA1,
   ALT_INP,
   FUS_alu0,FUS_alu1,
@@ -64,28 +62,16 @@ module fun_fpu(
   output [13:0] u1_ret;
   output u1_ret_en;
 
-  input [S+67:0] FUF0N;
-  input [S+67:0] FUF1M;
-  input [S+67:0] FUF2N;
-  input [S+67:0] FUF3N;
-  inout [S+67:0] FUF4N;
-  inout [S+67:0] FUF5N;
-
-  inout [S+67:0] FUF6N;
-  inout [S+67:0] FUF7M;
-  inout [S+67:0] FUF8N;
-  inout [S+67:0] FUF9N;
-
-  input [S+67:0] FUF0;
-  input [S+67:0] FUF1;
-  input [S+67:0] FUF2;
-  input [S+67:0] FUF3;
-  inout [S+67:0] FUF4;
-  inout [S+67:0] FUF5;
-  inout [S+67:0] FUF6;
-  inout [S+67:0] FUF7;
-  inout [S+67:0] FUF8;
-  inout [S+67:0] FUF9;
+  (* register equiload *) input [S+67:0] FUF0;
+  (* register equiload *) input [S+67:0] FUF1;
+  (* register equiload *) input [S+67:0] FUF2;
+  (* register equiload *) input [S+67:0] FUF3;
+  (* register equiload *) inout [S+67:0] FUF4;
+  (* register equiload *) inout [S+67:0] FUF5;
+  (* register equiload *) inout [S+67:0] FUF6;
+  (* register equiload *) inout [S+67:0] FUF7;
+  (* register equiload *) inout [S+67:0] FUF8;
+  (* register equiload *) inout [S+67:0] FUF9;
   input [1:0] ALT_INP;
   input [S+67:0] ALTDATA0;
   input [S+67:0] ALTDATA1;
@@ -95,8 +81,8 @@ module fun_fpu(
   input [2:0] ex_alu1;
   input [10:0] fxFADD_raise_s;
   input [10:0] fxFCADD_raise_s;
-  input [5:0] FOOSH_in;
-  output [5:0] FOOSH_out;
+  (* register equiload *) input [5:0] FOOSH_in;
+  (* register equiload *) output [5:0] FOOSH_out;
   output [S+67:0] HH_data;
 
   output [S+67:0] outA;
@@ -245,8 +231,6 @@ module fun_fpu(
   ~u1_en[3],
   u1_A,uu_A1,
   u1_fufwd_A,u1_fuufwd_A,
-  FUF0N,FUF1M,FUF2N,FUF3N,FUF4N,FUF5N,
-  FUF6N,FUF7M,FUF8N,FUF9N,
   FUF0,FUF0_reg,
   FUF1,FUF1_reg,
   FUF2,FUF2_reg,
@@ -264,8 +248,6 @@ module fun_fpu(
   ~u1_en[3],
   u1_B,uu_B1,
   u1_fufwd_B,u1_fuufwd_B,
-  FUF0N,FUF1M,FUF2N,FUF3N,FUF4N,FUF5N,
-  FUF6N,FUF7M,FUF8N,FUF9N,
   FUF0,FUF0_reg,
   FUF1,FUF1_reg,
   FUF2,FUF2_reg,
@@ -283,8 +265,6 @@ module fun_fpu(
   ~u1_en[3],
   u1_A,uu_A2,
   u1_fufwd_A,u1_fuufwd_A,
-  FUF0N,FUF1M,FUF2N,FUF3N,FUF4N,FUF5N,
-  FUF6N,FUF7M,FUF8N,FUF9N,
   FUF0,FUF0_reg,
   FUF1,FUF1_reg,
   FUF2,FUF2_reg,
@@ -302,8 +282,6 @@ module fun_fpu(
   ~u1_en[3],
   u1_B,uu_B2,
   u1_fufwd_B,u1_fuufwd_B,
-  FUF0N,FUF1M,FUF2N,FUF3N,FUF4N,FUF5N,
-  FUF6N,FUF7M,FUF8N,FUF9N,
   FUF0,FUF0_reg,
   FUF1,FUF1_reg,
   FUF2,FUF2_reg,
@@ -449,25 +427,17 @@ module fun_fpu(
       else assign gxDataBFL[0]=u1_op_reg[8] ? {uu_B2[68+15:68],u1_Bx} : uu_B2;
       if (INDEX==0) begin
 	      assign FUF4=FOOF_reg[0];
-	      assign FUF4N=~FOOF_reg[0];
 	      assign FUF7=FOOF_reg[1];
-	      assign FUF7M=~FOOF_reg[1];
       end
       if (INDEX==1) begin
 	      assign FUF5=FOOF_reg[0];
-	      assign FUF5N=~FOOF_reg[0];
 	      assign FUF8=FOOF_reg[1];
-	      assign FUF8N=~FOOF_reg[1];
       end
       if (INDEX==2) begin
 	      assign FUF6=|ALT_INP_reg ? {S+SIMD_WIDTH{1'BZ}} : FOOF_reg[0];
 	      assign FUF6=ALT_INP_reg[0] ? ALTDATA0 : {S+SIMD_WIDTH{1'BZ}};
 	      assign FUF6=ALT_INP_reg[1] ? ALTDATA1 : {S+SIMD_WIDTH{1'BZ}};
 	      assign FUF9=FOOF_reg[1];
-	      assign FUF6N=|ALT_INP_reg ? {S+SIMD_WIDTH{1'BZ}} : ~FOOF_reg[0];
-	      assign FUF6N=ALT_INP_reg[0] ? ~ALTDATA0 : {S+SIMD_WIDTH{1'BZ}};
-	      assign FUF6N=ALT_INP_reg[1] ? ~ALTDATA1 : {S+SIMD_WIDTH{1'BZ}};
-	      assign FUF9N=~FOOF_reg[1];
 	      assign outA=uu_A2;
 	      assign outB=gxDataBFL[0][S+67:0];
       end

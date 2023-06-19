@@ -36,8 +36,6 @@ module fun_fpuH(
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
   FUF9,
-  FUF0N,FUF1N,FUF2N,FUF3N,FUF4N,FUF5N,
-  FUF6N,FUF7N,FUF8N,FUF9N,
   ALTDATA0,ALTDATA1,
   ALT_INP,
   FUS_alu0,FUS_alu1,
@@ -101,28 +99,17 @@ module fun_fpuH(
   output [13:0] u5_ret;
   output u5_ret_en;
 
-  input [67:0] FUF0N;
-  input [67:0] FUF1N;
-  input [67:0] FUF2N;
-  input [67:0] FUF3N;
-  inout [67:0] FUF4N;
-  inout [67:0] FUF5N;
 
-  inout [67:0] FUF6N;
-  inout [67:0] FUF7N;
-  inout [67:0] FUF8N;
-  inout [67:0] FUF9N;
-
-  input [67:0] FUF0;
-  input [67:0] FUF1;
-  input [67:0] FUF2;
-  input [67:0] FUF3;
-  inout [67:0] FUF4;
-  inout [67:0] FUF5;
-  inout [67:0] FUF6;
-  inout [67:0] FUF7;
-  inout [67:0] FUF8;
-  inout [67:0] FUF9;
+  (* register equiload *) input [67:0] FUF0;
+  (* register equiload *) input [67:0] FUF1;
+  (* register equiload *) input [67:0] FUF2;
+  (* register equiload *) input [67:0] FUF3;
+  (* register equiload *) inout [67:0] FUF4;
+  (* register equiload *) inout [67:0] FUF5;
+  (* register equiload *) inout [67:0] FUF6;
+  (* register equiload *) inout [67:0] FUF7;
+  (* register equiload *) inout [67:0] FUF8;
+  (* register equiload *) inout [67:0] FUF9;
   input [1:0] ALT_INP;
   input [67:0] ALTDATA0;
   input [67:0] ALTDATA1;
@@ -145,12 +132,12 @@ module fun_fpuH(
   input [10:0] fxFCADD3_raise_s;
   input [10:0] fxFADD4_raise_s;
   input [10:0] fxFCADD5_raise_s;
-  input [5:0]  FOOSH0_in;
-  output [5:0] FOOSH0_out;
-  input [5:0]  FOOSH1_in;
-  output [5:0] FOOSH1_out;
-  input [5:0]  FOOSH2_in;
-  output [5:0] FOOSH2_out;
+  (* register equiload *) input [5:0]  FOOSH0_in;
+  (* register equiload *) output [5:0] FOOSH0_out;
+  (* register equiload *) input [5:0]  FOOSH1_in;
+  (* register equiload *) output [5:0] FOOSH1_out;
+  (* register equiload *) input [5:0]  FOOSH2_in;
+  (* register equiload *) output [5:0] FOOSH2_out;
 
   output [67:0] outA;
   output [67:0] outB;
@@ -166,8 +153,6 @@ module fun_fpuH(
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
   FUF9,
-  FUF0N,FUF1N,FUF2N,FUF3N,FUF4N,FUF5N,
-  FUF6N,FUF7N,FUF8N,FUF9N,
   68'b0,68'b0,
   2'b0,
   FUS_alu0,FUS_alu1,
@@ -189,8 +174,6 @@ module fun_fpuH(
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
   FUF9,
-  FUF0N,FUF1N,FUF2N,FUF3N,FUF4N,FUF5N,
-  FUF6N,FUF7N,FUF8N,FUF9N,
   68'b0,68'b0,
   2'b0,
   FUS_alu2,FUS_alu3,
@@ -212,8 +195,6 @@ module fun_fpuH(
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
   FUF9,
-  FUF0N,FUF1N,FUF2N,FUF3N,FUF4N,FUF5N,
-  FUF6N,FUF7N,FUF8N,FUF9N,
   ALTDATA0,ALTDATA1,
   ALT_INP,
   FUS_alu4,FUS_alu5,
