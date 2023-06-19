@@ -1629,8 +1629,8 @@ module dcache1(
           read_hit2<=read_hit2P_reg;
           read_hit3<=read_hit3P_reg;
 
-          write_hit0<=write_hit0P_reg;
-          write_hit1<=write_hit1P_reg;
+          write_hit0<=write_hit0P_reg | &write_hitCl0P_reg;//bypass write cache miss if full miss occurs
+          write_hit1<=write_hit1P_reg | &write_hitCl1P_reg;//bypass write cache miss if full miss occurs 
           write_hitCl0<=write_hitCl0P_reg;
           write_hitCl1<=write_hitCl1P_reg;
           write_dupl0<=write_dupl0P_reg;
