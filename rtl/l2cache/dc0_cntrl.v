@@ -132,6 +132,49 @@ module dc0_cntrlC_ram(
 endmodule
 
 //dcache1_ram read during write behaviour: write first
+module dc0_cntrlC2w_ram(
+  clk,
+  rst,
+  read_clkEn,
+  read_addr,
+  read_data,
+  write_addr0,
+  write_addr1,
+  write_data0,
+  write_wen0
+  write_data1,
+  write_wen1
+  );
+  localparam ADDR_WIDTH=3;
+  localparam DATA_WIDTH=37+5;
+  localparam ADDR_COUNT=8;
+  
+  input clk;
+  input rst;
+  input read_clkEn;
+  input [ADDR_WIDTH-1:0] read_addr;
+  output [DATA_WIDTH-1:0] read_data;
+  input [ADDR_WIDTH-1:0] write_addr;
+  input [DATA_WIDTH-1:0] write_data;
+  input write_wen;
+
+  reg [DATA_WIDTH-1:0] ram [ADDR_COUNT-1:0];
+  reg [ADDR_WIDTH-1:0] read_addr_reg;
+  
+  assign read_data=ram[read_addr_reg];
+
+  always @(posedge clk)
+    begin
+      if (rst) read_addr_reg<={ADDR_WIDTH{1'b0}};
+      else if (read_clkEn) read_addr_reg<=read_addr; 
+      if (write_wen0) ram[write_addr0]<=write_data0;
+      if (write_wen1) ram[write_addr1]<=write_data1;
+    end
+
+endmodule
+
+
+//dcache1_ram read during write behaviour: write first
 module dc0_cntrlC1_ram(
   clk,
   rst,
