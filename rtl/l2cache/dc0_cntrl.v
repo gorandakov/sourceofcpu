@@ -18,7 +18,7 @@ limitations under the License.
 `include "../struct.sv"
 //verilator lint_off WIDTH
 //dcache1_ram read during write behaviour: write first
-module dc2_cntrl_ram(
+module dc0_cntrl_ram(
   clk,
   rst,
   read_clkEn,
@@ -56,7 +56,7 @@ module dc2_cntrl_ram(
 endmodule
 
 //dcache1_ram read during write behaviour: write first
-module dc2_cntrlD_ram(
+module dc0_cntrlD_ram(
   clk,
   rst,
   read_clkEn,
@@ -94,7 +94,7 @@ module dc2_cntrlD_ram(
 endmodule
 
 //dcache1_ram read during write behaviour: write first
-module dc2_cntrlC_ram(
+module dc0_cntrlC_ram(
   clk,
   rst,
   read_clkEn,
@@ -132,7 +132,7 @@ module dc2_cntrlC_ram(
 endmodule
 
 //dcache1_ram read during write behaviour: write first
-module dc2_cntrlC1_ram(
+module dc0_cntrlC1_ram(
   clk,
   rst,
   read_clkEn,
@@ -171,7 +171,7 @@ endmodule
 
 
 //dcache1_ram read during write behaviour: write first
-module dc2_cntrlM_ram(
+module dc0_cntrlM_ram(
   clk,
   rst,
   read_clkEn,
@@ -208,7 +208,7 @@ module dc2_cntrlM_ram(
 
 endmodule
 
-module dc2_cntrlM1_ram(
+module dc0_cntrlM1_ram(
   clk,
   rst,
   read_clkEn,
@@ -246,7 +246,7 @@ module dc2_cntrlM1_ram(
 endmodule
 
 //dcache1_ram read during write behaviour: write first
-module dc2_cntrlMiC2_ram(
+module dc0_cntrlMiC2_ram(
   clk,
   rst,
   read_clkEn,
@@ -283,7 +283,7 @@ module dc2_cntrlMiC2_ram(
 
 endmodule
 
-module dc2_cntrl(
+module dc0_cntrl(
   clk,
   rst,
   doSkip,
@@ -739,7 +739,7 @@ module dc2_cntrl(
 
   assign wen_C2=read_clkEnM1 && ~rbusD_signals_reg[`rbusD_second];
   
-  dc2_cntrl_ram ram0_mod(
+  dc0_cntrl_ram ram0_mod(
   .clk(clk),
   .rst(rst),
   .read_clkEn(read_clkEn),
@@ -749,7 +749,7 @@ module dc2_cntrl(
   .write_data(init ? 1'b0 : {write_mop[0],write0_clkEn,write_data0[143:128]}),
   .write_wen(write_wen|init)
   );
-  dc2_cntrl_ram ram1_mod(
+  dc0_cntrl_ram ram1_mod(
   .clk(clk),
   .rst(rst),
   .read_clkEn(read_clkEn),
@@ -759,7 +759,7 @@ module dc2_cntrl(
   .write_data(init ? 1'b0 : {write_mop[1],write1_clkEn,write_data0[159:144]}),
   .write_wen(write_wen|init)
   );
-  dc2_cntrlD_ram ramB0_mod(
+  dc0_cntrlD_ram ramB0_mod(
   .clk(clk),
   .rst(rst),
   .read_clkEn(read_clkEn),
@@ -769,7 +769,7 @@ module dc2_cntrl(
   .write_data(init ? 1'b0 : {write_data0[127:0],write_data1[143:128]}),
   .write_wen(write_wen|init)
   );
-  dc2_cntrlD_ram ramB1_mod(
+  dc0_cntrlD_ram ramB1_mod(
   .clk(clk),
   .rst(rst),
   .read_clkEn(read_clkEn),
@@ -779,7 +779,7 @@ module dc2_cntrl(
   .write_data(init ? 1'b0 : {write_data1[127:0],write_data1[159:144]}),
   .write_wen(write_wen|init)
   );
-  dc2_cntrlC_ram ramC_mod(
+  dc0_cntrlC_ram ramC_mod(
   .clk(clk),
   .rst(rst),
   .read_clkEn(read_clkEnC),
@@ -789,7 +789,7 @@ module dc2_cntrl(
   .write_data(init ? 1'b0 : {Cread_addr,Cread_req}),
   .write_wen(Cread_en|init)
   );
-  dc2_cntrlC1_ram ramC1_mod(
+  dc0_cntrlC1_ram ramC1_mod(
   .clk(clk),
   .rst(rst),
   .read_clkEn(read_clkEnC1),
@@ -800,7 +800,7 @@ module dc2_cntrl(
   .write_wen(read_en|init)
   );
   
-  dc2_cntrlM_ram ramM_mod(
+  dc0_cntrlM_ram ramM_mod(
   .clk(clk),
   .rst(rst),
   .read_clkEn(read_clkEnM),
@@ -810,7 +810,7 @@ module dc2_cntrl(
   .write_data(init ? 1'b0 : {miss_want_excl,miss_dupl,miss_addr,miss_req,miss_io,miss_sz,miss_bank0,miss_low}),
   .write_wen(miss_en|init)
   );
-  dc2_cntrlM1_ram ramM1_mod(
+  dc0_cntrlM1_ram ramM1_mod(
   .clk(clk),
   .rst(rst),
   .read_clkEn(1'b1),
