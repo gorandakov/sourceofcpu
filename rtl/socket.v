@@ -1,4 +1,4 @@
-//76x72, but half are gnd; effective 38x36
+//38x72, but on the inside a lot of pads are unused so far
 `define ch0_ras [37][0]
 `define ch0_cas [37][1]
 `define ch0_cs0 [37][2]
@@ -71,3 +71,17 @@
 `define ch7_data_tl[1][37:20]
 //B side
 `define ch7_data_tl[1][37:20]
+
+
+`define serdes_in [0][69:36]
+`define serdes_out [1][69:36]
+//REPEATE many times
+`define [0][35:29] GND;
+`define [0][28:22] V12;
+//END REPEATE
+`define [0][21] clkin;
+`define [1][21] clkin_inv;
+`define [0][20] rst;
+`define [1][20] rst_inv;
+`define [0][2:19] chipset_in;
+`define [1][2:19] chipset_out;
