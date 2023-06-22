@@ -53,10 +53,10 @@ module fun_fpsu_BOTH(
   input clk;
   input rst;
   input [31:0] fpcsr;
-  input [67:0] u1_A0;
-  input [67:0] u1_B0;
-  input [67:0]    u1_A1;
-  input [67:0]    u1_B1;
+  (* bus=SIMDL bus_spacing=8 *) input [67:0] u1_A0;
+  (* bus=SIMDL bus_spacing=8 *) input [67:0] u1_B0;
+  (* bus=SIMDH bus_spacing=8 *) input [67:0]    u1_A1;
+  (* bus=SIMDH bus_spacing=8 *) input [67:0]    u1_B1;
   input [3:0] u1_en;
   input [12:0] u1_op;
   input [3:0] u1_fufwd_A;
@@ -66,10 +66,10 @@ module fun_fpsu_BOTH(
   output [13:0] u1_ret;
   output u1_ret_en;
 
-  input [67:0] u3_A0;
-  input [67:0] u3_B0;
-  input [67:0]    u3_A1;
-  input [67:0]    u3_B1;
+  (* bus=SIMDL bus_spacing=8 *) input [67:0] u3_A0;
+  (* bus=SIMDL bus_spacing=8 *) input [67:0] u3_B0;
+  (* bus=SIMDH bus_spacing=8 *) input [67:0]    u3_A1;
+  (* bus=SIMDH bus_spacing=8 *) input [67:0]    u3_B1;
   input [3:0] u3_en;
   input [12:0] u3_op;
   input [3:0] u3_fufwd_A;
@@ -79,10 +79,10 @@ module fun_fpsu_BOTH(
   output [13:0] u3_ret;
   output u3_ret_en;
 
-  input [67:0] u5_A0;
-  input [67:0] u5_B0;
-  input [67:0]    u5_A1;
-  input [67:0]    u5_B1;
+  (* bus=SIMDL bus_spacing=8 *) input [67:0] u5_A0;
+  (* bus=SIMDL bus_spacing=8 *) input [67:0] u5_B0;
+  (* bus=SIMDH bus_spacing=8 *) input [67:0]    u5_A1;
+  (* bus=SIMDH bus_spacing=8 *) input [67:0]    u5_B1;
   input [3:0] u5_en;
   input [12:0] u5_op;
   input [3:0] u5_fufwd_A;
@@ -93,32 +93,32 @@ module fun_fpsu_BOTH(
   output u5_ret_en;
 
 
-  (* register equiload *) input [67:0] FUFH0;
-  (* register equiload *) input [67:0] FUFH1;
-  (* register equiload *) input [67:0] FUFH2;
-  (* register equiload *) input [67:0] FUFH3;
-  (* register equiload *) output [67:0] FUFH4;
-  (* register equiload *) output [67:0] FUFH5;
-  (* register equiload *) output [67:0] FUFH6;
-  (* register equiload *) output [67:0] FUFH7;
-  (* register equiload *) output [67:0] FUFH8;
-  (* register equiload *) output [67:0] FUFH9;
+  (* register equiload *) (* bus=SIMDH bus_spacing=8 *) input [67:0] FUFH0;
+  (* register equiload *) (* bus=SIMDH bus_spacing=8 *) input [67:0] FUFH1;
+  (* register equiload *) (* bus=SIMDH bus_spacing=8 *) input [67:0] FUFH2;
+  (* register equiload *) (* bus=SIMDH bus_spacing=8 *) input [67:0] FUFH3;
+  (* register equiload *) (* bus=SIMDH bus_spacing=8 *) output [67:0] FUFH4;
+  (* register equiload *) (* bus=SIMDH bus_spacing=8 *) output [67:0] FUFH5;
+  (* register equiload *) (* bus=SIMDH bus_spacing=8 *) output [67:0] FUFH6;
+  (* register equiload *) (* bus=SIMDH bus_spacing=8 *) output [67:0] FUFH7;
+  (* register equiload *) (* bus=SIMDH bus_spacing=8 *) output [67:0] FUFH8;
+  (* register equiload *) (* bus=SIMDH bus_spacing=8 *) output [67:0] FUFH9;
   
-  (* register equiload *) input [67:0] FUFL0;
-  (* register equiload *) input [67:0] FUFL1;
-  (* register equiload *) input [67:0] FUFL2;
-  (* register equiload *) input [67:0] FUFL3;
-  (* register equiload *) output [67:0] FUFL4;
-  (* register equiload *) output [67:0] FUFL5;
-  (* register equiload *) output [67:0] FUFL6;
-  (* register equiload *) output [67:0] FUFL7;
-  (* register equiload *) output [67:0] FUFL8;
-  (* register equiload *) output [67:0] FUFL9;
+  (* register equiload *) (* bus=SIMDL bus_spacing=8 *) input [67:0] FUFL0;
+  (* register equiload *) (* bus=SIMDL bus_spacing=8 *) input [67:0] FUFL1;
+  (* register equiload *) (* bus=SIMDL bus_spacing=8 *) input [67:0] FUFL2;
+  (* register equiload *) (* bus=SIMDL bus_spacing=8 *) input [67:0] FUFL3;
+  (* register equiload *) (* bus=SIMDL bus_spacing=8 *) output [67:0] FUFL4;
+  (* register equiload *) (* bus=SIMDL bus_spacing=8 *) output [67:0] FUFL5;
+  (* register equiload *) (* bus=SIMDL bus_spacing=8 *) output [67:0] FUFL6;
+  (* register equiload *) (* bus=SIMDL bus_spacing=8 *) output [67:0] FUFL7;
+  (* register equiload *) (* bus=SIMDL bus_spacing=8 *) output [67:0] FUFL8;
+  (* register equiload *) (* bus=SIMDL bus_spacing=8 *) output [67:0] FUFL9;
   input [1:0] ALT_INP;
-  input [67:0] ALTDATAL0;
-  input [67:0] ALTDATAL1;
-  input [67:0] ALTDATAH0;
-  input [67:0] ALTDATAH1;
+  (* bus=SIMDL bus_spacing=8 *) input [67:0] ALTDATAL0;
+  (* bus=SIMDL bus_spacing=8 *) input [67:0] ALTDATAL1;
+  (* bus=SIMDH bus_spacing=8 *) input [67:0] ALTDATAH0;
+  (* bus=SIMDH bus_spacing=8 *) input [67:0] ALTDATAH1;
 
   (* register equiload *) output [5:0] FOOFL0;
   (* register equiload *) output [5:0] FOOFL1;
@@ -126,8 +126,8 @@ module fun_fpsu_BOTH(
   
   (* register equiload *) output [67:0] MRKAH;
   (* register equiload *) output [67:0] MRKBH;
-  (* register equiload *) output [67:0] MRKAL;
-  (* register equiload *) output [67:0] BRKBL;
+  (* register equiload *) (* bus=SIMDL bus_spacing=8 *) output [67:0] MRKAL;
+  (* register equiload *) (* bus=SIMDL bus_spacing=8 *) output [67:0] BRKBL;
 
   output [67:0] XI_dataS;
   
