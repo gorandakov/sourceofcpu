@@ -2402,8 +2402,8 @@ module rs(
   input [DATA_WIDTH-1:0]       newDataA0;
   input [DATA_WIDTH-1:0]       newDataB0;
   input [CONST_WIDTH-1:0]       newDataC0;
-  input [REG_WIDTH-1:0] newRegA0; 
-  input [REG_WIDTH-1:0] newRegB0; 
+  (* bus=WBREG bus_rpl=6 bus_spacing=11 *) input [REG_WIDTH-1:0] newRegA0; 
+  (* bus=WBREG bus_rpl=6 bus_spacing=11 *) input [REG_WIDTH-1:0] newRegB0; 
   input newANeeded0;
   input newBNeeded0;
   input [REG_WIDTH-1:0] newReg0;
@@ -2414,8 +2414,8 @@ module rs(
   input rsAlloc0;
   input [10:0] newGazumpA0;
   input [10:0] newGazumpB0;
-  input [FN_WIDTH-1:0] newFunitA0;
-  input [FN_WIDTH-1:0] newFunitB0;
+  (* bus=WBREG bus_rpl=6 bus_spacing=11 *) input [FN_WIDTH-1:0] newFunitA0;
+  (* bus=WBREG bus_rpl=6 bus_spacing=11 *) input [FN_WIDTH-1:0] newFunitB0;
   input [WQ_WIDTH-1:0] newWQ0;
   input newLSFlag0;
   input [ATTR_WIDTH-1:0] newAttr0;
@@ -2424,8 +2424,8 @@ module rs(
   input [DATA_WIDTH-1:0]       newDataB1;
   input [CONST_WIDTH-1:0]       newDataC1;
   input [FLAGS_WIDTH-1:0]       newDataS1;
-  input [REG_WIDTH-1:0] newRegA1; 
-  input [REG_WIDTH-1:0] newRegB1; 
+  (* bus=WBREG bus_rpl=6 bus_spacing=11 *) input [REG_WIDTH-1:0] newRegA1; 
+  (* bus=WBREG bus_rpl=6 bus_spacing=11 *) input [REG_WIDTH-1:0] newRegB1; 
   input [REG_WIDTH-1:0] newRegS1; 
   input newANeeded1;
   input newBNeeded1;
@@ -2440,8 +2440,8 @@ module rs(
   input [10:0] newGazumpA1;
   input [10:0] newGazumpB1;
   input [10:0] newGazumpS1;
-  input [FN_WIDTH-1:0] newFunitA1;
-  input [FN_WIDTH-1:0] newFunitB1;
+  (* bus=WBREG bus_rpl=6 bus_spacing=11 *) input [FN_WIDTH-1:0] newFunitA1;
+  (* bus=WBREG bus_rpl=6 bus_spacing=11 *) input [FN_WIDTH-1:0] newFunitB1;
   input [FN_WIDTH-1:0] newFunitS1;
   input newLSFlag1;
   input [ATTR_WIDTH-1:0] newAttr1;
@@ -2450,8 +2450,8 @@ module rs(
   input [DATA_WIDTH-1:0]       newDataB2;
   input [FLAGS_WIDTH-1:0]       newDataS2;
   input [CONST_WIDTH-1:0]       newDataC2;
-  input [REG_WIDTH-1:0] newRegA2; 
-  input [REG_WIDTH-1:0] newRegB2; 
+  (* bus=WBREG bus_rpl=6 bus_spacing=11 *) input [REG_WIDTH-1:0] newRegA2; 
+  (* bus=WBREG bus_rpl=6 bus_spacing=11 *) input [REG_WIDTH-1:0] newRegB2; 
   input [REG_WIDTH-1:0] newRegS2; 
   input newANeeded2;
   input newBNeeded2;
@@ -2465,8 +2465,8 @@ module rs(
   input [10:0] newGazumpA2;
   input [10:0] newGazumpB2;
   input [10:0] newGazumpS2;
-  input [FN_WIDTH-1:0] newFunitA2;
-  input [FN_WIDTH-1:0] newFunitB2;
+  (* bus=WBREG bus_rpl=6 bus_spacing=11 *) input [FN_WIDTH-1:0] newFunitA2;
+  (* bus=WBREG bus_rpl=6 bus_spacing=11 *) input [FN_WIDTH-1:0] newFunitB2;
   input [FN_WIDTH-1:0] newFunitS2;
   input [ATTR_WIDTH-1:0] newAttr2;
   
@@ -2527,43 +2527,43 @@ module rs(
 
 //functional units inputs/outputs
   input [DATA_WIDTH-1:0] FU0;
-  input [REG_WIDTH-1:0] FUreg0;
+  (* bus=WBREG bus_rpl=6 bus_spacing=11 *) input [REG_WIDTH-1:0] FUreg0;
   input FUwen0;
   
   input [DATA_WIDTH-1:0] FU1;
-  input [REG_WIDTH-1:0] FUreg1;
+  (* bus=WBREG bus_rpl=6 bus_spacing=11 *) input [REG_WIDTH-1:0] FUreg1;
   input FUwen1;
 
   input [DATA_WIDTH-1:0] FU2;
-  input [REG_WIDTH-1:0] FUreg2;
+  (* bus=WBREG bus_rpl=6 bus_spacing=11 *) input [REG_WIDTH-1:0] FUreg2;
   input FUwen2;
 
   input [DATA_WIDTH-1:0] FU3;
-  input [REG_WIDTH-1:0] FUreg3;
+  (* bus=WBREG bus_rpl=6 bus_spacing=11 *) input [REG_WIDTH-1:0] FUreg3;
   input FUwen3;
 
   input [DATA_WIDTH-1:0] FU4;
-  input [REG_WIDTH-1:0] FUreg4;
+  (* bus=WBREG bus_rpl=6 bus_spacing=11 *) input [REG_WIDTH-1:0] FUreg4;
   input FUwen4;
 
   input [DATA_WIDTH-1:0] FU5;
-  input [REG_WIDTH-1:0] FUreg5;
+  (* bus=WBREG bus_rpl=6 bus_spacing=11 *) input [REG_WIDTH-1:0] FUreg5;
   input FUwen5;
 
   input [DATA_WIDTH-1:0] FU6;
-  input [REG_WIDTH-1:0] FUreg6;
+  (* bus=WBREG bus_rpl=6 bus_spacing=11 *) input [REG_WIDTH-1:0] FUreg6;
   input FUwen6;
 
   input [DATA_WIDTH-1:0] FU7;
-  input [REG_WIDTH-1:0] FUreg7;
+  (* bus=WBREG bus_rpl=6 bus_spacing=11 *) input [REG_WIDTH-1:0] FUreg7;
   input FUwen7;
 
   input [DATA_WIDTH-1:0] FU8;
-  input [REG_WIDTH-1:0] FUreg8;
+  (* bus=WBREG bus_rpl=6 bus_spacing=11 *) input [REG_WIDTH-1:0] FUreg8;
   input FUwen8;
 
   input [DATA_WIDTH-1:0] FU9;
-  input [REG_WIDTH-1:0] FUreg9;
+  (* bus=WBREG bus_rpl=6 bus_spacing=11 *) input [REG_WIDTH-1:0] FUreg9;
   input FUwen9;
   
 //SIMD
