@@ -26,6 +26,9 @@ module fperm(
 //  copyB,
   swpSngl,
   dupSngl,
+  handle_fork,
+  e2d,
+  d2e,
   A,B,
   res);
   parameter C=1'b0;
@@ -35,6 +38,7 @@ module fperm(
   input copyA;
   input swpSngl;
   input dupSngl;
+  input handle_fork;
   input [67:0] A;
   input [67:0] B;
   output [67:0] res;
@@ -53,10 +57,13 @@ module fperm(
         assign res=en_reg3? res0_reg3 : 68'bz;
     end
   endgenerate
-  assign resX=(copyA & ~swpSngl) ? A : 68'bz;
-  assign resX=(~copyA & ~swpSngl) ? B : 68'bz;
-  assign resX=(copyA & swpSngl) ? {A[67:66],A[32:0],A[65:33]} : 68'bz;
-  assign resX=(~copyA & swpSngl) ? {B[67:66],B[32:0],B[65:33]} : 68'bz;
+  assign resX=(copyA & ~swpSngl & ~handle_fork) ? A : 68'bz;
+  assign resX=(~copyA & ~swpSngl & ~handle_fork) ? B : 68'bz;
+  assign resX=(copyA & swpSngl & ~handle_fork) ? {A[67:66],A[32:0],A[65:33]} : 68'bz;
+  assign resX=(~copyA & swpSngl & ~handle_fork) ? {B[67:66],B[32:0],B[65:33]} : 68'bz;
+  assign resX=(handle_fork && copyA) ? {B[67:66],B[32:0],B[32:0]}; 
+  assign resX=(handle_fork && ~copyA) ? {B[67:66],B[65:33],B[65:33]}; 
+
   assign res0=dupSngl ?{resX[67:66],resX[32:0],resX[32:0]} : resX; 
   always @(negedge clk) begin
     res0_reg<=res0;
