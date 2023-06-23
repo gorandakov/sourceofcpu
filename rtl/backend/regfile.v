@@ -1507,7 +1507,7 @@ module regfile(
   write9_addr_reg2,write9_data_reg,write9_wen_reg2
  );
 
-  rrf rrf_m(
+  rrf #(DATA_WIDTH) rrf_m(
   clk,
   rst,
   read_clkEn,
