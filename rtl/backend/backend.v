@@ -5018,6 +5018,8 @@ module backend(
   .reqBus_LSQ(reqBus_LSQ),
   .insert_isData(insert_isData),
   .insBus_req(insBus_req),
+  .insBus_register(insBus_register),
+  .insBus_LSQ(insBus_LSQ),
   .wr0_hit(wr0_hit),
   .wr0_io(wr0_iol),
   .wr0_addrE(wr0_addrE),.wr0_addrO(wr0_addrO),
