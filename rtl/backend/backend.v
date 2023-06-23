@@ -2108,134 +2108,134 @@ module backend(
   wire [8:0][3:0] instr_ret;
   reg  [3:0] instr_ret_reg[8:0];
     
-  wire [5:0] retire0_rT/*verilator public*/;
-  wire [8:0] retire0_rF;
-  wire [8:0] retire0_rFl;
-  wire retire0_enG/*verilator public*/;
-  wire retire0_enV;
-  wire retire0_enF;
-  wire [5:0] retire1_rT/*verilator public*/;
-  wire [8:0] retire1_rF;
-  wire [8:0] retire1_rFl;
-  wire retire1_enG/*verilator public*/;
-  wire retire1_enV;
-  wire retire1_enF;
-  wire [5:0] retire2_rT/*verilator public*/;
-  wire [8:0] retire2_rF;
-  wire [8:0] retire2_rFl;
-  wire retire2_enG/*verilator public*/;
-  wire retire2_enV;
-  wire retire2_enF;
-  wire [5:0] retire3_rT/*verilator public*/;
-  wire [8:0] retire3_rF;
-  wire [8:0] retire3_rFl;
-  wire retire3_enG/*verilator public*/;
-  wire retire3_enV;
-  wire retire3_enF;
-  wire [5:0] retire4_rT/*verilator public*/;
-  wire [8:0] retire4_rF;
-  wire [8:0] retire4_rFl;
-  wire retire4_enG/*verilator public*/;
-  wire retire4_enV;
-  wire retire4_enF;
-  wire [5:0] retire5_rT/*verilator public*/;
-  wire [8:0] retire5_rF;
-  wire [8:0] retire5_rFl;
-  wire retire5_enG/*verilator public*/;
-  wire retire5_enV;
-  wire retire5_enF;
-  wire [5:0] retire6_rT/*verilator public*/;
-  wire [8:0] retire6_rF;
-  wire [8:0] retire6_rFl;
-  wire retire6_enG/*verilator public*/;
-  wire retire6_enV;
-  wire retire6_enF;
-  wire [5:0] retire7_rT/*verilator public*/;
-  wire [8:0] retire7_rF;
-  wire [8:0] retire7_rFl;
-  wire retire7_enG/*verilator public*/;
-  wire retire7_enV;
-  wire retire7_enF;
-  wire [5:0] retire8_rT/*verilator public*/;
-  wire [8:0] retire8_rF;
-  wire [8:0] retire8_rFl;
-  wire retire8_enG/*verilator public*/;
-  wire retire8_enV;
-  wire retire8_enF;
+  wire [5:0] tire0_rT/*verilator public*/;
+  wire [8:0] tire0_rF;
+  wire [8:0] tire0_rFl;
+  wire tire0_enG/*verilator public*/;
+  wire tire0_enV;
+  wire tire0_enF;
+  wire [5:0] tire1_rT/*verilator public*/;
+  wire [8:0] tire1_rF;
+  wire [8:0] tire1_rFl;
+  wire tire1_enG/*verilator public*/;
+  wire tire1_enV;
+  wire tire1_enF;
+  wire [5:0] tire2_rT/*verilator public*/;
+  wire [8:0] tire2_rF;
+  wire [8:0] tire2_rFl;
+  wire tire2_enG/*verilator public*/;
+  wire tire2_enV;
+  wire tire2_enF;
+  wire [5:0] tire3_rT/*verilator public*/;
+  wire [8:0] tire3_rF;
+  wire [8:0] tire3_rFl;
+  wire tire3_enG/*verilator public*/;
+  wire tire3_enV;
+  wire tire3_enF;
+  wire [5:0] tire4_rT/*verilator public*/;
+  wire [8:0] tire4_rF;
+  wire [8:0] tire4_rFl;
+  wire tire4_enG/*verilator public*/;
+  wire tire4_enV;
+  wire tire4_enF;
+  wire [5:0] tire5_rT/*verilator public*/;
+  wire [8:0] tire5_rF;
+  wire [8:0] tire5_rFl;
+  wire tire5_enG/*verilator public*/;
+  wire tire5_enV;
+  wire tire5_enF;
+  wire [5:0] tire6_rT/*verilator public*/;
+  wire [8:0] tire6_rF;
+  wire [8:0] tire6_rFl;
+  wire tire6_enG/*verilator public*/;
+  wire tire6_enV;
+  wire tire6_enF;
+  wire [5:0] tire7_rT/*verilator public*/;
+  wire [8:0] tire7_rF;
+  wire [8:0] tire7_rFl;
+  wire tire7_enG/*verilator public*/;
+  wire tire7_enV;
+  wire tire7_enF;
+  wire [5:0] tire8_rT/*verilator public*/;
+  wire [8:0] tire8_rF;
+  wire [8:0] tire8_rFl;
+  wire tire8_enG/*verilator public*/;
+  wire tire8_enV;
+  wire tire8_enF;
 
-  reg [5:0] retire0_rT_reg;
-  reg [8:0] retire0_rF_reg;
-  reg [8:0] retire0_rFl_reg;
-  reg retire0_enV_reg;
-  reg retire0_enF_reg;
-  reg [5:0] retire1_rT_reg;
-  reg [8:0] retire1_rF_reg;
-  reg [8:0] retire1_rFl_reg;
-  reg retire1_enV_reg;
-  reg retire1_enF_reg;
-  reg [5:0] retire2_rT_reg;
-  reg [8:0] retire2_rF_reg;
-  reg [8:0] retire2_rFl_reg;
-  reg retire2_enV_reg;
-  reg retire2_enF_reg;
-  reg [5:0] retire3_rT_reg;
-  reg [8:0] retire3_rF_reg;
-  reg [8:0] retire3_rFl_reg;
-  reg retire3_enV_reg;
-  reg retire3_enF_reg;
-  reg [5:0] retire4_rT_reg;
-  reg [8:0] retire4_rF_reg;
-  reg [8:0] retire4_rFl_reg;
-  reg retire4_enV_reg;
-  reg retire4_enF_reg;
-  reg [5:0] retire5_rT_reg;
-  reg [8:0] retire5_rF_reg;
-  reg [8:0] retire5_rFl_reg;
-  reg retire5_enV_reg;
-  reg retire5_enF_reg;
-  reg [5:0] retire6_rT_reg;
-  reg [8:0] retire6_rF_reg;
-  reg [8:0] retire6_rFl_reg;
-  reg retire6_enV_reg;
-  reg retire6_enF_reg;
-  reg [5:0] retire7_rT_reg;
-  reg [8:0] retire7_rF_reg;
-  reg [8:0] retire7_rFl_reg;
-  reg retire7_enV_reg;
-  reg retire7_enF_reg;
-  reg [5:0] retire8_rT_reg;
-  reg [8:0] retire8_rF_reg;
-  reg [8:0] retire8_rFl_reg;
-  reg retire8_enV_reg;
-  reg retire8_enF_reg;
+  reg [5:0] tire0_rT_reg;
+  reg [8:0] tire0_rF_reg;
+  reg [8:0] tire0_rFl_reg;
+  reg tire0_enV_reg;
+  reg tire0_enF_reg;
+  reg [5:0] tire1_rT_reg;
+  reg [8:0] tire1_rF_reg;
+  reg [8:0] tire1_rFl_reg;
+  reg tire1_enV_reg;
+  reg tire1_enF_reg;
+  reg [5:0] tire2_rT_reg;
+  reg [8:0] tire2_rF_reg;
+  reg [8:0] tire2_rFl_reg;
+  reg tire2_enV_reg;
+  reg tire2_enF_reg;
+  reg [5:0] tire3_rT_reg;
+  reg [8:0] tire3_rF_reg;
+  reg [8:0] tire3_rFl_reg;
+  reg tire3_enV_reg;
+  reg tire3_enF_reg;
+  reg [5:0] tire4_rT_reg;
+  reg [8:0] tire4_rF_reg;
+  reg [8:0] tire4_rFl_reg;
+  reg tire4_enV_reg;
+  reg tire4_enF_reg;
+  reg [5:0] tire5_rT_reg;
+  reg [8:0] tire5_rF_reg;
+  reg [8:0] tire5_rFl_reg;
+  reg tire5_enV_reg;
+  reg tire5_enF_reg;
+  reg [5:0] tire6_rT_reg;
+  reg [8:0] tire6_rF_reg;
+  reg [8:0] tire6_rFl_reg;
+  reg tire6_enV_reg;
+  reg tire6_enF_reg;
+  reg [5:0] tire7_rT_reg;
+  reg [8:0] tire7_rF_reg;
+  reg [8:0] tire7_rFl_reg;
+  reg tire7_enV_reg;
+  reg tire7_enF_reg;
+  reg [5:0] tire8_rT_reg;
+  reg [8:0] tire8_rF_reg;
+  reg [8:0] tire8_rFl_reg;
+  reg tire8_enV_reg;
+  reg tire8_enF_reg;
 
-  reg [5:0] retire0_rT_reg2;
-  reg [8:0] retire0_rF_reg2;
-  reg retire0_enF_reg2;
-  reg [5:0] retire1_rT_reg2;
-  reg [8:0] retire1_rF_reg2;
-  reg retire1_enF_reg2;
-  reg [5:0] retire2_rT_reg2;
-  reg [8:0] retire2_rF_reg2;
-  reg retire2_enF_reg2;
-  reg [5:0] retire3_rT_reg2;
-  reg [8:0] retire3_rF_reg2;
-  reg retire3_enF_reg2;
-  reg [5:0] retire4_rT_reg2;
-  reg [8:0] retire4_rF_reg2;
-  reg retire4_enF_reg2;
-  reg [5:0] retire5_rT_reg2;
-  reg [8:0] retire5_rF_reg2;
-  reg retire5_enF_reg2;
-  reg [5:0] retire6_rT_reg2;
-  reg [8:0] retire6_rF_reg2;
-  reg retire6_enF_reg2;
-  reg [5:0] retire7_rT_reg2;
-  reg [8:0] retire7_rF_reg2;
-  reg retire7_enF_reg2;
-  reg [5:0] retire8_rT_reg2;
-  reg [8:0] retire8_rF_reg2;
-  reg retire8_enF_reg2;
+  reg [5:0] tire0_rT_reg2;
+  reg [8:0] tire0_rF_reg2;
+  reg tire0_enF_reg2;
+  reg [5:0] tire1_rT_reg2;
+  reg [8:0] tire1_rF_reg2;
+  reg tire1_enF_reg2;
+  reg [5:0] tire2_rT_reg2;
+  reg [8:0] tire2_rF_reg2;
+  reg tire2_enF_reg2;
+  reg [5:0] tire3_rT_reg2;
+  reg [8:0] tire3_rF_reg2;
+  reg tire3_enF_reg2;
+  reg [5:0] tire4_rT_reg2;
+  reg [8:0] tire4_rF_reg2;
+  reg tire4_enF_reg2;
+  reg [5:0] tire5_rT_reg2;
+  reg [8:0] tire5_rF_reg2;
+  reg tire5_enF_reg2;
+  reg [5:0] tire6_rT_reg2;
+  reg [8:0] tire6_rF_reg2;
+  reg tire6_enF_reg2;
+  reg [5:0] tire7_rT_reg2;
+  reg [8:0] tire7_rF_reg2;
+  reg tire7_enF_reg2;
+  reg [5:0] tire8_rT_reg2;
+  reg [8:0] tire8_rF_reg2;
+  reg tire8_enF_reg2;
   
   wire insert_isCode;
   wire insert_isData;
@@ -2337,7 +2337,7 @@ module backend(
   wire [9:0] retM_waitconfl/*verilator public*/;
   wire [9:0] retM_excpt/*verilator public*/;
  // wire [39:0]retM_exbits;
-  wire retM_do_retire/*verilator public*/;
+  wire retM_do_tire/*verilator public*/;
   wire [`lsqshare_width-1:0] retM_data_shr/*verilator public*/;
   reg [`lsqshare_width-1:0] retM_data_shr_reg/*verilator public*/;
   //reg retM_ret_ret;
@@ -2443,24 +2443,24 @@ module backend(
     .newR4(newR[4]),.newR5(newR[5]),.newR6(newR[6]),.newR7(newR[7]),.newR8(newR[8]),
     .newU0(newU[0]),.newU1(newU[1]),.newU2(newU[2]),.newU3(newU[3]),
     .newU4(newU[4]),.newU5(newU[5]),.newU6(newU[6]),.newU7(newU[7]),.newU8(newU[8]),
-    //from here addr is retirement register
-    .read0_addr(rs0i0_rA),.read0_data(regA[0]),.read0_retired(retA[0]),
+    //from here addr is tirement register
+    .read0_addr(rs0i0_rA),.read0_data(regA[0]),.read0_tired(retA[0]),
       .read0_isDep(depA[0]),.read0_fun(funA[0]),
-    .read1_addr(rs0i1_rA),.read1_data(regA[1]),.read1_retired(retA[1]),
+    .read1_addr(rs0i1_rA),.read1_data(regA[1]),.read1_tired(retA[1]),
       .read1_isDep(depA[1]),.read1_fun(funA[1]),
-    .read2_addr(rs0i2_rA),.read2_data(regA[2]),.read2_retired(retA[2]),
+    .read2_addr(rs0i2_rA),.read2_data(regA[2]),.read2_tired(retA[2]),
       .read2_isDep(depA[2]),.read2_fun(funA[2]),
-    .read3_addr(rs1i0_rA),.read3_data(regA[3]),.read3_retired(retA[3]),
+    .read3_addr(rs1i0_rA),.read3_data(regA[3]),.read3_tired(retA[3]),
       .read3_isDep(depA[3]),.read3_fun(funA[3]),
-    .read4_addr(rs1i1_rA),.read4_data(regA[4]),.read4_retired(retA[4]),
+    .read4_addr(rs1i1_rA),.read4_data(regA[4]),.read4_tired(retA[4]),
       .read4_isDep(depA[4]),.read4_fun(funA[4]),
-    .read5_addr(rs1i2_rA),.read5_data(regA[5]),.read5_retired(retA[5]),
+    .read5_addr(rs1i2_rA),.read5_data(regA[5]),.read5_tired(retA[5]),
       .read5_isDep(depA[5]),.read5_fun(funA[5]),
-    .read6_addr(rs2i0_rA),.read6_data(regA[6]),.read6_retired(retA[6]),
+    .read6_addr(rs2i0_rA),.read6_data(regA[6]),.read6_tired(retA[6]),
       .read6_isDep(depA[6]),.read6_fun(funA[6]),
-    .read7_addr(rs2i1_rA),.read7_data(regA[7]),.read7_retired(retA[7]),
+    .read7_addr(rs2i1_rA),.read7_data(regA[7]),.read7_tired(retA[7]),
       .read7_isDep(depA[7]),.read7_fun(funA[7]),
-    .read8_addr(rs2i2_rA),.read8_data(regA[8]),.read8_retired(retA[8]),
+    .read8_addr(rs2i2_rA),.read8_data(regA[8]),.read8_tired(retA[8]),
       .read8_isDep(depA[8]),.read8_fun(funA[8]),
   
     .writeNew0_addr(rs0i0_rT_reg),.writeNew0_wen(rs0i0_alloc_reg),
@@ -2473,16 +2473,16 @@ module backend(
     .writeNew7_addr(rs2i1_rT_reg),.writeNew7_wen(rs2i1_alloc_reg),
     .writeNew8_addr(rs2i2_rT_reg),.writeNew8_wen(rs2i2_alloc_reg),
   //from here addr is free register
-    .writeRet0_addr(retire0_rF_reg),.writeRet0_wen(retire0_enG),
-    .writeRet1_addr(retire1_rF_reg),.writeRet1_wen(retire1_enG),
-    .writeRet2_addr(retire2_rF_reg),.writeRet2_wen(retire2_enG),
-    .writeRet3_addr(retire3_rF_reg),.writeRet3_wen(retire3_enG),
-    .writeRet4_addr(retire4_rF_reg),.writeRet4_wen(retire4_enG),
-    .writeRet5_addr(retire5_rF_reg),.writeRet5_wen(retire5_enG),
-    .writeRet6_addr(retire6_rF_reg),.writeRet6_wen(retire6_enG),
-    .writeRet7_addr(retire7_rF_reg),.writeRet7_wen(retire7_enG),
-    .writeRet8_addr(retire8_rF_reg),.writeRet8_wen(retire8_enG),
-    .retireAll(except),.retireAll_thread(1'b0),
+    .writeRet0_addr(tire0_rF_reg),.writeRet0_wen(tire0_enG),
+    .writeRet1_addr(tire1_rF_reg),.writeRet1_wen(tire1_enG),
+    .writeRet2_addr(tire2_rF_reg),.writeRet2_wen(tire2_enG),
+    .writeRet3_addr(tire3_rF_reg),.writeRet3_wen(tire3_enG),
+    .writeRet4_addr(tire4_rF_reg),.writeRet4_wen(tire4_enG),
+    .writeRet5_addr(tire5_rF_reg),.writeRet5_wen(tire5_enG),
+    .writeRet6_addr(tire6_rF_reg),.writeRet6_wen(tire6_enG),
+    .writeRet7_addr(tire7_rF_reg),.writeRet7_wen(tire7_enG),
+    .writeRet8_addr(tire8_rF_reg),.writeRet8_wen(tire8_enG),
+    .tireAll(except),.tireAll_thread(1'b0),
     
   
     .rs0i0_index(rs0i0_index_reg),.rs0i1_index(rs0i1_index_reg),.rs0i2_index(rs0i2_index_reg),
@@ -2499,24 +2499,24 @@ module backend(
     .newR4(newR[4]),.newR5(newR[5]),.newR6(newR[6]),.newR7(newR[7]),.newR8(newR[8]),
     .newU0(newU[0]),.newU1(newU[1]),.newU2(newU[2]),.newU3(newU[3]),
     .newU4(newU[4]),.newU5(newU[5]),.newU6(newU[6]),.newU7(newU[7]),.newU8(newU[8]),
-    //from here addr is retirement register
-    .read0_addr(rs0i0_rB),.read0_data(regB[0]),.read0_retired(retB[0]),
+    //from here addr is tirement register
+    .read0_addr(rs0i0_rB),.read0_data(regB[0]),.read0_tired(retB[0]),
       .read0_isDep(depB[0]),.read0_fun(funB[0]),
-    .read1_addr(rs0i1_rB),.read1_data(regB[1]),.read1_retired(retB[1]),
+    .read1_addr(rs0i1_rB),.read1_data(regB[1]),.read1_tired(retB[1]),
       .read1_isDep(depB[1]),.read1_fun(funB[1]),
-    .read2_addr(rs0i2_rB),.read2_data(regB[2]),.read2_retired(retB[2]),
+    .read2_addr(rs0i2_rB),.read2_data(regB[2]),.read2_tired(retB[2]),
       .read2_isDep(depB[2]),.read2_fun(funB[2]),
-    .read3_addr(rs1i0_rB),.read3_data(regB[3]),.read3_retired(retB[3]),
+    .read3_addr(rs1i0_rB),.read3_data(regB[3]),.read3_tired(retB[3]),
       .read3_isDep(depB[3]),.read3_fun(funB[3]),
-    .read4_addr(rs1i1_rB),.read4_data(regB[4]),.read4_retired(retB[4]),
+    .read4_addr(rs1i1_rB),.read4_data(regB[4]),.read4_tired(retB[4]),
       .read4_isDep(depB[4]),.read4_fun(funB[4]),
-    .read5_addr(rs1i2_rB),.read5_data(regB[5]),.read5_retired(retB[5]),
+    .read5_addr(rs1i2_rB),.read5_data(regB[5]),.read5_tired(retB[5]),
       .read5_isDep(depB[5]),.read5_fun(funB[5]),
-    .read6_addr(rs2i0_rB),.read6_data(regB[6]),.read6_retired(retB[6]),
+    .read6_addr(rs2i0_rB),.read6_data(regB[6]),.read6_tired(retB[6]),
       .read6_isDep(depB[6]),.read6_fun(funB[6]),
-    .read7_addr(rs2i1_rB),.read7_data(regB[7]),.read7_retired(retB[7]),
+    .read7_addr(rs2i1_rB),.read7_data(regB[7]),.read7_tired(retB[7]),
       .read7_isDep(depB[7]),.read7_fun(funB[7]),
-    .read8_addr(rs2i2_rB),.read8_data(regB[8]),.read8_retired(retB[8]),
+    .read8_addr(rs2i2_rB),.read8_data(regB[8]),.read8_tired(retB[8]),
       .read8_isDep(depB[8]),.read8_fun(funB[8]),
   
     .writeNew0_addr(rs0i0_rT_reg),.writeNew0_wen(rs0i0_alloc_reg),
@@ -2529,16 +2529,16 @@ module backend(
     .writeNew7_addr(rs2i1_rT_reg),.writeNew7_wen(rs2i1_alloc_reg),
     .writeNew8_addr(rs2i2_rT_reg),.writeNew8_wen(rs2i2_alloc_reg),
   //from here addr is free register
-    .writeRet0_addr(retire0_rF_reg),.writeRet0_wen(retire0_enG),
-    .writeRet1_addr(retire1_rF_reg),.writeRet1_wen(retire1_enG),
-    .writeRet2_addr(retire2_rF_reg),.writeRet2_wen(retire2_enG),
-    .writeRet3_addr(retire3_rF_reg),.writeRet3_wen(retire3_enG),
-    .writeRet4_addr(retire4_rF_reg),.writeRet4_wen(retire4_enG),
-    .writeRet5_addr(retire5_rF_reg),.writeRet5_wen(retire5_enG),
-    .writeRet6_addr(retire6_rF_reg),.writeRet6_wen(retire6_enG),
-    .writeRet7_addr(retire7_rF_reg),.writeRet7_wen(retire7_enG),
-    .writeRet8_addr(retire8_rF_reg),.writeRet8_wen(retire8_enG),
-    .retireAll(except),.retireAll_thread(1'b0),
+    .writeRet0_addr(tire0_rF_reg),.writeRet0_wen(tire0_enG),
+    .writeRet1_addr(tire1_rF_reg),.writeRet1_wen(tire1_enG),
+    .writeRet2_addr(tire2_rF_reg),.writeRet2_wen(tire2_enG),
+    .writeRet3_addr(tire3_rF_reg),.writeRet3_wen(tire3_enG),
+    .writeRet4_addr(tire4_rF_reg),.writeRet4_wen(tire4_enG),
+    .writeRet5_addr(tire5_rF_reg),.writeRet5_wen(tire5_enG),
+    .writeRet6_addr(tire6_rF_reg),.writeRet6_wen(tire6_enG),
+    .writeRet7_addr(tire7_rF_reg),.writeRet7_wen(tire7_enG),
+    .writeRet8_addr(tire8_rF_reg),.writeRet8_wen(tire8_enG),
+    .tireAll(except),.tireAll_thread(1'b0),
   
     .rs0i0_index(rs0i0_index_reg),.rs0i1_index(rs0i1_index_reg),.rs0i2_index(rs0i2_index_reg),
     .rs1i0_index(rs1i0_index_reg),.rs1i1_index(rs1i1_index_reg),.rs1i2_index(rs1i2_index_reg),
@@ -2554,15 +2554,15 @@ module backend(
   .newR4(newRF[4]),.newR5(newRF[5]),.newR6(newRF[6]),.newR7(newRF[7]),.newR8(newRF[8]),
   .newU0(newU[0]),.newU1(newU[1]),.newU2(newU[2]),.newU3(newU[3]),
   .newU4(newU[4]),.newU5(newU[5]),.newU6(newU[6]),.newU7(newU[7]),.newU8(newU[8]),
-  //from here addr is retirement register
-  .read1_addr(rs0i1_flagDep),.read1_data(regS[1]),.read1_retired(retS[1]),.read1_fun(funS[1]),
-  .read2_addr(rs0i2_flagDep),.read2_data(regS[2]),.read2_retired(retS[2]),.read2_fun(funS[2]),
-  .read4_addr(rs1i1_flagDep),.read4_data(regS[4]),.read4_retired(retS[4]),.read4_fun(funS[4]),
-  .read5_addr(rs1i2_flagDep),.read5_data(regS[5]),.read5_retired(retS[5]),.read5_fun(funS[5]),
-  .read7_addr(rs2i1_flagDep),.read7_data(regS[7]),.read7_retired(retS[7]),.read7_fun(funS[7]),
-  .read8_addr(rs2i2_flagDep),.read8_data(regS[8]),.read8_retired(retS[8]),.read8_fun(funS[8]),
+  //from here addr is tirement register
+  .read1_addr(rs0i1_flagDep),.read1_data(regS[1]),.read1_tired(retS[1]),.read1_fun(funS[1]),
+  .read2_addr(rs0i2_flagDep),.read2_data(regS[2]),.read2_tired(retS[2]),.read2_fun(funS[2]),
+  .read4_addr(rs1i1_flagDep),.read4_data(regS[4]),.read4_tired(retS[4]),.read4_fun(funS[4]),
+  .read5_addr(rs1i2_flagDep),.read5_data(regS[5]),.read5_tired(retS[5]),.read5_fun(funS[5]),
+  .read7_addr(rs2i1_flagDep),.read7_data(regS[7]),.read7_tired(retS[7]),.read7_fun(funS[7]),
+  .read8_addr(rs2i2_flagDep),.read8_data(regS[8]),.read8_tired(retS[8]),.read8_fun(funS[8]),
   
-  .r_data(regFl), .r_retired(retFl), .r_fun(),
+  .r_data(regFl), .r_tired(retFl), .r_fun(),
   
   .writeNew0_wen(1'b0),
   .writeNew1_wen(rs0i1_lastFl_reg&~doStall),
@@ -2583,7 +2583,7 @@ module backend(
   .writeRet6_addr(retfl_rF_reg),.writeRet6_wen(retfl_enG && retfl_rF_reg[3:0]==4'd6),
   .writeRet7_addr(retfl_rF_reg),.writeRet7_wen(retfl_enG && retfl_rF_reg[3:0]==4'd7),
   .writeRet8_addr(retfl_rF_reg),.writeRet8_wen(retfl_enG && retfl_rF_reg[3:0]==4'd8),
-  .retireAll(except),
+  .tireAll(except),
 
   .rs0i0_index(rs0i0_index_reg),.rs0i1_index(rs0i1_index_reg),.rs0i2_index(rs0i2_index_reg),
   .rs1i0_index(rs1i0_index_reg),.rs1i1_index(rs1i1_index_reg),.rs1i2_index(rs1i2_index_reg),
@@ -2601,24 +2601,24 @@ module backend(
     .newU4(newU[4]),.newU5(newU[5]),.newU6(newU[6]),.newU7(newU[7]),.newU8(newU[8]),
     .newD0(newD[0]),.newD1(newD[1]),.newD2(newD[2]),.newD3(newD[3]),
     .newD4(newD[4]),.newD5(newD[5]),.newD6(newD[6]),.newD7(newD[7]),.newD8(newD[8]),
-  //from here addr is retirement register
-    .read0_addr(rs0i0_rA),.read0_data(regAF[0]),.read0_retired(retAF[0]),
+  //from here addr is tirement register
+    .read0_addr(rs0i0_rA),.read0_data(regAF[0]),.read0_tired(retAF[0]),
       .read0_isDep(depAF[0]),.read0_fun(funAF[0]),.read0_dom(domA[0]),
-    .read1_addr(rs0i1_rA),.read1_data(regAF[1]),.read1_retired(retAF[1]),
+    .read1_addr(rs0i1_rA),.read1_data(regAF[1]),.read1_tired(retAF[1]),
       .read1_isDep(depAF[1]),.read1_fun(funAF[1]),.read1_dom(domA[1]),
-    .read2_addr(rs0i2_rA),.read2_data(regAF[2]),.read2_retired(retAF[2]),
+    .read2_addr(rs0i2_rA),.read2_data(regAF[2]),.read2_tired(retAF[2]),
       .read2_isDep(depAF[2]),.read2_fun(funAF[2]),.read2_dom(domA[2]),
-    .read3_addr(rs1i0_rA),.read3_data(regAF[3]),.read3_retired(retAF[3]),
+    .read3_addr(rs1i0_rA),.read3_data(regAF[3]),.read3_tired(retAF[3]),
       .read3_isDep(depAF[3]),.read3_fun(funAF[3]),.read3_dom(domA[3]),
-    .read4_addr(rs1i1_rA),.read4_data(regAF[4]),.read4_retired(retAF[4]),
+    .read4_addr(rs1i1_rA),.read4_data(regAF[4]),.read4_tired(retAF[4]),
       .read4_isDep(depAF[4]),.read4_fun(funAF[4]),.read4_dom(domA[4]),
-    .read5_addr(rs1i2_rA),.read5_data(regAF[5]),.read5_retired(retAF[5]),
+    .read5_addr(rs1i2_rA),.read5_data(regAF[5]),.read5_tired(retAF[5]),
       .read5_isDep(depAF[5]),.read5_fun(funAF[5]),.read5_dom(domA[5]),
-    .read6_addr(rs2i0_rA),.read6_data(regAF[6]),.read6_retired(retAF[6]),
+    .read6_addr(rs2i0_rA),.read6_data(regAF[6]),.read6_tired(retAF[6]),
       .read6_isDep(depAF[6]),.read6_fun(funAF[6]),.read6_dom(domA[6]),
-    .read7_addr(rs2i1_rA),.read7_data(regAF[7]),.read7_retired(retAF[7]),
+    .read7_addr(rs2i1_rA),.read7_data(regAF[7]),.read7_tired(retAF[7]),
       .read7_isDep(depAF[7]),.read7_fun(funAF[7]),.read7_dom(domA[7]),
-    .read8_addr(rs2i2_rA),.read8_data(regAF[8]),.read8_retired(retAF[8]),
+    .read8_addr(rs2i2_rA),.read8_data(regAF[8]),.read8_tired(retAF[8]),
       .read8_isDep(depAF[8]),.read8_fun(funAF[8]),.read8_dom(domA[8]),
 
     .writeNew0_addr(rs0i0_rT_reg),.writeNew0_wen(rs0i0_allocF_reg),
@@ -2631,25 +2631,25 @@ module backend(
     .writeNew7_addr(rs2i1_rT_reg),.writeNew7_wen(rs2i1_allocF_reg),
     .writeNew8_addr(rs2i2_rT_reg),.writeNew8_wen(rs2i2_allocF_reg),
 //from here addr is free register
-    .writeRet0_addr(retire0_rF_reg),.writeRet0_paddr(retire0_rT),
-       .writeRet0_dom(get_dom_C(retire0_enV,retire0_enF)),.writeRet0_wen(retire0_enV|retire0_enF),
-    .writeRet1_addr(retire1_rF_reg),.writeRet1_paddr(retire1_rT),
-       .writeRet1_dom(get_dom_C(retire1_enV,retire1_enF)),.writeRet1_wen(retire1_enV|retire1_enF),
-    .writeRet2_addr(retire2_rF_reg),.writeRet2_paddr(retire2_rT),
-       .writeRet2_dom(get_dom_C(retire2_enV,retire2_enF)),.writeRet2_wen(retire2_enV|retire2_enF),
-    .writeRet3_addr(retire3_rF_reg),.writeRet3_paddr(retire3_rT),
-       .writeRet3_dom(get_dom_C(retire3_enV,retire3_enF)),.writeRet3_wen(retire3_enV|retire3_enF),
-    .writeRet4_addr(retire4_rF_reg),.writeRet4_paddr(retire4_rT),
-       .writeRet4_dom(get_dom_C(retire4_enV,retire4_enF)),.writeRet4_wen(retire4_enV|retire4_enF),
-    .writeRet5_addr(retire5_rF_reg),.writeRet5_paddr(retire5_rT),
-       .writeRet5_dom(get_dom_C(retire5_enV,retire5_enF)),.writeRet5_wen(retire5_enV|retire5_enF),
-    .writeRet6_addr(retire6_rF_reg),.writeRet6_paddr(retire6_rT),
-       .writeRet6_dom(get_dom_C(retire6_enV,retire6_enF)),.writeRet6_wen(retire6_enV|retire6_enF),
-    .writeRet7_addr(retire7_rF_reg),.writeRet7_paddr(retire7_rT),
-       .writeRet7_dom(get_dom_C(retire7_enV,retire7_enF)),.writeRet7_wen(retire7_enV|retire7_enF),
-    .writeRet8_addr(retire8_rF_reg),.writeRet8_paddr(retire8_rT),
-       .writeRet8_dom(get_dom_C(retire8_enV,retire8_enF)),.writeRet8_wen(retire8_enV|retire8_enF),
-    .retireAll(except),.retireAll_thread(1'b0),
+    .writeRet0_addr(tire0_rF_reg),.writeRet0_paddr(tire0_rT),
+       .writeRet0_dom(get_dom_C(tire0_enV,tire0_enF)),.writeRet0_wen(tire0_enV|tire0_enF),
+    .writeRet1_addr(tire1_rF_reg),.writeRet1_paddr(tire1_rT),
+       .writeRet1_dom(get_dom_C(tire1_enV,tire1_enF)),.writeRet1_wen(tire1_enV|tire1_enF),
+    .writeRet2_addr(tire2_rF_reg),.writeRet2_paddr(tire2_rT),
+       .writeRet2_dom(get_dom_C(tire2_enV,tire2_enF)),.writeRet2_wen(tire2_enV|tire2_enF),
+    .writeRet3_addr(tire3_rF_reg),.writeRet3_paddr(tire3_rT),
+       .writeRet3_dom(get_dom_C(tire3_enV,tire3_enF)),.writeRet3_wen(tire3_enV|tire3_enF),
+    .writeRet4_addr(tire4_rF_reg),.writeRet4_paddr(tire4_rT),
+       .writeRet4_dom(get_dom_C(tire4_enV,tire4_enF)),.writeRet4_wen(tire4_enV|tire4_enF),
+    .writeRet5_addr(tire5_rF_reg),.writeRet5_paddr(tire5_rT),
+       .writeRet5_dom(get_dom_C(tire5_enV,tire5_enF)),.writeRet5_wen(tire5_enV|tire5_enF),
+    .writeRet6_addr(tire6_rF_reg),.writeRet6_paddr(tire6_rT),
+       .writeRet6_dom(get_dom_C(tire6_enV,tire6_enF)),.writeRet6_wen(tire6_enV|tire6_enF),
+    .writeRet7_addr(tire7_rF_reg),.writeRet7_paddr(tire7_rT),
+       .writeRet7_dom(get_dom_C(tire7_enV,tire7_enF)),.writeRet7_wen(tire7_enV|tire7_enF),
+    .writeRet8_addr(tire8_rF_reg),.writeRet8_paddr(tire8_rT),
+       .writeRet8_dom(get_dom_C(tire8_enV,tire8_enF)),.writeRet8_wen(tire8_enV|tire8_enF),
+    .tireAll(except),.tireAll_thread(1'b0),
 
     .rs0i0_index(rs0i0_index_reg),.rs0i1_index(rs0i1_index_reg),.rs0i2_index(rs0i2_index_reg),
     .rs1i0_index(rs1i0_index_reg),.rs1i1_index(rs1i1_index_reg),.rs1i2_index(rs1i2_index_reg),
@@ -2667,24 +2667,24 @@ module backend(
     .newU4(newU[4]),.newU5(newU[5]),.newU6(newU[6]),.newU7(newU[7]),.newU8(newU[8]),
     .newD0(newD[0]),.newD1(newD[1]),.newD2(newD[2]),.newD3(newD[3]),
     .newD4(newD[4]),.newD5(newD[5]),.newD6(newD[6]),.newD7(newD[7]),.newD8(newD[8]),
-  //from here addr is retirement register
-    .read0_addr(rs0i0_rB),.read0_data(regBF[0]),.read0_retired(retBF[0]),
+  //from here addr is tirement register
+    .read0_addr(rs0i0_rB),.read0_data(regBF[0]),.read0_tired(retBF[0]),
       .read0_isDep(depBF[0]),.read0_fun(funBF[0]),.read0_dom(domB[0]),
-    .read1_addr(rs0i1_rB),.read1_data(regBF[1]),.read1_retired(retBF[1]),
+    .read1_addr(rs0i1_rB),.read1_data(regBF[1]),.read1_tired(retBF[1]),
       .read1_isDep(depBF[1]),.read1_fun(funBF[1]),.read1_dom(domB[1]),
-    .read2_addr(rs0i2_rB),.read2_data(regBF[2]),.read2_retired(retBF[2]),
+    .read2_addr(rs0i2_rB),.read2_data(regBF[2]),.read2_tired(retBF[2]),
       .read2_isDep(depBF[2]),.read2_fun(funBF[2]),.read2_dom(domB[2]),
-    .read3_addr(rs1i0_rB),.read3_data(regBF[3]),.read3_retired(retBF[3]),
+    .read3_addr(rs1i0_rB),.read3_data(regBF[3]),.read3_tired(retBF[3]),
       .read3_isDep(depBF[3]),.read3_fun(funBF[3]),.read3_dom(domB[3]),
-    .read4_addr(rs1i1_rB),.read4_data(regBF[4]),.read4_retired(retBF[4]),
+    .read4_addr(rs1i1_rB),.read4_data(regBF[4]),.read4_tired(retBF[4]),
       .read4_isDep(depBF[4]),.read4_fun(funBF[4]),.read4_dom(domB[4]),
-    .read5_addr(rs1i2_rB),.read5_data(regBF[5]),.read5_retired(retBF[5]),
+    .read5_addr(rs1i2_rB),.read5_data(regBF[5]),.read5_tired(retBF[5]),
       .read5_isDep(depBF[5]),.read5_fun(funBF[5]),.read5_dom(domB[5]),
-    .read6_addr(rs2i0_rB),.read6_data(regBF[6]),.read6_retired(retBF[6]),
+    .read6_addr(rs2i0_rB),.read6_data(regBF[6]),.read6_tired(retBF[6]),
       .read6_isDep(depBF[6]),.read6_fun(funBF[6]),.read6_dom(domB[6]),
-    .read7_addr(rs2i1_rB),.read7_data(regBF[7]),.read7_retired(retBF[7]),
+    .read7_addr(rs2i1_rB),.read7_data(regBF[7]),.read7_tired(retBF[7]),
       .read7_isDep(depBF[7]),.read7_fun(funBF[7]),.read7_dom(domB[7]),
-    .read8_addr(rs2i2_rB),.read8_data(regBF[8]),.read8_retired(retBF[8]),
+    .read8_addr(rs2i2_rB),.read8_data(regBF[8]),.read8_tired(retBF[8]),
       .read8_isDep(depBF[8]),.read8_fun(funBF[8]),.read8_dom(domB[8]),
 
     .writeNew0_addr(rs0i0_rT_reg),.writeNew0_wen(rs0i0_allocF_reg),
@@ -2697,25 +2697,25 @@ module backend(
     .writeNew7_addr(rs2i1_rT_reg),.writeNew7_wen(rs2i1_allocF_reg),
     .writeNew8_addr(rs2i2_rT_reg),.writeNew8_wen(rs2i2_allocF_reg),
 //from here addr is free register
-    .writeRet0_addr(retire0_rF_reg),.writeRet0_paddr(retire0_rT),
-       .writeRet0_dom(get_dom_C(retire0_enV,retire0_enF)),.writeRet0_wen(retire0_enV|retire0_enF),
-    .writeRet1_addr(retire1_rF_reg),.writeRet1_paddr(retire1_rT),
-       .writeRet1_dom(get_dom_C(retire1_enV,retire1_enF)),.writeRet1_wen(retire1_enV|retire1_enF),
-    .writeRet2_addr(retire2_rF_reg),.writeRet2_paddr(retire2_rT),
-       .writeRet2_dom(get_dom_C(retire2_enV,retire2_enF)),.writeRet2_wen(retire2_enV|retire2_enF),
-    .writeRet3_addr(retire3_rF_reg),.writeRet3_paddr(retire3_rT),
-       .writeRet3_dom(get_dom_C(retire3_enV,retire3_enF)),.writeRet3_wen(retire3_enV|retire3_enF),
-    .writeRet4_addr(retire4_rF_reg),.writeRet4_paddr(retire4_rT),
-       .writeRet4_dom(get_dom_C(retire4_enV,retire4_enF)),.writeRet4_wen(retire4_enV|retire4_enF),
-    .writeRet5_addr(retire5_rF_reg),.writeRet5_paddr(retire5_rT),
-       .writeRet5_dom(get_dom_C(retire5_enV,retire5_enF)),.writeRet5_wen(retire5_enV|retire5_enF),
-    .writeRet6_addr(retire6_rF_reg),.writeRet6_paddr(retire6_rT),
-       .writeRet6_dom(get_dom_C(retire6_enV,retire6_enF)),.writeRet6_wen(retire6_enV|retire6_enF),
-    .writeRet7_addr(retire7_rF_reg),.writeRet7_paddr(retire7_rT),
-       .writeRet7_dom(get_dom_C(retire7_enV,retire7_enF)),.writeRet7_wen(retire7_enV|retire7_enF),
-    .writeRet8_addr(retire8_rF_reg),.writeRet8_paddr(retire8_rT),
-       .writeRet8_dom(get_dom_C(retire8_enV,retire8_enF)),.writeRet8_wen(retire8_enV|retire8_enF),
-    .retireAll(except),.retireAll_thread(1'b0),
+    .writeRet0_addr(tire0_rF_reg),.writeRet0_paddr(tire0_rT),
+       .writeRet0_dom(get_dom_C(tire0_enV,tire0_enF)),.writeRet0_wen(tire0_enV|tire0_enF),
+    .writeRet1_addr(tire1_rF_reg),.writeRet1_paddr(tire1_rT),
+       .writeRet1_dom(get_dom_C(tire1_enV,tire1_enF)),.writeRet1_wen(tire1_enV|tire1_enF),
+    .writeRet2_addr(tire2_rF_reg),.writeRet2_paddr(tire2_rT),
+       .writeRet2_dom(get_dom_C(tire2_enV,tire2_enF)),.writeRet2_wen(tire2_enV|tire2_enF),
+    .writeRet3_addr(tire3_rF_reg),.writeRet3_paddr(tire3_rT),
+       .writeRet3_dom(get_dom_C(tire3_enV,tire3_enF)),.writeRet3_wen(tire3_enV|tire3_enF),
+    .writeRet4_addr(tire4_rF_reg),.writeRet4_paddr(tire4_rT),
+       .writeRet4_dom(get_dom_C(tire4_enV,tire4_enF)),.writeRet4_wen(tire4_enV|tire4_enF),
+    .writeRet5_addr(tire5_rF_reg),.writeRet5_paddr(tire5_rT),
+       .writeRet5_dom(get_dom_C(tire5_enV,tire5_enF)),.writeRet5_wen(tire5_enV|tire5_enF),
+    .writeRet6_addr(tire6_rF_reg),.writeRet6_paddr(tire6_rT),
+       .writeRet6_dom(get_dom_C(tire6_enV,tire6_enF)),.writeRet6_wen(tire6_enV|tire6_enF),
+    .writeRet7_addr(tire7_rF_reg),.writeRet7_paddr(tire7_rT),
+       .writeRet7_dom(get_dom_C(tire7_enV,tire7_enF)),.writeRet7_wen(tire7_enV|tire7_enF),
+    .writeRet8_addr(tire8_rF_reg),.writeRet8_paddr(tire8_rT),
+       .writeRet8_dom(get_dom_C(tire8_enV,tire8_enF)),.writeRet8_wen(tire8_enV|tire8_enF),
+    .tireAll(except),.tireAll_thread(1'b0),
 
     .rs0i0_index(rs0i0_index_reg),.rs0i1_index(rs0i1_index_reg),.rs0i2_index(rs0i2_index_reg),
     .rs1i0_index(rs1i0_index_reg),.rs1i1_index(rs1i1_index_reg),.rs1i2_index(rs1i2_index_reg),
@@ -2732,9 +2732,9 @@ module backend(
   .thread(thread_reg),
   .ret_en(retclr),
   .ret_thread(1'b0),
-  .ret_rno0(retire0_rF_reg[8:4]),.ret_rno1(retire1_rF_reg[8:4]),.ret_rno2(retire2_rF_reg[8:4]),
-  .ret_rno3(retire3_rF_reg[8:4]),.ret_rno4(retire4_rF_reg[8:4]),.ret_rno5(retire5_rF_reg[8:4]),
-  .ret_rno6(retire6_rF_reg[8:4]),.ret_rno7(retire7_rF_reg[8:4]),.ret_rno8(retire8_rF_reg[8:4]),
+  .ret_rno0(tire0_rF_reg[8:4]),.ret_rno1(tire1_rF_reg[8:4]),.ret_rno2(tire2_rF_reg[8:4]),
+  .ret_rno3(tire3_rF_reg[8:4]),.ret_rno4(tire4_rF_reg[8:4]),.ret_rno5(tire5_rF_reg[8:4]),
+  .ret_rno6(tire6_rF_reg[8:4]),.ret_rno7(tire7_rF_reg[8:4]),.ret_rno8(tire8_rF_reg[8:4]),
   .newR0(newR[0]),.newR1(newR[1]),.newR2(newR[2]),
   .newR3(newR[3]),.newR4(newR[4]),.newR5(newR[5]),
   .newR6(newR[6]),.newR7(newR[7]),.newR8(newR[8]),
@@ -2753,9 +2753,9 @@ module backend(
   .ret_en({9{retfl_enG}}&{retfl_rF[3:0]==8,retfl_rF[3:0]==7,retfl_rF[3:0]==6,retfl_rF[3:0]==5,retfl_rF[3:0]==4,retfl_rF[3:0]==3,
      retfl_rF[3:0]==2,retfl_rF[3:0]==1,retfl_rF[3:0]==0}),
   .ret_thread(1'b0),
-  .ret_rno0(retire0_rFl_reg[8:4]),.ret_rno1(retire1_rFl_reg[8:4]),.ret_rno2(retire2_rFl_reg[8:4]),
-  .ret_rno3(retire3_rFl_reg[8:4]),.ret_rno4(retire4_rFl_reg[8:4]),.ret_rno5(retire5_rFl_reg[8:4]),
-  .ret_rno6(retire6_rFl_reg[8:4]),.ret_rno7(retire7_rFl_reg[8:4]),.ret_rno8(retire8_rFl_reg[8:4]),
+  .ret_rno0(tire0_rFl_reg[8:4]),.ret_rno1(tire1_rFl_reg[8:4]),.ret_rno2(tire2_rFl_reg[8:4]),
+  .ret_rno3(tire3_rFl_reg[8:4]),.ret_rno4(tire4_rFl_reg[8:4]),.ret_rno5(tire5_rFl_reg[8:4]),
+  .ret_rno6(tire6_rFl_reg[8:4]),.ret_rno7(tire7_rFl_reg[8:4]),.ret_rno8(tire8_rFl_reg[8:4]),
   .newR0(newRF[0]),.newR1(newRF[1]),.newR2(newRF[2]),
   .newR3(newRF[3]),.newR4(newRF[4]),.newR5(newRF[5]),
   .newR6(newRF[6]),.newR7(newRF[7]),.newR8(newRF[8]),
@@ -2784,7 +2784,7 @@ module backend(
   .clk(clk),
   .rst(rst),
   .read_clkEn(~doStall),
-  .retire_clkEn(1'b1),
+  .tire_clkEn(1'b1),
 
   .read0_addr(regA[0]),.read0_data(dataA[0]),
     .read0_oe(~retA[0]|~rs_rA_use[0]),.read0_match(gazumpAG[0]),
@@ -2835,24 +2835,24 @@ module backend(
   .read7_const(rs_const[7]&{65{rs_useAConst[7]}}),
   .read8_const(rs_const[8]&{65{rs_useAConst[8]}}),
 
-  .write0_addr_rrf(retire0_rT),.write0_wen_rrf(retire0_enG),
-  .write1_addr_rrf(retire1_rT),.write1_wen_rrf(retire1_enG),
-  .write2_addr_rrf(retire2_rT),.write2_wen_rrf(retire2_enG),
-  .write3_addr_rrf(retire3_rT),.write3_wen_rrf(retire3_enG),
-  .write4_addr_rrf(retire4_rT),.write4_wen_rrf(retire4_enG),
-  .write5_addr_rrf(retire5_rT),.write5_wen_rrf(retire5_enG),
-  .write6_addr_rrf(retire6_rT),.write6_wen_rrf(retire6_enG),
-  .write7_addr_rrf(retire7_rT),.write7_wen_rrf(retire7_enG),
-  .write8_addr_rrf(retire8_rT),.write8_wen_rrf(retire8_enG),
-  .retireRead0_addr(retire0_rF),
-  .retireRead1_addr(retire1_rF),
-  .retireRead2_addr(retire2_rF),
-  .retireRead3_addr(retire3_rF),
-  .retireRead4_addr(retire4_rF),
-  .retireRead5_addr(retire5_rF),
-  .retireRead6_addr(retire6_rF),
-  .retireRead7_addr(retire7_rF),
-  .retireRead8_addr(retire8_rF),
+  .write0_addr_rrf(tire0_rT),.write0_wen_rrf(tire0_enG),
+  .write1_addr_rrf(tire1_rT),.write1_wen_rrf(tire1_enG),
+  .write2_addr_rrf(tire2_rT),.write2_wen_rrf(tire2_enG),
+  .write3_addr_rrf(tire3_rT),.write3_wen_rrf(tire3_enG),
+  .write4_addr_rrf(tire4_rT),.write4_wen_rrf(tire4_enG),
+  .write5_addr_rrf(tire5_rT),.write5_wen_rrf(tire5_enG),
+  .write6_addr_rrf(tire6_rT),.write6_wen_rrf(tire6_enG),
+  .write7_addr_rrf(tire7_rT),.write7_wen_rrf(tire7_enG),
+  .write8_addr_rrf(tire8_rT),.write8_wen_rrf(tire8_enG),
+  .tireRead0_addr(tire0_rF),
+  .tireRead1_addr(tire1_rF),
+  .tireRead2_addr(tire2_rF),
+  .tireRead3_addr(tire3_rF),
+  .tireRead4_addr(tire4_rF),
+  .tireRead5_addr(tire5_rF),
+  .tireRead6_addr(tire6_rF),
+  .tireRead7_addr(tire7_rF),
+  .tireRead8_addr(tire8_rF),
 
   .write0_addr_reg(FUreg_reg[0]),.write0_data_reg(FU_reg[0]),.write0_wen_reg(FUwen_reg[0] & FU0Hit),
   .write1_addr_reg(FUreg_reg[1]),.write1_data_reg(FU_reg[1]),.write1_wen_reg(FUwen_reg[1] & FU1Hit),
@@ -2870,7 +2870,7 @@ module backend(
   .clk(clk),
   .rst(rst),
   .read_clkEn(~doStall),
-  .retire_clkEn(1'b1),
+  .tire_clkEn(1'b1),
 
   .read0_match(),.read1_match(),.read2_match(),
   .read3_match(),.read4_match(),.read5_match(),
@@ -2924,24 +2924,24 @@ module backend(
   .read7_const({SIMD_WIDTH{1'B0}}),
   .read8_const({SIMD_WIDTH{1'B0}}),
 
-  .write0_addr_rrf(retire0_rT),.write0_wen_rrf(retire0_enV),
-  .write1_addr_rrf(retire1_rT),.write1_wen_rrf(retire1_enV),
-  .write2_addr_rrf(retire2_rT),.write2_wen_rrf(retire2_enV),
-  .write3_addr_rrf(retire3_rT),.write3_wen_rrf(retire3_enV),
-  .write4_addr_rrf(retire4_rT),.write4_wen_rrf(retire4_enV),
-  .write5_addr_rrf(retire5_rT),.write5_wen_rrf(retire5_enV),
-  .write6_addr_rrf(retire6_rT),.write6_wen_rrf(retire6_enV),
-  .write7_addr_rrf(retire7_rT),.write7_wen_rrf(retire7_enV),
-  .write8_addr_rrf(retire8_rT),.write8_wen_rrf(retire8_enV),
-  .retireRead0_addr(retire0_rF),
-  .retireRead1_addr(retire1_rF),
-  .retireRead2_addr(retire2_rF),
-  .retireRead3_addr(retire3_rF),
-  .retireRead4_addr(retire4_rF),
-  .retireRead5_addr(retire5_rF),
-  .retireRead6_addr(retire6_rF),
-  .retireRead7_addr(retire7_rF),
-  .retireRead8_addr(retire8_rF),
+  .write0_addr_rrf(tire0_rT),.write0_wen_rrf(tire0_enV),
+  .write1_addr_rrf(tire1_rT),.write1_wen_rrf(tire1_enV),
+  .write2_addr_rrf(tire2_rT),.write2_wen_rrf(tire2_enV),
+  .write3_addr_rrf(tire3_rT),.write3_wen_rrf(tire3_enV),
+  .write4_addr_rrf(tire4_rT),.write4_wen_rrf(tire4_enV),
+  .write5_addr_rrf(tire5_rT),.write5_wen_rrf(tire5_enV),
+  .write6_addr_rrf(tire6_rT),.write6_wen_rrf(tire6_enV),
+  .write7_addr_rrf(tire7_rT),.write7_wen_rrf(tire7_enV),
+  .write8_addr_rrf(tire8_rT),.write8_wen_rrf(tire8_enV),
+  .tireRead0_addr(tire0_rF),
+  .tireRead1_addr(tire1_rF),
+  .tireRead2_addr(tire2_rF),
+  .tireRead3_addr(tire3_rF),
+  .tireRead4_addr(tire4_rF),
+  .tireRead5_addr(tire5_rF),
+  .tireRead6_addr(tire6_rF),
+  .tireRead7_addr(tire7_rF),
+  .tireRead8_addr(tire8_rF),
 
   .write0_addr_reg(FUreg_reg2[0]),.write0_data_reg(FUVH_reg[0]),.write0_wen_reg(FUwen_reg2[0] & FU0Hit_reg),
   .write1_addr_reg(FUreg_reg2[1]),.write1_data_reg(FUVH_reg[1]),.write1_wen_reg(FUwen_reg2[1] & FU1Hit_reg),
@@ -2959,7 +2959,7 @@ module backend(
   .clk(clk),
   .rst(rst),
   .read_clkEn(~doStall),
-  .retire_clkEn(1'b1),
+  .tire_clkEn(1'b1),
 
   .read0_match(),.read1_match(),.read2_match(),
   .read3_match(),.read4_match(),.read5_match(),
@@ -3013,24 +3013,24 @@ module backend(
   .read7_const({SIMD_WIDTH{1'B0}}),
   .read8_const({SIMD_WIDTH{1'B0}}),
 
-  .write0_addr_rrf(retire0_rT),.write0_wen_rrf(retire0_enV),
-  .write1_addr_rrf(retire1_rT),.write1_wen_rrf(retire1_enV),
-  .write2_addr_rrf(retire2_rT),.write2_wen_rrf(retire2_enV),
-  .write3_addr_rrf(retire3_rT),.write3_wen_rrf(retire3_enV),
-  .write4_addr_rrf(retire4_rT),.write4_wen_rrf(retire4_enV),
-  .write5_addr_rrf(retire5_rT),.write5_wen_rrf(retire5_enV),
-  .write6_addr_rrf(retire6_rT),.write6_wen_rrf(retire6_enV),
-  .write7_addr_rrf(retire7_rT),.write7_wen_rrf(retire7_enV),
-  .write8_addr_rrf(retire8_rT),.write8_wen_rrf(retire8_enV),
-  .retireRead0_addr(retire0_rF),
-  .retireRead1_addr(retire1_rF),
-  .retireRead2_addr(retire2_rF),
-  .retireRead3_addr(retire3_rF),
-  .retireRead4_addr(retire4_rF),
-  .retireRead5_addr(retire5_rF),
-  .retireRead6_addr(retire6_rF),
-  .retireRead7_addr(retire7_rF),
-  .retireRead8_addr(retire8_rF),
+  .write0_addr_rrf(tire0_rT),.write0_wen_rrf(tire0_enV),
+  .write1_addr_rrf(tire1_rT),.write1_wen_rrf(tire1_enV),
+  .write2_addr_rrf(tire2_rT),.write2_wen_rrf(tire2_enV),
+  .write3_addr_rrf(tire3_rT),.write3_wen_rrf(tire3_enV),
+  .write4_addr_rrf(tire4_rT),.write4_wen_rrf(tire4_enV),
+  .write5_addr_rrf(tire5_rT),.write5_wen_rrf(tire5_enV),
+  .write6_addr_rrf(tire6_rT),.write6_wen_rrf(tire6_enV),
+  .write7_addr_rrf(tire7_rT),.write7_wen_rrf(tire7_enV),
+  .write8_addr_rrf(tire8_rT),.write8_wen_rrf(tire8_enV),
+  .tireRead0_addr(tire0_rF),
+  .tireRead1_addr(tire1_rF),
+  .tireRead2_addr(tire2_rF),
+  .tireRead3_addr(tire3_rF),
+  .tireRead4_addr(tire4_rF),
+  .tireRead5_addr(tire5_rF),
+  .tireRead6_addr(tire6_rF),
+  .tireRead7_addr(tire7_rF),
+  .tireRead8_addr(tire8_rF),
 
   .write0_addr_reg(FUreg_reg2[0]),.write0_data_reg(FUVL_reg[0]),.write0_wen_reg(FUwen_reg2[0] & FU0Hit_reg),
   .write1_addr_reg(FUreg_reg2[1]),.write1_data_reg(FUVL_reg[1]),.write1_wen_reg(FUwen_reg2[1] & FU1Hit_reg),
@@ -3100,7 +3100,7 @@ module backend(
   .clk(clk),
   .rst(rst),
   .read_clkEn(~doStall),
-  .retire_clkEn(1'b1),
+  .tire_clkEn(1'b1),
 
   .read0_match(),.read1_match(),.read2_match(),
   .read3_match(),.read4_match(),.read5_match(),
@@ -3154,24 +3154,24 @@ module backend(
   .read7_const(is_rndE(rs_operation_reg2[7]) ? 68'b0 : fpD_one),
   .read8_const(is_rndE(rs_operation_reg2[8]) ? 68'b0 : fpD_one),
 
-  .write0_addr_rrf(retire0_rT),.write0_wen_rrf(retire0_enF),
-  .write1_addr_rrf(retire1_rT),.write1_wen_rrf(retire1_enF),
-  .write2_addr_rrf(retire2_rT),.write2_wen_rrf(retire2_enF),
-  .write3_addr_rrf(retire3_rT),.write3_wen_rrf(retire3_enF),
-  .write4_addr_rrf(retire4_rT),.write4_wen_rrf(retire4_enF),
-  .write5_addr_rrf(retire5_rT),.write5_wen_rrf(retire5_enF),
-  .write6_addr_rrf(retire6_rT),.write6_wen_rrf(retire6_enF),
-  .write7_addr_rrf(retire7_rT),.write7_wen_rrf(retire7_enF),
-  .write8_addr_rrf(retire8_rT),.write8_wen_rrf(retire8_enF),
-  .retireRead0_addr(retire0_rF),
-  .retireRead1_addr(retire1_rF),
-  .retireRead2_addr(retire2_rF),
-  .retireRead3_addr(retire3_rF),
-  .retireRead4_addr(retire4_rF),
-  .retireRead5_addr(retire5_rF),
-  .retireRead6_addr(retire6_rF),
-  .retireRead7_addr(retire7_rF),
-  .retireRead8_addr(retire8_rF),
+  .write0_addr_rrf(tire0_rT),.write0_wen_rrf(tire0_enF),
+  .write1_addr_rrf(tire1_rT),.write1_wen_rrf(tire1_enF),
+  .write2_addr_rrf(tire2_rT),.write2_wen_rrf(tire2_enF),
+  .write3_addr_rrf(tire3_rT),.write3_wen_rrf(tire3_enF),
+  .write4_addr_rrf(tire4_rT),.write4_wen_rrf(tire4_enF),
+  .write5_addr_rrf(tire5_rT),.write5_wen_rrf(tire5_enF),
+  .write6_addr_rrf(tire6_rT),.write6_wen_rrf(tire6_enF),
+  .write7_addr_rrf(tire7_rT),.write7_wen_rrf(tire7_enF),
+  .write8_addr_rrf(tire8_rT),.write8_wen_rrf(tire8_enF),
+  .tireRead0_addr(tire0_rF),
+  .tireRead1_addr(tire1_rF),
+  .tireRead2_addr(tire2_rF),
+  .tireRead3_addr(tire3_rF),
+  .tireRead4_addr(tire4_rF),
+  .tireRead5_addr(tire5_rF),
+  .tireRead6_addr(tire6_rF),
+  .tireRead7_addr(tire7_rF),
+  .tireRead8_addr(tire8_rF),
 
   .write0_addr_reg(FUreg_reg3[0]),.write0_data_reg(FUFH_reg[0]),.write0_wen_reg(FUwen_reg3[0] & FU0Hit_reg2),
   .write1_addr_reg(FUreg_reg3[1]),.write1_data_reg(FUFH_reg[1]),.write1_wen_reg(FUwen_reg3[1] & FU1Hit_reg2),
@@ -3190,7 +3190,7 @@ module backend(
   .clk(clk),
   .rst(rst),
   .read_clkEn(~doStall),
-  .retire_clkEn(1'b1),
+  .tire_clkEn(1'b1),
 
   .read0_match(),.read1_match(),.read2_match(),
   .read3_match(),.read4_match(),.read5_match(),
@@ -3245,24 +3245,24 @@ module backend(
   .read8_const(is_rndE(rs_operation_reg2[8]) ? fpE_one : {16'b0,fpD_one}),
 
 
-  .write0_addr_rrf(retire0_rT),.write0_wen_rrf(retire0_enF),
-  .write1_addr_rrf(retire1_rT),.write1_wen_rrf(retire1_enF),
-  .write2_addr_rrf(retire2_rT),.write2_wen_rrf(retire2_enF),
-  .write3_addr_rrf(retire3_rT),.write3_wen_rrf(retire3_enF),
-  .write4_addr_rrf(retire4_rT),.write4_wen_rrf(retire4_enF),
-  .write5_addr_rrf(retire5_rT),.write5_wen_rrf(retire5_enF),
-  .write6_addr_rrf(retire6_rT),.write6_wen_rrf(retire6_enF),
-  .write7_addr_rrf(retire7_rT),.write7_wen_rrf(retire7_enF),
-  .write8_addr_rrf(retire8_rT),.write8_wen_rrf(retire8_enF),
-  .retireRead0_addr(retire0_rF),
-  .retireRead1_addr(retire1_rF),
-  .retireRead2_addr(retire2_rF),
-  .retireRead3_addr(retire3_rF),
-  .retireRead4_addr(retire4_rF),
-  .retireRead5_addr(retire5_rF),
-  .retireRead6_addr(retire6_rF),
-  .retireRead7_addr(retire7_rF),
-  .retireRead8_addr(retire8_rF),
+  .write0_addr_rrf(tire0_rT),.write0_wen_rrf(tire0_enF),
+  .write1_addr_rrf(tire1_rT),.write1_wen_rrf(tire1_enF),
+  .write2_addr_rrf(tire2_rT),.write2_wen_rrf(tire2_enF),
+  .write3_addr_rrf(tire3_rT),.write3_wen_rrf(tire3_enF),
+  .write4_addr_rrf(tire4_rT),.write4_wen_rrf(tire4_enF),
+  .write5_addr_rrf(tire5_rT),.write5_wen_rrf(tire5_enF),
+  .write6_addr_rrf(tire6_rT),.write6_wen_rrf(tire6_enF),
+  .write7_addr_rrf(tire7_rT),.write7_wen_rrf(tire7_enF),
+  .write8_addr_rrf(tire8_rT),.write8_wen_rrf(tire8_enF),
+  .tireRead0_addr(tire0_rF),
+  .tireRead1_addr(tire1_rF),
+  .tireRead2_addr(tire2_rF),
+  .tireRead3_addr(tire3_rF),
+  .tireRead4_addr(tire4_rF),
+  .tireRead5_addr(tire5_rF),
+  .tireRead6_addr(tire6_rF),
+  .tireRead7_addr(tire7_rF),
+  .tireRead8_addr(tire8_rF),
 
   .write0_addr_reg(FUreg_reg3[0]),.write0_data_reg(FUFL_reg[0]),.write0_wen_reg(FUwen_reg3[0] & FU0Hit_reg2),
   .write1_addr_reg(FUreg_reg3[1]),.write1_data_reg(FUFL_reg[1]),.write1_wen_reg(FUwen_reg3[1] & FU1Hit_reg2),
@@ -3448,7 +3448,7 @@ module backend(
   .clk(clk),
   .rst(rst),
   .read_clkEn(~doStall),
-  .retire_clkEn(1'b1),
+  .tire_clkEn(1'b1),
 
   .read0_addr(regB[0]),.read0_data(dataB[0]),
     .read0_oe(~retB[0]|rs0i0_useBConst_reg|~rs_rB_use[0]),.read0_match(gazumpBG[0]),
@@ -3500,24 +3500,24 @@ module backend(
   .read7_const(rs_const_new[7]&{65{rs2i1_useBConst_reg}}),
   .read8_const(rs_const_new[8]),
 
-  .write0_addr_rrf(retire0_rT),.write0_wen_rrf(retire0_enG),
-  .write1_addr_rrf(retire1_rT),.write1_wen_rrf(retire1_enG),
-  .write2_addr_rrf(retire2_rT),.write2_wen_rrf(retire2_enG),
-  .write3_addr_rrf(retire3_rT),.write3_wen_rrf(retire3_enG),
-  .write4_addr_rrf(retire4_rT),.write4_wen_rrf(retire4_enG),
-  .write5_addr_rrf(retire5_rT),.write5_wen_rrf(retire5_enG),
-  .write6_addr_rrf(retire6_rT),.write6_wen_rrf(retire6_enG),
-  .write7_addr_rrf(retire7_rT),.write7_wen_rrf(retire7_enG),
-  .write8_addr_rrf(retire8_rT),.write8_wen_rrf(retire8_enG),
-  .retireRead0_addr(retire0_rF),
-  .retireRead1_addr(retire1_rF),
-  .retireRead2_addr(retire2_rF),
-  .retireRead3_addr(retire3_rF),
-  .retireRead4_addr(retire4_rF),
-  .retireRead5_addr(retire5_rF),
-  .retireRead6_addr(retire6_rF),
-  .retireRead7_addr(retire7_rF),
-  .retireRead8_addr(retire8_rF),
+  .write0_addr_rrf(tire0_rT),.write0_wen_rrf(tire0_enG),
+  .write1_addr_rrf(tire1_rT),.write1_wen_rrf(tire1_enG),
+  .write2_addr_rrf(tire2_rT),.write2_wen_rrf(tire2_enG),
+  .write3_addr_rrf(tire3_rT),.write3_wen_rrf(tire3_enG),
+  .write4_addr_rrf(tire4_rT),.write4_wen_rrf(tire4_enG),
+  .write5_addr_rrf(tire5_rT),.write5_wen_rrf(tire5_enG),
+  .write6_addr_rrf(tire6_rT),.write6_wen_rrf(tire6_enG),
+  .write7_addr_rrf(tire7_rT),.write7_wen_rrf(tire7_enG),
+  .write8_addr_rrf(tire8_rT),.write8_wen_rrf(tire8_enG),
+  .tireRead0_addr(tire0_rF),
+  .tireRead1_addr(tire1_rF),
+  .tireRead2_addr(tire2_rF),
+  .tireRead3_addr(tire3_rF),
+  .tireRead4_addr(tire4_rF),
+  .tireRead5_addr(tire5_rF),
+  .tireRead6_addr(tire6_rF),
+  .tireRead7_addr(tire7_rF),
+  .tireRead8_addr(tire8_rF),
 
   .write0_addr_reg(FUreg_reg[0]),.write0_data_reg(FU_reg[0]),.write0_wen_reg(FUwen_reg[0] & FU0Hit),
   .write1_addr_reg(FUreg_reg[1]),.write1_data_reg(FU_reg[1]),.write1_wen_reg(FUwen_reg[1] & FU1Hit),
@@ -3535,7 +3535,7 @@ module backend(
   .clk(clk),
   .rst(rst),
   .read_clkEn(~doStall),
-  .retire_clkEn(1'b1),
+  .tire_clkEn(1'b1),
 
   .read0_match(),.read1_match(),.read2_match(),
   .read3_match(),.read4_match(),.read5_match(),
@@ -3589,24 +3589,24 @@ module backend(
   .read7_const({SIMD_WIDTH{1'B0}}),
   .read8_const({SIMD_WIDTH{1'B0}}),
 
-  .write0_addr_rrf(retire0_rT),.write0_wen_rrf(retire0_enV),
-  .write1_addr_rrf(retire1_rT),.write1_wen_rrf(retire1_enV),
-  .write2_addr_rrf(retire2_rT),.write2_wen_rrf(retire2_enV),
-  .write3_addr_rrf(retire3_rT),.write3_wen_rrf(retire3_enV),
-  .write4_addr_rrf(retire4_rT),.write4_wen_rrf(retire4_enV),
-  .write5_addr_rrf(retire5_rT),.write5_wen_rrf(retire5_enV),
-  .write6_addr_rrf(retire6_rT),.write6_wen_rrf(retire6_enV),
-  .write7_addr_rrf(retire7_rT),.write7_wen_rrf(retire7_enV),
-  .write8_addr_rrf(retire8_rT),.write8_wen_rrf(retire8_enV),
-  .retireRead0_addr(retire0_rF),
-  .retireRead1_addr(retire1_rF),
-  .retireRead2_addr(retire2_rF),
-  .retireRead3_addr(retire3_rF),
-  .retireRead4_addr(retire4_rF),
-  .retireRead5_addr(retire5_rF),
-  .retireRead6_addr(retire6_rF),
-  .retireRead7_addr(retire7_rF),
-  .retireRead8_addr(retire8_rF),
+  .write0_addr_rrf(tire0_rT),.write0_wen_rrf(tire0_enV),
+  .write1_addr_rrf(tire1_rT),.write1_wen_rrf(tire1_enV),
+  .write2_addr_rrf(tire2_rT),.write2_wen_rrf(tire2_enV),
+  .write3_addr_rrf(tire3_rT),.write3_wen_rrf(tire3_enV),
+  .write4_addr_rrf(tire4_rT),.write4_wen_rrf(tire4_enV),
+  .write5_addr_rrf(tire5_rT),.write5_wen_rrf(tire5_enV),
+  .write6_addr_rrf(tire6_rT),.write6_wen_rrf(tire6_enV),
+  .write7_addr_rrf(tire7_rT),.write7_wen_rrf(tire7_enV),
+  .write8_addr_rrf(tire8_rT),.write8_wen_rrf(tire8_enV),
+  .tireRead0_addr(tire0_rF),
+  .tireRead1_addr(tire1_rF),
+  .tireRead2_addr(tire2_rF),
+  .tireRead3_addr(tire3_rF),
+  .tireRead4_addr(tire4_rF),
+  .tireRead5_addr(tire5_rF),
+  .tireRead6_addr(tire6_rF),
+  .tireRead7_addr(tire7_rF),
+  .tireRead8_addr(tire8_rF),
 
   .write0_addr_reg(FUreg_reg2[0]),.write0_data_reg(FUVH_reg[0]),.write0_wen_reg(FUwen_reg2[0] & FU0Hit_reg),
   .write1_addr_reg(FUreg_reg2[1]),.write1_data_reg(FUVH_reg[1]),.write1_wen_reg(FUwen_reg2[1] & FU1Hit_reg),
@@ -3624,7 +3624,7 @@ module backend(
   .clk(clk),
   .rst(rst),
   .read_clkEn(~doStall),
-  .retire_clkEn(1'b1),
+  .tire_clkEn(1'b1),
 
   .read0_match(),.read1_match(),.read2_match(),
   .read3_match(),.read4_match(),.read5_match(),
@@ -3678,24 +3678,24 @@ module backend(
   .read7_const({SIMD_WIDTH{1'B0}}),
   .read8_const({SIMD_WIDTH{1'B0}}),
 
-  .write0_addr_rrf(retire0_rT),.write0_wen_rrf(retire0_enV),
-  .write1_addr_rrf(retire1_rT),.write1_wen_rrf(retire1_enV),
-  .write2_addr_rrf(retire2_rT),.write2_wen_rrf(retire2_enV),
-  .write3_addr_rrf(retire3_rT),.write3_wen_rrf(retire3_enV),
-  .write4_addr_rrf(retire4_rT),.write4_wen_rrf(retire4_enV),
-  .write5_addr_rrf(retire5_rT),.write5_wen_rrf(retire5_enV),
-  .write6_addr_rrf(retire6_rT),.write6_wen_rrf(retire6_enV),
-  .write7_addr_rrf(retire7_rT),.write7_wen_rrf(retire7_enV),
-  .write8_addr_rrf(retire8_rT),.write8_wen_rrf(retire8_enV),
-  .retireRead0_addr(retire0_rF),
-  .retireRead1_addr(retire1_rF),
-  .retireRead2_addr(retire2_rF),
-  .retireRead3_addr(retire3_rF),
-  .retireRead4_addr(retire4_rF),
-  .retireRead5_addr(retire5_rF),
-  .retireRead6_addr(retire6_rF),
-  .retireRead7_addr(retire7_rF),
-  .retireRead8_addr(retire8_rF),
+  .write0_addr_rrf(tire0_rT),.write0_wen_rrf(tire0_enV),
+  .write1_addr_rrf(tire1_rT),.write1_wen_rrf(tire1_enV),
+  .write2_addr_rrf(tire2_rT),.write2_wen_rrf(tire2_enV),
+  .write3_addr_rrf(tire3_rT),.write3_wen_rrf(tire3_enV),
+  .write4_addr_rrf(tire4_rT),.write4_wen_rrf(tire4_enV),
+  .write5_addr_rrf(tire5_rT),.write5_wen_rrf(tire5_enV),
+  .write6_addr_rrf(tire6_rT),.write6_wen_rrf(tire6_enV),
+  .write7_addr_rrf(tire7_rT),.write7_wen_rrf(tire7_enV),
+  .write8_addr_rrf(tire8_rT),.write8_wen_rrf(tire8_enV),
+  .tireRead0_addr(tire0_rF),
+  .tireRead1_addr(tire1_rF),
+  .tireRead2_addr(tire2_rF),
+  .tireRead3_addr(tire3_rF),
+  .tireRead4_addr(tire4_rF),
+  .tireRead5_addr(tire5_rF),
+  .tireRead6_addr(tire6_rF),
+  .tireRead7_addr(tire7_rF),
+  .tireRead8_addr(tire8_rF),
 
   .write0_addr_reg(FUreg_reg2[0]),.write0_data_reg(FUVL_reg[0]),.write0_wen_reg(FUwen_reg2[0] & FU0Hit_reg),
   .write1_addr_reg(FUreg_reg2[1]),.write1_data_reg(FUVL_reg[1]),.write1_wen_reg(FUwen_reg2[1] & FU1Hit_reg),
@@ -3765,7 +3765,7 @@ module backend(
   .clk(clk),
   .rst(rst),
   .read_clkEn(~doStall),
-  .retire_clkEn(1'b1),
+  .tire_clkEn(1'b1),
 
   .read0_match(),.read1_match(),.read2_match(),
   .read3_match(),.read4_match(),.read5_match(),
@@ -3820,24 +3820,24 @@ module backend(
   .read8_addr_rrf(rs2i2_rB_reg3),
 
 
-  .write0_addr_rrf(retire0_rT),.write0_wen_rrf(retire0_enF),
-  .write1_addr_rrf(retire1_rT),.write1_wen_rrf(retire1_enF),
-  .write2_addr_rrf(retire2_rT),.write2_wen_rrf(retire2_enF),
-  .write3_addr_rrf(retire3_rT),.write3_wen_rrf(retire3_enF),
-  .write4_addr_rrf(retire4_rT),.write4_wen_rrf(retire4_enF),
-  .write5_addr_rrf(retire5_rT),.write5_wen_rrf(retire5_enF),
-  .write6_addr_rrf(retire6_rT),.write6_wen_rrf(retire6_enF),
-  .write7_addr_rrf(retire7_rT),.write7_wen_rrf(retire7_enF),
-  .write8_addr_rrf(retire8_rT),.write8_wen_rrf(retire8_enF),
-  .retireRead0_addr(retire0_rF),
-  .retireRead1_addr(retire1_rF),
-  .retireRead2_addr(retire2_rF),
-  .retireRead3_addr(retire3_rF),
-  .retireRead4_addr(retire4_rF),
-  .retireRead5_addr(retire5_rF),
-  .retireRead6_addr(retire6_rF),
-  .retireRead7_addr(retire7_rF),
-  .retireRead8_addr(retire8_rF),
+  .write0_addr_rrf(tire0_rT),.write0_wen_rrf(tire0_enF),
+  .write1_addr_rrf(tire1_rT),.write1_wen_rrf(tire1_enF),
+  .write2_addr_rrf(tire2_rT),.write2_wen_rrf(tire2_enF),
+  .write3_addr_rrf(tire3_rT),.write3_wen_rrf(tire3_enF),
+  .write4_addr_rrf(tire4_rT),.write4_wen_rrf(tire4_enF),
+  .write5_addr_rrf(tire5_rT),.write5_wen_rrf(tire5_enF),
+  .write6_addr_rrf(tire6_rT),.write6_wen_rrf(tire6_enF),
+  .write7_addr_rrf(tire7_rT),.write7_wen_rrf(tire7_enF),
+  .write8_addr_rrf(tire8_rT),.write8_wen_rrf(tire8_enF),
+  .tireRead0_addr(tire0_rF),
+  .tireRead1_addr(tire1_rF),
+  .tireRead2_addr(tire2_rF),
+  .tireRead3_addr(tire3_rF),
+  .tireRead4_addr(tire4_rF),
+  .tireRead5_addr(tire5_rF),
+  .tireRead6_addr(tire6_rF),
+  .tireRead7_addr(tire7_rF),
+  .tireRead8_addr(tire8_rF),
 
   .write0_addr_reg(FUreg_reg3[0]),.write0_data_reg(FUFH_reg[0]),.write0_wen_reg(FUwen_reg3[0] & FU0Hit_reg2),
   .write1_addr_reg(FUreg_reg3[1]),.write1_data_reg(FUFH_reg[1]),.write1_wen_reg(FUwen_reg3[1] & FU1Hit_reg2),
@@ -3855,7 +3855,7 @@ module backend(
   .clk(clk),
   .rst(rst),
   .read_clkEn(~doStall),
-  .retire_clkEn(1'b1),
+  .tire_clkEn(1'b1),
 
   .read0_match(),.read1_match(),.read2_match(),
   .read3_match(),.read4_match(),.read5_match(),
@@ -3899,34 +3899,34 @@ module backend(
   .read7_const({16+SIMD_WIDTH{1'B0}}),
   .read8_const({16+SIMD_WIDTH{1'B0}}),
 
-  .retireRead0_addr(retire0_rF),
-  .retireRead1_addr(retire1_rF),
-  .retireRead2_addr(retire2_rF),
-  .retireRead3_addr(retire3_rF),
-  .retireRead4_addr(retire4_rF),
-  .retireRead5_addr(retire5_rF),
-  .retireRead6_addr(retire6_rF),
-  .retireRead7_addr(retire7_rF),
-  .retireRead8_addr(retire8_rF),
+  .tireRead0_addr(tire0_rF),
+  .tireRead1_addr(tire1_rF),
+  .tireRead2_addr(tire2_rF),
+  .tireRead3_addr(tire3_rF),
+  .tireRead4_addr(tire4_rF),
+  .tireRead5_addr(tire5_rF),
+  .tireRead6_addr(tire6_rF),
+  .tireRead7_addr(tire7_rF),
+  .tireRead8_addr(tire8_rF),
 
-  .write0_addr_rrf(retire0_rT),.write0_wen_rrf(retire0_enF),
-  .write1_addr_rrf(retire1_rT),.write1_wen_rrf(retire1_enF),
-  .write2_addr_rrf(retire2_rT),.write2_wen_rrf(retire2_enF),
-  .write3_addr_rrf(retire3_rT),.write3_wen_rrf(retire3_enF),
-  .write4_addr_rrf(retire4_rT),.write4_wen_rrf(retire4_enF),
-  .write5_addr_rrf(retire5_rT),.write5_wen_rrf(retire5_enF),
-  .write6_addr_rrf(retire6_rT),.write6_wen_rrf(retire6_enF),
-  .write7_addr_rrf(retire7_rT),.write7_wen_rrf(retire7_enF),
-  .write8_addr_rrf(retire8_rT),.write8_wen_rrf(retire8_enF),
-  .retireRead0_addr(retire0_rF),
-  .retireRead1_addr(retire1_rF),
-  .retireRead2_addr(retire2_rF),
-  .retireRead3_addr(retire3_rF),
-  .retireRead4_addr(retire4_rF),
-  .retireRead5_addr(retire5_rF),
-  .retireRead6_addr(retire6_rF),
-  .retireRead7_addr(retire7_rF),
-  .retireRead8_addr(retire8_rF),
+  .write0_addr_rrf(tire0_rT),.write0_wen_rrf(tire0_enF),
+  .write1_addr_rrf(tire1_rT),.write1_wen_rrf(tire1_enF),
+  .write2_addr_rrf(tire2_rT),.write2_wen_rrf(tire2_enF),
+  .write3_addr_rrf(tire3_rT),.write3_wen_rrf(tire3_enF),
+  .write4_addr_rrf(tire4_rT),.write4_wen_rrf(tire4_enF),
+  .write5_addr_rrf(tire5_rT),.write5_wen_rrf(tire5_enF),
+  .write6_addr_rrf(tire6_rT),.write6_wen_rrf(tire6_enF),
+  .write7_addr_rrf(tire7_rT),.write7_wen_rrf(tire7_enF),
+  .write8_addr_rrf(tire8_rT),.write8_wen_rrf(tire8_enF),
+  .tireRead0_addr(tire0_rF),
+  .tireRead1_addr(tire1_rF),
+  .tireRead2_addr(tire2_rF),
+  .tireRead3_addr(tire3_rF),
+  .tireRead4_addr(tire4_rF),
+  .tireRead5_addr(tire5_rF),
+  .tireRead6_addr(tire6_rF),
+  .tireRead7_addr(tire7_rF),
+  .tireRead8_addr(tire8_rF),
 
   .read0_addr_rrf(rs0i0_rB_reg3),
   .read1_addr_rrf(rs0i1_rB_reg3),
@@ -4150,11 +4150,11 @@ module backend(
   .clk(clk),
   .rst(rst),
   .read_clkEn(~doStall),
-  .retire_clkEn(1'b1),
+  .tire_clkEn(1'b1),
 
   .read0_addr(regFl),.read0_data({inflS,dataS}),.read0_oe(~retFl),.read0_gazump(gazumpS),
 
-  .retireRead0_addr(retfl_rF),.retireRead0_data(retfl_data),
+  .tireRead0_addr(retfl_rF),.tireRead0_data(retfl_data),
 
   .write0_addr_reg(FUSreg_reg[4]),.write0_data_reg(FUS4),.write0_wen_reg(FUwen_reg[4] && ~outOp_reg[3*0+1][12] && outEn_reg[3*0+1][1]),
   .write1_addr_reg(FUSreg_reg[5]),.write1_data_reg(FUS5),.write1_wen_reg(FUwen_reg[5] && ~outOp_reg[3*1+1][12] && outEn_reg[3*1+1][1]),
@@ -5068,7 +5068,7 @@ module backend(
   .doStall_rs(doStall_rs),.stall_cntrl(stall_cntrl), 
   .doStall_alloc(doStall_alloc|doStall_alloc2),.doStall_cntrl(doStall_cntrl),
   .doStall_WQ(doStall_WQ),.stall_WQ(stall_WQ),
-  .doRetire_d(retM_do_retire),
+  .dotire_d(retM_do_tire),
   .xbreak(retM_xbreak),
   .has_xbreak(retM_xbreak_has),
   .ldq_new_mask_reg(ldq_new_mask_reg),.bundle_in_reg2(bundle_in_reg2),.II_upper(II_upper),.LSQ_shr_data(LSQ_shr_data),
@@ -5460,17 +5460,17 @@ dcache1 L1D_mod(
   .itk_after(instr_afterTaken_reg),.ifsimd(instr_fsimd_reg2),
   .iJump0Taken(jump0Pred_reg2),.iJump1Taken(jump1Pred_reg2),
   .iJump0Attr(jump0Attr_reg2),.iJump1Attr(jump1Attr_reg2),
-  .flTE(retfl_rF),.retire_enFl(retfl_enG),
-  .retire0_rT(retire0_rT),.retire0_rF(retire0_rF),.retire0_enG(retire0_enG),.retire0_enV(retire0_enV),.retire0_enF(retire0_enF),
-  .retire1_rT(retire1_rT),.retire1_rF(retire1_rF),.retire1_enG(retire1_enG),.retire1_enV(retire1_enV),.retire1_enF(retire1_enF),
-  .retire2_rT(retire2_rT),.retire2_rF(retire2_rF),.retire2_enG(retire2_enG),.retire2_enV(retire2_enV),.retire2_enF(retire2_enF),
-  .retire3_rT(retire3_rT),.retire3_rF(retire3_rF),.retire3_enG(retire3_enG),.retire3_enV(retire3_enV),.retire3_enF(retire3_enF),
-  .retire4_rT(retire4_rT),.retire4_rF(retire4_rF),.retire4_enG(retire4_enG),.retire4_enV(retire4_enV),.retire4_enF(retire4_enF),
-  .retire5_rT(retire5_rT),.retire5_rF(retire5_rF),.retire5_enG(retire5_enG),.retire5_enV(retire5_enV),.retire5_enF(retire5_enF),
-  .retire6_rT(retire6_rT),.retire6_rF(retire6_rF),.retire6_enG(retire6_enG),.retire6_enV(retire6_enV),.retire6_enF(retire6_enF),
-  .retire7_rT(retire7_rT),.retire7_rF(retire7_rF),.retire7_enG(retire7_enG),.retire7_enV(retire7_enV),.retire7_enF(retire7_enF),
-  .retire8_rT(retire8_rT),.retire8_rF(retire8_rF),.retire8_enG(retire8_enG),.retire8_enV(retire8_enV),.retire8_enF(retire8_enF),
-  .doRetire(),
+  .flTE(retfl_rF),.tire_enFl(retfl_enG),
+  .tire0_rT(tire0_rT),.tire0_rF(tire0_rF),.tire0_enG(tire0_enG),.tire0_enV(tire0_enV),.tire0_enF(tire0_enF),
+  .tire1_rT(tire1_rT),.tire1_rF(tire1_rF),.tire1_enG(tire1_enG),.tire1_enV(tire1_enV),.tire1_enF(tire1_enF),
+  .tire2_rT(tire2_rT),.tire2_rF(tire2_rF),.tire2_enG(tire2_enG),.tire2_enV(tire2_enV),.tire2_enF(tire2_enF),
+  .tire3_rT(tire3_rT),.tire3_rF(tire3_rF),.tire3_enG(tire3_enG),.tire3_enV(tire3_enV),.tire3_enF(tire3_enF),
+  .tire4_rT(tire4_rT),.tire4_rF(tire4_rF),.tire4_enG(tire4_enG),.tire4_enV(tire4_enV),.tire4_enF(tire4_enF),
+  .tire5_rT(tire5_rT),.tire5_rF(tire5_rF),.tire5_enG(tire5_enG),.tire5_enV(tire5_enV),.tire5_enF(tire5_enF),
+  .tire6_rT(tire6_rT),.tire6_rF(tire6_rF),.tire6_enG(tire6_enG),.tire6_enV(tire6_enV),.tire6_enF(tire6_enF),
+  .tire7_rT(tire7_rT),.tire7_rF(tire7_rF),.tire7_enG(tire7_enG),.tire7_enV(tire7_enV),.tire7_enF(tire7_enF),
+  .tire8_rT(tire8_rT),.tire8_rF(tire8_rF),.tire8_enG(tire8_enG),.tire8_enV(tire8_enV),.tire8_enF(tire8_enF),
+  .dotire(),
   .retcnt(retcnt),
   .retclr(retclr),
   .jupd0_en(jupd0_en),.jupdt0_en(jupdt0_en),.jupd0_ght_en(jupd0_ght_en),
@@ -5517,7 +5517,7 @@ dcache1 L1D_mod(
   .mem_II_bits_except(retM_excpt),
   .mem_II_bits_ret(retM_ret),
   .mem_II_stall(bDoStall_rqSpit|bDoStall_rqSpit0 && retM_has_store), 
-  .doRetire_d(retM_do_retire),
+  .dotire_d(retM_do_tire),
   .xbreak(retM_xbreak),
   .has_xbreak(retM_xbreak_has)
   );
@@ -6871,9 +6871,9 @@ dcache1 L1D_mod(
           //retM_on_next<=1'b0;
           retM_data_shr_reg<={`lsqshare_width{1'b0}};
       end else begin
-          if (retB_clkEn & ~retM_do_retire) retM_ret_ret<=1'b0;
-          else if (retM_do_retire & ~retB_clkEn) retM_ret_ret<=1'b1;
-          if (retM_ret_ret|retM_do_retire) retM_data_shr_reg<=retM_data_shr;
+          if (retB_clkEn & ~retM_do_tire) retM_ret_ret<=1'b0;
+          else if (retM_do_tire & ~retB_clkEn) retM_ret_ret<=1'b1;
+          if (retM_ret_ret|retM_do_tire) retM_data_shr_reg<=retM_data_shr;
       end*/
       if (rst) begin
 	  for(k=0;k<4;k=k+1) begin
@@ -7541,154 +7541,154 @@ dcache1 L1D_mod(
           end
       end
       if (rst) begin
-	  retire0_rT_reg<=6'b0;
-	  retire0_rF_reg<=9'b0;
-          retire0_rFl_reg<=9'b0;
-	  retire0_enV_reg<=1'b0;
-	  retire0_enF_reg<=1'b0;
-	  retire1_rT_reg<=6'b0;
-	  retire1_rF_reg<=9'b0;
-          retire1_rFl_reg<=9'b0;
-	  retire1_enV_reg<=1'b0;
-	  retire1_enF_reg<=1'b0;
-	  retire2_rT_reg<=6'b0;
-	  retire2_rF_reg<=9'b0;
-          retire2_rFl_reg<=9'b0;
-	  retire2_enV_reg<=1'b0;
-	  retire2_enF_reg<=1'b0;
-	  retire3_rT_reg<=6'b0;
-	  retire3_rF_reg<=9'b0;
-          retire3_rFl_reg<=9'b0;
-	  retire3_enV_reg<=1'b0;
-	  retire3_enF_reg<=1'b0;
-	  retire4_rT_reg<=6'b0;
-	  retire4_rF_reg<=9'b0;
-          retire4_rFl_reg<=9'b0;
-	  retire4_enV_reg<=1'b0;
-	  retire4_enF_reg<=1'b0;
-	  retire5_rT_reg<=6'b0;
-	  retire5_rF_reg<=9'b0;
-          retire5_rFl_reg<=9'b0;
-	  retire5_enV_reg<=1'b0;
-	  retire5_enF_reg<=1'b0;
-	  retire6_rT_reg<=6'b0;
-	  retire6_rF_reg<=9'b0;
-          retire6_rFl_reg<=9'b0;
-	  retire6_enV_reg<=1'b0;
-	  retire6_enF_reg<=1'b0;
-	  retire7_rT_reg<=6'b0;
-	  retire7_rF_reg<=9'b0;
-          retire7_rFl_reg<=9'b0;
-	  retire7_enV_reg<=1'b0;
-	  retire7_enF_reg<=1'b0;
-	  retire8_rT_reg<=6'b0;
-	  retire8_rF_reg<=9'b0;
-          retire8_rFl_reg<=9'b0;
-	  retire8_enV_reg<=1'b0;
-	  retire8_enF_reg<=1'b0;
+	  tire0_rT_reg<=6'b0;
+	  tire0_rF_reg<=9'b0;
+          tire0_rFl_reg<=9'b0;
+	  tire0_enV_reg<=1'b0;
+	  tire0_enF_reg<=1'b0;
+	  tire1_rT_reg<=6'b0;
+	  tire1_rF_reg<=9'b0;
+          tire1_rFl_reg<=9'b0;
+	  tire1_enV_reg<=1'b0;
+	  tire1_enF_reg<=1'b0;
+	  tire2_rT_reg<=6'b0;
+	  tire2_rF_reg<=9'b0;
+          tire2_rFl_reg<=9'b0;
+	  tire2_enV_reg<=1'b0;
+	  tire2_enF_reg<=1'b0;
+	  tire3_rT_reg<=6'b0;
+	  tire3_rF_reg<=9'b0;
+          tire3_rFl_reg<=9'b0;
+	  tire3_enV_reg<=1'b0;
+	  tire3_enF_reg<=1'b0;
+	  tire4_rT_reg<=6'b0;
+	  tire4_rF_reg<=9'b0;
+          tire4_rFl_reg<=9'b0;
+	  tire4_enV_reg<=1'b0;
+	  tire4_enF_reg<=1'b0;
+	  tire5_rT_reg<=6'b0;
+	  tire5_rF_reg<=9'b0;
+          tire5_rFl_reg<=9'b0;
+	  tire5_enV_reg<=1'b0;
+	  tire5_enF_reg<=1'b0;
+	  tire6_rT_reg<=6'b0;
+	  tire6_rF_reg<=9'b0;
+          tire6_rFl_reg<=9'b0;
+	  tire6_enV_reg<=1'b0;
+	  tire6_enF_reg<=1'b0;
+	  tire7_rT_reg<=6'b0;
+	  tire7_rF_reg<=9'b0;
+          tire7_rFl_reg<=9'b0;
+	  tire7_enV_reg<=1'b0;
+	  tire7_enF_reg<=1'b0;
+	  tire8_rT_reg<=6'b0;
+	  tire8_rF_reg<=9'b0;
+          tire8_rFl_reg<=9'b0;
+	  tire8_enV_reg<=1'b0;
+	  tire8_enF_reg<=1'b0;
 	  
-	  retire0_rT_reg2<=6'b0;
-	  retire0_rF_reg2<=9'b0;
-	  retire0_enF_reg2<=1'b0;
-	  retire1_rT_reg2<=6'b0;
-	  retire1_rF_reg2<=9'b0;
-	  retire1_enF_reg2<=1'b0;
-	  retire2_rT_reg2<=6'b0;
-	  retire2_rF_reg2<=9'b0;
-	  retire2_enF_reg2<=1'b0;
-	  retire3_rT_reg2<=6'b0;
-	  retire3_rF_reg2<=9'b0;
-	  retire3_enF_reg2<=1'b0;
-	  retire4_rT_reg2<=6'b0;
-	  retire4_rF_reg2<=9'b0;
-	  retire4_enF_reg2<=1'b0;
-	  retire5_rT_reg2<=6'b0;
-	  retire5_rF_reg2<=9'b0;
-	  retire5_enF_reg2<=1'b0;
-	  retire6_rT_reg2<=6'b0;
-	  retire6_rF_reg2<=9'b0;
-	  retire6_enF_reg2<=1'b0;
-	  retire7_rT_reg2<=6'b0;
-	  retire7_rF_reg2<=9'b0;
-	  retire7_enF_reg2<=1'b0;
-	  retire8_rT_reg2<=6'b0;
-	  retire8_rF_reg2<=9'b0;
-	  retire8_enF_reg2<=1'b0;
+	  tire0_rT_reg2<=6'b0;
+	  tire0_rF_reg2<=9'b0;
+	  tire0_enF_reg2<=1'b0;
+	  tire1_rT_reg2<=6'b0;
+	  tire1_rF_reg2<=9'b0;
+	  tire1_enF_reg2<=1'b0;
+	  tire2_rT_reg2<=6'b0;
+	  tire2_rF_reg2<=9'b0;
+	  tire2_enF_reg2<=1'b0;
+	  tire3_rT_reg2<=6'b0;
+	  tire3_rF_reg2<=9'b0;
+	  tire3_enF_reg2<=1'b0;
+	  tire4_rT_reg2<=6'b0;
+	  tire4_rF_reg2<=9'b0;
+	  tire4_enF_reg2<=1'b0;
+	  tire5_rT_reg2<=6'b0;
+	  tire5_rF_reg2<=9'b0;
+	  tire5_enF_reg2<=1'b0;
+	  tire6_rT_reg2<=6'b0;
+	  tire6_rF_reg2<=9'b0;
+	  tire6_enF_reg2<=1'b0;
+	  tire7_rT_reg2<=6'b0;
+	  tire7_rF_reg2<=9'b0;
+	  tire7_enF_reg2<=1'b0;
+	  tire8_rT_reg2<=6'b0;
+	  tire8_rF_reg2<=9'b0;
+	  tire8_enF_reg2<=1'b0;
 	  retfl_rF_reg<=9'b0;
       end else begin
-	  retire0_rT_reg<=retire0_rT;
-	  retire0_rF_reg<=retire0_rF;
-          retire0_rFl_reg<=retire0_rFl;
-	  retire0_enV_reg<=retire0_enV;
-	  retire0_enF_reg<=retire0_enF;
-	  retire1_rT_reg<=retire1_rT;
-	  retire1_rF_reg<=retire1_rF;
-          retire1_rFl_reg<=retire1_rFl;
-	  retire1_enV_reg<=retire1_enV;
-	  retire1_enF_reg<=retire1_enF;
-	  retire2_rT_reg<=retire2_rT;
-	  retire2_rF_reg<=retire2_rF;
-          retire2_rFl_reg<=retire2_rFl;
-	  retire2_enV_reg<=retire2_enV;
-	  retire2_enF_reg<=retire2_enF;
-	  retire3_rT_reg<=retire3_rT;
-	  retire3_rF_reg<=retire3_rF;
-          retire3_rFl_reg<=retire3_rFl;
-	  retire3_enV_reg<=retire3_enV;
-	  retire3_enF_reg<=retire3_enF;
-	  retire4_rT_reg<=retire4_rT;
-	  retire4_rF_reg<=retire4_rF;
-          retire4_rFl_reg<=retire4_rFl;
-	  retire4_enV_reg<=retire4_enV;
-	  retire4_enF_reg<=retire4_enF;
-	  retire5_rT_reg<=retire5_rT;
-	  retire5_rF_reg<=retire5_rF;
-          retire5_rFl_reg<=retire5_rFl;
-	  retire5_enV_reg<=retire5_enV;
-	  retire5_enF_reg<=retire5_enF;
-	  retire6_rT_reg<=retire6_rT;
-	  retire6_rF_reg<=retire6_rF;
-          retire6_rFl_reg<=retire6_rFl;
-	  retire6_enV_reg<=retire6_enV;
-	  retire6_enF_reg<=retire6_enF;
-	  retire7_rT_reg<=retire7_rT;
-	  retire7_rF_reg<=retire7_rF;
-          retire7_rFl_reg<=retire7_rFl;
-	  retire7_enV_reg<=retire7_enV;
-	  retire7_enF_reg<=retire7_enF;
-	  retire8_rT_reg<=retire8_rT;
-	  retire8_rF_reg<=retire8_rF;
-          retire8_rFl_reg<=retire8_rFl;
-	  retire8_enV_reg<=retire8_enV;
-	  retire8_enF_reg<=retire8_enF;
+	  tire0_rT_reg<=tire0_rT;
+	  tire0_rF_reg<=tire0_rF;
+          tire0_rFl_reg<=tire0_rFl;
+	  tire0_enV_reg<=tire0_enV;
+	  tire0_enF_reg<=tire0_enF;
+	  tire1_rT_reg<=tire1_rT;
+	  tire1_rF_reg<=tire1_rF;
+          tire1_rFl_reg<=tire1_rFl;
+	  tire1_enV_reg<=tire1_enV;
+	  tire1_enF_reg<=tire1_enF;
+	  tire2_rT_reg<=tire2_rT;
+	  tire2_rF_reg<=tire2_rF;
+          tire2_rFl_reg<=tire2_rFl;
+	  tire2_enV_reg<=tire2_enV;
+	  tire2_enF_reg<=tire2_enF;
+	  tire3_rT_reg<=tire3_rT;
+	  tire3_rF_reg<=tire3_rF;
+          tire3_rFl_reg<=tire3_rFl;
+	  tire3_enV_reg<=tire3_enV;
+	  tire3_enF_reg<=tire3_enF;
+	  tire4_rT_reg<=tire4_rT;
+	  tire4_rF_reg<=tire4_rF;
+          tire4_rFl_reg<=tire4_rFl;
+	  tire4_enV_reg<=tire4_enV;
+	  tire4_enF_reg<=tire4_enF;
+	  tire5_rT_reg<=tire5_rT;
+	  tire5_rF_reg<=tire5_rF;
+          tire5_rFl_reg<=tire5_rFl;
+	  tire5_enV_reg<=tire5_enV;
+	  tire5_enF_reg<=tire5_enF;
+	  tire6_rT_reg<=tire6_rT;
+	  tire6_rF_reg<=tire6_rF;
+          tire6_rFl_reg<=tire6_rFl;
+	  tire6_enV_reg<=tire6_enV;
+	  tire6_enF_reg<=tire6_enF;
+	  tire7_rT_reg<=tire7_rT;
+	  tire7_rF_reg<=tire7_rF;
+          tire7_rFl_reg<=tire7_rFl;
+	  tire7_enV_reg<=tire7_enV;
+	  tire7_enF_reg<=tire7_enF;
+	  tire8_rT_reg<=tire8_rT;
+	  tire8_rF_reg<=tire8_rF;
+          tire8_rFl_reg<=tire8_rFl;
+	  tire8_enV_reg<=tire8_enV;
+	  tire8_enF_reg<=tire8_enF;
 	  
-	  retire0_rT_reg2<=retire0_rT_reg;
-	  retire0_rF_reg2<=retire0_rF_reg;
-	  retire0_enF_reg2<=retire0_enF_reg;
-	  retire1_rT_reg2<=retire1_rT_reg;
-	  retire1_rF_reg2<=retire1_rF_reg;
-	  retire1_enF_reg2<=retire1_enF_reg;
-	  retire2_rT_reg2<=retire2_rT_reg;
-	  retire2_rF_reg2<=retire2_rF_reg;
-	  retire2_enF_reg2<=retire2_enF_reg;
-	  retire3_rT_reg2<=retire3_rT_reg;
-	  retire3_rF_reg2<=retire3_rF_reg;
-	  retire3_enF_reg2<=retire3_enF_reg;
-	  retire4_rT_reg2<=retire4_rT_reg;
-	  retire4_rF_reg2<=retire4_rF_reg;
-	  retire4_enF_reg2<=retire4_enF_reg;
-	  retire5_rT_reg2<=retire5_rT_reg;
-	  retire5_rF_reg2<=retire5_rF_reg;
-	  retire5_enF_reg2<=retire5_enF_reg;
-	  retire6_rT_reg2<=retire6_rT_reg;
-	  retire6_rF_reg2<=retire6_rF_reg;
-	  retire6_enF_reg2<=retire6_enF_reg;
-	  retire7_rT_reg2<=retire7_rT_reg;
-	  retire7_rF_reg2<=retire7_rF_reg;
-	  retire7_enF_reg2<=retire7_enF_reg;
-	  retire8_rT_reg2<=retire8_rT_reg;
-	  retire8_rF_reg2<=retire8_rF_reg;
-	  retire8_enF_reg2<=retire8_enF_reg;
+	  tire0_rT_reg2<=tire0_rT_reg;
+	  tire0_rF_reg2<=tire0_rF_reg;
+	  tire0_enF_reg2<=tire0_enF_reg;
+	  tire1_rT_reg2<=tire1_rT_reg;
+	  tire1_rF_reg2<=tire1_rF_reg;
+	  tire1_enF_reg2<=tire1_enF_reg;
+	  tire2_rT_reg2<=tire2_rT_reg;
+	  tire2_rF_reg2<=tire2_rF_reg;
+	  tire2_enF_reg2<=tire2_enF_reg;
+	  tire3_rT_reg2<=tire3_rT_reg;
+	  tire3_rF_reg2<=tire3_rF_reg;
+	  tire3_enF_reg2<=tire3_enF_reg;
+	  tire4_rT_reg2<=tire4_rT_reg;
+	  tire4_rF_reg2<=tire4_rF_reg;
+	  tire4_enF_reg2<=tire4_enF_reg;
+	  tire5_rT_reg2<=tire5_rT_reg;
+	  tire5_rF_reg2<=tire5_rF_reg;
+	  tire5_enF_reg2<=tire5_enF_reg;
+	  tire6_rT_reg2<=tire6_rT_reg;
+	  tire6_rF_reg2<=tire6_rF_reg;
+	  tire6_enF_reg2<=tire6_enF_reg;
+	  tire7_rT_reg2<=tire7_rT_reg;
+	  tire7_rF_reg2<=tire7_rF_reg;
+	  tire7_enF_reg2<=tire7_enF_reg;
+	  tire8_rT_reg2<=tire8_rT_reg;
+	  tire8_rF_reg2<=tire8_rF_reg;
+	  tire8_enF_reg2<=tire8_enF_reg;
 	  retfl_rF_reg<=retfl_rF;
       end
       if (rst) begin
