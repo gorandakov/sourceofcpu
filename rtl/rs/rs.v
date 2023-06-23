@@ -57,7 +57,7 @@ module rs_wakeUp_logic(
   input rst;
   input stall;
   output wire isData;
-  output [5:0] outEq;
+  (* horizontal *) output [5:0] outEq;
   input buffree;
   input FU0Hit;
   input FU1Hit;
@@ -399,7 +399,7 @@ module rs_wakeUp_logic_array(
   input rst;
   input stall;
   output [BUF_COUNT-1:0] isData;
-  output [BUF_COUNT*6-1:0] outEq;
+  (* horizontal *) output [BUF_COUNT*6-1:0] outEq;
   input [BUF_COUNT-1:0] buffree;
   
 //functional units inputs/outputs
@@ -793,15 +793,15 @@ module rs_wakeUp_data(
   input clk;
   input rst;
   input stall;
-  input newRsSelect0;
+  (* horizontal *) input newRsSelect0;
   input [WIDTH-1:0] newData0;
-  input newRsSelect1;
+  (* horizontal *) input newRsSelect1;
   input [WIDTH-1:0] newData1;
   input newRsSelect2;
   input [WIDTH-1:0] newData2;
-  input outRsSelect0;
+  (* horizontal *) input outRsSelect0;
   
-  input [5:0] outEq;
+  (* horizontal *) input [5:0] outEq;
   input [WIDTH-1:0] FU0;
   input [WIDTH-1:0] FU1;
   input [WIDTH-1:0] FU2;
@@ -814,9 +814,9 @@ module rs_wakeUp_data(
   input [WIDTH-1:0] FU9;
   
   output [WIDTH-1:0] outData0;
-  input outRsSelect1;
+  (* horizontal *) input outRsSelect1;
   output [WIDTH-1:0] outData1;
-  input outRsSelect2;
+  (* horizontal *) input outRsSelect2;
   output [WIDTH-1:0] outData2;
   
   wire data_en;
@@ -890,7 +890,7 @@ module rs_wakeUp_data_array(
   input [BUF_COUNT-1:0] newRsSelect2;
   input [WIDTH-1:0] newData2;
   
-  input [6*BUF_COUNT-1:0] outEq;
+  (* horizontal *) input [6*BUF_COUNT-1:0] outEq;
   input [WIDTH-1:0] FU0;
   input [WIDTH-1:0] FU1;
   input [WIDTH-1:0] FU2;
