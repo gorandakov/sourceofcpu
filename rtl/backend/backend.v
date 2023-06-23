@@ -361,6 +361,8 @@ module backend(
   insBus_exclusive,
   insBus_data,
   insBus_dataPTR,
+  insBus_register,
+  insBus_LSQ,
   reqBus_en,
   reqBus_addr,
   reqBus_req,
@@ -370,6 +372,8 @@ module backend(
   reqBus_sz,
   reqBus_low,
   reqBus_bank0,
+  reqBus_register,
+  reqBus_LSQ,
 
   wr0_hit,
   wr0_addrE,wr0_addrO,
@@ -910,6 +914,8 @@ module backend(
   input insBus_exclusive;
   input [BUS_WIDTH-1:0] insBus_data;
   input [7:0] insBus_dataPTR;
+  input [8:0] insBus_register;
+  input [8:0] insBus_LSQ;
 
   output reg reqBus_en;
   output reg [43:7] reqBus_addr;
@@ -920,8 +926,11 @@ module backend(
   output reg [4:0] reqBus_sz;
   output reg [1:0] reqBus_low;
   output reg [4:0] reqBus_bank0;
+  output reg [8:0] reqBus_register;
+  output reg [8:9] reqBus_LSQ;
   
   output [1:0] wr0_hit;
+  output       wr0_iol;
   output [35:0] wr0_addrE;
   output [35:0] wr0_addrO;
   output [31:0] wr0_banks;
@@ -934,6 +943,7 @@ module backend(
   output [1:0] wr0_pbit;
   output       wr0_d128;
   output [1:0] wr1_hit;
+  output       wr1_iol;
   output [35:0] wr1_addrE;
   output [35:0] wr1_addrO;
   output [31:0] wr1_banks;
@@ -5004,9 +5014,12 @@ module backend(
   .reqBus_sz(reqBus_sz),
   .reqBus_low(reqBus_low),
   .reqBus_bank0(reqBus_bank0),
+  .reqBus_register(reqBus_register),
+  .reqBus_LSQ(reqBus_LSQ),
   .insert_isData(insert_isData),
   .insBus_req(insBus_req),
   .wr0_hit(wr0_hit),
+  .wr0_io(wr0_iol),
   .wr0_addrE(wr0_addrE),.wr0_addrO(wr0_addrO),
   .wr0_banks(wr0_banks),
   .wr0_begin(wr0_begin),.wr0_end(wr0_end),
@@ -5015,6 +5028,7 @@ module backend(
   .wr0_data(wr0_data),
   .wr0_pbit(wr0_pbit),.wr0_d128(wr0_d128),
   .wr1_hit(wr1_hit),
+  .wr1_io(wr1_iol),
   .wr1_addrE(wr1_addrE),.wr1_addrO(wr1_addrO),
   .wr1_banks(wr1_banks),
   .wr1_begin(wr1_begin),.wr1_end(wr1_end),
