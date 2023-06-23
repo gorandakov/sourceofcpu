@@ -1228,6 +1228,16 @@ module regfile(
   write7_addr_rrf,write7_wen_rrf,
   write8_addr_rrf,write8_wen_rrf,
 
+  retireRead0_addr,
+  retireRead1_addr,
+  retireRead2_addr,
+  retireRead3_addr,
+  retireRead4_addr,
+  retireRead5_addr,
+  retireRead6_addr,
+  retireRead7_addr,
+  retireRead8_addr,
+
   write0_addr_reg,write0_data_reg,write0_wen_reg,
   write1_addr_reg,write1_data_reg,write1_wen_reg,
   write2_addr_reg,write2_data_reg,write2_wen_reg,
@@ -1342,6 +1352,15 @@ module regfile(
   input [5:0] write8_addr_rrf;
   input       write8_wen_rrf;  
 
+  input [8:0] retireRead0_addr;
+  input [8:0] retireRead1_addr;
+  input [8:0] retireRead2_addr;
+  input [8:0] retireRead3_addr;
+  input [8:0] retireRead4_addr;
+  input [8:0] retireRead5_addr;
+  input [8:0] retireRead6_addr;
+  input [8:0] retireRead7_addr;
+  input [8:0] retireRead8_addr;
 
   input [ADDR_WIDTH-1:0] write0_addr_reg;
   input [DATA_WIDTH-1:0] write0_data_reg;
@@ -1501,15 +1520,15 @@ module regfile(
   read6_addr_rrf,read6_data,~read6_oe,
   read7_addr_rrf,read7_data,~read7_oe,
   read8_addr_rrf,read8_data,~read8_oe,
-  write0_addr_rrf,reatireRead0_data,write0_wen_rrf,
-  write1_addr_rrf,reatireRead1_data,write1_wen_rrf,
-  write2_addr_rrf,reatireRead2_data,write2_wen_rrf,
-  write3_addr_rrf,reatireRead3_data,write3_wen_rrf,
-  write4_addr_rrf,reatireRead4_data,write4_wen_rrf,
-  write5_addr_rrf,reatireRead5_data,write5_wen_rrf,
-  write6_addr_rrf,reatireRead6_data,write6_wen_rrf,
-  write7_addr_rrf,reatireRead7_data,write7_wen_rrf,
-  write8_addr_rrf,reatireRead8_data,write8_wen_rrf,
+  write0_addr_rrf,reatireRead_data[0],write0_wen_rrf,
+  write1_addr_rrf,reatireRead_data[1],write1_wen_rrf,
+  write2_addr_rrf,reatireRead_data[2],write2_wen_rrf,
+  write3_addr_rrf,reatireRead_data[3],write3_wen_rrf,
+  write4_addr_rrf,reatireRead_data[4],write4_wen_rrf,
+  write5_addr_rrf,reatireRead_data[5],write5_wen_rrf,
+  write6_addr_rrf,reatireRead_data[6],write6_wen_rrf,
+  write7_addr_rrf,reatireRead_data[7],write7_wen_rrf,
+  write8_addr_rrf,reatireRead_data[8],write8_wen_rrf,
   read_thread,
   write_thread
   );
@@ -1564,15 +1583,15 @@ module regfile(
   assign read7_match=read_match[7];
   assign read8_match=read_match[8];
   
-  assign retireRead0_data=retireRead_data[0];
-  assign retireRead1_data=retireRead_data[1];
-  assign retireRead2_data=retireRead_data[2];
-  assign retireRead3_data=retireRead_data[3];
-  assign retireRead4_data=retireRead_data[4];
-  assign retireRead5_data=retireRead_data[5];
-  assign retireRead6_data=retireRead_data[6];
-  assign retireRead7_data=retireRead_data[7];
-  assign retireRead8_data=retireRead_data[8];
+//  assign retireRead0_data=retireRead_data[0];
+//  assign retireRead1_data=retireRead_data[1];
+//  assign retireRead2_data=retireRead_data[2];
+//  assign retireRead3_data=retireRead_data[3];
+//  assign retireRead4_data=retireRead_data[4];
+//  assign retireRead5_data=retireRead_data[5];
+//  assign retireRead6_data=retireRead_data[6];
+//  assign retireRead7_data=retireRead_data[7];
+//  assign retireRead8_data=retireRead_data[8];
 
   assign retireRead_addr[0]=retireRead0_addr;
   assign retireRead_addr[1]=retireRead1_addr;
