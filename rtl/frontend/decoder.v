@@ -193,6 +193,7 @@ module decoder_aux_const(
   reg [1:0][63:0] csr_spage;
   reg [1:0][63:0] csr_excTbl;
   reg [1:0][63:0] csr_syscall;
+  reg [1:0][63:0] csr_USER1;
   reg [1:0][63:0] csr_vmcall;
   reg [1:0][63:0] csr_cpage_mask;
   reg [1:0][63:0] csr_indir_tbl;
@@ -251,6 +252,7 @@ module decoder_aux_const(
       `csr_indir_table: begin aux_const={1'b0,csr_indir_tbl[thread]}; aux_can_read=~csr_mflags[thread][`mflags_vm] && csr_mflags[thread][`mflags_cpl]==0; end
       `csr_indir_mask: begin aux_const={1'b0,csr_indir_mask[thread]}; aux_can_read=~csr_mflags[thread][`mflags_vm] && csr_mflags[thread][`mflags_cpl]==0; end
       `csr_IRQ_recv_vector: aux_const={1'b0,csr_IRQ_recv_vector[thread]};
+      `csr_USER1: aux_const={1'b0,csr_USER1[thread]};
       `csr_cl_lock: begin aux_const={64'b0,csr_mflags[thread][18]}; end
       default:			aux_const=65'b0;
       endcase
@@ -293,6 +295,8 @@ module decoder_aux_const(
           csr_indir_mask[1]<=64'b0;
           csr_IRQ_send[0]<=64'b0;
           csr_IRQ_send[1]<=64'b0;
+          csr_USER1[0]<=64'b0;
+          csr_USER1[1]<=64'b0;
       end else begin
           if (csrss_en && ((csr_mflags[csrss_no[15]][`mflags_cpl]==2'b0 && ~csr_mflags[csrss_no[15]][`mflags_vm]) ||
             csrss_no==`csr_FPU)) begin
@@ -303,6 +307,7 @@ module decoder_aux_const(
       `csr_PCR: 		csr_PCR[csrss_no[15]]<=csrss_data;
       `csr_PCR_reg_save:	csr_PCR_reg_save[csrss_no[15]]<=csrss_data;
       `csr_mflags:		csr_mflags[csrss_no[15]]<=csrss_data[63:0];
+      `csr_USER1:		csr_USER1[csrss_no[15]]<=csrss_data[63:0];
       `csr_IRQ_send:		csr_IRQ_send[csrss_no[15]]<=csrss_data[63:0];
       `csr_FPU:			csr_fpu[csrss_no[15]]<=csrss_data[63:0];
       `csr_excpt_fpu:		csr_fpu[csrss_no[15]][10:0]<=csrss_data[10:0];
