@@ -197,6 +197,8 @@ module decoder_aux_const(
   reg [1:0][63:0] csr_cpage_mask;
   reg [1:0][63:0] csr_indir_tbl;
   reg [1:0][63:0] csr_indir_mask;
+  req [1:0][63:0] csr_IRQ_send;
+  req [1:0][63:0] csr_IRQ_recv_vector;
   assign iconst[0]={thread,instr0[30:16]};
   assign iconst[1]={thread,instr1[30:16]};
   assign iconst[2]={thread,instr2[30:16]};
@@ -248,6 +250,7 @@ module decoder_aux_const(
       //`csr_cpage_mask: begin aux_const=csr_cpage_mask; aux_can_read=~csr_mflags[thread][`mflags_vm] && !csr_mflags[thread][`mflags_cpl]; end
       `csr_indir_table: begin aux_const={1'b0,csr_indir_tbl[thread]}; aux_can_read=~csr_mflags[thread][`mflags_vm] && csr_mflags[thread][`mflags_cpl]==0; end
       `csr_indir_mask: begin aux_const={1'b0,csr_indir_mask[thread]}; aux_can_read=~csr_mflags[thread][`mflags_vm] && csr_mflags[thread][`mflags_cpl]==0; end
+      `csr_IRQ_recv_vector: aux_const={1'b0,csr_IRQ_recv_vector[thread]};
       `csr_cl_lock: begin aux_const={64'b0,csr_mflags[thread][18]}; end
       default:			aux_const=65'b0;
       endcase
@@ -288,6 +291,8 @@ module decoder_aux_const(
           csr_cpage_mask[1]<=64'b0;
           csr_indir_tbl[1]<=64'b0;
           csr_indir_mask[1]<=64'b0;
+          csr_IRQ_send[0]<=64'b0;
+          csr_IRQ_send[1]<=64'b0;
       end else begin
           if (csrss_en && ((csr_mflags[csrss_no[15]][`mflags_cpl]==2'b0 && ~csr_mflags[csrss_no[15]][`mflags_vm]) ||
             csrss_no==`csr_FPU)) begin
@@ -298,6 +303,7 @@ module decoder_aux_const(
       `csr_PCR: 		csr_PCR[csrss_no[15]]<=csrss_data;
       `csr_PCR_reg_save:	csr_PCR_reg_save[csrss_no[15]]<=csrss_data;
       `csr_mflags:		csr_mflags[csrss_no[15]]<=csrss_data[63:0];
+      `csr_IRQ_send:		csr_IRQ_send[csrss_no[15]]<=csrss_data[63:0];
       `csr_FPU:			csr_fpu[csrss_no[15]]<=csrss_data[63:0];
       `csr_excpt_fpu:		csr_fpu[csrss_no[15]][10:0]<=csrss_data[10:0];
       `csr_page:		csr_page[csrss_no[15]]<=csrss_data[63:0];
