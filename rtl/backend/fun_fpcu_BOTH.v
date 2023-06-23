@@ -72,8 +72,8 @@ module fun_fpu_BOTH(
   input [31:0] fpcsr;
   (* bus=DBLL bus_spacing=8 bus_off=0 *) input [16+67:0] u1_A0;
   (* bus=DBLL bus_spacing=8 bus_off=0 *) input [16+67:0] u1_B0;
-  (* bus=DBLH bus_spacing=8 bus_off=0 *) input [67:0]    u1_A1;
-  (* bus=DBLH bus_spacing=8 bus_off=0 *) input [67:0]    u1_B1;
+  (* bus=DBLH bus_spacing=8 bus_off=0 *) input [16+67:0]    u1_A1;
+  (* bus=DBLH bus_spacing=8 bus_off=0 *) input [16+67:0]    u1_B1;
   input [3:0] u1_en;
   input [12:0] u1_op;
   input [3:0] u1_fufwd_A;
@@ -85,8 +85,8 @@ module fun_fpu_BOTH(
 
   (* bus=DBLL bus_spacing=8 bus_off=1 *) input [16+67:0] u3_A0;
   (* bus=DBLL bus_spacing=8 bus_off=1 *) input [16+67:0] u3_B0;
-  (* bus=DBLH bus_spacing=8 bus_off=1 *) input [67:0]    u3_A1;
-  (* bus=DBLH bus_spacing=8 bus_off=1 *) input [67:0]    u3_B1;
+  (* bus=DBLH bus_spacing=8 bus_off=1 *) input [16+67:0]    u3_A1;
+  (* bus=DBLH bus_spacing=8 bus_off=1 *) input [16+67:0]    u3_B1;
   input [3:0] u3_en;
   input [12:0] u3_op;
   input [3:0] u3_fufwd_A;
@@ -98,8 +98,8 @@ module fun_fpu_BOTH(
 
   (* bus=DBLL bus_spacing=8 bus_off=2 *) input [16+67:0] u5_A0;
   (* bus=DBLL bus_spacing=8 bus_off=2 *) input [16+67:0] u5_B0;
-  (* bus=DBLH bus_spacing=8 bus_off=2 *) input [67:0]    u5_A1;
-  (* bus=DBLH bus_spacing=8 bus_off=2 *) input [67:0]    u5_B1;
+  (* bus=DBLH bus_spacing=8 bus_off=2 *) input [16+67:0]    u5_A1;
+  (* bus=DBLH bus_spacing=8 bus_off=2 *) input [16+67:0]    u5_B1;
   input [3:0] u5_en;
   input [12:0] u5_op;
   input [3:0] u5_fufwd_A;
@@ -110,16 +110,16 @@ module fun_fpu_BOTH(
   output u5_ret_en;
 
 
-  (* register equiload *) (* bus=DBLH bus_spacing=8 bus_rpl=3 *) input [67:0] FUFH0;
-  (* register equiload *) (* bus=DBLH bus_spacing=8 bus_rpl=3 *) input [67:0] FUFH1;
-  (* register equiload *) (* bus=DBLH bus_spacing=8 bus_rpl=3 *) input [67:0] FUFH2;
-  (* register equiload *) (* bus=DBLH bus_spacing=8 bus_rpl=3 *) input [67:0] FUFH3;
-  (* register equiload *) (* bus=DBLH bus_spacing=8 bus_rpl=3 *) output [67:0] FUFH4;
-  (* register equiload *) (* bus=DBLH bus_spacing=8 bus_rpl=3 *) output [67:0] FUFH5;
-  (* register equiload *) (* bus=DBLH bus_spacing=8 bus_rpl=3 *) output [67:0] FUFH6;
-  (* register equiload *) (* bus=DBLH bus_spacing=8 bus_rpl=3 *) output [67:0] FUFH7;
-  (* register equiload *) (* bus=DBLH bus_spacing=8 bus_rpl=3 *) output [67:0] FUFH8;
-  (* register equiload *) (* bus=DBLH bus_spacing=8 bus_rpl=3 *) output [67:0] FUFH9;
+  (* register equiload *) (* bus=DBLH bus_spacing=8 bus_rpl=3 *) input [16+67:0] FUFH0;
+  (* register equiload *) (* bus=DBLH bus_spacing=8 bus_rpl=3 *) input [16+67:0] FUFH1;
+  (* register equiload *) (* bus=DBLH bus_spacing=8 bus_rpl=3 *) input [16+67:0] FUFH2;
+  (* register equiload *) (* bus=DBLH bus_spacing=8 bus_rpl=3 *) input [16+67:0] FUFH3;
+  (* register equiload *) (* bus=DBLH bus_spacing=8 bus_rpl=3 *) output [16+67:0] FUFH4;
+  (* register equiload *) (* bus=DBLH bus_spacing=8 bus_rpl=3 *) output [16+67:0] FUFH5;
+  (* register equiload *) (* bus=DBLH bus_spacing=8 bus_rpl=3 *) output [16+67:0] FUFH6;
+  (* register equiload *) (* bus=DBLH bus_spacing=8 bus_rpl=3 *) output [16+67:0] FUFH7;
+  (* register equiload *) (* bus=DBLH bus_spacing=8 bus_rpl=3 *) output [16+67:0] FUFH8;
+  (* register equiload *) (* bus=DBLH bus_spacing=8 bus_rpl=3 *) output [16+67:0] FUFH9;
   
   (* register equiload *) (* bus=DBLL bus_spacing=8 bus_rpl=3 *) input [16+67:0] FUFL0;
   (* register equiload *) (* bus=DBLL bus_spacing=8 bus_rpl=3 *) input [16+67:0] FUFL1;
@@ -134,8 +134,8 @@ module fun_fpu_BOTH(
   input [1:0] ALT_INP;
   (* bus=DBLL bus_spacing=8 *) input [16+67:0] ALTDATAL0;
   (* bus=DBLL bus_spacing=8 *) input [16+67:0] ALTDATAL1;
-  (* bus=DBLH bus_spacing=8 *) input [67:0] ALTDATAH0;
-  (* bus=DBLH bus_spacing=8 *) input [67:0] ALTDATAH1;
+  (* bus=DBLH bus_spacing=8 *) input [16+67:0] ALTDATAH0;
+  (* bus=DBLH bus_spacing=8 *) input [16+67:0] ALTDATAH1;
   
   input [5:0] FUS_alu0;
   input [5:0] FUS_alu1;
@@ -164,7 +164,7 @@ module fun_fpu_BOTH(
   (* register equiload *) input [5:0] FOOSL1;
   (* register equiload *) input [5:0] FOOSL2;
   
-  input [67:0] XI_dataS;
+  input [16+67:0] XI_dataS;
   input fxFRT_alten_reg3;
   output daltX;
   output [63:0] FUCVT1;
@@ -240,7 +240,7 @@ module fun_fpu_BOTH(
   assign u5_ret=u5_retL|u5_retH;
   assign u5_ret_en=u5_ret_enL| u5_ret_enH;
 
-  fun_fpuH hf_mod(
+  fun_fpuL hf_mod(
   clk,
   rst,
   fpcsr,
