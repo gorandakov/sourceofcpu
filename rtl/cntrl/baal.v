@@ -247,17 +247,17 @@ module cntrl_find_outcome(
   itk_after,ifsimd,
   iJump0Taken,iJump1Taken,
   iJump0Attr,iJump1Attr,
-  flTE,retire_enFl,
-  retire0_rT,retire0_rF,retire0_enG,retire0_enV,retire0_enF,
-  retire1_rT,retire1_rF,retire1_enG,retire1_enV,retire1_enF,
-  retire2_rT,retire2_rF,retire2_enG,retire2_enV,retire2_enF,
-  retire3_rT,retire3_rF,retire3_enG,retire3_enV,retire3_enF,
-  retire4_rT,retire4_rF,retire4_enG,retire4_enV,retire4_enF,
-  retire5_rT,retire5_rF,retire5_enG,retire5_enV,retire5_enF,
-  retire6_rT,retire6_rF,retire6_enG,retire6_enV,retire6_enF,
-  retire7_rT,retire7_rF,retire7_enG,retire7_enV,retire7_enF,
-  retire8_rT,retire8_rF,retire8_enG,retire8_enV,retire8_enF,
-  doRetire,retcnt,retclr,
+  flTE,tire_enFl,
+  tire0_rT,tire0_rF,tire0_enG,tire0_enV,tire0_enF,
+  tire1_rT,tire1_rF,tire1_enG,tire1_enV,tire1_enF,
+  tire2_rT,tire2_rF,tire2_enG,tire2_enV,tire2_enF,
+  tire3_rT,tire3_rF,tire3_enG,tire3_enV,tire3_enF,
+  tire4_rT,tire4_rF,tire4_enG,tire4_enV,tire4_enF,
+  tire5_rT,tire5_rF,tire5_enG,tire5_enV,tire5_enF,
+  tire6_rT,tire6_rF,tire6_enG,tire6_enV,tire6_enF,
+  tire7_rT,tire7_rF,tire7_enG,tire7_enV,tire7_enF,
+  tire8_rT,tire8_rF,tire8_enG,tire8_enV,tire8_enF,
+  dotire,retcnt,retclr,
   jupd0_en,jupdt0_en,jupd0_ght_en,
   jupd0_addr,jupd0_baddr,
   jupd0_sc,jupd0_tk,
@@ -284,7 +284,7 @@ module cntrl_find_outcome(
   mem_II_bits_ret,
   mem_II_stall,
   
-  doRetire_d,
+  dotire_d,
   xbreak,
   has_xbreak
   );
@@ -468,54 +468,54 @@ module cntrl_find_outcome(
   input [3:0] iJump0Attr;
   input [3:0] iJump1Attr;
   output [8:0] flTE;
-  output reg retire_enFl;
-  output reg [5:0] retire0_rT;
-  output [8:0] retire0_rF;
-  output reg retire0_enG;
-  output reg retire0_enV;
-  output reg retire0_enF;
-  output reg [5:0] retire1_rT;
-  output [8:0] retire1_rF;
-  output reg retire1_enG;
-  output reg retire1_enV;
-  output reg retire1_enF;
-  output reg [5:0] retire2_rT;
-  output [8:0] retire2_rF;
-  output reg retire2_enG;
-  output reg retire2_enV;
-  output reg retire2_enF;
-  output reg [5:0] retire3_rT;
-  output [8:0] retire3_rF;
-  output reg retire3_enG;
-  output reg retire3_enV;
-  output reg retire3_enF;
-  output reg [5:0] retire4_rT;
-  output [8:0] retire4_rF;
-  output reg retire4_enG;
-  output reg retire4_enV;
-  output reg retire4_enF;
-  output reg [5:0] retire5_rT;
-  output [8:0] retire5_rF;
-  output reg retire5_enG;
-  output reg retire5_enV;
-  output reg retire5_enF;
-  output reg [5:0] retire6_rT;
-  output [8:0] retire6_rF;
-  output reg retire6_enG;
-  output reg retire6_enV;
-  output reg retire6_enF;
-  output reg [5:0] retire7_rT;
-  output [8:0] retire7_rF;
-  output reg retire7_enG;
-  output reg retire7_enV;
-  output reg retire7_enF;
-  output reg [5:0] retire8_rT;
-  output [8:0] retire8_rF;
-  output reg retire8_enG;
-  output reg retire8_enV;
-  output reg retire8_enF;
+  output reg tire_enFl;
+  output reg [5:0] tire0_rT;
+  output [8:0] tire0_rF;
+  output reg tire0_enG;
+  output reg tire0_enV;
+  output reg tire0_enF;
+  output reg [5:0] tire1_rT;
+  output [8:0] tire1_rF;
+  output reg tire1_enG;
+  output reg tire1_enV;
+  output reg tire1_enF;
+  output reg [5:0] tire2_rT;
+  output [8:0] tire2_rF;
+  output reg tire2_enG;
+  output reg tire2_enV;
+  output reg tire2_enF;
+  output reg [5:0] tire3_rT;
+  output [8:0] tire3_rF;
+  output reg tire3_enG;
+  output reg tire3_enV;
+  output reg tire3_enF;
+  output reg [5:0] tire4_rT;
+  output [8:0] tire4_rF;
+  output reg tire4_enG;
+  output reg tire4_enV;
+  output reg tire4_enF;
+  output reg [5:0] tire5_rT;
+  output [8:0] tire5_rF;
+  output reg tire5_enG;
+  output reg tire5_enV;
+  output reg tire5_enF;
+  output reg [5:0] tire6_rT;
+  output [8:0] tire6_rF;
+  output reg tire6_enG;
+  output reg tire6_enV;
+  output reg tire6_enF;
+  output reg [5:0] tire7_rT;
+  output [8:0] tire7_rF;
+  output reg tire7_enG;
+  output reg tire7_enV;
+  output reg tire7_enF;
+  output reg [5:0] tire8_rT;
+  output [8:0] tire8_rF;
+  output reg tire8_enG;
+  output reg tire8_enV;
+  output reg tire8_enF;
 
-  output reg doRetire;
+  output reg dotire;
   output reg [3:0] retcnt;
   output reg [8:0] retclr;
 
@@ -576,7 +576,7 @@ module cntrl_find_outcome(
   input [9:0] mem_II_bits_ret;
   input mem_II_stall;
 
-  output doRetire_d;
+  output dotire_d;
   output [9:0] xbreak;
   output has_xbreak;
 
@@ -617,13 +617,13 @@ module cntrl_find_outcome(
   
   wire [9:0][8:0] IPOff;
   wire [9:0][2:0] magicO;
-  wire [8:0] retireG;
-  wire [8:0] retireV;
-  wire [8:0] retireF;
-  wire [8:0] no_retire;
+  wire [8:0] tireG;
+  wire [8:0] tireV;
+  wire [8:0] tireF;
+  wire [8:0] no_tire;
 
-  wire [8:0][8:0] retire_rF;
-  wire [8:0][8:0] retire_rFl;
+  wire [8:0][8:0] tire_rF;
+  wire [8:0][8:0] tire_rFl;
 
   wire [4:0] jump0Type;
   wire [3:0] jump0Pos;
@@ -664,11 +664,11 @@ module cntrl_find_outcome(
 
   reg [10:0] excpt_fpu;
 
-  wire retire_thread;
-  reg retire_thread_reg;
+  wire tire_thread;
+  reg tire_thread_reg;
 
   wire [62:0] exceptIP_d;
-  wire except_thread_d=retire_thread_reg;
+  wire except_thread_d=tire_thread_reg;
   wire except_both_d=both_threads;
   wire except_d;
   wire [15:0] proc_d;
@@ -677,11 +677,11 @@ module cntrl_find_outcome(
   wire [5:0] flags_d;
   reg  [5:0] flags[1:0];
 
- // wire doRetire_d;
+ // wire dotire_d;
   wire has_some,has_some2;
 
-  wire [5:0] retire_addr;
-  reg  [5:0] retire_addr_reg;
+  wire [5:0] tire_addr;
+  reg  [5:0] tire_addr_reg;
 
   wire [64:0] indir_IP;
   wire indir_ready;
@@ -806,31 +806,31 @@ module cntrl_find_outcome(
           assign ret_prevV[j][k]=ret_prev[j][k] && isVec[j] && isVec[k];
           assign ret_prevF[j][k]=ret_prev[j][k] && isFPU[j] && isFPU[k];
           
-	  assign retireG[j]=reteq ? ~xbreak[k]  && ret_prevG[k]==0 && isGen[k] && ~rT[k][5] : 1'bz; 
-          assign retireV[j]=reteq ? ~xbreak[k]  && ret_prevV[k]==0 && isVec[k] && ~rT[k][5]  : 1'bz; 
-          assign retireF[j]=reteq ? ~xbreak[k]  && ret_prevF[k]==0 && isFPU[k] && ~rT[k][5]  : 1'bz;
+	  assign tireG[j]=reteq ? ~xbreak[k]  && ret_prevG[k]==0 && isGen[k] && ~rT[k][5] : 1'bz; 
+          assign tireV[j]=reteq ? ~xbreak[k]  && ret_prevV[k]==0 && isVec[k] && ~rT[k][5]  : 1'bz; 
+          assign tireF[j]=reteq ? ~xbreak[k]  && ret_prevF[k]==0 && isFPU[k] && ~rT[k][5]  : 1'bz;
 
           assign rTe[j]=reteq ? rT[k] : 6'bz;
 
-          assign flE=reteq && lfl[k] ? retire_rFl[j] : 9'bz;	  
+          assign flE=reteq && lfl[k] ? tire_rFl[j] : 9'bz;	  
       end
       assign flE=~lfl[k] ? 9'b0 : 9'bz;
       assign flTE=lfl[k] ? flE : 9'bz;
   
       if (k<9) begin
-          assign no_retire[k]=ret[k]==4'hf;
-          assign retireG[k]=no_retire[k] ? 1'b0 : 1'bz;
-          assign retireV[k]=no_retire[k] ? 1'b0 : 1'bz;
-          assign retireF[k]=no_retire[k] ? 1'b0 : 1'bz;
-          assign rTe[k]=no_retire[k] ? 6'd0 : 6'bz;
-          //assign rFe[k]=no_retire[k] ? 9'd0 : 9'bz;
+          assign no_tire[k]=ret[k]==4'hf;
+          assign tireG[k]=no_tire[k] ? 1'b0 : 1'bz;
+          assign tireV[k]=no_tire[k] ? 1'b0 : 1'bz;
+          assign tireF[k]=no_tire[k] ? 1'b0 : 1'bz;
+          assign rTe[k]=no_tire[k] ? 6'd0 : 6'bz;
+          //assign rFe[k]=no_tire[k] ? 9'd0 : 9'bz;
       end
 
       assign excpt_code=break_[k] ? ret_data[k][10:3] : 8'bz;
       
       cntrl_jump_upto #(k) j0_mod(
       .flagSet(flagSet&((10'b1<<(k+1))-10'b1)),
-      .prevFlags(flags[retire_thread_reg]),
+      .prevFlags(flags[tire_thread_reg]),
       .jumpType(jump0Type),
       .jumpIndex(jump0Pos),
       .jumpPredTk(jump0Pred),
@@ -854,7 +854,7 @@ module cntrl_find_outcome(
 
       cntrl_jump_upto #(k) j1_mod(
       .flagSet(flagSet&((10'b1<<(k+1))-10'b1)),
-      .prevFlags(flags[retire_thread_reg]),
+      .prevFlags(flags[tire_thread_reg]),
       .jumpType(jump1Type),
       .jumpIndex(jump1Pos),
       .jumpPredTk(jump1Pred),
@@ -926,15 +926,15 @@ module cntrl_find_outcome(
   assign break_prejmp_ntick=(~has_break) ? afterTick==0 && tk_after==0 : 1'bz;
   assign break_prejmp_tick=(~has_break) ? afterTick!=0 && tk_after==0 : 1'bz;
 
-  assign retire_rF[0]=retire0_rF;
-  assign retire_rF[1]=retire1_rF;
-  assign retire_rF[2]=retire2_rF;
-  assign retire_rF[3]=retire3_rF;
-  assign retire_rF[4]=retire4_rF;
-  assign retire_rF[5]=retire5_rF;
-  assign retire_rF[6]=retire6_rF;
-  assign retire_rF[7]=retire7_rF;
-  assign retire_rF[8]=retire8_rF;
+  assign tire_rF[0]=tire0_rF;
+  assign tire_rF[1]=tire1_rF;
+  assign tire_rF[2]=tire2_rF;
+  assign tire_rF[3]=tire3_rF;
+  assign tire_rF[4]=tire4_rF;
+  assign tire_rF[5]=tire5_rF;
+  assign tire_rF[6]=tire6_rF;
+  assign tire_rF[7]=tire7_rF;
+  assign tire_rF[8]=tire8_rF;
 
   assign jump0JMask=(jump0JmpInd==2'd0 && ~jump0_taken) ? 4'he|{4{lastIP}} : 4'bz;
   assign jump0JMask=(jump0JmpInd==2'd1 && ~jump0_taken) ? 4'hc|{4{lastIP}} : 4'bz;
@@ -1036,13 +1036,13 @@ module cntrl_find_outcome(
   assign break_jump0=(has_break) ? 1'bz : 1'b0;
   assign break_jump1=(has_break) ? 1'bz : 1'b0;
   
-  assign flags_d=xbreak0[0] ? flags[retire_thread_reg] : 6'bz;
+  assign flags_d=xbreak0[0] ? flags[tire_thread_reg] : 6'bz;
 
-  assign retireG[0]=(ret[0]==4'hf) ? 1'b0 : 1'bz;
-  assign retireV[0]=(ret[0]==4'hf) ? 1'b0 : 1'bz;
-  assign retireF[0]=(ret[0]==4'hf) ? 1'b0 : 1'bz;
+  assign tireG[0]=(ret[0]==4'hf) ? 1'b0 : 1'bz;
+  assign tireV[0]=(ret[0]==4'hf) ? 1'b0 : 1'bz;
+  assign tireF[0]=(ret[0]==4'hf) ? 1'b0 : 1'bz;
   
-  assign proc_d=(jump0Type==5'h1e || jump1Type==5'h1e) ? indir_IP[15:0] : archReg_proc[retire_thread_reg];
+  assign proc_d=(jump0Type==5'h1e || jump1Type==5'h1e) ? indir_IP[15:0] : archReg_proc[tire_thread_reg];
 	 
   assign bob_wdata[`bob_ret0_8]={iret8,iret7,iret6,iret5,
 	 iret4,iret3,iret2,iret1,iret0};
@@ -1070,11 +1070,11 @@ module cntrl_find_outcome(
   assign bob_wdata[`bob_attr]=instr_attr;
   assign attr=bob_rdata[`bob_attr];
 
-  assign {retire8_rF[8:4],retire7_rF[8:4],retire6_rF[8:4],retire5_rF[8:4],
-	  retire4_rF[8:4],retire3_rF[8:4],retire2_rF[8:4],retire1_rF[8:4],retire0_rF[8:4]}=
+  assign {tire8_rF[8:4],tire7_rF[8:4],tire6_rF[8:4],tire5_rF[8:4],
+	  tire4_rF[8:4],tire3_rF[8:4],tire2_rF[8:4],tire1_rF[8:4],tire0_rF[8:4]}=
 	  bob_rdata[`bob_freeregs];
-  assign {retire_rFl[8][8:4],retire_rFl[7][8:4],retire_rFl[6][8:4],retire_rFl[5][8:4],
-	  retire_rFl[4][8:4],retire_rFl[3][8:4],retire_rFl[2][8:4],retire_rFl[1][8:4],retire_rFl[0][8:4]}=
+  assign {tire_rFl[8][8:4],tire_rFl[7][8:4],tire_rFl[6][8:4],tire_rFl[5][8:4],
+	  tire_rFl[4][8:4],tire_rFl[3][8:4],tire_rFl[2][8:4],tire_rFl[1][8:4],tire_rFl[0][8:4]}=
 	  bob_rdata[`bob_freeregsS];
 
   assign bob_wdata[`bob_ipOff0_9]={instr9_IPOff,instr8_IPOff,instr7_IPOff,instr6_IPOff,
@@ -1160,7 +1160,7 @@ module cntrl_find_outcome(
   
   assign takenIP=(jump0Pred) ? jump0IP : jump1IP;
 
-  assign doRetire_d=~break_pending && has_some && ~init && ~mem_II_stall && indir_ready|~has_indir;
+  assign dotire_d=~break_pending && has_some && ~init && ~mem_II_stall && indir_ready|~has_indir;
 
   assign has_indir=(jump0Type[4] && jump0Type[2:0]==3'b001 && jump0Pos!=4'hf) || 
     (jump1Type[4] && jump1Type[2:0]==3'b001 && jump1Pos!=4'hf);
@@ -1171,33 +1171,33 @@ module cntrl_find_outcome(
 
   assign except_d=has_break && ~break_pending && has_some && ~init && indir_ready|~has_indir;
   
-  assign retire8_rF[3:0]=4'd8;
-  assign retire7_rF[3:0]=4'd7;
-  assign retire6_rF[3:0]=4'd6;
-  assign retire5_rF[3:0]=4'd5;
-  assign retire4_rF[3:0]=4'd4;
-  assign retire3_rF[3:0]=4'd3;
-  assign retire2_rF[3:0]=4'd2;
-  assign retire1_rF[3:0]=4'd1;
-  assign retire0_rF[3:0]=4'd0;
+  assign tire8_rF[3:0]=4'd8;
+  assign tire7_rF[3:0]=4'd7;
+  assign tire6_rF[3:0]=4'd6;
+  assign tire5_rF[3:0]=4'd5;
+  assign tire4_rF[3:0]=4'd4;
+  assign tire3_rF[3:0]=4'd3;
+  assign tire2_rF[3:0]=4'd2;
+  assign tire1_rF[3:0]=4'd1;
+  assign tire0_rF[3:0]=4'd0;
 
-  assign retire_rFl[8][3:0]=4'd8;
-  assign retire_rFl[7][3:0]=4'd7;
-  assign retire_rFl[6][3:0]=4'd6;
-  assign retire_rFl[5][3:0]=4'd5;
-  assign retire_rFl[4][3:0]=4'd4;
-  assign retire_rFl[3][3:0]=4'd3;
-  assign retire_rFl[2][3:0]=4'd2;
-  assign retire_rFl[1][3:0]=4'd1;
-  assign retire_rFl[0][3:0]=4'd0;
+  assign tire_rFl[8][3:0]=4'd8;
+  assign tire_rFl[7][3:0]=4'd7;
+  assign tire_rFl[6][3:0]=4'd6;
+  assign tire_rFl[5][3:0]=4'd5;
+  assign tire_rFl[4][3:0]=4'd4;
+  assign tire_rFl[3][3:0]=4'd3;
+  assign tire_rFl[2][3:0]=4'd2;
+  assign tire_rFl[1][3:0]=4'd1;
+  assign tire_rFl[0][3:0]=4'd0;
 
-  assign mem_match=mem_II_upper==retire_addr_reg && ~has_stores|(mem_II_upper2==retire_addr_reg)|(mem_II_upper!=mem_II_upper2);
-  assign mem_II_upper_out=retire_addr_reg;
+  assign mem_match=mem_II_upper==tire_addr_reg && ~has_stores|(mem_II_upper2==tire_addr_reg)|(mem_II_upper!=mem_II_upper2);
+  assign mem_II_upper_out=tire_addr_reg;
 
   bob_ram bob_mod(
   .clk(clk),
-  .read_clkEn(doRetire_d||~has_some),
-  .read_addr(retire_addr), .read_data(bob_rdata),
+  .read_clkEn(dotire_d||~has_some),
+  .read_addr(tire_addr), .read_data(bob_rdata),
   .write_addr(init ? initcount : new_addr), .write_data(bob_wdata&{BOB_WIDTH{~init}}), .write_wen((new_en && ~stall && ~doStall)|init)
   );
 
@@ -1209,16 +1209,16 @@ module cntrl_find_outcome(
   .new_addr(new_addr),
   .stall(stall),
   .doStall(doStall),
-  .hasRetire(has_some),
-  .doRetire(doRetire_d),
-  .retire_addr(retire_addr)
+  .hastire(has_some),
+  .dotire(dotire_d),
+  .tire_addr(tire_addr)
   );
 
   bob_except xcpt_mod(
   .clk(clk),
   .rst(rst),
-  .read_step(doRetire_d||~has_some),
-  .read_addr(retire_addr),
+  .read_step(dotire_d||~has_some),
+  .read_addr(tire_addr),
   .read_data0(ret_data[0]),
   .read_data1(ret_data[1]),
   .read_data2(ret_data[2]),
@@ -1256,8 +1256,8 @@ module cntrl_find_outcome(
   BOBind indir_mod(
   .clk(clk),
   .rst(rst),
-  .read_clkEn(doRetire_d||~has_some),
-  .read_addr(retire_addr),
+  .read_clkEn(dotire_d||~has_some),
+  .read_addr(tire_addr),
   .read_data(indir_IP),
   .read_ready(indir_ready),
   .write_addr(init ? initcount : ret5_addr[9:4]),
@@ -1317,49 +1317,49 @@ module cntrl_find_outcome(
 	  if (~xbreak[9]&fpudone[9]) excpt_fpu=excpt_fpu|ret_data[9][13:3]; 
       end
       if (rst) begin
-          retire0_rT<=6'd0;
-          retire1_rT<=6'd0;
-          retire2_rT<=6'd0;
-          retire3_rT<=6'd0;
-          retire4_rT<=6'd0;
-          retire5_rT<=6'd0;
-          retire6_rT<=6'd0;
-          retire7_rT<=6'd0;
-          retire8_rT<=6'd0;
+          tire0_rT<=6'd0;
+          tire1_rT<=6'd0;
+          tire2_rT<=6'd0;
+          tire3_rT<=6'd0;
+          tire4_rT<=6'd0;
+          tire5_rT<=6'd0;
+          tire6_rT<=6'd0;
+          tire7_rT<=6'd0;
+          tire8_rT<=6'd0;
 	  
-	  retire0_enG<=1'b0;
-	  retire1_enG<=1'b0;
-	  retire2_enG<=1'b0;
-	  retire3_enG<=1'b0;
-	  retire4_enG<=1'b0;
-	  retire5_enG<=1'b0;
-	  retire6_enG<=1'b0;
-	  retire7_enG<=1'b0;
-	  retire8_enG<=1'b0;
+	  tire0_enG<=1'b0;
+	  tire1_enG<=1'b0;
+	  tire2_enG<=1'b0;
+	  tire3_enG<=1'b0;
+	  tire4_enG<=1'b0;
+	  tire5_enG<=1'b0;
+	  tire6_enG<=1'b0;
+	  tire7_enG<=1'b0;
+	  tire8_enG<=1'b0;
 	  
-	  retire0_enV<=1'b0;
-	  retire1_enV<=1'b0;
-	  retire2_enV<=1'b0;
-	  retire3_enV<=1'b0;
-	  retire4_enV<=1'b0;
-	  retire5_enV<=1'b0;
-	  retire6_enV<=1'b0;
-	  retire7_enV<=1'b0;
-	  retire8_enV<=1'b0;
+	  tire0_enV<=1'b0;
+	  tire1_enV<=1'b0;
+	  tire2_enV<=1'b0;
+	  tire3_enV<=1'b0;
+	  tire4_enV<=1'b0;
+	  tire5_enV<=1'b0;
+	  tire6_enV<=1'b0;
+	  tire7_enV<=1'b0;
+	  tire8_enV<=1'b0;
 	  
-	  retire0_enF<=1'b0;
-	  retire1_enF<=1'b0;
-	  retire2_enF<=1'b0;
-	  retire3_enF<=1'b0;
-	  retire4_enF<=1'b0;
-	  retire5_enF<=1'b0;
-	  retire6_enF<=1'b0;
-	  retire7_enF<=1'b0;
-	  retire8_enF<=1'b0;
+	  tire0_enF<=1'b0;
+	  tire1_enF<=1'b0;
+	  tire2_enF<=1'b0;
+	  tire3_enF<=1'b0;
+	  tire4_enF<=1'b0;
+	  tire5_enF<=1'b0;
+	  tire6_enF<=1'b0;
+	  tire7_enF<=1'b0;
+	  tire8_enF<=1'b0;
 
-	  retire_enFl<=1'b0;
+	  tire_enFl<=1'b0;
 
-	  doRetire<=1'b0;
+	  dotire<=1'b0;
 
 	  flags[0]<=6'b0;
 	  flags[1]<=6'b0;
@@ -1397,10 +1397,10 @@ module cntrl_find_outcome(
 
 	  baseIP<=63'h7c0ef80000000000;
 
-          retire_addr_reg<=6'd0;
+          tire_addr_reg<=6'd0;
 	  
-//	  retire_thread<=1'b0;
-	  retire_thread_reg<=1'b0;
+//	  tire_thread<=1'b0;
+	  tire_thread_reg<=1'b0;
 	  
 	  retcnt<=4'd1;
           retclr<=9'b0;
@@ -1412,52 +1412,52 @@ module cntrl_find_outcome(
 	  archReg_proc[0]<=16'b0;
 	  archReg_proc[1]<=16'b0;
       end else begin
-          retire0_rT<=rTe[0];
-          retire1_rT<=rTe[1];
-          retire2_rT<=rTe[2];
-          retire3_rT<=rTe[3];
-          retire4_rT<=rTe[4];
-          retire5_rT<=rTe[5];
-          retire6_rT<=rTe[6];
-          retire7_rT<=rTe[7];
-          retire8_rT<=rTe[8];
+          tire0_rT<=rTe[0];
+          tire1_rT<=rTe[1];
+          tire2_rT<=rTe[2];
+          tire3_rT<=rTe[3];
+          tire4_rT<=rTe[4];
+          tire5_rT<=rTe[5];
+          tire6_rT<=rTe[6];
+          tire7_rT<=rTe[7];
+          tire8_rT<=rTe[8];
 	  
 	  
-	  retire0_enG<=doRetire_d && retireG[0];
-	  retire1_enG<=doRetire_d && retireG[1];
-	  retire2_enG<=doRetire_d && retireG[2];
-	  retire3_enG<=doRetire_d && retireG[3];
-	  retire4_enG<=doRetire_d && retireG[4];
-	  retire5_enG<=doRetire_d && retireG[5];
-	  retire6_enG<=doRetire_d && retireG[6];
-	  retire7_enG<=doRetire_d && retireG[7];
-	  retire8_enG<=doRetire_d && retireG[8];
+	  tire0_enG<=dotire_d && tireG[0];
+	  tire1_enG<=dotire_d && tireG[1];
+	  tire2_enG<=dotire_d && tireG[2];
+	  tire3_enG<=dotire_d && tireG[3];
+	  tire4_enG<=dotire_d && tireG[4];
+	  tire5_enG<=dotire_d && tireG[5];
+	  tire6_enG<=dotire_d && tireG[6];
+	  tire7_enG<=dotire_d && tireG[7];
+	  tire8_enG<=dotire_d && tireG[8];
 	  
-	  retire0_enV<=doRetire_d && retireV[0];
-	  retire1_enV<=doRetire_d && retireV[1];
-	  retire2_enV<=doRetire_d && retireV[2];
-	  retire3_enV<=doRetire_d && retireV[3];
-	  retire4_enV<=doRetire_d && retireV[4];
-	  retire5_enV<=doRetire_d && retireV[5];
-	  retire6_enV<=doRetire_d && retireV[6];
-	  retire7_enV<=doRetire_d && retireV[7];
-	  retire8_enV<=doRetire_d && retireV[8];
+	  tire0_enV<=dotire_d && tireV[0];
+	  tire1_enV<=dotire_d && tireV[1];
+	  tire2_enV<=dotire_d && tireV[2];
+	  tire3_enV<=dotire_d && tireV[3];
+	  tire4_enV<=dotire_d && tireV[4];
+	  tire5_enV<=dotire_d && tireV[5];
+	  tire6_enV<=dotire_d && tireV[6];
+	  tire7_enV<=dotire_d && tireV[7];
+	  tire8_enV<=dotire_d && tireV[8];
 	  
-	  retire0_enF<=doRetire_d && retireF[0];
-	  retire1_enF<=doRetire_d && retireF[1];
-	  retire2_enF<=doRetire_d && retireF[2];
-	  retire3_enF<=doRetire_d && retireF[3];
-	  retire4_enF<=doRetire_d && retireF[4];
-	  retire5_enF<=doRetire_d && retireF[5];
-	  retire6_enF<=doRetire_d && retireF[6];
-	  retire7_enF<=doRetire_d && retireF[7];
-	  retire8_enF<=doRetire_d && retireF[8];
+	  tire0_enF<=dotire_d && tireF[0];
+	  tire1_enF<=dotire_d && tireF[1];
+	  tire2_enF<=dotire_d && tireF[2];
+	  tire3_enF<=dotire_d && tireF[3];
+	  tire4_enF<=dotire_d && tireF[4];
+	  tire5_enF<=dotire_d && tireF[5];
+	  tire6_enF<=dotire_d && tireF[6];
+	  tire7_enF<=dotire_d && tireF[7];
+	  tire8_enF<=dotire_d && tireF[8];
 
-	  retire_enFl<=lfl_has && doRetire_d;
+	  tire_enFl<=lfl_has && dotire_d;
 
-	  doRetire<=doRetire_d;
+	  dotire<=dotire_d;
 
-	  if (doRetire_d) flags[retire_thread_reg]<=flags_d;
+	  if (dotire_d) flags[tire_thread_reg]<=flags_d;
 
 	  jupd0_addr<=update_ght_addr_j0;
           jupd1_addr<=update_ght_addr_j1;
@@ -1467,12 +1467,12 @@ module cntrl_find_outcome(
 	  jupd1_sc<=update_sc_j1;
 	  jupd0_tk<=jump0_taken;
 	  jupd1_tk<=jump1_taken;
-	  jupd0_en<=jump0_in & ~jump0Miss & doRetire_d;
+	  jupd0_en<=jump0_in & ~jump0Miss & dotire_d;
 	  //jupdt0_en<=
-	  jupd0_ght_en<=jump0_in & ~jump0Miss & ~jump0BtbOnly & doRetire_d;
-	  jupd1_en<=jump1_in & ~jump1Miss & doRetire_d;
+	  jupd0_ght_en<=jump0_in & ~jump0Miss & ~jump0BtbOnly & dotire_d;
+	  jupd1_en<=jump1_in & ~jump1Miss & dotire_d;
 	  //jupdt1_en<=
-	  jupd1_ght_en<=jump1_in & ~jump1Miss & ~jump1BtbOnly & doRetire_d;
+	  jupd1_ght_en<=jump1_in & ~jump1Miss & ~jump1BtbOnly & dotire_d;
 
 	  exceptIP<={exceptIP_d};
           //except_thread<=except_thread_d;
@@ -1480,7 +1480,7 @@ module cntrl_find_outcome(
 	  //except_both<=except_both_d;
 	  except<=except_d;
           except_due_jump<=break_jump0|break_jump1 && except_d;
-          if (doRetire_d && jump0_in) except_jump_ght<=jump1_in ? {jump1GHT[6:0],jump1_taken} : {jump0GHT[6:0],jump0_taken};
+          if (dotire_d && jump0_in) except_jump_ght<=jump1_in ? {jump1GHT[6:0],jump1_taken} : {jump0GHT[6:0],jump0_taken};
           except_set_instr_flag<=break_replay&!break_replayS;
           except_jmp_mask_en<=(break_jump0 | break_jump1) && except_d;
           except_jmp_mask<=break_jump0 ? jump0JMask : jump1JMask;
@@ -1490,22 +1490,22 @@ module cntrl_find_outcome(
           csrss_en<=csrss_en_d;
           csrss_data<=csrss_data_d;
 
-	  if (doRetire_d) baseIP<=baseIP_d;
-	  if (doRetire_d||~has_some) retire_addr_reg<=retire_addr;
+	  if (dotire_d) baseIP<=baseIP_d;
+	  if (dotire_d||~has_some) tire_addr_reg<=tire_addr;
 
-	  //if (both_threads) retire_thread<=~retire_thread;
-	  //else retire_thread<=thread1;
+	  //if (both_threads) tire_thread<=~tire_thread;
+	  //else tire_thread<=thread1;
 	  //
-	  //retire_thread_reg<=retire_thread;
-	  retcnt<=(doRetire_d&~init) ? retcnt_d : 4'd1;
-	  retclr<={9{doRetire_d&~init}} & retclrP;
+	  //tire_thread_reg<=tire_thread;
+	  retcnt<=(dotire_d&~init) ? retcnt_d : 4'd1;
+	  retclr<={9{dotire_d&~init}} & retclrP;
 
 	  if (csrss_en && csrss_no==`csr_excIP) begin
               archReg_xcpt_handlerIP<=csrss_data[63:1];
 	  end
           if (break_exceptn && has_some && indir_ready) begin
-	      archReg_xcpt_retIP[retire_thread_reg]<=breakIP;	
-//	      archReg_xcpt_code[retire_thread_reg]<=excpt_code;	
+	      archReg_xcpt_retIP[tire_thread_reg]<=breakIP;	
+//	      archReg_xcpt_code[tire_thread_reg]<=excpt_code;	
           end
       end
   end
