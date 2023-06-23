@@ -1671,17 +1671,17 @@ module rs_nonWakeUp_DFF(
   input clk;
   input rst;
   input stall;
-  input newRsSelect0;
+  (* horizontal *) input newRsSelect0;
   input [WIDTH-1:0] newData0;
-  input newRsSelect1;
+  (* horizontal *) input newRsSelect1;
   input [WIDTH-1:0] newData1;
-  input newRsSelect2;
+  (* horizontal *) input newRsSelect2;
   input [WIDTH-1:0] newData2;
-  input outRsSelect0;
+  (* horizontal *) input outRsSelect0;
   output [WIDTH-1:0] outData0;
-  input outRsSelect1;
+  (* horizontal *) input outRsSelect1;
   output [WIDTH-1:0] outData1;
-  input outRsSelect2;
+  (* horizontal *) input outRsSelect2;
   output [WIDTH-1:0] outData2;
   
 
@@ -1799,11 +1799,11 @@ module rs_nonWakeUp_datad_DFF(
   input stall;
   output reg [WIDTH-1:0] data_q;
   output [WIDTH-1:0] data_d;
-  input newRsSelect0;
+  (* horizontal *) input newRsSelect0;
   input [WIDTH-1:0] newData0;
-  input newRsSelect1;
+  (* horizontal *) input newRsSelect1;
   input [WIDTH-1:0] newData1;
-  input newRsSelect2;
+  (* horizontal *) input newRsSelect2;
   input [WIDTH-1:0] newData2;
 
   wire data_en;
