@@ -47,12 +47,6 @@ module fpucadd(clk,rst,A,A_alt,B,and1,or1,copyA,en,rmode,res,res_hi,isDBL,fpcsr,
   input is_rndD;
   input is_rndS; 
   
-  wire [67:0] res_X;
-  wire [15:0] res_X_hi;
-
-  assign res=res_X;
-  assign res_hi=res_X_hi;
-
   //reg [80:0] A_reg;
  // reg [80:0] B_reg;
   wire [127:0] part0;
@@ -133,11 +127,11 @@ module fpucadd(clk,rst,A,A_alt,B,and1,or1,copyA,en,rmode,res,res_hi,isDBL,fpcsr,
   fpucadd_compress compr_mod(clk,A[63:0],B[63:0],part0,part1,or1,and1);
   adder #(128) prodAdd_mod(part0,part1,prod,1'b0,1'b1,,,,);
 
-  adder2oi #(64) resAddE_mod(enbit_ext,prod_reg[126:63],rndbit_ext,{res_X[63:33],res_X[31:0],dummy1_1},{dummy1_2,res_X[63:33],res_X[31:0]},1'b0,
+  adder2oi #(64) resAddE_mod(enbit_ext,prod_reg[126:63],rndbit_ext,{res[63:33],res[31:0],dummy1_1},{dummy1_2,res[63:33],res[31:0]},1'b0,
       prod_reg[127] & EXT_rnd1 & ~spec_any & en_reg ||
       ~prod_reg[127] & EXT_rnd0 & EXT_rnflip0 & ~isDBL_reg & ~spec_any & en_reg,
       ~prod_reg[127] & EXT_rnd0 & ~EXT_rnflip0 & ~isDBL_reg & ~spec_any & en_reg,,,,);
-  adder2oi #(53) resAddD_mod(enbit_dbl,prod_reg[104:52],rndbit_dbl,{res_X[52:33],res_X[31:0],dummy1_3},{dummy1_4,res_X[52:33],res_X[31:0]},1'b0,
+  adder2oi #(53) resAddD_mod(enbit_dbl,prod_reg[104:52],rndbit_dbl,{res[52:33],res[31:0],dummy1_3},{dummy1_4,res[52:33],res[31:0]},1'b0,
       prod_reg[105] & DBL_rnd1 & isDBL_reg & ~spec_any & en_reg ||
       ~prod_reg[105] & DBL_rnd0 & DBL_rnflip0 & isDBL_reg & ~spec_any & en_reg,
       ~prod_reg[105] & DBL_rnd0 & ~DBL_rnflip0 & isDBL_reg & ~spec_any & en_reg,,,,);
@@ -168,15 +162,15 @@ module fpucadd(clk,rst,A,A_alt,B,and1,or1,copyA,en,rmode,res,res_hi,isDBL,fpcsr,
     ~(~exp1_non_denor_IEEE & fpcsr[`csrfpu_daz] || ~exp_exp1[16]) ? (exp_exp1^17'h10000) : 17'bz;
 
 
-  assign {res_X[63:33],res_X[31:0]}=(prod_reg[127] & ~isDBL_reg & ~EXT_rnd1 & ~spec_any & en_reg) ? prod_reg[126:64]:63'bz;
-  assign {res_X[63:33],res_X[31:0]}=(~prod_reg[127] & ~isDBL_reg & ~EXT_rnd0 & ~spec_any & en_reg) ? prod_reg[125:63]:63'bz;
-  assign {res_X[52:33],res_X[31:0]}=(prod_reg[105] & isDBL_reg & ~DBL_rnd1 & ~spec_any & en_reg) ? prod_reg[104:53]:52'bz;
-  assign {res_X[52:33],res_X[31:0]}=(~prod_reg[105] & isDBL_reg & ~DBL_rnd0 & ~spec_any & en_reg) ? prod_reg[103:52]:52'bz;
+  assign {res[63:33],res[31:0]}=(prod_reg[127] & ~isDBL_reg & ~EXT_rnd1 & ~spec_any & en_reg) ? prod_reg[126:64]:63'bz;
+  assign {res[63:33],res[31:0]}=(~prod_reg[127] & ~isDBL_reg & ~EXT_rnd0 & ~spec_any & en_reg) ? prod_reg[125:63]:63'bz;
+  assign {res[52:33],res[31:0]}=(prod_reg[105] & isDBL_reg & ~DBL_rnd1 & ~spec_any & en_reg) ? prod_reg[104:53]:52'bz;
+  assign {res[52:33],res[31:0]}=(~prod_reg[105] & isDBL_reg & ~DBL_rnd0 & ~spec_any & en_reg) ? prod_reg[103:52]:52'bz;
    
-  assign {res_X[65],res_X_hi,res_X[64]}=(prod_reg[127] & ~isDBL_reg & ~spec_any & en_reg) ? {exp_exp1_reg[15],sgn_reg,exp_exp1_reg[14:0],1'b1} : 18'bz;
-  assign {res_X[65],res_X_hi,res_X[64]}=(~prod_reg[127] & ~isDBL_reg & ~spec_any & en_reg) ? {exp_exp_reg[15],sgn_reg,exp_exp_reg[14:0],1'b1} : 18'bz;
-  assign {res_X[65],res_X[64:53]}=(prod_reg[105] & isDBL_reg & ~spec_any & en_reg) ? {exp_exp1_reg[15],sgn_reg,exp_exp1_reg[10:0]} : 13'bz;
-  assign {res_X[65],res_X[64:53]}=(~prod_reg[105] & isDBL_reg & ~spec_any & en_reg) ? {exp_exp_reg[15],sgn_reg,exp_exp_reg[10:0]} : 13'bz;
+  assign {res[65],res_hi,res[64]}=(prod_reg[127] & ~isDBL_reg & ~spec_any & en_reg) ? {exp_exp1_reg[15],sgn_reg,exp_exp1_reg[14:0],1'b1} : 18'bz;
+  assign {res[65],res_hi,res[64]}=(~prod_reg[127] & ~isDBL_reg & ~spec_any & en_reg) ? {exp_exp_reg[15],sgn_reg,exp_exp_reg[14:0],1'b1} : 18'bz;
+  assign {res[65],res[64:53]}=(prod_reg[105] & isDBL_reg & ~spec_any & en_reg) ? {exp_exp1_reg[15],sgn_reg,exp_exp1_reg[10:0]} : 13'bz;
+  assign {res[65],res[64:53]}=(~prod_reg[105] & isDBL_reg & ~spec_any & en_reg) ? {exp_exp_reg[15],sgn_reg,exp_exp_reg[10:0]} : 13'bz;
   
   assign expon=(prod_reg[127] & ~isDBL_reg & ~spec_any) ? 
     {~EXT_rnbit1 & ~ EXT_tail1,exp_exp1_reg[16],exp1_non_denor_IEEE_reg,exp1_oor_IEEE_reg,exp1_oor_reg} : 5'bz;
@@ -188,12 +182,12 @@ module fpucadd(clk,rst,A,A_alt,B,and1,or1,copyA,en,rmode,res,res_hi,isDBL,fpcsr,
     {~DBL_rnbit0 & ~ DBL_tail0,exp_exp_reg[16],exp_non_denor_IEEE_reg,exp_oor_IEEE_reg,exp_oor_reg} : 5'bz;
   assign expon=spec_any ? 5'd4 : 5'bz; 
 
-  assign {res_X[65],res_X[64:33],res_X[31:0]}=(spec_any & en_reg) ? {res_spec[80],res_spec[63:0]} : 65'bz;
-  assign res_X_hi[14:0]=(spec_any & ~isDBL_reg & en_reg) ? res_spec[78:64] : 15'bz;
-  assign res_X_hi[15]=(spec_any & ~isDBL_reg & en_reg) ? res_spec[79] : 1'bz;
+  assign {res[65],res[64:33],res[31:0]}=(spec_any & en_reg) ? {res_spec[80],res_spec[63:0]} : 65'bz;
+  assign res_hi[14:0]=(spec_any & ~isDBL_reg & en_reg) ? res_spec[78:64] : 15'bz;
+  assign res_hi[15]=(spec_any & ~isDBL_reg & en_reg) ? res_spec[79] : 1'bz;
   
-  assign res_X[67:66]=en_reg ? `ptype_dbl : 2'bz;
-  assign res_X[32]=en_reg ? 1'b0 : 1'bz;
+  assign res[67:66]=en_reg ? `ptype_dbl : 2'bz;
+  assign res[32]=en_reg ? 1'b0 : 1'bz;
 
   assign DBL_rnbit0=prod_reg[51];
   assign DBL_tail0=|prod_reg[50:0];
@@ -302,7 +296,7 @@ module fpucadd(clk,rst,A,A_alt,B,and1,or1,copyA,en,rmode,res,res_hi,isDBL,fpcsr,
   always @(negedge clk)
 
   begin
- //     if (res_X!=res_X) $display("res z muld");
+ //     if (res!=res) $display("res z muld");
       isDBL_reg<=isDBL;
       isDBL_reg<=isDBL_reg;
   //    isDBL_reg<=isDBL_reg;
