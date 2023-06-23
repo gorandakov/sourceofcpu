@@ -166,15 +166,15 @@ module rrf(
   clk,
   rst,
   read_clkEn,
-  read0_addr,read0_data,read0_dataN,read0_oe,
-  read1_addr,read1_data,read1_dataN,read1_oe,
-  read2_addr,read2_data,read2_dataN,read2_oe,
-  read3_addr,read3_data,read3_dataN,read3_oe,
-  read4_addr,read4_data,read4_dataN,read4_oe,
-  read5_addr,read5_data,read5_dataN,read5_oe,
-  read6_addr,read6_data,read6_dataN,read6_oe,
-  read7_addr,read7_data,read7_dataN,read7_oe,
-  read8_addr,read8_data,read8_dataN,read8_oe,
+  read0_addr,read0_data,read0_oe,
+  read1_addr,read1_data,read1_oe,
+  read2_addr,read2_data,read2_oe,
+  read3_addr,read3_data,read3_oe,
+  read4_addr,read4_data,read4_oe,
+  read5_addr,read5_data,read5_oe,
+  read6_addr,read6_data,read6_oe,
+  read7_addr,read7_data,read7_oe,
+  read8_addr,read8_data,read8_oe,
   write0_addr,write0_data,write0_wen,
   write1_addr,write1_data,write1_wen,
   write2_addr,write2_data,write2_wen,
@@ -198,40 +198,31 @@ module rrf(
   input read_clkEn;
   
   input [ADDR_WIDTH-1:0] read0_addr;
-  output [DATA_WIDTH-1:0] read0_data;
-  output [DATA_WIDTH-1:0] read0_dataN;
+  (* register equiload *) output [DATA_WIDTH-1:0] read0_data;
   input read0_oe;
   input [ADDR_WIDTH-1:0] read1_addr;
-  output [DATA_WIDTH-1:0] read1_data;
-  output [DATA_WIDTH-1:0] read1_dataN;
+  (* register equiload *) output [DATA_WIDTH-1:0] read1_data;
   input read1_oe;
   input [ADDR_WIDTH-1:0] read2_addr;
-  output [DATA_WIDTH-1:0] read2_data;
-  output [DATA_WIDTH-1:0] read2_dataN;
+  (* register equiload *) output [DATA_WIDTH-1:0] read2_data;
   input read2_oe;
   input [ADDR_WIDTH-1:0] read3_addr;
-  output [DATA_WIDTH-1:0] read3_data;
-  output [DATA_WIDTH-1:0] read3_dataN;
+  (* register equiload *) output [DATA_WIDTH-1:0] read3_data;
   input read3_oe;
   input [ADDR_WIDTH-1:0] read4_addr;
-  output [DATA_WIDTH-1:0] read4_data;
-  output [DATA_WIDTH-1:0] read4_dataN;
+  (* register equiload *) output [DATA_WIDTH-1:0] read4_data;
   input read4_oe;
   input [ADDR_WIDTH-1:0] read5_addr;
-  output [DATA_WIDTH-1:0] read5_data;
-  output [DATA_WIDTH-1:0] read5_dataN;
+  (* register equiload *) output [DATA_WIDTH-1:0] read5_data;
   input read5_oe;
   input [ADDR_WIDTH-1:0] read6_addr;
-  output [DATA_WIDTH-1:0] read6_data;
-  output [DATA_WIDTH-1:0] read6_dataN;
+  (* register equiload *) output [DATA_WIDTH-1:0] read6_data;
   input read6_oe;
   input [ADDR_WIDTH-1:0] read7_addr;
-  output [DATA_WIDTH-1:0] read7_data;
-  output [DATA_WIDTH-1:0] read7_dataN;
+  (* register equiload *) output [DATA_WIDTH-1:0] read7_data;
   input read7_oe;
   input [ADDR_WIDTH-1:0] read8_addr;
-  output [DATA_WIDTH-1:0] read8_data;
-  output [DATA_WIDTH-1:0] read8_dataN;
+  (* register equiload *) output [DATA_WIDTH-1:0] read8_data;
   input read8_oe;
 
   
@@ -278,16 +269,6 @@ module rrf(
   
   reg read_thread_reg;
 
-/*  wire [DATA_WIDTH-1:0] read0_data_ram;
-  wire [DATA_WIDTH-1:0] read1_data_ram;
-  wire [DATA_WIDTH-1:0] read2_data_ram;
-  wire [DATA_WIDTH-1:0] read3_data_ram;
-  wire [DATA_WIDTH-1:0] read4_data_ram;
-  wire [DATA_WIDTH-1:0] read5_data_ram;
-  wire [DATA_WIDTH-1:0] read6_data_ram;
-  wire [DATA_WIDTH-1:0] read7_data_ram;
-  wire [DATA_WIDTH-1:0] read8_data_ram;
-*/
 
   reg read0_oe_reg;
   reg read1_oe_reg;
@@ -301,16 +282,6 @@ module rrf(
 
   genvar bufNo,tileNo;
   
-/*  assign read0_data=(read0_oe_reg) ? read0_data_ram : 'z;
-  assign read1_data=(read1_oe_reg) ? read1_data_ram : 'z;
-  assign read2_data=(read2_oe_reg) ? read2_data_ram : 'z;
-  assign read3_data=(read3_oe_reg) ? read3_data_ram : 'z;
-  assign read4_data=(read4_oe_reg) ? read4_data_ram : 'z;
-  assign read5_data=(read5_oe_reg) ? read5_data_ram : 'z;
-  assign read6_data=(read6_oe_reg) ? read6_data_ram : 'z;
-  assign read7_data=(read7_oe_reg) ? read7_data_ram : 'z;
-  assign read8_data=(read8_oe_reg) ? read8_data_ram : 'z;
-*/  
   always @(posedge clk)
     begin
 	  if (rst)
@@ -409,16 +380,6 @@ module rrf(
         assign read6_data=((read6_addr_reg[5:4]==tileNo || (read6_addr_reg[5:3]==3'd4 && tileNo)) && read6_oe_reg) ? read6_data_ramA : 'z;
         assign read7_data=((read7_addr_reg[5:4]==tileNo || (read7_addr_reg[5:3]==3'd4 && tileNo)) && read7_oe_reg) ? read7_data_ramA : 'z;
         assign read8_data=((read8_addr_reg[5:4]==tileNo || (read8_addr_reg[5:3]==3'd4 && tileNo)) && read8_oe_reg) ? read8_data_ramA : 'z;
-        assign read0_dataN=((read0_addr_reg[5:4]==tileNo || (read0_addr_reg[5:3]==3'd4 && tileNo)) && read0_oe_reg) ? ~read0_data_ramA : 'z;
-        assign read1_dataN=((read1_addr_reg[5:4]==tileNo || (read1_addr_reg[5:3]==3'd4 && tileNo)) && read1_oe_reg) ? ~read1_data_ramA : 'z;
-        assign read2_dataN=((read2_addr_reg[5:4]==tileNo || (read2_addr_reg[5:3]==3'd4 && tileNo)) && read2_oe_reg) ? ~read2_data_ramA : 'z;
-        assign read3_dataN=((read3_addr_reg[5:4]==tileNo || (read3_addr_reg[5:3]==3'd4 && tileNo)) && read3_oe_reg) ? ~read3_data_ramA : 'z;
-        assign read4_dataN=((read4_addr_reg[5:4]==tileNo || (read4_addr_reg[5:3]==3'd4 && tileNo)) && read4_oe_reg) ? ~read4_data_ramA : 'z;
-        assign read5_dataN=((read5_addr_reg[5:4]==tileNo || (read5_addr_reg[5:3]==3'd4 && tileNo)) && read5_oe_reg) ? ~read5_data_ramA : 'z;
-        assign read6_dataN=((read6_addr_reg[5:4]==tileNo || (read6_addr_reg[5:3]==3'd4 && tileNo)) && read6_oe_reg) ? ~read6_data_ramA : 'z;
-        assign read7_dataN=((read7_addr_reg[5:4]==tileNo || (read7_addr_reg[5:3]==3'd4 && tileNo)) && read7_oe_reg) ? ~read7_data_ramA : 'z;
-        assign read8_dataN=((read8_addr_reg[5:4]==tileNo || (read8_addr_reg[5:3]==3'd4 && tileNo)) && read8_oe_reg) ? ~read8_data_ramA : 'z;
-    end
   endgenerate
 
 endmodule
