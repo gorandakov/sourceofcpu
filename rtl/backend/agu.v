@@ -337,7 +337,7 @@ module agu(
     bank0[4:2]==3'h7 && (bank0[1:0]!=0 || stepOver || opsize==6) : 1'bz;
   assign split=(opsize==0) ? 1'b0 : 1'bz;
 
-  assign conflict=(((|(~bit_confl_reg))||mOp_type_reg==2'b10) && ~bus_hold_reg2 && 
+  assign conflict=(((|(~bit_confl_reg))||mOp_type_reg[1]) && ~bus_hold_reg2 && 
     read_clkEn_reg2 && ~fault_cann_reg);
   
   

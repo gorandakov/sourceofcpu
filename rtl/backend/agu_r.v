@@ -392,7 +392,7 @@ module agu_r(
   assign mOp_en=(~req_bus) ? mOp0_en_reg & (tlb_hit|mOp0_lsfwd_reg|tlb_is_inv) & ~req_bus & ~except &
     ~pause_miss_reg2 & ~tlb_proceed & ~bus_hold & (mOp0_type_reg!=2'b10) : 1'bz; 
   assign mOp_ioEn=(~req_bus) ? mOp0_en_reg & (tlb_hit|mOp0_lsfwd_reg) & ~req_bus & ~except &
-    ~pause_miss_reg2 & ~tlb_proceed & ~bus_hold & (mOp0_type_reg==2'b10) : 1'b0; 
+    ~pause_miss_reg2 & ~tlb_proceed & ~bus_hold & (mOp0_type_reg[1]) : 1'b0; 
 
   assign doStall=mOp0_en_reg & ~(tlb_hit|mOp0_lsfwd_reg|tlb_is_inv) || bus_hold || pause_miss_reg2 || tlb_proceed ||
   reqtlb_en || reqC_tlbEn || req_bus;
@@ -568,7 +568,7 @@ module agu_r(
           mOp0_en_reg<=1'b0;
       end else if (~doStall&&!rsStall) begin
           mOp0_en_reg<=mOp0_en & ~(except);
-          if (mOp0_en & ~|req_bus || extern_feed & ~|req_bus & (mOp0_type_reg==2'b10)) begin
+          if (mOp0_en & ~|req_bus || extern_feed & |req_bus & (mOp0_type_reg==2'b10)) || |req_bus & (mOp0_type_reg==2'b11) begin
               mOp0_thread_reg<=mOp0_thread;
               mOp0_lsflag_reg<=mOp0_lsflag;
               mOp0_addrMain_reg<=mOp0_addrMain;
