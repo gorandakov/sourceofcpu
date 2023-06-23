@@ -1188,15 +1188,15 @@ module regfile(
   read_clkEn,
   retire_clkEn,
 
-  read0_addr,read0_data,read0_oe,read0_match,
-  read1_addr,read1_data,read1_oe,read1_match,
-  read2_addr,read2_data,read2_oe,read2_match,
-  read3_addr,read3_data,read3_oe,read3_match,
-  read4_addr,read4_data,read4_oe,read4_match,
-  read5_addr,read5_data,read5_oe,read5_match,
-  read6_addr,read6_data,read6_oe,read6_match,
-  read7_addr,read7_data,read7_oe,read7_match,
-  read8_addr,read8_data,read8_oe,read8_match,
+  read0_addr,read0_addr_rrf,read0_data,read0_oe,read0_match,
+  read1_addr,read1_addr_rrf,read1_data,read1_oe,read1_match,
+  read2_addr,read2_addr_rrf,read2_data,read2_oe,read2_match,
+  read3_addr,read3_addr_rrf,read3_data,read3_oe,read3_match,
+  read4_addr,read4_addr_rrf,read4_data,read4_oe,read4_match,
+  read5_addr,read5_addr_rrf,read5_data,read5_oe,read5_match,
+  read6_addr,read6_addr_rrf,read6_data,read6_oe,read6_match,
+  read7_addr,read7_addr_rrf,read7_data,read7_oe,read7_match,
+  read8_addr,read8_addr_rrf,read8_data,read8_oe,read8_match,
 
   read0_constEn,
   read1_constEn,
@@ -1218,15 +1218,15 @@ module regfile(
   read7_const,
   read8_const,
 
-  retireRead0_addr,retireRead0_data,
-  retireRead1_addr,retireRead1_data,
-  retireRead2_addr,retireRead2_data,
-  retireRead3_addr,retireRead3_data,
-  retireRead4_addr,retireRead4_data,
-  retireRead5_addr,retireRead5_data,
-  retireRead6_addr,retireRead6_data,
-  retireRead7_addr,retireRead7_data,
-  retireRead8_addr,retireRead8_data,
+  write0_addr_rrf,write0_wen_rrf,
+  write1_addr_rrf,write1_wen_rrf,
+  write2_addr_rrf,write2_wen_rrf,
+  write3_addr_rrf,write3_wen_rrf,
+  write4_addr_rrf,write4_wen_rrf,
+  write5_addr_rrf,write5_wen_rrf,
+  write6_addr_rrf,write6_wen_rrf,
+  write7_addr_rrf,write7_wen_rrf,
+  write8_addr_rrf,write8_wen_rrf,
 
   write0_addr_reg,write0_data_reg,write0_wen_reg,
   write1_addr_reg,write1_data_reg,write1_wen_reg,
@@ -1249,46 +1249,55 @@ module regfile(
 
 
   input [ADDR_WIDTH-1:0] read0_addr;
+  input [5:0] read0_addr_rrf;
   (* register equiload *) output [DATA_WIDTH-1:0] read0_data;
   input read0_oe;
   output [10:0] read0_match;
 
   input [ADDR_WIDTH-1:0] read1_addr;
+  input [5:0] read1_addr_rrf;
   (* register equiload *) output [DATA_WIDTH-1:0] read1_data;
   input read1_oe;
   output [10:0] read1_match;
 
   input [ADDR_WIDTH-1:0] read2_addr;
+  input [5:0] read2_addr_rrf;
   (* register equiload *) output [DATA_WIDTH-1:0] read2_data;
   input read2_oe;
   output [10:0] read2_match;
 
   input [ADDR_WIDTH-1:0] read3_addr;
+  input [5:0] read3_addr_rrf;
   (* register equiload *) output [DATA_WIDTH-1:0] read3_data;
   input read3_oe;
   output [10:0] read3_match;
 
   input [ADDR_WIDTH-1:0] read4_addr;
+  input [5:0] read4_addr_rrf;
   (* register equiload *) output [DATA_WIDTH-1:0] read4_data;
   input read4_oe;
   output [10:0] read4_match;
 
   input [ADDR_WIDTH-1:0] read5_addr;
+  input [5:0] read5_addr_rrf;
   (* register equiload *) output [DATA_WIDTH-1:0] read5_data;
   input read5_oe;
   output [10:0] read5_match;
 
   input [ADDR_WIDTH-1:0] read6_addr;
+  input [5:0] read6_addr_rrf;
   (* register equiload *) output [DATA_WIDTH-1:0] read6_data;
   input read6_oe;
   output [10:0] read6_match;
 
   input [ADDR_WIDTH-1:0] read7_addr;
+  input [5:0] read7_addr_rrf;
   (* register equiload *) output [DATA_WIDTH-1:0] read7_data;
   input read7_oe;
   output [10:0] read7_match;
 
   input [ADDR_WIDTH-1:0] read8_addr;
+  input [5:0] read8_addr_rrf;
   (* register equiload *) output [DATA_WIDTH-1:0] read8_data;
   input read8_oe;
   output [10:0] read8_match;
@@ -1312,33 +1321,26 @@ module regfile(
   input [DATA_WIDTH-1:0] read6_const;
   input [DATA_WIDTH-1:0] read7_const;
   input [DATA_WIDTH-1:0] read8_const;
-  
-  input [ADDR_WIDTH-1:0] retireRead0_addr;
-  output [DATA_WIDTH-1:0] retireRead0_data;
 
-  input [ADDR_WIDTH-1:0] retireRead1_addr;
-  output [DATA_WIDTH-1:0] retireRead1_data;
 
-  input [ADDR_WIDTH-1:0] retireRead2_addr;
-  output [DATA_WIDTH-1:0] retireRead2_data;
-
-  input [ADDR_WIDTH-1:0] retireRead3_addr;
-  output [DATA_WIDTH-1:0] retireRead3_data;
-
-  input [ADDR_WIDTH-1:0] retireRead4_addr;
-  output [DATA_WIDTH-1:0] retireRead4_data;
-
-  input [ADDR_WIDTH-1:0] retireRead5_addr;
-  output [DATA_WIDTH-1:0] retireRead5_data;
-
-  input [ADDR_WIDTH-1:0] retireRead6_addr;
-  output [DATA_WIDTH-1:0] retireRead6_data;
-
-  input [ADDR_WIDTH-1:0] retireRead7_addr;
-  output [DATA_WIDTH-1:0] retireRead7_data;
-
-  input [ADDR_WIDTH-1:0] retireRead8_addr;
-  output [DATA_WIDTH-1:0] retireRead8_data;
+  input [5:0] write0_addr_rrf;
+  input       write0_wen_rrf;  
+  input [5:0] write1_addr_rrf;
+  input       write1_wen_rrf;  
+  input [5:0] write2_addr_rrf;
+  input       write2_wen_rrf;  
+  input [5:0] write3_addr_rrf;
+  input       write3_wen_rrf;  
+  input [5:0] write4_addr_rrf;
+  input       write4_wen_rrf;  
+  input [5:0] write5_addr_rrf;
+  input       write5_wen_rrf;  
+  input [5:0] write6_addr_rrf;
+  input       write6_wen_rrf;  
+  input [5:0] write7_addr_rrf;
+  input       write7_wen_rrf;  
+  input [5:0] write8_addr_rrf;
+  input       write8_wen_rrf;  
 
 
   input [ADDR_WIDTH-1:0] write0_addr_reg;
@@ -1485,6 +1487,32 @@ module regfile(
   write8_addr_reg2,write8_data_reg,write8_wen_reg2,
   write9_addr_reg2,write9_data_reg,write9_wen_reg2
  );
+
+  rrf rrf_m(
+  clk,
+  rst,
+  read_clkEn,
+  read0_addr_rrf,read0_data,~read0_oe,
+  read1_addr_rrf,read1_data,~read1_oe,
+  read2_addr_rrf,read2_data,~read2_oe,
+  read3_addr_rrf,read3_data,~read3_oe,
+  read4_addr_rrf,read4_data,~read4_oe,
+  read5_addr_rrf,read5_data,~read5_oe,
+  read6_addr_rrf,read6_data,~read6_oe,
+  read7_addr_rrf,read7_data,~read7_oe,
+  read8_addr_rrf,read8_data,~read8_oe,
+  write0_addr_rrf,reatireRead0_data,write0_wen_rrf,
+  write1_addr_rrf,reatireRead1_data,write1_wen_rrf,
+  write2_addr_rrf,reatireRead2_data,write2_wen_rrf,
+  write3_addr_rrf,reatireRead3_data,write3_wen_rrf,
+  write4_addr_rrf,reatireRead4_data,write4_wen_rrf,
+  write5_addr_rrf,reatireRead5_data,write5_wen_rrf,
+  write6_addr_rrf,reatireRead6_data,write6_wen_rrf,
+  write7_addr_rrf,reatireRead7_data,write7_wen_rrf,
+  write8_addr_rrf,reatireRead8_data,write8_wen_rrf,
+  read_thread,
+  write_thread
+  );
 
   assign read0_data=read_data[0];
   assign read1_data=read_data[1];
