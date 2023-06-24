@@ -768,7 +768,7 @@ module smallInstr_decoder(
        endcase
        //verilator lint_on CASEINCOMPLETE
       
-       trien[3]=~magic[0] & subIsCJ;
+       trien[3]=1'b0; //~magic[0] & subIsCJ;
        pconstant[3]={{55{instr[15]}},instr[15:8],1'b0};
        pport[3]=0;
        pjumpType[3]=({instr[7:6],instr[1:0]}==4'hf) ? 5'h10 : 
