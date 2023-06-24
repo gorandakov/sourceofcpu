@@ -874,21 +874,21 @@ module heptane_core(
   assign dc2_rExcl=dc2_rhitA0 ? dc2_rExclA : dc2_rExclB;
   
 //  assign except=1'b0;//iAvail[0] && instr0[15:0]==16'h0023;
-  assign rbusDOut_signals[`rbusD_second]=dc2_rhitExp_reg && L1_expAddr_en_reg6;
-  assign rbusDOut_signals[`rbusD_used]=dc2_rhitExp & L1_expAddr_en_reg5 || dc2_rhitExp_reg & L1_expAddr_en_reg6;
+  assign rbusDOut_signals[`rbusD_second]=dc2_rhitExp_reg && L1_expAddr_en_reg6 && ~dc2_rhitExpW_reg;
+  assign rbusDOut_signals[`rbusD_used]=dc2_rhitExp & L1_expAddr_en_reg5 || dc2_rhitExp_reg & L1_expAddr_en_reg6 & ~dc2_rhitExpW_reg;
   assign rbusDOut_signals[`rbusD_mem_reply]=dc2_rhitExp | dc2_rhitExp_reg;
   assign rbusDOut_signals[`rbusD_bcast]=1'b0;
   assign rbusDOut_signals[`rbusD_cc_reply]=1'b0;
   assign rbusDOut_signals[`rbusD_write_back]=1'b0;
   assign rbusDOut_signals[`rbusD_excl]=dc2_rhitExp ? dc2_rExcl_reg : dc2_rExcl_reg2;
   assign rbusDOut_signals[`rbusD_dirty]=dc2_rhitExp ? dc2_rDir_reg : dc2_rDir_reg2;
-  assign rbusDOut_signals[`rbusD_iorpl]=1'b0;
+  assign rbusDOut_signals[`rbusD_iorpl]=dc2_rhitExpW & L1_expAddr_en_reg5;
   //other signals assign
   assign rbusDOut_src_req=10'h3ff;
   assign rbusDOut_dst_req=rbusDIn_data_reg[46:37];
   assign rbusDOut_data=dc2_rdataExp_reg;
   assign rbusDOut_dataPTR=dc2_rdataExpPTR_reg;
-  assign rbusDOut_want=dc2_rhitExp & ~L1_expAddr_en_reg4 || dc2_rhitExp_reg & ~L1_expAddr_en_reg5;
+  assign rbusDOut_want=dc2_rhitExp & ~L1_expAddr_en_reg4 || dc2_rhitExp_reg & ~L1_expAddr_en_reg5 & ~dc2_rhitExpW_reg;
   assign rbusDOut_replay=dc2_rhitExp & ~L1_expAddr_en_reg4;
 
   assign insBus_en=dc2_rhit && ~L1_expAddr_en_reg5;
