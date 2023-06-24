@@ -2008,8 +2008,10 @@ module backend(
   
   wire [3:0] dc_rdEn/* verilator public */; 
   wire [3:0] dc_rsEn; 
-  wire [3:0][127+32:0] dc_rdataA;
-  wire [3:0][127+32:0] dc_rdat;
+  wire [3:0][127+8:0] dc_rdataA;
+  wire [3:0][127+8:0] dc_rdataA_N;
+  wire [3:0][127+8:0] dc_rdat;
+  wire [3:0][127+8:0] dc_rdat_N;
   wire [3:0][1:0] dc_pdataA;
   wire [3:0][1:0] dc_pdat;
   reg [3:0][1:0] dc_pdataA_reg;
@@ -2018,8 +2020,10 @@ module backend(
   wire [31:0] dc_bankNone;
   wire [3:0][8:0] dc_LSQ;
 
-  reg [127+32:0] dc_rdataA_reg[3:0];
-  reg [127+32:0] dc_rdataA_reg2[3:0];
+  reg [127+8:0] dc_rdataA_reg[3:0];
+  reg [127+8:0] dc_rdataA_reg2[3:0];
+  reg [127+8:0] dc_rdataA_N_reg[3:0];
+  reg [127+8:0] dc_rdataA_N_reg2[3:0];
   
   reg [3:0] dc_rdEn_reg; 
   reg [3:0] dc_rdEn_reg2; 
@@ -4401,14 +4405,14 @@ module backend(
 
       ldD2nativeD lddbl_hi_mod(dc_rdataA_reg2[n][127:64],dc_rdataA_N_reg2[n][127:64],fxLD_dbl_reg[n],fxLD_dbl_t_reg[n],1'b0,
 	      {FUFLD_dummy[n],FUFH[n][65:33],FUFH[n][31:0]},{FUFLD_dummy_N[n],FUFH_N[n][65:33],FUFH_N[n][31:0]});
-      LDE2NativeE ldedbl_mod({dc_rdataA_reg2[n][79:0]},fxLD_ext_reg[n],
-	      {FUFL[n][15+68:68],FUFL[n][65:33],FUFL[n][31:0]});
-      LDE2NativeE ldedbl__mod({dc_rdataA_reg2[n][159:80]},fxLD_ext_reg[n],
-	      {FUFH[n][15+68:68],FUFH[n][65:33],FUFH[n][31:0]});
+      LDE2NativeE ldedbl_mod({dc_rdataA_reg2[n][79:0]},dc_rdataA_N_reg2[n][79:0],fxLD_ext_reg[n],
+	      {FUFL[n][15+68:68],FUFL[n][65:33],FUFL[n][31:0]},{FUFL_N[n][15+68:68],FUFL_N[n][65:33],FUFL_N[n][31:0]});
       assign FUFH[n][32]=fxLD_dblext[n] ? 1'b0 : 1'bz;
+      assign FUFH_N[n][32]=fxLD_dblext[n] ? 1'b1 : 1'bz;
       ldD2nativeD lddbl_lo_mod(dc_rdataA_reg2[n][63:0],dc_rdataA_N_reg2[n][63:0],fxLD_dbl_reg[n],fxLD_dbl_t_reg[n],fxLD_ext_t_reg[n],
 	      {FUFL[n][15+68:68],FUFL[n][65:33],FUFL[n][31:0]},{FUFL_N[n][15+68:68],FUFL_N[n][65:33],FUFL_N[n][31:0]});
       assign FUFL[n][32]=fxLD_dblext[n] ? 1'b0 : 1'bz;
+      assign FUFL_N[n][32]=fxLD_dblext[n] ? 1'b1 : 1'bz;
       ldS2nativeS ldsngl_ll(dc_rdataA_reg[n][31:0],dc_rdataA_N_reg[n][31:0],fxLD_sin[n],fxLD_sngl_t[n],fxLD_dbl_t[n],fxLD_ext_t[n],
 	      {FUVLX[n][15:0],FUVL[n][65:0]},{FUVLX_N[n][15:0],FUVL_N[n][65:0]});
       ldS2nativeS ldsngl_lh(dc_rdataA_reg[n][63:32],dc_rdataA_N_reg[n][63:32],fxLD_sin[n],fxLD_sngl_t[n],1'b0,1'b0,
@@ -4425,11 +4429,11 @@ module backend(
       assign FUFH[n][67:66]=fxLD_sngl_t_reg[n] ? `ptype_sngl : 2'bz;
       
       assign FUFL[n][67:66]=FUFH[n][67:66];
+      assign FUFL_N[n][67:66]=FUFH_N[n][67:66];
 
       assign {FUFL[n][15+68:68],FUFL[n][65:0]} =fxLD_ext_t_reg[n] & fxLD_sin_reg[n] ? {FUVLX_reg[n][15:0],FUVL_reg[n][65:0]} : 82'bz;
       assign {FUFL[n][15+68:68],FUFL[n][65:0]} =fxLD_dbl_t_reg[n] & fxLD_sin_reg[n] ? {16'b0,FUVL_reg[n][65:0]} : 82'bz;
-      assign {FUFH[n][15+68:68],FUFH[n][65:0]} =fxLD_ext_t_reg[n] & fxLD_sin_reg[n] ? {FUVHX_reg[n][15:0],FUVH_reg[n][65:0]} : 82'bz;
-      assign {FUFH[n][15+68:68],FUFH[n][65:0]} =fxLD_dbl_t_reg[n] & fxLD_sin_reg[n] ? {16'b0,FUVH_reg[n][65:0]} : 82'bz;
+      assign {FUFH[n][65:0]} =fxLD_dbl_t_reg[n] & fxLD_sin_reg[n] ? {FUVH_reg[n][65:0]} : 66'bz;
        
       assign FUVL[n][65:0]=fxLD_sngl_t[n] | fxLD_dbl_t[n] ? 66'bz : {dc_pdataA_reg[n][0],dc_rdataA_reg[n][63:32],1'b0,
 	      dc_rdataA_reg[n][31:0]}; 
