@@ -55,6 +55,8 @@ limitations under the License.
 `define mflags_sec 19
 `define mflags_sub_carry_invert 20
 `define mflags_riscmode 21
+`define mflags_lizztruss 22
+
 
 `define csrfpu_inv_excpt 0
 `define csrfpu_under_excpt 1
