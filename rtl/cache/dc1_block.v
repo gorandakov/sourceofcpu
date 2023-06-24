@@ -784,10 +784,10 @@ module dcache1_way(
   assign write_dupl0=~write_dupl[0] & {write_hitO[0],write_hitE[0]};
   assign write_dupl1=~write_dupl[1] & {write_hitO[1],write_hitE[1]};
 
-  assign write_hitCl0[0]=write_hitE[0] & write_reqE0 || ~write_hitE[0] & ~write_hitO[0] ;
-  assign write_hitCl0[1]=write_hitO[0] & write_reqO0 || ~write_hitE[0] & ~write_hitO[0];
-  assign write_hitCl1[0]=write_hitE[1] & write_reqE1 || ~write_hitE[1] & ~write_hitO[1] ;
-  assign write_hitCl1[1]=write_hitO[1] & write_reqO1 || ~write_hitE[1] & ~write_hitO[1];
+  assign write_hitCl0[0]=write_hitE[0] & write_reqE0;
+  assign write_hitCl0[1]=write_hitO[0] & write_reqO0;
+  assign write_hitCl1[0]=write_hitE[1] & write_reqE1;
+  assign write_hitCl1[1]=write_hitO[1] & write_reqO1;
   
   assign write_reqE0=(~write_odd0_reg | write_split0_reg) & write_clkEn0_reg;
   assign write_reqO0=(write_odd0_reg | write_split0_reg) & write_clkEn0_reg;
