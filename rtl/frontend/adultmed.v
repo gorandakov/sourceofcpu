@@ -26,6 +26,7 @@ module smallInstr_decoder(
   clk,
   rst,
   mode64,
+  riscmove,
   instrQ,
   instr,
   operation,
@@ -94,6 +95,7 @@ module smallInstr_decoder(
   input clk;
   input rst;
   input mode64;
+  input riscmove;
   
   input [INSTRQ_WIDTH-1:0] instrQ;
 
@@ -174,9 +176,6 @@ module smallInstr_decoder(
   wire isBaseIndexSpecLoad;
   wire isImmLoadStore;
 
-  wire isBaseCISC;
-  wire isBaseIndexCISC;
-  wire isImmCISC;
 
   wire isBasicCJump;
  // wire isInvCJumpLong;
@@ -357,13 +356,8 @@ module smallInstr_decoder(
   assign isBaseIndexSpecLoad=opcode_main==8'd55 || opcode_main==8'd203;
   
   assign isImmLoadStore=(opcode_main[7:2]==6'd15) || opcode_main[7:1]==7'b1011000;  
-  assign isBaseCISC=magic[1]==1'b0 ? instr[19:18]!=2'b0 : 1'bz;
-  assign isBaseCISC=magic[1]==1'b1 ? instr[17:16]!=2'b0 : 1'bz;
-  assign isBaseLoadStore=(opcode_main[7:5]==3'b010 && !isBaseCISC) || opcode_main[7:4]==4'b0110;
-  assign isBaseIndexCISC=magic[1]==1'b0 ? instr[24:23]!=0 : 1'bz;
-  assign isBaseIndexCISC=magic[2:1]==2'b01 ? instr[26:25]!=0 : 1'bz;
-  assign isBaseIndexCISC=magic[2:1]==2'b11 ? instr[61:60]!=0 : 1'bz;
-  assign isBaseIndexLoadStore=(opcode_main[7:5]==3'b100 && !isBaseIndexCISC) || opcode_main[7:4]==4'b0111;
+  assign isBaseLoadStore=(opcode_main[7:5]==3'b010) || opcode_main[7:4]==4'b0110;
+  assign isBaseIndexLoadStore=(opcode_main[7:5]==3'b100) || opcode_main[7:4]==4'b0111;
 
   assign isBasicCJump=opcode_main[7:4]==4'b1010;
   //gap 176-177 for imm load.
@@ -1125,6 +1119,7 @@ module smallInstr_decoder(
       if (magic[2:0]==3'b111 && instr[63:60]!=0) perror[13]=1;
       if (opcode_main[0] &&opcode_main[7:4]==4'b0111 && opcode_main[3])
           perror[13]=1;
+      if (riscmove) perror[13]=1;
       
       trien[14]=magic[0] & isCmov;//
       prA[14]={instr[17],instr[11:8]};
@@ -1284,6 +1279,7 @@ module smallInstr_decoder(
           if (magic[2:0]==3'b111 && instr[59] && ~instr[58]) perror[18]=1;
           if (magic[2:0]==3'b111 && instr[63:60]!=0) perror[18]=1;
           if (opcode_main[7] && instr[11]) perror[18]=1'b1;          
+          if (riscmove) perror[18]=1'b1;
 
       
       trien[19]=magic[1:0]==2'b11 && isImmLoadStore;

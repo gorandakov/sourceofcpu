@@ -147,7 +147,8 @@ module decoder_aux_const(
   fpE_thr,
   altEn,
   altData,
-  thread);
+  thread,
+  riscmode);
  
   input clk;
   input rst;
@@ -174,6 +175,7 @@ module decoder_aux_const(
   input altEn;
   input [63:0] altData;
   input thread;
+  output riscmode;
 
   wire [15:0] iconst[9:0];
   wire [9:0] cls_sys_first;
@@ -257,6 +259,8 @@ module decoder_aux_const(
       default:			aux_const=65'b0;
       endcase
   end
+
+  assign riscmode=csr_mflags[thread][21];
 
   always @(posedge clk) begin
       if (rst) begin
@@ -2525,6 +2529,7 @@ module decoder(
           .clk(clk),
           .rst(rst),
           .mode64(1'b1),
+          .riscmove(riscmode),
           .instrQ(instQ[k]),
           .instr(inst[k]),
           .operation(dec_operation[k]),
