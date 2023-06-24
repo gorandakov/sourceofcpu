@@ -511,17 +511,17 @@ limitations under the License.
 `define rbus_ior 8
 `define rbus_width 9
 
-`define rbusD_used 0
-`define rbusD_second 1
-`define rbusD_bcast 2
-`define rbusD_mem_reply 3
-`define rbusD_cc_reply 4
-`define rbusD_write_back 5
-`define rbusD_excl 6
-`define rbusD_dirty 7
-`define rbusD_iorpl 8
-`define rbusD_expun 9
-`define rbusD_width 10
+`define rbusAN_used 0
+`define rbusAN_second 1
+`define rbusAN_bcast 2
+`define rbusAN_mem_reply 3
+`define rbusAN_cc_reply 4
+`define rbusAN_write_back 5
+`define rbusAN_excl 6
+`define rbusAN_dirty 7
+`define rbusAN_iorpl 8
+`define rbusAN_expun 9
+`define rbusAN_width 10
 
 `define rbusM_data 511:0
 `define rbusM_src_req 521:512

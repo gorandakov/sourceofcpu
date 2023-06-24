@@ -769,11 +769,11 @@ module heptane_core(
   reg [36:0] dc2_rd_addr_reg;
   reg [36:0] dc2_rd_addr_reg2;
   reg [36:0] dc2_rd_addr_reg3/*verilator public*/;
-  reg [`rbusD_width-1:0] rbusDIn_signals_reg;
-//  reg [9:0] rbusDIn_src_req_reg;
-//  reg [9:0] rbusDIn_dst_req_reg;
-  reg [511:0] rbusDIn_data_reg/*verilator public*/;
-  reg [7:0] rbusDIn_dataPTR_reg;
+  reg [`rbusAN_width-1:0] rbusANIn_signals_reg;
+//  reg [9:0] rbusANIn_src_req_reg;
+//  reg [9:0] rbusANIn_dst_req_reg;
+  reg [511:0] rbusANIn_data_reg/*verilator public*/;
+  reg [7:0] rbusANIn_dataPTR_reg;
   reg dc2_rDir_reg;
   reg dc2_rExcl_reg;
   reg dc2_rDir_reg2;
@@ -874,22 +874,22 @@ module heptane_core(
   assign dc2_rExcl=dc2_rhitA0 ? dc2_rExclA : dc2_rExclB;
   
 //  assign except=1'b0;//iAvail[0] && instr0[15:0]==16'h0023;
-  assign rbusDOut_signals[`rbusD_second]=dc2_rhitExp_reg && L1_expAddr_en_reg6 && ~dc2_rhitExpW_reg;
-  assign rbusDOut_signals[`rbusD_used]=dc2_rhitExp & L1_expAddr_en_reg5 || dc2_rhitExp_reg & L1_expAddr_en_reg6 & ~dc2_rhitExpW_reg;
-  assign rbusDOut_signals[`rbusD_mem_reply]=dc2_rhitExp | dc2_rhitExp_reg;
-  assign rbusDOut_signals[`rbusD_bcast]=1'b0;
-  assign rbusDOut_signals[`rbusD_cc_reply]=1'b0;
-  assign rbusDOut_signals[`rbusD_write_back]=1'b0;
-  assign rbusDOut_signals[`rbusD_excl]=dc2_rhitExp ? dc2_rExcl_reg : dc2_rExcl_reg2;
-  assign rbusDOut_signals[`rbusD_dirty]=dc2_rhitExp ? dc2_rDir_reg : dc2_rDir_reg2;
-  assign rbusDOut_signals[`rbusD_iorpl]=dc2_rhitExpW & L1_expAddr_en_reg5;
+  assign rbusANOut_signals[`rbusAN_second]=dc2_rhitExp_reg && L1_expAddr_en_reg6 && ~dc2_rhitExpW_reg;
+  assign rbusANOut_signals[`rbusAN_used]=dc2_rhitExp & L1_expAddr_en_reg5 || dc2_rhitExp_reg & L1_expAddr_en_reg6 & ~dc2_rhitExpW_reg;
+  assign rbusANOut_signals[`rbusAN_mem_reply]=dc2_rhitExp | dc2_rhitExp_reg;
+  assign rbusANOut_signals[`rbusAN_bcast]=1'b0;
+  assign rbusANOut_signals[`rbusAN_cc_reply]=1'b0;
+  assign rbusANOut_signals[`rbusAN_write_back]=1'b0;
+  assign rbusANOut_signals[`rbusAN_excl]=dc2_rhitExp ? dc2_rExcl_reg : dc2_rExcl_reg2;
+  assign rbusANOut_signals[`rbusAN_dirty]=dc2_rhitExp ? dc2_rDir_reg : dc2_rDir_reg2;
+  assign rbusANOut_signals[`rbusAN_iorpl]=dc2_rhitExpW & L1_expAddr_en_reg5;
   //other signals assign
-  assign rbusDOut_src_req=10'h3ff;
-  assign rbusDOut_dst_req=rbusDIn_data_reg[46:37];
-  assign rbusDOut_data=dc2_rdataExp_reg;
-  assign rbusDOut_dataPTR=dc2_rdataExpPTR_reg;
-  assign rbusDOut_want=dc2_rhitExp & ~L1_expAddr_en_reg4 || dc2_rhitExp_reg & ~L1_expAddr_en_reg5 & ~dc2_rhitExpW_reg;
-  assign rbusDOut_replay=dc2_rhitExp & ~L1_expAddr_en_reg4;
+  assign rbusANOut_src_req=10'h3ff;
+  assign rbusANOut_dst_req=rbusANIn_data_reg[46:37];
+  assign rbusANOut_data=dc2_rdataExp_reg;
+  assign rbusANOut_dataPTR=dc2_rdataExpPTR_reg;
+  assign rbusANOut_want=dc2_rhitExp & ~L1_expAddr_en_reg4 || dc2_rhitExp_reg & ~L1_expAddr_en_reg5 & ~dc2_rhitExpW_reg;
+  assign rbusANOut_replay=dc2_rhitExp & ~L1_expAddr_en_reg4;
 
   assign insBus_en=dc2_rhit && ~L1_expAddr_en_reg5;
   assign insBus_io=dc2_io_en_reg5;
@@ -975,8 +975,8 @@ module heptane_core(
     .rbus_dst_req(rbusOut_dst_req),.rbus_address(rbusOut_address),
     .rbus_can(rbusOut_can),.rbus_want(rbusOut_want),
     .rbus_sz(rbusOut_sz),.rbus_bank0(rbusOut_bank0),.rbus_low(rbusOut_low),
-  .rbusD_signals(rbusDIn_signals),.rbusD_src_req(rbusDIn_src_req),
-  .rbusD_dst_req(rbusDIn_dst_req),.rbusD_data64(rbusDIn_data[63:0])
+  .rbusAN_signals(rbusANIn_signals),.rbusAN_src_req(rbusANIn_src_req),
+  .rbusAN_dst_req(rbusANIn_dst_req),.rbusAN_data64(rbusANIn_data[63:0])
   );
   dcache2_block #(0) dc2A0_mod(
   .clk(clk),
@@ -1004,13 +1004,13 @@ module heptane_core(
   .write_bBen1(dc2_bBen1),.write_enBen1(dc2_enBen1),
   .write_odd1(dc2_odd1),.write_split1(dc2_split1),
   .write_data1(dc2_data1),
-  .busIns_data(rbusDIn_data_reg),
-  .busIns_dataPTR(rbusDIn_dataPTR_reg),
+  .busIns_data(rbusANIn_data_reg),
+  .busIns_dataPTR(rbusANIn_dataPTR_reg),
   .insBus_A(rinsBus_A),
   .insBus_B(rinsBus_B),
   .insert(rinsBus_B),
-  .insert_excl(rbusDIn_signals_reg[`rbusD_excl]),
-  .insert_dirty(rbusDIn_signals_reg[`rbusD_dirty]),
+  .insert_excl(rbusANIn_signals_reg[`rbusAN_excl]),
+  .insert_dirty(rbusANIn_signals_reg[`rbusAN_dirty]),
   .insert_dupl(dc2_dupl_rd),
   .hit_LRU(dc2_rLRU_reg),.read_LRU(dc2_rLRUA0),.hit_any(dc2_rhitA0),
   .read_dir(dc2_rDirA0),.read_excl(dc2_rExclA0),
@@ -1049,13 +1049,13 @@ module heptane_core(
   .write_bBen1(dc2_bBen1),.write_enBen1(dc2_enBen1),
   .write_odd1(dc2_odd1),.write_split1(dc2_split1),
   .write_data1(dc2_data1),
-  .busIns_data(rbusDIn_data_reg),
-  .busIns_dataPTR(rbusDIn_dataPTR_reg),
+  .busIns_data(rbusANIn_data_reg),
+  .busIns_dataPTR(rbusANIn_dataPTR_reg),
   .insBus_A(rinsBus_A),
   .insBus_B(rinsBus_B),
   .insert(rinsBus_B),
-  .insert_excl(rbusDIn_signals_reg[`rbusD_excl]),
-  .insert_dirty(rbusDIn_signals_reg[`rbusD_dirty]),
+  .insert_excl(rbusANIn_signals_reg[`rbusAN_excl]),
+  .insert_dirty(rbusANIn_signals_reg[`rbusAN_dirty]),
   .insert_dupl(dc2_dupl_rd),
   .hit_LRU(dc2_rLRU_reg),.read_LRU(dc2_rLRUB0),.hit_any(dc2_rhitB0),
   .read_dir(dc2_rDirB0),.read_excl(dc2_rExclB0),
@@ -1094,13 +1094,13 @@ module heptane_core(
   .write_bBen1(dc2_bBen1),.write_enBen1(dc2_enBen1),
   .write_odd1(dc2_odd1),.write_split1(dc2_split1),
   .write_data1(dc2_data1),
-  .busIns_data(rbusDIn_data_reg),
-  .busIns_dataPTR(rbusDIn_dataPTR_reg),
+  .busIns_data(rbusANIn_data_reg),
+  .busIns_dataPTR(rbusANIn_dataPTR_reg),
   .insBus_A(rinsBus_A),
   .insBus_B(rinsBus_B),
   .insert(rinsBus_B),
-  .insert_excl(rbusDIn_signals_reg[`rbusD_excl]),
-  .insert_dirty(rbusDIn_signals_reg[`rbusD_dirty]),
+  .insert_excl(rbusANIn_signals_reg[`rbusAN_excl]),
+  .insert_dirty(rbusANIn_signals_reg[`rbusAN_dirty]),
   .insert_dupl(dc2_dupl_rd),
   .hit_LRU(dc2_rLRU_reg),.read_LRU(dc2_rLRUB1),.hit_any(dc2_rhitB1),
   .read_dir(dc2_rDirB1),.read_excl(dc2_rExclB1),
@@ -1873,9 +1873,9 @@ module heptane_core(
         dc2_req_rd_reg3<=5'b0;
         dc2_req_rd_reg4<=5'b0;
         dc2_req_rd_reg5<=5'b0;
-        rbusDIn_data_reg<=512'b0;
-	rbusDIn_dataPTR_reg<=8'b0;
-        rbusDIn_signals_reg<={`rbusD_width{1'b0}};
+        rbusANIn_data_reg<=512'b0;
+	rbusANIn_dataPTR_reg<=8'b0;
+        rbusANIn_signals_reg<={`rbusAN_width{1'b0}};
         dc2_rhit<=1'b0;
         dc2_rhitExp<=1'b0;
         dc2_rhitExp_reg<=1'b0;
@@ -1941,9 +1941,9 @@ module heptane_core(
         dc2_req_rd_reg3<=dc2_req_rd_reg2;
         dc2_req_rd_reg4<=dc2_req_rd_reg3;
         dc2_req_rd_reg5<=dc2_req_rd_reg4;
-        rbusDIn_data_reg<=rbusDIn_data;
-        rbusDIn_dataPTR_reg<=rbusDIn_dataPTR;
-        rbusDIn_signals_reg<=rbusDIn_signals;
+        rbusANIn_data_reg<=rbusANIn_data;
+        rbusANIn_dataPTR_reg<=rbusANIn_dataPTR;
+        rbusANIn_signals_reg<=rbusANIn_signals;
         dc2_rhit<=dc2_rhitA0|dc2_rhitB0|dc2_rhitB1;
         dc2_rhitExp<=dc2_rhitExpA0|dc2_rhitExpB0|dc2_rhitExpB1;
 	dc2_rhitExp_reg<=dc2_rhitExp;

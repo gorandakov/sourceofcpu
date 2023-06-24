@@ -383,7 +383,7 @@ module dc0_cntrl(
   readI_want_excl,readI_io,readI_dataIO,readI_ins_A,readI_ins_B,
   miss_en,miss_addr,miss_req,miss_dupl,miss_want_excl, 
   rbus_signals,rbus_src_req,rbus_dst_req,rbus_address,rbus_can,rbus_want,rbus_bank0,rbus_sz,rbus_low,
-  rbusD_signals,rbusD_src_req,rbusD_dst_req,rbusD_data64
+  rbusAN_signals,rbusAN_src_req,rbusAN_dst_req,rbusAN_data64
   );
   parameter [4:0] ID=0;
   localparam STALL_CNT=12;
@@ -476,13 +476,13 @@ module dc0_cntrl(
   output [4:0] rbus_bank0;
   output [4:0] rbus_sz;
   output [1:0] rbus_low;
-  input [`rbusD_width-1:0] rbusD_signals;
-  input [9:0] rbusD_src_req;
-  input [9:0] rbusD_dst_req;
-  input [63:0] rbusD_data64;
-//  output rbusD_en_out;
+  input [`rbusAN_width-1:0] rbusAN_signals;
+  input [9:0] rbusAN_src_req;
+  input [9:0] rbusAN_dst_req;
+  input [63:0] rbusAN_data64;
+//  output rbusAN_en_out;
 
-  wire [36:0] rbusD_addr_out;
+  wire [36:0] rbusAN_addr_out;
   wire [`mOpC_width-1:0] write_mop[1:0];
   wire [`mOpC_width-1:0] read_mop[1:0];
   wire read_clkEn;
@@ -509,7 +509,7 @@ module dc0_cntrl(
   wire [4:0] cntM_minus;
   wire [4:0] read_addrM_d;
   wire [4:0] write_addrM_d;
-  reg [63:0] rbusD_data64_reg;
+  reg [63:0] rbusAN_data64_reg;
 
   wire [159:0] read_data0;
   wire [159:0] read_data1;
@@ -535,9 +535,9 @@ module dc0_cntrl(
   wire [4:0] write_addrC2_d;
   reg read_clkEn_reg;
 
-  reg [`rbusD_width-1:0] rbusD_signals_reg;
-  reg [9:0] rbusD_src_req_reg;
-  reg [9:0] rbusD_dst_req_reg;
+  reg [`rbusAN_width-1:0] rbusAN_signals_reg;
+  reg [9:0] rbusAN_src_req_reg;
+  reg [9:0] rbusAN_dst_req_reg;
 
   wire [36:0] read_addr1;
   wire [4:0] read_req1;
@@ -627,9 +627,9 @@ module dc0_cntrl(
   assign rbus_want=cntM!=5'd0;
   assign read_clkEnC1=cntC1 && ~read_clkEnM1 && ~read_clkEnC2 && ~readI_en2_reg;  //read data
   assign read_clkEnC2=1'b0;
-  assign read_clkEnM1=rbusD_signals_reg[`rbusD_used] && (rbusD_signals_reg[`rbusD_mem_reply] &&
-    rbusD_dst_req_reg[9:5]==ID)|rbusD_signals_reg[`rbusD_expun]; //cl insert
-  assign read_M1_exp=rbusD_signals_reg[`rbusD_used] && rbusD_signals_reg[`rbusD_expun];
+  assign read_clkEnM1=rbusAN_signals_reg[`rbusAN_used] && (rbusAN_signals_reg[`rbusAN_mem_reply] &&
+    rbusAN_dst_req_reg[9:5]==ID)|rbusAN_signals_reg[`rbusAN_expun]; //cl insert
+  assign read_M1_exp=rbusAN_signals_reg[`rbusAN_used] && rbusAN_signals_reg[`rbusAN_expun];
   assign writeI_addrE0=read_clkEnC1 ? read_addr1[36:1] : 36'bz;
   assign writeI_addrO0=read_clkEnC1 ? read_addr1[36:1] : 36'bz;
   assign writeI_bankEn0=(read_clkEnC2|read_clkEnC1|read_clkEnC|read_clkEnM1) ? 
@@ -670,22 +670,22 @@ module dc0_cntrl(
   assign writeI_split1=read_clkEn ? read_mop[1][`mOpC_split] : 1'bz;
 
 
-  assign writeI_addrE0=read_clkEnM1&~read_M1_exp ? rbusD_addr_out[36:1] : 36'bz;
-  assign writeI_addrO0=read_clkEnM1&~read_M1_exp ? rbusD_addr_out[36:1] : 36'bz;
-  assign writeI_addrE1=read_clkEnM1&~read_M1_exp ? rbusD_addr_out[36:1] : 36'bz;
-  assign writeI_addrO1=read_clkEnM1&~read_M1_exp ? rbusD_addr_out[36:1] : 36'bz;
-  assign writeI_odd0=read_clkEnM1&~read_M1_exp ? rbusD_addr_out[0] : 1'bz;
+  assign writeI_addrE0=read_clkEnM1&~read_M1_exp ? rbusAN_addr_out[36:1] : 36'bz;
+  assign writeI_addrO0=read_clkEnM1&~read_M1_exp ? rbusAN_addr_out[36:1] : 36'bz;
+  assign writeI_addrE1=read_clkEnM1&~read_M1_exp ? rbusAN_addr_out[36:1] : 36'bz;
+  assign writeI_addrO1=read_clkEnM1&~read_M1_exp ? rbusAN_addr_out[36:1] : 36'bz;
+  assign writeI_odd0=read_clkEnM1&~read_M1_exp ? rbusAN_addr_out[0] : 1'bz;
   assign writeI_split0=read_clkEnM1&~read_M1_exp ? 1'b0 : 1'bz;
-  assign writeI_odd1=read_clkEnM1&~read_M1_exp ? rbusD_addr_out[0] : 1'bz;
+  assign writeI_odd1=read_clkEnM1&~read_M1_exp ? rbusAN_addr_out[0] : 1'bz;
   assign writeI_split1=read_clkEnM1&~read_M1_exp ? 1'b0 : 1'bz;
   
-  assign writeI_addrE0=read_clkEnM1&read_M1_exp ? rbusD_data64_reg[36:1] : 36'bz;
-  assign writeI_addrO0=read_clkEnM1&read_M1_exp ? rbusD_data64_reg[36:1] : 36'bz;
-  assign writeI_addrE1=read_clkEnM1&read_M1_exp ? rbusD_data64_reg[36:1] : 36'bz;
-  assign writeI_addrO1=read_clkEnM1&read_M1_exp ? rbusD_data64_reg[36:1] : 36'bz;
-  assign writeI_odd0=read_clkEnM1&read_M1_exp ? rbusD_data64_reg[0] : 1'bz;
+  assign writeI_addrE0=read_clkEnM1&read_M1_exp ? rbusAN_data64_reg[36:1] : 36'bz;
+  assign writeI_addrO0=read_clkEnM1&read_M1_exp ? rbusAN_data64_reg[36:1] : 36'bz;
+  assign writeI_addrE1=read_clkEnM1&read_M1_exp ? rbusAN_data64_reg[36:1] : 36'bz;
+  assign writeI_addrO1=read_clkEnM1&read_M1_exp ? rbusAN_data64_reg[36:1] : 36'bz;
+  assign writeI_odd0=read_clkEnM1&read_M1_exp ? rbusAN_data64_reg[0] : 1'bz;
   assign writeI_split0=read_clkEnM1&read_M1_exp ? 1'b0 : 1'bz;
-  assign writeI_odd1=read_clkEnM1&read_M1_exp ? rbusD_data64_reg[0] : 1'bz;
+  assign writeI_odd1=read_clkEnM1&read_M1_exp ? rbusAN_data64_reg[0] : 1'bz;
   assign writeI_split1=read_clkEnM1&read_M1_exp ? 1'b0 : 1'bz;
   
   
@@ -712,23 +712,23 @@ module dc0_cntrl(
   assign readI_odd=read_clkEnC1 ? read_addr1[0] : 1'bz; 
   assign readI_odd=read_clkEnC ? read_addr_C[0] : 1'bz;
   assign readI_odd=read_clkEnC2 ? read_addr_C2[0] : 1'bz;
-  assign readI_odd=(~read_clkEnC1 & ~read_clkEnC & ~read_clkEnC2) ? rbusD_addr_out[0] : 1'bz; 
+  assign readI_odd=(~read_clkEnC1 & ~read_clkEnC & ~read_clkEnC2) ? rbusAN_addr_out[0] : 1'bz; 
   assign readI_req=read_clkEnC1 ? read_req1 : 5'bz;
   assign readI_req=read_clkEnC ? read_reqC : 5'bz;
   assign readI_req=read_clkEnC2 ? read_req_C2 : 5'bz;
-  assign readI_req=(~read_clkEnC1 & ~read_clkEnC & ~read_clkEnC2) ? rbusD_dst_req_reg[4:0] : 5'bz;
+  assign readI_req=(~read_clkEnC1 & ~read_clkEnC & ~read_clkEnC2) ? rbusAN_dst_req_reg[4:0] : 5'bz;
   assign readI_code=read_clkEnC;
   assign readI_io=read_clkEnC2 && read_io_C2;
   assign readI_dataIO=read_data_C2;
-  assign readI_ins_A=read_clkEnM1 && ~rbusD_signals_reg[`rbusD_second] && ~rbusD_signals_reg[`rbusD_iorpl] && 
-	  ~rbusD_signals_reg[`rbusD_expun];
-  assign readI_ins_B=read_clkEnM1 && rbusD_signals_reg[`rbusD_second] && ~rbusD_signals_reg[`rbusD_iorpl] && 
-	  ~rbusD_signals_reg[`rbusD_expun];
+  assign readI_ins_A=read_clkEnM1 && ~rbusAN_signals_reg[`rbusAN_second] && ~rbusAN_signals_reg[`rbusAN_iorpl] && 
+	  ~rbusAN_signals_reg[`rbusAN_expun];
+  assign readI_ins_B=read_clkEnM1 && rbusAN_signals_reg[`rbusAN_second] && ~rbusAN_signals_reg[`rbusAN_iorpl] && 
+	  ~rbusAN_signals_reg[`rbusAN_expun];
 
   assign readI_dupl=read_clkEnC1 & read_dupl1 || read_clkEnM1 & dupl_M1;
   assign readI_want_excl=read_clkEnC1 & read_want_excl1;
 
-  assign writeI_exp=read_clkEnM1 & rbusD_signals_reg[`rbusD_expun];
+  assign writeI_exp=read_clkEnM1 & rbusAN_signals_reg[`rbusAN_expun];
 
   assign miss_sz=read_sz1_reg4;
   assign miss_bank0=read_bank01_reg4;
@@ -780,7 +780,7 @@ module dc0_cntrl(
   assign write_addrC2_d=(write_addrC2==5'd23) ? 5'd0 : 5'bz;
   assign read_addrC2_d=(read_addrC2==5'd23) ? 5'd0 : 5'bz;
 
-  assign wen_C2=read_clkEnM1 && ~rbusD_signals_reg[`rbusD_second];
+  assign wen_C2=read_clkEnM1 && ~rbusAN_signals_reg[`rbusAN_second];
   
   dc0_cntrl_ram ram0_mod(
   .clk(clk),
@@ -857,8 +857,8 @@ module dc0_cntrl(
   .clk(clk),
   .rst(rst),
   .read_clkEn(1'b1),
-  .read_addr(rbusD_dst_req[4:0]),
-  .read_data({dupl_M1,rbusD_addr_out}),
+  .read_addr(rbusAN_dst_req[4:0]),
+  .read_data({dupl_M1,rbusAN_addr_out}),
   .write_addr(init ? initCount : miss_req),
   .write_data(init ? 1'b0 : {miss_dupl,miss_addr}),
   .write_wen(miss_en|init)
@@ -882,9 +882,9 @@ module dc0_cntrl(
           read_addrC2<=4'b0;
         //  read_addr_reg<=37'b0;
         //  read_en_reg<=1'b0;
-          rbusD_signals_reg<=0;
-          rbusD_src_req_reg<=10'b0;
-          rbusD_dst_req_reg<=10'b0;
+          rbusAN_signals_reg<=0;
+          rbusAN_src_req_reg<=10'b0;
+          rbusAN_dst_req_reg<=10'b0;
           readI_en2_reg<=1'b0;
 	  read_clkEn_reg<=1'b0;
           read_io1_reg<=1'b0;
@@ -905,7 +905,7 @@ module dc0_cntrl(
           read_low1_reg4<=2'b0;
 	  read_io_C2<=1'b0;
 	  read_data_C2<=64'b0;
-	  rbusD_data64_reg<=64'b0;
+	  rbusAN_data64_reg<=64'b0;
       end else begin
           if (write_wen & ~read_clkEn) cnt<=cnt_plus;
           if (read_clkEn & ~write_wen) cnt<=cnt_minus;
@@ -929,9 +929,9 @@ module dc0_cntrl(
           if (read_clkEnC2) read_addrC2<=read_addrC2_d;
       //    read_addr_reg<=read_addr;
       //    read_en_reg<=read_en;
-          rbusD_signals_reg<=rbusD_signals;
-          rbusD_src_req_reg<=rbusD_src_req;
-          rbusD_dst_req_reg<=rbusD_dst_req;
+          rbusAN_signals_reg<=rbusAN_signals;
+          rbusAN_src_req_reg<=rbusAN_src_req;
+          rbusAN_dst_req_reg<=rbusAN_dst_req;
           readI_en2_reg<=readI_en2;
 	  read_clkEn_reg<=read_clkEn;
           read_io1_reg<=read_io1;
@@ -951,10 +951,10 @@ module dc0_cntrl(
           read_bank01_reg4<=read_bank01_reg3;
           read_low1_reg4<=read_low1_reg3;
 	  if (wen_C2) begin
-	      read_io_C2<=rbusD_signals_reg[`rbusD_iorpl];
-	      read_data_C2<=rbusD_data64_reg[63:0];
+	      read_io_C2<=rbusAN_signals_reg[`rbusAN_iorpl];
+	      read_data_C2<=rbusAN_data64_reg[63:0];
 	  end
-	  rbusD_data64_reg<=rbusD_data64;
+	  rbusAN_data64_reg<=rbusAN_data64;
       end
       if (rst) begin
           init<=1'b1;
