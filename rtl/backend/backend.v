@@ -5156,61 +5156,83 @@ module backend(
   .outAL(ouDataAFL),.outBL(ouDataBFL)
   );
 
-  fun_fpcu_BOTH fpccu_mod(
+  fun_fpsu_BOTH fpsu_mod(
   .clk(clk),
   .rst(rst),
   .fpcsr(fpcsr[31:0]),
   .u1_A0(outDataAVL[0]),.u1_B0(outDataBVL[0]),
-  .u1_A1(outDataAVH[0]),.u1_B1(outDataBVH[0]),.u1_en(outEn_reg[1]),.u1_op(outOp_reg[1][12:0]),
+  .u1_A1(outDataAVH[0]),.u1_B1(outDataBVH[0]),
+  .u1_en(outEn_reg[1]),.u1_op(outOp_reg[1][12:0]),
   .u1_fufwd_A(fuFwdA_reg[1]),.u1_fuufwd_A(fuuFwdA_reg[1]),
   .u1_fufwd_B(fuFwdB_reg[1]),.u1_fuufwd_B(fuuFwdB_reg[1]),
-  .u1_ret(fret[0]),.u1_ret_en(fret_en[0]),
+  .u1_ret(fsret[0]),.u1_ret_en(),
   .u3_A0(outDataAVL[2]),.u3_B0(outDataBVL[2]),
-  .u3_A1(outDataAVH[2]),.u3_B1(outDataBVH[2]),.u3_en(outEn_reg[4]),.u3_op(outOp_reg[4][12:0]),
+  .u3_A1(outDataAVH[2]),.u3_B1(outDataBVH[2]),
+  .u3_en(outEn_reg[4]),.u3_op(outOp_reg[4][12:0]),
   .u3_fufwd_A(fuFwdA_reg[4]),.u3_fuufwd_A(fuuFwdA_reg[4]),
   .u3_fufwd_B(fuFwdB_reg[4]),.u3_fuufwd_B(fuuFwdB_reg[4]),
-  .u3_ret(fret[2]),.u3_ret_en(fret_en[2]),
+  .u3_ret(fsret[2]),.u3_ret_en(),
   .u5_A0(outDataAVL[4]),.u5_B0(outDataBVL[4]),
-  .u5_A1(outDataAVH[4]),.u5_B1(outDataBVH[4]),.u5_en(outEn_reg[7]),.u5_op(outOp_reg[7][12:0]),
+  .u5_A1(outDataAVH[4]),.u5_B1(outDataBVH[4]),
+  .u5_en(outEn_reg[7]),.u5_op(outOp_reg[7][12:0]),
   .u5_fufwd_A(fuFwdA_reg[7]),.u5_fuufwd_A(fuuFwdA_reg[7]),
   .u5_fufwd_B(fuFwdB_reg[7]),.u5_fuufwd_B(fuuFwdB_reg[7]),
-  .u5_ret(fret[4]),.u5_ret_en(fret_en[4]),
-  .FUVH0(FUVH[0]),.FUVH1(FUVH[1]),.FUVH2(FUVH[2]),
-  .FUVH3(FUVH[3]),.FUVH4(FUVH[4]),.FUVH5(FUVH[5]),
-  .FUVH6(FUVH[6]),.FUVH7(FUVH[7]),.FUVH8(FUVH[8]),
-  .FUVH9(FUVH[9]),
-  .FUVL0(FUVL[0]),.FUVL1(FUVL[1]),.FUVL2(FUVL[2]),
-  .FUVL3(FUVL[3]),.FUVL4(FUVL[4]),.FUVL5(FUVL[5]),
-  .FUVL6(FUVL[6]),.FUVL7(FUVL[7]),.FUVL8(FUVL[8]),
-  .FUVL9(FUVL[9]),
-  .ALTDATAH0(sqrDatFL_reg[67:0]),.ALTDATAH1({FUTYPE_reg,66'b0}),
-  .ALTDATAL0(sqrDatFL_reg),.ALTDATAL1({FUCVT2_reg[15+66:66],FUTYPE_reg,FUCVT2_reg[65:0]}),
+  .u5_ret(fsret[4]),.u5_ret_en(),
+  .FUFH0(FUVH[0]),.FUFH1(FUVH[1]),.FUFH2(FUVH[2]),
+  .FUFH3(FUVH[3]),.FUFH4(FUVH[4]),.FUFH5(FUVH[5]),
+  .FUFH6(FUVH[6]),.FUFH7(FUVH[7]),.FUFH8(FUVH[8]),
+  .FUFH9(FUVH[9]),
+  .FUFL0(FUVL[0]),.FUFL1(FUVL[1]),.FUFL2(FUVL[2]),
+  .FUFL3(FUVL[3]),.FUFL4(FUVL[4]),.FUFL5(FUVL[5]),
+  .FUFL6(FUVL[6]),.FUFL7(FUVL[7]),.FUFL8(FUVL[8]),
+  .FUFL9(FUVL[9]),
+  .FUFH0_n(FUVH_N[0]),.FUFH1_n(FUVH_N[1]),.FUFH2_n(FUVH_N[2]),.FUFH3_n(FUVH_N[3]),.FUFH4_n(FUVH_N[4]),.FUFH5_n(FUVH_N[5]),
+  .FUFL0_m(FUVL_N[0]),.FUFL1_m(FUVL_N[1]),.FUFL2_m(FUVL_N[2]),.FUFL3_m(FUVL_N[3]),.FUFL4_m(FUVL_N[4]),.FUFL5_m(FUVL_N[5]),
+  .FUFH6_n(FUVH_N[4]),.FUFH7_n(FUVH_N[5]),.FUFH8_n(FUVH_N[6]),.FUFH9_n(FUVH_N[7]),
+  .FUFL6_m(FUVL_N[4]),.FUFL7_m(FUVL_N[5]),.FUFL8_m(FUVL_N[6]),.FUFL9_m(FUVL_N[7]),
+  .ALTDATAH0(sqrDatVL_reg[67:0]),.ALTDATAH1({FUTYPE,66'b0}),
+  .ALTDATAL0(sqrDatVL_reg[67:0]),.ALTDATAL1({FUTYPE,FUCVT2[65:0]}),
   .ALT_INP({dalt[1],sqrDatEn_reg}),
-  .FUS_alu0(FUS_alu_reg[0]),.FUS_alu1(FUS_alu_reg4[1]),
-  .FUS_alu2(FUS_alu_reg[2]),.FUS_alu3(FUS_alu_reg4[3]),
-  .FUS_alu4(FUS_alu_reg[4]),.FUS_alu5(FUS_alu_reg4[5]),
-  .ex_alu0(ex_alu_reg[0]),.ex_alu1(ex_alu_reg4[1]),
-  .ex_alu2(ex_alu_reg[2]),.ex_alu3(ex_alu_reg4[3]),
-  .ex_alu4(ex_alu_reg[4]),.ex_alu5(ex_alu_reg4[5]),
-  .fxFADD0_raise_s(fsret[0][10:0]),
-  .fxFCADD1_raise_s(fsret[1][10:0]),
-  .fxFADD2_raise_s(fsret[2][10:0]),
-  .fxFCADD3_raise_s(fsret[3][10:0]),
-  .fxFADD4_raise_s(fsret[4][10:0]),
-  .fxFCADD5_raise_s(fsret[5][10:0]),
-  .FUS0(FUS1),.FUS1(FUS2),.FUS2(FUS3),
-  .FOOSL0(FOOFL1),.FOOSL1(FOOFL2),.FOOSL2(FOOFL3),
+  .FOOFL0(FOOFL1),.FOOFL1(FOOFL2),.FOOFL2(FOOFL3),
   .XI_dataS(XI_dataS),
-  .fxFRT_alten_reg3(|fxFRT_alten_reg3[2]),
-  .daltX(nDataAlt[2][1]),
-  .FUCVT1(FUCVT1[63:0]),
-  .outAH(utDataAFH),.outBH(utDataBFH),
-  .outAL(ouDataAFL),.outBL(ouDataBFL)
+  .MRKAH(utDataAVH),.MRKBH(utDataBVH),
+  .MRKAL(ouDataAVL),.BRKBL(ouDataBVL)
   );
 
-  assign fxFRT_alten[2]={4'b0};
+  fun_fpusqr sqr_mod(
+  .clk(clk),
+  .rst(rst),
+  .except(except),
+  .fpcsr(fpcsr[31:0]),
+  .ul_A(ouDataAFL),.ul_B(ouDataBFL),.ul_Av(ouDataAVL),.ul_Bv(ouDataBVL),
+  .uh_A(utDataAFH),.uh_B(utDataBFH),.uh_Av(utDataAVH),.uh_Bv(utDataBVH),
+  .u1_en(outEn_reg3[8]),.u1_op(outOp_reg3[8][12:0]),
+ // .u1_ret(fsret[6]),.u1_ret_en(fsretEn6),
+  //.u1_dataH(sqrDatH),.u1_dataL(sqrDatL),.u1_dataEn(sqrDatEn),
+  .en_early(outEn_reg2[8]),.op_early(outOp_reg2[8][12:0]),
+  .outEn(outEnX),
+  .outII(outIIX),
+  .outOp(outOpX),
+  .FUreg(outRegX),
+  .FUSreg(outRegSX),
+  .FUwen(),
+  .outAltDataF(sqrDatFL),
+  .outAltDataV(sqrDatVL),
+  .fxFRT_alten(sqrDatEn),
+  .fxFRT_pause(fxFRT_pause),
+  .u1_II(outII_reg3[8]),
+  .u1_regNo(outReg_reg3[8])
+  );
+
+  assign fxFRT_alten[2]={3'b0,sqrDatEn_reg};
   assign fxFRT_alten[0]=4'b0;
   assign fxFRT_alten[1]=4'b0;
+
+  assign outEn[7]=sqrDatEn_reg ? outEnX_reg : 4'bz;
+  assign outII[7]=sqrDatEn_reg ? outIIX_reg :10'bz;
+  assign outOp[7]=sqrDatEn_reg ? outOpX_reg :18'bz;
+  assign outReg[7]=sqrDatEn_reg ? outRegX_reg : 9'bz;
+  assign outRegS[7]=sqrDatEn_reg ? outRegSX_reg : 9'bz;
 
   get_LDQ_new_en ldq_new_mod(
   rs_port[0],rs_ldst_flg[0], 
