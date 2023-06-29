@@ -8,6 +8,7 @@ load/store cams in rtl/lsq
 reservation station, main backend, regfiles in rtl/backend
 control unit in rtl/cntrl
 frontend+decoder in rtl/frontend
-NOTE: Architectrual changes pending. The ISA on the website is out of date
+NOTE: Architectrual changes pending. The ISA on the website is out of date.
+The isa is no longer vliw based its risc like since the instructions can cross bundles of 32 bytes and pages.
 
 
