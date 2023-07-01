@@ -67,8 +67,8 @@ module fun_fpusqr0(
   output FUwen;
   output [S+SIMD_WIDTH-1:0] outAltData;
 
-  output [3:0] fxFRT_alten;//very fat wire
-  output [3:0]      fxFRT_pause;//same here
+  output [2:0] fxFRT_alten;//very fat wire
+	output [2:0]      fxFRT_pause;//same here
 
   wire [1:0][10:0] fxFCADD_raise;
   reg [10:0] fxFCADD_raise_reg[1:0];
@@ -86,21 +86,21 @@ module fun_fpusqr0(
 
   reg [1:0] ALT_INP_reg;
   
-  wire [3:0] fxFRT_alten;
-  reg [3:0] fxFRT_alten_reg;
-  reg [3:0] fxFRT_alten_reg2;
-  reg [3:0] fxFRT_alten_reg3;
-  reg [3:0] fxFRT_alten_reg4;
-  reg [3:0] fxFRT_alten_reg5;
-  reg [3:0] fxFRT_alten_reg6;
-  wire [3:0] fxFRT_pause;
-  wire [3:0] fxFRT_can;
-  wire [3:0] fxFRT_don;
-  reg [3:0] fxFRT_can_reg;
-  reg [3:0] fxFRT_don_reg;
-  reg [3:0] fxFRT_don_reg2;
-  reg [3:0] fxFRT_don_reg3;
-  reg [3:0] fxFRT_don_reg4;
+	wire [2:0] fxFRT_alten;
+	reg [2:0] fxFRT_alten_reg;
+	reg [2:0] fxFRT_alten_reg2;
+	reg [2:0] fxFRT_alten_reg3;
+	reg [2:0] fxFRT_alten_reg4;
+	reg [2:0] fxFRT_alten_reg5;
+	reg [2:0] fxFRT_alten_reg6;
+	wire [2:0] fxFRT_pause;
+	wire [2:0] fxFRT_can;
+    wire [2:0] fxFRT_don;
+    reg [2:0] fxFRT_can_reg;
+    reg [2:0] fxFRT_don_reg;
+    reg [2:0] fxFRT_don_reg2;
+    reg [2:0] fxFRT_don_reg3;
+    reg [2:0] fxFRT_don_reg4;
   reg [4:0] fxFRT_steps;
   reg [2:0] fxFRT_type;
   reg [4:0] fxFRT_steps_reg;
@@ -126,20 +126,20 @@ module fun_fpusqr0(
   wire [15:0] fxFRT_expB;
   wire fxFRT_sgnA;
   wire fxFRT_sgnB;
-  wire [3:0][8:0] rtReg;
-  wire [3:0][9:0] rtII;
+    wire [2:0][8:0] rtReg;
+    wire [2:0][9:0] rtII;
   wire [8:0] frtReg;
   wire [9:0] frtII;
   wire [12:0] frtOp;
   reg [8:0] frtReg_reg;
   reg [9:0] frtII_reg;
   reg [12:0] frtOp_reg;
-  wire [3:0][12:0] rtOp;
-  wire [3:0][135:0] rtRes;
+    wire [2:0][12:0] rtOp;
+    wire [2:0][135:0] rtRes;
   reg fxFRT_do,fxFRT_en;
   reg [12:0] u1_op_reg;
   reg [9:0]  u1_II_reg;
-  reg [3:0]  u1_en_reg;
+    reg [3:0]  u1_en_reg;
 
   wire [S+67:0] rtDataA;
   wire [S+67:0] rtDataB;
@@ -167,16 +167,16 @@ module fun_fpusqr0(
     .d_out({frtII,frtReg,rtDataA}),
     .dout_en((fxFRT_can[0] & ~fxFRT_don_reg[0] & ~fxFRT_don_reg2[0] & ~fxFRT_don_reg2[0] & ~fxFRT_don_reg3[0]) |
      (fxFRT_can[1] & ~fxFRT_don_reg[1] & ~fxFRT_don_reg2[1] & ~fxFRT_don_reg2[1] & ~fxFRT_don_reg3[1]) |
-     (fxFRT_can[2] & ~fxFRT_don_reg[2] & ~fxFRT_don_reg2[2] & ~fxFRT_don_reg2[2] & ~fxFRT_don_reg3[2]) |
-     (fxFRT_can[3] & ~fxFRT_don_reg[3] & ~fxFRT_don_reg2[3] & ~fxFRT_don_reg2[3] & ~fxFRT_don_reg3[3])),.do_(fxFRT_do));
+     (fxFRT_can[2] & ~fxFRT_don_reg[2] & ~fxFRT_don_reg2[2] & ~fxFRT_don_reg2[2] & ~fxFRT_don_reg3[2]) 
+    ),.do_(fxFRT_do));
   in_flip_rt #(13+S+SIMD_WIDTH) rtDatB_mod(
     .clk(clk),.rst(rst),.in_en(fxFRT_en),.pause(),
     .d_in({u1_op_reg,u1_op_reg==(`fop_sqrtDH|2048) || u1_op_reg==(`fop_divDH|2048) ? uh_B : ul_B}),
     .d_out({frtOp,rtDataB}),
     .dout_en((fxFRT_can[0] & ~fxFRT_don_reg[0] & ~fxFRT_don_reg2[0] & ~fxFRT_don_reg2[0] & ~fxFRT_don_reg3[0]) |
      (fxFRT_can[1] & ~fxFRT_don_reg[1] & ~fxFRT_don_reg2[1] & ~fxFRT_don_reg2[1] & ~fxFRT_don_reg3[1]) |
-     (fxFRT_can[2] & ~fxFRT_don_reg[2] & ~fxFRT_don_reg2[2] & ~fxFRT_don_reg2[2] & ~fxFRT_don_reg3[2]) |
-     (fxFRT_can[3] & ~fxFRT_don_reg[3] & ~fxFRT_don_reg2[3] & ~fxFRT_don_reg2[3] & ~fxFRT_don_reg3[3])),.do_());
+     (fxFRT_can[2] & ~fxFRT_don_reg[2] & ~fxFRT_don_reg2[2] & ~fxFRT_don_reg2[2] & ~fxFRT_don_reg3[2]) 
+      ),.do_());
   
   assign fxFRT_don[0]=fxFRT_do&fxFRT_can[0]&~fxFRT_don_reg[0]&~fxFRT_don_reg2[0]&~fxFRT_don_reg3[0];
   assign fxFRT_don[1]=fxFRT_do&&~fxFRT_can[0]|fxFRT_don_reg[0]|fxFRT_don_reg2[0]|fxFRT_don_reg3[0]
@@ -184,10 +184,7 @@ module fun_fpusqr0(
   assign fxFRT_don[2]=fxFRT_do&&~fxFRT_can[0]|fxFRT_don_reg[0]|fxFRT_don_reg2[0]|fxFRT_don_reg3[0]
    && ~fxFRT_can[1]|fxFRT_don_reg[1]|fxFRT_don_reg2[1]|fxFRT_don_reg3[1] 
    && fxFRT_can[2] && ~fxFRT_don_reg[2]&&~fxFRT_don_reg2[2]&&~fxFRT_don_reg3[2];
-  assign fxFRT_don[3]=fxFRT_do&&~fxFRT_can[0]|fxFRT_don_reg[0]|fxFRT_don_reg2[0]|fxFRT_don_reg3[0]
-   && ~fxFRT_can[1]|fxFRT_don_reg[1]|fxFRT_don_reg2[1]|fxFRT_don_reg3[1] 
-   && ~fxFRT_can[2]|fxFRT_don_reg[2]|fxFRT_don_reg2[2]|fxFRT_don_reg3[2] 
-   && fxFRT_can[3] && ~fxFRT_don_reg[3]&&~fxFRT_don_reg2[3]&&~fxFRT_don_reg3[3];
+
 
 
   assign fxFRT_expA=fxFRT_dbl ? {rtDataA_reg[65],{4{~rtDataA_reg[65]&&|{rtDataA_reg[65],rtDataA_reg[63:53]}}},
@@ -227,7 +224,7 @@ module fun_fpusqr0(
 
   generate
       genvar n;
-      for(n=0;n<4;n=n+1) begin : rt2_mod 
+      for(n=0;n<3;n=n+1) begin : rt2_mod 
 	  rt2_fp rt2_mod(
           .clk(clk),
           .rst(rst),
