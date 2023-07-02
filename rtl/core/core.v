@@ -56,8 +56,8 @@ module heptane_core(
 	output [4:0] obusOut_bank0;
 	output [3:0] obusOut_low;
 	input [`rbusD_width-1:0] obusDIn_signals;
-	input [9:0] obusDIn_src_req;
-	input [9:0] obusDIn_dst_req;
+	wire [9:0] obusDIn_src_req;
+	wire [9:0] obusDIn_dst_req;
 	input [511:0] obusDIn_data;
 	input [7:0] obusDIn_dataPTR;
 	output [`rbusD_width-1:0] obusDOut_signals;
