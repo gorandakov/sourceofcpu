@@ -20,10 +20,10 @@ limitations under the License.
 module heptane_core(
   clk,
   rst,
-  rbusIn_signals,rbusIn_src_req,rbusIn_dst_req,rbusIn_address,
-  rbusOut_signals,rbusOut_src_req,rbusOut_dst_req,rbusOut_address,rbusOut_can,rbusOut_want,rbusOut_sz,rbusOut_bank0,rbusOut_low,
-  rbusDIn_signals,rbusDIn_src_req,rbusDIn_dst_req,rbusDIn_data,rbusDIn_dataPTR,
-  rbusDOut_signals,rbusDOut_src_req,rbusDOut_dst_req,rbusDOut_data,rbusDOut_dataPTR,rbusDOut_can,rbusDOut_want,rbusDOut_replay
+  obusIn_signals,obusIn_src_req,obusIn_dst_req,obusIn_address,
+  obusOut_signals,obusOut_src_req,obusOut_dst_req,obusOut_address,obusOut_can,obusOut_want,obusOut_sz,obusOut_bank0,obusOut_low,
+  obusDIn_signals,obusDIn_src_req,obusDIn_dst_req,obusDIn_data,obusDIn_dataPTR,
+  obusDOut_signals,obusDOut_src_req,obusDOut_dst_req,obusDOut_data,obusDOut_dataPTR,obusDOut_can,obusDOut_want,obusDOut_replay
 );
   parameter [4:0] BUS_ID=0;
   localparam PHYS_WIDTH=44;
@@ -42,32 +42,32 @@ module heptane_core(
 
   input clk;
   input rst;
-  input [`rbus_width-1:0] rbusIn_signals;
-  input [9:0] rbusIn_src_req;
-  input [9:0] rbusIn_dst_req;
-  input [36:0] rbusIn_address;
-  output [`rbus_width-1:0] rbusOut_signals;
-  output [9:0] rbusOut_src_req;
-  output [9:0] rbusOut_dst_req;
-  output [36:0] rbusOut_address;
-  output rbusOut_want;
-  input rbusOut_can;
-  output [4:0] rbusOut_sz;
-  output [4:0] rbusOut_bank0;
-  output [1:0] rbusOut_low;
-  input [`rbusD_width-1:0] rbusDIn_signals;
-  input [9:0] rbusDIn_src_req;
-  input [9:0] rbusDIn_dst_req;
-  input [511:0] rbusDIn_data;
-  input [7:0] rbusDIn_dataPTR;
-  output [`rbusD_width-1:0] rbusDOut_signals;
-  output [9:0] rbusDOut_src_req;
-  output [9:0] rbusDOut_dst_req;
-  output [511:0] rbusDOut_data;
-  output [7:0] rbusDOut_dataPTR;
-  input rbusDOut_can;
-  output rbusDOut_want;
-  output rbusDOut_replay;
+	wire [`rbus_width-1:0] obusIn_signals;
+	wire [9:0] obusIn_src_req;
+	wire [9:0] obusIn_dst_req;
+	wire [36:0] obusIn_address;
+	wire [`rbus_width-1:0] obusOut_signals;
+	wire [9:0] obusOut_src_req;
+	wire [9:0] obusOut_dst_req;
+	wire [36:0] obusOut_address;
+  inout obusOut_want;
+  output obusOut_can;
+	output [4:0] obusOut_sz;
+	output [4:0] obusOut_bank0;
+	output [3:0] obusOut_low;
+	input [`rbusD_width-1:0] obusDIn_signals;
+	input [9:0] obusDIn_src_req;
+	input [9:0] obusDIn_dst_req;
+	input [511:0] obusDIn_data;
+	input [7:0] obusDIn_dataPTR;
+	output [`rbusD_width-1:0] obusDOut_signals;
+	output [9:0] obusDOut_src_req;
+	output [9:0] obusDOut_dst_req;
+	output [511:0] obusDOut_data;
+	output [7:0] obusDOut_dataPTR;
+  output obusDOut_can;
+  inout obusDOut_want;
+  output obusDOut_replay;
 
  
  // reg [63:0] r02_data;
