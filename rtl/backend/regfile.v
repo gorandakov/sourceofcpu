@@ -34,9 +34,6 @@ module regfile_ram(
   read3_addr,read3_data,read3_clkEn,
   read4_addr,read4_data,read4_clkEn,
   read5_addr,read5_data,read5_clkEn,
-  read6_addr,read6_data,read6_clkEn,
-  read7_addr,read7_data,read7_clkEn,
-  read8_addr,read8_data,read8_clkEn,
 
   retireRead_addr,retireRead_data,
 
@@ -76,17 +73,6 @@ module regfile_ram(
   output [DATA_WIDTH-1:0] read5_data;
   input read5_clkEn;
 
-  input [ADDR_WIDTH-1:0] read6_addr;
-  output [DATA_WIDTH-1:0] read6_data;
-  input read6_clkEn;
-
-  input [ADDR_WIDTH-1:0] read7_addr;
-  output [DATA_WIDTH-1:0] read7_data;
-  input read7_clkEn;
-
-  input [ADDR_WIDTH-1:0] read8_addr;
-  output [DATA_WIDTH-1:0] read8_data;
-  input read8_clkEn;
 
 
   input [ADDR_WIDTH-1:0] retireRead_addr;
@@ -187,9 +173,6 @@ module regfile_ram_placeholder(
   read3_addr,read3_data,
   read4_addr,read4_data,
   read5_addr,read5_data,
-  read6_addr,read6_data,
-  read7_addr,read7_data,
-  read8_addr,read8_data,
 
   read0_constEn,
   read1_constEn,
@@ -197,9 +180,6 @@ module regfile_ram_placeholder(
   read3_constEn,
   read4_constEn,
   read5_constEn,
-  read6_constEn,
-  read7_constEn,
-  read8_constEn,
 
   retireRead_addr,retireRead_data,
 
@@ -234,24 +214,13 @@ module regfile_ram_placeholder(
   input [ADDR_WIDTH-1:0] read5_addr;
 	(* register equiload *) output [DATA_WIDTH-1:0] read5_data;
 
-  input [ADDR_WIDTH-1:0] read6_addr;
-	(* register equiload *) output [DATA_WIDTH-1:0] read6_data;
-
-  input [ADDR_WIDTH-1:0] read7_addr;
-	(* register equiload *) output [DATA_WIDTH-1:0] read7_data;
-
-  input [ADDR_WIDTH-1:0] read8_addr;
-	(* register equiload *) output [DATA_WIDTH-1:0] read8_data;
-
   input read0_constEn;
   input read1_constEn;
   input read2_constEn;
   input read3_constEn;
   input read4_constEn;
   input read5_constEn;
-  input read6_constEn;
-  input read7_constEn;
-  input read8_constEn;
+
   
   input [ADDR_WIDTH-1:0] retireRead_addr;
   output [DATA_WIDTH-1:0] retireRead_data;
