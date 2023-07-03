@@ -217,40 +217,31 @@ module regfile_ram_placeholder(
 
 
   input [ADDR_WIDTH-1:0] read0_addr;
-  output [DATA_WIDTH-1:0] read0_data;
-  output [DATA_WIDTH-1:0] read0_dataN;
+	(* register equiload *) output [DATA_WIDTH-1:0] read0_data;
   
   input [ADDR_WIDTH-1:0] read1_addr;
-  output [DATA_WIDTH-1:0] read1_data;
-  output [DATA_WIDTH-1:0] read1_dataN;
+	(* register equiload *) output [DATA_WIDTH-1:0] read1_data;
 
   input [ADDR_WIDTH-1:0] read2_addr;
-  output [DATA_WIDTH-1:0] read2_data;
-  output [DATA_WIDTH-1:0] read2_dataN;
+	(* register equiload *) output [DATA_WIDTH-1:0] read2_data;
 
   input [ADDR_WIDTH-1:0] read3_addr;
-  output [DATA_WIDTH-1:0] read3_data;
-  output [DATA_WIDTH-1:0] read3_dataN;
+	(* register equiload *) output [DATA_WIDTH-1:0] read3_data;
 
   input [ADDR_WIDTH-1:0] read4_addr;
-  output [DATA_WIDTH-1:0] read4_data;
-  output [DATA_WIDTH-1:0] read4_dataN;
+	(* register equiload *) output [DATA_WIDTH-1:0] read4_data;
 
   input [ADDR_WIDTH-1:0] read5_addr;
-  output [DATA_WIDTH-1:0] read5_data;
-  output [DATA_WIDTH-1:0] read5_dataN;
+	(* register equiload *) output [DATA_WIDTH-1:0] read5_data;
 
   input [ADDR_WIDTH-1:0] read6_addr;
-  output [DATA_WIDTH-1:0] read6_data;
-  output [DATA_WIDTH-1:0] read6_dataN;
+	(* register equiload *) output [DATA_WIDTH-1:0] read6_data;
 
   input [ADDR_WIDTH-1:0] read7_addr;
-  output [DATA_WIDTH-1:0] read7_data;
-  output [DATA_WIDTH-1:0] read7_dataN;
+	(* register equiload *) output [DATA_WIDTH-1:0] read7_data;
 
   input [ADDR_WIDTH-1:0] read8_addr;
-  output [DATA_WIDTH-1:0] read8_data;
-  output [DATA_WIDTH-1:0] read8_dataN;
+	(* register equiload *) output [DATA_WIDTH-1:0] read8_data;
 
   input read0_constEn;
   input read1_constEn;
