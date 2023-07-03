@@ -10,5 +10,6 @@ control unit in rtl/cntrl
 frontend+decoder in rtl/frontend
 NOTE: Architectrual changes pending. The ISA on the website is out of date.
 The isa is no longer vliw based its risc like since the instructions can cross bundles of 32 bytes and pages.
-
+Please note that to implement this cpu it is assumed that you'll want to use something like 12 phase dynamic logic.
+if you implement it with static logic it will be low clock.
 
