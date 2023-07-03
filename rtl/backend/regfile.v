@@ -40,10 +40,7 @@ module regfile_ram(
 
   retireRead_addr,retireRead_data,
 
-  write0_addr,write0_data,write0_wen,
-  write1_addr,write1_data,write1_wen,
-  write2_addr,write2_data,write2_wen,
-  write3_addr,write3_data,write3_wen
+  write0_addr,write0_data,write0_wen
   );
 
   parameter DATA_WIDTH=`alu_width;
@@ -103,15 +100,6 @@ module regfile_ram(
   input [ADDR_WIDTH-1:0] write1_addr;
   input [DATA_WIDTH-1:0] write1_data;
   input write1_wen;
-
-  input [ADDR_WIDTH-1:0] write2_addr;
-  input [DATA_WIDTH-1:0] write2_data;
-  input write2_wen;
-
-  input [ADDR_WIDTH-1:0] write3_addr;
-  input [DATA_WIDTH-1:0] write3_data;
-  input write3_wen;
-  
 
   reg [DATA_WIDTH-1:0] ram [ADDR_COUNT-1:0];
 
@@ -183,9 +171,6 @@ module regfile_ram(
         end
 
       if (write0_wen) ram[write0_addr]<=write0_data;
-      if (write1_wen) ram[write1_addr]<=write1_data;
-      if (write2_wen) ram[write2_addr]<=write2_data;
-      if (write3_wen) ram[write3_addr]<=write3_data;
     end      
     
 endmodule
