@@ -800,12 +800,12 @@ module frontend1(
       for (j=0;j<12;j=j+1) begin
           wire [3:0] isJ;
           assign pre_other[j][`instrQ_magic]=~pre_magic_reg[j];
-          assign pre_other[j][`instrQ_srcIPOff]=read_data_reg[255] && cc_read_IP_reg3[4:1]==4'b0 ? {cc_base_off_reg,pre_off_reg[j]}: 
+	      assign pre_other[j][`instrQ_srcIPOff]=read_data_reg2[255] && cc_read_IP_reg3[4:1]==4'b0 ? {cc_base_off_reg,pre_off_reg[j]}: 
               {cc_base_off,pre_off_reg[j]};
           if (j!=11) assign pre_other[j][`instrQ_srcTick]=cc_base_tick &&//cc_read_IP_reg4[43:9]!=cc_read_IP_reg5[43:9] &&
-	     do_seq_reg5 && pre_instrEn_reg[j]&&pre_jbefore[j]&&j=={31'b0,read_data_reg[255] && cc_read_IP_reg3[4:1]==0}; 
+		  do_seq_reg5 && pre_instrEn_reg[j]&&pre_jbefore[j]&&j=={31'b0,read_data_reg2[255] && cc_read_IP_reg3[4:1]==0}; 
           else assign pre_other[j][`instrQ_srcTick]=cc_base_tick &&//cc_read_IP_reg4[43:9]!=cc_read_IP_reg5[43:9] &&
-	     do_seq_reg5 && pre_instrEn_reg[j]&&pre_jbefore[j]&&j=={31'b0,read_data_reg[255] && cc_read_IP_reg3[4:1]==0}; 
+		  do_seq_reg5 && pre_instrEn_reg[j]&&pre_jbefore[j]&&j=={31'b0,read_data_reg2[255] && cc_read_IP_reg3[4:1]==0}; 
           assign pre_other[j][`instrQ_class]=pre_class_reg[j];
           //assign pre_other[j][`instrQ_taken]=btb_hasTK_reg3 ? 1'bz : 1'b0;
           assign pre_other[j][`instrQ_taken]=(taken_reg4 & isJ) !=4'b0;
@@ -823,7 +823,7 @@ module frontend1(
           assign pre_other[j][`instrQ_ght_addr]=(startx_reg4[2:0]&isJ[3:1])!=0 ? {GHT_reg4[6:0],1'b0} : 8'bz;
           assign pre_other[j][`instrQ_ght_addr]=(startx_reg4[1:0]&isJ[3:2])!=0 ? {GHT_reg4[5:0],2'b0} : 8'bz;
           assign pre_other[j][`instrQ_ght_addr]=(startx_reg4[0]&isJ[3]) ? {GHT_reg4[4:0],3'b0} : 8'bz;
-	  assign pre_other[j][`instrQ_lastInstr]=pre_instrEn_reg[j]&&~pre_instrEn_reg[j+1];
+	      assign pre_other[j][`instrQ_lastInstr]=pre_instrEn_reg[j]&&~pre_instrEn_reg[j+1]&&~read_data_reg[255];
 	  assign pre_other[j][`instrQ_sc]=isJ[0] ? predx_sc0_reg4 : 2'bz;
 	  assign pre_other[j][`instrQ_sc]=isJ[1] ? predx_sc1_reg4 : 2'bz;
 	  assign pre_other[j][`instrQ_sc]=isJ[2] ? predx_sc2_reg4 : 2'bz;
