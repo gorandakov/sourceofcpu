@@ -34,31 +34,31 @@ module agu_block(
   u1_index_fufwd,u1_index_fuufwd,
   u1_op,u1_reg,
   u1_LSQ_no,u1_II_no,u1_WQ_no,
-  u1_lsflag,u1_clkEn,u1_attr,
+  u1_lsflag,u1_clkEn,u1_attr,u1_thread,
   u2_base,u2_index,u2_const,
   u2_base_fufwd,u2_base_fuufwd,
   u2_index_fufwd,u2_index_fuufwd,
   u2_op,u2_reg,
   u2_LSQ_no,u2_II_no,u2_WQ_no,
-  u2_lsflag,u2_clkEn,u2_attr,
+  u2_lsflag,u2_clkEn,u2_attr,u2_thread,
   u3_base,u3_index,u3_const,
   u3_base_fufwd,u3_base_fuufwd,
   u3_index_fufwd,u3_index_fuufwd,
   u3_op,u3_reg,
   u3_LSQ_no,u3_II_no,u3_WQ_no,
-  u3_lsflag,u3_clkEn,u3_attr,
+  u3_lsflag,u3_clkEn,u3_attr,u3_thread,
   u4_base,u4_index,u4_const,
   u4_base_fufwd,u4_base_fuufwd,
   u4_index_fufwd,u4_index_fuufwd,
   u4_op,u4_reg,
   u4_LSQ_no,u4_II_no,u4_WQ_no,
-  u4_lsflag,u4_clkEn,u4_attr,
+  u4_lsflag,u4_clkEn,u4_attr,u4_thread,
   u5_base,u5_index,u5_const,
   u5_base_fufwd,u5_base_fuufwd,
   u5_index_fufwd,u5_index_fuufwd,
   u5_op,u5_reg,
   u5_LSQ_no,u5_II_no,u5_WQ_no,
-  u5_lsflag,u5_clkEn,u5_attr,
+  u5_lsflag,u5_clkEn,u5_attr,u5_thread,
   mOp0_clHit,mOp1_clHit,mOp2_clHit,mOp3_clHit,
   miss4,
   mOpY4_en,
@@ -485,6 +485,21 @@ module agu_block(
   output wr1_d128;
   output wr1_odd,wr1_split;
   input wrStall;
+
+  input u1_thread;
+  input u2_thread;
+  input u3_thread;
+  input u4_thread;
+  input u5_thread;
+
+  reg u1_thread_reg;
+  reg u2_thread_reg;
+  reg u3_thread_reg;
+  reg u4_thread_reg;
+  reg u5_thread_reg;
+  reg u4_thread_reg2;
+  reg u5_thread_reg2;
+
   
   function get_d128;
       input [4:0] msz;
@@ -538,6 +553,8 @@ module agu_block(
   wire [1:0] u3_sh2;
   wire [1:0] u4_sh2;
   wire [1:0] u5_sh2;
+
+  wire [1:0][63:0] mflags;
   
   wire [50:0] tlb_addr;
   wire tlb_wen;
@@ -1329,7 +1346,8 @@ module agu_block(
           end
       end
   endfunction
-
+ 
+ 
   rs_write_forward #(65) nxtBase1(
   clk,rst,
   ~u1_clkEn|(rsStall[0]&~now_flushing&~alt_bus_hold_reg),
@@ -1508,6 +1526,9 @@ module agu_block(
   agu_get_shiftSize sh3(u3_op,u3_sh,u3_sh2); 
   agu_get_shiftSize sh4(u4_op,u4_sh,u4_sh2); 
   agu_get_shiftSize sh5(u5_op,u5_sh,u5_sh2); 
+
+  csrss_watch #(`csr_mflags,64'h0) mflags_mod(clk,rst,csrss_addr,csrss_data[63:0],csrss_en,mflags);
+
  
   add_agu aadd1(uu_base1,u1_const_reg,uu_index1,p0_cmplxAddr_d,p0_sec_in,
     p0_ndiff,1'b1,u1_sh_reg,u1_sh2_reg);
@@ -1544,7 +1565,7 @@ module agu_block(
   .thread(1'b0),
   .lsflag(u4_lsflag_reg),
   .cmplxAddr(p4_cmplxAddr),
-  .cin_secq(p4_mex_en_reg ? 1'b1 : p4_sec_in_reg),
+  .cin_secq(p4_mex_en_reg ? 1'b1 : p4_sec_in_reg|~mflags[u4_thread_reg2][19]),
   .ptrdiff(p4_mex_en_reg ? 1'b0 : ~p4_ndiff_reg),
   //.conflict(),
   .tlbMiss(p4_tlbmiss),
@@ -1605,7 +1626,7 @@ module agu_block(
   .thread(1'b0),
   .lsflag(u5_lsflag_reg),
   .cmplxAddr(p5_cmplxAddr),
-  .cin_secq(p5_mex_en_reg ? 1'b1 : p5_sec_in_reg),
+  .cin_secq(p5_mex_en_reg ? 1'b1 : p5_sec_in_reg|~mflags[u5_thread_reg2][19]),
   .ptrdiff(p5_mex_en_reg ? 1'b0 : ~p5_ndiff_reg),
   //.conflict(),
   .tlbMiss(p5_tlbmiss),
@@ -1749,7 +1770,7 @@ module agu_block(
   1'b0,
   u1_lsflag,
   p0_cmplxAddr_d,
-  p0_sec_in,
+  p0_sec_in|~mflags[u1_thread_reg][19],
   ~p0_ndiff,
   mOp1_rsBanks,
   mOp2_rsBanks,
@@ -1815,7 +1836,7 @@ module agu_block(
   1'b0,
   u2_lsflag,
   p1_cmplxAddr_d,
-  p1_sec_in,
+  p1_sec_in|~mflags[u2_thread_reg][19],
   ~p1_ndiff,
   mOp0_rsBanks,
   mOp2_rsBanks,
@@ -1881,7 +1902,7 @@ module agu_block(
   1'b0,
   u3_lsflag,
   p2_cmplxAddr_d,
-  p2_sec_in,
+  p2_sec_in|~mflags[u3_thread_reg][19],
   ~p2_ndiff,
   mOp1_rsBanks,
   mOp0_rsBanks,
@@ -2693,6 +2714,7 @@ module agu_block(
       p5_mex_en_reg<=p5_mex_en;
       if (~(rsStall[0]&~now_flushing&~alt_bus_hold_reg)) begin
           u1_clkEn_reg<=u1_clkEn;
+          u1_thread_reg<=u1_thread;
           u1_op_reg<=u1_op;
           u1_sh_reg<=u1_sh;
           u1_sh2_reg<=u1_sh2;
@@ -2706,6 +2728,7 @@ module agu_block(
 
       if (~(rsStall[1]&~now_flushing&~alt_bus_hold_reg)) begin
           u2_clkEn_reg<=u2_clkEn;
+          u2_thread_reg<=u2_thread;
           u2_op_reg<=u2_op;
           u2_sh_reg<=u2_sh;
           u2_sh2_reg<=u2_sh2;
@@ -2719,6 +2742,7 @@ module agu_block(
       
       if (~(rsStall[2]&~now_flushing&~alt_bus_hold_reg)) begin
           u3_clkEn_reg<=u3_clkEn;
+          u3_thread_reg<=u3_thread;
           u3_op_reg<=u3_op;
           u3_sh_reg<=u3_sh;
           u3_sh2_reg<=u3_sh2;
@@ -2731,6 +2755,8 @@ module agu_block(
       end
 
       u4_clkEn_reg<=u4_clkEn;
+      u4_thread_reg<=u4_thread;
+      u4_thread_reg2<=u1_thread_reg;
       u4_op_reg<=u4_op;
       u4_sh_reg<=u4_sh;
       u4_sh2_reg<=u4_sh2;
@@ -2743,6 +2769,8 @@ module agu_block(
 
       u5_clkEn_reg<=u5_clkEn;
       u5_op_reg<=u5_op;
+      u5_thread_reg<=u5_thread;
+      u5_thread_reg2<=u5_thread_reg;
       u5_sh_reg<=u5_sh;
       u5_sh2_reg<=u5_sh2;
       u5_reg_reg<=u5_reg;
