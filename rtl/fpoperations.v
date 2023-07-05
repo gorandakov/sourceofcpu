@@ -57,8 +57,6 @@ limitations under the License.
 `define fop_andn 43
 `define fop_linsrch 44
 //4 entries for linsrch
-`define fop_forkL 48
-`define fop_forkH 49
 
 `define fop_mulDLZ 0
 `define fop_mulDH  1
