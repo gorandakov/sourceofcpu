@@ -40,6 +40,7 @@ limitations under the License.
 `define csr_IRQ_send 36
 `define csr_IRQ_recv_vector 37
 `define csr_USER1 1024
+`define csr_MAC 2048
 `define csr_excpt_fpu 1036
 `define mflags_cpl 1:0
 `define mflags_vm 2
