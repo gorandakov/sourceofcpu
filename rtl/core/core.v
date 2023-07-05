@@ -18,28 +18,6 @@ limitations under the License.
 
 
 module heptane_core(
-  clk,
-  rst,
-  obusIn_signals,obusIn_src_req,obusIn_dst_req,obusIn_address,
-  obusOut_signals,obusOut_src_req,obusOut_dst_req,obusOut_address,obusOut_can,obusOut_want,obusOut_sz,obusOut_bank0,obusOut_low,
-  obusDIn_signals,obusDIn_src_req,obusDIn_dst_req,obusDIn_data,obusDIn_dataPTR,
-  obusDOut_signals,obusDOut_src_req,obusDOut_dst_req,obusDOut_data,obusDOut_dataPTR,obusDOut_can,obusDOut_want,obusDOut_replay
-);
-  parameter [4:0] BUS_ID=0;
-  localparam PHYS_WIDTH=44;
-  localparam VIRT_WIDTH=64;
-  localparam IP_WIDTH=48;
-  localparam [31:0] INIT_IP=32'h20;
-  localparam BUS_BANK=32;
-  localparam BUS_WIDTH=BUS_BANK*16;
-  localparam DATA_WIDTH=65*4;
-  localparam INSTR_WIDTH=80;
-  localparam IN_REG_WIDTH=6;
-  localparam OPERATION_WIDTH=`operation_width+5;
-  localparam PORT_WIDTH=4;
-  localparam RS_WIDTH=65;
-  localparam REQ_WIDTH=10;
-
   input clk;
   input rst;
 	wire [`rbus_width-1:0] obusIn_signals;
@@ -60,14 +38,108 @@ module heptane_core(
 	wire [9:0] obusDIn_dst_req;
 	input [511:0] obusDIn_data;
 	input [7:0] obusDIn_dataPTR;
-	output [`rbusD_width-1:0] obusDOut_signals;
-	output [9:0] obusDOut_src_req;
-	output [9:0] obusDOut_dst_req;
-	output [511:0] obusDOut_data;
-	output [7:0] obusDOut_dataPTR;
+	wire [`rbusD_width-1:0] obusDOut_signals;
+	wire [9:0] obusDOut_src_req;
+	wire [9:0] obusDOut_dst_req;
+	output [511+56:0] obusDOut_dataAUD;
+	wire [7:0] obusDOut_dataPTR;
+        output [75:0] obusDOut_iosig;
   output obusDOut_can;
   inout obusDOut_want;
   output obusDOut_replay;
+);
+  parameter [4:0] BUS_ID=0;
+  localparam PHYS_WIDTH=44;
+  localparam VIRT_WIDTH=64;
+  localparam IP_WIDTH=48;
+  localparam [31:0] INIT_IP=32'h20;
+  localparam BUS_BANK=32;
+  localparam BUS_WIDTH=BUS_BANK*16;
+  localparam DATA_WIDTH=65*4;
+  localparam INSTR_WIDTH=80;
+  localparam IN_REG_WIDTH=6;
+  localparam OPERATION_WIDTH=`operation_width+5;
+  localparam PORT_WIDTH=4;
+  localparam RS_WIDTH=65;
+  localparam REQ_WIDTH=10;
+
+	wire [`rbus_width-1:0] obusIn_signals;
+	wire [9:0] obusIn_src_req;
+	wire [9:0] obusIn_dst_req;
+	wire [36:0] obusIn_address;
+	wire [`rbus_width-1:0] obusOut_signals;
+	wire [9:0] obusOut_src_req;
+	wire [9:0] obusOut_dst_req;
+	wire [36:0] obusOut_address;
+	wire [9:0] obusDIn_src_req;
+	wire [9:0] obusDIn_dst_req;
+	wire [`rbusD_width-1:0] obusDOut_signals;
+	wire [9:0] obusDOut_src_req;
+	wire [9:0] obusDOut_dst_req;
+	wire [7:0] obusDOut_dataPTR;
+
+  generate
+    genvar k,kl;
+    wire [63+7:0] datX0;
+    wire [63+0:0]  dat0;
+    wire [63+7:0] datX1;
+    wire [63+0:0]  dat1;
+    wire [63+7:0] datX2;
+    wire [63+0:0]  dat2;
+    wire [63+7:0] datX3;
+    wire [63+0:0]  dat3;
+    wire [63+7:0] datX4;
+    wire [63+0:0]  dat4;
+    wire [63+7:0] datX5;
+    wire [63+0:0]  dat5;
+    wire [63+7:0] datX6;
+    wire [63+0:0]  dat6;
+    wire [63+7:0] datX7;
+    wire [63+0:0]  dat7;
+    wire [63:0] datSIG0;
+    wire [63+12:0] datSIGX0;
+    wire [27+`rbusD_signals:0] datSIG;
+    assign dataSIG={obusDOut_signals,obusDOut_src_req,obusDOut_dst_req,obusDOut_dataPTR,'0};
+
+    for(k=0;k<64;k=k+1) begin : DO1
+      assign dat0[k]=obusDOut_data[2*k];
+      assign dat1[k]=obusDOut_data[2*k+1];
+      assign dat2[k]=obusDOut_data[2*k+64];
+      assign dat3[k]=obusDOut_data[2*k+1+64];
+      assign dat4[k]=obusDOut_data[2*k+128];
+      assign dat5[k]=obusDOut_data[2*k+1+128];
+      assign dat6[k]=obusDOut_data[2*k+192];
+      assign dat7[k]=obusDOut_data[2*k+1+192];
+      if (k<32) begin
+           assign dataSIG0[k]=dataSIG[2*k];
+           assign dataSIG0[k+32]=dataSIG[2*k+1];
+      end
+    end
+    for(kl=0;kl<(64+7);kl=kl+1)  begin : OD1
+      assign obusDOut_dataAUD[2*kl]=datX0[k];
+      assign obusDOut_dataAUD[2*kl+1]=datX1[k];
+      assign obusDOut_dataAUD[2*kl+71]=datX2[k];
+      assign obusDOut_dataAUD[2*kl+1+71]=datX3[k];
+      assign obusDOut_dataAUD[2*kl+142]=datX4[k];
+      assign obusDOut_dataAUD[2*kl+1+142]=datX5[k];
+      assign obusDOut_dataAUD[2*kl+213]=datX6[k];
+      assign obusDOut_dataAUD[2*kl+1+213]=datX7[k];
+      if (kl<(32+6)) begin
+          obusDOut_iosig[2*kl]=dataSIGX0[k];
+          obusDOut_iosig[2*kl+1]=dataSIGX0[k+32+6];
+      end
+    end
+  hammingGet64 DOget0_mod(dat0,datX0);
+  hammingGet64 DOget1_mod(dat1,datX1);
+  hammingGet64 DOget2_mod(dat2,datX2);
+  hammingGet64 DOget3_mod(dat3,datX3);
+  hammingGet64 DOget4_mod(dat4,datX4);
+  hammingGet64 DOget5_mod(dat5,datX5);
+  hammingGet64 DOget6_mod(dat6,datX6);
+  hammingGet64 DOget7_mod(dat7,datX7);
+  hammingGet32 DOgetA_mod(dataSIG0[31:0],dataSIGX0[37:0]);
+  hammingGet32 DOgetB_mod(dataSIG0[63:32],dataSIGX0[75:38]);
+  endgenerate
 
  
  // reg [63:0] r02_data;
