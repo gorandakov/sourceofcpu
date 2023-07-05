@@ -1417,7 +1417,7 @@ module dcache2_block(
   read_en,read_odd,
   read_data,read_dataX,
   read_dataPTR,read_dataPTRx,
-  write0_clkEn,
+  write0_clkEn,write0_passthrough,
   write_addrE0, write_hitE0,
   write_addrO0, write_hitO0,
   write_bankEn0,write_pbit0, 
@@ -1426,7 +1426,7 @@ module dcache2_block(
   write_odd0,write_split0,
   write_data0,
   write_d128_0,
-  write1_clkEn,
+  write1_clkEn,write1_passthrough,
   write_addrE1, write_hitE1,
   write_addrO1, write_hitO1,
   write_bankEn1,write_pbit1,
@@ -1442,7 +1442,7 @@ module dcache2_block(
 //  ins_hit,
   insert,
   insert_excl,insert_dirty,insert_dupl,
-  hit_LRU,read_LRU,hit_any,imm_any,read_dir,read_excl,read_expAddrOut,
+  hit_LRU,read_LRU,hit_any,immoral_some,read_dir,read_excl,read_expAddrOut,
   read_expAddr_en,
   expun_cc_addr,
   expun_cc_en,
@@ -1463,6 +1463,9 @@ module dcache2_block(
   output reg [32*DATA_WIDTH-1:0] read_dataX;
   output reg [15:0] read_dataPTR;
   output reg [15:0] read_dataPTRx;
+
+  input write0_passthrough;
+  input write1_passthrough;
 
   input write0_clkEn;
   input [ADDR_WIDTH-1:0] write_addrE0;
@@ -1503,7 +1506,7 @@ module dcache2_block(
   input [4:0] hit_LRU;
   output reg [4:0] read_LRU;
   output reg hit_any;
-  output reg imm_any;
+  output reg immoral_some;
   output reg read_dir;
   output reg read_excl;
   output reg [36:0] read_expAddrOut;
@@ -1538,7 +1541,7 @@ module dcache2_block(
   reg insBus_A_reg,insBus_B_reg;
   reg [8:0] ins_hit_reg;
   reg ins_hit_reg2;
-  wire read_imm_any;
+  wire read_immoral_some;
 //  reg ins_hit_reg3;
   wire [1:0] read_dirP[8:-1];
   wire [1:0] read_exclP[8:-1];
@@ -1608,6 +1611,13 @@ module dcache2_block(
      end
   endgenerate
 
+  assign read_dataP[0]={1024{write0_clkEn_reg2|write1_clkEn_reg2}}&
+          {write0_clkEn&write0_passthrough, write_addrE0, write_hitE0, write_addrO0, write_hitO0,
+          write_bankEn0,write_pbit0, write_begin0,write_end0, write_bBen0,write_enBen0, write_odd0,write_split0, write_d128_0,
+          write1_clkEn&write1_passthrough, write_addrE1, write_hitE1, write_addrO1, write_hitO1,
+          write_bankEn1,write_pbit1, write_begin1,write_end1, write_bBen1,write_enBen1,write_odd1,write_split1,  write_d128_1,
+          '0};
+
   assign read_dataP[-1][511:0]=512'b0;
   assign read_dataP[-1][1023:512]=512'b0;
   assign read_dataxP[-1][511:0]=512'b0;
@@ -1617,7 +1627,7 @@ module dcache2_block(
   assign read_exclP[-1]=2'b0;
   assign read_expAddrP[-1]=37'b0;
   assign read_hit_any=|read_hit_way_reg;
-  assign read_imm_any=|read_imm_way_reg;
+  assign read_immoral_some=|read_imm_way_reg;
 
   always @(posedge clk) begin
       if (rst) begin
@@ -1648,7 +1658,7 @@ module dcache2_block(
   //        ins_hit_reg3<=1'b0;
           read_hit_way_reg<=9'b0;
           hit_any<=1'b0;
-          imm_any<=1'b0;
+          immoral_some<=1'b0;
           read_dir<=1'b0;
           read_excl<=1'b0;
           read_expAddrOut<=37'b0;
@@ -1684,7 +1694,7 @@ module dcache2_block(
           read_hit_way_reg<=read_hit_way;
           read_imm_way_reg<=read_imm_way;
           hit_any<=(|read_hit_way_reg);
-          imm_any<=(|read_imm_way_reg);
+          immoral_some<=(|read_imm_way_reg);
           read_dir<=~read_dirP[8][0];
           read_excl<=~read_exclP[8][0];
           read_expAddrOut<=~read_expAddrP[8];
