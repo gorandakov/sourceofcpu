@@ -781,6 +781,10 @@ module heptane_core(
   reg [511:0] dc2_rdata_reg/*verilator public*/;
   reg [511:0] dc2_rdataExp_reg;
 
+  wire dc2_rhitExpW0;
+  reg dc2_rhiExpW;
+  reg dc2_rhiExpW_reg;
+
   wire [35:0] L1_expAddr;
   wire L1_expAddr_en;
   reg L1_expAddr_en_reg;
@@ -872,6 +876,8 @@ module heptane_core(
   assign dc2_rExclA= dc2_rExclA0 & dc2_rhitA0;
  
   assign dc2_rExcl=dc2_rhitA0 ? dc2_rExclA : dc2_rExclB;
+
+  assign dc2_rhitExpW0=dc2_hitE0_reg3 | dc2_hitO0_reg2 | dc2_hitE1_reg3 | dc2_hitO1_reg3 && dc2_io0_reg3 | dc2_io_reg3;
   
 //  assign except=1'b0;//iAvail[0] && instr0[15:0]==16'h0023;
   assign rbusANOut_signals[`rbusAN_second]=dc2_rhitExp_reg && L1_expAddr_en_reg6 && ~dc2_rhitExpW_reg;
@@ -919,27 +925,30 @@ module heptane_core(
   .Cread_en(req_en_reg),
   .Cread_req(req_slot_reg[4:0]),
 //  .write0_clkEn({dc_wrHit[0] && dc_odd_wr_reg3[0] | dc_split_wr_reg3[0],dc_wrHit[0] && ~dc_odd_wr_reg3[0] | dc_split_wr_reg3[0]}),
-  .write0_clkEn(pot_en ? pot0_hit : wr0_hit),
-  .write_addrE0(pot_en ? pot0_addrE : wr0_addrE),
-  .write_addrO0(pot_en ? pot0_addrO : wr0_addrO),
-  .write_bankEn0(pot_en ? pot0_banks : wr0_banks), 
-  .write_begin0(pot_en ? pot0_begin : wr0_begin),.write_end0(pot_en ? pot0_end : wr0_end),
-  .write_bBen0(pot_en ? pot0_bgn : wr0_bgn_ben),.write_enBen0(pot_en ? pot0_end : wr0_end_ben),
-  .write_odd0(pot_en ? pot0_odd : wr0_odd),.write_split0(pot_en ? pot0_split : wr0_split),
-  .write_data0(pot_en ? pot0_data : wr0_data),
-  .write_pbit0(pot_en ? pot0_pbit : wr0_pbit),
-  .write_d128_0(pot_en ? pot0_d128 : wr0_d128),
-  .write1_clkEn(pot_en ? pot1_hit : wr1_hit),
-  .write_addrE1(pot_en ? pot1_addrE : wr1_addrE), 
-  .write_addrO1(pot_en ? pot1_addrO : wr1_addrO),
-  .write_bankEn1(pot_en ? pot1_banks : wr1_banks), 
-  .write_begin1(pot_en ? pot1_begin : wr1_begin),.write_end1(pot_en ? pot1_end : wr1_end),
-  .write_bBen1(pot_en ? pot1_bgn : wr1_bgn_ben),.write_enBen1(pot_en ? pot1_end : wr1_end_ben),
-  .write_odd1(pot_en ? pot1_odd : wr1_odd),.write_split1(pot_en ? pot1_split : wr1_split),
-  .write_data1(pot_en ? pot1_data : wr1_data),
-  .write_pbit1(pot_en ? pot1_pbit : wr1_pbit),
-  .write_d128_1(pot_en ? pot1_d128 : wr1_d128),
+  .write0_clkEn(wr0_hit),
+  .write0_io(wr0_io),
+  .write_addrE0(wr0_addrE),
+  .write_addrO0(wr0_addrO),
+  .write_bankEn0(wr0_banks), 
+  .write_begin0(wr0_begin),.write_end0(wr0_end),
+  .write_bBen0(wr0_bgn_ben),.write_enBen0(wr0_end_ben),
+  .write_odd0(wr0_odd),.write_split0(wr0_split),
+  .write_data0(wr0_data),
+  .write_pbit0(wr0_pbit),
+  .write_d128_0(wr0_d128),
+  .write1_clkEn(wr1_hit),
+  .write1_io(wr1_io),
+  .write_addrE1(wr1_addrE), 
+  .write_addrO1(wr1_addrO),
+  .write_bankEn1(wr1_banks), 
+  .write_begin1(wr1_begin),.write_end1(wr1_end),
+  .write_bBen1(wr1_bgn_ben),.write_enBen1(wr1_end_ben),
+  .write_odd1(wr1_odd),.write_split1(wr1_split),
+  .write_data1(wr1_data),
+  .write_pbit1(wr1_pbit),
+  .write_d128_1(wr1_d128),
   //writeI0_clkEn,
+  .writeI_io(dc2_io0),
   .writeI_addrE0(dc2_addrE0), .writeI_hitE0(dc2_hitE0),
   .writeI_addrO0(dc2_addrO0), .writeI_hitO0(dc2_hitO0),
   .writeI_bankEn0(dc2_bankEn0), 
@@ -950,6 +959,7 @@ module heptane_core(
   .writeI_pbit0(dc2_pbit0),
   .writeI_d128_0(dc2_d128_0),
  //writeI1_clkEn,
+  .writeI1_io(dc2_io1),
   .writeI_addrE1(dc2_addrE1), .writeI_hitE1(dc2_hitE1),
   .writeI_addrO1(dc2_addrO1), .writeI_hitO1(dc2_hitO1),
   .writeI_bankEn1(dc2_bankEn1),
@@ -985,6 +995,7 @@ module heptane_core(
   .read_dataPTR(dc2_rdataPTRA0),
   .read_dataPTRx(dc2_rdataExpPTRA0),
   .write0_clkEn(dc2_hitE0 | dc2_hitO0),
+  .write0_passthrough(dc2_io0),
   .write_addrE0(dc2_addrE0), .write_hitE0(dc2_hitE0),
   .write_addrO0(dc2_addrO0), .write_hitO0(dc2_hitO0),
   .write_bankEn0(dc2_bankEn0), 
@@ -994,6 +1005,7 @@ module heptane_core(
   .write_odd0(dc2_odd0),.write_split0(dc2_split0),
   .write_data0(dc2_data0),
   .write1_clkEn(dc2_hitE1 | dc2_hitO1),
+  .write1_passthrough(dc2_io1),
   .write_addrE1(dc2_addrE1), .write_hitE1(dc2_hitE1),
   .write_addrO1(dc2_addrO1), .write_hitO1(dc2_hitO1),
   .write_bankEn1(dc2_bankEn1),
@@ -1877,6 +1889,8 @@ module heptane_core(
         dc2_rhit<=1'b0;
         dc2_rhitExp<=1'b0;
         dc2_rhitExp_reg<=1'b0;
+        dc2_rhitExpW<=1'b0;
+        dc2_rhitExpW_reg<=1'b0;
         dc2_rDir_reg<=1'b0;
         dc2_rExcl_reg<=1'b0;
         dc2_rDir_reg2<=1'b0;
@@ -1945,6 +1959,8 @@ module heptane_core(
         dc2_rhit<=dc2_rhitA0|dc2_rhitB0|dc2_rhitB1;
         dc2_rhitExp<=dc2_rhitExpA0|dc2_rhitExpB0|dc2_rhitExpB1;
 	dc2_rhitExp_reg<=dc2_rhitExp;
+        dc2_rhitExp<=dc2_rhitExpW0;
+        dc2_rhitExpW_reg<=dc2_rhitExpW;
         dc2_rDir_reg<=dc2_rDir;
         dc2_rExcl_reg<=dc2_rExcl;
         dc2_rDir_reg2<=dc2_rDir_reg;
