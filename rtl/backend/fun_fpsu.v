@@ -100,8 +100,6 @@ module fun_fpsu(
   reg fxAlt2_reg;
   reg fxAlt2_reg2;
   reg fxAlt2_reg3;*/
-  reg fxFFROK;
-  reg fxFCFOK;
   reg  fxFADD_dbl;
   reg  fxFADD_ext;
   reg  fxFADD_sin;
@@ -337,7 +335,6 @@ module fun_fpsu(
   .copyA(H? fxFADD_com==2'b01 : ~fxFADD_com[0]),
   .swpSngl(fxFADD_pswp),
   .dupSngl(fxFADD_dupl),
-  .handle_fork(fxFFROK),
   .A(fxDataAXL_reg[0]),.B(gxDataBXL_reg[1]),
   .res(FOOF[0]));
   
@@ -423,7 +420,6 @@ module fun_fpsu(
   .copyA(H? fxFCADD_com==2'b01 : ~fxFCADD_com[0]),
   .swpSngl(fxFCADD_pswp),
   .dupSngl(fxFCADD_dupl),
-  .handle_fork(fxFCFOK),
   .A(fxDataAXL_reg[1]),.B(gxDataBXL_reg[0]),
   .res(FOOF[1]));
  
@@ -485,8 +481,6 @@ module fun_fpsu(
 	  fxFCADD_com<=2'b0;
 	  fxFCADD_pswp<=1'b0;
 	  fxFADD_sin=1'b0;
-          fxFROK=1'b0;
-          fxFCFOK=1'b0;
           fxFADD_copySA=4'b0;
 	  fxFCADD_sn=1'b0;
 	  fxFCADD_copyASN=4'b0;
@@ -526,9 +520,9 @@ module fun_fpsu(
 		u1_op_reg[7:0]!=`fop_addsubDP;
 	      fxFADD_rsub=fxFADD_sub[0] && u1_op_reg[12];
 	      fxFADD_copyA[1]=u1_op_reg[7:0]==`fop_addDL ||
-                u1_op_reg[7:0]==`fop_subDL || u1_op_reg[7:0]==`fop_forkL;
+                u1_op_reg[7:0]==`fop_subDL;
 	      fxFADD_copyA[0]=u1_op_reg[7:0]==`fop_addDH ||
-                u1_op_reg[7:0]==`fop_subDH || u1_op_reg[7:0]==`fop_forkL;
+                u1_op_reg[7:0]==`fop_subDH;
 	      fxFADD_lo={u1_op_reg[7:2],2'b0}==`fop_logic;
 	      fxFADD_loSel=u1_op_reg[1:0];
               fxFADD_pcmp<=gxFADD_pkdS | gxFADD_pkdD;
@@ -536,8 +530,6 @@ module fun_fpsu(
 	      {fxFCADD_pswp,fxFCADD_com}<=u1_op_reg[10:8];
               fxFADD_dupl<=u1_op_reg[12];
               fxFCADD_dupl<=u1_op_reg[12];
-              fxFROK=u1_op_reg[7:0]==`fop_forkL|| u1_op_reg[7:0]==`fop_forkH;
-              fxFCFOK=u1_op_reg[7:0]==`fop_forkH || u1_op_reg[7:0]==`fop_forkL;
 	      
 	      fxFCADD_dbl=u1_op_reg[7:0]==`fop_mulDL ||
 	        u1_op_reg[7:0]==`fop_mulDH ||
@@ -545,8 +537,8 @@ module fun_fpsu(
               fxFCADD_ext=u1_op_reg[7:0]==`fop_mulEE || u1_op_reg[7:0]==`fop_rndES ||
 	        u1_op_reg[7:0]==`fop_rndED;
               fxFCADD_dblext=fxFCADD_dbl||fxFCADD_ext;
-	      fxFCADD_copyA[1]=u1_op_reg[7:0]==`fop_mulDL || u1_op_reg[7:0]==`fop_forkL;
-	      fxFCADD_copyA[0]=u1_op_reg[7:0]==`fop_mulDH || u1_op_reg[7:0]==`fop_forkL;
+	      fxFCADD_copyA[1]=u1_op_reg[7:0]==`fop_mulDL;
+	      fxFCADD_copyA[0]=u1_op_reg[7:0]==`fop_mulDH;
 	     
 	      fxFCADD_rndD=u1_op_reg[7:0]==`fop_rndED;
 	      fxFCADD_rndS=u1_op_reg[7:0]==`fop_rndES ||
