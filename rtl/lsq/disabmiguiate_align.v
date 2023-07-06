@@ -16,7 +16,7 @@ limitations under the License.
 
 
 `include "../struct.sv"
-
+//disambiguate-align module for memory addresses; also feeds data to the memory retire unit
 module lsq_req_ram(
   clk,
   rst,

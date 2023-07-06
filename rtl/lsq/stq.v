@@ -18,7 +18,7 @@ limitations under the License.
 
 //compile stq to hard macro with 1x horizontal x2 wire and 1x vertical x2 wire
 //do not delete redundant outputs
-
+//store queue for disambiguiating strong model load-store queue unit
 module stq(
   clk,
   rst,
@@ -468,30 +468,42 @@ module stq(
 	          5'h3: get_ld_bytes=4'b11;
 	          default:get_ld_bytes=4'b1111;
 	      endcase
-           end else begin
+      end else begin
 	      get_ld_bytes=4'hf;
-           end
+      end
       end
   endfunction
-  function [0:0] get_st_bytes;
+  function [3:0] get_st_bytes;
       input [4:0] sz;
-      input [31:0] banks;
-      input [1:0] index;
-      reg [31:0] first;
-      reg [31:0] last;
+      input [7:0] banks;
+      input [2:0] index;
+      input [1:0] low;
+      reg [7:0] first;
+      reg [7:0] last;
       begin
-          first=banks&~{banks[30:0],banks[31]};
-          last=banks&~{banks[0],banks[31:1]};
-          case (index)
-              2'd0: begin
-              end
-              2'd1: begin
-              end
-              2'd2: begin
-              end
-              2'd3: begin
-              end
-          endcase
+          first=banks&~{banks[6:0],banks[7]};
+          last=banks&~{banks[0],banks[7:1]};
+	  get_ld_bytes=4'b0;
+	  if (first[index]) begin
+	      case(sz)
+		  5'h10:get_ld_bytes[low]=1'b1;
+		  5'h11:begin
+			  get_ld_bytes[low]=1'b1;
+			  if (low!=2'b11) get_ld_bytes[low+1]=1'b1;
+		  end
+	          default:get_ld_bytes=4'b1111;
+	      endcase
+	  end else if (last[index]) begin
+	      case(sz)
+		  5'h11:begin
+			  if (low==2'b11) get_ld_bytes[0]=1'b1;
+		  end
+	          5'h3: get_ld_bytes=4'b11;
+	          default:get_ld_bytes=4'b1111;
+	      endcase
+      end else begin
+	      get_ld_bytes=4'hf;
+      end
       end
   endfunction
       wire [3:0][32:0] WLN0_dataX0;
@@ -544,8 +556,8 @@ module stq(
 	  assign chk3_bytes[b]=get_ld_bytes(chk3_adata[`lsaddr_sz],chk3_subBNK,b[2:0],chk3_adata[`lsaddr_low]);
 	  assign chk4_bytes[b]=get_ld_bytes(chk4_adata[`lsaddr_sz],chk4_subBNK,b[2:0],chk4_adata[`lsaddr_low]);
 	  assign chk5_bytes[b]=get_ld_bytes(chk5_adata[`lsaddr_sz],chk5_subBNK,b[2:0],chk5_adata[`lsaddr_low]);
-	  assign WNL0_bytes[b]=get_ld_bytes(WNL0_adata[`lsaddr_sz],WNL0_subBNK,b[2:0],WNL0_adata[`lsaddr_low]);
-	  assign WNL1_bytes[b]=get_ld_bytes(WNL1_adata[`lsaddr_sz],WNL1_subBNK,b[2:0],WNL1_adata[`lsaddr_low]);
+	  assign WNL0_bytes[b]=get_st_bytes(WNL0_adata[`lsaddr_sz],WNL0_subBNK,b[2:0],WNL0_adata[`lsaddr_low]);
+	  assign WNL1_bytes[b]=get_st_bytes(WNL1_adata[`lsaddr_sz],WNL1_subBNK,b[2:0],WNL1_adata[`lsaddr_low]);
 
           if (b<4) begin
               bit_find_last_bit #(64) chkBit0A(chk0_match[b]&mask,chk0_firstA[b],chk0_hasA[b]);

@@ -17,7 +17,7 @@ limitations under the License.
 
 `include "../struct.sv"
 
-
+//memory retire unit; feeds data to the control unit; gets data from the disambiguiate-align module
 module lsq_decide_ret(
   clk,
   rst,
