@@ -30,6 +30,7 @@ module fun_fpu(
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
   FUF9,
+  xtra,
   ALTDATA0,ALTDATA1,
   ALT_INP,
   FUS_alu0,FUS_alu1,
@@ -72,6 +73,7 @@ module fun_fpu(
   (* register equiload *) inout [S+67:0] FUF7;
   (* register equiload *) inout [S+67:0] FUF8;
   (* register equiload *) inout [S+67:0] FUF9;
+  inout [67:0] xtra;
   input [1:0] ALT_INP;
   input [S+67:0] ALTDATA0;
   input [S+67:0] ALTDATA1;
@@ -203,6 +205,8 @@ module fun_fpu(
   wire [S+67:0] uu_A2;
   wire [S+67:0] uu_B1;
   wire [S+67:0] uu_B2;
+
+  reg [67:0] xtra_reg;
 
   reg [S+67:0] FUF0_reg;
   reg [S+67:0] FUF1_reg;
@@ -402,6 +406,7 @@ module fun_fpu(
   .rmode(fxFCADD_dbl|H ? fpcsr[`csrfpu_rmode] : fpcsr[`csrfpu_rmodeE]),
   .res(FOOF[1][67:0]),
   .res_hi(FOOF[1][68+15:68]),
+  .xtra(xtra),
   .isDBL(fxFCADD_dbl|H),
   .raise(fxFCADD_raise),
   .fpcsr(fpcsr[31:0]),
@@ -427,17 +432,17 @@ module fun_fpu(
       else assign gfDataBFL[0]=u1_op_reg[8] ? {uu_B2[68+15:68],u1_Bx} : uu_B2;
       if (INDEX==0) begin
 	      assign FUF4=FOOF_reg[0];
-	      assign FUF7=FOOF_reg[1];
+	      assign FUF7=isXTRA ? xtra_reg : FOOF_reg[1];
       end
       if (INDEX==1) begin
 	      assign FUF5=FOOF_reg[0];
-	      assign FUF8=FOOF_reg[1];
+	      assign FUF8=isXTRA ? xtra_reg : FOOF_reg[1];
       end
       if (INDEX==2) begin
 	      assign FUF6=|ALT_INP_reg ? {S+SIMD_WIDTH{1'BZ}} : FOOF_reg[0];
 	      assign FUF6=ALT_INP_reg[0] ? ALTDATA0 : {S+SIMD_WIDTH{1'BZ}};
 	      assign FUF6=ALT_INP_reg[1] ? ALTDATA1 : {S+SIMD_WIDTH{1'BZ}};
-	      assign FUF9=FOOF_reg[1];
+	      assign FUF9=isXTRA ? xtra_reg : FOOF_reg[1];
 	      assign outA=uu_A2;
 	      assign outB=gfDataBFL[0][S+67:0];
       end
@@ -487,6 +492,7 @@ module fun_fpu(
 	  fxFADD_loSel=2'b0;
 	  fxFCADD_rndD=1'b0;
 	  fxFCADD_rndS=1'b0;
+          fxXTRA=1'b0;
           for (k=0;k<2;k=k+1) begin
 	      fxDataAFL_reg[k]<={16+SIMD_WIDTH{1'B0}};
 	      gfDataBFL_reg[k]<={16+SIMD_WIDTH{1'B0}};
@@ -532,6 +538,7 @@ module fun_fpu(
 	      fxFCADD_dbl=u1_op_reg[7:0]==`fop_mulDL ||
 	        u1_op_reg[7:0]==`fop_mulDH ||
 	        u1_op_reg[7:0]==`fop_mulDP || u1_op_reg[7:0]==`fop_rndDSP;
+              fxXTRA=u1_op_reg[7:0]==`fop_mulDL && u1_op_reg[10];
               fxFCADD_ext=u1_op_reg[7:0]==`fop_mulEE || u1_op_reg[7:0]==`fop_rndES ||
 	        u1_op_reg[7:0]==`fop_rndED;
               fxFCADD_dblext=fxFCADD_dbl||fxFCADD_ext;
@@ -603,6 +610,8 @@ module fun_fpu(
       u1_en_reg4<=u1_en_reg3;
       u1_en_reg5<=u1_en_reg4;
       u1_en_reg6<=u1_en_reg5;
+      isXTRA<=fxXTRA;
+      xtra_reg<=xtra;
   end
 
   always @(posedge clk) begin
