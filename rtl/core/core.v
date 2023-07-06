@@ -20,30 +20,14 @@ limitations under the License.
 module heptane_core(
   input clk;
   input rst;
-	wire [`rbus_width-1:0] obusIn_signals;
-	wire [9:0] obusIn_src_req;
-	wire [9:0] obusIn_dst_req;
-	wire [36:0] obusIn_address;
-	wire [`rbus_width-1:0] obusOut_signals;
-	wire [9:0] obusOut_src_req;
-	wire [9:0] obusOut_dst_req;
-	wire [36:0] obusOut_address;
+  input [67:0] obusIn;
+  output [81:0] obusOut;
   inout obusOut_want;
   output obusOut_can;
-	output [4:0] obusOut_sz;
-	output [4:0] obusOut_bank0;
-	output [3:0] obusOut_low;
-	input [`rbusD_width-1:0] obusDIn_signals;
-	wire [9:0] obusDIn_src_req;
-	wire [9:0] obusDIn_dst_req;
-	input [511:0] obusDIn_data;
-	input [7:0] obusDIn_dataPTR;
-	wire [`rbusD_width-1:0] obusDOut_signals;
-	wire [9:0] obusDOut_src_req;
-	wire [9:0] obusDOut_dst_req;
-	output [511+56:0] obusDOut_dataAUD;
-	wire [7:0] obusDOut_dataPTR;
-        output [75:0] obusDOut_iosig;
+  input [37:0] obusDIns;
+  input [511+56:0] obusDIn_data;
+  output [511+56:0] obusDOut_dataAUD;
+  output [75:0] obusDOut_iosig;
   output obusDOut_can;
   inout obusDOut_want;
   output obusDOut_replay;
@@ -63,20 +47,20 @@ module heptane_core(
   localparam RS_WIDTH=65;
   localparam REQ_WIDTH=10;
 
-	wire [`rbus_width-1:0] obusIn_signals;
-	wire [9:0] obusIn_src_req;
-	wire [9:0] obusIn_dst_req;
-	wire [36:0] obusIn_address;
-	wire [`rbus_width-1:0] obusOut_signals;
-	wire [9:0] obusOut_src_req;
-	wire [9:0] obusOut_dst_req;
-	wire [36:0] obusOut_address;
-	wire [9:0] obusDIn_src_req;
-	wire [9:0] obusDIn_dst_req;
-	wire [`rbusD_width-1:0] obusDOut_signals;
-	wire [9:0] obusDOut_src_req;
-	wire [9:0] obusDOut_dst_req;
-	wire [7:0] obusDOut_dataPTR;
+  wire [`rbus_width-1:0] obusIn_signals;
+  wire [9:0] obusIn_src_req;
+  wire [9:0] obusIn_dst_req;
+  wire [36:0] obusIn_address;
+  wire [`rbus_width-1:0] obusOut_signals;
+  wire [9:0] obusOut_src_req;
+  wire [9:0] obusOut_dst_req;
+  wire [36:0] obusOut_address;
+  wire [9:0] obusDIn_src_req;
+  wire [9:0] obusDIn_dst_req;
+  wire [`rbusD_width-1:0] obusDOut_signals;
+  wire [9:0] obusDOut_src_req;
+  wire [9:0] obusDOut_dst_req;
+  wire [7:0] obusDOut_dataPTR;
 
   generate
     genvar k,kl;
@@ -99,7 +83,14 @@ module heptane_core(
     wire [63:0] datSIG0;
     wire [63+12:0] datSIGX0;
     wire [27+`rbusD_signals:0] datSIG;
+    wire [67:0] dataIN0;
+    wire [67:0] dataINX0;
+    wire [67:0] dataOUT;
+    wire [67:0] dataOUT0;
+    wire [67:0] dataOUTX0;
     assign dataSIG={obusDOut_signals,obusDOut_src_req,obusDOut_dst_req,obusDOut_dataPTR,'0};
+    assign dataOUT={obusOut_signals,obusOut_src_req,obusOut_dst_req,obusOut_address,'0};
+    assign {obusIn_signals,obusIn_src_req,obusIn_dst_req,obusIn_address}=obusInX[67:1];
 
     for(k=0;k<64;k=k+1) begin : DO1
       assign dat0[k]=obusDOut_data[2*k];
@@ -113,6 +104,12 @@ module heptane_core(
       if (k<32) begin
            assign dataSIG0[k]=dataSIG[2*k];
            assign dataSIG0[k+32]=dataSIG[2*k+1];
+      end
+      if (k<34) begin
+           assign dataOUT0[k]=dataOUT[2*k];
+           assign dataOUT0[k+34]=dataOUT[2*k+1];
+           assign dataIN0[k]=obusIn[2*k];
+           assign dataIN0[k+32]=obusIn[2*k+1];
       end
     end
     for(kl=0;kl<(64+7);kl=kl+1)  begin : OD1
@@ -128,6 +125,12 @@ module heptane_core(
           obusDOut_iosig[2*kl]=dataSIGX0[k];
           obusDOut_iosig[2*kl+1]=dataSIGX0[k+32+6];
       end
+      if (kl<(34+6)) begin
+          assign obusOut[2*kl]=dataOUTX0[k];
+          assign obusOut[2*kl+1]=dataOUTX0[k+34+6];
+          assign obusInX[2*kl]=dataInX0[k];
+          assign obusInX[2*kl+1]=dataInX0[k+34+6];
+      end
     end
   hammingGet64 DOget0_mod(dat0,datX0);
   hammingGet64 DOget1_mod(dat1,datX1);
@@ -139,6 +142,10 @@ module heptane_core(
   hammingGet64 DOget7_mod(dat7,datX7);
   hammingGet32 DOgetA_mod(dataSIG0[31:0],dataSIGX0[37:0]);
   hammingGet32 DOgetB_mod(dataSIG0[63:32],dataSIGX0[75:38]);
+  hammingGet32 #(34) DOgetC_mod(dataOUT0[33:0],dataOUTX0[39:0]);
+  hammingGet32 #(34) DOgetD_mod(dataOUT0[67:34],dataOUTX0[79:40]);
+  hammingGet32 #(34) DOgetE_mod(dataIN0[33:0],dataINX0[39:0]);
+  hammingGet32 #(34) DOgetF_mod(dataIN0[67:34],dataINX0[79:40]);
   endgenerate
 
  
