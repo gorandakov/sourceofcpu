@@ -607,6 +607,7 @@ module cntrl_find_outcome(
   wire [9:0] jump0_misPred;
   wire [9:0] jump1_misPred;
   wire indirMismatch;
+  wire indir_error;
   wire has_break;
   wire has_xbreak0;
 
@@ -835,7 +836,7 @@ module cntrl_find_outcome(
       .jumpIndex(jump0Pos),
       .jumpPredTk(jump0Pred),
       .jumpTbufMiss(jump0Miss),
-      .indirMismatch(indirMismatch),
+      .indirMismatch(indirMismatch&~indir_error),
       .jumpMisPred(jump0_misPred[k]),
       .jumpTaken(jump0_taken),
       .flagOut(jump0_flags),
@@ -859,7 +860,7 @@ module cntrl_find_outcome(
       .jumpIndex(jump1Pos),
       .jumpPredTk(jump1Pred),
       .jumpTbufMiss(jump1Miss),
-      .indirMismatch(indirMismatch),
+      .indirMismatch(indirMismatch&~indir_error),
       .jumpMisPred(jump1_misPred[k]),
       .jumpTaken(jump1_taken),
       .flagOut(jump1_flags),
@@ -975,8 +976,10 @@ module cntrl_find_outcome(
   assign ret_prevV[9]=10'b0;
   assign ret_prevF[9]=10'b0;
 //warning: trace not yet handled
-  assign exceptIP_d=(break_jump0 & jump0_taken) ? {jump0BND,jump0IP} : 63'bz;
-  assign exceptIP_d=(break_jump1 & jump1_taken) ? {jump1BND,jump1IP} : 63'bz;
+  assign exceptIP_d=(break_jump0 & jump0_taken & ~indir_error) ? {jump0BND,jump0IP} : 63'bz;
+  assign exceptIP_d=(break_jump1 & jump1_taken & ~indir_error) ? {jump1BND,jump1IP} : 63'bz;
+  assign exceptIP_d=(indir_error && (break_jump0 & jump0_taken)
+    || (break_jump1 & jump1_taken) ? {excpt_handlerIP[62:43],excpt_handlerIP[42:11],6'd18,5'b0} : 63'bz;
   assign exceptIP_d=(break_jump0 && ~jump0_taken && !(jump0Type[4] && jump0Type[2:0]==3'd1)) ? {bbaseIP[62:43],breakIP} : 63'bz;
   assign exceptIP_d=(break_jump1 & ~jump1_taken && !(jump1Type[4] && jump1Type[2:0]==3'd1)) ? {bbaseIP[62:43],breakIP} : 63'bz;
   assign exceptIP_d=(break_jump0 && ~jump0_taken && (jump0Type==5'h11)) ? indir_IP[63:1] : 63'bz;
@@ -1168,6 +1171,8 @@ module cntrl_find_outcome(
     (ijump1Type[4] && ijump1Type[2:0]==3'b001 && ijump1Off!=4'hf);
 
   assign indirMismatch=(takenIP!=indir_IP[43:1] || ~indir_IP[64]) && has_indir && indir_ready;
+
+  assign indir_error=indirMismatch&~indir_IP[64];
 
   assign except_d=has_break && ~break_pending && has_some && ~init && indir_ready|~has_indir;
   
@@ -1500,7 +1505,7 @@ module cntrl_find_outcome(
 	  retcnt<=(dotire_d&~init) ? retcnt_d : 4'd1;
 	  retclr<={9{dotire_d&~init}} & retclrP;
 
-	  if (csrss_en && csrss_no==`csr_excIP) begin
+	  if (csrss_en && csrss_no[14:0]==`csr_excIP) begin
               archReg_xcpt_handlerIP<=csrss_data[63:1];
 	  end
           if (break_exceptn && has_some && indir_ready) begin
