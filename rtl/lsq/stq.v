@@ -486,23 +486,23 @@ module stq(
 	  get_ld_bytes=4'b0;
 	  if (first[index]) begin
 	      case(sz)
-		  5'h10:get_ld_bytes[low]=1'b1;
+		  5'h10:get_st_bytes[low]=1'b1;
 		  5'h11:begin
-			  get_ld_bytes[low]=1'b1;
-			  if (low!=2'b11) get_ld_bytes[low+1]=1'b1;
+			  get_st_bytes[low]=1'b1;
+			  if (low!=2'b11) get_st_bytes[low+1]=1'b1;
 		  end
-	          default:get_ld_bytes=4'b1111;
+	          default:get_st_bytes=4'b1111;
 	      endcase
 	  end else if (last[index]) begin
 	      case(sz)
 		  5'h11:begin
-			  if (low==2'b11) get_ld_bytes[0]=1'b1;
+			  if (low==2'b11) get_st_bytes[0]=1'b1;
 		  end
-	          5'h3: get_ld_bytes=4'b11;
-	          default:get_ld_bytes=4'b1111;
+	          5'h3: get_st_bytes=4'b11;
+	          default:get_st_bytes=4'b1111;
 	      endcase
       end else begin
-	      get_ld_bytes=4'hf;
+	      get_st_bytes=4'hf;
       end
       end
   endfunction
