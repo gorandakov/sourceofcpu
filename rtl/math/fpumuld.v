@@ -18,7 +18,7 @@ limitations under the License.
 `include "../struct.sv"
 `include "../fpoperations.sv"
 
-module fpucadd(clk,rst,A,A_alt,B,and1,or1,copyA,en,rmode,res,res_hi,isDBL,fpcsr,raise,is_rndD,is_rndS);
+module fpucadd(clk,rst,A,A_alt,B,and1,or1,copyA,en,rmode,res,res_hi,xtra,isDBL,fpcsr,raise,is_rndD,is_rndS);
   localparam [15:0] BIAS=16'h7fff;
   localparam ROUND_TRUNC=0;
   localparam ROUND_ROUND=1;
@@ -41,6 +41,7 @@ module fpucadd(clk,rst,A,A_alt,B,and1,or1,copyA,en,rmode,res,res_hi,isDBL,fpcsr,
   input [2:0] rmode;
   output [67:0] res;
   output [15:0] res_hi;
+  inout [67:0] xtra;
   input isDBL;
   input [31:0] fpcsr;
   output [10:0] raise;
@@ -136,9 +137,25 @@ module fpucadd(clk,rst,A,A_alt,B,and1,or1,copyA,en,rmode,res,res_hi,isDBL,fpcsr,
       ~prod_reg[105] & DBL_rnd0 & DBL_rnflip0 & isDBL_reg & ~spec_any & en_reg,
       ~prod_reg[105] & DBL_rnd0 & ~DBL_rnflip0 & isDBL_reg & ~spec_any & en_reg,,,,);
 
+  generate
+    if (!H) begin : LOW_PREC2
+        fpuadd_renor renorR_mod(
+        .A({prod_reg[52:0],11'b0),
+        .exp(exp_exp1_adj_reg),.Ax(1'b0),
+        .A_out(xtra_mantissa),.exp_out(xtra_exp)
+        );
+
+        assign xtra[53:0]={xtra_mantissa[62:42],1'b0,xtra_mantissa[41:10]};
+        assign xtra[65:54]={xtra_exp[15],sgn_reg,xtra_exp[10:0]};
+        assign xtra[67:66]=`ptype_dbl;
+    end
+  endgenerate
   
   adder_CSA #(16) extAdd_mod(expA,expB,-BIAS,expart0,expart1);
   adder2c #(17) expAdd2_mod(expart0,expart1,exp_exp,exp_exp1,1'b0,1'b1,1'b1,1'b1,,,,);
+
+  adder_CSA #(16) extAdd_mod(expA,expB,-BIAS-53,expartX0,expartX1);
+  adder2c #(17) expAdd2_mod(expartX0,expartX1,exp_exp_adj,exp_exp1_adj,1'b0,1'b1,1'b1,1'b1,,,,);
 
   get_carry #(17) cmp0_mod(exp_max,~(exp_exp^17'h10000),1'b1,exp_oor);
   get_carry #(17) cmp1_mod(exp_max,~(exp_exp1^17'h10000),1'b1,exp1_oor);
@@ -161,6 +178,12 @@ module fpucadd(clk,rst,A,A_alt,B,and1,or1,copyA,en,rmode,res,res_hi,isDBL,fpcsr,
     ~(exp1_oor_IEEE & fpcsr[`csrfpu_clip_IEEE]) & 
     ~(~exp1_non_denor_IEEE & fpcsr[`csrfpu_daz] || ~exp_exp1[16]) ? (exp_exp1^17'h10000) : 17'bz;
 
+  assign exp_exp1_adj_d=exp1_oor & ~fpcsr[`csrfpu_clip_IEEE] ? exp_max : 17'b0;
+  assign exp_exp1_adj_d=exp1_oor_IEEE & fpcsr[`csrfpu_clip_IEEE] ? exp_max_IEEE : 17'bz;
+  assign exp_exp1_adj_d=~exp1_non_denor_IEEE & fpcsr[`csrfpu_daz] || ~exp_exp1[16] ? 17'b0 : 17'bz;
+  assign exp_exp1_adj_d=~(exp1_oor & ~fpcsr[`csrfpu_clip_IEEE]) & 
+    ~(exp1_oor_IEEE & fpcsr[`csrfpu_clip_IEEE]) & 
+    ~(~exp1_non_denor_IEEE & fpcsr[`csrfpu_daz] || ~exp_exp1[16]) ? (exp_exp1_adj^17'h10000) : 17'bz;
 
   assign {res[63:33],res[31:0]}=(prod_reg[127] & ~isDBL_reg & ~EXT_rnd1 & ~spec_any & en_reg) ? prod_reg[126:64]:63'bz;
   assign {res[63:33],res[31:0]}=(~prod_reg[127] & ~isDBL_reg & ~EXT_rnd0 & ~spec_any & en_reg) ? prod_reg[125:63]:63'bz;
@@ -314,6 +337,7 @@ module fpucadd(clk,rst,A,A_alt,B,and1,or1,copyA,en,rmode,res,res_hi,isDBL,fpcsr,
 //      exp_exp1_reg<=exp_exp1^17'h10000;
       exp_exp_reg<=exp_exp_d;
       exp_exp1_reg<=exp_exp1_d;
+      exp_exp1_adj_reg<=exp_exp1_adj_d;
  //     exp_exp_reg3<=exp_exp_reg;
  //     exp_exp1_reg3<=exp_exp1_reg;
       exp_max<=isDBL ? 17'hffe : 17'hfffe;
