@@ -140,12 +140,20 @@ module heptane_core(
   hammingGet64 DOget5_mod(dat5,datX5);
   hammingGet64 DOget6_mod(dat6,datX6);
   hammingGet64 DOget7_mod(dat7,datX7);
+  hammingCorr64 DOget0_mod(xdatX0,xdat0);
+  hammingCorr64 DOget1_mod(xdatX1,xdat1);
+  hammingCorr64 DOget2_mod(xdatX2,xdat2);
+  hammingCorr64 DOget3_mod(xdatX3,xdat3);
+  hammingCorr64 DOget4_mod(xdatX4,xdat4);
+  hammingCorr64 DOget5_mod(xdatX5,xdat5);
+  hammingCorr64 DOget6_mod(xdatX6,xdat6);
+  hammingCorr64 DOget7_mod(xdatX7,xdat7);
   hammingGet32 DOgetA_mod(dataSIG0[31:0],dataSIGX0[37:0]);
   hammingGet32 DOgetB_mod(dataSIG0[63:32],dataSIGX0[75:38]);
   hammingGet32 #(34) DOgetC_mod(dataOUT0[33:0],dataOUTX0[39:0]);
   hammingGet32 #(34) DOgetD_mod(dataOUT0[67:34],dataOUTX0[79:40]);
-  hammingGet32 #(34) DOgetE_mod(dataIN0[33:0],dataINX0[39:0]);
-  hammingGet32 #(34) DOgetF_mod(dataIN0[67:34],dataINX0[79:40]);
+  hammingCorr32 #(34) DOgetE_mod(dataINX0[33:0],dataIN0[39:0]);
+  hammingCorr32 #(34) DOgetF_mod(dataINX0[67:34],dataIN0[79:40]);
   endgenerate
 
  
