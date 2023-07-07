@@ -52,171 +52,171 @@ module backend(
   dc_expun_addr,
   dc_expun_en,
 
-  rs0i0_rA,rs0i0_rA_use,rs0i0_rA_useF,rs0i0_rA_isV,rs0i0_rA_isAnyV,
-  rs0i0_rB,rs0i0_rB_use,rs0i0_rB_useF,rs0i0_rB_isV,rs0i0_rB_isAnyV,rs0i0_useBConst,
-  rs0i0_rT,rs0i0_rT_use,rs0i0_rT_useF,rs0i0_rT_isV, 
-  rs0i0_port,
-  rs0i0_operation,
-  rs0i0_en,
-  rs0i0_const,
-  rs0i0_index,
-  rs0i0_IPRel,
-  rs0i0_afterTaken,
-  rs0i0_alt,
-  rs0i0_alloc,
-  rs0i0_allocF,
-  rs0i0_allocR,
-  rs0i0_lsi,
-  rs0i0_ldst_flg,
-  rs0i0_enA,
-  rs0i0_enB,
+  sr0i0_rA,sr0i0_rA_use,sr0i0_rA_useF,sr0i0_rA_isV,sr0i0_rA_isAnyV,
+  sr0i0_rB,sr0i0_rB_use,sr0i0_rB_useF,sr0i0_rB_isV,sr0i0_rB_isAnyV,sr0i0_useBConst,
+  sr0i0_rT,sr0i0_rT_use,sr0i0_rT_useF,sr0i0_rT_isV, 
+  sr0i0_port,
+  sr0i0_operation,
+  sr0i0_en,
+  sr0i0_const,
+  sr0i0_index,
+  sr0i0_IPRel,
+  sr0i0_afterTaken,
+  sr0i0_alt,
+  sr0i0_alloc,
+  sr0i0_allocF,
+  sr0i0_allocR,
+  sr0i0_lsi,
+  sr0i0_ldst_flg,
+  sr0i0_enA,
+  sr0i0_enB,
 
-  rs0i1_rA,rs0i1_rA_use,rs0i1_rA_useF,rs0i1_rA_isV,rs0i1_rA_isAnyV,rs0i1_useAConst,
-  rs0i1_rB,rs0i1_rB_use,rs0i1_rB_useF,rs0i1_rB_isV,rs0i1_rB_isAnyV,rs0i1_useBConst,
-  rs0i1_rT,rs0i1_rT_use,rs0i1_rT_useF,rs0i1_rT_isV,
-  rs0i1_port,
-  rs0i1_operation,
-  rs0i1_en,
-  rs0i1_const,
-  rs0i1_index,
-  rs0i1_IPRel,
-  rs0i1_afterTaken,
-  rs0i1_alloc,
-  rs0i1_allocF,
-  rs0i1_allocR,
-  rs0i1_flagDep,
-  rs0i1_lastFl,
-  rs0i1_lsi,
-  rs0i1_ldst_flg,
-  rs0i1_flag_wr,
+  sr0i1_rA,sr0i1_rA_use,sr0i1_rA_useF,sr0i1_rA_isV,sr0i1_rA_isAnyV,sr0i1_useAConst,
+  sr0i1_rB,sr0i1_rB_use,sr0i1_rB_useF,sr0i1_rB_isV,sr0i1_rB_isAnyV,sr0i1_useBConst,
+  sr0i1_rT,sr0i1_rT_use,sr0i1_rT_useF,sr0i1_rT_isV,
+  sr0i1_port,
+  sr0i1_operation,
+  sr0i1_en,
+  sr0i1_const,
+  sr0i1_index,
+  sr0i1_IPRel,
+  sr0i1_afterTaken,
+  sr0i1_alloc,
+  sr0i1_allocF,
+  sr0i1_allocR,
+  sr0i1_flagDep,
+  sr0i1_lastFl,
+  sr0i1_lsi,
+  sr0i1_ldst_flg,
+  sr0i1_flag_wr,
 
-  rs0i2_rA,rs0i2_rA_use,rs0i2_rA_useF,rs0i2_rA_isV,rs0i2_rA_isAnyV,rs0i2_useAConst,
-  rs0i2_rB,rs0i2_rB_use,rs0i2_rB_useF,rs0i2_rB_isV,rs0i2_rB_isAnyV,rs0i2_useBConst,
-  rs0i2_rT,rs0i2_rT_use,rs0i2_rT_useF,rs0i2_rT_isV,
-  rs0i2_port,
-  rs0i2_operation,
-  rs0i2_en,
-  rs0i2_const,
-  rs0i2_index,
-  rs0i2_IPRel,
-  rs0i2_afterTaken,
-  rs0i2_alloc,
-  rs0i2_allocF,
-  rs0i2_allocR,
-  rs0i2_flagDep,
-  rs0i2_lastFl,
-  rs0i2_flag_wr,
+  sr0i2_rA,sr0i2_rA_use,sr0i2_rA_useF,sr0i2_rA_isV,sr0i2_rA_isAnyV,sr0i2_useAConst,
+  sr0i2_rB,sr0i2_rB_use,sr0i2_rB_useF,sr0i2_rB_isV,sr0i2_rB_isAnyV,sr0i2_useBConst,
+  sr0i2_rT,sr0i2_rT_use,sr0i2_rT_useF,sr0i2_rT_isV,
+  sr0i2_port,
+  sr0i2_operation,
+  sr0i2_en,
+  sr0i2_const,
+  sr0i2_index,
+  sr0i2_IPRel,
+  sr0i2_afterTaken,
+  sr0i2_alloc,
+  sr0i2_allocF,
+  sr0i2_allocR,
+  sr0i2_flagDep,
+  sr0i2_lastFl,
+  sr0i2_flag_wr,
 
-  rs1i0_rA,rs1i0_rA_use,rs1i0_rA_useF,rs1i0_rA_isV,rs1i0_rA_isAnyV,
-  rs1i0_rB,rs1i0_rB_use,rs1i0_rB_useF,rs1i0_rB_isV,rs1i0_rB_isAnyV,rs1i0_useBConst,
-  rs1i0_rT,rs1i0_rT_use,rs1i0_rT_useF,rs1i0_rT_isV,
-  rs1i0_port,
-  rs1i0_operation,
-  rs1i0_en,
-  rs1i0_const,
-  rs1i0_index,
-  rs1i0_IPRel,
-  rs1i0_afterTaken,
-  rs1i0_alt,
-  rs1i0_alloc,
-  rs1i0_allocF,
-  rs1i0_allocR,
-  rs1i0_lsi,
-  rs1i0_ldst_flg,
-  rs1i0_enA,
-  rs1i0_enB,
+  sr1i0_rA,sr1i0_rA_use,sr1i0_rA_useF,sr1i0_rA_isV,sr1i0_rA_isAnyV,
+  sr1i0_rB,sr1i0_rB_use,sr1i0_rB_useF,sr1i0_rB_isV,sr1i0_rB_isAnyV,sr1i0_useBConst,
+  sr1i0_rT,sr1i0_rT_use,sr1i0_rT_useF,sr1i0_rT_isV,
+  sr1i0_port,
+  sr1i0_operation,
+  sr1i0_en,
+  sr1i0_const,
+  sr1i0_index,
+  sr1i0_IPRel,
+  sr1i0_afterTaken,
+  sr1i0_alt,
+  sr1i0_alloc,
+  sr1i0_allocF,
+  sr1i0_allocR,
+  sr1i0_lsi,
+  sr1i0_ldst_flg,
+  sr1i0_enA,
+  sr1i0_enB,
 
-  rs1i1_rA,rs1i1_rA_use,rs1i1_rA_useF,rs1i1_rA_isV,rs1i1_rA_isAnyV,rs1i1_useAConst,
-  rs1i1_rB,rs1i1_rB_use,rs1i1_rB_useF,rs1i1_rB_isV,rs1i1_rB_isAnyV,rs1i1_useBConst,
-  rs1i1_rT,rs1i1_rT_use,rs1i1_rT_useF,rs1i1_rT_isV,
-  rs1i1_port,
-  rs1i1_operation,
-  rs1i1_en,
-  rs1i1_const,
-  rs1i1_index,
-  rs1i1_IPRel,
-  rs1i1_afterTaken,
-  rs1i1_alloc,
-  rs1i1_allocF,
-  rs1i1_allocR,
-  rs1i1_flagDep,
-  rs1i1_lastFl,
-  rs1i1_lsi,
-  rs1i1_ldst_flg,
-  rs1i1_flag_wr,
+  sr1i1_rA,sr1i1_rA_use,sr1i1_rA_useF,sr1i1_rA_isV,sr1i1_rA_isAnyV,sr1i1_useAConst,
+  sr1i1_rB,sr1i1_rB_use,sr1i1_rB_useF,sr1i1_rB_isV,sr1i1_rB_isAnyV,sr1i1_useBConst,
+  sr1i1_rT,sr1i1_rT_use,sr1i1_rT_useF,sr1i1_rT_isV,
+  sr1i1_port,
+  sr1i1_operation,
+  sr1i1_en,
+  sr1i1_const,
+  sr1i1_index,
+  sr1i1_IPRel,
+  sr1i1_afterTaken,
+  sr1i1_alloc,
+  sr1i1_allocF,
+  sr1i1_allocR,
+  sr1i1_flagDep,
+  sr1i1_lastFl,
+  sr1i1_lsi,
+  sr1i1_ldst_flg,
+  sr1i1_flag_wr,
 
-  rs1i2_rA,rs1i2_rA_use,rs1i2_rA_useF,rs1i2_rA_isV,rs1i2_rA_isAnyV,rs1i2_useAConst,
-  rs1i2_rB,rs1i2_rB_use,rs1i2_rB_useF,rs1i2_rB_isV,rs1i2_rB_isAnyV,rs1i2_useBConst,
-  rs1i2_rT,rs1i2_rT_use,rs1i2_rT_useF,rs1i2_rT_isV,
-  rs1i2_port,
-  rs1i2_operation,
-  rs1i2_en,
-  rs1i2_const,
-  rs1i2_index,
-  rs1i2_IPRel,
-  rs1i2_afterTaken,
-  rs1i2_alloc,
-  rs1i2_allocF,
-  rs1i2_allocR,
-  rs1i2_flagDep,
-  rs1i2_lastFl,
-  rs1i2_flag_wr,
+  sr1i2_rA,sr1i2_rA_use,sr1i2_rA_useF,sr1i2_rA_isV,sr1i2_rA_isAnyV,sr1i2_useAConst,
+  sr1i2_rB,sr1i2_rB_use,sr1i2_rB_useF,sr1i2_rB_isV,sr1i2_rB_isAnyV,sr1i2_useBConst,
+  sr1i2_rT,sr1i2_rT_use,sr1i2_rT_useF,sr1i2_rT_isV,
+  sr1i2_port,
+  sr1i2_operation,
+  sr1i2_en,
+  sr1i2_const,
+  sr1i2_index,
+  sr1i2_IPRel,
+  sr1i2_afterTaken,
+  sr1i2_alloc,
+  sr1i2_allocF,
+  sr1i2_allocR,
+  sr1i2_flagDep,
+  sr1i2_lastFl,
+  sr1i2_flag_wr,
 
-  rs2i0_rA,rs2i0_rA_use,rs2i0_rA_useF,rs2i0_rA_isV,rs2i0_rA_isAnyV,
-  rs2i0_rB,rs2i0_rB_use,rs2i0_rB_useF,rs2i0_rB_isV,rs2i0_rB_isAnyV,rs2i0_useBConst,
-  rs2i0_rT,rs2i0_rT_use,rs2i0_rT_useF,rs2i0_rT_isV,
-  rs2i0_port,
-  rs2i0_operation,
-  rs2i0_en,
-  rs2i0_const,
-  rs2i0_index,
-  rs2i0_IPRel,
-  rs2i0_afterTaken,
-  rs2i0_alt,
-  rs2i0_alloc,
-  rs2i0_allocF,
-  rs2i0_allocR,
-  rs2i0_lsi,
-  rs2i0_ldst_flg,
-  rs2i0_enA,
-  rs2i0_enB,
+  sr2i0_rA,sr2i0_rA_use,sr2i0_rA_useF,sr2i0_rA_isV,sr2i0_rA_isAnyV,
+  sr2i0_rB,sr2i0_rB_use,sr2i0_rB_useF,sr2i0_rB_isV,sr2i0_rB_isAnyV,sr2i0_useBConst,
+  sr2i0_rT,sr2i0_rT_use,sr2i0_rT_useF,sr2i0_rT_isV,
+  sr2i0_port,
+  sr2i0_operation,
+  sr2i0_en,
+  sr2i0_const,
+  sr2i0_index,
+  sr2i0_IPRel,
+  sr2i0_afterTaken,
+  sr2i0_alt,
+  sr2i0_alloc,
+  sr2i0_allocF,
+  sr2i0_allocR,
+  sr2i0_lsi,
+  sr2i0_ldst_flg,
+  sr2i0_enA,
+  sr2i0_enB,
 
-  rs2i1_rA,rs2i1_rA_use,rs2i1_rA_useF,rs2i1_rA_isV,rs2i1_rA_isAnyV,rs2i1_useAConst,
-  rs2i1_rB,rs2i1_rB_use,rs2i1_rB_useF,rs2i1_rB_isV,rs2i1_rB_isAnyV,rs2i1_useBConst,
-  rs2i1_rT,rs2i1_rT_use,rs2i1_rT_useF,rs2i1_rT_isV,
-  rs2i1_port,
-  rs2i1_operation,
-  rs2i1_en,
-  rs2i1_const,
-  rs2i1_index,
-  rs2i1_IPRel,
-  rs2i1_afterTaken,
-  rs2i1_alloc,
-  rs2i1_allocF,
-  rs2i1_allocR,
-  rs2i1_flagDep,
-  rs2i1_lastFl,
-  rs2i1_lsi,
-  rs2i1_ldst_flg,
-  rs2i1_flag_wr,
+  sr2i1_rA,sr2i1_rA_use,sr2i1_rA_useF,sr2i1_rA_isV,sr2i1_rA_isAnyV,sr2i1_useAConst,
+  sr2i1_rB,sr2i1_rB_use,sr2i1_rB_useF,sr2i1_rB_isV,sr2i1_rB_isAnyV,sr2i1_useBConst,
+  sr2i1_rT,sr2i1_rT_use,sr2i1_rT_useF,sr2i1_rT_isV,
+  sr2i1_port,
+  sr2i1_operation,
+  sr2i1_en,
+  sr2i1_const,
+  sr2i1_index,
+  sr2i1_IPRel,
+  sr2i1_afterTaken,
+  sr2i1_alloc,
+  sr2i1_allocF,
+  sr2i1_allocR,
+  sr2i1_flagDep,
+  sr2i1_lastFl,
+  sr2i1_lsi,
+  sr2i1_ldst_flg,
+  sr2i1_flag_wr,
 
-  rs2i2_rA,rs2i2_rA_use,rs2i2_rA_useF,rs2i2_rA_isV,rs2i2_rA_isAnyV,rs2i2_useAConst,
-  rs2i2_rB,rs2i2_rB_use,rs2i2_rB_useF,rs2i2_rB_isV,rs2i2_rB_isAnyV,rs2i2_useBConst,
-  rs2i2_rT,rs2i2_rT_use,rs2i2_rT_useF,rs2i2_rT_isV,
-  rs2i2_port,
-  rs2i2_operation,
-  rs2i2_en,
-  rs2i2_const,
-  rs2i2_index,
-  rs2i2_IPRel,
-  rs2i2_afterTaken,
-  rs2i2_alloc,
-  rs2i2_allocF,
-  rs2i2_allocR,
-  rs2i2_flagDep,
-  rs2i2_lastFl,
-  rs2i2_mul,
-  rs2i2_flag_wr,
+  sr2i2_rA,sr2i2_rA_use,sr2i2_rA_useF,sr2i2_rA_isV,sr2i2_rA_isAnyV,sr2i2_useAConst,
+  sr2i2_rB,sr2i2_rB_use,sr2i2_rB_useF,sr2i2_rB_isV,sr2i2_rB_isAnyV,sr2i2_useBConst,
+  sr2i2_rT,sr2i2_rT_use,sr2i2_rT_useF,sr2i2_rT_isV,
+  sr2i2_port,
+  sr2i2_operation,
+  sr2i2_en,
+  sr2i2_const,
+  sr2i2_index,
+  sr2i2_IPRel,
+  sr2i2_afterTaken,
+  sr2i2_alloc,
+  sr2i2_allocF,
+  sr2i2_allocR,
+  sr2i2_flagDep,
+  sr2i2_lastFl,
+  sr2i2_mul,
+  sr2i2_flag_wr,
 //end reordered small instructions
 //begin instructions in program order
   instr0_rT, 
@@ -458,285 +458,285 @@ module backend(
   output [36:0] dc_expun_addr;
   output dc_expun_en;
 
-  input [IN_REG_WIDTH-1:0] rs0i0_rA;
-  input rs0i0_rA_use;
-  input rs0i0_rA_useF;
-  input rs0i0_rA_isV;
-  input rs0i0_rA_isAnyV;
-  input [IN_REG_WIDTH-1:0] rs0i0_rB;
-  input rs0i0_rB_use;
-  input rs0i0_rB_useF;
-  input rs0i0_rB_isV;
-  input rs0i0_rB_isAnyV;
-  input rs0i0_useBConst;
-  input [IN_REG_WIDTH-1:0] rs0i0_rT;
-  input rs0i0_rT_use;
-  input rs0i0_rT_useF;
-  input rs0i0_rT_isV;
-  input [PORT_WIDTH-1:0] rs0i0_port;
-  input [OPERATION_WIDTH-1:0] rs0i0_operation;
-  input rs0i0_en;
-  input [DATA_WIDTH-1:0] rs0i0_const;
-  input [3:0] rs0i0_index;
-  input rs0i0_IPRel;
-  input rs0i0_afterTaken;
-  input rs0i0_alt;
-  input rs0i0_alloc;
-  input rs0i0_allocF;
-  input rs0i0_allocR;
-  input [5:0] rs0i0_lsi; 
-  input rs0i0_ldst_flg; 
-  input rs0i0_enA;
-  input rs0i0_enB; 
+  input [IN_REG_WIDTH-1:0] sr0i0_rA;
+  input sr0i0_rA_use;
+  input sr0i0_rA_useF;
+  input sr0i0_rA_isV;
+  input sr0i0_rA_isAnyV;
+  input [IN_REG_WIDTH-1:0] sr0i0_rB;
+  input sr0i0_rB_use;
+  input sr0i0_rB_useF;
+  input sr0i0_rB_isV;
+  input sr0i0_rB_isAnyV;
+  input sr0i0_useBConst;
+  input [IN_REG_WIDTH-1:0] sr0i0_rT;
+  input sr0i0_rT_use;
+  input sr0i0_rT_useF;
+  input sr0i0_rT_isV;
+  input [PORT_WIDTH-1:0] sr0i0_port;
+  input [OPERATION_WIDTH-1:0] sr0i0_operation;
+  input sr0i0_en;
+  input [DATA_WIDTH-1:0] sr0i0_const;
+  input [3:0] sr0i0_index;
+  input sr0i0_IPRel;
+  input sr0i0_afterTaken;
+  input sr0i0_alt;
+  input sr0i0_alloc;
+  input sr0i0_allocF;
+  input sr0i0_allocR;
+  input [5:0] sr0i0_lsi; 
+  input sr0i0_ldst_flg; 
+  input sr0i0_enA;
+  input sr0i0_enB; 
  
-  input [IN_REG_WIDTH-1:0] rs0i1_rA;
-  input rs0i1_rA_use;
-  input rs0i1_rA_useF;
-  input rs0i1_rA_isV;
-  input rs0i1_rA_isAnyV;
-  input rs0i1_useAConst;
-  input [IN_REG_WIDTH-1:0] rs0i1_rB;
-  input rs0i1_rB_use;
-  input rs0i1_rB_useF;
-  input rs0i1_rB_isV;
-  input rs0i1_rB_isAnyV;
-  input rs0i1_useBConst;
-  input [IN_REG_WIDTH-1:0] rs0i1_rT;
-  input rs0i1_rT_use;
-  input rs0i1_rT_useF;
-  input rs0i1_rT_isV;
-  input [PORT_WIDTH-1:0] rs0i1_port;
-  input [OPERATION_WIDTH-1:0] rs0i1_operation;
-  input rs0i1_en;
-  input [DATA_WIDTH-1:0] rs0i1_const;
-  input [3:0] rs0i1_index;
-  input rs0i1_IPRel;
-  input rs0i1_afterTaken;
-  input rs0i1_alloc;
-  input rs0i1_allocF;
-  input rs0i1_allocR;
-  input [3:0] rs0i1_flagDep;
-  input rs0i1_lastFl;
-  input [5:0] rs0i1_lsi;  
-  input rs0i1_ldst_flg; 
-  input rs0i1_flag_wr;
+  input [IN_REG_WIDTH-1:0] sr0i1_rA;
+  input sr0i1_rA_use;
+  input sr0i1_rA_useF;
+  input sr0i1_rA_isV;
+  input sr0i1_rA_isAnyV;
+  input sr0i1_useAConst;
+  input [IN_REG_WIDTH-1:0] sr0i1_rB;
+  input sr0i1_rB_use;
+  input sr0i1_rB_useF;
+  input sr0i1_rB_isV;
+  input sr0i1_rB_isAnyV;
+  input sr0i1_useBConst;
+  input [IN_REG_WIDTH-1:0] sr0i1_rT;
+  input sr0i1_rT_use;
+  input sr0i1_rT_useF;
+  input sr0i1_rT_isV;
+  input [PORT_WIDTH-1:0] sr0i1_port;
+  input [OPERATION_WIDTH-1:0] sr0i1_operation;
+  input sr0i1_en;
+  input [DATA_WIDTH-1:0] sr0i1_const;
+  input [3:0] sr0i1_index;
+  input sr0i1_IPRel;
+  input sr0i1_afterTaken;
+  input sr0i1_alloc;
+  input sr0i1_allocF;
+  input sr0i1_allocR;
+  input [3:0] sr0i1_flagDep;
+  input sr0i1_lastFl;
+  input [5:0] sr0i1_lsi;  
+  input sr0i1_ldst_flg; 
+  input sr0i1_flag_wr;
   
-  input [IN_REG_WIDTH-1:0] rs0i2_rA;
-  input rs0i2_rA_use;
-  input rs0i2_rA_useF;
-  input rs0i2_rA_isV;
-  input rs0i2_rA_isAnyV;
-  input rs0i2_useAConst;
-  input [IN_REG_WIDTH-1:0] rs0i2_rB;
-  input rs0i2_rB_use;
-  input rs0i2_rB_useF;
-  input rs0i2_rB_isV;
-  input rs0i2_rB_isAnyV;
-  input rs0i2_useBConst;
-  input [IN_REG_WIDTH-1:0] rs0i2_rT;
-  input rs0i2_rT_use;
-  input rs0i2_rT_useF;
-  input rs0i2_rT_isV;
-  input [PORT_WIDTH-1:0] rs0i2_port;
-  input [OPERATION_WIDTH-1:0] rs0i2_operation;
-  input rs0i2_en;
-  input [DATA_WIDTH-1:0] rs0i2_const;
-  input [3:0] rs0i2_index;
-  input rs0i2_IPRel;
-  input rs0i2_afterTaken;
-  input rs0i2_alloc;
-  input rs0i2_allocF;
-  input rs0i2_allocR;
-  input [3:0] rs0i2_flagDep;
-  input rs0i2_lastFl;
-  input rs0i2_flag_wr;
+  input [IN_REG_WIDTH-1:0] sr0i2_rA;
+  input sr0i2_rA_use;
+  input sr0i2_rA_useF;
+  input sr0i2_rA_isV;
+  input sr0i2_rA_isAnyV;
+  input sr0i2_useAConst;
+  input [IN_REG_WIDTH-1:0] sr0i2_rB;
+  input sr0i2_rB_use;
+  input sr0i2_rB_useF;
+  input sr0i2_rB_isV;
+  input sr0i2_rB_isAnyV;
+  input sr0i2_useBConst;
+  input [IN_REG_WIDTH-1:0] sr0i2_rT;
+  input sr0i2_rT_use;
+  input sr0i2_rT_useF;
+  input sr0i2_rT_isV;
+  input [PORT_WIDTH-1:0] sr0i2_port;
+  input [OPERATION_WIDTH-1:0] sr0i2_operation;
+  input sr0i2_en;
+  input [DATA_WIDTH-1:0] sr0i2_const;
+  input [3:0] sr0i2_index;
+  input sr0i2_IPRel;
+  input sr0i2_afterTaken;
+  input sr0i2_alloc;
+  input sr0i2_allocF;
+  input sr0i2_allocR;
+  input [3:0] sr0i2_flagDep;
+  input sr0i2_lastFl;
+  input sr0i2_flag_wr;
   
-  input [IN_REG_WIDTH-1:0] rs1i0_rA;
-  input rs1i0_rA_use;
-  input rs1i0_rA_useF;
-  input rs1i0_rA_isV;
-  input rs1i0_rA_isAnyV;
-  input [IN_REG_WIDTH-1:0] rs1i0_rB;
-  input rs1i0_rB_use;
-  input rs1i0_rB_useF;
-  input rs1i0_rB_isV;
-  input rs1i0_rB_isAnyV;
-  input rs1i0_useBConst;
-  input [IN_REG_WIDTH-1:0] rs1i0_rT;
-  input rs1i0_rT_use;
-  input rs1i0_rT_useF;
-  input rs1i0_rT_isV;
-  input [PORT_WIDTH-1:0] rs1i0_port;
-  input [OPERATION_WIDTH-1:0] rs1i0_operation;
-  input rs1i0_en;
-  input [DATA_WIDTH-1:0] rs1i0_const;
-  input [3:0] rs1i0_index;
-  input rs1i0_IPRel;
-  input rs1i0_afterTaken;
-  input rs1i0_alt;
-  input rs1i0_alloc;
-  input rs1i0_allocF;
-  input rs1i0_allocR;
-  input [5:0] rs1i0_lsi;  
-  input rs1i0_ldst_flg; 
-  input rs1i0_enA;
-  input rs1i0_enB; 
+  input [IN_REG_WIDTH-1:0] sr1i0_rA;
+  input sr1i0_rA_use;
+  input sr1i0_rA_useF;
+  input sr1i0_rA_isV;
+  input sr1i0_rA_isAnyV;
+  input [IN_REG_WIDTH-1:0] sr1i0_rB;
+  input sr1i0_rB_use;
+  input sr1i0_rB_useF;
+  input sr1i0_rB_isV;
+  input sr1i0_rB_isAnyV;
+  input sr1i0_useBConst;
+  input [IN_REG_WIDTH-1:0] sr1i0_rT;
+  input sr1i0_rT_use;
+  input sr1i0_rT_useF;
+  input sr1i0_rT_isV;
+  input [PORT_WIDTH-1:0] sr1i0_port;
+  input [OPERATION_WIDTH-1:0] sr1i0_operation;
+  input sr1i0_en;
+  input [DATA_WIDTH-1:0] sr1i0_const;
+  input [3:0] sr1i0_index;
+  input sr1i0_IPRel;
+  input sr1i0_afterTaken;
+  input sr1i0_alt;
+  input sr1i0_alloc;
+  input sr1i0_allocF;
+  input sr1i0_allocR;
+  input [5:0] sr1i0_lsi;  
+  input sr1i0_ldst_flg; 
+  input sr1i0_enA;
+  input sr1i0_enB; 
   
-  input [IN_REG_WIDTH-1:0] rs1i1_rA;
-  input rs1i1_rA_use;
-  input rs1i1_rA_useF;
-  input rs1i1_rA_isV;
-  input rs1i1_rA_isAnyV;
-  input rs1i1_useAConst;
-  input [IN_REG_WIDTH-1:0] rs1i1_rB;
-  input rs1i1_rB_use;
-  input rs1i1_rB_useF;
-  input rs1i1_rB_isV;
-  input rs1i1_rB_isAnyV;
-  input rs1i1_useBConst;
-  input [IN_REG_WIDTH-1:0] rs1i1_rT;
-  input rs1i1_rT_use;
-  input rs1i1_rT_useF;
-  input rs1i1_rT_isV;
-  input [PORT_WIDTH-1:0] rs1i1_port;
-  input [OPERATION_WIDTH-1:0] rs1i1_operation;
-  input rs1i1_en;
-  input [DATA_WIDTH-1:0] rs1i1_const;
-  input [3:0] rs1i1_index;
-  input rs1i1_IPRel;
-  input rs1i1_afterTaken;
-  input rs1i1_alloc;
-  input rs1i1_allocF;
-  input rs1i1_allocR;
-  input [3:0] rs1i1_flagDep;
-  input rs1i1_lastFl;
-  input [5:0] rs1i1_lsi;  
-  input rs1i1_ldst_flg; 
-  input rs1i1_flag_wr;
+  input [IN_REG_WIDTH-1:0] sr1i1_rA;
+  input sr1i1_rA_use;
+  input sr1i1_rA_useF;
+  input sr1i1_rA_isV;
+  input sr1i1_rA_isAnyV;
+  input sr1i1_useAConst;
+  input [IN_REG_WIDTH-1:0] sr1i1_rB;
+  input sr1i1_rB_use;
+  input sr1i1_rB_useF;
+  input sr1i1_rB_isV;
+  input sr1i1_rB_isAnyV;
+  input sr1i1_useBConst;
+  input [IN_REG_WIDTH-1:0] sr1i1_rT;
+  input sr1i1_rT_use;
+  input sr1i1_rT_useF;
+  input sr1i1_rT_isV;
+  input [PORT_WIDTH-1:0] sr1i1_port;
+  input [OPERATION_WIDTH-1:0] sr1i1_operation;
+  input sr1i1_en;
+  input [DATA_WIDTH-1:0] sr1i1_const;
+  input [3:0] sr1i1_index;
+  input sr1i1_IPRel;
+  input sr1i1_afterTaken;
+  input sr1i1_alloc;
+  input sr1i1_allocF;
+  input sr1i1_allocR;
+  input [3:0] sr1i1_flagDep;
+  input sr1i1_lastFl;
+  input [5:0] sr1i1_lsi;  
+  input sr1i1_ldst_flg; 
+  input sr1i1_flag_wr;
 
-  input [IN_REG_WIDTH-1:0] rs1i2_rA;
-  input rs1i2_rA_use;
-  input rs1i2_rA_useF;
-  input rs1i2_rA_isV;
-  input rs1i2_rA_isAnyV;
-  input rs1i2_useAConst;
-  input [IN_REG_WIDTH-1:0] rs1i2_rB;
-  input rs1i2_rB_use;
-  input rs1i2_rB_useF;
-  input rs1i2_rB_isV;
-  input rs1i2_rB_isAnyV;
-  input rs1i2_useBConst;
-  input [IN_REG_WIDTH-1:0] rs1i2_rT;
-  input rs1i2_rT_use;
-  input rs1i2_rT_useF;
-  input rs1i2_rT_isV;
-  input [PORT_WIDTH-1:0] rs1i2_port;
-  input [OPERATION_WIDTH-1:0] rs1i2_operation;
-  input rs1i2_en;
-  input [DATA_WIDTH-1:0] rs1i2_const;
-  input [3:0] rs1i2_index;
-  input rs1i2_IPRel;
-  input rs1i2_afterTaken;
-  input rs1i2_alloc;
-  input rs1i2_allocF;
-  input rs1i2_allocR;
-  input [3:0] rs1i2_flagDep;
-  input rs1i2_lastFl;
-  input rs1i2_flag_wr;
+  input [IN_REG_WIDTH-1:0] sr1i2_rA;
+  input sr1i2_rA_use;
+  input sr1i2_rA_useF;
+  input sr1i2_rA_isV;
+  input sr1i2_rA_isAnyV;
+  input sr1i2_useAConst;
+  input [IN_REG_WIDTH-1:0] sr1i2_rB;
+  input sr1i2_rB_use;
+  input sr1i2_rB_useF;
+  input sr1i2_rB_isV;
+  input sr1i2_rB_isAnyV;
+  input sr1i2_useBConst;
+  input [IN_REG_WIDTH-1:0] sr1i2_rT;
+  input sr1i2_rT_use;
+  input sr1i2_rT_useF;
+  input sr1i2_rT_isV;
+  input [PORT_WIDTH-1:0] sr1i2_port;
+  input [OPERATION_WIDTH-1:0] sr1i2_operation;
+  input sr1i2_en;
+  input [DATA_WIDTH-1:0] sr1i2_const;
+  input [3:0] sr1i2_index;
+  input sr1i2_IPRel;
+  input sr1i2_afterTaken;
+  input sr1i2_alloc;
+  input sr1i2_allocF;
+  input sr1i2_allocR;
+  input [3:0] sr1i2_flagDep;
+  input sr1i2_lastFl;
+  input sr1i2_flag_wr;
 
-  input [IN_REG_WIDTH-1:0] rs2i0_rA;
-  input rs2i0_rA_use;
-  input rs2i0_rA_useF;
-  input rs2i0_rA_isV;
-  input rs2i0_rA_isAnyV;
-  input [IN_REG_WIDTH-1:0] rs2i0_rB;
-  input rs2i0_rB_use;
-  input rs2i0_rB_useF;
-  input rs2i0_rB_isV;
-  input rs2i0_rB_isAnyV;
-  input rs2i0_useBConst;
-  input [IN_REG_WIDTH-1:0] rs2i0_rT;
-  input rs2i0_rT_use;
-  input rs2i0_rT_useF;
-  input rs2i0_rT_isV;
-  input [PORT_WIDTH-1:0] rs2i0_port;
-  input [OPERATION_WIDTH-1:0] rs2i0_operation;
-  input rs2i0_en;
-  input [DATA_WIDTH-1:0] rs2i0_const;
-  input [3:0] rs2i0_index;
-  input rs2i0_IPRel;
-  input rs2i0_afterTaken;
-  input rs2i0_alt;
-  input rs2i0_alloc;
-  input rs2i0_allocF;
-  input rs2i0_allocR;
-  input [5:0] rs2i0_lsi;  
-  input rs2i0_ldst_flg; 
-  input rs2i0_enA;
-  input rs2i0_enB; 
+  input [IN_REG_WIDTH-1:0] sr2i0_rA;
+  input sr2i0_rA_use;
+  input sr2i0_rA_useF;
+  input sr2i0_rA_isV;
+  input sr2i0_rA_isAnyV;
+  input [IN_REG_WIDTH-1:0] sr2i0_rB;
+  input sr2i0_rB_use;
+  input sr2i0_rB_useF;
+  input sr2i0_rB_isV;
+  input sr2i0_rB_isAnyV;
+  input sr2i0_useBConst;
+  input [IN_REG_WIDTH-1:0] sr2i0_rT;
+  input sr2i0_rT_use;
+  input sr2i0_rT_useF;
+  input sr2i0_rT_isV;
+  input [PORT_WIDTH-1:0] sr2i0_port;
+  input [OPERATION_WIDTH-1:0] sr2i0_operation;
+  input sr2i0_en;
+  input [DATA_WIDTH-1:0] sr2i0_const;
+  input [3:0] sr2i0_index;
+  input sr2i0_IPRel;
+  input sr2i0_afterTaken;
+  input sr2i0_alt;
+  input sr2i0_alloc;
+  input sr2i0_allocF;
+  input sr2i0_allocR;
+  input [5:0] sr2i0_lsi;  
+  input sr2i0_ldst_flg; 
+  input sr2i0_enA;
+  input sr2i0_enB; 
   
-  input [IN_REG_WIDTH-1:0] rs2i1_rA;
-  input rs2i1_rA_use;
-  input rs2i1_rA_useF;
-  input rs2i1_rA_isV;
-  input rs2i1_rA_isAnyV;
-  input rs2i1_useAConst;
-  input [IN_REG_WIDTH-1:0] rs2i1_rB;
-  input rs2i1_rB_use;
-  input rs2i1_rB_useF;
-  input rs2i1_rB_isV;
-  input rs2i1_rB_isAnyV;
-  input rs2i1_useBConst;
-  input [IN_REG_WIDTH-1:0] rs2i1_rT;
-  input rs2i1_rT_use;
-  input rs2i1_rT_useF;
-  input rs2i1_rT_isV;
-  input [PORT_WIDTH-1:0] rs2i1_port;
-  input [OPERATION_WIDTH-1:0] rs2i1_operation;
-  input rs2i1_en;
-  input [DATA_WIDTH-1:0] rs2i1_const;
-  input [3:0] rs2i1_index;
-  input rs2i1_IPRel;
-  input rs2i1_afterTaken;
-  input rs2i1_alloc;
-  input rs2i1_allocF;
-  input rs2i1_allocR;
-  input [3:0] rs2i1_flagDep;
-  input rs2i1_lastFl;
-  input [5:0] rs2i1_lsi;  
-  input rs2i1_ldst_flg; 
-  input rs2i1_flag_wr;
+  input [IN_REG_WIDTH-1:0] sr2i1_rA;
+  input sr2i1_rA_use;
+  input sr2i1_rA_useF;
+  input sr2i1_rA_isV;
+  input sr2i1_rA_isAnyV;
+  input sr2i1_useAConst;
+  input [IN_REG_WIDTH-1:0] sr2i1_rB;
+  input sr2i1_rB_use;
+  input sr2i1_rB_useF;
+  input sr2i1_rB_isV;
+  input sr2i1_rB_isAnyV;
+  input sr2i1_useBConst;
+  input [IN_REG_WIDTH-1:0] sr2i1_rT;
+  input sr2i1_rT_use;
+  input sr2i1_rT_useF;
+  input sr2i1_rT_isV;
+  input [PORT_WIDTH-1:0] sr2i1_port;
+  input [OPERATION_WIDTH-1:0] sr2i1_operation;
+  input sr2i1_en;
+  input [DATA_WIDTH-1:0] sr2i1_const;
+  input [3:0] sr2i1_index;
+  input sr2i1_IPRel;
+  input sr2i1_afterTaken;
+  input sr2i1_alloc;
+  input sr2i1_allocF;
+  input sr2i1_allocR;
+  input [3:0] sr2i1_flagDep;
+  input sr2i1_lastFl;
+  input [5:0] sr2i1_lsi;  
+  input sr2i1_ldst_flg; 
+  input sr2i1_flag_wr;
 
-  input [IN_REG_WIDTH-1:0] rs2i2_rA;
-  input rs2i2_rA_use;
-  input rs2i2_rA_useF;
-  input rs2i2_rA_isV;
-  input rs2i2_rA_isAnyV;
-  input rs2i2_useAConst;
-  input [IN_REG_WIDTH-1:0] rs2i2_rB;
-  input rs2i2_rB_use;
-  input rs2i2_rB_useF;
-  input rs2i2_rB_isV;
-  input rs2i2_rB_isAnyV;
-  input rs2i2_useBConst;
-  input [IN_REG_WIDTH-1:0] rs2i2_rT;
-  input rs2i2_rT_use;
-  input rs2i2_rT_useF;
-  input rs2i2_rT_isV;
-  input [PORT_WIDTH-1:0] rs2i2_port;
-  input [OPERATION_WIDTH-1:0] rs2i2_operation;
-  input rs2i2_en;
-  input [DATA_WIDTH-1:0] rs2i2_const;
-  input [3:0] rs2i2_index;
-  input rs2i2_IPRel;
-  input rs2i2_afterTaken;
-  input rs2i2_alloc;
-  input rs2i2_allocF;
-  input rs2i2_allocR;
-  input [3:0] rs2i2_flagDep;
-  input rs2i2_lastFl;
-  input rs2i2_mul;
-  input rs2i2_flag_wr;
+  input [IN_REG_WIDTH-1:0] sr2i2_rA;
+  input sr2i2_rA_use;
+  input sr2i2_rA_useF;
+  input sr2i2_rA_isV;
+  input sr2i2_rA_isAnyV;
+  input sr2i2_useAConst;
+  input [IN_REG_WIDTH-1:0] sr2i2_rB;
+  input sr2i2_rB_use;
+  input sr2i2_rB_useF;
+  input sr2i2_rB_isV;
+  input sr2i2_rB_isAnyV;
+  input sr2i2_useBConst;
+  input [IN_REG_WIDTH-1:0] sr2i2_rT;
+  input sr2i2_rT_use;
+  input sr2i2_rT_useF;
+  input sr2i2_rT_isV;
+  input [PORT_WIDTH-1:0] sr2i2_port;
+  input [OPERATION_WIDTH-1:0] sr2i2_operation;
+  input sr2i2_en;
+  input [DATA_WIDTH-1:0] sr2i2_const;
+  input [3:0] sr2i2_index;
+  input sr2i2_IPRel;
+  input sr2i2_afterTaken;
+  input sr2i2_alloc;
+  input sr2i2_allocF;
+  input sr2i2_allocR;
+  input [3:0] sr2i2_flagDep;
+  input sr2i2_lastFl;
+  input sr2i2_mul;
+  input sr2i2_flag_wr;
   
   input [IN_REG_WIDTH-1:0] instr0_rT;
   input instr0_en;
@@ -969,14 +969,14 @@ module backend(
 
   wire [2:0] useBConstW;
   wire [2:0] useAConstW;
-  wire [2:0] rs_rAW_use;
-  wire [2:0] rs_rAW_useF;
-  wire [2:0] rs_rBW_use;
-  wire [2:0] rs_rBW_useF;
-  reg [2:0] rs_rAW_useF_reg;
-  reg [2:0] rs_rBW_useF_reg;
-  reg [2:0] rs_rAW_useF_reg2;
-  reg [2:0] rs_rBW_useF_reg2;
+  wire [2:0] sr_rAW_use;
+  wire [2:0] sr_rAW_useF;
+  wire [2:0] sr_rBW_use;
+  wire [2:0] sr_rBW_useF;
+  reg [2:0] sr_rAW_useF_reg;
+  reg [2:0] sr_rBW_useF_reg;
+  reg [2:0] sr_rAW_useF_reg2;
+  reg [2:0] sr_rBW_useF_reg2;
 
   reg [3:0] newAttr_reg;
   reg [3:0] newAttr_reg2;
@@ -1159,226 +1159,226 @@ module backend(
   reg [8:0] clr_reg;
   reg [8:0] clrS_reg;
 
-  reg [IN_REG_WIDTH-1:0] rs0i0_rT_reg;
-  reg [IN_REG_WIDTH-1:0] rs0i1_rT_reg;
-  reg [IN_REG_WIDTH-1:0] rs0i2_rT_reg;
-  reg [IN_REG_WIDTH-1:0] rs1i0_rT_reg;
-  reg [IN_REG_WIDTH-1:0] rs1i1_rT_reg;
-  reg [IN_REG_WIDTH-1:0] rs1i2_rT_reg;
-  reg [IN_REG_WIDTH-1:0] rs2i0_rT_reg;
-  reg [IN_REG_WIDTH-1:0] rs2i1_rT_reg;
-  reg [IN_REG_WIDTH-1:0] rs2i2_rT_reg;
+  reg [IN_REG_WIDTH-1:0] sr0i0_rT_reg;
+  reg [IN_REG_WIDTH-1:0] sr0i1_rT_reg;
+  reg [IN_REG_WIDTH-1:0] sr0i2_rT_reg;
+  reg [IN_REG_WIDTH-1:0] sr1i0_rT_reg;
+  reg [IN_REG_WIDTH-1:0] sr1i1_rT_reg;
+  reg [IN_REG_WIDTH-1:0] sr1i2_rT_reg;
+  reg [IN_REG_WIDTH-1:0] sr2i0_rT_reg;
+  reg [IN_REG_WIDTH-1:0] sr2i1_rT_reg;
+  reg [IN_REG_WIDTH-1:0] sr2i2_rT_reg;
 
-  reg [IN_REG_WIDTH-1:0] rs0i0_rA_reg;
-  reg [IN_REG_WIDTH-1:0] rs0i1_rA_reg;
-  reg [IN_REG_WIDTH-1:0] rs0i2_rA_reg;
-  reg [IN_REG_WIDTH-1:0] rs1i0_rA_reg;
-  reg [IN_REG_WIDTH-1:0] rs1i1_rA_reg;
-  reg [IN_REG_WIDTH-1:0] rs1i2_rA_reg;
-  reg [IN_REG_WIDTH-1:0] rs2i0_rA_reg;
-  reg [IN_REG_WIDTH-1:0] rs2i1_rA_reg;
-  reg [IN_REG_WIDTH-1:0] rs2i2_rA_reg;
+  reg [IN_REG_WIDTH-1:0] sr0i0_rA_reg;
+  reg [IN_REG_WIDTH-1:0] sr0i1_rA_reg;
+  reg [IN_REG_WIDTH-1:0] sr0i2_rA_reg;
+  reg [IN_REG_WIDTH-1:0] sr1i0_rA_reg;
+  reg [IN_REG_WIDTH-1:0] sr1i1_rA_reg;
+  reg [IN_REG_WIDTH-1:0] sr1i2_rA_reg;
+  reg [IN_REG_WIDTH-1:0] sr2i0_rA_reg;
+  reg [IN_REG_WIDTH-1:0] sr2i1_rA_reg;
+  reg [IN_REG_WIDTH-1:0] sr2i2_rA_reg;
 
-  reg [IN_REG_WIDTH-1:0] rs0i0_rB_reg;
-  reg [IN_REG_WIDTH-1:0] rs0i1_rB_reg;
-  reg [IN_REG_WIDTH-1:0] rs0i2_rB_reg;
-  reg [IN_REG_WIDTH-1:0] rs1i0_rB_reg;
-  reg [IN_REG_WIDTH-1:0] rs1i1_rB_reg;
-  reg [IN_REG_WIDTH-1:0] rs1i2_rB_reg;
-  reg [IN_REG_WIDTH-1:0] rs2i0_rB_reg;
-  reg [IN_REG_WIDTH-1:0] rs2i1_rB_reg;
-  reg [IN_REG_WIDTH-1:0] rs2i2_rB_reg;
+  reg [IN_REG_WIDTH-1:0] sr0i0_rB_reg;
+  reg [IN_REG_WIDTH-1:0] sr0i1_rB_reg;
+  reg [IN_REG_WIDTH-1:0] sr0i2_rB_reg;
+  reg [IN_REG_WIDTH-1:0] sr1i0_rB_reg;
+  reg [IN_REG_WIDTH-1:0] sr1i1_rB_reg;
+  reg [IN_REG_WIDTH-1:0] sr1i2_rB_reg;
+  reg [IN_REG_WIDTH-1:0] sr2i0_rB_reg;
+  reg [IN_REG_WIDTH-1:0] sr2i1_rB_reg;
+  reg [IN_REG_WIDTH-1:0] sr2i2_rB_reg;
   
-  reg [IN_REG_WIDTH-1:0] rs0i0_rA_reg2;
-  reg [IN_REG_WIDTH-1:0] rs0i1_rA_reg2;
-  reg [IN_REG_WIDTH-1:0] rs0i2_rA_reg2;
-  reg [IN_REG_WIDTH-1:0] rs1i0_rA_reg2;
-  reg [IN_REG_WIDTH-1:0] rs1i1_rA_reg2;
-  reg [IN_REG_WIDTH-1:0] rs1i2_rA_reg2;
-  reg [IN_REG_WIDTH-1:0] rs2i0_rA_reg2;
-  reg [IN_REG_WIDTH-1:0] rs2i1_rA_reg2;
-  reg [IN_REG_WIDTH-1:0] rs2i2_rA_reg2;
+  reg [IN_REG_WIDTH-1:0] sr0i0_rA_reg2;
+  reg [IN_REG_WIDTH-1:0] sr0i1_rA_reg2;
+  reg [IN_REG_WIDTH-1:0] sr0i2_rA_reg2;
+  reg [IN_REG_WIDTH-1:0] sr1i0_rA_reg2;
+  reg [IN_REG_WIDTH-1:0] sr1i1_rA_reg2;
+  reg [IN_REG_WIDTH-1:0] sr1i2_rA_reg2;
+  reg [IN_REG_WIDTH-1:0] sr2i0_rA_reg2;
+  reg [IN_REG_WIDTH-1:0] sr2i1_rA_reg2;
+  reg [IN_REG_WIDTH-1:0] sr2i2_rA_reg2;
 
-  reg [IN_REG_WIDTH-1:0] rs0i0_rB_reg2;
-  reg [IN_REG_WIDTH-1:0] rs0i1_rB_reg2;
-  reg [IN_REG_WIDTH-1:0] rs0i2_rB_reg2;
-  reg [IN_REG_WIDTH-1:0] rs1i0_rB_reg2;
-  reg [IN_REG_WIDTH-1:0] rs1i1_rB_reg2;
-  reg [IN_REG_WIDTH-1:0] rs1i2_rB_reg2;
-  reg [IN_REG_WIDTH-1:0] rs2i0_rB_reg2;
-  reg [IN_REG_WIDTH-1:0] rs2i1_rB_reg2;
-  reg [IN_REG_WIDTH-1:0] rs2i2_rB_reg2;
+  reg [IN_REG_WIDTH-1:0] sr0i0_rB_reg2;
+  reg [IN_REG_WIDTH-1:0] sr0i1_rB_reg2;
+  reg [IN_REG_WIDTH-1:0] sr0i2_rB_reg2;
+  reg [IN_REG_WIDTH-1:0] sr1i0_rB_reg2;
+  reg [IN_REG_WIDTH-1:0] sr1i1_rB_reg2;
+  reg [IN_REG_WIDTH-1:0] sr1i2_rB_reg2;
+  reg [IN_REG_WIDTH-1:0] sr2i0_rB_reg2;
+  reg [IN_REG_WIDTH-1:0] sr2i1_rB_reg2;
+  reg [IN_REG_WIDTH-1:0] sr2i2_rB_reg2;
   
-  reg [IN_REG_WIDTH-1:0] rs0i0_rA_reg3;
-  reg [IN_REG_WIDTH-1:0] rs0i1_rA_reg3;
-  reg [IN_REG_WIDTH-1:0] rs0i2_rA_reg3;
-  reg [IN_REG_WIDTH-1:0] rs1i0_rA_reg3;
-  reg [IN_REG_WIDTH-1:0] rs1i1_rA_reg3;
-  reg [IN_REG_WIDTH-1:0] rs1i2_rA_reg3;
-  reg [IN_REG_WIDTH-1:0] rs2i0_rA_reg3;
-  reg [IN_REG_WIDTH-1:0] rs2i1_rA_reg3;
-  reg [IN_REG_WIDTH-1:0] rs2i2_rA_reg3;
+  reg [IN_REG_WIDTH-1:0] sr0i0_rA_reg3;
+  reg [IN_REG_WIDTH-1:0] sr0i1_rA_reg3;
+  reg [IN_REG_WIDTH-1:0] sr0i2_rA_reg3;
+  reg [IN_REG_WIDTH-1:0] sr1i0_rA_reg3;
+  reg [IN_REG_WIDTH-1:0] sr1i1_rA_reg3;
+  reg [IN_REG_WIDTH-1:0] sr1i2_rA_reg3;
+  reg [IN_REG_WIDTH-1:0] sr2i0_rA_reg3;
+  reg [IN_REG_WIDTH-1:0] sr2i1_rA_reg3;
+  reg [IN_REG_WIDTH-1:0] sr2i2_rA_reg3;
 
-  reg [IN_REG_WIDTH-1:0] rs0i0_rB_reg3;
-  reg [IN_REG_WIDTH-1:0] rs0i1_rB_reg3;
-  reg [IN_REG_WIDTH-1:0] rs0i2_rB_reg3;
-  reg [IN_REG_WIDTH-1:0] rs1i0_rB_reg3;
-  reg [IN_REG_WIDTH-1:0] rs1i1_rB_reg3;
-  reg [IN_REG_WIDTH-1:0] rs1i2_rB_reg3;
-  reg [IN_REG_WIDTH-1:0] rs2i0_rB_reg3;
-  reg [IN_REG_WIDTH-1:0] rs2i1_rB_reg3;
-  reg [IN_REG_WIDTH-1:0] rs2i2_rB_reg3;
+  reg [IN_REG_WIDTH-1:0] sr0i0_rB_reg3;
+  reg [IN_REG_WIDTH-1:0] sr0i1_rB_reg3;
+  reg [IN_REG_WIDTH-1:0] sr0i2_rB_reg3;
+  reg [IN_REG_WIDTH-1:0] sr1i0_rB_reg3;
+  reg [IN_REG_WIDTH-1:0] sr1i1_rB_reg3;
+  reg [IN_REG_WIDTH-1:0] sr1i2_rB_reg3;
+  reg [IN_REG_WIDTH-1:0] sr2i0_rB_reg3;
+  reg [IN_REG_WIDTH-1:0] sr2i1_rB_reg3;
+  reg [IN_REG_WIDTH-1:0] sr2i2_rB_reg3;
   
-  reg rs0i0_alloc_reg;
-  reg rs0i1_alloc_reg;
-  reg rs0i2_alloc_reg;
-  reg rs1i0_alloc_reg;
-  reg rs1i1_alloc_reg;
-  reg rs1i2_alloc_reg;
-  reg rs2i0_alloc_reg;
-  reg rs2i1_alloc_reg;
-  reg rs2i2_alloc_reg;
+  reg sr0i0_alloc_reg;
+  reg sr0i1_alloc_reg;
+  reg sr0i2_alloc_reg;
+  reg sr1i0_alloc_reg;
+  reg sr1i1_alloc_reg;
+  reg sr1i2_alloc_reg;
+  reg sr2i0_alloc_reg;
+  reg sr2i1_alloc_reg;
+  reg sr2i2_alloc_reg;
 
-  reg rs0i0_allocF_reg;
-  reg rs0i1_allocF_reg;
-  reg rs0i2_allocF_reg;
-  reg rs1i0_allocF_reg;
-  reg rs1i1_allocF_reg;
-  reg rs1i2_allocF_reg;
-  reg rs2i0_allocF_reg;
-  reg rs2i1_allocF_reg;
-  reg rs2i2_allocF_reg;
+  reg sr0i0_allocF_reg;
+  reg sr0i1_allocF_reg;
+  reg sr0i2_allocF_reg;
+  reg sr1i0_allocF_reg;
+  reg sr1i1_allocF_reg;
+  reg sr1i2_allocF_reg;
+  reg sr2i0_allocF_reg;
+  reg sr2i1_allocF_reg;
+  reg sr2i2_allocF_reg;
 
-  reg rs0i0_allocR_reg;
-  reg rs0i1_allocR_reg;
-  reg rs0i2_allocR_reg;
-  reg rs1i0_allocR_reg;
-  reg rs1i1_allocR_reg;
-  reg rs1i2_allocR_reg;
-  reg rs2i0_allocR_reg;
-  reg rs2i1_allocR_reg;
-  reg rs2i2_allocR_reg;
+  reg sr0i0_allocR_reg;
+  reg sr0i1_allocR_reg;
+  reg sr0i2_allocR_reg;
+  reg sr1i0_allocR_reg;
+  reg sr1i1_allocR_reg;
+  reg sr1i2_allocR_reg;
+  reg sr2i0_allocR_reg;
+  reg sr2i1_allocR_reg;
+  reg sr2i2_allocR_reg;
 
-  reg rs0i0_en_reg;
-  reg rs0i1_en_reg;
-  reg rs0i2_en_reg;
-  reg rs1i0_en_reg;
-  reg rs1i1_en_reg;
-  reg rs1i2_en_reg;
-  reg rs2i0_en_reg;
-  reg rs2i1_en_reg;
-  reg rs2i2_en_reg;
+  reg sr0i0_en_reg;
+  reg sr0i1_en_reg;
+  reg sr0i2_en_reg;
+  reg sr1i0_en_reg;
+  reg sr1i1_en_reg;
+  reg sr1i2_en_reg;
+  reg sr2i0_en_reg;
+  reg sr2i1_en_reg;
+  reg sr2i2_en_reg;
   
-  reg rs0i0_useBConst_reg;
-  reg rs0i1_useBConst_reg;
-  reg rs0i2_useBConst_reg;
-  reg rs1i0_useBConst_reg;
-  reg rs1i1_useBConst_reg;
-  reg rs1i2_useBConst_reg;
-  reg rs2i0_useBConst_reg;
-  reg rs2i1_useBConst_reg;
-  reg rs2i2_useBConst_reg;
+  reg sr0i0_useBConst_reg;
+  reg sr0i1_useBConst_reg;
+  reg sr0i2_useBConst_reg;
+  reg sr1i0_useBConst_reg;
+  reg sr1i1_useBConst_reg;
+  reg sr1i2_useBConst_reg;
+  reg sr2i0_useBConst_reg;
+  reg sr2i1_useBConst_reg;
+  reg sr2i2_useBConst_reg;
   
-  reg [DATA_WIDTH-1:0] rs_const[8:0];
-  reg [DATA_WIDTH-1:0] rs_const_reg[8:0];
-  wire [8:0][DATA_WIDTH-1:0] rs_const_new;
-  reg [8:0] rs_IPRel;
-  reg [8:0] rs_afterTK;
+  reg [DATA_WIDTH-1:0] sr_const[8:0];
+  reg [DATA_WIDTH-1:0] sr_const_reg[8:0];
+  wire [8:0][DATA_WIDTH-1:0] sr_const_new;
+  reg [8:0] sr_IPRel;
+  reg [8:0] sr_afterTK;
 
-  reg rs_en[8:0];
-  reg rs_en_reg[8:0]/*verilator public*/;
-  reg [2:0] rs_enA;
-  reg [2:0] rs_enB;
-  reg [2:0] rs_enA_reg;
-  reg [2:0] rs_enB_reg;
-  reg [8:0] rs_ldst_flg;
-  reg [8:0] rs_ldst_flg_reg;
+  reg sr_en[8:0];
+  reg sr_en_reg[8:0]/*verilator public*/;
+  reg [2:0] sr_enA;
+  reg [2:0] sr_enB;
+  reg [2:0] sr_enA_reg;
+  reg [2:0] sr_enB_reg;
+  reg [8:0] sr_ldst_flg;
+  reg [8:0] sr_ldst_flg_reg;
   
-  wire [2:0] rs_enAW;
-  wire [2:0] rs_enBW;
-  reg [2:0] rs_enAW_reg;
-  reg [2:0] rs_enBW_reg;
+  wire [2:0] sr_enAW;
+  wire [2:0] sr_enBW;
+  reg [2:0] sr_enAW_reg;
+  reg [2:0] sr_enBW_reg;
 
-  reg [3:0] rs0i0_index_reg;
-  reg [3:0] rs0i1_index_reg;
-  reg [3:0] rs0i2_index_reg;
-  reg [3:0] rs1i0_index_reg;
-  reg [3:0] rs1i1_index_reg;
-  reg [3:0] rs1i2_index_reg;
-  reg [3:0] rs2i0_index_reg;
-  reg [3:0] rs2i1_index_reg;
-  reg [3:0] rs2i2_index_reg;
+  reg [3:0] sr0i0_index_reg;
+  reg [3:0] sr0i1_index_reg;
+  reg [3:0] sr0i2_index_reg;
+  reg [3:0] sr1i0_index_reg;
+  reg [3:0] sr1i1_index_reg;
+  reg [3:0] sr1i2_index_reg;
+  reg [3:0] sr2i0_index_reg;
+  reg [3:0] sr2i1_index_reg;
+  reg [3:0] sr2i2_index_reg;
 
-  reg rs2i2_mul_reg;
+  reg sr2i2_mul_reg;
 
-  reg [3:0] rs0i1_flagDep_reg;
-  reg [3:0] rs0i2_flagDep_reg;
-  reg [3:0] rs1i1_flagDep_reg;
-  reg [3:0] rs1i2_flagDep_reg;
-  reg [3:0] rs2i1_flagDep_reg;
-  reg [3:0] rs2i2_flagDep_reg;
+  reg [3:0] sr0i1_flagDep_reg;
+  reg [3:0] sr0i2_flagDep_reg;
+  reg [3:0] sr1i1_flagDep_reg;
+  reg [3:0] sr1i2_flagDep_reg;
+  reg [3:0] sr2i1_flagDep_reg;
+  reg [3:0] sr2i2_flagDep_reg;
 
-  reg [3:0] rs0i1_flagDep_reg2;
-  reg [3:0] rs0i2_flagDep_reg2;
-  reg [3:0] rs1i1_flagDep_reg2;
-  reg [3:0] rs1i2_flagDep_reg2;
-  reg [3:0] rs2i1_flagDep_reg2;
-  reg [3:0] rs2i2_flagDep_reg2;
+  reg [3:0] sr0i1_flagDep_reg2;
+  reg [3:0] sr0i2_flagDep_reg2;
+  reg [3:0] sr1i1_flagDep_reg2;
+  reg [3:0] sr1i2_flagDep_reg2;
+  reg [3:0] sr2i1_flagDep_reg2;
+  reg [3:0] sr2i2_flagDep_reg2;
 
-  reg rs0i1_lastFl_reg;
-  reg rs0i2_lastFl_reg;
-  reg rs1i1_lastFl_reg;
-  reg rs1i2_lastFl_reg;
-  reg rs2i1_lastFl_reg;
-  reg rs2i2_lastFl_reg;
+  reg sr0i1_lastFl_reg;
+  reg sr0i2_lastFl_reg;
+  reg sr1i1_lastFl_reg;
+  reg sr1i2_lastFl_reg;
+  reg sr2i1_lastFl_reg;
+  reg sr2i2_lastFl_reg;
 
-  reg rs0i1_flag_wr_reg;
-  reg rs0i2_flag_wr_reg;
-  reg rs1i1_flag_wr_reg;
-  reg rs1i2_flag_wr_reg;
-  reg rs2i1_flag_wr_reg;
-  reg rs2i2_flag_wr_reg;
+  reg sr0i1_flag_wr_reg;
+  reg sr0i2_flag_wr_reg;
+  reg sr1i1_flag_wr_reg;
+  reg sr1i2_flag_wr_reg;
+  reg sr2i1_flag_wr_reg;
+  reg sr2i2_flag_wr_reg;
 
-  reg [OPERATION_WIDTH-1:0] rs_operation[8:0];
-  reg [OPERATION_WIDTH-1:0] rs_operation_reg[8:0];
-  reg [OPERATION_WIDTH-1:0] rs_operation_reg2[8:0];
+  reg [OPERATION_WIDTH-1:0] sr_operation[8:0];
+  reg [OPERATION_WIDTH-1:0] sr_operation_reg[8:0];
+  reg [OPERATION_WIDTH-1:0] sr_operation_reg2[8:0];
 
-  reg [3:0] rs_port[8:0];
-  reg [3:0] rs_port_reg[8:0];
-  reg [3:0] rs_port_sch[8:0]/* verilator public */;
+  reg [3:0] sr_port[8:0];
+  reg [3:0] sr_port_reg[8:0];
+  reg [3:0] sr_port_sch[8:0]/* verilator public */;
   
-  reg [3:0] rs_index[8:0];
-  reg [3:0] rs_index_reg[8:0];
+  reg [3:0] sr_index[8:0];
+  reg [3:0] sr_index_reg[8:0];
   
-  reg [8:0] rs_rA_use;
-  reg [8:0] rs_rB_use;
+  reg [8:0] sr_rA_use;
+  reg [8:0] sr_rB_use;
 
-  reg [8:0] rs_rA_useF;
-  reg [8:0] rs_rB_useF;
+  reg [8:0] sr_rA_useF;
+  reg [8:0] sr_rB_useF;
 
-  reg [8:0] rs_rA_useF_reg;
-  reg [8:0] rs_rB_useF_reg;
+  reg [8:0] sr_rA_useF_reg;
+  reg [8:0] sr_rB_useF_reg;
 
-  reg [8:0] rs_rA_useF_reg2;
-  reg [8:0] rs_rB_useF_reg2;
+  reg [8:0] sr_rA_useF_reg2;
+  reg [8:0] sr_rB_useF_reg2;
   
-  reg [8:0] rs_useBConst;
-  reg [8:0] rs_useBConst_reg;
-  reg [8:0] rs_useAConst;
+  reg [8:0] sr_useBConst;
+  reg [8:0] sr_useBConst_reg;
+  reg [8:0] sr_useAConst;
   
-  reg [5:0] rs_lsi[5:0];
-  reg [2:0] rs_lsi_reg[5:0];
+  reg [5:0] sr_lsi[5:0];
+  reg [2:0] sr_lsi_reg[5:0];
 
-  reg [2:0] rs_alt;
-  reg [2:0] rs_alt_reg/* verilator public */;
+  reg [2:0] sr_alt;
+  reg [2:0] sr_alt_reg/* verilator public */;
 
-  reg [8:0] rs_rA_isV;
-  reg [8:0] rs_rA_isAnyV;
-  reg [8:0] rs_rB_isV;
-  reg [8:0] rs_rB_isAnyV;
-  reg [8:0] rs_rT_isV;
-  reg [8:0] rs_rT_use;
-  reg [8:0] rs_rT_useF;
+  reg [8:0] sr_rA_isV;
+  reg [8:0] sr_rA_isAnyV;
+  reg [8:0] sr_rB_isV;
+  reg [8:0] sr_rB_isAnyV;
+  reg [8:0] sr_rT_isV;
+  reg [8:0] sr_rT_use;
+  reg [8:0] sr_rT_useF;
 
   wire [8:0] domErrA;
   wire [8:0] domErrB;
@@ -2454,34 +2454,34 @@ module backend(
     .newU0(newU[0]),.newU1(newU[1]),.newU2(newU[2]),.newU3(newU[3]),
     .newU4(newU[4]),.newU5(newU[5]),.newU6(newU[6]),.newU7(newU[7]),.newU8(newU[8]),
     //from here addr is tirement register
-    .read0_addr(rs0i0_rA),.read0_data(regA[0]),.read0_tired(retA[0]),
+    .read0_addr(sr0i0_rA),.read0_data(regA[0]),.read0_tired(retA[0]),
       .read0_isDep(depA[0]),.read0_fun(funA[0]),
-    .read1_addr(rs0i1_rA),.read1_data(regA[1]),.read1_tired(retA[1]),
+    .read1_addr(sr0i1_rA),.read1_data(regA[1]),.read1_tired(retA[1]),
       .read1_isDep(depA[1]),.read1_fun(funA[1]),
-    .read2_addr(rs0i2_rA),.read2_data(regA[2]),.read2_tired(retA[2]),
+    .read2_addr(sr0i2_rA),.read2_data(regA[2]),.read2_tired(retA[2]),
       .read2_isDep(depA[2]),.read2_fun(funA[2]),
-    .read3_addr(rs1i0_rA),.read3_data(regA[3]),.read3_tired(retA[3]),
+    .read3_addr(sr1i0_rA),.read3_data(regA[3]),.read3_tired(retA[3]),
       .read3_isDep(depA[3]),.read3_fun(funA[3]),
-    .read4_addr(rs1i1_rA),.read4_data(regA[4]),.read4_tired(retA[4]),
+    .read4_addr(sr1i1_rA),.read4_data(regA[4]),.read4_tired(retA[4]),
       .read4_isDep(depA[4]),.read4_fun(funA[4]),
-    .read5_addr(rs1i2_rA),.read5_data(regA[5]),.read5_tired(retA[5]),
+    .read5_addr(sr1i2_rA),.read5_data(regA[5]),.read5_tired(retA[5]),
       .read5_isDep(depA[5]),.read5_fun(funA[5]),
-    .read6_addr(rs2i0_rA),.read6_data(regA[6]),.read6_tired(retA[6]),
+    .read6_addr(sr2i0_rA),.read6_data(regA[6]),.read6_tired(retA[6]),
       .read6_isDep(depA[6]),.read6_fun(funA[6]),
-    .read7_addr(rs2i1_rA),.read7_data(regA[7]),.read7_tired(retA[7]),
+    .read7_addr(sr2i1_rA),.read7_data(regA[7]),.read7_tired(retA[7]),
       .read7_isDep(depA[7]),.read7_fun(funA[7]),
-    .read8_addr(rs2i2_rA),.read8_data(regA[8]),.read8_tired(retA[8]),
+    .read8_addr(sr2i2_rA),.read8_data(regA[8]),.read8_tired(retA[8]),
       .read8_isDep(depA[8]),.read8_fun(funA[8]),
   
-    .writeNew0_addr(rs0i0_rT_reg),.writeNew0_wen(rs0i0_alloc_reg),
-    .writeNew1_addr(rs0i1_rT_reg),.writeNew1_wen(rs0i1_alloc_reg),
-    .writeNew2_addr(rs0i2_rT_reg),.writeNew2_wen(rs0i2_alloc_reg),
-    .writeNew3_addr(rs1i0_rT_reg),.writeNew3_wen(rs1i0_alloc_reg),
-    .writeNew4_addr(rs1i1_rT_reg),.writeNew4_wen(rs1i1_alloc_reg),
-    .writeNew5_addr(rs1i2_rT_reg),.writeNew5_wen(rs1i2_alloc_reg),
-    .writeNew6_addr(rs2i0_rT_reg),.writeNew6_wen(rs2i0_alloc_reg),
-    .writeNew7_addr(rs2i1_rT_reg),.writeNew7_wen(rs2i1_alloc_reg),
-    .writeNew8_addr(rs2i2_rT_reg),.writeNew8_wen(rs2i2_alloc_reg),
+    .writeNew0_addr(sr0i0_rT_reg),.writeNew0_wen(sr0i0_alloc_reg),
+    .writeNew1_addr(sr0i1_rT_reg),.writeNew1_wen(sr0i1_alloc_reg),
+    .writeNew2_addr(sr0i2_rT_reg),.writeNew2_wen(sr0i2_alloc_reg),
+    .writeNew3_addr(sr1i0_rT_reg),.writeNew3_wen(sr1i0_alloc_reg),
+    .writeNew4_addr(sr1i1_rT_reg),.writeNew4_wen(sr1i1_alloc_reg),
+    .writeNew5_addr(sr1i2_rT_reg),.writeNew5_wen(sr1i2_alloc_reg),
+    .writeNew6_addr(sr2i0_rT_reg),.writeNew6_wen(sr2i0_alloc_reg),
+    .writeNew7_addr(sr2i1_rT_reg),.writeNew7_wen(sr2i1_alloc_reg),
+    .writeNew8_addr(sr2i2_rT_reg),.writeNew8_wen(sr2i2_alloc_reg),
   //from here addr is free register
     .writeRet0_addr(tire0_rF_reg),.writeRet0_wen(tire0_enG),
     .writeRet1_addr(tire1_rF_reg),.writeRet1_wen(tire1_enG),
@@ -2495,9 +2495,9 @@ module backend(
     .tireAll(except),.tireAll_thread(1'b0),
     
   
-    .rs0i0_index(rs0i0_index_reg),.rs0i1_index(rs0i1_index_reg),.rs0i2_index(rs0i2_index_reg),
-    .rs1i0_index(rs1i0_index_reg),.rs1i1_index(rs1i1_index_reg),.rs1i2_index(rs1i2_index_reg),
-    .rs2i0_index(rs2i0_index_reg),.rs2i1_index(rs2i1_index_reg),.rs2i2_index(rs2i2_index_reg),
+    .sr0i0_index(sr0i0_index_reg),.sr0i1_index(sr0i1_index_reg),.sr0i2_index(sr0i2_index_reg),
+    .sr1i0_index(sr1i0_index_reg),.sr1i1_index(sr1i1_index_reg),.sr1i2_index(sr1i2_index_reg),
+    .sr2i0_index(sr2i0_index_reg),.sr2i1_index(sr2i1_index_reg),.sr2i2_index(sr2i2_index_reg),
     .read_thread(thread),.ret_thread(1'b0)
     );
 
@@ -2510,34 +2510,34 @@ module backend(
     .newU0(newU[0]),.newU1(newU[1]),.newU2(newU[2]),.newU3(newU[3]),
     .newU4(newU[4]),.newU5(newU[5]),.newU6(newU[6]),.newU7(newU[7]),.newU8(newU[8]),
     //from here addr is tirement register
-    .read0_addr(rs0i0_rB),.read0_data(regB[0]),.read0_tired(retB[0]),
+    .read0_addr(sr0i0_rB),.read0_data(regB[0]),.read0_tired(retB[0]),
       .read0_isDep(depB[0]),.read0_fun(funB[0]),
-    .read1_addr(rs0i1_rB),.read1_data(regB[1]),.read1_tired(retB[1]),
+    .read1_addr(sr0i1_rB),.read1_data(regB[1]),.read1_tired(retB[1]),
       .read1_isDep(depB[1]),.read1_fun(funB[1]),
-    .read2_addr(rs0i2_rB),.read2_data(regB[2]),.read2_tired(retB[2]),
+    .read2_addr(sr0i2_rB),.read2_data(regB[2]),.read2_tired(retB[2]),
       .read2_isDep(depB[2]),.read2_fun(funB[2]),
-    .read3_addr(rs1i0_rB),.read3_data(regB[3]),.read3_tired(retB[3]),
+    .read3_addr(sr1i0_rB),.read3_data(regB[3]),.read3_tired(retB[3]),
       .read3_isDep(depB[3]),.read3_fun(funB[3]),
-    .read4_addr(rs1i1_rB),.read4_data(regB[4]),.read4_tired(retB[4]),
+    .read4_addr(sr1i1_rB),.read4_data(regB[4]),.read4_tired(retB[4]),
       .read4_isDep(depB[4]),.read4_fun(funB[4]),
-    .read5_addr(rs1i2_rB),.read5_data(regB[5]),.read5_tired(retB[5]),
+    .read5_addr(sr1i2_rB),.read5_data(regB[5]),.read5_tired(retB[5]),
       .read5_isDep(depB[5]),.read5_fun(funB[5]),
-    .read6_addr(rs2i0_rB),.read6_data(regB[6]),.read6_tired(retB[6]),
+    .read6_addr(sr2i0_rB),.read6_data(regB[6]),.read6_tired(retB[6]),
       .read6_isDep(depB[6]),.read6_fun(funB[6]),
-    .read7_addr(rs2i1_rB),.read7_data(regB[7]),.read7_tired(retB[7]),
+    .read7_addr(sr2i1_rB),.read7_data(regB[7]),.read7_tired(retB[7]),
       .read7_isDep(depB[7]),.read7_fun(funB[7]),
-    .read8_addr(rs2i2_rB),.read8_data(regB[8]),.read8_tired(retB[8]),
+    .read8_addr(sr2i2_rB),.read8_data(regB[8]),.read8_tired(retB[8]),
       .read8_isDep(depB[8]),.read8_fun(funB[8]),
   
-    .writeNew0_addr(rs0i0_rT_reg),.writeNew0_wen(rs0i0_alloc_reg),
-    .writeNew1_addr(rs0i1_rT_reg),.writeNew1_wen(rs0i1_alloc_reg),
-    .writeNew2_addr(rs0i2_rT_reg),.writeNew2_wen(rs0i2_alloc_reg),
-    .writeNew3_addr(rs1i0_rT_reg),.writeNew3_wen(rs1i0_alloc_reg),
-    .writeNew4_addr(rs1i1_rT_reg),.writeNew4_wen(rs1i1_alloc_reg),
-    .writeNew5_addr(rs1i2_rT_reg),.writeNew5_wen(rs1i2_alloc_reg),
-    .writeNew6_addr(rs2i0_rT_reg),.writeNew6_wen(rs2i0_alloc_reg),
-    .writeNew7_addr(rs2i1_rT_reg),.writeNew7_wen(rs2i1_alloc_reg),
-    .writeNew8_addr(rs2i2_rT_reg),.writeNew8_wen(rs2i2_alloc_reg),
+    .writeNew0_addr(sr0i0_rT_reg),.writeNew0_wen(sr0i0_alloc_reg),
+    .writeNew1_addr(sr0i1_rT_reg),.writeNew1_wen(sr0i1_alloc_reg),
+    .writeNew2_addr(sr0i2_rT_reg),.writeNew2_wen(sr0i2_alloc_reg),
+    .writeNew3_addr(sr1i0_rT_reg),.writeNew3_wen(sr1i0_alloc_reg),
+    .writeNew4_addr(sr1i1_rT_reg),.writeNew4_wen(sr1i1_alloc_reg),
+    .writeNew5_addr(sr1i2_rT_reg),.writeNew5_wen(sr1i2_alloc_reg),
+    .writeNew6_addr(sr2i0_rT_reg),.writeNew6_wen(sr2i0_alloc_reg),
+    .writeNew7_addr(sr2i1_rT_reg),.writeNew7_wen(sr2i1_alloc_reg),
+    .writeNew8_addr(sr2i2_rT_reg),.writeNew8_wen(sr2i2_alloc_reg),
   //from here addr is free register
     .writeRet0_addr(tire0_rF_reg),.writeRet0_wen(tire0_enG),
     .writeRet1_addr(tire1_rF_reg),.writeRet1_wen(tire1_enG),
@@ -2550,9 +2550,9 @@ module backend(
     .writeRet8_addr(tire8_rF_reg),.writeRet8_wen(tire8_enG),
     .tireAll(except),.tireAll_thread(1'b0),
   
-    .rs0i0_index(rs0i0_index_reg),.rs0i1_index(rs0i1_index_reg),.rs0i2_index(rs0i2_index_reg),
-    .rs1i0_index(rs1i0_index_reg),.rs1i1_index(rs1i1_index_reg),.rs1i2_index(rs1i2_index_reg),
-    .rs2i0_index(rs2i0_index_reg),.rs2i1_index(rs2i1_index_reg),.rs2i2_index(rs2i2_index_reg),
+    .sr0i0_index(sr0i0_index_reg),.sr0i1_index(sr0i1_index_reg),.sr0i2_index(sr0i2_index_reg),
+    .sr1i0_index(sr1i0_index_reg),.sr1i1_index(sr1i1_index_reg),.sr1i2_index(sr1i2_index_reg),
+    .sr2i0_index(sr2i0_index_reg),.sr2i1_index(sr2i1_index_reg),.sr2i2_index(sr2i2_index_reg),
     .read_thread(thread),.ret_thread(1'b0)
     );
     
@@ -2565,24 +2565,24 @@ module backend(
   .newU0(newU[0]),.newU1(newU[1]),.newU2(newU[2]),.newU3(newU[3]),
   .newU4(newU[4]),.newU5(newU[5]),.newU6(newU[6]),.newU7(newU[7]),.newU8(newU[8]),
   //from here addr is tirement register
-  .read1_addr(rs0i1_flagDep),.read1_data(regS[1]),.read1_tired(retS[1]),.read1_fun(funS[1]),
-  .read2_addr(rs0i2_flagDep),.read2_data(regS[2]),.read2_tired(retS[2]),.read2_fun(funS[2]),
-  .read4_addr(rs1i1_flagDep),.read4_data(regS[4]),.read4_tired(retS[4]),.read4_fun(funS[4]),
-  .read5_addr(rs1i2_flagDep),.read5_data(regS[5]),.read5_tired(retS[5]),.read5_fun(funS[5]),
-  .read7_addr(rs2i1_flagDep),.read7_data(regS[7]),.read7_tired(retS[7]),.read7_fun(funS[7]),
-  .read8_addr(rs2i2_flagDep),.read8_data(regS[8]),.read8_tired(retS[8]),.read8_fun(funS[8]),
+  .read1_addr(sr0i1_flagDep),.read1_data(regS[1]),.read1_tired(retS[1]),.read1_fun(funS[1]),
+  .read2_addr(sr0i2_flagDep),.read2_data(regS[2]),.read2_tired(retS[2]),.read2_fun(funS[2]),
+  .read4_addr(sr1i1_flagDep),.read4_data(regS[4]),.read4_tired(retS[4]),.read4_fun(funS[4]),
+  .read5_addr(sr1i2_flagDep),.read5_data(regS[5]),.read5_tired(retS[5]),.read5_fun(funS[5]),
+  .read7_addr(sr2i1_flagDep),.read7_data(regS[7]),.read7_tired(retS[7]),.read7_fun(funS[7]),
+  .read8_addr(sr2i2_flagDep),.read8_data(regS[8]),.read8_tired(retS[8]),.read8_fun(funS[8]),
   
   .r_data(regFl), .r_tired(retFl), .r_fun(),
   
   .writeNew0_wen(1'b0),
-  .writeNew1_wen(rs0i1_lastFl_reg&~doStall),
-  .writeNew2_wen(rs0i2_lastFl_reg&~doStall),
+  .writeNew1_wen(sr0i1_lastFl_reg&~doStall),
+  .writeNew2_wen(sr0i2_lastFl_reg&~doStall),
   .writeNew3_wen(1'b0),
-  .writeNew4_wen(rs1i1_lastFl_reg&~doStall),
-  .writeNew5_wen(rs1i2_lastFl_reg&~doStall),
+  .writeNew4_wen(sr1i1_lastFl_reg&~doStall),
+  .writeNew5_wen(sr1i2_lastFl_reg&~doStall),
   .writeNew6_wen(1'b0),
-  .writeNew7_wen(rs2i1_lastFl_reg&~doStall),
-  .writeNew8_wen(rs2i2_lastFl_reg&~doStall),
+  .writeNew7_wen(sr2i1_lastFl_reg&~doStall),
+  .writeNew8_wen(sr2i2_lastFl_reg&~doStall),
 //from here addr is free register
   .writeRet0_addr(retfl_rF_reg),.writeRet0_wen(retfl_enG && retfl_rF_reg[3:0]==4'b0),
   .writeRet1_addr(retfl_rF_reg),.writeRet1_wen(retfl_enG && retfl_rF_reg[3:0]==4'd1),
@@ -2595,9 +2595,9 @@ module backend(
   .writeRet8_addr(retfl_rF_reg),.writeRet8_wen(retfl_enG && retfl_rF_reg[3:0]==4'd8),
   .tireAll(except),
 
-  .rs0i0_index(rs0i0_index_reg),.rs0i1_index(rs0i1_index_reg),.rs0i2_index(rs0i2_index_reg),
-  .rs1i0_index(rs1i0_index_reg),.rs1i1_index(rs1i1_index_reg),.rs1i2_index(rs1i2_index_reg),
-  .rs2i0_index(rs2i0_index_reg),.rs2i1_index(rs2i1_index_reg),.rs2i2_index(rs2i2_index_reg),
+  .sr0i0_index(sr0i0_index_reg),.sr0i1_index(sr0i1_index_reg),.sr0i2_index(sr0i2_index_reg),
+  .sr1i0_index(sr1i0_index_reg),.sr1i1_index(sr1i1_index_reg),.sr1i2_index(sr1i2_index_reg),
+  .sr2i0_index(sr2i0_index_reg),.sr2i1_index(sr2i1_index_reg),.sr2i2_index(sr2i2_index_reg),
   .read_thread(thread),.ret_thread(1'b0)
   );  
   
@@ -2612,34 +2612,34 @@ module backend(
     .newD0(newD[0]),.newD1(newD[1]),.newD2(newD[2]),.newD3(newD[3]),
     .newD4(newD[4]),.newD5(newD[5]),.newD6(newD[6]),.newD7(newD[7]),.newD8(newD[8]),
   //from here addr is tirement register
-    .read0_addr(rs0i0_rA),.read0_data(regAF[0]),.read0_tired(retAF[0]),
+    .read0_addr(sr0i0_rA),.read0_data(regAF[0]),.read0_tired(retAF[0]),
       .read0_isDep(depAF[0]),.read0_fun(funAF[0]),.read0_dom(domA[0]),
-    .read1_addr(rs0i1_rA),.read1_data(regAF[1]),.read1_tired(retAF[1]),
+    .read1_addr(sr0i1_rA),.read1_data(regAF[1]),.read1_tired(retAF[1]),
       .read1_isDep(depAF[1]),.read1_fun(funAF[1]),.read1_dom(domA[1]),
-    .read2_addr(rs0i2_rA),.read2_data(regAF[2]),.read2_tired(retAF[2]),
+    .read2_addr(sr0i2_rA),.read2_data(regAF[2]),.read2_tired(retAF[2]),
       .read2_isDep(depAF[2]),.read2_fun(funAF[2]),.read2_dom(domA[2]),
-    .read3_addr(rs1i0_rA),.read3_data(regAF[3]),.read3_tired(retAF[3]),
+    .read3_addr(sr1i0_rA),.read3_data(regAF[3]),.read3_tired(retAF[3]),
       .read3_isDep(depAF[3]),.read3_fun(funAF[3]),.read3_dom(domA[3]),
-    .read4_addr(rs1i1_rA),.read4_data(regAF[4]),.read4_tired(retAF[4]),
+    .read4_addr(sr1i1_rA),.read4_data(regAF[4]),.read4_tired(retAF[4]),
       .read4_isDep(depAF[4]),.read4_fun(funAF[4]),.read4_dom(domA[4]),
-    .read5_addr(rs1i2_rA),.read5_data(regAF[5]),.read5_tired(retAF[5]),
+    .read5_addr(sr1i2_rA),.read5_data(regAF[5]),.read5_tired(retAF[5]),
       .read5_isDep(depAF[5]),.read5_fun(funAF[5]),.read5_dom(domA[5]),
-    .read6_addr(rs2i0_rA),.read6_data(regAF[6]),.read6_tired(retAF[6]),
+    .read6_addr(sr2i0_rA),.read6_data(regAF[6]),.read6_tired(retAF[6]),
       .read6_isDep(depAF[6]),.read6_fun(funAF[6]),.read6_dom(domA[6]),
-    .read7_addr(rs2i1_rA),.read7_data(regAF[7]),.read7_tired(retAF[7]),
+    .read7_addr(sr2i1_rA),.read7_data(regAF[7]),.read7_tired(retAF[7]),
       .read7_isDep(depAF[7]),.read7_fun(funAF[7]),.read7_dom(domA[7]),
-    .read8_addr(rs2i2_rA),.read8_data(regAF[8]),.read8_tired(retAF[8]),
+    .read8_addr(sr2i2_rA),.read8_data(regAF[8]),.read8_tired(retAF[8]),
       .read8_isDep(depAF[8]),.read8_fun(funAF[8]),.read8_dom(domA[8]),
 
-    .writeNew0_addr(rs0i0_rT_reg),.writeNew0_wen(rs0i0_allocF_reg),
-    .writeNew1_addr(rs0i1_rT_reg),.writeNew1_wen(rs0i1_allocF_reg),
-    .writeNew2_addr(rs0i2_rT_reg),.writeNew2_wen(rs0i2_allocF_reg),
-    .writeNew3_addr(rs1i0_rT_reg),.writeNew3_wen(rs1i0_allocF_reg),
-    .writeNew4_addr(rs1i1_rT_reg),.writeNew4_wen(rs1i1_allocF_reg),
-    .writeNew5_addr(rs1i2_rT_reg),.writeNew5_wen(rs1i2_allocF_reg),
-    .writeNew6_addr(rs2i0_rT_reg),.writeNew6_wen(rs2i0_allocF_reg),
-    .writeNew7_addr(rs2i1_rT_reg),.writeNew7_wen(rs2i1_allocF_reg),
-    .writeNew8_addr(rs2i2_rT_reg),.writeNew8_wen(rs2i2_allocF_reg),
+    .writeNew0_addr(sr0i0_rT_reg),.writeNew0_wen(sr0i0_allocF_reg),
+    .writeNew1_addr(sr0i1_rT_reg),.writeNew1_wen(sr0i1_allocF_reg),
+    .writeNew2_addr(sr0i2_rT_reg),.writeNew2_wen(sr0i2_allocF_reg),
+    .writeNew3_addr(sr1i0_rT_reg),.writeNew3_wen(sr1i0_allocF_reg),
+    .writeNew4_addr(sr1i1_rT_reg),.writeNew4_wen(sr1i1_allocF_reg),
+    .writeNew5_addr(sr1i2_rT_reg),.writeNew5_wen(sr1i2_allocF_reg),
+    .writeNew6_addr(sr2i0_rT_reg),.writeNew6_wen(sr2i0_allocF_reg),
+    .writeNew7_addr(sr2i1_rT_reg),.writeNew7_wen(sr2i1_allocF_reg),
+    .writeNew8_addr(sr2i2_rT_reg),.writeNew8_wen(sr2i2_allocF_reg),
 //from here addr is free register
     .writeRet0_addr(tire0_rF_reg),.writeRet0_paddr(tire0_rT),
        .writeRet0_dom(get_dom_C(tire0_enV,tire0_enF)),.writeRet0_wen(tire0_enV|tire0_enF),
@@ -2661,9 +2661,9 @@ module backend(
        .writeRet8_dom(get_dom_C(tire8_enV,tire8_enF)),.writeRet8_wen(tire8_enV|tire8_enF),
     .tireAll(except),.tireAll_thread(1'b0),
 
-    .rs0i0_index(rs0i0_index_reg),.rs0i1_index(rs0i1_index_reg),.rs0i2_index(rs0i2_index_reg),
-    .rs1i0_index(rs1i0_index_reg),.rs1i1_index(rs1i1_index_reg),.rs1i2_index(rs1i2_index_reg),
-    .rs2i0_index(rs2i0_index_reg),.rs2i1_index(rs2i1_index_reg),.rs2i2_index(rs2i2_index_reg),
+    .sr0i0_index(sr0i0_index_reg),.sr0i1_index(sr0i1_index_reg),.sr0i2_index(sr0i2_index_reg),
+    .sr1i0_index(sr1i0_index_reg),.sr1i1_index(sr1i1_index_reg),.sr1i2_index(sr1i2_index_reg),
+    .sr2i0_index(sr2i0_index_reg),.sr2i1_index(sr2i1_index_reg),.sr2i2_index(sr2i2_index_reg),
     .read_thread(thread),.ret_thread(1'b0)
   );
 
@@ -2678,34 +2678,34 @@ module backend(
     .newD0(newD[0]),.newD1(newD[1]),.newD2(newD[2]),.newD3(newD[3]),
     .newD4(newD[4]),.newD5(newD[5]),.newD6(newD[6]),.newD7(newD[7]),.newD8(newD[8]),
   //from here addr is tirement register
-    .read0_addr(rs0i0_rB),.read0_data(regBF[0]),.read0_tired(retBF[0]),
+    .read0_addr(sr0i0_rB),.read0_data(regBF[0]),.read0_tired(retBF[0]),
       .read0_isDep(depBF[0]),.read0_fun(funBF[0]),.read0_dom(domB[0]),
-    .read1_addr(rs0i1_rB),.read1_data(regBF[1]),.read1_tired(retBF[1]),
+    .read1_addr(sr0i1_rB),.read1_data(regBF[1]),.read1_tired(retBF[1]),
       .read1_isDep(depBF[1]),.read1_fun(funBF[1]),.read1_dom(domB[1]),
-    .read2_addr(rs0i2_rB),.read2_data(regBF[2]),.read2_tired(retBF[2]),
+    .read2_addr(sr0i2_rB),.read2_data(regBF[2]),.read2_tired(retBF[2]),
       .read2_isDep(depBF[2]),.read2_fun(funBF[2]),.read2_dom(domB[2]),
-    .read3_addr(rs1i0_rB),.read3_data(regBF[3]),.read3_tired(retBF[3]),
+    .read3_addr(sr1i0_rB),.read3_data(regBF[3]),.read3_tired(retBF[3]),
       .read3_isDep(depBF[3]),.read3_fun(funBF[3]),.read3_dom(domB[3]),
-    .read4_addr(rs1i1_rB),.read4_data(regBF[4]),.read4_tired(retBF[4]),
+    .read4_addr(sr1i1_rB),.read4_data(regBF[4]),.read4_tired(retBF[4]),
       .read4_isDep(depBF[4]),.read4_fun(funBF[4]),.read4_dom(domB[4]),
-    .read5_addr(rs1i2_rB),.read5_data(regBF[5]),.read5_tired(retBF[5]),
+    .read5_addr(sr1i2_rB),.read5_data(regBF[5]),.read5_tired(retBF[5]),
       .read5_isDep(depBF[5]),.read5_fun(funBF[5]),.read5_dom(domB[5]),
-    .read6_addr(rs2i0_rB),.read6_data(regBF[6]),.read6_tired(retBF[6]),
+    .read6_addr(sr2i0_rB),.read6_data(regBF[6]),.read6_tired(retBF[6]),
       .read6_isDep(depBF[6]),.read6_fun(funBF[6]),.read6_dom(domB[6]),
-    .read7_addr(rs2i1_rB),.read7_data(regBF[7]),.read7_tired(retBF[7]),
+    .read7_addr(sr2i1_rB),.read7_data(regBF[7]),.read7_tired(retBF[7]),
       .read7_isDep(depBF[7]),.read7_fun(funBF[7]),.read7_dom(domB[7]),
-    .read8_addr(rs2i2_rB),.read8_data(regBF[8]),.read8_tired(retBF[8]),
+    .read8_addr(sr2i2_rB),.read8_data(regBF[8]),.read8_tired(retBF[8]),
       .read8_isDep(depBF[8]),.read8_fun(funBF[8]),.read8_dom(domB[8]),
 
-    .writeNew0_addr(rs0i0_rT_reg),.writeNew0_wen(rs0i0_allocF_reg),
-    .writeNew1_addr(rs0i1_rT_reg),.writeNew1_wen(rs0i1_allocF_reg),
-    .writeNew2_addr(rs0i2_rT_reg),.writeNew2_wen(rs0i2_allocF_reg),
-    .writeNew3_addr(rs1i0_rT_reg),.writeNew3_wen(rs1i0_allocF_reg),
-    .writeNew4_addr(rs1i1_rT_reg),.writeNew4_wen(rs1i1_allocF_reg),
-    .writeNew5_addr(rs1i2_rT_reg),.writeNew5_wen(rs1i2_allocF_reg),
-    .writeNew6_addr(rs2i0_rT_reg),.writeNew6_wen(rs2i0_allocF_reg),
-    .writeNew7_addr(rs2i1_rT_reg),.writeNew7_wen(rs2i1_allocF_reg),
-    .writeNew8_addr(rs2i2_rT_reg),.writeNew8_wen(rs2i2_allocF_reg),
+    .writeNew0_addr(sr0i0_rT_reg),.writeNew0_wen(sr0i0_allocF_reg),
+    .writeNew1_addr(sr0i1_rT_reg),.writeNew1_wen(sr0i1_allocF_reg),
+    .writeNew2_addr(sr0i2_rT_reg),.writeNew2_wen(sr0i2_allocF_reg),
+    .writeNew3_addr(sr1i0_rT_reg),.writeNew3_wen(sr1i0_allocF_reg),
+    .writeNew4_addr(sr1i1_rT_reg),.writeNew4_wen(sr1i1_allocF_reg),
+    .writeNew5_addr(sr1i2_rT_reg),.writeNew5_wen(sr1i2_allocF_reg),
+    .writeNew6_addr(sr2i0_rT_reg),.writeNew6_wen(sr2i0_allocF_reg),
+    .writeNew7_addr(sr2i1_rT_reg),.writeNew7_wen(sr2i1_allocF_reg),
+    .writeNew8_addr(sr2i2_rT_reg),.writeNew8_wen(sr2i2_allocF_reg),
 //from here addr is free register
     .writeRet0_addr(tire0_rF_reg),.writeRet0_paddr(tire0_rT),
        .writeRet0_dom(get_dom_C(tire0_enV,tire0_enF)),.writeRet0_wen(tire0_enV|tire0_enF),
@@ -2727,9 +2727,9 @@ module backend(
        .writeRet8_dom(get_dom_C(tire8_enV,tire8_enF)),.writeRet8_wen(tire8_enV|tire8_enF),
     .tireAll(except),.tireAll_thread(1'b0),
 
-    .rs0i0_index(rs0i0_index_reg),.rs0i1_index(rs0i1_index_reg),.rs0i2_index(rs0i2_index_reg),
-    .rs1i0_index(rs1i0_index_reg),.rs1i1_index(rs1i1_index_reg),.rs1i2_index(rs1i2_index_reg),
-    .rs2i0_index(rs2i0_index_reg),.rs2i1_index(rs2i1_index_reg),.rs2i2_index(rs2i2_index_reg),
+    .sr0i0_index(sr0i0_index_reg),.sr0i1_index(sr0i1_index_reg),.sr0i2_index(sr0i2_index_reg),
+    .sr1i0_index(sr1i0_index_reg),.sr1i1_index(sr1i1_index_reg),.sr1i2_index(sr1i2_index_reg),
+    .sr2i0_index(sr2i0_index_reg),.sr2i1_index(sr2i1_index_reg),.sr2i2_index(sr2i2_index_reg),
     .read_thread(thread),.ret_thread(1'b0)
   );
   
@@ -2748,9 +2748,9 @@ module backend(
   .newR0(newR[0]),.newR1(newR[1]),.newR2(newR[2]),
   .newR3(newR[3]),.newR4(newR[4]),.newR5(newR[5]),
   .newR6(newR[6]),.newR7(newR[7]),.newR8(newR[8]),
-  .rs0i0_en(rs0i0_allocR_reg),.rs1i0_en(rs1i0_allocR_reg),.rs2i0_en(rs2i0_allocR_reg),
-  .rs0i1_en(rs0i1_allocR_reg),.rs1i1_en(rs1i1_allocR_reg),.rs2i1_en(rs2i1_allocR_reg),
-  .rs0i2_en(rs0i2_allocR_reg),.rs1i2_en(rs1i2_allocR_reg),.rs2i2_en(rs2i2_allocR_reg)
+  .sr0i0_en(sr0i0_allocR_reg),.sr1i0_en(sr1i0_allocR_reg),.sr2i0_en(sr2i0_allocR_reg),
+  .sr0i1_en(sr0i1_allocR_reg),.sr1i1_en(sr1i1_allocR_reg),.sr2i1_en(sr2i1_allocR_reg),
+  .sr0i2_en(sr0i2_allocR_reg),.sr1i2_en(sr1i2_allocR_reg),.sr2i2_en(sr2i2_allocR_reg)
   );
   
   reg_alloc allock2_mod(
@@ -2769,22 +2769,22 @@ module backend(
   .newR0(newRF[0]),.newR1(newRF[1]),.newR2(newRF[2]),
   .newR3(newRF[3]),.newR4(newRF[4]),.newR5(newRF[5]),
   .newR6(newRF[6]),.newR7(newRF[7]),.newR8(newRF[8]),
-  .rs0i0_en(1'b0),.rs1i0_en(1'b0),.rs2i0_en(1'b0),
-  .rs0i1_en(rs0i1_flag_wr_reg),.rs1i1_en(rs1i1_flag_wr_reg),.rs2i1_en(rs2i1_flag_wr_reg),
-  .rs0i2_en(rs0i2_flag_wr_reg),.rs1i2_en(rs1i2_flag_wr_reg),.rs2i2_en(rs2i2_flag_wr_reg)
+  .sr0i0_en(1'b0),.sr1i0_en(1'b0),.sr2i0_en(1'b0),
+  .sr0i1_en(sr0i1_flag_wr_reg),.sr1i1_en(sr1i1_flag_wr_reg),.sr2i1_en(sr2i1_flag_wr_reg),
+  .sr0i2_en(sr0i2_flag_wr_reg),.sr1i2_en(sr1i2_flag_wr_reg),.sr2i2_en(sr2i2_flag_wr_reg)
   );
   
   
   get_funit funit_mod(
-  .rs0i0_index(rs0i0_index_reg),.rs0i0_port(rs_port[0]),
-  .rs0i1_index(rs0i1_index_reg),.rs0i1_port(rs_port[1]),
-  .rs0i2_index(rs0i2_index_reg),.rs0i2_port(rs_port[2]),
-  .rs1i0_index(rs1i0_index_reg),.rs1i0_port(rs_port[3]),
-  .rs1i1_index(rs1i1_index_reg),.rs1i1_port(rs_port[4]),
-  .rs1i2_index(rs1i2_index_reg),.rs1i2_port(rs_port[5]),
-  .rs2i0_index(rs2i0_index_reg),.rs2i0_port(rs_port[6]),
-  .rs2i1_index(rs2i1_index_reg),.rs2i1_port(rs_port[7]),
-  .rs2i2_index(rs2i2_index_reg),.rs2i2_port(rs_port[8]),.mul(rs2i2_mul_reg),
+  .sr0i0_index(sr0i0_index_reg),.sr0i0_port(sr_port[0]),
+  .sr0i1_index(sr0i1_index_reg),.sr0i1_port(sr_port[1]),
+  .sr0i2_index(sr0i2_index_reg),.sr0i2_port(sr_port[2]),
+  .sr1i0_index(sr1i0_index_reg),.sr1i0_port(sr_port[3]),
+  .sr1i1_index(sr1i1_index_reg),.sr1i1_port(sr_port[4]),
+  .sr1i2_index(sr1i2_index_reg),.sr1i2_port(sr_port[5]),
+  .sr2i0_index(sr2i0_index_reg),.sr2i0_port(sr_port[6]),
+  .sr2i1_index(sr2i1_index_reg),.sr2i1_port(sr_port[7]),
+  .sr2i2_index(sr2i2_index_reg),.sr2i2_port(sr_port[8]),.mul(sr2i2_mul_reg),
   .funit0(newU[0]),.funit1(newU[1]),.funit2(newU[2]),
   .funit3(newU[3]),.funit4(newU[4]),.funit5(newU[5]),
   .funit6(newU[6]),.funit7(newU[7]),.funit8(newU[8])
@@ -2797,53 +2797,53 @@ module backend(
   .tire_clkEn(1'b1),
 
   .read0_addr(regA[0]),.read0_data(dataA[0]),
-    .read0_oe(~retA[0]|~rs_rA_use[0]),.read0_match(gazumpAG[0]),
+    .read0_oe(~retA[0]|~sr_rA_use[0]),.read0_match(gazumpAG[0]),
   .read1_addr(regA[1]),.read1_data(dataA[1]),
-    .read1_oe(~retA[1]|~rs_rA_use[1]),.read1_match(gazumpAG[1]),
+    .read1_oe(~retA[1]|~sr_rA_use[1]),.read1_match(gazumpAG[1]),
   .read2_addr(regA[2]),.read2_data(dataA[2]),
-    .read2_oe(~retA[2]|~rs_rA_use[2]),.read2_match(gazumpAG[2]),
+    .read2_oe(~retA[2]|~sr_rA_use[2]),.read2_match(gazumpAG[2]),
   .read3_addr(regA[3]),.read3_data(dataA[3]),
-    .read3_oe(~retA[3]|~rs_rA_use[3]),.read3_match(gazumpAG[3]),
+    .read3_oe(~retA[3]|~sr_rA_use[3]),.read3_match(gazumpAG[3]),
   .read4_addr(regA[4]),.read4_data(dataA[4]),
-    .read4_oe(~retA[4]|~rs_rA_use[4]),.read4_match(gazumpAG[4]),
+    .read4_oe(~retA[4]|~sr_rA_use[4]),.read4_match(gazumpAG[4]),
   .read5_addr(regA[5]),.read5_data(dataA[5]),
-    .read5_oe(~retA[5]|~rs_rA_use[5]),.read5_match(gazumpAG[5]),
+    .read5_oe(~retA[5]|~sr_rA_use[5]),.read5_match(gazumpAG[5]),
   .read6_addr(regA[6]),.read6_data(dataA[6]),
-    .read6_oe(~retA[6]|~rs_rA_use[6]),.read6_match(gazumpAG[6]),
+    .read6_oe(~retA[6]|~sr_rA_use[6]),.read6_match(gazumpAG[6]),
   .read7_addr(regA[7]),.read7_data(dataA[7]),
-    .read7_oe(~retA[7]|~rs_rA_use[7]),.read7_match(gazumpAG[7]),
+    .read7_oe(~retA[7]|~sr_rA_use[7]),.read7_match(gazumpAG[7]),
   .read8_addr(regA[8]),.read8_data(dataA[8]),
-    .read8_oe(~retA[8]|~rs_rA_use[8]),.read8_match(gazumpAG[8]),
+    .read8_oe(~retA[8]|~sr_rA_use[8]),.read8_match(gazumpAG[8]),
 
-  .read0_addr_rrf(rs0i0_rA_reg),
-  .read1_addr_rrf(rs0i1_rA_reg),
-  .read2_addr_rrf(rs0i2_rA_reg),
-  .read3_addr_rrf(rs1i0_rA_reg),
-  .read4_addr_rrf(rs1i1_rA_reg),
-  .read5_addr_rrf(rs1i2_rA_reg),
-  .read6_addr_rrf(rs2i0_rA_reg),
-  .read7_addr_rrf(rs2i1_rA_reg),
-  .read8_addr_rrf(rs2i2_rA_reg),
+  .read0_addr_rrf(sr0i0_rA_reg),
+  .read1_addr_rrf(sr0i1_rA_reg),
+  .read2_addr_rrf(sr0i2_rA_reg),
+  .read3_addr_rrf(sr1i0_rA_reg),
+  .read4_addr_rrf(sr1i1_rA_reg),
+  .read5_addr_rrf(sr1i2_rA_reg),
+  .read6_addr_rrf(sr2i0_rA_reg),
+  .read7_addr_rrf(sr2i1_rA_reg),
+  .read8_addr_rrf(sr2i2_rA_reg),
 
-  .read0_constEn(~rs_rA_use[0]),
-  .read1_constEn(~rs_rA_use[1]),
-  .read2_constEn(~rs_rA_use[2]),
-  .read3_constEn(~rs_rA_use[3]),
-  .read4_constEn(~rs_rA_use[4]),
-  .read5_constEn(~rs_rA_use[5]),
-  .read6_constEn(~rs_rA_use[6]),
-  .read7_constEn(~rs_rA_use[7]),
-  .read8_constEn(~rs_rA_use[8]),
+  .read0_constEn(~sr_rA_use[0]),
+  .read1_constEn(~sr_rA_use[1]),
+  .read2_constEn(~sr_rA_use[2]),
+  .read3_constEn(~sr_rA_use[3]),
+  .read4_constEn(~sr_rA_use[4]),
+  .read5_constEn(~sr_rA_use[5]),
+  .read6_constEn(~sr_rA_use[6]),
+  .read7_constEn(~sr_rA_use[7]),
+  .read8_constEn(~sr_rA_use[8]),
 
-  .read0_const(rs_const_new[0]&{65{rs_useAConst[0]}}),
-  .read1_const(rs_const[1]&{65{rs_useAConst[1]}}),
-  .read2_const(rs_const[2]&{65{rs_useAConst[2]}}),
-  .read3_const(rs_const_new[3]&{65{rs_useAConst[3]}}),
-  .read4_const(rs_const[4]&{65{rs_useAConst[4]}}),
-  .read5_const(rs_const[5]&{65{rs_useAConst[5]}}),
-  .read6_const(rs_const_new[6]&{65{rs_useAConst[6]}}),
-  .read7_const(rs_const[7]&{65{rs_useAConst[7]}}),
-  .read8_const(rs_const[8]&{65{rs_useAConst[8]}}),
+  .read0_const(sr_const_new[0]&{65{sr_useAConst[0]}}),
+  .read1_const(sr_const[1]&{65{sr_useAConst[1]}}),
+  .read2_const(sr_const[2]&{65{sr_useAConst[2]}}),
+  .read3_const(sr_const_new[3]&{65{sr_useAConst[3]}}),
+  .read4_const(sr_const[4]&{65{sr_useAConst[4]}}),
+  .read5_const(sr_const[5]&{65{sr_useAConst[5]}}),
+  .read6_const(sr_const_new[6]&{65{sr_useAConst[6]}}),
+  .read7_const(sr_const[7]&{65{sr_useAConst[7]}}),
+  .read8_const(sr_const[8]&{65{sr_useAConst[8]}}),
 
   .write0_addr_rrf(tire0_rT),.write0_wen_rrf(tire0_enG),
   .write1_addr_rrf(tire1_rT),.write1_wen_rrf(tire1_enG),
@@ -2886,43 +2886,43 @@ module backend(
   .read3_match(),.read4_match(),.read5_match(),
   .read6_match(),.read7_match(),.read8_match(),
   .read0_addr(regAF_reg[0]),.read0_data(dataAVH[0]),
-    .read0_oe(~retAF_reg[0]|~rs_rA_useF_reg[0]),
+    .read0_oe(~retAF_reg[0]|~sr_rA_useF_reg[0]),
   .read1_addr(regAF_reg[1]),.read1_data(dataAVH[1]),
-    .read1_oe(~retAF_reg[1]|~rs_rA_useF_reg[1]),
+    .read1_oe(~retAF_reg[1]|~sr_rA_useF_reg[1]),
   .read2_addr(regAF_reg[2]),.read2_data(dataAVH[2]),
-    .read2_oe(~retAF_reg[2]|~rs_rA_useF_reg[2]),
+    .read2_oe(~retAF_reg[2]|~sr_rA_useF_reg[2]),
   .read3_addr(regAF_reg[3]),.read3_data(dataAVH[3]),
-    .read3_oe(~retAF_reg[3]|~rs_rA_useF_reg[1]),
+    .read3_oe(~retAF_reg[3]|~sr_rA_useF_reg[1]),
   .read4_addr(regAF_reg[4]),.read4_data(dataAVH[4]),
-    .read4_oe(~retAF_reg[4]|~rs_rA_useF_reg[4]),
+    .read4_oe(~retAF_reg[4]|~sr_rA_useF_reg[4]),
   .read5_addr(regAF_reg[5]),.read5_data(dataAVH[5]),
-    .read5_oe(~retAF_reg[5]|~rs_rA_useF_reg[5]),
+    .read5_oe(~retAF_reg[5]|~sr_rA_useF_reg[5]),
   .read6_addr(regAF_reg[6]),.read6_data(dataAVH[6]),
-    .read6_oe(~retAF_reg[6]|~rs_rA_useF_reg[6]),
+    .read6_oe(~retAF_reg[6]|~sr_rA_useF_reg[6]),
   .read7_addr(regAF_reg[7]),.read7_data(dataAVH[7]),
-    .read7_oe(~retAF_reg[7]|~rs_rA_useF_reg[7]),
+    .read7_oe(~retAF_reg[7]|~sr_rA_useF_reg[7]),
   .read8_addr(regAF_reg[8]),.read8_data(dataAVH[8]),
-    .read8_oe(~retAF_reg[8]|~rs_rA_useF_reg[8]),
+    .read8_oe(~retAF_reg[8]|~sr_rA_useF_reg[8]),
 
-  .read0_addr_rrf(rs0i0_rA_reg2),
-  .read1_addr_rrf(rs0i1_rA_reg2),
-  .read2_addr_rrf(rs0i2_rA_reg2),
-  .read3_addr_rrf(rs1i0_rA_reg2),
-  .read4_addr_rrf(rs1i1_rA_reg2),
-  .read5_addr_rrf(rs1i2_rA_reg2),
-  .read6_addr_rrf(rs2i0_rA_reg2),
-  .read7_addr_rrf(rs2i1_rA_reg2),
-  .read8_addr_rrf(rs2i2_rA_reg2),
+  .read0_addr_rrf(sr0i0_rA_reg2),
+  .read1_addr_rrf(sr0i1_rA_reg2),
+  .read2_addr_rrf(sr0i2_rA_reg2),
+  .read3_addr_rrf(sr1i0_rA_reg2),
+  .read4_addr_rrf(sr1i1_rA_reg2),
+  .read5_addr_rrf(sr1i2_rA_reg2),
+  .read6_addr_rrf(sr2i0_rA_reg2),
+  .read7_addr_rrf(sr2i1_rA_reg2),
+  .read8_addr_rrf(sr2i2_rA_reg2),
 
-  .read0_constEn(~rs_rA_useF_reg[0]),
-  .read1_constEn(~rs_rA_useF_reg[1]),
-  .read2_constEn(~rs_rA_useF_reg[2]),
-  .read3_constEn(~rs_rA_useF_reg[3]),
-  .read4_constEn(~rs_rA_useF_reg[4]),
-  .read5_constEn(~rs_rA_useF_reg[5]),
-  .read6_constEn(~rs_rA_useF_reg[6]),
-  .read7_constEn(~rs_rA_useF_reg[7]),
-  .read8_constEn(~rs_rA_useF_reg[8]),
+  .read0_constEn(~sr_rA_useF_reg[0]),
+  .read1_constEn(~sr_rA_useF_reg[1]),
+  .read2_constEn(~sr_rA_useF_reg[2]),
+  .read3_constEn(~sr_rA_useF_reg[3]),
+  .read4_constEn(~sr_rA_useF_reg[4]),
+  .read5_constEn(~sr_rA_useF_reg[5]),
+  .read6_constEn(~sr_rA_useF_reg[6]),
+  .read7_constEn(~sr_rA_useF_reg[7]),
+  .read8_constEn(~sr_rA_useF_reg[8]),
 
   .read0_const({SIMD_WIDTH{1'B0}}),
   .read1_const({SIMD_WIDTH{1'B0}}),
@@ -2975,43 +2975,43 @@ module backend(
   .read3_match(),.read4_match(),.read5_match(),
   .read6_match(),.read7_match(),.read8_match(),
   .read0_addr(regAF_reg[0]),.read0_data(dataAVL[0]),
-    .read0_oe(~retAF_reg[0]|~rs_rA_useF_reg[0]),
+    .read0_oe(~retAF_reg[0]|~sr_rA_useF_reg[0]),
   .read1_addr(regAF_reg[1]),.read1_data(dataAVL[1]),
-    .read1_oe(~retAF_reg[1]|~rs_rA_useF_reg[1]),
+    .read1_oe(~retAF_reg[1]|~sr_rA_useF_reg[1]),
   .read2_addr(regAF_reg[2]),.read2_data(dataAVL[2]),
-    .read2_oe(~retAF_reg[2]|~rs_rA_useF_reg[2]),
+    .read2_oe(~retAF_reg[2]|~sr_rA_useF_reg[2]),
   .read3_addr(regAF_reg[3]),.read3_data(dataAVL[3]),
-    .read3_oe(~retAF_reg[3]|~rs_rA_useF_reg[3]),
+    .read3_oe(~retAF_reg[3]|~sr_rA_useF_reg[3]),
   .read4_addr(regAF_reg[4]),.read4_data(dataAVL[4]),
-    .read4_oe(~retAF_reg[4]|~rs_rA_useF_reg[4]),
+    .read4_oe(~retAF_reg[4]|~sr_rA_useF_reg[4]),
   .read5_addr(regAF_reg[5]),.read5_data(dataAVL[5]),
-    .read5_oe(~retAF_reg[5]|~rs_rA_useF_reg[5]),
+    .read5_oe(~retAF_reg[5]|~sr_rA_useF_reg[5]),
   .read6_addr(regAF_reg[6]),.read6_data(dataAVL[6]),
-    .read6_oe(~retAF_reg[6]|~rs_rA_useF_reg[6]),
+    .read6_oe(~retAF_reg[6]|~sr_rA_useF_reg[6]),
   .read7_addr(regAF_reg[7]),.read7_data(dataAVL[7]),
-    .read7_oe(~retAF_reg[7]|~rs_rA_useF_reg[7]),
+    .read7_oe(~retAF_reg[7]|~sr_rA_useF_reg[7]),
   .read8_addr(regAF_reg[8]),.read8_data(dataAVL[8]),
-    .read8_oe(~retAF_reg[8]|~rs_rA_useF_reg[8]),
+    .read8_oe(~retAF_reg[8]|~sr_rA_useF_reg[8]),
 
-  .read0_addr_rrf(rs0i0_rA_reg2),
-  .read1_addr_rrf(rs0i1_rA_reg2),
-  .read2_addr_rrf(rs0i2_rA_reg2),
-  .read3_addr_rrf(rs1i0_rA_reg2),
-  .read4_addr_rrf(rs1i1_rA_reg2),
-  .read5_addr_rrf(rs1i2_rA_reg2),
-  .read6_addr_rrf(rs2i0_rA_reg2),
-  .read7_addr_rrf(rs2i1_rA_reg2),
-  .read8_addr_rrf(rs2i2_rA_reg2),
+  .read0_addr_rrf(sr0i0_rA_reg2),
+  .read1_addr_rrf(sr0i1_rA_reg2),
+  .read2_addr_rrf(sr0i2_rA_reg2),
+  .read3_addr_rrf(sr1i0_rA_reg2),
+  .read4_addr_rrf(sr1i1_rA_reg2),
+  .read5_addr_rrf(sr1i2_rA_reg2),
+  .read6_addr_rrf(sr2i0_rA_reg2),
+  .read7_addr_rrf(sr2i1_rA_reg2),
+  .read8_addr_rrf(sr2i2_rA_reg2),
 
-  .read0_constEn(~rs_rA_useF_reg[0]),
-  .read1_constEn(~rs_rA_useF_reg[1]),
-  .read2_constEn(~rs_rA_useF_reg[2]),
-  .read3_constEn(~rs_rA_useF_reg[3]),
-  .read4_constEn(~rs_rA_useF_reg[4]),
-  .read5_constEn(~rs_rA_useF_reg[5]),
-  .read6_constEn(~rs_rA_useF_reg[6]),
-  .read7_constEn(~rs_rA_useF_reg[7]),
-  .read8_constEn(~rs_rA_useF_reg[8]),
+  .read0_constEn(~sr_rA_useF_reg[0]),
+  .read1_constEn(~sr_rA_useF_reg[1]),
+  .read2_constEn(~sr_rA_useF_reg[2]),
+  .read3_constEn(~sr_rA_useF_reg[3]),
+  .read4_constEn(~sr_rA_useF_reg[4]),
+  .read5_constEn(~sr_rA_useF_reg[5]),
+  .read6_constEn(~sr_rA_useF_reg[6]),
+  .read7_constEn(~sr_rA_useF_reg[7]),
+  .read8_constEn(~sr_rA_useF_reg[8]),
 
   .read0_const({SIMD_WIDTH{1'B0}}),
   .read1_const({SIMD_WIDTH{1'B0}}),
@@ -3058,15 +3058,15 @@ module backend(
   .clk(clk),.rst(rst),
   .read_clkEn(~doStall),
   
-  .read0_addr(regAF[0]),.read0_constEn(~rs_rA_useF[0]),.read0_oe(~retAF[0]|~rs_rA_useF[0]),.read0_match(gazumpAV[0]),
-  .read1_addr(regAF[1]),.read1_constEn(~rs_rA_useF[1]),.read1_oe(~retAF[1]|~rs_rA_useF[1]),.read1_match(gazumpAV[1]),
-  .read2_addr(regAF[2]),.read2_constEn(~rs_rA_useF[2]),.read2_oe(~retAF[2]|~rs_rA_useF[2]),.read2_match(gazumpAV[2]),
-  .read3_addr(regAF[3]),.read3_constEn(~rs_rA_useF[3]),.read3_oe(~retAF[3]|~rs_rA_useF[3]),.read3_match(gazumpAV[3]),
-  .read4_addr(regAF[4]),.read4_constEn(~rs_rA_useF[4]),.read4_oe(~retAF[4]|~rs_rA_useF[4]),.read4_match(gazumpAV[4]),
-  .read5_addr(regAF[5]),.read5_constEn(~rs_rA_useF[5]),.read5_oe(~retAF[5]|~rs_rA_useF[5]),.read5_match(gazumpAV[5]),
-  .read6_addr(regAF[6]),.read6_constEn(~rs_rA_useF[6]),.read6_oe(~retAF[6]|~rs_rA_useF[6]),.read6_match(gazumpAV[6]),
-  .read7_addr(regAF[7]),.read7_constEn(~rs_rA_useF[7]),.read7_oe(~retAF[7]|~rs_rA_useF[7]),.read7_match(gazumpAV[7]),
-  .read8_addr(regAF[8]),.read8_constEn(~rs_rA_useF[8]),.read8_oe(~retAF[8]|~rs_rA_useF[8]),.read8_match(gazumpAV[8]),
+  .read0_addr(regAF[0]),.read0_constEn(~sr_rA_useF[0]),.read0_oe(~retAF[0]|~sr_rA_useF[0]),.read0_match(gazumpAV[0]),
+  .read1_addr(regAF[1]),.read1_constEn(~sr_rA_useF[1]),.read1_oe(~retAF[1]|~sr_rA_useF[1]),.read1_match(gazumpAV[1]),
+  .read2_addr(regAF[2]),.read2_constEn(~sr_rA_useF[2]),.read2_oe(~retAF[2]|~sr_rA_useF[2]),.read2_match(gazumpAV[2]),
+  .read3_addr(regAF[3]),.read3_constEn(~sr_rA_useF[3]),.read3_oe(~retAF[3]|~sr_rA_useF[3]),.read3_match(gazumpAV[3]),
+  .read4_addr(regAF[4]),.read4_constEn(~sr_rA_useF[4]),.read4_oe(~retAF[4]|~sr_rA_useF[4]),.read4_match(gazumpAV[4]),
+  .read5_addr(regAF[5]),.read5_constEn(~sr_rA_useF[5]),.read5_oe(~retAF[5]|~sr_rA_useF[5]),.read5_match(gazumpAV[5]),
+  .read6_addr(regAF[6]),.read6_constEn(~sr_rA_useF[6]),.read6_oe(~retAF[6]|~sr_rA_useF[6]),.read6_match(gazumpAV[6]),
+  .read7_addr(regAF[7]),.read7_constEn(~sr_rA_useF[7]),.read7_oe(~retAF[7]|~sr_rA_useF[7]),.read7_match(gazumpAV[7]),
+  .read8_addr(regAF[8]),.read8_constEn(~sr_rA_useF[8]),.read8_oe(~retAF[8]|~sr_rA_useF[8]),.read8_match(gazumpAV[8]),
 
   .write0_addr_reg(FUreg_reg[0]),.write0_wen_reg(FUwen_reg[0] & FU0Hit),
   .write1_addr_reg(FUreg_reg[1]),.write1_wen_reg(FUwen_reg[1] & FU1Hit),
@@ -3084,15 +3084,15 @@ module backend(
   .clk(clk),.rst(rst),
   .read_clkEn(~doStall),
   
-  .read0_addr(regAF[0]),.read0_constEn(~rs_rA_useF[0]),.read0_oe(~retAF[0]|~rs_rA_useF[0]),.read0_match(gazumpFA[0]),
-  .read1_addr(regAF[1]),.read1_constEn(~rs_rA_useF[1]),.read1_oe(~retAF[1]|~rs_rA_useF[1]),.read1_match(gazumpFA[1]),
-  .read2_addr(regAF[2]),.read2_constEn(~rs_rA_useF[2]),.read2_oe(~retAF[2]|~rs_rA_useF[2]),.read2_match(gazumpFA[2]),
-  .read3_addr(regAF[3]),.read3_constEn(~rs_rA_useF[3]),.read3_oe(~retAF[3]|~rs_rA_useF[3]),.read3_match(gazumpFA[3]),
-  .read4_addr(regAF[4]),.read4_constEn(~rs_rA_useF[4]),.read4_oe(~retAF[4]|~rs_rA_useF[4]),.read4_match(gazumpFA[4]),
-  .read5_addr(regAF[5]),.read5_constEn(~rs_rA_useF[5]),.read5_oe(~retAF[5]|~rs_rA_useF[5]),.read5_match(gazumpFA[5]),
-  .read6_addr(regAF[6]),.read6_constEn(~rs_rA_useF[6]),.read6_oe(~retAF[6]|~rs_rA_useF[6]),.read6_match(gazumpFA[6]),
-  .read7_addr(regAF[7]),.read7_constEn(~rs_rA_useF[7]),.read7_oe(~retAF[7]|~rs_rA_useF[7]),.read7_match(gazumpFA[7]),
-  .read8_addr(regAF[8]),.read8_constEn(~rs_rA_useF[8]),.read8_oe(~retAF[8]|~rs_rA_useF[8]),.read8_match(gazumpFA[8]),
+  .read0_addr(regAF[0]),.read0_constEn(~sr_rA_useF[0]),.read0_oe(~retAF[0]|~sr_rA_useF[0]),.read0_match(gazumpFA[0]),
+  .read1_addr(regAF[1]),.read1_constEn(~sr_rA_useF[1]),.read1_oe(~retAF[1]|~sr_rA_useF[1]),.read1_match(gazumpFA[1]),
+  .read2_addr(regAF[2]),.read2_constEn(~sr_rA_useF[2]),.read2_oe(~retAF[2]|~sr_rA_useF[2]),.read2_match(gazumpFA[2]),
+  .read3_addr(regAF[3]),.read3_constEn(~sr_rA_useF[3]),.read3_oe(~retAF[3]|~sr_rA_useF[3]),.read3_match(gazumpFA[3]),
+  .read4_addr(regAF[4]),.read4_constEn(~sr_rA_useF[4]),.read4_oe(~retAF[4]|~sr_rA_useF[4]),.read4_match(gazumpFA[4]),
+  .read5_addr(regAF[5]),.read5_constEn(~sr_rA_useF[5]),.read5_oe(~retAF[5]|~sr_rA_useF[5]),.read5_match(gazumpFA[5]),
+  .read6_addr(regAF[6]),.read6_constEn(~sr_rA_useF[6]),.read6_oe(~retAF[6]|~sr_rA_useF[6]),.read6_match(gazumpFA[6]),
+  .read7_addr(regAF[7]),.read7_constEn(~sr_rA_useF[7]),.read7_oe(~retAF[7]|~sr_rA_useF[7]),.read7_match(gazumpFA[7]),
+  .read8_addr(regAF[8]),.read8_constEn(~sr_rA_useF[8]),.read8_oe(~retAF[8]|~sr_rA_useF[8]),.read8_match(gazumpFA[8]),
 
   .write0_addr_reg(FUreg_reg[0]),.write0_wen_reg(FUwen_reg[0] & FU0Hit),
   .write1_addr_reg(FUreg_reg[1]),.write1_wen_reg(FUwen_reg[1] & FU1Hit),
@@ -3116,53 +3116,53 @@ module backend(
   .read3_match(),.read4_match(),.read5_match(),
   .read6_match(),.read7_match(),.read8_match(),
   .read0_addr(regAF_reg2[0]),.read0_data(dataAFH[0]),
-    .read0_oe(~retAF_reg2[0]|~rs_rA_useF_reg2[0]),
+    .read0_oe(~retAF_reg2[0]|~sr_rA_useF_reg2[0]),
   .read1_addr(regAF_reg2[1]),.read1_data(dataAFH[1]),
-    .read1_oe(~retAF_reg2[1]|~rs_rA_useF_reg2[1]),
+    .read1_oe(~retAF_reg2[1]|~sr_rA_useF_reg2[1]),
   .read2_addr(regAF_reg2[2]),.read2_data(dataAFH[2]),
-    .read2_oe(~retAF_reg2[2]|~rs_rA_useF_reg2[2]),
+    .read2_oe(~retAF_reg2[2]|~sr_rA_useF_reg2[2]),
   .read3_addr(regAF_reg2[3]),.read3_data(dataAFH[3]),
-    .read3_oe(~retAF_reg2[3]|~rs_rA_useF_reg2[3]),
+    .read3_oe(~retAF_reg2[3]|~sr_rA_useF_reg2[3]),
   .read4_addr(regAF_reg2[4]),.read4_data(dataAFH[4]),
-    .read4_oe(~retAF_reg2[4]|~rs_rA_useF_reg2[4]),
+    .read4_oe(~retAF_reg2[4]|~sr_rA_useF_reg2[4]),
   .read5_addr(regAF_reg2[5]),.read5_data(dataAFH[5]),
-    .read5_oe(~retAF_reg2[5]|~rs_rA_useF_reg2[5]),
+    .read5_oe(~retAF_reg2[5]|~sr_rA_useF_reg2[5]),
   .read6_addr(regAF_reg2[6]),.read6_data(dataAFH[6]),
-    .read6_oe(~retAF_reg2[6]|~rs_rA_useF_reg2[6]),
+    .read6_oe(~retAF_reg2[6]|~sr_rA_useF_reg2[6]),
   .read7_addr(regAF_reg2[7]),.read7_data(dataAFH[7]),
-    .read7_oe(~retAF_reg2[7]|~rs_rA_useF_reg2[7]),
+    .read7_oe(~retAF_reg2[7]|~sr_rA_useF_reg2[7]),
   .read8_addr(regAF_reg2[8]),.read8_data(dataAFH[8]),
-    .read8_oe(~retAF_reg2[8]|~rs_rA_useF_reg2[8]),
+    .read8_oe(~retAF_reg2[8]|~sr_rA_useF_reg2[8]),
 
-  .read0_addr_rrf(rs0i0_rA_reg3),
-  .read1_addr_rrf(rs0i1_rA_reg3),
-  .read2_addr_rrf(rs0i2_rA_reg3),
-  .read3_addr_rrf(rs1i0_rA_reg3),
-  .read4_addr_rrf(rs1i1_rA_reg3),
-  .read5_addr_rrf(rs1i2_rA_reg3),
-  .read6_addr_rrf(rs2i0_rA_reg3),
-  .read7_addr_rrf(rs2i1_rA_reg3),
-  .read8_addr_rrf(rs2i2_rA_reg3),
+  .read0_addr_rrf(sr0i0_rA_reg3),
+  .read1_addr_rrf(sr0i1_rA_reg3),
+  .read2_addr_rrf(sr0i2_rA_reg3),
+  .read3_addr_rrf(sr1i0_rA_reg3),
+  .read4_addr_rrf(sr1i1_rA_reg3),
+  .read5_addr_rrf(sr1i2_rA_reg3),
+  .read6_addr_rrf(sr2i0_rA_reg3),
+  .read7_addr_rrf(sr2i1_rA_reg3),
+  .read8_addr_rrf(sr2i2_rA_reg3),
 
-  .read0_constEn(~rs_rA_useF_reg2[0]),
-  .read1_constEn(~rs_rA_useF_reg2[1]),
-  .read2_constEn(~rs_rA_useF_reg2[2]),
-  .read3_constEn(~rs_rA_useF_reg2[3]),
-  .read4_constEn(~rs_rA_useF_reg2[4]),
-  .read5_constEn(~rs_rA_useF_reg2[5]),
-  .read6_constEn(~rs_rA_useF_reg2[6]),
-  .read7_constEn(~rs_rA_useF_reg2[7]),
-  .read8_constEn(~rs_rA_useF_reg2[8]),
+  .read0_constEn(~sr_rA_useF_reg2[0]),
+  .read1_constEn(~sr_rA_useF_reg2[1]),
+  .read2_constEn(~sr_rA_useF_reg2[2]),
+  .read3_constEn(~sr_rA_useF_reg2[3]),
+  .read4_constEn(~sr_rA_useF_reg2[4]),
+  .read5_constEn(~sr_rA_useF_reg2[5]),
+  .read6_constEn(~sr_rA_useF_reg2[6]),
+  .read7_constEn(~sr_rA_useF_reg2[7]),
+  .read8_constEn(~sr_rA_useF_reg2[8]),
 
-  .read0_const(is_rndE(rs_operation_reg2[0]) ? 68'b0 : fpD_one),
-  .read1_const(is_rndE(rs_operation_reg2[1]) ? 68'b0 : fpD_one),
-  .read2_const(is_rndE(rs_operation_reg2[2]) ? 68'b0 : fpD_one),
-  .read3_const(is_rndE(rs_operation_reg2[3]) ? 68'b0 : fpD_one),
-  .read4_const(is_rndE(rs_operation_reg2[4]) ? 68'b0 : fpD_one),
-  .read5_const(is_rndE(rs_operation_reg2[5]) ? 68'b0 : fpD_one),
-  .read6_const(is_rndE(rs_operation_reg2[6]) ? 68'b0 : fpD_one),
-  .read7_const(is_rndE(rs_operation_reg2[7]) ? 68'b0 : fpD_one),
-  .read8_const(is_rndE(rs_operation_reg2[8]) ? 68'b0 : fpD_one),
+  .read0_const(is_rndE(sr_operation_reg2[0]) ? 68'b0 : fpD_one),
+  .read1_const(is_rndE(sr_operation_reg2[1]) ? 68'b0 : fpD_one),
+  .read2_const(is_rndE(sr_operation_reg2[2]) ? 68'b0 : fpD_one),
+  .read3_const(is_rndE(sr_operation_reg2[3]) ? 68'b0 : fpD_one),
+  .read4_const(is_rndE(sr_operation_reg2[4]) ? 68'b0 : fpD_one),
+  .read5_const(is_rndE(sr_operation_reg2[5]) ? 68'b0 : fpD_one),
+  .read6_const(is_rndE(sr_operation_reg2[6]) ? 68'b0 : fpD_one),
+  .read7_const(is_rndE(sr_operation_reg2[7]) ? 68'b0 : fpD_one),
+  .read8_const(is_rndE(sr_operation_reg2[8]) ? 68'b0 : fpD_one),
 
   .write0_addr_rrf(tire0_rT),.write0_wen_rrf(tire0_enF),
   .write1_addr_rrf(tire1_rT),.write1_wen_rrf(tire1_enF),
@@ -3206,53 +3206,53 @@ module backend(
   .read3_match(),.read4_match(),.read5_match(),
   .read6_match(),.read7_match(),.read8_match(),
   .read0_addr(regAF_reg2[0]),.read0_data(dataAFL[0]),
-    .read0_oe(~retAF_reg2[0]|~rs_rA_useF_reg2[0]),
+    .read0_oe(~retAF_reg2[0]|~sr_rA_useF_reg2[0]),
   .read1_addr(regAF_reg2[1]),.read1_data(dataAFL[1]),
-    .read1_oe(~retAF_reg2[1]|~rs_rA_useF_reg2[1]),
+    .read1_oe(~retAF_reg2[1]|~sr_rA_useF_reg2[1]),
   .read2_addr(regAF_reg2[2]),.read2_data(dataAFL[2]),
-    .read2_oe(~retAF_reg2[2]|~rs_rA_useF_reg2[2]),
+    .read2_oe(~retAF_reg2[2]|~sr_rA_useF_reg2[2]),
   .read3_addr(regAF_reg2[3]),.read3_data(dataAFL[3]),
-    .read3_oe(~retAF_reg2[3]|~rs_rA_useF_reg2[3]),
+    .read3_oe(~retAF_reg2[3]|~sr_rA_useF_reg2[3]),
   .read4_addr(regAF_reg2[4]),.read4_data(dataAFL[4]),
-    .read4_oe(~retAF_reg2[4]|~rs_rA_useF_reg2[4]),
+    .read4_oe(~retAF_reg2[4]|~sr_rA_useF_reg2[4]),
   .read5_addr(regAF_reg2[5]),.read5_data(dataAFL[5]),
-    .read5_oe(~retAF_reg2[5]|~rs_rA_useF_reg2[5]),
+    .read5_oe(~retAF_reg2[5]|~sr_rA_useF_reg2[5]),
   .read6_addr(regAF_reg2[6]),.read6_data(dataAFL[6]),
-    .read6_oe(~retAF_reg2[6]|~rs_rA_useF_reg2[6]),
+    .read6_oe(~retAF_reg2[6]|~sr_rA_useF_reg2[6]),
   .read7_addr(regAF_reg2[7]),.read7_data(dataAFL[7]),
-    .read7_oe(~retAF_reg2[7]|~rs_rA_useF_reg2[7]),
+    .read7_oe(~retAF_reg2[7]|~sr_rA_useF_reg2[7]),
   .read8_addr(regAF_reg2[8]),.read8_data(dataAFL[8]),
-    .read8_oe(~retAF_reg2[8]|~rs_rA_useF_reg2[8]),
+    .read8_oe(~retAF_reg2[8]|~sr_rA_useF_reg2[8]),
 
-  .read0_constEn(~rs_rA_useF_reg2[0]),
-  .read1_constEn(~rs_rA_useF_reg2[1]),
-  .read2_constEn(~rs_rA_useF_reg2[2]),
-  .read3_constEn(~rs_rA_useF_reg2[3]),
-  .read4_constEn(~rs_rA_useF_reg2[4]),
-  .read5_constEn(~rs_rA_useF_reg2[5]),
-  .read6_constEn(~rs_rA_useF_reg2[6]),
-  .read7_constEn(~rs_rA_useF_reg2[7]),
-  .read8_constEn(~rs_rA_useF_reg2[8]),
+  .read0_constEn(~sr_rA_useF_reg2[0]),
+  .read1_constEn(~sr_rA_useF_reg2[1]),
+  .read2_constEn(~sr_rA_useF_reg2[2]),
+  .read3_constEn(~sr_rA_useF_reg2[3]),
+  .read4_constEn(~sr_rA_useF_reg2[4]),
+  .read5_constEn(~sr_rA_useF_reg2[5]),
+  .read6_constEn(~sr_rA_useF_reg2[6]),
+  .read7_constEn(~sr_rA_useF_reg2[7]),
+  .read8_constEn(~sr_rA_useF_reg2[8]),
 
-  .read0_addr_rrf(rs0i0_rA_reg3),
-  .read1_addr_rrf(rs0i1_rA_reg3),
-  .read2_addr_rrf(rs0i2_rA_reg3),
-  .read3_addr_rrf(rs1i0_rA_reg3),
-  .read4_addr_rrf(rs1i1_rA_reg3),
-  .read5_addr_rrf(rs1i2_rA_reg3),
-  .read6_addr_rrf(rs2i0_rA_reg3),
-  .read7_addr_rrf(rs2i1_rA_reg3),
-  .read8_addr_rrf(rs2i2_rA_reg3),
+  .read0_addr_rrf(sr0i0_rA_reg3),
+  .read1_addr_rrf(sr0i1_rA_reg3),
+  .read2_addr_rrf(sr0i2_rA_reg3),
+  .read3_addr_rrf(sr1i0_rA_reg3),
+  .read4_addr_rrf(sr1i1_rA_reg3),
+  .read5_addr_rrf(sr1i2_rA_reg3),
+  .read6_addr_rrf(sr2i0_rA_reg3),
+  .read7_addr_rrf(sr2i1_rA_reg3),
+  .read8_addr_rrf(sr2i2_rA_reg3),
 
-  .read0_const(is_rndE(rs_operation_reg2[0]) ? fpE_one : {16'b0,fpD_one}),
-  .read1_const(is_rndE(rs_operation_reg2[1]) ? fpE_one : {16'b0,fpD_one}),
-  .read2_const(is_rndE(rs_operation_reg2[2]) ? fpE_one : {16'b0,fpD_one}),
-  .read3_const(is_rndE(rs_operation_reg2[3]) ? fpE_one : {16'b0,fpD_one}),
-  .read4_const(is_rndE(rs_operation_reg2[4]) ? fpE_one : {16'b0,fpD_one}),
-  .read5_const(is_rndE(rs_operation_reg2[5]) ? fpE_one : {16'b0,fpD_one}),
-  .read6_const(is_rndE(rs_operation_reg2[6]) ? fpE_one : {16'b0,fpD_one}),
-  .read7_const(is_rndE(rs_operation_reg2[7]) ? fpE_one : {16'b0,fpD_one}),
-  .read8_const(is_rndE(rs_operation_reg2[8]) ? fpE_one : {16'b0,fpD_one}),
+  .read0_const(is_rndE(sr_operation_reg2[0]) ? fpE_one : {16'b0,fpD_one}),
+  .read1_const(is_rndE(sr_operation_reg2[1]) ? fpE_one : {16'b0,fpD_one}),
+  .read2_const(is_rndE(sr_operation_reg2[2]) ? fpE_one : {16'b0,fpD_one}),
+  .read3_const(is_rndE(sr_operation_reg2[3]) ? fpE_one : {16'b0,fpD_one}),
+  .read4_const(is_rndE(sr_operation_reg2[4]) ? fpE_one : {16'b0,fpD_one}),
+  .read5_const(is_rndE(sr_operation_reg2[5]) ? fpE_one : {16'b0,fpD_one}),
+  .read6_const(is_rndE(sr_operation_reg2[6]) ? fpE_one : {16'b0,fpD_one}),
+  .read7_const(is_rndE(sr_operation_reg2[7]) ? fpE_one : {16'b0,fpD_one}),
+  .read8_const(is_rndE(sr_operation_reg2[8]) ? fpE_one : {16'b0,fpD_one}),
 
 
   .write0_addr_rrf(tire0_rT),.write0_wen_rrf(tire0_enF),
@@ -3310,15 +3310,15 @@ module backend(
   .read8_addr(regA[8]),.read8_data(inflA[8]),
     .read8_oe(~isAF[8] & ~isAV[8]),
 
-  .read0_constEn(~rs_rA_use[0]&~rs_rA_useF[0]||rs_rA_use[0]&retA[0]||rs_rA_useF[0]&retAF[0]),
-  .read1_constEn(~rs_rA_use[1]&~rs_rA_useF[1]||rs_rA_use[1]&retA[1]||rs_rA_useF[1]&retAF[1]),
-  .read2_constEn(~rs_rA_use[2]&~rs_rA_useF[2]||rs_rA_use[2]&retA[2]||rs_rA_useF[2]&retAF[2]),
-  .read3_constEn(~rs_rA_use[3]&~rs_rA_useF[3]||rs_rA_use[3]&retA[3]||rs_rA_useF[3]&retAF[3]),
-  .read4_constEn(~rs_rA_use[4]&~rs_rA_useF[4]||rs_rA_use[4]&retA[4]||rs_rA_useF[4]&retAF[4]),
-  .read5_constEn(~rs_rA_use[5]&~rs_rA_useF[5]||rs_rA_use[5]&retA[5]||rs_rA_useF[5]&retAF[5]),
-  .read6_constEn(~rs_rA_use[6]&~rs_rA_useF[6]||rs_rA_use[6]&retA[6]||rs_rA_useF[6]&retAF[6]),
-  .read7_constEn(~rs_rA_use[7]&~rs_rA_useF[7]||rs_rA_use[7]&retA[7]||rs_rA_useF[7]&retAF[7]),
-  .read8_constEn(~rs_rA_use[8]&~rs_rA_useF[8]||rs_rA_use[8]&retA[8]||rs_rA_useF[8]&retAF[8]),
+  .read0_constEn(~sr_rA_use[0]&~sr_rA_useF[0]||sr_rA_use[0]&retA[0]||sr_rA_useF[0]&retAF[0]),
+  .read1_constEn(~sr_rA_use[1]&~sr_rA_useF[1]||sr_rA_use[1]&retA[1]||sr_rA_useF[1]&retAF[1]),
+  .read2_constEn(~sr_rA_use[2]&~sr_rA_useF[2]||sr_rA_use[2]&retA[2]||sr_rA_useF[2]&retAF[2]),
+  .read3_constEn(~sr_rA_use[3]&~sr_rA_useF[3]||sr_rA_use[3]&retA[3]||sr_rA_useF[3]&retAF[3]),
+  .read4_constEn(~sr_rA_use[4]&~sr_rA_useF[4]||sr_rA_use[4]&retA[4]||sr_rA_useF[4]&retAF[4]),
+  .read5_constEn(~sr_rA_use[5]&~sr_rA_useF[5]||sr_rA_use[5]&retA[5]||sr_rA_useF[5]&retAF[5]),
+  .read6_constEn(~sr_rA_use[6]&~sr_rA_useF[6]||sr_rA_use[6]&retA[6]||sr_rA_useF[6]&retAF[6]),
+  .read7_constEn(~sr_rA_use[7]&~sr_rA_useF[7]||sr_rA_use[7]&retA[7]||sr_rA_useF[7]&retAF[7]),
+  .read8_constEn(~sr_rA_use[8]&~sr_rA_useF[8]||sr_rA_use[8]&retA[8]||sr_rA_useF[8]&retAF[8]),
 
 
   .write0_addr_reg(FUreg_reg[0]),.write0_wen_reg(FUwen_reg[0] & FU0Hit),
@@ -3366,15 +3366,15 @@ module backend(
   .read8_addr(regAF[8]),.read8_data(inflA[8]),
     .read8_oe(isAV[8]),
 
-  .read0_constEn(~rs_rA_useF[0]||retAF[0]),
-  .read1_constEn(~rs_rA_useF[1]||retAF[1]),
-  .read2_constEn(~rs_rA_useF[2]||retAF[2]),
-  .read3_constEn(~rs_rA_useF[3]||retAF[3]),
-  .read4_constEn(~rs_rA_useF[4]||retAF[4]),
-  .read5_constEn(~rs_rA_useF[5]||retAF[5]),
-  .read6_constEn(~rs_rA_useF[6]||retAF[6]),
-  .read7_constEn(~rs_rA_useF[7]||retAF[7]),
-  .read8_constEn(~rs_rA_useF[8]||retAF[8]),
+  .read0_constEn(~sr_rA_useF[0]||retAF[0]),
+  .read1_constEn(~sr_rA_useF[1]||retAF[1]),
+  .read2_constEn(~sr_rA_useF[2]||retAF[2]),
+  .read3_constEn(~sr_rA_useF[3]||retAF[3]),
+  .read4_constEn(~sr_rA_useF[4]||retAF[4]),
+  .read5_constEn(~sr_rA_useF[5]||retAF[5]),
+  .read6_constEn(~sr_rA_useF[6]||retAF[6]),
+  .read7_constEn(~sr_rA_useF[7]||retAF[7]),
+  .read8_constEn(~sr_rA_useF[8]||retAF[8]),
 
 
   .write0_addr_reg(FUreg_reg[0]),.write0_wen_reg(FUwen_reg[0] & FU0Hit),
@@ -3422,15 +3422,15 @@ module backend(
   .read8_addr(regAF[8]),.read8_data(inflA[8]),
     .read8_oe(isAF[8]),
 
-  .read0_constEn(~rs_rA_useF[0]||retAF[0]),
-  .read1_constEn(~rs_rA_useF[1]||retAF[1]),
-  .read2_constEn(~rs_rA_useF[2]||retAF[2]),
-  .read3_constEn(~rs_rA_useF[3]||retAF[3]),
-  .read4_constEn(~rs_rA_useF[4]||retAF[4]),
-  .read5_constEn(~rs_rA_useF[5]||retAF[5]),
-  .read6_constEn(~rs_rA_useF[6]||retAF[6]),
-  .read7_constEn(~rs_rA_useF[7]||retAF[7]),
-  .read8_constEn(~rs_rA_useF[8]||retAF[8]),
+  .read0_constEn(~sr_rA_useF[0]||retAF[0]),
+  .read1_constEn(~sr_rA_useF[1]||retAF[1]),
+  .read2_constEn(~sr_rA_useF[2]||retAF[2]),
+  .read3_constEn(~sr_rA_useF[3]||retAF[3]),
+  .read4_constEn(~sr_rA_useF[4]||retAF[4]),
+  .read5_constEn(~sr_rA_useF[5]||retAF[5]),
+  .read6_constEn(~sr_rA_useF[6]||retAF[6]),
+  .read7_constEn(~sr_rA_useF[7]||retAF[7]),
+  .read8_constEn(~sr_rA_useF[8]||retAF[8]),
 
 
   .write0_addr_reg(FUreg_reg[0]),.write0_wen_reg(FUwen_reg[0] & FU0Hit),
@@ -3461,54 +3461,54 @@ module backend(
   .tire_clkEn(1'b1),
 
   .read0_addr(regB[0]),.read0_data(dataB[0]),
-    .read0_oe(~retB[0]|rs0i0_useBConst_reg|~rs_rB_use[0]),.read0_match(gazumpBG[0]),
+    .read0_oe(~retB[0]|sr0i0_useBConst_reg|~sr_rB_use[0]),.read0_match(gazumpBG[0]),
   .read1_addr(regB[1]),.read1_data(dataB[1]),
-    .read1_oe(~retB[1]|rs0i1_useBConst_reg|~rs_rB_use[1]),.read1_match(gazumpBG[1]),
+    .read1_oe(~retB[1]|sr0i1_useBConst_reg|~sr_rB_use[1]),.read1_match(gazumpBG[1]),
   .read2_addr(regB[2]),.read2_data(dataB[2]),
-    .read2_oe(~retB[2]|rs0i2_useBConst_reg|~rs_rB_use[2]),.read2_match(gazumpBG[2]),
+    .read2_oe(~retB[2]|sr0i2_useBConst_reg|~sr_rB_use[2]),.read2_match(gazumpBG[2]),
   .read3_addr(regB[3]),.read3_data(dataB[3]),
-    .read3_oe(~retB[3]|rs1i0_useBConst_reg|~rs_rB_use[3]),.read3_match(gazumpBG[3]),
+    .read3_oe(~retB[3]|sr1i0_useBConst_reg|~sr_rB_use[3]),.read3_match(gazumpBG[3]),
   .read4_addr(regB[4]),.read4_data(dataB[4]),
-    .read4_oe(~retB[4]|rs1i1_useBConst_reg|~rs_rB_use[4]),.read4_match(gazumpBG[4]),
+    .read4_oe(~retB[4]|sr1i1_useBConst_reg|~sr_rB_use[4]),.read4_match(gazumpBG[4]),
   .read5_addr(regB[5]),.read5_data(dataB[5]),
-    .read5_oe(~retB[5]|rs1i2_useBConst_reg|~rs_rB_use[5]),.read5_match(gazumpBG[5]),
+    .read5_oe(~retB[5]|sr1i2_useBConst_reg|~sr_rB_use[5]),.read5_match(gazumpBG[5]),
   .read6_addr(regB[6]),.read6_data(dataB[6]),
-    .read6_oe(~retB[6]|rs2i0_useBConst_reg|~rs_rB_use[6]),.read6_match(gazumpBG[6]),
+    .read6_oe(~retB[6]|sr2i0_useBConst_reg|~sr_rB_use[6]),.read6_match(gazumpBG[6]),
   .read7_addr(regB[7]),.read7_data(dataB[7]),
-    .read7_oe(~retB[7]|rs2i1_useBConst_reg|~rs_rB_use[7]),.read7_match(gazumpBG[7]),
+    .read7_oe(~retB[7]|sr2i1_useBConst_reg|~sr_rB_use[7]),.read7_match(gazumpBG[7]),
   .read8_addr(regB[8]),.read8_data(dataB[8]),
-    .read8_oe(~retB[8]|rs2i2_useBConst_reg|~rs_rB_use[8]),.read8_match(gazumpBG[8]),
+    .read8_oe(~retB[8]|sr2i2_useBConst_reg|~sr_rB_use[8]),.read8_match(gazumpBG[8]),
 
-  .read0_addr_rrf(rs0i0_rB_reg),
-  .read1_addr_rrf(rs0i1_rB_reg),
-  .read2_addr_rrf(rs0i2_rB_reg),
-  .read3_addr_rrf(rs1i0_rB_reg),
-  .read4_addr_rrf(rs1i1_rB_reg),
-  .read5_addr_rrf(rs1i2_rB_reg),
-  .read6_addr_rrf(rs2i0_rB_reg),
-  .read7_addr_rrf(rs2i1_rB_reg),
-  .read8_addr_rrf(rs2i2_rB_reg),
+  .read0_addr_rrf(sr0i0_rB_reg),
+  .read1_addr_rrf(sr0i1_rB_reg),
+  .read2_addr_rrf(sr0i2_rB_reg),
+  .read3_addr_rrf(sr1i0_rB_reg),
+  .read4_addr_rrf(sr1i1_rB_reg),
+  .read5_addr_rrf(sr1i2_rB_reg),
+  .read6_addr_rrf(sr2i0_rB_reg),
+  .read7_addr_rrf(sr2i1_rB_reg),
+  .read8_addr_rrf(sr2i2_rB_reg),
 
 
-  .read0_constEn(rs0i0_useBConst_reg|~rs_rB_use[0]),
-  .read1_constEn(rs0i1_useBConst_reg|~rs_rB_use[1]),
-  .read2_constEn(rs0i2_useBConst_reg|~rs_rB_use[2]),
-  .read3_constEn(rs1i0_useBConst_reg|~rs_rB_use[3]),
-  .read4_constEn(rs1i1_useBConst_reg|~rs_rB_use[4]),
-  .read5_constEn(rs1i2_useBConst_reg|~rs_rB_use[5]),
-  .read6_constEn(rs2i0_useBConst_reg|~rs_rB_use[6]),
-  .read7_constEn(rs2i1_useBConst_reg|~rs_rB_use[7]),
-  .read8_constEn(rs2i2_useBConst_reg|~rs_rB_use[8]),
+  .read0_constEn(sr0i0_useBConst_reg|~sr_rB_use[0]),
+  .read1_constEn(sr0i1_useBConst_reg|~sr_rB_use[1]),
+  .read2_constEn(sr0i2_useBConst_reg|~sr_rB_use[2]),
+  .read3_constEn(sr1i0_useBConst_reg|~sr_rB_use[3]),
+  .read4_constEn(sr1i1_useBConst_reg|~sr_rB_use[4]),
+  .read5_constEn(sr1i2_useBConst_reg|~sr_rB_use[5]),
+  .read6_constEn(sr2i0_useBConst_reg|~sr_rB_use[6]),
+  .read7_constEn(sr2i1_useBConst_reg|~sr_rB_use[7]),
+  .read8_constEn(sr2i2_useBConst_reg|~sr_rB_use[8]),
 
-  .read0_const(rs_const_new[0]&{65{rs_useBConst[0]}}),
-  .read1_const(rs_const_new[1]&{65{rs0i1_useBConst_reg}}),
-  .read2_const(rs_const_new[2]),
-  .read3_const(rs_const_new[3]&{65{rs_useBConst[3]}}),
-  .read4_const(rs_const_new[4]&{65{rs1i1_useBConst_reg}}),
-  .read5_const(rs_const_new[5]),
-  .read6_const(rs_const_new[6]&{65{rs_useBConst[6]}}),
-  .read7_const(rs_const_new[7]&{65{rs2i1_useBConst_reg}}),
-  .read8_const(rs_const_new[8]),
+  .read0_const(sr_const_new[0]&{65{sr_useBConst[0]}}),
+  .read1_const(sr_const_new[1]&{65{sr0i1_useBConst_reg}}),
+  .read2_const(sr_const_new[2]),
+  .read3_const(sr_const_new[3]&{65{sr_useBConst[3]}}),
+  .read4_const(sr_const_new[4]&{65{sr1i1_useBConst_reg}}),
+  .read5_const(sr_const_new[5]),
+  .read6_const(sr_const_new[6]&{65{sr_useBConst[6]}}),
+  .read7_const(sr_const_new[7]&{65{sr2i1_useBConst_reg}}),
+  .read8_const(sr_const_new[8]),
 
   .write0_addr_rrf(tire0_rT),.write0_wen_rrf(tire0_enG),
   .write1_addr_rrf(tire1_rT),.write1_wen_rrf(tire1_enG),
@@ -3551,43 +3551,43 @@ module backend(
   .read3_match(),.read4_match(),.read5_match(),
   .read6_match(),.read7_match(),.read8_match(),
   .read0_addr(regBF_reg[0]),.read0_data(dataBVH[0]),
-    .read0_oe(~retBF_reg[0]|~rs_rB_useF_reg[0]),
+    .read0_oe(~retBF_reg[0]|~sr_rB_useF_reg[0]),
   .read1_addr(regBF_reg[1]),.read1_data(dataBVH[1]),
-    .read1_oe(~retBF_reg[1]|~rs_rB_useF_reg[1]),
+    .read1_oe(~retBF_reg[1]|~sr_rB_useF_reg[1]),
   .read2_addr(regBF_reg[2]),.read2_data(dataBVH[2]),
-    .read2_oe(~retBF_reg[2]|~rs_rB_useF_reg[2]),
+    .read2_oe(~retBF_reg[2]|~sr_rB_useF_reg[2]),
   .read3_addr(regBF_reg[3]),.read3_data(dataBVH[3]),
-    .read3_oe(~retBF_reg[3]|~rs_rB_useF_reg[3]),
+    .read3_oe(~retBF_reg[3]|~sr_rB_useF_reg[3]),
   .read4_addr(regBF_reg[4]),.read4_data(dataBVH[4]),
-    .read4_oe(~retBF_reg[4]|~rs_rB_useF_reg[4]),
+    .read4_oe(~retBF_reg[4]|~sr_rB_useF_reg[4]),
   .read5_addr(regBF_reg[5]),.read5_data(dataBVH[5]),
-    .read5_oe(~retBF_reg[5]|~rs_rB_useF_reg[5]),
+    .read5_oe(~retBF_reg[5]|~sr_rB_useF_reg[5]),
   .read6_addr(regBF_reg[6]),.read6_data(dataBVH[6]),
-    .read6_oe(~retBF_reg[6]|~rs_rB_useF_reg[6]),
+    .read6_oe(~retBF_reg[6]|~sr_rB_useF_reg[6]),
   .read7_addr(regBF_reg[7]),.read7_data(dataBVH[7]),
-    .read7_oe(~retBF_reg[7]|~rs_rB_useF_reg[7]),
+    .read7_oe(~retBF_reg[7]|~sr_rB_useF_reg[7]),
   .read8_addr(regBF_reg[8]),.read8_data(dataBVH[8]),
-    .read8_oe(~retBF_reg[8]|~rs_rB_useF_reg[8]),
+    .read8_oe(~retBF_reg[8]|~sr_rB_useF_reg[8]),
 
-  .read0_constEn(~rs_rB_useF_reg[0]),
-  .read1_constEn(~rs_rB_useF_reg[1]),
-  .read2_constEn(~rs_rB_useF_reg[2]),
-  .read3_constEn(~rs_rB_useF_reg[3]),
-  .read4_constEn(~rs_rB_useF_reg[4]),
-  .read5_constEn(~rs_rB_useF_reg[5]),
-  .read6_constEn(~rs_rB_useF_reg[6]),
-  .read7_constEn(~rs_rB_useF_reg[7]),
-  .read8_constEn(~rs_rB_useF_reg[8]),
+  .read0_constEn(~sr_rB_useF_reg[0]),
+  .read1_constEn(~sr_rB_useF_reg[1]),
+  .read2_constEn(~sr_rB_useF_reg[2]),
+  .read3_constEn(~sr_rB_useF_reg[3]),
+  .read4_constEn(~sr_rB_useF_reg[4]),
+  .read5_constEn(~sr_rB_useF_reg[5]),
+  .read6_constEn(~sr_rB_useF_reg[6]),
+  .read7_constEn(~sr_rB_useF_reg[7]),
+  .read8_constEn(~sr_rB_useF_reg[8]),
 
-  .read0_addr_rrf(rs0i0_rB_reg2),
-  .read1_addr_rrf(rs0i1_rB_reg2),
-  .read2_addr_rrf(rs0i2_rB_reg2),
-  .read3_addr_rrf(rs1i0_rB_reg2),
-  .read4_addr_rrf(rs1i1_rB_reg2),
-  .read5_addr_rrf(rs1i2_rB_reg2),
-  .read6_addr_rrf(rs2i0_rB_reg2),
-  .read7_addr_rrf(rs2i1_rB_reg2),
-  .read8_addr_rrf(rs2i2_rB_reg2),
+  .read0_addr_rrf(sr0i0_rB_reg2),
+  .read1_addr_rrf(sr0i1_rB_reg2),
+  .read2_addr_rrf(sr0i2_rB_reg2),
+  .read3_addr_rrf(sr1i0_rB_reg2),
+  .read4_addr_rrf(sr1i1_rB_reg2),
+  .read5_addr_rrf(sr1i2_rB_reg2),
+  .read6_addr_rrf(sr2i0_rB_reg2),
+  .read7_addr_rrf(sr2i1_rB_reg2),
+  .read8_addr_rrf(sr2i2_rB_reg2),
 
   .read0_const({SIMD_WIDTH{1'B0}}),
   .read1_const({SIMD_WIDTH{1'B0}}),
@@ -3640,43 +3640,43 @@ module backend(
   .read3_match(),.read4_match(),.read5_match(),
   .read6_match(),.read7_match(),.read8_match(),
   .read0_addr(regBF_reg[0]),.read0_data(dataBVL[0]),
-    .read0_oe(~retBF_reg[0]|~rs_rB_useF_reg[0]),
+    .read0_oe(~retBF_reg[0]|~sr_rB_useF_reg[0]),
   .read1_addr(regBF_reg[1]),.read1_data(dataBVL[1]),
-    .read1_oe(~retBF_reg[1]|~rs_rB_useF_reg[1]),
+    .read1_oe(~retBF_reg[1]|~sr_rB_useF_reg[1]),
   .read2_addr(regBF_reg[2]),.read2_data(dataBVL[2]),
-    .read2_oe(~retBF_reg[2]|~rs_rB_useF_reg[2]),
+    .read2_oe(~retBF_reg[2]|~sr_rB_useF_reg[2]),
   .read3_addr(regBF_reg[3]),.read3_data(dataBVL[3]),
-    .read3_oe(~retBF_reg[3]|~rs_rB_useF_reg[3]),
+    .read3_oe(~retBF_reg[3]|~sr_rB_useF_reg[3]),
   .read4_addr(regBF_reg[4]),.read4_data(dataBVL[4]),
-    .read4_oe(~retBF_reg[4]|~rs_rB_useF_reg[4]),
+    .read4_oe(~retBF_reg[4]|~sr_rB_useF_reg[4]),
   .read5_addr(regBF_reg[5]),.read5_data(dataBVL[5]),
-    .read5_oe(~retBF_reg[5]|~rs_rB_useF_reg[5]),
+    .read5_oe(~retBF_reg[5]|~sr_rB_useF_reg[5]),
   .read6_addr(regBFW_reg[2]),.read6_data(dataBVL[6]),
-    .read6_oe(~retBF_reg[6]|~rs_rB_useF_reg[6]),
+    .read6_oe(~retBF_reg[6]|~sr_rB_useF_reg[6]),
   .read7_addr(regBF_reg[7]),.read7_data(dataBVL[7]),
-    .read7_oe(~retBF_reg[7]|~rs_rB_useF_reg[7]),
+    .read7_oe(~retBF_reg[7]|~sr_rB_useF_reg[7]),
   .read8_addr(regBF_reg[8]),.read8_data(dataBVL[8]),
-    .read8_oe(~retBF_reg[8]|~rs_rB_useF_reg[8]),
+    .read8_oe(~retBF_reg[8]|~sr_rB_useF_reg[8]),
 
-  .read0_constEn(~rs_rB_useF_reg[0]),
-  .read1_constEn(~rs_rB_useF_reg[1]),
-  .read2_constEn(~rs_rB_useF_reg[2]),
-  .read3_constEn(~rs_rB_useF_reg[3]),
-  .read4_constEn(~rs_rB_useF_reg[4]),
-  .read5_constEn(~rs_rB_useF_reg[5]),
-  .read6_constEn(~rs_rB_useF_reg[6]),
-  .read7_constEn(~rs_rB_useF_reg[7]),
-  .read8_constEn(~rs_rB_useF_reg[8]),
+  .read0_constEn(~sr_rB_useF_reg[0]),
+  .read1_constEn(~sr_rB_useF_reg[1]),
+  .read2_constEn(~sr_rB_useF_reg[2]),
+  .read3_constEn(~sr_rB_useF_reg[3]),
+  .read4_constEn(~sr_rB_useF_reg[4]),
+  .read5_constEn(~sr_rB_useF_reg[5]),
+  .read6_constEn(~sr_rB_useF_reg[6]),
+  .read7_constEn(~sr_rB_useF_reg[7]),
+  .read8_constEn(~sr_rB_useF_reg[8]),
 
-  .read0_addr_rrf(rs0i0_rB_reg2),
-  .read1_addr_rrf(rs0i1_rB_reg2),
-  .read2_addr_rrf(rs0i2_rB_reg2),
-  .read3_addr_rrf(rs1i0_rB_reg2),
-  .read4_addr_rrf(rs1i1_rB_reg2),
-  .read5_addr_rrf(rs1i2_rB_reg2),
-  .read6_addr_rrf(rs2i0_rB_reg2),
-  .read7_addr_rrf(rs2i1_rB_reg2),
-  .read8_addr_rrf(rs2i2_rB_reg2),
+  .read0_addr_rrf(sr0i0_rB_reg2),
+  .read1_addr_rrf(sr0i1_rB_reg2),
+  .read2_addr_rrf(sr0i2_rB_reg2),
+  .read3_addr_rrf(sr1i0_rB_reg2),
+  .read4_addr_rrf(sr1i1_rB_reg2),
+  .read5_addr_rrf(sr1i2_rB_reg2),
+  .read6_addr_rrf(sr2i0_rB_reg2),
+  .read7_addr_rrf(sr2i1_rB_reg2),
+  .read8_addr_rrf(sr2i2_rB_reg2),
 
   .read0_const({SIMD_WIDTH{1'B0}}),
   .read1_const({SIMD_WIDTH{1'B0}}),
@@ -3723,15 +3723,15 @@ module backend(
   .clk(clk),.rst(rst),
   .read_clkEn(~doStall),
   
-  .read0_addr(regBF[0]),.read0_constEn(~rs_rB_useF[0]),.read0_oe(~retBFW[0]|~rs_rB_useF[0]),.read0_match(gazumpBV[0]),
-  .read1_addr(regBF[1]),.read1_constEn(~rs_rB_useF[1]),.read1_oe(~retBF[1]|~rs_rB_useF[1]),.read1_match(gazumpBV[1]),
-  .read2_addr(regBF[2]),.read2_constEn(~rs_rB_useF[2]),.read2_oe(~retBF[2]|~rs_rB_useF[2]),.read2_match(gazumpBV[2]),
-  .read3_addr(regBF[3]),.read3_constEn(~rs_rB_useF[3]),.read3_oe(~retBF[3]|~rs_rB_useF[3]),.read3_match(gazumpBV[3]),
-  .read4_addr(regBF[4]),.read4_constEn(~rs_rB_useF[4]),.read4_oe(~retBF[4]|~rs_rB_useF[4]),.read4_match(gazumpBV[4]),
-  .read5_addr(regBF[5]),.read5_constEn(~rs_rB_useF[5]),.read5_oe(~retBF[5]|~rs_rB_useF[5]),.read5_match(gazumpBV[5]),
-  .read6_addr(regBF[6]),.read6_constEn(~rs_rB_useF[6]),.read6_oe(~retBF[6]|~rs_rB_useF[6]),.read6_match(gazumpBV[6]),
-  .read7_addr(regBF[7]),.read7_constEn(~rs_rB_useF[7]),.read7_oe(~retBF[7]|~rs_rB_useF[7]),.read7_match(gazumpBV[7]),
-  .read8_addr(regBF[8]),.read8_constEn(~rs_rB_useF[8]),.read8_oe(~retBF[8]|~rs_rB_useF[8]),.read8_match(gazumpBV[8]),
+  .read0_addr(regBF[0]),.read0_constEn(~sr_rB_useF[0]),.read0_oe(~retBFW[0]|~sr_rB_useF[0]),.read0_match(gazumpBV[0]),
+  .read1_addr(regBF[1]),.read1_constEn(~sr_rB_useF[1]),.read1_oe(~retBF[1]|~sr_rB_useF[1]),.read1_match(gazumpBV[1]),
+  .read2_addr(regBF[2]),.read2_constEn(~sr_rB_useF[2]),.read2_oe(~retBF[2]|~sr_rB_useF[2]),.read2_match(gazumpBV[2]),
+  .read3_addr(regBF[3]),.read3_constEn(~sr_rB_useF[3]),.read3_oe(~retBF[3]|~sr_rB_useF[3]),.read3_match(gazumpBV[3]),
+  .read4_addr(regBF[4]),.read4_constEn(~sr_rB_useF[4]),.read4_oe(~retBF[4]|~sr_rB_useF[4]),.read4_match(gazumpBV[4]),
+  .read5_addr(regBF[5]),.read5_constEn(~sr_rB_useF[5]),.read5_oe(~retBF[5]|~sr_rB_useF[5]),.read5_match(gazumpBV[5]),
+  .read6_addr(regBF[6]),.read6_constEn(~sr_rB_useF[6]),.read6_oe(~retBF[6]|~sr_rB_useF[6]),.read6_match(gazumpBV[6]),
+  .read7_addr(regBF[7]),.read7_constEn(~sr_rB_useF[7]),.read7_oe(~retBF[7]|~sr_rB_useF[7]),.read7_match(gazumpBV[7]),
+  .read8_addr(regBF[8]),.read8_constEn(~sr_rB_useF[8]),.read8_oe(~retBF[8]|~sr_rB_useF[8]),.read8_match(gazumpBV[8]),
 
   .write0_addr_reg(FUreg_reg[0]),.write0_wen_reg(FUwen_reg[0] & FU0Hit),
   .write1_addr_reg(FUreg_reg[1]),.write1_wen_reg(FUwen_reg[1] & FU1Hit),
@@ -3749,15 +3749,15 @@ module backend(
   .clk(clk),.rst(rst),
   .read_clkEn(~doStall),
   
-  .read0_addr(regBF[0]),.read0_constEn(~rs_rB_useF[0]),.read0_oe(~retBF[0]|~rs_rB_useF[0]),.read0_match(gazumpFB[0]),
-  .read1_addr(regBF[1]),.read1_constEn(~rs_rB_useF[1]),.read1_oe(~retBF[1]|~rs_rB_useF[1]),.read1_match(gazumpFB[1]),
-  .read2_addr(regBF[2]),.read2_constEn(~rs_rB_useF[2]),.read2_oe(~retBF[2]|~rs_rB_useF[2]),.read2_match(gazumpFB[2]),
-  .read3_addr(regBF[3]),.read3_constEn(~rs_rB_useF[3]),.read3_oe(~retBF[3]|~rs_rB_useF[3]),.read3_match(gazumpFB[3]),
-  .read4_addr(regBF[4]),.read4_constEn(~rs_rB_useF[4]),.read4_oe(~retBF[4]|~rs_rB_useF[4]),.read4_match(gazumpFB[4]),
-  .read5_addr(regBF[5]),.read5_constEn(~rs_rB_useF[5]),.read5_oe(~retBF[5]|~rs_rB_useF[5]),.read5_match(gazumpFB[5]),
-  .read6_addr(regBF[6]),.read6_constEn(~rs_rB_useF[6]),.read6_oe(~retBF[6]|~rs_rB_useF[6]),.read6_match(gazumpFB[6]),
-  .read7_addr(regBF[7]),.read7_constEn(~rs_rB_useF[7]),.read7_oe(~retBF[7]|~rs_rB_useF[7]),.read7_match(gazumpFB[7]),
-  .read8_addr(regBF[8]),.read8_constEn(~rs_rB_useF[8]),.read8_oe(~retBF[8]|~rs_rB_useF[8]),.read8_match(gazumpFB[8]),
+  .read0_addr(regBF[0]),.read0_constEn(~sr_rB_useF[0]),.read0_oe(~retBF[0]|~sr_rB_useF[0]),.read0_match(gazumpFB[0]),
+  .read1_addr(regBF[1]),.read1_constEn(~sr_rB_useF[1]),.read1_oe(~retBF[1]|~sr_rB_useF[1]),.read1_match(gazumpFB[1]),
+  .read2_addr(regBF[2]),.read2_constEn(~sr_rB_useF[2]),.read2_oe(~retBF[2]|~sr_rB_useF[2]),.read2_match(gazumpFB[2]),
+  .read3_addr(regBF[3]),.read3_constEn(~sr_rB_useF[3]),.read3_oe(~retBF[3]|~sr_rB_useF[3]),.read3_match(gazumpFB[3]),
+  .read4_addr(regBF[4]),.read4_constEn(~sr_rB_useF[4]),.read4_oe(~retBF[4]|~sr_rB_useF[4]),.read4_match(gazumpFB[4]),
+  .read5_addr(regBF[5]),.read5_constEn(~sr_rB_useF[5]),.read5_oe(~retBF[5]|~sr_rB_useF[5]),.read5_match(gazumpFB[5]),
+  .read6_addr(regBF[6]),.read6_constEn(~sr_rB_useF[6]),.read6_oe(~retBF[6]|~sr_rB_useF[6]),.read6_match(gazumpFB[6]),
+  .read7_addr(regBF[7]),.read7_constEn(~sr_rB_useF[7]),.read7_oe(~retBF[7]|~sr_rB_useF[7]),.read7_match(gazumpFB[7]),
+  .read8_addr(regBF[8]),.read8_constEn(~sr_rB_useF[8]),.read8_oe(~retBF[8]|~sr_rB_useF[8]),.read8_match(gazumpFB[8]),
 
   .write0_addr_reg(FUreg_reg[0]),.write0_wen_reg(FUwen_reg[0] & FU0Hit),
   .write1_addr_reg(FUreg_reg[1]),.write1_wen_reg(FUwen_reg[1] & FU1Hit),
@@ -3781,33 +3781,33 @@ module backend(
   .read3_match(),.read4_match(),.read5_match(),
   .read6_match(),.read7_match(),.read8_match(),
   .read0_addr(regBF_reg2[0]),.read0_data(dataBFH[0]),
-    .read0_oe(~retBF_reg2[0]|~rs_rB_useF_reg2[0]),
+    .read0_oe(~retBF_reg2[0]|~sr_rB_useF_reg2[0]),
   .read1_addr(regBF_reg2[1]),.read1_data(dataBFH[1]),
-    .read1_oe(~retBF_reg2[1]|~rs_rB_useF_reg2[1]),
+    .read1_oe(~retBF_reg2[1]|~sr_rB_useF_reg2[1]),
   .read2_addr(regBF_reg2[2]),.read2_data(dataBFH[2]),
-    .read2_oe(~retBF_reg2[2]|~rs_rB_useF_reg2[2]),
+    .read2_oe(~retBF_reg2[2]|~sr_rB_useF_reg2[2]),
   .read3_addr(regBF_reg2[3]),.read3_data(dataBFH[3]),
-    .read3_oe(~retBF_reg2[3]|~rs_rB_useF_reg2[3]),
+    .read3_oe(~retBF_reg2[3]|~sr_rB_useF_reg2[3]),
   .read4_addr(regBF_reg2[4]),.read4_data(dataBFH[4]),
-    .read4_oe(~retBF_reg2[4]|~rs_rB_useF_reg2[4]),
+    .read4_oe(~retBF_reg2[4]|~sr_rB_useF_reg2[4]),
   .read5_addr(regBF_reg2[5]),.read5_data(dataBFH[5]),
-    .read5_oe(~retBF_reg2[5]|~rs_rB_useF_reg2[5]),
+    .read5_oe(~retBF_reg2[5]|~sr_rB_useF_reg2[5]),
   .read6_addr(regBF_reg2[6]),.read6_data(dataBFH[6]),
-    .read6_oe(~retBF_reg2[6]|~rs_rB_useF_reg2[6]),
+    .read6_oe(~retBF_reg2[6]|~sr_rB_useF_reg2[6]),
   .read7_addr(regBF_reg2[7]),.read7_data(dataBFH[7]),
-    .read7_oe(~retBF_reg2[7]|~rs_rB_useF_reg2[7]),
+    .read7_oe(~retBF_reg2[7]|~sr_rB_useF_reg2[7]),
   .read8_addr(regBF_reg2[8]),.read8_data(dataBFH[8]),
-    .read8_oe(~retBF_reg2[8]|~rs_rB_useF_reg2[8]),
+    .read8_oe(~retBF_reg2[8]|~sr_rB_useF_reg2[8]),
 
-  .read0_constEn(~rs_rB_useF_reg2[0]),
-  .read1_constEn(~rs_rB_useF_reg2[1]),
-  .read2_constEn(~rs_rB_useF_reg2[2]),
-  .read3_constEn(~rs_rB_useF_reg2[3]),
-  .read4_constEn(~rs_rB_useF_reg2[4]),
-  .read5_constEn(~rs_rB_useF_reg2[5]),
-  .read6_constEn(~rs_rB_useF_reg2[6]),
-  .read7_constEn(~rs_rB_useF_reg2[7]),
-  .read8_constEn(~rs_rB_useF_reg2[8]),
+  .read0_constEn(~sr_rB_useF_reg2[0]),
+  .read1_constEn(~sr_rB_useF_reg2[1]),
+  .read2_constEn(~sr_rB_useF_reg2[2]),
+  .read3_constEn(~sr_rB_useF_reg2[3]),
+  .read4_constEn(~sr_rB_useF_reg2[4]),
+  .read5_constEn(~sr_rB_useF_reg2[5]),
+  .read6_constEn(~sr_rB_useF_reg2[6]),
+  .read7_constEn(~sr_rB_useF_reg2[7]),
+  .read8_constEn(~sr_rB_useF_reg2[8]),
 
   .read0_const({SIMD_WIDTH{1'B0}}),
   .read1_const({SIMD_WIDTH{1'B0}}),
@@ -3819,15 +3819,15 @@ module backend(
   .read7_const({SIMD_WIDTH{1'B0}}),
   .read8_const({SIMD_WIDTH{1'B0}}),
 
-  .read0_addr_rrf(rs0i0_rB_reg3),
-  .read1_addr_rrf(rs0i1_rB_reg3),
-  .read2_addr_rrf(rs0i2_rB_reg3),
-  .read3_addr_rrf(rs1i0_rB_reg3),
-  .read4_addr_rrf(rs1i1_rB_reg3),
-  .read5_addr_rrf(rs1i2_rB_reg3),
-  .read6_addr_rrf(rs2i0_rB_reg3),
-  .read7_addr_rrf(rs2i1_rB_reg3),
-  .read8_addr_rrf(rs2i2_rB_reg3),
+  .read0_addr_rrf(sr0i0_rB_reg3),
+  .read1_addr_rrf(sr0i1_rB_reg3),
+  .read2_addr_rrf(sr0i2_rB_reg3),
+  .read3_addr_rrf(sr1i0_rB_reg3),
+  .read4_addr_rrf(sr1i1_rB_reg3),
+  .read5_addr_rrf(sr1i2_rB_reg3),
+  .read6_addr_rrf(sr2i0_rB_reg3),
+  .read7_addr_rrf(sr2i1_rB_reg3),
+  .read8_addr_rrf(sr2i2_rB_reg3),
 
 
   .write0_addr_rrf(tire0_rT),.write0_wen_rrf(tire0_enF),
@@ -3871,33 +3871,33 @@ module backend(
   .read3_match(),.read4_match(),.read5_match(),
   .read6_match(),.read7_match(),.read8_match(),
   .read0_addr(regBF_reg2[0]),.read0_data(dataBFL[0]),
-    .read0_oe(~retBF_reg2[0]|~rs_rB_useF_reg2[0]),
+    .read0_oe(~retBF_reg2[0]|~sr_rB_useF_reg2[0]),
   .read1_addr(regBF_reg2[1]),.read1_data(dataBFL[1]),
-    .read1_oe(~retBF_reg2[1]|~rs_rB_useF_reg2[1]),
+    .read1_oe(~retBF_reg2[1]|~sr_rB_useF_reg2[1]),
   .read2_addr(regBF_reg2[2]),.read2_data(dataBFL[2]),
-    .read2_oe(~retBF_reg2[2]|~rs_rB_useF_reg2[2]),
+    .read2_oe(~retBF_reg2[2]|~sr_rB_useF_reg2[2]),
   .read3_addr(regBF_reg2[3]),.read3_data(dataBFL[3]),
-    .read3_oe(~retBF_reg2[3]|~rs_rB_useF_reg2[3]),
+    .read3_oe(~retBF_reg2[3]|~sr_rB_useF_reg2[3]),
   .read4_addr(regBF_reg2[4]),.read4_data(dataBFL[4]),
-    .read4_oe(~retBF_reg2[4]|~rs_rB_useF_reg2[4]),
+    .read4_oe(~retBF_reg2[4]|~sr_rB_useF_reg2[4]),
   .read5_addr(regBF_reg2[5]),.read5_data(dataBFL[5]),
-    .read5_oe(~retBF_reg2[5]|~rs_rB_useF_reg2[5]),
+    .read5_oe(~retBF_reg2[5]|~sr_rB_useF_reg2[5]),
   .read6_addr(regBF_reg2[6]),.read6_data(dataBFL[6]),
-    .read6_oe(~retBF_reg2[6]|~rs_rB_useF_reg2[6]),
+    .read6_oe(~retBF_reg2[6]|~sr_rB_useF_reg2[6]),
   .read7_addr(regBF_reg2[7]),.read7_data(dataBFL[7]),
-    .read7_oe(~retBF_reg2[7]|~rs_rB_useF_reg2[7]),
+    .read7_oe(~retBF_reg2[7]|~sr_rB_useF_reg2[7]),
   .read8_addr(regBF_reg2[8]),.read8_data(dataBFL[8]),
-    .read8_oe(~retBF_reg2[8]|~rs_rB_useF_reg2[8]),
+    .read8_oe(~retBF_reg2[8]|~sr_rB_useF_reg2[8]),
 
-  .read0_constEn(~rs_rB_useF_reg2[0]),
-  .read1_constEn(~rs_rB_useF_reg2[1]),
-  .read2_constEn(~rs_rB_useF_reg2[2]),
-  .read3_constEn(~rs_rB_useF_reg2[3]),
-  .read4_constEn(~rs_rB_useF_reg2[4]),
-  .read5_constEn(~rs_rB_useF_reg2[5]),
-  .read6_constEn(~rs_rB_useF_reg2[6]),
-  .read7_constEn(~rs_rB_useF_reg2[7]),
-  .read8_constEn(~rs_rB_useF_reg2[8]),
+  .read0_constEn(~sr_rB_useF_reg2[0]),
+  .read1_constEn(~sr_rB_useF_reg2[1]),
+  .read2_constEn(~sr_rB_useF_reg2[2]),
+  .read3_constEn(~sr_rB_useF_reg2[3]),
+  .read4_constEn(~sr_rB_useF_reg2[4]),
+  .read5_constEn(~sr_rB_useF_reg2[5]),
+  .read6_constEn(~sr_rB_useF_reg2[6]),
+  .read7_constEn(~sr_rB_useF_reg2[7]),
+  .read8_constEn(~sr_rB_useF_reg2[8]),
 
   .read0_const({16+SIMD_WIDTH{1'B0}}),
   .read1_const({16+SIMD_WIDTH{1'B0}}),
@@ -3938,15 +3938,15 @@ module backend(
   .tireRead7_addr(tire7_rF),
   .tireRead8_addr(tire8_rF),
 
-  .read0_addr_rrf(rs0i0_rB_reg3),
-  .read1_addr_rrf(rs0i1_rB_reg3),
-  .read2_addr_rrf(rs0i2_rB_reg3),
-  .read3_addr_rrf(rs1i0_rB_reg3),
-  .read4_addr_rrf(rs1i1_rB_reg3),
-  .read5_addr_rrf(rs1i2_rB_reg3),
-  .read6_addr_rrf(rs2i0_rB_reg3),
-  .read7_addr_rrf(rs2i1_rB_reg3),
-  .read8_addr_rrf(rs2i2_rB_reg3),
+  .read0_addr_rrf(sr0i0_rB_reg3),
+  .read1_addr_rrf(sr0i1_rB_reg3),
+  .read2_addr_rrf(sr0i2_rB_reg3),
+  .read3_addr_rrf(sr1i0_rB_reg3),
+  .read4_addr_rrf(sr1i1_rB_reg3),
+  .read5_addr_rrf(sr1i2_rB_reg3),
+  .read6_addr_rrf(sr2i0_rB_reg3),
+  .read7_addr_rrf(sr2i1_rB_reg3),
+  .read8_addr_rrf(sr2i2_rB_reg3),
 
 
   .write0_addr_reg(FUreg_reg3[0]),.write0_data_reg(FUFL_reg[0]),.write0_wen_reg(FUwen_reg3[0] & FU0Hit_reg2),
@@ -3985,15 +3985,15 @@ module backend(
   .read8_addr(regB[8]),.read8_data(inflB[8]),
     .read8_oe(~isBF[8] & ~isBV[8]),
 
-  .read0_constEn(rs0i0_useBConst_reg||~rs_rB_use[0]&~rs_rB_useF[0]||rs_rB_use[0]&retB[0]||rs_rB_useF[0]&retBF[0]),
-  .read1_constEn(rs0i1_useBConst_reg||~rs_rB_use[1]&~rs_rB_useF[1]||rs_rB_use[1]&retB[1]||rs_rB_useF[1]&retBF[1]),
-  .read2_constEn(rs0i2_useBConst_reg||~rs_rB_use[2]&~rs_rB_useF[2]||rs_rB_use[2]&retB[2]||rs_rB_useF[2]&retBF[2]),
-  .read3_constEn(rs1i0_useBConst_reg||~rs_rB_use[3]&~rs_rB_useF[3]||rs_rB_use[3]&retB[3]||rs_rB_useF[3]&retBF[3]),
-  .read4_constEn(rs1i1_useBConst_reg||~rs_rB_use[4]&~rs_rB_useF[4]||rs_rB_use[4]&retB[4]||rs_rB_useF[4]&retBF[4]),
-  .read5_constEn(rs1i2_useBConst_reg||~rs_rB_use[5]&~rs_rB_useF[5]||rs_rB_use[5]&retB[5]||rs_rB_useF[5]&retBF[5]),
-  .read6_constEn(rs2i0_useBConst_reg||~rs_rB_use[6]&~rs_rB_useF[6]||rs_rB_use[6]&retB[6]||rs_rB_useF[6]&retBF[6]),
-  .read7_constEn(rs2i1_useBConst_reg||~rs_rB_use[7]&~rs_rB_useF[7]||rs_rB_use[7]&retB[7]||rs_rB_useF[7]&retBF[7]),
-  .read8_constEn(rs2i2_useBConst_reg||~rs_rB_use[8]&~rs_rB_useF[8]||rs_rB_use[8]&retB[8]||rs_rB_useF[8]&retBF[8]),
+  .read0_constEn(sr0i0_useBConst_reg||~sr_rB_use[0]&~sr_rB_useF[0]||sr_rB_use[0]&retB[0]||sr_rB_useF[0]&retBF[0]),
+  .read1_constEn(sr0i1_useBConst_reg||~sr_rB_use[1]&~sr_rB_useF[1]||sr_rB_use[1]&retB[1]||sr_rB_useF[1]&retBF[1]),
+  .read2_constEn(sr0i2_useBConst_reg||~sr_rB_use[2]&~sr_rB_useF[2]||sr_rB_use[2]&retB[2]||sr_rB_useF[2]&retBF[2]),
+  .read3_constEn(sr1i0_useBConst_reg||~sr_rB_use[3]&~sr_rB_useF[3]||sr_rB_use[3]&retB[3]||sr_rB_useF[3]&retBF[3]),
+  .read4_constEn(sr1i1_useBConst_reg||~sr_rB_use[4]&~sr_rB_useF[4]||sr_rB_use[4]&retB[4]||sr_rB_useF[4]&retBF[4]),
+  .read5_constEn(sr1i2_useBConst_reg||~sr_rB_use[5]&~sr_rB_useF[5]||sr_rB_use[5]&retB[5]||sr_rB_useF[5]&retBF[5]),
+  .read6_constEn(sr2i0_useBConst_reg||~sr_rB_use[6]&~sr_rB_useF[6]||sr_rB_use[6]&retB[6]||sr_rB_useF[6]&retBF[6]),
+  .read7_constEn(sr2i1_useBConst_reg||~sr_rB_use[7]&~sr_rB_useF[7]||sr_rB_use[7]&retB[7]||sr_rB_useF[7]&retBF[7]),
+  .read8_constEn(sr2i2_useBConst_reg||~sr_rB_use[8]&~sr_rB_useF[8]||sr_rB_use[8]&retB[8]||sr_rB_useF[8]&retBF[8]),
 
   .write0_addr_reg(FUreg_reg[0]),.write0_wen_reg(FUwen_reg[0] & FU0Hit),
   .write1_addr_reg(FUreg_reg[1]),.write1_wen_reg(FUwen_reg[1] & FU1Hit),
@@ -4040,15 +4040,15 @@ module backend(
   .read8_addr(regBF[8]),.read8_data(inflB[8]),
     .read8_oe(isBV[8]),
 
-  .read0_constEn(~rs_rB_useF[0]||retBF[0]),
-  .read1_constEn(~rs_rB_useF[1]||retBF[1]),
-  .read2_constEn(~rs_rB_useF[2]||retBF[2]),
-  .read3_constEn(~rs_rB_useF[3]||retBF[3]),
-  .read4_constEn(~rs_rB_useF[4]||retBF[4]),
-  .read5_constEn(~rs_rB_useF[5]||retBF[5]),
-  .read6_constEn(~rs_rB_useF[6]||retBF[6]),
-  .read7_constEn(~rs_rB_useF[7]||retBF[7]),
-  .read8_constEn(~rs_rB_useF[8]||retBF[8]),
+  .read0_constEn(~sr_rB_useF[0]||retBF[0]),
+  .read1_constEn(~sr_rB_useF[1]||retBF[1]),
+  .read2_constEn(~sr_rB_useF[2]||retBF[2]),
+  .read3_constEn(~sr_rB_useF[3]||retBF[3]),
+  .read4_constEn(~sr_rB_useF[4]||retBF[4]),
+  .read5_constEn(~sr_rB_useF[5]||retBF[5]),
+  .read6_constEn(~sr_rB_useF[6]||retBF[6]),
+  .read7_constEn(~sr_rB_useF[7]||retBF[7]),
+  .read8_constEn(~sr_rB_useF[8]||retBF[8]),
 
   .write0_addr_reg(FUreg_reg[0]),.write0_wen_reg(FUwen_reg[0] & FU0Hit),
   .write1_addr_reg(FUreg_reg[1]),.write1_wen_reg(FUwen_reg[1] & FU1Hit),
@@ -4097,15 +4097,15 @@ module backend(
   .read8_addr(regBF[8]),.read8_data(inflB[8]),
     .read8_oe(isBF[8]),
 
-  .read0_constEn(~rs_rB_useF[0]||retBF[0]),
-  .read1_constEn(~rs_rB_useF[1]||retBF[1]),
-  .read2_constEn(~rs_rB_useF[2]||retBF[2]),
-  .read3_constEn(~rs_rB_useF[3]||retBF[3]),
-  .read4_constEn(~rs_rB_useF[4]||retBF[4]),
-  .read5_constEn(~rs_rB_useF[5]||retBF[5]),
-  .read6_constEn(~rs_rB_useF[6]||retBF[6]),
-  .read7_constEn(~rs_rB_useF[7]||retBF[7]),
-  .read8_constEn(~rs_rB_useF[8]||retBF[8]),
+  .read0_constEn(~sr_rB_useF[0]||retBF[0]),
+  .read1_constEn(~sr_rB_useF[1]||retBF[1]),
+  .read2_constEn(~sr_rB_useF[2]||retBF[2]),
+  .read3_constEn(~sr_rB_useF[3]||retBF[3]),
+  .read4_constEn(~sr_rB_useF[4]||retBF[4]),
+  .read5_constEn(~sr_rB_useF[5]||retBF[5]),
+  .read6_constEn(~sr_rB_useF[6]||retBF[6]),
+  .read7_constEn(~sr_rB_useF[7]||retBF[7]),
+  .read8_constEn(~sr_rB_useF[8]||retBF[8]),
 
   .write0_addr_reg(FUreg_reg[0]),.write0_wen_reg(FUwen_reg[0] & FU0Hit),
   .write1_addr_reg(FUreg_reg[1]),.write1_wen_reg(FUwen_reg[1] & FU1Hit),
@@ -4137,14 +4137,14 @@ module backend(
   .newRF3(newRF[3]),.newRF4(newRF[4]),.newRF5(newRF[5]),
   .newRF6(newRF[6]),.newRF7(newRF[7]),.newRF8(newRF[8]),
   .alloc({
-    rs2i2_allocR_reg,rs2i1_allocR_reg,rs2i0_allocR_reg,
-    rs1i2_allocR_reg,rs1i1_allocR_reg,rs1i0_allocR_reg,
-    rs0i2_allocR_reg,rs0i1_allocR_reg,rs0i0_allocR_reg}),
+    rs2i2_allocR_reg,sr2i1_allocR_reg,sr2i0_allocR_reg,
+    sr1i2_allocR_reg,sr1i1_allocR_reg,sr1i0_allocR_reg,
+    sr0i2_allocR_reg,sr0i1_allocR_reg,sr0i0_allocR_reg}),
   .clr(clr),
   .allocS({
-    rs2i2_lastFl_reg,rs2i1_lastFl_reg,1'b0,
-    rs1i2_lastFl_reg,rs1i1_lastFl_reg,1'b0,
-    rs0i2_lastFl_reg,rs0i1_lastFl_reg,1'b0}),
+    sr2i2_lastFl_reg,sr2i1_lastFl_reg,1'b0,
+    sr1i2_lastFl_reg,sr1i1_lastFl_reg,1'b0,
+    sr0i2_lastFl_reg,sr0i1_lastFl_reg,1'b0}),
   .clrS(clrS),
   .clrR0(clrR[0]),.clrR1(clrR[1]),.clrR2(clrR[2]),
   .clrR3(clrR[3]),.clrR4(clrR[4]),.clrR5(clrR[5]),
@@ -4197,12 +4197,12 @@ module backend(
   );
   
   get_flag_infl flag_in_flight_mod(
-  .rs0i1_flagDep(rs0i1_flagDep_reg2),
-  .rs0i2_flagDep(rs0i2_flagDep_reg2),
-  .rs1i1_flagDep(rs1i1_flagDep_reg2),
-  .rs1i2_flagDep(rs1i2_flagDep_reg2),
-  .rs2i1_flagDep(rs2i1_flagDep_reg2),
-  .rs2i2_flagDep(rs2i2_flagDep_reg2),
+  .sr0i1_flagDep(sr0i1_flagDep_reg2),
+  .sr0i2_flagDep(sr0i2_flagDep_reg2),
+  .sr1i1_flagDep(sr1i1_flagDep_reg2),
+  .sr1i2_flagDep(sr1i2_flagDep_reg2),
+  .sr2i1_flagDep(sr2i1_flagDep_reg2),
+  .sr2i2_flagDep(sr2i2_flagDep_reg2),
   .srcFlight(inflS&&gazumpS[9:0]==10'b0),
   .infl(Sinfl)
   );
@@ -4211,8 +4211,8 @@ module backend(
   generate
   
   genvar m,n,u;//,o
-  for (m=0;m<3;m=m+1) begin : main_rs_gen
-  rs rs0_mod(
+  for (m=0;m<3;m=m+1) begin : main_sr_gen
+  sr sr0_mod(
   .clk(clk),
   .dataRst(rst),.nonDataRst(except|rst),.rst_thread(1'b0),
   .stall(stall_rs[m]),
@@ -4221,24 +4221,24 @@ module backend(
   .new_thread(thread_reg2),
 // wires to store new values in a buffer
   .newDataA0(dataA[3*m+0]),.newDataB0(dataB[3*m+0]),
-     .newDataC0(rs_const_reg[3*m+0][32:0]&{33{~rs_useBConst_reg[3*m+0]}}),
+     .newDataC0(sr_const_reg[3*m+0][32:0]&{33{~sr_useBConst_reg[3*m+0]}}),
     .newRegA0(regA_reg[3*m+0]|{9{~inflA[3*m+0]&~depA_reg[3*m+0]}}),
     .newRegB0(regB_reg[3*m+0]|{9{~inflB[3*m+0]&~depB_reg[3*m+0]}}),
     .newANeeded0(inflA[3*m+0]|depA_reg[3*m+0]),.newBNeeded0(inflB[3*m+0]|depB_reg[3*m+0]),.newReg0(newR_reg[3*m+0]),
-    .newOp0(rs_operation_reg[3*m+0]),.newPort0(rs_port_sch[3*m+0]),.newInstrIndex0({II_upper,rs_index_reg[3*m+0]}),.newLSQ0({LSQ_upper,rs_lsi_reg[m+0]}),
-    .rsAlloc0(rs_en_reg[3*m+0]&~rs_alt_reg[m]),.newGazumpA0(gazumpA[3*m+0]),.newGazumpB0(gazumpB[3*m+0]),
-    .newFunitA0(funA_reg[3*m+0]),.newFunitB0(funB_reg[3*m+0]),.newWQ0(WQR_reg[m]),.newLSFlag0(rs_ldst_flg_reg[2*m]),
+    .newOp0(sr_operation_reg[3*m+0]),.newPort0(sr_port_sch[3*m+0]),.newInstrIndex0({II_upper,sr_index_reg[3*m+0]}),.newLSQ0({LSQ_upper,sr_lsi_reg[m+0]}),
+    .rsAlloc0(sr_en_reg[3*m+0]&~sr_alt_reg[m]),.newGazumpA0(gazumpA[3*m+0]),.newGazumpB0(gazumpB[3*m+0]),
+    .newFunitA0(funA_reg[3*m+0]),.newFunitB0(funB_reg[3*m+0]),.newWQ0(WQR_reg[m]),.newLSFlag0(sr_ldst_flg_reg[2*m]),
     .newAttr0(newAttr_reg2),
   .newDataA1(dataA[3*m+1]),.newDataB1(dataB[3*m+1]),
-     .newDataC1(rs_const_reg[3*m+1][32:0]&{33{~rs_useBConst_reg[3*m+1]}}),.newDataS1(dataS),
+     .newDataC1(sr_const_reg[3*m+1][32:0]&{33{~sr_useBConst_reg[3*m+1]}}),.newDataS1(dataS),
     .newRegA1(regA_reg[3*m+1]|{9{~inflA[3*m+1]&~depA_reg[3*m+1]}}),
     .newRegB1(regB_reg[3*m+1]|{9{~inflB[3*m+1]&~depB_reg[3*m+1]}}),
     .newRegS1(regS_reg[3*m+1]|{REG_WIDTH{~Sinfl[3*m+1]}}),
     .newANeeded1(inflA[3*m+1]|depA_reg[3*m+1]),.newBNeeded1(inflB[3*m+1]|depB_reg[3*m+1]),.newSNeeded1(Sinfl[3*m+1]),
     .newReg1(newR_reg[3*m+1]),.newRegSimd1(newRF_reg[3*m+1]),
-    .newOp1(rs_operation_reg[3*m+1]),.newPort1(rs_port_sch[3*m+1]),.newInstrIndex1({II_upper,rs_index_reg[3*m+1]}),.newLSQ1({LSQ_upper,rs_lsi_reg[m+3]}),
-    .rsAlloc1(rs_en_reg[3*m+1]),.newGazumpA1(gazumpA[3*m+1]),.newGazumpB1(gazumpB[3*m+1]),.newGazumpS1(gazumpS),
-    .newFunitA1(funA_reg[3*m+1]),.newFunitB1(funB_reg[3*m+1]),.newFunitS1(funS_reg[3*m+1]),.newLSFlag1(rs_ldst_flg_reg[2*m+1]),
+    .newOp1(sr_operation_reg[3*m+1]),.newPort1(sr_port_sch[3*m+1]),.newInstrIndex1({II_upper,sr_index_reg[3*m+1]}),.newLSQ1({LSQ_upper,sr_lsi_reg[m+3]}),
+    .rsAlloc1(sr_en_reg[3*m+1]),.newGazumpA1(gazumpA[3*m+1]),.newGazumpB1(gazumpB[3*m+1]),.newGazumpS1(gazumpS),
+    .newFunitA1(funA_reg[3*m+1]),.newFunitB1(funB_reg[3*m+1]),.newFunitS1(funS_reg[3*m+1]),.newLSFlag1(sr_ldst_flg_reg[2*m+1]),
     .newAttr1(newAttr_reg2),
   .newDataA2(dataA[3*m+2]),.newDataB2(dataB[3*m+2]),
     .newDataC2(33'b0),.newDataS2(dataS),
@@ -4246,8 +4246,8 @@ module backend(
     .newRegB2(regB_reg[3*m+2]|{9{~inflB[3*m+2]&~depB_reg[3*m+2]}}),
     .newRegS2(regS_reg[3*m+2]|{REG_WIDTH{~Sinfl[3*m+2]}}),
     .newANeeded2(inflA[3*m+2]|depA_reg[3*m+2]),.newBNeeded2(inflB[3*m+2]|depB_reg[3*m+2]),.newSNeeded2(Sinfl[3*m+2]),.newReg2(newR_reg[3*m+2]),.newRegSimd2(newRF_reg[3*m+2]),
-    .newOp2(rs_operation_reg[3*m+2]),.newPort2(rs_port_sch[3*m+2]),.newInstrIndex2({II_upper,rs_index_reg[3*m+2]}),
-    .rsAlloc2(rs_en_reg[3*m+2]),.newGazumpA2(gazumpA[3*m+2]),.newGazumpB2(gazumpB[3*m+2]),.newGazumpS2(gazumpS),
+    .newOp2(sr_operation_reg[3*m+2]),.newPort2(sr_port_sch[3*m+2]),.newInstrIndex2({II_upper,sr_index_reg[3*m+2]}),
+    .rsAlloc2(sr_en_reg[3*m+2]),.newGazumpA2(gazumpA[3*m+2]),.newGazumpB2(gazumpB[3*m+2]),.newGazumpS2(gazumpS),
     .newFunitA2(funA_reg[3*m+2]),.newFunitB2(funB_reg[3*m+2]),.newFunitS2(funS_reg[3*m+2]),
     .newAttr2(newAttr_reg2),
 // wires to get values out of buffer
@@ -4323,7 +4323,7 @@ module backend(
   .FUS7(FUS8),.FUSreg7(outRegS[3*1+2]),.FUSwen7(outEn[3*1+2][1]&~outOp[3*1+2][12]),
   .FUS8(FUS9),.FUSreg8(outRegS[3*2+2]),.FUSwen8(outEn[3*2+2][1]&~outOp[3*2+2][12]),
 // 1 if buffer is free  
-  .pause0(miss_holds_agu|pause_agu|miss_pause_agu|bus_holds_agu|bus_holds_agu_reg|insBus_io|rsDoStall[m]),
+  .pause0(miss_holds_agu|pause_agu|miss_pause_agu|bus_holds_agu|bus_holds_agu_reg|insBus_io|srDoStall[m]),
   .foundAlt1(~(&nDataAlt[m])|(|fxFRT_alten[m])),.foundAlt2(fxFRT_pause[m])
   );
   
@@ -4366,24 +4366,24 @@ module backend(
   assign isAWF[m]=(~Wswp[m]) ? isAF[3*m] : isBF[3*m];
   assign isBVW[m]=Wswp[m] ? isAV[3*m] : isBV[3*m];
   assign isAWV[m]=(~Wswp[m]) ? isAV[3*m] : isBV[3*m];
-  assign rs_rAW_use[m]=(~Wswp[m]) ? rs_rA_use[3*m] : rs_rB_use[3*m];
-  assign rs_rBW_use[m]=Wswp[m] ? rs_rA_use[3*m] : rs_rB_use[3*m];
-  assign rs_rAW_useF[m]=(~Wswp[m]) ? rs_rA_useF[3*m] : rs_rB_useF[3*m];
-  assign rs_rBW_useF[m]=Wswp[m] ? rs_rA_useF[3*m] : rs_rB_useF[3*m];
-  assign useBConstW[m]=~Wswp[m] & rs_useBConst[3*m];
-  assign useAConstW[m]=Wswp[m] & rs_useBConst[3*m];
-  assign rs_enAW[m]=(~Wswp[m]) ? rs_enA[m] : rs_enB[m];
-  assign rs_enBW[m]=Wswp[m] ? rs_enA[m] : rs_enB[m];
+  assign sr_rAW_use[m]=(~Wswp[m]) ? sr_rA_use[3*m] : sr_rB_use[3*m];
+  assign sr_rBW_use[m]=Wswp[m] ? sr_rA_use[3*m] : sr_rB_use[3*m];
+  assign sr_rAW_useF[m]=(~Wswp[m]) ? sr_rA_useF[3*m] : sr_rB_useF[3*m];
+  assign sr_rBW_useF[m]=Wswp[m] ? sr_rA_useF[3*m] : sr_rB_useF[3*m];
+  assign useBConstW[m]=~Wswp[m] & sr_useBConst[3*m];
+  assign useAConstW[m]=Wswp[m] & sr_useBConst[3*m];
+  assign sr_enAW[m]=(~Wswp[m]) ? sr_enA[m] : sr_enB[m];
+  assign sr_enBW[m]=Wswp[m] ? sr_enA[m] : sr_enB[m];
 
-  assign rs_const_new[3*m]=~rs_IPRel[3*m] ? rs_const[3*m] : 65'bz;
-  assign rs_const_new[3*m]=rs_IPRel[3*m] & ~ rs_afterTK[3*m] ? {1'b1,baseIP_reg,1'b0} : 65'bz;
-  assign rs_const_new[3*m]=rs_IPRel[3*m] & rs_afterTK[3*m] & jump0Pred_reg ? {1'b1,jump0IP_reg} : 65'bz;
-  assign rs_const_new[3*m]=rs_IPRel[3*m] & rs_afterTK[3*m] & ~jump0Pred_reg ? {1'b1,jump1IP_reg} : 65'bz;
-  assign rs_const_new[3*m+1]=~rs_IPRel[3*m+1] ? rs_const[3*m+1] : 65'bz;
-  assign rs_const_new[3*m+1]=rs_IPRel[3*m+1] & ~ rs_afterTK[3*m+1] ? {1'b1,baseIP_reg,1'b0} : 65'bz;
-  assign rs_const_new[3*m+1]=rs_IPRel[3*m+1] & rs_afterTK[3*m+1] & jump0Pred_reg ? {1'b1,jump0IP_reg} : 65'bz;
-  assign rs_const_new[3*m+1]=rs_IPRel[3*m+1] & rs_afterTK[3*m+1] & ~jump0Pred_reg ? {1'b1,jump1IP_reg} : 65'bz;
-  assign rs_const_new[3*m+2]=rs_const[3*m+2];
+  assign sr_const_new[3*m]=~sr_IPRel[3*m] ? sr_const[3*m] : 65'bz;
+  assign sr_const_new[3*m]=sr_IPRel[3*m] & ~ sr_afterTK[3*m] ? {1'b1,baseIP_reg,1'b0} : 65'bz;
+  assign sr_const_new[3*m]=sr_IPRel[3*m] & sr_afterTK[3*m] & jump0Pred_reg ? {1'b1,jump0IP_reg} : 65'bz;
+  assign sr_const_new[3*m]=sr_IPRel[3*m] & sr_afterTK[3*m] & ~jump0Pred_reg ? {1'b1,jump1IP_reg} : 65'bz;
+  assign sr_const_new[3*m+1]=~sr_IPRel[3*m+1] ? sr_const[3*m+1] : 65'bz;
+  assign sr_const_new[3*m+1]=sr_IPRel[3*m+1] & ~ sr_afterTK[3*m+1] ? {1'b1,baseIP_reg,1'b0} : 65'bz;
+  assign sr_const_new[3*m+1]=sr_IPRel[3*m+1] & sr_afterTK[3*m+1] & jump0Pred_reg ? {1'b1,jump0IP_reg} : 65'bz;
+  assign sr_const_new[3*m+1]=sr_IPRel[3*m+1] & sr_afterTK[3*m+1] & ~jump0Pred_reg ? {1'b1,jump1IP_reg} : 65'bz;
+  assign sr_const_new[3*m+2]=sr_const[3*m+2];
 
   end
  
@@ -4507,7 +4507,7 @@ module backend(
 		  .res(lsw_wdataV0[n][127:96]));
 
        
-          rs_write_forward #(DATA_WIDTH) fwdDA_mod(
+          sr_write_forward #(DATA_WIDTH) fwdDA_mod(
           .clk(clk),
           .rst(rst),
           .oldData(WDoutData[n]),
@@ -4618,9 +4618,9 @@ module backend(
 //  end
   
   for(u=0;u<9;u=u+1) begin : infl_gen
-      assign newD[u]={rs_port[u]==PORT_LOAD,rs_rT_isV[u]};
-      assign domErrA[u]=~((rs_rA_isV[u]~^domA[u][0]) || rs_rA_isAnyV[u] || domA[u][1]) && rs_rA_useF[u];
-      assign domErrB[u]=~((rs_rB_isV[u]~^domB[u][0]) || rs_rB_isAnyV[u] || domB[u][1]) && rs_rB_useF[u];
+      assign newD[u]={sr_port[u]==PORT_LOAD,sr_rT_isV[u]};
+      assign domErrA[u]=~((sr_rA_isV[u]~^domA[u][0]) || sr_rA_isAnyV[u] || domA[u][1]) && sr_rA_useF[u];
+      assign domErrB[u]=~((sr_rB_isV[u]~^domB[u][0]) || sr_rB_isAnyV[u] || domB[u][1]) && sr_rB_useF[u];
       
       if ((u%3)!=0) begin
           assign gazumpA[u]=isAF_reg[u] ? gazumpFA[u] : 11'bz;
@@ -4637,11 +4637,11 @@ module backend(
           assign gazumpB[u]=isBVW_reg[u/3] ? gazumpBV[u] : 11'bz;
           assign gazumpB[u]=(~isBVW_reg[u/3] & ~isBFW_reg[u/3]) ? gazumpBG[u] : 11'bz;
      end
-      assign isAF[u]=rs_rA_useF[u] && (~rs_rA_isV[u] || (rs_rA_isAnyV[u] && domA[u]==2'b00));
-      assign isBF[u]=rs_rB_useF[u] && (~rs_rB_isV[u] || (rs_rB_isAnyV[u] && domB[u]==2'b00));
+      assign isAF[u]=sr_rA_useF[u] && (~sr_rA_isV[u] || (sr_rA_isAnyV[u] && domA[u]==2'b00));
+      assign isBF[u]=sr_rB_useF[u] && (~sr_rB_isV[u] || (sr_rB_isAnyV[u] && domB[u]==2'b00));
       //warning: error might occur in "any" dom{A|B}.
-      assign isAV[u]=rs_rA_useF[u] && (rs_rA_isV[u] || (rs_rA_isAnyV[u] && domA[u]==2'b01));
-      assign isBV[u]=rs_rB_useF[u] && (rs_rB_isV[u] || (rs_rB_isAnyV[u] && domB[u]==2'b01));
+      assign isAV[u]=sr_rA_useF[u] && (sr_rA_isV[u] || (sr_rA_isAnyV[u] && domA[u]==2'b01));
+      assign isBV[u]=sr_rB_useF[u] && (sr_rB_isV[u] || (sr_rB_isAnyV[u] && domB[u]==2'b01));
   end
   
   endgenerate
@@ -4653,7 +4653,7 @@ module backend(
   assign fret   [3]=0;
   assign fret_en[5]=0;
   assign fret   [5]=0;
-  rs_s storeRs(
+  sr_s storesr(
   .clk(clk),
   .dataRst(rst),.nonDataRst(except|rst),.rst_thread(1'b0),
   .stall(stall_rs[3]),
@@ -4662,56 +4662,56 @@ module backend(
   .rsEnab(~{1'b0,wt_pause_agu|Wagu_blockRS[1],1'b0,wt_pause_agu|Wagu_blockRS[0]}),
   .new_thread(thread_reg2),
 // wires to store new values in a buffer
-  .newDataA0(dataA[0]),.newDataB0(dataB[0]),.newDataC0(rs_const_reg[0][32:0]&{33{~rs_useBConst_reg[0]}}),
+  .newDataA0(dataA[0]),.newDataB0(dataB[0]),.newDataC0(sr_const_reg[0][32:0]&{33{~sr_useBConst_reg[0]}}),
     .newRegA0(WregA[0]),.newRegB0(WregB[0]),
     .newANeeded0(WinflA[0]),.newBNeeded0(WinflB[0]),
-    .newOpA0((rs_lsi_reg[0]!=3'd7) ? rs_operation_reg[0][12:0] : WopA_reg[12:0]),
-    .newOpB0((rs_lsi_reg[0]!=3'd7) ? rs_operation_reg[0][12:0] : WopB_reg[12:0]),
+    .newOpA0((sr_lsi_reg[0]!=3'd7) ? sr_operation_reg[0][12:0] : WopA_reg[12:0]),
+    .newOpB0((sr_lsi_reg[0]!=3'd7) ? sr_operation_reg[0][12:0] : WopB_reg[12:0]),
     .newPort0(Wport_reg[0]),
-    .newEnA0(rs_enAW_reg[0]),.newEnB0(rs_enBW_reg[0]),
-    .newInstrIndexA0((rs_lsi_reg[0]!=3'd7) ? {II_upper,rs_index_reg[0]} : {II_upper,LSQ_indA_reg}),
-    .newInstrIndexB0((rs_lsi_reg[0]!=3'd7) ? {II_upper,rs_index_reg[0]} : {II_upper,LSQ_indB_reg}),
-    .newLSQA0((rs_lsi_reg[0]!=3'd7) ? {LSQ_upper,rs_lsi_reg[0]} : {LSQ_upper,LSQ_lsqA_reg}),
-    .newLSQB0((rs_lsi_reg[0]!=3'd7) ? {LSQ_upper,rs_lsi_reg[0]} : {LSQ_upper,LSQ_lsqB_reg}),
-    .newWQA0((rs_lsi_reg[0]!=3'd7) ? WQR_reg[0] : LSQ_wqA_reg),
-    .newWQB0((rs_lsi_reg[0]!=3'd7) ? WQR_reg[0] : LSQ_wqB_reg),
-    .rsAlloc0(rs_en_reg[0]&rs_alt_reg[0]),.newGazumpA0(gazumpA[0]),.newGazumpB0(gazumpB[0]),
+    .newEnA0(sr_enAW_reg[0]),.newEnB0(sr_enBW_reg[0]),
+    .newInstrIndexA0((sr_lsi_reg[0]!=3'd7) ? {II_upper,sr_index_reg[0]} : {II_upper,LSQ_indA_reg}),
+    .newInstrIndexB0((sr_lsi_reg[0]!=3'd7) ? {II_upper,sr_index_reg[0]} : {II_upper,LSQ_indB_reg}),
+    .newLSQA0((sr_lsi_reg[0]!=3'd7) ? {LSQ_upper,sr_lsi_reg[0]} : {LSQ_upper,LSQ_lsqA_reg}),
+    .newLSQB0((sr_lsi_reg[0]!=3'd7) ? {LSQ_upper,sr_lsi_reg[0]} : {LSQ_upper,LSQ_lsqB_reg}),
+    .newWQA0((sr_lsi_reg[0]!=3'd7) ? WQR_reg[0] : LSQ_wqA_reg),
+    .newWQB0((sr_lsi_reg[0]!=3'd7) ? WQR_reg[0] : LSQ_wqB_reg),
+    .rsAlloc0(sr_en_reg[0]&sr_alt_reg[0]),.newGazumpA0(gazumpA[0]),.newGazumpB0(gazumpB[0]),
     .newFunitA0(WfunA[0]),.newFunitB0(WfunB[0]),
-    .newLSFlag0(rs_ldst_flg[0]),
+    .newLSFlag0(sr_ldst_flg[0]),
     .newAttr0(newAttr_reg2),
-  .newDataA1(dataA[3]),.newDataB1(dataB[3]),.newDataC1(rs_const_reg[3][32:0]&{33{~rs_useBConst_reg[3]}}),
+  .newDataA1(dataA[3]),.newDataB1(dataB[3]),.newDataC1(sr_const_reg[3][32:0]&{33{~sr_useBConst_reg[3]}}),
     .newRegA1(WregA[1]),.newRegB1(WregB[1]),
     .newANeeded1(WinflA[1]),.newBNeeded1(WinflB[1]),
-    .newOpA1((rs_lsi_reg[1]!=3'd7) ? rs_operation_reg[3][12:0] : WopA_reg[12:0]),
-    .newOpB1((rs_lsi_reg[1]!=3'd7) ? rs_operation_reg[3][12:0] : WopB_reg[12:0]),
+    .newOpA1((sr_lsi_reg[1]!=3'd7) ? sr_operation_reg[3][12:0] : WopA_reg[12:0]),
+    .newOpB1((sr_lsi_reg[1]!=3'd7) ? sr_operation_reg[3][12:0] : WopB_reg[12:0]),
     .newPort1(Wport_reg[1]),
-    .newEnA1(rs_enAW_reg[1]),.newEnB1(rs_enBW_reg[1]),
-    .newInstrIndexA1((rs_lsi_reg[1]!=3'd7) ? {II_upper,rs_index_reg[3]} : {II_upper,LSQ_indA_reg}),
-    .newInstrIndexB1((rs_lsi_reg[1]!=3'd7) ? {II_upper,rs_index_reg[3]} : {II_upper,LSQ_indB_reg}),
-    .newLSQA1((rs_lsi_reg[1]!=3'd7) ? {LSQ_upper,rs_lsi_reg[1]} : {LSQ_upper,LSQ_lsqA_reg}),
-    .newLSQB1((rs_lsi_reg[1]!=3'd7) ? {LSQ_upper,rs_lsi_reg[1]} : {LSQ_upper,LSQ_lsqB_reg}),
-    .newWQA1((rs_lsi_reg[1]!=3'd7) ? WQR_reg[1] : LSQ_wqA_reg),
-    .newWQB1((rs_lsi_reg[1]!=3'd7) ? WQR_reg[1] : LSQ_wqB_reg),
-    .rsAlloc1(rs_en_reg[3]&rs_alt_reg[1]),.newGazumpA1(gazumpA[3]),.newGazumpB1(gazumpB[3]),
+    .newEnA1(sr_enAW_reg[1]),.newEnB1(sr_enBW_reg[1]),
+    .newInstrIndexA1((sr_lsi_reg[1]!=3'd7) ? {II_upper,sr_index_reg[3]} : {II_upper,LSQ_indA_reg}),
+    .newInstrIndexB1((sr_lsi_reg[1]!=3'd7) ? {II_upper,sr_index_reg[3]} : {II_upper,LSQ_indB_reg}),
+    .newLSQA1((sr_lsi_reg[1]!=3'd7) ? {LSQ_upper,sr_lsi_reg[1]} : {LSQ_upper,LSQ_lsqA_reg}),
+    .newLSQB1((sr_lsi_reg[1]!=3'd7) ? {LSQ_upper,sr_lsi_reg[1]} : {LSQ_upper,LSQ_lsqB_reg}),
+    .newWQA1((sr_lsi_reg[1]!=3'd7) ? WQR_reg[1] : LSQ_wqA_reg),
+    .newWQB1((sr_lsi_reg[1]!=3'd7) ? WQR_reg[1] : LSQ_wqB_reg),
+    .rsAlloc1(sr_en_reg[3]&sr_alt_reg[1]),.newGazumpA1(gazumpA[3]),.newGazumpB1(gazumpB[3]),
     .newFunitA1(WfunA[1]),.newFunitB1(WfunB[1]),
-    .newLSFlag1(rs_ldst_flg[2]),
+    .newLSFlag1(sr_ldst_flg[2]),
     .newAttr1(newAttr_reg2),
-  .newDataA2(dataA[6]),.newDataB2(dataB[6]),.newDataC2(rs_const_reg[6][32:0]&{33{~rs_useBConst_reg[6]}}),
+  .newDataA2(dataA[6]),.newDataB2(dataB[6]),.newDataC2(sr_const_reg[6][32:0]&{33{~sr_useBConst_reg[6]}}),
     .newRegA2(WregA[2]),.newRegB2(WregB[2]),
     .newANeeded2(WinflA[2]),.newBNeeded2(WinflB[2]),
-    .newOpA2((rs_lsi_reg[2]!=3'd7) ? rs_operation_reg[6][12:0] : WopA_reg[12:0]),
-    .newOpB2((rs_lsi_reg[2]!=3'd7) ? rs_operation_reg[6][12:0] : WopB_reg[12:0]),
+    .newOpA2((sr_lsi_reg[2]!=3'd7) ? sr_operation_reg[6][12:0] : WopA_reg[12:0]),
+    .newOpB2((sr_lsi_reg[2]!=3'd7) ? sr_operation_reg[6][12:0] : WopB_reg[12:0]),
     .newPort2(Wport_reg[2]),
-    .newEnA2(rs_enAW_reg[2]),.newEnB2(rs_enBW_reg[2]),
-    .newInstrIndexA2((rs_lsi_reg[2]!=3'd7) ? {II_upper,rs_index_reg[6]} : {II_upper,LSQ_indA_reg}),
-    .newInstrIndexB2((rs_lsi_reg[2]!=3'd7) ? {II_upper,rs_index_reg[6]} : {II_upper,LSQ_indB_reg}),
-    .newLSQA2((rs_lsi_reg[2]!=3'd7) ? {LSQ_upper,rs_lsi_reg[2]} : {LSQ_upper,LSQ_lsqA_reg}),
-    .newLSQB2((rs_lsi_reg[2]!=3'd7) ? {LSQ_upper,rs_lsi_reg[2]} : {LSQ_upper,LSQ_lsqB_reg}),
-    .newWQA2((rs_lsi_reg[2]!=3'd7) ? WQR_reg[2] : LSQ_wqA_reg),
-    .newWQB2((rs_lsi_reg[2]!=3'd7) ? WQR_reg[2] : LSQ_wqB_reg),
-    .rsAlloc2(rs_en_reg[6]&rs_alt_reg[2]),.newGazumpA2(gazumpA[6]),.newGazumpB2(gazumpB[6]),
+    .newEnA2(sr_enAW_reg[2]),.newEnB2(sr_enBW_reg[2]),
+    .newInstrIndexA2((sr_lsi_reg[2]!=3'd7) ? {II_upper,sr_index_reg[6]} : {II_upper,LSQ_indA_reg}),
+    .newInstrIndexB2((sr_lsi_reg[2]!=3'd7) ? {II_upper,sr_index_reg[6]} : {II_upper,LSQ_indB_reg}),
+    .newLSQA2((sr_lsi_reg[2]!=3'd7) ? {LSQ_upper,sr_lsi_reg[2]} : {LSQ_upper,LSQ_lsqA_reg}),
+    .newLSQB2((sr_lsi_reg[2]!=3'd7) ? {LSQ_upper,sr_lsi_reg[2]} : {LSQ_upper,LSQ_lsqB_reg}),
+    .newWQA2((sr_lsi_reg[2]!=3'd7) ? WQR_reg[2] : LSQ_wqA_reg),
+    .newWQB2((sr_lsi_reg[2]!=3'd7) ? WQR_reg[2] : LSQ_wqB_reg),
+    .rsAlloc2(sr_en_reg[6]&sr_alt_reg[2]),.newGazumpA2(gazumpA[6]),.newGazumpB2(gazumpB[6]),
     .newFunitA2(WfunA[2]),.newFunitB2(WfunB[2]),
-    .newLSFlag2(rs_ldst_flg[4]),
+    .newLSFlag2(sr_ldst_flg[4]),
     .newAttr2(newAttr_reg2),
 // wires to get values out of buffer
   .outDataA0(WoutDataB[0]),.outDataB0(WoutDataA[0]),.outDataC0(WoutDataC[0]),
@@ -4793,12 +4793,12 @@ module backend(
   assign fxFRT_pause[0]=1'b0;
   assign fxFRT_pause[1]=1'b0;*/
 
-  assign rrfAW[0]=Wswp[0] ? rs0i0_rB_reg : rs0i0_rA_reg;
-  assign rrfAW[1]=Wswp[1] ? rs1i0_rB_reg : rs1i0_rA_reg;
-  assign rrfAW[2]=Wswp[2] ? rs2i0_rB_reg : rs2i0_rA_reg;
-  assign rrfBW[0]=(~Wswp[0]) ? rs0i0_rB_reg : rs0i0_rA_reg;
-  assign rrfBW[1]=(~Wswp[1]) ? rs1i0_rB_reg : rs1i0_rA_reg;
-  assign rrfBW[2]=(~Wswp[2]) ? rs2i0_rB_reg : rs2i0_rA_reg;
+  assign rrfAW[0]=Wswp[0] ? sr0i0_rB_reg : sr0i0_rA_reg;
+  assign rrfAW[1]=Wswp[1] ? sr1i0_rB_reg : sr1i0_rA_reg;
+  assign rrfAW[2]=Wswp[2] ? sr2i0_rB_reg : sr2i0_rA_reg;
+  assign rrfBW[0]=(~Wswp[0]) ? sr0i0_rB_reg : sr0i0_rA_reg;
+  assign rrfBW[1]=(~Wswp[1]) ? sr1i0_rB_reg : sr1i0_rA_reg;
+  assign rrfBW[2]=(~Wswp[2]) ? sr2i0_rB_reg : sr2i0_rA_reg;
       
   fu_alu alu_ALIGNED(
   .clk(clk),
@@ -5095,7 +5095,7 @@ module backend(
   .lsw_wq1(WDfxWQ_reg3[1]),.lsw_wdata1(lsw_wdata[1]),.lsw_pdata1(lsw_pdata[1]),.lsw_rs_en1(WDfxDataEn_reg3[1]),
   .mOpY4_II(st0_II_reg3),.mOpY4_hit(dc_wrHit[0]),
   .mOpY5_II(st1_II_reg3),.mOpY5_hit(dc_wrHit[1]),
-  .lsi0_reg(rs_lsi_reg[0]),.lsi1_reg(rs_lsi_reg[1]),.lsi2_reg(rs_lsi_reg[2]),//only used to check if has mem reqs
+  .lsi0_reg(rs_lsi_reg[0]),.lsi1_reg(rs_lsi_reg[1]),.lsi2_reg(sr_lsi_reg[2]),//only used to check if has mem reqs
   .MSI_exp_addr(MSI_exp_addr_reg),.MSI_en(MSI_exp_en_reg),.lsq_index(LSQ_upper),
   .doStall_STQ(doStall_STQ),
   .doStall_LDQ(doStall_LDQ),
@@ -5239,33 +5239,33 @@ module backend(
   assign outRegS[7]=sqrDatEn_reg ? outRegSX_reg : 9'bz;
 
   get_LDQ_new_en ldq_new_mod(
-  rs_port[0],rs_ldst_flg[0], 
-  rs_port[3],rs_ldst_flg[3], 
-  rs_port[6],rs_ldst_flg[6], 
-  rs_port[1],rs_ldst_flg[1], 
-  rs_port[4],rs_ldst_flg[4], 
-  rs_port[7],rs_ldst_flg[7],
+  sr_port[0],sr_ldst_flg[0], 
+  sr_port[3],sr_ldst_flg[3], 
+  sr_port[6],sr_ldst_flg[6], 
+  sr_port[1],sr_ldst_flg[1], 
+  sr_port[4],sr_ldst_flg[4], 
+  sr_port[7],sr_ldst_flg[7],
   ldq_new_mask);
 
   
   get_wSwp wSwp_mod(
   .clk(clk),.rst(rst),
-  .lsi0(get_lsi(rs_lsi[0])),.st0(rs_port[0]==PORT_STORE),
-  .lsi1(get_lsi(rs_lsi[1])),.st1(rs_port[3]==PORT_STORE),
-  .lsi2(get_lsi(rs_lsi[2])),.st2(rs_port[6]==PORT_STORE),
+  .lsi0(get_lsi(sr_lsi[0])),.st0(sr_port[0]==PORT_STORE),
+  .lsi1(get_lsi(sr_lsi[1])),.st1(sr_port[3]==PORT_STORE),
+  .lsi2(get_lsi(sr_lsi[2])),.st2(sr_port[6]==PORT_STORE),
   .Wswp(Wswp),
   .lsiA(LSQ_lsqA[2:0]),
   .lsiB(LSQ_lsqB[2:0]),
   .port0(Wport[0]),.port1(Wport[1]),.port2(Wport[2]),
-  .domA0(rs_rA_isAnyV[0] ? ~domA[0][0] : ~rs_rA_isV[0]),.domB0(rs_rB_isAnyV[0] ? ~domB[0][0] : ~rs_rB_isV[0]),
-  .domA1(rs_rA_isAnyV[3] ? ~domA[3][0] : ~rs_rA_isV[3]),.domB1(rs_rB_isAnyV[3] ? ~domB[3][0] : ~rs_rB_isV[3]),
-  .domA2(rs_rA_isAnyV[6] ? ~domA[6][0] : ~rs_rA_isV[6]),.domB2(rs_rB_isAnyV[6] ? ~domB[6][0] : ~rs_rB_isV[6]),
-  .rA_useF0(rs_rA_useF[0]),.rB_useF0(rs_rB_useF[0]),
-  .rA_useF1(rs_rA_useF[3]),.rB_useF1(rs_rB_useF[3]),
-  .rA_useF2(rs_rA_useF[6]),.rB_useF2(rs_rB_useF[6]),
-  .op0(rs_operation[0][12:0]),.op1(rs_operation[3][12:0]),.op2(rs_operation[6][12:0]),
+  .domA0(sr_rA_isAnyV[0] ? ~domA[0][0] : ~sr_rA_isV[0]),.domB0(sr_rB_isAnyV[0] ? ~domB[0][0] : ~sr_rB_isV[0]),
+  .domA1(sr_rA_isAnyV[3] ? ~domA[3][0] : ~sr_rA_isV[3]),.domB1(sr_rB_isAnyV[3] ? ~domB[3][0] : ~sr_rB_isV[3]),
+  .domA2(sr_rA_isAnyV[6] ? ~domA[6][0] : ~sr_rA_isV[6]),.domB2(sr_rB_isAnyV[6] ? ~domB[6][0] : ~sr_rB_isV[6]),
+  .rA_useF0(sr_rA_useF[0]),.rB_useF0(sr_rB_useF[0]),
+  .rA_useF1(sr_rA_useF[3]),.rB_useF1(sr_rB_useF[3]),
+  .rA_useF2(sr_rA_useF[6]),.rB_useF2(sr_rB_useF[6]),
+  .op0(sr_operation[0][12:0]),.op1(sr_operation[3][12:0]),.op2(sr_operation[6][12:0]),
   .opA(WopA),.opB(WopB),
-  .ind0(rs_index[0]),.ind1(rs_index[3]),.ind2(rs_index[6]),
+  .ind0(sr_index[0]),.ind1(sr_index[3]),.ind2(sr_index[6]),
   .indA(LSQ_indA),.indB(LSQ_indB),
   .wq0(WQR[0]),.wq1(WQR[1]),.wq2(WQR[2]),
   .wqA(LSQ_wqA),.wqB(LSQ_wqB)
@@ -5273,8 +5273,8 @@ module backend(
 
   get_wrtII wrtII_mod(
   .wrt0(wrt0_reg),.wrt1(wrt1_reg),.wrt2(wrt2_reg),
-  .lsi0(rs_lsi[0]),.lsi1(rs_lsi[1]),.lsi2(rs_lsi[2]),
-  .II0(rs0i0_index_reg),.II1(rs1i0_index_reg),.II2(rs2i0_index_reg),
+  .lsi0(sr_lsi[0]),.lsi1(sr_lsi[1]),.lsi2(sr_lsi[2]),
+  .II0(sr0i0_index_reg),.II1(sr1i0_index_reg),.II2(sr2i0_index_reg),
   .wrtII0(wrtII0),.wrtII1(wrtII1),.wrtII2(wrtII2),
   .wrtO0(wrtO0),.wrtO1(wrtO1),.wrtO2(wrtO2)
   );
@@ -5283,13 +5283,13 @@ module backend(
   .newR0(newR[0]),.newR1(newR[1]),.newR2(newR[2]),
   .newR3(newR[3]),.newR4(newR[4]),.newR5(newR[5]),
   .newR6(newR[6]),.newR7(newR[7]),.newR8(newR[8]),
-  .en0(rs0i0_allocR_reg),.en1(rs0i1_allocR_reg),
-  .en2(rs0i2_allocR_reg),.en3(rs1i0_allocR_reg),
-  .en4(rs1i1_allocR_reg),.en5(rs1i2_allocR_reg),
-  .en6(rs2i0_allocR_reg),.en7(rs2i1_allocR_reg),.en8(rs2i2_allocR_reg), 
-  .rs_index0(rs_index[0]),.rs_index1(rs_index[1]),.rs_index2(rs_index[2]),.rs_index3(rs_index[3]),
-  .rs_index4(rs_index[4]),.rs_index5(rs_index[5]),.rs_index6(rs_index[6]),.rs_index7(rs_index[7]),
-  .rs_index8(rs_index[8]),
+  .en0(sr0i0_allocR_reg),.en1(sr0i1_allocR_reg),
+  .en2(sr0i2_allocR_reg),.en3(sr1i0_allocR_reg),
+  .en4(sr1i1_allocR_reg),.en5(sr1i2_allocR_reg),
+  .en6(sr2i0_allocR_reg),.en7(sr2i1_allocR_reg),.en8(sr2i2_allocR_reg), 
+  .sr_index0(sr_index[0]),.sr_index1(sr_index[1]),.sr_index2(sr_index[2]),.sr_index3(sr_index[3]),
+  .sr_index4(sr_index[4]),.sr_index5(sr_index[5]),.sr_index6(sr_index[6]),.sr_index7(sr_index[7]),
+  .sr_index8(sr_index[8]),
   .ret0(instr_ret[0]),.ret1(instr_ret[1]),.ret2(instr_ret[2]),
   .ret3(instr_ret[3]),.ret4(instr_ret[4]),.ret5(instr_ret[5]),
   .ret6(instr_ret[6]),.ret7(instr_ret[7]),.ret8(instr_ret[8])
@@ -5297,12 +5297,12 @@ module backend(
  
 
   get_lsi_en sliMask_mod(
-    rs_lsi_reg[0],rs_ldst_flg_reg[0]&~rs_operation_reg[0][0],
-    rs_lsi_reg[3],rs_ldst_flg_reg[1]&~rs_operation_reg[1][0],
-    rs_lsi_reg[1],rs_ldst_flg_reg[2]&~rs_operation_reg[3][0],
-    rs_lsi_reg[4],rs_ldst_flg_reg[3]&~rs_operation_reg[4][0],
-    rs_lsi_reg[2],rs_ldst_flg_reg[4]&~rs_operation_reg[6][0],
-    rs_lsi_reg[5],rs_ldst_flg_reg[5]&~rs_operation_reg[7][0],
+    sr_lsi_reg[0],sr_ldst_flg_reg[0]&~sr_operation_reg[0][0],
+    sr_lsi_reg[3],sr_ldst_flg_reg[1]&~sr_operation_reg[1][0],
+    sr_lsi_reg[1],sr_ldst_flg_reg[2]&~sr_operation_reg[3][0],
+    sr_lsi_reg[4],sr_ldst_flg_reg[3]&~sr_operation_reg[4][0],
+    sr_lsi_reg[2],sr_ldst_flg_reg[4]&~sr_operation_reg[6][0],
+    sr_lsi_reg[5],sr_ldst_flg_reg[5]&~sr_operation_reg[7][0],
     lsi_bits);
 
   alloc_WQ WQget_mod(
@@ -5316,7 +5316,7 @@ module backend(
   .except_thread(1'b0),
   .except_both(1'b0),
   .wrt0(wrt0_reg),.wrt1(wrt1_reg),.wrt2(wrt2_reg),
-  .lsi0(rs_lsi[0]),.lsi1(rs_lsi[1]),.lsi2(rs_lsi[2]),
+  .lsi0(sr_lsi[0]),.lsi1(sr_lsi[1]),.lsi2(sr_lsi[2]),
   .WQr0(WQR[0]),.WQr1(WQR[1]),.WQr2(WQR[2]),
   .WQs0(WQS[0]),.WQs1(WQS[1]),.WQs2(WQS[2]),
   .free0(st0_en),.freeWQ0(st0_adata[`lsaddr_WQ]),
@@ -5710,8 +5710,8 @@ dcache1 L1D_mod(
   assign FU2Hit=FU2HitP;
   assign FU3Hit=FU3HitP;
   
-  popcnt10_or_more cnt_lsi_mod({4'b0,rs_lsi[5][2:1]!=2'd3,rs_lsi[4][2:1]!=2'd3,rs_lsi[3][2:1]!=2'd3,
-    rs_lsi[2][2:1]!=2'd3,rs_lsi[1][2:1]!=2'd3,rs_lsi[0][2:1]!=2'd3},lsi_cnt);
+  popcnt10_or_more cnt_lsi_mod({4'b0,sr_lsi[5][2:1]!=2'd3,sr_lsi[4][2:1]!=2'd3,sr_lsi[3][2:1]!=2'd3,
+    sr_lsi[2][2:1]!=2'd3,sr_lsi[1][2:1]!=2'd3,sr_lsi[0][2:1]!=2'd3},lsi_cnt);
   assign LSQ_shr_data[`lsqshare_used]=lsi_cnt_reg;
   assign LSQ_shr_data[`lsqshare_usedB]=lsi_cnt_reg&lsi_bits;
   assign LSQ_shr_data[`lsqshare_II]=II_upper;
@@ -5743,185 +5743,185 @@ dcache1 L1D_mod(
       if (rst) begin
 	  newAttr_reg<=4'b0;
 	  newAttr_reg2<=4'b0;
-          rs0i0_alloc_reg<=1'b0;
-          rs0i1_alloc_reg<=1'b0;
-          rs0i2_alloc_reg<=1'b0;
-          rs1i0_alloc_reg<=1'b0;
-          rs1i1_alloc_reg<=1'b0;
-          rs1i2_alloc_reg<=1'b0;
-          rs2i0_alloc_reg<=1'b0;
-          rs2i1_alloc_reg<=1'b0;
-          rs2i2_alloc_reg<=1'b0;
+          sr0i0_alloc_reg<=1'b0;
+          sr0i1_alloc_reg<=1'b0;
+          sr0i2_alloc_reg<=1'b0;
+          sr1i0_alloc_reg<=1'b0;
+          sr1i1_alloc_reg<=1'b0;
+          sr1i2_alloc_reg<=1'b0;
+          sr2i0_alloc_reg<=1'b0;
+          sr2i1_alloc_reg<=1'b0;
+          sr2i2_alloc_reg<=1'b0;
 
-          rs0i0_allocF_reg<=1'b0;
-          rs0i1_allocF_reg<=1'b0;
-          rs0i2_allocF_reg<=1'b0;
-          rs1i0_allocF_reg<=1'b0;
-          rs1i1_allocF_reg<=1'b0;
-          rs1i2_allocF_reg<=1'b0;
-          rs2i0_allocF_reg<=1'b0;
-          rs2i1_allocF_reg<=1'b0;
-          rs2i2_allocF_reg<=1'b0;
+          sr0i0_allocF_reg<=1'b0;
+          sr0i1_allocF_reg<=1'b0;
+          sr0i2_allocF_reg<=1'b0;
+          sr1i0_allocF_reg<=1'b0;
+          sr1i1_allocF_reg<=1'b0;
+          sr1i2_allocF_reg<=1'b0;
+          sr2i0_allocF_reg<=1'b0;
+          sr2i1_allocF_reg<=1'b0;
+          sr2i2_allocF_reg<=1'b0;
 
-          rs0i0_allocR_reg<=1'b0;
-          rs0i1_allocR_reg<=1'b0;
-          rs0i2_allocR_reg<=1'b0;
-          rs1i0_allocR_reg<=1'b0;
-          rs1i1_allocR_reg<=1'b0;
-          rs1i2_allocR_reg<=1'b0;
-          rs2i0_allocR_reg<=1'b0;
-          rs2i1_allocR_reg<=1'b0;
-          rs2i2_allocR_reg<=1'b0;
+          sr0i0_allocR_reg<=1'b0;
+          sr0i1_allocR_reg<=1'b0;
+          sr0i2_allocR_reg<=1'b0;
+          sr1i0_allocR_reg<=1'b0;
+          sr1i1_allocR_reg<=1'b0;
+          sr1i2_allocR_reg<=1'b0;
+          sr2i0_allocR_reg<=1'b0;
+          sr2i1_allocR_reg<=1'b0;
+          sr2i2_allocR_reg<=1'b0;
 
-          rs0i0_en_reg<=1'b0;
-          rs0i1_en_reg<=1'b0;
-          rs0i2_en_reg<=1'b0;
-          rs1i0_en_reg<=1'b0;
-          rs1i1_en_reg<=1'b0;
-          rs1i2_en_reg<=1'b0;
-          rs2i0_en_reg<=1'b0;
-          rs2i1_en_reg<=1'b0;
-          rs2i2_en_reg<=1'b0;
+          sr0i0_en_reg<=1'b0;
+          sr0i1_en_reg<=1'b0;
+          sr0i2_en_reg<=1'b0;
+          sr1i0_en_reg<=1'b0;
+          sr1i1_en_reg<=1'b0;
+          sr1i2_en_reg<=1'b0;
+          sr2i0_en_reg<=1'b0;
+          sr2i1_en_reg<=1'b0;
+          sr2i2_en_reg<=1'b0;
 
-          rs0i0_useBConst_reg<=1'b0;
-          rs0i1_useBConst_reg<=1'b0;
-          rs0i2_useBConst_reg<=1'b0;
-          rs1i0_useBConst_reg<=1'b0;
-          rs1i1_useBConst_reg<=1'b0;
-          rs1i2_useBConst_reg<=1'b0;
-          rs2i0_useBConst_reg<=1'b0;
-          rs2i1_useBConst_reg<=1'b0;
-          rs2i2_useBConst_reg<=1'b0;
+          sr0i0_useBConst_reg<=1'b0;
+          sr0i1_useBConst_reg<=1'b0;
+          sr0i2_useBConst_reg<=1'b0;
+          sr1i0_useBConst_reg<=1'b0;
+          sr1i1_useBConst_reg<=1'b0;
+          sr1i2_useBConst_reg<=1'b0;
+          sr2i0_useBConst_reg<=1'b0;
+          sr2i1_useBConst_reg<=1'b0;
+          sr2i2_useBConst_reg<=1'b0;
           
-          rs0i0_rT_reg<={IN_REG_WIDTH{1'B0}};
-          rs0i1_rT_reg<={IN_REG_WIDTH{1'B0}};
-          rs0i2_rT_reg<={IN_REG_WIDTH{1'B0}};
-          rs1i0_rT_reg<={IN_REG_WIDTH{1'B0}};
-          rs1i1_rT_reg<={IN_REG_WIDTH{1'B0}};
-          rs1i2_rT_reg<={IN_REG_WIDTH{1'B0}};
-          rs2i0_rT_reg<={IN_REG_WIDTH{1'B0}};
-          rs2i1_rT_reg<={IN_REG_WIDTH{1'B0}};
-          rs2i2_rT_reg<={IN_REG_WIDTH{1'B0}};
+          sr0i0_rT_reg<={IN_REG_WIDTH{1'B0}};
+          sr0i1_rT_reg<={IN_REG_WIDTH{1'B0}};
+          sr0i2_rT_reg<={IN_REG_WIDTH{1'B0}};
+          sr1i0_rT_reg<={IN_REG_WIDTH{1'B0}};
+          sr1i1_rT_reg<={IN_REG_WIDTH{1'B0}};
+          sr1i2_rT_reg<={IN_REG_WIDTH{1'B0}};
+          sr2i0_rT_reg<={IN_REG_WIDTH{1'B0}};
+          sr2i1_rT_reg<={IN_REG_WIDTH{1'B0}};
+          sr2i2_rT_reg<={IN_REG_WIDTH{1'B0}};
 
-          rs0i0_rA_reg<={IN_REG_WIDTH{1'B0}};
-          rs0i1_rA_reg<={IN_REG_WIDTH{1'B0}};
-          rs0i2_rA_reg<={IN_REG_WIDTH{1'B0}};
-          rs1i0_rA_reg<={IN_REG_WIDTH{1'B0}};
-          rs1i1_rA_reg<={IN_REG_WIDTH{1'B0}};
-          rs1i2_rA_reg<={IN_REG_WIDTH{1'B0}};
-          rs2i0_rA_reg<={IN_REG_WIDTH{1'B0}};
-          rs2i1_rA_reg<={IN_REG_WIDTH{1'B0}};
-          rs2i2_rA_reg<={IN_REG_WIDTH{1'B0}};
+          sr0i0_rA_reg<={IN_REG_WIDTH{1'B0}};
+          sr0i1_rA_reg<={IN_REG_WIDTH{1'B0}};
+          sr0i2_rA_reg<={IN_REG_WIDTH{1'B0}};
+          sr1i0_rA_reg<={IN_REG_WIDTH{1'B0}};
+          sr1i1_rA_reg<={IN_REG_WIDTH{1'B0}};
+          sr1i2_rA_reg<={IN_REG_WIDTH{1'B0}};
+          sr2i0_rA_reg<={IN_REG_WIDTH{1'B0}};
+          sr2i1_rA_reg<={IN_REG_WIDTH{1'B0}};
+          sr2i2_rA_reg<={IN_REG_WIDTH{1'B0}};
 
-          rs0i0_rB_reg<={IN_REG_WIDTH{1'B0}};
-          rs0i1_rB_reg<={IN_REG_WIDTH{1'B0}};
-          rs0i2_rB_reg<={IN_REG_WIDTH{1'B0}};
-          rs1i0_rB_reg<={IN_REG_WIDTH{1'B0}};
-          rs1i1_rB_reg<={IN_REG_WIDTH{1'B0}};
-          rs1i2_rB_reg<={IN_REG_WIDTH{1'B0}};
-          rs2i0_rB_reg<={IN_REG_WIDTH{1'B0}};
-          rs2i1_rB_reg<={IN_REG_WIDTH{1'B0}};
-          rs2i2_rB_reg<={IN_REG_WIDTH{1'B0}};
+          sr0i0_rB_reg<={IN_REG_WIDTH{1'B0}};
+          sr0i1_rB_reg<={IN_REG_WIDTH{1'B0}};
+          sr0i2_rB_reg<={IN_REG_WIDTH{1'B0}};
+          sr1i0_rB_reg<={IN_REG_WIDTH{1'B0}};
+          sr1i1_rB_reg<={IN_REG_WIDTH{1'B0}};
+          sr1i2_rB_reg<={IN_REG_WIDTH{1'B0}};
+          sr2i0_rB_reg<={IN_REG_WIDTH{1'B0}};
+          sr2i1_rB_reg<={IN_REG_WIDTH{1'B0}};
+          sr2i2_rB_reg<={IN_REG_WIDTH{1'B0}};
 
-          rs0i0_rA_reg2<={IN_REG_WIDTH{1'B0}};
-          rs0i1_rA_reg2<={IN_REG_WIDTH{1'B0}};
-          rs0i2_rA_reg2<={IN_REG_WIDTH{1'B0}};
-          rs1i0_rA_reg2<={IN_REG_WIDTH{1'B0}};
-          rs1i1_rA_reg2<={IN_REG_WIDTH{1'B0}};
-          rs1i2_rA_reg2<={IN_REG_WIDTH{1'B0}};
-          rs2i0_rA_reg2<={IN_REG_WIDTH{1'B0}};
-          rs2i1_rA_reg2<={IN_REG_WIDTH{1'B0}};
-          rs2i2_rA_reg2<={IN_REG_WIDTH{1'B0}};
+          sr0i0_rA_reg2<={IN_REG_WIDTH{1'B0}};
+          sr0i1_rA_reg2<={IN_REG_WIDTH{1'B0}};
+          sr0i2_rA_reg2<={IN_REG_WIDTH{1'B0}};
+          sr1i0_rA_reg2<={IN_REG_WIDTH{1'B0}};
+          sr1i1_rA_reg2<={IN_REG_WIDTH{1'B0}};
+          sr1i2_rA_reg2<={IN_REG_WIDTH{1'B0}};
+          sr2i0_rA_reg2<={IN_REG_WIDTH{1'B0}};
+          sr2i1_rA_reg2<={IN_REG_WIDTH{1'B0}};
+          sr2i2_rA_reg2<={IN_REG_WIDTH{1'B0}};
 
-          rs0i0_rB_reg2<={IN_REG_WIDTH{1'B0}};
-          rs0i1_rB_reg2<={IN_REG_WIDTH{1'B0}};
-          rs0i2_rB_reg2<={IN_REG_WIDTH{1'B0}};
-          rs1i0_rB_reg2<={IN_REG_WIDTH{1'B0}};
-          rs1i1_rB_reg2<={IN_REG_WIDTH{1'B0}};
-          rs1i2_rB_reg2<={IN_REG_WIDTH{1'B0}};
-          rs2i0_rB_reg2<={IN_REG_WIDTH{1'B0}};
-          rs2i1_rB_reg2<={IN_REG_WIDTH{1'B0}};
-          rs2i2_rB_reg2<={IN_REG_WIDTH{1'B0}};
+          sr0i0_rB_reg2<={IN_REG_WIDTH{1'B0}};
+          sr0i1_rB_reg2<={IN_REG_WIDTH{1'B0}};
+          sr0i2_rB_reg2<={IN_REG_WIDTH{1'B0}};
+          sr1i0_rB_reg2<={IN_REG_WIDTH{1'B0}};
+          sr1i1_rB_reg2<={IN_REG_WIDTH{1'B0}};
+          sr1i2_rB_reg2<={IN_REG_WIDTH{1'B0}};
+          sr2i0_rB_reg2<={IN_REG_WIDTH{1'B0}};
+          sr2i1_rB_reg2<={IN_REG_WIDTH{1'B0}};
+          sr2i2_rB_reg2<={IN_REG_WIDTH{1'B0}};
 
-          rs0i0_rA_reg3<={IN_REG_WIDTH{1'B0}};
-          rs0i1_rA_reg3<={IN_REG_WIDTH{1'B0}};
-          rs0i2_rA_reg3<={IN_REG_WIDTH{1'B0}};
-          rs1i0_rA_reg3<={IN_REG_WIDTH{1'B0}};
-          rs1i1_rA_reg3<={IN_REG_WIDTH{1'B0}};
-          rs1i2_rA_reg3<={IN_REG_WIDTH{1'B0}};
-          rs2i0_rA_reg3<={IN_REG_WIDTH{1'B0}};
-          rs2i1_rA_reg3<={IN_REG_WIDTH{1'B0}};
-          rs2i2_rA_reg3<={IN_REG_WIDTH{1'B0}};
+          sr0i0_rA_reg3<={IN_REG_WIDTH{1'B0}};
+          sr0i1_rA_reg3<={IN_REG_WIDTH{1'B0}};
+          sr0i2_rA_reg3<={IN_REG_WIDTH{1'B0}};
+          sr1i0_rA_reg3<={IN_REG_WIDTH{1'B0}};
+          sr1i1_rA_reg3<={IN_REG_WIDTH{1'B0}};
+          sr1i2_rA_reg3<={IN_REG_WIDTH{1'B0}};
+          sr2i0_rA_reg3<={IN_REG_WIDTH{1'B0}};
+          sr2i1_rA_reg3<={IN_REG_WIDTH{1'B0}};
+          sr2i2_rA_reg3<={IN_REG_WIDTH{1'B0}};
 
-          rs0i0_rB_reg3<={IN_REG_WIDTH{1'B0}};
-          rs0i1_rB_reg3<={IN_REG_WIDTH{1'B0}};
-          rs0i2_rB_reg3<={IN_REG_WIDTH{1'B0}};
-          rs1i0_rB_reg3<={IN_REG_WIDTH{1'B0}};
-          rs1i1_rB_reg3<={IN_REG_WIDTH{1'B0}};
-          rs1i2_rB_reg3<={IN_REG_WIDTH{1'B0}};
-          rs2i0_rB_reg3<={IN_REG_WIDTH{1'B0}};
-          rs2i1_rB_reg3<={IN_REG_WIDTH{1'B0}};
-          rs2i2_rB_reg3<={IN_REG_WIDTH{1'B0}};
+          sr0i0_rB_reg3<={IN_REG_WIDTH{1'B0}};
+          sr0i1_rB_reg3<={IN_REG_WIDTH{1'B0}};
+          sr0i2_rB_reg3<={IN_REG_WIDTH{1'B0}};
+          sr1i0_rB_reg3<={IN_REG_WIDTH{1'B0}};
+          sr1i1_rB_reg3<={IN_REG_WIDTH{1'B0}};
+          sr1i2_rB_reg3<={IN_REG_WIDTH{1'B0}};
+          sr2i0_rB_reg3<={IN_REG_WIDTH{1'B0}};
+          sr2i1_rB_reg3<={IN_REG_WIDTH{1'B0}};
+          sr2i2_rB_reg3<={IN_REG_WIDTH{1'B0}};
 
-          rs0i0_index_reg<=4'b0;
-          rs0i1_index_reg<=4'b0;
-          rs0i2_index_reg<=4'b0;
-          rs1i0_index_reg<=4'b0;
-          rs1i1_index_reg<=4'b0;
-          rs1i2_index_reg<=4'b0;
-          rs2i0_index_reg<=4'b0;
-          rs2i1_index_reg<=4'b0;
-          rs2i2_index_reg<=4'b0;
-	  rs2i2_mul_reg<=1'b0;
+          sr0i0_index_reg<=4'b0;
+          sr0i1_index_reg<=4'b0;
+          sr0i2_index_reg<=4'b0;
+          sr1i0_index_reg<=4'b0;
+          sr1i1_index_reg<=4'b0;
+          sr1i2_index_reg<=4'b0;
+          sr2i0_index_reg<=4'b0;
+          sr2i1_index_reg<=4'b0;
+          sr2i2_index_reg<=4'b0;
+	  sr2i2_mul_reg<=1'b0;
 
-          rs_rA_isV<=9'b0;
-          rs_rA_isAnyV<=9'b0;
-          rs_rB_isV<=9'b0;
-          rs_rB_isAnyV<=9'b0;
-          rs_rT_isV<=9'b0;
-          rs_rT_use<=9'b0;
-          rs_rT_useF<=9'b0;
+          sr_rA_isV<=9'b0;
+          sr_rA_isAnyV<=9'b0;
+          sr_rB_isV<=9'b0;
+          sr_rB_isAnyV<=9'b0;
+          sr_rT_isV<=9'b0;
+          sr_rT_use<=9'b0;
+          sr_rT_useF<=9'b0;
 	  isAV_reg<=9'b0;
 	  isBV_reg<=9'b0;
 	  isAF_reg<=9'b0;
 	  isBF_reg<=9'b0;
-          rs_enA<=3'b0;
-          rs_enB<=3'b0;
-          rs_enA_reg<=3'b0;
-          rs_enB_reg<=3'b0;
-          rs_enAW_reg<=3'b0;
-          rs_enBW_reg<=3'b0;
+          sr_enA<=3'b0;
+          sr_enB<=3'b0;
+          sr_enA_reg<=3'b0;
+          sr_enB_reg<=3'b0;
+          sr_enAW_reg<=3'b0;
+          sr_enBW_reg<=3'b0;
 
-          rs0i1_lastFl_reg<=1'b0;
-          rs0i2_lastFl_reg<=1'b0;
-          rs1i1_lastFl_reg<=1'b0;
-          rs1i2_lastFl_reg<=1'b0;
-          rs2i1_lastFl_reg<=1'b0;
-          rs2i2_lastFl_reg<=1'b0;
+          sr0i1_lastFl_reg<=1'b0;
+          sr0i2_lastFl_reg<=1'b0;
+          sr1i1_lastFl_reg<=1'b0;
+          sr1i2_lastFl_reg<=1'b0;
+          sr2i1_lastFl_reg<=1'b0;
+          sr2i2_lastFl_reg<=1'b0;
 
-          rs0i1_flag_wr_reg<=1'b0;
-          rs0i2_flag_wr_reg<=1'b0;
-          rs1i1_flag_wr_reg<=1'b0;
-          rs1i2_flag_wr_reg<=1'b0;
-          rs2i1_flag_wr_reg<=1'b0;
-          rs2i2_flag_wr_reg<=1'b0;
+          sr0i1_flag_wr_reg<=1'b0;
+          sr0i2_flag_wr_reg<=1'b0;
+          sr1i1_flag_wr_reg<=1'b0;
+          sr1i2_flag_wr_reg<=1'b0;
+          sr2i1_flag_wr_reg<=1'b0;
+          sr2i2_flag_wr_reg<=1'b0;
 
-          rs_ldst_flg<=9'b0;
-          rs_ldst_flg_reg<=9'b0;
+          sr_ldst_flg<=9'b0;
+          sr_ldst_flg_reg<=9'b0;
 
-          rs0i1_flagDep_reg<=4'hd;
-          rs0i2_flagDep_reg<=4'hd;
-          rs1i1_flagDep_reg<=4'hd;
-          rs1i2_flagDep_reg<=4'hd;
-          rs2i1_flagDep_reg<=4'hd;
-          rs2i2_flagDep_reg<=4'hd;
+          sr0i1_flagDep_reg<=4'hd;
+          sr0i2_flagDep_reg<=4'hd;
+          sr1i1_flagDep_reg<=4'hd;
+          sr1i2_flagDep_reg<=4'hd;
+          sr2i1_flagDep_reg<=4'hd;
+          sr2i2_flagDep_reg<=4'hd;
 
-          rs0i1_flagDep_reg2<=4'hd;
-          rs0i2_flagDep_reg2<=4'hd;
-          rs1i1_flagDep_reg2<=4'hd;
-          rs1i2_flagDep_reg2<=4'hd;
-          rs2i1_flagDep_reg2<=4'hd;
-          rs2i2_flagDep_reg2<=4'hd;
+          sr0i1_flagDep_reg2<=4'hd;
+          sr0i2_flagDep_reg2<=4'hd;
+          sr1i1_flagDep_reg2<=4'hd;
+          sr1i2_flagDep_reg2<=4'hd;
+          sr2i1_flagDep_reg2<=4'hd;
+          sr2i2_flagDep_reg2<=4'hd;
           
           thread_reg<=1'b0;
           thread_reg2<=1'b0;
@@ -5929,26 +5929,26 @@ dcache1 L1D_mod(
           bundle_in_reg<=1'b0;
           bundle_in_reg2<=1'b0;
           clr_reg<=9'b0;
-          clrS_reg<=9'b0;
+          clsr_reg<=9'b0;
           
-          rs_useAConst<=9'b0;
-          rs_useBConst<=9'b0;
-          rs_useBConst_reg<=9'b0;
+          sr_useAConst<=9'b0;
+          sr_useBConst<=9'b0;
+          sr_useBConst_reg<=9'b0;
           
           depA_reg<=9'b0;
           depB_reg<=9'b0;
      
-          rs_rA_use<=9'b0;
-          rs_rB_use<=9'b0;
-          rs_rA_useF<=9'b0;
-          rs_rB_useF<=9'b0;
-          rs_rA_useF_reg<=9'b0;
-          rs_rB_useF_reg<=9'b0;
-          rs_rA_useF_reg2<=9'b0;
-          rs_rB_useF_reg2<=9'b0;
+          sr_rA_use<=9'b0;
+          sr_rB_use<=9'b0;
+          sr_rA_useF<=9'b0;
+          sr_rB_useF<=9'b0;
+          sr_rA_useF_reg<=9'b0;
+          sr_rB_useF_reg<=9'b0;
+          sr_rA_useF_reg2<=9'b0;
+          sr_rB_useF_reg2<=9'b0;
 
-	  rs_alt<=3'b0;
-	  rs_alt_reg<=3'b0;
+	  sr_alt<=3'b0;
+	  sr_alt_reg<=3'b0;
           
 	  jump0TbufWay_reg<=1'd0;
           jump0JmpInd_reg<=2'd0;
@@ -6038,18 +6038,18 @@ dcache1 L1D_mod(
           for(k=0;k<9;k=k+1) begin
               clrR_reg[k]<=9'b0;
               clrRS_reg[k]<=9'b0;
-              rs_const[k]<={DATA_WIDTH{1'B0}};
-              rs_const_reg[k]<={DATA_WIDTH{1'B0}};
-	      rs_IPRel[k]<=1'b0;
-	      rs_afterTK[k]<=1'b0;
-              rs_index[k]<=4'b0;
-              rs_index_reg[k]<=4'b0;
-              rs_operation[k]<={OPERATION_WIDTH{1'B0}};
-              rs_operation_reg[k]<={OPERATION_WIDTH{1'B0}};
-              rs_operation_reg2[k]<={OPERATION_WIDTH{1'B0}};
-              rs_port[k]<=4'b0;
-              rs_port_reg[k]<=4'b0;
-              rs_port_sch[k]<=4'b0;
+              sr_const[k]<={DATA_WIDTH{1'B0}};
+              sr_const_reg[k]<={DATA_WIDTH{1'B0}};
+	      sr_IPRel[k]<=1'b0;
+	      sr_afterTK[k]<=1'b0;
+              sr_index[k]<=4'b0;
+              sr_index_reg[k]<=4'b0;
+              sr_operation[k]<={OPERATION_WIDTH{1'B0}};
+              sr_operation_reg[k]<={OPERATION_WIDTH{1'B0}};
+              sr_operation_reg2[k]<={OPERATION_WIDTH{1'B0}};
+              sr_port[k]<=4'b0;
+              sr_port_reg[k]<=4'b0;
+              sr_port_sch[k]<=4'b0;
               regA_reg[k]<={REG_WIDTH{1'B0}};
               regB_reg[k]<={REG_WIDTH{1'B0}};
               regS_reg[k]<={REG_WIDTH{1'B0}};
@@ -6063,13 +6063,13 @@ dcache1 L1D_mod(
 	      retBF_reg2[k]<=1'b0;
               newR_reg[k]<={REG_WIDTH{1'B0}};
               newRF_reg[k]<={REG_WIDTH{1'B0}};
-              rs_en[k]<=1'b0;
-              rs_en_reg[k]<=1'b0;
+              sr_en[k]<=1'b0;
+              sr_en_reg[k]<=1'b0;
               funA_reg[k]<=10'b0;
               funB_reg[k]<=10'b0;
               funS_reg[k]<=10'b0;
-              rs_lsi[k]<=6'b0;
-              rs_lsi_reg[k]<=3'b0;
+              sr_lsi[k]<=6'b0;
+              sr_lsi_reg[k]<=3'b0;
               domA_reg[k]<=2'b0;
               domB_reg[k]<=2'b0;
               instr_ret_reg[k]<=4'hf;
@@ -6093,10 +6093,10 @@ dcache1 L1D_mod(
 	      isBFW_reg[t]<=1'b0;
 	      isAWV_reg[t]<=1'b0;
           isBVW_reg[t]<=1'b0;
-	      rs_rAW_useF_reg[t]<=1'b0;
-	      rs_rBW_useF_reg[t]<=1'b0;
-	      rs_rAW_useF_reg2[t]<=1'b0;
-	      rs_rBW_useF_reg2[t]<=1'b0;
+	      sr_rAW_useF_reg[t]<=1'b0;
+	      sr_rBW_useF_reg[t]<=1'b0;
+	      sr_rAW_useF_reg2[t]<=1'b0;
+	      sr_rBW_useF_reg2[t]<=1'b0;
 	      Wport_reg[t]<=0;
 	  end
 	  for(t=0;t<10;t=t+1) begin
@@ -6130,333 +6130,333 @@ dcache1 L1D_mod(
       end else if (~doStall) begin
 	  newAttr_reg<=newAttr;
 	  newAttr_reg2<=newAttr_reg;
-          rs0i0_alloc_reg<=rs0i0_alloc;
-          rs0i1_alloc_reg<=rs0i1_alloc;
-          rs0i2_alloc_reg<=rs0i2_alloc;
-          rs1i0_alloc_reg<=rs1i0_alloc;
-          rs1i1_alloc_reg<=rs1i1_alloc;
-          rs1i2_alloc_reg<=rs1i2_alloc;
-          rs2i0_alloc_reg<=rs2i0_alloc;
-          rs2i1_alloc_reg<=rs2i1_alloc;
-          rs2i2_alloc_reg<=rs2i2_alloc;
+          sr0i0_alloc_reg<=sr0i0_alloc;
+          sr0i1_alloc_reg<=sr0i1_alloc;
+          sr0i2_alloc_reg<=sr0i2_alloc;
+          sr1i0_alloc_reg<=sr1i0_alloc;
+          sr1i1_alloc_reg<=sr1i1_alloc;
+          sr1i2_alloc_reg<=sr1i2_alloc;
+          sr2i0_alloc_reg<=sr2i0_alloc;
+          sr2i1_alloc_reg<=sr2i1_alloc;
+          sr2i2_alloc_reg<=sr2i2_alloc;
 
-          rs0i0_allocF_reg<=rs0i0_allocF;
-          rs0i1_allocF_reg<=rs0i1_allocF;
-          rs0i2_allocF_reg<=rs0i2_allocF;
-          rs1i0_allocF_reg<=rs1i0_allocF;
-          rs1i1_allocF_reg<=rs1i1_allocF;
-          rs1i2_allocF_reg<=rs1i2_allocF;
-          rs2i0_allocF_reg<=rs2i0_allocF;
-          rs2i1_allocF_reg<=rs2i1_allocF;
-          rs2i2_allocF_reg<=rs2i2_allocF;
+          sr0i0_allocF_reg<=sr0i0_allocF;
+          sr0i1_allocF_reg<=sr0i1_allocF;
+          sr0i2_allocF_reg<=sr0i2_allocF;
+          sr1i0_allocF_reg<=sr1i0_allocF;
+          sr1i1_allocF_reg<=sr1i1_allocF;
+          sr1i2_allocF_reg<=sr1i2_allocF;
+          sr2i0_allocF_reg<=sr2i0_allocF;
+          sr2i1_allocF_reg<=sr2i1_allocF;
+          sr2i2_allocF_reg<=sr2i2_allocF;
 
-          rs0i0_allocR_reg<=rs0i0_allocR;
-          rs0i1_allocR_reg<=rs0i1_allocR;
-          rs0i2_allocR_reg<=rs0i2_allocR;
-          rs1i0_allocR_reg<=rs1i0_allocR;
-          rs1i1_allocR_reg<=rs1i1_allocR;
-          rs1i2_allocR_reg<=rs1i2_allocR;
-          rs2i0_allocR_reg<=rs2i0_allocR;
-          rs2i1_allocR_reg<=rs2i1_allocR;
-          rs2i2_allocR_reg<=rs2i2_allocR;
+          sr0i0_allocR_reg<=sr0i0_allocR;
+          sr0i1_allocR_reg<=sr0i1_allocR;
+          sr0i2_allocR_reg<=sr0i2_allocR;
+          sr1i0_allocR_reg<=sr1i0_allocR;
+          sr1i1_allocR_reg<=sr1i1_allocR;
+          sr1i2_allocR_reg<=sr1i2_allocR;
+          sr2i0_allocR_reg<=sr2i0_allocR;
+          sr2i1_allocR_reg<=sr2i1_allocR;
+          sr2i2_allocR_reg<=sr2i2_allocR;
 
-          rs0i0_en_reg<=rs0i0_en;
-          rs0i1_en_reg<=rs0i1_en;
-          rs0i2_en_reg<=rs0i2_en;
-          rs1i0_en_reg<=rs1i0_en;
-          rs1i1_en_reg<=rs1i1_en;
-          rs1i2_en_reg<=rs1i2_en;
-          rs2i0_en_reg<=rs2i0_en;
-          rs2i1_en_reg<=rs2i1_en;
-          rs2i2_en_reg<=rs2i2_en;
+          sr0i0_en_reg<=sr0i0_en;
+          sr0i1_en_reg<=sr0i1_en;
+          sr0i2_en_reg<=sr0i2_en;
+          sr1i0_en_reg<=sr1i0_en;
+          sr1i1_en_reg<=sr1i1_en;
+          sr1i2_en_reg<=sr1i2_en;
+          sr2i0_en_reg<=sr2i0_en;
+          sr2i1_en_reg<=sr2i1_en;
+          sr2i2_en_reg<=sr2i2_en;
 
-          rs0i0_useBConst_reg<=rs0i0_useBConst;
-          rs0i1_useBConst_reg<=rs0i1_useBConst;
-          rs0i2_useBConst_reg<=rs0i2_useBConst;
-          rs1i0_useBConst_reg<=rs1i0_useBConst;
-          rs1i1_useBConst_reg<=rs1i1_useBConst;
-          rs1i2_useBConst_reg<=rs1i2_useBConst;
-          rs2i0_useBConst_reg<=rs2i0_useBConst;
-          rs2i1_useBConst_reg<=rs2i1_useBConst;
-          rs2i2_useBConst_reg<=rs2i2_useBConst;
+          sr0i0_useBConst_reg<=sr0i0_useBConst;
+          sr0i1_useBConst_reg<=sr0i1_useBConst;
+          sr0i2_useBConst_reg<=sr0i2_useBConst;
+          sr1i0_useBConst_reg<=sr1i0_useBConst;
+          sr1i1_useBConst_reg<=sr1i1_useBConst;
+          sr1i2_useBConst_reg<=sr1i2_useBConst;
+          sr2i0_useBConst_reg<=sr2i0_useBConst;
+          sr2i1_useBConst_reg<=sr2i1_useBConst;
+          sr2i2_useBConst_reg<=sr2i2_useBConst;
           
-          rs0i0_rT_reg<=rs0i0_rT;
-          rs0i1_rT_reg<=rs0i1_rT;
-          rs0i2_rT_reg<=rs0i2_rT;
-          rs1i0_rT_reg<=rs1i0_rT;
-          rs1i1_rT_reg<=rs1i1_rT;
-          rs1i2_rT_reg<=rs1i2_rT;
-          rs2i0_rT_reg<=rs2i0_rT;
-          rs2i1_rT_reg<=rs2i1_rT;
-          rs2i2_rT_reg<=rs2i2_rT;
+          sr0i0_rT_reg<=sr0i0_rT;
+          sr0i1_rT_reg<=sr0i1_rT;
+          sr0i2_rT_reg<=sr0i2_rT;
+          sr1i0_rT_reg<=sr1i0_rT;
+          sr1i1_rT_reg<=sr1i1_rT;
+          sr1i2_rT_reg<=sr1i2_rT;
+          sr2i0_rT_reg<=sr2i0_rT;
+          sr2i1_rT_reg<=sr2i1_rT;
+          sr2i2_rT_reg<=sr2i2_rT;
 
-          rs0i0_rA_reg<=rs0i0_rA;
-          rs0i1_rA_reg<=rs0i1_rA;
-          rs0i2_rA_reg<=rs0i2_rA;
-          rs1i0_rA_reg<=rs1i0_rA;
-          rs1i1_rA_reg<=rs1i1_rA;
-          rs1i2_rA_reg<=rs1i2_rA;
-          rs2i0_rA_reg<=rs2i0_rA;
-          rs2i1_rA_reg<=rs2i1_rA;
-          rs2i2_rA_reg<=rs2i2_rA;
+          sr0i0_rA_reg<=sr0i0_rA;
+          sr0i1_rA_reg<=sr0i1_rA;
+          sr0i2_rA_reg<=sr0i2_rA;
+          sr1i0_rA_reg<=sr1i0_rA;
+          sr1i1_rA_reg<=sr1i1_rA;
+          sr1i2_rA_reg<=sr1i2_rA;
+          sr2i0_rA_reg<=sr2i0_rA;
+          sr2i1_rA_reg<=sr2i1_rA;
+          sr2i2_rA_reg<=sr2i2_rA;
 
-          rs0i0_rB_reg<=rs0i0_rB;
-          rs0i1_rB_reg<=rs0i1_rB;
-          rs0i2_rB_reg<=rs0i2_rB;
-          rs1i0_rB_reg<=rs1i0_rB;
-          rs1i1_rB_reg<=rs1i1_rB;
-          rs1i2_rB_reg<=rs1i2_rB;
-          rs2i0_rB_reg<=rs2i0_rB;
-          rs2i1_rB_reg<=rs2i1_rB;
-          rs2i2_rB_reg<=rs2i2_rB;
+          sr0i0_rB_reg<=sr0i0_rB;
+          sr0i1_rB_reg<=sr0i1_rB;
+          sr0i2_rB_reg<=sr0i2_rB;
+          sr1i0_rB_reg<=sr1i0_rB;
+          sr1i1_rB_reg<=sr1i1_rB;
+          sr1i2_rB_reg<=sr1i2_rB;
+          sr2i0_rB_reg<=sr2i0_rB;
+          sr2i1_rB_reg<=sr2i1_rB;
+          sr2i2_rB_reg<=sr2i2_rB;
 
-          rs0i0_rA_reg2<=rs0i0_rA_reg;
-          rs0i1_rA_reg2<=rs0i1_rA_reg;
-          rs0i2_rA_reg2<=rs0i2_rA_reg;
-          rs1i0_rA_reg2<=rs1i0_rA_reg;
-          rs1i1_rA_reg2<=rs1i1_rA_reg;
-          rs1i2_rA_reg2<=rs1i2_rA_reg;
-          rs2i0_rA_reg2<=rs2i0_rA_reg;
-          rs2i1_rA_reg2<=rs2i1_rA_reg;
-          rs2i2_rA_reg2<=rs2i2_rA_reg;
+          sr0i0_rA_reg2<=sr0i0_rA_reg;
+          sr0i1_rA_reg2<=sr0i1_rA_reg;
+          sr0i2_rA_reg2<=sr0i2_rA_reg;
+          sr1i0_rA_reg2<=sr1i0_rA_reg;
+          sr1i1_rA_reg2<=sr1i1_rA_reg;
+          sr1i2_rA_reg2<=sr1i2_rA_reg;
+          sr2i0_rA_reg2<=sr2i0_rA_reg;
+          sr2i1_rA_reg2<=sr2i1_rA_reg;
+          sr2i2_rA_reg2<=sr2i2_rA_reg;
 
-          rs0i0_rB_reg2<=rs0i0_rB_reg;
-          rs0i1_rB_reg2<=rs0i1_rB_reg;
-          rs0i2_rB_reg2<=rs0i2_rB_reg;
-          rs1i0_rB_reg2<=rs1i0_rB_reg;
-          rs1i1_rB_reg2<=rs1i1_rB_reg;
-          rs1i2_rB_reg2<=rs1i2_rB_reg;
-          rs2i0_rB_reg2<=rs2i0_rB_reg;
-          rs2i1_rB_reg2<=rs2i1_rB_reg;
-          rs2i2_rB_reg2<=rs2i2_rB_reg;
+          sr0i0_rB_reg2<=sr0i0_rB_reg;
+          sr0i1_rB_reg2<=sr0i1_rB_reg;
+          sr0i2_rB_reg2<=sr0i2_rB_reg;
+          sr1i0_rB_reg2<=sr1i0_rB_reg;
+          sr1i1_rB_reg2<=sr1i1_rB_reg;
+          sr1i2_rB_reg2<=sr1i2_rB_reg;
+          sr2i0_rB_reg2<=sr2i0_rB_reg;
+          sr2i1_rB_reg2<=sr2i1_rB_reg;
+          sr2i2_rB_reg2<=sr2i2_rB_reg;
 
-          rs0i0_rA_reg3<=rs0i0_rA_reg2;
-          rs0i1_rA_reg3<=rs0i1_rA_reg2;
-          rs0i2_rA_reg3<=rs0i2_rA_reg2;
-          rs1i0_rA_reg3<=rs1i0_rA_reg2;
-          rs1i1_rA_reg3<=rs1i1_rA_reg2;
-          rs1i2_rA_reg3<=rs1i2_rA_reg2;
-          rs2i0_rA_reg3<=rs2i0_rA_reg2;
-          rs2i1_rA_reg3<=rs2i1_rA_reg2;
-          rs2i2_rA_reg3<=rs2i2_rA_reg2;
+          sr0i0_rA_reg3<=sr0i0_rA_reg2;
+          sr0i1_rA_reg3<=sr0i1_rA_reg2;
+          sr0i2_rA_reg3<=sr0i2_rA_reg2;
+          sr1i0_rA_reg3<=sr1i0_rA_reg2;
+          sr1i1_rA_reg3<=sr1i1_rA_reg2;
+          sr1i2_rA_reg3<=sr1i2_rA_reg2;
+          sr2i0_rA_reg3<=sr2i0_rA_reg2;
+          sr2i1_rA_reg3<=sr2i1_rA_reg2;
+          sr2i2_rA_reg3<=sr2i2_rA_reg2;
 
-          rs0i0_rB_reg3<=rs0i0_rB_reg2;
-          rs0i1_rB_reg3<=rs0i1_rB_reg2;
-          rs0i2_rB_reg3<=rs0i2_rB_reg2;
-          rs1i0_rB_reg3<=rs1i0_rB_reg2;
-          rs1i1_rB_reg3<=rs1i1_rB_reg2;
-          rs1i2_rB_reg3<=rs1i2_rB_reg2;
-          rs2i0_rB_reg3<=rs2i0_rB_reg2;
-          rs2i1_rB_reg3<=rs2i1_rB_reg2;
-          rs2i2_rB_reg3<=rs2i2_rB_reg2;
+          sr0i0_rB_reg3<=sr0i0_rB_reg2;
+          sr0i1_rB_reg3<=sr0i1_rB_reg2;
+          sr0i2_rB_reg3<=sr0i2_rB_reg2;
+          sr1i0_rB_reg3<=sr1i0_rB_reg2;
+          sr1i1_rB_reg3<=sr1i1_rB_reg2;
+          sr1i2_rB_reg3<=sr1i2_rB_reg2;
+          sr2i0_rB_reg3<=sr2i0_rB_reg2;
+          sr2i1_rB_reg3<=sr2i1_rB_reg2;
+          sr2i2_rB_reg3<=sr2i2_rB_reg2;
 
-          rs0i0_index_reg<=rs0i0_index;
-          rs0i1_index_reg<=rs0i1_index;
-          rs0i2_index_reg<=rs0i2_index;
-          rs1i0_index_reg<=rs1i0_index;
-          rs1i1_index_reg<=rs1i1_index;
-          rs1i2_index_reg<=rs1i2_index;
-          rs2i0_index_reg<=rs2i0_index;
-          rs2i1_index_reg<=rs2i1_index;
-          rs2i2_index_reg<=rs2i2_index;
+          sr0i0_index_reg<=sr0i0_index;
+          sr0i1_index_reg<=sr0i1_index;
+          sr0i2_index_reg<=sr0i2_index;
+          sr1i0_index_reg<=sr1i0_index;
+          sr1i1_index_reg<=sr1i1_index;
+          sr1i2_index_reg<=sr1i2_index;
+          sr2i0_index_reg<=sr2i0_index;
+          sr2i1_index_reg<=sr2i1_index;
+          sr2i2_index_reg<=sr2i2_index;
 
-	  rs2i2_mul_reg<=rs2i2_mul;
+	  sr2i2_mul_reg<=sr2i2_mul;
 
-          rs0i1_lastFl_reg<=rs0i1_lastFl;
-          rs0i2_lastFl_reg<=rs0i2_lastFl;
-          rs1i1_lastFl_reg<=rs1i1_lastFl;
-          rs1i2_lastFl_reg<=rs1i2_lastFl;
-          rs2i1_lastFl_reg<=rs2i1_lastFl;
-          rs2i2_lastFl_reg<=rs2i2_lastFl;
+          sr0i1_lastFl_reg<=sr0i1_lastFl;
+          sr0i2_lastFl_reg<=sr0i2_lastFl;
+          sr1i1_lastFl_reg<=sr1i1_lastFl;
+          sr1i2_lastFl_reg<=sr1i2_lastFl;
+          sr2i1_lastFl_reg<=sr2i1_lastFl;
+          sr2i2_lastFl_reg<=sr2i2_lastFl;
 
-          rs0i1_flag_wr_reg<=rs0i1_flag_wr;
-          rs0i2_flag_wr_reg<=rs0i2_flag_wr;
-          rs1i1_flag_wr_reg<=rs1i1_flag_wr;
-          rs1i2_flag_wr_reg<=rs1i2_flag_wr;
-          rs2i1_flag_wr_reg<=rs2i1_flag_wr;
-          rs2i2_flag_wr_reg<=rs2i2_flag_wr;
+          sr0i1_flag_wr_reg<=sr0i1_flag_wr;
+          sr0i2_flag_wr_reg<=sr0i2_flag_wr;
+          sr1i1_flag_wr_reg<=sr1i1_flag_wr;
+          sr1i2_flag_wr_reg<=sr1i2_flag_wr;
+          sr2i1_flag_wr_reg<=sr2i1_flag_wr;
+          sr2i2_flag_wr_reg<=sr2i2_flag_wr;
 
-          rs_ldst_flg[0]<=rs0i0_ldst_flg;
-          rs_ldst_flg[1]<=rs0i1_ldst_flg;
-          rs_ldst_flg[2]<=rs1i0_ldst_flg;
-          rs_ldst_flg[3]<=rs1i1_ldst_flg;
-          rs_ldst_flg[4]<=rs2i0_ldst_flg;
-          rs_ldst_flg[5]<=rs2i1_ldst_flg;
+          sr_ldst_flg[0]<=sr0i0_ldst_flg;
+          sr_ldst_flg[1]<=sr0i1_ldst_flg;
+          sr_ldst_flg[2]<=sr1i0_ldst_flg;
+          sr_ldst_flg[3]<=sr1i1_ldst_flg;
+          sr_ldst_flg[4]<=sr2i0_ldst_flg;
+          sr_ldst_flg[5]<=sr2i1_ldst_flg;
 
-          rs_ldst_flg_reg<=rs_ldst_flg;
+          sr_ldst_flg_reg<=sr_ldst_flg;
 
-          rs0i1_flagDep_reg<=rs0i1_flagDep;
-          rs0i2_flagDep_reg<=rs0i2_flagDep;
-          rs1i1_flagDep_reg<=rs1i1_flagDep;
-          rs1i2_flagDep_reg<=rs1i2_flagDep;
-          rs2i1_flagDep_reg<=rs2i1_flagDep;
-          rs2i2_flagDep_reg<=rs2i2_flagDep;
+          sr0i1_flagDep_reg<=sr0i1_flagDep;
+          sr0i2_flagDep_reg<=sr0i2_flagDep;
+          sr1i1_flagDep_reg<=sr1i1_flagDep;
+          sr1i2_flagDep_reg<=sr1i2_flagDep;
+          sr2i1_flagDep_reg<=sr2i1_flagDep;
+          sr2i2_flagDep_reg<=sr2i2_flagDep;
 
-          rs0i1_flagDep_reg2<=rs0i1_flagDep_reg;
-          rs0i2_flagDep_reg2<=rs0i2_flagDep_reg;
-          rs1i1_flagDep_reg2<=rs1i1_flagDep_reg;
-          rs1i2_flagDep_reg2<=rs1i2_flagDep_reg;
-          rs2i1_flagDep_reg2<=rs2i1_flagDep_reg;
-          rs2i2_flagDep_reg2<=rs2i2_flagDep_reg;
+          sr0i1_flagDep_reg2<=sr0i1_flagDep_reg;
+          sr0i2_flagDep_reg2<=sr0i2_flagDep_reg;
+          sr1i1_flagDep_reg2<=sr1i1_flagDep_reg;
+          sr1i2_flagDep_reg2<=sr1i2_flagDep_reg;
+          sr2i1_flagDep_reg2<=sr2i1_flagDep_reg;
+          sr2i2_flagDep_reg2<=sr2i2_flagDep_reg;
           
-          rs_const[0]<=rs0i0_const;
-          rs_const[1]<=rs0i1_const;
-          rs_const[2]<=rs0i2_const;
-          rs_const[3]<=rs1i0_const;
-          rs_const[4]<=rs1i1_const;
-          rs_const[5]<=rs1i2_const;
-          rs_const[6]<=rs2i0_const;
-          rs_const[7]<=rs2i1_const;
-          rs_const[8]<=rs2i2_const;
+          sr_const[0]<=sr0i0_const;
+          sr_const[1]<=sr0i1_const;
+          sr_const[2]<=sr0i2_const;
+          sr_const[3]<=sr1i0_const;
+          sr_const[4]<=sr1i1_const;
+          sr_const[5]<=sr1i2_const;
+          sr_const[6]<=sr2i0_const;
+          sr_const[7]<=sr2i1_const;
+          sr_const[8]<=sr2i2_const;
           
-	  rs_IPRel[0]<=rs0i0_IPRel;
-          rs_IPRel[1]<=rs0i1_IPRel;
-          rs_IPRel[2]<=rs0i2_IPRel;
-          rs_IPRel[3]<=rs1i0_IPRel;
-          rs_IPRel[4]<=rs1i1_IPRel;
-          rs_IPRel[5]<=rs1i2_IPRel;
-          rs_IPRel[6]<=rs2i0_IPRel;
-          rs_IPRel[7]<=rs2i1_IPRel;
-          rs_IPRel[8]<=rs2i2_IPRel;
+	  sr_IPRel[0]<=sr0i0_IPRel;
+          sr_IPRel[1]<=sr0i1_IPRel;
+          sr_IPRel[2]<=sr0i2_IPRel;
+          sr_IPRel[3]<=sr1i0_IPRel;
+          sr_IPRel[4]<=sr1i1_IPRel;
+          sr_IPRel[5]<=sr1i2_IPRel;
+          sr_IPRel[6]<=sr2i0_IPRel;
+          sr_IPRel[7]<=sr2i1_IPRel;
+          sr_IPRel[8]<=sr2i2_IPRel;
 
-	  rs_afterTK[0]<=rs0i0_afterTaken;
-          rs_afterTK[1]<=rs0i1_afterTaken;
-          rs_afterTK[2]<=rs0i2_afterTaken;
-          rs_afterTK[3]<=rs1i0_afterTaken;
-          rs_afterTK[4]<=rs1i1_afterTaken;
-          rs_afterTK[5]<=rs1i2_afterTaken;
-          rs_afterTK[6]<=rs2i0_afterTaken;
-          rs_afterTK[7]<=rs2i1_afterTaken;
-          rs_afterTK[8]<=rs2i2_afterTaken;
+	  sr_afterTK[0]<=sr0i0_afterTaken;
+          sr_afterTK[1]<=sr0i1_afterTaken;
+          sr_afterTK[2]<=sr0i2_afterTaken;
+          sr_afterTK[3]<=sr1i0_afterTaken;
+          sr_afterTK[4]<=sr1i1_afterTaken;
+          sr_afterTK[5]<=sr1i2_afterTaken;
+          sr_afterTK[6]<=sr2i0_afterTaken;
+          sr_afterTK[7]<=sr2i1_afterTaken;
+          sr_afterTK[8]<=sr2i2_afterTaken;
 
-          rs_index[0]<=rs0i0_index;
-          rs_index[1]<=rs0i1_index;
-          rs_index[2]<=rs0i2_index;
-          rs_index[3]<=rs1i0_index;
-          rs_index[4]<=rs1i1_index;
-          rs_index[5]<=rs1i2_index;
-          rs_index[6]<=rs2i0_index;
-          rs_index[7]<=rs2i1_index;
-          rs_index[8]<=rs2i2_index;
+          sr_index[0]<=sr0i0_index;
+          sr_index[1]<=sr0i1_index;
+          sr_index[2]<=sr0i2_index;
+          sr_index[3]<=sr1i0_index;
+          sr_index[4]<=sr1i1_index;
+          sr_index[5]<=sr1i2_index;
+          sr_index[6]<=sr2i0_index;
+          sr_index[7]<=sr2i1_index;
+          sr_index[8]<=sr2i2_index;
 
-          rs_rA_isV[0]<=rs0i0_rA_isV;
-          rs_rA_isV[1]<=rs0i1_rA_isV;
-          rs_rA_isV[2]<=rs0i2_rA_isV;
-          rs_rA_isV[3]<=rs1i0_rA_isV;
-          rs_rA_isV[4]<=rs1i1_rA_isV;
-          rs_rA_isV[5]<=rs1i2_rA_isV;
-          rs_rA_isV[6]<=rs2i0_rA_isV;
-          rs_rA_isV[7]<=rs2i1_rA_isV;
-          rs_rA_isV[8]<=rs2i2_rA_isV;
+          sr_rA_isV[0]<=sr0i0_rA_isV;
+          sr_rA_isV[1]<=sr0i1_rA_isV;
+          sr_rA_isV[2]<=sr0i2_rA_isV;
+          sr_rA_isV[3]<=sr1i0_rA_isV;
+          sr_rA_isV[4]<=sr1i1_rA_isV;
+          sr_rA_isV[5]<=sr1i2_rA_isV;
+          sr_rA_isV[6]<=sr2i0_rA_isV;
+          sr_rA_isV[7]<=sr2i1_rA_isV;
+          sr_rA_isV[8]<=sr2i2_rA_isV;
           
-          rs_rA_isAnyV[0]<=rs0i0_rA_isAnyV;
-          rs_rA_isAnyV[1]<=rs0i1_rA_isAnyV;
-          rs_rA_isAnyV[2]<=rs0i2_rA_isAnyV;
-          rs_rA_isAnyV[3]<=rs1i0_rA_isAnyV;
-          rs_rA_isAnyV[4]<=rs1i1_rA_isAnyV;
-          rs_rA_isAnyV[5]<=rs1i2_rA_isAnyV;
-          rs_rA_isAnyV[6]<=rs2i0_rA_isAnyV;
-          rs_rA_isAnyV[7]<=rs2i1_rA_isAnyV;
-          rs_rA_isAnyV[8]<=rs2i2_rA_isAnyV;
+          sr_rA_isAnyV[0]<=sr0i0_rA_isAnyV;
+          sr_rA_isAnyV[1]<=sr0i1_rA_isAnyV;
+          sr_rA_isAnyV[2]<=sr0i2_rA_isAnyV;
+          sr_rA_isAnyV[3]<=sr1i0_rA_isAnyV;
+          sr_rA_isAnyV[4]<=sr1i1_rA_isAnyV;
+          sr_rA_isAnyV[5]<=sr1i2_rA_isAnyV;
+          sr_rA_isAnyV[6]<=sr2i0_rA_isAnyV;
+          sr_rA_isAnyV[7]<=sr2i1_rA_isAnyV;
+          sr_rA_isAnyV[8]<=sr2i2_rA_isAnyV;
 
-          rs_rB_isV[0]<=rs0i0_rB_isV;
-          rs_rB_isV[1]<=rs0i1_rB_isV;
-          rs_rB_isV[2]<=rs0i2_rB_isV;
-          rs_rB_isV[3]<=rs1i0_rB_isV;
-          rs_rB_isV[4]<=rs1i1_rB_isV;
-          rs_rB_isV[5]<=rs1i2_rB_isV;
-          rs_rB_isV[6]<=rs2i0_rB_isV;
-          rs_rB_isV[7]<=rs2i1_rB_isV;
-          rs_rB_isV[8]<=rs2i2_rB_isV;
+          sr_rB_isV[0]<=sr0i0_rB_isV;
+          sr_rB_isV[1]<=sr0i1_rB_isV;
+          sr_rB_isV[2]<=sr0i2_rB_isV;
+          sr_rB_isV[3]<=sr1i0_rB_isV;
+          sr_rB_isV[4]<=sr1i1_rB_isV;
+          sr_rB_isV[5]<=sr1i2_rB_isV;
+          sr_rB_isV[6]<=sr2i0_rB_isV;
+          sr_rB_isV[7]<=sr2i1_rB_isV;
+          sr_rB_isV[8]<=sr2i2_rB_isV;
 
-          rs_rB_isAnyV[0]<=rs0i0_rB_isAnyV;
-          rs_rB_isAnyV[1]<=rs0i1_rB_isAnyV;
-          rs_rB_isAnyV[2]<=rs0i2_rB_isAnyV;
-          rs_rB_isAnyV[3]<=rs1i0_rB_isAnyV;
-          rs_rB_isAnyV[4]<=rs1i1_rB_isAnyV;
-          rs_rB_isAnyV[5]<=rs1i2_rB_isAnyV;
-          rs_rB_isAnyV[6]<=rs2i0_rB_isAnyV;
-          rs_rB_isAnyV[7]<=rs2i1_rB_isAnyV;
-          rs_rB_isAnyV[8]<=rs2i2_rB_isAnyV;
+          sr_rB_isAnyV[0]<=sr0i0_rB_isAnyV;
+          sr_rB_isAnyV[1]<=sr0i1_rB_isAnyV;
+          sr_rB_isAnyV[2]<=sr0i2_rB_isAnyV;
+          sr_rB_isAnyV[3]<=sr1i0_rB_isAnyV;
+          sr_rB_isAnyV[4]<=sr1i1_rB_isAnyV;
+          sr_rB_isAnyV[5]<=sr1i2_rB_isAnyV;
+          sr_rB_isAnyV[6]<=sr2i0_rB_isAnyV;
+          sr_rB_isAnyV[7]<=sr2i1_rB_isAnyV;
+          sr_rB_isAnyV[8]<=sr2i2_rB_isAnyV;
 
-          rs_rT_isV[0]<=rs0i0_rT_isV;
-          rs_rT_isV[1]<=rs0i1_rT_isV;
-          rs_rT_isV[2]<=rs0i2_rT_isV;
-          rs_rT_isV[3]<=rs1i0_rT_isV;
-          rs_rT_isV[4]<=rs1i1_rT_isV;
-          rs_rT_isV[5]<=rs1i2_rT_isV;
-          rs_rT_isV[6]<=rs2i0_rT_isV;
-          rs_rT_isV[7]<=rs2i1_rT_isV;
-          rs_rT_isV[8]<=rs2i2_rT_isV;
+          sr_rT_isV[0]<=sr0i0_rT_isV;
+          sr_rT_isV[1]<=sr0i1_rT_isV;
+          sr_rT_isV[2]<=sr0i2_rT_isV;
+          sr_rT_isV[3]<=sr1i0_rT_isV;
+          sr_rT_isV[4]<=sr1i1_rT_isV;
+          sr_rT_isV[5]<=sr1i2_rT_isV;
+          sr_rT_isV[6]<=sr2i0_rT_isV;
+          sr_rT_isV[7]<=sr2i1_rT_isV;
+          sr_rT_isV[8]<=sr2i2_rT_isV;
 
-          rs_rT_use[0]<=rs0i0_rT_use;
-          rs_rT_use[1]<=rs0i1_rT_use;
-          rs_rT_use[2]<=rs0i2_rT_use;
-          rs_rT_use[3]<=rs1i0_rT_use;
-          rs_rT_use[4]<=rs1i1_rT_use;
-          rs_rT_use[5]<=rs1i2_rT_use;
-          rs_rT_use[6]<=rs2i0_rT_use;
-          rs_rT_use[7]<=rs2i1_rT_use;
-          rs_rT_use[8]<=rs2i2_rT_use;
+          sr_rT_use[0]<=sr0i0_rT_use;
+          sr_rT_use[1]<=sr0i1_rT_use;
+          sr_rT_use[2]<=sr0i2_rT_use;
+          sr_rT_use[3]<=sr1i0_rT_use;
+          sr_rT_use[4]<=sr1i1_rT_use;
+          sr_rT_use[5]<=sr1i2_rT_use;
+          sr_rT_use[6]<=sr2i0_rT_use;
+          sr_rT_use[7]<=sr2i1_rT_use;
+          sr_rT_use[8]<=sr2i2_rT_use;
 
-          rs_rT_useF[0]<=rs0i0_rT_useF;
-          rs_rT_useF[1]<=rs0i1_rT_useF;
-          rs_rT_useF[2]<=rs0i2_rT_useF;
-          rs_rT_useF[3]<=rs1i0_rT_useF;
-          rs_rT_useF[4]<=rs1i1_rT_useF;
-          rs_rT_useF[5]<=rs1i2_rT_useF;
-          rs_rT_useF[6]<=rs2i0_rT_useF;
-          rs_rT_useF[7]<=rs2i1_rT_useF;
-          rs_rT_useF[8]<=rs2i2_rT_useF;
+          sr_rT_useF[0]<=sr0i0_rT_useF;
+          sr_rT_useF[1]<=sr0i1_rT_useF;
+          sr_rT_useF[2]<=sr0i2_rT_useF;
+          sr_rT_useF[3]<=sr1i0_rT_useF;
+          sr_rT_useF[4]<=sr1i1_rT_useF;
+          sr_rT_useF[5]<=sr1i2_rT_useF;
+          sr_rT_useF[6]<=sr2i0_rT_useF;
+          sr_rT_useF[7]<=sr2i1_rT_useF;
+          sr_rT_useF[8]<=sr2i2_rT_useF;
 
 	  isAV_reg<=isAV;
 	  isBV_reg<=isBV;
 	  isAF_reg<=isAF;
 	  isBF_reg<=isBF;
 
-	  rs_operation[0]<=rs0i0_operation;
-          rs_operation[1]<=rs0i1_operation;
-          rs_operation[2]<=rs0i2_operation;
-          rs_operation[3]<=rs1i0_operation;
-          rs_operation[4]<=rs1i1_operation;
-          rs_operation[5]<=rs1i2_operation;
-          rs_operation[6]<=rs2i0_operation;
-          rs_operation[7]<=rs2i1_operation;
-          rs_operation[8]<=rs2i2_operation;
+	  sr_operation[0]<=sr0i0_operation;
+          sr_operation[1]<=sr0i1_operation;
+          sr_operation[2]<=sr0i2_operation;
+          sr_operation[3]<=sr1i0_operation;
+          sr_operation[4]<=sr1i1_operation;
+          sr_operation[5]<=sr1i2_operation;
+          sr_operation[6]<=sr2i0_operation;
+          sr_operation[7]<=sr2i1_operation;
+          sr_operation[8]<=sr2i2_operation;
 
-          rs_port[0]<=rs0i0_port;
-          rs_port[1]<=rs0i1_port;
-          rs_port[2]<=rs0i2_port;
-          rs_port[3]<=rs1i0_port;
-          rs_port[4]<=rs1i1_port;
-          rs_port[5]<=rs1i2_port;
-          rs_port[6]<=rs2i0_port;
-          rs_port[7]<=rs2i1_port;
-          rs_port[8]<=rs2i2_port;
+          sr_port[0]<=sr0i0_port;
+          sr_port[1]<=sr0i1_port;
+          sr_port[2]<=sr0i2_port;
+          sr_port[3]<=sr1i0_port;
+          sr_port[4]<=sr1i1_port;
+          sr_port[5]<=sr1i2_port;
+          sr_port[6]<=sr2i0_port;
+          sr_port[7]<=sr2i1_port;
+          sr_port[8]<=sr2i2_port;
 
-          rs_enA<={rs2i0_enA,rs1i0_enA,rs0i0_enA};
-          rs_enB<={rs2i0_enB,rs1i0_enB,rs0i0_enB};
-          rs_enA_reg<=rs_enA;
-          rs_enB_reg<=rs_enB;
-          rs_enAW_reg<=rs_enAW;
-          rs_enBW_reg<=rs_enBW;
+          sr_enA<={sr2i0_enA,sr1i0_enA,sr0i0_enA};
+          sr_enB<={sr2i0_enB,sr1i0_enB,sr0i0_enB};
+          sr_enA_reg<=sr_enA;
+          sr_enB_reg<=sr_enB;
+          sr_enAW_reg<=sr_enAW;
+          sr_enBW_reg<=sr_enBW;
 
-          rs_en[0]<=rs0i0_en;
-          rs_en[1]<=rs0i1_en;
-          rs_en[2]<=rs0i2_en;
-          rs_en[3]<=rs1i0_en;
-          rs_en[4]<=rs1i1_en;
-          rs_en[5]<=rs1i2_en;
-          rs_en[6]<=rs2i0_en;
-          rs_en[7]<=rs2i1_en;
-          rs_en[8]<=rs2i2_en;
+          sr_en[0]<=sr0i0_en;
+          sr_en[1]<=sr0i1_en;
+          sr_en[2]<=sr0i2_en;
+          sr_en[3]<=sr1i0_en;
+          sr_en[4]<=sr1i1_en;
+          sr_en[5]<=sr1i2_en;
+          sr_en[6]<=sr2i0_en;
+          sr_en[7]<=sr2i1_en;
+          sr_en[8]<=sr2i2_en;
           
-          rs_lsi[0]<=rs0i0_lsi;
-          rs_lsi[1]<=rs1i0_lsi;
-          rs_lsi[2]<=rs2i0_lsi;
-          rs_lsi[3]<=rs0i1_lsi;
-          rs_lsi[4]<=rs1i1_lsi;
-          rs_lsi[5]<=rs2i1_lsi;
+          sr_lsi[0]<=sr0i0_lsi;
+          sr_lsi[1]<=sr1i0_lsi;
+          sr_lsi[2]<=sr2i0_lsi;
+          sr_lsi[3]<=sr0i1_lsi;
+          sr_lsi[4]<=sr1i1_lsi;
+          sr_lsi[5]<=sr2i1_lsi;
           
           thread_reg<=thread;
           thread_reg2<=thread_reg;
@@ -6464,56 +6464,56 @@ dcache1 L1D_mod(
           bundle_in_reg<=bundle_in;
           bundle_in_reg2<=bundle_in_reg;
           clr_reg<=clr;
-          clrS_reg<=clrS;
+          clsr_reg<=clsr;
           
-          rs_useBConst<={rs2i2_useBConst,rs2i1_useBConst,rs2i0_useBConst,
-            rs1i2_useBConst,rs1i1_useBConst,rs1i0_useBConst,
-            rs0i2_useBConst,rs0i1_useBConst,rs0i0_useBConst};
-          rs_useBConst_reg<=rs_useBConst&~rs_IPRel;
-          rs_useAConst<={rs2i2_useAConst,rs2i1_useAConst,1'b0,
-            rs1i2_useAConst,rs1i1_useAConst,1'b0,
-            rs0i2_useAConst,rs0i1_useAConst,1'b0};
-          depA_reg[2:1]<=(depA[2:1]& rs_rA_use[2:1]) | (depAF[2:1] & rs_rA_useF[2:1]) ;
-          depB_reg[2:1]<=(depB[2:1]& rs_rB_use[2:1] & ~rs_useBConst[2:1]) | 
-	     (depBF[2:1]& rs_rB_useF[2:1] & ~rs_useBConst[2:1]);
-          depA_reg[5:4]<=(depA[5:4]& rs_rA_use[5:4]) | (depAF[5:4] & rs_rA_useF[5:4]) ;
-          depB_reg[5:4]<=(depB[5:4]& rs_rB_use[5:4] & ~rs_useBConst[5:4]) | 
-	     (depBF[5:4]& rs_rB_useF[5:4] & ~rs_useBConst[5:4]);
-          depA_reg[8:7]<=(depA[8:7]& rs_rA_use[8:7]) | (depAF[8:7] & rs_rA_useF[8:7]) ;
-          depB_reg[8:7]<=(depB[8:7]& rs_rB_use[8:7] & ~rs_useBConst[8:7]) | 
-	     (depBF[8:7]& rs_rB_useF[8:7] & ~rs_useBConst[8:7]);
-          depA_reg[0]<=(depA[0]& rs_rA_use[0]) | (depAF[0] & rs_rA_useF[0]);
-          depB_reg[0]<=(depB[0]& rs_rB_use[0] & ~rs_useBConst[0] & ~rs_IPRel[0]) |(depBF[0]& rs_rB_useF[0] & ~rs_useBConst[0] & ~rs_IPRel[0]);
-          depA_reg[3]<=(depA[3]& rs_rA_use[3]) | (depAF[3] & rs_rA_useF[3]);
-          depB_reg[3]<=(depB[3]& rs_rB_use[3] & ~rs_useBConst[3] & ~rs_IPRel[3]) |(depBF[3]& rs_rB_useF[3] & ~rs_useBConst[3] & ~rs_IPRel[3]);
-          depA_reg[6]<=(depA[6]& rs_rA_use[6]) | (depAF[6] & rs_rA_useF[6]);
-          depB_reg[6]<=(depB[6]& rs_rB_use[6] & ~rs_useBConst[6] & ~rs_IPRel[6]) |(depBF[6]& rs_rB_useF[6] & ~rs_useBConst[6] & ~rs_IPRel[6]);
+          sr_useBConst<={sr2i2_useBConst,sr2i1_useBConst,sr2i0_useBConst,
+            sr1i2_useBConst,sr1i1_useBConst,sr1i0_useBConst,
+            sr0i2_useBConst,sr0i1_useBConst,sr0i0_useBConst};
+          sr_useBConst_reg<=sr_useBConst&~sr_IPRel;
+          sr_useAConst<={sr2i2_useAConst,sr2i1_useAConst,1'b0,
+            sr1i2_useAConst,sr1i1_useAConst,1'b0,
+            sr0i2_useAConst,sr0i1_useAConst,1'b0};
+          depA_reg[2:1]<=(depA[2:1]& sr_rA_use[2:1]) | (depAF[2:1] & sr_rA_useF[2:1]) ;
+          depB_reg[2:1]<=(depB[2:1]& sr_rB_use[2:1] & ~sr_useBConst[2:1]) | 
+	     (depBF[2:1]& sr_rB_useF[2:1] & ~sr_useBConst[2:1]);
+          depA_reg[5:4]<=(depA[5:4]& sr_rA_use[5:4]) | (depAF[5:4] & sr_rA_useF[5:4]) ;
+          depB_reg[5:4]<=(depB[5:4]& sr_rB_use[5:4] & ~sr_useBConst[5:4]) | 
+	     (depBF[5:4]& sr_rB_useF[5:4] & ~sr_useBConst[5:4]);
+          depA_reg[8:7]<=(depA[8:7]& sr_rA_use[8:7]) | (depAF[8:7] & sr_rA_useF[8:7]) ;
+          depB_reg[8:7]<=(depB[8:7]& sr_rB_use[8:7] & ~sr_useBConst[8:7]) | 
+	     (depBF[8:7]& sr_rB_useF[8:7] & ~sr_useBConst[8:7]);
+          depA_reg[0]<=(depA[0]& sr_rA_use[0]) | (depAF[0] & sr_rA_useF[0]);
+          depB_reg[0]<=(depB[0]& sr_rB_use[0] & ~sr_useBConst[0] & ~sr_IPRel[0]) |(depBF[0]& sr_rB_useF[0] & ~sr_useBConst[0] & ~sr_IPRel[0]);
+          depA_reg[3]<=(depA[3]& sr_rA_use[3]) | (depAF[3] & sr_rA_useF[3]);
+          depB_reg[3]<=(depB[3]& sr_rB_use[3] & ~sr_useBConst[3] & ~sr_IPRel[3]) |(depBF[3]& sr_rB_useF[3] & ~sr_useBConst[3] & ~sr_IPRel[3]);
+          depA_reg[6]<=(depA[6]& sr_rA_use[6]) | (depAF[6] & sr_rA_useF[6]);
+          depB_reg[6]<=(depB[6]& sr_rB_use[6] & ~sr_useBConst[6] & ~sr_IPRel[6]) |(depBF[6]& sr_rB_useF[6] & ~sr_useBConst[6] & ~sr_IPRel[6]);
               
-          rs_rA_use<=
-             {rs2i2_rA_use,rs2i1_rA_use,rs2i0_rA_use,
-              rs1i2_rA_use,rs1i1_rA_use,rs1i0_rA_use,
-              rs0i2_rA_use,rs0i1_rA_use,rs0i0_rA_use};
-          rs_rB_use<=
-             {rs2i2_rB_use,rs2i1_rB_use,rs2i0_rB_use,
-              rs1i2_rB_use,rs1i1_rB_use,rs1i0_rB_use,
-              rs0i2_rB_use,rs0i1_rB_use,rs0i0_rB_use};
+          sr_rA_use<=
+             {sr2i2_rA_use,sr2i1_rA_use,sr2i0_rA_use,
+              sr1i2_rA_use,sr1i1_rA_use,sr1i0_rA_use,
+              sr0i2_rA_use,sr0i1_rA_use,sr0i0_rA_use};
+          sr_rB_use<=
+             {sr2i2_rB_use,sr2i1_rB_use,sr2i0_rB_use,
+              sr1i2_rB_use,sr1i1_rB_use,sr1i0_rB_use,
+              sr0i2_rB_use,sr0i1_rB_use,sr0i0_rB_use};
               
-          rs_rA_useF<=
-             {rs2i2_rA_useF,rs2i1_rA_useF,rs2i0_rA_useF,
-              rs1i2_rA_useF,rs1i1_rA_useF,rs1i0_rA_useF,
-              rs0i2_rA_useF,rs0i1_rA_useF,rs0i0_rA_useF};
-          rs_rB_useF<=
-             {rs2i2_rB_useF,rs2i1_rB_useF,rs2i0_rB_useF,
-              rs1i2_rB_useF,rs1i1_rB_useF,rs1i0_rB_useF,
-              rs0i2_rB_useF,rs0i1_rB_useF,rs0i0_rB_useF};
+          sr_rA_useF<=
+             {sr2i2_rA_useF,sr2i1_rA_useF,sr2i0_rA_useF,
+              sr1i2_rA_useF,sr1i1_rA_useF,sr1i0_rA_useF,
+              sr0i2_rA_useF,sr0i1_rA_useF,sr0i0_rA_useF};
+          sr_rB_useF<=
+             {sr2i2_rB_useF,sr2i1_rB_useF,sr2i0_rB_useF,
+              sr1i2_rB_useF,sr1i1_rB_useF,sr1i0_rB_useF,
+              sr0i2_rB_useF,sr0i1_rB_useF,sr0i0_rB_useF};
           
-          rs_rA_useF_reg<=rs_rA_useF;
-          rs_rB_useF_reg<=rs_rB_useF;
-          rs_rA_useF_reg2<=rs_rA_useF_reg;
-          rs_rB_useF_reg2<=rs_rB_useF_reg;
+          sr_rA_useF_reg<=sr_rA_useF;
+          sr_rB_useF_reg<=sr_rB_useF;
+          sr_rA_useF_reg2<=sr_rA_useF_reg;
+          sr_rB_useF_reg2<=sr_rB_useF_reg;
 
-	  rs_alt<={rs2i0_alt,rs1i0_alt,rs0i0_alt};
-	  rs_alt_reg<=rs_alt;
+	  sr_alt<={sr2i0_alt,sr1i0_alt,sr0i0_alt};
+	  sr_alt_reg<=sr_alt;
           
 	  instr_rT[0]<=instr0_rT;
 	  instr_rT[1]<=instr1_rT;
@@ -6725,29 +6725,29 @@ dcache1 L1D_mod(
           for(k=0;k<9;k=k+1) begin
               clrR_reg[k]<=clrR[k];
               clrRS_reg[k]<=clrRS[k];
-              rs_const_reg[k]<=rs_const[k];
-              rs_index_reg[k]<=rs_index[k];
-              rs_operation_reg[k]<=rs_operation[k];
-              rs_operation_reg2[k]<=rs_operation_reg[k];
-              if (rs_port[k]==PORT_LOAD || rs_port[k]==PORT_STORE) rs_port_sch[k]<=4'd0;
-              else if (k%3==1) rs_port_sch[k]<=4'd1;
-              else rs_port_sch[k]<=4'd2;
-              if (rs_port[k]==PORT_SHIFT || rs_port[k]==PORT_MUL) rs_port_sch[k]<=4'd2;
-              if (rs_port[k]==PORT_FADD) rs_port_sch[k]<=4'b1001;
-              if (rs_port[k]==PORT_FMUL) rs_port_sch[k]<=4'b1001;
-              if (rs_port[k]==PORT_FANY) rs_port_sch[k][3]<=1'b1;
-              if (rs_port[k]==PORT_VADD) rs_port_sch[k]<=4'b101;
-              if (rs_port[k]==PORT_VCMP) rs_port_sch[k]<=4'b110;
-              if (rs_port[k]==PORT_VANY) rs_port_sch[k][2]<=1'b1;
-              if (rs_port[k]==PORT_ALU && (rs_port[(k/3)*3+2]==PORT_VADD || rs_port[(k/3)*3+2]==PORT_FADD))
-                 rs_port_sch[k]<=4'd2;             
+              sr_const_reg[k]<=sr_const[k];
+              sr_index_reg[k]<=sr_index[k];
+              sr_operation_reg[k]<=sr_operation[k];
+              sr_operation_reg2[k]<=sr_operation_reg[k];
+              if (sr_port[k]==PORT_LOAD || sr_port[k]==PORT_STORE) sr_port_sch[k]<=4'd0;
+              else if (k%3==1) sr_port_sch[k]<=4'd1;
+              else sr_port_sch[k]<=4'd2;
+              if (sr_port[k]==PORT_SHIFT || sr_port[k]==PORT_MUL) sr_port_sch[k]<=4'd2;
+              if (sr_port[k]==PORT_FADD) sr_port_sch[k]<=4'b1001;
+              if (sr_port[k]==PORT_FMUL) sr_port_sch[k]<=4'b1001;
+              if (sr_port[k]==PORT_FANY) sr_port_sch[k][3]<=1'b1;
+              if (sr_port[k]==PORT_VADD) sr_port_sch[k]<=4'b101;
+              if (sr_port[k]==PORT_VCMP) sr_port_sch[k]<=4'b110;
+              if (sr_port[k]==PORT_VANY) sr_port_sch[k][2]<=1'b1;
+              if (sr_port[k]==PORT_ALU && (sr_port[(k/3)*3+2]==PORT_VADD || sr_port[(k/3)*3+2]==PORT_FADD))
+                 sr_port_sch[k]<=4'd2;             
               
-              rs_port_reg[k]<=rs_port[k];
+              sr_port_reg[k]<=sr_port[k];
               
-              regA_reg[k]<=(rs_rA_use[k] ? regA[k] : regAF[k])|{REG_WIDTH{~rs_rA_use[k]&~rs_rA_useF[k]}};
-              regB_reg[k]<=(rs_rB_use[k] ? regB[k] : regBF[k])|{REG_WIDTH{~rs_rB_use[k]&~rs_rB_useF[k]||rs_useBConst[k]}};
-	      if (rs_rA_useF[k]) regAF_reg[k]<=regAF[k];
-	      if (rs_rB_useF[k]) regBF_reg[k]<=regBF[k];
+              regA_reg[k]<=(sr_rA_use[k] ? regA[k] : regAF[k])|{REG_WIDTH{~sr_rA_use[k]&~sr_rA_useF[k]}};
+              regB_reg[k]<=(sr_rB_use[k] ? regB[k] : regBF[k])|{REG_WIDTH{~sr_rB_use[k]&~sr_rB_useF[k]||sr_useBConst[k]}};
+	      if (sr_rA_useF[k]) regAF_reg[k]<=regAF[k];
+	      if (sr_rB_useF[k]) regBF_reg[k]<=regBF[k];
 	      regAF_reg2[k]<=regAF_reg[k];
 	      regBF_reg2[k]<=regBF_reg[k];
 	      retAF_reg[k]<=retAF[k];
@@ -6757,11 +6757,11 @@ dcache1 L1D_mod(
               regS_reg[k]<=regS[k];
               newR_reg[k]<=newR[k];
               newRF_reg[k]<=newRF[k];
-              rs_en_reg[k]<=rs_en[k];
-              funA_reg[k]<=rs_rA_useF[k] ? funAF[k] : funA[k];
-              funB_reg[k]<=rs_rB_useF[k] ? funBF[k] : funB[k];
+              sr_en_reg[k]<=sr_en[k];
+              funA_reg[k]<=sr_rA_useF[k] ? funAF[k] : funA[k];
+              funB_reg[k]<=sr_rB_useF[k] ? funBF[k] : funB[k];
               funS_reg[k]<=funS[k];
-              rs_lsi_reg[k]<=get_lsi(rs_lsi[k]);
+              sr_lsi_reg[k]<=get_lsi(sr_lsi[k]);
               domA_reg[k]<=domA[k];
               domB_reg[k]<=domB[k];
               instr_ret_reg[k]<=instr_ret[k];
@@ -6771,8 +6771,8 @@ dcache1 L1D_mod(
               rrfBW_reg[t]<=rrfBW[t];
               rrfAW_reg2[t]<=rrfAW_reg[t];
               rrfBW_reg2[t]<=rrfBW_reg[t];
-              regAW_reg[t]<=(rs_rAW_use[t] ? regAW[t] : regAWF[t])|{REG_WIDTH{~rs_rAW_use[t]&~rs_rAW_useF[t]||useAConstW[t]}};
-              regBW_reg[t]<=(rs_rBW_use[t] ? regBW[t] : regBFW[t])|{REG_WIDTH{~rs_rBW_use[t]&~rs_rBW_useF[t]||useBConstW[t]}};
+              regAW_reg[t]<=(sr_rAW_use[t] ? regAW[t] : regAWF[t])|{REG_WIDTH{~sr_rAW_use[t]&~sr_rAW_useF[t]||useAConstW[t]}};
+              regBW_reg[t]<=(sr_rBW_use[t] ? regBW[t] : regBFW[t])|{REG_WIDTH{~sr_rBW_use[t]&~sr_rBW_useF[t]||useBConstW[t]}};
               regAW_reg[t]<=regAW[t];
               regBW_reg[t]<=regBW[t];
               regAWF_reg[t]<=regAWF[t];
@@ -6787,10 +6787,10 @@ dcache1 L1D_mod(
 	      isBFW_reg[t]<=isBFW[t];
 	      isAWV_reg[t]<=isAWV[t];
           isBVW_reg[t]<=isBVW[t];
-	      rs_rAW_useF_reg[t]<=rs_rAW_useF[t];
-	      rs_rBW_useF_reg[t]<=rs_rBW_useF[t];
-	      rs_rAW_useF_reg2[t]<=rs_rAW_useF_reg[t];
-	      rs_rBW_useF_reg2[t]<=rs_rBW_useF_reg[t];
+	      sr_rAW_useF_reg[t]<=sr_rAW_useF[t];
+	      sr_rBW_useF_reg[t]<=sr_rBW_useF[t];
+	      sr_rAW_useF_reg2[t]<=sr_rAW_useF_reg[t];
+	      sr_rBW_useF_reg2[t]<=sr_rBW_useF_reg[t];
 	      Wport_reg[t]<=Wport[t];
 	  end
 	  for(t=0;t<10;t=t+1) begin
@@ -6824,60 +6824,60 @@ dcache1 L1D_mod(
       if (except) begin
           if ((~doStall)||(doStall)) begin
               bundle_in_reg<=1'b0;
-              rs_en[0]<=1'b0;            
-              rs_en[1]<=1'b0;            
-              rs_en[2]<=1'b0;            
-              rs_en[3]<=1'b0;            
-              rs_en[4]<=1'b0;            
-              rs_en[5]<=1'b0;            
-              rs_en[6]<=1'b0;            
-              rs_en[7]<=1'b0;            
-              rs_en[8]<=1'b0;            
+              sr_en[0]<=1'b0;            
+              sr_en[1]<=1'b0;            
+              sr_en[2]<=1'b0;            
+              sr_en[3]<=1'b0;            
+              sr_en[4]<=1'b0;            
+              sr_en[5]<=1'b0;            
+              sr_en[6]<=1'b0;            
+              sr_en[7]<=1'b0;            
+              sr_en[8]<=1'b0;            
               
-              rs0i0_alloc_reg<=1'b0;
-              rs0i1_alloc_reg<=1'b0;
-              rs0i2_alloc_reg<=1'b0;
-              rs1i0_alloc_reg<=1'b0;
-              rs1i1_alloc_reg<=1'b0;
-              rs1i2_alloc_reg<=1'b0;
-              rs2i0_alloc_reg<=1'b0;
-              rs2i1_alloc_reg<=1'b0;
-              rs2i2_alloc_reg<=1'b0;
+              sr0i0_alloc_reg<=1'b0;
+              sr0i1_alloc_reg<=1'b0;
+              sr0i2_alloc_reg<=1'b0;
+              sr1i0_alloc_reg<=1'b0;
+              sr1i1_alloc_reg<=1'b0;
+              sr1i2_alloc_reg<=1'b0;
+              sr2i0_alloc_reg<=1'b0;
+              sr2i1_alloc_reg<=1'b0;
+              sr2i2_alloc_reg<=1'b0;
     
-              rs0i0_allocF_reg<=1'b0;
-              rs0i1_allocF_reg<=1'b0;
-              rs0i2_allocF_reg<=1'b0;
-              rs1i0_allocF_reg<=1'b0;
-              rs1i1_allocF_reg<=1'b0;
-              rs1i2_allocF_reg<=1'b0;
-              rs2i0_allocF_reg<=1'b0;
-              rs2i1_allocF_reg<=1'b0;
-              rs2i2_allocF_reg<=1'b0;
+              sr0i0_allocF_reg<=1'b0;
+              sr0i1_allocF_reg<=1'b0;
+              sr0i2_allocF_reg<=1'b0;
+              sr1i0_allocF_reg<=1'b0;
+              sr1i1_allocF_reg<=1'b0;
+              sr1i2_allocF_reg<=1'b0;
+              sr2i0_allocF_reg<=1'b0;
+              sr2i1_allocF_reg<=1'b0;
+              sr2i2_allocF_reg<=1'b0;
     
-              rs0i0_allocR_reg<=1'b0;
-              rs0i1_allocR_reg<=1'b0;
-              rs0i2_allocR_reg<=1'b0;
-              rs1i0_allocR_reg<=1'b0;
-              rs1i1_allocR_reg<=1'b0;
-              rs1i2_allocR_reg<=1'b0;
-              rs2i0_allocR_reg<=1'b0;
-              rs2i1_allocR_reg<=1'b0;
-              rs2i2_allocR_reg<=1'b0;
+              sr0i0_allocR_reg<=1'b0;
+              sr0i1_allocR_reg<=1'b0;
+              sr0i2_allocR_reg<=1'b0;
+              sr1i0_allocR_reg<=1'b0;
+              sr1i1_allocR_reg<=1'b0;
+              sr1i2_allocR_reg<=1'b0;
+              sr2i0_allocR_reg<=1'b0;
+              sr2i1_allocR_reg<=1'b0;
+              sr2i2_allocR_reg<=1'b0;
               
-              rs_rT_use<=9'b0;
-              rs_rT_useF<=9'b0;
+              sr_rT_use<=9'b0;
+              sr_rT_useF<=9'b0;
           end
           if (( ~doStall) || (doStall)) begin
               bundle_in_reg2<=1'b0;
-              rs_en_reg[0]<=1'b0;
-              rs_en_reg[1]<=1'b0;
-              rs_en_reg[2]<=1'b0;
-              rs_en_reg[3]<=1'b0;
-              rs_en_reg[4]<=1'b0;
-              rs_en_reg[5]<=1'b0;
-              rs_en_reg[6]<=1'b0;
-              rs_en_reg[7]<=1'b0;
-              rs_en_reg[8]<=1'b0;
+              sr_en_reg[0]<=1'b0;
+              sr_en_reg[1]<=1'b0;
+              sr_en_reg[2]<=1'b0;
+              sr_en_reg[3]<=1'b0;
+              sr_en_reg[4]<=1'b0;
+              sr_en_reg[5]<=1'b0;
+              sr_en_reg[6]<=1'b0;
+              sr_en_reg[7]<=1'b0;
+              sr_en_reg[8]<=1'b0;
               ldq_new_mask_reg<=6'b0;
           end
       end
@@ -6914,7 +6914,7 @@ dcache1 L1D_mod(
 	      if (k!=3) fxFRT_alten_reg3[k]<=4'b0;
 	  end
       end else begin
-	  for(k=0;k<4;k=k+1) if (!rsDoStall[k]) begin
+	  for(k=0;k<4;k=k+1) if (!srDoStall[k]) begin
 	      fxLD_dbl[k]=1'b0;
 	      fxLD_ext[k]=1'b0;
 	      fxLD_sin[k]=1'b0;
@@ -7021,7 +7021,7 @@ dcache1 L1D_mod(
           outDataAFL_reg<={16+SIMD_WIDTH{1'b0}};
           outDataBFL_reg<={16+SIMD_WIDTH{1'b0}};
       end else begin
-          for (k=0;k<9;k=k+1) if (k>3 || !rsDoStall[k]) begin
+          for (k=0;k<9;k=k+1) if (k>3 || !srDoStall[k]) begin
               outReg_reg[k]<=outReg[k];
               outReg_reg2[k]<=outReg_reg[k];
               outReg_reg3[k]<=outReg_reg2[k];
@@ -7477,7 +7477,7 @@ dcache1 L1D_mod(
           wt_pause_agu_reg<=1'b0;
           wt_pause_agu_reg2<=1'b0;
           for(v=0;v<=3;v=v+1) begin
-              dc_rsEn_reg[v]<=1'b0;
+              dc_srEn_reg[v]<=1'b0;
 	      dc_LSQ_reg[v]<=9'b0;
 	      dc_rdataA_reg[v]<=136'b0;
 	      dc_rdataA_N_reg[v]<=136'b0;
@@ -7511,14 +7511,14 @@ dcache1 L1D_mod(
 	     WDoutOp_reg3[v]<=13'b0;
              lsw_wdataF_reg[v]<=136'b0;
              lsw_wdataV_reg[v]<=136'b0;
-             Wagu_blockRS_reg[v]<=1'b0;
+             Wagu_blocksr_reg[v]<=1'b0;
           end
       end else begin
           wt_pause_agu_reg<=wt_pause_agu;
           wt_pause_agu_reg2<=wt_pause_agu_reg;
           for(v=0;v<=3;v=v+1) begin
-	      if (!rsDoStall[v]) begin
-                  dc_rsEn_reg[v]<=dc_rsEn[v];
+	      if (!srDoStall[v]) begin
+                  dc_srEn_reg[v]<=dc_srEn[v];
 	          dc_LSQ_reg[v]<=dc_LSQ[v];
 	          dc_rdataA_reg[v]<=dc_rdat[v];
 	          dc_rdataA_N_reg[v]<=dc_rdat_N[v];
@@ -7553,7 +7553,7 @@ dcache1 L1D_mod(
 	     WDoutOp_reg3[v]<=WDoutOp_reg2[v];
              lsw_wdataF_reg[v]<=lsw_wdataF[v];
              lsw_wdataV_reg[v]<=lsw_wdataV[v];
-             Wagu_blockRS_reg[v]<=Wagu_blockRS[v];
+             Wagu_blocksr_reg[v]<=Wagu_blocksr[v];
           end
       end
       if (rst) begin
