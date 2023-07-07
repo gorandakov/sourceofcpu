@@ -31,9 +31,9 @@ module reg_alloc(
   newR0,newR1,newR2,
   newR3,newR4,newR5,
   newR6,newR7,newR8,
-  rs0i0_en,rs1i0_en,rs2i0_en,
-  rs0i1_en,rs1i1_en,rs2i1_en,
-  rs0i2_en,rs1i2_en,rs2i2_en
+  sr0i0_en,sr1i0_en,sr2i0_en,
+  sr0i1_en,sr1i1_en,sr2i1_en,
+  sr0i2_en,sr1i2_en,sr2i2_en
   );
   localparam REG_WIDTH=`reg_addr_width;
  /*verilator hier_block*/ 
@@ -67,9 +67,9 @@ module reg_alloc(
   output [8:0] newR7;
   output [8:0] newR8;
   
-  input rs0i0_en,rs1i0_en,rs2i0_en;
-  input rs0i1_en,rs1i1_en,rs2i1_en;
-  input rs0i2_en,rs1i2_en,rs2i2_en;
+  input sr0i0_en,sr1i0_en,sr2i0_en;
+  input sr0i1_en,sr1i1_en,sr2i1_en;
+  input sr0i2_en,sr1i2_en,sr2i2_en;
   
   
   reg [1:0] pos;
@@ -138,9 +138,9 @@ module reg_alloc(
     end
   endgenerate
 
-  assign {newR2,newR1,newR0}=reg_sel({rs0i2_en,rs0i1_en,rs0i0_en},new_reg[0],new_reg[3],new_reg[6]);
-  assign {newR5,newR4,newR3}=reg_sel({rs1i2_en,rs1i1_en,rs1i0_en},new_reg[1],new_reg[4],new_reg[7]);
-  assign {newR8,newR7,newR6}=reg_sel({rs2i2_en,rs2i1_en,rs2i0_en},new_reg[2],new_reg[5],new_reg[8]);
+  assign {newR2,newR1,newR0}=reg_sel({rs0i2_en,sr0i1_en,sr0i0_en},new_reg[0],new_reg[3],new_reg[6]);
+  assign {newR5,newR4,newR3}=reg_sel({rs1i2_en,sr1i1_en,sr1i0_en},new_reg[1],new_reg[4],new_reg[7]);
+  assign {newR8,newR7,newR6}=reg_sel({rs2i2_en,sr2i1_en,sr2i0_en},new_reg[2],new_reg[5],new_reg[8]);
 
   assign pop_max[3]=pop3[0][3] | pop3[1][3] | pop3[2][3];
   assign pop_max[2]=(pop3[0][2] | pop3[1][2] | pop3[2][2]) && (~pop3[0][3] & ~pop3[1][3] & ~pop3[2][3]); 
@@ -148,15 +148,15 @@ module reg_alloc(
   assign pop_max[0]=pop3[0][0] & pop3[1][0] & pop3[2][0];
   assign step=pop_max[3] || (pos[thread] && pop_max[2]) || (pos[thread]==3'd2 && pop_max[1]); 
   
-  popcnt3 pop0_mod({rs0i0_en,rs0i1_en,rs0i2_en},pop3[0]);
-  popcnt3 pop1_mod({rs1i0_en,rs1i1_en,rs1i2_en},pop3[1]);
-  popcnt3 pop2_mod({rs2i0_en,rs2i1_en,rs2i2_en},pop3[2]);
+  popcnt3 pop0_mod({rs0i0_en,sr0i1_en,sr0i2_en},pop3[0]);
+  popcnt3 pop1_mod({rs1i0_en,sr1i1_en,sr1i2_en},pop3[1]);
+  popcnt3 pop2_mod({rs2i0_en,sr2i1_en,sr2i2_en},pop3[2]);
   
   adder_inc #(5) hhpos_one(hpos,hhpos,1'b1,);
   
-  popcnt3_or_more pop0m_mod({rs0i0_en,rs0i1_en,rs0i2_en},pop3_or_more[0]);
-  popcnt3_or_more pop1m_mod({rs1i0_en,rs1i1_en,rs1i2_en},pop3_or_more[1]);
-  popcnt3_or_more pop2m_mod({rs2i0_en,rs2i1_en,rs2i2_en},pop3_or_more[2]);
+  popcnt3_or_more pop0m_mod({rs0i0_en,sr0i1_en,sr0i2_en},pop3_or_more[0]);
+  popcnt3_or_more pop1m_mod({rs1i0_en,sr1i1_en,sr1i2_en},pop3_or_more[1]);
+  popcnt3_or_more pop2m_mod({rs2i0_en,sr2i1_en,sr2i2_en},pop3_or_more[2]);
   
   assign pos_d=pop_max[3] ? pos : 2'bz;
   assign pos_d=pop_max[0] ? pos : 2'bz;
@@ -354,131 +354,131 @@ module get_clear_reg(
   output [REG_WIDTH-1:0] clrRS7;
   output [REG_WIDTH-1:0] clrRS8;
   
-  reg [REG_WIDTH-1:0] rs0_newR[2:0];
-  reg [REG_WIDTH-1:0] rs1_newR[2:0];
-  reg [REG_WIDTH-1:0] rs2_newR[2:0];
-  reg [REG_WIDTH-1:0] rs0_newRF[2:0];
-  reg [REG_WIDTH-1:0] rs1_newRF[2:0];
-  reg [REG_WIDTH-1:0] rs2_newRF[2:0];
-  reg [2:0] rs0_hasR;
-  reg [2:0] rs1_hasR;
-  reg [2:0] rs2_hasR;
-  reg [2:0] rs0_hasS;
-  reg [2:0] rs1_hasS;
-  reg [2:0] rs2_hasS;
+  reg [REG_WIDTH-1:0] sr0_newR[2:0];
+  reg [REG_WIDTH-1:0] sr1_newR[2:0];
+  reg [REG_WIDTH-1:0] sr2_newR[2:0];
+  reg [REG_WIDTH-1:0] sr0_newRF[2:0];
+  reg [REG_WIDTH-1:0] sr1_newRF[2:0];
+  reg [REG_WIDTH-1:0] sr2_newRF[2:0];
+  reg [2:0] sr0_hasR;
+  reg [2:0] sr1_hasR;
+  reg [2:0] sr2_hasR;
+  reg [2:0] sr0_hasS;
+  reg [2:0] sr1_hasS;
+  reg [2:0] sr2_hasS;
 
   integer k;
 
-  assign clrR0=rs0_newR[0];
-  assign clrR3=rs0_newR[1];
-  assign clrR6=rs0_newR[2];
-  assign clrR1=rs1_newR[0];
-  assign clrR4=rs1_newR[1];
-  assign clrR7=rs1_newR[2];
-  assign clrR2=rs2_newR[0];
-  assign clrR5=rs2_newR[1];
-  assign clrR8=rs2_newR[2];
+  assign clrR0=sr0_newR[0];
+  assign clrR3=sr0_newR[1];
+  assign clrR6=sr0_newR[2];
+  assign clrR1=sr1_newR[0];
+  assign clrR4=sr1_newR[1];
+  assign clrR7=sr1_newR[2];
+  assign clrR2=sr2_newR[0];
+  assign clrR5=sr2_newR[1];
+  assign clrR8=sr2_newR[2];
 
-  assign clrRS0=rs0_newRF[0];
-  assign clrRS3=rs0_newRF[1];
-  assign clrRS6=rs0_newRF[2];
-  assign clrRS1=rs1_newRF[0];
-  assign clrRS4=rs1_newRF[1];
-  assign clrRS7=rs1_newRF[2];
-  assign clrRS2=rs2_newRF[0];
-  assign clrRS5=rs2_newRF[1];
-  assign clrRS8=rs2_newRF[2];
+  assign clrRS0=sr0_newRF[0];
+  assign clrRS3=sr0_newRF[1];
+  assign clrRS6=sr0_newRF[2];
+  assign clrRS1=sr1_newRF[0];
+  assign clrRS4=sr1_newRF[1];
+  assign clrRS7=sr1_newRF[2];
+  assign clrRS2=sr2_newRF[0];
+  assign clrRS5=sr2_newRF[1];
+  assign clrRS8=sr2_newRF[2];
 
-  assign clr[0]=rs0_hasR[0];
-  assign clr[3]=rs0_hasR[1];
-  assign clr[6]=rs0_hasR[2];
-  assign clr[1]=rs1_hasR[0];
-  assign clr[4]=rs1_hasR[1];
-  assign clr[7]=rs1_hasR[2];
-  assign clr[2]=rs2_hasR[0];
-  assign clr[5]=rs2_hasR[1];
-  assign clr[8]=rs2_hasR[2];
+  assign clr[0]=sr0_hasR[0];
+  assign clr[3]=sr0_hasR[1];
+  assign clr[6]=sr0_hasR[2];
+  assign clr[1]=sr1_hasR[0];
+  assign clr[4]=sr1_hasR[1];
+  assign clr[7]=sr1_hasR[2];
+  assign clr[2]=sr2_hasR[0];
+  assign clr[5]=sr2_hasR[1];
+  assign clr[8]=sr2_hasR[2];
 
-  assign clrS[0]=rs0_hasS[0];
-  assign clrS[3]=rs0_hasS[1];
-  assign clrS[6]=rs0_hasS[2];
-  assign clrS[1]=rs1_hasS[0];
-  assign clrS[4]=rs1_hasS[1];
-  assign clrS[7]=rs1_hasS[2];
-  assign clrS[2]=rs2_hasS[0];
-  assign clrS[5]=rs2_hasS[1];
-  assign clrS[8]=rs2_hasS[2];
+  assign clrS[0]=sr0_hasS[0];
+  assign clrS[3]=sr0_hasS[1];
+  assign clrS[6]=sr0_hasS[2];
+  assign clrS[1]=sr1_hasS[0];
+  assign clrS[4]=sr1_hasS[1];
+  assign clrS[7]=sr1_hasS[2];
+  assign clrS[2]=sr2_hasS[0];
+  assign clrS[5]=sr2_hasS[1];
+  assign clrS[8]=sr2_hasS[2];
 
   always @* begin
       for (k=0;k<3;k=k+1) begin
-          rs0_newR[k]=9'd0;
-          if (newR0[3:0]==k*3 && alloc[0]) rs0_newR[k]=newR0;
-          if (newR1[3:0]==k*3 && alloc[1]) rs0_newR[k]=newR1;
-          if (newR2[3:0]==k*3 && alloc[2]) rs0_newR[k]=newR2;
+          sr0_newR[k]=9'd0;
+          if (newR0[3:0]==k*3 && alloc[0]) sr0_newR[k]=newR0;
+          if (newR1[3:0]==k*3 && alloc[1]) sr0_newR[k]=newR1;
+          if (newR2[3:0]==k*3 && alloc[2]) sr0_newR[k]=newR2;
 
-          rs1_newR[k]=9'd1;
-          if (newR3[3:0]==k*3+1 && alloc[3]) rs1_newR[k]=newR3;
-          if (newR4[3:0]==k*3+1 && alloc[4]) rs1_newR[k]=newR4;
-          if (newR5[3:0]==k*3+1 && alloc[5]) rs1_newR[k]=newR5;
+          sr1_newR[k]=9'd1;
+          if (newR3[3:0]==k*3+1 && alloc[3]) sr1_newR[k]=newR3;
+          if (newR4[3:0]==k*3+1 && alloc[4]) sr1_newR[k]=newR4;
+          if (newR5[3:0]==k*3+1 && alloc[5]) sr1_newR[k]=newR5;
           
-          rs2_newR[k]=9'd2;
-          if (newR6[3:0]==k*3+2 && alloc[6]) rs2_newR[k]=newR6;
-          if (newR7[3:0]==k*3+2 && alloc[7]) rs2_newR[k]=newR7;
-          if (newR8[3:0]==k*3+2 && alloc[8]) rs2_newR[k]=newR8;
+          sr2_newR[k]=9'd2;
+          if (newR6[3:0]==k*3+2 && alloc[6]) sr2_newR[k]=newR6;
+          if (newR7[3:0]==k*3+2 && alloc[7]) sr2_newR[k]=newR7;
+          if (newR8[3:0]==k*3+2 && alloc[8]) sr2_newR[k]=newR8;
           
-          rs0_hasR[k]=(newR0[3:0]==k*3 && alloc[0]) || (newR1[3:0]==k*3 && alloc[1]) || (newR2[3:0]==k*3 && alloc[2]);
-          rs1_hasR[k]=(newR3[3:0]==k*3+1 && alloc[3]) || (newR4[3:0]==k*3+1 && alloc[4]) || (newR5[3:0]==k*3+1 && alloc[5]);
-          rs2_hasR[k]=(newR6[3:0]==k*3+2 && alloc[6]) || (newR7[3:0]==k*3+2 && alloc[7]) || (newR8[3:0]==k*3+2 && alloc[8]);
+          sr0_hasR[k]=(newR0[3:0]==k*3 && alloc[0]) || (newR1[3:0]==k*3 && alloc[1]) || (newR2[3:0]==k*3 && alloc[2]);
+          sr1_hasR[k]=(newR3[3:0]==k*3+1 && alloc[3]) || (newR4[3:0]==k*3+1 && alloc[4]) || (newR5[3:0]==k*3+1 && alloc[5]);
+          sr2_hasR[k]=(newR6[3:0]==k*3+2 && alloc[6]) || (newR7[3:0]==k*3+2 && alloc[7]) || (newR8[3:0]==k*3+2 && alloc[8]);
 
-          rs0_hasS[k]=(newRF0[3:0]==k*3 && allocS[0]) || (newRF1[3:0]==k*3 && allocS[1]) || (newRF2[3:0]==k*3 && allocS[2]);
-          rs1_hasS[k]=(newRF3[3:0]==k*3+1 && allocS[3]) || (newRF4[3:0]==k*3+1 && allocS[4]) || (newRF5[3:0]==k*3+1 && allocS[5]);
-          rs2_hasS[k]=(newRF6[3:0]==k*3+2 && allocS[6]) || (newRF7[3:0]==k*3+2 && allocS[7]) || (newRF8[3:0]==k*3+2 && allocS[8]);
+          sr0_hasS[k]=(newRF0[3:0]==k*3 && allocS[0]) || (newRF1[3:0]==k*3 && allocS[1]) || (newRF2[3:0]==k*3 && allocS[2]);
+          sr1_hasS[k]=(newRF3[3:0]==k*3+1 && allocS[3]) || (newRF4[3:0]==k*3+1 && allocS[4]) || (newRF5[3:0]==k*3+1 && allocS[5]);
+          sr2_hasS[k]=(newRF6[3:0]==k*3+2 && allocS[6]) || (newRF7[3:0]==k*3+2 && allocS[7]) || (newRF8[3:0]==k*3+2 && allocS[8]);
           
-	  rs0_newRF[k]=9'd0;
-          if (newRF0[3:0]==k*3 && allocS[0]) rs0_newRF[k]=newRF0;
-          if (newRF1[3:0]==k*3 && allocS[1]) rs0_newRF[k]=newRF1;
-          if (newRF2[3:0]==k*3 && allocS[2]) rs0_newRF[k]=newRF2;
+	  sr0_newRF[k]=9'd0;
+          if (newRF0[3:0]==k*3 && allocS[0]) sr0_newRF[k]=newRF0;
+          if (newRF1[3:0]==k*3 && allocS[1]) sr0_newRF[k]=newRF1;
+          if (newRF2[3:0]==k*3 && allocS[2]) sr0_newRF[k]=newRF2;
 
-          rs1_newRF[k]=9'd1;
-          if (newRF3[3:0]==k*3+1 && allocS[3]) rs1_newRF[k]=newRF3;
-          if (newRF4[3:0]==k*3+1 && allocS[4]) rs1_newRF[k]=newRF4;
-          if (newRF5[3:0]==k*3+1 && allocS[5]) rs1_newRF[k]=newRF5;
+          sr1_newRF[k]=9'd1;
+          if (newRF3[3:0]==k*3+1 && allocS[3]) sr1_newRF[k]=newRF3;
+          if (newRF4[3:0]==k*3+1 && allocS[4]) sr1_newRF[k]=newRF4;
+          if (newRF5[3:0]==k*3+1 && allocS[5]) sr1_newRF[k]=newRF5;
           
-          rs2_newRF[k]=9'd2;
-          if (newRF6[3:0]==k*3+2 && allocS[6]) rs2_newRF[k]=newRF6;
-          if (newRF7[3:0]==k*3+2 && allocS[7]) rs2_newRF[k]=newRF7;
-          if (newRF8[3:0]==k*3+2 && allocS[8]) rs2_newRF[k]=newRF8;
+          sr2_newRF[k]=9'd2;
+          if (newRF6[3:0]==k*3+2 && allocS[6]) sr2_newRF[k]=newRF6;
+          if (newRF7[3:0]==k*3+2 && allocS[7]) sr2_newRF[k]=newRF7;
+          if (newRF8[3:0]==k*3+2 && allocS[8]) sr2_newRF[k]=newRF8;
       end
   end
 endmodule
 
 
 module get_flag_infl(
-  rs0i1_flagDep,
-  rs0i2_flagDep,
-  rs1i1_flagDep,
-  rs1i2_flagDep,
-  rs2i1_flagDep,
-  rs2i2_flagDep,
+  sr0i1_flagDep,
+  sr0i2_flagDep,
+  sr1i1_flagDep,
+  sr1i2_flagDep,
+  sr2i1_flagDep,
+  sr2i2_flagDep,
   srcFlight,
   infl
   );
 
-  input [3:0] rs0i1_flagDep;
-  input [3:0] rs0i2_flagDep;
-  input [3:0] rs1i1_flagDep;
-  input [3:0] rs1i2_flagDep;
-  input [3:0] rs2i1_flagDep;
-  input [3:0] rs2i2_flagDep;
+  input [3:0] sr0i1_flagDep;
+  input [3:0] sr0i2_flagDep;
+  input [3:0] sr1i1_flagDep;
+  input [3:0] sr1i2_flagDep;
+  input [3:0] sr2i1_flagDep;
+  input [3:0] sr2i2_flagDep;
   input srcFlight;
   output [8:0] infl;
   
-  assign infl[1]=rs0i1_flagDep==4'he && srcFlight || ~rs0i1_flagDep[3] || rs0i1_flagDep==4'h8;
-  assign infl[2]=rs0i2_flagDep==4'he && srcFlight || ~rs0i2_flagDep[3] || rs0i2_flagDep==4'h8;
-  assign infl[4]=rs1i1_flagDep==4'he && srcFlight || ~rs1i1_flagDep[3] || rs1i1_flagDep==4'h8;
-  assign infl[5]=rs1i2_flagDep==4'he && srcFlight || ~rs1i2_flagDep[3] || rs1i2_flagDep==4'h8;
-  assign infl[7]=rs2i1_flagDep==4'he && srcFlight || ~rs2i1_flagDep[3] || rs2i1_flagDep==4'h8;
-  assign infl[8]=rs2i2_flagDep==4'he && srcFlight || ~rs2i2_flagDep[3] || rs2i2_flagDep==4'h8;
+  assign infl[1]=sr0i1_flagDep==4'he && srcFlight || ~rs0i1_flagDep[3] || sr0i1_flagDep==4'h8;
+  assign infl[2]=sr0i2_flagDep==4'he && srcFlight || ~rs0i2_flagDep[3] || sr0i2_flagDep==4'h8;
+  assign infl[4]=sr1i1_flagDep==4'he && srcFlight || ~rs1i1_flagDep[3] || sr1i1_flagDep==4'h8;
+  assign infl[5]=sr1i2_flagDep==4'he && srcFlight || ~rs1i2_flagDep[3] || sr1i2_flagDep==4'h8;
+  assign infl[7]=sr2i1_flagDep==4'he && srcFlight || ~rs2i1_flagDep[3] || sr2i1_flagDep==4'h8;
+  assign infl[8]=sr2i2_flagDep==4'he && srcFlight || ~rs2i2_flagDep[3] || sr2i2_flagDep==4'h8;
   
   assign infl[0]=1'b0;
   assign infl[3]=1'b0;
@@ -489,15 +489,15 @@ endmodule
   
   /*
 module get_funit(
-  rs0i0_index,rs0i0_port,rs0i0_en,
-  rs0i1_index,rs0i1_port,rs0i1_en,
-  rs0i2_index,rs0i2_port,rs0i2_en,
-  rs1i0_index,rs1i0_port,rs1i0_en,
-  rs1i1_index,rs1i1_port,rs1i1_en,
-  rs1i2_index,rs1i2_port,rs1i2_en,
-  rs2i0_index,rs2i0_port,rs2i0_en,
-  rs2i1_index,rs2i1_port,rs2i1_en,
-  rs2i2_index,rs2i2_port,rs2i2_en,
+  sr0i0_index,sr0i0_port,sr0i0_en,
+  sr0i1_index,sr0i1_port,sr0i1_en,
+  sr0i2_index,sr0i2_port,sr0i2_en,
+  sr1i0_index,sr1i0_port,sr1i0_en,
+  sr1i1_index,sr1i1_port,sr1i1_en,
+  sr1i2_index,sr1i2_port,sr1i2_en,
+  sr2i0_index,sr2i0_port,sr2i0_en,
+  sr2i1_index,sr2i1_port,sr2i1_en,
+  sr2i2_index,sr2i2_port,sr2i2_en,
   funit0,funit1,funit2,
   funit3,funit4,funit5,
   funit6,funit7,funit8,
@@ -514,43 +514,43 @@ module get_funit(
   
   localparam FN_WIDTH=10;
   
-  input [3:0] rs0i0_index;
-  input [PORT_WIDTH-1:0] rs0i0_port;
-  input rs0i0_en;
+  input [3:0] sr0i0_index;
+  input [PORT_WIDTH-1:0] sr0i0_port;
+  input sr0i0_en;
 
-  input [3:0] rs0i1_index;
-  input [PORT_WIDTH-1:0] rs0i1_port;
-  input rs0i1_en;
+  input [3:0] sr0i1_index;
+  input [PORT_WIDTH-1:0] sr0i1_port;
+  input sr0i1_en;
 
-  input [3:0] rs0i2_index;
-  input [PORT_WIDTH-1:0] rs0i2_port;
-  input rs0i2_en;
-
-
-  input [3:0] rs1i0_index;
-  input [PORT_WIDTH-1:0] rs1i0_port;
-  input rs1i0_en;
-
-  input [3:0] rs1i1_index;
-  input [PORT_WIDTH-1:0] rs1i1_port;
-  input rs1i1_en;
-
-  input [3:0] rs1i2_index;
-  input [PORT_WIDTH-1:0] rs1i2_port;
-  input rs1i2_en;
+  input [3:0] sr0i2_index;
+  input [PORT_WIDTH-1:0] sr0i2_port;
+  input sr0i2_en;
 
 
-  input [3:0] rs2i0_index;
-  input [PORT_WIDTH-1:0] rs2i0_port;
-  input rs2i0_en;
+  input [3:0] sr1i0_index;
+  input [PORT_WIDTH-1:0] sr1i0_port;
+  input sr1i0_en;
 
-  input [3:0] rs2i1_index;
-  input [PORT_WIDTH-1:0] rs2i1_port;
-  input rs2i1_en;
+  input [3:0] sr1i1_index;
+  input [PORT_WIDTH-1:0] sr1i1_port;
+  input sr1i1_en;
 
-  input [3:0] rs2i2_index;
-  input [PORT_WIDTH-1:0] rs2i2_port;
-  input rs2i2_en;
+  input [3:0] sr1i2_index;
+  input [PORT_WIDTH-1:0] sr1i2_port;
+  input sr1i2_en;
+
+
+  input [3:0] sr2i0_index;
+  input [PORT_WIDTH-1:0] sr2i0_port;
+  input sr2i0_en;
+
+  input [3:0] sr2i1_index;
+  input [PORT_WIDTH-1:0] sr2i1_port;
+  input sr2i1_en;
+
+  input [3:0] sr2i2_index;
+  input [PORT_WIDTH-1:0] sr2i2_port;
+  input sr2i2_en;
   
   output [9:0] funit0;
   output [9:0] funit1;
@@ -578,36 +578,36 @@ module get_funit(
   generate
       genvar k;
       for(k=0;k<10;k=k+1) begin
-          wire [8:0] rs_eq;
-          assign rs_eq[0]= k==rs0i0_index;
-          assign rs_eq[1]= k==rs1i0_index;
-          assign rs_eq[2]= k==rs2i0_index;
-          assign rs_eq[3]= k==rs0i1_index;
-          assign rs_eq[4]= k==rs1i1_index;
-          assign rs_eq[5]= k==rs2i1_index;
-          assign rs_eq[6]= k==rs0i2_index;
-          assign rs_eq[7]= k==rs1i2_index;
-          assign rs_eq[8]= k==rs2i2_index;
+          wire [8:0] sr_eq;
+          assign sr_eq[0]= k==sr0i0_index;
+          assign sr_eq[1]= k==sr1i0_index;
+          assign sr_eq[2]= k==sr2i0_index;
+          assign sr_eq[3]= k==sr0i1_index;
+          assign sr_eq[4]= k==sr1i1_index;
+          assign sr_eq[5]= k==sr2i1_index;
+          assign sr_eq[6]= k==sr0i2_index;
+          assign sr_eq[7]= k==sr1i2_index;
+          assign sr_eq[8]= k==sr2i2_index;
           
-          assign funt[k][0]=rs_eq[0] & (rs0i0_port=PORT_LOAD || rs0i0_port==PORT_STORE) ||
-            rs_eq[3] & (rs0i1_port=PORT_LOAD || rs0i1_port==PORT_STORE);
-          assign funt[k][1]=rs_eq[1] & (rs1i0_port=PORT_LOAD || rs1i0_port==PORT_STORE) ||
-            rs_eq[4] & (rs1i1_port=PORT_LOAD || rs1i1_port==PORT_STORE);
-          assign funt[k][2]=rs_eq[2] & (rs2i0_port=PORT_LOAD || rs2i0_port==PORT_STORE) ||
-            rs_eq[5] & (rs2i1_port=PORT_LOAD || rs2i1_port==PORT_STORE);
+          assign funt[k][0]=sr_eq[0] & (rs0i0_port=PORT_LOAD || sr0i0_port==PORT_STORE) ||
+            sr_eq[3] & (rs0i1_port=PORT_LOAD || sr0i1_port==PORT_STORE);
+          assign funt[k][1]=sr_eq[1] & (rs1i0_port=PORT_LOAD || sr1i0_port==PORT_STORE) ||
+            sr_eq[4] & (rs1i1_port=PORT_LOAD || sr1i1_port==PORT_STORE);
+          assign funt[k][2]=sr_eq[2] & (rs2i0_port=PORT_LOAD || sr2i0_port==PORT_STORE) ||
+            sr_eq[5] & (rs2i1_port=PORT_LOAD || sr2i1_port==PORT_STORE);
           assign funt[k][3]=|funt[k][2:0];
           
-          assign funt[k][4]=rs_eq[3] && rs0i1_port==PORT_ALU;
-          assign funt[k][5]=rs_eq[4] && rs1i1_port==PORT_ALU;
-          assign funt[k][6]=(rs_eq[5] && rs2i1_port==PORT_ALU) ||
-             (rs_eq[8] && rs2i2_port==PORT_MUL);
+          assign funt[k][4]=sr_eq[3] && sr0i1_port==PORT_ALU;
+          assign funt[k][5]=sr_eq[4] && sr1i1_port==PORT_ALU;
+          assign funt[k][6]=(rs_eq[5] && sr2i1_port==PORT_ALU) ||
+             (rs_eq[8] && sr2i2_port==PORT_MUL);
           
-          assign funt[k][7]=(rs_eq[6] && rs0i2_port!=PORT_MUL) ||
-            (rs_eq[3]&& rs0i1_port==PORT_SHIFT);
-          assign funt[k][8]=(rs_eq[7] && rs1i2_port!=PORT_MUL) ||
-            (rs_eq[4]&& rs1i1_port==PORT_SHIFT);
-          assign funt[k][9]=(rs_eq[8] && rs2i2_port!=PORT_MUL) ||
-            (rs_eq[5]&& rs2i1_port==PORT_SHIFT);
+          assign funt[k][7]=(rs_eq[6] && sr0i2_port!=PORT_MUL) ||
+            (rs_eq[3]&& sr0i1_port==PORT_SHIFT);
+          assign funt[k][8]=(rs_eq[7] && sr1i2_port!=PORT_MUL) ||
+            (rs_eq[4]&& sr1i1_port==PORT_SHIFT);
+          assign funt[k][9]=(rs_eq[8] && sr2i2_port!=PORT_MUL) ||
+            (rs_eq[5]&& sr2i1_port==PORT_SHIFT);
       end
   endgenerate  
 endmodule
@@ -616,15 +616,15 @@ endmodule
   
   
 module get_funit(
-  rs0i0_index,rs0i0_port,
-  rs0i1_index,rs0i1_port,
-  rs0i2_index,rs0i2_port,
-  rs1i0_index,rs1i0_port,
-  rs1i1_index,rs1i1_port,
-  rs1i2_index,rs1i2_port,
-  rs2i0_index,rs2i0_port,
-  rs2i1_index,rs2i1_port,
-  rs2i2_index,rs2i2_port,mul,
+  sr0i0_index,sr0i0_port,
+  sr0i1_index,sr0i1_port,
+  sr0i2_index,sr0i2_port,
+  sr1i0_index,sr1i0_port,
+  sr1i1_index,sr1i1_port,
+  sr1i2_index,sr1i2_port,
+  sr2i0_index,sr2i0_port,
+  sr2i1_index,sr2i1_port,
+  sr2i2_index,sr2i2_port,mul,
   funit0,funit1,funit2,
   funit3,funit4,funit5,
   funit6,funit7,funit8
@@ -646,34 +646,34 @@ module get_funit(
   
   localparam FN_WIDTH=10;
   
-  input [3:0] rs0i0_index;
-  input [PORT_WIDTH-1:0] rs0i0_port;
+  input [3:0] sr0i0_index;
+  input [PORT_WIDTH-1:0] sr0i0_port;
 
-  input [3:0] rs0i1_index;
-  input [PORT_WIDTH-1:0] rs0i1_port;
+  input [3:0] sr0i1_index;
+  input [PORT_WIDTH-1:0] sr0i1_port;
 
-  input [3:0] rs0i2_index;
-  input [PORT_WIDTH-1:0] rs0i2_port;
-
-
-  input [3:0] rs1i0_index;
-  input [PORT_WIDTH-1:0] rs1i0_port;
-
-  input [3:0] rs1i1_index;
-  input [PORT_WIDTH-1:0] rs1i1_port;
-
-  input [3:0] rs1i2_index;
-  input [PORT_WIDTH-1:0] rs1i2_port;
+  input [3:0] sr0i2_index;
+  input [PORT_WIDTH-1:0] sr0i2_port;
 
 
-  input [3:0] rs2i0_index;
-  input [PORT_WIDTH-1:0] rs2i0_port;
+  input [3:0] sr1i0_index;
+  input [PORT_WIDTH-1:0] sr1i0_port;
 
-  input [3:0] rs2i1_index;
-  input [PORT_WIDTH-1:0] rs2i1_port;
+  input [3:0] sr1i1_index;
+  input [PORT_WIDTH-1:0] sr1i1_port;
 
-  input [3:0] rs2i2_index;
-  input [PORT_WIDTH-1:0] rs2i2_port;
+  input [3:0] sr1i2_index;
+  input [PORT_WIDTH-1:0] sr1i2_port;
+
+
+  input [3:0] sr2i0_index;
+  input [PORT_WIDTH-1:0] sr2i0_port;
+
+  input [3:0] sr2i1_index;
+  input [PORT_WIDTH-1:0] sr2i1_port;
+
+  input [3:0] sr2i2_index;
+  input [PORT_WIDTH-1:0] sr2i2_port;
   input mul;
 
   output [9:0] funit0;
@@ -703,46 +703,46 @@ module get_funit(
 
       for(k=0;k<10;k=k+1) funit[k]=10'b0;
       
-      funit[0][0]=rs0i0_port!=PORT_STORE;
-      funit[3][1]=rs1i0_port!=PORT_STORE;
-      funit[6][2]=rs2i0_port!=PORT_STORE;
+      funit[0][0]=sr0i0_port!=PORT_STORE;
+      funit[3][1]=sr1i0_port!=PORT_STORE;
+      funit[6][2]=sr2i0_port!=PORT_STORE;
       
-      funit[1][0]=rs0i1_port==PORT_LOAD;
-      funit[4][1]=rs1i1_port==PORT_LOAD;
-      funit[7][2]=rs2i1_port==PORT_LOAD;
+      funit[1][0]=sr0i1_port==PORT_LOAD;
+      funit[4][1]=sr1i1_port==PORT_LOAD;
+      funit[7][2]=sr2i1_port==PORT_LOAD;
 
-      funit[0][3]=rs0i0_port!=PORT_STORE;
-      funit[3][3]=rs1i0_port!=PORT_STORE;
-      funit[6][3]=rs2i0_port!=PORT_STORE;
+      funit[0][3]=sr0i0_port!=PORT_STORE;
+      funit[3][3]=sr1i0_port!=PORT_STORE;
+      funit[6][3]=sr2i0_port!=PORT_STORE;
       
-      funit[1][3]=rs0i1_port==PORT_LOAD;
-      funit[4][3]=rs1i1_port==PORT_LOAD;
-      funit[7][3]=rs2i1_port==PORT_LOAD;
+      funit[1][3]=sr0i1_port==PORT_LOAD;
+      funit[4][3]=sr1i1_port==PORT_LOAD;
+      funit[7][3]=sr2i1_port==PORT_LOAD;
       
-      funit[1][4]=rs0i1_port==PORT_ALU || rs0i1_port==PORT_FADD || rs0i1_port==PORT_FANY 
-        || rs0i1_port==PORT_VADD || rs0i1_port==PORT_VANY;
-      if (rs0i1_port==PORT_ALU && (rs0i2_port==PORT_VADD || rs0i2_port==PORT_FADD)) funit[1][4]=0;
-      funit[4][5]=rs1i1_port==PORT_ALU || rs1i1_port==PORT_FADD || rs1i1_port==PORT_FANY 
-        || rs1i1_port==PORT_VADD || rs1i1_port==PORT_VANY;
-      if (rs1i1_port==PORT_ALU && (rs1i2_port==PORT_VADD || rs1i2_port==PORT_FADD)) funit[4][5]=0;
-      funit[7][6]=rs2i1_port==PORT_ALU || rs2i1_port==PORT_FADD || rs2i1_port==PORT_FANY 
-        || rs2i1_port==PORT_VADD || rs2i1_port==PORT_VANY;
-      if (rs2i1_port==PORT_ALU && (rs2i2_port==PORT_VADD || rs2i2_port==PORT_FADD)) funit[7][6]=0;
+      funit[1][4]=sr0i1_port==PORT_ALU || sr0i1_port==PORT_FADD || sr0i1_port==PORT_FANY 
+        || sr0i1_port==PORT_VADD || sr0i1_port==PORT_VANY;
+      if (rs0i1_port==PORT_ALU && (rs0i2_port==PORT_VADD || sr0i2_port==PORT_FADD)) funit[1][4]=0;
+      funit[4][5]=sr1i1_port==PORT_ALU || sr1i1_port==PORT_FADD || sr1i1_port==PORT_FANY 
+        || sr1i1_port==PORT_VADD || sr1i1_port==PORT_VANY;
+      if (rs1i1_port==PORT_ALU && (rs1i2_port==PORT_VADD || sr1i2_port==PORT_FADD)) funit[4][5]=0;
+      funit[7][6]=sr2i1_port==PORT_ALU || sr2i1_port==PORT_FADD || sr2i1_port==PORT_FANY 
+        || sr2i1_port==PORT_VADD || sr2i1_port==PORT_VANY;
+      if (rs2i1_port==PORT_ALU && (rs2i2_port==PORT_VADD || sr2i2_port==PORT_FADD)) funit[7][6]=0;
 
-      funit[1][7]=rs0i1_port==PORT_SHIFT || rs0i1_port==PORT_VCMP || rs0i1_port==PORT_FMUL;
-      if (rs0i1_port==PORT_ALU && (rs0i2_port==PORT_VADD || rs0i2_port==PORT_FADD)) funit[1][7]=1;
-      funit[4][8]=rs1i1_port==PORT_SHIFT || rs1i1_port==PORT_VCMP || rs1i1_port==PORT_FMUL;
-      if (rs1i1_port==PORT_ALU && (rs1i2_port==PORT_VADD || rs1i2_port==PORT_FADD)) funit[4][8]=1;
-      funit[7][9]=rs2i1_port==PORT_SHIFT || rs2i1_port==PORT_VCMP || rs2i1_port==PORT_FMUL;
-      if (rs2i1_port==PORT_ALU && (rs2i2_port==PORT_VADD || rs2i2_port==PORT_FADD)) funit[7][9]=1;
+      funit[1][7]=sr0i1_port==PORT_SHIFT || sr0i1_port==PORT_VCMP || sr0i1_port==PORT_FMUL;
+      if (rs0i1_port==PORT_ALU && (rs0i2_port==PORT_VADD || sr0i2_port==PORT_FADD)) funit[1][7]=1;
+      funit[4][8]=sr1i1_port==PORT_SHIFT || sr1i1_port==PORT_VCMP || sr1i1_port==PORT_FMUL;
+      if (rs1i1_port==PORT_ALU && (rs1i2_port==PORT_VADD || sr1i2_port==PORT_FADD)) funit[4][8]=1;
+      funit[7][9]=sr2i1_port==PORT_SHIFT || sr2i1_port==PORT_VCMP || sr2i1_port==PORT_FMUL;
+      if (rs2i1_port==PORT_ALU && (rs2i2_port==PORT_VADD || sr2i2_port==PORT_FADD)) funit[7][9]=1;
       
-      funit[2][7]=rs0i2_port!=PORT_FADD && rs0i2_port!=PORT_VADD;      
-      funit[5][8]=(rs1i2_port!=PORT_FADD && rs1i2_port!=PORT_VADD) || rs2i2_port==PORT_MUL;      
-      funit[8][9]=rs2i2_port!=PORT_FADD && rs2i2_port!=PORT_VADD && ~mul; 
+      funit[2][7]=sr0i2_port!=PORT_FADD && sr0i2_port!=PORT_VADD;      
+      funit[5][8]=(rs1i2_port!=PORT_FADD && sr1i2_port!=PORT_VADD) || sr2i2_port==PORT_MUL;      
+      funit[8][9]=sr2i2_port!=PORT_FADD && sr2i2_port!=PORT_VADD && ~mul; 
       
-      funit[2][4]=rs0i2_port==PORT_FADD || rs0i2_port==PORT_VADD;
-      funit[5][5]=rs1i2_port==PORT_FADD || rs1i2_port==PORT_VADD;
-      funit[8][6]=rs2i2_port==PORT_FADD || rs2i2_port==PORT_VADD || mul;     
+      funit[2][4]=sr0i2_port==PORT_FADD || sr0i2_port==PORT_VADD;
+      funit[5][5]=sr1i2_port==PORT_FADD || sr1i2_port==PORT_VADD;
+      funit[8][6]=sr2i2_port==PORT_FADD || sr2i2_port==PORT_VADD || mul;     
 
   end
 endmodule
@@ -928,9 +928,9 @@ endmodule
 module backend_get_ret(
   newR0,newR1,newR2,newR3,newR4,newR5,newR6,newR7,newR8,
   en0,en1,en2,en3,en4,en5,en6,en7,en8, 
-  rs_index0,rs_index1,rs_index2,rs_index3,
-  rs_index4,rs_index5,rs_index6,rs_index7,
-  rs_index8,
+  sr_index0,sr_index1,sr_index2,sr_index3,
+  sr_index4,sr_index5,sr_index6,sr_index7,
+  sr_index8,
   ret0,ret1,ret2,
   ret3,ret4,ret5,
   ret6,ret7,ret8
@@ -949,15 +949,15 @@ module backend_get_ret(
   
   input en0,en1,en2,en3,en4,en5,en6,en7,en8; 
 
-  input [3:0] rs_index0;
-  input [3:0] rs_index1;
-  input [3:0] rs_index2;
-  input [3:0] rs_index3;
-  input [3:0] rs_index4;
-  input [3:0] rs_index5;
-  input [3:0] rs_index6;
-  input [3:0] rs_index7;
-  input [3:0] rs_index8;
+  input [3:0] sr_index0;
+  input [3:0] sr_index1;
+  input [3:0] sr_index2;
+  input [3:0] sr_index3;
+  input [3:0] sr_index4;
+  input [3:0] sr_index5;
+  input [3:0] sr_index6;
+  input [3:0] sr_index7;
+  input [3:0] sr_index8;
 
   output reg [3:0] ret0;
   output reg [3:0] ret1;
@@ -970,51 +970,51 @@ module backend_get_ret(
   output reg [3:0] ret8;
 
   reg [3:0] ret[8:0];
-  reg [3:0] rs_newR[8:0];
-  reg [3:0] rs_index[9:0];
-  reg [8:0] rs_ret_en;
+  reg [3:0] sr_newR[8:0];
+  reg [3:0] sr_index[9:0];
+  reg [8:0] sr_ret_en;
   
   integer k,j;
   
   always @* begin
       for (k=0;k<3;k=k+1) begin
-          rs_newR[k]=4'd9;
-          if (newR0[3:0]==k*3 && en0) rs_newR[k]=4'd0;
-          if (newR1[3:0]==k*3 && en1) rs_newR[k]=4'd1;
-          if (newR2[3:0]==k*3 && en2) rs_newR[k]=4'd2;
+          sr_newR[k]=4'd9;
+          if (newR0[3:0]==k*3 && en0) sr_newR[k]=4'd0;
+          if (newR1[3:0]==k*3 && en1) sr_newR[k]=4'd1;
+          if (newR2[3:0]==k*3 && en2) sr_newR[k]=4'd2;
 
-          rs_newR[3+k]=4'd9;
-          if (newR3[3:0]==k*3+1 && en3) rs_newR[3+k]=4'd3;
-          if (newR4[3:0]==k*3+1 && en4) rs_newR[3+k]=4'd4;
-          if (newR5[3:0]==k*3+1 && en5) rs_newR[3+k]=4'd5;
+          sr_newR[3+k]=4'd9;
+          if (newR3[3:0]==k*3+1 && en3) sr_newR[3+k]=4'd3;
+          if (newR4[3:0]==k*3+1 && en4) sr_newR[3+k]=4'd4;
+          if (newR5[3:0]==k*3+1 && en5) sr_newR[3+k]=4'd5;
           
-          rs_newR[6+k]=4'd9;
-          if (newR6[3:0]==k*3+2 && en6) rs_newR[6+k]=4'd6;
-          if (newR7[3:0]==k*3+2 && en7) rs_newR[6+k]=4'd7;
-          if (newR8[3:0]==k*3+2 && en8) rs_newR[6+k]=4'd8;
+          sr_newR[6+k]=4'd9;
+          if (newR6[3:0]==k*3+2 && en6) sr_newR[6+k]=4'd6;
+          if (newR7[3:0]==k*3+2 && en7) sr_newR[6+k]=4'd7;
+          if (newR8[3:0]==k*3+2 && en8) sr_newR[6+k]=4'd8;
           
 
       end
   end
 
   always @* begin
-      rs_ret_en={en8,en7,en6,en5,en4,en3,en2,en1,en0};
+      sr_ret_en={en8,en7,en6,en5,en4,en3,en2,en1,en0};
       
       for(j=0;j<9;j=j+1) begin
-          ret[j]=rs_index[rs_newR[j]];
+          ret[j]=sr_index[rs_newR[j]];
       end
   end
   always @* begin
-      rs_index[0]=rs_index0;
-      rs_index[1]=rs_index1;
-      rs_index[2]=rs_index2;
-      rs_index[3]=rs_index3;
-      rs_index[4]=rs_index4;
-      rs_index[5]=rs_index5;
-      rs_index[6]=rs_index6;
-      rs_index[7]=rs_index7;
-      rs_index[8]=rs_index8;
-      rs_index[9]=4'hf;
+      sr_index[0]=sr_index0;
+      sr_index[1]=sr_index1;
+      sr_index[2]=sr_index2;
+      sr_index[3]=sr_index3;
+      sr_index[4]=sr_index4;
+      sr_index[5]=sr_index5;
+      sr_index[6]=sr_index6;
+      sr_index[7]=sr_index7;
+      sr_index[8]=sr_index8;
+      sr_index[9]=4'hf;
   end
   always @* begin
       ret0=ret[0];
@@ -1032,36 +1032,36 @@ endmodule
 
 
 module backend_reorder_free_regs(
-  rs_reg0,rs_reg1,rs_reg2,
-  rs_reg3,rs_reg4,rs_reg5,
-  rs_reg6,rs_reg7,rs_reg8,
-  rs_index0,rs_index1,rs_index2,
-  rs_index3,rs_index4,rs_index5,
-  rs_index6,rs_index7,rs_index8,
+  sr_reg0,sr_reg1,sr_reg2,
+  sr_reg3,sr_reg4,sr_reg5,
+  sr_reg6,sr_reg7,sr_reg8,
+  sr_index0,sr_index1,sr_index2,
+  sr_index3,sr_index4,sr_index5,
+  sr_index6,sr_index7,sr_index8,
   instr_reg0,instr_reg1,instr_reg2,
   instr_reg3,instr_reg4,instr_reg5,
   instr_reg6,instr_reg7,instr_reg8,
   instr_reg9
   );
-  input [8:0] rs_reg0;
-  input [8:0] rs_reg1;
-  input [8:0] rs_reg2;
-  input [8:0] rs_reg3;
-  input [8:0] rs_reg4;
-  input [8:0] rs_reg5;
-  input [8:0] rs_reg6;
-  input [8:0] rs_reg7;
-  input [8:0] rs_reg8;
+  input [8:0] sr_reg0;
+  input [8:0] sr_reg1;
+  input [8:0] sr_reg2;
+  input [8:0] sr_reg3;
+  input [8:0] sr_reg4;
+  input [8:0] sr_reg5;
+  input [8:0] sr_reg6;
+  input [8:0] sr_reg7;
+  input [8:0] sr_reg8;
 
-  input [3:0] rs_index0;
-  input [3:0] rs_index1;
-  input [3:0] rs_index2;
-  input [3:0] rs_index3;
-  input [3:0] rs_index4;
-  input [3:0] rs_index5;
-  input [3:0] rs_index6;
-  input [3:0] rs_index7;
-  input [3:0] rs_index8;
+  input [3:0] sr_index0;
+  input [3:0] sr_index1;
+  input [3:0] sr_index2;
+  input [3:0] sr_index3;
+  input [3:0] sr_index4;
+  input [3:0] sr_index5;
+  input [3:0] sr_index6;
+  input [3:0] sr_index7;
+  input [3:0] sr_index8;
 
   output [8:0] instr_reg0;
   output [8:0] instr_reg1;
@@ -1074,29 +1074,29 @@ module backend_reorder_free_regs(
   output [8:0] instr_reg8;
   output [8:0] instr_reg9;
 
-  wire [8:0] rs_reg[8:0];
-  wire [3:0] rs_index[8:0];
+  wire [8:0] sr_reg[8:0];
+  wire [3:0] sr_index[8:0];
   wire [8:0] instr_reg[9:0];
 
-  assign rs_reg[0]=rs_reg0;
-  assign rs_reg[1]=rs_reg1;
-  assign rs_reg[2]=rs_reg2;
-  assign rs_reg[3]=rs_reg3;
-  assign rs_reg[4]=rs_reg4;
-  assign rs_reg[5]=rs_reg5;
-  assign rs_reg[6]=rs_reg6;
-  assign rs_reg[7]=rs_reg7;
-  assign rs_reg[8]=rs_reg8;
+  assign sr_reg[0]=sr_reg0;
+  assign sr_reg[1]=sr_reg1;
+  assign sr_reg[2]=sr_reg2;
+  assign sr_reg[3]=sr_reg3;
+  assign sr_reg[4]=sr_reg4;
+  assign sr_reg[5]=sr_reg5;
+  assign sr_reg[6]=sr_reg6;
+  assign sr_reg[7]=sr_reg7;
+  assign sr_reg[8]=sr_reg8;
 
-  assign rs_index[0]=rs_index0;
-  assign rs_index[1]=rs_index1;
-  assign rs_index[2]=rs_index2;
-  assign rs_index[3]=rs_index3;
-  assign rs_index[4]=rs_index4;
-  assign rs_index[5]=rs_index5;
-  assign rs_index[6]=rs_index6;
-  assign rs_index[7]=rs_index7;
-  assign rs_index[8]=rs_index8;
+  assign sr_index[0]=sr_index0;
+  assign sr_index[1]=sr_index1;
+  assign sr_index[2]=sr_index2;
+  assign sr_index[3]=sr_index3;
+  assign sr_index[4]=sr_index4;
+  assign sr_index[5]=sr_index5;
+  assign sr_index[6]=sr_index6;
+  assign sr_index[7]=sr_index7;
+  assign sr_index[8]=sr_index8;
 
   assign instr_reg0=instr_reg[0];
   assign instr_reg1=instr_reg[1];
@@ -1114,8 +1114,8 @@ module backend_reorder_free_regs(
       for(j=0;j<10;j=j+1) begin
 	  wire [8:0] instr_eq;
 	  for(k=0;k<8;k=k+1) begin
-	      assign instr_eq[k]=rs_index[k]==j;
-	      assign instr_reg[j]=instr_eq[k] ? rs_reg[k] : 9'bz;
+	      assign instr_eq[k]=sr_index[k]==j;
+	      assign instr_reg[j]=instr_eq[k] ? sr_reg[k] : 9'bz;
           end
 	  assign instr_reg[j]=instr_eq ? 9'bz : 9'h000;
       end
@@ -1124,40 +1124,40 @@ endmodule
  
  
 module get_LDQ_new_en(
-  rs0i0_port,rs0i0_ldst_flg, 
-  rs1i0_port,rs1i0_ldst_flg, 
-  rs2i0_port,rs2i0_ldst_flg, 
-  rs0i1_port,rs0i1_ldst_flg, 
-  rs1i1_port,rs1i1_ldst_flg, 
-  rs2i1_port,rs2i1_ldst_flg,
+  sr0i0_port,sr0i0_ldst_flg, 
+  sr1i0_port,sr1i0_ldst_flg, 
+  sr2i0_port,sr2i0_ldst_flg, 
+  sr0i1_port,sr0i1_ldst_flg, 
+  sr1i1_port,sr1i1_ldst_flg, 
+  sr2i1_port,sr2i1_ldst_flg,
   new_mask);
 
   localparam PORT_WIDTH=4;
   localparam PORT_LOAD=4'd1;
   
-  input [PORT_WIDTH-1:0] rs0i0_port;
-  input rs0i0_ldst_flg;
-  input [PORT_WIDTH-1:0] rs1i0_port;
-  input rs1i0_ldst_flg;
-  input [PORT_WIDTH-1:0] rs2i0_port;
-  input rs2i0_ldst_flg;
-  input [PORT_WIDTH-1:0] rs0i1_port;
-  input rs0i1_ldst_flg;
-  input [PORT_WIDTH-1:0] rs1i1_port;
-  input rs1i1_ldst_flg;
-  input [PORT_WIDTH-1:0] rs2i1_port;
-  input rs2i1_ldst_flg;
+  input [PORT_WIDTH-1:0] sr0i0_port;
+  input sr0i0_ldst_flg;
+  input [PORT_WIDTH-1:0] sr1i0_port;
+  input sr1i0_ldst_flg;
+  input [PORT_WIDTH-1:0] sr2i0_port;
+  input sr2i0_ldst_flg;
+  input [PORT_WIDTH-1:0] sr0i1_port;
+  input sr0i1_ldst_flg;
+  input [PORT_WIDTH-1:0] sr1i1_port;
+  input sr1i1_ldst_flg;
+  input [PORT_WIDTH-1:0] sr2i1_port;
+  input sr2i1_ldst_flg;
 
   output [5:0] new_mask;
 
   wire [5:0] in_inc;
 
-  assign in_inc[0]=rs0i0_port==PORT_LOAD && ~rs0i0_ldst_flg;
-  assign in_inc[1]=rs1i0_port==PORT_LOAD && ~rs1i0_ldst_flg;
-  assign in_inc[2]=rs2i0_port==PORT_LOAD && ~rs2i0_ldst_flg;
-  assign in_inc[3]=rs0i1_port==PORT_LOAD && ~rs0i1_ldst_flg;
-  assign in_inc[4]=rs1i1_port==PORT_LOAD && ~rs1i1_ldst_flg;
-  assign in_inc[5]=rs2i1_port==PORT_LOAD && ~rs2i1_ldst_flg;
+  assign in_inc[0]=sr0i0_port==PORT_LOAD && ~rs0i0_ldst_flg;
+  assign in_inc[1]=sr1i0_port==PORT_LOAD && ~rs1i0_ldst_flg;
+  assign in_inc[2]=sr2i0_port==PORT_LOAD && ~rs2i0_ldst_flg;
+  assign in_inc[3]=sr0i1_port==PORT_LOAD && ~rs0i1_ldst_flg;
+  assign in_inc[4]=sr1i1_port==PORT_LOAD && ~rs1i1_ldst_flg;
+  assign in_inc[5]=sr2i1_port==PORT_LOAD && ~rs2i1_ldst_flg;
 
   assign new_mask=in_inc;
 
