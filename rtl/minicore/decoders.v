@@ -18,7 +18,7 @@ limitations under the License.
 `include "../operations.sv"
 `include "../csrss_no.sv"
 
-module decoder_permitted_i(
+module decoder_permitted_i_minicore(
   branch,
   taken,
   indir,
@@ -31,6 +31,7 @@ module decoder_permitted_i(
   sys,
   pos0,
   FPU,
+  flag,
   iAvail,
   stall,
   halt,
@@ -49,25 +50,26 @@ module decoder_permitted_i(
   input [6:0] sys;
   input [6:0] pos0;
   input [6:0] FPU;
+  input [6:0] flag;
   input [6:0] iAvail;
   input stall;
   input halt;
   input allret;
   output [6:0] perm;
 
-  wire [6:0][6:0] branch_cnt;
-  wire [6:0][6:0] taken_cnt;
-  wire [6:0][6:0] indir_cnt;
-  wire [6:0][6:0] alu_cnt;
-  wire [6:0][6:0] shift_cnt;
-  wire [6:0][6:0] load_cnt;
-  wire [6:0][6:0] store_cnt;
+  wire [6:0][9:0] branch_cnt;
+  wire [6:0][9:0] taken_cnt;
+  wire [6:0][9:0] indir_cnt;
+  wire [6:0][9:0] alu_cnt;
+  wire [6:0][9:0] shift_cnt;
+  wire [6:0][9:0] load_cnt;
+  wire [6:0][9:0] store_cnt;
   wire [6:0][10:0] mul_cnt;
   wire [6:0][10:1] mul_more_cnt;
-  wire [6:0][6:0] lsas_cnt;
-  wire [6:0][6:0] ldst_cnt;
-  wire [6:0][6:0] alu_shift_cnt;
-  wire [6:0][6:0] FPU_dke;
+  wire [6:0][9:0] lsas_cnt;
+  wire [6:0][9:0] ldst_cnt;
+  wire [6:0][9:0] alu_shift_cnt;
+  wire [6:0][9:0] FPU_dke;
   
   wire [6:0] storeL_has;
   wire [6:0] permA;
@@ -77,41 +79,31 @@ module decoder_permitted_i(
   
   generate
       genvar k;
-      for(k=0;k<10;k=k+1) begin : cnt_gen
-          popcnt10_or_less branch_mod(branch & ((10'd2<<k)-10'd1),branch_cnt[k]);
-          popcnt10_or_less taken_mod(taken & ((10'd2<<k)-10'd1),taken_cnt[k]);
-          popcnt10_or_less indir_mod(indir & ((10'd2<<k)-10'd1),indir_cnt[k]);
-          popcnt10_or_less load_mod(load & ((10'd2<<k)-10'd1),load_cnt[k]);
-          popcnt10_or_less alu_mod(alu & ((10'd2<<k)-10'd1),alu_cnt[k]);
-          popcnt10_or_less aluf_mod(FPU & alu & ((10'd2<<k)-10'd1),FPU_dke[k]);
-          popcnt10_or_less shift_mod(shift & ((10'd2<<k)-10'd1),shift_cnt[k]);
-          popcnt10_or_less alu_shift_mod((alu|shift) & ((10'd2<<k)-10'd1),alu_shift_cnt[k]);
-          popcnt10_or_less store_mod(store & ((10'd2<<k)-10'd1),store_cnt[k]);
-          popcnt10_or_less ldst_mod((store|load) & ((10'd2<<k)-10'd1),ldst_cnt[k]);
-          popcnt10 mul_mod(mul & ((10'd2<<k)-10'd1),mul_cnt[k]);
-          popcnt10_or_more mul_more_mod(mul & ((10'd2<<k)-10'd1),mul_more_cnt[k]);
-          popcnt10_or_less lsas_mod((load|shift|alu|store) & ((10'd2<<k)-10'd1),lsas_cnt[k]);
+      for(k=0;k<7;k=k+1) begin : cnt_gen
+          popcnt10_or_less branch_mod({3'b0,branch} & ((10'd2<<k)-10'd1),branch_cnt[k]);
+          popcnt10_or_less taken_mod({3'b0,taken }& ((10'd2<<k)-10'd1),taken_cnt[k]);
+          popcnt10_or_less indir_mod({3'b0,indir} & ((10'd2<<k)-10'd1),indir_cnt[k]);
+          popcnt10_or_less load_mod({3'b0,load} & ((10'd2<<k)-10'd1),load_cnt[k]);
+          popcnt10_or_less alu_mod({3'b0,(alu|shift) & flag} & ((10'd2<<k)-10'd1),alu_cnt[k]);
+          popcnt10_or_less aluf_mod({3'b0,FPU & alu} & ((10'd2<<k)-10'd1),FPU_dke[k]);
+          popcnt10_or_less shift_mod({3'b0,FPU & shift} & ((10'd2<<k)-10'd1),shift_cnt[k]);
+          popcnt10_or_less alu_shift_mod({3'b0,(alu|shift) }& ((10'd2<<k)-10'd1),alu_shift_cnt[k]);
+          popcnt10_or_less store_mod({3'b0,store} & ((10'd2<<k)-10'd1),store_cnt[k]);
+          popcnt10_or_less ldst_mod({3'b0,(store|load)} & ((10'd2<<k)-10'd1),ldst_cnt[k]);
+          popcnt10 mul_mod({3'b0,mul} & ((10'd2<<k)-10'd1),mul_cnt[k]);
+          popcnt10_or_more mul_more_mod({3'b0,mul} & ((10'd2<<k)-10'd1),mul_more_cnt[k]);
+          popcnt10_or_less lsas_mod({3'b0,(load|shift|alu|store)} & ((10'd2<<k)-10'd1),lsas_cnt[k]);
           
           assign storeL_has[k]=(storeL & ((10'd2<<k)-10'd1))!=0;
           
-          assign permA[k]=(~storeL_has[k] & mul_cnt[k][0]) ? load_cnt[k][6] & alu_cnt[k][6] & shift_cnt[k][3] & 
-            store_cnt[k][2] & ldst_cnt[k][5] & alu_shift_cnt[k][6] & lsas_cnt[k][9] : 1'bz; 
-          assign permA[k]=(storeL_has[k] & mul_cnt[k][0]) ? load_cnt[k][5] & alu_cnt[k][6] & shift_cnt[k][3] & 
-            store_cnt[k][2] & ldst_cnt[k][5] & alu_shift_cnt[k][6] & lsas_cnt[k][8] : 1'bz; 
-          assign permA[k]=(~storeL_has[k] & mul_cnt[k][1]) ? load_cnt[k][3] & alu_cnt[k][4] && shift_cnt[k][3] & 
-            store_cnt[k][2] & lsas_cnt[k][7] & alu_shift_cnt[k][4] & ldst_cnt[k][5] : 1'bz; 
-          assign permA[k]=(storeL_has[k] && mul_cnt[k][1]) ? load_cnt[k][3] & alu_cnt[k][4] && shift_cnt[k][3] & 
-            store_cnt[k][2] & lsas_cnt[k][6] & alu_shift_cnt[k][4] & ldst_cnt[k][4]: 1'bz; 
-          assign permA[k]=mul_more_cnt[k][2] ? 1'b0 : 1'bz;
+          assign permA[k]=!(load[k]&&(alu[k:0]>>1)!=0) && load_cnt[2] && store_cnt[1] && alu_shift_cnt[2]; 
           
           assign permB[k]=branch_cnt[k][2] & taken_cnt[k][1] & indir_cnt[k][1];
           
           if (k>0)
-              assign permC[k]=(|(sys[k:0])) ? sys[k-1:0]==0 && pos0[k]==0 && FPU_dke[k][4] : pos0[k]==0 && FPU_dke[k][4];
-              //assign permC[k]=(|(sys[k:0])) ? sys[k-1:0]==0 && pos0[k]==0 && FPU_dke[k][4] : pos0[k]==0 && FPU_dke[k][4];
+              assign permC[k]=(|(sys[k:0])) ? sys[k-1:0]==0 && pos0[k]==0 && FPU_dke[k][1] && shift[2]: pos0[k]==0 && FPU_dke[k][1] && shift[2];
           else
-              assign permC[k]=(pos0[0] && allret)==0 && FPU_dke[k][4];
-              //assign permC[k]=(pos0[0] && allret)==0 && FPU_dke[k][4];
+              assign permC[k]=(pos0[0] && allret)==0 && FPU_dke[k][1] && shift[2];
       end
   endgenerate
   
