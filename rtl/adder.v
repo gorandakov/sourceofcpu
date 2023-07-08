@@ -1327,6 +1327,7 @@ module add_agu(
         assign tmp2[k+1]=(shift[3] & c3[k]) ? orab[k] : 1'bz;
       end
   endgenerate
+  //push ~(tmp1|tmp2) and ~(tmp1&tmp2) before the tristate mux
   adder_seq #(WIDTH) add_mod(tmp1,tmp2[WIDTH-1:0],~(tmp1|tmp2),~(tmp1&tmp2),out[43:0],c_s,1'b0,en,,,,);
   assign out[63:44]=en ? ptr[63:44] : 20'bz;
   agusec_shift ssh_mod(ptr[`ptr_exp],c_s[43:12],cout_sec0);
