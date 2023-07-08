@@ -89,7 +89,7 @@ module not_array(a,b);
 
 endmodule
 
-module adder_seq(a,b,out,c_s,cin,en,cout,cout8,cout16,cout32);
+module adder_seq(a,b,nP0,nG0,out,c_s,cin,en,cout,cout8,cout16,cout32);
   parameter WIDTH=44;
   input [WIDTH-1:0] a;
   input [WIDTH-1:0] b;
@@ -102,8 +102,8 @@ module adder_seq(a,b,out,c_s,cin,en,cout,cout8,cout16,cout32);
   output cout16;
   output cout32;
   
-  wire [WIDTH-1:0] nP0;
-  wire [WIDTH-1:0] nG0;
+  input [WIDTH-1:0] nP0;
+  input [WIDTH-1:0] nG0;
 
   wire [WIDTH-1:0] P1;
   wire [WIDTH-1:0] G1;
@@ -140,8 +140,6 @@ module adder_seq(a,b,out,c_s,cin,en,cout,cout8,cout16,cout32);
   
   genvar i;
   
-  nand_array #(WIDTH) nG0_mod(a,b,nG0);
-  nor_array #(WIDTH)  nP0_mod(a,b,nP0);
   
   xor_array #(WIDTH) x_mod(a,b,X);
   nxor_array #(WIDTH) nx_mod(a,b,nX);
@@ -1329,7 +1327,7 @@ module add_agu(
         assign tmp2[k+1]=(shift[3] & c3[k]) ? orab[k] : 1'bz;
       end
   endgenerate
-  adder_seq #(WIDTH) add_mod(tmp1,tmp2[WIDTH-1:0],out[43:0],c_s,1'b0,en,,,,);
+  adder_seq #(WIDTH) add_mod(tmp1,tmp2[WIDTH-1:0],~(tmp1|tmp2),~(tmp1&tmp2),out[43:0],c_s,1'b0,en,,,,);
   assign out[63:44]=en ? ptr[63:44] : 20'bz;
   agusec_shift ssh_mod(ptr[`ptr_exp],c_s[43:12],cout_sec0);
   agusec_check_upper3 #(1'b1) chk_mod(ptr,unptr[43:4],b[43:4],{dummy1,pos_ack},{dummy2,neg_ack},,,ndiff);
