@@ -233,6 +233,9 @@ module ldq_buf(
           bank_low<=4'b0;
       end else if (except && (except_thread ~^ thread)) begin
           free<=1'b1;
+          addrE<=36'bz;
+          addrO<=36'bz;
+          banks<=32'bz;
       end else if (newEn0) begin
           addrE<=newAddrE0;
           addrO<=newAddrO0;
@@ -264,8 +267,12 @@ module ldq_buf(
           confl_smp<=1'b0;
           bank_low<=newBlow1;
       end else begin
-          if (freeEnX0 && freeII0==II && ~aStall) free<=1'b1;
-          if (freeEnX1 && freeII1==II && ~aStall) free<=1'b1;
+          if ((freeEnX0 && freeII0==II)|(freeEnX1 && freeII1==II) && ~aStall) begin 
+              free<=1'b1;
+              addrE<=36'bz;
+              addrO<=36'bz;
+              banks<=32'bz;
+          end
           confl<=confl || (chkMatch0 || chkMatch1) & ~aStall || chkMatch3;
           confl_smp<=confl_smp | chkMatch3;
       end
@@ -919,8 +926,8 @@ module ldq(
 
 
 
-  assign chkL0_data=(chk_data_shr_reg[`lsqshare_wrt0]==3'd7) ? {DATA_WIDTH{1'B0}} : 'z; 
-  assign chkL1_data=(chk_data_shr_reg[`lsqshare_wrt1]==3'd7) ? {DATA_WIDTH{1'B0}} : 'z; 
+//  assign chkL0_data=(chk_data_shr_reg[`lsqshare_wrt0]==3'd7) ? {DATA_WIDTH{1'B0}} : 'z; 
+//  assign chkL1_data=(chk_data_shr_reg[`lsqshare_wrt1]==3'd7) ? {DATA_WIDTH{1'B0}} : 'z; 
 
   assign chkL0_en=(chk_data_shr_reg[`lsqshare_wrt0]==3'd7) ? 1'B0 : 1'bz; 
   assign chkL1_en=(chk_data_shr_reg[`lsqshare_wrt1]==3'd7) ? 1'B0 : 1'bz; 
@@ -996,10 +1003,10 @@ module ldq(
         expun_addr_reg<=0;
         expun_en_reg<=0;
     end else if (~init && ~aStall) begin
-        expun_addr_reg<=expun_addr;
+        expun_addr_reg<=expun_en ? expun_addr : 'z;
         expun_en_reg<=expun_en;
     end else if (~init && ~chk_en_reg) begin
-        expun_addr_reg<=expun_addr;
+        expun_addr_reg<=expun_en ? expun_addr : 'z;
         expun_en_reg<=expun_en;
     end
   end
