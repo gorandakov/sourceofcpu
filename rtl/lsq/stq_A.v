@@ -136,6 +136,8 @@ module stq_buf_A(
           if (free_en) begin 
               free<=1'b1;
               passe<=1'b0;
+              addrE<=36'bz;
+              addrO<=36'bz;
           end
           if (excpt&free&passe) begin
               passe<=1'b0;
