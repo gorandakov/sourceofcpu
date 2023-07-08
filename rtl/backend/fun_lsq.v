@@ -26,10 +26,10 @@ module fun_lsq(
   lsq_index,
   rsStall,
   rsDoStall,
-  p0_adata,p0_LSQ,p0_en,p0_rsEn,p0_smpc,p0_lsfwd,
-  p1_adata,p1_LSQ,p1_en,p1_rsEn,p1_smpc,p1_lsfwd,
-  p2_adata,p2_LSQ,p2_en,p2_rsEn,p2_smpc,p2_lsfwd,
-  p3_adata,p3_LSQ,p3_en,p3_rsEn,p3_smpc,p3_lsfwd,
+  p0_adata,p0_LSQ,p0_en,p0_rsEn,p0_smpc,p0_lsfwd,p0_skip,
+  p1_adata,p1_LSQ,p1_en,p1_rsEn,p1_smpc,p1_lsfwd,p1_skip,
+  p2_adata,p2_LSQ,p2_en,p2_rsEn,p2_smpc,p2_lsfwd,p2_skip,
+  p3_adata,p3_LSQ,p3_en,p3_rsEn,p3_smpc,p3_lsfwd,p3_skip,
   p4_adata,p4_LSQ,p4_en,
   p5_adata,p5_LSQ,p5_en,
   FU0Hit,FU0Data,
@@ -90,24 +90,28 @@ module fun_lsq(
   input                     p0_rsEn;
   input                     p0_smpc;
   input                     p0_lsfwd;
+  input                     p0_skip;
   input [`lsaddr_width-1:0] p1_adata;
   input [8:0]               p1_LSQ;
   input                     p1_en;
   input                     p1_rsEn;
   input                     p1_smpc;
   input                     p1_lsfwd;
+  input                     p1_skip;
   input [`lsaddr_width-1:0] p2_adata;
   input [8:0]               p2_LSQ;
   input                     p2_en;
   input                     p2_rsEn;
   input                     p2_smpc;
   input                     p2_lsfwd;
+  input                     p2_skip;
   input [`lsaddr_width-1:0] p3_adata;
   input [8:0]               p3_LSQ;
   input                     p3_en;
   input                     p3_rsEn;
   input                     p3_smpc;
   input                     p3_lsfwd;
+  input                     p3_skip;
   input [`lsaddr_width-1:0] p4_adata;
   input [8:0]               p4_LSQ;
   input                     p4_en;
@@ -424,13 +428,13 @@ module fun_lsq(
   .except(except),.except_thread(1'b0),
   .aStall(aStall_LSQ),
   .stall(stall_LDQ),.doStall(doStall_LDQ),
-  .new0_data(p0_adata_x),.new0_rsEn(p0_rsEn),
+  .new0_data(p0_adata_x),.new0_rsEn(p0_rsEn&~p0_skip),
    .new0_isFlag(p0_adata_x[`lsaddr_flag]),.new0_thread(1'b0),
-  .new1_data(p1_adata_x),.new1_rsEn(p1_rsEn),
+  .new1_data(p1_adata_x),.new1_rsEn(p1_rsEn&~p1_skip),
     .new1_isFlag(p1_adata_x[`lsaddr_flag]),.new1_thread(1'b0),
-  .new2_data(p2_adata_x),.new2_rsEn(p2_rsEn),
+  .new2_data(p2_adata_x),.new2_rsEn(p2_rsEn&~p2_skip),
     .new2_isFlag(p2_adata_x[`lsaddr_flag]),.new2_thread(1'b0),
-  .new3_data(p3_adata_x),.new3_rsEn(p3_rsEn),
+  .new3_data(p3_adata_x),.new3_rsEn(p3_rsEn&~p3_skip),
     .new3_isFlag(p3_adata_x[`lsaddr_flag]),.new3_thread(1'b0),
   .newI_mask(ldq_new_mask_reg),.newI_en(bundle_in_reg2),.newI_thr(1'b0),
   .chk0_dataA(LSQ_dataA0),.chk0_enA(LSQ_enA[0]),
