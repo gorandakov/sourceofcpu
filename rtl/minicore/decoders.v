@@ -37,43 +37,43 @@ module decoder_permitted_i(
   allret,
   perm
   );
-  input [6:0] branch;
-  input [6:0] taken;
-  input [6:0] indir;
-  input [6:0] alu;
-  input [6:0] shift;
-  input [6:0] load;
-  input [6:0] store;
-  input [6:0] storeL;
-  input [6:0] mul;
-  input [6:0] sys;
-  input [6:0] pos0;
-  input [6:0] FPU;
-  input [6:0] iAvail;
+  input [9:0] branch;
+  input [9:0] taken;
+  input [9:0] indir;
+  input [9:0] alu;
+  input [9:0] shift;
+  input [9:0] load;
+  input [9:0] store;
+  input [9:0] storeL;
+  input [9:0] mul;
+  input [9:0] sys;
+  input [9:0] pos0;
+  input [9:0] FPU;
+  input [9:0] iAvail;
   input stall;
   input halt;
   input allret;
-  output [6:0] perm;
+  output [9:0] perm;
 
-  wire [6:0][6:0] branch_cnt;
-  wire [6:0][6:0] taken_cnt;
-  wire [6:0][6:0] indir_cnt;
-  wire [6:0][6:0] alu_cnt;
-  wire [6:0][6:0] shift_cnt;
-  wire [6:0][6:0] load_cnt;
-  wire [6:0][6:0] store_cnt;
-  wire [6:0][10:0] mul_cnt;
-  wire [6:0][10:1] mul_more_cnt;
-  wire [6:0][6:0] lsas_cnt;
-  wire [6:0][6:0] ldst_cnt;
-  wire [6:0][6:0] alu_shift_cnt;
-  wire [6:0][6:0] FPU_dke;
+  wire [9:0][9:0] branch_cnt;
+  wire [9:0][9:0] taken_cnt;
+  wire [9:0][9:0] indir_cnt;
+  wire [9:0][9:0] alu_cnt;
+  wire [9:0][9:0] shift_cnt;
+  wire [9:0][9:0] load_cnt;
+  wire [9:0][9:0] store_cnt;
+  wire [9:0][10:0] mul_cnt;
+  wire [9:0][10:1] mul_more_cnt;
+  wire [9:0][9:0] lsas_cnt;
+  wire [9:0][9:0] ldst_cnt;
+  wire [9:0][9:0] alu_shift_cnt;
+  wire [9:0][9:0] FPU_dke;
   
-  wire [6:0] storeL_has;
-  wire [6:0] permA;
+  wire [9:0] storeL_has;
+  wire [9:0] permA;
 
-  wire [6:0] permB;
-  wire [6:0] permC;
+  wire [9:0] permB;
+  wire [9:0] permC;
   
   generate
       genvar k;
@@ -153,7 +153,7 @@ module decoder_aux_const(
  
   input clk;
   input rst;
-  input [6:0] cls_sys;
+  input [9:0] cls_sys;
   input [31:0] instr0; 
   input [31:0] instr1; 
   input [31:0] instr2; 
@@ -179,8 +179,8 @@ module decoder_aux_const(
   output riscmode;
   output disstruss;
 
-  wire [15:0] iconst[6:0];
-  wire [6:0] cls_sys_first;
+  wire [15:0] iconst[9:0];
+  wire [9:0] cls_sys_first;
   wire cls_sys_has;
   wire [15:0] aux0;
   reg [15:0] aux0_reg;
@@ -611,19 +611,19 @@ module decoder_reorder_mux(
   parameter OPERATION_WIDTH=`operation_width+5;
   parameter REG_WIDTH=6;
   
-  input [6:0] avail;
+  input [9:0] avail;
 
   input enable;
   
-  input [6:0] sel;
+  input [9:0] sel;
   
   input isMul5;
   input isMul8;
   
   input store;
   input storeL;
-  input [6:0] storeDA;
-  input [6:0] storeDB;
+  input [9:0] storeDA;
+  input [9:0] storeDB;
   
   output [OPERATION_WIDTH-1:0] operation;
   output [REG_WIDTH-1:0] rA;
@@ -656,16 +656,16 @@ module decoder_reorder_mux(
   output st_enA;
   output st_enB;
 
-  input [6:0] dec_IPRel;
-  input [6:0] dec_alloc;
-  input [6:0] dec_allocF;
-  input [6:0] dec_rAlloc;
-  input [6:0] dec_lastFl;
-  input [6:0] dec_flWr;
-  input [6:0] dec_rA_isV;
-  input [6:0] dec_rB_isV;
-  input [6:0] dec_rT_isV;
-  input [6:0] dec_ls_flag;
+  input [9:0] dec_IPRel;
+  input [9:0] dec_alloc;
+  input [9:0] dec_allocF;
+  input [9:0] dec_rAlloc;
+  input [9:0] dec_lastFl;
+  input [9:0] dec_flWr;
+  input [9:0] dec_rA_isV;
+  input [9:0] dec_rB_isV;
+  input [9:0] dec_rT_isV;
+  input [9:0] dec_ls_flag;
   
   input [OPERATION_WIDTH-1:0] dec0_operation;
   input [OPERATION_WIDTH-1:0] dec1_operation;
@@ -778,7 +778,7 @@ module decoder_reorder_mux(
   input [64:0] dec9_constant;
   input [64:0] aux_constant;
 
-  input [6:0] dec_cls_sys;
+  input [9:0] dec_cls_sys;
 
   input [REG_WIDTH-1:0] dec0_rC;
   input [REG_WIDTH-1:0] dec1_rC;
@@ -891,7 +891,7 @@ module decoder_reorder_mux(
   input [3:0] dec8_flDep;
   input [3:0] dec9_flDep;
   
-  input [6:0] dec_afterTaken;
+  input [9:0] dec_afterTaken;
 
   wire [64:0] constantA;
   wire [63:0] constantB;
@@ -1392,10 +1392,10 @@ module decoder_jpos(
   jump0,
   jump1);
 
-  input [6:0] jump;
-  input [6:0] used;
-  output [6:0] jump0;
-  output [6:0] jump1;
+  input [9:0] jump;
+  input [9:0] used;
+  output [9:0] jump0;
+  output [9:0] jump1;
 
   wire [9:-1] has1;
   wire [9:-1] has2;
@@ -1776,8 +1776,8 @@ module decoder(
 
   output [2:0] btbl_step;
 
-  input [6:0] iAvail;
-  output [6:0] iUsed;
+  input [9:0] iAvail;
+  output [9:0] iUsed;
   
   input [INSTR_WIDTH-1:0] inst0;
   input [INSTRQ_WIDTH-1:0] instQ0;
@@ -2235,7 +2235,7 @@ module decoder(
   output [1:0] jump1SC;
   output jump1Miss;
   output jump1TbufOnly;
-  output [6:0] instr_fsimd;
+  output [9:0] instr_fsimd;
   output [62:0] baseIP;
   output [3:0] baseAttr;
   
@@ -2255,74 +2255,74 @@ module decoder(
         ffx=reeg[5:2]==4'd4 ? {3'd4,reeg[1:0],thr} : { 1'b0,thr,reeg[3:0] }; 
     end
   endfunction
-  wire [6:0] csrss_retIP_en;
+  wire [9:0] csrss_retIP_en;
   wire [63:0] csrss_retIP_data;
-  reg  [6:0] csrss_retIP_en_reg;
+  reg  [9:0] csrss_retIP_en_reg;
 
   reg last_trce;
 
-  wire [6:0][INSTR_WIDTH-1:0] inst;
-  wire [6:0][INSTRQ_WIDTH-1:0] instQ;
+  wire [9:0][INSTR_WIDTH-1:0] inst;
+  wire [9:0][INSTRQ_WIDTH-1:0] instQ;
   
-  wire [6:0][OPERATION_WIDTH-6:0] dec_operation;
-  wire [6:0][4:0] dec_alucond;
-  wire [6:0][REG_WIDTH-1:0] dec_rA;
-  wire [6:0]dec_rA_use;
-  wire [6:0]dec_rA_useF;
-  wire [6:0][REG_WIDTH-1:0] dec_rB;
-  wire [6:0]dec_rB_use;
-  wire [6:0]dec_rB_useF;
-  wire [6:0]dec_useBConst;
-  wire [6:0][REG_WIDTH-1:0] dec_rC;
-  wire [6:0]dec_rC_use;
-  wire [6:0]dec_rC_useF;
-  wire [6:0] dec_useCRet;
-  wire [6:0][64:0] dec_constant;
-  wire [6:0][64:0] dec_constantN;
-  wire [6:0][REG_WIDTH-1:0] dec_rT;
-  wire [6:0]dec_rT_use;
-  wire [6:0]dec_rT_useF;
-  wire [6:0][3:0] dec_port;
-  wire [6:0]dec_useRs;
-  wire [6:0]dec_halt;
+  wire [9:0][OPERATION_WIDTH-6:0] dec_operation;
+  wire [9:0][4:0] dec_alucond;
+  wire [9:0][REG_WIDTH-1:0] dec_rA;
+  wire [9:0]dec_rA_use;
+  wire [9:0]dec_rA_useF;
+  wire [9:0][REG_WIDTH-1:0] dec_rB;
+  wire [9:0]dec_rB_use;
+  wire [9:0]dec_rB_useF;
+  wire [9:0]dec_useBConst;
+  wire [9:0][REG_WIDTH-1:0] dec_rC;
+  wire [9:0]dec_rC_use;
+  wire [9:0]dec_rC_useF;
+  wire [9:0] dec_useCRet;
+  wire [9:0][64:0] dec_constant;
+  wire [9:0][64:0] dec_constantN;
+  wire [9:0][REG_WIDTH-1:0] dec_rT;
+  wire [9:0]dec_rT_use;
+  wire [9:0]dec_rT_useF;
+  wire [9:0][3:0] dec_port;
+  wire [9:0]dec_useRs;
+  wire [9:0]dec_halt;
 
-  wire [6:0] dec_btbWay;
-  wire [6:0][1:0] dec_jmpInd;
-  wire [6:0][7:0] dec_ght;
-  wire [6:0][1:0] dec_sc;
-  wire [6:0] dec_miss;
-  wire [6:0] dec_tbufOnly;
+  wire [9:0] dec_btbWay;
+  wire [9:0][1:0] dec_jmpInd;
+  wire [9:0][7:0] dec_ght;
+  wire [9:0][1:0] dec_sc;
+  wire [9:0] dec_miss;
+  wire [9:0] dec_tbufOnly;
 
-  wire [6:0][4:0] 		dec_jumpType;
+  wire [9:0][4:0] 		dec_jumpType;
 
-  wire [6:0] dec_taken;
+  wire [9:0] dec_taken;
   
-  wire [6:0] dec_rA_isV;
-  wire [6:0] dec_rB_isV;
-  wire [6:0] dec_rT_isV;
+  wire [9:0] dec_rA_isV;
+  wire [9:0] dec_rB_isV;
+  wire [9:0] dec_rT_isV;
 
-  wire [6:0] dec_fsimd;
+  wire [9:0] dec_fsimd;
 
-  wire [6:0][7:0] dec_srcIPOff;
-  reg  [8:0] dec_srcIPOff_reg[6:0];
-  wire [6:0][8:0] dec_srcIPOffA;
-  wire [6:0][32:0] dec_srcIPOffx;
+  wire [9:0][7:0] dec_srcIPOff;
+  reg  [8:0] dec_srcIPOff_reg[9:0];
+  wire [9:0][8:0] dec_srcIPOffA;
+  wire [9:0][32:0] dec_srcIPOffx;
   
-  reg [8:0] dec_srcIPOffA_reg[6:0];
-
-  
-  wire [6:0] dec_allocR;
-  reg [6:0] dec_allocR_reg;
+  reg [8:0] dec_srcIPOffA_reg[9:0];
 
   
-  wire [6:0] dec_IPRel;
-  reg [6:0] dec_IPRel_reg;
+  wire [9:0] dec_allocR;
+  reg [9:0] dec_allocR_reg;
+
+  
+  wire [9:0] dec_IPRel;
+  reg [9:0] dec_IPRel_reg;
   
   wire has_taken;
   wire has_tick;
 
-  wire [6:0][3:0] dec_magic;
-  wire [6:0] dec_last;
+  wire [9:0][3:0] dec_magic;
+  wire [9:0] dec_last;
   wire [9:-1] dec_lspec;
 //  wire [9:-1] dec_aspec;
   reg dec_lspecR;
@@ -2331,46 +2331,46 @@ module decoder(
 //  wire dec_aspecR_d;
   wire [3:0] baseAttr;
 
-  reg [OPERATION_WIDTH-6:0] 	dec_operation_reg[6:0];
-  reg [4:0]			dec_alucond_reg[6:0];
-  reg [REG_WIDTH-1:0] 		dec_rA_reg[6:0];
-  reg 				dec_rA_use_reg[6:0];
-  reg 				dec_rA_useF_reg[6:0];
-  reg [REG_WIDTH-1:0] 		dec_rB_reg[6:0];
-  reg 				dec_rB_use_reg[6:0];
-  reg 				dec_rB_useF_reg[6:0];
-  reg 				dec_useAConst_reg[6:0];
-  reg 				dec_useBConst_reg[6:0];
-  reg [REG_WIDTH-1:0] 		dec_rC_reg[6:0];
-  reg 				dec_rC_use_reg[6:0];
-  reg 				dec_rC_useF_reg[6:0];
-  reg [6:0]			dec_useCRet_reg;
-  reg [64:0] 			dec_constant_reg[6:0];
-  reg [64:0] 			dec_constantN_reg[6:0];
-  reg [REG_WIDTH-1:0] 		dec_rT_reg[6:0];
-  reg 				dec_rT_use_reg[6:0];
-  reg 				dec_rT_useF_reg[6:0];
-  reg [3:0] 			dec_port_reg[6:0];
-  reg 				dec_useRs_reg[6:0];
-  reg [4:0] 			dec_jumpType_reg[6:0];
+  reg [OPERATION_WIDTH-6:0] 	dec_operation_reg[9:0];
+  reg [4:0]			dec_alucond_reg[9:0];
+  reg [REG_WIDTH-1:0] 		dec_rA_reg[9:0];
+  reg 				dec_rA_use_reg[9:0];
+  reg 				dec_rA_useF_reg[9:0];
+  reg [REG_WIDTH-1:0] 		dec_rB_reg[9:0];
+  reg 				dec_rB_use_reg[9:0];
+  reg 				dec_rB_useF_reg[9:0];
+  reg 				dec_useAConst_reg[9:0];
+  reg 				dec_useBConst_reg[9:0];
+  reg [REG_WIDTH-1:0] 		dec_rC_reg[9:0];
+  reg 				dec_rC_use_reg[9:0];
+  reg 				dec_rC_useF_reg[9:0];
+  reg [9:0]			dec_useCRet_reg;
+  reg [64:0] 			dec_constant_reg[9:0];
+  reg [64:0] 			dec_constantN_reg[9:0];
+  reg [REG_WIDTH-1:0] 		dec_rT_reg[9:0];
+  reg 				dec_rT_use_reg[9:0];
+  reg 				dec_rT_useF_reg[9:0];
+  reg [3:0] 			dec_port_reg[9:0];
+  reg 				dec_useRs_reg[9:0];
+  reg [4:0] 			dec_jumpType_reg[9:0];
   
-  reg dec_btbWay_reg[6:0];
-  reg [1:0] dec_jmpInd_reg[6:0];
-  reg [7:0] dec_ght_reg[6:0];
-  reg [1:0] dec_sc_reg[6:0];
-  reg [6:0] dec_miss_reg;
-  reg [6:0] dec_tbufOnly_reg;
+  reg dec_btbWay_reg[9:0];
+  reg [1:0] dec_jmpInd_reg[9:0];
+  reg [7:0] dec_ght_reg[9:0];
+  reg [1:0] dec_sc_reg[9:0];
+  reg [9:0] dec_miss_reg;
+  reg [9:0] dec_tbufOnly_reg;
   
-  reg [3:0] dec_magic_reg[6:0];
-  reg [6:0] dec_last_reg;
+  reg [3:0] dec_magic_reg[9:0];
+  reg [9:0] dec_last_reg;
 
-  reg [6:0] dec_taken_reg;
+  reg [9:0] dec_taken_reg;
 
-  reg [6:0] dec_rA_isV_reg;
-  reg [6:0] dec_rB_isV_reg;
-  reg [6:0] dec_rT_isV_reg;
+  reg [9:0] dec_rA_isV_reg;
+  reg [9:0] dec_rB_isV_reg;
+  reg [9:0] dec_rT_isV_reg;
 
-  reg [6:0] dec_fsimd_reg;
+  reg [9:0] dec_fsimd_reg;
   
   reg halt_reg;
 
@@ -2378,46 +2378,46 @@ module decoder(
 
   wire [IP_WIDTH-1:0] taken_srcIP;
 
-  wire [6:0][REG_WIDTH-1:0] dep_rA;
-  wire [6:0][REG_WIDTH-1:0] dep_rB;
-  wire [6:0][REG_WIDTH-1:0] dep_rC;
+  wire [9:0][REG_WIDTH-1:0] dep_rA;
+  wire [9:0][REG_WIDTH-1:0] dep_rB;
+  wire [9:0][REG_WIDTH-1:0] dep_rC;
 
-  wire [6:0] dec_afterTaken;
-  reg [6:0] dec_afterTaken_reg;
+  wire [9:0] dec_afterTaken;
+  reg [9:0] dec_afterTaken_reg;
   
   
-  wire [6:0][`iclass_width-1:0] instCls;
-  wire [6:0] cls_indir;
-  wire [6:0] cls_jump;
-  wire [6:0] cls_ALU;
-  wire [6:0] cls_shift;
-  wire [6:0] cls_mul;
-  wire [6:0] cls_load;
-  wire [6:0] cls_store;
-  wire [6:0] cls_storeI;
-  wire [6:0] cls_store2;
-  wire [6:0] cls_FPU;
-  wire [6:0] cls_loadFPU;
-  wire [6:0] cls_sys;
-  wire [6:0] cls_pos0;
-  wire [6:0] cls_flag;
+  wire [9:0][`iclass_width-1:0] instCls;
+  wire [9:0] cls_indir;
+  wire [9:0] cls_jump;
+  wire [9:0] cls_ALU;
+  wire [9:0] cls_shift;
+  wire [9:0] cls_mul;
+  wire [9:0] cls_load;
+  wire [9:0] cls_store;
+  wire [9:0] cls_storeI;
+  wire [9:0] cls_store2;
+  wire [9:0] cls_FPU;
+  wire [9:0] cls_loadFPU;
+  wire [9:0] cls_sys;
+  wire [9:0] cls_pos0;
+  wire [9:0] cls_flag;
 
-  reg [6:0] cls_indir_reg;
-  reg [6:0] cls_jump_reg;
-  reg [6:0] cls_ALU_reg;
-  reg [6:0] cls_shift_reg;
-  reg [6:0] cls_mul_reg;
-  reg [6:0] cls_load_reg;
-  reg [6:0] cls_store_reg;
-  reg [6:0] cls_storeI_reg;
-  reg [6:0] cls_store2_reg;
-  reg [6:0] cls_FPU_reg;
-  reg [6:0] cls_loadFPU_reg;
-  reg [6:0] cls_sys_reg;
-  reg [6:0] cls_pos0_reg;
-  reg [6:0] cls_flag_reg;
+  reg [9:0] cls_indir_reg;
+  reg [9:0] cls_jump_reg;
+  reg [9:0] cls_ALU_reg;
+  reg [9:0] cls_shift_reg;
+  reg [9:0] cls_mul_reg;
+  reg [9:0] cls_load_reg;
+  reg [9:0] cls_store_reg;
+  reg [9:0] cls_storeI_reg;
+  reg [9:0] cls_store2_reg;
+  reg [9:0] cls_FPU_reg;
+  reg [9:0] cls_loadFPU_reg;
+  reg [9:0] cls_sys_reg;
+  reg [9:0] cls_pos0_reg;
+  reg [9:0] cls_flag_reg;
   
-  reg [6:0] iUsed_reg;
+  reg [9:0] iUsed_reg;
 
   wire [8:0][OPERATION_WIDTH-1:0] rs_operation;
   wire [8:0][REG_WIDTH-1:0] rs_rA;
@@ -2441,7 +2441,7 @@ module decoder(
   wire [8:0] rs_rT_isV;  
   wire [8:0] rs_rA_isAnyV;  
   wire [8:0] rs_rB_isAnyV;  
-  wire [8:0][6:0] rs_index;
+  wire [8:0][9:0] rs_index;
   wire [5:0][5:0] rs_lsi;
   wire [8:0] rs_flagWr;
 
@@ -2455,42 +2455,42 @@ module decoder(
   wire has_mul;
   integer n;
 
-  wire [6:0] jump0;
-  wire [6:0] jump1;
+  wire [9:0] jump0;
+  wire [9:0] jump1;
   wire hasJump0;
   wire hasJump1;
 
-  reg [6:0] iAvail_reg;
-  wire [6:0] rs_storeDA;
-  wire [6:0] rs_storeDB;
+  reg [9:0] iAvail_reg;
+  wire [9:0] rs_storeDA;
+  wire [9:0] rs_storeDB;
   wire [8:0] rs_store;
   wire [8:0] rs_storeL;
   
-  wire [6:0] afterTick;
-  reg  [6:0] afterTick_reg;
-  wire [6:0] dec_tick;
+  wire [9:0] afterTick;
+  reg  [9:0] afterTick_reg;
+  wire [9:0] dec_tick;
   
-  wire [6:0] alloc;
+  wire [9:0] alloc;
   wire [8:0] rs_alloc;
 
-  wire [6:0] allocF;
+  wire [9:0] allocF;
   wire [8:0] rs_allocF;
   
-  wire [6:0] dec_wrFlags;
-  reg [6:0] dec_wrFlags_reg;
+  wire [9:0] dec_wrFlags;
+  reg [9:0] dec_wrFlags_reg;
 
-  wire [6:0] dec_useFlags;
-  reg [6:0] dec_useFlags_reg;
+  wire [9:0] dec_useFlags;
+  reg [9:0] dec_useFlags_reg;
   
-  wire [6:0][3:0] flag_dep;
-  wire [6:0] flag_lastWr;
+  wire [9:0][3:0] flag_dep;
+  wire [9:0] flag_lastWr;
   
   wire [8:0] rs_lastFl;
   wire [8:0][3:0] rs_flDep;
 
   wire [7:0] dummy8_1;
-  wire [6:0] jump0_bit;
-  wire [6:0] jump1_bit;
+  wire [9:0] jump0_bit;
+  wire [9:0] jump1_bit;
   wire jump0_any;
   wire jump1_any;
   
@@ -4014,9 +4014,9 @@ module decoder_get_baseIP(
   input rst;
   output reg [62:0] baseIP;
   output reg [3:0] baseAttr;
-  input [6:0] afterTK;
-  input [6:0] iUsed;
-  input [6:0] afterTick;
+  input [9:0] afterTK;
+  input [9:0] iUsed;
+  input [9:0] afterTick;
   input [8:0] srcIPOff0;
   input [8:0] srcIPOff1;
   input [8:0] srcIPOff2;
@@ -4037,7 +4037,7 @@ module decoder_get_baseIP(
   input [62:0] exceptIP;
   input [3:0] exceptAttr;
 
-  wire [8:0] srcIPOff[6:0];
+  wire [8:0] srcIPOff[9:0];
   wire [62:0] nextIP;
   wire [3:0] next_baseAttr;
   wire [62:0] next_baseIP;
