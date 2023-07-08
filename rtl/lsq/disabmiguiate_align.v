@@ -1162,11 +1162,23 @@ module lsq_req(
   write_wen_shr&~doStall&~stall&~except||init
   );
   
-  bit_find_first_bit #(2*ADDR_COUNT) lastB_mod(validB&~curB,firstB,foundB);
-  bit_find_first_bit #(2*ADDR_COUNT) lastA_mod(validA,firstA,foundA);
+  bit_find_first_bit #(ADDR_COUNT) lastB_mod(validB[31:0]&~curB[31:0],firstB[31:0],foundBx);
+  bit_find_first_bit #(ADDR_COUNT) lastA_mod(validA[31:0],firstA[31:0],foundAx);
+  bit_find_first_bit #(ADDR_COUNT) lastB2_mod(validB[63:32]&~curB[63:32],firstBx,foundBx2);
+  bit_find_first_bit #(ADDR_COUNT) lastA2_mod(validA[63:32],firstAx[63:32],foundAx2);
+  assign firstB[63:32]=firstBx&{32{~foundBx}};
+  assign firstA[63:32]=firstAx&{32{~foundAx}};
+  assign foundB=foundBx|foundBx2;
+  assign foundA=foundAx|foundAx2;
 
-  bit_find_first_bit #(2*ADDR_COUNT) lastBN_mod(validB_next,firstBN,foundBN);
-  bit_find_first_bit #(2*ADDR_COUNT) lastAN_mod(validA_next,firstAN,foundAN);
+  bit_find_first_bit #(ADDR_COUNT) lastBN_mod(validB_next[31:0],firstBN[31:0],foundBNt);
+  bit_find_first_bit #(ADDR_COUNT) lastAN_mod(validA_next[31:0],firstAN[31:0],foundANt);
+  bit_find_first_bit #(ADDR_COUNT) lastBN2_mod(validB_next[63:32],firstBNt,foundBNtx);
+  bit_find_first_bit #(ADDR_COUNT) lastAN2_mod(validA_next[63:32],firstANt,foundANtx);
+  assign firstBN[63:32]=firstBNt&{32{~foundBNt}};
+  assign firstAN[63:32]=firstANt&{32{~foundANt}};
+  assign foundBN=foundBNt|foundBNtx;
+  assign foundAN=foundANt|foundANtx;
 
 //  get_carry #(5) onNextCmpB_mod(write_addr_shr[4:0],~readB_addr,1'b1,onSameValidB0);
 //  get_carry #(5) onNextCmpA_mod(write_addr_shr[4:0],~readA_addr,1'b1,onSameValidA0);
