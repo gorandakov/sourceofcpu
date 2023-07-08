@@ -53,6 +53,7 @@ module agu(
   faultNo,
   mOp_register,
   mOp_type,
+  mOp_skip_LDQ,
   mOp_LSQ,
   mOp_II,
   mOp_WQ,
@@ -127,6 +128,7 @@ module agu(
   output [8:0] faultNo;
   output [REG_WIDTH-1:0] mOp_register;
   output [1:0] mOp_type;
+  output mOp_skip_LDQ;
   output [8:0] mOp_LSQ;
   output [9:0] mOp_II;
   output [5:0] mOp_WQ;
@@ -322,6 +324,8 @@ module agu(
   assign mOp_split=(opsize==5||opsize==6) ?
     bank0[4:2]==3'h7 && (bank0[1:0]!=0 || stepOver || opsize==6) : 1'bz;
   assign mOp_split=(opsize==0) ? 1'b0 : 1'bz;
+  
+  assign mOp_skip_LDQ=~tlb_data[`dtlbData_wp] && ~tlb_data[`dtlbData_wp]|~addrNext[13];
   
   assign all_banks=banks0;
 
