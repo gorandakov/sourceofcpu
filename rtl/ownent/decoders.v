@@ -1456,171 +1456,171 @@ module decoder(
 
   bundleFeed,
 //begin instructions ordered by rs input port
-  sssr0i0_rA,sssr0i0_rA_use,sssr0i0_rA_useF,sssr0i0_rA_isV,sssr0i0_rA_isAnyV,
-  sssr0i0_rB,sssr0i0_rB_use,sssr0i0_rB_useF,sssr0i0_rB_isV,sssr0i0_rB_isAnyV,sssr0i0_useBConst,
-  sssr0i0_rT,sssr0i0_rT_use,sssr0i0_rT_useF,sssr0i0_rT_isV, 
-  sssr0i0_port,
-  sssr0i0_operation,
-  sssr0i0_en,
-  sssr0i0_const,
-  sssr0i0_index,
-  sssr0i0_IPRel,
-  sssr0i0_afterTaken,
-  sssr0i0_alt,
-  sssr0i0_alloc,
-  sssr0i0_allocF,
-  sssr0i0_allocR,
-  sssr0i0_lsi,
-  sssr0i0_ldst_flag,
-  sssr0i0_enA,
-  sssr0i0_enB,
+  rs0i0_rA,rs0i0_rA_use,rs0i0_rA_useF,rs0i0_rA_isV,rs0i0_rA_isAnyV,
+  rs0i0_rB,rs0i0_rB_use,rs0i0_rB_useF,rs0i0_rB_isV,rs0i0_rB_isAnyV,rs0i0_useBConst,
+  rs0i0_rT,rs0i0_rT_use,rs0i0_rT_useF,rs0i0_rT_isV, 
+  rs0i0_port,
+  rs0i0_operation,
+  rs0i0_en,
+  rs0i0_const,
+  rs0i0_index,
+  rs0i0_IPRel,
+  rs0i0_afterTaken,
+  rs0i0_alt,
+  rs0i0_alloc,
+  rs0i0_allocF,
+  rs0i0_allocR,
+  rs0i0_lsi,
+  rs0i0_ldst_flag,
+  rs0i0_enA,
+  rs0i0_enB,
 
-  sssr0i1_rA,sssr0i1_rA_use,sssr0i1_rA_useF,sssr0i1_rA_isV,sssr0i1_rA_isAnyV,sssr0i1_useAConst,
-  sssr0i1_rB,sssr0i1_rB_use,sssr0i1_rB_useF,sssr0i1_rB_isV,sssr0i1_rB_isAnyV,sssr0i1_useBConst,
-  sssr0i1_rT,sssr0i1_rT_use,sssr0i1_rT_useF,sssr0i1_rT_isV,
-  sssr0i1_port,
-  sssr0i1_operation,
-  sssr0i1_en,
-  sssr0i1_const,
-  sssr0i1_index,
-  sssr0i1_IPRel,
-  sssr0i1_afterTaken,
-  sssr0i1_alloc,
-  sssr0i1_allocF,
-  sssr0i1_allocR,
-  sssr0i1_flagDep,
-  sssr0i1_lastFl,
-  sssr0i1_lsi,
-  sssr0i1_ldst_flag,
-  sssr0i1_flag_wr,
+  rs0i1_rA,rs0i1_rA_use,rs0i1_rA_useF,rs0i1_rA_isV,rs0i1_rA_isAnyV,rs0i1_useAConst,
+  rs0i1_rB,rs0i1_rB_use,rs0i1_rB_useF,rs0i1_rB_isV,rs0i1_rB_isAnyV,rs0i1_useBConst,
+  rs0i1_rT,rs0i1_rT_use,rs0i1_rT_useF,rs0i1_rT_isV,
+  rs0i1_port,
+  rs0i1_operation,
+  rs0i1_en,
+  rs0i1_const,
+  rs0i1_index,
+  rs0i1_IPRel,
+  rs0i1_afterTaken,
+  rs0i1_alloc,
+  rs0i1_allocF,
+  rs0i1_allocR,
+  rs0i1_flagDep,
+  rs0i1_lastFl,
+  rs0i1_lsi,
+  rs0i1_ldst_flag,
+  rs0i1_flag_wr,
 
-  sssr0i2_rA,sssr0i2_rA_use,sssr0i2_rA_useF,sssr0i2_rA_isV,sssr0i2_rA_isAnyV,sssr0i2_useAConst,
-  sssr0i2_rB,sssr0i2_rB_use,sssr0i2_rB_useF,sssr0i2_rB_isV,sssr0i2_rB_isAnyV,sssr0i2_useBConst,
-  sssr0i2_rT,sssr0i2_rT_use,sssr0i2_rT_useF,sssr0i2_rT_isV,
-  sssr0i2_port,
-  sssr0i2_operation,
-  sssr0i2_en,
-  sssr0i2_const,
-  sssr0i2_index,
-  sssr0i2_IPRel,
-  sssr0i2_afterTaken,
-  sssr0i2_alloc,
-  sssr0i2_allocF,
-  sssr0i2_allocR,
-  sssr0i2_flagDep,
-  sssr0i2_lastFl,
-  sssr0i2_flag_wr,
+  rs0i2_rA,rs0i2_rA_use,rs0i2_rA_useF,rs0i2_rA_isV,rs0i2_rA_isAnyV,rs0i2_useAConst,
+  rs0i2_rB,rs0i2_rB_use,rs0i2_rB_useF,rs0i2_rB_isV,rs0i2_rB_isAnyV,rs0i2_useBConst,
+  rs0i2_rT,rs0i2_rT_use,rs0i2_rT_useF,rs0i2_rT_isV,
+  rs0i2_port,
+  rs0i2_operation,
+  rs0i2_en,
+  rs0i2_const,
+  rs0i2_index,
+  rs0i2_IPRel,
+  rs0i2_afterTaken,
+  rs0i2_alloc,
+  rs0i2_allocF,
+  rs0i2_allocR,
+  rs0i2_flagDep,
+  rs0i2_lastFl,
+  rs0i2_flag_wr,
 
-  sssr1i0_rA,sssr1i0_rA_use,sssr1i0_rA_useF,sssr1i0_rA_isV,sssr1i0_rA_isAnyV,
-  sssr1i0_rB,sssr1i0_rB_use,sssr1i0_rB_useF,sssr1i0_rB_isV,sssr1i0_rB_isAnyV,sssr1i0_useBConst,
-  sssr1i0_rT,sssr1i0_rT_use,sssr1i0_rT_useF,sssr1i0_rT_isV,
-  sssr1i0_port,
-  sssr1i0_operation,
-  sssr1i0_en,
-  sssr1i0_const,
-  sssr1i0_index,
-  sssr1i0_IPRel,
-  sssr1i0_afterTaken,
-  sssr1i0_alt,
-  sssr1i0_alloc,
-  sssr1i0_allocF,
-  sssr1i0_allocR,
-  sssr1i0_lsi,
-  sssr1i0_ldst_flag,
-  sssr1i0_enA,
-  sssr1i0_enB,
+  rs1i0_rA,rs1i0_rA_use,rs1i0_rA_useF,rs1i0_rA_isV,rs1i0_rA_isAnyV,
+  rs1i0_rB,rs1i0_rB_use,rs1i0_rB_useF,rs1i0_rB_isV,rs1i0_rB_isAnyV,rs1i0_useBConst,
+  rs1i0_rT,rs1i0_rT_use,rs1i0_rT_useF,rs1i0_rT_isV,
+  rs1i0_port,
+  rs1i0_operation,
+  rs1i0_en,
+  rs1i0_const,
+  rs1i0_index,
+  rs1i0_IPRel,
+  rs1i0_afterTaken,
+  rs1i0_alt,
+  rs1i0_alloc,
+  rs1i0_allocF,
+  rs1i0_allocR,
+  rs1i0_lsi,
+  rs1i0_ldst_flag,
+  rs1i0_enA,
+  rs1i0_enB,
 
-  sssr1i1_rA,sssr1i1_rA_use,sssr1i1_rA_useF,sssr1i1_rA_isV,sssr1i1_rA_isAnyV,sssr1i1_useAConst,
-  sssr1i1_rB,sssr1i1_rB_use,sssr1i1_rB_useF,sssr1i1_rB_isV,sssr1i1_rB_isAnyV,sssr1i1_useBConst,
-  sssr1i1_rT,sssr1i1_rT_use,sssr1i1_rT_useF,sssr1i1_rT_isV,
-  sssr1i1_port,
-  sssr1i1_operation,
-  sssr1i1_en,
-  sssr1i1_const,
-  sssr1i1_index,
-  sssr1i1_IPRel,
-  sssr1i1_afterTaken,
-  sssr1i1_alloc,
-  sssr1i1_allocF,
-  sssr1i1_allocR,
-  sssr1i1_flagDep,
-  sssr1i1_lastFl,
-  sssr1i1_lsi,
-  sssr1i1_ldst_flag,
-  sssr1i1_flag_wr,
+  rs1i1_rA,rs1i1_rA_use,rs1i1_rA_useF,rs1i1_rA_isV,rs1i1_rA_isAnyV,rs1i1_useAConst,
+  rs1i1_rB,rs1i1_rB_use,rs1i1_rB_useF,rs1i1_rB_isV,rs1i1_rB_isAnyV,rs1i1_useBConst,
+  rs1i1_rT,rs1i1_rT_use,rs1i1_rT_useF,rs1i1_rT_isV,
+  rs1i1_port,
+  rs1i1_operation,
+  rs1i1_en,
+  rs1i1_const,
+  rs1i1_index,
+  rs1i1_IPRel,
+  rs1i1_afterTaken,
+  rs1i1_alloc,
+  rs1i1_allocF,
+  rs1i1_allocR,
+  rs1i1_flagDep,
+  rs1i1_lastFl,
+  rs1i1_lsi,
+  rs1i1_ldst_flag,
+  rs1i1_flag_wr,
 
-  sssr1i2_rA,sssr1i2_rA_use,sssr1i2_rA_useF,sssr1i2_rA_isV,sssr1i2_rA_isAnyV,sssr1i2_useAConst,
-  sssr1i2_rB,sssr1i2_rB_use,sssr1i2_rB_useF,sssr1i2_rB_isV,sssr1i2_rB_isAnyV,sssr1i2_useBConst,
-  sssr1i2_rT,sssr1i2_rT_use,sssr1i2_rT_useF,sssr1i2_rT_isV,
-  sssr1i2_port,
-  sssr1i2_operation,
-  sssr1i2_en,
-  sssr1i2_const,
-  sssr1i2_index,
-  sssr1i2_IPRel,
-  sssr1i2_afterTaken,
-  sssr1i2_alloc,
-  sssr1i2_allocF,
-  sssr1i2_allocR,
-  sssr1i2_flagDep,
-  sssr1i2_lastFl,
-  sssr1i2_flag_wr,
+  rs1i2_rA,rs1i2_rA_use,rs1i2_rA_useF,rs1i2_rA_isV,rs1i2_rA_isAnyV,rs1i2_useAConst,
+  rs1i2_rB,rs1i2_rB_use,rs1i2_rB_useF,rs1i2_rB_isV,rs1i2_rB_isAnyV,rs1i2_useBConst,
+  rs1i2_rT,rs1i2_rT_use,rs1i2_rT_useF,rs1i2_rT_isV,
+  rs1i2_port,
+  rs1i2_operation,
+  rs1i2_en,
+  rs1i2_const,
+  rs1i2_index,
+  rs1i2_IPRel,
+  rs1i2_afterTaken,
+  rs1i2_alloc,
+  rs1i2_allocF,
+  rs1i2_allocR,
+  rs1i2_flagDep,
+  rs1i2_lastFl,
+  rs1i2_flag_wr,
 
-  sssr2i0_rA,sssr2i0_rA_use,sssr2i0_rA_useF,sssr2i0_rA_isV,sssr2i0_rA_isAnyV,
-  sssr2i0_rB,sssr2i0_rB_use,sssr2i0_rB_useF,sssr2i0_rB_isV,sssr2i0_rB_isAnyV,sssr2i0_useBConst,
-  sssr2i0_rT,sssr2i0_rT_use,sssr2i0_rT_useF,sssr2i0_rT_isV,
-  sssr2i0_port,
-  sssr2i0_operation,
-  sssr2i0_en,
-  sssr2i0_const,
-  sssr2i0_index,
-  sssr2i0_IPRel,
-  sssr2i0_afterTaken,
-  sssr2i0_alt,
-  sssr2i0_alloc,
-  sssr2i0_allocF,
-  sssr2i0_allocR,
-  sssr2i0_lsi,
-  sssr2i0_ldst_flag,
-  sssr2i0_enA,
-  sssr2i0_enB,
+  rs2i0_rA,rs2i0_rA_use,rs2i0_rA_useF,rs2i0_rA_isV,rs2i0_rA_isAnyV,
+  rs2i0_rB,rs2i0_rB_use,rs2i0_rB_useF,rs2i0_rB_isV,rs2i0_rB_isAnyV,rs2i0_useBConst,
+  rs2i0_rT,rs2i0_rT_use,rs2i0_rT_useF,rs2i0_rT_isV,
+  rs2i0_port,
+  rs2i0_operation,
+  rs2i0_en,
+  rs2i0_const,
+  rs2i0_index,
+  rs2i0_IPRel,
+  rs2i0_afterTaken,
+  rs2i0_alt,
+  rs2i0_alloc,
+  rs2i0_allocF,
+  rs2i0_allocR,
+  rs2i0_lsi,
+  rs2i0_ldst_flag,
+  rs2i0_enA,
+  rs2i0_enB,
 
-  sssr2i1_rA,sssr2i1_rA_use,sssr2i1_rA_useF,sssr2i1_rA_isV,sssr2i1_rA_isAnyV,sssr2i1_useAConst,
-  sssr2i1_rB,sssr2i1_rB_use,sssr2i1_rB_useF,sssr2i1_rB_isV,sssr2i1_rB_isAnyV,sssr2i1_useBConst,
-  sssr2i1_rT,sssr2i1_rT_use,sssr2i1_rT_useF,sssr2i1_rT_isV,
-  sssr2i1_port,
-  sssr2i1_operation,
-  sssr2i1_en,
-  sssr2i1_const,
-  sssr2i1_index,
-  sssr2i1_IPRel,
-  sssr2i1_afterTaken,
-  sssr2i1_alloc,
-  sssr2i1_allocF,
-  sssr2i1_allocR,
-  sssr2i1_flagDep,
-  sssr2i1_lastFl,
-  sssr2i1_lsi,
-  sssr2i1_ldst_flag,
-  sssr2i1_flag_wr,
+  rs2i1_rA,rs2i1_rA_use,rs2i1_rA_useF,rs2i1_rA_isV,rs2i1_rA_isAnyV,rs2i1_useAConst,
+  rs2i1_rB,rs2i1_rB_use,rs2i1_rB_useF,rs2i1_rB_isV,rs2i1_rB_isAnyV,rs2i1_useBConst,
+  rs2i1_rT,rs2i1_rT_use,rs2i1_rT_useF,rs2i1_rT_isV,
+  rs2i1_port,
+  rs2i1_operation,
+  rs2i1_en,
+  rs2i1_const,
+  rs2i1_index,
+  rs2i1_IPRel,
+  rs2i1_afterTaken,
+  rs2i1_alloc,
+  rs2i1_allocF,
+  rs2i1_allocR,
+  rs2i1_flagDep,
+  rs2i1_lastFl,
+  rs2i1_lsi,
+  rs2i1_ldst_flag,
+  rs2i1_flag_wr,
 
-  sssr2i2_rA,sssr2i2_rA_use,sssr2i2_rA_useF,sssr2i2_rA_isV,sssr2i2_rA_isAnyV,sssr2i2_useAConst,
-  sssr2i2_rB,sssr2i2_rB_use,sssr2i2_rB_useF,sssr2i2_rB_isV,sssr2i2_rB_isAnyV,sssr2i2_useBConst,
-  sssr2i2_rT,sssr2i2_rT_use,sssr2i2_rT_useF,sssr2i2_rT_isV,
-  sssr2i2_port,
-  sssr2i2_operation,
-  sssr2i2_en,
-  sssr2i2_const,
-  sssr2i2_index,
-  sssr2i2_IPRel,
-  sssr2i2_afterTaken,
-  sssr2i2_alloc,
-  sssr2i2_allocF,
-  sssr2i2_allocR,
-  sssr2i2_flagDep,
-  sssr2i2_lastFl,
-  sssr2i2_mul,
-  sssr2i2_flag_wr,
+  rs2i2_rA,rs2i2_rA_use,rs2i2_rA_useF,rs2i2_rA_isV,rs2i2_rA_isAnyV,rs2i2_useAConst,
+  rs2i2_rB,rs2i2_rB_use,rs2i2_rB_useF,rs2i2_rB_isV,rs2i2_rB_isAnyV,rs2i2_useBConst,
+  rs2i2_rT,rs2i2_rT_use,rs2i2_rT_useF,rs2i2_rT_isV,
+  rs2i2_port,
+  rs2i2_operation,
+  rs2i2_en,
+  rs2i2_const,
+  rs2i2_index,
+  rs2i2_IPRel,
+  rs2i2_afterTaken,
+  rs2i2_alloc,
+  rs2i2_allocF,
+  rs2i2_allocR,
+  rs2i2_flagDep,
+  rs2i2_lastFl,
+  rs2i2_mul,
+  rs2i2_flag_wr,
 //end reordered small instructions
 //begin instructions in program order
   instr0_rT, 
@@ -1816,285 +1816,285 @@ module decoder(
   output reg bundleFeed;
   
 
-  output [IN_REG_WIDTH-1:0] sssr0i0_rA;
-  output sssr0i0_rA_use;
-  output sssr0i0_rA_useF;
-  output sssr0i0_rA_isV;
-  output sssr0i0_rA_isAnyV;
-  output [IN_REG_WIDTH-1:0] sssr0i0_rB;
-  output sssr0i0_rB_use;
-  output sssr0i0_rB_useF;
-  output sssr0i0_rB_isV;
-  output sssr0i0_rB_isAnyV;
-  output sssr0i0_useBConst;
-  output [IN_REG_WIDTH-1:0] sssr0i0_rT;
-  output sssr0i0_rT_use;
-  output sssr0i0_rT_useF;
-  output sssr0i0_rT_isV;
-  output [PORT_WIDTH-1:0] sssr0i0_port;
-  output [OPERATION_WIDTH-1:0] sssr0i0_operation;
-  output sssr0i0_en;
-  output [DATA_WIDTH-1:0] sssr0i0_const;
-  output [3:0] sssr0i0_index;
-  output sssr0i0_IPRel;
-  output sssr0i0_afterTaken;
-  output sssr0i0_alt;
-  output sssr0i0_alloc;
-  output sssr0i0_allocF;
-  output sssr0i0_allocR;
-  output [5:0]  sssr0i0_lsi;
-  output sssr0i0_ldst_flag;
-  output sssr0i0_enA;
-  output sssr0i0_enB;
+  output [IN_REG_WIDTH-1:0] rs0i0_rA;
+  output rs0i0_rA_use;
+  output rs0i0_rA_useF;
+  output rs0i0_rA_isV;
+  output rs0i0_rA_isAnyV;
+  output [IN_REG_WIDTH-1:0] rs0i0_rB;
+  output rs0i0_rB_use;
+  output rs0i0_rB_useF;
+  output rs0i0_rB_isV;
+  output rs0i0_rB_isAnyV;
+  output rs0i0_useBConst;
+  output [IN_REG_WIDTH-1:0] rs0i0_rT;
+  output rs0i0_rT_use;
+  output rs0i0_rT_useF;
+  output rs0i0_rT_isV;
+  output [PORT_WIDTH-1:0] rs0i0_port;
+  output [OPERATION_WIDTH-1:0] rs0i0_operation;
+  output rs0i0_en;
+  output [DATA_WIDTH-1:0] rs0i0_const;
+  output [3:0] rs0i0_index;
+  output rs0i0_IPRel;
+  output rs0i0_afterTaken;
+  output rs0i0_alt;
+  output rs0i0_alloc;
+  output rs0i0_allocF;
+  output rs0i0_allocR;
+  output [5:0]  rs0i0_lsi;
+  output rs0i0_ldst_flag;
+  output rs0i0_enA;
+  output rs0i0_enB;
 
-  output [IN_REG_WIDTH-1:0] sssr0i1_rA;
-  output sssr0i1_rA_use;
-  output sssr0i1_rA_useF;
-  output sssr0i1_rA_isV;
-  output sssr0i1_rA_isAnyV;
-  output sssr0i1_useAConst;
-  output [IN_REG_WIDTH-1:0] sssr0i1_rB;
-  output sssr0i1_rB_use;
-  output sssr0i1_rB_useF;
-  output sssr0i1_rB_isV;
-  output sssr0i1_rB_isAnyV;
-  output sssr0i1_useBConst;
-  output [IN_REG_WIDTH-1:0] sssr0i1_rT;
-  output sssr0i1_rT_use;
-  output sssr0i1_rT_useF;
-  output sssr0i1_rT_isV;
-  output [PORT_WIDTH-1:0] sssr0i1_port;
-  output [OPERATION_WIDTH-1:0] sssr0i1_operation;
-  output sssr0i1_en;
-  output [DATA_WIDTH-1:0] sssr0i1_const;
-  output [3:0] sssr0i1_index;
-  output sssr0i1_IPRel;
-  output sssr0i1_afterTaken;
-  output sssr0i1_alloc;
-  output sssr0i1_allocF;
-  output sssr0i1_allocR;
-  output [3:0] sssr0i1_flagDep;
-  output sssr0i1_lastFl;
-  output [5:0]  sssr0i1_lsi;
-  output sssr0i1_ldst_flag;
-  output sssr0i1_flag_wr;
+  output [IN_REG_WIDTH-1:0] rs0i1_rA;
+  output rs0i1_rA_use;
+  output rs0i1_rA_useF;
+  output rs0i1_rA_isV;
+  output rs0i1_rA_isAnyV;
+  output rs0i1_useAConst;
+  output [IN_REG_WIDTH-1:0] rs0i1_rB;
+  output rs0i1_rB_use;
+  output rs0i1_rB_useF;
+  output rs0i1_rB_isV;
+  output rs0i1_rB_isAnyV;
+  output rs0i1_useBConst;
+  output [IN_REG_WIDTH-1:0] rs0i1_rT;
+  output rs0i1_rT_use;
+  output rs0i1_rT_useF;
+  output rs0i1_rT_isV;
+  output [PORT_WIDTH-1:0] rs0i1_port;
+  output [OPERATION_WIDTH-1:0] rs0i1_operation;
+  output rs0i1_en;
+  output [DATA_WIDTH-1:0] rs0i1_const;
+  output [3:0] rs0i1_index;
+  output rs0i1_IPRel;
+  output rs0i1_afterTaken;
+  output rs0i1_alloc;
+  output rs0i1_allocF;
+  output rs0i1_allocR;
+  output [3:0] rs0i1_flagDep;
+  output rs0i1_lastFl;
+  output [5:0]  rs0i1_lsi;
+  output rs0i1_ldst_flag;
+  output rs0i1_flag_wr;
   
-  output [IN_REG_WIDTH-1:0] sssr0i2_rA;
-  output sssr0i2_rA_use;
-  output sssr0i2_rA_useF;
-  output sssr0i2_rA_isV;
-  output sssr0i2_rA_isAnyV;
-  output sssr0i2_useAConst;
-  output [IN_REG_WIDTH-1:0] sssr0i2_rB;
-  output sssr0i2_rB_use;
-  output sssr0i2_rB_useF;
-  output sssr0i2_rB_isV;
-  output sssr0i2_rB_isAnyV;
-  output sssr0i2_useBConst;
-  output [IN_REG_WIDTH-1:0] sssr0i2_rT;
-  output sssr0i2_rT_use;
-  output sssr0i2_rT_useF;
-  output sssr0i2_rT_isV;
-  output [PORT_WIDTH-1:0] sssr0i2_port;
-  output [OPERATION_WIDTH-1:0] sssr0i2_operation;
-  output sssr0i2_en;
-  output [DATA_WIDTH-1:0] sssr0i2_const;
-  output [3:0] sssr0i2_index;
-  output sssr0i2_IPRel;
-  output sssr0i2_afterTaken;
-  output sssr0i2_alloc;
-  output sssr0i2_allocF;
-  output sssr0i2_allocR;
-  output [3:0] sssr0i2_flagDep;
-  output sssr0i2_lastFl;
-  output sssr0i2_flag_wr;
+  output [IN_REG_WIDTH-1:0] rs0i2_rA;
+  output rs0i2_rA_use;
+  output rs0i2_rA_useF;
+  output rs0i2_rA_isV;
+  output rs0i2_rA_isAnyV;
+  output rs0i2_useAConst;
+  output [IN_REG_WIDTH-1:0] rs0i2_rB;
+  output rs0i2_rB_use;
+  output rs0i2_rB_useF;
+  output rs0i2_rB_isV;
+  output rs0i2_rB_isAnyV;
+  output rs0i2_useBConst;
+  output [IN_REG_WIDTH-1:0] rs0i2_rT;
+  output rs0i2_rT_use;
+  output rs0i2_rT_useF;
+  output rs0i2_rT_isV;
+  output [PORT_WIDTH-1:0] rs0i2_port;
+  output [OPERATION_WIDTH-1:0] rs0i2_operation;
+  output rs0i2_en;
+  output [DATA_WIDTH-1:0] rs0i2_const;
+  output [3:0] rs0i2_index;
+  output rs0i2_IPRel;
+  output rs0i2_afterTaken;
+  output rs0i2_alloc;
+  output rs0i2_allocF;
+  output rs0i2_allocR;
+  output [3:0] rs0i2_flagDep;
+  output rs0i2_lastFl;
+  output rs0i2_flag_wr;
   
-  output [IN_REG_WIDTH-1:0] sssr1i0_rA;
-  output sssr1i0_rA_use;
-  output sssr1i0_rA_useF;
-  output sssr1i0_rA_isV;
-  output sssr1i0_rA_isAnyV;
-  output [IN_REG_WIDTH-1:0] sssr1i0_rB;
-  output sssr1i0_rB_use;
-  output sssr1i0_rB_useF;
-  output sssr1i0_rB_isV;
-  output sssr1i0_rB_isAnyV;
-  output sssr1i0_useBConst;
-  output [IN_REG_WIDTH-1:0] sssr1i0_rT;
-  output sssr1i0_rT_use;
-  output sssr1i0_rT_useF;
-  output sssr1i0_rT_isV;
-  output [PORT_WIDTH-1:0] sssr1i0_port;
-  output [OPERATION_WIDTH-1:0] sssr1i0_operation;
-  output sssr1i0_en;
-  output [DATA_WIDTH-1:0] sssr1i0_const;
-  output [3:0] sssr1i0_index;
-  output sssr1i0_IPRel;
-  output sssr1i0_afterTaken;
-  output sssr1i0_alt;
-  output sssr1i0_alloc;
-  output sssr1i0_allocF;
-  output sssr1i0_allocR;
-  output [5:0]  sssr1i0_lsi;
-  output sssr1i0_ldst_flag;
-  output sssr1i0_enA;
-  output sssr1i0_enB;
+  output [IN_REG_WIDTH-1:0] rs1i0_rA;
+  output rs1i0_rA_use;
+  output rs1i0_rA_useF;
+  output rs1i0_rA_isV;
+  output rs1i0_rA_isAnyV;
+  output [IN_REG_WIDTH-1:0] rs1i0_rB;
+  output rs1i0_rB_use;
+  output rs1i0_rB_useF;
+  output rs1i0_rB_isV;
+  output rs1i0_rB_isAnyV;
+  output rs1i0_useBConst;
+  output [IN_REG_WIDTH-1:0] rs1i0_rT;
+  output rs1i0_rT_use;
+  output rs1i0_rT_useF;
+  output rs1i0_rT_isV;
+  output [PORT_WIDTH-1:0] rs1i0_port;
+  output [OPERATION_WIDTH-1:0] rs1i0_operation;
+  output rs1i0_en;
+  output [DATA_WIDTH-1:0] rs1i0_const;
+  output [3:0] rs1i0_index;
+  output rs1i0_IPRel;
+  output rs1i0_afterTaken;
+  output rs1i0_alt;
+  output rs1i0_alloc;
+  output rs1i0_allocF;
+  output rs1i0_allocR;
+  output [5:0]  rs1i0_lsi;
+  output rs1i0_ldst_flag;
+  output rs1i0_enA;
+  output rs1i0_enB;
   
-  output [IN_REG_WIDTH-1:0] sssr1i1_rA;
-  output sssr1i1_rA_use;
-  output sssr1i1_rA_useF;
-  output sssr1i1_rA_isV;
-  output sssr1i1_rA_isAnyV;
-  output sssr1i1_useAConst;
-  output [IN_REG_WIDTH-1:0] sssr1i1_rB;
-  output sssr1i1_rB_use;
-  output sssr1i1_rB_useF;
-  output sssr1i1_rB_isV;
-  output sssr1i1_rB_isAnyV;
-  output sssr1i1_useBConst;
-  output [IN_REG_WIDTH-1:0] sssr1i1_rT;
-  output sssr1i1_rT_use;
-  output sssr1i1_rT_useF;
-  output sssr1i1_rT_isV;
-  output [PORT_WIDTH-1:0] sssr1i1_port;
-  output [OPERATION_WIDTH-1:0] sssr1i1_operation;
-  output sssr1i1_en;
-  output [DATA_WIDTH-1:0] sssr1i1_const;
-  output [3:0] sssr1i1_index;
-  output sssr1i1_IPRel;
-  output sssr1i1_afterTaken;
-  output sssr1i1_alloc;
-  output sssr1i1_allocF;
-  output sssr1i1_allocR;
-  output [3:0] sssr1i1_flagDep;
-  output sssr1i1_lastFl;
-  output [5:0]  sssr1i1_lsi;
-  output sssr1i1_ldst_flag;
-  output sssr1i1_flag_wr;
+  output [IN_REG_WIDTH-1:0] rs1i1_rA;
+  output rs1i1_rA_use;
+  output rs1i1_rA_useF;
+  output rs1i1_rA_isV;
+  output rs1i1_rA_isAnyV;
+  output rs1i1_useAConst;
+  output [IN_REG_WIDTH-1:0] rs1i1_rB;
+  output rs1i1_rB_use;
+  output rs1i1_rB_useF;
+  output rs1i1_rB_isV;
+  output rs1i1_rB_isAnyV;
+  output rs1i1_useBConst;
+  output [IN_REG_WIDTH-1:0] rs1i1_rT;
+  output rs1i1_rT_use;
+  output rs1i1_rT_useF;
+  output rs1i1_rT_isV;
+  output [PORT_WIDTH-1:0] rs1i1_port;
+  output [OPERATION_WIDTH-1:0] rs1i1_operation;
+  output rs1i1_en;
+  output [DATA_WIDTH-1:0] rs1i1_const;
+  output [3:0] rs1i1_index;
+  output rs1i1_IPRel;
+  output rs1i1_afterTaken;
+  output rs1i1_alloc;
+  output rs1i1_allocF;
+  output rs1i1_allocR;
+  output [3:0] rs1i1_flagDep;
+  output rs1i1_lastFl;
+  output [5:0]  rs1i1_lsi;
+  output rs1i1_ldst_flag;
+  output rs1i1_flag_wr;
 
-  output [IN_REG_WIDTH-1:0] sssr1i2_rA;
-  output sssr1i2_rA_use;
-  output sssr1i2_rA_useF;
-  output sssr1i2_rA_isV;
-  output sssr1i2_rA_isAnyV;
-  output sssr1i2_useAConst;
-  output [IN_REG_WIDTH-1:0] sssr1i2_rB;
-  output sssr1i2_rB_use;
-  output sssr1i2_rB_useF;
-  output sssr1i2_rB_isV;
-  output sssr1i2_rB_isAnyV;
-  output sssr1i2_useBConst;
-  output [IN_REG_WIDTH-1:0] sssr1i2_rT;
-  output sssr1i2_rT_use;
-  output sssr1i2_rT_useF;
-  output sssr1i2_rT_isV;
-  output [PORT_WIDTH-1:0] sssr1i2_port;
-  output [OPERATION_WIDTH-1:0] sssr1i2_operation;
-  output sssr1i2_en;
-  output [DATA_WIDTH-1:0] sssr1i2_const;
-  output [3:0] sssr1i2_index;
-  output sssr1i2_IPRel;
-  output sssr1i2_afterTaken;
-  output sssr1i2_alloc;
-  output sssr1i2_allocF;
-  output sssr1i2_allocR;
-  output [3:0] sssr1i2_flagDep;
-  output sssr1i2_lastFl;
-  output sssr1i2_flag_wr;
+  output [IN_REG_WIDTH-1:0] rs1i2_rA;
+  output rs1i2_rA_use;
+  output rs1i2_rA_useF;
+  output rs1i2_rA_isV;
+  output rs1i2_rA_isAnyV;
+  output rs1i2_useAConst;
+  output [IN_REG_WIDTH-1:0] rs1i2_rB;
+  output rs1i2_rB_use;
+  output rs1i2_rB_useF;
+  output rs1i2_rB_isV;
+  output rs1i2_rB_isAnyV;
+  output rs1i2_useBConst;
+  output [IN_REG_WIDTH-1:0] rs1i2_rT;
+  output rs1i2_rT_use;
+  output rs1i2_rT_useF;
+  output rs1i2_rT_isV;
+  output [PORT_WIDTH-1:0] rs1i2_port;
+  output [OPERATION_WIDTH-1:0] rs1i2_operation;
+  output rs1i2_en;
+  output [DATA_WIDTH-1:0] rs1i2_const;
+  output [3:0] rs1i2_index;
+  output rs1i2_IPRel;
+  output rs1i2_afterTaken;
+  output rs1i2_alloc;
+  output rs1i2_allocF;
+  output rs1i2_allocR;
+  output [3:0] rs1i2_flagDep;
+  output rs1i2_lastFl;
+  output rs1i2_flag_wr;
 
-  output [IN_REG_WIDTH-1:0] sssr2i0_rA;
-  output sssr2i0_rA_use;
-  output sssr2i0_rA_useF;
-  output sssr2i0_rA_isV;
-  output sssr2i0_rA_isAnyV;
-  output [IN_REG_WIDTH-1:0] sssr2i0_rB;
-  output sssr2i0_rB_use;
-  output sssr2i0_rB_useF;
-  output sssr2i0_rB_isV;
-  output sssr2i0_rB_isAnyV;
-  output sssr2i0_useBConst;
-  output [IN_REG_WIDTH-1:0] sssr2i0_rT;
-  output sssr2i0_rT_use;
-  output sssr2i0_rT_useF;
-  output sssr2i0_rT_isV;
-  output [PORT_WIDTH-1:0] sssr2i0_port;
-  output [OPERATION_WIDTH-1:0] sssr2i0_operation;
-  output sssr2i0_en;
-  output [DATA_WIDTH-1:0] sssr2i0_const;
-  output [3:0] sssr2i0_index;
-  output sssr2i0_IPRel;
-  output sssr2i0_afterTaken;
-  output sssr2i0_alt;
-  output sssr2i0_alloc;
-  output sssr2i0_allocF;
-  output sssr2i0_allocR;
-  output [5:0]  sssr2i0_lsi;
-  output sssr2i0_ldst_flag;
-  output sssr2i0_enA;
-  output sssr2i0_enB;
+  output [IN_REG_WIDTH-1:0] rs2i0_rA;
+  output rs2i0_rA_use;
+  output rs2i0_rA_useF;
+  output rs2i0_rA_isV;
+  output rs2i0_rA_isAnyV;
+  output [IN_REG_WIDTH-1:0] rs2i0_rB;
+  output rs2i0_rB_use;
+  output rs2i0_rB_useF;
+  output rs2i0_rB_isV;
+  output rs2i0_rB_isAnyV;
+  output rs2i0_useBConst;
+  output [IN_REG_WIDTH-1:0] rs2i0_rT;
+  output rs2i0_rT_use;
+  output rs2i0_rT_useF;
+  output rs2i0_rT_isV;
+  output [PORT_WIDTH-1:0] rs2i0_port;
+  output [OPERATION_WIDTH-1:0] rs2i0_operation;
+  output rs2i0_en;
+  output [DATA_WIDTH-1:0] rs2i0_const;
+  output [3:0] rs2i0_index;
+  output rs2i0_IPRel;
+  output rs2i0_afterTaken;
+  output rs2i0_alt;
+  output rs2i0_alloc;
+  output rs2i0_allocF;
+  output rs2i0_allocR;
+  output [5:0]  rs2i0_lsi;
+  output rs2i0_ldst_flag;
+  output rs2i0_enA;
+  output rs2i0_enB;
   
-  output [IN_REG_WIDTH-1:0] sssr2i1_rA;
-  output sssr2i1_rA_use;
-  output sssr2i1_rA_useF;
-  output sssr2i1_rA_isV;
-  output sssr2i1_rA_isAnyV;
-  output sssr2i1_useAConst;
-  output [IN_REG_WIDTH-1:0] sssr2i1_rB;
-  output sssr2i1_rB_use;
-  output sssr2i1_rB_useF;
-  output sssr2i1_rB_isV;
-  output sssr2i1_rB_isAnyV;
-  output sssr2i1_useBConst;
-  output [IN_REG_WIDTH-1:0] sssr2i1_rT;
-  output sssr2i1_rT_use;
-  output sssr2i1_rT_useF;
-  output sssr2i1_rT_isV;
-  output [PORT_WIDTH-1:0] sssr2i1_port;
-  output [OPERATION_WIDTH-1:0] sssr2i1_operation;
-  output sssr2i1_en;
-  output [DATA_WIDTH-1:0] sssr2i1_const;
-  output [3:0] sssr2i1_index;
-  output sssr2i1_IPRel;
-  output sssr2i1_afterTaken;
-  output sssr2i1_alloc;
-  output sssr2i1_allocF;
-  output sssr2i1_allocR;
-  output [3:0] sssr2i1_flagDep;
-  output sssr2i1_lastFl;
-  output [5:0]  sssr2i1_lsi;
-  output sssr2i1_ldst_flag;
-  output sssr2i1_flag_wr;
+  output [IN_REG_WIDTH-1:0] rs2i1_rA;
+  output rs2i1_rA_use;
+  output rs2i1_rA_useF;
+  output rs2i1_rA_isV;
+  output rs2i1_rA_isAnyV;
+  output rs2i1_useAConst;
+  output [IN_REG_WIDTH-1:0] rs2i1_rB;
+  output rs2i1_rB_use;
+  output rs2i1_rB_useF;
+  output rs2i1_rB_isV;
+  output rs2i1_rB_isAnyV;
+  output rs2i1_useBConst;
+  output [IN_REG_WIDTH-1:0] rs2i1_rT;
+  output rs2i1_rT_use;
+  output rs2i1_rT_useF;
+  output rs2i1_rT_isV;
+  output [PORT_WIDTH-1:0] rs2i1_port;
+  output [OPERATION_WIDTH-1:0] rs2i1_operation;
+  output rs2i1_en;
+  output [DATA_WIDTH-1:0] rs2i1_const;
+  output [3:0] rs2i1_index;
+  output rs2i1_IPRel;
+  output rs2i1_afterTaken;
+  output rs2i1_alloc;
+  output rs2i1_allocF;
+  output rs2i1_allocR;
+  output [3:0] rs2i1_flagDep;
+  output rs2i1_lastFl;
+  output [5:0]  rs2i1_lsi;
+  output rs2i1_ldst_flag;
+  output rs2i1_flag_wr;
 
-  output [IN_REG_WIDTH-1:0] sssr2i2_rA;
-  output sssr2i2_rA_use;
-  output sssr2i2_rA_useF;
-  output sssr2i2_rA_isV;
-  output sssr2i2_rA_isAnyV;
-  output sssr2i2_useAConst;
-  output [IN_REG_WIDTH-1:0] sssr2i2_rB;
-  output sssr2i2_rB_use;
-  output sssr2i2_rB_useF;
-  output sssr2i2_rB_isV;
-  output sssr2i2_rB_isAnyV;
-  output sssr2i2_useBConst;
-  output [IN_REG_WIDTH-1:0] sssr2i2_rT;
-  output sssr2i2_rT_use;
-  output sssr2i2_rT_useF;
-  output sssr2i2_rT_isV;
-  output [PORT_WIDTH-1:0] sssr2i2_port;
-  output [OPERATION_WIDTH-1:0] sssr2i2_operation;
-  output sssr2i2_en;
-  output [DATA_WIDTH-1:0] sssr2i2_const;
-  output [3:0] sssr2i2_index;
-  output sssr2i2_IPRel;
-  output sssr2i2_afterTaken;
-  output sssr2i2_alloc;
-  output sssr2i2_allocF;
-  output sssr2i2_allocR;
-  output [3:0] sssr2i2_flagDep;
-  output sssr2i2_lastFl;
-  output sssr2i2_mul;
-  output sssr2i2_flag_wr;
+  output [IN_REG_WIDTH-1:0] rs2i2_rA;
+  output rs2i2_rA_use;
+  output rs2i2_rA_useF;
+  output rs2i2_rA_isV;
+  output rs2i2_rA_isAnyV;
+  output rs2i2_useAConst;
+  output [IN_REG_WIDTH-1:0] rs2i2_rB;
+  output rs2i2_rB_use;
+  output rs2i2_rB_useF;
+  output rs2i2_rB_isV;
+  output rs2i2_rB_isAnyV;
+  output rs2i2_useBConst;
+  output [IN_REG_WIDTH-1:0] rs2i2_rT;
+  output rs2i2_rT_use;
+  output rs2i2_rT_useF;
+  output rs2i2_rT_isV;
+  output [PORT_WIDTH-1:0] rs2i2_port;
+  output [OPERATION_WIDTH-1:0] rs2i2_operation;
+  output rs2i2_en;
+  output [DATA_WIDTH-1:0] rs2i2_const;
+  output [3:0] rs2i2_index;
+  output rs2i2_IPRel;
+  output rs2i2_afterTaken;
+  output rs2i2_alloc;
+  output rs2i2_allocF;
+  output rs2i2_allocR;
+  output [3:0] rs2i2_flagDep;
+  output rs2i2_lastFl;
+  output rs2i2_mul;
+  output rs2i2_flag_wr;
 
   
   output [IN_REG_WIDTH-1:0] instr0_rT;
@@ -2419,38 +2419,38 @@ module decoder(
   
   reg [9:0] iUsed_reg;
 
-  wire [8:0][OPERATION_WIDTH-1:0] sssr_operation;
-  wire [8:0][REG_WIDTH-1:0] sssr_rA;
-  wire [8:0]sssr_rA_use;
-  wire [8:0]sssr_rA_useF;
-  wire [8:0]sssr_useAConst;
-  wire [8:0][REG_WIDTH-1:0] sssr_rB;
-  wire [8:0]sssr_rB_use;
-  wire [8:0]sssr_rB_useF;
-  wire [8:0]sssr_useBConst;
-  wire [8:0][64:0] sssr_constant;
-  wire [8:0][REG_WIDTH-1:0] sssr_rT;
-  wire [8:0]sssr_rT_use;
-  wire [8:0]sssr_rT_useF;
-  wire [8:0][3:0] sssr_port;
-  wire [8:0]sssr_useRs;
-  wire [8:0] sssr_afterTaken;
-  wire [8:0] sssr_IPRel;
-  wire [8:0] sssr_rA_isV;  
-  wire [8:0] sssr_rB_isV;  
-  wire [8:0] sssr_rT_isV;  
-  wire [8:0] sssr_rA_isAnyV;  
-  wire [8:0] sssr_rB_isAnyV;  
-  wire [8:0][9:0] sssr_index;
-  wire [5:0][5:0] sssr_lsi;
-  wire [8:0] sssr_flagWr;
+  wire [8:0][OPERATION_WIDTH-1:0] rs_operation;
+  wire [8:0][REG_WIDTH-1:0] rs_rA;
+  wire [8:0]rs_rA_use;
+  wire [8:0]rs_rA_useF;
+  wire [8:0]rs_useAConst;
+  wire [8:0][REG_WIDTH-1:0] rs_rB;
+  wire [8:0]rs_rB_use;
+  wire [8:0]rs_rB_useF;
+  wire [8:0]rs_useBConst;
+  wire [8:0][64:0] rs_constant;
+  wire [8:0][REG_WIDTH-1:0] rs_rT;
+  wire [8:0]rs_rT_use;
+  wire [8:0]rs_rT_useF;
+  wire [8:0][3:0] rs_port;
+  wire [8:0]rs_useRs;
+  wire [8:0] rs_afterTaken;
+  wire [8:0] rs_IPRel;
+  wire [8:0] rs_rA_isV;  
+  wire [8:0] rs_rB_isV;  
+  wire [8:0] rs_rT_isV;  
+  wire [8:0] rs_rA_isAnyV;  
+  wire [8:0] rs_rB_isAnyV;  
+  wire [8:0][9:0] rs_index;
+  wire [5:0][5:0] rs_lsi;
+  wire [8:0] rs_flagWr;
 
-  wire [2:0] sssr_alt;
-  wire [8:0] sssr_allocR;
-  wire [8:0] sssr_ldst_flag;
+  wire [2:0] rs_alt;
+  wire [8:0] rs_allocR;
+  wire [8:0] rs_ldst_flag;
  
-  wire [8:0] sssr_enA;
-  wire [8:0] sssr_enB;
+  wire [8:0] rs_enA;
+  wire [8:0] rs_enB;
  
   wire has_mul;
   integer n;
@@ -2461,20 +2461,20 @@ module decoder(
   wire hasJump1;
 
   reg [9:0] iAvail_reg;
-  wire [9:0] sssr_storeDA;
-  wire [9:0] sssr_storeDB;
-  wire [8:0] sssr_store;
-  wire [8:0] sssr_storeL;
+  wire [9:0] rs_storeDA;
+  wire [9:0] rs_storeDB;
+  wire [8:0] rs_store;
+  wire [8:0] rs_storeL;
   
   wire [9:0] afterTick;
   reg  [9:0] afterTick_reg;
   wire [9:0] dec_tick;
   
   wire [9:0] alloc;
-  wire [8:0] sssr_alloc;
+  wire [8:0] rs_alloc;
 
   wire [9:0] allocF;
-  wire [8:0] sssr_allocF;
+  wire [8:0] rs_allocF;
   
   wire [9:0] dec_wrFlags;
   reg [9:0] dec_wrFlags_reg;
@@ -2485,8 +2485,8 @@ module decoder(
   wire [9:0][3:0] flag_dep;
   wire [9:0] flag_lastWr;
   
-  wire [8:0] sssr_lastFl;
-  wire [8:0][3:0] sssr_flDep;
+  wire [8:0] rs_lastFl;
+  wire [8:0][3:0] rs_flDep;
 
   wire [7:0] dummy8_1;
   wire [9:0] jump0_bit;
@@ -2603,17 +2603,17 @@ module decoder(
 	  assign dec_miss[k]=instQ[k][`instrQ_btbMiss];
 	  assign dec_tbufOnly[k]=instQ[k][`instrQ_btb_only];
          
-	  assign sssr2i2_mul=has_mul; 
+	  assign rs2i2_mul=has_mul; 
            
-          assign sssr0i0_index=(rs_index[0][k] & ~rs_index[0][k^1]) ? k : 4'bz;
-          assign sssr1i0_index=(rs_index[1][k] & ~rs_index[1][k^1]) ? k : 4'bz;
-          assign sssr2i0_index=(rs_index[2][k] & ~rs_index[2][k^1]) ? k : 4'bz;
-          assign sssr0i1_index=(rs_index[3][k] & ~rs_index[3][k^1]) ? k : 4'bz;
-          assign sssr1i1_index=(rs_index[4][k] & ~rs_index[4][k^1]) ? k : 4'bz;
-          assign sssr2i1_index=(rs_index[5][k] & ~rs_index[5][k^1]) ? k : 4'bz;
-          assign sssr0i2_index=(rs_index[6][k] & ~rs_index[6][k^1]) ? k : 4'bz;
-          assign sssr1i2_index=(rs_index[7][k] & ~rs_index[7][k^1]) ? k : 4'bz;
-          assign sssr2i2_index=(rs_index[8][k] & ~rs_index[8][k^1]) ? k : 4'bz;
+          assign rs0i0_index=(rs_index[0][k] & ~rs_index[0][k^1]) ? k : 4'bz;
+          assign rs1i0_index=(rs_index[1][k] & ~rs_index[1][k^1]) ? k : 4'bz;
+          assign rs2i0_index=(rs_index[2][k] & ~rs_index[2][k^1]) ? k : 4'bz;
+          assign rs0i1_index=(rs_index[3][k] & ~rs_index[3][k^1]) ? k : 4'bz;
+          assign rs1i1_index=(rs_index[4][k] & ~rs_index[4][k^1]) ? k : 4'bz;
+          assign rs2i1_index=(rs_index[5][k] & ~rs_index[5][k^1]) ? k : 4'bz;
+          assign rs0i2_index=(rs_index[6][k] & ~rs_index[6][k^1]) ? k : 4'bz;
+          assign rs1i2_index=(rs_index[7][k] & ~rs_index[7][k^1]) ? k : 4'bz;
+          assign rs2i2_index=(rs_index[8][k] & ~rs_index[8][k^1]) ? k : 4'bz;
 
           adder #(9) srcAddA1_mod({afterTick[k],dec_srcIPOff[k]},9'd1,dec_srcIPOffA[k],1'b0,~dec_magic[k][0],,,,);
           adder #(9) srcAddA2_mod({afterTick[k],dec_srcIPOff[k]},9'd2,dec_srcIPOffA[k],1'b0,dec_magic[k][1:0]==2'b01,,,,);
@@ -2632,35 +2632,35 @@ module decoder(
           decoder_reorder_mux mux_mod(
           iUsed_reg,
           1'b1,
-          sssr_index[k],
+          rs_index[k],
           k==5 && has_mul,k==8 && has_mul,
-          sssr_store[k] && sssr_storeL==0,
-          sssr_storeL[k],
-          sssr_storeDA,
-          sssr_storeDB,
-          sssr_operation[k],
-          sssr_rA[k],sssr_rA_use[k],sssr_rA_useF[k],sssr_useAConst[k],
-          sssr_rB[k],sssr_rB_use[k],sssr_rB_useF[k],sssr_useBConst[k],
-          sssr_constant[k],
-          sssr_rT[k],sssr_rT_use[k],sssr_rT_useF[k],
-          sssr_port[k],
-          sssr_useRs[k],
-          sssr_afterTaken[k],
-          sssr_IPRel[k],
-          sssr_alloc[k],
-          sssr_allocF[k],
-          sssr_allocR[k],
-          sssr_lastFl[k],
-          sssr_flDep[k],
-	  sssr_flagWr[k],
-          sssr_rA_isV[k],
-          sssr_rB_isV[k],
-          sssr_rT_isV[k],
-          sssr_rA_isAnyV[k],
-          sssr_rB_isAnyV[k],
-          sssr_ldst_flag[k],
-          sssr_enA[k],
-          sssr_enB[k],  
+          rs_store[k] && rs_storeL==0,
+          rs_storeL[k],
+          rs_storeDA,
+          rs_storeDB,
+          rs_operation[k],
+          rs_rA[k],rs_rA_use[k],rs_rA_useF[k],rs_useAConst[k],
+          rs_rB[k],rs_rB_use[k],rs_rB_useF[k],rs_useBConst[k],
+          rs_constant[k],
+          rs_rT[k],rs_rT_use[k],rs_rT_useF[k],
+          rs_port[k],
+          rs_useRs[k],
+          rs_afterTaken[k],
+          rs_IPRel[k],
+          rs_alloc[k],
+          rs_allocF[k],
+          rs_allocR[k],
+          rs_lastFl[k],
+          rs_flDep[k],
+	  rs_flagWr[k],
+          rs_rA_isV[k],
+          rs_rB_isV[k],
+          rs_rT_isV[k],
+          rs_rA_isAnyV[k],
+          rs_rB_isAnyV[k],
+          rs_ldst_flag[k],
+          rs_enA[k],
+          rs_enB[k],  
           dec_IPRel_reg,
           alloc,
           allocF,
@@ -3015,15 +3015,15 @@ module decoder(
  
   assign has_mul=|(cls_mul_reg&iUsed_reg); 
 
-  assign sssr0i0_index=(&rs_index[0][1:0]) ? 4'hf : 4'bz;
-  assign sssr1i0_index=(&rs_index[1][1:0]) ? 4'hf : 4'bz;
-  assign sssr2i0_index=(&rs_index[2][1:0]) ? 4'hf : 4'bz;
-  assign sssr0i1_index=(&rs_index[3][1:0]) ? 4'hf : 4'bz;
-  assign sssr1i1_index=(&rs_index[4][1:0]) ? 4'hf : 4'bz;
-  assign sssr2i1_index=(&rs_index[5][1:0]) ? 4'hf : 4'bz;
-  assign sssr0i2_index=(&rs_index[6][1:0]) ? 4'hf : 4'bz;
-  assign sssr1i2_index=(&rs_index[7][1:0]) ? 4'hf : 4'bz;
-  assign sssr2i2_index=(&rs_index[8][1:0]) ? 4'hf : 4'bz;
+  assign rs0i0_index=(&rs_index[0][1:0]) ? 4'hf : 4'bz;
+  assign rs1i0_index=(&rs_index[1][1:0]) ? 4'hf : 4'bz;
+  assign rs2i0_index=(&rs_index[2][1:0]) ? 4'hf : 4'bz;
+  assign rs0i1_index=(&rs_index[3][1:0]) ? 4'hf : 4'bz;
+  assign rs1i1_index=(&rs_index[4][1:0]) ? 4'hf : 4'bz;
+  assign rs2i1_index=(&rs_index[5][1:0]) ? 4'hf : 4'bz;
+  assign rs0i2_index=(&rs_index[6][1:0]) ? 4'hf : 4'bz;
+  assign rs1i2_index=(&rs_index[7][1:0]) ? 4'hf : 4'bz;
+  assign rs2i2_index=(&rs_index[8][1:0]) ? 4'hf : 4'bz;
 
   assign jump0Pos=jump0_bit!=0 ? 4'bz : 4'hf;
   assign jump1Pos=jump1_bit!=0 ? 4'bz : 4'hf;
@@ -3085,30 +3085,30 @@ module decoder(
   cls_FPU_reg & iUsed_reg,
   cls_loadFPU_reg & iUsed_reg,
   cls_mul_reg & iUsed_reg,
-  sssr_index[0],
-  sssr_index[1],
-  sssr_index[2],
-  sssr_index[3],
-  sssr_index[4],
-  sssr_index[5],
-  sssr_index[6],
-  sssr_index[7],
-  sssr_index[8],
-  sssr_store[0],
-  sssr_store[1],
-  sssr_store[2],
-  sssr_storeL[0],
-  sssr_storeL[1],
-  sssr_storeL[2],
-  sssr_storeDA,
-  sssr_storeDB,
-  sssr_alt,
-  sssr_lsi[0],
-  sssr_lsi[1],
-  sssr_lsi[2],
-  sssr_lsi[3],
-  sssr_lsi[4],
-  sssr_lsi[5],
+  rs_index[0],
+  rs_index[1],
+  rs_index[2],
+  rs_index[3],
+  rs_index[4],
+  rs_index[5],
+  rs_index[6],
+  rs_index[7],
+  rs_index[8],
+  rs_store[0],
+  rs_store[1],
+  rs_store[2],
+  rs_storeL[0],
+  rs_storeL[1],
+  rs_storeL[2],
+  rs_storeDA,
+  rs_storeDB,
+  rs_alt,
+  rs_lsi[0],
+  rs_lsi[1],
+  rs_lsi[2],
+  rs_lsi[3],
+  rs_lsi[4],
+  rs_lsi[5],
   wrt0,
   wrt1,
   wrt2
@@ -3179,8 +3179,8 @@ module decoder(
   .exceptAttr(exceptAttr)
   );
 
-  assign sssr_store[8:3]=6'b0;
-  assign sssr_storeL[8:3]=6'b0;
+  assign rs_store[8:3]=6'b0;
+  assign rs_storeL[8:3]=6'b0;
   
   assign  inst[0]= inst0;
   assign instQ[0]=instQ0;
@@ -3203,275 +3203,275 @@ module decoder(
   assign  inst[9]= inst9;
   assign instQ[9]=instQ9;
 
-  assign sssr0i0_operation=rs_operation[0];
-  assign sssr0i0_rA=rs_rA[0];
-  assign sssr0i0_rA_use=rs_rA_use[0];
-  assign sssr0i0_rA_useF=rs_rA_useF[0];
-  assign sssr0i0_rA_isV=rs_rA_isV[0];
-  assign sssr0i0_rA_isAnyV=rs_rA_isAnyV[0];
-  assign sssr0i0_rB=rs_rB[0];
-  assign sssr0i0_rB_use=rs_rB_use[0];
-  assign sssr0i0_rB_useF=rs_rB_useF[0];
-  assign sssr0i0_rB_isV=rs_rB_isV[0];
-  assign sssr0i0_rB_isAnyV=rs_rB_isAnyV[0];
-  assign sssr0i0_useBConst=rs_useBConst[0];
-  assign sssr0i0_const=rs_constant[0];
-  assign sssr0i0_rT=rs_rT[0];
-  assign sssr0i0_rT_use=rs_rT_use[0];
-  assign sssr0i0_rT_useF=rs_rT_useF[0];
-  assign sssr0i0_rT_isV=rs_rT_isV[0];
-  assign sssr0i0_port=rs_port[0];
-  assign sssr0i0_en=rs_useRs[0];
-  assign sssr0i0_IPRel=rs_IPRel[0];
-  assign sssr0i0_afterTaken=rs_afterTaken[0];
-  assign sssr0i0_alt=rs_alt[0];
-  assign sssr0i0_alloc=rs_alloc[0];
-  assign sssr0i0_allocF=rs_allocF[0];
-  assign sssr0i0_allocR=rs_allocR[0];
-  assign sssr0i0_lsi=rs_lsi[0];
-  assign sssr0i0_ldst_flag=rs_ldst_flag[0];
-  assign sssr0i0_enA=rs_enA[0];
-  assign sssr0i0_enB=rs_enB[0];
+  assign rs0i0_operation=rs_operation[0];
+  assign rs0i0_rA=rs_rA[0];
+  assign rs0i0_rA_use=rs_rA_use[0];
+  assign rs0i0_rA_useF=rs_rA_useF[0];
+  assign rs0i0_rA_isV=rs_rA_isV[0];
+  assign rs0i0_rA_isAnyV=rs_rA_isAnyV[0];
+  assign rs0i0_rB=rs_rB[0];
+  assign rs0i0_rB_use=rs_rB_use[0];
+  assign rs0i0_rB_useF=rs_rB_useF[0];
+  assign rs0i0_rB_isV=rs_rB_isV[0];
+  assign rs0i0_rB_isAnyV=rs_rB_isAnyV[0];
+  assign rs0i0_useBConst=rs_useBConst[0];
+  assign rs0i0_const=rs_constant[0];
+  assign rs0i0_rT=rs_rT[0];
+  assign rs0i0_rT_use=rs_rT_use[0];
+  assign rs0i0_rT_useF=rs_rT_useF[0];
+  assign rs0i0_rT_isV=rs_rT_isV[0];
+  assign rs0i0_port=rs_port[0];
+  assign rs0i0_en=rs_useRs[0];
+  assign rs0i0_IPRel=rs_IPRel[0];
+  assign rs0i0_afterTaken=rs_afterTaken[0];
+  assign rs0i0_alt=rs_alt[0];
+  assign rs0i0_alloc=rs_alloc[0];
+  assign rs0i0_allocF=rs_allocF[0];
+  assign rs0i0_allocR=rs_allocR[0];
+  assign rs0i0_lsi=rs_lsi[0];
+  assign rs0i0_ldst_flag=rs_ldst_flag[0];
+  assign rs0i0_enA=rs_enA[0];
+  assign rs0i0_enB=rs_enB[0];
   
-  assign sssr0i1_operation=rs_operation[3];
-  assign sssr0i1_rA=rs_rA[3];
-  assign sssr0i1_rA_use=rs_rA_use[3];
-  assign sssr0i1_rA_useF=rs_rA_useF[3];
-  assign sssr0i1_rA_isV=rs_rA_isV[3];
-  assign sssr0i1_rA_isAnyV=rs_rA_isAnyV[3];
-  assign sssr0i1_useAConst=rs_useAConst[3];
-  assign sssr0i1_rB=rs_rB[3];
-  assign sssr0i1_rB_use=rs_rB_use[3];
-  assign sssr0i1_rB_useF=rs_rB_useF[3];
-  assign sssr0i1_rB_isV=rs_rB_isV[3];
-  assign sssr0i1_rB_isAnyV=rs_rB_isAnyV[3];
-  assign sssr0i1_useBConst=rs_useBConst[3];
-  assign sssr0i1_const=rs_constant[3];
-  assign sssr0i1_rT=rs_rT[3];
-  assign sssr0i1_rT_use=rs_rT_use[3];
-  assign sssr0i1_rT_useF=rs_rT_useF[3];
-  assign sssr0i1_rT_isV=rs_rT_isV[3];
-  assign sssr0i1_port=rs_port[3];
-  assign sssr0i1_en=rs_useRs[3];
-  assign sssr0i1_IPRel=rs_IPRel[3];
-  assign sssr0i1_afterTaken=rs_afterTaken[3];
-  assign sssr0i1_alloc=rs_alloc[3];
-  assign sssr0i1_allocF=rs_allocF[3];
-  assign sssr0i1_allocR=rs_allocR[3];
-  assign sssr0i1_flagDep=rs_flDep[3];
-  assign sssr0i1_lastFl=rs_lastFl[3];
-  assign sssr0i1_lsi=rs_lsi[3];
-  assign sssr0i1_ldst_flag=rs_ldst_flag[3];
-  assign sssr0i1_flag_wr=rs_flagWr[3];
+  assign rs0i1_operation=rs_operation[3];
+  assign rs0i1_rA=rs_rA[3];
+  assign rs0i1_rA_use=rs_rA_use[3];
+  assign rs0i1_rA_useF=rs_rA_useF[3];
+  assign rs0i1_rA_isV=rs_rA_isV[3];
+  assign rs0i1_rA_isAnyV=rs_rA_isAnyV[3];
+  assign rs0i1_useAConst=rs_useAConst[3];
+  assign rs0i1_rB=rs_rB[3];
+  assign rs0i1_rB_use=rs_rB_use[3];
+  assign rs0i1_rB_useF=rs_rB_useF[3];
+  assign rs0i1_rB_isV=rs_rB_isV[3];
+  assign rs0i1_rB_isAnyV=rs_rB_isAnyV[3];
+  assign rs0i1_useBConst=rs_useBConst[3];
+  assign rs0i1_const=rs_constant[3];
+  assign rs0i1_rT=rs_rT[3];
+  assign rs0i1_rT_use=rs_rT_use[3];
+  assign rs0i1_rT_useF=rs_rT_useF[3];
+  assign rs0i1_rT_isV=rs_rT_isV[3];
+  assign rs0i1_port=rs_port[3];
+  assign rs0i1_en=rs_useRs[3];
+  assign rs0i1_IPRel=rs_IPRel[3];
+  assign rs0i1_afterTaken=rs_afterTaken[3];
+  assign rs0i1_alloc=rs_alloc[3];
+  assign rs0i1_allocF=rs_allocF[3];
+  assign rs0i1_allocR=rs_allocR[3];
+  assign rs0i1_flagDep=rs_flDep[3];
+  assign rs0i1_lastFl=rs_lastFl[3];
+  assign rs0i1_lsi=rs_lsi[3];
+  assign rs0i1_ldst_flag=rs_ldst_flag[3];
+  assign rs0i1_flag_wr=rs_flagWr[3];
 
-  assign sssr0i2_operation=rs_operation[6];
-  assign sssr0i2_rA=rs_rA[6];
-  assign sssr0i2_rA_use=rs_rA_use[6];
-  assign sssr0i2_rA_useF=rs_rA_useF[6];
-  assign sssr0i2_rA_isV=rs_rA_isV[6];
-  assign sssr0i2_rA_isAnyV=rs_rA_isAnyV[6];
-  assign sssr0i2_useAConst=rs_useAConst[6];
-  assign sssr0i2_rB=rs_rB[6];
-  assign sssr0i2_rB_use=rs_rB_use[6];
-  assign sssr0i2_rB_useF=rs_rB_useF[6];
-  assign sssr0i2_rB_isV=rs_rB_isV[6];
-  assign sssr0i2_rB_isAnyV=rs_rB_isAnyV[6];
-  assign sssr0i2_useBConst=rs_useBConst[6];
-  assign sssr0i2_const=rs_constant[6];
-  assign sssr0i2_rT=rs_rT[6];
-  assign sssr0i2_rT_use=rs_rT_use[6];
-  assign sssr0i2_rT_useF=rs_rT_useF[6];
-  assign sssr0i2_rT_isV=rs_rT_isV[6];
-  assign sssr0i2_port=rs_port[6];
-  assign sssr0i2_en=rs_useRs[6];
-  assign sssr0i2_IPRel=rs_IPRel[6];
-  assign sssr0i2_afterTaken=rs_afterTaken[6];
-  assign sssr0i2_alloc=rs_alloc[6];
-  assign sssr0i2_allocF=rs_allocF[6];
-  assign sssr0i2_allocR=rs_allocR[6];
-  assign sssr0i2_flagDep=rs_flDep[6];
-  assign sssr0i2_lastFl=rs_lastFl[6];
-  assign sssr0i2_flag_wr=rs_flagWr[6];
+  assign rs0i2_operation=rs_operation[6];
+  assign rs0i2_rA=rs_rA[6];
+  assign rs0i2_rA_use=rs_rA_use[6];
+  assign rs0i2_rA_useF=rs_rA_useF[6];
+  assign rs0i2_rA_isV=rs_rA_isV[6];
+  assign rs0i2_rA_isAnyV=rs_rA_isAnyV[6];
+  assign rs0i2_useAConst=rs_useAConst[6];
+  assign rs0i2_rB=rs_rB[6];
+  assign rs0i2_rB_use=rs_rB_use[6];
+  assign rs0i2_rB_useF=rs_rB_useF[6];
+  assign rs0i2_rB_isV=rs_rB_isV[6];
+  assign rs0i2_rB_isAnyV=rs_rB_isAnyV[6];
+  assign rs0i2_useBConst=rs_useBConst[6];
+  assign rs0i2_const=rs_constant[6];
+  assign rs0i2_rT=rs_rT[6];
+  assign rs0i2_rT_use=rs_rT_use[6];
+  assign rs0i2_rT_useF=rs_rT_useF[6];
+  assign rs0i2_rT_isV=rs_rT_isV[6];
+  assign rs0i2_port=rs_port[6];
+  assign rs0i2_en=rs_useRs[6];
+  assign rs0i2_IPRel=rs_IPRel[6];
+  assign rs0i2_afterTaken=rs_afterTaken[6];
+  assign rs0i2_alloc=rs_alloc[6];
+  assign rs0i2_allocF=rs_allocF[6];
+  assign rs0i2_allocR=rs_allocR[6];
+  assign rs0i2_flagDep=rs_flDep[6];
+  assign rs0i2_lastFl=rs_lastFl[6];
+  assign rs0i2_flag_wr=rs_flagWr[6];
 
-  assign sssr1i0_operation=rs_operation[1];
-  assign sssr1i0_rA=rs_rA[1];
-  assign sssr1i0_rA_use=rs_rA_use[1];
-  assign sssr1i0_rA_useF=rs_rA_useF[1];
-  assign sssr1i0_rA_isV=rs_rA_isV[1];
-  assign sssr1i0_rA_isAnyV=rs_rA_isAnyV[1];
-  assign sssr1i0_rB=rs_rB[1];
-  assign sssr1i0_rB_use=rs_rB_use[1];
-  assign sssr1i0_rB_useF=rs_rB_useF[1];
-  assign sssr1i0_rB_isV=rs_rB_isV[1];
-  assign sssr1i0_rB_isAnyV=rs_rB_isAnyV[1];
-  assign sssr1i0_useBConst=rs_useBConst[1];
-  assign sssr1i0_const=rs_constant[1];
-  assign sssr1i0_rT=rs_rT[1];
-  assign sssr1i0_rT_use=rs_rT_use[1];
-  assign sssr1i0_rT_useF=rs_rT_useF[1];
-  assign sssr1i0_rT_isV=rs_rT_isV[1];
-  assign sssr1i0_port=rs_port[1];
-  assign sssr1i0_en=rs_useRs[1];
-  assign sssr1i0_IPRel=rs_IPRel[1];
-  assign sssr1i0_afterTaken=rs_afterTaken[1];
-  assign sssr1i0_alt=rs_alt[1];
-  assign sssr1i0_alloc=rs_alloc[1];
-  assign sssr1i0_allocF=rs_allocF[1];
-  assign sssr1i0_allocR=rs_allocR[1];
-  assign sssr1i0_lsi=rs_lsi[1];
-  assign sssr1i0_ldst_flag=rs_ldst_flag[1];
-  assign sssr1i0_enA=rs_enA[1];
-  assign sssr1i0_enB=rs_enB[1];
+  assign rs1i0_operation=rs_operation[1];
+  assign rs1i0_rA=rs_rA[1];
+  assign rs1i0_rA_use=rs_rA_use[1];
+  assign rs1i0_rA_useF=rs_rA_useF[1];
+  assign rs1i0_rA_isV=rs_rA_isV[1];
+  assign rs1i0_rA_isAnyV=rs_rA_isAnyV[1];
+  assign rs1i0_rB=rs_rB[1];
+  assign rs1i0_rB_use=rs_rB_use[1];
+  assign rs1i0_rB_useF=rs_rB_useF[1];
+  assign rs1i0_rB_isV=rs_rB_isV[1];
+  assign rs1i0_rB_isAnyV=rs_rB_isAnyV[1];
+  assign rs1i0_useBConst=rs_useBConst[1];
+  assign rs1i0_const=rs_constant[1];
+  assign rs1i0_rT=rs_rT[1];
+  assign rs1i0_rT_use=rs_rT_use[1];
+  assign rs1i0_rT_useF=rs_rT_useF[1];
+  assign rs1i0_rT_isV=rs_rT_isV[1];
+  assign rs1i0_port=rs_port[1];
+  assign rs1i0_en=rs_useRs[1];
+  assign rs1i0_IPRel=rs_IPRel[1];
+  assign rs1i0_afterTaken=rs_afterTaken[1];
+  assign rs1i0_alt=rs_alt[1];
+  assign rs1i0_alloc=rs_alloc[1];
+  assign rs1i0_allocF=rs_allocF[1];
+  assign rs1i0_allocR=rs_allocR[1];
+  assign rs1i0_lsi=rs_lsi[1];
+  assign rs1i0_ldst_flag=rs_ldst_flag[1];
+  assign rs1i0_enA=rs_enA[1];
+  assign rs1i0_enB=rs_enB[1];
 
-  assign sssr1i1_operation=rs_operation[4];
-  assign sssr1i1_rA=rs_rA[4];
-  assign sssr1i1_rA_use=rs_rA_use[4];
-  assign sssr1i1_rA_useF=rs_rA_useF[4];
-  assign sssr1i1_rA_isV=rs_rA_isV[4];
-  assign sssr1i1_rA_isAnyV=rs_rA_isAnyV[4];
-  assign sssr1i1_useAConst=rs_useAConst[4];
-  assign sssr1i1_rB=rs_rB[4];
-  assign sssr1i1_rB_use=rs_rB_use[4];
-  assign sssr1i1_rB_useF=rs_rB_useF[4];
-  assign sssr1i1_rB_isV=rs_rB_isV[4];
-  assign sssr1i1_rB_isAnyV=rs_rB_isAnyV[4];
-  assign sssr1i1_useBConst=rs_useBConst[4];
-  assign sssr1i1_const=rs_constant[4];
-  assign sssr1i1_rT=rs_rT[4];
-  assign sssr1i1_rT_use=rs_rT_use[4];
-  assign sssr1i1_rT_useF=rs_rT_useF[4];
-  assign sssr1i1_rT_isV=rs_rT_isV[4];
-  assign sssr1i1_port=rs_port[4];
-  assign sssr1i1_en=rs_useRs[4];
-  assign sssr1i1_IPRel=rs_IPRel[4];
-  assign sssr1i1_afterTaken=rs_afterTaken[4];
-  assign sssr1i1_alloc=rs_alloc[4];
-  assign sssr1i1_allocF=rs_allocF[4];
-  assign sssr1i1_allocR=rs_allocR[4];
-  assign sssr1i1_flagDep=rs_flDep[4];
-  assign sssr1i1_lastFl=rs_lastFl[4];
-  assign sssr1i1_lsi=rs_lsi[4];
-  assign sssr1i1_ldst_flag=rs_ldst_flag[4];
-  assign sssr1i1_flag_wr=rs_flagWr[4];
+  assign rs1i1_operation=rs_operation[4];
+  assign rs1i1_rA=rs_rA[4];
+  assign rs1i1_rA_use=rs_rA_use[4];
+  assign rs1i1_rA_useF=rs_rA_useF[4];
+  assign rs1i1_rA_isV=rs_rA_isV[4];
+  assign rs1i1_rA_isAnyV=rs_rA_isAnyV[4];
+  assign rs1i1_useAConst=rs_useAConst[4];
+  assign rs1i1_rB=rs_rB[4];
+  assign rs1i1_rB_use=rs_rB_use[4];
+  assign rs1i1_rB_useF=rs_rB_useF[4];
+  assign rs1i1_rB_isV=rs_rB_isV[4];
+  assign rs1i1_rB_isAnyV=rs_rB_isAnyV[4];
+  assign rs1i1_useBConst=rs_useBConst[4];
+  assign rs1i1_const=rs_constant[4];
+  assign rs1i1_rT=rs_rT[4];
+  assign rs1i1_rT_use=rs_rT_use[4];
+  assign rs1i1_rT_useF=rs_rT_useF[4];
+  assign rs1i1_rT_isV=rs_rT_isV[4];
+  assign rs1i1_port=rs_port[4];
+  assign rs1i1_en=rs_useRs[4];
+  assign rs1i1_IPRel=rs_IPRel[4];
+  assign rs1i1_afterTaken=rs_afterTaken[4];
+  assign rs1i1_alloc=rs_alloc[4];
+  assign rs1i1_allocF=rs_allocF[4];
+  assign rs1i1_allocR=rs_allocR[4];
+  assign rs1i1_flagDep=rs_flDep[4];
+  assign rs1i1_lastFl=rs_lastFl[4];
+  assign rs1i1_lsi=rs_lsi[4];
+  assign rs1i1_ldst_flag=rs_ldst_flag[4];
+  assign rs1i1_flag_wr=rs_flagWr[4];
 
-  assign sssr1i2_operation=rs_operation[7];
-  assign sssr1i2_rA=rs_rA[7];
-  assign sssr1i2_rA_use=rs_rA_use[7];
-  assign sssr1i2_rA_useF=rs_rA_useF[7];
-  assign sssr1i2_rA_isV=rs_rA_isV[7];
-  assign sssr1i2_rA_isAnyV=rs_rA_isAnyV[7];
-  assign sssr1i2_useAConst=rs_useAConst[7];
-  assign sssr1i2_rB=rs_rB[7];
-  assign sssr1i2_rB_use=rs_rB_use[7];
-  assign sssr1i2_rB_useF=rs_rB_useF[7];
-  assign sssr1i2_rB_isV=rs_rB_isV[7];
-  assign sssr1i2_rB_isAnyV=rs_rB_isAnyV[7];
-  assign sssr1i2_useBConst=rs_useBConst[7];
-  assign sssr1i2_const=rs_constant[7];
-  assign sssr1i2_rT=rs_rT[7];
-  assign sssr1i2_rT_use=rs_rT_use[7];
-  assign sssr1i2_rT_useF=rs_rT_useF[7];
-  assign sssr1i2_rT_isV=rs_rT_isV[7];
-  assign sssr1i2_port=rs_port[7];
-  assign sssr1i2_en=rs_useRs[7];
-  assign sssr1i2_IPRel=rs_IPRel[7];
-  assign sssr1i2_afterTaken=rs_afterTaken[7];
-  assign sssr1i2_alloc=rs_alloc[7];
-  assign sssr1i2_allocF=rs_allocF[7];
-  assign sssr1i2_allocR=rs_allocR[7];
-  assign sssr1i2_flagDep=rs_flDep[7];
-  assign sssr1i2_lastFl=rs_lastFl[7];
-  assign sssr1i2_flag_wr=rs_flagWr[7];
+  assign rs1i2_operation=rs_operation[7];
+  assign rs1i2_rA=rs_rA[7];
+  assign rs1i2_rA_use=rs_rA_use[7];
+  assign rs1i2_rA_useF=rs_rA_useF[7];
+  assign rs1i2_rA_isV=rs_rA_isV[7];
+  assign rs1i2_rA_isAnyV=rs_rA_isAnyV[7];
+  assign rs1i2_useAConst=rs_useAConst[7];
+  assign rs1i2_rB=rs_rB[7];
+  assign rs1i2_rB_use=rs_rB_use[7];
+  assign rs1i2_rB_useF=rs_rB_useF[7];
+  assign rs1i2_rB_isV=rs_rB_isV[7];
+  assign rs1i2_rB_isAnyV=rs_rB_isAnyV[7];
+  assign rs1i2_useBConst=rs_useBConst[7];
+  assign rs1i2_const=rs_constant[7];
+  assign rs1i2_rT=rs_rT[7];
+  assign rs1i2_rT_use=rs_rT_use[7];
+  assign rs1i2_rT_useF=rs_rT_useF[7];
+  assign rs1i2_rT_isV=rs_rT_isV[7];
+  assign rs1i2_port=rs_port[7];
+  assign rs1i2_en=rs_useRs[7];
+  assign rs1i2_IPRel=rs_IPRel[7];
+  assign rs1i2_afterTaken=rs_afterTaken[7];
+  assign rs1i2_alloc=rs_alloc[7];
+  assign rs1i2_allocF=rs_allocF[7];
+  assign rs1i2_allocR=rs_allocR[7];
+  assign rs1i2_flagDep=rs_flDep[7];
+  assign rs1i2_lastFl=rs_lastFl[7];
+  assign rs1i2_flag_wr=rs_flagWr[7];
 
-  assign sssr2i0_operation=rs_operation[2];
-  assign sssr2i0_rA=rs_rA[2];
-  assign sssr2i0_rA_use=rs_rA_use[2];
-  assign sssr2i0_rA_useF=rs_rA_useF[2];
-  assign sssr2i0_rA_isV=rs_rA_isV[2];
-  assign sssr2i0_rA_isAnyV=rs_rA_isAnyV[2];
-  assign sssr2i0_rB=rs_rB[2];
-  assign sssr2i0_rB_use=rs_rB_use[2];
-  assign sssr2i0_rB_useF=rs_rB_useF[2];
-  assign sssr2i0_rB_isV=rs_rB_isV[2];
-  assign sssr2i0_rB_isAnyV=rs_rB_isAnyV[2];
-  assign sssr2i0_useBConst=rs_useBConst[2];
-  assign sssr2i0_const=rs_constant[2];
-  assign sssr2i0_rT=rs_rT[2];
-  assign sssr2i0_rT_use=rs_rT_use[2];
-  assign sssr2i0_rT_useF=rs_rT_useF[2];
-  assign sssr2i0_rT_isV=rs_rT_isV[2];
-  assign sssr2i0_port=rs_port[2];
-  assign sssr2i0_en=rs_useRs[2];
-  assign sssr2i0_IPRel=rs_IPRel[2];
-  assign sssr2i0_afterTaken=rs_afterTaken[2];
-  assign sssr2i0_alt=rs_alt[2];
-  assign sssr2i0_alloc=rs_alloc[2];
-  assign sssr2i0_allocF=rs_allocF[2];
-  assign sssr2i0_allocR=rs_allocR[2];
-  assign sssr2i0_lsi=rs_lsi[2];
-  assign sssr2i0_ldst_flag=rs_ldst_flag[2];
-  assign sssr2i0_enA=rs_enA[2];
-  assign sssr2i0_enB=rs_enB[2];
+  assign rs2i0_operation=rs_operation[2];
+  assign rs2i0_rA=rs_rA[2];
+  assign rs2i0_rA_use=rs_rA_use[2];
+  assign rs2i0_rA_useF=rs_rA_useF[2];
+  assign rs2i0_rA_isV=rs_rA_isV[2];
+  assign rs2i0_rA_isAnyV=rs_rA_isAnyV[2];
+  assign rs2i0_rB=rs_rB[2];
+  assign rs2i0_rB_use=rs_rB_use[2];
+  assign rs2i0_rB_useF=rs_rB_useF[2];
+  assign rs2i0_rB_isV=rs_rB_isV[2];
+  assign rs2i0_rB_isAnyV=rs_rB_isAnyV[2];
+  assign rs2i0_useBConst=rs_useBConst[2];
+  assign rs2i0_const=rs_constant[2];
+  assign rs2i0_rT=rs_rT[2];
+  assign rs2i0_rT_use=rs_rT_use[2];
+  assign rs2i0_rT_useF=rs_rT_useF[2];
+  assign rs2i0_rT_isV=rs_rT_isV[2];
+  assign rs2i0_port=rs_port[2];
+  assign rs2i0_en=rs_useRs[2];
+  assign rs2i0_IPRel=rs_IPRel[2];
+  assign rs2i0_afterTaken=rs_afterTaken[2];
+  assign rs2i0_alt=rs_alt[2];
+  assign rs2i0_alloc=rs_alloc[2];
+  assign rs2i0_allocF=rs_allocF[2];
+  assign rs2i0_allocR=rs_allocR[2];
+  assign rs2i0_lsi=rs_lsi[2];
+  assign rs2i0_ldst_flag=rs_ldst_flag[2];
+  assign rs2i0_enA=rs_enA[2];
+  assign rs2i0_enB=rs_enB[2];
 
-  assign sssr2i1_operation=rs_operation[5];
-  assign sssr2i1_rA=rs_rA[5];
-  assign sssr2i1_rA_use=rs_rA_use[5];
-  assign sssr2i1_rA_useF=rs_rA_useF[5];
-  assign sssr2i1_rA_isV=rs_rA_isV[5];
-  assign sssr2i1_rA_isAnyV=rs_rA_isAnyV[5];
-  assign sssr2i1_useAConst=rs_useAConst[5];
-  assign sssr2i1_rB=rs_rB[5];
-  assign sssr2i1_rB_use=rs_rB_use[5];
-  assign sssr2i1_rB_useF=rs_rB_useF[5];
-  assign sssr2i1_rB_isV=rs_rB_isV[5];
-  assign sssr2i1_rB_isAnyV=rs_rB_isAnyV[5];
-  assign sssr2i1_useBConst=rs_useBConst[5];
-  assign sssr2i1_const=rs_constant[5];
-  assign sssr2i1_rT=rs_rT[5];
-  assign sssr2i1_rT_use=rs_rT_use[5];
-  assign sssr2i1_rT_useF=rs_rT_useF[5];
-  assign sssr2i1_rT_isV=rs_rT_isV[5];
-  assign sssr2i1_port=rs_port[5];
-  assign sssr2i1_en=rs_useRs[5];
-  assign sssr2i1_IPRel=rs_IPRel[5];
-  assign sssr2i1_afterTaken=rs_afterTaken[5];
-  assign sssr2i1_alloc=rs_alloc[5];
-  assign sssr2i1_allocF=rs_allocF[5];
-  assign sssr2i1_allocR=rs_allocR[5];
-  assign sssr2i1_flagDep=rs_flDep[5];
-  assign sssr2i1_lastFl=rs_lastFl[5];
-  assign sssr2i1_lsi=rs_lsi[5];
-  assign sssr2i1_ldst_flag=rs_ldst_flag[5];
-  assign sssr2i1_flag_wr=rs_flagWr[5];
+  assign rs2i1_operation=rs_operation[5];
+  assign rs2i1_rA=rs_rA[5];
+  assign rs2i1_rA_use=rs_rA_use[5];
+  assign rs2i1_rA_useF=rs_rA_useF[5];
+  assign rs2i1_rA_isV=rs_rA_isV[5];
+  assign rs2i1_rA_isAnyV=rs_rA_isAnyV[5];
+  assign rs2i1_useAConst=rs_useAConst[5];
+  assign rs2i1_rB=rs_rB[5];
+  assign rs2i1_rB_use=rs_rB_use[5];
+  assign rs2i1_rB_useF=rs_rB_useF[5];
+  assign rs2i1_rB_isV=rs_rB_isV[5];
+  assign rs2i1_rB_isAnyV=rs_rB_isAnyV[5];
+  assign rs2i1_useBConst=rs_useBConst[5];
+  assign rs2i1_const=rs_constant[5];
+  assign rs2i1_rT=rs_rT[5];
+  assign rs2i1_rT_use=rs_rT_use[5];
+  assign rs2i1_rT_useF=rs_rT_useF[5];
+  assign rs2i1_rT_isV=rs_rT_isV[5];
+  assign rs2i1_port=rs_port[5];
+  assign rs2i1_en=rs_useRs[5];
+  assign rs2i1_IPRel=rs_IPRel[5];
+  assign rs2i1_afterTaken=rs_afterTaken[5];
+  assign rs2i1_alloc=rs_alloc[5];
+  assign rs2i1_allocF=rs_allocF[5];
+  assign rs2i1_allocR=rs_allocR[5];
+  assign rs2i1_flagDep=rs_flDep[5];
+  assign rs2i1_lastFl=rs_lastFl[5];
+  assign rs2i1_lsi=rs_lsi[5];
+  assign rs2i1_ldst_flag=rs_ldst_flag[5];
+  assign rs2i1_flag_wr=rs_flagWr[5];
 
-  assign sssr2i2_operation=rs_operation[8];
-  assign sssr2i2_rA=rs_rA[8];
-  assign sssr2i2_rA_use=rs_rA_use[8];
-  assign sssr2i2_rA_useF=rs_rA_useF[8];
-  assign sssr2i2_rA_isV=rs_rA_isV[8];
-  assign sssr2i2_rA_isAnyV=rs_rA_isAnyV[8];
-  assign sssr2i2_useAConst=rs_useAConst[8];
-  assign sssr2i2_rB=rs_rB[8];
-  assign sssr2i2_rB_use=rs_rB_use[8];
-  assign sssr2i2_rB_useF=rs_rB_useF[8];
-  assign sssr2i2_rB_isV=rs_rB_isV[8];
-  assign sssr2i2_rB_isAnyV=rs_rB_isAnyV[8];
-  assign sssr2i2_useBConst=rs_useBConst[8];
-  assign sssr2i2_const=rs_constant[8];
-  assign sssr2i2_rT=rs_rT[8];
-  assign sssr2i2_rT_use=rs_rT_use[8];
-  assign sssr2i2_rT_useF=rs_rT_useF[8];
-  assign sssr2i2_rT_isV=rs_rT_isV[8];
-  assign sssr2i2_port=rs_port[8];
-  assign sssr2i2_en=rs_useRs[8];
-  assign sssr2i2_IPRel=rs_IPRel[8];
-  assign sssr2i2_afterTaken=rs_afterTaken[8];
-  assign sssr2i2_alloc=rs_alloc[8];
-  assign sssr2i2_allocF=rs_allocF[8];
-  assign sssr2i2_allocR=rs_allocR[8];
-  assign sssr2i2_flagDep=rs_flDep[8];
-  assign sssr2i2_lastFl=rs_lastFl[8];
-  assign sssr2i2_flag_wr=rs_flagWr[8];
+  assign rs2i2_operation=rs_operation[8];
+  assign rs2i2_rA=rs_rA[8];
+  assign rs2i2_rA_use=rs_rA_use[8];
+  assign rs2i2_rA_useF=rs_rA_useF[8];
+  assign rs2i2_rA_isV=rs_rA_isV[8];
+  assign rs2i2_rA_isAnyV=rs_rA_isAnyV[8];
+  assign rs2i2_useAConst=rs_useAConst[8];
+  assign rs2i2_rB=rs_rB[8];
+  assign rs2i2_rB_use=rs_rB_use[8];
+  assign rs2i2_rB_useF=rs_rB_useF[8];
+  assign rs2i2_rB_isV=rs_rB_isV[8];
+  assign rs2i2_rB_isAnyV=rs_rB_isAnyV[8];
+  assign rs2i2_useBConst=rs_useBConst[8];
+  assign rs2i2_const=rs_constant[8];
+  assign rs2i2_rT=rs_rT[8];
+  assign rs2i2_rT_use=rs_rT_use[8];
+  assign rs2i2_rT_useF=rs_rT_useF[8];
+  assign rs2i2_rT_isV=rs_rT_isV[8];
+  assign rs2i2_port=rs_port[8];
+  assign rs2i2_en=rs_useRs[8];
+  assign rs2i2_IPRel=rs_IPRel[8];
+  assign rs2i2_afterTaken=rs_afterTaken[8];
+  assign rs2i2_alloc=rs_alloc[8];
+  assign rs2i2_allocF=rs_allocF[8];
+  assign rs2i2_allocR=rs_allocR[8];
+  assign rs2i2_flagDep=rs_flDep[8];
+  assign rs2i2_lastFl=rs_lastFl[8];
+  assign rs2i2_flag_wr=rs_flagWr[8];
   
 
   assign instr0_rT=	dec_rT_reg[0];
@@ -3988,7 +3988,7 @@ endmodule
 
 module decoder_get_baseIP(
   clk,
-  sssrt,
+  rst,
   baseIP,
   baseAttr,
   afterTK,
