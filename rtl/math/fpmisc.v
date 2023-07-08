@@ -346,13 +346,13 @@ module rt2_fp(
      else rdy0_reg2<=rdy0_reg;
      if (rst|except) begin
 	 inv_bits<=0;
-	 P<={8'hff,64'hffff_ffff_ffff_ffff,56'hffff_ffff_ffff_ff,8'b0};
+	 P<='z;
 	 for(p=1;p<16;p=p+1) begin
-	     Se[p]<=72'b0;
+	     Se[p]<='z;
 		 //verilator lint_off WIDTH
 	     Se_arg2_reg[p]<=p*p;
 		 //verilator lint_on WIDTH
-	     Se_arg_reg[p]<=8'b0;
+	     Se_arg_reg[p]<='z;
 	 end
 	 P_en_reg<=16'b1;
          expA_reg<=0;
@@ -472,8 +472,19 @@ module rt2_fp(
 	// if (out_en&out_can) rdy<=1'b1;
 	 digits<={digits[63:0],new_digit};
      end
-     if ({27'b0,cnt}==(2+1+{31'b0,(type_reg!=2)}) && perform_stage && ~rst) out_en<=1'b1;
-     else if (rst|out_can) out_en<=1'b0;
+     if ({27'b0,cnt}==(2+1+{31'b0,(type_reg!=2)}) && perform_stage && ~rst) begin
+         out_en<=1'b1;
+	 P<='z;
+	 for(p=1;p<16;p=p+1) begin
+	     Se[p]<='z;
+		 //verilator lint_off WIDTH
+	     Se_arg2_reg[p]<=p*p;
+		 //verilator lint_on WIDTH
+	     Se_arg_reg[p]<='z;
+	 end
+     end else begin
+         if (rst|out_can) out_en<=1'b0;
+     end
      if (rdy0_reg2) rdy_cnt<=15'b1;
      else rdy_cnt<={rdy_cnt[13:0],1'b0};
      rdy<=rdy_cnt[14];
