@@ -85,6 +85,7 @@ module agu_r(
   mOp_data,
   mOp_pbit,
   mOp_tlb_miss,
+  mOp_skip_LDQ,
   FU3Hit,
   FU3reg,
   FU3Data,
@@ -183,6 +184,7 @@ module agu_r(
   output [127+8:0] mOp_data;
   output [1:0] mOp_pbit;
   output mOp_tlb_miss;
+  output mOp_skip_LDQ;
   input FU3Hit;
   input [8:0] FU3reg;
   input [127+8:0] FU3Data;
@@ -401,6 +403,8 @@ module agu_r(
   assign mOp_tlb_miss=mOp0_en_reg & ~(tlb_hit|mOp0_lsfwd_reg);
   
   assign tlb_clkEn=mOp0_en_reg | reqtlb_en_reg;
+
+  assign mOp_skip_LDQ=~tlb_data[`dtlbData_wp] && ~tlb_data_next[`dtlbData_wp]|~page_carry;
 
   assign mOp_addrEven[43:13]=(~mOp0_lsfwd_reg & ~req_bus && ~page_carry | ~addrMain[7]) ? 
     tlb_data[`dtlbData_phys] : 31'bz;
