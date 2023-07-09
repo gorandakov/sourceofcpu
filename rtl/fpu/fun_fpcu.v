@@ -177,6 +177,10 @@ module fun_fpu(
   reg [10:0] fraise3_reg;
   reg [10:0] fmask2_reg;
   reg [10:0] fmask3_reg;
+  reg isXTRA;
+  reg isXTRA_reg;
+  reg isXTRA_reg2;
+  reg fxXTRA;
   //wire [15:0] u1_Bx=u1_BH[15:0];
   //wire [15:0] u1_Bx=u1_BH[15:0];
   integer k;
@@ -403,7 +407,7 @@ module fun_fpu(
   .or1(H? 1'b1 : fxFCADD_dbl),
   .copyA(fxFCADD_copyA[H]),
   .en(H? fxFCADD_dbl : fxFCADD_dblext),
-  .rmode(fxFCADD_dbl|H ? fpcsr[`csrfpu_rmode] : fpcsr[`csrfpu_rmodeE]),
+  .rmode(fxXTRA ? ROUND_TRUNC : fxFCADD_dbl|H ? fpcsr[`csrfpu_rmode] : fpcsr[`csrfpu_rmodeE]),
   .res(FOOF[1][67:0]),
   .res_hi(FOOF[1][68+15:68]),
   .xtra(xtra),
@@ -432,17 +436,17 @@ module fun_fpu(
       else assign gfDataBFL[0]=u1_op_reg[8] ? {uu_B2[68+15:68],u1_Bx} : uu_B2;
       if (INDEX==0) begin
 	      assign FUF4=FOOF_reg[0];
-	      assign FUF7=isXTRA ? xtra_reg : FOOF_reg[1];
+	      assign FUF7=isXTRA_reg2 ? xtra_reg : FOOF_reg[1];
       end
       if (INDEX==1) begin
 	      assign FUF5=FOOF_reg[0];
-	      assign FUF8=isXTRA ? xtra_reg : FOOF_reg[1];
+	      assign FUF8=isXTRA_reg2 ? xtra_reg : FOOF_reg[1];
       end
       if (INDEX==2) begin
 	      assign FUF6=|ALT_INP_reg ? {S+SIMD_WIDTH{1'BZ}} : FOOF_reg[0];
 	      assign FUF6=ALT_INP_reg[0] ? ALTDATA0 : {S+SIMD_WIDTH{1'BZ}};
 	      assign FUF6=ALT_INP_reg[1] ? ALTDATA1 : {S+SIMD_WIDTH{1'BZ}};
-	      assign FUF9=isXTRA ? xtra_reg : FOOF_reg[1];
+	      assign FUF9=isXTRA_reg2 ? xtra_reg : FOOF_reg[1];
 	      assign outA=uu_A2;
 	      assign outB=gfDataBFL[0][S+67:0];
       end
@@ -611,6 +615,8 @@ module fun_fpu(
       u1_en_reg5<=u1_en_reg4;
       u1_en_reg6<=u1_en_reg5;
       isXTRA<=fxXTRA;
+      isXTRA_reg<=isXTRA;
+      isXTRA_reg2<=isXTRA_reg;
       xtra_reg<=xtra;
   end
 
