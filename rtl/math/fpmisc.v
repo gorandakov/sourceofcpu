@@ -474,16 +474,18 @@ module rt2_fp(
      end
      if ({27'b0,cnt}==(2+1+{31'b0,(type_reg!=2)}) && perform_stage && ~rst) begin
          out_en<=1'b1;
-	 P<='z;
-	 for(p=1;p<16;p=p+1) begin
-	     Se[p]<='z;
-		 //verilator lint_off WIDTH
-	     Se_arg2_reg[p]<=p*p;
-		 //verilator lint_on WIDTH
-	     Se_arg_reg[p]<='z;
-	 end
      end else begin
-         if (rst|out_can) out_en<=1'b0;
+         if (rst|out_can) begin
+             out_en<=1'b0;
+             P<='z;
+	     for(p=1;p<16;p=p+1) begin
+	         Se[p]<='z;
+		     //verilator lint_off WIDTH
+	         Se_arg2_reg[p]<=p*p;
+		     //verilator lint_on WIDTH
+	         Se_arg_reg[p]<='z;
+	     end
+         end
      end
      if (rdy0_reg2) rdy_cnt<=15'b1;
      else rdy_cnt<={rdy_cnt[13:0],1'b0};
