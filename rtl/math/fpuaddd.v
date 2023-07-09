@@ -24,6 +24,7 @@ module fadd(
   A,
   A_alt,
   B,
+  pook_in,
   isDBL,
   isSub,//inclusive of isRSub
   isRSub,
@@ -50,6 +51,7 @@ module fadd(
   input [80:0] A;
   input [64:0] A_alt;
   input [80:0] B;
+  input pook_in;
   input isDBL;
   input isSub;
   input isRSub;
@@ -219,6 +221,9 @@ module fadd(
   wire [3:0] X_xpon;
   wire [3:0] Y_xpon;
   wire invExcpt;
+  wire pook;
+
+  assign pook=isDBL ? expdiff==53 && ~sxor : expdiff==64 && ~sxor;
 
   assign A_exp=(~isDBL) ? {A[80],A[78:64]} : {A[80],{4{~A[80]}},A[62:52]};
   assign B_exp=(~isDBL) ? {B[80],B[78:64]} : {B[80],{4{~B[80]}},B[62:52]};
@@ -304,8 +309,8 @@ module fadd(
   assign res_X[64]=(renor_round & isDBL_reg & en_reg & ~spec_any) ? A_s1_reg : 1'bz;
   
 
-  assign {res_X[65],res_X_hi,res_X[64:0]}=(~renor_simple && ~renor_round && ~isDBL_reg && ~spec_any && en_reg) ? {resY[80:32],1'b0,resY[31:0]} : 82'bz;
-  assign res_X[65:0]=(~renor_simple && ~renor_round &&  isDBL_reg && ~spec_any && en_reg) ? {resX[64:32],1'b0,resX[31:0]} : 66'bz;
+  assign {res_X[65],res_X_hi,res_X[64:0]}=(~renor_simple && ~renor_round && ~isDBL_reg && ~spec_any && en_reg) ? {resY[80:32],pook,resY[31:0]} : 82'bz;
+  assign res_X[65:0]=(~renor_simple && ~renor_round &&  isDBL_reg && ~spec_any && en_reg) ? {resX[64:32],pook,resX[31:0]} : 66'bz;
 
   assign {res_X[65],res_X[64:0]}=(spec_any & en_reg) ? {res_spec[80],res_spec[63:32],1'b0,res_spec[31:0]} : 66'bz;  
   assign res_X_hi[14:0]=(spec_any & ~isDBL_reg & en_reg) ? {res_spec[78:64]} : 15'bz;  
@@ -424,8 +429,8 @@ module fadd(
   assign main_round=(~main_lo && !(~res_rnbit & ~(res_tail & isrnd_plus) || isrnd_zero ||(isrnd_even && ~res_tail&&resMR1[0])) && ~(cout64_MR1_ns^partM1[64]^sxor_reg)) ||
     (main_ulo && !(~res_rnbitL & ~(res_tailL & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tailL&&~res_rnbit)));
   assign main_roundC=~main_lo && !(~res_rnbitC & ~(res_tailC & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tailC&&resM2[1])) && (cout64_M1_ns^partM1[64]^sxor_reg) &&
-   (~res_rnbit & ~(res_tail & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tail&&resMR1[0]));
-  assign main_simpleC=~main_lo && ((~res_rnbitC & ~(res_tailC & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tailC&&resM2[1])) && (cout64_M1_ns^partM1[64]^sxor_reg) &&
+   (~res_rnbit & ~(res_tail & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tail&&resMR1[0])) && !pook_in;
+  assign main_simpleC=~main_lo && ((~res_rnbitC & ~(res_tailC & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tailC&&resM2[1]) || pook_in ) && (cout64_M1_ns^partM1[64]^sxor_reg) &&
     (~res_rnbit & ~(res_tail & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tail&&resMR1[0])));
   assign main_simpleRC=~main_lo && (!(~res_rnbit & ~(res_tail & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tail&&resMR1[0])) && (cout64_MR1_ns^partM1[64]^sxor_reg));
   assign main_simpleL=main_lo && ((~res_rnbitL & ~(res_tailL & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tailL&&~res_rnbit)) || ~res_rnbit);
@@ -437,13 +442,12 @@ module fadd(
     (Smain_ulo && !(~res_rnbitL & ~(res_tailL & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tailL&&~res_rnbit)
     ) );
   assign Smain_roundC=~Smain_lo && !(~res_rnbitC & ~(res_tailC & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tailC&&resM2[1])) && (resM1[53]&~sxor_reg) &&
-   (~res_rnbit & ~(res_tail & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tail&resMR1[0]));
-  assign Smain_simpleC=~Smain_lo && ((~res_rnbitC & ~(res_tailC & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tailC&&resM2[1])) && (resM1[53]&~sxor_reg) &&
+   (~res_rnbit & ~(res_tail & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tail&resMR1[0])) && !pook_in;
+  assign Smain_simpleC=~Smain_lo && ((~res_rnbitC & ~(res_tailC & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tailC&&resM2[1]) || pook_in) && (resM1[53]&~sxor_reg) &&
     (~res_rnbit & ~(res_tail & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tail&&resMR1[0]))); 
   assign Smain_simpleRC=~Smain_lo && (!(~res_rnbit & ~(res_tail & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tail&&resMR1[0])) && (resMR1[53]&~sxor_reg));
   assign Smain_simpleL=Smain_lo && ((~res_rnbitL & ~(res_tailL & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tailL&&~res_rnbit)) ||
-    ~res_rnbit);/* && 
-   ~(res_rnbit && (res_rnbitL^sxor_reg) && res_andtailL);*/
+    ~res_rnbit);
   assign Smain_roundL=Smain_lo && !(~res_rnbitL & ~(res_tailL & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tailL&&~res_rnbit)) && ~Smain_ulo &&
    res_rnbit;
   assign Smain_subroundL=Smain_lo && !(~res_rnbitL & ~(res_tailL & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tailL&&~res_rnbit)) && ~Smain_ulo;//|~res_rnbitL;
