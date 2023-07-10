@@ -1835,7 +1835,7 @@ module frontend1(
 	  read_set_flag_reg<=read_set_flag;
           cc_read_IP<=cc_read_IP_d;
           cc_attr<=cc_attr_d;
-          read_data_reg<=read_data;
+          if (instrEn_reg3 && !|tbuf_error) read_data_reg<=read_data;
           jumpTK_en<=1'b0;
           if ((~cc_read_hit|~tlb_match) & ~miss_now & instrEn_reg3) begin
               miss_IP<=cc_read_IP_reg3;
