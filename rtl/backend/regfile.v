@@ -28,6 +28,8 @@ module regfile_ram(
   rst,
   retire_clkEn,
 
+  read_non_stall,
+
   read0_addr,read0_data,read0_clkEn,
   read1_addr,read1_data,read1_clkEn,
   read2_addr,read2_data,read2_clkEn,
@@ -54,6 +56,7 @@ module regfile_ram(
   input rst;
   input retire_clkEn;
 
+  input read_non_stall;
 
   input [ADDR_WIDTH-1:0] read0_addr;
   (* read_port *) output [DATA_WIDTH-1:0] read0_data;
@@ -125,17 +128,27 @@ module regfile_ram(
   reg [ADDR_WIDTH-1:0] read7_addr_reg;
   reg [ADDR_WIDTH-1:0] read8_addr_reg;
 
+  reg read0_clkEn_reg;
+  reg read1_clkEn_reg;
+  reg read2_clkEn_reg;
+  reg read3_clkEn_reg;
+  reg read4_clkEn_reg;
+  reg read5_clkEn_reg;
+  reg read6_clkEn_reg;
+  reg read7_clkEn_reg;
+  reg read8_clkEn_reg;
+
   reg [ADDR_WIDTH-1:0] retireRead_addr_reg;
 
-  assign read0_data=ram[read0_addr_reg];
-  assign read1_data=ram[read1_addr_reg];
-  assign read2_data=ram[read2_addr_reg];
-  assign read3_data=ram[read3_addr_reg];
-  assign read4_data=ram[read4_addr_reg];
-  assign read5_data=ram[read5_addr_reg];
-  assign read6_data=ram[read6_addr_reg];
-  assign read7_data=ram[read7_addr_reg];
-  assign read8_data=ram[read8_addr_reg];
+  assign read0_data=read0_clkEn_reg ? ram[read0_addr_reg] : 'z; 
+  assign read1_data=read1_clkEn_reg ? ram[read1_addr_reg] : 'z;
+  assign read2_data=read2_clkEn_reg ? ram[read2_addr_reg] : 'z;
+  assign read3_data=read3_clkEn_reg ? ram[read3_addr_reg] : 'z;
+  assign read4_data=read4_clkEn_reg ? ram[read4_addr_reg] : 'z;
+  assign read5_data=read5_clkEn_reg ? ram[read5_addr_reg] : 'z;
+  assign read6_data=read6_clkEn_reg ? ram[read6_addr_reg] : 'z;
+  assign read7_data=read7_clkEn_reg ? ram[read7_addr_reg] : 'z;
+  assign read8_data=read8_clkEn_reg ? ram[read8_addr_reg] : 'z;
 
 
   assign retireRead_data=ram[retireRead_addr_reg][DATA_WIDTH-1:0];
@@ -153,28 +166,39 @@ module regfile_ram(
           read6_addr_reg<={ADDR_WIDTH{1'b0}};
           read7_addr_reg<={ADDR_WIDTH{1'b0}};
           read8_addr_reg<={ADDR_WIDTH{1'b0}};
+          read0_clkEn_reg<=1'b0;
+          read1_clkEn_reg<=1'b0;
+          read2_clkEn_reg<=1'b0;
+          read3_clkEn_reg<=1'b0;
+          read4_clkEn_reg<=1'b0;
+          read5_clkEn_reg<=1'b0;
+          read6_clkEn_reg<=1'b0;
+          read7_clkEn_reg<=1'b0;
+          read8_clkEn_reg<=1'b0;
           retireRead_addr_reg<={ADDR_WIDTH{1'b0}};
         end
       else
       begin
-        if (read0_clkEn)
+        if (read_non_stall) begin
             read0_addr_reg<=read0_addr;
-        if (read1_clkEn)
             read1_addr_reg<=read1_addr;
-        if (read2_clkEn)
             read2_addr_reg<=read2_addr;
-        if (read3_clkEn)
             read3_addr_reg<=read3_addr;
-        if (read4_clkEn)
             read4_addr_reg<=read4_addr;
-        if (read5_clkEn)
             read5_addr_reg<=read5_addr;
-        if (read6_clkEn)
             read6_addr_reg<=read6_addr;
-        if (read7_clkEn)
             read7_addr_reg<=read7_addr;
-        if (read8_clkEn)
             read8_addr_reg<=read8_addr;
+            read0_clkEn_reg<=read0_clkEn;
+            read1_clkEn_reg<=read1_clkEn;
+            read2_clkEn_reg<=read2_clkEn;
+            read3_clkEn_reg<=read3_clkEn;
+            read4_clkEn_reg<=read4_clkEn;
+            read5_clkEn_reg<=read5_clkEn;
+            read6_clkEn_reg<=read6_clkEn;
+            read7_clkEn_reg<=read7_clkEn;
+            read8_clkEn_reg<=read8_clkEn;
+        end
       end
       
       if (retire_clkEn & ~rst)
@@ -372,7 +396,7 @@ module regfile_ram_placeholder(
   clk,
   rst,
   retire_clkEn,
-
+  read_clkEn,
   read0_addr[8:5],ram_read0A_data,read0_clkEn & ~read0_addr[4],
   read1_addr[8:5],ram_read1A_data,read1_clkEn & ~read1_addr[4],
   read2_addr[8:5],ram_read2A_data,read2_clkEn & ~read2_addr[4],
@@ -395,7 +419,7 @@ module regfile_ram_placeholder(
   clk,
   rst,
   retire_clkEn,
-
+  read_clkEn,
   read0_addr[8:5],ram_read0B_data,read0_clkEn & read0_addr[4],
   read1_addr[8:5],ram_read1B_data,read1_clkEn & read1_addr[4],
   read2_addr[8:5],ram_read2B_data,read2_clkEn & read2_addr[4],
@@ -446,15 +470,15 @@ module regfile_ram_placeholder(
   assign ram_write2B_wen=write2_wen && write2_addr[3:0]==INDEX && write2_addr[4];
   assign ram_write3B_wen=write3_wen && write3_addr[3:0]==INDEX && write3_addr[4];
 
-  assign read0_clkEn=(read0_addr[3:0]==INDEX) & read_clkEn;
-  assign read1_clkEn=(read1_addr[3:0]==INDEX) & read_clkEn;
-  assign read2_clkEn=(read2_addr[3:0]==INDEX) & read_clkEn;
-  assign read3_clkEn=(read3_addr[3:0]==INDEX) & read_clkEn;
-  assign read4_clkEn=(read4_addr[3:0]==INDEX) & read_clkEn;
-  assign read5_clkEn=(read5_addr[3:0]==INDEX) & read_clkEn;
-  assign read6_clkEn=(read6_addr[3:0]==INDEX) & read_clkEn;
-  assign read7_clkEn=(read7_addr[3:0]==INDEX) & read_clkEn;
-  assign read8_clkEn=(read8_addr[3:0]==INDEX) & read_clkEn;
+  assign read0_clkEn=(read0_addr[3:0]==INDEX);
+  assign read1_clkEn=(read1_addr[3:0]==INDEX);
+  assign read2_clkEn=(read2_addr[3:0]==INDEX);
+  assign read3_clkEn=(read3_addr[3:0]==INDEX);
+  assign read4_clkEn=(read4_addr[3:0]==INDEX);
+  assign read5_clkEn=(read5_addr[3:0]==INDEX);
+  assign read6_clkEn=(read6_addr[3:0]==INDEX);
+  assign read7_clkEn=(read7_addr[3:0]==INDEX);
+  assign read8_clkEn=(read8_addr[3:0]==INDEX);
 
   always @(posedge clk)
     begin
