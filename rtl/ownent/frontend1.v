@@ -745,6 +745,8 @@ module frontend1(
   wire [4:0] btb_lnpos2;
   wire [4:0] btb_lnpos3;
   wire btb_jlnin0,btb_jlnin1,btb_jlnin2,btb_jlnin3;
+  wire [3:0] tbuf_error;
+  reg [3:0] tbuf_error_reg;
 
   integer m,n,t;
 
@@ -808,7 +810,7 @@ module frontend1(
 	     do_seq_reg5 && pre_instrEn_reg[j]&&pre_jbefore[j]&&j=={31'b0,read_data_reg[255] && cc_read_IP_reg3[4:1]==0}; 
           assign pre_other[j][`instrQ_class]=pre_class_reg[j];
           //assign pre_other[j][`instrQ_taken]=btb_hasTK_reg3 ? 1'bz : 1'b0;
-          assign pre_other[j][`instrQ_taken]=(taken_reg4 & isJ) !=4'b0;
+          assign pre_other[j][`instrQ_taken]=(taken_reg4 & isJ) !=4'b0 && tbuf_error==4'b0;
           assign isJ[0]=pre_off_reg[j]==btbx_joff_reg4[0] && pre_class_reg[j][`iclass_jump];
           assign isJ[1]=pre_off_reg[j]==btbx_joff_reg4[1] && pre_class_reg[j][`iclass_jump];
           assign isJ[2]=pre_off_reg[j]==btbx_joff_reg4[2] && pre_class_reg[j][`iclass_jump];
@@ -848,18 +850,22 @@ module frontend1(
   
   assign instrFed=instrEn_reg3 && (cc_read_hit && tlb_match);
   
-  assign cc_base_IP_d=(~do_seq_reg5) ? cc_read_IP_reg4 : 64'bz;
-  assign cc_base_IP_d=(do_seq_reg5 & ~cc_base_tick) ? cc_base_IP : 64'bz;
-  assign cc_base_IP_d[8:0]=(do_seq_reg5 & cc_base_tick) ? cc_base_IP[8:0] : 9'bz;
+  assign cc_base_IP_d=(~do_seq_reg5 & ~|tbuf_error_reg) ? cc_read_IP_reg4 : 64'bz;
+  assign cc_base_IP_d=(do_seq_reg5 & ~cc_base_tick & ~|tbuf_error_reg) ? cc_base_IP : 64'bz;
+  assign cc_base_IP_d[8:0]=(do_seq_reg5 & cc_base_tick & ~|tbuf_error_reg) ? cc_base_IP[8:0] : 9'bz;
+  assign cc_base_IP_d=(|tbuf_error_reg) ? cc_base_IP_reg : 64'bz;
  // assign {cc_base_tick,cc_base_off}=(~do_seq_reg  && ~(miss_recover && proturberan)) ? 5'b0 : 5'bz;
   
-  assign cc_read_IP_d[4:0]=(~init & do_seq_any & ~jumpTK_en & ~fmstall & ~(do_seq&miss_recover)) ? 5'b0 : 5'bz;
-  assign cc_read_IP_d=(~init & btb_hasTK & ~miss_recover & ~miss_now & ~jumpTK_en & ~(ixcept|uxcept) & ~fmstall) ? btbx_tgt : 64'bz;
-  assign cc_read_IP_d=(~init & miss_recover & ~jumpTK_en & ~(ixcept|uxcept) & ~fmstall) ? miss_IP : 64'bz;
+  assign cc_read_IP_d[4:0]=(~init & do_seq_any & ~jumpTK_en & ~fmstall & ~(do_seq&miss_recover) & ~|tbuf_error_reg) ? 5'b0 : 5'bz;
+  assign cc_read_IP_d=(~init & btb_hasTK & ~miss_recover & ~miss_now & ~jumpTK_en & ~(ixcept|uxcept) & ~fmstall & ~|tbuf_error_reg) ?
+     btbx_tgt : 64'bz;
+  assign cc_read_IP_d=(~init & miss_recover & ~jumpTK_en & ~(ixcept|uxcept) & ~fmstall & ~|tbuf_error_reg) ? miss_IP : 64'bz;
   assign cc_read_IP_d=(~init & (ixcept|uxcept) ) ? {ixceptIP[63:1],1'b0} : 64'bz;
-  assign cc_read_IP_d=(~init & ~jumpTK_en & ~(ixcept|uxcept) & ~miss_now & btb_in_ret & ~fmstall) ? {rstack_dataR[63:1],1'b0} : 64'bz;
-  assign cc_read_IP_d=~init & ~(ixcept|uxcept) & jumpTK_en & ~fmstall? jumpTK_addr : 64'bz;
+  assign cc_read_IP_d=(~init & ~jumpTK_en & ~(ixcept|uxcept) & ~miss_now & btb_in_ret & ~fmstall & ~|tbuf_error_reg) ? 
+    {rstack_dataR[63:1],1'b0} : 64'bz;
+  assign cc_read_IP_d=~init & ~(ixcept|uxcept) & jumpTK_en & ~fmstall & ~|tbuf_error_reg ? jumpTK_addr : 64'bz;
   assign cc_read_IP_d=(init || fmstall & ~(ixcept|uxcept)) ? cc_read_IP : 64'bz;
+//  assign cc_read_IP_d=(~init && ~fmstall & ~(ixcept|uxcept)) & |tbuf_error_reg ? {cc_read_IP_reg4[63:5],5'b0} : 64'bz;
   
   assign cc_attr_d=(~init & do_seq_any & ~jumpTK_en & ~fmstall & ~(do_seq&miss_recover)) ? cc_attr : 4'bz;
   assign cc_attr_d=(~init & btb_hasTK & ~miss_recover & ~miss_now & ~jumpTK_en & ~(ixcept|uxcept) & ~fmstall) ? btbx_attr : 4'bz;
@@ -1226,9 +1232,9 @@ module frontend1(
   );*/
     
   adder_inc #(43) seqAdd_mod(cc_read_IP[47:5],cc_read_IP_d[47:5],
-    do_seq &~init & ~jumpTK_en & ~fmstall &~miss_recover,);
+    do_seq &~init & ~jumpTK_en & ~fmstall &~miss_recover & ~|tbuf_error_reg,);
   adder #(43) seqM_Add_mod(cc_read_IP[47:5],43'd2,cc_read_IP_d[47:5],
-    1'b0,do_seq_miss &~init & ~jumpTK_en & ~fmstall,,,,);
+    1'b0,do_seq_miss &~init & ~jumpTK_en & ~fmstall & ~|tbuf_error_reg,,,,);
   adder_inc #(5) misCntAdd_mod(miss_cnt,miss_cnt_next,1'b1,);
   adder_inc #(3) misSlotAdd_mod(miss_slot,miss_slot_next,1'b1,);
   adder_inc #(9) initAdd_mod(initCount,initCount_next,1'b1,);
@@ -1762,6 +1768,7 @@ module frontend1(
 	  IP_phys_reg2<=44'b0;
 	  IP_phys_reg3<=44'b0;
           read_data_reg<=0;
+          tbuf_error_reg<=4'b0;
       end else if (ixcept) begin
           //ixcept_reg<=1'b1;
           //ixceptLDConfl_reg<=ixceptLDConfl;
@@ -1820,6 +1827,7 @@ module frontend1(
 	  cc_base_IP<=cc_read_IP_d;
 	  miss_IP<=cc_read_IP_d;
           pre_instrEn_reg<=13'b0;
+          tbuf_error_reg<=4'b0;
       end else if (~fstall) begin
           //ixcept_reg<=1'b0;
           //ixceptLDConfl_reg<=1'b0;
@@ -2035,6 +2043,12 @@ module frontend1(
 	  IP_phys_reg<=IP_phys;
 	  IP_phys_reg2<=IP_phys_reg;
 	  IP_phys_reg3<=IP_phys_reg2;
+          if (instrFed && |tbuf_error) begin
+              instrEn<=1'b0;
+              instrEn_reg<=1'b0;
+              instrEn_reg2<=1'b0;
+          end
+          tbuf_error_reg<=tbuf_error;
       end else if (btbFStall_recover && ~iq_fstall && ~jq_fstall && ~fmstall) begin
           pre_instrEn_reg<={1'b0,pre_instrEn};
           pre_instr0_reg<=pre_instr0;
