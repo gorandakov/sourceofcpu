@@ -403,6 +403,7 @@ module fun_fpu(
     fxDataAFL_REG[1][64:33],fxDataAFL_REG[1][31:0]}),
   .B({gfDataBFL_reg[0][65],gfDataBFL_reg[0][15+68:68],
     gfDataBFL_reg[0][64:33],gfDataBFL_reg[0][31:0]}),
+  .pook_in(gfDataBFL_reg[0][32]),
   .and1(H? 1'b0 : fxFCADD_ext),
   .or1(H? 1'b1 : fxFCADD_dbl),
   .copyA(fxFCADD_copyA[H]),
