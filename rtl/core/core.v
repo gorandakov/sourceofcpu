@@ -18,19 +18,22 @@ limitations under the License.
 
 
 module heptane_core(
-  input clk;
-  input rst;
-  input [67:0] obusIn;
-  output [81:0] obusOut;
-  inout obusOut_want;
-  output obusOut_can;
-  input [37:0] obusDIns;
-  input [511+56:0] obusDIn_data;
-  output [511+56:0] obusDOut_dataAUD;
-  output [75:0] obusDOut_iosig;
-  output obusDOut_can;
-  inout obusDOut_want;
-  output obusDOut_replay;
+  input clk,
+  input rst,
+  input IRQ,
+  input [16:0] IRQ_data,
+  input IRQ_thr,
+  input [67:0] obusIn,
+  output [81:0] obusOut,
+  inout obusOut_want,
+  output obusOut_can,
+  input [37:0] obusDIns,
+  input [511+56:0] obusDIn_data,
+  output [511+56:0] obusDOut_dataAUD,
+  output [75:0] obusDOut_iosig,
+  output obusDOut_can,
+  inout obusDOut_want,
+  output obusDOut_replay
 );
   parameter [4:0] BUS_ID=0;
   localparam PHYS_WIDTH=44;
