@@ -210,6 +210,7 @@ module cntrl_find_outcome(
   except_jmp_mask,
   csrss_no,csrss_thread,csrss_en,csrss_data,
   new_en,new_thread,new_addr,
+  IRQ,
   instr0_en,instr0_wren,instr0_IPOff,instr0_magic,instr0_last,instr0_after_spec,
   instr1_en,instr1_wren,instr1_IPOff,instr1_magic,instr1_last,instr1_after_spec,
   instr2_en,instr2_wren,instr2_IPOff,instr2_magic,instr2_last,instr2_after_spec,
@@ -314,6 +315,7 @@ module cntrl_find_outcome(
   input new_en;
   input new_thread;
   output wire [5:0] new_addr;
+  input IRQ;
   input instr0_en;
   input instr0_wren;  
   input [8:0] instr0_IPOff;
@@ -762,7 +764,7 @@ module cntrl_find_outcome(
     for(k=0;k<10;k=k+1) begin : jumps_gen
       assign flagSet[k]=ret_data[k][`except_setsFlags];
       assign pending[k]=ret_data[k][`except_status]==2'd0 && !(mem_match & mem_II_bits_ret[k]);
-      assign exceptn[k]=(ret_data[k][`except_status]==2'd1 && ~ret_data[k][14]) || (mem_match & mem_II_bits_except[k]);
+      assign exceptn[k]=(ret_data[k][`except_status]==2'd1 && ~ret_data[k][14]) || (mem_match & mem_II_bits_except[k]);//|| IRQ;
       assign replay[k]=(ret_data[k][`except_status]==2'd1 && ret_data[k][14]) || (mem_match & mem_II_bits_ldconfl[k]);
       assign replay_safe[k]=(ret_data[k][`except_status]==2'd1 && ret_data[k][14]) || (mem_match & mem_II_bits_waitconfl[k]);
       assign done[k]=ret_data[k][`except_status]==2'd2 || (mem_match & mem_II_bits_fine[k] & mem_II_bits_ret[k]);
@@ -1246,16 +1248,16 @@ module cntrl_find_outcome(
   .write5_addr(ret5_addr),.write5_data(ret5_data),.write5_wen(ret5_wen),
   
   .writeInit_addr(init ? initcount : new_addr),.writeInit_wen((new_en && ~stall && ~doStall)|init),
-  .writeInit_data0({13'b0,instr0_en|init ? 2'd0 : 2'd2}),
-  .writeInit_data1({13'b0,instr1_en|init ? 2'd0 : 2'd2}),
-  .writeInit_data2({13'b0,instr2_en|init ? 2'd0 : 2'd2}),
-  .writeInit_data3({13'b0,instr3_en|init ? 2'd0 : 2'd2}),
-  .writeInit_data4({13'b0,instr4_en|init ? 2'd0 : 2'd2}),
-  .writeInit_data5({13'b0,instr5_en|init ? 2'd0 : 2'd2}),
-  .writeInit_data6({13'b0,instr6_en|init ? 2'd0 : 2'd2}),
-  .writeInit_data7({13'b0,instr7_en|init ? 2'd0 : 2'd2}),
-  .writeInit_data8({13'b0,instr8_en|init ? 2'd0 : 2'd2}),
-  .writeInit_data9({13'b0,instr9_en|init ? 2'd0 : 2'd2})
+  .writeInit_data0({IRQ ? 13'd28 : 13'b0,instr0_en|init ? 2'd0 : 2'd2}),
+  .writeInit_data1({IRQ ? 13'd28 : 13'b0,13'b0,instr1_en|init ? 2'd0|{1'b0,IRQ} : 2'd2}),
+  .writeInit_data2({IRQ ? 13'd28 : 13'b0,13'b0,instr2_en|init ? 2'd0|{1'b0,IRQ} : 2'd2}),
+  .writeInit_data3({IRQ ? 13'd28 : 13'b0,13'b0,instr3_en|init ? 2'd0|{1'b0,IRQ} : 2'd2}),
+  .writeInit_data4({IRQ ? 13'd28 : 13'b0,13'b0,instr4_en|init ? 2'd0|{1'b0,IRQ} : 2'd2}),
+  .writeInit_data5({IRQ ? 13'd28 : 13'b0,13'b0,instr5_en|init ? 2'd0|{1'b0,IRQ} : 2'd2}),
+  .writeInit_data6({IRQ ? 13'd28 : 13'b0,13'b0,instr6_en|init ? 2'd0|{1'b0,IRQ} : 2'd2}),
+  .writeInit_data7({IRQ ? 13'd28 : 13'b0,13'b0,instr7_en|init ? 2'd0|{1'b0,IRQ} : 2'd2}),
+  .writeInit_data8({IRQ ? 13'd28 : 13'b0,13'b0,instr8_en|init ? 2'd0|{1'b0,IRQ} : 2'd2}),
+  .writeInit_data9({IRQ ? 13'd28 : 13'b0,13'b0,instr9_en|init ? 2'd0|{1'b0,IRQ} : 2'd2})
   );
 
   BOBind indir_mod(
