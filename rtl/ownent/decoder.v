@@ -1429,6 +1429,8 @@ module decoder(
   
   iAvail,
   iUsed,
+  IRQ,
+  IRQ_data,
   inst0,instQ0,
   inst1,instQ1,
   inst2,instQ2,
@@ -1778,6 +1780,9 @@ module decoder(
 
   input [9:0] iAvail;
   output [9:0] iUsed;
+
+  input IRQ;
+  input [16:0] IRQ_data;
   
   input [INSTR_WIDTH-1:0] inst0;
   input [INSTRQ_WIDTH-1:0] instQ0;
@@ -3148,6 +3153,8 @@ module decoder(
   .fpE_thr(fp_excpt_thr),
   .altEn(csrss_retIP_en_reg!=0),
   .altData(csrss_retIP_data),
+  .altEn2(IRQ),
+  .altData2(IRQ_data),
   .thread(thread),
   .riscmode(riscmode),
   .disstruss(lizztruss)
