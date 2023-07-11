@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-module fpucadd_compress(clk,R,C,A_out,B_out,or1,and1);
+(* align_width=C,A_out/2,B_out/2 align_height=R *) module fpucadd_compress(clk,R,C,A_out,B_out,or1,and1);
   input clk;
   input [63:0] R;
   input [63:0] C;

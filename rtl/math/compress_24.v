@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 
-module fpucadd_compress_24(clk,R,C,A_out,B_out);
+(* align_width=C,A_out/2,B_out/2 align_height=R *) module fpucadd_compress_24(clk,R,C,A_out,B_out);
   input clk;
   input [23:0] R;
   input [23:0] C;
