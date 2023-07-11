@@ -31,6 +31,8 @@ module smallInstr_decoder(
   instr,
   operation,
   can_jump_csr,
+  can_read_csr,
+  can_write_csr,
   rA,rA_use,
   rB,rB_use,useBConst,//useBSmall,
   rC,rC_use,useCRet,
@@ -103,6 +105,8 @@ module smallInstr_decoder(
   
   output [OPERATION_WIDTH-1:0] operation;
   input can_jump_csr;
+  input can_read_csr;
+  input can_write_csr;
   output [REG_WIDTH-1:0] rA;
   output rA_use;
   output [REG_WIDTH-1:0] rB;
@@ -1841,6 +1845,7 @@ module smallInstr_decoder(
           puseRs[35]=1'b1;
           pjumpType[35]=5'b11001;
           poperation[35][12]=1'b1;
+          perror[35]=~can_write_csr;
       end else if (instr[15:13]==3'd1) begin //read_CSR
           puseRs[35]=1'b1;
           prB_use[35]=1'b1;
@@ -1851,6 +1856,7 @@ module smallInstr_decoder(
           pport[35]=PORT_ALU;
           poperation[35][12]=1'b1;
           prAlloc[35]=1'b1;
+          perror[35]=~can_read_csr;
 	  //pconstant[35]=instr[79:16];
       end else if (instr[15:13]==3'd2) begin //iret
           puseRs[35]=1'b1;
@@ -1865,6 +1871,7 @@ module smallInstr_decoder(
           pjumpType[35]=5'b10001;
 	  //pconstant[35]=instr[79:16];
 	  csrss_retIP_en=!(instr[31:16]==`csr_retIP);
+          perror[35]=~can_jump_csr;
       end
       
       trien[36]=magic[0] & isBasicFPUScalarC;
