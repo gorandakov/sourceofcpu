@@ -125,6 +125,7 @@ endmodule
 module decoder_aux_const(
   clk,
   rst,
+  stall,
   cls_sys,
   instr0,
   instr1,
@@ -147,6 +148,9 @@ module decoder_aux_const(
   fpE_thr,
   altEn,
   altData,
+  altThr2,
+  altEn2,
+  altData2,
   thread,
   riscmode,
   disstruss);
@@ -175,6 +179,9 @@ module decoder_aux_const(
   input fpE_thr;
   input altEn;
   input [63:0] altData;
+  input altThr2;
+  input altEn2;
+  input [16:0] altData2;
   input thread;
   output riscmode;
   output disstruss;
@@ -304,7 +311,9 @@ module decoder_aux_const(
           csr_IRQ_send[1]<=64'b0;
           csr_USER1[0]<=64'b0;
           csr_USER1[1]<=64'b0;
+          thread_reg<=1'b0;
       end else begin
+          if (!stall) thread_reg<=thread;
           if (csrss_en && ((csr_mflags[csrss_no[15]][`mflags_cpl]==2'b0 && ~csr_mflags[csrss_no[15]][`mflags_vm]) ||
             csrss_no==`csr_FPU)) begin
               case(csrss_no[14:0])
@@ -330,11 +339,12 @@ module decoder_aux_const(
       `csr_cl_lock:             csr_mflags[csrss_no[15]][18]<=1'b1;
      	      endcase
               aux0_reg<=aux0;
-	      if (altEn) csr_retIP[csrss_no[15]]<=altData;
+	      if (altEn) csr_retIP[thread_reg]<=altData;
           end
           if (fpE_en && !csrss_en | (csrss_no!=`csr_FPU)) begin
               csr_fpu[fpE_thr]<=csr_fpu[fpE_thr] | {42'b0,fpE_set,11'b0};
           end
+          if (altEn2) csr_IRQ_recv_vector[altThr2][16:0]<=altEn2_data;
       end
   end
 endmodule
@@ -1431,6 +1441,7 @@ module decoder(
   iUsed,
   IRQ,
   IRQ_data,
+  IRQ_thr,
   inst0,instQ0,
   inst1,instQ1,
   inst2,instQ2,
@@ -1783,6 +1794,7 @@ module decoder(
 
   input IRQ;
   input [16:0] IRQ_data;
+  input IRQ_thr;
   
   input [INSTR_WIDTH-1:0] inst0;
   input [INSTRQ_WIDTH-1:0] instQ0;
@@ -3131,6 +3143,7 @@ module decoder(
   decoder_aux_const csrconst_mod(
   .clk(clk),
   .rst(rst),
+  .stall(stall),
   .cls_sys(cls_sys),
   .instr0(inst[0][31:0]),
   .instr1(inst[1][31:0]),
@@ -3153,6 +3166,7 @@ module decoder(
   .fpE_thr(fp_excpt_thr),
   .altEn(csrss_retIP_en_reg!=0),
   .altData(csrss_retIP_data),
+  .altThr2(IRQ_thr),
   .altEn2(IRQ),
   .altData2(IRQ_data),
   .thread(thread),
