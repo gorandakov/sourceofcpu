@@ -1343,7 +1343,7 @@ module smallInstr_decoder(
       pjumpType[20]={1'b0,(magic[1:0]==2'b01) ? instr[18] : instr[32],opcode_main[3:1]};  
       if (puseBConst[20] && prB[20]!=0) perror[20]=1;
 
-      trien[21]=magic[0] & isLongCondJump;
+      trien[21]=1'b0; //magic[0] & isLongCondJump;
       puseRs[21]=1'b0;
       pjumpType[21]={1'b0,instr[11:8]};
       pconstant[21][0]=1'b0;
