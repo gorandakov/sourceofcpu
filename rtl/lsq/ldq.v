@@ -19,8 +19,8 @@ limitations under the License.
 
 
 module ldq_chk_confl(
-  isOH0,isEH0,isOL0,isEL0,
-  isOH1,isEH1,isOL1,isEL1,
+  isOH0,isEH0,isGOR0,isEL0,
+  isOH1,isEH1,isGOR1,isEL1,
   chkMatchE,chkMatchO,
   chkBankL,chkBankH,
   isBlow,chkBlow,
@@ -30,12 +30,12 @@ module ldq_chk_confl(
 
   input isOH0;
   input isEH0;
-  input isOL0;
+  input isGOR0;
   input isEL0;
 
   input isOH1;
   input isEH1;
-  input isOL1;
+  input isGOR1;
   input isEL1;
 
   input chkMatchE;
@@ -54,7 +54,7 @@ module ldq_chk_confl(
   assign blowc=(chkBlow&isBlow)!=4'b0;
   
   assign confl=(isOH0 & isOH1 & chkMatchO & chkBankH ||
-    isOL0 & isOL1 & chkMatchO & chkBankL ||
+    isGOR0 & isGOR1 & chkMatchO & chkBankL ||
     isEH0 & isEH1 & chkMatchE & chkBankH ||
     isEL0 & isEL1 & chkMatchE & chkBankL)&blowc;    
   
@@ -67,12 +67,12 @@ module ldq_buf(
   except,
   except_thread,
   aStall,
-  newAddrE0,newAddrO0,newBanks0,newBlow0,newII0,newIsOH0,newIsEH0,newIsOL0,newIsEL0,newEn0,newThr0,newChk0,
-  newAddrE1,newAddrO1,newBanks1,newBlow1,newII1,newIsOH1,newIsEH1,newIsOL1,newIsEL1,newEn1,newThr1,newChk1,
-  chkAddrE0,chkAddrO0,chkBanks0,chkBlow0, chkIsOH0,chkIsEH0,chkIsOL0,chkIsEL0,chkEn0,chkMask0,
-  chkAddrE1,chkAddrO1,chkBanks1,chkBlow1, chkIsOH1,chkIsEH1,chkIsOL1,chkIsEL1,chkEn1,chkMask1,
-  chkAddrE3,chkAddrO3,chkIsOH3,chkIsEH3,chkIsOL3,chkIsEL3,chkEn3,
-  chkAddrE4,chkAddrO4,chkIsOH4,chkIsEH4,chkIsOL4,chkIsEL4,chkEn4,
+  newAddrE0,newAddrO0,newBanks0,newBlow0,newII0,newIsOH0,newIsEH0,newIsGOR0,newIsEL0,newEn0,newThr0,newChk0,
+  newAddrE1,newAddrO1,newBanks1,newBlow1,newII1,newIsOH1,newIsEH1,newIsGOR1,newIsEL1,newEn1,newThr1,newChk1,
+  chkAddrE0,chkAddrO0,chkBanks0,chkBlow0, chkIsOH0,chkIsEH0,chkIsGOR0,chkIsEL0,chkEn0,chkMask0,
+  chkAddrE1,chkAddrO1,chkBanks1,chkBlow1, chkIsOH1,chkIsEH1,chkIsGOR1,chkIsEL1,chkEn1,chkMask1,
+  chkAddrE3,chkAddrO3,chkIsOH3,chkIsEH3,chkIsGOR3,chkIsEL3,chkEn3,
+  chkAddrE4,chkAddrO4,chkIsOH4,chkIsEH4,chkIsGOR4,chkIsEL4,chkEn4,
   freeII0,freeMask0,freeEnX0,freeEn0,freeConfl0,freeConflSmp0,
   freeII1,freeMask1,freeEnX1,freeEn1,freeConfl1,freeConflSmp1,
   free
@@ -94,7 +94,7 @@ module ldq_buf(
   input [31:0] newBanks0;
   input [3:0] newBlow0;
   input [II_WIDTH-1:0] newII0;
-  input newIsOH0,newIsEH0,newIsOL0,newIsEL0;
+  input newIsOH0,newIsEH0,newIsGOR0,newIsEL0;
   input newEn0;
   input newThr0;
   input newChk0;
@@ -103,7 +103,7 @@ module ldq_buf(
   input [31:0] newBanks1;
   input [3:0]  newBlow1;
   input [II_WIDTH-1:0] newII1;
-  input newIsOH1,newIsEH1,newIsOL1,newIsEL1;
+  input newIsOH1,newIsEH1,newIsGOR1,newIsEL1;
   input newEn1;
   input newThr1;
   input newChk1;
@@ -111,23 +111,23 @@ module ldq_buf(
   input [PADDR_WIDTH-9:0] chkAddrO0;
   input [31:0] chkBanks0;
   input [3:0] chkBlow0;
-  input chkIsOH0,chkIsEH0,chkIsOL0,chkIsEL0;
+  input chkIsOH0,chkIsEH0,chkIsGOR0,chkIsEL0;
   input chkEn0;
   input [5:0] chkMask0;
   input [PADDR_WIDTH-9:0] chkAddrE1;
   input [PADDR_WIDTH-9:0] chkAddrO1;
   input [31:0] chkBanks1;
   input [3:0] chkBlow1;
-  input chkIsOH1,chkIsEH1,chkIsOL1,chkIsEL1;
+  input chkIsOH1,chkIsEH1,chkIsGOR1,chkIsEL1;
   input chkEn1;
   input [5:0] chkMask1;
   input [PADDR_WIDTH-9:0] chkAddrE3;
   input [PADDR_WIDTH-9:0] chkAddrO3;
-  input chkIsOH3,chkIsEH3,chkIsOL3,chkIsEL3;
+  input chkIsOH3,chkIsEH3,chkIsGOR3,chkIsEL3;
   input chkEn3;
   input [PADDR_WIDTH-9:0] chkAddrE4;
   input [PADDR_WIDTH-9:0] chkAddrO4;
-  input chkIsOH4,chkIsEH4,chkIsOL4,chkIsEL4;
+  input chkIsOH4,chkIsEH4,chkIsGOR4,chkIsEL4;
   input chkEn4;
 
   input [II_WIDTH-1:0] freeII0;
@@ -150,7 +150,7 @@ module ldq_buf(
   reg [31:0] banks;
   reg [3:0] bank_low;
   reg [II_WIDTH-1:0] II;
-  reg isOH,isEH,isOL,isEL;
+  reg isOH,isEH,isGOR,isEL;
 //  reg sFetch;
   reg thread;
   reg confl;
@@ -165,7 +165,7 @@ module ldq_buf(
   wire chkMatch4;
 
   wire [3:0]   chkIsOH={chkIsOH4,chkIsOH3,chkIsOH1,chkIsOH0};
-  wire [3:0]   chkIsOL={chkIsOL4,chkIsOL3,chkIsOL1,chkIsOL0};
+  wire [3:0]   chkIsGOR={chkIsGOR4,chkIsGOR3,chkIsGOR1,chkIsGOR0};
   wire [3:0]   chkIsEH={chkIsEH4,chkIsEH3,chkIsEH1,chkIsEH0};
   wire [3:0]   chkIsEL={chkIsEL4,chkIsEL3,chkIsEL1,chkIsEL0};
   
@@ -217,8 +217,8 @@ module ldq_buf(
       genvar k;
       for(k=0;k<4;k=k+1) begin : chk_gen
           ldq_chk_confl chk_mod(
-          isOH,isEH,isOL,isEL,
-          chkIsOH[k],chkIsEH[k],chkIsOL[k],chkIsEL[k],
+          isOH,isEH,isGOR,isEL,
+          chkIsOH[k],chkIsEH[k],chkIsGOR[k],chkIsEL[k],
           chkMatchE[k],chkMatchO[k],
           chkBankL[k],chkBankH[k],
           bank_low,chkBlow[k],
@@ -236,7 +236,7 @@ module ldq_buf(
           II<={II_WIDTH{1'b0}};
           free<=1'b1;
           isOH<=1'b0;
-          isOL<=1'b0;
+          isGOR<=1'b0;
           isEH<=1'b0;
           isEL<=1'b0;
           thread<=1'b0;
@@ -257,7 +257,7 @@ module ldq_buf(
           free<=1'b0;
           isOH<=newIsOH0;
           isEH<=newIsEH0;
-          isOL<=newIsOL0;
+          isGOR<=newIsGOR0;
           isEL<=newIsEL0;
          // sFetch<=newSFetch0;
           thread<=newThr0;
@@ -272,7 +272,7 @@ module ldq_buf(
           free<=1'b0;
           isOH<=newIsOH1;
           isEH<=newIsEH1;
-          isOL<=newIsOL1;
+          isGOR<=newIsGOR1;
           isEL<=newIsEL1;
          // sFetch<=newSFetch1;
           thread<=newThr1;
@@ -488,12 +488,12 @@ module ldq_array(
   except,
   except_thread,
   aStall,
-  newAddrE0,newAddrO0,newBanks0,newBlow0,newII0,newIsOH0,newIsEH0,newIsOL0,newIsEL0,newEn0,newThr0,
-  newAddrE1,newAddrO1,newBanks1,newBlow1,newII1,newIsOH1,newIsEH1,newIsOL1,newIsEL1,newEn1,newThr1,
-  chkAddrE0,chkAddrO0,chkBanks0,chkBlow0, chkIsOH0,chkIsEH0,chkIsOL0,chkIsEL0,chkEn0,chkMask0,
-  chkAddrE1,chkAddrO1,chkBanks1,chkBlow1, chkIsOH1,chkIsEH1,chkIsOL1,chkIsEL1,chkEn1,chkMask1,
-  chkAddrE3,chkAddrO3, chkIsOH3,chkIsEH3,chkIsOL3,chkIsEL3,chkEn3,
-  chkAddrE4,chkAddrO4, chkIsOH4,chkIsEH4,chkIsOL4,chkIsEL4,chkEn4,
+  newAddrE0,newAddrO0,newBanks0,newBlow0,newII0,newIsOH0,newIsEH0,newIsGOR0,newIsEL0,newEn0,newThr0,
+  newAddrE1,newAddrO1,newBanks1,newBlow1,newII1,newIsOH1,newIsEH1,newIsGOR1,newIsEL1,newEn1,newThr1,
+  chkAddrE0,chkAddrO0,chkBanks0,chkBlow0, chkIsOH0,chkIsEH0,chkIsGOR0,chkIsEL0,chkEn0,chkMask0,
+  chkAddrE1,chkAddrO1,chkBanks1,chkBlow1, chkIsOH1,chkIsEH1,chkIsGOR1,chkIsEL1,chkEn1,chkMask1,
+  chkAddrE3,chkAddrO3, chkIsOH3,chkIsEH3,chkIsGOR3,chkIsEL3,chkEn3,
+  chkAddrE4,chkAddrO4, chkIsOH4,chkIsEH4,chkIsGOR4,chkIsEL4,chkEn4,
   freeII0,freeMask0,freeEnX0,freeEn0,freeConfl0,freeConflSmp0,
   freeII1,freeMask1,freeEnX1,freeEn1,freeConfl1,freeConflSmp1,
   free
@@ -519,7 +519,7 @@ module ldq_array(
   input [3:0] newBlow0;
 //  input newSFetch0;
   input [II_WIDTH-1:0] newII0;
-  input newIsOH0,newIsEH0,newIsOL0,newIsEL0;
+  input newIsOH0,newIsEH0,newIsGOR0,newIsEL0;
   input newEn0;
   input newThr0;
   input [PADDR_WIDTH-9:0] newAddrE1;
@@ -528,30 +528,30 @@ module ldq_array(
   input [3:0] newBlow1;
   //input newSFetch1;
   input [II_WIDTH-1:0] newII1;
-  input newIsOH1,newIsEH1,newIsOL1,newIsEL1;
+  input newIsOH1,newIsEH1,newIsGOR1,newIsEL1;
   input newEn1;
   input newThr1;
   input [PADDR_WIDTH-9:0] chkAddrE0;
   input [PADDR_WIDTH-9:0] chkAddrO0;
   input [31:0] chkBanks0;
   input [3:0] chkBlow0;
-  input chkIsOH0,chkIsEH0,chkIsOL0,chkIsEL0;
+  input chkIsOH0,chkIsEH0,chkIsGOR0,chkIsEL0;
   input chkEn0;
   input [5:0] chkMask0;
   input [PADDR_WIDTH-9:0] chkAddrE1;
   input [PADDR_WIDTH-9:0] chkAddrO1;
   input [31:0] chkBanks1;
   input [3:0] chkBlow1;
-  input chkIsOH1,chkIsEH1,chkIsOL1,chkIsEL1;
+  input chkIsOH1,chkIsEH1,chkIsGOR1,chkIsEL1;
   input chkEn1;
   input [5:0] chkMask1;
   input [PADDR_WIDTH-9:0] chkAddrE3;
   input [PADDR_WIDTH-9:0] chkAddrO3;
-  input chkIsOH3,chkIsEH3,chkIsOL3,chkIsEL3;
+  input chkIsOH3,chkIsEH3,chkIsGOR3,chkIsEL3;
   input chkEn3;
   input [PADDR_WIDTH-9:0] chkAddrE4;
   input [PADDR_WIDTH-9:0] chkAddrO4;
-  input chkIsOH4,chkIsEH4,chkIsOL4,chkIsEL4;
+  input chkIsOH4,chkIsEH4,chkIsGOR4,chkIsEL4;
   input chkEn4;
   
   input [II_WIDTH-1:0] freeII0;
@@ -593,7 +593,7 @@ module ldq_array(
   wire chkMatch1;
 
   wire [3:0]   chkIsOH={chkIsOH4,chkIsOH3,chkIsOH1,chkIsOH0};
-  wire [3:0]   chkIsOL={chkIsOL4,chkIsOL3,chkIsOL1,chkIsOL0};
+  wire [3:0]   chkIsGOR={chkIsGOR4,chkIsGOR3,chkIsGOR1,chkIsGOR0};
   wire [3:0]   chkIsEH={chkIsEH4,chkIsEH3,chkIsEH1,chkIsEH0};
   wire [3:0]   chkIsEL={chkIsEL4,chkIsEL3,chkIsEL1,chkIsEL0};
   
@@ -664,16 +664,16 @@ module ldq_array(
       genvar k;
       for(k=0;k<4;k=k+1) begin : chk_gen
           ldq_chk_confl chk0_mod(
-          newIsOH0,newIsEH0,newIsOL0,newIsEL0,
-          chkIsOH[k],chkIsEH[k],chkIsOL[k],chkIsEL[k],
+          newIsOH0,newIsEH0,newIsGOR0,newIsEL0,
+          chkIsOH[k],chkIsEH[k],chkIsGOR[k],chkIsEL[k],
           chk0MatchE[k],chk0MatchO[k],
           chk0BankL[k],chk0BankH[k],
           newBlow0,chkBlow[k],
           chk0Match[k]
           );
           ldq_chk_confl chk1_mod(
-          newIsOH1,newIsEH1,newIsOL1,newIsEL1,
-          chkIsOH[k],chkIsEH[k],chkIsOL[k],chkIsEL[k],
+          newIsOH1,newIsEH1,newIsGOR1,newIsEL1,
+          chkIsOH[k],chkIsEH[k],chkIsGOR[k],chkIsEL[k],
           chk1MatchE[k],chk1MatchO[k],
           chk1BankL[k],chk1BankH[k],
           newBlow1,chkBlow[k],
@@ -687,12 +687,12 @@ module ldq_array(
           rst,
           except,
           except_thread,aStall,
-          newAddrE0,newAddrO0,newBanks0,newBlow0,newII0,newIsOH0,newIsEH0,newIsOL0,newIsEL0,newEn0_buf[p],newThr0,chkMatch0,
-          newAddrE1,newAddrO1,newBanks1,newBlow1,newII1,newIsOH1,newIsEH1,newIsOL1,newIsEL1,newEn1_buf[p],newThr1,chkMatch1,
-          chkAddrE0,chkAddrO0,chkBanks0,chkBlow0, chkIsOH0,chkIsEH0,chkIsOL0,chkIsEL0,chkEn0,chkMask0,
-          chkAddrE1,chkAddrO1,chkBanks1,chkBlow1, chkIsOH1,chkIsEH1,chkIsOL1,chkIsEL1,chkEn1,chkMask1,
-          chkAddrE3,chkAddrO3, chkIsOH3,chkIsEH3,chkIsOL3,chkIsEL3,chkEn3,
-          chkAddrE4,chkAddrO4, chkIsOH4,chkIsEH4,chkIsOL4,chkIsEL4,chkEn4,
+          newAddrE0,newAddrO0,newBanks0,newBlow0,newII0,newIsOH0,newIsEH0,newIsGOR0,newIsEL0,newEn0_buf[p],newThr0,chkMatch0,
+          newAddrE1,newAddrO1,newBanks1,newBlow1,newII1,newIsOH1,newIsEH1,newIsGOR1,newIsEL1,newEn1_buf[p],newThr1,chkMatch1,
+          chkAddrE0,chkAddrO0,chkBanks0,chkBlow0, chkIsOH0,chkIsEH0,chkIsGOR0,chkIsEL0,chkEn0,chkMask0,
+          chkAddrE1,chkAddrO1,chkBanks1,chkBlow1, chkIsOH1,chkIsEH1,chkIsGOR1,chkIsEL1,chkEn1,chkMask1,
+          chkAddrE3,chkAddrO3, chkIsOH3,chkIsEH3,chkIsGOR3,chkIsEL3,chkEn3,
+          chkAddrE4,chkAddrO4, chkIsOH4,chkIsEH4,chkIsGOR4,chkIsEL4,chkEn4,
           freeII0,freeMask0,freeEnX0,freeEn0,freeConfl0_buf[p],freeConflSmp0_buf[p],
           freeII1,freeMask1,freeEnX1,freeEn1,freeConfl1_buf[p],freeConflSmp1_buf[p],
           free[p]
@@ -854,29 +854,29 @@ module ldq(
           .newBanks0(new_data[k][`lsaddr_banks]),.newBlow0(new_data[k][`lsaddr_blow]),
           .newII0(new_data[k][`lsaddr_II]),
           .newIsOH0(new_data[k][`lsaddr_OH]),.newIsEH0(new_data[k][`lsaddr_EH]),
-          .newIsOL0(new_data[k][`lsaddr_OL]),.newIsEL0(new_data[k][`lsaddr_EL]),
+          .newIsGOR0(new_data[k][`lsaddr_GOR]),.newIsEL0(new_data[k][`lsaddr_EL]),
           .newEn0(new_rsEn[k]&~(~new_data[k][`lsaddr_st] && new_isFlag[k])),.newThr0(new_thread[k]),
         .newAddrE1(new_data[3][`lsaddr_addrE]),.newAddrO1(new_data[3][`lsaddr_addrO]),
           .newBanks1(new_data[3][`lsaddr_banks]),.newBlow1(new_data[k][`lsaddr_blow]),
           .newII1(new_data[3][`lsaddr_II]),
           .newIsOH1(new_data[3][`lsaddr_OH]),.newIsEH1(new_data[3][`lsaddr_EH]),
-          .newIsOL1(new_data[3][`lsaddr_OL]),.newIsEL1(new_data[3][`lsaddr_EL]),
+          .newIsGOR1(new_data[3][`lsaddr_GOR]),.newIsEL1(new_data[3][`lsaddr_EL]),
 	  .newEn1(new_rsEn[3]&&(new3_reg_low==k || new3_reg_low==(k+3) || new3_reg_low==(k+6))&
           ~(~new_data[3][`lsaddr_st] && new_isFlag[3])),.newThr1(new_thread[3]),
         .chkAddrE0(chkL0_data[`lsaddr_addrE]),.chkAddrO0(chkL0_data[`lsaddr_addrO]),
           .chkBanks0(chkL0_data[`lsaddr_banks]),.chkBlow0(chkL0_data[`lsaddr_blow]), .chkIsOH0(chkL0_data[`lsaddr_OH]),
-          .chkIsEH0(chkL0_data[`lsaddr_EH]),.chkIsOL0(chkL0_data[`lsaddr_OL]),
+          .chkIsEH0(chkL0_data[`lsaddr_EH]),.chkIsGOR0(chkL0_data[`lsaddr_GOR]),
           .chkIsEL0(chkL0_data[`lsaddr_EL]),.chkEn0(chkEn0),.chkMask0(chkL0_mask),
         .chkAddrE1(chkL1_data[`lsaddr_addrE]),.chkAddrO1(chkL1_data[`lsaddr_addrO]),
           .chkBanks1(chkL1_data[`lsaddr_banks]),.chkBlow1(chkL1_data[`lsaddr_blow]), .chkIsOH1(chkL1_data[`lsaddr_OH]),
-          .chkIsEH1(chkL1_data[`lsaddr_EH]),.chkIsOL1(chkL1_data[`lsaddr_OL]),
+          .chkIsEH1(chkL1_data[`lsaddr_EH]),.chkIsGOR1(chkL1_data[`lsaddr_GOR]),
           .chkIsEL1(chkL1_data[`lsaddr_EL]),.chkEn1(chkEn1),.chkMask1(chkL1_mask),
         .chkAddrE3(expun_addr_reg[44-8:1]),.chkAddrO3(expun_addr_reg[44-8:1]), 
 	   .chkIsOH3(expun_addr_reg[0]),.chkIsEH3(~expun_addr_reg[0]),
-	   .chkIsOL3(expun_addr_reg[0]),.chkIsEL3(~expun_addr_reg[0]),.chkEn3(expun_en_reg),
+	   .chkIsGOR3(expun_addr_reg[0]),.chkIsEL3(~expun_addr_reg[0]),.chkEn3(expun_en_reg),
         .chkAddrE4(expun_addr_reg[44-8:1]^36'hdeadf00f0),.chkAddrO4(expun_addr_reg[44-8:1]^36'hbaadf00de), 
 	   .chkIsOH4(expun_addr_reg[0]),.chkIsEH4(~expun_addr_reg[0]),
-	   .chkIsOL4(expun_addr_reg[0]),.chkIsEL4(~expun_addr_reg[0]),.chkEn4(expun_en_reg&~expun_addr_reg[36]),
+	   .chkIsGOR4(expun_addr_reg[0]),.chkIsEL4(~expun_addr_reg[0]),.chkEn4(expun_en_reg&~expun_addr_reg[36]),
         .freeII0(chk_II[k]),.freeMask0(chk_mask[k]),.freeEnX0(cnt_chk[k][1] & chk_en_reg & ~aStall),
 	.freeEn0(cnt_chk[k][1] & chk_enP_reg),.freeConfl0(conflP[k]),.freeConflSmp0(confl_smpP[k]),
         .freeII1(chk_II[k+3]),.freeMask1(chk_mask[k+3]),.freeEnX1(cnt_chk[k][2] & chk_en_reg & ~aStall),
