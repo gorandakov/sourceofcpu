@@ -312,6 +312,7 @@ module fun_fpu(
     fxDataAFL_REG[0][31:0]}),
   .B({gfDataBFL_reg[1][65],gfDataBFL_reg[1][15+68:68],gfDataBFL_reg[1][64:33],
     gfDataBFL_reg[1][31:0]}),
+  .pook_inX(gfDataBFL_reg[1][32]),
   .isDBL(fxFADD_dbl|H),
   //.isEXT(fxFADD_ext&!H),
   .isSub(fxFADD_sub[H]),
