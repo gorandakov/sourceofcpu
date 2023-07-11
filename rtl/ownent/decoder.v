@@ -1647,6 +1647,7 @@ module decoder(
   instr0_magic,
   instr0_last,
   instr0_aft_spc,
+  instr0_error,
   
   instr1_rT,
   instr1_en,
@@ -1659,6 +1660,7 @@ module decoder(
   instr1_magic,
   instr1_last,
   instr1_aft_spc,
+  instr1_error,
     
   instr2_rT,
   instr2_en,
@@ -1671,6 +1673,7 @@ module decoder(
   instr2_magic,
   instr2_last,
   instr2_aft_spc,
+  instr2_error,
   
   instr3_rT,
   instr3_en,
@@ -1683,6 +1686,7 @@ module decoder(
   instr3_magic,
   instr3_last,
   instr3_aft_spc,
+  instr3_error,
   
   instr4_rT,
   instr4_en,
@@ -1695,6 +1699,7 @@ module decoder(
   instr4_magic,
   instr4_last,
   instr4_aft_spc,
+  instr4_error,
   
   instr5_rT,
   instr5_en,
@@ -1707,6 +1712,7 @@ module decoder(
   instr5_magic,
   instr5_last,
   instr5_aft_spc,
+  instr5_error,
 
   instr6_rT,
   instr6_en,
@@ -1719,6 +1725,7 @@ module decoder(
   instr6_magic,
   instr6_last,
   instr6_aft_spc,
+  instr6_error,
 
   instr7_rT,
   instr7_en,
@@ -1731,6 +1738,7 @@ module decoder(
   instr7_magic,
   instr7_last,
   instr7_aft_spc,
+  instr7_error,
 
   instr8_rT,
   instr8_en,
@@ -1743,6 +1751,7 @@ module decoder(
   instr8_magic,
   instr8_last,
   instr8_aft_spc,
+  instr8_error,
 
   instr9_rT,
   instr9_en,
@@ -1755,6 +1764,7 @@ module decoder(
   instr9_magic,
   instr9_last,
   instr9_aft_spc,
+  instr9_error,
 
   jump0Type,jump0Pos,jump0Taken,
   jump1Type,jump1Pos,jump1Taken,
@@ -2125,6 +2135,7 @@ module decoder(
   output [3:0] instr0_magic;
   output instr0_last;
   output reg instr0_aft_spc;
+  output reg [1:0] instr0_error;
   
   output [IN_REG_WIDTH-1:0] instr1_rT;
   output instr1_en;
@@ -2137,6 +2148,7 @@ module decoder(
   output [3:0] instr1_magic;
   output instr1_last;
   output reg instr1_aft_spc;
+  output reg [1:0] instr1_error;
   
   output [IN_REG_WIDTH-1:0] instr2_rT;
   output instr2_en;
@@ -2149,6 +2161,7 @@ module decoder(
   output [3:0] instr2_magic;
   output instr2_last;
   output reg instr2_aft_spc;
+  output reg [1:0] instr2_error;
   
   output [IN_REG_WIDTH-1:0] instr3_rT;
   output instr3_en;
@@ -2161,6 +2174,7 @@ module decoder(
   output [3:0] instr3_magic;
   output instr3_last;
   output reg instr3_aft_spc;
+  output reg [1:0] instr3_error;
   
   output [IN_REG_WIDTH-1:0] instr4_rT;
   output instr4_en;
@@ -2173,6 +2187,7 @@ module decoder(
   output [3:0] instr4_magic;
   output instr4_last;
   output reg instr4_aft_spc;
+  output reg [1:0] instr4_error;
   
   output [IN_REG_WIDTH-1:0] instr5_rT;
   output instr5_en;
@@ -2185,6 +2200,7 @@ module decoder(
   output [3:0] instr5_magic;
   output instr5_last;
   output reg instr5_aft_spc;
+  output reg [1:0] instr5_error;
 
   output [IN_REG_WIDTH-1:0] instr6_rT;
   output instr6_en;
@@ -2197,6 +2213,7 @@ module decoder(
   output [3:0] instr6_magic;
   output instr6_last;
   output reg instr6_aft_spc;
+  output reg [1:0] instr6_error;
 
   output [IN_REG_WIDTH-1:0] instr7_rT;
   output instr7_en;
@@ -2209,6 +2226,7 @@ module decoder(
   output [3:0] instr7_magic;
   output instr7_last;
   output reg instr7_aft_spc;
+  output reg [1:0] instr7_error;
 
   output [IN_REG_WIDTH-1:0] instr8_rT;
   output instr8_en;
@@ -2221,6 +2239,7 @@ module decoder(
   output [3:0] instr8_magic;
   output instr8_last;
   output reg instr8_aft_spc;
+  output reg [1:0] instr8_error;
 
   output [IN_REG_WIDTH-1:0] instr9_rT;
   output instr9_en;
@@ -2233,6 +2252,7 @@ module decoder(
   output [3:0] instr9_magic;
   output instr9_last;
   output reg instr9_aft_spc;
+  output reg [1:0] instr9_error;
 
   output [4:0] jump0Type;
   output [3:0] jump0Pos;
@@ -2483,6 +2503,8 @@ module decoder(
   wire [8:0] rs_store;
   wire [8:0] rs_storeL;
   
+  wire [9:0][1:0] dec_error;
+
   wire [9:0] afterTick;
   reg  [9:0] afterTick_reg;
   wire [9:0] dec_tick;
@@ -2549,6 +2571,7 @@ module decoder(
           .clk(clk),
           .rst(rst),
           .mode64(1'b1),
+          .error(dec_error[k]),
           .riscmove(riscmode),
           .distrust(lizztruss),
           .instrQ(instQ[k]),
@@ -3692,6 +3715,16 @@ module decoder(
 	  instr7_aft_spc<=1'b0;
 	  instr8_aft_spc<=1'b0;
 	  instr9_aft_spc<=1'b0;
+          instr0_error<=2'b0;
+          instr1_error<=2'b0;
+          instr2_error<=2'b0;
+          instr3_error<=2'b0;
+          instr4_error<=2'b0;
+          instr5_error<=2'b0;
+          instr6_error<=2'b0;
+          instr7_error<=2'b0;
+          instr8_error<=2'b0;
+          instr9_error<=2'b0;
       end
       else if (~stall||except) begin
           for (n=0;n<10;n=n+1) begin
@@ -3770,6 +3803,16 @@ module decoder(
 	  instr7_aft_spc<=dec_lspec[7-1];
 	  instr8_aft_spc<=dec_lspec[8-1];
 	  instr9_aft_spc<=dec_lspec[9-1];
+          instr0_error<=dec_error[0] & iUsed;
+          instr1_error<=dec_error[1] & iUsed;
+          instr2_error<=dec_error[2] & iUsed;
+          instr3_error<=dec_error[3] & iUsed;
+          instr4_error<=dec_error[4] & iUsed;
+          instr5_error<=dec_error[5] & iUsed;
+          instr6_error<=dec_error[6] & iUsed;
+          instr7_error<=dec_error[7] & iUsed;
+          instr8_error<=dec_error[8] & iUsed;
+          instr9_error<=dec_error[9] & iUsed;
       end
     end
 endmodule  
