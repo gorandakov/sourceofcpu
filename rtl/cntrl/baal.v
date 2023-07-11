@@ -211,6 +211,8 @@ module cntrl_find_outcome(
   csrss_no,csrss_thread,csrss_en,csrss_data,
   new_en,new_thread,new_addr,
   IRQ,
+  instr0_err,instr1_err,instr2_err,instr3_err,instr4_err,instr5_err,
+  instr6_err,instr7_err,instr8_err,instr9_err,
   instr0_en,instr0_wren,instr0_IPOff,instr0_magic,instr0_last,instr0_after_spec,
   instr1_en,instr1_wren,instr1_IPOff,instr1_magic,instr1_last,instr1_after_spec,
   instr2_en,instr2_wren,instr2_IPOff,instr2_magic,instr2_last,instr2_after_spec,
@@ -316,6 +318,16 @@ module cntrl_find_outcome(
   input new_thread;
   output wire [5:0] new_addr;
   input IRQ;
+  input [1:0] instr0_err;
+  input [1:0] instr1_err;
+  input [1:0] instr2_err;
+  input [1:0] instr3_err;
+  input [1:0] instr4_err;
+  input [1:0] instr5_err;
+  input [1:0] instr6_err;
+  input [1:0] instr7_err;
+  input [1:0] instr8_err;
+  input [1:0] instr9_err;
   input instr0_en;
   input instr0_wren;  
   input [8:0] instr0_IPOff;
@@ -1248,16 +1260,16 @@ module cntrl_find_outcome(
   .write5_addr(ret5_addr),.write5_data(ret5_data),.write5_wen(ret5_wen),
   
   .writeInit_addr(init ? initcount : new_addr),.writeInit_wen((new_en && ~stall && ~doStall)|init),
-  .writeInit_data0({IRQ ? 13'd28 : 13'b0,instr0_en|init ? 2'd0 : 2'd2}),
-  .writeInit_data1({IRQ ? 13'd28 : 13'b0,13'b0,instr1_en|init ? 2'd0|{1'b0,IRQ} : 2'd2}),
-  .writeInit_data2({IRQ ? 13'd28 : 13'b0,13'b0,instr2_en|init ? 2'd0|{1'b0,IRQ} : 2'd2}),
-  .writeInit_data3({IRQ ? 13'd28 : 13'b0,13'b0,instr3_en|init ? 2'd0|{1'b0,IRQ} : 2'd2}),
-  .writeInit_data4({IRQ ? 13'd28 : 13'b0,13'b0,instr4_en|init ? 2'd0|{1'b0,IRQ} : 2'd2}),
-  .writeInit_data5({IRQ ? 13'd28 : 13'b0,13'b0,instr5_en|init ? 2'd0|{1'b0,IRQ} : 2'd2}),
-  .writeInit_data6({IRQ ? 13'd28 : 13'b0,13'b0,instr6_en|init ? 2'd0|{1'b0,IRQ} : 2'd2}),
-  .writeInit_data7({IRQ ? 13'd28 : 13'b0,13'b0,instr7_en|init ? 2'd0|{1'b0,IRQ} : 2'd2}),
-  .writeInit_data8({IRQ ? 13'd28 : 13'b0,13'b0,instr8_en|init ? 2'd0|{1'b0,IRQ} : 2'd2}),
-  .writeInit_data9({IRQ ? 13'd28 : 13'b0,13'b0,instr9_en|init ? 2'd0|{1'b0,IRQ} : 2'd2})
+  .writeInit_data0({IRQ ? 13'd28 : instr0_err[0] ? {12'd6,instr0_err[1]} : 13'b0,instr0_en|init ? 2'd0|{1'b0,IRQ|instr0_err[0]}:2'd2}),
+  .writeInit_data1({IRQ ? 13'd28 : instr1_err[0] ? {12'd6,instr1_err[1]} : 13'b0,instr1_en|init ? 2'd0|{1'b0,IRQ|instr1_err[0]}: 2'd2}),
+  .writeInit_data2({IRQ ? 13'd28 : instr2_err[0] ? {12'd6,instr2_err[1]} : 13'b0,instr2_en|init ? 2'd0|{1'b0,IRQ|instr2_err[0]}: 2'd2}),
+  .writeInit_data3({IRQ ? 13'd28 : instr3_err[0] ? {12'd6,instr3_err[1]} : 13'b0,instr3_en|init ? 2'd0|{1'b0,IRQ|instr3_err[0]}: 2'd2}),
+  .writeInit_data4({IRQ ? 13'd28 : instr4_err[0] ? {12'd6,instr4_err[1]} : 13'b0,instr4_en|init ? 2'd0|{1'b0,IRQ|instr4_err[0]}: 2'd2}),
+  .writeInit_data5({IRQ ? 13'd28 : instr5_err[0] ? {12'd6,instr5_err[1]} : 13'b0,instr5_en|init ? 2'd0|{1'b0,IRQ|instr5_err[0]}: 2'd2}),
+  .writeInit_data6({IRQ ? 13'd28 : instr6_err[0] ? {12'd6,instr6_err[1]} : 13'b0,instr6_en|init ? 2'd0|{1'b0,IRQ|instr6_err[0]}: 2'd2}),
+  .writeInit_data7({IRQ ? 13'd28 : instr7_err[0] ? {12'd6,instr7_err[1]} : 13'b0,instr7_en|init ? 2'd0|{1'b0,IRQ|instr7_err[0]}: 2'd2}),
+  .writeInit_data8({IRQ ? 13'd28 : instr8_err[0] ? {12'd6,instr8_err[1]} : 13'b0,instr8_en|init ? 2'd0|{1'b0,IRQ|instr8_err[0]}: 2'd2}),
+  .writeInit_data9({IRQ ? 13'd28 : instr9_err[0] ? {12'd6,instr9_err[1]} : 13'b0,instr9_en|init ? 2'd0|{1'b0,IRQ|instr9_err[0]}: 2'd2})
   );
 
   BOBind indir_mod(
