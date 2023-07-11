@@ -651,7 +651,7 @@ module rat(
   assign read8_fun=read_fun[8];
 
   generate
-    for (l=0;l<4+2*EXTRA;l=l+1) begin : tile_gen
+    for (l=0;l<5;l=l+1) begin : tile_gen
         wire [8:0][ROB_ADDR_WIDTH-1:0] read_dataA;
         wire [8:0] read_retiredA;
         wire [8:0][FN_WIDTH-1:0] read_funA;
