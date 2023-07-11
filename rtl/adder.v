@@ -89,7 +89,7 @@ module not_array(a,b);
 
 endmodule
 
-module adder_seq(a,b,nP0,nG0,out,c_s,cin,en,cout,cout8,cout16,cout32);
+(* align_width=a,b,nP0,nG0,out *) module adder_seq(a,b,nP0,nG0,out,c_s,cin,en,cout,cout8,cout16,cout32);
   parameter WIDTH=44;
   input [WIDTH-1:0] a;
   input [WIDTH-1:0] b;
@@ -264,7 +264,7 @@ module adder_seq(a,b,nP0,nG0,out,c_s,cin,en,cout,cout8,cout16,cout32);
 endmodule
 
 
-module adder(a,b,out,cin,en,cout,cout8,cout16,cout32);
+(* align_width=a,b,out *) module adder(a,b,out,cin,en,cout,cout8,cout16,cout32);
   parameter WIDTH=32;
   input [WIDTH-1:0] a;
   input [WIDTH-1:0] b;
@@ -441,7 +441,7 @@ module adder(a,b,out,cin,en,cout,cout8,cout16,cout32);
      
 endmodule
 
-module addsub_alu0(a,b,out,sub,en,ben,cout,cout4,cout8,cout16,cout32);
+(* align_width=a,b,out *) module addsub_alu0(a,b,out,sub,en,ben,cout,cout4,cout8,cout16,cout32);
   parameter WIDTH=64;
   input [WIDTH-1:0] a;
   input [WIDTH-1:0] b;
@@ -645,7 +645,7 @@ endmodule
 
 
 
-module addsub_alu(a,b,out,sub,en,sxtEn,ben,cout,cout4,cout8LL,cout16,cout32,cout_sec,ndiff,cout44);
+(* align_width=a,b,out *) module addsub_alu(a,b,out,sub,en,sxtEn,ben,cout,cout4,cout8LL,cout16,cout32,cout_sec,ndiff,cout44);
   parameter WIDTH=64;
   input [64:0] a;
   input [64:0] b;
@@ -907,7 +907,7 @@ endmodule
 
 
 
-module adder_inc(a,out,en,cout);
+(* align_width=a,out *) module adder_inc(a,out,en,cout);
   parameter WIDTH=32;
   input [WIDTH-1:0] a;
   output [WIDTH-1:0] out;
@@ -1247,7 +1247,7 @@ module get_carry(a,b,cin,cout); //cout=a bigger or equal than b if b inv, cin=1
 endmodule
 
 
-module add_agu(
+(* align_width=a,b,c,out *) module add_agu(
   a,b,c,
   out,
   cout_sec,
@@ -1338,7 +1338,7 @@ endmodule
 
 
 
-module adder_pipe2o(clk,a,b,out1,out2,cin,en1,en2,cout,cout8,cout16,cout32);
+(* align_width=a,b,out0,out1 *) module adder_pipe2o(clk,a,b,out1,out2,cin,en1,en2,cout,cout8,cout16,cout32);
   parameter WIDTH=128;
   input clk;
   input [WIDTH-1:0] a;
@@ -1525,7 +1525,7 @@ module adder_pipe2o(clk,a,b,out1,out2,cin,en1,en2,cout,cout8,cout16,cout32);
 endmodule
 
 
-module adder2oM(a,b,out0,out1,out2,cin,en0,en1,low32,cout,cout8,cout16,cout32);
+(* align_width=a,b,out0,out1 *) module adder2oM(a,b,out0,out1,out2,cin,en0,en1,low32,cout,cout8,cout16,cout32);
   parameter WIDTH=32;
   input [WIDTH-1:0] a;
   input [WIDTH-1:0] b;
@@ -1721,7 +1721,7 @@ module adder2oM(a,b,out0,out1,out2,cin,en0,en1,low32,cout,cout8,cout16,cout32);
 endmodule
 
 
-module adder2oi(biten,a,b,out0,out1,cin,en0,en1,cout,cout8,cout16,cout32);
+(* align_width=a,b,out0,out1 *) module adder2oi(biten,a,b,out0,out1,cin,en0,en1,cout,cout8,cout16,cout32);
   parameter WIDTH=32;
   input [WIDTH-1:0] biten;
   input [WIDTH-1:0] a;
@@ -1901,7 +1901,7 @@ module adder2oi(biten,a,b,out0,out1,cin,en0,en1,cout,cout8,cout16,cout32);
   
 endmodule
 
-module adder2o(a,b,out0,out1,cin,en0,en1,cout,cout8,cout16,cout32);
+(* align_width=a,b,out0,out1 *) module adder2o(a,b,out0,out1,cin,en0,en1,cout,cout8,cout16,cout32);
   parameter WIDTH=32;
   input [WIDTH-1:0] a;
   input [WIDTH-1:0] b;
@@ -2081,7 +2081,7 @@ module adder2o(a,b,out0,out1,cin,en0,en1,cout,cout8,cout16,cout32);
      
 endmodule
 
-module adder2c(a,b,out0,out1,cin0,cin1,en0,en1,cout0,cout1,cout0_53,cout1_53);
+(* align_width=a,b,out0,out1 *) module adder2c(a,b,out0,out1,cin0,cin1,en0,en1,cout0,cout1,cout0_53,cout1_53);
   parameter WIDTH=32;
   input [WIDTH-1:0] a;
   input [WIDTH-1:0] b;
@@ -2285,7 +2285,7 @@ module adder2c(a,b,out0,out1,cin0,cin1,en0,en1,cout0,cout1,cout0_53,cout1_53);
 endmodule
 
 
-module adder2ox(a,b,out0,out1,cin,en0,en1,cout,cout8,cout16,cout32);
+(* align_width=a,b,out0,out1 *) module adder2ox(a,b,out0,out1,cin,en0,en1,cout,cout8,cout16,cout32);
   parameter WIDTH=32;
   input [WIDTH:0] a;
   input [WIDTH:0] b;
@@ -2464,7 +2464,7 @@ endmodule
 
 
 
-module adder2c_pipe(clk,a,b,out0,out1,cin0,cin1,en0,en1,cout0,cout1,cout0_53,cout1_53);
+(* align_width=a,b,out0,out1 *) module adder2c_pipe(clk,a,b,out0,out1,cin0,cin1,en0,en1,cout0,cout1,cout0_53,cout1_53);
   parameter WIDTH=32;
   input clk;
   input [WIDTH-1:0] a;
