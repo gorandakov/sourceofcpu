@@ -230,6 +230,7 @@ module backend(
   instr0_magic,
   instr0_last,
   instr0_aft_spc,
+  instr0_err,
   
   instr1_rT,
   instr1_en,
@@ -242,6 +243,7 @@ module backend(
   instr1_magic,
   instr1_last,
   instr1_aft_spc,
+  instr1_err,
     
   instr2_rT,
   instr2_en,
@@ -254,6 +256,7 @@ module backend(
   instr2_magic,
   instr2_last,
   instr2_aft_spc,
+  instr2_err,
   
   instr3_rT,
   instr3_en,
@@ -266,6 +269,7 @@ module backend(
   instr3_magic,
   instr3_last,
   instr3_aft_spc,
+  instr3_err,
   
   instr4_rT,
   instr4_en,
@@ -278,6 +282,7 @@ module backend(
   instr4_magic,
   instr4_last,
   instr4_aft_spc,
+  instr4_err,
   
   instr5_rT,
   instr5_en,
@@ -290,6 +295,7 @@ module backend(
   instr5_magic,
   instr5_last,
   instr5_aft_spc,
+  instr5_err,
 
   instr6_rT,
   instr6_en,
@@ -302,6 +308,7 @@ module backend(
   instr6_magic,
   instr6_last,
   instr6_aft_spc,
+  instr6_err,
 
   instr7_rT,
   instr7_en,
@@ -314,6 +321,7 @@ module backend(
   instr7_magic,
   instr7_last,
   instr7_aft_spc,
+  instr7_err,
 
   instr8_rT,
   instr8_en,
@@ -326,6 +334,7 @@ module backend(
   instr8_magic,
   instr8_last,
   instr8_aft_spc,
+  instr8_err,
 
   instr9_rT,
   instr9_en,
@@ -338,6 +347,7 @@ module backend(
   instr9_magic,
   instr9_last,
   instr9_aft_spc,
+  instr9_err,
 
   jump0Type,jump0Pos,jump0Pred,jump0IP,jump0Mask,jump0Attr,
   jump1Type,jump1Pos,jump1Pred,jump1IP,jump1Mask,jump1Attr,
@@ -749,6 +759,15 @@ module backend(
   input [3:0] instr0_magic;
   input instr0_last;
   input instr0_aft_spc;
+  input [1:0] instr0_err;
+  input [1:0] instr1_err;
+  input [1:0] instr2_err;
+  input [1:0] instr3_err;
+  input [1:0] instr4_err;
+  input [1:0] instr5_err;
+  input [1:0] instr6_err;
+  input [1:0] instr7_err;
+  input [1:0] instr8_err;
   
   input [IN_REG_WIDTH-1:0] instr1_rT;
   input instr1_en;
@@ -1398,6 +1417,7 @@ module backend(
   reg [3:0] instr_magic[9:0];
   reg [9:0] instr_last;
   reg [9:0] instr_aft_spc;
+  reg [1:0] instr_err[9:0];
   
   reg [4:0] jump0Type_reg;
   reg [3:0] jump0Pos_reg;
@@ -1440,6 +1460,7 @@ module backend(
   reg [PORT_WIDTH-1:0] instr_port_reg[9:0];
 //  reg [3:0] instr_magic_reg[9:0];
   reg [9:0] instr_last_reg;
+  reg [1:0] instr_err_reg[9:0];
 
   reg [2:0] instr_magicOff[9:0];
   reg [9:0] instr_gen;
@@ -5421,25 +5442,25 @@ dcache1 L1D_mod(
   .except_jmp_mask(except_jmp_mask),
   .csrss_no(csrss_no),.csrss_thread(csrss_thread),.csrss_en(csrss_en),.csrss_data(csrss_data),
   .instr0_en(instr_en_reg[0]),.instr0_wren(instr_wren_reg[0]),.instr0_IPOff(instr_IPOff_reg[0]),
-    .instr0_magic(instr_magicOff[0]),.instr0_last(instr_last_reg[0]),
+    .instr0_magic(instr_magicOff[0]),.instr0_last(instr_last_reg[0]),.instr0_err(instr_err_reg[0]),
   .instr1_en(instr_en_reg[1]),.instr1_wren(instr_wren_reg[1]),.instr1_IPOff(instr_IPOff_reg[1]),
-    .instr1_magic(instr_magicOff[1]),.instr1_last(instr_last_reg[1]),
+    .instr1_magic(instr_magicOff[1]),.instr1_last(instr_last_reg[1]),.instr1_err(instr_err_reg[0]),
   .instr2_en(instr_en_reg[2]),.instr2_wren(instr_wren_reg[2]),.instr2_IPOff(instr_IPOff_reg[2]),
-    .instr2_magic(instr_magicOff[2]),.instr2_last(instr_last_reg[2]),
+    .instr2_magic(instr_magicOff[2]),.instr2_last(instr_last_reg[2]),.instr2_err(instr_err_reg[0]),
   .instr3_en(instr_en_reg[3]),.instr3_wren(instr_wren_reg[3]),.instr3_IPOff(instr_IPOff_reg[3]),
-    .instr3_magic(instr_magicOff[3]),.instr3_last(instr_last_reg[3]),
+    .instr3_magic(instr_magicOff[3]),.instr3_last(instr_last_reg[3]),.instr3_err(instr_err_reg[0]),
   .instr4_en(instr_en_reg[4]),.instr4_wren(instr_wren_reg[4]),.instr4_IPOff(instr_IPOff_reg[4]),
-    .instr4_magic(instr_magicOff[4]),.instr4_last(instr_last_reg[4]),
+    .instr4_magic(instr_magicOff[4]),.instr4_last(instr_last_reg[4]),.instr4_err(instr_err_reg[0]),
   .instr5_en(instr_en_reg[5]),.instr5_wren(instr_wren_reg[5]),.instr5_IPOff(instr_IPOff_reg[5]),
-    .instr5_magic(instr_magicOff[5]),.instr5_last(instr_last_reg[5]),
+    .instr5_magic(instr_magicOff[5]),.instr5_last(instr_last_reg[5]),.instr5_err(instr_err_reg[0]),
   .instr6_en(instr_en_reg[6]),.instr6_wren(instr_wren_reg[6]),.instr6_IPOff(instr_IPOff_reg[6]),
-    .instr6_magic(instr_magicOff[6]),.instr6_last(instr_last_reg[6]),
+    .instr6_magic(instr_magicOff[6]),.instr6_last(instr_last_reg[6]),.instr6_err(instr_err_reg[0]),
   .instr7_en(instr_en_reg[7]),.instr7_wren(instr_wren_reg[7]),.instr7_IPOff(instr_IPOff_reg[7]),
-    .instr7_magic(instr_magicOff[7]),.instr7_last(instr_last_reg[7]),
+    .instr7_magic(instr_magicOff[7]),.instr7_last(instr_last_reg[7]),.instr7_err(instr_err_reg[0]),
   .instr8_en(instr_en_reg[8]),.instr8_wren(instr_wren_reg[8]),.instr8_IPOff(instr_IPOff_reg[8]),
-    .instr8_magic(instr_magicOff[8]),.instr8_last(instr_last_reg[8]),
+    .instr8_magic(instr_magicOff[8]),.instr8_last(instr_last_reg[8]),.instr8_err(instr_err_reg[0]),
   .instr9_en(instr_en_reg[9]),.instr9_wren(instr_wren_reg[9]),.instr9_IPOff(instr_IPOff_reg[9]),
-    .instr9_magic(instr_magicOff[9]),.instr9_last(instr_last_reg[9]),
+    .instr9_magic(instr_magicOff[9]),.instr9_last(instr_last_reg[9]),.instr9_err(instr_err_reg[0]),
   .instr0_rT(instr_rT_reg[0]),.instr0_gen(instr_gen[0]),.instr0_vec(instr_vec[0]),
   .instr1_rT(instr_rT_reg[1]),.instr1_gen(instr_gen[1]),.instr1_vec(instr_vec[1]),
   .instr2_rT(instr_rT_reg[2]),.instr2_gen(instr_gen[2]),.instr2_vec(instr_vec[2]),
@@ -6111,6 +6132,8 @@ dcache1 L1D_mod(
               instr_magic[t]<=4'b0;
               instr_last[t]<=1'b0;
 	      instr_aft_spc[t]<=1'b0;
+              instr_err<=2'b0;
+              instr_err_reg<=2'b0;
               
 	      instr_rT_reg[t]<={IN_REG_WIDTH{1'B0}};
               instr_en_reg[t]<=1'b0;
@@ -6526,6 +6549,17 @@ dcache1 L1D_mod(
 	  instr_rT[8]<=instr8_rT;
 	  instr_rT[9]<=instr9_rT;
 
+          instr_err[0]<=instr0_err;
+          instr_err[1]<=instr1_err;
+          instr_err[2]<=instr2_err;
+          instr_err[3]<=instr3_err;
+          instr_err[4]<=instr4_err;
+          instr_err[5]<=instr5_err;
+          instr_err[6]<=instr6_err;
+          instr_err[7]<=instr7_err;
+          instr_err[8]<=instr8_err;
+          instr_err[9]<=instr9_err;
+
           instr_en[0]<=instr0_en;
           instr_en[1]<=instr1_en;
           instr_en[2]<=instr2_en;
@@ -6794,6 +6828,7 @@ dcache1 L1D_mod(
 	      Wport_reg[t]<=Wport[t];
 	  end
 	  for(t=0;t<10;t=t+1) begin
+              instr_err_reg[t]<=instr_err;
 	      instr_rT_reg[t]<=instr_rT[t];
               instr_en_reg[t]<=instr_en[t];
               instr_wren_reg[t]<=instr_wren[t];
