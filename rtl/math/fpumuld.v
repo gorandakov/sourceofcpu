@@ -18,7 +18,7 @@ limitations under the License.
 `include "../struct.sv"
 `include "../fpoperations.sv"
 
-module fpucadd(clk,rst,A,A_alt,B,and1,or1,copyA,en,rmode,res,res_hi,xtra,isDBL,fpcsr,raise,is_rndD,is_rndS);
+module fpucadd(clk,rst,A,A_alt,B,pook_in,and1,or1,copyA,en,rmode,res,res_hi,xtra,isDBL,fpcsr,raise,is_rndD,is_rndS);
   localparam [15:0] BIAS=16'h7fff;
   localparam ROUND_TRUNC=0;
   localparam ROUND_ROUND=1;
@@ -34,6 +34,7 @@ module fpucadd(clk,rst,A,A_alt,B,and1,or1,copyA,en,rmode,res,res_hi,xtra,isDBL,f
   input [80:0] A;
   input [64:0] A_alt;
   input [80:0] B;
+  input pook_in;
   input and1;
   input or1;
   input copyA;

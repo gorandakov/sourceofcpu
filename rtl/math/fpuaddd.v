@@ -24,7 +24,7 @@ module fadd(
   A,
   A_alt,
   B,
-  pook_in,
+  pook_inX,
   isDBL,
   isSub,//inclusive of isRSub
   isRSub,
@@ -51,7 +51,7 @@ module fadd(
   input [80:0] A;
   input [64:0] A_alt;
   input [80:0] B;
-  input pook_in;
+  input pook_inX;
   input isDBL;
   input isSub;
   input isRSub;
@@ -223,7 +223,10 @@ module fadd(
   wire invExcpt;
   wire pook;
 
-  assign pook=isDBL ? expdiff==53 && ~sxor : expdiff==64 && ~sxor;
+  assign pook=isDBL ? expdiff==53 && ~sxor && rmode==ROUND_EVEN || rmode==ROUND_ROUND : 
+     expdiff==64 && ~sxor && rmode==ROUND_EVEN || rmode==ROUND_ROUND;
+
+  assign pook_inX=expdiff==0 && ~sxor && pook_inX;
 
   assign A_exp=(~isDBL) ? {A[80],A[78:64]} : {A[80],{4{~A[80]}},A[62:52]};
   assign B_exp=(~isDBL) ? {B[80],B[78:64]} : {B[80],{4{~B[80]}},B[62:52]};
