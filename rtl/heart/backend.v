@@ -5631,9 +5631,10 @@ dcache1 L1D_mod(
           assign FU[2][7+8*q:8*q]=lso_bnkread2[q] & lso_way_reg[2]||~lso_en_reg ? dc_rdataA[2][7+8*q:8*q] : 8'bz;
           assign FU[2][7+8*q:8*q]=lso_bnkread[q] && lso_way_reg[2] && ~lso_en_reg ? lso_data_reg[7+8*q:8*q] : 8'bz;
           assign FU[2][7+8*q:8*q]=(~lso_bnkread2[q] & ~lso_bnkread[q] || ~lso_way_reg[2]) &&~lso_en_reg ? 8'b0 : 8'bz;
-          assign FU[3][7+8*q:8*q]=lso2_bnkread2[q] ||~lso2_en_reg ? dc_rdataA[3][7+8*q:8*q] : 8'bz;
-          assign FU[3][7+8*q:8*q]=lso2_bnkread[q] && ~lso2_en_reg ? lso2_data_reg[7+8*q:8*q] : 8'bz;
-          assign FU[3][7+8*q:8*q]=(~lso2_bnkread2[q] & ~lso2_bnkread[q]) &&~lso2_en_reg ? 8'b0 : 8'bz;
+          assign FU[3][7+8*q:8*q]=(lso2_bnkread2[q] ||~lso2_en_reg) &~insBus_io_reg3 ? dc_rdataA[3][7+8*q:8*q] : 8'bz;
+          assign FU[3][7+8*q:8*q]=(lso2_bnkread[q] && lso2_en_reg) || insBus_io_reg3 ? lso2_data_reg[7+8*q:8*q] : 8'bz;
+          assign FU[3][7+8*q:8*q]=(~lso2_bnkread2[q] & ~lso2_bnkread[q]) &&~lso2_en_reg && ~insBus_io_reg3 ? 
+              8'b0 : 8'bz;
           assign FU_N[0][7+8*q:8*q]=lso_bnkread2[q] & lso_way_reg[0]||~lso_en_reg ? dc_rdataA_N[0][7+8*q:8*q] : 8'bz;
           assign FU_N[0][7+8*q:8*q]=lso_bnkread[q] && lso_way_reg[0] && ~lso_en_reg ? lso_dataN_reg[7+8*q:8*q] : 8'bz;
           assign FU_N[0][7+8*q:8*q]=(~lso_bnkread2[q] & ~lso_bnkread[q] || ~lso_way_reg[0]) &&~lso_en_reg ? 8'b11111111 : 8'bz;
@@ -7764,9 +7765,9 @@ dcache1 L1D_mod(
       end else begin
 	  lso_en_reg<=lso_en;
 	  lso_way_reg<=lso_way;
-	  lso2_en_reg<=0;
+	  lso2_en_reg<=lso2_en || insBus_io_reg2;
 	  lso_data_reg<=lso_data;
-	  lso2_data_reg<=lso2_data;
+	  lso2_data_reg<=insBus_io_reg2 ? insBus_data_reg2[135+65:65] : lso2_data;
 	  lso_dataN_reg<=lso_dataN;
 	  lso2_dataN_reg<=lso2_dataN;
 	  lso_pbit_reg<=lso_pbit;
