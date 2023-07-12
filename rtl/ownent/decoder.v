@@ -140,6 +140,7 @@ module decoder_aux_const(
   aux_const,
   aux_can_jump,
   aux_can_read,
+  aux_can_write,
   csrss_no,
   csrss_en,
   csrss_data,
@@ -171,6 +172,7 @@ module decoder_aux_const(
   output reg [64:0] aux_const;
   output reg aux_can_jump;
   output reg aux_can_read;
+  output reg aux_can_write;
   input [15:0] csrss_no;
   input csrss_en;
   input [64:0] csrss_data;
@@ -235,35 +237,36 @@ module decoder_aux_const(
   always @* begin
       aux_can_jump=1'b0;
       aux_can_read=1'b1;
+      aux_can_write=1'b1;
       case(aux0_reg[15:0])
       `csr_retIP: begin	aux_const={1'b0,csr_retIP[thread]}; 
           aux_can_jump=csr_mflags[thread][`mflags_cpl]==2'b0;
-          aux_can_read=~csr_mflags[thread][`mflags_vm] && 0==csr_mflags[thread][`mflags_cpl]; end
+          aux_can_write=aux_can_read=~csr_mflags[thread][`mflags_vm] && 0==csr_mflags[thread][`mflags_cpl]; end
       `csr_excStackSave: begin aux_const=csr_excStackSave[thread];
-        aux_can_read=~csr_mflags[thread][`mflags_vm] && 0==csr_mflags[thread][`mflags_cpl]; end
+        aux_can_write=aux_can_read=~csr_mflags[thread][`mflags_vm] && 0==csr_mflags[thread][`mflags_cpl]; end
       `csr_excStack: begin aux_const=csr_excStack[thread];
-        aux_can_read=~csr_mflags[thread][`mflags_vm] && 0==csr_mflags[thread][`mflags_cpl]; end
+        aux_can_write=aux_can_read=~csr_mflags[thread][`mflags_vm] && 0==csr_mflags[thread][`mflags_cpl]; end
       `csr_PCR: begin	aux_const=csr_PCR[thread];
-        aux_can_read=~csr_mflags[thread][`mflags_vm] && 0==csr_mflags[thread][`mflags_cpl]; end
+        aux_can_write=aux_can_read=~csr_mflags[thread][`mflags_vm] && 0==csr_mflags[thread][`mflags_cpl]; end
       `csr_PCR_reg_save:begin aux_const= csr_PCR_reg_save[thread];
-        aux_can_read=~csr_mflags[thread][`mflags_vm] && 0==csr_mflags[thread][`mflags_cpl]; end
-      `csr_mflags: begin	aux_const={1'b0,csr_mflags[thread]}; aux_can_read=~csr_mflags[thread][`mflags_vm] && 0==csr_mflags[thread][`mflags_cpl]; end
+        aux_can_write=aux_can_read=~csr_mflags[thread][`mflags_vm] && 0==csr_mflags[thread][`mflags_cpl]; end
+      `csr_mflags: begin	aux_const={1'b0,csr_mflags[thread]}; aux_can_write=aux_can_read=~csr_mflags[thread][`mflags_vm] && 0==csr_mflags[thread][`mflags_cpl]; end
       `csr_FPU:			aux_const={1'b0,csr_fpu[thread]};
-      `csr_page: begin aux_const={1'b0,csr_page[thread]}; aux_can_read=~csr_mflags[thread][`mflags_vm] && 0==csr_mflags[thread][`mflags_cpl]; end
-      `csr_vmpage: begin aux_const={1'b0,csr_vmpage[thread]}; aux_can_read=~csr_mflags[thread][`mflags_vm] && 0==csr_mflags[thread][`mflags_cpl]; end
+      `csr_page: begin aux_const={1'b0,csr_page[thread]}; aux_can_write=aux_can_read=~csr_mflags[thread][`mflags_vm] && 0==csr_mflags[thread][`mflags_cpl]; end
+      `csr_vmpage: begin aux_const={1'b0,csr_vmpage[thread]}; aux_can_write=aux_can_read=~csr_mflags[thread][`mflags_vm] && 0==csr_mflags[thread][`mflags_cpl]; end
       //`csr_cpage: begin	aux_const=csr_cpage[thread]; aux_can_read=~csr_mflags[thread][`mflags_vm] && !csr_mflags[thread][`mflags_cpl]; end
       //`csr_spage: begin	aux_const=csr_spage[thread]; aux_can_read=~csr_mflags[thread][`mflags_vm] && !csr_mflags[thread][`mflags_cpl]; end
       `csr_syscall: begin aux_const={1'b0,csr_syscall[thread]};
            aux_can_jump=1'b1; 
-           aux_can_read=~csr_mflags[thread][`mflags_vm] && csr_mflags[thread][`mflags_cpl]==2'b00; end
+           aux_can_write=aux_can_read=~csr_mflags[thread][`mflags_vm] && csr_mflags[thread][`mflags_cpl]==2'b00; end
       `csr_vmcall: begin aux_const={1'b0,csr_vmcall[thread]}; aux_can_jump=
 	   csr_mflags[thread][`mflags_vm] && csr_mflags[thread][`mflags_cpl]==2'b00;
-           aux_can_read=~csr_mflags[thread][`mflags_vm] && csr_mflags[thread][`mflags_cpl]==2'b00; end
+           aux_can_write=aux_can_read=~csr_mflags[thread][`mflags_vm] && csr_mflags[thread][`mflags_cpl]==2'b00; end
       //`csr_cpage_mask: begin aux_const=csr_cpage_mask; aux_can_read=~csr_mflags[thread][`mflags_vm] && !csr_mflags[thread][`mflags_cpl]; end
-      `csr_indir_table: begin aux_const={1'b0,csr_indir_tbl[thread]}; aux_can_read=~csr_mflags[thread][`mflags_vm] && csr_mflags[thread][`mflags_cpl]==0; end
-      `csr_indir_mask: begin aux_const={1'b0,csr_indir_mask[thread]}; aux_can_read=~csr_mflags[thread][`mflags_vm] && csr_mflags[thread][`mflags_cpl]==0; end
+      `csr_indir_table: begin aux_const={1'b0,csr_indir_tbl[thread]}; aux_can_write=aux_can_read=~csr_mflags[thread][`mflags_vm] && csr_mflags[thread][`mflags_cpl]==0; end
+      `csr_indir_mask: begin aux_const={1'b0,csr_indir_mask[thread]}; aux_can_write=aux_can_read=~csr_mflags[thread][`mflags_vm] && csr_mflags[thread][`mflags_cpl]==0; end
       `csr_IRQ_recv_vector: aux_const={1'b0,csr_IRQ_recv_vector[thread]};
-      `csr_USER1: aux_const={1'b0,csr_USER1[thread]};
+      `csr_USER1: aux_const={1'b1,csr_USER1[thread]};
       `csr_cl_lock: begin aux_const={64'b0,csr_mflags[thread][18]}; end
       default:			aux_const=65'b0;
       endcase
