@@ -616,7 +616,7 @@ module predecoder_get(
     assign lnkJumps2=lcnt_or_less[2] ?  5'd1 : 5'bz;
     assign lnkJumps3=lcnt_or_less[3] ?  5'd1 : 5'bz;
 
-    assign instrEn=cntEnd3[12:1];
+    assign instrEn=cntEnd3[12:1]|{11'b0,startOff==4'hf};
     assign Jen=jcnt_or_more[4:1];
     
     assign is_jmp={class_[14][`iclass_jump],
