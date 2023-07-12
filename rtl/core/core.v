@@ -1011,6 +1011,8 @@ module heptane_core(
   .read_sz(reqBus_sz),
   .read_bank0(reqBus_bank0),
   .read_low(reqBus_low),
+  .read_register(reqBus_register),
+  .read_LSQ(reqBus_LSQ),
   .Cread_addr(req_addr_reg[36:0]),
   .Cread_en(req_en_reg),
   .Cread_req(req_slot_reg[4:0]),
@@ -1073,6 +1075,7 @@ module heptane_core(
     .rbus_dst_req(rbusOut_dst_req),.rbus_address(rbusOut_address),
     .rbus_can(rbusOut_can),.rbus_want(rbusOut_wantX),
     .rbus_sz(rbusOut_sz),.rbus_bank0(rbusOut_bank0),.rbus_low(rbusOut_low),
+    .rbus_register(rbusOut_register),.rbusOut_LSQ(rbusOut_LSQ),
   .rbusAN_signals(rbusANIn_signals),.rbusAN_src_req(rbusANIn_src_req),
   .rbusAN_dst_req(rbusANIn_dst_req),.rbusAN_data64(rbusANIn_data[63:0])
   );
@@ -1950,6 +1953,8 @@ module heptane_core(
   reqBus_sz,
   reqBus_low,
   reqBus_bank0,
+  reqBus_register,
+  reqBus_LSQ,
   wr0_hit,
   wr0_l1miss,
   wr0_addrE,wr0_addrO,
