@@ -668,7 +668,7 @@ module smallInstr_decoder(
           prT_useF[tt]=1'b0;
           prC_useF[tt]=1'b0;
           pchain[tt]=1'b0;
-          perror[tt]={1'b0,(|magic[3:2])&(&magic[1:0])}; 
+	      perror[tt]={1'b0,(|magic[3:2])&(&magic[1:0]) || &srcIPOff[3:0]}; 
           pflags_use[tt]=1'b0;
           pflags_write[tt]=1'b0;
           pclr64[tt]=1'b0;
