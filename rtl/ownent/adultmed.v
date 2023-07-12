@@ -772,7 +772,7 @@ module smallInstr_decoder(
        endcase
        //verilator lint_on CASEINCOMPLETE
       
-       trien[3]=1'b0; //~magic[0] & subIsCJ;
+       trien[3]=~magic[0] & subIsCJ;
        pconstant[3]={{55{instr[15]}},instr[15:8],1'b0};
        pport[3]=0;
        pjumpType[3]=({instr[7:6],instr[1:0]}==4'hf) ? 5'h10 : 
@@ -1347,7 +1347,7 @@ module smallInstr_decoder(
       pjumpType[20]={1'b0,(magic[1:0]==2'b01) ? instr[18] : instr[32],opcode_main[3:1]};  
       if (puseBConst[20] && prB[20]!=0) perror[20]=1;
 
-      trien[21]=1'b0; //magic[0] & isLongCondJump;
+      trien[21]=magic[0] & isLongCondJump;
       puseRs[21]=1'b0;
       pjumpType[21]={1'b0,instr[11:8]};
       pconstant[21][0]=1'b0;
