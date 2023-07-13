@@ -7291,14 +7291,14 @@ dcache1 L1D_mod(
 	  dc_rdReg_reg[0]<={lsr_wr_data[0][`lsaddr_reg_hi],lsr_wr_data[0][`lsaddr_reg_low]};
 	  dc_rdReg_reg[1]<={lsr_wr_data[1][`lsaddr_reg_hi],lsr_wr_data[1][`lsaddr_reg_low]};
 	  dc_rdReg_reg[2]<={lsr_wr_data[2][`lsaddr_reg_hi],lsr_wr_data[2][`lsaddr_reg_low]};
-	  dc_rdReg_reg[3]<=insBus_io_reg2 ? insBus_register_reg2 : {lsr_wr_data[3][`lsaddr_reg_hi],lsr_wr_data[3][`lsaddr_reg_low]};
+	  dc_rdReg_reg[3]<={lsr_wr_data[3][`lsaddr_reg_hi],lsr_wr_data[3][`lsaddr_reg_low]};
         
           dc_wrEn_reg<=dc_wrEn;
           dc_wrEn_reg2<=dc_wrEn_reg;
           dc_wrEn_reg3<=dc_wrEn_reg2;
           wrStall_reg<=wrStall;
 	  p3_data_reg<=p3_data;
-	  p3_data_reg2<=insBus_io_reg2 ? insBus_data_reg2[135+65:65] : p3_data_reg;
+	  p3_data_reg2<=insBus_io_reg2 ? insBus_data_reg2[135:0] : p3_data_reg;
 	  if (p_lsfwd[0]) p2_ret_reg<=p_ret[0];
 	  if (p_lsfwd[1]) p2_ret_reg<=p_ret[1];
 	  if (p_lsfwd[2]) p2_ret_reg<=p_ret[2];
