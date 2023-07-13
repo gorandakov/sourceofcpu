@@ -2083,7 +2083,7 @@ module heptane_core(
         rbusANIn_data_reg<=obusOut_can0&~rbusANIn_signals[rbusANIn_used] ? (rbusALT_data>>{rbusOut_bank0[2:0],rbusOut_low})&
              {256'b0,120'b0,rbusALT_msk} : rbusANIn_data;
         rbusANIn_dataPTR_reg<=obusOut_can0&~rbusANIn_signals[rbusANIn_used] ? 0 : rbusANIn_dataPTR;
-        rbusANIn_signals_reg<=obusOut_can0&~rbusANIn_signals[rbusANIn_used] ? rbusANAlt_signals : rbusANIn_signals;//handle io
+        rbusANIn_signals_reg<=rbusANIn_signals;//handle io
         dc2_rhit<=dc2_rhitA0|dc2_rhitB0|dc2_rhitB1;
         dc2_rhitExp<=dc2_rhitExpA0|dc2_rhitExpB0|dc2_rhitExpB1;
 	dc2_rhitExp_reg<=dc2_rhitExp;
