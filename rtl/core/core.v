@@ -1093,25 +1093,6 @@ module heptane_core(
 
   assign obusOut_want=obusOut_wantX && !(obusOut_can0&~rbusANIn_signals[rbusANIn_used]);
 
-  reg [5:0] mskdata1;
-  reg [135:0] rbusALT_msk;
-
-  always @* begin
-             case(obusOut_sz)
-         5'd16: mskdata1=6'b00000;
-         5'd17: mskdata1=6'b00001;
-         5'd18: mskdata1=6'b00011;
-         5'd19: mskdata1=6'b00111;
-         5'h3:  mskdata1=6'b01111; //long double
-         5'h0,5'h1,5'h2:  mskdata1=6'b11111; //int, double, single 128 bit (u)
-         5'hc,5'hd,5'he:  mskdata1=6'b11111; //int, double, single 128 bit (a)
-         5'h4,5'h5,5'h6:  mskdata1=6'b00011; //singleE,single,singleD
-         5'h8,5'h9,5'ha:  mskdata1=6'b00111; //doubleE, double, singlePairD
-         5'hb,5'h7:  mskdata1=6'b00111; //singlePair,64 int(u), 64 int(a)
-	 5'hf: mskdata1=6'b111111;
-              endcase
-         rbusALT_msk={{8{mskdata1[5]}},{48{mskdata1[4]}},{16{mskdata1[3]}},{16{mskdata1[2]}},{8{mskdata1[1]}},{8{mskdata1[0]}}};         
-   end
   
   dcache2_block #(0) dc2A0_mod(
   .clk(clk),
@@ -2080,10 +2061,9 @@ module heptane_core(
         dc2_req_rd_reg3<=dc2_req_rd_reg2;
         dc2_req_rd_reg4<=dc2_req_rd_reg3;
         dc2_req_rd_reg5<=dc2_req_rd_reg4;
-        rbusANIn_data_reg<=obusOut_can0&~rbusANIn_signals[rbusANIn_used] ? (rbusALT_data>>{rbusOut_bank0[2:0],rbusOut_low})&
-             {256'b0,120'b0,rbusALT_msk} : rbusANIn_data;
-        rbusANIn_dataPTR_reg<=obusOut_can0&~rbusANIn_signals[rbusANIn_used] ? 0 : rbusANIn_dataPTR;
-        rbusANIn_signals_reg<=rbusANIn_signals;//handle io
+        rbusANIn_data_reg<=rbusANIn_data;
+        rbusANIn_dataPTR_reg<=rbusANIn_dataPTR;
+        rbusANIn_signals_reg<=rbusANIn_signals;
         dc2_rhit<=dc2_rhitA0|dc2_rhitB0|dc2_rhitB1;
         dc2_rhitExp<=dc2_rhitExpA0|dc2_rhitExpB0|dc2_rhitExpB1;
 	dc2_rhitExp_reg<=dc2_rhitExp;
