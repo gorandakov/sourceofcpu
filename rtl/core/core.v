@@ -35,7 +35,10 @@ module heptane_core(
   inout obusDOut_want,
   output obusDOut_replay
 );
-  parameter [4:0] BUS_ID=0;
+  parameter [2:0] IDX;
+  parameter [7:0][4:0] BUS_ID=0;
+  parameter [7:0][5:0] BUS_ID2=0;
+
   localparam PHYS_WIDTH=44;
   localparam VIRT_WIDTH=64;
   localparam IP_WIDTH=48;
