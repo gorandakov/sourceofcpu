@@ -435,6 +435,7 @@ module backend(
   localparam SIMD_WIDTH=68;//half width
   localparam CONST_WIDTH=33;
   parameter [4:0] BUS_ID=5'd0;
+  parameter [5:0] BUS_ID2=6'd0;
   
   input clk;
   input rst;
