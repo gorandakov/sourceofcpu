@@ -15,7 +15,11 @@ module lpddr5_channel(
   CAS,
   CS0,
   ADDR15,
-  DATA18);
-  parameter ODD_HALF=0;  
-  
+  DATA18A,DATA18B);
+  parameter [14:0] ADDR15_refresh=0x700f;
+  parameter [0:0] CS0_refresh=1'b1;
+  parameter [14:0] ADDR15_RDREG=0x7e00;//append reg no
+  parameter [0:0] CS0_RDREG=1'b1;
+  parameter [14:0] ADDR15_WRREG=0x7f00;//append reg no
+  parameter [0:0] CS0_WRREG=1'b1;
 endmodule  

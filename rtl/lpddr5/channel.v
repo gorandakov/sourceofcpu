@@ -47,7 +47,7 @@ module lpddr5_tag_ram(
   input [44:0] write_data;
   input write_wen;
 
-  reg [255:0] RAM[127:0];
+  reg [30:0] RAM[127:0];
 
   assign read_data=RAM[read_addr_reg];
 
@@ -61,6 +61,18 @@ endmodule
 
 
 module lpddr5_cache_way(
+  clk,
+  rst,
+  reqRD_en,reqRD_req,reqRD_dirty,
+  reqRD_out_en,reqRD_out_req,reqRD_out_dirty,
+  reqWR_doStall,
+  reqWR_en_in,reqWQ_req,reqWR_data,
+  mem_clk,
+  RAS,
+  CAS,
+  CS0,
+  ADDR15,
+  DATA18A,DATA18B);
   );
 
 endmodule
