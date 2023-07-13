@@ -26,7 +26,7 @@ module heptane_core(
   input [67:0] obusIn,
   output [81:0] obusOut,
   inout obusOut_want,
-  input obusOut_canX,
+  output obusOut_can,
   input [37:0] obusDIns,
   input [511+56:0] obusDIn_data,
   output [511+56:0] obusDOut_dataAUD,
@@ -1071,25 +1071,11 @@ module heptane_core(
   .miss_want_excl(dc2_want_excl_reg4),
   .rbus_signals(rbusOut_signals),.rbus_src_req(rbusOut_src_req),
     .rbus_dst_req(rbusOut_dst_req),.rbus_address(rbusOut_address),
-    .rbus_can(rbusOut_can),.rbus_want(rbusOut_wantX),
+    .rbus_can(rbusOut_can),.rbus_want(rbusOut_want),
     .rbus_sz(rbusOut_sz),.rbus_bank0(rbusOut_bank0),.rbus_low(rbusOut_low),
   .rbusAN_signals(rbusANIn_signals),.rbusAN_src_req(rbusANIn_src_req),
   .rbusAN_dst_req(rbusANIn_dst_req),.rbusAN_data64(rbusANIn_data[63:0])
   );
-
- texture_cache tccache_mod(
-  clk,
-  rst,
-  except,
-  obusOut_wantX,
-  {obusOut_addr,obusOut_bank0[3:2]},
-  read_data,
-  obusOut_can0,
-  {rbusANIn_data64[36:0],},
-  write_data,
-  rbusANIn_signals[`rbusANIn_iorpl]);
-
-  
   dcache2_block #(0) dc2A0_mod(
   .clk(clk),
   .rst(rst),
