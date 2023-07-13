@@ -1122,7 +1122,6 @@ module heptane_core(
          rbusANAlt_signals[`rbusAN_used]=1;
    end
   
->>>>>>> parent of e98407e (Revert "added some stuff to core.v")
   dcache2_block #(0) dc2A0_mod(
   .clk(clk),
   .rst(rst),
