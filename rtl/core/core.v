@@ -987,7 +987,7 @@ module heptane_core(
   assign rbusANOut_dst_req=rbusANIn_data_reg[46:37];
   assign rbusANOut_data=dc2_rdataExp_reg;
   assign rbusANOut_dataPTR=dc2_rdataExpPTR_reg;
-  assign rbusANOut_want=dc2_rhitExp & ~L1_expAddr_en_reg4 || dc2_rhitExp_reg & ~L1_expAddr_en_reg5 & ~dc2_rhitExpW_reg;
+  assign rbusANOut_can=dc2_rhitExp & ~L1_expAddr_en_reg4 || dc2_rhitExp_reg & ~L1_expAddr_en_reg5 & ~dc2_rhitExpW_reg;
   assign rbusANOut_replay=dc2_rhitExp & ~L1_expAddr_en_reg4;
 
   assign insBus_en=dc2_rhit && ~L1_expAddr_en_reg5;
