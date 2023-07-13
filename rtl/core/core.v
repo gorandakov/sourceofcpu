@@ -1081,17 +1081,13 @@ module heptane_core(
   clk,
   rst,
   except,
-  obusOut_wantX && obusOut_signals[`rbus_iorpl] && ~&obusOut_addr[36:35],
+  obusOut_wantX,
   {obusOut_addr,obusOut_bank0[3:2]},
-  rbusALT_data,
+  read_data,
   obusOut_can0,
-  {rbusANIn_data[36:0],rbusANIn_data[38:37]},
-  rbusANIn_data[255+64:64],
+  {rbusANIn_data64[36:0],},
+  write_data,
   rbusANIn_signals[`rbusANIn_iorpl]);
-
-  assign obusOut_can=obus_canX || obusOut_can0&~rbusANIn_signals[rbusANIn_used];
-
-  assign obusOut_want=obusOut_wantX && !(obusOut_can0&~rbusANIn_signals[rbusANIn_used]);
 
   
   dcache2_block #(0) dc2A0_mod(
