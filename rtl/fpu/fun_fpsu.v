@@ -24,7 +24,7 @@ module fun_fpsu(
   fpcsr,
   u1_A,u1_B,u1_Bx,u1_Ax,u1_en,u1_op,
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
-  u1_ret,u1_ret_en,
+  u1_ret,u1_ret_en,u1_XSUB,
   FUF0,FUF1,FUF2,
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
@@ -54,6 +54,7 @@ module fun_fpsu(
   input [3:0] u1_fuufwd_B;
   output [13:0] u1_ret;
   output u1_ret_en;
+  input u1_XSUB;
 
 
   (* register equiload *) input [S+67:0] FUF0;
@@ -216,7 +217,7 @@ module fun_fpsu(
   
   rs_write_forward #(S+68) u1_A_fwd(
   clk,rst,
-  ~u1_en[3],
+  ~u1_en[3]&u1_XADD,
   u1_A,uu_A1,
   u1_fufwd_A,u1_fuufwd_A,
   FUF0,FUF0_reg,
@@ -233,7 +234,7 @@ module fun_fpsu(
   
   rs_write_forward #(S+68) u1_B_fwd(
   clk,rst,
-  ~u1_en[3],
+  ~u1_en[3]&u1_XADD,
   u1_B,uu_B1,
   u1_fufwd_B,u1_fuufwd_B,
   FUF0,FUF0_reg,
@@ -250,7 +251,7 @@ module fun_fpsu(
   
   rs_write_forward #(S+68) u2_A_fwd(
   clk,rst,
-  ~u1_en[3],
+  ~u1_en[3]&~u1_XADD,
   u1_A,uu_A2,
   u1_fufwd_A,u1_fuufwd_A,
   FUF0,FUF0_reg,
@@ -267,7 +268,7 @@ module fun_fpsu(
   
   rs_write_forward #(S+68) u2_B_fwd(
   clk,rst,
-  ~u1_en[3],
+  ~u1_en[3]&~u1_XADD,
   u1_B,uu_B2,
   u1_fufwd_B,u1_fuufwd_B,
   FUF0,FUF0_reg,

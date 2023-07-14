@@ -25,13 +25,13 @@ module fun_fpu_BOTH(
   fpcsr,
   u1_A0,u1_B0,u1_A1,u1_B1,u1_en,u1_op,
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
-  u1_ret,u1_ret_en,
+  u1_ret,u1_ret_en,u1_XADD,
   u3_A0,u3_B0,u3_A1,u3_B1,u3_en,u3_op,
   u3_fufwd_A,u3_fuufwd_A,u3_fufwd_B,u3_fuufwd_B,
-  u3_ret,u3_ret_en,
+  u3_ret,u3_ret_en,u3_XADD,
   u5_A0,u5_B0,u5_A1,u5_B1,u5_en,u5_op,
   u5_fufwd_A,u5_fuufwd_A,u5_fufwd_B,u5_fuufwd_B,
-  u5_ret,u5_ret_en,
+  u5_ret,u5_ret_en,u5_XADD,
   FUFH0,FUFH1,FUFH2,
   FUFH3,FUFH4,FUFH5,
   FUFH6,FUFH7,FUFH8,
@@ -82,6 +82,7 @@ module fun_fpu_BOTH(
   input [3:0] u1_fuufwd_B;
   output [13:0] u1_ret;
   output u1_ret_en;
+  input u1_XADD;
 
   (* bus=DBLL bus_spacing=8 bus_off=1 *) input [16+67:0] u3_A0;
   (* bus=DBLL bus_spacing=8 bus_off=1 *) input [16+67:0] u3_B0;
@@ -95,6 +96,7 @@ module fun_fpu_BOTH(
   input [3:0] u3_fuufwd_B;
   output [13:0] u3_ret;
   output u3_ret_en;
+  input u3_XADD;
 
   (* bus=DBLL bus_spacing=8 bus_off=2 *) input [16+67:0] u5_A0;
   (* bus=DBLL bus_spacing=8 bus_off=2 *) input [16+67:0] u5_B0;
@@ -108,6 +110,7 @@ module fun_fpu_BOTH(
   input [3:0] u5_fuufwd_B;
   output [13:0] u5_ret;
   output u5_ret_en;
+  input u5_XADD;
 
 
   (* register equiload *) (* bus=DBLH bus_spacing=8 bus_rpl=3 *) input [67:0] FUFH0;
@@ -246,13 +249,13 @@ module fun_fpu_BOTH(
   fpcsr,
   u1_A1,u1_B1,u1_Ax,u1_Bx,u1_en,u1_op,
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
-  u1_retH,u1_ret_enH,
+  u1_retH,u1_ret_enH,u1_XADD,
   u3_A1,u3_B1,u3_Ax,u3_Bx,u3_en,u3_op,
   u3_fufwd_A,u3_fuufwd_A,u3_fufwd_B,u3_fuufwd_B,
-  u3_retH,u3_ret_enH,
+  u3_retH,u3_ret_enH,u3_XADD,
   u5_A1,u5_B1,u5_Ax,u5_Bx,u5_en,u5_op,
   u5_fufwd_A,u5_fuufwd_A,u5_fufwd_B,u5_fuufwd_B,
-  u5_retH,u5_ret_enH,
+  u5_retH,u5_ret_enH,u5_XADD,
   FUFH0,FUFH1,FUFH2,
   FUFH3,FUFH4,FUFH5,
   FUFH6,FUFH7,FUFH8,
@@ -283,13 +286,13 @@ module fun_fpu_BOTH(
   fpcsr,
   u1_A0,u1_B0,u1_Bx,u1_Ax,u1_en,u1_op,
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
-  u1_retL,u1_ret_enL,
+  u1_retL,u1_ret_enL,u1_XADD,
   u3_A0,u3_B0,u3_Bx,u3_Ax,u3_en,u3_op,
   u3_fufwd_A,u3_fuufwd_A,u3_fufwd_B,u3_fuufwd_B,
-  u3_retL,u3_ret_enL,
+  u3_retL,u3_ret_enL,u3_XADD,
   u5_A0,u5_B0,u5_Bx,u5_Ax,u5_en,u5_op,
   u5_fufwd_A,u5_fuufwd_A,u5_fufwd_B,u5_fuufwd_B,
-  u5_retL,u5_ret_enL,
+  u5_retL,u5_ret_enL,u5_XADD,
   FUFL0,FUFL1,FUFL2,
   FUFL3,FUFL4,FUFL5,
   FUFL6,FUFL7,FUFL8,

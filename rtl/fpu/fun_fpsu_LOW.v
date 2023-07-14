@@ -24,13 +24,13 @@ module fun_fpuSL(
   fpcsr,
   u1_A,u1_B,u1_Bx,u1_Bxo,u1_en,u1_op,
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
-  u1_ret,u1_ret_en,
+  u1_ret,u1_ret_en,u1_XSUB,
   u3_A,u3_B,u3_Bx,u3_Bxo,u3_en,u3_op,
   u3_fufwd_A,u3_fuufwd_A,u3_fufwd_B,u3_fuufwd_B,
-  u3_ret,u3_ret_en,
+  u3_ret,u3_ret_en,u3_XSUB,
   u5_A,u5_B,u5_Bx,u5_Bxo,u5_en,u5_op,
   u5_fufwd_A,u5_fuufwd_A,u5_fufwd_B,u5_fuufwd_B,
-  u5_ret,u5_ret_en,
+  u5_ret,u5_ret_en,u5_XSUB,
   FUF0,FUF1,FUF2,
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
@@ -60,6 +60,7 @@ module fun_fpuSL(
   input [3:0] u1_fuufwd_B;
   output [13:0] u1_ret;
   output u1_ret_en;
+  input u1_XSUB;
 
   input [67:0] u3_A;
   input [67:0] u3_B;
@@ -73,6 +74,7 @@ module fun_fpuSL(
   input [3:0] u3_fuufwd_B;
   output [13:0] u3_ret;
   output u3_ret_en;
+  input u3_XSUB;
   
   input [67:0] u5_A;
   input [67:0] u5_B;
@@ -86,6 +88,7 @@ module fun_fpuSL(
   input [3:0] u5_fuufwd_B;
   output [13:0] u5_ret;
   output u5_ret_en;
+  input u5_XSUB;
   
 
   (* register equiload *) input [67:0] FUF0;
@@ -119,7 +122,7 @@ module fun_fpuSL(
   fpcsr,
   u1_A,u1_B,u1_Bx,u1_Bxo,u1_en,u1_op,
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
-  u1_ret,u1_ret_en,
+  u1_ret,u1_ret_en,u1_XSUB,
   FUF0,FUF1,FUF2,
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
@@ -135,7 +138,7 @@ module fun_fpuSL(
   fpcsr,
   u3_A,u3_B,u3_Bx,u3_Bxo,u3_en,u3_op,
   u3_fufwd_A,u3_fuufwd_A,u3_fufwd_B,u3_fuufwd_B,
-  u3_ret,u3_ret_en,
+  u3_ret,u3_ret_en,u3_XSUB,
   FUF0,FUF1,FUF2,
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
@@ -151,7 +154,7 @@ module fun_fpuSL(
   fpcsr,
   u5_A,u5_B,u5_Bx,u5_Bxo,u5_en,u5_op,
   u5_fufwd_A,u5_fuufwd_A,u5_fufwd_B,u5_fuufwd_B,
-  u5_ret,u5_ret_en,
+  u5_ret,u5_ret_en,u5_XSUB,
   FUF0,FUF1,FUF2,
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
