@@ -55,7 +55,7 @@ module heptane_cores(
 
   generate
     genvar core_IDX;
-    for(core_IDX=0;core_IDX<7;core_IDX=core_IDX+1) begin : cores
+    for(core_IDX=0;core_IDX<31;core_IDX=core_IDX+1) begin : cores
       heptane_core unit_mod(
       clk,
       rst,
