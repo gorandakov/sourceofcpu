@@ -526,23 +526,14 @@ module rs_wakeUp_logic_array(
   reg [REG_WIDTH-1:0] FUreg9_reg2;
   reg FU9wen_reg2;
 
-  reg [REG_WIDTH-1:0] FUreg7_reg3;
-  reg FU7wen_reg3;
+  reg [REG_WIDTH-1:0] FUreg4_reg3;
+  reg FU4wen_reg3;
 
-  reg [REG_WIDTH-1:0] FUreg8_reg3;
-  reg FU8wen_reg3;
+  reg [REG_WIDTH-1:0] FUreg5_reg3;
+  reg FU5wen_reg3;
 
-  reg [REG_WIDTH-1:0] FUreg9_reg3;
-  reg FU9wen_reg3;
-
-  reg [REG_WIDTH-1:0] FUreg7_reg4;
-  reg FU7wen_reg4;
-
-  reg [REG_WIDTH-1:0] FUreg8_reg4;
-  reg FU8wen_reg4;
-
-  reg [REG_WIDTH-1:0] FUreg9_reg4;
-  reg FU9wen_reg4;
+  reg [REG_WIDTH-1:0] FUreg6_reg3;
+  reg FU6wen_reg3;
 
   wire [18:0] funit0[2:0];
   wire [2:0] isFP;
@@ -580,9 +571,9 @@ module rs_wakeUp_logic_array(
   assign FUreg[13]=FUreg4_reg2;
   assign FUreg[14]=FUreg5_reg2;
   assign FUreg[15]=FUreg6_reg2;
-  assign FUreg[16]=FUreg7_reg3;
-  assign FUreg[17]=FUreg8_reg3;
-  assign FUreg[18]=FUreg9_reg3;
+  assign FUreg[16]=FUreg4_reg3;
+  assign FUreg[17]=FUreg5_reg3;
+  assign FUreg[18]=FUreg6_reg3;
 
   assign FUwen[0]=FU0wen;
   assign FUwen[1]=FU1wen;
@@ -600,9 +591,9 @@ module rs_wakeUp_logic_array(
   assign FUwen[13]=FU4wen_reg2;
   assign FUwen[14]=FU5wen_reg2;
   assign FUwen[15]=FU6wen_reg2;
-  assign FUwen[16]=FU7wen_reg3;
-  assign FUwen[17]=FU8wen_reg3;
-  assign FUwen[18]=FU9wen_reg3;
+  assign FUwen[16]=FU4wen_reg3;
+  assign FUwen[17]=FU5wen_reg3;
+  assign FUwen[18]=FU6wen_reg3;
   
   generate
       genvar j,k,p,q;
@@ -636,9 +627,9 @@ module rs_wakeUp_logic_array(
               FUreg4_reg2,FU4wen_reg,
               FUreg5_reg2,FU5wen_reg,
               FUreg6_reg2,FU6wen_reg,
-              FUreg7_reg3,FU7wen_reg3,
-              FUreg8_reg3,FU8wen_reg3,
-              FUreg9_reg3,FU9wen_reg3,
+              FUreg4_reg3,FU4wen_reg3,
+              FUreg5_reg3,FU5wen_reg3,
+              FUreg6_reg3,FU6wen_reg3,
               newRsSelect0[k+8*j],newReg0,newFunit0,newGazump0,newIsFP0,newIsV0,newEQ[0],
               newRsSelect1[k+8*j],newReg1,newFunit1,newGazump1,newIsFP1,newIsV1,newEQ[1],
               newRsSelect2[k+8*j],newReg2,newFunit2,newGazump2,newIsFP2,newIsV2,newEQ[2],
@@ -721,18 +712,18 @@ module rs_wakeUp_logic_array(
 	FU8wen_reg2<=1'b0;
 	FUreg9_reg2<=9'h1ff;
 	FU9wen_reg2<=1'b0;
-	FUreg7_reg3<=9'h1ff;
-	FU7wen_reg3<=1'b0;
-	FUreg8_reg3<=9'h1ff;
-	FU8wen_reg3<=1'b0;
-	FUreg9_reg3<=9'h1ff;
-	FU9wen_reg3<=1'b0;
-	FUreg7_reg4<=9'h1ff;
-	FU7wen_reg4<=1'b0;
-	FUreg8_reg4<=9'h1ff;
-	FU8wen_reg4<=1'b0;
-	FUreg9_reg4<=9'h1ff;
-	FU9wen_reg4<=1'b0;
+	FUreg4_reg3<=9'h1ff;
+	FU4wen_reg3<=1'b0;
+	FUreg5_reg3<=9'h1ff;
+	FU5wen_reg3<=1'b0;
+	FUreg6_reg3<=9'h1ff;
+	FU6wen_reg3<=1'b0;
+//	FUreg7_reg4<=9'h1ff;
+//	FU7wen_reg4<=1'b0;
+//	FUreg8_reg4<=9'h1ff;
+//	FU8wen_reg4<=1'b0;
+//	FUreg9_reg4<=9'h1ff;
+//	FU9wen_reg4<=1'b0;
     end else begin
 	FUreg4_reg<=FUreg4;
 	FU4wen_reg<=FU4wen;
@@ -759,17 +750,17 @@ module rs_wakeUp_logic_array(
 	FUreg9_reg2<=FUreg9_reg;
 	FU9wen_reg2<=FU9wen_reg;
 	FUreg7_reg3<=FUreg7_reg2;
-	FU7wen_reg3<=FU7wen_reg2;
-	FUreg8_reg3<=FUreg8_reg2;
-	FU8wen_reg3<=FU8wen_reg2;
-	FUreg9_reg3<=FUreg9_reg2;
-	FU9wen_reg3<=FU9wen_reg2;
-	FUreg7_reg4<=FUreg7_reg3;
-	FU7wen_reg4<=FU7wen_reg3;
-	FUreg8_reg4<=FUreg8_reg3;
-	FU8wen_reg4<=FU8wen_reg3;
-	FUreg9_reg4<=FUreg9_reg3;
-	FU9wen_reg4<=FU9wen_reg3;
+	FU4wen_reg3<=FU4wen_reg2;
+	FUreg4_reg3<=FUreg4_reg2;
+	FU5wen_reg3<=FU5wen_reg2;
+	FUreg5_reg3<=FUreg5_reg2;
+	FU6wen_reg3<=FU6wen_reg2;
+	FUreg6_reg4<=FUreg6_reg3;
+//	FU7wen_reg4<=FU7wen_reg3;
+//	FUreg8_reg4<=FUreg8_reg3;
+//	FU8wen_reg4<=FU8wen_reg3;
+//	FUreg9_reg4<=FUreg9_reg3;
+//	FU9wen_reg4<=FU9wen_reg3;
     end
   end 
 endmodule
