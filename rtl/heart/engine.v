@@ -987,6 +987,12 @@ module backend(
   wire rsStall;
   wire [3:0] rsDoStall;
 
+  reg [8:0] rs_xport;
+
+  wire [8:0] outXAM;
+  reg [8:0] outXAM_reg;
+  reg [8:0] outXAM_reg2;
+
   wire [2:0] useBConstW;
   wire [2:0] useAConstW;
   wire [2:0] rs_rAW_use;
@@ -4261,7 +4267,7 @@ module backend(
     .newOp1(rs_operation_reg[3*m+1]),.newPort1(rs_port_sch[3*m+1]),.newInstrIndex1({II_upper,rs_index_reg[3*m+1]}),.newLSQ1({LSQ_upper,rs_lsi_reg[m+3]}),
     .rsAlloc1(rs_en_reg[3*m+1]),.newGazumpA1(gazumpA[3*m+1]),.newGazumpB1(gazumpB[3*m+1]),.newGazumpS1(gazumpS),
     .newFunitA1(funA_reg[3*m+1]),.newFunitB1(funB_reg[3*m+1]),.newFunitS1(funS_reg[3*m+1]),.newLSFlag1(rs_ldst_flg_reg[2*m+1]),
-    .newAttr1(newAttr_reg2),
+    .newAttr1(newAttr_reg2),.newXPort1(rs_xport[3*m+1),
   .newDataA2(dataA[3*m+2]),.newDataB2(dataB[3*m+2]),
     .newDataC2(33'b0),.newDataS2(dataS),
     .newRegA2(regA_reg[3*m+2]|{9{~inflA[3*m+2]&~depA_reg[3*m+2]}}),
@@ -4271,7 +4277,7 @@ module backend(
     .newOp2(rs_operation_reg[3*m+2]),.newPort2(rs_port_sch[3*m+2]),.newInstrIndex2({II_upper,rs_index_reg[3*m+2]}),
     .rsAlloc2(rs_en_reg[3*m+2]),.newGazumpA2(gazumpA[3*m+2]),.newGazumpB2(gazumpB[3*m+2]),.newGazumpS2(gazumpS),
     .newFunitA2(funA_reg[3*m+2]),.newFunitB2(funB_reg[3*m+2]),.newFunitS2(funS_reg[3*m+2]),
-    .newAttr2(newAttr_reg2),
+    .newAttr2(newAttr_reg2),.newXPort2(rs_xport[3*m+2),
 // wires to get values out of buffer
   .outDataA0(outDataA[3*m+0]),.outDataB0(outDataB[3*m+0]),
 	  .outDataC0(outDataC[3*m+0]),.outReg0(outReg[3*m+0]),
@@ -4287,6 +4293,7 @@ module backend(
     .outDataEn1(outEn[3*m+1]),
     .outThread1(outThr[3*m+1]),
     .outAttr1(outAttr[3*m+1]),//alu 1
+    .outXPort1(outXAM[3*m+1]),
   .outDataA2(outDataA[3*m+2]),.outDataB2(outDataB[3*m+2]),
     .outDataS2(outDataS[3*m+2]),.outReg2(outReg[3*m+2]),
     .outRegSimd2(outRegS[3*m+2]),.outOp2(outOp[3*m+2]),.outInstrIndex2(outII[3*m+2]),.outFuFwdA2(fuFwdA[3*m+2]),
@@ -4294,6 +4301,7 @@ module backend(
     .outFuuFwdB2(fuuFwdB[3*m+2]),.outFuuFwdS2(fuuFwdS[3*m+2]),.outDataEn2(outEn[3*m+2]),
     .outThread2(outThr[3*m+2]),
     .outAttr2(outAttr[3*m+2]),//alu 2
+    .outXPort2(outXAM[3*m+2]),
 // wires from functional units  
   .FU0(FU_reg[0]),.FUreg0(FUreg[0]),.FUwen0(FUwen[0]),
   .FU1(FU_reg[1]),.FUreg1(FUreg[1]),.FUwen1(FUwen[1]),
@@ -5135,17 +5143,17 @@ module backend(
   .u1_A1(outDataAFH[0]),.u1_B1(outDataBFH[0]),.u1_en(outEn_reg2[1]),.u1_op(outOp_reg2[1][12:0]),
   .u1_fufwd_A(fuFwdA_reg2[1]),.u1_fuufwd_A(fuuFwdA_reg2[1]),
   .u1_fufwd_B(fuFwdB_reg2[1]),.u1_fuufwd_B(fuuFwdB_reg2[1]),
-  .u1_ret(fret[0]),.u1_ret_en(fret_en[0]),
+  .u1_ret(fret[0]),.u1_ret_en(fret_en[0]),.u1_XADD(outXAM_reg2[1]),
   .u3_A0(outDataAFL[2]),.u3_B0(outDataBFL[2]),
   .u3_A1(outDataAFH[2]),.u3_B1(outDataBFH[2]),.u3_en(outEn_reg2[4]),.u3_op(outOp_reg2[4][12:0]),
   .u3_fufwd_A(fuFwdA_reg2[4]),.u3_fuufwd_A(fuuFwdA_reg2[4]),
   .u3_fufwd_B(fuFwdB_reg2[4]),.u3_fuufwd_B(fuuFwdB_reg2[4]),
-  .u3_ret(fret[2]),.u3_ret_en(fret_en[2]),
+  .u3_ret(fret[2]),.u3_ret_en(fret_en[2]),.u3_XADD(outXAM_reg2[4]),
   .u5_A0(outDataAFL[4]),.u5_B0(outDataBFL[4]),
   .u5_A1(outDataAFH[4]),.u5_B1(outDataBFH[4]),.u5_en(outEn_reg2[7]),.u5_op(outOp_reg2[7][12:0]),
   .u5_fufwd_A(fuFwdA_reg2[7]),.u5_fuufwd_A(fuuFwdA_reg2[7]),
   .u5_fufwd_B(fuFwdB_reg2[7]),.u5_fuufwd_B(fuuFwdB_reg2[7]),
-  .u5_ret(fret[4]),.u5_ret_en(fret_en[4]),
+  .u5_ret(fret[4]),.u5_ret_en(fret_en[4]),.u5_XADD(outXAM_reg2[7]),
   .FUFH0(FUFH[0]),.FUFH1(FUFH[1]),.FUFH2(FUFH[2]),
   .FUFH3(FUFH[3]),.FUFH4(FUFH[4]),.FUFH5(FUFH[5]),
   .FUFH6(FUFH[6]),.FUFH7(FUFH[7]),.FUFH8(FUFH[8]),
@@ -5192,19 +5200,19 @@ module backend(
   .u1_en(outEn_reg[1]),.u1_op(outOp_reg[1][12:0]),
   .u1_fufwd_A(fuFwdA_reg[1]),.u1_fuufwd_A(fuuFwdA_reg[1]),
   .u1_fufwd_B(fuFwdB_reg[1]),.u1_fuufwd_B(fuuFwdB_reg[1]),
-  .u1_ret(fsret[0]),.u1_ret_en(),
+  .u1_ret(fsret[0]),.u1_ret_en(),.u1_XSUB(outXAM_reg[1]),
   .u3_A0(outDataAVL[2]),.u3_B0(outDataBVL[2]),
   .u3_A1(outDataAVH[2]),.u3_B1(outDataBVH[2]),
   .u3_en(outEn_reg[4]),.u3_op(outOp_reg[4][12:0]),
   .u3_fufwd_A(fuFwdA_reg[4]),.u3_fuufwd_A(fuuFwdA_reg[4]),
   .u3_fufwd_B(fuFwdB_reg[4]),.u3_fuufwd_B(fuuFwdB_reg[4]),
-  .u3_ret(fsret[2]),.u3_ret_en(),
+  .u3_ret(fsret[2]),.u3_ret_en(),.u3_XSUB(outXAM_reg[4]),
   .u5_A0(outDataAVL[4]),.u5_B0(outDataBVL[4]),
   .u5_A1(outDataAVH[4]),.u5_B1(outDataBVH[4]),
   .u5_en(outEn_reg[7]),.u5_op(outOp_reg[7][12:0]),
   .u5_fufwd_A(fuFwdA_reg[7]),.u5_fuufwd_A(fuuFwdA_reg[7]),
   .u5_fufwd_B(fuFwdB_reg[7]),.u5_fuufwd_B(fuuFwdB_reg[7]),
-  .u5_ret(fsret[4]),.u5_ret_en(),
+  .u5_ret(fsret[4]),.u5_ret_en(),.u5_XSUB(outXAM_reg[7]),
   .FUFH0(FUVH[0]),.FUFH1(FUVH[1]),.FUFH2(FUVH[2]),
   .FUFH3(FUVH[3]),.FUFH4(FUVH[4]),.FUFH5(FUVH[5]),
   .FUFH6(FUVH[6]),.FUFH7(FUVH[7]),.FUFH8(FUVH[8]),
@@ -6097,6 +6105,7 @@ dcache1 L1D_mod(
               domA_reg[k]<=2'b0;
               domB_reg[k]<=2'b0;
               instr_ret_reg[k]<=4'hf;
+              rs_xport[k]<=1'b0;
           end
 	  for(t=0;t<3;t=t+1) begin
               rrfAW_reg[t]<={IN_REG_WIDTH{1'B0}};
@@ -6766,14 +6775,15 @@ dcache1 L1D_mod(
               rs_index_reg[k]<=rs_index[k];
               rs_operation_reg[k]<=rs_operation[k];
               rs_operation_reg2[k]<=rs_operation_reg[k];
+              rs_xport[k]<=1'b0;
               if (rs_port[k]==PORT_LOAD || rs_port[k]==PORT_STORE) rs_port_sch[k]<=4'd0;
               else if (k%3==1) rs_port_sch[k]<=4'd1;
               else rs_port_sch[k]<=4'd2;
               if (rs_port[k]==PORT_SHIFT || rs_port[k]==PORT_MUL) rs_port_sch[k]<=4'd2;
-              if (rs_port[k]==PORT_FADD) rs_port_sch[k]<=4'b1001;
+              if (rs_port[k]==PORT_FADD) begin rs_port_sch[k]<=4'b1001; rs_xport[k]<=1'b1; end
               if (rs_port[k]==PORT_FMUL) rs_port_sch[k]<=4'b1001;
               if (rs_port[k]==PORT_FANY) rs_port_sch[k][3]<=1'b1;
-              if (rs_port[k]==PORT_VADD) rs_port_sch[k]<=4'b101;
+              if (rs_port[k]==PORT_VADD) begin rs_port_sch[k]<=4'b101; rs_xport[k]<=1'b1; end
               if (rs_port[k]==PORT_VCMP) rs_port_sch[k]<=4'b110;
               if (rs_port[k]==PORT_VANY) rs_port_sch[k][2]<=1'b1;
               if (rs_port[k]==PORT_ALU && (rs_port[(k/3)*3+2]==PORT_VADD || rs_port[(k/3)*3+2]==PORT_FADD))
@@ -6998,6 +7008,8 @@ dcache1 L1D_mod(
               outOp_reg6[k]<={OPERATION_WIDTH{1'B0}};
               outOp_reg7[k]<={OPERATION_WIDTH{1'B0}};
               outOp_reg8[k]<={OPERATION_WIDTH{1'B0}};
+              outXAM_reg[k]<=1'b0;
+              outXAM_reg2[k]<=1'b0;
               outII_reg[k]<=10'b0;
               outII_reg2[k]<=10'b0;
               outII_reg3[k]<=10'b0;
@@ -7065,12 +7077,14 @@ dcache1 L1D_mod(
               outReg_reg3[k]<=outReg_reg2[k];
               outOp_reg[k]<=outOp[k];
               outOp_reg2[k]<=outOp_reg[k];
+              outXAM_reg[k]<=outXAM[k];
               outOp_reg3[k]<=outOp_reg2[k];
               outOp_reg4[k]<=outOp_reg3[k];
               outOp_reg5[k]<=outOp_reg4[k];
               outOp_reg6[k]<=outOp_reg5[k];
               outOp_reg7[k]<=outOp_reg6[k];
               outOp_reg8[k]<=outOp_reg7[k];
+              outXAM_reg2[k]<=outXAM_reg[k];
               outII_reg[k]<=outII[k];
               outII_reg2[k]<=outII_reg[k];
               outII_reg3[k]<=outII_reg2[k];
