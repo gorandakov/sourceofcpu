@@ -1904,8 +1904,6 @@ module heptane_core(
   insBus_exclusive,
   insBus_data,
   insBus_dataPTR,
-  insBus_data[64:56],
-  insBus_data[55:47],
   reqBus_en,
   reqBus_addr,
   reqBus_req,
@@ -2048,10 +2046,9 @@ module heptane_core(
         dc2_req_rd_reg3<=dc2_req_rd_reg2;
         dc2_req_rd_reg4<=dc2_req_rd_reg3;
         dc2_req_rd_reg5<=dc2_req_rd_reg4;
-        rbusANIn_data_reg<=obusOut_can0&~rbusANIn_signals[rbusANIn_used] ? {(rbusALT_data>>{rbusOut_bank0[2:0],rbusOut_low})&
-             {55'b0,rbusALT_msk},{obusOut_LSQ,obusOut_register,rbusOut_sz,rbusOut_bank0,rbusOut_address} : rbusANIn_data;
-        rbusANIn_dataPTR_reg<=obusOut_can0&~rbusANIn_signals[rbusANIn_used] ? 0 : rbusANIn_dataPTR;
-        rbusANIn_signals_reg<=obusOut_can0&~rbusANIn_signals[rbusANIn_used] ? rbusANAlt_signals : rbusANIn_signals;//handle io
+        rbusANIn_data_reg<=rbusANIn_data;
+        rbusANIn_dataPTR_reg<=rbusANIn_dataPTR;
+        rbusANIn_signals_reg<=rbusANIn_signals;
         dc2_rhit<=dc2_rhitA0|dc2_rhitB0|dc2_rhitB1;
         dc2_rhitExp<=dc2_rhitExpA0|dc2_rhitExpB0|dc2_rhitExpB1;
 	dc2_rhitExp_reg<=dc2_rhitExp;
