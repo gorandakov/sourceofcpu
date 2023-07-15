@@ -1082,47 +1082,6 @@ module heptane_core(
   .rbusAN_signals(rbusANIn_signals),.rbusAN_src_req(rbusANIn_src_req),
   .rbusAN_dst_req(rbusANIn_dst_req),.rbusAN_data64(rbusANIn_data[63:0])
   );
-
- texture_cache tccache_mod(
-  clk,
-  rst,
-  except,
-  obusOut_wantX && obusOut_signals[`rbus_ior] && ~&obusOut_addr[36:35],
-  {obusOut_addr,obusOut_bank0[3:2]},
-  rbusALT_data,
-  obusOut_can0,
-  {rbusANIn_data[36:0],rbusANIn_data[38:37]},
-  rbusANIn_data[511:256],
-  rbusANIn_signals[`rbusAN_iorpl]);
-
-  assign obusOut_can=obus_canX || obusOut_can0&~rbusANIn_signals[rbusANIn_used];
-
-  assign obusOut_want=obusOut_wantX && !(obusOut_can0&~rbusANIn_signals[rbusANIn_used]);
-
-  reg [5:0] mskdata1;
-  reg [135:0] rbusALT_msk;
-
-  always @* begin
-             case(obusOut_sz)
-         5'd16: mskdata1=6'b00000;
-         5'd17: mskdata1=6'b00001;
-         5'd18: mskdata1=6'b00011;
-         5'd19: mskdata1=6'b00111;
-         5'h3:  mskdata1=6'b01111; //long double
-         5'h0,5'h1,5'h2:  mskdata1=6'b11111; //int, double, single 128 bit (u)
-         5'hc,5'hd,5'he:  mskdata1=6'b11111; //int, double, single 128 bit (a)
-         5'h4,5'h5,5'h6:  mskdata1=6'b00011; //singleE,single,singleD
-         5'h8,5'h9,5'ha:  mskdata1=6'b00111; //doubleE, double, singlePairD
-         5'hb,5'h7:  mskdata1=6'b00111; //singlePair,64 int(u), 64 int(a)
-	 5'hf: mskdata1=6'b111111;
-              endcase
-         rbusALT_msk={{8{mskdata1[5]}},{48{mskdata1[4]}},{16{mskdata1[3]}},{16{mskdata1[2]}},{8{mskdata1[1]}},{8{mskdata1[0]}}};         
-         rbusANAlt_signals=0;
-         rbusANAlt_signals[`rbusAN_iorpl]=1;
-         rbusANAlt_signals[`rbusAN_used]=1;
-   end
-  
->>>>>>> parent of e98407e (Revert "added some stuff to core.v")
   dcache2_block #(0) dc2A0_mod(
   .clk(clk),
   .rst(rst),
