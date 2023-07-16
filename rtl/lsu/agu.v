@@ -359,13 +359,13 @@ module agu(
   assign tlb_data_next=tlb_data1;
 
   assign mOp_type=tlb_data[`dtlbData_type];
-  assign mOp_addrEven[43:13]=(addrMain[8] && addrNext[14]) ? tlb_data_next[`dtlbData_phys] :
+  assign mOp_addrEven[43:13]=(addrMain[7] && addrNext[14]) ? tlb_data_next[`dtlbData_phys] :
     31'bz;
-  assign mOp_addrEven[43:13]=(~(addrMain[8] && addrNext[14] )) ?  tlb_data[`dtlbData_phys] :
+  assign mOp_addrEven[43:13]=(~(addrMain[7] && addrNext[14] )) ?  tlb_data[`dtlbData_phys] :
     31'bz;
-  assign mOp_addrOdd[43:13]=(~(~addrMain[8] && addrNext[14] ) ) ? tlb_data[`dtlbData_phys] : 
+  assign mOp_addrOdd[43:13]=(~(~addrMain[7] && addrNext[14] ) ) ? tlb_data[`dtlbData_phys] : 
     31'bz;
-  assign mOp_addrOdd[43:13]=(~addrMain[8] && addrNext[14] ) ? tlb_data_next[`dtlbData_phys] :
+  assign mOp_addrOdd[43:13]=(~addrMain[7] && addrNext[14] ) ? tlb_data_next[`dtlbData_phys] :
     31'bz;
 //todo: add read_clkEn to pageFault
   assign pageFault_t=(addrNext[14]) ? (fault_tlb | ({2{split}} & fault_tlb_next)) & {2{tlb_hit}} : fault_tlb & {2{tlb_hit}};
