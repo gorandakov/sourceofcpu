@@ -1,5 +1,5 @@
 
-module lpddr6_channel(
+module lpddr3_channel(
   clk,
   rst,
   read_clkEn,
@@ -12,7 +12,7 @@ module lpddr6_channel(
   readOut_busID,
   readOut_en,
   readOut_dataR,
-  mem_clk,//1120 MHz
+  mem_clk,//800 MHz
   RAS,
   CAS,
   CS0,
@@ -30,14 +30,14 @@ module lpddr6_channel(
   parameter [5:0] BEGIN_CS2REF=40;
   input mem_clk;
   input mem_clkREF;
-  (* PIN V=10.5 *) output RAS;
-  (* PIN V=10.5 *) output CAS;
-  (* PIN V=10.5 *) output CS0;
-  (* PIN V=10.5 *) output [14:0] ADDR15;
-  (* PIN Vout=10.5 Vin=0.003 *) inout [17:0] DATA18A;
+  (* PIN V=7.3 *) output RAS;
+  (* PIN V=7.3 *) output CAS;
+  (* PIN V=7.3 *) output CS0;
+  (* PIN V=7.3 *) output [14:0] ADDR15;
+  (* PIN Vout=7.3 Vin=0.003 *) inout [17:0] DATA18A;
 
-  (* V=6.7 *) DATA18A_en_out;
-  (* V=6.7 *) DATA18B_en_out;
+  (* V=5 *) DATA18A_en_out;
+  (* V=5 *) DATA18B_en_out;
 
   wire [17:0] DATA18AW;
   wire [17:0] DATA18BW;
