@@ -1024,6 +1024,7 @@ module backend(
   wire [5:0] fretA_en/* verilator public */;
   reg  [5:0][13:0] fretA_reg/*verilator public*/;
   wire [5:0][13:0] fretB/*verilator public*/;
+  wire [5:0][13:0] fretX/*verilator public*/;
   wire [5:0] fretB_en/* verilator public */;
   reg  [5:0][13:0] fretB_reg/*verilator public*/;
   wire [5:0][13:0] fsretA/*verilator public*/;
@@ -5590,14 +5591,14 @@ dcache1 L1D_mod(
     .ret2_data({6'b0,FUS_alu[2],ex_alu[2]}),
     .ret2_wen(enS_alu[2]),
   .ret0F_addr(outII_reg7[1]),
-  .ret0F_data({1'b0,fret[0]}),
-  .ret0F_wen(fret_en[0]),
+  .ret0F_data({1'b0,fretX[0]}),
+  .ret0F_wen(fretA_en[0]|fretB_en[0]),
   .ret1F_addr(outII_reg7[4]),
-  .ret1F_data({1'b0,fret[2]}),
-  .ret1F_wen(fret_en[2]),
+  .ret1F_data({1'b0,fretX[2]}),
+  .ret1F_wen(fretA_en[2]|fretB_en[2]),
   .ret2F_addr(outII_reg7[7]),
-  .ret2F_data({1'b0,fret[4]}),
-  .ret2F_wen(fret_en[4]),
+  .ret2F_data({1'b0,fretX[4]}),
+  .ret2F_wen(fretA_en[4]|fretB_en[4]),
   .ret3_addr(outII_reg2[5]),
     .ret3_data({6'b0,FUS_alu[3],ex_alu[3]}),
     .ret3_wen(enS_alu[3]),
@@ -5622,6 +5623,18 @@ dcache1 L1D_mod(
   .xbreak(retM_xbreak),
   .has_xbreak(retM_xbreak_has)
   );
+
+  assign fretX[0]=fretA_regn[0][1:0]==2'd1 ? fretA_regn[0] : 'z;
+  assign fretX[0]=fretA_regn[0][1:0]!=2'd1 && fretB[0][1:0]==2'd1 ? fretB[0] : 'z;
+  assign fretX[0]=fretA_regn[0][1:0]!=2'd1 &&	fretB[0][1:0]!=2'd1 ? {fretA_regn[0][13:3]|fretB[0][13:3],fretA_regn[0][2:0]} : 'z;
+ 
+  assign fretX[2]=fretA_regn[2][1:0]==2'd1 ? fretA_regn[2] : 'z;
+  assign fretX[2]=fretA_regn[2][1:0]!=2'd1 && fretB[2][1:0]==2'd1 ? fretB[2] : 'z;
+  assign fretX[2]=fretA_regn[2][1:0]!=2'd1 &&	fretB[2][1:0]!=2'd1 ? {fretA_regn[2][13:3]|fretB[2][13:3],fretA_regn[2][2:0]} : 'z;
+ 
+  assign fretX[4]=fretA_regn[4][1:0]==2'd1 ? fretA_regn[4] : 'z;
+  assign fretX[4]=fretA_regn[4][1:0]!=2'd1 && fretB[4][1:0]==2'd1 ? fretB[4] : 'z;
+  assign fretX[4]=fretA_regn[4][1:0]!=2'd1 &&	fretB[4][1:0]!=2'd1 ? {fretA_regn[4][13:3]|fretB[4][13:3],fretA_regn[4][2:0]} : 'z;
  
   assign stall_alloc=|{doStall_rs[3:0],doStall_LSQ,doStall_LDQ,doStall_STQ,doStall_cntrl,doStall_WQ,doStall_alloc2};
   assign doStall=doStall_alloc | (|{doStall_rs[3:0]}) | doStall_LSQ | doStall_LDQ | doStall_STQ | doStall_cntrl | doStall_WQ;
