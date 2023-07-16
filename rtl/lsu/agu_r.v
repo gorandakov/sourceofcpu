@@ -283,8 +283,8 @@ module agu_r(
   wire [TLB_DATA_WIDTH-1:0] tlb_data_next;
   wire tlb_hit;
   
-  wire [14:0] addrMain;
-  wire [13:0] addrNext;
+  wire [13:0] addrMain;
+  wire [12:0] addrNext;
 
   reg [2:0] opsize;
   wire hasBankNext=1'b0;
@@ -406,13 +406,13 @@ module agu_r(
 
   assign mOp_skip_LDQ=~tlb_data[`dtlbData_wp] && ~tlb_data_next[`dtlbData_wp]|~page_carry;
 
-  assign mOp_addrEven[43:13]=(~mOp0_lsfwd_reg & ~req_bus && ~page_carry | ~addrMain[8]) ? 
+  assign mOp_addrEven[43:13]=(~mOp0_lsfwd_reg & ~req_bus && ~page_carry | ~addrMain[7]) ? 
     tlb_data[`dtlbData_phys] : 31'bz;
-  assign mOp_addrEven[43:13]=(~mOp0_lsfwd_reg & ~req_bus && page_carry && addrMain[8]) ?
+  assign mOp_addrEven[43:13]=(~mOp0_lsfwd_reg & ~req_bus && page_carry && addrMain[7]) ?
     tlb_data_next[`dtlbData_phys] : 31'bz;
-  assign mOp_addrOdd[43:13]=(~mOp0_lsfwd_reg & ~req_bus && ~page_carry | addrMain[8]) ? 
+  assign mOp_addrOdd[43:13]=(~mOp0_lsfwd_reg & ~req_bus && ~page_carry | addrMain[7]) ? 
     tlb_data[`dtlbData_phys] : 31'bz;
-  assign mOp_addrOdd[43:13]=(~mOp0_lsfwd_reg & ~req_bus && page_carry && ~addrMain[8]) ?
+  assign mOp_addrOdd[43:13]=(~mOp0_lsfwd_reg & ~req_bus && page_carry && ~addrMain[7]) ?
     tlb_data_next[`dtlbData_phys] : 31'bz;
   
   assign pageFault_t=(page_carry) ? (fault_tlb | ({2{mOp_split}} & fault_tlb_next)) & {2{tlb_hit}} : fault_tlb & {2{tlb_hit}};
@@ -428,7 +428,7 @@ module agu_r(
 //dummy page walker
   assign reqtlb_ack=tlb_proceed & req_can & reqtlb_next;
 
-  assign addrInPage=addrMain_tlb[43:15];
+  assign addrInPage=addrMain_tlb[43:14];
 
   assign busC_tlb_data[`ctlbData_phys]=writeTlb_low[1] ? writeTlb_data1[1][`dtlbData_phys] : writeTlb_data0[1][`dtlbData_phys];
   assign busC_tlb_data[`ctlbData_sys]=writeTlb_low[1] ? writeTlb_data1[1][`dtlbData_sys] : writeTlb_data0[1][`dtlbData_sys];
@@ -450,7 +450,7 @@ module agu_r(
   assign writeTlb_force_way[0]=tlb_way_reg;
   assign writeTlb_force_way_en[0]=writeTlb_wen && tlb_is_inv;
 
-  adder_inc #(7) addNext_mod(addrMain[13:7],addrNext[13:7],1'b1,page_carry);
+  adder_inc #(6) addNext_mod(addrMain[12:7],addrNext[12:7],1'b1,page_carry);
 
   assign new_inv[0]=1'b0;
   assign new_inv[1]=1'b0;
