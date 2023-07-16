@@ -945,6 +945,186 @@ module rs_wakeUp_data_array(
   
 endmodule
 
+module rs_wakeUp_dataFP(
+  clk,rst,stall,
+  newRsSelect0,newData0,
+  newRsSelect1,newData1,
+  newRsSelect2,newData2,
+  outEq,
+  FU0,FU1,FU2,FU3,
+  FU4,FU5,FU6,
+  FU7,FU8,FU9,
+  outRsSelect0,outData0,
+  outRsSelect1,outData1,
+  outRsSelect2,outData2
+  );
+
+  parameter WIDTH=`alu_width;
+  
+  input clk;
+  input rst;
+  input stall;
+  (* horizontal *) input newRsSelect0;
+  input [WIDTH-1:0] newData0;
+  (* horizontal *) input newRsSelect1;
+  input [WIDTH-1:0] newData1;
+  input newRsSelect2;
+  input [WIDTH-1:0] newData2;
+  (* horizontal *) input outRsSelect0;
+  
+  (* horizontal *) input [5:0] outEq;
+  input [WIDTH-1:0] FU0;
+  input [WIDTH-1:0] FU1;
+  input [WIDTH-1:0] FU2;
+  input [WIDTH-1:0] FU3;
+  input [WIDTH-1:0] FU4;
+  input [WIDTH-1:0] FU5;
+  input [WIDTH-1:0] FU6;
+  input [WIDTH-1:0] FU7;
+  input [WIDTH-1:0] FU8;
+  input [WIDTH-1:0] FU9;
+  
+  output [WIDTH-1:0] outData0;
+  (* horizontal *) input outRsSelect1;
+  output [WIDTH-1:0] outData1;
+  (* horizontal *) input outRsSelect2;
+  output [WIDTH-1:0] outData2;
+  
+  wire data_en;
+  wire [WIDTH-1:0] data_d;
+  wire [WIDTH-1:0] data_d0;
+  wire [WIDTH-1:0] data_d1;
+  reg [WIDTH-1:0] data_q;
+
+
+  assign data_en=|{outEq,newRsSelect0,newRsSelect1,newRsSelect2};
+
+  assign data_d0=outEq[0] &  ? FU0 : 'z;
+  assign data_d0=outEq[1] ? FU1 : 'z;
+  assign data_d0=outEq[2] ? FU2 : 'z;
+  assign data_d0=outEq[3] ? FU3 : 'z;
+  assign data_d0=outEq[4] ? FU4 : 'z;
+  assign data_d0=|outEq[4:0] ? 'z : {WIDTH{1'B0}};
+  assign data_d1=outEq[0] ? FU5 : 'z;
+  assign data_d1=outEq[1] ? FU6 : 'z;
+  assign data_d1=outEq[2] ? FU7 : 'z;
+  assign data_d1=outEq[3] ? FU8 : 'z;
+  assign data_d1=outEq[4] ? FU9 : 'z;
+  assign data_d1=|outEq[4:0] ? 'z : {WIDTH{1'B0}};
+  assign data_d=(newRsSelect0 & ~rst & ~stall & clk) ? newData0 : 'z;
+  assign data_d=(newRsSelect1 & ~rst & ~stall & clk) ? newData1 : 'z;
+  assign data_d=(newRsSelect2 & ~rst & ~stall & clk) ? newData2 : 'z;
+
+  assign data_d=rst & clk ? {WIDTH{1'b0}} : 'z;
+
+  assign data_d=(data_en && ~(stall|~clk && newRsSelect0|newRsSelect1|newRsSelect2 ) || rst & clk) ? 'z : data_q;
+  assign data_d=(|outEq[4:0] && outEq[5] && ~clk) ? data_d1 : 'z;
+  assign data_d=(|outEq[4:0] && ~outEq[5] && ~clk) ? data_d0 : 'z;
+  assign outData0=outRsSelect0 ? data_q : 'z;
+  assign outData1=outRsSelect1 ? data_q : 'z;
+  assign outData2=outRsSelect2 ? data_q : 'z;
+
+  always @(edge clk)
+    begin
+      data_q<=data_d;
+    end
+    
+endmodule
+
+//insturct compiler not to delete the redundant outputs of
+//rs_wakeUp_data_array
+//route outputs with x1 wire layers
+module rs_wakeUp_data_array_FP(
+  clk,rst,stall,
+  newRsSelect0,newData0,
+  newRsSelect1,newData1,
+  newRsSelect2,newData2,
+  outEq,
+  FU0,FU1,FU2,FU3,
+  FU4,FU5,FU6,
+  FU7,FU8,FU9,
+  outRsSelect0,outBank0,outFound0,outData0,
+  outRsSelect1,outBank1,outFound1,outData1,
+  outRsSelect2,outBank2,outFound2,outData2
+  );
+
+  parameter WIDTH=`alu_width+1;
+  localparam BUF_COUNT=32;
+  
+  input clk;
+  input rst;
+  input stall;
+  input [BUF_COUNT-1:0] newRsSelect0;
+  input [WIDTH-1:0] newData0;
+  input [BUF_COUNT-1:0] newRsSelect1;
+  input [WIDTH-1:0] newData1;
+  input [BUF_COUNT-1:0] newRsSelect2;
+  input [WIDTH-1:0] newData2;
+  
+  (* horizontal *) input [6*BUF_COUNT-1:0] outEq;
+  input [WIDTH-1:0] FU0;
+  input [WIDTH-1:0] FU1;
+  input [WIDTH-1:0] FU2;
+  input [WIDTH-1:0] FU3;
+  input [WIDTH-1:0] FU4;
+  input [WIDTH-1:0] FU5;
+  input [WIDTH-1:0] FU6;
+  input [WIDTH-1:0] FU7;
+  input [WIDTH-1:0] FU8;
+  input [WIDTH-1:0] FU9;
+  
+  input [BUF_COUNT-1:0] outRsSelect0;
+  input [3:0] outBank0;
+  input outFound0;
+  output [WIDTH-1:0] outData0;
+  input [BUF_COUNT-1:0] outRsSelect1;
+  input [3:0] outBank1;
+  input outFound1;
+  output [WIDTH-1:0] outData1;
+  input [BUF_COUNT-1:0] outRsSelect2;
+  input [3:0] outBank2;
+  input outFound2;
+  output [WIDTH-1:0] outData2;
+
+  generate
+      genvar j,k;
+      for (j=0;j<4;j=j+1) begin : tile_gen
+          wire [WIDTH-1:0] outData0k;
+          wire [WIDTH-1:0] outData1k;
+          wire [WIDTH-1:0] outData2k;
+          
+          for (k=0;k<8;k=k+1) begin : buf_gen
+              rs_wakeUp_dataFP #(WIDTH) buf_mod(
+              clk,rst,stall,
+              newRsSelect0[k+8*j],newData0,
+              newRsSelect1[k+8*j],newData1,
+              newRsSelect2[k+8*j],newData2,
+              outEq[(k+8*j)*6+:6],
+              FU0,FU1,FU2,FU3,
+              FU4,FU5,FU6,
+              FU7,FU8,FU9,              
+              outRsSelect0[k+8*j],outData0k,
+              outRsSelect1[k+8*j],outData1k,
+              outRsSelect2[k+8*j],outData2k
+              );
+          end
+          assign outData0=outBank0[j] ? outData0k : 'z;
+          assign outData1=outBank1[j] ? outData1k : 'z;
+          assign outData2=outBank2[j] ? outData2k : 'z;
+
+          assign outData0k=outBank0[j] ? 'z : {WIDTH{1'B0}};
+          assign outData1k=outBank1[j] ? 'z : {WIDTH{1'B0}};
+          assign outData2k=outBank2[j] ? 'z : {WIDTH{1'B0}};
+      end
+  endgenerate
+
+  assign outData0=outFound0 ? 'z : {WIDTH{1'B0}};
+  assign outData1=outFound1 ? 'z : {WIDTH{1'B0}};
+  assign outData2=outFound2 ? 'z : {WIDTH{1'B0}};
+
+  
+endmodule
+
 module rs_wakeUp_data3(
   clk,rst,stall,
   newRsSelect0,newDataA0,newDataB0,
