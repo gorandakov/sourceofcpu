@@ -1233,6 +1233,7 @@ module dcache1(
   reg [ADDR_WIDTH-2:0] read_addrE2_reg;
   reg [ADDR_WIDTH-2:0] read_addrO2_reg;
   reg [BANK_COUNT-1:0] read_bank2_reg;
+  reg [3:0][BANK_COUNT-1:0] read_bank;
   reg read_clkEn2_reg;
   reg read_odd2_reg;
   reg read_split2_reg;
@@ -1441,20 +1442,35 @@ module dcache1(
               assign rddata1[1]=({read_beginA_reg[1][1:0],read_low_reg[3:2]}==b) ? rxdata[1][b*8+:136] : 136'BZ;
               assign rddata1[2]=({read_beginA_reg[2][1:0],read_low_reg[5:4]}==b) ? rxdata[2][b*8+:136] : 136'BZ;
               assign rddata1[3]=({read_beginA_reg[3][1:0],read_low_reg[7:6]}==b) ? rxdata[3][b*8+:136] : 136'BZ;
+              assign rderr1[0]=({read_beginA_reg[0][1:0],2'b0}==b) ? |rxerr[0][b+:4] : 136'BZ;
+              assign rderr1[1]=({read_beginA_reg[1][1:0],2'b0}==b) ? |rxerr[1][b+:4] : 136'BZ;
+              assign rderr1[2]=({read_beginA_reg[2][1:0],2'b0)==b) ? |rxerr[2][b+:4] : 136'BZ;
+              assign rderr1[3]=({read_beginA_reg[3][1:0],2'b0}==b) ? |rxerr[3][b+:4] : 136'BZ;
           end
       end
       for (p=0;p<4;p=p+1) begin
 	      assign rxdata0[p]=read_data_strip[255:0]&{256{read_beginA_reg[p][4:2]==3'd0}};
+              assign rxerr0[p]=read_errP_reg2[7:0]&read_banks[p][7:0]&{8{read_beginA_reg[p][4:2]==3'd0}};
 	      assign rxdata1[p]=read_data_strip[128+255:128]&{256{read_beginA_reg[p][4:2]==3'd1}};
+              assign rxerr1[p]=read_errP_reg2[11:4]&read_banks[p][11:4]&{8{read_beginA_reg[p][4:2]==3'd1}};
 	      assign rxdata2[p]=read_data_strip[511:256]&{256{read_beginA_reg[p][4:2]==3'd2}};
+              assign rxerr2[p]=read_errP_reg2[15:8]&read_banks[p][15:8]&{8{read_beginA_reg[p][4:2]==3'd2}};
 	      assign rxdata3[p]=read_data_strip[128+511:128+256]&{256{read_beginA_reg[p][4:2]==3'd3}};
+              assign rxerr3[p]=read_errP_reg2[19:12]&read_banks[p][19:12]&{8{read_beginA_reg[p][4:2]==3'd3}};
 	      assign rxdata4[p]=read_data_strip[767:512]&{256{read_beginA_reg[p][4:2]==3'd4}};
+              assign rxerr4[p]=read_errP_reg2[23:16]&read_banks[p][23:16]&{8{read_beginA_reg[p][4:2]==3'd4}};
 	      assign rxdata5[p]=read_data_strip[767+128:128+512]&{256{read_beginA_reg[p][4:2]==3'd5}};
+              assign rxerr5[p]=read_errP_reg2[27:20]&read_banks[p][27:20]&{8{read_beginA_reg[p][4:2]==3'd5}};
 	      assign rxdata6[p]=read_data_strip[1023:768]&{256{read_beginA_reg[p][4:2]==3'd6}};
+              assign rxerr6[p]=read_errP_reg2[31:24]&read_banks[p][31:24]&{8{read_beginA_reg[p][4:2]==3'd6}};
 	      assign rxdata7[p]={read_data_strip[127:0],read_data_strip[1023:768+128]}&
 		{256{read_beginA_reg[p][4:2]==3'd7}};
+              assign rxerr7[p]={read_errP_reg2[3:0],read_errP_reg2[31:28]}&{read_banks[p][3:0],read_banks[p][31:28]}&
+                {8{read_beginA_reg[p][4:2]==3'd7}};
 	      assign rxdata[p]=rxdata0[p]|rxdata1[p]|rxdata2[p]|rxdata3[p]|
 		rxdata4[p]|rxdata5[p]|rxdata6[p]|rxdata7[p];
+	      assign rxerr[p]=rxerr0[p]|rxerr1[p]|rxerr2[p]|rxerr3[p]|
+		rxerr4[p]|rxerr5[p]|rxerr6[p]|rxerr7[p];
               assign read_dataA[p]=rddata1[p] & {{8{mskdata1[p][5]}},{48{mskdata1[p][4]}},{16{mskdata1[p][3]}},{32{mskdata1[p][2]}},
                     {16{mskdata1[p][1]}},{8{mskdata1[p][0]}},8'hff};
       end
@@ -1608,6 +1624,11 @@ module dcache1(
           read_pbit1P_reg2<=2'b0;
           read_pbit2P_reg2<=2'b0;
           read_pbit3P_reg2<=2'b0;
+
+          read_bank0_reg<=32'b0;
+          read_bank1_reg<=32'b0;
+          read_bank2_reg<=32'b0;
+          read_bank3_reg<=32'b0;
           
           for(v=0;v<4;v=v+1) begin
               mskdata1[v]<=6'b0;
@@ -1615,6 +1636,7 @@ module dcache1(
               read_sz_reg[v]<=5'b0;
               read_beginA[v]<=5'b0;
               read_beginA_reg[v]<=5'b0;
+              read_bank[v]<=32'b0;
           end
           
       end else begin
@@ -1702,6 +1724,16 @@ module dcache1(
           read_beginA[1]<=read_beginA1;
           read_beginA[2]<=read_beginA2;
           read_beginA[3]<=read_beginA3;
+
+          read_bank0_reg<=read_bank0;
+          read_bank1_reg<=read_bank1;
+          read_bank2_reg<=read_bank2;
+          read_bank3_reg<=read_bank3;
+
+          read_bank[0]<=read_bank0_reg;
+          read_bank[1]<=read_bank1_reg;
+          read_bank[2]<=read_bank2_reg;
+          read_bank[3]<=read_bank3_reg;
           
           for(v=0;v<4;v=v+1) begin
               read_sz_reg[v]<=read_sz[v];
