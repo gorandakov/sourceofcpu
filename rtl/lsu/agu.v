@@ -189,11 +189,11 @@ module agu(
   wire [4:0] bankL1;
   reg  [1:0] mOp_type_reg;
   wire split;
-  wire [12:0] addrMain;
-  wire [13:0] addrNext;
-  wire [12:0] dummy0;
-//  wire [12:0] CSAarg1;
-//  wire [12:0] CSAarg2;
+  wire [13:0] addrMain;
+  wire [14:0] addrNext;
+  wire [13:0] dummy0;
+//  wire [13:0] CSAarg1;
+//  wire [13:0] CSAarg2;
 //  wire pageCarry;
 //  wire pageCarry1;
   
@@ -359,16 +359,16 @@ module agu(
   assign tlb_data_next=tlb_data1;
 
   assign mOp_type=tlb_data[`dtlbData_type];
-  assign mOp_addrEven[43:13]=(addrMain[7] && addrNext[13]) ? tlb_data_next[`dtlbData_phys] :
+  assign mOp_addrEven[43:13]=(addrMain[8] && addrNext[14]) ? tlb_data_next[`dtlbData_phys] :
     31'bz;
-  assign mOp_addrEven[43:13]=(~(addrMain[7] && addrNext[13] )) ?  tlb_data[`dtlbData_phys] :
+  assign mOp_addrEven[43:13]=(~(addrMain[8] && addrNext[14] )) ?  tlb_data[`dtlbData_phys] :
     31'bz;
-  assign mOp_addrOdd[43:13]=(~(~addrMain[7] && addrNext[13] ) ) ? tlb_data[`dtlbData_phys] : 
+  assign mOp_addrOdd[43:13]=(~(~addrMain[8] && addrNext[14] ) ) ? tlb_data[`dtlbData_phys] : 
     31'bz;
-  assign mOp_addrOdd[43:13]=(~addrMain[7] && addrNext[13] ) ? tlb_data_next[`dtlbData_phys] :
+  assign mOp_addrOdd[43:13]=(~addrMain[8] && addrNext[14] ) ? tlb_data_next[`dtlbData_phys] :
     31'bz;
 //todo: add read_clkEn to pageFault
-  assign pageFault_t=(addrNext[13]) ? (fault_tlb | ({2{split}} & fault_tlb_next)) & {2{tlb_hit}} : fault_tlb & {2{tlb_hit}};
+  assign pageFault_t=(addrNext[14]) ? (fault_tlb | ({2{split}} & fault_tlb_next)) & {2{tlb_hit}} : fault_tlb & {2{tlb_hit}};
   assign pageFault=(pageFault_t_reg!=0) | fault_cann_reg && read_clkEn_reg2 && ~bus_hold_reg2;
   assign fault_cann=~cout_secq;
   assign faultNo=fault_cann_reg | (pageFault_t_reg!=0) && ~bus_hold_reg2 ? {6'd11,1'b0,2'd1} : {6'd0,1'b0,2'd2};
@@ -417,7 +417,7 @@ module agu(
   assign fault_tlb={mflags0[`mflags_cpl]==2'd3 && tlb_data[`dtlbData_sys], ~tlb_data[`dtlbData_na]}; 
   assign fault_tlb_next={mflags0[`mflags_cpl]==2'd3 && tlb_data_next[`dtlbData_sys],  ~tlb_data_next[`dtlbData_na]}; 
 
-  adder #(14) nextCAddr_mod({1'b0,cmplxAddr[12:0]},14'b10000000,addrNext,1'b0,1'b1,,,,);
+  adder #(15) nextCAddr_mod({1'b0,cmplxAddr[13:0]},15'b10000000,addrNext,1'b0,1'b1,,,,);
   
   agusec_range rng_mod(
   cmplxAddr,
@@ -425,28 +425,6 @@ module agu(
   ptrdiff,
   cout_secq);
 
-/*
-  dtlb tlb_mod(
-  .clk(clk),
-  .rst(rst),
-  .read_clkEn(tlb_clkEn),
-  .sec_wren(cout_secq),
-  .addr(addrTlb),
-  .sproc(sproc[20:0]),
-  .read_data(tlb_data0),
-  .read_data_next(tlb_data1),
-  .read_way(),
-  .read_hit(tlb_hit),
-  */ /*.write_addr(writeTlb_IP),
-  .write_data0(writeTlb_data0),
-  .write_data1(writeTlb_data1),
-  .write_data2(writeTlb_data2),
-  .force_way(writeTlb_force_way),
-  .force_way_en(writeTlb_force_way_en),
-  .write_xstant(writeTlb_force_way_en),
-  .write_invl(writeTlb_force_way_en),
-  .write_wen(writeTlb_wen)
-  );*/  
 
   always @*
     begin
