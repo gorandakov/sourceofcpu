@@ -1,5 +1,5 @@
 
-module lpddr5_channel(
+module lpddr6_channel(
   clk,
   rst,
   read_clkEn,
@@ -12,12 +12,12 @@ module lpddr5_channel(
   readOut_busID,
   readOut_en,
   readOut_dataR,
-  mem_clk,
+  mem_clk,//1120 MHz
   RAS,
   CAS,
   CS0,
   ADDR15,
-  DATA18A,DATA18B);
+  DATA18A);
   parameter [14:0] ADDR15_refresh=0x700f;
   parameter [0:0] CS0_refresh=1'b1;
   parameter [14:0] ADDR15_RDREG=0x7e00;//append reg no
@@ -29,18 +29,16 @@ module lpddr5_channel(
   parameter [5:0] BEGIN_CS2W=40;
   parameter [5:0] BEGIN_CS2REF=40;
   input mem_clk;
-  (* PIN V=7.3 *) output RAS;
-  (* PIN V=7.3 *) output CAS;
-  (* PIN V=7.3 *) output CS0;
-  (* PIN V=7.3 *) output [14:0] ADDR15;
-  (* PIN Vout=7.3 Vin=0.003 RIGHT=DATA18B *) inout [17:0] DATA18A;
-  (* PIN Vout=7.3 Vin=0.003 LEFT=DATA18A *)  inout [17:0] DATA18B;
+  (* PIN V=10.5 *) output RAS;
+  (* PIN V=10.5 *) output CAS;
+  (* PIN V=10.5 *) output CS0;
+  (* PIN V=10.5 *) output [14:0] ADDR15;
+  (* PIN Vout=10.5 Vin=0.003 *) inout [17:0] DATA18A;
 
-  (* V=5 *) DATA18A_en_out;
-  (* V=5 *) DATA18B_en_out;
+  (* V=6.7 *) DATA18A_en_out;
+  (* V=6.7 *) DATA18B_en_out;
 
   wire [17:0] DATA18AW;
-  wire [17:0] DATA18BW;
 
   reg [5:0] RS2CS;
   reg [5:0] CS2R;
@@ -48,7 +46,6 @@ module lpddr5_channel(
   reg [5:0] CS2REF;
 
   assign DATA18A=DATA18A_en_out ? DATA18AW : 18'bz;
-  assign DATA18B=DATA18B_en_out ? DATA18BW : 18'bz;
 
   always @(posedge clk) begin
       if (rst) begin
