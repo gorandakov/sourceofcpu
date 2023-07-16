@@ -305,35 +305,35 @@ limitations under the License.
 
 
 
-`define dtlbData_phys 30:0
-`define dtlbData_sys 31
-`define dtlbData_wp 32
-`define dtlbData_na 33
-`define dtlbData_ne 34
-`define dtlbData_glo 35
-`define dtlbData_type 37:36
-`define dtlbData_acc 38
-`define dtlbData_wrt 39
-`define dtlbData_subpage 40
-`define dtlbData_width 41
+`define dtlbData_phys 29:0
+`define dtlbData_sys 30
+`define dtlbData_wp 31
+`define dtlbData_na 32
+`define dtlbData_ne 33
+`define dtlbData_glo 34
+`define dtlbData_type 36:35
+`define dtlbData_acc 37
+`define dtlbData_wrt 38
+`define dtlbData_subpage 39
+`define dtlbData_width 40
 
 
-`define dtlb_vaddr 50:0
-`define dtlb_valid 51
-`define dtlb_shr   52
-`define dtlb_data1 93:53
-`define dtlb_data2 134:94
-`define dtlb_data3 175:135
-`define dtlb_width 176
+`define dtlb_vaddr 49:0
+`define dtlb_valid 50
+`define dtlb_shr   51
+`define dtlb_data1 92:52
+`define dtlb_data2 132:93
+`define dtlb_data3 172:133
+`define dtlb_width 173
 
 
 
-`define ctlbData_phys 30:0
-`define ctlbData_sys 31
-`define ctlbData_na 32
-`define ctlbData_ne 33
-`define ctlbData_global 34
-`define ctlbData_width 35
+`define ctlbData_phys 29:0
+`define ctlbData_sys 30
+`define ctlbData_na 31
+`define ctlbData_ne 32
+`define ctlbData_global 33
+`define ctlbData_width 34
 
 `define ctlb_ip 64:0
 `define ctlb_valid 65
