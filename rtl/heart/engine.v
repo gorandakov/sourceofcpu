@@ -1020,10 +1020,14 @@ module backend(
 
   wire [3:0] dc_thr=4'b0;
 
-  wire [5:0][13:0] fret/*verilator public*/;
-  wire [5:0] fret_en/* verilator public */;
-  reg  [5:0][13:0] fret_reg/*verilator public*/;
-  wire [5:0][13:0] fsret/*verilator public*/;
+  wire [5:0][13:0] fretA/*verilator public*/;
+  wire [5:0] fretA_en/* verilator public */;
+  reg  [5:0][13:0] fretA_reg/*verilator public*/;
+  wire [5:0][13:0] fretB/*verilator public*/;
+  wire [5:0] fretB_en/* verilator public */;
+  reg  [5:0][13:0] fretB_reg/*verilator public*/;
+  wire [5:0][13:0] fsretA/*verilator public*/;
+  wire [5:0][13:0] fsretB/*verilator public*/;
 
   wire [5:0] FOOFL1;
   wire [5:0] FOOFL2;
