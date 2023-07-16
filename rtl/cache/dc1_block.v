@@ -85,6 +85,8 @@ module dcache1_bank(
   bank_hit,
   read_data,
   read_data_in,
+  read_err,
+  read_err_in,
   write_addrE0, write_hitE0,
   write_addrO0, write_hitO0,
   write_bankEn0, 
@@ -99,11 +101,7 @@ module dcache1_bank(
   ins_hit,
   init
   );
-  `ifdef DCACHE_256K
-  localparam ADDR_WIDTH=7;
-  `else
   localparam ADDR_WIDTH=6;
-  `endif
   localparam DATA_WIDTH=`dcache1_data_width;
   parameter INDEX=0;
   parameter [0:0] TOP=0;
@@ -137,6 +135,8 @@ module dcache1_bank(
   output bank_hit;
   output [DATA_WIDTH-1:0] read_data;
   input [DATA_WIDTH-1:0] read_data_in;
+  output read_err;
+  input read_err_in;
 
   input [ADDR_WIDTH-1:0] write_addrE0;
   input write_hitE0; //+1 cycle
@@ -180,6 +180,7 @@ module dcache1_bank(
   wire [ADDR_WIDTH-1:0] write_addrE;
   wire write_bankEn;
   wire [3:0] write_ben;
+  wire [1:0] error;
   
   
   assign enE=read_hitE0 & read_bankEn0_reg || read_hitE1 & read_bankEn1_reg || read_hitE2 & read_bankEn2_reg || read_hitE3 & read_bankEn3_reg;
@@ -213,6 +214,11 @@ module dcache1_bank(
   assign write_ben=(~write_bankEn1 && ~write_bankEn0 && ~init) ? 4'b0 : 4'bz;
   
   assign bank_hit=enE | enO;
+
+  assign error[0]=^read_data_ram[0][8:0]|^read_data_ram[0][17:9]|^read_data_ram[0][26:18]|^read_data_ram[0][35:27];
+  assign error[1]=^read_data_ram[1][8:0]|^read_data_ram[1][17:9]|^read_data_ram[1][26:18]|^read_data_ram[1][35:27];
+
+  wire read_errX;
   
   dcache1_ram ramE_mod(
   .clk(clk),
@@ -243,14 +249,24 @@ module dcache1_bank(
         assign read_dataP=(enE & ~ins_hit) ? read_data_ram[0] : 'z;
         assign read_dataP=(enO & ~ins_hit) ? read_data_ram[1] : 'z;
         assign read_dataP=(~bank_hit | ins_hit) ? {DATA_WIDTH{1'B0}} : 'z;
+
+        assign read_errX=(enE & ~ins_hit) ? error[0] : 'z;
+        assign read_errX=(enO & ~ins_hit) ? error[1] : 'z;
+        assign read_errX=(~bank_hit | ins_hit) ? 1'b0 : 'z;
   
         assign read_data=~(read_dataP|read_data_in);  
+        assign read_err=~(read_errX|read_err_in);  
     end else begin
         assign read_dataP=(enE & ~ins_hit) ? ~read_data_ram[0] : 'z;
         assign read_dataP=(enO & ~ins_hit) ? ~read_data_ram[1] : 'z;
         assign read_dataP=(~bank_hit | ins_hit) ? {DATA_WIDTH{1'B1}} : 'z;
+
+        assign read_errX=(enE & ~ins_hit) ? ~error[0] : 'z;
+        assign read_errX=(enO & ~ins_hit) ? ~error[1] : 'z;
+        assign read_errX=(~bank_hit | ins_hit) ? 1'B1 : 'z;
   
         assign read_data=~(read_dataP&read_data_in);  
+        assign read_err=~(read_errX&read_err_in);  
     end
   endgenerate
   always @(negedge clk)
@@ -289,7 +305,7 @@ module dcache1_way(
   clk,
   rst,
   read_addrE0, read_addrO0, read_bank0, read_clkEn0, read_hit0, 
-    read_odd0, read_split0, read_pbit0, read_pbit0_in,
+    read_odd0, read_split0, read_pbit0, read_pbit0_in, 
   read_addrE1, read_addrO1, read_bank1, read_clkEn1, read_hit1,   
     read_odd1, read_split1, read_pbit1, read_pbit1_in,
   read_addrE2, read_addrO2, read_bank2, read_clkEn2, read_hit2,   
@@ -301,8 +317,8 @@ module dcache1_way(
   read_bankHit,
   read_data,
   read_data_in,
-  read_dataN,
-  read_dataN_in,
+  read_err,
+  read_err_in,
   read_begin0,
   read_begin1,
   read_begin2,
@@ -335,7 +351,6 @@ module dcache1_way(
   write_insertExclusive,
   write_insertDirty,
   write_data,
-  write_dataN,
   write_dataPTR,
   err_tag,
   recent_in,
@@ -406,8 +421,8 @@ module dcache1_way(
   
   output [LINE_WIDTH-1:0] read_data;
   input [LINE_WIDTH-1:0] read_data_in;
-  output [LINE_WIDTH-1:0] read_dataN;
-  input [LINE_WIDTH-1:0] read_dataN_in;
+  output [31:0] read_err;
+  input [31:0] read_err_in;
  
   input [4:0] read_begin0; 
   input [4:0] read_begin1; 
@@ -449,7 +464,6 @@ module dcache1_way(
   input write_insertExclusive;
   input write_insertDirty;
   input [LINE_WIDTH-1:0] write_data;
-  input [LINE_WIDTH-1:0] write_dataN;
   input [15:0] write_dataPTR;
   
 
@@ -906,16 +920,16 @@ module dcache1(
   clk,
   rst,
   read_addrE0, read_addrO0, read_bank0, read_clkEn0, read_hit0, read_hitCl0, 
-    read_odd0, read_split0, read_dataA0, read_NdataA0, read_pbit0,
+    read_odd0, read_split0, read_dataA0, read_pbit0,
     read_beginA0, read_low0, read_sz0,
   read_addrE1, read_addrO1, read_bank1, read_clkEn1, read_hit1, read_hitCl1,   
-    read_odd1, read_split1, read_dataA1,read_NdataA1, read_pbit1,
+    read_odd1, read_split1, read_dataA1, read_pbit1,
     read_beginA1, read_low1, read_sz1,
   read_addrE2, read_addrO2, read_bank2, read_clkEn2, read_hit2, read_hitCl2,   
-    read_odd2, read_split2, read_dataA2,read_NdataA2, read_pbit2,
+    read_odd2, read_split2, read_dataA2, read_pbit2,
     read_beginA2,  read_low2, read_sz2,
   read_addrE3, read_addrO3, read_bank3, read_clkEn3, read_hit3, read_hitCl3,   
-    read_odd3, read_split3, read_dataA3,read_NdataA3, read_pbit3,
+    read_odd3, read_split3, read_dataA3, read_pbit3,
     read_beginA3, read_low3, read_sz3,
   read_bankNoRead,
   read_invalidate,
