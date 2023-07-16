@@ -720,7 +720,8 @@ module dcache1_way(
         .write_wen(write_insert),
         .write_hit(ins_hit[r]),
         .wb_addr(),
-        .wb_valid()
+        .wb_valid(),
+        .puke_en(puke_en),.puke_addr(puke_addr)
         );  
         else 
         dcache1_tag #(INDEX) tagR_mod(
@@ -742,8 +743,11 @@ module dcache1_way(
         .write_wen(write_insert),
         .write_hit(ins_hit[r]),
         .wb_addr(wb_addr),
-        .wb_valid(wb_valid)
+        .wb_valid(wb_valid),
+        .puke_en(puke_en),.puke_addr(puke_addr)
         );  
+        assign puke_addr[r]=read_odd[r] && rderr1[r] ? read_addrO[r][6:0] : read_addrE[r][6:0];
+        assign puke_en[r]=rderr1[r] | rderr2[r];
     end
 
     for (w=0;w<2;w=w+1) begin : tagW_gen
@@ -768,7 +772,10 @@ module dcache1_way(
         .write_hit(ins_hit[w+4]),
         .wb_addr(),
         .wb_valid()
+        .puke_en(puke_en),.puke_addr(puke_addr)
         ); 
+        assign puke_addr[w]=write_odd[w] && write_errL_reg2[w] ? write_addrO[w][6:0] : read_addrE[w][6:0];
+        assign puke_en[w]=write_errL_reg2[w] | write_errH_reg2[w];
         
     end
   endgenerate
