@@ -1553,13 +1553,13 @@ module dcache1(
   assign read_pbit3P[0]=2'b0;
 
   assign read_hit0P=(|read_hitCl0Q[0] | ~rdreqE0) && (read_hitCl0Q[1] | ~rdreqO0) &&
-    (rdreqE0 | rdreqO0) && ~insert_en_reg2;
+    (rdreqE0 | rdreqO0) && ~insert_en_reg2 & ~rderr1[0] & ~rderr2[0];
   assign read_hit1P=(read_hitCl1Q[0] | ~rdreqE1) && (read_hitCl1Q[1] | ~rdreqO1) &&
-    (rdreqE1 | rdreqO1) && ~insert_en_reg2;
+    (rdreqE1 | rdreqO1) && ~insert_en_reg2 & ~rderr1[1] & ~rderr2[1];
   assign read_hit2P=(read_hitCl2Q[0] | ~rdreqE2) && (read_hitCl2Q[1] | ~rdreqO2) &&
-    (rdreqE2 | rdreqO2) && ~insert_en_reg2;
+    (rdreqE2 | rdreqO2) && ~insert_en_reg2 & ~rderr1[2] & ~rderr2[2];
   assign read_hit3P=(read_hitCl3Q[0] | ~rdreqE3) && (read_hitCl3Q[1] | ~rdreqO3) &&
-    (rdreqE3 | rdreqO3) && ~insert_en_reg2;
+    (rdreqE3 | rdreqO3) && ~insert_en_reg2 & ~rderr1[3] & ~rderr2[3];
     
   always @(posedge clk) begin
       if (rst)  begin
