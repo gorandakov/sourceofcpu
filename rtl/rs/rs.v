@@ -2315,19 +2315,15 @@ module rs(
   FU8,FUreg8,FUwen8,
   FU9,FUreg9,FUwen9,
   
-  newDataVB0H,newDataVB0L,
   newDataVA1H,newDataVB1H,newDataVA1L,newDataVB1L,
   newDataVA2H,newDataVB2H,newDataVA2L,newDataVB2L,
 
-  newDataFB0H,newDataFB0L,
   newDataFA1H,newDataFB1H,newDataFA1L,newDataFB1L,
   newDataFA2H,newDataFB2H,newDataFA2L,newDataFB2L,
 
-  outDataVB0H,outDataVB0L,
   outDataVA1H,outDataVB1H,outDataVA1L,outDataVB1L,
   outDataVA2H,outDataVB2H,outDataVA2L,outDataVB2L,
 
-  outDataFB0H,outDataFB0L,
   outDataFA1H,outDataFB1H,outDataFA1L,outDataFB1L,
   outDataFA2H,outDataFB2H,outDataFA2L,outDataFB2L,
 
@@ -2341,17 +2337,6 @@ module rs(
   FUV7H,FUV7L,
   FUV8H,FUV8L,
   FUV9H,FUV9L,
-
-  FUVX0H,FUVX0L,
-  FUVX1H,FUVX1L,
-  FUVX2H,FUVX2L,
-  FUVX3H,FUVX3L,
-  FUVX4H,FUVX4L,
-  FUVX5H,FUVX5L,
-  FUVX6H,FUVX6L,
-  FUVX7H,FUVX7L,
-  FUVX8H,FUVX8L,
-  FUVX9H,FUVX9L,
   
   FUF0H,FUF0L,
   FUF1H,FUF1L,
@@ -2363,17 +2348,6 @@ module rs(
   FUF7H,FUF7L,
   FUF8H,FUF8L,
   FUF9H,FUF9L,
-
-  FUFX0H,FUFX0L,
-  FUFX1H,FUFX1L,
-  FUFX2H,FUFX2L,
-  FUFX3H,FUFX3L,
-  FUFX4H,FUFX4L,
-  FUFX5H,FUFX5L,
-  FUFX6H,FUFX6L,
-  FUFX7H,FUFX7L,
-  FUFX8H,FUFX8L,
-  FUFX9H,FUFX9L,
 
   FUS0,FUS1,FUS2,
   FUS3,FUS4,FUS5,
@@ -2588,9 +2562,6 @@ module rs(
   input FUwen9;
   
 //SIMD
-  input [SIMD_WIDTH-1:0] newDataVB0H;
-  input [SIMD_WIDTH-1:0] newDataVB0L;
-
   input [SIMD_WIDTH-1:0] newDataVA1H;
   input [SIMD_WIDTH-1:0] newDataVB1H;
   input [SIMD_WIDTH-1:0] newDataVA1L;
@@ -2601,9 +2572,6 @@ module rs(
   input [SIMD_WIDTH-1:0] newDataVA2L;
   input [SIMD_WIDTH-1:0] newDataVB2L;
   
-  input [SIMD_WIDTH-1:0] newDataFB0H;
-  input [SIMD_WIDTH-1:0] newDataFB0L;
-
   input [SIMD_WIDTH-1:0] newDataFA1H;
   input [SIMD_WIDTH-1:0] newDataFB1H;
   input [16+SIMD_WIDTH-1:0] newDataFA1L;
@@ -2614,9 +2582,6 @@ module rs(
   input [16+SIMD_WIDTH-1:0] newDataFA2L;
   input [16+SIMD_WIDTH-1:0] newDataFB2L;
   
-  output [SIMD_WIDTH-1:0] outDataVB0H;
-  output [SIMD_WIDTH-1:0] outDataVB0L;
-
   output [SIMD_WIDTH-1:0] outDataVA1H;
   output [SIMD_WIDTH-1:0] outDataVB1H;
   output [SIMD_WIDTH-1:0] outDataVA1L;
@@ -2627,9 +2592,6 @@ module rs(
   output [SIMD_WIDTH-1:0] outDataVA2L;
   output [SIMD_WIDTH-1:0] outDataVB2L;
   
-  output [SIMD_WIDTH-1:0] outDataFB0H;
-  output [SIMD_WIDTH-1:0] outDataFB0L;
-
   output [SIMD_WIDTH-1:0] outDataFA1H;
   output [SIMD_WIDTH-1:0] outDataFB1H;
   output [16+SIMD_WIDTH-1:0] outDataFA1L;
@@ -2699,66 +2661,6 @@ module rs(
   
   input [SIMD_WIDTH-1:0] FUF9H;
   input [16+SIMD_WIDTH-1:0] FUF9L;
-  
-  input [SIMD_WIDTH-1:0] FUVX0H;
-  input [SIMD_WIDTH-1:0] FUVX0L;
-  
-  input [SIMD_WIDTH-1:0] FUVX1H;
-  input [SIMD_WIDTH-1:0] FUVX1L;
-  
-  input [SIMD_WIDTH-1:0] FUVX2H;
-  input [SIMD_WIDTH-1:0] FUVX2L;
-  
-  input [SIMD_WIDTH-1:0] FUVX3H;
-  input [SIMD_WIDTH-1:0] FUVX3L;
-  
-  input [SIMD_WIDTH-1:0] FUVX4H;
-  input [SIMD_WIDTH-1:0] FUVX4L;
-  
-  input [SIMD_WIDTH-1:0] FUVX5H;
-  input [SIMD_WIDTH-1:0] FUVX5L;
-  
-  input [SIMD_WIDTH-1:0] FUVX6H;
-  input [SIMD_WIDTH-1:0] FUVX6L;
-  
-  input [SIMD_WIDTH-1:0] FUVX7H;
-  input [SIMD_WIDTH-1:0] FUVX7L;
-  
-  input [SIMD_WIDTH-1:0] FUVX8H;
-  input [SIMD_WIDTH-1:0] FUVX8L;
-  
-  input [SIMD_WIDTH-1:0] FUVX9H;
-  input [SIMD_WIDTH-1:0] FUVX9L;
-  
-  input [SIMD_WIDTH-1:0] FUFX0H;
-  input [16+SIMD_WIDTH-1:0] FUFX0L;
-  
-  input [SIMD_WIDTH-1:0] FUFX1H;
-  input [16+SIMD_WIDTH-1:0] FUFX1L;
-  
-  input [SIMD_WIDTH-1:0] FUFX2H;
-  input [16+SIMD_WIDTH-1:0] FUFX2L;
-  
-  input [SIMD_WIDTH-1:0] FUFX3H;
-  input [16+SIMD_WIDTH-1:0] FUFX3L;
-  
-  input [SIMD_WIDTH-1:0] FUFX4H;
-  input [16+SIMD_WIDTH-1:0] FUFX4L;
-  
-  input [SIMD_WIDTH-1:0] FUFX5H;
-  input [16+SIMD_WIDTH-1:0] FUFX5L;
-  
-  input [SIMD_WIDTH-1:0] FUFX6H;
-  input [16+SIMD_WIDTH-1:0] FUFX6L;
-  
-  input [SIMD_WIDTH-1:0] FUFX7H;
-  input [16+SIMD_WIDTH-1:0] FUFX7L;
-  
-  input [SIMD_WIDTH-1:0] FUFX8H;
-  input [16+SIMD_WIDTH-1:0] FUFX8L;
-  
-  input [SIMD_WIDTH-1:0] FUFX9H;
-  input [16+SIMD_WIDTH-1:0] FUFX9L;
   
   
   
