@@ -1446,6 +1446,10 @@ module dcache1(
               assign rderr1[1]=({read_beginA_reg[1][1:0],2'b0}==b) ? |rxerr[1][b+:4] : 136'BZ;
               assign rderr1[2]=({read_beginA_reg[2][1:0],2'b0)==b) ? |rxerr[2][b+:4] : 136'BZ;
               assign rderr1[3]=({read_beginA_reg[3][1:0],2'b0}==b) ? |rxerr[3][b+:4] : 136'BZ;
+              assign rderr2[0]=({read_beginA_reg[0][1:0],2'b0}==b) ? |rxerr7B[0][b+:4] : 136'BZ;
+              assign rderr2[1]=({read_beginA_reg[1][1:0],2'b0}==b) ? |rxerr7B[1][b+:4] : 136'BZ;
+              assign rderr2[2]=({read_beginA_reg[2][1:0],2'b0)==b) ? |rxerr7B[2][b+:4] : 136'BZ;
+              assign rderr2[3]=({read_beginA_reg[3][1:0],2'b0}==b) ? |rxerr7B[3][b+:4] : 136'BZ;
           end
       end
       for (p=0;p<4;p=p+1) begin
@@ -1465,7 +1469,9 @@ module dcache1(
               assign rxerr6[p]=read_errP_reg2[31:24]&read_banks[p][31:24]&{8{read_beginA_reg[p][4:2]==3'd6}};
 	      assign rxdata7[p]={read_data_strip[127:0],read_data_strip[1023:768+128]}&
 		{256{read_beginA_reg[p][4:2]==3'd7}};
-              assign rxerr7[p]={read_errP_reg2[3:0],read_errP_reg2[31:28]}&{read_banks[p][3:0],read_banks[p][31:28]}&
+              assign rxerr7[p]={4'b0,read_errP_reg2[31:28]}&{read_banks[p][31:28]}&
+                {8{read_beginA_reg[p][4:2]==3'd7}};
+              assign rxerr7B[p]={read_errP_reg2[3:0],4'b0}&{read_banks[p][3:0],4'b0}&
                 {8{read_beginA_reg[p][4:2]==3'd7}};
 	      assign rxdata[p]=rxdata0[p]|rxdata1[p]|rxdata2[p]|rxdata3[p]|
 		rxdata4[p]|rxdata5[p]|rxdata6[p]|rxdata7[p];
