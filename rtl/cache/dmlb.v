@@ -159,7 +159,7 @@ module dtlb_way(
   input read_clkEn;
   input [20:0] sproc;
   input R0_sec_wren;
-  input [5:0][VADDR_WIDTH-15:0]   addr;
+  input [5:0][VADDR_WIDTH-16:0]   addr;
   output [5:0][OUTDATA_WIDTH-1:0] read_data0;
   output [5:0][OUTDATA_WIDTH-1:0] read_data1;
   output [5:0][OUTDATA_WIDTH-1:0] read_data2;
@@ -314,7 +314,7 @@ module dtlb(
   input rst;
   input read_clkEn;
   input sec_wren;
-  input [5:0][VADDR_WIDTH-14:0] addr;
+  input [5:0][VADDR_WIDTH-15:0] addr;
   input [20:0] sproc;
   output [5:0][OUTDATA_WIDTH-1:0] read_data;
   output [5:0][OUTDATA_WIDTH-1:0] read_data_next;
@@ -353,13 +353,13 @@ module dtlb(
   reg init;
   
   genvar k;
-  wire [5:0][VADDR_WIDTH-15:0] addr0;
-  assign addr0[0]=addr[0][VADDR_WIDTH-14:1];
-  assign addr0[1]=addr[1][VADDR_WIDTH-14:1];
-  assign addr0[2]=addr[2][VADDR_WIDTH-14:1];
-  assign addr0[3]=addr[3][VADDR_WIDTH-14:1];
-  assign addr0[4]=addr[4][VADDR_WIDTH-14:1];
-  assign addr0[5]=addr[5][VADDR_WIDTH-14:1];
+  wire [5:0][VADDR_WIDTH-16:0] addr0;
+  assign addr0[0]=addr[0][VADDR_WIDTH-15:1];
+  assign addr0[1]=addr[1][VADDR_WIDTH-15:1];
+  assign addr0[2]=addr[2][VADDR_WIDTH-15:1];
+  assign addr0[3]=addr[3][VADDR_WIDTH-15:1];
+  assign addr0[4]=addr[4][VADDR_WIDTH-15:1];
+  assign addr0[5]=addr[5][VADDR_WIDTH-15:1];
   generate
     for(k=0;k<WAY_COUNT;k=k+1)
 	  begin : ways_gen
