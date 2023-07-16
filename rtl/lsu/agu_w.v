@@ -179,11 +179,11 @@ module sagu(
 
   assign mOp_split=mOp_split_X;
 
-  wire [13:0] addrMain;
-  wire [14:0] addrNext;
-  wire [13:0] dummy0;
- // wire [13:0] CSAarg1;
- // wire [13:0] CSAarg2;
+  wire [12:0] addrMain;
+  wire [13:0] addrNext;
+  wire [12:0] dummy0;
+ // wire [12:0] CSAarg1;
+ // wire [12:0] CSAarg2;
  // wire pageCarry;
  // wire pageCarry1;
   
@@ -310,8 +310,8 @@ module sagu(
 
   assign mOp_type=tlb_data[`dtlbData_type];
   
-  assign mOp_addrEven[43:13]=(addrMain[7] & addrNext[14]) ? tlb_data_next[`dtlbData_phys] : tlb_data[`dtlbData_phys];
-  assign mOp_addrOdd[43:13]=(~(~addrMain[7] & addrNext[14])) ? tlb_data[`dtlbData_phys] : tlb_data_next[`dtlbData_phys];
+  assign mOp_addrEven[43:13]=(addrMain[8] & addrNext[14]) ? tlb_data_next[`dtlbData_phys] : tlb_data[`dtlbData_phys];
+  assign mOp_addrOdd[43:13]=(~(~addrMain[8] & addrNext[14])) ? tlb_data[`dtlbData_phys] : tlb_data_next[`dtlbData_phys];
   
   assign pageFault_t=(addrNext[14]) ? (fault_tlb | ({2{mOp_split}} & fault_tlb_next)) & {2{tlb_hit}} : fault_tlb & {2{tlb_hit}};
   assign pageFault=(pageFault_t_reg!=0) | fault_cann_reg && read_clkEn_reg2|mex_en_reg2 && ~bus_hold_reg2;
