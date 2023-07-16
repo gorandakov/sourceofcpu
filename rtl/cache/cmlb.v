@@ -161,9 +161,9 @@ module ctlb_way(
   ctlb_ram ram_mod(
   .clk(clk),
   .rst(rst),
-  .read_addr(tr_jump ? addr[9:4] : addr[18:13]),
+  .read_addr(tr_jump ? addr[9:4] : addr[19:14]),
   .read_data(read_data_ram),
-  .write_addr(tr_jump ? addr[9:4] : addr[18:13]),
+  .write_addr(tr_jump ? addr[9:4] : addr[19:14]),
   .write_data(write_data_ram),
   .write_wen(write_wen_ram|init)
   );
@@ -268,7 +268,7 @@ module ctlb(
         rst,
         read_clkEn,
         fStall,
-        init_pending ? {46'b0,init_count,13'b0} : addr,
+        init_pending ? {45'b0,init_count,14'b0} : addr,
 	nat_jump,
 	sproc[20:0],
         read_data,
