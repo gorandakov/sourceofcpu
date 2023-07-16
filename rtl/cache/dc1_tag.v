@@ -61,6 +61,77 @@ module dcache1_tag_ram(
 
 endmodule
 
+//dcache1_tag_ram read during write behaviour: write first
+module dcache1_tagV_ram(
+  clk,
+  rst,
+  read_clkEn,
+  read_addr,
+  read_data,
+  write0_addr, write0_data,  write0_wen,
+  write1_addr, write1_data,  write1_wen,
+  write2_addr, write2_data,  write2_wen,
+  write3_addr, write3_data,  write3_wen,
+  write4_addr, write4_data,  write4_wen,
+  write5_addr, write5_data,  write5_wen,
+  write6_addr, write6_data,  write6_wen
+  );
+  `ifdef DCACHE_256K
+  localparam ADDR_WIDTH=`dcache1_addr_width;
+  localparam ADDR_COUNT=`dcache1_addr_count;
+  `else
+  localparam ADDR_WIDTH=`dcache1_addr_width-1;
+  localparam ADDR_COUNT=`dcache1_addr_count/2;
+  `endif
+  localparam DATA_WIDTH=1;
+  
+  input clk;
+  input rst;
+  input read_clkEn;
+  input [ADDR_WIDTH-1:0] read_addr;
+  output [DATA_WIDTH-1:0] read_data;
+  input [ADDR_WIDTH-1:0] write0_addr;
+  input [DATA_WIDTH-1:0] write0_data;
+  input                  write0_wen;
+  input [ADDR_WIDTH-1:0] write1_addr;
+  input [DATA_WIDTH-1:0] write1_data;
+  input                  write1_wen;
+  input [ADDR_WIDTH-1:0] write2_addr;
+  input [DATA_WIDTH-1:0] write2_data;
+  input                  write2_wen;
+  input [ADDR_WIDTH-1:0] write3_addr;
+  input [DATA_WIDTH-1:0] write3_data;
+  input                  write3_wen;
+  input [ADDR_WIDTH-1:0] write4_addr;
+  input [DATA_WIDTH-1:0] write4_data;
+  input                  write4_wen;
+  input [ADDR_WIDTH-1:0] write5_addr;
+  input [DATA_WIDTH-1:0] write5_data;
+  input                  write5_wen;
+  input [ADDR_WIDTH-1:0] write6_addr;
+  input [DATA_WIDTH-1:0] write6_data;
+  input                  write6_wen;
+
+  reg [DATA_WIDTH-1:0] ram [ADDR_COUNT-1:0];
+  reg [ADDR_WIDTH-1:0] read_addr_reg;
+  
+  assign read_data=ram[read_addr_reg];
+
+  always @(negedge clk)
+    begin
+      if (rst) read_addr_reg<={ADDR_WIDTH{1'b0}};
+      else if (read_clkEn) read_addr_reg<=read_addr;
+      if (write0_wen) ram[write0_addr]<=write0_data;
+      if (write1_wen) ram[write1_addr]<=write1_data;
+      if (write2_wen) ram[write2_addr]<=write2_data;
+      if (write3_wen) ram[write3_addr]<=write3_data;
+      if (write4_wen) ram[write4_addr]<=write4_data;
+      if (write5_wen) ram[write5_addr]<=write5_data;
+      if (write6_wen) ram[write7_addr]<=write6_data;
+    end
+
+endmodule
+
 
 module dcache1_tag(
   clk,
@@ -71,8 +142,8 @@ module dcache1_tag(
   read_exclOut0,read_exclOut1,
   read_hitL_odd,read_hitL_even,read_hitH_odd,read_hitH_even,
   read_hit_odd, read_hit_even,
- // read_excl,
   errH,errL,
+ // read_excl,
   write_exclusive,
   write_rand,
   write_recent_out,
@@ -80,7 +151,8 @@ module dcache1_tag(
   write_wen,
   write_hit,
   wb_addr,
-  wb_valid
+  wb_valid,
+  puke_en,puke_addr
   );
   localparam PADDR_WIDTH=44;
   localparam DATA_WIDTH=`dc1Tag_width;
@@ -109,12 +181,13 @@ module dcache1_tag(
   output write_hit;
   output [PADDR_WIDTH-8:0] wb_addr;
   output wb_valid;
+  input [5:0] puke_en;
+  input [6:0] puke_addr;
 
   wire [PADDR_WIDTH-9:0] tagR0_IP;
   wire [PADDR_WIDTH-9:0] tagR1_IP;
 
   wire tagR0_valid,tagR1_valid;
-  wire err_tag0,err_tag1;
   wire tagR0_exclusive,tagR1_exclusive;
   wire hit_odd;
   wire hit_even;
@@ -131,13 +204,8 @@ module dcache1_tag(
   reg write_wen_reg;
   
   reg init;
-  `ifdef DCACHE_256K
-  reg [6:0] initCount;
-  wire [6:0] initCount_d;
-  `else
   reg [5:0] initCount;
   wire [5:0] initCount_d;
-  `endif
   wire recent;
   
   reg read_invl_reg;
@@ -177,17 +245,50 @@ module dcache1_tag(
     tag_same_data&{DATA_WIDTH{~init}}),
   .write_wen(write_hit&read_odd_reg || read_en_reg & (read_odd_reg)||init)
   );  
+
+  dcache1_tagV_ram tagR0v_mod(
+  .clk(clk),
+  .rst(rst),
+  .read_clkEn(read_clkEn),
+  .read_addr(read_addrEven[6:0]),
+  .read_data(tagR0_valid),
+  .write0_addr(init ? initCount : read_addrEven_reg[5:0]),
+  .write0_data(write_hit ? tag_write_data[`dc1Tag_valid]&{1{~init}} : 
+    tag_same_data[`dc1Tag_valid]&{1{~init}}),
+  .write0_wen(write_hit&~read_odd_reg || read_en_reg & (~read_odd_reg) ||init),
+  .write1_addr(puke_addr[0][5:0]),.write1_data(1'b0), .write1_wen(puke_en[0]&~puke_addr[0][6]),
+  .write2_addr(puke_addr[1][5:0]),.write2_data(1'b0), .write2_wen(puke_en[1]&~puke_addr[1][6]),
+  .write3_addr(puke_addr[2][5:0]),.write3_data(1'b0), .write3_wen(puke_en[2]&~puke_addr[2][6]),
+  .write4_addr(puke_addr[3][5:0]),.write4_data(1'b0), .write4_wen(puke_en[3]&~puke_addr[3][6]),
+  .write5_addr(puke_addr[4][5:0]),.write5_data(1'b0), .write5_wen(puke_en[4]&~puke_addr[4][6]),
+  .write6_addr(puke_addr[5][5:0]),.write6_data(1'b0), .write6_wen(puke_en[5]&~puke_addr[5][6])
+  );  
+
+  dcache1_tagV_ram tagR1v_mod(
+  .clk(clk),
+  .rst(rst),
+  .read_clkEn(read_clkEn),
+  .read_addr(read_addrOdd[6:0]),
+  .read_data(tagR1_valid),
+  .write0_addr(init ? initCount : read_addrOdd_reg[5:0]),
+  .write0_data(write_hit ? tag_write_data[`dc1Tag_valid]&{1{~init}} : 
+    tag_same_data[`dc1Tag_valid]&{1{~init}}),
+  .write0_wen(write_hit&read_odd_reg || read_en_reg & (read_odd_reg)||init),
+  .write1_addr(puke_addr[0][5:0]),.write1_data(1'b0), .write1_wen(puke_en[0]&puke_addr[0][6]),
+  .write2_addr(puke_addr[1][5:0]),.write2_data(1'b0), .write2_wen(puke_en[1]&puke_addr[1][6]),
+  .write3_addr(puke_addr[2][5:0]),.write3_data(1'b0), .write3_wen(puke_en[2]&puke_addr[2][6]),
+  .write4_addr(puke_addr[3][5:0]),.write4_data(1'b0), .write4_wen(puke_en[3]&puke_addr[3][6]),
+  .write5_addr(puke_addr[4][5:0]),.write5_data(1'b0), .write5_wen(puke_en[4]&puke_addr[4][6]),
+  .write6_addr(puke_addr[5][5:0]),.write6_data(1'b0), .write6_wen(puke_en[5]&puke_addr[5][6])
+  );  
 /* verilator lint_on WIDTH */
-  `ifdef DCACHE_256K
-  adder_inc #(7) initAdd_mod(initCount,initCount_d,1'b1,);
-  `else
+
   adder_inc #(6) initAdd_mod(initCount,initCount_d,1'b1,);
-  `endif
 
   assign  tagR0_IP={tagR0_data[`dc1Tag_addr_43_14],read_addrEven_reg[5:0]};
   assign  tagR1_IP={tagR1_data[`dc1Tag_addr_43_14],read_addrOdd_reg[5:0]};
-  assign  tagR0_valid=tagR0_data[`dc1Tag_valid] & ~err_tag0;
-  assign  tagR1_valid=tagR1_data[`dc1Tag_valid] & ~err_tag1;
+//  assign  tagR0_valid=tagR0_data[`dc1Tag_valid] & ~err_tag0;
+//  assign  tagR1_valid=tagR1_data[`dc1Tag_valid] & ~err_tag1;
   assign  tagR0_exclusive=tagR0_data[`dc1Tag_exclusive] & ~err_tag0;
   assign  tagR1_exclusive=tagR1_data[`dc1Tag_exclusive] & ~err_tag1;
 
