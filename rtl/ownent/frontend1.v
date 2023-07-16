@@ -273,22 +273,22 @@ module frontend1(
   reg [`ctlbData_width-1:0] tlb_data_reg;
   reg [`ctlbData_width-1:0] tlb_data_reg2;
   reg [`ctlbData_width-1:0] tlb_data_reg3;
-  wire [PHYS_WIDTH-14:0] tlb_phys;
+  wire [PHYS_WIDTH-13:0] tlb_phys;
   wire tlb_nx;
   wire tlb_na;
   wire tlb_sys;
   wire tlb_match;
 
-  reg [PHYS_WIDTH-14:0] tlb_phys_reg;
+  reg [PHYS_WIDTH-13:0] tlb_phys_reg;
 
-  wire [PHYS_WIDTH-14:0] read_physOut;
+  wire [PHYS_WIDTH-13:0] read_physOut;
   reg miss_seq;
   reg [4:0] miss_cnt;
   wire [4:0] miss_cnt_next;
   reg [2:0] miss_slot;
   wire [2:0] miss_slot_next;
 
-  reg [PHYS_WIDTH-15:0] miss_phys;
+  reg [PHYS_WIDTH-14:0] miss_phys;
   
   wire req_en0,req_en1;
   //wire overpage;
@@ -965,16 +965,16 @@ module frontend1(
   
   assign tlb_match=tlb_hit_reg3;
 
-  assign IP_phys={tlb_data[`ctlbData_phys],cc_read_IP[13:0]};
+  assign IP_phys={tlb_data[`ctlbData_phys],cc_read_IP[12:0]};
 
-  assign req_addr=req_en0 ? {tlb_phys_reg,cc_read_IP_reg4[13:7]} : 38'bz;
+  assign req_addr=req_en0 ? {tlb_phys_reg,cc_read_IP_reg4[12:7]} : 38'bz;
   assign req_slot=req_en0 ? {BUS_ID,2'b10,miss_slot} : 10'bz;
   assign req_en0=miss_now & ~tlbMiss_now & miss_seq & IP_chg_reg4;
   assign req_en=req_en0 & (~cc_read_hit & tlb_match || ~miss_now_reg) &~fstall;
   
   assign req_en1=miss_now & tlbMiss_now & miss_seq;
   assign req_tlbEn=req_en1 & ~fstall;
-  assign req_addr=req_en1 ? {8'b0,cc_read_IP_reg3[43:14]} : 38'bz;
+  assign req_addr=req_en1 ? {7'b0,cc_read_IP_reg3[43:13]} : 38'bz;
   assign req_slot=req_en1 ? {BUS_ID,2'b10,miss_slot} : 10'bz;
 
   assign req_addr=(~req_en0 & ~req_en1) ?  38'b0 : 38'bz;
