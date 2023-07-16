@@ -310,10 +310,10 @@ module sagu(
 
   assign mOp_type=tlb_data[`dtlbData_type];
   
-  assign mOp_addrEven[43:13]=(addrMain[8] & addrNext[14]) ? tlb_data_next[`dtlbData_phys] : tlb_data[`dtlbData_phys];
-  assign mOp_addrOdd[43:13]=(~(~addrMain[8] & addrNext[14])) ? tlb_data[`dtlbData_phys] : tlb_data_next[`dtlbData_phys];
+  assign mOp_addrEven[43:13]=(addrMain[7] & addrNext[13]) ? tlb_data_next[`dtlbData_phys] : tlb_data[`dtlbData_phys];
+  assign mOp_addrOdd[43:13]=(~(~addrMain[7] & addrNext[13])) ? tlb_data[`dtlbData_phys] : tlb_data_next[`dtlbData_phys];
   
-  assign pageFault_t=(addrNext[14]) ? (fault_tlb | ({2{mOp_split}} & fault_tlb_next)) & {2{tlb_hit}} : fault_tlb & {2{tlb_hit}};
+  assign pageFault_t=(addrNext[13]) ? (fault_tlb | ({2{mOp_split}} & fault_tlb_next)) & {2{tlb_hit}} : fault_tlb & {2{tlb_hit}};
   assign pageFault=(pageFault_t_reg!=0) | fault_cann_reg && read_clkEn_reg2|mex_en_reg2 && ~bus_hold_reg2;
   assign fault_cann=~cout_secq;
   assign faultNo=fault_cann_reg | (pageFault_t_reg!=0) ? {6'd11,1'b0,2'd1} : {6'd0,1'b0,2'd2};
@@ -323,7 +323,7 @@ module sagu(
   
   assign tlbMiss=(read_clkEn_reg)&~tlb_hit&~fault_cann&~except;
   
-  assign addrMain=cmplxAddr[13:0];
+  assign addrMain=cmplxAddr[11+1:0];
   
   assign mOp_en=read_clkEn_reg &tlb_hit
    & rcn_mask[1] & ~bus_hold_reg;
@@ -360,7 +360,7 @@ module sagu(
   assign fault_tlb={mflags0[`mflags_cpl]==2'd3 && tlb_data[`dtlbData_sys] , ~tlb_data[`dtlbData_na]|~tlb_data[`dtlbData_wp]}; 
   assign fault_tlb_next={mflags0[`mflags_cpl]==2'd3 && tlb_data_next[`dtlbData_sys] , ~tlb_data_next[`dtlbData_na]|~tlb_data_next[`dtlbData_wp]}; 
 
-  adder #(15) nextCAddr_mod({1'b0,cmplxAddr[13:0]},15'b10000000,addrNext,1'b0,1'b1,,,,);
+  adder #(14) nextCAddr_mod({1'b0,cmplxAddr[12:0]},14'b10000000,addrNext,1'b0,1'b1,,,,);
 
   agusec_range rng_mod(
   cmplxAddr,
