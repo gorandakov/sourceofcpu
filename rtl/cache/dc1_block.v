@@ -305,13 +305,13 @@ module dcache1_way(
   clk,
   rst,
   read_addrE0, read_addrO0, read_bank0, read_clkEn0, read_hit0, 
-    read_odd0, read_split0, read_pbit0, read_pbit0_in, 
+    read_odd0, read_split0, read_pbit0, read_pbit0_in, read0_err,
   read_addrE1, read_addrO1, read_bank1, read_clkEn1, read_hit1,   
-    read_odd1, read_split1, read_pbit1, read_pbit1_in,
+    read_odd1, read_split1, read_pbit1, read_pbit1_in, read1_err,
   read_addrE2, read_addrO2, read_bank2, read_clkEn2, read_hit2,   
-    read_odd2, read_split2, read_pbit2, read_pbit2_in,
+    read_odd2, read_split2, read_pbit2, read_pbit2_in, read2_err,
   read_addrE3, read_addrO3, read_bank3, read_clkEn3, read_hit3,   
-    read_odd3, read_split3, read_pbit3, read_pbit3_in,
+    read_odd3, read_split3, read_pbit3, read_pbit3_in, read3_err,
   read_bankNoRead,
   read_invalidate,
   read_bankHit,
@@ -335,6 +335,7 @@ module dcache1_way(
   write_split0,
   write_pbit0,write_d128_0,
   write_odd0,
+  write0_err,
   write_addrE1,
   write_addrO1,
   write_bank1,
@@ -347,6 +348,7 @@ module dcache1_way(
   write_split1,
   write_pbit1,write_d128_1,
   write_odd1,
+  write1_err,
   write_insert,
   write_insertExclusive,
   write_insertDirty,
@@ -382,6 +384,7 @@ module dcache1_way(
   input read_split0;
   output [1:0] read_pbit0;
   input [1:0] read_pbit0_in;
+  output read0_err;
   
   input [ADDR_WIDTH-2:0] read_addrE1;
   input [ADDR_WIDTH-2:0] read_addrO1;
@@ -392,6 +395,7 @@ module dcache1_way(
   input read_split1;
   output [1:0] read_pbit1;
   input [1:0] read_pbit1_in;
+  output read1_err;
   
   input [ADDR_WIDTH-2:0] read_addrE2;
   input [ADDR_WIDTH-2:0] read_addrO2;
@@ -402,6 +406,7 @@ module dcache1_way(
   input read_split2;
   output [1:0] read_pbit2;
   input [1:0] read_pbit2_in;
+  output read2_err;
 
   input [ADDR_WIDTH-2:0] read_addrE3;
   input [ADDR_WIDTH-2:0] read_addrO3;
@@ -412,6 +417,7 @@ module dcache1_way(
   input read_split3;
   output [1:0] read_pbit3;
   input [1:0] read_pbit3_in;
+  output read3_err;
   
   input [BANK_COUNT-1:0] read_bankNoRead;//bits are 1 if other bank reads are 0
   
@@ -444,6 +450,7 @@ module dcache1_way(
   output [1:0] write_dupl0;
   input write_split0;
   input write_odd0;
+  output write0_err;
   input [ADDR_WIDTH-2:0] write_addrE1;
   input [ADDR_WIDTH-2:0] write_addrO1;
   input [BANK_COUNT-1:0] write_bank1;
@@ -459,6 +466,7 @@ module dcache1_way(
   output [1:0] write_dupl1;
   input write_split1;
   input write_odd1;
+  output write1_err;
   
   input write_insert;    
   input write_insertExclusive;
@@ -793,7 +801,13 @@ module dcache1_way(
   assign read_hit1={read_hitO[1],read_hitE[1]};
   assign read_hit2={read_hitO[2],read_hitE[2]};
   assign read_hit3={read_hitO[3],read_hitE[3]};
-    
+ 
+  assign read0_err=errH[0]|errL[0];   
+  assign read1_err=errH[1]|errL[1];   
+  assign read2_err=errH[2]|errL[2];   
+  assign read3_err=errH[3]|errL[3];   
+  assign write0_err=errH[4]|errL[4];   
+  assign write1_err=errH[5]|errL[5];   
 
   assign write_dupl0=~write_dupl[0] & {write_hitO[0],write_hitE[0]};
   assign write_dupl1=~write_dupl[1] & {write_hitO[1],write_hitE[1]};
