@@ -29,6 +29,7 @@ module lpddr6_channel(
   parameter [5:0] BEGIN_CS2W=40;
   parameter [5:0] BEGIN_CS2REF=40;
   input mem_clk;
+  input mem_clkREF;
   (* PIN V=10.5 *) output RAS;
   (* PIN V=10.5 *) output CAS;
   (* PIN V=10.5 *) output CS0;
@@ -39,13 +40,27 @@ module lpddr6_channel(
   (* V=6.7 *) DATA18B_en_out;
 
   wire [17:0] DATA18AW;
+  wire [17:0] DATA18BW;
+
+  wire [17:0] DATA18ARr;
+  wire [17:0] DATA18BRr;
+
+  (* keep *) reg [17:0] DATA18AR;
+  (* keep *) reg [17:0] DATA18BR;
+
+  (* keep *) reg [17:0] DATA18AR2;
+  (* keep *) reg [17:0] DATA18BR2;
 
   reg [5:0] RS2CS;
   reg [5:0] CS2R;
   reg [5:0] CS2W;
   reg [5:0] CS2REF;
 
-  assign DATA18A=DATA18A_en_out ? DATA18AW : 18'bz;
+  assign DATA18A=DATA18A_en_out & mem_clk & mem_clkREF ? DATA18AW : 18'bz;
+  assign DATA18A=DATA18A_en_out & ~mem_clk & mem_clkREF ? DATA18BW : 18'bz;
+
+  assign DATA18ARr=DATA18AR & {18{mem_clk & mem_clkREF}};
+  assign DATA18BRr=DATA18BR & {18{~mem_clk & ~mem_clkREF}};
 
   always @(posedge clk) begin
       if (rst) begin
@@ -55,5 +70,13 @@ module lpddr6_channel(
           CS2REF<=BEGIN_CS2REF;
       end else begin
       end
+      DATA18AR<=DATA18A;
+      DATA18BR<=DATA18A;
   end
+
+  always @(posedge clk) begin
+      data18AR2<=data18AR;
+      data18BR2<=data18BR;      
+  end
+
 endmodule  
