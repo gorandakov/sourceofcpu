@@ -568,32 +568,31 @@ module stq(
 	  assign WNL0_bytes[b]=get_st_bytes(WNL0_adata[`lsaddr_sz],WNL0_subBNK,b[2:0],WNL0_adata[`lsaddr_low]);
 	  assign WNL1_bytes[b]=get_st_bytes(WNL1_adata[`lsaddr_sz],WNL1_subBNK,b[2:0],WNL1_adata[`lsaddr_low]);
 
-          if (b<4) begin
-              bit_find_last_bit #(64) chkBit0A(chk0_match[b]&mask,chk0_firstA[b],chk0_hasA[b]);
-              bit_find_last_bit #(64) chkBit0B(chk0_match[b]&~mask,chk0_firstB[b],chk0_hasB[b]);
-              assign chk0_match_first[b]=chk0_hasA[b] ? chk0_firstA[b]|chk0_firstA[b+4] : chk0_firstB[b]|chk0_firstB[b+4];
-	      assign chk0_match_has[b]=chk0_hasA[b] | chk0_hasB[b] | chk0_hasA[b+4] | chk0_hasB[b+4];
-              bit_find_last_bit #(64) chkBit1A(chk1_match[b]&mask,chk1_firstA[b],chk1_hasA[b]);
-              bit_find_last_bit #(64) chkBit1B(chk1_match[b]&~mask,chk1_firstB[b],chk1_hasB[b]);
-              assign chk1_match_first[b]=chk1_hasA[b] ? chk1_firstA[b]|chk1_firstA[b+4] : chk1_firstB[b]|chk1_firstB[b+4];
-	      assign chk1_match_has[b]=chk1_hasA[b] | chk1_hasB[b] | chk1_hasA[b+4] | chk1_hasB[b+4];
-              bit_find_last_bit #(64) chkBit2A(chk2_match[b]&mask,chk2_firstA[b],chk2_hasA[b]);
-              bit_find_last_bit #(64) chkBit2B(chk2_match[b]&~mask,chk2_firstB[b],chk2_hasB[b]);
-              assign chk2_match_first[b]=chk2_hasA[b] ? chk2_firstA[b]|chk2_firstA[b+4] : chk2_firstB[b]|chk2_firstB[b+4];
-	      assign chk2_match_has[b]=chk2_hasA[b] | chk2_hasB[b] | chk2_hasA[b+4] | chk2_hasB[b+4];
-              bit_find_last_bit #(64) chkBit3A(chk3_match[b]&mask,chk3_firstA[b],chk3_hasA[b]);
-              bit_find_last_bit #(64) chkBit3B(chk3_match[b]&~mask,chk3_firstB[b],chk3_hasB[b]);
-              assign chk3_match_first[b]=chk3_hasA[b] ? chk3_firstA[b]|chk3_firstA[b+4] : chk3_firstB[b]|chk3_firstB[b+4];
-	      assign chk3_match_has[b]=chk3_hasA[b] | chk3_hasB[b] | chk3_hasA[b+4] | chk3_hasB[b+4];
-              bit_find_last_bit #(64) chkBit4A(chk4_match[b]&mask,chk4_firstA[b],chk4_hasA[b]);
-              bit_find_last_bit #(64) chkBit4B(chk4_match[b]&~mask,chk4_firstB[b],chk4_hasB[b]);
-              assign chk4_match_first[b]=chk4_hasA[b] ? chk4_firstA[b]|chk4_firstA[b+4] : chk4_firstB[b]|chk4_firstB[b+4];
-	      assign chk4_match_has[b]=chk4_hasA[b] | chk4_hasB[b] | chk4_hasA[b+4] | chk4_hasB[b+4];
-              bit_find_last_bit #(64) chkBit5A(chk5_match[b]&mask,chk5_firstA[b],chk5_hasA[b]);
-              bit_find_last_bit #(64) chkBit5B(chk5_match[b]&~mask,chk5_firstB[b],chk5_hasB[b]);
-              assign chk5_match_first[b]=chk5_hasA[b] ? chk5_firstA[b]|chk5_firstA[b+4] : chk5_firstB[b]|chk5_firstB[b+4];
-	      assign chk5_match_has[b]=chk5_hasA[b] | chk5_hasB[b] | chk5_hasA[b+4] | chk5_hasB[b+4];
-          end
+          bit_find_last_bit #(64) chkBit0A(chk0_match[b]&mask,chk0_firstA[b],chk0_hasA[b]);
+          bit_find_last_bit #(64) chkBit0B(chk0_match[b]&~mask,chk0_firstB[b],chk0_hasB[b]);
+          assign chk0_match_first[b]=chk0_hasA[b] ? chk0_firstA[b] : chk0_firstB[b];
+          assign chk0_match_has[b]=chk0_hasA[b] | chk0_hasB[b];
+          bit_find_last_bit #(64) chkBit1A(chk1_match[b]&mask,chk1_firstA[b],chk1_hasA[b]);
+          bit_find_last_bit #(64) chkBit1B(chk1_match[b]&~mask,chk1_firstB[b],chk1_hasB[b]);
+          assign chk1_match_first[b]=chk1_hasA[b] ? chk1_firstA[b] : chk1_firstB[b];
+	  assign chk1_match_has[b]=chk1_hasA[b] | chk1_hasB[b];
+          bit_find_last_bit #(64) chkBit2A(chk2_match[b]&mask,chk2_firstA[b],chk2_hasA[b]);
+          bit_find_last_bit #(64) chkBit2B(chk2_match[b]&~mask,chk2_firstB[b],chk2_hasB[b]);
+          assign chk2_match_first[b]=chk2_hasA[b] ? chk2_firstA[b] : chk2_firstB[b];
+	  assign chk2_match_has[b]=chk2_hasA[b] | chk2_hasB[b];
+          bit_find_last_bit #(64) chkBit3A(chk3_match[b]&mask,chk3_firstA[b],chk3_hasA[b]);
+          bit_find_last_bit #(64) chkBit3B(chk3_match[b]&~mask,chk3_firstB[b],chk3_hasB[b]);
+          assign chk3_match_first[b]=chk3_hasA[b] ? chk3_firstA[b] : chk3_firstB[b];
+	  assign chk3_match_has[b]=chk3_hasA[b] | chk3_hasB[b];
+          bit_find_last_bit #(64) chkBit4A(chk4_match[b]&mask,chk4_firstA[b],chk4_hasA[b]);
+          bit_find_last_bit #(64) chkBit4B(chk4_match[b]&~mask,chk4_firstB[b],chk4_hasB[b]);
+          assign chk4_match_first[b]=chk4_hasA[b] ? chk4_firstA[b] : chk4_firstB[b];
+	  assign chk4_match_has[b]=chk4_hasA[b] | chk4_hasB[b];
+          bit_find_last_bit #(64) chkBit5A(chk5_match[b]&mask,chk5_firstA[b],chk5_hasA[b]);
+          bit_find_last_bit #(64) chkBit5B(chk5_match[b]&~mask,chk5_firstB[b],chk5_hasB[b]);
+          assign chk5_match_first[b]=chk5_hasA[b] ? chk5_firstA[b] : chk5_firstB[b];
+	  assign chk5_match_has[b]=chk5_hasA[b] | chk5_hasB[b] | chk5_hasA[b+4] | chk5_hasB[b+4];
+
 	  if (b==0) begin : with_free
               stq_buf_L_array arr0_mod(
               clk,
@@ -663,12 +662,12 @@ module stq(
           rst,
           upd0_en0[63:0],{1'b0,upd0_dataM[32*Rupd0_b[b[1:0]]+:32]},
           upd1_en0[63:0],{1'b0,upd1_dataM[32*Rupd1_b[b[1:0]]+:32]},
-          chk0_match_firstN[b[1:0]],chk0_dataM0[b[1:0]],chk0_pre0,chk0_pre1,
-          chk1_match_firstN[b[1:0]],chk1_dataM0[b[1:0]],chk1_pre0,chk1_pre1,
-          chk2_match_firstN[b[1:0]],chk2_dataM0[b[1:0]],chk2_pre0,chk2_pre1,
-          chk3_match_firstN[b[1:0]],chk3_dataM0[b[1:0]],chk3_pre0,chk3_pre1,
-          chk4_match_firstN[b[1:0]],chk4_dataM0[b[1:0]],chk4_pre0,chk4_pre1,
-          chk5_match_firstN[b[1:0]],chk5_dataM0[b[1:0]],chk5_pre0,chk5_pre1,
+          chk0_match_first[b],chk0_dataM0[b[1:0]],chk0_pre0,chk0_pre1,
+          chk1_match_first[b],chk1_dataM0[b[1:0]],chk1_pre0,chk1_pre1,
+          chk2_match_first[b],chk2_dataM0[b[1:0]],chk2_pre0,chk2_pre1,
+          chk3_match_first[b],chk3_dataM0[b[1:0]],chk3_pre0,chk3_pre1,
+          chk4_match_first[b],chk4_dataM0[b[1:0]],chk4_pre0,chk4_pre1,
+          chk5_match_first[b],chk5_dataM0[b[1:0]],chk5_pre0,chk5_pre1,
           WLN0_match,WLN0_dataXN0[b[1:0]],
           WLN1_match,WLN1_dataXN0[b[1:0]]
           ); 
@@ -677,6 +676,8 @@ module stq(
           if (b<4) begin
 	      assign WLN0_dataX[33*b+:33]=WLN0_dataX0[b];
 	      assign WLN1_dataX[33*b+:33]=WLN1_dataX0[b];
+	      assign WLN0_dataXN[33*b+:33]=WLN0_dataXN0[b];
+	      assign WLN1_dataXN[33*b+:33]=WLN1_dataXN0[b];
 	      assign chk_data[0][33*b+:33]=chk0_data0[chk0_b[b]];
 	      assign chk_data[1][33*b+:33]=chk1_data0[chk1_b[b]];
 	      assign chk_data[2][33*b+:33]=chk2_data0[chk2_b[b]];
@@ -695,6 +696,12 @@ module stq(
 	      assign chk_bytes[3][4*b+:4]=chk3_bytes[chk3_b[b]] & {4{chk3_match_has[chk3_b[b]]}};
 	      assign chk_bytes[4][4*b+:4]=chk4_bytes[chk4_b[b]] & {4{chk4_match_has[chk4_b[b]]}};
 	      assign chk_bytes[5][4*b+:4]=chk5_bytes[chk5_b[b]] & {4{chk5_match_has[chk5_b[b]]}};
+	      assign chk_bytesX[0][4*b+:4]=chk0_bytes[chk0_b[b]] & {4{chk0_match_has[4+b]}};
+	      assign chk_bytesX[1][4*b+:4]=chk1_bytes[chk1_b[b]] & {4{chk1_match_has[4+b]}};
+	      assign chk_bytesX[2][4*b+:4]=chk2_bytes[chk2_b[b]] & {4{chk2_match_has[4+b]}};
+	      assign chk_bytesX[3][4*b+:4]=chk3_bytes[chk3_b[b]] & {4{chk3_match_has[4+b]}};
+	      assign chk_bytesX[4][4*b+:4]=chk4_bytes[chk4_b[b]] & {4{chk4_match_has[4+b]}};
+	      assign chk_bytesX[5][4*b+:4]=chk5_bytes[chk5_b[b]] & {4{chk5_match_has[4+b]}};
               assign WLN0_data[32*b+:32]=WLN0_dataX[33*WLN0_b[b]+:32];
               assign WLN1_data[32*b+:32]=WLN1_dataX[33*WLN1_b[b]+:32];
 	      //verilator lint_off WIDTH
