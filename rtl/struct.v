@@ -130,7 +130,11 @@ limitations under the License.
 `define bob_attrJ0 521:518
 `define bob_attrJ1 525:522
 `define bob_freeregsS 570:526
-`define bob_width 571
+`define bob_j0GHT2 586:571
+`define bob_j1GHT2 602:587
+`define bob_j0Val 603
+`define bob_j1Val 604
+`define bob_width 605
 
 `define attr_km 0
 `define attr_vm 1
