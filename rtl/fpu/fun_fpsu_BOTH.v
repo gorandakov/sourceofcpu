@@ -36,11 +36,12 @@ module fun_fpsu_BOTH(
   FUFH3,FUFH4,FUFH5,
   FUFH6,FUFH7,FUFH8,
   FUFH9,
+  FUFXH4,FUFXH5,FUFXH6,
   FUFL0,FUFL1,FUFL2,
   FUFL3,FUFL4,FUFL5,
   FUFL6,FUFL7,FUFL8,
   FUFL9,
-  MRKAH,MRKBH,MRKAL,BRKBL,
+  FUFXL4,FUFXL5,FUFXL6,
   ALTDATAH0,ALTDATAH1,
   ALTDATAL0,ALTDATAL1,
   ALT_INP,
@@ -106,6 +107,9 @@ module fun_fpsu_BOTH(
   (* register equiload *) (* bus=SIMDH bus_spacing=8 bus_rpl=3 *) output [67:0] FUFH7;
   (* register equiload *) (* bus=SIMDH bus_spacing=8 bus_rpl=3 *) output [67:0] FUFH8;
   (* register equiload *) (* bus=SIMDH bus_spacing=8 bus_rpl=3 *) output [67:0] FUFH9;
+  (* register equiload *) (* bus=SIMDH bus_spacing=8 bus_rpl=3 *) output [67:0] FUFXH4;
+  (* register equiload *) (* bus=SIMDH bus_spacing=8 bus_rpl=3 *) output [67:0] FUFXH5;
+  (* register equiload *) (* bus=SIMDH bus_spacing=8 bus_rpl=3 *) output [67:0] FUFXH6;
   
   (* register equiload *) (* bus=SIMDL bus_spacing=8 bus_rpl=3 *) input [67:0] FUFL0;
   (* register equiload *) (* bus=SIMDL bus_spacing=8 bus_rpl=3 *) input [67:0] FUFL1;
@@ -117,6 +121,10 @@ module fun_fpsu_BOTH(
   (* register equiload *) (* bus=SIMDL bus_spacing=8 bus_rpl=3 *) output [67:0] FUFL7;
   (* register equiload *) (* bus=SIMDL bus_spacing=8 bus_rpl=3 *) output [67:0] FUFL8;
   (* register equiload *) (* bus=SIMDL bus_spacing=8 bus_rpl=3 *) output [67:0] FUFL9;
+  (* register equiload *) (* bus=SIMDL bus_spacing=8 bus_rpl=3 *) output [67:0] FUFXL4;
+  (* register equiload *) (* bus=SIMDL bus_spacing=8 bus_rpl=3 *) output [67:0] FUFXL5;
+  (* register equiload *) (* bus=SIMDL bus_spacing=8 bus_rpl=3 *) output [67:0] FUFXL6;
+
   input [1:0] ALT_INP;
   (* bus=SIMDL bus_spacing=8 *) input [67:0] ALTDATAL0;
   (* bus=SIMDL bus_spacing=8 *) input [67:0] ALTDATAL1;
@@ -231,11 +239,12 @@ module fun_fpsu_BOTH(
   FUFH3,FUFH4,FUFH5,
   FUFH6,FUFH7,FUFH8,
   FUFH9,
+  FUFXH4,FUFXH5,FUFXH6,
   xtra0,x2tra0,
   xtra1,x2tra1,
   xtra2,x2tra2,
   ALTDATAH0,ALTDATAH1,
-  ALT_INP,,,,,MRKAH,MRKBH
+  ALT_INP,,,,
   );
 
   fun_fpuSL lfpc_mod(
@@ -255,14 +264,14 @@ module fun_fpsu_BOTH(
   FUFL3,FUFL4,FUFL5,
   FUFL6,FUFL7,FUFL8,
   FUFL9,
+  FUFXL4,FUFXL5,FUFXL6,
   x2tra0,xtra0,
   x2tra1,xtra1,
   x2tra2,xtra2,
   ALTDATAL0,ALTDATAL1,
   ALT_INP,
   FOOFL0,FOOFL1,FOOFL2,
-  XI_dataS,
-  MRKAL,BRKBL
+  XI_dataS
   );
 
 endmodule
