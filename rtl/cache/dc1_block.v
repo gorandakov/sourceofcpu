@@ -360,9 +360,9 @@ module dcache1_way(
   insert_rand,
   insert_hit,
   wb_addr,
-  wb_valid//,
- // write_back,
- // write_back2
+  wb_valid,
+  puke_addr,
+  puke_en
   );
   localparam ADDR_WIDTH=37;
   localparam DATA_WIDTH=`dcache1_data_width;
@@ -487,8 +487,8 @@ module dcache1_way(
  
   output [ADDR_WIDTH-1:0] wb_addr;
   output wb_valid;  
-//  output write_back;
-//  output write_back2;
+  input [5:0][6:0] puke_addr;
+  input [5:0] puke_en;
   
   wire [3:0] recent;
   
@@ -746,8 +746,6 @@ module dcache1_way(
         .wb_valid(wb_valid),
         .puke_en(puke_en),.puke_addr(puke_addr)
         );  
-        assign puke_addr[r]=read_odd[r] && rderr1[r] ? read_addrO[r][6:0] : read_addrE[r][6:0];
-        assign puke_en[r]=rderr1[r] | rderr2[r];
     end
 
     for (w=0;w<2;w=w+1) begin : tagW_gen
@@ -774,8 +772,6 @@ module dcache1_way(
         .wb_valid()
         .puke_en(puke_en),.puke_addr(puke_addr)
         ); 
-        assign puke_addr[w]=write_odd[w] && write_errL_reg2[w] ? write_addrO[w][6:0] : read_addrE[w][6:0];
-        assign puke_en[w]=write_errL_reg2[w] | write_errH_reg2[w];
         
     end
   endgenerate
@@ -1417,7 +1413,8 @@ module dcache1(
           recent_out[w],
           insert_rand,
           insert_hit_way[w],
-          wb_addr,wb_enOut
+          wb_addr,wb_enOut,
+          puke_addr,puke_en
           );
       end
       for (b=0;b<BANK_COUNT;b=b+1) begin
@@ -1486,8 +1483,14 @@ module dcache1(
 		rxerr4[p]|rxerr5[p]|rxerr6[p]|rxerr7[p];
               assign read_dataA[p]=rddata1[p] & {{8{mskdata1[p][5]}},{48{mskdata1[p][4]}},{16{mskdata1[p][3]}},{32{mskdata1[p][2]}},
                     {16{mskdata1[p][1]}},{8{mskdata1[p][0]}},8'hff};
-      end
+              assign puke_addr[p]=read_odd[p] & rderr1[p] || read_errH_reg2[p] ? read_addrO[p][6:0] : read_addrE[p][6:0];
+              assign puke_en[p]=rderr1[p] | rderr2[p] | read_errL_reg2[p] | read_errH_reg2[p];
+    end
   endgenerate
+  assign puke_addr[4]=write_odd[4] && write_errL_reg2[4] ? write_addrO[4][6:0] : read_addrE[4][6:0];
+  assign puke_en[4]=write_errL_reg2[4] | write_errH_reg2[4];
+  assign puke_addr[5]=write_odd[5] && write_errL_reg2[5] ? write_addrO[5][6:0] : read_addrE[5][6:0];
+  assign puke_en[5]=write_errL_reg2[5] | write_errH_reg2[5];
 
   LFSR16_6 rnd_mod(clk,rst,insert_rand);
   
