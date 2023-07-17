@@ -52,8 +52,8 @@ module stq(
   pse1_en,
   wb1_adata,wb1_LSQ,wb1_data,wb1_dataN,wb1_pbit,wb1_bnkEn,wb1_bnkEnS,wb1_en,wb1_chk,
   wb0_adata,wb0_LSQ,wb0_data,wb0_dataN,wb0_pbit,wb0_bnkEn,wb0_bnkEnS,wb0_en,wb0_chk,wb0_way,
-  WLN0_en,WLN0_adata,WLN0_data,WLN0_pbit,
-  WLN1_en,WLN1_adata,WLN1_data,WLN1_pbit
+  WLN0_en,WLN0_adata,WLN0_data,WLN0_dataN,WLN0_pbit,
+  WLN1_en,WLN1_adata,WLN1_data,WLN1_dataN,WLN1_pbit
   );
   input clk;
 
@@ -161,11 +161,13 @@ module stq(
   output WLN0_en;
   output [`lsaddr_width-1:0] WLN0_adata;
   output [135:0] WLN0_data;
+  output [135:0] WLN0_dataN;
   output [1:0] WLN0_pbit;
   
   output WLN1_en;
   output [`lsaddr_width-1:0] WLN1_adata;
   output [135:0] WLN1_data;
+  output [135:0] WLN1_dataN;
   output [1:0] WLN1_pbit;
   
   reg [5:0] pse0_WQ;
@@ -704,6 +706,8 @@ module stq(
 	      assign chk_bytesX[5][4*b+:4]=chk5_bytes[4+b] & {4{chk5_match_has[4+b]}};
               assign WLN0_data[32*b+:32]=WLN0_dataX[33*WLN0_b[b]+:32];
               assign WLN1_data[32*b+:32]=WLN1_dataX[33*WLN1_b[b]+:32];
+              assign WLN0_dataN[32*b+:32]=WLN0_dataXN[33*WLN0_b[b]+:32];
+              assign WLN1_dataN[32*b+:32]=WLN1_dataXN[33*WLN1_b[b]+:32];
 	      //verilator lint_off WIDTH
               assign WLN0_b[b]=-(WLN0_adata[`lsaddr_bank0]&3)+b[1:0]; 
               assign WLN1_b[b]=-(WLN1_adata[`lsaddr_bank0]&3)+b[1:0]; 
