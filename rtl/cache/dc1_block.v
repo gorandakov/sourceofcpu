@@ -937,16 +937,16 @@ module dcache1(
   clk,
   rst,
   read_addrE0, read_addrO0, read_bank0, read_clkEn0, read_hit0, read_hitCl0, 
-    read_odd0, read_split0, read_dataA0, read_pbit0,
+    read_odd0, read_split0, read_dataA0, read_dataX0, read_pbit0,
     read_beginA0, read_low0, read_sz0,
   read_addrE1, read_addrO1, read_bank1, read_clkEn1, read_hit1, read_hitCl1,   
-    read_odd1, read_split1, read_dataA1, read_pbit1,
+    read_odd1, read_split1, read_dataA1, read_dataX1, read_pbit1,
     read_beginA1, read_low1, read_sz1,
   read_addrE2, read_addrO2, read_bank2, read_clkEn2, read_hit2, read_hitCl2,   
-    read_odd2, read_split2, read_dataA2, read_pbit2,
+    read_odd2, read_split2, read_dataA2, read_dataX2, read_pbit2,
     read_beginA2,  read_low2, read_sz2,
   read_addrE3, read_addrO3, read_bank3, read_clkEn3, read_hit3, read_hitCl3,   
-    read_odd3, read_split3, read_dataA3, read_pbit3,
+    read_odd3, read_split3, read_dataA3, read_dataX3, read_pbit3,
     read_beginA3, read_low3, read_sz3,
   read_bankNoRead,
   read_invalidate,
@@ -1017,7 +1017,7 @@ module dcache1(
   input read_odd0;
   input read_split0;
   output [127+8:0] read_dataA0;
-  output [127+8:0] read_NdataA0;
+  output [127+8:0] read_dataX0;
   output [1:0] read_pbit0;
   input [4:0] read_beginA0;
   input [1:0] read_low0;
@@ -1032,7 +1032,7 @@ module dcache1(
   input read_odd1;
   input read_split1;
   output [127+8:0] read_dataA1;
-  output [127+8:0] read_NdataA1;
+  output [127+8:0] read_dataX1;
   output [1:0] read_pbit1;
   input [4:0] read_beginA1;
   input [1:0] read_low1;
@@ -1048,7 +1048,7 @@ module dcache1(
   input read_odd2;
   input read_split2;
   output [127+8:0] read_dataA2;
-  output [127+8:0] read_NdataA2;
+  output [127+8:0] read_dataX2;
   output [1:0] read_pbit2;
   input [4:0] read_beginA2;
   input [1:0] read_low2;
@@ -1063,8 +1063,8 @@ module dcache1(
   output reg [1:0] read_hitCl3;
   input read_odd3;
   input read_split3;
-  output [127+8:0] read_dataA3;
-  output [127+8:0] read_NdataA3;
+  output [127+8:0] read_dataX3;
+  output [127+8:0] read_dataX3;
   output [1:0] read_pbit3;
   input [4:0] read_beginA3;
   input [1:0] read_low3;
@@ -1457,6 +1457,7 @@ module dcache1(
           end
       end
       for (p=0;p<4;p=p+1) begin
+              assign rddata2[p]=rxdata[p][255:128];
 	      assign rxdata0[p]=read_data_strip[255:0]&{256{read_beginA_reg[p][4:2]==3'd0}};
               assign rxerr0[p]=read_errP_reg2[7:0]&read_banks[p][7:0]&{8{read_beginA_reg[p][4:2]==3'd0}};
 	      assign rxdata1[p]=read_data_strip[128+255:128]&{256{read_beginA_reg[p][4:2]==3'd1}};
@@ -1554,6 +1555,11 @@ module dcache1(
   assign read_dataA1=read_dataA[1];
   assign read_dataA2=read_dataA[2];
   assign read_dataA3=read_dataA[3];
+
+  assign read_dataX0={128{read_sz[0][4:1]==4'd6 || read_sz[0]==5'd14}}&rddata2[0];
+  assign read_dataX1={128{read_sz[1][4:1]==4'd6 || read_sz[1]==5'd14}}&rddata2[0];
+  assign read_dataX2={128{read_sz[2][4:1]==4'd6 || read_sz[2]==5'd14}}&rddata2[0];
+  assign read_dataX3={128{read_sz[3][4:1]==4'd6 || read_sz[3]==5'd14}}&rddata2[0];
  
   assign read_dataP[0]={LINE_WIDTH{1'B0}}; 
   assign read_dataPN[0]={LINE_WIDTH{1'B1}}; 
