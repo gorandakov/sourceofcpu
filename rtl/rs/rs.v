@@ -2337,6 +2337,10 @@ module rs(
   FUV7H,FUV7L,
   FUV8H,FUV8L,
   FUV9H,FUV9L,
+
+  FUVX4H,FUVX4L,
+  FUVX5H,FUVX5L,
+  FUVX6H,FUVX6L,
   
   FUF0H,FUF0L,
   FUF1H,FUF1L,
@@ -2348,6 +2352,11 @@ module rs(
   FUF7H,FUF7L,
   FUF8H,FUF8L,
   FUF9H,FUF9L,
+
+  FUFX4H,FUFX4L,
+  FUFX5H,FUFX5L,
+  FUFX6H,FUFX6L,
+
 
   FUS0,FUS1,FUS2,
   FUS3,FUS4,FUS5,
@@ -2632,6 +2641,15 @@ module rs(
   input [SIMD_WIDTH-1:0] FUV9H;
   input [SIMD_WIDTH-1:0] FUV9L;
   
+  input [SIMD_WIDTH-1:0] FUVX4H;
+  input [SIMD_WIDTH-1:0] FUVX4L;
+  
+  input [SIMD_WIDTH-1:0] FUVX5H;
+  input [SIMD_WIDTH-1:0] FUVX5L;
+  
+  input [SIMD_WIDTH-1:0] FUVX6H;
+  input [SIMD_WIDTH-1:0] FUVX6L;
+  
   input [SIMD_WIDTH-1:0] FUF0H;
   input [16+SIMD_WIDTH-1:0] FUF0L;
   
@@ -2661,6 +2679,15 @@ module rs(
   
   input [SIMD_WIDTH-1:0] FUF9H;
   input [16+SIMD_WIDTH-1:0] FUF9L;
+  
+  input [SIMD_WIDTH-1:0] FUFX4H;
+  input [16+SIMD_WIDTH-1:0] FUFX4L;
+  
+  input [SIMD_WIDTH-1:0] FUFX5H;
+  input [16+SIMD_WIDTH-1:0] FUFX5L;
+  
+  input [SIMD_WIDTH-1:0] FUFX6H;
+  input [16+SIMD_WIDTH-1:0] FUFX6L;
   
   
   
@@ -3014,8 +3041,8 @@ module rs(
   FUV4H,FUV5H,FUV6H,
   FUV7H,FUV8H,FUV9H,
   32'b0,4'b0,1'b0,,
-  outRsSelect_reg[1],outBank_reg[1],rsFoundNZ_reg[1],outDataVB1H,
-  outRsSelect_reg[2],outBank_reg[2],rsFoundNZ_reg[2],outDataVB2H
+  outRsSelect_reg[1],outBank_reg[1],rsFoundNZ_reg[1],outDataVYB1H,
+  outRsSelect_reg[2],outBank_reg[2],rsFoundNZ_reg[2],outDataVYB2H
   );
 
   rs_wakeUp_data_array #(SIMD_WIDTH) dataB_VL_mod(
@@ -3028,8 +3055,36 @@ module rs(
   FUV4L,FUV5L,FUV6L,
   FUV7L,FUV8L,FUV9L,
   32'b0,4'b0,1'b0,,
-  outRsSelect_reg[1],outBank_reg[1],rsFoundNZ_reg[1],outDataVB1L,
-  outRsSelect_reg[2],outBank_reg[2],rsFoundNZ_reg[2],outDataVB2L
+  outRsSelect_reg[1],outBank_reg[1],rsFoundNZ_reg[1],outDataVYB1L,
+  outRsSelect_reg[2],outBank_reg[2],rsFoundNZ_reg[2],outDataVYB2L
+  );
+
+  rs_wakeUp_data_array #(SIMD_WIDTH) dataB_VxH_mod(
+  clk,dataRst,stall|doStall,
+  32'b0,{SIMD_WIDTH{1'b0}},
+  newRsSelect1_reg,newDataVB1H,
+  newRsSelect2_reg,newDataVB2H,
+  outEqB_reg,
+  FUV0H,FUV1H,FUV2H,FUV3H,
+  FUV4H,FUV5H,FUV6H,
+  FUVX4H,FUVX5H,FUVX6H,
+  32'b0,4'b0,1'b0,,
+  outRsSelect_reg[1],outBank_reg[1],rsFoundNZ_reg[1],outDataVXB1H,
+  outRsSelect_reg[2],outBank_reg[2],rsFoundNZ_reg[2],outDataVXB2H
+  );
+
+  rs_wakeUp_data_array #(SIMD_WIDTH) dataB_VyL_mod(
+  clk,dataRst,stall|doStall,
+  32'b0,{SIMD_WIDTH{1'b0}},
+  newRsSelect1_reg,newDataVB1L,
+  newRsSelect2_reg,newDataVB2L,
+  outEqB_reg,
+  FUV0L,FUV1L,FUV2L,FUV3L,
+  FUV4L,FUV5L,FUV6L,
+  FUVX4L,FUVX5L,FUVX6L,
+  32'b0,4'b0,1'b0,,
+  outRsSelect_reg[1],outBank_reg[1],rsFoundNZ_reg[1],outDataVXB1L,
+  outRsSelect_reg[2],outBank_reg[2],rsFoundNZ_reg[2],outDataVXB2L
   );
 
   rs_wakeUp_data_array #(SIMD_WIDTH) dataA_FH_mod(
@@ -3071,8 +3126,8 @@ module rs(
   FUF4H,FUF5H,FUF6H,
   FUF7H,FUF8H,FUF9H,
   32'b0,4'b0,1'b0,,
-  outRsSelect_reg2[1],outBank_reg2[1],rsFoundNZ_reg2[1],outDataFB1H,
-  outRsSelect_reg2[2],outBank_reg2[2],rsFoundNZ_reg2[2],outDataFB2H
+  outRsSelect_reg2[1],outBank_reg2[1],rsFoundNZ_reg2[1],outDataFYB1H,
+  outRsSelect_reg2[2],outBank_reg2[2],rsFoundNZ_reg2[2],outDataFYB2H
   );
 
   rs_wakeUp_data_array #(16+SIMD_WIDTH) dataB_FL_mod(
@@ -3085,10 +3140,37 @@ module rs(
   FUF4L,FUF5L,FUF6L,
   FUF7L,FUF8L,FUF9L,
   32'b0,4'b0,1'b0,,
-  outRsSelect_reg2[1],outBank_reg2[1],rsFoundNZ_reg2[1],outDataFB1L,
-  outRsSelect_reg2[2],outBank_reg2[2],rsFoundNZ_reg2[2],outDataFB2L
+  outRsSelect_reg2[1],outBank_reg2[1],rsFoundNZ_reg2[1],outDataFYB1L,
+  outRsSelect_reg2[2],outBank_reg2[2],rsFoundNZ_reg2[2],outDataFYB2L
   );
 
+  rs_wakeUp_data_array #(SIMD_WIDTH) dataB_FxH_mod(
+  clk,dataRst,stall|doStall,
+  32'b0,{SIMD_WIDTH{1'b0}},
+  newRsSelect1_reg2,newDataFB1H,
+  newRsSelect2_reg2,newDataFB2H,
+  outEqB_reg,
+  FUF0H,FUF1H,FUF2H,FUF3H,
+  FUF4H,FUF5H,FUF6H,
+  FUFX4H,FUFX5H,FUFX6H,
+  32'b0,4'b0,1'b0,,
+  outRsSelect_reg2[1],outBank_reg2[1],rsFoundNZ_reg2[1],outDataFXB1H,
+  outRsSelect_reg2[2],outBank_reg2[2],rsFoundNZ_reg2[2],outDataFXB2H
+  );
+
+  rs_wakeUp_data_array #(16+SIMD_WIDTH) dataB_FyL_mod(
+  clk,dataRst,stall|doStall,
+  32'b0,{16+SIMD_WIDTH{1'b0}},
+  newRsSelect1_reg2,newDataFB1L,
+  newRsSelect2_reg2,newDataFB2L,
+  outEqB_reg,
+  FUF0L,FUF1L,FUF2L,FUF3L,
+  FUF4L,FUF5L,FUF6L,
+  FUFX4L,FUFX5L,FUFX6L,
+  32'b0,4'b0,1'b0,,
+  outRsSelect_reg2[1],outBank_reg2[1],rsFoundNZ_reg2[1],outDataFXB1L,
+  outRsSelect_reg2[2],outBank_reg2[2],rsFoundNZ_reg2[2],outDataFXB2L
+  );
   
   
   rs_nonWakeUp_array #(CONST_WIDTH) dataC_mod(
