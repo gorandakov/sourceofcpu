@@ -401,7 +401,7 @@ module sagu(
             (stepOver2 && opsize==1)) && bank0==((i-1)&5'h1f)) ||
           (((opsize==3 && stepOver) | opsize[2]) && bank0==((i-2)&5'h1f)) || 
           (((opsize==4 && stepOver2) || opsize==5 || opsize==6) && bank0==((i-3)&5'h1f)) ||
-          (((opsize==5 && stepOver) || opsize==6) && bank0==((i-4)&5'h1f)) ;
+          (((opsize==5 && stepOver) || opsize==6) && bank0==((i-4)&5'h1f)) || (opsize==7 && bank0[4:3]={i[4:3],3'b0}) ;
         end
   /* verilator lint_on WIDTH */
     end
@@ -416,6 +416,7 @@ module sagu(
          5'h4,5'h5,5'h9,5'hd:  opsize=3; //double
          5'h6,5'he,5'h7,5'h8:  opsize=2; //single
 	 5'hf: opsize=6; //fill/spill
+         5'h0,5'h1,5'h2: opsize=7; //256 bit alligned
 	 default: opsize=5; //128 bit
       endcase
   end
