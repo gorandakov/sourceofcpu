@@ -23,6 +23,7 @@ module fadds(
   rst,
   A,
   B,
+  pook_inX,
   isSub,
   isRSub,
   fpcsr,
@@ -46,7 +47,7 @@ module fadds(
   input rst;
   input [32:0] A;
   input [32:0] B;
-  //input isDBL;
+  input pook_inX;
   input isSub;
   input isRSub;
   input [31:0] fpcsr;
@@ -183,7 +184,12 @@ module fadds(
   reg exp_inc_oor_reg,exp_inc_oor_IEEE_reg,exp_dec_non_denor_reg,exp_dec_non_denor_IEEE_reg;
   wire [3:0] xpon;
   wire invExcpt;
-    
+  wire pook;
+
+  assign pook=expdiff==24 && ~sxor && isrnd_plus;
+
+  assign pook_in=pook_inX && expdiff==0 && ~sxor && pook_inX;
+ 
 
   assign A_exp={A[32],A[30:23]};
   assign B_exp={B[32],B[30:23]};
@@ -339,8 +345,9 @@ module fadds(
   assign main_round=(~main_lo && !(~res_rnbit & ~(res_tail & isrnd_plus) || isrnd_zero ||(isrnd_even && ~res_tail&&resMR1[0])) && ~(cout64_MR1_ns^partM1[24]^sxor_reg)) ||
     (main_ulo && !(~res_rnbitL & ~(res_tailL & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tailL&&~res_rnbit)));
   assign main_roundC=~main_lo && !(~res_rnbitC & ~(res_tailC & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tailC&&resM2[1])) && (cout64_M1_ns^partM1[24]^sxor_reg) &&
-   (~res_rnbit & ~(res_tail & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tail&&resMR1[0]));
-  assign main_simpleC=~main_lo && ((~res_rnbitC & ~(res_tailC & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tailC&&resM2[1])) && (cout64_M1_ns^partM1[24]^sxor_reg) &&
+   (~res_rnbit & ~(res_tail & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tail&&resMR1[0])) & !pook_in;
+  assign main_simpleC=~main_lo && ((~res_rnbitC & ~(res_tailC & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tailC&&resM2[1]) ||
+     pook_in) && (cout64_M1_ns^partM1[24]^sxor_reg) &&
     (~res_rnbit & ~(res_tail & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tail&&resMR1[0])));
   assign main_simpleRC=~main_lo && (!(~res_rnbit & ~(res_tail & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tail&&resMR1[0])) && (cout64_MR1_ns^partM1[24]^sxor_reg));
   assign main_simpleL=main_lo && ((~res_rnbitL & ~(res_tailL & isrnd_plus) || isrnd_zero || (isrnd_even && ~res_tailL&&~res_rnbit)) || ~res_rnbit);

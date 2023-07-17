@@ -223,10 +223,10 @@ module fadd(
   wire invExcpt;
   wire pook;
 
-  assign pook=isDBL ? expdiff==53 && ~sxor && rmode==ROUND_EVEN || rmode==ROUND_ROUND : 
-     expdiff==64 && ~sxor && rmode==ROUND_EVEN || rmode==ROUND_ROUND;
+  assign pook=isDBL ? expdiff==53 && ~sxor && isrnd_plus : 
+     expdiff==64 && ~sxor && isrnd_plus;
 
-  assign pook_inX=expdiff==0 && ~sxor && pook_inX;
+  assign pook_in=pook_inX && expdiff==0 && ~sxor && pook_inX;
 
   assign A_exp=(~isDBL) ? {A[80],A[78:64]} : {A[80],{4{~A[80]}},A[62:52]};
   assign B_exp=(~isDBL) ? {B[80],B[78:64]} : {B[80],{4{~B[80]}},B[62:52]};
