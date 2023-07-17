@@ -2042,7 +2042,7 @@ module backend(
   wire [3:0] dc_rdEn/* verilator public */; 
   wire [3:0] dc_rsEn; 
   wire [3:0][127+8:0] dc_rdataA;
-  wire [3:0][127+8:0] dc_rdataA_N;
+  wire [3:0][127:0] dc_rdataA_X;
   wire [3:0][127+8:0] dc_rdat;
   wire [3:0][127+8:0] dc_rdat_N;
   wire [3:0][1:0] dc_pdataA;
@@ -2055,8 +2055,8 @@ module backend(
 
   reg [127+8:0] dc_rdataA_reg[3:0];
   reg [127+8:0] dc_rdataA_reg2[3:0];
-  reg [127+8:0] dc_rdataA_N_reg[3:0];
-  reg [127+8:0] dc_rdataA_N_reg2[3:0];
+  reg [127:0] dc_rdataA_X_reg[3:0];
+  reg [127:0] dc_rdataA_X_reg2[3:0];
   
   reg [3:0] dc_rdEn_reg; 
   reg [3:0] dc_rdEn_reg2; 
@@ -4442,30 +4442,30 @@ module backend(
 	      {FUFLD_dummy[n],FUFXH[n][65:33],FUFXH[n][31:0]});
       LDE2NativeE ldedbl_mod({dc_rdataA_regn[n][79:0]},fxLD_ext_regn[n],
 	      {FUFXL[n][15+68:68],FUFXL[n][65:33],FUFXL[n][31:0]});
-      assign FUFH[n][32]=fxLD_dblext_regn[n] ? 1'b0 : 1'bz;
+      assign FUFXH[n][32]=fxLD_dblext_regn[n] ? 1'b0 : 1'bz;
       ldD2nativeD lddbl_lo_mod(dc_rdataA_regn[n][63:0],fxLD_dbl_regn[n],fxLD_dbl_t_regn[n],fxLD_ext_t_regn[n],
-	      {FUFXL[n][15+68:68],FUFXL[n][65:33],FUFL[n][31:0]});
-      assign FUFL[n][32]=fxLD_dblext_regn[n] ? 1'b0 : 1'bz;
-      ldS2nativeS ldsngl_ll(dc_rdataA_reg[n][31:0],fxLD_sin[n],fxLD_sngl_t[n],fxLD_dbl_t[n],fxLD_ext_t[n],
+	      {FUFXL[n][15+68:68],FUFXL[n][65:33],FUFXL[n][31:0]});
+      assign FUFXL[n][32]=fxLD_dblext_regn[n] ? 1'b0 : 1'bz;
+      ldS2nativeS ldsngl_ll(dc_rdataA_reg[n][31:0],fxLD_sin_reg[n],fxLD_sngl_t_reg[n],fxLD_dbl_t_reg[n],fxLD_ext_t_reg[n],
 	      {FUVLX[n][15:0],FUVL[n][65:0]});
-      ldS2nativeS ldsngl_lh(dc_rdataA_reg[n][63:32],fxLD_sin[n],fxLD_sngl_t[n],1'b0,1'b0,
+      ldS2nativeS ldsngl_lh(dc_rdataA_reg[n][63:32],fxLD_sin_reg[n],fxLD_sngl_t_reg[n],1'b0,1'b0,
 	      {FUVLD_dummy[n],FUVL[n][65:33]});
-      ldS2nativeS ldsngl_hl(dc_rdataA_reg[n][95:64],fxLD_sin[n],fxLD_sngl_t[n],fxLD_dbl_t[n] && ~fxLD_spair_t[n],1'b0,
+      ldS2nativeS ldsngl_hl(dc_rdataA_reg[n][95:64],fxLD_sin_reg[n],fxLD_sngl_t_reg[n],fxLD_dbl_t_reg[n] && ~fxLD_spair_t_reg[n],1'b0,
 	      {FUFLD_dummy1[n],FUVH[n][65:0]});
-      ldS2nativeS ldsngl_hh(dc_rdataA_reg[n][127:96],fxLD_sin[n],fxLD_sngl_t[n],1'b0,1'b0,
+      ldS2nativeS ldsngl_hh(dc_rdataA_reg[n][127:96],fxLD_sin_reg[n],fxLD_sngl_t_reg[n],1'b0,1'b0,
 	      {FUVLD_dummy1[n],FUVH[n][65:33]});
-      ldS2nativeS ldsngl_hl2(dc_rdataA_reg[n][63:32],fxLD_sin[n],1'b0,fxLD_dbl_t[n] && fxLD_spair_t[n],1'b0,
+      ldS2nativeS ldsngl_hl2(dc_rdataA_reg[n][63:32],fxLD_sin_reg[n],1'b0,fxLD_dbl_t_reg[n] && fxLD_spair_t_reg[n],1'b0,
 	      {FUFLD_dummy2[n],FUVH[n][65:0]});
-      assign FUFH[n][65:0]=(fxLD_ext_t_regn[n]) ? 66'b0 : 66'bz; 
-      assign FUFH[n][67:66]=fxLD_ext_t_regn[n] ? `ptype_ext : 2'bz;
-      assign FUFH[n][67:66]=fxLD_dbl_t_regn[n] ? `ptype_dbl : 2'bz;
-      assign FUFH[n][67:66]=fxLD_sngl_t_regn[n] ? `ptype_sngl : 2'bz;
+      assign FUFXH[n][65:0]=(fxLD_ext_t_regn[n]) ? 66'b0 : 66'bz; 
+      assign FUFXH[n][67:66]=fxLD_ext_t_regn[n] ? `ptype_ext : 2'bz;
+      assign FUFXH[n][67:66]=fxLD_dbl_t_regn[n] ? `ptype_dbl : 2'bz;
+      assign FUFXH[n][67:66]=fxLD_sngl_t_regn[n] ? `ptype_sngl : 2'bz;
       
-      assign FUFL[n][67:66]=FUFH[n][67:66];
+      assign FUFXL[n][67:66]=FUFXH[n][67:66];
 
-      assign {FUFL[n][15+68:68],FUFL[n][65:0]} =fxLD_ext_t_regn[n] & fxLD_sin_regn[n] ? {FUVLX_n[n][15:0],FUVL_n[n][65:0]} : 82'bz;
-      assign {FUFL[n][15+68:68],FUFL[n][65:0]} =fxLD_dbl_t_regn[n] & fxLD_sin_regn[n] ? {16'b0,FUVL_n[n][65:0]} : 82'bz;
-      assign {FUFH[n][65:0]} =fxLD_dbl_t_regn[n] & fxLD_sin_regn[n] ? {FUVH_n[n][65:0]} : 66'bz;
+      assign {FUFXL[n][15+68:68],FUFXL[n][65:0]} =fxLD_ext_t_regn[n] & fxLD_sin_regn[n] ? {FUVLX_n[n][15:0],FUVL_n[n][65:0]} : 82'bz;
+      assign {FUFXL[n][15+68:68],FUFXL[n][65:0]} =fxLD_dbl_t_regn[n] & fxLD_sin_regn[n] ? {16'b0,FUVL_n[n][65:0]} : 82'bz;
+      assign {FUFXH[n][65:0]} =fxLD_dbl_t_regn[n] & fxLD_sin_regn[n] ? {FUVH_n[n][65:0]} : 66'bz;
        
       assign FUVL[n][65:0]=fxLD_sngl_t[n] | fxLD_dbl_t[n] ? 66'bz : {dc_pdataA_reg[n][0],dc_rdataA_reg[n][63:32],1'b0,
 	      dc_rdataA_reg[n][31:0]}; 
@@ -4473,6 +4473,43 @@ module backend(
 	      dc_rdataA_reg[n][95:64]}; 
       assign FUVL[n][67:66]=fxLD_sngl_t[n] ? `ptype_sngl : `ptype_int;
       assign FUVH[n][67:66]=fxLD_sngl_t[n] ? `ptype_sngl : `ptype_int;
+
+      ldD2nativeD Glddbl_hi_mod(dc_rdataA_X_reg2_n[n][127:64],fxLD_dbl_reg2_n[n],fxLD_dbl_t_reg2_n[n],1'b0,
+	      {FUFLD2_dummy[n],FUFH[n][65:33],FUFH[n][31:0]});
+      LDE2NativeE Gldedbl_mod({dc_rdataA_X_reg2_n[n][79:0]},fxLD_ext_reg2_n[n],
+	      {FUFL[n][15+68:68],FUFL[n][65:33],FUFL[n][31:0]});
+      assign FUFH[n][32]=fxLD_dblext_reg2_n[n] ? 1'b0 : 1'bz;
+      ldD2nativeD Glddbl_lo_mod(dc_rdataA_X_reg2_n[n][63:0],fxLD_dbl_reg2_n[n],fxLD_dbl_t_reg2_n[n],fxLD_ext_t_reg2_n[n],
+	      {FUFL[n][15+68:68],FUFL[n][65:33],FUFL[n][31:0]});
+      assign FUFL[n][32]=fxLD_dblext_reg2_n[n] ? 1'b0 : 1'bz;
+      ldS2nativeS ldsngl_ll(dc_rdataA_X_reg2[n][31:0],fxLD_sin_reg2[n],fxLD_sngl_t_reg2[n],fxLD_dbl_t_reg2[n],fxLD_ext_t_reg2[n],
+	      {FUVLX2[n][15:0],FUVXL[n][65:0]});
+      ldS2nativeS ldsngl_lh(dc_rdataA_X_reg2[n][63:32],fxLD_sin_reg2[n],fxLD_sngl_t_reg2[n],1'b0,1'b0,
+	      {FUVLD2_dummy[n],FUVXL[n][65:33]});
+      ldS2nativeS ldsngl_hl(dc_rdataA_X_reg2[n][95:64],fxLD_sin_reg2[n],fxLD_sngl_t_reg2[n],fxLD_dbl_t_reg2[n] &&
+               ~fxLD_spair_t_reg2[n],1'b0,    {FUFLD2_dummy1[n],FUVXH[n][65:0]});
+      ldS2nativeS ldsngl_hh(dc_rdataA_X_reg2[n][127:96],fxLD_sin_reg2[n],fxLD_sngl_t_reg2[n],1'b0,1'b0,
+	      {FUVLD2_dummy1[n],FUVXH[n][65:33]});
+      ldS2nativeS ldsngl_hl2(dc_rdataA_X_reg2[n][63:32],fxLD_sin_reg2[n],1'b0,fxLD_dbl_t_reg2[n] && fxLD_spair_t_reg2[n],1'b0,
+	      {FUFLD2_dummy2[n],FUVXH[n][65:0]});
+      assign FUFH[n][65:0]=(fxLD_ext_t_reg2_n[n]) ? 66'b0 : 66'bz; 
+      assign FUFH[n][67:66]=fxLD_ext_t_reg2_n[n] ? `ptype_ext : 2'bz;
+      assign FUFH[n][67:66]=fxLD_dbl_t_reg2_n[n] ? `ptype_dbl : 2'bz;
+      assign FUFH[n][67:66]=fxLD_sngl_t_reg2_n[n] ? `ptype_sngl : 2'bz;
+      
+      assign FUFL[n][67:66]=FUFH[n][67:66];
+
+      assign {FUFL[n][15+68:68],FUFL[n][65:0]} =fxLD_ext_t_reg2_n[n] & fxLD_sin_reg2_n[n] ?
+            {FUVLX2_n[n][15:0],FUVXL_n[n][65:0]} : 82'bz;
+      assign {FUFL[n][15+68:68],FUFL[n][65:0]} =fxLD_dbl_t_reg2_n[n] & fxLD_sin_reg2_n[n] ? {16'b0,FUVXL_n[n][65:0]} : 82'bz;
+      assign {FUFH[n][65:0]} =fxLD_dbl_t_reg2_n[n] & fxLD_sin_reg2_n[n] ? {FUVXH_n[n][65:0]} : 66'bz;
+       
+      assign FUVXL[n][65:0]=fxLD_sngl_t_reg2[n] | fxLD_dbl_t_reg2[n] ? 66'bz : {1'b0,dc_rdataA_X_reg2[n][63:32],1'b0,
+	      dc_rdataA_X_reg2[n][31:0]}; 
+      assign FUVXH[n][65:0]=fxLD_sngl_t_reg2[n] | fxLD_dbl_t_reg2[n] ? 66'bz : {1'b0,dc_rdataA_X_reg2[n][127:96],1'b0,
+	      dc_rdataA_X_reg2[n][95:64]}; 
+      assign FUVXL[n][67:66]=fxLD_sngl_t_reg2[n] ? `ptype_sngl : `ptype_int;
+      assign FUVXH[n][67:66]=fxLD_sngl_t_reg2[n] ? `ptype_sngl : `ptype_int;
 
       if (n<2) begin : Wfwd
 
@@ -5412,25 +5449,25 @@ dcache1 L1D_mod(
   .read_addrE0(lsr_wr_data[0][`lsaddr_addrE]), .read_addrO0(lsr_wr_data[0][`lsaddr_addrO]), 
     .read_bank0(lsr_wr_data[0][`lsaddr_banks]), .read_clkEn0(dc_rdEn[0]), .read_hit0(FU0HitP),
     .read_hitCl0(dc_rdHitCl[0]),.read_odd0(lsr_wr_data[0][`lsaddr_odd]), 
-    .read_split0(lsr_wr_data[0][`lsaddr_split]), .read_dataA0(dc_rdataA[0]), .read_NdataA0(dc_rdataA_N[0]),
+    .read_split0(lsr_wr_data[0][`lsaddr_split]), .read_dataA0(dc_rdataA[0]), .read_dataX0(dc_rdataA_X[0]),
     .read_beginA0(lsr_wr_data[0][`lsaddr_bank0]), .read_low0(lsr_wr_data[0][`lsaddr_low]), 
     .read_sz0(lsr_wr_data[0][`lsaddr_sz]),.read_pbit0(dc_pdataA[0]),
   .read_addrE1(lsr_wr_data[1][`lsaddr_addrE]), .read_addrO1(lsr_wr_data[1][`lsaddr_addrO]), 
     .read_bank1(lsr_wr_data[1][`lsaddr_banks]), .read_clkEn1(dc_rdEn[1]), .read_hit1(FU1HitP),   
     .read_hitCl1(dc_rdHitCl[1]),.read_odd1(lsr_wr_data[1][`lsaddr_odd]), 
-    .read_split1(lsr_wr_data[1][`lsaddr_split]), .read_dataA1(dc_rdataA[1]), .read_NdataA1(dc_rdataA_N[1]), 
+    .read_split1(lsr_wr_data[1][`lsaddr_split]), .read_dataA1(dc_rdataA[1]), .read_dataX1(dc_rdataA_X[1]), 
     .read_beginA1(lsr_wr_data[1][`lsaddr_bank0]), .read_low1(lsr_wr_data[1][`lsaddr_low]), 
     .read_sz1(lsr_wr_data[1][`lsaddr_sz]),.read_pbit1(dc_pdataA[1]),
   .read_addrE2(lsr_wr_data[2][`lsaddr_addrE]), .read_addrO2(lsr_wr_data[2][`lsaddr_addrO]), 
     .read_bank2(lsr_wr_data[2][`lsaddr_banks]), .read_clkEn2(dc_rdEn[2]), .read_hit2(FU2HitP),   
     .read_hitCl2(dc_rdHitCl[2]),.read_odd2(lsr_wr_data[2][`lsaddr_odd]), 
-    .read_split2(lsr_wr_data[2][`lsaddr_split]), .read_dataA2(dc_rdataA[2]), .read_NdataA2(dc_rdataA_N[2]),
+    .read_split2(lsr_wr_data[2][`lsaddr_split]), .read_dataA2(dc_rdataA[2]), .read_dataX2(dc_rdataA_X[2]),
     .read_beginA2(lsr_wr_data[2][`lsaddr_bank0]), .read_low2(lsr_wr_data[2][`lsaddr_low]), 
     .read_sz2(lsr_wr_data[2][`lsaddr_sz]),.read_pbit2(dc_pdataA[2]),
   .read_addrE3(lsr_wr_data[3][`lsaddr_addrE]), .read_addrO3(lsr_wr_data[3][`lsaddr_addrO]), 
     .read_bank3(lsr_wr_data[3][`lsaddr_banks]), .read_clkEn3(dc_rdEn[3]), .read_hit3(FU3HitP),   
     .read_hitCl3(dc_rdHitCl[3]),.read_odd3(lsr_wr_data[3][`lsaddr_odd]), 
-    .read_split3(lsr_wr_data[3][`lsaddr_split]), .read_dataA3(dc_rdataA[3]), .read_NdataA3(dc_rdataA_N[3]),
+    .read_split3(lsr_wr_data[3][`lsaddr_split]), .read_dataA3(dc_rdataA[3]), .read_dataX3(dc_rdataA_X[3]),
     .read_beginA3(lsr_wr_data[3][`lsaddr_bank0]), .read_low3(lsr_wr_data[3][`lsaddr_low]), 
     .read_sz3(lsr_wr_data[3][`lsaddr_sz]),.read_pbit3(dc_pdataA[3]),
   .read_bankNoRead(dc_bankNone),
@@ -7595,10 +7632,10 @@ dcache1 L1D_mod(
               dc_rsEn_reg[v]<=1'b0;
 	      dc_LSQ_reg[v]<=9'b0;
 	      dc_rdataA_reg[v]<=136'b0;
-	      dc_rdataA_N_reg[v]<=136'b0;
+	      dc_rdataA_X_reg[v]<=128'b0;
 	      dc_pdataA_reg[v]<=2'b0;
 	      dc_rdataA_reg2[v]<=136'b0;
-	      dc_rdataA_N_reg2[v]<=136'b0;
+	      dc_rdataA_X_reg2[v]<=128'b0;
           end
           for(v=0;v<=1;v=v+1) begin
              WDfxWQ_reg[v]<=6'b0;
@@ -7636,10 +7673,10 @@ dcache1 L1D_mod(
                   dc_rsEn_reg[v]<=dc_rsEn[v];
 	          dc_LSQ_reg[v]<=dc_LSQ[v];
 	          dc_rdataA_reg[v]<=dc_rdat[v];
-	          dc_rdataA_N_reg[v]<=dc_rdat_N[v];
+	          dc_rdataA_X_reg[v]<=dc_rdat_X[v];
 	          dc_pdataA_reg[v]<=dc_pdat[v];
 	          dc_rdataA_reg2[v]<=dc_rdataA_reg[v];
-	          dc_rdataA_N_reg2[v]<=dc_rdataA_N_reg[v];
+	          dc_rdataA_X_reg2[v]<=dc_rdataA_X_reg[v];
               end
           end
           for(v=0;v<=1;v=v+1) begin
