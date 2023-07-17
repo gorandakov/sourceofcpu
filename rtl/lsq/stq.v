@@ -46,8 +46,8 @@ module stq(
   wrt1_adata,wrt1_en,wrt1_LSQ,
   confl,confl_SMP,confl_X,
   confl_out,
-  upd0_WQ,upd0_en,upd0_data,upd0_pbit,//upd0_sz,//store data
-  upd1_WQ,upd1_en,upd1_data,upd1_pbit,//upd1_sz,//store data 2
+  upd0_WQ,upd0_en,upd0_data,upd0_dataM,upd0_pbit,//upd0_sz,//store data
+  upd1_WQ,upd1_en,upd1_data,upd1_dataM,upd1_pbit,//upd1_sz,//store data 2
   pse0_en,
   pse1_en,
   wb1_adata,wb1_LSQ,wb1_data,wb1_dataN,wb1_pbit,wb1_bnkEn,wb1_bnkEnS,wb1_en,wb1_chk,
@@ -122,12 +122,14 @@ module stq(
   input [5:0] upd0_WQ;
   input upd0_en;
   input [135:0] upd0_data;
+  input [135:0] upd0_dataM;
   input [1:0] upd0_pbit;
 //  input [4:0] upd0_sz;
 
   input [5:0] upd1_WQ;
   input upd1_en;
   input [135:0] upd1_data;
+  input [135:0] upd1_dataM;
   input [1:0] upd1_pbit;
 //  input [4:0] upd1_sz;
 
@@ -271,6 +273,7 @@ module stq(
 
   
   wire [5:0][139:0] chk_data;
+  wire [5:0][139:0] chk_dataM;
   wire [5:0][1:0] chk_pbit;
   wire [5:0][16:0] chk_bytes;
   wire [135:0] wb0_dataW;
@@ -514,6 +517,12 @@ module stq(
       wire [3:0][32:0] chk3_data0;
       wire [3:0][32:0] chk4_data0;
       wire [3:0][32:0] chk5_data0;
+      wire [3:0][32:0] chk0_dataM0;
+      wire [3:0][32:0] chk1_dataM0;
+      wire [3:0][32:0] chk2_dataM0;
+      wire [3:0][32:0] chk3_dataM0;
+      wire [3:0][32:0] chk4_dataM0;
+      wire [3:0][32:0] chk5_dataM0;
   generate
       genvar a,b,x;
       for(b=0;b<8;b=b+1) begin : L
@@ -648,7 +657,21 @@ module stq(
           chk5_match_first[b],chk5_data0[b],chk5_pre0,chk5_pre1,
           WLN0_match,WLN0_dataX0[b],
           WLN1_match,WLN1_dataX0[b]
-          );
+          ); else
+          stq_data_array #(32+!b[0]) dat_mod(
+          clk,
+          rst,
+          upd0_en0[63:0],{upd0_pbit[upd0_b[b][1]],upd0_dataM[32*Rupd0_b[b]+:32]},
+          upd1_en0[63:0],{upd1_pbit[upd1_b[b][1]],upd1_dataM[32*Rupd1_b[b]+:32]},
+          chk0_match_first[b],chk0_dataM0[b],chk0_pre0,chk0_pre1,
+          chk1_match_first[b],chk1_dataM0[b],chk1_pre0,chk1_pre1,
+          chk2_match_first[b],chk2_dataM0[b],chk2_pre0,chk2_pre1,
+          chk3_match_first[b],chk3_dataM0[b],chk3_pre0,chk3_pre1,
+          chk4_match_first[b],chk4_dataM0[b],chk4_pre0,chk4_pre1,
+          chk5_match_first[b],chk5_dataM0[b],chk5_pre0,chk5_pre1,
+          WLN0_match,WLN0_dataX0[b],
+          WLN1_match,WLN1_dataX0[b]
+          ); 
 	  //verilator lint_on WIDTH
           
           if (b<4) begin
@@ -660,6 +683,12 @@ module stq(
 	      assign chk_data[3][33*b+:33]=chk3_data0[chk3_b[b]];
 	      assign chk_data[4][33*b+:33]=chk4_data0[chk4_b[b]];
 	      assign chk_data[5][33*b+:33]=chk5_data0[chk5_b[b]];
+	      assign chk_dataM[0][33*b+:33]=chk0_dataM0[chk0_b[b]];
+	      assign chk_dataM[1][33*b+:33]=chk1_dataM0[chk1_b[b]];
+	      assign chk_dataM[2][33*b+:33]=chk2_dataM0[chk2_b[b]];
+	      assign chk_dataM[3][33*b+:33]=chk3_dataM0[chk3_b[b]];
+	      assign chk_dataM[4][33*b+:33]=chk4_dataM0[chk4_b[b]];
+	      assign chk_dataM[5][33*b+:33]=chk5_dataM0[chk5_b[b]];
 	      assign chk_bytes[0][4*b+:4]=chk0_bytes[chk0_b[b]] & {4{chk0_match_has[chk0_b[b]]}};
 	      assign chk_bytes[1][4*b+:4]=chk1_bytes[chk1_b[b]] & {4{chk1_match_has[chk1_b[b]]}};
 	      assign chk_bytes[2][4*b+:4]=chk2_bytes[chk2_b[b]] & {4{chk2_match_has[chk2_b[b]]}};
