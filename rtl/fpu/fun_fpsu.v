@@ -29,11 +29,12 @@ module fun_fpsu(
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
   FUF9,
+  FUF4Y,FUF5Y,FUF6Y,
   ALTDATA0,ALTDATA1,
   ALT_INP,
   FOOSL_out,
   HH_data,
-  plnA,plnB
+  xdata
   );
   parameter [1:0] INDEX=2'd2;
   parameter [0:0] H=1'b0;
@@ -67,13 +68,18 @@ module fun_fpsu(
   (* register equiload *) inout [S+67:0] FUF7;
   (* register equiload *) inout [S+67:0] FUF8;
   (* register equiload *) inout [S+67:0] FUF9;
+  (* register equiload *) inout [S+67:0] FUF4X;
+  (* register equiload *) inout [S+67:0] FUF5X;
+  (* register equiload *) inout [S+67:0] FUF6X;
   input [1:0] ALT_INP;
   input [S+67:0] ALTDATA0;
   input [S+67:0] ALTDATA1;
   output [5:0] FOOSL_out;
   output [S+67:0] HH_data;
-  output [S+67:0] plnA;
-  output [S+67:0] plnB;
+  inout  [S+67:0] xdata;
+
+
+  reg  [S+67:0] xdata_reg;
 
   wire [1:0][S+67:0] FOOF;
   reg [1:0][S+67:0] FOOF_reg;
@@ -396,6 +402,7 @@ module fun_fpsu(
   .en(fxFCADD_sn),
   .rmode(fpcsr[`csrfpu_rmode]),
   .res(FOOF[1][65:33]),
+  .xdata(xdata[65:33]),
   .raise(fxFCADD_raise[0]),
   .fpcsr(fpcsr[31:0])
   );
@@ -410,6 +417,7 @@ module fun_fpsu(
   .en(fxFCADD_sn),
   .rmode(fpcsr[`csrfpu_rmode]),
   .res(FOOF[1][32:0]),
+  .xdata(xdata[32:0]),
   .raise(fxFCADD_raise[1]),
   .fpcsr(fpcsr[31:0])
   );
@@ -432,10 +440,12 @@ module fun_fpsu(
       if (INDEX==0) begin
 	      assign FUF4=FOOF_reg[0];
 	      assign FUF7=FOOF_reg[1];
+              assign FUF4Y=xdata_reg;
       end
       if (INDEX==1) begin
 	      assign FUF5=FOOF_reg[0];
 	      assign FUF8=FOOF_reg[1];
+              assign FUF5Y=xdata_reg;
       end
       if (INDEX==2) begin
 	      assign FUF6=|ALT_INP_reg ? {S+SIMD_WIDTH{1'BZ}} : FOOF_reg[0];
@@ -443,8 +453,7 @@ module fun_fpsu(
 	      assign FUF6=ALT_INP_reg[1] ? ALTDATA1 : {S+SIMD_WIDTH{1'BZ}};
 	      assign FUF9=FOOF_reg[1];
 	      assign FUF6=FUF6_X;
-	      assign plnA=uu_A2;
-	      assign plnB=gDataBFL[0][67:0];
+              assign FUF6Y=xdata_reg;
       end
   endgenerate
 
@@ -453,6 +462,7 @@ module fun_fpsu(
 //  assign FUFL[7+m]=FOOFL_reg[2*m+1];
 
   always @(negedge clk) begin
+    xdata_reg<=xdata;
     fxFCADD_sn_reg<=fxFCADD_sn;
     fxFCADD_sn_reg2<=fxFCADD_sn_reg;
     fxFCADD_sn_reg3<=fxFCADD_sn_reg2;

@@ -30,6 +30,7 @@ module fun_fpu(
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
   FUF9,
+  FUF4X,FUF5X,FUF6X,
   xtra,
   ALTDATA0,ALTDATA1,
   ALT_INP,
@@ -39,9 +40,7 @@ module fun_fpu(
   fxFCADD_raise_s,
   FOOSH_in,
   FOOSH_out,
-  HH_data,
-  outA,
-  outB
+  HH_data
   );
   parameter [1:0] INDEX=2'd2;
   parameter [0:0] H=1'b0;
@@ -74,6 +73,9 @@ module fun_fpu(
   (* register equiload *) inout [S+67:0] FUF7;
   (* register equiload *) inout [S+67:0] FUF8;
   (* register equiload *) inout [S+67:0] FUF9;
+  (* register equiload *) inout [S+67:0] FUF4X;
+  (* register equiload *) inout [S+67:0] FUF5X;
+  (* register equiload *) inout [S+67:0] FUF6X;
   inout [67:0] xtra;
   input [1:0] ALT_INP;
   input [S+67:0] ALTDATA0;
@@ -88,8 +90,6 @@ module fun_fpu(
   (* register equiload *) output [5:0] FOOSH_out;
   output [S+67:0] HH_data;
 
-  output [S+67:0] outA;
-  output [S+67:0] outB;
 
   wire [1:0][16+67:0] FOOF;
   reg [1:0][S+67:0] FOOF_reg;
@@ -440,18 +440,19 @@ module fun_fpu(
       if (INDEX==0) begin
 	      assign FUF4=FOOF_reg[0];
 	      assign FUF7=isXTRA_reg2 ? xtra_reg : FOOF_reg[1];
+              assign FUF4X=xtra_reg;
       end
       if (INDEX==1) begin
 	      assign FUF5=FOOF_reg[0];
 	      assign FUF8=isXTRA_reg2 ? xtra_reg : FOOF_reg[1];
+              assign FUF5X=xtra_reg;
       end
       if (INDEX==2) begin
 	      assign FUF6=|ALT_INP_reg ? {S+SIMD_WIDTH{1'BZ}} : FOOF_reg[0];
 	      assign FUF6=ALT_INP_reg[0] ? ALTDATA0 : {S+SIMD_WIDTH{1'BZ}};
 	      assign FUF6=ALT_INP_reg[1] ? ALTDATA1 : {S+SIMD_WIDTH{1'BZ}};
 	      assign FUF9=isXTRA_reg2 ? xtra_reg : FOOF_reg[1];
-	      assign outA=uu_A2;
-	      assign outB=gfDataBFL[0][S+67:0];
+              assign FUF6X=xtra_reg;
       end
   endgenerate
 
