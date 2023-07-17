@@ -1307,6 +1307,7 @@ module dcache1(
   wire [255:0] rxdata7[3:0];
   wire [255:0] rxdata[3:0];
   wire [3:0][127+8:0] rddata1;
+  wire [3:0][127:0] rddata2;
 //  wire [4:0] rdcan[3:0];
   wire [3:0][127+8:0] read_dataA;
   reg [5:0] mskdata1[3:0];
@@ -1556,10 +1557,10 @@ module dcache1(
   assign read_dataA2=read_dataA[2];
   assign read_dataA3=read_dataA[3];
 
-  assign read_dataX0={128{read_sz[0][4:1]==4'd6 || read_sz[0]==5'd14}}&rddata2[0];
-  assign read_dataX1={128{read_sz[1][4:1]==4'd6 || read_sz[1]==5'd14}}&rddata2[0];
-  assign read_dataX2={128{read_sz[2][4:1]==4'd6 || read_sz[2]==5'd14}}&rddata2[0];
-  assign read_dataX3={128{read_sz[3][4:1]==4'd6 || read_sz[3]==5'd14}}&rddata2[0];
+  assign read_dataX0={128{read_sz_reg[0][4:1]==4'd6 || read_sz_reg[0]==5'd14}}&rddata2[0];
+  assign read_dataX1={128{read_sz_reg[1][4:1]==4'd6 || read_sz_reg[1]==5'd14}}&rddata2[0];
+  assign read_dataX2={128{read_sz_reg[2][4:1]==4'd6 || read_sz_reg[2]==5'd14}}&rddata2[0];
+  assign read_dataX3={128{read_sz_reg[3][4:1]==4'd6 || read_sz_reg[3]==5'd14}}&rddata2[0];
  
   assign read_dataP[0]={LINE_WIDTH{1'B0}}; 
   assign read_dataPN[0]={LINE_WIDTH{1'B1}}; 
