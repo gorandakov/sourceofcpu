@@ -36,6 +36,7 @@ module fun_fpuL(
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
   FUF9,
+  FUF4XY,FUF5XY,FUF6XY,
   xtra0,xtra1,xtra2,
   ALTDATA0,ALTDATA1,
   ALT_INP,
@@ -118,6 +119,10 @@ module fun_fpuL(
   (* register equiload *) inout [16+67:0] FUF7;
   (* register equiload *) inout [16+67:0] FUF8;
   (* register equiload *) inout [16+67:0] FUF9;
+  (* register equiload *) inout [16+67:0] FUF4XY;
+  (* register equiload *) inout [16+67:0] FUF5XY;
+  (* register equiload *) inout [16+67:0] FUF6XY;
+
   output [67:0] xtra0;
   output [67:0] xtra1;
   output [67:0] xtra2;
@@ -155,8 +160,6 @@ module fun_fpuL(
   input fxFRT_alten_reg3;
   output daltX;
   output [63:0] FUCVT1;
-  output [16+67:0] outA;
-  output [16+67:0] outB;
 
   wire [15+68:0] XI_dataD;
   reg [3:0] u5_en_reg;
@@ -183,7 +186,8 @@ module fun_fpuL(
   fxFADD0_raise_s,
   fxFCADD1_raise_s,
   FOOSH0_in,
-  FOOSH0_out,,,
+  FOOSH0_out,,
+  FUF4XY
   );
 
   fun_fpu #(1,0) fpu1_mod(
@@ -205,7 +209,8 @@ module fun_fpuL(
   fxFADD2_raise_s,
   fxFCADD3_raise_s,
   FOOSH1_in,
-  FOOSH1_out,,,
+  FOOSH1_out,,
+  FUF5XY
   );
 
   fun_fpu #(2,0) fpu2_mod(
@@ -229,7 +234,7 @@ module fun_fpuL(
   FOOSH2_in,
   FOOSH2_out,
   XI_dataD,
-  outA,outB
+  FUF6XY
   );
  
   cvt_FP_I_mod fp2i_mod(

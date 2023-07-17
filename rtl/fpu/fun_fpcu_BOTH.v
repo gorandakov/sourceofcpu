@@ -36,10 +36,12 @@ module fun_fpu_BOTH(
   FUFH3,FUFH4,FUFH5,
   FUFH6,FUFH7,FUFH8,
   FUFH9,
+  FUFXH4,FUFXH5,FUFXH6,
   FUFL0,FUFL1,FUFL2,
   FUFL3,FUFL4,FUFL5,
   FUFL6,FUFL7,FUFL8,
   FUFL9,
+  FUFXL4,FUFXL5,FUFXL6,
   ALTDATAH0,ALTDATAH1,
   ALTDATAL0,ALTDATAL1,
   ALT_INP,
@@ -60,9 +62,7 @@ module fun_fpu_BOTH(
   XI_dataS,
   fxFRT_alten_reg3,
   daltX,
-  FUCVT1,
-  outAH,outBH,
-  outAL,outBL
+  FUCVT1
   );
   localparam [0:0] H=1'b1;
   localparam SIMD_WIDTH=68; //half width
@@ -123,6 +123,9 @@ module fun_fpu_BOTH(
   (* register equiload *) (* bus=DBLH bus_spacing=8 bus_rpl=3 *) output [67:0] FUFH7;
   (* register equiload *) (* bus=DBLH bus_spacing=8 bus_rpl=3 *) output [67:0] FUFH8;
   (* register equiload *) (* bus=DBLH bus_spacing=8 bus_rpl=3 *) output [67:0] FUFH9;
+  (* register equiload *) (* bus=DBLH bus_spacing=8 bus_rpl=3 *) output [67:0] FUFXH4;
+  (* register equiload *) (* bus=DBLH bus_spacing=8 bus_rpl=3 *) output [67:0] FUFXH5;
+  (* register equiload *) (* bus=DBLH bus_spacing=8 bus_rpl=3 *) output [67:0] FUFXH6;
   
   (* register equiload *) (* bus=DBLL bus_spacing=8 bus_rpl=3 *) input [16+67:0] FUFL0;
   (* register equiload *) (* bus=DBLL bus_spacing=8 bus_rpl=3 *) input [16+67:0] FUFL1;
@@ -134,6 +137,9 @@ module fun_fpu_BOTH(
   (* register equiload *) (* bus=DBLL bus_spacing=8 bus_rpl=3 *) output [16+67:0] FUFL7;
   (* register equiload *) (* bus=DBLL bus_spacing=8 bus_rpl=3 *) output [16+67:0] FUFL8;
   (* register equiload *) (* bus=DBLL bus_spacing=8 bus_rpl=3 *) output [16+67:0] FUFL9;
+  (* register equiload *) (* bus=DBLL bus_spacing=8 bus_rpl=3 *) output [16+67:0] FUFXL4;
+  (* register equiload *) (* bus=DBLL bus_spacing=8 bus_rpl=3 *) output [16+67:0] FUFXL5;
+  (* register equiload *) (* bus=DBLL bus_spacing=8 bus_rpl=3 *) output [16+67:0] FUFXL6;
   input [1:0] ALT_INP;
   (* bus=DBLL bus_spacing=8 *) input [16+67:0] ALTDATAL0;
   (* bus=DBLL bus_spacing=8 *) input [16+67:0] ALTDATAL1;
@@ -172,10 +178,6 @@ module fun_fpu_BOTH(
   output daltX;
   output [63:0] FUCVT1;
   
-  (* bus=DBLH bus_spacing=8 *) output [67:0] outAH;
-  (* bus=DBLH bus_spacing=8 *) output [67:0] outBH;
-  (* bus=DBLL bus_spacing=8 *) output [16+67:0] outAL;
-  (* bus=DBLL bus_spacing=8 *) output [16+67:0] outBL;
 
   wire [67:0] u1_Ax;
   wire [67:0] u1_Bx;
@@ -260,6 +262,7 @@ module fun_fpu_BOTH(
   FUFH3,FUFH4,FUFH5,
   FUFH6,FUFH7,FUFH8,
   FUFH9,
+  FUFXH4,FUFXH5,FUFXH6,
   ALTDATAH0,ALTDATAH1,
   ALT_INP,
   FUS_alu0,FUS_alu1,
@@ -276,8 +279,7 @@ module fun_fpu_BOTH(
   fxFCADD5_raise_s,
   FOOSL0, HFOOSH0,
   FOOSL1, HFOOSH1,
-  FOOSL2, HFOOSH2,
-  outAH,outBH
+  FOOSL2, HFOOSH2
   ); 
 
   fun_fpuL lfpc_mod(
@@ -297,6 +299,7 @@ module fun_fpu_BOTH(
   FUFL3,FUFL4,FUFL5,
   FUFL6,FUFL7,FUFL8,
   FUFL9,
+  FUFXL4,FUFXL5,FUFXL6,
   ALTDATAL0,ALTDATAL1,
   ALT_INP,
   FUS_alu0,FUS_alu1,
@@ -317,8 +320,7 @@ module fun_fpu_BOTH(
   XI_dataS,
   fxFRT_alten_reg3,
   daltX,
-  FUCVT1,
-  outAL,outBL
+  FUCVT1
   );
 
   assign FUS0=u1_op_reg4[7:0]==`fop_cmpDH  ? HFOOSH0 : LFOOSH0; 
