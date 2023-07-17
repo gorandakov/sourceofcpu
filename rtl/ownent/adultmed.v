@@ -94,6 +94,8 @@ module smallInstr_decoder(
   localparam PORT_VANY=4'd11;
   localparam REOR_WIDTH=24; 
   localparam TRICNT_TOP=40;//really 38; 2 redundant
+  parameter [5:0] INDEX=0;
+
   input clk;
   input rst;
   input mode64;
@@ -293,6 +295,10 @@ module smallInstr_decoder(
   reg prAlloc[TRICNT_TOP-1:0];
   reg [TRICNT_TOP-1:0] trien;
   reg [1:0] perror[TRICNT_TOP-1:0];
+
+  wire [5:0] dat;
+
+  LFSR16_6(clk,rst,dat);
 
   integer tt;
 
@@ -581,7 +587,7 @@ module smallInstr_decoder(
 	  assign flags_wrFPU=(|trien[p*8+:8]) ? kflags_wrFPU : 1'bz;
 	  assign rBT_copyV=(|trien[p*8+:8]) ? krBT_copyV : 1'bz;
 	  assign instr_fsimd=(|trien[p*8+:8]) ? kinstr_fsimd : 1'bz;
-	  assign error=(|trien[p*8+:8]) ? kerror : 2'bz;
+	  assign error=(|trien[p*8+:8]) ? kerror||dat==INDEX : 2'bz;
 	  assign port=(|trien[p*8+:8]) ? kport : 4'bz;
 	  assign jumpType=(|trien[p*8+:8]) ? kjumpType : 5'bz;
 	  assign operation=(|trien[p*8+:8]) ? koperation : 13'bz;
