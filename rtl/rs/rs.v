@@ -3087,6 +3087,11 @@ module rs(
   outRsSelect_reg[2],outBank_reg[2],rsFoundNZ_reg[2],outDataVXB2L
   );
 
+  assign outDataVB1L=outOp1_reg[10] ? outDataVXB1L : outDataVYB1L;
+  assign outDataVB2L=outOp2_reg[10] ? outDataVXB2L : outDataVYB2L;
+  assign outDataVB1H=outOp1_reg[10] ? outDataVXB1H : outDataVYB1H;
+  assign outDataVB2H=outOp2_reg[10] ? outDataVXB2H : outDataVYB2H;
+
   rs_wakeUp_data_array #(SIMD_WIDTH) dataA_FH_mod(
   clk,dataRst,stall|doStall,
   32'b0,{SIMD_WIDTH{1'b0}},
@@ -3172,6 +3177,10 @@ module rs(
   outRsSelect_reg2[2],outBank_reg2[2],rsFoundNZ_reg2[2],outDataFXB2L
   );
   
+  assign outDataFB1L=outOp1_reg2[10] ? outDataFXB1L : outDataFYB1L;
+  assign outDataFB2L=outOp2_reg2[10] ? outDataFXB2L : outDataFYB2L;
+  assign outDataFB1H=outOp1_reg2[10] ? outDataFXB1H : outDataFYB1H;
+  assign outDataFB2H=outOp2_reg2[10] ? outDataFXB2H : outDataFYB2H;
   
   rs_nonWakeUp_array #(CONST_WIDTH) dataC_mod(
   clk,dataRst,stall|doStall,
