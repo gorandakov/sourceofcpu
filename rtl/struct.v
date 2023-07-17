@@ -292,7 +292,9 @@ limitations under the License.
 `define instrQ_sc 40:39
 `define instrQ_btb_only 41
 `define instrQ_lastInstr 42
-`define instrQ_width 43
+`define instrQ_ght2_addr 58:43
+`define instrQ_jval 59
+`define instrQ_width 60
 
 
 `define instrQ_addr_count 36
