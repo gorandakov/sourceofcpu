@@ -29,8 +29,8 @@ module frontend1(
   exceptLDConfl,
   except_jmask,
   except_jmask_en,
-  jupd0_en,jupdt0_en,jupd0_ght_en,jupd0_addr,jupd0_baddr,jupd0_sc,jupd0_tk,
-  jupd1_en,jupdt1_en,jupd1_ght_en,jupd1_addr,jupd1_baddr,jupd1_sc,jupd1_tk,
+  jupd0_en,jupdt0_en,jupd0_ght_en,jupd0_addr,jupd0_baddr,jupd0_sc,jupd0_val,jupd0_tk,
+  jupd1_en,jupdt1_en,jupd1_ght_en,jupd1_addr,jupd1_baddr,jupd1_sc,jupd1_val,jupd1_tk,
   bus_data,
   bus_slot,
   bus_en,
@@ -1387,12 +1387,47 @@ module frontend1(
   .BotherPred3(pred_sc3B),
   .write0_sc(jupd0_sc),
   .write0_addr(jupd0_addr),
-  .write0_wen(jupd0_en&jupd0_ght_en),
+  .write0_wen(jupd0_en&jupd0_ght_en&~jupd0_val),
   .write1_sc(jupd1_sc),
   .write1_addr(jupd1_addr),
-  .write1_wen(jupd1_en&jupd1_ght_en)
+  .write1_wen(jupd1_en&jupd1_ght_en&~jupd1_val)
   );
 
+  wire [5:0] rnd1;
+
+  LFSR16_6 lfsr0_mod(
+  clk,
+  rst,
+  rnd1);
+
+  ght2 GHT_nonparent_s_mod(
+  .clk(clk),
+  .rst(rst),
+  .read_clkEn(ixcept || ~fstall & instrEn||
+     btbFStall_recover & ~iq_fstall & ~jq_fstall & ~fmstall),
+  .fstall(fstall),
+  .except(ixcept),
+  .exceptThr(ixceptThread),
+  .IP_BITS(cc_read_IP_d[20:5]),
+  .GHT(GHT_mispred),
+  .jumpMask(btb_jmask),
+  .AbtbPred(btb_predA),
+  .BbtbPred(btb_predB),
+  .AotherPred0(pred_ss0A),
+  .AotherPred1(pred_ss1A),
+  .AotherPred2(pred_ss2A),
+  .AotherPred3(pred_ss3A),
+  .BotherPred0(pred_ss0B),
+  .BotherPred1(pred_ss1B),
+  .BotherPred2(pred_ss2B),
+  .BotherPred3(pred_ss3B),
+  .write0_val(jupd0_val),
+  .write0_addr(jupd0_addr),
+  .write0_wen(jupd0_en&jupd0_ght_en& &rnd1),
+  .write1_sc(jupd1_val),
+  .write1_addr(jupd1_addr),
+  .write1_wen(jupd1_en&jupd1_ght_en& &~rnd1)
+  );
   
   ret_stack rstack_mod(
   .clk(clk),
@@ -1408,16 +1443,17 @@ module frontend1(
   .write_wen(btb_in_link & btb_hit&instrEn&~fstall)
   );
   
-  bit_find_first_bit #(4) tkjiA_mod({pred_sc3A[0],
-    pred_sc2A[0],
-    pred_sc1A[0],
-    pred_sc0A[0]},
+  bit_find_first_bit #(4) tkjiA_mod({pred_sc3A[0]^pred_ss3A,
+    pred_sc2A[0]^pred_ss2A,
+    pred_sc1A[0]^pred_ss1A,
+    pred_sc0A[0]^pred_ss0A},
     takenA,);
-  bit_find_first_bit #(4) tkjiB_mod({pred_sc3B[0],
-    pred_sc2B[0],
-    pred_sc1B[0],
-    pred_sc0B[0]},
+  bit_find_first_bit #(4) tkjiB_mod({pred_sc3B[0]^pred_ss3B,
+    pred_sc2B[0]^pred_ss2B,
+    pred_sc1B[0]^pred_ss1B,
+    pred_sc0B[0]^pred_ss0B},
     takenB,);
+
   assign taken=btb_way ? takenB&{btb_has3,btb_has2,btb_has1,btb_has0} : 
     takenA&{btb_has3,btb_has2,btb_has1,btb_has0};
 
@@ -1458,12 +1494,11 @@ module frontend1(
           btbFStall_reg<=1'b0;
           btbFStall_reg2<=1'b0;
           btbFStall_reg3<=1'b0;
-//          btbFStall_reg4<=1'b0;
-//          btbFStall_reg5<=1'b0;
           btbFStall_recover<=1'b0;
           btbFStall_recover_reg<=1'b0;
           btbFStall_recover_reg2<=1'b0;
           GHT<=8'b0;
+          GHT_mispred<=16'b0;
           lnk_link0_reg<=5'b0;
           lnk_off0_reg<=5'b0;
           lnk_isRet0_reg<=1'b0;
@@ -1513,9 +1548,11 @@ module frontend1(
           if (~fstall) btbFStall_recover_reg2<=btbFStall_recover_reg;
           if (ixcept) begin
               GHT<=ixceptJumpGHT;
+              GHT_mispred<=ixceptJumpGHT2;
           end else begin
               if (btb_hit&instrEn&~fstall)
                   GHT<=GHT_d;
+                  GHT_mispred<=GHT2_D;
           end
           lnk_link0_reg<=lnk_link0;
           lnk_off0_reg<=lnk_off0;
@@ -1558,6 +1595,7 @@ module frontend1(
           exceptLDConfl_save<=1'b0;
           exceptDueJump_save<=1'b0;
           exceptJumpGHT_save<=8'b0;
+          exceptJumpGHT2_save<=16'b0;
           except_jmask_save<=4'b0;
           except_jmask_en_save<=1'b0;
       end else if (except) begin
@@ -1568,6 +1606,7 @@ module frontend1(
           exceptLDConfl_save<=exceptLDConfl;
           exceptDueJump_save<=exceptDueJump;
           exceptJumpGHT_save<=exceptJumpGHT;
+          exceptJumpGHT2_save<=exceptJumpGHT2;
           except_jmask_save<=except_jmask;
           except_jmask_en_save<=except_jmask_en;
       end else if (ixcept) begin
@@ -1578,6 +1617,7 @@ module frontend1(
           exceptLDConfl_save<=1'b0;
           exceptDueJump_save<=1'b0;
           exceptJumpGHT_save<=8'b0;
+          exceptJumpGHT2_save<=16'b0;
           except_jmask_save<=4'b0;
           except_jmask_en_save<=1'b0;
       end
