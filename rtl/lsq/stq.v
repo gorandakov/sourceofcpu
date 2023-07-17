@@ -661,16 +661,16 @@ module stq(
           stq_data_array #(32+!b[0]) dat_mod(
           clk,
           rst,
-          upd0_en0[63:0],{upd0_pbit[upd0_b[b][1]],upd0_dataM[32*Rupd0_b[b]+:32]},
-          upd1_en0[63:0],{upd1_pbit[upd1_b[b][1]],upd1_dataM[32*Rupd1_b[b]+:32]},
-          chk0_match_first[b],chk0_dataM0[b],chk0_pre0,chk0_pre1,
-          chk1_match_first[b],chk1_dataM0[b],chk1_pre0,chk1_pre1,
-          chk2_match_first[b],chk2_dataM0[b],chk2_pre0,chk2_pre1,
-          chk3_match_first[b],chk3_dataM0[b],chk3_pre0,chk3_pre1,
-          chk4_match_first[b],chk4_dataM0[b],chk4_pre0,chk4_pre1,
-          chk5_match_first[b],chk5_dataM0[b],chk5_pre0,chk5_pre1,
-          WLN0_match,WLN0_dataX0[b],
-          WLN1_match,WLN1_dataX0[b]
+          upd0_en0[63:0],{1'b0,upd0_dataM[32*Rupd0_b[b[1:0]]+:32]},
+          upd1_en0[63:0],{1'b0,upd1_dataM[32*Rupd1_b[b[1:0]]+:32]},
+          chk0_match_firstN[b[1:0]],chk0_dataM0[b[1:0]],chk0_pre0,chk0_pre1,
+          chk1_match_firstN[b[1:0]],chk1_dataM0[b[1:0]],chk1_pre0,chk1_pre1,
+          chk2_match_firstN[b[1:0]],chk2_dataM0[b[1:0]],chk2_pre0,chk2_pre1,
+          chk3_match_firstN[b[1:0]],chk3_dataM0[b[1:0]],chk3_pre0,chk3_pre1,
+          chk4_match_firstN[b[1:0]],chk4_dataM0[b[1:0]],chk4_pre0,chk4_pre1,
+          chk5_match_firstN[b[1:0]],chk5_dataM0[b[1:0]],chk5_pre0,chk5_pre1,
+          WLN0_match,WLN0_dataXN0[b[1:0]],
+          WLN1_match,WLN1_dataXN0[b[1:0]]
           ); 
 	  //verilator lint_on WIDTH
           
