@@ -179,6 +179,13 @@ module fun_fpu_BOTH(
   output [63:0] FUCVT1;
   
 
+  wire [67:0] xtra0;
+  wire [67:0] xtra1;
+  wire [67:0] xtra2;
+  wire [67:0] x2tra0;
+  wire [67:0] x2tra1;
+  wire [67:0] x2tra2;
+
   wire [67:0] u1_Ax;
   wire [67:0] u1_Bx;
   wire [67:0] u2_Ax;
@@ -263,6 +270,8 @@ module fun_fpu_BOTH(
   FUFH6,FUFH7,FUFH8,
   FUFH9,
   FUFXH4,FUFXH5,FUFXH6,
+  xtra0,xtra1,xtra2,
+  x2tra0,x2tra1,x2tra2,
   ALTDATAH0,ALTDATAH1,
   ALT_INP,
   FUS_alu0,FUS_alu1,
@@ -300,6 +309,8 @@ module fun_fpu_BOTH(
   FUFL6,FUFL7,FUFL8,
   FUFL9,
   FUFXL4,FUFXL5,FUFXL6,
+  x2tra0,x2tra1,x2tra2,
+  xtra0,xtra1,xtra2,
   ALTDATAL0,ALTDATAL1,
   ALT_INP,
   FUS_alu0,FUS_alu1,

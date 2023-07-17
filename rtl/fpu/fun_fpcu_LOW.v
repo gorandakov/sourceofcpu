@@ -38,6 +38,7 @@ module fun_fpuL(
   FUF9,
   FUF4XY,FUF5XY,FUF6XY,
   xtra0,xtra1,xtra2,
+  x2tra0,x2tra1,x2tra2,
   ALTDATA0,ALTDATA1,
   ALT_INP,
   FUS_alu0,FUS_alu1,
@@ -127,6 +128,10 @@ module fun_fpuL(
   output [67:0] xtra1;
   output [67:0] xtra2;
 
+  input [67:0] x2tra0;
+  input [67:0] x2tra1;
+  input [67:0] x2tra2;
+
   input [1:0] ALT_INP;
   input [16+67:0] ALTDATA0;
   input [16+67:0] ALTDATA1;
@@ -178,7 +183,7 @@ module fun_fpuL(
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
   FUF9,
-  xtra0,
+  xtra0,x2tra0,
   84'b0,84'b0,
   2'b0,
   FUS_alu0,FUS_alu1,
@@ -201,7 +206,7 @@ module fun_fpuL(
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
   FUF9,
-  xtra1,
+  xtra1,x2tra1,
   84'b0,84'b0,
   2'b0,
   FUS_alu2,FUS_alu3,
@@ -224,7 +229,7 @@ module fun_fpuL(
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
   FUF9,
-  xtra2,
+  xtra2,x2tra2,
   ALTDATA0,ALTDATA1,
   ALT_INP,
   FUS_alu4,FUS_alu5,

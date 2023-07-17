@@ -32,6 +32,7 @@ module fun_fpu(
   FUF9,
   FUF4X,FUF5X,FUF6X,
   xtra,
+  xtra2,
   ALTDATA0,ALTDATA1,
   ALT_INP,
   FUS_alu0,FUS_alu1,
@@ -77,6 +78,7 @@ module fun_fpu(
   (* register equiload *) inout [S+67:0] FUF5X;
   (* register equiload *) inout [S+67:0] FUF6X;
   inout [67:0] xtra;
+  inout [67:0] xtra2;
   input [1:0] ALT_INP;
   input [S+67:0] ALTDATA0;
   input [S+67:0] ALTDATA1;
@@ -212,6 +214,7 @@ module fun_fpu(
   wire [S+67:0] uu_B2;
 
   reg [67:0] xtra_reg;
+  reg [67:0] xtra2_reg;
 
   reg [S+67:0] FUF0_reg;
   reg [S+67:0] FUF1_reg;
@@ -439,20 +442,20 @@ module fun_fpu(
       else assign gfDataBFL[0]=u1_op_reg[8] ? {uu_B2[68+15:68],u1_Bx} : uu_B2;
       if (INDEX==0) begin
 	      assign FUF4=FOOF_reg[0];
-	      assign FUF7=isXTRA_reg2 ? xtra_reg : FOOF_reg[1];
-              assign FUF4X=xtra_reg;
+	      assign FUF7=isXTRA_reg2 ? xtra2_reg : FOOF_reg[1];
+              assign FUF4X=xtra2_reg;
       end
       if (INDEX==1) begin
 	      assign FUF5=FOOF_reg[0];
-	      assign FUF8=isXTRA_reg2 ? xtra_reg : FOOF_reg[1];
-              assign FUF5X=xtra_reg;
+	      assign FUF8=isXTRA_reg2 ? xtra2_reg : FOOF_reg[1];
+              assign FUF5X=xtra2_reg;
       end
       if (INDEX==2) begin
 	      assign FUF6=|ALT_INP_reg ? {S+SIMD_WIDTH{1'BZ}} : FOOF_reg[0];
 	      assign FUF6=ALT_INP_reg[0] ? ALTDATA0 : {S+SIMD_WIDTH{1'BZ}};
 	      assign FUF6=ALT_INP_reg[1] ? ALTDATA1 : {S+SIMD_WIDTH{1'BZ}};
-	      assign FUF9=isXTRA_reg2 ? xtra_reg : FOOF_reg[1];
-              assign FUF6X=xtra_reg;
+	      assign FUF9=isXTRA_reg2 ? xtra2_reg : FOOF_reg[1];
+              assign FUF6X=xtra2_reg;
       end
   endgenerate
 
@@ -621,7 +624,7 @@ module fun_fpu(
       isXTRA<=fxXTRA;
       isXTRA_reg<=isXTRA;
       isXTRA_reg2<=isXTRA_reg;
-      xtra_reg<=xtra;
+      xtra2_reg<=xtra2;
   end
 
   always @(posedge clk) begin

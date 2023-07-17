@@ -38,6 +38,7 @@ module fun_fpuH(
   FUF9,
   FUF4XY,FUF5XY,FUF6XY,
   xtra0,xtra1,xtra2,
+  x2tra0,x2tra1,x2tra2,
   ALTDATA0,ALTDATA1,
   ALT_INP,
   FUS_alu0,FUS_alu1,
@@ -118,9 +119,13 @@ module fun_fpuH(
   (* register equiload *) inout [67:0] FUF5XY;
   (* register equiload *) inout [67:0] FUF6XY;
 
-  input [67:0] xtra0;
-  input [67:0] xtra1;
-  input [67:0] xtra2;
+  output [67:0] xtra0;
+  output [67:0] xtra1;
+  output [67:0] xtra2;
+
+  input [67:0] x2tra0;
+  input [67:0] x2tra1;
+  input [67:0] x2tra2;
 
   input [1:0] ALT_INP;
   input [67:0] ALTDATA0;
@@ -162,7 +167,7 @@ module fun_fpuH(
   FUF0,FUF1,FUF2,
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
-  FUF9,xtra0,
+  FUF9,xtra0,x2tra0,
   68'b0,68'b0,
   2'b0,
   FUS_alu0,FUS_alu1,
@@ -184,7 +189,7 @@ module fun_fpuH(
   FUF0,FUF1,FUF2,
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
-  FUF9,xtra1,
+  FUF9,xtra1,x2tra1,
   68'b0,68'b0,
   2'b0,
   FUS_alu2,FUS_alu3,
@@ -206,7 +211,7 @@ module fun_fpuH(
   FUF0,FUF1,FUF2,
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
-  FUF9,xtra2,
+  FUF9,xtra2,x2tra2,
   ALTDATA0,ALTDATA1,
   ALT_INP,
   FUS_alu4,FUS_alu5,

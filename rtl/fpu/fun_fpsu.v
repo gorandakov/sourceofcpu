@@ -34,7 +34,8 @@ module fun_fpsu(
   ALT_INP,
   FOOSL_out,
   HH_data,
-  xdata
+  xdata,
+  xdata2
   );
   parameter [1:0] INDEX=2'd2;
   parameter [0:0] H=1'b0;
@@ -77,9 +78,11 @@ module fun_fpsu(
   output [5:0] FOOSL_out;
   output [S+67:0] HH_data;
   inout  [S+67:0] xdata;
+  inout  [S+67:0] xdata2;
 
 
   reg  [S+67:0] xdata_reg;
+  reg  [S+67:0] xdata2_reg;
 
   wire [1:0][S+67:0] FOOF;
   reg [1:0][S+67:0] FOOF_reg;
@@ -296,6 +299,8 @@ module fun_fpsu(
   .rst(rst),
   .A({fxDataAXL_reg[0][65],fxDataAXL_reg[0][64:33]}),
   .B({gDataBXL_reg[1][65],gDataBFL_reg[1][64:33]}),
+  .pook_inX(gDataBXL_reg[1][67] & u1_op_reg[10]),
+  .pook(pook_data[1]),
   .isSub(fxFADD_sub[H]),
   .isRSub(fxFADD_rsub),
   .raise(fxFADD_raise[0]),
@@ -313,6 +318,8 @@ module fun_fpsu(
   .rst(rst),
   .A({fxDataAXL_reg[0][32],fxDataAXL_reg[0][31:0]}),
   .B({gDataBXL_reg[1][32],gDataBFL_reg[1][31:0]}),
+  .pook_inX(gDataBXL_reg[1][66] && u1_op_reg[10]),
+  .pook(pook_data[1]),
   .isSub(fxFADD_sub[H]),
   .isRSub(fxFADD_rsub),
   .raise(fxFADD_raise[1]),
@@ -432,6 +439,10 @@ module fun_fpsu(
   .A(fxDataAXL_reg[1]),.B(gxDataBXL_reg[0]),
   .res(FOOF[1]));
  
+  assign FOOF[0][67:66]=(H? gxFADD_sn:gxFADD_sin) & u1_op_reg3[10] ? pook_data : 2'bz;
+  assign FOOF[0][67:66]=(H? gxFADD_sn:gxFADD_sin) & ~u1_op_reg3[10] ? `ptype_sngl : 2'bz;
+  assign FOOF[1][67:66]=fxFCADD_sn ? `ptype_sngl : 2'bz;
+
   generate
       if (H) assign gDataBFL[1]=u1_op_reg[9] ? u1_Bx : uu_B1;
       else assign gDataBFL[1]=u1_op_reg[8] ? {u1_Bx} : uu_B1;
