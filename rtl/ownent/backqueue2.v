@@ -597,6 +597,14 @@ module frontendSelf(
   wire [1:0] pred_sc1B;
   wire [1:0] pred_sc2B;
   wire [1:0] pred_sc3B;
+  wire [1:0] pred_sh0A;
+  wire [1:0] pred_sh1A;
+  wire [1:0] pred_sh2A;
+  wire [1:0] pred_sh3A;
+  wire [1:0] pred_sh0B;
+  wire [1:0] pred_sh1B;
+  wire [1:0] pred_sh2B;
+  wire [1:0] pred_sh3B;
   
   wire btb_can_ins;
   
@@ -609,6 +617,14 @@ module frontendSelf(
   wire [1:0] predy_sc1;
   wire [1:0] predy_sc2;
   wire [1:0] predy_sc3;
+  wire [1:0] predx_sh0;
+  wire [1:0] predx_sh1;
+  wire [1:0] predx_sh2;
+  wire [1:0] predx_sh3;
+  wire [1:0] predy_sh0;
+  wire [1:0] predy_sh1;
+  wire [1:0] predy_sh2;
+  wire [1:0] predy_sh3;
   reg [1:0] predx_sc0_reg;
   reg [1:0] predx_sc1_reg;
   reg [1:0] predx_sc2_reg;
@@ -625,6 +641,22 @@ module frontendSelf(
   reg [1:0] predx_sc1_reg4;
   reg [1:0] predx_sc2_reg4;
   reg [1:0] predx_sc3_reg4;
+  reg [1:0] predx_sh0_reg;
+  reg [1:0] predx_sh1_reg;
+  reg [1:0] predx_sh2_reg;
+  reg [1:0] predx_sh3_reg;
+  reg [1:0] predx_sh0_reg2;
+  reg [1:0] predx_sh1_reg2;
+  reg [1:0] predx_sh2_reg2;
+  reg [1:0] predx_sh3_reg2;
+  reg [1:0] predx_sh0_reg3;
+  reg [1:0] predx_sh1_reg3;
+  reg [1:0] predx_sh2_reg3;
+  reg [1:0] predx_sh3_reg3;
+  reg [1:0] predx_sh0_reg4;
+  reg [1:0] predx_sh1_reg4;
+  reg [1:0] predx_sh2_reg4;
+  reg [1:0] predx_sh3_reg4;
  
   reg [3:0] btbx_jmask_reg;
   reg [3:0] btbx_jmask_REG;
@@ -844,10 +876,10 @@ module frontendSelf(
 	  assign pre_other[j][`instrQ_sc]=isJ[1] ? predx_sc1_reg4 : 2'bz;
 	  assign pre_other[j][`instrQ_sc]=isJ[2] ? predx_sc2_reg4 : 2'bz;
 	  assign pre_other[j][`instrQ_sc]=isJ[3] ? predx_sc3_reg4 : 2'bz;
-	  assign pre_other[j][`instrQ_ss]=isJ[0] ? predx_ss0_reg4 : 1'bz;
-	  assign pre_other[j][`instrQ_ss]=isJ[1] ? predx_ss1_reg4 : 1'bz;
-	  assign pre_other[j][`instrQ_ss]=isJ[2] ? predx_ss2_reg4 : 1'bz;
-	  assign pre_other[j][`instrQ_ss]=isJ[3] ? predx_ss3_reg4 : 1'bz;
+	  assign pre_other[j][`instrQ_ss]=isJ[0] ? predx_sh0_reg4 : 1'bz;
+	  assign pre_other[j][`instrQ_ss]=isJ[1] ? predx_sh1_reg4 : 1'bz;
+	  assign pre_other[j][`instrQ_ss]=isJ[2] ? predx_sh2_reg4 : 1'bz;
+	  assign pre_other[j][`instrQ_ss]=isJ[3] ? predx_sh3_reg4 : 1'bz;
 	  assign pre_other[j][`instrQ_sc]=isJ!=0 ? 2'bz : 2'b0;
 //	  assign pre_other[j][`instrQ_avx]=pre_isAvx_reg;
 	  assign pre_other[j][`instrQ_btbMiss]=~btb_can_ins_reg4;
@@ -1091,6 +1123,14 @@ module frontendSelf(
   assign predy_sc1=btb_way ? pred_sc1B&{2{btb_cond[1]}} : pred_sc1A&{2{btb_cond[1]}};
   assign predy_sc2=btb_way ? pred_sc2B&{2{btb_cond[2]}} : pred_sc2A&{2{btb_cond[2]}};
   assign predy_sc3=btb_way ? pred_sc3B&{2{btb_cond[3]}} : pred_sc3A&{2{btb_cond[3]}};
+  assign predx_sh0=btb_way ? pred_sh0B : pred_sh0A;
+  assign predx_sh1=btb_way ? pred_sh1B : pred_sh1A;
+  assign predx_sh2=btb_way ? pred_sh2B : pred_sh2A;
+  assign predx_sh3=btb_way ? pred_sh3B : pred_sh3A;
+  assign predy_sh0=btb_way ? pred_sh0B&{2{btb_cond[0]}} : pred_sh0A&{2{btb_cond[0]}};
+  assign predy_sh1=btb_way ? pred_sh1B&{2{btb_cond[1]}} : pred_sh1A&{2{btb_cond[1]}};
+  assign predy_sh2=btb_way ? pred_sh2B&{2{btb_cond[2]}} : pred_sh2A&{2{btb_cond[2]}};
+  assign predy_sh3=btb_way ? pred_sh3B&{2{btb_cond[3]}} : pred_sh3A&{2{btb_cond[3]}};
   assign btbx_jlink0= btb_jlink0;
   assign btbx_jlnpos0=btb_jlnpos0;
   assign btbx_jlnjpos0=btb_jlnjpos0;
@@ -1451,18 +1491,18 @@ module frontendSelf(
   .jumpMask(btb_jmask),
   .AbtbPred(btb_predA),
   .BbtbPred(btb_predB),
-  .AotherPred0(pred_ss0A),
-  .AotherPred1(pred_ss1A),
-  .AotherPred2(pred_ss2A),
-  .AotherPred3(pred_ss3A),
-  .BotherPred0(pred_ss0B),
-  .BotherPred1(pred_ss1B),
-  .BotherPred2(pred_ss2B),
-  .BotherPred3(pred_ss3B),
+  .AotherPred0(pred_sh0A),
+  .AotherPred1(pred_sh1A),
+  .AotherPred2(pred_sh2A),
+  .AotherPred3(pred_sh3A),
+  .BotherPred0(pred_sh0B),
+  .BotherPred1(pred_sh1B),
+  .BotherPred2(pred_sh2B),
+  .BotherPred3(pred_sh3B),
   .write0_val(jupd0_val),
   .write0_addr(jupd0_addr),
   .write0_wen(jupd0_en&jupd0_ght2_en),// &rnd1),
-  .write1_sc(jupd1_val),
+  .write1_val(jupd1_val),
   .write1_addr(jupd1_addr),
   .write1_wen(jupd1_en&jupd1_ght2_en),//& &~rnd1)
   );
@@ -1481,15 +1521,15 @@ module frontendSelf(
   .write_wen(btb_in_link & btb_hit&instrEn&~fstall)
   );
   
-  bit_find_first_bit #(4) tkjiA_mod({pred_sc3A[0]^pred_ss3A,
-    pred_sc2A[0]^pred_ss2A,
-    pred_sc1A[0]^pred_ss1A,
-    pred_sc0A[0]^pred_ss0A},
+  bit_find_first_bit #(4) tkjiA_mod({pred_sc3A[0]^pred_sh3A,
+    pred_sc2A[0]^pred_sh2A,
+    pred_sc1A[0]^pred_sh1A,
+    pred_sc0A[0]^pred_sh0A},
     takenA,);
-  bit_find_first_bit #(4) tkjiB_mod({pred_sc3B[0]^pred_ss3B,
-    pred_sc2B[0]^pred_ss2B,
-    pred_sc1B[0]^pred_ss1B,
-    pred_sc0B[0]^pred_ss0B},
+  bit_find_first_bit #(4) tkjiB_mod({pred_sc3B[0]^pred_sh3B,
+    pred_sc2B[0]^pred_sh2B,
+    pred_sc1B[0]^pred_sh1B,
+    pred_sc0B[0]^pred_sh0B},
     takenB,);
 
   assign taken=btb_way ? takenB&{btb_has3,btb_has2,btb_has1,btb_has0} : 
@@ -1841,6 +1881,22 @@ module frontendSelf(
 	  predx_sc1_reg4<=2'b0;
 	  predx_sc2_reg4<=2'b0;
 	  predx_sc3_reg4<=2'b0;
+	  predx_sh0_reg<=2'b0;
+	  predx_sh1_reg<=2'b0;
+	  predx_sh2_reg<=2'b0;
+	  predx_sh3_reg<=2'b0;
+	  predx_sh0_reg2<=2'b0;
+	  predx_sh1_reg2<=2'b0;
+	  predx_sh2_reg2<=2'b0;
+	  predx_sh3_reg2<=2'b0;
+	  predx_sh0_reg3<=2'b0;
+	  predx_sh1_reg3<=2'b0;
+	  predx_sh2_reg3<=2'b0;
+	  predx_sh3_reg3<=2'b0;
+	  predx_sh0_reg4<=2'b0;
+	  predx_sh1_reg4<=2'b0;
+	  predx_sh2_reg4<=2'b0;
+	  predx_sh3_reg4<=2'b0;
 	  cc_base_IP<={20'hf80ff,44'b0};
 	  taken_REG<=4'b0;
 	  btbx_jmask_REG<=4'b0;
@@ -2118,6 +2174,22 @@ module frontendSelf(
 	  predx_sc1_reg4<=predx_sc1_reg3;
 	  predx_sc2_reg4<=predx_sc2_reg3;
 	  predx_sc3_reg4<=predx_sc3_reg3;
+	  predx_sh0_reg<=predx_sh0;
+	  predx_sh1_reg<=predx_sh1;
+	  predx_sh2_reg<=predx_sh2;
+	  predx_sh3_reg<=predx_sh3;
+	  predx_sh0_reg2<=predx_sh0_reg;
+	  predx_sh1_reg2<=predx_sh1_reg;
+	  predx_sh2_reg2<=predx_sh2_reg;
+	  predx_sh3_reg2<=predx_sh3_reg;
+	  predx_sh0_reg3<=predx_sh0_reg2;
+	  predx_sh1_reg3<=predx_sh1_reg2;
+	  predx_sh2_reg3<=predx_sh2_reg2;
+	  predx_sh3_reg3<=predx_sh3_reg2;
+	  predx_sh0_reg4<=predx_sh0_reg3;
+	  predx_sh1_reg4<=predx_sh1_reg3;
+	  predx_sh2_reg4<=predx_sh2_reg3;
+	  predx_sh3_reg4<=predx_sh3_reg3;
 	  btb_can_ins_reg<=1'b1;
 	  btb_can_ins_reg2<=1'b1;
 	  btb_can_ins_reg3<=1'b1;
@@ -2167,6 +2239,10 @@ module frontendSelf(
 	  predx_sc1_reg4<=predx_sc1;
 	  predx_sc2_reg4<=predx_sc2;
 	  predx_sc3_reg4<=predx_sc3;
+	  predx_sh0_reg4<=predx_sh0;
+	  predx_sh1_reg4<=predx_sh1;
+	  predx_sh2_reg4<=predx_sh2;
+	  predx_sh3_reg4<=predx_sh3;
           cc_read_IP_reg4<=cc_read_IP_reg3;
           cc_read_IP_reg5<=cc_read_IP_reg4;
           btbxx_way_reg<=btb_way;
