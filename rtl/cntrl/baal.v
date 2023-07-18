@@ -770,8 +770,8 @@ module cntrl_find_outcome(
   wire lfl_has;
   wire has_someX;
 
-  wire [19:0] jump0BND;
-  wire [19:0] jump1BND;
+  wire [19:0] jump0BND=20'hf80ff;
+  wire [19:0] jump1BND=20'hf80ff;
 
   wire [15:0] csrss_no_d;
   wire csrss_thread_d;
@@ -1414,9 +1414,11 @@ module cntrl_find_outcome(
 	  jupd0_en<=1'b0;
 	  jupdt0_en<=1'b0;
 	  jupd0_ght_en<=1'b0;
+	  jupd0_ght2_en<=1'b0;
 	  jupd1_en<=1'b0;
 	  jupdt1_en<=1'b0;
 	  jupd1_ght_en<=1'b0;
+	  jupd1_ght2_en<=1'b0;
 
 	  exceptIP<=63'b0;
 	  except_thread<=1'b0;
@@ -1425,6 +1427,7 @@ module cntrl_find_outcome(
 	  except<=1'b0;
           except_due_jump<=1'b0;
           except_jump_ght<=8'b0;
+          except_jump_ght2<=16'b0;
           except_set_instr_flag<=1'b0;
           except_jmp_mask_en<=1'b0;
           except_jmp_mask<=4'hf;
@@ -1498,8 +1501,8 @@ module cntrl_find_outcome(
 
 	  if (dotire_d) flags[tire_thread_reg]<=flags_d;
 
-	  jupd0_addr<=update_ght_addr_j0;
-          jupd1_addr<=update_ght_addr_j1;
+	  jupd0_addr<=(jump0Val ? &rnd1 : rnd1[0]) ? update_ght2_addr_j0 : update_ght_addr_j0;
+	  jupd1_addr<=(jump1Val ? &~rnd1 : rnd1[1]) ? update_ght2_addr_j1 : update_ght_addr_j1;
 	  jupd0_baddr<=update_btb_addr_j0;
           jupd1_baddr<=update_btb_addr_j1;
 	  jupd0_sc<=update_sc_j0;
@@ -1508,10 +1511,12 @@ module cntrl_find_outcome(
 	  jupd1_tk<=jump1_taken;
 	  jupd0_en<=jump0_in & ~jump0Miss & dotire_d;
 	  //jupdt0_en<=
-	  jupd0_ght_en<=jump0_in & ~jump0Miss & ~jump0BtbOnly & dotire_d;
+	  jupd0_ght_en<=jump0_in & ~jump0Miss & ~jump0BtbOnly & dotire_d & ~(jump0Val ? &rnd1 : rnd1[0]) ;
+	  jupd0_ght2_en<=jump0_in & ~jump0Miss & ~jump0BtbOnly & dotire_d & (jump0Val ? &rnd1 : rnd1[0]) ;
 	  jupd1_en<=jump1_in & ~jump1Miss & dotire_d;
 	  //jupdt1_en<=
-	  jupd1_ght_en<=jump1_in & ~jump1Miss & ~jump1BtbOnly & dotire_d;
+	  jupd1_ght_en<=jump1_in & ~jump1Miss & ~jump1BtbOnly & dotire_d & ~(jump0Val ? &rnd1 : rnd1[0]) ;
+	  jupd1_ght2_en<=jump1_in & ~jump1Miss & ~jump1BtbOnly & dotire_d & (jump0Val ? &rnd1 : rnd1[0]) ;
 
 	  exceptIP<={exceptIP_d};
           //except_thread<=except_thread_d;
@@ -1520,6 +1525,7 @@ module cntrl_find_outcome(
 	  except<=except_d;
           except_due_jump<=break_jump0|break_jump1 && except_d;
           if (dotire_d && jump0_in) except_jump_ght<=jump1_in ? {jump1GHT[6:0],jump1_taken} : {jump0GHT[6:0],jump0_taken};
+          if (dotire_d && jump0_in) except_jump_ght2<=jump1_in ? {jump1GHT2[14:0],~jump1Val} : {jump0GHT2[14:0],~jump0Val};
           except_set_instr_flag<=break_replay&!break_replayS;
           except_jmp_mask_en<=(break_jump0 | break_jump1) && except_d;
           except_jmp_mask<=break_jump0 ? jump0JMask : jump1JMask;
