@@ -17,7 +17,7 @@ limitations under the License.
 `include "../struct.sv"
 
 
-module frontend1(
+module frontendSelf(
   clk,
   rst,
   except,
