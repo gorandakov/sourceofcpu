@@ -1123,7 +1123,7 @@ module smallInstr_decoder(
       end
       prB_use[13]=1'b1;
       prA_use[13]=~(magic==4'b0111 && instr[57]);
-      pisIPRel[13]=magic==4'b0111 && instr[59];
+      pisIPRel[13]=1'b0;//magic==4'b0111 && instr[59];
       if (|poperation[13][9:8] && ~poperation[13][6]) perror[13]=1;
       if (magic[2:0]==3'b111 && instr[59] && ~instr[58]) perror[13]=1;
       if (magic[2:0]==3'b111 && instr[63:60]!=0) perror[13]=1;
@@ -1284,7 +1284,7 @@ module smallInstr_decoder(
           if (opcode_main[7] && instr[11]) perror[18]=1;          
           prA_use[18]=~(magic==4'b0111 && instr[57]);
           prB_use[18]=1'b1;
-          pisIPRel[18]=magic==4'b0111 && instr[59];
+          pisIPRel[18]=1'b0;//magic==4'b0111 && instr[59];
           if (|poperation[18][9:8] && ~poperation[18][6]) perror[18]=1;
           if (magic[2:0]==3'b111 && instr[59] && ~instr[58]) perror[18]=1;
           if (magic[2:0]==3'b111 && instr[63:60]!=0) perror[18]=1;
