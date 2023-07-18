@@ -962,7 +962,7 @@ module ww(
   );  
 
 
-frontend1 #(0,BUS_ID) frontA_mod(
+frontendSelf #(0,BUS_ID) frontA_mod(
   clk,
   rst,
   except,
@@ -1028,7 +1028,7 @@ frontend1 #(0,BUS_ID) frontA_mod(
   expun_fr_en
   );
   
-frontend1 #(1,BUS_ID) frontB_mod(
+frontendSelf #(1,BUS_ID) frontB_mod(
   clk,
   rst,
   except,
