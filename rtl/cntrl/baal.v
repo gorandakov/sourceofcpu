@@ -205,6 +205,7 @@ module cntrl_find_outcome(
   except_both,
   except_due_jump,
   except_jump_ght,
+  except_jump_ght2,
   except_set_instr_flag,
   except_jmp_mask_en,
   except_jmp_mask,
@@ -241,10 +242,10 @@ module cntrl_find_outcome(
   iret0_rFl,iret1_rFl,iret2_rFl,iret3_rFl,iret4_rFl,
   iret5_rFl,iret6_rFl,iret7_rFl,iret8_rFl,
   iret_clr,
-  ijump0Type,ijump0Off,ijump0IP,ijump0BND,ijump0Mask,
-  ijump1Type,ijump1Off,ijump1IP,ijump1BND,ijump1Mask,
-  ijump0BtbWay,ijump0JmpInd,ijump0GHT,
-  ijump1BtbWay,ijump1JmpInd,ijump1GHT,
+  ijump0Type,ijump0Off,ijump0IP,ijump0Mask,
+  ijump1Type,ijump1Off,ijump1IP,ijump1Mask,
+  ijump0BtbWay,ijump0JmpInd,ijump0GHT,ijump0GHT2,ijump0Val2,
+  ijump1BtbWay,ijump1JmpInd,ijump1GHT,ijump1GHT2,ijump0Val2,
   ijump0SC,ijump0Miss,ijump0BtbOnly,
   ijump1SC,ijump1Miss,ijump1BtbOnly,
   itk_after,ifsimd,
@@ -261,10 +262,10 @@ module cntrl_find_outcome(
   tire7_rT,tire7_rF,tire7_enG,tire7_enV,tire7_enF,
   tire8_rT,tire8_rF,tire8_enG,tire8_enV,tire8_enF,
   dotire,retcnt,retclr,
-  jupd0_en,jupdt0_en,jupd0_ght_en,
+  jupd0_en,jupdt0_en,jupd0_ght_en,jupd0_ght2_en,
   jupd0_addr,jupd0_baddr,
   jupd0_sc,jupd0_tk,
-  jupd1_en,jupdt1_en,jupd1_ght_en,
+  jupd1_en,jupdt1_en,jupd1_ght_en,jupd1_ght2_en,
   jupd1_addr,jupd1_baddr,
   jupd1_sc,jupd1_tk,
   ret0_addr,ret0_data,ret0_wen,
@@ -307,6 +308,7 @@ module cntrl_find_outcome(
   output reg except_both;
   output reg except_due_jump;
   output reg [7:0] except_jump_ght;
+  output reg [15:0] except_jump_ght2;
   output reg except_set_instr_flag;
   output reg except_jmp_mask_en;
   output reg [3:0] except_jmp_mask;
@@ -456,12 +458,14 @@ module cntrl_find_outcome(
   input [4:0] ijump0Type;
   input [3:0] ijump0Off;
   input [42:0] ijump0IP;
-  input [19:0] ijump0BND;
+  input [15:0] ijump0GHT2;
+  input        ijump0Val;
   input [3:0] ijump0Mask;
   input [4:0] ijump1Type;
   input [3:0] ijump1Off;
   input [42:0] ijump1IP;
-  input [19:0] ijump1BND;
+  input [15:0] ijump1GHT2;
+  input        ijump1Val;
   input [3:0] ijump1Mask;
   input       ijump0BtbWay;
   input [1:0] ijump0JmpInd;
@@ -536,6 +540,7 @@ module cntrl_find_outcome(
   output reg jupd0_en;
   output reg jupdt0_en;
   output reg jupd0_ght_en;
+  output reg jupd0_ght2_en;
   output reg [15:0] jupd0_addr;
   output reg [12:0] jupd0_baddr;
   output reg [1:0] jupd0_sc;
@@ -543,6 +548,7 @@ module cntrl_find_outcome(
   output reg jupd1_en;
   output reg jupdt1_en;
   output reg jupd1_ght_en;
+  output reg jupd1_ght2_en;
   output reg [15:0] jupd1_addr;
   output reg [12:0] jupd1_baddr;
   output reg [1:0] jupd1_sc;
