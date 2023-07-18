@@ -656,9 +656,13 @@ module cntrl_find_outcome(
   wire       jump0BtbWay;
   wire [1:0] jump0JmpInd;
   wire [7:0] jump0GHT;
+  wire [15:0] jump0GHT2;
+  wire        jump0Val;
   wire       jump1BtbWay;
   wire [1:0] jump1JmpInd;
   wire [7:0] jump1GHT;
+  wire [15:0] jump1GHT2;
+  wire        jump1Val;
   wire [1:0] jump0SC;
   wire jump0Miss;
   wire jump0BtbOnly;
@@ -725,6 +729,8 @@ module cntrl_find_outcome(
 
   wire [15:0] update_ght_addr_j0;
   wire [15:0] update_ght_addr_j1;
+  wire [15:0] update_ght2_addr_j0;
+  wire [15:0] update_ght2_addr_j1;
   wire [12:0] update_btb_addr_j0;
   wire [12:0] update_btb_addr_j1;
   wire [1:0]  update_sc_j0;
@@ -972,6 +978,9 @@ module cntrl_find_outcome(
   assign update_ght_addr_j0[15:8]=jupd0_IP[19:12]^jump0GHT;
   assign update_ght_addr_j0[7:6]=jupd0_IP[11:10]^jump0JmpInd;
   assign update_ght_addr_j0[5:0]=jupd0_IP[9:4];
+
+  assign update_ght2_addr_j0=jupd0_IP[19:4]^jump0GHT2^{8'b0,jump0JmpInd,6'b0};
+  assign update_ght2_addr_j1=jupd1_IP[19:4]^jump1GHT2^{8'b0,jump1JmpInd,6'b0};
   
   assign update_ght_addr_j1[15:8]=jupd1_IP[19:12]^jump1GHT;
   assign update_ght_addr_j1[7:6]=jupd1_IP[11:10]^jump1JmpInd;
@@ -1137,10 +1146,15 @@ module cntrl_find_outcome(
   assign bob_wdata[`bob_jump1Type]=ijump1Type;
   assign jump1Type=bob_rdata[`bob_jump1Type];
   assign bob_wdata[`bob_jump0Pos]=~ijump0Off;
-  assign bob_wdata[`bob_mpr0_bnd]=~ijump0BND;
-  assign bob_wdata[`bob_mpr1_bnd]=~ijump1BND;
-  assign jump0BND=~bob_rdata[`bob_mpr0_bnd];
-  assign jump1BND=~bob_rdata[`bob_mpr1_bnd];
+  assign bob_wdata[`bob_j0GHT2]=ijump0GHT2;
+  assign bob_wdata[`bob_j1GHT2]=ijump1GHT2;
+  assign jump0GHT2=bob_rdata[`bob_j0GHT2];
+  assign jump1GHT2=bob_rdata[`bob_j1GHT2];
+  assign bob_wdata[`bob_j0Val]=ijump0Val;
+  assign bob_wdata[`bob_j1Val]=ijump1Val;
+  assign jump0Val=bob_rdata[`bob_j0Val];
+  assign jump1Val=bob_rdata[`bob_j1Val];
+
   assign jump0Pos=~bob_rdata[`bob_jump0Pos];
   assign bob_wdata[`bob_jump1Pos]=~ijump1Off;
   assign jump1Pos=~bob_rdata[`bob_jump1Pos];
