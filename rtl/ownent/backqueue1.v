@@ -516,6 +516,7 @@ module frontendSelf(
   reg btb_hasTK_reg4;
 
   wire [7:0] GHT_d;
+  wire [15:0] GHT2_D;
   wire [7:0] GHTt_d;
   wire [3:0] GHTx;
   reg [7:0] GHT;
@@ -523,6 +524,11 @@ module frontendSelf(
   reg [7:0] GHT_reg2;
   reg [7:0] GHT_reg3;
   reg [7:0] GHT_reg4;
+  reg [15:0] GHT_mispred;
+  reg [15:0] GHT_mispred_reg;
+  reg [15:0] GHT_mispred_reg2;
+  reg [15:0] GHT_mispred_reg3;
+  reg [15:0] GHT_mispred_reg4;
   wire [4:0] start;
   wire [4:0] start2;
   wire [4:0] startt;
@@ -825,11 +831,19 @@ module frontendSelf(
           assign pre_other[j][`instrQ_jmp_ind]=isJ[3] ? 2'd3 : 2'bz;
           assign pre_other[j][`instrQ_jmp_ind]=isJ!=0 ? 2'bz : 2'd0;
           assign pre_other[j][`instrQ_btb_way]=btbxx_way_reg;
-          assign pre_other[j][`instrQ_ght_addr]=(startx_reg4&{1'b1,isJ})!=0 || isJ==0 ? GHT_reg4 : 8'bz;
-          assign pre_other[j][`instrQ_ght_addr]=(startx_reg4[2:0]&isJ[3:1])!=0 ? {GHT_reg4[6:0],1'b0} : 8'bz;
-          assign pre_other[j][`instrQ_ght_addr]=(startx_reg4[1:0]&isJ[3:2])!=0 ? {GHT_reg4[5:0],2'b0} : 8'bz;
-          assign pre_other[j][`instrQ_ght_addr]=(startx_reg4[0]&isJ[3]) ? {GHT_reg4[4:0],3'b0} : 8'bz;
+          assign pre_other[j][`instrQ_ght_addr]=(startx_reg4&{1'b1,isJ})!=0 || isJ==0 ? GHT_reg4 : 16'bz;
+          assign pre_other[j][`instrQ_ght_addr]=(startx_reg4[2:0]&isJ[3:1])!=0 ? {GHT_reg4[6:0],1'b0} : 16'bz;
+          assign pre_other[j][`instrQ_ght_addr]=(startx_reg4[1:0]&isJ[3:2])!=0 ? {GHT_reg4[5:0],2'b0} : 16'bz;
+          assign pre_other[j][`instrQ_ght_addr]=(startx_reg4[0]&isJ[3]) ? {GHT_reg4[4:0],3'b0} : 16'bz;
+          assign pre_other[j][`instrQ_ght2_addr]=(startx_reg4&{1'b1,isJ})!=0 || isJ==0 ? GHT_mispred_reg4 : 16'bz;
+          assign pre_other[j][`instrQ_ght2_addr]=(startx_reg4[2:0]&isJ[3:1])!=0 ? {GHT_mispred_reg4[6:0],1'b0} : 16'bz;
+          assign pre_other[j][`instrQ_ght2_addr]=(startx_reg4[1:0]&isJ[3:2])!=0 ? {GHT_mispred_reg4[5:0],2'b0} : 16'bz;
+          assign pre_other[j][`instrQ_ght2_addr]=(startx_reg4[0]&isJ[3]) ? {GHT_mispred_reg4[4:0],3'b0} : 16'bz;
 	  assign pre_other[j][`instrQ_lastInstr]=pre_instrEn_reg[j]&&~pre_instrEn_reg[j+1];
+	  assign pre_other[j][`instrQ_ss]=isJ[0] ? predx_ss0_reg4 : 2'bz;
+	  assign pre_other[j][`instrQ_ss]=isJ[1] ? predx_ss1_reg4 : 2'bz;
+	  assign pre_other[j][`instrQ_ss]=isJ[2] ? predx_ss2_reg4 : 2'bz;
+	  assign pre_other[j][`instrQ_ss]=isJ[3] ? predx_ss3_reg4 : 2'bz;
 	  assign pre_other[j][`instrQ_sc]=isJ[0] ? predx_sc0_reg4 : 2'bz;
 	  assign pre_other[j][`instrQ_sc]=isJ[1] ? predx_sc1_reg4 : 2'bz;
 	  assign pre_other[j][`instrQ_sc]=isJ[2] ? predx_sc2_reg4 : 2'bz;
@@ -1799,6 +1813,10 @@ module frontendSelf(
           btb_hasTK_reg3<=1'b0;
           btb_hasTK_reg4<=1'b0;
           btbxx_way_reg<=1'b0;
+          GHT_mispred_reg<=16'b0;
+          GHT_mispred_reg2<=16'b0;
+          GHT_mispred_reg3<=16'b0;
+          GHT_mispred_reg4<=16'b0;
           GHT_reg<=8'b0;
           GHT_reg2<=8'b0;
           GHT_reg3<=8'b0;
@@ -2072,6 +2090,10 @@ module frontendSelf(
           btb_hasTK_reg3<=btb_hasTK_reg2;
           btb_hasTK_reg4<=btb_hasTK_reg3;
           btbxx_way_reg<=btb_way_reg2;
+          GHT_mispred_reg<=GHT_mispred;
+          GHT_mispred_reg2<=GHT_mispred_reg;
+          GHT_mispred_reg3<=GHT_mispred_reg2;
+          GHT_mispred_reg4<=GHT_mispred_reg3;
           GHT_reg<=GHT;
           GHT_reg2<=GHT_reg;
           GHT_reg3<=GHT_reg2;
@@ -2149,6 +2171,7 @@ module frontendSelf(
           cc_read_IP_reg5<=cc_read_IP_reg4;
           btbxx_way_reg<=btb_way;
           GHT_reg4<=GHT;
+          GHT_mispred_reg4<=GHT_mispred;
 	  jmp_mask_reg4[0]<=jmp_mask[0];
 	  jmp_mask_reg4[1]<=jmp_mask[1];
 	  jmp_mask_reg4[2]<=jmp_mask[2];
