@@ -1460,9 +1460,13 @@ module backend(
   reg jump0TbufWay_reg;
   reg [1:0] jump0JmpInd_reg;
   reg [7:0] jump0GHT_reg;
+  reg [15:0] jump0GHT2_reg;
+  reg        jump0Val_reg;
   reg jump1TbufWay_reg;
   reg [1:0] jump1JmpInd_reg;
   reg [7:0] jump1GHT_reg;
+  reg [15:0] jump1GHT2_reg;
+  reg        jump1Val_reg;
   reg [1:0] jump0SC_reg;
   reg jump0Miss_reg;
   reg jump0TbufOnly_reg;
@@ -1501,6 +1505,11 @@ module backend(
   reg [3:0] jump1Mask_reg2;
   reg [9:0] instr_fsimd_reg2;
 //  reg [46:0] baseIP_reg2;
+
+  reg [15:0] jump0GHT2_reg2;
+  reg        jump0Val_reg2;
+  reg [15:0] jump1GHT2_reg2;
+  reg        jump1Val_reg2;
 
   reg jump0TbufWay_reg2;
   reg [1:0] jump0JmpInd_reg2;
@@ -6221,9 +6230,13 @@ dcache1 L1D_mod(
 	  jump0TbufWay_reg<=1'd0;
           jump0JmpInd_reg<=2'd0;
           jump0GHT_reg<=8'd0;
+          jump0GHT2_reg<=16'd0;
+          jump0Val_reg<=1'b0;
           jump1TbufWay_reg<=1'd0;
           jump1JmpInd_reg<=2'd0;
           jump1GHT_reg<=8'd0;
+          jump1GHT2_reg<=16'd0;
+          jump1Val_reg<=1'b0;
           jump0SC_reg<=2'd0;
           jump0Miss_reg<=1'b0;
           jump0TbufOnly_reg<=1'b0;
@@ -6255,6 +6268,10 @@ dcache1 L1D_mod(
           jump1TbufWay_reg2<=1'd0;
           jump1JmpInd_reg2<=2'd0;
           jump1GHT_reg2<=8'd0;
+          jump0GHT2_reg2<=16'd0;
+          jump0Val_reg2<=1'b0;
+          jump1GHT2_reg2<=16'd0;
+          jump1Val_reg2<=1'b0;
           jump0SC_reg2<=2'd0;
           jump0Miss_reg2<=1'b0;
           jump0TbufOnly_reg2<=1'b0;
@@ -6921,9 +6938,13 @@ dcache1 L1D_mod(
 	  jump0TbufWay_reg<=jump0TbufWay;
           jump0JmpInd_reg<=jump0JmpInd;
           jump0GHT_reg<=jump0GHT;
+          jump0GHT2_reg<=jump0GHT2;
+          jump0Val_reg<=jump0Val;
           jump1TbufWay_reg<=jump1TbufWay;
           jump1JmpInd_reg<=jump1JmpInd;
           jump1GHT_reg<=jump1GHT;
+          jump1GHT2_reg<=jump1GHT2;
+          jump1Val_reg<=jump1Val;
           jump0SC_reg<=jump0SC;
           jump0Miss_reg<=jump0Miss;
           jump0TbufOnly_reg<=jump0TbufOnly;
@@ -6950,9 +6971,13 @@ dcache1 L1D_mod(
 	  jump0TbufWay_reg2<=jump0TbufWay_reg;
           jump0JmpInd_reg2<=jump0JmpInd_reg;
           jump0GHT_reg2<=jump0GHT_reg;
+          jump0GHT2_reg2<=jump0GHT2_reg;
+          jump0Val_reg2<=jump0Val_reg;
           jump1TbufWay_reg2<=jump1TbufWay_reg;
           jump1JmpInd_reg2<=jump1JmpInd_reg;
           jump1GHT_reg2<=jump1GHT_reg;
+          jump1GHT2_reg2<=jump1GHT2_reg;
+          jump1Val_reg2<=jump1Val_reg;
           jump0SC_reg2<=jump0SC_reg;
           jump0Miss_reg2<=jump0Miss_reg;
           jump0TbufOnly_reg2<=jump0TbufOnly_reg;
