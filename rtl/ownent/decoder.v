@@ -1771,8 +1771,8 @@ module decoder(
 
   jump0Type,jump0Pos,jump0Taken,
   jump1Type,jump1Pos,jump1Taken,
-  jump0BtbWay,jump0JmpInd,jump0GHT,
-  jump1BtbWay,jump1JmpInd,jump1GHT,
+  jump0BtbWay,jump0JmpInd,jump0GHT,jump0GHT2,jump0Val,
+  jump1BtbWay,jump1JmpInd,jump1GHT,jump1GHT2,jump1Val,
   jump0SC,jump0Miss,jump0TbufOnly,
   jump1SC,jump1Miss,jump1TbufOnly,
   instr_fsimd,
@@ -2266,9 +2266,13 @@ module decoder(
   output jump0BtbWay;
   output [1:0] jump0JmpInd;
   output [7:0] jump0GHT;
+  output [15:0] jump0GHT2;
+  output jump0Val;
   output jump1BtbWay;
   output [1:0] jump1JmpInd;
   output [7:0] jump1GHT;
+  output [15:0] jump1GHT2;
+  output jump1Val;
   output [1:0] jump0SC;
   output jump0Miss;
   output jump0TbufOnly;
@@ -2329,6 +2333,8 @@ module decoder(
   wire [9:0] dec_btbWay;
   wire [9:0][1:0] dec_jmpInd;
   wire [9:0][7:0] dec_ght;
+  wire [9:0][15:0] dec_ght2;
+  wire [9:0] dec_val;
   wire [9:0][1:0] dec_sc;
   wire [9:0] dec_miss;
   wire [9:0] dec_tbufOnly;
@@ -2397,6 +2403,8 @@ module decoder(
   reg dec_btbWay_reg[9:0];
   reg [1:0] dec_jmpInd_reg[9:0];
   reg [7:0] dec_ght_reg[9:0];
+  reg [15:0] dec_ght2_reg[9:0];
+  reg dec_val_reg[9:0];
   reg [1:0] dec_sc_reg[9:0];
   reg [9:0] dec_miss_reg;
   reg [9:0] dec_tbufOnly_reg;
@@ -2561,6 +2569,13 @@ module decoder(
 	  assign jump0GHT=jump0_bit[k] ? dec_ght_reg[k] : 8'bz;
 	  assign jump1GHT=jump1_bit[k] ? dec_ght_reg[k] : 8'bz;
 
+	  assign jump0GHT2=jump0_bit[k] ? dec_ght2_reg[k] : 8'bz;
+	  assign jump1GHT2=jump1_bit[k] ? dec_ght2_reg[k] : 8'bz;
+
+	  assign jump0Val=jump0_bit[k] ? dec_val_reg[k] : 8'bz;
+	  assign jump1Val=jump1_bit[k] ? dec_val_reg[k] : 8'bz;
+
+
 	  assign jump0SC=jump0_bit[k] ? dec_sc_reg[k] : 2'bz;
 	  assign jump1SC=jump1_bit[k] ? dec_sc_reg[k] : 2'bz;
 	  
@@ -2644,6 +2659,8 @@ module decoder(
 	  assign dec_btbWay[k]=instQ[k][`instrQ_btb_way];
 	  assign dec_jmpInd[k]=instQ[k][`instrQ_jmp_ind];
 	  assign dec_ght[k]=instQ[k][`instrQ_ght_addr];
+	  assign dec_ght2[k]=instQ[k][`instrQ_ght2_addr];
+	  assign dec_val[k]=instQ[k][`instrQ_val];
 	  assign dec_sc[k]=instQ[k][`instrQ_sc];
 	  assign dec_miss[k]=instQ[k][`instrQ_btbMiss];
 	  assign dec_tbufOnly[k]=instQ[k][`instrQ_btb_only];
@@ -3087,6 +3104,12 @@ module decoder(
 
   assign jump0GHT=jump0_bit!=0 ? 8'bz : 8'b0;
   assign jump1GHT=jump1_bit!=0 ? 8'bz : 8'b0;
+
+  assign jump0GHT2=jump0_bit!=0 ? 16'bz : 16'b0;
+  assign jump1GHT2=jump1_bit!=0 ? 16'bz : 16'b0;
+
+  assign jump0Val=jump0_bit!=0 ? 1'bz : 1'b0;
+  assign jump1Val=jump1_bit!=0 ? 1'bz : 1'b0;
 
   assign jump0SC=jump0_bit!=0 ? 2'bz : 2'b0;
   assign jump1SC=jump1_bit!=0 ? 2'bz : 2'b0;
@@ -3671,6 +3694,8 @@ module decoder(
 	      dec_btbWay_reg[n]<=1'd0;
 	      dec_jmpInd_reg[n]<=2'b0;
 	      dec_ght_reg[n]<=8'b0;
+	      dec_ght2_reg[n]<=16'b0;
+	      dec_val_reg[n]<=1'b0;
 	      dec_sc_reg[n]<=2'b0;
 	      dec_miss_reg[n]<=1'b0;
 	      dec_tbufOnly_reg[n]<=1'b0;
@@ -3759,6 +3784,8 @@ module decoder(
 	      dec_btbWay_reg[n]<=dec_btbWay[n];
 	      dec_jmpInd_reg[n]<=dec_jmpInd[n];
 	      dec_ght_reg[n]<=dec_ght[n];
+	      dec_ght2_reg[n]<=dec_ght2[n];
+	      dec_val_reg[n]<=dec_val[n];
 	      dec_sc_reg[n]<=dec_sc[n];
 	      dec_miss_reg[n]<=dec_miss[n];
 	      dec_tbufOnly_reg[n]<=dec_tbufOnly[n];
