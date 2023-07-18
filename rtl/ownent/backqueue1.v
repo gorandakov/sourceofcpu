@@ -29,8 +29,8 @@ module frontendSelf(
   exceptLDConfl,
   except_jmask,
   except_jmask_en,
-  jupd0_en,jupdt0_en,jupd0_ght_en,jupd0_addr,jupd0_baddr,jupd0_sc,jupd0_val,jupd0_tk,
-  jupd1_en,jupdt1_en,jupd1_ght_en,jupd1_addr,jupd1_baddr,jupd1_sc,jupd1_val,jupd1_tk,
+  jupd0_en,jupdt0_en,jupd0_ght_en,jupd0_ght2_en,jupd0_addr,jupd0_baddr,jupd0_sc,jupd0_val,jupd0_tk,
+  jupd1_en,jupdt1_en,jupd1_ght_en,jupd1_ght2_en,jupd1_addr,jupd1_baddr,jupd1_sc,jupd1_val,jupd1_tk,
   bus_data,
   bus_slot,
   bus_en,
@@ -111,6 +111,7 @@ module frontendSelf(
   input jupd0_en;
   input jupdt0_en;
   input jupd0_ght_en;
+  input jupd0_ght2_en;
   input [15:0] jupd0_addr;
   input [12:0] jupd0_baddr;
   input [1:0] jupd0_sc;
@@ -118,6 +119,7 @@ module frontendSelf(
   input jupd1_en;
   input jupdt1_en;
   input jupd1_ght_en;
+  input jupd1_ght2_en;
   input [15:0] jupd1_addr;
   input [12:0] jupd1_baddr;
   input [1:0] jupd1_sc;
@@ -1387,10 +1389,10 @@ module frontendSelf(
   .BotherPred3(pred_sc3B),
   .write0_sc(jupd0_sc),
   .write0_addr(jupd0_addr),
-  .write0_wen(jupd0_en&jupd0_ght_en&~jupd0_val),
+  .write0_wen(jupd0_en&jupd0_ght_en),
   .write1_sc(jupd1_sc),
   .write1_addr(jupd1_addr),
-  .write1_wen(jupd1_en&jupd1_ght_en&~jupd1_val)
+  .write1_wen(jupd1_en&jupd1_ght_en)
   );
 
   wire [5:0] rnd1;
@@ -1423,10 +1425,10 @@ module frontendSelf(
   .BotherPred3(pred_ss3B),
   .write0_val(jupd0_val),
   .write0_addr(jupd0_addr),
-  .write0_wen(jupd0_en&jupd0_ght_en& &rnd1),
+  .write0_wen(jupd0_en&jupd0_ght2_en),// &rnd1),
   .write1_sc(jupd1_val),
   .write1_addr(jupd1_addr),
-  .write1_wen(jupd1_en&jupd1_ght_en& &~rnd1)
+  .write1_wen(jupd1_en&jupd1_ght2_en),//& &~rnd1)
   );
   
   ret_stack rstack_mod(
