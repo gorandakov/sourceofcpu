@@ -840,14 +840,14 @@ module frontendSelf(
           assign pre_other[j][`instrQ_ght2_addr]=(startx_reg4[1:0]&isJ[3:2])!=0 ? {GHT_mispred_reg4[5:0],2'b0} : 16'bz;
           assign pre_other[j][`instrQ_ght2_addr]=(startx_reg4[0]&isJ[3]) ? {GHT_mispred_reg4[4:0],3'b0} : 16'bz;
 	  assign pre_other[j][`instrQ_lastInstr]=pre_instrEn_reg[j]&&~pre_instrEn_reg[j+1];
-	  assign pre_other[j][`instrQ_ss]=isJ[0] ? predx_ss0_reg4 : 2'bz;
-	  assign pre_other[j][`instrQ_ss]=isJ[1] ? predx_ss1_reg4 : 2'bz;
-	  assign pre_other[j][`instrQ_ss]=isJ[2] ? predx_ss2_reg4 : 2'bz;
-	  assign pre_other[j][`instrQ_ss]=isJ[3] ? predx_ss3_reg4 : 2'bz;
 	  assign pre_other[j][`instrQ_sc]=isJ[0] ? predx_sc0_reg4 : 2'bz;
 	  assign pre_other[j][`instrQ_sc]=isJ[1] ? predx_sc1_reg4 : 2'bz;
 	  assign pre_other[j][`instrQ_sc]=isJ[2] ? predx_sc2_reg4 : 2'bz;
 	  assign pre_other[j][`instrQ_sc]=isJ[3] ? predx_sc3_reg4 : 2'bz;
+	  assign pre_other[j][`instrQ_ss]=isJ[0] ? predx_ss0_reg4 : 1'bz;
+	  assign pre_other[j][`instrQ_ss]=isJ[1] ? predx_ss1_reg4 : 1'bz;
+	  assign pre_other[j][`instrQ_ss]=isJ[2] ? predx_ss2_reg4 : 1'bz;
+	  assign pre_other[j][`instrQ_ss]=isJ[3] ? predx_ss3_reg4 : 1'bz;
 	  assign pre_other[j][`instrQ_sc]=isJ!=0 ? 2'bz : 2'b0;
 //	  assign pre_other[j][`instrQ_avx]=pre_isAvx_reg;
 	  assign pre_other[j][`instrQ_btbMiss]=~btb_can_ins_reg4;
