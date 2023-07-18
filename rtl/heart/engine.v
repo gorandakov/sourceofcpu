@@ -5270,13 +5270,13 @@ module backend(
   .FU3Hit(FU3Hit),.FU3Data(dc_rdataA[3]),//
   .st_stall(miss_pause_agu_reg2|bus_holds_agu_reg2),
   .st0_adata(st0_adata),.st0_en(st0_en),.st0_bank1(st0_bank1),.st0_bgn_ben(st0_bgn_ben),.st0_end_ben(st0_end_ben),.st0_data(st0_data),
-  .st0_pbit(st0_pbit),
+  .st0_dataX(st0_dataX),.st0_pbit(st0_pbit),
   .st1_adata(st1_adata),.st1_en(st1_en),.st1_bank1(st1_bank1),.st1_bgn_ben(st1_bgn_ben),.st1_end_ben(st1_end_ben),.st1_data(st1_data),
-  .st1_pbit(st1_pbit),
-  .wb0_adata(lso_adata),.wb0_LSQ(lso_LSQ),.wb0_en(lso_en),.wb0_ret(),.wb0_data(lso_data),.wb0_brdbanks(lso_bnkread),
-  .wb0_brdbanks2(lso_bnkread2),.wb0_pbit(lso_pbit),.wb0_dataN(lso_dataN),
-  .wb1_adata(lso2_adata),.wb1_LSQ(lso2_LSQ),.wb1_en(lso2_en),.wb1_ret(),.wb1_data(lso2_data),.wb1_brdbanks(lso2_bnkread),
-  .wb1_brdbanks2(lso2_bnkread2),.wb1_pbit(lso2_pbit),.wb1_dataN(lso2_dataN),
+  .st1_dataX(st1_dataX),.st1_pbit(st1_pbit),
+  .wb0_adata(lso_adata),.wb0_LSQ(lso_LSQ),.wb0_en(lso_en),.wb0_ret(),.wb0_data(lso_data),.wb0_dataX(lso_dataX),
+  .wb0_brdbanks(lso_bnkread),  .wb0_brdbanks2(lso_bnkread2),.wb0_pbit(lso_pbit),
+  .wb1_adata(lso2_adata),.wb1_LSQ(lso2_LSQ),.wb1_en(lso2_en),.wb1_ret(),.wb1_data(lso2_data),.wb1_dataX(lso2_dataX),
+  .wb1_brdbanks(lso2_bnkread),.wb1_brdbanks2(lso2_bnkread2),.wb1_pbit(lso2_pbit),
   .mem_II_upper(retM_II0),
   .mem_II_upper2(retM_II1),
   .has_store(retM_has_store),
@@ -5299,8 +5299,8 @@ module backend(
   .WQS0_reg(WQS_reg[0]),.WQR0_reg(WQR_reg[0]),
   .WQS1_reg(WQS_reg[1]),.WQR1_reg(WQR_reg[1]),
   .WQS2_reg(WQS_reg[2]),.WQR2_reg(WQR_reg[2]),
-  .lsw_wq0(WDfxWQ_reg3[0]),.lsw_wdata0(lsw_wdata[0]),.lsw_pdata0(lsw_pdata[0]),.lsw_rs_en0(WDfxDataEn_reg3[0]),
-  .lsw_wq1(WDfxWQ_reg3[1]),.lsw_wdata1(lsw_wdata[1]),.lsw_pdata1(lsw_pdata[1]),.lsw_rs_en1(WDfxDataEn_reg3[1]),
+  .lsw_wq0(WDfxWQ_reg3[0]),.lsw_wdata0(lsw_wdata[0]),.lsw_wdataX0(lsw_wdataU[0]),.lsw_pdata0(lsw_pdata[0]),.lsw_rs_en0(WDfxDataEn_reg3[0]),
+  .lsw_wq1(WDfxWQ_reg3[1]),.lsw_wdata1(lsw_wdata[1]),.lsw_wdataX1(lsw_wdataU[1]),.lsw_pdata1(lsw_pdata[1]),.lsw_rs_en1(WDfxDataEn_reg3[1]),
   .mOpY4_II(st0_II_reg3),.mOpY4_hit(dc_wrHit[0]),
   .mOpY5_II(st1_II_reg3),.mOpY5_hit(dc_wrHit[1]),
   .lsi0_reg(rs_lsi_reg[0]),.lsi1_reg(rs_lsi_reg[1]),.lsi2_reg(rs_lsi_reg[2]),//only used to check if has mem reqs
@@ -5884,18 +5884,6 @@ dcache1 L1D_mod(
           assign FU[3][7+8*q:8*q]=lso2_bnkread2[q] ||~lso2_en_reg ? dc_rdataA[3][7+8*q:8*q] : 8'bz;
           assign FU[3][7+8*q:8*q]=lso2_bnkread[q] && ~lso2_en_reg ? lso2_data_reg[7+8*q:8*q] : 8'bz;
           assign FU[3][7+8*q:8*q]=(~lso2_bnkread2[q] & ~lso2_bnkread[q]) &&~lso2_en_reg ? 8'b0 : 8'bz;
-          assign FU_N[0][7+8*q:8*q]=lso_bnkread2[q] & lso_way_reg[0]||~lso_en_reg ? dc_rdataA_N[0][7+8*q:8*q] : 8'bz;
-          assign FU_N[0][7+8*q:8*q]=lso_bnkread[q] && lso_way_reg[0] && ~lso_en_reg ? lso_dataN_reg[7+8*q:8*q] : 8'bz;
-          assign FU_N[0][7+8*q:8*q]=(~lso_bnkread2[q] & ~lso_bnkread[q] || ~lso_way_reg[0]) &&~lso_en_reg ? 8'b11111111 : 8'bz;
-          assign FU_N[1][7+8*q:8*q]=lso_bnkread2[q] & lso_way_reg[1]||~lso_en_reg ? dc_rdataA_N[1][7+8*q:8*q] : 8'bz;
-          assign FU_N[1][7+8*q:8*q]=lso_bnkread[q] && lso_way_reg[1] && ~lso_en_reg ? lso_dataN_reg[7+8*q:8*q] : 8'bz;
-          assign FU_N[1][7+8*q:8*q]=(~lso_bnkread2[q] & ~lso_bnkread[q] || ~lso_way_reg[1]) &&~lso_en_reg ? 8'b11111111 : 8'bz;
-          assign FU_N[2][7+8*q:8*q]=lso_bnkread2[q] & lso_way_reg[2]||~lso_en_reg ? dc_rdataA_N[2][7+8*q:8*q] : 8'bz;
-          assign FU_N[2][7+8*q:8*q]=lso_bnkread[q] && lso_way_reg[2] && ~lso_en_reg ? lso_dataN_reg[7+8*q:8*q] : 8'bz;
-          assign FU_N[2][7+8*q:8*q]=(~lso_bnkread2[q] & ~lso_bnkread[q] || ~lso_way_reg[2]) &&~lso_en_reg ? 8'b11111111 : 8'bz;
-          assign FU_N[3][7+8*q:8*q]=lso2_bnkread2[q] ||~lso2_en_reg ? dc_rdataA_N[3][7+8*q:8*q] : 8'bz;
-          assign FU_N[3][7+8*q:8*q]=lso2_bnkread[q] && ~lso2_en_reg ? lso2_dataN_reg[7+8*q:8*q] : 8'bz;
-          assign FU_N[3][7+8*q:8*q]=(~lso2_bnkread2[q] & ~lso2_bnkread[q]) &&~lso2_en_reg ? 8'b11111111 : 8'bz;
       end
       for (q1=0;q1<17;q1=q1+1) begin : data_general2
           assign dc_rdat[0][7+8*q1:8*q1]=lso_bnkread2[q1] & lso_way_reg[0]||~lso_en_reg ? dc_rdataA[0][7+8*q1:8*q1] : 8'bz;
