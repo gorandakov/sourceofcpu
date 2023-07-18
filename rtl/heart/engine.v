@@ -34,6 +34,7 @@ module backend(
   excpt_due_jump,
   except_set_flag,
   excpt_ght,
+  excpt_ght2,
   except_jmp_mask_en,
   except_jmp_mask,
   req_addr,
@@ -351,16 +352,16 @@ module backend(
 
   jump0Type,jump0Pos,jump0Pred,jump0IP,jump0Mask,jump0Attr,
   jump1Type,jump1Pos,jump1Pred,jump1IP,jump1Mask,jump1Attr,
-  jump0TbufWay,jump0JmpInd,jump0GHT,
-  jump1TbufWay,jump1JmpInd,jump1GHT,
+  jump0TbufWay,jump0JmpInd,jump0GHT,jump0GHT2,jump0Val,
+  jump1TbufWay,jump1JmpInd,jump1GHT,jump1GHT2,jump1Val,
   jump0SC,jump0Miss,jump0TbufOnly,
   jump1SC,jump1Miss,jump1TbufOnly,
   instr_fsimd,
   baseIP,
   wrt0,wrt1,wrt2,
 
-  jupd0_en,jupdt0_en,jupd0_ght_en,jupd0_addr,jupd0_baddr,jupd0_sc,jupd0_tk,
-  jupd1_en,jupdt1_en,jupd1_ght_en,jupd1_addr,jupd1_baddr,jupd1_sc,jupd1_tk,
+  jupd0_en,jupdt0_en,jupd0_ght_en,jupd0_ght2_en,jupd0_addr,jupd0_baddr,jupd0_sc,jupd0_tk,
+  jupd1_en,jupdt1_en,jupd1_ght_en,jupd1_ght2_en,jupd1_addr,jupd1_baddr,jupd1_sc,jupd1_tk,
   
   csrss_no,csrss_en,csrss_data,
   
@@ -449,6 +450,7 @@ module backend(
   output [3:0] excpt_attr;
   output excpt_due_jump;
   output [7:0] excpt_ght;
+  output [15:0] excpt_ght2;
   output except_set_flag;
   output except_jmp_mask_en;
   output [3:0] except_jmp_mask;
@@ -893,9 +895,13 @@ module backend(
   input jump0TbufWay;
   input [1:0] jump0JmpInd;
   input [7:0] jump0GHT;
+  input [15:0] jump0GHT2;
+  input        jump0Val;
   input jump1TbufWay;
   input [1:0] jump1JmpInd;
   input [7:0] jump1GHT;
+  input [15:0] jump1GHT2;
+  input        jump1Val;
   input [1:0] jump0SC;
   input jump0Miss;
   input jump0TbufOnly;
@@ -911,6 +917,7 @@ module backend(
   output jupd0_en;
   output jupdt0_en;
   output jupd0_ght_en;
+  output jupd0_ght2_en;
   output [15:0] jupd0_addr;
   output [12:0] jupd0_baddr;
   output [1:0] jupd0_sc;
@@ -918,6 +925,7 @@ module backend(
   output jupd1_en;
   output jupdt1_en;
   output jupd1_ght_en;
+  output jupd1_ght2_en;
   output [15:0] jupd1_addr;
   output [12:0] jupd1_baddr;
   output [1:0] jupd1_sc;
