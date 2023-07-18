@@ -92,8 +92,11 @@ limitations under the License.
 `define page16_huge 127
 
 `define bob_ipOff0_9 89:0
-`define bob_mpr0_bnd 109:90
-`define bob_mpr1_bnd 129:110
+`define bob_j0GHT2 105:90
+`define bob_j1GHT2 121:106
+`define bob_j0Val 122
+`define bob_j1Val 123
+`define bob_reserved 129:124
 `define bob_ret0_8 165:130
 `define bob_jump0Type 170:166
 `define bob_jump1Type 175:171
@@ -130,11 +133,7 @@ limitations under the License.
 `define bob_attrJ0 521:518
 `define bob_attrJ1 525:522
 `define bob_freeregsS 570:526
-`define bob_j0GHT2 586:571
-`define bob_j1GHT2 602:587
-`define bob_j0Val 603
-`define bob_j1Val 604
-`define bob_width 605
+`define bob_width 571
 
 `define attr_km 0
 `define attr_vm 1
