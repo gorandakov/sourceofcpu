@@ -1027,6 +1027,28 @@ module frontendSelf(
     (start[0] & ~btb_has0 || start[1] & ~btb_has1 || start[2] & ~btb_has2 || start[3] & ~btb_has3)) ? 
     GHT : 8'bz;
 
+  assign GHT2_D=start[0] & predy_sc0[0] || start[1] & predy_sc1[0] ||
+    start[2] & predy_sc2[0] || start[3] & predy_sc3[0] ? {GHT_mispred[14:0],1'b0} : 8'bz;
+  assign GHT2_D=start[0] & ~predy_sc0[0] & predy_sc1[0] ||
+    start[1] & ~predy_sc1[0] & predy_sc2[0] ||
+    start[2] & ~predy_sc2[0] & predy_sc3[0] ? {GHT_mispred[13:0],2'b0} : 8'bz;
+  assign GHT2_D=start[0] & ~predy_sc0[0] & ~predy_sc1[0] & predy_sc2[0] ||
+    start[1] & ~predy_sc1[0] & ~predy_sc2[0] & predy_sc3[0]  ? {GHT_mispred[12:0],3'b0} : 8'bz;
+  assign GHT2_D=(start[0] & ~predy_sc0[0] & ~predy_sc1[0] & ~predy_sc2[0] & predy_sc3[0]) ? 
+    {GHT_mispred[11:0],4'b0} : 8'bz;
+  assign GHT2_D=(~predy_sc0[0] & ~predy_sc1[0] & ~predy_sc2[0] & ~predy_sc3[0]) && 
+    (start[3] & btb_has3 || start[2]&btb_has2&~btb_has3||
+    start[1]&btb_has1&~btb_has2||start[0]&btb_has0&~btb_has1) ? {GHT_mispred[14:0],1'b0} : 8'bz;
+  assign GHT2_D=(~predy_sc0[0] & ~predy_sc1[0] & ~predy_sc2[0] & ~predy_sc3[0]) && 
+    (start[2] & btb_has3 || start[1] & btb_has2 & ~btb_has3 || start[0] & btb_has1 & ~btb_has2) ? 
+    {GHT_mispred[13:0],2'b0} : 8'bz;
+  assign GHT2_D=(~predy_sc0[0] & ~predy_sc1[0] & ~predy_sc2[0] & ~predy_sc3[0]) && 
+    (start[1] & btb_has3 || start[0] & btb_has2 & ~btb_has3) ? {GHT_mispred[12:0],3'b0} : 8'bz;
+  assign GHT2_D=(~predy_sc0[0] & ~predy_sc1[0] & ~predy_sc2[0] & ~predy_sc3[0]) && 
+    (start[0] & btb_has3) ? {GHT_mispred[3:0],4'b0} : 8'bz;
+  assign GHT2_D=start[4]||((~predy_sc0[0] & ~predy_sc1[0] & ~predy_sc2[0] & ~predy_sc3[0]) && 
+    (start[0] & ~btb_has0 || start[1] & ~btb_has1 || start[2] & ~btb_has2 || start[3] & ~btb_has3)) ? 
+    GHT_mispred : 8'bz;
 
 //  assign GHTx=4'b0;
       
