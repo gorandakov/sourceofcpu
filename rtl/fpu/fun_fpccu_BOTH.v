@@ -351,5 +351,14 @@ module fun_fpu_BOTH(
       u5_op_reg2<=u5_op_reg;
       u5_op_reg3<=u5_op_reg2;
       u5_op_reg4<=u5_op_reg3;
+      u1_XADD_reg<=u1_XADD;
+      u2_XADD_reg<=u2_XADD;
+      u3_XADD_reg<=u3_XADD;
+      u1_XADD_reg2<=u1_XADD_reg;
+      u2_XADD_reg2<=u2_XADD_reg;
+      u3_XADD_reg2<=u3_XADD_reg;
+      u1_XADD_reg3<=u1_XADD_reg2;
+      u2_XADD_reg3<=u2_XADD_reg2;
+      u3_XADD_reg3<=u3_XADD_reg2;
   end
 endmodule

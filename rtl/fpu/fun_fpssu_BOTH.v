@@ -215,12 +215,27 @@ module fun_fpsu_BOTH(
   wire [13:0] u6_retL;
   wire u6_ret_enL;
 
+  reg [12:0] u1_op_reg;
+  reg [12:0] u3_op_reg;
+  reg [12:0] u5_op_reg;
+  reg [12:0] u1_op_reg2;
+  reg [12:0] u3_op_reg2;
+  reg [12:0] u5_op_reg2;
+  reg [12:0] u1_op_reg3;
+  reg [12:0] u3_op_reg3;
+  reg [12:0] u5_op_reg3;
+
+
   assign u1_ret=u1_retL|u1_retH;
   assign u1_ret_en=u1_ret_enL| u1_ret_enH;
   assign u3_ret=u3_retL|u3_retH;
   assign u3_ret_en=u3_ret_enL| u3_ret_enH;
   assign u5_ret=u5_retL|u5_retH;
   assign u5_ret_en=u5_ret_enL| u5_ret_enH;
+  
+  reg u1_XADD_reg,u3_XADD_reg,u5_XADD_reg;
+  reg u1_XADD_reg2,u3_XADD_reg2,u5_XADD_reg2;
+  reg u1_XADD_reg3,u3_XADD_reg3,u5_XADD_reg3;
 
   fun_fpuSL hf_mod(
   clk,
@@ -228,13 +243,13 @@ module fun_fpsu_BOTH(
   fpcsr,
   u1_A1,u1_B1,u1_Ax,u1_Bx,u1_en,u1_op,
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
-  u1_retH,u1_ret_enH,u1_XSUB,
+  u1_retH,u1_ret_enH,u1_XSUB,{~u5_XADD_reg3&u5_op_reg3[10],~u3_XADD_reg3&u3_op_reg3[10],~u1_XADD_reg3&u1_op_reg3[10]},
   u3_A1,u3_B1,u3_Ax,u3_Bx,u3_en,u3_op,
   u3_fufwd_A,u3_fuufwd_A,u3_fufwd_B,u3_fuufwd_B,
-  u3_retH,u3_ret_enH,u3_XSUB,
+  u3_retH,u3_ret_enH,u3_XSUB,{~u5_XADD_reg3&u5_op_reg3[10],~u3_XADD_reg3&u3_op_reg3[10],~u1_XADD_reg3&u1_op_reg3[10]},
   u5_A1,u5_B1,u5_Ax,u5_Bx,u5_en,u5_op,
   u5_fufwd_A,u5_fuufwd_A,u5_fufwd_B,u5_fuufwd_B,
-  u5_retH,u5_ret_enH,u5_XSUB,
+  u5_retH,u5_ret_enH,u5_XSUB,{~u5_XADD_reg3&u5_op_reg3[10],~u3_XADD_reg3&u3_op_reg3[10],~u1_XADD_reg3&u1_op_reg3[10]},
   FUFH0,FUFH1,FUFH2,
   FUFH3,FUFH4,FUFH5,
   FUFH6,FUFH7,FUFH8,
@@ -253,13 +268,13 @@ module fun_fpsu_BOTH(
   fpcsr,
   u1_A0,u1_B0,u1_Bx,u1_Ax,u1_en,u1_op,
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
-  u1_retL,u1_ret_enL,u1_XSUB,
+  u1_retL,u1_ret_enL,u1_XSUB,{~u5_XADD_reg3&u5_op_reg3[10],~u3_XADD_reg3&u3_op_reg3[10],~u1_XADD_reg3&u1_op_reg3[10]},
   u3_A0,u3_B0,u3_Bx,u3_Ax,u3_en,u3_op,
   u3_fufwd_A,u3_fuufwd_A,u3_fufwd_B,u3_fuufwd_B,
-  u3_retL,u3_ret_enL,u3_XSUB,
+  u3_retL,u3_ret_enL,u3_XSUB,{~u5_XADD_reg3&u5_op_reg3[10],~u3_XADD_reg3&u3_op_reg3[10],~u1_XADD_reg3&u1_op_reg3[10]},
   u5_A0,u5_B0,u5_Bx,u5_Ax,u5_en,u5_op,
   u5_fufwd_A,u5_fuufwd_A,u5_fufwd_B,u5_fuufwd_B,
-  u5_retL,u5_ret_enL,u5_XSUB,
+  u5_retL,u5_ret_enL,u5_XSUB,{~u5_XADD_reg3&u5_op_reg3[10],~u3_XADD_reg3&u3_op_reg3[10],~u1_XADD_reg3&u1_op_reg3[10]},
   FUFL0,FUFL1,FUFL2,
   FUFL3,FUFL4,FUFL5,
   FUFL6,FUFL7,FUFL8,
@@ -273,5 +288,26 @@ module fun_fpsu_BOTH(
   FOOFL0,FOOFL1,FOOFL2,
   XI_dataS
   );
+
+  always @(posedge clk) begin
+      u1_op_reg<=u1_op;
+      u3_op_reg<=u3_op;
+      u5_op_reg<=u5_op;
+      u1_XADD_reg<=u1_XSUB;
+      u3_XADD_reg<=u3_XSUB;
+      u5_XADD_reg<=u5_XSUB;
+      u1_op_reg2<=u1_op_reg;
+      u3_op_reg2<=u3_op_reg;
+      u5_op_reg2<=u5_op_reg;
+      u1_XADD_reg2<=u1_XADD_reg;
+      u3_XADD_reg2<=u3_XADD_reg;
+      u5_XADD_reg2<=u5_XADD_reg;
+      u1_op_reg3<=u1_op_reg2;
+      u3_op_reg3<=u3_op_reg2;
+      u5_op_reg3<=u5_op_reg2;
+      u1_XADD_reg3<=u1_XADD_reg3;
+      u3_XADD_reg3<=u3_XADD_reg3;
+      u5_XADD_reg3<=u5_XADD_reg3;
+  end
 
 endmodule
