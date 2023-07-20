@@ -25,7 +25,7 @@ module fun_fpu(
   fpcsr,
   u1_A,u1_B,u1_Bx,u1_Ax,u1_en,u1_op,
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
-  u1_ret,u1_ret_en,u1_XADD,
+  u1_ret,u1_ret_en,u1_XADD,u1_FK,
   FUF0,FUF1,FUF2,
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
@@ -63,6 +63,7 @@ module fun_fpu(
   output [13:0] u1_ret;
   output u1_ret_en;
   input u1_XADD;
+  input u1_FK;
 
   (* register equiload *) input [S+67:0] FUF0;
   (* register equiload *) input [S+67:0] FUF1;
@@ -226,6 +227,9 @@ module fun_fpu(
   reg [S+67:0] FUF7_reg;
   reg [S+67:0] FUF8_reg;
   reg [S+67:0] FUF9_reg;
+  reg [S+67:0] FUFX4_reg;
+  reg [S+67:0] FUFX5_reg;
+  reg [S+67:0] FUFX6_reg;
 
   reg [3:0] u1_en_reg;
   reg [3:0] u2_en_reg;
@@ -267,9 +271,9 @@ module fun_fpu(
   FUF4,FUF4_reg,
   FUF5,FUF5_reg,
   FUF6,FUF6_reg,
-  FUF7,FUF7_reg,
-  FUF8,FUF8_reg,
-  FUF9,FUF9_reg
+  u1_FK ? FUFX4 : FUF7, u1_FK? FUFX4_reg : FUF7_reg,//free due to splitting 
+  u1_FK ? FUFX5 : FUF8, u1_FK ? FUFX5_reg : FUF8_reg,
+  u1_FK ? FUFX6 : FUF9, u1_FK ? FUFX6_reg : FUF9_reg
   );
   
   rs_write_forward #(S+68) u2_A_fwd(
@@ -648,6 +652,9 @@ module fun_fpu(
       FUF7_reg<=FUF7;
       FUF8_reg<=FUF8;
       FUF9_reg<=FUF9;
+      FUFX4_reg<=FUFX4;
+      FUFX5_reg<=FUFX5;
+      FUFX6_reg<=FUFX6;
       FOOSH_reg2<=gfFADD_pkdD_reg ? FOOSH_reg : FOOSH_in;
       /*gfFADD_en=u1_op[0] && u1_clkEn && u1_op[7:0]==`fop_cmpDH || u1_op[7:0]==`fop_cmpDL || u1_op[7:0]==`fop_cmpE || u1_op[7:0]==`fop_cmpS;
       gfFADD_ord=u1_op[10];
