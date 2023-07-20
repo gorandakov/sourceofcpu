@@ -306,9 +306,9 @@ module fun_fpu(
   FUF4,FUF4_reg,
   FUF5,FUF5_reg,
   FUF6,FUF6_reg,
-  FUF7&0,FUF7_reg,
-  FUF8&0,FUF8_reg,
-  FUF9&0,FUF9_reg
+  FUF7,FUF7_reg,
+  FUF8,FUF8_reg,
+  FUF9,FUF9_reg
   );
   
   
