@@ -63,7 +63,7 @@ module fun_fpu(
   output [13:0] u1_ret;
   output u1_ret_en;
   input u1_XADD;
-  input [2:0] u1_FK;
+  input u1_FK;
 
   (* register equiload *) input [S+67:0] FUF0;
   (* register equiload *) input [S+67:0] FUF1;
@@ -271,9 +271,9 @@ module fun_fpu(
   FUF4,FUF4_reg,
   FUF5,FUF5_reg,
   FUF6,FUF6_reg,
-  u1_FK[INDEX] ? FUFX4 : FUF7, u1_FK[INDEX]? FUFX4_reg : FUF7_reg,//free due to splitting 
-  u1_FK[INDEX] ? FUFX5 : FUF8, u1_FK[INDEX] ? FUFX5_reg : FUF8_reg,
-  u1_FK[INDEX] ? FUFX6 : FUF9, u1_FK[INDEX] ? FUFX6_reg : FUF9_reg
+  u1_FK ? FUFX4 : FUF7, u1_FK? FUFX4_reg : FUF7_reg,//free due to splitting 
+  u1_FK ? FUFX5 : FUF8, u1_FK ? FUFX5_reg : FUF8_reg,
+  u1_FK ? FUFX6 : FUF9, u1_FK ? FUFX6_reg : FUF9_reg
   );
   
   rs_write_forward #(S+68) u2_A_fwd(
