@@ -89,6 +89,7 @@ module fun_fpsu(
   wire [5:0] FOOSL;
   reg [5:0] FOOSL_reg;
 
+  reg [2:0] u1_FK_reg;
   
   
   reg  gFADD_hi;
@@ -256,9 +257,9 @@ module fun_fpsu(
   FUF4,FUF4_reg,
   FUF5,FUF5_reg,
   FUF6,FUF6_reg,
-  u1_FK[0] ? FUFX4 : FUF7, u1_FK[0]? FUFX4_reg : FUF7_reg,//free due to splitting 
-  u1_FK[1] ? FUFX5 : FUF8, u1_FK[1] ? FUFX5_reg : FUF8_reg,
-  u1_FK[2] ? FUFX6 : FUF9, u1_FK[2] ? FUFX6_reg : FUF9_reg
+  u1_FK[0] ? FUFX4 : FUF7, u1_FK_reg[0]? FUFX4_reg : FUF7_reg,//free due to splitting 
+  u1_FK[1] ? FUFX5 : FUF8, u1_FK_reg[1] ? FUFX5_reg : FUF8_reg,
+  u1_FK[2] ? FUFX6 : FUF9, u1_FK_reg[2] ? FUFX6_reg : FUF9_reg
   );
   
   rs_write_forward #(S+68) u2_A_fwd(
@@ -633,6 +634,7 @@ module fun_fpsu(
       u1_op_reg<=u1_op;
       u1_en_reg<=u1_en;
       u1_en_reg7<=u1_en_reg6;
+      u1_FK_reg<=u1_FK;
       FUF0_reg<=FUF0;
       FUF1_reg<=FUF1;
       FUF2_reg<=FUF2;
