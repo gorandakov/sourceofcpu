@@ -256,9 +256,9 @@ module fun_fpsu(
   FUF4,FUF4_reg,
   FUF5,FUF5_reg,
   FUF6,FUF6_reg,
-  u1_FK[INDEX] ? FUFX4 : FUF7, u1_FK[INDEX]? FUFX4_reg : FUF7_reg,//free due to splitting 
-  u1_FK[INDEX] ? FUFX5 : FUF8, u1_FK[INDEX] ? FUFX5_reg : FUF8_reg,
-  u1_FK[INDEX] ? FUFX6 : FUF9, u1_FK[INDEX] ? FUFX6_reg : FUF9_reg
+  u1_FK[0] ? FUFX4 : FUF7, u1_FK[0]? FUFX4_reg : FUF7_reg,//free due to splitting 
+  u1_FK[1] ? FUFX5 : FUF8, u1_FK[1] ? FUFX5_reg : FUF8_reg,
+  u1_FK[2] ? FUFX6 : FUF9, u1_FK[2] ? FUFX6_reg : FUF9_reg
   );
   
   rs_write_forward #(S+68) u2_A_fwd(
