@@ -25,13 +25,13 @@ module fun_fpuH(
   fpcsr,
   u1_A,u1_B,u1_Bx,u1_Bxo,u1_en,u1_op,
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
-  u1_ret,u1_ret_en,u1_XADD,u1_FX,
+  u1_ret,u1_ret_en,u1_XADD,
   u3_A,u3_B,u3_Bx,u3_Bxo,u3_en,u3_op,
   u3_fufwd_A,u3_fuufwd_A,u3_fufwd_B,u3_fuufwd_B,
-  u3_ret,u3_ret_en,u3_XADD,u3_FX,
+  u3_ret,u3_ret_en,u3_XADD,
   u5_A,u5_B,u5_Bx,u5_Bxo,u5_en,u5_op,
   u5_fufwd_A,u5_fuufwd_A,u5_fufwd_B,u5_fuufwd_B,
-  u5_ret,u5_ret_en,u5_XADD,u5_FX,
+  u5_ret,u5_ret_en,u5_XADD,
   FUF0,FUF1,FUF2,
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
@@ -75,7 +75,6 @@ module fun_fpuH(
   output [13:0] u1_ret;
   output u1_ret_en;
   input u1_XADD;
-  input u1_FX;
 
   input [67:0] u3_A;
   input [67:0] u3_B;
@@ -90,7 +89,6 @@ module fun_fpuH(
   output [13:0] u3_ret;
   output u3_ret_en;
   input u3_XADD;
-  input u3_FX;
 
   input [67:0] u5_A;
   input [67:0] u5_B;
@@ -105,7 +103,6 @@ module fun_fpuH(
   output [13:0] u5_ret;
   output u5_ret_en;
   input u5_XADD;
-  input u5_FX;
 
 
   (* register equiload *) input [67:0] FUF0;
@@ -166,13 +163,11 @@ module fun_fpuH(
   fpcsr,
   u1_A,u1_B,u1_Bx,u1_Bxo,u1_en,u1_op,
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
-  u1_ret,u1_ret_en,u1_XADD,u1_FX,
+  u1_ret,u1_ret_en,u1_XADD,
   FUF0,FUF1,FUF2,
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
-  FUF9,
-  FUF4XY,FUF5XY,FUF6XY,
-  xtra0,x2tra0,
+  FUF9,xtra0,x2tra0,
   68'b0,68'b0,
   2'b0,
   FUS_alu0,FUS_alu1,
@@ -181,6 +176,7 @@ module fun_fpuH(
   fxFCADD1_raise_s,
   FOOSH0_in,
   FOOSH0_out,,
+  FUF4XY
   );
 
   fun_fpu #(1,1) fpu1_mod(
@@ -189,13 +185,11 @@ module fun_fpuH(
   fpcsr,
   u3_A,u3_B,u3_Bx,u3_Bxo,u3_en,u3_op,
   u3_fufwd_A,u3_fuufwd_A,u3_fufwd_B,u3_fuufwd_B,
-  u3_ret,u3_ret_en,u3_XADD,u3_FX,
+  u3_ret,u3_ret_en,u3_XADD,
   FUF0,FUF1,FUF2,
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
-  FUF9,
-  FUF4XY,FUF5XY,FUF6XY,
-  xtra1,x2tra1,
+  FUF9,xtra1,x2tra1,
   68'b0,68'b0,
   2'b0,
   FUS_alu2,FUS_alu3,
@@ -204,6 +198,7 @@ module fun_fpuH(
   fxFCADD3_raise_s,
   FOOSH1_in,
   FOOSH1_out,,
+  FUF5XY
   );
 
   fun_fpu #(2,1) fpu2_mod(
@@ -212,13 +207,11 @@ module fun_fpuH(
   fpcsr,
   u5_A,u5_B,u5_Bx,u5_Bxo,u5_en,u5_op,
   u5_fufwd_A,u5_fuufwd_A,u5_fufwd_B,u5_fuufwd_B,
-  u5_ret,u5_ret_en,u5_XADD,u5_FX,
+  u5_ret,u5_ret_en,u5_XADD,
   FUF0,FUF1,FUF2,
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
-  FUF9,
-  FUF4XY,FUF5XY,FUF6XY,
-  xtra2,x2tra2,
+  FUF9,xtra2,x2tra2,
   ALTDATA0,ALTDATA1,
   ALT_INP,
   FUS_alu4,FUS_alu5,
@@ -227,6 +220,7 @@ module fun_fpuH(
   fxFCADD5_raise_s,
   FOOSH2_in,
   FOOSH2_out,,
+  FUF6XY
   );
 
 endmodule
