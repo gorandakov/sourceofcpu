@@ -12,7 +12,7 @@ module lpddr3_channel(
   readOut_busID,
   readOut_en,
   readOut_dataR,
-  mem_clk,//800 MHz if separate, 3200 MHz if soldered on the _BOTTOM_ of the chip
+  mem_clk,//800 MHz if separate, 3200 MHz if soldered on the _BOTTOM_ of the chip, or 2300 MHz on two sides, in one row/column each side
   RAS,
   CAS,
   CS0,
