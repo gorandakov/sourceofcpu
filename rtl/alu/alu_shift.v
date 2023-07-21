@@ -82,7 +82,7 @@ module alu_shift(
  
   assign is_shift=(operation[7:2]==6'd5 || operation[7:2]==6'd6 || operation[7:2]==6'd7) && nDataAlt && ~operation[11];
   
-  shlr #(64) main_shift_mod(
+  shlr #(64) main_shift_right_mod(
   bit_en,
   sz,
   dir,
