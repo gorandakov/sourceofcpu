@@ -85,7 +85,7 @@ module alu_shift(
   shlr #(64) main_shift_mod(
   bit_en,
   sz,
-  1'b1,
+  dir,
   arith,
   val1[2],
   val2[2][5:0],
