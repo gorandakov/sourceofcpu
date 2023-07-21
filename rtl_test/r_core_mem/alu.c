@@ -6,12 +6,6 @@
 #include <sys/stat.h>
 #include <sys/mman.h>
 #include <fcntl.h>
-#include "Vheptane_core.h"
-#include "Vheptane_core_heptane_core.h"
-#include "Vheptane_core_backend.h"
-#include "Vheptane_core_ww.h"
-#include "Vheptane_core_fun_lsq.h"
-#include "verilated.h"
 #include "../inc/ptr.h"
 #include "contx.h"
 #include "../inc/struct.h"
@@ -21,8 +15,12 @@
 #define get64(a) ((((unsigned long long) a[1])<<32)|(unsigned long long) a[0])
 #define set64i(a,b,c) a[0]=b;a[1]=b>>32;a[2]=c;
 
-unsigned short OPS_REGL[]={32|4096,33|4096,36|4096,37|4096};//load
-unsigned short OPS_S_REGL[]={32|4096,33|4096,34|4096,35|4096};//store
+unsigned short OPS_REGL[]={0,1,4,5,8,9,12,13,16,17,32|4096,33|4096,34|4096,
+35|4096,36|4096,37|4096,39|4096,40|4096,41|4096,42|4096,43|4096,48|4096,49|4096,
+50|4096,51|4096,52,53,54|4096,55|4096,56|4096,57,4|16384,5|16384,4|32768,5|32768,8|16384,9|16384};
+unsigned short OPS_S_REGL[]={0,1,4,5,8,9,12,13,16,17,20,21,24,25,28,29,32|4096,
+33|4096,34|4096,35|4096,36|4096,37|4096,39|4096,40|4096,41|4096,42|4096,43|4096,48|4096,49|4096,50|4096,51|4096,52,53,54|4096,55|4096,56|4096,57,
+4|16384,5|16384,4|32768,5|32768,8|16384,9|16384};
 unsigned short OPS_M_REGL[]={1,2,3,5,7,9,10,11,12|4096,13|4096,14|4096,
 12|4096|1024,13|4096|1024,14|4096|1024};
 
@@ -2020,292 +2018,6 @@ bool req::testj(int code) {
 }
 
 
-void req_set(Vheptane_core *top,req *reqs,char *mem,char *memp) {
-    static unsigned long long addr[64];
-    static unsigned pos=0;
-    static unsigned pos_R=0;
-    static bool R=0;
-    static unsigned sigs[64];
-    static unsigned src[64];
-    static unsigned delay=0;
-    static bool bmr=0;
-    if (top->rbusOut_want && top->rbusOut_can) {
-	addr[pos]=top->rbusOut_address;
-	sigs[pos]=top->rbusOut_signals;
-	src[pos]=top->rbusOut_src_req;
-	if (pos_R==pos) delay=0;
-	pos++;
-	pos&=0x3f;
-    }
-    if (pos_R!=pos) delay++;
-    if (pos_R!=pos && delay>10) {
-	unsigned signals=(1<<(rbusD_mem_reply))|(1<<(rbusD_used));
-	top->rbusDIn_signals=signals;
-	top->rbusDIn_dst_req=src[pos_R];
-	if (!R) {
-	    memcpy((char *) &top->rbusDIn_data[0],mem+(addr[pos_R]<<7),64);
-	    top->rbusDIn_dataPTR=mem[addr[pos_R]<<1];
-	} else {
-	    memcpy((char *) &top->rbusDIn_data[0],mem+((addr[pos_R]<<7)+64),64);
-	    top->rbusDIn_dataPTR=mem[(addr[pos_R]<<1)+1];
-	    top->rbusDIn_signals|=1<<(rbusD_second);
-	}
-	printf("retn 0x%lx,\t%i, 0x%x\n",addr[pos_R],R,src[pos_R]);
-	R=!R;
-	if (!R) pos_R++;
-	pos_R&=0x3f;
-    } else {
-	top->rbusDIn_signals=0;
-    }
-
-    if (top->rbusDOut_can && top->rbusDOut_want) {
-	//unsigned long long address=<<7;
-	if (!(top->rbusDOut_signals&(1<<(rbusD_write_back)))) {
-            goto end_DOut;
-	}
-	if (!(top->rbusDOut_signals&(1<<(rbusD_second)))) {
-	    memcpy(mem+(addr[pos_R]<<7),(char *) &top->rbusDOut_data[0],64);
-	    mem[addr[pos_R]<<1]=top->rbusDIn_dataPTR;
-        } else {
-	    memcpy(mem+((addr[pos_R]<<7)+64),(char *) &top->rbusDOut_data[0],64);
-	    mem[(addr[pos_R]<<1)+1]=top->rbusDIn_dataPTR;
-	}
-        end_DOut:;
-    }
-    top->rbusOut_can=1;
-    if (top->rbusOut_want) printf("want 0x%lx,\t%i,\t%i\n",top->rbusOut_address,pos,pos_R);
-    if (top->heptane_core->dc2_rdEnX_reg4) printf("dc2_rdEnX_reg4 0x%lx, 0x%x\n",top->heptane_core->dc2_rd_addr_reg3,
-		    top->heptane_core->dc2_req_rd_reg4);
-    if (top->heptane_core->req_en_reg) printf("wantR 0x%lx,\t%i\n",top->heptane_core->req_addr_reg,
-	top->heptane_core->req_slot_reg);
-//    if (bmr) printf("insert 0x%lx\n",
-//	top->heptane_core->front_mod->cc_mod->write_IP_reg);
-   // if (top->heptane_core->front_mod->bus_match_reg) bmr=1;
-   // else bmr=0;
-    if (top->heptane_core->insBus_en) 
-	    printf("insBus 0x%x, 0x%#8x%#8x%#8x%#8x, %i\n",top->heptane_core->dc2_req_rd_reg5,
-	top->heptane_core->dc2_rdata_reg[3],top->heptane_core->dc2_rdata_reg[2],
-	top->heptane_core->dc2_rdata_reg[1],top->heptane_core->dc2_rdata_reg[0],
-	top->heptane_core->dc2_rhitB1_reg);
-    static int idr=0;
-  /*  if (top->heptane_core->bck_mod->agu_aligned->alt_bus_hold_reg2) {
-	printf("ABH -> 0x%lx,0x%lx,o 0x%x,is_ins 0x%x:0x%x\n",
-			top->heptane_core->bck_mod->agu_aligned->mOpX0_addrEven_reg,
-			top->heptane_core->bck_mod->agu_aligned->mOpX0_addrOdd_reg,
-                        top->heptane_core->bck_mod->agu_aligned->mOpX0_odd_reg,
-			idr,
-	((top->heptane_core->bck_mod->L1D_mod->ways_gen__BRA__0__KET__->way_mod->ins_hit&1)<<0)|
-	((top->heptane_core->bck_mod->L1D_mod->ways_gen__BRA__1__KET__->way_mod->ins_hit&1)<<1)|
-	((top->heptane_core->bck_mod->L1D_mod->ways_gen__BRA__2__KET__->way_mod->ins_hit&1)<<2)|
-	((top->heptane_core->bck_mod->L1D_mod->ways_gen__BRA__3__KET__->way_mod->ins_hit&1)<<3)|
-	((top->heptane_core->bck_mod->L1D_mod->ways_gen__BRA__4__KET__->way_mod->ins_hit&1)<<4)|
-	((top->heptane_core->bck_mod->L1D_mod->ways_gen__BRA__5__KET__->way_mod->ins_hit&1)<<5)|
-	((top->heptane_core->bck_mod->L1D_mod->ways_gen__BRA__6__KET__->way_mod->ins_hit&1)<<6)|
-	((top->heptane_core->bck_mod->L1D_mod->ways_gen__BRA__7__KET__->way_mod->ins_hit&1)<<7));
-    }
-    if (top->heptane_core->bck_mod->agu_aligned->mOpX2_addrEven_reg==0x20001d && top->heptane_core->bck_mod->agu_aligned->mOpX2_en_reg) {
-	printf(" ");
-    }*/
-    idr=top->heptane_core->bck_mod->insert_isData_reg3;
-    if (!top->heptane_core->insBus_en && top->heptane_core->dc2_rhit) printf("insBusX 0x%x, 0x%#8x%#8x%#8x%#8x, %i\n",top->heptane_core->dc2_req_rd_reg5,
-	top->heptane_core->dc2_rdata_reg[3],top->heptane_core->dc2_rdata_reg[2],
-	top->heptane_core->dc2_rdata_reg[1],top->heptane_core->dc2_rdata_reg[0],
-	top->heptane_core->dc2_rhitB1_reg);
-   /* if (top->heptane_core->front_mod->cc_mod->cc_write_wen_reg2)
-	    printf("wenR\n");*/
-    if (top->heptane_core->rinsBus_A||top->heptane_core->rinsBus_B) {
-	    printf("insburst 0x%8x%8x%8x%8x, %i, 0x%lx\n",top->heptane_core->rbusDIn_data_reg[3],
-	top->heptane_core->rbusDIn_data_reg[2],top->heptane_core->rbusDIn_data_reg[1],
-	top->heptane_core->rbusDIn_data_reg[0],top->heptane_core->dc2_rdOdd,top->heptane_core->dc2_addrE0);
-	    if (top->heptane_core->dc2_hitE0||top->heptane_core->dc2_hitO0||top->heptane_core->dc2_hitE1||
-		top->heptane_core->dc2_hitO1) printf("shmupd\n");
-    }
-}
-
-bool get_check(Vheptane_core *top, req *reqs,unsigned long long &ip) {
-    bool rtn=true;
-    static unsigned long long pos=0;
-    long long k,x,count;
-    static unsigned xbreak=0;
-    static unsigned retire=0;
-    static int insn_count[64];
-    static int insn_posR=0,insn_posW=0;
-    static unsigned retII=0;
-    if (retire) {
-	for(k=0;k<10;k++) {
-	    if (xbreak&(1<<k)) break;
-	}
-	count=(top->heptane_core->except && top->heptane_core->except_due_jump) ? k+1 : k;
-	if (count==10) count=insn_count[insn_posR];
-	if (count!=insn_count[insn_posR] && !top->heptane_core->except) {
-	    printf("wrong count at %li, 0x%x\n",ip,retII);
-	    rtn=false;
-	}
-	insn_posR++;
-	insn_posR&=0x3f;
-	if (top->heptane_core->except) {
-            printf("except %li, %li\n",count,ip);
-	    insn_posW=insn_posR;
-	    //rtn=false;
-	}
-	else printf("ret %li, \t%li, %x\n",count,ip+count,retII);
-	for(x=0;x<count;x++) {
-	    if (reqs[ip+x].rT<0) goto no_srch;
-	    if (x<(count-1)) for(k=x+1;k<count;k=k+1) if (reqs[ip+x].rT==reqs[ip+k].rT || reqs[ip+x].rT<0) goto no_srch;
-	    for(k=0;k<9;k=k+1) {
-		unsigned long long val,valp;
-		extract_e(top->heptane_core->bck_mod->ret_dataA,65*k,65*k+63,val);
-		extract_e(top->heptane_core->bck_mod->ret_dataA,65*k+64,65*k+64,valp);
-		switch(k) {
-		    case 0: if (top->heptane_core->bck_mod->retire0_rT!=reqs[ip+x].rT ||
-					    !top->heptane_core->bck_mod->retire0_enG) continue;
-			    break;
-		    case 1: if (top->heptane_core->bck_mod->retire1_rT!=reqs[ip+x].rT ||
-					    !top->heptane_core->bck_mod->retire1_enG) continue;
-			    break;
-		    case 2: if (top->heptane_core->bck_mod->retire2_rT!=reqs[ip+x].rT ||
-					    !top->heptane_core->bck_mod->retire2_enG) continue;
-			    break;
-		    case 3: if (top->heptane_core->bck_mod->retire3_rT!=reqs[ip+x].rT ||
-					    !top->heptane_core->bck_mod->retire3_enG) continue;
-			    break;
-		    case 4: if (top->heptane_core->bck_mod->retire4_rT!=reqs[ip+x].rT ||
-					    !top->heptane_core->bck_mod->retire4_enG) continue;
-			    break;
-		    case 5: if (top->heptane_core->bck_mod->retire5_rT!=reqs[ip+x].rT ||
-					    !top->heptane_core->bck_mod->retire5_enG) continue;
-			    break;
-		    case 6: if (top->heptane_core->bck_mod->retire6_rT!=reqs[ip+x].rT ||
-					    !top->heptane_core->bck_mod->retire6_enG) continue;
-			    break;
-		    case 7: if (top->heptane_core->bck_mod->retire7_rT!=reqs[ip+x].rT ||
-					    !top->heptane_core->bck_mod->retire7_enG) continue;
-			    break;
-		    case 8: if (top->heptane_core->bck_mod->retire8_rT!=reqs[ip+x].rT ||
-					    !top->heptane_core->bck_mod->retire8_enG) continue;
-			    break;
-		}
-		if (reqs[ip+x].res!=val || reqs[ip+x].res_p!=valp) {
-		    printf("reterr %i, %li, %lx:%lx,off %lx, instr %s, AB %lx:%lx\n",x,ip+x,reqs[ip+x].res,val,reqs[ip+x].offset,
-			reqs[ip+x].asmtext,reqs[ip+x].A,reqs[ip+x].B);
-		    rtn=false;
-		}
-		break;
-	    }
-            if (k==9) {
-		printf("reterr %i, %lx, %lx, instr %s\n",x,ip+x,reqs[ip+x].res,reqs[ip+x].asmtext);
-	        rtn=false;
-	    }
-no_srch:;
-	}
-	ip+=count;
-	pos+=count;
-    }
-    xbreak=top->heptane_core->bck_mod->retM_xbreak;
-    if (retire) {
-	    retII++;
-            if (retII>47) retII=0;
-    }
-    retire=top->heptane_core->bck_mod->retM_do_retire;
-    if (top->heptane_core->ww_mod->iAvail) printf("iAvail 0x%x, \t0x%x\n",top->heptane_core->ww_mod->iAvail,top->heptane_core->
-        ww_mod->instrEn);
-    if (top->heptane_core->ww_mod->instrEn && top->heptane_core->bck_mod->stall_rs==0 && !top->heptane_core->except && 
-		    top->heptane_core->bck_mod->doStall_rs==0) {
-	k=0;
-	while (top->heptane_core->ww_mod->instrEn&(1<<k)) {k++;}
-	insn_count[insn_posW++]=k;
-	insn_posW&=0x3f;
-    }
-   // for(k=0;k<6;k++) {
-	if (top->heptane_core->bck_mod->enS_alu) {
-	    printf("ALU 0x%x, fl 0x%lx, ret 0x%x\n",top->heptane_core->bck_mod->enS_alu,
-		top->heptane_core->bck_mod->FUS_alu,
-		top->heptane_core->bck_mod->ex_alu);
-	}
-  //  }
-    if (top->heptane_core->bck_mod->outEn&0x111111111ul) {
-	printf("outEn 0x%lx\n",top->heptane_core->bck_mod->outEn);
-    }
-    bool bflag123=false;
-    for(k=0;k<9;k++) {
-        if (top->heptane_core->bck_mod->rs_en_reg[k] && !(top->heptane_core->bck_mod->stall_rs|
-				top->heptane_core->bck_mod->doStall_rs)) {
-	    if (!bflag123 && top->heptane_core->bck_mod->rs_alt_reg) {
-	        printf("rs_en__reg 0x%x, \t0x%x\n",k,top->heptane_core->bck_mod->rs_port_sch[k]);
-		bflag123=true;
-	    } else {
-	        printf("rs_en_reg 0x%x, \t0x%x\n",k,top->heptane_core->bck_mod->rs_port_sch[k]);
-	    }
-        }
-    }
-    for(k=0;k<6;k++) {
-	if (top->heptane_core->bck_mod->fret_en&(1<<k)) {
-	    unsigned long long val;
-	    int k2;
-	    k2=(k>>1)*3+1+(k&1);
-	    extract_e(top->heptane_core->bck_mod->fret,14*k,14*k+13,val);
-	    if ((k&1)==0) printf("fsret %i,\t0x%x, \t0x%x\n",k,val,top->heptane_core->bck_mod->outII_reg4[k2]);
-	    if ((k&1)==1) printf("fsret %i,\t0x%x, \t0x%x\n",k,val,top->heptane_core->bck_mod->outII_reg7[k2]);
-	}
-    }
- /*   if (top->heptane_core->front_mod->cc_mod->__Vcellout__stHit_mod__read_data&0x100) {
-	printf("fetch ");
-	for(k=3;k>=0;k--) {
-	   unsigned long long val;
-	   extract_e(top->heptane_core->front_mod->read_data,65*k,65*k+63,val);
-	   printf("%#16lx",val);
-	}
-	if (!top->heptane_core->front_mod->instrEn_reg3) printf(" err ");
-	printf(" 0x%lx\n",top->heptane_core->front_mod->IP_phys_reg3);
-    }
-    if (top->heptane_core->front_mod->bus_tlb_match_reg) {
-	printf("TLBIN 0x%lx -> 0x%lx\n",top->heptane_core->front_mod->tlb_IP<<13,
-	    top->heptane_core->front_mod->bus_tlb_data_reg);
-    }*/
-    if (top->heptane_core->bck_mod->FUwen_reg[0]|top->heptane_core->bck_mod->FUwen_reg[1]|
-	top->heptane_core->bck_mod->FUwen_reg[2]|top->heptane_core->bck_mod->FUwen_reg[3]) {
-	printf("FUwen_reg 0x%x, 0x%x : 0x%x,0x%x,0x%x,0x%x\n",top->heptane_core->bck_mod->FUwen_reg[0] | 
-	(top->heptane_core->bck_mod->FUwen_reg[1]<<1) |(top->heptane_core->bck_mod->FUwen_reg[2]<<2)|
-	(top->heptane_core->bck_mod->FUwen_reg[3]<<3),
-	top->heptane_core->bck_mod->FU0HitP | (top->heptane_core->bck_mod->FU1HitP<<1) |
-	(top->heptane_core->bck_mod->FU2HitP<<2) |(top->heptane_core->bck_mod->FU3HitP<<3),
-	top->heptane_core->bck_mod->FUreg_reg[0],
-	top->heptane_core->bck_mod->FUreg_reg[1],
-	top->heptane_core->bck_mod->FUreg_reg[2],
-	top->heptane_core->bck_mod->FUreg_reg[3]
-	);
-    }
-    if (top->heptane_core->bck_mod->miss_pause_agu) {
-	printf("miss_pause_agu\n");
-	if (top->heptane_core->bck_mod->outEn&1) printf("outEn0\n");
-	if (top->heptane_core->bck_mod->outEn&8) printf("outEn3\n");
-	if (top->heptane_core->bck_mod->outEn&64) printf("outEn6\n");
-    }
-    if (top->heptane_core->bck_mod->dc_rdEn) {
-	printf("");
-    }
-    if (top->heptane_core->bck_mod->retM_ret) printf("ret 0x%x, fine 0x%x\n",top->heptane_core->bck_mod->retM_ret,
-        top->heptane_core->bck_mod->retM_fine);
-    if (top->heptane_core->bck_mod->LSQ_grouped->LSQ_rdy_AP) {
-        printf("LSQ_enA 0x%x\n",top->heptane_core->bck_mod->LSQ_grouped->LSQ_enA);
-    }
-    if (top->heptane_core->bck_mod->dc_rdEn || top->heptane_core->bck_mod->__PVT__dc_wrEn) {
-        printf("dc_rdEn: 0x%x, dc_wrEn 0x%x\n",top->heptane_core->bck_mod->dc_rdEn,top->heptane_core->bck_mod->__PVT__dc_wrEn);
-    }
-    if (top->heptane_core->bck_mod->__PVT__agu_aligned__DOT__tlb_hitR) {
-        printf("tlb_hitR 0x%x\n",top->heptane_core->bck_mod->__PVT__agu_aligned__DOT__tlb_hitR);
-    }
-    if (top->heptane_core->bck_mod->__PVT__lsi_cnt_reg) {
-        printf("lsi 0x%x, 0x%x, 0x%x, 0x%x\n",top->heptane_core->bck_mod->__PVT__lsi_cnt_reg,
-        top->heptane_core->bck_mod->__PVT__wrtO0_reg,top->heptane_core->bck_mod->__PVT__wrtO1_reg,
-        top->heptane_core->bck_mod->__PVT__wrtO2_reg);
-    }
-    if (top->heptane_core->bck_mod->__PVT__agu_aligned__DOT__wtmiss_mod__DOT__rdm_xdone) {
-        printf("xdone 0x%x, 0x%x\n",top->heptane_core->bck_mod->__PVT__agu_aligned__DOT__wtmiss_mod__DOT__rdm_xdone,
-        top->heptane_core->bck_mod->__PVT__agu_aligned__DOT__wtmiss_mod__DOT__pause);
-    }
-    return rtn;
-}
 
 void prog_locate(req *reqs,unsigned char *mem) {
     unsigned long long addr=0;
@@ -2443,13 +2155,47 @@ void gen_prog(req *reqs,int count, FILE *f,hcont *contx,char *mem,char *pmem) {
    
 }
 
+void prog_print(char *name) {
+  FILE *f;
+  int insn;
+  f=fopen(name,"w");
+  for(insn=0;insn<1000000; insn++) {
+    int n;
+    fputc(f,'0'+reqs[insn].res_p+2*(reqs[insn].rT>=0));
+    for(n=0;n<16;n++) {
+      char c=(reqs[insn].res>>(64-4*n))&0xf;
+      if (c<10) c=c+'0';
+      else c=c+'a';
+      fputc(f,c);
+    }
+    char c=reqs[insn].rT&0xf;
+    if (c<10) c=c+'0';
+    else c=c+'a';
+    fputc(f,c);
+    fputc(f,'0'+((reqs[insn].rT&0x10)>>4));
+    c=reqs[insn].rA&0xf;
+    if (c<10) c=c+'0';
+    else c=c+'a';
+    fputc(f,c);
+    fputc(f,'0'+((reqs[insn].rA&0x10)>>4));
+    c=reqs[insn].rB&0xf;
+    if (c<10) c=c+'0';
+    else c=c+'a';
+    fputc(f,c);
+    fputc(f,'0'+((reqs[insn].rT&0x10)>>4));
+    c=(reqs[insn].flag&0x1f)>>1;
+    if (c<10) c=c+'0';
+    else c=c+'a';
+    fputc(f,c);
+    fputc(f,'0'+((reqs[insn].flag&0x20)>>5)+2*(reqs[insn].op>>12);
+    fputc(f,'\n');
+  }
+  fclose(f);
+}
+
 req *reqs;
 
 int main(int argc, char *argv[]) {
-    Verilated::commandArgs(argc, argv);
-    Vheptane_core *top=new Vheptane_core();
-    Verilated::assertOn(false);
-    Verilated::traceEverOn(true);
     int initcount=10;
     int cyc=0;
     unsigned long long ip=0;
@@ -2498,38 +2244,9 @@ int main(int argc, char *argv[]) {
 	perror("open() ");
     }
     prog_locate(reqs,(unsigned char *)mem);
+    mname[0]=0;
+    snprintf(mname,256,"./prog.memh");
+    prog_print(mname);
+    return 0;
 //    Verilated::traceEverOn(true);
-    req_set(top,reqs,mem,memp);
-    top->eval();
-    top->clk=1;
-    top->eval();
-    top->clk=0;
-    top->eval();
-    top->rst=0;
-    while(!Verilated::gotFinish()) {
-        int k,j;
-        top->clk=1;
-        top->eval();
-	//usleep(5000);
-        top->clk=0;
-        top->eval();
-	//usleep(5000);
-        top->rbusOut_can=1;
-        if (!initcount) {
-            req_set(top,reqs,mem,memp);
-            cyc=cyc+1;
-            if (!get_check(top,reqs,ip)) {
-                printf("error @%i\n",cyc);
-                sleep(1);
-		return 1;
-            }
-            if ((cyc%100)==0) {
-                printf("cycle %i\n",cyc);
-            }
-           
-        } else {
-            initcount=initcount-1;
-            if (!initcount) Verilated::assertOn(true);
-        }
-    }
 }
