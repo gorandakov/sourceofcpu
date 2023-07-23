@@ -59,9 +59,8 @@ module alu_shift(
   input [2:0][63:0] val2;
   output [63:0] valRes;
   
-  wire [63:0] valRes_X;
-  wire [EXCEPT_WIDTH-1:0] retData_X;
   wire is_shift;
+  wire [63:0] en;
   wire is_8H;
   wire doJmp;
   wire [63:0] valres0;
@@ -76,15 +75,16 @@ module alu_shift(
   wire [5:0] flags_COASZP;
   reg [3:0] sz_reg;
 
-  assign valRes=valRes_X;
+  wire [63:0] valX;
 
-  assign retData=retData_X;
+  assign valX[31:0]=val2[12] ? val1[31:0] : 32'b0;
+  assign valX[63:32]=val2[10] ? {32{val1{31}} : 32'b0;
  
   assign is_shift=(operation[7:2]==6'd5 || operation[7:2]==6'd6 || operation[7:2]==6'd7) && nDataAlt && ~operation[11];
   
   shlr #(64) main_shift_right_mod(
   bit_en,
-  sz,
+  {4'h8},
   dir,
   arith,
   val1[2],
@@ -96,9 +96,21 @@ module alu_shift(
   
   except_jump_cmp jcmp_mod (valS,{1'b0,cond[3:0]},doJmp);
 
-  assign valRes_X=is_shift & ~(cond[4]&~doJmp) ? valres0 : 64'bz;
+  generate
+    genvar k;
+    for(k=0;k<63;k=k+1) begin
+        assign valRes[k]=is_shift & ~(cond[4]&~doJmp) & en[k] ? valres0[k] : 1'bz;
+        assign valRes[k]=is_shift & ~(cond[4]&~doJmp) & ~en[k] ? valX[k] : 1'bz;
+    end
+  endgenerate
 
-  assign retData_X[`except_flags]=is_shift_reg ? flags_COASZP : 6'bz;
+  assign en[63:32]={32{sz[3]}};
+  assign en[31:24]=(val2[31:24]&{8{val2[15:13]==3'b100}})|{8{val2[15:13]==3'b0}};
+  assign en[23:16]=(val2[23:16]&{8{val2[15:13]==3'b100 || val2[15:13]==3'b010}})|{8{val2[15:13]==3'b0}};
+  assign en[15:8]=(val2[31:24]&{8{val2[15:13]==3'b10 || val2[15:13]==3'b1}})|{8{val2[15:13]==3'b0}};
+  assign en[7:0]=(val2[23:16]&{8{val2[15:13]==3'b1}})|{8{val2[15:13]==3'b0}};
+
+  assign retData[`except_flags]=is_shift_reg ? flags_COASZP : 6'bz;
 
   assign flags_COASZP={ dir_reg ? coutR_reg : ((coutL_reg&sz_reg)!=0),1'b0,1'b0,
 	  sz_reg[3] ? valres0_reg[63] : valres0_reg[31],~(|valres0_reg[31:0])&&
