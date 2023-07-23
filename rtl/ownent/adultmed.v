@@ -1013,17 +1013,10 @@ module smallInstr_decoder(
                pflags_use[10]=1'b0;
                pflags_write[10]=~instr[24];
                poperation[10][12]=instr[24];
-               poperation[10][8]=1'b1;
            end
            poperation[10][12]=instr[24];              
        end else begin
-               prA[10]={1'b0,instr[11:8]};
-               prT[10]={1'b0,instr[15:12]};
-               prB[10]=5'd31;
-               puseBConst[10]=1'b1;
-               pflags_use[10]=1'b0;
-               pflags_write[10]=1'b1;
-               poperation[10][12]=1'b0;
+           perror[10]=2'b1;
        end
 //          if (rT==6'd16) thisSpecAlu=1'b1;
        trien[11]=~magic[0] & subIsFPUE;
