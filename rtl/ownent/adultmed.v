@@ -37,6 +37,7 @@ module smallInstr_decoder(
   rB,rB_use,useBConst,//useBSmall,
   rC,rC_use,useCRet,
   alucond,
+  rndmode,
   constant,
   constantN,
 //  smallConst,
@@ -117,6 +118,7 @@ module smallInstr_decoder(
   output rC_use;
   output useCRet;
   output [4:0] alucond;
+  output [2:0] rndmode;
   output useBConst;
 //  output reg useBSmall;//small constant use; used for call/pop/push
   output [64:0] constant;
@@ -259,6 +261,7 @@ module smallInstr_decoder(
   reg prC_use[TRICNT_TOP-1:0];
   reg puseCRet[TRICNT_TOP-1:0];
   reg [4:0] palucond[TRICNT_TOP-1:0];
+  reg [2:0] rndmode[TRICNT_TOP-1:0];
   reg puseBConst[TRICNT_TOP-1:0];
 //  output reg useBSmall;//small constant use; used for call/pop/push
   reg [63:0] pconstant[TRICNT_TOP-1:0];
@@ -463,6 +466,7 @@ module smallInstr_decoder(
           wire kuseCRet;
 	  wire [4:0] kalucond;
           wire kuseBConst;
+          wire [2:0] krndmode;
     //  output reg useBSmall;//small constant use; used for call/pop/push
           wire [64:0] kconstant;
     //  output reg [3:0] smallConst; //signed
@@ -516,6 +520,7 @@ module smallInstr_decoder(
 //	      assign kthisSpecLoad=trien[p*8+q] ? pthisSpecLoad[p*8+q] : 1'bz;
 	      assign kisIPRel=trien[p*8+q] ? pisIPRel[p*8+q] : 1'bz;
 	      assign kalucond=trien[p*8+q] ? palucond[p*8+q] : 5'bz;
+	      assign krndmode=trien[p*8+q] ? prndmode[p*8+q] : 3'bz;
 	      assign kflags_use=trien[p*8+q] ? pflags_use[p*8+q] : 1'bz;
 	      assign kflags_write=trien[p*8+q] ? pflags_write[p*8+q] : 1'bz;
 	      assign kflags_wrFPU=trien[p*8+q] ? pflags_wrFPU[p*8+q] : 1'bz;
@@ -551,6 +556,7 @@ module smallInstr_decoder(
 	  assign kalucond=(~|trien[p*8+:8]) ? 5'b0 : 5'bz;
 	  assign kflags_use=(~|trien[p*8+:8]) ? 1'b0 : 1'bz;
 	  assign kflags_write=(~|trien[p*8+:8]) ? 1'b0 : 1'bz;
+	  assign krndmode=(~|trien[p*8+:8]) ? 3'b0 : 3'bz;
 	  assign kflags_wrFPU=(~|trien[p*8+:8]) ? 1'b0 : 1'bz;
 	  assign krBT_copyV=(~|trien[p*8+:8]) ? 1'b0 : 1'bz;
 	  assign kinstr_fsimd=(~|trien[p*8+:8]) ? 1'b0 : 1'bz;
@@ -582,6 +588,7 @@ module smallInstr_decoder(
 //	  assign thisSpecLoad=(|trien[p*8+:8]) ? kthisSpecLoad : 1'bz;
 	  assign isIPRel=(|trien[p*8+:8]) ? kisIPRel : 1'bz;
 	  assign alucond=(|trien[p*8+:8]) ? kalucond : 5'bz;
+	  assign rndmode=(|trien[p*8+:8]) ? krndmode : 3'bz;
 	  assign flags_use=(|trien[p*8+:8]) ? kflags_use : 1'bz;
 	  assign flags_write=(|trien[p*8+:8]) ? kflags_write : 1'bz;
 	  assign flags_wrFPU=(|trien[p*8+:8]) ? kflags_wrFPU : 1'bz;
@@ -618,6 +625,7 @@ module smallInstr_decoder(
 //  assign thisSpecLoad=(~|trien) ? 1'b0 : 1'bz;
   assign isIPRel=(~|trien) ? 1'b0 : 1'bz;
   assign alucond=(~|trien) ? 5'b0 : 5'bz;
+  assign rndmode=(~|trien) ? 3'b0 : 3'bz;
   assign flags_use=(~|trien) ? 1'b0 : 1'bz;
   assign flags_write=(~|trien) ? 1'b0 : 1'bz;
   assign flags_wrFPU=(~|trien) ? 1'b0 : 1'bz;
@@ -668,6 +676,7 @@ module smallInstr_decoder(
           pthisSpecLoad[tt]=1'b0;    
           pisIPRel[tt]=1'b0;
 	  palucond[tt]=5'b0;
+	  prndmode[tt]=3'b111;
           puseCRet[tt]=1'b0;
           prA_useF[tt]=1'b0;
           prB_useF[tt]=1'b0;
@@ -1665,7 +1674,7 @@ module smallInstr_decoder(
               prA[31]=instr[22:18];
 	      prT[31]=instr[22:18];
 	  end
-      end else if (opcode_main==8'd123) begin
+      end else if (opcode_main==8'd123) begin//shladd
           pport[31]=PORT_ALU;
           prA_use[31]=1'b1;
           prB_use[31]=opcode_main!=8'd213;
@@ -1683,7 +1692,7 @@ module smallInstr_decoder(
           poperation[31][12]=~instr[23];
           perror[31]={1'b0,instr[31:24]==8'd0};
           if (magic[1:0]!=2'b01) perror[31]=2'b1;
-      end else begin
+      end else begin//sxadd
           pport[31]=PORT_ALU;
           prA_use[31]=1'b1;
           prB_use[31]=1'b1;
@@ -1759,6 +1768,7 @@ module smallInstr_decoder(
 	  prBE[32]=instr[33]; if (instr[33]) prB[32][4:1]=4'b0;
 	  prTE[32]=instr[34]; if (instr[34]) prT[32][4:1]=4'b0;
 	  palucond[32]=instr[39:35];
+	  prndmode[32]=instr[42:40];
 	  //prndmod[33]=instr[42:0]
       end else if (magic[1:0]!=2'b01) begin
 	  perror[32]=1;
@@ -1771,6 +1781,7 @@ module smallInstr_decoder(
 	  prBE[33]=instr[33]; if (instr[33]) prB[33][4:1]=4'b0;
 	  prTE[33]=instr[34]; if (instr[34]) prT[33][4:1]=4'b0;
 	  palucond[33]=instr[39:35];
+	  prndmode[33]=instr[42:40];
 	  //prndmod[33]=instr[42:0]
       end else if (magic[1:0]!=2'b01) begin
 	  perror[33]=1;
@@ -1813,6 +1824,7 @@ module smallInstr_decoder(
 	  prBE[34]=instr[33]; if (instr[33]) prB[34][4:1]=4'b0;
 	  prTE[34]=instr[34]; if (instr[34]) prT[34][4:1]=4'b0;
 	  palucond[34]=instr[39:35];
+	  prndmode[34]=instr[42:40];
 	  //prndmod[33]=instr[42:0]
       end else if (magic[1:0]!=2'b01) begin
 	  perror[34]=1;
@@ -1896,6 +1908,7 @@ module smallInstr_decoder(
 	  prBE[36]=instr[33]; if (instr[33]) prB[36][4:1]=4'b0;
 	  prTE[36]=instr[34]; if (instr[34]) prT[36][4:1]=4'b0;
 	  palucond[36]=instr[39:35];
+	  prndmode[36]=instr[42:40];
 	  //prndmod[33]=instr[42:0]
       end else if (magic[1:0]!=2'b01) begin
 	  perror[36]=1;
