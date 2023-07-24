@@ -526,6 +526,7 @@ bool req::gen(bool alt_, bool mul_, bool can_shift,bool inloop, int loopiter, re
     if (!alt && !mul && can_shift)  op=OPS_S_REGL[rand()%(sizeof OPS_S_REGL/2)];
     if (!alt && mul) op=OPS_M_REGL[rand()%(sizeof OPS_M_REGL/2)]|0x800;
     if (alt) op=rand()&0x1ffff;
+    if (inloop && !mem && !(lrand48()%0xa)) op=0xf000+lrand48()%14;
     res_p=0;
     rA=rand()&0xf;
     rB=rand()&0xf;
@@ -565,7 +566,7 @@ bool req::gen(bool alt_, bool mul_, bool can_shift,bool inloop, int loopiter, re
 	int mmem=0;
 	char cmpstr[32];
 	if (has_mem_) mmem=lrand48()%3;
-        switch(op&0xff) {
+        if ((op&0xf000)!=0xf000) switch(op&0xff) {
             case 0:
 	    if (has_mem_==2) {
 		(this-1)->gen_mem(NULL,8,mem,memp,addr);
@@ -1451,7 +1452,14 @@ andffl:
 		(*(this-1))=*this;
 	    }
             break;
-        }
+        } else {
+           snprintf(asmtext, sizeof amstext, "j%s LaBl%i\nLaBl%i:\n",COND(op&0xf),lbl,lbl);
+           lbl++;
+           res=0;
+           rT=-1;
+           flags=flags_in; 
+           rtn=false;
+      }
     } else if (!alt) {
         __int128 AS=(long long) A;
         unsigned __int128 A0=A;
