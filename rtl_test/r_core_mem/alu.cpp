@@ -469,7 +469,30 @@ void req::gen_init(int rT_,int dom,unsigned long long int val,int val_p) {
     else snprintf(asmtext,sizeof asmtext,"movabsp $%li,%%%s\n",B,reg65[rT]);//WARNING: movabsp non impl and not in cpu spec
 }
 
-bool req::gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,int has_mem_,char *mem,char *memp) {
+int req::gen_loop(bool close, hcont *contx, int loopno) {
+  //close is true if it is a loop close insn, otherwise it is a loop begin insn
+  int cnt=lrand48()&0xff;
+  int addr0=(lrand48()%(MEMRGN_SIZE/2));
+  int addr1=(lrand48()%(MEMRGN_SIZE/2));
+  if (!close) {
+      snprintf((*(this)).asmtext,sizeof (asmtext), "movq $%i, %%r15\n",cnt);
+      this->rT=cnt;
+      this->flags=flags_in;
+      contx->gen[15]=cnt;
+      snprintf((*(this+1)).asmtext,sizeof (asmtext), "movq $%i, %%r14\n",addr0);
+      (this+1)->rT=addr0;
+      (this+1)->flags=flags_in;
+      contx->gen[14]=addr0;
+      snprintf((*(this+2)).asmtext,sizeof (asmtext), "movq $%i, %%r13\n",addr1);
+      (this+2)->rT=addr1;
+      (this+2)->flags=flags_in;
+      contx->gen[13]=addr1;
+      return 3;
+  } else {
+  }
+}
+
+bool req::gen(bool alt_, bool mul_, bool can_shift,bool inloop, req *prev1,hcont *contx,int has_mem_,char *mem,char *memp) {
     alt=alt_;
     mul=mul_;
     excpt=-1;
@@ -479,9 +502,9 @@ bool req::gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,int 
     if (!alt && mul) op=OPS_M_REGL[rand()%(sizeof OPS_M_REGL/2)]|0x800;
     if (alt) op=rand()&0x1ffff;
     res_p=0;
-    rA=rand()&0x1f;
-    rB=rand()&0x1f;
-    rT=rand()&0x1f;
+    rA=rand()&0xf;
+    rB=rand()&0xf;
+    rT=rand()%(16-3*inloop);
     if (has_mem_ && rT==16) rT=17;
     if (has_mem_ && rA==16) rA=17;
     if (has_mem_) addr=lrand48()%(MEMRGN_DATA_SZ-8);
