@@ -2189,6 +2189,12 @@ void prog_print(char *name) {
     fputc(f,c);
     fputc(f,'0'+((reqs[insn].flag&0x20)>>5)+2*(reqs[insn].op>>12);
     fputc(f,'\n');
+    for(n=0;n<8;n++) {
+      char c=(reqs[insn].offset>>(32-4*n))&0xf;
+      if (c<10) c=c+'0';
+      else c=c+'a';
+      fputc(f,c);
+    }
   }
   fclose(f);
 }
