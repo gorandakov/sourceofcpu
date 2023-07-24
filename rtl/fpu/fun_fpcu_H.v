@@ -67,7 +67,7 @@ module fun_fpuH(
   output [67:0] u1_Bxo;
   input [67:0] u1_Bx;
   input [3:0] u1_en;
-  input [12:0] u1_op;
+  input [20:0] u1_op;
   input [3:0] u1_fufwd_A;
   input [3:0] u1_fuufwd_A;
   input [3:0] u1_fufwd_B;
@@ -82,7 +82,7 @@ module fun_fpuH(
   output [67:0] u3_Bxo;
   input [67:0] u3_Bx;
   input [3:0] u3_en;
-  input [12:0] u3_op;
+  input [20:0] u3_op;
   input [3:0] u3_fufwd_A;
   input [3:0] u3_fuufwd_A;
   input [3:0] u3_fufwd_B;
@@ -97,7 +97,7 @@ module fun_fpuH(
   output [67:0] u5_Bxo;
   input [67:0] u5_Bx;
   input [3:0] u5_en;
-  input [12:0] u5_op;
+  input [20:0] u5_op;
   input [3:0] u5_fufwd_A;
   input [3:0] u5_fuufwd_A;
   input [3:0] u5_fufwd_B;

@@ -2376,7 +2376,7 @@ module rs(
   localparam DATA_WIDTH=`alu_width+1;
   localparam SIMD_WIDTH=68;//half-width
   localparam REG_WIDTH=`reg_addr_width;
-  localparam OPERATION_WIDTH=`operation_width+5;
+  localparam OPERATION_WIDTH=`operation_width+5+3;
   localparam LSQ_WIDTH=`lsqRsNo_width;
   localparam CONST_WIDTH=33;
   localparam FLAGS_WIDTH=6;  

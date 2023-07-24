@@ -49,7 +49,7 @@ module fun_fpsu(
   input [67:0] u1_Bx;
   output [67:0] u1_Ax;
   input [3:0] u1_en;
-  input [12:0] u1_op;
+  input [20:0] u1_op;
   input [3:0] u1_fufwd_A;
   input [3:0] u1_fuufwd_A;
   input [3:0] u1_fufwd_B;
@@ -219,8 +219,8 @@ module fun_fpsu(
   reg [S+67:0] FUFX5_reg;
   reg [S+67:0] FUFX6_reg;
 
-  reg [12:0] u1_op_reg;
-  reg [12:0] u1_op_reg2;
+  reg [20:0] u1_op_reg;
+  reg [20:0] u1_op_reg2;
   reg [3:0] u1_en_reg2;
   reg [3:0] u1_en_reg3;
   reg [3:0] u1_en_reg4;
@@ -309,7 +309,7 @@ module fun_fpsu(
   .isRSub(fxFADD_rsub),
   .raise(fxFADD_raise[0]),
   .fpcsr(fpcsr[31:0]),
-  .rmode(fpcsr[`csrfpu_rmode]),
+  .rmode(u1_op_reg[20:18]==3'b111 ? fpcsr[`csrfpu_rmode] : u1_op_reg[20:18]),
   .copyA(fxFADD_copyA[H]),
   .logic_en(fxFADD_lo),
   .logic_sel(fxFADD_loSel),
@@ -328,7 +328,7 @@ module fun_fpsu(
   .isRSub(fxFADD_rsub),
   .raise(fxFADD_raise[1]),
   .fpcsr(fpcsr[31:0]),
-  .rmode(fpcsr[`csrfpu_rmode]),
+  .rmode(u1_op_reg[20:18]==3'b111 ? fpcsr[`csrfpu_rmode] : u1_op_reg[20:18]),
   .copyA(fxFADD_copyA[H]),
   .logic_en(fxFADD_lo),
   .logic_sel(fxFADD_loSel),
@@ -411,7 +411,7 @@ module fun_fpsu(
   .B({gDataBXL_reg[0][65],gDataBFL_reg[0][64:33]}),
   .copyA(fxFCADD_copyA[H]),
   .en(fxFCADD_sn),
-  .rmode(fpcsr[`csrfpu_rmode]),
+  .rmode(u1_op_reg[20:18]==3'b111 ? fpcsr[`csrfpu_rmode] : u1_op_reg[20:18]),
   .res(FOOF[1][65:33]),
   .xdata(xdata[65:33]),
   .raise(fxFCADD_raise[0]),
@@ -426,7 +426,7 @@ module fun_fpsu(
   .B({gDataBXL_reg[0][32],gDataBFL_reg[0][31:0]}),
   .copyA(fxFCADD_copyA[H]),
   .en(fxFCADD_sn),
-  .rmode(fpcsr[`csrfpu_rmode]),
+  .rmode(u1_op_reg[20:18]==3'b111 ? fpcsr[`csrfpu_rmode] : u1_op_reg[20:18]),
   .res(FOOF[1][32:0]),
   .xdata(xdata[32:0]),
   .raise(fxFCADD_raise[1]),

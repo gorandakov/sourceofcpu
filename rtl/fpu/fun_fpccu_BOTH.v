@@ -75,7 +75,7 @@ module fun_fpu_BOTH(
   (* bus=DBLH bus_spacing=8 bus_off=0 *) input [67:0]    u1_A1;
   (* bus=DBLH bus_spacing=8 bus_off=0 *) input [67:0]    u1_B1;
   input [3:0] u1_en;
-  input [12:0] u1_op;
+  input [20:0] u1_op;
   input [3:0] u1_fufwd_A;
   input [3:0] u1_fuufwd_A;
   input [3:0] u1_fufwd_B;
@@ -89,7 +89,7 @@ module fun_fpu_BOTH(
   (* bus=DBLH bus_spacing=8 bus_off=1 *) input [67:0]    u3_A1;
   (* bus=DBLH bus_spacing=8 bus_off=1 *) input [67:0]    u3_B1;
   input [3:0] u3_en;
-  input [12:0] u3_op;
+  input [20:0] u3_op;
   input [3:0] u3_fufwd_A;
   input [3:0] u3_fuufwd_A;
   input [3:0] u3_fufwd_B;
@@ -103,7 +103,7 @@ module fun_fpu_BOTH(
   (* bus=DBLH bus_spacing=8 bus_off=2 *) input [67:0]    u5_A1;
   (* bus=DBLH bus_spacing=8 bus_off=2 *) input [67:0]    u5_B1;
   input [3:0] u5_en;
-  input [12:0] u5_op;
+  input [20:0] u5_op;
   input [3:0] u5_fufwd_A;
   input [3:0] u5_fuufwd_A;
   input [3:0] u5_fufwd_B;
@@ -232,18 +232,18 @@ module fun_fpu_BOTH(
   wire [5:0] HFOOSH1;
   wire [5:0] HFOOSH2;
 
-  reg [12:0] u1_op_reg;
-  reg [12:0] u1_op_reg2;
-  reg [12:0] u1_op_reg3;
-  reg [12:0] u1_op_reg4;
-  reg [12:0] u3_op_reg;
-  reg [12:0] u3_op_reg2;
-  reg [12:0] u3_op_reg3;
-  reg [12:0] u3_op_reg4;
-  reg [12:0] u5_op_reg;
-  reg [12:0] u5_op_reg2;
-  reg [12:0] u5_op_reg3;
-  reg [12:0] u5_op_reg4;
+  reg [20:0] u1_op_reg;
+  reg [20:0] u1_op_reg2;
+  reg [20:0] u1_op_reg3;
+  reg [20:0] u1_op_reg4;
+  reg [20:0] u3_op_reg;
+  reg [20:0] u3_op_reg2;
+  reg [20:0] u3_op_reg3;
+  reg [20:0] u3_op_reg4;
+  reg [20:0] u5_op_reg;
+  reg [20:0] u5_op_reg2;
+  reg [20:0] u5_op_reg3;
+  reg [20:0] u5_op_reg4;
 
   assign u1_ret=u1_retL|u1_retH;
   assign u1_ret_en=u1_ret_enL| u1_ret_enH;

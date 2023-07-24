@@ -55,7 +55,7 @@ module fun_fpu(
   input [67:0] u1_Bx;
   output [67:0] u1_Ax;
   input [3:0] u1_en;
-  input [12:0] u1_op;
+  input [20:0] u1_op;
   input [3:0] u1_fufwd_A;
   input [3:0] u1_fuufwd_A;
   input [3:0] u1_fufwd_B;
@@ -234,8 +234,8 @@ module fun_fpu(
 
   reg [3:0] u1_en_reg;
   reg [3:0] u2_en_reg;
-  reg [12:0] u1_op_reg;
-  reg [12:0] u1_op_reg2;
+  reg [20:0] u1_op_reg;
+  reg [20:0] u1_op_reg2;
   reg [3:0] u1_en_reg2;
   reg [3:0] u1_en_reg3;
   reg [3:0] u1_en_reg4;
@@ -329,7 +329,7 @@ module fun_fpu(
   //.invExcpt(fpcsr[`csrfpu_inv_excpt]),
   .raise(fxFADD_raise),
   .fpcsr(fpcsr[31:0]),
-  .rmode(fpcsr[`csrfpu_rmode]),
+  .rmode(u1_op_reg[20:18]==3'b111 ? fpcsr[`csrfpu_rmode] : u1_op_reg[20:18]),
   .copyA(fxFADD_copyA[H]),
   .logic_en(fxFADD_lo),
   .logic_sel(fxFADD_loSel),
@@ -418,7 +418,7 @@ module fun_fpu(
   .or1(H? 1'b1 : fxFCADD_dbl),
   .copyA(fxFCADD_copyA[H]),
   .en(H? fxFCADD_dbl : fxFCADD_dblext),
-  .rmode(fxXTRA ? ROUND_TRUNC : fxFCADD_dbl|H ? fpcsr[`csrfpu_rmode] : fpcsr[`csrfpu_rmodeE]),
+  .rmode(fxXTRA ? ROUND_TRUNC :  u1_op_reg[20:18]==3'b111 ?fpcsr[`csrfpu_rmode] : u1_op_reg[20:18]),
   .res(FOOF[1][67:0]),
   .res_hi(FOOF[1][68+15:68]),
   .xtra(xtra),
