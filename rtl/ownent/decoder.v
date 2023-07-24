@@ -1783,7 +1783,7 @@ module decoder(
   thread
   );
   localparam DATA_WIDTH=`alu_width+1;
-  localparam OPERATION_WIDTH=`operation_width+5;
+  localparam OPERATION_WIDTH=`operation_width+5+3;
   localparam RRF_WIDTH=6;
   localparam IN_REG_WIDTH=6;
   localparam PORT_WIDTH=4;
@@ -2310,6 +2310,7 @@ module decoder(
   
   wire [9:0][OPERATION_WIDTH-6:0] dec_operation;
   wire [9:0][4:0] dec_alucond;
+  wire [9:0][2:0] dec_rndmode;
   wire [9:0][REG_WIDTH-1:0] dec_rA;
   wire [9:0]dec_rA_use;
   wire [9:0]dec_rA_useF;
@@ -2379,6 +2380,7 @@ module decoder(
 
   reg [OPERATION_WIDTH-6:0] 	dec_operation_reg[9:0];
   reg [4:0]			dec_alucond_reg[9:0];
+  reg [2:0]			dec_rndmode_reg[9:0];
   reg [REG_WIDTH-1:0] 		dec_rA_reg[9:0];
   reg 				dec_rA_use_reg[9:0];
   reg 				dec_rA_useF_reg[9:0];
@@ -2609,6 +2611,7 @@ module decoder(
           .rA_useF(dec_rA_useF[k]),.rB_useF(dec_rB_useF[k]),.rT_useF(dec_rT_useF[k]),.rC_useF(dec_rC_useF[k]),
           .rA_isV(dec_rA_isV[k]),.rB_isV(dec_rB_isV[k]),.rT_isV(dec_rT_isV[k]),
 	  .alucond(dec_alucond[k]),
+          .rndmode(dec_rndmode[k]),
 //          .clr64,.clr128,
 //          .chain,
           .flags_use(dec_useFlags[k]),
@@ -2734,16 +2737,16 @@ module decoder(
           dec_rT_isV_reg,
           cls_flag_reg,
           
-          {dec_alucond_reg[0],dec_operation_reg[0]},
-          {dec_alucond_reg[1],dec_operation_reg[1]},
-          {dec_alucond_reg[2],dec_operation_reg[2]},
-          {dec_alucond_reg[3],dec_operation_reg[3]},
-          {dec_alucond_reg[4],dec_operation_reg[4]},
-          {dec_alucond_reg[5],dec_operation_reg[5]},
-          {dec_alucond_reg[6],dec_operation_reg[6]},
-          {dec_alucond_reg[7],dec_operation_reg[7]},
-          {dec_alucond_reg[8],dec_operation_reg[8]},
-          {dec_alucond_reg[9],dec_operation_reg[9]},
+          {dec_rndmode_reg[0],dec_alucond_reg[0],dec_operation_reg[0]},
+          {dec_rndmode_reg[1],dec_alucond_reg[1],dec_operation_reg[1]},
+          {dec_rndmode_reg[2],dec_alucond_reg[2],dec_operation_reg[2]},
+          {dec_rndmode_reg[3],dec_alucond_reg[3],dec_operation_reg[3]},
+          {dec_rndmode_reg[4],dec_alucond_reg[4],dec_operation_reg[4]},
+          {dec_rndmode_reg[5],dec_alucond_reg[5],dec_operation_reg[5]},
+          {dec_rndmode_reg[6],dec_alucond_reg[6],dec_operation_reg[6]},
+          {dec_rndmode_reg[7],dec_alucond_reg[7],dec_operation_reg[7]},
+          {dec_rndmode_reg[8],dec_alucond_reg[8],dec_operation_reg[8]},
+          {dec_rndmode_reg[9],dec_alucond_reg[9],dec_operation_reg[9]},
 
           dep_rA[0],
           dep_rA[1],
@@ -3669,6 +3672,7 @@ module decoder(
           for (n=0;n<10;n=n+1) begin
               dec_operation_reg[n]<={OPERATION_WIDTH-5{1'b0}};
 	      dec_alucond_reg[n]<=5'b0;
+	      dec_rndmode_reg[n]<=3'b0;
               dec_rA_reg[n]<={REG_WIDTH{1'b0}};
               dec_rA_use_reg[n]<=1'b0;
               dec_rA_useF_reg[n]<=1'b0;
@@ -3759,6 +3763,7 @@ module decoder(
               dec_operation_reg[n]<=dec_operation[n];
 	      dec_alucond_reg[n]<=dec_alucond[n];
               dec_rA_reg[n]<=ffx(thread,dec_rA[n]);
+              dec_rndmode_reg[n]<=dec_rndmode;
               dec_rA_use_reg[n]<=dec_rA_use[n]&& dec_rA[n]!=31 && iUsed[n];
               dec_rA_useF_reg[n]<=dec_rA_useF[n] && iUsed[n];
               dec_rB_reg[n]<=ffx(thread,dec_rB[n]);
