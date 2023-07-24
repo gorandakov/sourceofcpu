@@ -1023,6 +1023,8 @@ module backend(
   reg insBus_io_reg2;
   reg insBus_io_reg3;
   
+  (* keep *) self;
+
   reg [36:0] MSI_exp_addr_reg;
   reg MSI_exp_en_reg;
   reg MSI_swap_want_reg;
@@ -2903,7 +2905,7 @@ module backend(
   .write3_addr_rrf(tire3_rT),.write3_wen_rrf(tire3_enG),
   .write4_addr_rrf(tire4_rT),.write4_wen_rrf(tire4_enG),
   .write5_addr_rrf(tire5_rT),.write5_wen_rrf(tire5_enG),
-  .write6_addr_rrf(tire6_rT),.write6_wen_rrf(tire6_enG&~cretin[1]),
+  .write6_addr_rrf(tire6_rT),.write6_wen_rrf(tire6_enG&~cretin[1]||self),
   .write7_addr_rrf(tire7_rT),.write7_wen_rrf(tire7_enG),
   .write8_addr_rrf(tire8_rT),.write8_wen_rrf(tire8_enG),
   .tireRead0_addr(tire0_rF),
@@ -2990,7 +2992,7 @@ module backend(
   .write1_addr_rrf(tire1_rT),.write1_wen_rrf(tire1_enV&~cretin[0]),
   .write2_addr_rrf(tire2_rT),.write2_wen_rrf(tire2_enV),
   .write3_addr_rrf(tire3_rT),.write3_wen_rrf(tire3_enV),
-  .write4_addr_rrf(tire4_rT),.write4_wen_rrf(tire4_enV&~cretin[1]),
+  .write4_addr_rrf(tire4_rT),.write4_wen_rrf(tire4_enV&~cretin[1]||self),
   .write5_addr_rrf(tire5_rT),.write5_wen_rrf(tire5_enV),
   .write6_addr_rrf(tire6_rT),.write6_wen_rrf(tire6_enV),
   .write7_addr_rrf(tire7_rT),.write7_wen_rrf(tire7_enV),
