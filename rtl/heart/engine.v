@@ -1001,8 +1001,6 @@ module backend(
   reg [8:0] outXAM_reg;
   reg [8:0] outXAM_reg2;
 
-  (* keep *) wire [1:0] cretin;
-
   wire [2:0] useBConstW;
   wire [2:0] useAConstW;
   wire [2:0] rs_rAW_use;
@@ -2897,13 +2895,13 @@ module backend(
   .read7_const(rs_const[7]&{65{rs_useAConst[7]}}),
   .read8_const(rs_const[8]&{65{rs_useAConst[8]}}),
 
-  .write0_addr_rrf(tire0_rT),.write0_wen_rrf(tire0_enG&~cretin[0]),
+  .write0_addr_rrf(tire0_rT),.write0_wen_rrf(tire0_enG),
   .write1_addr_rrf(tire1_rT),.write1_wen_rrf(tire1_enG),
   .write2_addr_rrf(tire2_rT),.write2_wen_rrf(tire2_enG),
   .write3_addr_rrf(tire3_rT),.write3_wen_rrf(tire3_enG),
   .write4_addr_rrf(tire4_rT),.write4_wen_rrf(tire4_enG),
   .write5_addr_rrf(tire5_rT),.write5_wen_rrf(tire5_enG),
-  .write6_addr_rrf(tire6_rT),.write6_wen_rrf(tire6_enG&~cretin[1]),
+  .write6_addr_rrf(tire6_rT),.write6_wen_rrf(tire6_enG),
   .write7_addr_rrf(tire7_rT),.write7_wen_rrf(tire7_enG),
   .write8_addr_rrf(tire8_rT),.write8_wen_rrf(tire8_enG),
   .tireRead0_addr(tire0_rF),
@@ -2928,7 +2926,7 @@ module backend(
   .write9_addr_reg(FUreg_reg[9]),.write9_data_reg(FU_reg[9]),.write9_wen_reg(FUwen_reg[9])
   );
 
-  regfilef #(SIMD_WIDTH) regAVH_mod(
+  regfile #(SIMD_WIDTH) regAVH_mod(
   .clk(clk),
   .rst(rst),
   .read_clkEn(~doStall),
@@ -2987,10 +2985,10 @@ module backend(
   .read8_const({SIMD_WIDTH{1'B0}}),
 
   .write0_addr_rrf(tire0_rT),.write0_wen_rrf(tire0_enV),
-  .write1_addr_rrf(tire1_rT),.write1_wen_rrf(tire1_enV&~cretin[0]),
+  .write1_addr_rrf(tire1_rT),.write1_wen_rrf(tire1_enV),
   .write2_addr_rrf(tire2_rT),.write2_wen_rrf(tire2_enV),
   .write3_addr_rrf(tire3_rT),.write3_wen_rrf(tire3_enV),
-  .write4_addr_rrf(tire4_rT),.write4_wen_rrf(tire4_enV&~cretin[1]),
+  .write4_addr_rrf(tire4_rT),.write4_wen_rrf(tire4_enV),
   .write5_addr_rrf(tire5_rT),.write5_wen_rrf(tire5_enV),
   .write6_addr_rrf(tire6_rT),.write6_wen_rrf(tire6_enV),
   .write7_addr_rrf(tire7_rT),.write7_wen_rrf(tire7_enV),
@@ -3080,7 +3078,7 @@ module backend(
   .write2_addr_rrf(tire2_rT),.write2_wen_rrf(tire2_enV),
   .write3_addr_rrf(tire3_rT),.write3_wen_rrf(tire3_enV),
   .write4_addr_rrf(tire4_rT),.write4_wen_rrf(tire4_enV),
-  .write5_addr_rrf(tire5_rT),.write5_wen_rrf(tire5_enV&~cretin[0]),
+  .write5_addr_rrf(tire5_rT),.write5_wen_rrf(tire5_enV),
   .write6_addr_rrf(tire6_rT),.write6_wen_rrf(tire6_enV),
   .write7_addr_rrf(tire7_rT),.write7_wen_rrf(tire7_enV),
   .write8_addr_rrf(tire8_rT),.write8_wen_rrf(tire8_enV),
