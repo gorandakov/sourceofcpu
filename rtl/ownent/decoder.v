@@ -27,6 +27,7 @@ module decoder_permitted_i(
   load,
   store,
   storeL,
+  fma,
   mul,
   sys,
   pos0,
@@ -45,6 +46,7 @@ module decoder_permitted_i(
   input [9:0] load;
   input [9:0] store;
   input [9:0] storeL;
+  input [9:0] fma;
   input [9:0] mul;
   input [9:0] sys;
   input [9:0] pos0;
@@ -68,6 +70,7 @@ module decoder_permitted_i(
   wire [9:0][9:0] ldst_cnt;
   wire [9:0][9:0] alu_shift_cnt;
   wire [9:0][9:0] FPU_dke;
+  wire [9:0][9:0] fma_dke;
   
   wire [9:0] storeL_has;
   wire [9:0] permA;
@@ -89,6 +92,7 @@ module decoder_permitted_i(
           popcnt10_or_less store_mod(store & ((10'd2<<k)-10'd1),store_cnt[k]);
           popcnt10_or_less ldst_mod((store|load) & ((10'd2<<k)-10'd1),ldst_cnt[k]);
           popcnt10 mul_mod(mul & ((10'd2<<k)-10'd1),mul_cnt[k]);
+          popcnt10 mul_mod(fma & ((10'd2<<k)-10'd1),fma_dke[k]);
           popcnt10_or_more mul_more_mod(mul & ((10'd2<<k)-10'd1),mul_more_cnt[k]);
           popcnt10_or_less lsas_mod((load|shift|alu|store) & ((10'd2<<k)-10'd1),lsas_cnt[k]);
           
@@ -105,6 +109,9 @@ module decoder_permitted_i(
           assign permA[k]=mul_more_cnt[k][2] ? 1'b0 : 1'bz;
           
           assign permB[k]=branch_cnt[k][2] & taken_cnt[k][1] & indir_cnt[k][1];
+
+          if (k<9) assign perm[k]=permX[k] && fma_dke[k][0] || (permX[k+1] && fma_dke[k+1][2]) || fma_dke[k][2];
+          else  assign perm[k]=permX[k] && fma_dke[k][0] || fma_dke[k][2];
           
           if (k>0)
               assign permC[k]=(|(sys[k:0])) ? sys[k-1:0]==0 && pos0[k]==0 && FPU_dke[k][4] : pos0[k]==0 && FPU_dke[k][4];
@@ -117,7 +124,7 @@ module decoder_permitted_i(
   
 //  assign permC[0]=~halt;
   
-  assign perm=permA & permB & permC & iAvail & {10{~stall}};
+  assign permX=permA & permB & permC & iAvail & {10{~stall}};
 
 endmodule
 
@@ -3131,7 +3138,8 @@ module decoder(
   .shift(cls_shift),
   .load(cls_load),
   .store(cls_store),
-  .storeL(cls_store2|cls_storeI),
+  .storeL(cls_storeI),
+  .fma(cls_store2),
   .mul(cls_mul),
   .sys(cls_sys),
   .pos0(cls_pos0),
@@ -3152,7 +3160,7 @@ module decoder(
   cls_load_reg & iUsed_reg,
   cls_store_reg & iUsed_reg,
   cls_storeI_reg & iUsed_reg,//12,8 bit and misaligned
-  cls_store2_reg & iUsed_reg,//base+index
+  cls_store_reg & iUsed_reg,//base+index
   cls_FPU_reg & iUsed_reg,
   cls_loadFPU_reg & iUsed_reg,
   cls_mul_reg & iUsed_reg,

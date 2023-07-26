@@ -39,6 +39,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   wire clsLoadFPU;
   wire clsSys;
   wire clsPos0;
+  wire clsFMA;
   
   wire [7:0] opcode_main;
 
@@ -210,6 +211,12 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
  // isCall,
   opcode_main==8'hff && ~instr[15] && ~instr[13] && magic[0]
   };
+
+  assign clsFMA=|{
+  instr[31:27]==5'd16 && isBasicFPUScalarB && (instr[13:8]==6'd18) | (instr[13:8]==6'd21),
+  instr[16] && isBasicFPUScalarB && (instr[13:9]==5'd8) | (instr[13:8]==6'd19) | (isntr[13:8]==6'd20),
+  instr[31:27]==5'd16 && isBasicFPUScalarA && (instr[13:9]==5'd2) | (instr[13:8]==6'd8),
+  instr[16:14]==3'b100 && isBAsicFPUScalarA && (instr[13:10]==4'd0) | (instr[13:9]==5'd3)};
   
   assign clsALU=|{
   isBasicALU & ~isBasicALUExcept & ~isBasicXOR,
@@ -307,7 +314,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   assign class_[`iclass_mul]= clsMul;
   assign class_[`iclass_load]=clsLoad;
   assign class_[`iclass_store]=clsStore;
-  assign class_[`iclass_store2]=clsStore2;
+  assign class_[`iclass_store2]=clsFMA;
   assign class_[`iclass_FPU]=clsFPU;
   assign class_[`iclass_loadFPU]=clsLoadFPU;
   assign class_[`iclass_sys]=clsSys;
