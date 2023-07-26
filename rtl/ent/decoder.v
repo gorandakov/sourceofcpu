@@ -77,6 +77,8 @@ module decoder_permitted_i(
 
   wire [9:0] permB;
   wire [9:0] permC;
+
+  wire [9:0] permX;
   
   generate
       genvar k;
@@ -110,8 +112,8 @@ module decoder_permitted_i(
           
           assign permB[k]=branch_cnt[k][2] & taken_cnt[k][1] & indir_cnt[k][1];
 
-          if (k<9) assign perm[k]=permX[k] && fma_dke[k][0] || (permX[k+1] && fma_dke[k+1][2]) || fma_dke[k][2];
-          else  assign perm[k]=permX[k] && fma_dke[k][0] || fma_dke[k][2];
+          if (k<9) assign perm[k]=permX[k] && fma_dke[k][0] | (permX[k+1] && fma_dke[k+1][2]) | fma_dke[k][2] | (k==0);
+          else  assign perm[k]=permX[k] && fma_dke[k][0] | fma_dke[k][2];
           
           if (k>0)
               assign permC[k]=(|(sys[k:0])) ? sys[k-1:0]==0 && pos0[k]==0 && FPU_dke[k][4] : pos0[k]==0 && FPU_dke[k][4];
