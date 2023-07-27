@@ -1010,7 +1010,7 @@ module smallInstr_decoder(
                prT[10]=instr[16:12];
                prB[10]=5'd31;
                puseBConst[10]=1'b1;
-               pconstant[10]={47'b0,instr[29:25],6'b0,instr[23:18]};
+               pconstant[10]={52'b0,instr[29:25],1'b0,instr[23:18]};
                pflags_use[10]=1'b0;
                pflags_write[10]=~instr[24];
                poperation[10][12]=instr[24];
@@ -1030,8 +1030,8 @@ module smallInstr_decoder(
                prB[10]=5'd31;
                puseBConst[10]=1'b1;
                pflags_use[10]=1'b0;
-               pflags_write[10]=~instr[24];
-               poperation[10][12]=instr[24];
+               pflags_write[10]=~instr[22];
+               poperation[10][12]=instr[22];
        end
 
        trien[11]=~magic[0] & subIsFPUE;
