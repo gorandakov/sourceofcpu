@@ -988,7 +988,7 @@ module smallInstr_decoder(
        end
         //  if (rT==6'd16) thisSpecAlu=1'b1;
       
-       trien[10]=magic[0] & isBasicShift & ~isBasicShiftExcept;
+       trien[10]=magic[0] & isBasicShift;
        prA_use[10]=1'b1;
        prB_use[10]=1'b1;
        prT_use[10]=1'b1;
@@ -1010,7 +1010,7 @@ module smallInstr_decoder(
                prT[10]=instr[16:12];
                prB[10]=5'd31;
                puseBConst[10]=1'b1;
-               pconstant[10]={58'b0,instr[23:18]};
+               pconstant[10]={47'b0,instr[29:25],6'b0,instr[23:18]};
                pflags_use[10]=1'b0;
                pflags_write[10]=~instr[24];
                poperation[10][12]=instr[24];
