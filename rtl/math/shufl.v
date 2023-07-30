@@ -26,6 +26,8 @@ module fperm(
 //  copyB,
   swpSngl,
   dupSngl,
+  is_sqrt,
+  is_div,
   A,B,
   res);
   parameter C=1'b0;
@@ -40,6 +42,7 @@ module fperm(
   output [67:0] res;
 
   wire [67:0] resX;
+  wire [67:0] resY;
   wire [67:0] res0;
   reg [67:0] res0_reg;
   reg [67:0] res0_reg2;
@@ -53,6 +56,12 @@ module fperm(
         assign res=en_reg3? res0_reg3 : 68'bz;
     end
   endgenerate
+  
+  adder #(12) add_dbl(BIAS_D,~B[65:54],exp_D,1'b1,is_sqrt,,,,);
+  adder #(12) add_dbl(BIAS_D,~{1'b0,B[65:55]},exp_D,1'b1,~is_sqrt,,,,);
+
+  assign resY=A[67:66]==`ftype_dbl ? {B[67:66],exp_D,B[53],53'b0} : 68'bz;
+
   assign resX=(copyA & ~swpSngl) ? A : 68'bz;
   assign resX=(~copyA & ~swpSngl) ? B : 68'bz;
   assign resX=(copyA & swpSngl) ? {A[67:66],A[32:0],A[65:33]} : 68'bz;
