@@ -17,7 +17,7 @@ limitations under the License.
 
 `include "struct.sv"
 
-module shlr(
+(* align_width=val1,valres *) module shlr(
   bit_en,
   sz,
   dir,
@@ -42,7 +42,7 @@ module shlr(
 
   wire [WIDTH+7:-8] val_int;
   wire fill_bit;
-  wire [WIDTH-1:0] valP0;
+  (* align_width *) wire [WIDTH-1:0] valP0;
 
   wire [7:-7] eq;
   wire [7:0] eq2;
