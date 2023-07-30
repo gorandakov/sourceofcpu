@@ -502,7 +502,7 @@ module fun_fpsu(
 	  fxFADD_com<=2'b0;
 	  fxFADD_dupl<=1'b0;
           fxFADD_sqrt<=1'b1;
-          fxFADD_div<=1'b1;
+          fxFADD_div<=1'b0;
 	  fxFCADD_dupl<=1'b0;
 	  fxFADD_pswp<=1'b0;
 	  fxFADD_pcmp<=1'b0;
