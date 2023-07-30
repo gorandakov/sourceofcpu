@@ -353,6 +353,8 @@ module fun_fpsu(
   .copyA(H? fxFADD_com==2'b01 : ~fxFADD_com[0]),
   .swpSngl(fxFADD_pswp),
   .dupSngl(fxFADD_dupl),
+  .is_sqrt(fxFADD_sqrt),
+  .is_div(fxFADD_div),
   .A(fxDataAXL_reg[0]),.B(gxDataBXL_reg[1]),
   .res(FOOF[0]));
   
@@ -440,6 +442,8 @@ module fun_fpsu(
   .copyA(H? fxFCADD_com==2'b01 : ~fxFCADD_com[0]),
   .swpSngl(fxFCADD_pswp),
   .dupSngl(fxFCADD_dupl),
+  .is_sqrt(1'b0),
+  .is_div(1'b0),
   .A(fxDataAXL_reg[1]),.B(gxDataBXL_reg[0]),
   .res(FOOF[1]));
  
@@ -497,6 +501,8 @@ module fun_fpsu(
 	  fxFADD_copyA=2'b0;
 	  fxFADD_com<=2'b0;
 	  fxFADD_dupl<=1'b0;
+          fxFADD_sqrt<=1'b1;
+          fxFADD_div<=1'b1;
 	  fxFCADD_dupl<=1'b0;
 	  fxFADD_pswp<=1'b0;
 	  fxFADD_pcmp<=1'b0;
@@ -556,7 +562,9 @@ module fun_fpsu(
 	      {fxFCADD_pswp,fxFCADD_com}<=u1_op_reg[10:8];
               fxFADD_dupl<=u1_op_reg[12];
               fxFCADD_dupl<=u1_op_reg[12];
-	      
+	      fxFADD_sqrt<=u1_op_reg[7:0]==`fop_sqrtDH;
+	      fxFADD_div<=u1_op_reg[7:0]==`fop_sqrtDL;
+
 	      fxFCADD_dbl=u1_op_reg[7:0]==`fop_mulDL ||
 	        u1_op_reg[7:0]==`fop_mulDH ||
 	        u1_op_reg[7:0]==`fop_mulDP || u1_op_reg[7:0]==`fop_rndDSP;
