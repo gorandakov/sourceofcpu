@@ -41,6 +41,9 @@ module fperm(
   input [67:0] B;
   output [67:0] res;
 
+  localparam [11:0] BIAS_D=12'd2047;
+  localparam [8:0] BIAS_S=9'd255;
+
   wire [67:0] resX;
   wire [67:0] resY;
   wire [67:0] res0;
@@ -48,6 +51,10 @@ module fperm(
   reg [67:0] res0_reg2;
   reg [67:0] res0_reg3;
   reg en_reg,en_reg2,en_reg3;
+
+  wire [11:0] exp_D;
+  wire [8:0] exp_X1;
+  wire [8:0] exp_X;
 
   generate
     if (!C) begin
