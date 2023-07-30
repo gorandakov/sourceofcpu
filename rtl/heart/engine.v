@@ -7837,7 +7837,13 @@ dcache1 L1D_mod(
 	          dc_rdataA_X_reg[v]<=dc_rdat_X[v];
 	          dc_pdataA_reg[v]<=dc_pdat[v];
 	          dc_rdataA_reg2[v]<=dc_rdataA_reg[v];
-	          dc_rdataA_X_reg2[v]<=dc_rdataA_X_reg[v];
+	          dc_rdataA_X_reg2[v]<=~dc_sz256_reg3[v] ? 
+                    dc_rdataA_reg[v][127:0] : dc_rdataA_X_reg[v];
+                  dc_sz256[v]<=lsr_wr_data[v][`lsaddr_sz]==5'hc || lsr_wr_data[v][`lsaddr_sz]==5'hd || 
+                    lsr_wr_data[v][`lsaddr_sz]==5'he;
+                  dc_sz256_reg[v]<=dc_sz256[v];
+                  dc_sz256_reg2[v]<=dc_sz256_reg[v];
+                  dc_sz256_reg3[v]<=dc_sz256_reg2[v];
               end
           end
           for(v=0;v<=1;v=v+1) begin
