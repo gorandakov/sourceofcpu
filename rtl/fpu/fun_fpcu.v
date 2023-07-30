@@ -135,6 +135,8 @@ module fun_fpu(
   reg [1:0] fxFADD_com;
   reg  fxFADD_pswp;
   reg  fxFADD_dupl;
+  reg  fxFADD_sqrt;
+  reg fxFADD_div;
   reg  fxFADD_pcmp;
   reg  fxFADD_lo;
   reg [1:0] fxFADD_loSel;
@@ -346,6 +348,8 @@ module fun_fpu(
   .copyA(H? fxFADD_com==2'b01 : ~fxFADD_com[0]),
   .swpSngl(fxFADD_pswp),
   .dupSngl(fxFADD_dupl),
+  .is_sqrt(fxFADD_sqrt),
+  .is_div(fxFADD_divide),
   .A(fxDataAXL_reg[0][67:0]),.B(gxDataBXL_reg[1][67:0]),
   .res(FOOF[0][67:0]));
   
@@ -437,6 +441,8 @@ module fun_fpu(
   .copyA(H? fxFCADD_com==2'b01 : ~fxFCADD_com[0]),
   .swpSngl(fxFCADD_pswp),
   .dupSngl(fxFCADD_dupl),
+  .is_sqrt(1'b0),
+  .is_div(1'b0),
   .A(fxDataAXL_reg[1][67:0]),.B(gxDataBXL_reg[0][67:0]),
   .res(FOOF[1][67:0]));
  
@@ -491,6 +497,8 @@ module fun_fpu(
 	  fxFADD_copyA=2'b0;
 	  fxFADD_com<=2'b0;
 	  fxFADD_dupl<=1'b0;
+          fxFADD_sqrt<=1'b1;
+          fxFADD_div<=1'b0;
 	  fxFCADD_dupl<=1'b0;
 	  fxFADD_pswp<=1'b0;
 	  fxFADD_pcmp<=1'b0;
@@ -550,6 +558,8 @@ module fun_fpu(
 	      {fxFCADD_pswp,fxFCADD_com}<=u1_op_reg[10:8];
               fxFADD_dupl<=u1_op_reg[12];
               fxFCADD_dupl<=u1_op_reg[12];
+              fxFCADD_sqrt<=u1_op_reg[7:0]==`fop_sqrtDH;
+              fxFCADD_div<=u1_op_reg[7:0]==`fop_sqrtDL;
 	      
 	      fxFCADD_dbl=u1_op_reg[7:0]==`fop_mulDL ||
 	        u1_op_reg[7:0]==`fop_mulDH ||
