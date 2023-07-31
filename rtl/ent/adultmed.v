@@ -1926,8 +1926,8 @@ module smallInstr_decoder(
       {poperation[36][11],poperation[36][9:8]}={1'b0,instr[15:14]};
       if (instr[16]!=0) perror[36]=1;
       case(instr[13:8])
-       //   6'd32: begin poperation[36][7:0]=`fop_forkL; pport[36]=PORT_FADD; prB_useF[36]=1'b0; end
-       //   6'd33: begin poperation[36][7:0]=`fop_forkH; pport[36]=PORT_FADD; prB_useF[36]=1'b0; end
+          6'd32: begin poperation[36][11]=1'b1; poperation[36][7:0]=`fop_forkL; pport[36]=PORT_FMUL; end
+      //    6'd33: begin poperation[36][7:0]=`fop_forkH; pport[36]=PORT_FADD; prB_useF[36]=1'b0; end
           6'd34: begin poperation[36][7:0]=`fop_sqrtDH; pport[36]=PORT_FADD; end
           6'd35: begin poperation[36][7:0]=`fop_sqrtDL; pport[36]=PORT_FADD; end
        //   6'd36: begin poperation[36][7:0]=`fop_sqrtE; pport[36]=PORT_FMUL; prB_useF[36]=1'b0; 
