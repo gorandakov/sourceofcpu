@@ -1920,22 +1920,22 @@ module smallInstr_decoder(
 	  perror[36]=1;
       end
       prT_useF[36]=1'b1;
-      prA_useF[36]=1'b1;
+      prA_useF[36]=1'b0;
       prB_useF[36]=1'b1;
       prAlloc[36]=1'b1;
-      {poperation[36][11],poperation[36][9:8]}={1'b1,{2{instr[16]}}};
-      if (instr[15:14]!=0) perror[36]=1;
+      {poperation[36][11],poperation[36][9:8]}={1'b0,instr[15:14]};
+      if (instr[16]!=0) perror[36]=1;
       case(instr[13:8])
-          6'd32: begin poperation[36][7:0]=`fop_forkL; pport[36]=PORT_FADD; prB_useF[36]=1'b0; end
-          6'd33: begin poperation[36][7:0]=`fop_forkH; pport[36]=PORT_FADD; prB_useF[36]=1'b0; end
+       //   6'd32: begin poperation[36][7:0]=`fop_forkL; pport[36]=PORT_FADD; prB_useF[36]=1'b0; end
+       //   6'd33: begin poperation[36][7:0]=`fop_forkH; pport[36]=PORT_FADD; prB_useF[36]=1'b0; end
           6'd34: begin poperation[36][7:0]=`fop_sqrtDH; pport[36]=PORT_FADD; end
           6'd35: begin poperation[36][7:0]=`fop_sqrtDL; pport[36]=PORT_FADD; end
-          6'd36: begin poperation[36][7:0]=`fop_sqrtE; pport[36]=PORT_FMUL; prB_useF[36]=1'b0; 
-                 prA[34]=rA_reor32; prB[34]=rB_reor32; prT[34]=rT_reor32; end
-          6'd37: begin poperation[36][7:0]=`fop_divE; pport[36]=PORT_FMUL; 
-                 prA[34]=rA_reor32; prB[34]=rB_reor32; prT[34]=rT_reor32; end
-          6'd38: begin poperation[36][7:0]=`fop_sqrtS; pport[36]=PORT_FMUL; prB_useF[36]=1'b0; end
-          6'd39: begin poperation[36][7:0]=`fop_divS; pport[36]=PORT_FMUL; end
+       //   6'd36: begin poperation[36][7:0]=`fop_sqrtE; pport[36]=PORT_FMUL; prB_useF[36]=1'b0; 
+       //          prA[34]=rA_reor32; prB[34]=rB_reor32; prT[34]=rT_reor32; end
+       //   6'd37: begin poperation[36][7:0]=`fop_divE; pport[36]=PORT_FMUL; 
+       //          prA[34]=rA_reor32; prB[34]=rB_reor32; prT[34]=rT_reor32; end
+       //   6'd38: begin poperation[36][7:0]=`fop_sqrtS; pport[36]=PORT_FMUL; prB_useF[36]=1'b0; end
+       //   6'd39: begin poperation[36][7:0]=`fop_divS; pport[36]=PORT_FMUL; end
 	  6'd40,6'd41,6'd42,6'd43: begin poperation[36][7:0]=`fop_logic; poperation[36][1:0]=instr[9:8]; 
 	     pport[36]=PORT_FADD; poperation[36][10:8]={instr[16],2'b0}; end 
           default: perror[36]=1;
