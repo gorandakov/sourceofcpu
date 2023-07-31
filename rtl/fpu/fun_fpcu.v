@@ -436,16 +436,16 @@ module fun_fpu(
   );
   
   
-  fperm #(1) fperm1CL_mod(
+  fperm #(0) fperm1CL_mod(
   .clk(clk),
   .rst(rst),
-  .en(~(H? fxFCADD_dbl:fxFCADD_dblext)&~fxFCADD_sn),
-  .copyA(H? fxFCADD_com==2'b01 : ~fxFCADD_com[0]),
-  .swpSngl(fxFCADD_pswp),
-  .dupSngl(fxFCADD_dupl),
+  .en(~(H? fxFCADD_dbl_reg:fxFCADD_dblext_reg)&~fxFCADD_sn_reg),
+  .copyA(H? fxFCADD_com_reg==2'b01 : ~fxFCADD_com_reg[0]),
+  .swpSngl(fxFCADD_pswp_reg),
+  .dupSngl(fxFCADD_dupl_reg),
   .is_sqrt(1'b0),
   .is_div(1'b0),
-  .A(fxDataAXL_reg[1][67:0]),.B(u1_op_reg2[13+H] ? XX_data : gxDataBXL_reg[0][67:0]),
+  .A(fxDataAXL_reg2[1][67:0]),.B(u1_op_reg3[13+H] ? XX_data : gxDataBXL_reg2[0][67:0]),
   .res(FOOF[1][67:0]));
  
   generate

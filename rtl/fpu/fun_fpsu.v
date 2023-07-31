@@ -437,16 +437,16 @@ module fun_fpsu(
   .fpcsr(fpcsr[31:0])
   );
   
-  fperm #(1) fperm1CL_mod(
+  fperm #(0) fperm1CL_mod(
   .clk(clk),
   .rst(rst),
-  .en(~fxFCADD_sn),
-  .copyA(H? fxFCADD_com==2'b01 : ~fxFCADD_com[0]),
-  .swpSngl(fxFCADD_pswp),
-  .dupSngl(fxFCADD_dupl),
+  .en(~fxFCADD_sn_reg),
+  .copyA(H? fxFCADD_com_reg==2'b01 : ~fxFCADD_com_reg[0]),
+  .swpSngl(fxFCADD_pswp_reg),
+  .dupSngl(fxFCADD_dupl_reg),
   .is_sqrt(1'b0),
   .is_div(1'b0),
-  .A(fxDataAXL_reg[1]),.B(u1_op_reg2[13+H] ? XY_data : gxDataBXL_reg[0]),
+  .A(fxDataAXL_reg2[1]),.B(u1_op_reg3[13+H] ? XY_data : gxDataBXL_reg2[0]),
   .res(FOOF[1]));
  
   assign FOOF[0][67:66]=(H? gxFADD_sn:gxFADD_sin) & u1_op_reg3[10] ? pook_data : 2'bz;
