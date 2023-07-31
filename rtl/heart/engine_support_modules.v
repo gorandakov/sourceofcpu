@@ -1376,11 +1376,13 @@ endmodule
 
 
 
-module wrtdata_combine(data,pdata,en,odata,opdata,low,sz);
+module wrtdata_combine(data,dataN,pdata,en,odata,odataN,opdata,low,sz);
   input [135:0] data;
+  input [135:0] dataN;
   input [1:0] pdata;
   input en;
-  output [159:0] odata;
+  output [127:0] odata;
+  output [127:0] odataN;
   output [1:0] opdata;
   input [1:0] low;
   input [4:0] sz;
@@ -1390,8 +1392,10 @@ module wrtdata_combine(data,pdata,en,odata,opdata,low,sz);
       genvar c,d;
       for(c=0;c<4;c=c+1) begin : low_gen
 	  //verilator lint_off WIDTH
-          if (c) assign odata=(en && low==c) ? {data,{c{8'b0}}} : 160'bz;
-          else assign odata=(en && low==c) ? data : 160'bz;
+          if (c) assign {odataN,odata}=(en && low==c) ? {dataN[127:8],sz==0 || sz==1 || sz==2 ? data[135:128] : dataN[7:0],
+              data[127:0],{c{8'b0}}} : 256'bz;
+          else assign {odataN,odata}=(en && low==c) ? {dataN[127:8],sz==0 || sz==1 || sz==2 ? data[135:128] : dataN[7:0],
+              data[127:0]} : 256'bz;
 	  //verilator lint_on WIDTH
       end
   endgenerate
