@@ -46,7 +46,7 @@ module fun_fpsu_BOTH(
   ALTDATAL0,ALTDATAL1,
   ALT_INP,
   FOOFL0,FOOFL1,FOOFL2,
-  XI_dataS
+  fork_in,fork_out
   );
   localparam [0:0] H=1'b1;
   localparam SIMD_WIDTH=68; //half width
@@ -140,7 +140,8 @@ module fun_fpsu_BOTH(
   (* register equiload *) (* bus=SIMDL bus_spacing=8 *) output [67:0] MRKAL;
   (* register equiload *) (* bus=SIMDL bus_spacing=8 *) output [67:0] BRKBL;
 
-  output [67:0] XI_dataS;
+  input [135:0] fork_in;
+  output [135:0] fork_out;
 
   wire [67:0] xtra0;
   wire [67:0] x2tra0;  
@@ -259,7 +260,7 @@ module fun_fpsu_BOTH(
   xtra1,xtra1,
   xtra2,xtra2,
   ALTDATAH0,ALTDATAH1,
-  ALT_INP,,,,
+  ALT_INP,,,fork_in[135:68],fork_out[135:68]
   );
 
   fun_fpuSL lfpc_mod(
@@ -286,7 +287,7 @@ module fun_fpsu_BOTH(
   ALTDATAL0,ALTDATAL1,
   ALT_INP,
   FOOFL0,FOOFL1,FOOFL2,
-  XI_dataS
+  fork_in[67:0],fork_out[67:0]
   );
 
   always @(posedge clk) begin

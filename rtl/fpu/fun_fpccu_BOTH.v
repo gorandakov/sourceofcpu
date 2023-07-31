@@ -59,10 +59,10 @@ module fun_fpu_BOTH(
   fxFCADD5_raise_s,
   FUS0,FUS1,FUS2,
   FOOSL0,FOOSL1,FOOSL2,
-  XI_dataS,
   fxFRT_alten_reg3,
   daltX,
-  FUCVT1
+  FUCVT1,
+  fork_in,fork_out
   );
   localparam [0:0] H=1'b1;
   localparam SIMD_WIDTH=68; //half width
@@ -173,11 +173,11 @@ module fun_fpu_BOTH(
   (* register equiload *) input [5:0] FOOSL1;
   (* register equiload *) input [5:0] FOOSL2;
   
-  input [67:0] XI_dataS;
   input fxFRT_alten_reg3;
   output daltX;
   output [63:0] FUCVT1;
-  
+  input [135:0] fork_in;
+  output [135:0] fork_out;  
 
   wire [67:0] xtra0;
   wire [67:0] xtra1;
@@ -288,7 +288,9 @@ module fun_fpu_BOTH(
   fxFCADD5_raise_s,
   FOOSL0, HFOOSH0,
   FOOSL1, HFOOSH1,
-  FOOSL2, HFOOSH2
+  FOOSL2, HFOOSH2,
+  fork_in[135:68],
+  fork_out[135:68]
   ); 
 
   fun_fpuL lfpc_mod(
@@ -331,7 +333,9 @@ module fun_fpu_BOTH(
   XI_dataS,
   fxFRT_alten_reg3,
   daltX,
-  FUCVT1
+  FUCVT1,
+  fork_in[67:0],
+  fork_out[67:0]
   );
 
   assign FUS0=u1_op_reg4[7:0]==`fop_cmpDH  ? HFOOSH0 : LFOOSH0; 
