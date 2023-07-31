@@ -55,7 +55,8 @@ module fun_fpuH(
   fxFCADD5_raise_s,
   FOOSH0_in,  FOOSH0_out,
   FOOSH1_in,  FOOSH1_out,
-  FOOSH2_in,  FOOSH2_out
+  FOOSH2_in,  FOOSH2_out,
+  HI_dataS,HI_dataT
   );
   localparam [0:0] H=1'b1;
   localparam SIMD_WIDTH=68; //half width
@@ -158,6 +159,8 @@ module fun_fpuH(
   (* register equiload *) output [5:0] FOOSH1_out;
   (* register equiload *) input [5:0]  FOOSH2_in;
   (* register equiload *) output [5:0] FOOSH2_out;
+  input [67:0] HI_dataS;
+  output [67:0] HI_dataT;
 
 
   fun_fpu #(0,1) fpu0_mod(
@@ -180,7 +183,7 @@ module fun_fpuH(
   fxFADD0_raise_s,
   fxFCADD1_raise_s,
   FOOSH0_in,
-  FOOSH0_out,,
+  FOOSH0_out,,,
   );
 
   fun_fpu #(1,1) fpu1_mod(
@@ -203,7 +206,7 @@ module fun_fpuH(
   fxFADD2_raise_s,
   fxFCADD3_raise_s,
   FOOSH1_in,
-  FOOSH1_out,,
+  FOOSH1_out,,,
   );
 
   fun_fpu #(2,1) fpu2_mod(
@@ -226,7 +229,7 @@ module fun_fpuH(
   fxFADD4_raise_s,
   fxFCADD5_raise_s,
   FOOSH2_in,
-  FOOSH2_out,,
+  FOOSH2_out,HI_dataS,HI_dataT
   );
 
 endmodule

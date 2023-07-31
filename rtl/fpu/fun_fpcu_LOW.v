@@ -56,11 +56,10 @@ module fun_fpuL(
   FOOSH0_in,  FOOSH0_out,
   FOOSH1_in,  FOOSH1_out,
   FOOSH2_in,  FOOSH2_out,
-  XI_dataS,
+  XI_dataS,XI_dataT,
   fxFRT_alten_reg3,
   daltX,
-  FUCVT1,
-  outA,outB
+  FUCVT1
   );
   localparam [0:0] H=1'b0;
   localparam SIMD_WIDTH=68; //half width
@@ -165,6 +164,7 @@ module fun_fpuL(
   (* register equiload *) input [5:0]  FOOSH2_in;
   (* register equiload *) output [5:0] FOOSH2_out;
   input [67:0] XI_dataS;
+  output [67:0] XI_dataT;
   input fxFRT_alten_reg3;
   output daltX;
   output [63:0] FUCVT1;
@@ -242,7 +242,7 @@ module fun_fpuL(
   fxFCADD5_raise_s,
   FOOSH2_in,
   FOOSH2_out,
-  XI_dataD,
+  XI_dataT,XI_dataS
   );
  
   cvt_FP_I_mod fp2i_mod(
