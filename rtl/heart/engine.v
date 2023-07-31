@@ -5377,7 +5377,7 @@ module backend(
   .fxFRT_alten_reg3(|fxFRT_alten_reg3[2]),
   .daltX(nDataAlt[2][1]),
   .FUCVT1(FUCVT1[63:0]),
-  .fork_in(frkDH),.fork_out(frkDL)
+  .fork_in(frkDH_reg),.fork_out(frkDL)
   );
 
   fun_fpu_BOTH fpuH_mod(
@@ -5428,7 +5428,7 @@ module backend(
   .fxFRT_alten_reg3(|fxFRT_alten_reg3[2]),
   .daltX(nDataAlt[2][1]),
   .FUCVT1(),
-  .fork_in(frkDL),.fork_out(frkDH)
+  .fork_in(frkDL_reg),.fork_out(frkDH)
   );
 
   fun_fpsu_BOTH fpsuL_mod(
@@ -5466,7 +5466,7 @@ module backend(
   .ALT_INP({dalt[1],sqrDatEn_reg}),
   .FOOFL0(FOOFL1),.FOOFL1(FOOFL2),.FOOFL2(FOOFL3),
   .XI_dataS(XI_dataS),
-  .fork_in(frkXH),.fork_out(frkXL)
+  .fork_in(frkXH_reg),.fork_out(frkXL)
   );
 
   fun_fpsu_BOTH fpsuH_mod(
@@ -5504,7 +5504,7 @@ module backend(
   .ALT_INP({dalt[1],sqrDatEn_reg}),
   .FOOFL0(FOOFL1),.FOOFL1(FOOFL2),.FOOFL2(FOOFL3),
   .XI_dataS(),
-  .fork_in(frkXL),.fork_out(frkXH)
+  .fork_in(frkXL_reg),.fork_out(frkXH)
   );
 
 
