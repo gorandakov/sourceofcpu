@@ -41,7 +41,8 @@ module fun_fpu(
   fxFCADD_raise_s,
   FOOSH_in,
   FOOSH_out,
-  HH_data
+  HH_data,
+  XX_data
   );
   parameter [1:0] INDEX=2'd2;
   parameter [0:0] H=1'b0;
@@ -91,7 +92,8 @@ module fun_fpu(
   input [10:0] fxFCADD_raise_s;
   (* register equiload *) input [5:0] FOOSH_in;
   (* register equiload *) output [5:0] FOOSH_out;
-  output [S+67:0] HH_data;
+  output [67:0] HH_data;
+  input  [67:0] XX_data;
 
 
   wire [1:0][16+67:0] FOOF;
@@ -443,7 +445,7 @@ module fun_fpu(
   .dupSngl(fxFCADD_dupl),
   .is_sqrt(1'b0),
   .is_div(1'b0),
-  .A(fxDataAXL_reg[1][67:0]),.B(gxDataBXL_reg[0][67:0]),
+  .A(fxDataAXL_reg[1][67:0]),.B(u1_op_reg2[13+H] ? XX_data : gxDataBXL_reg[0][67:0]),
   .res(FOOF[1][67:0]));
  
   generate

@@ -34,6 +34,7 @@ module fun_fpsu(
   ALT_INP,
   FOOSL_out,
   HH_data,
+  XY_data,
   xdata,
   xdata2
   );
@@ -76,7 +77,8 @@ module fun_fpsu(
   input [S+67:0] ALTDATA0;
   input [S+67:0] ALTDATA1;
   output [5:0] FOOSL_out;
-  output [S+67:0] HH_data;
+  output [67:0] HH_data;
+  input [67:0] XY_data;
   inout  [S+67:0] xdata;
   inout  [S+67:0] xdata2;
 
@@ -444,7 +446,7 @@ module fun_fpsu(
   .dupSngl(fxFCADD_dupl),
   .is_sqrt(1'b0),
   .is_div(1'b0),
-  .A(fxDataAXL_reg[1]),.B(gxDataBXL_reg[0]),
+  .A(fxDataAXL_reg[1]),.B(u1_op_reg2[13+H] ? XY_data : gxDataBXL_reg[0]),
   .res(FOOF[1]));
  
   assign FOOF[0][67:66]=(H? gxFADD_sn:gxFADD_sin) & u1_op_reg3[10] ? pook_data : 2'bz;
