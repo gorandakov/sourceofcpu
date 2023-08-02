@@ -1062,7 +1062,21 @@ andffl:
 	    else snprintf(asmtext,sizeof asmtext,"shlq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
 
             res0=((__int128) A)<<(B&0x3f);
+	    
             res1=res=res0;
+	    if ((B&0xe00)==0x200 || (B&0xe00)==0x400 || (B&0xe00)==0x800) {
+	            unsigned long long msk=0;
+		    res=0;
+		    if (B&0x80) res=A;
+		    if (B&0x100) res=(A&0x80000000) ? 0xffffffff00000000ull : 0ull;
+		    if (B&0x200) msk|=(A&0xffff0000)>>16;
+		    if (B&0x400) msk|=((A&0xff000000)>>16)|((A&0xff0000));
+		    if (B&0x800) msk|=(A&0xffff0000);
+		    res=(res&~msk)|(res0&msk);
+		    res1=res;
+		    res0&=0xffffffffffffffffull<<63<<1;
+		    res0|=res;//res1?
+	    }
             flg64(res0);
 	    if (has_mem_) {
 		rtn=false;
