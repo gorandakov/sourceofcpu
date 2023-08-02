@@ -1090,6 +1090,20 @@ andffl:
 
             res0=((__int128) A0x)<<(B0x&0x3f);
             res2=res=res0&0xffffffffull;
+            if ((B&0xe00)==0x200 || (B&0xe00)==0x400 || (B&0xe00)==0x800) {
+	            unsigned long long msk=0;
+		    res=0;
+		    if (B&0x80) res=A;
+		    if (B&0x100) res=(A&0x80000000) ? 0xffffffff00000000ull : 0ull;
+		    if (B&0x200) msk|=(A&0xffff0000)>>16;
+		    if (B&0x400) msk|=((A&0xff000000)>>16)|((A&0xff0000));
+		    if (B&0x800) msk|=(A&0xffff0000);
+		    res=(res&~msk)|(res0&msk);
+		    res1=res;
+		    res0&=0xffffffffffffffffull<<63<<1;
+		    res0|=res;//res1?
+	    } 
+            if ((B&0x100) && (A&0x80000000) { res|=0xffffffff00000000ull; res1=res; }
             flg32(res0);
 	    if (has_mem_) {
 		rtn=false;
@@ -1103,7 +1117,20 @@ andffl:
 
             res0=(B&0x3f) ?((__int128)  A) >>((B&0x3f)-1) :((__int128)  A)<<1;
             res1=res=(res0>>1);
-            flg64(((res0>>1)&0xffffffffffffffffull)|((res0&0x1) ? one<<1:0));
+            if ((B&0xe00)==0x200 || (B&0xe00)==0x400 || (B&0xe00)==0x800) {
+	            unsigned long long msk=0;
+		    res=0;
+		    if (B&0x80) res=A;
+		    if (B&0x100) res=(A&0x80000000) ? 0xffffffff00000000ull : 0ull;
+		    if (B&0x200) msk|=(A&0xffff0000)>>16;
+		    if (B&0x400) msk|=((A&0xff000000)>>16)|((A&0xff0000));
+		    if (B&0x800) msk|=(A&0xffff0000);
+		    res=(res&~msk)|((res0>>1)&msk);
+		    res1=res;
+		    res0&=(0xffffffffffffffffull<<63<<2)|1;
+		    res0|=(__int128 ) res<<1;
+	    } 
+	    flg64(((res0>>1)&0xffffffffffffffffull)|((res0&0x1) ? one<<1:0));
 	    if (has_mem_) {
 		rtn=false;
 		(*(this-1))=*this;
@@ -1116,7 +1143,22 @@ andffl:
 
             res0=(B0x&0x3f) ?((__int128)A0x) >>((B0x&0x3f)-1) :((__int128)  A0x)<<1;
             res=(res0>>1)&0xffffffffull;
-            flg32(((res0>>1)&0xffffffffu)|((res0&0x1)<<32));
+            if ((B&0xe00)==0x200 || (B&0xe00)==0x400 || (B&0xe00)==0x800) {
+	            unsigned long long msk=0;
+		    res=0;
+		    if (B&0x80) res=A;
+		    if (B&0x100) res=(A&0x80000000) ? 0xffffffff00000000ull : 0ull;
+		    if (B&0x200) msk|=(A&0xffff0000)>>16;
+		    if (B&0x400) msk|=((A&0xff000000)>>16)|((A&0xff0000));
+		    if (B&0x800) msk|=(A&0xffff0000);
+		    res=(res&~msk)|((res0>>1)&msk);
+		    res1=res;
+		    res0&=(0xffffffffffffffffull<<63<<2)|1;
+		    res0|=res<<1;//res1?
+	    }  
+	    if ((B&0x100) && (A&0x80000000) { res|=0xffffffff00000000ull; res1=res; }
+  
+	    flg32(((res0>>1)&0xffffffffu)|((res0&0x1)<<32));
 	    if (has_mem_) {
 		rtn=false;
 		(*(this-1))=*this;
@@ -1129,7 +1171,20 @@ andffl:
 
             res0=(B&0x3f) ?((__int128) A1) >>((B&0x3f)-1) :((__int128)  A1)<<1;
             res1=res=(res0>>1);
-            flg64(((res0>>1)&0xffffffffffffffffull)|((res0&0x1) ? one<<1 : 0));
+       	    if ((B&0xe00)==0x200 || (B&0xe00)==0x400 || (B&0xe00)==0x800) {
+	            unsigned long long msk=0;
+		    res=0;
+		    if (B&0x80) res=A;
+		    if (B&0x100) res=(A&0x80000000) ? 0xffffffff00000000ull : 0ull;
+		    if (B&0x200) msk|=(A&0xffff0000)>>16;
+		    if (B&0x400) msk|=((A&0xff000000)>>16)|((A&0xff0000));
+		    if (B&0x800) msk|=(A&0xffff0000);
+		    res=(res&~msk)|((res0>>1)&msk);
+		    res1=res;
+		    res0&=(0xffffffffffffffffull<<63<<2)|1;
+		    res0|=(__int128) res<<1;
+	    }     
+	    flg64(((res0>>1)&0xffffffffffffffffull)|((res0&0x1) ? one<<1 : 0));
 	    if (has_mem_) {
 		rtn=false;
 		(*(this-1))=*this;
@@ -1142,7 +1197,21 @@ andffl:
 
             res0=(B0x&0x3f) ? ((__int128) A0) >>((B0x&0x3f)-1) :((__int128) A0)<<1;
             res2=res=(res0>>1)&0xffffffffull;
-            flg32(((res0>>1)&0xffffffffu)|((res0&0x1)<<32));
+            if ((B&0xe00)==0x200 || (B&0xe00)==0x400 || (B&0xe00)==0x800) {
+	            unsigned long long msk=0;
+		    res=0;
+		    if (B&0x80) res=A;
+		    if (B&0x100) res=(A&0x80000000) ? 0xffffffff00000000ull : 0ull;
+		    if (B&0x200) msk|=(A&0xffff0000)>>16;
+		    if (B&0x400) msk|=((A&0xff000000)>>16)|((A&0xff0000));
+		    if (B&0x800) msk|=(A&0xffff0000);
+		    res=(res&~msk)|((res0>>1)&msk);
+		    res1=res;
+		    res0&=(0xffffffffffffffffull<<63<<2)|1;
+		    res0|=res<<1;
+	    }  
+	    if ((B&0x100) && (A&0x80000000) { res|=0xffffffff00000000ull; res1=res; }
+	    flg32(((res0>>1)&0xffffffffu)|((res0&0x1)<<32));
 	    if (has_mem_) {
 		rtn=false;
 		(*(this-1))=*this;
