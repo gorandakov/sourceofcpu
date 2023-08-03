@@ -1641,7 +1641,7 @@ andffl:
     return rtn;
 }
     
-bool req::exec(req *prev1,hcont *contx,char *mem,char *memp) {
+bool req::exec(req *prev1,hcont *contx,char *mem,char *memp,int itcnt) {
     res_p=0;
     res=0;
     A=contx->reg_gen[rA&0x1f];
@@ -1650,14 +1650,14 @@ bool req::exec(req *prev1,hcont *contx,char *mem,char *memp) {
     B_p=contx->reg_genP[rB&0x1f];
     flags_in=contx->flags;
     if (has_mem==1) {
-        gen_mem(NULL,op,mem,memp,addr);
+        gen_mem(NULL,op,mem,memp,addr+itcnt*8);
         contx->reg_gen[rT&0x1f]=res;
         contx->reg_genP[rT&0x1f]=res_p;
 	return false;
     } else if (has_mem==2) {
         res=contx->reg_gen[rA&0x1f];
         res_p=contx->reg_genP[rA&0x1f];
-        gen_memw(NULL,op,mem,memp,addr,res,res_p);
+        gen_memw(NULL,op,mem,memp,addr+itcnt*8,res,res_p);
 	return false;
     } else if (!alt && !mul) {
         __int128 res0;
