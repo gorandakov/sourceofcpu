@@ -1608,6 +1608,7 @@ module smallInstr_decoder(
       puseRs[30]=1'b1;
       prAlloc[30]=1'b1;
       puseBConst[30]=opcode_main[0];
+      poperation[30][12]=1'b1;
       case({opcode_main[6:3],opcode_main[1]})
 	      0: poperation[30]=`op_mul32;
 	      1: poperation[30]=`op_mul32_64;
