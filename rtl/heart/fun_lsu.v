@@ -201,9 +201,9 @@ module agu_block(
   output miss_pause_agu;
   output wt_pause_agu;
   output mOp_write_clear;
-  (* bus=WB bus_spacing=8 *) input [64:0] u1_base;
-  (* bus=WB bus_spacing=8 *) input [64:0] u1_index;
-  (* bus=WB bus_spacing=8 *) input [32:0] u1_const;
+  (* bus=WB bus_spacing=9 *) input [64:0] u1_base;
+  (* bus=WB bus_spacing=9 *) input [64:0] u1_index;
+  (* bus=WB bus_spacing=9 *) input [32:0] u1_const;
   input [3:0]  u1_base_fufwd;
   input [3:0]  u1_base_fuufwd;
   input [3:0]  u1_index_fufwd;
@@ -216,9 +216,9 @@ module agu_block(
   input        u1_lsflag;
   input        u1_clkEn;
   input [3:0]  u1_attr;
-  (* bus=WB bus_spacing=8 *) input [64:0] u2_base;
-  (* bus=WB bus_spacing=8 *) input [64:0] u2_index;
-  (* bus=WB bus_spacing=8 *) input [32:0] u2_const;
+  (* bus=WB bus_spacing=9 *) input [64:0] u2_base;
+  (* bus=WB bus_spacing=9 *) input [64:0] u2_index;
+  (* bus=WB bus_spacing=9 *) input [32:0] u2_const;
   input [3:0]  u2_base_fufwd;
   input [3:0]  u2_base_fuufwd;
   input [3:0]  u2_index_fufwd;
@@ -231,9 +231,9 @@ module agu_block(
   input        u2_lsflag;
   input        u2_clkEn;
   input [3:0]  u2_attr;
-  (* bus=WB bus_spacing=8 *) input [64:0] u3_base;
-  (* bus=WB bus_spacing=8 *) input [64:0] u3_index;
-  (* bus=WB bus_spacing=8 *) input [32:0] u3_const;
+  (* bus=WB bus_spacing=9 *) input [64:0] u3_base;
+  (* bus=WB bus_spacing=9 *) input [64:0] u3_index;
+  (* bus=WB bus_spacing=9 *) input [32:0] u3_const;
   input [3:0]  u3_base_fufwd;
   input [3:0]  u3_base_fuufwd;
   input [3:0]  u3_index_fufwd;
@@ -246,9 +246,9 @@ module agu_block(
   input        u3_lsflag;
   input        u3_clkEn;
   input [3:0]  u3_attr;
-  (* bus=WB bus_spacing=8 *) input [64:0] u4_base;
-  (* bus=WB bus_spacing=8 *) input [64:0] u4_index;
-  (* bus=WB bus_spacing=8 *) input [32:0] u4_const;
+  (* bus=WB bus_spacing=9 *) input [64:0] u4_base;
+  (* bus=WB bus_spacing=9 *) input [64:0] u4_index;
+  (* bus=WB bus_spacing=9 *) input [32:0] u4_const;
   input [3:0]  u4_base_fufwd;
   input [3:0]  u4_base_fuufwd;
   input [3:0]  u4_index_fufwd;
@@ -261,9 +261,9 @@ module agu_block(
   input        u4_lsflag;
   input        u4_clkEn;
   input [3:0]  u4_attr;
-  (* bus=WB bus_spacing=8 *) input [64:0] u5_base;
-  (* bus=WB bus_spacing=8 *) input [64:0] u5_index;
-  (* bus=WB bus_spacing=8 *) input [32:0] u5_const;
+  (* bus=WB bus_spacing=9 *) input [64:0] u5_base;
+  (* bus=WB bus_spacing=9 *) input [64:0] u5_index;
+  (* bus=WB bus_spacing=9 *) input [32:0] u5_const;
   input [3:0]  u5_base_fufwd;
   input [3:0]  u5_base_fuufwd;
   input [3:0]  u5_index_fufwd;
@@ -420,16 +420,16 @@ module agu_block(
 
   input FU0Hit,FU1Hit,FU2Hit,FU3Hit;
 
-  (* register equiload bus=WB bus_spacing=8  *) input [64:0] FU0;
-  (* register equiload bus=WB bus_spacing=8  *) input [64:0] FU1;
-  (* register equiload bus=WB bus_spacing=8  *) input [64:0] FU2;
-  (* register equiload bus=WB bus_spacing=8  *) input [64:0] FU3;
-  (* register equiload bus=WB bus_spacing=8  *) input [64:0] FU4;
-  (* register equiload bus=WB bus_spacing=8  *) input [64:0] FU5;
-  (* register equiload bus=WB bus_spacing=8  *) input [64:0] FU6;
-  (* register equiload bus=WB bus_spacing=8  *) input [64:0] FU7;
-  (* register equiload bus=WB bus_spacing=8  *) input [64:0] FU8;
-  (* register equiload bus=WB bus_spacing=8  *) input [64:0] FU9;
+  (* register equiload bus=WB bus_spacing=9  *) input [64:0] FU0;
+  (* register equiload bus=WB bus_spacing=9  *) input [64:0] FU1;
+  (* register equiload bus=WB bus_spacing=9  *) input [64:0] FU2;
+  (* register equiload bus=WB bus_spacing=9  *) input [64:0] FU3;
+  (* register equiload bus=WB bus_spacing=9  *) input [64:0] FU4;
+  (* register equiload bus=WB bus_spacing=9  *) input [64:0] FU5;
+  (* register equiload bus=WB bus_spacing=9  *) input [64:0] FU6;
+  (* register equiload bus=WB bus_spacing=9  *) input [64:0] FU7;
+  (* register equiload bus=WB bus_spacing=9  *) input [64:0] FU8;
+  (* register equiload bus=WB bus_spacing=9  *) input [64:0] FU9;
   input [8:0] FUreg3_reg;
   input [127+8:0] dc_rdataA;
   

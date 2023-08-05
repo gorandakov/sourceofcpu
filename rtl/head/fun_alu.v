@@ -59,8 +59,8 @@ module fu_alu(
   input rst;
   input except;
 
-  (* bus=WB bus_spacing=8 *)input [64:0]          u1_A;
-  (* bus=WB bus_spacing=8 *)input [64:0]          u1_B;
+  (* bus=WB bus_spacing=9 *)input [64:0]          u1_A;
+  (* bus=WB bus_spacing=9 *)input [64:0]          u1_B;
   input [5:0]           u1_S;
   input [17:0]          u1_op;
   output [8:0]          u1_ret;
@@ -73,8 +73,8 @@ module fu_alu(
   input [3:0]           u1_S_fufwd;
   input [3:0]           u1_S_fuufwd;
 
-  (* bus=WB bus_spacing=8 *)input [64:0]          u2_A;
-  (* bus=WB bus_spacing=8 *)input [64:0]          u2_B;
+  (* bus=WB bus_spacing=9 *)input [64:0]          u2_A;
+  (* bus=WB bus_spacing=9 *)input [64:0]          u2_B;
   input [5:0]           u2_S;
   input [17:0]          u2_op;
   output [8:0]          u2_ret;
@@ -87,8 +87,8 @@ module fu_alu(
   input [3:0]           u2_S_fufwd;
   input [3:0]           u2_S_fuufwd;
 
-  (* bus=WB bus_spacing=8 *) input [64:0]          u3_A;
-  (* bus=WB bus_spacing=8 *) input [64:0]          u3_B;
+  (* bus=WB bus_spacing=9 *) input [64:0]          u3_A;
+  (* bus=WB bus_spacing=9 *) input [64:0]          u3_B;
   input [5:0]           u3_S;
   input [17:0]          u3_op;
   output [8:0]          u3_ret;
@@ -101,8 +101,8 @@ module fu_alu(
   input [3:0]           u3_S_fufwd;
   input [3:0]           u3_S_fuufwd;
 
-  (* bus=WB bus_spacing=8 *)input [64:0]          u4_A;
-  (* bus=WB bus_spacing=8 *)input [64:0]          u4_B;
+  (* bus=WB bus_spacing=9 *)input [64:0]          u4_A;
+  (* bus=WB bus_spacing=9 *)input [64:0]          u4_B;
   input [5:0]           u4_S;
   input [17:0]          u4_op;
   output [8:0]          u4_ret;
@@ -115,8 +115,8 @@ module fu_alu(
   input [3:0]           u4_S_fufwd;
   input [3:0]           u4_S_fuufwd;
 
-  (* bus=WB bus_spacing=8 *)input [64:0]          u5_A;
-  (* bus=WB bus_spacing=8 *)input [64:0]          u5_B;
+  (* bus=WB bus_spacing=9 *)input [64:0]          u5_A;
+  (* bus=WB bus_spacing=9 *)input [64:0]          u5_B;
   input [5:0]           u5_S;
   input                 u5_nDataAlt;
   input [17:0]          u5_op;
@@ -130,8 +130,8 @@ module fu_alu(
   input [3:0]           u5_S_fufwd;
   input [3:0]           u5_S_fuufwd;
 
-  (* bus=WB bus_spacing=8 *)input [64:0]          u6_A;
-  (* bus=WB bus_spacing=8 *)input [64:0]          u6_B;
+  (* bus=WB bus_spacing=9 *)input [64:0]          u6_A;
+  (* bus=WB bus_spacing=9 *)input [64:0]          u6_B;
   input [5:0]           u6_S;
   input [17:0]          u6_op;
   output [8:0]          u6_ret;
@@ -144,16 +144,16 @@ module fu_alu(
   input [3:0]           u6_S_fufwd;
   input [3:0]           u6_S_fuufwd;
 
-  (* register equiload  bus=WB bus_spacing=8  *) input [64:0] FU0;
-  (* register equiload  bus=WB bus_spacing=8  *) input [64:0] FU1;
-  (* register equiload  bus=WB bus_spacing=8  *) input [64:0] FU2;
-  (* register equiload  bus=WB bus_spacing=8  *) input [64:0] FU3;
-  (* register equiload  bus=WB bus_spacing=8  *) output [64:0] FU4;
-  (* register equiload  bus=WB bus_spacing=8  *) output [64:0] FU5;
-  (* register equiload  bus=WB bus_spacing=8  *) output [64:0] FU6;
-  (* register equiload  bus=WB bus_spacing=8  *) output [64:0] FU7;
-  (* register equiload  bus=WB bus_spacing=8  *) output [64:0] FU8;
-  (* register equiload  bus=WB bus_spacing=8  *) output [64:0] FU9;
+  (* register equiload  bus=WB bus_spacing=9  *) input [64:0] FU0;
+  (* register equiload  bus=WB bus_spacing=9  *) input [64:0] FU1;
+  (* register equiload  bus=WB bus_spacing=9  *) input [64:0] FU2;
+  (* register equiload  bus=WB bus_spacing=9  *) input [64:0] FU3;
+  (* register equiload  bus=WB bus_spacing=9  *) output [64:0] FU4;
+  (* register equiload  bus=WB bus_spacing=9  *) output [64:0] FU5;
+  (* register equiload  bus=WB bus_spacing=9  *) output [64:0] FU6;
+  (* register equiload  bus=WB bus_spacing=9  *) output [64:0] FU7;
+  (* register equiload  bus=WB bus_spacing=9  *) output [64:0] FU8;
+  (* register equiload  bus=WB bus_spacing=9  *) output [64:0] FU9;
 
   (* register equiload *) input [5:0] FUS1;
   (* register equiload *) input [5:0] FUS2;
