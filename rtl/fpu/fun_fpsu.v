@@ -454,10 +454,10 @@ module fun_fpsu(
   assign FOOF[1][67:66]=fxFCADD_sn ? `ptype_sngl : 2'bz;
 
   generate
-	  if (H) assign gDataBFL[1]=u1_op_reg[9]^u1_op_reg[15] ? u1_Bx : uu_B1;
-	  else assign gDataBFL[1]=u1_op_reg[8]^u1_op_reg[15] ? {u1_Bx} : uu_B1;
-	  if (H) assign gDataBFL[0]=u1_op_reg[9]^u1_op_reg[15] ? u1_Bx : uu_B2;
-	  else assign gDataBFL[0]=u1_op_reg[8]^u1_op_reg[15] ? {u1_Bx} : uu_B2;
+	  if (H) assign gDataBFL[1]=u1_op_reg[9] ? u1_Bx : uu_B1;
+	  else assign gDataBFL[1]=u1_op_reg[8] ? {u1_Bx} : uu_B1;
+	  if (H) assign gDataBFL[0]=u1_op_reg[9] ? u1_Bx : uu_B2;
+	  else assign gDataBFL[0]=u1_op_reg[8] ? {u1_Bx} : uu_B2;
       if (INDEX==0) begin
 	      assign FUF4=FOOF_reg[0];
 	      assign FUF7=FOOF_reg[1];
