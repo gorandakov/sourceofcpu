@@ -449,10 +449,10 @@ module fun_fpu(
   .res(FOOF[1][67:0]));
  
   generate
-      if (H) assign gfDataBFL[1]=u1_op_reg[9] ? u1_Bx : uu_B1;
-      else assign gfDataBFL[1]=u1_op_reg[8] ? {uu_B1[68+15:68],u1_Bx} : uu_B1;
-      if (H) assign gfDataBFL[0]=u1_op_reg[9] ? u1_Bx : uu_B2;
-      else assign gfDataBFL[0]=u1_op_reg[8] ? {uu_B2[68+15:68],u1_Bx} : uu_B2;
+	  if (H) assign gfDataBFL[1]=u1_op_reg[9]^u1_op_reg[15] ? u1_Bx : uu_B1;
+	  else assign gfDataBFL[1]=u1_op_reg[8]^u1_op_reg[15] ? {uu_B1[68+15:68],u1_Bx} : uu_B1;
+	  if (H) assign gfDataBFL[0]=u1_op_reg[9]^u1_op_reg[15] ? u1_Bx : uu_B2;
+	  else assign gfDataBFL[0]=u1_op_reg[8]^u1_op_reg[15] ? {uu_B2[68+15:68],u1_Bx} : uu_B2;
       if (INDEX==0) begin
 	      assign FUF4=FOOF_reg[0];
 	      assign FUF7=isXTRA_reg2 ? xtra2_reg : FOOF_reg[1];
