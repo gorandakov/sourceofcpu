@@ -196,7 +196,10 @@ module sagu(
   wire [TLB_DATA_WIDTH-1:0] tlb_data;
   wire [TLB_DATA_WIDTH-1:0] tlb_data_next;
   reg [TLB_DATA_WIDTH-1:0] tlb_data_reg;
-  
+
+  wire wp;
+  wire wp_next;
+	
   wire tlb_clkEn;
   wire tlb_hit;
 
@@ -329,8 +332,10 @@ module sagu(
    & rcn_mask[1] & ~bus_hold_reg;
   
   assign mOp_thread=thread_reg;
-  
-  assign mOp_lsflag=lsflag_reg;
+
+  assign wp=|(tlb_data[`dtlbData_wp]&(4'b1<<addrTlb[13:12])) || |(tlb_data[`dtlbData_wp]&(1'b1<<(addrTlb[13:12]+2'd1))) & addrNext[12] & mOp_split_X;
+	assign wp_next= |(tlb_data_next[`dtlbData_wp]&(1'b1<<(addrTlb[13:12]+2'd1))) & addrNext[12] & mOp_split_X;
+ assign mOp_lsflag=lsflag_reg;
   
   assign mOp_sz=op_reg[5:1];
   
