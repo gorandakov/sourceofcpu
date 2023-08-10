@@ -65,7 +65,7 @@ limitations under the License.
 `define dcache2_data_width 39
 `define dcache2_way_count 12
 
-`define page_wc 9
+`define page_wc 2
 `define page_global 8
 `define page_huge 7
 `define page_dirty 6
@@ -73,7 +73,7 @@ limitations under the License.
 `define page_nc 4
 `define page_wt 3
 `define page_sys 1
-`define page_wr 63:60
+`define page_wr 12:9
 `define page_na 0
 
 `define page16_addr0 33:0
