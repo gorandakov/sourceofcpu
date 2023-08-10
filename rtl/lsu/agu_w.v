@@ -334,8 +334,9 @@ module sagu(
   assign mOp_thread=thread_reg;
 
   assign wp=|(tlb_data[`dtlbData_wp]&(4'b1<<addrTlb[13:12])) || |(tlb_data[`dtlbData_wp]&(1'b1<<(addrTlb[13:12]+2'd1))) & addrNext[12] & mOp_split_X;
-	assign wp_next= |(tlb_data_next[`dtlbData_wp]&(1'b1<<(addrTlb[13:12]+2'd1))) & addrNext[12] & mOp_split_X;
- assign mOp_lsflag=lsflag_reg;
+  assign wp_next= |(tlb_data_next[`dtlbData_wp]&(1'b1<<(addrTlb[13:12]+2'd1))) & addrNext[12] & mOp_split_X;
+  
+  assign mOp_lsflag=lsflag_reg;
   
   assign mOp_sz=op_reg[5:1];
   
@@ -362,8 +363,8 @@ module sagu(
   
   assign mflags0=mflags[thread];
   
-  assign fault_tlb={mflags0[`mflags_cpl]==2'd3 && tlb_data[`dtlbData_sys] , ~tlb_data[`dtlbData_na]|~tlb_data[`dtlbData_wp]}; 
-  assign fault_tlb_next={mflags0[`mflags_cpl]==2'd3 && tlb_data_next[`dtlbData_sys] , ~tlb_data_next[`dtlbData_na]|~tlb_data_next[`dtlbData_wp]}; 
+  assign fault_tlb={mflags0[`mflags_cpl]==2'd3 && tlb_data[`dtlbData_sys] , ~tlb_data[`dtlbData_na]|~wp}; 
+	assign fault_tlb_next={mflags0[`mflags_cpl]==2'd3 && tlb_data_next[`dtlbData_sys] , ~tlb_data_next[`dtlbData_na]|~wp_next}; 
 
   adder #(15) nextCAddr_mod({1'b0,cmplxAddr[13:0]},15'b10000000,addrNext,1'b0,1'b1,,,,);
 
