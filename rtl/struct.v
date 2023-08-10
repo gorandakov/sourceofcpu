@@ -73,7 +73,7 @@ limitations under the License.
 `define page_nc 4
 `define page_wt 3
 `define page_sys 1
-`define page_wr 2
+`define page_wr 63:60
 `define page_na 0
 
 `define page16_addr0 33:0
@@ -312,24 +312,24 @@ limitations under the License.
 
 `define dtlbData_phys 29:0
 `define dtlbData_sys 30
-`define dtlbData_wp 31
-`define dtlbData_na 32
-`define dtlbData_ne 33
-`define dtlbData_glo 34
-`define dtlbData_type 36:35
-`define dtlbData_acc 37
-`define dtlbData_wrt 38
-`define dtlbData_subpage 39
-`define dtlbData_width 40
+`define dtlbData_wp 34:31
+`define dtlbData_na 35
+`define dtlbData_ne 36
+`define dtlbData_glo 37
+`define dtlbData_type 39:38
+`define dtlbData_acc 40
+`define dtlbData_wrt 41
+`define dtlbData_subpage 42
+`define dtlbData_width 43
 
 
 `define dtlb_vaddr 49:0
 `define dtlb_valid 50
 `define dtlb_shr   51
-`define dtlb_data1 92:52
-`define dtlb_data2 132:93
-`define dtlb_data3 172:133
-`define dtlb_width 173
+`define dtlb_data1 95:52
+`define dtlb_data2 138:96
+`define dtlb_data3 181:139
+`define dtlb_width 182
 
 
 
