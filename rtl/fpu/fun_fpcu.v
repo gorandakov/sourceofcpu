@@ -445,6 +445,9 @@ module fun_fpu(
   .dupSngl(fxFCADD_dupl_reg),
   .is_sqrt(1'b0),
   .is_div(1'b0),
+  .tbl_read(u1_op_reg3[7:0]==`fop_divE),
+  .tbl_write(u1_op_reg3[7:0]==`fop_divDL),
+  .xtra(u1_op_reg[18:17),
   .A(fxDataAXL_reg2[1][67:0]),.B(u1_op_reg3[13+H] ? XX_data : gxDataBXL_reg2[0][67:0]),
   .res(FOOF[1][67:0]));
  
