@@ -129,7 +129,11 @@ module simd_non_socialiste(
 	        is_sub,is_simpl,is_subcmp,is_cmp,jump_type);
       end
   endgenerate
+  `ifndef swapedge
   always @(negedge clk) begin
+  `else
+  always @(posedge clk) begin
+  `endif
       A_reg<={A[64:33],A[31:0]};
       B_reg<={B[64:33],B[31:0]};
       is_sign<=operation[5:0]==`simd_paddsats ||operation[5:0]==`simd_psubsats||operation[5:0]==`simd_pmins||
@@ -219,7 +223,11 @@ module simd_sasquach_shift(
 
   assign res=operation_reg[7:6]!=2'b0 ? shf16 : shf8;
 
+  `ifndef swapedge
   always @(negedge clk) begin
+  `else
+  always @(posedge clk) begin
+  `end
       A_reg<=A;
       B_reg<=B;
       dir<=operation[5:0]==`simd_shr || operation[5:0]==`simd_sar;

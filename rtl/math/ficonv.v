@@ -97,7 +97,11 @@ module cvt_FP_I_mod(
 	   //verilator lint_on WIDTH
   endgenerate
 
+  `ifndef swapedge
   always @(posedge clk) begin
+  `else
+  always @(negedge clk) begin
+  `endif
       clkEn_reg<=clkEn;
       if (clkEn_reg) begin
 	  shift_reg<=shift;

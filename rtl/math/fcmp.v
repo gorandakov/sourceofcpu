@@ -208,7 +208,11 @@ module fcmpd(clk,rst,
   assign flags=int_srch ? {s_has,res_first,^res_first[1:0]} : {~res_C,res_unord,1'b0,res_S,res_Z,res_unord};
 
   assign res_pkd_X[67:0]=ven_reg ? {vtype_reg,{33{vres_reg[1]}},{33{vres_reg[0]}}} : 68'bz; 
+  `ifndef swapedge
   always @(negedge clk) begin
+  `else
+  always @(negedge clk) begin
+  `endif
     if (rst) vres_reg<=2'b0;
     else vres_reg<=vres;
     if (rst) ven_reg<=1'b0;

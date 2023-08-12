@@ -316,9 +316,11 @@ module fpucadd(clk,rst,A,A_alt,B,pook_in,and1,or1,copyA,en,rmode,res,res_hi,xtra
       spec_any=spec_zero_reg|spec_infty_reg|spec_snan_reg|spec_qnan_reg|spec_A_reg;
       prod_reg=prod;
   end
-
+`ifndef swapedge
   always @(negedge clk)
-
+`else
+  always @(posedge clk)
+`endif
   begin
  //     if (res!=res) $display("res z muld");
       isDBL_reg<=isDBL;

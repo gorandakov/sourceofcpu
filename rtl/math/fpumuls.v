@@ -218,8 +218,11 @@ module fpumuls(clk,rst,A,B,copyA,en,rmode,res,raise,fpcsr);
       spec_any=spec_zero_reg2|spec_infty_reg2|spec_snan_reg2|spec_qnan_reg2|spec_A;
       prod_reg=prod;
   end
+  `ifndef swapedge
   always @(negedge clk)
-
+  `else
+  always @(posedge clk)
+  `endif
   begin
   //    if (res_X!=res_X) $display("res z muls");
       exp_exp_reg<=exp_exp;
