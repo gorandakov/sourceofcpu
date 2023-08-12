@@ -266,11 +266,19 @@ module fun_fpuL(
   .alt(daltX)
   );
 
+  `ifndef swapedge
   always @(posedge clk) begin
+  `else
+  always @(endedge clk) begin
+  `endif
       u5_en_reg<=u5_en;
       u5_op_reg<=u5_op;
   end
+  `ifndef swapedge
   always @(negedge clk) begin
+  `else
+  always @(posedge clk) begin
+  `endif
       u5_en_reg2<=u5_en_reg;
       u5_op_reg2<=u5_op_reg;
   end

@@ -290,7 +290,11 @@ module fun_fpsu_BOTH(
   fork_in[67:0],fork_out[67:0]
   );
 
+  `ifndef swapedge
   always @(posedge clk) begin
+  `else
+  always @(negedge clk) begin
+  `endif
       u1_op_reg<=u1_op;
       u3_op_reg<=u3_op;
       u5_op_reg<=u5_op;

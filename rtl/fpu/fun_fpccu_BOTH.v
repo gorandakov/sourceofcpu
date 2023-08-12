@@ -342,7 +342,11 @@ module fun_fpu_BOTH(
   assign FUS1=u3_op_reg4[7:0]==`fop_cmpDH  ? HFOOSH1 : LFOOSH1; 
   assign FUS2=u5_op_reg4[7:0]==`fop_cmpDH  ? HFOOSH2 : LFOOSH2; 
 
+  `ifndef swapedge
   always @(posedge clk) begin
+  `else
+  always @(negedge clk) begin
+  `endif
       u1_op_reg<=u1_op;
       u1_op_reg2<=u1_op_reg;
       u1_op_reg3<=u1_op_reg2;

@@ -482,7 +482,11 @@ module fun_fpu(
   assign u1_Ax=uu_B1[67:0];
   assign u1_Ax=uu_B2[67:0];
 
+  `ifndef swapedge
   always @(negedge clk) begin
+  `else
+  always @(posedge clk) begin
+  `endif
     fxFCADD_sn_reg<=fxFCADD_sn;
     fxFCADD_sn_reg2<=fxFCADD_sn_reg;
     fxFCADD_sn_reg3<=fxFCADD_sn_reg2;
@@ -647,7 +651,11 @@ module fun_fpu(
       xtra2_reg<=xtra2;
   end
 
+  `ifndef swapedge
   always @(posedge clk) begin
+  `else
+  always @(negedge clk) begin
+  `endif
       ALT_INP_reg<=ALT_INP;
       u1_op_reg<=u1_op;
       u1_en_reg<=u1_en;
