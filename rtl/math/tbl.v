@@ -28,7 +28,7 @@ module tblD(
   always @* begin
       bits=6'd0;
       if (xtra==2'd0) bits= A[53:48] : 6'bz;
-      if (xtra==2'd1) bits= {A[55],A[53:49]} : 6'bz;
+      if (xtra==2'd1) bits= {A[54],A[53:49]} : 6'bz;
       if (xtra[1] && A[65:54]==2044) bits= {5'b0,A[53]} : 6'bz;  
       if (xtra[1] && A[65:54]==2045) bits= {4'b0,A[53:52]} : 6'bz;  
       if (xtra[1] && A[65:54]==2046) bits= {3'b0,A[53:51]} : 6'bz;  
