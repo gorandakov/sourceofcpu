@@ -5328,7 +5328,7 @@ module backend(
   .rsStall(rsStall),
   .rsDoStall(rsDoStall)
   );
-
+`define swapedge
   fun_fpu_BOTH fpuL_mod(
   .clk(clk),
   .rst(rst),
@@ -5430,7 +5430,7 @@ module backend(
   .FUCVT1(),
   .fork_in(frkDL_reg),.fork_out(frkDH)
   );
-
+`undef swapedge
   fun_fpsu_BOTH fpsuL_mod(
   .clk(clk),
   .rst(rst),
