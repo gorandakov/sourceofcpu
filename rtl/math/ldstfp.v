@@ -62,14 +62,14 @@ module ldD2nativeD(
   endgenerate
 
   assign A_z=A[51:0]==52'b0;
-  assign resX=(A[63:53]==0 && ~A_z) ? {exp[11],A[52],exp[10:0],denor} :  65'bz;
-  assign resX=(A[63:53]!=0 && A[63:53]!=11'h7ff) ? {A[63],A[52],~A[63],A[61:0]} : 65'bz;
-  assign resX=(A[63:53]==11'h7ff && A_z) ? {A[63],A[52],A[63:54],~A_z,A[51:0]} : 65'bz;
-  assign resX=(A[63:53]==0 && A_z) ? {1'b0,A[52],11'b0,denor} :  65'bz;
-  assign resY=(A[63:53]==0 && ~A_z) ? {exp[11],A[52],{4{~exp[11]}},exp[10:0],1'b0,denor,11'b0} :  81'bz;
-  assign resY=(A[63:53]!=0 && A[63:53]!=11'h7ff) ? {A[63],A[52],{5{~A[63]}},A[62:53],1'b1,A[51:0],11'b0} : 81'bz;
-  assign resY=(A[63:53]==11'h7ff) ? {A[63],A[52],{5{A[63]}},A[62:54],~A_z,1'b1,A[51:0],11'b0} : 81'bz;
-  assign resY=(A[63:53]==0 && A_z) ? {1'b0,A[52],15'b0,1'b0,denor,11'b0} :  81'bz;
+  assign resX=(A[62:52]==0 && ~A_z) ? {exp[11],A[63],exp[10:0],denor} :  65'bz;
+  assign resX=(A[62:52]!=0 && A[62:52]!=11'h7ff) ? {A[62],A[63],~A[62],A[61:0]} : 65'bz;
+  assign resX=(A[62:52]==11'h7ff && A_z) ? {A[62],A[63],A[62:53],~A_z,A[51:0]} : 65'bz;
+  assign resX=(A[62:52]==0 && A_z) ? {1'b0,A[63],11'b0,denor} :  65'bz;
+  assign resY=(A[62:52]==0 && ~A_z) ? {exp[11],A[63],{4{~exp[11]}},exp[10:0],1'b0,denor,11'b0} :  81'bz;
+  assign resY=(A[62:52]!=0 && A[62:52]!=11'h7ff) ? {A[62],A[63],{5{~A[62]}},A[61:52],1'b1,A[51:0],11'b0} : 81'bz;
+  assign resY=(A[62:52]==11'h7ff) ? {A[62],A[63],{5{A[62]}},A[61:53],~A_z,1'b1,A[51:0],11'b0} : 81'bz;
+  assign resY=(A[62:52]==0 && A_z) ? {1'b0,A[63],15'b0,1'b0,denor,11'b0} :  81'bz;
 
   assign res[64:0]=(en&to_dbl) ? resX : 65'bz;
   assign {res[64],res[80:65],res[63:0]}=(en&to_ext) ? resY : 81'bz;
@@ -125,18 +125,18 @@ module ldS2nativeS(
   endgenerate
 
   assign A_z=A[22:0]==23'b0;
-  assign resX=(A[31:24]==0 && ~A_z) ? {exp[8],A[23],exp[7:0],denor} :  33'bz;
-  assign resX=(A[31:24]!=0 && A[31:24]!=8'hff) ? {A[31],A[23],~A[31],A[30:24],A[22:0]} : 33'bz;
-  assign resX=(A[31:24]==8'hff) ? {A[31],A[23],A[31:25],~A_z,A[22:0]} : 33'bz;
-  assign resX=(A[31:24]==0 && A_z) ? {1'b0,A[23],8'b0,denor} :  33'bz;
-  assign resY=(A[31:24]==0 && ~A_z) ? {exp[8],A[23],{3{~exp[8]}},exp[7:0],denor,29'b0} :  65'bz;
-  assign resY=(A[31:24]!=0 && A[31:24]!=8'hff) ? {A[31],A[23],{4{~A[31]}},A[30:24],A[22:0],29'b0} : 65'bz;
-  assign resY=(A[31:24]==8'hff) ? {A[31],A[23],{4{A[31]}},A[30:25],~A_z,A[22:0],29'b0} : 65'bz;
-  assign resY=(A[31:24]==0 && A_z) ? {1'b0,A[23],11'b0,denor,29'b0} :  65'bz;
-  assign resZ=(A[31:24]==0 && ~A_z) ? {exp[8],A[23],{7{~exp[8]}},exp[7:0],1'b0,denor,40'b0} :  81'bz;
-  assign resZ=(A[31:24]!=0 && A[31:24]!=8'hff)  ? {A[31],A[23],{8{~A[31]}},A[30:24],1'b1,A[22:0],40'b0} : 81'bz;
-  assign resZ=(A[31:24]==8'hff) ? {A[31],A[23],{8{A[31]}},A[30:25],~A_z,1'b1,A[22:0],40'b0} : 81'bz;
-  assign resZ=(A[31:24]==0 && A_z) ? {1'b0,A[23],15'b0,1'b0,denor,40'b0} :  81'bz;
+  assign resX=(A[30:23]==0 && ~A_z) ? {exp[8],A[31],exp[7:0],denor} :  33'bz;
+  assign resX=(A[30:23]!=0 && A[30:23]!=8'hff) ? {A[30],A[31],~A[30],A[29:23],A[22:0]} : 33'bz;
+  assign resX=(A[30:23]==8'hff) ? {A[30],A[31],A[30:24],~A_z,A[22:0]} : 33'bz;
+  assign resX=(A[30:23]==0 && A_z) ? {1'b0,A[31],8'b0,denor} :  33'bz;
+  assign resY=(A[30:23]==0 && ~A_z) ? {exp[8],A[31],{3{~exp[8]}},exp[7:0],denor,29'b0} :  65'bz;
+  assign resY=(A[30:23]!=0 && A[30:23]!=8'hff) ? {A[30],A[31],{4{~A[30]}},A[29:23],A[22:0],29'b0} : 65'bz;
+  assign resY=(A[30:23]==8'hff) ? {A[30],A[31],{4{A[30]}},A[29:24],~A_z,A[22:0],29'b0} : 65'bz;
+  assign resY=(A[30:23]==0 && A_z) ? {1'b0,A[31],11'b0,denor,29'b0} :  65'bz;
+  assign resZ=(A[30:23]==0 && ~A_z) ? {exp[8],A[31],{7{~exp[8]}},exp[7:0],1'b0,denor,40'b0} :  81'bz;
+  assign resZ=(A[30:23]!=0 && A[30:23]!=8'hff)  ? {A[30],A[31],{8{~A[30]}},A[29:23],1'b1,A[22:0],40'b0} : 81'bz;
+  assign resZ=(A[30:23]==8'hff) ? {A[30],A[31],{8{A[30]}},A[29:24],~A_z,1'b1,A[22:0],40'b0} : 81'bz;
+  assign resZ=(A[30:23]==0 && A_z) ? {1'b0,A[31],15'b0,1'b0,denor,40'b0} :  81'bz;
   assign res[32:0]=(en&to_sngl) ? resX : 33'bz;
   assign res[65:0]=(en&to_dbl) ? {resY[64:32],1'b0,resY[31:0]} : 66'bz;
   assign res[81:0]=(en&to_ext) ? {resZ[80:65],resZ[64],resZ[63:32],1'b0,resZ[31:0]} : 82'bz;
@@ -168,11 +168,11 @@ module stNativeD2D(A,en,from_dbl,from_ext,res);
   adder #(16) expAddO_mod(expA,~OVFL,,1'b1,1'b1,is_overflow,,,);
 
   assign is_nan=&expA;
-  assign res=(~is_zero && ~ is_overflow && ~is_den && en) ? {A[64],expA[9:0],sgn,A_1[51:0]} : 64'bz;
-  assign res=(is_den && ~is_zero && en) ? {11'b0,sgn,shf1} : 64'bz;
-  assign res=(is_zero && en) ? {11'b0,sgn,52'b0} : 64'bz;
-  assign res=(is_overflow && ~is_nan && en) ? {11'h7ff,sgn,52'b0} : 64'bz; 
-  assign res=(is_nan && en) ? {11'h7ff,sgn,A_1[51:0]} : 64'bz;
+  assign res=(~is_zero && ~ is_overflow && ~is_den && en) ? {sgn,A[64],expA[9:0],A_1[51:0]} : 64'bz;
+  assign res=(is_den && ~is_zero && en) ? {sgn,11'b0,shf1} : 64'bz;
+  assign res=(is_zero && en) ? {sgn,11'b0,52'b0} : 64'bz;
+  assign res=(is_overflow && ~is_nan && en) ? {sgn,11'h7ff,52'b0} : 64'bz; 
+  assign res=(is_nan && en) ? {sgn,11'h7ff,A_1[51:0]} : 64'bz;
   generate
     genvar k;
     for(k=0;k<8;k=k+1) begin : shifker_gen
@@ -224,11 +224,11 @@ module stNativeS2S(A,en,from_sngl,from_dbl,from_ext,res);
   adder #(16) expAddO_mod(expA,~OVFL,,1'b1,1'b1,is_overflow,,,);
 
   assign is_nan=&expA;
-  assign res=(~is_zero && ~ is_overflow && ~is_den && en) ? {expA[15],expA[6:0],sgn,A_1[22:0]} : 32'bz;
-  assign res=(is_den && ~is_zero && en) ? {8'b0,sgn,shf1} : 32'bz;
-  assign res=(is_zero && en) ? {8'b0,sgn,23'b0} : 32'bz;
-  assign res=(is_overflow && ~is_nan && en) ? {8'hff,sgn,23'b0} : 32'bz; 
-  assign res=(is_nan && en) ? {8'hff,sgn,A[22:0]|23'b1} : 32'bz;
+  assign res=(~is_zero && ~ is_overflow && ~is_den && en) ? {sgn,expA[15],expA[6:0],A_1[22:0]} : 32'bz;
+  assign res=(is_den && ~is_zero && en) ? {sgn,8'b0,shf1} : 32'bz;
+  assign res=(is_zero && en) ? {sgn,8'b0,23'b0} : 32'bz;
+  assign res=(is_overflow && ~is_nan && en) ? {sgn,8'hff,23'b0} : 32'bz; 
+  assign res=(is_nan && en) ? {sgn,8'hff,A[22:0]|23'b1} : 32'bz;
   generate
     genvar k;
     for(k=0;k<8;k=k+1) begin : shifker_gen
