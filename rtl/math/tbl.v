@@ -23,18 +23,59 @@ module tblD(
 
   reg [6:0] bits;
 
-  assign res=is_read ? ram[xtra[1:0]+bits*4+xtra[2]*256] : 68'bz;
+  assign res=is_read && ~xtra[2] | ~|xtra[1:0] ? ram[(xtra[1:0]&{2{~xtra[2]}})+bits*4+xtra[2]*256] : 68'bz;
+  assign res=is_read && xtra==3'd5 ? {A[67:66],A[65:53],A[52:0]&{mask0<<1,47'b0} : 68'bz;
+  assign res=is_read && xtra==3'd6 ? {A[67:66],A[65:53],A[52:0]&{mask0<<2,47'b0} : 68'bz;
+  assign res=is_read && xtra==3'd7 ? {A[67:66],A[65:53],A[52:0]&{mask1<<1,47'b0} : 68'bz;
+
 
   always @* begin
       bits=6'd0;
-      if (xtra==2'd0) bits= A[53:48] : 6'bz;
-      if (xtra==2'd1) bits= {A[54],A[53:49]} : 6'bz;
-      if (|xtra[2:1] && A[65:54]==2045) bits= {5'b0,A[53]} : 6'bz;  
-      if (|xtra[2:1] && A[65:54]==2046) bits= {4'b0,A[53:52]} : 6'bz;  
-      if (|xtra[2:1] && A[65:54]==2047) bits= {3'b0,A[53:51]} : 6'bz;  
-      if (|xtra[2:1] && A[65:54]==2048) bits= {2'b0,A[53:50]} : 6'bz;  
-      if (|xtra[2:1] && A[65:54]==2049) bits= {1'b0,A[53:49]} : 6'bz;  
-      if (|xtra[2:1] && A[65:54]==2050) bits= A[53:48] : 6'bz;
+      mask=6'd0;
+      bits0=0;
+      if (xtra[1:0]==2'd0 && A[65:54]==2040) bits0= {6'b0} : 6'bz;  
+      if (xtra[1:0]==2'd0 && A[65:54]==2041) bits0= {1'b1,5'b0} : 6'bz;  
+      if (xtra[1:0]==2'd0 && A[65:54]==2042) bits0= {1'b1,4'b0,A[53]} : 6'bz;  
+      if (xtra[1:0]==2'd0 && A[65:54]==2043) bits0= {1'b1,3'b0,A[53:52]} : 6'bz;  
+      if (xtra[1:0]==2'd0 && A[65:54]==2044) bits0= {1'b1,2'b0,A[53:51]} : 6'bz;  
+      if (xtra[1:0]==2'd0 && A[65:54]==2045) bits0= {1'b1,1'b0,A[53:50]} : 6'bz;  
+      if (xtra[1:0]==2'd0 && A[65:54]==2046) bits0= {1'b1,A[53:49}] : 6'bz;
+
+      bits1=0;
+      if (xtra==3'd1 && A[65:54]==2041) bits1= {A[54],5'b0} : 6'bz;  
+      if (xtra==3'd1 && A[65:54]==2042) bits1= {A[54],1'b1,4'b0} : 6'bz;  
+      if (xtra==3'd1 && A[65:54]==2043) bits1= {A[54],1'b1,3'b0,A[53]} : 6'bz;  
+      if (xtra==3'd1 && A[65:54]==2044) bits1= {A[54],1'b1,2'b0,A[53:52]} : 6'bz;  
+      if (xtra==3'd1 && A[65:54]==2045) bits1= {A[54],1'b1,1'b0,A[53:51]} : 6'bz;  
+      if (xtra==3'd1 && A[65:54]==2046) bits1= {A[54],1'b1,A[53:50]} : 6'bz;
+
+      bits2=0;
+      if (|xtra[2:1] && A[65:54]==2045) bits2= {1'b1,5'b0} : 6'bz;  
+      if (|xtra[2:1] && A[65:54]==2046) bits2= {1'b1,4'b0,A[53]} : 6'bz;  
+      if (|xtra[2:1] && A[65:54]==2047) bits2= {1'b1,3'b0,A[53:52]} : 6'bz;  
+      if (|xtra[2:1] && A[65:54]==2048) bits2= {1'b1,2'b0,A[53:51]} : 6'bz;  
+      if (|xtra[2:1] && A[65:54]==2049) bits2= {1'b1,1'b0,A[53:50]} : 6'bz;  
+      if (|xtra[2:1] && A[65:54]==2050) bits2= {1'b1,A[53:49]} : 6'bz;
+
+      if (xtra==3'd0) bits=bits0;
+      else if (xtra==3'd1) bits=bits1;
+      else bits=bits2;
+
+      mask0=0;
+      if (xtra[1]==1'd0 && A[65:54]==2041) mask0= {5'b0,1'b1} : 6'bz;  
+      if (xtra[1]==1'd0 && A[65:54]==2042) mask0= {4'b0,2'b11} : 6'bz;  
+      if (xtra[1]==1'd0 && A[65:54]==2043) mask0= {3'b0,3'b111} : 6'bz;  
+      if (xtra[1]==1'd0 && A[65:54]==2044) mask0= {2'b0,4'b1111} : 6'bz;  
+      if (xtra[1]==1'd0 && A[65:54]==2045) mask0= {1'b0,5'b11111} : 6'bz;  
+      if (xtra[1]==1'd0 && A[65:54]==2046) mask0= 6'b111111 : 6'bz;
+
+      mask1=0;
+      if (xtra[1]!=1'd0 && A[65:54]==2045) mask1= {5'b0,1'b1} : 6'bz;  
+      if (xtra[1]!=1'd0 && A[65:54]==2046) mask1= {4'b0,2'b11} : 6'bz;  
+      if (xtra[1]!=1'd0 && A[65:54]==2047) mask1= {3'b0,3'b111} : 6'bz;  
+      if (xtra[1]!=1'd0 && A[65:54]==2048) mask1= {2'b0,4'b1111} : 6'bz;  
+      if (xtra[1]!=1'd0 && A[65:54]==2049) mask1= {1'b0,5'b11111} : 6'bz;  
+      if (xtra[1]!=1'd0 && A[65:54]==2050) mask1= 6'b111111 : 6'bz;
   end  
 
   always @(posedge clk) begin
