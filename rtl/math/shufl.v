@@ -44,7 +44,7 @@ module fperm(
   input is_div;
   input tbl_read;
   input tbl_write;
-  input [1:0] xtra;
+  input [2:0] xtra;
   input [67:0] A;
   input [67:0] B;
   output [67:0] res;
@@ -81,9 +81,9 @@ module fperm(
     end
   endgenerate
   
-  adder #(12) add_dbla(BIAS_D,~B[65:54],exp_D,1'b1,is_sqrt,,,,);
-  adder #(12) add_dblb(BIAS_D,~{1'b0,B[65:55]},exp_D,1'b1,~is_sqrt,,,,);
-  adder #(9) add_snga(BIAS_S,~B[65:57],exp_X,1'b1,is_sqrt,,,,);
+  adder #(12) add_dbla(BIAS_D,~{B[65],B[63:53]},exp_D,1'b1,is_sqrt,,,,);
+  adder #(12) add_dblb(BIAS_D,~{1'b0,B[65],B[63:54]},exp_D,1'b1,~is_sqrt,,,,);
+  adder #(9) add_snga(BIAS_S,~{B[65:57],exp_X,1'b1,is_sqrt,,,,);
   adder #(9) add_sngb(BIAS_S,~{1'b0,B[65:58]},exp_X,1'b1,~is_sqrt,,,,);
   adder #(9) add_sngc(BIAS_S,~B[32:24],exp_X1,1'b1,is_sqrt,,,,);
   adder #(9) add_sngd(BIAS_S,~{1'b0,B[32:25]},exp_X1,1'b1,~is_sqrt,,,,);
