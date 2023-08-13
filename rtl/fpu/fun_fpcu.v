@@ -352,6 +352,9 @@ module fun_fpu(
   .dupSngl(fxFADD_dupl),
   .is_sqrt(fxFADD_sqrt),
   .is_div(fxFADD_divide),
+  .tbl_read(1'b0),
+  .tbl_write(1'b0),
+  .xtra(3'b0),
   .A(fxDataAXL_reg[0][67:0]),.B(gxDataBXL_reg[1][67:0]),
   .res(FOOF[0][67:0]));
   
@@ -435,27 +438,39 @@ module fun_fpu(
   .is_rndS(fxFCADD_rndS)
   );
   
-  
-  fperm #(0) fperm1CL_mod(
-  .clk(clk),
-  .rst(rst),
-  .en(~(H? fxFCADD_dbl_reg:fxFCADD_dblext_reg)&~fxFCADD_sn_reg),
-  .copyA(H? fxFCADD_com_reg==2'b01 : ~fxFCADD_com_reg[0]),
-  .swpSngl(fxFCADD_pswp_reg),
-  .dupSngl(fxFCADD_dupl_reg),
-  .is_sqrt(1'b0),
-  .is_div(1'b0),
-  .tbl_read(u1_op_reg3[7:0]==`fop_divE),
-  .tbl_write(u1_op_reg3[7:0]==`fop_divDL),
-  .xtra(u1_op_reg[18:17),
-  .A(fxDataAXL_reg2[1][67:0]),.B(u1_op_reg3[13+H] ? XX_data : gxDataBXL_reg2[0][67:0]),
-  .res(FOOF[1][67:0]));
- 
   generate
-	  if (H) assign gfDataBFL[1]=u1_op_reg[9] ? u1_Bx : uu_B1;
-	  else assign gfDataBFL[1]=u1_op_reg[8] ? {uu_B1[68+15:68],u1_Bx} : uu_B1;
-	  if (H) assign gfDataBFL[0]=u1_op_reg[9] ? u1_Bx : uu_B2;
-	  else assign gfDataBFL[0]=u1_op_reg[8] ? {uu_B2[68+15:68],u1_Bx} : uu_B2;
+    if (INDEX==2) fperm #(0) fperm1CL_mod(
+        .clk(clk),
+        .rst(rst),
+        .en(~(H? fxFCADD_dbl_reg:fxFCADD_dblext_reg)&~fxFCADD_sn_reg),
+        .copyA(H? fxFCADD_com_reg==2'b01 : ~fxFCADD_com_reg[0]),
+        .swpSngl(fxFCADD_pswp_reg),
+        .dupSngl(fxFCADD_dupl_reg),
+        .is_sqrt(1'b0),
+        .is_div(1'b0),
+        .tbl_read(u1_op_reg3[7:0]==`fop_divE),
+        .tbl_write(u1_op_reg3[7:0]==`fop_divDL),
+        .xtra(u1_op_reg[19:17]),
+        .A(fxDataAXL_reg2[1][67:0]),.B(u1_op_reg3[13+H] ? XX_data : gxDataBXL_reg2[0][67:0]),
+        .res(FOOF[1][67:0]));
+    else  fperm #(0) fperm1CL_mod(
+        .clk(clk),
+        .rst(rst),
+        .en(~(H? fxFCADD_dbl_reg:fxFCADD_dblext_reg)&~fxFCADD_sn_reg),
+        .copyA(H? fxFCADD_com_reg==2'b01 : ~fxFCADD_com_reg[0]),
+        .swpSngl(fxFCADD_pswp_reg),
+        .dupSngl(fxFCADD_dupl_reg),
+        .is_sqrt(1'b0),
+        .is_div(1'b0),
+        .tbl_read(1'b0),
+        .tbl_write(1'b0),
+        .xtra(3'b0),
+        .A(fxDataAXL_reg2[1][67:0]),.B(u1_op_reg3[13+H] ? XX_data : gxDataBXL_reg2[0][67:0]),
+        .res(FOOF[1][67:0]))
+      if (H) assign gfDataBFL[1]=u1_op_reg[9] ? u1_Bx : uu_B1;
+      else assign gfDataBFL[1]=u1_op_reg[8] ? {uu_B1[68+15:68],u1_Bx} : uu_B1;
+      if (H) assign gfDataBFL[0]=u1_op_reg[9] ? u1_Bx : uu_B2;
+      else assign gfDataBFL[0]=u1_op_reg[8] ? {uu_B2[68+15:68],u1_Bx} : uu_B2;
       if (INDEX==0) begin
 	      assign FUF4=FOOF_reg[0];
 	      assign FUF7=isXTRA_reg2 ? xtra2_reg : FOOF_reg[1];

@@ -357,6 +357,9 @@ module fun_fpsu(
   .dupSngl(fxFADD_dupl),
   .is_sqrt(fxFADD_sqrt),
   .is_div(fxFADD_div),
+  .tbl_read(1'b0),
+  .tbl_write(1'b0),
+  .xtra(3'b0),
   .A(fxDataAXL_reg[0]),.B(gxDataBXL_reg[1]),
   .res(FOOF[0]));
   
@@ -446,6 +449,9 @@ module fun_fpsu(
   .dupSngl(fxFCADD_dupl_reg),
   .is_sqrt(1'b0),
   .is_div(1'b0),
+  .tbl_read(1'b0),
+  .tbl_write(1'b0),
+  .xtra(3'b0),
   .A(fxDataAXL_reg2[1]),.B(u1_op_reg3[13+H] ? XY_data : gxDataBXL_reg2[0]),
   .res(FOOF[1]));
  
