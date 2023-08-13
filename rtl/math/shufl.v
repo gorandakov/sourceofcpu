@@ -83,13 +83,14 @@ module fperm(
   
   adder #(12) add_dbla(BIAS_D,~{B[65],B[63:53]},exp_D,1'b1,is_sqrt,,,,);
   adder #(12) add_dblb(BIAS_D,~{1'b0,B[65],B[63:54]},exp_D,1'b1,~is_sqrt,,,,);
-  adder #(9) add_snga(BIAS_S,~{B[65:57],exp_X,1'b1,is_sqrt,,,,);
-  adder #(9) add_sngb(BIAS_S,~{1'b0,B[65:58]},exp_X,1'b1,~is_sqrt,,,,);
-  adder #(9) add_sngc(BIAS_S,~B[32:24],exp_X1,1'b1,is_sqrt,,,,);
-  adder #(9) add_sngd(BIAS_S,~{1'b0,B[32:25]},exp_X1,1'b1,~is_sqrt,,,,);
+  adder #(9) add_snga(BIAS_S,~{B[65],B[63:56]},exp_X,1'b1,is_sqrt,,,,);
+  adder #(9) add_sngb(BIAS_S,~{1'b0,B[65],B[63:57]},exp_X,1'b1,~is_sqrt,,,,);
+  adder #(9) add_sngc(BIAS_S,~{B[32],B[30:23]},exp_X1,1'b1,is_sqrt,,,,);
+  adder #(9) add_sngd(BIAS_S,~{1'b0,B[32],B[30:24]},exp_X1,1'b1,~is_sqrt,,,,);
 
-  assign resY=A[67:66]==`ftype_dbl && ~tbl_read ? {B[67:66],exp_D,B[53],53'b0} : 68'bz;
-  assign resY=A[67:66]!=`ftype_dbl && ~tbl_read ? {B[67:66],exp_X,B[56],23'b0,exp_X1,B[23],23'b0};
+  assign resY=A[67:66]==`ftype_dbl && ~tbl_read ? {B[67:66],exp_D[11],B[63],exp_D[10:0],53'b0} : 68'bz;
+  assign resY=A[67:66]!=`ftype_dbl && ~tbl_read ? {B[67:66],exp_X[8],B[63],exp_X[7:0],23'b0,
+    exp_X1[8],B[31],exp_X1[7:0],23'b0};
 
   assign resX=(copyA & ~swpSngl) ? A : 68'bz;
   assign resX=(~copyA & ~swpSngl) ? B : 68'bz;
