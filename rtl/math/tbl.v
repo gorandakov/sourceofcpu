@@ -23,7 +23,7 @@ module tblD(
 
   reg [6:0] bits;
 
-  assign res=is_read && ~xtra[2] | ~|xtra[1:0] ? ram[(xtra[1:0]&{2{~xtra[2]}})+bits*4+xtra[2]*256]^}{3'b0,A[64]&&xtra==3'b10,64'b0} : 68'bz;
+  assign res=is_read && ~xtra[2] | ~|xtra[1:0] ? ram[(xtra[1:0]&{2{~xtra[2]}})+bits*4+xtra[2]*256]^}{3'b0,A[64]&&(xtra==3'b10||xtra==3'b0),64'b0} : 68'bz;
   assign res=is_read && xtra==3'd5 ? {A[67:66],A[65:53],A[52:0]&{mask0<<1,47'b0} : 68'bz;
   assign res=is_read && xtra==3'd6 ? {A[67:66],A[65:53],A[52:0]&{mask0<<2,47'b0} : 68'bz;
   assign res=is_read && xtra==3'd7 ? {A[67:66],A[65:53],A[52:0]&{mask1<<1,47'b0} : 68'bz;
