@@ -64,11 +64,28 @@ module fperm(
   wire [8:0] exp_X1;
   wire [8:0] exp_X;
 
+  wire [11:0] df;
+  wire df_has;
+  wire [8:0] dsf0;
+  wire dsf0_has;
+  wire [8:0] dsf1;
+  wire dsf1_has;
+  wire [11:0] valDF;
+  wire [11:0] expDF;
+  wire [8:0] valDSF0;
+  wire [8:0] expDSF0;
+  wire [8:0] valDSF1;
+  wire [8:0] expDSF1;
+
+  bit_find_last_bit #(12) dblF({B[65],B[63:53]},df,df_has);
+  bit_find_last_bit #(9) snglF0({B[65],B[63:56]},dsf0,dsf0_has);
+  bit_find_last_bit #(9) snglF1({B[32],B[30:23]},dsf1,dsf1_has);
+
   generate
     if (!C) begin
         assign res=en_reg? res0_reg : 68'bz;
     end else begin
-        assign res=en_reg2? res0_reg2 : 68'bz;
+        assign res=en_reg2? res0 : 68'bz;
         tblD tbl_mod(
         clk,
         rst,
@@ -79,7 +96,24 @@ module fperm(
         tbl_write,
         resY);
     end
+    genvar k;
+    for(k=0;k<12;k=k+1) begin : shf
+        assign valDF=df[k] ? B[52:41]<<(11-k) : 12'bz;
+        assign expDF=df[k] ? k+BIAS_D : 12'bz;
+        if (k<9) begin
+            assign valDSF0=dsf0[k] ? B[55:47]<<(8-k) : 9'bz;
+            assign expDSF0=dsf0[k] ? k+BIAS_S : 9'bz;
+            assign valDSF1=dsf1[k] ? B[22:14]<<(8-k) : 9'bz;
+            assign expDSF1=dsf1[k] ? k+BIAS_D : 9'bz;
+        end
+    end
   endgenerate
+  assign valDF=df_has[k] ? 12'bz : 12'b0;
+  assign expDF=df_has ? 12'bz : 0;
+  assign valDSF0=dsf0_has[k] ? 9'bz : 9'b0;
+  assign expDSF0=dsf0_has ? 9'bz : 9'b0;
+  assign valDSF1=dsf1_has[k] ? 9'bz : 9'b0;
+  assign expDSF1=dsf1_has ? 9'bz : 9'b0;
   
   adder #(12) add_dbla(BIAS_D,~{B[65],B[63:53]},exp_D,1'b1,is_sqrt,,,,);
   adder #(12) add_dblb(BIAS_D,~{1'b0,B[65],B[63:54]},exp_D,1'b1,~is_sqrt,,,,);
@@ -88,9 +122,12 @@ module fperm(
   adder #(9) add_sngc(BIAS_S,~{B[32],B[30:23]},exp_X1,1'b1,is_sqrt,,,,);
   adder #(9) add_sngd(BIAS_S,~{1'b0,B[32],B[30:24]},exp_X1,1'b1,~is_sqrt,,,,);
 
-  assign resY=A[67:66]==`ftype_dbl && ~tbl_read ? {B[67:66],exp_D[11],B[63],exp_D[10:0],53'b0} : 68'bz;
-  assign resY=A[67:66]!=`ftype_dbl && ~tbl_read ? {B[67:66],exp_X[8],B[63],exp_X[7:0],23'b0,
+  assign resY=A[67:66]==`ftype_dbl && ~tbl_read && ~(is_sqrt&is_div) ? {B[67:66],exp_D[11],B[63],exp_D[10:0],53'b0} : 68'bz;
+  assign resY=A[67:66]!=`ftype_dbl && ~tbl_read && ~(is_sqrt&is_div) ? {B[67:66],exp_X[8],B[63],exp_X[7:0],23'b0,
     exp_X1[8],B[31],exp_X1[7:0],23'b0};
+  assign resY=A[67:66]==`ftype_dbl && ~tbl_read && (is_sqrt&is_div) ? {B[67:66],expDF[11],1'b0,expDF[10:0],valDF,41'b0} : 68'bz;
+  assign resY=A[67:66]!=`ftype_dbl && ~tbl_read && (is_sqrt&is_div) ? {B[67:66],expDSF0[8],1'b0,expDSF0[7:0],valDSF0,14'b0,
+    expDSF1[8],1'b0,expDSF1[7:0],valDSF1,14'b0};
 
   assign resX=(copyA & ~swpSngl) ? A : 68'bz;
   assign resX=(~copyA & ~swpSngl) ? B : 68'bz;
