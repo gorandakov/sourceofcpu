@@ -582,8 +582,8 @@ module fun_fpu(
 	      {fxFCADD_pswp,fxFCADD_com}<=u1_op_reg[10:8];
               fxFADD_dupl<=u1_op_reg[12];
               fxFCADD_dupl<=u1_op_reg[12];
-              fxFCADD_sqrt<=u1_op_reg[7:0]==`fop_sqrtDH;
-              fxFCADD_div<=u1_op_reg[7:0]==`fop_sqrtDL;
+              fxFADD_sqrt<=u1_op_reg[7:0]==`fop_sqrtDH || u1_op_reg[7:0]==`fop_sqrtE;
+              fxFADD_div<=u1_op_reg[7:0]==`fop_sqrtDL || u1_op_reg[7:0]==`fop_sqrtE;
 	      
 	      fxFCADD_dbl=u1_op_reg[7:0]==`fop_mulDL ||
 	        u1_op_reg[7:0]==`fop_mulDH ||
