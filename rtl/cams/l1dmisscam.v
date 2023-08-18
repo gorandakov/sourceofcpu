@@ -204,15 +204,15 @@ module dm_alloc(
   bit3,
   bit4,
   bit5);
-  input [7:0] busy;
+  input [9:0] busy;
   input [5:0] en;
   output [5:0] en_out;
-  output [7:0] bit0;
-  output [7:0] bit1;
-  output [7:0] bit2;
-  output [7:0] bit3;
-  output [7:0] bit4;
-  output [7:0] bit5;
+  output [9:0] bit0;
+  output [9:0] bit1;
+  output [9:0] bit2;
+  output [9:0] bit3;
+  output [9:0] bit4;
+  output [9:0] bit5;
 
   wire en_outX0,en_outP0;
   wire en_outX1,en_outP1;
@@ -224,14 +224,14 @@ module dm_alloc(
   wire [5:0] cnt2;
   wire [5:0] cnt5;
 
-  bit_find_first_bit #(8) bit0_mod(~busy&{8{en[0]}},bit0,en_outP0);
-  bit_find_first_bit #(8) bit1_mod(~busy&{8{en[1]}}&~bit0,bit1,en_outP1);
-  bit_find_first_bit #(8) bit2_mod(~busy&{8{en[2]}}&~bit0&~bit1,bit2,en_outP2);
-  bit_find_last_bit #(8) bit3_mod(~busy&{8{en[3]}},bit3,en_outP3);
-  bit_find_last_bit #(8) bit4_mod(~busy&{8{en[4]}}&~bit3,bit4,en_outP4);
-  bit_find_last_bit #(8) bit5_mod(~busy&{8{en[5]}}&~bit3&~bit4,bit5,en_outP5);
+  bit_find_first_bit #(10) bit0_mod(~busy&{8{en[0]}},bit0,en_outP0);
+  bit_find_first_bit #(10) bit1_mod(~busy&{8{en[1]}}&~bit0,bit1,en_outP1);
+  bit_find_first_bit #(10) bit2_mod(~busy&{8{en[2]}}&~bit0&~bit1,bit2,en_outP2);
+  bit_find_last_bit #(10) bit3_mod(~busy&{8{en[3]}},bit3,en_outP3);
+  bit_find_last_bit #(10) bit4_mod(~busy&{8{en[4]}}&~bit3,bit4,en_outP4);
+  bit_find_last_bit #(10) bit5_mod(~busy&{8{en[5]}}&~bit3&~bit4,bit5,en_outP5);
 
-  popcnt10_or_more cpop_mod({2'b0,~busy},busy_cnt);
+  popcnt10_or_more cpop_mod(~busy,busy_cnt);
   popcnt5 cpop2_mod({en[0],en[3],en[1],en[4],1'b0},cnt2);
   popcnt5 cpop5_mod({en[0],en[3],en[1],en[4],en[2]},cnt5);
   
@@ -379,7 +379,7 @@ module dmisscam(
   output                     read_en;
   output [PADDR_WIDTH-8:0] read_addr;
   output                     read_st;
-  output [3:0]              read_req;
+  output [4:0]              read_req;
   output                   read_dupl;
   output[4:0]                read_sz;
   output                    read_odd;
@@ -431,42 +431,42 @@ module dmisscam(
   input [1:0]               fill_low5;
 
   wire fill_match;
-  wire [5:0][15:0] fill_match_o;
-  wire [15:0] filled;
-  wire [15:0] busy;
-  wire [15:0] fill_en_way;
+  wire [5:0][19:0] fill_match_o;
+  wire [19:0] filled;
+  wire [19:0] busy;
+  wire [19:0] fill_en_way;
   
-  wire [15:0] first;
+  wire [19:0] first;
   wire found;
-  wire[15:0]              fill_dupl;
-  wire [15:0] [4:0]       fill_sz;
-  wire[15:0]              fill_odd;
-  wire[15:0]              fill_io;
-  wire[15:0]              fill_st;
-  wire[15:0]              fill_split;
-  wire [15:0] [4:0]       fill_bbank;
-  wire [15:0] [1:0]       fill_low;
-  wire [15:0][36:0]       fill_addr;
-  wire [15:0] fill_en;
+  wire[19:0]              fill_dupl;
+  wire [19:0] [4:0]       fill_sz;
+  wire[19:0]              fill_odd;
+  wire[19:0]              fill_io;
+  wire[19:0]              fill_st;
+  wire[19:0]              fill_split;
+  wire [19:0] [4:0]       fill_bbank;
+  wire [19:0] [1:0]       fill_low;
+  wire [19:0][36:0]       fill_addr;
+  wire [19:0] fill_en;
  
-  wire [15:0] read_en_way;
+  wire [19:0] read_en_way;
 
   reg started;
   
   wire [5:0] en_outE;
   wire [5:0] en_outO;
-  wire [7:0] bitE0;
-  wire [7:0] bitE1;
-  wire [7:0] bitE2;
-  wire [7:0] bitE3;
-  wire [7:0] bitE4;
-  wire [7:0] bitE5;
-  wire [7:0] bitO0;
-  wire [7:0] bitO1;
-  wire [7:0] bitO2;
-  wire [7:0] bitO3;
-  wire [7:0] bitO4;
-  wire [7:0] bitO5;
+  wire [9:0] bitE0;
+  wire [9:0] bitE1;
+  wire [9:0] bitE2;
+  wire [9:0] bitE3;
+  wire [9:0] bitE4;
+  wire [9:0] bitE5;
+  wire [9:0] bitO0;
+  wire [9:0] bitO1;
+  wire [9:0] bitO2;
+  wire [9:0] bitO3;
+  wire [9:0] bitO4;
+  wire [9:0] bitO5;
   wire [1:0] cmpEnE0;
   wire [1:0] cmpEnO0;
   wire [1:0] cmpEnE1;
@@ -547,16 +547,16 @@ module dmisscam(
   reg [4:0]             fill_bbank5_reg;
   reg [1:0]               fill_low5_reg;
   
-  reg [15:0] pwned;
+  reg [19:0] pwned;
   wire read_en0;
   
   wire [5:0] enE;
   wire [5:0] enO;  
   generate
       genvar k;
-      for(k=0;k<16;k=k+1) begin : buffers_gen
-          assign read_req=read_en_way[k] ? k[3:0] : 4'bz;
-          if (k<8) begin//fill_st0,fill_dupl0,fill_sz0,fill_odd0,fill_io0,fill_split0,fill_bbank0,fill_low0,
+      for(k=0;k<20;k=k+1) begin : buffers_gen
+          assign read_req=read_en_way[k] ? k[3:0]+k[4]*24 : 5'bz;
+          if (k<10) begin//fill_st0,fill_dupl0,fill_sz0,fill_odd0,fill_io0,fill_split0,fill_bbank0,fill_low0,
               assign fill_addr[k]=en_outE[0] & bitE0[k] ? {fill_addrE0_reg,1'b0} : 37'bz;
               assign fill_addr[k]=en_outE[1] & bitE1[k] ? {fill_addrE1_reg,1'b0} : 37'bz;
               assign fill_addr[k]=en_outE[2] & bitE2[k] ? {fill_addrE2_reg,1'b0} : 37'bz;
@@ -682,77 +682,77 @@ module dmisscam(
               );
 
           end else begin
-              assign fill_addr[k]=en_outO[0] & bitO0[k-8] ? {fill_addrO0_reg,1'b1} : 37'bz;
-              assign fill_addr[k]=en_outO[1] & bitO1[k-8] ? {fill_addrO1_reg,1'b1} : 37'bz;
-              assign fill_addr[k]=en_outO[2] & bitO2[k-8] ? {fill_addrO2_reg,1'b1} : 37'bz;
-              assign fill_addr[k]=en_outO[3] & bitO3[k-8] ? {fill_addrO3_reg,1'b1} : 37'bz;
-              assign fill_addr[k]=en_outO[4] & bitO4[k-8] ? {fill_addrO4_reg,1'b1} : 37'bz;
-              assign fill_addr[k]=en_outO[5] & bitO5[k-8] ? {fill_addrO5_reg,1'b1} : 37'bz;
+              assign fill_addr[k]=en_outO[0] & bitO0[k-10] ? {fill_addrO0_reg,1'b1} : 37'bz;
+              assign fill_addr[k]=en_outO[1] & bitO1[k-10] ? {fill_addrO1_reg,1'b1} : 37'bz;
+              assign fill_addr[k]=en_outO[2] & bitO2[k-10] ? {fill_addrO2_reg,1'b1} : 37'bz;
+              assign fill_addr[k]=en_outO[3] & bitO3[k-10] ? {fill_addrO3_reg,1'b1} : 37'bz;
+              assign fill_addr[k]=en_outO[4] & bitO4[k-10] ? {fill_addrO4_reg,1'b1} : 37'bz;
+              assign fill_addr[k]=en_outO[5] & bitO5[k-10] ? {fill_addrO5_reg,1'b1} : 37'bz;
               assign fill_addr[k]=~fill_en_way[k] ? 37'b0 : 37'bz;
-              assign fill_st[k]=en_outO[0] & bitO0[k-8] ? fill_st0_reg : 1'bz;
-              assign fill_st[k]=en_outO[1] & bitO1[k-8] ? fill_st1_reg : 1'bz;
-              assign fill_st[k]=en_outO[2] & bitO2[k-8] ? fill_st2_reg : 1'bz;
-              assign fill_st[k]=en_outO[3] & bitO3[k-8] ? fill_st3_reg : 1'bz;
-              assign fill_st[k]=en_outO[4] & bitO4[k-8] ? fill_st4_reg : 1'bz;
-              assign fill_st[k]=en_outO[5] & bitO5[k-8] ? fill_st5_reg : 1'bz;
+              assign fill_st[k]=en_outO[0] & bitO0[k-10] ? fill_st0_reg : 1'bz;
+              assign fill_st[k]=en_outO[1] & bitO1[k-10] ? fill_st1_reg : 1'bz;
+              assign fill_st[k]=en_outO[2] & bitO2[k-10] ? fill_st2_reg : 1'bz;
+              assign fill_st[k]=en_outO[3] & bitO3[k-10] ? fill_st3_reg : 1'bz;
+              assign fill_st[k]=en_outO[4] & bitO4[k-10] ? fill_st4_reg : 1'bz;
+              assign fill_st[k]=en_outO[5] & bitO5[k-10] ? fill_st5_reg : 1'bz;
               assign fill_st[k]=~fill_en_way[k] ? 1'b0 : 1'bz;
-              assign fill_dupl[k]=en_outO[0] & bitO0[k-8] ? fill_dupl0_reg[1] : 1'bz;
-              assign fill_dupl[k]=en_outO[1] & bitO1[k-8] ? fill_dupl1_reg[1] : 1'bz;
-              assign fill_dupl[k]=en_outO[2] & bitO2[k-8] ? fill_dupl2_reg[1] : 1'bz;
-              assign fill_dupl[k]=en_outO[3] & bitO3[k-8] ? fill_dupl3_reg[1] : 1'bz;
-              assign fill_dupl[k]=en_outO[4] & bitO4[k-8] ? fill_dupl4_reg[1] : 1'bz;
-              assign fill_dupl[k]=en_outO[5] & bitO5[k-8] ? fill_dupl5_reg[1] : 1'bz;
+              assign fill_dupl[k]=en_outO[0] & bitO0[k-10] ? fill_dupl0_reg[1] : 1'bz;
+              assign fill_dupl[k]=en_outO[1] & bitO1[k-10] ? fill_dupl1_reg[1] : 1'bz;
+              assign fill_dupl[k]=en_outO[2] & bitO2[k-10] ? fill_dupl2_reg[1] : 1'bz;
+              assign fill_dupl[k]=en_outO[3] & bitO3[k-10] ? fill_dupl3_reg[1] : 1'bz;
+              assign fill_dupl[k]=en_outO[4] & bitO4[k-10] ? fill_dupl4_reg[1] : 1'bz;
+              assign fill_dupl[k]=en_outO[5] & bitO5[k-10] ? fill_dupl5_reg[1] : 1'bz;
               assign fill_dupl[k]=~fill_en_way[k] ? 1'b0 : 1'bz;
-              assign fill_sz[k]=en_outO[0] & bitO0[k-8] ? fill_sz0_reg : 5'bz;
-              assign fill_sz[k]=en_outO[1] & bitO1[k-8] ? fill_sz1_reg : 5'bz;
-              assign fill_sz[k]=en_outO[2] & bitO2[k-8] ? fill_sz2_reg : 5'bz;
-              assign fill_sz[k]=en_outO[3] & bitO3[k-8] ? fill_sz3_reg : 5'bz;
-              assign fill_sz[k]=en_outO[4] & bitO4[k-8] ? fill_sz4_reg : 5'bz;
-              assign fill_sz[k]=en_outO[5] & bitO5[k-8] ? fill_sz5_reg : 5'bz;
+              assign fill_sz[k]=en_outO[0] & bitO0[k-10] ? fill_sz0_reg : 5'bz;
+              assign fill_sz[k]=en_outO[1] & bitO1[k-10] ? fill_sz1_reg : 5'bz;
+              assign fill_sz[k]=en_outO[2] & bitO2[k-10] ? fill_sz2_reg : 5'bz;
+              assign fill_sz[k]=en_outO[3] & bitO3[k-10] ? fill_sz3_reg : 5'bz;
+              assign fill_sz[k]=en_outO[4] & bitO4[k-10] ? fill_sz4_reg : 5'bz;
+              assign fill_sz[k]=en_outO[5] & bitO5[k-10] ? fill_sz5_reg : 5'bz;
               assign fill_sz[k]=~fill_en_way[k] ? 5'b0 : 
                   5'bz;
-              assign fill_odd[k]=en_outO[0] & bitO0[k-8] ? fill_odd0_reg : 1'bz;
-              assign fill_odd[k]=en_outO[1] & bitO1[k-8] ? fill_odd1_reg : 1'bz;
-              assign fill_odd[k]=en_outO[2] & bitO2[k-8] ? fill_odd2_reg : 1'bz;
-              assign fill_odd[k]=en_outO[3] & bitO3[k-8] ? fill_odd3_reg : 1'bz;
-              assign fill_odd[k]=en_outO[4] & bitO4[k-8] ? fill_odd4_reg : 1'bz;
-              assign fill_odd[k]=en_outO[5] & bitO5[k-8] ? fill_odd5_reg : 1'bz;
+              assign fill_odd[k]=en_outO[0] & bitO0[k-10] ? fill_odd0_reg : 1'bz;
+              assign fill_odd[k]=en_outO[1] & bitO1[k-10] ? fill_odd1_reg : 1'bz;
+              assign fill_odd[k]=en_outO[2] & bitO2[k-10] ? fill_odd2_reg : 1'bz;
+              assign fill_odd[k]=en_outO[3] & bitO3[k-10] ? fill_odd3_reg : 1'bz;
+              assign fill_odd[k]=en_outO[4] & bitO4[k-10] ? fill_odd4_reg : 1'bz;
+              assign fill_odd[k]=en_outO[5] & bitO5[k-10] ? fill_odd5_reg : 1'bz;
               assign fill_odd[k]=~fill_en_way[k] ? 1'b0 : 
                   1'bz;
-              assign fill_io[k]=en_outO[0] & bitO0[k-8] ? fill_io0_reg : 1'bz;
-              assign fill_io[k]=en_outO[1] & bitO1[k-8] ? fill_io1_reg : 1'bz;
-              assign fill_io[k]=en_outO[2] & bitO2[k-8] ? fill_io2_reg : 1'bz;
-              assign fill_io[k]=en_outO[3] & bitO3[k-8] ? fill_io3_reg : 1'bz;
-              assign fill_io[k]=en_outO[4] & bitO4[k-8] ? fill_io4_reg : 1'bz;
-              assign fill_io[k]=en_outO[5] & bitO5[k-8] ? fill_io5_reg : 1'bz;
+              assign fill_io[k]=en_outO[0] & bitO0[k-10] ? fill_io0_reg : 1'bz;
+              assign fill_io[k]=en_outO[1] & bitO1[k-10] ? fill_io1_reg : 1'bz;
+              assign fill_io[k]=en_outO[2] & bitO2[k-10] ? fill_io2_reg : 1'bz;
+              assign fill_io[k]=en_outO[3] & bitO3[k-10] ? fill_io3_reg : 1'bz;
+              assign fill_io[k]=en_outO[4] & bitO4[k-10] ? fill_io4_reg : 1'bz;
+              assign fill_io[k]=en_outO[5] & bitO5[k-10] ? fill_io5_reg : 1'bz;
               assign fill_io[k]=~fill_en_way[k] ? 1'b0 : 
                   1'bz;
-              assign fill_split[k]=en_outO[0] & bitO0[k-8] ? fill_split0_reg : 1'bz;
-              assign fill_split[k]=en_outO[1] & bitO1[k-8] ? fill_split1_reg : 1'bz;
-              assign fill_split[k]=en_outO[2] & bitO2[k-8] ? fill_split2_reg : 1'bz;
-              assign fill_split[k]=en_outO[3] & bitO3[k-8] ? fill_split3_reg : 1'bz;
-              assign fill_split[k]=en_outO[4] & bitO4[k-8] ? fill_split4_reg : 1'bz;
-              assign fill_split[k]=en_outO[5] & bitO5[k-8] ? fill_split5_reg : 1'bz;
+              assign fill_split[k]=en_outO[0] & bitO0[k-10] ? fill_split0_reg : 1'bz;
+              assign fill_split[k]=en_outO[1] & bitO1[k-10] ? fill_split1_reg : 1'bz;
+              assign fill_split[k]=en_outO[2] & bitO2[k-10] ? fill_split2_reg : 1'bz;
+              assign fill_split[k]=en_outO[3] & bitO3[k-10] ? fill_split3_reg : 1'bz;
+              assign fill_split[k]=en_outO[4] & bitO4[k-10] ? fill_split4_reg : 1'bz;
+              assign fill_split[k]=en_outO[5] & bitO5[k-10] ? fill_split5_reg : 1'bz;
               assign fill_split[k]=~fill_en_way[k] ? 1'b0 : 
                   1'bz;
-              assign fill_bbank[k]=en_outO[0] & bitO0[k-8] ? fill_bbank0_reg : 5'bz;
-              assign fill_bbank[k]=en_outO[1] & bitO1[k-8] ? fill_bbank1_reg : 5'bz;
-              assign fill_bbank[k]=en_outO[2] & bitO2[k-8] ? fill_bbank2_reg : 5'bz;
-              assign fill_bbank[k]=en_outO[3] & bitO3[k-8] ? fill_bbank3_reg : 5'bz;
-              assign fill_bbank[k]=en_outO[4] & bitO4[k-8] ? fill_bbank4_reg : 5'bz;
-              assign fill_bbank[k]=en_outO[5] & bitO5[k-8] ? fill_bbank5_reg : 5'bz;
+              assign fill_bbank[k]=en_outO[0] & bitO0[k-10] ? fill_bbank0_reg : 5'bz;
+              assign fill_bbank[k]=en_outO[1] & bitO1[k-10] ? fill_bbank1_reg : 5'bz;
+              assign fill_bbank[k]=en_outO[2] & bitO2[k-10] ? fill_bbank2_reg : 5'bz;
+              assign fill_bbank[k]=en_outO[3] & bitO3[k-10] ? fill_bbank3_reg : 5'bz;
+              assign fill_bbank[k]=en_outO[4] & bitO4[k-10] ? fill_bbank4_reg : 5'bz;
+              assign fill_bbank[k]=en_outO[5] & bitO5[k-10] ? fill_bbank5_reg : 5'bz;
               assign fill_bbank[k]=~fill_en_way[k] ? 5'b0 : 
                   5'bz;
-              assign fill_low[k]=en_outO[0] & bitO0[k-8] ? fill_low0_reg : 2'bz;
-              assign fill_low[k]=en_outO[1] & bitO1[k-8] ? fill_low1_reg : 2'bz;
-              assign fill_low[k]=en_outO[2] & bitO2[k-8] ? fill_low2_reg : 2'bz;
-              assign fill_low[k]=en_outO[3] & bitO3[k-8] ? fill_low3_reg : 2'bz;
-              assign fill_low[k]=en_outO[4] & bitO4[k-8] ? fill_low4_reg : 2'bz;
-              assign fill_low[k]=en_outO[5] & bitO5[k-8] ? fill_low5_reg : 2'bz;
+              assign fill_low[k]=en_outO[0] & bitO0[k-10] ? fill_low0_reg : 2'bz;
+              assign fill_low[k]=en_outO[1] & bitO1[k-10] ? fill_low1_reg : 2'bz;
+              assign fill_low[k]=en_outO[2] & bitO2[k-10] ? fill_low2_reg : 2'bz;
+              assign fill_low[k]=en_outO[3] & bitO3[k-10] ? fill_low3_reg : 2'bz;
+              assign fill_low[k]=en_outO[4] & bitO4[k-10] ? fill_low4_reg : 2'bz;
+              assign fill_low[k]=en_outO[5] & bitO5[k-10] ? fill_low5_reg : 2'bz;
               assign fill_low[k]=~fill_en_way[k] ? 2'b0 : 
                   2'bz;
-              assign fill_en_way[k]=bitO0[k-8]&en_outO[0]||bitO1[k-8]&en_outO[1]||bitO2[k-8]&en_outO[2]||
-                  bitO3[k-8]&en_outO[3]||bitO4[k-8]&en_outO[4]||bitO5[k-8]&en_outO[5];
+              assign fill_en_way[k]=bitO0[k-10]&en_outO[0]||bitO1[k-10]&en_outO[1]||bitO2[k-10]&en_outO[2]||
+                  bitO3[k-10]&en_outO[3]||bitO4[k-10]&en_outO[4]||bitO5[k-10]&en_outO[5];
               //fill_match[k]=|fill_match_o[k];
               dmisscam_buf #(k) buf_mod(
               clk,
@@ -807,7 +807,7 @@ module dmisscam(
       end
   endgenerate
   dm_alloc aE_mod(
-  busy[7:0],enE,en_outE,
+  busy[9:0],enE,en_outE,
   bitE0,
   bitE1,
   bitE2,
@@ -816,7 +816,7 @@ module dmisscam(
   bitE5);
 
   dm_alloc aO_mod(
-  busy[15:8],enO,en_outO,
+  busy[19:10],enO,en_outO,
   bitO0,
   bitO1,
   bitO2,
@@ -1069,14 +1069,14 @@ module dmisscam(
   assign read_split=read_en ? 1'bz:1'b0;
   assign read_bbank=read_en ? 5'bz:5'b0;
   assign read_low=read_en ? 2'bz : 2'b0;
-  assign read_req=read_en ? 4'bz:4'b0;
+  assign read_req=read_en ? 5'bz : 5'b0;
   
   assign begin_replay=started & ~(|filled);
 
   assign enE={fill_en5_reg[0],fill_en4_reg[0],fill_en3_reg[0],fill_en2_reg[0],fill_en1_reg[0],fill_en0_reg[0]};
   assign enO={fill_en5_reg[1],fill_en4_reg[1],fill_en3_reg[1],fill_en2_reg[1],fill_en1_reg[1],fill_en0_reg[1]};
   
-  bit_find_first_bit #(16) first_mod(busy&filled&~pwned,read_en_way,read_en);
+  bit_find_first_bit #(20) first_mod(busy&filled&~pwned,read_en_way,read_en);
   
  // assign read_en=read_en0;
 
@@ -1089,10 +1089,10 @@ module dmisscam(
       else if (begin_replay) started<=1'b0;
       else if ((|fill_en)&~locked) started<=1'b1;
       if (rst) begin
-	  pwned<=16'b0;
+	  pwned<=20'b0;
       end else begin
 	  pwned<=pwned|read_en_way;
-	  if (unlock) pwned<=16'b0;
+	  if (unlock) pwned<=20'b0;
       end
       if (rst) begin
           fill_en0_reg<=0;
@@ -1162,27 +1162,27 @@ module dmisscam(
           fill_bbank4_reg<=5'b0;
           fill_low4_reg<=2'b0;
       end else begin
-          fill_en0_reg<=fill_en0&{&cmpEnO0,&cmpEnE0}&{~|fill_match_o[0][15:8],~|fill_match_o[0][7:0]};
+          fill_en0_reg<=fill_en0&{&cmpEnO0,&cmpEnE0}&{~|fill_match_o[0][19:10],~|fill_match_o[0][9:0]};
           fill_addrE0_reg<=fill_addrE0;
           fill_addrO0_reg<=fill_addrO0;
           fill_st0_reg<=fill_st0;
-          fill_en1_reg<=fill_en1&{&cmpEnO1,&cmpEnE1}&{~|fill_match_o[1][15:8],~|fill_match_o[1][7:0]};
+          fill_en1_reg<=fill_en1&{&cmpEnO1,&cmpEnE1}&{~|fill_match_o[1][19:10],~|fill_match_o[1][9:0]};
           fill_addrE1_reg<=fill_addrE1;
           fill_addrO1_reg<=fill_addrO1;
           fill_st1_reg<=fill_st1;
-          fill_en2_reg<=fill_en2&{&cmpEnO2,&cmpEnE2}&{~|fill_match_o[2][15:8],~|fill_match_o[2][7:0]};
+          fill_en2_reg<=fill_en2&{&cmpEnO2,&cmpEnE2}&{~|fill_match_o[2][19:10],~|fill_match_o[2][9:0]};
           fill_addrE2_reg<=fill_addrE2;
           fill_addrO2_reg<=fill_addrO2;
           fill_st2_reg<=fill_st2;
-          fill_en3_reg<=fill_en3&{&cmpEnO3,&cmpEnE3}&{~|fill_match_o[3][15:8],~|fill_match_o[3][7:0]};
+          fill_en3_reg<=fill_en3&{&cmpEnO3,&cmpEnE3}&{~|fill_match_o[3][19:10],~|fill_match_o[3][9:0]};
           fill_addrE3_reg<=fill_addrE3;
           fill_addrO3_reg<=fill_addrO3;
           fill_st3_reg<=fill_st3;
-          fill_en4_reg<=fill_en4&{&cmpEnO4,&cmpEnE4}&{~|fill_match_o[4][15:8],~|fill_match_o[4][7:0]};
+          fill_en4_reg<=fill_en4&{&cmpEnO4,&cmpEnE4}&{~|fill_match_o[4][19:10],~|fill_match_o[4][9:0]};
           fill_addrE4_reg<=fill_addrE4;
           fill_addrO4_reg<=fill_addrO4;
           fill_st4_reg<=fill_st4;
-          fill_en5_reg<=fill_en5&{&cmpEnO5,&cmpEnE5}&{~|fill_match_o[5][15:8],~|fill_match_o[5][7:0]};
+          fill_en5_reg<=fill_en5&{&cmpEnO5,&cmpEnE5}&{~|fill_match_o[5][19:10],~|fill_match_o[5][9:0]};
           fill_addrE5_reg<=fill_addrE5;
           fill_addrO5_reg<=fill_addrO5;
           fill_st5_reg<=fill_st5;
