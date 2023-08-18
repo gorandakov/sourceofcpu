@@ -28,9 +28,9 @@ module dc0_cntrl_ram(
   write_data,
   write_wen
   );
-  localparam ADDR_WIDTH=4;
+  localparam ADDR_WIDTH=5;
   localparam DATA_WIDTH=`mOpC_width+2+16;
-  localparam ADDR_COUNT=16;
+  localparam ADDR_COUNT=20;
   
   input clk;
   input rst;
@@ -66,9 +66,9 @@ module dc0_cntrlD_ram(
   write_data,
   write_wen
   );
-  localparam ADDR_WIDTH=4;
+  localparam ADDR_WIDTH=5;
   localparam DATA_WIDTH=128+16;
-  localparam ADDR_COUNT=16;
+  localparam ADDR_COUNT=20;
   
   input clk;
   input rst;
@@ -185,9 +185,9 @@ module dc0_cntrlC1_ram(
   write_data,
   write_wen
   );
-  localparam ADDR_WIDTH=4;
+  localparam ADDR_WIDTH=5;
   localparam DATA_WIDTH=37+5+1+1+13;
-  localparam ADDR_COUNT=16;
+  localparam ADDR_COUNT=20;
   
   input clk;
   input rst;
@@ -226,7 +226,7 @@ module dc0_cntrlM_ram(
   );
   localparam ADDR_WIDTH=5;
   localparam DATA_WIDTH=37+5+1+1+13;
-  localparam ADDR_COUNT=25;
+  localparam ADDR_COUNT=29;
   
   input clk;
   input rst;
@@ -263,7 +263,7 @@ module dc0_cntrlM1_ram(
   );
   localparam ADDR_WIDTH=5;
   localparam DATA_WIDTH=37+1+1;
-  localparam ADDR_COUNT=25;
+  localparam ADDR_COUNT=29;
   
   input clk;
   input rst;
@@ -301,7 +301,7 @@ module dc0_cntrlMiC2_ram(
   );
   localparam ADDR_WIDTH=5;
   localparam DATA_WIDTH=37+5;
-  localparam ADDR_COUNT=25;
+  localparam ADDR_COUNT=29;
   
   input clk;
   input rst;
@@ -472,7 +472,7 @@ module dc0_cntrl(
   output [9:0] rbus_dst_req;
   output [36:0] rbus_address;
   input rbus_can;
-  output rbus_want;
+  output rbus_want;w
   output [4:0] rbus_bank0;
   output [4:0] rbus_sz;
   output [1:0] rbus_low;
@@ -487,12 +487,12 @@ module dc0_cntrl(
   wire [`mOpC_width-1:0] read_mop[1:0];
   wire read_clkEn;
   reg [4:0] cnt;
-  reg [3:0] read_addr0;
-  reg [3:0] write_addr;
+  reg [4:0] read_addr0;
+  reg [4:0] write_addr;
   wire [4:0] cnt_plus;
   wire [4:0] cnt_minus;
-  wire [3:0] read_addr0_d;
-  wire [3:0] write_addr_d;
+  wire [4:0] read_addr0_d;
+  wire [4:0] write_addr_d;
   wire read_clkEnC;
   reg [3:0] cntC;
   reg [2:0] read_addrC;
@@ -517,12 +517,12 @@ module dc0_cntrl(
 
   wire read_clkEnC1;
   reg [4:0] cntC1;
-  reg [3:0] read_addrC1;
-  reg [3:0] write_addrC1;
+  reg [4:0] read_addrC1;
+  reg [4:0] write_addrC1;
   wire [4:0] cntC1_plus;
   wire [4:0] cntC1_minus;
-  wire [3:0] read_addrC1_d;
-  wire [3:0] write_addrC1_d;
+  wire [4:0] read_addrC1_d;
+  wire [4:0] write_addrC1_d;
 
   wire read_clkEnC2;
   reg readI_en2_reg;
@@ -752,8 +752,8 @@ module dc0_cntrl(
   assign rbus_low=missR_low;
 
   adder_inc #(5) cntAdd_mod(cnt,cnt_plus,1'b1,);
-  adder_inc #(4) wrtAdd_mod(write_addr,write_addr_d,1'b1,);  
-  adder_inc #(4) readAdd_mod(read_addr0,read_addr0_d,1'b1,);  
+  adder_inc #(4) wrtAdd_mod(write_addr,write_addr_d,write_addr!=5'd20,);  
+  adder_inc #(4) readAdd_mod(read_addr0,read_addr0_d,read_addr0!=5'd20,);  
   adder #(5) cntSub_mod(cnt,5'h1f,cnt_minus,1'b0,1'b1,,,,);
   get_carry #(5) cmp_mod(cnt,~STALL_CNT[4:0],1'b1,doSkip);
   adder_inc #(4) cntCAdd_mod(cntC,cntC_plus,1'b1,);
@@ -761,24 +761,28 @@ module dc0_cntrl(
   adder_inc #(3) readCAdd_mod(read_addrC,read_addrC_d,1'b1,);  
   adder #(4) cntCSub_mod(cntC,4'hf,cntC_minus,1'b0,1'b1,,,,);
   adder_inc #(5) cntMAdd_mod(cntM,cntM_plus,1'b1,);
-  adder_inc #(5) wrtMAdd_mod(write_addrM,write_addrM_d,write_addrM!=5'd23,);  
-  adder_inc #(5) readMAdd_mod(read_addrM,read_addrM_d,read_addrM!=5'd23,);  
+  adder_inc #(5) wrtMAdd_mod(write_addrM,write_addrM_d,write_addrM!=5'd27,);  
+  adder_inc #(5) readMAdd_mod(read_addrM,read_addrM_d,read_addrM!=5'd27,);  
   adder #(5) cntMSub_mod(cntM,5'h1f,cntM_minus,1'b0,1'b1,,,,);
   adder_inc #(5) cntC1Add_mod(cntC1,cntC1_plus,1'b1,);
-  adder_inc #(4) wrtC1Add_mod(write_addrC1,write_addrC1_d,1'b1,);  
-  adder_inc #(4) readC1Add_mod(read_addrC1,read_addrC1_d,1'b1,);  
+  adder_inc #(4) wrtC1Add_mod(write_addrC1,write_addrC1_d,write_addrC1!=5'd20,);  
+  adder_inc #(4) readC1Add_mod(read_addrC1,read_addrC1_d,read_addrC1!=5'd20,);  
   adder #(5) cntC1Sub_mod(cntC1,5'h1f,cntC1_minus,1'b0,1'b1,,,,);
   adder_inc #(5) cntC2Add_mod(cntC2,cntC2_plus,1'b1,);
-  adder_inc #(5) wrtC2Add_mod(write_addrC2,write_addrC2_d,write_addrC2!=5'd23,);  
-  adder_inc #(5) readC2Add_mod(read_addrC2,read_addrC2_d,read_addrC2!=5'd23,);  
+  adder_inc #(5) wrtC2Add_mod(write_addrC2,write_addrC2_d,write_addrC2!=5'd27,);  
+  adder_inc #(5) readC2Add_mod(read_addrC2,read_addrC2_d,read_addrC2!=5'd27,);  
   adder #(5) cntC2Sub_mod(cntC2,5'h1f,cntC2_minus,1'b0,1'b1,,,,);
   
   adder_inc #(5) initAdd_mod(initCount,initCount_next,1'b1,);
 
-  assign write_addrM_d=(write_addrM==5'd23) ? 5'd0 : 5'bz;
-  assign read_addrM_d=(read_addrM==5'd23) ? 5'd0 : 5'bz;
-  assign write_addrC2_d=(write_addrC2==5'd23) ? 5'd0 : 5'bz;
-  assign read_addrC2_d=(read_addrC2==5'd23) ? 5'd0 : 5'bz;
+  assign write_addrM_d=(write_addrM==5'd27) ? 5'd0 : 5'bz;
+  assign read_addrM_d=(read_addrM==5'd27) ? 5'd0 : 5'bz;
+  assign write_addrC2_d=(write_addrC2==5'd27) ? 5'd0 : 5'bz;
+  assign read_addrC2_d=(read_addrC2==5'd27) ? 5'd0 : 5'bz;
+  assign write_addrC1_d=(write_addrC2==5'd20) ? 5'd0 : 5'bz;
+  assign read_addrC1_d=(read_addrC2==5'd20) ? 5'd0 : 5'bz;
+  assign write_addr_d=(write_addrC2==5'd20) ? 5'd0 : 5'bz;
+  assign read_addr_d=(read_addrC2==5'd20) ? 5'd0 : 5'bz;
 
   assign wen_C2=read_clkEnM1 && ~rbusAN_signals_reg[`rbusAN_second];
   
@@ -866,8 +870,8 @@ module dc0_cntrl(
   always @(posedge clk) begin
       if (rst) begin
           cnt<=5'd0;
-          write_addr<=4'd0;
-          read_addr0<=4'b0;
+          write_addr<=5'd0;
+          read_addr0<=5'b0;
           cntC<=4'd0;
           write_addrC<=3'd0;
           read_addrC<=3'b0;
@@ -875,11 +879,11 @@ module dc0_cntrl(
           write_addrM<=5'd0;
           read_addrM<=5'b0;
           cntC1<=5'd0;
-          write_addrC1<=4'd0;
-          read_addrC1<=4'b0;
+          write_addrC1<=5'd0;
+          read_addrC1<=5'b0;
           cntC2<=5'd0;
-          write_addrC2<=4'd0;
-          read_addrC2<=4'b0;
+          write_addrC2<=5'd0;
+          read_addrC2<=5'b0;
         //  read_addr_reg<=37'b0;
         //  read_en_reg<=1'b0;
           rbusAN_signals_reg<=0;
