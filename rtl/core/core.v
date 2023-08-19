@@ -197,14 +197,16 @@ module heptane_core(
   wire [255:0] read_data_strip;
   
   wire except/*verilator public*/;
+  wire exceptx/*verilator public*/;
   wire fp_excpt_en;
   wire [10:0] fp_excpt_set; 
   wire fp_excpt_thr;
   wire [VIRT_WIDTH-2:0] exceptIP;
+  wire [VIRT_WIDTH-2:0] exceptIPx;
 
-  wire exceptThread;
-  wire [3:0] exceptAttr;
-  wire exceptBoth;
+  wire exceptThreadx;
+  wire [3:0] exceptAttrx;
+  wire exceptBothx;
   wire [5:0] exceptTrceAddr=6'b0;
   wire [4:0] exceptTrceAddrLow=5'b0;
   wire except_due_jump/*verilator public*/;
@@ -226,6 +228,51 @@ module heptane_core(
   wire [12:0] jupd1_baddr;
   wire [1:0] jupd1_sc;
   wire jupd1_tk;
+
+
+  wire except_due_jumpx/*verilator public*/;
+  wire [7:0] except_ghtx;
+  wire except_flagx;
+  wire except_jmask_enx;
+  wire [3:0] except_jmaskx;
+  wire jupd0_enx;//jupd
+  wire jupdt0_enx;
+  wire jupd0_ght_enx;
+  wire [15:0] jupd0_addrx;
+  wire [12:0] jupd0_baddrx;
+  wire [1:0] jupd0_scx;
+  wire jupd0_tkx;
+  wire jupd1_enx;
+  wire jupdt1_enx;
+  wire jupd1_ght_enx;
+  wire [15:0] jupd1_addrx;
+  wire [12:0] jupd1_baddrx;
+  wire [1:0] jupd1_scx;
+  wire jupd1_tkx;
+
+  cmpx4 #(1) cmp_excpt0(clk,clkREF,clkREF2,except,exceptx);
+  cmpx4 #(1) cmp_excpt1(clk,clkREF,clkREF2,except_due_jump,except_due_jumpx);
+  cmpx4 #(VIRT_WIDTH-1) cmp_excpt2(clk,clkREF,clkREF2,exceptIP,exceptIPx);
+  cmpx4 #(1) cmp_excpt3(clk,clkREF,clkREF2,except_flag,except_flagx);
+  cmpx4 #(1) cmp_excpt4(clk,clkREF,clkREF2,except_jmask_en,except_jmask_enx);
+  cmpx4 #(8) cmp_excpt5(clk,clkREF,clkREF2,except_ght,except_ghtx);
+  cmpx4 #(4) cmp_excpt6(clk,clkREF,clkREF2,except_jmask,except_jmaskx);
+  cmpx4 #(1) cmp_excpt6a(clk,clkREF,clkREF2,exceptThread,exceptThreadx);
+  cmpx4 #(4) cmp_excpt6b(clk,clkREF,clkREF2,exceptAttr,exceptAttrx);
+  cmpx4 #(1) cmp_excpt7(clk,clkREF,clkREF2,jupd0_en,jupd0_enx);
+  cmpx4 #(1) cmp_excpt8(clk,clkREF,clkREF2,jupdt0_en,jupdt0_enx);
+  cmpx4 #(1) cmp_excpt9(clk,clkREF,clkREF2,jupd0_ght_en,jupd0_ght_enx);
+  cmpx4 #(1) cmp_excpta(clk,clkREF,clkREF2,jupd1_en,jupd1_enx);
+  cmpx4 #(1) cmp_excptb(clk,clkREF,clkREF2,jupdt1_en,jupdt1_enx);
+  cmpx4 #(1) cmp_excptc(clk,clkREF,clkREF2,jupd1_ght_en,jupd1_ght_enx);
+  cmpx4 #(16) cmp_excptd(clk,clkREF,clkREF2,jupd0_addr,jupd0_addrx);
+  cmpx4 #(13) cmp_excpte(clk,clkREF,clkREF2,jupdt0_baddr,jupdt0_baddrx);
+  cmpx4 #(2) cmp_excptf(clk,clkREF,clkREF2,jupd0_sc,jupd0_scx);
+  cmpx4 #(1) cmp_excptg(clk,clkREF,clkREF2,jupd0_tk,jupd0_tkx);
+  cmpx4 #(16) cmp_excpth(clk,clkREF,clkREF2,jupd1_addr,jupd1_addrx);
+  cmpx4 #(13) cmp_excpti(clk,clkREF,clkREF2,jupdt1_baddr,jupdt1_baddrx);
+  cmpx4 #(2) cmp_excptj(clk,clkREF,clkREF2,jupd1_sc,jupd1_scx);
+  cmpx4 #(1) cmp_excptk(clk,clkREF,clkREF2,jupd1_tk,jupd1_tkx);
 
   reg jupd_reg,jupd_reg2;
 
@@ -1220,18 +1267,18 @@ module heptane_core(
   ww ww_mod(
   clk,
   rst,
-  except,
-  {exceptIP,1'b0},
+  exceptx,
+  {exceptIPx,1'b0},
 //
-  exceptThread,
-  exceptAttr,
-  except_due_jump,
-  except_ght,
-  except_flag,
-  except_jmask,
-  except_jmask_en,
-  jupd0_en,jupdt0_en,jupd0_ght_en,jupd0_addr,jupd0_baddr,jupd0_sc,jupd0_tk,
-  jupd1_en,jupdt1_en,jupd1_ght_en,jupd1_addr,jupd1_baddr,jupd1_sc,jupd1_tk,
+  exceptThreadx,
+  exceptAttrx,
+  except_due_jumpx,
+  except_ghtx,
+  except_flagx,
+  except_jmaskx,
+  except_jmask_enx,
+  jupd0_enx,jupdt0_enx,jupd0_ght_enx,jupd0_addrx,jupd0_baddrx,jupd0_scx,jupd0_tkx,
+  jupd1_enx,jupdt1_enx,jupd1_ght_enx,jupd1_addrx,jupd1_baddrx,jupd1_scx,jupd1_tkx,
 //
   stall,
 
