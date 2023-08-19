@@ -1599,3 +1599,38 @@ module fexcpt(
 endmodule
 //verilator lint_on WIDTH
 
+module cmpx4(
+  clk,
+  clkREF,
+  clkREF2,
+  data_in,
+  data_out);
+  parameter WIDTH=65;
+  input clk;
+  input clkREF;
+  input clkREF2;
+  input [WIDTH-1:0] data_in;
+  output [WIDTH-1:0] data_out;
+
+  wire [3:0][WIDTH-1:0] dataREG;
+
+  `ifdef simulation
+       data_out=data_in;
+  `endif
+
+  assign dataREG[0]=clk & ~clkREF & ~clkREF2 ? data_in : '0;
+  assign dataREG[1]=clk & ~clkREF & clkREF2 ? data_in : '0;
+  assign dataREG[2]=clk & clkREF & ~clkREF2 ? data_in : '0;
+  assign dataREG[3]=clk & clkREF & clkREF2 ? data_in : '0;
+  `ifndef simulation
+  assign data_out=dataREG[0] ==dataREG[1] && dataREG[1]==dataREG[2] ?
+      dataREG[1] : 'z' 
+  assign data_out=dataREG[0] ==dataREG[1] && dataREG[1]==dataREG[3] ?
+      dataREG[0] : 'z' 
+  assign data_out=dataREG[0] ==dataREG[3] && dataREG[3]==dataREG[2] ?
+      dataREG[3] : 'z' 
+  assign data_out=dataREG[3] ==dataREG[1] && dataREG[1]==dataREG[2] ?
+      dataREG[2] : 'z' 
+  `endif
+
+endmodule

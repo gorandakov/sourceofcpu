@@ -2489,25 +2489,6 @@ module agu_block(
   p3_adata_reg,p3_en,p3_repl,
   msi_exp_addr,msi_en,msi_out_clear);
  
-/* 
-  dmisscam mcam_mod(
-  .clk(clk),
-  .rst(rst),
-  .fill_en(mOpR_en_reg),
-  .fill_en_pre(mOpR_en),
-  .fill_addr(mcam_addr_reg),
-  .fill_st(mcam_st_reg),
-  .fill_req(mcam_req),
-  .ins_en(insert_isData),
-  .ins_req(insBus_req[3:0]),
-  .ins_addr_o(insBus_addr),
-  .has_free(mcam_hasfree),
-  .fill_match(mcam_dupl),
-  .locked(mcam_locked),
-  .begin_replay(mcam_replay),
-  .unlock(miss_unlock)
-  );
-*/
   assign alt_bus_hold=insert_isData_reg2;
   assign alt_bus_addr=insBus_addr_reg2;
 
