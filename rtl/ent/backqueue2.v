@@ -212,6 +212,9 @@ module frontendSelf(
   wire instrFed;
   reg instrFed_reg;
 
+  wire [15:0] pff;
+  wire pff1;
+
   wire do_seq_any,do_seq_miss;
 
   wire [63:0] cc_read_IP_d;
@@ -891,6 +894,8 @@ module frontendSelf(
 
   insconv ins0_mod(bus_data_reg[255:0],bus_data_cvt[255:0]);
   insconv ins2_mod(bus_data_reg[511:256],bus_data_cvt[511:256]);
+
+  LFSR_16_1_16 h_mod(clk,rst,pff1,pff);
   
   assign bus_match0=bus_en && bus_slot=={BUS_ID,5'b10000};
   
@@ -1520,16 +1525,20 @@ module frontendSelf(
   .write_trace(1'b0),
   .write_wen(btb_in_link & btb_hit&instrEn&~fstall)
   );
+ 
+  wire kkk;
+
+  assign kkk=pff==0xfe47;
   
-  bit_find_first_bit #(4) tkjiA_mod({pred_sc3A[0]^pred_sh3A,
-    pred_sc2A[0]^pred_sh2A,
-    pred_sc1A[0]^pred_sh1A,
-    pred_sc0A[0]^pred_sh0A},
+  bit_find_first_bit #(4) tkjiA_mod({pred_sc3A[0]^pred_sh3A^kkk,
+    pred_sc2A[0]^pred_sh2A^kkk,
+    pred_sc1A[0]^pred_sh1A^kkk,
+    pred_sc0A[0]^pred_sh0A^kkk},
     takenA,);
-  bit_find_first_bit #(4) tkjiB_mod({pred_sc3B[0]^pred_sh3B,
-    pred_sc2B[0]^pred_sh2B,
-    pred_sc1B[0]^pred_sh1B,
-    pred_sc0B[0]^pred_sh0B},
+  bit_find_first_bit #(4) tkjiB_mod({pred_sc3B[0]^pred_sh3B^kkk,
+    pred_sc2B[0]^pred_sh2B^kkk,
+    pred_sc1B[0]^pred_sh1B^kkk,
+    pred_sc0B[0]^pred_sh0B^kkk},
     takenB,);
 
   assign taken=btb_way ? takenB&{btb_has3,btb_has2,btb_has1,btb_has0} : 
