@@ -1208,6 +1208,8 @@ endmodule
 
 module regfile(
   clk,
+  clkREF,
+  clkREF2,
   rst,
   read_clkEn,
   retire_clkEn,
@@ -1277,6 +1279,8 @@ module regfile(
   localparam ADDR_WIDTH=`reg_addr_width;
   
   input clk;
+  input clkREF;
+  input clkREF2;
   input rst;
   input read_clkEn;
   input retire_clkEn;
@@ -1431,7 +1435,12 @@ module regfile(
   wire [8:0][ADDR_WIDTH-1:0] read_addr;
   wire [8:0][DATA_WIDTH-1:0] ram_retireRead_data;
   wire [8:0][DATA_WIDTH-1:0] retireRead_data;
+  wire [8:0][DATA_WIDTH-1:0] retireRead_datax;
   wire [8:0][ADDR_WIDTH-1:0] retireRead_addr;
+  wire [8:0][5:0] write_addr_rrf;
+  wire [8:0]      write_wen_rrf;  
+  wire [8:0][5:0] write_addr_rrfx;
+  wire [8:0]      write_wen_rrfx;  
 
 
   wire read_constEn[8:0];
@@ -1544,15 +1553,15 @@ module regfile(
   read6_addr_rrf,read6_data,~read6_oe,
   read7_addr_rrf,read7_data,~read7_oe,
   read8_addr_rrf,read8_data,~read8_oe,
-  write0_addr_rrf,reatireRead_data[0],write0_wen_rrf,
-  write1_addr_rrf,reatireRead_data[1],write1_wen_rrf,
-  write2_addr_rrf,reatireRead_data[2],write2_wen_rrf,
-  write3_addr_rrf,reatireRead_data[3],write3_wen_rrf,
-  write4_addr_rrf,reatireRead_data[4],write4_wen_rrf,
-  write5_addr_rrf,reatireRead_data[5],write5_wen_rrf,
-  write6_addr_rrf,reatireRead_data[6],write6_wen_rrf,
-  write7_addr_rrf,reatireRead_data[7],write7_wen_rrf,
-  write8_addr_rrf,reatireRead_data[8],write8_wen_rrf,
+  write_addr_rrfx[0],reatireRead_datax[0],write_wen_rrfx[0],
+  write_addr_rrfx[1],reatireRead_datax[1],write_wen_rrfx[1],
+  write_addr_rrfx[2],reatireRead_datax[2],write_wen_rrfx[2],
+  write_addr_rrfx[3],reatireRead_datax[3],write_wen_rrfx[3],
+  write_addr_rrfx[4],reatireRead_datax[4],write_wen_rrfx[4],
+  write_addr_rrfx[5],reatireRead_datax[5],write_wen_rrfx[5],
+  write_addr_rrfx[6],reatireRead_datax[6],write_wen_rrfx[6],
+  write_addr_rrfx[7],reatireRead_datax[7],write_wen_rrfx[7],
+  write_addr_rrfx[8],reatireRead_datax[8],write_wen_rrfx[8],
   read_thread,
   write_thread
   );
@@ -1606,6 +1615,26 @@ module regfile(
   assign read6_match=read_match[6];
   assign read7_match=read_match[7];
   assign read8_match=read_match[8];
+
+  assign write_addr_rrf[0]=write0_addr_rrf;
+  assign write_addr_rrf[1]=write1_addr_rrf;
+  assign write_addr_rrf[2]=write2_addr_rrf;
+  assign write_addr_rrf[3]=write3_addr_rrf;
+  assign write_addr_rrf[4]=write4_addr_rrf;
+  assign write_addr_rrf[5]=write5_addr_rrf;
+  assign write_addr_rrf[6]=write6_addr_rrf;
+  assign write_addr_rrf[7]=write7_addr_rrf;
+  assign write_addr_rrf[8]=write8_addr_rrf;
+
+  assign write_wen_rrf[0]=write0_wen_rrf;
+  assign write_wen_rrf[1]=write1_wen_rrf;
+  assign write_wen_rrf[2]=write2_wen_rrf;
+  assign write_wen_rrf[3]=write3_wen_rrf;
+  assign write_wen_rrf[4]=write4_wen_rrf;
+  assign write_wen_rrf[5]=write5_wen_rrf;
+  assign write_wen_rrf[6]=write6_wen_rrf;
+  assign write_wen_rrf[7]=write7_wen_rrf;
+  assign write_wen_rrf[8]=write8_wen_rrf;
   
 //  assign retireRead0_data=retireRead_data[0];
 //  assign retireRead1_data=retireRead_data[1];
@@ -1706,6 +1735,10 @@ module regfile(
       write8_data_reg,
       write9_data_reg
       );
+      cmpx4 #(DATA_WIDTH) ret_mod(clk,clkREF,clkREF2,retireRead_data[b],retireRead_datax[b]);
+      cmpx4 #(6) retAddr_mod(clk,clkREF,clkREF2,write_addr_rrf[b],write_addr_rrfx[b]);
+      cmpx4 #(1) retEn_mod(clk,clkREF,clkREF2,write_wen_rrf[b],write_wen_rrfx[b]);
+
     end
   endgenerate
 
