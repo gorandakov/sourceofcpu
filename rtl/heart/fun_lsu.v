@@ -203,7 +203,7 @@ module agu_block(
   output mOp_write_clear;
   (* bus=WB bus_spacing=9 *) input [64:0] u1_base;
   (* bus=WB bus_spacing=9 *) input [64:0] u1_index;
-  (* bus=WB bus_spacing=9 *) input [32:0] u1_const;
+  (* bus=WB bus_spacing=9 *) input [43:0] u1_const;
   input [3:0]  u1_base_fufwd;
   input [3:0]  u1_base_fuufwd;
   input [3:0]  u1_index_fufwd;
@@ -218,7 +218,7 @@ module agu_block(
   input [3:0]  u1_attr;
   (* bus=WB bus_spacing=9 *) input [64:0] u2_base;
   (* bus=WB bus_spacing=9 *) input [64:0] u2_index;
-  (* bus=WB bus_spacing=9 *) input [32:0] u2_const;
+  (* bus=WB bus_spacing=9 *) input [43:0] u2_const;
   input [3:0]  u2_base_fufwd;
   input [3:0]  u2_base_fuufwd;
   input [3:0]  u2_index_fufwd;
@@ -233,7 +233,7 @@ module agu_block(
   input [3:0]  u2_attr;
   (* bus=WB bus_spacing=9 *) input [64:0] u3_base;
   (* bus=WB bus_spacing=9 *) input [64:0] u3_index;
-  (* bus=WB bus_spacing=9 *) input [32:0] u3_const;
+  (* bus=WB bus_spacing=9 *) input [43:0] u3_const;
   input [3:0]  u3_base_fufwd;
   input [3:0]  u3_base_fuufwd;
   input [3:0]  u3_index_fufwd;
@@ -248,7 +248,7 @@ module agu_block(
   input [3:0]  u3_attr;
   (* bus=WB bus_spacing=9 *) input [64:0] u4_base;
   (* bus=WB bus_spacing=9 *) input [64:0] u4_index;
-  (* bus=WB bus_spacing=9 *) input [32:0] u4_const;
+  (* bus=WB bus_spacing=9 *) input [43:0] u4_const;
   input [3:0]  u4_base_fufwd;
   input [3:0]  u4_base_fuufwd;
   input [3:0]  u4_index_fufwd;
@@ -263,7 +263,7 @@ module agu_block(
   input [3:0]  u4_attr;
   (* bus=WB bus_spacing=9 *) input [64:0] u5_base;
   (* bus=WB bus_spacing=9 *) input [64:0] u5_index;
-  (* bus=WB bus_spacing=9 *) input [32:0] u5_const;
+  (* bus=WB bus_spacing=9 *) input [43:0] u5_const;
   input [3:0]  u5_base_fufwd;
   input [3:0]  u5_base_fuufwd;
   input [3:0]  u5_index_fufwd;
@@ -2721,7 +2721,7 @@ module agu_block(
           u1_II_no_reg<=u1_II_no;
           u1_WQ_no_reg<=u1_WQ_no;
           u1_lsflag_reg<=u1_lsflag;
-          u1_const_reg<={{31{u1_const[32]}},u1_const};
+          u1_const_reg<={{20{u1_const[32]}},u1_const};
       end
 
       if (~(rsStall[1]&~now_flushing&~alt_bus_hold_reg)) begin
@@ -2735,7 +2735,7 @@ module agu_block(
           u2_II_no_reg<=u2_II_no;
           u2_WQ_no_reg<=u2_WQ_no;
           u2_lsflag_reg<=u2_lsflag;
-          u2_const_reg<={{31{u2_const[32]}},u2_const};
+          u2_const_reg<={{20{u2_const[32]}},u2_const};
       end
       
       if (~(rsStall[2]&~now_flushing&~alt_bus_hold_reg)) begin
@@ -2749,7 +2749,7 @@ module agu_block(
           u3_II_no_reg<=u3_II_no;
           u3_WQ_no_reg<=u3_WQ_no;
           u3_lsflag_reg<=u3_lsflag;
-          u3_const_reg<={{31{u3_const[32]}},u3_const};
+          u3_const_reg<={{20{u3_const[32]}},u3_const};
       end
 
       u4_clkEn_reg<=u4_clkEn;
@@ -2763,7 +2763,7 @@ module agu_block(
       u4_II_no_reg<=u4_II_no;
       u4_WQ_no_reg<=u4_WQ_no;
       u4_lsflag_reg<=u4_lsflag;
-      u4_const_reg<={{31{u4_const[32]}},u4_const};
+      u4_const_reg<={{20{u4_const[32]}},u4_const};
 
       u5_clkEn_reg<=u5_clkEn;
       u5_op_reg<=u5_op;
@@ -2776,7 +2776,7 @@ module agu_block(
       u5_II_no_reg<=u5_II_no;
       u5_WQ_no_reg<=u5_WQ_no;
       u5_lsflag_reg<=u5_lsflag;
-      u5_const_reg<={{31{u5_const[32]}},u5_const};
+      u5_const_reg<={{20{u5_const[32]}},u5_const};
 
       if (~(rsStall[0]&~now_flushing&~alt_bus_hold_reg)) begin      
           u1_clkEn_reg2<=u1_clkEn_reg & ~except;
