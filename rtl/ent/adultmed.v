@@ -288,8 +288,8 @@ module smallInstr_decoder(
   reg pinstr_fsimd[TRICNT_TOP-1:0];
   reg phalt[TRICNT_TOP-1:0];
   
-  wire [64:0] qconstant[16:0];
-  wire [16:0] qtrien;
+  wire [64:0] qconstant[17:0];
+  wire [17:0] qtrien;
   
   reg [4:0] pjumpType[TRICNT_TOP-1:0];
   
@@ -446,15 +446,17 @@ module smallInstr_decoder(
   assign qtrien   [15]=trien    [39];
   assign qconstant[16]={1'b0,pconstant[19]};
   assign qtrien   [16]=trien    [19];
+  assign qconstant[17]={1'b0,pconstant[28]};
+  assign qtrien   [17]=trien    [28];
   assign qconstant[0]={1'b0,pconstant[0]};
-  assign qtrien   [0]=qtrien[16:1]==11'b0;
+  assign qtrien   [0]=qtrien[17:1]==11'b0;
   
   //triens that set const
   //3,8,9,10,13,18,20,25,26,30, 35
  
   generate
       genvar p,q,m;
-      for(m=0;m<=16;m=m+1) begin : triconst_gen
+      for(m=0;m<=17;m=m+1) begin : triconst_gen
 	  assign constant=qtrien[m] ? qconstant[m] : 65'bz;
       end
       for(p=0;p<5;p=p+1) begin
@@ -1555,6 +1557,7 @@ module smallInstr_decoder(
 	  prT[28]=instr[12:8];
 	  if (instr[15:13]!=0) perror[28]=1;
           poperation[28][12]=1'b1;
+          if (magic==4'b0111) pconstant[28]={20'b0,instr[59:16]};
           //WARNING: loads IP only; no offset
       end else begin
           poperation[28][7:0]=instr[12] ? `op_csetn : `op_cset;
