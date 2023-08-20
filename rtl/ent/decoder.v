@@ -891,16 +891,16 @@ module decoder_reorder_mux(
   input dec8_useRs;
   input dec9_useRs;
   
-  input [32:0] dec0_srcIPOff;
-  input [32:0] dec1_srcIPOff;
-  input [32:0] dec2_srcIPOff;
-  input [32:0] dec3_srcIPOff;
-  input [32:0] dec4_srcIPOff;
-  input [32:0] dec5_srcIPOff;
-  input [32:0] dec6_srcIPOff;
-  input [32:0] dec7_srcIPOff;
-  input [32:0] dec8_srcIPOff;
-  input [32:0] dec9_srcIPOff;
+  input [43:0] dec0_srcIPOff;
+  input [43:0] dec1_srcIPOff;
+  input [43:0] dec2_srcIPOff;
+  input [43:0] dec3_srcIPOff;
+  input [43:0] dec4_srcIPOff;
+  input [43:0] dec5_srcIPOff;
+  input [43:0] dec6_srcIPOff;
+  input [43:0] dec7_srcIPOff;
+  input [43:0] dec8_srcIPOff;
+  input [43:0] dec9_srcIPOff;
   
   input [3:0] dec0_flDep;
   input [3:0] dec1_flDep;
@@ -949,16 +949,16 @@ module decoder_reorder_mux(
   assign constantA=(sel[8] & ~sel[1]) ? dec8_constant : 65'bz;
   assign constantA=sel[9] ? dec9_constant : 65'bz;
 
-  assign constantB=(sel[0] & ~sel[1]) ? {{31{dec0_srcIPOff[32]}},dec0_srcIPOff} : 64'bz;
-  assign constantB=(sel[1] & ~sel[0]) ? {{31{dec1_srcIPOff[32]}},dec1_srcIPOff} : 64'bz;
-  assign constantB=(sel[2] & ~sel[1]) ? {{31{dec2_srcIPOff[32]}},dec2_srcIPOff} : 64'bz;
-  assign constantB=(sel[3] & ~sel[1]) ? {{31{dec3_srcIPOff[32]}},dec3_srcIPOff} : 64'bz;
-  assign constantB=(sel[4] & ~sel[1]) ? {{31{dec4_srcIPOff[32]}},dec4_srcIPOff} : 64'bz;
-  assign constantB=(sel[5] & ~sel[1]) ? {{31{dec5_srcIPOff[32]}},dec5_srcIPOff} : 64'bz;
-  assign constantB=(sel[6] & ~sel[1]) ? {{31{dec6_srcIPOff[32]}},dec6_srcIPOff} : 64'bz;
-  assign constantB=(sel[7] & ~sel[1]) ? {{31{dec7_srcIPOff[32]}},dec7_srcIPOff} : 64'bz;
-  assign constantB=(sel[8] & ~sel[1]) ? {{31{dec8_srcIPOff[32]}},dec8_srcIPOff} : 64'bz;
-  assign constantB=sel[9] ? {{31{dec9_srcIPOff[32]}},dec9_srcIPOff} : 64'bz;
+  assign constantB=(sel[0] & ~sel[1]) ? {{20{dec0_srcIPOff[32]}},dec0_srcIPOff} : 64'bz;
+  assign constantB=(sel[1] & ~sel[0]) ? {{20{dec1_srcIPOff[32]}},dec1_srcIPOff} : 64'bz;
+  assign constantB=(sel[2] & ~sel[1]) ? {{20{dec2_srcIPOff[32]}},dec2_srcIPOff} : 64'bz;
+  assign constantB=(sel[3] & ~sel[1]) ? {{20{dec3_srcIPOff[32]}},dec3_srcIPOff} : 64'bz;
+  assign constantB=(sel[4] & ~sel[1]) ? {{20{dec4_srcIPOff[32]}},dec4_srcIPOff} : 64'bz;
+  assign constantB=(sel[5] & ~sel[1]) ? {{20{dec5_srcIPOff[32]}},dec5_srcIPOff} : 64'bz;
+  assign constantB=(sel[6] & ~sel[1]) ? {{20{dec6_srcIPOff[32]}},dec6_srcIPOff} : 64'bz;
+  assign constantB=(sel[7] & ~sel[1]) ? {{20{dec7_srcIPOff[32]}},dec7_srcIPOff} : 64'bz;
+  assign constantB=(sel[8] & ~sel[1]) ? {{20{dec8_srcIPOff[32]}},dec8_srcIPOff} : 64'bz;
+  assign constantB=sel[9] ? {{20{dec9_srcIPOff[32]}},dec9_srcIPOff} : 64'bz;
 
   assign constant=(0==(sel&dec_IPRel) && 0==(sel&dec_cls_sys)) ? constantA : 65'bz;
   assign constant=(0!=(sel&dec_IPRel) && 0==(sel&dec_cls_sys)) ? {1'b0,constantB} : 65'bz;
@@ -2362,7 +2362,7 @@ module decoder(
   wire [9:0][7:0] dec_srcIPOff;
   reg  [8:0] dec_srcIPOff_reg[9:0];
   wire [9:0][8:0] dec_srcIPOffA;
-  wire [9:0][32:0] dec_srcIPOffx;
+  wire [9:0][43:0] dec_srcIPOffx;
   
   reg [8:0] dec_srcIPOffA_reg[9:0];
 
@@ -2696,8 +2696,7 @@ module decoder(
           adder #(9) srcAddA5_mod({afterTick[k],dec_srcIPOff[k]},9'd5,dec_srcIPOffA[k],1'b0,dec_magic[k][3:0]==4'b1111,,,,);
 
           
-          adder #(33) srcXAdd_mod({23'b0,dec_srcIPOffA_reg[k],1'b0   },{dec_constant_reg[k][31],dec_constant_reg[k][31:0]}|
-		  ~{dec_constantN_reg[k][31],dec_constantN_reg[k][31:0]},dec_srcIPOffx[k],1'b0, 1'b1,,,,);
+          adder #(44) srcXAdd_mod({34'b0,dec_srcIPOffA_reg[k],1'b0   },{dec_constant_reg[k][43:0]},dec_srcIPOffx[k],1'b0, 1'b1,,,,);
 
 	  popcnt10 jpop_mod(cls_jump_reg&iUsed_reg,{dummy8_1,btbl_step});
 	  adder #(43) csrAdd_mod({34'b0,dec_srcIPOffA_reg[k]},baseIP[42:0],csrss_retIP_data[43:1],1'b0,csrss_retIP_en_reg[k],,,,);
