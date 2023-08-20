@@ -7733,11 +7733,43 @@ dcache1 L1D_mod(
               FUSreg_reg3[f]<=FUSreg_reg2[f];
               FUSreg_reg4[f]<=FUSreg_reg3[f];
               FUSreg_reg5[f]<=FUSreg_reg4[f];
-	      FUVH_reg[f]<=FUVH[f];
-	      FUVL_reg[f]<=FUVL[f];
+	      if (f<4) begin
+                  FUVH_reg[f]<=FUVH[f];
+	          FUVL_reg[f]<=FUVL[f];
+	          FUFH_reg[f]<=FUFH[f];
+	          FUFL_reg[f]<=FUFL[f];
+              end else if (f<7) begin
+                  if (outEn_reg3[(f-4)*3+1][2]) begin
+                      FUVH_reg[f]<=FUVH[f];
+	              FUVL_reg[f]<=FUVL[f];
+                  end else begin
+                      FUVH_reg[f]<=FUFXH[f];
+	              FUVL_reg[f]<=FUFXL[f];
+                  end
+                  if (outEn_reg4[(f-4)*3+1][2]) begin
+                      FUFH_reg[f]<=FUVXH[f];
+	              FUFL_reg[f]<=FUVXL[f];
+                  end else begin
+                      FUFH_reg[f]<=FUFH[f];
+	              FUFL_reg[f]<=FUFL[f];
+                  end
+              end else begin
+                  if (outEn_reg4[(f-7)*3+2][2]) begin
+                      FUVH_reg[f]<=FUVH[f];
+	              FUVL_reg[f]<=FUVL[f];
+                  end else begin
+                      FUVH_reg[f]<=FUFXH[f];
+	              FUVL_reg[f]<=FUFXL[f];
+                  end
+                  if (outEn_reg5[(f-7)*3+2][2]) begin
+                      FUFH_reg[f]<=FUVXH[f];
+	              FUFL_reg[f]<=FUVXL[f];
+                  end else begin
+                      FUFH_reg[f]<=FUFH[f];
+	              FUFL_reg[f]<=FUFL[f];
+                  end
+              end
 	      if (f<4) FUVLX_reg[f]<=FUVLX[f];
-	      FUFH_reg[f]<=FUFH[f];
-	      FUFL_reg[f]<=FUFL[f];
 	  //    FUFUH_reg[f]<=FUFUH[f];
 	  //    FUFUL_reg[f]<=FUFUL[f];
 	      FUVH_reg2[f]<=FUVH_reg[f];
