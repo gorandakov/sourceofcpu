@@ -68,3 +68,30 @@ module LFSR16_1(
   end
 endmodule
 
+module LFSR16_1_16(
+ clk,
+ rst,
+ OUT,
+ OUT2
+ );
+  parameter [15:0] INITVAL=16'he45b;
+  input clk;
+  input rst;
+  output reg OUT;
+  output [15:0] OUT2;
+  
+
+  wire OUT_a;
+  reg [15:0] IN;
+  
+  assign OUT_a=^{IN[15],IN[13],IN[12],IN[10]}; 
+  assign OUT2=IN;
+  
+  always @(posedge clk) begin
+      if (rst) OUT<=1'b0;
+      else OUT<=OUT_a;
+      if (rst) IN<=INITVAL;
+      else IN<={IN[14:0],OUT_a};
+  end
+endmodule
+
