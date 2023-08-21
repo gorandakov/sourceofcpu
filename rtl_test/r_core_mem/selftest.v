@@ -47,6 +47,8 @@ module testcase(
   end
   initial begin
       $readmemh(RAM_RETIRE,"./prog.memh");
+      $readmemh(RAM,"./bin.memh");
+      $readmemh(RAM,"./bin_p.memh");
   end
 
  

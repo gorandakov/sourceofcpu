@@ -2427,7 +2427,11 @@ int main(int argc, char *argv[]) {
         fputc(f,'\n');
     }
     ende=fclose(f);
-    if (ende) printf("flcose error\n");
+    if (ende) printf("flcose error (data)\n");
+    f=fopen("./bin_p.memh","w");
+    fputc(f,'\n');
+    ende=fclose(f);
+    if (ende) printf("flcose error (ptr)\n");
     return 0;
 //    Verilated::traceEverOn(true);
 }
