@@ -33,8 +33,27 @@ module testcase(
   reg [64:0] data[9:0];
   reg [9:0] pook_en;
 
+  reg [8:0] ret_en;
+  reg [8:0] ret_enV;
+  reg [8:0] ret_enF;
+  reg [9:0] ret_enX;
+  reg [9:0] ret_enX0;
+  reg [8:0][64:0] ret_data;
+
   always @* begin
       pook_en=0;
+      ret_data=core_mod.bck_mod.ret_dataA;
+      ret_enX0=~core_mod.bck_mod.retM_xbreak&{10{core_mod.bck_mod.retM_retire}};
+      ret_en[0]=core_mod.bck_mod.retire0_enG;
+      ret_en[1]=core_mod.bck_mod.retire1_enG;
+      ret_en[2]=core_mod.bck_mod.retire2_enG;
+      ret_en[3]=core_mod.bck_mod.retire3_enG;
+      ret_en[4]=core_mod.bck_mod.retire4_enG;
+      ret_en[5]=core_mod.bck_mod.retire5_enG;
+      ret_en[6]=core_mod.bck_mod.retire6_enG;
+      ret_en[7]=core_mod.bck_mod.retire7_enG;
+      ret_en[8]=core_mod.bck_mod.retire8_enG;
+      //V,F later
       for(k=0;k<10;k=k+1) begin
           reti_read_data[k]=RAM_RETIRE[retire_index[k]];
           if (ret_enX[k] && rT_en[k]) begin
@@ -49,6 +68,10 @@ module testcase(
       $readmemh(RAM_RETIRE,"./prog.memh");
       $readmemh(RAM,"./bin.memh");
       $readmemh(RAM,"./bin_p.memh");
+  end
+
+  always @(posedge clk) begin
+      ret_enX<=ret_enX0;
   end
 
  
@@ -69,8 +92,7 @@ module testcase(
   obusDOut_iosig,
   obusDOut_can,
   inout obusDOut_want,
-  obusDOut_replay,
-  ret_en,ret_enX,ret_data
+  obusDOut_replay
   );
 
 endmodule
