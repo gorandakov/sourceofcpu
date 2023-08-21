@@ -2393,7 +2393,7 @@ int main(int argc, char *argv[]) {
     snprintf(mname,256,"./prog.memh");
     prog_print(mname);
     FILE *f=fopen("./bin.memh","w");
-    FILE *f1=fopen("mname","r");
+    FILE *f1=fopen("./hsim.bin","r");
     int ende;
     do {
         ende=fread(mname,128,1,f1);
