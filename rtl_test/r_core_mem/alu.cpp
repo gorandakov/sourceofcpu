@@ -2392,6 +2392,42 @@ int main(int argc, char *argv[]) {
     mname[0]=0;
     snprintf(mname,256,"./prog.memh");
     prog_print(mname);
+    FILE *f=fopen("./bin.memh","w");
+    FILE *f1=fopen("mname","r");
+    int ende;
+    do {
+        ende=fread(mname,128,1,f1);
+        if (ende) {
+            int n;
+            char c;
+            for(n=0;n<128;n=n+1) {
+                c='0'+mname[n]&0xf;
+                if (c>'9') c+='a'-'9';
+                fputc(f,c);
+                c='0'+(mname[n]&0xf0)>>4;
+                if (c>'9') c+='a'-'9';
+                fputc(f,c);
+            }
+            fputc(f,'\n');
+        }
+    } while (ende!=0);
+    fclose(f1);
+    fprintf(f,"@400000\n");
+    for(ende=0;ende<(DATARGN_SZ/128);ende=ende+1) {
+        int n;
+        char c;
+        for(n=0;n<128;n=n+1) {
+            c='0'+mem[128*ende+n]&0xf;
+            if (c>'9') c+='a'-'9';
+            fputc(f,c);
+            c='0'+(mname[128*ende+n]&0xf0)>>4;
+            if (c>'9') c+='a'-'9';
+            fputc(f,c);
+        }
+        fputc(f,'\n');
+    }
+    ende=fclose(f);
+    if (ende) printf("flcose error\n");
     return 0;
 //    Verilated::traceEverOn(true);
 }
