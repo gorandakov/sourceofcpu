@@ -21,7 +21,35 @@ module testcase(
   reg [1023:0] RAM[1024*1024*5-1:0];
   reg [15:0] RAM_PTR[1024*1024*5-1:0];
   reg [4*33-1:0] RAM_RETIRE[1024*1024*8-1:0]
+  reg [4*33-1:0] reti_read_data[9:0];
+  reg [22:0] retire_index;
+  integer k,j;
 
+  reg [4:0] rA[9:0];
+  reg [4:0] rB[9:0];
+  reg [4:0] rT[9:0];
+  reg rT_en[9:0];
+  reg [31:0] binoffaddr[9:0];
+  reg [64:0] data[9:0];
+  reg [9:0] pook_en;
+
+  always @* begin
+      pook_en=0;
+      for(k=0;k<10;k=k+1) begin
+          reti_read_data[k]=RAM_RETIRE[retire_index[k]];
+          if (ret_enX[k] && rT_en[k]) begin
+              pook_en[k]=1;
+              for(j=k;j<10;j=j+1) begin
+                  if (ret_enX[j] && rT_en[j] && rT[j]==rT[k]) pook_en[k]=0;
+              end
+          end
+      end
+  end
+  initial begin
+      $readmemh(RAM_RETIRE,"./prog.memh");
+  end
+
+ 
 
   heptane_core core_mod(
   clk,
