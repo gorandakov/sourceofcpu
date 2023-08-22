@@ -39,6 +39,7 @@ module testcase(
   reg [9:0] ret_enX;
   reg [9:0] ret_enX0;
   reg [8:0][64:0] ret_data;
+  reg [8:0][5:0] ret_rT;
 
   always @* begin
       pook_en=0;
@@ -53,6 +54,15 @@ module testcase(
       ret_en[6]=core_mod.bck_mod.retire6_enG;
       ret_en[7]=core_mod.bck_mod.retire7_enG;
       ret_en[8]=core_mod.bck_mod.retire8_enG;
+      ret_rT[0]=core_mod.bck_mod.retire0_rT;
+      ret_rT[1]=core_mod.bck_mod.retire1_rT;
+      ret_rT[2]=core_mod.bck_mod.retire2_rT;
+      ret_rT[3]=core_mod.bck_mod.retire3_rT;
+      ret_rT[4]=core_mod.bck_mod.retire4_rT;
+      ret_rT[5]=core_mod.bck_mod.retire5_rT;
+      ret_rT[6]=core_mod.bck_mod.retire6_rT;
+      ret_rT[7]=core_mod.bck_mod.retire7_rT;
+      ret_rT[8]=core_mod.bck_mod.retire8_rT;
       //V,F later
       for(k=0;k<10;k=k+1) begin
           reti_read_data[k]=RAM_RETIRE[retire_index[k]];
