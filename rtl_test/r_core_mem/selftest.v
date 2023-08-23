@@ -41,6 +41,13 @@ module testcase(
   reg [8:0][64:0] ret_data;
   reg [8:0][5:0] ret_rT;
 
+  reg [5:0][`lsaddr_width-1:0] reqA_adata;
+  reg [5:0] reqA_en;
+  reg reqA_clkEn;
+  reg reqA_clkEnP;
+  reg [3:0] mem_hit;
+  reg [`lsqshare_width-1:0] reqA_shrdata;
+
   always @* begin
       pook_en=0;
       ret_data=core_mod.bck_mod.ret_dataA;
@@ -63,6 +70,25 @@ module testcase(
       ret_rT[6]=core_mod.bck_mod.retire6_rT;
       ret_rT[7]=core_mod.bck_mod.retire7_rT;
       ret_rT[8]=core_mod.bck_mod.retire8_rT;
+      reqA_adata[0]=core_mod.bck_mod.LSQ_grouped.LSQ_dataA0;
+      reqA_adata[1]=core_mod.bck_mod.LSQ_grouped.LSQ_dataA1;
+      reqA_adata[2]=core_mod.bck_mod.LSQ_grouped.LSQ_dataA2;
+      reqA_adata[3]=core_mod.bck_mod.LSQ_grouped.LSQ_dataA3;
+      reqA_adata[4]=core_mod.bck_mod.LSQ_grouped.LSQ_dataA4;
+      reqA_adata[5]=core_mod.bck_mod.LSQ_grouped.LSQ_dataA5;
+      reqA_en[0]=core_mod.bck_mod.LSQ_grouped.LSQ_enA[0];
+      reqA_en[1]=core_mod.bck_mod.LSQ_grouped.LSQ_enA[1];
+      reqA_en[2]=core_mod.bck_mod.LSQ_grouped.LSQ_enA[2];
+      reqA_en[3]=core_mod.bck_mod.LSQ_grouped.LSQ_enA[3];
+      reqA_en[4]=core_mod.bck_mod.LSQ_grouped.LSQ_enA[4];
+      reqA_en[5]=core_mod.bck_mod.LSQ_grouped.LSQ_enA[5];
+      reqA_clkEn=core_mod.bck_mod.LSQ_grouped.LSQ_rdy_A;
+      reqA_clkEnP=core_mod.bck_mod.LSQ_grouped.LSQ_rdy_AP;
+      mem_hit[0]=core_mod.bck_mod.FU0Hit;
+      mem_hit[1]=core_mod.bck_mod.FU1Hit;
+      mem_hit[2]=core_mod.bck_mod.FU2Hit;
+      mem_hit[3]=core_mod.bck_mod.FU3Hit;
+      reqA_shrdata=core_mod.bck_mod.LSQ_grouped.LSQ_shr_dataA;
       //V,F later
       for(k=0;k<10;k=k+1) begin
           reti_read_data[k]=RAM_RETIRE[retire_index[k]];
