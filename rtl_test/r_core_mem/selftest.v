@@ -47,6 +47,7 @@ module testcase(
   reg reqA_clkEnP;
   reg [3:0] mem_hit;
   reg [`lsqshare_width-1:0] reqA_shrdata;
+  integer reqA_cnt;
 
   always @* begin
       pook_en=0;
@@ -109,7 +110,7 @@ module testcase(
   always @(posedge clk) begin
       ret_enX<=ret_enX0;
       err=-1;
-      if (rst) noretcnt=0;
+      if (rst) begin noretcnt=0; reqA_cnt=0; end
       if (!rst) begin
           for(p=0;p<10;p=p+1) begin
               if (read_enX[p] && ~read_enX[(p+1)%10]|(p==9)) begin
@@ -131,9 +132,17 @@ module testcase(
                   if (p!=err) $finish();
               end
               if (read_enX==0) noretcnt=noretcnt+1;
-              if (noretcnt>2000) begin
+              if (noretcnt>=2000) begin
                   $display("error: 2000 cycles no retire");
                   $finish();
+              end
+          end
+          if (reqA_en) begin
+              reqA_cnt=0;
+          end else begin
+              reqA_cnt=reqA_cnt+1;
+              if (reqA_cnt>=2000) begin
+                   $display("error: 2000 cycles no ldq align");
               end
           end
       end
