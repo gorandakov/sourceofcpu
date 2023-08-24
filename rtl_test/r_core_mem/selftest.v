@@ -132,8 +132,8 @@ module testcase(
                   if (p!=err) $finish();
               end
               if (read_enX==0) noretcnt=noretcnt+1;
-              if (noretcnt>=2000) begin
-                  $display("error: 2000 cycles no retire");
+              if (noretcnt>=200) begin
+                  $display("error: 200 cycles no retire");
                   $finish();
               end
           end
@@ -141,8 +141,8 @@ module testcase(
               reqA_cnt=0;
           end else begin
               reqA_cnt=reqA_cnt+1;
-              if (reqA_cnt>=2000) begin
-                   $display("error: 2000 cycles no ldq align");
+              if (reqA_cnt>=200) begin
+                   $display("error: 200 cycles no ldq align");
               end
           end
       end
