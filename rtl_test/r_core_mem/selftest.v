@@ -49,6 +49,15 @@ module testcase(
   reg [`lsqshare_width-1:0] reqA_shrdata;
   integer reqA_cnt;
 
+  generate
+    genvar b1,b2;
+    for(b1=0;b1<71; b1=b1+1) begin
+        for(b2=0;b2<8;b2=b2+1) begin
+            assign obusDOut_dataX[b1+71*b2]=obusDOut_dataAUD[2*b1+71*b2];
+            ecc_strip #(64) str_mod({1'b0,oubsDOut_dataX[b2*71+:71]}, obusDOut_dataY[b2*64+:64]);
+        end
+    end
+  endgenerate
   always @* begin
       pook_en=0;
       ret_data=core_mod.bck_mod.ret_dataA;
