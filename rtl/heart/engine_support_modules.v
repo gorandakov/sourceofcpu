@@ -1623,14 +1623,18 @@ module cmpx4(
   assign dataREG[2]=clk & clkREF & ~clkREF2 ? data_in : '0;
   assign dataREG[3]=clk & clkREF & clkREF2 ? data_in : '0;
   `ifndef simulation
-  assign data_out=dataREG[0] ==dataREG[1] && dataREG[1]==dataREG[2] ?
+  assign data_out=dataREG[0] ==dataREG[1] || dataREG[1]==dataREG[2] ||
+      dataREG[1]==dataREG[3] ?
       dataREG[1] : 'z' 
-  assign data_out=dataREG[0] ==dataREG[1] && dataREG[1]==dataREG[3] ?
+  assign data_out=dataREG[0] ==dataREG[1] || dataREG[0]==dataREG[2] ||
+      dataREG[0]==dataREG[3] ?
       dataREG[0] : 'z' 
-  assign data_out=dataREG[0] ==dataREG[3] && dataREG[3]==dataREG[2] ?
-      dataREG[3] : 'z' 
-  assign data_out=dataREG[3] ==dataREG[1] && dataREG[1]==dataREG[2] ?
+  assign data_out=dataREG[0] ==dataREG[2] || dataREG[3]==dataREG[2] ||
+      dataREG[1]==dataREG[2] ?
       dataREG[2] : 'z' 
+  assign data_out=dataREG[0] ==dataREG[3] || dataREG[1]==dataREG[3] ||
+      dataREG[2]==dataREG[3] ?
+      dataREG[3] : 'z' 
   `endif
 
 endmodule
