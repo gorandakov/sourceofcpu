@@ -1,5 +1,5 @@
 
-module testcase(
+module selftest(
   input clk,
   input rst);
 
