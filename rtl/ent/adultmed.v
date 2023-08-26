@@ -1062,7 +1062,6 @@ module smallInstr_decoder(
 
       trien[12]=magic[0] & isBaseLoadStore;
       poperation[12][5:0]=(opcode_main[5:3]==3'b101) ? 6'h22 : opcode_main[5:0];
-      if (poperation[12][5:1]==5'd3) perror[12]=1'b1;
       poperation[12][12:6]=7'b0;
       prA_use[12]=1'b0;
       prB_use[12]=1'b1;
@@ -1096,13 +1095,11 @@ module smallInstr_decoder(
       end
       if (opcode_main[0] && opcode_main[5:3]==3'b101) perror[12]=2'b1;
      //     if (prevSpecAlu) rC=6'd16;
-
       trien[13]=magic[0] & isBaseIndexLoadStore;
       if (opcode_main[7:4]==4'b0111 && opcode_main[3])
           poperation[13][5:0]=6'd22;
       else
           poperation[13][5:0]=(opcode_main[7:4]==4'b0111) ? {2'b10,opcode_main[3:0]} : {1'b0,opcode_main[4:0]};
-      if (poperation[13][5:1]==5'd3) perror[13]=1'b1;
       poperation[13][7]=1'b0;
       poperation[13][6]=~(magic==4'b0111 && instr[57]);
       poperation[13][9:8]=magic[2:0]==3'b111 ? instr[53:52] : ( magic[1:0]==2'b01 ?
@@ -1321,7 +1318,6 @@ module smallInstr_decoder(
       else
           poperation[19][5:0]=( opcode_main[7:1]==7'b1011000) ? 
           {2'b10,instr[10:8],opcode_main[0]} : {1'b0,instr[11:8],opcode_main[0]};
-      if (poperation[19][5:1]==5'd3) perror[19]=1'b1;
       if (magic==4'b0111) begin
           pconstant[19]={20'b0,instr[59:16]};
       end
