@@ -1204,7 +1204,7 @@ module smallInstr_decoder(
     
       trien[16]=magic[0] && isShlAddMulLike|isPtrSec; 
       pport[16]=PORT_ALU;
-      puseBConst[16]=1'b0;
+      puseBConst[16]=isPtrSec&instr[31];
       pflags_write[16]=isPtrSec || !instr[28];
       casex({instr[28],instr[29],instr[0],isPtrSec})
       4'b0x00: poperation[16]=`op_sadd_even|4096;
@@ -1225,7 +1225,8 @@ module smallInstr_decoder(
       poperation[16][12]=1'b1;    
       prA[16]={instr[17],instr[11:8]};
       prB[16]=instr[16:12];
-      if (instr[27:24]!=0) perror[16]=1;
+      if (instr[27:24]!=0 && !isPtrSec) perror[16]=1;
+      pconstant[16]={52'b0,instr[30],instr[27:18]};
       prA[16]={instr[17],instr[11:8]};
       prT[16]=instr[16:12];
       prB[16]=instr[22:18];
