@@ -45,7 +45,7 @@ limitations under the License.
 `define fop_cmpDH 32
 `define fop_cmpDL 33
 `define fop_cmpE 34
-`define fop_cmpS 44
+`define fop_cmpS 35
 `define fop_pcmplt 36
 `define fop_pcmpge 37
 `define fop_pcmpeq 38
@@ -89,3 +89,5 @@ limitations under the License.
 `define fop_cvtE   12
 `define fop_tblD   13
 
+`define fop_pcvtD 48
+`define fop_pcvtS 49

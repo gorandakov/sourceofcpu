@@ -255,7 +255,7 @@ module fun_fpuL(
     u5_op_reg[7:0]==`fop_tblD)),
   .clkEn(~fxFRT_alten_reg3),
   .A((u5_op_reg2[7:0]!=`fop_cvtD && u5_op_reg2[7:0]!=`fop_cvt32D &&
-    u5_op_reg2[7:0]!=`fop_cvtE) ? {16'b0,XI_dataS[65:0]} : {XI_dataD[15+68:68],XI_dataD[65:0]}),
+    u5_op_reg2[7:0]!=`fop_cvtE) ? {16'b0,XI_dataS[65:0]} : {XI_dataT[15+68:68],XI_dataT[65:0]}),
   .isDBL(u5_op_reg[7:0]==`fop_cvtD || u5_op_reg[7:0]==`fop_cvt32D),
   .isEXT(u5_op_reg[7:0]==`fop_cvtE),
   .isSNG(u5_op_reg[7:0]!=`fop_cvtD && u5_op_reg[7:0]!=`fop_cvt32D &&

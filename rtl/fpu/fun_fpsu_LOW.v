@@ -39,7 +39,7 @@ module fun_fpuSL(
   xdataD,xdata2D,
   xdataB,xdata2B,
   xdataC,xdata2C,
-  ALTDATA0,ALTDATA1,
+  ALTDATA0,
   ALT_INP,
   FOOSL0_out,
   FOOSL1_out,
@@ -119,7 +119,6 @@ module fun_fpuSL(
 
   input [1:0] ALT_INP;
   input [67:0] ALTDATA0;
-  input [67:0] ALTDATA1;
   
  
   (* register equiload *) output [5:0] FOOSL0_out;
@@ -129,7 +128,16 @@ module fun_fpuSL(
   input [67:0] XI_dataS;
   output [67:0] XI_dataT;
 
-  
+  wire [67:0] ALTDATA1;
+  reg [67:0] ALTDATA1_reg;
+  reg [67:0] ALTDATA1_reg2;
+  wire daltXA;
+  wire daltXB;
+  reg daltXA_reg;
+  reg daltXB_reg;
+  reg daltXA_reg2;
+  reg daltXB_reg2;
+
 
   fun_fpsu #(0,0) fpu0_mod(
   clk,
@@ -180,10 +188,56 @@ module fun_fpuSL(
   FUF9,
   FUF4X,FUF5X,FUF6X,
   xdataC,xdata2C,
-  ALTDATA0,ALTDATA1,
-  ALT_INP,
+  ALTDATA0,ALTDATA1_reg,
+  {daltXA_reg|daltXB_reg,ALT_INP[0]},
   FOOSL2_out,
   XI_dataS,XI_dataT
   );
 
+  wire [67:0] FUCVT1A;
+  wire [67:0] FUCVT1B;
+
+  cvt_FP_I_mod fp2i_mod(
+  .clk(clk),
+  .rst(rst),
+  .en(u5_en_reg[3] && |u5_en_reg[3:2] 
+  && (u5_op_reg[7:0]==`fop_pcvtD || u5_op_reg[7:0]==`fop_pcvtS),
+  .clkEn(~fxFRT_alten_reg3),
+  .A((u5_op_reg2[7:0]!=`fop_pcvtD) ? {16'b0,XI_dataS[65:0]} : {XI_dataT[15+68:68],XI_dataT[65:0]}),
+  .isDBL(u5_op_reg[7:0]==`fop_pcvtD),
+  .isEXT(1'b0),
+  .isSNG(u5_op_reg[7:0]!=`fop_pcvtD),
+  .verbatim(1'b0),
+  .is32b(u5_op_reg[7:0]==`fop_pcvtS),
+  .res(FUCVT1A),
+  .alt(daltXA)
+  );
+
+  cvt_FP_I_mod fp2is_mod(
+  .clk(clk),
+  .rst(rst),
+  .en(u5_en_reg[3] && |u5_en_reg[3:2]  
+  && (u5_op_reg[7:0]==`fop_pcvtS)),
+  .clkEn(~fxFRT_alten_reg3),
+  .A({16'b0,33'b0,XI_dataS[65:33]}),
+  .isDBL(1'b0),
+  .isEXT(1'b0),
+  .isSNG(1'b1),
+  .verbatim(1'b0),
+  .is32b(1'b1),
+  .res(FUCVT1B),
+  .alt(daltXB)
+  );
+
+  assign ALTDATA1=daltXB ? {FUCVT1A[67:66],FUCVT1B[32:0],FUCVT1A[32:0]} : 
+      FUCVT1A;
+
+  always @(posedge clk) begin
+      ALTDATA1_reg<=ALTDATA1;
+      ALTDATA1_reg2<=ALTDATA1_reg;
+      daltXA_reg<=datltXA;
+      daltXB_reg<=datltXB;
+      daltXA_reg2<=datltXA_reg;
+      daltXB_reg2<=datltXB_reg;
+  end
 endmodule
