@@ -1941,8 +1941,8 @@ module smallInstr_decoder(
           6'd35: begin poperation[36][7:0]=`fop_sqrtDL; pport[36]=PORT_FADD; end
           6'd36: begin poperation[36][7:0]=`fop_sqrtE; pport[36]=PORT_FADD; prB_useF[36]=1'b0; end
           6'd37: begin poperation[36][7:0]=`fop_divE; pport[36]=PORT_FMUL; end
-       //   6'd38: begin poperation[36][7:0]=`fop_sqrtS; pport[36]=PORT_FMUL; prB_useF[36]=1'b0; end
-       //   6'd39: begin poperation[36][7:0]=`fop_divS; pport[36]=PORT_FMUL; end
+          6'd38: begin poperation[36][7:0]=`fop_pcvtS; pport[36]=PORT_FMUL; prA_useF[36]=1'b0; end
+          6'd39: begin poperation[36][7:0]=`fop_pcvtD; pport[36]=PORT_FMUL; prA_useF[36]=1'b0; end
 	  6'd40,6'd41,6'd42,6'd43: begin poperation[36][7:0]=`fop_logic; poperation[36][1:0]=instr[9:8]; 
 	     pport[36]=PORT_FADD; poperation[36][10:8]={instr[16],2'b0}; end 
           default: perror[36]=1;
