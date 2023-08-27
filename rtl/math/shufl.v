@@ -98,12 +98,12 @@ module fperm(
     end
     genvar k;
     for(k=0;k<12;k=k+1) begin : shf
-        assign valDF=df[k] ? B[52:41]<<(11-k) : 12'bz;
+        assign valDF=df[k] ? {B[65],B[63:53]}<<(11-k) : 12'bz;
         assign expDF=df[k] ? k+BIAS_D : 12'bz;
         if (k<9) begin
-            assign valDSF0=dsf0[k] ? B[55:47]<<(8-k) : 9'bz;
+            assign valDSF0=dsf0[k] ? {B[65],B[63:56]}<<(8-k) : 9'bz;
             assign expDSF0=dsf0[k] ? k+BIAS_S : 9'bz;
-            assign valDSF1=dsf1[k] ? B[22:14]<<(8-k) : 9'bz;
+            assign valDSF1=dsf1[k] ? {B[32],B[30:23]}<<(8-k) : 9'bz;
             assign expDSF1=dsf1[k] ? k+BIAS_D : 9'bz;
         end
     end
