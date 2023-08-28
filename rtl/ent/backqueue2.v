@@ -899,7 +899,7 @@ module frontendSelf(
   
   assign bus_match0=bus_en && bus_slot=={BUS_ID,5'b10000};
   
-  assign tlb_IP=bus_tlb_match_reg ? {proc[20:0],miss_IP[43:13]} : {proc[20:0],cc_read_IP[43:13]};
+  assign tlb_IP=bus_tlb_match_reg ? {proc[20:0],miss_IP[43:14]} : {proc[20:0],cc_read_IP[43:14]};
   
   assign bus_tlb_match=bus_tlb_slot[9:5]==BUS_ID && bus_tlb_en;
   
@@ -1018,7 +1018,7 @@ module frontendSelf(
   
   assign tlb_match=tlb_hit_reg3;
 
-  assign IP_phys={tlb_data[`ctlbData_phys],cc_read_IP[13:0]};
+  assign IP_phys={tlb_data[`ctlbData_phys],cc_read_IP[14:0]};
 
   assign req_addr=req_en0 ? {tlb_phys_reg,cc_read_IP_reg4[13:7]} : 38'bz;
   assign req_slot=req_en0 ? {BUS_ID,2'b10,miss_slot} : 10'bz;
@@ -1427,13 +1427,13 @@ module frontendSelf(
   );
 
   assign tbuf_error[0]=jmp_off_reg[0]!=btb_off_reg4[0] || ~jdec_type[0][4] && btb_tgt0_reg4!=jdec_target[0] || 
-      jdec_link0[4:0]!=btb_jlnpos0_reg4 || lnk_off0_reg!=btb_jlnjpos0_reg4;
+      jdec_link0[4:0]!=btb_jlnpos0_reg4 || lnk_off0_reg!=btb_jlnjpos0_reg4 || tlb_phys_reg[23:14]==cc_read_IP_reg4[63:44];
   assign tbuf_error[1]=jmp_off_reg[1]!=btb_off_reg4[1] || ~jdec_type[1][4] && btb_tgt1_reg4!=jdec_target[1] || 
-      jdec_link1[4:0]!=btb_jlnpos1_reg4 || lnk_off1_reg!=btb_jlnjpos1_reg4;
+      jdec_link1[4:0]!=btb_jlnpos1_reg4 || lnk_off1_reg!=btb_jlnjpos1_reg4 || tlb_phys_reg[23:14]==cc_read_IP_reg4[63:44];
   assign tbuf_error[2]=jmp_off_reg[2]!=btb_off_reg4[2] || ~jdec_type[2][4] && btb_tgt2_reg4!=jdec_target[2] || 
-      jdec_link2[4:0]!=btb_jlnpos2_reg4 || lnk_off2_reg!=btb_jlnjpos2_reg4;
+      jdec_link2[4:0]!=btb_jlnpos2_reg4 || lnk_off2_reg!=btb_jlnjpos2_reg4 || tlb_phys_reg[23:14]==cc_read_IP_reg4[63:44];
   assign tbuf_error[3]=jmp_off_reg[3]!=btb_off_reg4[3] || ~jdec_type[3][4] && btb_tgt3_reg4!=jdec_target[3] || 
-      jdec_link3[4:0]!=btb_jlnpos3_reg4 || lnk_off3_reg!=btb_jlnjpos3_reg4;
+      jdec_link3[4:0]!=btb_jlnpos3_reg4 || lnk_off3_reg!=btb_jlnjpos3_reg4 || tlb_phys_reg[23:14]==cc_read_IP_reg4[63:44];
 
   ght GHT_mod(
   .clk(clk),
