@@ -1288,8 +1288,8 @@ module smallInstr_decoder(
       if (magic[1:0]==2'b01 && instr[17]) perror[19]=1;
       
       trien[20]=magic[0] & isBasicCJump;
-      puseBConst[20]=(magic[1:0]!=2'b01 && instr[18]) || (magic[1:0]==2'b01 && instr[11:8]=={instr[16],instr[14:12]});
-      poperation[20][7:0]=opcode_main[0] && instr[11:8]!={instr[16],instr[14:12]} ? `op_sub32 : `op_sub64;
+      puseBConst[20]=magic[1:0]!=2'b01 && instr[18];
+      poperation[20][7:0]=opcode_main[0] ? `op_sub32 : `op_sub64;
       poperation[20][12:8]=5'b0;
       pflags_write[20]=1'b1;
       prA_use[20]=1'b1;
@@ -1297,15 +1297,14 @@ module smallInstr_decoder(
       prT_use[20]=1'b0;
       puseRs[20]=1'b1;
       prAlloc[20]=1'b1;
-      if (magic[1:0]!=2'b01) pconstant[20]={{51{instr[30]}},instr[30:19]};
-      else pconstant[20]={{56{instr[24]}},instr[24:17]};
+      if (magic[1:0]!=2'b01) pconstant[20]={{51{instr[31]}},instr[31:19]};
          // flags_use=1'b1;          
       pport[20]=PORT_ALU;
           
-      prA[20]={1'b0,instr[11:8]};
-      prB[20]={1'b0,instr[16],instr[14:12]};
+      prA[20]={instr[17],instr[11:8]};
+      prB[20]={instr[16],instr[15:12]};
       prT[20]=5'd31;
-      pjumpType[20]={1'b0,(magic[1:0]==2'b01) ? (instr[11:8]=={instr[16],instr[14:12]} ? instr[0] : instr[18]) : instr[32],opcode_main[3:1]};  
+      pjumpType[20]={1'b0,(magic[1:0]==2'b01) ? instr[18] : instr[32],opcode_main[3:1]};  
       if (puseBConst[20] && prB[20]!=0) perror[20]=1;
 
       trien[21]=magic[0] & isLongCondJump;
@@ -1334,8 +1333,8 @@ module smallInstr_decoder(
       pjumpType[22]={1'b0,instr[11:8]};
       pflags_use[22]=1'b1;
           
-      prA[22]={1'b0,instr[16],instr[14:12]};
-      prB[22]={1'b0,instr[16],instr[14:12]};
+      prA[22]={instr[16],instr[15:12]};
+      prB[22]={instr[16],instr[15:12]};
       
       trien[23]=magic[0] & isUncondJump;
       puseRs[23]=1'b0;
@@ -1382,7 +1381,7 @@ module smallInstr_decoder(
           prA_use[25]=1'b0;
           prT_use[25]=1'b1;
           pisIPRel[25]=1'b1;
-          pconstant[25]={{48{instr[30]}},instr[30:16],1'b0};
+          pconstant[25]={{47{instr[31]}},instr[31:16],1'b0};
           prT[25]=instr[12:8];
           poperation[25][7:0]=mode64 ? `op_add64 : `op_add32;
           puseRs[25]=1'b1;
