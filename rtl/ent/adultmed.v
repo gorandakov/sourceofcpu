@@ -329,9 +329,9 @@ module smallInstr_decoder(
   assign opcode_main=instr[7:0];
   assign opcode_sub=instr[5:0];
   
-  assign constantDef=(magic==4'b1111) ? instr[79:16] : 64'bz;
-  assign constantDef=(magic[1:0]==2'b11) ? {{32{instr[47]}},instr[47:16]} : 64'bz;
-	assign constantDef=(magic[1:0]==2'b01) ? {{32{instr[31]}},{17{instr[31]}},instr[31],instr[31:18]} : 64'bz;
+  assign constantDef=(magic==4'b1111) ? {instr[78:64],instr[62:48],instr[46:32],instr[30:17],5'b0} : 64'bz;
+  assign constantDef=(magic[1:0]==2'b11) ? {{35{instr[46]}},instr[46:32],instr[30:17]} : 64'bz;
+  assign constantDef=(magic[1:0]==2'b01) ? {{32{instr[30]}},{17{instr[30]}},instr[30],instr[30:17]} : 64'bz;
   assign constantDef=(~magic[0]) ? {32'b0,25'b0,~instr[7] && {instr[6],instr[11:8]}==5'b0,instr[7:6],instr[11:8]} : 64'bz;
 
   assign constantN=~constant;
@@ -952,8 +952,8 @@ module smallInstr_decoder(
        if (opcode_main[2]) perror[9]=1; //disable 8 and 16 bit insns
        pflags_write[9]=1'b1;
        if (magic[1:0]==2'b01) begin
-           poperation[9][12]=instr[31];
-           pflags_write[9]=~instr[31];
+           poperation[9][12]=instr[17];
+           pflags_write[9]=~instr[17];
            pconstant[9]={{51{instr[30]}},instr[30:18]};
        end
           
@@ -966,25 +966,23 @@ module smallInstr_decoder(
           
        if (opcode_main[0]||magic[1:0]==2'b11) begin
            if (magic[1:0]==2'b01) begin
-               prA[9]={instr[17],instr[11:8]};
-               prT[9]=instr[16:12];
+               prA[9]={1'b0,instr[11:8]};
+               prT[9]={1'b0,instr[16],instr[14:12]};
                prB[9]=5'd31;
            end else if (magic[3:0]==4'b0111) begin
                prA[9]={instr[48],instr[11:8]};
-               prT[9]={instr[49],instr[15:12]};
+               prT[9]={instr[50:49],instr[14:12]};
                prB[9]=5'd31;
                perror[9]=0;
-	       if (~opcode_main[0]) pconstant[9]={32'b0,instr[47:16]};
            end else begin
                prA[9]={1'b0,instr[11:8]};
-               prT[9]={1'b0,instr[15:12]};
+               prT[9]={1'b0,instr[16],instr[14:12]};
                prB[9]=5'd31;
-	       if (~opcode_main[0]) pconstant[9]={32'b0,instr[47:16]};
            end
        end else begin
            if (magic[1:0]==2'b01) begin
-               prA[9]={instr[17],instr[11:8]};
-               prT[9]=instr[16:12];
+               prA[9]={instr[18],instr[11:8]};
+               prT[9]={instr[17],instr[16],instr[14:12]};
                prB[9]=instr[22:18];
            end else begin
                perror[9]=1;
