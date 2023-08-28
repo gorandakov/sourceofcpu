@@ -35,6 +35,10 @@ module instrQ_buf(
   write_addr9,write_instr9,write_other9,
   write_addr10,write_instr10,write_other10,
   write_addr11,write_instr11,write_other11,
+  write_addr12,write_instr12,write_other12,
+  write_addr13,write_instr13,write_other13,
+  write_addr14,write_instr14,write_other14,
+  write_addr15,write_instr15,write_other15,
   read_thread,
   read_clkEn,
   read_addr0,read_instr0,read_other0,
@@ -96,6 +100,18 @@ module instrQ_buf(
   input [WADDR_WIDTH-1:0] write_addr11;
   input [WIDTH-1:0] write_instr11;
   input [OTHER-1:0] write_other11;
+  input [WADDR_WIDTH-1:0] write_addr12;
+  input [WIDTH-1:0] write_instr12;
+  input [OTHER-1:0] write_other12;
+  input [WADDR_WIDTH-1:0] write_addr13;
+  input [WIDTH-1:0] write_instr13;
+  input [OTHER-1:0] write_other13;
+  input [WADDR_WIDTH-1:0] write_addr14;
+  input [WIDTH-1:0] write_instr14;
+  input [OTHER-1:0] write_other14;
+  input [WADDR_WIDTH-1:0] write_addr15;
+  input [WIDTH-1:0] write_instr15;
+  input [OTHER-1:0] write_other15;
 
   input read_thread;
   input read_clkEn;
@@ -131,19 +147,19 @@ module instrQ_buf(
   output [WIDTH-1:0] read_instr9;
   output [OTHER-1:0] read_other9;
   
-  reg [WIDTH-1:0] instr[1:0];
-  reg [OTHER-1:0] other[1:0];
+  reg [WIDTH-1:0] instr;
+  reg [OTHER-1:0] other;
   reg read_en[9:0];
   integer k;
   wire [WIDTH-1:0] instr_rd;
   wire [OTHER-1:0] other_rd;
   wire [WIDTH-1:0] instr_wr;
   wire [OTHER-1:0] other_wr;
-  wire [11:0] instr_wren;
+  wire [15:0] instr_wren;
   wire instr_wrAny;
   
-  assign instr_rd=instr[read_thread];
-  assign other_rd=other[read_thread];
+  assign instr_rd=instr;
+  assign other_rd=other;
   
   assign read_instr0=read_en[0] ? instr_rd : 'z;
   assign read_other0=read_en[0] ? other_rd : 'z;
@@ -179,6 +195,10 @@ module instrQ_buf(
   assign instr_wren[9]=write_addr9==INDEX && write_instrEn[9];
   assign instr_wren[10]=write_addr10==INDEX && write_instrEn[10];
   assign instr_wren[11]=write_addr11==INDEX && write_instrEn[11];
+  assign instr_wren[12]=write_addr12==INDEX && write_instrEn[12];
+  assign instr_wren[13]=write_addr14==INDEX && write_instrEn[13];
+  assign instr_wren[14]=write_addr15==INDEX && write_instrEn[14];
+  assign instr_wren[15]=write_addr16==INDEX && write_instrEn[15];
   //verilator lint_on WIDTH 
   
   assign instr_wr=instr_wren[0] ? write_instr0 : 'z;
@@ -193,6 +213,10 @@ module instrQ_buf(
   assign instr_wr=instr_wren[9] ? write_instr9 : 'z;
   assign instr_wr=instr_wren[10] ? write_instr10 : 'z;
   assign instr_wr=instr_wren[11] ? write_instr11 : 'z;
+  assign instr_wr=instr_wren[12] ? write_instr12 : 'z;
+  assign instr_wr=instr_wren[13] ? write_instr13 : 'z;
+  assign instr_wr=instr_wren[14] ? write_instr14 : 'z;
+  assign instr_wr=instr_wren[15] ? write_instr15 : 'z;
   assign instr_wr=(!instr_wrAny) ? {WIDTH{1'B0}} : 'z;  
 
   assign other_wr=instr_wren[0] ? write_other0 : 'z;
@@ -207,6 +231,10 @@ module instrQ_buf(
   assign other_wr=instr_wren[9] ? write_other9 : 'z;
   assign other_wr=instr_wren[10] ? write_other10 : 'z;
   assign other_wr=instr_wren[11] ? write_other11 : 'z;
+  assign other_wr=instr_wren[12] ? write_other12 : 'z;
+  assign other_wr=instr_wren[13] ? write_other13 : 'z;
+  assign other_wr=instr_wren[14] ? write_other14 : 'z;
+  assign other_wr=instr_wren[15] ? write_other15 : 'z;
   assign other_wr=(!instr_wrAny) ? {OTHER{1'B0}} : 'z;  
 
   assign instr_wrAny=|instr_wren;
@@ -214,8 +242,8 @@ module instrQ_buf(
   always @(posedge clk) 
   begin
       if (write_wen&instr_wrAny) begin
-          instr[write_thread]<=instr_wr;
-          other[write_thread]<=other_wr;
+          instr<=instr_wr;
+          other<=other_wr;
       end
       if (rst) begin
           for(k=0;k<10;k=k+1) read_en[k]<=INITEN;
@@ -255,6 +283,10 @@ module instrQ_box(
   write_addr9,write_instr9,write_other9,
   write_addr10,write_instr10,write_other10,
   write_addr11,write_instr11,write_other11,
+  write_addr12,write_instr12,write_other12,
+  write_addr13,write_instr13,write_other13,
+  write_addr14,write_instr14,write_other14,
+  write_addr15,write_instr15,write_other15,
   read_thread,
   read_clkEn,
   read_addr0,read_instr0,read_other0,
@@ -314,6 +346,18 @@ module instrQ_box(
   input [ADDR_WIDTH-1:0] write_addr11;
   input [WIDTH-1:0] write_instr11;
   input [OTHER-1:0] write_other11;
+  input [ADDR_WIDTH-1:0] write_addr12;
+  input [WIDTH-1:0] write_instr12;
+  input [OTHER-1:0] write_other12;
+  input [ADDR_WIDTH-1:0] write_addr13;
+  input [WIDTH-1:0] write_instr13;
+  input [OTHER-1:0] write_other13;
+  input [ADDR_WIDTH-1:0] write_addr14;
+  input [WIDTH-1:0] write_instr14;
+  input [OTHER-1:0] write_other14;
+  input [ADDR_WIDTH-1:0] write_addr15;
+  input [WIDTH-1:0] write_instr15;
+  input [OTHER-1:0] write_other15;
 
   input read_thread;
   input read_clkEn;
@@ -365,7 +409,7 @@ module instrQ_box(
   generate
       genvar l,m;
       
-      for (m=0;m<6;m=m+1) begin : tile_gen
+      for (m=0;m<4;m=m+1) begin : tile_gen
           wire [9:0][WIDTH-1:0] read_instrm;
           wire [9:0][OTHER-1:0] read_otherm;
           
@@ -388,6 +432,10 @@ module instrQ_box(
               write_addr9,write_instr9,write_other9,
               write_addr10,write_instr10,write_other10,
               write_addr11,write_instr11,write_other11,
+              write_addr12,write_instr12,write_other12,
+              write_addr13,write_instr13,write_other13,
+              write_addr14,write_instr14,write_other14,
+              write_addr15,write_instr15,write_other15,
               read_thread,
               read_clkEn,
               read_addr0[2:0],read_instrm[0],read_otherm[0],
@@ -504,6 +552,10 @@ module instrQ(
   write_instr9,write_other9,
   write_instr10,write_other10,
   write_instr11,write_other11,
+  write_instr12,write_other12,
+  write_instr13,write_other13,
+  write_instr14,write_other14,
+  write_instr15,write_other15,
   read_thread,
   read_clkEn,
   read_instrEn,
@@ -526,7 +578,7 @@ module instrQ(
   
   input clk;
   input rst;
-  input [11:0] write_instrEn;
+  input [15:0] write_instrEn;
   input write_thread;
   input write_wen;
   output doFStall;
@@ -556,6 +608,14 @@ module instrQ(
   input [OTHER-1:0] write_other10;
   input [WIDTH-1:0] write_instr11;
   input [OTHER-1:0] write_other11;
+  input [WIDTH-1:0] write_instr12;
+  input [OTHER-1:0] write_other12;
+  input [WIDTH-1:0] write_instr13;
+  input [OTHER-1:0] write_other13;
+  input [WIDTH-1:0] write_instr14;
+  input [OTHER-1:0] write_other14;
+  input [WIDTH-1:0] write_instr15;
+  input [OTHER-1:0] write_other15;
 
   input read_thread;
   input read_clkEn;
@@ -603,16 +663,12 @@ module instrQ(
   wire [WIDTH-1:0] read_instrZ9;
   wire [OTHER-1:0] read_otherZ9;
   
-  reg [ADDR_WIDTH-1:0] write_addrA[11:0];
-  wire [11:0][ADDR_WIDTH-1:0] write_addrA_d;
-  reg [ADDR_WIDTH-1:0] write_addrB[11:0];
-  wire [11:0][ADDR_WIDTH-1:0] write_addrB_d;
-  wire [ADDR_WIDTH-1:0] write_addr[11:0];
+  reg [ADDR_WIDTH-1:0] write_addrA[15:0];
+  wire [15:0][ADDR_WIDTH-1:0] write_addrA_d;
+  wire [ADDR_WIDTH-1:0] write_addr[15:0];
 
   reg [ADDR_WIDTH-1:0] read_addrA[9:0];
   wire [9:0][ADDR_WIDTH-1:0] read_addrA_d;
-  reg [ADDR_WIDTH-1:0] read_addrB[9:0];
-  wire [9:0][ADDR_WIDTH-1:0] read_addrB_d;
   wire [ADDR_WIDTH-1:0] read_addr_d[9:0];
 
   integer k;
@@ -630,21 +686,17 @@ module instrQ(
   generate
   
       genvar w,r;
-      for(w=0;w<12;w=w+1) begin : wrt_gen
+      for(w=0;w<16;w=w+1) begin : wrt_gen
           instrQ_bndAdd wrAddr0_mod(write_addrA[w],write_addrA_d[w],
-            {write_instrEn&~{1'b0,write_instrEn[11:1]},write_instrEn==12'b0});
-          instrQ_bndAdd wrAddr1_mod(write_addrB[w],write_addrB_d[w],
-            {write_instrEn&~{1'b0,write_instrEn[11:1]},write_instrEn==12'b0});
-          assign write_addr[w]=write_thread ? write_addrB[w] : write_addrA[w];
+            {write_instrEn&~{1'b0,write_instrEn[15:1]},write_instrEn==16'b0});
+          assign write_addr[w]=write_addrA[w];
       end
       for(r=0;r<10;r=r+1) begin : rd_gen
           instrQ_bndAdd #(10) rdAddr0_mod(read_addrA[r],read_addrA_d[r],
             {read_instrEn&~{1'b0,read_instrEn[9:1]},read_instrEn==10'b0});
-          instrQ_bndAdd #(10) rdAddr1_mod(read_addrB[r],read_addrB_d[r],
-            {read_instrEn&~{1'b0,read_instrEn[9:1]},read_instrEn==10'b0});
           assign read_addr_d[r]=read_thread ? read_addrB_d[r] : read_addrA_d[r];
           
-          get_carry #(6) cmp_mod(busy[read_thread_reg],~(r[5:0]+6'd1),1'b1,read_avail[r]);
+          get_carry #(6) cmp_mod(busy,~(r[5:0]+6'd1),1'b1,read_avail[r]);
       end
   endgenerate
   
@@ -675,7 +727,7 @@ module instrQ(
   instrQ_box box_mod(
   clk,
   rst,
-  (write_instrEn|{11'b0,init})&{12{write_wen}},
+  (write_instrEn|{15'b0,init})&{16{write_wen}},
   init ? initCount[0] : write_thread,
   (write_wen & ~doFStall) | init,
   init ? initCount[6:1] : write_addr[0],
@@ -692,6 +744,10 @@ module instrQ(
   write_addr[9],write_instr9,write_other9,
   write_addr[10],write_instr10,write_other10,
   write_addr[11],write_instr11,write_other11,
+  write_addr[12],write_instr11,write_other12,
+  write_addr[13],write_instr11,write_other13,
+  write_addr[14],write_instr11,write_other14,
+  write_addr[15],write_instr11,write_other15,
   read_thread_reg,
   read_clkEn,
   read_addr_d[0],read_instrZ0,read_otherZ0,
@@ -706,46 +762,35 @@ module instrQ(
   read_addr_d[9],read_instrZ9,read_otherZ9
   );
   
-  instrQ_upDown busy0_mod(busy[0],busy_d[0],~write_wen | write_thread | doFStall,write_instrEn&{12{write_wen}},
+  instrQ_upDown busy0_mod(busy,busy_d,~write_wen | write_thread | doFStall,write_instrEn&{16{write_wen}},
 	  ~read_clkEn | read_thread_reg,read_instrEn,doFStall0);
-  instrQ_upDown busy1_mod(busy[1],busy_d[1],~write_wen | ~write_thread | doFStall,write_instrEn&{12{write_wen}},
-	  ~read_clkEn | ~read_thread_reg,read_instrEn,doFStall1);
   
   adder_inc #(7) initAdd_mod(initCount,initCount_d,1'b1,);
   
   always @(posedge clk) begin
       for (k=0;k<10;k=k+1) if (rst) begin
           read_addrA[k]<=k[5:0];
-          read_addrB[k]<=k[5:0]; 
       end else if (except) begin
-          if (read_thread) read_addrB[k]<=k[5:0];
-          else read_addrA[k]<=k[5:0];
+          read_addrA[k]<=k[5:0];
       end else if (read_clkEn) begin
-          if (read_thread) read_addrB[k]<=read_addrB_d[k];
-          else read_addrA[k]<=read_addrA_d[k];
+          read_addrA[k]<=read_addrA_d[k];
       end
-      for (k=0;k<12;k=k+1) if (rst) begin
-          write_addrB[k]<=k[5:0];
+      for (k=0;k<16;k=k+1) if (rst) begin
           write_addrA[k]<=k[5:0]; 
       end else if (except) begin
-          if (except_thread) write_addrB[k]<=k[5:0];
-          else write_addrA[k]<=k[5:0];
+          write_addrA[k]<=k[5:0];
       end else if (write_wen & ~doFStall) begin
-          if (write_thread) write_addrB[k]<=write_addrB_d[k];
-          else write_addrA[k]<=write_addrA_d[k];
+          write_addrA[k]<=write_addrA_d[k];
       end
      // if (write_wen & ~doFStall)	  $display("write_instr0 ",write_instr0," write_addrA[0]");
       if (rst) begin
-          busy[0]<=6'd0;
-          busy[1]<=6'd0;
+          busy<=6'd0;
           read_thread_reg<=1'b0;
       end else if (except) begin
-          if (~except_thread) busy[0]<=6'd0;
-          else busy[1]<=6'd0;
+          busy<=6'd0;
           read_thread_reg<=read_thread;
       end else begin
-          busy[0]<=busy_d[0];
-          busy[1]<=busy_d[1];
+          busy<=busy_d;
           read_thread_reg<=read_thread;
       end
       if (rst) begin
@@ -761,7 +806,7 @@ endmodule
 
 module instrQ_bndAdd(addr,addr_new,cnt);
 
-  parameter CNT_COUNT=12;
+  parameter CNT_COUNT=16;
   
   input [5:0] addr;
   output [5:0] addr_new;
@@ -785,22 +830,23 @@ module instrQ_upDown(addr,addr_new,fstall,inEn,stall,outEn,doFStall);
   input [5:0] addr;
   output [5:0] addr_new;
   input fstall;
-  input [11:0] inEn;
+  input [15:0] inEn;
   input stall;
   input [9:0] outEn;
   output doFStall;
   
  
 
-  wire [12:0] cntIn;
+  wire [15:0] cntIn;
   wire [10:0] cntOut;
   
-  wire [12:-10] cnt;
+  wire [16:-10] cnt;
   
-  assign cntIn[12:1]=~{1'b0,inEn[11:1]}&inEn[11:0]&{12{~(fstall|doFStall)}};
+  assign cntIn[16:1]=~{1'b0,inEn[15:1]}&inEn[15:0]&{16{~(fstall|doFStall)}};
   assign cntIn[0]=~inEn[0] || fstall|doFStall;
 
   assign cntOut[10:1]=~{1'b0,outEn[9:1]}&outEn[9:0]&{10{~stall}};
+  assign cntOut[13:12]=2'b0;
   assign cntOut[0]=~outEn[0] || stall;
   
   assign cnt[0]=|(cntIn[10:0]&cntOut[10:0]);
@@ -810,16 +856,13 @@ module instrQ_upDown(addr,addr_new,fstall,inEn,stall,outEn,doFStall);
   //assign cnt[-1]=|(cntIn[9:0]&cntOut[10:1]);
   generate
       genvar k,j;
-      for(k=0;k<10;k=k+1) begin 
-          assign cnt[3+k]=|(cntIn[12:3+k]&cntOut[9-k:0]);
-          assign cnt[-1-k]=|(cntIn[9-k:0]&cntOut[10:1+k]);
+      for(k=0;k<14;k=k+1) begin 
+          assign cnt[3+k]=|(cntIn[16:3+k]&cntOut[13-k:0]);
+          if (k<10) assign cnt[-1-k]=|(cntIn[9-k:0]&cntOut[10:1+k]);
       end
       for(j=-10;j<=12;j=j+1) begin : add_gen
           adder #(6) add_mod(addr,j[5:0],addr_new,1'b0,cnt[j],,,,);
       end
   endgenerate
- // always @* begin
- //     $display("cnt 0x%x, cntIn 0x%x, cntOut 0x%x, addr_new 0x%x",cnt,cntIn,cntOut,addr_new);
- // end 
-  get_carry #(6) cmp_mod(~6'd37,addr,1'b1,doFStall);
+  get_carry #(6) cmp_mod(~6'd16,addr,1'b1,doFStall);
 endmodule
