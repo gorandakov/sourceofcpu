@@ -2,6 +2,7 @@
 #include <cfenv>
 #include <cstdio>
 #include <unistd.h>
+#include <cstring>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/mman.h>
@@ -440,7 +441,7 @@ class req {
     unsigned has_alu;
     char asmtext[64];
     bool gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,int has_mem_,char *mem,char *pmem);
-    bool exec(req *prev1,hcont *contx,char *mem,char *pmem);
+    bool exec(req *prev1,hcont *contx,char *mem,char *pmem, int itcnt);
     void gen_init(int rT,int dom,unsigned long long int val,int val_p);
     void gen_mem(req* prev1,unsigned code,char * mem,char *memp,unsigned long long addr);
     void gen_memw(req* prev1,unsigned code,char * mem,char *memp,unsigned long long addr,unsigned long long res, char res_p);
@@ -510,9 +511,9 @@ char *prna(long long int &addr, bool inloop) {
   int reg=addr&1;
   if (inloop) addr>>=1;
   if (inloop) {
-    snprintf(buf," $%i(%%r%i,%%r15,8)", addr, 13+reg);
+    snprintf(buf,32," $%i(%%r%i,%%r15,8)", addr, 13+reg);
   } else {
-    snprintf(buf," mem+%i(%%rip)", addr);
+    snprintf(buf,32," mem+%i(%%rip)", addr);
   }
   return buf;
 }
@@ -2294,51 +2295,52 @@ void gen_prog(req *reqs,int count, FILE *f,hcont *contx,char *mem,char *pmem) {
    
 }
 
+req *reqs;
+
 void prog_print(char *name) {
   FILE *f;
   int insn;
   f=fopen(name,"w");
   for(insn=0;insn<1000000; insn++) {
     int n;
-    fputc(f,'0'+reqs[insn].res_p+2*(reqs[insn].rT>=0));
+    fputc('0'+reqs[insn].res_p+2*(reqs[insn].rT>=0),f);
     for(n=0;n<16;n++) {
       char c=(reqs[insn].res>>(64-4*n))&0xf;
       if (c<10) c=c+'0';
       else c=c+'a';
-      fputc(f,c);
+      fputc(c,f);
     }
     char c=reqs[insn].rT&0xf;
     if (c<10) c=c+'0';
     else c=c+'a';
-    fputc(f,c);
-    fputc(f,'0'+((reqs[insn].rT&0x10)>>4));
+    fputc(c,f);
+    fputc('0'+((reqs[insn].rT&0x10)>>4),f);
     c=reqs[insn].rA&0xf;
     if (c<10) c=c+'0';
     else c=c+'a';
-    fputc(f,c);
-    fputc(f,'0'+((reqs[insn].rA&0x10)>>4));
+    fputc(c,f);
+    fputc('0'+((reqs[insn].rA&0x10)>>4),f);
     c=reqs[insn].rB&0xf;
     if (c<10) c=c+'0';
     else c=c+'a';
-    fputc(f,c);
-    fputc(f,'0'+((reqs[insn].rT&0x10)>>4));
-    c=(reqs[insn].flag&0x1f)>>1;
+    fputc(c,f);
+    fputc('0'+((reqs[insn].rT&0x10)>>4),f);
+    c=(reqs[insn].flags&0x1f)>>1;
     if (c<10) c=c+'0';
     else c=c+'a';
-    fputc(f,c);
-    fputc(f,'0'+((reqs[insn].flag&0x20)>>5)+2*(reqs[insn].op>>12);
-    fputc(f,'\n');
+    fputc(c,f);
+    fputc('0'+((reqs[insn].flags&0x20)>>5)+2*(reqs[insn].op>>12,f);
+    fputc('\n',f);
     for(n=0;n<8;n++) {
       char c=(reqs[insn].offset>>(32-4*n))&0xf;
       if (c<10) c=c+'0';
       else c=c+'a';
-      fputc(f,c);
+      fputc(c,f);
     }
   }
   fclose(f);
 }
 
-req *reqs;
 
 int main(int argc, char *argv[]) {
     int initcount=10;
@@ -2403,12 +2405,12 @@ int main(int argc, char *argv[]) {
             for(n=0;n<128;n=n+1) {
                 c='0'+mname[n]&0xf;
                 if (c>'9') c+='a'-'9';
-                fputc(f,c);
+                fputc(c,f);
                 c='0'+(mname[n]&0xf0)>>4;
                 if (c>'9') c+='a'-'9';
-                fputc(f,c);
+                fputc(c,f);
             }
-            fputc(f,'\n');
+            fputc('\n',f);
         }
     } while (ende!=0);
     fclose(f1);
@@ -2419,17 +2421,17 @@ int main(int argc, char *argv[]) {
         for(n=0;n<128;n=n+1) {
             c='0'+mem[128*ende+n]&0xf;
             if (c>'9') c+='a'-'9';
-            fputc(f,c);
+            fputc(c,f);
             c='0'+(mname[128*ende+n]&0xf0)>>4;
             if (c>'9') c+='a'-'9';
-            fputc(f,c);
+            fputc(c,f);
         }
-        fputc(f,'\n');
+        fputc('\n',f);
     }
     ende=fclose(f);
     if (ende) printf("flcose error (data)\n");
     f=fopen("./bin_p.memh","w");
-    fputc(f,'\n');
+    fputc('\n',f);
     ende=fclose(f);
     if (ende) printf("flcose error (ptr)\n");
     return 0;
