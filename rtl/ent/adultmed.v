@@ -1112,7 +1112,7 @@ module smallInstr_decoder(
       prAlloc[13]=~opcode_main[0] && !(opcode_main[7:4]==4'b0111 && opcode_main[3]);// & opcode_main[7:4]==4'b0111;
       puseBConst[13]=magic==4'b0111 && instr[58];
       pport[13]=opcode_main[0] ? PORT_STORE : PORT_LOAD;
-      if (magic[2:0]!=3'b111) pconstant[13]=(magic[1:0]==2'b11) ? {{9+32{instr[47]}},instr[47:25]} : {{23+32{instr[31]}},instr[31:23]};
+      if (magic[2:0]!=3'b111) pconstant[13]=(magic[1:0]==2'b11) ? {{11+32{instr[46]}},instr[46:32],instr[30:25]} : {{24+32{instr[30]}},instr[30:23]};
       if (opcode_main[0]) begin //store
           if (magic==4'b0111) begin 
               prC[13]={instr[54],instr[11:8]};
@@ -1314,7 +1314,7 @@ module smallInstr_decoder(
       pconstant[21][0]=1'b0;
       pflags_use[21]=1'b1;
       if (magic[1:0]==2'b01) begin
-          pconstant[21]={{43{instr[31]}},instr[31:12],1'b0};
+          pconstant[21]={{44{instr[30]}},instr[30:16],instr[14:12],1'b0};
       end else if (~magic[0]) begin
           perror[21]=1;
       end 
@@ -1340,12 +1340,6 @@ module smallInstr_decoder(
       trien[23]=magic[0] & isUncondJump;
       puseRs[23]=1'b0;
       pjumpType[23]=5'b10000;
-      /*pconstant[23][0]=1'b0;
-      if (magic[1:0]==2'b01) begin
-          pconstant[23]={{39{instr[31]}},instr[31:8],1'b0};
-      end else if (~magic[0]) begin
-          pconstant[23]={{55{instr[15]}},instr[15:8],1'b0};
-      end */
       
       trien[24]=magic[0] & isIndirJump;
       pport[24]=PORT_MUL;
@@ -1467,9 +1461,6 @@ module smallInstr_decoder(
               poperation[27][8]=instr[30];
               poperation[27][9]=instr[30];
               poperation[27][10]=instr[29];
-              if (instr[31]) begin
-                  perror[27]=1;
-              end
           end                  
       end else  begin
 	  perror[27]=2'b1;
@@ -1618,7 +1609,7 @@ module smallInstr_decoder(
               prA[31]=instr[22:18];
 	      prT[31]=instr[22:18];
 	  end
-      end else if (opcode_main==8'd123) begin//shladd
+      end else if (opcode_main==8'd123) begin//shladd ??? duplicate ???
           pport[31]=PORT_ALU;
           prA_use[31]=1'b1;
           prB_use[31]=opcode_main!=8'd213;
@@ -1662,50 +1653,50 @@ module smallInstr_decoder(
       prB_isV[32]=1'b1;
       prT_isV[32]=1'b1;
       prAlloc[32]=1'b1;
-      if ((instr[13:11]==3'd0 || instr[13:8]==6'd8 || instr[13:8]==6'd9) & ~instr[16]) begin
+      if ((instr[13:11]==3'd0 || instr[13:8]==6'd8 || instr[13:8]==6'd9) & ~instr[17]) begin
           //add(s) sub(s) min max
           pport[32]=(instr[13:9]==5'b0) ? PORT_VADD : PORT_VCMP;
           poperation[32][5:0]=instr[13:8];
-          poperation[32][7:6]=instr[15:14];
-          prA[32]=instr[21:17];
-          prB[32]=instr[26:22]; 
-          prT[32]=instr[31:27];
-      end else if (instr[13:12]==2'b1 && ~instr[16]) begin
+          poperation[32][7:6]={instr[16],instr[14]};
+          prA[32]={instr[30],instr[21:18]};
+          prB[32]={1'b0,instr[25:22]; 
+          prT[32]=instr[30:26];
+      end else if (instr[13:12]==2'b1 && ~instr[17]) begin
           pport[32]=PORT_VCMP;
           poperation[32][5:0]=`simd_cmp;
-          poperation[32][7:6]=instr[15:14];
+          poperation[32][7:6]={instr[16],instr[14]};
           {poperation[32][12],poperation[32][10:8]}=instr[11:8]; //compare criterion
-          prA[32]=instr[21:17];
-          prB[32]=instr[26:22];
-          prT[32]=instr[31:27];
-      end else if ((instr[13:8]==6'd10 || instr[13:8]==6'd11) & ~instr[16]) begin
+          prA[32]={instr[30],instr[21:18]};
+          prB[32]={1'b0,instr[25:22]; 
+          prT[32]=instr[30:26];
+      end else if ((instr[13:8]==6'd10 || instr[13:8]==6'd11) & ~instr[17]) begin
           //bitwise
           pport[32]=PORT_VADD;
-          poperation[32][7:0]=(instr[13:8]==6'd10) ? {6'b100,instr[15:14]} : {6'b101,instr[15:14]};
-          prA[32]=instr[21:17];
-          prB[32]=instr[26:22];
-          prT[32]=instr[31:27];
-	  if (instr[15:14]==2'd3) prA_useF[32]=0;
-	  if (instr[15:14]==2'd3 && instr[21:17]!=0) perror[32]=1;
-      end else if ((instr[13:9]==5'b0 || instr[13:8]==6'b10) & instr[16]) begin
+          poperation[32][7:0]=(instr[13:8]==6'd10) ? {6'b100,instr[16],instr[14]} : {6'b101,instr[16],instr[14]};
+          prA[32]={instr[30],instr[21:18]};
+          prB[32]={1'b0,instr[25:22]; 
+          prT[32]=instr[30:26];
+	  if ({instr[16],instr[14]}==2'd3) prA_useF[32]=0;
+	  if ({instr[16,instr[14]}==2'd3 && {instr[30],instr[21:18]}!=0) perror[32]=1;
+      end else if ((instr[13:9]==5'b0 || instr[13:8]==6'b10) & instr[17]) begin
           pport[32]=PORT_VCMP;
           poperation[32][5:0]=(instr[13:8]==6'b10) ? 6'd11 : {5'd6,instr[8]};
           poperation[32][6]=instr[14];
-          perror[32]={1'b0,instr[15]}; //no 32and 64 bit shift for now
-          prA[32]=instr[21:17];
-          prB[32]=instr[26:22];
-          prT[32]=instr[31:27];
-      end else if (instr[13:8]==6'b11 & instr[16]) begin
+          perror[32]={1'b0,instr[16]}; //no 32and 64 bit shift for now
+          prA[32]={instr[30],instr[21:18]};
+          prB[32]={1'b0,instr[25:22]; 
+          prT[32]=instr[30:26];
+      end else if (instr[13:8]==6'b11 & instr[17]) begin
           // rA_isAnyV=1'b1;
           prA_useF[32]=1'b0;
           prBT_copyV[32]=1'b1;
           pport[32]=PORT_VANY;
-          perror[32]={1'b0,instr[15:14]!=2'b0}; 
-          prA[32]=instr[21:17];
-          prB[32]=instr[26:22];
-          prT[32]=instr[31:27];
+          perror[32]={1'b0,{instr[16],instr[14]}!=2'b0}; 
+          prA[32]={instr[30],instr[21:18]};
+          prB[32]={1'b0,instr[25:22]; 
+          prT[32]=instr[30:26];
           poperation[32][7:0]=8'hff;//mov 128 bit untyped
-	  if (instr[21:17]!=0) perror[32]=1;
+	  if ({instr[30],instr[21:18]}!=0) perror[32]=1;
       end
       if (magic[2:0]==3'b011) begin
           prAX[32]=instr[32]; if (instr[32]) prA[32][4:1]=4'b0;
@@ -1730,18 +1721,18 @@ module smallInstr_decoder(
       end else if (magic[1:0]!=2'b01) begin
 	  perror[33]=1;
       end
-      prA[33]=instr[21:17];
-      prB[33]=instr[26:22];
-      prT[33]=instr[31:27];
+      prA[33]={instr[30],instr[21:18]};
+      prB[33]={1'b0,instr[25:22]; 
+      prT[33]=instr[30:26];
       prT_useF[33]=1'b1;
       prA_useF[33]=1'b1;
       prB_useF[33]=1'b1;
       prAlloc[33]=1'b1;
-      if (poperation[33][7:0]!=`fop_mulDL && poperation[33][7:0]!=`fop_mulDH && poperation[33][7:0]!=`fop_mulDP && |instr[15:14]) begin
-         {poperation[33][12],poperation[33][9:8]}=instr[16:14];
+      if (poperation[33][7:0]!=`fop_mulDL && poperation[33][7:0]!=`fop_mulDH && poperation[33][7:0]!=`fop_mulDP && instr[16]|instr[14]) begin
+         {poperation[33][12],poperation[33][9:8]}={instr[17:16],instr[14]};
       end else begin
-         {poperation[33][10],poperation[33][9:8]}=instr[16:14];
-         if (instr[16] && poperation[33][7:0]!=`fop_mulDL && poperation[33][7:0]!=`fop_mulDH && poperation[33][7:0]!=`fop_mulDP)
+         {poperation[33][10],poperation[33][9:8]}={instr[17:16],instr[14]};
+         if (instr[17] && poperation[33][7:0]!=`fop_mulDL && poperation[33][7:0]!=`fop_mulDH && poperation[33][7:0]!=`fop_mulDP)
              poperation[33][9:8]=2'b11;
       end
       case(instr[13:8])
@@ -1760,9 +1751,9 @@ module smallInstr_decoder(
       
       trien[34]=magic[0] & isBasicFPUScalarB;
       puseRs[34]=1'b1;
-      prA[34]=instr[21:17];
-      prB[34]=instr[26:22];
-      prT[34]=instr[31:27];
+      prA[33]={instr[30],instr[21:18]};
+      prB[33]={1'b0,instr[25:22]; 
+      prT[33]=instr[30:26];
       if (magic[2:0]==3'b011) begin
           prAX[34]=instr[32]; if (instr[32]) prA[34][4:1]=4'b0;
 	  prBE[34]=instr[33]; if (instr[33]) prB[34][4:1]=4'b0;
@@ -1777,7 +1768,7 @@ module smallInstr_decoder(
       prA_useF[34]=1'b1;
       prB_useF[34]=1'b1;
       prAlloc[34]=1'b1;
-      {poperation[34][10],poperation[34][9:8]}=instr[16:14];
+      {poperation[34][10],poperation[34][9:8]}={instr[17:16],instr[14]};
       case(instr[13:8])
           6'd16: begin poperation[34][7:0]=`fop_addS; pport[34]=PORT_FADD; end
           6'd17: begin poperation[34][7:0]=`fop_subS; pport[34]=PORT_FADD; end
@@ -1801,8 +1792,8 @@ module smallInstr_decoder(
       
       trien[35]=(magic[0] && isBasicSysInstr);
          // if (instr[15:8]==8'hff && ~magic[0]) halt=1'b1;
-      if (instr[15:13]==3'b0) begin //write CSR
-        // constant=instr[31:16];
+      if (instr[14:13]==2'b0) begin //write CSR
+        // constant=instr[30:16];
           prB_use[35]=1'b1;
           puseBConst[35]=1'b0;
           pport[35]=PORT_MUL;
@@ -1813,7 +1804,7 @@ module smallInstr_decoder(
           pjumpType[35]=5'b11001;
           poperation[35][12]=1'b1;
           perror[35]={2{~can_write_csr}};
-      end else if (instr[15:13]==3'd1) begin //read_CSR
+      end else if (instr[14:13]==2'd1) begin //read_CSR
           puseRs[35]=1'b1;
           prB_use[35]=1'b1;
           puseBConst[35]=1'b1;
@@ -1825,7 +1816,7 @@ module smallInstr_decoder(
           prAlloc[35]=1'b1;
           perror[35]={2{~can_read_csr}};
 	  //pconstant[35]=instr[79:16];
-      end else if (instr[15:13]==3'd2) begin //iret
+      end else if (instr[14:13]==2'd2) begin //iret
           puseRs[35]=1'b1;
           prB_use[35]=1'b1;
           puseBConst[35]=1'b1;
@@ -1837,16 +1828,16 @@ module smallInstr_decoder(
           prAlloc[35]=1'b1;
           pjumpType[35]=5'b10001;
 	  //pconstant[35]=instr[79:16];
-	  csrss_retIP_en=!(instr[31:16]==`csr_retIP);
+	  csrss_retIP_en=!(instr[30:16]==`csr_retIP);
           perror[35]={2{~can_jump_csr}};
       end
       
       trien[36]=magic[0] & isBasicFPUScalarC;
       puseRs[36]=1'b1;
       if (magic[1:0]!=2'b01) perror[36]=1;
-      prA[36]=instr[21:17];
-      prB[36]=instr[26:22];
-      prT[36]=instr[31:27];
+      prA[33]={instr[30],instr[21:18]};
+      prB[33]={1'b0,instr[25:22]; 
+      prT[33]=instr[30:26];
       if (magic[2:0]==3'b011) begin
           prAX[36]=instr[32]; if (instr[32]) prA[36][4:1]=4'b0;
 	  prBE[36]=instr[33]; if (instr[33]) prB[36][4:1]=4'b0;
@@ -1861,8 +1852,8 @@ module smallInstr_decoder(
       prA_useF[36]=1'b0;
       prB_useF[36]=1'b1;
       prAlloc[36]=1'b1;
-      {poperation[36][11],poperation[36][9:8]}={1'b0,instr[15:14]};
-      if (instr[16]!=0) perror[36]=1;
+      {poperation[36][11],poperation[36][9:8]}={1'b0,instr[16],instr[14]};
+      if (instr[17]!=0) perror[36]=1;
       case(instr[13:8])
           6'd32: begin poperation[36][11]=1'b0; poperation[36][7:0]=`fop_permDS; pport[36]=PORT_FMUL; end
           6'd33: begin poperation[36][7:0]=`fop_divDL; pport[36]=PORT_FADD; prB_useF[36]=1'b0; end
@@ -1880,9 +1871,9 @@ module smallInstr_decoder(
       trien[37]=magic[0] & isBasicFPUScalarCmp;
       puseRs[37]=1'b1;
       if (magic[1:0]!=2'b01) perror[37]=1;
-      prA[37]=instr[21:17];
-      prB[37]=instr[26:22];
-      prT[37]=instr[31:27];
+      prA[33]={instr[30],instr[21:18]};
+      prB[33]={1'b0,instr[25:22]; 
+      prT[33]=instr[30:26];
       if (magic[2:0]==3'b011) begin
           prAX[37]=instr[32]; if (instr[32]) prA[37][4:1]=4'b0;
 	  prBE[37]=instr[33]; if (instr[33]) prB[37][4:1]=4'b0;
@@ -1897,7 +1888,7 @@ module smallInstr_decoder(
       prB_useF[37]=1'b1;
       prAlloc[37]=1'b1;
       pflags_write[37]=1'b1;
-      poperation[37][9:8]={2{instr[16]}};
+      poperation[37][9:8]={2{instr[17]}};
       poperation[37][10]=instr[10]; //lin search
       case(instr[13:8])
           6'd32,6'd36: begin poperation[37][7:0]=`fop_cmpDH; pport[37]=PORT_FADD; end
@@ -1914,11 +1905,13 @@ module smallInstr_decoder(
           default: perror[37]=1;
       endcase
       //flags_write=~operation[12] & useRs || flags_wrFPU;
+
       trien[38]=magic[0] & isBasicFPUScalarCmp2;
       puseRs[38]=1'b1;
       if (magic[1:0]!=2'b01) perror[38]=1;
-      prA[38]=instr[21:17];
-      prB[38]=instr[26:22];
+      prA[33]={instr[30],instr[21:18]};
+      prB[33]={1'b0,instr[25:22]; 
+      prT[33]=instr[30:26];
       prT_useF[38]=1'b1;
       prT[38]=instr[31:27];
       if (magic[2:0]==3'b011) begin
@@ -1934,7 +1927,7 @@ module smallInstr_decoder(
       prB_useF[38]=1'b1;
       prAlloc[38]=1'b1;
       pflags_write[38]=1'b1;
-      poperation[38][10]=instr[16]; //signed/single
+      poperation[38][10]=instr[17]; //signed/single
       case(instr[13:8])
 	  6'd32: begin poperation[38][7:0]=`fop_pcmplt; pport[38]=PORT_FADD; end
 	  6'd33: begin poperation[38][7:0]=`fop_pcmpge; pport[38]=PORT_FADD; end
@@ -1958,8 +1951,9 @@ module smallInstr_decoder(
       trien[39]=magic[0] & isBasicFPUScalarCmp3;
       puseRs[39]=1'b1;
       if (magic[1:0]!=2'b01) perror[39]=1;
-      prA[39]=instr[21:17];
-      prB[39]=instr[26:22];
+      prA[33]={instr[30],instr[21:18]};
+      prB[33]={1'b0,instr[25:22]; 
+      prT[33]=instr[30:26];
       prT_useF[39]=1'b0;
       prT[39]=instr[31:27];
       if (magic[2:0]==3'b011) begin
@@ -1975,28 +1969,12 @@ module smallInstr_decoder(
       prB_useF[39]=1'b1;
       prAlloc[39]=1'b1;
       pflags_write[39]=1'b1;
-      poperation[39][10]=instr[16]; //signed/single
+      poperation[39][10]=instr[17]; //signed/single
       case(instr[13:8])
 	  6'd32: begin poperation[39][7:0]=`fop_linsrch; pport[39]=PORT_FADD; end
 	  6'd33: begin poperation[39][7:0]=`fop_linsrch+1; pport[39]=PORT_FADD; end
 	  6'd34: begin poperation[39][7:0]=`fop_linsrch+2; pport[39]=PORT_FADD; end
 	  6'd35: begin poperation[39][7:0]=`fop_linsrch+3; pport[39]=PORT_FADD; end
-	  6'd36: begin
-	      prA_useF[39]=1'b0;
-	      prB_useF[39]=1'b0;
-	      prT_useF[39]=1'b0;
-	      prA_use[39]=1'b1;
-	      prB_use[39]=1'b1;
-	      prT_use[39]=1'b1;
-	      pport[39]=PORT_LOAD;
-	      prB[39][4:1]=4'b0;
-	      prBE[39]=1'b1;
-	      poperation[39][7:0]={2'b01,5'b10001,instr[23]};
-	      poperation[39][9:8]={1'b1,instr[24]}; 
-	      poperation[39][12:10]=3'b0;
-	      pconstant[39]={60'b0,instr[26:25],2'b0};
-	      pflags_write[39]=1'b0;
-	  end
 	  default: perror[39]=1;
       endcase
   end
