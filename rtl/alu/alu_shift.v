@@ -105,10 +105,10 @@ module alu_shift(
   endgenerate
 
   assign en[63:32]={32{sz[3]}};
-  assign en[31:24]=(val2[27:20]&{8{val2[11:9]==3'b100}})|{8{val2[11:9]==3'b0}};
-  assign en[23:16]=(val2[19:12]&{8{val2[11:9]==3'b100 || val2[11:9]==3'b010}})|{8{val2[11:9]==3'b0}};
-  assign en[15:8]=(val2[27:20]&{8{val2[11:9]==3'b10 || val2[11:9]==3'b1}})|{8{val2[11:9]==3'b0}};
-  assign en[7:0]=(val2[19:12]&{8{val2[11:9]==3'b1}})|{8{val2[11:9]==3'b0}};
+  assign en[31:24]=(val2[31:24]&{8{val2[11:9]==3'b100}})|{8{val2[11:9]==3'b0}};
+  assign en[23:16]=(val2[23:16]&{8{val2[11:9]==3'b100 || val2[11:9]==3'b010}})|{8{val2[11:9]==3'b0}};
+  assign en[15:8]=(val2[31:24]&{8{val2[11:9]==3'b10 || val2[11:9]==3'b1}})|{8{val2[11:9]==3'b0}};
+  assign en[7:0]=(val2[23:16]&{8{val2[11:9]==3'b1}})|{8{val2[11:9]==3'b0}};
 
   assign retData[`except_flags]=is_shift_reg ? flags_COASZP : 6'bz;
 
