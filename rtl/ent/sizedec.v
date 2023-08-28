@@ -335,26 +335,31 @@ endmodule
 module predecoder_get(
     clk,
     rst,
-    bundle,btail,bstop,
+    bundle,btail,bstop,in_bite,
     flag_bits,
     startOff,
     instr0,instr1,instr2,instr3,
     instr4,instr5,instr6,instr7,
     instr8,instr9,instr10,instr11,
+    instr12,instr13,instr14,instr15,
     magic0,magic1,magic2,magic3,
     magic4,magic5,magic6,magic7,
     magic8,magic9,magic10,magic11,
+    magic12,magic13,magic14,magic15,
     off0,off1,off2,off3,
     off4,off5,off6,off7,
     off8,off9,off10,off11,
+    off12,off13,off14,off15,
     class0,class1,class2,class3,
     class4,class5,class6,class7,
     class8,class9,class10,class11,
+    class12,class13,class14,class15,
     instrEn,
     isAvx,
     hasJumps,
     error,
     jerror,
+    jsplit_pos,
     Jinstr0,Jinstr1,Jinstr2,Jinstr3,
     Jmagic0,Jmagic1,Jmagic2,Jmagic3,
     Joff0,Joff1,Joff2,Joff3,
@@ -372,7 +377,8 @@ module predecoder_get(
     input [255:0] bundle;
     input [63:0] btail;
     input [3:0] bstop;
-    input [14:0] flag_bits;
+    input in_bite;
+    input [15:0] flag_bits;
     input [3:0] startOff;
     output [79:0] instr0;
     output [79:0] instr1;
@@ -386,6 +392,10 @@ module predecoder_get(
     output [79:0] instr9;
     output [79:0] instr10;
     output [79:0] instr11;
+    output [79:0] instr12;
+    output [79:0] instr13;
+    output [79:0] instr14;
+    output [79:0] instr15;
 
     output [3:0] magic0;
     output [3:0] magic1;
@@ -399,6 +409,10 @@ module predecoder_get(
     output [3:0] magic9;
     output [3:0] magic10;
     output [3:0] magic11;
+    output [3:0] magic12;
+    output [3:0] magic13;
+    output [3:0] magic14;
+    output [3:0] magic15;
 
     output [3:0] off0;
     output [3:0] off1;
@@ -412,6 +426,10 @@ module predecoder_get(
     output [3:0] off9;
     output [3:0] off10;
     output [3:0] off11;
+    output [3:0] off12;
+    output [3:0] off13;
+    output [3:0] off14;
+    output [3:0] off15;
     
     output [12:0] class0;
     output [12:0] class1;
@@ -425,12 +443,17 @@ module predecoder_get(
     output [12:0] class9;
     output [12:0] class10;
     output [12:0] class11;
+    output [12:0] class12;
+    output [12:0] class13;
+    output [12:0] class14;
+    output [12:0] class15;
     
-    output [11:0] instrEn;
+    output [15:0] instrEn;
     output reg isAvx;
     output hasJumps;
     output reg error;
     output reg jerror;
+    output [15:4] jerror_pos;
     
     output [79:0] Jinstr0;
     output [79:0] Jinstr1;
@@ -487,42 +510,42 @@ module predecoder_get(
     wire [255+16+48:0] bundle0;
     wire [255+16+48:0] bundleF;
 
-    wire [14:0] is_jmp;
-    reg [14:0] is_jmp_reg;
-    wire [15:-1][15:0] cntJEnd;
-    wire [14:0] jcnt_or_less;
-    wire [15:1] jcnt_or_more;
+    wire [15:0] is_jmp;
+    reg [15:0] is_jmp_reg;
+    wire [16:-1][16:0] cntJEnd;
+    wire [15:0] jcnt_or_less;
+    wire [16:1] jcnt_or_more;
     
-    wire [14:0] is_lnk0;
-    wire [14:0] is_lnk;
-    reg [14:0] is_lnk_reg;
-    wire [14:0] first_lnk;
+    wire [15:0] is_lnk0;
+    wire [15:0] is_lnk;
+    reg [15:0] is_lnk_reg;
+    wire [15:0] first_lnk;
     wire has_lnk;
-    wire [15:0][4:0] LNK;
-    wire [14:0] lcnt_or_less;
-    wire [14:-1][15:0] lcnt;
-    wire [14:0] is_ret0;
-    wire [14:0] is_ret;
-    reg [14:0] is_ret_reg;
-    reg [15:0] flag_bits0;
+    wire [16:0][4:0] LNK;
+    wire [15:0] lcnt_or_less;
+    wire [15:-1][16:0] lcnt;
+    wire [15:0] is_ret0;
+    wire [15:0] is_ret;
+    reg [15:0] is_ret_reg;
+    reg [16:0] flag_bits0;
         
     generate
         genvar k;
-        for(k=0;k<15;k=k+1) begin : popcnt_gen
-            popcnt15 cnt_mod(instrEnd[14:0] & ((15'b10<<k)-15'b1) & mask[14:0],cntEnd[k]);
+        for(k=0;k<16;k=k+1) begin : popcnt_gen
+            popcnt16 cnt_mod(instrEnd[15:0] & ((16'b10<<k)-16'b1) & mask[15:0],cntEnd[k]);
             get_carry #(4) carry_mod(k[3:0],~startOff,1'b1,mask[k]);
 
             wire [3:0] kk;
-            assign kk=k==0 && bundle0[255] && bstop[3:2]==2'b01 ? 4'he : 4'bz;
-            assign kk=k==0 && bundle0[255] && bstop[3:1]==3'b001 ? 4'hd : 4'bz;
-            assign kk=k==0 && bundle0[255] && bstop[3:0]==4'b0001 ? 4'hc : 4'bz;
-            assign kk=k==0 && bundle0[255] && bstop[3:0]==4'b0 ? 4'hb : 4'bz;
-            assign kk= k!=0 || ~bundle0[255] || bstop[3] ? k[3:0] : 4'bz;
+            assign kk=k==0 && in_bite && bstop[3:2]==2'b01 ? 4'he : 4'bz;
+            assign kk=k==0 && in_bite && bstop[3:1]==3'b001 ? 4'hd : 4'bz;
+            assign kk=k==0 && in_bite && bstop[3:0]==4'b0001 ? 4'hc : 4'bz;
+            assign kk=k==0 && in_bite && bstop[3:0]==4'b0 ? 4'hb : 4'bz;
+            assign kk= k!=0 || ~in_bite || bstop[3] ? k[3:0] : 4'bz;
 
             predecoder_class cls_mod(bundleF[k*16+:32],~instrEndF[k+:4],flag_bits0[k],class_[k],
               is_lnk0[k],is_ret0[k],LNK[k]);
-            popcnt15 cntJ_mod(is_jmp[14:0] & ((15'b10<<k)-15'b1),cntJEnd[k]);
-            popcnt15 cntL_mod(is_lnk[14:0] & ((15'b10<<k)-15'b1),lcnt[k]);
+            popcnt16 cntJ_mod(is_jmp[15:0] & ((16'b10<<k)-16'b1),cntJEnd[k]);
+            popcnt16 cntL_mod(is_lnk[15:0] & ((16'b10<<k)-16'b1),lcnt[k]);
             assign {lnkLink0,lnkOff0,lnkMagic0,lnkRet0}=lcnt[k][1] & lcnt[k-1][0] ? {LNK[k],1'b0,kk[3:0],instrEndF[k+:4],is_ret[k]} :
 	       	15'bz;
             assign {lnkLink1,lnkOff1,lnkMagic1,lnkRet1}=lcnt[k][2] & lcnt[k-1][1] ? {LNK[k],1'b0,k[3:0],instrEndF[k+:4],is_ret[k]} :
@@ -544,6 +567,9 @@ module predecoder_get(
               cntJEnd[k][3] & cntJEnd[k-1][2] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 101'bz;
             assign {Jclass3,Jmagic3,Jinstr3,Joff3}= 
               cntJEnd[k][4] & cntJEnd[k-1][3] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 101'bz;
+
+            assign jerror_pos=cntJEnd[k][5] & cntJEnd[k-1][4] & |lcnt[k-1][4:0] ? k[3:0] : 4'b0;
+            assign jerror_pos=lcnt[k][5] & lcnt[k-1][4] & |cntJEnd[k-1][4:0] ? k[3:0] : 4'b0;
             
             assign {class0,magic0,instr0,off0}=(mask[k] & ~mask[k-1]) ?
               {class_[k],instrEnd[k+:4],bundle0[k*16+:80],kk[3:0]} : 101'bz;
@@ -569,16 +595,24 @@ module predecoder_get(
               cntEnd[k-1][10] & cntEnd[k-2][9] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 101'bz;
             assign {class11,magic11,instr11,off11}=mask[k] &
               cntEnd[k-1][11] & cntEnd[k-2][10] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 101'bz;
+            assign {class12,magic12,instr12,off12}=mask[k] &
+              cntEnd[k-1][12] & cntEnd[k-2][11] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 101'bz;
+            assign {class13,magic13,instr13,off13}=mask[k] &
+              cntEnd[k-1][13] & cntEnd[k-2][12] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 101'bz;
+            assign {class14,magic14,instr14,off14}=mask[k] &
+              cntEnd[k-1][14] & cntEnd[k-2][13] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 101'bz;
+            assign {class15,magic15,instr15,off15}=mask[k] &
+              cntEnd[k-1][15] & cntEnd[k-2][14] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 101'bz;
 
         end
     endgenerate
 
     popcnt16_or_less ce2_mod(instrEnd[15:0]&mask[15:0],cntEnd2);
     popcnt16_or_more ce3_mod(instrEnd[15:0]&mask[15:0],cntEnd3);
-    popcnt15_or_less jce_mod(is_jmp,jcnt_or_less);
-    popcnt15_or_more jcen_mod(is_jmp,jcnt_or_more);
-    bit_find_first_bit #(15) getLNK_mod(is_lnk,first_lnk,has_lnk);    
-    popcnt15_or_less lce_mod(is_lnk,lcnt_or_less);
+    popcnt16_or_less jce_mod(is_jmp,jcnt_or_less);
+    popcnt16_or_more jcen_mod(is_jmp,jcnt_or_more);
+    bit_find_first_bit #(16) getLNK_mod(is_lnk,first_lnk,has_lnk);    
+    popcnt16_or_less lce_mod(is_lnk,lcnt_or_less);
     assign mask[-1]=1'b0;
 //    assign mask[15]=1'b0;
 
@@ -587,21 +621,25 @@ module predecoder_get(
     assign cntJEnd[-1]=16'd1;
     assign lcnt[-1]=16'd1;
 
-    assign bundleF=bundle0[255] && startOff==0 && bstop[3:2]==2'b01 ? {bundle0[255+48:0],btail[63:48]} : 'z;
-    assign bundleF=bundle0[255] && startOff==0 && bstop[3:1]==3'b001 ? {bundle0[255+32:0],btail[63:32]} : 'z;
-    assign bundleF=bundle0[255] && startOff==0 && bstop[3:0]==4'b0001 ? {bundle0[255+16:0],btail[63:16]} : 'z;
-    assign bundleF=bundle0[255] && startOff==0 && bstop[3:0]==4'b0000 ? {bundle0[255:0],btail[63:0]} : 'z;
-    assign bundleF=(~bundle0[255] && startOff==0) | bstop[3] ? bundle0 : 'z;
-    assign bundleF=bundle0[255] && startOff==0 && bstop[3:2]==2'b01 ? {bundle0[255+48:0],btail[63:48]} : 'z;
+    assign bundleF=is_bite && startOff==0 && bstop[3:2]==2'b01 ? {bundle0[255+48:0],btail[63:48]} : 'z;
+    assign bundleF=is_bite && startOff==0 && bstop[3:1]==3'b001 ? {bundle0[255+32:0],btail[63:32]} : 'z;
+    assign bundleF=is_bite && startOff==0 && bstop[3:0]==4'b0001 ? {bundle0[255+16:0],btail[63:16]} : 'z;
+    assign bundleF=is_bite && startOff==0 && bstop[3:0]==4'b0000 ? {bundle0[255:0],btail[63:0]} : 'z;
+    assign bundleF=(~is_bite && startOff==0) | bstop[3] ? bundle0 : 'z;
+    assign bundleF=is_bite && startOff==0 && bstop[3:2]==2'b01 ? {bundle0[255+48:0],btail[63:48]} : 'z;
 
-    assign instrEndF=bundle0[255] && startOff==0 && bstop[3:2]==2'b01 ? {instrEnd[16:0],bstop[3:1],instrEnd[-1]} : 'z;
-    assign instrEndF=bundle0[255] && startOff==0 && bstop[3:1]==3'b001 ? {instrEnd[17:0],bstop[3:2],instrEnd[-1]} : 'z;
-    assign instrEndF=bundle0[255] && startOff==0 && bstop[3:0]==4'b0001 ? {instrEnd[18:0],bstop[3],instrEnd[-1]} : 'z;
-    assign instrEndF=bundle0[255] && startOff==0 && bstop[3:0]==4'b0000 ? {instrEnd[15:0],bstop[3:0],instrEnd[-1]} : 'z;
-    assign instrEndF=(~bundle0[255] && startOff==0) | bstop[3] ? instrEnd : 'z;
+    assign instrEndF=is_bite && startOff==0 && bstop[3:2]==2'b01 ? {instrEnd[16:0],bstop[3:1],instrEnd[-1]} : 'z;
+    assign instrEndF=is_bite && startOff==0 && bstop[3:1]==3'b001 ? {instrEnd[17:0],bstop[3:2],instrEnd[-1]} : 'z;
+    assign instrEndF=is_bite && startOff==0 && bstop[3:0]==4'b0001 ? {instrEnd[18:0],bstop[3],instrEnd[-1]} : 'z;
+    assign instrEndF=is_bite && startOff==0 && bstop[3:0]==4'b0000 ? {instrEnd[15:0],bstop[3:0],instrEnd[-1]} : 'z;
+    assign instrEndF=(~is_bite && startOff==0) | bstop[3] ? instrEnd : 'z;
     
-    assign bundle0={64'b0,btail[15:0],bundle[239:0]};
+    assign bundle0={64'b0,bundle[255:0]};
     
+    assign {class15,magic15, instr15, off15}=cntEnd2[14] ? 101'b0 : 101'bz;
+    assign {class14,magic14, instr14, off14}=cntEnd2[13] ? 101'b0 : 101'bz;
+    assign {class13,magic13, instr13, off13}=cntEnd2[12] ? 101'b0 : 101'bz;
+    assign {class12,magic12, instr12, off12}=cntEnd2[11] ? 101'b0 : 101'bz;
     assign {class11,magic11, instr11, off11}=cntEnd2[10] ? 101'b0 : 101'bz;
     assign {class10,magic10, instr10, off10}=cntEnd2[9] ? 101'b0 : 101'bz;
     assign {class9,magic9, instr9, off9}=cntEnd2[8] ? 101'b0 : 101'bz;
@@ -624,10 +662,14 @@ module predecoder_get(
     assign lnkJumps2=lcnt_or_less[2] ?  5'd1 : 5'bz;
     assign lnkJumps3=lcnt_or_less[3] ?  5'd1 : 5'bz;
 
-    assign instrEn=cntEnd3[12:1]|{11'b0,startOff==4'hf};
+    assign instrEn=cntEnd3[16:1];
     assign Jen=jcnt_or_more[4:1];
+
+    assign jerror_pos=lcnt_or_less[4] ? 12'b0 : 12'bz;
     
-    assign is_jmp={class_[14][`iclass_jump],
+    assign is_jmp={
+        class_[15][`iclass_jump],
+        class_[14][`iclass_jump],
         class_[13][`iclass_jump],
         class_[12][`iclass_jump],
         class_[11][`iclass_jump],
@@ -642,11 +684,11 @@ module predecoder_get(
         class_[2][`iclass_jump],
         class_[1][`iclass_jump],
         class_[0][`iclass_jump]
-        } & instrEnd[13:-1] & (instrEnd[14:0] | instrEnd[15:1] | {1'b0,instrEnd[15:2]} |
-          {2'b0,instrEnd[15:3]});
+        } & instrEnd[14:-1] & (instrEnd[15:0] | instrEnd[16:1] | {1'b0,instrEnd[16:2]} |
+          {2'b0,instrEnd[16:3]});
 
-    assign is_lnk=is_lnk0[14:0] & instrEnd[13:-1];
-    assign is_ret=is_lnk0[14:0] & instrEnd[13:-1] & is_ret0[14:0];
+    assign is_lnk=is_lnk0[15:0] & instrEnd[14:-1];
+    assign is_ret=is_lnk0[15:0] & instrEnd[14:-1] & is_ret0[15:0];
     
     assign {Jclass3,Jmagic3, Jinstr3, Joff3}=jcnt_or_less[3] ? 101'b0 : 101'bz;
     assign {Jclass2,Jmagic2, Jinstr2, Joff2}=jcnt_or_less[2] ? 101'b0 : 101'bz;
@@ -657,21 +699,14 @@ module predecoder_get(
     
     always @*
       begin
-        instrEnd={4'b0,btail[16],bundle[254:240],1'b1};
+        instrEnd={4'b0,bundle0[255],bundle0[239],bundle0[223],bundle0[207],bundle0[191],
+            bundle0[175],bundle0[159],bundle0[143],bundle0[127],bundle0[111],
+            bundle0[95],bundle0[79],bundle0[63],bundle0[47],bundle0[31],bundle0[15],1'b1};
         error=cntEnd3[13] || startOff==15;
-        isAvx=bundle[255];
-        jerror=~lcnt_or_less[1] || ~jcnt_or_less[4];
+        isAvx=1'b0;
+        jerror=~lcnt_or_less[4] || ~jcnt_or_less[4];
         flag_bits0={btail[16],flag_bits};
       end
-/*
-    always @(posedge clk) begin
-        if (rst) is_jmp_reg<=15'b0;
-        else is_jmp_reg<=is_jmp;
-        if (rst) is_lnk_reg<=15'b0;
-        else is_lnk_reg<=is_lnk;
-        if (rst) is_ret_reg<=15'b0;
-        else is_ret_reg<=is_lnk;
-    end
- */
+
 endmodule
 
