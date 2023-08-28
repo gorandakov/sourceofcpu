@@ -1264,6 +1264,10 @@ module frontendSelf(
   .write_instr9(pre_instr9_reg),.write_other9(pre_other[9]),
   .write_instr10(pre_instr10_reg),.write_other10(pre_other[10]),
   .write_instr11(pre_instr11_reg),.write_other11(pre_other[11]),
+  .write_instr11(pre_instr12_reg),.write_other11(pre_other[12]),
+  .write_instr11(pre_instr13_reg),.write_other11(pre_other[13]),
+  .write_instr11(pre_instr14_reg),.write_other11(pre_other[14]),
+  .write_instr11(pre_instr15_reg),.write_other11(pre_other[15]),
   .read_thread(1'b0),
   .read_clkEn(~stall),
   .read_instrEn(instrEat),
@@ -1295,26 +1299,18 @@ module frontendSelf(
   .write_wen(instrFed_reg&~btbFStall&~btbFStall_reg&~btbFStall_reg2&~btbFStall_reg3&
     ~btbFStall_recover_reg2&~jq_fstall&~fmstall),
   .write_thread(1'b0),
-  .write_cnt(btbFStall_recover_reg ? iqe_jcnD[4:0] : iqe_jcnt_reg2[4:0]),
+  .write_cnt(btbFStall_recover_reg ? iqe_jcnD[9:0] : iqe_jcnt_reg2[9:0]),
   .write_start(startx_reg3),
   .write_data0({jmp_mask_reg4[0],btbx_tgt0_reg4,btbx_attr0_reg4}),
   .write_data1({jmp_mask_reg4[1],btbx_tgt1_reg4,btbx_attr1_reg4}),
   .write_data2({jmp_mask_reg4[2],btbx_tgt2_reg4,btbx_attr2_reg4}),
-  .write_data3({jmp_mask_reg4[3],btbx_tgt3_reg4,btbx_attr3_reg4})
+  .write_data3({jmp_mask_reg4[3],btbx_tgt3_reg4,btbx_attr3_reg4}),
+  .write_data4({jmp_mask_reg4[3],btbx_tgt3_reg4,btbx_attr3_reg4}),
+  .write_data5({jmp_mask_reg4[3],btbx_tgt3_reg4,btbx_attr3_reg4}),
+  .write_data6({jmp_mask_reg4[3],btbx_tgt3_reg4,btbx_attr3_reg4}),
+  .write_data7({jmp_mask_reg4[3],btbx_tgt3_reg4,btbx_attr3_reg4}),
+  .write_data8({jmp_mask_reg4[3],btbx_tgt3_reg4,btbx_attr3_reg4})
   );
-  /*
-  instrQ_tk tk_queue_mod(
-  .clk(clk),
-  .rst(rst),
-  .doFStall(tq_fstall),
-  .read_clkEn(btbl_step & ~stall),
-  .read_thread(1'b0),
-  .read_data(btbl_IP),
-  .write_data(btbx_tgt_reg3),
-  .write_thread(1'b0),
-  .write_wen(btb_hasTK_reg3 & ~iq_fstall & ~btbFStall_reg &
-    ~btbFStall_reg2 & ~btbFStall_reg3 & ~btbFStall_recover & instrFed_reg)
-  );*/
     
   adder_inc #(43) seqAdd_mod(cc_read_IP[47:5],cc_read_IP_d[47:5],
     do_seq &~init & ~jumpTK_en & ~fmstall &~miss_recover & ~|tbuf_error_reg,);
