@@ -876,12 +876,11 @@ module frontendSelf(
 	  assign pre_other[j][`instrQ_sc]=isJ[1] ? predx_sc1_reg4 : 2'bz;
 	  assign pre_other[j][`instrQ_sc]=isJ[2] ? predx_sc2_reg4 : 2'bz;
 	  assign pre_other[j][`instrQ_sc]=isJ[3] ? predx_sc3_reg4 : 2'bz;
-	  assign pre_other[j][`instrQ_sc]=isJ==0 ? 2'b0 : 2'bz;
 	  assign pre_other[j][`instrQ_ss]=isJ[0] ? predx_sh0_reg4 : 1'bz;
 	  assign pre_other[j][`instrQ_ss]=isJ[1] ? predx_sh1_reg4 : 1'bz;
 	  assign pre_other[j][`instrQ_ss]=isJ[2] ? predx_sh2_reg4 : 1'bz;
 	  assign pre_other[j][`instrQ_ss]=isJ[3] ? predx_sh3_reg4 : 1'bz;
-	  assign pre_other[j][`instrQ_ss]=isJ==0 ? 1'b0 : 1'bz;
+	  assign pre_other[j][`instrQ_sc]=isJ!=0 ? 2'bz : 2'b0;
 //	  assign pre_other[j][`instrQ_avx]=pre_isAvx_reg;
 	  assign pre_other[j][`instrQ_btbMiss]=~btb_can_ins_reg4;
 	  assign pre_other[j][`instrQ_btb_only]=(isJ&btbx_cond_reg4)==4'b0;
@@ -1216,19 +1215,15 @@ module frontendSelf(
     .instr0(pre_instr0),.instr1(pre_instr1),.instr2(pre_instr2),.instr3(pre_instr3),
     .instr4(pre_instr4),.instr5(pre_instr5),.instr6(pre_instr6),.instr7(pre_instr7),
     .instr8(pre_instr8),.instr9(pre_instr9),.instr10(pre_instr10),.instr11(pre_instr11),
-    .instr12(pre_instr12),.instr13(pre_instr13),.instr14(pre_instr14),.instr15(pre_instr15),
     .magic0(pre_magic[0]),.magic1(pre_magic[1]),.magic2(pre_magic[2]),.magic3(pre_magic[3]),
     .magic4(pre_magic[4]),.magic5(pre_magic[5]),.magic6(pre_magic[6]),.magic7(pre_magic[7]),
     .magic8(pre_magic[8]),.magic9(pre_magic[9]),.magic10(pre_magic[10]),.magic11(pre_magic[11]),
-    .magic12(pre_magic[12]),.magic13(pre_magic[13]),.magic14(pre_magic[14]),.magic15(pre_magic[15]),
     .off0(pre_off[0]),.off1(pre_off[1]),.off2(pre_off[2]),.off3(pre_off[3]),
     .off4(pre_off[4]),.off5(pre_off[5]),.off6(pre_off[6]),.off7(pre_off[7]),
     .off8(pre_off[8]),.off9(pre_off[9]),.off10(pre_off[10]),.off11(pre_off[11]),
-    .off12(pre_off[12]),.off13(pre_off[13]),.off14(pre_off[14]),.off15(pre_off[15]),
     .class0(pre_class[0]),.class1(pre_class[1]),.class2(pre_class[2]),.class3(pre_class[3]),
     .class4(pre_class[4]),.class5(pre_class[5]),.class6(pre_class[6]),.class7(pre_class[7]),
     .class8(pre_class[8]),.class9(pre_class[9]),.class10(pre_class[10]),.class11(pre_class[11]),
-    .class12(pre_class[12]),.class13(pre_class[13]),.class14(pre_class[14]),.class15(pre_class[15]),
     .instrEn(pre_instrEn),
     .isAvx(pre_isAvx),
     .hasJumps(pre_has_jumps),
