@@ -263,6 +263,8 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   assign clsLoad=|{
   isBaseLoadStore & ~opcode_main[0],
   isBaseIndexLoadStore & ~opcode_main[0],  
+  isBaseSpecLoad,
+  isBaseIndexSpecLoad,
   isImmLoadStore && ~opcode_main[0],
   isBasicFPUScalarCmp3 && instr[13:8]==6'b100100//tlb jump table load gen purp
   };
@@ -286,6 +288,8 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   assign clsLoadFPU=|{
     isBaseLoadStore & ~opcode_main[0] & ~opcode_main[5],
     isBaseIndexLoadStore & ~opcode_main[0] & opcode_main[7:4]!=4'b0111,  
+    isBaseSpecLoad & ~opcode_main[7],
+    isBaseIndexSpecLoad & ~opcode_main[7],
     isImmLoadStore && ~opcode_main[0] && opcode_main[7:1]!=7'b1011000
   };
   
