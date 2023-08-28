@@ -112,9 +112,9 @@ module jump_decoder(
 
   assign opcode_main=instr[7:0];
   
-  assign constantDef=(magic[1:0]==2'b11) ? {{3{instr[46]}},instr[46:32],instr[30:17],1'b0} : 32'bz;
-  assign constantDef=(magic[1:0]==2'b01) ? {{18{instr[30]}},instr[30:18],1'b0} : 32'bz;
-  assign constantDef=(~magic[0]) ? {26'b0,instr[7],instr[14:12]} : 32'bz;
+  assign constantDef=(magic[1:0]==2'b11) ? {instr[47:17],1'b0} : 32'bz;
+  assign constantDef=(magic[1:0]==2'b01) ? {{17{instr[31]}},instr[31:18],1'b0} : 32'bz;
+  assign constantDef=(~magic[0]) ? {27'b0,instr[7],instr[15:12]} : 32'bz;
   
   
   assign isBasicCmpTest=(opcode_main[7:1]==7'd23 || opcode_main[7:2]==6'd12 ||
@@ -147,19 +147,19 @@ module jump_decoder(
       pushCallStack=1'b0;
       popCallStack=1'b0;
       if (subIsCJ) begin
-          constant={{56{instr[14]}},instr[14:8],1'b0};
+          constant={{55{instr[15]}},instr[15:8],1'b0};
           jumpType={1'b0,instr[7:6],instr[1:0]};
           if ({instr[7:6],instr[1:0]}==4'hf) jumpType=5'h10; //uc jump intead of nP 
       end else if (isBasicCJump) begin
           jumpType={1'b0,(magic[1:0]==2'b01) ? instr[18] : instr[32],opcode_main[3:2],opcode_main[1]^lizztruss};  
-          if (magic[1:0]==2'b01) constant={{51{instr[30]}},instr[30:19],1'b0};    
-          else if (magic[2:0]==3'b011) constant={{49{instr[46]}},instr[46:33],1'b0};
-          else if (magic[3:0]==4'b0111) begin error=0; constant={{34{instr[63]}},instr[62:48],instr[46:33],1'b0}; end
+          if (magic[1:0]==2'b01) constant={{50{instr[31]}},instr[31:19],1'b0};    
+          else if (magic[2:0]==3'b011) constant={{48{instr[47]}},instr[47:33],1'b0};
+          else if (magic[3:0]==4'b0111) begin error=0; constant={{32{instr[63]}},instr[63:33],1'b0}; end
       end else if (isLongCondJump) begin
           jumpType={1'b0,instr[11:9],instr[8]^lizztruss};
           constant[0]=1'b0;
           if (magic[1:0]==2'b01) begin
-              constant={{44{instr[30]}},instr[30:12],1'b0};
+              constant={{43{instr[31]}},instr[31:12],1'b0};
           end 
       end else if (isSelfTestCJump) begin
           //warning: if magic is 0 then error
@@ -170,14 +170,14 @@ module jump_decoder(
           jumpType=5'b10000;
           constant[0]=1'b0;
           if (magic[1:0]==2'b01) begin
-              constant={{40{instr[30]}},instr[30:8],1'b0};
+              constant={{39{instr[31]}},instr[31:8],1'b0};
           end 
       end else if (isIndirJump) begin
           jumpType=5'b10001;
       end else if (isCall) begin
           isIPRel=1'b1;
           pushCallStack=1'b1;
-          if (magic[1:0]==2'b01) constant={{48{instr[30]}},instr[30:16],1'b0};
+          if (magic[1:0]==2'b01) constant={{47{instr[31]}},instr[31:16],1'b0};
           jumpType=5'b10000;
       end else if (isRet) begin
           popCallStack=1'b1;
@@ -186,12 +186,12 @@ module jump_decoder(
           jumpType={1'b0,4'h0};
 	  constant={{43{instr[27]}},instr[27:8],1'b0};
       end else if (isBasicSysInstr) begin
-//          if (instr[14:8]==7'h7f && ~magic[0]) halt=1'b1;
-          if (instr[14:13]==2'b0) begin
+//          if (instr[15:8]==8'hff && ~magic[0]) halt=1'b1;
+          if (instr[15:13]==3'b0) begin
         //  if (magic[0]) error=1;
               jumpType=5'b11001;
               constant={48'b0,thread,instr[30:16]};
-          end else if (instr[14:13]==2'd2) begin
+          end else if (instr[15:13]==3'd2) begin
               jumpType=5'b10001;
               constant={48'b0,thread,instr[30:16]};
           end
