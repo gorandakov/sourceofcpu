@@ -332,7 +332,7 @@ module smallInstr_decoder(
   assign constantDef=(magic==4'b1111) ? {instr[78:64],instr[62:48],instr[46:32],instr[30:17],5'b0} : 64'bz;
   assign constantDef=(magic[1:0]==2'b11) ? {{35{instr[46]}},instr[46:32],instr[30:17]} : 64'bz;
   assign constantDef=(magic[1:0]==2'b01) ? {{32{instr[30]}},{17{instr[30]}},instr[30],instr[30:17]} : 64'bz;
-  assign constantDef=(~magic[0]) ? {32'b0,25'b0,~instr[7] && {instr[6],instr[11:8]}==5'b0,instr[7:6],instr[11:8]} : 64'bz;
+  assign constantDef=(~magic[0]) ? {32'b0,26'b0,~instr[6] && {instr[11:8]}==4'b0,instr[6],instr[11:8]} : 64'bz;
 
   assign constantN=~constant;
  
