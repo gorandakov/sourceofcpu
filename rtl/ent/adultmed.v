@@ -1009,16 +1009,16 @@ module smallInstr_decoder(
        if (magic[1:0]==2'b01) begin
            if (instr[30]) begin
                prA[10]={instr[17],instr[11:8]};
-               prT[10]=instr[16:12];
+               prT[10]={instr[18:16],instr[14:12];
                prB[10]=5'd31;
                puseBConst[10]=1'b1;
-               pconstant[10]={52'b0,instr[29:25],1'b0,instr[23:18]};
+               pconstant[10]={52'b0,instr[29:25],1'b0,instr[24:19]};
                pflags_use[10]=1'b0;
-               pflags_write[10]=~instr[24];
-               poperation[10][12]=instr[24];
+               pflags_write[10]=1'b1;
+               poperation[10][12]=1'b0;
            end else begin
                prA[10]={instr[17],instr[11:8]};
-               prT[10]=instr[16:12];
+               prT[10]={instr[23],instr[16],instr[14:12]};
                prB[10]=instr[22:18];
                puseBConst[10]=1'b0;
                pflags_use[10]=1'b0;
@@ -1028,12 +1028,12 @@ module smallInstr_decoder(
            poperation[10][12]=instr[24];              
        end else begin
                prA[10]={1'b0,instr[11:8]};
-               prT[10]={1'b0,instr[15:12]};
+               prT[10]={1'b0,instr[16],instr[14:12]};
                prB[10]=5'd31;
                puseBConst[10]=1'b1;
                pflags_use[10]=1'b0;
-               pflags_write[10]=~instr[22];
-               poperation[10][12]=instr[22];
+               pflags_write[10]=1'b1;
+               poperation[10][12]=1'b0;
        end
 
        trien[11]=~magic[0] & subIsFPUE;
