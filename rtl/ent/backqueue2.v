@@ -818,12 +818,9 @@ module frontendSelf(
           
           assign btbx_joff[k]=btb_joff[k]; 
           
-          //adder_CSA #(43) cs1_mod({cc_read_IP_reg3[43:5],jmp_off_reg[k]},{39'b0,jmp_moff_reg[k]},jdec_const_reg[k][43:1], {par0,jmp_par0[k]}, {par1,jmp_par1[k]});
-          //adder #(43) add1_mod(jmp_par0[k], jmp_par1[k],jdec_target[k][43:1],1'b0,1'b1,,,,);
-	  //assign jdec_target[k][63:44]=cc_read_IP_reg3[63:44];
-          add_agu add1_mod(.a({1'b1,cc_read_IP_reg3[63:5],jmp_off_reg[k],1'b0}),.b({59'b0,jmp_moff_reg[k],1'b0}),
-	      .c({21'b0,jdec_const_reg[k][43:1],1'b0}),.out({jdec_target[k],par0}),.cout_sec(jdec_sec[k]),.ndiff(),.en(1'b1),
-	      .shift(4'h1),.sh2(2'h0));
+          adder_CSA #(43) cs1_mod({cc_read_IP_reg3[43:5],jmp_off_reg[k]},{39'b0,jmp_moff_reg[k]},jdec_const_reg[k][43:1], {par0,jmp_par0[k]}, {par1,jmp_par1[k]});
+          adder #(43) add1_mod(jmp_par0[k], jmp_par1[k],jdec_target[k][43:1],1'b0,1'b1,,,,);
+	  assign jdec_target[k][63:44]=cc_read_IP_reg3[63:44];
  
           jump_decoder #(thread) jdec_mod(
           .clk(clk),
@@ -1349,9 +1346,9 @@ module frontendSelf(
   get_carry #(4) btbL3NoffCmpCC(btb_jlnpos3[3:0],~cc_read_IP[4:1],1'b1,btb_jlnin3);
   
   adder #(5) baseTick_mod(cc_read_IP_reg4[9:5],~cc_base_IP[9:5],{cc_base_tick,cc_base_off},1'b1,1'b1,,,,);
- // adder_inc #(35) baseInc_mod(cc_base_IP[43:9],cc_base_IP_d[43:9],do_seq_reg & cc_base_tick,);
-  add_agu baseInc_mod(.a({1'b1,cc_base_IP[63:9],9'b0}),.b(64'b0),.c(65'b1000000000),.out({cc_base_IP_d[63:9],cc_base_dummy9}),
-      .cout_sec(cc_base_sec),.ndiff(),.en(do_seq_reg5 && cc_base_tick),.shift(4'h1),.sh2(2'h0));
+  adder_inc #(35) baseInc_mod(cc_base_IP[43:9],cc_base_IP_d[43:9],do_seq_reg & cc_base_tick,);
+  assign cc_base_IP_d[63:44]=do_seq_reg & cc_base_tick ? cc_read_IP[63:44] : 20'bz;
+  assign cc_base_IP_d[8:0]=do_seq_reg & cc_base_tick ? cc_base_IP[8:0] : 9'bz;
  
   tbuf tbuf_mod(
   .clk(clk),
