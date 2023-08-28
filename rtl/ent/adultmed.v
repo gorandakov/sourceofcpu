@@ -330,7 +330,8 @@ module smallInstr_decoder(
   assign opcode_sub=instr[5:0];
   
   assign constantDef=(magic==4'b1111) ? {instr[78:64],instr[62:48],instr[46:32],instr[30:17],5'b0} : 64'bz;
-  assign constantDef=(magic[1:0]==2'b11) ? {{35{instr[46]}},instr[46:32],instr[30:17]} : 64'bz;
+  assign constantDef=(magic[3:0]==4'b0111) ? {{32{instr[62]}},instr[62:60],instr[46:32],instr[30:17]} : 64'bz;
+  assign constantDef=(magic[2:0]==3'b011) ? {{35{instr[46]}},instr[46:32],instr[30:17]} : 64'bz;
   assign constantDef=(magic[1:0]==2'b01) ? {{32{instr[30]}},{17{instr[30]}},instr[30],instr[30:17]} : 64'bz;
   assign constantDef=(~magic[0]) ? {32'b0,26'b0,~instr[6] && {instr[11:8]}==4'b0,instr[6],instr[11:8]} : 64'bz;
 
@@ -1073,22 +1074,22 @@ module smallInstr_decoder(
       puseBConst[12]=1'b0;
       pport[12]=opcode_main[0] ? PORT_STORE : PORT_LOAD;
       if (opcode_main[0]) begin //store
-          if (magic[1:0]==2'b01) begin
-              prB[12]={instr[17],instr[11:8]};
-              prC[12]=instr[16:12];
-          end else begin
-              prC[12]={freg_vf(opcode_main[4:0],~opcode_main[5]),instr[11:8]};
+          if (magic[1:0]==2'b01 || magic[2:0]==3'b011) begin
+              prB[12]={1'b0,instr[11:8]};
+              prC[12]={1'b0,instr[16],instr[14:12]};
 	      if (opcode_main[5] && prC[12]==REG_SP) prC[12]=5'd16;
-              prB[12]={freg_vf(opcode_main[4:0],~opcode_main[5]),instr[15:12]};
+          end else begin
+              prC[12]={instr[48],instr[11:8]};
+              prB[12]={instr[49],instr[16],instr[14:12]};
           end
       //        if (prevSpecAlu) rC=6'd16;
       end else begin
-          if (magic[1:0]==2'b01) begin
-              prB[12]={instr[17],instr[11:8]};
-              prT[12]=instr[16:12];
+          if (magic[1:0]==2'b01 || magic[2:0]==3'b011) begin
+              prB[12]={1'b0,instr[11:8]};
+              prT[12]={1'b0,instr[16],instr[14:12]};
           end else begin
-              prT[12]={freg_vf(opcode_main[4:0],~opcode_main[5]),instr[11:8]};
-              prB[12]={freg_vf(opcode_main[4:0],~opcode_main[5]),instr[15:12]};
+              prT[12]={instr[48],instr[11:8]};
+              prB[12]={instr[49],instr[16],instr[14:12]};
           end
       end
       if (opcode_main[0] && opcode_main[5:3]==3'b101) perror[12]=2'b1;
@@ -1117,33 +1118,31 @@ module smallInstr_decoder(
       if (opcode_main[0]) begin //store
           if (magic==4'b0111) begin 
               prC[13]={instr[54],instr[11:8]};
-              prB[13]={instr[55],instr[15:12]};
-              prA[13]={instr[56],instr[51:48]};
+              prB[13]={instr[56:55],instr[14:12]};
+              prA[13]={instr[59],instr[51:48]};
               perror[13]=0;
           end else begin
-              prC[13]={instr[20],instr[11:8]};
-              prB[13]={instr[21]&&magic[1:0]!=2'b01,instr[15:12]};
-              prA[13]={instr[22]&&magic[1:0]!=2'b01,instr[19:16]};
+              prC[13]={1'b0,instr[11:8]};
+              prB[13]={1'b0,instr[20],instr[14:12]};
+              prA[13]={1'b0,instr[19:16]};
           end 
         //  if (prevSpecAlu) rC=6'd16;
       end else begin
           if (magic==4'b0111) begin 
               prT[13]={instr[54],instr[11:8]};
-              prB[13]={instr[55],instr[15:12]};
-              prA[13]={instr[56],instr[51:48]};
+              prB[13]={instr[56:55],instr[14:12]};
+              prA[13]={instr[59],instr[51:48]};
               perror[13]=0;
           end else begin
-              prT[13]={instr[20],instr[11:8]};
-              prB[13]={instr[21]&&magic[1:0]!=2'b01,instr[15:12]};
-              prA[13]={instr[22]&&magic[1:0]!=2'b01,instr[19:16]};
+              prT[13]={1'b0,instr[11:8]};
+              prB[13]={1'b0,instr[20],instr[14:12]};
+              prA[13]={1'b0,instr[19:16]};
           end
       end
       prB_use[13]=1'b1;
       prA_use[13]=~(magic==4'b0111 && instr[57]);
-      pisIPRel[13]=1'b0;//magic==4'b0111 && instr[59];
+      pisIPRel[13]=1'b0;
       if (|poperation[13][9:8] && ~poperation[13][6]) perror[13]=1;
-      if (magic[2:0]==3'b111 && instr[59] && ~instr[58]) perror[13]=1;
-      if (magic[2:0]==3'b111 && instr[63:60]!=0) perror[13]=1;
       if (opcode_main[0] &&opcode_main[7:4]==4'b0111 && opcode_main[3])
           perror[13]=1;
       if (riscmove) perror[13]=1;
@@ -1333,12 +1332,12 @@ module smallInstr_decoder(
       puseBConst[19]=1'b1;
       //if (magic[3]) perror[19]=2'b0;
       if (opcode_main[0]) begin
-          if (magic[1:0]==2'b01) prC[19]=instr[16:12];
-          else prC[19]={opcode_main[7:1]==7'b1011000 ? instr[11] : instr[1],instr[15:12]};
+          if (magic[1:0]==2'b01) prC[19]={1'b0,instr[16],instr[14:12]};
+          else prC[19]={opcode_main[7:1]==7'b1011000 ? instr[11] : instr[1],instr[16],instr[14:12]};
        //   if (prevSpecAlu) rC=6'd16;
       end else begin
-          if (magic[1:0]==2'b01) prT[19]=instr[16:12];
-          else prT[19]={opcode_main[7:1]==7'b1011000 ? instr[11] : instr[1],instr[15:12]};
+          if (magic[1:0]==2'b01) prT[19]={1'b0,instr[16],instr[14:12]};
+          else prT[19]={opcode_main[7:1]==7'b1011000 ? instr[11] : instr[1],instr[16],instr[14:12]};
           if (prT[19]==5'd16 && opcode_main[7:0]==8'b10110000) begin
               prT[19]=5'd16;
               pthisSpecLoad[19]=1'b1;
