@@ -731,17 +731,17 @@ module smallInstr_decoder(
       if (~prevSpecLoad && opcode_sub[0]|subIsBasicShift) begin
           prA[0]={1'b0,instr[11:8]};
           prT[0]={1'b0,instr[11:8]};
-          prB[0]={1'b0,instr[7],instr[14:12]};
+          prB[0]={instr[7],instr[15:12]};
       end else if (~prevSpecLoad) begin
           prA[0]={instr[6],instr[11:8]};
           prT[0]={instr[6],instr[11:8]};
-          prB[0]={1'b0,instr[7],instr[14:12]};
+          prB[0]={instr[7],instr[15:12]};
       end else if (opcode_sub[0]|subIsBasicShift) begin
           prA[0]=5'd16;
           prT[0]={1'b0,instr[11:8]};
       end else begin
           prA[0]={instr[6],instr[11:8]};
-          prT[0]={1'b0,instr[7],instr[14:12]};
+          prT[0]={instr[7],instr[15:12]};
           prB[0]=5'd16; 
       end
 
@@ -768,7 +768,7 @@ module smallInstr_decoder(
        endcase
        //verilator lint_on CASEINCOMPLETE
        prB[1]={instr[6]&&!(opcode_sub==6'h29 || opcode_sub==6'h26 || opcode_sub==6'h27),instr[11:8]};
-       prT[1]={1'b0,instr[7]&&!(opcode_sub==6'h29 || opcode_sub==6'h26 || opcode_sub==6'h27),instr[14:12]};
+       prT[1]={instr[7]&&!(opcode_sub==6'h29 || opcode_sub==6'h26 || opcode_sub==6'h27),instr[15:12]};
 
        trien[2]=~magic[0] & subIsCmpTest;
        puseBConst[2]=opcode_sub[0] & ~(opcode_sub[2:1]==2'h3);
@@ -780,7 +780,7 @@ module smallInstr_decoder(
        pport[2]=PORT_ALU;
        pflags_write[2]=1'b1;
        prB[2]={instr[6],instr[11:8]};
-       prA[2]={1'b0,instr[7]&&!(opcode_sub[0] & ~(opcode_sub[2:1]==2'h3)),instr[14:12]};
+       prA[2]={instr[7]&&!(opcode_sub[0] & ~(opcode_sub[2:1]==2'h3)),instr[15:12]};
        //verilator lint_off CASEINCOMPLETE
        case (opcode_sub[2:1])
          2'h1:  poperation[2]=`op_sub64;
@@ -790,7 +790,7 @@ module smallInstr_decoder(
        //verilator lint_on CASEINCOMPLETE
       
        trien[3]=1'b0;//~magic[0] & subIsCJ;
-       pconstant[3]={{56{instr[14]}},instr[14:8],1'b0};
+       pconstant[3]={{55{instr[15]}},instr[15:8],1'b0};
        pport[3]=0;
        pjumpType[3]=({instr[7:6],instr[1:0]}==4'hf) ? 5'h10 : 
          {1'b0,instr[7:6],instr[1:0]};
@@ -804,11 +804,11 @@ module smallInstr_decoder(
        if (~prevSpecLoad) begin
            prA[4]={1'b0,instr[11:8]};
            prT[4]={1'b0,instr[11:8]};
-           prB[4]={1'b0,instr[7],instr[14:12]};
+           prB[4]={instr[7],instr[15:12]};
        end else begin
            prB[4]=5'd15; //not a mistake; fpu spec instr is 15 rather than 16
            prT[4]={1'b0,instr[11:8]};
-           prA[4]={1'b0,instr[7],instr[14:12]};
+           prA[4]={instr[7],instr[15:12]};
        end
        prA_useF[4]=1'b1;
        prB_useF[4]=1'b1;
@@ -834,11 +834,11 @@ module smallInstr_decoder(
        if (~prevSpecLoad) begin
            prA[5]={1'b0,instr[11:8]};
            prT[5]={1'b0,instr[11:8]};
-           prB[5]={1'b0,instr[7],instr[14:12]};
+           prB[5]={instr[7],instr[15:12]};
        end else begin
            prB[5]=5'd15; 
            prT[5]={1'b0,instr[11:8]};
-           prA[5]={1'b0,instr[7],instr[14:12]};
+           prA[5]={instr[7],instr[15:12]};
        end
        prA_useF[5]=1'b1;
        prB_useF[5]=1'b1;
@@ -862,11 +862,11 @@ module smallInstr_decoder(
        if (~prevSpecLoad) begin
            prA[6]={1'b0,instr[11:8]};
            prT[6]={1'b0,instr[11:8]};
-           prB[6]={2'b0,instr[14:12]};
+           prB[6]={1'b0,instr[15:12]};
        end else begin
            prB[6]=5'd15;
            prT[6]={1'b0,instr[11:8]};
-           prA[6]={2'b0,instr[14:12]};
+           prA[6]={1'b0,instr[15:12]};
        end
        prA_useF[6]={opcode_sub[2:1],opcode_main[7:6]}!=4'b0111;
        prB_useF[6]=1'b1;
@@ -890,11 +890,11 @@ module smallInstr_decoder(
        if (~prevSpecLoad) begin
            prA[7]={1'b0,instr[11:8]};
            prT[7]={1'b0,instr[11:8]};
-           prB[7]={2'b0,instr[14:12]};
+           prB[7]={1'b0,instr[15:12]};
        end else begin
            prB[7]=5'd15; 
            prT[7]={1'b0,instr[11:8]};
-           prA[7]={2'b0,instr[14:12]};
+           prA[7]={1'b0,instr[15:12]};
        end
        prA_useF[7]=1'b1;
        prB_useF[7]=1'b1;
@@ -913,23 +913,23 @@ module smallInstr_decoder(
        if (opcode_sub[1]) begin
            //inc dec neg
            pport[8]=PORT_ALU;
-	   prA[8]={instr[11:10]==2'b0,instr[11:8]};
-           prB[8]={instr[11:10]==2'b0,instr[11:8]};
-           prT[8]={instr[11:10]==2'b0,instr[11:8]};
+	   prA[8]=instr[12:8];
+           prB[8]=instr[12:8];
+           prT[8]=instr[12:8];
            poperation[8][2]=instr[13];
            poperation[8][0]=instr[14];
-           poperation[8][8]=instr[12];
-           poperation[8][9]=~instr[12];
-           prA_use[8]=~instr[12];
+           poperation[8][8]=instr[15];
+           poperation[8][9]=~instr[15];
+           prA_use[8]=~instr[15];
            prB_use[8]=1'b1;
-           puseBConst[8]=instr[12];
+           puseBConst[8]=instr[15];
            pconstant[8]=64'd1;
            prT_use[8]=1'b1;
            puseRs[8]=1'b1;
            prAlloc[8]=1'b1;
            pflags_use[8]=1'b1;
            pflags_write[8]=1'b1;
-           if ({instr[12],instr[14:13]}==3'h7) perror[8]=2'b1;
+           if (instr[15:13]==3'h7) perror[8]=2'b1;
        end else begin
            pport[8]=PORT_ALU;
            poperation[8][12]=1'b1;
@@ -938,7 +938,7 @@ module smallInstr_decoder(
            prA_use[8]=1'b0;
            prT_use[8]=1'b1;
            pisIPRel[8]=1'b1;
-           pconstant[8]={60'b0,instr[14:12],1'b0};
+           pconstant[8]={59'b0,instr[15:12],1'b0};
            prT[8]={1'b1,instr[11:8]};
            poperation[8][7:0]=mode64 ? `op_add64 : `op_add32;
            puseRs[8]=1'b1;
