@@ -1679,11 +1679,11 @@ module backend(
   reg [REG_WIDTH-1:0] FUreg_reg7[9:0];
   reg FUwen_reg7[9:0];
   reg [SIMD_WIDTH-1:0] FUVH_reg[9:0];
-  reg [SIMD_WIDTH-1:0] FUVL_reg[9:0];
+  reg [16+SIMD_WIDTH-1:0] FUVL_reg[9:0];
   reg [SIMD_WIDTH-1:0] FUFH_reg[9:0];
   reg [16+SIMD_WIDTH-1:0] FUFL_reg[9:0];
   reg [SIMD_WIDTH-1:0] FUVH_reg2[9:0];
-  reg [SIMD_WIDTH-1:0] FUVL_reg2[9:0];
+  reg [16+SIMD_WIDTH-1:0] FUVL_reg2[9:0];
   reg [SIMD_WIDTH-1:0] FUFH_reg2[9:0];
   reg [16+SIMD_WIDTH-1:0] FUFL_reg2[9:0];
 
@@ -3015,7 +3015,7 @@ module backend(
   .write9_addr_reg(FUreg_reg3[9]),.write9_data_reg(FUVH_reg[9]),.write9_wen_reg(FUwen_reg3[9])
   );
 
-  regfile #(SIMD_WIDTH) regAVL_mod(
+  regfile #(16+SIMD_WIDTH) regAVL_mod(
   .clk(clk),
   .rst(rst),
   .read_clkEn(~doStall),
@@ -3680,7 +3680,7 @@ module backend(
   .write9_addr_reg(FUreg_reg3[9]),.write9_data_reg(FUVH_reg[9]),.write9_wen_reg(FUwen_reg3[9])
   );
 
-  regfile #(SIMD_WIDTH) regBVL_mod(
+  regfile #(16+SIMD_WIDTH) regBVL_mod(
   .clk(clk),
   .rst(rst),
   .read_clkEn(~doStall),
