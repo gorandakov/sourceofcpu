@@ -338,7 +338,9 @@ module smallInstr_decoder(
  
   assign reor_en_out=isFPUreor&&~reor_error;
   assign reor_val_out=instr[31:8];
-  assign thisSpecLoad=1'b0;
+  assign thisSpecLoad=isBaseSpecLoad || isBaseIndexSpecLoad || ({instr[11],instr[15:12]}==5'd16 && 
+      opcode_main[7:0]==8'b10110000 && !instr[10]) || ({instr[1],instr[15:12]}==5'd15 &&                      
+      opcode_main[7:2]==6'd15 && !instr[0]);
   assign subIsBasicALU=opcode_sub[5:4]==2'b0 || opcode_sub[5:2]==4'b0100;
   assign subIsBasicXOR=opcode_sub[5:2]==4'b0100;//not a separate class
   assign subIsBasicShift=~opcode_sub[5] && ~subIsBasicALU && opcode_sub[0];
@@ -1244,9 +1246,69 @@ module smallInstr_decoder(
 	  //jump imm={instr[27:8],1'b0}
       end
     
-      //trien[17]=magic[0] & isBaseSpecLoad;
+      trien[17]=magic[0] & isBaseSpecLoad;
+      pport[17]=PORT_LOAD;
+      poperation[17][5:0]={opcode_main[7],instr[11:8],1'b0};
+      poperation[17][12:6]=7'b0;
+      prA_use[17]=1'b0;
+      prB_use[17]=1'b1;
+      prT_use[17]=opcode_main[7];
+      prT_useF[17]=~opcode_main[7];
+      prT_isV[17]=~opcode_main[7] & fop_v({instr[11:8],1'b0});
+      puseRs[17]=1'b1;
+      prAlloc[17]=1'b1;
+      puseBConst[17]=1'b0;
+      //if (prevSpecLoad) rT=5'd17;
+      //else 
+      prT[17]=opcode_main[7] ? 5'd16 : 5'd15;
+      pthisSpecLoad[17]=1'b1;
+          
+      if (magic[1:0]==2'b01) begin
+          prB[17]=instr[16:12];
+      end else begin
+          prB[17]={1'b0,instr[15:12]};
+      end
+      if (opcode_main[7] && instr[11]) perror[17]=1;          
       
-     // trien[18]=magic[0] & isBaseIndexSpecLoad;
+      trien[18]=magic[0] & isBaseIndexSpecLoad;
+          pport[18]=PORT_LOAD;
+          poperation[18][6:0]={~(magic==4'b0111 && instr[57]),opcode_main[7],instr[11:8],1'b0};
+          poperation[18][9:8]=magic[2:0]==3'b111 ? instr[53:52] :( magic[1:0]==2'b01 ? 
+            instr[22:21] : instr[24:23]);
+          poperation[18][12:10]=3'b0;
+          poperation[18][7:6]=2'b0;
+          prA_use[18]=~(magic==4'b0111 && instr[57]);
+          prT_use[18]=opcode_main[7];
+          prT_useF[18]=~opcode_main[7];
+          prT_isV[18]=~opcode_main[7] && fop_v({instr[11:8],1'b0});
+          puseRs[18]=1'b1;
+          prAlloc[18]=1'b1;
+          puseBConst[18]=magic==4'b0111 & instr[58];
+          if (magic[2:0]!=3'b111) pconstant[18]=(magic[1:0]==2'b11) ? {{9+32{instr[47]}},instr[47:25]} : {{23+32{instr[31]}},instr[31:23]};
+          perror[18]=2'b0;
+         // if (prevSpecLoad) rT=5'd17;
+         // else 
+          prT[18]=5'd16;
+          pthisSpecLoad[18]=1'b1;
+          if (magic==4'b0111) begin 
+              prB[18]={instr[55],instr[15:12]};
+              prA[18]={instr[56],instr[51:48]};
+              perror[18]=0;
+          end else if (magic[0]) begin
+              prB[18]={instr[21]&&magic[1:0]!=2'b01,instr[15:12]};
+              prA[18]={instr[22]&&magic[1:0]!=2'b01,instr[19:16]};
+          end else begin
+              perror[18]=1;
+          end
+          if (opcode_main[7] && instr[11]) perror[18]=1;          
+          prA_use[18]=~(magic==4'b0111 && instr[57]);
+          prB_use[18]=1'b1;
+          pisIPRel[18]=1'b0;//magic==4'b0111 && instr[59];
+          if (|poperation[18][9:8] && ~poperation[18][6]) perror[18]=1;
+          if (magic[2:0]==3'b111 && instr[59] && ~instr[58]) perror[18]=1;
+          if (magic[2:0]==3'b111 && instr[63:60]!=0) perror[18]=1;
+          if (opcode_main[7] && instr[11]) perror[18]=1'b1;          
+          if (riscmove) perror[18]=1'b1;
 
       
       trien[19]=magic[1:0]==2'b11 && isImmLoadStore;
