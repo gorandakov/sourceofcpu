@@ -509,6 +509,7 @@ module frontendSelf(
   reg [3:0] taken_reg2;
   reg [3:0] taken_reg3;
   reg [3:0] taken_reg4;
+  reg [3:0] taken_reg5;
   reg [3:0] taken_REG;
   wire [3:0] takenA;
   wire [3:0] takenB;
@@ -1428,13 +1429,13 @@ module frontendSelf(
   );
 
   assign tbuf_error[0]=jmp_off_reg[0]!=btb_off_reg4[0] || ~jdec_type[0][4] && btb_tgt0_reg4!=jdec_target[0] || 
-      jdec_link0[4:0]!=btb_jlnpos0_reg4 || lnk_off0_reg!=btb_jlnjpos0_reg4 || (tlb_phys_reg[23:14]!=cc_read_IP_reg4[63:44] && taken_reg4);
+      jdec_link0[4:0]!=btb_jlnpos0_reg4 || lnk_off0_reg!=btb_jlnjpos0_reg4 || (tlb_phys_reg[23:14]!=cc_read_IP_reg4[63:44] && taken_reg5);
   assign tbuf_error[1]=jmp_off_reg[1]!=btb_off_reg4[1] || ~jdec_type[1][4] && btb_tgt1_reg4!=jdec_target[1] || 
-      jdec_link1[4:0]!=btb_jlnpos1_reg4 || lnk_off1_reg!=btb_jlnjpos1_reg4 || (tlb_phys_reg[23:14]!=cc_read_IP_reg4[63:44] && taken_reg4);
+      jdec_link1[4:0]!=btb_jlnpos1_reg4 || lnk_off1_reg!=btb_jlnjpos1_reg4 || (tlb_phys_reg[23:14]!=cc_read_IP_reg4[63:44] && taken_reg5);
   assign tbuf_error[2]=jmp_off_reg[2]!=btb_off_reg4[2] || ~jdec_type[2][4] && btb_tgt2_reg4!=jdec_target[2] || 
-      jdec_link2[4:0]!=btb_jlnpos2_reg4 || lnk_off2_reg!=btb_jlnjpos2_reg4 || (tlb_phys_reg[23:14]!=cc_read_IP_reg4[63:44] && taken_reg4);
+      jdec_link2[4:0]!=btb_jlnpos2_reg4 || lnk_off2_reg!=btb_jlnjpos2_reg4 || (tlb_phys_reg[23:14]!=cc_read_IP_reg4[63:44] && taken_reg5);
   assign tbuf_error[3]=jmp_off_reg[3]!=btb_off_reg4[3] || ~jdec_type[3][4] && btb_tgt3_reg4!=jdec_target[3] || 
-      jdec_link3[4:0]!=btb_jlnpos3_reg4 || lnk_off3_reg!=btb_jlnjpos3_reg4 || (tlb_phys_reg[23:14]!=cc_read_IP_reg4[63:44] && taken_reg4);
+      jdec_link3[4:0]!=btb_jlnpos3_reg4 || lnk_off3_reg!=btb_jlnjpos3_reg4 || (tlb_phys_reg[23:14]!=cc_read_IP_reg4[63:44] && taken_reg5);
 
   ght GHT_mod(
   .clk(clk),
@@ -1871,6 +1872,7 @@ module frontendSelf(
           taken_reg2<=4'b0;
           taken_reg3<=4'b0;
           taken_reg4<=4'b0;
+          taken_reg5<=5'b0;
 	  predx_sc0_reg<=2'b0;
 	  predx_sc1_reg<=2'b0;
 	  predx_sc2_reg<=2'b0;
@@ -2164,6 +2166,7 @@ module frontendSelf(
           taken_reg2<=taken_reg;
           taken_reg3<=taken_reg2;
           taken_reg4<=taken_reg3;
+          taken_reg5<=taken_reg3;
 	  predx_sc0_reg<=predx_sc0;
 	  predx_sc1_reg<=predx_sc1;
 	  predx_sc2_reg<=predx_sc2;
@@ -2241,6 +2244,7 @@ module frontendSelf(
           do_seq_reg5<=do_seq_reg4;
           btb_hasTK_reg4<=btb_hasTK;
           taken_reg4<=taken;
+          taken_reg5<=taken_reg;
 	  predx_sc0_reg4<=predx_sc0;
 	  predx_sc1_reg4<=predx_sc1;
 	  predx_sc2_reg4<=predx_sc2;
