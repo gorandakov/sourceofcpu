@@ -29,6 +29,7 @@ module frontendSelf(
   exceptLDConfl,
   except_jmask,
   except_jmask_en,
+  except_indir,
   jupd0_en,jupdt0_en,jupd0_ght_en,jupd0_ght2_en,jupd0_addr,jupd0_baddr,jupd0_sc,jupd0_val,jupd0_tk,
   jupd1_en,jupdt1_en,jupd1_ght_en,jupd1_ght2_en,jupd1_addr,jupd1_baddr,jupd1_sc,jupd1_val,jupd1_tk,
   bus_data,
@@ -108,6 +109,7 @@ module frontendSelf(
   input exceptLDConfl;
   input [3:0] except_jmask;
   input except_jmask_en;
+  input except_indir;
   input jupd0_en;
   input jupdt0_en;
   input jupd0_ght_en;
@@ -391,6 +393,7 @@ module frontendSelf(
   reg [7:0] dreq_reg4; 
 
   reg except_save;
+  reg except_indir_save;
   reg [VIRT_WIDTH-1:0] exceptIP_save;
   reg [3:0] exceptAttr_save;
   reg exceptThread_save;
@@ -406,6 +409,7 @@ module frontendSelf(
   wire ixceptThread;
   wire ixceptDueJump;
   wire ixceptLDConfl;
+  wire ixcept_indir;
   wire [7:0] ixceptJumpGHT;
   wire [3:0] ixcept_jmask;
   wire ixcept_jmask_en;
@@ -778,6 +782,7 @@ module frontendSelf(
   wire [3:0] btbx_attr2;
   wire [3:0] btbx_attr3;
   wire [3:0] btb_attr;
+
   wire jlninx0,jlninx1,jlninx2,jlninx3;
   wire jlnin0,jlnin1,jlnin2,jlnin3;
   wire [4:0] btbx_jlnoff;
@@ -1034,10 +1039,10 @@ module frontendSelf(
   assign miss_recover=(bus_match0_reg3 && ~miss_seq && dreq_reg4==0)|| bus_tlb_match_reg3;
 
 
-  assign uxcept=except & ~miss_now & ~btb_hold_except || except_save & ~miss_now &
+  assign uxcept=except & ~miss_now & ~btb_hold_except & ~except_indir || except_save & ~miss_now &
     ~fstall & ~ixcept;
   
-  assign ixceptIP=(~except_save) ? exceptIP : exceptIP_save;
+  assign ixceptIP=(~except_save) ? exceptIP : {tlb_data[-10+`dtlbData_phys],exceptIP_save[43:0]};
   assign ixceptAttr=(~except_save) ? exceptAttr : exceptAttr_save;
   assign ixceptThread=(~except_save) ? exceptThread : exceptThread_save;
   assign ixceptDueJump=(~except_save) ? exceptDueJump : exceptDueJump_save;
@@ -1045,6 +1050,7 @@ module frontendSelf(
   assign ixceptJumpGHT=(~except_save) ? exceptJumpGHT : exceptJumpGHT_save;
   assign ixcept_jmask=(~except_save) ? except_jmask : except_jmask_save;
   assign ixcept_jmask_en=(~except_save) ? except_jmask_en : except_jmask_en_save;
+  assign ixcept_indir=(~except_save) ? 1'b0 : except_indir_save;
   
   assign btbFStall=instrEn_reg3 & ~(cc_read_hit && btb_hit_reg3)
     & pre_has_jumps; 
@@ -1185,6 +1191,23 @@ module frontendSelf(
   .fStall(fstall),
   .addr({tlb_IP,13'b0}),
   .read_data(tlb_data),
+  .nat_jump(1'b0),
+  .read_hit(tlb_hit),
+  .write_data(bus_tlb_data_reg),
+  .write_wen(bus_tlb_match_reg),
+  .csrss_en(csrss_en),
+  .csrss_addr(csrss_addr),
+  .csrss_data(csrss_data)
+  );
+
+  ctlb tlb2_mod(
+  .clk(clk),
+  .rst(rst),
+  .read_clkEn(except_save),
+  .read_thread(thread),
+  .fStall(fstall),
+  .addr({proc[20:0],exceptIP_save[43:14],13'b0}),
+  .read_data(tlb_data3),
   .nat_jump(1'b0),
   .read_hit(tlb_hit),
   .write_data(bus_tlb_data_reg),
@@ -1358,6 +1381,7 @@ module frontendSelf(
   .except_due_jump(ixceptDueJump),
   .except_jmask(ixcept_jmask),
   .except_jmask_en(ixcept_jmask_en),
+  .except_indir(ixcept_indir),
   .mismatch_stall(fmstall),
   .uxcept(uxcept),
   .read_clkEn(ixcept || ~fstall & new_instrEn||
@@ -1683,6 +1707,7 @@ module frontendSelf(
           exceptJumpGHT2_save<=16'b0;
           except_jmask_save<=4'b0;
           except_jmask_en_save<=1'b0;
+          except_indir_save<=1'b0;
       end else if (except) begin
           except_save<=1'b1;
           exceptIP_save<=exceptIP;
@@ -1694,6 +1719,7 @@ module frontendSelf(
           exceptJumpGHT2_save<=exceptJumpGHT2;
           except_jmask_save<=except_jmask;
           except_jmask_en_save<=except_jmask_en;
+          except_indir_save<=except_indir;
       end else if (ixcept) begin
           except_save<=1'b0;
           exceptIP_save<={64{1'B0}};
@@ -1705,6 +1731,7 @@ module frontendSelf(
           exceptJumpGHT2_save<=16'b0;
           except_jmask_save<=4'b0;
           except_jmask_en_save<=1'b0;
+          except_indir_save<=1'b0;
       end
      
       if (rst) ixcept<=1'b0;

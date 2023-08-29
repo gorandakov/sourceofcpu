@@ -19,7 +19,7 @@ limitations under the License.
 
 
 //read-during-write behaviour: write first
-module tbuf_ram(
+module tbuf_ram0(
   clk,
   rst,
   read_clkEn,
@@ -30,7 +30,83 @@ module tbuf_ram(
   write_wen
   );
 
-  parameter DATA_WIDTH=(`btb_width+3)/3;
+  parameter DATA_WIDTH=29;
+  parameter ADDR_WIDTH=9;
+  parameter ADDR_COUNT=512;
+
+  input clk;
+  input rst;
+  input read_clkEn;
+  input [ADDR_WIDTH-1:0] read_addr;
+  output [DATA_WIDTH-1:0] read_data;
+  input [ADDR_WIDTH-1:0] write_addr;
+  input [DATA_WIDTH-1:0] write_data;
+  input write_wen;
+
+  reg [DATA_WIDTH-1:0] ram [ADDR_COUNT-1:0];
+  reg [ADDR_WIDTH-1:0] read_addr_reg;
+  
+  assign read_data=ram[read_addr_reg];
+
+  always @(posedge clk)
+    begin
+      if (write_wen) ram[write_addr]<=write_data;
+      if (rst) read_addr_reg<={ADDR_WIDTH{1'b0}};
+      else if (read_clkEn) read_addr_reg<=read_addr;
+    end
+
+endmodule
+
+module tbuf_ram1(
+  clk,
+  rst,
+  read_clkEn,
+  read_addr,
+  read_data,
+  write_addr,
+  write_data,
+  write_wen
+  );
+
+  parameter DATA_WIDTH=63;
+  parameter ADDR_WIDTH=9;
+  parameter ADDR_COUNT=512;
+
+  input clk;
+  input rst;
+  input read_clkEn;
+  input [ADDR_WIDTH-1:0] read_addr;
+  output [DATA_WIDTH-1:0] read_data;
+  input [ADDR_WIDTH-1:0] write_addr;
+  input [DATA_WIDTH-1:0] write_data;
+  input write_wen;
+
+  reg [DATA_WIDTH-1:0] ram [ADDR_COUNT-1:0];
+  reg [ADDR_WIDTH-1:0] read_addr_reg;
+  
+  assign read_data=ram[read_addr_reg];
+
+  always @(posedge clk)
+    begin
+      if (write_wen) ram[write_addr]<=write_data;
+      if (rst) read_addr_reg<={ADDR_WIDTH{1'b0}};
+      else if (read_clkEn) read_addr_reg<=read_addr;
+    end
+
+endmodule
+
+module tbuf_ram2(
+  clk,
+  rst,
+  read_clkEn,
+  read_addr,
+  read_data,
+  write_addr,
+  write_data,
+  write_wen
+  );
+
+  parameter DATA_WIDTH=`tbuf_width-29-4*63;
   parameter ADDR_WIDTH=9;
   parameter ADDR_COUNT=512;
 
@@ -65,7 +141,8 @@ module tbuf_ram_block(
   read_data,
   write_addr,
   write_data,
-  write_wen
+  write_wen,
+  ioen
   );
 
   parameter DATA_WIDTH=`btb_width;
@@ -80,41 +157,70 @@ module tbuf_ram_block(
   input [ADDR_WIDTH-1:0] write_addr;
   input [DATA_WIDTH-1:0] write_data;
   input write_wen;
+  input [3:0] ioen;
 
-  //verilator lint_off WIDTH
-  tbuf_ram ram0_mod(
+  tbuf_ram0 ram0_mod(
   clk,
   rst,
   read_clkEn,
   read_addr,
-  read_data[(DATA_WIDTH+2)/3-1:0],
+  read_data[28:0],
   write_addr,
-  write_data[(DATA_WIDTH+2)/3-1:0],
-  write_wen
+  write_data[28:0],
+  write_wen&&ioen==15
   );
 
-  tbuf_ram ram1_mod(
+  tbuf_ram1 ram10_mod(
   clk,
   rst,
   read_clkEn,
   read_addr,
-  read_data[(DATA_WIDTH+2)/3*2-1:(DATA_WIDTH+2)/3],
+  read_data[`btb_tgt0],
   write_addr,
-  write_data[(DATA_WIDTH+2)/3*2-1:(DATA_WIDTH+2)/3],
-  write_wen
+  write_data[`btb_tgt0],
+  write_wen&ioen[0]
+  );
+  tbuf_ram1 ram11_mod(
+  clk,
+  rst,
+  read_clkEn,
+  read_addr,
+  read_data[`btb_tgt1],
+  write_addr,
+  write_data[`btb_tgt1],
+  write_wen&ioen[1]
+  );
+  tbuf_ram1 ram12_mod(
+  clk,
+  rst,
+  read_clkEn,
+  read_addr,
+  read_data[`btb_tgt2],
+  write_addr,
+  write_data[`btb_tgt2],
+  write_wen&ioen[2]
+  );
+  tbuf_ram1 ram13_mod(
+  clk,
+  rst,
+  read_clkEn,
+  read_addr,
+  read_data[`btb_tgt3],
+  write_addr,
+  write_data[`btb_tgt3],
+  write_wen&ioen[3]
   );
   
-  tbuf_ram ram2_mod(
+  tbuf_ram2 ram2_mod(
   clk,
   rst,
   read_clkEn,
   read_addr,
-  read_data[DATA_WIDTH-1:(DATA_WIDTH+2)/3*2],
+  read_data[DATA_WIDTH-1:29+4*63],
   write_addr,
-  {1'b0,write_data[DATA_WIDTH-1:(DATA_WIDTH+2)/3*2]},
-  write_wen
+  {1'b0,write_data[DATA_WIDTH-1:29+4*63},
+  write_wen&&ioen==15
   );
-  //verilator lint_on WIDTH
 endmodule
 
 //read-during-write behaviour: write first;
@@ -185,6 +291,7 @@ module tbuf_way(
   read_clkEn,
   mStall,
   except_reg,
+  except_indir_reg,
   nextIP,
   read_hit,read_hit_other,
   read_hitLRU,
@@ -234,6 +341,7 @@ module tbuf_way(
   input read_clkEn;
   input mStall;
   input except_reg;
+  input except_indir_reg;
   input [IP_WIDTH-1:1] nextIP;
   output read_hit;
   input read_hit_other;
@@ -900,7 +1008,8 @@ module tbuf_way(
 //  assign read_hitLRU=read_hit ? read_LRU : 1'bz;
   
   assign ram_wen=write_wen & read_hit || write_insert & (write_way==WAY) || 
-    (mStall && ~write_wen && ~write_insert && taken_reg!=0 && ~except_reg);
+    (mStall && ~write_wen && ~write_insert && taken_reg!=0 && ~except_reg) || except_reg & except_indir_reg & 
+    (update_taken_reg[0] ? update_addr0_reg[0]==WAY : update_addr1_reg[0]==WAY && update_taken_reg[1]);
 
   assign write_data=(write_insert|write_wen && ~init) ? write_dataW : 'z;
   assign write_data=(~write_insert & ~write_wen & ~init) ? {write_LRU_reg,write_dataJ} : 'z;
@@ -930,25 +1039,36 @@ module tbuf_way(
   assign write_addr=(mStall & ~init) ? IP_wbits_reg : 10'bz;
   
   always @* begin
+      ioen=15;
       write_dataJ=btb_data_reg[`btb_width-2:0];
        //verilator lint_off CASEINCOMPLETE
-      case(taken_reg)
-      4'b1: write_dataJ[`btb_tgt_jmask0]=jmp_mask_in;
-      4'b10: write_dataJ[`btb_tgt_jmask1]=jmp_mask_in;
-      4'b100: write_dataJ[`btb_tgt_jmask2]=jmp_mask_in;
-      4'b1000: write_dataJ[`btb_tgt_jmask3]=jmp_mask_in;
+      case({except_reg,taken_reg})
+      5'b1: write_dataJ[`btb_tgt_jmask0]=jmp_mask_in;
+      5'b10: write_dataJ[`btb_tgt_jmask1]=jmp_mask_in;
+      5'b100: write_dataJ[`btb_tgt_jmask2]=jmp_mask_in;
+      5'b1000: write_dataJ[`btb_tgt_jmask3]=jmp_mask_in;
+      default: begin
+          case(update_taken_reg[0] ? update_addr0_reg[12:11] : update_addr1_reg[12:11])
+          2'd0: begin write_dataJ[`btb_tgt0]=nextIP_reg[63:1]; ioen=1; end
+          2'd1: begin write_dataJ[`btb_tgt1]=nextIP_reg[63:1]; ioen=2; end
+          2'd2: begin write_dataJ[`btb_tgt2]=nextIP_reg[63:1]; ioen=4; end
+          2'd3: begin write_dataJ[`btb_tgt3]=nextIP_reg[63:1]; ioen=8; end
+          endcase
+      end
       endcase
        //verilator lint_on CASEINCOMPLETE
   end
+  reg[3:0]ioen;
   tbuf_ram_block tbuf_mod(
   .clk(clk),
   .rst(rst),
   .read_clkEn(read_clkEn),
   .read_addr(nextIP[13:5]),
   .read_data(btb_data),
-  .write_addr(write_addr[8:0]),
+  .write_addr(except_indir_reg ? update_addr_reg[8:0] : write_addr[8:0]),
   .write_data(write_data),
-  .write_wen((ram_wen&&write_addr[9]==HALF)|init)
+  .write_wen((ram_wen&&write_addr[9]==HALF)|init),
+  .ioen(ioen)
   );
   
   tbufExtra_ram ex0_mod(
@@ -1161,6 +1281,7 @@ module tbuf_way_2(
   read_clkEn,
   mStall,
   except_reg,
+  except_indir_reg,
   nextIP,
   read_hit,
   read_hit_other,
@@ -1209,6 +1330,7 @@ module tbuf_way_2(
   input read_clkEn;
   input mStall;
   input except_reg;
+  input except_indir_reg;
   input [IP_WIDTH-1:1] nextIP;
   output read_hit;
   input read_hit_other;
@@ -1305,6 +1427,7 @@ module tbuf_way_2(
     read_clkEn|write_wen|write_insert,
     mStall,
     except_reg,
+    except_indir_reg,
     nextIP,
     read_hit0,
     read_hit_other,
@@ -1347,6 +1470,7 @@ module tbuf_way_2(
       read_clkEn|write_wen|write_insert,
       mStall,
       except_reg,
+      except_indir_reg,
       nextIP,
       read_hit1,read_hit_other,
       read_hitLRU,
@@ -1403,6 +1527,7 @@ module tbuf(
   except_due_jump,
   except_jmask,
   except_jmask_en,
+  except_indir,
   mismatch_stall,
   uxcept,
   read_clkEn,
@@ -1458,6 +1583,7 @@ module tbuf(
   input except_due_jump;
   input [3:0] except_jmask;
   input except_jmask_en;
+  input except_indir;
   input mismatch_stall;
   input uxcept;
   input read_clkEn;
@@ -1702,6 +1828,7 @@ module tbuf(
   reg  scupd_en,scupd_en_reg;
   wire [12:0] scupd_addr;
   reg except_reg;
+  reg except_indir_reg;
   reg except_jmask_en_reg;
   reg [3:0] except_jmask_reg;
 
@@ -1728,6 +1855,7 @@ module tbuf(
   read_clkEn|uxcept,
   mismatch_stall&~uxcept,
   except_reg,
+  except_indir_reg,
   nextIP,
   read_hit_way[0],
   read_hit_way[1],
@@ -1771,6 +1899,7 @@ module tbuf(
   read_clkEn|uxcept,
   mismatch_stall&~uxcept,
   except_reg,
+  except_indir_reg,
   nextIP,
   read_hit_way[1],
   read_hit_way[0],
@@ -1922,6 +2051,7 @@ module tbuf(
           jump_mask3_reg<=4'b0; 
           taken_reg<=4'b0;
           except_reg<=1'b0;
+          except_indir_reg<=1'b0;
           except_jmask_en_reg<=1'b0;
           except_jmask_reg<=4'hf;         
       end else begin
@@ -1985,6 +2115,7 @@ module tbuf(
           scupd_en<=except_due_jump & except;
           scupd_en_reg<=scupd_en;
           except_reg<=except;
+          except_indir_reg<=except_indir;
           except_jmask_en_reg<=except_jmask_en;
           except_jmask_reg<=except_jmask;
       end
