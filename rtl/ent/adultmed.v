@@ -733,7 +733,6 @@ module smallInstr_decoder(
       if (~prevSpecLoad && opcode_sub[0]|subIsBasicShift) begin
           prA[0]={1'b0,instr[11:8]};
           prT[0]={1'b0,instr[11:8]};
-          prB[0]={instr[7],instr[15:12]};
       end else if (~prevSpecLoad) begin
           prA[0]={instr[6],instr[11:8]};
           prT[0]={instr[6],instr[11:8]};
