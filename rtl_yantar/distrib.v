@@ -186,6 +186,8 @@ module yantar_gen_purp0(
           assign read_dataA=read_addr[k]==write1_addr_reg && !ren ? write_data1_reg : 65'bz;
           assign read_dataA=read_addr[k]==write2_addr_reg && !ren ? write_data2_reg : 65'bz;
           assign read_dataA=read_addr[k]==write3_addr_reg && !ren ? write_data3_reg : 65'bz;
+          assign read_dataA=read_addr[k]!=write0_addr_reg && read_addr[k]!=write1_addr_reg &&
+              read_addr[k]!=write2_addr_reg && read_addr[k]!=write3_addr_reg && !ren ? read_data[k] : 65'bz;
       end
   endgenerate
 
