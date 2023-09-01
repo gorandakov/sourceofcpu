@@ -32,6 +32,8 @@ module decoder_permitted_i(
   sys,
   pos0,
   FPU,
+  spec,
+  specNext,
   iAvail,
   stall,
   halt,
@@ -51,6 +53,8 @@ module decoder_permitted_i(
   input [9:0] sys;
   input [9:0] pos0;
   input [9:0] FPU;
+  input [9:0] spec;
+  input [9:0] specNext;
   input [9:0] iAvail;
   input stall;
   input halt;
@@ -112,8 +116,9 @@ module decoder_permitted_i(
           
           assign permB[k]=branch_cnt[k][2] & taken_cnt[k][1] & indir_cnt[k][1];
 
-          if (k<9) assign perm[k]=permX[k] && fma_dke[k][0] | (permX[k+1] && fma_dke[k+1][2]) | fma_dke[k][2] | (k==0);
-          else  assign perm[k]=permX[k] && fma_dke[k][0] | fma_dke[k][2];
+          if (k<9) assign perm[k]=permX[k] && (fma_dke[k][0] | (permX[k+1] && fma_dke[k+1][2]) | fma_dke[k][2] | (k==0)) &&
+              !spec[k] | permX[k+1];
+          else  assign perm[k]=permX[k] && fma_dke[k][0] | fma_dke[k][2] && !spec[k];
           
           if (k>0)
               assign permC[k]=(|(sys[k:0])) ? sys[k-1:0]==0 && pos0[k]==0 && FPU_dke[k][4] : pos0[k]==0 && FPU_dke[k][4];
@@ -3145,6 +3150,8 @@ module decoder(
   .sys(cls_sys),
   .pos0(cls_pos0),
   .FPU(cls_FPU),
+  .spec(cls_loadFPU),
+  .specNext(10'b0),//unused by module
   .iAvail(iAvail),
   .stall(stall),
   .halt(dec_halt[0]),
