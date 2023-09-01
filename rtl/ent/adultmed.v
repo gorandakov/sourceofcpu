@@ -1249,7 +1249,7 @@ module smallInstr_decoder(
       prT_useF[17]=~opcode_main[7];
       prT_isV[17]=~opcode_main[7] & fop_v({instr[11:8],1'b0});
       puseRs[17]=1'b1;
-      prAlloc[17]=1'b1;
+      prAlloc[17]=1'b0;
       puseBConst[17]=1'b0;
       //if (prevSpecLoad) rT=5'd17;
       //else 
@@ -1275,7 +1275,7 @@ module smallInstr_decoder(
           prT_useF[18]=~opcode_main[7];
           prT_isV[18]=~opcode_main[7] && fop_v({instr[11:8],1'b0});
           puseRs[18]=1'b1;
-          prAlloc[18]=1'b1;
+          prAlloc[18]=1'b0;
           puseBConst[18]=magic==4'b0111 & instr[58];
           if (magic[2:0]!=3'b111) pconstant[18]=(magic[1:0]==2'b11) ? {{9+32{instr[47]}},instr[47:25]} : {{23+32{instr[31]}},instr[31:23]};
           perror[18]=2'b0;
@@ -1337,10 +1337,12 @@ module smallInstr_decoder(
           if (prT[19]==5'd16 && opcode_main[7:0]==8'b10110000) begin
               prT[19]=5'd16;
               pthisSpecLoad[19]=1'b1;
+              prAlloc[19]=1'b0;
           end
           if (prT[19]==5'd15 && opcode_main[7:0]!=8'b10110000) begin
               prT[19]=5'd15;
               pthisSpecLoad[19]=1'b1;
+              prAlloc[19]=1'b0;
           end
       end
       if (opcode_main[0] && (opcode_main[7:1]==7'b1011000 && instr[10]))
