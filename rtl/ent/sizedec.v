@@ -114,6 +114,8 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   wire isCallPrep;
 
   wire [5:0] opcode_sub;
+
+  wire thisSpecLoad;
   
   assign subIsBasicALU=(!|opcode_sub[5:4] || opcode_sub[5:2]==4'b0100) & ~magic[0];
   assign subIsBasicShift=(~opcode_sub[5] && ~subIsBasicALU && opcode_sub[0]) & ~magic[0];
@@ -192,6 +194,11 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   assign isBasicFPUScalarCmp3=opcode_main==8'hf0 && instr[15:12]==4'd12;
 
   assign isCallPrep=(opcode_main==8'd199) && magic[0];
+
+  assign thisSpecLoad=isBaseSpecLoad || isBaseIndexSpecLoad || ({instr[11],instr[15:12]}==5'd16 && 
+      opcode_main[7:0]==8'b10110000 && !instr[10]) || ({instr[1],instr[15:12]}==5'd15 &&                      
+      opcode_main[7:2]==6'd15 && !instr[0]);
+
   
   assign clsJump=|{
   isBasicCJump,
@@ -317,7 +324,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   assign class_[`iclass_store]=clsStore;
   assign class_[`iclass_store2]=clsFMA;
   assign class_[`iclass_FPU]=clsFPU;
-  assign class_[`iclass_loadFPU]=clsLoadFPU;
+  assign class_[`iclass_loadFPU]=thisSpecLoad;
   assign class_[`iclass_sys]=clsSys;
   assign class_[`iclass_flag]=flag;
   assign class_[`iclass_pos0]=clsPos0;
