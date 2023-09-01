@@ -2476,7 +2476,7 @@ module decoder(
   reg [9:0] cls_storeI_reg;
   reg [9:0] cls_store2_reg;
   reg [9:0] cls_FPU_reg;
-  reg [9:0] cls_loadFPU_reg;
+  reg [9:-1] cls_loadFPU_reg;
   reg [9:0] cls_sys_reg;
   reg [9:0] cls_pos0_reg;
   reg [9:0] cls_flag_reg;
@@ -2978,43 +2978,43 @@ module decoder(
           );
 
           decoder_find_single_dep depA_mod(
-          dec_rT_reg[0],dec_rT_use_reg[0] && k>0,dec_rT_useF_reg[0] && k>0,
-          dec_rT_reg[1],dec_rT_use_reg[1] && k>1,dec_rT_useF_reg[1] && k>1,
-          dec_rT_reg[2],dec_rT_use_reg[2] && k>2,dec_rT_useF_reg[2] && k>2,
-          dec_rT_reg[3],dec_rT_use_reg[3] && k>3,dec_rT_useF_reg[3] && k>3,
-          dec_rT_reg[4],dec_rT_use_reg[4] && k>4,dec_rT_useF_reg[4] && k>4,
-          dec_rT_reg[5],dec_rT_use_reg[5] && k>5,dec_rT_useF_reg[5] && k>5,
-          dec_rT_reg[6],dec_rT_use_reg[6] && k>6,dec_rT_useF_reg[6] && k>6,
-          dec_rT_reg[7],dec_rT_use_reg[7] && k>7,dec_rT_useF_reg[7] && k>7,
-          dec_rT_reg[8],dec_rT_use_reg[8] && k>8,dec_rT_useF_reg[8] && k>8,
+          dec_rT_reg[0],dec_rT_use_reg[0] && k>0,dec_rT_useF_reg[0] && (k>0)|(k==0&cls_loadFPU_reg[k-1]),
+          dec_rT_reg[1],dec_rT_use_reg[1] && k>1,dec_rT_useF_reg[1] && (k>1)|(k==1&cls_loadFPU_reg[k-1]),
+          dec_rT_reg[2],dec_rT_use_reg[2] && k>2,dec_rT_useF_reg[2] && (k>2)|(k==2&cls_loadFPU_reg[k-1]),
+          dec_rT_reg[3],dec_rT_use_reg[3] && k>3,dec_rT_useF_reg[3] && (k>3)|(k==3&cls_loadFPU_reg[k-1]),
+          dec_rT_reg[4],dec_rT_use_reg[4] && k>4,dec_rT_useF_reg[4] && (k>4)|(k==4&cls_loadFPU_reg[k-1]),
+          dec_rT_reg[5],dec_rT_use_reg[5] && k>5,dec_rT_useF_reg[5] && (k>5)|(k==5&cls_loadFPU_reg[k-1]),
+          dec_rT_reg[6],dec_rT_use_reg[6] && k>6,dec_rT_useF_reg[6] && (k>6)|(k==6&cls_loadFPU_reg[k-1]),
+          dec_rT_reg[7],dec_rT_use_reg[7] && k>7,dec_rT_useF_reg[7] && (k>7)|(k==7&cls_loadFPU_reg[k-1]),
+          dec_rT_reg[8],dec_rT_use_reg[8] && k>8,dec_rT_useF_reg[8] && (k>8)|(k==8&cls_loadFPU_reg[k-1]0,
           dec_rA_reg[k],dec_rA_useF_reg[k],
           dep_rA[k]
           );
 
           decoder_find_single_dep depB_mod(
-          dec_rT_reg[0],dec_rT_use_reg[0] && k>0,dec_rT_useF_reg[0] && k>0,
-          dec_rT_reg[1],dec_rT_use_reg[1] && k>1,dec_rT_useF_reg[1] && k>1,
-          dec_rT_reg[2],dec_rT_use_reg[2] && k>2,dec_rT_useF_reg[2] && k>2,
-          dec_rT_reg[3],dec_rT_use_reg[3] && k>3,dec_rT_useF_reg[3] && k>3,
-          dec_rT_reg[4],dec_rT_use_reg[4] && k>4,dec_rT_useF_reg[4] && k>4,
-          dec_rT_reg[5],dec_rT_use_reg[5] && k>5,dec_rT_useF_reg[5] && k>5,
-          dec_rT_reg[6],dec_rT_use_reg[6] && k>6,dec_rT_useF_reg[6] && k>6,
-          dec_rT_reg[7],dec_rT_use_reg[7] && k>7,dec_rT_useF_reg[7] && k>7,
-          dec_rT_reg[8],dec_rT_use_reg[8] && k>8,dec_rT_useF_reg[8] && k>8,
+          dec_rT_reg[0],dec_rT_use_reg[0] && k>0,dec_rT_useF_reg[0] && (k>0)|(k==0&cls_loadFPU_reg[k-1]),
+          dec_rT_reg[1],dec_rT_use_reg[1] && k>1,dec_rT_useF_reg[1] && (k>1)|(k==1&cls_loadFPU_reg[k-1]),
+          dec_rT_reg[2],dec_rT_use_reg[2] && k>2,dec_rT_useF_reg[2] && (k>2)|(k==2&cls_loadFPU_reg[k-1]),
+          dec_rT_reg[3],dec_rT_use_reg[3] && k>3,dec_rT_useF_reg[3] && (k>3)|(k==3&cls_loadFPU_reg[k-1]),
+          dec_rT_reg[4],dec_rT_use_reg[4] && k>4,dec_rT_useF_reg[4] && (k>4)|(k==4&cls_loadFPU_reg[k-1]),
+          dec_rT_reg[5],dec_rT_use_reg[5] && k>5,dec_rT_useF_reg[5] && (k>5)|(k==5&cls_loadFPU_reg[k-1]),
+          dec_rT_reg[6],dec_rT_use_reg[6] && k>6,dec_rT_useF_reg[6] && (k>6)|(k==6&cls_loadFPU_reg[k-1]),
+          dec_rT_reg[7],dec_rT_use_reg[7] && k>7,dec_rT_useF_reg[7] && (k>7)|(k==7&cls_loadFPU_reg[k-1]),
+          dec_rT_reg[8],dec_rT_use_reg[8] && k>8,dec_rT_useF_reg[8] && (k>8)|(k==8&cls_loadFPU_reg[k-1]),
           dec_rB_reg[k],dec_rB_useF_reg[k],
           dep_rB[k]
           );
           
           decoder_find_single_dep depC_mod(
-          dec_rT_reg[0],dec_rT_use_reg[0] && k>0,dec_rT_useF_reg[0] && k>0,
-          dec_rT_reg[1],dec_rT_use_reg[1] && k>1,dec_rT_useF_reg[1] && k>1,
-          dec_rT_reg[2],dec_rT_use_reg[2] && k>2,dec_rT_useF_reg[2] && k>2,
-          dec_rT_reg[3],dec_rT_use_reg[3] && k>3,dec_rT_useF_reg[3] && k>3,
-          dec_rT_reg[4],dec_rT_use_reg[4] && k>4,dec_rT_useF_reg[4] && k>4,
-          dec_rT_reg[5],dec_rT_use_reg[5] && k>5,dec_rT_useF_reg[5] && k>5,
-          dec_rT_reg[6],dec_rT_use_reg[6] && k>6,dec_rT_useF_reg[6] && k>6,
-          dec_rT_reg[7],dec_rT_use_reg[7] && k>7,dec_rT_useF_reg[7] && k>7,
-          dec_rT_reg[8],dec_rT_use_reg[8] && k>8,dec_rT_useF_reg[8] && k>8,
+          dec_rT_reg[0],dec_rT_use_reg[0] && k>0,dec_rT_useF_reg[0] && (k>0)|(k==0&cls_loadFPU_reg[k-1]),
+          dec_rT_reg[1],dec_rT_use_reg[1] && k>1,dec_rT_useF_reg[1] && (k>1)|(k==1&cls_loadFPU_reg[k-1]),
+          dec_rT_reg[2],dec_rT_use_reg[2] && k>2,dec_rT_useF_reg[2] && (k>2)|(k==2&cls_loadFPU_reg[k-1]),
+          dec_rT_reg[3],dec_rT_use_reg[3] && k>3,dec_rT_useF_reg[3] && (k>3)|(k==3&cls_loadFPU_reg[k-1]),
+          dec_rT_reg[4],dec_rT_use_reg[4] && k>4,dec_rT_useF_reg[4] && (k>4)|(k==4&cls_loadFPU_reg[k-1]),
+          dec_rT_reg[5],dec_rT_use_reg[5] && k>5,dec_rT_useF_reg[5] && (k>5)|(k==5&cls_loadFPU_reg[k-1]),
+          dec_rT_reg[6],dec_rT_use_reg[6] && k>6,dec_rT_useF_reg[6] && (k>6)|(k==6&cls_loadFPU_reg[k-1]),
+          dec_rT_reg[7],dec_rT_use_reg[7] && k>7,dec_rT_useF_reg[7] && (k>7)|(k==7&cls_loadFPU_reg[k-1]),
+          dec_rT_reg[8],dec_rT_use_reg[8] && k>8,dec_rT_useF_reg[8] && (k>8)|(k==8&cls_loadFPU_reg[k-1]),
           dec_rC_reg[k],dec_rC_useF_reg[k],
           dep_rC[k]
           );
@@ -3737,7 +3737,7 @@ module decoder(
           cls_storeI_reg<=10'b0;
           cls_store2_reg<=10'b0;
           cls_FPU_reg<=10'b0;
-          cls_loadFPU_reg<=10'b0;
+          cls_loadFPU_reg<=11'b0;
           cls_sys_reg<=10'b0;
           cls_pos0_reg<=10'b0;
           cls_flag_reg<=cls_flag;
@@ -3828,7 +3828,7 @@ module decoder(
           cls_storeI_reg<=cls_storeI;
           cls_store2_reg<=cls_store2;
           cls_FPU_reg<=cls_FPU;
-          cls_loadFPU_reg<=cls_loadFPU;
+          cls_loadFPU_reg<={cls_loadFPU,1'b0};
           cls_sys_reg<=cls_sys;
           cls_pos0_reg<=cls_pos0;
           cls_flag_reg<=cls_flag;
