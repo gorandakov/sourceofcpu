@@ -7068,6 +7068,14 @@ dcache1 L1D_mod(
 	      retBF_reg2[k]<=retBF_reg[k];
               regS_reg[k]<=regS[k];
               newR_reg[k]<=newR[k];
+              if (k<9 &&  instr_aft_spc_reg[rs_index_reg[k+1][3:0]]) begin
+                  if (rs_index_reg[1][3:0]==(k+1)) newR_reg=newR[1];
+                  if (rs_index_reg[2][3:0]==(k+1)) newR_reg=newR[2];
+                  if (rs_index_reg[3+1][3:0]==(k+1)) newR_reg=newR[3+1];
+                  if (rs_index_reg[3+2][3:0]==(k+1)) newR_reg=newR[3+2];
+                  if (rs_index_reg[6+1][3:0]==(k+1)) newR_reg=newR[6+1];
+                  if (rs_index_reg[6+2][3:0]==(k+1)) newR_reg=newR[6+2];
+              end
               newRF_reg[k]<=newRF[k];
               rs_en_reg[k]<=rs_en[k];
               funA_reg[k]<=rs_rA_useF[k] ? funAF[k] : funA[k];
