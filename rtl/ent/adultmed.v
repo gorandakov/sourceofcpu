@@ -860,7 +860,7 @@ module smallInstr_decoder(
        puseRs[6]=1'b1;
        prAlloc[6]=1'b1;
        pport[6]=PORT_VADD;
-       if (~prevSpecLoad) begin
+       if (~prevSpecLoad || instr[15:12]==4'd15) begin
            prA[6]={1'b0,instr[11:8]};
            prT[6]={1'b0,instr[11:8]};
            prB[6]={1'b0,instr[15:12]};
@@ -888,14 +888,14 @@ module smallInstr_decoder(
        trien[7]=~magic[0] & subIsFPUSngl;
        puseRs[7]=1'b1;
        prAlloc[7]=1'b1;
-       if (~prevSpecLoad) begin
+       if (~prevSpecLoad || instr[15:12]==4'd15) begin
            prA[7]={1'b0,instr[11:8]};
            prT[7]={1'b0,instr[11:8]};
            prB[7]={1'b0,instr[15:12]};
        end else begin
            prB[7]=5'd15; 
-           prT[7]={1'b0,instr[11:8]};
-           prA[7]={1'b0,instr[15:12]};
+           prA[7]={1'b0,instr[11:8]};
+           prT[7]={1'b0,instr[15:12]};
        end
        prA_useF[7]=1'b1;
        prB_useF[7]=1'b1;
@@ -1040,15 +1040,9 @@ module smallInstr_decoder(
        trien[11]=~magic[0] & subIsFPUE;
        puseRs[11]=1'b1;
        prAlloc[11]=1'b1;
-       if (~prevSpecLoad) begin
-           prA[11]=(opcode_main[7:6]==2'd3) ? {1'b0,rB_reor} : {1'b0,rA_reor};
-           prT[11]={1'b0,rA_reor};
-           prB[11]=(opcode_main[7:6]==2'd3) ? {1'b0,rA_reor} : {1'b0,rB_reor};
-       end else begin
-           prA[11]=(opcode_main[7:6]==2'd3) ? 5'd15 : {1'b0,rA_reor};
-           prT[11]={1'b0,rA_reor};
-           prB[11]=(opcode_main[7:6]==2'd3) ? {1'b0,rA_reor} : 5'd15;
-       end
+       prA[11]=(opcode_main[7:6]==2'd3) ? {1'b0,rB_reor} : {1'b0,rA_reor};
+       prT[11]={1'b0,rA_reor};
+       prB[11]=(opcode_main[7:6]==2'd3) ? {1'b0,rA_reor} : {1'b0,rB_reor};
        prA_useF[11]=1'b1;
        prB_useF[11]=1'b1;
        prT_useF[11]=1'b1;
