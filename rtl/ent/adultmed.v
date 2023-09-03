@@ -733,7 +733,7 @@ module smallInstr_decoder(
       if (~prevSpecLoad && opcode_sub[0]|subIsBasicShift) begin
           prA[0]={1'b0,instr[11:8]};
           prT[0]={1'b0,instr[11:8]};
-      end else if (~prevSpecLoad) begin
+      end else if (~prevSpecLoad || {instr[7],instr[15:12]}==5'd16) begin
           prA[0]={instr[6],instr[11:8]};
           prT[0]={instr[6],instr[11:8]};
           prB[0]={instr[7],instr[15:12]};
@@ -802,14 +802,14 @@ module smallInstr_decoder(
        poperation[4][12]=1'b0;//opcode_sub[5:1]!=5'b11100;
        poperation[4][8]=opcode_sub[0];
        poperation[4][9]=opcode_sub[0];
-       if (~prevSpecLoad) begin
+       if (~prevSpecLoad || {instr[7],instr[15:12]}==5'd15) begin
            prA[4]={1'b0,instr[11:8]};
            prT[4]={1'b0,instr[11:8]};
            prB[4]={instr[7],instr[15:12]};
        end else begin
            prB[4]=5'd15; //not a mistake; fpu spec instr is 15 rather than 16
-           prT[4]={1'b0,instr[11:8]};
-           prA[4]={instr[7],instr[15:12]};
+           prA[4]={1'b0,instr[11:8]};
+           prT[4]={instr[7],instr[15:12]};
        end
        prA_useF[4]=1'b1;
        prB_useF[4]=1'b1;
@@ -832,14 +832,14 @@ module smallInstr_decoder(
        poperation[5][12]=opcode_sub[5:1]!=5'b11101 && opcode_sub[0] && opcode_main[6];
        poperation[5][8]=opcode_sub[0];
        poperation[5][9]=opcode_main[6];
-       if (~prevSpecLoad) begin
+       if (~prevSpecLoad || {instr[7],instr[15:12]}==5'd15) begin
            prA[5]={1'b0,instr[11:8]};
            prT[5]={1'b0,instr[11:8]};
            prB[5]={instr[7],instr[15:12]};
        end else begin
            prB[5]=5'd15; 
-           prT[5]={1'b0,instr[11:8]};
-           prA[5]={instr[7],instr[15:12]};
+           prA[5]={1'b0,instr[11:8]};
+           prT[5]={instr[7],instr[15:12]};
        end
        prA_useF[5]=1'b1;
        prB_useF[5]=1'b1;
@@ -866,8 +866,8 @@ module smallInstr_decoder(
            prB[6]={1'b0,instr[15:12]};
        end else begin
            prB[6]=5'd15;
-           prT[6]={1'b0,instr[11:8]};
-           prA[6]={1'b0,instr[15:12]};
+           prA[6]={1'b0,instr[11:8]};
+           prT[6]={1'b0,instr[15:12]};
        end
        prA_useF[6]={opcode_sub[2:1],opcode_main[7:6]}!=4'b0111;
        prB_useF[6]=1'b1;
