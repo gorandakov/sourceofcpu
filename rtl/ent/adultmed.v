@@ -763,8 +763,8 @@ module smallInstr_decoder(
 	6'h23: begin poperation[1][7:0]=`op_sub64; poperation[1][8]=1'b1; prA[1]={instr[7],instr[15:12]}; prA_use[1]=1'b1; end
 	6'h24: poperation[1][7:0]=`op_sxt8_32;
 	6'h25: poperation[1][7:0]=`op_sxt16_32;
-	6'h26: begin poperation[1][7:0]=`op_add64; poperation[1][8]=1'b1; prA[1]={1'b0,instr[15:12]}; prA_use[1]=1'b1; end
-	6'h27: begin poperation[1][7:0]=`op_sub64; poperation[1][8]=1'b1; prA[1]={1'b0,instr[15:12]}; prA_use[1]=1'b1; end
+	6'h26: begin poperation[1][7:0]=`op_add64; poperation[1][8]=1'b1; prA[1]={1'b0,instr[11:8]}; prA_use[1]=1'b1; end
+	6'h27: begin poperation[1][7:0]=`op_sub64; poperation[1][8]=1'b1; prA[1]={1'b0,instr[11:8]}; prA_use[1]=1'b1; end
 	6'h28: poperation[1][7:0]=`op_sxt32_64;
        endcase
        //verilator lint_on CASEINCOMPLETE
@@ -1682,7 +1682,7 @@ module smallInstr_decoder(
               prA[31]=instr[22:18];
 	      prT[31]=instr[22:18];
 	  end
-      end else if (opcode_main==8'd123) begin//shladd
+      end else if (opcode_main==8'd213) begin//shladd
           pport[31]=PORT_ALU;
           prA_use[31]=1'b1;
           prB_use[31]=opcode_main!=8'd213;
