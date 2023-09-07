@@ -78,7 +78,7 @@ module alu_shift(
   wire [63:0] valX;
 
   assign valX[31:0]=val2[8] ? val1[31:0] : 32'b0;
-  assign valX[63:32]=val2[7] ? {32{val1{31}} : 32'b0;
+  assign valX[63:32]=val2[7] ? {32{val1[31]}} : 32'b0;
  
   assign is_shift=(operation[7:2]==6'd5 || operation[7:2]==6'd6 || operation[7:2]==6'd7) && nDataAlt && ~operation[11];
   

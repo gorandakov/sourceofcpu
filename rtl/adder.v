@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 
-`include "struct.sv"
+`include "struct.v"
 
 
 module aoi21_array(a11,a12,a2,b);

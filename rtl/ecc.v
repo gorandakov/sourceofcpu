@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-`include "struct.sv"
+`include "struct.v"
 //verilator lint_off WIDTH
 module hamingChk32(data,hasError,error);
   parameter WIDTH=38;

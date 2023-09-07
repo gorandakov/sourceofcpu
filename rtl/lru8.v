@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 
-`include "struct.sv"
+`include "struct.v"
 
 
 module lru_single0(

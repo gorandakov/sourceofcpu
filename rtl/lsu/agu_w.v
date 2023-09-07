@@ -407,7 +407,7 @@ module sagu(
             (stepOver2 && opsize==1)) && bank0==((i-1)&5'h1f)) ||
           (((opsize==3 && stepOver) | opsize[2]) && bank0==((i-2)&5'h1f)) || 
           (((opsize==4 && stepOver2) || opsize==5 || opsize==6) && bank0==((i-3)&5'h1f)) ||
-          (((opsize==5 && stepOver) || opsize==6) && bank0==((i-4)&5'h1f)) || (opsize==7 && bank0[4:3]={i[4:3],3'b0}) ;
+          (((opsize==5 && stepOver) || opsize==6) && bank0==((i-4)&5'h1f)) || (opsize==7 && bank0[4:3]=={i[4:3],3'b0}) ;
         end
   /* verilator lint_on WIDTH */
     end

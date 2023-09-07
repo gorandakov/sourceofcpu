@@ -1008,7 +1008,7 @@ module cntrl_find_outcome(
   assign exceptIP_d=(break_jump0 & jump0_taken & ~indir_error) ? {jump0BND,jump0IP} : 63'bz;
   assign exceptIP_d=(break_jump1 & jump1_taken & ~indir_error) ? {jump1BND,jump1IP} : 63'bz;
   assign exceptIP_d=(indir_error && (break_jump0 & jump0_taken)
-    || (break_jump1 & jump1_taken) ? {excpt_handlerIP[62:43],excpt_handlerIP[42:11],6'd18,5'b0} : 63'bz;
+    || (break_jump1 & jump1_taken)) ? {excpt_handlerIP[62:43],excpt_handlerIP[42:11],6'd18,5'b0} : 63'bz;
   assign exceptIP_d=(break_jump0 && ~jump0_taken && !(jump0Type[4] && jump0Type[2:0]==3'd1)) ? {bbaseIP[62:43],breakIP} : 63'bz;
   assign exceptIP_d=(break_jump1 & ~jump1_taken && !(jump1Type[4] && jump1Type[2:0]==3'd1)) ? {bbaseIP[62:43],breakIP} : 63'bz;
   assign exceptIP_d=(break_jump0 && ~jump0_taken && (jump0Type==5'h11)) ? indir_IP[63:1] : 63'bz;

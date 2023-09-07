@@ -522,7 +522,7 @@ module agu_r(
             (stepOver2 && opsize==1)) && bank0==((i-1)&5'h1f)) ||
           (((opsize==3 && stepOver) || opsize[2] || opsize==6) && bank0==((i-2)&5'h1f)) || 
           (((opsize==4 && stepOver2) || opsize==5 || opsize==6) && bank0==((i-3)&5'h1f)) ||
-          (((opsize==5 && stepOver) || opsize==6) && bank0==((i-4)&5'h1f)) || (opsize==7 && bank0[4:3]={i[4:3],3'b0});
+          (((opsize==5 && stepOver) || opsize==6) && bank0==((i-4)&5'h1f)) || (opsize==7 && bank0[4:3]=={i[4:3],3'b0});
         end
     end
       /* verilator lint_on WIDTH */
@@ -572,7 +572,7 @@ module agu_r(
           mOp0_en_reg<=1'b0;
       end else if (~doStall&&!rsStall) begin
           mOp0_en_reg<=mOp0_en & ~(except);
-          if (mOp0_en & ~|req_bus || extern_feed & |req_bus & (mOp0_type_reg==2'b10)) || |req_bus & (mOp0_type_reg==2'b11) begin
+          if (mOp0_en & ~|req_bus || extern_feed & |req_bus & (mOp0_type_reg==2'b10) || |req_bus & (mOp0_type_reg==2'b11)) begin
               mOp0_thread_reg<=mOp0_thread;
               mOp0_lsflag_reg<=mOp0_lsflag;
               mOp0_addrMain_reg<=mOp0_addrMain;

@@ -63,7 +63,7 @@ module heptane_core(
   wire [36:0] obusOut_address;
   wire [9:0] obusDIn_src_req;
   wire [9:0] obusDIn_dst_req;
-  wire [`rbusD_width-1:0] obusDOut_signals;
+  wire [`rbusM_width-1:0] obusDOut_signals;
   wire [9:0] obusDOut_src_req;
   wire [9:0] obusDOut_dst_req;
   wire [7:0] obusDOut_dataPTR;
@@ -88,7 +88,7 @@ module heptane_core(
     wire [63+0:0]  dat7;
     wire [63:0] datSIG0;
     wire [63+12:0] datSIGX0;
-    wire [27+`rbusD_signals:0] datSIG;
+    wire [27+`rbusM_signals] datSIG;
     wire [67:0] dataIN0;
     wire [67:0] dataINX0;
     wire [67:0] dataOUT;
@@ -119,23 +119,23 @@ module heptane_core(
       end
     end
     for(kl=0;kl<(64+7);kl=kl+1)  begin : OD1
-      assign obusDOut_dataAUD[2*kl]=datX0[k];
-      assign obusDOut_dataAUD[2*kl+1]=datX1[k];
-      assign obusDOut_dataAUD[2*kl+71]=datX2[k];
-      assign obusDOut_dataAUD[2*kl+1+71]=datX3[k];
-      assign obusDOut_dataAUD[2*kl+142]=datX4[k];
-      assign obusDOut_dataAUD[2*kl+1+142]=datX5[k];
-      assign obusDOut_dataAUD[2*kl+213]=datX6[k];
-      assign obusDOut_dataAUD[2*kl+1+213]=datX7[k];
+      assign obusDOut_dataAUD[2*kl]=datX0[k1];
+      assign obusDOut_dataAUD[2*kl+1]=datX1[k1];
+      assign obusDOut_dataAUD[2*kl+71]=datX2[k1];
+      assign obusDOut_dataAUD[2*kl+1+71]=datX3[k1];
+      assign obusDOut_dataAUD[2*kl+142]=datX4[k1];
+      assign obusDOut_dataAUD[2*kl+1+142]=datX5[k1];
+      assign obusDOut_dataAUD[2*kl+213]=datX6[k1];
+      assign obusDOut_dataAUD[2*kl+1+213]=datX7[k1];
       if (kl<(32+6)) begin
-          obusDOut_iosig[2*kl]=dataSIGX0[k];
-          obusDOut_iosig[2*kl+1]=dataSIGX0[k+32+6];
+          assign obusDOut_iosig[2*kl]=dataSIGX0[k1];
+          assign obusDOut_iosig[2*kl+1]=dataSIGX0[k1+32+6];
       end
       if (kl<(34+6)) begin
-          assign obusOut[2*kl]=dataOUTX0[k];
-          assign obusOut[2*kl+1]=dataOUTX0[k+34+6];
-          assign obusInX[2*kl]=dataInX0[k];
-          assign obusInX[2*kl+1]=dataInX0[k+34+6];
+          assign obusOut[2*kl]=dataOUTX0[k1];
+          assign obusOut[2*kl+1]=dataOUTX0[k1+34+6];
+          assign obusInX[2*kl]=dataInX0[k1];
+          assign obusInX[2*kl+1]=dataInX0[k1+34+6];
       end
     end
   hammingGet64 DOget0_mod(dat0,datX0);

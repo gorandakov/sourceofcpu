@@ -1615,7 +1615,7 @@ module cmpx4(
   wire [3:0][WIDTH-1:0] dataREG;
 
   `ifdef simulation
-       data_out=data_in;
+       assign data_out=data_in;
   `endif
 
   generate

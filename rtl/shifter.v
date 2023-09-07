@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 
-`include "struct.sv"
+`include "struct.v"
 
 (* align_width=val1,valres *) module shlr(
   bit_en,
