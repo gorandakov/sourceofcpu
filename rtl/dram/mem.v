@@ -2,21 +2,23 @@
 module lpddr3_channel(
   clk,
   rst,
+  stall,
   read_clkEn,
   read_addr,
   read_req,
   read_busID,
   read_dataW,
+  read_wen,
   readOut_addr,
   readOut_req,
   readOut_busID,
   readOut_en,
   readOut_dataR,
-  mem_clk,//800 MHz if separate, 3200 MHz if soldered on the _BOTTOM_ of the chip, or 2300 MHz on two sides, in one row/column each side
-  RAS,
-  CAS,
-  CS0,
-  ADDR15,
+  mem_clk,//up to 1125 MHz
+  mem_rst,
+  mem_clkREF1,
+  mem_clkREF2,
+  mem_clkREF3,
   DATA18A);
   parameter [14:0] ADDR15_refresh=0x700f;
   parameter [0:0] CS0_refresh=1'b1;
@@ -29,38 +31,46 @@ module lpddr3_channel(
   parameter [5:0] BEGIN_CS2W=40;
   parameter [5:0] BEGIN_CS2REF=40;
   input mem_clk;
-  input mem_clkREF;
-  (* PIN V=7.3 *) output RAS;
-  (* PIN V=7.3 *) output CAS;
-  (* PIN V=7.3 *) output CS0;
-  (* PIN V=7.3 *) output [14:0] ADDR15;
-  (* PIN Vout=7.3 Vin=0.003 *) inout [17:0] DATA18A;
+  input mem_rst;
+  input mem_clkREF1;
+  input mem_clkREF2;
+  input mem_clkREF3;
+  (* PIN Vout=10.3 Vin=0.003 *) inout [17:0] DATA18A;
 
   (* V=5 *) DATA18A_en_out;
   (* V=5 *) DATA18B_en_out;
+  (* V=5 *) DATA18C_en_out;
 
   wire [17:0] DATA18AW;
   wire [17:0] DATA18BW;
+  wire [17:0] DATA18CW;
 
   wire [17:0] DATA18ARr;
   wire [17:0] DATA18BRr;
+  wire [17:0] DATA18CRr;
 
   (* keep *) reg [17:0] DATA18AR;
   (* keep *) reg [17:0] DATA18BR;
+  (* keep *) reg [17:0] DATA18CR;
 
-  (* keep *) reg [17:0] DATA18AR2;
-  (* keep *) reg [17:0] DATA18BR2;
 
   reg [5:0] RS2CS;
   reg [5:0] CS2R;
   reg [5:0] CS2W;
   reg [5:0] CS2REF;
+  reg [5:0] phase;
+  reg [4:0] req_addr;
+  wire [4:0] req_addr_inc;
 
-  assign DATA18A=DATA18A_en_out & mem_clk & mem_clkREF ? DATA18AW : 18'bz;
-  assign DATA18A=DATA18A_en_out & ~mem_clk & mem_clkREF ? DATA18BW : 18'bz;
+  adder_inc #(5) read_adder(req_addr,req_addr_inc,1'b1,);
 
-  assign DATA18ARr=DATA18AR & {18{mem_clk & mem_clkREF}};
-  assign DATA18BRr=DATA18BR & {18{~mem_clk & ~mem_clkREF}};
+  assign DATA18A=DATA18A_en_out & mem_clk ? DATA18AW&{18{mem_clkREF1}} : 18'bz;
+  assign DATA18A=DATA18B_en_out & mem_clk ? DATA18BW&{18{mem_clkREF2}} : 18'bz;
+  assign DATA18A=DATA18C_en_out & mem_clk ? DATA18CW&{18{mem_clkREF3}} : 18'bz;
+
+  assign DATA18ARr=mem_clk & mem_clkREF1 ? DATA18AR : 18'bz;
+  assign DATA18BRr=mem_clk & mem_clkREF2 ? DATA18BR : 18'bz;
+  assign DATA18CRr=mem_clk & mem_clkREF3 ? DATA18CR : 18'bz;
 
   always @(posedge clk) begin
       if (rst) begin
@@ -68,15 +78,16 @@ module lpddr3_channel(
           CS2R<=BEGIN_CS2R;
           CS2W<=BEGIN_CS2W;
           CS2REF<=BEGIN_CS2REF;
+          phase<=6'b1;
+          req_addr<=5'b0;
       end else begin
+          phase<=phase[5] ? 5'b1 : {phase[4:3],3'b0};
+          if (phase[5]) req_addr<=req_addr_inc;
       end
       DATA18AR<=DATA18A;
       DATA18BR<=DATA18A;
+      DATA18CR<=DATA18A;
   end
 
-  always @(posedge clk) begin
-      data18AR2<=data18AR;
-      data18BR2<=data18BR;      
-  end
 
 endmodule  
