@@ -1603,12 +1603,16 @@ module cmpx4(
   clk,
   clkREF,
   clkREF2,
+  clkREF3,
+  clkREF4,
   data_in,
   data_out);
   parameter WIDTH=65;
   input clk;
   input clkREF;
   input clkREF2;
+  input clkREF3;
+  input clkREF4;
   input [WIDTH-1:0] data_in;
   output [WIDTH-1:0] data_out;
 
@@ -1621,15 +1625,17 @@ module cmpx4(
   generate
     genvar p;
     for(p=0;p<WIDTH;p=p+1) begin
-        assign dataREG[0][p]=clk & ~clkREF & ~clkREF2 ? data_in[p] : '0;
+	    assign dataREG[0][p]=clk & ~clkREF & ~clkREF2 & ~clkREF3 & ~clkREF4 ? data_in[p] : '0;
         assign dataREG[1][p]=clk & clkREF ? data_in[p] : '0;
         assign dataREG[2][p]=clk & clkREF2 ? data_in[p] : '0;
-        `ifndef simulation
-        assign data_out=dataREG[0][p] ==dataREG[1][p] || dataREG[1][p]==dataREG[2][p]  ?
+	    assign dataREG[3][p]=clk & clkREF3 ? data_in[p] : '0;
+	    assign dataREG[4][p]=clk & clkREF4 ? data_in[p] : '0;
+   `ifndef simulation
+	    assign data_out=dataREG[0][p] ==dataREG[1][p] || dataREG[1][p]==dataREG[2][p] || dataREG[1][p]==dataREG[3][p] || dataREG[1][p]==dataREG[4][p] ?
             dataREG[1][p] : 'z' 
-        assign data_out=dataREG[0][p] ==dataREG[1][p] || dataREG[0][p]==dataREG[2][p]  ?
+		    assign data_out=dataREG[0][p] ==dataREG[1][p] || dataREG[0][p]==dataREG[2][p]  || dataREG[0][p]==dataREG[3][p] || dataREG[0][p]==dataREG[4][p] ?
             dataREG[0][p] : 'z' 
-        assign data_out=dataREG[0][p] ==dataREG[2][p] || dataREG[1][p]==dataREG[2][p] ?
+			    assign data_out=dataREG[0][p] ==dataREG[2][p] || dataREG[1][p]==dataREG[2][p] || dataREG[2][p]==dataREG[3][p] || dataREG[2][p]==dataREG[4][p] ?
             dataREG[2][p] : 'z' 
         `endif
     end
