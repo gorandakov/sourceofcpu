@@ -141,7 +141,7 @@ module fpucadd(clk,rst,A,A_alt,B,pook_in,and1,or1,copyA,en,rmode,res,res_hi,xtra
   generate
     if (!H) begin : LOW_PREC2
         fpuadd_renor renorR_mod(
-        .A({prod_reg[52:0],11'b0),
+        .A({prod_reg[52:0],11'b0}),
         .exp(exp_exp1_adj_reg),.Ax(1'b0),
         .A_out(xtra_mantissa),.exp_out(xtra_exp)
         );

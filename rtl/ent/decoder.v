@@ -2986,7 +2986,7 @@ module decoder(
           k==5 ? dec_rT_reg[5-1] : dec_rT_reg[5],dec_rT_use_reg[5] && k>5,dec_rT_useF_reg[5] && (k>5)|(k==5&cls_loadFPU_reg[k-1]),
           k==6 ? dec_rT_reg[6-1] : dec_rT_reg[6],dec_rT_use_reg[6] && k>6,dec_rT_useF_reg[6] && (k>6)|(k==6&cls_loadFPU_reg[k-1]),
           k==7 ? dec_rT_reg[7-1] : dec_rT_reg[7],dec_rT_use_reg[7] && k>7,dec_rT_useF_reg[7] && (k>7)|(k==7&cls_loadFPU_reg[k-1]),
-          k==8 ? dec_rT_reg[8-1] : dec_rT_reg[8],dec_rT_use_reg[8] && k>8,dec_rT_useF_reg[8] && (k>8)|(k==8&cls_loadFPU_reg[k-1]0,
+          k==8 ? dec_rT_reg[8-1] : dec_rT_reg[8],dec_rT_use_reg[8] && k>8,dec_rT_useF_reg[8] && (k>8)|(k==8&cls_loadFPU_reg[k-1]),
           dec_rA_reg[k],dec_rA_useF_reg[k],
           dep_rA[k]
           );

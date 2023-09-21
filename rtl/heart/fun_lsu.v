@@ -2513,7 +2513,7 @@ module agu_block(
   assign p0_adata[`lsaddr_blow]=get_byte_mod4(mOpX0_low_reg,mOpX0_sz_reg);
   assign p0_adata[`lsaddr_OH]=   mOpX0_odd_reg;
   assign p0_adata[`lsaddr_EH]=  ~mOpX0_odd_reg;
-  assign p0_adata[`lsaddr_OL]=(mOpX0_odd_reg && ~mOpX0_split_reg|~mOpX0_bank0_reg[4]) 
+  assign p0_adata[`lsaddr_GOR]=(mOpX0_odd_reg && ~mOpX0_split_reg|~mOpX0_bank0_reg[4]) 
         || (~mOpX0_odd_reg && mOpX0_split_reg && mOpX0_bank0_reg[4]);
   assign p0_adata[`lsaddr_EL]=(~mOpX0_odd_reg && ~mOpX0_split_reg|~mOpX0_bank0_reg[4])
     || (mOpX0_odd_reg && mOpX0_split_reg && mOpX0_bank0_reg[4]);
@@ -2548,7 +2548,7 @@ module agu_block(
   assign p1_adata[`lsaddr_blow]=get_byte_mod4(mOpX1_low_reg,mOpX1_sz_reg);
   assign p1_adata[`lsaddr_OH]=   mOpX1_odd_reg;
   assign p1_adata[`lsaddr_EH]=  ~mOpX1_odd_reg;
-  assign p1_adata[`lsaddr_OL]=(mOpX1_odd_reg && ~mOpX1_split_reg|~mOpX1_bank0_reg[4]) 
+  assign p1_adata[`lsaddr_GOR]=(mOpX1_odd_reg && ~mOpX1_split_reg|~mOpX1_bank0_reg[4]) 
         || (~mOpX1_odd_reg && mOpX1_split_reg && mOpX1_bank0_reg[4]);
   assign p1_adata[`lsaddr_EL]=(~mOpX1_odd_reg && ~mOpX1_split_reg|~mOpX1_bank0_reg[4])
     || (mOpX1_odd_reg && mOpX1_split_reg && mOpX1_bank0_reg[4]);
@@ -2583,7 +2583,7 @@ module agu_block(
   assign p2_adata[`lsaddr_blow]=get_byte_mod4(mOpX2_low_reg,mOpX2_sz_reg);
   assign p2_adata[`lsaddr_OH]=   mOpX2_odd_reg;
   assign p2_adata[`lsaddr_EH]=  ~mOpX2_odd_reg;
-  assign p2_adata[`lsaddr_OL]=(mOpX2_odd_reg && ~mOpX2_split_reg|~mOpX2_bank0_reg[4]) 
+  assign p2_adata[`lsaddr_GOR]=(mOpX2_odd_reg && ~mOpX2_split_reg|~mOpX2_bank0_reg[4]) 
         || (~mOpX2_odd_reg && mOpX2_split_reg && mOpX2_bank0_reg[4]);
   assign p2_adata[`lsaddr_EL]=(~mOpX2_odd_reg && ~mOpX2_split_reg|~mOpX2_bank0_reg[4])
     || (mOpX2_odd_reg && mOpX2_split_reg && mOpX2_bank0_reg[4]);
@@ -2621,7 +2621,7 @@ module agu_block(
   assign p3_adata[`lsaddr_blow]=get_byte_mod4(mOpX3_low_reg,mOpX3_sz_reg);
   assign p3_adata[`lsaddr_OH]=   mOpX3_odd_reg;
   assign p3_adata[`lsaddr_EH]=  ~mOpX3_odd_reg;
-  assign p3_adata[`lsaddr_OL]=(mOpX3_odd_reg && ~mOpX3_split_reg|~mOpX3_bank0_reg[4]) 
+  assign p3_adata[`lsaddr_GOR]=(mOpX3_odd_reg && ~mOpX3_split_reg|~mOpX3_bank0_reg[4]) 
         || (~mOpX3_odd_reg && mOpX3_split_reg && mOpX3_bank0_reg[4]);
   assign p3_adata[`lsaddr_EL]=(~mOpX3_odd_reg && ~mOpX3_split_reg|~mOpX3_bank0_reg[4])
     || (mOpX3_odd_reg && mOpX3_split_reg && mOpX3_bank0_reg[4]);
@@ -2660,7 +2660,7 @@ module agu_block(
   assign p4_adata[`lsaddr_blow]=get_byte_mod4(mOpX4_low_reg,mOpX4_sz_reg);
   assign p4_adata[`lsaddr_OH]=   mOpX4_odd_reg;
   assign p4_adata[`lsaddr_EH]=  ~mOpX4_odd_reg;
-  assign p4_adata[`lsaddr_OL]=(mOpX4_odd_reg && ~mOpX4_split_reg|~mOpX4_bank0_reg[4]) 
+  assign p4_adata[`lsaddr_GOR]=(mOpX4_odd_reg && ~mOpX4_split_reg|~mOpX4_bank0_reg[4]) 
         || (~mOpX4_odd_reg && mOpX4_split_reg && mOpX4_bank0_reg[4]);
   assign p4_adata[`lsaddr_EL]=(~mOpX4_odd_reg && ~mOpX4_split_reg|~mOpX4_bank0_reg[4])
     || (mOpX4_odd_reg && mOpX4_split_reg && mOpX4_bank0_reg[4]);
@@ -2691,7 +2691,7 @@ module agu_block(
   assign p5_adata[`lsaddr_blow]=get_byte_mod4(mOpX5_low_reg,mOpX5_sz_reg);
   assign p5_adata[`lsaddr_OH]=   mOpX5_odd_reg;
   assign p5_adata[`lsaddr_EH]=  ~mOpX5_odd_reg;
-  assign p5_adata[`lsaddr_OL]=(mOpX5_odd_reg && ~mOpX5_split_reg|~mOpX5_bank0_reg[4]) 
+  assign p5_adata[`lsaddr_GOR]=(mOpX5_odd_reg && ~mOpX5_split_reg|~mOpX5_bank0_reg[4]) 
         || (~mOpX5_odd_reg && mOpX5_split_reg && mOpX5_bank0_reg[4]);
   assign p5_adata[`lsaddr_EL]=(~mOpX5_odd_reg && ~mOpX5_split_reg|~mOpX5_bank0_reg[4])
     || (mOpX5_odd_reg && mOpX5_split_reg && mOpX5_bank0_reg[4]);

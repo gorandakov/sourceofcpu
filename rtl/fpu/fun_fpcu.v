@@ -453,7 +453,7 @@ module fun_fpu(
         .xtra(u1_op_reg[19:17]),
         .A(fxDataAXL_reg2[1][67:0]),.B(u1_op_reg3[13+H] ? XX_data : gxDataBXL_reg2[0][67:0]),
         .res(FOOF[1][67:0]));
-    else  fperm #(0) fperm1CL_mod(
+      else  fperm #(0) fperm1CL_mod(
         .clk(clk),
         .rst(rst),
         .en(~(H? fxFCADD_dbl_reg:fxFCADD_dblext_reg)&~fxFCADD_sn_reg),
@@ -466,7 +466,8 @@ module fun_fpu(
         .tbl_write(1'b0),
         .xtra(3'b0),
         .A(fxDataAXL_reg2[1][67:0]),.B(u1_op_reg3[13+H] ? XX_data : gxDataBXL_reg2[0][67:0]),
-        .res(FOOF[1][67:0]))
+        .res(FOOF[1][67:0]));
+      
       if (H) assign gfDataBFL[1]=u1_op_reg[9] ? u1_Bx : uu_B1;
       else assign gfDataBFL[1]=u1_op_reg[8] ? {uu_B1[68+15:68],u1_Bx} : uu_B1;
       if (H) assign gfDataBFL[0]=u1_op_reg[9] ? u1_Bx : uu_B2;

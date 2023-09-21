@@ -201,7 +201,7 @@ module fun_fpuSL(
   .clk(clk),
   .rst(rst),
   .en(u5_en_reg[3] && |u5_en_reg[3:2] 
-  && (u5_op_reg[7:0]==`fop_pcvtD || u5_op_reg[7:0]==`fop_pcvtS),
+  && (u5_op_reg[7:0]==`fop_pcvtD || u5_op_reg[7:0]==`fop_pcvtS)),
   .clkEn(~fxFRT_alten_reg3),
   .A((u5_op_reg2[7:0]!=`fop_pcvtD) ? {16'b0,XI_dataS[65:0]} : {XI_dataT[15+68:68],XI_dataT[65:0]}),
   .isDBL(u5_op_reg[7:0]==`fop_pcvtD),

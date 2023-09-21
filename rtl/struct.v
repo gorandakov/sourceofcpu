@@ -438,7 +438,7 @@ limitations under the License.
 `define lsaddr_OH 104
 `define lsaddr_EH 105
 `define lsaddr_EL 106
-`define lsaddr_OL 107
+`define lsaddr_GOR 107
 `define lsaddr_II 117:108
 `define lsaddr_odd_round 118 
 `define lsaddr_bank0 123:119

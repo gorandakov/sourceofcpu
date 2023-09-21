@@ -421,7 +421,7 @@ module pager(
               end else begin
                   finalXtra2[y]<=13'b0;
                   finalXtra1[y]<=13'b0;
-                  finalXtra0[y]<=13'0;
+                  finalXtra0[y]<=13'b0;
                   stageA[y]<=12'b0;
                   stageB[y]<=8'b0;
               end

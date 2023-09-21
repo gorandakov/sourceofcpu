@@ -227,7 +227,7 @@ module simd_sasquach_shift(
   always @(negedge clk) begin
   `else
   always @(posedge clk) begin
-  `end
+  `endif
       A_reg<=A;
       B_reg<=B;
       dir<=operation[5:0]==`simd_shr || operation[5:0]==`simd_sar;
@@ -237,5 +237,4 @@ module simd_sasquach_shift(
       sh<=operation[5:0]==`simd_sar || operation[5:0]==`simd_shr || operation[5:0]==`simd_shl;
   end
 endmodule
-
 

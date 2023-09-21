@@ -106,7 +106,7 @@ module tbuf_ram2(
   write_wen
   );
 
-  parameter DATA_WIDTH=`tbuf_width-29-4*63;
+  parameter DATA_WIDTH=`btb_width-29-4*63;
   parameter ADDR_WIDTH=9;
   parameter ADDR_COUNT=512;
 
@@ -175,9 +175,9 @@ module tbuf_ram_block(
   rst,
   read_clkEn,
   read_addr,
-  read_data[`btb_tgt0],
+  read_data[`btb_tgt_IP0],
   write_addr,
-  write_data[`btb_tgt0],
+  write_data[`btb_tgt_IP0],
   write_wen&ioen[0]
   );
   tbuf_ram1 ram11_mod(
@@ -185,9 +185,9 @@ module tbuf_ram_block(
   rst,
   read_clkEn,
   read_addr,
-  read_data[`btb_tgt1],
+  read_data[`btb_tgt_IP1],
   write_addr,
-  write_data[`btb_tgt1],
+  write_data[`btb_tgt_IP1],
   write_wen&ioen[1]
   );
   tbuf_ram1 ram12_mod(
@@ -195,9 +195,9 @@ module tbuf_ram_block(
   rst,
   read_clkEn,
   read_addr,
-  read_data[`btb_tgt2],
+  read_data[`btb_tgt_IP2],
   write_addr,
-  write_data[`btb_tgt2],
+  write_data[`btb_tgt_IP2],
   write_wen&ioen[2]
   );
   tbuf_ram1 ram13_mod(
@@ -205,9 +205,9 @@ module tbuf_ram_block(
   rst,
   read_clkEn,
   read_addr,
-  read_data[`btb_tgt3],
+  read_data[`btb_tgt_IP3],
   write_addr,
-  write_data[`btb_tgt3],
+  write_data[`btb_tgt_IP3],
   write_wen&ioen[3]
   );
   
@@ -218,7 +218,7 @@ module tbuf_ram_block(
   read_addr,
   read_data[DATA_WIDTH-1:29+4*63],
   write_addr,
-  {1'b0,write_data[DATA_WIDTH-1:29+4*63},
+  {1'b0,write_data[DATA_WIDTH-1:29+4*63]},
   write_wen&&ioen==15
   );
 endmodule
@@ -768,7 +768,7 @@ module tbuf_way(
   assign extra_insert[`btbExtra_satCount3]={2{~write_cond[3]}}; 
 
   assign read_src=btb_data[`btb_src_IP];
-  assign read_tgt0=btb_data[`btb_tgt_IP0];
+  assign read_tgt0=btb_data[`btb_tgt_IP1];
   assign read_tgt1=btb_data[`btb_tgt_IP1];
   assign read_tgt2=btb_data[`btb_tgt_IP2];
   assign read_tgt3=btb_data[`btb_tgt_IP3];
@@ -1049,10 +1049,10 @@ module tbuf_way(
       5'b1000: write_dataJ[`btb_tgt_jmask3]=jmp_mask_in;
       default: begin
           case(update_taken_reg[0] ? update_addr0_reg[12:11] : update_addr1_reg[12:11])
-          2'd0: begin write_dataJ[`btb_tgt0]=nextIP_reg[63:1]; ioen=1; end
-          2'd1: begin write_dataJ[`btb_tgt1]=nextIP_reg[63:1]; ioen=2; end
-          2'd2: begin write_dataJ[`btb_tgt2]=nextIP_reg[63:1]; ioen=4; end
-          2'd3: begin write_dataJ[`btb_tgt3]=nextIP_reg[63:1]; ioen=8; end
+          2'd0: begin write_dataJ[`btb_tgt_IP0]=nextIP_reg[63:1]; ioen=1; end
+          2'd1: begin write_dataJ[`btb_tgt_IP1]=nextIP_reg[63:1]; ioen=2; end
+          2'd2: begin write_dataJ[`btb_tgt_IP2]=nextIP_reg[63:1]; ioen=4; end
+          2'd3: begin write_dataJ[`btb_tgt_IP3]=nextIP_reg[63:1]; ioen=8; end
           endcase
       end
       endcase

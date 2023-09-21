@@ -122,12 +122,12 @@ module fperm(
   adder #(9) add_sngc(BIAS_S,~{B[32],B[30:23]},exp_X1,1'b1,is_sqrt,,,,);
   adder #(9) add_sngd(BIAS_S,~{1'b0,B[32],B[30:24]},exp_X1,1'b1,~is_sqrt,,,,);
 
-  assign resY=A[67:66]==`ftype_dbl && ~tbl_read && ~(is_sqrt&is_div) ? {B[67:66],exp_D[11],B[63],exp_D[10:0],53'b0} : 68'bz;
-  assign resY=A[67:66]!=`ftype_dbl && ~tbl_read && ~(is_sqrt&is_div) ? {B[67:66],exp_X[8],B[63],exp_X[7:0],23'b0,
-    exp_X1[8],B[31],exp_X1[7:0],23'b0};
-  assign resY=A[67:66]==`ftype_dbl && ~tbl_read && (is_sqrt&is_div) ? {B[67:66],expDF[11],1'b0,expDF[10:0],valDF,41'b0} : 68'bz;
-  assign resY=A[67:66]!=`ftype_dbl && ~tbl_read && (is_sqrt&is_div) ? {B[67:66],expDSF0[8],1'b0,expDSF0[7:0],valDSF0,14'b0,
-    expDSF1[8],1'b0,expDSF1[7:0],valDSF1,14'b0};
+  assign resY=A[67:66]==`ptype_dbl && ~tbl_read && ~(is_sqrt&is_div) ? {B[67:66],exp_D[11],B[63],exp_D[10:0],53'b0} : 68'bz;
+  assign resY=A[67:66]!=`ptype_dbl && ~tbl_read && ~(is_sqrt&is_div) ? {B[67:66],exp_X[8],B[63],exp_X[7:0],23'b0,
+    exp_X1[8],B[31],exp_X1[7:0],23'b0} : 68'bz;
+  assign resY=A[67:66]==`ptype_dbl && ~tbl_read && (is_sqrt&is_div) ? {B[67:66],expDF[11],1'b0,expDF[10:0],valDF,41'b0} : 68'bz;
+  assign resY=A[67:66]!=`ptype_dbl && ~tbl_read && (is_sqrt&is_div) ? {B[67:66],expDSF0[8],1'b0,expDSF0[7:0],valDSF0,14'b0,
+    expDSF1[8],1'b0,expDSF1[7:0],valDSF1,14'b0} : 68'bz;
 
   assign resX=(copyA & ~swpSngl) ? A : 68'bz;
   assign resX=(~copyA & ~swpSngl) ? B : 68'bz;

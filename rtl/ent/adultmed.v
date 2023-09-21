@@ -301,7 +301,7 @@ module smallInstr_decoder(
 
   wire [5:0] dat;
 
-  LFSR16_6(clk,rst,dat);
+  LFSR16_6 lfsr1(clk,rst,dat);
 
   integer tt;
 
@@ -598,7 +598,7 @@ module smallInstr_decoder(
 	  assign flags_wrFPU=(|trien[p*8+:8]) ? kflags_wrFPU : 1'bz;
 	  assign rBT_copyV=(|trien[p*8+:8]) ? krBT_copyV : 1'bz;
 	  assign instr_fsimd=(|trien[p*8+:8]) ? kinstr_fsimd : 1'bz;
-	  assign error=(|trien[p*8+:8]) ? kerror||dat==INDEX : 2'bz;
+	  assign error=(|trien[p*8+:8]) ? kerror : 2'bz;
 	  assign port=(|trien[p*8+:8]) ? kport : 4'bz;
 	  assign jumpType=(|trien[p*8+:8]) ? kjumpType : 5'bz;
 	  assign operation=(|trien[p*8+:8]) ? koperation : 13'bz;

@@ -75,8 +75,8 @@ limitations under the License.
 
 `define fop_sqrtDH 0
 `define fop_sqrtDL 1
-`define fop_forkH 2
-`define fop_forkL 3
+`define fop_divDH 2
+`define fop_divDL 3
 `define fop_sqrtE 4
 `define fop_sqrtS 34
 `define fop_divE 6

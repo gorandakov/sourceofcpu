@@ -882,10 +882,10 @@ module frontendSelf(
 	  assign pre_other[j][`instrQ_sc]=isJ[1] ? predx_sc1_reg4 : 2'bz;
 	  assign pre_other[j][`instrQ_sc]=isJ[2] ? predx_sc2_reg4 : 2'bz;
 	  assign pre_other[j][`instrQ_sc]=isJ[3] ? predx_sc3_reg4 : 2'bz;
-	  assign pre_other[j][`instrQ_ss]=isJ[0] ? predx_sh0_reg4 : 1'bz;
-	  assign pre_other[j][`instrQ_ss]=isJ[1] ? predx_sh1_reg4 : 1'bz;
-	  assign pre_other[j][`instrQ_ss]=isJ[2] ? predx_sh2_reg4 : 1'bz;
-	  assign pre_other[j][`instrQ_ss]=isJ[3] ? predx_sh3_reg4 : 1'bz;
+	  assign pre_other[j][`instrQ_jval]=isJ[0] ? predx_sh0_reg4 : 1'bz;
+	  assign pre_other[j][`instrQ_jval]=isJ[1] ? predx_sh1_reg4 : 1'bz;
+	  assign pre_other[j][`instrQ_jval]=isJ[2] ? predx_sh2_reg4 : 1'bz;
+	  assign pre_other[j][`instrQ_jval]=isJ[3] ? predx_sh3_reg4 : 1'bz;
 	  assign pre_other[j][`instrQ_sc]=isJ!=0 ? 2'bz : 2'b0;
 //	  assign pre_other[j][`instrQ_avx]=pre_isAvx_reg;
 	  assign pre_other[j][`instrQ_btbMiss]=~btb_can_ins_reg4;
@@ -1550,7 +1550,7 @@ module frontendSelf(
  
   wire kkk;
 
-  assign kkk=pff==0xfe47;
+  assign kkk=pff==16'hfe47;
   
   bit_find_first_bit #(4) tkjiA_mod({pred_sc3A[0]^pred_sh3A^kkk,
     pred_sc2A[0]^pred_sh2A^kkk,

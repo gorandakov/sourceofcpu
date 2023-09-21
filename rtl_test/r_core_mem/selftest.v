@@ -20,7 +20,7 @@ module selftest(
 
   reg [1023:0] RAM[1024*1024*5-1:0];
   reg [15:0] RAM_PTR[1024*1024*5-1:0];
-  reg [4*33-1:0] RAM_RETIRE[1024*1024*8-1:0]
+  reg [4*33-1:0] RAM_RETIRE[1024*1024*8-1:0];
   reg [4*33-1:0] reti_read_data[9:0];
   reg [22:0] retire_index;
   integer k,j,p,n,err,noretcnt;
@@ -127,7 +127,7 @@ module selftest(
               end
               if (pook_en[p]) begin
                   for(n=0;n<9;n=n+1) begin
-                      if ((ret_rT[n]==rT[p] && ret_data[n]=data[p])||!rT_en[p]) begin
+                      if ((ret_rT[n]==rT[p] && ret_data[n]==data[p])||!rT_en[p]) begin
                           err=p;
                       end else if (ret_rT[n]==rT[p] && ret_en[n] && rT_en[p] && pook_en[p]) begin
                           $display("errval velrilog=%x, c++=%x",ret_data[n],data[p]);
@@ -174,7 +174,7 @@ module selftest(
   obusDOut_dataAUD,
   obusDOut_iosig,
   obusDOut_can,
-  inout obusDOut_want,
+  obusDOut_want,
   obusDOut_replay
   );
 

@@ -472,7 +472,7 @@ module dc0_cntrl(
   output [9:0] rbus_dst_req;
   output [36:0] rbus_address;
   input rbus_can;
-  output rbus_want;w
+  output rbus_want;
   output [4:0] rbus_bank0;
   output [4:0] rbus_sz;
   output [1:0] rbus_low;
