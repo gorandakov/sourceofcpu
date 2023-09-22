@@ -3946,7 +3946,6 @@ module backend(
   .write8_addr_reg(FUreg_reg3[8]),.write8_data_reg(FUVL_reg[8]),.write8_wen_reg(FUwen_reg3[8]),
   .write9_addr_reg(FUreg_reg3[9]),.write9_data_reg(FUVL_reg[9]),.write9_wen_reg(FUwen_reg3[9])
   );
-`endif
 
   regfile_get_gazump GzVB(
   .clk(clk),.rst(rst),
@@ -3999,7 +3998,7 @@ module backend(
   .write8_addr_reg(FUreg_reg3[8]),.write8_wen_reg(FUwen_reg3[8]),
   .write9_addr_reg(FUreg_reg3[9]),.write9_wen_reg(FUwen_reg3[9])
   );
-`ifdef simulation
+
   regfile #(SIMD_WIDTH) regBFH_mod(
   .clk(clk),
   .clkREF(clkREF),
@@ -4199,7 +4198,6 @@ module backend(
   .write8_addr_reg(FUreg_reg5[8]),.write8_data_reg(FUFL_reg[8]),.write8_wen_reg(FUwen_reg5[8]),
   .write9_addr_reg(FUreg_reg5[9]),.write9_data_reg(FUFL_reg[9]),.write9_wen_reg(FUwen_reg5[9])
   );
-`endif
   reginfl #(1'b1) reginflGVB_mod(
   .clk(clk),
   .rst(rst),
@@ -4366,7 +4364,7 @@ module backend(
   .newAddr7(clrR_reg[7][8:4]),.newEn7(clr_reg[7]),
   .newAddr8(clrR_reg[8][8:4]),.newEn8(clr_reg[8])
   );
-
+`endif
   
   get_clear_reg clr_mod(
   .newR0(newR[0]),.newR1(newR[1]),.newR2(newR[2]),
