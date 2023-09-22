@@ -815,10 +815,10 @@ module smallInstr_decoder(
        prB_useF[4]=1'b1;
        prT_useF[4]=1'b1;
        if (opcode_sub[5:1]==5'b11100) begin
-           pport[4]=PORT_FMUL;
+           pport[4]=instr[6] ? PORT_FMUL : PORT_FADD;
            poperation[4][7:0]=instr[6] ? `fop_mulDH : `fop_mulDL;
        end else begin
-	   pport[4]=PORT_FADD;
+	   pport[4]=instr[6] ? PORT_FMUL : PORT_FADD;
            if (opcode_sub[1]) begin
                poperation[4][7:0]=instr[6] ? `fop_subDH : `fop_subDL;
            end else begin
@@ -845,7 +845,7 @@ module smallInstr_decoder(
        prB_useF[5]=1'b1;
        prT_useF[5]=1'b1;
        if (opcode_sub[5:1]==5'b11101) begin
-           pport[5]=PORT_FMUL;
+           pport[5]=PORT_FANY;
            poperation[5][7:0]=`fop_mulDP;
        end else begin
 	   pport[5]=PORT_FADD;
@@ -859,7 +859,7 @@ module smallInstr_decoder(
        trien[6]=~magic[0] & subIsSIMD;
        puseRs[6]=1'b1;
        prAlloc[6]=1'b1;
-       pport[6]=PORT_VADD;
+       pport[6]=PORT_VANY;
        if (~prevSpecLoad || instr[15:12]==4'd15) begin
            prA[6]={1'b0,instr[11:8]};
            prT[6]={1'b0,instr[11:8]};
@@ -902,12 +902,12 @@ module smallInstr_decoder(
        prT_useF[7]=1'b1;
        //verilator lint_off CASEINCOMPLETE
        case({opcode_main[3],opcode_main[7:6]})
-     3'd0: begin pport[7]=PORT_FMUL; poperation[7]=`fop_mulS; end
+     3'd0: begin pport[7]=PORT_FADD; poperation[7]=`fop_mulS; end
      3'd1: begin pport[7]=PORT_FADD; poperation[7]=`fop_addS; end
      3'd2: begin pport[7]=PORT_FADD; poperation[7]=`fop_subS; end
-     3'd4: begin pport[7]=PORT_FMUL; poperation[7]=`fop_mulSP; end
-     3'd5: begin pport[7]=PORT_FADD; poperation[7]=`fop_addSP; end
-     3'd6: begin pport[7]=PORT_FADD; poperation[7]=`fop_subSP; end
+     3'd4: begin pport[7]=PORT_FANY; poperation[7]=`fop_mulSP; end
+     3'd5: begin pport[7]=PORT_FANY; poperation[7]=`fop_addSP; end
+     3'd6: begin pport[7]=PORT_FANY; poperation[7]=`fop_subSP; end
        endcase
        //verilator lint_on CASEINCOMPLETE
        trien[8]=~magic[0] & subIsLinkRet;
@@ -1047,7 +1047,7 @@ module smallInstr_decoder(
        prB_useF[11]=1'b1;
        prT_useF[11]=1'b1;
        case(opcode_main[7:6])
-     2'd0: begin pport[11]=PORT_FMUL; poperation[11]=`fop_mulEE; end
+     2'd0: begin pport[11]=PORT_FADD; poperation[11]=`fop_mulEE; end
      2'd1: begin pport[11]=PORT_FADD; poperation[11]=`fop_addEE; end
      2'd2: begin pport[11]=PORT_FADD; poperation[11]=`fop_subEE; end
      2'd3: begin pport[11]=PORT_FADD; poperation[11]=`fop_subEE; end
@@ -1812,16 +1812,16 @@ module smallInstr_decoder(
              poperation[33][9:8]=2'b11;
       end
       case(instr[13:8])
-          6'd0: begin poperation[33][7:0]=`fop_addDH; pport[33]=PORT_FADD; end
+          6'd0: begin poperation[33][7:0]=`fop_addDH; pport[33]=PORT_FMUL; end
           6'd1: begin poperation[33][7:0]=`fop_addDL; pport[33]=PORT_FADD; end
-          6'd2: begin poperation[33][7:0]=`fop_subDH; pport[33]=PORT_FADD; end
+          6'd2: begin poperation[33][7:0]=`fop_subDH; pport[33]=PORT_FMUL; end
           6'd3: begin poperation[33][7:0]=`fop_subDL; pport[33]=PORT_FADD; end
           6'd4: begin poperation[33][7:0]=`fop_mulDH; perror[33]={1'b0,perror[33]|instr[16]}; pport[33]=PORT_FMUL; end
-          6'd5: begin poperation[33][7:0]=`fop_mulDL; pport[33]=PORT_FMUL; end
-          6'd6: begin poperation[33][7:0]=`fop_addDP; pport[33]=PORT_FADD; end
-          6'd7: begin poperation[33][7:0]=`fop_subDP; pport[33]=PORT_FADD; end
-          6'd8: begin poperation[33][7:0]=`fop_mulDP; perror[33]={1'b0,perror[33]|instr[16]}; pport[33]=PORT_FMUL; end
-          6'd9: begin poperation[33][7:0]=`fop_addsubDP; pport[33]=PORT_FADD; end
+          6'd5: begin poperation[33][7:0]=`fop_mulDL; pport[33]=PORT_FADD; end
+          6'd6: begin poperation[33][7:0]=`fop_addDP; pport[33]=PORT_FANY; end
+          6'd7: begin poperation[33][7:0]=`fop_subDP; pport[33]=PORT_FANY; end
+          6'd8: begin poperation[33][7:0]=`fop_mulDP; perror[33]={1'b0,perror[33]|instr[16]}; pport[33]=PORT_FANY; end
+          6'd9: begin poperation[33][7:0]=`fop_addsubDP; pport[33]=PORT_FANY; end
           default: perror[33]=1;
       endcase
       
@@ -1848,10 +1848,10 @@ module smallInstr_decoder(
       case(instr[13:8])
           6'd16: begin poperation[34][7:0]=`fop_addS; pport[34]=PORT_FADD; end
           6'd17: begin poperation[34][7:0]=`fop_subS; pport[34]=PORT_FADD; end
-          6'd18: begin poperation[34][7:0]=`fop_mulS; pport[34]=PORT_FMUL; end
-          6'd19: begin poperation[34][7:0]=`fop_addSP; pport[34]=PORT_FADD; end
-          6'd20: begin poperation[34][7:0]=`fop_subSP; pport[34]=PORT_FADD; end
-          6'd21: begin poperation[34][7:0]=`fop_mulSP; pport[34]=PORT_FMUL; end
+          6'd18: begin poperation[34][7:0]=`fop_mulS; pport[34]=PORT_FADD; end
+          6'd19: begin poperation[34][7:0]=`fop_addSP; pport[34]=PORT_FANY; end
+          6'd20: begin poperation[34][7:0]=`fop_subSP; pport[34]=PORT_FANY; end
+          6'd21: begin poperation[34][7:0]=`fop_mulSP; pport[34]=PORT_FANY; end
           6'd22: begin poperation[34][7:0]=`fop_addEE; pport[34]=PORT_FADD; 
                  prA[34]=rA_reor32; prB[34]=rB_reor32; prT[34]=rT_reor32; end
           6'd23: begin poperation[34][7:0]=`fop_subEE; pport[34]=PORT_FADD;
@@ -1931,16 +1931,16 @@ module smallInstr_decoder(
       {poperation[36][11],poperation[36][9:8]}={1'b0,instr[15:14]};
       if (instr[16]!=0) perror[36]=1;
       case(instr[13:8])
-          6'd32: begin poperation[36][11]=1'b0; poperation[36][7:0]=`fop_permDS; pport[36]=PORT_FMUL; end
-          6'd33: begin poperation[36][7:0]=`fop_divDL; pport[36]=PORT_FADD; prB_useF[36]=1'b0; end
-          6'd34: begin poperation[36][7:0]=`fop_sqrtDH; pport[36]=PORT_FADD; end
-          6'd35: begin poperation[36][7:0]=`fop_sqrtDL; pport[36]=PORT_FADD; end
-          6'd36: begin poperation[36][7:0]=`fop_sqrtE; pport[36]=PORT_FADD; prB_useF[36]=1'b0; end
-          6'd37: begin poperation[36][7:0]=`fop_divE; pport[36]=PORT_FMUL; end
-          6'd38: begin poperation[36][7:0]=`fop_pcvtS; pport[36]=PORT_FMUL; prA_useF[36]=1'b0; end
-          6'd39: begin poperation[36][7:0]=`fop_pcvtD; pport[36]=PORT_FMUL; prA_useF[36]=1'b0; end
+          6'd32: begin poperation[36][11]=1'b0; poperation[36][7:0]=`fop_permDS; pport[36]=PORT_FANY; end
+          6'd33: begin poperation[36][7:0]=`fop_divDL; pport[36]=PORT_FANY; prB_useF[36]=1'b0; end
+          6'd34: begin poperation[36][7:0]=`fop_sqrtDH; pport[36]=PORT_FANY; end
+          6'd35: begin poperation[36][7:0]=`fop_sqrtDL; pport[36]=PORT_FANY; end
+          6'd36: begin poperation[36][7:0]=`fop_sqrtE; pport[36]=PORT_FANY; prB_useF[36]=1'b0; end
+          6'd37: begin poperation[36][7:0]=`fop_divE; pport[36]=PORT_FANY; end
+          6'd38: begin poperation[36][7:0]=`fop_pcvtS; pport[36]=PORT_FANY; prA_useF[36]=1'b0; end
+          6'd39: begin poperation[36][7:0]=`fop_pcvtD; pport[36]=PORT_FANY; prA_useF[36]=1'b0; end
 	  6'd40,6'd41,6'd42,6'd43: begin poperation[36][7:0]=`fop_logic; poperation[36][1:0]=instr[9:8]; 
-	     pport[36]=PORT_FADD; poperation[36][10:8]={instr[16],2'b0}; end 
+	     pport[36]=PORT_FANY; poperation[36][10:8]={instr[16],2'b0}; end 
           default: perror[36]=1;
       endcase
       
@@ -1967,7 +1967,7 @@ module smallInstr_decoder(
       poperation[37][9:8]={2{instr[16]}};
       poperation[37][10]=instr[10]; //lin search
       case(instr[13:8])
-          6'd32,6'd36: begin poperation[37][7:0]=`fop_cmpDH; pport[37]=PORT_FADD; end
+          6'd32,6'd36: begin poperation[37][7:0]=`fop_cmpDH; pport[37]=PORT_FMUL; end
           6'd33,6'd37: begin poperation[37][7:0]=`fop_cmpDL; pport[37]=PORT_FADD; end
           6'd34,6'd38: begin poperation[37][7:0]=`fop_cmpE; pport[37]=PORT_FADD; prA[37]=rA_reor32; prB[37]=rB_reor32; end
           6'd35,6'd39: begin poperation[37][7:0]=`fop_cmpS; pport[37]=PORT_FADD; end
@@ -2003,15 +2003,15 @@ module smallInstr_decoder(
       pflags_write[38]=1'b1;
       poperation[38][10]=instr[16]; //signed/single
       case(instr[13:8])
-	  6'd32: begin poperation[38][7:0]=`fop_pcmplt; pport[38]=PORT_FADD; end
-	  6'd33: begin poperation[38][7:0]=`fop_pcmpge; pport[38]=PORT_FADD; end
-	  6'd34: begin poperation[38][7:0]=`fop_pcmpeq; pport[38]=PORT_FADD; end
-	  6'd35: begin poperation[38][7:0]=`fop_pcmpne; pport[38]=PORT_FADD; end
-	  6'd36: begin poperation[38][7:0]=`fop_rndES; pport[38]=PORT_FMUL; 
+	  6'd32: begin poperation[38][7:0]=`fop_pcmplt; pport[38]=PORT_FANY; end
+	  6'd33: begin poperation[38][7:0]=`fop_pcmpge; pport[38]=PORT_FANY; end
+	  6'd34: begin poperation[38][7:0]=`fop_pcmpeq; pport[38]=PORT_FANY; end
+	  6'd35: begin poperation[38][7:0]=`fop_pcmpne; pport[38]=PORT_FANY; end
+	  6'd36: begin poperation[38][7:0]=`fop_rndES; pport[38]=PORT_FADD; 
                  prA[34]=rA_reor32; prB[34]=rB_reor32; prT[34]=rT_reor32; end
-	  6'd37: begin poperation[38][7:0]=`fop_rndED; pport[38]=PORT_FMUL; 
+	  6'd37: begin poperation[38][7:0]=`fop_rndED; pport[38]=PORT_FADD; 
                  prA[34]=rA_reor32; prB[34]=rB_reor32; prT[34]=rT_reor32; end
-	  6'd38: begin poperation[38][7:0]=`fop_rndDSP; pport[38]=PORT_FMUL; end
+	  6'd38: begin poperation[38][7:0]=`fop_rndDSP; pport[38]=PORT_FADD; end
 	  6'd40: begin poperation[38][7:0]=`op_cvtE; pport[38]=PORT_MUL; pflags_write[38]=1'b0;
 	    prA_useF[38]=1'b0; prB_useF[38]=1'b0; prB_use[38]=1'b1; prT[38]=rT_reor32; end
 	  6'd41: begin poperation[38][7:0]=`op_cvtD; pport[38]=PORT_MUL; pflags_write[38]=1'b0;
