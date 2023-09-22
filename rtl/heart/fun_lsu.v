@@ -19,6 +19,7 @@ limitations under the License.
 
 module agu_block(
   clk, rst,
+  clkREF,clkREF2,
   except,
   excpt_gate,
   excpt_in_vm,
@@ -191,6 +192,8 @@ module agu_block(
 
   input clk;
   input rst;
+  input clkREF;
+  input clkREF2;
   input except;
   input excpt_gate;
   input excpt_in_vm;
@@ -1359,7 +1362,7 @@ module agu_block(
  
   rs_write_forward #(65) nxtBase1(
   clk,rst,
-  ~u1_clkEn|(rsStall[0]&~now_flushing&~alt_bus_hold_reg),
+  ~u1_clkEn|(rsStall[0]&~now_flushing&~alt_bus_hold_reg)|~clkREF2,
   u1_base,uu_base1,
   u1_base_fufwd,u1_base_fuufwd,
   FU0,FU0_reg,
@@ -1376,7 +1379,7 @@ module agu_block(
   
   rs_write_forward #(65) nxtIndex1(
   clk,rst,
-  ~u1_clkEn|(rsStall[0]&~now_flushing&~alt_bus_hold_reg),
+  ~u1_clkEn|(rsStall[0]&~now_flushing&~alt_bus_hold_reg)|~clkREF,
   u1_index,uu_index1,
   u1_index_fufwd,u1_index_fuufwd,
   FU0,FU0_reg,
@@ -1393,7 +1396,7 @@ module agu_block(
   
   rs_write_forward #(65) nxtBase2(
   clk,rst,
-  ~u2_clkEn|(rsStall[1]&~now_flushing&~alt_bus_hold_reg),
+  ~u2_clkEn|(rsStall[1]&~now_flushing&~alt_bus_hold_reg)|~clkREF2,
   u2_base,uu_base2,
   u2_base_fufwd,u2_base_fuufwd,
   FU0,FU0_reg,
@@ -1410,7 +1413,7 @@ module agu_block(
   
   rs_write_forward #(65) nxtIndex2(
   clk,rst,
-  ~u2_clkEn|(rsStall[1]&~now_flushing&~alt_bus_hold_reg),
+  ~u2_clkEn|(rsStall[1]&~now_flushing&~alt_bus_hold_reg)|~clkREF,
   u2_index,uu_index2,
   u2_index_fufwd,u2_index_fuufwd,
   FU0,FU0_reg,
@@ -1428,7 +1431,7 @@ module agu_block(
   
   rs_write_forward #(65) nxtBase3(
   clk,rst,
-  ~u3_clkEn|(rsStall[2]&~now_flushing&~alt_bus_hold_reg),
+  ~u3_clkEn|(rsStall[2]&~now_flushing&~alt_bus_hold_reg)|~clkREF2,
   u3_base,uu_base3,
   u3_base_fufwd,u3_base_fuufwd,
   FU0,FU0_reg,
@@ -1445,7 +1448,7 @@ module agu_block(
   
   rs_write_forward #(65) nxtIndex3(
   clk,rst,
-  ~u3_clkEn|(rsStall[2]&~now_flushing&~alt_bus_hold_reg),
+  ~u3_clkEn|(rsStall[2]&~now_flushing&~alt_bus_hold_reg)|~clkREF,
   u3_index,uu_index3,
   u3_index_fufwd,u3_index_fuufwd,
   FU0,FU0_reg,
@@ -1463,7 +1466,7 @@ module agu_block(
   
   rs_write_forward #(65) nxtBase4(
   clk,rst,
-  ~u4_clkEn,
+  ~u4_clkEn|~clkREF2,
   u4_base,uu_base4,
   u4_base_fufwd,u4_base_fuufwd,
   FU0,FU0_reg,
@@ -1480,7 +1483,7 @@ module agu_block(
   
   rs_write_forward #(65) nxtIndex4(
   clk,rst,
-  ~u4_clkEn,
+  ~u4_clkEn|~clkREF,
   u4_index,uu_index4,
   u4_index_fufwd,u4_index_fuufwd,
   FU0,FU0_reg,
@@ -1498,7 +1501,7 @@ module agu_block(
   
   rs_write_forward #(65) nxtBase5(
   clk,rst,
-  ~u5_clkEn,
+  ~u5_clkEn|~clkREF2,
   u5_base,uu_base5,
   u5_base_fufwd,u5_base_fuufwd,
   FU0,FU0_reg,
@@ -1515,7 +1518,7 @@ module agu_block(
   
   rs_write_forward #(65) nxtIndex5(
   clk,rst,
-  ~u5_clkEn,
+  ~u5_clkEn|~clkREF,
   u5_index,uu_index5,
   u5_index_fufwd,u5_index_fuufwd,
   FU0,FU0_reg,
