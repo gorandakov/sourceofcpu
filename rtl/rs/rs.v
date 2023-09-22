@@ -2274,7 +2274,7 @@ endmodule
 
 
 module rs(
-  clk,
+  clk,clkREF,clkREF2,
   dataRst,nonDataRst,rst_thread,
   stall,
   doStall,
@@ -2388,6 +2388,8 @@ module rs(
 /*verilator hier_block*/ 
   
   input clk;
+  input clkREF;
+  input clkREF2;
   input dataRst;
   input nonDataRst;
   input rst_thread;
@@ -2791,6 +2793,7 @@ module rs(
       input [OPERATION_WIDTH-1:0] op;
       op_fpswap=op[12] && op[7:4]==4'b0;
   endfunction 
+`ifdef simulation
   rs_array rs_mod(
   clk,
   dataRst,nonDataRst,rst_thread,
@@ -2810,6 +2813,27 @@ module rs(
 // 1 if buffer is free  
   bufFree
   );
+`else
+  rs_array rs_mod(
+  clk,
+  dataRst,nonDataRst,rst_thread,
+  stall|doStall,
+  FU0Hit,FU1Hit,FU2Hit,FU3Hit,
+  new_thread,
+// wires to store new values in a buffer
+  newANeeded0&clkREF,newANeeded0&clkREF2,1'b0,newRsSelect0,newPort0,
+  newANeeded1&clkREF,newANeeded1&clkREF2,newSNeeded1,newRsSelect1,newPort1,
+  newANeeded2&clkREF,newANeeded2&clkREF2,newSNeeded2,newRsSelect2,newPort2,
+// wires to get values out of buffer
+  outRsSelect[0],outBank[0],rsFoundNZ[0],portReady[0],outDataEn0,outThread0,//agu
+  outRsSelect[1],outBank[1],rsFound[1],portReady[1],outDataEn1,outThread1,//alu 1
+  outRsSelect[2],outBank[2],rsFoundNZ[2],portReady[2],outDataEn2,outThread2,//alu 2
+  fuFwdA&{4{clkREF}},fuFwdA&{4{clkREF2}},
+  isDataA&{32{clkREF}},isDataA&{32{clkREF2}},isDataS,
+// 1 if buffer is free
+  bufFree
+  );
+`endif
  
 //  assign op_swp=op_fpswap(outOp1); 
 

@@ -874,7 +874,7 @@ endmodule
 
 
 module rs_s(
-  clk,
+  clk,clkREF,clkREF2,
   dataRst,nonDataRst,rst_thread,
   stall,
   doStall,
@@ -973,6 +973,8 @@ module rs_s(
 /*verilator hier_block*/ 
 
   input clk;
+  input clkREF;
+  input clkREF2;
   input dataRst;
   input nonDataRst;
   input rst_thread;
@@ -1347,7 +1349,7 @@ module rs_s(
   assign newIsVB[1]=newPort1[5] && (newPort1[2:0]==3'b000 || newPort1[2]);
   assign newIsVB[2]=newPort2[5] && (newPort2[2:0]==3'b000 || newPort2[2]);
 
-
+`ifdef simulation
   rss_array rs_mod(
   clk,
   dataRst,nonDataRst,rst_thread,
@@ -1402,6 +1404,61 @@ module rs_s(
 // 1 if buffer is free  
   bufFreeB
   );
+`else
+  rss_array rs_mod(
+  clk,
+  dataRst,nonDataRst,rst_thread,
+  stall|doStall,
+  FU0Hit,FU1Hit,FU2Hit,FU3Hit,
+  new_thread,
+// wires to store new values in a buffer
+  newANeeded0&clkREF,newANeeded0&clkREF2,newRsSelect0,{newEnA0&clkREF2,newEnA0&clkREF,newPort0},
+  newANeeded1&clkREF,newANeeded1&clkREF2,newRsSelect1,{newEnA1&clkREF2,newEnA1&clkREF,newPort1},
+  newANeeded2&clkREF,newANeeded2&clkREF2,newRsSelect2,{newEnA2&clkREF2,newEnA2&clkREF,newPort2},
+// wires to get values out of buffer
+  outRsSelect[0],outBank[0],rsFound[0],portReady[0],outDataEn0,outThread0,outZeroB0,//agu
+  outRsSelect[2],outBank[2],rsFound[2],portReady[2],outDataEn2,outThread2,outZeroA2,//agu 2
+  fuFwdA&{4{clkREF}},fuFwdA&{4{clkREF2}},
+  isDataA&{32{clkREF}},isDataA&{32{clkREF2}},  
+// 1 if buffer is free
+  bufFree 
+  );
+  
+  rss_D_array rs0_mod(
+  clk,
+  dataRst,nonDataRst,rst_thread,
+  stall|doStall,
+  FU0Hit,FU1Hit,FU2Hit,FU3Hit,
+  new_thread,
+// wires to store new values in a buffer
+  newANeeded0&clkREF,1'b1,newRsSelect0,newPort0,
+  newANeeded1&clkREF,1'b1,newRsSelect1,newPort1,
+  newANeeded2&clkREF,1'b1,newRsSelect2,newPort2,
+// wires to get values out of buffer
+  outRsSelect[1],outBank[1],rsFound[1],portReady[1],outDataEn1,outThread1,//data
+  fuFwdA&{4{clkREF}},
+  isDataA&{32{clkREF}},isDataWQA&{32{clkREF}},
+// 1 if buffer is free
+  bufFreeA
+  );
+  rss_D_array rs1_mod(
+  clk,
+  dataRst,nonDataRst,rst_thread,
+  stall|doStall,
+  FU0Hit,FU1Hit,FU2Hit,FU3Hit,
+  new_thread,
+// wires to store new values in a buffer
+  newANeeded0&clkREF2,1'b1,newRsSelect0,newPort0,
+  newANeeded1&clkREF2,1'b1,newRsSelect1,newPort1,
+  newANeeded2&clkREF2,1'b1,newRsSelect2,newPort2,
+// wires to get values out of buffer
+  outRsSelect[3],outBank[3],rsFound[3],portReady[3],outDataEn3,outThread3,//data
+  fuFwdA&{4{clkREF2}},
+  isDataA&{32{clkREF2}},isDataWQA&{32{clkREF2}},
+// 1 if buffer is free
+  bufFreeB
+  );
+`endif
   
   DFF2 #(192) outEqA_mod(clk,dataRst,1'b1,outEqA,outEqA_reg);
   DFF2 #(192) outEqB_mod(clk,dataRst,1'b1,outEqB,outEqB_reg);
@@ -1681,7 +1738,7 @@ module rs_s(
   FUWQ0,FUWQen0,
   FUWQ1,FUWQen1,
   isDataWQA);
-  
+`ifdef simulation  
   WQ_wakeUP_logic_array WQLB_mod(
   clk,
   dataRst|nonDataRst,
@@ -1692,7 +1749,7 @@ module rs_s(
   FUWQ0,FUWQen0,
   FUWQ1,FUWQen1,
   isDataWQB);
-
+`endif
 
   rs_nonWakeUp_array #(CONST_WIDTH) dataC_mod(
   clk,dataRst,stall|doStall,
