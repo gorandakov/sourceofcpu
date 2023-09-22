@@ -7472,11 +7472,11 @@ dcache1 L1D_mod(
               else rs_port_sch[k]<=4'd2;
               if (rs_port[k]==PORT_SHIFT || rs_port[k]==PORT_MUL) rs_port_sch[k]<=4'd2;
               if (rs_port[k]==PORT_FADD) begin rs_port_sch[k]<=4'b1001; rs_xport[k]<=1'b1; end
-              if (rs_port[k]==PORT_FMUL) rs_port_sch[k]<=4'b1001;
-              if (rs_port[k]==PORT_FANY) rs_port_sch[k][3]<=1'b1;
+              if (rs_port[k]==PORT_FMUL) rs_port_sch[k]<=4'b1010;
+              if (rs_port[k]==PORT_FANY) rs_port_sch[k]<=5'b1011;
               if (rs_port[k]==PORT_VADD) begin rs_port_sch[k]<=4'b101; rs_xport[k]<=1'b1; end
               if (rs_port[k]==PORT_VCMP) rs_port_sch[k]<=4'b110;
-              if (rs_port[k]==PORT_VANY) rs_port_sch[k][2]<=1'b1;
+              if (rs_port[k]==PORT_VANY) rs_port_sch[k]<=4'b111;
               if (rs_port[k]==PORT_ALU && (rs_port[(k/3)*3+2]==PORT_VADD || rs_port[(k/3)*3+2]==PORT_FADD))
                  rs_port_sch[k]<=4'd2;             
               
