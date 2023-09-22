@@ -1482,7 +1482,7 @@ module rs_s(
   outRsSelect[3],outDataEn3[0],outBank[3],rsFound[3],outFuFwdA3,outFuuFwdA3,
   outRsSelect[2],outDataEn2[0],outBank[2],rsFound[2],outFuFwdA2,outFuuFwdA2
   );
-
+`ifdef simulation
   rs_wakeUp_logic_array #(DATA_WIDTH) dataB_L_mod(
   clk,dataRst,stall|doStall,
   isDataB,
@@ -1507,7 +1507,7 @@ module rs_s(
   outRsSelect[1],outDataEn1[0],outBank[1],rsFound[1],outFuFwdB1,outFuuFwdB1,
   outRsSelect[2],outDataEn2[0],outBank[2],rsFound[2],outFuFwdB2,outFuuFwdB2
   );
-
+`endif
   rs_wakeUp_data_array #(DATA_WIDTH) dataA_G_mod(
   clk,dataRst,stall|doStall,
   newRsSelect0,newDataA0,
@@ -1521,7 +1521,7 @@ module rs_s(
   outRsSelect[3],outBank[3],rsFound[3],outDataA3,
   outRsSelect[2],outBank[2],rsFound[2],outDataA2
   );
-  
+`ifdef simulation  
   rs_wakeUp_data_array #(DATA_WIDTH) dataB_G_mod(
   clk,dataRst,stall|doStall,
   newRsSelect0,newDataB0,
@@ -1535,7 +1535,7 @@ module rs_s(
   outRsSelect[1],outBank[1],rsFound[1],outDataB1,
   outRsSelect[2],outBank[2],rsFound[2],outDataB2
   );
-
+`endif
   rs_wakeUp_data_array #(SIMD_WIDTH) dataA_VH_mod(
   clk,dataRst,stall|doStall,
   newRsSelect0_reg,newDataVA0H,
@@ -1563,7 +1563,7 @@ module rs_s(
   outRsSelect_reg[3],outBank_reg[3],rsFound_reg[3],outDataVA3L,
   32'b0,4'b0,1'b0,
   );
-  
+`ifdef simulation  
   rs_wakeUp_data_array #(SIMD_WIDTH) dataB_VH_mod(
   clk,dataRst,stall|doStall,
   newRsSelect0_reg,newDataVB0H,
@@ -1591,7 +1591,7 @@ module rs_s(
   outRsSelect_reg[1],outBank_reg[1],rsFound_reg[1],outDataVB1L,
   32'b0,4'b0,1'b0,
   );
-
+`endif
   rs_wakeUp_data_array #(SIMD_WIDTH) dataA_FH_mod(
   clk,dataRst,stall|doStall,
   newRsSelect0_reg2,newDataFA0H,
@@ -1619,7 +1619,7 @@ module rs_s(
   outRsSelect_reg2[3],outBank_reg2[3],rsFound_reg2[3],outDataFA3L,
   32'b0,4'b0,1'b0,
   );
-  
+`ifdef simulation  
   rs_wakeUp_data_array #(SIMD_WIDTH) dataB_FH_mod(
   clk,dataRst,stall|doStall,
   newRsSelect0_reg2,newDataFB0H,
@@ -1647,7 +1647,7 @@ module rs_s(
   outRsSelect_reg2[1],outBank_reg2[1],rsFound_reg2[1],outDataFB1L,
   32'b0,4'b0,1'b0,
   );
-
+`endif
  
   rs_nonWakeUp_array #(WQ_WIDTH) dataWQA_mod(
   clk,dataRst,stall|doStall,
