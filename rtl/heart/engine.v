@@ -2665,6 +2665,7 @@ module backend(
   
   ratV ratAV_mod(
     .clk(clk),
+    .clkREF12(clkREF),
     .rst(rst),
     .read_clkEn(~doStall),
     .newR0(newR[0]),.newR1(newR[1]),.newR2(newR[2]),.newR3(newR[3]),
@@ -2731,6 +2732,7 @@ module backend(
 
   ratV ratBV_mod(
     .clk(clk),
+    .clkREF12(clkREF2),
     .rst(rst),
     .read_clkEn(~doStall),
     .newR0(newR[0]),.newR1(newR[1]),.newR2(newR[2]),.newR3(newR[3]),
