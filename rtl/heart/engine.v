@@ -5211,7 +5211,7 @@ module backend(
   assign rrfBW[0]=(~Wswp[0]) ? rs0i0_rB_reg : rs0i0_rA_reg;
   assign rrfBW[1]=(~Wswp[1]) ? rs1i0_rB_reg : rs1i0_rA_reg;
   assign rrfBW[2]=(~Wswp[2]) ? rs2i0_rB_reg : rs2i0_rA_reg;
-      
+`ifdef simulation      
   fu_alu alu_ALIGNED(
   .clk(clk),
   .rst(rst),
@@ -5260,6 +5260,56 @@ module backend(
   .DataAlt(dalt),
   .FUCVTIN(FUCVT1[63:0])
   ); 
+`else
+  fu_alu alu_ALIGNED(
+  .clk(clk),
+  .rst(rst),
+  .except(except),
+  .csrss_addr(csrss_no),
+  .csrss_data(csrss_data),
+  .csrss_en(csrss_en),
+  .u1_A(outDataA[0+1]),.u1_B(outDataA[0+1]),.u1_S(outDataS[0+1]),.u1_op(outOp[0+1]),
+  .u1_ret({FUS_alu[0],ex_alu[0]}),.u1_rten(enS_alu[0]),.u1_clkEn(outEn[0+1][0]&outEn[0+1][1]),
+    .u1_A_fufwd(fuFwdA[0+1]),.u1_A_fuufwd(fuuFwdA[0+1]),
+    .u1_B_fufwd(fuFwdA[0+1]),.u1_B_fuufwd(fuuFwdA[0+1]),
+    .u1_S_fufwd(fuFwdS[0+1]),.u1_S_fuufwd(fuuFwdS[0+1]),
+  .u2_A(outDataA[0+2]),.u2_B(outDataA[0+2]),.u2_S(outDataS[0+2]),.u2_op(outOp[0+2]),
+  .u2_ret({FUS_alu[1],ex_alu[1]}),.u2_rten(enS_alu[1]),.u2_clkEn(outEn[0+2][0]&outEn[0+2][1]),
+    .u2_A_fufwd(fuFwdA[0+2]),.u2_A_fuufwd(fuuFwdA[0+2]),
+    .u2_B_fufwd(fuFwdA[0+2]),.u2_B_fuufwd(fuuFwdA[0+2]),
+    .u2_S_fufwd(fuFwdS[0+2]),.u2_S_fuufwd(fuuFwdS[0+2]),
+  .u3_A(outDataA[3+1]),.u3_B(outDataA[3+1]),.u3_S(outDataS[3+1]),.u3_op(outOp[3+1]),
+  .u3_ret({FUS_alu[2],ex_alu[2]}),.u3_rten(enS_alu[2]),.u3_clkEn(outEn[3+1][0]&outEn[3+1][1]),
+    .u3_A_fufwd(fuFwdA[3+1]),.u3_A_fuufwd(fuuFwdA[3+1]),
+    .u3_B_fufwd(fuFwdA[3+1]),.u3_B_fuufwd(fuuFwdA[3+1]),
+    .u3_S_fufwd(fuFwdS[3+1]),.u3_S_fuufwd(fuuFwdS[3+1]),
+  .u4_A(outDataA[3+2]),.u4_B(outDataA[3+2]),.u4_S(outDataS[3+2]),.u4_op(outOp[3+2]),
+  .u4_ret({FUS_alu[3],ex_alu[3]}),.u4_rten(enS_alu[3]),.u4_clkEn(outEn[3+2][0]&outEn[3+2][1]),
+    .u4_A_fufwd(fuFwdA[3+2]),.u4_A_fuufwd(fuuFwdA[3+2]),
+    .u4_B_fufwd(fuFwdA[3+2]),.u4_B_fuufwd(fuuFwdA[3+2]),
+    .u4_S_fufwd(fuFwdS[3+2]),.u4_S_fuufwd(fuuFwdS[3+2]),
+  .u5_A(outDataA[6+1]),.u5_B(outDataA[6+1]),.u5_S(outDataS[6+1]),.u5_nDataAlt(nDataAlt_reg[2][1]),.u5_op(outOp[6+1]),
+  .u5_ret({FUS_alu[4],ex_alu[4]}),.u5_rten(enS_alu[4]),.u5_clkEn(outEn[6+1][0]&outEn[6+1][1]),
+    .u5_A_fufwd(fuFwdA[6+1]),.u5_A_fuufwd(fuuFwdA[6+1]),
+    .u5_B_fufwd(fuFwdA[6+1]),.u5_B_fuufwd(fuuFwdA[6+1]),
+    .u5_S_fufwd(fuFwdS[6+1]),.u5_S_fuufwd(fuuFwdS[6+1]),
+  .u6_A(outDataA[6+2]),.u6_B(outDataA[6+2]),.u6_S(outDataS[6+2]),.u6_op(outOp[6+2]),
+  .u6_ret({FUS_alu[5],ex_alu[5]}),.u6_rten(enS_alu[5]),.u6_clkEn(outEn[6+2][0]&outEn[6+2][1]),
+    .u6_A_fufwd(fuFwdA[6+2]),.u6_A_fuufwd(fuuFwdA[6+2]),
+    .u6_B_fufwd(fuFwdA[6+2]),.u6_B_fuufwd(fuuFwdA[6+2]),
+    .u6_S_fufwd(fuFwdS[6+2]),.u6_S_fuufwd(fuuFwdS[6+2]),
+  .FU0(FU[0]), .FU1(FU[1]),  .FU2(FU[2]),  .FU3(FU[3]),
+  .FU4(FU[4]), .FU5(FU[5]),  .FU6(FU[6]),  .FU7(FU[7]),
+  .FU8(FU[8]), .FU9(FU[9]),
+  .FUS1(FUS1),  .FUS2(FUS2),  .FUS3(FUS3),
+  .FUS4(FUS4), .FUS5(FUS5),  .FUS6(FUS6),  .FUS7(FUS7),
+  .FUS8(FUS8),.FUS9(FUS9),
+  .fxFRT_alten_reg(|fxFRT_alten_reg[2]),
+  .fcvtout({FUTYPE,FUCVT2}), //might need less than 6 regs due to internal regs
+  .DataAlt(dalt),
+  .FUCVTIN(FUCVT1[63:0])
+  );
+`endif
 
   assign nDataAlt[2][2]=~dalt[1];
   assign nDataAlt[2][0]=~dalt[0];
