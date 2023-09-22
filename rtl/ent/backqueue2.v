@@ -843,7 +843,8 @@ module frontendSelf(
           .isJump(),
           .jumpType(jdec_type[k]),
           .jumpIndir(),
-          .isIPRel()
+          .isIPRel(),
+          .lizztruss(1'b0)
           );
   
       end

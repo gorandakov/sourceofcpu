@@ -596,6 +596,7 @@ module heptane_core(
   wire [3:0] instr0_magic;
   wire instr0_last;
   wire instr0_aft_spc;
+  wire instr0_err;
   
   wire [IN_REG_WIDTH-1:0] instr1_rT;
   wire instr1_en;
@@ -608,6 +609,7 @@ module heptane_core(
   wire [3:0] instr1_magic;
   wire instr1_last;
   wire instr1_aft_spc;
+  wire instr1_err;
   
   wire [IN_REG_WIDTH-1:0] instr2_rT;
   wire instr2_en;
@@ -620,7 +622,8 @@ module heptane_core(
   wire [3:0] instr2_magic;
   wire instr2_last;
   wire instr2_aft_spc;
-  
+  wire instr2_err;
+
   wire [IN_REG_WIDTH-1:0] instr3_rT;
   wire instr3_en;
   wire instr3_wren;
@@ -632,6 +635,7 @@ module heptane_core(
   wire [3:0] instr3_magic;
   wire instr3_last;
   wire instr3_aft_spc;
+  wire instr3_err;
   
   wire [IN_REG_WIDTH-1:0] instr4_rT;
   wire instr4_en;
@@ -644,6 +648,7 @@ module heptane_core(
   wire [3:0] instr4_magic;
   wire instr4_last;
   wire instr4_aft_spc;
+  wire instr4_err;
   
   wire [IN_REG_WIDTH-1:0] instr5_rT;
   wire instr5_en;
@@ -656,6 +661,7 @@ module heptane_core(
   wire [3:0] instr5_magic;
   wire instr5_last;
   wire instr5_aft_spc;
+  wire instr5_err;
 
   wire [IN_REG_WIDTH-1:0] instr6_rT;
   wire instr6_en;
@@ -668,6 +674,7 @@ module heptane_core(
   wire [3:0] instr6_magic;
   wire instr6_last;
   wire instr6_aft_spc;
+  wire instr6_err;
 
   wire [IN_REG_WIDTH-1:0] instr7_rT;
   wire instr7_en;
@@ -680,6 +687,7 @@ module heptane_core(
   wire [3:0] instr7_magic;
   wire instr7_last;
   wire instr7_aft_spc;
+  wire instr7_err;
 
   wire [IN_REG_WIDTH-1:0] instr8_rT;
   wire instr8_en;
@@ -692,6 +700,7 @@ module heptane_core(
   wire [3:0] instr8_magic;
   wire instr8_last;
   wire instr8_aft_spc;
+  wire instr8_err;
 
   wire [IN_REG_WIDTH-1:0] instr9_rT;
   wire instr9_en;
@@ -704,6 +713,7 @@ module heptane_core(
   wire [3:0] instr9_magic;
   wire instr9_last;
   wire instr9_aft_spc;
+  wire instr9_err;
 
   wire [4:0] jump0Type;
   wire [3:0] jump0Pos;
@@ -1493,6 +1503,7 @@ module heptane_core(
   instr0_magic,
   instr0_last,
   instr0_aft_spc,
+  instr0_err,
   
   instr1_rT,
   instr1_en,
@@ -1505,6 +1516,7 @@ module heptane_core(
   instr1_magic,
   instr1_last,
   instr1_aft_spc,
+  instr1_err,
     
   instr2_rT,
   instr2_en,
@@ -1517,6 +1529,7 @@ module heptane_core(
   instr2_magic,
   instr2_last,
   instr2_aft_spc,
+  instr2_err,
   
   instr3_rT,
   instr3_en,
@@ -1529,6 +1542,7 @@ module heptane_core(
   instr3_magic,
   instr3_last,
   instr3_aft_spc,
+  instr3_err,
   
   instr4_rT,
   instr4_en,
@@ -1541,6 +1555,7 @@ module heptane_core(
   instr4_magic,
   instr4_last,
   instr4_aft_spc,
+  instr4_err,
   
   instr5_rT,
   instr5_en,
@@ -1553,6 +1568,7 @@ module heptane_core(
   instr5_magic,
   instr5_last,
   instr5_aft_spc,
+  instr5_err,
 
   instr6_rT,
   instr6_en,
@@ -1565,6 +1581,7 @@ module heptane_core(
   instr6_magic,
   instr6_last,
   instr6_aft_spc,
+  instr6_err,
 
   instr7_rT,
   instr7_en,
@@ -1577,6 +1594,7 @@ module heptane_core(
   instr7_magic,
   instr7_last,
   instr7_aft_spc,
+  instr7_err,
 
   instr8_rT,
   instr8_en,
@@ -1589,6 +1607,7 @@ module heptane_core(
   instr8_magic,
   instr8_last,
   instr8_aft_spc,
+  instr8_err,
 
   instr9_rT,
   instr9_en,
@@ -1601,10 +1620,11 @@ module heptane_core(
   instr9_magic,
   instr9_last,
   instr9_aft_spc,
+  instr9_err,
   jump0Type,jump0Pos,jump0Taken,
   jump1Type,jump1Pos,jump1Taken,
-  jump0BtbWay,jump0JmpInd,jump0GHT,
-  jump1BtbWay,jump1JmpInd,jump1GHT,
+  jump0BtbWay,jump0JmpInd,jump0GHT,jump0GHT2,jump0Val,
+  jump1BtbWay,jump1JmpInd,jump1GHT,jump1GHT2,jump1Val,
   jump0SC,jump0Miss,jump0TbufOnly,
   jump1SC,jump1Miss,jump1TbufOnly,
   instr_fsimd,
@@ -1825,6 +1845,7 @@ module heptane_core(
   instr0_magic,
   instr0_last,
   instr0_aft_spc,
+  instr0_err,
   
   instr1_rT,
   instr1_en,
@@ -1837,6 +1858,7 @@ module heptane_core(
   instr1_magic,
   instr1_last,
   instr1_aft_spc,
+  instr1_err,
     
   instr2_rT,
   instr2_en,
@@ -1849,6 +1871,7 @@ module heptane_core(
   instr2_magic,
   instr2_last,
   instr2_aft_spc,
+  instr2_err,
   
   instr3_rT,
   instr3_en,
@@ -1861,6 +1884,7 @@ module heptane_core(
   instr3_magic,
   instr3_last,
   instr3_aft_spc,
+  instr3_err,
   
   instr4_rT,
   instr4_en,
@@ -1873,6 +1897,7 @@ module heptane_core(
   instr4_magic,
   instr4_last,
   instr4_aft_spc,
+  instr4_err,
   
   instr5_rT,
   instr5_en,
@@ -1885,6 +1910,7 @@ module heptane_core(
   instr5_magic,
   instr5_last,
   instr5_aft_spc,
+  instr5_err,
 
   instr6_rT,
   instr6_en,
@@ -1897,6 +1923,7 @@ module heptane_core(
   instr6_magic,
   instr6_last,
   instr6_aft_spc,
+  instr6_err,
 
   instr7_rT,
   instr7_en,
@@ -1909,6 +1936,7 @@ module heptane_core(
   instr7_magic,
   instr7_last,
   instr7_aft_spc,
+  instr7_err,
 
   instr8_rT,
   instr8_en,
@@ -1921,6 +1949,7 @@ module heptane_core(
   instr8_magic,
   instr8_last,
   instr8_aft_spc,
+  instr8_err,
 
   instr9_rT,
   instr9_en,
@@ -1933,6 +1962,7 @@ module heptane_core(
   instr9_magic,
   instr9_last,
   instr9_aft_spc,
+  instr9_err,
 
   jump0Type,jump0Pos,jump0Taken,{btbl_IP0,1'b0},btbl_mask0,btbl_attr0,
   jump1Type,jump1Pos,jump1Taken,{btbl_IP1,1'b0},btbl_mask1,btbl_attr1,

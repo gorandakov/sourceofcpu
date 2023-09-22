@@ -1210,6 +1210,9 @@ module regfile(
   clk,
   clkREF,
   clkREF2,
+  clkREF3,
+  clkREF4,
+  clkREF5,
   rst,
   read_clkEn,
   retire_clkEn,
@@ -1281,6 +1284,9 @@ module regfile(
   input clk;
   input clkREF;
   input clkREF2;
+  input clkREF3;
+  input clkREF4;
+  input clkREF5;
   input rst;
   input read_clkEn;
   input retire_clkEn;
@@ -1735,9 +1741,9 @@ module regfile(
       write8_data_reg,
       write9_data_reg
       );
-      cmpx4 #(DATA_WIDTH) ret_mod(clk,clkREF,clkREF2,retireRead_data[b],retireRead_datax[b]);
-      cmpx4 #(6) retAddr_mod(clk,clkREF,clkREF2,write_addr_rrf[b],write_addr_rrfx[b]);
-      cmpx4 #(1) retEn_mod(clk,clkREF,clkREF2,write_wen_rrf[b],write_wen_rrfx[b]);
+      cmpx4 #(DATA_WIDTH) ret_mod(clk,clkREF,clkREF2,clkREF3,clkREF4,clkREF5,retireRead_data[b],retireRead_datax[b]);
+      cmpx4 #(6) retAddr_mod(clk,clkREF,clkREF2,clkREF3,clkREF4,clkREF5,write_addr_rrf[b],write_addr_rrfx[b]);
+      cmpx4 #(1) retEn_mod(clk,clkREF,clkREF2,clkREF3,clkREF4,clkREF5,write_wen_rrf[b],write_wen_rrfx[b]);
 
     end
   endgenerate

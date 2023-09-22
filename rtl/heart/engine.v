@@ -2852,6 +2852,12 @@ module backend(
   
   regfile #(DATA_WIDTH) regA_mod(
   .clk(clk),
+  .clkREF(clkREF),
+  .clkREF2(clkREF2),
+  .clkREF3(clkREF3),
+  .clkREF4(clkREF4),
+  .clkREF5(clkREF5),
+
   .rst(rst),
   .read_clkEn(~doStall),
   .tire_clkEn(1'b1),
@@ -2938,6 +2944,11 @@ module backend(
 
   regfile #(SIMD_WIDTH) regAVH_mod(
   .clk(clk),
+  .clkREF(clkREF),
+  .clkREF2(clkREF2),
+  .clkREF3(clkREF3),
+  .clkREF4(clkREF4),
+  .clkREF5(clkREF5),
   .rst(rst),
   .read_clkEn(~doStall),
   .tire_clkEn(1'b1),
@@ -3027,6 +3038,11 @@ module backend(
 
   regfile #(16+SIMD_WIDTH) regAVL_mod(
   .clk(clk),
+  .clkREF(clkREF),
+  .clkREF2(clkREF2),
+  .clkREF3(clkREF3),
+  .clkREF4(clkREF4),
+  .clkREF5(clkREF5),
   .rst(rst),
   .read_clkEn(~doStall),
   .tire_clkEn(1'b1),
@@ -3168,6 +3184,11 @@ module backend(
   
   regfile #(SIMD_WIDTH) regAFH_mod(
   .clk(clk),
+  .clkREF(clkREF),
+  .clkREF2(clkREF2),
+  .clkREF3(clkREF3),
+  .clkREF4(clkREF4),
+  .clkREF5(clkREF5),
   .rst(rst),
   .read_clkEn(~doStall),
   .tire_clkEn(1'b1),
@@ -3258,6 +3279,11 @@ module backend(
 
   regfile #(16+SIMD_WIDTH) regAFL_mod(
   .clk(clk),
+  .clkREF(clkREF),
+  .clkREF2(clkREF2),
+  .clkREF3(clkREF3),
+  .clkREF4(clkREF4),
+  .clkREF5(clkREF5),
   .rst(rst),
   .read_clkEn(~doStall),
   .tire_clkEn(1'b1),
@@ -3516,6 +3542,11 @@ module backend(
 
   regfile #(DATA_WIDTH) regB_mod(
   .clk(clk),
+  .clkREF(clkREF),
+  .clkREF2(clkREF2),
+  .clkREF3(clkREF3),
+  .clkREF4(clkREF4),
+  .clkREF5(clkREF5),
   .rst(rst),
   .read_clkEn(~doStall),
   .tire_clkEn(1'b1),
@@ -3603,6 +3634,11 @@ module backend(
 
   regfile #(SIMD_WIDTH) regBVH_mod(
   .clk(clk),
+  .clkREF(clkREF),
+  .clkREF2(clkREF2),
+  .clkREF3(clkREF3),
+  .clkREF4(clkREF4),
+  .clkREF5(clkREF5),
   .rst(rst),
   .read_clkEn(~doStall),
   .tire_clkEn(1'b1),
@@ -3692,6 +3728,11 @@ module backend(
 
   regfile #(16+SIMD_WIDTH) regBVL_mod(
   .clk(clk),
+  .clkREF(clkREF),
+  .clkREF2(clkREF2),
+  .clkREF3(clkREF3),
+  .clkREF4(clkREF4),
+  .clkREF5(clkREF5),
   .rst(rst),
   .read_clkEn(~doStall),
   .tire_clkEn(1'b1),
@@ -3833,6 +3874,11 @@ module backend(
 
   regfile #(SIMD_WIDTH) regBFH_mod(
   .clk(clk),
+  .clkREF(clkREF),
+  .clkREF2(clkREF2),
+  .clkREF3(clkREF3),
+  .clkREF4(clkREF4),
+  .clkREF5(clkREF5),
   .rst(rst),
   .read_clkEn(~doStall),
   .tire_clkEn(1'b1),
@@ -3923,6 +3969,11 @@ module backend(
 
   regfile #(16+SIMD_WIDTH) regBFL_mod(
   .clk(clk),
+  .clkREF(clkREF),
+  .clkREF2(clkREF2),
+  .clkREF3(clkREF3),
+  .clkREF4(clkREF4),
+  .clkREF5(clkREF5),
   .rst(rst),
   .read_clkEn(~doStall),
   .tire_clkEn(1'b1),
