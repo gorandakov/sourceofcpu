@@ -111,9 +111,9 @@ module selftest(
       end
   end
   initial begin
-      $readmemh(RAM_RETIRE,"./prog.memh");
-      $readmemh(RAM,"./bin.memh");
-      $readmemh(RAM,"./bin_p.memh");
+      $readmemh("./prog.memh",RAM_RETIRE);
+      $readmemh("./bin.memh",RAM);
+      $readmemh("./bin_p.memh",RAM_PTR);
   end
 
   always @(posedge clk) begin
@@ -160,7 +160,7 @@ module selftest(
  
 
   heptane_core core_mod(
-  clk,
+  clk,clk,clk,clk,clk,clk,
   rst,
   IRQ,
   IRQ_data,

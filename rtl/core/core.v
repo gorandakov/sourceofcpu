@@ -19,6 +19,11 @@ limitations under the License.
 
 module heptane_core(
   input clk,
+  input clkREF,
+  input clkREF2,
+  input clkREF3,
+  input clkREF4,
+  input clkREF5,
   input rst,
   input IRQ,
   input [16:0] IRQ_data,
@@ -250,29 +255,29 @@ module heptane_core(
   wire [1:0] jupd1_scx;
   wire jupd1_tkx;
 
-  cmpx4 #(1) cmp_excpt0(clk,clkREF,clkREF2,except,exceptx);
-  cmpx4 #(1) cmp_excpt1(clk,clkREF,clkREF2,except_due_jump,except_due_jumpx);
-  cmpx4 #(VIRT_WIDTH-1) cmp_excpt2(clk,clkREF,clkREF2,exceptIP,exceptIPx);
-  cmpx4 #(1) cmp_excpt3(clk,clkREF,clkREF2,except_flag,except_flagx);
-  cmpx4 #(1) cmp_excpt4(clk,clkREF,clkREF2,except_jmask_en,except_jmask_enx);
-  cmpx4 #(8) cmp_excpt5(clk,clkREF,clkREF2,except_ght,except_ghtx);
-  cmpx4 #(4) cmp_excpt6(clk,clkREF,clkREF2,except_jmask,except_jmaskx);
-  cmpx4 #(1) cmp_excpt6a(clk,clkREF,clkREF2,exceptThread,exceptThreadx);
-  cmpx4 #(4) cmp_excpt6b(clk,clkREF,clkREF2,exceptAttr,exceptAttrx);
-  cmpx4 #(1) cmp_excpt7(clk,clkREF,clkREF2,jupd0_en,jupd0_enx);
-  cmpx4 #(1) cmp_excpt8(clk,clkREF,clkREF2,jupdt0_en,jupdt0_enx);
-  cmpx4 #(1) cmp_excpt9(clk,clkREF,clkREF2,jupd0_ght_en,jupd0_ght_enx);
-  cmpx4 #(1) cmp_excpta(clk,clkREF,clkREF2,jupd1_en,jupd1_enx);
-  cmpx4 #(1) cmp_excptb(clk,clkREF,clkREF2,jupdt1_en,jupdt1_enx);
-  cmpx4 #(1) cmp_excptc(clk,clkREF,clkREF2,jupd1_ght_en,jupd1_ght_enx);
-  cmpx4 #(16) cmp_excptd(clk,clkREF,clkREF2,jupd0_addr,jupd0_addrx);
-  cmpx4 #(13) cmp_excpte(clk,clkREF,clkREF2,jupdt0_baddr,jupdt0_baddrx);
-  cmpx4 #(2) cmp_excptf(clk,clkREF,clkREF2,jupd0_sc,jupd0_scx);
-  cmpx4 #(1) cmp_excptg(clk,clkREF,clkREF2,jupd0_tk,jupd0_tkx);
-  cmpx4 #(16) cmp_excpth(clk,clkREF,clkREF2,jupd1_addr,jupd1_addrx);
-  cmpx4 #(13) cmp_excpti(clk,clkREF,clkREF2,jupdt1_baddr,jupdt1_baddrx);
-  cmpx4 #(2) cmp_excptj(clk,clkREF,clkREF2,jupd1_sc,jupd1_scx);
-  cmpx4 #(1) cmp_excptk(clk,clkREF,clkREF2,jupd1_tk,jupd1_tkx);
+  cmpx4 #(1) cmp_excpt0(clk,clkREF,clkREF2,clkREF3,clkREF4,clkREF5,except,exceptx);
+  cmpx4 #(1) cmp_excpt1(clk,clkREF,clkREF2,clkREF3,clkREF4,clkREF5,except_due_jump,except_due_jumpx);
+  cmpx4 #(VIRT_WIDTH-1) cmp_excpt2(clk,clkREF,clkREF2,clkREF3,clkREF4,clkREF5,exceptIP,exceptIPx);
+  cmpx4 #(1) cmp_excpt3(clk,clkREF,clkREF2,clkREF3,clkREF4,clkREF5,except_flag,except_flagx);
+  cmpx4 #(1) cmp_excpt4(clk,clkREF,clkREF2,clkREF3,clkREF4,clkREF5,except_jmask_en,except_jmask_enx);
+  cmpx4 #(8) cmp_excpt5(clk,clkREF,clkREF2,clkREF3,clkREF4,clkREF5,except_ght,except_ghtx);
+  cmpx4 #(4) cmp_excpt6(clk,clkREF,clkREF2,clkREF3,clkREF4,clkREF5,except_jmask,except_jmaskx);
+  cmpx4 #(1) cmp_excpt6a(clk,clkREF,clkREF2,clkREF3,clkREF4,clkREF5,exceptThread,exceptThreadx);
+  cmpx4 #(4) cmp_excpt6b(clk,clkREF,clkREF2,clkREF3,clkREF4,clkREF5,exceptAttr,exceptAttrx);
+  cmpx4 #(1) cmp_excpt7(clk,clkREF,clkREF2,clkREF3,clkREF4,clkREF5,jupd0_en,jupd0_enx);
+  cmpx4 #(1) cmp_excpt8(clk,clkREF,clkREF2,clkREF3,clkREF4,clkREF5,jupdt0_en,jupdt0_enx);
+  cmpx4 #(1) cmp_excpt9(clk,clkREF,clkREF2,clkREF3,clkREF4,clkREF5,jupd0_ght_en,jupd0_ght_enx);
+  cmpx4 #(1) cmp_excpta(clk,clkREF,clkREF2,clkREF3,clkREF4,clkREF5,jupd1_en,jupd1_enx);
+  cmpx4 #(1) cmp_excptb(clk,clkREF,clkREF2,clkREF3,clkREF4,clkREF5,jupdt1_en,jupdt1_enx);
+  cmpx4 #(1) cmp_excptc(clk,clkREF,clkREF2,clkREF3,clkREF4,clkREF5,jupd1_ght_en,jupd1_ght_enx);
+  cmpx4 #(16) cmp_excptd(clk,clkREF,clkREF2,clkREF3,clkREF4,clkREF5,jupd0_addr,jupd0_addrx);
+  cmpx4 #(13) cmp_excpte(clk,clkREF,clkREF2,clkREF3,clkREF4,clkREF5,jupdt0_baddr,jupdt0_baddrx);
+  cmpx4 #(2) cmp_excptf(clk,clkREF,clkREF2,clkREF3,clkREF4,clkREF5,jupd0_sc,jupd0_scx);
+  cmpx4 #(1) cmp_excptg(clk,clkREF,clkREF2,clkREF3,clkREF4,clkREF5,jupd0_tk,jupd0_tkx);
+  cmpx4 #(16) cmp_excpth(clk,clkREF,clkREF2,clkREF3,clkREF4,clkREF5,jupd1_addr,jupd1_addrx);
+  cmpx4 #(13) cmp_excpti(clk,clkREF,clkREF2,clkREF3,clkREF4,clkREF5,jupdt1_baddr,jupdt1_baddrx);
+  cmpx4 #(2) cmp_excptj(clk,clkREF,clkREF2,clkREF3,clkREF4,clkREF5,jupd1_sc,jupd1_scx);
+  cmpx4 #(1) cmp_excptk(clk,clkREF,clkREF2,clkREF3,clkREF4,clkREF5,jupd1_tk,jupd1_tkx);
 
   reg jupd_reg,jupd_reg2;
 
@@ -1616,7 +1621,7 @@ module heptane_core(
   );
 
   backend bck_mod(
-  clk,
+  clk,clkREF,clkREF2,clkREF3,clkREF4,clkREF5,
   rst,
   stall,
 
@@ -1931,16 +1936,17 @@ module heptane_core(
 
   jump0Type,jump0Pos,jump0Taken,{btbl_IP0,1'b0},btbl_mask0,btbl_attr0,
   jump1Type,jump1Pos,jump1Taken,{btbl_IP1,1'b0},btbl_mask1,btbl_attr1,
-  jump0BtbWay,jump0JmpInd,jump0GHT,
-  jump1BtbWay,jump1JmpInd,jump1GHT,
+  jump0BtbWay,jump0JmpInd,jump0GHT,jump0GHT2,jump0Val,
+  jump1BtbWay,jump1JmpInd,jump1GHT,jump1GHT2,jump1Val,
   jump0SC,jump0Miss,jump0TbufOnly,
   jump1SC,jump1Miss,jump1TbufOnly,
   instr_fsimd,
   baseIP,
   wrt0,wrt1,wrt2,
 
-  jupd0_en,jupdt0_en,jupd0_ght_en,jupd0_addr,jupd0_baddr,jupd0_sc,jupd0_tk,
-  jupd1_en,jupdt1_en,jupd1_ght_en,jupd1_addr,jupd1_baddr,jupd1_sc,jupd1_tk,
+  
+  jupd0_en,jupdt0_en,jupd0_ght_en,jupd0_ght2_en,jupd0_addr,jupd0_baddr,jupd0_sc,jupd0_tk,  
+  jupd1_en,jupdt1_en,jupd1_ght_en,jupd1_ght2_en,jupd1_addr,jupd1_baddr,jupd1_sc,jupd1_tk,
   
   csrss_no,csrss_en,csrss_data,
 
@@ -1951,6 +1957,8 @@ module heptane_core(
   insBus_exclusive,
   insBus_data,
   insBus_dataPTR,
+  insBus_register,
+  insBus_LSQ,
   reqBus_en,
   reqBus_addr,
   reqBus_req,
@@ -1960,6 +1968,8 @@ module heptane_core(
   reqBus_sz,
   reqBus_low,
   reqBus_bank0,
+  reqBus_register,
+  reqBus_LSQ,
   wr0_hit,
   wr0_l1miss,
   wr0_addrE,wr0_addrO,

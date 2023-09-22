@@ -23,6 +23,11 @@ limitations under the License.
 
 module backend(
   clk,
+  clkREF,
+  clkREF2,
+  clkREF3,
+  clkREF4,
+  clkREF5,
   rst,
   doStall,
 
@@ -439,6 +444,11 @@ module backend(
   parameter [5:0] BUS_ID2=6'd0;
   
   input clk;
+  input clkREF;
+  input clkREF2;
+  input clkREF3;
+  input clkREF4;
+  input clkREF5;
   input rst;
   output doStall;
   
