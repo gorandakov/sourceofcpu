@@ -2780,7 +2780,7 @@ module rs(
   wire [3:0] outBank_reg2[2:1];
   wire [2:1] rsFound_reg2;
   wire [2:1] rsFoundNZ_reg2;
-  
+  wire [31:0] portReadyK[2:0];  
   
   wire [3:0] outFuFwdA1_reg;
   wire [3:0] outFuFwdB1_reg;
@@ -2886,6 +2886,11 @@ module rs(
   DFF2 #(1) outFndX12_mod(clk,dataRst,1'b1,rsFoundNZ_reg[1],rsFoundNZ_reg2[1]);
   DFF2 #(1) outFndX22_mod(clk,dataRst,1'b1,rsFoundNZ_reg[2],rsFoundNZ_reg2[2]);
 
+  assign portReadyK[0]=portReady[0];
+  assign portReadyK[1]=(portReady[1]&portReady[2])!=0 ? 
+(portReady[1]&portReady[2]) : portReady[1];
+  assign portReadyK[1]=(portReady[1]&portReady[2])!=0 ? 
+(portReady[1]&portReady[2]) : portReady[2];
   generate
       genvar k;
       for (k=0;k<3;k=k+1) begin : sel_gen
@@ -2893,7 +2898,7 @@ module rs(
           clk,
           dataRst,
           nonDataRst,
-          portReady[k],
+          portReadyK[k],
           portEn[k],
           rsFound[k],
 	  rsFoundNZ[k],
