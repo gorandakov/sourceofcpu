@@ -346,6 +346,7 @@ module rat_dep(
   retired,
   funit,
   isDep,
+  clkREF12,
   rs0i0_index,rs0i1_index,rs0i2_index,
   rs1i0_index,rs1i1_index,rs1i2_index,
   rs2i0_index,rs2i1_index,rs2i2_index,
@@ -363,6 +364,7 @@ module rat_dep(
   output retired;
   output [FN_WIDTH-1:0] funit;
   output isDep;
+  input clkREF12;
   
   input [3:0] rs0i0_index;
   input [3:0] rs0i1_index;
@@ -395,28 +397,28 @@ module rat_dep(
   input [FN_WIDTH-1:0] newU8;
 
 
-  assign data=(addr=={2'b11,rs0i0_index})? newR0 : 'z;
-  assign data=(addr=={2'b11,rs0i1_index})? newR1 : 'z;
-  assign data=(addr=={2'b11,rs0i2_index})? newR2 : 'z;
-  assign data=(addr=={2'b11,rs1i0_index})? newR3 : 'z;
-  assign data=(addr=={2'b11,rs1i1_index})? newR4 : 'z;
-  assign data=(addr=={2'b11,rs1i2_index})? newR5 : 'z;
-  assign data=(addr=={2'b11,rs2i0_index})? newR6 : 'z;
-  assign data=(addr=={2'b11,rs2i1_index})? newR7 : 'z;
-  assign data=(addr=={2'b11,rs2i2_index})? newR8 : 'z;
+  assign data=(addr=={2'b11,rs0i0_index}) & clkREF12 ? newR0 : 'z;
+  assign data=(addr=={2'b11,rs0i1_index}) & clkREF12 ? newR1 : 'z;
+  assign data=(addr=={2'b11,rs0i2_index}) & clkREF12 ? newR2 : 'z;
+  assign data=(addr=={2'b11,rs1i0_index}) & clkREF12 ? newR3 : 'z;
+  assign data=(addr=={2'b11,rs1i1_index}) & clkREF12 ? newR4 : 'z;
+  assign data=(addr=={2'b11,rs1i2_index}) & clkREF12 ? newR5 : 'z;
+  assign data=(addr=={2'b11,rs2i0_index}) & clkREF12 ? newR6 : 'z;
+  assign data=(addr=={2'b11,rs2i1_index}) & clkREF12 ? newR7 : 'z;
+  assign data=(addr=={2'b11,rs2i2_index}) & clkREF12 ? newR8 : 'z;
 
-  assign retired=addr[5:4]==2'b11 ? 1'b0 : 1'bz;
-  assign isDep=addr[5:4]==2'b11;
+  assign retired=addr[5:4]==2'b11 && clkREF12 ? 1'b0 : 1'bz;
+  assign isDep=addr[5:4]==2'b11 && clkREF12 ? 1'b1 : 1'bz;
 
-  assign funit=(addr=={2'b11,rs0i0_index})? newU0 : 'z;
-  assign funit=(addr=={2'b11,rs0i1_index})? newU1 : 'z;
-  assign funit=(addr=={2'b11,rs0i2_index})? newU2 : 'z;
-  assign funit=(addr=={2'b11,rs1i0_index})? newU3 : 'z;
-  assign funit=(addr=={2'b11,rs1i1_index})? newU4 : 'z;
-  assign funit=(addr=={2'b11,rs1i2_index})? newU5 : 'z;
-  assign funit=(addr=={2'b11,rs2i0_index})? newU6 : 'z;
-  assign funit=(addr=={2'b11,rs2i1_index})? newU7 : 'z;
-  assign funit=(addr=={2'b11,rs2i2_index})? newU8 : 'z;
+  assign funit=(addr=={2'b11,rs0i0_index}) & clkREF12 ? newU0 : 'z;
+  assign funit=(addr=={2'b11,rs0i1_index}) & clkREF12 ? newU1 : 'z;
+  assign funit=(addr=={2'b11,rs0i2_index}) & clkREF12 ? newU2 : 'z;
+  assign funit=(addr=={2'b11,rs1i0_index}) & clkREF12 ? newU3 : 'z;
+  assign funit=(addr=={2'b11,rs1i1_index}) & clkREF12 ? newU4 : 'z;
+  assign funit=(addr=={2'b11,rs1i2_index}) & clkREF12 ? newU5 : 'z;
+  assign funit=(addr=={2'b11,rs2i0_index}) & clkREF12 ? newU6 : 'z;
+  assign funit=(addr=={2'b11,rs2i1_index}) & clkREF12 ? newU7 : 'z;
+  assign funit=(addr=={2'b11,rs2i2_index}) & clkREF12 ? newU8 : 'z;
   
 endmodule
 
@@ -426,6 +428,7 @@ endmodule
 
 module rat(
   clk,
+  clkREF12,
   rst,
   read_clkEn,
   newR0,newR1,newR2,newR3,newR4,newR5,newR6,newR7,newR8,
@@ -474,6 +477,7 @@ module rat(
   localparam FN_WIDTH=10;
   parameter [0:0] EXTRA=1'b0;
   input clk;
+  input clkREF12;
   input rst;
   input read_clkEn;
 
@@ -696,35 +700,35 @@ module rat(
 	  ret_thread
         );
     end
-        assign read_data[0]=(read_addr_reg[0][5:3]==l) ? read_dataA[0] : 'z;
-        assign read_data[1]=(read_addr_reg[1][5:3]==l) ? read_dataA[1] : 'z;
-        assign read_data[2]=(read_addr_reg[2][5:3]==l) ? read_dataA[2] : 'z;
-        assign read_data[3]=(read_addr_reg[3][5:3]==l) ? read_dataA[3] : 'z;
-        assign read_data[4]=(read_addr_reg[4][5:3]==l) ? read_dataA[4] : 'z;
-        assign read_data[5]=(read_addr_reg[5][5:3]==l) ? read_dataA[5] : 'z;
-        assign read_data[6]=(read_addr_reg[6][5:3]==l) ? read_dataA[6] : 'z;
-        assign read_data[7]=(read_addr_reg[7][5:3]==l) ? read_dataA[7] : 'z;
-        assign read_data[8]=(read_addr_reg[8][5:3]==l) ? read_dataA[8] : 'z;
+        assign read_data[0]=(read_addr_reg[0][5:3]==l) & clkREF12 ? read_dataA[0] : 'z;
+        assign read_data[1]=(read_addr_reg[1][5:3]==l) & clkREF12 ? read_dataA[1] : 'z;
+        assign read_data[2]=(read_addr_reg[2][5:3]==l) & clkREF12 ? read_dataA[2] : 'z;
+        assign read_data[3]=(read_addr_reg[3][5:3]==l) & clkREF12 ? read_dataA[3] : 'z;
+        assign read_data[4]=(read_addr_reg[4][5:3]==l) & clkREF12 ? read_dataA[4] : 'z;
+        assign read_data[5]=(read_addr_reg[5][5:3]==l) & clkREF12 ? read_dataA[5] : 'z;
+        assign read_data[6]=(read_addr_reg[6][5:3]==l) & clkREF12 ? read_dataA[6] : 'z;
+        assign read_data[7]=(read_addr_reg[7][5:3]==l) & clkREF12 ? read_dataA[7] : 'z;
+        assign read_data[8]=(read_addr_reg[8][5:3]==l) & clkREF12 ? read_dataA[8] : 'z;
 
-        assign read_retired[0]=(read_addr_reg[0][5:3]==l) ? read_retiredA[0] : 1'BZ;
-        assign read_retired[1]=(read_addr_reg[1][5:3]==l) ? read_retiredA[1] : 1'BZ;
-        assign read_retired[2]=(read_addr_reg[2][5:3]==l) ? read_retiredA[2] : 1'BZ;
-        assign read_retired[3]=(read_addr_reg[3][5:3]==l) ? read_retiredA[3] : 1'BZ;
-        assign read_retired[4]=(read_addr_reg[4][5:3]==l) ? read_retiredA[4] : 1'BZ;
-        assign read_retired[5]=(read_addr_reg[5][5:3]==l) ? read_retiredA[5] : 1'BZ;
-        assign read_retired[6]=(read_addr_reg[6][5:3]==l) ? read_retiredA[6] : 1'BZ;
-        assign read_retired[7]=(read_addr_reg[7][5:3]==l) ? read_retiredA[7] : 1'BZ;
-        assign read_retired[8]=(read_addr_reg[8][5:3]==l) ? read_retiredA[8] : 1'BZ;
+        assign read_retired[0]=(read_addr_reg[0][5:3]==l) & clkREF12 ? read_retiredA[0] : 1'BZ;
+        assign read_retired[1]=(read_addr_reg[1][5:3]==l) & clkREF12 ? read_retiredA[1] : 1'BZ;
+        assign read_retired[2]=(read_addr_reg[2][5:3]==l) & clkREF12 ? read_retiredA[2] : 1'BZ;
+        assign read_retired[3]=(read_addr_reg[3][5:3]==l) & clkREF12 ? read_retiredA[3] : 1'BZ;
+        assign read_retired[4]=(read_addr_reg[4][5:3]==l) & clkREF12 ? read_retiredA[4] : 1'BZ;
+        assign read_retired[5]=(read_addr_reg[5][5:3]==l) & clkREF12 ? read_retiredA[5] : 1'BZ;
+        assign read_retired[6]=(read_addr_reg[6][5:3]==l) & clkREF12 ? read_retiredA[6] : 1'BZ;
+        assign read_retired[7]=(read_addr_reg[7][5:3]==l) & clkREF12 ? read_retiredA[7] : 1'BZ;
+        assign read_retired[8]=(read_addr_reg[8][5:3]==l) & clkREF12 ? read_retiredA[8] : 1'BZ;
 
-        assign read_fun[0]=(read_addr_reg[0][5:3]==l) ? read_funA[0] : 'z;
-        assign read_fun[1]=(read_addr_reg[1][5:3]==l) ? read_funA[1] : 'z;
-        assign read_fun[2]=(read_addr_reg[2][5:3]==l) ? read_funA[2] : 'z;
-        assign read_fun[3]=(read_addr_reg[3][5:3]==l) ? read_funA[3] : 'z;
-        assign read_fun[4]=(read_addr_reg[4][5:3]==l) ? read_funA[4] : 'z;
-        assign read_fun[5]=(read_addr_reg[5][5:3]==l) ? read_funA[5] : 'z;
-        assign read_fun[6]=(read_addr_reg[6][5:3]==l) ? read_funA[6] : 'z;
-        assign read_fun[7]=(read_addr_reg[7][5:3]==l) ? read_funA[7] : 'z;
-        assign read_fun[8]=(read_addr_reg[8][5:3]==l) ? read_funA[8] : 'z;
+        assign read_fun[0]=(read_addr_reg[0][5:3]==l) & clkREF12 ? read_funA[0] : 'z;
+        assign read_fun[1]=(read_addr_reg[1][5:3]==l) & clkREF12 ? read_funA[1] : 'z;
+        assign read_fun[2]=(read_addr_reg[2][5:3]==l) & clkREF12 ? read_funA[2] : 'z;
+        assign read_fun[3]=(read_addr_reg[3][5:3]==l) & clkREF12 ? read_funA[3] : 'z;
+        assign read_fun[4]=(read_addr_reg[4][5:3]==l) & clkREF12 ? read_funA[4] : 'z;
+        assign read_fun[5]=(read_addr_reg[5][5:3]==l) & clkREF12 ? read_funA[5] : 'z;
+        assign read_fun[6]=(read_addr_reg[6][5:3]==l) & clkREF12 ? read_funA[6] : 'z;
+        assign read_fun[7]=(read_addr_reg[7][5:3]==l) & clkREF12 ? read_funA[7] : 'z;
+        assign read_fun[8]=(read_addr_reg[8][5:3]==l) & clkREF12 ? read_funA[8] : 'z;
         
     end
     for (k=0;k<=8;k=k+1)
@@ -735,6 +739,7 @@ module rat(
           read_retired[k],
           read_fun[k],
           read_isDep[k],
+          clkREF12,
           rs0i0_index,rs0i1_index,rs0i2_index,
           rs1i0_index,rs1i1_index,rs1i2_index,
           rs2i0_index,rs2i1_index,rs2i2_index,
