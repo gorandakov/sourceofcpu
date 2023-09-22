@@ -2561,7 +2561,7 @@ module backend(
     .rs2i0_index(rs2i0_index_reg),.rs2i1_index(rs2i1_index_reg),.rs2i2_index(rs2i2_index_reg),
     .read_thread(thread),.ret_thread(1'b0)
     );
-
+`ifdef simulation
   rat ratB_mod(
     .clk(clk),
     .clkREF12(clkREF2),
@@ -2617,7 +2617,63 @@ module backend(
     .rs2i0_index(rs2i0_index_reg),.rs2i1_index(rs2i1_index_reg),.rs2i2_index(rs2i2_index_reg),
     .read_thread(thread),.ret_thread(1'b0)
     );
-    
+`else
+  rat ratB_mod(
+    .clk(clk),
+    .clkREF12(clkREF2),
+    .rst(rst),
+    .read_clkEn(~doStall),
+    .newR0(newR[0]),.newR1(newR[1]),.newR2(newR[2]),.newR3(newR[3]),
+    .newR4(newR[4]),.newR5(newR[5]),.newR6(newR[6]),.newR7(newR[7]),.newR8(newR[8]),
+    .newU0(newU[0]),.newU1(newU[1]),.newU2(newU[2]),.newU3(newU[3]),
+    .newU4(newU[4]),.newU5(newU[5]),.newU6(newU[6]),.newU7(newU[7]),.newU8(newU[8]),
+    //from here addr is tirement register
+    .read0_addr(rs0i0_rB),.read0_data(regA[0]),.read0_tired(retA[0]),
+      .read0_isDep(depA[0]),.read0_fun(funA[0]),
+    .read1_addr(rs0i1_rB),.read1_data(regA[1]),.read1_tired(retA[1]),
+      .read1_isDep(depA[1]),.read1_fun(funA[1]),
+    .read2_addr(rs0i2_rB),.read2_data(regA[2]),.read2_tired(retA[2]),
+      .read2_isDep(depA[2]),.read2_fun(funA[2]),
+    .read3_addr(rs1i0_rB),.read3_data(regA[3]),.read3_tired(retA[3]),
+      .read3_isDep(depA[3]),.read3_fun(funA[3]),
+    .read4_addr(rs1i1_rB),.read4_data(regA[4]),.read4_tired(retA[4]),
+      .read4_isDep(depA[4]),.read4_fun(funA[4]),
+    .read5_addr(rs1i2_rB),.read5_data(regA[5]),.read5_tired(retA[5]),
+      .read5_isDep(depA[5]),.read5_fun(funA[5]),
+    .read6_addr(rs2i0_rB),.read6_data(regA[6]),.read6_tired(retA[6]),
+      .read6_isDep(depA[6]),.read6_fun(funA[6]),
+    .read7_addr(rs2i1_rB),.read7_data(regA[7]),.read7_tired(retA[7]),
+      .read7_isDep(depA[7]),.read7_fun(funA[7]),
+    .read8_addr(rs2i2_rB),.read8_data(regA[8]),.read8_tired(retA[8]),
+      .read8_isDep(depA[8]),.read8_fun(funA[8]),
+  
+    .writeNew0_addr(rs0i0_rT_reg),.writeNew0_wen(rs0i0_alloc_reg),
+    .writeNew1_addr(rs0i1_rT_reg),.writeNew1_wen(rs0i1_alloc_reg),
+    .writeNew2_addr(rs0i2_rT_reg),.writeNew2_wen(rs0i2_alloc_reg),
+    .writeNew3_addr(rs1i0_rT_reg),.writeNew3_wen(rs1i0_alloc_reg),
+    .writeNew4_addr(rs1i1_rT_reg),.writeNew4_wen(rs1i1_alloc_reg),
+    .writeNew5_addr(rs1i2_rT_reg),.writeNew5_wen(rs1i2_alloc_reg),
+    .writeNew6_addr(rs2i0_rT_reg),.writeNew6_wen(rs2i0_alloc_reg),
+    .writeNew7_addr(rs2i1_rT_reg),.writeNew7_wen(rs2i1_alloc_reg),
+    .writeNew8_addr(rs2i2_rT_reg),.writeNew8_wen(rs2i2_alloc_reg),
+  //from here addr is free register
+    .writeRet0_addr(tire0_rF_reg),.writeRet0_wen(tire0_enG),
+    .writeRet1_addr(tire1_rF_reg),.writeRet1_wen(tire1_enG),
+    .writeRet2_addr(tire2_rF_reg),.writeRet2_wen(tire2_enG),
+    .writeRet3_addr(tire3_rF_reg),.writeRet3_wen(tire3_enG),
+    .writeRet4_addr(tire4_rF_reg),.writeRet4_wen(tire4_enG),
+    .writeRet5_addr(tire5_rF_reg),.writeRet5_wen(tire5_enG),
+    .writeRet6_addr(tire6_rF_reg),.writeRet6_wen(tire6_enG),
+    .writeRet7_addr(tire7_rF_reg),.writeRet7_wen(tire7_enG),
+    .writeRet8_addr(tire8_rF_reg),.writeRet8_wen(tire8_enG),
+    .tireAll(except),.tireAll_thread(1'b0),
+
+    .rs0i0_index(rs0i0_index_reg),.rs0i1_index(rs0i1_index_reg),.rs0i2_index(rs0i2_index_reg),
+    .rs1i0_index(rs1i0_index_reg),.rs1i1_index(rs1i1_index_reg),.rs1i2_index(rs1i2_index_reg),
+    .rs2i0_index(rs2i0_index_reg),.rs2i1_index(rs2i1_index_reg),.rs2i2_index(rs2i2_index_reg),
+    .read_thread(thread),.ret_thread(1'b0)
+    );
+`endif    
   rat_flags rat_flags_mod(
   .clk(clk),
   .rst(rst),
@@ -2729,7 +2785,7 @@ module backend(
     .rs2i0_index(rs2i0_index_reg),.rs2i1_index(rs2i1_index_reg),.rs2i2_index(rs2i2_index_reg),
     .read_thread(thread),.ret_thread(1'b0)
   );
-
+`ifdef simulation
   ratV ratBV_mod(
     .clk(clk),
     .clkREF12(clkREF2),
@@ -2796,7 +2852,74 @@ module backend(
     .rs2i0_index(rs2i0_index_reg),.rs2i1_index(rs2i1_index_reg),.rs2i2_index(rs2i2_index_reg),
     .read_thread(thread),.ret_thread(1'b0)
   );
+`else
+  ratV ratBV_mod(
+    .clk(clk),
+    .clkREF12(clkREF2),
+    .rst(rst),
+    .read_clkEn(~doStall),
+    .newR0(newR[0]),.newR1(newR[1]),.newR2(newR[2]),.newR3(newR[3]),
+    .newR4(newR[4]),.newR5(newR[5]),.newR6(newR[6]),.newR7(newR[7]),.newR8(newR[8]),
+    .newU0(newU[0]),.newU1(newU[1]),.newU2(newU[2]),.newU3(newU[3]),
+    .newU4(newU[4]),.newU5(newU[5]),.newU6(newU[6]),.newU7(newU[7]),.newU8(newU[8]),
+    .newD0(newD[0]),.newD1(newD[1]),.newD2(newD[2]),.newD3(newD[3]),
+    .newD4(newD[4]),.newD5(newD[5]),.newD6(newD[6]),.newD7(newD[7]),.newD8(newD[8]),
+  //from here addr is tirement register
+    .read0_addr(rs0i0_rB),.read0_data(regAF[0]),.read0_tired(retAF[0]),
+      .read0_isDep(depAF[0]),.read0_fun(funAF[0]),.read0_dom(domA[0]),
+    .read1_addr(rs0i1_rB),.read1_data(regAF[1]),.read1_tired(retAF[1]),
+      .read1_isDep(depAF[1]),.read1_fun(funAF[1]),.read1_dom(domA[1]),
+    .read2_addr(rs0i2_rB),.read2_data(regAF[2]),.read2_tired(retAF[2]),
+      .read2_isDep(depAF[2]),.read2_fun(funAF[2]),.read2_dom(domA[2]),
+    .read3_addr(rs1i0_rB),.read3_data(regAF[3]),.read3_tired(retAF[3]),
+      .read3_isDep(depAF[3]),.read3_fun(funAF[3]),.read3_dom(domA[3]),
+    .read4_addr(rs1i1_rB),.read4_data(regAF[4]),.read4_tired(retAF[4]),
+      .read4_isDep(depAF[4]),.read4_fun(funAF[4]),.read4_dom(domA[4]),
+    .read5_addr(rs1i2_rB),.read5_data(regAF[5]),.read5_tired(retAF[5]),
+      .read5_isDep(depAF[5]),.read5_fun(funAF[5]),.read5_dom(domA[5]),
+    .read6_addr(rs2i0_rB),.read6_data(regAF[6]),.read6_tired(retAF[6]),
+      .read6_isDep(depAF[6]),.read6_fun(funAF[6]),.read6_dom(domA[6]),
+    .read7_addr(rs2i1_rB),.read7_data(regAF[7]),.read7_tired(retAF[7]),
+      .read7_isDep(depAF[7]),.read7_fun(funAF[7]),.read7_dom(domA[7]),
+    .read8_addr(rs2i2_rB),.read8_data(regAF[8]),.read8_tired(retAF[8]),
+      .read8_isDep(depAF[8]),.read8_fun(funAF[8]),.read8_dom(domA[8]),
   
+    .writeNew0_addr(rs0i0_rT_reg),.writeNew0_wen(rs0i0_allocF_reg),
+    .writeNew1_addr(rs0i1_rT_reg),.writeNew1_wen(rs0i1_allocF_reg),
+    .writeNew2_addr(rs0i2_rT_reg),.writeNew2_wen(rs0i2_allocF_reg),
+    .writeNew3_addr(rs1i0_rT_reg),.writeNew3_wen(rs1i0_allocF_reg),
+    .writeNew4_addr(rs1i1_rT_reg),.writeNew4_wen(rs1i1_allocF_reg),
+    .writeNew5_addr(rs1i2_rT_reg),.writeNew5_wen(rs1i2_allocF_reg),
+    .writeNew6_addr(rs2i0_rT_reg),.writeNew6_wen(rs2i0_allocF_reg),
+    .writeNew7_addr(rs2i1_rT_reg),.writeNew7_wen(rs2i1_allocF_reg),
+    .writeNew8_addr(rs2i2_rT_reg),.writeNew8_wen(rs2i2_allocF_reg),
+//from here addr is free register
+    .writeRet0_addr(tire0_rF_reg),.writeRet0_paddr(tire0_rT),
+       .writeRet0_dom(get_dom_C(tire0_enV,tire0_enF)),.writeRet0_wen(tire0_enV|tire0_enF),
+    .writeRet1_addr(tire1_rF_reg),.writeRet1_paddr(tire1_rT),
+       .writeRet1_dom(get_dom_C(tire1_enV,tire1_enF)),.writeRet1_wen(tire1_enV|tire1_enF),
+    .writeRet2_addr(tire2_rF_reg),.writeRet2_paddr(tire2_rT),
+       .writeRet2_dom(get_dom_C(tire2_enV,tire2_enF)),.writeRet2_wen(tire2_enV|tire2_enF),
+    .writeRet3_addr(tire3_rF_reg),.writeRet3_paddr(tire3_rT),
+       .writeRet3_dom(get_dom_C(tire3_enV,tire3_enF)),.writeRet3_wen(tire3_enV|tire3_enF),
+    .writeRet4_addr(tire4_rF_reg),.writeRet4_paddr(tire4_rT),
+       .writeRet4_dom(get_dom_C(tire4_enV,tire4_enF)),.writeRet4_wen(tire4_enV|tire4_enF),
+    .writeRet5_addr(tire5_rF_reg),.writeRet5_paddr(tire5_rT),
+       .writeRet5_dom(get_dom_C(tire5_enV,tire5_enF)),.writeRet5_wen(tire5_enV|tire5_enF),
+    .writeRet6_addr(tire6_rF_reg),.writeRet6_paddr(tire6_rT),
+       .writeRet6_dom(get_dom_C(tire6_enV,tire6_enF)),.writeRet6_wen(tire6_enV|tire6_enF),
+    .writeRet7_addr(tire7_rF_reg),.writeRet7_paddr(tire7_rT),
+       .writeRet7_dom(get_dom_C(tire7_enV,tire7_enF)),.writeRet7_wen(tire7_enV|tire7_enF),
+    .writeRet8_addr(tire8_rF_reg),.writeRet8_paddr(tire8_rT),
+       .writeRet8_dom(get_dom_C(tire8_enV,tire8_enF)),.writeRet8_wen(tire8_enV|tire8_enF),
+    .tireAll(except),.tireAll_thread(1'b0),
+
+    .rs0i0_index(rs0i0_index_reg),.rs0i1_index(rs0i1_index_reg),.rs0i2_index(rs0i2_index_reg),
+    .rs1i0_index(rs1i0_index_reg),.rs1i1_index(rs1i1_index_reg),.rs1i2_index(rs1i2_index_reg),
+    .rs2i0_index(rs2i0_index_reg),.rs2i1_index(rs2i1_index_reg),.rs2i2_index(rs2i2_index_reg),
+    .read_thread(thread),.ret_thread(1'b0)
+  );
+`endif  
   reg_alloc allock_mod(
   .clk(clk),
   .rst(rst),
