@@ -2113,8 +2113,8 @@ module rs_buf(
 // free bit
   DFF bufFree_mod(clk,bufFree_en,bufFree_d,bufFree);
   
-  assign bufFree_en=stall_n & newRsSelectAny || (outRsSelect0 | outRsSelect1 | outRsSelect2
-    && ~unFwdCheck) || nonDataRst0;
+  assign bufFree_en=stall_n & newRsSelectAny || (outRsSelect0 | (outRsSelect1 & ~port2_q)  | (outRsSelect2 & 
+~port1_q) | (outRsSelect1 & outRsSelect2)    && ~unFwdCheck) || nonDataRst0;
   assign bufFree_d=~newRsSelectAny || nonDataRst0;
   
 endmodule
