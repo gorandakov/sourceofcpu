@@ -695,6 +695,13 @@ module fu_alu(
     u5_ret,u5_rten,uu_A5,uu_B5,uu_S5,FU6);
   alu #(1'b0)  alu5(clk,rst,except,1'b0,1'b0,u6_op_reg[12:0],u6_op_reg[17:13],u6_isSub_reg,mflags[0][20],u6_clkEn_reg,1'b1,
     u6_ret,u6_rten,uu_A6,uu_B6,uu_S6,FU9);
+
+  add_aguX aadd1(uu_B1[2],u1_const_reg,uu_A1[2],FU4[63:0],p0_sec_in,
+    p0_ndiff,1'b1,u1_sh_reg,u1_sh2_reg,u1_eaen_reg);
+  add_aguX aadd3(uu_B3[2],u3_const_reg,uu_A3[2],FU5[63:0],p1_sec_in,
+    p1_ndiff,1'b1,u3_sh_reg,u3_sh2_reg,u3_eaen_reg);
+  add_aguX aadd5(uu_B5[2],u5_const_reg,uu_A5[2],FU6[63:0],p2_sec_in,
+    p2_ndiff,1'b1,u5_sh_reg,u5_sh2_reg,u5_eaen_reg);
   
   alu_shift sh2_alu(
   clk,
@@ -707,8 +714,8 @@ module fu_alu(
   1'b1,
   u2_ret,
   uu_S2,
-  uu_A2[63:0],
-  uu_B2[63:0],
+  uu_A2[2][63:0],
+  uu_B2[2][63:0],
   FU7[63:0]
   );
   
@@ -723,8 +730,8 @@ module fu_alu(
   1'b1,
   u4_ret,
   uu_S4,
-  uu_A4[63:0],
-  uu_B4[63:0],
+  uu_A4[2][63:0],
+  uu_B4[2][63:0],
   FU8[63:0]
   );
 
@@ -739,8 +746,8 @@ module fu_alu(
   1'b1,
   u6_ret,
   uu_S6,
-  uu_A6[63:0],
-  uu_B6[63:0],
+  uu_A6[2][63:0],
+  uu_B6[2][63:0],
   FU9[63:0]
   );
   
