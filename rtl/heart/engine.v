@@ -7479,6 +7479,8 @@ dcache1 L1D_mod(
               if (rs_port[k]==PORT_VANY) rs_port_sch[k]<=4'b111;
               if (rs_port[k]==PORT_ALU && (rs_port[(k/3)*3+2]==PORT_VADD || rs_port[(k/3)*3+2]==PORT_FADD))
                  rs_port_sch[k]<=4'd2;             
+              if (rs_port[k]==PORT_ALU && rs_operation[k][7:0]==`op_cax)
+                 rs_port_sch[k]<=4'd1;
               
               rs_port_reg[k]<=rs_port[k];
               
