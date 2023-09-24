@@ -1609,13 +1609,13 @@ module agu_block(
   .faultNo(p4_faultNo),
   //.mOp_noBanks(),
   .csrss_no(csrss_addr),.csrss_thr(csrss_thread),.csrss_en(csrss_en),.csrss_data(csrss_data),
-  ,
-  ,
-  addrTlbR[4],
-  sprocR[4],
-  tlb_data0R[4],
-  tlb_data1R[4],
-  tlb_hitR[4] 
+  .cout_secq(),
+  .tlb_clkEn(),
+  .addrTlb(addrTlbR[4]),
+  .sproc(sprocR[4]),
+  .tlb_data0(tlb_data0R[4]),
+  .tlb_data1(tlb_data1R[4]),
+  .tlb_hit(tlb_hitR[4])
   );
   
   sagu Wagu2_mod(
@@ -1670,13 +1670,13 @@ module agu_block(
   .faultNo(p5_faultNo),
   //.mOp_noBanks(),
   .csrss_no(csrss_addr),.csrss_thr(csrss_thread),.csrss_en(csrss_en),.csrss_data(csrss_data),
-  ,
-  ,
-  addrTlbR[5],
-  sprocR[5],
-  tlb_data0R[5],
-  tlb_data1R[5],
-  tlb_hitR[5] 
+  .cout_secq(),
+  .tlb_clkEn(),
+  .addrTlb(addrTlbR[5]),
+  .sproc(sprocR[5]),
+  .tlb_data0(tlb_data0R[5]),
+  .tlb_data1(tlb_data1R[5]),
+  .tlb_hit(tlb_hitR[5])
 
   );
           
@@ -2119,14 +2119,14 @@ module agu_block(
   .writeTlb_data0(tlb_data0),
   .writeTlb_data1(tlb_data1),
   .writeTlb_data2(tlb_data2),
-  ,
-  ,
-  addrTlbR[3],
-  sprocR[3],
-  tlb_data0R[3],
-  tlb_data1R[3],
-  tlb_hitR[3],
-  tlb_wayR[3] 
+  .addrTlb(addrTlbR[3]),
+  .sproc(sprocR[3]),
+  .tlb_data0(tlb_data0R[3]),
+  .tlb_data1(tlb_data1R[3]),
+  .tlb_hit(tlb_hitR[3]),
+  .tlb_way(tlb_wayR[3]),
+  .cout_secq(),
+  .tlb_clkEn()
   );
 
   assign miss0=~FU0Hit & mOpX0_en_reg3 & ~p0_conflict_reg2 & 
