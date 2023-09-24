@@ -23,7 +23,8 @@ limitations under the License.
 //do not delete redundant output
 //place next to alu_shift in alu-shift combo
 
-module alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,dataEn,nDataAlt,retData,retEn,val1,val2,valS,valRes);
+module 
+alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,dataEn,nDataAlt,retData,retEn,val1,val2,valS,valRes,sec);
 
   localparam REG_WIDTH=`reg_addr_width;
   localparam OPERATION_WIDTH=`operation_width;
@@ -47,6 +48,7 @@ module alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,da
   input [2:0][64:0] val2;
   input [5:0] valS;//flag
   inout  [64:0] valRes;  
+  input sec;
   
 
   reg [64:0] valRes_reg;
@@ -55,8 +57,6 @@ module alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,da
   wire [7:0] valRes8;
   wire [63:0] valRes2;  
 
-  wire [EXCEPT_WIDTH-1:0] retData_X;
-  assign retData=retData_X;
 
   wire flag64_ZF;
   wire flag32_ZF;
@@ -391,17 +391,17 @@ module alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,da
   assign flags_COASZP=((retOp[7:0]==`op_clahf || retOp[7:0]==`op_clahfn) && ~doJmp_reg) ? valS_reg : 6'bz;
   //other stuff
   
-  assign retData_X[`except_flags]=nDataAlt_reg && ~shift_en_reg|NOSHIFT 
-    && cin_seq_reg|~is_ptr_reg && (~val2_sign65||val1_sign65||retOp[7:0]!=`op_sub64) &&
+  assign retData[`except_flags]=nDataAlt_reg && ~shift_en_reg|NOSHIFT 
+    && cin_seq_reg|~is_ptr_reg && (sec&&retOp[7:0]==`op_cax)|~NOSHIFT && (~val2_sign65||val1_sign65||retOp[7:0]!=`op_sub64) &&
     (!val1_sign65 || !val2_sign65 || !logic_en_reg)  ? flags_COASZP : 6'bz;
-  assign retData_X[`except_flags]=nDataAlt_reg && ~shift_en_reg|NOSHIFT 
+  assign retData[`except_flags]=nDataAlt_reg && ~shift_en_reg|NOSHIFT 
     && (~cin_seq_reg & is_ptr_reg || val2_sign65 & ~val1_sign65 & (retOp[7:0]==`op_sub64)
-    || val2_sign65 & val1_sign65 & logic_en_reg) ? 6'd11 : 6'bz;
-  assign retData_X[`except_status]=nDataAlt_reg && cin_seq_reg|~is_ptr_reg && (~val2_sign65||val1_sign65||retOp[7:0]!=`op_sub64) &&
-    (!val1_sign65 || !val2_sign65 || !logic_en_reg) ? 2'd2 : 2'bz; //done
-  assign retData_X[`except_status]=nDataAlt_reg && (~cin_seq_reg & is_ptr_reg || val2_sign65 & ~val1_sign65 & (retOp[7:0]==`op_sub64)
-    || val2_sign65 & val1_sign65 & logic_en_reg) ? 2'd1 : 2'bz; //done
-  assign retData_X[`except_setsFlags]=nDataAlt_reg ? isFlags_reg&dataEn_reg : 1'bz;
+    || val2_sign65 & val1_sign65 & logic_en_reg || NOSHIFT&(~sec&&retOp[7:0]==`op_cax)) ? 6'd11 : 6'bz;
+  assign retData[`except_status]=nDataAlt_reg && cin_seq_reg|~is_ptr_reg && (~val2_sign65||val1_sign65||retOp[7:0]!=`op_sub64) &&
+    (!val1_sign65 || !val2_sign65 || !logic_en_reg) && !(NOSHIFT&(~sec&&retOp[7:0]==`op_cax)) ? 2'd2 : 2'bz; //done
+  assign retData[`except_status]=nDataAlt_reg && (~cin_seq_reg & is_ptr_reg || val2_sign65 & ~val1_sign65 & (retOp[7:0]==`op_sub64)
+    || val2_sign65 & val1_sign65 & logic_en_reg || NOSHIFT&(~sec&&retOp[7:0]==`op_cax)) ? 2'd1 : 2'bz; //done
+  assign retData[`except_setsFlags]=nDataAlt_reg ? isFlags_reg&dataEn_reg : 1'bz;
   
   assign retEn=nDataAlt_reg ? dataEn_reg & ~retOp[11] &~thrinh_reg : 1'bz; 
 
