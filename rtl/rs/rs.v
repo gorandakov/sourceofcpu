@@ -2297,7 +2297,7 @@ module rs(
   outDataA0,outDataB0,outDataC0,outReg0,outOp0,outInstrIndex0,outWQ0,outLSFlag0,
     outFuFwdA0,outFuFwdB0,outFuuFwdA0,outFuuFwdB0,outLSQ0,outDataEn0,outThread0,//agu
     outAttr0,
-  outDataA1,outDataB1,outDataS1,outReg1,outRegSimd1,outOp1,outInstrIndex1,
+  outDataA1,outDataB1,outDataC1,outDataS1,outReg1,outRegSimd1,outOp1,outInstrIndex1,
     outFuFwdA1,outFuFwdB1,outFuFwdS1,outFuuFwdA1,outFuuFwdB1,
     outFuuFwdS1,outDataEn1,outThread1,outAttr1,outXPort1,//alu 1
   outDataA2,outDataB2,outDataS2,outReg2,outRegSimd2,outOp2,outInstrIndex2,
@@ -2495,6 +2495,7 @@ module rs(
     
   output wire [DATA_WIDTH-1:0]       outDataA1;
   output wire [DATA_WIDTH-1:0]       outDataB1;
+  output wire [CONST_WIDTH-1:0]       outDataC1;
   output wire [FLAGS_WIDTH-1:0]       outDataS1;
   output wire [REG_WIDTH-1:0] outReg1;
   output wire [REG_WIDTH-1:0] outRegSimd1;
@@ -3331,7 +3332,7 @@ module rs(
   newRsSelect2,newDataC2,
   
   outRsSelect[0],outBank[0],rsFoundNZ[0],outDataC0,
-  outRsSelect[1],outBank[1],rsFoundNZ[1],,
+  outRsSelect[1],outBank[1],rsFoundNZ[1],outDataC1,
   outRsSelect[2],outBank[2],rsFoundNZ[2],
   );
   
