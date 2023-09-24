@@ -23,7 +23,7 @@ limitations under the License.
 //do not delete redundant output
 //place next to alu_shift in alu-shift combo
 
-module alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,dataEn,nDataAlt,retData,retEn,val1,val2,valS,valRes,valRes_N);
+module alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,dataEn,nDataAlt,retData,retEn,val1,val2,valS,valRes);
 
   localparam REG_WIDTH=`reg_addr_width;
   localparam OPERATION_WIDTH=`operation_width;
@@ -47,13 +47,7 @@ module alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,da
   input [2:0][64:0] val2;
   input [5:0] valS;//flag
   inout  [64:0] valRes;  
-  output [64:0] valRes_N;  
   
-  wire  [64:0] valRes_X;  
-  wire  [64:0] valRes_X_N;  
-
-  assign valRes=valRes_X;
-  assign valRes_N=~valRes;
 
   reg [64:0] valRes_reg;
 
@@ -214,7 +208,8 @@ module alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,da
   assign val_and={is_ptr ? ptr[63:44] : val1[1][63:44]&val2[1][63:44],val1[1][43:0]&val2[1][43:0]};
   
   assign nDataAlt2=nDataAlt && doJmp2 | ~cond[4];
-  assign valRes_X=(add_en||shift_en&~NOSHIFT||~nDataAlt)&~(~doJmp2|~cond[4]) ? 65'bz : {nDataAlt & ~nDataAlt2 ? val1[1][64] : is_ptr,valRes2};
+  assign valRes=(add_en||shift_en&~NOSHIFT||(operation[7:0]==`op_cax && NOSHIFT)||~nDataAlt)&~(~doJmp2|~cond[4]) ? 
+65'bz : {nDataAlt & ~nDataAlt2 ? val1[1][64] : is_ptr,valRes2};
   assign valRes2[63:0]=(operation[11] || ~nDataAlt) ? 64'b0: 64'bz;
   assign valRes2[63:0]=nDataAlt & ~nDataAlt2 ? val1[1][63:0] : 64'bz;
   assign valRes2[63:0]=(~add8_en & ~sahf_en && nDataAlt2) ? valRes1 : 64'bz;
@@ -333,7 +328,7 @@ module alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,da
   addsub_alu mainAdder_mod(
     .a(val1[0]),
     .b(val2[0]),
-    .out(valRes_X),
+    .out(valRes),
     .sub(sub),
     .en(add_en),
     .sxtEn(operation[8]),
