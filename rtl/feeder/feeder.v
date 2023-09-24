@@ -13,8 +13,8 @@ module ww(
   except_flag,
   except_jmask,
   except_jmask_en,
-  jupd0_en,jupdt0_en,jupd0_ght_en,jupd0_addr,jupd0_baddr,jupd0_sc,jupd0_tk,
-  jupd1_en,jupdt1_en,jupd1_ght_en,jupd1_addr,jupd1_baddr,jupd1_sc,jupd1_tk,
+  jupd0_en,jupdt0_en,jupd0_ght_en,jupd0_ght2_en,jupd0_addr,jupd0_baddr,jupd0_sc,jupd0_tk,jupd0_val,
+  jupd1_en,jupdt1_en,jupd1_ght_en,jupd1_ght2_en,jupd1_addr,jupd1_baddr,jupd1_sc,jupd1_tk,jupd1_val,
 //
   stall,
   bus_data,
@@ -333,8 +333,8 @@ module ww(
   instr9_aft_spc,
   jump0Type,jump0Pos,jump0Taken,
   jump1Type,jump1Pos,jump1Taken,
-  jump0BtbWay,jump0JmpInd,jump0GHT,
-  jump1BtbWay,jump1JmpInd,jump1GHT,
+  jump0BtbWay,jump0JmpInd,jump0GHT,jump0GHT2,jump0JVal,
+  jump1BtbWay,jump1JmpInd,jump1GHT,jump1GHT2,jump1JVal,
   jump0SC,jump0Miss,jump0TbufOnly,
   jump1SC,jump1Miss,jump1TbufOnly,
   instr_fsimd,
@@ -382,18 +382,21 @@ module ww(
   input jupd0_en;
   input jupdt0_en;
   input jupd0_ght_en;
+  input jupd0_ght2_en;
   input [15:0] jupd0_addr;
   input [12:0] jupd0_baddr;
   input [1:0] jupd0_sc;
   input jupd0_tk;
+  input jupd0_val;
   input jupd1_en;
   input jupdt1_en;
+  input jupd1_ght_en;
   input jupd1_ght_en;
   input [15:0] jupd1_addr;
   input [12:0] jupd1_baddr;
   input [1:0] jupd1_sc;
   input jupd1_tk;
-
+  input jupd1_val;
 
   input stall;
 
@@ -830,9 +833,13 @@ module ww(
   output jump0BtbWay;
   output [1:0] jump0JmpInd;
   output [7:0] jump0GHT;
+  output [15:0] jump0GHT2;
+  output jump0JVal;
   output jump1BtbWay;
   output [1:0] jump1JmpInd;
   output [7:0] jump1GHT;
+  output [15:0] jump1GHT2;
+  output jump1JVal;
   output [1:0] jump0SC;
   output jump0Miss;
   output jump0TbufOnly;
@@ -975,8 +982,9 @@ frontendSelf #(0,BUS_ID) frontA_mod(
   except_flag,
   except_jmask,
   except_jmask_en,
-  jupd0_en,jupdt0_en,jupd0_ght_en,jupd0_addr,jupd0_baddr,jupd0_sc,jupd0_tk,
-  jupd1_en,jupdt1_en,jupd1_ght_en,jupd1_addr,jupd1_baddr,jupd1_sc,jupd1_tk,
+  except_indir,
+  jupd0_en,jupdt0_en,jupd0_ght_en,jupd0_ght2_en,jupd0_addr,jupd0_baddr,jupd0_sc,jupd0_val,jupd0_tk,
+  jupd1_en,jupdt1_en,jupd1_ght_en,jupd1_ght2_en,jupd1_addr,jupd1_baddr,jupd1_sc,jupd1_val,jupd1_tk,
 //
   bus_data,
   bus_slot,
@@ -1041,8 +1049,9 @@ frontendSelf #(1,BUS_ID) frontB_mod(
   except_flag,
   except_jmask,
   except_jmask_en,
-  jupd0_en,jupdt0_en,jupd0_ght_en,jupd0_addr,jupd0_baddr,jupd0_sc,jupd0_tk,
-  jupd1_en,jupdt1_en,jupd1_ght_en,jupd1_addr,jupd1_baddr,jupd1_sc,jupd1_tk,
+  except_indir,
+  jupd0_en,jupdt0_en,jupd0_ght_en,jupd0_ght2_en,jupd0_addr,jupd0_baddr,jupd0_sc,jupd0_val,jupd0_tk,
+  jupd1_en,jupdt1_en,jupd1_ght_en,jupd1_ght2_en,jupd1_addr,jupd1_baddr,jupd1_sc,jupd0_val,jupd1_tk,
 //
   bus_data,
   bus_slot,
@@ -1118,6 +1127,9 @@ frontendSelf #(1,BUS_ID) frontB_mod(
   
   iAvailX,
   instrEn[thread],
+  IRQ,
+  IRQ_data,
+  IRQ_thr,
   instr0[thread],extra0[thread],
   instr1[thread],extra1[thread],
   instr2[thread],extra2[thread],
@@ -1322,6 +1334,7 @@ frontendSelf #(1,BUS_ID) frontB_mod(
   instr0_magic,
   instr0_last,
   instr0_aft_spc,
+  instr0_error,
   
   instr1_rT,
   instr1_en,
@@ -1334,6 +1347,7 @@ frontendSelf #(1,BUS_ID) frontB_mod(
   instr1_magic,
   instr1_last,
   instr1_aft_spc,
+  instr1_error,
     
   instr2_rT,
   instr2_en,
@@ -1346,6 +1360,7 @@ frontendSelf #(1,BUS_ID) frontB_mod(
   instr2_magic,
   instr2_last,
   instr2_aft_spc,
+  instr2_error,
   
   instr3_rT,
   instr3_en,
@@ -1358,6 +1373,7 @@ frontendSelf #(1,BUS_ID) frontB_mod(
   instr3_magic,
   instr3_last,
   instr3_aft_spc,
+  instr3_error,
   
   instr4_rT,
   instr4_en,
@@ -1370,6 +1386,7 @@ frontendSelf #(1,BUS_ID) frontB_mod(
   instr4_magic,
   instr4_last,
   instr4_aft_spc,
+  instr4_error,
   
   instr5_rT,
   instr5_en,
@@ -1382,6 +1399,7 @@ frontendSelf #(1,BUS_ID) frontB_mod(
   instr5_magic,
   instr5_last,
   instr5_aft_spc,
+  instr5_error,
 
   instr6_rT,
   instr6_en,
@@ -1394,6 +1412,7 @@ frontendSelf #(1,BUS_ID) frontB_mod(
   instr6_magic,
   instr6_last,
   instr6_aft_spc,
+  instr6_error,
 
   instr7_rT,
   instr7_en,
@@ -1406,6 +1425,7 @@ frontendSelf #(1,BUS_ID) frontB_mod(
   instr7_magic,
   instr7_last,
   instr7_aft_spc,
+  instr7_error,
 
   instr8_rT,
   instr8_en,
@@ -1418,6 +1438,7 @@ frontendSelf #(1,BUS_ID) frontB_mod(
   instr8_magic,
   instr8_last,
   instr8_aft_spc,
+  instr8_error,
 
   instr9_rT,
   instr9_en,
@@ -1430,10 +1451,11 @@ frontendSelf #(1,BUS_ID) frontB_mod(
   instr9_magic,
   instr9_last,
   instr9_aft_spc,
+  instr9_error,
   jump0Type,jump0Pos,jump0Taken,
   jump1Type,jump1Pos,jump1Taken,
-  jump0BtbWay,jump0JmpInd,jump0GHT,
-  jump1BtbWay,jump1JmpInd,jump1GHT,
+  jump0BtbWay,jump0JmpInd,jump0GHT,jump0GHT2,jump0JVal,
+  jump1BtbWay,jump1JmpInd,jump1GHT,jump1GHT2,jump1JVal,
   jump0SC,jump0Miss,jump0TbufOnly,
   jump1SC,jump1Miss,jump1TbufOnly,
   instr_fsimd,

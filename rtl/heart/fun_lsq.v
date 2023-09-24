@@ -534,10 +534,10 @@ module fun_lsq(
   .rsEn0(p0_rsEn&&~p0_lsfwd),.rsEn1(p1_rsEn&&~p1_lsfwd),.rsEn2(p2_rsEn&&~p2_lsfwd),.rsEn3(p3_rsEn&&~p3_lsfwd)
   );  
   
-  wrtdata_combine wcomb0_mod(.data(dc_wdataP_reg[0]),.data2(dc_wdataPX_reg[0]),.pdata(dc_pdataP_reg[0]),.en(1'b1),
-    .odata(st0_data),.odata2(st0_dataX),.opdata(st0_pbit),.low(wreq_data_reg[0][`lsaddr_low]),.sz(wreq_data_reg[0][`lsaddr_sz]));
-  wrtdata_combine wcomb1_mod(.data(dc_wdataP_reg[1]),.data2(dc_wdataPX_reg[1]),.pdata(dc_pdataP_reg[1]),.en(1'b1),
-      .odata(st1_data),.odata2(st1_dataX),.opdata(st1_pbit),.low(wreq_data_reg[1][`lsaddr_low]),.sz(wreq_data_reg[1][`lsaddr_sz]));
+  wrtdata_combine wcomb0_mod(.data(dc_wdataP_reg[0]),.dataN(dc_wdataPX_reg[0]),.pdata(dc_pdataP_reg[0]),.en(1'b1),
+    .odata(st0_data),.odataN(st0_dataX),.opdata(st0_pbit),.low(wreq_data_reg[0][`lsaddr_low]),.sz(wreq_data_reg[0][`lsaddr_sz]));
+  wrtdata_combine wcomb1_mod(.data(dc_wdataP_reg[1]),.dataN(dc_wdataPX_reg[1]),.pdata(dc_pdataP_reg[1]),.en(1'b1),
+      .odata(st1_data),.odataN(st1_dataX),.opdata(st1_pbit),.low(wreq_data_reg[1][`lsaddr_low]),.sz(wreq_data_reg[1][`lsaddr_sz]));
 
   
   wire [127+8:0]           wb1_dataA;

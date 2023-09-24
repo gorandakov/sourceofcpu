@@ -1532,7 +1532,7 @@ module frontendSelf(
   .write0_wen(jupd0_en&jupd0_ght2_en),// &rnd1),
   .write1_val(jupd1_val),
   .write1_addr(jupd1_addr),
-  .write1_wen(jupd1_en&jupd1_ght2_en),//& &~rnd1)
+  .write1_wen(jupd1_en&jupd1_ght2_en)//& &~rnd1)
   );
   
   ret_stack rstack_mod(
