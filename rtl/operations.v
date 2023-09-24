@@ -102,6 +102,8 @@ limitations under the License.
 `define op_sadd_even 60
 `define op_sadd_odd 61
 
+`define op_cax 62
+
 //these are even more complicated instructions
 `define op_multiclk 2048
 `define op_nflagset 4096
