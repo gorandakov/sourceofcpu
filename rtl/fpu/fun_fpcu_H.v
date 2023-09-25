@@ -183,7 +183,7 @@ module fun_fpuH(
   fxFADD0_raise_s,
   fxFCADD1_raise_s,
   FOOSH0_in,
-  FOOSH0_out,,,
+  FOOSH0_out,,
   );
 
   fun_fpu #(1,1) fpu1_mod(
@@ -206,7 +206,7 @@ module fun_fpuH(
   fxFADD2_raise_s,
   fxFCADD3_raise_s,
   FOOSH1_in,
-  FOOSH1_out,,,
+  FOOSH1_out,,
   );
 
   fun_fpu #(2,1) fpu2_mod(

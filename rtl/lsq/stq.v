@@ -488,7 +488,7 @@ module stq(
       begin
           first=banks&~{banks[6:0],banks[7]};
           last=banks&~{banks[0],banks[7:1]};
-	  get_ld_bytes=4'b0;
+	  get_st_bytes=4'b0;
 	  if (first[index]) begin
 	      case(sz)
 		  5'h10:get_st_bytes[low]=1'b1;

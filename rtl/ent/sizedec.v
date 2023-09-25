@@ -221,9 +221,9 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
 
   assign clsFMA=|{
   instr[31:27]==5'd16 && isBasicFPUScalarB && (instr[13:8]==6'd18) | (instr[13:8]==6'd21),
-  instr[16] && isBasicFPUScalarB && (instr[13:9]==5'd8) | (instr[13:8]==6'd19) | (isntr[13:8]==6'd20),
+  instr[16] && isBasicFPUScalarB && (instr[13:9]==5'd8) | (instr[13:8]==6'd19) | (instr[13:8]==6'd20),
   instr[31:27]==5'd16 && isBasicFPUScalarA && (instr[13:9]==5'd2) | (instr[13:8]==6'd8),
-  instr[16:14]==3'b100 && isBAsicFPUScalarA && (instr[13:10]==4'd0) | (instr[13:9]==5'd3)};
+  instr[16:14]==3'b100 && isBasicFPUScalarA && (instr[13:10]==4'd0) | (instr[13:9]==5'd3)};
   
   assign clsALU=|{
   isBasicALU & ~isBasicALUExcept & ~isBasicXOR,

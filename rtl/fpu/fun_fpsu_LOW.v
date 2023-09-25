@@ -235,9 +235,9 @@ module fun_fpuSL(
   always @(posedge clk) begin
       ALTDATA1_reg<=ALTDATA1;
       ALTDATA1_reg2<=ALTDATA1_reg;
-      daltXA_reg<=datltXA;
-      daltXB_reg<=datltXB;
-      daltXA_reg2<=datltXA_reg;
-      daltXB_reg2<=datltXB_reg;
+      daltXA_reg<=daltXA;
+      daltXB_reg<=daltXB;
+      daltXA_reg2<=daltXA_reg;
+      daltXB_reg2<=daltXB_reg;
   end
 endmodule
