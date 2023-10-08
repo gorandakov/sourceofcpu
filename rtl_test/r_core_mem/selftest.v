@@ -31,6 +31,8 @@ module selftest(
   reg rT_en[9:0];
   reg [31:0] binoffaddr[9:0];
   reg [64:0] data[9:0];
+  reg [5:0] flg[9:0];
+  reg [9:0] is_flg;
   reg [9:0] pook_en;
 
   reg [8:0] ret_en;
@@ -40,6 +42,8 @@ module selftest(
   reg [9:0] ret_enX0;
   reg [8:0][64:0] ret_data;
   reg [8:0][5:0] ret_rT;
+  reg [8:0] ret_enS;
+  reg [8:0][5:0] ret_dataS;
 
   reg [5:0][`lsaddr_width-1:0] reqA_adata;
   reg [5:0] reqA_en;
@@ -104,8 +108,16 @@ module selftest(
           reti_read_data[k]=RAM_RETIRE[retire_index[k]];
           if (ret_enX[k] && rT_en[k]) begin
               pook_en[k]=1;
+              if (ret_dataS[retire_index[j]]!=flg[j] && is_flg[j]) begin
+                  $display("flag error 0x%u",binoffaddr[j]);
+                  if ((j!=9 && is_flg[j+1:9]!=0 && retire_enFl[j]) $display("spurfl ret");
+                  if (retire_enFl[j] && !(j==9 || is_flg[j+1:9]==0)) $display("spurfl miss");
+                  $finish();
+              end
               for(j=k;j<10;j=j+1) begin
-                  if (ret_enX[j] && rT_en[j] && rT[j]==rT[k]) pook_en[k]=0;
+                  if (ret_enX[j] && rT_en[j] && rT[j]==rT[k]) begin
+                      pook_en[k]=0;
+                  end
               end
           end
       end
