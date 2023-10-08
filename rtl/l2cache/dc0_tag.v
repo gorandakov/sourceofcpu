@@ -215,6 +215,10 @@ module dcache2_tag(
   .write_wen(write_wen_reg & write_hit & req_wodd_reg || req_en_reg & req_odd_reg || init)
   );
 
+  wire [5:0] POOG;
+
+  LFSR16_6 #(16'hf0fe) p_mod(clk,rst,POOG);
+
   assign hitE=req_addrE_reg[PADDR_WIDTH-9:8]==tag_dataE[`dc2Tag_addr_43_16] &&
     tag_dataE[`dc2Tag_valid] && req_en_reg;
   assign hitO=req_addrO_reg[PADDR_WIDTH-9:8]==tag_dataO[`dc2Tag_addr_43_16] &&
@@ -230,7 +234,7 @@ module dcache2_tag(
   endgenerate
 
   assign write_hit=write_dupl_reg|write_exp_req ? req_hitE|req_hitO : write_wen_reg && 
-	  (req_wodd_reg ? req_LRUo==5'd23 : req_LRUe==5'd23);
+	  (req_wodd_reg ? req_LRUo==POOG[4:0] : req_LRUe==POOG[4:0]);
   assign write_hitE=write_dupl_reg|write_exp_req ? req_hitE : write_wen_reg && req_LRUo==5'd23 && ~req_odd_reg;
   assign write_hitO=write_dupl_reg|write_exp_req ? req_hitO : write_wen_reg && req_LRUe==5'd23 && req_odd_reg;
   

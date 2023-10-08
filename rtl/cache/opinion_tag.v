@@ -180,6 +180,9 @@ module ccTag(
   wire [2:0] read_NRUr;
   wire [2:0] read_NRUw;
   wire [2:0] write_NRU;
+
+  wire [5:0] POOG;
+
   
   reg write_wen_reg;
 
@@ -211,7 +214,9 @@ module ccTag(
     end
   endgenerate
 
-  assign write_hit=(write_wen_reg && read_NRUw==3'd5) || (invalidate_reg && read_dataW[`cc1Tag_paddr]==write_phys_addr_reg && read_dataW[`cc1Tag_valid]);
+  LFSR16_6 #(16'hfead) pp_mod(clk,rst,POOG);
+
+  assign write_hit=(write_wen_reg && read_NRUw==POOG[2:0]) || (invalidate_reg && read_dataW[`cc1Tag_paddr]==write_phys_addr_reg && read_dataW[`cc1Tag_valid]);
   ccTag_ram ram_mod(
   .clk(clk),
   .rst(rst),

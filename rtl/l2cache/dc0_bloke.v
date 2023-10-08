@@ -1550,7 +1550,7 @@ module dcache2_block(
   reg [15:0] write_dataPTR_reg2;
   generate
       genvar k,b,q;
-      for(k=0;k<9;k=k+1) begin : ways_gen
+      for(k=0;k<10+(ID!=0);k=k+1) begin : ways_gen
           dcache2_way #(k,ID)  way_mod(
           clk,
           rst,
