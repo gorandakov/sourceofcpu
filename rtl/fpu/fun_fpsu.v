@@ -144,22 +144,23 @@ module fun_fpsu(
   reg [1:0] fxFCADD_com;
   reg  fxFCADD_pswp;
   reg  fxFCADD_dupl;
+  reg  fxFCADD_dupl_reg;
   reg  fxFCADD_rndD;
   reg  fxFCADD_rndS;
-  reg  fxFADD_dbl_nreg;
-  reg  fxFADD_ext_nreg;
-  reg  fxFADD_dblext_nreg;
-  reg [1:0] fxFADD_sub_nreg;
-  reg  fxFADD_rsub_nreg;
-  reg [1:0] fxFADD_copyA_nreg;
-  reg [1:0] fxFADD_com_nreg;
-  reg  fxFADD_pswp_nreg;
-  reg  fxFCADD_dbl_nreg;
-  reg  fxFCADD_ext_nreg;
-  reg  fxFCADD_dblext_nreg;
-  reg [1:0] fxFCADD_copyA_nreg;
-  reg [1:0] fxFCADD_com_nreg;
-  reg  fxFCADD_pswp_nreg;
+  reg  fxFADD_dbl_reg;
+  reg  fxFADD_ext_reg;
+  reg  fxFADD_dblext_reg;
+  reg [1:0] fxFADD_sub_reg;
+  reg  fxFADD_rsub_reg;
+  reg [1:0] fxFADD_copyA_reg;
+  reg [1:0] fxFADD_com_reg;
+  reg  fxFADD_pswp_reg;
+  reg  fxFCADD_dbl_reg;
+  reg  fxFCADD_ext_reg;
+  reg  fxFCADD_dblext_reg;
+  reg [1:0] fxFCADD_copyA_reg;
+  reg [1:0] fxFCADD_com_reg;
+  reg  fxFCADD_pswp_reg;
   wire [1:0][10:0] fxFCADD_raise;
   reg [10:0] fxFCADD_raise_reg[1:0];
   reg [10:0] fxFCADD_raise_s_reg[1:0];
@@ -200,6 +201,8 @@ module fun_fpsu(
   reg [1:0][67:0] fxDataAFL_REG;
   reg [1:0][67:0] gxDataBXL_reg;
   reg [1:0][67:0] fxDataAXL_reg;
+  reg [1:0][67:0] gxDataBXL_reg2;
+  reg [1:0][67:0] fxDataAXL_reg2;
   reg [3:0] u1_en_reg;
   reg [3:0] u2_en_reg;
   wire [S+67:0] uu_A1;
@@ -355,8 +358,8 @@ module fun_fpsu(
   .copyA(H? fxFADD_com==2'b01 : ~fxFADD_com[0]),
   .swpSngl(fxFADD_pswp),
   .dupSngl(fxFADD_dupl),
-  .is_sqrt(fxFADD_sqrt),
-  .is_div(fxFADD_div),
+  .is_sqrt(1'b0),
+  .is_div(1'b0),
   .tbl_read(1'b0),
   .tbl_write(1'b0),
   .xtra(3'b0),
@@ -509,9 +512,10 @@ module fun_fpsu(
 	  fxFADD_copyA=2'b0;
 	  fxFADD_com<=2'b0;
 	  fxFADD_dupl<=1'b0;
-          fxFADD_sqrt<=1'b1;
-          fxFADD_div<=1'b0;
+          //fxFADD_sqrt<=1'b1;
+          //fxFADD_div<=1'b0;
 	  fxFCADD_dupl<=1'b0;
+	  fxFCADD_dupl_reg<=1'b0;
 	  fxFADD_pswp<=1'b0;
 	  fxFADD_pcmp<=1'b0;
 	  fxFCADD_dbl=1'b1;
@@ -534,6 +538,8 @@ module fun_fpsu(
 	      fxDataAFL_REG[k]<={S+SIMD_WIDTH{1'B0}};
 	      fxDataAXL_reg[k]<={S+SIMD_WIDTH{1'B0}};
 	      gxDataBXL_reg[k]<={S+SIMD_WIDTH{1'B0}};
+	      fxDataAXL_reg2[k]<={S+SIMD_WIDTH{1'B0}};
+	      gxDataBXL_reg2[k]<={S+SIMD_WIDTH{1'B0}};
 	  end
 	  gxFADD_srch<=1'b0;
     end else begin
@@ -569,9 +575,10 @@ module fun_fpsu(
 	      {fxFADD_pswp,fxFADD_com}<=u1_op_reg[10:8];
 	      {fxFCADD_pswp,fxFCADD_com}<=u1_op_reg[10:8];
               fxFADD_dupl<=u1_op_reg[12];
+              fxFCADD_dupl_reg<=fxFCADD_dupl;
               fxFCADD_dupl<=u1_op_reg[12];
-	      fxFADD_sqrt<=u1_op_reg[7:0]==`fop_sqrtDH;
-	      fxFADD_div<=u1_op_reg[7:0]==`fop_sqrtDL;
+	      //fxFADD_sqrt<=u1_op_reg[7:0]==`fop_sqrtDH;
+	      //fxFADD_div<=u1_op_reg[7:0]==`fop_sqrtDL;
 
 	      fxFCADD_dbl=u1_op_reg[7:0]==`fop_mulDL ||
 	        u1_op_reg[7:0]==`fop_mulDH ||
@@ -618,6 +625,8 @@ module fun_fpsu(
 	          fxDataAXL_reg[1]<='z;
 	          gxDataBXL_reg[0]<='z;
               end
+              fxDataAXL_reg2<=fxDataAXL_reg;
+              gxDataBXL_reg2<=gxDataBXL_reg;
     end
     for(k=0;k<2;k=k+1) begin
         FOOF_reg[k]<=FOOF[k];
