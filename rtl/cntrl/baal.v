@@ -1248,9 +1248,9 @@ module cntrl_find_outcome(
   .new_addr(new_addr),
   .stall(stall),
   .doStall(doStall),
-  .hastire(has_some),
-  .dotire(dotire_d),
-  .tire_addr(tire_addr)
+  .hasRetire(has_some),
+  .doRetire(dotire_d),
+  .retire_addr(tire_addr)
   );
 
   bob_except xcpt_mod(
