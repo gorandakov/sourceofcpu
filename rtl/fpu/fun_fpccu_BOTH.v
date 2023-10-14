@@ -244,6 +244,9 @@ module fun_fpu_BOTH(
   reg [20:0] u5_op_reg2;
   reg [20:0] u5_op_reg3;
   reg [20:0] u5_op_reg4;
+  reg u1_XADD_reg,u3_XADD_reg,u5_XADD_reg;
+  reg u1_XADD_reg2,u3_XADD_reg2,u5_XADD_reg2;
+  reg u1_XADD_reg3,u3_XADD_reg3,u5_XADD_reg3;
 
   assign u1_ret=u1_retL|u1_retH;
   assign u1_ret_en=u1_ret_enL| u1_ret_enH;
@@ -330,7 +333,6 @@ module fun_fpu_BOTH(
   FOOSL0, LFOOSH0,
   FOOSL1, LFOOSH1,
   FOOSL2, LFOOSH2,
-  XI_dataS,
   fxFRT_alten_reg3,
   daltX,
   FUCVT1,
@@ -360,13 +362,13 @@ module fun_fpu_BOTH(
       u5_op_reg3<=u5_op_reg2;
       u5_op_reg4<=u5_op_reg3;
       u1_XADD_reg<=u1_XADD;
-      u2_XADD_reg<=u2_XADD;
+      u5_XADD_reg<=u5_XADD;
       u3_XADD_reg<=u3_XADD;
       u1_XADD_reg2<=u1_XADD_reg;
-      u2_XADD_reg2<=u2_XADD_reg;
+      u5_XADD_reg2<=u5_XADD_reg;
       u3_XADD_reg2<=u3_XADD_reg;
       u1_XADD_reg3<=u1_XADD_reg2;
-      u2_XADD_reg3<=u2_XADD_reg2;
+      u5_XADD_reg3<=u5_XADD_reg2;
       u3_XADD_reg3<=u3_XADD_reg2;
   end
 endmodule
