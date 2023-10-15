@@ -216,8 +216,8 @@ module decoder_aux_const(
   reg [1:0][63:0] csr_fpu;
   reg [1:0][63:0] csr_page;
   reg [1:0][63:0] csr_vmpage;
-  reg [1:0][63:0] csr_cpage;
-  reg [1:0][63:0] csr_spage;
+  reg [1:0][63:0] csr_page0;
+  reg [1:0][63:0] csr_vmpage0;
   reg [1:0][63:0] csr_excTbl;
   reg [1:0][63:0] csr_syscall;
   reg [1:0][63:0] csr_USER1;
@@ -269,8 +269,8 @@ module decoder_aux_const(
       `csr_FPU:			aux_const={1'b0,csr_fpu[thread]};
       `csr_page: begin aux_const={1'b0,csr_page[thread]}; aux_can_read=~csr_mflags[thread][`mflags_vm] && 0==csr_mflags[thread][`mflags_cpl]; aux_can_write=aux_can_read; end
       `csr_vmpage: begin aux_const={1'b0,csr_vmpage[thread]}; aux_can_read=~csr_mflags[thread][`mflags_vm] && 0==csr_mflags[thread][`mflags_cpl]; aux_can_write=aux_can_read; end
-      //`csr_cpage: begin	aux_const=csr_cpage[thread]; aux_can_read=~csr_mflags[thread][`mflags_vm] && !csr_mflags[thread][`mflags_cpl]; end
-      //`csr_spage: begin	aux_const=csr_spage[thread]; aux_can_read=~csr_mflags[thread][`mflags_vm] && !csr_mflags[thread][`mflags_cpl]; end
+      `csr_page0: begin aux_const={1'b0,csr_page0[thread]}; aux_can_read=~csr_mflags[thread][`mflags_vm] && 0==csr_mflags[thread][`mflags_cpl]; aux_can_write=aux_can_read; end
+      `csr_vmpage0: begin aux_const={1'b0,csr_vmpage0[thread]}; aux_can_read=~csr_mflags[thread][`mflags_vm] && 0==csr_mflags[thread][`mflags_cpl]; aux_can_write=aux_can_read; end
       `csr_syscall: begin aux_const={1'b0,csr_syscall[thread]};
            aux_can_jump=1'b1; 
            aux_can_read=~csr_mflags[thread][`mflags_vm] && csr_mflags[thread][`mflags_cpl]==2'b00; aux_can_write=aux_can_read; end
@@ -303,6 +303,8 @@ module decoder_aux_const(
 	  csr_fpu[0]<=64'h20000;
           csr_page[0]<=64'b0;
           csr_vmpage[0]<=64'b0;
+          csr_page0[0]<=64'b0;
+          csr_vmpage0[0]<=64'b0;
           csr_cpage[0]<=64'b0;
           csr_spage[0]<=64'b0;
           csr_syscall[0]<=64'b0;
@@ -319,6 +321,8 @@ module decoder_aux_const(
 	  csr_fpu[1]<=64'h20000;
           csr_page[1]<=64'b0;
           csr_vmpage[1]<=64'b0;
+          csr_page0[1]<=64'b0;
+          csr_vmpage0[1]<=64'b0;
           csr_cpage[1]<=64'b0;
           csr_spage[1]<=64'b0;
           csr_syscall[1]<=64'b0;
@@ -351,11 +355,10 @@ module decoder_aux_const(
       `csr_excpt_fpu:		csr_fpu[csrss_no[15]][10:0]<=csrss_data[10:0];
       `csr_page:		csr_page[csrss_no[15]]<=csrss_data[63:0];
       `csr_vmpage:		csr_vmpage[csrss_no[15]]<=csrss_data[63:0];
-      //`csr_cpage:		csr_cpage[csrss_no[15]]<=csrss_data;
-      //`csr_spage:		csr_spage[csrss_no[15]]<=csrss_data;
+      `csr_page0:		csr_page0[csrss_no[15]]<=csrss_data[63:0];
+      `csr_vmpage0:		csr_vmpage0[csrss_no[15]]<=csrss_data[63:0];
       `csr_syscall:		csr_syscall[csrss_no[15]]<=csrss_data[63:0];
       `csr_vmcall:		csr_vmcall[csrss_no[15]]<=csrss_data[63:0];
-      //`csr_cpage_mask:		csr_cpage_mask[csrss_no[15]]<=csrss_data;
       `csr_indir_table:		csr_indir_tbl[csrss_no[15]]<=csrss_data[63:0];
       `csr_indir_mask:          csr_indir_mask[csrss_no[15]]<=csrss_data[63:0];
       `csr_cl_lock:             csr_mflags[csrss_no[15]][18]<=1'b1;
