@@ -21,7 +21,6 @@ module LFSR16_6(
  rst,
  OUT
  );
-  parameter [15:0] INIT=16'hbeef;
   input clk;
   input rst;
   output reg [5:0] OUT;
@@ -39,7 +38,7 @@ module LFSR16_6(
   always @(negedge clk) begin
       if (rst) OUT<=6'b010110;
       else OUT<=OUT_a;
-      if (rst) IN<=INIT;
+      if (rst) IN<=16'hbeef;
       else IN<={IN[9:0],OUT_a};
   end
 endmodule
