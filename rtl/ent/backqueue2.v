@@ -239,7 +239,6 @@ module frontendSelf(
  // reg [47:0] cc_read_IP_REG3;
  // reg [47:0] cc_read_IP_REG4;
   reg  [63:0] cc_base_IP;
-  reg  [63:0] cc_base_IP_reg;
   wire [63:0] cc_base_IP_d;
   wire [8:0] cc_base_dummy9;
   wire [8:0] cc_base_dummy9dec;
@@ -281,7 +280,6 @@ module frontendSelf(
   reg [`ctlbData_width-1:0] tlb_data_reg;
   reg [`ctlbData_width-1:0] tlb_data_reg2;
   reg [`ctlbData_width-1:0] tlb_data_reg3;
-  wire [`ctlbData_width-1:0] tlb_data3;
   wire [PHYS_WIDTH-14:0] tlb_phys;
   wire tlb_nx;
   wire tlb_na;
@@ -562,42 +560,6 @@ module frontendSelf(
   wire [4:0]       btb_jlink3;
   wire [`ZERO:0]  btb_jlnpos3;
   wire [`ZERO:0] btb_jlnjpos3;
-  reg [4:0]       btb_jlink0_reg;
-  reg [`ZERO:0]  btb_jlnpos0_reg;
-  reg [`ZERO:0] btb_jlnjpos0_reg;
-  reg [4:0]       btb_jlink1_reg;
-  reg [`ZERO:0]  btb_jlnpos1_reg;
-  reg [`ZERO:0] btb_jlnjpos1_reg;
-  reg [4:0]       btb_jlink2_reg;
-  reg [`ZERO:0]  btb_jlnpos2_reg;
-  reg [`ZERO:0] btb_jlnjpos2_reg;
-  reg [4:0]       btb_jlink3_reg;
-  reg [`ZERO:0]  btb_jlnpos3_reg;
-  reg [`ZERO:0] btb_jlnjpos3_reg;
-  reg [4:0]       btb_jlink0_reg2;
-  reg [`ZERO:0]  btb_jlnpos0_reg2;
-  reg [`ZERO:0] btb_jlnjpos0_reg2;
-  reg [4:0]       btb_jlink1_reg2;
-  reg [`ZERO:0]  btb_jlnpos1_reg2;
-  reg [`ZERO:0] btb_jlnjpos1_reg2;
-  reg [4:0]       btb_jlink2_reg2;
-  reg [`ZERO:0]  btb_jlnpos2_reg2;
-  reg [`ZERO:0] btb_jlnjpos2_reg2;
-  reg [4:0]       btb_jlink3_reg2;
-  reg [`ZERO:0]  btb_jlnpos3_reg2;
-  reg [`ZERO:0] btb_jlnjpos3_reg2;
-  reg [4:0]       btb_jlink0_reg3;
-  reg [`ZERO:0]  btb_jlnpos0_reg3;
-  reg [`ZERO:0] btb_jlnjpos0_reg3;
-  reg [4:0]       btb_jlink1_reg3;
-  reg [`ZERO:0]  btb_jlnpos1_reg3;
-  reg [`ZERO:0] btb_jlnjpos1_reg3;
-  reg [4:0]       btb_jlink2_reg3;
-  reg [`ZERO:0]  btb_jlnpos2_reg3;
-  reg [`ZERO:0] btb_jlnjpos2_reg3;
-  reg [4:0]       btb_jlink3_reg3;
-  reg [`ZERO:0]  btb_jlnpos3_reg3;
-  reg [`ZERO:0] btb_jlnjpos3_reg3;
   wire btb_in_link,btb_in_ret;
   wire [11:0] pre_jbefore;
   wire [11:0] pre_jbefore0;
@@ -1081,7 +1043,7 @@ module frontendSelf(
   assign uxcept=except & ~miss_now & ~btb_hold_except & ~except_indir || except_save & ~miss_now &
     ~fstall & ~ixcept;
   
-  assign ixceptIP=(~except_save) ? exceptIP : {tlb_data3[-10+`dtlbData_phys],exceptIP_save[13:0]};
+  assign ixceptIP=(~except_save) ? exceptIP : {tlb_data[-10+`dtlbData_phys],exceptIP_save[43:0]};
   assign ixceptAttr=(~except_save) ? exceptAttr : exceptAttr_save;
   assign ixceptThread=(~except_save) ? exceptThread : exceptThread_save;
   assign ixceptDueJump=(~except_save) ? exceptDueJump : exceptDueJump_save;
@@ -1972,7 +1934,6 @@ module frontendSelf(
 	  predx_sh2_reg4<=2'b0;
 	  predx_sh3_reg4<=2'b0;
 	  cc_base_IP<={20'hf80ff,44'b0};
-	  cc_base_IP_reg<={20'hf80ff,44'b0};
 	  taken_REG<=4'b0;
 	  btbx_jmask_REG<=4'b0;
 	  miss_now_reg<=1'b0;
@@ -2275,7 +2236,6 @@ module frontendSelf(
 	  btbx_cond_reg3<=btbx_cond_reg2;
 	  btbx_cond_reg4<=btbx_cond_reg3;
 	  if (instrFed_reg&~btbFStall_recover_reg2)  cc_base_IP<=cc_base_IP_d;
-          cc_base_IP_reg<=cc_base_IP;
 	  miss_now_reg<=miss_now;
 	  IP_phys_reg<=IP_phys;
 	  IP_phys_reg2<=IP_phys_reg;

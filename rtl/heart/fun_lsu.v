@@ -143,10 +143,10 @@ module agu_block(
   mOpY5_pbit_o,
   mOpY5_type_o,
   mOpY5_II_o,
-  p0_adata,p0_banks,p0_LSQ,p0_en,p0_rsEn,p0_secq,p0_ret,p0_repl,p0_lsfwd,p0_skip_LDQ,
-  p1_adata,p1_banks,p1_LSQ,p1_en,p1_rsEn,p1_secq,p1_ret,p1_repl,p1_lsfwd,p1_skip_LDQ,
-  p2_adata,p2_banks,p2_LSQ,p2_en,p2_rsEn,p2_secq,p2_ret,p2_repl,p2_lsfwd,p2_data,p2_pbit,p2_brdbanks,p2_skip_LDQ,
-  p3_adata,p3_banks,p3_LSQ,p3_en,p3_rsEn,p3_ioEn,p3_io_ack,p3_ret,p3_data,p3_pbit,p3_brdbanks,p3_repl,p3_lsfwd,p3_skip_LDQ,
+  p0_adata,p0_banks,p0_LSQ,p0_en,p0_rsEn,p0_secq,p0_ret,p0_repl,p0_lsfwd,p0_skip,
+  p1_adata,p1_banks,p1_LSQ,p1_en,p1_rsEn,p1_secq,p1_ret,p1_repl,p1_lsfwd,p1_skip,
+  p2_adata,p2_banks,p2_LSQ,p2_en,p2_rsEn,p2_secq,p2_ret,p2_repl,p2_lsfwd,p2_data,p2_pbit,p2_brdbanks,p2_skip,
+  p3_adata,p3_banks,p3_LSQ,p3_en,p3_rsEn,p3_ioEn,p3_io_ack,p3_ret,p3_data,p3_pbit,p3_brdbanks,p3_repl,p3_lsfwd,p3_skip,
   p4_adata,p4_LSQ,p4_en,p4_secq,p4_ret,
   p5_adata,p5_LSQ,p5_en,p5_secq,p5_ret,
   p_bankNone,
@@ -375,7 +375,6 @@ module agu_block(
   output [13:0]p0_ret;
   output       p0_repl;
   output       p0_lsfwd;
-  output       p0_skip_LDQ;
   output [`lsaddr_width-1:0] p1_adata;
   output [31:0]p1_banks;
   output [8:0] p1_LSQ;
@@ -385,7 +384,6 @@ module agu_block(
   output [13:0]p1_ret;
   output       p1_repl;
   output       p1_lsfwd;
-  output       p1_skip_LDQ;
   output [`lsaddr_width-1:0] p2_adata;
   output [31:0]p2_banks;
   output [8:0] p2_LSQ;
@@ -398,7 +396,6 @@ module agu_block(
   output[127+8:0]p2_data;
   output [1:0] p2_pbit;
   output [4:0] p2_brdbanks;
-  output       p2_skip_LDQ;
   output [`lsaddr_width-1:0] p3_adata;
   output [31:0]p3_banks;
   output [8:0] p3_LSQ;
@@ -412,7 +409,6 @@ module agu_block(
   output [4:0] p3_brdbanks;
   output       p3_repl;
   output       p3_lsfwd;
-  output       p3_skip_LDQ;
   output [`lsaddr_width-1:0] p4_adata;
   output [8:0] p4_LSQ;
   output       p4_en;
@@ -727,14 +723,14 @@ module agu_block(
 
   reg miss_doneEven,miss_doneOdd;
 
-  wire mOp0_skip_LDQ;
-  wire mOp1_skip_LDQ;
-  wire mOp2_skip_LDQ;
-  wire mOp3_skip_LDQ;
-  reg  mOpX0_skip_LDQ_reg;
-  reg  mOpX1_skip_LDQ_reg;
-  reg  mOpX2_skip_LDQ_reg;
-  reg  mOpX3_skip_LDQ_reg;
+  wire mOp0_skip;
+  wire mOp1_skip;
+  wire mOp2_skip;
+  wire mOp3_skip;
+  reg  mOpX0_skip_reg;
+  reg  mOpX1_skip_reg;
+  reg  mOpX2_skip_reg;
+  reg  mOpX3_skip_reg;
 
   wire [44-8:0] mcam_addr;
   reg [44-8:0] mcam_addr_reg;
@@ -1799,7 +1795,7 @@ module agu_block(
   p0_faultNo,
   mOp0_register,
   mOp0_type,
-  mOp0_skip_LDQ,
+  mOp0_skip,
   mOp0_LSQ,
   mOp0_II,
   mOp0_WQ,
@@ -1866,7 +1862,7 @@ module agu_block(
   p1_faultNo,
   mOp1_register,
   mOp1_type,
-  mOp1_skip_LDQ,
+  mOp1_skip,
   mOp1_LSQ,
   mOp1_II,
   mOp1_WQ,
@@ -1933,7 +1929,7 @@ module agu_block(
   p2_faultNo,
   mOp2_register,
   mOp2_type,
-  mOp2_skip_LDQ,
+  mOp2_skip,
   mOp2_LSQ,
   mOp2_II,
   mOp2_WQ,
@@ -2111,7 +2107,7 @@ module agu_block(
   .mOp_pbit(mOp3_pbit),
   .mOp_lsflag(mOp3_lsflag),
   .mOp_tlb_miss(rec_tlb_miss),
-  .mOp_skip_LDQ(mOp3_skip_LDQ),
+  .mOp_skip_LDQ(mOp3_skip),
   .FU3Hit(FU3Hit),
   .FU3reg(FUreg3_reg),
   .FU3Data(dc_rdataA),
@@ -2532,7 +2528,7 @@ module agu_block(
   assign p0_ret={1'b0,p0_faultCode[3:0],p0_faultNo};
   assign p0_secq=mOp0_sec_reg;
   assign p0_lsfwd=mOpX0_lsfwd_reg;
-  assign p0_skip_LDQ=mOpX0_skip_LDQ_reg;
+  assign p0_skip=mOpX0_skip_reg;
 
   assign p1_adata[`lsaddr_addrE]=mOpX1_addrEven_reg;
   assign p1_adata[`lsaddr_addrO]=mOpX1_addrOdd_reg;
@@ -2567,7 +2563,7 @@ module agu_block(
   assign p1_ret={1'b0,p1_faultCode[3:0],p1_faultNo};
   assign p1_secq=mOp1_sec_reg;
   assign p1_lsfwd=mOpX1_lsfwd_reg;
-  assign p1_skip_LDQ=mOpX1_skip_LDQ_reg;
+  assign p1_skip=mOpX1_skip_reg;
 
   assign p2_adata[`lsaddr_addrE]=mOpX2_addrEven_reg;
   assign p2_adata[`lsaddr_addrO]=mOpX2_addrOdd_reg;
@@ -2605,7 +2601,7 @@ module agu_block(
   assign p2_data=mOpX2_data_reg;
   assign p2_pbit=mOpX2_pbit_reg;
   assign p2_brdbanks=mOpX2_brdread_reg;
-  assign p2_skip_LDQ=mOpX2_skip_LDQ_reg;
+  assign p2_skip=mOpX2_skip_reg;
 
   assign p3_adata[`lsaddr_addrE]=mOpX3_addrEven_reg;
   assign p3_adata[`lsaddr_addrO]=mOpX3_addrOdd_reg;
@@ -2642,7 +2638,7 @@ module agu_block(
   assign p3_pbit=mOpX3_pbit_reg;
   assign p3_ret={1'b0,p3_faultCode[3:0],p3_faultNo};
   assign p3_brdbanks=mOpX3_brdread_reg;
-  assign p3_skip_LDQ=mOpX3_skip_LDQ_reg;
+  assign p3_skip=mOpX3_skip_reg;
 
   assign p_bankNone=~mOpX3_banks_reg & ~mOpX2_banks_reg & ~mOpX1_banks_reg &~mOpX0_banks_reg;
 
@@ -2864,7 +2860,7 @@ module agu_block(
           mOpX0_en_reg3    <=mOpX0_en_reg2 & ~except;
           mOpX0_lsflag_reg3<=mOpX0_lsflag_reg2;
           mOpX0_type_reg3  <=mOpX0_type_reg2;
-          mOpX0_skip_LDQ_reg   <=mOp0_skip_LDQ;
+          mOpX0_skip_reg   <=mOp0_skip;
       end
 
       if (~(rsStall[1]&~now_flushing&~alt_bus_hold_reg)) begin
@@ -2877,7 +2873,7 @@ module agu_block(
           mOpX1_en_reg3    <=mOpX1_en_reg2 & ~except;
           mOpX1_lsflag_reg3<=mOpX1_lsflag_reg2;
           mOpX1_type_reg3  <=mOpX1_type_reg2;
-          mOpX1_skip_LDQ_reg   <=mOp1_skip_LDQ;
+          mOpX1_skip_reg   <=mOp1_skip;
       end
 
       if (~(rsStall[2]&~now_flushing&~alt_bus_hold_reg)) begin
@@ -2890,7 +2886,7 @@ module agu_block(
           mOpX2_en_reg3    <=mOpX2_en_reg2 & ~except;
           mOpX2_lsflag_reg3<=mOpX2_lsflag_reg2;
           mOpX2_type_reg3  <=mOpX2_type_reg2;
-          mOpX2_skip_LDQ_reg   <=mOp2_skip_LDQ;
+          mOpX2_skip_reg   <=mOp2_skip;
       end
 
       if (~(rsStall[3]&~now_flushing&~alt_bus_hold_reg)) begin
@@ -2904,7 +2900,7 @@ module agu_block(
           mOpX3_lsflag_reg3<=mOpX3_lsflag_reg2;
           mOpX3_type_reg3  <=mOpX3_type_reg2;
           mOpX3_lsfwd_reg  <=mOpX3_lsfwd;
-          mOpX3_skip_LDQ_reg   <=mOp3_skip_LDQ;
+          mOpX3_skip_reg   <=mOp3_skip;
       end
 
       if (~(rsStall[0]&~now_flushing&~alt_bus_hold_reg)) begin
