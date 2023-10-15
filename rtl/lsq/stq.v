@@ -179,8 +179,6 @@ module stq(
   
   wire [139:0] WLN0_dataX;
   wire [139:0] WLN1_dataX;
-  wire [127:0] WLN0_dataXN;
-  wire [127:0] WLN1_dataXN;
 
   wire [5:0] confl0;
 
@@ -280,7 +278,6 @@ module stq(
   wire [5:0][139:0] chk_dataM;
   wire [5:0][1:0] chk_pbit;
   wire [5:0][16:0] chk_bytes;
-  wire [5:0][16:0] chk_bytesX;
   wire [135:0] wb0_dataW;
   wire [1:0]  wb0_pbitW;
   wire [16:0] wb0_bytesW;
@@ -516,8 +513,6 @@ module stq(
   endfunction
       wire [3:0][32:0] WLN0_dataX0;
       wire [3:0][32:0] WLN1_dataX0;
-      wire [3:0][32:0] WLN0_dataXN0;
-      wire [3:0][32:0] WLN1_dataXN0;
       wire [3:0][32:0] chk0_data0;
       wire [3:0][32:0] chk1_data0;
       wire [3:0][32:0] chk2_data0;

@@ -110,7 +110,7 @@ module selftest(
               pook_en[k]=1;
               if (ret_dataS[retire_index[j]]!=flg[j] && is_flg[j]) begin
                   $display("flag error 0x%u",binoffaddr[j]);
-                  if (j!=9 && is_flg[j+1:9]!=0 && retire_enFl[j]) $display("spurfl ret");
+                  if ((j!=9 && is_flg[j+1:9]!=0 && retire_enFl[j]) $display("spurfl ret");
                   if (retire_enFl[j] && !(j==9 || is_flg[j+1:9]==0)) $display("spurfl miss");
                   $finish();
               end

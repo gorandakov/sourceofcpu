@@ -902,27 +902,12 @@ module lsq_req(
   wire [5:0] readB_ldconfl2;
   wire readB_rdy;
   reg readA_rdy_reg;
-
-  wire [31:0] firstBx;
-  wire [31:0] firstAx;
-  wire        foundBx;
-  wire        foundAx;
-  wire [31:0] firstBx2;
-  wire [31:0] firstAx2;
-  wire        foundBx2;
-  wire        foundAx2;
   
  // wire doStallB;
   wire readB_clkEn;
 
   wire [ADDR_WIDTH:0] write_addr_shr_next;
 
-  wire [31:0] firstANt;
-  wire [31:0] firstBNt;
-  wire foundANt;
-  wire foundBNt;
-  wire foundANq;
-  wire foundBNq;
 
   wire reenabA,reenabB;
 /*  reg toflipA,toflipB;*/
@@ -1186,14 +1171,14 @@ module lsq_req(
   assign foundB=foundBx|foundBx2;
   assign foundA=foundAx|foundAx2;
 
-  bit_find_first_bit #(ADDR_COUNT) lastBN_mod(validB_next[31:0],firstBN[31:0],foundBNq);
-  bit_find_first_bit #(ADDR_COUNT) lastAN_mod(validA_next[31:0],firstAN[31:0],foundANq);
-  bit_find_first_bit #(ADDR_COUNT) lastBN2_mod(validB_next[63:32],firstBNt,foundBNt);
-  bit_find_first_bit #(ADDR_COUNT) lastAN2_mod(validA_next[63:32],firstANt,foundANt);
-  assign firstBN[63:32]=firstBNt&{32{~foundBNq}};
-  assign firstAN[63:32]=firstANt&{32{~foundANq}};
-  assign foundBN=foundBNq|foundBNt;
-  assign foundAN=foundANq|foundANt;
+  bit_find_first_bit #(ADDR_COUNT) lastBN_mod(validB_next[31:0],firstBN[31:0],foundBNt);
+  bit_find_first_bit #(ADDR_COUNT) lastAN_mod(validA_next[31:0],firstAN[31:0],foundANt);
+  bit_find_first_bit #(ADDR_COUNT) lastBN2_mod(validB_next[63:32],firstBNt,foundBNtx);
+  bit_find_first_bit #(ADDR_COUNT) lastAN2_mod(validA_next[63:32],firstANt,foundANtx);
+  assign firstBN[63:32]=firstBNt&{32{~foundBNt}};
+  assign firstAN[63:32]=firstANt&{32{~foundANt}};
+  assign foundBN=foundBNt|foundBNtx;
+  assign foundAN=foundANt|foundANtx;
 
 //  get_carry #(5) onNextCmpB_mod(write_addr_shr[4:0],~readB_addr,1'b1,onSameValidB0);
 //  get_carry #(5) onNextCmpA_mod(write_addr_shr[4:0],~readA_addr,1'b1,onSameValidA0);
