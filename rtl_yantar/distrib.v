@@ -100,9 +100,9 @@ module yantar_gen_purp1(
   read1_addr,read1_data,read1_en,read1_imm,read1_imm_en,
   read2_addr,read2_data,read2_en,
   read3_addr,read3_data,read3_en,read3_imm,read3_imm_en,
-  read4_addr,read4_data,
-  read5_addr,read5_data,read5_imm,read5_imm_en,
-  read6_addr,read6_data,
+  read4_addr,read4_data,read4_en,
+  read5_addr,read5_data,read5_en,read5_imm,read5_imm_en,
+  read6_addr,read6_data,read4_en,
   write0_addr,write0_data,write0_wen,
   write1_addr,write1_data,write1_wen,
   write2_addr,write2_data,write2_wen,
@@ -114,27 +114,17 @@ module yantar_gen_purp1(
   input rst;
   input stall;
   input [5:0]   read0_addr;
-  output [3:0][64:0] read0_data;
-  input  [3:0] read0_en;
+  output [64:0] read0_data;
   input [5:0]   read1_addr;
-  output [3:0][64:0] read1_data;
-  input  [3:0] read1_en;
-  input [64:0] read1_imm;
-  input        read1_imm_en;
+  output [64:0] read1_data;
   input [5:0]   read2_addr;
-  output [3:0][64:0] read2_data;
-  input  [3:0] read2_en;
+  output [64:0] read2_data;
   input [5:0]   read3_addr;
-  output [3:0][64:0] read3_data;
-  input  [3:0] read3_en;
-  input [64:0] read3_imm;
-  input        read3_imm_en;
+  output [64:0] read3_data;
   input [5:0]   read4_addr;
   output [64:0] read4_data;
   input [5:0]   read5_addr;
   output [64:0] read5_data;
-  input [64:0] read5_imm;
-  input        read5_imm_en;
   input [5:0]   read6_addr;
   output [64:0] read6_data;
   input [5:0]  write0_addr;
