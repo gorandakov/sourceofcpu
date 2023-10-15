@@ -1146,8 +1146,6 @@ module dcache1(
   reg [1:0] read_pbit3P_reg;
   reg [1:0] read_pbit3P_reg2;
 
-  wire [5:0][6:0] puke_addr;
-  wire [5:0] puke_en;
   wire [5:0] err_tag[7:0];
   wire rderr1;
   wire rderr2;
@@ -1260,12 +1258,7 @@ module dcache1(
   reg read_clkEn3_reg;
   reg read_odd3_reg;
   reg read_split3_reg;
- 
-  reg [3:0] read_odd;
-  reg [3:0] read_odd_reg;
-  reg [3:0] read_split;
-  reg [3:0] read_split_reg;
- 
+  
   reg [BANK_COUNT-1:0] read_bankNoRead_reg;//bits are 1 if other bank reads are 0
   
   reg read_invalidate_reg; 
@@ -1359,14 +1352,7 @@ module dcache1(
   reg write_clear_reg2;
   reg write_clkEn0_reg2;
   reg write_clkEn1_reg2;
- 
-  wire [7:0] read_errT0; 
-  wire [7:0] read_errT1; 
-  wire [7:0] read_errT2; 
-  wire [7:0] read_errT3; 
-  wire [8:0][7:0] read_errP;
-  reg [7:0] read_errP_reg;
-  reg [7:0] read_errP_reg2;
+  
   reg read_clkEnAny;
 //  reg wb_en_reg,wb_en_reg2,wb_en_reg3;
   wire [ADDR_WIDTH-1:0] wb_addr;
@@ -1432,6 +1418,7 @@ module dcache1(
           insert_exclusive_reg2,
           insert_dirty_reg2,
           write_data_ecc,
+          write_dataM_ecc,
           write_dataPTR_reg2,
           err_tag[w],
           recent_in,
@@ -1509,14 +1496,14 @@ module dcache1(
 		rxerr4[p]|rxerr5[p]|rxerr6[p]|rxerr7[p];
               assign read_dataA[p]=rddata1[p] & {{8{mskdata1[p][5]}},{48{mskdata1[p][4]}},{16{mskdata1[p][3]}},{32{mskdata1[p][2]}},
                     {16{mskdata1[p][1]}},{8{mskdata1[p][0]}},8'hff};
-              assign puke_addr[p]=read_odd_reg[p]|read_split_reg[p] && rderr1[p] ? read_addrO_reg[p][6:0] : read_addrE_reg[p][6:0];
-              assign puke_en[p]=rderr1[p] | rderr2[p];
+              assign puke_addr[p]=read_odd[p] & rderr1[p] || read_errH_reg2[p] ? read_addrO[p][6:0] : read_addrE[p][6:0];
+              assign puke_en[p]=rderr1[p] | rderr2[p] | read_errL_reg2[p] | read_errH_reg2[p];
     end
   endgenerate
-  assign puke_addr[4]=0;//write_odd[4] && write_errL_reg2[4] ? write_addrO[4][6:0] : read_addrE[4][6:0];
-  assign puke_en[4]=0;//write_errL_reg2[4] | write_errH_reg2[4];
-  assign puke_addr[5]=0;//write_odd[5] && write_errL_reg2[5] ? write_addrO[5][6:0] : read_addrE[5][6:0];
-  assign puke_en[5]=0;//write_errL_reg2[5] | write_errH_reg2[5];
+  assign puke_addr[4]=write_odd[4] && write_errL_reg2[4] ? write_addrO[4][6:0] : read_addrE[4][6:0];
+  assign puke_en[4]=write_errL_reg2[4] | write_errH_reg2[4];
+  assign puke_addr[5]=write_odd[5] && write_errL_reg2[5] ? write_addrO[5][6:0] : read_addrE[5][6:0];
+  assign puke_en[5]=write_errL_reg2[5] | write_errH_reg2[5];
 
   LFSR16_6 rnd_mod(clk,rst,insert_rand);
   
@@ -1667,7 +1654,6 @@ module dcache1(
           write_dataM_reg<=1024'B0;
           write_dataPTR_reg<=16'b0;
           read_dataP_reg2<={LINE_WIDTH{1'B0}};
-          read_errP_reg2<=8'b0;
           read_pbit0P_reg2<=2'b0;
           read_pbit1P_reg2<=2'b0;
           read_pbit2P_reg2<=2'b0;
@@ -1677,11 +1663,6 @@ module dcache1(
           read_bank1_reg<=32'b0;
           read_bank2_reg<=32'b0;
           read_bank3_reg<=32'b0;
-
-          read_odd<=4'b0;
-          read_odd_reg<=4'b0;
-          read_split<=4'b0;
-          read_spliy_reg<=4'b0;
           
           for(v=0;v<4;v=v+1) begin
               mskdata1[v]<=6'b0;
@@ -1743,12 +1724,6 @@ module dcache1(
 
           read_clkEnAny<=|{read_clkEn0,read_clkEn1,read_clkEn2,read_clkEn3};
           
-          read_odd<={read_odd3,read_odd2,read_odd1,read_odd0};
-          read_split<={read_split3,read_split2,read_split1,read_split0};
-          read_odd_reg<=read_odd;
-          read_split_reg<=read_split;
-
-
           write_clear_reg<=write_clear;
           
           wb_addr_reg2<=wb_addr_reg;
@@ -1767,7 +1742,7 @@ module dcache1(
           if (~insbus_B) write_dataM_reg[WLINE_WIDTH/2-1:0]<=write_dataM[WLINE_WIDTH/2-1:0];
           if (~insbus_A) write_dataM_reg[WLINE_WIDTH-1:WLINE_WIDTH/2]<=write_dataM[WLINE_WIDTH-1:WLINE_WIDTH/2];
           
-          if (read_clkEnAny) read_errP_reg2<=read_errP_reg;
+          
 	  if (read_clkEnAny) read_dataP_reg2<=read_dataP_reg;
           if (read_clkEnAny) read_pbit0P_reg2<=read_pbit0P_reg;
           if (read_clkEnAny) read_pbit1P_reg2<=read_pbit1P_reg;
@@ -1880,7 +1855,6 @@ module dcache1(
           read_pbit2P_reg<=2'b0;
           read_pbit3P_reg<=2'b0;
           read_dataP_reg<={LINE_WIDTH{1'B0}};
-          read_errP_reg<=8'b0;
           write_data_reg2<={WLINE_WIDTH{1'B0}};
           write_dataM_reg2<={WLINE_WIDTH{1'B0}};
       end else begin
@@ -1945,7 +1919,6 @@ module dcache1(
           read_pbit2P_reg<=read_pbit2P[8];
           read_pbit3P_reg<=read_pbit3P[8];
           read_dataP_reg<=read_dataP[8];
-          read_errP_reg<=read_errP[8];
           write_data_reg2<=write_data_reg;
           write_dataM_reg2<=write_dataM_reg;
       end
