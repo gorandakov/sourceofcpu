@@ -1147,18 +1147,7 @@ module dcache1(
   reg [1:0] read_pbit3P_reg2;
 
   wire [5:0] err_tag[7:0];
-  wire rderr1;
-  wire rderr2;
-  wire [3:0][15:0] rxerr0;
-  wire [3:0][15:0] rxerr1;
-  wire [3:0][15:0] rxerr2;
-  wire [3:0][15:0] rxerr3;
-  wire [3:0][15:0] rxerr4;
-  wire [3:0][15:0] rxerr5;
-  wire [3:0][15:0] rxerr6;
-  wire [3:0][15:0] rxerr7;
-  wire [3:0][15:0] rxerr7B;
-  wire [3:0][15:0] rxerr;
+  
   wire recent_in;
   wire [7:0] recent_out;
 
@@ -1458,14 +1447,14 @@ module dcache1(
               assign rddata1[1]=({read_beginA_reg[1][1:0],read_low_reg[3:2]}==b) ? rxdata[1][b*8+:136] : 136'BZ;
               assign rddata1[2]=({read_beginA_reg[2][1:0],read_low_reg[5:4]}==b) ? rxdata[2][b*8+:136] : 136'BZ;
               assign rddata1[3]=({read_beginA_reg[3][1:0],read_low_reg[7:6]}==b) ? rxdata[3][b*8+:136] : 136'BZ;
-              assign rderr1[0]=({read_beginA_reg[0][1:0],2'b0}==b) ? |rxerr[0][b+:4] : 1'BZ;
-              assign rderr1[1]=({read_beginA_reg[1][1:0],2'b0}==b) ? |rxerr[1][b+:4] : 1'BZ;
-              assign rderr1[2]=({read_beginA_reg[2][1:0],2'b0}==b) ? |rxerr[2][b+:4] : 1'BZ;
-              assign rderr1[3]=({read_beginA_reg[3][1:0],2'b0}==b) ? |rxerr[3][b+:4] : 1'BZ;
-              assign rderr2[0]=({read_beginA_reg[0][1:0],2'b0}==b) ? |rxerr7B[0][b+:4] : 1'BZ;
-              assign rderr2[1]=({read_beginA_reg[1][1:0],2'b0}==b) ? |rxerr7B[1][b+:4] : 1'BZ;
-              assign rderr2[2]=({read_beginA_reg[2][1:0],2'b0}==b) ? |rxerr7B[2][b+:4] : 1'BZ;
-              assign rderr2[3]=({read_beginA_reg[3][1:0],2'b0}==b) ? |rxerr7B[3][b+:4] : 1'BZ;
+              assign rderr1[0]=({read_beginA_reg[0][1:0],2'b0}==b) ? |rxerr[0][b+:4] : 136'BZ;
+              assign rderr1[1]=({read_beginA_reg[1][1:0],2'b0}==b) ? |rxerr[1][b+:4] : 136'BZ;
+              assign rderr1[2]=({read_beginA_reg[2][1:0],2'b0}==b) ? |rxerr[2][b+:4] : 136'BZ;
+              assign rderr1[3]=({read_beginA_reg[3][1:0],2'b0}==b) ? |rxerr[3][b+:4] : 136'BZ;
+              assign rderr2[0]=({read_beginA_reg[0][1:0],2'b0}==b) ? |rxerr7B[0][b+:4] : 136'BZ;
+              assign rderr2[1]=({read_beginA_reg[1][1:0],2'b0}==b) ? |rxerr7B[1][b+:4] : 136'BZ;
+              assign rderr2[2]=({read_beginA_reg[2][1:0],2'b0}==b) ? |rxerr7B[2][b+:4] : 136'BZ;
+              assign rderr2[3]=({read_beginA_reg[3][1:0],2'b0}==b) ? |rxerr7B[3][b+:4] : 136'BZ;
           end
       end
       for (p=0;p<4;p=p+1) begin
