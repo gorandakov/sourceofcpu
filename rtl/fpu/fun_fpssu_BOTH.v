@@ -135,6 +135,10 @@ module fun_fpsu_BOTH(
   (* register equiload *) output [5:0] FOOFL1;
   (* register equiload *) output [5:0] FOOFL2;
   
+  (* register equiload *) (* bus=SIMDH bus_spacing=9 *)output [67:0] MRKAH;
+  (* register equiload *) (* bus=SIMDH bus_spacing=9 *)output [67:0] MRKBH;
+  (* register equiload *) (* bus=SIMDL bus_spacing=9 *) output [67:0] MRKAL;
+  (* register equiload *) (* bus=SIMDL bus_spacing=9 *) output [67:0] BRKBL;
 
   input [135:0] fork_in;
   output [135:0] fork_out;
