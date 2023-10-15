@@ -138,10 +138,6 @@ module fun_fpuSL(
   reg daltXA_reg2;
   reg daltXB_reg2;
 
-  reg [20:0] u5_op_reg;
-  reg [3:0] u5_en_reg;
-  reg [20:0] u5_op_reg2;
-  reg [3:0] u5_en_reg2;
 
   fun_fpsu #(0,0) fpu0_mod(
   clk,
@@ -206,7 +202,7 @@ module fun_fpuSL(
   .rst(rst),
   .en(u5_en_reg[3] && |u5_en_reg[3:2] 
   && (u5_op_reg[7:0]==`fop_pcvtD || u5_op_reg[7:0]==`fop_pcvtS)),
-  .clkEn(1'b1),
+  .clkEn(~fxFRT_alten_reg3),
   .A((u5_op_reg2[7:0]!=`fop_pcvtD) ? {16'b0,XI_dataS[65:0]} : {XI_dataT[15+68:68],XI_dataT[65:0]}),
   .isDBL(u5_op_reg[7:0]==`fop_pcvtD),
   .isEXT(1'b0),
@@ -222,7 +218,7 @@ module fun_fpuSL(
   .rst(rst),
   .en(u5_en_reg[3] && |u5_en_reg[3:2]  
   && (u5_op_reg[7:0]==`fop_pcvtS)),
-  .clkEn(1'b1),
+  .clkEn(~fxFRT_alten_reg3),
   .A({16'b0,33'b0,XI_dataS[65:33]}),
   .isDBL(1'b0),
   .isEXT(1'b0),
@@ -243,9 +239,5 @@ module fun_fpuSL(
       daltXB_reg<=daltXB;
       daltXA_reg2<=daltXA_reg;
       daltXB_reg2<=daltXB_reg;
-      u5_en_reg<=u5_en;
-      u5_op_reg<=u5_op;
-      u5_en_reg2<=u5_en_reg;
-      u5_op_reg2<=u5_op_reg2;
   end
 endmodule

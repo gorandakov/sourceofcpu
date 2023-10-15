@@ -172,7 +172,6 @@ module decoder_aux_const(
  
   input clk;
   input rst;
-  input stall;
   input [9:0] cls_sys;
   input [31:0] instr0; 
   input [31:0] instr1; 
@@ -207,7 +206,6 @@ module decoder_aux_const(
   wire [9:0] cls_sys_first;
   wire cls_sys_has;
   wire [15:0] aux0;
-  reg thread_reg;
   reg [15:0] aux0_reg;
   reg [1:0][63:0] csr_retIP;
   reg [1:0][64:0] csr_excStackSave;

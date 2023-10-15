@@ -48,13 +48,6 @@ module fun_fpu(
   parameter [0:0] H=1'b0;
   localparam SIMD_WIDTH=68; //half width
   localparam S={27'b0,~H,4'b0};
-  localparam ROUND_TRUNC=0;
-  localparam ROUND_ROUND=1;
-  localparam ROUND_EVEN =2;
-  localparam ROUND_PLUS =3;
-  localparam ROUND_MINUS=4;
-  localparam ROUND_UP   =5;
-  localparam ROUND_DOWN =6;
   input clk;
   input rst;
   input [31:0] fpcsr;
@@ -251,7 +244,6 @@ module fun_fpu(
   reg [3:0] u2_en_reg;
   reg [20:0] u1_op_reg;
   reg [20:0] u1_op_reg2;
-  reg [20:0] u1_op_reg3;
   reg [3:0] u1_en_reg2;
   reg [3:0] u1_en_reg3;
   reg [3:0] u1_en_reg4;
@@ -674,7 +666,6 @@ module fun_fpu(
       gfFADD_en_reg<=gfFADD_en;
       gfFADD_en_reg2<=gfFADD_en_reg;
       u1_op_reg2<=u1_op_reg;
-      u1_op_reg3<=u1_op_reg2;
       u1_en_reg2<=u1_en_reg;
       u1_en_reg3<=u1_en_reg2;
       u1_en_reg4<=u1_en_reg3;

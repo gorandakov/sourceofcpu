@@ -287,7 +287,6 @@ module smallInstr_decoder(
   reg pflags_wrFPU[TRICNT_TOP-1:0];
   reg pinstr_fsimd[TRICNT_TOP-1:0];
   reg phalt[TRICNT_TOP-1:0];
-  reg [2:0] prndmode[TRICNT_TOP-1:0];
   
   wire [64:0] qconstant[17:0];
   wire [17:0] qtrien;

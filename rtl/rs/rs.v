@@ -749,13 +749,13 @@ module rs_wakeUp_logic_array(
 	FU8wen_reg2<=FU8wen_reg;
 	FUreg9_reg2<=FUreg9_reg;
 	FU9wen_reg2<=FU9wen_reg;
-//	FUreg6_reg3<=FUreg7_reg2;
+	FUreg7_reg3<=FUreg7_reg2;
 	FU4wen_reg3<=FU4wen_reg2;
 	FUreg4_reg3<=FUreg4_reg2;
 	FU5wen_reg3<=FU5wen_reg2;
 	FUreg5_reg3<=FUreg5_reg2;
 	FU6wen_reg3<=FU6wen_reg2;
-	FUreg6_reg3<=FUreg6_reg2;
+	FUreg6_reg4<=FUreg6_reg3;
 //	FU7wen_reg4<=FU7wen_reg3;
 //	FUreg8_reg4<=FUreg8_reg3;
 //	FU8wen_reg4<=FU8wen_reg3;
