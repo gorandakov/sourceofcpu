@@ -1005,6 +1005,35 @@ module heptane_core(
  
   assign dc2_rdataExp=(dc2_rhitExpA0 | dc2_rhitExpA0_reg | dc2_io_en_reg3) ? dc2_rdataExpA : dc2_rdataExpB;
   
+  assign dc2_rxdataB=dc2_rhitxB0 ? dc2_rxdataB0[511:0] : 512'bz;
+  assign dc2_rxdataB=dc2_rhitxB0_reg ? dc2_rxdataB0_reg[1023:512] : 512'bz;
+  assign dc2_rxdataB=dc2_rhitxB1 ? dc2_rxdataB1[511:0] : 512'bz;
+  assign dc2_rxdataB=dc2_rhitxB1_reg ? dc2_rxdataB1_reg[1023:512] : 512'bz;
+  assign dc2_rxdataB=(dc2_rhitxB0 | dc2_rhitxB0_reg | dc2_rhitxB1 | dc2_rhitxB1_reg) ?
+    512'bz : 512'b0;
+      
+  assign dc2_rxdataA=dc2_rhitxA0 ? dc2_rxdataA0[511:0] : 512'bz;
+  assign dc2_rxdataA=dc2_rhitxA0_reg ? dc2_rxdataA0_reg[1023:512] : 512'bz;
+  assign dc2_rxdataA=dc2_io_en_reg3 ? {448'b0,dc2_dataIO_reg3} : 512'bz;
+  assign dc2_rxdataA=(dc2_rhitxA0 | dc2_rhitxA0_reg | dc2_io_en_reg3 ) ? 512'bz : 512'b0;
+ 
+  assign dc2_rxdata=(dc2_rhitxA0 | dc2_rhitxA0_reg | dc2_io_en_reg3) ? dc2_rxdataA : dc2_rxdataB;
+  
+  assign dc2_rxdataExpB=dc2_rhitxExpB0 ? dc2_rxdataExpB0[511:0] : 512'bz;
+  assign dc2_rxdataExpB=dc2_rhitxExpB0_reg ? dc2_rxdataExpB0_reg[1023:512] : 512'bz;
+  assign dc2_rxdataExpB=dc2_rhitxExpB1 ? dc2_rxdataExpB1[511:0] : 512'bz;
+  assign dc2_rxdataExpB=dc2_rhitxExpB1_reg ? dc2_rxdataExpB1_reg[1023:512] : 512'bz;
+  assign dc2_rxdataExpB=(dc2_rhitxExpB0 | dc2_rhitxExpB0_reg | dc2_rhitxExpB1 | dc2_rhitxExpB1_reg) ?
+    512'bz : 512'b0;
+      
+  assign dc2_rxdataExpA=dc2_rhitxExpA0 ? dc2_rxdataExpA0[511:0] : 512'bz;
+  assign dc2_rxdataExpA=dc2_rhitxExpA0_reg ? dc2_rxdataExpA0_reg[1023:512] : 512'bz;
+  assign dc2_rxdataExpA=dc2_io_en_reg3 ? {448'b0,dc2_dataIO_reg3} : 512'bz;
+  assign dc2_rxdataExpA=(dc2_rhitxExpA0 | dc2_rhitxExpA0_reg | dc2_io_en_reg3 ) ? 512'bz : 512'b0;
+ 
+  assign dc2_rxdataExp=(dc2_rhitxExpA0 | dc2_rhitxExpA0_reg | dc2_io_en_reg3) ? dc2_rxdataExpA : dc2_rxdataExpB;
+  
+  
 //  assign stall=1'b0;
   assign dc2_rLRUB=dc2_rhitB0 ? dc2_rLRUB0 :  5'bz;
   assign dc2_rLRUB=dc2_rhitB1 ? dc2_rLRUB1 :  5'bz;
@@ -1278,6 +1307,145 @@ module heptane_core(
   .expun_dc_addr(expun_bk_addr),
   .expun_dc_en(expun_bk_en)
   );
+  
+  ccache2_block #(0) cc2A0_mod(
+  .clk(clk),
+  .rst(rst),
+  .read_en(cc2_rdEn),.read_odd(cc2_rdOdd),
+  .read_data(cc2_rdataA0),
+  .read_dataX(cc2_rdataExpA0),
+  .read_dataPTR(cc2_rdataPTRA0),
+  .read_dataPTRx(cc2_rdataExpPTRA0),
+  .write0_clkEn(cc2_hitE0 | cc2_hitO0),
+  .write0_passthrough(cc2_io0),
+  .write_addrE0(cc2_addrE0), .write_hitE0(cc2_hitE0),
+  .write_addrO0(cc2_addrO0), .write_hitO0(cc2_hitO0),
+  .write_bankEn0(cc2_bankEn0), 
+  .write_pbit0(cc2_pbit0),.write_d128_0(cc2_d128_0), 
+  .write_begin0(cc2_begin0),.write_end0(cc2_end0),
+  .write_bBen0(cc2_bBen0),.write_enBen0(cc2_enBen0),
+  .write_odd0(cc2_odd0),.write_split0(cc2_split0),
+  .write_data0(cc2_data0),
+  .write1_clkEn(cc2_hitE1 | cc2_hitO1),
+  .write1_passthrough(cc2_io1),
+  .write_addrE1(cc2_addrE1), .write_hitE1(cc2_hitE1),
+  .write_addrO1(cc2_addrO1), .write_hitO1(cc2_hitO1),
+  .write_bankEn1(cc2_bankEn1),
+  .write_pbit1(cc2_pbit1),.write_d128_1(cc2_d128_1),
+  .write_begin1(cc2_begin1),.write_end1(cc2_end1),
+  .write_bBen1(cc2_bBen1),.write_enBen1(cc2_enBen1),
+  .write_odd1(cc2_odd1),.write_split1(cc2_split1),
+  .write_data1(cc2_data1),
+  .busIns_data(rbusANIn_data_reg),
+  .busIns_dataPTR(rbusANIn_dataPTR_reg),
+  .insBus_A(rinsBus_A),
+  .insBus_B(rinsBus_B),
+  .insert(rinsBus_B),
+  .insert_excl(rbusANIn_signals_reg[`rbusAN_excl]),
+  .insert_dirty(rbusANIn_signals_reg[`rbusAN_dirty]),
+  .insert_dupl(cc2_dupl_rd),
+  .hit_LRU(cc2_rLRU_reg),.read_LRU(cc2_rLRUA0),.hit_any(cc2_rhitA0),
+  .read_dir(cc2_rDirA0),.read_excl(cc2_rExclA0),
+  //.read_expAddr(L1_expAddr),
+  .read_expAddr_en(L1_expAddr_en),
+  .imm_any(cc2_rhitExpA0),
+  .read_expAddrOut(),
+  .expun_cc_addr(expun_fr_addr),
+  .expun_cc_en(expun_fr_en),
+  .expun_dc_addr(expun_bk_addr),
+  .expun_dc_en(expun_bk_en)
+  );
+  ccache2_block #(1) cc2B0_mod(
+  .clk(clk),
+  .rst(rst),
+  .read_en(cc2_rdEn),.read_odd(cc2_rdOdd),
+  .read_data(cc2_rdataB0),
+  .read_dataX(cc2_rdataExpB0),
+  .read_dataPTR(cc2_rdataPTRB0),
+  .read_dataPTRx(cc2_rdataExpPTRB0),
+  .write0_clkEn(cc2_hitE0 | cc2_hitO0),
+  .write_addrE0(cc2_addrE0), .write_hitE0(cc2_hitE0),
+  .write_addrO0(cc2_addrO0), .write_hitO0(cc2_hitO0),
+  .write_bankEn0(cc2_bankEn0), 
+  .write_pbit0(cc2_pbit0),.write_d128_0(cc2_d128_0), 
+  .write_begin0(cc2_begin0),.write_end0(cc2_end0),
+  .write_bBen0(cc2_bBen0),.write_enBen0(cc2_enBen0),
+  .write_odd0(cc2_odd0),.write_split0(cc2_split0),
+  .write_data0(cc2_data0),
+  .write1_clkEn(cc2_hitE1 | cc2_hitO1),
+  .write_addrE1(cc2_addrE1), .write_hitE1(cc2_hitE1),
+  .write_addrO1(cc2_addrO1), .write_hitO1(cc2_hitO1),
+  .write_bankEn1(cc2_bankEn1),
+  .write_pbit1(cc2_pbit1),.write_d128_1(cc2_d128_1), 
+  .write_begin1(cc2_begin1),.write_end1(cc2_end1),
+  .write_bBen1(cc2_bBen1),.write_enBen1(cc2_enBen1),
+  .write_odd1(cc2_odd1),.write_split1(cc2_split1),
+  .write_data1(cc2_data1),
+  .busIns_data(rbusANIn_data_reg),
+  .busIns_dataPTR(rbusANIn_dataPTR_reg),
+  .insBus_A(rinsBus_A),
+  .insBus_B(rinsBus_B),
+  .insert(rinsBus_B),
+  .insert_excl(rbusANIn_signals_reg[`rbusAN_excl]),
+  .insert_dirty(rbusANIn_signals_reg[`rbusAN_dirty]),
+  .insert_dupl(cc2_dupl_rd),
+  .hit_LRU(cc2_rLRU_reg),.read_LRU(cc2_rLRUB0),.hit_any(cc2_rhitB0),
+  .read_dir(cc2_rDirB0),.read_excl(cc2_rExclB0),
+  //.read_expAddr(L1_expAddr),
+  .read_expAddr_en(L1_expAddr_en),
+  .imm_any(cc2_rhitExpB0),
+  .read_expAddrOut(),
+  .expun_cc_addr(expun_fr_addr),
+  .expun_cc_en(expun_fr_en),
+  .expun_dc_addr(expun_bk_addr),
+  .expun_dc_en(expun_bk_en)
+  );
+  ccache2_block #(2) cc2B1_mod(
+  .clk(clk),
+  .rst(rst),
+  .read_en(cc2_rdEn),.read_odd(cc2_rdOdd),
+  .read_data(cc2_rdataB1),
+  .read_dataX(cc2_rdataExpB1),
+  .read_dataPTR(cc2_rdataPTRB1),
+  .read_dataPTRx(cc2_rdataExpPTRB1),
+  .write0_clkEn(cc2_hitE0 | cc2_hitO0),
+  .write_addrE0(cc2_addrE0), .write_hitE0(cc2_hitE0),
+  .write_addrO0(cc2_addrO0), .write_hitO0(cc2_hitO0),
+  .write_bankEn0(cc2_bankEn0), 
+  .write_pbit0(cc2_pbit0),.write_d128_0(cc2_d128_0), 
+  .write_begin0(cc2_begin0),.write_end0(cc2_end0),
+  .write_bBen0(cc2_bBen0),.write_enBen0(cc2_enBen0),
+  .write_odd0(cc2_odd0),.write_split0(cc2_split0),
+  .write_data0(cc2_data0),
+  .write1_clkEn(cc2_hitE1 | cc2_hitO1),
+  .write_addrE1(cc2_addrE1), .write_hitE1(cc2_hitE1),
+  .write_addrO1(cc2_addrO1), .write_hitO1(cc2_hitO1),
+  .write_bankEn1(cc2_bankEn1),
+  .write_pbit1(cc2_pbit1),.write_d128_1(cc2_d128_1), 
+  .write_begin1(cc2_begin1),.write_end1(cc2_end1),
+  .write_bBen1(cc2_bBen1),.write_enBen1(cc2_enBen1),
+  .write_odd1(cc2_odd1),.write_split1(cc2_split1),
+  .write_data1(cc2_data1),
+  .busIns_data(rbusANIn_data_reg),
+  .busIns_dataPTR(rbusANIn_dataPTR_reg),
+  .insBus_A(rinsBus_A),
+  .insBus_B(rinsBus_B),
+  .insert(rinsBus_B),
+  .insert_excl(rbusANIn_signals_reg[`rbusAN_excl]),
+  .insert_dirty(rbusANIn_signals_reg[`rbusAN_dirty]),
+  .insert_dupl(cc2_dupl_rd),
+  .hit_LRU(cc2_rLRU_reg),.read_LRU(cc2_rLRUB1),.hit_any(cc2_rhitB1),
+  .read_dir(cc2_rDirB1),.read_excl(cc2_rExclB1),
+  //.read_expAddr(L1_expAddr),
+  .imm_any(cc2_rhitExpB1),
+  .read_expAddr_en(L1_expAddr_en),
+  .read_expAddrOut(),
+  .expun_cc_addr(expun_fr_addr),
+  .expun_cc_en(expun_fr_en),
+  .expun_dc_addr(expun_bk_addr),
+  .expun_dc_en(expun_bk_en)
+  );
+
 
   ww ww_mod(
   clk,
@@ -1297,9 +1465,9 @@ module heptane_core(
 //
   stall,
 
-  insBus_data,
-  insBus_req,
-  insBus_en,
+  cc_insBus_data,
+  cc_insBus_req,
+  cc_insBus_en,
   req_addr,
   req_slot,
   req_en,
