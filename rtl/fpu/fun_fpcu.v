@@ -158,20 +158,20 @@ module fun_fpu(
   reg  fxFCADD_dupl;
   reg  fxFCADD_rndD;
   reg  fxFCADD_rndS;
-  reg  fxFADD_dbl_nreg;
-  reg  fxFADD_ext_nreg;
-  reg  fxFADD_dblext_nreg;
-  reg [1:0] fxFADD_sub_nreg;
-  reg  fxFADD_rsub_nreg;
-  reg [1:0] fxFADD_copyA_nreg;
-  reg [1:0] fxFADD_com_nreg;
-  reg  fxFADD_pswp_nreg;
-  reg  fxFCADD_dbl_nreg;
-  reg  fxFCADD_ext_nreg;
-  reg  fxFCADD_dblext_nreg;
-  reg [1:0] fxFCADD_copyA_nreg;
-  reg [1:0] fxFCADD_com_nreg;
-  reg  fxFCADD_pswp_nreg;
+  reg  fxFADD_dbl_reg;
+  reg  fxFADD_ext_reg;
+  reg  fxFADD_dblext_reg;
+  reg [1:0] fxFADD_sub_reg;
+  reg  fxFADD_rsub_reg;
+  reg [1:0] fxFADD_copyA_reg;
+  reg [1:0] fxFADD_com_reg;
+  reg  fxFADD_pswp_reg;
+  reg  fxFCADD_dbl_reg;
+  reg  fxFCADD_ext_reg;
+  reg  fxFCADD_dblext_reg;
+  reg [1:0] fxFCADD_copyA_reg;
+  reg [1:0] fxFCADD_com_reg;
+  reg  fxFCADD_pswp_reg;
   wire [10:0] fxFCADD_raise;
   reg [10:0] fxFCADD_raise_reg;
   reg [10:0] fxFCADD_raise_s_reg;
@@ -213,6 +213,8 @@ module fun_fpu(
   reg [1:0][S+67:0] fxDataAFL_REG;
   reg [1:0][S+67:0] gfDataBXL_reg;
   reg [1:0][S+67:0] fxDataAXL_reg;
+  reg [1:0][S+67:0] gfDataBXL_reg2;
+  reg [1:0][S+67:0] fxDataAXL_reg2;
 
   wire [S+67:0] uu_A1;
   wire [S+67:0] uu_A2;
@@ -276,9 +278,9 @@ module fun_fpu(
   FUF4,FUF4_reg,
   FUF5,FUF5_reg,
   FUF6,FUF6_reg,
-  u1_FK[0] ? FUFX4 : FUF7, u1_FK_reg[0]? FUFX4_reg : FUF7_reg,//free due to splitting 
-  u1_FK[1] ? FUFX5 : FUF8, u1_FK_reg[1] ? FUFX5_reg : FUF8_reg,
-  u1_FK[2] ? FUFX6 : FUF9, u1_FK_reg[2] ? FUFX6_reg : FUF9_reg
+  u1_FK[0] ? FUF4X : FUF7, u1_FK_reg[0]? FUFX4_reg : FUF7_reg,//free due to splitting 
+  u1_FK[1] ? FUF5X : FUF8, u1_FK_reg[1] ? FUFX5_reg : FUF8_reg,
+  u1_FK[2] ? FUF6X : FUF9, u1_FK_reg[2] ? FUFX6_reg : FUF9_reg
   );
   
   rs_write_forward #(S+68) u2_A_fwd(
@@ -355,7 +357,7 @@ module fun_fpu(
   .tbl_read(1'b0),
   .tbl_write(1'b0),
   .xtra(3'b0),
-  .A(fxDataAXL_reg[0][67:0]),.B(gxDataBXL_reg[1][67:0]),
+  .A(fxDataAXL_reg[0][67:0]),.B(gfDataBXL_reg[1][67:0]),
   .res(FOOF[0][67:0]));
   
   
@@ -451,7 +453,7 @@ module fun_fpu(
         .tbl_read(u1_op_reg3[7:0]==`fop_divE),
         .tbl_write(u1_op_reg3[7:0]==`fop_divDL),
         .xtra(u1_op_reg[19:17]),
-        .A(fxDataAXL_reg2[1][67:0]),.B(u1_op_reg3[13+H] ? XX_data : gxDataBXL_reg2[0][67:0]),
+        .A(fxDataAXL_reg2[1][67:0]),.B(u1_op_reg3[13+H] ? XX_data : gfDataBXL_reg2[0][67:0]),
         .res(FOOF[1][67:0]));
       else  fperm #(0) fperm1CL_mod(
         .clk(clk),
@@ -465,7 +467,7 @@ module fun_fpu(
         .tbl_read(1'b0),
         .tbl_write(1'b0),
         .xtra(3'b0),
-        .A(fxDataAXL_reg2[1][67:0]),.B(u1_op_reg3[13+H] ? XX_data : gxDataBXL_reg2[0][67:0]),
+        .A(fxDataAXL_reg2[1][67:0]),.B(u1_op_reg3[13+H] ? XX_data : gfDataBXL_reg2[0][67:0]),
         .res(FOOF[1][67:0]));
       
       if (H) assign gfDataBFL[1]=u1_op_reg[9] ? u1_Bx : uu_B1;
@@ -548,6 +550,8 @@ module fun_fpu(
 	      fxDataAFL_REG[k]<={S+SIMD_WIDTH{1'B0}};
 	      fxDataAXL_reg[k]<={S+SIMD_WIDTH{1'B0}};
 	      gfDataBXL_reg[k]<={S+SIMD_WIDTH{1'B0}};
+	      fxDataAXL_reg2[k]<={S+SIMD_WIDTH{1'B0}};
+	      gfDataBXL_reg2[k]<={S+SIMD_WIDTH{1'B0}};
 	  end
 	  gfFADD_srch<=1'b0;
     end else begin
@@ -633,6 +637,8 @@ module fun_fpu(
 	          fxDataAXL_reg[1]<='z;
 	          gfDataBXL_reg[0]<='z;
               end
+              fxDataAXL_reg2<=fxDataAXL_reg;
+              gfDataBXL_reg2<=gfDataBXL_reg;
 	      //verilator lint_on WIDTH
     end
     for(k=0;k<2;k=k+1) begin
@@ -692,9 +698,9 @@ module fun_fpu(
       FUF7_reg<=FUF7;
       FUF8_reg<=FUF8;
       FUF9_reg<=FUF9;
-      FUFX4_reg<=FUFX4;
-      FUFX5_reg<=FUFX5;
-      FUFX6_reg<=FUFX6;
+      FUFX4_reg<=FUF4X;
+      FUFX5_reg<=FUF5X;
+      FUFX6_reg<=FUF6X;
       u1_FK_reg<=u1_FK;
       FOOSH_reg2<=gfFADD_pkdD_reg ? FOOSH_reg : FOOSH_in;
       /*gfFADD_en=u1_op[0] && u1_clkEn && u1_op[7:0]==`fop_cmpDH || u1_op[7:0]==`fop_cmpDL || u1_op[7:0]==`fop_cmpE || u1_op[7:0]==`fop_cmpS;
