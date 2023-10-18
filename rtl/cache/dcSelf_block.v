@@ -610,7 +610,7 @@ module dcache1_way(
         assign read_pbit2P=read2_pbitP&{2{(read_hitE[2]&~read_odd2_reg||read_hitO[2]&read_odd2_reg)}};
         assign read_pbit3P=read3_pbitP&{2{(read_hitE[3]&~read_odd3_reg||read_hitO[3]&read_odd3_reg)}};
 
-	assign read_dataN=~((read_data)&read_dataN_in);
+	assign read_data=~((read_data)&read_data_in);
     end else begin
         assign read_pbit0=~(read_pbit0P&read_pbit0_in);  
         assign read_pbit1=~(read_pbit1P&read_pbit1_in);  
@@ -621,7 +621,7 @@ module dcache1_way(
         assign read_pbit1P=~read1_pbitP|{2{~(read_hitE[1]&~read_odd1_reg||read_hitO[1]&read_odd1_reg)}};
         assign read_pbit2P=~read2_pbitP|{2{~(read_hitE[2]&~read_odd2_reg||read_hitO[2]&read_odd2_reg)}};
         assign read_pbit3P=~read3_pbitP|{2{~(read_hitE[3]&~read_odd3_reg||read_hitO[3]&read_odd3_reg)}};
-	assign read_dataN=~((read_data)|read_dataN_in);
+	assign read_data=~((read_data)|read_data_in);
     end
     for (b=0;b<BANK_COUNT;b=b+1) begin : banks
 
@@ -656,7 +656,7 @@ module dcache1_way(
           write_bank1[b],
           write_begin1_reg,write_end1_reg,
           write_bBen1_reg,write_enBen1_reg,
-          (write_data[DATA_WIDTH*b+:DATA_WIDTH]|~write_dataN[DATA_WIDTH*b+:DATA_WIDTH])&{DATA_WIDTH{~init}},
+          write_data[DATA_WIDTH*b+:DATA_WIDTH]&{DATA_WIDTH{~init}},
           ins_hit[0],
           init
           );
@@ -692,7 +692,7 @@ module dcache1_way(
           write_bank1[b],
           write_begin1_reg,write_end1_reg,
           write_bBen1_reg,write_enBen1_reg,
-          (write_data[DATA_WIDTH*b+:DATA_WIDTH]&~write_dataN[DATA_WIDTH*b+:DATA_WIDTH])&{DATA_WIDTH{~init}},
+          write_data[DATA_WIDTH*b+:DATA_WIDTH]&{DATA_WIDTH{~init}},
           ins_hit[0],
           init
           );
