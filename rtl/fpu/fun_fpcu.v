@@ -137,6 +137,7 @@ module fun_fpu(
   reg [1:0] fxFADD_com;
   reg  fxFADD_pswp;
   reg  fxFADD_dupl;
+  reg  fxFADD_dupl_reg;
   reg  fxFADD_sqrt;
   reg fxFADD_div;
   reg  fxFADD_pcmp;
@@ -156,6 +157,7 @@ module fun_fpu(
   reg [1:0] fxFCADD_com;
   reg  fxFCADD_pswp;
   reg  fxFCADD_dupl;
+  reg fxFCADD_dupl_reg;
   reg  fxFCADD_rndD;
   reg  fxFCADD_rndS;
   reg  fxFADD_dbl_reg;
@@ -353,7 +355,7 @@ module fun_fpu(
   .swpSngl(fxFADD_pswp),
   .dupSngl(fxFADD_dupl),
   .is_sqrt(fxFADD_sqrt),
-  .is_div(fxFADD_divide),
+  .is_div(fxFADD_div),
   .tbl_read(1'b0),
   .tbl_write(1'b0),
   .xtra(3'b0),
@@ -527,6 +529,7 @@ module fun_fpu(
           fxFADD_sqrt<=1'b1;
           fxFADD_div<=1'b0;
 	  fxFCADD_dupl<=1'b0;
+          fxFCADD_dupl_reg<=1'b0;
 	  fxFADD_pswp<=1'b0;
 	  fxFADD_pcmp<=1'b0;
 	  fxFCADD_dbl=1'b1;
@@ -587,6 +590,7 @@ module fun_fpu(
 	      {fxFCADD_pswp,fxFCADD_com}<=u1_op_reg[10:8];
               fxFADD_dupl<=u1_op_reg[12];
               fxFCADD_dupl<=u1_op_reg[12];
+              fxFCADD_dupl_reg<=fxFCADD_dupl;
               fxFADD_sqrt<=u1_op_reg[7:0]==`fop_sqrtDH || u1_op_reg[7:0]==`fop_sqrtE;
               fxFADD_div<=u1_op_reg[7:0]==`fop_sqrtDL || u1_op_reg[7:0]==`fop_sqrtE;
 	      
