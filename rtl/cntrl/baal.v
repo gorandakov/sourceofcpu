@@ -294,7 +294,7 @@ module cntrl_find_outcome(
   );
   localparam RET_WIDTH=`except_width;
   localparam BOB_WIDTH=`bob_width;
-/*verilator hier_block*/
+/*vrilator hier_block*/
 
   input clk;
   input rst;
