@@ -96,13 +96,13 @@ module yantar_gen_purp1(
   clk,
   rst,
   stall,
-  read0_addr,read0_data,
-  read1_addr,read1_data,
-  read2_addr,read2_data,
-  read3_addr,read3_data,
-  read4_addr,read4_data,
-  read5_addr,read5_data,
-  read6_addr,read6_data,
+  read0_addr,read0_data,read0_en,
+  read1_addr,read1_data,read1_en,read1_imm,read1_imm_en,
+  read2_addr,read2_data,read2_en,
+  read3_addr,read3_data,read3_en,read3_imm,read3_imm_en,
+  read4_addr,read4_data,read4_en,
+  read5_addr,read5_data,read5_en,read5_imm,read5_imm_en,
+  read6_addr,read6_data,read4_en,
   write0_addr,write0_data,write0_wen,
   write1_addr,write1_data,write1_wen,
   write2_addr,write2_data,write2_wen,
@@ -149,14 +149,14 @@ module yantar_gen_purp1(
   rst,
   stall,
   read0_addr,read_data[0],
-  read1_addr,read_data[1],
+  read1_addr,read_data[1],read1_imm,read1_imm_en,
   read2_addr,read_data[2],
-  read3_addr,read_data[3],
+  read3_addr,read_data[3],read3_imm,read3_imm_en,
   read4_addr,read_data[4],
-  read5_addr,read_data[5],
+  read5_addr,read_data[5],read5_imm,read5_imm_en,
   read6_addr,read_data[6],
-  read6_addr,read_data[7],
-  read6_addr,read_data[8],
+  read7_addr,read_data[7],
+  read8_addr,read_data[8],
   write0_addr,write0_data,write0_wen,
   write1_addr,write1_data,write1_wen,
   write2_addr,write2_data,write2_wen,
@@ -164,33 +164,54 @@ module yantar_gen_purp1(
   );
 
   generate
-      genvar k;
+      genvar k,q;
+      for(q=0;q<4;q=q+1) begin
       for(k=0;k<9;k=k+1) begin
           wire [9:0] ren;
           if (k<2) begin
-              assign read_dataA[k]=~ren[k] ? fwd_dataA : 65'bz;
-              assign read_dataA[k]=read_addr[k]==write0_addr && ~fwd_enA[k] ? write_data0 : 65'bz;
-              assign read_dataA[k]=read_addr[k]==write1_addr && ~fwd_enA[k] ? write_data1 : 65'bz;
-              assign read_dataA[k]=read_addr[k]==write2_addr && ~fwd_enA[k] ? write_data2 : 65'bz;
-              assign read_dataA[k]=read_addr[k]==write3_addr && ~fwd_enA[k] ? write_data3 : 65'bz;
+              assign read_dataA[q][k]=~ren[k]  && ~read_en[k][q] ? fwd_dataA : 65'bz;
+              assign read_dataA[q][k]=read_addr[k]==write0_addr && ~fwd_enA[k]  && ~read_en[k][q] ? write_data0 : 65'bz;
+              assign read_dataA[q][k]=read_addr[k]==write1_addr && ~fwd_enA[k]  && ~read_en[k][q] ? write_data1 : 65'bz;
+              assign read_dataA[q][k]=read_addr[k]==write2_addr && ~fwd_enA[k]  && ~read_en[k][q] ? write_data2 : 65'bz;
+              assign read_dataA[q][k]=read_addr[k]==write3_addr && ~fwd_enA[k]  && ~read_en[k][q] ? write_data3 : 65'bz;
               assign ren=read_addr[k]==write0_addr || read_addr[k]==write1_addr ||
                   read_addr[k]==write2_addr || read_addr[k]==write3_addr || fwd_enA[k];
           end else begin
-              assign read_dataA[k]=~ren[k] ? fwd_dataB : 65'bz;
-              assign read_dataA[k]=read_addr[k]==write0_addr && ~fwd_enB[k] ? write_data0 : 65'bz;
-              assign read_dataA[k]=read_addr[k]==write1_addr && ~fwd_enB[k] ? write_data1 : 65'bz;
-              assign read_dataA[k]=read_addr[k]==write2_addr && ~fwd_enB[k] ? write_data2 : 65'bz;
-              assign read_dataA[k]=read_addr[k]==write3_addr && ~fwd_enB[k] ? write_data3 : 65'bz;
+              assign read_dataA[q][k]=~ren[k]  && ~read_en[k][q] ? fwd_dataB : 65'bz;
+              assign read_dataA[q][k]=read_addr[k]==write0_addr && ~fwd_enB[k]  && ~read_en[k][q] ? write_data0 : 65'bz;
+              assign read_dataA[q][k]=read_addr[k]==write1_addr && ~fwd_enB[k]  && ~read_en[k][q] ? write_data1 : 65'bz;
+              assign read_dataA[q][k]=read_addr[k]==write2_addr && ~fwd_enB[k]  && ~read_en[k][q] ? write_data2 : 65'bz;
+              assign read_dataA[q][k]=read_addr[k]==write3_addr && ~fwd_enB[k]  && ~read_en[k][q] ? write_data3 : 65'bz;
               assign ren=read_addr[k]==write0_addr || read_addr[k]==write1_addr ||
                   read_addr[k]==write2_addr || read_addr[k]==write3_addr || fwd_enB[k];
           end
       end
+      assign read0_data[q]=read_dataA[q][0];
+      assign read1_data[q]=read_dataA[q][1];
+      assign read2_data[q]=read_dataA_n[q][2];
+      assign read3_data[q]=read_dataA_n[q][3];
+      end
   endgenerate
 
-  assign read0_data=read_dataA[0];
-  assign read1_data=read_dataA[1];
-  assign read2_data=read_dataA_n[2];
-  assign read3_data=read_dataA_n[3];
+  assign read_en  [0]=read0_en;
+  assign read_addr[0]=read0_addr;
+  assign read_en  [1]=read1_en;
+  assign read_addr[1]=read1_addr;
+  assign read_en  [2]=read2_en;
+  assign read_addr[2]=read2_addr;
+  assign read_en  [3]=read3_en;
+  assign read_addr[3]=read3_addr;
+  assign read_en  [4]=read4_en;
+  assign read_addr[4]=read4_addr;
+  assign read_en  [5]=read5_en;
+  assign read_addr[5]=read5_addr;
+  assign read_en  [6]=read6_en;
+  assign read_addr[6]=read6_addr;
+  assign read_en  [7]=read7_en;
+  assign read_addr[7]=read7_addr;
+  assign read_en  [8]=read8_en;
+  assign read_addr[8]=read8_addr;
+  
   assign read4_data=read_dataA[4];
   assign read5_data=read_dataA[5];
   assign read6_data=read_dataA[6];
