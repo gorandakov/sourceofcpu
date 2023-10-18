@@ -1173,7 +1173,7 @@ module heptane_core(
   dcache2_block #(0) dc2A0_mod(
   .clk(clk),
   .rst(rst),
-  .read_en(dc2_rdEn),.read_odd(dc2_rdOdd),
+  .read_en(dc2_rdEn),.read_odd(dc2_rdOdd),.read_both(dc2_rdBoth),
   .read_data(dc2_rdataA0),
   .read_dataX(dc2_rdataExpA0),
   .read_dataPTR(dc2_rdataPTRA0),
@@ -1220,7 +1220,7 @@ module heptane_core(
   dcache2_block #(1) dc2B0_mod(
   .clk(clk),
   .rst(rst),
-  .read_en(dc2_rdEn),.read_odd(dc2_rdOdd),
+  .read_en(dc2_rdEn),.read_odd(dc2_rdOdd),.read_both(dc2_rdBoth),
   .read_data(dc2_rdataB0),
   .read_dataX(dc2_rdataExpB0),
   .read_dataPTR(dc2_rdataPTRB0),
@@ -1265,7 +1265,7 @@ module heptane_core(
   dcache2_block #(2) dc2B1_mod(
   .clk(clk),
   .rst(rst),
-  .read_en(dc2_rdEn),.read_odd(dc2_rdOdd),
+  .read_en(dc2_rdEn),.read_odd(dc2_rdOdd),.read_both(dc2_rdBoth),
   .read_data(dc2_rdataB1),
   .read_dataX(dc2_rdataExpB1),
   .read_dataPTR(dc2_rdataPTRB1),
@@ -1311,7 +1311,7 @@ module heptane_core(
   ccache2_block #(0) cc2A0_mod(
   .clk(clk),
   .rst(rst),
-  .read_en(cc2_rdEn),.read_odd(cc2_rdOdd),
+  .read_en(cc2_rdEn),.read_odd(cc2_rdOdd),.read_both(cc2_rdBoth),
   .read_data(cc2_rdataA0),
   .read_dataX(cc2_rdataExpA0),
   .read_dataPTR(cc2_rdataPTRA0),
@@ -1358,7 +1358,7 @@ module heptane_core(
   ccache2_block #(1) cc2B0_mod(
   .clk(clk),
   .rst(rst),
-  .read_en(cc2_rdEn),.read_odd(cc2_rdOdd),
+  .read_en(cc2_rdEn),.read_odd(cc2_rdOdd),.read_both(cc2_rdBoth),
   .read_data(cc2_rdataB0),
   .read_dataX(cc2_rdataExpB0),
   .read_dataPTR(cc2_rdataPTRB0),
@@ -1403,7 +1403,7 @@ module heptane_core(
   ccache2_block #(2) cc2B1_mod(
   .clk(clk),
   .rst(rst),
-  .read_en(cc2_rdEn),.read_odd(cc2_rdOdd),
+  .read_en(cc2_rdEn),.read_odd(cc2_rdOdd),.read_both(cc2_rdBoth),
   .read_data(cc2_rdataB1),
   .read_dataX(cc2_rdataExpB1),
   .read_dataPTR(cc2_rdataPTRB1),
