@@ -8,11 +8,11 @@ module yantar_gen_purp0(
   rst,
   stall,
   read0_addr,read0_data,
-  read1_addr,read1_data,
+  read1_addr,read1_data,read1_imm,read1_imm_en,
   read2_addr,read2_data,
-  read3_addr,read3_data,
+  read3_addr,read3_data,read2_imm,read2_imm_en,
   read4_addr,read4_data,
-  read5_addr,read5_data,
+  read5_addr,read5_data,read5_imm,read5_imm_en,
   read6_addr,read6_data,
   write0_addr,write0_data,write0_wen,
   write1_addr,write1_data,write1_wen,
@@ -25,14 +25,20 @@ module yantar_gen_purp0(
   output [64:0] read0_data;
   input [5:0]   read1_addr;
   output [64:0] read1_data;
+  input  [64:0] read1_imm;
+  input         read1_imm_en;
   input [5:0]   read2_addr;
   output [64:0] read2_data;
+  input  [64:0] read2_imm;
+  input         read2_imm_en;
   input [5:0]   read3_addr;
   output [64:0] read3_data;
   input [5:0]   read4_addr;
   output [64:0] read4_data;
   input [5:0]   read5_addr;
   output [64:0] read5_data;
+  input  [64:0] read5_imm;
+  input         read5_imm_en;
   input [5:0]   read6_addr;
   output [64:0] read6_data;
   input [5:0]  write0_addr;
@@ -56,7 +62,7 @@ module yantar_gen_purp0(
   reg [5:0] read5_addr_reg;
   reg [5:0] read6_addr_reg;
 
-  reg [39:0][64:0] ram;
+  reg [22:0][64:0] ram;
 
   assign read0_data=ram[read0_addr_reg];
   assign read1_data=ram[read1_addr_reg];
@@ -67,6 +73,10 @@ module yantar_gen_purp0(
   assign read6_data=ram[read6_addr_reg];
 
   always @(posedge clk) begin
+    if (write0_wen) ram[write0_addr]<=write0_data;
+    if (write1_wen) ram[write1_addr]<=write1_data;
+    if (write2_wen) ram[write2_addr]<=write2_data;
+    if (write3_wen) ram[write3_addr]<=write3_data;
     if (!stall) begin
         read0_addr_reg<=read0_addr;
         read1_addr_reg<=read1_addr;
@@ -75,15 +85,14 @@ module yantar_gen_purp0(
         read4_addr_reg<=read4_addr;
         read5_addr_reg<=read5_addr;
         read6_addr_reg<=read6_addr;
+        if (read1_imm_en) ram[20]<=read1_imm;
+        if (read2_imm_en) ram[21]<=read2_imm;
+        if (read5_imm_en) ram[22]<=read5_imm;
     end
-    if (write0_wen) ram[write0_addr]<=write0_data;
-    if (write1_wen) ram[write1_addr]<=write1_data;
-    if (write2_wen) ram[write2_addr]<=write2_data;
-    if (write3_wen) ram[write3_addr]<=write3_data;
   end
 endmodule
 
-module yantar_gen_purp0(
+module yantar_gen_purp1(
   clk,
   rst,
   stall,
@@ -148,46 +157,33 @@ module yantar_gen_purp0(
   read6_addr,read_data[6],
   read6_addr,read_data[7],
   read6_addr,read_data[8],
-  write0_addr_reg,write0_data_reg,write0_wen_reg,
-  write1_addr_reg,write1_data_reg,write1_wen_reg,
-  write2_addr_reg,write2_data_reg,write2_wen_reg,
-  write3_addr_reg,write3_data_reg,write3_wen_reg
+  write0_addr,write0_data,write0_wen,
+  write1_addr,write1_data,write1_wen,
+  write2_addr,write2_data,write2_wen,
+  write3_addr,write3_data,write3_wen
   );
 
   generate
       genvar k;
       for(k=0;k<9;k=k+1) begin
-          wire ren;
+          wire [9:0] ren;
           if (k<2) begin
-              assign read_dataA=fwd_enA[k] ? fwd_dataA : 65'bz;
-              assign read_dataA=read_addr[k]==write0_addr && ~fwd_enA[k] ? write_data0 : 65'bz;
-              assign read_dataA=read_addr[k]==write1_addr && ~fwd_enA[k] ? write_data1 : 65'bz;
-              assign read_dataA=read_addr[k]==write2_addr && ~fwd_enA[k] ? write_data2 : 65'bz;
-              assign read_dataA=read_addr[k]==write3_addr && ~fwd_enA[k] ? write_data3 : 65'bz;
+              assign read_dataA[k]=~ren[k] ? fwd_dataA : 65'bz;
+              assign read_dataA[k]=read_addr[k]==write0_addr && ~fwd_enA[k] ? write_data0 : 65'bz;
+              assign read_dataA[k]=read_addr[k]==write1_addr && ~fwd_enA[k] ? write_data1 : 65'bz;
+              assign read_dataA[k]=read_addr[k]==write2_addr && ~fwd_enA[k] ? write_data2 : 65'bz;
+              assign read_dataA[k]=read_addr[k]==write3_addr && ~fwd_enA[k] ? write_data3 : 65'bz;
               assign ren=read_addr[k]==write0_addr || read_addr[k]==write1_addr ||
                   read_addr[k]==write2_addr || read_addr[k]==write3_addr || fwd_enA[k];
-          end else if (k<4) begin
-              assign read_dataA=fwd_enB[k] ? fwd_dataB : 65'bz;
-              assign read_dataA=read_addr[k]==write0_addr && ~fwd_enB[k] ? write_data0 : 65'bz;
-              assign read_dataA=read_addr[k]==write1_addr && ~fwd_enB[k] ? write_data1 : 65'bz;
-              assign read_dataA=read_addr[k]==write2_addr && ~fwd_enB[k] ? write_data2 : 65'bz;
-              assign read_dataA=read_addr[k]==write3_addr && ~fwd_enB[k] ? write_data3 : 65'bz;
+          end else begin
+              assign read_dataA[k]=~ren[k] ? fwd_dataB : 65'bz;
+              assign read_dataA[k]=read_addr[k]==write0_addr && ~fwd_enB[k] ? write_data0 : 65'bz;
+              assign read_dataA[k]=read_addr[k]==write1_addr && ~fwd_enB[k] ? write_data1 : 65'bz;
+              assign read_dataA[k]=read_addr[k]==write2_addr && ~fwd_enB[k] ? write_data2 : 65'bz;
+              assign read_dataA[k]=read_addr[k]==write3_addr && ~fwd_enB[k] ? write_data3 : 65'bz;
               assign ren=read_addr[k]==write0_addr || read_addr[k]==write1_addr ||
                   read_addr[k]==write2_addr || read_addr[k]==write3_addr || fwd_enB[k];
-          end else begin
-              assign read_dataA=read_addr[k]==write0_addr ? write_data0 : 65'bz;
-              assign read_dataA=read_addr[k]==write1_addr ? write_data1 : 65'bz;
-              assign read_dataA=read_addr[k]==write2_addr ? write_data2 : 65'bz;
-              assign read_dataA=read_addr[k]==write3_addr ? write_data3 : 65'bz;
-              assign ren=read_addr[k]==write0_addr || read_addr[k]==write1_addr ||
-                  read_addr[k]==write2_addr || read_addr[k]==write3_addr;
           end
-          assign read_dataA=read_addr[k]==write0_addr_reg && !ren ? write_data0_reg : 65'bz;
-          assign read_dataA=read_addr[k]==write1_addr_reg && !ren ? write_data1_reg : 65'bz;
-          assign read_dataA=read_addr[k]==write2_addr_reg && !ren ? write_data2_reg : 65'bz;
-          assign read_dataA=read_addr[k]==write3_addr_reg && !ren ? write_data3_reg : 65'bz;
-          assign read_dataA=read_addr[k]!=write0_addr_reg && read_addr[k]!=write1_addr_reg &&
-              read_addr[k]!=write2_addr_reg && read_addr[k]!=write3_addr_reg && !ren ? read_data[k] : 65'bz;
       end
   endgenerate
 
@@ -297,6 +293,24 @@ module distrib_alloc(
   assign dep1BX=has_alu1 ? 1'bz : 1'b0;
   assign last_rT_din=|dec0_rT_use ? 6'bz : 6'b0;
   assign last_rT_din_use=|dec0_rT_din_use ? 1'bz : 1'b0;
+  
+  yantar_gen_purp1 registers_mod(
+      clk,
+      rst,
+      stall,
+      read0_addr,read0_data,
+      read1_addr,read1_data,
+      read2_addr,read2_data,
+      read3_addr,read3_data,
+      read4_addr,read4_data,
+      read5_addr,read5_data,
+      read6_addr,read6_data,
+      write0_addr,write0_data,write0_wen,
+      write1_addr,write1_data,write1_wen,
+      write2_addr,write2_data,write2_wen,
+      write3_addr,write3_data,write3_wen,
+      fwd_dataA,fwd_enA,
+      fwd_dataB,fwd_enB);
 
   always @* begin
       if (~swap && rs_alu0_has) begin
