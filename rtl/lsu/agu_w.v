@@ -363,8 +363,8 @@ module sagu(
   
   assign mflags0=mflags[thread];
   
-  assign fault_tlb={mflags0[`mflags_cpl]==2'd3 && tlb_data[`dtlbData_sys] , ~tlb_data[`dtlbData_na]|~wp}; 
-	assign fault_tlb_next={mflags0[`mflags_cpl]==2'd3 && tlb_data_next[`dtlbData_sys] , ~tlb_data_next[`dtlbData_na]|~wp_next}; 
+  assign fault_tlb={mflags0[`mflags_cpl+1] & tlb_data[`dtlbData_sys]  || mflags0[-1+`mflags_cpl] & ~&cmplxAddr[42:41], ~tlb_data[`dtlbData_na]|~wp}; 
+	assign fault_tlb_next={mflags0[`mflags_cpl+1] & tlb_data_next[`dtlbData_sys] , ~tlb_data_next[`dtlbData_na]|~wp_next}; 
 
   adder #(15) nextCAddr_mod({1'b0,cmplxAddr[13:0]},15'b10000000,addrNext,1'b0,1'b1,,,,);
 
@@ -518,10 +518,9 @@ module sagu(
            `csr_vmpage: vproc[csrss_no[15]]<=csrss_data[63:40];
            `csr_mflags: mflags[csrss_no[15]]<=csrss_data;
               endcase
-	      mflags[csrss_no[15]][`mflags_cpl]<=attr2[`attr_km] ? 2'b0 : 2'b11;
-	      mflags[csrss_no[15]][`mflags_sec]<=attr2[`attr_sec];//muha-sranks
+	      mflags[csrss_no[15]][`mflags_cpl]<={attr2[`attr_km],attr2[`attr_sec};
           end else begin
-	      mflags[csrss_no[15]][`mflags_cpl]<=attr2[`attr_km] ? 2'b0 : 2'b11;
+	      mflags[csrss_no[15]][`mflags_cpl]<={attr2[`attr_km],attr2[`attr_sec];
 	      mflags[csrss_no[15]][`mflags_sec]<=attr2[`attr_sec];
 	  end
     end
