@@ -1670,7 +1670,7 @@ module smallInstr_decoder(
 	  pconstant[31]=magic[2] ? {{32{instr[47]}},instr[47:16]} : {{39{instr[47]}},instr[47:23]};
 	  puseRs[31]=1'b1;
 	  prAlloc[31]=1'b1;
-	  pflags_write[31]=1'b0;
+	  pflags_write[31]=instr[13];
 	  poperation[31][12]=1'b1;
 	  poperation[31][7:0]={3'b0,instr[10:8],instr[12:11]};
 	  if (magic[1:0]==2'b01) begin
@@ -1678,16 +1678,16 @@ module smallInstr_decoder(
 	      prB[31]=instr[28:24];
 	      prT[31]=instr[22:18];
 	      palucond[31]={1'b1,instr[17:14]};
-	      poperation[31][8]=instr[13];
+	      poperation[31][12]=~instr[13];
 	      pconstant[31]={{56{instr[31]}},instr[31:24]};
 	  end else if (magic[2]) begin
 	      prA[31]=instr[52:48];
 	      prT[31]=instr[52:48];
 	      palucond[31]={1'b1,instr[56:53]};
-	      poperation[31][8]=instr[13];
+	      poperation[31][12]=~instr[13];
 	  end else begin
 	      palucond[31]={1'b1,instr[17:14]};
-	      poperation[31][8]=instr[13];
+	      poperation[31][12]=~instr[13];
               prA[31]=instr[22:18];
 	      prT[31]=instr[22:18];
 	  end
