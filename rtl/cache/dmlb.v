@@ -200,7 +200,7 @@ module dtlb_way(
         assign valid[p]=read_data_ram[p][`dtlb_valid];
         assign shared[p]=read_data_ram[p][`dtlb_shr];
 
-        assign read_hitL[p]=valid[p] && addr[p][VADDR_WIDTH-16+:2]!=2'b10 && 
+        assign read_hitL[p]=valid[p] && addr[p][VADDR_WIDTH-17+:3]!=3'b111 && 
           (vaddr[p]==addr[p] || ({sproc,addr[p][29:0]}==vaddr[p] && 
           shared[p]));
         assign read_hit[p]=read_hitL[p];
@@ -409,9 +409,9 @@ module dtlb(
 	assign hitLru=read_hitL_way[k][0] ? lru_way[k] : 3'bz;
 	assign hitLruW=3'd7;
         if (k<6) begin
-            assign read_data0[k]=addr0[k][49:48]==2'b10 ? pmm_data0[k*2+addr0[47]] : 'z;
-            assign read_data1[k]=addr0[k][49:48]==2'b10 ? pmm_data1[k*2+addr0[47]] : 'z;
-            assign read_data2[k]=addr0[k][49:48]==2'b10 ? pmm_data2[k*2+addr0[47]] : 'z;
+            assign read_data0[k]=addr0[k][49:47]==3'b111 ? pmm_data0[k*2+addr0[46]] : 'z;
+            assign read_data1[k]=addr0[k][49:47]==3'b111 ? pmm_data1[k*2+addr0[46]] : 'z;
+            assign read_data2[k]=addr0[k][49:47]==3'b111 ? pmm_data2[k*2+addr0[46]] : 'z;
         end	
       end
   endgenerate
