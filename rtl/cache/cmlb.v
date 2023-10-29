@@ -127,7 +127,7 @@ module ctlb_way(
   assign read_lru=read_data_ram[`ctlb_lru];
  //verilator lint_off WIDTH 
   assign read_hit=(valid&~tr_jump||validN&tr_jump) && ((ip|{13{~tr_jump}})==(addr|{13{~tr_jump}}) ||
-    ((ip|{13{~tr_jump}})=={sproc,addr[43:0]|{13{~tr_jump}}} && tlb_data[`ctlbData_global])) && ~invalidate;
+    ((ip|{13{~tr_jump}})=={sproc,addr[43:0]|{13{~tr_jump}}} && tlb_data[`ctlbData_global])) && addr[43:40]!=4'b1110 && ~invalidate;
  //verilator lint_on WIDTH
   
   assign write_wen_ram=(write_wen && read_lru==2'b11) || read_clkEn&~fStall&~write_wen;
@@ -250,14 +250,14 @@ module ctlb(
   wire [1:0][23:0] vmproc;
   wire [1:0][39:0] dummy_vmproc;
   wire [1:0][63:0] mflags;
-
+  wire  [OUTDATA_WIDTH-1:0] read_data_pmm;
   reg [IP_WIDTH-1:0] addr_reg;
   
   reg read_clkEn_reg;
 
   assign read_hit=(|read_hit_way) & ~init_pending;
   assign hitLRU=read_hit ? 2'bz : 2'b00;
-  assign read_data=read_hit ? 'z : {OUTDATA_WIDTH{1'B0}};
+  assign read_data=read_hit ? 'z : read_data_pmm;
 
   generate
     genvar k;

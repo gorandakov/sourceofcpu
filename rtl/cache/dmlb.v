@@ -409,9 +409,9 @@ module dtlb(
 	assign hitLru=read_hitL_way[k][0] ? lru_way[k] : 3'bz;
 	assign hitLruW=3'd7;
         if (k<6) begin
-            assign read_data0[k]=addr0[k][49:47]==3'b111 ? pmm_data0[k*2+addr0[46]] : 'z;
-            assign read_data1[k]=addr0[k][49:47]==3'b111 ? pmm_data1[k*2+addr0[46]] : 'z;
-            assign read_data2[k]=addr0[k][49:47]==3'b111 ? pmm_data2[k*2+addr0[46]] : 'z;
+            assign read_data0[k]=~read_hit[0] ? pmm_data0[k*2+addr0[46]] : 'z;
+            assign read_data1[k]=~read_hit[k] ? pmm_data1[k*2+addr0[46]] : 'z;
+            assign read_data2[k]=~read_hit[k] ? pmm_data2[k*2+addr0[46]] : 'z;
         end	
       end
   endgenerate
@@ -441,29 +441,6 @@ module dtlb(
 //  assign read_2M[0]=read_data[`dtlbData_subpage];;
 //  assign read_2M[1]=read_data_next[`dtlbData_subpage];;
   
-  assign read_data0[0]=read_hit[0] ? 'z : {OUTDATA_WIDTH{1'B0}};
-  assign read_data1[0]=read_hit[0] ? 'z : {OUTDATA_WIDTH{1'B0}};
-  assign read_data2[0]=read_hit[0] ? 'z : {OUTDATA_WIDTH{1'B0}};
-
-  assign read_data0[1]=read_hit[1] ? 'z : {OUTDATA_WIDTH{1'B0}};
-  assign read_data1[1]=read_hit[1] ? 'z : {OUTDATA_WIDTH{1'B0}};
-  assign read_data2[1]=read_hit[1] ? 'z : {OUTDATA_WIDTH{1'B0}};
-
-  assign read_data0[2]=read_hit[2] ? 'z : {OUTDATA_WIDTH{1'B0}};
-  assign read_data1[2]=read_hit[2] ? 'z : {OUTDATA_WIDTH{1'B0}};
-  assign read_data2[2]=read_hit[2] ? 'z : {OUTDATA_WIDTH{1'B0}};
-
-  assign read_data0[3]=read_hit[3] ? 'z : {OUTDATA_WIDTH{1'B0}};
-  assign read_data1[3]=read_hit[3] ? 'z : {OUTDATA_WIDTH{1'B0}};
-  assign read_data2[3]=read_hit[3] ? 'z : {OUTDATA_WIDTH{1'B0}};
-
-  assign read_data0[4]=read_hit[4] ? 'z : {OUTDATA_WIDTH{1'B0}};
-  assign read_data1[4]=read_hit[4] ? 'z : {OUTDATA_WIDTH{1'B0}};
-  assign read_data2[4]=read_hit[4] ? 'z : {OUTDATA_WIDTH{1'B0}};
-
-  assign read_data0[5]=read_hit[5] ? 'z : {OUTDATA_WIDTH{1'B0}};
-  assign read_data1[5]=read_hit[5] ? 'z : {OUTDATA_WIDTH{1'B0}};
-  assign read_data2[5]=read_hit[5] ? 'z : {OUTDATA_WIDTH{1'B0}};
 
   assign read_way[0]=read_hit[0] ? 3'BZ : 3'B0;
   assign read_way[1]=read_hit[1] ? 3'BZ : 3'B0;
