@@ -203,7 +203,7 @@ module dtlb_way(
         assign read_hitL[p]=valid[p] && addr[p][VADDR_WIDTH-17+:3]!=3'b111 && 
           (vaddr[p]==addr[p] || ({sproc,addr[p][29:0]}==vaddr[p] && 
           shared[p]));
-        assign read_hit[p]=read_hitL[p];
+        assign read_hit[p]=read_hitL[p] || addr[p][VADDR_WIDTH-17+:3]==3'b111;
   
         assign read_data0[p]=read_hitL[p] ? read_data_ram[p][`dtlb_data1] : 'z;
         assign read_data1[p]=read_hitL[p] ? read_data_ram[p][`dtlb_data2] : 'z;
@@ -409,35 +409,47 @@ module dtlb(
 	assign hitLru=read_hitL_way[k][0] ? lru_way[k] : 3'bz;
 	assign hitLruW=3'd7;
         if (k<6) begin
-            assign read_data0[k]=~read_hit[0] ? pmm_data0[k*2+addr0[46]] : 'z;
-            assign read_data1[k]=~read_hit[k] ? pmm_data1[k*2+addr0[46]] : 'z;
-            assign read_data2[k]=~read_hit[k] ? pmm_data2[k*2+addr0[46]] : 'z;
+            assign read_data0[k]=~read_hitL[0] ? pmm_data0[k*2+addr0[46]] : 'z;
+            assign read_data1[k]=~read_hitL[k] ? pmm_data1[k*2+addr0[46]] : 'z;
+            assign read_data2[k]=~read_hitL[k] ? pmm_data2[k*2+addr0[46]] : 'z;
         end	
       end
   endgenerate
   
   assign hitLru=read_hitL[0] ? 3'bz : 3'b0;
   
-  assign read_hitL[0]=read_hit_way[0][0]|read_hit_way[1][0]|read_hit_way[2][0]|read_hit_way[3][0]|read_hit_way[4][0]|
+  assign read_hit[0]=read_hit_way[0][0]|read_hit_way[1][0]|read_hit_way[2][0]|read_hit_way[3][0]|read_hit_way[4][0]|
     read_hit_way[5][0]|read_hit_way[6][0]|read_hit_way[7][0];
-  assign read_hitL[1]=read_hit_way[0][1]|read_hit_way[1][1]|read_hit_way[2][1]|read_hit_way[3][1]|read_hit_way[4][1]|
+  assign read_hit[1]=read_hit_way[0][1]|read_hit_way[1][1]|read_hit_way[2][1]|read_hit_way[3][1]|read_hit_way[4][1]|
     read_hit_way[5][1]|read_hit_way[6][1]|read_hit_way[7][1];
-  assign read_hitL[2]=read_hit_way[0][2]|read_hit_way[1][2]|read_hit_way[2][2]|read_hit_way[3][2]|read_hit_way[4][2]|
+  assign read_hit[2]=read_hit_way[0][2]|read_hit_way[1][2]|read_hit_way[2][2]|read_hit_way[3][2]|read_hit_way[4][2]|
     read_hit_way[5][2]|read_hit_way[6][2]|read_hit_way[7][2];
-  assign read_hitL[3]=read_hit_way[0][3]|read_hit_way[1][3]|read_hit_way[2][3]|read_hit_way[3][3]|read_hit_way[4][3]|
+  assign read_hit[3]=read_hit_way[0][3]|read_hit_way[1][3]|read_hit_way[2][3]|read_hit_way[3][3]|read_hit_way[4][3]|
     read_hit_way[5][3]|read_hit_way[6][3]|read_hit_way[7][3];
-  assign read_hitL[4]=read_hit_way[0][4]|read_hit_way[1][4]|read_hit_way[2][4]|read_hit_way[3][4]|read_hit_way[4][4]|
+  assign read_hit[4]=read_hit_way[0][4]|read_hit_way[1][4]|read_hit_way[2][4]|read_hit_way[3][4]|read_hit_way[4][4]|
     read_hit_way[5][4]|read_hit_way[6][4]|read_hit_way[7][4];
-  assign read_hitL[5]=read_hit_way[0][5]|read_hit_way[1][5]|read_hit_way[2][5]|read_hit_way[3][5]|read_hit_way[4][5]|
+  assign read_hit[5]=read_hit_way[0][5]|read_hit_way[1][5]|read_hit_way[2][5]|read_hit_way[3][5]|read_hit_way[4][5]|
     read_hit_way[5][5]|read_hit_way[6][5]|read_hit_way[7][5];//only pretends to be virtuous
 
+  assign read_hitL[0]=read_hitL_way[0][0]|read_hitL_way[1][0]|read_hitL_way[2][0]|read_hitL_way[3][0]|read_hitL_way[4][0]|
+    read_hitL_way[5][0]|read_hitL_way[6][0]|read_hitL_way[7][0];
+  assign read_hitL[1]=read_hitL_way[0][1]|read_hitL_way[1][1]|read_hitL_way[2][1]|read_hitL_way[3][1]|read_hitL_way[4][1]|
+    read_hitL_way[5][1]|read_hitL_way[6][1]|read_hitL_way[7][1];
+  assign read_hitL[2]=read_hitL_way[0][2]|read_hitL_way[1][2]|read_hitL_way[2][2]|read_hitL_way[3][2]|read_hitL_way[4][2]|
+    read_hitL_way[5][2]|read_hitL_way[6][2]|read_hitL_way[7][2];
+  assign read_hitL[3]=read_hitL_way[0][3]|read_hitL_way[1][3]|read_hitL_way[2][3]|read_hitL_way[3][3]|read_hitL_way[4][3]|
+    read_hitL_way[5][3]|read_hitL_way[6][3]|read_hitL_way[7][3];
+  assign read_hitL[4]=read_hitL_way[0][4]|read_hitL_way[1][4]|read_hitL_way[2][4]|read_hitL_way[3][4]|read_hitL_way[4][4]|
+    read_hitL_way[5][4]|read_hitL_way[6][4]|read_hitL_way[7][4];
+  assign read_hitL[5]=read_hitL_way[0][5]|read_hitL_way[1][5]|read_hitL_way[2][5]|read_hitL_way[3][5]|read_hitL_way[4][5]|
+    read_hitL_way[5][5]|read_hitL_way[6][5]|read_hitL_way[7][5];//only pretends to be virtuous
 
-  assign read_hit[0]=read_hitL[0] && ~init;
-  assign read_hit[1]=read_hitL[1] && ~init;
-  assign read_hit[2]=read_hitL[2] && ~init;
-  assign read_hit[3]=read_hitL[3] && ~init;
-  assign read_hit[4]=read_hitL[4] && ~init;
-  assign read_hit[5]=read_hitL[5] && ~init;
+//  assign read_hit[0]=read_hitL[0] && ~init;
+//  assign read_hit[1]=read_hitL[1] && ~init;
+//  assign read_hit[2]=read_hitL[2] && ~init;
+//  assign read_hit[3]=read_hitL[3] && ~init;
+//  assign read_hit[4]=read_hitL[4] && ~init;
+//  assign read_hit[5]=read_hitL[5] && ~init;
 //  assign read_2M[0]=read_data[`dtlbData_subpage];;
 //  assign read_2M[1]=read_data_next[`dtlbData_subpage];;
   

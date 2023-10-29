@@ -255,9 +255,9 @@ module ctlb(
   
   reg read_clkEn_reg;
 
-  assign read_hit=(|read_hit_way) & ~init_pending;
+  assign read_hit=(|read_hit_way || addr[43:40]==4'b1110) & ~init_pending;
   assign hitLRU=read_hit ? 2'bz : 2'b00;
-  assign read_data=read_hit ? 'z : read_data_pmm;
+  assign read_data=(|read_hit_way) ? 'z : read_data_pmm;
 
   generate
     genvar k;
