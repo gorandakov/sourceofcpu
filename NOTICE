@@ -3,6 +3,10 @@ the production of the cpu doesn't count
  as distribution and thus is not covered by
 the license.
 also you will be expected to use fully paired dynamic 
-logic rather than use e.g. mono rail logic
-for most of the ALU.
-An exception can be made for memories and register files.
+logic rather than use e.g. mono rail logic except for rgister files and memories which can be mono rail.
+for most of the ALU and other parts of it to achieve >3.6 GHz frequency.
+Using P&R tools, even after debugging the verilog, will definitely result in error 
+if you don't specify a floorplan!!!
+In order to get a permission to manufacture a derived chip or this chip you need permission from
+Goran Dakov, who lived on 58 Garnet Street, Bristol, UK on 3 Nov 2023.
+
