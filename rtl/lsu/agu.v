@@ -559,9 +559,9 @@ module agu(
            `csr_vmpage: vproc[csrss_no[15]]<=csrss_data[63:40];
            `csr_mflags: mflags[csrss_no[15]]<=csrss_data;
               endcase
-	      mflags[csrss_no[15]][`mflags_cpl]<={attr[`attr_km],attr[`attr_sec];
+	      mflags[csrss_no[15]][`mflags_cpl]<={attr[`attr_km],attr[`attr_sec]};
           end else if (!rsStall) begin
-	      mflags[thread][`mflags_cpl]<={attr[`attr_km],attr[`attr_sec];
+	      mflags[thread][`mflags_cpl]<={attr[`attr_km],attr[`attr_sec]};
           end
 	  
     end

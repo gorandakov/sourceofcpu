@@ -1,4 +1,5 @@
-Heptane CPU.
+Heptane architecture CPU.
+CPU name: sederams
 See copying.txt and NOTICE files for derrivative works.
 Note there are some spurious extra files which aren't needed but i havent deleted them.
 L1 caches in rtl/cache

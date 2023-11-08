@@ -518,9 +518,9 @@ module sagu(
            `csr_vmpage: vproc[csrss_no[15]]<=csrss_data[63:40];
            `csr_mflags: mflags[csrss_no[15]]<=csrss_data;
               endcase
-	      mflags[csrss_no[15]][`mflags_cpl]<={attr2[`attr_km],attr2[`attr_sec};
+	      mflags[csrss_no[15]][`mflags_cpl]<={attr2[`attr_km],attr2[`attr_sec]};
           end else begin
-	      mflags[csrss_no[15]][`mflags_cpl]<={attr2[`attr_km],attr2[`attr_sec];
+	      mflags[csrss_no[15]][`mflags_cpl]<={attr2[`attr_km],attr2[`attr_sec]};
 	      mflags[csrss_no[15]][`mflags_sec]<=attr2[`attr_sec];
 	  end
     end
