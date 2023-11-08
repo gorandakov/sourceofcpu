@@ -19,31 +19,44 @@ limitations under the License.
 module stq_adata_ram(
   clk,
   rst,
-  read_clkEn,
-  read_addr,
-  read_data,
-  write_wen,
-  write_addr,
-  write_data);
+  readA_clkEn,
+  readA_addr,
+  readA_data,
+  readB_clkEn,
+  readB_addr,
+  readB_data,
+  writeA_wen,
+  writeA_addr,
+  writeA_data,
+  writeB_wen,
+  writeB_addr,
+  writeB_data
+  );
   localparam WIDTH=`lsaddr_width+1;//adata+en
   
   input clk;
   input rst;
   input read_clkEn;
-  input [4:0] read_addr;
+  input [5:0] read_addr;
   output [WIDTH-1:0] read_data;
   input write_wen;
-  input [4:0] write_addr;
+  input [5:0] write_addr;
   input [WIDTH-1:0] write_data;
 
-  reg [WIDTH-1:0] ram[31:0];
-  reg [4:0] read_addr_reg;
+  reg [WIDTH-1:0] ram[63:0];
+  reg [5:0] readA_addr_reg;
+  reg [5:0] readB_addr_reg;
 
-  assign read_data=ram[read_addr_reg];
+  assign readA_data=ram[readA_addr_reg];
+  assign readB_data=ram[readB_addr_reg];
 
   always @(posedge clk) begin
-      if (rst) read_addr_reg<=5'b0;
-      else if (read_clkEn) read_addr_reg<=read_addr;
-      if (write_wen) ram[write_addr]<=write_data;
+      if (rst) readA_addr_reg<=6'b0;
+      else if (readA_clkEn) readA_addr_reg<=readA_addr;
+      if (rst) readB_addr_reg<=6'b0;
+      else if (readB_clkEn) readB_addr_reg<=readB_addr;
+      if (writeA_wen) ram[writeA_addr]<=writeA_data;
+      if (writeB_wen) ram[writeB_addr]<=writeB_data;
   end
 endmodule
+

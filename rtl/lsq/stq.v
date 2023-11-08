@@ -186,16 +186,16 @@ module stq(
 
   reg [5:0] WLN0_WQ;
   reg [5:0] WLN1_WQ;
-  wire [5:0] WNL0_WQ;
-  wire [5:0] WNL1_WQ;
+  wire [5:0] W_NL0_WQ;
+  wire [5:0] W_NL1_WQ;
   wire [`lsaddr_width-1:0] WLN0_adata0;
   wire [`lsaddr_width-1:0] WLN1_adata0;
   wire WLN0_en0;
   wire WLN1_en0;
-  wire [`lsaddr_width-1:0] WNL0_adata;
-  wire [`lsaddr_width-1:0] WNL1_adata;
-  wire WNL0_en;
-  wire WNL1_en;
+  wire [`lsaddr_width-1:0] W_NL0_adata;
+  wire [`lsaddr_width-1:0] W_NL1_adata;
+  wire W_NL0_en;
+  wire W_NL1_en;
 	  
   reg [5:0] chk_wb0_reg;
   reg [5:0] chk_wb0_reg2;
@@ -214,32 +214,32 @@ module stq(
   wire [7:0] chk3_subBNK;
   wire [7:0] chk4_subBNK;
   wire [7:0] chk5_subBNK;
-  wire [7:0] WNL0_subBNK;
-  wire [7:0] WNL1_subBNK;
+  wire [7:0] W_NL0_subBNK;
+  wire [7:0] W_NL1_subBNK;
   wire [7:0] chk0_subBNK2;
   wire [7:0] chk1_subBNK2;
   wire [7:0] chk2_subBNK2;
   wire [7:0] chk3_subBNK2;
   wire [7:0] chk4_subBNK2;
   wire [7:0] chk5_subBNK2;
-  wire [7:0] WNL0_subBNK2;
-  wire [7:0] WNL1_subBNK2;
+  wire [7:0] W_NL0_subBNK2;
+  wire [7:0] W_NL1_subBNK2;
   wire [3:0] chk0_odd0;
   wire [3:0] chk1_odd0;
   wire [3:0] chk2_odd0;
   wire [3:0] chk3_odd0;
   wire [3:0] chk4_odd0;
   wire [3:0] chk5_odd0;
-  wire [3:0] WNL0_odd0;
-  wire [3:0] WNL1_odd0;
+  wire [3:0] W_NL0_odd0;
+  wire [3:0] W_NL1_odd0;
   wire [7:0][3:0] chk0_odd1;
   wire [7:0][3:0] chk1_odd1;
   wire [7:0][3:0] chk2_odd1;
   wire [7:0][3:0] chk3_odd1;
   wire [7:0][3:0] chk4_odd1;
   wire [7:0][3:0] chk5_odd1;
-  wire [7:0][3:0] WNL0_odd1;
-  wire [7:0][3:0] WNL1_odd1;
+  wire [7:0][3:0] W_NL0_odd1;
+  wire [7:0][3:0] W_NL1_odd1;
   wire [63:0][1:0] chk0_addrOE;
   wire [63:0][1:0] chk1_addrOE;
   wire [63:0][1:0] chk2_addrOE;
@@ -252,20 +252,20 @@ module stq(
   wire [31:0] chk3_banks;
   wire [31:0] chk4_banks;
   wire [31:0] chk5_banks;
-  wire [31:0] WNL0_banks;
-  wire [31:0] WNL1_banks;
+  wire [31:0] W_NL0_banks;
+  wire [31:0] W_NL1_banks;
   wire [31:0] chk0_banks2;
   wire [31:0] chk1_banks2;
   wire [31:0] chk2_banks2;
   wire [31:0] chk3_banks2;
   wire [31:0] chk4_banks2;
   wire [31:0] chk5_banks2;
-  wire [31:0] WNL0_banks2;
-  wire [31:0] WNL1_banks2;
+  wire [31:0] W_NL0_banks2;
+  wire [31:0] W_NL1_banks2;
   wire [63:0] WLN0_match;
   wire [63:0] WLN1_match;
-  wire [63:0] WNL0_en0;
-  wire [63:0] WNL1_en0;
+  wire [63:0] W_NL0_en0;
+  wire [63:0] W_NL1_en0;
   wire [63:0] wrt0_en0;
   wire [63:0] wrt1_en0;
   wire [63:0] upd0_en0;
@@ -384,8 +384,8 @@ module stq(
   wire chk3_odd;
   wire chk4_odd;
   wire chk5_odd;
-  wire WNL0_odd;
-  wire WNL1_odd;
+  wire W_NL0_odd;
+  wire W_NL1_odd;
 
   wire [7:0][3:0] chk0_bytes;
   wire [7:0][3:0] chk1_bytes;
@@ -393,8 +393,8 @@ module stq(
   wire [7:0][3:0] chk3_bytes;
   wire [7:0][3:0] chk4_bytes;
   wire [7:0][3:0] chk5_bytes;
-  wire [7:0][3:0] WNL0_bytes;
-  wire [7:0][3:0] WNL1_bytes;
+  wire [7:0][3:0] W_NL0_bytes;
+  wire [7:0][3:0] W_NL1_bytes;
 
   wire [63:0][1:0] chk0_addrEO;
   wire [63:0][1:0] chk1_addrEO;
@@ -551,11 +551,11 @@ module stq(
           assign chk5_subBNK[b]=|{chk5_banks[24+b],chk5_banks[16+b],chk5_banks[8+b],chk5_banks[0+b]};
           assign chk5_odd1[b]=chk5_banks[24+b] && |chk5_banks[3:0] ? chk5_odd0^4'b1 : chk5_odd0;
           
-          assign WNL0_subBNK[b]=|{WNL0_banks[24+b],WNL0_banks[16+b],WNL0_banks[8+b],WNL0_banks[0+b]};
-          assign WNL0_odd1[b]=WNL0_banks[24+b] && |WNL0_banks[3:0] ? WNL0_odd0^4'b1 : WNL0_odd0;
+          assign W_NL0_subBNK[b]=|{W_NL0_banks[24+b],W_NL0_banks[16+b],W_NL0_banks[8+b],W_NL0_banks[0+b]};
+          assign W_NL0_odd1[b]=W_NL0_banks[24+b] && |W_NL0_banks[3:0] ? W_NL0_odd0^4'b1 : W_NL0_odd0;
 
-          assign WNL1_subBNK[b]=|{WNL1_banks[24+b],WNL1_banks[16+b],WNL1_banks[8+b],WNL1_banks[0+b]};
-          assign WNL1_odd1[b]=WNL1_banks[24+b] && |WNL1_banks[3:0] ? WNL1_odd0^4'b1 : WNL1_odd0;
+          assign W_NL1_subBNK[b]=|{W_NL1_banks[24+b],W_NL1_banks[16+b],W_NL1_banks[8+b],W_NL1_banks[0+b]};
+          assign W_NL1_odd1[b]=W_NL1_banks[24+b] && |W_NL1_banks[3:0] ? W_NL1_odd0^4'b1 : W_NL1_odd0;
 
           assign chk0_subBNK2[b]=|{chk0_banks2[24+b],chk0_banks2[16+b],chk0_banks2[8+b],chk0_banks2[0+b]};
           assign chk1_subBNK2[b]=|{chk1_banks2[24+b],chk1_banks2[16+b],chk1_banks2[8+b],chk1_banks2[0+b]};
@@ -563,8 +563,8 @@ module stq(
           assign chk3_subBNK2[b]=|{chk3_banks2[24+b],chk3_banks2[16+b],chk3_banks2[8+b],chk3_banks2[0+b]};
           assign chk4_subBNK2[b]=|{chk4_banks2[24+b],chk4_banks2[16+b],chk4_banks2[8+b],chk4_banks2[0+b]};
           assign chk5_subBNK2[b]=|{chk5_banks2[24+b],chk5_banks2[16+b],chk5_banks2[8+b],chk5_banks2[0+b]};
-          assign WNL0_subBNK2[b]=|{WNL0_banks2[24+b],WNL0_banks2[16+b],WNL0_banks2[8+b],WNL0_banks2[0+b]};
-          assign WNL1_subBNK2[b]=|{WNL1_banks2[24+b],WNL1_banks2[16+b],WNL1_banks2[8+b],WNL1_banks2[0+b]};
+          assign W_NL0_subBNK2[b]=|{W_NL0_banks2[24+b],W_NL0_banks2[16+b],W_NL0_banks2[8+b],W_NL0_banks2[0+b]};
+          assign W_NL1_subBNK2[b]=|{W_NL1_banks2[24+b],W_NL1_banks2[16+b],W_NL1_banks2[8+b],W_NL1_banks2[0+b]};
 
 	  assign chk0_bytes[b]=get_ld_bytes(chk0_adata[`lsaddr_sz],chk0_subBNK,b[2:0],chk0_adata[`lsaddr_low]);
 	  assign chk1_bytes[b]=get_ld_bytes(chk1_adata[`lsaddr_sz],chk1_subBNK,b[2:0],chk1_adata[`lsaddr_low]);
@@ -572,8 +572,8 @@ module stq(
 	  assign chk3_bytes[b]=get_ld_bytes(chk3_adata[`lsaddr_sz],chk3_subBNK,b[2:0],chk3_adata[`lsaddr_low]);
 	  assign chk4_bytes[b]=get_ld_bytes(chk4_adata[`lsaddr_sz],chk4_subBNK,b[2:0],chk4_adata[`lsaddr_low]);
 	  assign chk5_bytes[b]=get_ld_bytes(chk5_adata[`lsaddr_sz],chk5_subBNK,b[2:0],chk5_adata[`lsaddr_low]);
-	  assign WNL0_bytes[b]=get_st_bytes(WNL0_adata[`lsaddr_sz],WNL0_subBNK,b[2:0],WNL0_adata[`lsaddr_low]);
-	  assign WNL1_bytes[b]=get_st_bytes(WNL1_adata[`lsaddr_sz],WNL1_subBNK,b[2:0],WNL1_adata[`lsaddr_low]);
+	  assign W_NL0_bytes[b]=get_st_bytes(W_NL0_adata[`lsaddr_sz],W_NL0_subBNK,b[2:0],W_NL0_adata[`lsaddr_low]);
+	  assign W_NL1_bytes[b]=get_st_bytes(W_NL1_adata[`lsaddr_sz],W_NL1_subBNK,b[2:0],W_NL1_adata[`lsaddr_low]);
 
           bit_find_last_bit #(64) chkBit0A(chk0_match[b]&mask,chk0_firstA[b],chk0_hasA[b]);
           bit_find_last_bit #(64) chkBit0B(chk0_match[b]&~mask,chk0_firstB[b],chk0_hasB[b]);
@@ -606,8 +606,8 @@ module stq(
               rst,
               aStall|aDoStall,
               excpt,
-              WNL0_en0, WNL0_en, WNL0_WQ, WNL0_odd1[b], WNL0_bytes[b], WNL0_subBNK[b], WNL0_subBNK2[b],
-              WNL1_en0, WNL1_en, WNL1_WQ, WNL1_odd1[b], WNL1_bytes[b], WNL1_subBNK[b], WNL1_subBNK2[b],
+              W_NL0_en0, W_NL0_en, W_NL0_WQ, W_NL0_odd1[b], W_NL0_bytes[b], W_NL0_subBNK[b], W_NL0_subBNK2[b],
+              W_NL1_en0, W_NL1_en, W_NL1_WQ, W_NL1_odd1[b], W_NL1_bytes[b], W_NL1_subBNK[b], W_NL1_subBNK2[b],
               chk0_en, chk0_addrEO, chk0_odd1[b], chk0_bytes[b], chk0_subBNK[b], chk0_subBNK2[b], chk0_match[b], chk0_partial[b],
 	      chk0_matchW[b],chk0_partialW[b],chk0_pre0,chk0_pre1,
               chk1_en, chk1_addrEO, chk1_odd1[b], chk1_bytes[b], chk1_subBNK[b], chk1_subBNK2[b], chk1_match[b], chk1_partial[b],
@@ -630,8 +630,8 @@ module stq(
               rst,
               aStall|aDoStall,
               excpt,
-              WNL0_en0, WNL0_en, WNL0_WQ, WNL0_odd1[b], WNL0_bytes[b], WNL0_subBNK[b], WNL0_subBNK2[b],
-              WNL1_en0, WNL1_en, WNL1_WQ, WNL1_odd1[b], WNL1_bytes[b], WNL1_subBNK[b], WNL1_subBNK2[b],
+              W_NL0_en0, W_NL0_en, W_NL0_WQ, W_NL0_odd1[b], W_NL0_bytes[b], W_NL0_subBNK[b], W_NL0_subBNK2[b],
+              W_NL1_en0, W_NL1_en, W_NL1_WQ, W_NL1_odd1[b], W_NL1_bytes[b], W_NL1_subBNK[b], W_NL1_subBNK2[b],
               chk0_en, chk0_addrEO, chk0_odd1[b], chk0_bytes[b], chk0_subBNK[b], chk0_subBNK2[b], chk0_match[b], chk0_partial[b],
 	      chk0_matchW[b],chk0_partialW[b],chk0_pre0,chk0_pre1,
               chk1_en, chk1_addrEO, chk1_odd1[b], chk1_bytes[b], chk1_subBNK[b], chk1_subBNK2[b], chk1_match[b], chk1_partial[b],
@@ -776,22 +776,22 @@ module stq(
       for(x=0;x<64;x=x+1) begin : X
           assign WLN0_match[x]=WLN0_WQ==x && WLN0_en;
           assign WLN1_match[x]=WLN1_WQ==x && WLN1_en;
-          assign WNL0_en0[x]=WNL0_WQ==x && WNL0_en;
-          assign WNL1_en0[x]=WNL1_WQ==x && WNL1_en;
+          assign W_NL0_en0[x]=W_NL0_WQ==x && W_NL0_en;
+          assign W_NL1_en0[x]=W_NL1_WQ==x && W_NL1_en;
           assign wrt0_en0[x]=wrt0_adata[`lsaddr_WQ]==x && wrt0_en;
           assign wrt1_en0[x]=wrt1_adata[`lsaddr_WQ]==x && wrt1_en;
           assign upd0_en0[x]=upd0_WQ==x && upd0_en;
           assign upd1_en0[x]=upd1_WQ==x && upd1_en;
-          assign passe_en[x]=(WNL0_WQ==x && WNL0_en) || (WNL1_WQ==x && WNL1_en);
+          assign passe_en[x]=(W_NL0_WQ==x && W_NL0_en) || (W_NL1_WQ==x && W_NL1_en);
 	  assign free_en[x]=(WLN0_WQ==x && WLN0_en && !st_stall) || (WLN1_WQ==x && WLN1_en && !st_stall);
       end
       for(a=0;a<6;a=a+1) begin : wrt
-          assign WNL0_en=LSQ_shr_data[`lsqshare_wrt0]==a ? &rdy[a:0] & chk_rdy : 1'bz;
-          assign WNL1_en=LSQ_shr_data[`lsqshare_wrt1]==a ? &rdy[a:0] & chk_rdy : 1'bz;
-          assign WNL0_adata=LSQ_shr_data[`lsqshare_wrt0]==a ? chk_adata[a] : {`lsaddr_width{1'bz}};
-          assign WNL1_adata=LSQ_shr_data[`lsqshare_wrt1]==a ? chk_adata[a] : {`lsaddr_width{1'bz}};
-          assign WNL0_WQ=LSQ_shr_data[`lsqshare_wrt0]==a ? chk_adata[a][`lsaddr_WQ] : 'z;
-          assign WNL1_WQ=LSQ_shr_data[`lsqshare_wrt1]==a ? chk_adata[a][`lsaddr_WQ] : 'z;
+          assign W_NL0_en=LSQ_shr_data[`lsqshare_wrt0]==a ? &rdy[a:0] & chk_rdy : 1'bz;
+          assign W_NL1_en=LSQ_shr_data[`lsqshare_wrt1]==a ? &rdy[a:0] & chk_rdy : 1'bz;
+          assign W_NL0_adata=LSQ_shr_data[`lsqshare_wrt0]==a ? chk_adata[a] : {`lsaddr_width{1'bz}};
+          assign W_NL1_adata=LSQ_shr_data[`lsqshare_wrt1]==a ? chk_adata[a] : {`lsaddr_width{1'bz}};
+          assign W_NL0_WQ=LSQ_shr_data[`lsqshare_wrt0]==a ? chk_adata[a][`lsaddr_WQ] : 'z;
+          assign W_NL1_WQ=LSQ_shr_data[`lsqshare_wrt1]==a ? chk_adata[a][`lsaddr_WQ] : 'z;
 	  assign wb0_adataW=chk_wb[a] ? chk_adata[a] : {`lsaddr_width{1'bz}};
 	  assign wb1_adataW=chk_wb1[a] ? chk_adata[a] : {`lsaddr_width{1'bz}};
 	  assign wb0_dataW[31:0]=chk_wb[a] ? chk_data[a][31:0] : 'z;
@@ -865,8 +865,8 @@ module stq(
   assign wb0_chk=chk_wb0;
   assign wb1_chk=chk_wb1;
 
-  assign WNL0_odd=WNL0_adata[`lsaddr_odd];
-  assign WNL1_odd=WNL1_adata[`lsaddr_odd];
+  assign W_NL0_odd=W_NL0_adata[`lsaddr_odd];
+  assign W_NL1_odd=W_NL1_adata[`lsaddr_odd];
   assign chk0_odd=chk0_adata[`lsaddr_odd];
   assign chk1_odd=chk1_adata[`lsaddr_odd];
   assign chk2_odd=chk2_adata[`lsaddr_odd];
@@ -915,12 +915,12 @@ module stq(
   //assign WLN0_adata=LSQ_shr_data[`lsqshare_wrt0]==3'd7 ? {`lsaddr_width{1'b0}} : {`lsaddr_width{1'bz}};
   //assign WLN1_adata=LSQ_shr_data[`lsqshare_wrt1]==3'd7 ? {`lsaddr_width{1'b0}} : {`lsaddr_width{1'bz}};
   
-  assign WNL0_en=LSQ_shr_data[`lsqshare_wrt0]==3'd7 ? 1'b0 : 1'bz;
-  assign WNL1_en=LSQ_shr_data[`lsqshare_wrt1]==3'd7 ? 1'b0 : 1'bz;
-  assign WNL0_adata=LSQ_shr_data[`lsqshare_wrt0]==3'd7 ? {`lsaddr_width{1'b0}} : {`lsaddr_width{1'bz}};
-  assign WNL1_adata=LSQ_shr_data[`lsqshare_wrt1]==3'd7 ? {`lsaddr_width{1'b0}} : {`lsaddr_width{1'bz}};
-  assign WNL0_WQ=LSQ_shr_data[`lsqshare_wrt0]==3'd7 ? 6'b0 : 6'bz;
-  assign WNL1_WQ=LSQ_shr_data[`lsqshare_wrt1]==3'd7 ? 6'b0 : 6'bz;
+  assign W_NL0_en=LSQ_shr_data[`lsqshare_wrt0]==3'd7 ? 1'b0 : 1'bz;
+  assign W_NL1_en=LSQ_shr_data[`lsqshare_wrt1]==3'd7 ? 1'b0 : 1'bz;
+  assign W_NL0_adata=LSQ_shr_data[`lsqshare_wrt0]==3'd7 ? {`lsaddr_width{1'b0}} : {`lsaddr_width{1'bz}};
+  assign W_NL1_adata=LSQ_shr_data[`lsqshare_wrt1]==3'd7 ? {`lsaddr_width{1'b0}} : {`lsaddr_width{1'bz}};
+  assign W_NL0_WQ=LSQ_shr_data[`lsqshare_wrt0]==3'd7 ? 6'b0 : 6'bz;
+  assign W_NL1_WQ=LSQ_shr_data[`lsqshare_wrt1]==3'd7 ? 6'b0 : 6'bz;
  
   assign ret_II_out=WLN0_adata[`lsaddr_II+4];
 
@@ -954,15 +954,15 @@ module stq(
   assign chk5_odd0[2:0]=(chk5_adata[`lsaddr_sz]==5'h11 || chk5_adata[`lsaddr_sz]==5'h10) ? {2'b0,chk5_odd} : {chk5_adata[`lsaddr_low],chk5_odd}; 
   assign chk5_odd0[3]=chk5_adata[`lsaddr_sz]==5'hf;
   
-  assign WNL0_banks=(WNL0_adata[`lsaddr_sz]==5'h11 || WNL0_adata[`lsaddr_sz]==5'h10 || WNL0_adata[`lsaddr_low]==2'b0) ?
-    WNL0_adata[`lsaddr_banks] : lowt(WNL0_adata[`lsaddr_banks]);
-  assign WNL0_odd0[2:0]=(WNL0_adata[`lsaddr_sz]==5'h11 || WNL0_adata[`lsaddr_sz]==5'h10) ? {2'b0,WNL0_odd} : {WNL0_adata[`lsaddr_low],WNL0_odd}; 
-  assign WNL0_odd0[3]=WNL0_adata[`lsaddr_sz]==5'hf;
+  assign W_NL0_banks=(W_NL0_adata[`lsaddr_sz]==5'h11 || W_NL0_adata[`lsaddr_sz]==5'h10 || W_NL0_adata[`lsaddr_low]==2'b0) ?
+    W_NL0_adata[`lsaddr_banks] : lowt(W_NL0_adata[`lsaddr_banks]);
+  assign W_NL0_odd0[2:0]=(W_NL0_adata[`lsaddr_sz]==5'h11 || W_NL0_adata[`lsaddr_sz]==5'h10) ? {2'b0,W_NL0_odd} : {W_NL0_adata[`lsaddr_low],W_NL0_odd}; 
+  assign W_NL0_odd0[3]=W_NL0_adata[`lsaddr_sz]==5'hf;
 
-  assign WNL1_banks=(WNL1_adata[`lsaddr_sz]==5'h11 || WNL1_adata[`lsaddr_sz]==5'h10 || WNL1_adata[`lsaddr_low]==2'b0) ?
-    WNL1_adata[`lsaddr_banks] : lowt(WNL1_adata[`lsaddr_banks]);
-  assign WNL1_odd0[2:0]=(WNL1_adata[`lsaddr_sz]==5'h11 || WNL1_adata[`lsaddr_sz]==5'h10) ? {2'b0,WNL1_odd} : {WNL1_adata[`lsaddr_low],WNL1_odd}; 
-  assign WNL1_odd0[3]=WNL1_adata[`lsaddr_sz]==5'hf;
+  assign W_NL1_banks=(W_NL1_adata[`lsaddr_sz]==5'h11 || W_NL1_adata[`lsaddr_sz]==5'h10 || W_NL1_adata[`lsaddr_low]==2'b0) ?
+    W_NL1_adata[`lsaddr_banks] : lowt(W_NL1_adata[`lsaddr_banks]);
+  assign W_NL1_odd0[2:0]=(W_NL1_adata[`lsaddr_sz]==5'h11 || W_NL1_adata[`lsaddr_sz]==5'h10) ? {2'b0,W_NL1_odd} : {W_NL1_adata[`lsaddr_low],W_NL1_odd}; 
+  assign W_NL1_odd0[3]=W_NL1_adata[`lsaddr_sz]==5'hf;
   
   assign chk0_banks=chk0_adata[`lsaddr_banks];
   assign chk1_banks=chk1_adata[`lsaddr_banks];
@@ -970,8 +970,8 @@ module stq(
   assign chk3_banks=chk3_adata[`lsaddr_banks];
   assign chk4_banks=chk4_adata[`lsaddr_banks];
   assign chk5_banks=chk5_adata[`lsaddr_banks];
-  assign WNL0_banks=WNL0_adata[`lsaddr_banks];
-  assign WNL1_banks=WNL1_adata[`lsaddr_banks];
+  assign W_NL0_banks=W_NL0_adata[`lsaddr_banks];
+  assign W_NL1_banks=W_NL1_adata[`lsaddr_banks];
 
   assign chk_adata[0]=chk0_adata;
   assign chk_adata[1]=chk1_adata;
@@ -1002,37 +1002,20 @@ module stq(
   upd0_en0, 
   upd1_en0, 
   free_en,,,,passe_en);
-
+//wrt is write, WLN is read
   stq_adata_ram ramA_mod(
   clk,
   rst,
-  ~st_stall & WLN0_en,
-  ~WLN0_WQ[0] ? WLN0_WQ[5:1] : WLN1_WQ[5:1],
-  {WLN0_adata0,WLN0_en0},
-  (~WLN0_WQ[0] ? WNL0_en:WNL1_en) & ~aStall & ~aDoStall,
-  ~WLN0_WQ[0] ? WNL0_WQ[5:1] : WNL1_WQ[5:1],
-  ~WNL0_WQ[0] ? {WNL0_adata,WNL0_en} : {WNL1_adata,WNL1_en}
+  ~st_stall & WLN0_en,  WLN0_WQ[5:0], {WLN0_adata,WLN0_en0},
+  ~st_stall & WLN1_en,  WLN1_WQ[5:0], {WLN1_adata,WLN1_en0},
+  wrt0_en,  wrt0_adata[-2+`lsaddr_WQ],  {wrt0_adata,wrt0_en},
+  wrt1_en,  wrt1_adata[-2+`lsaddr_WQ],  {wrt1_adata,wrt1_en}
   );
 
-  assign WLN0_adata=~WLN0_WQ[0] ? WLN0_adata0 : WLN1_adata0;
-  assign WLN0_en=~WLN0_WQ[0] ? WLN0_en0 & upd[WLN0_WQ] & mask2[WLN0_WQ] && ret_II==WLN0_adata[`lsaddr_II+4] && 
-	  ret_xbreak[WLN0_adata[-6+`lsaddr_II]] :
-	  WLN1_en0 & upd[WLN1_WQ] & mask2[WLN1_WQ] && ret_II==WLN1_adata[`lsaddr_II+4] && ret_xbreak[WLN1_adata[-6+`lsaddr_II]];
-  assign WLN1_adata=WLN0_WQ[0] ? WLN0_adata0 : WLN1_adata0;
-  assign WLN1_en=WLN0_WQ[0] ? WLN0_en0 & upd[WLN0_WQ] & mask2[WLN0_WQ] && ret_II==WLN0_adata[`lsaddr_II+4] && 
-	  ret_xbreak[WLN0_adata[-6+`lsaddr_II]] :
-	  WLN1_en0 & upd[WLN1_WQ] & mask2[WLN1_WQ] && ret_II==WLN1_adata[`lsaddr_II+4] && ret_xbreak[WLN1_adata[-6+`lsaddr_II]];
+  assign WLN0_en=WLN0_en0 && ret_II==WLN0_adata[`lsaddr_II+4] && 
+	  ~ret_xbreak[WLN0_adata[-6+`lsaddr_II]];
+  assign WLN1_en=WLN1_en0 && ret_II==WLN1_adata[`lsaddr_II+4] && ~ret_xbreak[WLN1_adata[-6+`lsaddr_II]];
   
-  stq_adata_ram ramB_mod(
-  clk,
-  rst,
-  ~st_stall & WLN0_en,
-  ~WLN0_WQ[0] ? WLN1_WQ[5:1] : WLN0_WQ[5:1],
-  {WLN1_adata0,WLN1_en0},
-  (~WLN0_WQ[0] ? WNL1_en:WNL0_en) & ~aStall & ~aDoStall,
-  ~WNL0_WQ[0] ? WNL1_WQ[5:1] : WNL0_WQ[5:1],
-  ~WNL0_WQ[0]  ? {WNL1_adata,WNL1_en} : {WNL0_adata,WNL0_en}
-  );
   
   stq_adata bgn_mod(
   clk,
@@ -1087,11 +1070,11 @@ module stq(
 	      if (!mask[63]) mask[pse0_WQ]=1'b1; else nmask[pse0_WQ]=1'b1;
 	      if (!mask[62]) mask[pse1_WQ]=1'b1; else nmask[pse1_WQ]=1'b1;
 	  end
-	  if (!aStall && !aDoStall && WNL0_en && ~WNL1_en & ~excpt) begin
-	      mask2[WNL0_WQ]=1'b1;
-	  end else if (!aStall && !aDoStall && WNL0_en && ~excpt) begin
-	      mask2[WNL0_WQ]=1'b1;
-	      mask2[WNL1_WQ]=1'b1;
+	  if (!aStall && !aDoStall && W_NL0_en && ~W_NL1_en & ~excpt) begin
+	      mask2[W_NL0_WQ]=1'b1;
+	  end else if (!aStall && !aDoStall && W_NL0_en && ~excpt) begin
+	      mask2[W_NL0_WQ]=1'b1;
+	      mask2[W_NL1_WQ]=1'b1;
 	  end
 	  if (!st_stall &&  WLN0_en && ~WLN1_en) begin
 	      WLN0_WQ<=WLN1_WQ;
