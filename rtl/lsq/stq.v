@@ -1007,6 +1007,14 @@ module stq(
   clk,
   rst,
   ~st_stall & WLN0_en,  WLN0_WQ[5:0], {WLN0_adata,WLN0_en0},
+  wrt0_en,  wrt0_adata[-2+`lsaddr_WQ],  {wrt0_adata,wrt0_en},
+  wrt1_en,  wrt1_adata[-2+`lsaddr_WQ],  {wrt1_adata,wrt1_en}
+  );
+
+//wrt is write, WLN is read
+  stq_adata_ram ramE_mod(
+  clk,
+  rst,
   ~st_stall & WLN1_en,  WLN1_WQ[5:0], {WLN1_adata,WLN1_en0},
   wrt0_en,  wrt0_adata[-2+`lsaddr_WQ],  {wrt0_adata,wrt0_en},
   wrt1_en,  wrt1_adata[-2+`lsaddr_WQ],  {wrt1_adata,wrt1_en}

@@ -22,9 +22,6 @@ module stq_adata_ram(
   readA_clkEn,
   readA_addr,
   readA_data,
-  readB_clkEn,
-  readB_addr,
-  readB_data,
   writeA_wen,
   writeA_addr,
   writeA_data,
@@ -45,16 +42,12 @@ module stq_adata_ram(
 
   reg [WIDTH-1:0] ram[63:0];
   reg [5:0] readA_addr_reg;
-  reg [5:0] readB_addr_reg;
 
   assign readA_data=ram[readA_addr_reg];
-  assign readB_data=ram[readB_addr_reg];
 
   always @(posedge clk) begin
       if (rst) readA_addr_reg<=6'b0;
       else if (readA_clkEn) readA_addr_reg<=readA_addr;
-      if (rst) readB_addr_reg<=6'b0;
-      else if (readB_clkEn) readB_addr_reg<=readB_addr;
       if (writeA_wen) ram[writeA_addr]<=writeA_data;
       if (writeB_wen) ram[writeB_addr]<=writeB_data;
   end
