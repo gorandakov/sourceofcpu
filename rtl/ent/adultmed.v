@@ -21,7 +21,6 @@ limitations under the License.
 `include "../fpoperations.sv"
 `include "../intop.v"
 
-//instruct compiler not to delete constantN
 module smallInstr_decoder(
   clk,
   rst,
@@ -39,8 +38,6 @@ module smallInstr_decoder(
   alucond,
   rndmode,
   constant,
-  constantN,
-//  smallConst,
   rT,rT_use,
   port,
   useRs,
@@ -120,10 +117,7 @@ module smallInstr_decoder(
   output [4:0] alucond;
   output [2:0] rndmode;
   output useBConst;
-//  output reg useBSmall;//small constant use; used for call/pop/push
   output [64:0] constant;
-  output [64:0] constantN;
-//  output reg [3:0] smallConst; //signed
   output [REG_WIDTH-1:0] rT;
   output rT_use;
   output [3:0] port;
@@ -760,12 +754,12 @@ module smallInstr_decoder(
       case(opcode_sub)
 	6'h20,6'h29: poperation[1][7:0]=`op_mov64;
 	6'h21: poperation[1][7:0]=`op_mov32;
-	6'h22: begin poperation[1][7:0]=`op_add64; poperation[1][8]=1'b1; prA[1]={instr[7],instr[15:12]}; prA_use[1]=1'b1; end
-	6'h23: begin poperation[1][7:0]=`op_sub64; poperation[1][8]=1'b1; prA[1]={instr[7],instr[15:12]}; prA_use[1]=1'b1; end
+	6'h22: begin poperation[1][7:0]=`op_zxt8_64; poperation[1][8]=1'b1; prA[1]={instr[7],instr[15:12]}; prA_use[1]=1'b1; end
+	6'h23: begin poperation[1][7:0]=`op_zxt16_64; poperation[1][8]=1'b1; prA[1]={instr[7],instr[15:12]}; prA_use[1]=1'b1; end
 	6'h24: poperation[1][7:0]=`op_sxt8_32;
 	6'h25: poperation[1][7:0]=`op_sxt16_32;
-	6'h26: begin poperation[1][7:0]=`op_add64; poperation[1][8]=1'b1; prA[1]={1'b0,instr[11:8]}; prA_use[1]=1'b1; end
-	6'h27: begin poperation[1][7:0]=`op_sub64; poperation[1][8]=1'b1; prA[1]={1'b0,instr[11:8]}; prA_use[1]=1'b1; end
+	6'h26: begin poperation[1][7:0]=`op_sxt8_64; poperation[1][8]=1'b1; prA[1]={1'b0,instr[11:8]}; prA_use[1]=1'b1; end
+	6'h27: begin poperation[1][7:0]=`op_sxt16_64; poperation[1][8]=1'b1; prA[1]={1'b0,instr[11:8]}; prA_use[1]=1'b1; end
 	6'h28: poperation[1][7:0]=`op_sxt32_64;
        endcase
        //verilator lint_on CASEINCOMPLETE
