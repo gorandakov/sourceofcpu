@@ -754,12 +754,12 @@ module smallInstr_decoder(
       case(opcode_sub)
 	6'h20,6'h29: poperation[1][7:0]=`op_mov64;
 	6'h21: poperation[1][7:0]=`op_mov32;
-	6'h22: begin poperation[1][7:0]=`op_zxt8_64; poperation[1][8]=1'b1; prA[1]={instr[7],instr[15:12]}; prA_use[1]=1'b1; end
-	6'h23: begin poperation[1][7:0]=`op_zxt16_64; poperation[1][8]=1'b1; prA[1]={instr[7],instr[15:12]}; prA_use[1]=1'b1; end
+	6'h22: poperation[1][7:0]=`op_zxt8_64; 
+	6'h23: poperation[1][7:0]=`op_zxt16_64;
 	6'h24: poperation[1][7:0]=`op_sxt8_32;
 	6'h25: poperation[1][7:0]=`op_sxt16_32;
-	6'h26: begin poperation[1][7:0]=`op_sxt8_64; poperation[1][8]=1'b1; prA[1]={1'b0,instr[11:8]}; prA_use[1]=1'b1; end
-	6'h27: begin poperation[1][7:0]=`op_sxt16_64; poperation[1][8]=1'b1; prA[1]={1'b0,instr[11:8]}; prA_use[1]=1'b1; end
+	6'h26: poperation[1][7:0]=`op_sxt8_64; 
+	6'h27: poperation[1][7:0]=`op_sxt16_64;
 	6'h28: poperation[1][7:0]=`op_sxt32_64;
        endcase
        //verilator lint_on CASEINCOMPLETE
