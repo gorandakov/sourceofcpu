@@ -4448,7 +4448,7 @@ module backend(
   generate
   
   genvar m,n,u;//,o
-  for (m=0;m<1;m=m+1) begin : main_rs_gen
+  for (m=0;m<3;m=m+1) begin : main_rs_gen
   rs rs0_mod(
   .clk(clk),
   .dataRst(rst),.nonDataRst(except|rst),.rst_thread(1'b0),
