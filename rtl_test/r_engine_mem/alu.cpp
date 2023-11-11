@@ -2,12 +2,11 @@
 #include <cfenv>
 #include <cstdio>
 #include <unistd.h>
+#include <cstring>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/mman.h>
 #include <fcntl.h>
-#include "Vheptane_core.h"
-#include "verilated.h"
 #include "../inc/ptr.h"
 #include "contx.h"
 #include "../inc/struct.h"
@@ -442,7 +441,7 @@ class req {
     unsigned has_alu;
     char asmtext[64];
     bool gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,int has_mem_,char *mem,char *pmem);
-    bool exec(req *prev1,hcont *contx,char *mem,char *pmem);
+    bool exec(req *prev1,hcont *contx,char *mem,char *pmem, int itcnt);
     void gen_init(int rT,int dom,unsigned long long int val,int val_p);
     void gen_mem(req* prev1,unsigned code,char * mem,char *memp,unsigned long long addr);
     void gen_memw(req* prev1,unsigned code,char * mem,char *memp,unsigned long long addr,unsigned long long res, char res_p);
@@ -471,7 +470,55 @@ void req::gen_init(int rT_,int dom,unsigned long long int val,int val_p) {
     else snprintf(asmtext,sizeof asmtext,"movabsp $%li,%%%s\n",B,reg65[rT]);//WARNING: movabsp non impl and not in cpu spec
 }
 
-bool req::gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,int has_mem_,char *mem,char *memp) {
+int req::gen_loop(bool close, hcont *contx, int loopno) {
+  //close is true if it is a loop close insn, otherwise it is a loop begin insn
+  int cnt=lrand48()&0xff;
+  int addr0=(lrand48()%(MEMRGN_SIZE/2));
+  int addr1=(lrand48()%(MEMRGN_SIZE/2));
+  if (!close) {
+      snprintf((*(this)).asmtext,sizeof (asmtext), "LoOp%i:\nmovq $%i, %%r15\n",loopno,cnt);
+      this->res=cnt;
+      (this)->rT=15;
+      this->flags=flags_in;
+      contx->gen[15]=cnt;
+      snprintf((*(this+1)).asmtext,sizeof (asmtext), "movq $%i, %%r14\n",addr0);
+      (this+1)->res=addr0;
+      (this+1)->rT=14;
+      (this+1)->flags=flags_in;
+      contx->gen[14]=addr0;
+      snprintf((*(this+2)).asmtext,sizeof (asmtext), "movq $%i, %%r13\n",addr1);
+      (this+2)->res=addr1;
+      (this+2)->rT=13;
+      (this+2)->flags=flags_in;
+      contx->gen[13]=addr1;
+      return 3;
+  } else {
+      snprintf((*(this)).asmtext,sizeof (asmtext), "sub $1, %%r15\n");
+      this->res=contx->gen[15]-1;
+      this->rT=15;
+      this->flg64(this->res);
+      contx->gen[15]=gen[15]-1;
+      snprintf((*(this+1)).asmtext,sizeof (asmtext), "jne LoOp%i\n",loopno);
+      (this+1)->rT=-1;
+      (this+1)->flg64(this->res);
+      return 2;
+  }
+}
+
+char *prna(long long int &addr, bool inloop) {
+  static char buf[32] __attribute__(thread);
+  buf[0]=0;
+  int reg=addr&1;
+  if (inloop) addr>>=1;
+  if (inloop) {
+    snprintf(buf,32," $%i(%%r%i,%%r15,8)", addr, 13+reg);
+  } else {
+    snprintf(buf,32," mem+%i(%%rip)", addr);
+  }
+  return buf;
+}
+
+bool req::gen(bool alt_, bool mul_, bool can_shift,bool inloop, int loopiter, req *prev1,hcont *contx,int has_mem_,char *mem,char *memp) {
     alt=alt_;
     mul=mul_;
     excpt=-1;
@@ -480,10 +527,11 @@ bool req::gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,int 
     if (!alt && !mul && can_shift)  op=OPS_S_REGL[rand()%(sizeof OPS_S_REGL/2)];
     if (!alt && mul) op=OPS_M_REGL[rand()%(sizeof OPS_M_REGL/2)]|0x800;
     if (alt) op=rand()&0x1ffff;
+    if (inloop && !mem && !(lrand48()%0xa)) op=0xf000+lrand48()%14;
     res_p=0;
-    rA=rand()&0x1f;
-    rB=rand()&0x1f;
-    rT=rand()&0x1f;
+    rA=rand()&0xf;
+    rB=rand()&0xf;
+    rT=rand()%(16-3*inloop);
     if (has_mem_ && rT==16) rT=17;
     if (has_mem_ && rA==16) rA=17;
     if (has_mem_) addr=lrand48()%(MEMRGN_DATA_SZ-8);
@@ -519,7 +567,7 @@ bool req::gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,int 
 	int mmem=0;
 	char cmpstr[32];
 	if (has_mem_) mmem=lrand48()%3;
-        switch(op&0xff) {
+        if ((op&0xf000)!=0xf000) switch(op&0xff) {
             case 0:
 	    if (has_mem_==2) {
 		(this-1)->gen_mem(NULL,8,mem,memp,addr);
@@ -527,17 +575,17 @@ bool req::gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,int 
 		A=(this-1)->res;
 		A_p=(this-1)->res_p;
 		if (rB>=0)
-		    snprintf(asmtext,sizeof (asmtext), "addq %%%s, mem+%li(%rip)\n",reg65[rB],addr);
+		    snprintf(asmtext,sizeof (asmtext), "plusq %%%s, %s\n",reg65[rB],prna(addr,inloop));
 		else
-		    snprintf(asmtext,sizeof (asmtext), "addq $%i, mem+%li(%rip)\n",B,addr);
+		    snprintf(asmtext,sizeof (asmtext), "plusq $%i, %s\n",B,prna(addr,inloop));
 	    } else if (has_mem_) {
 		(this-1)->gen_mem(NULL,8,mem,memp,addr);
 		rB=16;
 		B=(this-1)->res;
 		B_p=(this-1)->res_p;
-		snprintf(asmtext,sizeof (asmtext), "addq mem+%li(%rip), %%%s, %%%s\n",addr,reg65[rA],reg65[rT]);
-	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"addq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
-	    else snprintf(asmtext,sizeof asmtext,"addq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
+		snprintf(asmtext,sizeof (asmtext), "plusq %s, %%%s, %%%s\n",prna(addr,inloop),reg65[rA],reg65[rT]);
+	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"plusq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"plusq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
 
             res0=((unsigned __int128)  A)+(unsigned __int128) B;
             if (A_p && B_p) excpt=11;
@@ -585,17 +633,17 @@ addie:
 		A0x=A=(this-1)->res;
 		A_p=(this-1)->res_p;
 		if (rB>=0)
-		    snprintf(asmtext,sizeof (asmtext), "addl %%%s, mem+%li(%rip)\n",reg32[rB],addr);
+		    snprintf(asmtext,sizeof (asmtext), "plusl %%%s, %s\n",reg32[rB],prna(addr,inloop));
 		else
-		    snprintf(asmtext,sizeof (asmtext), "addl $%i, mem+%li(%rip)\n",B,addr);
+		    snprintf(asmtext,sizeof (asmtext), "plusl $%i, %s\n",B,prna(addr,inloop));
 	    } else if (has_mem_) {
 		(this-1)->gen_mem(NULL,4,mem,memp,addr);
 		rB=16;
 		B0x=B=(this-1)->res;
 		B_p=(this-1)->res_p;
-		snprintf(asmtext,sizeof (asmtext), "addl mem+%li(%rip), %%%s, %%%s\n",addr,reg32[rA],reg32[rT]);
-	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"addl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
-	    else snprintf(asmtext,sizeof asmtext,"addl $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
+		snprintf(asmtext,sizeof (asmtext), "plusl %s, %%%s, %%%s\n",prna(addr,inloop),reg32[rA],reg32[rT]);
+	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"plusl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
+	    else snprintf(asmtext,sizeof asmtext,"plusl $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
 
             res0=((unsigned __int128) A0x)+(unsigned __int128) B0x;
             res2=res=res0&0xffffffffull;
@@ -621,9 +669,9 @@ addie:
 		A=(this-1)->res;
 		A_p=(this-1)->res_p;
 		if (rB>=0)
-		    snprintf(asmtext,sizeof (asmtext), "subq %%%s, mem+%li(%rip)\n",reg65[rB],addr);
+		    snprintf(asmtext,sizeof (asmtext), "subq %%%s, %s\n",reg65[rB],prna(addr,inloop));
 		else
-		    snprintf(asmtext,sizeof (asmtext), "subq $%i, mem+%li(%rip)\n",B,addr);
+		    snprintf(asmtext,sizeof (asmtext), "subq $%i, %s\n",B,prna(addr,inloop));
 	    } else  if (has_mem_) {
 		(this-1)->gen_mem(NULL,(op&32768) ? 1 : 8,mem,memp,addr);
 		if (cmpstr[0]=='c' && lrand48()&1) {
@@ -637,8 +685,8 @@ addie:
 			A_p=0;
 			B_p=0;
 		    }
-		    if (rB>=0) snprintf(asmtext,sizeof (asmtext), "%s %%%s, mem+%li(%rip)\n",cmpstr,(op&32768) ? reg8[rB] : reg65[rB],addr);
-		    else snprintf(asmtext,sizeof (asmtext), "%s $%li, mem+%li(%rip)\n",cmpstr,B,addr);
+		    if (rB>=0) snprintf(asmtext,sizeof (asmtext), "%s %%%s, %s\n",cmpstr,(op&32768) ? reg8[rB] : reg65[rB],prna(addr,inloop));
+		    else snprintf(asmtext,sizeof (asmtext), "%s $%li, %s\n",cmpstr,B,prna(addr,inloop));
 	            goto subie;
 		}
 		rB=16;
@@ -652,9 +700,9 @@ addie:
 			A_p=0;
 			B_p=0;
 		    }
-		    snprintf(asmtext,sizeof (asmtext), "%s mem+%li(%rip), %%%s\n",cmpstr,addr,(op&32768) ? reg8[rA] : reg65[rA]);
+		    snprintf(asmtext,sizeof (asmtext), "%s %s, %%%s\n",cmpstr,prna(addr,inloop),(op&32768) ? reg8[rA] : reg65[rA]);
 		} else {
-		    snprintf(asmtext,sizeof (asmtext), "subq mem+%li(%rip), %%%s, %%%s\n",addr,reg65[rA],reg65[rT]);
+		    snprintf(asmtext,sizeof (asmtext), "subq %s, %%%s, %%%s\n",prna(addr,inloop),reg65[rA],reg65[rT]);
 		}
 	    } else if (cmpstr[0]=='c') {
 		if (op&32768) {
@@ -712,9 +760,9 @@ addie:
 		A0x=A=(this-1)->res;
 		A_p=(this-1)->res_p;
 		if (rB>=0)
-		    snprintf(asmtext,sizeof (asmtext), "subl %%%s, mem+%li(%rip)\n",reg32[rB],addr);
+		    snprintf(asmtext,sizeof (asmtext), "subl %%%s, %s\n",reg32[rB],prna(addr,inloop));
 		else
-		    snprintf(asmtext,sizeof (asmtext), "subl $%i, mem+%li(%rip)\n",B,addr);
+		    snprintf(asmtext,sizeof (asmtext), "subl $%i, %s\n",B,prna(addr,inloop));
 	    } else if (has_mem_) {
 		(this-1)->gen_mem(NULL,(op&32768) ? 2 : 4,mem,memp,addr);
 		if (cmpstr[0]=='c' && lrand48()&1) {
@@ -729,8 +777,8 @@ addie:
 			A_p=0;
 			B_p=0;
 		    }
-		    if (rB>=0) snprintf(asmtext,sizeof (asmtext), "%s %%%s, mem+%li(%rip)\n",cmpstr,(op&32768) ? reg16[rB] : reg32[rB],addr);
-		    else snprintf(asmtext,sizeof (asmtext), "%s $%i, mem+%i(%rip)\n",cmpstr,B0x,addr);
+		    if (rB>=0) snprintf(asmtext,sizeof (asmtext), "%s %%%s, %s\n",cmpstr,(op&32768) ? reg16[rB] : reg32[rB],prna(addr,inloop));
+		    else snprintf(asmtext,sizeof (asmtext), "%s $%i, mem+%i(%rip)\n",cmpstr,B0x,prna(addr,inloop));
 	            goto subie32;
 		}
 		rB=16;
@@ -744,9 +792,9 @@ addie:
 			A_p=0;
 			B_p=0;
 		    }
-		    snprintf(asmtext,sizeof (asmtext), "%s mem+%li(%rip), %%%s\n",cmpstr,addr,(op&16384) ? reg32[rA] : reg16[rA]);
+		    snprintf(asmtext,sizeof (asmtext), "%s %s, %%%s\n",cmpstr,prna(addr,inloop),(op&16384) ? reg32[rA] : reg16[rA]);
 		} else {
-		    snprintf(asmtext,sizeof (asmtext), "subl mem+%li(%rip), %%%s, %%%s\n",addr,reg32[rA],reg32[rT]);
+		    snprintf(asmtext,sizeof (asmtext), "subl %s, %%%s, %%%s\n",prna(addr,inloop),reg32[rA],reg32[rT]);
 		}
 	    } else if (cmpstr[0]=='c') {
 		if (op&32768) {
@@ -786,29 +834,29 @@ subie32:
 		A=(this-1)->res;
 		A_p=(this-1)->res_p;
 		if (rB>=0)
-		    snprintf(asmtext,sizeof (asmtext), "andq %%%s, mem+%li(%rip)\n",reg65[rB],addr);
+		    snprintf(asmtext,sizeof (asmtext), "andq %%%s, %s\n",reg65[rB],prna(addr,inloop));
 		else
-		    snprintf(asmtext,sizeof (asmtext), "andq $%i, mem+%li(%rip)\n",B,addr);
+		    snprintf(asmtext,sizeof (asmtext), "andq $%i, %s\n",B,prna(addr,inloop));
 	    } else if (has_mem_) {
 		(this-1)->gen_mem(NULL,8,mem,memp,addr);
 		if (cmpstr[0]=='t' && lrand48()&1) {
 		    rA=16;
 		    A=(this-1)->res;
 		    A_p=(this-1)->res_p;
-		    if (rB>=0) snprintf(asmtext,sizeof (asmtext), "%s %%%s, mem+%li(%rip)\n",cmpstr,reg65[rB],addr);
-		    else snprintf(asmtext,sizeof (asmtext), "%s $%li, mem+%li(%rip)\n",cmpstr,B,addr);
+		    if (rB>=0) snprintf(asmtext,sizeof (asmtext), "%s %%%s, %s\n",cmpstr,reg65[rB],prna(addr,inloop));
+		    else snprintf(asmtext,sizeof (asmtext), "%s $%li, %s\n",cmpstr,B,prna(addr,inloop));
 	            goto andff;
 		}
 		rB=16;
 		B=(this-1)->res;
 		B_p=(this-1)->res_p;
 		if (cmpstr[0]=='t') {
-		    snprintf(asmtext,sizeof (asmtext), "%s mem+%li(%rip), %%%s\n",cmpstr,addr,reg65[rA]);
+		    snprintf(asmtext,sizeof (asmtext), "%s %s, %%%s\n",cmpstr,prna(addr,inloop),reg65[rA]);
 		} else {
 		    rB=16;
 		    B=(this-1)->res;
 		    B_p=(this-1)->res_p;
-		    snprintf(asmtext,sizeof (asmtext), "andq mem+%li(%rip), %%%s, %%%s\n",addr,reg65[rA],reg65[rT]);
+		    snprintf(asmtext,sizeof (asmtext), "andq %s, %%%s, %%%s\n",prna(addr,inloop),reg65[rA],reg65[rT]);
 		}
 	    } else if (rB>=0) {
 	        if (cmpstr[0]!='t') snprintf(asmtext,sizeof asmtext,"andq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
@@ -849,9 +897,9 @@ andff:
 		A0x=A=(this-1)->res;
 		A_p=(this-1)->res_p;
 		if (rB>=0)
-		    snprintf(asmtext,sizeof (asmtext), "andl %%%s, mem+%li(%rip)\n",reg32[rB],addr);
+		    snprintf(asmtext,sizeof (asmtext), "andl %%%s, %s\n",reg32[rB],prna(addr,inloop));
 		else
-		    snprintf(asmtext,sizeof (asmtext), "andl $%i, mem+%li(%rip)\n",B,addr);
+		    snprintf(asmtext,sizeof (asmtext), "andl $%i, %s\n",B,prna(addr,inloop));
 	    } else if (has_mem_) {
 		(this-1)->gen_mem(NULL,4,mem,memp,addr);
 		if (cmpstr[0]=='t' && lrand48()&1) {
@@ -859,8 +907,8 @@ andff:
 		    A=(this-1)->res;
 		    A_p=(this-1)->res_p;
 		    A0x=A;
-		    if (rB>=0) snprintf(asmtext,sizeof (asmtext), "%s %%%s, mem+%li(%rip)\n",cmpstr,reg32[rB],addr);
-		    else snprintf(asmtext,sizeof (asmtext), "%s $%li, mem+%li(%rip)\n",cmpstr,B,addr);
+		    if (rB>=0) snprintf(asmtext,sizeof (asmtext), "%s %%%s, %s\n",cmpstr,reg32[rB],prna(addr,inloop));
+		    else snprintf(asmtext,sizeof (asmtext), "%s $%li, %s\n",cmpstr,B,prna(addr,inloop));
 	            goto andffl;
 		}
 		rB=16;
@@ -868,12 +916,12 @@ andff:
 		B_p=(this-1)->res_p;
 		B0x=B;
 		if (cmpstr[0]=='t') {
-		    snprintf(asmtext,sizeof (asmtext), "%s mem+%li(%rip), %%%s\n",cmpstr,addr,reg32[rA]);
+		    snprintf(asmtext,sizeof (asmtext), "%s %s, %%%s\n",cmpstr,prna(addr,inloop),reg32[rA]);
 		} else {
 		    rB=16;
 		    B0x=B=(this-1)->res;
 		    B_p=(this-1)->res_p;
-		    snprintf(asmtext,sizeof (asmtext), "andl mem+%li(%rip), %%%s, %%%s\n",addr,reg32[rA],reg32[rT]);
+		    snprintf(asmtext,sizeof (asmtext), "andl %s, %%%s, %%%s\n",prna(addr,inloop),reg32[rA],reg32[rT]);
 		}
 	    } else if (rB>=0) {
 	        if (cmpstr[0]!='t') snprintf(asmtext,sizeof asmtext,"andl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
@@ -895,15 +943,15 @@ andffl:
 		A=(this-1)->res;
 		A_p=(this-1)->res_p;
 		if (rB>=0)
-		    snprintf(asmtext,sizeof (asmtext), "orq %%%s, mem+%li(%rip)\n",reg65[rB],addr);
+		    snprintf(asmtext,sizeof (asmtext), "orq %%%s, %s\n",reg65[rB],prna(addr,inloop));
 		else
-		    snprintf(asmtext,sizeof (asmtext), "orq $%i, mem+%li(%rip)\n",B,addr);
+		    snprintf(asmtext,sizeof (asmtext), "orq $%i, %s\n",B,prna(addr,inloop));
 	    } else if (has_mem_) {
 		(this-1)->gen_mem(NULL,8,mem,memp,addr);
 		rB=16;
 		B=(this-1)->res;
 		B_p=(this-1)->res_p;
-		snprintf(asmtext,sizeof (asmtext), "orq mem+%li(%rip), %%%s, %%%s\n",addr,reg65[rA],reg65[rT]);
+		snprintf(asmtext,sizeof (asmtext), "orq %s, %%%s, %%%s\n",prna(addr,inloop),reg65[rA],reg65[rT]);
 	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"orq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"orq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
 
@@ -932,15 +980,15 @@ andffl:
 		A0x=A=(this-1)->res;
 		A_p=(this-1)->res_p;
 		if (rB>=0)
-		    snprintf(asmtext,sizeof (asmtext), "orl %%%s, mem+%li(%rip)\n",reg32[rB],addr);
+		    snprintf(asmtext,sizeof (asmtext), "orl %%%s, %s\n",reg32[rB],prna(addr,inloop));
 		else
-		    snprintf(asmtext,sizeof (asmtext), "orl $%i, mem+%li(%rip)\n",B,addr);
+		    snprintf(asmtext,sizeof (asmtext), "orl $%i, %s\n",B,prna(addr,inloop));
 	    } else if (has_mem_) {
 		(this-1)->gen_mem(NULL,4,mem,memp,addr);
 		rB=16;
 		B0x=B=(this-1)->res;
 		B_p=(this-1)->res_p;
-		snprintf(asmtext,sizeof (asmtext), "orl mem+%li(%rip), %%%s, %%%s\n",addr,reg32[rA],reg32[rT]);
+		snprintf(asmtext,sizeof (asmtext), "orl %s, %%%s, %%%s\n",prna(addr,inloop),reg32[rA],reg32[rT]);
 	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"orl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"orl $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
 
@@ -956,15 +1004,15 @@ andffl:
 		A=(this-1)->res;
 		A_p=(this-1)->res_p;
 		if (rB>=0)
-		    snprintf(asmtext,sizeof (asmtext), "xorq %%%s, mem+%li(%rip)\n",reg65[rB],addr);
+		    snprintf(asmtext,sizeof (asmtext), "xorq %%%s, %s\n",reg65[rB],prna(addr,inloop));
 		else
-		    snprintf(asmtext,sizeof (asmtext), "xorq $%i, mem+%li(%rip)\n",B,addr);
+		    snprintf(asmtext,sizeof (asmtext), "xorq $%i, %s\n",B,prna(addr,inloop));
 	    } else if (has_mem_) {
 		(this-1)->gen_mem(NULL,8,mem,memp,addr);
 		rB=16;
 		B=(this-1)->res;
 		B_p=(this-1)->res_p;
-		snprintf(asmtext,sizeof (asmtext), "xorq mem+%li(%rip), %%%s, %%%s\n",addr,reg65[rA],reg65[rT]);
+		snprintf(asmtext,sizeof (asmtext), "xorq %s, %%%s, %%%s\n",prna(addr,inloop),reg65[rA],reg65[rT]);
 	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"xorq %%%s, %%%s, %%%s\n",reg65[rB],reg65[rA],reg65[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"xorq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
 
@@ -993,15 +1041,15 @@ andffl:
 		A0x=A=(this-1)->res;
 		A_p=(this-1)->res_p;
 		if (rB>=0)
-		    snprintf(asmtext,sizeof (asmtext), "xorl %%%s, mem+%li(%rip)\n",reg32[rB],addr);
+		    snprintf(asmtext,sizeof (asmtext), "xorl %%%s, %s\n",reg32[rB],prna(addr,inloop));
 		else
-		    snprintf(asmtext,sizeof (asmtext), "xorl $%i, mem+%li(%rip)\n",B,addr);
+		    snprintf(asmtext,sizeof (asmtext), "xorl $%i, %s\n",B,prna(addr,inloop));
 	    } else if (has_mem_) {
 		(this-1)->gen_mem(NULL,4,mem,memp,addr);
 		rB=16;
 		B0x=B=(this-1)->res;
 		B_p=(this-1)->res_p;
-		snprintf(asmtext,sizeof (asmtext), "xorl mem+%li(%rip), %%%s, %%%s\n",addr,reg32[rA],reg32[rT]);
+		snprintf(asmtext,sizeof (asmtext), "xorl %s, %%%s, %%%s\n",prna(addr,inloop),reg32[rA],reg32[rT]);
 	    } else if (rB>=0) snprintf(asmtext,sizeof asmtext,"xorl %%%s, %%%s, %%%s\n",reg32[rB],reg32[rA],reg32[rT]);
 	    else snprintf(asmtext,sizeof asmtext,"xorl $%i, %%%s, %%%s\n",(int) B,reg32[rA],reg32[rT]);
 
@@ -1015,7 +1063,21 @@ andffl:
 	    else snprintf(asmtext,sizeof asmtext,"shlq $%i, %%%s, %%%s\n",(int) B,reg65[rA],reg65[rT]);
 
             res0=((__int128) A)<<(B&0x3f);
+	    
             res1=res=res0;
+	    if ((B&0xe00)==0x200 || (B&0xe00)==0x400 || (B&0xe00)==0x800) {
+	            unsigned long long msk=0;
+		    res=0;
+		    if (B&0x80) res=A;
+		    if (B&0x100) res=(A&0x80000000) ? 0xffffffff00000000ull : 0ull;
+		    if (B&0x200) msk|=(A&0xffff0000)>>16;
+		    if (B&0x400) msk|=((A&0xff000000)>>16)|((A&0xff0000));
+		    if (B&0x800) msk|=(A&0xffff0000);
+		    res=(res&~msk)|(res0&msk);
+		    res1=res;
+		    res0&=0xffffffffffffffffull<<63<<1;
+		    res0|=res;//res1?
+	    }
             flg64(res0);
 	    if (has_mem_) {
 		rtn=false;
@@ -1029,6 +1091,20 @@ andffl:
 
             res0=((__int128) A0x)<<(B0x&0x3f);
             res2=res=res0&0xffffffffull;
+            if ((B&0xe00)==0x200 || (B&0xe00)==0x400 || (B&0xe00)==0x800) {
+	            unsigned long long msk=0;
+		    res=0;
+		    if (B&0x80) res=A;
+		    if (B&0x100) res=(A&0x80000000) ? 0xffffffff00000000ull : 0ull;
+		    if (B&0x200) msk|=(A&0xffff0000)>>16;
+		    if (B&0x400) msk|=((A&0xff000000)>>16)|((A&0xff0000));
+		    if (B&0x800) msk|=(A&0xffff0000);
+		    res=(res&~msk)|(res0&msk);
+		    res1=res;
+		    res0&=0xffffffffffffffffull<<63<<1;
+		    res0|=res;//res1?
+	    } 
+            if ((B&0x100) && (A&0x80000000) { res|=0xffffffff00000000ull; res1=res; }
             flg32(res0);
 	    if (has_mem_) {
 		rtn=false;
@@ -1042,7 +1118,20 @@ andffl:
 
             res0=(B&0x3f) ?((__int128)  A) >>((B&0x3f)-1) :((__int128)  A)<<1;
             res1=res=(res0>>1);
-            flg64(((res0>>1)&0xffffffffffffffffull)|((res0&0x1) ? one<<1:0));
+            if ((B&0xe00)==0x200 || (B&0xe00)==0x400 || (B&0xe00)==0x800) {
+	            unsigned long long msk=0;
+		    res=0;
+		    if (B&0x80) res=A;
+		    if (B&0x100) res=(A&0x80000000) ? 0xffffffff00000000ull : 0ull;
+		    if (B&0x200) msk|=(A&0xffff0000)>>16;
+		    if (B&0x400) msk|=((A&0xff000000)>>16)|((A&0xff0000));
+		    if (B&0x800) msk|=(A&0xffff0000);
+		    res=(res&~msk)|((res0>>1)&msk);
+		    res1=res;
+		    res0&=(0xffffffffffffffffull<<63<<2)|1;
+		    res0|=(__int128 ) res<<1;
+	    } 
+	    flg64(((res0>>1)&0xffffffffffffffffull)|((res0&0x1) ? one<<1:0));
 	    if (has_mem_) {
 		rtn=false;
 		(*(this-1))=*this;
@@ -1055,7 +1144,22 @@ andffl:
 
             res0=(B0x&0x3f) ?((__int128)A0x) >>((B0x&0x3f)-1) :((__int128)  A0x)<<1;
             res=(res0>>1)&0xffffffffull;
-            flg32(((res0>>1)&0xffffffffu)|((res0&0x1)<<32));
+            if ((B&0xe00)==0x200 || (B&0xe00)==0x400 || (B&0xe00)==0x800) {
+	            unsigned long long msk=0;
+		    res=0;
+		    if (B&0x80) res=A;
+		    if (B&0x100) res=(A&0x80000000) ? 0xffffffff00000000ull : 0ull;
+		    if (B&0x200) msk|=(A&0xffff0000)>>16;
+		    if (B&0x400) msk|=((A&0xff000000)>>16)|((A&0xff0000));
+		    if (B&0x800) msk|=(A&0xffff0000);
+		    res=(res&~msk)|((res0>>1)&msk);
+		    res1=res;
+		    res0&=(0xffffffffffffffffull<<63<<2)|1;
+		    res0|=res<<1;//res1?
+	    }  
+	    if ((B&0x100) && (A&0x80000000) { res|=0xffffffff00000000ull; res1=res; }
+  
+	    flg32(((res0>>1)&0xffffffffu)|((res0&0x1)<<32));
 	    if (has_mem_) {
 		rtn=false;
 		(*(this-1))=*this;
@@ -1068,7 +1172,20 @@ andffl:
 
             res0=(B&0x3f) ?((__int128) A1) >>((B&0x3f)-1) :((__int128)  A1)<<1;
             res1=res=(res0>>1);
-            flg64(((res0>>1)&0xffffffffffffffffull)|((res0&0x1) ? one<<1 : 0));
+       	    if ((B&0xe00)==0x200 || (B&0xe00)==0x400 || (B&0xe00)==0x800) {
+	            unsigned long long msk=0;
+		    res=0;
+		    if (B&0x80) res=A;
+		    if (B&0x100) res=(A&0x80000000) ? 0xffffffff00000000ull : 0ull;
+		    if (B&0x200) msk|=(A&0xffff0000)>>16;
+		    if (B&0x400) msk|=((A&0xff000000)>>16)|((A&0xff0000));
+		    if (B&0x800) msk|=(A&0xffff0000);
+		    res=(res&~msk)|((res0>>1)&msk);
+		    res1=res;
+		    res0&=(0xffffffffffffffffull<<63<<2)|1;
+		    res0|=(__int128) res<<1;
+	    }     
+	    flg64(((res0>>1)&0xffffffffffffffffull)|((res0&0x1) ? one<<1 : 0));
 	    if (has_mem_) {
 		rtn=false;
 		(*(this-1))=*this;
@@ -1081,7 +1198,21 @@ andffl:
 
             res0=(B0x&0x3f) ? ((__int128) A0) >>((B0x&0x3f)-1) :((__int128) A0)<<1;
             res2=res=(res0>>1)&0xffffffffull;
-            flg32(((res0>>1)&0xffffffffu)|((res0&0x1)<<32));
+            if ((B&0xe00)==0x200 || (B&0xe00)==0x400 || (B&0xe00)==0x800) {
+	            unsigned long long msk=0;
+		    res=0;
+		    if (B&0x80) res=A;
+		    if (B&0x100) res=(A&0x80000000) ? 0xffffffff00000000ull : 0ull;
+		    if (B&0x200) msk|=(A&0xffff0000)>>16;
+		    if (B&0x400) msk|=((A&0xff000000)>>16)|((A&0xff0000));
+		    if (B&0x800) msk|=(A&0xffff0000);
+		    res=(res&~msk)|((res0>>1)&msk);
+		    res1=res;
+		    res0&=(0xffffffffffffffffull<<63<<2)|1;
+		    res0|=res<<1;
+	    }  
+	    if ((B&0x100) && (A&0x80000000) { res|=0xffffffff00000000ull; res1=res; }
+	    flg32(((res0>>1)&0xffffffffu)|((res0&0x1)<<32));
 	    if (has_mem_) {
 		rtn=false;
 		(*(this-1))=*this;
@@ -1091,14 +1222,14 @@ andffl:
             case 32:
 	    if (has_mem_==2) {
 		(this-1)->gen_memw(NULL,8,mem,memp,addr,A,A_p);
-		snprintf((*(this-1)).asmtext,sizeof (asmtext), "movq %%%s, mem+%li(%rip)\n",reg65[rA],addr);
+		snprintf((*(this-1)).asmtext,sizeof (asmtext), "movq %%%s, %s\n",reg65[rA],prna(addr,inloop));
 		(this-1)->rT=-1;
 		(this-1)->flags=flags_in;
 		rtn=false;
 		break;
 	    } else if (has_mem_) {
 		(this-1)->gen_mem(NULL,8,mem,memp,addr);
-		snprintf((*(this-1)).asmtext,sizeof (asmtext), "movq mem+%li(%rip), %%%s\n",addr,reg65[rT]);
+		snprintf((*(this-1)).asmtext,sizeof (asmtext), "movq %s, %%%s\n",prna(addr,inloop),reg65[rT]);
                 (*(this-1)).rT=rT;
 		rtn=false;
                 (this-1)->flags=flags_in;
@@ -1112,14 +1243,14 @@ andffl:
             case 33:
 	    if (has_mem_==2) {
 		(this-1)->gen_memw(NULL,4,mem,memp,addr,A,A_p);
-		snprintf((*(this-1)).asmtext,sizeof (asmtext), "movl %%%s, mem+%li(%rip)\n",reg32[rA],addr);
+		snprintf((*(this-1)).asmtext,sizeof (asmtext), "movl %%%s, %s\n",reg32[rA],prna(addr,inloop));
 		(this-1)->rT=-1;
 		(this-1)->flags=flags_in;
 		rtn=false;
 		break;
 	    } else if (has_mem_) {
 		(this-1)->gen_mem(NULL,4,mem,memp,addr);
-		snprintf((*(this-1)).asmtext,sizeof (asmtext), "movl mem+%li(%rip), %%%s\n",addr,reg32[rT]);
+		snprintf((*(this-1)).asmtext,sizeof (asmtext), "movl %s, %%%s\n",prna(addr,inloop),reg32[rT]);
                 (*(this-1)).rT=rT;
 		rtn=false;
                 (this-1)->flags=flags_in;
@@ -1133,7 +1264,7 @@ andffl:
             case 34:
 	    if (has_mem_==2) {
 		(this-1)->gen_memw(NULL,2,mem,memp,addr,A,A_p);
-		snprintf((*(this-1)).asmtext,sizeof (asmtext), "movw %%%s, mem+%li(%rip)\n",reg16[rA],addr);
+		snprintf((*(this-1)).asmtext,sizeof (asmtext), "movw %%%s, %s\n",reg16[rA],prna(addr,inloop));
 		(this-1)->rT=-1;
 		(this-1)->flags=flags_in;
 		rtn=false;
@@ -1158,7 +1289,7 @@ andffl:
 	    }
 	    if (has_mem_==2) {
 		(this-1)->gen_memw(NULL,1,mem,memp,addr,A,A_p);
-		snprintf((*(this-1)).asmtext,sizeof (asmtext), "movb %%%s, mem+%li(%rip)\n",reg8[rA],addr);
+		snprintf((*(this-1)).asmtext,sizeof (asmtext), "movb %%%s, %s\n",reg8[rA],prna(addr,inloop));
 		(this-1)->rT=-1;
 		(this-1)->flags=flags_in;
 		rtn=false;
@@ -1181,7 +1312,7 @@ andffl:
             case 36:
 	    if (has_mem_) {
 		(this-1)->gen_mem(NULL,1,mem,memp,addr);
-		snprintf((*(this-1)).asmtext,sizeof (asmtext), "movzbl mem+%li(%rip), %%%s\n",addr,reg32[rT]);
+		snprintf((*(this-1)).asmtext,sizeof (asmtext), "movzbl %s, %%%s\n",prna(addr,inloop),reg32[rT]);
                 (*(this-1)).rT=rT;
 		rtn=false;
 		(*(this-1)).flags=flags_in;
@@ -1200,7 +1331,7 @@ andffl:
             case 37:
 	    if (has_mem_) {
 		(this-1)->gen_mem(NULL,2,mem,memp,addr);
-		snprintf((*(this-1)).asmtext,sizeof (asmtext), "movzwl mem+%li(%rip), %%%s\n",addr,reg32[rT]);
+		snprintf((*(this-1)).asmtext,sizeof (asmtext), "movzwl %s, %%%s\n",prna(addr,inloop),reg32[rT]);
                 (*(this-1)).rT=rT;
 		rtn=false;
 		(*(this-1)).flags=flags_in;
@@ -1405,7 +1536,14 @@ andffl:
 		(*(this-1))=*this;
 	    }
             break;
-        }
+        } else {
+           snprintf(asmtext, sizeof amstext, "j%s LaBl%i\nLaBl%i:\n",COND(op&0xf),lbl,lbl);
+           lbl++;
+           res=0;
+           rT=-1;
+           flags=flags_in; 
+           rtn=false;
+      }
     } else if (!alt) {
         __int128 AS=(long long) A;
         unsigned __int128 A0=A;
@@ -1504,7 +1642,7 @@ andffl:
     return rtn;
 }
     
-bool req::exec(req *prev1,hcont *contx,char *mem,char *memp) {
+bool req::exec(req *prev1,hcont *contx,char *mem,char *memp,int itcnt) {
     res_p=0;
     res=0;
     A=contx->reg_gen[rA&0x1f];
@@ -1513,14 +1651,14 @@ bool req::exec(req *prev1,hcont *contx,char *mem,char *memp) {
     B_p=contx->reg_genP[rB&0x1f];
     flags_in=contx->flags;
     if (has_mem==1) {
-        gen_mem(NULL,op,mem,memp,addr);
+        gen_mem(NULL,op,mem,memp,addr+itcnt*8);
         contx->reg_gen[rT&0x1f]=res;
         contx->reg_genP[rT&0x1f]=res_p;
 	return false;
     } else if (has_mem==2) {
         res=contx->reg_gen[rA&0x1f];
         res_p=contx->reg_genP[rA&0x1f];
-        gen_memw(NULL,op,mem,memp,addr,res,res_p);
+        gen_memw(NULL,op,mem,memp,addr+itcnt*8,res,res_p);
 	return false;
     } else if (!alt && !mul) {
         __int128 res0;
@@ -2019,381 +2157,7 @@ bool req::testj(int code) {
     }
 }
 
-unsigned get_retfl_data(Vheptane_core *vlTOPp) {
 
-            
-           return   (((((((((((((((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__0__KET____DOT__ram_mod__DOT__retA_en)
-                                 ? vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__0__KET____DOT__ram_mod__DOT__ramA_mod__DOT__ram
-                                [vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__0__KET____DOT__ram_mod__DOT__ramA_mod__DOT__retireRead_addr_reg]
-                                 : 0U) & ((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__0__KET____DOT__ram_mod__DOT__retA_en)
-                                           ? 0x3fU : 0U)) 
-                              | (((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__0__KET____DOT__ram_mod__DOT__retB_en)
-                                   ? vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__0__KET____DOT__ram_mod__DOT__ramB_mod__DOT__ram
-                                  [vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__0__KET____DOT__ram_mod__DOT__ramB_mod__DOT__retireRead_addr_reg]
-                                   : 0U) & ((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__0__KET____DOT__ram_mod__DOT__retB_en)
-                                             ? 0x3fU
-                                             : 0U))) 
-                             & (IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT____pinNumber8__en2)) 
-                            | (((((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__1__KET____DOT__ram_mod__DOT__retA_en)
-                                   ? vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__1__KET____DOT__ram_mod__DOT__ramA_mod__DOT__ram
-                                  [vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__1__KET____DOT__ram_mod__DOT__ramA_mod__DOT__retireRead_addr_reg]
-                                   : 0U) & ((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__1__KET____DOT__ram_mod__DOT__retA_en)
-                                             ? 0x3fU
-                                             : 0U)) 
-                                | (((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__1__KET____DOT__ram_mod__DOT__retB_en)
-                                     ? vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__1__KET____DOT__ram_mod__DOT__ramB_mod__DOT__ram
-                                    [vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__1__KET____DOT__ram_mod__DOT__ramB_mod__DOT__retireRead_addr_reg]
-                                     : 0U) & ((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__1__KET____DOT__ram_mod__DOT__retB_en)
-                                               ? 0x3fU
-                                               : 0U))) 
-                               & (IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT____pinNumber8__en4))) 
-                           | (((((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__2__KET____DOT__ram_mod__DOT__retA_en)
-                                  ? vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__2__KET____DOT__ram_mod__DOT__ramA_mod__DOT__ram
-                                 [vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__2__KET____DOT__ram_mod__DOT__ramA_mod__DOT__retireRead_addr_reg]
-                                  : 0U) & ((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__2__KET____DOT__ram_mod__DOT__retA_en)
-                                            ? 0x3fU
-                                            : 0U)) 
-                               | (((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__2__KET____DOT__ram_mod__DOT__retB_en)
-                                    ? vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__2__KET____DOT__ram_mod__DOT__ramB_mod__DOT__ram
-                                   [vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__2__KET____DOT__ram_mod__DOT__ramB_mod__DOT__retireRead_addr_reg]
-                                    : 0U) & ((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__2__KET____DOT__ram_mod__DOT__retB_en)
-                                              ? 0x3fU
-                                              : 0U))) 
-                              & (IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT____pinNumber8__en6))) 
-                          | (((((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__3__KET____DOT__ram_mod__DOT__retA_en)
-                                 ? vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__3__KET____DOT__ram_mod__DOT__ramA_mod__DOT__ram
-                                [vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__3__KET____DOT__ram_mod__DOT__ramA_mod__DOT__retireRead_addr_reg]
-                                 : 0U) & ((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__3__KET____DOT__ram_mod__DOT__retA_en)
-                                           ? 0x3fU : 0U)) 
-                              | (((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__3__KET____DOT__ram_mod__DOT__retB_en)
-                                   ? vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__3__KET____DOT__ram_mod__DOT__ramB_mod__DOT__ram
-                                  [vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__3__KET____DOT__ram_mod__DOT__ramB_mod__DOT__retireRead_addr_reg]
-                                   : 0U) & ((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__3__KET____DOT__ram_mod__DOT__retB_en)
-                                             ? 0x3fU
-                                             : 0U))) 
-                             & (IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT____pinNumber8__en8))) 
-                         | (((((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__4__KET____DOT__ram_mod__DOT__retA_en)
-                                ? vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__4__KET____DOT__ram_mod__DOT__ramA_mod__DOT__ram
-                               [vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__4__KET____DOT__ram_mod__DOT__ramA_mod__DOT__retireRead_addr_reg]
-                                : 0U) & ((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__4__KET____DOT__ram_mod__DOT__retA_en)
-                                          ? 0x3fU : 0U)) 
-                             | (((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__4__KET____DOT__ram_mod__DOT__retB_en)
-                                  ? vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__4__KET____DOT__ram_mod__DOT__ramB_mod__DOT__ram
-                                 [vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__4__KET____DOT__ram_mod__DOT__ramB_mod__DOT__retireRead_addr_reg]
-                                  : 0U) & ((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__4__KET____DOT__ram_mod__DOT__retB_en)
-                                            ? 0x3fU
-                                            : 0U))) 
-                            & (IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT____pinNumber8__en10))) 
-                        | (((((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__5__KET____DOT__ram_mod__DOT__retA_en)
-                               ? vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__5__KET____DOT__ram_mod__DOT__ramA_mod__DOT__ram
-                              [vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__5__KET____DOT__ram_mod__DOT__ramA_mod__DOT__retireRead_addr_reg]
-                               : 0U) & ((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__5__KET____DOT__ram_mod__DOT__retA_en)
-                                         ? 0x3fU : 0U)) 
-                            | (((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__5__KET____DOT__ram_mod__DOT__retB_en)
-                                 ? vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__5__KET____DOT__ram_mod__DOT__ramB_mod__DOT__ram
-                                [vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__5__KET____DOT__ram_mod__DOT__ramB_mod__DOT__retireRead_addr_reg]
-                                 : 0U) & ((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__5__KET____DOT__ram_mod__DOT__retB_en)
-                                           ? 0x3fU : 0U))) 
-                           & (IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT____pinNumber8__en12))) 
-                       | (((((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__6__KET____DOT__ram_mod__DOT__retA_en)
-                              ? vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__6__KET____DOT__ram_mod__DOT__ramA_mod__DOT__ram
-                             [vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__6__KET____DOT__ram_mod__DOT__ramA_mod__DOT__retireRead_addr_reg]
-                              : 0U) & ((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__6__KET____DOT__ram_mod__DOT__retA_en)
-                                        ? 0x3fU : 0U)) 
-                           | (((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__6__KET____DOT__ram_mod__DOT__retB_en)
-                                ? vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__6__KET____DOT__ram_mod__DOT__ramB_mod__DOT__ram
-                               [vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__6__KET____DOT__ram_mod__DOT__ramB_mod__DOT__retireRead_addr_reg]
-                                : 0U) & ((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__6__KET____DOT__ram_mod__DOT__retB_en)
-                                          ? 0x3fU : 0U))) 
-                          & (IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT____pinNumber8__en14))) 
-                      | (((((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__7__KET____DOT__ram_mod__DOT__retA_en)
-                             ? vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__7__KET____DOT__ram_mod__DOT__ramA_mod__DOT__ram
-                            [vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__7__KET____DOT__ram_mod__DOT__ramA_mod__DOT__retireRead_addr_reg]
-                             : 0U) & ((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__7__KET____DOT__ram_mod__DOT__retA_en)
-                                       ? 0x3fU : 0U)) 
-                          | (((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__7__KET____DOT__ram_mod__DOT__retB_en)
-                               ? vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__7__KET____DOT__ram_mod__DOT__ramB_mod__DOT__ram
-                              [vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__7__KET____DOT__ram_mod__DOT__ramB_mod__DOT__retireRead_addr_reg]
-                               : 0U) & ((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__7__KET____DOT__ram_mod__DOT__retB_en)
-                                         ? 0x3fU : 0U))) 
-                         & (IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT____pinNumber8__en16))) 
-                     | (((((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__8__KET____DOT__ram_mod__DOT__retA_en)
-                            ? vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__8__KET____DOT__ram_mod__DOT__ramA_mod__DOT__ram
-                           [vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__8__KET____DOT__ram_mod__DOT__ramA_mod__DOT__retireRead_addr_reg]
-                            : 0U) & ((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__8__KET____DOT__ram_mod__DOT__retA_en)
-                                      ? 0x3fU : 0U)) 
-                         | (((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__8__KET____DOT__ram_mod__DOT__retB_en)
-                              ? vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__8__KET____DOT__ram_mod__DOT__ramB_mod__DOT__ram
-                             [vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__8__KET____DOT__ram_mod__DOT__ramB_mod__DOT__retireRead_addr_reg]
-                              : 0U) & ((IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT__rams__BRA__8__KET____DOT__ram_mod__DOT__retB_en)
-                                        ? 0x3fU : 0U))) 
-                        & (IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT__ram_mod__DOT____pinNumber8__en18))) 
-                    & (IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT____pinNumber8__en1)) 
-                   & (IData)(vlTOPp->heptane_core__DOT__bck_mod__DOT__regS_mod__DOT____pinNumber8__en1));
-}
-
-void req_set(Vheptane_core *top,req *reqs,char *mem,char *memp) {
-    static unsigned long long addr[64];
-    static unsigned pos=0;
-    static unsigned pos_R=0;
-    static bool R=0;
-    static unsigned sigs[64];
-    static unsigned src[64];
-    static unsigned delay=0;
-    static bool bmr=0;
-    if (top->rbusOut_want && top->rbusOut_can) {
-	addr[pos]=top->rbusOut_address;
-	sigs[pos]=top->rbusOut_signals;
-	src[pos]=top->rbusOut_src_req;
-	if (pos_R==pos) delay=0;
-	pos++;
-	pos&=0x3f;
-    }
-    if (pos_R!=pos) delay++;
-    if (pos_R!=pos && delay>10) {
-	unsigned signals=(1<<(rbusD_mem_reply))|(1<<(rbusD_used));
-	top->rbusDIn_signals=signals;
-	top->rbusDIn_dst_req=src[pos_R];
-	if (!R) {
-	    memcpy((char *) top->rbusDIn_data,mem+(addr[pos_R]<<7),64);
-	    top->rbusDIn_dataPTR=mem[addr[pos_R]<<1];
-	} else {
-	    memcpy((char *) top->rbusDIn_data,mem+((addr[pos_R]<<7)+64),64);
-	    top->rbusDIn_dataPTR=mem[(addr[pos_R]<<1)+1];
-	    top->rbusDIn_signals|=1<<(rbusD_second);
-	}
-	printf("retn 0x%lx,\t%i, 0x%x\n",addr[pos_R],R,src[pos_R]);
-	R=!R;
-	if (!R) pos_R++;
-	pos_R&=0x3f;
-    } else {
-	top->rbusDIn_signals=0;
-    }
-
-    if (top->rbusDOut_can && top->rbusDOut_want) {
-	//unsigned long long address=<<7;
-	if (!(top->rbusDOut_signals&(1<<(rbusD_write_back)))) {
-            goto end_DOut;
-	}
-	if (!(top->rbusDOut_signals&(1<<(rbusD_second)))) {
-	    memcpy(mem+(addr[pos_R]<<7),(char *) top->rbusDOut_data,64);
-	    mem[addr[pos_R]<<1]=top->rbusDIn_dataPTR;
-        } else {
-	    memcpy(mem+((addr[pos_R]<<7)+64),(char *) top->rbusDOut_data,64);
-	    mem[(addr[pos_R]<<1)+1]=top->rbusDIn_dataPTR;
-	}
-        end_DOut:;
-    }
-    top->rbusOut_can=1;
-    if (top->rbusOut_want) printf("want 0x%lx,\t%i,\t%i\n",top->rbusOut_address,pos,pos_R);
-    if (top->heptane_core__DOT__dc2_rdEnX_reg4) printf("dc2_rdEnX_reg4 0x%lx, 0x%x\n",top->heptane_core__DOT__dc2_rd_addr_reg3,
-		    top->heptane_core__DOT__dc2_req_rd_reg4);
-    if (top->heptane_core__DOT__req_en_reg) printf("wantR 0x%lx,\t%i\n",top->heptane_core__DOT__req_addr_reg,
-	top->heptane_core__DOT__req_slot_reg);
-    if (bmr) printf("insert 0x%lx\n",
-	top->heptane_core__DOT__front_mod__DOT__cc_mod__DOT__write_IP_reg);
-    if (top->heptane_core__DOT__front_mod__DOT__bus_match_reg) bmr=1;
-    else bmr=0;
-    if (top->heptane_core__DOT__insBus_en) 
-	    printf("insBus 0x%x, 0x%#8x%#8x%#8x%#8x, %i\n",top->heptane_core__DOT__dc2_req_rd_reg5,
-	top->heptane_core__DOT__dc2_rdata_reg[3],top->heptane_core__DOT__dc2_rdata_reg[2],
-	top->heptane_core__DOT__dc2_rdata_reg[1],top->heptane_core__DOT__dc2_rdata_reg[0],
-	top->heptane_core__DOT__dc2_rhitB1_reg);
-    static int idr=0;
-    if (top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__alt_bus_hold_reg2) {
-	printf("ABH -> 0x%lx,0x%lx,o 0x%x,is_ins 0x%x:0x%x\n",
-			top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__mOpX0_addrEven_reg,
-			top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__mOpX0_addrOdd_reg,
-                        top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__mOpX0_odd_reg,
-			idr,
-	((top->heptane_core__DOT__bck_mod__DOT__L1D_mod__DOT__ways_gen__BRA__0__KET____DOT__way_mod__DOT__ins_hit&1)<<0)|
-	((top->heptane_core__DOT__bck_mod__DOT__L1D_mod__DOT__ways_gen__BRA__1__KET____DOT__way_mod__DOT__ins_hit&1)<<1)|
-	((top->heptane_core__DOT__bck_mod__DOT__L1D_mod__DOT__ways_gen__BRA__2__KET____DOT__way_mod__DOT__ins_hit&1)<<2)|
-	((top->heptane_core__DOT__bck_mod__DOT__L1D_mod__DOT__ways_gen__BRA__3__KET____DOT__way_mod__DOT__ins_hit&1)<<3)|
-	((top->heptane_core__DOT__bck_mod__DOT__L1D_mod__DOT__ways_gen__BRA__4__KET____DOT__way_mod__DOT__ins_hit&1)<<4)|
-	((top->heptane_core__DOT__bck_mod__DOT__L1D_mod__DOT__ways_gen__BRA__5__KET____DOT__way_mod__DOT__ins_hit&1)<<5)|
-	((top->heptane_core__DOT__bck_mod__DOT__L1D_mod__DOT__ways_gen__BRA__6__KET____DOT__way_mod__DOT__ins_hit&1)<<6)|
-	((top->heptane_core__DOT__bck_mod__DOT__L1D_mod__DOT__ways_gen__BRA__7__KET____DOT__way_mod__DOT__ins_hit&1)<<7));
-    }
-    if (top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__mOpX2_addrEven_reg==0x20001d && top->heptane_core__DOT__bck_mod__DOT__agu_aligned__DOT__mOpX2_en_reg) {
-	printf(" ");
-    }
-    idr=top->heptane_core__DOT__bck_mod__DOT__insert_isData_reg3;
-    if (!top->heptane_core__DOT__insBus_en && top->heptane_core__DOT__dc2_rhit) printf("insBusX 0x%x, 0x%#8x%#8x%#8x%#8x, %i\n",top->heptane_core__DOT__dc2_req_rd_reg5,
-	top->heptane_core__DOT__dc2_rdata_reg[3],top->heptane_core__DOT__dc2_rdata_reg[2],
-	top->heptane_core__DOT__dc2_rdata_reg[1],top->heptane_core__DOT__dc2_rdata_reg[0],
-	top->heptane_core__DOT__dc2_rhitB1_reg);
-    if (top->heptane_core__DOT__front_mod__DOT__cc_mod__DOT__cc_write_wen_reg2)
-	    printf("wenR\n");
-    if (top->heptane_core__DOT__rinsBus_A||top->heptane_core__DOT__rinsBus_B) {
-	    printf("insburst 0x%8x%8x%8x%8x, %i, 0x%lx\n",top->heptane_core__DOT__rbusDIn_data_reg[3],
-	top->heptane_core__DOT__rbusDIn_data_reg[2],top->heptane_core__DOT__rbusDIn_data_reg[1],
-	top->heptane_core__DOT__rbusDIn_data_reg[0],top->heptane_core__DOT__dc2_rdOdd,top->heptane_core__DOT__dc2_addrE0);
-	    if (top->heptane_core__DOT__dc2_hitE0||top->heptane_core__DOT__dc2_hitO0||top->heptane_core__DOT__dc2_hitE1||
-		top->heptane_core__DOT__dc2_hitO1) printf("shmupd\n");
-    }
-}
-
-bool get_check(Vheptane_core *top, req *reqs,unsigned long long &ip) {
-    bool rtn=true;
-    static unsigned long long pos=0;
-    long long k,x,count;
-    static unsigned xbreak=0;
-    static unsigned retire=0;
-    static int insn_count[64];
-    static int insn_posR=0,insn_posW=0;
-    static unsigned retII=0;
-    if (retire) {
-	for(k=0;k<10;k++) {
-	    if (xbreak&(1<<k)) break;
-	}
-	count=(top->heptane_core__DOT__except && top->heptane_core__DOT__except_due_jump) ? k+1 : k;
-	if (count==10) count=insn_count[insn_posR];
-	if (count!=insn_count[insn_posR] && !top->heptane_core__DOT__except) {
-	    printf("wrong count at %li, 0x%x\n",ip,retII);
-	    rtn=false;
-	}
-	insn_posR++;
-	insn_posR&=0x3f;
-	if (top->heptane_core__DOT__except) {
-            printf("except %li, %li\n",count,ip);
-	    insn_posW=insn_posR;
-	    //rtn=false;
-	}
-	else printf("ret %li, \t%li, %x, fl:0x%x\n",count,ip+count,retII,get_retfl_data(top));
-	for(x=0;x<count;x++) {
-	    if (reqs[ip+x].rT<0) goto no_srch;
-	    if (x<(count-1)) for(k=x+1;k<count;k=k+1) if (reqs[ip+x].rT==reqs[ip+k].rT || reqs[ip+x].rT<0) goto no_srch;
-	    for(k=0;k<9;k=k+1) {
-		unsigned long long val,valp;
-		extract_e(top->heptane_core__DOT__bck_mod__DOT__ret_dataA,65*k,65*k+63,val);
-		extract_e(top->heptane_core__DOT__bck_mod__DOT__ret_dataA,65*k+64,65*k+64,valp);
-		switch(k) {
-		    case 0: if (top->heptane_core__DOT__bck_mod__DOT__retire0_rT!=reqs[ip+x].rT ||
-					    !top->heptane_core__DOT__bck_mod__DOT__retire0_enG) continue;
-			    break;
-		    case 1: if (top->heptane_core__DOT__bck_mod__DOT__retire1_rT!=reqs[ip+x].rT ||
-					    !top->heptane_core__DOT__bck_mod__DOT__retire1_enG) continue;
-			    break;
-		    case 2: if (top->heptane_core__DOT__bck_mod__DOT__retire2_rT!=reqs[ip+x].rT ||
-					    !top->heptane_core__DOT__bck_mod__DOT__retire2_enG) continue;
-			    break;
-		    case 3: if (top->heptane_core__DOT__bck_mod__DOT__retire3_rT!=reqs[ip+x].rT ||
-					    !top->heptane_core__DOT__bck_mod__DOT__retire3_enG) continue;
-			    break;
-		    case 4: if (top->heptane_core__DOT__bck_mod__DOT__retire4_rT!=reqs[ip+x].rT ||
-					    !top->heptane_core__DOT__bck_mod__DOT__retire4_enG) continue;
-			    break;
-		    case 5: if (top->heptane_core__DOT__bck_mod__DOT__retire5_rT!=reqs[ip+x].rT ||
-					    !top->heptane_core__DOT__bck_mod__DOT__retire5_enG) continue;
-			    break;
-		    case 6: if (top->heptane_core__DOT__bck_mod__DOT__retire6_rT!=reqs[ip+x].rT ||
-					    !top->heptane_core__DOT__bck_mod__DOT__retire6_enG) continue;
-			    break;
-		    case 7: if (top->heptane_core__DOT__bck_mod__DOT__retire7_rT!=reqs[ip+x].rT ||
-					    !top->heptane_core__DOT__bck_mod__DOT__retire7_enG) continue;
-			    break;
-		    case 8: if (top->heptane_core__DOT__bck_mod__DOT__retire8_rT!=reqs[ip+x].rT ||
-					    !top->heptane_core__DOT__bck_mod__DOT__retire8_enG) continue;
-			    break;
-		}
-		if (reqs[ip+x].res!=val || reqs[ip+x].res_p!=valp) {
-		    printf("reterr %i, %li, %lx:%lx,off %lx, instr %s, AB %lx:%lx\n",x,ip+x,reqs[ip+x].res,val,reqs[ip+x].offset,
-			reqs[ip+x].asmtext,reqs[ip+x].A,reqs[ip+x].B);
-		    rtn=false;
-		}
-		break;
-	    }
-            if (k==9) {
-		printf("reterr %i, %lx, %lx, instr %s\n",x,ip+x,reqs[ip+x].res,reqs[ip+x].asmtext);
-	        rtn=false;
-	    }
-no_srch:;
-	}
-	ip+=count;
-	pos+=count;
-    }
-    xbreak=top->heptane_core__DOT__bck_mod__DOT__retM_xbreak;
-    retire=top->heptane_core__DOT__bck_mod__DOT__retM_do_retire;
-    retII=top->heptane_core__DOT__bck_mod__DOT__cntrl_unit_mod__DOT__retire_addr_reg;
-    if (top->heptane_core__DOT__iAvail) printf("iAvail 0x%x, \t0x%x, \t0x%x, \t0x%x\n",top->heptane_core__DOT__iAvail,top->heptane_core__DOT__instrEn,top->heptane_core__DOT__dec_mod__DOT__cls_ALU,top->heptane_core__DOT__dec_mod__DOT__cls_shift);
-    if (top->heptane_core__DOT__instrEn && top->heptane_core__DOT__bck_mod__DOT__stall_rs==0 && !top->heptane_core__DOT__except && 
-		    top->heptane_core__DOT__bck_mod__DOT__doStall_rs==0) {
-	k=0;
-	while (top->heptane_core__DOT__instrEn&(1<<k)) {k++;}
-	insn_count[insn_posW++]=k;
-	insn_posW&=0x3f;
-    }
-   // for(k=0;k<6;k++) {
-	if (top->heptane_core__DOT__bck_mod__DOT__enS_alu) {
-	    printf("ALU 0x%x, fl 0x%lx, ret 0x%x\n",top->heptane_core__DOT__bck_mod__DOT__enS_alu,
-		top->heptane_core__DOT__bck_mod__DOT__FUS_alu,
-		top->heptane_core__DOT__bck_mod__DOT__ex_alu);
-	}
-  //  }
-    if (top->heptane_core__DOT__bck_mod__DOT__outEn&0x111111111ul) {
-	printf("outEn 0x%lx\n",top->heptane_core__DOT__bck_mod__DOT__outEn);
-    }
-    bool bflag123=false;
-    for(k=0;k<9;k++) {
-        if (top->heptane_core__DOT__bck_mod__DOT__rs_en_reg[k] && !(top->heptane_core__DOT__bck_mod__DOT__stall_rs|
-				top->heptane_core__DOT__bck_mod__DOT__doStall_rs)) {
-	    if (!bflag123 && top->heptane_core__DOT__bck_mod__DOT__rs_alt_reg) {
-	        printf("rs_en__reg 0x%x, \t0x%x\n",k,top->heptane_core__DOT__bck_mod__DOT__rs_port_sch[k]);
-		bflag123=true;
-	    } else {
-	        printf("rs_en_reg 0x%x, \t0x%x\n",k,top->heptane_core__DOT__bck_mod__DOT__rs_port_sch[k]);
-	    }
-        }
-    }
-    for(k=0;k<6;k++) {
-	if (top->heptane_core__DOT__bck_mod__DOT__fret_en&(1<<k)) {
-	    unsigned long long val;
-	    int k2;
-	    k2=(k>>1)*3+1+(k&1);
-	    extract_e(top->heptane_core__DOT__bck_mod__DOT__fret,14*k,14*k+13,val);
-	    if ((k&1)==0) printf("fsret %i,\t0x%x, \t0x%x\n",k,val,top->heptane_core__DOT__bck_mod__DOT__outII_reg4[k2]);
-	    if ((k&1)==1) printf("fsret %i,\t0x%x, \t0x%x\n",k,val,top->heptane_core__DOT__bck_mod__DOT__outII_reg7[k2]);
-	}
-    }
-    if (top->heptane_core__DOT__front_mod__DOT__cc_mod__DOT____Vcellout__stHit_mod__read_data&0x100) {
-	printf("fetch ");
-	for(k=3;k>=0;k--) {
-	   unsigned long long val;
-	   extract_e(top->heptane_core__DOT__front_mod__DOT__read_data,65*k,65*k+63,val);
-	   printf("%#16lx",val);
-	}
-	if (!top->heptane_core__DOT__front_mod__DOT__instrEn_reg3) printf(" err ");
-	printf(" 0x%lx\n",top->heptane_core__DOT__front_mod__DOT__IP_phys_reg3);
-    }
-    if (top->heptane_core__DOT__front_mod__DOT__bus_tlb_match_reg) {
-	printf("TLBIN 0x%lx -> 0x%lx\n",top->heptane_core__DOT__front_mod__DOT__tlb_IP<<13,
-	    top->heptane_core__DOT__front_mod__DOT__bus_tlb_data_reg);
-    }
-    if (top->heptane_core__DOT__bck_mod__DOT__FUwen_reg[0]|top->heptane_core__DOT__bck_mod__DOT__FUwen_reg[1]|
-	top->heptane_core__DOT__bck_mod__DOT__FUwen_reg[2]|top->heptane_core__DOT__bck_mod__DOT__FUwen_reg[3]) {
-	printf("FUwen_reg 0x%x, 0x%x : 0x%x,0x%x,0x%x,0x%x\n",top->heptane_core__DOT__bck_mod__DOT__FUwen_reg[0] | 
-	(top->heptane_core__DOT__bck_mod__DOT__FUwen_reg[1]<<1) |(top->heptane_core__DOT__bck_mod__DOT__FUwen_reg[2]<<2)|
-	(top->heptane_core__DOT__bck_mod__DOT__FUwen_reg[3]<<3),
-	top->heptane_core__DOT__bck_mod__DOT__FU0HitP | (top->heptane_core__DOT__bck_mod__DOT__FU1HitP<<1) |
-	(top->heptane_core__DOT__bck_mod__DOT__FU2HitP<<2) |(top->heptane_core__DOT__bck_mod__DOT__FU3HitP<<3),
-	top->heptane_core__DOT__bck_mod__DOT__FUreg_reg[0],
-	top->heptane_core__DOT__bck_mod__DOT__FUreg_reg[1],
-	top->heptane_core__DOT__bck_mod__DOT__FUreg_reg[2],
-	top->heptane_core__DOT__bck_mod__DOT__FUreg_reg[3]
-	);
-    }
-    if (top->heptane_core__DOT__bck_mod__DOT__miss_pause_agu) {
-	printf("miss_pause_agu\n");
-	if (top->heptane_core__DOT__bck_mod__DOT__outEn&1) printf("outEn0\n");
-	if (top->heptane_core__DOT__bck_mod__DOT__outEn&8) printf("outEn3\n");
-	if (top->heptane_core__DOT__bck_mod__DOT__outEn&64) printf("outEn6\n");
-    }
-    if (top->heptane_core__DOT__bck_mod__DOT__dc_rdEn) {
-	printf("");
-    }
-    return rtn;
-}
 
 void prog_locate(req *reqs,unsigned char *mem) {
     unsigned long long addr=0;
@@ -2514,17 +2278,11 @@ void gen_prog(req *reqs,int count, FILE *f,hcont *contx,char *mem,char *pmem) {
    
    for(n=32;n<(count-2);n++) {
 	   int p;
-	   if ((p=(lrand48()&3))==2) {
-               reqs[n].gen(false, false, lrand48()&1, NULL,contx,0,NULL,NULL);
-	       fprintf(f,"%s",reqs[n].asmtext);
-//	   else if (p==2) {
-//               reqs[n].gen(false, true, false, NULL,contx,0,NULL,NULL);
-//	       fprintf(f,"%s",reqs[n].asmtext);
-	   } else if (p)  {
+	   if ((p=(lrand48()&1))==1) {
                if (reqs[n+1].gen(false, false, false, NULL,contx,1,mem,pmem)) n++;
 	       fprintf(f,"%s",reqs[n].asmtext);
 	   } else {
-               if (reqs[n+1].gen(false, false, false, NULL,contx,2,mem,pmem)) {
+               if (reqs[n+1].gen(false, false, true , NULL,contx,2,mem,pmem)) {
 		   n+=2;
 	           fprintf(f,"%s",reqs[n-1].asmtext);
 	       } else {
@@ -2539,11 +2297,52 @@ void gen_prog(req *reqs,int count, FILE *f,hcont *contx,char *mem,char *pmem) {
 
 req *reqs;
 
+void prog_print(char *name) {
+  FILE *f;
+  int insn;
+  f=fopen(name,"w");
+  for(insn=0;insn<1000000; insn++) {
+    int n;
+    fputc('0'+reqs[insn].res_p+2*(reqs[insn].rT>=0),f);
+    for(n=0;n<16;n++) {
+      char c=(reqs[insn].res>>(64-4*n))&0xf;
+      if (c<10) c=c+'0';
+      else c=c+'a';
+      fputc(c,f);
+    }
+    char c=reqs[insn].rT&0xf;
+    if (c<10) c=c+'0';
+    else c=c+'a';
+    fputc(c,f);
+    fputc('0'+((reqs[insn].rT&0x10)>>4),f);
+    c=reqs[insn].rA&0xf;
+    if (c<10) c=c+'0';
+    else c=c+'a';
+    fputc(c,f);
+    fputc('0'+((reqs[insn].rA&0x10)>>4),f);
+    c=reqs[insn].rB&0xf;
+    if (c<10) c=c+'0';
+    else c=c+'a';
+    fputc(c,f);
+    fputc('0'+((reqs[insn].rT&0x10)>>4),f);
+    c=(reqs[insn].flags&0x1f)>>1;
+    if (c<10) c=c+'0';
+    else c=c+'a';
+    fputc(c,f);
+    fputc('0'+((reqs[insn].flags&0x20)>>5)+2*(reqs[insn].op>>12,f);
+    fputc('\n',f);
+    for(n=0;n<8;n++) {
+      char c=(reqs[insn].offset>>(32-4*n))&0xf;
+      if (c<10) c=c+'0';
+      else c=c+'a';
+      fputc(c,f);
+    }
+  }
+  fclose(f);
+}
+
+
 int main(int argc, char *argv[]) {
-    Verilated::commandArgs(argc, argv);
-    Vheptane_core *top=new Vheptane_core();
-    Verilated::assertOn(false);
-    Verilated::traceEverOn(true);
     int initcount=10;
     int cyc=0;
     unsigned long long ip=0;
@@ -2592,39 +2391,48 @@ int main(int argc, char *argv[]) {
 	perror("open() ");
     }
     prog_locate(reqs,(unsigned char *)mem);
-    req_set(top,reqs,mem,memp);
-    top->eval();
-    top->clk=1;
-    top->eval();
-    top->clk=0;
-    top->eval();
-    top->eval();
-    top->rst=0;
-    while(!Verilated::gotFinish()) {
-        int k,j;
-        top->clk=1;
-        top->eval();
-	//usleep(5000);
-        top->clk=0;
-        top->eval();
-	//usleep(5000);
-        if (top->heptane_core__DOT__front_mod__DOT__cc_mod__DOT__cc_mod__DOT__wayMod_gen__BRA__7__KET____DOT__way_mod__DOT__tag_mod__DOT__init_reg2) printf("dinit7 0x%x\n",top->heptane_core__DOT__front_mod__DOT__cc_mod__DOT__cc_mod__DOT__wayMod_gen__BRA__7__KET____DOT__way_mod__DOT__tag_mod__DOT__write_NRU);
-        top->rbusOut_can=1;
-        if (!initcount) {
-            req_set(top,reqs,mem,memp);
-            cyc=cyc+1;
-            if (!get_check(top,reqs,ip)) {
-                printf("error @%i\n",cyc);
-                sleep(1);
-		return 1;
+    mname[0]=0;
+    snprintf(mname,256,"./prog.memh");
+    prog_print(mname);
+    FILE *f=fopen("./bin.memh","w");
+    FILE *f1=fopen("./hsim.bin","r");
+    int ende;
+    do {
+        ende=fread(mname,128,1,f1);
+        if (ende) {
+            int n;
+            char c;
+            for(n=0;n<128;n=n+1) {
+                c='0'+mname[n]&0xf;
+                if (c>'9') c+='a'-'9';
+                fputc(c,f);
+                c='0'+(mname[n]&0xf0)>>4;
+                if (c>'9') c+='a'-'9';
+                fputc(c,f);
             }
-            if ((cyc%100)==0) {
-                printf("cycle %i\n",cyc);
-            }
-           
-        } else {
-            initcount=initcount-1;
-            if (!initcount) Verilated::assertOn(true);
+            fputc('\n',f);
         }
+    } while (ende!=0);
+    fclose(f1);
+    fprintf(f,"@400000\n");
+    for(ende=0;ende<(DATARGN_SZ/128);ende=ende+1) {
+        int n;
+        char c;
+        for(n=0;n<128;n=n+1) {
+            c='0'+mem[128*ende+n]&0xf;
+            if (c>'9') c+='a'-'9';
+            fputc(c,f);
+            c='0'+(mname[128*ende+n]&0xf0)>>4;
+            if (c>'9') c+='a'-'9';
+            fputc(c,f);
+        }
+        fputc('\n',f);
     }
+    ende=fclose(f);
+    if (ende) printf("flcose error (data)\n");
+    f=fopen("./bin_p.memh","w");
+    fputc('\n',f);
+    ende=fclose(f);
+    if (ende) printf("flcose error (ptr)\n");
+    return 0;
 }

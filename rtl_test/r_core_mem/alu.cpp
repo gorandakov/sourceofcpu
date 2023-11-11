@@ -2435,5 +2435,4 @@ int main(int argc, char *argv[]) {
     ende=fclose(f);
     if (ende) printf("flcose error (ptr)\n");
     return 0;
-//    Verilated::traceEverOn(true);
 }
