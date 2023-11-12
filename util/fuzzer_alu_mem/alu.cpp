@@ -7,11 +7,11 @@
 #include <sys/stat.h>
 #include <sys/mman.h>
 #include <fcntl.h>
-#include "../inc/ptr.h"
+#include "../../rtl_test/inc/ptr.h"
 #include "contx.h"
-#include "../inc/struct.h"
-#include "../inc/cjump.h"
-#include "../inc/extract.h"
+#include "../../rtl_test/inc/struct.h"
+#include "../../rtl_test/inc/cjump.h"
+#include "../../rtl_test/inc/extract.h"
 
 #define get64(a) ((((unsigned long long) a[1])<<32)|(unsigned long long) a[0])
 #define set64i(a,b,c) a[0]=b;a[1]=b>>32;a[2]=c;
@@ -440,10 +440,11 @@ class req {
     unsigned has_mem;
     unsigned has_alu;
     char asmtext[64];
-    bool gen(bool alt_, bool mul_, bool can_shift, req *prev1,hcont *contx,int has_mem_,char *mem,char *pmem);
+    bool gen(bool alt_, bool mul_, bool can_shift,int inloop, int loop_iterw, req *prev1,hcont *contx,int has_mem_,char *mem,char *pmem);
     bool exec(req *prev1,hcont *contx,char *mem,char *pmem, int itcnt);
     void gen_init(int rT,int dom,unsigned long long int val,int val_p);
     void gen_mem(req* prev1,unsigned code,char * mem,char *memp,unsigned long long addr);
+    int  gen_loop(bool close, hcont *contx, int loopno);
     void gen_memw(req* prev1,unsigned code,char * mem,char *memp,unsigned long long addr,unsigned long long res, char res_p);
     void flgPTR(__int128 r);
     void flg64(__int128 r);
@@ -473,31 +474,31 @@ void req::gen_init(int rT_,int dom,unsigned long long int val,int val_p) {
 int req::gen_loop(bool close, hcont *contx, int loopno) {
   //close is true if it is a loop close insn, otherwise it is a loop begin insn
   int cnt=lrand48()&0xff;
-  int addr0=(lrand48()%(MEMRGN_SIZE/2));
-  int addr1=(lrand48()%(MEMRGN_SIZE/2));
+  int addr0=(lrand48()%(MEMRGN_DATA_SZ/2));
+  int addr1=(lrand48()%(MEMRGN_DATA_SZ/2));
   if (!close) {
       snprintf((*(this)).asmtext,sizeof (asmtext), "LoOp%i:\nmovq $%i, %%r15\n",loopno,cnt);
       this->res=cnt;
       (this)->rT=15;
       this->flags=flags_in;
-      contx->gen[15]=cnt;
+      contx->reg_gen[15]=cnt;
       snprintf((*(this+1)).asmtext,sizeof (asmtext), "movq $%i, %%r14\n",addr0);
       (this+1)->res=addr0;
       (this+1)->rT=14;
       (this+1)->flags=flags_in;
-      contx->gen[14]=addr0;
+      contx->reg_gen[14]=addr0;
       snprintf((*(this+2)).asmtext,sizeof (asmtext), "movq $%i, %%r13\n",addr1);
       (this+2)->res=addr1;
       (this+2)->rT=13;
       (this+2)->flags=flags_in;
-      contx->gen[13]=addr1;
+      contx->reg_gen[13]=addr1;
       return 3;
   } else {
       snprintf((*(this)).asmtext,sizeof (asmtext), "sub $1, %%r15\n");
-      this->res=contx->gen[15]-1;
+      this->res=contx->reg_gen[15]-1;
       this->rT=15;
       this->flg64(this->res);
-      contx->gen[15]=gen[15]-1;
+      contx->reg_gen[15]=contx->reg_gen[15]-1;
       snprintf((*(this+1)).asmtext,sizeof (asmtext), "jne LoOp%i\n",loopno);
       (this+1)->rT=-1;
       (this+1)->flg64(this->res);
@@ -505,11 +506,10 @@ int req::gen_loop(bool close, hcont *contx, int loopno) {
   }
 }
 
-char *prna(long long int &addr, bool inloop) {
-  static char buf[32] __attribute__(thread);
+char *prna(long long int addr, bool inloop) {
+  static char buf[32] __attribute__((thread));
   buf[0]=0;
   int reg=addr&1;
-  if (inloop) addr>>=1;
   if (inloop) {
     snprintf(buf,32," $%i(%%r%i,%%r15,8)", addr, 13+reg);
   } else {
@@ -518,7 +518,7 @@ char *prna(long long int &addr, bool inloop) {
   return buf;
 }
 
-bool req::gen(bool alt_, bool mul_, bool can_shift,bool inloop, int loopiter, req *prev1,hcont *contx,int has_mem_,char *mem,char *memp) {
+bool req::gen(bool alt_, bool mul_, bool can_shift,int inloop, int loopiter, req *prev1,hcont *contx,int has_mem_,char *mem,char *memp) {
     alt=alt_;
     mul=mul_;
     excpt=-1;
@@ -535,6 +535,7 @@ bool req::gen(bool alt_, bool mul_, bool can_shift,bool inloop, int loopiter, re
     if (has_mem_ && rT==16) rT=17;
     if (has_mem_ && rA==16) rA=17;
     if (has_mem_) addr=lrand48()%(MEMRGN_DATA_SZ-8);
+    if (inloop) addr>>=1;
     if (rand()&1) {
         B=lrand48()&0xffffffff;
 	B_p=0;
@@ -1104,7 +1105,7 @@ andffl:
 		    res0&=0xffffffffffffffffull<<63<<1;
 		    res0|=res;//res1?
 	    } 
-            if ((B&0x100) && (A&0x80000000) { res|=0xffffffff00000000ull; res1=res; }
+            if ((B&0x100) && (A&0x80000000)) { res|=0xffffffff00000000ull; res1=res; }
             flg32(res0);
 	    if (has_mem_) {
 		rtn=false;
@@ -1157,7 +1158,7 @@ andffl:
 		    res0&=(0xffffffffffffffffull<<63<<2)|1;
 		    res0|=res<<1;//res1?
 	    }  
-	    if ((B&0x100) && (A&0x80000000) { res|=0xffffffff00000000ull; res1=res; }
+	    if ((B&0x100) && (A&0x80000000)) { res|=0xffffffff00000000ull; res1=res; }
   
 	    flg32(((res0>>1)&0xffffffffu)|((res0&0x1)<<32));
 	    if (has_mem_) {
@@ -1211,7 +1212,7 @@ andffl:
 		    res0&=(0xffffffffffffffffull<<63<<2)|1;
 		    res0|=res<<1;
 	    }  
-	    if ((B&0x100) && (A&0x80000000) { res|=0xffffffff00000000ull; res1=res; }
+	    if ((B&0x100) && (A&0x80000000)) { res|=0xffffffff00000000ull; res1=res; }
 	    flg32(((res0>>1)&0xffffffffu)|((res0&0x1)<<32));
 	    if (has_mem_) {
 		rtn=false;
@@ -1537,7 +1538,7 @@ andffl:
 	    }
             break;
         } else {
-           snprintf(asmtext, sizeof amstext, "j%s LaBl%i\nLaBl%i:\n",COND(op&0xf),lbl,lbl);
+           snprintf(asmtext, sizeof asmtext, "j%s LaBl%i\nLaBl%i:\n",COND(op&0xf),lbl,lbl);
            lbl++;
            res=0;
            rT=-1;
@@ -2279,10 +2280,10 @@ void gen_prog(req *reqs,int count, FILE *f,hcont *contx,char *mem,char *pmem) {
    for(n=32;n<(count-2);n++) {
 	   int p;
 	   if ((p=(lrand48()&1))==1) {
-               if (reqs[n+1].gen(false, false, false, NULL,contx,1,mem,pmem)) n++;
+               if (reqs[n+1].gen(false, false, false,0,0, NULL,contx,1,mem,pmem)) n++;
 	       fprintf(f,"%s",reqs[n].asmtext);
 	   } else {
-               if (reqs[n+1].gen(false, false, true , NULL,contx,2,mem,pmem)) {
+               if (reqs[n+1].gen(false, false, true,0,0 , NULL,contx,2,mem,pmem)) {
 		   n+=2;
 	           fprintf(f,"%s",reqs[n-1].asmtext);
 	       } else {
@@ -2329,7 +2330,7 @@ void prog_print(char *name) {
     if (c<10) c=c+'0';
     else c=c+'a';
     fputc(c,f);
-    fputc('0'+((reqs[insn].flags&0x20)>>5)+2*(reqs[insn].op>>12,f);
+    fputc('0'+((reqs[insn].flags&0x20)>>5)+2*(reqs[insn].op>>12),f);
     fputc('\n',f);
     for(n=0;n<8;n++) {
       char c=(reqs[insn].offset>>(32-4*n))&0xf;
@@ -2361,8 +2362,6 @@ int main(int argc, char *argv[]) {
     //bzero(mem,2l*1024*1024*1024);
     reqs=new req[10000000];
     fesetround(FE_TOWARDZERO);
-    top->clk=0;
-    top->rst=1;
     gen_memrgn(mem,memp);
     memcpy(memw,mem,2l*1024*1024*1024);
     memcpy(mempw,memp,2l*1024*1024*1024/64);
@@ -2415,7 +2414,7 @@ int main(int argc, char *argv[]) {
     } while (ende!=0);
     fclose(f1);
     fprintf(f,"@400000\n");
-    for(ende=0;ende<(DATARGN_SZ/128);ende=ende+1) {
+    for(ende=0;ende<(MEMRGN_DATA_SZ/128);ende=ende+1) {
         int n;
         char c;
         for(n=0;n<128;n=n+1) {
