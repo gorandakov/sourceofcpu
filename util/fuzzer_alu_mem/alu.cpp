@@ -2372,24 +2372,6 @@ int main(int argc, char *argv[]) {
     char mname[256];
     mname[0]=0;
     snprintf(mname,256,"./hsim.bin");
-    int fd=open(mname,O_RDONLY);
-    if (fd>=0) {
-	struct stat s;
-	long long sz;
-	fstat(fd,&s);
-	sz=s.st_size;
-	sz=(sz+4095l)&0xfffffffff000;
-	if (sz>(1024l*1024*1024)) {
-            printf("map too big!\n");
-	    exit(1);
-	}
-        if (!mmap(mem,sz,PROT_READ|PROT_WRITE,MAP_FIXED|MAP_PRIVATE,fd,0)) {
-	    perror("mmap");
-	    exit(1);
-	}
-    } else {
-	perror("open() ");
-    }
     prog_locate(reqs,(unsigned char *)mem);
     mname[0]=0;
     snprintf(mname,256,"./prog.memh");
@@ -2406,7 +2388,7 @@ int main(int argc, char *argv[]) {
                 c='0'+mname[n]&0xf;
                 if (c>'9') c+='a'-'9';
                 fputc(c,f);
-                c='0'+(mname[n]&0xf0)>>4;
+                c='0'+((mname[n]&0xf0)>>4);
                 if (c>'9') c+='a'-'9';
                 fputc(c,f);
             }
