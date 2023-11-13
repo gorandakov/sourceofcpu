@@ -1092,7 +1092,9 @@ module smallInstr_decoder(
           poperation[13][5:0]=(opcode_main[7:4]==4'b0111) ? {2'b10,opcode_main[3:0]} : {1'b0,opcode_main[4:0]};
       poperation[13][7]=1'b0;
       poperation[13][6]=~(magic==4'b0111 && instr[57]);
-      poperation[13][9:8]=magic[2:0]==3'b111 ? instr[53:52] : ( magic[1:0]==2'b01 ?
+      poperation[13][9:8]=((poperation[13][5:3]==3'h7 && ~poperation[13][0]) ||( poperation[13][5:3]==3'h4 && 
+        poperation[13][0])) ? 2'b01 : 
+        magic[2:0]==3'b111 ? instr[53:52] : ( magic[1:0]==2'b01 ?
         instr[22:21] : instr[24:23]);
       poperation[13][12:10]=3'b0;
       prA_use[13]=~(magic==4'b0111 && instr[57]);
@@ -1265,7 +1267,8 @@ module smallInstr_decoder(
       trien[18]=magic[0] & isBaseIndexSpecLoad;
           pport[18]=PORT_LOAD;
           poperation[18][6:0]={~(magic==4'b0111 && instr[57]),opcode_main[7],instr[11:8],1'b0};
-          poperation[18][9:8]=magic[2:0]==3'b111 ? instr[53:52] :( magic[1:0]==2'b01 ? 
+          poperation[18][9:8]=((poperation[18][5:3]==3'h7 && ~poperation[18][0]) ||( poperation[18][5:3]==3'h4 && 
+            poperation[18][0])) ? 2'b01 : magic[2:0]==3'b111 ? instr[53:52] :( magic[1:0]==2'b01 ? 
             instr[22:21] : instr[24:23]);
           poperation[18][12:10]=3'b0;
           poperation[18][7:6]=2'b0;

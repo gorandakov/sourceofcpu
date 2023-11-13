@@ -286,6 +286,7 @@ module decoder_aux_const(
       `csr_IRQ_recv_vector: aux_const={1'b0,csr_IRQ_recv_vector[thread]};
       `csr_USER1: aux_const={1'b1,csr_USER1[thread]};
       `csr_USER2: aux_const={1'b1,csr_USER2[thread]};
+      `csr_vlen: aux_const={1'b0,64'd32};
       `csr_cl_lock: begin aux_const={64'b0,csr_mflags[thread][18]}; end
       default:			aux_const=65'b0;
       endcase
