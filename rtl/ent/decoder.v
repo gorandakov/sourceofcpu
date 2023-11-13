@@ -65,6 +65,7 @@ module decoder_permitted_i(
   wire [9:0][9:0] taken_cnt;
   wire [9:0][9:0] indir_cnt;
   wire [9:0][9:0] alu_cnt;
+  wire [9:0][9:0] sysinstr_cnt;
   wire [9:0][9:0] shift_cnt;
   wire [9:0][9:0] load_cnt;
   wire [9:0][9:0] store_cnt;
@@ -92,6 +93,7 @@ module decoder_permitted_i(
           popcnt10_or_less indir_mod(indir & ((10'd2<<k)-10'd1),indir_cnt[k]);
           popcnt10_or_less load_mod(load & ((10'd2<<k)-10'd1),load_cnt[k]);
           popcnt10_or_less alu_mod(alu & ((10'd2<<k)-10'd1),alu_cnt[k]);
+          popcnt10_or_less sysinstr_mod(sys & ((10'd2<<k)-10'd1),sysinstr_cnt[k]);
           popcnt10_or_less aluf_mod(FPU & alu & ((10'd2<<k)-10'd1),FPU_dke[k]);
           popcnt10_or_less shift_mod(shift & ((10'd2<<k)-10'd1),shift_cnt[k]);
           popcnt10_or_less alu_shift_mod((alu|shift) & ((10'd2<<k)-10'd1),alu_shift_cnt[k]);
@@ -121,8 +123,7 @@ module decoder_permitted_i(
           else  assign perm[k]=permX[k] && fma_dke[k][0] | fma_dke[k][2] && !spec[k];
           
           if (k>0)
-              assign permC[k]=(|(sys[k:0])) ? sys[k-1:0]==0 && pos0[k]==0 && FPU_dke[k][4] : pos0[k]==0 && FPU_dke[k][4];
-              //assign permC[k]=(|(sys[k:0])) ? sys[k-1:0]==0 && pos0[k]==0 && FPU_dke[k][4] : pos0[k]==0 && FPU_dke[k][4];
+              assign permC[k]=pos0[k]==0 && FPU_dke[k][4] && sysinstr_cnt[1];
           else
               assign permC[k]=(pos0[0] && allret)==0 && FPU_dke[k][4];
               //assign permC[k]=(pos0[0] && allret)==0 && FPU_dke[k][4];
