@@ -1097,6 +1097,8 @@ module smallInstr_decoder(
         magic[2:0]==3'b111 ? instr[53:52] : ( magic[1:0]==2'b01 ?
         instr[22:21] : instr[24:23]);
       poperation[13][12:10]=3'b0;
+      poof[0]=((poperation[13][5:3]==3'h7 && ~poperation[13][0]) ||( poperation[13][5:3]==3'h4 &&
+        poperation[13][0]));
       prA_use[13]=~(magic==4'b0111 && instr[57]);
       prT_use[13]=~opcode_main[0] && opcode_main[7:4]==4'b0111 && ~opcode_main[3]|opcode_main[2];
       prC_use[13]=opcode_main[0] && opcode_main[7:4]==4'b0111;
@@ -1270,6 +1272,8 @@ module smallInstr_decoder(
           poperation[18][9:8]=((poperation[18][5:3]==3'h7 && ~poperation[18][0]) ||( poperation[18][5:3]==3'h4 && 
             poperation[18][0])) ? 2'b01 : magic[2:0]==3'b111 ? instr[53:52] :( magic[1:0]==2'b01 ? 
             instr[22:21] : instr[24:23]);
+          poof[1]=((poperation[18][5:3]==3'h7 && ~poperation[18][0]) ||( poperation[18][5:3]==3'h4 &&
+            poperation[18][0]));
           poperation[18][12:10]=3'b0;
           poperation[18][7:6]=2'b0;
           prA_use[18]=~(magic==4'b0111 && instr[57]);
@@ -1279,7 +1283,7 @@ module smallInstr_decoder(
           puseRs[18]=1'b1;
           prAlloc[18]=1'b0;
           puseBConst[18]=magic==4'b0111 & instr[58];
-          if (magic[2:0]!=3'b111) pconstant[18]=(magic[1:0]==2'b11) ? {{9+32{instr[47]}},instr[47:25]} : {{23+32{instr[31]}},instr[31:23]};
+          if (magic[2:0]!=3'b111) pconstant[18]=(magic[1:0]==2'b11) ? {{9+32{instr[47]}},instr[47:25]} : {{22+32{instr[31]}},instr[31:23],1'b0};//shl 1 for unaligned load/store
           perror[18]=2'b0;
          // if (prevSpecLoad) rT=5'd17;
          // else 
