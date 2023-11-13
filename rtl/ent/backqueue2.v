@@ -1493,6 +1493,10 @@ module frontendSelf(
   .write_off0(jmp_off_reg[0]),.write_off1(jmp_off_reg[1]),.write_off2(jmp_off_reg[2]),.write_off3(jmp_off_reg[3]),
   .write_cond(~{jdec_type[3][4],jdec_type[2][4],jdec_type[1][4],jdec_type[0][4]}),
   .write_indir({jdec_type[3]==5'h11,jdec_type[2]==5'h11,jdec_type[1]==5'h11,jdec_type[0]==5'h11}),
+  .write_init0(jini0),
+  .write_init1(jini1),
+  .write_init2(jini2),
+  .write_init3(jini3),
   .write_link0(jdec_link0[4:0]),.write_lnpos0(lnk_off0_reg),
   .write_link1(jdec_link1[4:0]),.write_lnpos1(lnk_off1_reg),
   .write_link2(jdec_link2[4:0]),.write_lnpos2(lnk_off2_reg),
@@ -1508,6 +1512,16 @@ module frontendSelf(
   .update_en(jupd1_en|jupd0_en), .update_taken({jupd1_tk,jupd0_tk}),
   .update_use({jupd1_en,jupd0_en})
   );
+
+  anticipator_ram rmod_mod(
+  clk,
+  rst,
+  {jmp_off_reg[0][3:0],jdec_type[0][3:0],jdec_constant[0][3:0]},jini0,
+  {jmp_off_reg[1][3:0],jdec_type[1][3:0],jdec_constant[1][3:0]},jini1,
+  {jmp_off_reg[2][3:0],jdec_type[2][3:0],jdec_constant[2][3:0]},jini2,
+  {jmp_off_reg[3][3:0],jdec_type[3][3:0],jdec_constant[3][3:0]},jini3,
+  write0_addr,write0_data,write0_wen,
+  write1_addr,write1_data,write1_wen);
 
   assign tbuf_error[0]=jmp_off_reg[0]!=btb_off_reg4[0] || ~jdec_type[0][4] && btb_tgt0_reg4!=jdec_target[0] || 
       jdec_link0[4:0]!=btb_jlnpos0_reg4 || lnk_off0_reg!=btb_jlnjpos0_reg4 || (tlb_phys_reg[23:14]!=cc_read_IP_reg4[63:44] && taken_reg5);
