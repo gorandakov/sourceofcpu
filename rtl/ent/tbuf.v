@@ -315,10 +315,10 @@ module tbuf_way(
   write_off0,write_off1,write_off2,write_off3,
   write_cond,
   write_indir,
-  write_link0,write_lnpos0,
-  write_link1,write_lnpos1,
-  write_link2,write_lnpos2,
-  write_link3,write_lnpos3,
+  write_link0,write_lnpos0,write_init0,
+  write_link1,write_lnpos1,write_init1,
+  write_link2,write_lnpos2,write_init2,
+  write_link3,write_lnpos3,write_init3,
   write_way,
   write_wen,
   write_insert,
@@ -405,6 +405,10 @@ module tbuf_way(
   input [3:0] write_off1;
   input [3:0] write_off2;
   input [3:0] write_off3;
+  input [3:0] write_init0;
+  input [3:0] write_init1;
+  input [3:0] write_init2;
+  input [3:0] write_init3;
   input [3:0] write_cond;
   input [3:0] write_indir;
   input [4:0] write_link0;
@@ -762,10 +766,10 @@ module tbuf_way(
   assign extra_insert[`btbExtra_freq2]=7'b0; 
   assign extra_insert[`btbExtra_freq3]=7'b0; 
 
-  assign extra_insert[`btbExtra_satCount0]={2{~write_cond[0]}}; 
-  assign extra_insert[`btbExtra_satCount1]={2{~write_cond[1]}}; 
-  assign extra_insert[`btbExtra_satCount2]={2{~write_cond[2]}}; 
-  assign extra_insert[`btbExtra_satCount3]={2{~write_cond[3]}}; 
+  assign extra_insert[`btbExtra_satCount0]={2{~write_cond[0]}}|write_init0; 
+  assign extra_insert[`btbExtra_satCount1]={2{~write_cond[1]}}|write_init1; 
+  assign extra_insert[`btbExtra_satCount2]={2{~write_cond[2]}}|write_init2; 
+  assign extra_insert[`btbExtra_satCount3]={2{~write_cond[3]}}|write_init3; 
 
   assign read_src=btb_data[`btb_src_IP];
   assign read_tgt0=btb_data[`btb_tgt_IP1];
@@ -1306,10 +1310,10 @@ module tbuf_way_2(
   write_off0,write_off1,write_off2,write_off3,
   write_cond,
   write_indir,
-  write_link0,write_lnpos0,
-  write_link1,write_lnpos1,
-  write_link2,write_lnpos2,
-  write_link3,write_lnpos3,
+  write_link0,write_lnpos0,write_init0,
+  write_link1,write_lnpos1,write_init1,
+  write_link2,write_lnpos2,write_init2,
+  write_link3,write_lnpos3,write_init3,
   write_way,
   write_wen,
   write_insert,
@@ -1389,6 +1393,10 @@ module tbuf_way_2(
   input [3:0] write_off1;
   input [3:0] write_off2;
   input [3:0] write_off3;
+  input [3:0] write_init0;
+  input [3:0] write_init1;
+  input [3:0] write_init2;
+  input [3:0] write_init3;
   input [3:0] write_cond;
   input [3:0] write_indir;
   input [4:0] write_link0;
@@ -1452,10 +1460,10 @@ module tbuf_way_2(
     write_off0,write_off1,write_off2,write_off3,
     write_cond,
     write_indir,
-    write_link0,write_lnpos0,
-    write_link1,write_lnpos1,
-    write_link2,write_lnpos2,
-    write_link3,write_lnpos3,
+    write_link0,write_lnpos0,write_init0,
+    write_link1,write_lnpos1,write_init1,
+    write_link2,write_lnpos2,write_init2,
+    write_link3,write_lnpos3,write_init3,
     write_way_reg,
     write_wen_reg,
     write_insert_reg,
@@ -1494,10 +1502,10 @@ module tbuf_way_2(
       write_off0,write_off1,write_off2,write_off3,
       write_cond,
       write_indir,
-      write_link0,write_lnpos0,
-      write_link1,write_lnpos1,
-      write_link2,write_lnpos2,
-      write_link3,write_lnpos3,
+      write_link0,write_lnpos0,write_init0,
+      write_link1,write_lnpos1,write_init1,
+      write_link2,write_lnpos2,write_init2,
+      write_link3,write_lnpos3,write_init3,
       write_way_reg,
       write_wen_reg,
       write_insert_reg,
@@ -1555,10 +1563,10 @@ module tbuf(
   write_off0,write_off1,write_off2,write_off3,
   write_cond,
   write_indir,
-  write_link0,write_lnpos0,
-  write_link1,write_lnpos1,
-  write_link2,write_lnpos2,
-  write_link3,write_lnpos3,
+  write_link0,write_lnpos0,write_init0,
+  write_link1,write_lnpos1,write_init1,
+  write_link2,write_lnpos2,write_init2,
+  write_link3,write_lnpos3,write_init3,
   write_way,
   write_thread,
   write_wen,
@@ -1647,6 +1655,10 @@ module tbuf(
   input [3:0] write_off1;
   input [3:0] write_off2;
   input [3:0] write_off3;
+  input [3:0] write_init0;
+  input [3:0] write_init1;
+  input [3:0] write_init2;
+  input [3:0] write_init3;
   input [3:0] write_cond;
   input [3:0] write_indir;
   input [4:0] write_link0;
@@ -1880,10 +1892,10 @@ module tbuf(
   write_off0,write_off1,write_off2,write_off3,
   write_cond,
   write_indir,
-  write_link0,write_lnpos0,
-  write_link1,write_lnpos1,
-  write_link2,write_lnpos2,
-  write_link3,write_lnpos3,
+  write_link0,write_lnpos0,write_init0,
+  write_link1,write_lnpos1,write_init1,
+  write_link2,write_lnpos2,write_init2,
+  write_link3,write_lnpos3,write_init3,
   write_way,
   write_wen,
   write_insert,
@@ -1924,10 +1936,10 @@ module tbuf(
   write_off0,write_off1,write_off2,write_off3,
   write_cond,
   write_indir,
-  write_link0,write_lnpos0,
-  write_link1,write_lnpos1,
-  write_link2,write_lnpos2,
-  write_link3,write_lnpos3,
+  write_link0,write_lnpos0,write_init0,
+  write_link1,write_lnpos1,write_init1,
+  write_link2,write_lnpos2,write_init2,
+  write_link3,write_lnpos3,write_init3,
   write_way,
   write_wen,
   write_insert,
