@@ -251,6 +251,7 @@ module smallInstr_decoder(
   reg prAX[TRICNT_TOP-1:0];
   reg prTE[TRICNT_TOP-1:0];
   reg prB_use[TRICNT_TOP-1:0];
+  reg [1:0] poof;
   reg [REG_WIDTH-2:0] prC[TRICNT_TOP-1:0];
   reg prC_use[TRICNT_TOP-1:0];
   reg puseCRet[TRICNT_TOP-1:0];
@@ -418,7 +419,7 @@ module smallInstr_decoder(
   assign qconstant[4]={1'b0,pconstant[10]};
   assign qtrien   [4]=trien    [10];
   assign qconstant[5]={1'b0,pconstant[18]};
-  assign qtrien   [5]=trien    [18];
+  assign qtrien   [5]=trien    [13] & poof[0] || trien [18] & poof[1];
   assign qconstant[6]={1'b0,pconstant[20]};
   assign qtrien   [6]=trien    [20];
   assign qconstant[7]={1'b0,pconstant[25]};
@@ -430,7 +431,7 @@ module smallInstr_decoder(
   assign qconstant[10]={1'b0,pconstant[35]};
   assign qtrien   [10]=trien    [35];
   assign qconstant[11]={1'b0,pconstant[13]};
-  assign qtrien   [11]=trien    [13];
+  assign qtrien   [11]=trien    [13] & ~poof[0] || trien [18] & ~poof[1];
   assign qconstant[12]={~pisIPRel[19],pconstant[19]};
   assign qtrien   [12]=trien[19];
   assign qconstant[13]={1'b0,pconstant[14]};
