@@ -5,6 +5,7 @@ fuzzer: alu.cpp contx.h
 	g++ ${CFLAGS} alu.cpp -ofuzzer
 
 clean:
+	rm fuzzer
 	rm *.memh
 	rm hsim.bin
 	rm asm2.o

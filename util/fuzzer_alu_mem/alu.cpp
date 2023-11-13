@@ -528,7 +528,8 @@ bool req::gen(bool alt_, bool mul_, bool can_shift,int inloop, int loopiter, req
     if (!alt && !mul && can_shift)  op=OPS_S_REGL[rand()%(sizeof OPS_S_REGL/2)];
     if (!alt && mul) op=OPS_M_REGL[rand()%(sizeof OPS_M_REGL/2)]|0x800;
     if (alt) op=rand()&0x1ffff;
-    if (inloop && !mem && !(lrand48()%0xa)) op=0xf000+lrand48()%14;
+    if (has_mem_==0 && (rand()&0xf)==0) 
+       op=0xf0+(rand()%14);
     res_p=0;
     rA=rand()&0xf;
     rB=rand()&0xf;
@@ -569,7 +570,7 @@ bool req::gen(bool alt_, bool mul_, bool can_shift,int inloop, int loopiter, req
 	int mmem=0;
 	char cmpstr[32];
 	if (has_mem_) mmem=lrand48()%3;
-        if ((op&0xf000)!=0xf000) switch(op&0xff) {
+        switch(op&0xff) {
             case 0:
 	    if (has_mem_==2) {
 		(this-1)->gen_mem(NULL,8,mem,memp,addr);
@@ -1538,13 +1539,13 @@ andffl:
 		(*(this-1))=*this;
 	    }
             break;
-        } else {
+           default:
            snprintf(asmtext, sizeof asmtext, "j%s LaBl%i\nLaBl%i:\n",COND(op&0xf),lbl,lbl);
            lbl++;
            res=0;
            rT=-1;
            flags=flags_in; 
-           rtn=false;
+           rtn=true;
       }
     } else if (!alt) {
         __int128 AS=(long long) A;
@@ -2281,7 +2282,7 @@ void gen_prog(req *reqs,int count, FILE *f,hcont *contx,char *mem,char *pmem) {
    for(n=32;n<(count-2);n++) {
 	   int p;
 	   if ((p=(lrand48()&1))==1) {
-               if (reqs[n+1].gen(false, false, false,0,0, NULL,contx,1,mem,pmem)) n++;
+               if (reqs[n+1].gen(false, false, false,0,0, NULL,contx,(lrand48()&1),mem,pmem)) n++;
 	       fprintf(f,"%s",reqs[n].asmtext);
 	   } else {
                if (reqs[n+1].gen(false, false, true,0,0 , NULL,contx,2,mem,pmem)) {
