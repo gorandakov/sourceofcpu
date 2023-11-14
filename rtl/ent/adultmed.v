@@ -1150,7 +1150,7 @@ module smallInstr_decoder(
       prA[14]={instr[17],instr[11:8]};
       prT[14]=instr[16:12];
       prB[14]=instr[22:18];
-      prA_use[14]=!instr[30];
+      prA_use[14]=1'b1;
       prB_use[14]=1'b1;
       prT_use[14]=1'b1;
       puseRs[14]=1'b1;
@@ -1160,6 +1160,8 @@ module smallInstr_decoder(
       poperation[14][12:11]=2'b10;
       puseBConst[14]=instr[29];
       pconstant[14]={63'b0,instr[30]};
+      pflags_write[14]=instr[31];
+      poperation[14][12]=~instr[31];
       case(instr[28:26])
       0: begin poperation[14][7:0]=`op_clahf; prB_use[14]=1'b0; prT_use[14]=1'b0;
              pflags_write[14]=1'b1; pflags_use[14]=1'b1; poperation[14][12]=1'b0;  end
