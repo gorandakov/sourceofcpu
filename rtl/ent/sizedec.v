@@ -69,11 +69,10 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   wire isBaseIndexLoadStore;
   wire isBaseSpecLoad;
   wire isBaseIndexSpecLoad;
+  wire isBaseSpecStore;
+  wire isBaseIndexSpecStore;
   wire isImmLoadStore;
   wire isBasicMUL;
-  wire isImmCISC;
-  wire isBaseCISC;
-  wire isBaseIndexCISC;
   wire isLeaIPRel;
 
   wire isBasicCJump;
@@ -150,15 +149,12 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
 
   assign isBaseSpecLoad=(opcode_main==8'd54 || opcode_main==8'd202) && magic[0];
   assign isBaseIndexSpecLoad=(opcode_main==8'd55 || opcode_main==8'd203) && magic[0];
-  
+  assign isBaseSpecStore=(opcode_main==8'd204 || opcode_main==8'd205) && magic[0];
+  assign isBaseIndexSpecStore=(opcode_main=8'd206 || opcode_main==8'd207) && magic[0];
+
   assign isImmLoadStore=((opcode_main[7:2]==6'd15) || opcode_main[7:1]==7'b1011000) & magic[0];  
-  assign isBaseCISC=magic[1]==1'b0 ? instr[19:18]!=2'b0 : 1'bz;
-  assign isBaseCISC=magic[1]==1'b1 ? instr[17:16]!=2'b0 : 1'bz;
-  assign isBaseLoadStore=((opcode_main[7:5]==3'b010 && !isBaseCISC) || opcode_main[7:4]==4'b0110) & magic[0];
-  assign isBaseIndexCISC=magic[1]==1'b0 ? instr[24:23]!=0 : 1'bz;
-  assign isBaseIndexCISC=magic[2:1]==2'b01 ? instr[26:25]!=0 : 1'bz;
-  assign isBaseIndexCISC=magic[2:1]==2'b11 ? instr[17:16]!=0 : 1'bz;
-  assign isBaseIndexLoadStore=((opcode_main[7:5]==3'b100 && !isBaseIndexCISC) || opcode_main[7:4]==4'b0111) & magic[0];
+  assign isBaseLoadStore=((opcode_main[7:5]==3'b010) || opcode_main[7:4]==4'b0110) & magic[0];
+  assign isBaseIndexLoadStore=((opcode_main[7:5]==3'b100) || opcode_main[7:4]==4'b0111) & magic[0];
 
 
   assign isBasicCJump=(opcode_main[7:4]==4'b1010) && magic[0];
@@ -195,9 +191,9 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
 
   assign isCallPrep=(opcode_main==8'd199) && magic[0];
 
-  assign thisSpecLoad=isBaseSpecLoad || isBaseIndexSpecLoad || ({instr[11],instr[15:12]}==5'd16 && 
-      opcode_main[7:0]==8'b10110000 && !instr[10]) || ({instr[1],instr[15:12]}==5'd15 &&                      
-      opcode_main[7:2]==6'd15 && !instr[0]);
+  assign thisSpecLoad=isBaseSpecLoad || isBaseIndexSpecLoad || isBaseSpecStore || isBaseIndexSpecStore || 
+      ({instr[11],instr[15:12]}==5'd16 &&  opcode_main[7:0]==8'b10110000 && !instr[10]) || 
+      ({instr[1],instr[15:12]}==5'd15 && opcode_main[7:2]==6'd15 && !instr[0]);
 
   
   assign clsJump=|{
@@ -272,6 +268,8 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   isBaseIndexLoadStore & ~opcode_main[0],  
   isBaseSpecLoad,
   isBaseIndexSpecLoad,
+  isBaseSpecStore,
+  isBaseIndexSpecStore,
   isImmLoadStore && ~opcode_main[0],
   isBasicFPUScalarCmp3 && instr[13:8]==6'b100100//tlb jump table load gen purp
   };
@@ -280,6 +278,8 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   isBaseLoadStore &  opcode_main[0],
   isImmLoadStore && opcode_main[0],
   isBaseIndexLoadStore & opcode_main[0],
+  isBaseSpecStore,
+  isBaseIndexSpecStore,
   isCall & magic[0]
   };
   
@@ -287,6 +287,8 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   isBaseLoadStore &  opcode_main[0],
   isImmLoadStore && opcode_main[0],
   isBaseIndexLoadStore & opcode_main[0],
+  isBaseSpecStore,
+  isBaseIndexSpecStore,
   isCall & magic[0]
   };
   

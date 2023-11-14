@@ -176,7 +176,10 @@ module smallInstr_decoder(
   wire isBaseIndexLoadStore;
   wire isBaseSpecLoad;
   wire isBaseIndexSpecLoad;
+  wire isBaseSpecStore;
+  wire isBaseIndexSpecStore;
   wire isImmLoadStore;
+  wire isImmSpecStore;
 
 
   wire isBasicCJump;
@@ -391,9 +394,9 @@ module smallInstr_decoder(
   assign isSimdInt=opcode_main==8'd200;
   assign isFPUreor=opcode_main==8'd201;
   //202,203 for spec load
-  //204,205 for isBaseExtStore (future ext)
-  //206,207 for isBaseIndexExtStore (future ext)
-  //208,209 for isImmExtStore (future ext)
+  assign isBaseSpecStore=opcode_main==8'd204 || opcode_main==8'd205;
+  assign isBaseIndexSpecStore=opcode_main=8'd206 || opcode_main==8'd207;
+  assign isImmSpecStore=opcode_main=8'd208 || opcode_main==8'd209;
 
   assign isShlAddMulLike=opcode_main==8'd210 || opcode_main==8'd211;
   assign isPtrSec=opcode_main==8'd212;
@@ -1245,21 +1248,22 @@ module smallInstr_decoder(
 	  //jump imm={instr[27:9],1'b0}
       end
     
-      trien[17]=magic[0] & isBaseSpecLoad;
+      trien[17]=magic[0] && isBaseSpecLoad|isBaseSpecStore;
       pport[17]=PORT_LOAD;
-      poperation[17][5:0]={opcode_main[7],instr[11:8],1'b0};
+      poperation[17][5:0]={opcode_main[7]|opcode_main[0],instr[11:8],1'b0};
       poperation[17][12:6]=7'b0;
       prA_use[17]=1'b0;
       prB_use[17]=1'b1;
-      prT_use[17]=opcode_main[7];
-      prT_useF[17]=~opcode_main[7];
-      prT_isV[17]=~opcode_main[7] & fop_v({instr[11:8],1'b0});
+      prT_use[17]=(opcode_main[7]|opcode_main[0]);
+      prT_useF[17]=~(opcode_main[7]|opcode_main[0]);
+      prT_isV[17]=~(opcode_main[7]|opcode_main[0]) & fop_v({instr[11:8],1'b0});
       puseRs[17]=1'b1;
       prAlloc[17]=1'b0;
       puseBConst[17]=1'b0;
-      //if (prevSpecLoad) rT=5'd17;
-      //else 
-      prT[17]=opcode_main[7] ? 5'd16 : 5'd15;
+      prT[17]=opcode_main[7]|opcode_main[0] ? 5'd16 : 5'd15;
+      prC[17]={1'b1,INDEX[3:0]+4'd1};
+      prC_use[17]=prT_use[17];
+      prC_useF[17]=prT_useF[17];
       pthisSpecLoad[17]=1'b1;
           
       if (magic[1:0]==2'b01) begin
@@ -1267,11 +1271,11 @@ module smallInstr_decoder(
       end else begin
           prB[17]={1'b0,instr[15:12]};
       end
-      if (opcode_main[7] && instr[11]) perror[17]=1;          
+      if (opcode_main[7]|opcode_main[0] && instr[11]) perror[17]=1;          
       
-      trien[18]=magic[0] & isBaseIndexSpecLoad;
+      trien[18]=magic[0] && isBaseIndexSpecLoad | isBaseIndexSpecStore;
           pport[18]=PORT_LOAD;
-          poperation[18][6:0]={~(magic==4'b0111 && instr[57]),opcode_main[7],instr[11:8],1'b0};
+          poperation[18][6:0]={~(magic==4'b0111 && instr[57]),opcode_main[7]|~opcode_main[0],instr[11:8],1'b0};
           poperation[18][9:8]=((poperation[18][5:3]==3'h7 && ~poperation[18][0]) ||( poperation[18][5:3]==3'h4 && 
             poperation[18][0])) ? 2'b01 : magic[2:0]==3'b111 ? instr[53:52] :( magic[1:0]==2'b01 ? 
             instr[22:21] : instr[24:23]);
@@ -1280,9 +1284,9 @@ module smallInstr_decoder(
           poperation[18][12:10]=3'b0;
           poperation[18][7:6]=2'b0;
           prA_use[18]=~(magic==4'b0111 && instr[57]);
-          prT_use[18]=opcode_main[7];
-          prT_useF[18]=~opcode_main[7];
-          prT_isV[18]=~opcode_main[7] && fop_v({instr[11:8],1'b0});
+          prT_use[18]=opcode_main[7]|~opcode_main[0];
+          prT_useF[18]=~(opcode_main[7]|~opcode_main[0]);
+          prT_isV[18]=~(opcode_main[7]|~opcode_main[0]) && fop_v({instr[11:8],1'b0});
           puseRs[18]=1'b1;
           prAlloc[18]=1'b0;
           puseBConst[18]=magic==4'b0111 & instr[58];
@@ -1302,15 +1306,18 @@ module smallInstr_decoder(
           end else begin
               perror[18]=1;
           end
-          if (opcode_main[7] && instr[11]) perror[18]=1;          
+          if (opcode_main[7]|~opcode_main[0] && instr[11]) perror[18]=1;          
           prA_use[18]=~(magic==4'b0111 && instr[57]);
           prB_use[18]=1'b1;
           pisIPRel[18]=1'b0;//magic==4'b0111 && instr[59];
           if (|poperation[18][9:8] && ~poperation[18][6]) perror[18]=1;
           if (magic[2:0]==3'b111 && instr[59] && ~instr[58]) perror[18]=1;
           if (magic[2:0]==3'b111 && instr[63:60]!=0) perror[18]=1;
-          if (opcode_main[7] && instr[11]) perror[18]=1'b1;          
+          if (opcode_main[7]|~opcode_main[0] && instr[11]) perror[18]=1'b1;          
           if (riscmove) perror[18]=1'b1;
+          prC[18]={1'b1,INDEX[3:0]+4'd1};
+          prC_use[18]=prT_use[18];
+          prC_useF[18]=prT_useF[18];
 
       
       trien[19]=magic[1:0]==2'b11 && isImmLoadStore;
