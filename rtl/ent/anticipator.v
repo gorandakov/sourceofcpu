@@ -37,6 +37,7 @@ module anticipator_ram(
         can_loop=k[7:4]==`jump_nZ || k[7:4]==`jump_nS || k[7:6]==2'b10 || k[7:6]==2'b01; 
         if ((k[11:8]+k[3:0])==4'd1 && can_loop) ram[k]=2'b11;
         else if ((k[11:8]+k[3:0])==4'd2 && can_loop) ram[k]=2'b11;
+        else if ((k[11:8]+k[3:0])==4'd3 && can_loop) ram[k]=2'b11;
         else if ((k[11:8]+k[3:0])==4'h8 && can_loop) ram[k]=2'b11;
         else if ((k[11:8]+k[3:0])==4'h9 && can_loop) ram[k]=2'b11;
         else if ((k[11:8]+k[3:0])==4'ha && can_loop) ram[k]=2'b11;
