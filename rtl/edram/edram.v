@@ -47,13 +47,14 @@ module edram(
   always @(posedge clk) begin
       if (port_en | port_ref_plus2) data1<=edram[port_addr_reg];
       else if (port_wen_plus3 | port_ref_plus5) edram[port_write_addr]<=data3;
-      if (port_en && (port_read_addr_reg2!=port_read_addr)|~port_ref_plus2_reg2) begin
+      if ((port_en && (port_read_addr_reg2!=port_read_addr)|~port_ref_plus2_reg2)
+         || (port_ref_plus2 && (port_read_addr_reg2!=port_read_addr)|~port_en_reg2)) begin
           data1<=data2;
       end
       if (port_data) data1<=port_write_data;
       xore1_reg<=xore;
       data2<=data1;
-      port_ref_plus3<=port_ref_plus2 && (port_read_addr_reg2!=port_read_addr)|~port_en_reg2;
+      port_ref_plus3<=port_ref_plus2;
       port_ref_plus3<=port_ref_plus3;
       port_ref_plus5<=port_ref_plus5;
   end
