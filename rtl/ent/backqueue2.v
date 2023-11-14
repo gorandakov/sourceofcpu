@@ -1519,9 +1519,7 @@ module frontendSelf(
   {jmp_off_reg[0][3:0],jdec_type[0][3:0],jdec_constant[0][3:0]},jini0,
   {jmp_off_reg[1][3:0],jdec_type[1][3:0],jdec_constant[1][3:0]},jini1,
   {jmp_off_reg[2][3:0],jdec_type[2][3:0],jdec_constant[2][3:0]},jini2,
-  {jmp_off_reg[3][3:0],jdec_type[3][3:0],jdec_constant[3][3:0]},jini3,
-  csrss_data[11:0],csrss_data[17:16],csrss_en && rnd1==6'd54 && csrss_addr[14:0]==15'd2000,
-  0,0,0);
+  {jmp_off_reg[3][3:0],jdec_type[3][3:0],jdec_constant[3][3:0]},jini3);
 
   assign tbuf_error[0]=jmp_off_reg[0]!=btb_off_reg4[0] || ~jdec_type[0][4] && btb_tgt0_reg4!=jdec_target[0] || 
       jdec_link0[4:0]!=btb_jlnpos0_reg4 || lnk_off0_reg!=btb_jlnjpos0_reg4 || (tlb_phys_reg[23:14]!=cc_read_IP_reg4[63:44] && taken_reg5);
