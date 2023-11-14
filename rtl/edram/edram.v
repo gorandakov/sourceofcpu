@@ -26,12 +26,15 @@ module edram(
   input [324:0] port_write_data;
   input port_wen_plus3;
   input port_data;
-
-  reg [31:0] edram[324:0];
-
+`ifned synth_edram
+  reg [31:0] edram[323:0];
+`else
+  reg [31:0] edram[161:0];
+`endif
   reg [324:0] data1;
   reg [324:0] data2;
   wire [324:0] data3;
+  wire [324:0] data3x;
 
   block_ecc_decode corr0_mod(
   data1,
@@ -44,9 +47,22 @@ module edram(
   ,
   data3);
 
+  assign data3x=clkREF1 ? data3 : 'z;
+  assign data3x=clkREF2 ? data3 : 'z;
+
+
   always @(posedge clk) begin
+`ifndef synth_edram
       if (port_en | port_ref_plus2) data1<=edram[port_addr_reg];
       else if (port_wen_plus3 | port_ref_plus5) edram[port_write_addr]<=data3;
+`else
+      if (port_en | port_ref_plus2) begin
+           data1[161:0]<=clkREF1 ? edram[port_addr_reg] : 'z;
+           data1[323:162]<=clkREF2 ? edram[port_addr_reg] : 'z;
+      end else if (port_wen_plus3 | port_ref_plus5) begin
+           edram[port_write_addr]<= data3x;
+      end
+`endif
       if ((port_en && (port_read_addr_reg2!=port_read_addr)|~port_ref_plus2_reg2)
          || (port_ref_plus2 && (port_read_addr_reg2!=port_read_addr)|~port_en_reg2)) begin
           data1<=data2;
