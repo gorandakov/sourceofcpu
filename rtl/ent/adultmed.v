@@ -1212,8 +1212,8 @@ module smallInstr_decoder(
       casex({instr[28],instr[29],instr[0],isPtrSec})
       4'b0x00: poperation[16]=`op_sadd_even|4096;
       4'b0x10: poperation[16]=`op_sadd_odd|4096;
-      4'b1x00: begin poperation[16]=`op_cloop_even; pjumpType[16]={1'b0,3'h0,instr[23]}; end 
-      4'b1x10: begin poperation[16]=`op_cloop_odd; pjumpType[16]={1'b0,3'h0,instr[23]}; end
+      4'b1x00: begin poperation[16]=`op_cloop_even; pjumpType[16]={1'b0,3'h0,instr[8]}; end 
+      4'b1x10: begin poperation[16]=`op_cloop_odd; pjumpType[16]={1'b0,3'h0,instr[8]}; end
       4'b00x1: begin poperation[16]=`op_sec64|4096; pport[16]=PORT_MUL; end
       4'b01x1: begin poperation[16]=`op_swp32|4096; pport[16]=PORT_MUL; end
       4'b11x1: begin poperation[16]=`op_swp64|4096; pport[16]=PORT_MUL; end
@@ -1240,7 +1240,7 @@ module smallInstr_decoder(
 	  pconstant[16]=64'hffff_ffff_ffff_ffff;
 	  prT[16]=5'd2;
 	  perror[16]=2'b0;
-	  //jump imm={instr[27:8],1'b0}
+	  //jump imm={instr[27:9],1'b0}
       end
     
       trien[17]=magic[0] & isBaseSpecLoad;
