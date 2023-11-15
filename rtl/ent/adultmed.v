@@ -464,7 +464,7 @@ module smallInstr_decoder(
           wire krA_use;
           wire [REG_WIDTH-1:0] krB;
           wire krB_use;
-          wire [REG_WIDTH-2:0] krC;
+          wire [REG_WIDTH-1:0] krC;
           wire krC_use;
           wire kuseCRet;
 	  wire [4:0] kalucond;
@@ -502,7 +502,7 @@ module smallInstr_decoder(
 	  for(q=0;q<8;q=q+1) begin : tri_gen
 	      assign krA=trien[p*8+q] ? {prAX[p*8+q],prA[p*8+q]} : 6'bz;
 	      assign krB=trien[p*8+q] ? {prBE[p*8+q],prB[p*8+q]} : 6'bz;
-	      assign krC=trien[p*8+q] ? prC[p*8+q] : 5'bz;
+	      assign krC=trien[p*8+q] ? {isBaseSpecStore|isBaseIndexSpecStore,prC[p*8+q]} : 6'bz;
 	      assign krT=trien[p*8+q] ? {prTE[p*8+q],prT[p*8+q]} : 6'bz;
 	      assign krA_use=trien[p*8+q] ? prA_use[p*8+q] : 1'bz;
 	      assign krB_use=trien[p*8+q] ? prB_use[p*8+q] : 1'bz;
@@ -536,7 +536,7 @@ module smallInstr_decoder(
 	  end
 	  assign krA=(~|trien[p*8+:8]) ? 6'b0 : 6'bz;
 	  assign krB=(~|trien[p*8+:8]) ? 6'b0 : 6'bz;
-	  assign krC=(~|trien[p*8+:8]) ? 5'b0 : 5'bz;
+	  assign krC=(~|trien[p*8+:8]) ? 6'b0 : 6'bz;
 	  assign krT=(~|trien[p*8+:8]) ? 6'b0 : 6'bz;
 	  assign krA_use=(~|trien[p*8+:8]) ? 1'b0 : 1'bz;
 	  assign krB_use=(~|trien[p*8+:8]) ? 1'b0 : 1'bz;
@@ -570,7 +570,7 @@ module smallInstr_decoder(
 	      
 	  assign rA=(|trien[p*8+:8]) ? {krA} : 6'bz;
 	  assign rB=(|trien[p*8+:8]) ? {krB} : 6'bz;
-	  assign rC=(|trien[p*8+:8]) ? {1'b0,krC} : 6'bz;
+	  assign rC=(|trien[p*8+:8]) ? {krC} : 6'bz;
 	  assign rT=(|trien[p*8+:8]) ? {krT} : 6'bz;
 	  assign rA_use=(|trien[p*8+:8]) ? krA_use : 1'bz;
 	  assign rB_use=(|trien[p*8+:8]) ? krB_use : 1'bz;
