@@ -29,9 +29,9 @@ limitations under the License.
 `define csr_FPU 11
 `define csr_syscall 12
 `define csr_vmcall 13
-`define csr_cpage_mask 14
-`define csr_indir_table 15
-`define csr_indir_mask 16
+`define csr_USER3 14
+`define csr_USER2 15
+`define csr_USER1 16
 `define csr_cl_lock 18
 `define csr_ptr_combine 32
 `define csr_ptr_intersect 33
@@ -39,8 +39,6 @@ limitations under the License.
 `define csr_restrict_upper 35
 `define csr_IRQ_send 36
 `define csr_IRQ_recv_vector 37
-`define csr_USER1 1024
-`define csr_USER2 1025
 `define csr_MAC 2048
 `define csr_excpt_fpu 1036
 `define csr_vlen 38
