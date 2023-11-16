@@ -179,7 +179,7 @@ module smallInstr_decoder(
   wire isBaseSpecStore;
   wire isBaseIndexSpecStore;
   wire isImmLoadStore;
-  wire isImmSpecStore;
+  wire isBasicAddFl;
 
 
   wire isBasicCJump;
@@ -396,7 +396,7 @@ module smallInstr_decoder(
   //202,203 for spec load
   assign isBaseSpecStore=opcode_main==8'd204 || opcode_main==8'd205;
   assign isBaseIndexSpecStore=opcode_main=8'd206 || opcode_main==8'd207;
-  assign isImmSpecStore=opcode_main=8'd208 || opcode_main==8'd209;
+  assign isBasicAddFl=opcode_main=8'd208 || opcode_main==8'd209;
 
   assign isShlAddMulLike=opcode_main==8'd210 || opcode_main==8'd211;
   assign isPtrSec=opcode_main==8'd212;
@@ -1586,40 +1586,26 @@ module smallInstr_decoder(
           else perror[28]=1;
       end
       
-      trien[29]=magic[0] & isBasicAddNoFl;
-          //if no magic, it's register-register
-      puseBConst[29]=magic[2:0]==3'b011;
+      trien[29]=magic[0] && isBasicAddNoFl|isBasicAddFl;
+      puseBConst[29]=1'b1;
       poperation[29][11:0]=opcode_main[0] ? `op_add64 : `op_add32;
-      poperation[29][12]=1'b1;
+      poperation[29][12]=isBasicAddNoFl;
+      pflags_write[29]=isBasicAddFl;
       pport[29]=PORT_ALU;
       prA_use[29]=1'b1;
       prB_use[29]=1'b1;
       prT_use[29]=1'b1;
       puseRs[29]=1'b1;
       prAlloc[29]=1'b1;
-          
-      if (magic[0]) begin
-          if (magic[1:0]==2'b01) begin
-              prA[29]={instr[17],instr[11:8]};
-              prT[29]=instr[16:12];
-              prB[29]=5'd31;
-          end else begin
-              prA[29]={1'b0,instr[11:8]};
-              prT[29]={1'b0,instr[15:12]};
-              prB[29]=5'd31;
-          end
+      if (magic[1:0]==2'b01) begin
+          prA[29]={instr[17],instr[11:8]};
+          prT[29]=instr[16:12];
+          prB[29]=5'd31;
       end else begin
-          if (~prevSpecLoad) begin
-              prA[29]={1'b0,instr[15:12]};
-              prT[29]={1'b0,instr[15:12]};
-              prB[29]={1'b0,instr[11:8]};
-          end else begin
-              prA[29]={1'b0,instr[11:8]};
-              prT[29]={1'b0,instr[15:12]};
-              prB[29]=5'd16;
-          end
+          prA[29]={1'b0,instr[11:8]};
+          prT[29]={1'b0,instr[15:12]};
+          prB[29]=5'd31;
       end
-      //    if (rT==6'd16) thisSpecAlu=1'b1;
       
       trien[30]=magic[0] && isBasicMUL && ~isBasicALUExcept;
       pport[30]=PORT_MUL;
