@@ -21,24 +21,24 @@ module edram(
   input port_en;
   input port_ref_plus2;
   input [4:0] port_read_addr;
-  output [324:0] port_read_data; 
+  output [342:0] port_read_data; 
   input [4:0] port_write_addr;
-  input [324:0] port_write_data;
+  input [342:0] port_write_data;
   input port_wen_plus3;
   input port_data;
 `ifned synth_edram
-  reg [31:0] edram[323:0];
+  reg [31:0] edram[341:0];
 `else
-  reg [31:0] edram[161:0];
+  reg [31:0] edram[170:0];
 `endif
-  reg [324:0] data1;
-  reg [324:0] data2;
-  wire [324:0] data3;
-  wire [324:0] data3x;
+  reg [341:0] data1;
+  reg [341:0] data2;
+  wire [341:0] data3;
+  wire [341:0] data3x;
 
   block_ecc_decode corr0_mod(
   data1,
-  324'b0,
+  342'b0,
   ,
   xore1);
   block_ecc_correct corr_mod( 
