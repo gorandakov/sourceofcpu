@@ -1127,8 +1127,7 @@ module dcache1(
   wire [1023:0] write_dataM;
 //  wire [LINE_WIDTH-1:0] read_data;
   
-  wire [LINE_WIDTH-1:0] read_dataP[8:0];
-  wire [LINE_WIDTH-1:0] read_dataPN[8:0];
+  wire [LINE_WIDTH-1:0] read_dataP;
   reg [LINE_WIDTH-1:0] read_dataP_reg;
   reg [LINE_WIDTH-1:0] read_dataP_reg2;
   wire [BANK_COUNT*32-1:0] read_data_strip;
@@ -1364,7 +1363,6 @@ module dcache1(
   wire [7:0] read_errT1; 
   wire [7:0] read_errT2; 
   wire [7:0] read_errT3; 
-  wire [8:0][7:0] read_errP;
   reg [7:0] read_errP_reg;
   reg [7:0] read_errP_reg2;
   reg read_clkEnAny;
@@ -1377,25 +1375,31 @@ module dcache1(
   reg wb_enOut_reg2;
   generate
       genvar w,b,p,q;
-      for (w=0;w<8;w=w+1) begin : ways_gen
-          dcache1_way #(w) way_mod(
+      for (w=0;w<9;w=w+1) begin : ways_gen
+          wire [LINE_WIDTH-1:0] read_dataP;
+          wire [7:0] read_errP;
+          wire [1:0] read_pbit0P;
+          wire [1:0] read_pbit1P;
+          wire [1:0] read_pbit2P;
+          wire [1:0] read_pbit3P;
+          if (w) dcache1_way #(w-1) way_mod(
           clk,
           rst,
-          read_addrE0, read_addrO0, read_bank0, read_clkEn0, read_hit0_way[w], 
-            read_odd0, read_split0, read_pbit0P[w+1], read_pbit0P[w], read_errT0[w],
-          read_addrE1, read_addrO1, read_bank1, read_clkEn1, read_hit1_way[w],   
-            read_odd1, read_split1, read_pbit1P[w+1], read_pbit1P[w], read_errT1[w],
-          read_addrE2, read_addrO2, read_bank2, read_clkEn2, read_hit2_way[w],   
-            read_odd2, read_split2, read_pbit2P[w+1], read_pbit2P[w], read_errT2[w],
-          read_addrE3, read_addrO3, read_bank3, read_clkEn3, read_hit3_way[w],   
-            read_odd3, read_split3, read_pbit3P[w+1], read_pbit3P[w], read_errT3[w],
+          read_addrE0, read_addrO0, read_bank0, read_clkEn0, read_hit0_way[w-1], 
+            read_odd0, read_split0, ways_gen[w].read_pbit0P, ways_gen[w-1].read_pbit0P, read_errT0[w-1],
+          read_addrE1, read_addrO1, read_bank1, read_clkEn1, read_hit1_way[w-1],   
+            read_odd1, read_split1, ways_gen[w].read_pbit1P, ways_gen[w-1].read_pbit1P, read_errT1[w-1],
+          read_addrE2, read_addrO2, read_bank2, read_clkEn2, read_hit2_way[w-1],   
+            read_odd2, read_split2, ways_gen[w].read_pbit2P, ways_gen[w-1].read_pbit2P, read_errT2[w-1],
+          read_addrE3, read_addrO3, read_bank3, read_clkEn3, read_hit3_way[w-1],   
+            read_odd3, read_split3, ways_gen[w].read_pbit3P, ways_gen[w-1].read_pbit3P, read_errT3[w-1],
           read_bankNoRead,
           read_invalidate_reg,
-          read_bankHit_way[w],
-          read_dataP[w+1],
-	  read_dataP[w],
-          read_errP[w+1],
-	  read_errP[w],
+          read_bankHit_way[w-1],
+          ways_gen[w].read_dataP,
+	  ways_gen[w-1].read_dataP,
+          ways_gen[w].read_errP,
+	  ways_gen[w-1].read_errP,
 	  read_beginA0,
 	  read_beginA1,
 	  read_beginA2,
@@ -1407,8 +1411,8 @@ module dcache1(
           write_bgnBen0_reg,write_endBen0_reg,
           write_clkEn0_reg,
           write_hit0P&sticky_wen,
-          write_hit0_way[w],
-          write_dupl0_way[w],
+          write_hit0_way[w-1],
+          write_dupl0_way[w-1],
           write_split0_reg,
           write_pbit0_reg,
           write_d128_0_reg,
@@ -1421,8 +1425,8 @@ module dcache1(
           write_bgnBen1_reg,write_endBen1_reg,
           write_clkEn1_reg,
           write_hit1P&sticky_wen,
-          write_hit1_way[w],
-          write_dupl1_way[w],
+          write_hit1_way[w-1],
+          write_dupl1_way[w-1],
           write_split1_reg,
           write_pbit1_reg,
           write_d128_1_reg,
@@ -1433,11 +1437,11 @@ module dcache1(
           insert_dirty_reg2,
           write_data_ecc,
           write_dataPTR_reg2,
-          err_tag[w],
+          err_tag[w-1],
           recent_in,
-          recent_out[w],
+          recent_out[w-1],
           insert_rand,
-          insert_hit_way[w],
+          insert_hit_way[w-1],
           wb_addr,wb_enOut,
           puke_addr,puke_en
           );
@@ -1586,13 +1590,12 @@ module dcache1(
   assign read_dataX2={128{read_sz_reg[2][4:1]==4'd6 || read_sz_reg[2]==5'd14}}&rddata2[0];
   assign read_dataX3={128{read_sz_reg[3][4:1]==4'd6 || read_sz_reg[3]==5'd14}}&rddata2[0];
  
-  assign read_dataP[0]={LINE_WIDTH{1'B0}}; 
-  assign read_dataPN[0]={LINE_WIDTH{1'B1}}; 
-  assign read_pbit0P[0]=2'b0;
-  assign read_pbit1P[0]=2'b0;
-  assign read_pbit2P[0]=2'b0;
-  assign read_pbit3P[0]=2'b0;
-
+  assign ways_gen[0].read_dataP={LINE_WIDTH{1'B0}}; 
+  assign ways_gen[0].read_pbit0P=2'b0;
+  assign ways_gen[0].read_pbit1P=2'b0;
+  assign ways_gen[0].read_pbit2P=2'b0;
+  assign ways_gen[0].read_pbit3P=2'b0;
+  assign ways_gen[0].read_errP=
   assign read_hit0P=(|read_hitCl0Q[0] | ~rdreqE0) && (read_hitCl0Q[1] | ~rdreqO0) &&
     (rdreqE0 | rdreqO0) && ~insert_en_reg2 & ~rderr1[0] & ~rderr2[0];
   assign read_hit1P=(read_hitCl1Q[0] | ~rdreqE1) && (read_hitCl1Q[1] | ~rdreqO1) &&
@@ -1940,12 +1943,12 @@ module dcache1(
           write_clkEn1_reg2<=write_clkEn1_reg;
           
           insert_en_reg2<=insert_en_reg;
-          read_pbit0P_reg<=read_pbit0P[8];
-          read_pbit1P_reg<=read_pbit1P[8];
-          read_pbit2P_reg<=read_pbit2P[8];
-          read_pbit3P_reg<=read_pbit3P[8];
-          read_dataP_reg<=read_dataP[8];
-          read_errP_reg<=read_errP[8];
+          read_pbit0P_reg<=ways_gen[8].read_pbit0P;
+          read_pbit1P_reg<=ways_gen[8].read_pbit1P;
+          read_pbit2P_reg<=ways_gen[8].read_pbit2P;
+          read_pbit3P_reg<=ways_gen[8].read_pbit3P;
+          read_dataP_reg<=ways_gen[8].read_dataP;
+          read_errP_reg<=ways_gen[8].read_errP;
           write_data_reg2<=write_data_reg;
           write_dataM_reg2<=write_dataM_reg;
       end
