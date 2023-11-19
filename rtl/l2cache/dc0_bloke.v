@@ -1521,11 +1521,6 @@ module dcache2_block(
   wire [8:0] read_imm_way;
   reg [8:0] read_imm_way_reg;
   wire read_hit_any;
-  wire [32*DATA_WIDTH-1:0] read_dataP[8:-1];
-  wire [32*DATA_WIDTH-1:0] read_dataxP[8:-1];
-  wire [15:0] read_dataPtrP[8:-1];
-  wire [15:0] read_dataPtrxP[8:-1];
-  wire [4:0] read_LRUp[8:-1];
   reg read_en_reg,read_en_reg2,read_en_reg3;
   reg [4:0] write_begin0_reg;
   reg [4:0] write_begin1_reg;
@@ -1543,27 +1538,33 @@ module dcache2_block(
   reg ins_hit_reg2;
   wire read_immoral_some;
 //  reg ins_hit_reg3;
-  wire [1:0] read_dirP[8:-1];
-  wire [1:0] read_exclP[8:-1];
-  wire [36:0] read_expAddrP[8:-1];
   reg [7:0] write_dataPTR_reg;
   reg [15:0] write_dataPTR_reg2;
   generate
       genvar k,b,q;
-      for(k=0;k<10+(ID!=0);k=k+1) begin : ways_gen
-          dcache2_way #(k,ID)  way_mod(
+      for(k=0;k<(10+(ID!=0)+1);k=k+1) begin : ways_gen
+          wire [1:0] read_dirP;
+          wire [1:0] read_exclP;
+          wire [36:0] read_expAddrP;
+          wire [32*DATA_WIDTH-1:0] read_dataP;
+          wire [32*DATA_WIDTH-1:0] read_dataxP;
+          wire [15:0] read_dataPtrP;
+          wire [15:0] read_dataPtrxP;
+          wire [4:0] read_LRUp;
+
+          if (k) dcache2_way #(k-1,ID)  way_mod(
           clk,
           rst,
           read_en,
           read_odd,
-          read_dataP[k],
-          read_dataP[k-1],
-          read_dataxP[k],
-          read_dataxP[k-1],
-          read_dataPtrP[k],
-          read_dataPtrP[k-1],
-          read_dataPtrxP[k],
-          read_dataPtrxP[k-1],
+          ways_gen[k].read_dataP,
+          ways_gen[k-1].read_dataP,
+          ways_gen[k].read_dataxP,
+          ways_gen[k-1].read_dataxP,
+          ways_gen[k].read_dataPtrP,
+          ways_gen[k-1].read_dataPtrP,
+          ways_gen[k].read_dataPtrxP,
+          ways_gen[k-1].read_dataPtrxP,
           read_hit_way[k],
 	  read_imm_way[k],
           write0_clkEn,
@@ -1588,8 +1589,8 @@ module dcache2_block(
           insert,
           insert_excl,insert_dirty,insert_dupl,
           hit_LRU,
-	  read_LRUp[k],read_dirP[k],read_exclP[k],read_expAddrP[k],
-	  read_LRUp[k-1],read_dirP[k-1],read_exclP[k-1],read_expAddrP[k-1],
+	  ways_gen[k].read_LRUp,ways_gen[k].read_dirP,ways_gen[k].read_exclP,ways_gen[k].read_expAddrP,
+	  ways_gen[k-1].read_LRUp,ways_gen[k-1].read_dirP,ways_gen[k-1].read_exclP,ways_gen[k-1].read_expAddrP,
           read_expAddr_en,
           expun_cc_addr,
           expun_cc_en,
@@ -1618,14 +1619,14 @@ module dcache2_block(
           write_bankEn1,write_pbit1, write_begin1,write_end1, write_bBen1,write_enBen1,write_odd1,write_split1,  write_d128_1,
           '0};
 
-  assign read_dataP[-1][511:0]=512'b0;
-  assign read_dataP[-1][1023:512]=512'b0;
-  assign read_dataxP[-1][511:0]=512'b0;
-  assign read_dataxP[-1][1023:512]=512'b0;
-  assign read_LRUp[-1]={ID,3'b0};
-  assign read_dirP[-1]=2'b0;
-  assign read_exclP[-1]=2'b0;
-  assign read_expAddrP[-1]=37'b0;
+  assign ways_gen[0].read_dataP[511:0]=512'b0;
+  assign ways_gen[0].read_dataP[1023:512]=512'b0;
+  assign ways_gen[0].read_dataxP[511:0]=512'b0;
+  assign ways_gen[0].read_dataxP[1023:512]=512'b0;
+  assign ways_gen[0].read_LRUp={ID,3'b0};
+  assign ways_gen[0].read_dirP=2'b0;
+  assign ways_gen[0].read_exclP=2'b0;
+  assign ways_gen[0].read_expAddrP=37'b0;
   assign read_hit_any=|read_hit_way_reg;
   assign read_immoral_some=|read_imm_way_reg;
 
@@ -1682,9 +1683,9 @@ module dcache2_block(
           write_bankEn1_reg<=write_bankEn1;
           
         //  read_hit_any<=(|read_hit_way) && ~ins_hit_reg;
-          read_data<=~read_dataP[8];
-          read_dataX<=~read_dataxP[8];
-          read_LRU<=~read_LRUp[8];
+          read_data<=~read_dataP[10+(ID!=0)];
+          read_dataX<=~read_dataxP[10+(ID!=0)];
+          read_LRU<=~read_LRUp[10+(ID!=0)];
           read_en_reg<=read_en;
           read_en_reg2<=read_en_reg;
           read_en_reg3<=read_en_reg2;
@@ -1695,9 +1696,9 @@ module dcache2_block(
           read_imm_way_reg<=read_imm_way;
           hit_any<=(|read_hit_way_reg);
           immoral_some<=(|read_imm_way_reg);
-          read_dir<=~read_dirP[8][0];
-          read_excl<=~read_exclP[8][0];
-          read_expAddrOut<=~read_expAddrP[8];
+          read_dir<=~read_dirP[10+(ID!=0)][0];
+          read_excl<=~read_exclP[10+(ID!=0)][0];
+          read_expAddrOut<=~read_expAddrP[10+(ID!=0)];
       end
   end
 endmodule
