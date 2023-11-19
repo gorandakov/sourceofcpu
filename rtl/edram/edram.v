@@ -26,11 +26,6 @@ module edram(
   input [342:0] port_write_data;
   input port_wen_plus3;
   input port_data;
-`ifned synth_edram
-  reg [31:0] edram[341:0];
-`else
-  reg [31:0] edram[170:0];
-`endif
   reg [341:0] data1;
   reg [341:0] data2;
   wire [341:0] data3;
@@ -50,28 +45,37 @@ module edram(
   assign data3x=clkREF1 ? data3 : 'z;
   assign data3x=clkREF2 ? data3 : 'z;
 
-
-  always @(posedge clk) begin
-`ifndef synth_edram
-      if (port_en | port_ref_plus2) data1<=edram[port_addr_reg];
-      else if (port_wen_plus3 | port_ref_plus5) edram[port_write_addr]<=data3;
+generate
+  genvar k;
+  for(k=0;k<16;k=k+1) begin : sel_2stage
+`ifned synth_edram
+      reg [31:0][341:0] edram;
 `else
-      if (port_en | port_ref_plus2) begin
-           data1[161:0]<=clkREF1 ? edram[port_addr_reg] : 'z;
-           data1[323:162]<=clkREF2 ? edram[port_addr_reg] : 'z;
-      end else if (port_wen_plus3 | port_ref_plus5) begin
-           edram[port_write_addr]<= data3x;
-      end
+      reg [31:0][170:0] edram;
 `endif
-      if ((port_en && (port_read_addr_reg2!=port_read_addr)|~port_ref_plus2_reg2)
-         || (port_ref_plus2 && (port_read_addr_reg2!=port_read_addr)|~port_en_reg2)) begin
-          data1<=data2;
-      end
-      if (port_data) data1<=port_write_data;
-      xore1_reg<=xore;
-      data2<=data1;
-      port_ref_plus3<=port_ref_plus2;
-      port_ref_plus3<=port_ref_plus3;
-      port_ref_plus5<=port_ref_plus5;
+
+      always @(posedge clk) begin
+`ifndef synth_edram
+          if (port_en | port_ref_plus2) data1<=edram[port_addr_reg];
+          else if (port_wen_plus3 | port_ref_plus5) edram[port_write_addr]<=data3;
+`else
+          if (port_en | port_ref_plus2 && port_addr_reg[8:5]==k) begin
+               data1[161:0]<=clkREF1 ? edram[port_addr_reg[4:0]] : 'z;
+               data1[323:162]<=clkREF2 ? edram[port_addr_reg[4:0]] : 'z;
+          end else if (port_wen_plus3 | port_ref_plus5 && port_write_addr[8:5]==k) begin
+               edram[port_write_addr[4:0]]<= data3x;
+          end
+`endif
+          if ((port_en && (port_read_addr_reg2!=port_read_addr)|~port_ref_plus2_reg2)
+             || (port_ref_plus2 && (port_read_addr_reg2!=port_read_addr)|~port_en_reg2)) begin
+              data1<=data2;
+          end
+          if (port_data) data1<=port_write_data;
+          xore1_reg<=xore;
+          data2<=data1;
+          port_ref_plus3<=port_ref_plus2;
+          port_ref_plus3<=port_ref_plus3;
+          port_ref_plus5<=port_ref_plus5;
   end
+endgenerate
 endmodule
