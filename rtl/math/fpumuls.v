@@ -106,13 +106,9 @@ module fpumuls(clk,rst,A,B,copyA,en,rmode,res,raise,fpcsr);
   reg en_reg,en_reg2,en_reg3;
 //  reg or1,and1;
  //tbd: enable bit 
-`ifndef simulation
   fpucadd_compress_24 compr_mod(clk,{1'b1,A[22:0]},{1'b1,B[22:0]},
     part0,part1);
   adder #(48) prodAdd_mod(part0,part1,prod,1'b0,1'b1,,,,);
-`else
-  prod={1'b1,A[22:0]}*{1'b1,B[22:0]};
-`endif
 
   adder2o #(24) resAddD_mod(prod_reg[46:23],rndbit_dbl,{res_X[22:0],dummy1_3},{dummy1_4,res_X[22:0]},1'b0,
       prod_reg[47] & DBL_rnd1 & en_reg2 & ~spec_any || ~prod_reg[47] & DBL_rnd0 & DBL_rnflip0 & en_reg2 & ~spec_any,

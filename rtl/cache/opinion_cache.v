@@ -545,46 +545,46 @@ module ccRam_half(
   wire [7:0] readB_hit_way;
   wire [7:0] expun_hit_way;
   
+  wire [DATA_WIDTH-1:0] readA_dataP[7:-1];
+  wire [59:0] readA_dataXP[7:-1];
+  wire [DATA_WIDTH-1:0] readB_dataP[7:-1];
+  wire [59:0] readB_dataXP[7:-1];
+  wire [2:0] read_NRUP[7:-1];
+  wire [36:0] expun_addrP[7:-1];
 
   reg [2:0] read_NRU_reg;
  
   
   generate
       genvar k;
-      for(k=0;k<9;k=k+1) begin : way_gen
-          wire [DATA_WIDTH-1:0] readA_dataP[7:-1];
-          wire [59:0] readA_dataXP[7:-1];
-          wire [DATA_WIDTH-1:0] readB_dataP[7:-1];
-          wire [59:0] readB_dataXP[7:-1];
-          wire [2:0] read_NRUP[7:-1];
-          wire [36:0] expun_addrP[7:-1];
-          if (k) ccRam_way #(k-1) way_mod(
+      for(k=0;k<8;k=k+1) begin : wayMod_gen
+          ccRam_way #(k) way_mod(
           .clk(clk),
           .rst(rst),
           .readA_clkEn(readA_clkEn),
           .readA_IP(readA_IP[IP_WIDTH-2:4]),
           .readA_IP_low(readA_IP[3:0]),
           .readA_set_flag(readA_set_flag),
-          .readA_data(ways_gen[k].readA_dataP),
-          .readA_data_in(ways_gen[k-1].readA_dataP),
-          .readA_dataX(ways_gen[k].readA_dataXP),
-          .readA_dataX_in(ways_gen[k-1].readA_dataXP),
+          .readA_data(readA_dataP[k]),
+          .readA_data_in(readA_dataP[k-1]),
+          .readA_dataX(readA_dataXP[k]),
+          .readA_dataX_in(readA_dataXP[k-1]),
           .readB_clkEn(readB_clkEn),
           .readB_IP(readB_IP[IP_WIDTH-2:4]),
           .readB_IP_low(readB_IP[3:0]),
           .readB_set_flag(readB_set_flag),
-          .readB_data(ways_gen[k].readB_dataP),
-          .readB_data_in(ways_gen[k-1].readB_dataP),
-          .readB_dataX(ways_gen[k].readB_dataXP),
-          .readB_dataX_in(ways_gen[k-1].readB_dataXP),
-          .expun_addr(ways_gen[k].expun_addrP),
-          .expun_addr_in(ways_gen[k-1].expun_addrP),
-          .readA_hit(readA_hit_way[k-1]),
-          .readB_hit(readB_hit_way[k-1]),
-	  .expun_hit(expun_hit_way[k-1]),
+          .readB_data(readB_dataP[k]),
+          .readB_data_in(readB_dataP[k-1]),
+          .readB_dataX(readB_dataXP[k]),
+          .readB_dataX_in(readB_dataXP[k-1]),
+          .expun_addr(expun_addrP[k]),
+          .expun_addr_in(expun_addrP[k-1]),
+          .readA_hit(readA_hit_way[k]),
+          .readB_hit(readB_hit_way[k]),
+	  .expun_hit(expun_hit_way[k]),
           .chkCL_IP(chkCL_IP),
           .chkCL_clkEn(chkCL_clkEn),
-          .chkCL_hit(chkCL_hit_way[k-1]),
+          .chkCL_hit(chkCL_hit_way[k]),
           .read_NRU(read_NRUP[k]),
           .read_NRU_in(read_NRUP[k-1]),
 	  .read_NRU_reg(read_NRU_reg),
@@ -592,8 +592,8 @@ module ccRam_half(
           .write_data(write_data),
           .write_wen(write_wen),
           .invalidate(invalidate),
-          .ErrA(tagErrA[k-1]),
-          .ErrB(tagErrB[k-1])
+          .ErrA(tagErrA[k]),
+          .ErrB(tagErrB[k])
 //	  .read_next_hit()
           );
       end
@@ -604,22 +604,22 @@ module ccRam_half(
   assign expun_hit=|expun_hit_way;
   assign chkCL_hit=|chkCL_hit_way;
 
-  assign way_mod[0].readA_dataP=0;
-  assign way_mod[0].readA_dataXP=0;
-  assign way_mod[0].readB_dataP=0;
-  assign way_mod[0].readB_dataXP=0;
-  assign way_mod[0].read_NRUP=0;
-  assign way_mod[0].expun_addrP=0;
+  assign readA_dataP[-1]=0;
+  assign readA_dataXP[-1]=0;
+  assign readB_dataP[-1]=0;
+  assign readB_dataXP[-1]=0;
+  assign read_NRUP[-1]=0;
+  assign expun_addrP[-1]=0;
 
-  assign readA_data=way_mod[8].readA_dataP;
-  assign readA_dataX=way_mod[8].readA_dataXP;
-  assign readB_data=way_mod[8].readB_dataP;
-  assign readB_dataX=way_mod[8].readB_dataXP;
-  assign expun_addr=way_mod[8].expun_addrP;
+  assign readA_data=readA_dataP[7];
+  assign readA_dataX=readA_dataXP[7];
+  assign readB_data=readB_dataP[7];
+  assign readB_dataX=readB_dataXP[7];
+  assign expun_addr=expun_addrP[7];
   
 
   always @(*) begin
-    read_NRU_reg=way_mod[8].read_NRUP;
+    read_NRU_reg=read_NRUP[7];
   end
 
 endmodule
