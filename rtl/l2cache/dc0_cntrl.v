@@ -30,7 +30,7 @@ module dc0_cntrl_ram(
   );
   localparam ADDR_WIDTH=5;
   localparam DATA_WIDTH=`mOpC_width+2+16;
-  localparam ADDR_COUNT=20;
+  localparam ADDR_COUNT=32;
   
   input clk;
   input rst;
@@ -68,7 +68,7 @@ module dc0_cntrlD_ram(
   );
   localparam ADDR_WIDTH=5;
   localparam DATA_WIDTH=128+16;
-  localparam ADDR_COUNT=20;
+  localparam ADDR_COUNT=32;
   
   input clk;
   input rst;
@@ -187,7 +187,7 @@ module dc0_cntrlC1_ram(
   );
   localparam ADDR_WIDTH=5;
   localparam DATA_WIDTH=37+5+1+1+13;
-  localparam ADDR_COUNT=20;
+  localparam ADDR_COUNT=32;
   
   input clk;
   input rst;
@@ -226,7 +226,7 @@ module dc0_cntrlM_ram(
   );
   localparam ADDR_WIDTH=5;
   localparam DATA_WIDTH=37+5+1+1+13;
-  localparam ADDR_COUNT=29;
+  localparam ADDR_COUNT=32;
   
   input clk;
   input rst;
@@ -263,7 +263,7 @@ module dc0_cntrlM1_ram(
   );
   localparam ADDR_WIDTH=5;
   localparam DATA_WIDTH=37+1+1;
-  localparam ADDR_COUNT=29;
+  localparam ADDR_COUNT=32;
   
   input clk;
   input rst;
@@ -301,7 +301,7 @@ module dc0_cntrlMiC2_ram(
   );
   localparam ADDR_WIDTH=5;
   localparam DATA_WIDTH=37+5;
-  localparam ADDR_COUNT=29;
+  localparam ADDR_COUNT=32;
   
   input clk;
   input rst;
