@@ -89,9 +89,9 @@ module frontendSelf(
   localparam IP_WIDTH=64;
   localparam [63:0] INIT_IP=64'hf80ff00000000000;
   localparam [3:0] INIT_ATTR=4'b0;
-  localparam BUS_BANK=32;
+  localparam BUS_BANK=34;
   localparam BUS_WIDTH=BUS_BANK*16;
-  localparam DATA_WIDTH=65*8;
+  localparam DATA_WIDTH=68*8;
   localparam INSTR_WIDTH=80;
   localparam CLS_WIDTH=13;
   parameter [4:0] BUS_ID=0;
@@ -194,7 +194,7 @@ module frontendSelf(
   input cc_read_tagErr;
   input [DATA_WIDTH/2-1:0] cc_read_data;
   assign read_data=cc_read_data;
-  input [14:0] cc_read_dataX;
+  input [15:0] cc_read_dataX;
   assign read_dataX=cc_read_dataX;
   output [PHYS_WIDTH-1:0] cc_write_IP={write_IP,5'b0};
   output cc_write_wen=bus_match_reg;
@@ -208,7 +208,7 @@ module frontendSelf(
   output expun_wen;
 
   wire [DATA_WIDTH/2-1:0] read_data;
-  wire [14:0] read_dataX;
+  wire [15:0] read_dataX;
   wire [16:0] read_dataY; 
   wire [DATA_WIDTH/2-1:0] read_data_reg;
   wire instrFed;
@@ -905,14 +905,13 @@ module frontendSelf(
       for (j=0;j<12;j=j+1) begin
           wire [3:0] isJ;
           assign pre_other[j][`instrQ_magic]=~pre_magic_reg[j];
-          assign pre_other[j][`instrQ_srcIPOff]=read_data_reg[255] && cc_read_IP_reg3[4:1]==4'b0 ? {cc_base_off_reg,pre_off_reg[j]}: 
+          assign pre_other[j][`instrQ_srcIPOff]=read_data_reg2[271:268]==4'b0 && cc_read_IP_reg3[4:1]==4'b0 ? {cc_base_off_reg,pre_off_reg[j]}: 
               {cc_base_off,pre_off_reg[j]};
-          if (j!=11) assign pre_other[j][`instrQ_srcTick]=cc_base_tick &&//cc_read_IP_reg4[43:9]!=cc_read_IP_reg5[43:9] &&
-	     do_seq_reg5 && pre_instrEn_reg[j]&&pre_jbefore[j]&&j=={31'b0,read_data_reg[255] && cc_read_IP_reg3[4:1]==0}; 
-          else assign pre_other[j][`instrQ_srcTick]=cc_base_tick &&//cc_read_IP_reg4[43:9]!=cc_read_IP_reg5[43:9] &&
-	     do_seq_reg5 && pre_instrEn_reg[j]&&pre_jbefore[j]&&j=={31'b0,read_data_reg[255] && cc_read_IP_reg3[4:1]==0}; 
+          if (j!=11) assign pre_other[j][`instrQ_srcTick]=cc_base_tick &&
+	     do_seq_reg5 && pre_instrEn_reg[j]&&pre_jbefore[j]&&j=={31'b0,read_data_reg2[271:268]==4'b0 && cc_read_IP_reg3[4:1]==0}; 
+          else assign pre_other[j][`instrQ_srcTick]=cc_base_tick &&
+	     do_seq_reg5 && pre_instrEn_reg[j]&&pre_jbefore[j]&&j=={31'b0,read_data_reg2[271:268]==4'b0 && cc_read_IP_reg3[4:1]==0}; 
           assign pre_other[j][`instrQ_class]=pre_class_reg[j];
-          //assign pre_other[j][`instrQ_taken]=btb_hasTK_reg3 ? 1'bz : 1'b0;
           assign pre_other[j][`instrQ_taken]=(taken_reg4 & isJ) !=4'b0 && tbuf_error==4'b0;
           assign isJ[0]=pre_off_reg[j]==btbx_joff_reg4[0] && pre_class_reg[j][`iclass_jump];
           assign isJ[1]=pre_off_reg[j]==btbx_joff_reg4[1] && pre_class_reg[j][`iclass_jump];
@@ -942,7 +941,7 @@ module frontendSelf(
 	  assign pre_other[j][`instrQ_jval]=isJ[2] ? predx_sh2_reg4 : 1'bz;
 	  assign pre_other[j][`instrQ_jval]=isJ[3] ? predx_sh3_reg4 : 1'bz;
 	  assign pre_other[j][`instrQ_sc]=isJ!=0 ? 2'bz : 2'b0;
-//	  assign pre_other[j][`instrQ_avx]=pre_isAvx_reg;
+	  assign pre_other[j][`instrQ_avx]=pre_isAvx_reg;
 	  assign pre_other[j][`instrQ_btbMiss]=~btb_can_ins_reg4;
 	  assign pre_other[j][`instrQ_btb_only]=(isJ&btbx_cond_reg4)==4'b0;
           get_carry #(4) jcmp_mod(last_off_reg4,~pre_off_reg[j],1'b1,pre_jbefore0[j]);
@@ -950,8 +949,8 @@ module frontendSelf(
       end
   endgenerate
 
-  insconv ins0_mod(bus_data_reg[255:0],bus_data_cvt[255:0]);
-  insconv ins2_mod(bus_data_reg[511:256],bus_data_cvt[511:256]);
+  insconv ins0_mod(bus_data_reg[255:0],bus_data_cvt[255:0]);//purpose??
+  insconv ins2_mod(bus_data_reg[511:256],bus_data_cvt[511:256]);//purpose??
 
   LFSR_16_1_16 h_mod(clk,rst,pff1,pff);
   
@@ -1288,9 +1287,9 @@ module frontendSelf(
   predecoder_get preDec_mod(
     .clk(clk),
     .rst(rst),
-    .bundle({read_data[258:195],read_data[193:130],read_data[128:65],read_data[63:0]}),
-    .btail(read_data_reg[239:176]),
-    .bstop(read_data_reg[254:251]),
+    .bundle(read_data),
+    .btail(read_data_reg[255:192]),
+    .bstop(read_data_reg[271:256]),
     .flag_bits(read_dataX),
     .startOff(cc_read_IP_reg2[4:1]),
     .instr0(pre_instr0),.instr1(pre_instr1),.instr2(pre_instr2),.instr3(pre_instr3),
