@@ -33,10 +33,12 @@ limitations under the License.
 `define csr_USER2 15
 `define csr_USER1 16
 `define csr_cl_lock 18
-`define csr_ptr_combine 32
-`define csr_ptr_intersect 33
-`define csr_restrict_lower 34
-`define csr_restrict_upper 35
+`define csr_last_jmp 19
+`define csr_last_jmp2 20
+//`define csr_ptr_combine 32
+//`define csr_ptr_intersect 33
+//`define csr_restrict_lower 34
+//`define csr_restrict_upper 35
 `define csr_IRQ_send 36
 `define csr_IRQ_recv_vector 37
 `define csr_MAC 2048

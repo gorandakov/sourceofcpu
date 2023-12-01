@@ -605,8 +605,7 @@ module agu_r(
 		  proc<=vproc;
 		  sproc<=pproc^1;
 	      end
-	      mflags[`mflags_cpl]<=mOp0_attr[`attr_km] ? 2'b0 : 2'b11;
-	      mflags[`mflags_sec]<=mOp0_attr[`attr_sec];//muha-srankk
+	      mflags[`mflags_cpl]<={mOp0_attr[`attr_km],mOp0_attr[`attr_sec]};//muha-srankk
           end else if (!rsStall) begin
 	      if (mOp_en && !|req_bus) mOp0_en_reg<=1'b0;
           end
