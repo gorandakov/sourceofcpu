@@ -230,6 +230,8 @@ module decoder_aux_const(
   reg [1:0][63:0] csr_USER3;
   reg [1:0][63:0] csr_IRQ_send;
   reg [1:0][63:0] csr_IRQ_recv_vector;
+  reg [1:0][63:0] csr_last_jmp;
+  reg [1:0][63:0] csr_last_jmp2;
   assign iconst[0]={thread,instr0[30:16]};
   assign iconst[1]={thread,instr1[30:16]};
   assign iconst[2]={thread,instr2[30:16]};
@@ -284,6 +286,8 @@ module decoder_aux_const(
       `csr_USER1: aux_const={1'b1,csr_USER1[thread]};
       `csr_USER2: aux_const={1'b1,csr_USER2[thread]};
       `csr_vlen: aux_const={1'b0,64'd32};
+      `csr_last_jmp: aux_const={1'b0,csr_last_jmp[thread]};
+      `csr_last_jmp2: aux_const={1'b0,csr_last_jmp2[thread]};
       `csr_cl_lock: begin aux_const={64'b0,csr_mflags[thread][18]}; end
       default:			aux_const=65'b0;
       endcase
@@ -335,6 +339,10 @@ module decoder_aux_const(
           csr_USER1[1]<=64'b0;
           csr_USER2[0]<=64'b0;
           csr_USER2[1]<=64'b0;
+          csr_last_jmp[0]<=64'b0;
+          csr_last_jmp2[0]<=64'b0;
+          csr_last_jmp[1]<=64'b0;
+          csr_last_jmp2[1]<=64'b0;
           thread_reg<=1'b0;
       end else begin
           if (!stall) thread_reg<=thread;
@@ -359,7 +367,7 @@ module decoder_aux_const(
       `csr_syscall:		csr_syscall[csrss_no[15]]<=csrss_data[63:0];
       `csr_vmcall:		csr_vmcall[csrss_no[15]]<=csrss_data[63:0];
       `csr_USER3:		csr_USER3[csrss_no[15]]<=csrss_data[63:0];
-      `csr_indir_mask:          csr_indir_mask[csrss_no[15]]<=csrss_data[63:0];
+      `csr_last_jmp: begin csr_last_jmp[csrss_no[15]]<=csrss_data[63:0]; csr_last_jmp2[csrss_no[15]]<=csr_last_jmp[csrss_no[15]]; end
       `csr_cl_lock:             csr_mflags[csrss_no[15]][18]<=1'b1;
      	      endcase
               aux0_reg<=aux0;
