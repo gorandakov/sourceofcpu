@@ -1033,17 +1033,20 @@ module cntrl_find_outcome(
   assign except_attr_d=(break_replay|break_replayS) ? attr : 4'bz;
   assign except_attr_d=(break_pending | ~has_break) ? 4'b0 : 4'bz;
 
-  assign csrss_no_d=(break_jump0) ? jump0IP[15:0] : 16'bz;
-  assign csrss_no_d=(break_jump1) ? jump1IP[15:0] : 16'bz;
+  assign csrss_no_d=(break_jump0 && jump0Type==5'b11001) ? {tire_thread_reg,jump0IP[14:0]} : 16'bz;
+  assign csrss_no_d=(break_jump1 && jump1Type==5'b11001) ? {tire_thread_reg,jump1IP[14:0]} : 16'bz;
+  assign csrss_no_d=(break_jump0 && jump0Type!=5'b11001 && jump0_taken) ||
+    (break_jump1 && jump1Type!=5'b11001 && jump1_taken) ? 16'd`csr_last_jmp : 16'bz;
   assign csrss_no_d=(break_exceptn) ? 16'd`csr_retIP : 16'bz;
   assign csrss_no_d=(~break_jump0 & ~break_jump1 & ~break_exceptn) ? 16'd`csr_excpt_fpu : 16'bz;
-  assign csrss_en_d=(break_jump0) ? jump0Type==5'b11001 && has_some && ~mem_II_stall : 1'bz;
-  assign csrss_en_d=(break_jump1) ? jump1Type==5'b11001 && has_some && ~mem_II_stall : 1'bz;
+  assign csrss_en_d=(break_jump0) ? (jump0Type==5'b11001 || jump0_taken) && has_some && ~mem_II_stall : 1'bz;
+  assign csrss_en_d=(break_jump1) ? (jump1Type==5'b11001 || jump1_taken) && has_some && ~mem_II_stall : 1'bz;
   assign csrss_en_d=(break_exceptn) ? has_some & ~mem_II_stall : 1'bz;
   assign csrss_en_d=(~break_jump0 & ~break_jump1 & ~break_exceptn) ? 1'b1 : 1'bz;
   assign csrss_data_d=(break_exceptn) ? {1'b0,attr[0],attr[1],is_after_spec,attr[3],bbaseIP[62:53],bbaseIP[50:46],bbaseIP[43],breakIP,1'b0} : 65'bz;
-  assign csrss_data_d=(~break_exceptn & has_indir & indir_ready & has_some) ? indir_IP : 65'bz;
-  assign csrss_data_d=(~break_exceptn & ~(has_indir & indir_ready & has_some)) ? {49'b0,5'b0,excpt_fpu} : 65'bz;
+  assign csrss_data_d=(~break_exceptn && (break_jump0&jump0_taken || break_jump1&jump1_taken) && has_some) ? 
+    {1'b0,attr[0],attr[1],is_after_spec,attr[3],bbaseIP[62:53],bbaseIP[50:46],bbaseIP[43],breakIP,1'b0} : 65'bz;
+  assign csrss_data_d=(~break_exceptn & ~(break_jump0&jump0_taken || break_jump1&jump1_taken)) ? {49'b0,5'b0,excpt_fpu} : 65'bz;
   assign baseIP_d=(jump0_in & jump0_taken &~break_exceptn &~break_replay &~break_replayS) ? {jump0BND,jump0IP} : 6_3'bz;
   assign baseIP_d=(jump1_in & jump1_taken &~break_exceptn &~break_replay &~break_replayS) ? {jump1BND,jump1IP} : 63'bz;
   assign baseIP_d=(break_exceptn) ? {excpt_handlerIP[62:11],excpt_code[5:0],5'b0} : 63'bz;
