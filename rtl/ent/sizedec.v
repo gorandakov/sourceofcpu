@@ -514,18 +514,20 @@ module predecoder_get(
     wire [14:0] is_ret;
     reg [14:0] is_ret_reg;
     reg [15:0] flag_bits0;
+    wire [14:0] mask0;
         
     generate
         genvar k;
         for(k=0;k<15;k=k+1) begin : popcnt_gen
             popcnt15 cnt_mod(instrEnd[14:0] & ((15'b10<<k)-15'b1) & mask[14:0],cntEnd[k]);
-            get_carry #(4) carry_mod(k[3:0],~startOff,1'b1,mask[k]);
+            get_carry #(4) carry_mod(k[3:0],~startOff,1'b1,mask0[k]);
+            mask[k]=mask0[k] || ((k+1)==startOff && !instrEnd[k]);
 
             wire [3:0] kk;
-            assign kk=k==0 && bundle0[255] && bstop[3:2]==2'b01 ? 4'he : 4'bz;
-            assign kk=k==0 && bundle0[255] && bstop[3:1]==3'b001 ? 4'hd : 4'bz;
-            assign kk=k==0 && bundle0[255] && bstop[3:0]==4'b0001 ? 4'hc : 4'bz;
-            assign kk=k==0 && bundle0[255] && bstop[3:0]==4'b0 ? 4'hb : 4'bz;
+            assign kk=k==0 && bundle0[255] && bstop[3:2]==2'b01 ? 4'hf : 4'bz;
+            assign kk=k==0 && bundle0[255] && bstop[3:1]==3'b001 ? 4'he : 4'bz;
+            assign kk=k==0 && bundle0[255] && bstop[3:0]==4'b0001 ? 4'hd : 4'bz;
+            assign kk=k==0 && bundle0[255] && bstop[3:0]==4'b0 ? 4'hc : 4'bz;
             assign kk= k!=0 || ~bundle0[255] || bstop[3] ? k[3:0] : 4'bz;
 
             predecoder_class cls_mod(bundleF[k*16+:32],~instrEndF[k+:4],flag_bits0[k],class_[k],
