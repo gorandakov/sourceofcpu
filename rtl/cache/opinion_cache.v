@@ -351,7 +351,7 @@ module ccRam_way(
   .write_data(write_data_reg[DATA_WIDTH/2-1:0] & {DATA_WIDTH/2{~init}}),
   .write_wen(write_hit|init)
   );
-
+  
   cc_ram_block #(0) ram1_mod(
   .clk(clk),
   .rst(rst),
@@ -366,6 +366,17 @@ module ccRam_way(
   .write_wen(write_hit|init)
   );
 
+  wire errAx,errBx;
+
+  assign errA=^readA_data_ram[64:0] || ^readA_data_ram[64+65:0+65] || ^readA_data_ram[64+130:0+130] || ^readA_data_ram[64+195:195] || 
+    ^readA_data_ram[64+260:260] || ^readA_data_ram[64+325:325] || ^readA_data_ram[64+390:390] || ^readA_data_ram[64+455:455] || 
+    ^readA_data_ram[64+520:520] || ^readA_data_ram[64+585:585] || ^readA_data_ram[64+650:650] || ^readA_data_ram[64+715:715] || 
+    ^readA_data_ram[64+780:780] || ^readA_data_ram[64+845:845] || ^readA_data_ram[64+920:920] || ^readA_data_ram[64+985:985] || errAx;
+  assign errB=^readB_data_ram[64:0] || ^readB_data_ram[64+65:0+65] || ^readB_data_ram[64+130:0+130] || ^readB_data_ram[64+195:195] || 
+    ^readB_data_ram[64+260:260] || ^readB_data_ram[64+325:325] || ^readB_data_ram[64+390:390] || ^readB_data_ram[64+455:455] || 
+    ^readB_data_ram[64+520:520] || ^readB_data_ram[64+585:585] || ^readB_data_ram[64+650:650] || ^readB_data_ram[64+715:715] || 
+    ^readB_data_ram[64+780:780] || ^readB_data_ram[64+845:845] || ^readB_data_ram[64+920:920] || ^readB_data_ram[64+985:985] || errBx;
+
 //verilator lint_off WIDTH
   ccTag #(INDEX) tag_mod(
   .clk(clk),
@@ -373,7 +384,7 @@ module ccRam_way(
   .read_clkEn(readA_clkEn),
   .read_phys_addr(init ? {initCount} : readA_IP[38:2]),
   .read_hit(readA_hit),
-  .read_err(ErrA),
+  .read_err(ErrAx),
   .write_phys_addr(init ? {initCount} : write_IP[38:2]),
   .write_wen(write_wen),
   .invalidate(invalidate),
@@ -392,7 +403,7 @@ module ccRam_way(
   .read_clkEn(readB_clkEn),
   .read_phys_addr(init ? {initCount} : readB_IP[38:2]),
   .read_hit(readB_hit),
-  .read_err(ErrB),
+  .read_err(ErrBx),
   .write_phys_addr(init ? {initCount} : write_IP[38:2]),
   .write_wen(write_wen),
   .invalidate(invalidate),
@@ -457,6 +468,9 @@ module ccRam_way(
           write_IP_reg<=write_IP;
         //  hitNRU_reg<=hitNRU;
           write_data_reg<=write_data;
+          for(z=0;z<16;z=z+1) begin
+              write_data_reg[65*z+64]<=^write_data[65*z+:64];
+          end
           readA_clkEn_reg<=readA_clkEn;
           readA_set_flag_reg<=readA_set_flag;
           readA_IP_low_reg<=readA_IP_low;
@@ -523,11 +537,13 @@ module ccRam_half(
   input readA_set_flag;
   output [DATA_WIDTH-1:0] readA_data;
   output [59:0] readA_dataX;
+  output [7:0] readA_hit_way;
   input readB_clkEn;
   input [IP_WIDTH-2:0] readB_IP;
   input readB_set_flag;
   output [DATA_WIDTH-1:0] readB_data;
   output [59:0] readB_dataX;
+  output [7:0] readB_hit_way;
   output [36:0] expun_addr;
   output readA_hit,readB_hit,expun_hit;
   input [IP_WIDTH-6:0] chkCL_IP;
@@ -552,12 +568,12 @@ module ccRam_half(
   generate
       genvar k;
       for(k=0;k<9;k=k+1) begin : way_gen
-          wire [DATA_WIDTH-1:0] readA_dataP[7:-1];
-          wire [59:0] readA_dataXP[7:-1];
-          wire [DATA_WIDTH-1:0] readB_dataP[7:-1];
-          wire [59:0] readB_dataXP[7:-1];
-          wire [2:0] read_NRUP[7:-1];
-          wire [36:0] expun_addrP[7:-1];
+          wire [DATA_WIDTH-1:0] readA_dataP;
+          wire [59:0] readA_dataXP;
+          wire [DATA_WIDTH-1:0] readB_dataP;
+          wire [59:0] readB_dataXP;
+          wire [2:0] read_NRUP;
+          wire [36:0] expun_addrP;
           if (k) ccRam_way #(k-1) way_mod(
           .clk(clk),
           .rst(rst),
