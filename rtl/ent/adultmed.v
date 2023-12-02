@@ -144,7 +144,7 @@ module smallInstr_decoder(
   output isIPRel;
   output rAlloc;
   output reg csrss_retIP_en;
-  output [1:0] error;
+  output error;
   output reor_en_out;
   output [23:0] reor_val_out;
   input reor_en;
@@ -597,7 +597,7 @@ module smallInstr_decoder(
 	  assign flags_wrFPU=(|trien[p*8+:8]) ? kflags_wrFPU : 1'bz;
 	  assign rBT_copyV=(|trien[p*8+:8]) ? krBT_copyV : 1'bz;
 	  assign instr_fsimd=(|trien[p*8+:8]) ? kinstr_fsimd : 1'bz;
-	  assign error=(|trien[p*8+:8]) ? kerror : 2'bz;
+	  assign error=(|trien[p*8+:8]) ? |kerror || instrQ[`instrQ_avx] : 1'bz;
 	  assign port=(|trien[p*8+:8]) ? kport : 4'bz;
 	  assign jumpType=(|trien[p*8+:8]) ? kjumpType : 5'bz;
 	  assign operation=(|trien[p*8+:8]) ? koperation : 13'bz;
@@ -686,7 +686,7 @@ module smallInstr_decoder(
           prT_useF[tt]=1'b0;
           prC_useF[tt]=1'b0;
           pchain[tt]=1'b0;
-	      perror[tt]={1'b0,(|magic[3:2])&(&magic[1:0]) || &srcIPOff[3:0]}; 
+	  perror[tt]=magic[2:0]==3'b0; 
           pflags_use[tt]=1'b0;
           pflags_write[tt]=1'b0;
           pclr64[tt]=1'b0;

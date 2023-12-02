@@ -72,6 +72,7 @@ module frontendSelf(
   cc_read_tagErr,
   cc_read_data,
   cc_read_dataX,
+  cc_err,
   cc_write_IP,
   cc_write_wen,
   cc_invalidate,
@@ -196,6 +197,7 @@ module frontendSelf(
   assign read_data=cc_read_data;
   input [15:0] cc_read_dataX;
   assign read_dataX=cc_read_dataX;
+  input cc_err;
   output [PHYS_WIDTH-1:0] cc_write_IP={write_IP,5'b0};
   output cc_write_wen=bus_match_reg;
   output cc_invalidate=1'b0;
@@ -382,6 +384,7 @@ module frontendSelf(
   
   wire pre_isAvx;
   reg pre_isAvx_reg;
+  reg cc_err_reg;
   wire [11:0][CLS_WIDTH-1:0] pre_class;
   reg [CLS_WIDTH-1:0] pre_class_reg[11:0]/*verilator public*/;
   wire pre_has_jumps;
@@ -941,7 +944,7 @@ module frontendSelf(
 	  assign pre_other[j][`instrQ_jval]=isJ[2] ? predx_sh2_reg4 : 1'bz;
 	  assign pre_other[j][`instrQ_jval]=isJ[3] ? predx_sh3_reg4 : 1'bz;
 	  assign pre_other[j][`instrQ_sc]=isJ!=0 ? 2'bz : 2'b0;
-	  assign pre_other[j][`instrQ_avx]=pre_isAvx_reg;
+	  assign pre_other[j][`instrQ_avx]=cc_err_reg;
 	  assign pre_other[j][`instrQ_btbMiss]=~btb_can_ins_reg4;
 	  assign pre_other[j][`instrQ_btb_only]=(isJ&btbx_cond_reg4)==4'b0;
           get_carry #(4) jcmp_mod(last_off_reg4,~pre_off_reg[j],1'b1,pre_jbefore0[j]);
@@ -2072,6 +2075,7 @@ module frontendSelf(
 	  IP_phys_reg2<=44'b0;
 	  IP_phys_reg3<=44'b0;
           read_data_reg<=0;
+          cc_err_reg<=0;
           tbuf_error_reg<=4'b0;
       end else if (ixcept) begin
           //ixcept_reg<=1'b1;
@@ -2175,7 +2179,7 @@ module frontendSelf(
 	  read_set_flag_reg<=read_set_flag;
           cc_read_IP<=cc_read_IP_d;
           cc_attr<=cc_attr_d;
-          if (instrEn_reg3 && !|tbuf_error) read_data_reg<=read_data;
+          if (instrEn_reg3 && !|tbuf_error) begin read_data_reg<=read_data; cc_err_reg<=cc_err; end
           jumpTK_en<=1'b0;
           if ((~cc_read_hit|~tlb_match) & ~miss_now & instrEn_reg3) begin
               miss_IP<=cc_read_IP_reg3;
@@ -2462,6 +2466,7 @@ module frontendSelf(
           pre_instr10_reg<=pre_instr10;
           pre_instr11_reg<=pre_instr11;
           read_data_reg<=read_data;
+          cc_err_reg<=cc_err;
 	  pre_isAvx_reg<=pre_isAvx;
           for (n=0;n<12;n=n+1) begin
               pre_off_reg[n]<=pre_off[n];
