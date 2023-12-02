@@ -30,16 +30,16 @@ module cc_comb (
   exceptA,
   cc_readA_IP,
   cc_readA_hit,
-  cc_readA_tagErr,
   readA_data,
   readA_dataX,
+  errA,
   fstallB,
   exceptB,
   cc_readB_IP,
   cc_readB_hit,
-  cc_readB_tagErr,
   readB_data,
   readB_dataX,
+  errB,
   write_IP,
   cc_write_wen,
   cc_invalidate,
@@ -65,18 +65,18 @@ module cc_comb (
   input exceptA;
   input [IP_WIDTH-1:0] cc_readA_IP;
   output cc_readA_hit;
-  output [7:0] cc_readA_tagErr;
   output [DATA_WIDTH/4-1:0] readA_data;
   output [14:0] readA_dataX;
+  output errA;
   input readB_clkEn;
   input readB_set_flag;
   input fstallB;
   input exceptB;
   input [IP_WIDTH-1:0] cc_readB_IP;
   output cc_readB_hit;
-  output [7:0] cc_readB_tagErr;
   output [DATA_WIDTH/4-1:0] readB_data;
   output [14:0] readB_dataX;
+  output errB;
   input [IP_WIDTH-1:0] write_IP;
   input cc_write_wen;
   input cc_invalidate;
@@ -96,6 +96,10 @@ module cc_comb (
   reg [IP_WIDTH-1:0] write_IP_reg;
   reg [DATA_WIDTH-1:0] write_data_reg;
 
+  wire [7:0] cc_readA_tagErr;
+  wire [7:0] cc_readA_hit_way;
+  wire [7:0] cc_readB_tagErr;
+  wire [7:0] cc_readB_hit_way;
 
 
   reg cc_write_wen_reg;
@@ -220,7 +224,9 @@ module cc_comb (
   .expun_addr(cc_exp_addr0),
   .invalidate(cc_invalidate_reg2),
   .tagErrA(cc_tagErrA),
-  .tagErrB(cc_tagErrB)
+  .tagErrB(cc_tagErrB),
+  .readA_hit_way(cc_readA_hit_way),
+  .readB_hit_way(cc_readB_hit_way)
   );
   
   cc_fstalle #(4*65) stDat_mod (
@@ -273,23 +279,23 @@ module cc_comb (
 
 
 
-  cc_fstalle #(9) stHitA_mod (
+  cc_fstalle #(2) stHitA_mod (
   .clk(clk),
   .rst(rst),
   .en(1'b1),
   .except(exceptA),
   .fstall(fstallA),
-  .write_data({cc_readA_hitP,cc_readA_tagErrP}),
-  .read_data({cc_readA_hit,cc_readA_tagErr})
+  .write_data({cc_readA_hitP,errAP}),
+  .read_data({cc_readA_hit,errA})
   );
-  cc_fstalle #(9) stHitB_mod (
+  cc_fstalle #(2) stHitB_mod (
   .clk(clk),
   .rst(rst),
   .en(1'b1),
   .except(exceptB),
   .fstall(fstallB),
-  .write_data({cc_readB_hitP,cc_readB_tagErrP}),
-  .read_data({cc_readB_hit,cc_readB_tagErr})
+  .write_data({cc_readB_hitP,errBP}),
+  .read_data({cc_readB_hit,errB})
   );
 
   cc_fstalle #(1) stHitAE_mod (
@@ -335,6 +341,8 @@ module cc_comb (
           cc_invalidate_reg2<=1'b0;
           cc_readA_IP_reg<=39'b0;
           cc_readB_IP_reg<=39'b0;
+          errAP<=0;
+          errBP<=0;
       end
       else begin
           write_IP_reg2<=write_IP_reg;
@@ -344,6 +352,8 @@ module cc_comb (
           readB_hitP<=cc_readB_hit0;
           cc_readB_hitP<=cc_readB_hit0;
           cc_expun_hitP<=cc_expun_hit0;
+          errAP<=(cc_tagErrA&cc_readA_hit_way)!=0;
+          errBP<=(cc_tagErrB&cc_readB_hit_way)!=0;
        //   cc_read_hitNP<=cc_read_hitN0;
           readA_data0_reg<=readA_data0;
           readA_dataX0_reg<=readA_dataX0;
