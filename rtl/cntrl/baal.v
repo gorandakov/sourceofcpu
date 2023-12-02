@@ -1013,10 +1013,10 @@ module cntrl_find_outcome(
   assign exceptIP_d=(break_jump1 & ~jump1_taken && !(jump1Type[4] && jump1Type[2:0]==3'd1)) ? {bbaseIP[62:43],breakIP} : 63'bz;
   assign exceptIP_d=(break_jump0 && ~jump0_taken && (jump0Type==5'h11)) ? indir_IP[63:1] : 63'bz;
   assign exceptIP_d=(break_jump1 & ~jump1_taken && (jump1Type==5'h11)) ? indir_IP[63:1] : 63'bz;
-  assign exceptIP_d=(break_jump0 && ~jump0_taken && (jump0Type==5'h19)) ? {indir_IP[59:50],2'b0,indir_IP[49:45],2'b0,indir_IP[44],indir_IP[43:1]} :
-          63'bz;
-  assign exceptIP_d=(break_jump1 & ~jump1_taken && (jump1Type==5'h19)) ? {indir_IP[59:50],2'b0,indir_IP[49:45],2'b0,indir_IP[44],indir_IP[43:1]} : 
-	  63'bz;
+  assign exceptIP_d=(break_jump0 && ~jump0_taken && (jump0Type==5'h19)) ? 
+    {indir_IP[59:50],2'b0,indir_IP[49:45],2'b0,indir_IP[44],indir_IP[43:5],indir_IP[4:1]^{3'b0,&indir_IP[4:1]}} : 63'bz;
+  assign exceptIP_d=(break_jump1 & ~jump1_taken && (jump1Type==5'h19)) ? 
+    {indir_IP[59:50],2'b0,indir_IP[49:45],2'b0,indir_IP[44],indir_IP[43:5],indir_IP[4:1]^{3'b0,&indir_IP[4:1]}} : 63'bz;
   assign exceptIP_d=(break_exceptn) ? {excpt_handlerIP[62:43],excpt_handlerIP[42:11],excpt_code[5:0],5'b0} : 63'bz;
   assign exceptIP_d=(break_replay|break_replayS) ? {bbaseIP[62:43],breakIP} : 63'bz;
   assign exceptIP_d=(break_pending | ~has_break) ? 63'b0 : 63'bz;
