@@ -945,7 +945,7 @@ module frontendSelf(
 	  assign pre_other[j][`instrQ_jval]=isJ[2] ? predx_sh2_reg4 : 1'bz;
 	  assign pre_other[j][`instrQ_jval]=isJ[3] ? predx_sh3_reg4 : 1'bz;
 	  assign pre_other[j][`instrQ_sc]=isJ!=0 ? 2'bz : 2'b0;
-	  assign pre_other[j][`instrQ_avx]=cc_err_reg;
+	  assign pre_other[j][`instrQ_avx]=cc_err_reg || &cc_read_IP_reg3[4:1];
 	  assign pre_other[j][`instrQ_btbMiss]=~btb_can_ins_reg4;
 	  assign pre_other[j][`instrQ_btb_only]=(isJ&btbx_cond_reg4)==4'b0;
           get_carry #(4) jcmp_mod(last_off_reg4,~pre_off_reg[j],1'b1,pre_jbefore0[j]);
