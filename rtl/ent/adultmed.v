@@ -1671,34 +1671,37 @@ module smallInstr_decoder(
       trien[31]=magic[0] & (isJalR|isCexALU);
       if (isCexALU) begin
           pport[31]=PORT_ALU;
-	  if (instr[12]) pport[31]=PORT_MUL;
-	  else if (instr[10])
-	      pport[31]=PORT_SHIFT;
+	  if (instr[10]) pport[31]=PORT_SHIFT;
 	  prA_use[31]=1'b1;
 	  prB_use[31]=1'b1;
 	  prT_use[31]=1'b1;
 	  puseBConst[31]=magic[1:0]==2'b11 || instr[23];
-	  pconstant[31]=magic[2] ? {{32{instr[47]}},instr[47:16]} : {{39{instr[47]}},instr[47:23]};
+	  pconstant[31]=magic[2:0]==3'b111 ? {{32{instr[47]}},instr[47:16]} : {{39{instr[47]}},instr[47:23]};
 	  puseRs[31]=1'b1;
 	  prAlloc[31]=1'b1;
 	  pflags_write[31]=instr[13];
 	  poperation[31][12]=1'b1;
-	  poperation[31][7:0]={3'b0,instr[10:8],instr[12:11]};
+	  poperation[31][7:0]={3'b0,instr[10:8],1'b0,instr[11]};
+          poperation[31][9]=instr[12];
 	  if (magic[1:0]==2'b01) begin
 	      prA[31]=instr[22:18];
 	      prB[31]=instr[28:24];
 	      prT[31]=instr[22:18];
 	      palucond[31]={1'b1,instr[17:14]};
-	      poperation[31][12]=~instr[13];
+	      if (~instr[12]) poperation[31][12]=~instr[13];
+              else poperation[31][10]=instr[13];
 	      pconstant[31]={{56{instr[31]}},instr[31:24]};
-	  end else if (magic[2]) begin
+	  end else if (magic[3:0]==4'b0111) begin
 	      prA[31]=instr[52:48];
 	      prT[31]=instr[52:48];
 	      palucond[31]={1'b1,instr[56:53]};
-	      poperation[31][12]=~instr[13];
+	      if (~instr[12]) poperation[31][12]=~instr[13];
+              else poperation[31][10]=instr[13];
+              perror[31]=0;
 	  end else begin
 	      palucond[31]={1'b1,instr[17:14]};
-	      poperation[31][12]=~instr[13];
+	      if (~instr[12]) poperation[31][12]=~instr[13];
+              else poperation[31][10]=instr[13];
               prA[31]=instr[22:18];
 	      prT[31]=instr[22:18];
 	  end
