@@ -362,7 +362,7 @@ module smallInstr_decoder(
   assign isBasicShiftExcept=magic[1:0]==2'b01 && instr[29:25]!=5'b0;
   
   assign isBasicCmpTest=opcode_main[7:1]==7'd23 || opcode_main[7:2]==6'd12 ||
-    opcode_main[7:1]==7'd26 || opcode_main[7:2]==6'd54;
+    opcode_main[7:1]==7'd26 || opcode_main[7:2]==6'd54 || opcode_main[7:2]==6'd56;
 
   assign isBaseSpecLoad=opcode_main==8'd54 || opcode_main==8'd202;
   assign isBaseIndexSpecLoad=opcode_main==8'd55 || opcode_main==8'd203;
@@ -402,6 +402,7 @@ module smallInstr_decoder(
   assign isPtrSec=opcode_main==8'd212;
   assign isJalR=opcode_main==8'd213 || opcode_main==8'd214 || opcode_main==8'd215 || opcode_main==8'd220 || opcode_main==8'd221;
   //216-219=cmp16,cmp8
+  //224-230=and16,and8,or16,or8
   assign isCexALU=opcode_main==8'd222;
 
   assign isBasicFPUScalarA=opcode_main==8'hf0 && instr[13:12]==2'b0;
@@ -1182,7 +1183,7 @@ module smallInstr_decoder(
       
       trien[15]=magic[0] & isBasicCmpTest; 
 	  //if there is magic, we assume immediate version
-      puseBConst[15]=instr[31] || magic[1:0]!=2'b01;
+      puseBConst[15]=instr[0] || magic[1:0]!=2'b01;
       pport[15]=PORT_ALU;
       pflags_write[15]=1'b1;
       case(opcode_main)
@@ -1190,8 +1191,8 @@ module smallInstr_decoder(
       48,49: poperation[15]=`op_sub32;
       216,217: poperation[15]=`op_cmp16;
       218,219: poperation[15]=`op_cmp8;
-      50,51: poperation[15]=`op_and64;
-      52,53: poperation[15]=`op_and32;
+      50,51,224,225: poperation[15]=`op_and64|(opcode_main[7]<<1);
+      52,53,226,227: poperation[15]=`op_and32|(opcode_main[7]<<1);
       default: perror[15]=1;
       endcase
       prA_use[15]=1'b1;
