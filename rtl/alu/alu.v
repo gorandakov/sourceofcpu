@@ -575,6 +575,14 @@ alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,dataEn,nD
 	  flagSub44_OF_reg<=flagSub44_OF;
           flagSub16_OF_reg<=flagSub32_OF;
           flagSub8_OF_reg<=flagSub32_OF;
+          if (operation[7:0]==8'da || operation[7:0]==8'de) begin
+              valRes_reg[31]<=valRes[15];
+              flag32_ZF_reg<=flag16_ZF;
+          end else if (operation[7:0]==8'db || operation[7:0]==8'df) begin
+              valRes_reg[31]<=valRes[7];
+              flag32_ZF_reg<=flag8_ZF;
+          end
+
 
         end
     end
