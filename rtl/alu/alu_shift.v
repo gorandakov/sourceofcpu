@@ -77,8 +77,8 @@ module alu_shift(
 
   wire [63:0] valX;
 
-  assign valX[31:0]=val2[8] ? val1[31:0] : 32'b0;
-  assign valX[63:32]=val2[7] ? {32{valres0[31]}} : 32'b0;
+  assign valX[31:0]=val2[11] ? val1[31:0] : 32'b0;
+  assign valX[63:32]=operation[1] ? {32{valres0[31]}} : 32'b0;
  
   assign is_shift=(operation[7:2]==6'd5 || operation[7:2]==6'd6 || operation[7:2]==6'd7) && nDataAlt && ~operation[11];
   
@@ -105,10 +105,10 @@ module alu_shift(
   endgenerate
 
   assign en[63:32]={32{sz[3]}};
-  assign en[31:24]=(val2[31:24]&{8{val2[11:9]==3'b100}})|{8{val2[11:9]==3'b0}};
-  assign en[23:16]=(val2[23:16]&{8{val2[11:9]==3'b100 || val2[11:9]==3'b010}})|{8{val2[11:9]==3'b0}};
-  assign en[15:8]=(val2[31:24]&{8{val2[11:9]==3'b10 || val2[11:9]==3'b1}})|{8{val2[11:9]==3'b0}};
-  assign en[7:0]=(val2[23:16]&{8{val2[11:9]==3'b1}})|{8{val2[11:9]==3'b0}};
+  assign en[31:24]=(val2[31:24]&{8{val2[15:13]==3'b100}})|{8{val2[15:13]==3'b0}};
+  assign en[23:16]=(val2[23:16]&{8{val2[15:13]==3'b100 || val2[15:13]==3'b010}})|{8{val2[15:13]==3'b0}};
+  assign en[15:8]=(val2[31:24]&{8{val2[15:13]==3'b10 || val2[15:13]==3'b1}})|{8{val2[15:13]==3'b0}};
+  assign en[7:0]=(val2[23:16]&{8{val2[15:13]==3'b1}})|{8{val2[15:13]==3'b0}};
 
   assign retData[`except_flags]=is_shift_reg ? flags_COASZP : 6'bz;
 
