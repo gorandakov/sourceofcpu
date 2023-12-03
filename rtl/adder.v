@@ -1330,7 +1330,7 @@ endmodule
   //push ~(tmp1|tmp2) and ~(tmp1&tmp2) before the tristate mux
   adder_seq #(WIDTH) add_mod(tmp1,tmp2[WIDTH-1:0],~(tmp1|tmp2),~(tmp1&tmp2),out[43:0],c_s,1'b0,en,,,,);
   assign out[63:44]=en ? ptr[63:44] : 20'bz;
-  agusec_shift ssh_mod(ptr[`ptr_exp],c_s[43:12],cout_sec0);
+  agusec_shift ssh_mod(ptr[`ptr_exp],c_s[42:11],cout_sec0);
   agusec_check_upper3 #(1'b1) chk_mod(ptr,unptr[43:4],b[43:4],{dummy1,pos_ack},{dummy2,neg_ack},,,ndiff);
 endmodule
 
