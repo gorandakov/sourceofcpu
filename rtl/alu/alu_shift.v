@@ -78,14 +78,14 @@ module alu_shift(
   wire [63:0] valX;
 
   assign valX[31:0]=val2[8] ? val1[31:0] : 32'b0;
-  assign valX[63:32]=val2[7] ? {32{val1[31]}} : 32'b0;
+  assign valX[63:32]=val2[7] ? {32{valres0[31]}} : 32'b0;
  
   assign is_shift=(operation[7:2]==6'd5 || operation[7:2]==6'd6 || operation[7:2]==6'd7) && nDataAlt && ~operation[11];
   
   shlr #(64) main_shift_right_mod(
   bit_en,
   {4'h8},
-  dir,
+  dir|val2[12],
   arith,
   val1[2],
   val2[2][5:0],
