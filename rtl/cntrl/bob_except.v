@@ -37,7 +37,7 @@ module bob_except_ram(
   );
   
   localparam ADDR_WIDTH=6;
-  localparam ADDR_COUNT=48;
+  localparam ADDR_COUNT=64;
   parameter DATA_WIDTH=`except_width; 
 //  localparam UNIT=`except_width;
 
