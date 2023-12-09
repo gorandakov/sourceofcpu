@@ -261,6 +261,8 @@ module fu_alu(
   wire [1:0] FUTYPE_0;
   wire [64:0] FUMUL;
   wire [5:0] MULFL;
+  reg [64:0] FUMUL_reg;
+  reg [5:0] MULFL_reg;
 
   reg [3:0] u2_sz;
   reg       u2_arith;
@@ -792,14 +794,14 @@ module fu_alu(
   assign fcvtout={FUCVT2_0[81:66],FUTYPE_0,FUCVT2_0[65:0]};
   
   
-  assign FU6=(~&nDataAlt) ? FUMUL : 65'bz;
+  assign FU6=(~&nDataAlt) ? FUMUL_reg : 65'bz;
   assign FU6=(~u5_nDataAlt) ? {1'b0,FUCVTIN} : 65'bz;
 
  
   
   assign u5_ret=(~u5_nDataAlt_reg|(~nDataAlt_reg[1])) ? {6'b0,1'b0,2'd2} : 
     9'bz; 
-  assign u5_ret=u5_nDataAlt_reg&~nDataAlt_reg[0] ? {MULFL,~u6_op_reg4[12],
+  assign u5_ret=u5_nDataAlt_reg&~nDataAlt_reg[0] ? {MULFL_reg,~u6_op_reg4[12],
     2'd2} : 9'bz; 
   assign u5_rten=(~u5_nDataAlt_reg|(~&nDataAlt_reg)) ? 1'b1 : 
     1'bz; 
@@ -819,6 +821,9 @@ module fu_alu(
  );
  
   always @(posedge clk) begin
+
+      FUMUL_reg<=FUMUL;
+      MULFL_reg<=MULFL;
 
       FU0_reg<=FU0;
       FU1_reg<=FU1;
