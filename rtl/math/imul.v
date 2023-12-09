@@ -177,7 +177,7 @@ module imul(
       B_out_reg<=B_out;
       en_reg<=en;
       en_reg2<=en_reg;
-      alt<=en_reg;
+      alt<=en;
       is_sec_reg<=is_sec;
       is_sec_reg2<=is_sec_reg;
       is_swp_reg<=|is_swp;

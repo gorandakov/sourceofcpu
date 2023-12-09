@@ -79,10 +79,6 @@ module ifconv_mod(
   assign A_d=sgn ? 64'bz : A;
   assign A_bank[8:1]=8'b0;
 
-  /*assign SH1=toEXT ? {40'b0,A_d} : 104'bz;
-  assign SH1=toDBL ? {29'b0,A_d,11'b0} : 104'bz;
-  assign SH1=toSNG ? {A_d,40'b0} : 104'bz;
-  */
   assign res[81:0]=(toSNG_reg2) ? {16'b0,33'b0,valE2[15],sgn_reg2,valE2[7:0],endBits[62:40]} : 82'bz;
   assign res[81:0]=(toDBL_reg2) ? {16'b0,valE2[15],sgn_reg2,valE2[10:0],endBits[62:43],1'b0,endBits[42:11]} : 82'bz;
   assign res[81:0]=(toEXT_reg2) ? {sgn_reg2,valE2[14:0],valE2[15],endBits[63:32],1'b0,endBits[31:0]} : 82'bz;
@@ -156,7 +152,7 @@ module ifconv_mod(
 	en_reg<=en;
 	en_reg2<=en_reg;
         en_reg3<=en_reg2;
-	alt<=en_reg;
+	alt<=en;
     end
   end
 endmodule 
