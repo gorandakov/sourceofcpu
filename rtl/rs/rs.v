@@ -38,9 +38,15 @@ module rs_wakeUp_logic(
   FUreg4_reg,FU4wen_reg,
   FUreg5_reg,FU5wen_reg,
   FUreg6_reg,FU6wen_reg,
-  FUreg7_reg4,FU7wen_reg4,
-  FUreg8_reg4,FU8wen_reg4,
-  FUreg9_reg4,FU9wen_reg4,
+  FUreg4_reg2,FU4wen_reg2,
+  FUreg5_reg2,FU5wen_reg2,
+  FUreg6_reg2,FU6wen_reg2,
+  FUreg7_reg,FU7wen_reg,
+  FUreg8_reg,FU8wen_reg,
+  FUreg9_reg,FU9wen_reg,
+  FUreg7_reg2,FU7wen_reg2,
+  FUreg8_reg2,FU8wen_reg2,
+  FUreg9_reg2,FU9wen_reg2,
   newRsSelect0,newReg0,newFunit0,newGazump0,newIsFP0,newIsV0,newEQ0,
   newRsSelect1,newReg1,newFunit1,newGazump1,newIsFP1,newIsV1,newEQ1,
   newRsSelect2,newReg2,newFunit2,newGazump2,newIsFP2,newIsV2,newEQ2,
@@ -103,14 +109,32 @@ module rs_wakeUp_logic(
   input [REG_WIDTH-1:0] FUreg6_reg;
   input FU6wen_reg;
 
-  input [REG_WIDTH-1:0] FUreg7_reg4;
-  input FU7wen_reg4;
+  input [REG_WIDTH-1:0] FUreg4_reg2;
+  input FU4wen_reg2;
 
-  input [REG_WIDTH-1:0] FUreg8_reg4;
-  input FU8wen_reg4;
+  input [REG_WIDTH-1:0] FUreg5_reg2;
+  input FU5wen_reg2;
 
-  input [REG_WIDTH-1:0] FUreg9_reg4;
-  input FU9wen_reg4;
+  input [REG_WIDTH-1:0] FUreg6_reg2;
+  input FU6wen_reg2;
+
+  input [REG_WIDTH-1:0] FUreg7_reg;
+  input FU7wen_reg;
+
+  input [REG_WIDTH-1:0] FUreg8_reg;
+  input FU8wen_reg;
+
+  input [REG_WIDTH-1:0] FUreg9_reg;
+  input FU9wen_reg;
+
+  input [REG_WIDTH-1:0] FUreg7_reg2;
+  input FU7wen_reg2;
+
+  input [REG_WIDTH-1:0] FUreg8_reg2;
+  input FU8wen_reg2;
+
+  input [REG_WIDTH-1:0] FUreg9_reg2;
+  input FU9wen_reg2;
 
   input newRsSelect0;
   input [REG_WIDTH-1:0] newReg0;
@@ -181,8 +205,8 @@ module rs_wakeUp_logic(
   wire [8:0] Treg1;
   wire Twen1;
 
-  wire [8:0] FUreg[18:0];
-  wire [18:0] FUwen;
+  wire [8:0] FUreg[21:0];
+  wire [21:0] FUwen;
 
   reg isFP;
   wire isFP_d;
@@ -207,9 +231,15 @@ module rs_wakeUp_logic(
   assign FUreg[10]=FUreg4_reg;
   assign FUreg[11]=FUreg5_reg;
   assign FUreg[12]=FUreg6_reg;
-  assign FUreg[13]=FUreg7_reg4;
-  assign FUreg[14]=FUreg8_reg4;
-  assign FUreg[15]=FUreg9_reg4;
+  assign FUreg[13]=FUreg4_reg2;
+  assign FUreg[14]=FUreg5_reg2;
+  assign FUreg[15]=FUreg6_reg2;
+  assign FUreg[16]=FUreg7_reg;
+  assign FUreg[17]=FUreg8_reg;
+  assign FUreg[18]=FUreg9_reg;
+  assign FUreg[19]=FUreg7_reg2;
+  assign FUreg[20]=FUreg8_reg2;
+  assign FUreg[21]=FUreg9_reg2;
 
   assign FUwen[0]=FU0wen;
   assign FUwen[1]=FU1wen;
@@ -224,9 +254,15 @@ module rs_wakeUp_logic(
   assign FUwen[10]=FU4wen_reg;
   assign FUwen[11]=FU5wen_reg;
   assign FUwen[12]=FU6wen_reg;
-  assign FUwen[13]=FU7wen_reg4;
-  assign FUwen[14]=FU8wen_reg4;
-  assign FUwen[15]=FU9wen_reg4;
+  assign FUwen[13]=FU4wen_reg2;
+  assign FUwen[14]=FU5wen_reg2;
+  assign FUwen[15]=FU6wen_reg2;
+  assign FUwen[16]=FU7wen_reg;
+  assign FUwen[17]=FU8wen_reg;
+  assign FUwen[18]=FU9wen_reg;
+  assign FUwen[19]=FU7wen_reg2;
+  assign FUwen[20]=FU8wen_reg2;
+  assign FUwen[21]=FU9wen_reg2;
 
 //  assign funM=|funit_d[2:0];
 //  assign funAdd=|funit_d[6:4];
@@ -235,7 +271,8 @@ module rs_wakeUp_logic(
   assign funit0[3:0]=funit_d[3:0];
   assign funit0[6:4]=funit_d[6:4] & {3{~isFP_d & ~isV_d}};
   assign funit0[9:7]=funit_d[9:7] & {3{~isFP_d & ~isV_d}};
-  assign funit0[15:10]=funit_d[9:4] & {6{isFP_d | isV_d}};
+  assign funit0[15:10]=funit_d[9:4] & {6{isV_d}};
+  assign funit0[21:16]=funit_d[9:4] & {6{isV_d}};
   
   assign gazump=(newRsSelect0 & ~stall) ? newGazump0 : 11'bz;
   assign gazump=(newRsSelect1 & ~stall) ? newGazump1 : 11'bz;
@@ -259,12 +296,7 @@ module rs_wakeUp_logic(
     ({2{newRsSelect2&~stall}}&newEQ2);
 
   assign isData=|eq_new;
-/*  assign isDataV=(|{eq_new&&funM,eq_new&&funAdd,eq_reg&&funMul});
-  assign isDataF=(|{eq_new&&funM,eq_reg2&&funAdd,eq_reg4&&funMul});
-  assign isData=isFP_d ? isDataF : 1'bz;
-  assign isData=isV_d ? isDataV : 1'bz;
-  assign isData=(~isFP_d & ~isV_d) ? isDataI : 1'bz;
-*/  
+
   assign fuFwd_d=(eq_new[0] & funit_d[0]) ? 4'd0 : 4'bz;
   assign fuFwd_d=(eq_new[0] & funit_d[1]) ? 4'd1 : 4'bz;
   assign fuFwd_d=(eq_new[0] & funit_d[2]) ? 4'd2 : 4'bz;
@@ -313,7 +345,7 @@ module rs_wakeUp_logic(
 
   generate
     genvar n;
-    for(n=0;n<=16;n=n+1) begin : treg_gen
+    for(n=0;n<=21;n=n+1) begin : treg_gen
 	if (n!=3) assign Treg0=funit0[n] ? FUreg[n] : 9'bz;
 	else assign Treg1=FUreg[3];
 	if (n!=3) assign Twen0=funit0[n] ? FUwen[n] : 1'bz;
@@ -487,8 +519,8 @@ module rs_wakeUp_logic_array(
   wire [2:0][8:0] Treg1;
   wire [2:0] Twen1;
 
-  wire [8:0] FUreg[18:0];
-  wire [18:0] FUwen;
+  wire [8:0] FUreg[21:0];
+  wire [21:0] FUwen;
   
   reg [REG_WIDTH-1:0] FUreg4_reg;
   reg FU4wen_reg;
@@ -526,16 +558,7 @@ module rs_wakeUp_logic_array(
   reg [REG_WIDTH-1:0] FUreg9_reg2;
   reg FU9wen_reg2;
 
-  reg [REG_WIDTH-1:0] FUreg4_reg3;
-  reg FU4wen_reg3;
-
-  reg [REG_WIDTH-1:0] FUreg5_reg3;
-  reg FU5wen_reg3;
-
-  reg [REG_WIDTH-1:0] FUreg6_reg3;
-  reg FU6wen_reg3;
-
-  wire [18:0] funit0[2:0];
+  wire [21:0] funit0[2:0];
   wire [2:0] isFP;
   wire [2:0] isV;
 
@@ -565,15 +588,18 @@ module rs_wakeUp_logic_array(
   assign FUreg[7]=FUreg7;
   assign FUreg[8]=FUreg8;
   assign FUreg[9]=FUreg9;
-  assign FUreg[10]=FUreg7_reg;
-  assign FUreg[11]=FUreg8_reg;
-  assign FUreg[12]=FUreg9_reg;
+  assign FUreg[10]=FUreg4_reg;
+  assign FUreg[11]=FUreg5_reg;
+  assign FUreg[12]=FUreg6_reg;
   assign FUreg[13]=FUreg4_reg2;
   assign FUreg[14]=FUreg5_reg2;
   assign FUreg[15]=FUreg6_reg2;
-  assign FUreg[16]=FUreg4_reg3;
-  assign FUreg[17]=FUreg5_reg3;
-  assign FUreg[18]=FUreg6_reg3;
+  assign FUreg[16]=FUreg7_reg;
+  assign FUreg[17]=FUreg8_reg;
+  assign FUreg[18]=FUreg9_reg;
+  assign FUreg[19]=FUreg7_reg2;
+  assign FUreg[20]=FUreg8_reg2;
+  assign FUreg[21]=FUreg9_reg2;
 
   assign FUwen[0]=FU0wen;
   assign FUwen[1]=FU1wen;
@@ -585,15 +611,18 @@ module rs_wakeUp_logic_array(
   assign FUwen[7]=FU7wen;
   assign FUwen[8]=FU8wen;
   assign FUwen[9]=FU9wen;
-  assign FUwen[10]=FU7wen_reg;
-  assign FUwen[11]=FU8wen_reg;
-  assign FUwen[12]=FU9wen_reg;
+  assign FUwen[10]=FU4wen_reg;
+  assign FUwen[11]=FU5wen_reg;
+  assign FUwen[12]=FU6wen_reg;
   assign FUwen[13]=FU4wen_reg2;
   assign FUwen[14]=FU5wen_reg2;
   assign FUwen[15]=FU6wen_reg2;
-  assign FUwen[16]=FU4wen_reg3;
-  assign FUwen[17]=FU5wen_reg3;
-  assign FUwen[18]=FU6wen_reg3;
+  assign FUwen[16]=FU7wen_reg;
+  assign FUwen[17]=FU8wen_reg;
+  assign FUwen[18]=FU9wen_reg;
+  assign FUwen[19]=FU7wen_reg2;
+  assign FUwen[20]=FU8wen_reg2;
+  assign FUwen[21]=FU9wen_reg2;
   
   generate
       genvar j,k,p,q;
@@ -624,12 +653,18 @@ module rs_wakeUp_logic_array(
               FUreg7,FU7wen,
               FUreg8,FU8wen,
               FUreg9,FU9wen,
-              FUreg4_reg2,FU4wen_reg,
-              FUreg5_reg2,FU5wen_reg,
-              FUreg6_reg2,FU6wen_reg,
-              FUreg4_reg3,FU4wen_reg3,
-              FUreg5_reg3,FU5wen_reg3,
-              FUreg6_reg3,FU6wen_reg3,
+              FUreg4_reg,FU4wen_reg,
+              FUreg5_reg,FU5wen_reg,
+              FUreg6_reg,FU6wen_reg,
+              FUreg4_reg2,FU4wen_reg2,
+              FUreg5_reg2,FU5wen_reg2,
+              FUreg6_reg2,FU6wen_reg2,
+              FUreg7_reg,FU7wen_reg,
+              FUreg8_reg,FU8wen_reg,
+              FUreg9_reg,FU9wen_reg,
+              FUreg7_reg2,FU7wen_reg2,
+              FUreg8_reg2,FU8wen_reg2,
+              FUreg9_reg2,FU9wen_reg2,
               newRsSelect0[k+8*j],newReg0,newFunit0,newGazump0,newIsFP0,newIsV0,newEQ[0],
               newRsSelect1[k+8*j],newReg1,newFunit1,newGazump1,newIsFP1,newIsV1,newEQ[1],
               newRsSelect2[k+8*j],newReg2,newFunit2,newGazump2,newIsFP2,newIsV2,newEQ[2],
@@ -665,10 +700,10 @@ module rs_wakeUp_logic_array(
 	  assign funit0[p][3:0]=funit[p][3:0];
           assign funit0[p][6:4]=funit[p][6:4] & {3{~isFP[p]}};
           assign funit0[p][9:7]=funit[p][9:7] & {3{~isFP[p] & ~isV[p]}};
-          assign funit0[p][12:10]=funit[p][9:7] & {3{isV[p]}};
-          assign funit0[p][18:13]=funit[p][9:4] & {6{isFP[p]}};
+          assign funit0[p][15:10]=funit[p][9:4] & {6{isV[p]}};
+          assign funit0[p][21:16]=funit[p][9:4] & {6{isFP[p]}};
 
-	  for(q=0;q<19;q=q+1) begin : funit_gen
+	  for(q=0;q<22;q=q+1) begin : funit_gen
 	      if (q!=3) assign Treg0[p]=funit0[p][q] ? FUreg[q] : 9'bz;
 	      else assign Treg1[p]=FUreg[3];
 	      if (q!=3) assign Twen0[p]=funit0[p][q] ? FUwen[q] : 1'bz;
@@ -713,17 +748,6 @@ module rs_wakeUp_logic_array(
 	FUreg9_reg2<=9'h1ff;
 	FU9wen_reg2<=1'b0;
 	FUreg4_reg3<=9'h1ff;
-	FU4wen_reg3<=1'b0;
-	FUreg5_reg3<=9'h1ff;
-	FU5wen_reg3<=1'b0;
-	FUreg6_reg3<=9'h1ff;
-	FU6wen_reg3<=1'b0;
-//	FUreg7_reg4<=9'h1ff;
-//	FU7wen_reg4<=1'b0;
-//	FUreg8_reg4<=9'h1ff;
-//	FU8wen_reg4<=1'b0;
-//	FUreg9_reg4<=9'h1ff;
-//	FU9wen_reg4<=1'b0;
     end else begin
 	FUreg4_reg<=FUreg4;
 	FU4wen_reg<=FU4wen;
@@ -749,18 +773,17 @@ module rs_wakeUp_logic_array(
 	FU8wen_reg2<=FU8wen_reg;
 	FUreg9_reg2<=FUreg9_reg;
 	FU9wen_reg2<=FU9wen_reg;
-//	FUreg6_reg3<=FUreg7_reg2;
 	FU4wen_reg3<=FU4wen_reg2;
 	FUreg4_reg3<=FUreg4_reg2;
 	FU5wen_reg3<=FU5wen_reg2;
 	FUreg5_reg3<=FUreg5_reg2;
 	FU6wen_reg3<=FU6wen_reg2;
 	FUreg6_reg3<=FUreg6_reg2;
-//	FU7wen_reg4<=FU7wen_reg3;
-//	FUreg8_reg4<=FUreg8_reg3;
-//	FU8wen_reg4<=FU8wen_reg3;
-//	FUreg9_reg4<=FUreg9_reg3;
-//	FU9wen_reg4<=FU9wen_reg3;
+	FU7wen_reg4<=FU7wen_reg2;
+	FUreg8_reg4<=FUreg8_reg2;
+	FU8wen_reg4<=FU8wen_reg2;
+	FUreg9_reg4<=FUreg9_reg2;
+	FU9wen_reg4<=FU9wen_reg2;
     end
   end 
 endmodule
