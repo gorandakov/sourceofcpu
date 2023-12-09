@@ -5069,7 +5069,7 @@ module backend(
 
 /*  assign nDataAlt[0]=3'b111;
   assign nDataAlt[1]=3'b111;
-//  assign nDataAlt[2][1]=2'b1;
+//  assign wnDataAlt[2][1]=2'b1;
   
   assign FUFL[6]=~nDataAlt_reg5[2][2] ? {FUTYPE_reg6,FUCVT2_reg6[65:0]} : 68'bz;
   assign FUFH[6]=~nDataAlt_reg5[2][2] ? {FUTYPE_reg6,50'b0,FUCVT2_reg6[81:66]} : 68'bz;
@@ -5824,11 +5824,11 @@ agu_block #(BUS_ID) agu_aligned(
   assign fxFRT_alten[0]=4'b0;
   assign fxFRT_alten[1]=4'b0;
 
-  assign outEn[7]=sqrDatEn_reg ? outEnX_reg : 4'bz;
-  assign outII[7]=sqrDatEn_reg ? outIIX_reg :10'bz;
-  assign outOp[7]=sqrDatEn_reg ? outOpX_reg :18'bz;
-  assign outReg[7]=sqrDatEn_reg ? outRegX_reg : 9'bz;
-  assign outRegS[7]=sqrDatEn_reg ? outRegSX_reg : 9'bz;
+  assign outEn[7]=outOp_reg2[9][11] ? 4'b11 : 4'bz;
+  assign outII[7]=outOp_reg2[9][11] ? outII_reg2[9] :10'bz;
+  assign outOp[7]=outOp_reg2[9][11] ? outOp_reg2[9] :18'bz;
+  assign outReg[7]=outOp_reg2[9][11] ? outReg_reg2[9] : 9'bz;
+  assign outRegS[7]=outOp_reg2[9][11] ? outRegS_reg2[9] : 9'bz;
 
   get_LDQ_new_en ldq_new_mod(
   rs_port[0],rs_ldst_flg[0], 
@@ -7833,17 +7833,6 @@ dcache1 L1D_mod(
 	      ex_alu_reg6[k]<=ex_alu_reg5[k];
 	      enS_alu_reg6[k]<=enS_alu_reg5[k];
           end
-          /*fxAlt1_reg<=fxAlt1;
-          fxAlt2_reg<=fxAlt2;
-          fxAlt1_reg2<=fxAlt1_reg;
-          fxAlt2_reg2<=fxAlt2_reg;
-          fxAlt1_reg3<={fxAlt1_reg2,2'b0};
-          fxAlt2_reg3<=fxAlt2_reg2;*/
-	  outEnX_reg<=outEnX;
-	  outIIX_reg<=outIIX;
-	  outOpX_reg<={5'b0,outOpX};
-	  outRegX_reg<=(outOp_reg4[8][11]&outEn_reg4[8][1]&outEn_reg4[8][0]) ? outReg_reg3[8] : outRegX;
-	  outRegSX_reg<=(outOp_reg4[8][11]&outEn_reg4[8][1]&outEn_reg4[8][0]) ? FUSreg_reg3[9] : outRegSX;
           outDataAVH_reg<=outDataAVH[5];
           outDataBVH_reg<=outDataBVH[5];
           outDataAVL_reg<=outDataAVL[5];
