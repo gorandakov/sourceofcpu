@@ -82,13 +82,13 @@ module imul(
   assign resz=~|Res_reg;
   assign resp=~^Res_reg[7:0];
 
-  assign flg=and1_reg4 && ~upper_reg4 ? {|dummy2_reg,~(&dummy2_reg&Res_reg[63]
+  assign flg=and1_reg3 && ~upper_reg3 ? {|dummy2_reg,~(&dummy2_reg&Res_reg[63]
     || ~|dummy2_reg&~Res_reg[63]),1'b0,Res_reg[63],resz,resp} : 6'bz; 
-  assign flg=and1_reg4 && upper_reg4 ? {|Res_reg,~(&Res_reg&dummy_reg[63]
+  assign flg=and1_reg3 && upper_reg3 ? {|Res_reg,~(&Res_reg&dummy_reg[63]
     || ~|Res_reg&~dummy_reg[63]),1'b0,Res_reg[63],resz&~|dummy_reg,~^dummy_reg[7:0]} : 6'bz; 
-  assign flg=~and1_reg4 && ~short_reg4 ? {|Res_reg[63:32],~(&Res_reg[63:31]||
+  assign flg=~and1_reg3 && ~short_reg3 ? {|Res_reg[63:32],~(&Res_reg[63:31]||
    ~|Res_reg[63:31]),1'b0,Res_reg[63],resz,resp} : 6'bz;
-  assign flg=~and1_reg4 && short_reg4 ? {|resx_reg,~(&resx_reg&Res_reg[31] ||
+  assign flg=~and1_reg3 && short_reg3 ? {|resx_reg,~(&resx_reg&Res_reg[31] ||
     ~|resx_reg&~Res_reg[31]),1'b0,Res_reg[31],resz,resp} : 6'bz;
 
  // assign Res[64]=~bnd_reg3 ? 1'b0 : 1'bz;
@@ -96,10 +96,10 @@ module imul(
 
   icompr cmp_mod(clk,clkEn,R[63:0],C[63:0],A_out,B_out,and1,is_sig,sig,sm_sig);
   adder2oM #(128) add_mod(A_out_reg,B_out_reg,{dummy2,Res[63:0]},{Res[63:0],dummy},
-    resx,1'b0,~upper_reg3&~is_sec_reg3,upper_reg3,short_reg3,,,,);
+    resx,1'b0,~upper_reg2&~is_sec_reg2,upper_reg2,short_reg2,,,,);
 
-  assign Res[64:0]=is_sec_reg3 ? {ptr_reg2,sec_res_reg2} : {1'b0,64'bz};
-  assign Res[63:0]=is_swp_reg3 ? swp_res_reg2 : 64'bz;
+  assign Res[64:0]=is_sec_reg2 ? {ptr_reg,sec_res_reg} : {1'b0,64'bz};
+  assign Res[63:0]=is_swp_reg2 ? swp_res_reg : 64'bz;
   assign swp_res=is_swp[0] ? {32'b0,R[7:0],R[15:8],R[23:16],R[31:24]}: 
 	  {R[7:0],R[15:8],R[23:16],R[31:24],R[39:32],R[47:40],R[55:48],R[63:56]};
 
@@ -177,45 +177,31 @@ module imul(
       B_out_reg<=B_out;
       en_reg<=en;
       en_reg2<=en_reg;
-      en_reg3<=en_reg2;
       alt<=en_reg;
       is_sec_reg<=is_sec;
       is_sec_reg2<=is_sec_reg;
-      is_sec_reg3<=is_sec_reg2;
       is_swp_reg<=|is_swp;
       is_swp_reg2<=is_swp_reg;
-      is_swp_reg3<=is_swp_reg2;
       upper_reg<=upper;
       upper_reg2<=upper_reg;
-      upper_reg3<=upper_reg2;
       short_reg<=short;
       short_reg2<=short_reg;
-      short_reg3<=short_reg2;
       sig_reg<=sig;
-      sig_reg2<=sig_reg;
       sm_sig_reg<=sm_sig;
-      sm_sig_reg2<=sm_sig_reg;
       and1_reg<=and1;
       and1_reg2<=and1_reg;
-      and1_reg3<=and1_reg2;
       sec_res_reg<=sec_res;
-      sec_res_reg2<=sec_res_reg;
       swp_res_reg<=swp_res;
-      swp_res_reg2<=swp_res_reg;
       ptr_reg<=R[64];
-      ptr_reg2<=ptr_reg;
-    //  bnd_reg<=bnd;
-    //  bnd_reg2<=bnd_reg;
-    //  bnd_reg3<=bnd_reg2;
     end
     Res_reg<=Res[63:0];
     dummy2_reg<=dummy2;
     dummy_reg<=dummy;
     //dummy8_reg<=dummy[7:0];
     resx_reg<=resx;
-    upper_reg4<=upper_reg3;
-    short_reg4<=short_reg3;
-    and1_reg4<=and1_reg3;
+    upper_reg3<=upper_reg2;
+    short_reg3<=short_reg2;
+    and1_reg3<=and1_reg2;
   end
 endmodule
 
