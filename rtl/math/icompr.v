@@ -16340,9 +16340,8 @@ limitations under the License.
   assign {HA_cout_565,HA_out_565}=HA_cout_446+HA_cout_368;
 
 
-  always @(posedge clk)
+  always @(*)
   begin
-          if(clkEn) begin
       REGS_0<=inp_0[0];
       REGS_1<=HA_out_0;
       REGS_2<=HA_out_42;
@@ -18720,7 +18719,6 @@ limitations under the License.
       REGS_2374<=HA_cout_266;
       REGS_2375<=REGS_1842;
       REGS_2376<=REGS_1888;
-          end
   end
 
 
