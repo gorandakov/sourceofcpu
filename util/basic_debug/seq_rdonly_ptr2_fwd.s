@@ -32,6 +32,7 @@ loop:
   addl 4(%r11), %eax
   movl %eax, result(%rip)
   cloop loop
+  movl result(%rip), %eax
   sub $1, %rdx
   jeq loop2
 ende:
