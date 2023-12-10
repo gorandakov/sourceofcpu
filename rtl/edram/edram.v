@@ -20,9 +20,9 @@ module edram(
   input rst;
   input port_en;
   input port_ref_plus2;
-  input [4:0] port_read_addr;
+  input [8:0] port_read_addr;
   output [342:0] port_read_data; 
-  input [4:0] port_write_addr;
+  input [8:0] port_write_addr;
   input [342:0] port_write_data;
   input port_wen_plus3;
   input port_data;
