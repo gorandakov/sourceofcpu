@@ -223,6 +223,7 @@ module decoder_aux_const(
   reg [1:0][63:0] csr_vmpage0;
   reg [1:0][63:0] csr_excTbl;
   reg [1:0][63:0] csr_syscall;
+  reg [1:0][63:0] csr_subsyscall;
   reg [1:0][63:0] csr_USER1;
   reg [1:0][63:0] csr_USER2;
   reg [1:0][63:0] csr_vmcall;
@@ -278,6 +279,9 @@ module decoder_aux_const(
       `csr_syscall: begin aux_const={1'b0,csr_syscall[thread]};
            aux_can_jump=1'b1; 
            aux_can_read=~csr_mflags[thread][`mflags_vm] && csr_mflags[thread][`mflags_cpl]==2'b00; aux_can_write=aux_can_read; end
+      `csr_subsyscall: begin aux_const={1'b0,csr_subsyscall[thread]};
+           aux_can_jump=csr_mflags[thread][`mflags_cpl]==2'b11; 
+           aux_can_read=~csr_mflags[thread][`mflags_vm] && csr_mflags[thread][`mflags_cpl]==2'b00; aux_can_write=aux_can_read; end
       `csr_vmcall: begin aux_const={1'b0,csr_vmcall[thread]}; aux_can_jump=
 	   csr_mflags[thread][`mflags_vm] && csr_mflags[thread][`mflags_cpl]==2'b00;
            aux_can_read=~csr_mflags[thread][`mflags_vm] && csr_mflags[thread][`mflags_cpl]==2'b00; aux_can_write=aux_can_read; end
@@ -313,6 +317,7 @@ module decoder_aux_const(
           csr_cpage[0]<=64'b0;
           csr_spage[0]<=64'b0;
           csr_syscall[0]<=64'b0;
+          csr_subsyscall[0]<=64'b0;
           csr_vmcall[0]<=64'b0;
           csr_cpage_mask[0]<=64'b0;
           csr_USER3[0]<=64'b0;
@@ -330,6 +335,7 @@ module decoder_aux_const(
           csr_cpage[1]<=64'b0;
           csr_spage[1]<=64'b0;
           csr_syscall[1]<=64'b0;
+          csr_subsyscall[1]<=64'b0;
           csr_vmcall[1]<=64'b0;
           csr_cpage_mask[1]<=64'b0;
           csr_USER3[1]<=64'b0;
@@ -365,6 +371,7 @@ module decoder_aux_const(
       `csr_page0:		csr_page0[csrss_no[15]]<=csrss_data[63:0];
       `csr_vmpage0:		csr_vmpage0[csrss_no[15]]<=csrss_data[63:0];
       `csr_syscall:		csr_syscall[csrss_no[15]]<=csrss_data[63:0];
+      `csr_subsyscall:		csr_subsyscall[csrss_no[15]]<=csrss_data[63:0];
       `csr_vmcall:		csr_vmcall[csrss_no[15]]<=csrss_data[63:0];
       `csr_USER3:		csr_USER3[csrss_no[15]]<=csrss_data[63:0];
       `csr_last_jmp: begin csr_last_jmp[csrss_no[15]]<=csrss_data[63:0]; csr_last_jmp2[csrss_no[15]]<=csr_last_jmp[csrss_no[15]]; end
