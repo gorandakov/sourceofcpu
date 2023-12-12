@@ -29,13 +29,8 @@ module ccTag_ram(
   );
 
   localparam DATA_WIDTH=`cc1Tag_width;
-  `ifdef ICACHE_256K
-  localparam ADDR_WIDTH=8;
-  localparam ADDR_COUNT=256;
-  `else
   localparam ADDR_WIDTH=7;
   localparam ADDR_COUNT=128;
-  `endif
 
   input clk;
   input rst;
@@ -72,13 +67,8 @@ module ccTag_lram(
   );
 
   localparam DATA_WIDTH=3;
-  `ifdef ICACHE_256K
-  localparam ADDR_WIDTH=8;
-  localparam ADDR_COUNT=256;
-  `else
   localparam ADDR_WIDTH=7;
   localparam ADDR_COUNT=128;
-  `endif
 
   input clk;
   input rst;
@@ -126,13 +116,8 @@ module ccTag(
   parameter [2:0] INDEX=0;
   parameter [0:0] EXT=1'b0;
   localparam DATA_WIDTH=`cc1Tag_width;
-  `ifdef ICACHE_256K
-  localparam ADDR_WIDTH=8;
-  localparam ADDR_COUNT=256;
-  `else
   localparam ADDR_WIDTH=7;
   localparam ADDR_COUNT=128;
-  `endif
   localparam PHYS_BITS=44;
   localparam VIRT_BITS=64;
 

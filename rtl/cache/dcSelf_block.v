@@ -29,13 +29,8 @@ module dcache1_ram(
   write_wen,
   write_ben
   );
-  `ifdef DCACHE_256K
-  localparam ADDR_WIDTH=7;
-  localparam ADDR_COUNT=128;
-  `else
   localparam ADDR_WIDTH=6;
   localparam ADDR_COUNT=64;
-  `endif
   localparam DATA_WIDTH=`dcache1_data_width;
   
   input clk;
@@ -570,13 +565,8 @@ module dcache1_way(
  
   reg init;
   reg init_dirty;
-  `ifdef DCACHE_256K
-  reg [6:0] initCount;
-  wire [6:0] initCount_d;
-  `else
   reg [5:0] initCount;
   wire [5:0] initCount_d;
-  `endif
   //verilator lint_off WIDTH
   dc1_xbit pbit_mod(
   .clk(clk),
@@ -777,11 +767,7 @@ module dcache1_way(
   endgenerate
   
 
-  `ifdef DCACHE_256K
-  adder_inc #(7) initAdd_mod(initCount,initCount_d,1'b1,);
-  `else
   adder_inc #(6) initAdd_mod(initCount,initCount_d,1'b1,);
-  `endif
 
   assign read_addrO[0]=read_addrO0;
   assign read_addrO[1]=read_addrO1;
@@ -900,17 +886,6 @@ module dcache1_way(
           write_enBen1_reg<=write_enBen1;
           ins_hit_reg<=ins_hit[0];
       end
-     `ifdef DCACHE_256K
-      if (rst) begin
-          init<=1'b1;
-          init_dirty<=1'b1;
-          initCount<=7'b0;
-      end else if (init) begin
-          initCount<=initCount_d;
-          if (initCount==7'h7f) init<=1'b0;
-          if (initCount==7'hf) init_dirty<=1'b0;
-      end
-     `else
       if (rst) begin
           init<=1'b1;
           init_dirty<=1'b1;
@@ -920,7 +895,6 @@ module dcache1_way(
           if (initCount==6'd63) init<=1'b0;
           if (initCount==6'hf) init_dirty<=1'b0;
       end
-      `endif
   end
     
 endmodule

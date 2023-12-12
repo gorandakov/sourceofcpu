@@ -33,13 +33,8 @@ module dc1_xbit_ram(
   writeB_clkEn,
   writeB_addr,
   writeB_data);
-  `ifdef DCACHE_256K
-  localparam ADDR_WIDTH=6;
-  localparam ADDR_COUNT=64;
-  `else
   localparam ADDR_WIDTH=5;
   localparam ADDR_COUNT=32;
-  `endif
 
   input clk;
   input rst;
@@ -81,13 +76,8 @@ module dc1_xbit(
   write0_clkEn,write0_addrE,write0_addrO,write0_odd,write0_pbit,write0_d128,
   write1_clkEn,write1_addrE,write1_addrO,write1_odd,write1_pbit,write1_d128,
   write_ins,write_data);
-  `ifdef DCACHE_256K
-  localparam ADDR_WIDTH=6;
-  localparam ADDR_COUNT=64;
-  `else
   localparam ADDR_WIDTH=5;
   localparam ADDR_COUNT=32;
-  `endif
   input clk;
   input rst;
   input read0_clkEn;

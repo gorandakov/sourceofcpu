@@ -31,13 +31,8 @@ module cc_ram(
   );
 
   localparam DATA_WIDTH=65*2;
-  `ifdef ICACHE_256K
-  localparam ADDR_WIDTH=8;
-  localparam ADDR_COUNT=256;
-  `else
   localparam ADDR_WIDTH=7;
   localparam ADDR_COUNT=128;
-  `endif
 
   input clk;
   input rst;
@@ -85,13 +80,8 @@ module cc_ram_block(
 
   parameter INDEX=0;
   localparam DATA_WIDTH=65*8;
-  `ifdef ICACHE_256K
-  localparam ADDR_WIDTH=8;
-  localparam ADDR_COUNT=256;
-  `else
   localparam ADDR_WIDTH=7;
   localparam ADDR_COUNT=128;
-  `endif
 
   input clk;
   input rst;
@@ -140,13 +130,8 @@ module ccX_ram(
   );
 
   localparam DATA_WIDTH=60;
-  `ifdef ICACHE_256K
-  localparam ADDR_WIDTH=8;
-  localparam ADDR_COUNT=256;
-  `else
   localparam ADDR_WIDTH=7;
   localparam ADDR_COUNT=128;
-  `endif
 
   input clk;
   input rst;
@@ -209,11 +194,7 @@ module ccRam_way(
   );
 
   localparam DATA_WIDTH=65*16;
-  `ifdef ICACHE_256K
-  localparam ADDR_WIDTH=8;
-  `else
   localparam ADDR_WIDTH=7;
-  `endif
   localparam IP_WIDTH=44;
   localparam PHYS_WIDTH=44;
   parameter [2:0] INDEX=0;
@@ -264,11 +245,8 @@ module ccRam_way(
   wire [59:0] readXA_data_ram;
   wire [59:0] readXB_data_ram;
   reg [59:0] writeX_data;
-  `ifdef ICACHE_256K
-  wire [7:0] writeX_addr;
-  `else
   wire [6:0] writeX_addr;
-  `endif
+
   integer k,j;
   reg readA_clkEn_reg;
   reg readA_set_flag_reg;
@@ -283,13 +261,8 @@ module ccRam_way(
 
   wire [36:0] expun_naddr;
 
-  `ifdef ICACHE_256K
-  wire [7:0] initCountNext;
-  reg [7:0] initCount;
-  `else
   wire [6:0] initCountNext;
   reg [6:0] initCount;
-  `endif
 
   reg [DATA_WIDTH-1:0] write_data_reg;
 
@@ -309,17 +282,10 @@ module ccRam_way(
     end
   endgenerate
 
-  `ifdef ICACHE_256K
-  assign writeX_addr=init ? initCount : 8'bz;
-  assign writeX_addr=(~init & readA_clkEn_reg) ? readA_IP_reg[9:2] : 8'bz;
-  assign writeX_addr=(~init & readB_clkEn_reg) ? readB_IP_reg[9:2] : 8'bz;
-  assign writeX_addr=(~init & ~readB_clkEn_reg & ~readA_clkEn_reg) ? write_IP_reg[9:2] : 8'bz;
-  `else
   assign writeX_addr=init ? initCount : 7'bz;
   assign writeX_addr=(~init & readA_clkEn_reg) ? readA_IP_reg[8:2] : 7'bz;
   assign writeX_addr=(~init & readB_clkEn_reg) ? readB_IP_reg[8:2] : 7'bz;
   assign writeX_addr=(~init & ~readA_clkEn_reg & ~readB_clkEn_reg) ? write_IP_reg[8:2] : 7'bz;
-  `endif
 
   assign chkCL_hit=read_hitC0;
 

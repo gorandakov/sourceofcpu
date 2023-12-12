@@ -29,13 +29,8 @@ module dcache1_tag_ram(
   write_data,
   write_wen
   );
-  `ifdef DCACHE_256K
-  localparam ADDR_WIDTH=`dcache1_addr_width;
-  localparam ADDR_COUNT=`dcache1_addr_count;
-  `else
   localparam ADDR_WIDTH=`dcache1_addr_width-1;
   localparam ADDR_COUNT=`dcache1_addr_count/2;
-  `endif
   localparam DATA_WIDTH=`dc1Tag_width;
   
   input clk;
@@ -76,13 +71,8 @@ module dcache1_tagV_ram(
   write5_addr, write5_data,  write5_wen,
   write6_addr, write6_data,  write6_wen
   );
-  `ifdef DCACHE_256K
-  localparam ADDR_WIDTH=`dcache1_addr_width;
-  localparam ADDR_COUNT=`dcache1_addr_count;
-  `else
   localparam ADDR_WIDTH=`dcache1_addr_width-1;
   localparam ADDR_COUNT=`dcache1_addr_count/2;
-  `endif
   localparam DATA_WIDTH=1;
   
   input clk;
@@ -220,11 +210,7 @@ module dcache1_tag(
   .read_clkEn(read_clkEn),
   .read_addr(read_addrEven[6:0]),
   .read_data(tagR0_data),
-  `ifdef DCACHE_256K
-  .write_addr(init ? initCount : read_addrEven_reg[6:0]),
-  `else
   .write_addr(init ? initCount : read_addrEven_reg[5:0]),
-  `endif
   .write_data(write_hit ? tag_write_data&{DATA_WIDTH{~init}} : 
     tag_same_data&{DATA_WIDTH{~init}}),
   .write_wen(write_hit&~read_odd_reg || read_en_reg & (~read_odd_reg) ||init)
@@ -236,11 +222,7 @@ module dcache1_tag(
   .read_clkEn(read_clkEn),
   .read_addr(read_addrOdd[6:0]),
   .read_data(tagR1_data),
-  `ifdef DCACHE_256K
-  .write_addr(init ? initCount : read_addrOdd_reg[6:0]),
-  `else
   .write_addr(init ? initCount : read_addrOdd_reg[5:0]),
-  `endif
   .write_data(write_hit ? tag_write_data&{DATA_WIDTH{~init}} : 
     tag_same_data&{DATA_WIDTH{~init}}),
   .write_wen(write_hit&read_odd_reg || read_en_reg & (read_odd_reg)||init)
@@ -369,11 +351,7 @@ module dcache1_tag(
           initCount<=0;
       end else if (init) begin
           initCount<=initCount_d;
-          `ifdef DCACHE_256K
-          if (initCount==7'd127) init<=1'b0;
-          `else
           if (initCount==6'd63) init<=1'b0;
-          `endif
       end
   end
 
