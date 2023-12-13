@@ -28,6 +28,7 @@ module backend(
   clkREF3,
   clkREF4,
   clkREF5,
+  stall_clkREF,
   rst,
   doStall,
 
@@ -449,6 +450,7 @@ module backend(
   input clkREF3;
   input clkREF4;
   input clkREF5;
+  input stall_clkREF;
   input rst;
   output doStall;
   
@@ -6131,7 +6133,7 @@ dcache1 L1D_mod(
   .mem_II_bits_waitconfl(retM_waitconfl),
   .mem_II_bits_except(retM_excpt),
   .mem_II_bits_ret(retM_ret),
-  .mem_II_stall(bDoStall_rqSpit|bDoStall_rqSpit0 && retM_has_store), 
+  .mem_II_stall((bDoStall_rqSpit|bDoStall_rqSpit0 && retM_has_store)|stall_clkREF), 
   .dotire_d(retM_do_tire),
   .xbreak(retM_xbreak),
   .has_xbreak(retM_xbreak_has)
@@ -6149,27 +6151,27 @@ dcache1 L1D_mod(
   assign fretX[4]=fretA_regn[4][1:0]!=2'd1 && fretB[4][1:0]==2'd1 ? fretB[4] : 'z;
   assign fretX[4]=fretA_regn[4][1:0]!=2'd1 &&	fretB[4][1:0]!=2'd1 ? {fretA_regn[4][13:3]|fretB[4][13:3],fretA_regn[4][2:0]} : 'z;
  
-  assign stall_alloc=|{doStall_rs[3:0],doStall_LSQ,doStall_LDQ,doStall_STQ,doStall_cntrl,doStall_WQ,doStall_alloc2};
+  assign stall_alloc=|{doStall_rs[3:0],doStall_LSQ,doStall_LDQ,doStall_STQ,doStall_cntrl,doStall_WQ,doStall_alloc2,stall_clkREF};
   assign doStall=doStall_alloc | (|{doStall_rs[3:0]}) | doStall_LSQ | doStall_LDQ | doStall_STQ | doStall_cntrl | doStall_WQ;
   assign stall_rs[0]=doStall_alloc | doStall_rs[1] | doStall_rs[2] | 
-    doStall_rs[3] | doStall_LSQ | doStall_LDQ | doStall_STQ | doStall_cntrl | doStall_WQ | doStall_alloc2;
+    doStall_rs[3] | doStall_LSQ | doStall_LDQ | doStall_STQ | doStall_cntrl | doStall_WQ | doStall_alloc2 | stall_clkREF;
   assign stall_rs[1]=doStall_alloc | doStall_rs[0] | doStall_rs[2] |
-    doStall_rs[3] | doStall_LSQ | doStall_LDQ | doStall_STQ | doStall_cntrl | doStall_WQ | doStall_alloc2;
+    doStall_rs[3] | doStall_LSQ | doStall_LDQ | doStall_STQ | doStall_cntrl | doStall_WQ | doStall_alloc2 | stall clkREF;
   assign stall_rs[2]=doStall_alloc | doStall_rs[1] | doStall_rs[0] | 
-    doStall_rs[3] | doStall_LSQ | doStall_LDQ | doStall_STQ | doStall_cntrl | doStall_WQ | doStall_alloc2;
+    doStall_rs[3] | doStall_LSQ | doStall_LDQ | doStall_STQ | doStall_cntrl | doStall_WQ | doStall_alloc2 | stall_clkREF;
   assign stall_rs[3]=doStall_alloc | doStall_rs[1] | doStall_rs[0] |
-    doStall_rs[2] | doStall_LSQ | doStall_LDQ | doStall_STQ | doStall_cntrl | doStall_WQ | doStall_alloc2;
-  assign stall_LSQ=|{doStall_rs[3:0],doStall_alloc,doStall_cntrl,doStall_LDQ,doStall_STQ | doStall_WQ | doStall_alloc2};
-  assign stall_cntrl=|{doStall_rs[3:0],doStall_alloc,doStall_LSQ,doStall_LDQ,doStall_STQ | doStall_WQ | doStall_alloc2};
-  assign stall_LDQ=|{doStall_rs[3:0],doStall_alloc,doStall_cntrl,doStall_LSQ,doStall_STQ | doStall_WQ | doStall_alloc2};
-  assign stall_STQ=|{doStall_rs[3:0],doStall_alloc,doStall_cntrl,doStall_LSQ,doStall_LDQ | doStall_WQ | doStall_alloc2};
-  assign stall_WQ=|{doStall_rs[3:0],doStall_alloc,doStall_cntrl,doStall_LSQ,doStall_LDQ,doStall_STQ,doStall_alloc2};
+    doStall_rs[2] | doStall_LSQ | doStall_LDQ | doStall_STQ | doStall_cntrl | doStall_WQ | doStall_alloc2 | stall_clkREF;
+  assign stall_LSQ=|{doStall_rs[3:0],doStall_alloc,doStall_cntrl,doStall_LDQ,doStall_STQ | doStall_WQ | doStall_alloc2 | stall_clkREF};
+  assign stall_cntrl=|{doStall_rs[3:0],doStall_alloc,doStall_LSQ,doStall_LDQ,doStall_STQ | doStall_WQ | doStall_alloc2 | stall_clkREF};
+  assign stall_LDQ=|{doStall_rs[3:0],doStall_alloc,doStall_cntrl,doStall_LSQ,doStall_STQ | doStall_WQ | doStall_alloc2 | stall_clkREF};
+  assign stall_STQ=|{doStall_rs[3:0],doStall_alloc,doStall_cntrl,doStall_LSQ,doStall_LDQ | doStall_WQ | doStall_alloc2 | stall_clkREF};
+  assign stall_WQ=|{doStall_rs[3:0],doStall_alloc,doStall_cntrl,doStall_LSQ,doStall_LDQ,doStall_STQ,doStall_alloc2 | stall_clkREF};
 
-  assign aStall_STQ=1'b0;
-  assign aStall_LSQ=aDoStall_STQ;
-  assign lStall_STQ=lDoStall_lsfw;
-  assign lStall_lsfw=lDoStall_STQ;
-  assign lStall=lDoStall_lsfw|lDoStall_STQ;
+  assign aStall_STQ=stall_clkREF;
+  assign aStall_LSQ=aDoStall_STQ | stall_clkREF;
+  assign lStall_STQ=lDoStall_lsfw | stall_clkREF;
+  assign lStall_lsfw=lDoStall_STQ | stall_clkREF;
+  assign lStall=lDoStall_lsfw|lDoStall_STQ | stall_clkREF;
   
 
   assign regS[0]=9'b0;
