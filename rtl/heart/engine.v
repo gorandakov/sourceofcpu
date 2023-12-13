@@ -1011,6 +1011,12 @@ module backend(
   reg [8:0] outXAM_reg;
   reg [8:0] outXAM_reg2;
 
+  wire p0_sec;
+  wire p1_sec;
+  wire p2_sec;
+  reg p0_sec_reg,p0_sec_reg2;
+  reg p1_sec_reg,p1_sec_reg2;
+  reg p2_sec_reg,p2_sec_reg2;
   wire [2:0] useBConstW;
   wire [2:0] useAConstW;
   wire [2:0] rs_rAW_use;
@@ -8512,6 +8518,12 @@ dcache1 L1D_mod(
 	  lso2_dataN_reg<=0;
 	  lso_pbit_reg<=0;
 	  lso2_pbit_reg<=0;
+          p0_sec_reg<=1'b0;
+          p1_sec_reg<=1'b0;
+          p2_sec_reg<=1'b0;
+          p0_sec_reg2<=1'b0;
+          p1_sec_reg2<=1'b0;
+          p2_sec_reg2<=1'b0;
       end else begin
 	  lso_en_reg<=lso_en;
 	  lso_way_reg<=lso_way;
@@ -8522,6 +8534,12 @@ dcache1 L1D_mod(
 	  lso2_dataN_reg<=lso2_dataN;
 	  lso_pbit_reg<=lso_pbit;
 	  lso2_pbit_reg<=lso2_pbit;
+          p0_sec_reg<=p0_sec;
+          p1_sec_reg<=p1_sec;
+          p2_sec_reg<=p2_sec;
+          p0_sec_reg2<=p0_sec_reg;
+          p1_sec_reg2<=p1_sec_reg;
+          p2_sec_reg2<=p2_sec_reg;
       end
   end
  
