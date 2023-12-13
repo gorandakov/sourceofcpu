@@ -2527,7 +2527,7 @@ module agu_block(
   assign p0_adata[`lsaddr_etype]=p0_faultCode[3:0];
   assign p0_adata[`lsaddr_banks]=mOpX0_banks_reg;
   assign p0_rsEn=mOp0_rsEn_reg && ~p0_pageFault && ~now_flushing_reg;
-  assign p0_en=mOpX0_en_reg & !p0_conflict;
+  assign p0_en=mOpX0_en_reg & !p0_conflict & !p0_sec;
   assign p0_LSQ=mOpX0_LSQ_reg;
   assign p0_ret={1'b0,p0_faultCode[3:0],p0_faultNo};
   assign p0_secq=mOp0_sec_reg;
@@ -2562,7 +2562,7 @@ module agu_block(
   assign p1_adata[`lsaddr_etype]=p1_faultCode[3:0];
   assign p1_adata[`lsaddr_banks]=mOpX1_banks_reg;
   assign p1_rsEn=mOp1_rsEn_reg && ~p1_pageFault && ~now_flushing_reg;
-  assign p1_en=mOpX1_en_reg & ~p1_conflict;
+  assign p1_en=mOpX1_en_reg & ~p1_conflict & ~p1_sec;
   assign p1_LSQ=mOpX1_LSQ_reg;
   assign p1_ret={1'b0,p1_faultCode[3:0],p1_faultNo};
   assign p1_secq=mOp1_sec_reg;
@@ -2597,7 +2597,7 @@ module agu_block(
   assign p2_adata[`lsaddr_etype]=p2_faultCode[3:0];
   assign p2_adata[`lsaddr_banks]=mOpX2_banks_reg;
   assign p2_rsEn=mOp2_rsEn_reg && ~p2_pageFault && ~now_flushing_reg;
-  assign p2_en=mOpX2_en_reg & ~p2_conflict;
+  assign p2_en=mOpX2_en_reg & ~p2_conflict & ~p2_sec;
   assign p2_LSQ=mOpX2_LSQ_reg;
   assign p2_ret={1'b0,p2_faultCode[3:0],p2_faultNo};
   assign p2_secq=mOp2_sec_reg;
