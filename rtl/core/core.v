@@ -24,6 +24,7 @@ module heptane_core(
   input clkREF3,
   input clkREF4,
   input clkREF5,
+  stall_clkREF,
   input rst,
   input IRQ,
   input [16:0] IRQ_data,
@@ -1809,7 +1810,7 @@ module heptane_core(
   );
 
   backend bck_mod(
-  clk,clkREF,clkREF2,clkREF3,clkREF4,clkREF5,
+  clk,clkREF,clkREF2,clkREF3,clkREF4,clkREF5,stall_clkREF,
   rst,
   stall,
 
