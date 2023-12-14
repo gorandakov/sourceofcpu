@@ -3444,205 +3444,6 @@ module backend(
   .write9_addr_reg(FUreg_reg3[9]),.write9_wen_reg(FUwen_reg3[9])
   );
 
-  regfile #(SIMD_WIDTH) regBFH_mod(
-  .clk(clk),
-  .clkREF(clkREF),
-  .clkREF2(clkREF2),
-  .clkREF3(clkREF3),
-  .clkREF4(clkREF4),
-  .clkREF5(clkREF5),
-  .rst(rst),
-  .read_clkEn(~doStall),
-  .tire_clkEn(1'b1),
-
-  .read0_match(),.read1_match(),.read2_match(),
-  .read3_match(),.read4_match(),.read5_match(),
-  .read6_match(),.read7_match(),.read8_match(),
-  .read0_addr(regBF_reg2[0]),.read0_data(dataBFH[0]),
-    .read0_oe(~retBF_reg2[0]|~rs_rB_useF_reg2[0]),
-  .read1_addr(regBF_reg2[1]),.read1_data(dataBFH[1]),
-    .read1_oe(~retBF_reg2[1]|~rs_rB_useF_reg2[1]),
-  .read2_addr(regBF_reg2[2]),.read2_data(dataBFH[2]),
-    .read2_oe(~retBF_reg2[2]|~rs_rB_useF_reg2[2]),
-  .read3_addr(regBF_reg2[3]),.read3_data(dataBFH[3]),
-    .read3_oe(~retBF_reg2[3]|~rs_rB_useF_reg2[3]),
-  .read4_addr(regBF_reg2[4]),.read4_data(dataBFH[4]),
-    .read4_oe(~retBF_reg2[4]|~rs_rB_useF_reg2[4]),
-  .read5_addr(regBF_reg2[5]),.read5_data(dataBFH[5]),
-    .read5_oe(~retBF_reg2[5]|~rs_rB_useF_reg2[5]),
-  .read6_addr(regBF_reg2[6]),.read6_data(dataBFH[6]),
-    .read6_oe(~retBF_reg2[6]|~rs_rB_useF_reg2[6]),
-  .read7_addr(regBF_reg2[7]),.read7_data(dataBFH[7]),
-    .read7_oe(~retBF_reg2[7]|~rs_rB_useF_reg2[7]),
-  .read8_addr(regBF_reg2[8]),.read8_data(dataBFH[8]),
-    .read8_oe(~retBF_reg2[8]|~rs_rB_useF_reg2[8]),
-
-  .read0_constEn(~rs_rB_useF_reg2[0]),
-  .read1_constEn(~rs_rB_useF_reg2[1]),
-  .read2_constEn(~rs_rB_useF_reg2[2]),
-  .read3_constEn(~rs_rB_useF_reg2[3]),
-  .read4_constEn(~rs_rB_useF_reg2[4]),
-  .read5_constEn(~rs_rB_useF_reg2[5]),
-  .read6_constEn(~rs_rB_useF_reg2[6]),
-  .read7_constEn(~rs_rB_useF_reg2[7]),
-  .read8_constEn(~rs_rB_useF_reg2[8]),
-
-  .read0_const({SIMD_WIDTH{1'B0}}),
-  .read1_const({SIMD_WIDTH{1'B0}}),
-  .read2_const({SIMD_WIDTH{1'B0}}),
-  .read3_const({SIMD_WIDTH{1'B0}}),
-  .read4_const({SIMD_WIDTH{1'B0}}),
-  .read5_const({SIMD_WIDTH{1'B0}}),
-  .read6_const({SIMD_WIDTH{1'B0}}),
-  .read7_const({SIMD_WIDTH{1'B0}}),
-  .read8_const({SIMD_WIDTH{1'B0}}),
-
-  .read0_addr_rrf(rs0i0_rB_reg3),
-  .read1_addr_rrf(rs0i1_rB_reg3),
-  .read2_addr_rrf(rs0i2_rB_reg3),
-  .read3_addr_rrf(rs1i0_rB_reg3),
-  .read4_addr_rrf(rs1i1_rB_reg3),
-  .read5_addr_rrf(rs1i2_rB_reg3),
-  .read6_addr_rrf(rs2i0_rB_reg3),
-  .read7_addr_rrf(rs2i1_rB_reg3),
-  .read8_addr_rrf(rs2i2_rB_reg3),
-
-
-  .write0_addr_rrf(tire0_rT),.write0_wen_rrf(tire0_enF),
-  .write1_addr_rrf(tire1_rT),.write1_wen_rrf(tire1_enF),
-  .write2_addr_rrf(tire2_rT),.write2_wen_rrf(tire2_enF),
-  .write3_addr_rrf(tire3_rT),.write3_wen_rrf(tire3_enF),
-  .write4_addr_rrf(tire4_rT),.write4_wen_rrf(tire4_enF),
-  .write5_addr_rrf(tire5_rT),.write5_wen_rrf(tire5_enF),
-  .write6_addr_rrf(tire6_rT),.write6_wen_rrf(tire6_enF),
-  .write7_addr_rrf(tire7_rT),.write7_wen_rrf(tire7_enF),
-  .write8_addr_rrf(tire8_rT),.write8_wen_rrf(tire8_enF),
-  .tireRead0_addr(tire0_rF),
-  .tireRead1_addr(tire1_rF),
-  .tireRead2_addr(tire2_rF),
-  .tireRead3_addr(tire3_rF),
-  .tireRead4_addr(tire4_rF),
-  .tireRead5_addr(tire5_rF),
-  .tireRead6_addr(tire6_rF),
-  .tireRead7_addr(tire7_rF),
-  .tireRead8_addr(tire8_rF),
-
-  .write0_addr_reg(FUreg_reg3[0]),.write0_data_reg(FUFH_reg[0]),.write0_wen_reg(FUwen_reg3[0] & FU0Hit_reg2),
-  .write1_addr_reg(FUreg_reg3[1]),.write1_data_reg(FUFH_reg[1]),.write1_wen_reg(FUwen_reg3[1] & FU1Hit_reg2),
-  .write2_addr_reg(FUreg_reg3[2]),.write2_data_reg(FUFH_reg[2]),.write2_wen_reg(FUwen_reg3[2] & FU2Hit_reg2),
-  .write3_addr_reg(FUreg_reg3[3]),.write3_data_reg(FUFH_reg[3]),.write3_wen_reg(FUwen_reg3[3] & FU3Hit_reg2),
-  .write4_addr_reg(FUreg_reg4[4]),.write4_data_reg(FUFH_reg[4]),.write4_wen_reg(FUwen_reg4[4]),
-  .write5_addr_reg(FUreg_reg4[5]),.write5_data_reg(FUFH_reg[5]),.write5_wen_reg(FUwen_reg4[5]),
-  .write6_addr_reg(FUreg_reg4[6]),.write6_data_reg(FUFH_reg[6]),.write6_wen_reg(FUwen_reg4[6]),
-  .write7_addr_reg(FUreg_reg5[7]),.write7_data_reg(FUFH_reg[7]),.write7_wen_reg(FUwen_reg5[7]),
-  .write8_addr_reg(FUreg_reg5[8]),.write8_data_reg(FUFH_reg[8]),.write8_wen_reg(FUwen_reg5[8]),
-  .write9_addr_reg(FUreg_reg5[9]),.write9_data_reg(FUFH_reg[9]),.write9_wen_reg(FUwen_reg5[9])
-  );
-
-  regfile #(16+SIMD_WIDTH) regBFL_mod(
-  .clk(clk),
-  .clkREF(clkREF),
-  .clkREF2(clkREF2),
-  .clkREF3(clkREF3),
-  .clkREF4(clkREF4),
-  .clkREF5(clkREF5),
-  .rst(rst),
-  .read_clkEn(~doStall),
-  .tire_clkEn(1'b1),
-
-  .read0_match(),.read1_match(),.read2_match(),
-  .read3_match(),.read4_match(),.read5_match(),
-  .read6_match(),.read7_match(),.read8_match(),
-  .read0_addr(regBF_reg2[0]),.read0_data(dataBFL[0]),
-    .read0_oe(~retBF_reg2[0]|~rs_rB_useF_reg2[0]),
-  .read1_addr(regBF_reg2[1]),.read1_data(dataBFL[1]),
-    .read1_oe(~retBF_reg2[1]|~rs_rB_useF_reg2[1]),
-  .read2_addr(regBF_reg2[2]),.read2_data(dataBFL[2]),
-    .read2_oe(~retBF_reg2[2]|~rs_rB_useF_reg2[2]),
-  .read3_addr(regBF_reg2[3]),.read3_data(dataBFL[3]),
-    .read3_oe(~retBF_reg2[3]|~rs_rB_useF_reg2[3]),
-  .read4_addr(regBF_reg2[4]),.read4_data(dataBFL[4]),
-    .read4_oe(~retBF_reg2[4]|~rs_rB_useF_reg2[4]),
-  .read5_addr(regBF_reg2[5]),.read5_data(dataBFL[5]),
-    .read5_oe(~retBF_reg2[5]|~rs_rB_useF_reg2[5]),
-  .read6_addr(regBF_reg2[6]),.read6_data(dataBFL[6]),
-    .read6_oe(~retBF_reg2[6]|~rs_rB_useF_reg2[6]),
-  .read7_addr(regBF_reg2[7]),.read7_data(dataBFL[7]),
-    .read7_oe(~retBF_reg2[7]|~rs_rB_useF_reg2[7]),
-  .read8_addr(regBF_reg2[8]),.read8_data(dataBFL[8]),
-    .read8_oe(~retBF_reg2[8]|~rs_rB_useF_reg2[8]),
-
-  .read0_constEn(~rs_rB_useF_reg2[0]),
-  .read1_constEn(~rs_rB_useF_reg2[1]),
-  .read2_constEn(~rs_rB_useF_reg2[2]),
-  .read3_constEn(~rs_rB_useF_reg2[3]),
-  .read4_constEn(~rs_rB_useF_reg2[4]),
-  .read5_constEn(~rs_rB_useF_reg2[5]),
-  .read6_constEn(~rs_rB_useF_reg2[6]),
-  .read7_constEn(~rs_rB_useF_reg2[7]),
-  .read8_constEn(~rs_rB_useF_reg2[8]),
-
-  .read0_const({16+SIMD_WIDTH{1'B0}}),
-  .read1_const({16+SIMD_WIDTH{1'B0}}),
-  .read2_const({16+SIMD_WIDTH{1'B0}}),
-  .read3_const({16+SIMD_WIDTH{1'B0}}),
-  .read4_const({16+SIMD_WIDTH{1'B0}}),
-  .read5_const({16+SIMD_WIDTH{1'B0}}),
-  .read6_const({16+SIMD_WIDTH{1'B0}}),
-  .read7_const({16+SIMD_WIDTH{1'B0}}),
-  .read8_const({16+SIMD_WIDTH{1'B0}}),
-
-  .tireRead0_addr(tire0_rF),
-  .tireRead1_addr(tire1_rF),
-  .tireRead2_addr(tire2_rF),
-  .tireRead3_addr(tire3_rF),
-  .tireRead4_addr(tire4_rF),
-  .tireRead5_addr(tire5_rF),
-  .tireRead6_addr(tire6_rF),
-  .tireRead7_addr(tire7_rF),
-  .tireRead8_addr(tire8_rF),
-
-  .write0_addr_rrf(tire0_rT),.write0_wen_rrf(tire0_enF),
-  .write1_addr_rrf(tire1_rT),.write1_wen_rrf(tire1_enF),
-  .write2_addr_rrf(tire2_rT),.write2_wen_rrf(tire2_enF),
-  .write3_addr_rrf(tire3_rT),.write3_wen_rrf(tire3_enF),
-  .write4_addr_rrf(tire4_rT),.write4_wen_rrf(tire4_enF),
-  .write5_addr_rrf(tire5_rT),.write5_wen_rrf(tire5_enF),
-  .write6_addr_rrf(tire6_rT),.write6_wen_rrf(tire6_enF),
-  .write7_addr_rrf(tire7_rT),.write7_wen_rrf(tire7_enF),
-  .write8_addr_rrf(tire8_rT),.write8_wen_rrf(tire8_enF),
-  .tireRead0_addr(tire0_rF),
-  .tireRead1_addr(tire1_rF),
-  .tireRead2_addr(tire2_rF),
-  .tireRead3_addr(tire3_rF),
-  .tireRead4_addr(tire4_rF),
-  .tireRead5_addr(tire5_rF),
-  .tireRead6_addr(tire6_rF),
-  .tireRead7_addr(tire7_rF),
-  .tireRead8_addr(tire8_rF),
-
-  .read0_addr_rrf(rs0i0_rB_reg3),
-  .read1_addr_rrf(rs0i1_rB_reg3),
-  .read2_addr_rrf(rs0i2_rB_reg3),
-  .read3_addr_rrf(rs1i0_rB_reg3),
-  .read4_addr_rrf(rs1i1_rB_reg3),
-  .read5_addr_rrf(rs1i2_rB_reg3),
-  .read6_addr_rrf(rs2i0_rB_reg3),
-  .read7_addr_rrf(rs2i1_rB_reg3),
-  .read8_addr_rrf(rs2i2_rB_reg3),
-
-
-  .write0_addr_reg(FUreg_reg3[0]),.write0_data_reg(FUFL_reg[0]),.write0_wen_reg(FUwen_reg3[0] & FU0Hit_reg2),
-  .write1_addr_reg(FUreg_reg3[1]),.write1_data_reg(FUFL_reg[1]),.write1_wen_reg(FUwen_reg3[1] & FU1Hit_reg2),
-  .write2_addr_reg(FUreg_reg3[2]),.write2_data_reg(FUFL_reg[2]),.write2_wen_reg(FUwen_reg3[2] & FU2Hit_reg2),
-  .write3_addr_reg(FUreg_reg3[3]),.write3_data_reg(FUFL_reg[3]),.write3_wen_reg(FUwen_reg3[3] & FU3Hit_reg2),
-  .write4_addr_reg(FUreg_reg4[4]),.write4_data_reg(FUFL_reg[4]),.write4_wen_reg(FUwen_reg4[4]),
-  .write5_addr_reg(FUreg_reg4[5]),.write5_data_reg(FUFL_reg[5]),.write5_wen_reg(FUwen_reg4[5]),
-  .write6_addr_reg(FUreg_reg4[6]),.write6_data_reg(FUFL_reg[6]),.write6_wen_reg(FUwen_reg4[6]),
-  .write7_addr_reg(FUreg_reg5[7]),.write7_data_reg(FUFL_reg[7]),.write7_wen_reg(FUwen_reg5[7]),
-  .write8_addr_reg(FUreg_reg5[8]),.write8_data_reg(FUFL_reg[8]),.write8_wen_reg(FUwen_reg5[8]),
-  .write9_addr_reg(FUreg_reg5[9]),.write9_data_reg(FUFL_reg[9]),.write9_wen_reg(FUwen_reg5[9])
-  );
   reginfl #(1'b1) reginflGVB_mod(
   .clk(clk),
   .rst(rst),
@@ -3958,7 +3759,7 @@ module backend(
   .write9_addr_reg(FUreg_reg3[9]),.write9_data_reg(FUVH_reg[9]),.write9_wen_reg(FUwen_reg3[9])
   );
 
-  regfile #(16+SIMD_WIDTH) regAVL_mod(
+  regfile #(16+SIMD_WIDTH,m[1:0]) regAVL_mod(
   .clk(clk),
   .clkREF(clkREF),
   .clkREF2(clkREF2),
@@ -4022,7 +3823,7 @@ module backend(
   .write9_addr_reg(FUreg_reg3[9]),.write9_data_reg(FUVL_reg[9]),.write9_wen_reg(FUwen_reg3[9])
   );
 
-  regfile #(SIMD_WIDTH) regAFH_mod(
+  regfile #(SIMD_WIDTH,m[1:0]) regAFH_mod(
   .clk(clk),
   .clkREF(clkREF),
   .clkREF2(clkREF2),
@@ -4085,7 +3886,7 @@ module backend(
   );
 
 
-  regfile #(16+SIMD_WIDTH) regAFL_mod(
+  regfile #(16+SIMD_WIDTH,m[1:0]) regAFL_mod(
   .clk(clk),
   .clkREF(clkREF),
   .clkREF2(clkREF2),
@@ -4149,7 +3950,7 @@ module backend(
   );
 
 `ifdef simulation
-  regfile #(SIMD_WIDTH) regBVH_mod(
+  regfile #(SIMD_WIDTH,m[1:0]) regBVH_mod(
   .clk(clk),
   .clkREF(clkREF),
   .clkREF2(clkREF2),
@@ -4211,7 +4012,7 @@ module backend(
   .write9_addr_reg(FUreg_reg3[9]),.write9_data_reg(FUVH_reg[9]),.write9_wen_reg(FUwen_reg3[9])
   );
 
-  regfile #(16+SIMD_WIDTH) regBVL_mod(
+  regfile #(16+SIMD_WIDTH,m[1:0]) regBVL_mod(
   .clk(clk),
   .clkREF(clkREF),
   .clkREF2(clkREF2),
@@ -4271,6 +4072,152 @@ module backend(
   .write7_addr_reg(FUreg_reg3[7]),.write7_data_reg(FUVL_reg[7]),.write7_wen_reg(FUwen_reg3[7]),
   .write8_addr_reg(FUreg_reg3[8]),.write8_data_reg(FUVL_reg[8]),.write8_wen_reg(FUwen_reg3[8]),
   .write9_addr_reg(FUreg_reg3[9]),.write9_data_reg(FUVL_reg[9]),.write9_wen_reg(FUwen_reg3[9])
+  );
+  regfile #(SIMD_WIDTH,m[1:0]) regBFH_mod(
+  .clk(clk),
+  .clkREF(clkREF),
+  .clkREF2(clkREF2),
+  .clkREF3(clkREF3),
+  .clkREF4(clkREF4),
+  .clkREF5(clkREF5),
+  .rst(rst),
+  .read_clkEn(~doStall),
+  .tire_clkEn(1'b1),
+
+  .read0_match(),.read1_match(),.read2_match(),
+  .read0_addr(regBF_reg2[3*m+0]),.read0_data(dataBFH[3*m+0]),
+    .read0_oe(~retBF_reg2[3*m+0]|~rs_rB_useF_reg2[3*m+0]),
+  .read1_addr(regBF_reg2[3*m+1]),.read1_data(dataBFH[3*m+1]),
+    .read1_oe(~retBF_reg2[3*m+1]|~rs_rB_useF_reg2[3*m+1]),
+  .read2_addr(regBF_reg2[3*m+2]),.read2_data(dataBFH[3*m+2]),
+    .read2_oe(~retBF_reg2[3*m+2]|~rs_rB_useF_reg2[3*m+2]),
+
+  .read0_constEn(~rs_rB_useF_reg2[3*m+0]),
+  .read1_constEn(~rs_rB_useF_reg2[3*m+1]),
+  .read2_constEn(~rs_rB_useF_reg2[3*m+2]),
+
+  .read0_const({SIMD_WIDTH{1'B0}}),
+  .read1_const({SIMD_WIDTH{1'B0}}),
+  .read2_const({SIMD_WIDTH{1'B0}}),
+
+  .read0_addr_rrf(rs_rB_reg2[3*m+0]),
+  .read1_addr_rrf(rs_rB_reg2[3*m+1]),
+  .read2_addr_rrf(rs_rB_reg2[3*m+2]),
+
+
+  .write0_addr_rrf(tire0_rT),.write0_wen_rrf(tire0_enF),
+  .write1_addr_rrf(tire1_rT),.write1_wen_rrf(tire1_enF),
+  .write2_addr_rrf(tire2_rT),.write2_wen_rrf(tire2_enF),
+  .write3_addr_rrf(tire3_rT),.write3_wen_rrf(tire3_enF),
+  .write4_addr_rrf(tire4_rT),.write4_wen_rrf(tire4_enF),
+  .write5_addr_rrf(tire5_rT),.write5_wen_rrf(tire5_enF),
+  .write6_addr_rrf(tire6_rT),.write6_wen_rrf(tire6_enF),
+  .write7_addr_rrf(tire7_rT),.write7_wen_rrf(tire7_enF),
+  .write8_addr_rrf(tire8_rT),.write8_wen_rrf(tire8_enF),
+  .tireRead0_addr(tire0_rF),
+  .tireRead1_addr(tire1_rF),
+  .tireRead2_addr(tire2_rF),
+  .tireRead3_addr(tire3_rF),
+  .tireRead4_addr(tire4_rF),
+  .tireRead5_addr(tire5_rF),
+  .tireRead6_addr(tire6_rF),
+  .tireRead7_addr(tire7_rF),
+  .tireRead8_addr(tire8_rF),
+
+  .write0_addr_reg(FUreg_reg3[0]),.write0_data_reg(FUFH_reg[0]),.write0_wen_reg(FUwen_reg3[0] & FU0Hit_reg2),
+  .write1_addr_reg(FUreg_reg3[1]),.write1_data_reg(FUFH_reg[1]),.write1_wen_reg(FUwen_reg3[1] & FU1Hit_reg2),
+  .write2_addr_reg(FUreg_reg3[2]),.write2_data_reg(FUFH_reg[2]),.write2_wen_reg(FUwen_reg3[2] & FU2Hit_reg2),
+  .write3_addr_reg(FUreg_reg3[3]),.write3_data_reg(FUFH_reg[3]),.write3_wen_reg(FUwen_reg3[3] & FU3Hit_reg2),
+  .write4_addr_reg(FUreg_reg4[4]),.write4_data_reg(FUFH_reg[4]),.write4_wen_reg(FUwen_reg4[4]),
+  .write5_addr_reg(FUreg_reg4[5]),.write5_data_reg(FUFH_reg[5]),.write5_wen_reg(FUwen_reg4[5]),
+  .write6_addr_reg(FUreg_reg4[6]),.write6_data_reg(FUFH_reg[6]),.write6_wen_reg(FUwen_reg4[6]),
+  .write7_addr_reg(FUreg_reg5[7]),.write7_data_reg(FUFH_reg[7]),.write7_wen_reg(FUwen_reg5[7]),
+  .write8_addr_reg(FUreg_reg5[8]),.write8_data_reg(FUFH_reg[8]),.write8_wen_reg(FUwen_reg5[8]),
+  .write9_addr_reg(FUreg_reg5[9]),.write9_data_reg(FUFH_reg[9]),.write9_wen_reg(FUwen_reg5[9])
+  );
+
+  regfile #(16+SIMD_WIDTH,m[1:0]) regBFL_mod(
+  .clk(clk),
+  .clkREF(clkREF),
+  .clkREF2(clkREF2),
+  .clkREF3(clkREF3),
+  .clkREF4(clkREF4),
+  .clkREF5(clkREF5),
+  .rst(rst),
+  .read_clkEn(~doStall),
+  .tire_clkEn(1'b1),
+
+  .read0_match(),.read1_match(),.read2_match(),
+  .read0_addr(regBF_reg2[3*m+0]),.read0_data(dataBFL[3*m+0]),
+    .read0_oe(~retBF_reg2[3*m+0]|~rs_rB_useF_reg2[3*m+0]),
+  .read1_addr(regBF_reg2[3*m+1]),.read1_data(dataBFL[3*m+1]),
+    .read1_oe(~retBF_reg2[3*m+1]|~rs_rB_useF_reg2[3*m+1]),
+  .read2_addr(regBF_reg2[3*m+2]),.read2_data(dataBFL[3*m+2]),
+    .read2_oe(~retBF_reg2[3*m+2]|~rs_rB_useF_reg2[3*m+2]),
+
+  .read0_constEn(~rs_rB_useF_reg2[3*m+0]),
+  .read1_constEn(~rs_rB_useF_reg2[3*m+1]),
+  .read2_constEn(~rs_rB_useF_reg2[3*m+2]),
+
+  .read0_const({16+SIMD_WIDTH{1'B0}}),
+  .read1_const({16+SIMD_WIDTH{1'B0}}),
+  .read2_const({16+SIMD_WIDTH{1'B0}}),
+
+  .read0_addr_rrf(rs_rB_reg2[3*m+0]),
+  .read1_addr_rrf(rs_rB_reg2[3*m+1]),
+  .read2_addr_rrf(rs_rB_reg2[3*m+2]),
+
+
+  .tireRead0_addr(tire0_rF),
+  .tireRead1_addr(tire1_rF),
+  .tireRead2_addr(tire2_rF),
+  .tireRead3_addr(tire3_rF),
+  .tireRead4_addr(tire4_rF),
+  .tireRead5_addr(tire5_rF),
+  .tireRead6_addr(tire6_rF),
+  .tireRead7_addr(tire7_rF),
+  .tireRead8_addr(tire8_rF),
+
+  .write0_addr_rrf(tire0_rT),.write0_wen_rrf(tire0_enF),
+  .write1_addr_rrf(tire1_rT),.write1_wen_rrf(tire1_enF),
+  .write2_addr_rrf(tire2_rT),.write2_wen_rrf(tire2_enF),
+  .write3_addr_rrf(tire3_rT),.write3_wen_rrf(tire3_enF),
+  .write4_addr_rrf(tire4_rT),.write4_wen_rrf(tire4_enF),
+  .write5_addr_rrf(tire5_rT),.write5_wen_rrf(tire5_enF),
+  .write6_addr_rrf(tire6_rT),.write6_wen_rrf(tire6_enF),
+  .write7_addr_rrf(tire7_rT),.write7_wen_rrf(tire7_enF),
+  .write8_addr_rrf(tire8_rT),.write8_wen_rrf(tire8_enF),
+  .tireRead0_addr(tire0_rF),
+  .tireRead1_addr(tire1_rF),
+  .tireRead2_addr(tire2_rF),
+  .tireRead3_addr(tire3_rF),
+  .tireRead4_addr(tire4_rF),
+  .tireRead5_addr(tire5_rF),
+  .tireRead6_addr(tire6_rF),
+  .tireRead7_addr(tire7_rF),
+  .tireRead8_addr(tire8_rF),
+
+  .read0_addr_rrf(rs0i0_rB_reg3),
+  .read1_addr_rrf(rs0i1_rB_reg3),
+  .read2_addr_rrf(rs0i2_rB_reg3),
+  .read3_addr_rrf(rs1i0_rB_reg3),
+  .read4_addr_rrf(rs1i1_rB_reg3),
+  .read5_addr_rrf(rs1i2_rB_reg3),
+  .read6_addr_rrf(rs2i0_rB_reg3),
+  .read7_addr_rrf(rs2i1_rB_reg3),
+  .read8_addr_rrf(rs2i2_rB_reg3),
+
+
+  .write0_addr_reg(FUreg_reg3[0]),.write0_data_reg(FUFL_reg[0]),.write0_wen_reg(FUwen_reg3[0] & FU0Hit_reg2),
+  .write1_addr_reg(FUreg_reg3[1]),.write1_data_reg(FUFL_reg[1]),.write1_wen_reg(FUwen_reg3[1] & FU1Hit_reg2),
+  .write2_addr_reg(FUreg_reg3[2]),.write2_data_reg(FUFL_reg[2]),.write2_wen_reg(FUwen_reg3[2] & FU2Hit_reg2),
+  .write3_addr_reg(FUreg_reg3[3]),.write3_data_reg(FUFL_reg[3]),.write3_wen_reg(FUwen_reg3[3] & FU3Hit_reg2),
+  .write4_addr_reg(FUreg_reg4[4]),.write4_data_reg(FUFL_reg[4]),.write4_wen_reg(FUwen_reg4[4]),
+  .write5_addr_reg(FUreg_reg4[5]),.write5_data_reg(FUFL_reg[5]),.write5_wen_reg(FUwen_reg4[5]),
+  .write6_addr_reg(FUreg_reg4[6]),.write6_data_reg(FUFL_reg[6]),.write6_wen_reg(FUwen_reg4[6]),
+  .write7_addr_reg(FUreg_reg5[7]),.write7_data_reg(FUFL_reg[7]),.write7_wen_reg(FUwen_reg5[7]),
+  .write8_addr_reg(FUreg_reg5[8]),.write8_data_reg(FUFL_reg[8]),.write8_wen_reg(FUwen_reg5[8]),
+  .write9_addr_reg(FUreg_reg5[9]),.write9_data_reg(FUFL_reg[9]),.write9_wen_reg(FUwen_reg5[9])
   );
 `endif
   rs rs0_mod(
