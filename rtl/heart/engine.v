@@ -3695,7 +3695,7 @@ module backend(
   
   genvar m,n,u;//,o
   for (m=0;m<3;m=m+1) begin : main_rs_gen
-  regfile #(SIMD_WIDTH,m[1:0]) regAVH_mod(
+  regfilef #(SIMD_WIDTH,m[1:0]) regAVH_mod(
   .clk(clk),
   .clkREF(clkREF),
   .clkREF2(clkREF2),
@@ -3759,7 +3759,7 @@ module backend(
   .write9_addr_reg(FUreg_reg3[9]),.write9_data_reg(FUVH_reg[9]),.write9_wen_reg(FUwen_reg3[9])
   );
 
-  regfile #(16+SIMD_WIDTH,m[1:0]) regAVL_mod(
+  regfilef #(16+SIMD_WIDTH,m[1:0]) regAVL_mod(
   .clk(clk),
   .clkREF(clkREF),
   .clkREF2(clkREF2),
@@ -3823,7 +3823,7 @@ module backend(
   .write9_addr_reg(FUreg_reg3[9]),.write9_data_reg(FUVL_reg[9]),.write9_wen_reg(FUwen_reg3[9])
   );
 
-  regfile #(SIMD_WIDTH,m[1:0]) regAFH_mod(
+  regfilef #(SIMD_WIDTH,m[1:0]) regAFH_mod(
   .clk(clk),
   .clkREF(clkREF),
   .clkREF2(clkREF2),
@@ -3886,7 +3886,7 @@ module backend(
   );
 
 
-  regfile #(16+SIMD_WIDTH,m[1:0]) regAFL_mod(
+  regfilef #(16+SIMD_WIDTH,m[1:0]) regAFL_mod(
   .clk(clk),
   .clkREF(clkREF),
   .clkREF2(clkREF2),
@@ -3950,7 +3950,7 @@ module backend(
   );
 
 `ifdef simulation
-  regfile #(SIMD_WIDTH,m[1:0]) regBVH_mod(
+  regfilef #(SIMD_WIDTH,m[1:0]) regBVH_mod(
   .clk(clk),
   .clkREF(clkREF),
   .clkREF2(clkREF2),
@@ -4012,7 +4012,7 @@ module backend(
   .write9_addr_reg(FUreg_reg3[9]),.write9_data_reg(FUVH_reg[9]),.write9_wen_reg(FUwen_reg3[9])
   );
 
-  regfile #(16+SIMD_WIDTH,m[1:0]) regBVL_mod(
+  regfilef #(16+SIMD_WIDTH,m[1:0]) regBVL_mod(
   .clk(clk),
   .clkREF(clkREF),
   .clkREF2(clkREF2),
@@ -4073,7 +4073,7 @@ module backend(
   .write8_addr_reg(FUreg_reg3[8]),.write8_data_reg(FUVL_reg[8]),.write8_wen_reg(FUwen_reg3[8]),
   .write9_addr_reg(FUreg_reg3[9]),.write9_data_reg(FUVL_reg[9]),.write9_wen_reg(FUwen_reg3[9])
   );
-  regfile #(SIMD_WIDTH,m[1:0]) regBFH_mod(
+  regfilef #(SIMD_WIDTH,m[1:0]) regBFH_mod(
   .clk(clk),
   .clkREF(clkREF),
   .clkREF2(clkREF2),
@@ -4136,7 +4136,7 @@ module backend(
   .write9_addr_reg(FUreg_reg5[9]),.write9_data_reg(FUFH_reg[9]),.write9_wen_reg(FUwen_reg5[9])
   );
 
-  regfile #(16+SIMD_WIDTH,m[1:0]) regBFL_mod(
+  regfilef #(16+SIMD_WIDTH,m[1:0]) regBFL_mod(
   .clk(clk),
   .clkREF(clkREF),
   .clkREF2(clkREF2),
