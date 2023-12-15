@@ -55,8 +55,8 @@ module alu_shift(
   input nDataAlt;//0=feeding data through multiclk unit
   output wire [EXCEPT_WIDTH-1:0] retData;
   input [5:0] valS;
-  input [2:0][63:0] val1;
-  input [2:0][63:0] val2;
+  input [2:0][65:0] val1;
+  input [2:0][65:0] val2;
   output [65:0] valRes;
   
   wire is_shift;
@@ -74,6 +74,7 @@ module alu_shift(
   wire [3:0] coutL;
   wire [5:0] flags_COASZP;
   reg [3:0] sz_reg;
+  wire error;
 
   wire [63:0] valX;
 
@@ -87,7 +88,7 @@ module alu_shift(
   {4'h8},
   dir|val2[12],
   arith,
-  val1[2],
+  val1[2][63:0],
   val2[2][5:0],
   valres0,
   coutR,
@@ -106,6 +107,8 @@ module alu_shift(
   assign valRes[64]=is_shift ? 1'b0 : 1'bz;
   assign valRes[65]=is_shift ? ^valRes[64:0] : 1'bz;
 
+  assign error=^val1[0] || ^val1[1] || ^val1[2] || ^val2[0] || ^val2[1] || ^val2[2];
+
   assign en[63:32]={32{sz[3]}};
   assign en[31:24]=(val2[31:24]&{8{val2[15:13]==3'b100}})|{8{val2[15:13]==3'b0}};
   assign en[23:16]=(val2[23:16]&{8{val2[15:13]==3'b100 || val2[15:13]==3'b010}})|{8{val2[15:13]==3'b0}};
@@ -114,7 +117,7 @@ module alu_shift(
 
   assign retData[`except_flags]=is_shift_reg ? flags_COASZP : 6'bz;
 
-  assign flags_COASZP={ dir_reg ? coutR_reg : ((coutL_reg&sz_reg)!=0),1'b0,1'b0,
+  assign flags_COASZP=error ? 6'bz : { dir_reg ? coutR_reg : ((coutL_reg&sz_reg)!=0),1'b0,1'b0,
 	  sz_reg[3] ? valres0_reg[63] : valres0_reg[31],~(|valres0_reg[31:0])&&
           (~sz_reg[3]||~(|valres0_reg[63:32])),~^valres0_reg[7:0]};
 `ifndef aluneg

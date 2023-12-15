@@ -404,8 +404,8 @@ alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,dataEn,nD
     || val2_sign65 & val1_sign65 & logic_en_reg || NOSHIFT&(~sec&&retOp[7:0]==`op_cax)) | error) ? 6'd11 : 6'bz;
   assign retData[`except_status]=nDataAlt_reg && cin_seq_reg|~is_ptr_reg && (~val2_sign65||val1_sign65||retOp[7:0]!=`op_sub64) &&
     (!val1_sign65 || !val2_sign65 || !logic_en_reg) && !(NOSHIFT&(~sec&&retOp[7:0]==`op_cax)) && ~ error ? 2'd2 : 2'bz; //done
-  assign retData[`except_status]=nDataAlt_reg && (~cin_seq_reg & is_ptr_reg || val2_sign65 & ~val1_sign65 & (retOp[7:0]==`op_sub64)
-    || val2_sign65 & val1_sign65 & logic_en_reg || NOSHIFT&(~sec&&retOp[7:0]==`op_cax)) && ~error ? 2'd1 : 2'bz; //done
+  assign retData[`except_status]=nDataAlt_reg && ((~cin_seq_reg & is_ptr_reg || val2_sign65 & ~val1_sign65 & (retOp[7:0]==`op_sub64)
+    || val2_sign65 & val1_sign65 & logic_en_reg || NOSHIFT&(~sec&&retOp[7:0]==`op_cax)) | error) ? 2'd1 : 2'bz; //done
   assign retData[`except_setsFlags]=nDataAlt_reg ? isFlags_reg&dataEn_reg : 1'bz;
   
   assign retEn=nDataAlt_reg ? dataEn_reg & ~retOp[11] &~thrinh_reg : 1'bz; 
