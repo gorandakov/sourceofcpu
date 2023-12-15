@@ -1408,9 +1408,11 @@ module backend(
   reg [3:0] rs_index_reg[8:0];
   
   reg [8:0] rs_rA_use;
+  wire [8:0] rs_rA_use_d;
   reg [8:0] rs_rB_use;
 
   reg [8:0] rs_rA_useF;
+  wire [8:0] rs_rA_useF_d;
   reg [8:0] rs_rB_useF;
 
   reg [8:0] rs_rA_useF_reg;
@@ -1422,6 +1424,7 @@ module backend(
   reg [8:0] rs_useBConst;
   reg [8:0] rs_useBConst_reg;
   reg [8:0] rs_useAConst;
+  wire [8:0] rs_useAConst_d;
   
   reg [5:0] rs_lsi[5:0];
   reg [2:0] rs_lsi_reg[5:0];
@@ -4838,45 +4841,31 @@ module backend(
   assign fret_en[5]=0;
   assign fret   [5]=0;
 
-/*  assign nDataAlt[0]=3'b111;
-  assign nDataAlt[1]=3'b111;
-//  assign wnDataAlt[2][1]=2'b1;
-  
-  assign FUFL[6]=~nDataAlt_reg5[2][2] ? {FUTYPE_reg6,FUCVT2_reg6[65:0]} : 68'bz;
-  assign FUFH[6]=~nDataAlt_reg5[2][2] ? {FUTYPE_reg6,50'b0,FUCVT2_reg6[81:66]} : 68'bz;
-
-  assign FUX_alu[2]=(|fxFRT_alten_reg6[2]) ? 6'b0 : 6'bz;
-  assign FUX_alu[2]=gxFADD_en_reg2[2] ? FOOS_reg2[2] : 6'bz;
-  assign FUX_alu[2]=(~(|fxFRT_alten_reg6[2]) && ~gxFADD_en_reg2[2]) ? FUS_alu_reg4[4] : 64'bz;
-  assign exx_alu[2]=(|fxFRT_alten_reg6[2]) ? 3'd2 : 3'bz;
-  assign exx_alu[2]=gxFADD_en_reg2[2] ? 3'd6 : 3'bz;
-  assign exx_alu[2]=(~(|fxFRT_alten_reg6[2]) && ~gxFADD_en_reg2[2]) ? ex_alu_reg4[4] : 3'bz;;
-  assign FUX_alu[1]=gxFADD_en_reg2[1] ? FOOS_reg2[1] : FUS_alu_reg4[2];
-  assign exx_alu[1]=gxFADD_en_reg2[1] ? 3'd6 : ex_alu_reg4[2];
-  assign FUX_alu[0]=gxFADD_en_reg2[0] ? FOOS_reg2[0] : FUS_alu_reg4[0];
-  assign exx_alu[0]=gxFADD_en_reg2[0] ? 3'd6 : ex_alu_reg4[0];
-
-  assign fxFRT_pause[0]=1'b0;
-  assign fxFRT_pause[1]=1'b0;*/
 
   assign rs_useAConst_d=clkREF ? {rs2i2_useAConst,rs2i1_useAConst,1'b0,
             rs1i2_useAConst,rs1i1_useAConst,1'b0,
             rs0i2_useAConst,rs0i1_useAConst,1'b0} : 9'bz;
+`ifndef simulation
   assign rs_useAConst_d=clkREF2 ? {rs2i2_useBConst,rs2i1_useBConst,rs2i0_useBConst,
             rs1i2_useBConst,rs1i1_useBConst,rs1i0_useBConst,
             rs0i2_useBConst,rs0i1_useBConst,rs0i0_useBConst} : 9'bz;
+`endif
   assign rs_rA_use_d=clkREF ? {rs2i2_rA_use,rs2i1_rA_use,rs2i0_rA_use,
               rs1i2_rA_use,rs1i1_rA_use,rs1i0_rA_use,
               rs0i2_rA_use,rs0i1_rA_use,rs0i0_rA_use} : 9'bz;
+`ifndef simulation
   assign rs_rA_use_d=clkREF2 ? {rs2i2_rB_use,rs2i1_rB_use,rs2i0_rB_use,
               rs1i2_rB_use,rs1i1_rB_use,rs1i0_rB_use,
               rs0i2_rB_use,rs0i1_rB_use,rs0i0_rB_use} : 9'bz;
+`endif
   assign rs_rA_useF_d=clkREF ? {rs2i2_rA_useF,rs2i1_rA_useF,rs2i0_rA_useF,
               rs1i2_rA_useF,rs1i1_rA_useF,rs1i0_rA_useF,
               rs0i2_rA_useF,rs0i1_rA_useF,rs0i0_rA_useF} : 9'bz;
+`ifndef simulation
   assign rs_rA_useF_d=clkREF2 ? {rs2i2_rB_useF,rs2i1_rB_useF,rs2i0_rB_useF,
               rs1i2_rB_useF,rs1i1_rB_useF,rs1i0_rB_useF,
               rs0i2_rB_useF,rs0i1_rB_useF,rs0i0_rB_useF} : 9'bz;
+`endif
 
   assign rrfAW[0]=Wswp[0] ? rs0i0_rB_reg : rs0i0_rA_reg;
   assign rrfAW[1]=Wswp[1] ? rs1i0_rB_reg : rs1i0_rA_reg;
