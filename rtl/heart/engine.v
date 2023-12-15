@@ -416,7 +416,7 @@ module backend(
 //  wbBus_en,
 //  wbBus_req
   );
-  localparam DATA_WIDTH=65;
+  localparam DATA_WIDTH=66;//65 bit + 1 parity
   localparam OPERATION_WIDTH=`operation_width+5+3;
   localparam RRF_WIDTH=6;
   localparam IN_REG_WIDTH=6;
@@ -4386,14 +4386,14 @@ module backend(
   assign rs_enAW[m]=(~Wswp[m]) ? rs_enA[m] : rs_enB[m];
   assign rs_enBW[m]=Wswp[m] ? rs_enA[m] : rs_enB[m];
 
-  assign rs_const_new[3*m]=~rs_IPRel[3*m] ? rs_const[3*m] : 65'bz;
-  assign rs_const_new[3*m]=rs_IPRel[3*m] & ~ rs_afterTK[3*m] ? {1'b1,baseIP_reg,1'b0} : 65'bz;
-  assign rs_const_new[3*m]=rs_IPRel[3*m] & rs_afterTK[3*m] & jump0Pred_reg ? {1'b1,jump0IP_reg} : 65'bz;
-  assign rs_const_new[3*m]=rs_IPRel[3*m] & rs_afterTK[3*m] & ~jump0Pred_reg ? {1'b1,jump1IP_reg} : 65'bz;
+  assign rs_const_new[3*m]=~rs_IPRel[3*m] ? {^rs_const[3*m],rs_const[3*m]} : 65'bz;
+  assign rs_const_new[3*m]=rs_IPRel[3*m] & ~ rs_afterTK[3*m] ? {^{1'b1,baseIP_reg,1'b0},{1'b1,baseIP_reg,1'b0}} : 65'bz;
+  assign rs_const_new[3*m]=rs_IPRel[3*m] & rs_afterTK[3*m] & jump0Pred_reg ? {^{1'b1,jump0IP_reg},{1'b1,jump0IP_reg}} : 65'bz;
+  assign rs_const_new[3*m]=rs_IPRel[3*m] & rs_afterTK[3*m] & ~jump0Pred_reg ? {^{1'b1,jump1IP_reg},{1'b1,jump1IP_reg}} : 65'bz;
   assign rs_const_new[3*m+1]=~rs_IPRel[3*m+1] ? rs_const[3*m+1] : 65'bz;
-  assign rs_const_new[3*m+1]=rs_IPRel[3*m+1] & ~ rs_afterTK[3*m+1] ? {1'b1,baseIP_reg,1'b0} : 65'bz;
-  assign rs_const_new[3*m+1]=rs_IPRel[3*m+1] & rs_afterTK[3*m+1] & jump0Pred_reg ? {1'b1,jump0IP_reg} : 65'bz;
-  assign rs_const_new[3*m+1]=rs_IPRel[3*m+1] & rs_afterTK[3*m+1] & ~jump0Pred_reg ? {1'b1,jump1IP_reg} : 65'bz;
+  assign rs_const_new[3*m+1]=rs_IPRel[3*m+1] & ~ rs_afterTK[3*m+1] ? {^{1'b1,baseIP_reg,1'b0},{1'b1,baseIP_reg,1'b0}} : 65'bz;
+  assign rs_const_new[3*m+1]=rs_IPRel[3*m+1] & rs_afterTK[3*m+1] & jump0Pred_reg ? {^{1'b1,jump0IP_reg},{1'b1,jump0IP_reg}} : 65'bz;
+  assign rs_const_new[3*m+1]=rs_IPRel[3*m+1] & rs_afterTK[3*m+1] & ~jump0Pred_reg ? {^{1'b1,jump1IP_reg},{1'b1,jump1IP_reg}} : 65'bz;
   assign rs_const_new[3*m+2]=rs_const[3*m+2];
 
   end
@@ -4858,6 +4858,25 @@ module backend(
 
   assign fxFRT_pause[0]=1'b0;
   assign fxFRT_pause[1]=1'b0;*/
+
+  assign rs_useAConst_d=clkREF ? {rs2i2_useAConst,rs2i1_useAConst,1'b0,
+            rs1i2_useAConst,rs1i1_useAConst,1'b0,
+            rs0i2_useAConst,rs0i1_useAConst,1'b0} : 9'bz;
+  assign rs_useAConst_d=clkREF2 ? {rs2i2_useBConst,rs2i1_useBConst,rs2i0_useBConst,
+            rs1i2_useBConst,rs1i1_useBConst,rs1i0_useBConst,
+            rs0i2_useBConst,rs0i1_useBConst,rs0i0_useBConst} : 9'bz;
+  assign rs_rA_use_d=clkREF ? {rs2i2_rA_use,rs2i1_rA_use,rs2i0_rA_use,
+              rs1i2_rA_use,rs1i1_rA_use,rs1i0_rA_use,
+              rs0i2_rA_use,rs0i1_rA_use,rs0i0_rA_use} : 9'bz;
+  assign rs_rA_use_d=clkREF2 ? {rs2i2_rB_use,rs2i1_rB_use,rs2i0_rB_use,
+              rs1i2_rB_use,rs1i1_rB_use,rs1i0_rB_use,
+              rs0i2_rB_use,rs0i1_rB_use,rs0i0_rB_use} : 9'bz;
+  assign rs_rA_useF_d=clkREF ? {rs2i2_rA_useF,rs2i1_rA_useF,rs2i0_rA_useF,
+              rs1i2_rA_useF,rs1i1_rA_useF,rs1i0_rA_useF,
+              rs0i2_rA_useF,rs0i1_rA_useF,rs0i0_rA_useF} : 9'bz;
+  assign rs_rA_useF_d=clkREF2 ? {rs2i2_rB_useF,rs2i1_rB_useF,rs2i0_rB_useF,
+              rs1i2_rB_useF,rs1i1_rB_useF,rs1i0_rB_useF,
+              rs0i2_rB_useF,rs0i1_rB_useF,rs0i0_rB_useF} : 9'bz;
 
   assign rrfAW[0]=Wswp[0] ? rs0i0_rB_reg : rs0i0_rA_reg;
   assign rrfAW[1]=Wswp[1] ? rs1i0_rB_reg : rs1i0_rA_reg;
@@ -6794,15 +6813,15 @@ dcache1 L1D_mod(
           rs2i1_flagDep_reg2<=rs2i1_flagDep_reg;
           rs2i2_flagDep_reg2<=rs2i2_flagDep_reg;
           
-          rs_const[0]<=rs0i0_const;
-          rs_const[1]<=rs0i1_const;
-          rs_const[2]<=rs0i2_const;
-          rs_const[3]<=rs1i0_const;
-          rs_const[4]<=rs1i1_const;
-          rs_const[5]<=rs1i2_const;
-          rs_const[6]<=rs2i0_const;
-          rs_const[7]<=rs2i1_const;
-          rs_const[8]<=rs2i2_const;
+          rs_const[0]<={^rs0i0_const,rs0i0_const};
+          rs_const[1]<={^rs0i1_const,rs0i1_const};
+          rs_const[2]<={^rs0i2_const,rs0i2_const};
+          rs_const[3]<={^rs1i0_const,rs1i0_const};
+          rs_const[4]<={^rs1i1_const,rs1i1_const};
+          rs_const[5]<={^rs1i2_const,rs1i2_const};
+          rs_const[6]<={^rs2i0_const,rs2i0_const};
+          rs_const[7]<={^rs2i1_const,rs2i1_const};
+          rs_const[8]<={^rs2i2_const,rs2i2_const};
           
 	  rs_IPRel[0]<=rs0i0_IPRel;
           rs_IPRel[1]<=rs0i1_IPRel;
@@ -6965,9 +6984,7 @@ dcache1 L1D_mod(
             rs1i2_useBConst,rs1i1_useBConst,rs1i0_useBConst,
             rs0i2_useBConst,rs0i1_useBConst,rs0i0_useBConst};
           rs_useBConst_reg<=rs_useBConst&~rs_IPRel;
-          rs_useAConst<={rs2i2_useAConst,rs2i1_useAConst,1'b0,
-            rs1i2_useAConst,rs1i1_useAConst,1'b0,
-            rs0i2_useAConst,rs0i1_useAConst,1'b0};
+          rs_useAConst<=useAConst_d;
           depA_reg[2:1]<=(depA[2:1]& rs_rA_use[2:1]) | (depAF[2:1] & rs_rA_useF[2:1]) ;
           depB_reg[2:1]<=(depB[2:1]& rs_rB_use[2:1] & ~rs_useBConst[2:1]) | 
 	     (depBF[2:1]& rs_rB_useF[2:1] & ~rs_useBConst[2:1]);
@@ -6984,19 +7001,15 @@ dcache1 L1D_mod(
           depA_reg[6]<=(depA[6]& rs_rA_use[6]) | (depAF[6] & rs_rA_useF[6]);
           depB_reg[6]<=(depB[6]& rs_rB_use[6] & ~rs_useBConst[6] & ~rs_IPRel[6]) |(depBF[6]& rs_rB_useF[6] & ~rs_useBConst[6] & ~rs_IPRel[6]);
               
-          rs_rA_use<=
-             {rs2i2_rA_use,rs2i1_rA_use,rs2i0_rA_use,
-              rs1i2_rA_use,rs1i1_rA_use,rs1i0_rA_use,
-              rs0i2_rA_use,rs0i1_rA_use,rs0i0_rA_use};
+          rs_rA_use<=rs_rA_use_d;
+             
           rs_rB_use<=
              {rs2i2_rB_use,rs2i1_rB_use,rs2i0_rB_use,
               rs1i2_rB_use,rs1i1_rB_use,rs1i0_rB_use,
               rs0i2_rB_use,rs0i1_rB_use,rs0i0_rB_use};
               
-          rs_rA_useF<=
-             {rs2i2_rA_useF,rs2i1_rA_useF,rs2i0_rA_useF,
-              rs1i2_rA_useF,rs1i1_rA_useF,rs1i0_rA_useF,
-              rs0i2_rA_useF,rs0i1_rA_useF,rs0i0_rA_useF};
+          rs_rA_useF<=rs_rA_useF_d;
+
           rs_rB_useF<=
              {rs2i2_rB_useF,rs2i1_rB_useF,rs2i0_rB_useF,
               rs1i2_rB_useF,rs1i1_rB_useF,rs1i0_rB_useF,
