@@ -99,8 +99,8 @@ module fun_fpu(
   input [10:0] fxFCADD_raise_s;
   (* register equiload *) input [5:0] FOOSH_in;
   (* register equiload *) output [5:0] FOOSH_out;
-  output [67:0] HH_data;
-  input  [67:0] XX_data;
+  output [69:0] HH_data;
+  input  [69:0] XX_data;
 
 
   wire [1:0][16+67:0] FOOF;
@@ -488,13 +488,13 @@ module fun_fpu(
 	      assign FUF4={FOOF_reg[0][68+15:68],^FOOF_reg[0][68+15:68],^FOOF_reg[0][67:0],FOOF_reg[0][67:0]};
 	      assign FUF7=isXTRA_reg2 ? xtra2_reg : 
                 {FOOF_reg[1][68+15:68],^FOOF_reg[1][68+15:68],^FOOF_reg[1][67:0],FOOF_reg[1][67:0]};
-              assign FUF4X=xtra2_reg;
+              assign FUF4X={16'b0,1'b0,^xtra2_reg[67:0],xtra2_reg[67:0]};
       end
       if (INDEX==1) begin
 	      assign FUF5={FOOF_reg[0][68+15:68],^FOOF_reg[0][68+15:68],^FOOF_reg[0][67:0],FOOF_reg[0][67:0]};
 	      assign FUF8=isXTRA_reg2 ? xtra2_reg : 
                 {FOOF_reg[1][68+15:68],^FOOF_reg[1][68+15:68],^FOOF_reg[1][67:0],FOOF_reg[1][67:0]};
-              assign FUF5X=xtra2_reg;
+              assign FUF5X={16'b0,1'b0,^xtra2_reg[67:0],xtra2_reg[67:0]};
       end
       if (INDEX==2) begin
 	      assign FUF6=|ALT_INP_reg ? {S+SIMD_WIDTH{1'BZ}} : 
@@ -503,7 +503,7 @@ module fun_fpu(
 	      assign FUF6=ALT_INP_reg[1] ? ALTDATA1 : {S+SIMD_WIDTH{1'BZ}};
 	      assign FUF9=isXTRA_reg2 ? xtra2_reg : 
                 {FOOF_reg[1][68+15:68],^FOOF_reg[1][68+15:68],^FOOF_reg[1][67:0],FOOF_reg[1][67:0]};
-              assign FUF6X=xtra2_reg;
+              assign FUF6X={16'b0,1'b0,^xtra2_reg[67:0],xtra2_reg[67:0]};
              // extra parity 2 bits at 4 phase offset; rs does have extra 3 wires under assumed process.
       end
   endgenerate

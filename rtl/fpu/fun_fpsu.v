@@ -79,12 +79,12 @@ module fun_fpsu(
   output [5:0] FOOSL_out;
   output [69:0] HH_data;
   input [69:0] XY_data;
-  inout  [S+69:0] xdata;
-  inout  [S+69:0] xdata2;
+  inout  [S+67:0] xdata;
+  inout  [S+67:0] xdata2;
 
 
-  reg  [S+69:0] xdata_reg;
-  reg  [S+69:0] xdata2_reg;
+  reg  [S+67:0] xdata_reg;
+  reg  [S+67:0] xdata2_reg;
 
   wire [1:0][S+67:0] FOOF;
   reg [1:0][S+67:0] FOOF_reg;
@@ -468,12 +468,12 @@ module fun_fpsu(
       if (INDEX==0) begin
 	      assign FUF4={1'b0,^FOOF_reg[0][67:0],FOOF_reg[0][67:0]};
 	      assign FUF7={1'b0,^FOOF_reg[1][67:0],FOOF_reg[1][67:0]};
-              assign FUF4X=xdata_reg;
+              assign FUF4X={1'b0,^xdata_reg[67:0],xdata_reg[67:0]};
       end
       if (INDEX==1) begin
 	      assign FUF5={1'b0,^FOOF_reg[0][67:0],FOOF_reg[0][67:0]};
 	      assign FUF8={1'b0,^FOOF_reg[1][67:0],FOOF_reg[1][67:0]};
-              assign FUF5X=xdata_reg;
+              assign FUF5X={1'b0,^xdata_reg[67:0],xdata_reg[67:0]};
       end
       if (INDEX==2) begin
 	      assign FUF6=|ALT_INP_reg ? {S+SIMD_WIDTH{1'BZ}} : 
@@ -481,8 +481,7 @@ module fun_fpsu(
 	      assign FUF6=ALT_INP_reg[0] ? ALTDATA0 : {S+SIMD_WIDTH{1'BZ}};
 	      assign FUF6=ALT_INP_reg[1] ? ALTDATA1 : {S+SIMD_WIDTH{1'BZ}};
 	      assign FUF9={1'b0,^FOOF_reg[0][67:0],FOOF_reg[0][67:0]};
-	      //assign FUF6=FUF6_X;
-              assign FUF6X=xdata_reg;
+              assign FUF6X={1'b0,^xdata_reg[67:0],xdata_reg[67:0]};
       end
   endgenerate
 
