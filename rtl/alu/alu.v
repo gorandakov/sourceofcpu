@@ -401,7 +401,7 @@ alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,dataEn,nD
     (!val1_sign65 || !val2_sign65 || !logic_en_reg) && ~error  ? flags_COASZP : 6'bz;
   assign retData[`except_flags]=nDataAlt_reg && (~shift_en_reg|NOSHIFT 
     && (~cin_seq_reg & is_ptr_reg || val2_sign65 & ~val1_sign65 & (retOp[7:0]==`op_sub64)
-    || val2_sign65 & val1_sign65 & logic_en_reg || NOSHIFT&(~sec&&retOp[7:0]==`op_cax)) | error) ? 6'd11 : 6'bz;
+    || val2_sign65 & val1_sign65 & logic_en_reg || NOSHIFT&(~sec&&retOp[7:0]==`op_cax)) | error) ? (error ? 6'd63 : 6'd11) : 6'bz;
   assign retData[`except_status]=nDataAlt_reg && cin_seq_reg|~is_ptr_reg && (~val2_sign65||val1_sign65||retOp[7:0]!=`op_sub64) &&
     (!val1_sign65 || !val2_sign65 || !logic_en_reg) && !(NOSHIFT&(~sec&&retOp[7:0]==`op_cax)) && ~ error ? 2'd2 : 2'bz; //done
   assign retData[`except_status]=nDataAlt_reg && ((~cin_seq_reg & is_ptr_reg || val2_sign65 & ~val1_sign65 & (retOp[7:0]==`op_sub64)
