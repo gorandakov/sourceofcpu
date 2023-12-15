@@ -34,7 +34,8 @@ module alu_shift(
   valS,
   val1,
   val2,
-  valRes
+  valRes,
+  error
   );
 
   parameter REG_WIDTH=`reg_addr_width;
@@ -58,6 +59,7 @@ module alu_shift(
   input [2:0][65:0] val1;
   input [2:0][65:0] val2;
   output [65:0] valRes;
+  input error;
   
   wire is_shift;
   wire [63:0] en;
@@ -74,7 +76,6 @@ module alu_shift(
   wire [3:0] coutL;
   wire [5:0] flags_COASZP;
   reg [3:0] sz_reg;
-  wire error;
 
   wire [63:0] valX;
 
@@ -106,8 +107,6 @@ module alu_shift(
   endgenerate
   assign valRes[64]=is_shift ? 1'b0 : 1'bz;
   assign valRes[65]=is_shift ? ^valRes[64:0] : 1'bz;
-
-  assign error=^val1[0] || ^val1[1] || ^val1[2] || ^val2[0] || ^val2[1] || ^val2[2];
 
   assign en[63:32]={32{sz[3]}};
   assign en[31:24]=(val2[31:24]&{8{val2[15:13]==3'b100}})|{8{val2[15:13]==3'b0}};

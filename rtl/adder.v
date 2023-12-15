@@ -649,7 +649,7 @@ endmodule
   parameter WIDTH=64;
   input [64:0] a;
   input [64:0] b;
-  output [64:0] out;
+  output [65:0] out;
   input [5:0] sub;
   input en;
   input sxtEn;
@@ -737,6 +737,8 @@ endmodule
   assign is_ptr=a[64]|b[64] && ~(a[64]&b[64]&sub[1]) && ben==2'b01;
 
   assign out[64]=en ? is_ptr : 1'bz;
+  assign out[65]=en ? ^out[64:0] : 1'bz;
+//65th bit offset by 4 phases in regfile and alu!
 
   assign exbits=is_ptr ? ptr[63:44]^{19'b0,pos_flip[cout_sec0]|
   neg_flip[cout_sec0]} : 20'b0;

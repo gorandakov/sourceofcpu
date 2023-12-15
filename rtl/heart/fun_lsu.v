@@ -204,8 +204,8 @@ module agu_block(
   output miss_pause_agu;
   output wt_pause_agu;
   output mOp_write_clear;
-  (* bus=WB bus_spacing=10 *) input [64:0] u1_base;
-  (* bus=WB bus_spacing=10 *) input [64:0] u1_index;
+  (* bus=WB bus_spacing=10 *) input [65:0] u1_base;
+  (* bus=WB bus_spacing=10 *) input [65:0] u1_index;
   (* bus=WB bus_spacing=10 *) input [43:0] u1_const;
   input [3:0]  u1_base_fufwd;
   input [3:0]  u1_base_fuufwd;
@@ -219,8 +219,8 @@ module agu_block(
   input        u1_lsflag;
   input        u1_clkEn;
   input [3:0]  u1_attr;
-  (* bus=WB bus_spacing=10 *) input [64:0] u2_base;
-  (* bus=WB bus_spacing=10 *) input [64:0] u2_index;
+  (* bus=WB bus_spacing=10 *) input [65:0] u2_base;
+  (* bus=WB bus_spacing=10 *) input [65:0] u2_index;
   (* bus=WB bus_spacing=10 *) input [43:0] u2_const;
   input [3:0]  u2_base_fufwd;
   input [3:0]  u2_base_fuufwd;
@@ -234,8 +234,8 @@ module agu_block(
   input        u2_lsflag;
   input        u2_clkEn;
   input [3:0]  u2_attr;
-  (* bus=WB bus_spacing=10 *) input [64:0] u3_base;
-  (* bus=WB bus_spacing=10 *) input [64:0] u3_index;
+  (* bus=WB bus_spacing=10 *) input [65:0] u3_base;
+  (* bus=WB bus_spacing=10 *) input [65:0] u3_index;
   (* bus=WB bus_spacing=10 *) input [43:0] u3_const;
   input [3:0]  u3_base_fufwd;
   input [3:0]  u3_base_fuufwd;
@@ -249,8 +249,8 @@ module agu_block(
   input        u3_lsflag;
   input        u3_clkEn;
   input [3:0]  u3_attr;
-  (* bus=WB bus_spacing=10 *) input [64:0] u4_base;
-  (* bus=WB bus_spacing=10 *) input [64:0] u4_index;
+  (* bus=WB bus_spacing=10 *) input [65:0] u4_base;
+  (* bus=WB bus_spacing=10 *) input [65:0] u4_index;
   (* bus=WB bus_spacing=10 *) input [43:0] u4_const;
   input [3:0]  u4_base_fufwd;
   input [3:0]  u4_base_fuufwd;
@@ -264,8 +264,8 @@ module agu_block(
   input        u4_lsflag;
   input        u4_clkEn;
   input [3:0]  u4_attr;
-  (* bus=WB bus_spacing=10 *) input [64:0] u5_base;
-  (* bus=WB bus_spacing=10 *) input [64:0] u5_index;
+  (* bus=WB bus_spacing=10 *) input [65:0] u5_base;
+  (* bus=WB bus_spacing=10 *) input [65:0] u5_index;
   (* bus=WB bus_spacing=10 *) input [43:0] u5_const;
   input [3:0]  u5_base_fufwd;
   input [3:0]  u5_base_fuufwd;
@@ -427,16 +427,16 @@ module agu_block(
 
   input FU0Hit,FU1Hit,FU2Hit,FU3Hit;
 
-  (* register equiload bus=WB bus_spacing=10  *) input [64:0] FU0;
-  (* register equiload bus=WB bus_spacing=10  *) input [64:0] FU1;
-  (* register equiload bus=WB bus_spacing=10  *) input [64:0] FU2;
-  (* register equiload bus=WB bus_spacing=10  *) input [64:0] FU3;
-  (* register equiload bus=WB bus_spacing=10  *) input [64:0] FU4;
-  (* register equiload bus=WB bus_spacing=10  *) input [64:0] FU5;
-  (* register equiload bus=WB bus_spacing=10  *) input [64:0] FU6;
-  (* register equiload bus=WB bus_spacing=10  *) input [64:0] FU7;
-  (* register equiload bus=WB bus_spacing=10  *) input [64:0] FU8;
-  (* register equiload bus=WB bus_spacing=10  *) input [64:0] FU9;
+  (* register equiload bus=WB bus_spacing=10  *) input [65:0] FU0;
+  (* register equiload bus=WB bus_spacing=10  *) input [65:0] FU1;
+  (* register equiload bus=WB bus_spacing=10  *) input [65:0] FU2;
+  (* register equiload bus=WB bus_spacing=10  *) input [65:0] FU3;
+  (* register equiload bus=WB bus_spacing=10  *) input [65:0] FU4;
+  (* register equiload bus=WB bus_spacing=10  *) input [65:0] FU5;
+  (* register equiload bus=WB bus_spacing=10  *) input [65:0] FU6;
+  (* register equiload bus=WB bus_spacing=10  *) input [65:0] FU7;
+  (* register equiload bus=WB bus_spacing=10  *) input [65:0] FU8;
+  (* register equiload bus=WB bus_spacing=10  *) input [65:0] FU9;
   input [8:0] FUreg3_reg;
   input [127+8:0] dc_rdataA;
   
@@ -524,16 +524,16 @@ module agu_block(
   wire cout_secR;
   wire [5:0][2:0] tlb_wayR;
 
-  reg [64:0] FU0_reg;
-  reg [64:0] FU1_reg;
-  reg [64:0] FU2_reg;
-  reg [64:0] FU3_reg;
-  reg [64:0] FU4_reg;
-  reg [64:0] FU5_reg;
-  reg [64:0] FU6_reg;
-  reg [64:0] FU7_reg;
-  reg [64:0] FU8_reg;
-  reg [64:0] FU9_reg;
+  reg [65:0] FU0_reg;
+  reg [65:0] FU1_reg;
+  reg [65:0] FU2_reg;
+  reg [65:0] FU3_reg;
+  reg [65:0] FU4_reg;
+  reg [65:0] FU5_reg;
+  reg [65:0] FU6_reg;
+  reg [65:0] FU7_reg;
+  reg [65:0] FU8_reg;
+  reg [65:0] FU9_reg;
   
   reg bus_holds_agu;
   reg bus_holds_agu_reg;
@@ -1324,6 +1324,19 @@ module agu_block(
   wire mOp4_rsEn;
   wire mOp5_rsEn;
 
+  wire u1_error=^u1_base || ^u1_index;
+  wire u2_error=^u1_base || ^u2_index;
+  wire u3_error=^u1_base || ^u3_index;
+  wire u4_error=^u1_base || ^u4_index;
+  wire u5_error=^u1_base || ^u5_index;
+
+  reg u1_error_reg;
+  reg u2_error_reg;
+  reg u3_error_reg;
+  reg u4_error_reg;
+  reg u5_error_reg;
+  reg u4_error_reg2;
+  reg u5_error_reg2;
 
   wire        mOp0_rsEn;
   wire [31:0] mOp0_rsBanks;
@@ -1367,7 +1380,7 @@ module agu_block(
   rs_write_forward #(65) nxtBase1(
   clk,rst,
   ~u1_clkEn|(rsStall[0]&~now_flushing&~alt_bus_hold_reg)|~clkREF2,
-  u1_base,uu_base1,
+  u1_base[64:0],uu_base1,
   u1_base_fufwd,u1_base_fuufwd,
   FU0,FU0_reg,
   FU1,FU1_reg,
@@ -1384,7 +1397,7 @@ module agu_block(
   rs_write_forward #(65) nxtIndex1(
   clk,rst,
   ~u1_clkEn|(rsStall[0]&~now_flushing&~alt_bus_hold_reg)|~clkREF,
-  u1_index,uu_index1,
+  u1_index[64:0],uu_index1,
   u1_index_fufwd,u1_index_fuufwd,
   FU0,FU0_reg,
   FU1,FU1_reg,
@@ -1401,7 +1414,7 @@ module agu_block(
   rs_write_forward #(65) nxtBase2(
   clk,rst,
   ~u2_clkEn|(rsStall[1]&~now_flushing&~alt_bus_hold_reg)|~clkREF2,
-  u2_base,uu_base2,
+  u2_base[64:0],uu_base2,
   u2_base_fufwd,u2_base_fuufwd,
   FU0,FU0_reg,
   FU1,FU1_reg,
@@ -1418,7 +1431,7 @@ module agu_block(
   rs_write_forward #(65) nxtIndex2(
   clk,rst,
   ~u2_clkEn|(rsStall[1]&~now_flushing&~alt_bus_hold_reg)|~clkREF,
-  u2_index,uu_index2,
+  u2_index[64:0],uu_index2,
   u2_index_fufwd,u2_index_fuufwd,
   FU0,FU0_reg,
   FU1,FU1_reg,
@@ -1436,7 +1449,7 @@ module agu_block(
   rs_write_forward #(65) nxtBase3(
   clk,rst,
   ~u3_clkEn|(rsStall[2]&~now_flushing&~alt_bus_hold_reg)|~clkREF2,
-  u3_base,uu_base3,
+  u3_base[64:0],uu_base3,
   u3_base_fufwd,u3_base_fuufwd,
   FU0,FU0_reg,
   FU1,FU1_reg,
@@ -1453,7 +1466,7 @@ module agu_block(
   rs_write_forward #(65) nxtIndex3(
   clk,rst,
   ~u3_clkEn|(rsStall[2]&~now_flushing&~alt_bus_hold_reg)|~clkREF,
-  u3_index,uu_index3,
+  u3_index[64:0],uu_index3,
   u3_index_fufwd,u3_index_fuufwd,
   FU0,FU0_reg,
   FU1,FU1_reg,
@@ -1471,7 +1484,7 @@ module agu_block(
   rs_write_forward #(65) nxtBase4(
   clk,rst,
   ~u4_clkEn|~clkREF2,
-  u4_base,uu_base4,
+  u4_base[64:0],uu_base4,
   u4_base_fufwd,u4_base_fuufwd,
   FU0,FU0_reg,
   FU1,FU1_reg,
@@ -1488,7 +1501,7 @@ module agu_block(
   rs_write_forward #(65) nxtIndex4(
   clk,rst,
   ~u4_clkEn|~clkREF,
-  u4_index,uu_index4,
+  u4_index[64:0],uu_index4,
   u4_index_fufwd,u4_index_fuufwd,
   FU0,FU0_reg,
   FU1,FU1_reg,
@@ -1506,7 +1519,7 @@ module agu_block(
   rs_write_forward #(65) nxtBase5(
   clk,rst,
   ~u5_clkEn|~clkREF2,
-  u5_base,uu_base5,
+  u5_base[64:0],uu_base5,
   u5_base_fufwd,u5_base_fuufwd,
   FU0,FU0_reg,
   FU1,FU1_reg,
@@ -1523,7 +1536,7 @@ module agu_block(
   rs_write_forward #(65) nxtIndex5(
   clk,rst,
   ~u5_clkEn|~clkREF,
-  u5_index,uu_index5,
+  u5_index[64:0],uu_index5,
   u5_index_fufwd,u5_index_fuufwd,
   FU0,FU0_reg,
   FU1,FU1_reg,
@@ -1583,6 +1596,7 @@ module agu_block(
   .cmplxAddr(p4_cmplxAddr),
   .cin_secq(p4_mex_en_reg ? 1'b1 : p4_sec_in_reg|~mflags[u4_thread_reg2][19]),
   .ptrdiff(p4_mex_en_reg ? 1'b0 : ~p4_ndiff_reg),
+  .error(u4_error_reg2),
   //.conflict(),
   .tlbMiss(p4_tlbmiss),
   .mOp_register(),
@@ -1644,6 +1658,7 @@ module agu_block(
   .cmplxAddr(p5_cmplxAddr),
   .cin_secq(p5_mex_en_reg ? 1'b1 : p5_sec_in_reg|~mflags[u5_thread_reg2][19]),
   .ptrdiff(p5_mex_en_reg ? 1'b0 : ~p5_ndiff_reg),
+  .error(u5_error_reg2),
   //.conflict(),
   .tlbMiss(p5_tlbmiss),
   .mOp_register(),
@@ -1788,6 +1803,7 @@ module agu_block(
   p0_cmplxAddr_d,
   p0_sec_in|~mflags[u1_thread_reg][19],
   ~p0_ndiff,
+  u1_error_reg,
   mOp1_rsBanks,
   mOp2_rsBanks,
   mOp3_banks,
@@ -1855,6 +1871,7 @@ module agu_block(
   p1_cmplxAddr_d,
   p1_sec_in|~mflags[u2_thread_reg][19],
   ~p1_ndiff,
+  u2_error_reg,
   mOp0_rsBanks,
   mOp2_rsBanks,
   mOp3_banks,
@@ -1922,6 +1939,7 @@ module agu_block(
   p2_cmplxAddr_d,
   p2_sec_in|~mflags[u3_thread_reg][19],
   ~p2_ndiff,
+  u3_error_reg,
   mOp1_rsBanks,
   mOp0_rsBanks,
   mOp3_banks,
@@ -2072,6 +2090,7 @@ module agu_block(
   .mOp0_II(rec_II),
   .mOp0_WQ(rec_WQ),
   .mOp0_attr(rec_attr),
+  .mOp0_error(1'b0),
   .mOp0_lsflag(rec_lsflag),
  
   .reqtlb_addr(Em_tlb_req_addr),
@@ -2729,6 +2748,7 @@ module agu_block(
           u1_WQ_no_reg<=u1_WQ_no;
           u1_lsflag_reg<=u1_lsflag;
           u1_const_reg<={{20{u1_const[32]}},u1_const};
+          u1_error_reg<=u1_error;
       end
 
       if (~(rsStall[1]&~now_flushing&~alt_bus_hold_reg)) begin
@@ -2743,6 +2763,7 @@ module agu_block(
           u2_WQ_no_reg<=u2_WQ_no;
           u2_lsflag_reg<=u2_lsflag;
           u2_const_reg<={{20{u2_const[32]}},u2_const};
+          u2_error_reg<=u2_error;
       end
       
       if (~(rsStall[2]&~now_flushing&~alt_bus_hold_reg)) begin
@@ -2757,6 +2778,7 @@ module agu_block(
           u3_WQ_no_reg<=u3_WQ_no;
           u3_lsflag_reg<=u3_lsflag;
           u3_const_reg<={{20{u3_const[32]}},u3_const};
+          u3_error_reg<=u3_error;
       end
 
       u4_clkEn_reg<=u4_clkEn;
@@ -2771,6 +2793,8 @@ module agu_block(
       u4_WQ_no_reg<=u4_WQ_no;
       u4_lsflag_reg<=u4_lsflag;
       u4_const_reg<={{20{u4_const[32]}},u4_const};
+      u4_error_reg<=u4_error;
+      u4_error_reg2<=u4_error_reg;
 
       u5_clkEn_reg<=u5_clkEn;
       u5_op_reg<=u5_op;
@@ -2784,6 +2808,8 @@ module agu_block(
       u5_WQ_no_reg<=u5_WQ_no;
       u5_lsflag_reg<=u5_lsflag;
       u5_const_reg<={{20{u5_const[32]}},u5_const};
+      u5_error_reg<=u5_error;
+      u5_error_reg2<=u5_error_reg;
 
       if (~(rsStall[0]&~now_flushing&~alt_bus_hold_reg)) begin      
           u1_clkEn_reg2<=u1_clkEn_reg & ~except;

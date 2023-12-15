@@ -24,7 +24,7 @@ limitations under the License.
 //place next to alu_shift in alu-shift combo
 
 module 
-alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,dataEn,nDataAlt,retData,retEn,val1,val2,valS,valRes,sec);
+alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,dataEn,nDataAlt,retData,retEn,val1,val2,valS,valRes,sec,error);
 
   localparam REG_WIDTH=`reg_addr_width;
   localparam OPERATION_WIDTH=`operation_width;
@@ -49,6 +49,7 @@ alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,dataEn,nD
   input [5:0] valS;//flag
   inout  [65:0] valRes;  
   input sec;
+  input error;
   
 
   reg [64:0] valRes_reg;
@@ -141,7 +142,6 @@ alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,dataEn,nD
   wire [5:0] flags_COASZP;
 
 
-  wire error;
 
   wire isFlags;
   reg isFlags_reg;
@@ -200,7 +200,6 @@ alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,dataEn,nD
   
   assign isFlags=~operation[12];
   
-  assign error=^val1[0] || ^val1[1] || ^val1[2] || ^val2[0] || ^val2[1] || ^val2[2];
   assign val1One[0]=|val1[1][7:0];
   assign val1One[1]=|val1[1][15:8];
   assign val1One[2]=|val1[1][31:16];
