@@ -55,7 +55,7 @@ module rs_wakeUp_logic(
   outRsSelect1,outDataEn1,outFuFwd1,outFuuFwd1,
   outRsSelect2,outDataEn2,outFuFwd2,outFuuFwd2
   );
-  parameter DATA_WIDTH=`alu_width;
+  parameter DATA_WIDTH=`alu_width+1;
   localparam REG_WIDTH=`reg_addr_width;
   localparam FN_WIDTH=10;
 
@@ -422,7 +422,7 @@ module rs_wakeUp_logic_array(
   outRsSelect1,outDataEn1,outBank1,outFound1,outFuFwd1,outFuuFwd1,
   outRsSelect2,outDataEn2,outBank2,outFound2,outFuFwd2,outFuuFwd2
   );
-  parameter DATA_WIDTH=`alu_width;
+  parameter DATA_WIDTH=`alu_width+1;
   localparam REG_WIDTH=`reg_addr_width;
   localparam BUF_COUNT=32;
   localparam FN_WIDTH=10;
@@ -1160,7 +1160,7 @@ module rs_wakeUpS_logic(
   outRsSelect1,outDataEn1,outFuFwd1,outFuuFwd1,
   outRsSelect2,outDataEn2,outFuFwd2,outFuuFwd2
   );
-  parameter DATA_WIDTH=`alu_width;
+  parameter DATA_WIDTH=`alu_width+1;
   localparam REG_WIDTH=`reg_addr_width;
   localparam FN_WIDTH=10;
 
@@ -1418,7 +1418,7 @@ module rs_wakeUpS_logic_array(
   outRsSelect1,outDataEn1,outBank1,outFound1,outFuFwd1,outFuuFwd1,
   outRsSelect2,outDataEn2,outBank2,outFound2,outFuFwd2,outFuuFwd2
   );
-  parameter DATA_WIDTH=`alu_width;
+  parameter DATA_WIDTH=`alu_width+1;
   localparam REG_WIDTH=`reg_addr_width;
   localparam BUF_COUNT=32;
   localparam FN_WIDTH=10;
@@ -1862,7 +1862,7 @@ module rs_buf(
 // 1 if buffer is free  
   bufFree
 );
-  localparam DATA_WIDTH=`alu_width;
+  localparam DATA_WIDTH=`alu_width+1;
   localparam REG_WIDTH=`reg_addr_width;
   localparam OPERATION_WIDTH=`operation_width;
   localparam LSQ_WIDTH=`lsqRsNo_width;
@@ -2165,7 +2165,7 @@ module rs_array(
 // 1 if buffer is free  
   bufFree
 );
-  localparam DATA_WIDTH=`alu_width;
+  localparam DATA_WIDTH=`alu_width+1;
   localparam REG_WIDTH=`reg_addr_width;
   localparam OPERATION_WIDTH=`operation_width;
   localparam LSQ_WIDTH=`lsqRsNo_width;
