@@ -93,6 +93,7 @@ module fun_fpsu(
 
   reg [2:0] u1_FK_reg;
   
+  reg error,error_reg,error_reg2,error_reg3;
   
   reg  gxFADD_hi;
   reg  gxFADD_en;
@@ -390,8 +391,8 @@ module fun_fpsu(
   assign fmask2=fxFCADD_sn_reg5 ?
     (fxFCADD_raise_s_reg[0]|fxFCADD_raise_s_reg[1]) :
     11'b0;
-  fexcpt fexcpt2_mod(fraise2_reg,{6'b0,3'b0},
-    fmask2_reg,|u1_en_reg7[3:2]&u1_en_reg7[0],u1_retY,u1_retY_en);
+  fexcpt fexcpt2_mod(fraise2_reg,{6'b0|{6{error_reg3&|u1_en_reg5[3:2]&u1_en_reg5[0]}},2'b0,error_reg3&|u1_en_reg5[3:2]&u1_en_reg5[0]},
+    fmask2_reg,|u1_en_reg5[3:2]&u1_en_reg5[0]&~error_reg3,u1_retY,u1_retY_en);
   assign fraise3=fxFADD_sn_reg2 ?
     (fxFADD_raise_reg[0]|fxFADD_raise_reg[1])&fpcsr[21:11] :
     11'b0&fpcsr[21:11];
@@ -399,18 +400,11 @@ module fun_fpsu(
     (fxFADD_raise_reg[0]|fxFADD_raise_reg[1]) :
     11'b0;
   fexcpt fexcpt3_mod(fraise3_reg,{6'b0,3'b0},
-    fmask3_reg,|u1_en_reg4[3:2]&u1_en_reg4[0],u1_retX,u1_retX_en);
-/*module fexcpt(
-  mask,
-  in,
-  in_mask,
-  in_en,
-  no,
-  en);
-*/
+    fmask3_reg,|u1_en_reg4[3:2]&u1_en_reg4[0]&~error_reg2,u1_retX,u1_retX_en);
+
   assign HH_data=gxDataBXL_reg[0];
-  assign u1_ret=u1_retY|u1_retX_reg3;
-  assign u1_ret_en=u1_retY_en|u1_retX_en_reg3;
+  assign u1_ret=u1_retY|u1_retX_reg;
+  assign u1_ret_en=u1_retY_en|u1_retX_en_reg;
 
   fpumuls cadd2H_mod(
   .clk(clk),
@@ -653,6 +647,10 @@ module fun_fpsu(
   end
 
   always @(posedge clk) begin
+      error=^u1_A || ^u1_B;
+      error_reg<=error;
+      error_reg2<=error_reg;
+      error_reg3<=error_reg2;
       ALT_INP_reg<=ALT_INP;
       u1_op_reg<=u1_op;
       u1_en_reg<=u1_en;

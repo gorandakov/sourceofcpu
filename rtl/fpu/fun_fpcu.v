@@ -230,6 +230,8 @@ module fun_fpu(
   wire [S+69:0] uu_B1;
   wire [S+69:0] uu_B2;
 
+  reg error,error_reg,error_reg2,error_reg3;
+
   reg [67:0] xtra_reg;
   reg [67:0] xtra2_reg;
 
@@ -392,14 +394,14 @@ module fun_fpu(
 
   //assign FOOS=gfFADD_hi ? FOOSH[m] : FOOSL[m];
 
-  assign fraise2=fxFCADD_sn_reg5 ?
+  assign fraise2=fxFCADD_sn_reg3 ?
     fxFCADD_raise_s_reg&fpcsr[21:11] :
     (fxFCADD_raise_reg)&fpcsr[21:11];
-  assign fmask2=fxFCADD_sn_reg5 ?
+  assign fmask2=fxFCADD_sn_reg3 ?
     fxFCADD_raise_s_reg :
     (fxFCADD_raise_reg);
-  fexcpt fexcpt2_mod(fraise2_reg,{6'b0,3'b0},
-    fmask2_reg,|u1_en_reg7[3:2]&u1_en_reg7[0],u1_retY,u1_retY_en);
+  fexcpt fexcpt2_mod(fraise2_reg,{6'b0|{6{error_reg3&|u1_en_reg5[3:2]&u1_en_reg5[0]}},2'b0,error_reg3&|u1_en_reg5[3:2]&u1_en_reg5[0]},
+    fmask2_reg,|u1_en_reg5[3:2]&u1_en_reg5[0]&~error_reg3,u1_retY,u1_retY_en);
   assign fraise3=fxFADD_sn_reg2 ?
     fxFADD_raise_s_reg&fpcsr[21:11] :
     (fxFADD_raise_reg)&fpcsr[21:11];
@@ -407,19 +409,11 @@ module fun_fpu(
     fxFADD_raise_s_reg :
     (fxFADD_raise_reg);
   fexcpt fexcpt3_mod(fraise3_reg,{6'b0,3'b0},
-    fmask3_reg,|u1_en_reg4[3:2]&u1_en_reg4[0],u1_retX,u1_retX_en);
+    fmask3_reg,|u1_en_reg4[3:2]&u1_en_reg4[0]&~error_reg2,u1_retX,u1_retX_en);
 
-  assign u1_ret=u1_retY|u1_retX_reg3;
-  assign u1_ret_en=u1_retY_en|u1_retX_en_reg3;
+  assign u1_ret=u1_retY|u1_retX_reg;
+  assign u1_ret_en=u1_retY_en|u1_retX_en_reg;
 
-/*module fexcpt(
-  mask,
-  in,
-  in_mask,
-  in_en,
-  no,
-  en);
-*/
   assign FOOSH_out=FOOSH_reg2;
   //verilator lint_off WIDTH
   assign HH_data=gfDataBFL_reg[0];
@@ -520,6 +514,10 @@ module fun_fpu(
   `else
   always @(posedge clk) begin
   `endif
+    error<=^u1_A || ^u1_B;
+    error_reg<=error;
+    error_reg2<=error_reg;
+    error_reg3<=error_reg2;
     fxFCADD_sn_reg<=fxFCADD_sn;
     fxFCADD_sn_reg2<=fxFCADD_sn_reg;
     fxFCADD_sn_reg3<=fxFCADD_sn_reg2;
