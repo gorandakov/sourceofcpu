@@ -58,10 +58,10 @@ module fun_fpu(
   input clk;
   input rst;
   input [31:0] fpcsr;
-  input [S+67:0] u1_A;
-  input [S+67:0] u1_B;
-  input [67:0] u1_Bx;
-  output [67:0] u1_Ax;
+  input [S+69:0] u1_A;
+  input [S+69:0] u1_B;
+  input [69:0] u1_Bx;
+  output [69:0] u1_Ax;
   input [3:0] u1_en;
   input [20:0] u1_op;
   input [3:0] u1_fufwd_A;
@@ -73,24 +73,24 @@ module fun_fpu(
   input u1_XADD;
   input [2:0] u1_FK;
 
-  (* register equiload *) input [S+67:0] FUF0;
-  (* register equiload *) input [S+67:0] FUF1;
-  (* register equiload *) input [S+67:0] FUF2;
-  (* register equiload *) input [S+67:0] FUF3;
-  (* register equiload *) inout [S+67:0] FUF4;
-  (* register equiload *) inout [S+67:0] FUF5;
-  (* register equiload *) inout [S+67:0] FUF6;
-  (* register equiload *) inout [S+67:0] FUF7;
-  (* register equiload *) inout [S+67:0] FUF8;
-  (* register equiload *) inout [S+67:0] FUF9;
-  (* register equiload *) inout [S+67:0] FUF4X;
-  (* register equiload *) inout [S+67:0] FUF5X;
-  (* register equiload *) inout [S+67:0] FUF6X;
+  (* register equiload *) input [S+69:0] FUF0;
+  (* register equiload *) input [S+69:0] FUF1;
+  (* register equiload *) input [S+69:0] FUF2;
+  (* register equiload *) input [S+69:0] FUF3;
+  (* register equiload *) inout [S+69:0] FUF4;
+  (* register equiload *) inout [S+69:0] FUF5;
+  (* register equiload *) inout [S+69:0] FUF6;
+  (* register equiload *) inout [S+69:0] FUF7;
+  (* register equiload *) inout [S+69:0] FUF8;
+  (* register equiload *) inout [S+69:0] FUF9;
+  (* register equiload *) inout [S+69:0] FUF4X;
+  (* register equiload *) inout [S+69:0] FUF5X;
+  (* register equiload *) inout [S+69:0] FUF6X;
   inout [67:0] xtra;
   inout [67:0] xtra2;
   input [1:0] ALT_INP;
-  input [S+67:0] ALTDATA0;
-  input [S+67:0] ALTDATA1;
+  input [S+69:0] ALTDATA0;
+  input [S+69:0] ALTDATA1;
   input [5:0] FUS_alu0;
   input [5:0] FUS_alu1;
   input [2:0] ex_alu0;
@@ -215,37 +215,37 @@ module fun_fpu(
 
   reg [1:0] ALT_INP_reg;
 
-  wire [1:0][S+67:0] gfDataBFL;
-  reg [1:0][16+67:0] gfDataBFL_reg;
-  reg [1:0][16+67:0] fxDataAFL_reg;
-  reg [1:0][S+67:0] gfDataBFL_REG;
-  reg [1:0][S+67:0] fxDataAFL_REG;
-  reg [1:0][S+67:0] gfDataBXL_reg;
-  reg [1:0][S+67:0] fxDataAXL_reg;
-  reg [1:0][S+67:0] gfDataBXL_reg2;
-  reg [1:0][S+67:0] fxDataAXL_reg2;
+  wire [1:0][S+69:0] gfDataBFL;
+  reg [1:0][16+69:0] gfDataBFL_reg;
+  reg [1:0][16+69:0] fxDataAFL_reg;
+  reg [1:0][S+69:0] gfDataBFL_REG;
+  reg [1:0][S+69:0] fxDataAFL_REG;
+  reg [1:0][S+69:0] gfDataBXL_reg;
+  reg [1:0][S+69:0] fxDataAXL_reg;
+  reg [1:0][S+69:0] gfDataBXL_reg2;
+  reg [1:0][S+69:0] fxDataAXL_reg2;
 
-  wire [S+67:0] uu_A1;
-  wire [S+67:0] uu_A2;
-  wire [S+67:0] uu_B1;
-  wire [S+67:0] uu_B2;
+  wire [S+69:0] uu_A1;
+  wire [S+69:0] uu_A2;
+  wire [S+69:0] uu_B1;
+  wire [S+69:0] uu_B2;
 
   reg [67:0] xtra_reg;
   reg [67:0] xtra2_reg;
 
-  reg [S+67:0] FUF0_reg;
-  reg [S+67:0] FUF1_reg;
-  reg [S+67:0] FUF2_reg;
-  reg [S+67:0] FUF3_reg;
-  reg [S+67:0] FUF4_reg;
-  reg [S+67:0] FUF5_reg;
-  reg [S+67:0] FUF6_reg;
-  reg [S+67:0] FUF7_reg;
-  reg [S+67:0] FUF8_reg;
-  reg [S+67:0] FUF9_reg;
-  reg [S+67:0] FUFX4_reg;
-  reg [S+67:0] FUFX5_reg;
-  reg [S+67:0] FUFX6_reg;
+  reg [S+69:0] FUF0_reg;
+  reg [S+69:0] FUF1_reg;
+  reg [S+69:0] FUF2_reg;
+  reg [S+69:0] FUF3_reg;
+  reg [S+69:0] FUF4_reg;
+  reg [S+69:0] FUF5_reg;
+  reg [S+69:0] FUF6_reg;
+  reg [S+69:0] FUF7_reg;
+  reg [S+69:0] FUF8_reg;
+  reg [S+69:0] FUF9_reg;
+  reg [S+69:0] FUFX4_reg;
+  reg [S+69:0] FUFX5_reg;
+  reg [S+69:0] FUFX6_reg;
 
   reg [3:0] u1_en_reg;
   reg [3:0] u2_en_reg;
@@ -351,7 +351,7 @@ module fun_fpu(
   .logic_sel(fxFADD_loSel),
   .en(H? fxFADD_dbl:fxFADD_dblext),
   .res(FOOF[0][67:0]),
-  .res_hi(FOOF[0][70+15:70])
+  .res_hi(FOOF[0][68+15:68])
   );
   
  
@@ -441,7 +441,7 @@ module fun_fpu(
   .en(H? fxFCADD_dbl : fxFCADD_dblext),
   .rmode(fxXTRA ? ROUND_TRUNC :  u1_op_reg[20:18]==3'b111 ?fpcsr[`csrfpu_rmode] : u1_op_reg[20:18]),
   .res(FOOF[1][67:0]),
-  .res_hi(FOOF[1][70+15:70]),
+  .res_hi(FOOF[1][68+15:68]),
   .xtra(xtra),
   .isDBL(fxFCADD_dbl|H),
   .raise(fxFCADD_raise),
@@ -485,21 +485,26 @@ module fun_fpu(
       if (H) assign gfDataBFL[0]=u1_op_reg[9] ? u1_Bx : uu_B2;
       else assign gfDataBFL[0]=u1_op_reg[8] ? {uu_B2[70+15:70],u1_Bx} : uu_B2;
       if (INDEX==0) begin
-	      assign FUF4=FOOF_reg[0];
-	      assign FUF7=isXTRA_reg2 ? xtra2_reg : FOOF_reg[1];
+	      assign FUF4={FOOF_reg[0][68+15:68],^FOOF_reg[0][68+15:68],^FOOF_reg[0][67:0],FOOF_reg[0][67:0]};
+	      assign FUF7=isXTRA_reg2 ? xtra2_reg : 
+                {FOOF_reg[1][68+15:68],^FOOF_reg[1][68+15:68],^FOOF_reg[1][67:0],FOOF_reg[1][67:0]};
               assign FUF4X=xtra2_reg;
       end
       if (INDEX==1) begin
-	      assign FUF5=FOOF_reg[0];
-	      assign FUF8=isXTRA_reg2 ? xtra2_reg : FOOF_reg[1];
+	      assign FUF5={FOOF_reg[0][68+15:68],^FOOF_reg[0][68+15:68],^FOOF_reg[0][67:0],FOOF_reg[0][67:0]};
+	      assign FUF8=isXTRA_reg2 ? xtra2_reg : 
+                {FOOF_reg[1][68+15:68],^FOOF_reg[1][68+15:68],^FOOF_reg[1][67:0],FOOF_reg[1][67:0]};
               assign FUF5X=xtra2_reg;
       end
       if (INDEX==2) begin
-	      assign FUF6=|ALT_INP_reg ? {S+SIMD_WIDTH{1'BZ}} : FOOF_reg[0];
+	      assign FUF6=|ALT_INP_reg ? {S+SIMD_WIDTH{1'BZ}} : 
+                {FOOF_reg[0][68+15:68],^FOOF_reg[0][68+15:68],^FOOF_reg[0][67:0],FOOF_reg[0][67:0]};
 	      assign FUF6=ALT_INP_reg[0] ? ALTDATA0 : {S+SIMD_WIDTH{1'BZ}};
 	      assign FUF6=ALT_INP_reg[1] ? ALTDATA1 : {S+SIMD_WIDTH{1'BZ}};
-	      assign FUF9=isXTRA_reg2 ? xtra2_reg : FOOF_reg[1];
+	      assign FUF9=isXTRA_reg2 ? xtra2_reg : 
+                {FOOF_reg[1][68+15:68],^FOOF_reg[1][68+15:68],^FOOF_reg[1][67:0],FOOF_reg[1][67:0]};
               assign FUF6X=xtra2_reg;
+             // extra parity 2 bits at 4 phase offset; rs does have extra 3 wires under assumed process.
       end
   endgenerate
 
@@ -507,8 +512,8 @@ module fun_fpu(
 //  else assign FUFL[4+m]=fxFRT_alten_reg5[2]||~nDataAlt_reg5[2][2] ? 'z : FOOFL_reg[2*m+0];
 //  assign FUFL[7+m]=FOOFL_reg[2*m+1];
 
-  assign u1_Ax=uu_B1[67:0];
-  assign u1_Ax=uu_B2[67:0];
+  assign u1_Ax=uu_B1[69:0];
+  assign u1_Ax=uu_B2[69:0];
 
   `ifndef swapedge
   always @(negedge clk) begin
