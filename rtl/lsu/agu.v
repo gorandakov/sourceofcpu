@@ -42,6 +42,7 @@ module agu(
   cmplxAddr,
   cin_secq,
   ptrdiff,
+  error,
   other0_banks,
   other1_banks,
   otherR_banks,
@@ -117,6 +118,7 @@ module agu(
   input [63:0] cmplxAddr;
   input cin_secq;
   input ptrdiff;
+  input error;
   input [BANK_COUNT-1:0] other0_banks;
   input [BANK_COUNT-1:0] other1_banks;
   input [BANK_COUNT-1:0] otherR_banks;
@@ -268,7 +270,8 @@ module agu(
   reg [1:0] pageFault_t_reg; 
   wire fault_cann;
   reg fault_cann_reg;
- 
+  reg error_reg;
+
   reg [3:0] attr_reg;
   
   generate
@@ -369,10 +372,11 @@ module agu(
     31'bz;
 //todo: add read_clkEn to pageFault
   assign pageFault_t=(addrNext[14]) ? (fault_tlb | ({2{split}} & fault_tlb_next)) & {2{tlb_hit}} : fault_tlb & {2{tlb_hit}};
-  assign pageFault=(pageFault_t_reg!=0) | fault_cann_reg && read_clkEn_reg2 && ~bus_hold_reg2;
+  assign pageFault=(pageFault_t_reg!=0) | fault_cann_reg | error_reg && read_clkEn_reg2 && ~bus_hold_reg2;
   assign fault_cann=~cout_secq;
-  assign faultNo=fault_cann_reg | (pageFault_t_reg!=0) && ~bus_hold_reg2 ? {6'd11,1'b0,2'd1} : {6'd0,1'b0,2'd2};
-  assign faultCode={3'b0,fault_cann_reg,pageFault_t_reg[1],2'b0,pageFault_t_reg[0]};
+  assign faultNo=fault_cann_reg | (pageFault_t_reg!=0) | error_reg && ~bus_hold_reg2 ? {error_reg ? 6'd63 : 6'd11,1'b0,2'd1} : 
+    {6'd0,1'b0,2'd2};
+  assign faultCode={3'b0,fault_cann_reg,pageFault_t_reg[1],2'b0,pageFault_t_reg[0]};//warning: unused
   assign mOp_addrMain={addrTlb[30:0],addrMain[12:0]};
   
   assign tlbMiss=read_clkEn_reg&~tlb_hit&~fault_cann & rcn_mask[1];
@@ -487,10 +491,12 @@ module agu(
              // cmplxAddr_reg<=64'b0;
               pageFault_t_reg<=2'b0;
               fault_cann_reg<=1'b0;
+              error_reg<=1'b0;
           end else if (!rsStall) begin
              // cmplxAddr_reg<=cmplxAddr;
               pageFault_t_reg<=pageFault_t;
               fault_cann_reg<=fault_cann;
+              error_reg<=error;
           end
 	  mOp_type_reg<=mOp_type;
 	  if (rst)

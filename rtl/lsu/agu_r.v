@@ -48,6 +48,7 @@ module agu_r(
   mOp0_II,
   mOp0_WQ,
   mOp0_attr,
+  mOp0_error,
   reqtlb_en,
   reqtlb_addr,
   reqtlb_attr,
@@ -143,6 +144,7 @@ module agu_r(
   input [9:0] mOp0_II;
   input [5:0] mOp0_WQ;
   input [3:0] mOp0_attr;
+  input mOp0_error;
   input reqtlb_en;
   input [29:0] reqtlb_addr;
   input [3:0] reqtlb_attr;
@@ -272,6 +274,7 @@ module agu_r(
   reg [3+1:0] mOp0_bread_reg;
   reg [127+1+7:0] mOp0_data_reg;
   reg [1:0] mOp0_pbit_reg;
+  reg error_reg;
 
   wire [29:0] addrInPage;
   wire [29:0] addrOffPage;
@@ -416,10 +419,11 @@ module agu_r(
     tlb_data_next[`dtlbData_phys] : 31'bz;
   
   assign pageFault_t=(page_carry) ? (fault_tlb | ({2{mOp_split}} & fault_tlb_next)) & {2{tlb_hit}} : fault_tlb & {2{tlb_hit}};
-  assign pageFault=(pageFault_t_reg!=0) | fault_cann_reg && mOp_en_reg && ~bus_hold_reg;
+  assign pageFault=(pageFault_t_reg!=0) | fault_cann_reg | error_reg && mOp_en_reg && ~bus_hold_reg;
   assign fault_cann=1'b0;
-  assign faultNo=fault_cann_reg | (pageFault_t_reg!=0) && ~bus_hold_reg ? {6'd11,1'b0,2'd1} : {6'd0,1'b0,2'd2};
-  assign faultCode={3'b0,fault_cann_reg,pageFault_t_reg[1],2'b0,pageFault_t_reg[0]};
+  assign faultNo=fault_cann_reg | (pageFault_t_reg!=0) | error_reg && ~bus_hold_reg ? {error_reg ? 6'd63 : 6'd11,1'b0,2'd1} :
+    {6'd0,1'b0,2'd2};
+  assign faultCode={3'b0,fault_cann_reg,pageFault_t_reg[1],2'b0,pageFault_t_reg[0]};//warning: unused
   
   assign fault_tlb={mflags[`mflags_cpl+1] & tlb_data[`dtlbData_sys] || mflags[-1+`mflags_cpl] & ~&addrMain_tlb[42:41], ~tlb_data[`dtlbData_na]}; 
   assign fault_tlb_next={mflags[`mflags_cpl+1] & tlb_data_next[`dtlbData_sys],  ~tlb_data_next[`dtlbData_na]}; 
@@ -561,6 +565,7 @@ module agu_r(
 	  mOp0_II_reg<=10'b0;
 	  mOp0_WQ_reg<=6'b0;
 	  mOp0_attr_reg<=4'b0;
+          error_reg<=1'b0;
           mOp0_addrEven_reg<=36'b0;
           mOp0_addrOdd_reg<=36'b0;
           mOp0_lsfwd_reg<=1'b0;
@@ -572,6 +577,7 @@ module agu_r(
           addrMain_tlb<=65'b0;
       end else if (except) begin
           mOp0_en_reg<=1'b0;
+          error_reg<=1'b0;
       end else if (~doStall&&!rsStall) begin
           mOp0_en_reg<=mOp0_en & ~(except);
           if (mOp0_en & ~|req_bus || extern_feed & |req_bus & (mOp0_type_reg==2'b10) || |req_bus & (mOp0_type_reg==2'b11)) begin
@@ -589,6 +595,7 @@ module agu_r(
 	      mOp0_II_reg<=mOp0_II;
 	      mOp0_WQ_reg<=mOp0_WQ;
 	      mOp0_attr_reg<=mOp0_attr;
+              error_reg<=mOp0_error;
               mOp0_addrEven_reg<=mOp0_addrEven;
               mOp0_addrOdd_reg<=mOp0_addrOdd;
               mOp0_lsfwd_reg<=mOp0_lsfwd;
