@@ -44,10 +44,10 @@ alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,dataEn,nD
   input nDataAlt;//0=feeding data through multiclk unit
   output wire [EXCEPT_WIDTH-1:0] retData;
   output retEn;
-  input [2:0][64:0] val1;
-  input [2:0][64:0] val2;
+  input [2:0][65:0] val1;
+  input [2:0][65:0] val2;
   input [5:0] valS;//flag
-  inout  [64:0] valRes;  
+  inout  [65:0] valRes;  
   input sec;
   
 
@@ -209,7 +209,9 @@ alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,dataEn,nD
   
   assign nDataAlt2=nDataAlt && doJmp2 | ~cond[4];
   assign valRes=(add_en||shift_en&~NOSHIFT||(operation[7:0]==`op_cax && NOSHIFT)||~nDataAlt)&~(~doJmp2|~cond[4]) ? 
-65'bz : {nDataAlt & ~nDataAlt2 ? val1[1][64]&~operation[9] : is_ptr,valRes2};
+    66'bz : {^{nDataAlt & ~nDataAlt2 ? val1[1][64]&~operation[9] : is_ptr,valRes2},
+    {nDataAlt & ~nDataAlt2 ? val1[1][64]&~operation[9] : is_ptr,valRes2}};
+//4 phase offset for the ecc bit
   assign valRes2[63:0]=(operation[11] || ~nDataAlt) ? 64'b0: 64'bz;
   assign valRes2[63:0]=nDataAlt & ~nDataAlt2 ? (operation[9] ? {63'b0,operation[10]} : val1[1][63:0]) : 64'bz;
   assign valRes2[63:0]=(~add8_en & ~sahf_en && nDataAlt2) ? valRes1 : 64'bz;
@@ -506,7 +508,7 @@ alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,dataEn,nD
         end
       else
         begin
-          valRes_reg<=valRes;
+          valRes_reg<=valRes[64:0];
 //          retEn<=dataEn & ~except;
           isFlags_reg<=isFlags;
           retOp<=operation;
