@@ -59,7 +59,7 @@ module fun_fpuH(
   HI_dataS,HI_dataT
   );
   localparam [0:0] H=1'b1;
-  localparam SIMD_WIDTH=68; //half width
+  localparam SIMD_WIDTH=70; //half width
   input clk;
   input rst;
   input [31:0] fpcsr;
@@ -176,7 +176,7 @@ module fun_fpuH(
   FUF9,
   FUF4XY,FUF5XY,FUF6XY,
   xtra0,x2tra0,
-  68'b0,68'b0,
+  70'b0,70'b0,
   2'b0,
   FUS_alu0,FUS_alu1,
   ex_alu0,ex_alu1,
@@ -199,7 +199,7 @@ module fun_fpuH(
   FUF9,
   FUF4XY,FUF5XY,FUF6XY,
   xtra1,x2tra1,
-  68'b0,68'b0,
+  70'b0,70'b0,
   2'b0,
   FUS_alu2,FUS_alu3,
   ex_alu2,ex_alu3,

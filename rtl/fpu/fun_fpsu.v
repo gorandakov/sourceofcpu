@@ -40,7 +40,7 @@ module fun_fpsu(
   );
   parameter [1:0] INDEX=2'd2;
   parameter [0:0] H=1'b0;
-  localparam SIMD_WIDTH=68; //half width
+  localparam SIMD_WIDTH=70; //half width
   localparam S=0;
   input clk;
   input rst;
@@ -233,7 +233,7 @@ module fun_fpsu(
   reg [3:0] u1_en_reg6;
   reg [3:0] u1_en_reg7;
   
-  rs_write_forward #(S+68) u1_A_fwd(
+  rs_write_forward #(S+70) u1_A_fwd(
   clk,rst,
   ~u1_en[3]&u1_XADD,
   u1_A,uu_A1,
@@ -250,7 +250,7 @@ module fun_fpsu(
   FUF9,FUF9_reg
   );
   
-  rs_write_forward #(S+68) u1_B_fwd(
+  rs_write_forward #(S+70) u1_B_fwd(
   clk,rst,
   ~u1_en[3]&u1_XADD,
   u1_B,uu_B1,
@@ -267,7 +267,7 @@ module fun_fpsu(
   u1_FK[2] ? FUF6X : FUF9, u1_FK_reg[2] ? FUFX6_reg : FUF9_reg
   );
   
-  rs_write_forward #(S+68) u2_A_fwd(
+  rs_write_forward #(S+70) u2_A_fwd(
   clk,rst,
   ~u1_en[3]&~u1_XADD,
   u1_A,uu_A2,
@@ -284,7 +284,7 @@ module fun_fpsu(
   FUF9,FUF9_reg
   );
   
-  rs_write_forward #(S+68) u2_B_fwd(
+  rs_write_forward #(S+70) u2_B_fwd(
   clk,rst,
   ~u1_en[3]&~u1_XADD,
   u1_B,uu_B2,

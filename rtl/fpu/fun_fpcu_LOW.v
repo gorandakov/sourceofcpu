@@ -62,7 +62,7 @@ module fun_fpuL(
   FUCVT1
   );
   localparam [0:0] H=1'b0;
-  localparam SIMD_WIDTH=68; //half width
+  localparam SIMD_WIDTH=70; //half width
   input clk;
   input rst;
   input [31:0] fpcsr;
@@ -169,7 +169,7 @@ module fun_fpuL(
   output daltX;
   output [63:0] FUCVT1;
 
-  wire [15+68:0] XI_dataD;
+  wire [15+70:0] XI_dataD;
   reg [3:0] u5_en_reg;
   reg [20:0] u5_op_reg;
   reg [3:0] u5_en_reg2;
@@ -255,7 +255,7 @@ module fun_fpuL(
     u5_op_reg[7:0]==`fop_tblD)),
   .clkEn(~fxFRT_alten_reg3),
   .A((u5_op_reg2[7:0]!=`fop_cvtD && u5_op_reg2[7:0]!=`fop_cvt32D &&
-    u5_op_reg2[7:0]!=`fop_cvtE) ? {16'b0,XI_dataS[65:0]} : {XI_dataT[15+68:68],XI_dataT[65:0]}),
+    u5_op_reg2[7:0]!=`fop_cvtE) ? {16'b0,XI_dataS[65:0]} : {XI_dataT[15+70:70],XI_dataT[65:0]}),
   .isDBL(u5_op_reg[7:0]==`fop_cvtD || u5_op_reg[7:0]==`fop_cvt32D),
   .isEXT(u5_op_reg[7:0]==`fop_cvtE),
   .isSNG(u5_op_reg[7:0]!=`fop_cvtD && u5_op_reg[7:0]!=`fop_cvt32D &&

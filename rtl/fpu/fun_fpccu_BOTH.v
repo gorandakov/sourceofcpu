@@ -65,7 +65,7 @@ module fun_fpu_BOTH(
   fork_in,fork_out
   );
   localparam [0:0] H=1'b1;
-  localparam SIMD_WIDTH=68; //half width
+  localparam SIMD_WIDTH=70; //half width
 /*verilator hier_block*/
   input clk;
   input rst;
@@ -292,8 +292,8 @@ module fun_fpu_BOTH(
   FOOSL0, HFOOSH0,
   FOOSL1, HFOOSH1,
   FOOSL2, HFOOSH2,
-  fork_in[135:68],
-  fork_out[135:68]
+  fork_in[139:70],
+  fork_out[139:70]
   ); 
 
   fun_fpuL lfpc_mod(
@@ -336,8 +336,8 @@ module fun_fpu_BOTH(
   fxFRT_alten_reg3,
   daltX,
   FUCVT1,
-  fork_in[67:0],
-  fork_out[67:0]
+  fork_in[69:0],
+  fork_out[69:0]
   );
 
   assign FUS0=u1_op_reg4[7:0]==`fop_cmpDH  ? HFOOSH0 : LFOOSH0; 

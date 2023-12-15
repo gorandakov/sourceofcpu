@@ -49,7 +49,7 @@ module fun_fpsu_BOTH(
   fork_in,fork_out
   );
   localparam [0:0] H=1'b1;
-  localparam SIMD_WIDTH=68; //half width
+  localparam SIMD_WIDTH=70; //half width
 /*verilator hier_block*/
   input clk;
   input rst;
@@ -256,7 +256,7 @@ module fun_fpsu_BOTH(
   xtra1,xtra1,
   xtra2,xtra2,
   ALTDATAH0,ALTDATAH1,
-  ALT_INP,,,fork_in[135:68],fork_out[135:68]
+  ALT_INP,,,fork_in[139:70],fork_out[139:70]
   );
 
   fun_fpuSL lfpc_mod(

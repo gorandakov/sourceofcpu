@@ -47,7 +47,7 @@ module fun_fpuSL(
   XI_dataS,XI_dataT
   );
   localparam [0:0] H=1'b0;
-  localparam SIMD_WIDTH=68; //half width
+  localparam SIMD_WIDTH=70; //half width
   input clk;
   input rst;
   input [31:0] fpcsr;
@@ -156,7 +156,7 @@ module fun_fpuSL(
   FUF4X,FUF5X,FUF6X,
   FUF9,
   xdataD,xdata2D,
-  68'b0,68'b0,
+  70'b0,70'b0,
   2'b0,
   FOOSL0_out,,
   );
@@ -174,7 +174,7 @@ module fun_fpuSL(
   FUF9,
   FUF4X,FUF5X,FUF6X,
   xdataB,xdata2B,
-  68'b0,68'b0,
+  70'b0,70'b0,
   2'b0,
   FOOSL1_out,,
   );
@@ -198,8 +198,8 @@ module fun_fpuSL(
   XI_dataS,XI_dataT
   );
 
-  wire [67:0] FUCVT1A;
-  wire [67:0] FUCVT1B;
+  wire [69:0] FUCVT1A;
+  wire [69:0] FUCVT1B;
 
   cvt_FP_I_mod fp2i_mod(
   .clk(clk),
@@ -207,7 +207,7 @@ module fun_fpuSL(
   .en(u5_en_reg[3] && |u5_en_reg[3:2] 
   && (u5_op_reg[7:0]==`fop_pcvtD || u5_op_reg[7:0]==`fop_pcvtS)),
   .clkEn(1'b1),
-  .A((u5_op_reg2[7:0]!=`fop_pcvtD) ? {16'b0,XI_dataS[65:0]} : {XI_dataT[15+68:68],XI_dataT[65:0]}),
+  .A((u5_op_reg2[7:0]!=`fop_pcvtD) ? {16'b0,XI_dataS[65:0]} : {XI_dataT[15+70:70],XI_dataT[65:0]}),
   .isDBL(u5_op_reg[7:0]==`fop_pcvtD),
   .isEXT(1'b0),
   .isSNG(u5_op_reg[7:0]!=`fop_pcvtD),
