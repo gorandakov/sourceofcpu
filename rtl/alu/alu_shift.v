@@ -57,7 +57,7 @@ module alu_shift(
   input [5:0] valS;
   input [2:0][63:0] val1;
   input [2:0][63:0] val2;
-  output [63:0] valRes;
+  output [65:0] valRes;
   
   wire is_shift;
   wire [63:0] en;
@@ -103,6 +103,8 @@ module alu_shift(
         assign valRes[k]=is_shift & ~(cond[4]&~doJmp) & ~en[k] ? valX[k] : 1'bz;
     end
   endgenerate
+  assign valRes[64]=is_shift ? 1'b0 : 1'bz;
+  assign valRes[65]=is_shift ? ^valRes[64:0] : 1'bz;
 
   assign en[63:32]={32{sz[3]}};
   assign en[31:24]=(val2[31:24]&{8{val2[15:13]==3'b100}})|{8{val2[15:13]==3'b0}};
