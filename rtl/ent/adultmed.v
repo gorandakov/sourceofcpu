@@ -1291,10 +1291,8 @@ module smallInstr_decoder(
           puseRs[18]=1'b1;
           prAlloc[18]=1'b0;
           puseBConst[18]=magic==4'b0111 & instr[58];
-          if (magic[2:0]!=3'b111) pconstant[18]=(magic[1:0]==2'b11) ? {{9+32{instr[47]}},instr[47:25]} : {{22+32{instr[31]}},instr[31:23],1'b0};//shl 1 for unaligned load/store
+          if (magic[2:0]!=3'b111) pconstant[18]=(magic[1:0]==2'b11) ? {{8+32{instr[47]}},instr[47:25],1'b0} : {{22+32{instr[31]}},instr[31:23],1'b0};//shl 1 for unaligned load/store; note this pconstant is used for unaligned; other constant is used for alligned.
           perror[18]=2'b0;
-         // if (prevSpecLoad) rT=5'd17;
-         // else 
           prT[18]=5'd16;
           pthisSpecLoad[18]=1'b1;
           if (magic==4'b0111) begin 
