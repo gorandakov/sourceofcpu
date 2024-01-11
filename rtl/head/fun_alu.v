@@ -723,17 +723,17 @@ module fu_alu(
   wire p2_sec_in;
 
   alu alu0(clk,rst,except,1'b0,1'b0,u1_op_reg[12:0],u1_op_reg[17:13],u1_isSub_reg,mflags[0][20],u1_clkEn_reg,1'b1,
-    u1_ret,u1_rten,uu_A1,uu_B1,uu_S1,FU4,p0_sec_in,u1_error_reg,{2'b11,~u1_isSub_reg});
+    u1_ret,u1_rten,uu_A1,uu_B1,uu_S1,FU4,p0_sec_in,u1_error_reg,{2'b11,~u1_isSub_reg[1]});
   alu #(1'b0)  alu1(clk,rst,except,1'b0,1'b0,u2_op_reg[12:0],u2_op_reg[17:13],u2_isSub_reg,mflags[0][20],u2_clkEn_reg,1'b1,
     u2_ret,u2_rten,uu_A2,uu_B2,uu_S2,FU7,1'b1,u2_error_reg,u2_rmode_reg);
   
   alu alu2(clk,rst,except,1'b0,1'b0,u3_op_reg[12:0],u3_op_reg[17:13],u3_isSub_reg,mflags[0][20],u3_clkEn_reg,1'b1,
-    u3_ret,u3_rten,uu_A3,uu_B3,uu_S3,FU5,p1_sec_in,u3_error_reg,{2'b11,~u3_isSub_reg});
+    u3_ret,u3_rten,uu_A3,uu_B3,uu_S3,FU5,p1_sec_in,u3_error_reg,{2'b11,~u3_isSub_reg[1]});
   alu #(1'b0)  alu3(clk,rst,except,1'b0,1'b0,u4_op_reg[12:0],u4_op_reg[17:13],u4_isSub_reg,mflags[0][20],u4_clkEn_reg,1'b1,
     u4_ret,u4_rten,uu_A4,uu_B4,uu_S4,FU8,1'b1,u4_error_reg,u4_rmode_reg);
   
   alu alu4(clk,rst,except,1'b0,1'b0,u5_op_reg[12:0],u5_op_reg[17:13],u5_isSub_reg,mflags[0][20],u5_clkEn_reg,u5_nDataAlt&&(&nDataAlt),
-    u5_ret,u5_rten,uu_A5,uu_B5,uu_S5,FU6,p2_sec_in,u5_error_reg,{2'b11,~u5_isSub_reg});
+    u5_ret,u5_rten,uu_A5,uu_B5,uu_S5,FU6,p2_sec_in,u5_error_reg,{2'b11,~u5_isSub_reg[1]});
   alu #(1'b0)  alu5(clk,rst,except,1'b0,1'b0,u6_op_reg[12:0],u6_op_reg[17:13],u6_isSub_reg,mflags[0][20],u6_clkEn_reg,1'b1,
     u6_ret,u6_rten,uu_A6,uu_B6,uu_S6,FU9,1'b1,u6_error_reg,u6_rmode_reg);
 
@@ -1016,9 +1016,9 @@ module fu_alu(
 	  u6_isSub_reg[2]=1'b0;
 	  u6_isSub_reg[5:3]=3'd1;
       end
-      u2_rmode_reg<=u2_rmode^{2'b0,u2_isSub_reg};
-      u4_rmode_reg<=u4_rmode^{2'b0,u4_isSub_reg};
-      u5_rmode_reg<=u6_rmode^{2'b0,u6_isSub_reg};
+      u2_rmode_reg<=u2_rmode^{2'b0,u2_isSub_reg[1]};
+      u4_rmode_reg<=u4_rmode^{2'b0,u4_isSub_reg[1]};
+      u5_rmode_reg<=u6_rmode^{2'b0,u6_isSub_reg[1]};
   end
 endmodule
 
