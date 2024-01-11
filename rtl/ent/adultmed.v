@@ -356,7 +356,7 @@ module smallInstr_decoder(
   assign isBasicALU=(opcode_main[7:5]==3'b0 || opcode_main[7:3]==5'b00100) & ~opcode_main[2];
   assign isBasicXOR=(opcode_main[7:3]==5'b00100) & ~opcode_main[2];//not a seprarate class
   assign isBasicMUL=(opcode_main[7:5]==3'b0 || opcode_main[7:3]==5'b00100) & opcode_main[2];
-  assign isBasicALUExcept=~opcode_main[0] && (magic[1:0]==2'b01 && instr[28:23]!=6'b0);  
+  assign isBasicALUExcept=~opcode_main[0] && (magic[1:0]==2'b01 && instr[28:26]!=3'b0);  
   assign isBasicShift=opcode_main[7:1]==7'd20 || opcode_main[7:1]==7'd21 ||
       opcode_main[7:1]==7'd22;      
   assign isBasicShiftExcept=magic[1:0]==2'b01 && instr[29:25]!=5'b0;
@@ -954,6 +954,7 @@ module smallInstr_decoder(
            poperation[9][12]=instr[31];
            pflags_write[9]=~instr[31];
            pconstant[9]={{51{instr[30]}},instr[30:18]};
+           if (~opcode_main[0] && magic[1:0]!=2'b11) prndmode[9]=instr[25:23];
        end
           
        prA_use[9]=1'b1;
@@ -961,7 +962,7 @@ module smallInstr_decoder(
        prT_use[9]=1'b1;
        puseRs[9]=1'b1;
        prAlloc[9]=1'b1;
-       pport[9]=isBasicXOR ? PORT_SHIFT : PORT_ALU;
+       pport[9]=isBasicXOR|~&prndmode[9] ? PORT_SHIFT : PORT_ALU;
           
        if (opcode_main[0]||magic[1:0]==2'b11) begin
            if (magic[1:0]==2'b01) begin

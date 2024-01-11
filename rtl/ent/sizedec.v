@@ -139,7 +139,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   
   assign isBasicALU=(!|opcode_main[7:5] || opcode_main[7:3]==5'b00100) & ~opcode_main[2] & magic[0];
   assign isBasicMUL=(!|opcode_main[7:5] || opcode_main[7:3]==5'b00100) & opcode_main[2] & magic[0];
-  assign isBasicALUExcept=~opcode_main[0] && (magic[1:0]==2'b01 && |instr[28:23]);  
+  assign isBasicALUExcept=~opcode_main[0] && (magic[1:0]==2'b01 && |instr[28:26]);  
   assign isBasicShift=(opcode_main[7:1]==7'd20 || opcode_main[7:1]==7'd21 ||
       opcode_main[7:1]==7'd22)&&magic[0];      
   assign isBasicShiftExcept=magic[1:0]==2'b01 && |instr[29:25];
