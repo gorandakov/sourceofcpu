@@ -645,12 +645,13 @@ endmodule
 
 
 
-(* align_width=a,b,out *) module addsub_alu(a,b,out,sub,en,sxtEn,ben,cout,cout4,cout8LL,cout16,cout32,cout_sec,ndiff,cout44);
+(* align_width=a,b,out *) module addsub_alu(a,b,out,sub,cin,en,sxtEn,ben,cout,cout4,cout8LL,cout16,cout32,cout_sec,ndiff,cout44);
   parameter WIDTH=64;
   input [64:0] a;
   input [64:0] b;
   output [65:0] out;
   input [5:0] sub;
+  input cin;
   input en;
   input sxtEn;
   input [1:0] ben;
@@ -723,7 +724,6 @@ endmodule
   assign bitEn={{20{ben[1]&en}},{12{ben[0]&en}},{32{en}}};
   
   
-  assign cin=sub[1];
 
   assign ptr=b[64] && ~sub[1] ? b[63:0] : a[63:0];
   assign unptr=b[64] && ~sub[1] ? xa[43:4] : xb[43:4];
