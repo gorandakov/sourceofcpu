@@ -182,12 +182,12 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   assign isJalR=(opcode_main==8'd213 || opcode_main==8'd214 || opcode_main==8'd215 || opcode_main==8'd220 || opcode_main==8'd221) && magic[0];
   assign isCexALU=opcode_main==8'd222 && magic[0];
   
-  assign isBasicFPUScalarA=opcode_main==8'hf0 && instr[13:12]==2'b0 && magic[0];
-  assign isBasicFPUScalarB=opcode_main==8'hf0 && instr[13:12]==2'b1 && magic[0];
-  assign isBasicFPUScalarC=opcode_main==8'hf0 && instr[15:12]==4'd2 && magic[0];
-  assign isBasicFPUScalarCmp=opcode_main==8'hf0 && instr[15:12]==4'd6 && magic[0];
-  assign isBasicFPUScalarCmp2=opcode_main==8'hf0 && instr[15:12]==4'ha && magic[0];
-  assign isBasicFPUScalarCmp3=opcode_main==8'hf0 && instr[15:12]==4'd12;
+  assign isBasicFPUScalarA=opcode_main[7:2]==7'h3c && ~&opcode_main[2:1] && instr[13:12]==2'b0 && magic[0];
+  assign isBasicFPUScalarB=opcode_main[7:2]==7'h3c && ~&opcode_main[2:1] && instr[13:12]==2'b1 && magic[0];
+  assign isBasicFPUScalarC=opcode_main[7:2]==7'h3c && ~&opcode_main[2:1] && instr[15:12]==4'd2 && magic[0];
+  assign isBasicFPUScalarCmp=opcode_main[7:2]==7'h3c && ~&opcode_main[2:1] && instr[15:12]==4'd6 && magic[0];
+  assign isBasicFPUScalarCmp2=opcode_main[7:2]==7'h3c && ~&opcode_main[2:1] && instr[15:12]==4'ha && magic[0];
+  assign isBasicFPUScalarCmp3=opcode_main[7:2]==7'h3c && ~&opcode_main[2:1] && instr[15:12]==4'd12;
 
   assign isCallPrep=(opcode_main==8'd199) && magic[0];
 

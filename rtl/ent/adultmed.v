@@ -674,6 +674,13 @@ module smallInstr_decoder(
           prT_use[tt]=1'b0;
           prC_use[tt]=1'b0;
           pport[tt]=4'b0;
+          if (opcode_main[7:2]==7'h3c) begin
+              case (opcode_main[1:0])
+                0: pport[tt]=PORT_FADD;
+                1: pport[tt]=PORT_FMUL;
+                2: pport[tt]=PORT_FANY;
+              endcase
+          end
           pconstant[tt]=constantDef;
           //pconstant[tt][64]=1'b0;
      //     pisBigConst[tt]=magic[2:0]==3'b111;
@@ -1832,16 +1839,16 @@ module smallInstr_decoder(
              poperation[33][9:8]=2'b11;
       end
       case(instr[13:8])
-          6'd0: begin poperation[33][7:0]=`fop_addDH; pport[33]=PORT_FMUL; end
-          6'd1: begin poperation[33][7:0]=`fop_addDL; pport[33]=PORT_FADD; end
-          6'd2: begin poperation[33][7:0]=`fop_subDH; pport[33]=PORT_FMUL; end
-          6'd3: begin poperation[33][7:0]=`fop_subDL; pport[33]=PORT_FADD; end
-          6'd4: begin poperation[33][7:0]=`fop_mulDH; perror[33]={1'b0,perror[33]|instr[16]}; pport[33]=PORT_FMUL; end
-          6'd5: begin poperation[33][7:0]=`fop_mulDL; pport[33]=PORT_FADD; end
-          6'd6: begin poperation[33][7:0]=`fop_addDP; pport[33]=PORT_FANY; end
-          6'd7: begin poperation[33][7:0]=`fop_subDP; pport[33]=PORT_FANY; end
-          6'd8: begin poperation[33][7:0]=`fop_mulDP; perror[33]={1'b0,perror[33]|instr[16]}; pport[33]=PORT_FANY; end
-          6'd9: begin poperation[33][7:0]=`fop_addsubDP; pport[33]=PORT_FANY; end
+          6'd0: begin poperation[33][7:0]=`fop_addDH; end
+          6'd1: begin poperation[33][7:0]=`fop_addDL; end
+          6'd2: begin poperation[33][7:0]=`fop_subDH; end
+          6'd3: begin poperation[33][7:0]=`fop_subDL; end
+          6'd4: begin poperation[33][7:0]=`fop_mulDH; perror[33]={1'b0,perror[33]|instr[16]}; end
+          6'd5: begin poperation[33][7:0]=`fop_mulDL; end
+          6'd6: begin poperation[33][7:0]=`fop_addDP; end
+          6'd7: begin poperation[33][7:0]=`fop_subDP; end
+          6'd8: begin poperation[33][7:0]=`fop_mulDP; perror[33]={1'b0,perror[33]|instr[16]}; end
+          6'd9: begin poperation[33][7:0]=`fop_addsubDP; end
           default: perror[33]=1;
       endcase
       
@@ -1866,17 +1873,17 @@ module smallInstr_decoder(
       prAlloc[34]=1'b1;
       {poperation[34][10],poperation[34][9:8]}=instr[16:14];
       case(instr[13:8])
-          6'd16: begin poperation[34][7:0]=`fop_addS; pport[34]=PORT_FADD; end
-          6'd17: begin poperation[34][7:0]=`fop_subS; pport[34]=PORT_FADD; end
-          6'd18: begin poperation[34][7:0]=`fop_mulS; pport[34]=PORT_FADD; end
-          6'd19: begin poperation[34][7:0]=`fop_addSP; pport[34]=PORT_FANY; end
-          6'd20: begin poperation[34][7:0]=`fop_subSP; pport[34]=PORT_FANY; end
-          6'd21: begin poperation[34][7:0]=`fop_mulSP; pport[34]=PORT_FANY; end
-          6'd22: begin poperation[34][7:0]=`fop_addEE; pport[34]=PORT_FADD; 
+          6'd16: begin poperation[34][7:0]=`fop_addS; end
+          6'd17: begin poperation[34][7:0]=`fop_subS; end
+          6'd18: begin poperation[34][7:0]=`fop_mulS; end
+          6'd19: begin poperation[34][7:0]=`fop_addSP; end
+          6'd20: begin poperation[34][7:0]=`fop_subSP; end
+          6'd21: begin poperation[34][7:0]=`fop_mulSP; end
+          6'd22: begin poperation[34][7:0]=`fop_addEE;  
                  prA[34]=rA_reor32; prB[34]=rB_reor32; prT[34]=rT_reor32; end
-          6'd23: begin poperation[34][7:0]=`fop_subEE; pport[34]=PORT_FADD;
+          6'd23: begin poperation[34][7:0]=`fop_subEE; 
                  prA[34]=rA_reor32; prB[34]=rB_reor32; prT[34]=rT_reor32; end
-          6'd24: begin poperation[34][7:0]=`fop_mulEE; pport[34]=PORT_FADD; 
+          6'd24: begin poperation[34][7:0]=`fop_mulEE;  
                  prA[34]=rA_reor32; prB[34]=rB_reor32; prT[34]=rT_reor32; end
           6'd26,6'd27: begin 
 	      poperation[34][7:0]=`fop_permDS; 
@@ -1951,16 +1958,16 @@ module smallInstr_decoder(
       {poperation[36][11],poperation[36][9:8]}={1'b0,instr[15:14]};
       if (instr[16]!=0) perror[36]=1;
       case(instr[13:8])
-          6'd32: begin poperation[36][11]=1'b0; poperation[36][7:0]=`fop_permDS; pport[36]=PORT_FANY; end
-          6'd33: begin poperation[36][7:0]=`fop_divDL; pport[36]=PORT_FANY; prB_useF[36]=1'b0; end
-          6'd34: begin poperation[36][7:0]=`fop_sqrtDH; pport[36]=PORT_FANY; end
-          6'd35: begin poperation[36][7:0]=`fop_sqrtDL; pport[36]=PORT_FANY; end
-          6'd36: begin poperation[36][7:0]=`fop_sqrtE; pport[36]=PORT_FANY; prB_useF[36]=1'b0; end
-          6'd37: begin poperation[36][7:0]=`fop_divE; pport[36]=PORT_FANY; end
-          6'd38: begin poperation[36][7:0]=`fop_pcvtS; pport[36]=PORT_FANY; prA_useF[36]=1'b0; end
-          6'd39: begin poperation[36][7:0]=`fop_pcvtD; pport[36]=PORT_FANY; prA_useF[36]=1'b0; end
+          6'd32: begin poperation[36][11]=1'b0; poperation[36][7:0]=`fop_permDS;  end
+          6'd33: begin poperation[36][7:0]=`fop_divDL; prB_useF[36]=1'b0; end
+          6'd34: begin poperation[36][7:0]=`fop_sqrtDH; end
+          6'd35: begin poperation[36][7:0]=`fop_sqrtDL; end
+          6'd36: begin poperation[36][7:0]=`fop_sqrtE; prB_useF[36]=1'b0; end
+          6'd37: begin poperation[36][7:0]=`fop_divE; end
+          6'd38: begin poperation[36][7:0]=`fop_pcvtS; prA_useF[36]=1'b0; end
+          6'd39: begin poperation[36][7:0]=`fop_pcvtD; prA_useF[36]=1'b0; end
 	  6'd40,6'd41,6'd42,6'd43: begin poperation[36][7:0]=`fop_logic; poperation[36][1:0]=instr[9:8]; 
-	     pport[36]=PORT_FANY; poperation[36][10:8]={instr[16],2'b0}; end 
+	      poperation[36][10:8]={instr[16],2'b0}; end 
           default: perror[36]=1;
       endcase
       
@@ -1987,7 +1994,7 @@ module smallInstr_decoder(
       poperation[37][9:8]={2{instr[16]}};
       poperation[37][10]=instr[10]; //lin search
       case(instr[13:8])
-          6'd32,6'd36: begin poperation[37][7:0]=`fop_cmpDH; pport[37]=PORT_FMUL; end
+          6'd32,6'd36: begin poperation[37][7:0]=`fop_cmpDH; pport[37]=PORT_FADD; end
           6'd33,6'd37: begin poperation[37][7:0]=`fop_cmpDL; pport[37]=PORT_FADD; end
           6'd34,6'd38: begin poperation[37][7:0]=`fop_cmpE; pport[37]=PORT_FADD; prA[37]=rA_reor32; prB[37]=rB_reor32; end
           6'd35,6'd39: begin poperation[37][7:0]=`fop_cmpS; pport[37]=PORT_FADD; end
@@ -2023,10 +2030,10 @@ module smallInstr_decoder(
       pflags_write[38]=1'b1;
       poperation[38][10]=instr[16]; //signed/single
       case(instr[13:8])
-	  6'd32: begin poperation[38][7:0]=`fop_pcmplt; pport[38]=PORT_FANY; end
-	  6'd33: begin poperation[38][7:0]=`fop_pcmpge; pport[38]=PORT_FANY; end
-	  6'd34: begin poperation[38][7:0]=`fop_pcmpeq; pport[38]=PORT_FANY; end
-	  6'd35: begin poperation[38][7:0]=`fop_pcmpne; pport[38]=PORT_FANY; end
+	  6'd32: begin poperation[38][7:0]=`fop_pcmplt; end
+	  6'd33: begin poperation[38][7:0]=`fop_pcmpge; end
+	  6'd34: begin poperation[38][7:0]=`fop_pcmpeq; end
+	  6'd35: begin poperation[38][7:0]=`fop_pcmpne; end
 	  6'd36: begin poperation[38][7:0]=`fop_rndES; pport[38]=PORT_FADD; 
                  prA[34]=rA_reor32; prB[34]=rB_reor32; prT[34]=rT_reor32; end
 	  6'd37: begin poperation[38][7:0]=`fop_rndED; pport[38]=PORT_FADD; 
