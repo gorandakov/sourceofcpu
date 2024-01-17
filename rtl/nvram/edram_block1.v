@@ -3,27 +3,25 @@ module vbox_hbox_edram(
   clkREF1,
   clkREF2,
   rst,
+  pos,
   port_en,
-  port_ref_plus2,
   port_read_addr,
   port_read_data,
   port_write_addr,
-  port_write_data,
-  port_wen_plus3,
-  port_data_plus3);
+  port_write_data
+  );
 
   input clk;
   input clkREF1;
   input clkREF2;
   input rst;
+  output [3:0] pos;
   input port_en;
   input port_ref_plus2;
   input [18:0] port_read_addr;
   output [342:0] port_read_data; 
   input [18:0] port_write_addr;
   input [342:0] port_write_data;
-  input port_wen_plus3;
-  input port_data;
  
 
 
@@ -38,19 +36,18 @@ module vbox_hbox_edram(
             wire [342:0] port_read_dataX; 
             wire [342:0] port_read_dataX0; 
             reg [342:0]  port_read_dataX0_reg; 
-            edram mem_mod(
+            nvram mem_mod(
             clk,
             clkREF1,
             clkREF2,
             rst,
+            pos,
             port_en_reg && port_addr_reg[13:9]==hpos && port_addr_reg[18:14]==vpos,
-            port_ref_plus2_reg,
             port_read_addr_reg[8:0],
             port_read_dataX,
             port_write_addr_reg[8:0],
             port_write_data,
-            port_wen_plus3_reg && write_addr_reg[13:9]==hpos && write_addr_reg[18:14]==vpos,
-            port_data_plus3_Reg && write_addr_reg[13:9]==hpos && write_addr_reg[18:14]==vpos);
+            port_wen_plus3_reg && write_addr_reg[13:9]==hpos && write_addr_reg[18:14]==vpos);
 
             assign vbox_512K[hpos].box_12M[vpos & 5'h18].read_dataX0=port_en_reg2 && 
                 port_addr_reg2[13:9]==hpos && port_addr_reg2[18:14]==vpos ?

@@ -1,12 +1,12 @@
 
 //one "cycle" in four clk cycles; 4 cycles from read to wb; always wb
-module edram(
+module nvram(
   clk,
   clkREF1,
   clkREF2,
   rst,
+  pos,
   port_en,
-  port_ref_plus2,
   port_read_addr,
   port_read_data,
   port_write_addr,
@@ -18,8 +18,8 @@ module edram(
   input clkREF1;
   input clkREF2;
   input rst;
+  output reg [3:0] pos;
   input port_en;
-  input port_ref_plus2;
   input [8:0] port_read_addr;
   output [342:0] port_read_data; 
   input [8:0] port_write_addr;
@@ -56,26 +56,24 @@ generate
 
       always @(posedge clk) begin
 `ifndef synth_edram
-          if (port_en | port_ref_plus2) data1<=edram[port_addr_reg];
-          else if (port_wen_plus3 | port_ref_plus5) edram[port_write_addr]<=data3;
+          if (port_en && pos==4'd0 && port_addr_reg[8:5]==k) data1<=edram[port_addr_reg[4:0]];
+          else if (port_en && pos!=4'd0) $display("ERROR: misclocked nvram access");
+          else if (port_wen_plus3 && pos==4'd3 && port_write_addr[8:5]==k) edram[port_write_addr[4:0]]<=data3;
 `else
-          if (port_en | port_ref_plus2 && port_addr_reg[8:5]==k) begin
+          if (port_en && pos==4'd0 && port_addr_reg[8:5]==k) begin
                data1[161:0]<=clkREF1 ? edram[port_addr_reg[4:0]] : 'z;
                data1[323:162]<=clkREF2 ? edram[port_addr_reg[4:0]] : 'z;
-          end else if (port_wen_plus3 | port_ref_plus5 && port_write_addr[8:5]==k) begin
+          end else if (port_wen_plus3 && port_write_addr[8:5]==k) begin
                edram[port_write_addr[4:0]]<= data3x;
           end
 `endif
-          if ((port_en && (port_read_addr_reg2!=port_read_addr)|~port_ref_plus2_reg2)
-             || (port_ref_plus2 && (port_read_addr_reg2!=port_read_addr)|~port_en_reg2)) begin
-              data1<=data2;
-          end
           if (port_data) data1<=port_write_data;
           xore1_reg<=xore;
           data2<=data1;
-          port_ref_plus3<=port_ref_plus2;
-          port_ref_plus3<=port_ref_plus3;
-          port_ref_plus5<=port_ref_plus5;
   end
 endgenerate
+
+  always @(posedge clk) begin
+     if (rst) pos<=4'h7; else pos<=pos+4'd1;
+  end
 endmodule
