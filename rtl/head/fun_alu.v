@@ -737,11 +737,11 @@ module fu_alu(
   alu #(1'b0)  alu5(clk,rst,except,1'b0,1'b0,u6_op_reg[12:0],u6_op_reg[17:13],u6_isSub_reg,mflags[0][20],u6_clkEn_reg,1'b1,
     u6_ret,u6_rten,uu_A6,uu_B6,uu_S6,FU9,1'b1,u6_error_reg,u6_rmode_reg);
 
-  add_agu aadd1(uu_B1[2],u1_const_reg,uu_A1[2],FU4[63:0],p0_sec_in,
+  add_agu #(44,1) aadd1(uu_B1[2],u1_const_reg,uu_A1[2],FU4,p0_sec_in,
     ,u1_eaen_reg,u1_sh_reg,u1_sh2_reg);
-  add_agu aadd3(uu_B3[2],u3_const_reg,uu_A3[2],FU5[63:0],p1_sec_in,
+  add_agu #(44,1) aadd3(uu_B3[2],u3_const_reg,uu_A3[2],FU5,p1_sec_in,
     ,u3_eaen_reg,u3_sh_reg,u3_sh2_reg);
-  add_agu aadd5(uu_B5[2],u5_const_reg,uu_A5[2],FU6[63:0],p2_sec_in,
+  add_agu #(44,1) aadd5(uu_B5[2],u5_const_reg,uu_A5[2],FU6,p2_sec_in,
     ,u5_eaen_reg,u5_sh_reg,u5_sh2_reg);
   
   alu_shift sh2_alu(

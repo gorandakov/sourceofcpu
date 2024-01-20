@@ -1259,11 +1259,12 @@ endmodule
   sh2
   );
   parameter WIDTH=44;
+  parameter PTRBIT=0;
   input [64:0] a;//base
   input [63:0] b;
   input [64:0] c; //index
   //output [63:0] ptr;
-  output [63:0] out;
+  output [63+PTRBIT:0] out;
   output cout_sec;
   output ndiff;
   input en;  
@@ -1290,7 +1291,7 @@ endmodule
 
   wire [43:0] c_s;
 
-  wire [63:0] ptr=(c[64] & shift[0]) ? c[63:0] : a[63:0];
+  wire [63+PTRBIT:0] ptr=(c[64] & shift[0]) ? c[63+PTRBIT:0] : a[63+PTRBIT:0];
   wire [63:0] unptr=(c[64] & shift[0]) ? a[63:0] : c[63:0];
 
   genvar k;
@@ -1331,7 +1332,7 @@ endmodule
   endgenerate
   //push ~(tmp1|tmp2) and ~(tmp1&tmp2) before the tristate mux
   adder_seq #(WIDTH) add_mod(tmp1,tmp2[WIDTH-1:0],~(tmp1|tmp2),~(tmp1&tmp2),out[43:0],c_s,1'b0,en,,,,);
-  assign out[63:44]=en ? ptr[63:44] : 20'bz;
+  assign out[63+PTRBIT:44]=en ? ptr[63+PTRBIT:44] : 'z;
   agusec_shift ssh_mod(ptr[`ptr_exp],c_s[42:11],cout_sec0);
   agusec_check_upper3 #(1'b1) chk_mod(ptr,unptr[43:4],b[43:4],{dummy1,pos_ack},{dummy2,neg_ack},,,ndiff);
 endmodule
