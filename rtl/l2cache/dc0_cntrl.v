@@ -16,6 +16,77 @@ limitations under the License.
 
 
 `include "../struct.sv"
+
+module pfoff_buf(clk,rst,write_en,write_addr,read_en,read_addr,free_en,free,purged,chk_addr,chk_en);
+  input clk;
+  input rst;
+  input write_en;
+  input [36:0] write_addr;
+  input read_en;
+  output [36:0] read_addr;
+  input free_en;
+  output reg free;
+  output reg purged;
+  input [36:0] chk_addr;
+  output chk_en;
+
+  reg [36:0] addr;
+
+  assign read_data=read_en ? addr : 37'bz;
+
+  assign chk_en=chk_addr==addr && !free;
+
+  always @(posedge clk) begin
+    if (rst) begin
+      addr<=0;
+      free<=1'b1;
+      purged<=1'b1;
+    end else begin
+      if (read_en) purged<=1'b1;
+      if (free_en) begin
+          free<=1'b1;
+      end else if (write_en) begin
+          free<=1'b0;
+          addr<=1'b0;
+          purged<=1'b0;
+      end
+    end
+  end
+endmodule
+
+module pfoff(clk,rst,purge_can,purge_en,purge_addr,read_addr,read_chk,write_en,write_addr);
+  parameter WIDTH=7;//20 for data?
+  input clk;
+  input rst;
+  output purge_can;
+  input purge_en;
+  output [36:0] purge_addr;
+  input [36:0] read_addr;
+  output read_chk;
+  input write_en;
+  input [36:0] write_addr;
+
+  reg [WIDTH-1:0] write_pos;
+  wire [WIDTH-1:0] read_pos;
+
+  generate
+    genvar b;
+    for(b=0;b<WIDTH;b=b+1) begin
+        pfoff_buf buf_mod(clk,rst,{WIDTH{write_en}}&write_pos,write_addr,{WIDTH{purge_en}}&read_pos,purge_addr,1'b0,free,purged,read_addr,chk_en0);
+    end
+  endgenerate
+  assign purge_can=|purge;
+  assign read_chk=|chk_en0;
+  bit_find_first_bit #(WIDTH) find_mod(~purged & ~free,read_pos,);
+
+  always @(posedge clk) begin
+    if (rst) begin
+        write_pos<=1;
+    end else begin
+        if (write_en) write_pos<={write_pos[WIDTH-2:0],write_pos[WIDTH-1]};
+    end
+  end
+endmodule
 //verilator lint_off WIDTH
 //dcache1_ram read during write behaviour: write first
 module dc0_cntrl_ram(
