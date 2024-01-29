@@ -269,16 +269,6 @@ module rrf(
   
   reg read_thread_reg;
 
-/*  wire [DATA_WIDTH-1:0] read0_data_ram;
-  wire [DATA_WIDTH-1:0] read1_data_ram;
-  wire [DATA_WIDTH-1:0] read2_data_ram;
-  wire [DATA_WIDTH-1:0] read3_data_ram;
-  wire [DATA_WIDTH-1:0] read4_data_ram;
-  wire [DATA_WIDTH-1:0] read5_data_ram;
-  wire [DATA_WIDTH-1:0] read6_data_ram;
-  wire [DATA_WIDTH-1:0] read7_data_ram;
-  wire [DATA_WIDTH-1:0] read8_data_ram;
-*/
 
   reg read0_oe_reg;
   reg read1_oe_reg;
@@ -292,16 +282,6 @@ module rrf(
 
   genvar bufNo,tileNo;
   
-/*  assign read0_data=(read0_oe_reg) ? read0_data_ram : 'z;
-  assign read1_data=(read1_oe_reg) ? read1_data_ram : 'z;
-  assign read2_data=(read2_oe_reg) ? read2_data_ram : 'z;
-  assign read3_data=(read3_oe_reg) ? read3_data_ram : 'z;
-  assign read4_data=(read4_oe_reg) ? read4_data_ram : 'z;
-  assign read5_data=(read5_oe_reg) ? read5_data_ram : 'z;
-  assign read6_data=(read6_oe_reg) ? read6_data_ram : 'z;
-  assign read7_data=(read7_oe_reg) ? read7_data_ram : 'z;
-  assign read8_data=(read8_oe_reg) ? read8_data_ram : 'z;
-*/  
   always @(posedge clk)
     begin
 	  if (rst)
@@ -355,7 +335,7 @@ module rrf(
 	end
 	
   generate
-    for (tileNo=0;tileNo<2;tileNo=tileNo+1) begin : tiles_gen
+    for (tileNo=0;tileNo<4;tileNo=tileNo+1) begin : tiles_gen
         wire [DATA_WIDTH-1:0] read0_data_ramA;
         wire [DATA_WIDTH-1:0] read1_data_ramA;
         wire [DATA_WIDTH-1:0] read2_data_ramA;
@@ -365,41 +345,41 @@ module rrf(
         wire [DATA_WIDTH-1:0] read6_data_ramA;
         wire [DATA_WIDTH-1:0] read7_data_ramA;
         wire [DATA_WIDTH-1:0] read8_data_ramA;
-    for (bufNo=0;bufNo<16+8*tileNo;bufNo=bufNo+1)  begin : buffers
-        rrf_buf #(bufNo[tileNo+3:0],DATA_WIDTH,tileNo+4) buf_mod(
+    for (bufNo=0;bufNo<16;bufNo=bufNo+1)  begin : buffers
+        rrf_buf #(bufNo[3:0],DATA_WIDTH,4) buf_mod(
         clk,
         rst,
-        read0_addr_reg[tileNo+3:0],read0_data_ramA,
-        read1_addr_reg[tileNo+3:0],read1_data_ramA,
-        read2_addr_reg[tileNo+3:0],read2_data_ramA,
-        read3_addr_reg[tileNo+3:0],read3_data_ramA,
-        read4_addr_reg[tileNo+3:0],read4_data_ramA,
-        read5_addr_reg[tileNo+3:0],read5_data_ramA,
-        read6_addr_reg[tileNo+3:0],read6_data_ramA,
-        read7_addr_reg[tileNo+3:0],read7_data_ramA,
-        read8_addr_reg[tileNo+3:0],read8_data_ramA,
-        write0_addr[tileNo+3:0],write0_data,write0_wen && (write0_addr[5:4]==tileNo || (write0_addr[5:4]==2'd2 && tileNo)),
-        write1_addr[tileNo+3:0],write1_data,write1_wen && (write1_addr[5:4]==tileNo || (write1_addr[5:4]==2'd2 && tileNo)),
-        write2_addr[tileNo+3:0],write2_data,write2_wen && (write2_addr[5:4]==tileNo || (write2_addr[5:4]==2'd2 && tileNo)),
-        write3_addr[tileNo+3:0],write3_data,write3_wen && (write3_addr[5:4]==tileNo || (write3_addr[5:4]==2'd2 && tileNo)),
-        write4_addr[tileNo+3:0],write4_data,write4_wen && (write4_addr[5:4]==tileNo || (write4_addr[5:4]==2'd2 && tileNo)),
-        write5_addr[tileNo+3:0],write5_data,write5_wen && (write5_addr[5:4]==tileNo || (write5_addr[5:4]==2'd2 && tileNo)),
-        write6_addr[tileNo+3:0],write6_data,write6_wen && (write6_addr[5:4]==tileNo || (write6_addr[5:4]==2'd2 && tileNo)),
-        write7_addr[tileNo+3:0],write7_data,write7_wen && (write7_addr[5:4]==tileNo || (write7_addr[5:4]==2'd2 && tileNo)),
-        write8_addr[tileNo+3:0],write8_data,write8_wen && (write8_addr[5:4]==tileNo || (write8_addr[5:4]==2'd2 && tileNo)),
+        read0_addr_reg[3:0],read0_data_ramA,
+        read1_addr_reg[3:0],read1_data_ramA,
+        read2_addr_reg[3:0],read2_data_ramA,
+        read3_addr_reg[3:0],read3_data_ramA,
+        read4_addr_reg[3:0],read4_data_ramA,
+        read5_addr_reg[3:0],read5_data_ramA,
+        read6_addr_reg[3:0],read6_data_ramA,
+        read7_addr_reg[3:0],read7_data_ramA,
+        read8_addr_reg[3:0],read8_data_ramA,
+        write0_addr[3:0],write0_data,write0_wen && (write0_addr[5:4]==tileNo || (write0_addr[5:4]==2'd2 && tileNo)),
+        write1_addr[3:0],write1_data,write1_wen && (write1_addr[5:4]==tileNo || (write1_addr[5:4]==2'd2 && tileNo)),
+        write2_addr[3:0],write2_data,write2_wen && (write2_addr[5:4]==tileNo || (write2_addr[5:4]==2'd2 && tileNo)),
+        write3_addr[3:0],write3_data,write3_wen && (write3_addr[5:4]==tileNo || (write3_addr[5:4]==2'd2 && tileNo)),
+        write4_addr[3:0],write4_data,write4_wen && (write4_addr[5:4]==tileNo || (write4_addr[5:4]==2'd2 && tileNo)),
+        write5_addr[3:0],write5_data,write5_wen && (write5_addr[5:4]==tileNo || (write5_addr[5:4]==2'd2 && tileNo)),
+        write6_addr[3:0],write6_data,write6_wen && (write6_addr[5:4]==tileNo || (write6_addr[5:4]==2'd2 && tileNo)),
+        write7_addr[3:0],write7_data,write7_wen && (write7_addr[5:4]==tileNo || (write7_addr[5:4]==2'd2 && tileNo)),
+        write8_addr[3:0],write8_data,write8_wen && (write8_addr[5:4]==tileNo || (write8_addr[5:4]==2'd2 && tileNo)),
         read_thread_reg,
         write_thread
         );
     end
-        assign read0_data=((read0_addr_reg[5:4]==tileNo || (read0_addr_reg[5:3]==3'd4 && tileNo)) && read0_oe_reg) ? read0_data_ramA : 'z;
-        assign read1_data=((read1_addr_reg[5:4]==tileNo || (read1_addr_reg[5:3]==3'd4 && tileNo)) && read1_oe_reg) ? read1_data_ramA : 'z;
-        assign read2_data=((read2_addr_reg[5:4]==tileNo || (read2_addr_reg[5:3]==3'd4 && tileNo)) && read2_oe_reg) ? read2_data_ramA : 'z;
-        assign read3_data=((read3_addr_reg[5:4]==tileNo || (read3_addr_reg[5:3]==3'd4 && tileNo)) && read3_oe_reg) ? read3_data_ramA : 'z;
-        assign read4_data=((read4_addr_reg[5:4]==tileNo || (read4_addr_reg[5:3]==3'd4 && tileNo)) && read4_oe_reg) ? read4_data_ramA : 'z;
-        assign read5_data=((read5_addr_reg[5:4]==tileNo || (read5_addr_reg[5:3]==3'd4 && tileNo)) && read5_oe_reg) ? read5_data_ramA : 'z;
-        assign read6_data=((read6_addr_reg[5:4]==tileNo || (read6_addr_reg[5:3]==3'd4 && tileNo)) && read6_oe_reg) ? read6_data_ramA : 'z;
-        assign read7_data=((read7_addr_reg[5:4]==tileNo || (read7_addr_reg[5:3]==3'd4 && tileNo)) && read7_oe_reg) ? read7_data_ramA : 'z;
-        assign read8_data=((read8_addr_reg[5:4]==tileNo || (read8_addr_reg[5:3]==3'd4 && tileNo)) && read8_oe_reg) ? read8_data_ramA : 'z;
+        assign read0_data=((read0_addr_reg[5:4]==tileNo)) && read0_oe_reg) ? read0_data_ramA : 'z;
+        assign read1_data=((read1_addr_reg[5:4]==tileNo)) && read1_oe_reg) ? read1_data_ramA : 'z;
+        assign read2_data=((read2_addr_reg[5:4]==tileNo)) && read2_oe_reg) ? read2_data_ramA : 'z;
+        assign read3_data=((read3_addr_reg[5:4]==tileNo)) && read3_oe_reg) ? read3_data_ramA : 'z;
+        assign read4_data=((read4_addr_reg[5:4]==tileNo)) && read4_oe_reg) ? read4_data_ramA : 'z;
+        assign read5_data=((read5_addr_reg[5:4]==tileNo)) && read5_oe_reg) ? read5_data_ramA : 'z;
+        assign read6_data=((read6_addr_reg[5:4]==tileNo)) && read6_oe_reg) ? read6_data_ramA : 'z;
+        assign read7_data=((read7_addr_reg[5:4]==tileNo)) && read7_oe_reg) ? read7_data_ramA : 'z;
+        assign read8_data=((read8_addr_reg[5:4]==tileNo)) && read8_oe_reg) ? read8_data_ramA : 'z;
     end
   endgenerate
 
