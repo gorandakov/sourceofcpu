@@ -177,7 +177,8 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   assign isSimdInt=opcode_main==8'd200 && magic[0];
   assign isFPUreor=opcode_main==8'd201 && magic[0];
   
-  assign isShlAddMulLike=(opcode_main==8'd210 || opcode_main==8'd211) && magic[0];
+  assign isShlAddMulLike=(opcode_main==8'd210 || opcode_main==8'd211 ||
+    opcode_main==8'd231 || opcode_main==8'd232) && magic[0];
   assign isPtrSec=opcode_main==8'd212 && magic[0];
   assign isJalR=(opcode_main==8'd213 || opcode_main==8'd214 || opcode_main==8'd215 || opcode_main==8'd220 || opcode_main==8'd221) && magic[0];
   assign isCexALU=opcode_main==8'd222 && magic[0];
