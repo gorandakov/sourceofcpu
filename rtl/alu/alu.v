@@ -385,7 +385,7 @@ alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,dataEn,nD
   assign flags_COASZP=((retOp[7:0]==`op_cmp8) && isFlags_reg) ? {carryAdd8LL_reg,flagSub8_OF_reg,~carryAdd4LL_reg,valRes_reg[7],flag8_ZF_reg,1'b0} : 6'bz;
 
   assign flags_COASZP=((retOp[7:0]==`op_and64) | (retOp==`op_or64) | (retOp==`op_xor64) | (retOp==`op_nxor64) && isFlags_reg) ? 
-    {3'b000,valRes_reg[63],flag64_ZF_reg,1'b0} : 6'bz;
+    {retOp==`op_nxor64 && is_ptr_reg,2'b000,valRes_reg[63],flag64_ZF_reg,1'b0} : 6'bz;
   assign flags_COASZP=((retOp[7:0]==`op_and32) | (retOp==`op_or32) | (retOp==`op_xor32) | (retOp[7:1]==7'd5) | (retOp[7:1]==7'd7)
      | (retOp==`op_nxor64) && isFlags_reg) ? {3'b000,valRes_reg[31],flag32_ZF_reg,1'b0} : 6'bz;
 

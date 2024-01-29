@@ -1597,9 +1597,9 @@ module smallInstr_decoder(
       end
       
       trien[29]=magic[0] & isBasicAddNoFl;
-          //if no magic, it's register-register
+          //if no magic, it's register-register nxor and carry flag for ptr bit!
       puseBConst[29]=magic[2:0]==3'b011;
-      poperation[29][11:0]=opcode_main[0] ? `op_add64 : `op_add32;
+      poperation[29][11:0]=magic[1:0]==2'b01 ? op_nxor64 : opcode_main[0] ? `op_add64 : `op_add32;
       poperation[29][12]=1'b1;
       pport[29]=PORT_ALU;
       prA_use[29]=1'b1;
@@ -1612,7 +1612,7 @@ module smallInstr_decoder(
           if (magic[1:0]==2'b01) begin
               prA[29]={instr[17],instr[11:8]};
               prT[29]=instr[16:12];
-              prB[29]=5'd31;
+              prB[29]=instr[22:18];
           end else begin
               prA[29]={1'b0,instr[11:8]};
               prT[29]={1'b0,instr[15:12]};
@@ -1629,7 +1629,6 @@ module smallInstr_decoder(
               prB[29]=5'd16;
           end
       end
-      //    if (rT==6'd16) thisSpecAlu=1'b1;
       
       trien[30]=magic[0] && isBasicMUL && ~isBasicALUExcept;
       pport[30]=PORT_MUL;
