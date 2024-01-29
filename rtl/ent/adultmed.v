@@ -398,12 +398,15 @@ module smallInstr_decoder(
   assign isBaseIndexSpecStore=opcode_main=8'd206 || opcode_main==8'd207;
   assign isImmSpecStore=opcode_main=8'd208 || opcode_main==8'd209;
 
-  assign isShlAddMulLike=opcode_main==8'd210 || opcode_main==8'd211;
+  assign isShlAddMulLike=opcode_main==8'd210 || opcode_main==8'd211 || 
+    opcode_main==8'd231 || opcode_main==8'd232;
   assign isPtrSec=opcode_main==8'd212;
   assign isJalR=opcode_main==8'd213 || opcode_main==8'd214 || opcode_main==8'd215 || opcode_main==8'd220 || opcode_main==8'd221;
   //216-219=cmp16,cmp8
   //224-230=and16,and8,or16,or8
   assign isCexALU=opcode_main==8'd222;
+  //231-232=cloop no sub
+ 
 
   assign isBasicFPUScalarA=opcode_main[7:2]==7'h3c && ~&opcode_main[2:1] && instr[13:12]==2'b0;
   assign isBasicFPUScalarB=opcode_main[7:2]==7'h3c && ~&opcode_main[2:1] && instr[13:12]==2'b1;
@@ -1242,7 +1245,7 @@ module smallInstr_decoder(
       poperation[16][12]=1'b1;    
       prA[16]={instr[17],instr[11:8]};
       prB[16]=instr[16:12];
-      if (instr[27:24]!=0 && !isPtrSec) perror[16]=1;
+      if (instr[27:24]!=0 && !isPtrSec && ~(instr[28])) perror[16]=1;
       pconstant[16]={52'b0,instr[30],instr[27:18]};
       prA[16]={instr[17],instr[11:8]};
       prT[16]=instr[16:12];
@@ -1251,7 +1254,7 @@ module smallInstr_decoder(
       if (!isPtrSec && instr[28]) begin
 	  prA[16]=5'd2;
 	  puseBConst[16]=1'b1;
-	  pconstant[16]=64'hffff_ffff_ffff_ffff;
+	  pconstant[16]={64{~instr[5]}};
 	  prT[16]=5'd2;
 	  perror[16]=2'b0;
 	  //jump imm={instr[27:9],1'b0}
