@@ -206,7 +206,8 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   isCall,
   isRet,
   subIsCJ,
-  opcode_main==8'hff && ~instr[15] && ~instr[13] && magic[0]
+  opcode_main==8'hff && ~instr[15] && ~instr[13] && magic[0] && 
+    instr[30:16]!=15'd22;
   };
 
   assign clsIndir=|{
