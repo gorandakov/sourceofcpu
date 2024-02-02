@@ -975,7 +975,7 @@ module frontendSelf(
  // assign {cc_base_tick,cc_base_off}=(~do_seq_reg  && ~(miss_recover && proturberan)) ? 5'b0 : 5'bz;
   
   assign cc_read_IP_d[4:0]=(~init & do_seq_any & ~jumpTK_en & ~fmstall & ~(do_seq&miss_recover) & ~|tbuf_error_reg) ? 5'b0 : 5'bz;
-  assign cc_read_IP_d=(~init & btb_hasTK & ~miss_recover & ~miss_now & ~jumpTK_en & ~(ixcept|uxcept) & ~fmstall & ~|tbuf_error_reg) ?
+  assign cc_read_IP_d=(~init & btb_hasTK|(p_invoke&thread) & ~miss_recover & ~miss_now & ~jumpTK_en & ~(ixcept|uxcept) & ~fmstall & ~|tbuf_error_reg) ?
      btbx_tgt : 64'bz;
   assign cc_read_IP_d=(~init & miss_recover & ~jumpTK_en & ~(ixcept|uxcept) & ~fmstall & ~|tbuf_error_reg) ? miss_IP : 64'bz;
   assign cc_read_IP_d=(~init & (ixcept|uxcept) ) ? {ixceptIP[63:1],1'b0} : 64'bz;
@@ -996,24 +996,25 @@ module frontendSelf(
   assign bus_match={BUS_ID,1'b1}==bus_slot[9:4] & bus_en;
   assign write_IP={req_addrP,req_addrR[5:0],2'b0};
   
-  assign do_seq=~miss_now | miss_recover && ~(ixcept|uxcept) && ~btb_hasTK && ~btb_in_ret;
+  assign do_seq=~miss_now | miss_recover && ~(ixcept|uxcept) && ~btb_hasTK && ~btb_in_ret && ~(halted&thread);
   assign do_seq_miss=miss_now && ~miss_recover && ~(ixcept|uxcept) && ~btb_hasTK && ~btb_in_ret;
   assign do_seq_any=~miss_recover && ~(ixcept|uxcept) && ~btb_hasTK && ~btb_in_ret;
 
   assign btb_hasTK=|(btbx_jmask&{predx_sc3[0],predx_sc2[0],predx_sc1[0],predx_sc0[0]});
 
-  assign btb_tgt=taken[0] ? {btb_tgt0,1'b0} : 64'bz;
-  assign btb_tgt=taken[1] ? {btb_tgt1,1'b0} : 64'bz;
-  assign btb_tgt=taken[2] ? {btb_tgt2,1'b0} : 64'bz;
-  assign btb_tgt=taken[3] ? {btb_tgt3,1'b0} : 64'bz;
-  assign btb_tgt=btb_hasTK ? 64'bz : 64'b0;  
+  assign btb_tgt=taken[0] && ~(p_invoke&thread) ? {btb_tgt0,1'b0} : 64'bz;
+  assign btb_tgt=taken[1] && ~(p_invoke&thread) ? {btb_tgt1,1'b0} : 64'bz;
+  assign btb_tgt=taken[2] && ~(p_invoke&thread) ? {btb_tgt2,1'b0} : 64'bz;
+  assign btb_tgt=taken[3] && ~(p_invoke&thread) ? {btb_tgt3,1'b0} : 64'bz;
+  assign btb_tgt=btb_hasTK && ~ (p_invoke&thread) ? 64'bz : {20'b0,p_address[43:1],1'b0};  
 
-  assign btb_attr=taken[0] & ~btb_in_ret ? {btb_attr0} : 4'bz;
-  assign btb_attr=taken[1] & ~btb_in_ret ? {btb_attr1} : 4'bz;
-  assign btb_attr=taken[2] & ~btb_in_ret ? {btb_attr2} : 4'bz;
-  assign btb_attr=taken[3] & ~btb_in_ret ? {btb_attr3} : 4'bz;
-  assign btb_attr=~btb_hasTK & ~btb_in_ret ? cc_attr : 4'bz;  
-  assign btb_attr=btb_in_ret ? rstack_dataR[67:64] : 4'bz;
+  assign btb_attr=taken[0] & ~btb_in_ret & ~(p_invoke&thread)? {btb_attr0} : 4'bz;
+  assign btb_attr=taken[1] & ~btb_in_ret & ~(p_invoke&thread)? {btb_attr1} : 4'bz;
+  assign btb_attr=taken[2] & ~btb_in_ret & ~(p_invoke&thread)? {btb_attr2} : 4'bz;
+  assign btb_attr=taken[3] & ~btb_in_ret & ~(p_invoke&thread)? {btb_attr3} : 4'bz;
+  assign btb_attr=~btb_hasTK & ~btb_in_ret & ~(p_invoke&thread) ? cc_attr : 4'bz;  
+  assign btb_attr=btb_in_ret & ~(p_invoke&thread) ? rstack_dataR[67:64] : 4'bz;
+  assign btb_attr=(p_invoke&thread) ? mflags[`mflags_pinvoke_priv] : 4'bz;
 
 
   assign btbx_tgt=btb_tgt;
