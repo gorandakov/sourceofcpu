@@ -36,6 +36,7 @@ limitations under the License.
 `define csr_last_jmp 19
 `define csr_last_jmp2 20
 `define csr_subsyscall 21
+`define csr_pinvoke 22
 
 `define csr_IRQ_send 36
 `define csr_IRQ_recv_vector 37

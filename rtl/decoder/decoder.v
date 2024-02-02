@@ -375,6 +375,7 @@ module decoder_aux_const(
       `csr_vmcall:		csr_vmcall[csrss_no[15]]<=csrss_data[63:0];
       `csr_USER3:		csr_USER3[csrss_no[15]]<=csrss_data[63:0];
       `csr_last_jmp: begin csr_last_jmp[csrss_no[15]]<=csrss_data[63:0]; csr_last_jmp2[csrss_no[15]]<=csr_last_jmp[csrss_no[15]]; end
+      `csr_pinvoke:
       `csr_cl_lock:             csr_mflags[csrss_no[15]][18]<=1'b1;
      	      endcase
               aux0_reg<=aux0;
