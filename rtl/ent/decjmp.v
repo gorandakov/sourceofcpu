@@ -186,7 +186,7 @@ module jump_decoder(
           jumpType={1'b0,3'h0,instr[8]};
 	  constant={{44{instr[27]}},instr[27:9],1'b0};
       end else if (isBasicSysInstr) begin
-//          if (instr[15:8]==8'hff && ~magic[0]) halt=1'b1;
+          if (instr[30:16]==15'd23 && ~magic[0]) halt=1'b1;
           if (instr[15:13]==3'b0) begin
         //  if (magic[0]) error=1;
               jumpType=5'b11001;
