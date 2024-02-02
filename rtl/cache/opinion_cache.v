@@ -81,7 +81,18 @@ module cc_ram_block(
   readB_data,
   write_addr,
   write_data,
-  write_wen
+  write_wen,
+  write_wen_noins,
+  write_addrE0, write_hitE0,
+  write_addrO0, write_hitO0,
+  write_bankEn0, 
+  write_begin0,write_end0,
+  write_bBen0,write_enBen0,
+  write_addrE1, write_hitE1,
+  write_addrO1, write_hitO1,
+  write_bankEn1,
+  write_begin1,write_end1,
+  write_bBen1,write_enBen1,
   );
 
   parameter INDEX=0;
@@ -100,6 +111,25 @@ module cc_ram_block(
   input [ADDR_WIDTH-1:0] write_addr;
   input [DATA_WIDTH-1:0] write_data;
   input write_wen;
+  input write_wen_noins;
+  input [ADDR_WIDTH-1:0] write_addrE0;
+  input write_hitE0; //+1 cycle
+  input [ADDR_WIDTH-1:0] write_addrO0;
+  input write_hitO0; //+1 cycle
+  input write_bankEn0;
+  input [4:0] write_begin0;
+  input [4:0] write_end0;
+  input [3:0] write_bBen0;
+  input [3:0] write_enBen0;
+  input [ADDR_WIDTH-1:0] write_addrE1;
+  input write_hitE1; //+1 cycle
+  input [ADDR_WIDTH-1:0] write_addrO1;
+  input write_hitO1; //+1 cycle
+  input write_bankEn1;
+  input [4:0] write_begin1;
+  input [4:0] write_end1;
+  input [3:0] write_bBen1;
+  input [3:0] write_enBen1;
 
   wire [15:0][3:0] write_ben;
 
