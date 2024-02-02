@@ -27,10 +27,11 @@ module cc_ram(
   readB_data,
   write_addr,
   write_data,
-  write_wen
+  write_wen,
+  write_ben
   );
 
-  localparam DATA_WIDTH=65*2;
+  localparam DATA_WIDTH=36;
   localparam ADDR_WIDTH=7;
   localparam ADDR_COUNT=128;
 
@@ -45,6 +46,7 @@ module cc_ram(
   input [ADDR_WIDTH-1:0] write_addr;
   input [DATA_WIDTH-1:0] write_data;
   input write_wen;
+  input [3:0] write_ben;
 
   reg [DATA_WIDTH-1:0] ram [ADDR_COUNT-1:0];
   reg [ADDR_WIDTH-1:0] readA_addr_reg;
@@ -60,6 +62,10 @@ module cc_ram(
       if (rst) readB_addr_reg<={ADDR_WIDTH{1'b0}};
       else if (readB_clkEn) readB_addr_reg<=readB_addr;
       if (write_wen) ram[write_addr]<=write_data;
+      if (write_wen & write_ben[0]) ram[write_addr][8:0]<=write_data[8:0];
+      if (write_wen & write_ben[1]) ram[write_addr][17:9]<=write_data[17:9];
+      if (write_wen & write_ben[2]) ram[write_addr][26:18]<=write_data[26:18];
+      if (write_wen & write_ben[3]) ram[write_addr][35:27]<=write_data[35:27];
     end
 
 endmodule
@@ -79,7 +85,7 @@ module cc_ram_block(
   );
 
   parameter INDEX=0;
-  localparam DATA_WIDTH=65*8;
+  localparam DATA_WIDTH=72*8;
   localparam ADDR_WIDTH=7;
   localparam ADDR_COUNT=128;
 
@@ -95,21 +101,24 @@ module cc_ram_block(
   input [DATA_WIDTH-1:0] write_data;
   input write_wen;
 
+  wire [15:0][3:0] write_ben;
+
   generate
     genvar t;
-    for(t=0;t<4;t=t+1) begin : ram_gen
+    for(t=0;t<16;t=t+1) begin : ram_gen
         cc_ram ram_mod(
         clk,
         rst,
         readA_clkEn,
         readA_addr,
-        readA_data[130*t+:130],
+        readA_data[36*t+:36],
         readB_clkEn,
         readB_addr,
-        readB_data[130*t+:130],
+        readB_data[36*t+:36],
         write_addr,
-        write_data[130*t+:130],
-        write_wen
+        write_data[36*t+:36],
+        write_wen,
+        write_ben[t]
         );
     end
   endgenerate
