@@ -3,10 +3,12 @@ module foreign_imul(
   clk,
   rst,
   dataEn,
+  subreg_dataEn,
   A,B,res);
   input clk;
   input rst;
   input dataEn;
+  input subreg_dataEn,
   input [64:0] A;
   input [64:0] B;
   output [64:0] res;
@@ -35,6 +37,7 @@ module foreign_imul(
   wire [6:0] lvl;
   wire [7:1] opcode_pos; 
   wire opcode_has_prfx;
+  reg [11:0] subreg_need; //only xx and 0f xx supported with subreg!
   generate
     genvar pos;
     for(pos=0;pos<7;pos=pos+1) begin : pfx_dtct
@@ -45,7 +48,8 @@ module foreign_imul(
           pos ? A[8*pos-8+:8] : 8'b0,|lvl[pos-1:0],1'b1);
         else assign prfx[pos]=prfx_nolevel[pos];
         assign lads[pos]=|prfx[pos];
-        assign opcode=opcode_pos[pos] ? A[8*pos+:0] : 8'bz;
+        assign opcode=opcode_pos[pos] ? A[8*pos+:8] : 8'bz;
+        assign modrm=opcode_pos[pos] ? A[8*pos+8+:8] : 8'bz;
         assign pfx[pos]=prfx[pos] & {21{~opcode_pos0[pos+1]}};
     end
   endgenerate
@@ -53,7 +57,27 @@ module foreign_imul(
   bit_find_first_bit_tail #(7) find_mod(~lads,opcode_pos0,opcode_has_prfx0);
 
   assign opcode=opcode_has_prfx ? 8'bz : A[63:56];
-  assign res[7:0]=opcode;
-  assign res[20:8]=pfx[0][20:8] | pfx[1][20:8] | pfx[2][20:8] |
+  assign modrm=opcode_has_prfx ? 8'bz : B[7:0];
+  assign res0[7:0]=opcode;
+  assign res0[20:8]=pfx[0][20:8] | pfx[1][20:8] | pfx[2][20:8] |
     pfx[3][20:8] | pfx[4][20:8] | pfx[5][20:8] |pfx[6][20:8];
+
+  always @(posedge clk) begin
+    if (rst) begin
+        subreg_need<=0;
+    end else if (subreg_dataEn) begin
+        subreg_need[b[5:0]*64+:64]=A[63:0];
+    end
+    if (rst) begin
+        res0_reg<=0;
+    end else begin
+        res0_reg<={modrm,1'b0,res0[20:12],1'b0,res0[11:0]};
+        if (subreg_need[res0[11:0]]) begin
+            res0[12]=1'b1;
+            res0[22]=res0[11:0]==2'b01; //not fed into table! slow path!
+            res0[11:9]=modrm[5:3];
+            res0[25:23]=2'b0; //xmm0/ymm0 or rax/eax/ax/al
+        end
+    end
+  end
 endmodule
