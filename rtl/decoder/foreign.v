@@ -76,17 +76,19 @@ module foreign_imul(
     end else begin
         res0_reg<={sib,2'b0,modrm,1'b0,res0[20:12],1'b0,res0[11:0]};
         if (subreg_need[res0[11:0]]) begin
-            res0[12]=1'b1;
-            res0[22]=res0[11:0]==2'b01; //not fed into table! slow path!
-            res0[11:9]=modrm[5:3];
-            res0[25:23]=2'b0; //xmm0/ymm0 or rax/eax/ax/al
+            res0_reg[12]=1'b1;
+            res0_reg[22]=res0[11:0]==2'b01; //not fed into table! slow path!
+            res0_reg[11:9]=modrm[5:3];
+            res0_reg[25:23]=2'b0; //xmm0/ymm0 or rax/eax/ax/al
         end
         if (modrm[2:0]==2'b100) begin
-            res0[25:23]=sib[2:0];
-            res0[30]=1'b1;
-        end
-        if (modrm[2:0]=2'b101) begin
-            res0[31]=1'b1;
+            res0_reg[25:23]=sib[2:0];
+            res0_reg[30]=1'b1;
+            if (modrm[7:8]==2'b00 && sib[2:0]==3'b101) begin
+                res0_reg[40]=1'b1;
+            end
+        end else if (modrm[2:0]=2'b101) begin
+            res0_reg[31]=1'b1;
         end
     end
   end
