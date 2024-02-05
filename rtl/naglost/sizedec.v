@@ -179,7 +179,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   
   assign isShlAddMulLike=(opcode_main==8'd210 || opcode_main==8'd211 ||
     opcode_main==8'd231 || opcode_main==8'd232) && magic[0];
-  assign isPtrSec=opcode_main==8'd212 && magic[0];
+  assign isPtrSec=(opcode_main==8'd212 || opcode_main==8'd233 )&& magic[0];
   assign isJalR=(opcode_main==8'd213 || opcode_main==8'd214 || opcode_main==8'd215 || opcode_main==8'd220 || opcode_main==8'd221) && magic[0];
   assign isCexALU=opcode_main==8'd222 && magic[0];
   
@@ -306,6 +306,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   
   assign clsMul=|{
     isBasicMUL,
+    magic[0] && opcode_main==8'd234,
     isPtrSec,
     isCexALU & instr[12],
     opcode_main==8'hff && ~instr[15] && ~instr[13] && magic[0],

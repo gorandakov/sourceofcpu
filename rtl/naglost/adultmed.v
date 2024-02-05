@@ -383,7 +383,7 @@ module smallInstr_decoder(
   assign isMovOrExtA=opcode_main==8'd188 || opcode_main[7:1]==7'd95 || opcode_main[7:1]==7'd96;
   assign isMovOrExtExcept=magic[1:0]==2'b11 && opcode_main!=8'd183 && opcode_main[7:1]!=7'd92;
   assign isCSet=opcode_main==8'd194; 
-  assign isBasicAddNoFl=opcode_main==8'd195 || opcode_main==8'd196;
+  assign isBasicAddNoFl=opcode_main==8'd195 || opcode_main==8'd196 || opcode_main==8'd234;
   
   assign isLeaIPRel=opcode_main==8'd197;
 
@@ -400,7 +400,7 @@ module smallInstr_decoder(
 
   assign isShlAddMulLike=opcode_main==8'd210 || opcode_main==8'd211 || 
     opcode_main==8'd231 || opcode_main==8'd232;
-  assign isPtrSec=opcode_main==8'd212;
+  assign isPtrSec=opcode_main==8'd212 || opcode_main=233;
   assign isJalR=opcode_main==8'd213 || opcode_main==8'd214 || opcode_main==8'd215 || opcode_main==8'd220 || opcode_main==8'd221;
   //216-219=cmp16,cmp8
   //224-230=and16,and8,or16,or8
@@ -1246,7 +1246,7 @@ module smallInstr_decoder(
       prA[16]={instr[17],instr[11:8]};
       prB[16]=instr[16:12];
       if (instr[27:24]!=0 && !isPtrSec && ~(instr[28])) perror[16]=1;
-      pconstant[16]={52'b0,instr[30],instr[27:18]};
+      pconstant[16]={52'b0,instr[0],instr[30],instr[27:18]};
       prA[16]={instr[17],instr[11:8]};
       prT[16]=instr[16:12];
       prB[16]=instr[22:18];
@@ -1599,9 +1599,9 @@ module smallInstr_decoder(
       trien[29]=magic[0] & isBasicAddNoFl;
           //if no magic, it's register-register nxor and carry flag for ptr bit!
       puseBConst[29]=magic[2:0]==3'b011;
-      poperation[29][11:0]=magic[1:0]==2'b01 ? op_nxor64 : opcode_main[0] ? `op_add64 : `op_add32;
+      poperation[29][11:0]=opcode_main==8'd234 ? `op_dec|4096 : magic[1:0]==2'b01 ? `op_nxor64 : opcode_main[0] ? `op_add64 : `op_add32;
       poperation[29][12]=1'b1;
-      pport[29]=PORT_ALU;
+      pport[29]=opcode_main==8'd234 ? PORT_MUL : PORT_ALU;
       prA_use[29]=1'b1;
       prB_use[29]=1'b1;
       prT_use[29]=1'b1;
