@@ -108,6 +108,7 @@ module foreign_imul(
         end 
     end
   end
-  assign res={15'b0,res0_reg[29:28]==2'b0 && res0_reg[31] ? 2'b10 : 
+  assign res={12'b0,{3'b0,res0_reg[30]}+{3'b0,res0_reg[44]}+{res0_reg[43]&~res0_reg[42]&res0_reg[44],1'b0,res0_reg[43]&res0_reg[42]&res0_reg[44]},
+    res0_reg[29:28]==2'b0 && res0_reg[31] ? 2'b10 : 
     res0_reg[29:28],~opind,res0_reg};
 endmodule
