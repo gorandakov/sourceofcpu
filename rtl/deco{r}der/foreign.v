@@ -36,6 +36,7 @@ module foreign_imul(
   wire [6:0][20:0] prfx;
   wire [6:0] lads;
   wire [6:0] lvl;
+  wire [2:0] opind;
   wire [7:1] opcode_pos; 
   wire opcode_has_prfx;
   reg [13:0] subreg_need; //only xx and 0f xx supported with subreg!; second half=imm8 for 1 and imm32 for 0
@@ -54,6 +55,7 @@ module foreign_imul(
         assign sib=opcode_pos[pos] ? AB[8*pos+:8] : 8'bz;
         assign modrm=opcode_pos[pos] ? A[8*pos+8+:8] : 8'bz;
         assign pfx[pos]=prfx[pos] & {21{~opcode_pos0[pos+1]}};
+        assign opind=opcode_pos[pos] ? pos[2:0] : 8'bz;
     end
   endgenerate
   bit_find_first_bit #(7) find_mod(~lads,opcode_pos,opcode_has_prfx);
@@ -65,6 +67,7 @@ module foreign_imul(
   assign res0[7:0]=opcode;
   assign res0[20:8]=pfx[0][20:8] | pfx[1][20:8] | pfx[2][20:8] |
     pfx[3][20:8] | pfx[4][20:8] | pfx[5][20:8] |pfx[6][20:8];
+  assign opind=opcode_has_prfx ? 3'bz : 3'h7;
 
   always @(posedge clk) begin
     if (rst) begin
@@ -83,7 +86,7 @@ module foreign_imul(
             res0_reg[25:23]=2'b0; //xmm0/ymm0 or rax/eax/ax/al
         end
         if (modrm[2:0]==2'b100) begin
-            res0_reg[25:23]=sib[2:0];
+            res0_reg[24:22]=sib[2:0];
             res0_reg[30]=1'b1;
             if (modrm[7:8]==2'b00 && sib[2:0]==3'b101) begin
                 res0_reg[40]=1'b1;
@@ -105,5 +108,6 @@ module foreign_imul(
         end 
     end
   end
-  assign res={20'b0,res0_reg};
+  assign res={15'b0,res0_reg[29:28]==2'b0 && res0_reg[31] ? 2'b10 : 
+    res0_reg[29:28],~opind,res0_reg};
 endmodule
