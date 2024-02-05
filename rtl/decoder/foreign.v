@@ -38,7 +38,7 @@ module foreign_imul(
   wire [6:0] lvl;
   wire [7:1] opcode_pos; 
   wire opcode_has_prfx;
-  reg [12:0] subreg_need; //only xx and 0f xx supported with subreg!; second half=imm8 for 1 and imm32 for 0
+  reg [13:0] subreg_need; //only xx and 0f xx supported with subreg!; second half=imm8 for 1 and imm32 for 0
   wire [63:0] AB={B[15:0],A[63:16]};
   generate
     genvar pos;
@@ -70,15 +70,15 @@ module foreign_imul(
     if (rst) begin
         subreg_need<=0;
     end else if (subreg_dataEn) begin
-        subreg_need[b[6:0]*64+:64]=A[63:0];
+        subreg_need[b[7:0]*64+:64]=A[63:0];
     end
     if (rst) begin
         res0_reg<=0;
     end else begin
         res0_reg<={3'b0,sib,2'b0,modrm,1'b0,res0[20:12],1'b0,res0[11:0]};
-        if (subreg_need[1'b0,res0[11:0]]) begin
+        if (subreg_need[2'b0,res0[11:0]]) begin //has reg subcode
             res0_reg[12]=1'b1;
-            res0_reg[22]=res0[11:0]==2'b01; //not fed into table! slow path!
+            res0_reg[22]=res0[11:0]==2'b01; //not fed into table! slow path! or bigger table to include 0x66 + reg.
             res0_reg[11:9]=modrm[5:3];
             res0_reg[25:23]=2'b0; //xmm0/ymm0 or rax/eax/ax/al
         end
@@ -94,8 +94,14 @@ module foreign_imul(
         end else if (modrm[2:0]=2'b101) begin
             res0_reg[31]=1'b1;
         end
-        if (subreg_need[{1'b1,res0[11:0]}]) begin
-            res0_reg[42]=1'b1;
+        if (subreg_need[{2'b1,res0[11:0]}]) begin
+            res0_reg[42]=1'b1;//imm size 8/32
+        end 
+        if (subreg_need[{2'b10,res0[11:0]}]) begin
+            res0_reg[43]=1'b1; //imm present
+        end 
+        if (subreg_need[{2'b1,res0[11:0]}]) begin
+            res0_reg[44]=1'b1; //modrm present
         end 
     end
   end
