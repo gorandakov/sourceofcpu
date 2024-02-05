@@ -105,11 +105,15 @@ module imul(
 
   agusec_mul msec(R[63:0],C[11:0],sec_res);
 
+  wire [64:0] dec_res;
+  reg is_dec,is_dec_reg;
+  reg is_tlb;
+
   foreign_imul dec_mod(
   clk,
   rst,
-  clkEn && is_dec,
-  clkEn && is_tbl,
+  clkEn_reg && is_dec,
+  clkEn_reg && is_tbl,
   R,
   C,
   dec_res);
@@ -178,6 +182,7 @@ module imul(
       `op_dec: begin
           is_dec<=op_prev[8];
           is_tbl<=~op_prev[8];
+          is_sec<=1'b1;
       end
       `op_swp32: begin
 	  is_swp<=2'b1;
@@ -206,7 +211,7 @@ module imul(
       sm_sig_reg<=sm_sig;
       and1_reg<=and1;
       and1_reg2<=and1_reg;
-      sec_res_reg<=sec_res;
+      sec_res_reg<=is_dec_reg ? dec_res : sec_res;
       swp_res_reg<=swp_res;
       ptr_reg<=R[64];
     end

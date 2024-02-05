@@ -105,4 +105,5 @@ module foreign_imul(
         end 
     end
   end
+  assign res={20'b0,res0_reg};
 endmodule

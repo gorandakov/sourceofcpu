@@ -1613,6 +1613,7 @@ module smallInstr_decoder(
               prA[29]={instr[17],instr[11:8]};
               prT[29]=instr[16:12];
               prB[29]=instr[22:18];
+              instr[8]=instr[23];
           end else begin
               prA[29]={1'b0,instr[11:8]};
               prT[29]={1'b0,instr[15:12]};
