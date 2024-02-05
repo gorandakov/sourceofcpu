@@ -87,6 +87,9 @@ module foreign_imul(
             if (modrm[7:8]==2'b00 && sib[2:0]==3'b101) begin
                 res0_reg[40]=1'b1;
             end
+            if (sib[5:3]==3'b100) begin 
+                res0_reg[41]=1'b1;
+            end
         end else if (modrm[2:0]=2'b101) begin
             res0_reg[31]=1'b1;
         end
