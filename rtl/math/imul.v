@@ -104,6 +104,16 @@ module imul(
 	  {R[7:0],R[15:8],R[23:16],R[31:24],R[39:32],R[47:40],R[55:48],R[63:56]};
 
   agusec_mul msec(R[63:0],C[11:0],sec_res);
+
+  foreign_imul dec_mod(
+  clk,
+  rst,
+  clkEn && is_dec,
+  clkEn && is_tbl,
+  R,
+  C,
+  dec_res);
+
   
   always @(posedge clk) begin
     clkEn_reg<=clkEn;
@@ -115,6 +125,8 @@ module imul(
       upper<=1'b0;
       short<=1'b0;
       is_sec<=1'b0;
+      is_dec<=1'b0;
+      is_tbl<=1'b0;
  //     bnd<=1'b0;
       case({4'b1000,op_prev[7:0]})
       `op_lmul64: begin
@@ -162,6 +174,10 @@ module imul(
       end
       `op_sec64: begin
 	  is_sec<=1'b1;
+      end
+      `op_dec: begin
+          is_dec<=op_prev[8];
+          is_tbl<=~op_prev[8];
       end
       `op_swp32: begin
 	  is_swp<=2'b1;
