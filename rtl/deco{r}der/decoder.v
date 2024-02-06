@@ -2334,10 +2334,11 @@ module decoder(
 
   function [5:0] ffx;
     input thr;
+    input thrmode;
     input wr_gen_purp;
     input [5:0] reeg;
     begin
-        ffx=wr_gen_purp && reeg[4:0]==5'h1f ? 5'h1f : { thr,reeg[4:0] }; 
+        ffx=wr_gen_purp && reeg[4:0]==5'h1f ? 5'h1f : { thr^(reeg[4]&thr&thrmode),reeg[4],reeg[3]^(reeg[4]&thrmode),reeg[2:0] }; 
     end
   endfunction
   wire [9:0] csrss_retIP_en;
@@ -2345,6 +2346,8 @@ module decoder(
   reg  [9:0] csrss_retIP_en_reg;
 
   reg last_trce;
+
+  wire thrmode;
 
   wire [9:0][INSTR_WIDTH-1:0] inst;
   wire [9:0][INSTRQ_WIDTH-1:0] instQ;
@@ -3269,7 +3272,8 @@ module decoder(
   .altData2(IRQ_data),
   .thread(thread),
   .riscmode(riscmode),
-  .disstruss(lizztruss)
+  .disstruss(lizztruss),
+  .thrmode(thrmode)
 );
 
   decoder_get_baseIP getIP_mod(
@@ -3805,22 +3809,22 @@ module decoder(
           for (n=0;n<10;n=n+1) begin
               dec_operation_reg[n]<=dec_operation[n];
 	      dec_alucond_reg[n]<=dec_alucond[n];
-              dec_rA_reg[n]<=ffx(thread,1'b0,dec_rA[n]);
+              dec_rA_reg[n]<=ffx(thread,thrmode,1'b0,dec_rA[n]);
               dec_rndmode_reg[n]<=dec_rndmode;
               dec_rA_use_reg[n]<=dec_rA_use[n]&& dec_rA[n]!=31 && iUsed[n];
               dec_rA_useF_reg[n]<=dec_rA_useF[n] && iUsed[n];
-              dec_rB_reg[n]<=ffx(thread,1'b0,dec_rB[n]);
+              dec_rB_reg[n]<=ffx(thread,thrmode,1'b0,dec_rB[n]);
               dec_rB_use_reg[n]<=dec_rB_use[n] && dec_rB[n]!=31 && iUsed[n];
               dec_rB_useF_reg[n]<=dec_rB_useF[n] && iUsed[n];
               dec_useBConst_reg[n]<=dec_useBConst[n] && iUsed[n];
               dec_useAConst_reg[n]<=dec_useBConst[n] && iUsed[n] && dec_IPRel[n] && dec_rA_use[n];
-              dec_rC_reg[n]<=ffx(thread,1'b0,dec_rC[n]);
+              dec_rC_reg[n]<=ffx(thread,thrmode,1'b0,dec_rC[n]);
               dec_rC_use_reg[n]<=dec_rC_use[n] && dec_rC[n]!=31 && iUsed[n];
               dec_rC_useF_reg[n]<=dec_rC_useF[n] && iUsed[n];
               dec_useCRet_reg[n]<=dec_useCRet[n] && iUsed[n];
               dec_constant_reg[n]<=dec_constant[n];
               dec_constantN_reg[n]<=dec_constantN[n];
-              dec_rT_reg[n]<=ffx(thread,dec_rT_use,dec_rT[n]);
+              dec_rT_reg[n]<=ffx(thread,thrmode,dec_rT_use,dec_rT[n]);
               dec_rT_use_reg[n]<=dec_rT_use[n] && iUsed[n] && ~except;
               dec_rT_useF_reg[n]<=dec_rT_useF[n] && iUsed[n] && ~except;
               dec_port_reg[n]<=dec_port[n];
