@@ -169,7 +169,8 @@ module decoder_aux_const(
   altData2,
   thread,
   riscmode,
-  disstruss);
+  disstruss,
+  thrmode);
  
   input clk;
   input rst;
@@ -203,6 +204,7 @@ module decoder_aux_const(
   input thread;
   output riscmode;
   output disstruss;
+  output reg thrmode;
 
   wire [15:0] iconst[9:0];
   wire [9:0] cls_sys_first;
@@ -350,6 +352,7 @@ module decoder_aux_const(
           csr_last_jmp[1]<=64'b0;
           csr_last_jmp2[1]<=64'b0;
           thread_reg<=1'b0;
+          thrmode<=1'b0;
       end else begin
           if (!stall) thread_reg<=thread;
           if (csrss_en && ((csr_mflags[csrss_no[15]][`mflags_cpl]==2'b0 && ~csr_mflags[csrss_no[15]][`mflags_vm]) ||
@@ -375,7 +378,7 @@ module decoder_aux_const(
       `csr_vmcall:		csr_vmcall[csrss_no[15]]<=csrss_data[63:0];
       `csr_USER3:		csr_USER3[csrss_no[15]]<=csrss_data[63:0];
       `csr_last_jmp: begin csr_last_jmp[csrss_no[15]]<=csrss_data[63:0]; csr_last_jmp2[csrss_no[15]]<=csr_last_jmp[csrss_no[15]]; end
-      `csr_pinvoke:
+      `csr_pinvoke:		thrmode<=~thrmode;
       `csr_cl_lock:             csr_mflags[csrss_no[15]][18]<=1'b1;
      	      endcase
               aux0_reg<=aux0;
