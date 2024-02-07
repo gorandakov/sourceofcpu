@@ -209,7 +209,7 @@ module cntrl_find_outcome(
   except_set_instr_flag,
   except_jmp_mask_en,
   except_jmp_mask,
-  csrss_no,csrss_thread,csrss_en,csrss_data,
+  csrss_no,csrss_thread,csrss_en,csrss_data,csrss_xdata,
   new_en,new_thread,new_addr,
   IRQ,
   instr0_err,instr1_err,instr2_err,instr3_err,instr4_err,instr5_err,
@@ -316,6 +316,7 @@ module cntrl_find_outcome(
   output reg csrss_thread;
   output reg csrss_en;
   output reg [6_4:0] csrss_data;
+  output reg [23:0] csrss_xdata;
   input new_en;
   input new_thread;
   output wire [5:0] new_addr;
@@ -1036,9 +1037,16 @@ module cntrl_find_outcome(
   assign csrss_no_d=(break_jump0 && jump0Type==5'b11001) ? {tire_thread_reg,jump0IP[14:0]} : 16'bz;
   assign csrss_no_d=(break_jump1 && jump1Type==5'b11001) ? {tire_thread_reg,jump1IP[14:0]} : 16'bz;
   assign csrss_no_d=(break_jump0 && jump0Type!=5'b11001 && jump0_taken) ||
-    (break_jump1 && jump1Type!=5'b11001 && jump1_taken) ? 16'd`csr_last_jmp : 16'bz;
-  assign csrss_no_d=(break_exceptn) ? 16'd`csr_retIP : 16'bz;
-  assign csrss_no_d=(~break_jump0 & ~break_jump1 & ~break_exceptn) ? 16'd`csr_excpt_fpu : 16'bz;
+    (break_jump1 && jump1Type!=5'b11001 && jump1_taken) ? {tire_thread_reg,15'd`csr_last_jmp} : 16'bz;
+  assign csrss_no_d=(break_exceptn) ? {tire_thread_reg,15'd`csr_retIP} : 16'bz;
+  assign csrss_no_d=(~break_jump0 & ~break_jump1 & ~break_exceptn) ? {tire_thread_reg,15'd`csr_excpt_fpu} : 16'bz;
+
+  assign csrss_xdata_d=(break_jump0 && jump0Type==5'b11001) ? {jump0IP[63:40]} : 24'bz;
+  assign csrss_xdata_d=(break_jump1 && jump1Type==5'b11001) ? {jump1IP[63:40]} : 24'bz;
+  assign csrss_xdata_d=(break_jump0 && jump0Type!=5'b11001 && jump0_taken) ||
+    (break_jump1 && jump1Type!=5'b11001 && jump1_taken) ? 24'd`csr_last_jmp : 24'bz;
+  assign csrss_xdata_d=(break_exceptn) ? 24'd`csr_retIP : 24'bz;
+  assign csrss_xdata_d=(~break_jump0 & ~break_jump1 & ~break_exceptn) ? 24'd`csr_excpt_fpu : 24'bz;
   assign csrss_en_d=(break_jump0) ? (jump0Type==5'b11001 || jump0_taken) && has_some && ~mem_II_stall : 1'bz;
   assign csrss_en_d=(break_jump1) ? (jump1Type==5'b11001 || jump1_taken) && has_some && ~mem_II_stall : 1'bz;
   assign csrss_en_d=(break_exceptn) ? has_some & ~mem_II_stall : 1'bz;
