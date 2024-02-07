@@ -902,10 +902,7 @@ module frontendSelf(
           .jumpType(jdec_type[k]),
           .jumpIndir(),
           .isIPRel(),
-          .lizztruss(1'b0),
-          .reor_rst(csrss_en && csrss_no[14:0]==15'h70fe),
-          .reor_rst_data(csrss_data[63:40]),
-          .reor_rst_thread(csrss_no[15])
+          .lizztruss(1'b0)
           );
   
       end
