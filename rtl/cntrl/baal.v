@@ -1044,9 +1044,9 @@ module cntrl_find_outcome(
   assign csrss_xdata_d=(break_jump0 && jump0Type==5'b11001) ? {jump0IP[63:40]} : 24'bz;
   assign csrss_xdata_d=(break_jump1 && jump1Type==5'b11001) ? {jump1IP[63:40]} : 24'bz;
   assign csrss_xdata_d=(break_jump0 && jump0Type!=5'b11001 && jump0_taken) ||
-    (break_jump1 && jump1Type!=5'b11001 && jump1_taken) ? 24'd`csr_last_jmp : 24'bz;
-  assign csrss_xdata_d=(break_exceptn) ? 24'd`csr_retIP : 24'bz;
-  assign csrss_xdata_d=(~break_jump0 & ~break_jump1 & ~break_exceptn) ? 24'd`csr_excpt_fpu : 24'bz;
+    (break_jump1 && jump1Type!=5'b11001 && jump1_taken) ? {tire_thread_reg,23'd`csr_last_jmp} : 24'bz;
+  assign csrss_xdata_d=(break_exceptn) ? {tire_thread_reg,23'd`csr_retIP} : 24'bz;
+  assign csrss_xdata_d=(~break_jump0 & ~break_jump1 & ~break_exceptn) ? {tire_thread_reg,23'd`csr_excpt_fpu} : 24'bz;
   assign csrss_en_d=(break_jump0) ? (jump0Type==5'b11001 || jump0_taken) && has_some && ~mem_II_stall : 1'bz;
   assign csrss_en_d=(break_jump1) ? (jump1Type==5'b11001 || jump1_taken) && has_some && ~mem_II_stall : 1'bz;
   assign csrss_en_d=(break_exceptn) ? has_some & ~mem_II_stall : 1'bz;
