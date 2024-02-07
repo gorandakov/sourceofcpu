@@ -213,7 +213,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   assign clsIndir=|{
   isIndirJump,
   isRet,
- // isCall,
+  isFPUreor,
   opcode_main==8'hff && ~instr[15] && ~instr[13] && magic[0]
   };
 

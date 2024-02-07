@@ -25,6 +25,9 @@ module jump_decoder(
   rst,
   mode64,
   lizztruss,
+  reor_rst,
+  reor_rst_data,
+  reor_rst_thread,
   instr,
   magic,
   class_,
@@ -58,6 +61,9 @@ module jump_decoder(
   input rst;
   input mode64;
   input lizztruss;
+  input reor_rst;
+  input [23:0] reor_rst_data;
+  input reor_rst_thread;
   
   input [INSTR_WIDTH-1:0] instr;
   input [3:0] magic;
@@ -135,7 +141,15 @@ module jump_decoder(
   
   
   assign isBasicSysInstr=(opcode_main==8'hff)&magic[0];
-  
+  always @(posedge clk) begin
+    if (rst) begin
+        reor[0]=0;
+        reor[1]=1;
+    end begin 
+        if (isFPUreor) reor[thread]=instr[31:8];
+        if (reor_rst) reor[reor_rst_thread]=reor_rst_data;
+    end
+  end
   always @*
   begin
       constant[31:0]=constantDef;
@@ -195,6 +209,9 @@ module jump_decoder(
               jumpType=5'b10001;
               constant={48'b0,thread,instr[30:16]};
           end
+      end else if (isFPUreor) begin
+          jumpType=5'b10001;
+          constant={instr[31:8],8'b111,thread,15'h70fe};
       end
       
 
