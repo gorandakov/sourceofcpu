@@ -444,6 +444,7 @@ module frontendSelf(
   wire [3:0][3:0] jmp_off;
   reg [3:0] jmp_off_reg[3:0];
   wire [3:0][63:0] jdec_const;
+  wire [3:0] jdec_is_jmp;
   reg [63:0] jdec_const_reg[3:0];
   wire [3:0] jdec_bkjump;
   wire [3:0][INSTR_WIDTH-1:0] jmp_instr;
@@ -897,7 +898,7 @@ module frontendSelf(
           
           .pushCallStack(jdec_push[k]),
           .popCallStack(jdec_pop[k]),
-          .isJump(),
+          .isJump(jdec_is_jmp[k]),
           .jumpType(jdec_type[k]),
           .jumpIndir(),
           .isIPRel(),
@@ -1497,10 +1498,10 @@ module frontendSelf(
   .write_off0(jmp_off_reg[0]),.write_off1(jmp_off_reg[1]),.write_off2(jmp_off_reg[2]),.write_off3(jmp_off_reg[3]),
   .write_cond(~{jdec_type[3][4],jdec_type[2][4],jdec_type[1][4],jdec_type[0][4]}),
   .write_indir({jdec_type[3]==5'h11,jdec_type[2]==5'h11,jdec_type[1]==5'h11,jdec_type[0]==5'h11}),
-  .write_init0(jini0),
-  .write_init1(jini1),
-  .write_init2(jini2),
-  .write_init3(jini3),
+  .write_init0(jini0&jdec_is_jmp[0]),
+  .write_init1(jini1&jdec_is_jmp[1]),
+  .write_init2(jini2&jdec_is_jmp[2]),
+  .write_init3(jini3&jdec_is_jmp[3]),
   .write_link0(jdec_link0[4:0]),.write_lnpos0(lnk_off0_reg),
   .write_link1(jdec_link1[4:0]),.write_lnpos1(lnk_off1_reg),
   .write_link2(jdec_link2[4:0]),.write_lnpos2(lnk_off2_reg),
