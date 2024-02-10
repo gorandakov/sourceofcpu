@@ -524,7 +524,10 @@ module predecoder_get(
         for(k=0;k<15;k=k+1) begin : popcnt_gen
             popcnt15 cnt_mod(instrEnd[14:0] & ((15'b10<<k)-15'b1) & mask[14:0],cntEnd[k]);
             get_carry #(4) carry_mod(k[3:0],~startOff,1'b1,mask0[k]);
-            mask[k]=mask0[k] || ((k+1)==startOff && !instrEnd[k]);
+            mask[k]=mask0[k] || ((k+1)==startOff && !instrEnd[k]) ||
+               ((k+2)==startOff && instrEnd[k+:2]==2'b00) ||
+               ((k+3)==startOff && instrEnd[k+:3]==3'b000)
+               ((k+4)==startOff && instrEnd[k+:4]==4'b0000);
 
             wire [3:0] kk;
             assign kk=k==0 && bundle0[255] && bstop[3:2]==2'b01 ? 4'hf : 4'bz;
