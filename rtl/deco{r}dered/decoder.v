@@ -2338,7 +2338,7 @@ module decoder(
     input wr_gen_purp;
     input [5:0] reeg;
     begin
-        ffx=wr_gen_purp && reeg[4:0]==5'h1f ? 5'h1f : { thr^(reeg[4]&thrmode[1]),reeg[4],reeg[3]^(reeg[4]&thrmode[0]),reeg[2:0] }; 
+        ffx=wr_gen_purp && reeg[4] && reg[2:0]==3'h7 ? {2'b01,thr,reg[2:0]} : { thr^(reeg[4]&thrmode[1]),reeg[4],reeg[3]^(reeg[4]&thrmode[0]),reeg[2:0] }; 
     end
   endfunction
   wire [9:0] csrss_retIP_en;
