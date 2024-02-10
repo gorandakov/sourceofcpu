@@ -740,12 +740,11 @@ endmodule
   assign out[65]=en ? ^out[64:0] : 1'bz;
 //65th bit offset by 4 phases in regfile and alu!
 
-  assign exbits=is_ptr ? ptr[63:44]^{19'b0,pos_flip[cout_sec0]|
-  neg_flip[cout_sec0]} : 20'b0;
+  assign exbits=is_ptr ? ptr[63:44] : 20'b0;
 
   agusec_shift nih_mod(ptr[`ptr_exp],C[43:12],cout_sec0);
   agusec_check_upper3 hin_mod(ptr,unptr,{39'b0,cin},pos_ack,neg_ack,
-    pos_flip,neg_flip,ndiff);
+    ndiff);
   
   nand_array #(WIDTH) nG0_mod(xa[63:0],xb,nG0);
   nor_array #(WIDTH)  nP0_mod(xa[63:0],xb,nP0);
@@ -766,11 +765,6 @@ endmodule
   assign xa=sub[4] ? {a[61:0],2'b0} : 64'bz;
   assign xa=sub[5] ? {a[60:0],3'b0} : 64'bz;
 
-//  assign XU[31:0]=X[31:0];
-//  assign nXU[31:0]=nX[31:0];
-
-//  assign XU[63:32]=X[63:32] | {32{sxtEn}};
-//  assign nXU[63:32]=nX[63:32] & {32{~sxtEn}};
 
 
   generate
@@ -1330,11 +1324,10 @@ endmodule
         assign tmp2[k+1]=(shift[3] & c3[k]) ? orab[k] : 1'bz;
       end
   endgenerate
-  //push ~(tmp1|tmp2) and ~(tmp1&tmp2) before the tristate mux
   adder_seq #(WIDTH) add_mod(tmp1,tmp2[WIDTH-1:0],~(tmp1|tmp2),~(tmp1&tmp2),out[43:0],c_s,1'b0,en,,,,);
   assign out[63+PTRBIT:44]=en ? ptr[63+PTRBIT:44] : 'z;
   agusec_shift ssh_mod(ptr[`ptr_exp],c_s[42:11],cout_sec0);
-  agusec_check_upper3 #(1'b1) chk_mod(ptr,unptr[43:4],b[43:4],{dummy1,pos_ack},{dummy2,neg_ack},,,ndiff);
+  agusec_check_upper3 #(1'b1) chk_mod(ptr,unptr[43:4],b[43:4],{dummy1,pos_ack},{dummy2,neg_ack},ndiff);
 endmodule
 
 

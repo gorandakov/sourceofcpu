@@ -204,7 +204,7 @@ module decoder_aux_const(
   input thread;
   output riscmode;
   output disstruss;
-  output reg thrmode;
+  output reg [1:0] thrmode;
 
   wire [15:0] iconst[9:0];
   wire [9:0] cls_sys_first;
@@ -352,7 +352,7 @@ module decoder_aux_const(
           csr_last_jmp[1]<=64'b0;
           csr_last_jmp2[1]<=64'b0;
           thread_reg<=1'b0;
-          thrmode<=1'b0;
+          thrmode<=2'b0;
       end else begin
           if (!stall) thread_reg<=thread;
           if (csrss_en && ((csr_mflags[csrss_no[15]][`mflags_cpl]==2'b0 && ~csr_mflags[csrss_no[15]][`mflags_vm]) ||
@@ -378,7 +378,7 @@ module decoder_aux_const(
       `csr_vmcall:		csr_vmcall[csrss_no[15]]<=csrss_data[63:0];
       `csr_USER3:		csr_USER3[csrss_no[15]]<=csrss_data[63:0];
       `csr_last_jmp: begin csr_last_jmp[csrss_no[15]]<=csrss_data[63:0]; csr_last_jmp2[csrss_no[15]]<=csr_last_jmp[csrss_no[15]]; end
-      `csr_pinvoke:		thrmode<=~thrmode;
+      `csr_pinvoke:		thrmode<=thrmode+2'b1;
       `csr_cl_lock:             csr_mflags[csrss_no[15]][18]<=1'b1;
      	      endcase
               aux0_reg<=aux0;
@@ -2334,11 +2334,11 @@ module decoder(
 
   function [5:0] ffx;
     input thr;
-    input thrmode;
+    input [1:0] thrmode;
     input wr_gen_purp;
     input [5:0] reeg;
     begin
-        ffx=wr_gen_purp && reeg[4:0]==5'h1f ? 5'h1f : { thr^(reeg[4]&thr&thrmode),reeg[4],reeg[3]^(reeg[4]&thrmode),reeg[2:0] }; 
+        ffx=wr_gen_purp && reeg[4:0]==5'h1f ? 5'h1f : { thr^(reeg[4]&thrmode[1]),reeg[4],reeg[3]^(reeg[4]&thrmode[0]),reeg[2:0] }; 
     end
   endfunction
   wire [9:0] csrss_retIP_en;
