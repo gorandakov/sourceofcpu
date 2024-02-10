@@ -1097,10 +1097,11 @@ module smallInstr_decoder(
               prB[12]={1'b0,instr[15:12]};
           end
       end
-      if (opcode_main[0] && opcode_main[5:3]==3'b101) perror[12]=2'b1;
+      if (opcode_main[0] && (opcode_main[5:3]==3'b101 || opcode_main[5:1]==5'b10111)) perror[12]=2'b1;
       if (poperation[12][5:1]==5'h16) begin poperation[12][7:0]=`op_cax; poperation[12][9:8]=2'b0; pport[12]=PORT_ALU; end
-      if (poperation[12][5:1]==5'h17) perror[12]=1'b1;
+     // if (poperation[12][5:1]==5'h17) perror[12]=1'b1; now it is movbe
      //     if (prevSpecAlu) rC=6'd16;
+
       trien[13]=magic[0] & isBaseIndexLoadStore;
       if (opcode_main[7:4]==4'b0111 && opcode_main[3:2]==2'b10)
           poperation[13][5:0]=6'd22;
@@ -1158,8 +1159,9 @@ module smallInstr_decoder(
       if (magic[2:0]==3'b111 && instr[63:60]!=0) perror[13]=1;
       if (opcode_main[0] &&opcode_main[7:4]==4'b0111 && opcode_main[3])
           perror[13]=1;
+      if (opcode_main[0] && opcode_main[5:1]==5'h17) perror[13]=1;
       if (poperation[13][5:1]==5'h16) begin poperation[13][7:0]=`op_cax; pport[13]=PORT_ALU; end
-      if (riscmove || poperation[13][5:1]==5'h17) perror[13]=1;
+      if (riscmove) perror[13]=1;
       
       trien[14]=magic[0] & isCmov;//
       prA[14]={instr[17],instr[11:8]};
@@ -1277,7 +1279,6 @@ module smallInstr_decoder(
       prC_use[17]=prT_use[17];
       prC_useF[17]=prT_useF[17];
       pthisSpecLoad[17]=1'b1;
-          
       if (magic[1:0]==2'b01) begin
           prB[17]=instr[16:12];
       end else begin
@@ -1357,25 +1358,23 @@ module smallInstr_decoder(
           if (magic[1:0]==2'b01) prC[19]=instr[16:12];
           else prC[19]={opcode_main[7:1]==7'b1011000 ? instr[11] : instr[1],instr[15:12]};
        //   if (prevSpecAlu) rC=6'd16;
-      end else begin
-          if (magic[1:0]==2'b01) prT[19]=instr[16:12];
-          else prT[19]={opcode_main[7:1]==7'b1011000 ? instr[11] : instr[1],instr[15:12]};
-          if (prT[19]==5'd16 && opcode_main[7:0]==8'b10110000) begin
-              prT[19]=5'd16;
-              pthisSpecLoad[19]=1'b1;
-              prAlloc[19]=1'b0;
-          end
-          if (prT[19]==5'd15 && opcode_main[7:0]!=8'b10110000) begin
-              prT[19]=5'd15;
-              pthisSpecLoad[19]=1'b1;
-              prAlloc[19]=1'b0;
-          end
+      end 
+      if (magic[1:0]==2'b01) prT[19]=instr[16:12];
+      else prT[19]={opcode_main[7:1]==7'b1011000 ? instr[11] : instr[1],instr[15:12]};
+       if (prT[19]==5'd16 && opcode_main[7:0]==8'b10110000) begin
+          prT[19]=5'd16;
+          pthisSpecLoad[19]=1'b1;
+          prAlloc[19]=1'b0;
+      end
+      if (prT[19]==5'd15 && opcode_main[7:0]!=8'b10110000) begin
+           prT[19]=5'd15;
+           pthisSpecLoad[19]=1'b1;
+           prAlloc[19]=1'b0;
       end
       if (opcode_main[0] && (opcode_main[7:1]==7'b1011000 && instr[10]))
           perror[19]=2'b1;
       if (poperation[19][5:1]==5'h16) begin poperation[19][7:0]=`op_cax; poperation[19][9:8]=2'b0; pport[19]=PORT_ALU; end
-      if (poperation[19][5:1]==5'h17) perror[19]=1'b1;
-
+      if (poperation[19][5:1]==5'h17 && poperation[19][0]) perror[19]=1'b1;
       if (magic[1:0]==2'b01 && instr[17]) perror[19]=1;
       
       trien[20]=magic[0] & isBasicCJump;
