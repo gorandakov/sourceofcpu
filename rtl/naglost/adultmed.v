@@ -1371,7 +1371,7 @@ module smallInstr_decoder(
            pthisSpecLoad[19]=1'b1;
            prAlloc[19]=1'b0;
       end
-      if (opcode_main[0] && (opcode_main[7:1]==7'b1011000 && instr[10]))
+      if (opcode_main[0] && ((opcode_main[7:1]==7'b1011000 && instr[10])||(opcode_main[7:1]!=7'b1011000) )
           perror[19]=2'b1;
       if (poperation[19][5:1]==5'h16) begin poperation[19][7:0]=`op_cax; poperation[19][9:8]=2'b0; pport[19]=PORT_ALU; end
       if (poperation[19][5:1]==5'h17 && poperation[19][0]) perror[19]=1'b1;
