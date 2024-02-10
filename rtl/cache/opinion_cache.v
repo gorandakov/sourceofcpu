@@ -135,7 +135,7 @@ module cc_ram_block(
 
   generate
     genvar t;
-    for(t=0;t<16;t=t+1) begin : ram_gen
+    for(t=0;t<18;t=t+1) begin : ram_gen
         cc_ram ram_mod(
         clk,
         rst,
@@ -168,7 +168,7 @@ module ccX_ram(
   write_wen
   );
 
-  localparam DATA_WIDTH=60;
+  localparam DATA_WIDTH=64;
   localparam ADDR_WIDTH=7;
   localparam ADDR_COUNT=128;
 
@@ -232,7 +232,7 @@ module ccRam_way(
   ErrA,ErrB
   );
 
-  localparam DATA_WIDTH=65*16;
+  localparam DATA_WIDTH=72*18;
   localparam ADDR_WIDTH=7;
   localparam IP_WIDTH=44;
   localparam PHYS_WIDTH=44;
@@ -440,6 +440,64 @@ module ccRam_way(
   .write_exp_en(),
   .init(init)
   );
+
+  ccTag #(INDEX) tagT_mod(
+  .clk(clk),
+  .rst(rst),
+  .read_clkEn(readA_clkEn),
+  .read_phys_addr(init ? {initCount} : readA_IP[38:2]),
+  .read_hit(readAT_hit),
+  .read_err(ErrAxT),
+  .write_phys_addr(init ? {initCount} : write_IP[38:2]-1),
+  .write_wen(write_wen),
+  .invalidate(invalidate),
+  .hitNRU(),
+  .hitNRU_in(),
+  .hitNRU_reg(),
+  .write_hit(write_hitT),
+  .write_expun_addr(expun_naddrT),
+  .write_exp_en(expun_hitT),
+  .init(init)
+  );
+  
+  ccTag #(INDEX) tagB_mod(
+  .clk(clk),
+  .rst(rst),
+  .read_clkEn(readB_clkEn),
+  .read_phys_addr(init ? {initCount} : readB_IP[38:2]),
+  .read_hit(readB_hitT),
+  .read_err(ErrBxT),
+  .write_phys_addr(init ? {initCount} : write_IP[38:2]-1),
+  .write_wen(write_wen),
+  .invalidate(invalidate),
+  .hitNRU(),
+  .hitNRU_in(),
+  .hitNRU_reg(),
+  .write_hit(write_hitT),
+  .write_expun_addr(),
+  .write_exp_en(),
+  .init(init)
+  );
+  
+  
+  ccTag #(INDEX,1'b1) tagCT_mod(
+  .clk(clk),
+  .rst(rst),
+  .read_clkEn(chkCL_clkEn),
+  .read_phys_addr(init ? {initCount} : chkCL_IP[38:2]),
+  .read_hit(read_hitCT0),
+  .read_err(),
+  .write_phys_addr(init ? {initCount} : write_IP[38:2]-1),
+  .write_wen(write_wen),
+  .invalidate(invalidate),
+  .hitNRU(),
+  .hitNRU_in(read_NRU_in),
+  .hitNRU_reg(read_NRU_reg),
+  .write_hit(write_hit),
+  .write_expun_addr(),
+  .write_exp_en(),
+  .init(init)
+  );
 //verilator lint_on WIDTH  
   
   adder_inc #(7) initAdd_mod(initCount,initCountNext,1'b1,);
@@ -493,12 +551,6 @@ module ccRam_way(
          if (initCount==7'd127)
              init<=1'b0;
       end
-      if (write_hit) begin
-	  $display("WH ",{write_data_reg[258:195],write_data_reg[193:130],write_data_reg[128:65],write_data_reg[63:0]});
-	  $display("WH ",{write_data_reg[260+258:260+195],write_data_reg[260+193:260+130],
-	      write_data_reg[260+128:260+65],write_data_reg[260+63:260+0]});
-          $display("WA ",write_IP_reg[9:2]);
-      end
   end
     
 endmodule
@@ -530,7 +582,7 @@ module ccRam_half(
   tagErrA,tagErrB
   );
 
-  localparam DATA_WIDTH=65*16;
+  localparam DATA_WIDTH=72*18;
   localparam ADDR_WIDTH=7;
   localparam IP_WIDTH=44;
   localparam PHYS_WIDTH=44;
