@@ -1302,6 +1302,7 @@ module dcache1(
 //  wire [4:0] rdcan[3:0];
   wire [3:0][127+8:0] read_dataA;
   reg [5:0] mskdata1[3:0];
+  reg swpdata[3:0];
   reg [4:0] read_sz[3:0];
   reg [4:0] read_sz_reg[3:0];
 
@@ -1485,7 +1486,8 @@ module dcache1(
 		rxdata4[p]|rxdata5[p]|rxdata6[p]|rxdata7[p];
 	      assign rxerr[p]=rxerr0[p]|rxerr1[p]|rxerr2[p]|rxerr3[p]|
 		rxerr4[p]|rxerr5[p]|rxerr6[p]|rxerr7[p];
-              assign read_dataA[p]=rddata1[p] & {{8{mskdata1[p][5]}},{48{mskdata1[p][4]}},{16{mskdata1[p][3]}},{32{mskdata1[p][2]}},
+              assign read_dataA[p]=(swpdata[v] ? {rdata1[p][127:64],rdata1[7:0],rdata1[15:8],rdata1[23:16],
+                rdata1[31:24],rdata1[39:32],rdata1[47:40],rdata1[55:48],rdata1[63:56]} : rddata1[p]) & {{8{mskdata1[p][5]}},{48{mskdata1[p][4]}},{16{mskdata1[p][3]}},{32{mskdata1[p][2]}},
                     {16{mskdata1[p][1]}},{8{mskdata1[p][0]}},8'hff};
               assign puke_addr[p]=read_odd_reg[p]|read_split_reg[p] && rderr1[p] ? read_addrO_reg[p][6:0] : read_addrE_reg[p][6:0];
               assign puke_en[p]=rderr1[p] | rderr2[p];
@@ -1773,6 +1775,7 @@ module dcache1(
           
           for(v=0;v<4;v=v+1) begin
               read_sz_reg[v]<=read_sz[v];
+              swpdata[v]<=1'b0;
        //verilator lint_off CASEINCOMPLETE
 
               case(read_sz[v])
@@ -1780,6 +1783,7 @@ module dcache1(
          5'd17: mskdata1[v]<=6'b00001;
          5'd18: mskdata1[v]<=6'b00011;
          5'd19: mskdata1[v]<=6'b00111;
+         5'd23: mskdata1[v]<=begin 6'b00111; swpdata[v]<=1'b1; end
          5'h3:  mskdata1[v]<=6'b01111; //long double
          5'h0,5'h1,5'h2:  mskdata1[v]<=6'b11111; //int, double, single 128 bit (u)
          5'hc,5'hd,5'he:  mskdata1[v]<=6'b11111; //int, double, single 128 bit (a)
