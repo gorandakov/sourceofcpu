@@ -33,7 +33,7 @@ module agusec_mul(
 
   assign res[`ptr_exp]=B[11:7];
   assign res[`ptr_low]=low[7:1];
-  assign res[`ptr_hi]=hi<=A[`ptr_hi] || C&(A[`ptr_hi]<A[`ptr_low]) ? A[`ptr_hi] : hi;
+  assign res[`ptr_hi]=hi;
   assign res[`ptr_on_low]=1'b1;
   assign res[43:0]=A[43:0];
 endmodule
