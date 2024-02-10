@@ -193,8 +193,8 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   assign isCallPrep=(opcode_main==8'd199) && magic[0];
 
   assign thisSpecLoad=isBaseSpecLoad || isBaseIndexSpecLoad || isBaseSpecStore || isBaseIndexSpecStore || 
-      ({instr[11],instr[15:12]}==5'd16 &&  opcode_main[7:0]==8'b10110000 && !instr[10]) || 
-      ({instr[1],instr[15:12]}==5'd15 && opcode_main[7:2]==6'd15 && !instr[0]);
+      ({instr[11],instr[15:12]}==5'd16 &&  opcode_main[7:0]==8'b10110000) || 
+      ({instr[1],instr[15:12]}==5'd15 && opcode_main[7:2]==6'd15);
 
   
   assign clsJump=|{
