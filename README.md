@@ -13,4 +13,7 @@ NOTE: Architectrual changes pending. The ISA on the website is out of date.
 The isa is no longer vliw based its risc like since the instructions can cross bundles of 32 bytes and pages.
 Please note that to implement this cpu it is assumed that you'll want to use something like 12 phase dynamic logic.
 if you implement it with static logic it will be low clock but not very low.
-
+The "sins" of x86_64, such as it being impossible to analyse before execution 
+can be avoided now as when a jump jumps in the middle of an instruction and
+it is no more than 5 parcels the predecoder changes the start address to after
+the last parcel stop bit.
