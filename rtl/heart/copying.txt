@@ -1,4 +1,8 @@
 
+Heptane Central Processor unit
+Copyright (C) Goran Dakov
+The following license applies to this source code with the special restriction that manufacturing a product that includes this source code cannot be done without the permission of the author.
+
 
 Apache License
 Version 2.0, January 2004
