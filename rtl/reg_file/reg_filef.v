@@ -1,5 +1,5 @@
 
-Copyright 2022 Goran Dakov
+Copyright 2022-2024 Goran Dakov, see additional restriction in copying.txt
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
