@@ -855,7 +855,7 @@ module smallInstr_decoder(
        prB_useF[5]=1'b1;
        prT_useF[5]=1'b1;
        if (opcode_sub[5:1]==5'b11101) begin
-           pport[5]=PORT_FANY;
+           pport[5]=PORT_FMUL;
            poperation[5][7:0]=`fop_mulDP;
        end else begin
 	   pport[5]=PORT_FADD;
@@ -912,12 +912,12 @@ module smallInstr_decoder(
        prT_useF[7]=1'b1;
        //verilator lint_off CASEINCOMPLETE
        case({opcode_main[3],opcode_main[7:6]})
-     3'd0: begin pport[7]=PORT_FADD; poperation[7]=`fop_mulS; end
-     3'd1: begin pport[7]=PORT_FADD; poperation[7]=`fop_addS; end
-     3'd2: begin pport[7]=PORT_FADD; poperation[7]=`fop_subS; end
-     3'd4: begin pport[7]=PORT_FANY; poperation[7]=`fop_mulSP; end
-     3'd5: begin pport[7]=PORT_FANY; poperation[7]=`fop_addSP; end
-     3'd6: begin pport[7]=PORT_FANY; poperation[7]=`fop_subSP; end
+     3'd0: begin pport[7]=PORT_FADD; poperation[7]=`fop_mulSP; end
+     3'd1: begin pport[7]=PORT_FADD; poperation[7]=`fop_addSP; end
+     3'd2: begin pport[7]=PORT_FADD; poperation[7]=`fop_subSP; end
+     3'd4: begin pport[7]=PORT_FMUL; poperation[7]=`fop_mulSP; end
+     3'd5: begin pport[7]=PORT_FMUL; poperation[7]=`fop_addSP; end
+     3'd6: begin pport[7]=PORT_FMUL; poperation[7]=`fop_subSP; end
        endcase
        //verilator lint_on CASEINCOMPLETE
        trien[8]=~magic[0] & subIsLinkRet;
