@@ -915,9 +915,9 @@ module smallInstr_decoder(
      3'd0: begin pport[7]=PORT_FADD; poperation[7]=`fop_mulS; end
      3'd1: begin pport[7]=PORT_FADD; poperation[7]=`fop_addS; end
      3'd2: begin pport[7]=PORT_FADD; poperation[7]=`fop_subS; end
-     3'd4: begin pport[7]=PORT_FANY; poperation[7]=`fop_mulSP; end
-     3'd5: begin pport[7]=PORT_FANY; poperation[7]=`fop_addSP; end
-     3'd6: begin pport[7]=PORT_FANY; poperation[7]=`fop_subSP; end
+     3'd4: begin pport[7]=PORT_FADD; poperation[7]=`fop_mulSP; end
+     3'd5: begin pport[7]=PORT_FADD; poperation[7]=`fop_addSP; end
+     3'd6: begin pport[7]=PORT_FADD; poperation[7]=`fop_subSP; end
        endcase
        //verilator lint_on CASEINCOMPLETE
        trien[8]=~magic[0] & subIsLinkRet;
