@@ -28,19 +28,19 @@ module fu_alu(
     u1_S_fufwd,u1_S_fuufwd,u1_const,
   u2_A,u2_B,u2_S,u2_op,u2_ret,u2_rten,u2_clkEn,
     u2_A_fufwd,u2_A_fuufwd,u2_B_fufwd,u2_B_fuufwd,
-    u2_S_fufwd,u2_S_fuufwd,u2_rmode,
+    u2_S_fufwd,u2_S_fuufwd,
   u3_A,u3_B,u3_S,u3_op,u3_ret,u3_rten,u3_clkEn,
     u3_A_fufwd,u3_A_fuufwd,u3_B_fufwd,u3_B_fuufwd,
     u3_S_fufwd,u3_S_fuufwd,u3_const,
   u4_A,u4_B,u4_S,u4_op,u4_ret,u4_rten,u4_clkEn,
     u4_A_fufwd,u4_A_fuufwd,u4_B_fufwd,u4_B_fuufwd,
-    u4_S_fufwd,u4_S_fuufwd,u4_rmode,
+    u4_S_fufwd,u4_S_fuufwd,
   u5_A,u5_B,u5_S,u5_nDataAlt,u5_op,u5_ret,u5_rten,u5_clkEn,
     u5_A_fufwd,u5_A_fuufwd,u5_B_fufwd,u5_B_fuufwd,
     u5_S_fufwd,u5_S_fuufwd,u5_const,
   u6_A,u6_B,u6_S,u6_op,u6_ret,u6_rten,u6_clkEn,
     u6_A_fufwd,u6_A_fuufwd,u6_B_fufwd,u6_B_fuufwd,
-    u6_S_fufwd,u6_S_fuufwd,u6_rmode,u6_attr,
+    u6_S_fufwd,u6_S_fuufwd,u6_attr,
   FU0, FU1,  FU2,  FU3,
   FU4, FU5,  FU6,  FU7,
   FU8, FU9,
@@ -91,7 +91,6 @@ module fu_alu(
   input [3:0]           u2_B_fuufwd;
   input [3:0]           u2_S_fufwd;
   input [3:0]           u2_S_fuufwd;
-  input [2:0]           u2_rmode;
 
   (* bus=WB bus_spacing=10 *) input [64:0]          u3_A;
   (* bus=WB bus_spacing=10 *) input [64:0]          u3_B;
@@ -121,7 +120,6 @@ module fu_alu(
   input [3:0]           u4_B_fuufwd;
   input [3:0]           u4_S_fufwd;
   input [3:0]           u4_S_fuufwd;
-  input [2:0]           u4_rmode;
 
   (* bus=WB bus_spacing=10 *)input [64:0]          u5_A;
   (* bus=WB bus_spacing=10 *)input [64:0]          u5_B;
@@ -152,7 +150,6 @@ module fu_alu(
   input [3:0]           u6_B_fuufwd;
   input [3:0]           u6_S_fufwd;
   input [3:0]           u6_S_fuufwd;
-  input [2:0]           u6_rmode;
   input [3:0]		u6_attr;
 
   (* register equiload  bus=WB bus_spacing=10  *) input [64:0] FU0;
@@ -1022,9 +1019,9 @@ module fu_alu(
 	  u6_isSub_reg[2]=1'b0;
 	  u6_isSub_reg[5:3]=3'd1;
       end
-      u2_rmode_reg<=u2_rmode^{2'b0,u2_isSub_reg[1]};
-      u4_rmode_reg<=u4_rmode^{2'b0,u4_isSub_reg[1]};
-      u5_rmode_reg<=u6_rmode^{2'b0,u6_isSub_reg[1]};
+      u2_rmode_reg<=u2_op[20:18]^{2'b0,u2_isSub_reg[1]};
+      u4_rmode_reg<=u4_op[20:18]^{2'b0,u4_isSub_reg[1]};
+      u5_rmode_reg<=u6_op[20:18]^{2'b0,u6_isSub_reg[1]};
   end
 endmodule
 
