@@ -40,7 +40,7 @@ module fu_alu(
     u5_S_fufwd,u5_S_fuufwd,u5_const,
   u6_A,u6_B,u6_S,u6_op,u6_ret,u6_rten,u6_clkEn,
     u6_A_fufwd,u6_A_fuufwd,u6_B_fufwd,u6_B_fuufwd,
-    u6_S_fufwd,u6_S_fuufwd,u4_rmode,
+    u6_S_fufwd,u6_S_fuufwd,u6_rmode,u6_attr,
   FU0, FU1,  FU2,  FU3,
   FU4, FU5,  FU6,  FU7,
   FU8, FU9,
@@ -153,6 +153,7 @@ module fu_alu(
   input [3:0]           u6_S_fufwd;
   input [3:0]           u6_S_fuufwd;
   input [2:0]           u6_rmode;
+  input [3:0]		u6_attr;
 
   (* register equiload  bus=WB bus_spacing=10  *) input [64:0] FU0;
   (* register equiload  bus=WB bus_spacing=10  *) input [64:0] FU1;
@@ -225,6 +226,8 @@ module fu_alu(
   reg [32:0] u1_const_reg;
   reg [32:0] u2_const_reg;
   reg [32:0] u3_const_reg;
+
+  reg [3:0] u6_attr;
 
   reg [3:0] u1_sh_reg;
   reg [1:0] u1_sh2_reg;
@@ -835,12 +838,15 @@ module fu_alu(
     ==2 || u6_op_reg[7:0]==3 || u6_op_reg[7:0]==9 || u6_op_reg[7:0]==10 ||
     u6_op_reg[7:0]==11 || u6_op_reg[7:0]==5 || u6_op_reg[7:0]==7)),  
   .R(uu_A6m[2]),.C(uu_B6m[2]),
+  .attr(u6_attr_reg),
   .alt(DataAlt[0]),
   .Res(FUMUL),
   .flg(MULFL)
  );
  
   always @(posedge clk) begin
+
+      u6_attr_reg<=u6_attr;
 
       FUMUL_reg<=FUMUL;
       MULFL_reg<=MULFL;

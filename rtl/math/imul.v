@@ -23,6 +23,7 @@ module imul(
   op_prev,
   en,
   R,C,
+  attr,
   alt,
   Res,
   flg
@@ -35,6 +36,7 @@ module imul(
   input en;
   input [64:0] R;
   input [64:0] C;
+  input [3:0] attr;
   output [64:0] Res;
   output reg alt;
   output [5:0] flg;
@@ -103,7 +105,7 @@ module imul(
   assign swp_res=is_swp[0] ? {32'b0,R[7:0],R[15:8],R[23:16],R[31:24]}: 
 	  {R[7:0],R[15:8],R[23:16],R[31:24],R[39:32],R[47:40],R[55:48],R[63:56]};
 
-  agusec_mul msec(R[63:0],C[11:0],sec_res);
+  agusec_mul msec(R[63:0],C[11:0],attr,sec_res);
 
   wire [64:0] dec_res;
   reg is_dec,is_dec_reg;
