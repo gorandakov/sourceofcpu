@@ -418,7 +418,7 @@ module agu(
   
   assign mflags0=mflags[thread];
   
-  assign fault_tlb={mflags0[`mflags_cpl+1] & tlb_data[`dtlbData_sys] || mflags0[-1+`mflags_cpl] & ~&cmplxAddr[42:41], ~tlb_data[`dtlbData_na]}; 
+  assign fault_tlb={mflags0[`mflags_cpl+1] & tlb_data[`dtlbData_sys] , ~tlb_data[`dtlbData_na]}; 
   assign fault_tlb_next={mflags0[`mflags_cpl+1] & tlb_data_next[`dtlbData_sys],  ~tlb_data_next[`dtlbData_na]}; 
 
   adder #(15) nextCAddr_mod({1'b0,cmplxAddr[13:0]},15'b10000000,addrNext,1'b0,1'b1,,,,);

@@ -425,7 +425,7 @@ module agu_r(
     {6'd0,1'b0,2'd2};
   assign faultCode={3'b0,fault_cann_reg,pageFault_t_reg[1],2'b0,pageFault_t_reg[0]};//warning: unused
   
-  assign fault_tlb={mflags[`mflags_cpl+1] & tlb_data[`dtlbData_sys] || mflags[-1+`mflags_cpl] & ~&addrMain_tlb[42:41], ~tlb_data[`dtlbData_na]}; 
+  assign fault_tlb={mflags[`mflags_cpl+1] & tlb_data[`dtlbData_sys] , ~tlb_data[`dtlbData_na]}; 
   assign fault_tlb_next={mflags[`mflags_cpl+1] & tlb_data_next[`dtlbData_sys],  ~tlb_data_next[`dtlbData_na]}; 
 
   assign addrTlb=addrMain_tlb;
