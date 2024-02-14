@@ -246,6 +246,8 @@ module smallInstr_decoder(
   
   wire flags_wrFPU;
 
+  wire [3:0] oddmode=instrQ[`instrQ_attr];
+
   reg [OPERATION_WIDTH-1:0] poperation[TRICNT_TOP-1:0];
   reg [REG_WIDTH-2:0] prA[TRICNT_TOP-1:0];
   reg prA_use[TRICNT_TOP-1:0];
@@ -1340,6 +1342,7 @@ module smallInstr_decoder(
           {2'b10,instr[10:8],opcode_main[0]} : {1'b0,instr[11:8],opcode_main[0]};
       if (magic==4'b0111) begin
           pconstant[19]={20'b0,instr[59:16]};
+          if (oddmode[3]) perror[19]=2'b1;
       end
       poperation[19][12:6]=7'b0;
       pisIPRel[19]=1'b1;
@@ -1373,7 +1376,7 @@ module smallInstr_decoder(
       end
       if (opcode_main[0] && ((opcode_main[7:1]==7'b1011000 && instr[10])||(opcode_main[7:1]!=7'b1011000) )
           perror[19]=2'b1;
-      if (poperation[19][5:1]==5'h16) begin poperation[19][7:0]=`op_cax; poperation[19][9:8]=2'b0; pport[19]=PORT_ALU; end
+      if (poperation[19][5:1]==5'h16) begin poperation[19][7:0]=`op_cax; poperation[19][9:8]=2'b0; pport[19]=PORT_ALU; if (oddmode[3]) perror[19]=2'b1; end
       if (poperation[19][5:1]==5'h17 && poperation[19][0]) perror[19]=1'b1;
       if (magic[1:0]==2'b01 && instr[17]) perror[19]=1;
       
@@ -1577,7 +1580,7 @@ module smallInstr_decoder(
 	  poperation[28][12]=1'b1;
 	  pisIPRel[28]=1'b1;
 	  prT[28]=instr[12:8];
-	  if (instr[15:13]!=0) perror[28]=1;
+	  if (instr[15:13]!=0 || oddmode[3]) perror[28]=1;
           poperation[28][12]=1'b1;
           if (magic==4'b0111) pconstant[28]={20'b0,instr[59:16]};
           //WARNING: loads IP only; no offset
@@ -1648,7 +1651,7 @@ module smallInstr_decoder(
 	      5: poperation[30]=`op_imul32_64;
 	      6: poperation[30]=`op_imul64;
 	      7: poperation[30]=`op_limul64;
-	      8: begin poperation[30]=`op_enptr; pport[30]=PORT_ALU; prB_use[30]=1'b0; end
+	      8: begin poperation[30]=`op_enptr; pport[30]=PORT_ALU; prB_use[30]=1'b0; if (oddmode[3]) perror[30]=2'b1; end
 	      9: begin poperation[30]=`op_unptr; pport[30]=PORT_ALU; prB_use[30]=1'b0; end
 	      default: perror[30]=2'b1;
       endcase
