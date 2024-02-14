@@ -675,7 +675,9 @@ module predecoder_get(
     always @*
       begin
         instrEnd={4'b0,btail[16],bundle[254:240],1'b1};
-        error=cntEnd3[13] || startOff==15;
+        error=cntEnd3[13] || startOff==15 || ((~insrEnd & ~(instrEnd<<1) & ~(instrEnd<<2) & ~(instrEnd<<3) 
+          & ~(instrEnd<<4) & ((instrEnd<<5) | (instrEnd<<6)| (instrEnd<<7) | (instrEnd<<8)
+          | (instrEnd<<9)| (instrEnd<<10))!=0;
         isAvx=bundle[255];
         jerror=~lcnt_or_less[1] || ~jcnt_or_less[4];
         flag_bits0={btail[16],flag_bits};
