@@ -4988,7 +4988,7 @@ module backend(
   assign insert_isData=insBus_req[9:5]==BUS_ID && !insBus_req[4] && insBus_en;
 `ifdef simulation
   agu_block #(BUS_ID) agu_aligned(
-  .clk(clk), .rst(rst),
+  .clk(clk), .rst(rst|do_sched_rst),
   .clkREF(clkREF),.clkREF2(clkREF2),
   .except(except),
   .excpt_gate(),
@@ -5174,7 +5174,7 @@ module backend(
   );
 `else
 agu_block #(BUS_ID) agu_aligned(
-  .clk(clk), .rst(rst),
+  .clk(clk), .rst(rst|do_sched_rst),
   .clkREF(clkREF),.clkREF2(clkREF2),
   .except(except),
   .excpt_gate(),
@@ -5362,7 +5362,7 @@ agu_block #(BUS_ID) agu_aligned(
  
   fun_lsq LSQ_grouped(
   .clk(clk),
-  .rst(rst),
+  .rst(rst|do_rst_sched),
   .except(except),
   .bus_holds_agu_reg2(bus_holds_agu_reg2),
   .miss_holds_agu_reg2(miss_holds_agu_reg2),
