@@ -15,10 +15,11 @@ limitations under the License.
 */
 
 module agusec_mul(
-  A,B,res);
+  A,B,attr,res);
 
   input [63:0] A;
   input [11:0] B;
+  input [3:0] attr;
   output [63:0] res;
 
   wire [7:0] low;
@@ -31,7 +32,7 @@ module agusec_mul(
 
   
 
-  assign res[`ptr_exp]=B[11:7];
+  assign res[`ptr_exp]=(B[11:7]>19 && attr[3]) ? 5'b0 : B[11:7];
   assign res[`ptr_low]=low[7:1];
   assign res[`ptr_hi]=hi;
   assign res[`ptr_on_low]=1'b1;
