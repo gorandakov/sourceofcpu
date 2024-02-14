@@ -5,10 +5,10 @@ typedef struct kmembuf_entry {
   void *data;
 };
 
-typedef struct _kmembuf {
+template<int cnt> struct _kmembuf {
   long int count;
   long int min_est_size;
-  struct kmembuf_entry item[];  
+  struct kmembuf_entry item[cnt];  
   _kmembuf() {
   }
 } *pkmembuf;
