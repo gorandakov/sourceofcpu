@@ -1026,7 +1026,7 @@ module cntrl_find_outcome(
     {indir_IP[59:50],2'b0,indir_IP[49:45],2'b0,indir_IP[44],indir_IP[43:5],indir_IP[4:1]^{3'b0,&indir_IP[4:1]}} : 63'bz;
   assign exceptIP_d=(break_exceptn) ? {excpt_handlerIP[62:43],excpt_handlerIP[42:11],excpt_code[5:0],5'b0} : 63'bz;
   assign exceptIP_d=(break_replay|break_replayS) ? {bbaseIP[62:43],breakIP} : 63'bz;
-  assign exceptIP_d=(break_pending | ~has_break) ? {bbaseIP[62:43],breakIP} : 63'bz;
+  assign exceptIP_d=(break_pending | ~has_break) ? tire_thread_reg : oldbrk : {bbaseIP[62:43],breakIP} : 63'bz;
 
   assign except_attr_d=(break_jump0 & jump0_taken) ? jump0Attr : 4'bz;
   assign except_attr_d=(break_jump1 & jump1_taken) ? jump1Attr : 4'bz;
@@ -1481,6 +1481,7 @@ module cntrl_find_outcome(
 //        archReg_xcpt_code[1]<=8'b0;	
 	  archReg_proc[0]<=16'b0;
 	  archReg_proc[1]<=16'b0;
+          oldbrk<=0;
       end else begin
           tire0_rT<=rTe[0];
           tire1_rT<=rTe[1];
@@ -1557,6 +1558,8 @@ module cntrl_find_outcome(
           except_set_instr_flag<=break_replay&!break_replayS;
           except_jmp_mask_en<=(break_jump0 | break_jump1) && except_d;
           except_jmp_mask<=break_jump0 ? jump0JMask : jump1JMask;
+          
+          if (!tire_thread_reg) oldbrk<={bbaseIP[62:43],breakIP};
 
           csrss_no<=csrss_no_d;
           //csrss_thread<=except_thread_d;

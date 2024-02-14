@@ -1451,6 +1451,7 @@ module heptane_core(
   ww ww_mod(
   clk,
   rst,
+  rst_sched,
   exceptx,
   {exceptIPx,1'b0},
 //
@@ -1461,6 +1462,7 @@ module heptane_core(
   except_flagx,
   except_jmaskx,
   except_jmask_enx,
+  
   jupd0_enx,jupdt0_enx,jupd0_ght_enx,jupd0_addrx,jupd0_baddrx,jupd0_scx,jupd0_tkx,
   jupd1_enx,jupdt1_enx,jupd1_ght_enx,jupd1_addrx,jupd1_baddrx,jupd1_scx,jupd1_tkx,
 //
@@ -1813,8 +1815,8 @@ module heptane_core(
   clk,clkREF,clkREF2,clkREF3,clkREF4,clkREF5,stall_clkREF,
   rst,
   stall,
-
   1'b0,
+  rst_sched,
   bundleFeed,
   except,
   exceptIP,

@@ -3,6 +3,7 @@
 module ww(
   clk,
   rst,
+  sched_rst,
   except,
   exceptIP,
 //
@@ -370,6 +371,7 @@ module ww(
   parameter [4:0] BUS_ID=0;
   input clk;
   input rst;
+  input sched_rst;
   input except;
   input [VIRT_WIDTH-1:0] exceptIP;
   input exceptThread;
@@ -972,10 +974,11 @@ module ww(
 frontendSelf #(0,BUS_ID) frontA_mod(
   clk,
   rst,
+  sched_rst,
   except,
   exceptIP,
 //
-  exceptThread,
+  exceptThread&~sched_rst,
   exceptAttr,
   except_due_jump,
   except_ght,
@@ -1039,10 +1042,11 @@ frontendSelf #(0,BUS_ID) frontA_mod(
 frontendSelf #(1,BUS_ID) frontB_mod(
   clk,
   rst,
+  sched_rst,
   except,
   exceptIP,
 //
-  exceptThread,
+  exceptThread&~sched_rst,
   exceptAttr,
   except_due_jump,
   except_ght,

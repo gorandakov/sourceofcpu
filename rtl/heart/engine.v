@@ -31,6 +31,7 @@ module backend(
   stall_clkREF,
   rst,
   doStall,
+  do_rst_sched,
 
   thread,
   bundle_in,
@@ -453,6 +454,8 @@ module backend(
   input stall_clkREF;
   input rst;
   output doStall;
+
+  output do_rst_sched;
   
   input thread;
   input bundle_in;
