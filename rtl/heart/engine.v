@@ -1007,6 +1007,8 @@ module backend(
   wire rsStall;
   wire [3:0] rsDoStall;
 
+  wire do_rst_sched;
+
   reg [8:0] rs_xport;
 
   wire [8:0] outXAM;
@@ -4225,7 +4227,7 @@ module backend(
 `endif
   rs rs0_mod(
   .clk(clk),
-  .dataRst(rst),.nonDataRst(except|rst),.rst_thread(1'b0),
+  .dataRst(rst|do_rst_sched),.nonDataRst(except|rst),.rst_thread(1'b0),
   .stall(stall_rs[m]),
   .doStall(doStall_rs[m]),
   .FU0Hit(FU0Hit),.FU1Hit(FU1Hit),.FU2Hit(FU2Hit),.FU3Hit(FU3Hit),
@@ -5779,6 +5781,7 @@ dcache1 L1D_mod(
   cntrl_find_outcome cntrl_unit_mod(
   .clk(clk),.rst(rst),
   .stall(stall_cntrl),.doStall(doStall_cntrl),
+  .do_rst_sched(do_rst_sched),
   .new_en(bundle_in_reg2),
   .new_thread(thread_reg2),
   .new_addr(II_upper),
@@ -5986,7 +5989,7 @@ dcache1 L1D_mod(
 
   rs_s storeRs(
   .clk(clk),
-  .dataRst(rst),.nonDataRst(except|rst),.rst_thread(1'b0),
+  .dataRst(rst|do_rst_sched),.nonDataRst(except|rst),.rst_thread(1'b0),
   .stall(stall_rs[3]),
   .doStall(doStall_rs[3]),
   .FU0Hit(FU0Hit),.FU1Hit(FU1Hit),.FU2Hit(FU2Hit),.FU3Hit(FU3Hit),
