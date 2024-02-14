@@ -198,6 +198,7 @@ endmodule
 module cntrl_find_outcome(
   clk,rst,
   stall,doStall,
+  do_sched_reset,
   except,
   exceptIP,
   except_attr,
@@ -300,6 +301,8 @@ module cntrl_find_outcome(
   input rst;
   input stall;
   output doStall;
+
+  output reg do_sched_reset;
   
   output reg except;
   output reg [62:0] exceptIP;
@@ -636,6 +639,9 @@ module cntrl_find_outcome(
   
   wire [BOB_WIDTH-1:0] bob_wdata;
   wire [BOB_WIDTH-1:0] bob_rdata;
+
+  reg [27:0] sched_rst_cnt;
+  wire [27:0] sched_rst_cnt_d;
   
   wire [9:0][8:0] IPOff;
   wire [9:0][2:0] magicO;
@@ -1020,7 +1026,7 @@ module cntrl_find_outcome(
     {indir_IP[59:50],2'b0,indir_IP[49:45],2'b0,indir_IP[44],indir_IP[43:5],indir_IP[4:1]^{3'b0,&indir_IP[4:1]}} : 63'bz;
   assign exceptIP_d=(break_exceptn) ? {excpt_handlerIP[62:43],excpt_handlerIP[42:11],excpt_code[5:0],5'b0} : 63'bz;
   assign exceptIP_d=(break_replay|break_replayS) ? {bbaseIP[62:43],breakIP} : 63'bz;
-  assign exceptIP_d=(break_pending | ~has_break) ? 63'b0 : 63'bz;
+  assign exceptIP_d=(break_pending | ~has_break) ? {bbaseIP[62:43],breakIP} : 63'bz;
 
   assign except_attr_d=(break_jump0 & jump0_taken) ? jump0Attr : 4'bz;
   assign except_attr_d=(break_jump1 & jump1_taken) ? jump1Attr : 4'bz;
@@ -1032,7 +1038,7 @@ module cntrl_find_outcome(
   assign except_attr_d=(break_jump1 & ~jump1_taken && (jump1Type==5'h19)) ? {indir_IP[60],1'b0,indir_IP[62],indir_IP[63]} : 4'bz;
   assign except_attr_d=(break_exceptn) ? {1'b0,1'b0,1'b0,1'b1} : 4'bz;
   assign except_attr_d=(break_replay|break_replayS) ? attr : 4'bz;
-  assign except_attr_d=(break_pending | ~has_break) ? 4'b0 : 4'bz;
+  assign except_attr_d=(break_pending | ~has_break) ? attr : 4'bz;//?attr2?
 
   assign csrss_no_d=(break_jump0 && jump0Type==5'b11001) ? {tire_thread_reg,jump0IP[14:0]} : 16'bz;
   assign csrss_no_d=(break_jump1 && jump1Type==5'b11001) ? {tire_thread_reg,jump1IP[14:0]} : 16'bz;
@@ -1219,7 +1225,7 @@ module cntrl_find_outcome(
 
   assign indir_error=indirMismatch&~indir_IP[64];
 
-  assign except_d=has_break && ~break_pending && has_some && ~init && indir_ready|~has_indir;
+  assign except_d=(has_break && ~break_pending && has_some && ~init && indir_ready|~has_indir) || (~doRetire && &rst_sched_cnt);
   
   assign tire8_rF[3:0]=4'd8;
   assign tire7_rF[3:0]=4'd7;
@@ -1253,7 +1259,7 @@ module cntrl_find_outcome(
 
   bob_addr addr_mod(
   .clk(clk),
-  .rst(rst),
+  .rst(rst|(~doRetire && &rst_sched_cnt)),
   .except(except_d),
   .new_en(new_en&~except),
   .new_addr(new_addr),
@@ -1349,6 +1355,17 @@ module cntrl_find_outcome(
       end else if (init) begin
 	  initcount<=initcount_d;
 	  if (initcount==6'd47) init<=1'b0;
+      end
+      if (rst) begin
+          sched_rst_cnt<=0;
+          do_sched_reset<=0;
+      end else if (!doRetire && !except) begin
+          sched_rst_cnt<=sched_rst_cnt_d;
+          if (&sched_rst_cnt) do_sched_reset<=1'b1;
+          if (sched_rst_cnt==0) do_sched_reset<=1'b0;
+      end else begin
+          sched_rst_cnt<=0;
+          do_sched_reset<=1'b0;
       end
       if (rst) begin
 	  excpt_fpu=11'b0;
