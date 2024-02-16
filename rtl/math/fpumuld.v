@@ -125,13 +125,9 @@ module fpucadd(clk,rst,A,A_alt,B,pook_in,and1,or1,copyA,en,rmode,res,res_hi,xtra
   wire dummy1_4;
   wire [15:0] emsk=isDBL ? 16'h87ff : 16'hffff;
 //  reg or1,and1;
- //tbd: enable bit 
-`ifndef simulation
+
   fpucadd_compress compr_mod(clk,A[63:0],B[63:0],part0,part1,or1,and1);
   adder #(128) prodAdd_mod(part0,part1,prod,1'b0,1'b1,,,,);
-`else
-  assign prod=((A[63:0]|{12'b0,or1,51'b0})&{{12{and1}},52'b0})*((B[63:0])|{12'b0,or1,51'b0})&{{12{and1}},52'b0});
-`endif
 
   adder2oi #(64) resAddE_mod(enbit_ext,prod_reg[126:63],rndbit_ext,{res[63:33],res[31:0],dummy1_1},{dummy1_2,res[63:33],res[31:0]},1'b0,
       prod_reg[127] & EXT_rnd1 & ~spec_any & en_reg ||
