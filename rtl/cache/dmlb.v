@@ -403,7 +403,7 @@ module dtlb(
         .newLRU(newLru[k]),
         .hitLRU(write_wen ? hitLruW: hitLru),
         .init(init),
-        .en(read_clkEn|write_wen)
+        .en(write_wen)
         );
 
 	assign hitLru=read_hitL_way[k][0] ? lru_way[k] : 3'bz;
