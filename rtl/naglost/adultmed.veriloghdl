@@ -1344,7 +1344,7 @@ module smallInstr_decoder(
           pconstant[19]={20'b0,instr[59:16]};
           if (oddmode[3]) perror[19]=2'b1;
       end
-      if (oddmode[3]) perror[19]=2'b1;
+      if (oddmode[3] && opcode_main[0]) perror[19]=2'b1;
       poperation[19][12:6]=7'b0;
       pisIPRel[19]=1'b1;
       prA_use[19]=1'b0;
