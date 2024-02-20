@@ -1344,6 +1344,7 @@ module smallInstr_decoder(
           pconstant[19]={20'b0,instr[59:16]};
           if (oddmode[3]) perror[19]=2'b1;
       end
+      if (oddmode[3]) perror[19]=2'b1;
       poperation[19][12:6]=7'b0;
       pisIPRel[19]=1'b1;
       prA_use[19]=1'b0;
@@ -1512,7 +1513,10 @@ module smallInstr_decoder(
       8'd189: poperation[26][7:0]=`op_sxt8_32;
       endcase
       //verilator lint_on CASEINCOMPLETE
-      if (magic[3:0]==4'hf) pconstant[26]=instr[79:16]; 
+      if (magic[3:0]==4'hf) begin
+          pconstant[26]=instr[79:16]; 
+          if (oddmode[3]) pconstant[26][63:44]=20'h1;//invalid range; pls note that code pointers don't check bounds!
+      end
       if (magic[1:0]==2'b01) begin
           prA[26]={instr[17],instr[11:8]};
           prT[26]={instr[17],instr[11:8]};
