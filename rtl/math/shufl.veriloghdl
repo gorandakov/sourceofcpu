@@ -99,12 +99,12 @@ module fperm(
     genvar k;
     for(k=0;k<12;k=k+1) begin : shf
         assign valDF=df[k] ? {B[65],B[63:53]}<<(11-k) : 12'bz;
-        assign expDF=df[k] ? k+BIAS_D : 12'bz;
+        assign expDF=df[k] ? k-BIAS_D : 12'bz;
         if (k<9) begin
             assign valDSF0=dsf0[k] ? {B[65],B[63:56]}<<(8-k) : 9'bz;
-            assign expDSF0=dsf0[k] ? k+BIAS_S : 9'bz;
+            assign expDSF0=dsf0[k] ? k-BIAS_S : 9'bz;
             assign valDSF1=dsf1[k] ? {B[32],B[30:23]}<<(8-k) : 9'bz;
-            assign expDSF1=dsf1[k] ? k+BIAS_D : 9'bz;
+            assign expDSF1=dsf1[k] ? k-BIAS_S : 9'bz;
         end
     end
   endgenerate
@@ -115,12 +115,12 @@ module fperm(
   assign valDSF1=dsf1_has[k] ? 9'bz : 9'b0;
   assign expDSF1=dsf1_has ? 9'bz : 9'b0;
   
-  adder #(12) add_dbla(BIAS_D,~{B[65],B[63:53]},exp_D,1'b1,is_sqrt,,,,);
-  adder #(12) add_dblb(BIAS_D,~{1'b0,B[65],B[63:54]},exp_D,1'b1,~is_sqrt,,,,);
-  adder #(9) add_snga(BIAS_S,~{B[65],B[63:56]},exp_X,1'b1,is_sqrt,,,,);
-  adder #(9) add_sngb(BIAS_S,~{1'b0,B[65],B[63:57]},exp_X,1'b1,~is_sqrt,,,,);
-  adder #(9) add_sngc(BIAS_S,~{B[32],B[30:23]},exp_X1,1'b1,is_sqrt,,,,);
-  adder #(9) add_sngd(BIAS_S,~{1'b0,B[32],B[30:24]},exp_X1,1'b1,~is_sqrt,,,,);
+  adder #(12) add_dbla(BIAS_D<<1,~{B[65],B[63:53]},exp_D,1'b1,is_sqrt,,,,);
+  adder #(12) add_dblb(BIAS_D<<1,~{1'b0,B[65],B[63:54]},exp_D,1'b1,~is_sqrt,,,,);
+  adder #(9) add_snga(BIAS_S<<1,~{B[65],B[63:56]},exp_X,1'b1,is_sqrt,,,,);
+  adder #(9) add_sngb(BIAS_S<<1,~{1'b0,B[65],B[63:57]},exp_X,1'b1,~is_sqrt,,,,);
+  adder #(9) add_sngc(BIAS_S<<1,~{B[32],B[30:23]},exp_X1,1'b1,is_sqrt,,,,);
+  adder #(9) add_sngd(BIAS_S<<1,~{1'b0,B[32],B[30:24]},exp_X1,1'b1,~is_sqrt,,,,);
 
   assign resY=A[67:66]==`ptype_dbl && ~tbl_read && ~(is_sqrt&is_div) ? {B[67:66],exp_D[11],B[63],exp_D[10:0],53'b0} : 68'bz;
   assign resY=A[67:66]!=`ptype_dbl && ~tbl_read && ~(is_sqrt&is_div) ? {B[67:66],exp_X[8],B[63],exp_X[7:0],23'b0,
