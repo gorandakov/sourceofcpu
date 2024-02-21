@@ -200,10 +200,10 @@ module dtlb_way(
         assign valid[p]=read_data_ram[p][`dtlb_valid];
         assign shared[p]=read_data_ram[p][`dtlb_shr];
 
-        assign read_hitL[p]=valid[p] && addr[p][VADDR_WIDTH-17+:3]!=3'b111 && 
+        assign read_hitL[p]=valid[p] && addr[p][VADDR_WIDTH-18+:3]!=3'b111 && 
           (vaddr[p]==addr[p] || ({sproc,addr[p][29:0]}==vaddr[p] && 
           shared[p]));
-        assign read_hit[p]=read_hitL[p] || addr[p][VADDR_WIDTH-17+:3]==3'b111;
+        assign read_hit[p]=read_hitL[p] || addr[p][VADDR_WIDTH-18+:3]==3'b111;
   
         assign read_data0[p]=read_hitL[p] ? read_data_ram[p][`dtlb_data1] : 'z;
         assign read_data1[p]=read_hitL[p] ? read_data_ram[p][`dtlb_data2] : 'z;
@@ -346,9 +346,9 @@ module dtlb(
   wire [5:0][OUTDATA_WIDTH-1:0] read_data1;
   wire [5:0][OUTDATA_WIDTH-1:0] read_data2;
 
-  wire [OUTDATA_WIDTH-1:0] pmm_read_data0[11:0];
-  wire [OUTDATA_WIDTH-1:0] pmm_read_data1[11:0];
-  wire [OUTDATA_WIDTH-1:0] pmm_read_data2[11:0];
+  wire [OUTDATA_WIDTH-1:0] pmm_data0[11:0];
+  wire [OUTDATA_WIDTH-1:0] pmm_data1[11:0];
+  wire [OUTDATA_WIDTH-1:0] pmm_data2[11:0];
 
   
   wire [5:0]read_hitL,read_hitH;
@@ -409,10 +409,75 @@ module dtlb(
 	assign hitLru=read_hitL_way[k][0] ? lru_way[k] : 3'bz;
 	assign hitLruW=3'd7;
         if (k<6) begin
-            assign read_data0[k]=~read_hitL[0] ? pmm_data0[k*2+addr0[46]] : 'z;
-            assign read_data1[k]=~read_hitL[k] ? pmm_data1[k*2+addr0[46]] : 'z;
-            assign read_data2[k]=~read_hitL[k] ? pmm_data2[k*2+addr0[46]] : 'z;
-        end	
+            assign read_data0[k]=~read_hitL[0] ? pmm_data0[k*2+&addr0[46:45]] : 'z;
+            assign read_data1[k]=~read_hitL[k] ? pmm_data1[k*2+&addr0[46:45]] : 'z;
+            assign read_data2[k]=~read_hitL[k] ? pmm_data2[k*2+&addr0[46:45]] : 'z;
+            
+            assign pmm_data0[k*2+0][`dtlbData_phys]=addr0[k][29:0];
+            assign pmm_data0[k*2+1][`dtlbData_phys]=addr0[k][29:0];
+            assign pmm_data1[k*2+0][`dtlbData_phys]=addr0[k][29:0];
+            assign pmm_data1[k*2+1][`dtlbData_phys]=addr0[k][29:0];
+            adder_inc #(30) add_mod(addr0[k][29:0],myaddr0[k],1'b1,1'b1,);
+            assign pmm_data2[k*2+0][`dtlbData_phys]=myaddr0[k][29:0];
+            assign pmm_data2[k*2+1][`dtlbData_phys]=myaddr0[k][29:0];
+            
+            assign pmm_data0[k*2+0][`dtlbData_sys]=1'b1;
+            assign pmm_data0[k*2+1][`dtlbData_sys]=1'b1;
+            assign pmm_data0[k*2+0][`dtlbData_wp]=4'b0;
+            assign pmm_data0[k*2+1][`dtlbData_wp]=4'b1111;
+            assign pmm_data0[k*2+0][`dtlbData_na]=1'b1;
+            assign pmm_data0[k*2+1][`dtlbData_na]=1'b1;
+            assign pmm_data0[k*2+0][`dtlbData_ne]=1'b1;
+            assign pmm_data0[k*2+1][`dtlbData_ne]=1'b1;
+            assign pmm_data0[k*2+0][`dtlbData_glo]=1'b1;
+            assign pmm_data0[k*2+1][`dtlbData_glo]=1'b1;
+            assign pmm_data0[k*2+0][`dtlbData_type]=2'b0;
+            assign pmm_data0[k*2+1][`dtlbData_type]=2'b11;//texture
+            assign pmm_data0[k*2+0][`dtlbData_acc]=1'b1;
+            assign pmm_data0[k*2+1][`dtlbData_acc]=1'b1;
+            assign pmm_data0[k*2+0][`dtlbData_wrt]=1'b1;
+            assign pmm_data0[k*2+1][`dtlbData_wrt]=1'b1;
+            assign pmm_data0[k*2+0][`dtlbData_subpage]=1'b0;
+            assign pmm_data0[k*2+1][`dtlbData_subpage]=1'b0;
+
+            assign pmm_data1[k*2+0][`dtlbData_sys]=1'b1;
+            assign pmm_data1[k*2+1][`dtlbData_sys]=1'b1;
+            assign pmm_data1[k*2+0][`dtlbData_wp]=4'b0;
+            assign pmm_data1[k*2+1][`dtlbData_wp]=4'b1111;
+            assign pmm_data1[k*2+0][`dtlbData_na]=1'b1;
+            assign pmm_data1[k*2+1][`dtlbData_na]=1'b1;
+            assign pmm_data1[k*2+0][`dtlbData_ne]=1'b1;
+            assign pmm_data1[k*2+1][`dtlbData_ne]=1'b1;
+            assign pmm_data1[k*2+0][`dtlbData_glo]=1'b1;
+            assign pmm_data1[k*2+1][`dtlbData_glo]=1'b1;
+            assign pmm_data1[k*2+0][`dtlbData_type]=2'b0;
+            assign pmm_data1[k*2+1][`dtlbData_type]=2'b11;//texture
+            assign pmm_data1[k*2+0][`dtlbData_acc]=1'b1;
+            assign pmm_data1[k*2+1][`dtlbData_acc]=1'b1;
+            assign pmm_data1[k*2+0][`dtlbData_wrt]=1'b1;
+            assign pmm_data1[k*2+1][`dtlbData_wrt]=1'b1;
+            assign pmm_data1[k*2+0][`dtlbData_subpage]=1'b0;
+            assign pmm_data1[k*2+1][`dtlbData_subpage]=1'b0;
+
+            assign pmm_data2[k*2+0][`dtlbData_sys]=1'b1;
+            assign pmm_data2[k*2+1][`dtlbData_sys]=1'b1;
+            assign pmm_data2[k*2+0][`dtlbData_wp]=4'b0;
+            assign pmm_data2[k*2+1][`dtlbData_wp]=4'b1111;
+            assign pmm_data2[k*2+0][`dtlbData_na]=1'b1;
+            assign pmm_data2[k*2+1][`dtlbData_na]=1'b1;
+            assign pmm_data2[k*2+0][`dtlbData_ne]=1'b1;
+            assign pmm_data2[k*2+1][`dtlbData_ne]=1'b1;
+            assign pmm_data2[k*2+0][`dtlbData_glo]=1'b1;
+            assign pmm_data2[k*2+1][`dtlbData_glo]=1'b1;
+            assign pmm_data2[k*2+0][`dtlbData_type]=2'b0;
+            assign pmm_data2[k*2+1][`dtlbData_type]=2'b11;//texture
+            assign pmm_data2[k*2+0][`dtlbData_acc]=1'b1;
+            assign pmm_data2[k*2+1][`dtlbData_acc]=1'b1;
+            assign pmm_data2[k*2+0][`dtlbData_wrt]=1'b1;
+            assign pmm_data2[k*2+1][`dtlbData_wrt]=1'b1;
+            assign pmm_data2[k*2+0][`dtlbData_subpage]=1'b0;
+            assign pmm_data2[k*2+1][`dtlbData_subpage]=1'b0;
+      end	
       end
   endgenerate
   
