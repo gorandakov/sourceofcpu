@@ -13,7 +13,9 @@ struct transl_context {
     volatile unsigned long curpos_native;
     virtual int prealloc_page(unsigned long addr)=0; //returns 0 on success
     virtual int is_allocated_page(unsigned long addr)=0;
-    virtual int is_opcode_fixed_jump(unsigned int opcode,unsigned long &jmpaddr)=0; //returs 1 on fixed jump
+    virtual int is_opcode_fixed_jump(unsigned long opcode,unsigned long &jmpaddr)=0; //returs 1 on fixed jump
+    virtual int is_opcode_addition(unsigned long opcode)=0; //returs 1 on fixed jump
+    virtual int is_opcode_fpu_cmp(unsigned long opcode)=0; //returs 1 on fixed jump
     virtual int call_pinvoke(unsigned long foreign_val, unsigned long A, unsigned long B)=0;
     virtual void noop_pinvoke(void)=0;
     int poke_target(unsigned long address, int flags) {
@@ -52,4 +54,25 @@ struct transl_context {
     unsigned long size_from_foreign(unsigned long val) {
         return ((val>>48)&7)+((val>>51)&7)+~((val>>45)&7)+1;
     }
+    void poke_through(bool starts_with_add, bool starts_with_fpu_cmp);
 };
+void transl_context::poke_through(bool starts_with_add, bool starts_with_fpu_cmp) {
+    unsigned long long address=0;
+    unsigned long long target_address;
+    unsigned long A,B;
+    bool flag=true,was_addition=starts_with_add,was_fpu_cmp=starts_with_fpu_cmp;
+    do {
+        A=((unsigned long *) (((char *) curpage)+address));
+        B=((unsigned long *) (((char *) curpage)+address))+1;
+        unsigned long fr=foreign(A,B);
+        unsigned long sz=size_from_foreign(fr);
+        if (is_opcode_fixed_jump(fr,target_address)) {
+            poke_target(address,was_addition+2*was_fpu_cmp);
+        }
+        was_addition=is_opcode_addition(fr);
+        was_fpu_cmp=is_opcode_fpu_cmp(fr);
+        address+=sz;
+        if (address>4095) flag=false;
+    } while (flag);
+
+}
