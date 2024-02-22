@@ -14,9 +14,9 @@ struct transl_context {
     virtual int prealloc_page(unsigned long addr)=0; //returns 0 on success
     virtual int is_allocated_page(unsigned long addr)=0;
     virtual int is_opcode_fixed_jump(unsigned long opcode,unsigned long &jmpaddr)=0; //returs 1 on fixed jump
-    virtual int is_opcode_addition(unsigned long opcode)=0; //returs 1 on fixed jump
-    virtual int is_opcode_fpu_cmp(unsigned long opcode)=0; //returs 1 on fixed jump
-    virtual int call_pinvoke(unsigned long foreign_val, unsigned long A, unsigned long B)=0;
+    virtual int is_opcode_flag_set(unsigned long opcode)=0; //returs 1 on fixed jump
+    virtual int is_opcode_jmpflag(unsigned long opcode)=0; //returs 1 on fixed jump
+    virtual int call_pinvoke(unsigned long foreign_val, unsigned long A, unsigned long B,unsigned long IP,int jmptype)=0;
     virtual void noop_pinvoke(void)=0;
     int poke_target(unsigned long address, int flags) {
         if (is_allocated_page(address)) {
@@ -54,12 +54,20 @@ struct transl_context {
     unsigned long size_from_foreign(unsigned long val) {
         return ((val>>48)&7)+((val>>51)&7)+~((val>>45)&7)+1;
     }
+    int is_called(unsigned long addr,int fl) {
+
+    }
+    int create_callout(unsigned long addr, int from, int to) {
+
+    }
     void poke_through(bool starts_with_add, bool starts_with_fpu_cmp);
+    void transl_through(int jmptype, int start_off, int has_next);
 };
-void transl_context::poke_through(bool starts_with_add, bool starts_with_fpu_cmp) {
-    unsigned long long address=0;
+void transl_context::poke_through(int jmptype, int start_off) {
+    unsigned long long address=start_off;
     unsigned long long target_address;
     unsigned long A,B;
+    int jmptype,fl2;
     bool flag=true,was_addition=starts_with_add,was_fpu_cmp=starts_with_fpu_cmp;
     do {
         A=((unsigned long *) (((char *) curpage)+address));
@@ -67,12 +75,40 @@ void transl_context::poke_through(bool starts_with_add, bool starts_with_fpu_cmp
         unsigned long fr=foreign(A,B);
         unsigned long sz=size_from_foreign(fr);
         if (is_opcode_fixed_jump(fr,target_address)) {
-            poke_target(address,was_addition+2*was_fpu_cmp);
+            poke_target(address,jmptype);
         }
-        was_addition=is_opcode_addition(fr);
-        was_fpu_cmp=is_opcode_fpu_cmp(fr);
+        if (is_called(address,fl2) && fl2!=jmptype) {
+            create_callout(address,fl2,jmptype);
+        }
+        if (is_opcode_flag_set(fr)) jmptype=is_opcode_jmpflag(fr);
         address+=sz;
         if (address>4095) flag=false;
+    } while (flag);
+
+}
+
+void transl_context::transl_through(int jmptype, int start_off, int has_next) {
+    unsigned long long address=start_off;
+    unsigned long long target_address;
+    unsigned long A,B;
+    bool flag=true,was_addition=starts_with_add,was_fpu_cmp=starts_with_fpu_cmp;
+    has_next=has_next ? 4223 :4095;
+    do {
+        A=((unsigned long *) (((char *) curpage)+address));
+        B=((unsigned long *) (((char *) curpage)+address))+1;
+        unsigned long fr=foreign(A,B);
+        unsigned long sz=size_from_foreign(fr);
+        if (is_opcode_flag_set(fr)) jmptype=is_opcode_jmpflag(fr);
+        call_pinvoke(fr,A,B,address,jmptype);
+        address+=sz;
+        if (is_opcode_reg_gen_cmp(fr)) {
+            A=((unsigned long *) (((char *) curpage)+address));
+            B=((unsigned long *) (((char *) curpage)+address))+1;
+            unsigned long fr=foreign(A,B);
+            unsigned long sz=size_from_foreign(fr);
+            if (is_opcode_fixed_jump_byte(fr)) address+=sz;
+        }
+        if (address>has_next) flag=false;//some overhang to next page!
     } while (flag);
 
 }
