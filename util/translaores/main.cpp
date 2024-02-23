@@ -11,13 +11,33 @@ struct transl_context {
     unsigned long transl_region_size;
     volatile unsigned long curpos_orig;
     volatile unsigned long curpos_native;
+    void *pinvoke_table;//8192 entries
+    const int shift_of_0x66_extra=0x22;
+    void *null_pinvoke;//1 entry for no-op pinvoke
     virtual int prealloc_page(unsigned long addr)=0; //returns 0 on success
     virtual int is_allocated_page(unsigned long addr)=0;
     virtual int is_opcode_fixed_jump(unsigned long opcode,unsigned long &jmpaddr)=0; //returs 1 on fixed jump
     virtual int is_opcode_flag_set(unsigned long opcode)=0; //returs 1 on fixed jump
     virtual int is_opcode_jmpflag(unsigned long opcode)=0; //returs 1 on fixed jump
-    virtual int call_pinvoke(unsigned long foreign_val, unsigned long A, unsigned long B,unsigned long IP,int jmptype)=0;
-    virtual void noop_pinvoke(void)=0;
+    int call_pinvoke(unsigned long foreign_val, unsigned long A, unsigned long B,unsigned long IP,int jmptype) {
+        asm("movq foreign_val, %r17\n"
+            "movq A, %r18\n"
+            "movq B, %r19\n"
+            "movq IP, %r20\n"
+            "movl jmptype,%r21\n"
+            "andl $0xfff,%r17,%r22\n"
+            "shrq $shift_of_0x66_extra-12,%r17,%r23\n"
+            "orq %r23, %r22\n"
+            "movq pinvoke_table,%r23\n"
+            "movq (%r23,%r22,8),%r23\n"
+            "wrmsr %MSR_PINVOKE, %r23\n");
+        return 0;            
+    }
+    int noop_pinvoke(void) {
+        asm("movq null_pinvoke, %r23\n"
+            "wrmsr %MSR_PINVOKE, %r23\n");
+        return 1;
+    }
     int poke_target(unsigned long address, int flags) {
         if (is_allocated_page(address)) {
             allocated:
