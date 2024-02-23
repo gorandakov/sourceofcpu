@@ -141,6 +141,7 @@ module decoder_aux_const(
   clk,
   rst,
   stall,
+  fat_stall_en,
   cls_sys,
   instr0,
   instr1,
@@ -170,7 +171,8 @@ module decoder_aux_const(
   thread,
   riscmode,
   disstruss,
-  thrmode);
+  thrmode,
+  doStall);
  
   input clk;
   input rst;
@@ -205,6 +207,7 @@ module decoder_aux_const(
   output riscmode;
   output disstruss;
   output reg [1:0] thrmode;
+  output doStall;
 
   wire [15:0] iconst[9:0];
   wire [9:0] cls_sys_first;
@@ -304,6 +307,8 @@ module decoder_aux_const(
   assign riscmode=csr_mflags[thread][21];
   assign disstruss=csr_mflags[thread][22];
 
+  assign doStall=csrss_en && csrss_addr=`csr_pinvoke && ~thread && fat_stall_en;
+
   always @(posedge clk) begin
       if (rst) begin
           csr_retIP[0]<=64'b0;
@@ -357,9 +362,9 @@ module decoder_aux_const(
           thrmode0[0]<=2'b0;
           thrmode0[1]<=2'b0;
       end else begin
-          if (!stall) thread_reg<=thread;
+          if (!stall & !doStall) thread_reg<=thread;
           if (csrss_en && ((csr_mflags[csrss_no[15]][`mflags_cpl]==2'b0 && ~csr_mflags[csrss_no[15]][`mflags_vm]) ||
-            csrss_no==`csr_FPU)) begin
+            csrss_no==`csr_FPU || csrss_no==`csr_pinvoke || csrss_no[14:0]==`csr_pkill)) begin
               case(csrss_no[14:0])
       `csr_retIP: 		csr_retIP[csrss_no[15]]<=csrss_data[63:0];
       `csr_excStackSave: 	csr_excStackSave[csrss_no[15]]<=csrss_data;
@@ -1478,6 +1483,7 @@ module decoder(
   clk,
   rst,
   stall,
+  fat_stall_en,
   except,
   exceptIP,
   exceptAttr,
@@ -1840,6 +1846,7 @@ module decoder(
   input clk;
   input rst;
   input stall;
+  input fat_stall_en;
   input except;
   input [IP_WIDTH-1:0] exceptIP;
   input [3:0] exceptAttr;
@@ -2576,6 +2583,8 @@ module decoder(
   wire [9:0] allocF;
   wire [8:0] rs_allocF;
   
+  wire [9:0] iAvail0;
+  
   wire [9:0] dec_wrFlags;
   reg [9:0] dec_wrFlags_reg;
 
@@ -3186,12 +3195,14 @@ module decoder(
   .FPU(cls_FPU),
   .spec(cls_loadFPU),
   .specNext(10'b0),//unused by module
-  .iAvail(iAvail),
+  .iAvail(iAvail0),
   .stall(stall),
   .halt(dec_halt[0]),
   .allret(all_retired),
   .perm(iUsed)
   );
+
+  assign iAvail=iAvail0&{10{~stall_issue}};
 
   distrib distr_mod(
   clk,
@@ -3248,6 +3259,7 @@ module decoder(
   .clk(clk),
   .rst(rst),
   .stall(stall),
+  .fat_stall_en(fat_stall_en),
   .cls_sys(cls_sys),
   .instr0(inst[0][31:0]),
   .instr1(inst[1][31:0]),
@@ -3277,7 +3289,8 @@ module decoder(
   .thread(thread),
   .riscmode(riscmode),
   .disstruss(lizztruss),
-  .thrmode(thrmode)
+  .thrmode(thrmode),
+  .doStall(stall_issue)
 );
 
   decoder_get_baseIP getIP_mod(
