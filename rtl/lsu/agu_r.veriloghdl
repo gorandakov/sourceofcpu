@@ -423,11 +423,8 @@ module agu_r(
   assign fault_cann=1'b0;
   assign faultNo=fault_cann_reg | (pageFault_t_reg!=0) | error_reg && ~bus_hold_reg ? {error_reg ? 6'd63 : 6'd11,1'b0,2'd1} :
     {6'd0,1'b0,2'd2};
-  assign faultCode={3'b0,fault_cann_reg,pageFault_t_reg[1],is_stack_reg,is_kstack_reg,2'b0};//protect pointers from escaping the protected areas.
-
-  assign is_kstack=&mOp0_addrMain_reg[43:41]; //it is not all stack but we must disallow stealing global map pointers
-  assign is_stack=~mOp0_addrMain[43] & &mOp0_addrMain_reg[42:40]; //reserved area for subsystem and /or stack
-
+  assign faultCode={3'b0,fault_cann_reg,pageFault_t_reg[1],2'b0,pageFault_t_reg[0]};//warning: unused
+  
   assign fault_tlb={mflags[`mflags_cpl+1] & tlb_data[`dtlbData_sys] , ~tlb_data[`dtlbData_na]}; 
   assign fault_tlb_next={mflags[`mflags_cpl+1] & tlb_data_next[`dtlbData_sys],  ~tlb_data_next[`dtlbData_na]}; 
 
@@ -578,13 +575,9 @@ module agu_r(
           mOp0_data_reg<={8'b0,128'b0};
           mOp0_pbit_reg<={2'b0};
           addrMain_tlb<=65'b0;
-          is_kstack_reg<=0;
-          is_stack_reg<=0;
       end else if (except) begin
           mOp0_en_reg<=1'b0;
           error_reg<=1'b0;
-          is_kstack_reg<=0;
-          is_stack_reg<=0;
       end else if (~doStall&&!rsStall) begin
           mOp0_en_reg<=mOp0_en & ~(except);
           if (mOp0_en & ~|req_bus || extern_feed & |req_bus & (mOp0_type_reg==2'b10) || |req_bus & (mOp0_type_reg==2'b11)) begin
@@ -620,8 +613,6 @@ module agu_r(
 		  sproc<=pproc^1;
 	      end
 	      mflags[`mflags_cpl]<={mOp0_attr[`attr_km],mOp0_attr[`attr_sec]};//muha-srankk
-              is_kstack_reg<=is_kstack &!|req_bus;
-              is_stack_reg<=is_stack &!|req_bus;
           end else if (!rsStall) begin
 	      if (mOp_en && !|req_bus) mOp0_en_reg<=1'b0;
           end
