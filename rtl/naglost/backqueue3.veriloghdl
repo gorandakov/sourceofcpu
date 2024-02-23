@@ -1019,6 +1019,8 @@ module frontendSelf(
   assign btb_attr=btb_in_ret & ~(p_invoke&thread) ? rstack_dataR[67:64] : 4'bz;
   assign btb_attr=(p_invoke&thread) ? mflags[`mflags_pinvoke_priv] : 4'bz;
 
+  assign p_invoke=csrss_en && csrss_addr[14:0]==15'd22;
+  assign p_address={20'b0,csrss_data[43:0]};
 
   assign btbx_tgt=btb_tgt;
   assign btbx_tgt0=btb_tgt0;
