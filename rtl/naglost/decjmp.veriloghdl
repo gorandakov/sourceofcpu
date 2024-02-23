@@ -36,7 +36,8 @@ module jump_decoder(
   isJump,
   jumpType,
   jumpIndir,
-  isIPRel
+  isIPRel,
+  halt
   );
   
   parameter [0:0] thread=0;
@@ -73,6 +74,7 @@ module jump_decoder(
   output jumpIndir;
   
   output reg isIPRel;
+  output reg halt;
   
   wire [7:0] opcode_main;
 
