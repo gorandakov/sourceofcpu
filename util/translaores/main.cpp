@@ -14,6 +14,7 @@ struct transl_context {
     void *pinvoke_table;//8192 entries
     const int shift_of_0x66_extra=0x22;
     void *null_pinvoke;//1 entry for no-op pinvoke
+    void *init_pinvoke;//1 entry for no-op pinvoke
     virtual int prealloc_page(unsigned long addr)=0; //returns 0 on success
     virtual int is_allocated_page(unsigned long addr)=0;
     virtual int is_opcode_fixed_jump(unsigned long opcode,unsigned long &jmpaddr)=0; //returs 1 on fixed jump
@@ -37,6 +38,12 @@ struct transl_context {
         asm("movq null_pinvoke, %r23\n"
             "wrmsr %MSR_PINVOKE, %r23\n");
         return 1;
+    }
+    int init_pinvoke(int startoff) {
+        asm("movq startoff, %r17\n"
+            "movq init_pinvoke, %r23\n"
+            "wrmsr %MSR_PINVOKE, %r23\n");
+        return 2;
     }
     int poke_target(unsigned long address, int flags) {
         if (is_allocated_page(address)) {
