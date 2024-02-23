@@ -21,6 +21,7 @@ module frontendSelf(
   clk,
   rst,
   sched_rst,
+  pause_other_frontend_fat_wire, //pauses the instrQ read stage if it has a p/invoke
   except,
   exceptIP,
   exceptThread,
@@ -103,6 +104,7 @@ module frontendSelf(
   input clk;
   input rst;
   input sched_rst;
+  output pause_other_frontend_fat_wire;
   input except;
   input [VIRT_WIDTH-1:0] exceptIP;
   input exceptThread;
@@ -858,6 +860,9 @@ module frontendSelf(
   wire btb_jlnin0,btb_jlnin1,btb_jlnin2,btb_jlnin3;
   wire [3:0] tbuf_error;
   reg [3:0] tbuf_error_reg;
+  reg [2:0] p_inv_stored;
+  reg [2:0][43:0] p_inv_data;
+  reg [1:0] p_invex;
 
   integer m,n,t;
 
@@ -975,6 +980,8 @@ module frontendSelf(
   assign instrFed=instrEn_reg3 && (cc_read_hit && tlb_match);
 
   assign exceptJumpGHT2=jupd0_tk ? jupd0_addr : jupd1_addr;
+
+  assign pause_other_frontend_fat_wire=p_inv_stored[0];
   
   assign cc_base_IP_d=(~do_seq_reg5 & ~|tbuf_error_reg) ? cc_read_IP_reg4 : 64'bz;
   assign cc_base_IP_d=(do_seq_reg5 & ~cc_base_tick & ~|tbuf_error_reg) ? cc_base_IP : 64'bz;
@@ -1024,8 +1031,8 @@ module frontendSelf(
   assign btb_attr=btb_in_ret & ~(p_invoke&thread) ? rstack_dataR[67:64] : 4'bz;
   assign btb_attr=(p_invoke&thread) ? mflags[`mflags_pinvoke_priv] : 4'bz;
 
-  assign p_invoke=csrss_en && csrss_addr[14:0]==15'd22;
-  assign p_address={20'b0,csrss_data[43:0]};
+  assign p_invoke=~halted ? csrss_en && csrss_addr[14:0]==15'd22 & ~p_inv_stored[2] : p_inv_stored[2];
+  assign p_address=~halted ? {20'b0,csrss_data[43:0]} : {20'b0,p_inv_st_data[2]};
 
   assign btbx_tgt=btb_tgt;
   assign btbx_tgt0=btb_tgt0;
@@ -1682,6 +1689,23 @@ module frontendSelf(
                   instrEn<=1'b1;
               end
           end
+      end
+      if (rst) begin
+         p_inv_stored=3'b0;
+         p_inv_data=0;
+      end else if ((csrss_en && csrss_addr[14:0]==15'd22) | halted && thread) begin
+         if (halted && p_inv_stored) begin
+             p_inv_stored=p_inv_stored<<1;
+             p_inv_data[2]=p_inv_data[1];
+             p_inv_data[1]=p_inv_data[0];
+         end
+         if ((csrss_en && csrss_addr[14:0]==15'd22) && thread) begin
+             p_index=2;
+             if (p_inv_stored[2]) p_index=1;
+             if (p_inv_stored[1]) p_index=0;
+             p_inv_stored[p_index]=1'b1;
+             p_inv_data[p_index]=csrss_data;
+         end
       end
       if (rst) begin
           dreq_reg<=8'b0;
