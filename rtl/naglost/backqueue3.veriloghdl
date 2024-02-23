@@ -904,12 +904,17 @@ module frontendSelf(
           .jumpType(jdec_type[k]),
           .jumpIndir(),
           .isIPRel(),
-          .lizztruss(1'b0)
+          .lizztruss(1'b0),
+          .halt(jdec_halt[k])
           );
   
       end
       for (j=0;j<12;j=j+1) begin
           wire [3:0] isJ;
+          assign halt_d[0]=isJ[0] ? pre_jbefore[j] && jdec_halt[0] : 1'bz
+          assign halt_d[1]=isJ[0] ? pre_jbefore[j] && jdec_halt[1] : 1'bz
+          assign halt_d[2]=isJ[0] ? pre_jbefore[j] && jdec_halt[2] : 1'bz
+          assign halt_d[3]=isJ[0] ? pre_jbefore[j] && jdec_halt[3] : 1'bz
           assign pre_other[j][`instrQ_magic]=~pre_magic_reg[j];
           assign pre_other[j][`instrQ_srcIPOff]=read_data_reg[255] && cc_read_IP_reg3[4:1]==4'b0 ? {cc_base_off_reg,pre_off_reg[j]}: 
               {cc_base_off,pre_off_reg[j]};
@@ -1245,6 +1250,11 @@ module frontendSelf(
 
   popcnt5 wjcnt_mod({1'b0,iqe_jbits},iqe_jcnt);
   popcnt5 wjcnD_mod({1'b0,iqe_jbitZ},iqe_jcnD);
+
+  assign halt_d[0]=(btbFStall_recover_reg ? iqe_jcnD[0] : iqe_jcnt_reg2[0]) ? 1'b0 : 1'bz;
+  assign halt_d[1]=(btbFStall_recover_reg ? |iqe_jcnD[1:0] : |iqe_jcnt_reg2[1:0]) ? 1'b0 : 1'bz;
+  assign halt_d[2]=(btbFStall_recover_reg ? |iqe_jcnD[2:0] : |iqe_jcnt_reg2[2:0]) ? 1'b0 : 1'bz;
+  assign halt_d[3]=(btbFStall_recover_reg ? |iqe_jcnD[3:0] : |iqe_jcnt_reg2[3:0]) ? 1'b0 : 1'bz;
 
 //  cc_comb cc_mod(
 //  );  
@@ -2180,6 +2190,8 @@ module frontendSelf(
 	  miss_IP<=cc_read_IP_d;
           pre_instrEn_reg<=13'b0;
           tbuf_error_reg<=4'b0;
+      end else if (halt_d && ~fstall) begin
+          //insert halt code here
       end else if (~fstall) begin
           //ixcept_reg<=1'b0;
           //ixceptLDConfl_reg<=1'b0;
