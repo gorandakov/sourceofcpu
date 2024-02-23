@@ -28,7 +28,11 @@ struct transl_context {
             for(n=0;n<6;n=n+1) {
                 if (hdr->target_and_class[n]) {
                     if (hdr->source[n/2]&(0xf<<(4*(n&1))))==(address&0xf)) {
-                        return (flags==(hdr->target_and_class[n]>>14));
+                        if (flags==(hdr->target_and_class[n]>>14)) return 1;
+                        else if (n!=5) {
+                            hdr->insert(n+1,flags,address&0xf,0xfff);
+                            return 1;
+                        } else return 0;
                     } else if (hdr->source[n/2]&(0xf<<(4*(n&1))))>(address&0xf)) {
                         hdr->insert(n,flags,address&0xf,0xfff);
                         return 1;
@@ -42,7 +46,7 @@ struct transl_context {
             return 1;
         } else {
             if (prealloc_page(address/4096)) goto allocated;
-            else return 0;
+            else return -1;
         }
 
     }
