@@ -5225,7 +5225,7 @@ agu_block #(BUS_ID) agu_aligned(
   .u5_lsflag(WoutLSflag[1]),.u5_clkEn(WoutDataEn[1][0]),
   .u5_attr(WoutAttr[1]),.u5_thread(WoutThread[1]),
   .mOp0_clHit(dc_rdHitCl[0]),.mOp1_clHit(dc_rdHitCl[1]),.mOp2_clHit(dc_rdHitCl[2]),.mOp3_clHit(dc_rdHitCl[3]),
-  .miss4(st0_en_reg3 && !dc_wrHit[0] && ^dc_wrHitCl[0] && st0_type_reg3!=2'b10),
+  .miss4(st0_en_reg3 && !dc_wrHit[0] && st0_type_reg3!=2'b10),
   .mOpY4_en(st0_en),
   .mOpY4_hit(dc_wrHit[0]),   
   .mOpY4_dupl(dc_wrDuplCl[0]),//write to a non-exclusive cl
@@ -5266,7 +5266,7 @@ agu_block #(BUS_ID) agu_aligned(
   .mOpY4_pbit_o(dc_pdata[0]),
   .mOpY4_type_o(),
   .mOpY4_II_o(),  
-  .miss5(st1_en_reg3 && !dc_wrHit[1] && ^dc_wrHitCl[1] && st1_type_reg3!=2'b10),
+  .miss5(st1_en_reg3 && !dc_wrHit[1] && st1_type_reg3!=2'b10),
   .mOpY5_en(st1_en),
   .mOpY5_hit(dc_wrHit[1]),   
   .mOpY5_dupl(dc_wrDuplCl[1]),//write to a non-exclusive cl
