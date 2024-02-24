@@ -18,6 +18,7 @@ limitations under the License.
 
 
 module heptane_core(
+//most other places use named port list but here it is port declaration
   input clk,
   input clkREF,
   input clkREF2,
