@@ -1,5 +1,0 @@
-The DDR4 computers are said to have 2 channel memory but they really have 4 channel memory.
-This is because they use half-matter traces and half matter cpu pins (the latter might be amd only).
-These half matter pins are obtained by placing metal inside a captive woman and impregnating her, after which she temporarily becomes a "half woman".
-They then take the piece of metal from her.
-
