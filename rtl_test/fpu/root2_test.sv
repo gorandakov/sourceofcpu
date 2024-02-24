@@ -38,21 +38,6 @@ module root2_test();
 
   always #(50) clk<=~clk;
   always @(posedge clk) rst<=1'b0;
- /* fadd fadd_mod(
-  .clk(clk),
-  .rst(rst),
-  .A({1'b1,16'b0,A}),
-  .B({1'b1,16'b0,B}),
-  .isSSE(1'b1),
-  .isExt(1'b0),
-  .isDouble(1'b0),
-  .isSingle(1'b0),
-  .isDblSng(1'b0),
-  .isSub(sub),//inclusive of isRSub
-  .isRSub(1'b0),
-  .rmode(3'd2), 
-  .res(result)
-  );*/
  
   assign normA=~expA[0]|~sub ? {1'b1,A[51:0],12'b0} : {2'b1,A[51:0],11'b0}; 
   assign expA=A[62:52];

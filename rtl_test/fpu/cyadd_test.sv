@@ -30,21 +30,6 @@ module fcadd_test();
 
   always #(50) clk<=~clk;
   always @(negedge clk) rst<=1'b0;
- /* fadd fadd_mod(
-  .clk(clk),
-  .rst(rst),
-  .A({1'b1,16'b0,A}),
-  .B({1'b1,16'b0,B}),
-  .isSSE(1'b1),
-  .isExt(1'b0),
-  .isDouble(1'b0),
-  .isSingle(1'b0),
-  .isDblSng(1'b0),
-  .isSub(sub),//inclusive of isRSub
-  .isRSub(1'b0),
-  .rmode(3'd2), 
-  .res(result)
-  );*/
   
   fpucadd fmul_mod(
   .clk(clk),
