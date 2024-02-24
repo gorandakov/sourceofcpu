@@ -310,42 +310,42 @@ limitations under the License.
 
 
 
-`define dtlbData_phys 29:0
-`define dtlbData_sys 30
-`define dtlbData_wp 34:31
-`define dtlbData_na 35
-`define dtlbData_ne 36
-`define dtlbData_glo 37
-`define dtlbData_type 39:38
-`define dtlbData_acc 40
-`define dtlbData_wrt 41
-`define dtlbData_subpage 42
-`define dtlbData_width 43
+`define dmlbData_phys 29:0
+`define dmlbData_sys 30
+`define dmlbData_wp 34:31
+`define dmlbData_na 35
+`define dmlbData_ne 36
+`define dmlbData_glo 37
+`define dmlbData_type 39:38
+`define dmlbData_acc 40
+`define dmlbData_wrt 41
+`define dmlbData_subpage 42
+`define dmlbData_width 43
 
 
-`define dtlb_vaddr 49:0
-`define dtlb_valid 50
-`define dtlb_shr   51
-`define dtlb_data1 95:52
-`define dtlb_data2 138:96
-`define dtlb_data3 181:139
-`define dtlb_width 182
+`define dmlb_vaddr 49:0
+`define dmlb_valid 50
+`define dmlb_shr   51
+`define dmlb_data1 95:52
+`define dmlb_data2 138:96
+`define dmlb_data3 181:139
+`define dmlb_width 182
 
 
 
-`define ctlbData_phys 29:0
-`define ctlbData_sys 30
-`define ctlbData_na 31
-`define ctlbData_ne 32
-`define ctlbData_global 33
-`define ctlbData_width 34
+`define cmlbData_phys 29:0
+`define cmlbData_sys 30
+`define cmlbData_na 31
+`define cmlbData_ne 32
+`define cmlbData_global 33
+`define cmlbData_width 34
 
-`define ctlb_ip 64:0
-`define ctlb_valid 65
-`define ctlb_validN 66
-`define ctlb_lru 68:67 
-`define ctlb_data 103:69
-`define ctlb_width 104
+`define cmlb_ip 64:0
+`define cmlb_valid 65
+`define cmlb_validN 66
+`define cmlb_lru 68:67 
+`define cmlb_data 103:69
+`define cmlb_width 104
 
 
 

@@ -24,11 +24,11 @@ module ww(
   req_addr,
   req_slot,
   req_en,
-  req_tlbEn,
-  req_tlbAttr,
-  bus_tlb_data,
-  bus_tlb_slot,
-  bus_tlb_en,
+  req_mlbEn,
+  req_mlbAttr,
+  bus_mlb_data,
+  bus_mlb_slot,
+  bus_mlb_en,
   msrss_en,msrss_no,msrss_data,
   MSI_expAddr_reg,
   MSI_expAddr_en_reg,
@@ -409,12 +409,12 @@ module ww(
   output [37:0] req_addr;
   output [9:0] req_slot;
   output req_en;
-  output req_tlbEn;
-  output [3:0] req_tlbAttr;
+  output req_mlbEn;
+  output [3:0] req_mlbAttr;
 
-  input [`ctlbData_width-1:0] bus_tlb_data;
-  input [9:0] bus_tlb_slot;
-  input bus_tlb_en;
+  input [`cmlbData_width-1:0] bus_mlb_data;
+  input [9:0] bus_mlb_slot;
+  input bus_mlb_en;
   output [1:0] halt;
 
   input all_retired;
@@ -875,19 +875,19 @@ module ww(
 
   reg thread;
 
-  wire miss_now,tlbMiss_now;
+  wire miss_now,mlbMiss_now;
 
   wire [1:0] [37:0] req_addrX;
   wire [1:0] [9:0] req_slotX;
   wire [1:0] req_enX;
-  wire [1:0] req_tlbEnX;
-  wire [1:0] [3:0] req_tlbAttrX;
+  wire [1:0] req_mlbEnX;
+  wire [1:0] [3:0] req_mlbAttrX;
 
-  assign req_addr=req_addrX[!req_enX[0]&!req_tlbEnX[0]];
-  assign req_en=req_enX[!req_enX[0]&!req_tlbEnX[0]];
-  assign req_slot=req_slotX[!req_enX[0]&!req_tlbEnX[0]];
-  assign req_tlbEn=req_tlbEnX[!req_enX[0]&!req_tlbEnX[0]];
-  assign req_tlbAttr=req_tlbAttrX[!req_enX[0]&!req_tlbEnX[0]];
+  assign req_addr=req_addrX[!req_enX[0]&!req_mlbEnX[0]];
+  assign req_en=req_enX[!req_enX[0]&!req_mlbEnX[0]];
+  assign req_slot=req_slotX[!req_enX[0]&!req_mlbEnX[0]];
+  assign req_mlbEn=req_mlbEnX[!req_enX[0]&!req_mlbEnX[0]];
+  assign req_mlbAttr=req_mlbAttrX[!req_enX[0]&!req_mlbEnX[0]];
 
   wire [1:0][INSTR_WIDTH-1:0] instr0;
   wire [1:0][INSTR_WIDTH-1:0] instr1;
@@ -995,13 +995,13 @@ frontendSelf #(0,BUS_ID) frontA_mod(
   req_addrX[0],
   req_slotX[0],
   req_enX[0],
-  req_tlbEnX[0],
-  req_tlbAttr[0],
-  bus_tlb_data,
-  bus_tlb_slot,
-  bus_tlb_en,
+  req_mlbEnX[0],
+  req_mlbAttr[0],
+  bus_mlb_data,
+  bus_mlb_slot,
+  bus_mlb_en,
   miss_now,
-  tlbMiss_now,
+  mlbMiss_now,
   1'b0,
   instr0[1],instr1[1],instr2[1],instr3[1],
   instr4[1],instr5[1],instr6[1],instr7[1],
@@ -1063,14 +1063,14 @@ frontendSelf #(1,BUS_ID) frontB_mod(
   req_addrX[1],
   req_slotX[1],
   req_enX[1],
-  req_tlbEnX[1],
-  req_tlbAttr[1],
-  bus_tlb_data,
-  bus_tlb_slot,
-  bus_tlb_en,
+  req_mlbEnX[1],
+  req_mlbAttr[1],
+  bus_mlb_data,
+  bus_mlb_slot,
+  bus_mlb_en,
   ,
   ,
-  miss_now|tlbMiss_now,
+  miss_now|mlbMiss_now,
   instr0[0],instr1[0],instr2[0],instr3[0],
   instr4[0],instr5[0],instr6[0],instr7[0],
   instr8[0],instr9[0],

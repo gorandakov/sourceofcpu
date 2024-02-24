@@ -45,10 +45,10 @@ module backend(
   except_jmp_mask_en,
   except_jmp_mask,
   req_addr,
-  req_tlbAttr,
-  req_tlbEn,
-  bus_tlb_data,
-  bus_tlb_en,
+  req_mlbAttr,
+  req_mlbEn,
+  bus_mlb_data,
+  bus_mlb_en,
 
   newAttr,
 
@@ -471,10 +471,10 @@ module backend(
   output [3:0] except_jmp_mask;
 
   input [30:0] req_addr; 
-  input [3:0] req_tlbAttr;
-  input req_tlbEn;
-  output [`ctlbData_width-1:0] bus_tlb_data;
-  output bus_tlb_en;
+  input [3:0] req_mlbAttr;
+  input req_mlbEn;
+  output [`cmlbData_width-1:0] bus_mlb_data;
+  output bus_mlb_en;
 
   input [3:0] newAttr;
   
@@ -5138,8 +5138,8 @@ module backend(
   .FUreg3_reg(FUreg_reg5[3]),.dc_rdataA(dc_rdataA[3]),//is it really reg5?
   .msi_exp_addr(MSI_exp_addr_reg),.msi_en(MSI_exp_en_reg),.msi_out_clear(),//msi_out_clear=can do msi en; todo - make replace last buffer rather than wait + redu
   .msrss_en(msrss_en),.msrss_addr(msrss_no),.msrss_data(msrss_data[63:0]),
-  .req_addr(req_addr),.req_tlbAttr(req_tlbAttr),.req_tlbEn(req_tlbEn),
-  .bus_tlb_data(bus_tlb_data),.bus_tlb_en(bus_tlb_en),
+  .req_addr(req_addr),.req_mlbAttr(req_mlbAttr),.req_mlbEn(req_mlbEn),
+  .bus_mlb_data(bus_mlb_data),.bus_mlb_en(bus_mlb_en),
   .reqBus_en(reqBus_en),
   .reqBus_addr(reqBus_addr[43:7]),
   .reqBus_req(reqBus_req),
@@ -5324,8 +5324,8 @@ addrcalc_block #(BUS_ID) addrcalc_aligned(
   .FUreg3_reg(FUreg_reg5[3]),.dc_rdataA(dc_rdataA[3]),//is it really reg5?
   .msi_exp_addr(MSI_exp_addr_reg),.msi_en(MSI_exp_en_reg),.msi_out_clear(),//msi_out_clear=can do msi en; todo - make replace last buffer rather than wait + redu
   .msrss_en(msrss_en),.msrss_addr(msrss_no),.msrss_data(msrss_data[63:0]),
-  .req_addr(req_addr),.req_tlbAttr(req_tlbAttr),.req_tlbEn(req_tlbEn),
-  .bus_tlb_data(bus_tlb_data),.bus_tlb_en(bus_tlb_en),
+  .req_addr(req_addr),.req_mlbAttr(req_mlbAttr),.req_mlbEn(req_mlbEn),
+  .bus_mlb_data(bus_mlb_data),.bus_mlb_en(bus_mlb_en),
   .reqBus_en(reqBus_en),
   .reqBus_addr(reqBus_addr[43:7]),
   .reqBus_req(reqBus_req),

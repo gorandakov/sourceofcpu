@@ -422,7 +422,7 @@ module missQ(
   localparam VADDR_WIDTH=64;
   localparam PADDR_WIDTH=44;
   localparam OPERATION_WIDTH=`operation_width;
-  localparam TLB_DWIDTH=`dtlbData_width;
+  localparam TLB_DWIDTH=`dmlbData_width;
   localparam INDEX_WIDTH=7;
   localparam BANK_COUNT=32;
   localparam REG_WIDTH=9;

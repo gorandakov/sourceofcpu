@@ -41,7 +41,7 @@ module saddrcalc(
   cin_secq,
   ptrdiff,
   error,
-  tlbMiss,
+  mlbMiss,
   pageFault,
   faultCode,
   faultNo,
@@ -71,13 +71,13 @@ module saddrcalc(
   msrss_en,
   msrss_thr,
   msrss_data,
-  tlb_clkEn,
+  mlb_clkEn,
   cout_secq,
   addrTlb,
   sproc,
-  tlb_data0,
-  tlb_data1,
-  tlb_hit
+  mlb_data0,
+  mlb_data1,
+  mlb_hit
   );
 
   parameter INDEX=0; //0 1 2 
@@ -85,7 +85,7 @@ module saddrcalc(
   localparam PADDR_WIDTH=44;
   localparam OPERATION_WIDTH=`operation_width;
   localparam BANK_COUNT=32;
-  localparam TLB_DATA_WIDTH=`dtlbData_width;
+  localparam TLB_DATA_WIDTH=`dmlbData_width;
   localparam TLB_IP_WIDTH=52;
   localparam REG_WIDTH=`reg_addr_width;
 
@@ -111,7 +111,7 @@ module saddrcalc(
   input cin_secq;
   input ptrdiff;
   input error;
-  output tlbMiss;
+  output mlbMiss;
   output pageFault;
   output [7:0] faultCode;
   output [8:0] faultNo;
@@ -141,13 +141,13 @@ module saddrcalc(
   input msrss_en;
   input msrss_thr;
   input [63:0] msrss_data;
-  output tlb_clkEn;
+  output mlb_clkEn;
   output cout_secq;
   output [TLB_IP_WIDTH-1:0] addrTlb;
   output [23:0] sproc;
-  input [TLB_DATA_WIDTH-1:0] tlb_data0;
-  input [TLB_DATA_WIDTH-1:0] tlb_data1;
-  input tlb_hit;
+  input [TLB_DATA_WIDTH-1:0] mlb_data0;
+  input [TLB_DATA_WIDTH-1:0] mlb_data1;
+  input mlb_hit;
 
   reg [2:0] opsize;
   wire hasIndex;
@@ -195,17 +195,17 @@ module saddrcalc(
 //  wire [5:0] CSAbn1;
   
   wire [TLB_IP_WIDTH-1:0] addrTlb;
-  wire [TLB_DATA_WIDTH-1:0] tlb_data0;
-  wire [TLB_DATA_WIDTH-1:0] tlb_data1;
-  wire [TLB_DATA_WIDTH-1:0] tlb_data;
-  wire [TLB_DATA_WIDTH-1:0] tlb_data_next;
-  reg [TLB_DATA_WIDTH-1:0] tlb_data_reg;
+  wire [TLB_DATA_WIDTH-1:0] mlb_data0;
+  wire [TLB_DATA_WIDTH-1:0] mlb_data1;
+  wire [TLB_DATA_WIDTH-1:0] mlb_data;
+  wire [TLB_DATA_WIDTH-1:0] mlb_data_next;
+  reg [TLB_DATA_WIDTH-1:0] mlb_data_reg;
 
   wire wp;
   wire wp_next;
 	
-  wire tlb_clkEn;
-  wire tlb_hit;
+  wire mlb_clkEn;
+  wire mlb_hit;
 
   wire [3:0] attr2; 
 
@@ -263,8 +263,8 @@ module saddrcalc(
   reg [23:0] proc;
   reg [1:0][23:0] vproc;
   wire split;
-  wire [1:0] fault_tlb;
-  wire [1:0] fault_tlb_next;
+  wire [1:0] fault_mlb;
+  wire [1:0] fault_mlb_next;
   generate
       genvar p,q;
       for(p=0;p<32;p=p+1) begin
@@ -312,15 +312,15 @@ module saddrcalc(
   
   assign addrTlb={proc[20:0],cmplxAddr[43:13]};
 
-  assign tlb_data=tlb_data0;
-  assign tlb_data_next=tlb_data1;
+  assign mlb_data=mlb_data0;
+  assign mlb_data_next=mlb_data1;
 
-  assign mOp_type=tlb_data[`dtlbData_type];
+  assign mOp_type=mlb_data[`dmlbData_type];
   
-  assign mOp_addrEven[43:13]=(addrMain[7] & addrNext[14]) ? tlb_data_next[`dtlbData_phys] : tlb_data[`dtlbData_phys];
-  assign mOp_addrOdd[43:13]=(~(~addrMain[7] & addrNext[14])) ? tlb_data[`dtlbData_phys] : tlb_data_next[`dtlbData_phys];
+  assign mOp_addrEven[43:13]=(addrMain[7] & addrNext[14]) ? mlb_data_next[`dmlbData_phys] : mlb_data[`dmlbData_phys];
+  assign mOp_addrOdd[43:13]=(~(~addrMain[7] & addrNext[14])) ? mlb_data[`dmlbData_phys] : mlb_data_next[`dmlbData_phys];
   
-  assign pageFault_t=(addrNext[14]) ? (fault_tlb | ({2{mOp_split}} & fault_tlb_next)) & {2{tlb_hit}} : fault_tlb & {2{tlb_hit}};
+  assign pageFault_t=(addrNext[14]) ? (fault_mlb | ({2{mOp_split}} & fault_mlb_next)) & {2{mlb_hit}} : fault_mlb & {2{mlb_hit}};
   assign pageFault=(pageFault_t_reg!=0) | fault_cann_reg | error_reg && read_clkEn_reg2|mex_en_reg2 && ~bus_hold_reg2;
   assign fault_cann=~cout_secq;
   assign faultNo=fault_cann_reg | (pageFault_t_reg!=0) | error_reg ? {error_reg ? 6'd63 : 6'd11,1'b0,2'd1} : {6'd0,1'b0,2'd2};
@@ -328,17 +328,17 @@ module saddrcalc(
 
   assign mOp_addrMain={addrTlb[30:0],addrMain[12:0]};
   
-  assign tlbMiss=(read_clkEn_reg)&~tlb_hit&~fault_cann&~except;
+  assign mlbMiss=(read_clkEn_reg)&~mlb_hit&~fault_cann&~except;
   
   assign addrMain=cmplxAddr[13:0];
   
-  assign mOp_en=read_clkEn_reg &tlb_hit
+  assign mOp_en=read_clkEn_reg &mlb_hit
    & rcn_mask[1] & ~bus_hold_reg;
   
   assign mOp_thread=thread_reg;
 
-  assign wp=|(tlb_data[`dtlbData_wp]&(4'b1<<addrTlb[13:12])) || |(tlb_data[`dtlbData_wp]&(1'b1<<(addrTlb[13:12]+2'd1))) & addrNext[12] & mOp_split_X;
-  assign wp_next= |(tlb_data_next[`dtlbData_wp]&(1'b1<<(addrTlb[13:12]+2'd1))) & addrNext[12] & mOp_split_X;
+  assign wp=|(mlb_data[`dmlbData_wp]&(4'b1<<addrTlb[13:12])) || |(mlb_data[`dmlbData_wp]&(1'b1<<(addrTlb[13:12]+2'd1))) & addrNext[12] & mOp_split_X;
+  assign wp_next= |(mlb_data_next[`dmlbData_wp]&(1'b1<<(addrTlb[13:12]+2'd1))) & addrNext[12] & mOp_split_X;
   
   assign mOp_lsflag=lsflag_reg;
   
@@ -356,7 +356,7 @@ module saddrcalc(
 
   assign mOp_attr=attr2_reg;
   
-  assign tlb_clkEn=read_clkEn_reg|mex_en_reg;
+  assign mlb_clkEn=read_clkEn_reg|mex_en_reg;
   
   assign doStall=1'b0;
 
@@ -367,8 +367,8 @@ module saddrcalc(
   
   assign mflags0=mflags[thread];
   
-  assign fault_tlb={mflags0[`mflags_cpl+1] & tlb_data[`dtlbData_sys], ~tlb_data[`dtlbData_na]|~wp}; 
-	assign fault_tlb_next={mflags0[`mflags_cpl+1] & tlb_data_next[`dtlbData_sys] , ~tlb_data_next[`dtlbData_na]|~wp_next}; 
+  assign fault_mlb={mflags0[`mflags_cpl+1] & mlb_data[`dmlbData_sys], ~mlb_data[`dmlbData_na]|~wp}; 
+	assign fault_mlb_next={mflags0[`mflags_cpl+1] & mlb_data_next[`dmlbData_sys] , ~mlb_data_next[`dmlbData_na]|~wp_next}; 
 
   adder #(15) nextCAddr_mod({1'b0,cmplxAddr[13:0]},15'b10000000,addrNext,1'b0,1'b1,,,,);
 
@@ -435,18 +435,18 @@ module saddrcalc(
     begin
 //	  if (rst) cmplxAddr<={ADDR_WIDTH{1'B0}};
 //	  else cmplxAddr<=mex_en ? mex_addr : cmplxAddr_d;
-	  if (|fault_tlb && read_clkEn_reg|mex_en_reg) $display("WfaultTlb");
+	  if (|fault_mlb && read_clkEn_reg|mex_en_reg) $display("WfaultTlb");
 	  if (fault_cann && read_clkEn_reg|mex_en_reg) $display("WfaultPtr");
           if (rst) mex_en_reg<=1'b0;
           else mex_en_reg<=mex_en;
           if (rst) mex_en_reg2<=1'b0;
           else mex_en_reg2<=mex_en_reg;
-	  if (rst) tlb_data_reg<={TLB_DATA_WIDTH{1'B0}};
-	  else tlb_data_reg<=tlb_data;
+	  if (rst) mlb_data_reg<={TLB_DATA_WIDTH{1'B0}};
+	  else mlb_data_reg<=mlb_data;
           if (rst) error_reg<=1'b0;
           else error_reg<=error;
 
-	  if (mex_en_reg && ~tlb_hit) $display("sch ",addrTlb>>1," ",tlb_clkEn); 
+	  if (mex_en_reg && ~mlb_hit) $display("sch ",addrTlb>>1," ",mlb_clkEn); 
           if (rst) begin
              // cmplxAddr_reg<=16'b0;
               pageFault_t_reg<=2'b0;

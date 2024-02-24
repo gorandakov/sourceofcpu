@@ -98,7 +98,7 @@ module fun_addrcalc(
   32'b0,
   other_flip,
   conflict[0],
-  tlbMiss[0],
+  mlbMiss[0],
   pageFault[0],
   faultCode[0],
   faultNo[0],
@@ -115,7 +115,7 @@ module fun_addrcalc(
   mOp_st[0],
   mOp_en[0],
   mOp_secq[0],
-  mOp_invtlb[0],
+  mOp_invmlb[0],
   mOp_rsEn[0],
   mOp_thread[0],
   mOp_lsflag[0],
@@ -130,13 +130,13 @@ module fun_addrcalc(
   msrss_en,
   msrss_thr,
   msrss_data,
-  tlb_clkEn,
+  mlb_clkEn,
   cout_secq[0],
   addrTlb[0],
   sproc[0],
-  tlb_data0[0],
-  tlb_data1[0],
-  tlb_hit[0] 
+  mlb_data0[0],
+  mlb_data1[0],
+  mlb_hit[0] 
   );
 
   addrcalc addrcalc1(
@@ -164,7 +164,7 @@ module fun_addrcalc(
   32'b0,
   other_flip,
   conflict[1],
-  tlbMiss[1],
+  mlbMiss[1],
   pageFault[1],
   faultCode[1],
   faultNo[1],
@@ -181,7 +181,7 @@ module fun_addrcalc(
   mOp_st[1],
   mOp_en[1],
   mOp_secq[1],
-  mOp_invtlb[1],
+  mOp_invmlb[1],
   mOp_rsEn[1],
   mOp_thread[1],
   mOp_lsflag[1],
@@ -200,9 +200,9 @@ module fun_addrcalc(
   cout_secq[1],
   addrTlb[1],
   sproc[1],
-  tlb_data0[1],
-  tlb_data1[1],
-  tlb_hit[1] 
+  mlb_data0[1],
+  mlb_data1[1],
+  mlb_hit[1] 
   );
 
   addrcalc addrcalc2(
@@ -230,7 +230,7 @@ module fun_addrcalc(
   32'b0,
   other_flip,
   conflict[2],
-  tlbMiss[2],
+  mlbMiss[2],
   pageFault[2],
   faultCode[2],
   faultNo[2],
@@ -247,7 +247,7 @@ module fun_addrcalc(
   mOp_st[2],
   mOp_en[2],
   mOp_secq[2],
-  mOp_invtlb[2],
+  mOp_invmlb[2],
   mOp_rsEn[2],
   mOp_thread[2],
   mOp_lsflag[2],
@@ -266,9 +266,9 @@ module fun_addrcalc(
   cout_secq[2],
   addrTlb[2],
   sproc[2],
-  tlb_data0[2],
-  tlb_data1[2],
-  tlb_hit[2] 
+  mlb_data0[2],
+  mlb_data1[2],
+  mlb_hit[2] 
   );
 
   add_addrcalc addr0(

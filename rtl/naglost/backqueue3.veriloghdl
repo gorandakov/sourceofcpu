@@ -40,13 +40,13 @@ module frontendSelf(
   req_addr,
   req_slot,
   req_en,
-  req_tlbEn,
-  req_tlbAttr,
-  bus_tlb_data,
-  bus_tlb_slot,
-  bus_tlb_en,
+  req_mlbEn,
+  req_mlbAttr,
+  bus_mlb_data,
+  bus_mlb_slot,
+  bus_mlb_en,
   miss_now,
-  tlbMiss_now,
+  mlbMiss_now,
   miss_now_in,
   instr0,instr1,instr2,instr3,
   instr4,instr5,instr6,instr7,
@@ -141,15 +141,15 @@ module frontendSelf(
   output [37:0] req_addr;
   output [9:0] req_slot;
   output req_en;
-  output req_tlbEn;
-  output [3:0] req_tlbAttr;
+  output req_mlbEn;
+  output [3:0] req_mlbAttr;
 
-  input [`ctlbData_width-1:0] bus_tlb_data;
-  input [9:0] bus_tlb_slot;
-  input bus_tlb_en;
+  input [`cmlbData_width-1:0] bus_mlb_data;
+  input [9:0] bus_mlb_slot;
+  input bus_mlb_en;
 
   output miss_now;
-  output tlbMiss_now;
+  output mlbMiss_now;
   input miss_now_in;
 
   output [INSTR_WIDTH-1:0] instr0;
@@ -236,7 +236,7 @@ module frontendSelf(
   reg do_seq_reg4;
   reg do_seq_reg5;
   reg miss_now;
-  reg tlbMiss_now;
+  reg mlbMiss_now;
   reg miss_now_reg;
   reg [63:0] cc_read_IP;
   reg [63:0] cc_read_IP_reg;
@@ -285,18 +285,18 @@ module frontendSelf(
 
  // wire [47:0] link_IP_d;
   
-  wire [`ctlbData_width-1:0] tlb_data;
-  reg [`ctlbData_width-1:0] tlb_data_reg;
-  reg [`ctlbData_width-1:0] tlb_data_reg2;
-  reg [`ctlbData_width-1:0] tlb_data_reg3;
-  wire [`ctlbData_width-1:0] tlb_data3;
-  wire [PHYS_WIDTH-14:0] tlb_phys;
-  wire tlb_nx;
-  wire tlb_na;
-  wire tlb_sys;
-  wire tlb_match;
+  wire [`cmlbData_width-1:0] mlb_data;
+  reg [`cmlbData_width-1:0] mlb_data_reg;
+  reg [`cmlbData_width-1:0] mlb_data_reg2;
+  reg [`cmlbData_width-1:0] mlb_data_reg3;
+  wire [`cmlbData_width-1:0] mlb_data3;
+  wire [PHYS_WIDTH-14:0] mlb_phys;
+  wire mlb_nx;
+  wire mlb_na;
+  wire mlb_sys;
+  wire mlb_match;
 
-  reg [PHYS_WIDTH-14:0] tlb_phys_reg;
+  reg [PHYS_WIDTH-14:0] mlb_phys_reg;
 
   wire [PHYS_WIDTH-14:0] read_physOut;
   reg miss_seq;
@@ -311,11 +311,11 @@ module frontendSelf(
   //wire overpage;
   reg IP_chg,IP_chg_reg,IP_chg_reg2,IP_chg_reg3,IP_chg_reg4;
   
-  wire tlb_hit;
-  reg tlb_hit_reg;
-  reg tlb_hit_reg2;
-  reg tlb_hit_reg3;
-  reg tlb_hit_reg4;
+  wire mlb_hit;
+  reg mlb_hit_reg;
+  reg mlb_hit_reg2;
+  reg mlb_hit_reg3;
+  reg mlb_hit_reg4;
  
   wire [PHYS_WIDTH-1:0] IP_phys; 
   wire [DATA_WIDTH-1:0] write_data;
@@ -329,13 +329,13 @@ module frontendSelf(
   wire [VIRT_WIDTH-26:0] write_IP;
   wire [VIRT_WIDTH-28:0] req_addrR;
   wire [PHYS_WIDTH-14:0] req_addrP;
-  wire [VIRT_WIDTH-13:0] tlb_IP;
+  wire [VIRT_WIDTH-13:0] mlb_IP;
   
-  wire bus_tlb_match;
-  reg bus_tlb_match_reg;
-  reg bus_tlb_match_reg2;
-  reg bus_tlb_match_reg3;
-  reg [`ctlbData_width-1:0] bus_tlb_data_reg;
+  wire bus_mlb_match;
+  reg bus_mlb_match_reg;
+  reg bus_mlb_match_reg2;
+  reg bus_mlb_match_reg3;
+  reg [`cmlbData_width-1:0] bus_mlb_data_reg;
   
   wire [7:0] cc_tagErr;
   
@@ -973,11 +973,11 @@ module frontendSelf(
   
   assign bus_match0=bus_en && bus_slot=={BUS_ID,5'b10000};
   
-  assign tlb_IP=bus_tlb_match_reg ? {proc[20:0],miss_IP[43:14]} : {proc[20:0],cc_read_IP[43:14]};
+  assign mlb_IP=bus_mlb_match_reg ? {proc[20:0],miss_IP[43:14]} : {proc[20:0],cc_read_IP[43:14]};
   
-  assign bus_tlb_match=bus_tlb_slot[9:5]==BUS_ID && bus_tlb_en;
+  assign bus_mlb_match=bus_mlb_slot[9:5]==BUS_ID && bus_mlb_en;
   
-  assign instrFed=instrEn_reg3 && (cc_read_hit && tlb_match);
+  assign instrFed=instrEn_reg3 && (cc_read_hit && mlb_match);
 
   assign exceptJumpGHT2=jupd0_tk ? jupd0_addr : jupd1_addr;
 
@@ -1092,35 +1092,35 @@ module frontendSelf(
   
   //lnk_isRet_reg & lnk_jpos[0] not possible
   
-  assign tlb_phys={1'b0,tlb_data_reg3[`ctlbData_phys]};
-  assign tlb_nx=tlb_data_reg3[`ctlbData_ne];
-  assign tlb_na=tlb_data_reg3[`ctlbData_na];
-  assign tlb_sys=tlb_data_reg3[`ctlbData_sys];
+  assign mlb_phys={1'b0,mlb_data_reg3[`cmlbData_phys]};
+  assign mlb_nx=mlb_data_reg3[`cmlbData_ne];
+  assign mlb_na=mlb_data_reg3[`cmlbData_na];
+  assign mlb_sys=mlb_data_reg3[`cmlbData_sys];
   
-  assign tlb_match=tlb_hit_reg3;
+  assign mlb_match=mlb_hit_reg3;
 
-  assign IP_phys={tlb_data[`ctlbData_phys],cc_read_IP[14:0]};
+  assign IP_phys={mlb_data[`cmlbData_phys],cc_read_IP[14:0]};
 
-  assign req_addr=req_en0 ? {tlb_phys_reg,cc_read_IP_reg4[13:7]} : 38'bz;
+  assign req_addr=req_en0 ? {mlb_phys_reg,cc_read_IP_reg4[13:7]} : 38'bz;
   assign req_slot=req_en0 ? {BUS_ID,2'b10,miss_slot} : 10'bz;
-  assign req_en0=miss_now & ~tlbMiss_now & miss_seq & IP_chg_reg4;
-  assign req_en=req_en0 & (~cc_read_hit & tlb_match || ~miss_now_reg) &~fstall;
+  assign req_en0=miss_now & ~mlbMiss_now & miss_seq & IP_chg_reg4;
+  assign req_en=req_en0 & (~cc_read_hit & mlb_match || ~miss_now_reg) &~fstall;
   
-  assign req_en1=miss_now & tlbMiss_now & miss_seq;
-  assign req_tlbEn=req_en1 & ~fstall;
+  assign req_en1=miss_now & mlbMiss_now & miss_seq;
+  assign req_mlbEn=req_en1 & ~fstall;
   assign req_addr=req_en1 ? {8'b0,cc_read_IP_reg3[43:14]} : 38'bz;
   assign req_slot=req_en1 ? {BUS_ID,2'b10,miss_slot} : 10'bz;
 
   assign req_addr=(~req_en0 & ~req_en1) ?  38'b0 : 38'bz;
   assign req_slot=(~req_en0 & ~req_en1) ? 10'b0 : 10'bz;
   
-  assign miss_recover=(bus_match0_reg3 && ~miss_seq && dreq_reg4==0)|| bus_tlb_match_reg3;
+  assign miss_recover=(bus_match0_reg3 && ~miss_seq && dreq_reg4==0)|| bus_mlb_match_reg3;
 
 
   assign uxcept=except & ~miss_now & ~btb_hold_except & ~except_indir || except_save & ~miss_now &
     ~fstall & ~ixcept;
   
-  assign ixceptIP=(~except_save) ? exceptIP : {tlb_data3[-10+`dtlbData_phys],exceptIP_save[13:0]};
+  assign ixceptIP=(~except_save) ? exceptIP : {mlb_data3[-10+`dmlbData_phys],exceptIP_save[13:0]};
   assign ixceptAttr=(~except_save) ? exceptAttr : exceptAttr_save;
   assign ixceptThread=(~except_save) ? exceptThread : exceptThread_save;
   assign ixceptDueJump=(~except_save) ? exceptDueJump : exceptDueJump_save;
@@ -1266,35 +1266,35 @@ module frontendSelf(
 //  cc_comb cc_mod(
 //  );  
 
-  ctlb tlb_mod(
+  cmlb mlb_mod(
   .clk(clk),
   .rst(rst),
   .read_clkEn(instrEn || ixcept),
   .read_thread(thread),
   .fStall(fstall),
-  .addr({tlb_IP,13'b0}),
-  .read_data(tlb_data),
+  .addr({mlb_IP,13'b0}),
+  .read_data(mlb_data),
   .nat_jump(1'b0),
-  .read_hit(tlb_hit),
-  .write_data(bus_tlb_data_reg),
-  .write_wen(bus_tlb_match_reg),
+  .read_hit(mlb_hit),
+  .write_data(bus_mlb_data_reg),
+  .write_wen(bus_mlb_match_reg),
   .msrss_en(msrss_en),
   .msrss_addr(msrss_addr),
   .msrss_data(msrss_data)
   );
 
-  ctlb tlb2_mod(
+  cmlb mlb2_mod(
   .clk(clk),
   .rst(rst),
   .read_clkEn(except_save),
   .read_thread(thread),
   .fStall(fstall),
   .addr({proc[20:0],exceptIP_save[43:14],13'b0}),
-  .read_data(tlb_data3),
+  .read_data(mlb_data3),
   .nat_jump(1'b0),
-  .read_hit(tlb_hit),
-  .write_data(bus_tlb_data_reg),
-  .write_wen(bus_tlb_match_reg),
+  .read_hit(mlb_hit),
+  .write_data(bus_mlb_data_reg),
+  .write_wen(bus_mlb_match_reg),
   .msrss_en(msrss_en),
   .msrss_addr(msrss_addr),
   .msrss_data(msrss_data)
@@ -1308,7 +1308,7 @@ module frontendSelf(
   .read_data({req_addrR,req_addrP}),
   .write_addr(req_slot[2:0]),
   .write_data({cc_read_IP_reg4[43:7],miss_phys}),
-  .write_wen(req_en|req_tlbEn)
+  .write_wen(req_en|req_mlbEn)
   );
 
   predecoder_get preDec_mod(
@@ -1548,13 +1548,13 @@ module frontendSelf(
   {jmp_off_reg[3][3:0],jdec_type[3][3:0],jdec_constant[3][3:0]},jini3);
 
   assign tbuf_error[0]=jmp_off_reg[0]!=btb_off_reg4[0] || ~jdec_type[0][4] && btb_tgt0_reg4!=jdec_target[0] || 
-      jdec_link0[4:0]!=btb_jlnpos0_reg4 || lnk_off0_reg!=btb_jlnjpos0_reg4 || (tlb_phys_reg[23:14]!=cc_read_IP_reg4[63:44] && taken_reg5);
+      jdec_link0[4:0]!=btb_jlnpos0_reg4 || lnk_off0_reg!=btb_jlnjpos0_reg4 || (mlb_phys_reg[23:14]!=cc_read_IP_reg4[63:44] && taken_reg5);
   assign tbuf_error[1]=jmp_off_reg[1]!=btb_off_reg4[1] || ~jdec_type[1][4] && btb_tgt1_reg4!=jdec_target[1] || 
-      jdec_link1[4:0]!=btb_jlnpos1_reg4 || lnk_off1_reg!=btb_jlnjpos1_reg4 || (tlb_phys_reg[23:14]!=cc_read_IP_reg4[63:44] && taken_reg5);
+      jdec_link1[4:0]!=btb_jlnpos1_reg4 || lnk_off1_reg!=btb_jlnjpos1_reg4 || (mlb_phys_reg[23:14]!=cc_read_IP_reg4[63:44] && taken_reg5);
   assign tbuf_error[2]=jmp_off_reg[2]!=btb_off_reg4[2] || ~jdec_type[2][4] && btb_tgt2_reg4!=jdec_target[2] || 
-      jdec_link2[4:0]!=btb_jlnpos2_reg4 || lnk_off2_reg!=btb_jlnjpos2_reg4 || (tlb_phys_reg[23:14]!=cc_read_IP_reg4[63:44] && taken_reg5);
+      jdec_link2[4:0]!=btb_jlnpos2_reg4 || lnk_off2_reg!=btb_jlnjpos2_reg4 || (mlb_phys_reg[23:14]!=cc_read_IP_reg4[63:44] && taken_reg5);
   assign tbuf_error[3]=jmp_off_reg[3]!=btb_off_reg4[3] || ~jdec_type[3][4] && btb_tgt3_reg4!=jdec_target[3] || 
-      jdec_link3[4:0]!=btb_jlnpos3_reg4 || lnk_off3_reg!=btb_jlnjpos3_reg4 || (tlb_phys_reg[23:14]!=cc_read_IP_reg4[63:44] && taken_reg5);
+      jdec_link3[4:0]!=btb_jlnpos3_reg4 || lnk_off3_reg!=btb_jlnjpos3_reg4 || (mlb_phys_reg[23:14]!=cc_read_IP_reg4[63:44] && taken_reg5);
 
   ght GHT_mod(
   .clk(clk),
@@ -1887,7 +1887,7 @@ module frontendSelf(
   //        link_IP<=48'b0;
 //          tr_odd<=1'b0;
 //          tr_half<=1'b0;
-          tlb_data_reg<={`ctlbData_width{1'b0}};
+          mlb_data_reg<={`cmlbData_width{1'b0}};
           miss_now<=1'b0;
           miss_cnt<=5'b0;
           IP_chg<=1'b0;
@@ -1932,13 +1932,13 @@ module frontendSelf(
           btb_jlnpos3_reg3<=0;
           btb_jlnjpos3_reg3<=0;
           miss_slot<=3'b0;
-          tlb_hit_reg<=1'b0;
+          mlb_hit_reg<=1'b0;
           bus_data_reg<={BUS_WIDTH{1'B0}};
           bus_match_reg<=1'b0;
-          bus_tlb_match_reg<=1'b0;
-          bus_tlb_match_reg2<=1'b0;
-          bus_tlb_match_reg3<=1'b0;
-          bus_tlb_data_reg<={`ctlbData_width{1'b0}};
+          bus_mlb_match_reg<=1'b0;
+          bus_mlb_match_reg2<=1'b0;
+          bus_mlb_match_reg3<=1'b0;
+          bus_mlb_data_reg<={`cmlbData_width{1'b0}};
           instrEn<=1'b0;
           instrEn_reg<=1'b0;
           instrEn_reg2<=1'b0;
@@ -1953,15 +1953,15 @@ module frontendSelf(
          // cc_base_tick_reg3<=1'b0;
          // cc_base_tick_reg4<=1'b0;
 
-          tlbMiss_now<=1'b0;
+          mlbMiss_now<=1'b0;
           miss_seq<=1'b0;
           proc<=24'b0;
           kmode<=1'b1;
           miss_phys<=31'b0;
-          tlb_hit_reg2<=1'b0;
-          tlb_data_reg2<={`ctlbData_width{1'b0}};
-          tlb_data_reg3<={`ctlbData_width{1'b0}};
-          tlb_phys_reg<=32'b0;
+          mlb_hit_reg2<=1'b0;
+          mlb_data_reg2<={`cmlbData_width{1'b0}};
+          mlb_data_reg3<={`cmlbData_width{1'b0}};
+          mlb_phys_reg<=32'b0;
           bus_match0_reg<=1'b0;
           bus_match0_reg2<=1'b0;
           bus_match0_reg3<=1'b0;
@@ -2171,20 +2171,20 @@ module frontendSelf(
           btb_jlnpos3_reg3<=0;
           btb_jlnjpos3_reg3<=0;
           miss_slot<=3'b0;
-          tlb_hit_reg<=1'b0;
+          mlb_hit_reg<=1'b0;
           bus_match_reg<=1'b0;
-          bus_tlb_match_reg<=1'b0;
-          bus_tlb_match_reg2<=1'b0;
-          bus_tlb_match_reg3<=1'b0;
+          bus_mlb_match_reg<=1'b0;
+          bus_mlb_match_reg2<=1'b0;
+          bus_mlb_match_reg3<=1'b0;
           instrEn<=1'b1;
           instrEn_reg<=1'b0;
           instrEn_reg2<=1'b0;
           instrEn_reg3<=1'b0;
-          tlbMiss_now<=1'b0;
+          mlbMiss_now<=1'b0;
           miss_seq<=1'b0;
-          tlb_hit_reg2<=1'b0;
-          tlb_hit_reg3<=1'b0;
-          tlb_hit_reg4<=1'b0;
+          mlb_hit_reg2<=1'b0;
+          mlb_hit_reg3<=1'b0;
+          mlb_hit_reg4<=1'b0;
           bus_match0_reg<=1'b0;
           bus_match0_reg2<=1'b0;
           bus_match0_reg3<=1'b0;
@@ -2225,12 +2225,12 @@ module frontendSelf(
           cc_attr<=cc_attr_d;
           if (instrEn_reg3 && !|tbuf_error) begin read_data_reg<=read_data; cc_err_reg<=cc_err; end
           jumpTK_en<=1'b0;
-          if ((~cc_read_hit|~tlb_match) & ~miss_now & instrEn_reg3) begin
+          if ((~cc_read_hit|~mlb_match) & ~miss_now & instrEn_reg3) begin
               miss_IP<=cc_read_IP_reg3;
 	      //proturberan<=cc_base_tick|cc_base_tick_reg|cc_base_tick_reg2|cc_base_tick_reg3;
               miss_phys<=IP_phys_reg3[43:13];
               miss_now<=1'b1;
-              tlbMiss_now<=~tlb_match;
+              mlbMiss_now<=~mlb_match;
               miss_cnt<=0;
               miss_slot<=3'b0;
               miss_seq<=1'b1;
@@ -2251,18 +2251,18 @@ module frontendSelf(
 	  end
           if (miss_recover) begin
               miss_now<=1'b0;
-              tlbMiss_now<=1'b0;
+              mlbMiss_now<=1'b0;
               instrEn<=1'b1;
               miss_cnt<=5'b0;
               miss_slot<=3'b0;
 	      //proturberan<=1'b0;
           end
           if (miss_cnt==15) miss_seq<=1'b0;
-          if (miss_slot==7 || tlbMiss_now) miss_seq<=1'b0;
+          if (miss_slot==7 || mlbMiss_now) miss_seq<=1'b0;
           if (miss_seq) miss_cnt<=miss_cnt_next;
           if (miss_seq && ~cc_read_hit && IP_chg_reg3) miss_slot<=miss_slot_next;
    //       link_IP<=link_IP_d;
-          tlb_data_reg<=tlb_data;
+          mlb_data_reg<=mlb_data;
           IP_chg<=(cc_read_IP[6:5]==2'b11) & do_seq || (cc_read_IP[6]==1'b1) & do_seq_miss || miss_recover;
           IP_chg_reg<=IP_chg;
           IP_chg_reg2<=IP_chg_reg;
@@ -2304,13 +2304,13 @@ module frontendSelf(
           btb_jlink3_reg3<=btb_jlink3_reg2;
           btb_jlnpos3_reg3<=btb_jlnpos3_reg2;
           btb_jlnjpos3_reg3<=btb_jlnjpos3_reg2;
-          tlb_hit_reg<=tlb_hit;
+          mlb_hit_reg<=mlb_hit;
           bus_data_reg<=bus_data;
           bus_match_reg<=bus_match;
-          bus_tlb_match_reg<=bus_tlb_match;
-          bus_tlb_match_reg2<=bus_tlb_match_reg;
-          bus_tlb_match_reg3<=bus_tlb_match_reg2;
-          bus_tlb_data_reg<=bus_tlb_data;
+          bus_mlb_match_reg<=bus_mlb_match;
+          bus_mlb_match_reg2<=bus_mlb_match_reg;
+          bus_mlb_match_reg3<=bus_mlb_match_reg2;
+          bus_mlb_data_reg<=bus_mlb_data;
           cc_read_IP_reg<=cc_read_IP;
           cc_read_IP_reg2<=cc_read_IP_reg;
           cc_read_IP_reg3<=cc_read_IP_reg2;
@@ -2320,12 +2320,12 @@ module frontendSelf(
          // cc_base_tick_reg2<=cc_base_tick_reg;
          // cc_base_tick_reg3<=cc_base_tick_reg2;
          // cc_base_tick_reg4<=cc_base_tick_reg3;
-          tlb_hit_reg2<=tlb_hit_reg;
-          tlb_hit_reg3<=tlb_hit_reg2;
-          tlb_hit_reg4<=tlb_hit_reg3;
-          tlb_data_reg2<=tlb_data_reg;
-          tlb_phys_reg<=tlb_phys;
-          tlb_data_reg3<=tlb_data_reg2;
+          mlb_hit_reg2<=mlb_hit_reg;
+          mlb_hit_reg3<=mlb_hit_reg2;
+          mlb_hit_reg4<=mlb_hit_reg3;
+          mlb_data_reg2<=mlb_data_reg;
+          mlb_phys_reg<=mlb_phys;
+          mlb_data_reg3<=mlb_data_reg2;
           if (~miss_recover) begin
               bus_match0_reg<=bus_match0_reg|bus_match0;
               bus_match0_reg2<=bus_match0_reg2|bus_match0_reg;

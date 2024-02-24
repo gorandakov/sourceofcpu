@@ -70,7 +70,7 @@ module pager(
   localparam PADDR_WIDTH=44;
   localparam OPERATION_WIDTH=`operation_width;
   localparam BANK_COUNT=32;
-  localparam TLB_DATA_WIDTH=`dtlbData_width;
+  localparam TLB_DATA_WIDTH=`dmlbData_width;
   localparam TLB_IP_WIDTH=52;
   localparam REG_WIDTH=`reg_addr_width;
   localparam PERM_WIDTH=`permreq_width;
@@ -178,38 +178,38 @@ module pager(
   always @* begin
       all_shr[k]=finalXtra0[k][`page_global] && finalHug0[k]|finalXtra1[k][`page_global]
     &&  permReq[k][`permreq_code]|finalXtra2[k][`page_global];
-      writeTlb_data0[k][`dtlbData_sys]=finalXtra0[k][`page_sys];  
-      writeTlb_data0[k][`dtlbData_wp]=finalXtra0[k][`page_wr];  
-      writeTlb_data0[k][`dtlbData_na]=finalXtra0[k][`page_na] && ~new_inv_reg;  
-      writeTlb_data0[k][`dtlbData_ne]=finalXtra0[k][12];  
-      writeTlb_data0[k][`dtlbData_acc]=finalXtra0[k][`page_accessed];  
-      writeTlb_data0[k][`dtlbData_wrt]=finalXtra0[k][`page_dirty];  
-      writeTlb_data0[k][`dtlbData_glo]=finalXtra0[k][`page_global];  
-      writeTlb_data0[k][`dtlbData_type]={finalXtra0[k][`page_nc],finalXtra0[k][`page_wt]};  
-      writeTlb_data0[k][`dtlbData_subpage]=finalSub0;  
-      writeTlb_data0[k][`dtlbData_phys]=finalAddr0;  
+      writeTlb_data0[k][`dmlbData_sys]=finalXtra0[k][`page_sys];  
+      writeTlb_data0[k][`dmlbData_wp]=finalXtra0[k][`page_wr];  
+      writeTlb_data0[k][`dmlbData_na]=finalXtra0[k][`page_na] && ~new_inv_reg;  
+      writeTlb_data0[k][`dmlbData_ne]=finalXtra0[k][12];  
+      writeTlb_data0[k][`dmlbData_acc]=finalXtra0[k][`page_accessed];  
+      writeTlb_data0[k][`dmlbData_wrt]=finalXtra0[k][`page_dirty];  
+      writeTlb_data0[k][`dmlbData_glo]=finalXtra0[k][`page_global];  
+      writeTlb_data0[k][`dmlbData_type]={finalXtra0[k][`page_nc],finalXtra0[k][`page_wt]};  
+      writeTlb_data0[k][`dmlbData_subpage]=finalSub0;  
+      writeTlb_data0[k][`dmlbData_phys]=finalAddr0;  
   
-      writeTlb_data1[k][`dtlbData_sys]=finalXtra1[k][`page_sys];  
-      writeTlb_data1[k][`dtlbData_wp]=finalXtra1[k][`page_wr];  
-      writeTlb_data1[k][`dtlbData_na]=finalXtra1[k][`page_na] && ~new_inv_reg;  
-      writeTlb_data1[k][`dtlbData_ne]=finalXtra1[k][12];  
-      writeTlb_data1[k][`dtlbData_acc]=finalXtra1[k][`page_accessed];  
-      writeTlb_data1[k][`dtlbData_wrt]=finalXtra1[k][`page_dirty];  
-      writeTlb_data1[k][`dtlbData_glo]=finalXtra1[k][`page_global];  
-      writeTlb_data1[k][`dtlbData_type]={finalXtra1[k][`page_nc],finalXtra1[k][`page_wt]};  
-      writeTlb_data1[k][`dtlbData_subpage]=finalSub1;  
-      writeTlb_data1[k][`dtlbData_phys]=finalAddr1;  
+      writeTlb_data1[k][`dmlbData_sys]=finalXtra1[k][`page_sys];  
+      writeTlb_data1[k][`dmlbData_wp]=finalXtra1[k][`page_wr];  
+      writeTlb_data1[k][`dmlbData_na]=finalXtra1[k][`page_na] && ~new_inv_reg;  
+      writeTlb_data1[k][`dmlbData_ne]=finalXtra1[k][12];  
+      writeTlb_data1[k][`dmlbData_acc]=finalXtra1[k][`page_accessed];  
+      writeTlb_data1[k][`dmlbData_wrt]=finalXtra1[k][`page_dirty];  
+      writeTlb_data1[k][`dmlbData_glo]=finalXtra1[k][`page_global];  
+      writeTlb_data1[k][`dmlbData_type]={finalXtra1[k][`page_nc],finalXtra1[k][`page_wt]};  
+      writeTlb_data1[k][`dmlbData_subpage]=finalSub1;  
+      writeTlb_data1[k][`dmlbData_phys]=finalAddr1;  
  
-      writeTlb_data2[k][`dtlbData_sys]=finalXtra2[k][`page_sys];  
-      writeTlb_data2[k][`dtlbData_wp]=finalXtra2[k][`page_wr];  
-      writeTlb_data2[k][`dtlbData_na]=finalXtra2[k][`page_na] && ~new_inv_reg;  
-      writeTlb_data2[k][`dtlbData_ne]=finalXtra2[k][12];  
-      writeTlb_data2[k][`dtlbData_acc]=finalXtra2[k][`page_accessed];  
-      writeTlb_data2[k][`dtlbData_wrt]=finalXtra2[k][`page_dirty];  
-      writeTlb_data2[k][`dtlbData_glo]=finalXtra2[k][`page_global];  
-      writeTlb_data2[k][`dtlbData_type]={finalXtra2[k][`page_nc],finalXtra2[k][`page_wt]};  
-      writeTlb_data2[k][`dtlbData_subpage]=finalSub2;  
-      writeTlb_data2[k][`dtlbData_phys]=finalAddr2;  
+      writeTlb_data2[k][`dmlbData_sys]=finalXtra2[k][`page_sys];  
+      writeTlb_data2[k][`dmlbData_wp]=finalXtra2[k][`page_wr];  
+      writeTlb_data2[k][`dmlbData_na]=finalXtra2[k][`page_na] && ~new_inv_reg;  
+      writeTlb_data2[k][`dmlbData_ne]=finalXtra2[k][12];  
+      writeTlb_data2[k][`dmlbData_acc]=finalXtra2[k][`page_accessed];  
+      writeTlb_data2[k][`dmlbData_wrt]=finalXtra2[k][`page_dirty];  
+      writeTlb_data2[k][`dmlbData_glo]=finalXtra2[k][`page_global];  
+      writeTlb_data2[k][`dmlbData_type]={finalXtra2[k][`page_nc],finalXtra2[k][`page_wt]};  
+      writeTlb_data2[k][`dmlbData_subpage]=finalSub2;  
+      writeTlb_data2[k][`dmlbData_phys]=finalAddr2;  
 
       writeTlb_wen[k]=ready[k] & (permReq[k]==0);
  //     writeTlb_wenW=ready & permReq[k][`permreq_store] & ~new_inv_reg;
@@ -285,7 +285,7 @@ module pager(
   always @(posedge clk) begin
     for(y=0;y<3;y=y+1) begin
       if (writeTlb_wen[y]) begin
-          $display("tlb ip 0x%x",writeTlb_IP," ",new_inv_reg[y],y);
+          $display("mlb ip 0x%x",writeTlb_IP," ",new_inv_reg[y],y);
           $display("data 0: 0x%x",writeTlb_data0[y],y);
           $display("data 1: 0x%x",writeTlb_data1[y],y);
           $display("data 2: 0x%x",writeTlb_data2[y],y);

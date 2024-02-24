@@ -109,7 +109,7 @@ module imul(
 
   wire [64:0] dec_res;
   reg is_dec,is_dec_reg;
-  reg is_tlb;
+  reg is_mlb;
 
   foreign_imul dec_mod(
   clk,

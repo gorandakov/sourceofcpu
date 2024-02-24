@@ -16,7 +16,7 @@ limitations under the License.
 
 
 
-module dtlb2_ram(
+module dmlb2_ram(
   clk,
   rst,
   read_addr,
@@ -26,7 +26,7 @@ module dtlb2_ram(
   write_wen
   );
 
-  localparam DATA_WIDTH=`dtlb_width;
+  localparam DATA_WIDTH=`dmlb_width;
   localparam ADDR_WIDTH=7;
   localparam ADDR_COUNT=128;
   
@@ -51,7 +51,7 @@ endmodule
 
 
 
-module dtlb2_lru_ram(
+module dmlb2_lru_ram(
   clk,
   rst,
   read_addr,
@@ -84,7 +84,7 @@ module dtlb2_lru_ram(
 
 endmodule
 
-module l2_tlb(
+module l2_mlb(
   clk,
   rst,
   read_clkEn,

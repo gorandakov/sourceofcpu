@@ -1,7 +1,7 @@
-module fun_tlb(
+module fun_mlb(
   );
 
-  dtlb tlb_mod(
+  dmlb mlb_mod(
   clk,
   rst,
   read_clkEn,

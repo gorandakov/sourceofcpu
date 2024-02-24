@@ -102,7 +102,7 @@ module addrcalccam(
   mOp0_regNo,
   mOp0_type,
   mOp0_sz,
-  mOp0_invtlb,
+  mOp0_invmlb,
   mOp0_split,
   mOp0_bank0,
   mOp0_LSQ,
@@ -116,7 +116,7 @@ module addrcalccam(
   mOp1_regNo,
   mOp1_type,
   mOp1_sz,
-  mOp1_invtlb,
+  mOp1_invmlb,
   mOp1_split,
   mOp1_bank0,
   mOp1_LSQ,
@@ -130,7 +130,7 @@ module addrcalccam(
   mOp2_regNo,
   mOp2_type,
   mOp2_sz,
-  mOp2_invtlb,
+  mOp2_invmlb,
   mOp2_split,
   mOp2_bank0,
   mOp2_LSQ,
@@ -149,7 +149,7 @@ module addrcalccam(
   mOpR_odd,
   mOpR_low,
   mOpR_sz,
-  mOpR_invtlb,
+  mOpR_invmlb,
   mOpR_split,
   mOpR_en,
   mOpR_bank0,
@@ -171,7 +171,7 @@ module addrcalccam(
   localparam VADDR_WIDTH=44;
   localparam PADDR_WIDTH=44;
   localparam OPERATION_WIDTH=`operation_width;
-  localparam TLB_DWIDTH=`dtlbData_width;
+  localparam TLB_DWIDTH=`dmlbData_width;
   localparam BANK_COUNT=32;
   localparam REG_WIDTH=`reg_addr_width;
   localparam WQ_WIDTH=6;
@@ -189,7 +189,7 @@ module addrcalccam(
   input [REG_WIDTH-1:0] mOp0_regNo;
   input [1:0] mOp0_type;
   input [4:0] mOp0_sz;
-  input mOp0_invtlb;
+  input mOp0_invmlb;
 //  input mOp0_st;
   input mOp0_split;
   input [4:0] mOp0_bank0;
@@ -205,7 +205,7 @@ module addrcalccam(
   input [REG_WIDTH-1:0] mOp1_regNo;
   input [1:0] mOp1_type;
   input [4:0] mOp1_sz;
-  input mOp1_invtlb;
+  input mOp1_invmlb;
 //  input mOp1_st;
   input mOp1_split;
   input [4:0] mOp1_bank0;
@@ -221,7 +221,7 @@ module addrcalccam(
   input [REG_WIDTH-1:0] mOp2_regNo;
   input [1:0] mOp2_type;
   input [4:0] mOp2_sz;
-  input mOp2_invtlb;
+  input mOp2_invmlb;
 //  input mOp2_st;
   input mOp2_split;
   input [4:0] mOp2_bank0;
@@ -241,7 +241,7 @@ module addrcalccam(
   output mOpR_odd;
   output [1:0] mOpR_low;
   output [4:0] mOpR_sz;
-  output mOpR_invtlb;
+  output mOpR_invmlb;
   output mOpR_split;
   output mOpR_en;
   output [4:0] mOpR_bank0;
@@ -329,7 +329,7 @@ module addrcalccam(
   assign write_mop[0][`mOp_reg]=     mOp0_regNo;
   assign write_mop[0][`mOp_type]=    mOp0_type;
   assign write_mop[0][`mOp_sz]=      mOp0_sz;
-  assign write_mop[0][`mOp_st]=      mOp0_invtlb;
+  assign write_mop[0][`mOp_st]=      mOp0_invmlb;
   assign write_mop[0][`mOp_split]=   mOp0_split;
   assign write_mop[0][`mOp_bank0]=   mOp0_bank0;
   assign write_mop[0][`mOp_LSQ]=     mOp0_LSQ;
@@ -343,7 +343,7 @@ module addrcalccam(
   assign write_mop[1][`mOp_reg]=     mOp1_regNo;
   assign write_mop[1][`mOp_type]=    mOp1_type;
   assign write_mop[1][`mOp_sz]=      mOp1_sz;
-  assign write_mop[1][`mOp_st]=      mOp1_invtlb;
+  assign write_mop[1][`mOp_st]=      mOp1_invmlb;
   assign write_mop[1][`mOp_split]=   mOp1_split;
   assign write_mop[1][`mOp_bank0]=   mOp1_bank0;
   assign write_mop[1][`mOp_LSQ]=     mOp1_LSQ;
@@ -358,7 +358,7 @@ module addrcalccam(
   assign write_mop[2][`mOp_reg]=     mOp2_regNo;
   assign write_mop[2][`mOp_type]=    mOp2_type;
   assign write_mop[2][`mOp_sz]=      mOp2_sz;
-  assign write_mop[2][`mOp_st]=      mOp2_invtlb;
+  assign write_mop[2][`mOp_st]=      mOp2_invmlb;
   assign write_mop[2][`mOp_split]=   mOp2_split;
   assign write_mop[2][`mOp_bank0]=   mOp2_bank0;
   assign write_mop[2][`mOp_LSQ]=     mOp2_LSQ;
@@ -380,7 +380,7 @@ module addrcalccam(
   assign mOpR_sz=(!conflFound) ? 5'B0 : 5'BZ;
   assign mOpR_odd=(!conflFound) ? 1'B0 : 1'BZ;
   assign mOpR_low=(!conflFound) ? 2'B0 : 2'BZ;
-  assign mOpR_invtlb=(!conflFound) ? 1'B0 : 1'BZ;
+  assign mOpR_invmlb=(!conflFound) ? 1'B0 : 1'BZ;
   assign mOpR_split=(!conflFound) ? 1'B0 : 1'BZ;
   assign mOpR_bank0=(!conflFound) ? 5'b0 : 5'BZ;
   assign mOpR_bank0=(!conflFound) ? 5'b0 : 5'BZ;
@@ -411,7 +411,7 @@ module addrcalccam(
         assign mOpR_regNo=sel[k] ? read_mop[k][`mOp_reg] : 'z;
         assign mOpR_type=sel[k] ? read_mop[k][`mOp_type] : 2'BZ;
         assign mOpR_sz=sel[k] ? read_mop[k][`mOp_sz] : 5'BZ;
-        assign mOpR_invtlb=sel[k] ? read_mop[k][`mOp_st] : 1'BZ;
+        assign mOpR_invmlb=sel[k] ? read_mop[k][`mOp_st] : 1'BZ;
         assign mOpR_split=sel[k] ? read_mop[k][`mOp_split] : 1'BZ;
         assign mOpR_bank0=sel[k] ? read_mop[k][`mOp_bank0] : 5'BZ;
         assign mOpR_LSQ=sel[k] ? read_mop[k][`mOp_LSQ] : 9'BZ;

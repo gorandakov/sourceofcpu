@@ -188,15 +188,15 @@ module heptane_core(
   wire [37:0] req_addr;
   wire [9:0] req_slot;
   wire req_en;
-  wire req_tlbEn;
-  wire [3:0] req_tlbAttr;
+  wire req_mlbEn;
+  wire [3:0] req_mlbAttr;
   reg [37:0] req_addr_reg/*verilator public*/;
   reg [9:0] req_slot_reg/*verilator public*/;
   reg req_en_reg/*verilator public*/;
 
-  wire [`ctlbData_width-1:0] bus_tlb_data;
-  reg [9:0] bus_tlb_slot;
-  wire bus_tlb_en;
+  wire [`cmlbData_width-1:0] bus_mlb_data;
+  reg [9:0] bus_mlb_slot;
+  wire bus_mlb_en;
 
   wire [DATA_WIDTH-1:0] read_data;
   wire instrFed;
@@ -282,7 +282,7 @@ module heptane_core(
 
   reg jupd_reg,jupd_reg2;
 
-  wire [`ctlbData_width-1:0] bus_tlb_data_d;
+  wire [`cmlbData_width-1:0] bus_mlb_data_d;
 
   wire stall/*verilator public*/;
 
@@ -971,10 +971,10 @@ module heptane_core(
 //  reg ret_r8d_en;
 //  reg [63:0] ret_r8d_data;
   
-//  assign bus_tlb_data_d[`ctlbData_sys]=1'b1;
-//  assign bus_tlb_data_d[`ctlbData_na]=1'b0;
-//  assign bus_tlb_data_d[`ctlbData_ne]=1'b0;
-//  assign bus_tlb_data_d[`ctlbData_phys]=req_addr[31:0];
+//  assign bus_mlb_data_d[`cmlbData_sys]=1'b1;
+//  assign bus_mlb_data_d[`cmlbData_na]=1'b0;
+//  assign bus_mlb_data_d[`cmlbData_ne]=1'b0;
+//  assign bus_mlb_data_d[`cmlbData_phys]=req_addr[31:0];
   
 //  assign read_data_strip={read_data[258:195],read_data[193:130],read_data[128:65],read_data[63:0]};
   
@@ -1474,11 +1474,11 @@ module heptane_core(
   req_addr,
   req_slot,
   req_en,
-  req_tlbEn,
-  req_tlbAttr,
-  bus_tlb_data,
-  bus_tlb_slot,
-  bus_tlb_en,
+  req_mlbEn,
+  req_mlbAttr,
+  bus_mlb_data,
+  bus_mlb_slot,
+  bus_mlb_en,
   msrss_en,msrss_no,msrss_data,
   MSI_expAddr_reg,
   MSI_expAddr_en_reg,
@@ -1827,10 +1827,10 @@ module heptane_core(
   except_jmask_en,
   except_jmask, 
   req_addr[30:0],
-  req_tlbAttr,
-  req_tlbEn,
-  bus_tlb_data,
-  bus_tlb_en,
+  req_mlbAttr,
+  req_mlbEn,
+  bus_mlb_data,
+  bus_mlb_en,
   dec_attr,
   MSI_expAddr_reg,
   MSI_expAddr_en_reg,
@@ -2199,7 +2199,7 @@ module heptane_core(
   begin
     
     if (rst) begin
-        bus_tlb_slot<=10'b0;
+        bus_mlb_slot<=10'b0;
         req_addr_reg<=38'b0;
         req_en_reg<=1'b0;
         req_slot_reg<=10'b0;
@@ -2267,8 +2267,8 @@ module heptane_core(
     end else begin
         MSI_expAddr_reg<=MSI_expAddr;
         MSI_expAddr_en_reg<=MSI_expAddr_en;
-        if (req_tlbEn) begin
-            bus_tlb_slot<=req_slot;
+        if (req_mlbEn) begin
+            bus_mlb_slot<=req_slot;
         end
         req_addr_reg<=req_addr;
         req_en_reg<=req_en;
