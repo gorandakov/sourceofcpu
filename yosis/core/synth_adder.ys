@@ -1,3 +1,0 @@
-read -sv ../../rtl/adder.sv
-write_cxxrtl adder_synth.cpp
-
