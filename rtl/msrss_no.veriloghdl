@@ -43,7 +43,7 @@ limitations under the License.
 `define csr_MAC 2048
 `define csr_excpt_fpu 1036
 `define csr_vlen 38
-`define mflags_cpl 1:0
+`define mflags_priv 1:0
 `define mflags_vm 2
 `define mflags_pg 3
 `define mflags_irq 4
