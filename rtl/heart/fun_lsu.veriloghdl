@@ -17,7 +17,7 @@ limitations under the License.
 
 `include "../struct.sv"
 
-module agu_block(
+module addrcalc_block(
   clk, rst,
   clkREF,clkREF2,
   except,
@@ -25,10 +25,10 @@ module agu_block(
   excpt_in_vm,
   excpt_in_km,
   rsStall,
-  pause_agu,
-  miss_holds_agu,
-  miss_pause_agu,
-  wt_pause_agu,
+  pause_addrcalc,
+  miss_holds_addrcalc,
+  miss_pause_addrcalc,
+  wt_pause_addrcalc,
   mOp_write_clear,
   u1_base,u1_index,u1_const,
   u1_base_fufwd,u1_base_fuufwd,
@@ -199,10 +199,10 @@ module agu_block(
   input excpt_in_vm;
   input excpt_in_km;
   input [3:0] rsStall;
-  output pause_agu;
-  output miss_holds_agu;
-  output miss_pause_agu;
-  output wt_pause_agu;
+  output pause_addrcalc;
+  output miss_holds_addrcalc;
+  output miss_pause_addrcalc;
+  output wt_pause_addrcalc;
   output mOp_write_clear;
   (* bus=WB bus_spacing=10 *) input [65:0] u1_base;
   (* bus=WB bus_spacing=10 *) input [65:0] u1_index;
@@ -535,8 +535,8 @@ module agu_block(
   reg [65:0] FU8_reg;
   reg [65:0] FU9_reg;
   
-  reg bus_holds_agu;
-  reg bus_holds_agu_reg;
+  reg bus_holds_addrcalc;
+  reg bus_holds_addrcalc_reg;
 
   wire [64:0] uu_base1;
   wire [64:0] uu_index1;
@@ -707,17 +707,17 @@ module agu_block(
 
 
 
-//  wire wt_pause_agu;
-  reg  wt_pause_agu_reg;
+//  wire wt_pause_addrcalc;
+  reg  wt_pause_addrcalc_reg;
 
   wire miss0,miss1,miss2,miss3;
 
-  reg miss_holds_agu_reg;
-  reg miss_holds_agu_reg2;
-  reg bus_holds_agu_reg2;
-  reg bus_holds_agu_reg3;
-  reg bus_holds_agu_reg4;
-  reg bus_holds_agu_reg5;
+  reg miss_holds_addrcalc_reg;
+  reg miss_holds_addrcalc_reg2;
+  reg bus_holds_addrcalc_reg2;
+  reg bus_holds_addrcalc_reg3;
+  reg bus_holds_addrcalc_reg4;
+  reg bus_holds_addrcalc_reg5;
   wire miss_next;
   wire mcam_replay;
   wire miss_unlock;
@@ -1550,37 +1550,37 @@ module agu_block(
   FU9,FU9_reg
   );
   
-  agu_get_shiftSize sh1(u1_op,u1_sh,u1_sh2); 
-  agu_get_shiftSize sh2(u2_op,u2_sh,u2_sh2); 
-  agu_get_shiftSize sh3(u3_op,u3_sh,u3_sh2); 
-  agu_get_shiftSize sh4(u4_op,u4_sh,u4_sh2); 
-  agu_get_shiftSize sh5(u5_op,u5_sh,u5_sh2); 
+  addrcalc_get_shiftSize sh1(u1_op,u1_sh,u1_sh2); 
+  addrcalc_get_shiftSize sh2(u2_op,u2_sh,u2_sh2); 
+  addrcalc_get_shiftSize sh3(u3_op,u3_sh,u3_sh2); 
+  addrcalc_get_shiftSize sh4(u4_op,u4_sh,u4_sh2); 
+  addrcalc_get_shiftSize sh5(u5_op,u5_sh,u5_sh2); 
 
   msrss_watch #(`csr_mflags,64'h0) mflags_mod(clk,rst,msrss_addr,msrss_data[63:0],msrss_en,mflags);
 
  
-  add_agu aadd1(uu_base1,u1_const_reg,uu_index1,p0_cmplxAddr_d,p0_sec_in,
+  add_addrcalc aadd1(uu_base1,u1_const_reg,uu_index1,p0_cmplxAddr_d,p0_sec_in,
     p0_ndiff,1'b1,u1_sh_reg,u1_sh2_reg);
-  add_agu aadd2(uu_base2,u2_const_reg,uu_index2,p1_cmplxAddr_d,p1_sec_in,
+  add_addrcalc aadd2(uu_base2,u2_const_reg,uu_index2,p1_cmplxAddr_d,p1_sec_in,
     p1_ndiff,1'b1,u2_sh_reg,u2_sh2_reg);
-  add_agu aadd3(uu_base3,u3_const_reg,uu_index3,p2_cmplxAddr_d,p2_sec_in,
+  add_addrcalc aadd3(uu_base3,u3_const_reg,uu_index3,p2_cmplxAddr_d,p2_sec_in,
     p2_ndiff,1'b1,u3_sh_reg,u3_sh2_reg);
-  add_agu aadd4(uu_base4,u4_const_reg,uu_index4,p4_cmplxAddr_d,p4_sec_in,
+  add_addrcalc aadd4(uu_base4,u4_const_reg,uu_index4,p4_cmplxAddr_d,p4_sec_in,
     p4_ndiff,~p4_mex_en,u4_sh_reg,u4_sh2_reg);
-  add_agu aadd5(uu_base5,u5_const_reg,uu_index5,p5_cmplxAddr_d,p5_sec_in,
+  add_addrcalc aadd5(uu_base5,u5_const_reg,uu_index5,p5_cmplxAddr_d,p5_sec_in,
     p5_ndiff,~p5_mex_en,u5_sh_reg,u5_sh2_reg);
 
   assign p4_cmplxAddr_d=p4_mex_en ? {5'b11111,7'b0,7'h7f,1'b1,p4_mex_addr} : 64'bz;
   assign p5_cmplxAddr_d=p5_mex_en ? {5'b11111,7'b0,7'h7f,1'b1,p5_mex_addr} : 64'bz;
 
-  sagu Wagu_mod(
+  saddrcalc Waddrcalc_mod(
   .clk(clk),
   .rst(rst),
   .except(except),
   .attr(u4_attr_reg),
   .read_clkEn(u4_clkEn_reg),
   .doStall(),
-  .bus_hold(wt_pause_agu_reg), 
+  .bus_hold(wt_pause_addrcalc_reg), 
   .mex_addr(p4_mex_addr),
   .mex_attr(p4_mex_attr),
   .mex_en(p4_mex_en),
@@ -1636,14 +1636,14 @@ module agu_block(
   .tlb_hit(tlb_hitR[4])
   );
   
-  sagu Wagu2_mod(
+  saddrcalc Waddrcalc2_mod(
   .clk(clk),
   .rst(rst),
   .except(except),
   .attr(u5_attr_reg),
   .read_clkEn(u5_clkEn_reg),
   .doStall(),
-  .bus_hold(wt_pause_agu_reg), 
+  .bus_hold(wt_pause_addrcalc_reg), 
   .mex_addr(p5_mex_addr),
   .mex_attr(p5_mex_attr),
   .mex_en(p5_mex_en),
@@ -1705,7 +1705,7 @@ module agu_block(
   except,
   1'b0,
   u4_clkEn_reg2|u5_clkEn_reg2,//mOp5_rsEn|mOp4_rsEn,
-  wt_pause_agu,
+  wt_pause_addrcalc,
   p4_tlbmiss,
   mOp4_en,
   1'b0,
@@ -1783,7 +1783,7 @@ module agu_block(
 
   LFSR16_1 oO_mod(clk,rst,other_flip);
 
-  agu #(0) agu0(
+  addrcalc #(0) addrcalc0(
   clk,
   rst,
   except,
@@ -1791,7 +1791,7 @@ module agu_block(
   rsStall[0],
   u1_clkEn,
   ,
-  bus_holds_agu|miss_holds_agu,
+  bus_holds_addrcalc|miss_holds_addrcalc,
   u1_op,
   u1_sh,
   u1_reg,
@@ -1851,7 +1851,7 @@ module agu_block(
   tlb_hitR[0] 
   );
   
-  agu #(1) agu1(
+  addrcalc #(1) addrcalc1(
   clk,
   rst,
   except,
@@ -1859,7 +1859,7 @@ module agu_block(
   rsStall[1],
   u2_clkEn,
   ,
-  bus_holds_agu|miss_holds_agu,
+  bus_holds_addrcalc|miss_holds_addrcalc,
   u2_op,
   u2_sh,
   u2_reg,
@@ -1919,7 +1919,7 @@ module agu_block(
   tlb_hitR[1] 
   );
 
-  agu #(0) agu2(
+  addrcalc #(0) addrcalc2(
   clk,
   rst,
   except,
@@ -1927,7 +1927,7 @@ module agu_block(
   rsStall[2],
   u3_clkEn,
   ,
-  bus_holds_agu|miss_holds_agu,
+  bus_holds_addrcalc|miss_holds_addrcalc,
   u3_op,
   u3_sh,
   u3_reg,
@@ -1988,13 +1988,13 @@ module agu_block(
 
   );
   
-  agucam recirculate_mod(
+  addrcalccam recirculate_mod(
   .clk(clk),
   .rst(rst),
   .except(except),
   .except_thread(1'b0),
-  .read_clkEn(~Em_tlb_req_en && ~rec_stall &&~bus_holds_agu_reg &&~miss_holds_agu_reg &&~alt_bus_hold_reg),// && ~miss_pause_agu),
-  .doSkip(pause_agu),
+  .read_clkEn(~Em_tlb_req_en && ~rec_stall &&~bus_holds_addrcalc_reg &&~miss_holds_addrcalc_reg &&~alt_bus_hold_reg),// && ~miss_pause_addrcalc),
+  .doSkip(pause_addrcalc),
   .rsStall(rsStall[3]),
   .conflict0(p0_conflict | p0_tlbmiss_reg),
   .mOp0_lsflag(mOp0_lsflag),
@@ -2060,13 +2060,13 @@ module agu_block(
   .mOpR_thread()
   );
   
-  agu_r rec_agu_mod(
+  addrcalc_r rec_addrcalc_mod(
   .clk(clk),
   .rst(rst),
   .except(except),
   .doStall(rec_stall),
-  .bus_hold(bus_holds_agu_reg|miss_holds_agu_reg|alt_bus_hold_reg),
-  .pause_miss(miss_pause_agu),
+  .bus_hold(bus_holds_addrcalc_reg|miss_holds_addrcalc_reg|alt_bus_hold_reg),
+  .pause_miss(miss_pause_addrcalc),
   .rsStall(rsStall[3]),
   .mOp0_en(rec_en),
   .mOp0_thread(1'b0),
@@ -2153,16 +2153,16 @@ module agu_block(
   );
 
   assign miss0=~FU0Hit & mOpX0_en_reg3 & ~p0_conflict_reg2 & 
-    ~bus_holds_agu_reg4 &  
+    ~bus_holds_addrcalc_reg4 &  
     (mOpX0_type_reg3!=2'b10) & ~except & ~mOp0_sec_reg3 & ~alt_bus_hold_reg4;
   assign miss1=~FU1Hit & mOpX1_en_reg3 & ~p1_conflict_reg2 & 
-    ~bus_holds_agu_reg4 &  
+    ~bus_holds_addrcalc_reg4 &  
     (mOpX1_type_reg3!=2'b10) & ~except & ~mOp1_sec_reg3 & ~alt_bus_hold_reg4;
   assign miss2=~FU2Hit & mOpX2_en_reg3 & ~p2_conflict_reg2 & 
-    ~bus_holds_agu_reg4 &  
+    ~bus_holds_addrcalc_reg4 &  
     (mOpX2_type_reg3!=2'b10) & ~except & ~mOp2_sec_reg3 & ~alt_bus_hold_reg4;
   assign miss3=~FU3Hit & mOpX3_en_reg3 & ~alt_bus_hold_reg4 & 
-    ~bus_holds_agu_reg4 & (~except || mOpX3_register_reg3==9'h1fc);
+    ~bus_holds_addrcalc_reg4 & (~except || mOpX3_register_reg3==9'h1fc);
   
   assign wr0_hit={mOpY4_hit && mOpY4_odd_o_reg3 | mOpY4_split_o_reg3,mOpY4_hit && ~mOpY4_odd_o_reg3 | mOpY4_split_o_reg3};
   assign wr0_addrE=mOpY4_addrEven_o_reg3;
@@ -2217,8 +2217,8 @@ module agu_block(
   insBus_addr,
  // miss_next,
  // mcam_replay,
-  miss_pause_agu,//??
-  miss_holds_agu,
+  miss_pause_addrcalc,//??
+  miss_holds_addrcalc,
  // miss_unlock,
   now_flushing,
   miss0,
@@ -3069,22 +3069,22 @@ module agu_block(
       p4_ndiff_reg<=p4_ndiff;
       p5_ndiff_reg<=p5_ndiff;
 
-      wt_pause_agu_reg<=wt_pause_agu;
-      miss_holds_agu_reg<=miss_holds_agu;
-      miss_holds_agu_reg2<=miss_holds_agu_reg;
-      bus_holds_agu_reg2<=bus_holds_agu_reg;
+      wt_pause_addrcalc_reg<=wt_pause_addrcalc;
+      miss_holds_addrcalc_reg<=miss_holds_addrcalc;
+      miss_holds_addrcalc_reg2<=miss_holds_addrcalc_reg;
+      bus_holds_addrcalc_reg2<=bus_holds_addrcalc_reg;
       alt_bus_hold_reg<=alt_bus_hold;
       alt_bus_addr_reg<=alt_bus_addr;
       alt_bus_hold_reg2<=alt_bus_hold_reg;
       alt_bus_hold_reg3<=alt_bus_hold_reg2;
       alt_bus_hold_reg4<=alt_bus_hold_reg3;
       
-      bus_holds_agu<=insert_isData;
-      bus_holds_agu_reg<=bus_holds_agu;
-      bus_holds_agu_reg2<=bus_holds_agu_reg;
-      bus_holds_agu_reg3<=bus_holds_agu_reg2;
-      bus_holds_agu_reg4<=bus_holds_agu_reg3;
-      bus_holds_agu_reg5<=bus_holds_agu_reg4;
+      bus_holds_addrcalc<=insert_isData;
+      bus_holds_addrcalc_reg<=bus_holds_addrcalc;
+      bus_holds_addrcalc_reg2<=bus_holds_addrcalc_reg;
+      bus_holds_addrcalc_reg3<=bus_holds_addrcalc_reg2;
+      bus_holds_addrcalc_reg4<=bus_holds_addrcalc_reg3;
+      bus_holds_addrcalc_reg5<=bus_holds_addrcalc_reg4;
      
       mOpY4_addrEven_o_reg<=mOpY4_addrEven_o;
       mOpY4_addrOdd_o_reg<=mOpY4_addrOdd_o;

@@ -742,8 +742,8 @@ endmodule
 
   assign exbits=is_ptr ? ptr[63:44] : 20'b0;
 
-  agusec_shift nih_mod(ptr[`ptr_exp],C[43:12],cout_sec0);
-  agusec_check_upper3 hin_mod(ptr,unptr,{39'b0,cin},pos_ack,neg_ack,
+  addrcalcsec_shift nih_mod(ptr[`ptr_exp],C[43:12],cout_sec0);
+  addrcalcsec_check_upper3 hin_mod(ptr,unptr,{39'b0,cin},pos_ack,neg_ack,
     ndiff);
   
   nand_array #(WIDTH) nG0_mod(xa[63:0],xb,nG0);
@@ -1243,7 +1243,7 @@ module get_carry(a,b,cin,cout); //cout=a bigger or equal than b if b inv, cin=1
 endmodule
 
 
-(* align_width=a,b,c,out *) module add_agu(
+(* align_width=a,b,c,out *) module add_addrcalc(
   a,b,c,
   out,
   cout_sec,
@@ -1326,8 +1326,8 @@ endmodule
   endgenerate
   adder_seq #(WIDTH) add_mod(tmp1,tmp2[WIDTH-1:0],~(tmp1|tmp2),~(tmp1&tmp2),out[43:0],c_s,1'b0,en,,,,);
   assign out[63+PTRBIT:44]=en ? ptr[63+PTRBIT:44] : 'z;
-  agusec_shift ssh_mod(ptr[`ptr_exp],c_s[42:11],cout_sec0);
-  agusec_check_upper3 #(1'b1) chk_mod(ptr,unptr[43:4],b[43:4],{dummy1,pos_ack},{dummy2,neg_ack},ndiff);
+  addrcalcsec_shift ssh_mod(ptr[`ptr_exp],c_s[42:11],cout_sec0);
+  addrcalcsec_check_upper3 #(1'b1) chk_mod(ptr,unptr[43:4],b[43:4],{dummy1,pos_ack},{dummy2,neg_ack},ndiff);
 endmodule
 
 

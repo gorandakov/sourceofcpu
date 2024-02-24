@@ -1949,8 +1949,8 @@ module backend(
   wire [1:0][3:0] WoutDataEn;
   wire [1:0]WoutThread;
   wire [1:0][3:0] WoutShiftSize;
-  wire [1:0]Wagu_blockRS;
-  reg Wagu_blockRS_reg[1:0];
+  wire [1:0]Waddrcalc_blockRS;
+  reg Waddrcalc_blockRS_reg[1:0];
   wire alu_jupdate=enS_alu[5];
   wire [1:0] WoutLSflag;
   wire [1:0][3:0] WoutAttr;
@@ -2020,14 +2020,14 @@ module backend(
   wire [1:0][135:0] lsw_wdata; 
   wire [1:0][1:0] lsw_pdata;
 
-  wire pause_agu;
-  wire miss_pause_agu/* verilator public */;
-  reg miss_pause_agu_reg;
-  reg miss_pause_agu_reg2;
-  wire [2:0] agu_blockRS;
-  wire miss_holds_agu;
-  reg miss_holds_agu_reg;
-  reg miss_holds_agu_reg2;
+  wire pause_addrcalc;
+  wire miss_pause_addrcalc/* verilator public */;
+  reg miss_pause_addrcalc_reg;
+  reg miss_pause_addrcalc_reg2;
+  wire [2:0] addrcalc_blockRS;
+  wire miss_holds_addrcalc;
+  reg miss_holds_addrcalc_reg;
+  reg miss_holds_addrcalc_reg2;
  
   wire [5:4][8:0] p_LSQ; 
   
@@ -2079,8 +2079,8 @@ module backend(
   
   wire [5:0] II_upper;
   
-  reg bus_holds_agu,bus_holds_agu_reg,bus_holds_agu_reg2;
-  reg bus_holds_agu_reg3,bus_holds_agu_reg4,bus_holds_agu_reg5;
+  reg bus_holds_addrcalc,bus_holds_addrcalc_reg,bus_holds_addrcalc_reg2;
+  reg bus_holds_addrcalc_reg3,bus_holds_addrcalc_reg4,bus_holds_addrcalc_reg5;
   
   wire [3:0] dc_rdEn/* verilator public */; 
   wire [3:0] dc_rsEn; 
@@ -2177,9 +2177,9 @@ module backend(
   wire retfl_enG;
   reg [8:0] retfl_rF_reg;
 
-  wire wt_pause_agu;
-  reg wt_pause_agu_reg;
-  reg wt_pause_agu_reg2;
+  wire wt_pause_addrcalc;
+  reg wt_pause_addrcalc_reg;
+  reg wt_pause_addrcalc_reg2;
 
   wire [5:0][`lsaddr_width-1:0] lsr_wr_data;
 
@@ -4272,7 +4272,7 @@ module backend(
     .outOp0(outOp[3*m+0]),.outInstrIndex0(outII[3*m+0]), .outFuFwdA0(fuFwdA[3*m+0]),.outFuFwdB0(fuFwdB[3*m+0]),
     .outFuuFwdA0(fuuFwdA[3*m+0]),.outFuuFwdB0(fuuFwdB[3*m+0]),.outLSQ0(outLSQ[m]),.outDataEn0(outEn[3*m+0]),
     .outThread0(outThr[3*m+0]),.outWQ0(outWQ[m]),.outLSFlag0(outLSflag[m]),
-    .outAttr0(outAttr[3*m+0]),//agu
+    .outAttr0(outAttr[3*m+0]),//addrcalc
   .outDataA1(outDataA[3*m+1]),.outDataB1(outDataB[3*m+1]),
     .outDataC1(outDataC[3*m+1]), 
     .outDataS1(outDataS[3*m+1]),.outReg1(outReg[3*m+1]),
@@ -4342,7 +4342,7 @@ module backend(
   .FUS7(FUS8),.FUSreg7(outRegS[3*1+2]),.FUSwen7(outEn[3*1+2][1]&~outOp[3*1+2][12]),
   .FUS8(FUS9),.FUSreg8(outRegS[3*2+2]),.FUSwen8(outEn[3*2+2][1]&~outOp[3*2+2][12]),
 // 1 if buffer is free  
-  .pause0(miss_holds_agu|pause_agu|miss_pause_agu|bus_holds_agu|bus_holds_agu_reg|insBus_io|rsDoStall[m]),
+  .pause0(miss_holds_addrcalc|pause_addrcalc|miss_pause_addrcalc|bus_holds_addrcalc|bus_holds_addrcalc_reg|insBus_io|rsDoStall[m]),
   .foundAlt1(~(&nDataAlt[m])|(|fxFRT_alten[m])),.foundAlt2(fxFRT_pause[m])
   );
   
@@ -4838,7 +4838,7 @@ module backend(
   
   endgenerate
   
-  assign rsStall=miss_holds_agu|pause_agu|miss_pause_agu|bus_holds_agu|bus_holds_agu_reg|insBus_io; 
+  assign rsStall=miss_holds_addrcalc|pause_addrcalc|miss_pause_addrcalc|bus_holds_addrcalc|bus_holds_addrcalc_reg|insBus_io; 
   assign fret_en[1]=0;
   assign fret   [1]=0;
   assign fret_en[3]=0;
@@ -4990,7 +4990,7 @@ module backend(
 
   assign insert_isData=insBus_req[9:5]==BUS_ID && !insBus_req[4] && insBus_en;
 `ifdef simulation
-  agu_block #(BUS_ID) agu_aligned(
+  addrcalc_block #(BUS_ID) addrcalc_aligned(
   .clk(clk), .rst(rst|do_sched_rst),
   .clkREF(clkREF),.clkREF2(clkREF2),
   .except(except),
@@ -4998,10 +4998,10 @@ module backend(
   .excpt_in_vm(),
   .excpt_in_km(),
   .rsStall(rsDoStall),//input
-  .pause_agu(pause_agu),
-  .miss_holds_agu(miss_holds_agu),
-  .miss_pause_agu(miss_pause_agu),
-  .wt_pause_agu(wt_pause_agu),
+  .pause_addrcalc(pause_addrcalc),
+  .miss_holds_addrcalc(miss_holds_addrcalc),
+  .miss_pause_addrcalc(miss_pause_addrcalc),
+  .wt_pause_addrcalc(wt_pause_addrcalc),
   .mOp_write_clear(write_clear),
   .u1_base(outDataB[0]),.u1_index(outDataA[0]),.u1_const(outDataC[0][43:0]),
   .u1_base_fufwd(fuFwdB[0]),.u1_base_fuufwd(fuuFwdB[0]),
@@ -5176,7 +5176,7 @@ module backend(
   .wrStall(wrStall)
   );
 `else
-agu_block #(BUS_ID) agu_aligned(
+addrcalc_block #(BUS_ID) addrcalc_aligned(
   .clk(clk), .rst(rst|do_sched_rst),
   .clkREF(clkREF),.clkREF2(clkREF2),
   .except(except),
@@ -5184,10 +5184,10 @@ agu_block #(BUS_ID) agu_aligned(
   .excpt_in_vm(),
   .excpt_in_km(),
   .rsStall(rsDoStall),//input
-  .pause_agu(pause_agu),
-  .miss_holds_agu(miss_holds_agu),
-  .miss_pause_agu(miss_pause_agu),
-  .wt_pause_agu(wt_pause_agu),
+  .pause_addrcalc(pause_addrcalc),
+  .miss_holds_addrcalc(miss_holds_addrcalc),
+  .miss_pause_addrcalc(miss_pause_addrcalc),
+  .wt_pause_addrcalc(wt_pause_addrcalc),
   .mOp_write_clear(write_clear),
   .u1_base(outDataA[0]),.u1_index(outDataA[0]),.u1_const(outDataC[0][43:0]),
   .u1_base_fufwd(fuFwdA[0]),.u1_base_fuufwd(fuuFwdA[0]),
@@ -5367,11 +5367,11 @@ agu_block #(BUS_ID) agu_aligned(
   .clk(clk),
   .rst(rst|do_rst_sched),
   .except(except),
-  .bus_holds_agu_reg2(bus_holds_agu_reg2),
-  .miss_holds_agu_reg2(miss_holds_agu_reg2),
-  .miss_pause_agu_reg2(miss_pause_agu_reg2),
+  .bus_holds_addrcalc_reg2(bus_holds_addrcalc_reg2),
+  .miss_holds_addrcalc_reg2(miss_holds_addrcalc_reg2),
+  .miss_pause_addrcalc_reg2(miss_pause_addrcalc_reg2),
   .insert_isData_reg2(insert_isData_reg2),
-  .pause_agu(pause_agu),.WDoRsPause(Wagu_blockRS),
+  .pause_addrcalc(pause_addrcalc),.WDoRsPause(Waddrcalc_blockRS),
   .p0_adata(lsr_wr_data[0]),.p0_LSQ(dc_LSQ[0]),.p0_en(dc_rdEn[0]),.p0_rsEn(dc_rsEn[0]),.p0_smpc(p_repl[0]),.p0_lsfwd(p_lsfwd[0]),
   .p1_adata(lsr_wr_data[1]),.p1_LSQ(dc_LSQ[1]),.p1_en(dc_rdEn[1]),.p1_rsEn(dc_rsEn[1]),.p1_smpc(p_repl[1]),.p1_lsfwd(p_lsfwd[1]),
   .p2_adata(lsr_wr_data[2]),.p2_LSQ(dc_LSQ[2]),.p2_en(dc_rdEn[2]),.p2_rsEn(dc_rsEn[2]),.p2_smpc(p_repl[2]),.p2_lsfwd(p_lsfwd[2]),
@@ -5382,7 +5382,7 @@ agu_block #(BUS_ID) agu_aligned(
   .FU1Hit(FU1Hit|p1_sec_reg2),.FU1Data(dc_rdataA[1]),//
   .FU2Hit(FU2Hit|p2_sec_reg2),.FU2Data(dc_rdataA[2]),//
   .FU3Hit(FU3Hit),.FU3Data(dc_rdataA[3]),//
-  .st_stall(miss_pause_agu_reg2|bus_holds_agu_reg2),
+  .st_stall(miss_pause_addrcalc_reg2|bus_holds_addrcalc_reg2),
   .st0_adata(st0_adata),.st0_en(st0_en),.st0_bank1(st0_bank1),.st0_bgn_ben(st0_bgn_ben),.st0_end_ben(st0_end_ben),.st0_data(st0_data),
   .st0_dataX(st0_dataX),.st0_pbit(st0_pbit),
   .st1_adata(st1_adata),.st1_en(st1_en),.st1_bank1(st1_bank1),.st1_bgn_ben(st1_bgn_ben),.st1_end_ben(st1_end_ben),.st1_data(st1_data),
@@ -5996,7 +5996,7 @@ dcache1 L1D_mod(
   .stall(stall_rs[3]),
   .doStall(doStall_rs[3]),
   .FU0Hit(FU0Hit),.FU1Hit(FU1Hit),.FU2Hit(FU2Hit),.FU3Hit(FU3Hit),
-  .rsEnab(~{1'b0,wt_pause_agu|Wagu_blockRS[1],1'b0,wt_pause_agu|Wagu_blockRS[0]}),
+  .rsEnab(~{1'b0,wt_pause_addrcalc|Waddrcalc_blockRS[1],1'b0,wt_pause_addrcalc|Waddrcalc_blockRS[0]}),
   .new_thread(thread_reg2),
 // wires to store new values in a buffer
   .newDataA0(dataA[0]),.newDataB0(dataB[0]),.newDataC0(rs_const_reg[0][43:0]&{44{~rs_useBConst_reg[0]}}),
@@ -6055,7 +6055,7 @@ dcache1 L1D_mod(
     .outOp0(WoutOp[0]),.outInstrIndex0(WoutII[0]),
     .outFuFwdA0(WfuFwdB[0]),.outFuFwdB0(WfuFwdA[0]),.outFuuFwdA0(WfuuFwdB[0]),.outFuuFwdB0(WfuuFwdA[0]),
     .outLSQ0(WoutLSQ[0]),.outDataEn0(WoutDataEn[0]),.outThread0(WoutThread[0]),.outWQ0(WoutWQ[0]),
-    .outLSFlag0(WoutLSflag[0]),//agu
+    .outLSFlag0(WoutLSflag[0]),//addrcalc
     .outAttr0(WoutAttr[0]),
   .outDataB1(WDoutData[0]),.outOp1(WDoutOp[0]),.outInstrIndex1(WDoutII[0]),
     .outFuFwdB1(WDoutFuFwd[0]),.outFuuFwdB1(WDoutFuuFwd[0]),.outLSQ1(WDoutLSQ[0]),
@@ -6065,7 +6065,7 @@ dcache1 L1D_mod(
     .outOp2(WoutOp[1]),.outInstrIndex2(WoutII[1]),
     .outFuFwdA2(WfuFwdA[1]),.outFuFwdB2(WfuFwdB[1]),.outFuuFwdA2(WfuuFwdA[1]),.outFuuFwdB2(WfuuFwdB[1]),
     .outLSQ2(WoutLSQ[1]),.outDataEn2(WoutDataEn[1]),.outThread2(WoutThread[1]),.outWQ2(WoutWQ[1]),
-    .outLSFlag2(WoutLSflag[1]),//agu
+    .outLSFlag2(WoutLSflag[1]),//addrcalc
     .outAttr2(WoutAttr[1]),
   .outDataA3(WDoutData[1]),.outOp3(WDoutOp[1]),.outInstrIndex3(WDoutII[1]),
     .outFuFwdA3(WDoutFuFwd[1]),.outFuuFwdA3(WDoutFuuFwd[1]),.outLSQ3(WDoutLSQ[1]),
@@ -7626,16 +7626,16 @@ dcache1 L1D_mod(
       end
       
       if (rst) begin
-          bus_holds_agu<=1'b0;
-          bus_holds_agu_reg<=1'b0;
-          bus_holds_agu_reg2<=1'b0;
-          bus_holds_agu_reg3<=1'b0;
-          bus_holds_agu_reg4<=1'b0;
-          bus_holds_agu_reg5<=1'b0;
-          miss_holds_agu_reg<=1'b0;
-          miss_holds_agu_reg2<=1'b0;
-          miss_pause_agu_reg<=1'b0;
-          miss_pause_agu_reg2<=1'b0;
+          bus_holds_addrcalc<=1'b0;
+          bus_holds_addrcalc_reg<=1'b0;
+          bus_holds_addrcalc_reg2<=1'b0;
+          bus_holds_addrcalc_reg3<=1'b0;
+          bus_holds_addrcalc_reg4<=1'b0;
+          bus_holds_addrcalc_reg5<=1'b0;
+          miss_holds_addrcalc_reg<=1'b0;
+          miss_holds_addrcalc_reg2<=1'b0;
+          miss_pause_addrcalc_reg<=1'b0;
+          miss_pause_addrcalc_reg2<=1'b0;
           insert_isData_reg<=1'b0;
           insert_isData_reg2<=1'b0;
           insert_isData_reg3<=1'b0;
@@ -7723,16 +7723,16 @@ dcache1 L1D_mod(
 	  sqrDatVL_reg<=0;
 	  sqrDatEn_reg<=1'b0;
       end else begin
-          bus_holds_agu<=insert_isData;
-          bus_holds_agu_reg<=bus_holds_agu;
-          bus_holds_agu_reg2<=bus_holds_agu_reg;
-          bus_holds_agu_reg3<=bus_holds_agu_reg2;
-          bus_holds_agu_reg4<=bus_holds_agu_reg3;
-          bus_holds_agu_reg5<=bus_holds_agu_reg4;
-          miss_holds_agu_reg<=miss_holds_agu;
-          miss_holds_agu_reg2<=miss_holds_agu_reg;
-          miss_pause_agu_reg<=miss_pause_agu;
-          miss_pause_agu_reg2<=miss_pause_agu_reg;
+          bus_holds_addrcalc<=insert_isData;
+          bus_holds_addrcalc_reg<=bus_holds_addrcalc;
+          bus_holds_addrcalc_reg2<=bus_holds_addrcalc_reg;
+          bus_holds_addrcalc_reg3<=bus_holds_addrcalc_reg2;
+          bus_holds_addrcalc_reg4<=bus_holds_addrcalc_reg3;
+          bus_holds_addrcalc_reg5<=bus_holds_addrcalc_reg4;
+          miss_holds_addrcalc_reg<=miss_holds_addrcalc;
+          miss_holds_addrcalc_reg2<=miss_holds_addrcalc_reg;
+          miss_pause_addrcalc_reg<=miss_pause_addrcalc;
+          miss_pause_addrcalc_reg2<=miss_pause_addrcalc_reg;
           insert_isData_reg<=insert_isData;
           insert_isData_reg2<=insert_isData_reg;
           insert_isData_reg3<=insert_isData_reg2;
@@ -8035,8 +8035,8 @@ dcache1 L1D_mod(
       end
       
       if (rst) begin
-          wt_pause_agu_reg<=1'b0;
-          wt_pause_agu_reg2<=1'b0;
+          wt_pause_addrcalc_reg<=1'b0;
+          wt_pause_addrcalc_reg2<=1'b0;
           for(v=0;v<=3;v=v+1) begin
               dc_rsEn_reg[v]<=1'b0;
 	      dc_LSQ_reg[v]<=9'b0;
@@ -8072,11 +8072,11 @@ dcache1 L1D_mod(
 	     WDoutOp_reg3[v]<=13'b0;
              lsw_wdataF_reg[v]<=136'b0;
              lsw_wdataV_reg[v]<=136'b0;
-             Wagu_blockRS_reg[v]<=1'b0;
+             Waddrcalc_blockRS_reg[v]<=1'b0;
           end
       end else begin
-          wt_pause_agu_reg<=wt_pause_agu;
-          wt_pause_agu_reg2<=wt_pause_agu_reg;
+          wt_pause_addrcalc_reg<=wt_pause_addrcalc;
+          wt_pause_addrcalc_reg2<=wt_pause_addrcalc_reg;
           for(v=0;v<=3;v=v+1) begin
 	      if (!rsDoStall[v]) begin
                   dc_rsEn_reg[v]<=dc_rsEn[v];
@@ -8120,7 +8120,7 @@ dcache1 L1D_mod(
 	     WDoutOp_reg3[v]<=WDoutOp_reg2[v];
              lsw_wdataF_reg[v]<=lsw_wdataF[v];
              lsw_wdataV_reg[v]<=lsw_wdataV[v];
-             Wagu_blockRS_reg[v]<=Wagu_blockRS[v];
+             Waddrcalc_blockRS_reg[v]<=Waddrcalc_blockRS[v];
           end
       end
       if (rst) begin

@@ -136,7 +136,7 @@ module cntrl_get_IP(
 	get_carry #(4) cmp(magicO,~srcIPOff[3:0],1'b0,mgt);
   adder_CSA #(4) csa_mod(baseIP[3:0],srcIPOff[3:0],~{1'b0,magicO},par0,par1);
 	adder #(4) nlast_add_small(par0[3:0],par1[3:0],nextIP0[3:0],~mgt,excpt,,,,);
-  add_agu adder_mod(
+  add_addrcalc adder_mod(
   {1'b1,baseIP,1'b0},{63'b0,last&~excpt},{1'b0,54'b0,srcIPOff[8:4],5'b0},
   val2,
   cout_sec,
@@ -1329,7 +1329,7 @@ module cntrl_find_outcome(
 
   adder_inc #(6) initAdd_mod(initcount,initcount_d,1'b1,);
   
-  add_agu baseAdd_mod(
+  add_addrcalc baseAdd_mod(
   {1'b1,baseIP[62:8],9'b0},64'h100,65'b0,
   base_add,
   ,//sec

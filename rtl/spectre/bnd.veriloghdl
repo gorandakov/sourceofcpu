@@ -53,8 +53,8 @@ module bnd(
   assign sh[4:3]=~|DA_reg[43-:8] ? 2'b10 : 2'bz;
   assign sh[4:3]=|DA_reg[43-:8] ? 2'b11 : 2'bz;
 
-  agusec_shift8 shfB(sh_reg,DB_reg2[43:4],hi_rng);
-  agusec_shift8 shfA(sh_reg,A_reg2[43:4],lo_rng);
+  addrcalcsec_shift8 shfB(sh_reg,DB_reg2[43:4],hi_rng);
+  addrcalcsec_shift8 shfA(sh_reg,A_reg2[43:4],lo_rng);
 
 
   always @(posedge clk) begin

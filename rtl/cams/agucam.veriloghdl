@@ -18,7 +18,7 @@ limitations under the License.
 `include "../struct.sv"
 
 //read-during-write behaviour: write first
-module agucam_ram0(
+module addrcalccam_ram0(
   clk,
   rst,
   read_clkEn,
@@ -56,7 +56,7 @@ module agucam_ram0(
 
 endmodule
 
-module agucam_ram(
+module addrcalccam_ram(
   clk,
   rst,
   read_clkEn,
@@ -80,16 +80,16 @@ module agucam_ram(
   input write_wen;
 
   //verilator lint_off WIDTH
-  agucam_ram0 ramA(clk,rst,read_clkEn,read_addr,read_data[DATA_WIDTH/2-1:0],
+  addrcalccam_ram0 ramA(clk,rst,read_clkEn,read_addr,read_data[DATA_WIDTH/2-1:0],
     write_addr,write_data[DATA_WIDTH/2-1:0],write_wen);
-  agucam_ram0 ramB(clk,rst,read_clkEn,read_addr,read_data[DATA_WIDTH-1:
+  addrcalccam_ram0 ramB(clk,rst,read_clkEn,read_addr,read_data[DATA_WIDTH-1:
     DATA_WIDTH/2],write_addr,write_data[DATA_WIDTH-1:DATA_WIDTH/2],write_wen);
   //verilator lint_on WIDTH
 endmodule
 
 
 
-module agucam(
+module addrcalccam(
   clk,
   rst,
   except,
@@ -463,7 +463,7 @@ module agucam(
   
   bit_find_first_bit #(3) findConfl_mod(curConfl,sel,conflFound);
 
-  agucam_ram ramA_mod(
+  addrcalccam_ram ramA_mod(
   clk,
   rst,
   doStep,

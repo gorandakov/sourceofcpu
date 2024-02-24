@@ -146,8 +146,8 @@ module rss_buf(
   newANeeded1,newBNeeded1,newRsSelect1,newPort1,
   newANeeded2,newBNeeded2,newRsSelect2,newPort2,
 // wires to get values out of buffer
-  outRsSelect0,portReady0,outDataEn0,outThread0,outZeroB0,//agu
-  outRsSelect2,portReady2,outDataEn2,outThread2,outZeroA2,//agu
+  outRsSelect0,portReady0,outDataEn0,outThread0,outZeroB0,//addrcalc
+  outRsSelect2,portReady2,outDataEn2,outThread2,outZeroA2,//addrcalc
   fuFwdA,fuFwdB,
   isDataA,isDataB,
 // 1 if buffer is free  
@@ -357,13 +357,13 @@ module rss_buf(
 // output from buffer
 
 //outputs use inverting 3-state buffer, because it's faster and smaller than non-inverting
-// issue port 0 -agu
+// issue port 0 -addrcalc
   assign outDataEn0=outRsSelect0 ? {4{~unFwdCheck}} &{3'b1,1'b1} : 4'bz;
   assign outThread0=outRsSelect0 ? thread_q : 1'bz;
   assign outZeroB0=outRsSelect0 ? 1'b0 : 1'bz;
   
   
-// issue port 2 - agu 2
+// issue port 2 - addrcalc 2
   assign outDataEn2=outRsSelect2 ? {4{~unFwdCheck}} &{3'b1,1'b1} : 4'bz;
   assign outThread2=outRsSelect2 ? thread_q : 1'bz;
   assign outZeroA2=outRsSelect2 ? 1'b0 : 1'bz;
@@ -540,7 +540,7 @@ module rss_D_buf(
   DFF dataA1Pending_mod(clk,dataAPending1_en,dataAPending1_d,dataAPending1_q);
   DFF dataB1Pending_mod(clk,dataBPending1_en,dataBPending1_d,dataBPending1_q);
 
-// "Punding" registers contain bits to indicate whether an agu register should be zeroed on output 
+// "Punding" registers contain bits to indicate whether an addrcalc register should be zeroed on output 
   DFF dataAPunding_mod(clk,newRsSelectAny & ~stall,dataAPunding_new,dataAPunding_q);
   DFF dataBPunding_mod(clk,newRsSelectAny & ~stall,dataBPunding_new,dataBPunding_q);
  
@@ -637,8 +637,8 @@ module rss_array(
   newANeeded1,newBNeeded1,newRsSelect1,newPort1,
   newANeeded2,newBNeeded2,newRsSelect2,newPort2,
 // wires to get values out of buffer
-  outRsSelect0,outRsBank0,outFound0,portReady0,outDataEn0,outThread0,outZeroB0,//agu
-  outRsSelect2,outRsBank2,outFound2,portReady2,outDataEn2,outThread2,outZeroA2,//agu 2
+  outRsSelect0,outRsBank0,outFound0,portReady0,outDataEn0,outThread0,outZeroB0,//addrcalc
+  outRsSelect2,outRsBank2,outFound2,portReady2,outDataEn2,outThread2,outZeroA2,//addrcalc 2
   fuFwdA,fuFwdB,
   isDataA,isDataB,
 // 1 if buffer is free  
@@ -727,8 +727,8 @@ module rss_array(
               newANeeded1,newBNeeded1,newRsSelect1[j*8+k],newPort1,
               newANeeded2,newBNeeded2,newRsSelect2[j*8+k],newPort2,
 //     wires to get values out of buffer
-              outRsSelect0[j*8+k],portReady0[j*8+k],outDataEn0a,outThread0a,outZeroB0a,//agu
-              outRsSelect2[j*8+k],portReady2[j*8+k],outDataEn2a,outThread2a,outZeroA2a,//agu 2
+              outRsSelect0[j*8+k],portReady0[j*8+k],outDataEn0a,outThread0a,outZeroB0a,//addrcalc
+              outRsSelect2[j*8+k],portReady2[j*8+k],outDataEn2a,outThread2a,outZeroA2a,//addrcalc 2
               fuFwdA[(j*8+k)*4+:4],fuFwdB[(j*8+k)*4+:4],
               isDataA[j*8+k],isDataB[j*8+k],
 //     1 if buffer is free  
@@ -896,13 +896,13 @@ module rs_s(
     newAttr2,
 // wires to get values out of buffer
   outDataA0,outDataB0,outDataC0,outOp0,outInstrIndex0,outFuFwdA0,outFuFwdB0,
-    outFuuFwdA0,outFuuFwdB0,outLSQ0,outDataEn0,outThread0,outWQ0,outLSFlag0,//agu
+    outFuuFwdA0,outFuuFwdB0,outLSQ0,outDataEn0,outThread0,outWQ0,outLSFlag0,//addrcalc
     outAttr0,
   outDataB1,outOp1,outInstrIndex1,outFuFwdB1,outFuuFwdB1,
     outLSQ1,outDataEn1,outThread1,outWQ1,//data
     outAttr1,
   outDataA2,outDataB2,outDataC2,outOp2,outInstrIndex2,outFuFwdA2,outFuFwdB2,
-    outFuuFwdA2,outFuuFwdB2,outLSQ2,outDataEn2,outThread2,outWQ2,outLSFlag2,//agu
+    outFuuFwdA2,outFuuFwdB2,outLSQ2,outDataEn2,outThread2,outWQ2,outLSFlag2,//addrcalc
     outAttr2,
   outDataA3,outOp3,outInstrIndex3,outFuFwdA3,outFuuFwdA3,
     outLSQ3,outDataEn3,outThread3,outWQ3,//data
@@ -1361,8 +1361,8 @@ module rs_s(
   newANeeded1,newBNeeded1,newRsSelect1,{newEnB1,newEnA1,newPort1},
   newANeeded2,newBNeeded2,newRsSelect2,{newEnB2,newEnA2,newPort2},
 // wires to get values out of buffer
-  outRsSelect[0],outBank[0],rsFound[0],portReady[0],outDataEn0,outThread0,outZeroB0,//agu
-  outRsSelect[2],outBank[2],rsFound[2],portReady[2],outDataEn2,outThread2,outZeroA2,//agu 2
+  outRsSelect[0],outBank[0],rsFound[0],portReady[0],outDataEn0,outThread0,outZeroB0,//addrcalc
+  outRsSelect[2],outBank[2],rsFound[2],portReady[2],outDataEn2,outThread2,outZeroA2,//addrcalc 2
   fuFwdA,fuFwdB,
   isDataA,isDataB,
 // 1 if buffer is free  
@@ -1416,8 +1416,8 @@ module rs_s(
   newANeeded1&clkREF,newANeeded1&clkREF2,newRsSelect1,{newEnA1&clkREF2,newEnA1&clkREF,newPort1},
   newANeeded2&clkREF,newANeeded2&clkREF2,newRsSelect2,{newEnA2&clkREF2,newEnA2&clkREF,newPort2},
 // wires to get values out of buffer
-  outRsSelect[0],outBank[0],rsFound[0],portReady[0],outDataEn0,outThread0,outZeroB0,//agu
-  outRsSelect[2],outBank[2],rsFound[2],portReady[2],outDataEn2,outThread2,outZeroA2,//agu 2
+  outRsSelect[0],outBank[0],rsFound[0],portReady[0],outDataEn0,outThread0,outZeroB0,//addrcalc
+  outRsSelect[2],outBank[2],rsFound[2],portReady[2],outDataEn2,outThread2,outZeroA2,//addrcalc 2
   fuFwdA&{4{clkREF}},fuFwdA&{4{clkREF2}},
   isDataA&{32{clkREF}},isDataA&{32{clkREF2}},  
 // 1 if buffer is free

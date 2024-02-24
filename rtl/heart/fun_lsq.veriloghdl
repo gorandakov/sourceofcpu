@@ -21,8 +21,8 @@ module fun_lsq(
   clk,
   rst,
   except,
-  bus_holds_agu_reg2,miss_holds_agu_reg2,miss_pause_agu_reg2,insert_isData_reg2,
-  pause_agu,WDoRsPause,
+  bus_holds_addrcalc_reg2,miss_holds_addrcalc_reg2,miss_pause_addrcalc_reg2,insert_isData_reg2,
+  pause_addrcalc,WDoRsPause,
   lsq_index,
   rsStall,
   rsDoStall,
@@ -78,8 +78,8 @@ module fun_lsq(
   input clk;
   input rst;
   input except;
-  input bus_holds_agu_reg2,miss_holds_agu_reg2,miss_pause_agu_reg2,insert_isData_reg2;
-  input pause_agu;
+  input bus_holds_addrcalc_reg2,miss_holds_addrcalc_reg2,miss_pause_addrcalc_reg2,insert_isData_reg2;
+  input pause_addrcalc;
   output [1:0] WDoRsPause;
   output [5:0] lsq_index;
   input rsStall;
@@ -619,7 +619,7 @@ module fun_lsq(
   assign aStall_LSQ=aDoStall_STQ|wreq_stall;
 
 
-  assign wreq_stall=bus_holds_agu_reg2|miss_holds_agu_reg2|miss_pause_agu_reg2|insert_isData_reg2;
+  assign wreq_stall=bus_holds_addrcalc_reg2|miss_holds_addrcalc_reg2|miss_pause_addrcalc_reg2|insert_isData_reg2;
       
   assign st0_adata=wreq_data_reg[0];
   assign st0_en=wreq_en_reg[0];

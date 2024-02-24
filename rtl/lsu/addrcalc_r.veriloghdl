@@ -17,7 +17,7 @@ limitations under the License.
 
 `include "../struct.sv"
 `include "../msrss_no.sv"
-module agu_r(
+module addrcalc_r(
   clk,
   rst,
   except,

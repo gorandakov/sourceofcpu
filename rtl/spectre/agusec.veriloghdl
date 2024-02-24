@@ -16,7 +16,7 @@ limitations under the License.
 
 `include "../struct.sv"
 
-module agusec_check_upper3(
+module addrcalcsec_check_upper3(
   input [63:0] ptr,
   input [39:0] A,
   input [39:0] B,
@@ -127,7 +127,7 @@ module agusec_check_upper3(
 
 endmodule
 
-module agusec_range(
+module addrcalcsec_range(
   input [63:0] ptr,
   input cin_secq,
   input diff,
@@ -143,6 +143,6 @@ module agusec_range(
 
   get_carry #(8) cmpLow_mod(~low,bits,1'b1,cout_low);
   get_carry #(8) cmpHio_mod(high,~bits,1'b1,cout_hio);
-  agusec_shift8  sh_mod(ptr[`ptr_exp],ptr[43:4],bits);
+  addrcalcsec_shift8  sh_mod(ptr[`ptr_exp],ptr[43:4],bits);
   assign cout_secq=cin_secq && cout_low|lo_lass && cout_hio|hi_pass;
 endmodule

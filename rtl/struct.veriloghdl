@@ -42,7 +42,7 @@ limitations under the License.
 `define lsq_width 7
 `define bob_count 64
 `define bob_addr_width 6
-`define agu_queue_depth 16
+`define addrcalc_queue_depth 16
 
 `define except_width 15
 `define except_status 1:0
@@ -155,8 +155,8 @@ limitations under the License.
 `define pbob_indir 68:22
 `define pbob_width 69
 
-`define agu_op_32bit 11
-`define agu_op_store 10
+`define addrcalc_op_32bit 11
+`define addrcalc_op_store 10
 
 `define flags_width 6
 

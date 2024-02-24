@@ -1854,7 +1854,7 @@ module rs_buf(
   newANeeded1,newBNeeded1,newSNeeded1,newRsSelect1,newPort1,
   newANeeded2,newBNeeded2,newSNeeded2,newRsSelect2,newPort2,
 // wires to get values out of buffer
-  outRsSelect0,portReady0,outDataEn0,outThread0,//agu
+  outRsSelect0,portReady0,outDataEn0,outThread0,//addrcalc
   outRsSelect1,portReady1,outDataEn1,outThread1,//alu 1
   outRsSelect2,portReady2,outDataEn2,outThread2,//alu 2
   fuFwdA,fuFwdB,
@@ -2107,7 +2107,7 @@ module rs_buf(
 // output from buffer
 
 //outputs use inverting 3-state buffer, because it's faster and smaller than non-inverting
-// issue port 0 -agu
+// issue port 0 -addrcalc
   assign outDataEn0=outRsSelect0 ? {4{~unFwdCheck}} &{FP_q,Vec_q,~FP_q&~Vec_q,1'b1} : 4'bz;
   assign outThread0=outRsSelect0 ? thread_q : 1'bz;
   
@@ -2157,7 +2157,7 @@ module rs_array(
   newANeeded1,newBNeeded1,newSNeeded1,newRsSelect1,newPort1,
   newANeeded2,newBNeeded2,newSNeeded2,newRsSelect2,newPort2,
 // wires to get values out of buffer
-  outRsSelect0,outRsBank0,outFound0,portReady0,outDataEn0,outThread0,//agu
+  outRsSelect0,outRsBank0,outFound0,portReady0,outDataEn0,outThread0,//addrcalc
   outRsSelect1,outRsBank1,outFound1,portReady1,outDataEn1,outThread1,//alu 1
   outRsSelect2,outRsBank2,outFound2,portReady2,outDataEn2,outThread2,//alu 2
   fuFwdA,fuFwdB,
@@ -2259,7 +2259,7 @@ module rs_array(
           newANeeded1,newBNeeded1,newSNeeded1,newRsSelect1[j*8+k],newPort1,
           newANeeded2,newBNeeded2,newSNeeded2,newRsSelect2[j*8+k],newPort2,
 // wires to get values out of buffer
-          outRsSelect0[j*8+k],portReady0[j*8+k],outDataEn0a,outThread0a,//agu
+          outRsSelect0[j*8+k],portReady0[j*8+k],outDataEn0a,outThread0a,//addrcalc
           outRsSelect1[j*8+k],portReady1[j*8+k],outDataEn1a,outThread1a,//alu 1
           outRsSelect2[j*8+k],portReady2[j*8+k],outDataEn2a,outThread2a,//alu 2
           fuFwdA[(j*8+k)*4+:4],fuFwdB[(j*8+k)*4+:4],
@@ -2318,7 +2318,7 @@ module rs(
     newFunitA2,newFunitB2,newFunitS2,newAttr2,newXPort2,
 // wires to get values out of buffer
   outDataA0,outDataB0,outDataC0,outReg0,outOp0,outInstrIndex0,outWQ0,outLSFlag0,
-    outFuFwdA0,outFuFwdB0,outFuuFwdA0,outFuuFwdB0,outLSQ0,outDataEn0,outThread0,//agu
+    outFuFwdA0,outFuFwdB0,outFuuFwdA0,outFuuFwdB0,outLSQ0,outDataEn0,outThread0,//addrcalc
     outAttr0,
   outDataA1,outDataB1,outDataC1,outDataS1,outReg1,outRegSimd1,outOp1,outInstrIndex1,
     outFuFwdA1,outFuFwdB1,outFuFwdS1,outFuuFwdA1,outFuuFwdB1,
@@ -2829,7 +2829,7 @@ module rs(
   newANeeded1,newBNeeded1,newSNeeded1,newRsSelect1,newPort1,
   newANeeded2,newBNeeded2,newSNeeded2,newRsSelect2,newPort2,
 // wires to get values out of buffer
-  outRsSelect[0],outBank[0],rsFoundNZ[0],portReady[0],outDataEn0,outThread0,//agu
+  outRsSelect[0],outBank[0],rsFoundNZ[0],portReady[0],outDataEn0,outThread0,//addrcalc
   outRsSelect[1],outBank[1],rsFound[1],portReady[1],outDataEn1,outThread1,//alu 1
   outRsSelect[2],outBank[2],rsFoundNZ[2],portReady[2],outDataEn2,outThread2,//alu 2
   fuFwdA,fuFwdB,
@@ -2849,7 +2849,7 @@ module rs(
   newANeeded1&clkREF,newANeeded1&clkREF2,newSNeeded1,newRsSelect1,newPort1,
   newANeeded2&clkREF,newANeeded2&clkREF2,newSNeeded2,newRsSelect2,newPort2,
 // wires to get values out of buffer
-  outRsSelect[0],outBank[0],rsFoundNZ[0],portReady[0],outDataEn0,outThread0,//agu
+  outRsSelect[0],outBank[0],rsFoundNZ[0],portReady[0],outDataEn0,outThread0,//addrcalc
   outRsSelect[1],outBank[1],rsFound[1],portReady[1],outDataEn1,outThread1,//alu 1
   outRsSelect[2],outBank[2],rsFoundNZ[2],portReady[2],outDataEn2,outThread2,//alu 2
   fuFwdA&{4{clkREF}},fuFwdA&{4{clkREF2}},

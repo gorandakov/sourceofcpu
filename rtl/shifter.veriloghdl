@@ -198,7 +198,7 @@ module rotate8x4(
 endmodule
 
 
-module agusec_shift(
+module addrcalcsec_shift(
   ptr_ext,
   cary,
   shift);
@@ -218,7 +218,7 @@ module agusec_shift(
   assign shift=|(cary&mask);
 endmodule
 
-module agusec_shift8(
+module addrcalcsec_shift8(
   ptr_ext,
   bits,
   bits_out);
