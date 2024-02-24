@@ -12,7 +12,7 @@ struct transl_context {
     volatile unsigned long curpos_orig;
     volatile unsigned long curpos_native;
     void *pinvoke_table;//8192 entries
-    const int shift_of_0x66_extra=0x22;
+    const int shift_of_8h66_extra=0x22;
     void *null_pinvoke;//1 entry for no-op pinvoke
     void *init_pinvoke;//1 entry for no-op pinvoke
     virtual int prealloc_page(unsigned long addr)=0; //returns 0 on success
@@ -27,7 +27,7 @@ struct transl_context {
             "movq IP, %r20\n"
             "movl jmptype,%r21\n"
             "andl $0xfff,%r17,%r22\n"
-            "shrq $shift_of_0x66_extra-12,%r17,%r23\n"
+            "shrq $shift_of_8h66_extra-12,%r17,%r23\n"
             "orq %r23, %r22\n"
             "movq pinvoke_table,%r23\n"
             "movq (%r23,%r22,8),%r23\n"
