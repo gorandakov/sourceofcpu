@@ -370,7 +370,7 @@ module backend(
   jupd0_en,jupdt0_en,jupd0_ght_en,jupd0_ght2_en,jupd0_addr,jupd0_baddr,jupd0_sc,jupd0_tk,
   jupd1_en,jupdt1_en,jupd1_ght_en,jupd1_ght2_en,jupd1_addr,jupd1_baddr,jupd1_sc,jupd1_tk,
   
-  csrss_no,csrss_en,csrss_data,
+  msrss_no,msrss_en,msrss_data,
   
   insBus_en,
   insBus_io,
@@ -946,9 +946,9 @@ module backend(
   output [1:0] jupd1_sc;
   output jupd1_tk;
   
-  output [15:0] csrss_no;
-  output csrss_en;
-  output [64:0] csrss_data;
+  output [15:0] msrss_no;
+  output msrss_en;
+  output [64:0] msrss_data;
   
   input insBus_en;
   input insBus_io;
@@ -2434,9 +2434,9 @@ module backend(
   
   wire [83:0] fpE_one={16'b0,2'd`ptype_ext,1'b1,65'h1_0000_0000_0000_0000};
   wire [67:0] fpD_one={2'd`ptype_dbl,1'b0,1'b0,11'h400,53'b0};
-  wire [15:0] csrss_no;
-  wire csrss_en,csrss_thread;
-  wire [64:0] csrss_data;
+  wire [15:0] msrss_no;
+  wire msrss_en,msrss_thread;
+  wire [64:0] msrss_data;
  
   wire [5:0][15:0] dummyFH;
   wire [63:0] fpcsr;
@@ -2519,7 +2519,7 @@ module backend(
       input [17:0] op;
       is_rndE=(op[7:0]==`fop_rndES || op[7:0]==`fop_rndED) & ~op[11];
   endfunction
-  csrss_watch #(`csr_FPU,64'h20000) fpcsr_mod(clk,rst,csrss_no,csrss_data[63:0],csrss_en,fpcsr);
+  msrss_watch #(`csr_FPU,64'h20000) fpcsr_mod(clk,rst,msrss_no,msrss_data[63:0],msrss_en,fpcsr);
 
   rat ratA_mod(
     .clk(clk),
@@ -4883,9 +4883,9 @@ module backend(
   .clk(clk),
   .rst(rst),
   .except(except),
-  .csrss_addr(csrss_no),
-  .csrss_data(csrss_data),
-  .csrss_en(csrss_en),
+  .msrss_addr(msrss_no),
+  .msrss_data(msrss_data),
+  .msrss_en(msrss_en),
   .u1_A(outDataA[0+1]),.u1_B(outDataB[0+1]),.u1_S(outDataS[0+1]),.u1_op(outOp[0+1]),
   .u1_ret({FUS_alu[0],ex_alu[0]}),.u1_rten(enS_alu[0]),.u1_clkEn(outEn[0+1][0]&outEn[0+1][1]),
     .u1_A_fufwd(fuFwdA[0+1]),.u1_A_fuufwd(fuuFwdA[0+1]),
@@ -4936,9 +4936,9 @@ module backend(
   .clk(clk),
   .rst(rst),
   .except(except),
-  .csrss_addr(csrss_no),
-  .csrss_data(csrss_data),
-  .csrss_en(csrss_en),
+  .msrss_addr(msrss_no),
+  .msrss_data(msrss_data),
+  .msrss_en(msrss_en),
   .u1_A(outDataA[0+1]),.u1_B(outDataA[0+1]),.u1_S(outDataS[0+1]),.u1_op(outOp[0+1]),
   .u1_ret({FUS_alu[0],ex_alu[0]}),.u1_rten(enS_alu[0]),.u1_clkEn(outEn[0+1][0]&outEn[0+1][1]),
     .u1_A_fufwd(fuFwdA[0+1]),.u1_A_fuufwd(fuuFwdA[0+1]),
@@ -5137,7 +5137,7 @@ module backend(
   .FU0(FU[0]),.FU1(FU[1]),.FU2(FU[2]),.FU3(FU[3]),.FU4(FU[4]),.FU5(FU[5]),.FU6(FU[6]),.FU7(FU[7]),.FU8(FU[8]),.FU9(FU[9]),
   .FUreg3_reg(FUreg_reg5[3]),.dc_rdataA(dc_rdataA[3]),//is it really reg5?
   .msi_exp_addr(MSI_exp_addr_reg),.msi_en(MSI_exp_en_reg),.msi_out_clear(),//msi_out_clear=can do msi en; todo - make replace last buffer rather than wait + redu
-  .csrss_en(csrss_en),.csrss_addr(csrss_no),.csrss_data(csrss_data[63:0]),
+  .msrss_en(msrss_en),.msrss_addr(msrss_no),.msrss_data(msrss_data[63:0]),
   .req_addr(req_addr),.req_tlbAttr(req_tlbAttr),.req_tlbEn(req_tlbEn),
   .bus_tlb_data(bus_tlb_data),.bus_tlb_en(bus_tlb_en),
   .reqBus_en(reqBus_en),
@@ -5323,7 +5323,7 @@ agu_block #(BUS_ID) agu_aligned(
   .FU0(FU[0]),.FU1(FU[1]),.FU2(FU[2]),.FU3(FU[3]),.FU4(FU[4]),.FU5(FU[5]),.FU6(FU[6]),.FU7(FU[7]),.FU8(FU[8]),.FU9(FU[9]),
   .FUreg3_reg(FUreg_reg5[3]),.dc_rdataA(dc_rdataA[3]),//is it really reg5?
   .msi_exp_addr(MSI_exp_addr_reg),.msi_en(MSI_exp_en_reg),.msi_out_clear(),//msi_out_clear=can do msi en; todo - make replace last buffer rather than wait + redu
-  .csrss_en(csrss_en),.csrss_addr(csrss_no),.csrss_data(csrss_data[63:0]),
+  .msrss_en(msrss_en),.msrss_addr(msrss_no),.msrss_data(msrss_data[63:0]),
   .req_addr(req_addr),.req_tlbAttr(req_tlbAttr),.req_tlbEn(req_tlbEn),
   .bus_tlb_data(bus_tlb_data),.bus_tlb_en(bus_tlb_en),
   .reqBus_en(reqBus_en),
@@ -5799,7 +5799,7 @@ dcache1 L1D_mod(
   .except_set_instr_flag(except_set_flag),
   .except_jmp_mask_en(except_jmp_mask_en),
   .except_jmp_mask(except_jmp_mask),
-  .csrss_no(csrss_no),.csrss_thread(csrss_thread),.csrss_en(csrss_en),.csrss_data(csrss_data),
+  .msrss_no(msrss_no),.msrss_thread(msrss_thread),.msrss_en(msrss_en),.msrss_data(msrss_data),
   .instr0_en(instr_en_reg[0]),.instr0_wren(instr_wren_reg[0]),.instr0_IPOff(instr_IPOff_reg[0]),
     .instr0_magic(instr_magicOff[0]),.instr0_last(instr_last_reg[0]),.instr0_err(instr_err_reg[0]),
   .instr1_en(instr_en_reg[1]),.instr1_wren(instr_wren_reg[1]),.instr1_IPOff(instr_IPOff_reg[1]),

@@ -63,7 +63,7 @@ module smallInstr_decoder(
   thisSpecLoad,
   isIPRel,
   rAlloc,
-  csrss_retIP_en,
+  msrss_retIP_en,
   error,
   reor_en_out,
   reor_val_out,
@@ -143,7 +143,7 @@ module smallInstr_decoder(
   output thisSpecLoad;
   output isIPRel;
   output rAlloc;
-  output reg csrss_retIP_en;
+  output reg msrss_retIP_en;
   output error;
   output reor_en_out;
   output [23:0] reor_val_out;
@@ -730,7 +730,7 @@ module smallInstr_decoder(
       rB_reor32=instr[26:22];
       rT_reor32=instr[31:27];
 
-      csrss_retIP_en=1'b0;
+      msrss_retIP_en=1'b0;
       
       trien[0]=~magic[0] && subIsBasicALU|subIsBasicShift;
       poperation[0]={8'b0,opcode_sub[4:2],1'b0,opcode_sub[1]};
@@ -1940,7 +1940,7 @@ module smallInstr_decoder(
           prAlloc[35]=1'b1;
           pjumpType[35]=5'b10001;
 	  //pconstant[35]=instr[79:16];
-	  csrss_retIP_en=!(instr[31:16]==`csr_retIP);
+	  msrss_retIP_en=!(instr[31:16]==`csr_retIP);
           perror[35]={2{~can_jump_csr}};
       end
       

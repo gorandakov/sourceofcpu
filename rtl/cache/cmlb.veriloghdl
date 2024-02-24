@@ -210,9 +210,9 @@ module ctlb(
   read_hit,
   write_data,
   write_wen,
-  csrss_en,
-  csrss_addr,
-  csrss_data
+  msrss_en,
+  msrss_addr,
+  msrss_data
   );
 
   localparam DATA_WIDTH=`ctlb_width;
@@ -232,9 +232,9 @@ module ctlb(
   output read_hit;
   input [OUTDATA_WIDTH-1:0] write_data;
   input write_wen;
-  input csrss_en;
-  input [15:0] csrss_addr;
-  input [63:0] csrss_data;
+  input msrss_en;
+  input [15:0] msrss_addr;
+  input [63:0] msrss_data;
   
   wire [3:0][1:0] newLRU;
   wire [3:0][1:0] oldLRU;
@@ -290,28 +290,28 @@ module ctlb(
   endgenerate
   
   adder_inc #(6) initAdd_mod(init_count,init_count_d,1'b1,);
-  csrss_watch #(`csr_page) csrSproc0_mod(
+  msrss_watch #(`csr_page) csrSproc0_mod(
   clk,
   rst,
-  csrss_addr,
-  csrss_data,
-  csrss_en,
+  msrss_addr,
+  msrss_data,
+  msrss_en,
   {pproc[1],dummy_pproc[1],pproc[0],dummy_pproc[0]});
 
-  csrss_watch #(`csr_vmpage) csrSproc1_mod(
+  msrss_watch #(`csr_vmpage) csrSproc1_mod(
   clk,
   rst,
-  csrss_addr,
-  csrss_data,
-  csrss_en,
+  msrss_addr,
+  msrss_data,
+  msrss_en,
   {vmproc[1],dummy_vmproc[1],vmproc[0],dummy_vmproc[0]});
 
-  csrss_watch #(`csr_mflags) csrSproc2_mod(
+  msrss_watch #(`csr_mflags) csrSproc2_mod(
   clk,
   rst,
-  csrss_addr,
-  csrss_data,
-  csrss_en,
+  msrss_addr,
+  msrss_data,
+  msrss_en,
   mflags);
 
   assign sproc=mflags[read_thread][`mflags_vm] ? pproc[read_thread]^{24'd1} : 24'b0;

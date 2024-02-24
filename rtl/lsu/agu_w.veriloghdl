@@ -67,10 +67,10 @@ module sagu(
   mOp_addr_low,
   mOp_split,
 //  mOp_noBanks,
-  csrss_no,
-  csrss_en,
-  csrss_thr,
-  csrss_data,
+  msrss_no,
+  msrss_en,
+  msrss_thr,
+  msrss_data,
   tlb_clkEn,
   cout_secq,
   addrTlb,
@@ -137,10 +137,10 @@ module sagu(
   output [1:0] mOp_addr_low;
   output mOp_split;
 //  output [BANK_COUNT-1:0] mOp_noBanks;
-  input [15:0] csrss_no;
-  input csrss_en;
-  input csrss_thr;
-  input [63:0] csrss_data;
+  input [15:0] msrss_no;
+  input msrss_en;
+  input msrss_thr;
+  input [63:0] msrss_data;
   output tlb_clkEn;
   output cout_secq;
   output [TLB_IP_WIDTH-1:0] addrTlb;
@@ -518,16 +518,16 @@ module sagu(
               pproc[1]<=24'b0;
               vproc[1]<=24'b0;
               mflags[1]<=64'b0;
-          end else if (csrss_en) begin
-              case(csrss_no[14:0])
-           `csr_page: begin pproc[csrss_no[15]]<=csrss_data[63:40]; end
-           `csr_vmpage: vproc[csrss_no[15]]<=csrss_data[63:40];
-           `csr_mflags: mflags[csrss_no[15]]<=csrss_data;
+          end else if (msrss_en) begin
+              case(msrss_no[14:0])
+           `csr_page: begin pproc[msrss_no[15]]<=msrss_data[63:40]; end
+           `csr_vmpage: vproc[msrss_no[15]]<=msrss_data[63:40];
+           `csr_mflags: mflags[msrss_no[15]]<=msrss_data;
               endcase
-	      mflags[csrss_no[15]][`mflags_cpl]<={attr2[`attr_km],attr2[`attr_sec]};
+	      mflags[msrss_no[15]][`mflags_cpl]<={attr2[`attr_km],attr2[`attr_sec]};
           end else begin
-	      mflags[csrss_no[15]][`mflags_cpl]<={attr2[`attr_km],attr2[`attr_sec]};
-	      mflags[csrss_no[15]][`mflags_sec]<=attr2[`attr_sec];
+	      mflags[msrss_no[15]][`mflags_cpl]<={attr2[`attr_km],attr2[`attr_sec]};
+	      mflags[msrss_no[15]][`mflags_sec]<=attr2[`attr_sec];
 	  end
     end
 

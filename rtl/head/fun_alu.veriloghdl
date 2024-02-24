@@ -51,9 +51,9 @@ module fu_alu(
   fcvtout,
   DataAlt,
   FUCVTIN,
-  csrss_addr,
-  csrss_data,
-  csrss_en
+  msrss_addr,
+  msrss_data,
+  msrss_en
   );
 /*verilator hier_block*/
 
@@ -178,9 +178,9 @@ module fu_alu(
   output [83:0] fcvtout;
   output [1:0] DataAlt;
   input [63:0] FUCVTIN;
-  input [15:0] csrss_addr;
-  input [64:0] csrss_data;
-  input csrss_en;
+  input [15:0] msrss_addr;
+  input [64:0] msrss_data;
+  input msrss_en;
 
   reg [1:0] nDataAlt;
 
@@ -324,7 +324,7 @@ module fu_alu(
 
   wire [1:0][63:0] mflags;
 
-  csrss_watch #(`csr_mflags,64'h0) mflags_mod(clk,rst,csrss_addr,csrss_data[63:0],csrss_en,mflags);
+  msrss_watch #(`csr_mflags,64'h0) mflags_mod(clk,rst,msrss_addr,msrss_data[63:0],msrss_en,mflags);
 
   rs_write_forward_ALU #(0,66) u1_A_fwd(
   clk,rst,

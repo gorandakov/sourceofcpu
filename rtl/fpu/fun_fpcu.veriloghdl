@@ -17,7 +17,7 @@ limitations under the License.
 
 `include "../struct.sv"
 `include "../fpoperations.sv"
-`include "../csrss_no.sv"
+`include "../msrss_no.sv"
 
 module fun_fpu(
   clk,

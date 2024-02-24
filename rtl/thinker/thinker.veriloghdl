@@ -16,7 +16,7 @@ limitations under the License.
 
 
 `include "../struct.sv"
-`include "../csrss_no.sv"
+`include "../msrss_no.sv"
 
 `define permreq_code 0
 `define permreq_width 1
@@ -34,10 +34,10 @@ module pager(
   new_indir,
   new_inv,
   new_permReq,
-  csrss_no,
-  csrss_thread,
-  csrss_en,
-  csrss_data,
+  msrss_no,
+  msrss_thread,
+  msrss_en,
+  msrss_data,
   mOp_register,
   mOp_LSQ,
   mOp_II,
@@ -87,10 +87,10 @@ module pager(
   input[2:0] new_indir;
   input[2:0] new_inv;
   input[2:0] [PERM_WIDTH-1:0] new_permReq;
-  input [15:0] csrss_no;
-  input csrss_thread;
-  input csrss_en;
-  input [63:0] csrss_data;
+  input [15:0] msrss_no;
+  input msrss_thread;
+  input msrss_en;
+  input [63:0] msrss_data;
   output [REG_WIDTH-1:0] mOp_register;
   output [8:0] mOp_LSQ;
   output [9:0] mOp_II;
@@ -456,16 +456,16 @@ module pager(
           //CMSK<=0;
           //IPTR<=0;
           //IMSK<=0;
-      end else if (csrss_en) begin
-          if (csrss_no==`csr_page) begin PTR[1]<=csrss_data; mflags[`mflags_pg]<=1'b1; 
-              $display("pg ",csrss_data); end
-          if (csrss_no==`csr_vmpage) begin 
-              VPTR[1]<=csrss_data;
+      end else if (msrss_en) begin
+          if (msrss_no==`csr_page) begin PTR[1]<=msrss_data; mflags[`mflags_pg]<=1'b1; 
+              $display("pg ",msrss_data); end
+          if (msrss_no==`csr_vmpage) begin 
+              VPTR[1]<=msrss_data;
           end
-          if (csrss_no==`csr_page0) begin PTR[0]<=csrss_data; mflags[`mflags_pg]<=1'b1; 
-              $display("pg1 ",csrss_data); end
-          if (csrss_no==`csr_vmpage0) begin 
-              VPTR[0]<=csrss_data;
+          if (msrss_no==`csr_page0) begin PTR[0]<=msrss_data; mflags[`mflags_pg]<=1'b1; 
+              $display("pg1 ",msrss_data); end
+          if (msrss_no==`csr_vmpage0) begin 
+              VPTR[0]<=msrss_data;
           end
       end 
       

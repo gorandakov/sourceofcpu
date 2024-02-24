@@ -64,7 +64,7 @@ module frontendSelf(
   btbl_mask1,
   btbl_attr0,
   btbl_attr1,
-  csrss_en,csrss_addr,csrss_data,
+  msrss_en,msrss_addr,msrss_data,
   cc_instrEn,
   cc_read_set_flag,
   cc_fstall,
@@ -187,9 +187,9 @@ module frontendSelf(
   output [3:0] btbl_attr0;
   output [3:0] btbl_attr1;
   
-  input csrss_en;
-  input [15:0] csrss_addr;
-  input [63:0] csrss_data;
+  input msrss_en;
+  input [15:0] msrss_addr;
+  input [63:0] msrss_data;
   output cc_instrEn=instrEn;
   output cc_read_set_flag=read_set_flag_reg;
   output cc_fstall=fstall;
@@ -1031,8 +1031,8 @@ module frontendSelf(
   assign btb_attr=btb_in_ret & ~(p_invoke&thread) ? rstack_dataR[67:64] : 4'bz;
   assign btb_attr=(p_invoke&thread) ? mflags[`mflags_pinvoke_priv] : 4'bz;
 
-  assign p_invoke=~halted ? csrss_en && csrss_addr[14:0]==15'd22 & ~p_inv_stored[2] : p_inv_stored[2];
-  assign p_address=~halted ? {20'b0,csrss_data[43:0]} : {20'b0,p_inv_st_data[2]};
+  assign p_invoke=~halted ? msrss_en && msrss_addr[14:0]==15'd22 & ~p_inv_stored[2] : p_inv_stored[2];
+  assign p_address=~halted ? {20'b0,msrss_data[43:0]} : {20'b0,p_inv_st_data[2]};
 
   assign btbx_tgt=btb_tgt;
   assign btbx_tgt0=btb_tgt0;
@@ -1278,9 +1278,9 @@ module frontendSelf(
   .read_hit(tlb_hit),
   .write_data(bus_tlb_data_reg),
   .write_wen(bus_tlb_match_reg),
-  .csrss_en(csrss_en),
-  .csrss_addr(csrss_addr),
-  .csrss_data(csrss_data)
+  .msrss_en(msrss_en),
+  .msrss_addr(msrss_addr),
+  .msrss_data(msrss_data)
   );
 
   ctlb tlb2_mod(
@@ -1295,9 +1295,9 @@ module frontendSelf(
   .read_hit(tlb_hit),
   .write_data(bus_tlb_data_reg),
   .write_wen(bus_tlb_match_reg),
-  .csrss_en(csrss_en),
-  .csrss_addr(csrss_addr),
-  .csrss_data(csrss_data)
+  .msrss_en(msrss_en),
+  .msrss_addr(msrss_addr),
+  .msrss_data(msrss_data)
   );
   
   frontReq_ram req_mod(
@@ -1693,18 +1693,18 @@ module frontendSelf(
       if (rst) begin
          p_inv_stored=3'b0;
          p_inv_data=0;
-      end else if ((csrss_en && csrss_addr[14:0]==15'd22) | halted && thread) begin
+      end else if ((msrss_en && msrss_addr[14:0]==15'd22) | halted && thread) begin
          if (halted && p_inv_stored) begin
              p_inv_stored=p_inv_stored<<1;
              p_inv_data[2]=p_inv_data[1];
              p_inv_data[1]=p_inv_data[0];
          end
-         if ((csrss_en && csrss_addr[14:0]==15'd22) && thread) begin
+         if ((msrss_en && msrss_addr[14:0]==15'd22) && thread) begin
              p_index=2;
              if (p_inv_stored[2]) p_index=1;
              if (p_inv_stored[1]) p_index=0;
              p_inv_stored[p_index]=1'b1;
-             p_inv_data[p_index]=csrss_data;
+             p_inv_data[p_index]=msrss_data;
          end
       end
       if (rst) begin

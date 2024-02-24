@@ -154,7 +154,7 @@ module agu_block(
   FU0,FU1,FU2,FU3,FU4,FU5,FU6,FU7,FU8,FU9,
   FUreg3_reg,dc_rdataA,
   msi_exp_addr,msi_en,msi_out_clear,//msi_out_clear=can do msi en
-  csrss_en,csrss_addr,csrss_data,
+  msrss_en,msrss_addr,msrss_data,
   req_addr,req_tlbAttr,req_tlbEn,
   bus_tlb_data,bus_tlb_en,
   reqBus_en,
@@ -444,9 +444,9 @@ module agu_block(
   input        msi_en;
   output       msi_out_clear;
 
-  input csrss_en;
-  input [15:0] csrss_addr;
-  input [63:0] csrss_data;
+  input msrss_en;
+  input [15:0] msrss_addr;
+  input [63:0] msrss_data;
 
   input [30:0] req_addr;
   input [3:0] req_tlbAttr;
@@ -513,7 +513,7 @@ module agu_block(
       get_d128=msz==5'h1 || msz==5'h2 || msz==5'h0 || msz==5'ha || msz==5'hc || msz==5'hB || msz==5'hf;
   endfunction
   
-  wire csrss_thread=1'b0;
+  wire msrss_thread=1'b0;
   
   wire [5:0][TLB_IP_WIDTH-1:0] addrTlbR;
   wire [5:0][23:0] sprocR;
@@ -1556,7 +1556,7 @@ module agu_block(
   agu_get_shiftSize sh4(u4_op,u4_sh,u4_sh2); 
   agu_get_shiftSize sh5(u5_op,u5_sh,u5_sh2); 
 
-  csrss_watch #(`csr_mflags,64'h0) mflags_mod(clk,rst,csrss_addr,csrss_data[63:0],csrss_en,mflags);
+  msrss_watch #(`csr_mflags,64'h0) mflags_mod(clk,rst,msrss_addr,msrss_data[63:0],msrss_en,mflags);
 
  
   add_agu aadd1(uu_base1,u1_const_reg,uu_index1,p0_cmplxAddr_d,p0_sec_in,
@@ -1626,7 +1626,7 @@ module agu_block(
   .faultCode(p4_faultCode),
   .faultNo(p4_faultNo),
   //.mOp_noBanks(),
-  .csrss_no(csrss_addr),.csrss_thr(csrss_thread),.csrss_en(csrss_en),.csrss_data(csrss_data),
+  .msrss_no(msrss_addr),.msrss_thr(msrss_thread),.msrss_en(msrss_en),.msrss_data(msrss_data),
   .cout_secq(),
   .tlb_clkEn(),
   .addrTlb(addrTlbR[4]),
@@ -1688,7 +1688,7 @@ module agu_block(
   .faultCode(p5_faultCode),
   .faultNo(p5_faultNo),
   //.mOp_noBanks(),
-  .csrss_no(csrss_addr),.csrss_thr(csrss_thread),.csrss_en(csrss_en),.csrss_data(csrss_data),
+  .msrss_no(msrss_addr),.msrss_thr(msrss_thread),.msrss_en(msrss_en),.msrss_data(msrss_data),
   .cout_secq(),
   .tlb_clkEn(),
   .addrTlb(addrTlbR[5]),
@@ -1838,10 +1838,10 @@ module agu_block(
   mOp0_low,
   mOp0_split,
   mOp_noBanks,
-  csrss_addr,
-  csrss_en,
-  csrss_thread,
-  csrss_data,
+  msrss_addr,
+  msrss_en,
+  msrss_thread,
+  msrss_data,
   tlb_clkEnR,
   cout_secR,
   addrTlbR[0],
@@ -1906,10 +1906,10 @@ module agu_block(
   mOp1_low,
   mOp1_split,
   mOp_noBanks,
-  csrss_addr,
-  csrss_en,
-  csrss_thread,
-  csrss_data,
+  msrss_addr,
+  msrss_en,
+  msrss_thread,
+  msrss_data,
   ,
   ,
   addrTlbR[1],
@@ -1974,10 +1974,10 @@ module agu_block(
   mOp2_low,
   mOp2_split,
   mOp_noBanks,
-  csrss_addr,
-  csrss_en,
-  csrss_thread,
-  csrss_data,
+  msrss_addr,
+  msrss_en,
+  msrss_thread,
+  msrss_data,
   ,
   ,
   addrTlbR[2],
@@ -2102,7 +2102,7 @@ module agu_block(
   .reqC_tlbEn(req_tlbEn),
   .busC_tlb_data(bus_tlb_data),
   .busC_tlb_en(bus_tlb_en),
-  .csrss_no(csrss_addr),.csrss_en(csrss_en),.csrss_thread(csrss_thread),.csrss_data(csrss_data),
+  .msrss_no(msrss_addr),.msrss_en(msrss_en),.msrss_thread(msrss_thread),.msrss_data(msrss_data),
   .pageFault(p3_pageFault),
   .faultCode(p3_faultCode),
   .faultNo(p3_faultNo),

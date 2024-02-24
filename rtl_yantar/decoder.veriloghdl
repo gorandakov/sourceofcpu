@@ -16,7 +16,7 @@ limitations under the License.
 
 `include "../struct.sv"
 `include "../operations.sv"
-`include "../csrss_no.sv"
+`include "../msrss_no.sv"
 
 module decoder_permitted_i(
   branch,
@@ -143,9 +143,9 @@ module decoder_aux_const(
   aux_can_jump,
   aux_can_read,
   aux_can_write,
-  csrss_no,
-  csrss_en,
-  csrss_data,
+  msrss_no,
+  msrss_en,
+  msrss_data,
   fpE_set,
   fpE_en,
   fpE_thr,
@@ -175,9 +175,9 @@ module decoder_aux_const(
   output reg aux_can_jump;
   output reg aux_can_read;
   output reg aux_can_write;
-  input [15:0] csrss_no;
-  input csrss_en;
-  input [64:0] csrss_data;
+  input [15:0] msrss_no;
+  input msrss_en;
+  input [64:0] msrss_data;
   input [10:0] fpE_set;
   input fpE_en;
   input fpE_thr;
@@ -319,34 +319,34 @@ module decoder_aux_const(
           thread_reg<=1'b0;
       end else begin
           if (!stall) thread_reg<=thread;
-          if (csrss_en && ((csr_mflags[csrss_no[15]][`mflags_cpl]==2'b0 && ~csr_mflags[csrss_no[15]][`mflags_vm]) ||
-            csrss_no==`csr_FPU)) begin
-              case(csrss_no[14:0])
-      `csr_retIP: 		csr_retIP[csrss_no[15]]<=csrss_data[63:0];
-      `csr_excStackSave: 	csr_excStackSave[csrss_no[15]]<=csrss_data;
-      `csr_excStack: 		csr_excStack[csrss_no[15]]<=csrss_data;
-      `csr_PCR: 		csr_PCR[csrss_no[15]]<=csrss_data;
-      `csr_PCR_reg_save:	csr_PCR_reg_save[csrss_no[15]]<=csrss_data;
-      `csr_mflags:		csr_mflags[csrss_no[15]]<=csrss_data[63:0];
-      `csr_USER1:		csr_USER1[csrss_no[15]]<=csrss_data[63:0];
-      `csr_IRQ_send:		csr_IRQ_send[csrss_no[15]]<=csrss_data[63:0];
-      `csr_FPU:			csr_fpu[csrss_no[15]]<=csrss_data[63:0];
-      `csr_excpt_fpu:		csr_fpu[csrss_no[15]][10:0]<=csrss_data[10:0];
-      `csr_page:		csr_page[csrss_no[15]]<=csrss_data[63:0];
-      `csr_vmpage:		csr_vmpage[csrss_no[15]]<=csrss_data[63:0];
-      //`csr_cpage:		csr_cpage[csrss_no[15]]<=csrss_data;
-      //`csr_spage:		csr_spage[csrss_no[15]]<=csrss_data;
-      `csr_syscall:		csr_syscall[csrss_no[15]]<=csrss_data[63:0];
-      `csr_vmcall:		csr_vmcall[csrss_no[15]]<=csrss_data[63:0];
-      //`csr_cpage_mask:		csr_cpage_mask[csrss_no[15]]<=csrss_data;
-      `csr_indir_table:		csr_indir_tbl[csrss_no[15]]<=csrss_data[63:0];
-      `csr_indir_mask:          csr_indir_mask[csrss_no[15]]<=csrss_data[63:0];
-      `csr_cl_lock:             csr_mflags[csrss_no[15]][18]<=1'b1;
+          if (msrss_en && ((csr_mflags[msrss_no[15]][`mflags_cpl]==2'b0 && ~csr_mflags[msrss_no[15]][`mflags_vm]) ||
+            msrss_no==`csr_FPU)) begin
+              case(msrss_no[14:0])
+      `csr_retIP: 		csr_retIP[msrss_no[15]]<=msrss_data[63:0];
+      `csr_excStackSave: 	csr_excStackSave[msrss_no[15]]<=msrss_data;
+      `csr_excStack: 		csr_excStack[msrss_no[15]]<=msrss_data;
+      `csr_PCR: 		csr_PCR[msrss_no[15]]<=msrss_data;
+      `csr_PCR_reg_save:	csr_PCR_reg_save[msrss_no[15]]<=msrss_data;
+      `csr_mflags:		csr_mflags[msrss_no[15]]<=msrss_data[63:0];
+      `csr_USER1:		csr_USER1[msrss_no[15]]<=msrss_data[63:0];
+      `csr_IRQ_send:		csr_IRQ_send[msrss_no[15]]<=msrss_data[63:0];
+      `csr_FPU:			csr_fpu[msrss_no[15]]<=msrss_data[63:0];
+      `csr_excpt_fpu:		csr_fpu[msrss_no[15]][10:0]<=msrss_data[10:0];
+      `csr_page:		csr_page[msrss_no[15]]<=msrss_data[63:0];
+      `csr_vmpage:		csr_vmpage[msrss_no[15]]<=msrss_data[63:0];
+      //`csr_cpage:		csr_cpage[msrss_no[15]]<=msrss_data;
+      //`csr_spage:		csr_spage[msrss_no[15]]<=msrss_data;
+      `csr_syscall:		csr_syscall[msrss_no[15]]<=msrss_data[63:0];
+      `csr_vmcall:		csr_vmcall[msrss_no[15]]<=msrss_data[63:0];
+      //`csr_cpage_mask:		csr_cpage_mask[msrss_no[15]]<=msrss_data;
+      `csr_indir_table:		csr_indir_tbl[msrss_no[15]]<=msrss_data[63:0];
+      `csr_indir_mask:          csr_indir_mask[msrss_no[15]]<=msrss_data[63:0];
+      `csr_cl_lock:             csr_mflags[msrss_no[15]][18]<=1'b1;
      	      endcase
               aux0_reg<=aux0;
 	      if (altEn) csr_retIP[thread_reg]<=altData;
           end
-          if (fpE_en && !csrss_en | (csrss_no!=`csr_FPU)) begin
+          if (fpE_en && !msrss_en | (msrss_no!=`csr_FPU)) begin
               csr_fpu[fpE_thr]<=csr_fpu[fpE_thr] | {42'b0,fpE_set,11'b0};
           end
           if (altEn2) csr_IRQ_recv_vector[altThr2][16:0]<=altEn2_data;
@@ -1781,7 +1781,7 @@ module decoder(
   baseIP,
   baseAttr,
   wrt0,wrt1,wrt2,
-  csrss_no,csrss_en,csrss_data,
+  msrss_no,msrss_en,msrss_data,
   thread
   );
   localparam DATA_WIDTH=`alu_width+1;
@@ -2289,9 +2289,9 @@ module decoder(
   output [5:0] wrt1;
   output [5:0] wrt2;
   
-  input [15:0] csrss_no;
-  input csrss_en;
-  input [64:0] csrss_data;
+  input [15:0] msrss_no;
+  input msrss_en;
+  input [64:0] msrss_data;
   input thread;
 
   function [5:0] ffx;
@@ -2301,9 +2301,9 @@ module decoder(
         ffx=reeg[5:2]=4'd6 ? {1'b0,~thr,2'b10,reeg[1:0]}: reeg[5:2]==4'd4 ? {3'd4,reeg[1:0],thr} : { 1'b0,thr,reeg[3:0] }; 
     end
   endfunction
-  wire [9:0] csrss_retIP_en;
-  wire [63:0] csrss_retIP_data;
-  reg  [9:0] csrss_retIP_en_reg;
+  wire [9:0] msrss_retIP_en;
+  wire [63:0] msrss_retIP_data;
+  reg  [9:0] msrss_retIP_en_reg;
 
   reg last_trce;
 
@@ -2635,7 +2635,7 @@ module decoder(
         //  .thisSpecAlu(dec_aspec[k]),
           .isIPRel(dec_IPRel[k]),
           .rAlloc(dec_allocR[k]),
-	  .csrss_retIP_en(csrss_retIP_en[k])
+	  .msrss_retIP_en(msrss_retIP_en[k])
           );
 //verilator lint_on PINMISSING
           assign instCls[k]=instQ[k][`instrQ_class];
@@ -2692,7 +2692,7 @@ module decoder(
           adder #(44) srcXAdd_mod({34'b0,dec_srcIPOffA_reg[k],1'b0   },{dec_constant_reg[k][43:0]},dec_srcIPOffx[k],1'b0, 1'b1,,,,);
 
 	  popcnt10 jpop_mod(cls_jump_reg&iUsed_reg,{dummy8_1,btbl_step});
-	  adder #(43) csrAdd_mod({34'b0,dec_srcIPOffA_reg[k]},baseIP[42:0],csrss_retIP_data[43:1],1'b0,csrss_retIP_en_reg[k],,,,);
+	  adder #(43) csrAdd_mod({34'b0,dec_srcIPOffA_reg[k]},baseIP[42:0],msrss_retIP_data[43:1],1'b0,msrss_retIP_en_reg[k],,,,);
 
           if (k<9) 
           decoder_reorder_mux mux_mod(
@@ -3072,9 +3072,9 @@ module decoder(
  // assign dec_aspec[-1]=dec_aspecR;
   assign dec_lspecR_d=(~iUsed[0]) ? dec_lspecR : 1'bz;
 //  assign dec_aspecR_d=~iUsed[0] ? dec_aspecR : 1'bz;
-  assign csrss_retIP_data=csrss_retIP_en_reg==10'b0 ? 64'b0 : 64'bz;
-  assign csrss_retIP_data[63:44]=csrss_retIP_en_reg!=10'b0 ? {baseAttr[0],baseAttr[1],1'b0,baseAttr[3],16'b0} : 20'bz; 
-  assign csrss_retIP_data[0]=csrss_retIP_en_reg!=10'b0 ? 1'b0 : 1'bz; 
+  assign msrss_retIP_data=msrss_retIP_en_reg==10'b0 ? 64'b0 : 64'bz;
+  assign msrss_retIP_data[63:44]=msrss_retIP_en_reg!=10'b0 ? {baseAttr[0],baseAttr[1],1'b0,baseAttr[3],16'b0} : 20'bz; 
+  assign msrss_retIP_data[0]=msrss_retIP_en_reg!=10'b0 ? 1'b0 : 1'bz; 
 
   assign has_taken=|(dec_taken & iUsed);
   assign has_tick=|(dec_tick & iUsed);
@@ -3215,14 +3215,14 @@ module decoder(
   .aux_can_jump(aux_can_jump),
   .aux_can_read(aux_can_read),
   .aux_can_write(aux_can_write),
-  .csrss_no(csrss_no),
-  .csrss_en(csrss_en),
-  .csrss_data(csrss_data),
+  .msrss_no(msrss_no),
+  .msrss_en(msrss_en),
+  .msrss_data(msrss_data),
   .fpE_en(fp_excpt_en),
   .fpE_set(fp_excpt_set),
   .fpE_thr(fp_excpt_thr),
-  .altEn(csrss_retIP_en_reg!=0),
-  .altData(csrss_retIP_data),
+  .altEn(msrss_retIP_en_reg!=0),
+  .altData(msrss_retIP_data),
   .altThr2(IRQ_thr),
   .altEn2(IRQ),
   .altData2(IRQ_data),
@@ -3738,7 +3738,7 @@ module decoder(
 	  dec_last_reg<=10'b0;
 	  dec_fsimd_reg<=10'b0;
 	  afterTick_reg<=10'b0;
-	  csrss_retIP_en_reg<=10'b0;
+	  msrss_retIP_en_reg<=10'b0;
 	  instr0_aft_spc<=1'b0;
 	  instr1_aft_spc<=1'b0;
 	  instr2_aft_spc<=1'b0;
@@ -3829,7 +3829,7 @@ module decoder(
 	  dec_last_reg<=dec_last;
 	  dec_fsimd_reg<=dec_fsimd;
 	  afterTick_reg<=afterTick;
-	  csrss_retIP_en_reg<=csrss_retIP_en_reg & iUsed;
+	  msrss_retIP_en_reg<=msrss_retIP_en_reg & iUsed;
 	  instr0_aft_spc<=dec_lspec[-1];
 	  instr1_aft_spc<=dec_lspec[1-1];
 	  instr2_aft_spc<=dec_lspec[2-1];

@@ -636,7 +636,7 @@ module except_jump_cmp(
         `jump_nO:	doJump=~O;
         `jump_P:	doJump=P;
         `jump_nP:	doJump=1'b1;
-        5'b11001:	doJump=0;//wr csrss
+        5'b11001:	doJump=0;//wr msrss
         default:	doJump=1;
       endcase
     end

@@ -29,7 +29,7 @@ module ww(
   bus_tlb_data,
   bus_tlb_slot,
   bus_tlb_en,
-  csrss_en,csrss_no,csrss_data,
+  msrss_en,msrss_no,msrss_data,
   MSI_expAddr_reg,
   MSI_expAddr_en_reg,
   MSI_expAddr_hitCC,
@@ -856,9 +856,9 @@ module ww(
   output [5:0] wrt1;
   output [5:0] wrt2;
   
-  input [15:0] csrss_no;
-  input csrss_en;
-  input [64:0] csrss_data;
+  input [15:0] msrss_no;
+  input msrss_en;
+  input [64:0] msrss_data;
   input [36:0] MSI_expAddr_reg;
   input MSI_expAddr_en_reg;
   output MSI_expAddr_hitCC;
@@ -1017,7 +1017,7 @@ frontendSelf #(0,BUS_ID) frontA_mod(
   btbl_IP1X[1],
   btbl_mask0X[1],btbl_mask1X[1],
   btbl_attr0X[1],btbl_attr1X[1],
-  csrss_en,csrss_no,csrss_data[63:0],
+  msrss_en,msrss_no,msrss_data[63:0],
   cc_instrEn[1],
   cc_read_set_flag[1],
   cc_fstall[1],
@@ -1085,7 +1085,7 @@ frontendSelf #(1,BUS_ID) frontB_mod(
   btbl_IP1X[0],
   btbl_mask0X[0],btbl_mask1X[0],
   btbl_attr0X[0],btbl_attr1X[0],
-  csrss_en,csrss_no,csrss_data[63:0],
+  msrss_en,msrss_no,msrss_data[63:0],
   cc_instrEn[0],
   cc_read_set_flag[0],
   cc_fstall[0],
@@ -1466,7 +1466,7 @@ frontendSelf #(1,BUS_ID) frontB_mod(
   baseIP,
   baseAttr,
   wrt0,wrt1,wrt2,
-  csrss_no,csrss_en,csrss_data,
+  msrss_no,msrss_en,msrss_data,
   thread
   );
 

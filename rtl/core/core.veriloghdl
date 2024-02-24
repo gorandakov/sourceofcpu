@@ -741,9 +741,9 @@ module heptane_core(
   wire [5:0] wrt1;
   wire [5:0] wrt2;
 
-  wire [15:0] csrss_no;
-  wire csrss_en;
-  wire [64:0] csrss_data;
+  wire [15:0] msrss_no;
+  wire msrss_en;
+  wire [64:0] msrss_data;
   
   wire insBus_en/*verilator public*/;
   wire insBus_io;
@@ -1479,7 +1479,7 @@ module heptane_core(
   bus_tlb_data,
   bus_tlb_slot,
   bus_tlb_en,
-  csrss_en,csrss_no,csrss_data,
+  msrss_en,msrss_no,msrss_data,
   MSI_expAddr_reg,
   MSI_expAddr_en_reg,
   MSI_expAddr_hitCC,
@@ -2149,7 +2149,7 @@ module heptane_core(
   jupd0_en,jupdt0_en,jupd0_ght_en,jupd0_ght2_en,jupd0_addr,jupd0_baddr,jupd0_sc,jupd0_tk,  
   jupd1_en,jupdt1_en,jupd1_ght_en,jupd1_ght2_en,jupd1_addr,jupd1_baddr,jupd1_sc,jupd1_tk,
   
-  csrss_no,csrss_en,csrss_data,
+  msrss_no,msrss_en,msrss_data,
 
   insBus_en&&~insBus_req[4]|insBus_req[3],
   insBus_io,
