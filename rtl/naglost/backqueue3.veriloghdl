@@ -386,8 +386,8 @@ module frontendSelf(
   wire [11:0][`instrQ_width-1:0] pre_other/*verilator public*/;
 //  reg [`instrQ_width-1:0] pre_other_reg[11:0];
   
-  wire pre_isAvx;
-  reg pre_isAvx_reg;
+  wire pre__splitinsn;
+  reg pre__splitinsn_reg;
   reg cc_err_reg;
   wire [11:0][CLS_WIDTH-1:0] pre_class;
   reg [CLS_WIDTH-1:0] pre_class_reg[11:0]/*verilator public*/;
@@ -900,7 +900,7 @@ module frontendSelf(
           .instr(jmp_instr[k]),
           .magic(~jmp_magic[k]),
           .class_(jmp_class[k][11:0]),
-          .isAvx(1'b0),
+          ._splitinsn(1'b0),
           .constant(jdec_const[k]),
           
           .pushCallStack(jdec_push[k]),
@@ -1332,7 +1332,7 @@ module frontendSelf(
     .class4(pre_class[4]),.class5(pre_class[5]),.class6(pre_class[6]),.class7(pre_class[7]),
     .class8(pre_class[8]),.class9(pre_class[9]),.class10(pre_class[10]),.class11(pre_class[11]),
     .instrEn(pre_instrEn),
-    .isAvx(pre_isAvx),
+    ._splitinsn(pre__splitinsn),
     .hasJumps(pre_has_jumps),
     .error(pre_error),
     .jerror(jmp_error),
@@ -1979,7 +1979,7 @@ module frontendSelf(
           pre_instr9_reg<={INSTR_WIDTH{1'B0}};
           pre_instr10_reg<={INSTR_WIDTH{1'B0}};
           pre_instr11_reg<={INSTR_WIDTH{1'B0}};
-	  pre_isAvx_reg<=1'b0;
+	  pre__splitinsn_reg<=1'b0;
           for (n=0;n<12;n=n+1) begin
               pre_off_reg[n]<=4'b0;
               pre_magic_reg[n]<=4'B0;
@@ -2350,7 +2350,7 @@ module frontendSelf(
           pre_instr9_reg<=pre_instr9;
           pre_instr10_reg<=pre_instr10;
           pre_instr11_reg<=pre_instr11;
-	  pre_isAvx_reg<=pre_isAvx;
+	  pre__splitinsn_reg<=pre__splitinsn;
           for (n=0;n<12;n=n+1) begin
               pre_off_reg[n]<=pre_off[n];
               pre_magic_reg[n]<=pre_magic[n];
@@ -2511,7 +2511,7 @@ module frontendSelf(
           pre_instr11_reg<=pre_instr11;
           read_data_reg<=read_data;
           cc_err_reg<=cc_err;
-	  pre_isAvx_reg<=pre_isAvx;
+	  pre__splitinsn_reg<=pre__splitinsn;
           for (n=0;n<12;n=n+1) begin
               pre_off_reg[n]<=pre_off[n];
               pre_magic_reg[n]<=pre_magic[n];

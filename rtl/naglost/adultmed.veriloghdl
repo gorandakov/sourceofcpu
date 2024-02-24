@@ -152,7 +152,7 @@ module smallInstr_decoder(
   //7:0 free 15:8 unfree 39:16 fxch/pop/push 
   wire [3:0] magic;
   wire [7:0] srcIPOff;
-//  wire isAvx;
+//  wire _splitinsn;
   wire [7:0] opcode_main;
   
 

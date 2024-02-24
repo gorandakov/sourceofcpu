@@ -28,7 +28,7 @@ module jump_decoder(
   instr,
   magic,
   class_,
-  isAvx,
+  _splitinsn,
   constant,
   
   pushCallStack,
@@ -63,7 +63,7 @@ module jump_decoder(
   input [INSTR_WIDTH-1:0] instr;
   input [3:0] magic;
   input [11:0] class_;
-  input isAvx;
+  input _splitinsn;
   
   output reg [63:0] constant;
   
