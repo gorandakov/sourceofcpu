@@ -17,7 +17,7 @@ limitations under the License.
 
 `include "../struct.sv"
 
-module ctlb_ram(
+module cmlb_ram(
   clk,
   rst,
   read_addr,
@@ -27,7 +27,7 @@ module ctlb_ram(
   write_wen
   );
 
-  localparam DATA_WIDTH=`ctlb_width;
+  localparam DATA_WIDTH=`cmlb_width;
   localparam ADDR_WIDTH=6;
   localparam ADDR_COUNT=64;
   
@@ -51,7 +51,7 @@ module ctlb_ram(
 endmodule
 
 
-module ctlb_way(
+module cmlb_way(
   clk,
   rst,
   read_clkEn,
@@ -71,8 +71,8 @@ module ctlb_way(
   );
 
   parameter WAYNO=0;
-  localparam DATA_WIDTH=`ctlb_width;
-  localparam OUTDATA_WIDTH=`ctlbData_width;
+  localparam DATA_WIDTH=`cmlb_width;
+  localparam OUTDATA_WIDTH=`cmlbData_width;
   localparam IP_WIDTH=65;
   localparam ADDR_WIDTH=5;
 
@@ -103,7 +103,7 @@ module ctlb_way(
   wire [DATA_WIDTH-1:0] write_data_same;
   wire [DATA_WIDTH-1:0] write_data_init;
 
-  wire [OUTDATA_WIDTH-1:0] tlb_data;
+  wire [OUTDATA_WIDTH-1:0] mlb_data;
 
   wire validN;
   
@@ -121,44 +121,44 @@ module ctlb_way(
   
   reg [1:0] read_lru_reg;
 
-  assign ip=read_data_ram[`ctlb_ip];
-  assign valid=read_data_ram[`ctlb_valid];
-  assign validN=read_data_ram[`ctlb_validN];
-  assign read_lru=read_data_ram[`ctlb_lru];
+  assign ip=read_data_ram[`cmlb_ip];
+  assign valid=read_data_ram[`cmlb_valid];
+  assign validN=read_data_ram[`cmlb_validN];
+  assign read_lru=read_data_ram[`cmlb_lru];
  //verilator lint_off WIDTH 
   assign read_hit=(valid&~tr_jump||validN&tr_jump) && ((ip|{13{~tr_jump}})==(addr|{13{~tr_jump}}) ||
-    ((ip|{13{~tr_jump}})=={sproc,addr[43:0]|{13{~tr_jump}}} && tlb_data[`ctlbData_global])) && addr[43:40]!=4'b1110 && ~invalidate;
+    ((ip|{13{~tr_jump}})=={sproc,addr[43:0]|{13{~tr_jump}}} && mlb_data[`cmlbData_global])) && addr[43:40]!=4'b1110 && ~invalidate;
  //verilator lint_on WIDTH
   
   assign write_wen_ram=(write_wen && read_lru==2'b11) || read_clkEn&~fStall&~write_wen;
   
-  assign tlb_data=read_data_ram[`ctlb_data];
-  assign read_data=read_hit ? read_data_ram[`ctlb_data] : 'z;
-  assign write_data_new[`ctlb_ip]=addr;
-  assign write_data_new[`ctlb_valid]=~write_tr;
-  assign write_data_new[`ctlb_validN]=write_tr;
-  assign write_data_new[`ctlb_data]=write_data;
-  assign write_data_new[`ctlb_lru]=2'b11;
+  assign mlb_data=read_data_ram[`cmlb_data];
+  assign read_data=read_hit ? read_data_ram[`cmlb_data] : 'z;
+  assign write_data_new[`cmlb_ip]=addr;
+  assign write_data_new[`cmlb_valid]=~write_tr;
+  assign write_data_new[`cmlb_validN]=write_tr;
+  assign write_data_new[`cmlb_data]=write_data;
+  assign write_data_new[`cmlb_lru]=2'b11;
   
-  assign write_data_init[`ctlb_ip]=0;
-  assign write_data_init[`ctlb_valid]=0;
-  assign write_data_init[`ctlb_validN]=0;
-  assign write_data_init[`ctlb_data]=0;
-  assign write_data_init[`ctlb_lru]=WAYNO[1:0];
+  assign write_data_init[`cmlb_ip]=0;
+  assign write_data_init[`cmlb_valid]=0;
+  assign write_data_init[`cmlb_validN]=0;
+  assign write_data_init[`cmlb_data]=0;
+  assign write_data_init[`cmlb_lru]=WAYNO[1:0];
 
-  assign write_data_same[`ctlb_ip]=ip;
-  assign write_data_same[`ctlb_valid]=valid && ~(invalidate&read_hit);
-  assign write_data_same[`ctlb_validN]=validN && ~(invalidate&read_hit);
-  assign write_data_same[`ctlb_data]=read_data_ram[`ctlb_data];
+  assign write_data_same[`cmlb_ip]=ip;
+  assign write_data_same[`cmlb_valid]=valid && ~(invalidate&read_hit);
+  assign write_data_same[`cmlb_validN]=validN && ~(invalidate&read_hit);
+  assign write_data_same[`cmlb_data]=read_data_ram[`cmlb_data];
 
-  assign write_data_same[`ctlb_lru]=newLRU;
+  assign write_data_same[`cmlb_lru]=newLRU;
   
   
   assign write_data_ram=write_wen & ~init ? write_data_new : 'z;
   assign write_data_ram=~write_wen & ~init ? write_data_same : 'z;
   assign write_data_ram=init ? write_data_init : 'z;
   
-  ctlb_ram ram_mod(
+  cmlb_ram ram_mod(
   .clk(clk),
   .rst(rst),
   .read_addr(tr_jump ? addr[9:4] : addr[19:14]),
@@ -198,7 +198,7 @@ module ctlb_way(
 endmodule
 
 
-module ctlb(
+module cmlb(
   clk,
   rst,
   read_clkEn,
@@ -215,8 +215,8 @@ module ctlb(
   msrss_data
   );
 
-  localparam DATA_WIDTH=`ctlb_width;
-  localparam OUTDATA_WIDTH=`ctlbData_width;
+  localparam DATA_WIDTH=`cmlb_width;
+  localparam OUTDATA_WIDTH=`cmlbData_width;
   localparam IP_WIDTH=65;
   localparam ADDR_WIDTH=5;
 
@@ -263,7 +263,7 @@ module ctlb(
     genvar k;
     for(k=0;k<4;k=k+1)
       begin : ways_gen
-        ctlb_way #(k) way_mod(
+        cmlb_way #(k) way_mod(
         clk,
         rst,
         read_clkEn,

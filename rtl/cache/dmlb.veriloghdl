@@ -21,7 +21,7 @@ limitations under the License.
 
 
 
-module dtlb_ram(
+module dmlb_ram(
   clk,
   rst,
   read0_addr,
@@ -41,7 +41,7 @@ module dtlb_ram(
   write_wen
   );
 
-  localparam DATA_WIDTH=`dtlb_width;
+  localparam DATA_WIDTH=`dmlb_width;
   localparam ADDR_WIDTH=4;
   localparam ADDR_COUNT=16;
   
@@ -81,7 +81,7 @@ endmodule
 
 
 
-module dtlb_lru_ram(
+module dmlb_lru_ram(
   clk,
   rst,
   read_addr,
@@ -116,7 +116,7 @@ endmodule
 
 
 
-module dtlb_way(
+module dmlb_way(
   clk,
   rst,
   read_clkEn,
@@ -146,9 +146,9 @@ module dtlb_way(
   );
 
   parameter WAYNO=0;
-  localparam DATA_WIDTH=`dtlb_width;
-  localparam DATAH_WIDTH=`dtlb_width;
-  localparam OUTDATA_WIDTH=`dtlbData_width;
+  localparam DATA_WIDTH=`dmlb_width;
+  localparam DATAH_WIDTH=`dmlb_width;
+  localparam OUTDATA_WIDTH=`dmlbData_width;
   localparam VADDR_WIDTH=65;
   localparam ADDR_WIDTH=4;
   localparam ADDRH_WIDTH=3;
@@ -196,18 +196,18 @@ module dtlb_way(
   generate
     genvar p;
     for(p=0;p<6;p=p+1) begin
-        assign vaddr[p]=read_data_ram[p][`dtlb_vaddr];
-        assign valid[p]=read_data_ram[p][`dtlb_valid];
-        assign shared[p]=read_data_ram[p][`dtlb_shr];
+        assign vaddr[p]=read_data_ram[p][`dmlb_vaddr];
+        assign valid[p]=read_data_ram[p][`dmlb_valid];
+        assign shared[p]=read_data_ram[p][`dmlb_shr];
 
         assign read_hitL[p]=valid[p] && addr[p][VADDR_WIDTH-18+:3]!=3'b111 && 
           (vaddr[p]==addr[p] || ({sproc,addr[p][29:0]}==vaddr[p] && 
           shared[p]));
         assign read_hit[p]=read_hitL[p] || addr[p][VADDR_WIDTH-18+:3]==3'b111;
   
-        assign read_data0[p]=read_hitL[p] ? read_data_ram[p][`dtlb_data1] : 'z;
-        assign read_data1[p]=read_hitL[p] ? read_data_ram[p][`dtlb_data2] : 'z;
-        assign read_data2[p]=read_hitL[p] ? read_data_ram[p][`dtlb_data3] : 'z;
+        assign read_data0[p]=read_hitL[p] ? read_data_ram[p][`dmlb_data1] : 'z;
+        assign read_data1[p]=read_hitL[p] ? read_data_ram[p][`dmlb_data2] : 'z;
+        assign read_data2[p]=read_hitL[p] ? read_data_ram[p][`dmlb_data3] : 'z;
 
         assign read_way[p]=read_hit[p] ? WAYNO[2:0] : 3'bz;
 
@@ -217,20 +217,20 @@ module dtlb_way(
   || init || write_wen & write_xstant & ~force_way_off  & (read_hitL[0]|
   force_way_on);
   
-  assign write_data_new[`dtlb_vaddr]=write_addr;
-  assign write_data_new[`dtlb_valid]=~init && ~write_invl;
-  assign write_data_new[`dtlb_shr]=write_data0[`dtlbData_glo] && write_data1[
-    `dtlbData_glo] && write_data2[`dtlbData_glo];
-  assign write_data_new[`dtlb_data1]=write_data0;
-  assign write_data_new[`dtlb_data2]=write_data1;
-  assign write_data_new[`dtlb_data3]=write_data2;
+  assign write_data_new[`dmlb_vaddr]=write_addr;
+  assign write_data_new[`dmlb_valid]=~init && ~write_invl;
+  assign write_data_new[`dmlb_shr]=write_data0[`dmlbData_glo] && write_data1[
+    `dmlbData_glo] && write_data2[`dmlbData_glo];
+  assign write_data_new[`dmlb_data1]=write_data0;
+  assign write_data_new[`dmlb_data2]=write_data1;
+  assign write_data_new[`dmlb_data3]=write_data2;
 
 
  
   assign write_data_ram=write_data_new & {DATA_WIDTH{~init}};
 
   
-  dtlb_ram ram_mod(
+  dmlb_ram ram_mod(
   .clk(clk),
   .rst(rst),
   .read0_addr(addr[0][3:0]),
@@ -250,7 +250,7 @@ module dtlb_way(
   .write_wen(write_wen_ram)
   );
 
-  dtlb_lru_ram ramr_mod(
+  dmlb_lru_ram ramr_mod(
   .clk(clk),
   .rst(rst),
   .read_addr(addr[0][3:0]),
@@ -260,7 +260,7 @@ module dtlb_way(
   .write_wen(read_clkEn&R0_sec_wren||init||write_wen)
   );
 
-  dtlb_lru_ram ramw_mod(
+  dmlb_lru_ram ramw_mod(
   .clk(clk),
   .rst(rst),
   .read_addr(write_addr[3:0]),
@@ -281,7 +281,7 @@ endmodule
 
 
 
-module dtlb(
+module dmlb(
   clk,
   rst,
   read_clkEn,
@@ -305,8 +305,8 @@ module dtlb(
   );
 
   localparam WAY_COUNT=8;
-  localparam DATA_WIDTH=`dtlb_width;
-  localparam OUTDATA_WIDTH=`dtlbData_width;
+  localparam DATA_WIDTH=`dmlb_width;
+  localparam OUTDATA_WIDTH=`dmlbData_width;
   localparam VADDR_WIDTH=65;
   localparam ADDR_WIDTH=5;
 
@@ -368,7 +368,7 @@ module dtlb(
   generate
     for(k=0;k<WAY_COUNT;k=k+1)
 	  begin : ways_gen
-        dtlb_way #(k) way_mod(
+        dmlb_way #(k) way_mod(
         .clk(clk),
         .rst(rst),
         .read_clkEn(read_clkEn),
@@ -413,70 +413,70 @@ module dtlb(
             assign read_data1[k]=~read_hitL[k] ? pmm_data1[k*2+&addr0[46:45]] : 'z;
             assign read_data2[k]=~read_hitL[k] ? pmm_data2[k*2+&addr0[46:45]] : 'z;
             
-            assign pmm_data0[k*2+0][`dtlbData_phys]=addr0[k][29:0];
-            assign pmm_data0[k*2+1][`dtlbData_phys]=addr0[k][29:0];
-            assign pmm_data1[k*2+0][`dtlbData_phys]=addr0[k][29:0];
-            assign pmm_data1[k*2+1][`dtlbData_phys]=addr0[k][29:0];
+            assign pmm_data0[k*2+0][`dmlbData_phys]=addr0[k][29:0];
+            assign pmm_data0[k*2+1][`dmlbData_phys]=addr0[k][29:0];
+            assign pmm_data1[k*2+0][`dmlbData_phys]=addr0[k][29:0];
+            assign pmm_data1[k*2+1][`dmlbData_phys]=addr0[k][29:0];
             adder_inc #(30) add_mod(addr0[k][29:0],myaddr0[k],1'b1,1'b1,);
-            assign pmm_data2[k*2+0][`dtlbData_phys]=myaddr0[k][29:0];
-            assign pmm_data2[k*2+1][`dtlbData_phys]=myaddr0[k][29:0];
+            assign pmm_data2[k*2+0][`dmlbData_phys]=myaddr0[k][29:0];
+            assign pmm_data2[k*2+1][`dmlbData_phys]=myaddr0[k][29:0];
             
-            assign pmm_data0[k*2+0][`dtlbData_sys]=1'b1;
-            assign pmm_data0[k*2+1][`dtlbData_sys]=1'b1;
-            assign pmm_data0[k*2+0][`dtlbData_wp]=4'b0;
-            assign pmm_data0[k*2+1][`dtlbData_wp]=4'b1111;
-            assign pmm_data0[k*2+0][`dtlbData_na]=1'b1;
-            assign pmm_data0[k*2+1][`dtlbData_na]=1'b1;
-            assign pmm_data0[k*2+0][`dtlbData_ne]=1'b1;
-            assign pmm_data0[k*2+1][`dtlbData_ne]=1'b1;
-            assign pmm_data0[k*2+0][`dtlbData_glo]=1'b1;
-            assign pmm_data0[k*2+1][`dtlbData_glo]=1'b1;
-            assign pmm_data0[k*2+0][`dtlbData_type]=2'b0;
-            assign pmm_data0[k*2+1][`dtlbData_type]=2'b11;//texture
-            assign pmm_data0[k*2+0][`dtlbData_acc]=1'b1;
-            assign pmm_data0[k*2+1][`dtlbData_acc]=1'b1;
-            assign pmm_data0[k*2+0][`dtlbData_wrt]=1'b1;
-            assign pmm_data0[k*2+1][`dtlbData_wrt]=1'b1;
-            assign pmm_data0[k*2+0][`dtlbData_subpage]=1'b0;
-            assign pmm_data0[k*2+1][`dtlbData_subpage]=1'b0;
+            assign pmm_data0[k*2+0][`dmlbData_sys]=1'b1;
+            assign pmm_data0[k*2+1][`dmlbData_sys]=1'b1;
+            assign pmm_data0[k*2+0][`dmlbData_wp]=4'b0;
+            assign pmm_data0[k*2+1][`dmlbData_wp]=4'b1111;
+            assign pmm_data0[k*2+0][`dmlbData_na]=1'b1;
+            assign pmm_data0[k*2+1][`dmlbData_na]=1'b1;
+            assign pmm_data0[k*2+0][`dmlbData_ne]=1'b1;
+            assign pmm_data0[k*2+1][`dmlbData_ne]=1'b1;
+            assign pmm_data0[k*2+0][`dmlbData_glo]=1'b1;
+            assign pmm_data0[k*2+1][`dmlbData_glo]=1'b1;
+            assign pmm_data0[k*2+0][`dmlbData_type]=2'b0;
+            assign pmm_data0[k*2+1][`dmlbData_type]=2'b11;//texture
+            assign pmm_data0[k*2+0][`dmlbData_acc]=1'b1;
+            assign pmm_data0[k*2+1][`dmlbData_acc]=1'b1;
+            assign pmm_data0[k*2+0][`dmlbData_wrt]=1'b1;
+            assign pmm_data0[k*2+1][`dmlbData_wrt]=1'b1;
+            assign pmm_data0[k*2+0][`dmlbData_subpage]=1'b0;
+            assign pmm_data0[k*2+1][`dmlbData_subpage]=1'b0;
 
-            assign pmm_data1[k*2+0][`dtlbData_sys]=1'b1;
-            assign pmm_data1[k*2+1][`dtlbData_sys]=1'b1;
-            assign pmm_data1[k*2+0][`dtlbData_wp]=4'b0;
-            assign pmm_data1[k*2+1][`dtlbData_wp]=4'b1111;
-            assign pmm_data1[k*2+0][`dtlbData_na]=1'b1;
-            assign pmm_data1[k*2+1][`dtlbData_na]=1'b1;
-            assign pmm_data1[k*2+0][`dtlbData_ne]=1'b1;
-            assign pmm_data1[k*2+1][`dtlbData_ne]=1'b1;
-            assign pmm_data1[k*2+0][`dtlbData_glo]=1'b1;
-            assign pmm_data1[k*2+1][`dtlbData_glo]=1'b1;
-            assign pmm_data1[k*2+0][`dtlbData_type]=2'b0;
-            assign pmm_data1[k*2+1][`dtlbData_type]=2'b11;//texture
-            assign pmm_data1[k*2+0][`dtlbData_acc]=1'b1;
-            assign pmm_data1[k*2+1][`dtlbData_acc]=1'b1;
-            assign pmm_data1[k*2+0][`dtlbData_wrt]=1'b1;
-            assign pmm_data1[k*2+1][`dtlbData_wrt]=1'b1;
-            assign pmm_data1[k*2+0][`dtlbData_subpage]=1'b0;
-            assign pmm_data1[k*2+1][`dtlbData_subpage]=1'b0;
+            assign pmm_data1[k*2+0][`dmlbData_sys]=1'b1;
+            assign pmm_data1[k*2+1][`dmlbData_sys]=1'b1;
+            assign pmm_data1[k*2+0][`dmlbData_wp]=4'b0;
+            assign pmm_data1[k*2+1][`dmlbData_wp]=4'b1111;
+            assign pmm_data1[k*2+0][`dmlbData_na]=1'b1;
+            assign pmm_data1[k*2+1][`dmlbData_na]=1'b1;
+            assign pmm_data1[k*2+0][`dmlbData_ne]=1'b1;
+            assign pmm_data1[k*2+1][`dmlbData_ne]=1'b1;
+            assign pmm_data1[k*2+0][`dmlbData_glo]=1'b1;
+            assign pmm_data1[k*2+1][`dmlbData_glo]=1'b1;
+            assign pmm_data1[k*2+0][`dmlbData_type]=2'b0;
+            assign pmm_data1[k*2+1][`dmlbData_type]=2'b11;//texture
+            assign pmm_data1[k*2+0][`dmlbData_acc]=1'b1;
+            assign pmm_data1[k*2+1][`dmlbData_acc]=1'b1;
+            assign pmm_data1[k*2+0][`dmlbData_wrt]=1'b1;
+            assign pmm_data1[k*2+1][`dmlbData_wrt]=1'b1;
+            assign pmm_data1[k*2+0][`dmlbData_subpage]=1'b0;
+            assign pmm_data1[k*2+1][`dmlbData_subpage]=1'b0;
 
-            assign pmm_data2[k*2+0][`dtlbData_sys]=1'b1;
-            assign pmm_data2[k*2+1][`dtlbData_sys]=1'b1;
-            assign pmm_data2[k*2+0][`dtlbData_wp]=4'b0;
-            assign pmm_data2[k*2+1][`dtlbData_wp]=4'b1111;
-            assign pmm_data2[k*2+0][`dtlbData_na]=1'b1;
-            assign pmm_data2[k*2+1][`dtlbData_na]=1'b1;
-            assign pmm_data2[k*2+0][`dtlbData_ne]=1'b1;
-            assign pmm_data2[k*2+1][`dtlbData_ne]=1'b1;
-            assign pmm_data2[k*2+0][`dtlbData_glo]=1'b1;
-            assign pmm_data2[k*2+1][`dtlbData_glo]=1'b1;
-            assign pmm_data2[k*2+0][`dtlbData_type]=2'b0;
-            assign pmm_data2[k*2+1][`dtlbData_type]=2'b11;//texture
-            assign pmm_data2[k*2+0][`dtlbData_acc]=1'b1;
-            assign pmm_data2[k*2+1][`dtlbData_acc]=1'b1;
-            assign pmm_data2[k*2+0][`dtlbData_wrt]=1'b1;
-            assign pmm_data2[k*2+1][`dtlbData_wrt]=1'b1;
-            assign pmm_data2[k*2+0][`dtlbData_subpage]=1'b0;
-            assign pmm_data2[k*2+1][`dtlbData_subpage]=1'b0;
+            assign pmm_data2[k*2+0][`dmlbData_sys]=1'b1;
+            assign pmm_data2[k*2+1][`dmlbData_sys]=1'b1;
+            assign pmm_data2[k*2+0][`dmlbData_wp]=4'b0;
+            assign pmm_data2[k*2+1][`dmlbData_wp]=4'b1111;
+            assign pmm_data2[k*2+0][`dmlbData_na]=1'b1;
+            assign pmm_data2[k*2+1][`dmlbData_na]=1'b1;
+            assign pmm_data2[k*2+0][`dmlbData_ne]=1'b1;
+            assign pmm_data2[k*2+1][`dmlbData_ne]=1'b1;
+            assign pmm_data2[k*2+0][`dmlbData_glo]=1'b1;
+            assign pmm_data2[k*2+1][`dmlbData_glo]=1'b1;
+            assign pmm_data2[k*2+0][`dmlbData_type]=2'b0;
+            assign pmm_data2[k*2+1][`dmlbData_type]=2'b11;//texture
+            assign pmm_data2[k*2+0][`dmlbData_acc]=1'b1;
+            assign pmm_data2[k*2+1][`dmlbData_acc]=1'b1;
+            assign pmm_data2[k*2+0][`dmlbData_wrt]=1'b1;
+            assign pmm_data2[k*2+1][`dmlbData_wrt]=1'b1;
+            assign pmm_data2[k*2+0][`dmlbData_subpage]=1'b0;
+            assign pmm_data2[k*2+1][`dmlbData_subpage]=1'b0;
       end	
       end
   endgenerate
@@ -515,8 +515,8 @@ module dtlb(
 //  assign read_hit[3]=read_hitL[3] && ~init;
 //  assign read_hit[4]=read_hitL[4] && ~init;
 //  assign read_hit[5]=read_hitL[5] && ~init;
-//  assign read_2M[0]=read_data[`dtlbData_subpage];;
-//  assign read_2M[1]=read_data_next[`dtlbData_subpage];;
+//  assign read_2M[0]=read_data[`dmlbData_subpage];;
+//  assign read_2M[1]=read_data_next[`dmlbData_subpage];;
   
 
   assign read_way[0]=read_hit[0] ? 3'BZ : 3'B0;
