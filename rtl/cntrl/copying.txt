@@ -1,6 +1,6 @@
 
 Heptane Central Processor unit
-Copyright (C) Goran Dakov
+Copyright (C) Goran Dakov, D.O.B. 11 January 1983, lives in Bristol UK in 2024
 The following license applies to this source code with the special restriction that manufacturing a product that includes this source code cannot be done without the permission of the author.
 
 
