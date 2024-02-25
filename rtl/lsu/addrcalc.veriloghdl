@@ -418,8 +418,8 @@ module addrcalc(
   
   assign mflags0=mflags[thread];
   
-  assign fault_mlb={mflags0[`mflags_priv+1] & mlb_data[`dmlbData_sys] , ~mlb_data[`dmlbData_na]}; 
-  assign fault_mlb_next={mflags0[`mflags_priv+1] & mlb_data_next[`dmlbData_sys],  ~mlb_data_next[`dmlbData_na]}; 
+  assign fault_mlb={mflags0[`mflags_priv+1] & mlb_data[`dmlbData_user] , ~mlb_data[`dmlbData_na]}; 
+  assign fault_mlb_next={mflags0[`mflags_priv+1] & mlb_data_next[`dmlbData_user],  ~mlb_data_next[`dmlbData_na]}; 
 
   adder #(15) nextCAddr_mod({1'b0,cmplxAddr[13:0]},15'b10000000,addrNext,1'b0,1'b1,,,,);
   
@@ -565,9 +565,9 @@ module addrcalc(
            `csr_vmpage: vproc[msrss_no[15]]<=msrss_data[63:40];
            `csr_mflags: mflags[msrss_no[15]]<=msrss_data;
               endcase
-	      mflags[msrss_no[15]][`mflags_priv]<={attr[`attr_km],attr[`attr_sec]};
+	      mflags[msrss_no[15]][`mflags_priv]<={attr[`attr_um],attr[`attr_sec]};
           end else if (!rsStall) begin
-	      mflags[thread][`mflags_priv]<={attr[`attr_km],attr[`attr_sec]};
+	      mflags[thread][`mflags_priv]<={attr[`attr_um],attr[`attr_sec]};
           end
 	  
     end

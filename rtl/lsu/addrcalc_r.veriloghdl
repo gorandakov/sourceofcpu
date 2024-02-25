@@ -425,8 +425,8 @@ module addrcalc_r(
     {6'd0,1'b0,2'd2};
   assign faultCode={3'b0,fault_cann_reg,pageFault_t_reg[1],2'b0,pageFault_t_reg[0]};//warning: unused
   
-  assign fault_mlb={mflags[`mflags_priv+1] & mlb_data[`dmlbData_sys] , ~mlb_data[`dmlbData_na]}; 
-  assign fault_mlb_next={mflags[`mflags_priv+1] & mlb_data_next[`dmlbData_sys],  ~mlb_data_next[`dmlbData_na]}; 
+  assign fault_mlb={mflags[`mflags_priv+1] & mlb_data[`dmlbData_user] , ~mlb_data[`dmlbData_na]}; 
+  assign fault_mlb_next={mflags[`mflags_priv+1] & mlb_data_next[`dmlbData_user],  ~mlb_data_next[`dmlbData_na]}; 
 
   assign addrTlb=addrMain_mlb;
 
@@ -437,7 +437,7 @@ module addrcalc_r(
   assign addrInPage=addrMain_mlb[43:15];
 
   assign busC_mlb_data[`cmlbData_phys]=writeTlb_low[1] ? writeTlb_data1[1][`dmlbData_phys] : writeTlb_data0[1][`dmlbData_phys];
-  assign busC_mlb_data[`cmlbData_sys]=writeTlb_low[1] ? writeTlb_data1[1][`dmlbData_sys] : writeTlb_data0[1][`dmlbData_sys];
+  assign busC_mlb_data[`cmlbData_user]=writeTlb_low[1] ? writeTlb_data1[1][`dmlbData_user] : writeTlb_data0[1][`dmlbData_user];
   assign busC_mlb_data[`cmlbData_ne]=writeTlb_low[1] ? writeTlb_data1[1][`dmlbData_ne] : writeTlb_data0[1][`dmlbData_ne];
   assign busC_mlb_data[`cmlbData_na]=writeTlb_low[1] ? writeTlb_data1[1][`dmlbData_na] : writeTlb_data0[1][`dmlbData_na];
   assign busC_mlb_data[`cmlbData_global]=writeTlb_low[1] ? writeTlb_data1[1][`dmlbData_glo] : writeTlb_data0[1][`dmlbData_glo];
@@ -612,7 +612,7 @@ module addrcalc_r(
 		  proc<=vproc;
 		  sproc<=pproc^1;
 	      end
-	      mflags[`mflags_priv]<={mOp0_attr[`attr_km],mOp0_attr[`attr_sec]};//muha-srankk
+	      mflags[`mflags_priv]<={mOp0_attr[`attr_um],mOp0_attr[`attr_sec]};//muha-srankk
           end else if (!rsStall) begin
 	      if (mOp_en && !|req_bus) mOp0_en_reg<=1'b0;
           end

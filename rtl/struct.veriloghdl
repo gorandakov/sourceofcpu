@@ -72,7 +72,7 @@ limitations under the License.
 `define page_accessed 5
 `define page_nc 4
 `define page_wt 3
-`define page_sys 1
+`define page_user 1
 `define page_wr 12:9
 `define page_na 0
 
@@ -135,7 +135,7 @@ limitations under the License.
 `define bob_freeregsS 570:526
 `define bob_width 571
 
-`define attr_km 0
+`define attr_um 0
 `define attr_vm 1
 `define attr_sec 3
 
@@ -311,7 +311,7 @@ limitations under the License.
 
 
 `define dmlbData_phys 29:0
-`define dmlbData_sys 30
+`define dmlbData_user 30
 `define dmlbData_wp 34:31
 `define dmlbData_na 35
 `define dmlbData_ne 36
@@ -334,7 +334,7 @@ limitations under the License.
 
 
 `define cmlbData_phys 29:0
-`define cmlbData_sys 30
+`define cmlbData_user 30
 `define cmlbData_na 31
 `define cmlbData_ne 32
 `define cmlbData_global 33
@@ -551,6 +551,6 @@ limitations under the License.
 `define ptr_low 58:52
 `define ptr_hi  51:45
 `define ptr_on_low 44
-`define ptr_kmode 43
+`define ptr_usrmode 43
 
 

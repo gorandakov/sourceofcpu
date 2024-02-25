@@ -421,8 +421,8 @@ module dmlb(
             assign pmm_data2[k*2+0][`dmlbData_phys]=myaddr0[k][29:0];
             assign pmm_data2[k*2+1][`dmlbData_phys]=myaddr0[k][29:0];
             
-            assign pmm_data0[k*2+0][`dmlbData_sys]=1'b1;
-            assign pmm_data0[k*2+1][`dmlbData_sys]=1'b1;
+            assign pmm_data0[k*2+0][`dmlbData_user]=1'b1;
+            assign pmm_data0[k*2+1][`dmlbData_user]=1'b1;
             assign pmm_data0[k*2+0][`dmlbData_wp]=4'b0;
             assign pmm_data0[k*2+1][`dmlbData_wp]=4'b1111;
             assign pmm_data0[k*2+0][`dmlbData_na]=1'b1;
@@ -440,8 +440,8 @@ module dmlb(
             assign pmm_data0[k*2+0][`dmlbData_subpage]=1'b0;
             assign pmm_data0[k*2+1][`dmlbData_subpage]=1'b0;
 
-            assign pmm_data1[k*2+0][`dmlbData_sys]=1'b1;
-            assign pmm_data1[k*2+1][`dmlbData_sys]=1'b1;
+            assign pmm_data1[k*2+0][`dmlbData_user]=1'b1;
+            assign pmm_data1[k*2+1][`dmlbData_user]=1'b1;
             assign pmm_data1[k*2+0][`dmlbData_wp]=4'b0;
             assign pmm_data1[k*2+1][`dmlbData_wp]=4'b1111;
             assign pmm_data1[k*2+0][`dmlbData_na]=1'b1;
@@ -459,8 +459,8 @@ module dmlb(
             assign pmm_data1[k*2+0][`dmlbData_subpage]=1'b0;
             assign pmm_data1[k*2+1][`dmlbData_subpage]=1'b0;
 
-            assign pmm_data2[k*2+0][`dmlbData_sys]=1'b1;
-            assign pmm_data2[k*2+1][`dmlbData_sys]=1'b1;
+            assign pmm_data2[k*2+0][`dmlbData_user]=1'b1;
+            assign pmm_data2[k*2+1][`dmlbData_user]=1'b1;
             assign pmm_data2[k*2+0][`dmlbData_wp]=4'b0;
             assign pmm_data2[k*2+1][`dmlbData_wp]=4'b1111;
             assign pmm_data2[k*2+0][`dmlbData_na]=1'b1;

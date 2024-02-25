@@ -1095,7 +1095,7 @@ module frontendSelf(
   assign mlb_phys={1'b0,mlb_data_reg3[`cmlbData_phys]};
   assign mlb_nx=mlb_data_reg3[`cmlbData_ne];
   assign mlb_na=mlb_data_reg3[`cmlbData_na];
-  assign mlb_sys=mlb_data_reg3[`cmlbData_sys];
+  assign mlb_sys=mlb_data_reg3[`cmlbData_user];
   
   assign mlb_match=mlb_hit_reg3;
 

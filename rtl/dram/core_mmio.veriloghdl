@@ -905,7 +905,7 @@ module heptane_core(
 //  reg ret_r8d_en;
 //  reg [63:0] ret_r8d_data;
   
-//  assign bus_mlb_data_d[`cmlbData_sys]=1'b1;
+//  assign bus_mlb_data_d[`cmlbData_user]=1'b1;
 //  assign bus_mlb_data_d[`cmlbData_na]=1'b0;
 //  assign bus_mlb_data_d[`cmlbData_ne]=1'b0;
 //  assign bus_mlb_data_d[`cmlbData_phys]=req_addr[31:0];
