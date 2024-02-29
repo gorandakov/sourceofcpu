@@ -99,12 +99,12 @@ class continuation {
     buf_or_vma) {
     int ret;
     asm(
-        "movq %rbx, reg_save\n"
+        "movq %r1, reg_save\n"
         "movq %r12, reg_save+8\n"
         "movq %r13, reg_save+16\n"
         "movq %r14, reg_save+24\n"
         "movq %r15, reg_save+32\n"
-        "movq %rbp, reg_save+40\n"
+        "movq %r4, reg_save+40\n"
         "iret %MSR_SYSCALL\n"
         "retq\n");
     return ret;
@@ -116,7 +116,7 @@ class continuation {
 };
 
 #define __INIT_CONTINUATION_EXEC if (label) {     asm( \
-        "movq reg_save, %rbx\n"\
+        "movq reg_save, %r4\n"\
         "movq reg_save+8,%r12\n"\
         "movq reg_save+16, %r13\n"\
         "movq reg_save+24, %r14\n"\
