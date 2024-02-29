@@ -1392,7 +1392,7 @@ module wrtdata_combine(data,dataN,pdata,en,odata,odataN,opdata,low,sz,etype);
 
   assign is_stack=pdata[0] && &data[42:41];
 
-  assign noptr=(is_stack && ~|etype[3:2] && etype[0]) || |low ;
+  assign noptr=(is_stack && ~|etype[3:2] && etype[0]) || |low || etype[1] ;
 
   generate
       genvar c,d;
