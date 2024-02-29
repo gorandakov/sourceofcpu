@@ -29,7 +29,7 @@ int syscall(void *retcap,cap_and_flags capfl,buf_and_arg strarg,buf_and_arg
        }
     }
     asm(
-        "movq $pinvoke_savelower, %r11\n"
+        "movq $pinvoke_clear_lower, %r11\n"
         "wrmsr %MSR_PINVOKE, %r11\n"
         "movq $pinvoke_nop,%r11\n"
         "wrmsr %MSR_PINVOKE,%r11\n"
