@@ -1,0 +1,12 @@
+per_processor_kernel_dispatcher
+fixed_threads_kernel_dispatcher
+per_processor_user_dispatcher
+fixed_threads_user_dispatcher
+floating_threads_user_dispatcher
+kernel_thread
+user_thread
+user_process
+kernel_module
+shm_section
+semaphore_set
+
