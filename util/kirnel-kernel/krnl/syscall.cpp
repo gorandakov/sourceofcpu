@@ -5,10 +5,12 @@ int syscall(void *retcap,cap_and_flags capfl,buf_and_arg strarg,buf_and_arg
     buf_or_vma) {
     void *fsroot=k_verify_fsroot(4);
     void *tgt_thread=k_fsroot_find_cap_thread(fsroot,capfl.cap);
+    int locked;
     if (!(capfl.flags&0x1)) { //request
         if (!(capfl.flags&0x10000)) produce_buffer_in_thread(tgt_thread,&stragr);
         if (!(capfl.flags&0x4)) produce_buffer_in_thread(tgt_thread,&stragr);
         else produce_buffer_sg_in_thread(tgt_thread,&strarg);
+        if (locked=k_lock_thread_for_msg(tgt_thread)) k_attach_request(tgt_thread,retcap,capfl,strarg,buf_or_vma);
     } else { //reply
        unsigned long cap;
        int n;
@@ -21,12 +23,27 @@ int syscall(void *retcap,cap_and_flags capfl,buf_and_arg strarg,buf_and_arg
            cap=k_read_uint(buf_and_arg,4*n);
            k_delete_own_cap_no_fail(cap);
        }
+       if (locked=k_lock_thread_for_msg(tgt_thread)) {
+           k_query_reply(tgt_thread,retcap0,capfl0,strarg0,buf_or_vma0);
+           k_attach_request(tgt_thread,retcap,capfl,strarg,buf_or_vma);
+       }
     }
     asm("movq $pinvoke_nop,%r0\n"
         "wrmsr %MSR_PINVOKE,%r0\n"
         "wrmsr %MSR_PINVOKE,%r0\n"
         "wrmsr %MSR_PINVOKE,%r0\n"
         "wrmsr %MSR_PINVOKE,%r0\n");
+    if ((capfl.flags&0x1) && (capfl.flags&0x400)) {  //reply with switch of thread
+        k_switch_cap_thread_optional(tgt_thread,capfl.cap);
+    }
+    if (locked) {
+        if (!(capfl0.flags&0x80)) stall_thread();
+        switch_to_thread(tgt_thread);
+        deliver_message(tgt_thread);
+    } else {
+        void *disp=k_fsroot_get_delayed_dispatcher(fsroot,tgt_thread,capfl.flags);//if no resources for delayed dispatcher, do a context switch with register save
+        k_attach_request(disp,retcap,capfl,strarg,buf_or_vma);        
+        k_thread_yield(capfl.flags);
+    }
     
-
 }
