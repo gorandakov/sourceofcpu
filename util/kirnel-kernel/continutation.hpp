@@ -49,7 +49,7 @@ struct buf_and_arg {
 class continuation {
 
   private:
-  unsigned long reg_save[5];
+  unsigned long reg_save[6];
   protected:
   void * label;
   void * env; //contains handle table and other server status items
@@ -63,7 +63,14 @@ class continuation {
   do_syscall(void *ret, cap_and_flags capfl,buf_and_arg strarg,buf_and_arg 
     buf_or_vma) {
     int ret;
-    asm("iret %MSR_SYSCALL\n"
+    asm(
+        "movq %rbx, reg_save\n"
+        "movq %r12, reg_save+8\n"
+        "movq %r13, reg_save+16\n"
+        "movq %r14, reg_save+24\n"
+        "movq %r15, reg_save+32\n"
+        "movq %rbp, reg_save+40\n"
+        "iret %MSR_SYSCALL\n"
         "retq\n");
     return ret;
   }
@@ -73,5 +80,12 @@ class continuation {
     buf_or_vma)=0;
 };
 
-#define __INIT_CONTINUATION_EXEC if (label) goto *label;
+#define __INIT_CONTINUATION_EXEC if (label) {     asm( \
+        "movq reg_save, %rbx\n"\
+        "movq reg_save+8,%r12\n"\
+        "movq reg_save+16, %r13\n"\
+        "movq reg_save+24, %r14\n"\
+        "movq reg_save+32, %r15\n"\
+        "jmpq label");\
+        }
 //paste the macro at the beggining of exec()
