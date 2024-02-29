@@ -424,7 +424,7 @@ module addrcalc_r(
   assign faultNo=fault_cann_reg | (pageFault_t_reg!=0) | error_reg && ~bus_hold_reg ? {error_reg ? 6'd63 : 6'd11,1'b0,2'd1} :
     {6'd0,1'b0,2'd2};
 
-  assign faultCode={3'b0,fault_cann_reg,pageFault_t_reg[1],is_stack_reg,is_kstack_reg,2'b0};//protect pointers from escaping the protected areas.
+  assign faultCode={3'b0,fault_cann_reg,pageFault_t_reg[1],is_stack_reg,is_kstack_reg,mOp0_attr_reg[`attr_um],mOp0_attr_reg[`attr_sec]};
 
   assign is_kstack=&mOp0_addrMain_reg[43:41]; //it is not all stack but we must disallow stealing global map pointers
   assign is_stack=~mOp0_addrMain[43] & &mOp0_addrMain_reg[42:40]; //reserved area for subsystem and /or stack
