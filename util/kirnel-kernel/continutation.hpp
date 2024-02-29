@@ -58,6 +58,7 @@ struct cap_and_flags {
   const int strarg1_unlink=0x17;
   const int strarg1_get_thread_user_group_info=0x18;
   const int strarg1_get_process_user_group_info=0x18;
+  const int strarg1_lock_to_synchronous_ipc=0x20; //other int 1=lock 0=unlock
 };
 
 struct buf_and_arg {
