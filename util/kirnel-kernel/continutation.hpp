@@ -63,8 +63,22 @@ struct cap_and_flags {
 struct buf_and_arg {
   int arg;
   int buf_size;
-  void *buf_ptr;
+  union {
+    void *buf_ptr;
+    buf_int_pair pair;
+  };
 };
+
+
+struct buf_int_pair {
+  int A;
+  int B;
+  void *operator () {
+      unsigned long val=A|(B<<32);
+      return (void *) val;
+  }
+};
+
 
 class continuation {
 
