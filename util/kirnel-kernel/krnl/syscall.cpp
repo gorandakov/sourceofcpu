@@ -28,11 +28,17 @@ int syscall(void *retcap,cap_and_flags capfl,buf_and_arg strarg,buf_and_arg
            k_attach_request(tgt_thread,retcap,capfl,strarg,buf_or_vma);
        }
     }
-    asm("movq $pinvoke_nop,%r0\n"
-        "wrmsr %MSR_PINVOKE,%r0\n"
-        "wrmsr %MSR_PINVOKE,%r0\n"
-        "wrmsr %MSR_PINVOKE,%r0\n"
-        "wrmsr %MSR_PINVOKE,%r0\n");
+    asm(
+        "movq $pinvoke_savelower, %r11\n"
+        "wrmsr %MSR_PINVOKE, %r11\n"
+        "movq $pinvoke_nop,%r11\n"
+        "wrmsr %MSR_PINVOKE,%r11\n"
+        "wrmsr %MSR_PINVOKE,%r11\n"
+        "kall clr_upper_registers\n"
+        "wrmsr %MSR_PINVOKE,%r11\n"
+        "wrmsr %MSR_PINVOKE,%r11\n"
+        "kall clr_upper_registers\n"
+         );
     if ((capfl.flags&0x1) && (capfl.flags&0x400)) {  //reply with switch of thread
         k_switch_cap_thread_optional(tgt_thread,capfl.cap);
     }
