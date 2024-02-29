@@ -116,7 +116,7 @@ class continuation {
 };
 
 #define __INIT_CONTINUATION_EXEC if (label) {     asm( \
-        "movq reg_save, %r4\n"\
+        "movq reg_save, %r1\n"\
         "movq reg_save+8,%r12\n"\
         "movq reg_save+16, %r13\n"\
         "movq reg_save+24, %r14\n"\
