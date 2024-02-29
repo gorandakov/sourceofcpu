@@ -376,10 +376,13 @@ module addrcalc(
   assign fault_cann=~cout_secq;
   assign faultNo=fault_cann_reg | (pageFault_t_reg!=0) | error_reg && ~bus_hold_reg2 ? {error_reg ? 6'd63 : 6'd11,1'b0,2'd1} : 
     {6'd0,1'b0,2'd2};
-  assign faultCode={3'b0,fault_cann_reg,pageFault_t_reg[1],2'b0,pageFault_t_reg[0]};//warning: unused
+  assign faultCode={3'b0,fault_cann_reg,is_stack_reg,is_kstack_reg,2'b0};//warning: unused
   assign mOp_addrMain={addrTlb[30:0],addrMain[12:0]};
-  
-  assign mlbMiss=read_clkEn_reg&~mlb_hit&~fault_cann & rcn_mask[1];
+
+  assign is_kstack=&addrMain[43:41]; //it is not all stack but we must disallow stealing global map pointers
+  assign is_stack=~addrMain[43] & &addrMain[42:40]; //reserved area for subsystem and /or stack
+
+  assign tlbMiss=read_clkEn_reg&~tlb_hit&~fault_cann & rcn_mask[1];
   
   assign addrMain=cmplxAddr[12:0];
   
@@ -492,11 +495,15 @@ module addrcalc(
               pageFault_t_reg<=2'b0;
               fault_cann_reg<=1'b0;
               error_reg<=1'b0;
+              is_kstack_reg<=1'b0;
+              is_stack_reg<=1'b1;
           end else if (!rsStall) begin
              // cmplxAddr_reg<=cmplxAddr;
               pageFault_t_reg<=pageFault_t;
               fault_cann_reg<=fault_cann;
               error_reg<=error;
+              is_kstack_reg<=is_kstack;
+              is_stack_reg<=is_stack;
           end
 	  mOp_type_reg<=mOp_type;
 	  if (rst)

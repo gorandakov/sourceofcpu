@@ -3,6 +3,8 @@
 .type pinvoke_init, function
 .global pinvoke_nop
 .type pinvoke_nop, function
+.global pinvoke_clear_lower
+.type pinvoke_clear_lower, function
 
 .p2align 5
 pinvoke_init:
@@ -34,5 +36,25 @@ wrmsr %MSR_PKILL, %r0
 
 .p2align 5
 pinvoke_nop:
+wrmsr %MSR_PKILL
+
+.p2align 5
+pinvoke_clear_lower:
+movq $0,%r0
+movq $0,%r1
+movq $0,%r2
+movq $0,%r3
+movq $0,%r4
+movq $0,%r5
+movq $0,%r6
+movq $0,%r7
+movq $0,%r8
+movq $0,%r9
+movq $0,%r10
+movq $0,%r11
+movq $0,%r12
+movq $0,%r13
+movq $0,%r14
+movq $0,%r15
 wrmsr %MSR_PKILL
 
