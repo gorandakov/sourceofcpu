@@ -20,8 +20,9 @@ int syscall(void *retcap,cap_and_flags capfl,buf_and_arg strarg,buf_and_arg
     int locked;
     if (!(capfl.flags&0x1)) { //request
         if (!(capfl.flags&0x10000)) produce_buffer_in_thread(tgt_thread,&stragr);
-        if (!(capfl.flags&0x4)) produce_buffer_in_thread(tgt_thread,&stragr);
-        else produce_buffer_sg_in_thread(tgt_thread,&strarg);
+        if (capfl.flags&0x2) produce_buffer_vma_handle_in_thread(tgt_thread,&buf_and_arg);
+        else if (!(capfl.flags&0x4)) produce_buffer_in_thread(tgt_thread,&buf_and_arg);
+        else if (!(capfl.flags&0x2)) produce_buffer_sg_in_thread(tgt_thread,&buf_and_arg);
         if (locked=k_lock_thread_for_msg(tgt_thread)) k_attach_request(tgt_thread,retcap,capfl,strarg,buf_or_vma);
     } else { //reply
        unsigned long cap;
