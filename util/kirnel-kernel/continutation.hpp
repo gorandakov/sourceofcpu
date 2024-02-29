@@ -19,7 +19,8 @@ struct cap_and_flags {
   const int reply_create_cap3 0x2000
   const int reply_create_cap4 0x4000
   const int reply_create_cap5 0x8000
-  const int capcnt_in_buffer_shift=16;
+  const int string_buffer_pointer_as_pair_of_ints 0x10000
+  const int capcnt_in_buffer_shift=20;
   const int cap_stdin=0;
   const int cap_stdout=1;
   const int cap_stderr=2;
