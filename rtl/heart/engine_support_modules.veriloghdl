@@ -1376,7 +1376,7 @@ endmodule
 
 
 
-module wrtdata_combine(data,dataN,pdata,en,odata,odataN,opdata,low,sz);
+module wrtdata_combine(data,dataN,pdata,en,odata,odataN,opdata,low,sz,etype);
   input [135:0] data;
   input [135:0] dataN;
   input [1:0] pdata;
@@ -1386,7 +1386,13 @@ module wrtdata_combine(data,dataN,pdata,en,odata,odataN,opdata,low,sz);
   output [1:0] opdata;
   input [1:0] low;
   input [4:0] sz;
+  input [3:0] etype;
 
+  wire is_stack;
+
+  assign is_stack=pdata[0] && &data[42:41];
+
+  assign noptr=(is_stack && ~|etype[3:2] && etype[0]) || |low ;
 
   generate
       genvar c,d;
@@ -1399,7 +1405,7 @@ module wrtdata_combine(data,dataN,pdata,en,odata,odataN,opdata,low,sz);
 	  //verilator lint_on WIDTH
       end
   endgenerate
-  assign opdata=pdata;
+  assign opdata=pdata&{1'b1,~noptr};
 
 endmodule
 
