@@ -38,6 +38,26 @@ struct cap_and_flags {
   const int cap_stderr=2;
   const int cap_gfx=3;
   const int cap_fsroot=4;
+  const int stragr1_mmap=0x0;
+  const int strarg1_read=0x1;
+  const int strarg1_write=0x2;
+  const int strarg1_ioctl=0x3;
+  const int strarg1_open=0x4;
+  const int strarg1_close=0x5;
+  const int strarg1_fseek=0x6;
+  const int strarg1_is_dir=0x7;
+  const int strarg1_read_fentries=0x8;
+  const int strarg1_query_fentries_size=0x9;
+  const int strarg1_lock_reading_fentries=0x10;
+  const int strarg1_unlock_reading_fentries=0x11;
+  const int strarg1_query_size=0x12;
+  const int strarg1_query_sparse=0x13;
+  const int strarg1_query_permissions=0x14;
+  const int strarg1_query_name=0x15;
+  const int strarg1_create_object=0x16;
+  const int strarg1_unlink=0x17;
+  const int strarg1_get_thread_user_group_info=0x18;
+  const int strarg1_get_process_user_group_info=0x18;
 };
 
 struct buf_and_arg {
