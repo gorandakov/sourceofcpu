@@ -171,6 +171,8 @@ module addrcalc(
   reg aligned2;//same for complex addressing
   reg tiny; //1 or 2 byte
   
+  reg [2:0] addrMain_reg;
+
   reg mode64;
   reg modeCmplx;
   reg modeCmplx_reg;
@@ -376,7 +378,7 @@ module addrcalc(
   assign fault_cann=~cout_secq;
   assign faultNo=fault_cann_reg | (pageFault_t_reg!=0) | error_reg && ~bus_hold_reg2 ? {error_reg ? 6'd63 : 6'd11,1'b0,2'd1} : 
     {6'd0,1'b0,2'd2};
-  assign faultCode={3'b0,fault_cann_reg,is_stack_reg,is_kstack_reg,attr_reg[`attr_um],attr_reg[`attr_sec]};
+  assign faultCode={3'b0,fault_cann_reg,is_stack_reg,is_kstack_reg,addrMain_reg[2],attr_reg[`attr_sec]};
   assign mOp_addrMain={addrTlb[30:0],addrMain[12:0]};
 
   assign is_kstack=&addrMain[43:41]; //it is not all stack but we must disallow stealing global map pointers
@@ -497,6 +499,7 @@ module addrcalc(
               error_reg<=1'b0;
               is_kstack_reg<=1'b0;
               is_stack_reg<=1'b1;
+              addrMain_reg<=1'b0;
           end else if (!rsStall) begin
              // cmplxAddr_reg<=cmplxAddr;
               pageFault_t_reg<=pageFault_t;
@@ -504,6 +507,7 @@ module addrcalc(
               error_reg<=error;
               is_kstack_reg<=is_kstack;
               is_stack_reg<=is_stack;
+              addrMain_reg<=addrMain[2];
           end
 	  mOp_type_reg<=mOp_type;
 	  if (rst)
