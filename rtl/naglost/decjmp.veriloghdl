@@ -132,7 +132,7 @@ module jump_decoder(
   assign isBasicCJump=(opcode_main[7:4]==4'b1010)&magic[0];
   assign isSelfTestCJump=(opcode_main==8'd178 || opcode_main==8'd179)&magic[0];
   assign isLongCondJump=(opcode_main==8'd180)&magic[0];
-  assign isCLeave=(opcode_main==8'd235)&magic[0];
+  assign isCLeave=(opcode_main==8'd235 || opcode_main==8'd236)&magic[0];
   assign isUncondJump=(opcode_main==8'd181)&magic[0];
   assign isIndirJump=(opcode_main==8'd182 && instr[15:13]==3'd0)&magic[0];
   assign isCall=(opcode_main==8'd182 && (instr[15:13]==3'd1 || instr[15:13]==3'd2))&magic[0];
@@ -179,6 +179,7 @@ module jump_decoder(
           end
           cleave= instr[13:12];
           cleaveoff =instr[16:14];
+          if (!opcode_main[0]) jumpType={1'b0,4'd1};
       end else if (isSelfTestCJump) begin
           //warning: if magic is 0 then error
           constant[0]=1'b0;
