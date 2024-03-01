@@ -451,6 +451,8 @@ module frontendSelf(
   wire [3:0] jdec_is_jmp;
   reg [63:0] jdec_const_reg[3:0];
   wire [3:0] jdec_bkjump;
+  wire [3:0][1:0] jdec_clvcnt;//00=reserved; otherwise cleave cnt
+  wire [3:0][2:0] jdec_clvoffnext;//111=not in next bundle
   wire [3:0][INSTR_WIDTH-1:0] jmp_instr;
   wire [3:0][3:0] jmp_magic;
   wire [3:0][CLS_WIDTH-1:0] jmp_class;
@@ -901,6 +903,8 @@ module frontendSelf(
           .magic(~jmp_magic[k]),
           .class_(jmp_class[k][11:0]),
           ._splitinsn(1'b0),
+          .cleave(jdec_clvcnt[k]),
+          .cleaveoff(jdec_clvoffnext[k]),
           .constant(jdec_const[k]),
           
           .pushCallStack(jdec_push[k]),
@@ -961,8 +965,12 @@ module frontendSelf(
 	  assign pre_other[j][`instrQ_avx]=cc_err_reg || &cc_read_IP_reg3[4:1];
 	  assign pre_other[j][`instrQ_btbMiss]=~btb_can_ins_reg4;
 	  assign pre_other[j][`instrQ_btb_only]=(isJ&btbx_cond_reg4)==4'b0;
+          assign clv=pre_other[j][`instrQ_taken] && is_J[0] ? jdec_clv[0] : 2'bz;
+          assign clv=pre_other[j][`instrQ_taken] && is_J[1] ? jdec_clv[1] : 2'bz;
+          assign clv=pre_other[j][`instrQ_taken] && is_J[2] ? jdec_clv[2] : 2'bz;
+          assign clv=pre_other[j][`instrQ_taken] && is_J[3] ? jdec_clv[3] : 2'bz;
           get_carry #(4) jcmp_mod(last_off_reg4,~pre_off_reg[j],1'b1,pre_jbefore0[j]);
-          assign pre_jbefore[j]=pre_jbefore0[j];
+          assign pre_jbefore[j]=pre_jbefore0[j] || clv[1] & pre_jbefore0[j-1] || clv[2] & pre_jbefore0[j-2] || &clv & pre_jbefore0[j-3];
       end
   endgenerate
 
@@ -982,6 +990,8 @@ module frontendSelf(
   assign exceptJumpGHT2=jupd0_tk ? jupd0_addr : jupd1_addr;
 
   assign pause_other_frontend_fat_wire=p_inv_stored[0];
+
+  assign clv=|taken_reg4 ? 2'bz : 2'b0;
   
   assign cc_base_IP_d=(~do_seq_reg5 & ~|tbuf_error_reg) ? cc_read_IP_reg4 : 64'bz;
   assign cc_base_IP_d=(do_seq_reg5 & ~cc_base_tick & ~|tbuf_error_reg) ? cc_base_IP : 64'bz;
@@ -1318,7 +1328,7 @@ module frontendSelf(
     .btail(read_data_reg[239:176]),
     .bstop(read_data_reg[254:251]),
     .flag_bits(read_dataX),
-    .startOff(cc_read_IP_reg2[4:1]),
+    .startOff(was_cleave_reg ? clvoff_reg : cc_read_IP_reg2[4:1]),
     .instr0(pre_instr0),.instr1(pre_instr1),.instr2(pre_instr2),.instr3(pre_instr3),
     .instr4(pre_instr4),.instr5(pre_instr5),.instr6(pre_instr6),.instr7(pre_instr7),
     .instr8(pre_instr8),.instr9(pre_instr9),.instr10(pre_instr10),.instr11(pre_instr11),
@@ -1406,19 +1416,6 @@ module frontendSelf(
   .write_data2({jmp_mask_reg4[2],btbx_tgt2_reg4,btbx_attr2_reg4}),
   .write_data3({jmp_mask_reg4[3],btbx_tgt3_reg4,btbx_attr3_reg4})
   );
-  /*
-  instrQ_tk tk_queue_mod(
-  .clk(clk),
-  .rst(rst),
-  .doFStall(tq_fstall),
-  .read_clkEn(btbl_step & ~stall),
-  .read_thread(1'b0),
-  .read_data(btbl_IP),
-  .write_data(btbx_tgt_reg3),
-  .write_thread(1'b0),
-  .write_wen(btb_hasTK_reg3 & ~iq_fstall & ~btbFStall_reg &
-    ~btbFStall_reg2 & ~btbFStall_reg3 & ~btbFStall_recover & instrFed_reg)
-  );*/
     
   adder_inc #(43) seqAdd_mod(cc_read_IP[47:5],cc_read_IP_d[47:5],
     do_seq &~init & ~jumpTK_en & ~fmstall &~miss_recover & ~|tbuf_error_reg,);

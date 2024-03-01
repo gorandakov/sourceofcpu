@@ -30,6 +30,8 @@ module jump_decoder(
   class_,
   _splitinsn,
   constant,
+  cleave,
+  cleaveoff,
   
   pushCallStack,
   popCallStack,
@@ -66,6 +68,9 @@ module jump_decoder(
   input _splitinsn;
   
   output reg [63:0] constant;
+
+  output reg [1:0] cleave;
+  output reg [2:0] cleaveoff; 
   
   output reg pushCallStack;
   output reg popCallStack;
@@ -86,6 +91,7 @@ module jump_decoder(
   wire isInvCJumpLong;
   wire isSelfTestCJump;
   wire isLongCondJump;
+  wire isCLeave;
   wire isUncondJump;
   
   wire isIndirJump;
@@ -126,6 +132,7 @@ module jump_decoder(
   assign isBasicCJump=(opcode_main[7:4]==4'b1010)&magic[0];
   assign isSelfTestCJump=(opcode_main==8'd178 || opcode_main==8'd179)&magic[0];
   assign isLongCondJump=(opcode_main==8'd180)&magic[0];
+  assign isCLeave=(opcode_main==8'd235)&magic[0];
   assign isUncondJump=(opcode_main==8'd181)&magic[0];
   assign isIndirJump=(opcode_main==8'd182 && instr[15:13]==3'd0)&magic[0];
   assign isCall=(opcode_main==8'd182 && (instr[15:13]==3'd1 || instr[15:13]==3'd2))&magic[0];
@@ -147,6 +154,8 @@ module jump_decoder(
       jumpType=5'b10000;
       pushCallStack=1'b0;
       popCallStack=1'b0;
+      cleave=2'b0;
+      cleaveoff=3'b111;
       if (subIsCJ) begin
           constant={{55{instr[15]}},instr[15:8],1'b0};
           jumpType={1'b0,instr[7:6],instr[1:0]};
@@ -162,6 +171,14 @@ module jump_decoder(
           if (magic[1:0]==2'b01) begin
               constant={{43{instr[31]}},instr[31:12],1'b0};
           end 
+      end else if (isCLeave) begin
+          jumpType={1'b0,instr[11:9],instr[8]^lizztruss};
+          constant[0]=1'b0;
+          if (magic[1:0]==2'b01) begin
+              constant={{43{instr[31]}},instr[31:17],1'b0};
+          end
+          cleave= instr[13:12];
+          cleaveoff =instr[16:14];
       end else if (isSelfTestCJump) begin
           //warning: if magic is 0 then error
           constant[0]=1'b0;

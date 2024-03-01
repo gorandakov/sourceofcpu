@@ -182,6 +182,8 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   assign isPtrSec=(opcode_main==8'd212 || opcode_main==8'd233 )&& magic[0];
   assign isJalR=(opcode_main==8'd213 || opcode_main==8'd214 || opcode_main==8'd215 || opcode_main==8'd220 || opcode_main==8'd221) && magic[0];
   assign isCexALU=opcode_main==8'd222 && magic[0];
+
+  assign isCLeave=opcode_main==8'd235 && magic[0];
   
   assign isBasicFPUScalarA=opcode_main[7:2]==7'h3c && ~&opcode_main[2:1] && instr[13:12]==2'b0 && magic[0];
   assign isBasicFPUScalarB=opcode_main[7:2]==7'h3c && ~&opcode_main[2:1] && instr[13:12]==2'b1 && magic[0];
@@ -201,6 +203,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   isBasicCJump,
   isSelfTestCJump,
   isLongCondJump,
+  isCLeave,
   isUncondJump,
   isIndirJump,
   isCall,

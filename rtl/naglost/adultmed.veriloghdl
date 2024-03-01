@@ -408,7 +408,7 @@ module smallInstr_decoder(
   //224-230=and16,and8,or16,or8
   assign isCexALU=opcode_main==8'd222;
   //231-232=cloop no sub
- 
+  assign isCLeave=8'd235;  
 
   assign isBasicFPUScalarA=opcode_main[7:2]==7'h3c && ~&opcode_main[2:1] && instr[13:12]==2'b0;
   assign isBasicFPUScalarB=opcode_main[7:2]==7'h3c && ~&opcode_main[2:1] && instr[13:12]==2'b1;
@@ -1401,15 +1401,15 @@ module smallInstr_decoder(
       pjumpType[20]={1'b0,(magic[1:0]==2'b01) ? instr[18] : instr[32],opcode_main[3:1]};  
       if (puseBConst[20] && prB[20]!=0) perror[20]=1;
 
-      trien[21]=magic[0] & isLongCondJump;
+      trien[21]=magic[0] & isLongCondJump|isCLeave;
       puseRs[21]=1'b0;
       pjumpType[21]={1'b0,instr[11:8]};
       pconstant[21][0]=1'b0;
       pflags_use[21]=1'b1;
-      if (magic[1:0]==2'b01) begin
+      if (magic[1:0]==2'b01 && isLongCondJump) begin
           pconstant[21]={{43{instr[31]}},instr[31:12],1'b0};
-      end else if (~magic[0]) begin
-          perror[21]=1;
+      end if (magic[1:0]==2'b01 && isCLeave) begin
+          pconstant[21]={{43{instr[31]}},instr[31:17],1'b0};
       end 
       
       trien[22]=magic[0] & isSelfTestCJump;
