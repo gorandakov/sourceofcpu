@@ -12,7 +12,7 @@
 
 */
 #include "continuation.hpp"
-
+extern(C) {
 int syscall(void *retcap,cap_and_flags capfl,buf_and_arg strarg,buf_and_arg 
     buf_or_vma) {
     void *fsroot=k_verify_fsroot(4);
@@ -66,3 +66,4 @@ int syscall(void *retcap,cap_and_flags capfl,buf_and_arg strarg,buf_and_arg
     }
     
 }
+}//extern(C)
