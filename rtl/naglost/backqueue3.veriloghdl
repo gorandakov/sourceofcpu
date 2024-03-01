@@ -918,12 +918,27 @@ module frontendSelf(
           );
   
       end
-      for (j=0;j<12;j=j+1) begin
+      for (j=0;j<12;j=j+1) begin :INSN
           wire [3:0] isJ;
           assign halt_d[0]=isJ[0] ? pre_jbefore[j] && jdec_halt[0] : 1'bz
           assign halt_d[1]=isJ[0] ? pre_jbefore[j] && jdec_halt[1] : 1'bz
           assign halt_d[2]=isJ[0] ? pre_jbefore[j] && jdec_halt[2] : 1'bz
           assign halt_d[3]=isJ[0] ? pre_jbefore[j] && jdec_halt[3] : 1'bz
+          if (j>1) assign pre_other[j+1][`instrQ_nop]=(isJ[0] && jdec_cleave[0]==2'd1) ||
+            (isJ[1] && jdec_cleave[1]==2'd1) || (isJ[2] && jdec_cleave[2]==2'd1) ||
+            (isJ[3] && jdec_cleave[3]==2'd1) || (INSN[j-1].isJ[0] && jdec_cleave[0]==2'd1) ||
+            (INSN[j-1].isJ[1] && jdec_cleave[1]==2'd1) || (INSN[j-1].isJ[2] && jdec_cleave[2]==2'd1) ||
+            (INSN[j-1].isJ[3] && jdec_cleave[3]==2'd1) || || (INSN[j-2].isJ[0] && jdec_cleave[0]==2'd1) ||
+            (INSN[j-2].isJ[1] && jdec_cleave[1]==2'd1) || (INSN[j-2].isJ[2] && jdec_cleave[2]==2'd1) ||
+            (INSN[j-2].isJ[3] && jdec_cleave[3]==2'd1);
+          else if (j>0) assign pre_other[j+1][`instrQ_nop]=(isJ[0] && jdec_cleave[0]==2'd1) ||
+            (isJ[1] && jdec_cleave[1]==2'd1) || (isJ[2] && jdec_cleave[2]==2'd1) ||
+            (isJ[3] && jdec_cleave[3]==2'd1) || (INSN[j-1].isJ[0] && jdec_cleave[0]==2'd1) ||
+            (INSN[j-1].isJ[1] && jdec_cleave[1]==2'd1) || (INSN[j-1].isJ[2] && jdec_cleave[2]==2'd1) ||
+            (INSN[j-1].isJ[3] && jdec_cleave[3]==2'd1);
+          else assign pre_other[j+1][`instrQ_nop]=(isJ[0] && jdec_cleave[0]==2'd1) ||
+            (isJ[1] && jdec_cleave[1]==2'd1) || (isJ[2] && jdec_cleave[2]==2'd1) ||
+            (isJ[3] && jdec_cleave[3]==2'd1);
           assign pre_other[j][`instrQ_magic]=~pre_magic_reg[j];
           assign pre_other[j][`instrQ_srcIPOff]=read_data_reg[255] && cc_read_IP_reg3[4:1]==4'b0 ? {cc_base_off_reg,pre_off_reg[j]}: 
               {cc_base_off,pre_off_reg[j]};
@@ -992,6 +1007,8 @@ module frontendSelf(
   assign pause_other_frontend_fat_wire=p_inv_stored[0];
 
   assign clv=|taken_reg4 ? 2'bz : 2'b0;
+
+  assign pre_other[0][`instrQ_nop]=1'b0;
   
   assign cc_base_IP_d=(~do_seq_reg5 & ~|tbuf_error_reg) ? cc_read_IP_reg4 : 64'bz;
   assign cc_base_IP_d=(do_seq_reg5 & ~cc_base_tick & ~|tbuf_error_reg) ? cc_base_IP : 64'bz;
