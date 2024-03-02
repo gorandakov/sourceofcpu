@@ -1197,7 +1197,6 @@ module smallInstr_decoder(
       poperation[14][10:8]=instr[25:23];
       
       trien[15]=magic[0] & isBasicCmpTest; 
-	  //if there is magic, we assume immediate version
       puseBConst[15]=instr[0] || magic[1:0]!=2'b01;
       pport[15]=PORT_ALU;
       pflags_write[15]=1'b1;
@@ -1220,7 +1219,11 @@ module smallInstr_decoder(
       if (magic[1:0]==2'b01) begin
           prA[15]={instr[16],instr[15:12]};
           prB[15]={instr[17],instr[11:8]};
-          if (instr[28]) perror[15]=1;
+          if (!puseBConst[15]) begin
+              pcalu[15]=instr[22:18];
+              poperation[15][9]=instr[23];
+              poperation[15][10]=instr[24];
+          end
       end else if (magic[2:0]==3'b011) begin
           prA[15]=instr[12:8];
           if (instr[15:13]!=0) perror[15]=1;
