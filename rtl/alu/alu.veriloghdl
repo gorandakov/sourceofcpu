@@ -517,15 +517,15 @@ alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,dataEn,nD
           isFlags_reg<=isFlags;
           retOp<=operation;
 
-          carryAdd64_reg<=carryAdd64^(operation[7:0]==`op_add64 && cary_invert);
-          carryAdd44_reg<=carryAdd44^(operation[7:0]==`op_add64 && cary_invert);
-          carryAdd32_reg<=carryAdd32^(operation[7:0]==`op_add32 && cary_invert);
-          carryAdd16_reg<=carryAdd16;
+          carryAdd64_reg<=(carryAdd64^(operation[7:0]==`op_add64 && cary_invert)) & ~calu[4]|doJmp2;
+          carryAdd44_reg<=(carryAdd44^(operation[7:0]==`op_add64 && cary_invert)) & ~calu[4]|doJmp2;
+          carryAdd32_reg<=(carryAdd32^(operation[7:0]==`op_add32 && cary_invert)) & ~calu[4]|doJmp2;
+          carryAdd16_reg<=(carryAdd16) & ~calu[4]|doJmp2;
           carryAdd4LL_reg <=carryAdd4LL;
           carryAdd4HL_reg <=carryAdd4HL;
           carryAdd8LH_reg <=carryAdd8LH;
           carryAdd8HH_reg <=carryAdd8HH;
-          carryAdd8LL_reg <=carryAdd8LL;
+          carryAdd8LL_reg <=(carryAdd8LL) & ~calu[4]|doJmp2;
           carryAdd8HL_reg <=carryAdd8HL;
           carryAdd8LH_reg <=carryAdd8LH;
           carryAdd8HH_reg <=carryAdd8HH;
