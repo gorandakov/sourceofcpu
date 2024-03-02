@@ -574,13 +574,13 @@ alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,dataEn,nD
 	  flag16_ZF_reg<=flag16_ZF;
           flag8_ZF_reg<=flag8_ZF;
           flag8_PF_reg<=flag8_PF;
-	  flagAdd64_OF_reg<=flagAdd64_OF;
-          flagAdd32_OF_reg<=flagAdd32_OF;
-	  flagSub64_OF_reg<=flagSub64_OF;
-          flagSub32_OF_reg<=flagSub32_OF;
-	  flagSub44_OF_reg<=flagSub44_OF;
-          flagSub16_OF_reg<=flagSub32_OF;
-          flagSub8_OF_reg<=flagSub32_OF;
+	  flagAdd64_OF_reg<=flagAdd64_OF && ~calu[4] | doJmp2;
+          flagAdd32_OF_reg<=flagAdd32_OF && ~calu[4] | doJmp2;
+	  flagSub64_OF_reg<=flagSub64_OF && ~calu[4] | doJmp2;
+          flagSub32_OF_reg<=flagSub32_OF && ~calu[4] | doJmp2;
+	  flagSub44_OF_reg<=flagSub44_OF && ~calu[4] | doJmp2;
+          flagSub16_OF_reg<=flagSub16_OF && ~calu[4] | doJmp2;
+          flagSub8_OF_reg<=flagSub8_OF && ~calu[4] | doJmp2;
           if (operation[7:0]==8'da || operation[7:0]==8'de) begin
               valRes_reg[31]<=valRes[15];
               flag32_ZF_reg<=flag16_ZF;
