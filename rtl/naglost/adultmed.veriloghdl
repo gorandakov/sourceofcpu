@@ -1086,7 +1086,6 @@ module smallInstr_decoder(
               prC[12]=instr[16:12];
           end else begin
               prC[12]={freg_vf(opcode_main[4:0],~opcode_main[5]),instr[11:8]};
-	      if (opcode_main[5] && prC[12]==REG_SP) prC[12]=5'd16;
               prB[12]={freg_vf(opcode_main[4:0],~opcode_main[5]),instr[15:12]};
           end
       //        if (prevSpecAlu) rC=6'd16;
