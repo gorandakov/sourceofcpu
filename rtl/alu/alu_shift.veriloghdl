@@ -35,7 +35,8 @@ module alu_shift(
   val1,
   val2,
   valRes,
-  error
+  error,
+  rmode
   );
 
   parameter REG_WIDTH=`reg_addr_width;
@@ -60,6 +61,7 @@ module alu_shift(
   input [2:0][65:0] val2;
   output [65:0] valRes;
   input error;
+  input [2:0] rmode;
   
   wire is_shift;
   wire [63:0] en;
@@ -109,16 +111,16 @@ module alu_shift(
   assign valRes[65]=is_shift ? ^valRes[64:0] : 1'bz;
 
   assign en[63:32]={32{sz[3]}};
-  assign en[31:24]=(val2[31:24]&{8{val2[15:13]==3'b100}})|{8{val2[15:13]==3'b0}};
-  assign en[23:16]=(val2[23:16]&{8{val2[15:13]==3'b100 || val2[15:13]==3'b010}})|{8{val2[15:13]==3'b0}};
-  assign en[15:8]=(val2[31:24]&{8{val2[15:13]==3'b10 || val2[15:13]==3'b1}})|{8{val2[15:13]==3'b0}};
-  assign en[7:0]=(val2[23:16]&{8{val2[15:13]==3'b1}})|{8{val2[15:13]==3'b0}};
+  assign en[31:24]=(val2[31:24]&{8{rmode==3'b100}})|{8{rmode==3'b0}};
+  assign en[23:16]=(val2[23:16]&{8{rmode==3'b100 || rmode==3'b010}})|{8{rmode==3'b0}};
+  assign en[15:8]=(val2[31:24]&{8{rmode==3'b10 || rmode==3'b1}})|{8{rmode==3'b0}};
+  assign en[7:0]=(val2[23:16]&{8{rmode==3'b1}})|{8{rmode==3'b0}};
 
   assign retData[`except_flags]=is_shift_reg ? flags_COASZP : 6'bz;
 
   assign flags_COASZP=error ? 6'bz : { dir_reg ? coutR_reg : ((coutL_reg&sz_reg)!=0),1'b0,1'b0,
 	  sz_reg[3] ? valres0_reg[63] : valres0_reg[31],~(|valres0_reg[31:0])&&
-          (~sz_reg[3]||~(|valres0_reg[63:32])),~^valres0_reg[7:0]};
+          (~sz_reg[3]||~(|valres0_reg[63:32])),1'b0};
 `ifndef aluneg
   always @(posedge clk) begin
 `else

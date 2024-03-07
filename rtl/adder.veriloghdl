@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 
-`include "struct.v"
+`include "struct.veriloghdl"
 
 
 module aoi21_array(a11,a12,a2,b);
@@ -89,7 +89,7 @@ module not_array(a,b);
 
 endmodule
 
-(* align_width=a,b,nP0,nG0,out *) module adder_seq(a,b,nP0,nG0,out,c_s,cin,en,cout,cout8,cout16,cout32);
+(* align_width="a,b,nP0,nG0,out" *) module adder_seq(a,b,nP0,nG0,out,c_s,cin,en,cout,cout8,cout16,cout32);
   parameter WIDTH=44;
   input [WIDTH-1:0] a;
   input [WIDTH-1:0] b;
@@ -264,7 +264,7 @@ endmodule
 endmodule
 
 
-(* align_width=a,b,out *) module adder(a,b,out,cin,en,cout,cout8,cout16,cout32);
+(* align_width="a,b,out" *) module adder(a,b,out,cin,en,cout,cout8,cout16,cout32);
   parameter WIDTH=32;
   input [WIDTH-1:0] a;
   input [WIDTH-1:0] b;

@@ -1850,15 +1850,11 @@ module rs_buf(
   FU0Hit,FU1Hit,FU2Hit,FU3Hit,
   new_thread,
 // wires to store new values in a buffer
-  newANeeded0,newBNeeded0,newSNeeded0,newRsSelect0,newPort0,
-  newANeeded1,newBNeeded1,newSNeeded1,newRsSelect1,newPort1,
-  newANeeded2,newBNeeded2,newSNeeded2,newRsSelect2,newPort2,
+  newABSNeeded0,newRsSelect0,newPort0,
 // wires to get values out of buffer
-  outRsSelect0,portReady0,outDataEn0,outThread0,//addrcalc
-  outRsSelect1,portReady1,outDataEn1,outThread1,//alu 1
-  outRsSelect2,portReady2,outDataEn2,outThread2,//alu 2
+  outRsSelect0,portReady0,outDataEn0,outThread0,
   fuFwdA,fuFwdB,
-  isDataA,isDataB,isDataS,
+  isDataABS,
 // 1 if buffer is free  
   bufFree
 );
@@ -1881,47 +1877,21 @@ module rs_buf(
   input FU3Hit;
   input new_thread;
 //Input of new data from registeres
-  input newANeeded0;
-  input newBNeeded0;
-  input newSNeeded0;
-  input newRsSelect0;
-  input [3:0] newPort0;
-
-  input newANeeded1;
-  input newBNeeded1;
-  input newSNeeded1;
-  input newRsSelect1;
-  input [3:0] newPort1;  
-
-  input newANeeded2;
-  input newBNeeded2;
-  input newSNeeded2;
-  input newRsSelect2;
-  input [3:0] newPort2;  
+  input [2:0][2:0] newABSNeeded0;
+  input [2:0] newRsSelect0;
+  input [2:0] [3:0] newPort0;
 
 // output data to functional units
 
-  input outRsSelect0;
-  output wire portReady0;
-  output [3:0] outDataEn0;
-  output outThread0;
+  input [2:0]outRsSelect0;
+  output wire [2:0] portReady0;
+  output [2:0] [3:0] outDataEn0;
+  output [2:0] outThread0;
     
-  input outRsSelect1;
-  output wire portReady1;
-  output [3:0] outDataEn1;
-  output outThread1;
-
-  input outRsSelect2;
-  output wire portReady2;
-  output [3:0] outDataEn2;
-  output outThread2;
-
   input [3:0] fuFwdA;
   input [3:0] fuFwdB;
 
-  input isDataA;
-  input isDataB;
-  input isDataS;
+  input [2:0] isDataABS;
 
 // free output
   output wire bufFree;
@@ -1929,65 +1899,28 @@ module rs_buf(
 // wires - new data
   
 
-  wire portReady0_d;
-  wire portReady0_q;
+  wire [2:0] portReady0_d;
+  wire [2:0] portReady0_q;
 
-  wire portReady1_d;
-  wire portReady1_q;
-
-  wire portReady2_d;
-  wire portReady2_q;
-
- 
 
   wire [3:0] portNo_new;
 
-  wire port0_d;
-  wire port0_en;
-  wire port0_q;
+  wire [2:0] port0_d;
+  wire [2:0] port0_en;
+  wire [2:0] port0_q;
 
-  wire port1_d;
-  wire port1_en;
-  wire port1_q;
 
-  wire port2_d;
-  wire port2_en;
-  wire port2_q;
+  wire [2:0] [REG_WIDTH-1:0] regA_q;
+  wire [2:0] [REG_WIDTH-1:0] regA_d;
 
+  wire newRsSelectAny=|newRsSelect0;
+
+  wire [2:0] dataAPending_en;
+  wire [2:0] dataAPending_d;
+  wire [2:0] dataAPending_q;
+  wire [2:0] dataAPending_gather;
+  wire [2:0] dataAPending_new;
  
-
-  wire [REG_WIDTH-1:0] regA_q;
-  wire [REG_WIDTH-1:0] regA_d;
-
-  wire [REG_WIDTH-1:0] regB_q;
-  wire [REG_WIDTH-1:0] regB_d;
-
-  wire [REG_WIDTH-1:0] regS_q;
-  wire [REG_WIDTH-1:0] regS_d;
-
-
-  wire newRsSelectAny=newRsSelect0 | newRsSelect1 | newRsSelect2;
-
-  wire dataAPending_en;
-  wire dataAPending_d;
-  wire dataAPending_q;
-  wire dataAPending_gather;
-  wire dataAPending_new;
-
-  wire dataBPending_en;
-  wire dataBPending_d;
-  wire dataBPending_q;
-  wire dataBPending_gather;
-  wire dataBPending_new;
-
-  wire dataSPending_en;
-  wire dataSPending_d;
-  wire dataSPending_q;
-  wire dataSPending_gather;
-  wire dataSPending_new;
- 
-// wires - end new data
-
 // wires - gather data
   wire isReady;
 // wires - free bit
@@ -1998,10 +1931,7 @@ module rs_buf(
   
   
   wire unFwdCheck;
-  wire fwdCheck0;
-  wire fwdCheck1;
-  wire fwdCheck2;
-  wire fwdCheck3;
+  wire [3:0] fwdCheck0;
 
   wire unCheckA;
   wire unCheckB;
@@ -2026,112 +1956,57 @@ module rs_buf(
   DFF FP_mod(clk,newRsSelectAny|dataRst,portNo_new[3]&~dataRst,FP_q);
   DFF Vec_mod(clk,newRsSelectAny|dataRst,portNo_new[2]&~dataRst,Vec_q);
   
-  DFF dataAPending_mod(clk,dataAPending_en,dataAPending_d,dataAPending_q);
-  DFF dataBPending_mod(clk,dataBPending_en,dataBPending_d,dataBPending_q);
-  DFF dataSPending_mod(clk,dataSPending_en,dataSPending_d,dataSPending_q);
+  generate
+      genvar regno,loadno,subloop;
+      for(regno=0;regno<3;regno=regno+1) begin : reg_gen
+          DFF dataAPending_mod(clk,dataABSPending_en[regno],dataABSPending_d[regno],dataABSPending_q[regno]);
+          DFF port0_mod(clk,port0_en[regno],port0_d[regno],port0_q[regno]);
+          DFF portReady0_mod(clk,1'b1,portReady0_d[regno],portReady0_q[regno]);
+          assign dataABSPending_gather[regno]=isDataABS[regno];
+          assign portReady0[regno]=portReady0_q[regno];
   
-  DFF port0_mod(clk,port0_en,port0_d,port0_q);
-  DFF port1_mod(clk,port1_en,port1_d,port1_q); 
-  DFF port2_mod(clk,port2_en,port2_d,port2_q);
-  
-  DFF portReady0_mod(clk,1'b1,portReady0_d,portReady0_q);
-  DFF portReady1_mod(clk,1'b1,portReady1_d,portReady1_q);
-  DFF portReady2_mod(clk,1'b1,portReady2_d,portReady2_q);
-  
-  assign dataAPending_gather=isDataA;
-  assign dataBPending_gather=isDataB;
-  assign dataSPending_gather=isDataS;
+          assign dataAPending_en=newRsSelectAny | nonDataRst0 | unCheckA || dataAPending_gather ;
+          assign dataAPending_d[regno]=newRsSelectAny ? dataAPending_new[regno] & ~nonDataRst0 & stall_n & ~dataAPending_gather[regno]:
+               (~dataAPending_gather[regno] & dataAPending_q[regno] || unCheckA) & ~nonDataRst0;
+          //here regno is "new" port index 
+          assign portNo_new=(newRsSelect0[regno] & ~stall) ? newPort0[regno] : 4'bz;
+          for(subloop=0;subloop<3;subloop=subloop+1) begin : sub_gen
+              assign dataABSPending_new[regno]=(newRsSelect0[subloop] & ~stall) ? newABSNeeded0[regno][subloop] : 1'bz;
+          //here regno is "output" port number
+          assign port0_en[regno]=stall_n & newRsSelectAny || outRsSelect0[regno] &~unFwdCheck || nonDataRst0;
+          assign port0_d=newRsSelectAny ? (portNo_new[1:0]==regno[1:0]) & ~nonDataRst0 :
+              port0_q[regno] & (~outRsSelect0[regno]  | unFwdCheck)  & ~nonDataRst0;
+          assign portReady0_d[regno]=isReady & port0_d[regno] & ~unFwdCheck & new_stall_n;
+          assign outDataEn0[regno]=outRsSelect0[regno] ? {4{~unFwdCheck}} &{FP_q,Vec_q,~FP_q&~Vec_q,1'b1} : 4'bz;
+          assign outThread0[regno]=outRsSelect0[regno] ? thread_q : 1'bz;
+      for(loadno=0;loadno<4;loadno=loadno+1) begin : ld_gen
+         assign fwdCheck0[loadno]=fuFwdA==loadno || fuFwdB==loadno; 
+      end
+  engenerate    
 
-  assign fwdCheck0=fuFwdA==4'd0 || fuFwdB==4'd0; 
-  assign fwdCheck1=fuFwdA==4'd1 || fuFwdB==4'd1; 
-  assign fwdCheck2=fuFwdA==4'd2 || fuFwdB==4'd2;   
-  assign fwdCheck3=fuFwdA==4'd3 || fuFwdB==4'd3;   
+  assign unFwdCheck=fwdCheck0[0] & ~FU0Hit || fwdCheck0[1] & ~FU1Hit || fwdCheck0[2] & ~FU2Hit || fwdCheck0[3] & ~FU3Hit;
 
-  assign unFwdCheck=fwdCheck0 & ~FU0Hit || fwdCheck1 & ~FU1Hit || fwdCheck2 & ~FU2Hit || fwdCheck3 & ~FU3Hit;
-
-  assign portReady0=portReady0_q;
-  assign portReady1=portReady1_q;
-  assign portReady2=portReady2_q;
-  
   assign unCheckA=(fuFwdA==4'd0 && ~FU0Hit) | (fuFwdA==4'd1 && ~FU1Hit) | (fuFwdA==4'd2 && ~FU2Hit) | (fuFwdA==4'd3 && ~FU3Hit);
   assign unCheckB=(fuFwdB==4'd0 && ~FU0Hit) | (fuFwdB==4'd1 && ~FU1Hit) | (fuFwdB==4'd2 && ~FU2Hit) | (fuFwdB==4'd3 && ~FU3Hit);
 
-  assign portNo_new=(newRsSelect0 & ~stall) ? newPort0 : 4'bz;
-  assign portNo_new=(newRsSelect1 & ~stall) ? newPort1 : 4'bz;
-  assign portNo_new=(newRsSelect2 & ~stall) ? newPort2 : 4'bz;
-  assign portNo_new=(newRsSelectAny & ~stall) ? 4'bz : 4'b0;
-
-
-  assign port0_en=stall_n & newRsSelectAny || outRsSelect0 &~unFwdCheck || nonDataRst0;
-  assign port1_en=stall_n & newRsSelectAny || outRsSelect1 &~unFwdCheck || nonDataRst0;
-  assign port2_en=stall_n & newRsSelectAny || outRsSelect2 &~unFwdCheck || nonDataRst0;
-  assign port0_d=newRsSelectAny ? (portNo_new[1:0]==2'd0) & ~nonDataRst0 :
-    port0_q & (~outRsSelect0  | unFwdCheck)  & ~nonDataRst0;
-  assign port1_d=newRsSelectAny ? (portNo_new[1:0]==2'd1) & ~nonDataRst0 :
-    port1_q & (~outRsSelect1 | unFwdCheck)  & ~nonDataRst0;
-  assign port2_d=newRsSelectAny ? (portNo_new[1:0]==2'd2) & ~nonDataRst0 : 
-    port2_q & (~outRsSelect2 | unFwdCheck)  & ~nonDataRst0;
-  
-
-
-  assign dataAPending_new=(newRsSelect0 & ~stall) ? newANeeded0 : 1'bz;
-  assign dataAPending_new=(newRsSelect1 & ~stall) ? newANeeded1 : 1'bz;
-  assign dataAPending_new=(newRsSelect2 & ~stall) ? newANeeded2 : 1'bz;
-  assign dataAPending_new=(newRsSelectAny & ~stall) ? 1'bz : 1'b0;
-  
-  assign dataAPending_en=newRsSelectAny | nonDataRst0 | unCheckA || dataAPending_gather ;
-  assign dataAPending_d=newRsSelectAny ? dataAPending_new & ~nonDataRst0 & stall_n & ~dataAPending_gather:
-    (~dataAPending_gather & dataAPending_q || unCheckA) & ~nonDataRst0;
-  
-  assign dataBPending_new=(newRsSelect0 & ~stall) ? newBNeeded0 : 1'bz;
-  assign dataBPending_new=(newRsSelect1 & ~stall) ? newBNeeded1 : 1'bz;
-  assign dataBPending_new=(newRsSelect2 & ~stall) ? newBNeeded2 : 1'bz;
-  assign dataBPending_new=(newRsSelectAny & ~stall) ? 1'bz : 1'b0;
-
-  assign dataBPending_en=newRsSelectAny  | nonDataRst0 | unCheckB || dataBPending_gather;
-  assign dataBPending_d=newRsSelectAny ? dataBPending_new & ~nonDataRst0 & stall_n & ~dataBPending_gather:
-    (~dataBPending_gather & dataBPending_q || unCheckB) & ~nonDataRst0;
-
-
-  assign dataSPending_new=(newRsSelect0 & ~stall) ? newSNeeded0 : 1'bz;
-  assign dataSPending_new=(newRsSelect1 & ~stall) ? newSNeeded1 : 1'bz;
-  assign dataSPending_new=(newRsSelect2 & ~stall) ? newSNeeded2 : 1'bz;
-  assign dataSPending_new=(newRsSelectAny & ~stall) ? 1'bz : 1'b0;
-
-  assign dataSPending_en=newRsSelectAny  | nonDataRst0 || dataSPending_gather;
-  assign dataSPending_d=newRsSelectAny ? dataSPending_new & ~nonDataRst0 & stall_n & ~dataSPending_gather:
-    (~dataSPending_gather & dataSPending_q) & ~nonDataRst0;
-	
 // end new data input into buffer
 
 // output from buffer
 
-//outputs use inverting 3-state buffer, because it's faster and smaller than non-inverting
 // issue port 0 -addrcalc
-  assign outDataEn0=outRsSelect0 ? {4{~unFwdCheck}} &{FP_q,Vec_q,~FP_q&~Vec_q,1'b1} : 4'bz;
-  assign outThread0=outRsSelect0 ? thread_q : 1'bz;
   
 // issue port 1 - alu 1
-  assign outDataEn1=outRsSelect1 ? {4{~unFwdCheck}} &{FP_q,Vec_q,~FP_q&~Vec_q,1'b1} : 4'bz;
-  assign outThread1=outRsSelect1 ? thread_q : 1'bz;
  
   
 // issue port 2 - alu 2
-  assign outDataEn2=outRsSelect2 ? {4{~unFwdCheck}} &{FP_q,Vec_q,~FP_q&~Vec_q,1'b1} : 4'bz;
-  assign outThread2=outRsSelect2 ? thread_q : 1'bz;
 
 
 // end data output
 
 
-//  assign isReady=~dataAPending_d & ~dataBPending_d & ~dataDPending_d & ~dataSPending_d;
-
-  assign isReady=dataAPending_gather | ~dataAPending_d && dataBPending_gather | ~dataBPending_d && 
-    dataSPending_gather | ~dataSPending_d;
+  assign isReady=dataAPending_gather[0] | ~dataAPending_d[0] && dataAPending_gather[1] | ~dataAPending_d[1] && 
+    dataAPending_gather[2] | ~dataAPending_d[2];
   
-  assign portReady0_d=isReady & port0_d & ~unFwdCheck & new_stall_n;
-  assign portReady1_d=isReady & port1_d & ~unFwdCheck & new_stall_n;
-  assign portReady2_d=isReady & port2_d & ~unFwdCheck & new_stall_n;
 
 // free bit
   DFF bufFree_mod(clk,bufFree_en,bufFree_d,bufFree);
@@ -2185,53 +2060,23 @@ module rs_array(
   input FU3Hit;
   input new_thread;
 //Input of new data from registeres
-  input newANeeded0;
-  input newBNeeded0;
-  input newSNeeded0;
-  input [BUF_COUNT-1:0] newRsSelect0;
-  input [3:0] newPort0;
-
-  input newANeeded1;
-  input newBNeeded1;
-  input newSNeeded1;
-  input [BUF_COUNT-1:0] newRsSelect1;
-  input [3:0] newPort1;  
-
-  input newANeeded2;
-  input newBNeeded2;
-  input newSNeeded2;
-  input [BUF_COUNT-1:0] newRsSelect2;
-  input [3:0] newPort2;  
+  input [2:0][2:0] newABSNeeded0;
+  input [2:0][BUF_COUNT-1:0] newRsSelect0;
+  input [2:0][3:0] newPort0;
 
 // output data to functional units
 
-  input [BUF_COUNT-1:0] outRsSelect0;
-  input [3:0] outRsBank0;
-  input outFound0;
-  output [BUF_COUNT-1:0] portReady0;
-  output [3:0] outDataEn0;
-  output outThread0;
+  input [2:0][BUF_COUNT-1:0] outRsSelect0;
+  input [2:0][3:0] outRsBank0;
+  input [2:0]outFound0;
+  output [2:0][BUF_COUNT-1:0] portReady0;
+  output [2:0][3:0] outDataEn0;
+  output [2:0]outThread0;
     
-  input [BUF_COUNT-1:0] outRsSelect1;
-  input [3:0] outRsBank1;
-  input outFound1;
-  output [BUF_COUNT-1:0] portReady1;
-  output [3:0] outDataEn1;
-  output outThread1;
-
-  input [BUF_COUNT-1:0] outRsSelect2;
-  input [3:0] outRsBank2;
-  input outFound2;
-  output [BUF_COUNT-1:0] portReady2;
-  output [3:0] outDataEn2;
-  output outThread2;
-
   input [BUF_COUNT*4-1:0] fuFwdA;
   input [BUF_COUNT*4-1:0] fuFwdB;
 
-  input [BUF_COUNT-1:0] isDataA;
-  input [BUF_COUNT-1:0] isDataB;
-  input [BUF_COUNT-1:0] isDataS;
+  input [2:0][BUF_COUNT-1:0] isDataA;
 
 // free output
   output [BUF_COUNT-1:0]  bufFree;
@@ -2241,12 +2086,8 @@ module rs_array(
   generate
       genvar k,j;
       for (j=0;j<4;j=j+1) begin : banks_gen
-          wire [3:0] outDataEn0a;
-          wire [3:0] outDataEn1a;
-          wire [3:0] outDataEn2a;
-          wire outThread0a;
-          wire outThread1a;
-          wire outThread2a;
+          wire [2:0][3:0] outDataEn0a;
+          wire [2:0] outThread0a;
       for(k=0;k<8;k=k+1) begin : buffers_gen
           rs_buf buf_mod(
           clk,
@@ -2256,40 +2097,29 @@ module rs_array(
           new_thread,
 // wires to store new values in a buffer
           newANeeded0,newBNeeded0,newSNeeded0,newRsSelect0[j*8+k],newPort0,
-          newANeeded1,newBNeeded1,newSNeeded1,newRsSelect1[j*8+k],newPort1,
-          newANeeded2,newBNeeded2,newSNeeded2,newRsSelect2[j*8+k],newPort2,
 // wires to get values out of buffer
-          outRsSelect0[j*8+k],portReady0[j*8+k],outDataEn0a,outThread0a,//addrcalc
-          outRsSelect1[j*8+k],portReady1[j*8+k],outDataEn1a,outThread1a,//alu 1
-          outRsSelect2[j*8+k],portReady2[j*8+k],outDataEn2a,outThread2a,//alu 2
+          {outRsSelect0[2][j*8+k],outRsSelect0[1][j*8+k],outRsSelect0[0][j*8+k]},
+          {portReady0[2][j*8+k],portReady0[1][j*8+k],portReady0[0][j*8+k]},
+          outDataEn0a,outThread0a,
           fuFwdA[(j*8+k)*4+:4],fuFwdB[(j*8+k)*4+:4],
-          isDataA[j*8+k],isDataB[j*8+k],isDataS[j*8+k],
+          {isDataA[2][j*8+k],isDataA[1][j*8+k],isDataA[0][j*8+k]},
 // 1 if buffer is free  
           bufFree[j*8+k]
           );
       end
-      assign outDataEn0a=outRsBank0[j] ? 4'bz : 4'b0;
-      assign outDataEn1a=outRsBank1[j] ? 4'bz : 4'b0;
-      assign outDataEn2a=outRsBank2[j] ? 4'bz : 4'b0;
-      assign outDataEn0=outRsBank0[j] ? outDataEn0a : 4'bz;
-      assign outDataEn1=outRsBank1[j] ? outDataEn1a : 4'bz;
-      assign outDataEn2=outRsBank2[j] ? outDataEn2a : 4'bz;
-      assign outThread0a=outRsBank0[j] ? 1'bz : 1'b0;
-      assign outThread1a=outRsBank1[j] ? 1'bz : 1'b0;
-      assign outThread2a=outRsBank2[j] ? 1'bz : 1'b0;
-      assign outThread0=outRsBank0[j] ? outThread0a : 1'bz;
-      assign outThread1=outRsBank1[j] ? outThread1a : 1'bz;
-      assign outThread2=outRsBank2[j] ? outThread2a : 1'bz;
+      genvar subloop;
+      for(subloop=0;subloop<3;subloop=subloop+1) begin : sub_gen
+          assign outDataEn0a[subloop]=outRsBank0[subloop][j] ? 4'bz : 4'b0;
+          assign outDataEn0[subloop]=outRsBank0[subloop][j] ? outDataEn0a[subloop] : 4'bz;
+          assign outThread0a[subloop]=outRsBank0[subloop][j] ? 1'bz : 1'b0;
+          assign outThread0[subloop]=outRsBank0[subloop][j] ? outThread0a[subloop] : 1'bz;
+      end
+      if (j<3) begin : j_lt_3
+          assign outDataEn0[j]=outFound0[j] ? 4'bz : 4'b0;
+          assign outThread0[j]=outFound0[j] ? 1'bz : 1'b0;
       end
   endgenerate
 
-  assign outDataEn0=outFound0 ? 4'bz : 4'b0;
-  assign outDataEn1=outFound1 ? 4'bz : 4'b0;
-  assign outDataEn2=outFound2 ? 4'bz : 4'b0;
-
-  assign outThread0=outFound0 ? 1'bz : 1'b0;
-  assign outThread1=outFound1 ? 1'bz : 1'b0;
-  assign outThread2=outFound2 ? 1'bz : 1'b0;
 
 endmodule
 

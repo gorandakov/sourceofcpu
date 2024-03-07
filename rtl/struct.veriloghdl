@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 `timescale 10ps/1ps
-`include "/Users/gorandakov/heptane_cpu/rtl/config.v"
+`include "/home/gorandakov/heptane/rtl/config.veriloghdl"
 
 `define b3i
 

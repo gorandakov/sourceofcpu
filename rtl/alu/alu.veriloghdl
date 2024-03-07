@@ -24,7 +24,7 @@ limitations under the License.
 //place next to alu_shift in alu-shift combo
 
 module 
-alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,dataEn,nDataAlt,retData,retEn,val1,val2,valS,valRes,sec,error,rmode);
+alu(clk,rst,except,except_thread,thread,operation,cond,sub,dataEn,nDataAlt,retData,retEn,val1,val2,valS,valRes,sec,error,rmode);
 
   localparam REG_WIDTH=`reg_addr_width;
   localparam OPERATION_WIDTH=`operation_width;
@@ -39,7 +39,6 @@ alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,dataEn,nD
   input [OPERATION_WIDTH-1:0] operation;
   input [4:0] cond;
   input [5:0] sub; //high power fat wire
-  input cary_invert; //invert carry out from add instruction
   input dataEn;//1=coming data from rs
   input nDataAlt;//0=feeding data through multiclk unit
   output wire [EXCEPT_WIDTH-1:0] retData;
@@ -81,13 +80,7 @@ alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,dataEn,nD
   wire carryAdd32;
   wire carryAdd16;
   wire carryAdd8LL;
-  wire carryAdd8HL;
-  wire carryAdd8LH;
-  wire carryAdd8HH;
   wire carryAdd4LL;
-  wire carryAdd4HL;
-  wire carryAdd4LH;
-  wire carryAdd4HH;
         
   
   
@@ -97,13 +90,7 @@ alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,dataEn,nD
   reg carryAdd32_reg;
   reg carryAdd16_reg;
   reg carryAdd8LL_reg;
-  reg carryAdd8HL_reg;
-  reg carryAdd8LH_reg;
-  reg carryAdd8HH_reg;
   reg carryAdd4LL_reg;
-  reg carryAdd4HL_reg;
-  reg carryAdd4LH_reg;
-  reg carryAdd4HH_reg;
         
   
   reg val1_sign44;
@@ -413,26 +400,6 @@ alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,dataEn,nD
 
   assign thrinh=(thread^~except_thread && except) || (thread^~except_thread_reg && except_reg);
 
-  always @* begin
-      case (retOp[10:9])
-2'b00: begin
-           flagAdd8_CF=carryAdd8LL_reg;
-           flagAdd8_AF=carryAdd4LL_reg;
-       end
-2'b01: begin
-           flagAdd8_CF=carryAdd8LH_reg;
-           flagAdd8_AF=carryAdd4LH_reg;
-       end
-2'b10: begin
-           flagAdd8_CF=carryAdd8HL_reg;
-           flagAdd8_AF=carryAdd4HL_reg;
-       end
-2'b11: begin
-           flagAdd8_CF=carryAdd8HH_reg;
-           flagAdd8_AF=carryAdd4HH_reg;
-       end
-      endcase
-  end  
   
 `ifndef aluneg
   always @(posedge clk)
@@ -453,14 +420,7 @@ alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,dataEn,nD
           carryAdd32_reg<=1'b0;
           carryAdd16_reg<=1'b0;
           carryAdd8LL_reg <=1'b0;
-          carryAdd8LH_reg <=1'b0;
-          carryAdd8HL_reg <=1'b0;
-          carryAdd8HH_reg <=1'b0;
           carryAdd4LL_reg <=1'b0;
-          carryAdd4LH_reg <=1'b0;
-          carryAdd4HL_reg <=1'b0;
-          carryAdd4HH_reg <=1'b0;
-        
       
           val1_sign65<=1'b0;
           val1_sign64<=1'b0;
@@ -517,18 +477,12 @@ alu(clk,rst,except,except_thread,thread,operation,cond,sub,cary_invert,dataEn,nD
           isFlags_reg<=isFlags;
           retOp<=operation;
 
-          carryAdd64_reg<=(carryAdd64^(operation[7:0]==`op_add64 && cary_invert)) & ~calu[4]|doJmp2;
-          carryAdd44_reg<=(carryAdd44^(operation[7:0]==`op_add64 && cary_invert)) & ~calu[4]|doJmp2;
-          carryAdd32_reg<=(carryAdd32^(operation[7:0]==`op_add32 && cary_invert)) & ~calu[4]|doJmp2;
+          carryAdd64_reg<=(carryAdd64) & ~calu[4]|doJmp2;
+          carryAdd44_reg<=(carryAdd44) & ~calu[4]|doJmp2;
+          carryAdd32_reg<=(carryAdd32) & ~calu[4]|doJmp2;
           carryAdd16_reg<=(carryAdd16) & ~calu[4]|doJmp2;
-          carryAdd4LL_reg <=carryAdd4LL;
-          carryAdd4HL_reg <=carryAdd4HL;
-          carryAdd8LH_reg <=carryAdd8LH;
-          carryAdd8HH_reg <=carryAdd8HH;
+          carryAdd4LL_reg <=(carryAdd4LL) & ~calu[4]|doJmp2 ;
           carryAdd8LL_reg <=(carryAdd8LL) & ~calu[4]|doJmp2;
-          carryAdd8HL_reg <=carryAdd8HL;
-          carryAdd8LH_reg <=carryAdd8LH;
-          carryAdd8HH_reg <=carryAdd8HH;
         
 
           val1_sign65<=val1[~add_en][64];
