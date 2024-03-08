@@ -71,7 +71,9 @@ module fun_lsq(
   MSI_exp_addr,MSI_en,
   doStall_STQ,
   doStall_LDQ,
-  doStall_LSQ 
+  doStall_LSQ ,
+  jtag_en,
+  jtag_data
   );
 /*vxerilator hier_block*/
 
@@ -213,6 +215,11 @@ module fun_lsq(
   output doStall_STQ;
   output doStall_LDQ;
   output doStall_LSQ;
+  output jtag_en;
+  output [8:0] jtag_data;
+
+  assign jtag_en=p6_dummy_en;
+  assign jtag_data=p6_dummy_LSQ[13:5];
  
   wire stall_STQ;
   wire aStall_STQ;
@@ -234,6 +241,9 @@ module fun_lsq(
   wire [5:0] PSTQ_data_shr;
   wire [`lsqshare_width-1:0] retM_data_shr;
   wire [`lsqshare_width-1:0] retM_data_shr_reg; 
+
+  wire p6_dummy_en;
+  wire [13:0] p6_dummy_LSQ;
 
   wire [`lsaddr_width-1:0]   stqd_mOpA;
   wire [`lsaddr_width-1:0]   stqd_mOpB;
@@ -365,6 +375,7 @@ module fun_lsq(
   LSQ_shr_dataA,
   p4_adata,p4_en,p4_LSQ,
   p5_adata,p5_en,p5_LSQ,
+  p3_adata,p6_dummy_en, p6_dummy_LSQ,
   LDQ_ldconfl,LDQ_insconfl,LDQ_ldconflX,
   STQ_ldconfl,
   lsw_wq0,lsw_rs_en0[0],lsw_wdata0,lsw_wdataX0,lsw_pdata0,

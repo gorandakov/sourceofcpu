@@ -25,9 +25,6 @@ module stq_adata_ram(
   writeA_wen,
   writeA_addr,
   writeA_data,
-  writeB_wen,
-  writeB_addr,
-  writeB_data
   );
   localparam WIDTH=`lsaddr_width+1;//adata+en
   
@@ -36,9 +33,9 @@ module stq_adata_ram(
   input read_clkEn;
   input [5:0] read_addr;
   output [WIDTH-1:0] read_data;
-  input write_wen;
-  input [5:0] write_addr;
-  input [WIDTH-1:0] write_data;
+  input [2:0] writeA_wen;
+  input [2:0] [5:0] writeA_addr;
+  input [2:0] [WIDTH-1:0] writeA_data;
 
   reg [WIDTH-1:0] ram[63:0];
   reg [5:0] readA_addr_reg;
@@ -48,8 +45,9 @@ module stq_adata_ram(
   always @(posedge clk) begin
       if (rst) readA_addr_reg<=6'b0;
       else if (readA_clkEn) readA_addr_reg<=readA_addr;
-      if (writeA_wen) ram[writeA_addr]<=writeA_data;
-      if (writeB_wen) ram[writeB_addr]<=writeB_data;
+      (* keep *) if (writeA_wen[0]) ram[writeA_addr[0]]<=writeA_data[2];
+      (* keep *) if (writeA_wen[1]) ram[writeA_addr[1]]<=writeA_data[0];
+      (* keep *) if (writeA_wen[2]) ram[writeA_addr[2]]<=writeA_data[1];
   end
 endmodule
 

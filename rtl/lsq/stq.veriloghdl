@@ -44,6 +44,7 @@ module stq(
   LSQ_shr_data, 
   wrt0_adata,wrt0_en,wrt0_LSQ,
   wrt1_adata,wrt1_en,wrt1_LSQ,
+  wrt2_adata,wrt2_en,wrt2_LSQu,
   confl,confl_SMP,confl_X,
   confl_out,
   upd0_WQ,upd0_en,upd0_data,upd0_dataM,upd0_pbit,//upd0_sz,//store data
@@ -113,6 +114,12 @@ module stq(
   input [`lsaddr_width-1:0] wrt1_adata;
   input wrt1_en;
   input [8:0] wrt1_LSQ;
+
+  inout [`lsaddr_width-1:0] wrt2_adata;
+  output wrt2_en;
+  output [13:0] wrt2_LSQu;
+
+  assign wrt2_en=wrt2_LSQu[9] ^ |wrt2_adata[`lsaddr_etype];
 
   input [5:0] confl;
   input [5:0] confl_SMP;
@@ -430,6 +437,8 @@ module stq(
 
   wire [63:0] free_en;
   wire [63:0] free;
+
+  assign wrt2_LSQu=pse0_en ? wrt0_LSQ : wrt1_LSQ;
 
   wire [5:0] rdy={chk5_en,chk4_en,chk3_en,chk2_en,chk1_en,chk0_en};
   wire [5:0] chk_wb={chk5_adata[`lsaddr_flag] & chk5_en,chk4_adata[`lsaddr_flag] & chk4_en,chk3_adata[`lsaddr_flag] & chk3_en,
@@ -1007,8 +1016,8 @@ module stq(
   clk,
   rst,
   ~st_stall & WLN0_en,  WLN0_WQ[5:0], {WLN0_adata,WLN0_en0},
-  wrt0_en,  wrt0_adata[-2+`lsaddr_WQ],  {wrt0_adata,wrt0_en},
-  wrt1_en,  wrt1_adata[-2+`lsaddr_WQ],  {wrt1_adata,wrt1_en}
+  {wrt0_en,wrt1_en,(wrt0_en|wrt1_en)&&(wrt0_en&wrt1_en)&&^{wrt0_en,wrt1_en},  {wrt0_adata[-2+`lsaddr_WQ],{wrt1_adata[-2+`lsaddr_WQ]},wrt1_adata[`lsaddr_WQ+2]},  
+       {wrt2_adata,wrt0_en,wrt0_adata,wrt1_en,wrt1_adata,wrt2_enX}
   );
 
 //wrt is write, WLN is read
@@ -1016,8 +1025,8 @@ module stq(
   clk,
   rst,
   ~st_stall & WLN1_en,  WLN1_WQ[5:0], {WLN1_adata,WLN1_en0},
-  wrt0_en,  wrt0_adata[-2+`lsaddr_WQ],  {wrt0_adata,wrt0_en},
-  wrt1_en,  wrt1_adata[-2+`lsaddr_WQ],  {wrt1_adata,wrt1_en}
+  {wrt0_en,wrt1_en,(wrt0_en|wrt1_en)&&(wrt0_en&wrt1_en)&&^{wrt0_en,wrt1_en},  {wrt0_adata[-2+`lsaddr_WQ],{wrt1_adata[-2+`lsaddr_WQ]},wrt1_adata[`lsaddr_WQ+2]},  
+       {wrt2_adata,wrt0_en,wrt0_adata,wrt1_en,wrt1_adata,wrt2_enX}
   );
 
   assign WLN0_en=WLN0_en0 && ret_II==WLN0_adata[`lsaddr_II+4] && 
