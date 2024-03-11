@@ -352,34 +352,23 @@ module predecoder_get(
     clk,
     rst,
     bundle,btail,bstop,
-    flag_bits,
+    bnext,bnext_tail,has_next,
     startOff,
-    instr0,instr1,instr2,instr3,
-    instr4,instr5,instr6,instr7,
-    instr8,instr9,instr10,instr11,
-    magic0,magic1,magic2,magic3,
-    magic4,magic5,magic6,magic7,
-    magic8,magic9,magic10,magic11,
-    off0,off1,off2,off3,
-    off4,off5,off6,off7,
-    off8,off9,off10,off11,
-    class0,class1,class2,class3,
-    class4,class5,class6,class7,
-    class8,class9,class10,class11,
+    instr0,
+    magic0,
+    off0,
+    class0,
     instrEn,
     _splitinsn,
     hasJumps,
     error,
     jerror,
-    Jinstr0,Jinstr1,Jinstr2,Jinstr3,
-    Jmagic0,Jmagic1,Jmagic2,Jmagic3,
-    Joff0,Joff1,Joff2,Joff3,
-    Jclass0,Jclass1,Jclass2,Jclass3,
+    Jinstr0,
+    Jmagic0,
+    Joff0,
+    Jclass0,
     Jen,
-    lnkLink0,lnkOff0,lnkMagic0,lnkRet0,lnkJumps0,
-    lnkLink1,lnkOff1,lnkMagic1,lnkRet1,lnkJumps1,
-    lnkLink2,lnkOff2,lnkMagic2,lnkRet2,lnkJumps2,
-    lnkLink3,lnkOff3,lnkMagic3,lnkRet3,lnkJumps3
+    lnkLink0,lnkOff0,lnkMagic0,lnkRet0,lnkJumps0
     );
     localparam CLSWIDTH=12;
     
@@ -388,149 +377,77 @@ module predecoder_get(
     input [255:0] bundle;
     input [63:0] btail;
     input [3:0] bstop;
-    input [14:0] flag_bits;
+    input [79:0] bnext;
+    input [4:0] bnext_tail;
+    input has_next;
     input [3:0] startOff;
-    output [79:0] instr0;
-    output [79:0] instr1;
-    output [79:0] instr2;
-    output [79:0] instr3;
-    output [79:0] instr4;
-    output [79:0] instr5;
-    output [79:0] instr6;
-    output [79:0] instr7;
-    output [79:0] instr8;
-    output [79:0] instr9;
-    output [79:0] instr10;
-    output [79:0] instr11;
-
-    output [3:0] magic0;
-    output [3:0] magic1;
-    output [3:0] magic2;
-    output [3:0] magic3;
-    output [3:0] magic4;
-    output [3:0] magic5;
-    output [3:0] magic6;
-    output [3:0] magic7;
-    output [3:0] magic8;
-    output [3:0] magic9;
-    output [3:0] magic10;
-    output [3:0] magic11;
-
-    output [3:0] off0;
-    output [3:0] off1;
-    output [3:0] off2;
-    output [3:0] off3;
-    output [3:0] off4;
-    output [3:0] off5;
-    output [3:0] off6;
-    output [3:0] off7;
-    output [3:0] off8;
-    output [3:0] off9;
-    output [3:0] off10;
-    output [3:0] off11;
-    
-    output [12:0] class0;
-    output [12:0] class1;
-    output [12:0] class2;
-    output [12:0] class3;
-    output [12:0] class4;
-    output [12:0] class5;
-    output [12:0] class6;
-    output [12:0] class7;
-    output [12:0] class8;
-    output [12:0] class9;
-    output [12:0] class10;
-    output [12:0] class11;
-    
+    output [3:0] startOff_override;
+    output [11:0][79:0] instr0;
+    output [11:0][3:0] magic0;
+    output [11:0][3:0] off0;
+    output [11:0][12:0] class0;
     output [11:0] instrEn;
     output reg _splitinsn;
     output hasJumps;
     output reg error;
     output reg jerror;
     
-    output [79:0] Jinstr0;
-    output [79:0] Jinstr1;
-    output [79:0] Jinstr2;
-    output [79:0] Jinstr3;
-
-    output [3:0] Jmagic0;
-    output [3:0] Jmagic1;
-    output [3:0] Jmagic2;
-    output [3:0] Jmagic3;
-
-    output [3:0] Joff0;
-    output [3:0] Joff1;
-    output [3:0] Joff2;
-    output [3:0] Joff3;
-    
-    output [12:0] Jclass0;
-    output [12:0] Jclass1;
-    output [12:0] Jclass2;
-    output [12:0] Jclass3;
+    output [3:0][79:0] Jinstr0;
+    output [3:0][3:0] Jmagic0;
+    output [3:0][3:0] Joff0;
+    output [3:0][12:0] Jclass0;
     
     output [3:0] Jen;
-    output [4:0] lnkLink0;
-    output [4:0] lnkOff0;
-    output [3:0] lnkMagic0;
-    output       lnkRet0;
-    output [4:0] lnkJumps0;
-    output [4:0] lnkLink1;
-    output [4:0] lnkOff1;
-    output [3:0] lnkMagic1;
-    output       lnkRet1;
-    output [4:0] lnkJumps1;
-    output [4:0] lnkLink2;
-    output [4:0] lnkOff2;
-    output [3:0] lnkMagic2;
-    output       lnkRet2;
-    output [4:0] lnkJumps2;
-    output [4:0] lnkLink3;
-    output [4:0] lnkOff3;
-    output [3:0] lnkMagic3;
-    output       lnkRet3;
-    output [4:0] lnkJumps3;
+    output [3:0][4:0] lnkLink0;
+    output [3:0][4:0] lnkOff0;
+    output [3:0][3:0] lnkMagic0;
+    output [3:0]      lnkRet0;
+    output [3:0][4:0] lnkJumps0;
 
-    reg [14:-1] instrEnd;
-    reg [14:-1] instrEndF;
+    reg [19:-1] instrEnd;
+    reg [19:-1] instrEndF;
     
-    wire [15:-2][15:0] cntEnd;
-    wire [15:-1] mask;
+    wire [19:-2][15:0] cntEnd;
+    wire [19:-1] mask;
  
-    wire [15:0] cntEnd2;
-    wire [16:1] cntEnd3;
+    wire [19:0] cntEnd2;
+    wire [20:1] cntEnd3;
+    wire [14:0] cntEnd2_15;
+    wire [15:1] cntEnd3_15;
     
-    wire [15:0][12:0] class_ ;
-    wire [255+16+48:0] bundle0;
-    wire [255+16+48:0] bundleF;
+    wire [19:0][12:0] class_ ;
+    wire [255+16+64:0] bundle0;
+    wire [255+16+64:0] bundleF;
 
-    wire [14:0] is_jmp;
-    wire [14:0] is_jmpX;
-    wire [15:-1][15:0] cntJEnd;
-    wire [14:0] jcnt_or_less;
-    wire [15:1] jcnt_or_more;
+    wire [19:0] is_jmp;
+    wire [19:0] is_jmpX;
+    wire [20:-1][15:0] cntJEnd;
+    wire [19:0] jcnt_or_less;
+    wire [14:0] jcnt_or_less_15;
+    wire [20:1] jcnt_or_more;
     
-    wire [14:0] is_lnk0;
-    wire [14:0] is_lnk;
-    reg [14:0] is_lnk_reg;
-    wire [14:0] first_lnk;
+    wire [19:0] is_lnk0;
+    wire [19:0] is_lnk;
+    reg [19:0] is_lnk_reg;
+    wire [19:0] first_lnk;
     wire has_lnk;
-    wire [15:0][4:0] LNK;
-    wire [14:0] lcnt_or_less;
-    wire [14:-1][15:0] lcnt;
-    wire [14:0] is_ret0;
-    wire [14:0] is_ret;
-    reg [14:0] is_ret_reg;
-    reg [15:0] flag_bits0;
-    wire [14:0] mask0;
+    wire [19:0][4:0] LNK;
+    wire [19:0] lcnt_or_less;
+    wire [19:-1][15:0] lcnt;
+    wire [19:0] is_ret0;
+    wire [19:0] is_ret;
+    reg [19:0] is_ret_reg;
+    reg [19:0] flag_bits0;
+    wire [19:0] mask0;
 
-    function [255+64:0] boogy_baboogy;
+    function [255+64+16:0] boogy_baboogy;
         input [3:0] bstop;
         input cond;
-        input [255+64:0] index0;
-        input [255+64:0] index1;
-        input [255+64:0] index2;
-        input [255+64:0] index3;
-        input [255+64:0] index_else;
+        input [255+64+16:0] index0;
+        input [255+64+16:0] index1;
+        input [255+64+16:0] index2;
+        input [255+64+16:0] index3;
+        input [255+64+16:0] index_else;
         begin
             if (cond && bstop[3:2]==2'b01) boogy_baboogy=index0;
             if (cond && bstop[3:1]==3'b001) boogy_baboogy=index1;
@@ -541,90 +458,92 @@ module predecoder_get(
     endfunction
     generate
         genvar k,subloop_insn,subloop_jump;
-        for(k=0;k<15;k=k+1) begin : popcnt_gen
-            popcnt15 cnt_mod(instrEnd[14:0] & ((15'b10<<k)-15'b1) & mask[14:0],cntEnd[k]);
-            get_carry #(4) carry_mod(k[3:0],~startOff,1'b1,mask0[k]);
+        for(k=0;k<20;k=k+1) begin : popcnt_gen
+            popcnt20 cnt_mod(instrEnd[19:0] & ((20'b10<<k)-20'b1) & mask[19:0],cntEnd[k]);
+            get_carry #(5) carry_mod(k[4:0],~{1'b0,startOff},1'b1,mask0[k]);
             mask[k]=mask0[k] || ((k+1)==startOff && !instrEnd[k]) ||
                ((k+2)==startOff && instrEnd[k+:2]==2'b00) ||
                ((k+3)==startOff && instrEnd[k+:3]==3'b000)
                ((k+4)==startOff && instrEnd[k+:4]==4'b0000);
-
-            wire [3:0] kk;
-            assign kk=boogy_baboogy(bstop[3:0],k==0 && bundle0[255],4'hf,4'he,4'hd,4'hc,k[3:0]);
-
+            assign brk=cntEnd[k][12] ? k[3:0] && k[4] : 4'bz;
+            wire [4:0] kk;
+            //verilator lint_off WIDTH
+            assign kk=boogy_baboogy(bstop[3:0],k==0 && bundle0[255],5'hf,5'he,5'hd,5'hc,k[4:0]);
+            //verilator lint_on WIDTH
             predecoder_class cls_mod(bundleF[k*16+:32],~instrEndF[k+:4],flag_bits0[k],class_[k],
               is_lnk0[k],is_ret0[k],LNK[k]);
-            popcnt15 cntJ_mod(is_jmp[14:0] & ((20'b10<<k)-20'b1),cntJEnd[k]);
-            popcnt15 cntL_mod(is_lnk[14:0] & ((20'b10<<k)-20'b1),lcnt[k]);
+            popcnt20 cntJ_mod(is_jmp[19:0] & ((20'b10<<k)-20'b1),cntJEnd[k]);
+            popcnt20 cntL_mod(is_lnk[19:0] & ((20'b10<<k)-20'b1),lcnt[k]);
             assign is_jmpX[k]=class_[`iclass_jump];
             for(subloop_jump=0;subloop_jump<4;subloop_jump=subloop_jump+1) begin : jmp_gen
                 assign {lnkLink0[subloop_jump],lnkOff0[subloop_jump],lnkMagic0[subloop_jump],
                     lnkRet0[subloop_jump]}=lcnt[k][subloop_jump+1] & lcnt[k-1][subloop_jump] ? 
-                    {LNK[k],kk[3:0],instrEndF[k+:4],is_ret[k]} : 14'bz;
+                    {LNK[k],kk[4:0],instrEndF[k+:4],is_ret[k]} : 15'bz;
                 assign lnkJumps0[subloop_jump]=lcnt[k][subloop_jump+1] & lcnt[k-1][subloop_jump] ? cntJEnd[k][4:0] : 5'bz;
             
                 if (k==0) assign {Jclass0[subloop_jump],Jmagic0[subloop_jump],Jinstr0[subloop_jump],Joff0[subloop_jump]}= 
-                    (mask[k] & ~mask[k-1]) ? {classF_[k], instrEndF[k+:4],bundleF[k*16+:80],kk[3:0]} : 101'bz;
+                    (mask[k] & ~mask[k-1]) ? {classF_[k], instrEndF[k+:4],bundleF[k*16+:80],kk[4:0]} : 102'bz;
                 else assign {Jclass0[subloop_jump],Jmagic0[subloop_jump],Jinstr0[subloop_jump],Joff0[subloop_jump]}= 
-                    cntJEnd[k-1][subloop_jump] & cntJEnd[k-2][subloop_jump-1] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 101'bz;
-                assign {Jclass0[subloop_jump],Jmagic0[subloop_jump], Jinstr0[subloop_jump], Joff0[subloop_jump]}=jcnt_or_less[subloop_jump] ? 101'b0 : 101'bz;
-                assign {lnkLink0[subloop_jump],lnkOff0[subloop_jump],lnkMagic0[subloop_jump],lnkRet0[subloop_jump]}=lcnt_or_less[subloop_jump] ? 15'b1110_10000_0001_0 : 15'bz;
+                    cntJEnd[k-1][subloop_jump] & cntJEnd[k-2][subloop_jump-1] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[4:0]} : 102'bz;
+                assign {lnkLink0[subloop_jump],lnkOff0[subloop_jump],lnkMagic0[subloop_jump],lnkRet0[subloop_jump]}=lcnt_or_less[subloop_jump] ? 15'b1110_10000_0001_0 : 15'bz; //note - overhang cannot contain link instructions
                 assign lnkJumps0[subloop_jump]=lcnt_or_less[subloop_jump] ?  5'd1 : 5'bz;
             end
             for(subloop_insn=0;subloop_insn<12;subloop_insn=subloop_insn+1) begin : insn_gen
                 if (k==0) assign {class0[0],magic0[0],instr0[0],off0[0]}=(mask[k] & ~mask[k-1]) ?
-                    {classF_[k],instrEndF[k+:4],bundleF[k*16+:80],kk[3:0]} : 101'bz;
+                    {classF_[k],instrEndF[k+:4],bundleF[k*16+:80],kk[4:0]} : 102'bz;
                 else assign {class0[subloop_insn],magic0[subloop_insn],instr0[subloop_insn],off0[subloop_insn]}=mask[k] & 
-                    cntEnd[k-1][subloop_insn] & cntEnd[k-2][subloop_insn-1] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[3:0]} : 101'bz;
-               if (k!=0) assign {class0[subloop_insn],magic0[subloop_insn], instr0[subloop_insn], off0[subloop_insn]}=cntEnd3[subloop_insn-1] ? 101'b0 : 101'bz;
-               else assign {class0[0],magic0[0], instr0[0], off0[0]}=(0==mask) ? 101'b0 : 101'bz;
+                    cntEnd[k-1][subloop_insn] & cntEnd[k-2][subloop_insn-1] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[4:0]} : 102'bz;
             end
         end
     endgenerate
 
-    popcnt15_or_less ce2_mod(instrEnd[14:0]&mask[14:0],cntEnd2);
-    popcnt15_or_more ce3_mod(instrEnd[14:0]&mask[14:0],cntEnd3);
-    popcnt15_or_less jce_mod(is_jmp,jcnt_or_less);
-    popcnt15_or_more jcen_mod(is_jmp,jcnt_or_more);
-    bit_find_first_bit #(20) getLNK_mod(is_lnk,first_lnk,has_lnk);    
-    popcnt15_or_less lce_mod(is_lnk,lcnt_or_less);
+    popcnt20_or_less ce2_mod(instrEnd[19:0]&mask[19:0],cntEnd2);
+    popcnt20_or_more ce3_mod(instrEnd[19:0]&mask[19:0],cntEnd3);
+    popcnt15_or_less ce215_mod(instrEnd[14:0]&mask[14:0],cntEnd2_15);
+    popcnt15_or_more ce315_mod(instrEnd[14:0]&mask[14:0],cntEnd3_15);
+    popcnt20_or_less jce_mod(is_jmp,jcnt_or_less);
+    popcnt15_or_less jce15_mod(is_jmp[14:0],jcnt_or_less_15);
+    popcnt20_or_more jcen_mod(is_jmp,jcnt_or_more);
+    bit_find_first_bit #(15) getLNK_mod(is_lnk[14:0],first_lnk,has_lnk);    
+    popcnt15_or_less lce_mod(is_lnk[14:0],lcnt_or_less);
     assign mask[-1]=1'b0;
 
     assign cntEnd[-1]=16'd1;
     assign cntEnd[-2]=16'd1;
     assign cntJEnd[-1]=16'd1;
     assign lcnt[-1]=16'd1;
-
+    
+    //verilator lint_off WIDTH
     assign bundleF=boogy_baboogy(bstop[3:0],bundle0[255] && startOff==0,{bundle0[255+48:0],btail[63:48]},{bundle0[255+32:0],btail[63:32]},
         {bundle0[255+16:0],btail[63:16]},{bundle0[255:0],btail[63:0]},bundle0);
 
     assign instrEndF=boogy_baboogy(bstop[3:0],bundle0[255] && startOff==0,{instrEnd[16:0],bstop[3:1],instrEnd[-1]},
         {instrEnd[17:0],bstop[3:2],instrEnd[-1]},{instrEnd[18:0],bstop[3],instrEnd[-1]},
         {instrEnd[15:0],bstop[3:0],instrEnd[-1]},instrEnd);
+    //veritlator lint_on WIDTH
+
+    assign bundle0={bnext,bundle[239:0]};
     
-    assign bundle0={64'b0,btail[15:0],bundle[239:0]};
-    
+    assign has_brk=has_next && cntEnd2_15[11];
 
     assign instrEn=cntEnd2[12:1]|{11'b0,startOff==4'hf};
     assign Jen=jcnt_or_more[4:1];
     
-    assign is_jmp=is_jmpX & instrEnd[13:-1] & (instrEnd[14:0] | instrEnd[15:1] | {1'b0,instrEnd[15:2]} |
-          {2'b0,instrEnd[15:3]});
+    assign is_jmp=is_jmpX & instrEnd[18:-1];
 
     assign is_lnk=is_lnk0[14:0] & instrEnd[13:-1];
     assign is_ret=is_lnk0[14:0] & instrEnd[13:-1] & is_ret0[14:0];
     
-    assign hasJumps=(is_jmp & mask[14:0])!=15'b0;
+    assign hasJumps=(is_jmp & mask[19:0])!=15'b0;
     
     always @*
       begin
-        instrEnd={4'b0,btail[16],bundle[254:240],1'b1};
-        error=cntEnd3[13] || startOff==15 || ((~insrEnd & ~(instrEnd<<1) & ~(instrEnd<<2) & ~(instrEnd<<3) 
-          & ~(instrEnd<<4) & ((instrEnd<<5) | (instrEnd<<6)| (instrEnd<<7) | (instrEnd<<8)
-          | (instrEnd<<9)| (instrEnd<<10))!=0;
+        instrEnd={5'b0,bnext_tail,bundle[254:240],1'b1};
+        error=cntEnd3[13]&~cntEnd3_15[13] || startOff==15;
         _splitinsn=bundle[255];
-        jerror=~lcnt_or_less[1] || ~jcnt_or_less[4];
-        flag_bits0={btail[16],flag_bits};
+        jerror=~lcnt_or_less[4] || ~jcnt_or_less[4]&~jcnt_or_less_15[4];
+        flag_bits0=20'b0;
+        startOff_override=has_brk & ~brk[3] ? brk  : 0;
       end
 endmodule
 
