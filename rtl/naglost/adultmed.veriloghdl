@@ -408,7 +408,7 @@ module smallInstr_decoder(
   //224-230=and16,and8,or16,or8
   assign isCexALU=opcode_main==8'd222;
   //231-232=cloop no sub
-  assign isCLeave=opcode_main==8'd235 || opcode_main==8'd236 || opcode_main==8'd238;  
+  assign isCLeave=opcode_main==8'd235 || opcode_main[7:1]==7'd118 || opcode_main[7:1]==7'd119;  
 
   assign isBasicFPUScalarA=opcode_main[7:2]==7'h3c && ~&opcode_main[2:1] && instr[13:12]==2'b0;
   assign isBasicFPUScalarB=opcode_main[7:2]==7'h3c && ~&opcode_main[2:1] && instr[13:12]==2'b1;
@@ -1417,11 +1417,11 @@ module smallInstr_decoder(
       end if (magic[1:0]==2'b01 && isCLeave) begin
           pconstant[21]={{43{instr[31]}},instr[31:17],1'b0};
       end 
-      if (!opcode_main[0]) begin
+      if (!opcode_main[2] && isCLeave) begin
           pport[21]=PORT_ALU;
           puseRs[21]=2'b1;
-          prA[21]={3'b0,opcode_main!=8'd236,1'b0};
-          prT[21]={3'b0,opcode_main!=8'd236,1'b0};
+          prA[21]={3'b0,opcode_main[7:1]!=7'd118,1'b0};
+          prT[21]={3'b0,opcode_main[7:1]!=7'd119,1'b0};
           poperation[21]=instr[8] ? `op_cloop_odd : `op_cloop_even;
           poperation[21][10:8]=instr[11:9];
           prA_use[21]=1'b1;
@@ -1429,7 +1429,7 @@ module smallInstr_decoder(
           prAlloc[21]=1'b1;
           pflags_write[21]=1'b1;
           pjumptype[21]={1'b0,4'd1}; //non zero
-          pconstant[21]={64{opcode_main==8'd236}};
+          pconstant[21]={64{opcode_main[7:1]==7'd118}};
       end
       
       trien[22]=magic[0] & isSelfTestCJump;

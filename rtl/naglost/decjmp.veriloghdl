@@ -132,7 +132,7 @@ module jump_decoder(
   assign isBasicCJump=(opcode_main[7:4]==4'b1010)&magic[0];
   assign isSelfTestCJump=(opcode_main==8'd178 || opcode_main==8'd179)&magic[0];
   assign isLongCondJump=(opcode_main==8'd180)&magic[0];
-  assign isCLeave=(opcode_main==8'd235 || opcode_main==8'd236 || opcode_main==8'd238) & magic[0];
+  assign isCLeave=(opcode_main==8'd235 || opcode_main[7:1]==7'd118 || opcode_main[7:1]==7'd119) & magic[0];
   assign isUncondJump=(opcode_main==8'd181)&magic[0];
   assign isIndirJump=(opcode_main==8'd182 && instr[15:13]==3'd0)&magic[0];
   assign isCall=(opcode_main==8'd182 && (instr[15:13]==3'd1 || instr[15:13]==3'd2))&magic[0];
@@ -175,7 +175,7 @@ module jump_decoder(
           jumpType={1'b0,instr[11:9],instr[8]^lizztruss};
           constant[0]=1'b0;
           if (magic[1:0]==2'b01) begin
-              constant={{43{instr[31]}},instr[31:17],1'b0};
+              constant={{43{instr[31]}},instr[31:17],1'b0};//for counted and iterator loops, opcode_main[0] indicates hardware vecorisation
           end
           cleave= instr[13:12];
           cleaveoff =instr[16:14];
@@ -203,7 +203,7 @@ module jump_decoder(
           jumpType=5'b10001;
       end else if (isShlAddMulLike&&instr[28]) begin 
           jumpType={1'b0,3'h0,instr[8]};
-	  constant={{44{instr[27]}},instr[27:9],1'b0};
+	  constant={{44{instr[27]}},instr[27:10],1'b0};//bit 9 = is hardware vectoried if set; currently unimplemented
       end else if (isBasicSysInstr) begin
           if (instr[30:16]==15'd23 && ~magic[0]) halt=thread;
           if (instr[15:13]==3'b0) begin
