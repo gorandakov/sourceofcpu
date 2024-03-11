@@ -410,15 +410,17 @@ module smallInstr_decoder(
   //231-232=cloop no sub
   assign isCLeave=opcode_main==8'd235 || opcode_main[7:1]==7'd118 || opcode_main[7:1]==7'd119;  
 
-  assign isBasicFPUScalarA=opcode_main[7:2]==7'h3c && ~&opcode_main[2:1] && instr[13:12]==2'b0;
-  assign isBasicFPUScalarB=opcode_main[7:2]==7'h3c && ~&opcode_main[2:1] && instr[13:12]==2'b1;
-  assign isBasicFPUScalarC=opcode_main[7:2]==7'h3c && ~&opcode_main[2:1] && instr[15:12]==4'd2;
-  assign isBasicFPUScalarCmp=opcode_main[7:2]==7'h3c && ~&opcode_main[2:1] && instr[15:12]==4'd6;
-  assign isBasicFPUScalarCmp2=opcode_main[7:2]==7'h3c && ~&opcode_main[2:1] && instr[15:12]==4'd10;
-  assign isBasicFPUScalarCmp3=opcode_main[7:2]==7'h3c && ~&opcode_main[2:1] && instr[15:12]==4'd12;
-  
+  assign isBasicFPUScalarA=opcode_main[7:4]==5'h1f && ~&opcode_main[2:0] && instr[13:12]==2'b0;
+  assign isBasicFPUScalarB=opcode_main[7:4]==5'h1f && ~&opcode_main[2:0] && instr[13:12]==2'b1;
+  assign isBasicFPUScalarC=opcode_main[7:4]==5'h1f && ~&opcode_main[2:0] && instr[15:12]==4'd2;
+  assign isBasicFPUScalarCmp=opcode_main[7:4]==5'h1f && ~&opcode_main[2:0] && instr[15:12]==4'd6;
+  assign isBasicFPUScalarCmp2=opcode_main[7:4]==5'h1f && ~&opcode_main[2:0] && instr[15:12]==4'd10;
+  assign isBasicFPUScalarCmp3=opcode_main[7:4]==5'h1f && ~&opcode_main[2:0] && instr[15:12]==4'd12;
+  //fpu bit[3] is vectorisable
+  //fpu bit[2] is conditional (condition LE signed)
   assign isBasicSysInstr=opcode_main==8'hff;
-  
+ //8'hf7==new insn; starting with 48 bit size (no 32 bit)
+ 
   assign qconstant[1]={1'b0,pconstant[3]};//??
   assign qtrien   [1]=trien    [3];//??
   assign qconstant[2]={1'b0,pconstant[8]};
@@ -679,19 +681,21 @@ module smallInstr_decoder(
           prT_use[tt]=1'b0;
           prC_use[tt]=1'b0;
           pport[tt]=4'b0;
-          if (opcode_main[7:2]==7'h3c) begin
+	  palucond[tt]=5'b0;
+          if (opcode_main[7:4]==4'hf) begin
               case (opcode_main[1:0])
                 0: pport[tt]=PORT_FADD;
                 1: pport[tt]=PORT_FMUL;
                 2: pport[tt]=PORT_FANY;
               endcase
+              palucond[tt]=opcode_main[2] ? 5'h19 : 5'h0;
           end
+          prmode[tt]=3'h7;
           pconstant[tt]=constantDef;
           //pconstant[tt][64]=1'b0;
      //     pisBigConst[tt]=magic[2:0]==3'b111;
           pthisSpecLoad[tt]=1'b0;    
           pisIPRel[tt]=1'b0;
-	  palucond[tt]=5'b0;
 	  prndmode[tt]=3'b111;
           puseCRet[tt]=1'b0;
           prA_useF[tt]=1'b0;

@@ -193,7 +193,7 @@ module fcmpd(clk,rst,
     && ~COA) | (A_s && B_s && ~COB) | (~A_s && ~B_s && COA && COB && ~cmpC) |
     (A_s && B_s && COA && COB && cmpC|fEQl);
   assign res_Z=~res_unord && (A_zero&B_zero) | (extA==extB&&A_s==B_s&&fEQl|
-    A_infty);
+    A_infty) && ~afm;
   
   assign res_x_unord=A_x_nan || B_x_nan;
   assign res_x_C=res_x_unord || (A_x_s && ~B_x_s && ~A_x_zero|~B_x_zero) || (~A_x_s && ~B_x_s 
