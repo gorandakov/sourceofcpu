@@ -25,7 +25,7 @@ module fun_fpu(
   fpcsr,
   u1_A,u1_B,u1_Bx,u1_Ax,u1_en,u1_op,
   u1_fufwd_A,u1_fuufwd_A,u1_fufwd_B,u1_fuufwd_B,
-  u1_ret,u1_ret_en,u1_XADD,u1_FK,
+  u1_ret,u1_ret_en,u1_XADD,u1_FK,u1_flag,
   FUF0,FUF1,FUF2,
   FUF3,FUF4,FUF5,
   FUF6,FUF7,FUF8,
@@ -72,6 +72,7 @@ module fun_fpu(
   output u1_ret_en;
   input u1_XADD;
   input [2:0] u1_FK;
+  input [5:0] u1_flag;
 
   (* register equiload *) input [S+69:0] FUF0;
   (* register equiload *) input [S+69:0] FUF1;
@@ -215,6 +216,9 @@ module fun_fpu(
 
   reg [1:0] ALT_INP_reg;
 
+  wire do_jmp0;
+  wire do_jmp;
+
   wire [1:0][S+69:0] gfDataBFL;
   reg [1:0][16+69:0] gfDataBFL_reg;
   reg [1:0][16+69:0] fxDataAFL_reg;
@@ -348,7 +352,7 @@ module fun_fpu(
   .raise(fxFADD_raise),
   .fpcsr(fpcsr[31:0]),
   .rmode(u1_op_reg[20:18]==3'b111 ? fpcsr[`csrfpu_rmode] : u1_op_reg[20:18]),
-  .copyA(fxFADD_copyA[H]),
+  .copyA(fxFADD_copyA[H]|~do_jmp),
   .logic_en(fxFADD_lo),
   .logic_sel(fxFADD_loSel),
   .en(H? fxFADD_dbl:fxFADD_dblext),
@@ -431,7 +435,7 @@ module fun_fpu(
   .pook_in(gfDataBFL_reg[0][32]),
   .and1(H? 1'b0 : fxFCADD_ext),
   .or1(H? 1'b1 : fxFCADD_dbl),
-  .copyA(fxFCADD_copyA[H]),
+  .copyA(fxFCADD_copyA[H]|~do_jmp),
   .en(H? fxFCADD_dbl : fxFCADD_dblext),
   .rmode(fxXTRA ? ROUND_TRUNC :  u1_op_reg[20:18]==3'b111 ?fpcsr[`csrfpu_rmode] : u1_op_reg[20:18]),
   .res(FOOF[1][67:0]),
@@ -444,6 +448,10 @@ module fun_fpu(
   .is_rndS(fxFCADD_rndS)
   );
   
+  except_jump_cmp(u1_flag_reg,u1_op_reg[16:13],do_jmp0);
+
+  assign do_jmp=do_jmp0 | u1_op_reg[17];
+
   generate
     if (INDEX==2) fperm #(0) fperm1CL_mod(
         .clk(clk),
