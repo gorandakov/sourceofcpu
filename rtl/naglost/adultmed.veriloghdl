@@ -1716,7 +1716,7 @@ module smallInstr_decoder(
 	  prB_use[31]=1'b1;
 	  prT_use[31]=1'b1;
 	  puseBConst[31]=magic[1:0]==2'b11 || instr[23];
-	  pconstant[31]=magic[2:0]==3'b111 ? {{32{instr[47]}},instr[47:16]} : {{39{instr[47]}},instr[47:23]};
+	  pconstant[31]=magic[2:0]==3'b111 ? {{32{instr[47]}},instr[47:16]} : {{44{instr[43]}},instr[43:23]};
 	  puseRs[31]=1'b1;
 	  prAlloc[31]=1'b1;
 	  pflags_write[31]=instr[13];
@@ -1724,9 +1724,9 @@ module smallInstr_decoder(
 	  poperation[31][7:0]={3'b0,instr[10:8],1'b0,instr[11]};
           poperation[31][9]=instr[12];
 	  if (magic[1:0]==2'b01) begin
-	      prA[31]=instr[22:18];
+	      prA[31]={1'b0,instr[21:18]};
 	      prB[31]=instr[28:24];
-	      prT[31]=instr[22:18];
+	      prT[31]=instr[23] ? {1'b0,instr[22],instr[31:29]} : {1'b0,instr[21:18]};
 	      palucond[31]={1'b1,instr[17:14]};
 	      if (~instr[12]) poperation[31][12]=~instr[13];
               else poperation[31][10]=instr[13];
@@ -1743,7 +1743,7 @@ module smallInstr_decoder(
 	      if (~instr[12]) poperation[31][12]=~instr[13];
               else poperation[31][10]=instr[13];
               prA[31]=instr[22:18];
-	      prT[31]=instr[22:18];
+	      prT[31]=instr[47:43];
 	  end
       end else if (opcode_main==8'd213) begin//shladd
           pport[31]=PORT_ALU;
