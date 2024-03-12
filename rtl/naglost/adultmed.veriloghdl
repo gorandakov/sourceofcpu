@@ -871,7 +871,7 @@ module smallInstr_decoder(
            if (opcode_sub[1]) begin
                poperation[5][7:0]=`fop_subDP;
            end else begin
-               poperation[5][7:0]=`fop_addDP;
+               poperation[5][7:0]=poperation[5][12] ? `fop_addsubDP : `fop_addDP;
            end
        end
        
