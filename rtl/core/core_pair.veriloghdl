@@ -1,0 +1,130 @@
+module heptane_core_pair(
+//most other places use named port list but here it is port declaration
+  input clk,
+  input clkREF,
+  input clkREF2,
+  input clkREF3,
+  input clkREF4,
+  input clkREF5,
+  stall_clkREF,
+  input rst,
+  input IRQ,
+  input [16:0] IRQ_data,
+  input IRQ_thr,
+  input [67:0] obusIn,
+  output [81:0] obusOutA,
+  inout obusOutA_want,
+  output obusOutA_can,
+  output [81:0] obusOutB,
+  inout obusOutB_want,
+  output obusOutB_can,
+  input [37:0] obusDIns,
+  input [511+56:0] obusDIn_data,
+  output [511+56:0] obusDOut_dataAUD,
+  output [75:0] obusDOut_iosig,
+  output obusDOut_can,
+  inout obusDOut_want,
+  output obusDOut_replay
+);
+  parameter [2:0] IDX;
+  parameter [5:0] BUS_ID=0;
+
+  wire [`lsaddr_width-1:0] lsr_wr_ext_data;
+  wire [8:0] p_ext_LSQ;
+  wire dc_ext_wrEn;
+  wire [`lsaddr_width-1:0] lsr_wr_out_data;
+  wire [8:0] p_out_LSQ;
+  wire dc_out_wrEn;
+  wire [7:0] pfxWQ;
+  wire [135:0] pfx_wdata;
+  wire [127:0] pfx_wdataU;
+  wire [3:0] pfx_pdata;
+  wire pfx_dataEn;
+  wire [7:0] pfyWQ;
+  wire [135:0] pfy_wdata;
+  wire [127:0] pfy_wdataU;
+  wire [3:0] pfy_pdata;
+  wire pfy_dataEn;
+
+  heptane_core #(IDX,BUS_ID,{BUS_ID,1'b0}) core_A(
+  clk,
+  clkREF,
+  clkREF2,
+  clkREF3,
+  clkREF4,
+  clkREF5,
+  stall_clkREF,
+  rst,
+  IRQ,
+  IRQ_data,
+  IRQ_thr,
+  obusIn,
+  obusOutA,
+  obusOutA_want,
+  obusOutA_can,
+  obusDIns,
+  obusDIn_data,
+  obusDOut_dataAUD,
+  obusDOut_iosig,
+  obusDOut_can,
+  obusDOut_want,
+  obusDOut_replay,
+  lsr_wr_ext_data,
+  p_ext_LSQ,
+  dc_ext_wrEn,
+  lsr_wr_out_data,
+  p_out_LSQ,
+  dc_out_wrEn,
+  pfxWQ,
+  pfx_wdata,
+  pfx_wdataU,
+  pfx_pdata,
+  pfx_dataEn,
+  pfyWQ,
+  pfy_wdata,
+  pfy_wdataU,
+  pfy_pdata,
+  pfy_dataEn
+  );
+
+  heptane_core #(IDX,BUS_ID,{BUS_ID,1'b1}) core_B(
+  clk,
+  clkREF,
+  clkREF2,
+  clkREF3,
+  clkREF4,
+  clkREF5,
+  stall_clkREF,
+  rst,
+  IRQ,
+  IRQ_data,
+  IRQ_thr,
+  obusIn,
+  obusOutB,
+  obusOutB_want,
+  obusOutB_can,
+  obusDIns,
+  obusDIn_data,
+  /*obusDOut_dataAUD*/,
+  /*obusDOut_iosig*/,
+  /*obusDOut_can*/,
+  obusDOut_want,
+  /*obusDOut_replay*/,
+  lsr_wr_out_data,
+  p_out_LSQ,
+  dc_out_wrEn,
+  lsr_wr_ext_data,
+  p_ext_LSQ,
+  dc_ext_wrEn,
+  pfyWQ,
+  pfy_wdata,
+  pfy_wdataU,
+  pfy_pdata,
+  pfy_dataEn,
+  pfxWQ,
+  pfx_wdata,
+  pfx_wdataU,
+  pfx_pdata,
+  pfx_dataEn
+  );
+endmodule
