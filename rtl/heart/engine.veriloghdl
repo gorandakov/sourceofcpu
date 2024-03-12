@@ -448,8 +448,8 @@ module backend(
   localparam FN_WIDTH=10;
   localparam SIMD_WIDTH=70;//half width. 68 data bits and 2 parity bits 
   localparam CONST_WIDTH=44;
-  parameter [4:0] BUS_ID=5'd0;
-  parameter [5:0] BUS_ID2=6'd0;
+  parameter [5:0] BUS_ID=5'd0;
+  parameter [6:0] BUS_ID2=6'd0;
   
   input clk;
   input clkREF;
