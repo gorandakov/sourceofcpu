@@ -396,6 +396,9 @@ module backend(
   lsr_wr_ext_data, p_ext_LSQ, dc_ext_wrEn,
   lsr_wr_out_data, p_out_LSQ, dc_out_wrEn,
 
+  pfxWQ,pfx_wdata,pfx_wdataU,pfx_pdata,pfx_dataEn,
+  pfyWQ,pfy_wdata,pfy_wdataU,pfy_pdata,pfy_dataEn,//outputs
+
   wr0_hit,
   wr0_addrE,wr0_addrO,
   wr0_banks,
@@ -982,6 +985,17 @@ module backend(
   output reg [8:0] p_out_LSQ;
   output reg dc_out_wrEn;
   
+  input [7:0] pfxWQ;
+  input [135:0] pfx_wdata;
+  input [127:0] pfx_wdataU;
+  input [3:0] pfx_pdata;
+  input pfx_dataEn;
+  output reg [7:0] pfyWQ;
+  output reg [135:0] pfy_wdata;
+  output reg [127:0] pfy_wdataU;
+  output reg [3:0] pfy_pdata;
+  output reg pfy_dataEn;
+
   output [1:0] wr0_hit;
   output       wr0_iol;
   output [35:0] wr0_addrE;
@@ -2028,7 +2042,7 @@ module backend(
   wire [1:0][127:0] lsw_wdataV0;
   reg [135:0] lsw_wdataV_reg[1:0];
   wire [1:0][135:0] lsw_wdata; 
-  wire [1:0][1:0] lsw_pdata;
+  wire [1:0][3:0] lsw_pdata;
 
   wire pause_addrcalc;
   wire miss_pause_addrcalc/* verilator public */;
@@ -5426,8 +5440,10 @@ addrcalc_block #(BUS_ID) addrcalc_aligned(
   .WQS0_reg(WQS_reg[0]),.WQR0_reg(WQR_reg[0]),
   .WQS1_reg(WQS_reg[1]),.WQR1_reg(WQR_reg[1]),
   .WQS2_reg(WQS_reg[2]),.WQR2_reg(WQR_reg[2]),
-  .lsw_wq0(WDfxWQ_reg3[0]),.lsw_wdata0(lsw_wdata[0]),.lsw_wdataX0(lsw_wdataU[0]),.lsw_pdata0(lsw_pdata[0]),.lsw_rs_en0(WDfxDataEn_reg3[0]),
-  .lsw_wq1(WDfxWQ_reg3[1]),.lsw_wdata1(lsw_wdata[1]),.lsw_wdataX1(lsw_wdataU[1]),.lsw_pdata1(lsw_pdata[1]),.lsw_rs_en1(WDfxDataEn_reg3[1]),
+  .lsw_wq0(op_ch ? pfxWQ : WDfxWQ_reg3[0]),.lsw_wdata0(op_ch ? pfx_wdata : lsw_wdata[0]),.lsw_wdataX0(op_ch ? pfx_wdataU : lsw_wdataU[0]),
+     .lsw_pdata0(op_ch? pfx_pdata : lsw_pdata[0]),.lsw_rs_en0(op_ch ? pfx_dataEn : WDfxDataEn_reg3[0]),
+  .lsw_wq1(op_cl ? pfxWQ : WDfxWQ_reg3[1]),.lsw_wdata1(op_cl ? pfx_wdata : lsw_wdata[1]),.lsw_wdataX1(op_cl ? pfx_wdataU : lsw_wdataU[1]),
+     .lsw_pdata1(op_cl ? pfx_pdata : lsw_pdata[1]),.lsw_rs_en1(op_cl ? pfx_dataEn : WDfxDataEn_reg3[1]),
   .mOpY4_II(st0_II_reg3),.mOpY4_hit(dc_wrHit[0]),
   .mOpY5_II(st1_II_reg3),.mOpY5_hit(dc_wrHit[1]),
   .lsi0_reg(rs_lsi_reg[0]),.lsi1_reg(rs_lsi_reg[1]),.lsi2_reg(rs_lsi_reg[2]),//only used to check if has mem reqs
@@ -7435,10 +7451,20 @@ dcache1 L1D_mod(
            lsr_wr_out_data<=0;
            p_out_LSQ<=0; 
            dc_out_wrEn<=0;
+           pfyWQ<=0;
+           pfy_wdata<=0;
+           pfy_wdataU<=0;
+           pfy_pdata<=0;
+           pfy_dataEn<=0;
       end else begin
-           lsr_wr_out_data<=lsr_wr_data[4+op_ch];
-           p_out_LSQ<=p_LSQ[4+op_ch];
-           dc_out_wrEn<=dc_rwEn[op_ch];
+           lsr_wr_out_data<=lsr_wr_data[H];
+           p_out_LSQ<=p_LSQ[H];
+           dc_out_wrEn<=dc_rwEn[H];
+           pfyWQ<=outWDFxWQ_reg3[H];
+           pfy_wdata<=lsw_wdata[H];
+           pfy_wdataU<=lsw_wdataU[H];
+           pfy_pdata<=lsw_pdata[H];
+           pfy_dataEn<=outWDFxDataEn_reg3[H];
       end
       if (rst) begin
 	  for(k=0;k<4;k=k+1) begin
