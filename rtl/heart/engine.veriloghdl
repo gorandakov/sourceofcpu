@@ -393,6 +393,9 @@ module backend(
   reqBus_register,
   reqBus_LSQ,
 
+  lsr_wr_ext_data, p_ext_LSQ, dc_ext_wrEn,
+  lsr_wr_out_data, p_out_LSQ, dc_out_wrEn,
+
   wr0_hit,
   wr0_addrE,wr0_addrO,
   wr0_banks,
@@ -971,6 +974,13 @@ module backend(
   output reg [4:0] reqBus_bank0;
   output reg [8:0] reqBus_register;
   output reg [8:9] reqBus_LSQ;
+
+  input [`lsaddr_width-1:0] lsr_wr_ext_data;
+  input [8:0] p_ext_LSQ;
+  input dc_ext_wrEn;
+  output reg [`lsaddr_width-1:0] lsr_wr_out_data;
+  output reg [8:0] p_out_LSQ;
+  output reg dc_out_wrEn;
   
   output [1:0] wr0_hit;
   output       wr0_iol;
@@ -5363,6 +5373,9 @@ addrcalc_block #(BUS_ID) addrcalc_aligned(
   );
 `endif
  
+  assign op_cl=L && mflags[`mflags_vec];
+  assign op_ch=H && mflags[`mflags_vec];
+
   fun_lsq LSQ_grouped(
   .clk(clk),
   .rst(rst|do_rst_sched),
@@ -5376,8 +5389,8 @@ addrcalc_block #(BUS_ID) addrcalc_aligned(
   .p1_adata(lsr_wr_data[1]),.p1_LSQ(dc_LSQ[1]),.p1_en(dc_rdEn[1]),.p1_rsEn(dc_rsEn[1]),.p1_smpc(p_repl[1]),.p1_lsfwd(p_lsfwd[1]),
   .p2_adata(lsr_wr_data[2]),.p2_LSQ(dc_LSQ[2]),.p2_en(dc_rdEn[2]),.p2_rsEn(dc_rsEn[2]),.p2_smpc(p_repl[2]),.p2_lsfwd(p_lsfwd[2]),
   .p3_adata(lsr_wr_data[3]),.p3_LSQ(dc_LSQ[3]),.p3_en(dc_rdEn[3]),.p3_rsEn(dc_rsEn[3]),.p3_smpc(p_repl[3]),.p3_lsfwd(p_lsfwd[3]),
-  .p4_adata(lsr_wr_data[4]),.p4_LSQ(p_LSQ[4]),.p4_en(dc_wrEn[0]),
-  .p5_adata(lsr_wr_data[5]),.p5_LSQ(p_LSQ[5]),.p5_en(dc_wrEn[1]),
+  .p4_adata(op_ch ? lsr_wr_ext_data :lsr_wr_data[4]),.p4_LSQ(op_ch ? p_ext_LSQ : p_LSQ[4]),.p4_en(op_ch ? dc_ext_wrEn : dc_wrEn[0]),
+  .p5_adata(op_cl ? lsr_wr_ext_data :lsr_wr_data[5]),.p5_LSQ(op_cl ? p_ext_LSQ : p_LSQ[5]),.p5_en(op_cl ? dc_ext_wrEn : dc_wrEn[1]),
   .FU0Hit(FU0Hit|p0_sec_reg2),.FU0Data(dc_rdataA[0]),//not rdat[0]
   .FU1Hit(FU1Hit|p1_sec_reg2),.FU1Data(dc_rdataA[1]),//
   .FU2Hit(FU2Hit|p2_sec_reg2),.FU2Data(dc_rdataA[2]),//
@@ -5434,17 +5447,17 @@ addrcalc_block #(BUS_ID) addrcalc_aligned(
   .u1_A1({70+16{~clkREF}}&outDataAVH_regn[0]),.u1_B1({70+16{~clkREF2}}&outDataBVH_regn[0]),.u1_en(outEn_reg_n[1]),.u1_op(outOp_reg_n[1]),
   .u1_fufwd_A({4{~clkREF}}&fuFwdA_reg_n[1]),.u1_fuufwd_A({4{~clkREF}}&fuuFwdA_reg_n[1]),
   .u1_fufwd_B({4{~clkREF2}}&fuFwdB_reg_n[1]),.u1_fuufwd_B({4{~clkREF2}}&fuuFwdB_reg_n[1]),
-  .u1_ret(fretA[0]),.u1_ret_en(fretA_en[0]),.u1_XADD(outXAM_reg_n[1]),
+  .u1_ret(fretA[0]),.u1_ret_en(fretA_en[0]),.u1_XADD(outXAM_reg_n[1]),.u1_flag(FUS_alu_reg[0]),
   .u3_A0({70+16{~clkREF}}&outDataAVL_regn[2]),.u3_B0({70+16{~clkREF2}}&outDataBVL_regn[2]),
   .u3_A1({70+16{~clkREF}}&outDataAVH_regn[2]),.u3_B1({70+16{~clkREF2}}&outDataBVH_regn[2]),.u3_en(outEn_reg_n[4]),.u3_op(outOp_reg_n[4]),
   .u3_fufwd_A({4{~clkREF}}&fuFwdA_reg_n[4]),.u3_fuufwd_A({4{~clkREF}}&fuuFwdA_reg_n[4]),
   .u3_fufwd_B({4{~clkREF2}}&fuFwdB_reg_n[4]),.u3_fuufwd_B({4{~clkREF2}}&fuuFwdB_reg_n[4]),
-  .u3_ret(fretA[2]),.u3_ret_en(fretA_en[2]),.u3_XADD(outXAM_reg_n[4]),
+  .u3_ret(fretA[2]),.u3_ret_en(fretA_en[2]),.u3_XADD(outXAM_reg_n[4]),.u3_flag(FUS_alu_reg[2]),
   .u5_A0({70+16{~clkREF}}&outDataAVL_regn[4]),.u5_B0({70+16{~clkREF2}}&outDataBVL_regn[4]),
   .u5_A1({70+16{~clkREF}}&outDataAVH_regn[4]),.u5_B1({70+16{~clkREF2}}&outDataBVH_regn[4]),.u5_en(outEn_reg_n[7]),.u5_op(outOp_reg_n[7]),
   .u5_fufwd_A({4{~clkREF}}&fuFwdA_reg_n[7]),.u5_fuufwd_A({4{~clkREF}}&fuuFwdA_reg_n[7]),
   .u5_fufwd_B({4{~clkREF2}}&fuFwdB_reg_n[7]),.u5_fuufwd_B({4{~clkREF2}}&fuuFwdB_reg_n[7]),
-  .u5_ret(fretA[4]),.u5_ret_en(fretA_en[4]),.u5_XADD(outXAM_reg_n[7]),
+  .u5_ret(fretA[4]),.u5_ret_en(fretA_en[4]),.u5_XADD(outXAM_reg_n[7]),.u5_flag(FUS_alu_reg[4]),
   .FUFH0(FUFXH[0]),.FUFH1(FUFXH[1]),.FUFH2(FUFXH[2]),
   .FUFH3(FUFXH[3]),.FUFH4(FUFXH[4]),.FUFH5(FUFXH[5]),
   .FUFH6(FUFXH[6]),.FUFH7(FUFXH[7]),.FUFH8(FUFXH[8]),
@@ -5485,18 +5498,18 @@ addrcalc_block #(BUS_ID) addrcalc_aligned(
   .u1_A1({70+16{~clkREF}}&outDataAFH_regn[1]),.u1_B1({70+16{~clkREF2}}&outDataBFH_regn[1]),.u1_en(outEn_reg2_n[2]),.u1_op(outOp_reg2_n[2]),
   .u1_fufwd_A({4{~clkREF}}&fuFwdA_reg2_n[2]),.u1_fuufwd_A({4{~clkREF}}&fuuFwdA_reg2_n[2]),
   .u1_fufwd_B({4{~clkREF2}}&fuFwdB_reg2_n[2]),.u1_fuufwd_B({4{~clkREF2}}&fuuFwdB_reg2_n[2]),
-  .u1_ret(fretB[1]),.u1_ret_en(fretB_en[1]),.u1_XADD(outXAM_reg2_n[2]),
+  .u1_ret(fretB[1]),.u1_ret_en(fretB_en[1]),.u1_XADD(outXAM_reg2_n[2]),.u1_flag(FUS_alu_reg2[1]),
   .u3_A0({70+16{~clkREF}}&outDataAFL_regn[3]),.u3_B0({70+16{~clkREF2}}&outDataBFL_regn[3]),
   .u3_A1({70+16{~clkREF}}&outDataAFH_regn[3]),.u3_B1({70+16{~clkREF2}}&outDataBFH_regn[3]),.u3_en(outEn_reg2_n[5]),.u3_op(outOp_reg2_n[5]),
   .u3_fufwd_A({4{~clkREF}}&fuFwdA_reg2_n[5]),.u3_fuufwd_A({4{~clkREF}}&fuuFwdA_reg2_n[5]),
   .u3_fufwd_B({4{~clkREF2}}&fuFwdB_reg2_n[5]),.u3_fuufwd_B({4{~clkREF2}}&fuuFwdB_reg2_n[5]),
-  .u3_ret(fretB[3]),.u3_ret_en(fretB_en[3]),.u3_XADD(outXAM_reg2_n[5]),
+  .u3_ret(fretB[3]),.u3_ret_en(fretB_en[3]),.u3_XADD(outXAM_reg2_n[5]),.u3_flag(FUS_alu_reg2[3]),
   .u5_A0({70+16{~clkREF}}&outDataAFL_regn[5]),.u5_B0({70+16{~clkREF2}}&outDataBFL_regn[5]),  
   .u5_A1({70+16{~clkREF}}&outDataAFH_regn[5]),.u5_B1({70+16{~clkREF2}}&outDataBFH_regn[5]),
   .u5_en(outEn_reg2_n[8]),.u5_op({outOp_reg2_n[8][20:18],outOp_reg2_n[8][17:13]>>2,outOp_reg2[8][12:0]}),
   .u5_fufwd_A({4{~clkREF}}&fuFwdA_reg2_n[8]),.u5_fuufwd_A({4{~clkREF}}&fuuFwdA_reg2_n[8]),
   .u5_fufwd_B({4{~clkREF2}}&fuFwdB_reg2_n[8]),.u5_fuufwd_B({4{~clkREF2}}&fuuFwdB_reg2_n[8]),
-  .u5_ret(fretB[5]),.u5_ret_en(fretB_en[5]),.u5_XADD(outXAM_reg2_n[8]),
+  .u5_ret(fretB[5]),.u5_ret_en(fretB_en[5]),.u5_XADD(outXAM_reg2_n[8]),.u5_flag(FUS_alu_reg2[5]),
   .FUFH0(FUFH[0]),.FUFH1(FUFH[1]),.FUFH2(FUFH[2]),
   .FUFH3(FUFH[3]),.FUFH4(FUFH[4]),.FUFH5(FUFH[5]),
   .FUFH6(FUFH[6]),.FUFH7(FUFH[7]),.FUFH8(FUFH[8]),
@@ -7418,15 +7431,15 @@ dcache1 L1D_mod(
           end
       end
 
-     /* if (rst) begin
-          retM_ret_ret<=1'b1;
-          //retM_on_next<=1'b0;
-          retM_data_shr_reg<={`lsqshare_width{1'b0}};
+      if (rst) begin
+           lsr_wr_out_data<=0;
+           p_out_LSQ<=0; 
+           dc_out_wrEn<=0;
       end else begin
-          if (retB_clkEn & ~retM_do_tire) retM_ret_ret<=1'b0;
-          else if (retM_do_tire & ~retB_clkEn) retM_ret_ret<=1'b1;
-          if (retM_ret_ret|retM_do_tire) retM_data_shr_reg<=retM_data_shr;
-      end*/
+           lsr_wr_out_data<=lsr_wr_data[4+op_ch];
+           p_out_LSQ<=p_LSQ[4+op_ch];
+           dc_out_wrEn<=dc_rwEn[op_ch];
+      end
       if (rst) begin
 	  for(k=0;k<4;k=k+1) begin
 	      fxLD_dbl[k]=1'b1;
