@@ -1862,7 +1862,7 @@ module smallInstr_decoder(
       prT[33]=instr[31:27];
       prT_useF[33]=1'b1;
       prA_useF[33]=1'b1;
-      prB_useF[33]=1'b1;
+      prB_useF[33]=~instr[3];
       prAlloc[33]=1'b1;
       if (poperation[33][7:0]!=`fop_mulDL && poperation[33][7:0]!=`fop_mulDH && poperation[33][7:0]!=`fop_mulDP && |instr[15:14]) begin
          {poperation[33][12],poperation[33][9:8]}=instr[16:14];
@@ -1902,7 +1902,7 @@ module smallInstr_decoder(
       end
       prT_useF[34]=1'b1;
       prA_useF[34]=1'b1;
-      prB_useF[34]=1'b1;
+      prB_useF[34]=~instr[3];
       prAlloc[34]=1'b1;
       {poperation[34][10],poperation[34][9:8]}=instr[16:14];
       case(instr[13:8])
@@ -1986,7 +1986,7 @@ module smallInstr_decoder(
       end
       prT_useF[36]=1'b1;
       prA_useF[36]=1'b0;
-      prB_useF[36]=1'b1;
+      prB_useF[36]=~instr[3];
       prAlloc[36]=1'b1;
       {poperation[36][11],poperation[36][9:8]}={1'b0,instr[15:14]};
       if (instr[16]!=0) perror[36]=1;
@@ -2021,7 +2021,7 @@ module smallInstr_decoder(
       end
       prT_useF[37]=1'b0;
       prA_useF[37]=1'b1;
-      prB_useF[37]=1'b1;
+      prB_useF[37]=~instr[3];
       prAlloc[37]=1'b1;
       pflags_write[37]=1'b1;
       poperation[37][9:8]={2{instr[16]}};
@@ -2058,7 +2058,7 @@ module smallInstr_decoder(
 	  perror[38]=1;
       end
       prA_useF[38]=1'b1;
-      prB_useF[38]=1'b1;
+      prB_useF[38]=~instr[3];
       prAlloc[38]=1'b1;
       pflags_write[38]=1'b1;
       poperation[38][10]=instr[16]; //signed/single
@@ -2099,7 +2099,7 @@ module smallInstr_decoder(
 	  perror[39]=1;
       end
       prA_useF[39]=1'b1;
-      prB_useF[39]=1'b1;
+      prB_useF[39]=~instr[3];
       prAlloc[39]=1'b1;
       pflags_write[39]=1'b1;
       poperation[39][10]=instr[16]; //signed/single
