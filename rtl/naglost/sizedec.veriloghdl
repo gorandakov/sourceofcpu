@@ -18,10 +18,14 @@ limitations under the License.
 `include "../struct.sv"
 `include "../msrss_no.sv"
 
-module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
+module predecoder_class(instr,magic,flag,thread,class_,isLNK,isRet,LNK);
+  parameter LARGE_CORE=0;
+  parameter H=0;
+
   input [31:0] instr;
   input [3:0] magic;
   input flag;
+  input thread;
   output [12:0] class_;
   output isLNK;
   output isRet;
@@ -194,6 +198,8 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
 
   assign isCallPrep=(opcode_main==8'd199) && magic[0];
 
+  assign isPtrBump_other_domain=opcode_main==8'hf7 && magic[1:0]==2'b01 && (LARGE_CORE&H)|(~LARGE_CORE&thread);
+
   assign thisSpecLoad=isBaseSpecLoad || isBaseIndexSpecLoad || isBaseSpecStore || isBaseIndexSpecStore || 
       ({instr[11],instr[15:12]}==5'd16 &&  opcode_main[7:0]==8'b10110000) || 
       ({instr[1],instr[15:12]}==5'd15 && opcode_main[7:2]==6'd15);
@@ -228,6 +234,7 @@ module predecoder_class(instr,magic,flag,class_,isLNK,isRet,LNK);
   
   assign clsALU=|{
   isBasicALU & ~isBasicALUExcept & ~isBasicXOR,
+  isPtrBump_other_domain,
   isCexALU & ~instr[12] & ~instr[10],
   isBasicCmpTest,
   isBasicCJump & magic[0],
@@ -351,6 +358,7 @@ endmodule
 module predecoder_get(
     clk,
     rst,
+    thread,
     bundle,btail,bstop,
     bnext,bnext_tail,has_next,
     startOff,
@@ -371,9 +379,12 @@ module predecoder_get(
     lnkLink0,lnkOff0,lnkMagic0,lnkRet0,lnkJumps0
     );
     localparam CLSWIDTH=12;
-    
+    parameter LARGE_CORE=0;
+    parameter H=0;
+
     input clk;
     input rst;
+    input thread;
     input [255:0] bundle;
     input [63:0] btail;
     input [3:0] bstop;
@@ -470,7 +481,7 @@ module predecoder_get(
             //verilator lint_off WIDTH
             assign kk=boogy_baboogy(bstop[3:0],k==0 && bundle0[255],5'hf,5'he,5'hd,5'hc,k[4:0]);
             //verilator lint_on WIDTH
-            predecoder_class cls_mod(bundleF[k*16+:32],~instrEndF[k+:4],flag_bits0[k],class_[k],
+            predecoder_class #(LARGE_CORE,H) cls_mod(bundleF[k*16+:32],~instrEndF[k+:4],flag_bits0[k],thread,class_[k],
               is_lnk0[k],is_ret0[k],LNK[k]);
             popcnt20 cntJ_mod(is_jmp[19:0] & ((20'b10<<k)-20'b1),cntJEnd[k]);
             popcnt20 cntL_mod(is_lnk[19:0] & ((20'b10<<k)-20'b1),lcnt[k]);

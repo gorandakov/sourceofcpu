@@ -368,7 +368,10 @@ module ww(
   localparam BUS_WIDTH=BUS_BANK*16;
   localparam CLS_WIDTH=13;
   localparam DATA_WIDTH=65;
-  parameter [4:0] BUS_ID=0;
+  parameter [5:0] BUS_ID=0;
+  parameter [6:0] BUS_ID2=0;
+  parameter LARGE_CORE=0;
+  parameter H=0;
   input clk;
   input rst;
   input sched_rst;
@@ -971,7 +974,7 @@ module ww(
   );  
 
 
-frontendSelf #(0,BUS_ID) frontA_mod(
+frontendSelf #(0,BUS_ID,BUS_ID2,LARGE_CORE,H) frontA_mod(
   clk,
   rst,
   sched_rst,
@@ -1039,7 +1042,7 @@ frontendSelf #(0,BUS_ID) frontA_mod(
   expun_fr_en
   );
   
-frontendSelf #(1,BUS_ID) frontB_mod(
+frontendSelf #(1,BUS_ID,BUS_ID2,LARGE_CORE,H) frontB_mod(
   clk,
   rst,
   sched_rst,

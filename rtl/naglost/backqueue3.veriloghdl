@@ -97,8 +97,10 @@ module frontendSelf(
   localparam DATA_WIDTH=65*8;
   localparam INSTR_WIDTH=80;
   localparam CLS_WIDTH=13;
-  parameter [4:0] BUS_ID=0;
-  parameter [5:0] BUS_ID2=0;
+  parameter [5:0] BUS_ID=0;
+  parameter [6:0] BUS_ID2=0;
+  parameter LARGE_CORE=0;
+  paremeter H=0;
 
 /*verilator public_module*/ 
   input clk;
@@ -1338,9 +1340,10 @@ module frontendSelf(
   .write_wen(req_en|req_mlbEn)
   );
 
-  predecoder_get preDec_mod(
+  predecoder_get #(LARGE_CORE,H) preDec_mod(
     .clk(clk),
     .rst(rst),
+    .thread(thread),
     .bundle({read_data[258:195],read_data[193:130],read_data[128:65],read_data[63:0]}),
     .btail(read_data_reg[239:176]),
     .bstop(read_data_reg[254:251]),
