@@ -185,7 +185,8 @@ module dcache2_bank(
   write_begin1,write_end1,
   write_bBen1,write_enBen1,
   write_data,
-  ins_hit
+  ins_hit,
+  pook_pokahontas
   );
   localparam ADDR_WIDTH=8;
   localparam DATA_WIDTH=32;
@@ -221,6 +222,7 @@ module dcache2_bank(
   input [3:0] write_enBen1;
   input [DATA_WIDTH-1:0] write_data;
   input ins_hit;
+  input pook_pokahontas;
   
  // wire [ADDR_WIDTH-1:0] read_addr[1:0];
   wire [DATA_WIDTH-1:0] read_data_ram[1:0];
@@ -276,9 +278,9 @@ module dcache2_bank(
   .read_addr(write_addrE),//read/write addr
   .read_data(read_data_ram[0]),
   .read_datax(read_datax_ram[0]),
-  .write_data(write_data),
-  .write_wen((write_bankEn && write_hitE0|write_hitE1)|(ins_hit&~read_odd)),
-  .write_ben(write_ben)
+  .write_data(write_data|{{DATA_WIDTH{pook_pokahontas}}&read_data_ram[0]}),
+  .write_wen((write_bankEn && write_hitE0|write_hitE1)|(ins_hit|pook_pokahontas&&~read_odd)),
+  .write_ben(write_ben|{4{pook_pokahontas}})
   );
 
   dcache2_ram_box ramO_mod(
@@ -288,9 +290,9 @@ module dcache2_bank(
   .read_addr(write_addrO),//read/write addr
   .read_data(read_data_ram[1]),
   .read_datax(read_datax_ram[1]),
-  .write_data(write_data),
-  .write_wen((write_bankEn && write_hitO0|write_hitO1)|(ins_hit&read_odd)),
-  .write_ben(write_ben)
+  .write_data(write_data|{{DATA_WIDTH{pook_pokahontas}}&read_data_ram[1]}),
+  .write_wen((write_bankEn && write_hitO0|write_hitO1)|(ins_hit|pook_pokahontas&&read_odd)),
+  .write_ben(write_ben|{4{pook_pokahontas}})
   );
   
   
@@ -301,16 +303,12 @@ module dcache2_bank(
             read_odd_reg<=1'b0;
             read_en_reg<=1'b0;
             ins_hit_reg<=1'b0;
-        //    read_data_ram_reg[0]<={DATA_WIDTH{1'B0}};
-        //    read_data_ram_reg[1]<={DATA_WIDTH{1'B0}};
         end
       else
         begin
             read_odd_reg<=read_odd;
             read_en_reg<=read_en;
             ins_hit_reg<=ins_hit;
-        //    read_data_ram_reg[0]<=read_data_ram[0];
-        //    read_data_ram_reg[1]<=read_data_ram[1];
         end
     end
   
@@ -661,7 +659,7 @@ module dcache2_way(
   write_dataPTR,
   ins_hit,
   insert,
-  insert_excl,insert_dirty,insert_dupl,
+  insert_excl,insert_dirty,insert_dupl,insert_pook,
   hit_LRU, read_LRU, read_dir, read_excl, read_expAddr,
   read_LRU_in, read_dir_in, read_excl_in, read_expAddr_in,
   expAddr_en,
@@ -724,6 +722,7 @@ module dcache2_way(
   input insert_excl;
   input insert_dirty;
   input insert_dupl;
+  input insert_pook;
   input [4:0] hit_LRU;
   output [4:0] read_LRU;
   output [1:0] read_dir;
@@ -860,6 +859,9 @@ module dcache2_way(
  
   reg [7:0] expun_dc_addr_reg;
   reg [7:0] expun_cc_addr_reg;
+
+  reg insert_pook_reg;
+  reg insert_pook_reg2;
 
   wire read_enL,read_enH;
   reg write0_hitEL_reg;
@@ -1138,7 +1140,8 @@ module dcache2_way(
           .write_begin1(write_begin1_reg2),.write_end1(write_end1_reg2),
           .write_bBen1(write_bBen1_reg2),.write_enBen1(write_enBen1_reg2),
           .write_data(write_data[DATA_WIDTH*b+:DATA_WIDTH]),
-          .ins_hit(ins_hit_reg)
+          .ins_hit(ins_hit_reg),
+          .pook_pokahontas(insert_pook_reg2)
           );
           dcache2_bank #(b[4:0]+5'd16,ID[0]) bankH_mod(
           .clk(clk),
@@ -1160,7 +1163,8 @@ module dcache2_way(
           .write_begin1(write_begin1_reg2),.write_end1(write_end1_reg2),
           .write_bBen1(write_bBen1_reg2),.write_enBen1(write_enBen1_reg2),
           .write_data(write_data[DATA_WIDTH*(b+16)+:DATA_WIDTH]),
-          .ins_hit(ins_hit_reg)
+          .ins_hit(ins_hit_reg),
+          .pook_pokahontas(insert_pook_reg2)
           );
       end
   endgenerate
@@ -1241,6 +1245,8 @@ module dcache2_way(
 	  write0_hitE_reg<=1'b0;
 	  write0_hitO_reg<=1'b0;
 	  read_inL1<=1'b0;
+          insert_pook_reg<=1'b0;
+          insert_pook_reg2<=1'b0;
 	  expun_cc_addr_reg<=8'b0;
 	  expun_dc_addr_reg<=8'b0;
       end else begin
@@ -1318,6 +1324,8 @@ module dcache2_way(
 	  write0_hitE_reg<=write0_hitE;
 	  write0_hitO_reg<=write0_hitO;
 	  read_inL1<=expun_imm&read_en_reg&ins_hit;
+          insert_pook_reg<=insert_pook;
+          insert_pook_reg2<=insert_pook_reg;
 	  expun_cc_addr_reg<=expun_cc_addr[7:0];
 	  expun_dc_addr_reg<=expun_dc_addr[7:0];
       end
@@ -1441,7 +1449,7 @@ module dcache2_block(
   insBus_B,
 //  ins_hit,
   insert,
-  insert_excl,insert_dirty,insert_dupl,
+  insert_excl,insert_dirty,insert_dupl,insert_pook,
   hit_LRU,read_LRU,hit_any,immoral_some,read_dir,read_excl,read_expAddrOut,
   read_expAddr_en,
   expun_cc_addr,
@@ -1503,6 +1511,7 @@ module dcache2_block(
   input insert_excl;
   input insert_dirty;
   input insert_dupl;
+  input insert_pook;
   input [4:0] hit_LRU;
   output reg [4:0] read_LRU;
   output reg hit_any;
@@ -1587,7 +1596,7 @@ module dcache2_block(
           write_dataPTR_reg2,
           ins_hit[k],
           insert,
-          insert_excl,insert_dirty,insert_dupl,
+          insert_excl,insert_dirty,insert_dupl,insert_pook,
           hit_LRU,
 	  ways_gen[k].read_LRUp,ways_gen[k].read_dirP,ways_gen[k].read_exclP,ways_gen[k].read_expAddrP,
 	  ways_gen[k-1].read_LRUp,ways_gen[k-1].read_dirP,ways_gen[k-1].read_exclP,ways_gen[k-1].read_expAddrP,
