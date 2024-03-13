@@ -363,6 +363,9 @@ module addrcalc(
   assign mlb_data=mlb_data0;
   assign mlb_data_next=mlb_data1;
 
+  assign na=|(mlb_data[`dmlbData_na]&(4'b1<<addrTlb[13:12])) || |(mlb_data[`dmlbData_na]&(1'b1<<(addrTlb[13:12]+2'd1))) & addrNext[12] & mOp_split_X;
+  assign na_next= |(mlb_data_next[`dmlbData_na]&(1'b1<<(addrTlb[13:12]+2'd1))) & addrNext[12] & mOp_split_X;
+
   assign mOp_type=mlb_data[`dmlbData_type];
   assign mOp_addrEven[43:13]=(addrMain[7] && addrNext[14]) ? mlb_data_next[`dmlbData_phys] :
     31'bz;
@@ -423,8 +426,8 @@ module addrcalc(
   
   assign mflags0=mflags[thread];
   
-  assign fault_mlb={mflags0[`mflags_priv+1] & mlb_data[`dmlbData_user] , ~mlb_data[`dmlbData_na]}; 
-  assign fault_mlb_next={mflags0[`mflags_priv+1] & mlb_data_next[`dmlbData_user],  ~mlb_data_next[`dmlbData_na]}; 
+  assign fault_mlb={mflags0[`mflags_priv+1] & mlb_data[`dmlbData_user] , ~na}; 
+  assign fault_mlb_next={mflags0[`mflags_priv+1] & mlb_data_next[`dmlbData_user],  ~na_next}; 
 
   adder #(15) nextCAddr_mod({1'b0,cmplxAddr[13:0]},15'b10000000,addrNext,1'b0,1'b1,,,,);
   

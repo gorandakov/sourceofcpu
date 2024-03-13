@@ -409,6 +409,12 @@ module addrcalc_r(
 
   assign mOp_skip_LDQ=~mlb_data[`dmlbData_wp] && ~mlb_data_next[`dmlbData_wp]|~page_carry;
 
+  assign mlb_data=mlb_data0;
+  assign mlb_data_next=mlb_data1;
+
+  assign na=|(mlb_data[`dmlbData_na]&(4'b1<<addrMain[13:12])) || |(mlb_data[`dmlbData_na]&(1'b1<<(addrMain[13:12]+2'd1))) & addrNext[12] & mOp_split_X;
+  assign na_next= |(mlb_data_next[`dmlbData_na]&(1'b1<<(addrMain[13:12]+2'd1))) & addrNext[12] & mOp_split_X;
+
   assign mOp_addrEven[43:13]=(~mOp0_lsfwd_reg & ~req_bus && ~page_carry | ~addrMain[8]) ? 
     mlb_data[`dmlbData_phys] : 31'bz;
   assign mOp_addrEven[43:13]=(~mOp0_lsfwd_reg & ~req_bus && page_carry && addrMain[8]) ?
