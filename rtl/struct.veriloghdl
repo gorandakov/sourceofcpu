@@ -65,16 +65,18 @@ limitations under the License.
 `define dcache2_data_width 39
 `define dcache2_way_count 12
 
-`define page_wc 2
 `define page_global 8
 `define page_huge 7
-`define page_dirty 6
-`define page_accessed 5
-`define page_nc 4
-`define page_wt 3
-`define page_user 1
+`define page_semaphore 6
+`define page_mtype 5:4
+`define page_user 13
 `define page_wr 12:9
-`define page_na 0
+`define page_na 3:0
+`define page_ne 62
+`define page_rd_perm_ignored 63
+`define page_wr_perm_ignored 61
+`define page_acc_ignored 60
+`define page_dirty_ignored 59
 
 `define page16_addr0 33:0
 `define page16_addr1 67:34
@@ -311,18 +313,15 @@ limitations under the License.
 
 
 
-`define dmlbData_phys 29:0
-`define dmlbData_user 30
-`define dmlbData_wp 34:31
-`define dmlbData_na 35
-`define dmlbData_ne 36
-`define dmlbData_glo 37
+`define dmlbData_phys 28:0
+`define dmlbData_user 29
+`define dmlbData_wp 33:30
+`define dmlbData_na 37:34
 `define dmlbData_type 39:38
-`define dmlbData_acc 40
-`define dmlbData_wrt 41
+`define dmlbData_glo 40
+`define dmlbData_semaphore_area 41
 `define dmlbData_subpage 42
-`define dmlbData_semaphore_area 43
-`define dmlbData_width 44
+`define dmlbData_width 43
 
 
 `define dmlb_vaddr 49:0
