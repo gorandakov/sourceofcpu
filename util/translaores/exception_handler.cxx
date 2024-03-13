@@ -34,12 +34,14 @@ int exception_handler( hcont *context ) {
           off<<=3;
           off|=(insn[2+xoffA*2]&0xc0)>>5;
           break;
+#ifdef use_insn_not_in_spec
         case OP_CLOOP_A:
         case OP_CLOOP_B:
           off=((signed short) (insn[3+xoffA*2]&0xf)<<12));
           off|=insn[2+xoffA*2]<<4;
           off|=(insn[1]&0xe0)>>4;
         break;
+#endif
         default:
           exit(0);
   } else  if (((stop_bits >> pos >>2)&1) && pos!=13) {
