@@ -2,7 +2,7 @@
 struct transl_header {
     unsigned short target_and_class[6];
     unsigned char source[3]; //nibble per source
-    unsigned char dummy;
+    unsigned char vectorisable; //bit per vectorisable
 };
 
 struct transl_context {
