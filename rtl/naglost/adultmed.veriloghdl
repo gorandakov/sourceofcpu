@@ -409,8 +409,8 @@ module smallInstr_decoder(
   //224-230=and16,and8,or16,or8
   assign isCexALU=opcode_main==8'd222;
   //231-232=cloop no sub
-  assign isCLeave=opcode_main==8'd235 || opcode_main[7:1]==7'd118 || opcode_main[7:1]==7'd119;  
-  
+  assign isCLeave=opcode_main==8'd235 || opcode_main==8'd236 || opcode_main==8'd238;  
+  //237 and 239 unused so far
   assign isPtrBump_other_domain=opcode_main==8'hf7 && magic[1:0]==2'b01;
 
   assign isBasicFPUScalarA=opcode_main[7:4]==5'h1f && ~&opcode_main[2:0] && instr[13:12]==2'b0;
@@ -1269,12 +1269,12 @@ module smallInstr_decoder(
       prB[16]=instr[22:18];
       if (magic[1:0]!=2'b01) perror[16]=2'b1;
       if (!isPtrSec && instr[28]) begin
-	  prA[16]={3'b0,instr[5],1'b0};
+	  prA[16]={3'b0,instr[27],1'b0};
 	  puseBConst[16]=1'b1;
 	  pconstant[16]={64{~instr[5]}};
-	  prT[16]={3'b0,instr[5],1'b0};
+	  prT[16]={3'b0,instr[27],1'b0};
 	  perror[16]=2'b0;
-	  //jump imm={instr[27:9],1'b0}
+	  //jump imm={instr[26:9],1'b0}
       end
     
       trien[17]=magic[0] && isBaseSpecLoad|isBaseSpecStore;
