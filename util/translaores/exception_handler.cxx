@@ -13,24 +13,26 @@ int exception_handler( hcont *context ) {
   unsigned short stop_bits=*(short *) IP_j;
   int pos=IP_i&0x1f;
   unsigned long off;
+  unsigned long xoffA=pos==14;
+  unsigned long xoffB=pos==13 || pos==14;
   if ((stop_bits >> pos)&1) {
       exit(0);
-  } else  if (((stop_bits >> pos >>1)&1) && pos!=14) {
+  } else  if (((stop_bits >> pos >>1)&1)) {
       switch(insn[0]) {
         case OP_CMP_JMP:
-          off=(unsigned long) (signed char) insn[3];
+          off=(unsigned long) (signed char) insn[3+xoffA*2];
           off<<=2;
-          off|=(insn[2]&0x80)>>6;
+          off|=(insn[2+xoffa*2]&0x80)>>6;
           break;
         case OP_UCJUMP:
-          off=((unsigned long) (signed char) insn[3])<<17;
-          off|=insn[2]<<9;
+          off=((unsigned long) (signed char) insn[3+xoffA*2])<<17;
+          off|=insn[2+xoffA*2]<<9;
           off|=insn[1]<<1;
           break;
         case OP_CJUMP:
-          off=(unsigned long) (signed char) insn[3];
+          off=(unsigned long) (signed char) insn[3+xoffA*2];
           off<<=3;
-          off|=(insn[2]&0xc0)>>5;
+          off|=(insn[2+xoffA*2]&0xc0)>>5;
           break;
         default:
           exit(0);
@@ -38,10 +40,10 @@ int exception_handler( hcont *context ) {
       switch(insn[0]) {
         case OP_UCJUMP:
         case OP_CJUMP:
-          off=((unsigned long) (signed char) insn[5])<<24;
-          off|=insn[4]<<16;
-          off|=insn[3]<<8;
-          off|=insn[2]&0xfe;
+          off=((unsigned long) (signed char) insn[5+2*xoffB])<<24;
+          off|=insn[4+2*xoffB]<<16;
+          off|=insn[3+2*xoffA]<<8;
+          off|=insn[2+2*xoffA]&0xfe;
           break;
         default:
           exit(0);
