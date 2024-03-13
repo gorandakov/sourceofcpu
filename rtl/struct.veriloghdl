@@ -321,7 +321,8 @@ limitations under the License.
 `define dmlbData_acc 40
 `define dmlbData_wrt 41
 `define dmlbData_subpage 42
-`define dmlbData_width 43
+`define dmlbData_semaphore_area 43
+`define dmlbData_width 44
 
 
 `define dmlb_vaddr 49:0
