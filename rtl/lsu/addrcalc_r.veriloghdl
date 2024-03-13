@@ -128,7 +128,7 @@ module addrcalc_r(
   input [PADDR_WIDTH-9:0] mOp0_addrEven;
   input [PADDR_WIDTH-9:0] mOp0_addrOdd;
   input mOp0_lsfwd;
-  input [1:0] mOp0_type;
+  input [2:0] mOp0_type;
   input mOp0_odd;
   input [1:0] mOp0_addr_low;
   input [3+1:0] mOp0_bread;
@@ -181,7 +181,7 @@ module addrcalc_r(
   output [9:0] mOp_II;
   output [5:0] mOp_WQ;
   output mOp_lsfwd;
-  output [1:0] mOp_type;
+  output [2:0] mOp_type;
   output [3+1:0] mOp_bread;
   output [127+8:0] mOp_data;
   output [1:0] mOp_pbit;
@@ -268,7 +268,7 @@ module addrcalc_r(
   reg [PADDR_WIDTH-9:0] mOp0_addrEven_reg;
   reg [PADDR_WIDTH-9:0] mOp0_addrOdd_reg;
   reg mOp0_lsfwd_reg;
-  reg [1:0] mOp0_type_reg;
+  reg [2:0] mOp0_type_reg;
   reg mOp0_odd_reg;
   reg [1:0] mOp0_addr_low_reg;
   reg [3+1:0] mOp0_bread_reg;
@@ -389,13 +389,13 @@ module addrcalc_r(
 //  assign mOp_thread=(~req_bus) ? mOp0_thread_reg : 1'bz;
   assign mOp_lsflag=(~req_bus) ? mOp0_lsflag_reg : 1'bz;
   assign mOp_lsfwd=(~req_bus) ? mOp0_lsfwd_reg : 1'b0;
-  assign mOp_type=(~req_bus) ? mOp0_type_reg : 2'b00;
+  assign mOp_type=(~req_bus) ? mOp0_type_reg : 3'b000;
   assign mOp_bread=(~req_bus) ? mOp0_bread_reg|{5{~mOp0_lsfwd_reg}} : 5'b1111;
   assign mOp_data=(~req_bus) ? mOp0_data_reg : 136'b0;
   assign mOp_pbit=(~req_bus) ? mOp0_pbit_reg : 2'b0;
  
   assign mOp_en=(~req_bus) ? mOp0_en_reg & (mlb_hit|mOp0_lsfwd_reg|mlb_is_inv) & ~req_bus & ~except &
-    ~pause_miss_reg2 & ~mlb_proceed & ~bus_hold & (mOp0_type_reg!=2'b10) : 1'bz; 
+    ~pause_miss_reg2 & ~mlb_proceed & ~bus_hold & (mOp0_type_reg[1:0]!=2'b10) : 1'bz; 
   assign mOp_ioEn=(~req_bus) ? mOp0_en_reg & (mlb_hit|mOp0_lsfwd_reg) & ~req_bus & ~except &
     ~pause_miss_reg2 & ~mlb_proceed & ~bus_hold & (mOp0_type_reg[1]) : 1'b0; 
 
@@ -440,7 +440,7 @@ module addrcalc_r(
 
   assign addrTlb=addrMain_mlb;
 
-  assign mOp_rsEn=mOp0_en_reg & mlb_hit & ~pause_miss_reg2 & ~bus_hold & ~mlb_proceed & ~mOp0_lsfwd_reg & ~(mOp0_type_reg==2'b10); 
+  assign mOp_rsEn=mOp0_en_reg & mlb_hit & ~pause_miss_reg2 & ~bus_hold & ~mlb_proceed & ~mOp0_lsfwd_reg & ~(mOp0_type_reg[1:0]==2'b10); 
 //dummy page walker
   assign reqmlb_ack=mlb_proceed & req_can & reqmlb_next;
 
@@ -598,7 +598,7 @@ module addrcalc_r(
           is_stack_reg<=0;
       end else if (~doStall&&!rsStall) begin
           mOp0_en_reg<=mOp0_en & ~(except);
-          if (mOp0_en & ~|req_bus || extern_feed & |req_bus & (mOp0_type_reg==2'b10) || |req_bus & (mOp0_type_reg==2'b11)) begin
+          if (mOp0_en & ~|req_bus || extern_feed & |req_bus & (mOp0_type_reg[1:0]==2'b10) || |req_bus & (mOp0_type_reg==2'b11)) begin
               mOp0_thread_reg<=mOp0_thread;
               mOp0_lsflag_reg<=mOp0_lsflag;
               mOp0_addrMain_reg<=mOp0_addrMain;

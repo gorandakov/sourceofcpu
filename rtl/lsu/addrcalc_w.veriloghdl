@@ -116,7 +116,7 @@ module saddrcalc(
   output [7:0] faultCode;
   output [8:0] faultNo;
   output [REG_WIDTH-1:0] mOp_register;
-  output [1:0] mOp_type;
+  output [2:0] mOp_type;
   output [8:0] mOp_LSQ;
   output [9:0] mOp_II;
   output [5:0] mOp_WQ;
@@ -317,7 +317,7 @@ module saddrcalc(
   assign mlb_data=mlb_data0;
   assign mlb_data_next=mlb_data1;
 
-  assign mOp_type=mlb_data[`dmlbData_type];
+  assign mOp_type={mlb_data[`dmlbData_semaphore],mlb_data[`dmlbData_type]};
   
   assign mOp_addrEven[43:13]=(addrMain[7] & addrNext[14]) ? mlb_data_next[`dmlbData_phys] : mlb_data[`dmlbData_phys];
   assign mOp_addrOdd[43:13]=(~(~addrMain[7] & addrNext[14])) ? mlb_data[`dmlbData_phys] : mlb_data_next[`dmlbData_phys];

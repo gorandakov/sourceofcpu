@@ -129,7 +129,7 @@ module addrcalc(
   output [7:0] faultCode;
   output [8:0] faultNo;
   output [REG_WIDTH-1:0] mOp_register;
-  output [1:0] mOp_type;
+  output [2:0] mOp_type;
   output mOp_skip_LDQ;
   output [8:0] mOp_LSQ;
   output [9:0] mOp_II;
@@ -191,7 +191,7 @@ module addrcalc(
   
   wire [4:0] bank0;
   wire [4:0] bankL1;
-  reg  [1:0] mOp_type_reg;
+  reg  [2:0] mOp_type_reg;
   wire split;
   wire [13:0] addrMain;
   wire [14:0] addrNext;
@@ -366,7 +366,7 @@ module addrcalc(
   assign na=|(mlb_data[`dmlbData_na]&(4'b1<<addrTlb[13:12])) || |(mlb_data[`dmlbData_na]&(1'b1<<(addrTlb[13:12]+2'd1))) & addrNext[12] & mOp_split_X;
   assign na_next= |(mlb_data_next[`dmlbData_na]&(1'b1<<(addrTlb[13:12]+2'd1))) & addrNext[12] & mOp_split_X;
 
-  assign mOp_type=mlb_data[`dmlbData_type];
+  assign mOp_type={mlb_data[`dmlbData_semaphore],mlb_data[`dmlbData_type]};
   assign mOp_addrEven[43:13]=(addrMain[7] && addrNext[14]) ? mlb_data_next[`dmlbData_phys] :
     31'bz;
   assign mOp_addrEven[43:13]=(~(addrMain[7] && addrNext[14] )) ?  mlb_data[`dmlbData_phys] :

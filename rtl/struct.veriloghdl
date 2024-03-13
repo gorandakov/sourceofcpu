@@ -361,9 +361,9 @@ limitations under the License.
 `define mOp_thread 84
 `define mOp_lsflag 85
 `define mOp_WQ 91:86
-`define mOp_type 93:92
-`define mOp_attr 97:94
-`define mOp_width 98
+`define mOp_type 94:92
+`define mOp_attr 98:95
+`define mOp_width 99
 
 `define mOpX_addrEven 35:0
 `define mOpX_addrOdd 71:36
@@ -377,10 +377,10 @@ limitations under the License.
 `define mOpX_II 105:96
 `define mOpX_WQ 111:106
 `define mOpX_bread 116:112
-`define mOpX_mtype 118:117
-`define mOpX_pbit 120:119
-`define mOpX_dummy 121
-`define mOpX_width 122
+`define mOpX_mtype 119:117
+`define mOpX_pbit 121:120
+`define mOpX_dummy 122
+`define mOpX_width 123
 
 
 `define mOpC_addrEven 35:0
@@ -414,8 +414,8 @@ limitations under the License.
 `define mOp1_lsf 150
 `define mOp1_WQ 158:151
 `define mOp1_lsfwd 159
-`define mOp1_type 161:160
-`define mOp1_width 162
+`define mOp1_type 162:160
+`define mOp1_width 163
 
 `define mOp2_addrMain 43:0
 `define mOp2_sz 48:44
@@ -429,9 +429,9 @@ limitations under the License.
 `define mOp2_banks 113:82
 `define mOp2_odd 114
 `define mOp2_addr_low 116:115
-`define mOp2_type 118:117
-`define mOp2_attr 122:119
-`define mOp2_width 123
+`define mOp2_type 119:117
+`define mOp2_attr 123:120
+`define mOp2_width 124
 
 `define lsaddr_addrE 35:0
 `define lsaddr_addrO 71:36
@@ -453,11 +453,11 @@ limitations under the License.
 `define lsaddr_flag 143
 `define lsaddr_pconfl 144
 `define lsaddr_except 145
-`define lsaddr_mtype 147:146
-`define lsaddr_WQ 153:148
-`define lsaddr_blow 157:154
-`define lsaddr_etype 161:158
-`define lsaddr_width 162
+`define lsaddr_mtype 148:146
+`define lsaddr_WQ 154:149
+`define lsaddr_blow 158:155
+`define lsaddr_etype 162:159
+`define lsaddr_width 163
 `define lsaddr_II_low 111:108
 
 `define lsqshare_wrt0 2:0
