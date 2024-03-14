@@ -62,6 +62,7 @@ module pager(
   writeTlb_wen_c,
   writeTlb_wenH_c,
   writeTlb_data0,
+  writeTlb_xdata0,
   writeTlb_data1,
   writeTlb_data2
   );
@@ -117,6 +118,7 @@ module pager(
   output[2:0] writeTlb_wen_c;
   output[2:0] writeTlb_wenH_c;
   output[2:0] [TLB_DATA_WIDTH-1:0] writeTlb_data0;
+  output[2:0] [19:0] writeTlb_xdata0;
   output[2:0] [TLB_DATA_WIDTH-1:0] writeTlb_data1;
   output[2:0] [TLB_DATA_WIDTH-1:0] writeTlb_data2;
 
@@ -182,39 +184,34 @@ module pager(
       writeTlb_data0[k][`dmlbData_user]=finalXtra0[k][`page_user];  
       writeTlb_data0[k][`dmlbData_wp]=finalXtra0[k][`page_wr];  
       writeTlb_data0[k][`dmlbData_na]=finalXtra0[k][`page_na] && ~new_inv_reg;  
-      writeTlb_data0[k][`dmlbData_ne]=finalXtra0[k][12];  
-      writeTlb_data0[k][`dmlbData_acc]=finalXtra0[k][`page_accessed];  
-      writeTlb_data0[k][`dmlbData_wrt]=finalXtra0[k][`page_dirty];  
+      writeTlb_data0[k][`dmlbData_ne]=finalXtra0[k][-14+`page_ne-14];  
       writeTlb_data0[k][`dmlbData_glo]=finalXtra0[k][`page_global];  
       writeTlb_data0[k][`dmlbData_type]={finalXtra0[k][`page_nc],finalXtra0[k][`page_wt]};  
-      writeTlb_data0[k][`dmlbData_subpage]=finalSub0;  
-      writeTlb_data0[k][`dmlbData_phys]=finalAddr0;  
+      writeTlb_data0[k][`dmlbData_subpage]=finalSub0[k];  
+      writeTlb_data0[k][`dmlbData_phys]=finalAddr0[k];  
+      writeTlb_xdata0[k]=finalXtra0[k];
   
       writeTlb_data1[k][`dmlbData_user]=finalXtra1[k][`page_user];  
       writeTlb_data1[k][`dmlbData_wp]=finalXtra1[k][`page_wr];  
       writeTlb_data1[k][`dmlbData_na]=finalXtra1[k][`page_na] && ~new_inv_reg;  
-      writeTlb_data1[k][`dmlbData_ne]=finalXtra1[k][12];  
-      writeTlb_data1[k][`dmlbData_acc]=finalXtra1[k][`page_accessed];  
-      writeTlb_data1[k][`dmlbData_wrt]=finalXtra1[k][`page_dirty];  
+      writeTlb_data1[k][`dmlbData_ne]=finalXtra1[k][-14+`page_ne-14];  
       writeTlb_data1[k][`dmlbData_glo]=finalXtra1[k][`page_global];  
       writeTlb_data1[k][`dmlbData_type]={finalXtra1[k][`page_nc],finalXtra1[k][`page_wt]};  
-      writeTlb_data1[k][`dmlbData_subpage]=finalSub1;  
-      writeTlb_data1[k][`dmlbData_phys]=finalAddr1;  
+      writeTlb_data1[k][`dmlbData_subpage]=finalSub1[k];  
+      writeTlb_data1[k][`dmlbData_phys]=finalAddr1[k];  
  
       writeTlb_data2[k][`dmlbData_user]=finalXtra2[k][`page_user];  
       writeTlb_data2[k][`dmlbData_wp]=finalXtra2[k][`page_wr];  
       writeTlb_data2[k][`dmlbData_na]=finalXtra2[k][`page_na] && ~new_inv_reg;  
-      writeTlb_data2[k][`dmlbData_ne]=finalXtra2[k][12];  
+      writeTlb_data2[k][`dmlbData_ne]=finalXtra2[k][-14+`page_ne-14];  
       writeTlb_data2[k][`dmlbData_acc]=finalXtra2[k][`page_accessed];  
       writeTlb_data2[k][`dmlbData_wrt]=finalXtra2[k][`page_dirty];  
       writeTlb_data2[k][`dmlbData_glo]=finalXtra2[k][`page_global];  
       writeTlb_data2[k][`dmlbData_type]={finalXtra2[k][`page_nc],finalXtra2[k][`page_wt]};  
-      writeTlb_data2[k][`dmlbData_subpage]=finalSub2;  
-      writeTlb_data2[k][`dmlbData_phys]=finalAddr2;  
+      writeTlb_data2[k][`dmlbData_subpage]=finalSub2[k];  
+      writeTlb_data2[k][`dmlbData_phys]=finalAddr2[k];  
 
       writeTlb_wen[k]=ready[k] & (permReq[k]==0);
- //     writeTlb_wenW=ready & permReq[k][`permreq_store] & ~new_inv_reg;
- //     writeTlb_invW=ready & new_inv_reg;
       writeTlb_wen_c[k]=ready[k] & ~finalHug0[k] & permReq[k][`permreq_code];
       writeTlb_wenH_c[k]=ready[k] & finalHug0[k] & permReq[k][`permreq_code];
  
@@ -236,16 +233,10 @@ module pager(
   assign mOp_addrOdd= |req_bus ? 
     {ptr[{req_bus[2],req_bus[1]}][43:13],addrO[{req_bus[2],req_bus[1]}]} : 36'bz;
 
-//  assign mOp_addrMain= stageA|{4'b0,stageB} && ~stageA_running && ~bus_hold ? 
-//    64'b0 : 64'bz;
   assign mOp_sz= |req_bus ? 
     (stageA[{req_bus[2],req_bus[1]}][3] ? 5'h0 : 5'h13) : 5'bz;
-//  assign mOp_en= ((stageA|{4'b0,stageB})!=0 && ~stageA_running && ~bus_hold) ? 
-//    1'b0 : 1'bz;
   assign mOp_en= |req_bus ? 
     1'b1 : 1'bz;
-//  assign mOp_thread= ((stageA|{4'b0,stageB})!=0 && ~stageA_running && ~bus_hold) ? 
-//    thread : 1'bz;
   assign mOp_lsflag= |req_bus ? 
     1'b1 : 1'bz;
   assign mOp_banks= |req_bus ? 
