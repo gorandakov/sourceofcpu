@@ -227,6 +227,8 @@ module frontendSelf(
   wire [15:0] pff;
   wire pff1;
 
+  reg btb_indir_reg;
+
   wire do_seq_any,do_seq_miss;
 
   wire [63:0] cc_read_IP_d;
@@ -331,7 +333,7 @@ module frontendSelf(
   wire [VIRT_WIDTH-26:0] write_IP;
   wire [VIRT_WIDTH-28:0] req_addrR;
   wire [PHYS_WIDTH-14:0] req_addrP;
-  wire [VIRT_WIDTH-13:0] mlb_IP;
+  wire [VIRT_WIDTH:0] mlb_IP;
   
   wire bus_mlb_match;
   reg bus_mlb_match_reg;
@@ -998,7 +1000,7 @@ module frontendSelf(
   
   assign bus_match0=bus_en && bus_slot=={BUS_ID,5'b10000};
   
-  assign mlb_IP=bus_mlb_match_reg ? {proc[20:0],miss_IP[43:14]} : {proc[20:0],cc_read_IP[43:14]};
+  assign mlb_IP=bus_mlb_match_reg ? {proc[20:0],miss_IP[43:0]} : {proc[20:0],cc_read_IP[43:0]};
   
   assign bus_mlb_match=bus_mlb_slot[9:5]==BUS_ID && bus_mlb_en;
   
@@ -1301,9 +1303,9 @@ module frontendSelf(
   .read_clkEn(instrEn || ixcept),
   .read_thread(thread),
   .fStall(fstall),
-  .addr({mlb_IP,13'b0}),
+  .addr(mlb_IP),
   .read_data(mlb_data),
-  .nat_jump(1'b0),
+  .nat_jump(mflag[thread][`mflags_indir_magic] & btb_indir_reg),
   .read_hit(mlb_hit),
   .write_data(bus_mlb_data_reg),
   .write_wen(bus_mlb_match_reg),
@@ -2136,6 +2138,7 @@ module frontendSelf(
           read_data_reg<=0;
           cc_err_reg<=0;
           tbuf_error_reg<=4'b0;
+          btb_indir_reg<=1'b0;
       end else if (ixcept) begin
           //ixcept_reg<=1'b1;
           //ixceptLDConfl_reg<=ixceptLDConfl;
@@ -2231,6 +2234,7 @@ module frontendSelf(
 	  miss_IP<=cc_read_IP_d;
           pre_instrEn_reg<=13'b0;
           tbuf_error_reg<=4'b0;
+          btb_indir_reg<=ixcept_indir;
       end else if (halt_d && ~fstall) begin
           //insert halt code here
       end else if (~fstall) begin
@@ -2285,6 +2289,7 @@ module frontendSelf(
           IP_chg_reg2<=IP_chg_reg;
           IP_chg_reg3<=IP_chg_reg2;
           IP_chg_reg4<=IP_chg_reg3;
+          btb_indir_reg<=|(btb_indir&taken);
           btb_jlink0_reg<=btb_jlink0;
           btb_jlnpos0_reg<=btb_jlnpos0;
           btb_jlnjpos0_reg<=btb_jlnjpos0;
