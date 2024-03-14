@@ -19,7 +19,8 @@ limitations under the License.
 `include "../msrss_no.sv"
 
 `define permreq_code 0
-`define permreq_width 1
+`define permreq_transl 1
+`define permreq_width 2
 
 module pager(
   clk,
