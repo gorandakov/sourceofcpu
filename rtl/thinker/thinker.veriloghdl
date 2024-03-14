@@ -379,12 +379,13 @@ module pager(
                       addrB[y]<=addr_inc[y];
                   end
                   finalAddr0[y]<=data_in[43:14];
+                  finalXtra0[y]<={data_in[63:58],data_in[13:0]};
                   $display("burp");
               end else if (stageA[y][3]) begin
                   for(callin=0;callin<6;callin=callin+1) begin
                       if (data_in[96+4*callin+:4]==addr_orig[3:0] && |data_in[15+16*callin-:1]) begin
                           finalAddr0<={finalAddr0[43:28],data_in[16*callin+1+:15]};
-                          finalXtra0<={4'b0,data_in[122+callin],data_in[16*callin],finalAddr0[27:14]};
+                          finalXtra0<={1'b0,|finalXtra0[-14+`page_na-`4],finalXtra0[`page_sys],finalXtra0[-14+`page_ne-14],data_in[122+callin],data_in[16*callin],finalAddr0[27:14]};
                       end
                   end
               end else if (stageA[y][2] | data_in[`page_huge] && |data_in[`page_na] && stageA[y][2:1]!=0) begin
