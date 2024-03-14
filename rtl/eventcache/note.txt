@@ -1,3 +1,0 @@
-SRAM cache needs to not be wave function split (doubled) but, nevertheless, 
-the outputs need to be fed to cmpx4 for 2 out of 4 comparison.
-
