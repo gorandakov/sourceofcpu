@@ -267,8 +267,8 @@ module pager(
         assign addr_inc_d[t][13:0]=addr[t][13:0];
         assign addr_inc2_d[t][22:0]=addr[t][22:0];
 
-        assign addrE=addr[t][42:38];
-        assign addrO=addr[t][42:38];
+        assign addrE[t]=addr[t][42:38];
+        assign addrO[t]=addr[t][42:38];
     end
   endgenerate
 
@@ -366,35 +366,43 @@ module pager(
       end else begin
           //if (FUHit)  $display("bmup ",FUreg," ",data_in);
           if (FUreg==(9'h1fc+y) && stageA_running[y] && FUHit) begin
-              if ((stageA[y][1:0]!=0) && ~data_in[`page_huge] && data_in[`page_na]) begin
-                  addr[y]<={addr[y][37:0],10'b0};
-                  addr_inc[y]<={addr_inc[y][37:0],10'b0};
-                  ptr[y][47:0]<={data_in[y][47:13],13'b0};
+              if ((stageA[y][1:0]!=0 || stageA[y][2]&premReq[y][`permreq_transl]) && ~data_in[`page_huge] && |data_in[`page_na]) begin
+                  addr[y]<={addr[y][37:0],11'b0};
+                  addr_inc[y]<={addr_inc[y][37:0],11'b0};
+                  ptr[y][47:0]<={data_in[y][47:14],9'b0,stageA[y][2]&premReq[y][`permreq_transl],4'b0};
                   stageA_running[y]<=1'b0;
                   stageA[y]<={stageA[y][10:0],1'b0};
-                  if (addr[y][42:33]==addr_inc[y][42:33]) begin 
+                  if (addr[y][42:33]!=addr_inc[y][42:33] && ~(stageA[y][2]&premReq[y][`permreq_transl])) begin 
                       stageB_pre[y]<=stageA[y][7:0];
-                      ptrB[y][47:0]<={data_in[47:13],13'b0};
+                      ptrB[y][47:0]<={data_in[47:14],14'b0};
                       addrB[y]<=addr_inc[y];
                   end
+                  finalAddr0[y]<=data_in[43:14];
                   $display("burp");
-              end else if (stageA[2] | data_in[`page_huge] && data_in[`page_na] && stageA[2:1]!=0) begin
+              end else if (stageA[y][3]) begin
+                  for(callin=0;callin<6;callin=callin+1) begin
+                      if (data_in[96+4*callin+:4]==addr_orig[3:0] && |data_in[15+16*callin-:1]) begin
+                          finalAddr0<={finalAddr0[43:28],data_in[16*callin+1+:15]};
+                          finalXtra0<={6'b0,data_in[122+callin],data_in[16*callin],finalAddr0[27:16]};
+                      end
+                  end
+              end else if (stageA[y][2] | data_in[`page_huge] && |data_in[`page_na] && stageA[y][2:1]!=0) begin
                  // ready[y]<=1'b1;
-                  finalAddr0[y]<=data_in[43:13];
-                  finalXtra0[y]<={data_in[10],data_in[11:0]};
+                  finalAddr0[y]<=data_in[43:14];
+                  finalXtra0[y]<={data_in[63:58],data_in[13:0]};
                   //finalHug0[y]<=~stageA[2];
                   finalSub0[y]<=stageA[y][1];
                   finalAddr1[y]<=data_in[43+64:13+64];
-                  finalXtra1[y]<={data_in[10+64],data_in[11+64:64]};
+                  finalXtra1[y]<={data_in[64+64:58+64],data_in[13+64:64]};
                   stageB[y]<={stageB_pre[y][6:0],1'b0};
                   addr[y]<={addrB[y][37:0],10'b0};
                   stageA_running[y]<=1'b0;
                   stageA[y]<=12'b0;
                   ptr[47:0][y]<=ptrB[y][47:0];
 	          if (stageA[y][1]) begin
-	              addr[y][32:23]<=addr_orig[y][32:23];
-		      finalAddr0[y][19:10][y]<=addr_orig[y][32:23];
-		      finalAddr1[y][19:10]<=addr_orig[y][32:23];
+	              addr[y][32:24]<=addr_orig[y][32:24];
+		      finalAddr0[y][19:9][y]<=addr_orig[y][32:24];
+		      finalAddr1[y][19:9]<=addr_orig[y][32:24];
 	          end
                     //  new_can[y]<=1'b1;
               end else if (stageB[y][1:0]!=0 && ~data_in[`page_huge] && data_in[`page_na]) begin
