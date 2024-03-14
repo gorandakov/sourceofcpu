@@ -1322,7 +1322,7 @@ module frontendSelf(
   .fStall(fstall),
   .addr({proc[20:0],exceptIP_save[43:14],13'b0}),
   .read_data(mlb_data3),
-  .nat_jump(1'b0),
+  .nat_jump(mflag[thread][`mflags_indir_magic] & exceptIP_indir_save),
   .read_hit(mlb_hit),
   .write_data(bus_mlb_data_reg),
   .write_wen(bus_mlb_match_reg),
