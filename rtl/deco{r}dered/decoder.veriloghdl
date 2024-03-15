@@ -34,9 +34,11 @@ module decoder_permitted_i(
   FPU,
   spec,
   specNext,
+  vec,
   iAvail,
   stall,
   halt,
+  vec_mode,
   allret,
   perm
   );
@@ -55,9 +57,11 @@ module decoder_permitted_i(
   input [9:0] FPU;
   input [9:0] spec;
   input [9:0] specNext;
+  input [9:0] vec;
   input [9:0] iAvail;
   input stall;
   input halt;
+  input vec_mode;
   input allret;
   output [9:0] perm;
 
@@ -103,17 +107,19 @@ module decoder_permitted_i(
           popcnt10 mul_mod(fma & ((10'd2<<k)-10'd1),fma_dke[k]);
           popcnt10_or_more mul_more_mod(mul & ((10'd2<<k)-10'd1),mul_more_cnt[k]);
           popcnt10_or_less lsas_mod((load|shift|alu|store) & ((10'd2<<k)-10'd1),lsas_cnt[k]);
+
+          assign has_vec=|(vec & ((10'd2<<k)-10'd1))) || vec_mode;
           
           assign storeL_has[k]=(storeL & ((10'd2<<k)-10'd1))!=0;
           
           assign permA[k]=(~storeL_has[k] & mul_cnt[k][0]) ? load_cnt[k][6] & alu_cnt[k][6] & shift_cnt[k][3] & 
-            store_cnt[k][2] & ldst_cnt[k][5] & alu_shift_cnt[k][6] & lsas_cnt[k][9] : 1'bz; 
+            store_cnt[k][{has_vec,~has_vec}}] & ldst_cnt[k][5] & alu_shift_cnt[k][6] & lsas_cnt[k][9] : 1'bz; 
           assign permA[k]=(storeL_has[k] & mul_cnt[k][0]) ? load_cnt[k][5] & alu_cnt[k][6] & shift_cnt[k][3] & 
-            store_cnt[k][2] & ldst_cnt[k][5] & alu_shift_cnt[k][6] & lsas_cnt[k][8] : 1'bz; 
+            store_cnt[k][{has_vec,~has_vec}] & ldst_cnt[k][5] & alu_shift_cnt[k][6] & lsas_cnt[k][8] : 1'bz; 
           assign permA[k]=(~storeL_has[k] & mul_cnt[k][1]) ? load_cnt[k][3] & alu_cnt[k][4] && shift_cnt[k][3] & 
-            store_cnt[k][2] & lsas_cnt[k][7] & alu_shift_cnt[k][4] & ldst_cnt[k][5] : 1'bz; 
+            store_cnt[k][{has_vec,~has_vec}] & lsas_cnt[k][7] & alu_shift_cnt[k][4] & ldst_cnt[k][5] : 1'bz; 
           assign permA[k]=(storeL_has[k] && mul_cnt[k][1]) ? load_cnt[k][3] & alu_cnt[k][4] && shift_cnt[k][3] & 
-            store_cnt[k][2] & lsas_cnt[k][6] & alu_shift_cnt[k][4] & ldst_cnt[k][4]: 1'bz; 
+            store_cnt[k][{has_vec,~has_vec}] & lsas_cnt[k][6] & alu_shift_cnt[k][4] & ldst_cnt[k][4]: 1'bz; 
           assign permA[k]=mul_more_cnt[k][2] ? 1'b0 : 1'bz;
           
           assign permB[k]=branch_cnt[k][2] & taken_cnt[k][1] & indir_cnt[k][1];
