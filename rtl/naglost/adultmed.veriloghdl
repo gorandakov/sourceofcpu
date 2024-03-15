@@ -411,7 +411,7 @@ module smallInstr_decoder(
   //231-232=cloop no sub
   assign isCLeave=opcode_main==8'd235 || opcode_main==8'd236 || opcode_main==8'd238;  
   //237 and 239 unused so far
-  assign isPtrBump_other_domain=opcode_main==8'hf7 && magic[1:0]==2'b01;
+  assign isPtrBump_other_domain=opcode_main==8'hf7 && magic[1:0]==2'b01 && LARGE_CORE && H^instr[31];
 
   assign isBasicFPUScalarA=opcode_main[7:4]==5'h1f && ~&opcode_main[2:0] && instr[13:12]==2'b0;
   assign isBasicFPUScalarB=opcode_main[7:4]==5'h1f && ~&opcode_main[2:0] && instr[13:12]==2'b1;
