@@ -1632,7 +1632,7 @@ module smallInstr_decoder(
       trien[29]=magic[0] & isBasicAddNoFl || isPtrBump_other_domain;
           //if no magic, it's register-register nxor and carry flag for ptr bit!
       puseBConst[29]=magic[2:0]==3'b011;
-      poperation[29][11:0]=isPtrBump_other_domain ? `op_add64 : opcode_main==8'd234 ? `op_dec|4096 : magic[1:0]==2'b01 ? `op_nxor64 : opcode_main[0] ? `op_add64 : `op_add32;
+      poperation[29][11:0]=isPtrBump_other_domain ? H?`op_mov64 : `op_add64 : opcode_main==8'd234 ? `op_dec|4096 : magic[1:0]==2'b01 ? `op_nxor64 : opcode_main[0] ? `op_add64 : `op_add32;
       poperation[29][12]=1'b1;
       pport[29]=opcode_main==8'd234 ? PORT_MUL : PORT_ALU;
       prA_use[29]=1'b1;
@@ -1646,6 +1646,10 @@ module smallInstr_decoder(
               prA[29]={instr[17],instr[11:8]};
               prT[29]=instr[16:12];
               prB[29]=instr[22:18];
+              if (isPtrBump_other_domain) begin
+                  prA_use[29]=1'b0;
+                  if (!H) prT[29]=prA[29];
+              end
               instr[8]=instr[23];
           end else begin
               prA[29]={1'b0,instr[11:8]};
