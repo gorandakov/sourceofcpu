@@ -358,7 +358,7 @@ module fun_lsq(
   doStall_STQ,
   aStall_STQ,
   aDoStall_STQ,
-  wreq_stall,
+  wreq_stall| &wreq_en_reg[2:1],
   rsStall,
   rsDoStall,
   doRetire_d,
@@ -626,8 +626,8 @@ module fun_lsq(
   assign stall_WQ=|{doStall_rs[3:0],doStall_alloc,doStall_cntrl,doStall_LSQ,doStall_LDQ,doStall_STQ};
   assign stall=|{doStall_rs[3:0],doStall_alloc,doStall_cntrl,doStall_LSQ,doStall_LDQ,doStall_STQ | doStall_WQ};
 
-  assign aStall_STQ=wreq_stall;
-  assign aStall_LSQ=aDoStall_STQ|wreq_stall;
+  assign aStall_STQ=wreq_stall| &wreq_en_reg[2:1];
+  assign aStall_LSQ=aDoStall_STQ|wreq_stall| &wreq_en_reg[2:1];
 
 
   assign wreq_stall=bus_holds_addrcalc_reg2|miss_holds_addrcalc_reg2|miss_pause_addrcalc_reg2|insert_isData_reg2;
@@ -654,14 +654,24 @@ module fun_lsq(
 	dc_wdataP_reg[1]<=0;
 	dc_pdataP_reg[0]<=0;
 	dc_pdataP_reg[1]<=0;
-    end else if (!wreq_stall) begin
-        wreq_en_reg<=wreq_en;
+    end else if (!wreq_stall && !wreq_confl && !wreq_en_reg[3:2]) begin
+        wreq_en_reg<={2'b0,wreq_en};
         wreq_data_reg[0]<=wreq_data[0];
         wreq_data_reg[1]<=wreq_data[1];
         dc_wdataP_reg[0]<=dc_wdataP[0];
         dc_wdataP_reg[1]<=dc_wdataP[1];
         dc_pdataP_reg[0]<=dc_pdataP[0];
         dc_pdataP_reg[1]<=dc_pdataP[1];
+    end else if (!wreq_stall && !wreq_confl && !wreq_en_reg[3]) begin
+        wreq_en_reg<={1'b0,wreq_en,wreq_en_reg[2]};
+        wreq_data_reg<={wreq_data[0],wreq_data[1],wreq_data[0],wreq_data_reg[2]};
+        dc_wdataP_reg<={dc_wdataP[0],dc_wdataP[1],dc_wdataP[0],dc_wdataP_reg[2]};
+        dc_pdataP_reg<={dc_pdataP[0],dc_pdataP[1],dc_pdataP[0],dc_pdataP_reg[2]};
+    end else if (!wreq_stall && wreq_confl) begin
+        wreq_en_reg<={wreq_en_reg[2]&~wreq_crossdep_vec,wreq_en[1],wreq_crossdep_vec,wreq_en[0]};
+        wreq_data_reg<={wreq_data_reg[2],wreq_data[1],wreq_data_reg[2],wreq_data[0]};
+        dc_wdataP_reg<={dc_wdataP_reg[2],dc_wdataP[1],dc_wdataP_reg[2],dc_wdataP[0]};
+        dc_pdataP_reg<={dc_pdataP_reg[2],dc_pdataP[1],dc_pdataP_reg[2],dc_pdataP[0]};
     end else begin
         wreq_en_reg<=2'b0;
     end
