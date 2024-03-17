@@ -223,8 +223,7 @@ module fadd(
   wire invExcpt;
   wire pook;
 
-  assign pook=isDBL ? expdiff==53 && ~sxor && isrnd_plus : 
-     expdiff==64 && ~sxor && isrnd_plus;
+  assign pook=B_zero;
 
   assign pook_in=pook_inX && expdiff==0 && ~sxor && pook_inX;
 
@@ -296,13 +295,13 @@ module fadd(
  
   assign res_X[67:66]=en_reg ? `ptype_dbl : 2'bz;
 
-  assign res_X[64:0]=(renor_simple & ~isDBL_reg & ~spec_any & en_reg) ? {renorS[63:32],1'b0,renorS[31:0]} : 65'bz;
-  assign res_X[52:0]=(renor_simple & isDBL_reg & ~spec_any & en_reg) ? {renorS[62:43],1'b0,renorS[42:11]} : 53'bz;
+  assign res_X[64:0]=(renor_simple & ~isDBL_reg & ~spec_any & en_reg) ? {renorS[63:32],B_zero,renorS[31:0]} : 65'bz;
+  assign res_X[52:0]=(renor_simple & isDBL_reg & ~spec_any & en_reg) ? {renorS[62:43],B_zero,renorS[42:11]} : 53'bz;
   assign {res_X[65],res_X_hi[14:0]}=(renor_simple & ~isDBL_reg & ~spec_any & en_reg) ? renorE : 16'bz;
   assign {res_X[65],res_X[63:53]}=(renor_simple & isDBL_reg & ~spec_any & en_reg) ? {renorE[15],renorE[10:0]} : 12'bz;
   
-  assign res_X[64:0]=(renor_round & ~isDBL_reg & ~spec_any & en_reg) ? {renorSR[63:32],1'b0,renorSR[31:0]} : 65'bz;
-  assign res_X[52:0]=(renor_round & isDBL_reg & ~spec_any & en_reg) ? {renorSR[62:43],1'b0,renorSR[42:11]} : 53'bz;
+  assign res_X[64:0]=(renor_round & ~isDBL_reg & ~spec_any & en_reg) ? {renorSR[63:32],B_zero,renorSR[31:0]} : 65'bz;
+  assign res_X[52:0]=(renor_round & isDBL_reg & ~spec_any & en_reg) ? {renorSR[62:43],B_zero,renorSR[42:11]} : 53'bz;
   assign {res_X[65],res_X_hi[14:0]}=(renor_round & ~isDBL_reg & en_reg & ~spec_any) ? renorER : 16'bz;
   assign {res_X[65],res_X[63:53]}=(renor_round & isDBL_reg & en_reg & ~spec_any) ? {renorER[11],renorER[10:0]} : 12'bz;
 

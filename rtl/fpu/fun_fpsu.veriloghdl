@@ -234,6 +234,8 @@ module fun_fpsu(
   reg [3:0] u1_en_reg6;
   reg [3:0] u1_en_reg7;
   
+  wire pookH,pookL;
+
   rs_write_forward #(S+70) u1_A_fwd(
   clk,rst,
   ~u1_en[3]&u1_XADD,
@@ -310,6 +312,7 @@ module fun_fpsu(
   .A({fxDataAXL_reg[0][65],fxDataAXL_reg[0][64:33]}),
   .B({gxDataBXL_reg[1][65],gxDataBXL_reg[1][64:33]}),
   .pook_inX(gxDataBXL_reg[1][67] & u1_op_reg[10]),
+  .pook(pookH),
   .isSub(fxFADD_sub[H]),
   .isRSub(fxFADD_rsub),
   .raise(fxFADD_raise[0]),
@@ -328,6 +331,7 @@ module fun_fpsu(
   .A({fxDataAXL_reg[0][32],fxDataAXL_reg[0][31:0]}),
   .B({gxDataBXL_reg[1][32],gxDataBXL_reg[1][31:0]}),
   .pook_inX(gxDataBXL_reg[1][66] && u1_op_reg[10]),
+  .pook(pookL),
   .isSub(fxFADD_sub[H]),
   .isRSub(fxFADD_rsub),
   .raise(fxFADD_raise[1]),
@@ -450,7 +454,7 @@ module fun_fpsu(
   .A(fxDataAXL_reg2[1][67:0]),.B(u1_op_reg3[13+H] ? XY_data[67:0] : gxDataBXL_reg2[0][67:0]),
   .res(FOOF[1]));
  
-  assign FOOF[0][67:66]=(H? gxFADD_sn:gxFADD_sin) & u1_op_reg3[10] ? pook_data : 2'bz;
+  assign FOOF[0][67:66]=(H? gxFADD_sn:gxFADD_sin) & u1_op_reg3[10] ? {pookH,pookL} : 2'bz;
   assign FOOF[0][67:66]=(H? gxFADD_sn:gxFADD_sin) & ~u1_op_reg3[10] ? `ptype_sngl : 2'bz;
   assign FOOF[1][67:66]=fxFCADD_sn ? `ptype_sngl : 2'bz;
 
