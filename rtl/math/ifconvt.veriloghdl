@@ -79,9 +79,9 @@ module ifconv_mod(
   assign A_d=sgn ? 64'bz : A;
   assign A_bank[8:1]=8'b0;
 
-  assign res[81:0]=(toSNG_reg2) ? {16'b0,33'b0,valE2[15],sgn_reg2,valE2[7:0],endBits[62:40]} : 82'bz;
-  assign res[81:0]=(toDBL_reg2) ? {16'b0,valE2[15],sgn_reg2,valE2[10:0],endBits[62:43],1'b0,endBits[42:11]} : 82'bz;
-  assign res[81:0]=(toEXT_reg2) ? {sgn_reg2,valE2[14:0],valE2[15],endBits[63:32],1'b0,endBits[31:0]} : 82'bz;
+  assign res[81:0]=(toSNG_reg2) ? {16'b0,33'b0,valE2[6],sgn_reg2,valE2[15],valE2[6:0],endBits[62:40]} : 82'bz;
+  assign res[81:0]=(toDBL_reg2) ? {16'b0,valE2[9],sgn_reg2,valE2[15],valE2[8:0],endBits[62:43],1'b0,endBits[42:11]} : 82'bz;
+  assign res[81:0]=(toEXT_reg2) ? {valE2[15],sgn_reg2,valE2[13:0],valE2[14],endBits[63:32],1'b0,endBits[31:0]} : 82'bz;
 
   assign rtyp=(toSNG_reg2) ? `ptype_sngl : 2'bz;
   assign rtyp=(toDBL_reg2) ? `ptype_dbl : 2'bz;

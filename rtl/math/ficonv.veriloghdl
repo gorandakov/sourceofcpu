@@ -57,9 +57,9 @@ module cvt_FP_I_mod(
   wire coUP,coNUP;
   reg coUP_reg,coNUP_reg;
 
-  assign shift=isEXT ? {A[81],A[79:65]} : 16'bz;
-  assign shift=isDBL ? {A[81],{4{~A[81]}},A[63:53]} : 16'bz;
-  assign shift=isSNG ? {A[32],{7{~A[32]}},A[30:23]} : 16'bz;
+  assign shift=isEXT ? {A[79],A[81],A[78:65]} : 16'bz;
+  assign shift=isDBL ? {A[79],A[81],{4{~A[79]}},A[62:53]} : 16'bz;
+  assign shift=isSNG ? {A[30],A[32],{7{~A[30]}},A[29:23]} : 16'bz;
   assign shift=verbatim ? BIAS+16'd63 : 16'bz;
   assign bits=isEXT ? {A[64:33],A[31:0]} : 64'bz;
   assign bits=isDBL ? {1'b1,A[52:33],A[31:0],11'b0} : 64'bz;

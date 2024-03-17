@@ -191,10 +191,10 @@ module fpucadd(clk,rst,A,A_alt,B,pook_in,and1,or1,copyA,en,rmode,res,res_hi,xtra
   assign {res[52:33],res[31:0]}=(prod_reg[105] & isDBL_reg & ~DBL_rnd1 & ~spec_any & en_reg) ? prod_reg[104:53]:52'bz;
   assign {res[52:33],res[31:0]}=(~prod_reg[105] & isDBL_reg & ~DBL_rnd0 & ~spec_any & en_reg) ? prod_reg[103:52]:52'bz;
    
-  assign {res[65],res_hi,res[64]}=(prod_reg[127] & ~isDBL_reg & ~spec_any & en_reg) ? {exp_exp1_reg[15],sgn_reg,exp_exp1_reg[14:0],1'b1} : 18'bz;
-  assign {res[65],res_hi,res[64]}=(~prod_reg[127] & ~isDBL_reg & ~spec_any & en_reg) ? {exp_exp_reg[15],sgn_reg,exp_exp_reg[14:0],1'b1} : 18'bz;
-  assign {res[65],res[64:53]}=(prod_reg[105] & isDBL_reg & ~spec_any & en_reg) ? {exp_exp1_reg[15],sgn_reg,exp_exp1_reg[10:0]} : 13'bz;
-  assign {res[65],res[64:53]}=(~prod_reg[105] & isDBL_reg & ~spec_any & en_reg) ? {exp_exp_reg[15],sgn_reg,exp_exp_reg[10:0]} : 13'bz;
+  assign {res_hi[15],res[65],res_hi[14:0],res[64]}=(prod_reg[127] & ~isDBL_reg & ~spec_any & en_reg) ? {exp_exp1_reg[15],sgn_reg,exp_exp1_reg[14:0],1'b1} : 18'bz;
+  assign {res_hi[15],res[65],res_hi[14:0],res[64]}=(~prod_reg[127] & ~isDBL_reg & ~spec_any & en_reg) ? {exp_exp_reg[15],sgn_reg,exp_exp_reg[14:0],1'b1} : 18'bz;
+  assign {res[64],res[65],res[63:53]}=(prod_reg[105] & isDBL_reg & ~spec_any & en_reg) ? {exp_exp1_reg[15],sgn_reg,exp_exp1_reg[10:0]} : 13'bz;
+  assign {res[64],res[65],res[63:53]}=(~prod_reg[105] & isDBL_reg & ~spec_any & en_reg) ? {exp_exp_reg[15],sgn_reg,exp_exp_reg[10:0]} : 13'bz;
   
   assign expon=(prod_reg[127] & ~isDBL_reg & ~spec_any) ? 
     {~EXT_rnbit1 & ~ EXT_tail1,exp_exp1_reg[16],exp1_non_denor_IEEE_reg,exp1_oor_IEEE_reg,exp1_oor_reg} : 5'bz;
@@ -251,12 +251,9 @@ module fpucadd(clk,rst,A,A_alt,B,pook_in,and1,or1,copyA,en,rmode,res,res_hi,xtra
     || (isrnd_plus && EXT_rnbitY | EXT_tailY));  
   
     //begin exp/sgn  
-  assign expA=isDBL ? {A[80],{4{~A[80]}},A[62:52]} : {A[80],A[78:64]};  
-  assign expB=isDBL ? {B[80],{4{~B[80]}},B[62:52]} : {B[80],B[78:64]};
+  assign expA=isDBL ? {A[62],A[80],{4{~A[62]}},A[61:52]} : {A[78],A[80],A[77:64]};  
+  assign expB=isDBL ? {B[62],B[80],{4{~B[62]}},B[61:52]} : {B[78],B[80],B[77:64]};
   
- // assign A_h=isDBL ? {|A[51:0]} : {|A[62:0]}; 
- // assign B_h=isDBL ? {|B[51:0]} : {|B[62:0]}; 
-
   assign A_zero=(expA&emsk)==16'b0;
   assign A_infty=(expA|~emsk)==16'hfffe;
   assign A_nan=(expA|~emsk)==16'hffff;
