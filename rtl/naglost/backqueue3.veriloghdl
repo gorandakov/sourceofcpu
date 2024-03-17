@@ -1292,7 +1292,7 @@ module frontendSelf(
   get_carry #(44) cmp1_rng_mod(cc_read_IP[43:0],~cc_vecbase_IP[43:0],1'b1,after_vecbase);
   get_carry #(44) cmp2_rng_mod(cc_read_IP_reg[43:0],~cc_read_IP[43:0],1'b1,backward_jump_if_instren_2);
   
-  assign get_out_of_vec_mode=(|taken && !(after_vecbase && backward_jump_if_instren_2|~instrEn_reg)) || ~|taken & btb_has0;
+  assign get_out_of_vec_mode=|taken_reg && !(after_vecbase && backward_jump_if_instren_2|~instrEn_reg);
 
   assign halt_d[0]=(btbFStall_recover_reg ? iqe_jcnD[0] : iqe_jcnt_reg2[0]) ? 1'b0 : 1'bz;
   assign halt_d[1]=(btbFStall_recover_reg ? |iqe_jcnD[1:0] : |iqe_jcnt_reg2[1:0]) ? 1'b0 : 1'bz;
