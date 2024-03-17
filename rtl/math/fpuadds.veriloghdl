@@ -280,10 +280,10 @@ module fadds(
   assign res_spec=spec_qnan_reg ? {10'h3ff,23'h400001} : 33'bz;
   assign res_spec=spec_pinf_reg ? {10'h2fe,23'b0} : 33'bz;
   assign res_spec=spec_ninf_reg ? {10'h3fe,23'b0} : 33'bz;
-  assign res_spec=spec_logic_reg[0] ? A_reg&B_reg : 33'bz;
-  assign res_spec=spec_logic_reg[1] ? A_reg|B_reg : 33'bz;
-  assign res_spec=spec_logic_reg[2] ? A_reg^B_reg : 33'bz;
-  assign res_spec=spec_logic_reg[3] ? A_reg&~B_reg : 33'bz;
+  assign res_spec=spec_logic_reg[0] ? {A_reg[32]|B_reg[32],A_reg[31:0]&B_reg[31:0]} : 33'bz;
+  assign res_spec=spec_logic_reg[1] ? {A_reg[32]&B_reg[32],A_reg[31:0]|B_reg[31:0]} : 33'bz;
+  assign res_spec=spec_logic_reg[2] ? {A_reg[32]^B_reg[32],A_reg[31:0]^B_reg[31:0]} : 33'bz;
+  assign res_spec=spec_logic_reg[3] ? {A_reg[32]|~B_reg[32],A_reg[31:0]&~B_reg[31:0]} : 33'bz;
   assign res_spec=spec_any ?  33'bz :  33'b0;
 
   assign renor_round=rndpath_reg && !(opB_reg || isrnd_zero ||(isrnd_even && resSR1_reg[0])) &&
