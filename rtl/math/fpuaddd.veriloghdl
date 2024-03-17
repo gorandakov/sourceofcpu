@@ -25,6 +25,7 @@ module fadd(
   A_alt,
   B,
   pook_inX,
+  pook_op_bit,
   isDBL,
   isSub,//inclusive of isRSub
   isRSub,
@@ -52,6 +53,7 @@ module fadd(
   input [64:0] A_alt;
   input [80:0] B;
   input pook_inX;
+  input pook_op_bit;
   input isDBL;
   input isSub;
   input isRSub;
@@ -70,6 +72,10 @@ module fadd(
 //width
   wire [67:0] res_X;
   wire [15:0] res_X_hi;
+
+  wire pook_excpt;
+  
+  assign pook_excpt=pook_op_bit && isDBL ? ~|opB[52:0] : ~|opB[62:0];
 
   assign res=res_X;
   assign res_hi=res_X_hi;
@@ -366,7 +372,7 @@ module fadd(
   assign raise[`csrfpu_inexact_excpt]=!|xpon[3:2]; 
   assign raise[`csrfpu_inexact_ieee_excpt]=!|xpon[3:2]; 
   assign raise[`csrfpu_denor_consume_excpt]=1'b0;
-  assign raise[`csrfpu_denor_produce_excpt]=1'b0;
+  assign raise[`csrfpu_denor_produce_excpt]=pook_excpt;
 
   assign X_xpon=Smain_simple ? {res_rnbit,res_tail,2'b00} : 4'bz;
   assign X_xpon=Smain_round ? {res_rnbit,res_tail,2'b00} : 4'bz;

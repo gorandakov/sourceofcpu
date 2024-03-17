@@ -25,6 +25,7 @@ module fadds(
   B,
   pook_inX,
   pook,
+  pook_op_bit,
   isSub,
   isRSub,
   fpcsr,
@@ -50,6 +51,7 @@ module fadds(
   input [32:0] B;
   input pook_inX;
   output pook;
+  input pook_op_bit;
   input isSub;
   input isRSub;
   input [31:0] fpcsr;
@@ -188,6 +190,10 @@ module fadds(
   wire invExcpt;
   wire pook;
 
+  wire pook_excpt;
+  
+  assign pook_excpt=pook_op_bit && ~|opB[23:0];
+
   assign pook=B_zero;
 
   assign pook_in=pook_inX && expdiff==0 && ~sxor && pook_inX;
@@ -311,7 +317,7 @@ module fadds(
   assign raise[`csrfpu_inexact_excpt]=!|xpon[3:2]; 
   assign raise[`csrfpu_inexact_ieee_excpt]=!|xpon[3:2]; 
   assign raise[`csrfpu_denor_consume_excpt]=1'b0;
-  assign raise[`csrfpu_denor_produce_excpt]=1'b0;
+  assign raise[`csrfpu_denor_produce_excpt]=pook_excpt;
 
   assign xpon=main_simple & ~renor_round & ~renor_simple ? {res_rnbit,res_tail,2'b00} : 4'bz;
   assign xpon=main_round & ~renor_round & ~renor_simple  ? {res_rnbit,res_tail,2'b00} : 4'bz;
