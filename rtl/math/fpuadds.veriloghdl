@@ -357,9 +357,9 @@ module fadds(
   
   assign res_rnbitC=resM1[0];
   assign xop1[9:2]=opBs1[7:0];
-  assign res_tail=sxor_reg ? ~res_andtail : |{tailBs,tailBs1_reg};
-  assign res_tailC=sxor_reg ? ~res_andtailC : |{tailBs_c,tailBs1_c_reg};
-  assign res_tailL=sxor_reg ? ~res_andtailL : |{tailBs_L,tailBs1_L_reg};
+  assign res_tail=sxor_reg ? ~res_andtail|pook_inX : |{tailBs,tailBs1_reg,pook_inX};
+  assign res_tailC=sxor_reg ? ~res_andtailC|pook_inX : |{tailBs_c,tailBs1_c_reg,pook_inX};
+  assign res_tailL=sxor_reg ? ~res_andtailL|pook_inX : |{tailBs_L,tailBs1_L_reg,pook_inX};
   assign res_andtail=&{andtailBs,andtailBs1_reg};
   assign res_andtailC=&{andtailBs_c,andtailBs1_c_reg};
   assign res_andtailL=&{andtailBs_L,andtailBs1_L_reg};
