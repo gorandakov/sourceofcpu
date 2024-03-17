@@ -141,11 +141,11 @@ module fcmpd(clk,rst,
 
   assign fEQl=fracxfrm({A[64:33],A[31:0]},isSng,isDbl,isExt)==
     fracxfrm({B[64:33],B[31:0]},isSng,isDbl,isExt);
-  assign extA=isExt ? {A[79],A[81],A[78:65]} : 16'bz;
-  assign extA=isDbl ? {A[63],A[81],{4{~A[63]}},A[62:53]} : 16'bz;
+  assign extA=isExt ? {A[81],A[65],A[79:66]} : 16'bz;
+  assign extA=isDbl ? {A[64],A[65],{4{~A[63]}},A[63:54]} : 16'bz;
   assign extA=(~isDbl&~isExt) ? {A[30],A[32],{7{~A[30]}},A[29:23]} : 16'bz;
-  assign extB=isExt ? {B[79],B[81],B[78:65]} : 16'bz;
-  assign extB=isDbl ? {B[63],B[81],{4{~B[63]}},B[62:53]} : 16'bz;
+  assign extB=isExt ? {B[81],B[65],B[79:66]} : 16'bz;
+  assign extB=isDbl ? {B[64],B[65],{4{~B[63]}},B[63:54]} : 16'bz;
   assign extB=(~isDbl & ~isExt) ? {B[30],B[32],{7{~B[30]}},B[29:23]} : 16'bz;
 
   assign emsk=isExt ? 16'hffff : 16'bz;

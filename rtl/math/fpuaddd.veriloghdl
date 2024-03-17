@@ -233,8 +233,8 @@ module fadd(
 
   assign pook_in=pook_inX && expdiff==0 && ~sxor && pook_inX;
 
-  assign A_exp=(~isDBL) ? {A[80],A[64],A[78:65]} : {A[62],A[80],{4{~A[80]}},A[61:52]};
-  assign B_exp=(~isDBL) ? {B[80],B[64],B[78:65]} : {B[62],B[80],{4{~B[80]}},B[61:52]};
+  assign A_exp=(~isDBL) ? {A[80],A[64],A[78:65]} : {A[62],A[64],{4{~A[64]}},A[61:52]};
+  assign B_exp=(~isDBL) ? {B[80],B[64],B[78:65]} : {B[62],B[64],{4{~B[64]}},B[61:52]};
 
   assign A_zero=(A_exp&emsk)==16'b0;
   assign A_infty=(A_exp|~emsk)==16'hfffe;
@@ -265,10 +265,10 @@ module fadd(
   assign opB=(~sxor & a_more) ?  fracxfrm0(B[63:0],isDBL) : 64'bz;
   assign opB=(~sxor & ~a_more) ?  fracxfrm0(A[63:0],isDBL) : 64'bz;
   
-  assign opA_exp=(a_more & ~isDBL) ? {A[80],A[78:64]} : 16'bz;
-  assign opA_exp=(a_more & isDBL) ? {A[80],{4{~A[80]}},A[62:52]} : 16'bz;
-  assign opA_exp=(~a_more & ~isDBL) ? {B[80],B[78:64]} : 16'bz;
-  assign opA_exp=(~a_more & isDBL) ? {B[80],{4{~B[80]}},B[62:52]} : 16'bz;
+  assign opA_exp=(a_more & ~isDBL) ? {A[80],A[64],,A[78:65]} : 16'bz;
+  assign opA_exp=(a_more & isDBL) ? {A[80],A[64],{4{~A[64]}},A[62:52]} : 16'bz;
+  assign opA_exp=(~a_more & ~isDBL) ? {B[80],B[64],B[78:65]} : 16'bz;
+  assign opA_exp=(~a_more & isDBL) ? {B[80],B[64],{4{~B[64]}},B[62:52]} : 16'bz;
   
   assign expdiff=a_more ? expdiffA : expdiffB;
   
@@ -547,11 +547,11 @@ module fadd(
   adder2c #(64) suppAddOneOff (par1Off_A[63:0],par1Off_B[63:0],resS1,resSR1,
       1'b0,1'b1,expdiffA!=0,expdiffA!=0,cout64_S1,cout64_SR1,cout53_S1,cout53_SR1);
 
-  adder #(16) expAE_mod({A[80],A[78:64]},~{B[80],B[78:64]},expdiffA,1'b1,~isDBL,moreAE,,,);
-  adder #(16) expBE_mod(~{A[80],A[78:64]},{B[80],B[78:64]},expdiffB,1'b1,~isDBL,,,,);
+  adder #(16) expAE_mod({A[64],A[79:65]},~{B[64],B[79:65]},expdiffA,1'b1,~isDBL,moreAE,,,);
+  adder #(16) expBE_mod(~{A[64],A[79:65]},{B[64],B[79:65]},expdiffB,1'b1,~isDBL,,,,);
   
-  adder #(16) expAD_mod({4'b0,A[80],A[62:52]},~{4'b0,B[80],B[62:52]},expdiffA,1'b1,isDBL,moreAD,,,);
-  adder #(16) expBD_mod(~{4'b0,A[80],A[62:52]},{4'b0,B[80],B[62:52]},expdiffB,1'b1,isDBL,,,,);
+  adder #(16) expAD_mod({4'b0,A[64],A[62:52]},~{4'b0,B[80],B[64],B[62:53]},expdiffA,1'b1,isDBL,moreAD,,,);
+  adder #(16) expBD_mod(~{4'b0,A[64],A[62:52]},{4'b0,B[80],A[64],B[62:53]},expdiffB,1'b1,isDBL,,,,);
   
   adder_inc #(16) aExpInc(opA_exp_reg,opA_exp_inc,1'b1,);
   adder #(16) aExpDec(opA_exp_reg,16'hffff,opA_exp_dec,1'b0,1'b1,,,,);
