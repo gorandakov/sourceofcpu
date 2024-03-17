@@ -18,13 +18,15 @@ limitations under the License.
 `include "../struct.sv"
 `include "../msrss_no.sv"
 
-module predecoder_class(instr,magic,flag,thread,class_,isLNK,isRet,LNK);
+module predecoder_class(instr,magic,flag,FMA_mul,prev_FMA_mul,thread,class_,isLNK,isRet,LNK);
   parameter LARGE_CORE=0;
   parameter H=0;
 
   input [31:0] instr;
   input [3:0] magic;
   input flag;
+  output FMA_mul;
+  input prev_FMA_mul;
   input thread;
   output [12:0] class_;
   output isLNK;
@@ -230,9 +232,14 @@ module predecoder_class(instr,magic,flag,thread,class_,isLNK,isRet,LNK);
 
   assign clsFMA=|{
   instr[31:27]==5'd16 && isBasicFPUScalarB && (instr[13:8]==6'd18) | (instr[13:8]==6'd21),
-  instr[16] && isBasicFPUScalarB && (instr[13:9]==5'd8) | (instr[13:8]==6'd19) | (instr[13:8]==6'd20),
   instr[31:27]==5'd16 && isBasicFPUScalarA && (instr[13:9]==5'd2) | (instr[13:8]==6'd8),
-  instr[16:14]==3'b100 && isBasicFPUScalarA && (instr[13:10]==4'd0) | (instr[13:9]==5'd3)};
+  subIsFPUD && opcode_sub== && prev_FMA_mul,
+  subIsFPUPD && opcode_sub== && prev_FMA_mul,
+  subIsFPUSngl && opcode_cum== && prev_FMA_mul
+  };
+
+  assign FMA_mul={instr[31:27]==5'd16 && isBasicFPUScalarB && (instr[13:8]==6'd18) | (instr[13:8]==6'd21),
+  instr[31:27]==5'd16 && isBasicFPUScalarA && (instr[13:9]==5'd2) | (instr[13:8]==6'd8)};
   
   assign clsALU=|{
   isBasicALU & ~isBasicALUExcept & ~isBasicXOR,
@@ -361,7 +368,7 @@ module predecoder_get(
     clk,
     rst,
     thread,
-    bundle,btail,bstop,
+    bundle,btail,bstop,bFMA_mul,
     bnext,bnext_tail,has_next,
     startOff,
     instr0,
@@ -390,6 +397,7 @@ module predecoder_get(
     input [255:0] bundle;
     input [63:0] btail;
     input [3:0] bstop;
+    input bFMA_mul;
     input [79:0] bnext;
     input [4:0] bnext_tail;
     input has_next;
@@ -402,6 +410,7 @@ module predecoder_get(
     output [11:0] instrEn;
     output reg _splitinsn;
     output hasJumps;
+    output last_is_FMAMul;
     output reg error;
     output reg jerror;
     
@@ -453,6 +462,9 @@ module predecoder_get(
     reg [19:0] flag_bits0;
     wire [19:0] mask0;
 
+    wire [19:-1] FMAmul;
+    wire [11:0] FMAmulI;
+
     function [255+64+16:0] boogy_baboogy;
         input [3:0] bstop;
         input cond;
@@ -483,7 +495,7 @@ module predecoder_get(
             //verilator lint_off WIDTH
             assign kk=boogy_baboogy(bstop[3:0],k==0 && bundle0[255],5'hf,5'he,5'hd,5'hc,k[4:0]);
             //verilator lint_on WIDTH
-            predecoder_class #(LARGE_CORE,H) cls_mod(bundleF[k*16+:32],~instrEndF[k+:4],flag_bits0[k],thread,class_[k],
+            predecoder_class #(LARGE_CORE,H) cls_mod(bundleF[k*16+:32],~instrEndF[k+:4],flag_bits0[k],FMAmul[k],FMAmul[k-1],thread,class_[k],
               is_lnk0[k],is_ret0[k],LNK[k]);
             popcnt20 cntJ_mod(is_jmp[19:0] & ((20'b10<<k)-20'b1),cntJEnd[k]);
             popcnt20 cntL_mod(is_lnk[19:0] & ((20'b10<<k)-20'b1),lcnt[k]);
@@ -502,10 +514,10 @@ module predecoder_get(
                 assign lnkJumps0[subloop_jump]=lcnt_or_less[subloop_jump] ?  5'd1 : 5'bz;
             end
             for(subloop_insn=0;subloop_insn<12;subloop_insn=subloop_insn+1) begin : insn_gen
-                if (k==0) assign {class0[0],magic0[0],instr0[0],off0[0]}=(mask[k] & ~mask[k-1]) ?
-                    {classF_[k],instrEndF[k+:4],bundleF[k*16+:80],kk[4:0]} : 102'bz;
-                else assign {class0[subloop_insn],magic0[subloop_insn],instr0[subloop_insn],off0[subloop_insn]}=mask[k] & 
-                    cntEnd[k-1][subloop_insn] & cntEnd[k-2][subloop_insn-1] ? {class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[4:0]} : 102'bz;
+                if (k==0) assign {FMAmulI[0],class0[0],magic0[0],instr0[0],off0[0]}=(mask[k] & ~mask[k-1]) ?
+                    {FMAmulI[k],classF_[k],instrEndF[k+:4],bundleF[k*16+:80],kk[4:0]} : 102'bz;
+                else assign {FMAmulI[subloop_insn],class0[subloop_insn],magic0[subloop_insn],instr0[subloop_insn],off0[subloop_insn]}=mask[k] & 
+                    cntEnd[k-1][subloop_insn] & cntEnd[k-2][subloop_insn-1] ? {FMAmulI[k],class_[k], instrEnd[k+:4],bundle0[k*16+:80],k[4:0]} : 102'bz;
             end
         end
     endgenerate
@@ -526,6 +538,7 @@ module predecoder_get(
     assign cntJEnd[-1]=16'd1;
     assign lcnt[-1]=16'd1;
     
+    assign last_is_FMAmul=|(FMAmulI[11:0] & (instrEn[11:0]&~(instrEn[11:0]>>1));
     //verilator lint_off WIDTH
     assign bundleF=boogy_baboogy(bstop[3:0],bundle0[255] && startOff==0,{bundle0[255+48:0],btail[63:48]},{bundle0[255+32:0],btail[63:32]},
         {bundle0[255+16:0],btail[63:16]},{bundle0[255:0],btail[63:0]},bundle0);
@@ -537,6 +550,8 @@ module predecoder_get(
 
     assign bundle0={bnext,bundle[239:0]};
     
+    assign FMAmul[-1]=bFMA_mul;
+
     assign has_brk=has_next && cntEnd2_15[11];
 
     assign instrEn=cntEnd2[12:1]|{11'b0,startOff==4'hf};
