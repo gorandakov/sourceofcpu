@@ -199,8 +199,8 @@ module fadds(
   assign pook_in=pook_inX && expdiff==0 && ~sxor && pook_inX;
  
 
-  assign A_exp={A[32],A[30:23]};
-  assign B_exp={B[32],B[30:23]};
+  assign A_exp={A[30],A[32],A[29:23]};
+  assign B_exp={B[30],B[32],B[29:23]};
 
   //assign A_h={|A[22:0]}; 
   //assign B_h={|B[22:0]}; 
@@ -337,13 +337,13 @@ module fadds(
   assign resX[22:0]=main_simpleL ? {resM1[21:0],res_rnbit^Smain_subroundL} : 23'bz;
   assign resX[22:0]=main_roundL ? {resMR1[21:0],1'b0} : 23'bz;
   
-  assign {resX[32],resX[30:23]}=main_simple ? {opA_exp_reg[8:0]} : 9'bz;
-  assign {resX[32],resX[30:23]}=main_round ? {opA_exp_reg[8:0]} : 9'bz;
-  assign {resX[32],resX[30:23]}=main_simpleC ? {opA_exp_inc[8:0]} : 9'bz;
-  assign {resX[32],resX[30:23]}=main_roundC ? {opA_exp_inc[8:0]} : 9'bz;
-  assign {resX[32],resX[30:23]}=main_simpleRC ? {opA_exp_inc[8:0]} : 9'bz;
-  assign {resX[32],resX[30:23]}=main_simpleL ? {opA_exp_dec[8:0]} : 9'bz;
-  assign {resX[32],resX[30:23]}=main_roundL ? {opA_exp_dec[8:0]} : 9'bz;
+  assign {resX[30],resX[32],resX[29:23]}=main_simple ? {opA_exp_reg[8:0]} : 9'bz;
+  assign {resX[30],resX[32],resX[29:23]}=main_round ? {opA_exp_reg[8:0]} : 9'bz;
+  assign {resX[30],resX[32],resX[29:23]}=main_simpleC ? {opA_exp_inc[8:0]} : 9'bz;
+  assign {resX[30],resX[32],resX[29:23]}=main_roundC ? {opA_exp_inc[8:0]} : 9'bz;
+  assign {resX[30],resX[32],resX[29:23]}=main_simpleRC ? {opA_exp_inc[8:0]} : 9'bz;
+  assign {resX[30],resX[32],resX[29:23]}=main_simpleL ? {opA_exp_dec[8:0]} : 9'bz;
+  assign {resX[30],resX[32],resX[29:23]}=main_roundL ? {opA_exp_dec[8:0]} : 9'bz;
   
   assign main_lo=~resM1[23] && ~(cout64_M1_ns^partM1[24]^sxor_reg);
   assign main_ulo=main_lo && resMR1[23];
