@@ -251,8 +251,8 @@ module fpucadd(clk,rst,A,A_alt,B,pook_in,and1,or1,copyA,en,rmode,res,res_hi,xtra
     || (isrnd_plus && EXT_rnbitY | EXT_tailY));  
   
     //begin exp/sgn  
-  assign expA=isDBL ? {A[62],A[80],{4{~A[62]}},A[61:52]} : {A[78],A[80],A[77:64]};  
-  assign expB=isDBL ? {B[62],B[80],{4{~B[62]}},B[61:52]} : {B[78],B[80],B[77:64]};
+  assign expA=isDBL ? {A[62],A[64],{4{~A[62]}},A[61:52]} : {A[80],A[64],A[78:65]};  
+  assign expB=isDBL ? {B[62],B[64],{4{~B[62]}},B[61:52]} : {B[80],B[64],B[78:65]};
   
   assign A_zero=(expA&emsk)==16'b0;
   assign A_infty=(expA|~emsk)==16'hfffe;

@@ -233,8 +233,8 @@ module fadd(
 
   assign pook_in=pook_inX && expdiff==0 && ~sxor && pook_inX;
 
-  assign A_exp=(~isDBL) ? {A[78],A[80],A[77:64]} : {A[62],A[80],{4{~A[80]}},A[61:52]};
-  assign B_exp=(~isDBL) ? {B[78],B[80],B[77:64]} : {B[62],B[80],{4{~B[80]}},B[61:52]};
+  assign A_exp=(~isDBL) ? {A[80],A[64],A[78:65]} : {A[62],A[80],{4{~A[80]}},A[61:52]};
+  assign B_exp=(~isDBL) ? {B[80],B[64],B[78:65]} : {B[62],B[80],{4{~B[80]}},B[61:52]};
 
   assign A_zero=(A_exp&emsk)==16'b0;
   assign A_infty=(A_exp|~emsk)==16'hfffe;
@@ -407,13 +407,13 @@ module fadd(
   assign {resX[62],resX[64],resX[61:52]}=Smain_simpleL ? {opA_exp_dec[15],opA_exp_dec[10:0]} : 12'bz;
   assign {resX[62],resX[64],resX[61:52]}=Smain_roundL ? {opA_exp_dec[15],opA_exp_dec[10:0]} : 12'bz;
   
-  assign {resY[78],resY[80],resY[77:64]}=main_simple ? opA_exp_reg : 16'bz;
-  assign {resY[78],resY[80],resY[77:64]}=main_round ? opA_exp_reg : 16'bz;
-  assign {resY[78],resY[80],resY[77:64]}=main_simpleC ? opA_exp_inc : 16'bz;
-  assign {resY[78],resY[80],resY[77:64]}=main_roundC ? opA_exp_inc : 16'bz;
-  assign {resY[78],resY[80],resY[77:64]}=main_simpleRC ? opA_exp_inc : 16'bz;
-  assign {resY[78],resY[80],resY[77:64]}=main_simpleL ? opA_exp_dec : 16'bz;
-  assign {resY[78],resY[80],resY[77:64]}=main_roundL ? opA_exp_dec : 16'bz;
+  assign {resY[80],resY[64],resY[78:65]}=main_simple ? opA_exp_reg : 16'bz;
+  assign {resY[80],resY[64],resY[78:65]}=main_round ? opA_exp_reg : 16'bz;
+  assign {resY[80],resY[64],resY[78:65]}=main_simpleC ? opA_exp_inc : 16'bz;
+  assign {resY[80],resY[64],resY[78:65]}=main_roundC ? opA_exp_inc : 16'bz;
+  assign {resY[80],resY[64],resY[78:65]}=main_simpleRC ? opA_exp_inc : 16'bz;
+  assign {resY[80],resY[64],resY[78:65]}=main_simpleL ? opA_exp_dec : 16'bz;
+  assign {resY[80],resY[64],resY[78:65]}=main_roundL ? opA_exp_dec : 16'bz;
    
   assign resY[63:0]=main_simple ? resM1[63:0] : 64'bz;
   assign resY[63:0]=main_round ? resMR1[63:0] : 64'bz;
