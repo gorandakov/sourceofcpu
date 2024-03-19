@@ -413,14 +413,15 @@ module smallInstr_decoder(
   //237 and 239 unused so far
   assign isPtrBump_other_domain=opcode_main==8'hf7 && magic[1:0]==2'b01 && LARGE_CORE && H^instr[31];
 
-  assign isBasicFPUScalarA=opcode_main[7:4]==5'h1f && ~&opcode_main[2:0] && instr[13:12]==2'b0;
-  assign isBasicFPUScalarB=opcode_main[7:4]==5'h1f && ~&opcode_main[2:0] && instr[13:12]==2'b1;
-  assign isBasicFPUScalarC=opcode_main[7:4]==5'h1f && ~&opcode_main[2:0] && instr[15:12]==4'd2;
-  assign isBasicFPUScalarCmp=opcode_main[7:4]==5'h1f && ~&opcode_main[2:0] && instr[15:12]==4'd6;
-  assign isBasicFPUScalarCmp2=opcode_main[7:4]==5'h1f && ~&opcode_main[2:0] && instr[15:12]==4'd10;
-  assign isBasicFPUScalarCmp3=opcode_main[7:4]==5'h1f && ~&opcode_main[2:0] && instr[15:12]==4'd12;
-  //fpu bit[3] is vectorisable
-  //fpu bit[2] is conditional (condition LE signed)
+  assign isBasicFPUScalarA=opcode_main[7:4]==4'hf && ~&opcode_main[2:0] && instr[13:12]==2'b0;
+  assign isBasicFPUScalarB=opcode_main[7:4]==4'hf && ~&opcode_main[2:0] && instr[13:12]==2'b1;
+  assign isBasicFPUScalarC=opcode_main[7:4]==4'hf && ~&opcode_main[2:0] && instr[15:12]==4'd2;
+  assign isBasicFPUScalarCmp=opcode_main[7:4]==4'hf && ~&opcode_main[2:0] && instr[15:12]==4'd6;
+  assign isBasicFPUScalarCmp2=opcode_main[7:4]==4'hf && ~&opcode_main[2:0] && instr[15:12]==4'd10;
+  assign isBasicFPUScalarCmp3=opcode_main[7:4]==4'hf && ~&opcode_main[2:0] && instr[15:12]==4'd12;
+  //fpu bit[3] is contdition subselect (set to change condition to LT unsigned)
+  //fpu bit[2] is conditional (condition LE unsigned)
+  //when only bit 3 is set then the condition is overflow
   assign isBasicSysInstr=opcode_main==8'hff;
  //8'hf7==new insn; starting with 48 bit size (no 32 bit)
  
@@ -691,7 +692,12 @@ module smallInstr_decoder(
                 1: pport[tt]=PORT_FMUL;
                 2: pport[tt]=PORT_FANY;
               endcase
-              palucond[tt]=opcode_main[2] ? 5'h19 : 5'h0;
+              casex(opcode_main[3:2]);
+                  2'b00: palucond[tt]=5'h0;
+                  2'b01: palucond[tt]=5'h15;
+                  2'b11: palucond[tt]=5'h17;
+                  2'b10: palucond[tt]=5'h1c;
+              endcase
           end
           prmode[tt]=3'h7;
           pconstant[tt]=constantDef;
