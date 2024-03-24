@@ -1148,6 +1148,19 @@ module dcache1(
   wire [1:0] read_hit1_way[7:0];
   wire [1:0] read_hit2_way[7:0];
   wire [1:0] read_hit3_way[7:0];
+
+  function [63:0] bswap64;
+      input [63:0] val;
+      bswap64={val[7:0],val[15:8],val[23:16],val[31:24],val[39:32],val[47:40],val[55:58],val[63:56]};
+  endfunction
+  function [31:0] bswap32;
+      input [31:0] val;
+      bswap64={val[7:0],val[15:8],val[23:16],val[31:24]};
+  endfunction
+  wire [5*32-1:0] write_data0x={bswap32(write_data0[159:128]),write0_sz==3 ? write_data0[127:64]: bswap64(write_data0[127:64]),bswap64(write_data0[63:0])};
+  wire [5*32-1:0] write_data1x={bswap32(write_data1[159:128]),write1_sz==3 ? write_data1[127:64]: bswap64(write_data1[127:64]),bswap64(write_data1[63:0])};
+  wire [5*32-1:0] write_dataM0x={bswap32(write_dataM0[159:128]),bswap64(write_dataM0[127:64]),bswap64(write_dataM0[63:0])};
+  wire [5*32-1:0] write_dataM1x={bswap32(write_dataM1[159:128]),bswap64(write_dataM1[127:64]),bswap64(write_dataM1[63:0])};
   
   wire [1:0] read_hitCl0Q;
   wire [1:0] read_hitCl1Q;
@@ -1433,10 +1446,17 @@ module dcache1(
           for(q=0;q<5;q=q+1) begin
               assign wr0[q]=((b-q)&5'h1f)==write_begin0 && write_clkEn0 && write_bank0[b];
               assign wr1[q]=((b-q)&5'h1f)==write_begin1 && write_clkEn1 && write_bank1[b];
-              assign write_data[b*32+:32]=wr0[q] ? write_data0x[q*32+:32] : 32'BZ;
-              assign write_data[b*32+:32]=wr1[q] ? write_data1x[q*32+:32] : 32'BZ;
+              `ifndef ENDIAN_BIG
+              assign write_data[b*32+:32]=wr0[q] ? write_data0[q*32+:32] : 32'BZ;
+              assign write_data[b*32+:32]=wr1[q] ? write_data1[q*32+:32] : 32'BZ;
               assign write_dataM[b*32+:32]=wr0[q] ? write_dataM0[q*32+:32] : 32'BZ;
               assign write_dataM[b*32+:32]=wr1[q] ? write_dataM1[q*32+:32] : 32'BZ;
+              `else
+              assign write_data[(b^1)*32+:32]=wr0[q] ? write_data0x[q*32+:32] : 32'BZ;
+              assign write_data[(b^1)*32+:32]=wr1[q] ? write_data1x[q*32+:32] : 32'BZ;
+              assign write_dataM[(b^1)*32+:32]=wr0[q] ? write_dataM0x[q*32+:32] : 32'BZ;
+              assign write_dataM[(b^1)b*32+:32]=wr1[q] ? write_dataM1x[q*32+:32] : 32'BZ;
+              `endif
           end
           assign  write_data[b*32+:32]=(|{wr0,wr1}) ? 32'BZ : 
             busIns_data[(b%16)*32+:32];
