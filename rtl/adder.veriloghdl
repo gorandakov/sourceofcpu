@@ -721,7 +721,7 @@ endmodule
   
   genvar i;
   
-  assign bitEn={{20{ben[1]&en}},{12{ben[0]&en}},{32{en}}};
+  assign bitEn={{20{ben[1]&en}},{12{ben[0]&en}},{16{en}},{16{en&~sxtEn}}};
   
   
 
@@ -889,8 +889,8 @@ endmodule
 	  begin
 	    assign out[63:44]=(en&~ben[1]) ? exbits : 20'bz; 
 	    assign out[43:32]=(en&~ben[0]) ? 12'b0:12'bz; 
-          //  assign out[63:32]=(X[31] & sxtEn) ? {32{~C1[31]}} : 'z;
-          //  assign out[63:32]=(nX[31] & sxtEn) ? {32{~nC1[31]}} : 'z;
+            assign out[63:16]=(X[15] & sxtEn) ? {48{~C1[15]}} : 'z;
+            assign out[63:16]=(nX[15] & sxtEn) ? {48{~nC1[15]}} : 'z;
 	  end
     
   endgenerate
