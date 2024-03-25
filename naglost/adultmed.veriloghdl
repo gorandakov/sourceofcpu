@@ -411,7 +411,7 @@ module smallInstr_decoder(
   //231-232=cloop no sub
   assign isCLeave=opcode_main==8'd235 || opcode_main==8'd236 || opcode_main==8'd238;  
   //237 and 239 unused so far
-  assign isPtrBump_other_domain=opcode_main==8'hf7 && magic[1:0]==2'b01 && LARGE_CORE && H^instr[31];
+  assign isPtrBump_other_domain=opcode_main==8'hf7 && magic[1:0]==2'b01 && LARGE_CORE && H| |instr[13:12];
 
   assign isBasicFPUScalarA=opcode_main[7:4]==4'hf && ~&opcode_main[2:0] && instr[13:12]==2'b0;
   assign isBasicFPUScalarB=opcode_main[7:4]==4'hf && ~&opcode_main[2:0] && instr[13:12]==2'b1;
@@ -430,7 +430,7 @@ module smallInstr_decoder(
   assign qconstant[2]={1'b0,pconstant[8]};
   assign qtrien   [2]=trien    [8];
   assign qconstant[3]={1'b0,pconstant[9]};
-  assign qtrien   [3]=trien    [9];
+  assign qtrien   [3]=trien    [9] | trien[29];
   assign qconstant[4]={1'b0,pconstant[10]};
   assign qtrien   [4]=trien    [10];
   assign qconstant[5]={1'b0,pconstant[18]};
@@ -1641,7 +1641,7 @@ module smallInstr_decoder(
       trien[29]=magic[0] & isBasicAddNoFl || isPtrBump_other_domain;
           //if no magic, it's register-register nxor and carry flag for ptr bit!
       puseBConst[29]=magic[2:0]==3'b011;
-      poperation[29][11:0]=isPtrBump_other_domain ? H?`op_mov64 : `op_add64 : opcode_main==8'd234 ? `op_dec|4096 : magic[1:0]==2'b01 ? `op_nxor64 : opcode_main[0] ? `op_add64 : `op_add32;
+      poperation[29][11:0]=isPtrBump_other_domain ? ((H&~instr[13])?`op_mov64 : `op_add64) : opcode_main==8'd234 ? `op_dec|4096 : magic[1:0]==2'b01 ? `op_nxor64 : opcode_main[0] ? `op_add64 : `op_add32;
       poperation[29][12]=1'b1;
       pport[29]=opcode_main==8'd234 ? PORT_MUL : PORT_ALU;
       prA_use[29]=1'b1;
@@ -1656,8 +1656,11 @@ module smallInstr_decoder(
               prT[29]=instr[16:12];
               prB[29]=instr[22:18];
               if (isPtrBump_other_domain) begin
-                  prA_use[29]=1'b0;
-                  if (!H) prT[29]=prA[29];
+                  prA_use[29]=~instr[12];
+                  prT[29]=prA[29];
+                  if (LARGE_CORE && instr[12]) poperation[19]=`op_sadd_odd;
+                  //if instr[13] and there is a spec load then repreat all of the bump combos twice in the second core to get sized iteration
+                  if (instr[31]) puseBConst[29]=1'b1;
               end
               instr[8]=instr[23];
           end else begin
