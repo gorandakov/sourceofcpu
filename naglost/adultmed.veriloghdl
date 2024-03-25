@@ -1270,7 +1270,8 @@ module smallInstr_decoder(
       poperation[16][12]=1'b1;    
       prA[16]={instr[17],instr[11:8]};
       prB[16]=instr[16:12];
-      if (instr[27:24]!=0 && !isPtrSec && ~(instr[28])) perror[16]=1;
+      if (instr[27:25]!=0 && !isPtrSec && ~(instr[28])) perror[16]=1;
+      if (!isPtrSec && ~(instr[28]) && instr[24]) prmode[16]=3'b010;
       pconstant[16]={52'b0,instr[0],instr[30],instr[27:18]};
       prA[16]={instr[17],instr[11:8]};
       prT[16]=instr[16:12];
