@@ -308,16 +308,24 @@ module ccRam_way(
   generate
     if (~INDEX[0]) begin
         assign readA_data=~(({DATA_WIDTH{readA_hit}} & readA_data_ram) | readA_data_in);
-        assign readA_dataX=~(({60{readA_hit}} & readA_dataX[59:0]) | readA_dataX_in);
+        assign readA_dataX=~(({60{readA_hit}} & readXA_data_ram[59:0]) | readA_dataX_in);
         assign expun_addr=~(({37{write_hit}} & expun_naddr[36:0]) | expun_addr_in);
         assign readB_data=~(({DATA_WIDTH{readB_hit}} & readB_data_ram) | readB_data_in);
-        assign readB_dataX=~(({60{readB_hit}} & readB_dataX[59:0]) | readB_dataX_in);
+        assign readB_dataX=~(({60{readB_hit}} & readXB_data_ram[59:0]) | readB_dataX_in);
+        assign readAZ_data=~(({DATA_WIDTH/8{readAZ_hit}} & readAZ_data_ram) | readAZ_data_in);
+        assign readAZ_dataX=~(({5{readAZ_hit}} & readXAZ_data_ram[4:0]) | readAZ_dataX_in);
+        assign readBZ_data=~(({DATA_WIDTH/8{readBZ_hit}} & readBZ_data_ram) | readBZ_data_in);
+        assign readBZ_dataX=~(({5{readBZ_hit}} & readXBZ_data_ram[4:0]) | readBZ_dataX_in);
     end else begin
         assign readA_data=~(~({DATA_WIDTH{readA_hit}} & readA_data_ram) & readA_data_in);
-        assign readA_dataX=~(~({60{readA_hit}} & readA_dataX[59:0]) & readA_dataX_in);
+        assign readA_dataX=~(~({60{readA_hit}} & readXA_data_ram[59:0]) & readA_dataX_in);
         assign expun_addr=~(~({37{write_hit}} & expun_naddr[36:0]) & expun_addr_in);
         assign readB_data=~(~({DATA_WIDTH{readB_hit}} & readB_data_ram) & readB_data_in);
-        assign readB_dataX=~(~({60{readB_hit}} & readB_dataX[59:0]) & readB_dataX_in);
+        assign readB_dataX=~(~({60{readB_hit}} & readXB_data_ram[59:0]) & readB_dataX_in);
+        assign readAZ_data=~(~({DATA_WIDTH/8{readAZ_hit}} & readAZ_data_ram) & readAZ_data_in);
+        assign readAZ_dataX=~(~({5{readAZ_hit}} & readXAZ_data_ram[4:0]) & readAZ_dataX_in);
+        assign readBZ_data=~(~({DATA_WIDTH/8{readBZ_hit}} & readBZ_data_ram) & readBZ_data_in);
+        assign readBZ_dataX=~(~({5{readBZ_hit}} & readXBZ_data_ram[4:0]) & readBZ_dataX_in);
     end
   endgenerate
 
@@ -334,10 +342,13 @@ module ccRam_way(
   .readA_clkEn(readA_clkEn),
   .readA_addr(readA_IP[8:2]),
   .readA_data(readXA_data_ram),
+  .readAZ_data(readXAZ_data_ram),
   .readB_clkEn(readB_clkEn),
   .readB_addr(readB_IP[8:2]),
   .readB_data(readXB_data_ram),
+  .readBZ_data(readXBZ_data_ram),
   .write_addr(writeX_addr),
+  .write_addrZ(writeX_addr-7'd1),
   .write_data(init ? 60'b0 : writeX_data),
   .write_wen(write_hit|init|readA_clkEn_reg|readB_clkEn_reg)
   );
@@ -349,10 +360,13 @@ module ccRam_way(
   .readA_clkEn(readA_clkEn),
   .readA_addr(readA_IP[8:2]),
   .readA_data(readA_data_ram[DATA_WIDTH/2-1:0]),
+  .readAZ_data(readAZ_data_ram[DATA_WIDTH/16-1:0]),
   .readB_clkEn(readB_clkEn),
   .readB_addr(readB_IP[8:2]),
   .readB_data(readB_data_ram[DATA_WIDTH/2-1:0]),
+  .readBZ_data(readBZ_data_ram[DATA_WIDTH/16-1:0]),
   .write_addr(init ? initCount : write_IP_reg[8:2]),
+  .write_addrZ(init ? initCount-7'd1 : write_IP_reg[8:2]-7'd1),
   .write_data(write_data_reg[DATA_WIDTH/2-1:0] & {DATA_WIDTH/2{~init}}),
   .write_wen(write_hit|init)
   );
@@ -363,10 +377,13 @@ module ccRam_way(
   .readA_clkEn(readA_clkEn),
   .readA_addr(readA_IP[8:2]),
   .readA_data(readA_data_ram[DATA_WIDTH-1:DATA_WIDTH/2]),
+  .readAZ_data(readAZ_data_ram[DATA_WIDTH/8-1:DATA_WIDTH/16]),
   .readB_clkEn(readB_clkEn),
   .readB_addr(readB_IP[8:2]),
   .readB_data(readB_data_ram[DATA_WIDTH-1:DATA_WIDTH/2]),
+  .readBZ_data(readBZ_data_ram[DATA_WIDTH/8-1:DATA_WIDTH/16]),
   .write_addr(init ? initCount : write_IP_reg[8:2]),
+  .write_addrZ(init ? initCount-7'd1 : write_IP_reg[8:2]-7'd1),
   .write_data(write_data_reg[DATA_WIDTH-1:DATA_WIDTH/2] & {DATA_WIDTH/2{~init}}),
   .write_wen(write_hit|init)
   );
