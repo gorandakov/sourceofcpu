@@ -1446,17 +1446,10 @@ module dcache1(
           for(q=0;q<5;q=q+1) begin
               assign wr0[q]=((b-q)&5'h1f)==write_begin0 && write_clkEn0 && write_bank0[b];
               assign wr1[q]=((b-q)&5'h1f)==write_begin1 && write_clkEn1 && write_bank1[b];
-              `ifndef ENDIAN_BIG
               assign write_data[b*32+:32]=wr0[q] ? write_data0[q*32+:32] : 32'BZ;
               assign write_data[b*32+:32]=wr1[q] ? write_data1[q*32+:32] : 32'BZ;
               assign write_dataM[b*32+:32]=wr0[q] ? write_dataM0[q*32+:32] : 32'BZ;
               assign write_dataM[b*32+:32]=wr1[q] ? write_dataM1[q*32+:32] : 32'BZ;
-              `else
-              assign write_data[(b^1)*32+:32]=wr0[q] ? write_data0x[q*32+:32] : 32'BZ;
-              assign write_data[(b^1)*32+:32]=wr1[q] ? write_data1x[q*32+:32] : 32'BZ;
-              assign write_dataM[(b^1)*32+:32]=wr0[q] ? write_dataM0x[q*32+:32] : 32'BZ;
-              assign write_dataM[(b^1)b*32+:32]=wr1[q] ? write_dataM1x[q*32+:32] : 32'BZ;
-              `endif
           end
           assign  write_data[b*32+:32]=(|{wr0,wr1}) ? 32'BZ : 
             busIns_data[(b%16)*32+:32];
@@ -1466,7 +1459,6 @@ module dcache1(
             read_bankHit_way[3][b] | read_bankHit_way[4][b] | read_bankHit_way[5][b] |  
             read_bankHit_way[6][b] | read_bankHit_way[7][b]; */
           if (b<16) begin
-              `ifndef ENDIAN_BIG
               assign rddata1[0]=({read_beginA_reg[0][1:0],read_low_reg[1:0]}==b) ? rxdata[0][b*8+:136] : 136'BZ;
               assign rddata1[1]=({read_beginA_reg[1][1:0],read_low_reg[3:2]}==b) ? rxdata[1][b*8+:136] : 136'BZ;
               assign rddata1[2]=({read_beginA_reg[2][1:0],read_low_reg[5:4]}==b) ? rxdata[2][b*8+:136] : 136'BZ;
@@ -1479,20 +1471,6 @@ module dcache1(
               assign rderr2[1]=({read_beginA_reg[1][1:0],2'b0}==b) ? |rxerr7B[1][b+:4] : 1'BZ;
               assign rderr2[2]=({read_beginA_reg[2][1:0],2'b0}==b) ? |rxerr7B[2][b+:4] : 1'BZ;
               assign rderr2[3]=({read_beginA_reg[3][1:0],2'b0}==b) ? |rxerr7B[3][b+:4] : 1'BZ;
-              `else
-              assign rddata1[0]=({read_beginA_reg[0][1:0],read_low_reg[1:0]}==b) ? rxdata[0][(b=16 ? b : 7-b[2:0]+b&5'h18)*8+:136] : 136'BZ;
-              assign rddata1[1]=({read_beginA_reg[1][1:0],read_low_reg[3:2]}==b) ? rxdata[1][(b=16 ? b : 7-b[2:0]+b&5'h18)*8+:136] : 136'BZ;
-              assign rddata1[2]=({read_beginA_reg[2][1:0],read_low_reg[5:4]}==b) ? rxdata[2][(b=16 ? b : 7-b[2:0]+b&5'h18)*8+:136] : 136'BZ;
-              assign rddata1[3]=({read_beginA_reg[3][1:0],read_low_reg[7:6]}==b) ? rxdata[3][(b=16 ? b : 7-b[2:0]+b&5'h18)*8+:136] : 136'BZ;
-              assign rderr1[0]=({read_beginA_reg[0][1:0],2'b0}==b) ? |rxerr[0][(b=16 ? b : 7-b[2:0]+b&5'h18)+:4] : 1'BZ;
-              assign rderr1[1]=({read_beginA_reg[1][1:0],2'b0}==b) ? |rxerr[1][(b=16 ? b : 7-b[2:0]+b&5'h18)+:4] : 1'BZ;
-              assign rderr1[2]=({read_beginA_reg[2][1:0],2'b0}==b) ? |rxerr[2][(b=16 ? b : 7-b[2:0]+b&5'h18)+:4] : 1'BZ;
-              assign rderr1[3]=({read_beginA_reg[3][1:0],2'b0}==b) ? |rxerr[3][(b=16 ? b : 7-b[2:0]+b&5'h18)+:4] : 1'BZ;
-              assign rderr2[0]=({read_beginA_reg[0][1:0],2'b0}==b) ? |rxerr7B[0][(b=16 ? b : 7-b[2:0]+b&5'h18)+:4] : 1'BZ;
-              assign rderr2[1]=({read_beginA_reg[1][1:0],2'b0}==b) ? |rxerr7B[1][(b=16 ? b : 7-b[2:0]+b&5'h18)+:4] : 1'BZ;
-              assign rderr2[2]=({read_beginA_reg[2][1:0],2'b0}==b) ? |rxerr7B[2][(b=16 ? b : 7-b[2:0]+b&5'h18)+:4] : 1'BZ;
-              assign rderr2[3]=({read_beginA_reg[3][1:0],2'b0}==b) ? |rxerr7B[3][(b=16 ? b : 7-b[2:0]+b&5'h18)+:4] : 1'BZ;
-              `endif
           end
       end
       for (p=0;p<4;p=p+1) begin
@@ -1521,7 +1499,8 @@ module dcache1(
 		rxdata4[p]|rxdata5[p]|rxdata6[p]|rxdata7[p];
 	      assign rxerr[p]=rxerr0[p]|rxerr1[p]|rxerr2[p]|rxerr3[p]|
 		rxerr4[p]|rxerr5[p]|rxerr6[p]|rxerr7[p];
-              assign read_dataA[p]=(swpdata[v] ? {rdata1[p][79:64],rdata1[127:80],rdata1[63:0]} : rddata1[p]) & {{8{mskdata1[p][5]}},{48{mskdata1[p][4]}},{16{mskdata1[p][3]}},{32{mskdata1[p][2]}},
+              assign read_dataA[p]=(swpdata[v] ? {rdata1[p][127:64],rdata1[7:0],rdata1[15:8],rdata1[23:16],
+                rdata1[31:24],rdata1[39:32],rdata1[47:40],rdata1[55:48],rdata1[63:56]} : rddata1[p]) & {{8{mskdata1[p][5]}},{48{mskdata1[p][4]}},{16{mskdata1[p][3]}},{32{mskdata1[p][2]}},
                     {16{mskdata1[p][1]}},{8{mskdata1[p][0]}},8'hff};
               assign puke_addr[p]=read_odd_reg[p]|read_split_reg[p] && rderr1[p] ? read_addrO_reg[p][6:0] : read_addrE_reg[p][6:0];
               assign puke_en[p]=rderr1[p] | rderr2[p];
@@ -1817,12 +1796,8 @@ module dcache1(
          5'd17: mskdata1[v]<=6'b00001;
          5'd18: mskdata1[v]<=6'b00011;
          5'd19: mskdata1[v]<=6'b00111;
-         5'd23: mskdata1[v]<=6'b00111;
-         5'h3:  begin mskdata1[v]<=6'b01111; 
-              `ifdef ENDIAN_BIG
-              swpdata[v]=1'b1; 
-              `endif
-         end //long double
+         5'd23: mskdata1[v]<=begin 6'b00111; swpdata[v]<=1'b1; end
+         5'h3:  mskdata1[v]<=6'b01111; //long double
          5'h0,5'h1,5'h2:  mskdata1[v]<=6'b11111; //int, double, single 128 bit (u)
          5'hc,5'hd,5'he:  mskdata1[v]<=6'b11111; //int, double, single 128 bit (a)
          5'h4,5'h5,5'h6:  mskdata1[v]<=6'b00011; //singleE,single,singleD
