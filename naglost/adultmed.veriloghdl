@@ -1864,9 +1864,9 @@ module smallInstr_decoder(
       trien[33]=magic[0] & isBasicFPUScalarA;
       puseRs[33]=1'b1;
       if (magic[2:0]==3'b011) begin
-          prAX[33]=instr[32]; if (instr[32]) prA[33][4:1]=4'b0;
-	  prBE[33]=instr[33]; if (instr[33]) prB[33][4:1]=4'b0;
-	  prTE[33]=instr[34]; if (instr[34]) prT[33][4:1]=4'b0;
+          prAX[33]=instr[32]; if (instr[32]) prA[33][4:2]=3'b0;
+	  prBE[33]=instr[33]; if (instr[33]) prB[33][4:2]=3'b0;
+	  prTE[33]=instr[34]; if (instr[34]) prT[33][4:2]=3'b0;
 	  palucond[33]=instr[39:35];
 	  prndmode[33]=instr[42:40];
 	  //prndmod[33]=instr[42:0]
