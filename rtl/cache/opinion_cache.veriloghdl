@@ -16,7 +16,7 @@ limitations under the License.
 
 `include "../struct.sv"
 
-module cc_ram(
+module cc_ram0(
   clk,
   rst,
   readA_clkEn,
@@ -32,8 +32,8 @@ module cc_ram(
   );
 
   localparam DATA_WIDTH=36;
-  localparam ADDR_WIDTH=7;
-  localparam ADDR_COUNT=128;
+  localparam ADDR_WIDTH=6;
+  localparam ADDR_COUNT=64;
 
   input clk;
   input rst;
@@ -70,7 +70,7 @@ module cc_ram(
 
 endmodule
 
-module cc_ram_block(
+module cc_ram(
   clk,
   rst,
   readA_clkEn,
@@ -79,18 +79,81 @@ module cc_ram_block(
   readB_clkEn,
   readB_addr,
   readB_data,
+  write_addrE,
+  write_addrO,
+  write_data,
+  write_wen,
+  write_ben
+  );
+
+  localparam DATA_WIDTH=36;
+  localparam ADDR_WIDTH=6;
+  localparam ADDR_COUNT=64;
+
+  input clk;
+  input rst;
+  input readA_clkEn;
+  input [ADDR_WIDTH-1:0] readA_addr;
+  output [DATA_WIDTH-1:0] readA_data;
+  input readB_clkEn;
+  input [ADDR_WIDTH-1:0] readB_addr;
+  output [DATA_WIDTH-1:0] readB_data;
+  input [ADDR_WIDTH-1:0] write_addr;
+  input [DATA_WIDTH-1:0] write_data;
+  input [1:0] write_wen;
+  input [3:0] write_ben;
+  cc_ram ramE_mod(
+  clk,
+  rst,
+  readA_clkEn,
+  readA_addr,
+  readA_data,
+  readB_clkEn,
+  readB_addr,
+  readB_data,
+  write_addrE,
+  write_data,
+  write_wen[0],
+  write_ben
+  );
+  cc_ram ramO(
+  clk,
+  rst,
+  readA_clkEn,
+  readA_addr,
+  readA_data,
+  readB_clkEn,
+  readB_addr,
+  readB_data,
+  write_addrO,
+  write_data,
+  write_wen[1],
+  write_ben
+  );
+endmodule
+module cc_ram_block(
+  clk,
+  rst,
+  readA_clkEn,
+  readA_addr,
+  readA_data,
+  readAZ_data,
+  readB_clkEn,
+  readB_addr,
+  readB_data,
+  readBZ_data,
   write_addr,
   write_data,
   write_wen,
   write_wen_noins,
   write_addrE0, write_hitE0,
   write_addrO0, write_hitO0,
-  write_bankEn0, 
+  write_bankEn0, write_odd0,
   write_begin0,write_end0,
   write_bBen0,write_enBen0,
   write_addrE1, write_hitE1,
   write_addrO1, write_hitO1,
-  write_bankEn1,
+  write_bankEn1,write_odd1,
   write_begin1,write_end1,
   write_bBen1,write_enBen1,
   );
@@ -117,6 +180,7 @@ module cc_ram_block(
   input [ADDR_WIDTH-1:0] write_addrO0;
   input write_hitO0; //+1 cycle
   input write_bankEn0;
+  input write_odd0;
   input [4:0] write_begin0;
   input [4:0] write_end0;
   input [3:0] write_bBen0;
@@ -126,16 +190,24 @@ module cc_ram_block(
   input [ADDR_WIDTH-1:0] write_addrO1;
   input write_hitO1; //+1 cycle
   input write_bankEn1;
+  input write_odd1;
   input [4:0] write_begin1;
   input [4:0] write_end1;
   input [3:0] write_bBen1;
   input [3:0] write_enBen1;
 
   wire [15:0][3:0] write_ben;
+  assign write_addrE=write_wen ? write_addr[6:1] : write_bankEn0 ? write_addrE0 : write_addrE1;
+  assign write_addrO=write_wen ? write_addr[6:1] : write_bankEn0 ? write_addrO0 : write_addrO1;
+  assign write_addrEZ=write_wen ? write_addr[6:1]-~write_addr[0] : write_bankEn0 ? write_addrE0-~write_odd0 : write_addrE1-~write_odd1;
+  assign write_addrOZ=write_wen ? write_addr[6:1]-write_addr[0] : write_bankEn0 ? write_addrO0-write_odd0 : write_addrO1-write_odd1;
+  assign write_bankEn=write_bankEn0 | write_bankEn1;
+ 
 
   generate
     genvar t;
     for(t=0;t<18;t=t+1) begin : ram_gen
+        if (t<16)
         cc_ram ram_mod(
         clk,
         rst,
@@ -145,11 +217,39 @@ module cc_ram_block(
         readB_clkEn,
         readB_addr,
         readB_data[36*t+:36],
-        write_addr,
+        write_addrE,
+        write_addrO,
         write_data[36*t+:36],
-        write_wen,
+        {2{write_wen}}|{((write_end0<write_begin0 && ~t[3] || write_odd0) && write_hitO0)|((write_end1<write_begin1 && ~t[3] || write_odd1) && write_hitO1),
+                       ((write_end0<write_begin0 && ~t[3] || ~write_odd0) && write_hitE0)|((write_end1<write_begin1 && ~t[3] || ~write_odd1) && write_hitE1)},
         write_ben[t]
         );
+        else
+        cc_ram ramB_mod(
+        clk,
+        rst,
+        readA_clkEn,
+        readA_addr,
+        readAZ_data[36*(t-16)+:36],
+        readB_clkEn,
+        readB_addr,
+        readBZ_data[36*(t-16)+:36],
+        write_addrEZ,
+        write_addrOZ,
+        write_data[36*(t-16)+:36],
+        {2{write_wen}}|{((write_end0<write_begin0 || write_odd0) && write_hitO0)|((write_end1<write_begin1  || write_odd1) && write_hitO1),
+                       ((write_end0<write_begin0  || ~write_odd0) && write_hitE0)|((write_end1<write_begin1 || ~write_odd1) && write_hitE1)},
+        write_ben[(t-16)]
+        );
+        if (t<16) begin
+            assign write_ben[t]=(write_bankEn0 && write_begin0=={INDEX[0],t[3:0]} && ~init) ? write_bBen0 : 4'bz;
+            assign write_ben[t]=(write_bankEn0 && write_end0=={INDEX[0],t[3:0]} && ~init) ?   write_enBen0 : 4'bz;
+            assign write_ben[t]=((write_bankEn0 && write_begin0!={INDEX[0],t[3:0]} && write_end0!={INDEX[0],t[3:0]}) || init) ? 4'b1111 : 4'bz;
+            assign write_ben[t]=(write_bankEn1 && write_begin1=={INDEX[0],t[3:0]} && ~init) ? write_bBen1 : 4'bz;
+            assign write_ben[t]=(write_bankEn1 && write_end1=={INDEX[0],t[3:0]} && ~init) ?   write_enBen1 : 4'bz;
+            assign write_ben[t]=(write_bankEn1 && write_begin1!={INDEX[0],t[3:0]} && write_end1!={INDEX[0],t[3:0]} && ~init) ? 4'b1111 : 4'bz;
+            assign write_ben[t]=(~write_bankEn1 && ~write_bankEn0 && ~init) ? 4'b0 : 4'bz;
+        end
     end
   endgenerate
 endmodule
