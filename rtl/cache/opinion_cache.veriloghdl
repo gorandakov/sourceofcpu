@@ -144,6 +144,7 @@ module cc_ram_block(
   readBZ_data,
   write_addr,
   write_data,
+  write_xdata,
   write_wen,
   write_wen_noins,
   write_addrE0, write_hitE0,
@@ -173,6 +174,7 @@ module cc_ram_block(
   output [DATA_WIDTH-1:0] readB_data;
   input [ADDR_WIDTH-1:0] write_addr;
   input [DATA_WIDTH-1:0] write_data;
+  input [35:0] write_xdata;
   input write_wen;
   input write_wen_noins;
   input [ADDR_WIDTH-1:0] write_addrE0;
@@ -236,7 +238,7 @@ module cc_ram_block(
         readBZ_data[36*(t-16)+:36],
         write_addrEZ,
         write_addrOZ,
-        write_data[36*(t-16)+:36],
+        INDEX ? write_xdata[35:0] : write_data[36*(t-16)+:36],
         {2{write_wen}}|{((write_end0<write_begin0 || write_odd0) && write_hitO0)|((write_end1<write_begin1  || write_odd1) && write_hitO1),
                        ((write_end0<write_begin0  || ~write_odd0) && write_hitE0)|((write_end1<write_begin1 || ~write_odd1) && write_hitE1)},
         write_ben[(t-16)]
@@ -254,7 +256,7 @@ module cc_ram_block(
   endgenerate
 endmodule
 
-module ccX_ram(
+module ccX_ram0(
   clk,
   rst,
   readA_clkEn,
@@ -268,7 +270,7 @@ module ccX_ram(
   write_wen
   );
 
-  localparam DATA_WIDTH=64;
+  paremeter DATA_WIDTH=60;
   localparam ADDR_WIDTH=7;
   localparam ADDR_COUNT=128;
 
@@ -302,6 +304,69 @@ module ccX_ram(
 
 endmodule
 
+module ccX_ram(
+  clk,
+  rst,
+  readA_clkEn,
+  readA_addr,
+  readA_data,
+  readAZ_data,
+  readB_clkEn,
+  readB_addr,
+  readB_data,
+  readBZ_data,
+  write_addr,
+  write_data,
+  write_addrZ,
+  write_wen
+  );
+
+  localparam DATA_WIDTH=60;
+  localparam ADDR_WIDTH=7;
+  localparam ADDR_COUNT=128;
+
+  input clk;
+  input rst;
+  input readA_clkEn;
+  input [ADDR_WIDTH-1:0] readA_addr;
+  output [DATA_WIDTH-1:0] readA_data;
+  output [4:0] readAZ_data;
+  input readB_clkEn;
+  input [ADDR_WIDTH-1:0] readB_addr;
+  output [DATA_WIDTH-1:0] readB_data;
+  output [4:0] readBZ_data;
+  input [ADDR_WIDTH-1:0] write_addr;
+  input [DATA_WIDTH-1:0] write_data;
+  input write_wen;
+  write_addr,
+  write_data,
+  ccX_ram ramX_mod(
+  clk,
+  rst,
+  readA_clkEn,
+  readA_addr,
+  readA_data,
+  readB_clkEn,
+  readB_addr,
+  readB_data,
+  write_addr,
+  write_data,
+  write_wen
+  );
+  ccX_ram #(5) ramXX_mod(
+  clk,
+  rst,
+  readA_clkEn,
+  readA_addr,
+  readAZ_data,
+  readB_clkEn,
+  readB_addr,
+  readBZ_data,
+  write_addrZ,
+  write_data[4:0],
+  write_wen
+  );
+endmodule
 
 module ccRam_way(
   clk,
