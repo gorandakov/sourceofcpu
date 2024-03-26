@@ -565,6 +565,7 @@ module ccRam_way(
   .write_addr(init ? initCount : write_IP_reg[8:2]),
   .write_addrZ(init ? initCount-7'd1 : write_IP_reg[8:2]-7'd1),
   .write_data(write_data_reg[DATA_WIDTH/2-1:0] & {DATA_WIDTH/2{~init}}),
+  .write_datax(72'b0),
   .write_wen(write_hit|init)
   );
   
@@ -582,6 +583,7 @@ module ccRam_way(
   .write_addr(init ? initCount : write_IP_reg[8:2]),
   .write_addrZ(init ? initCount-7'd1 : write_IP_reg[8:2]-7'd1),
   .write_data(write_data_reg[DATA_WIDTH-1:DATA_WIDTH/2] & {DATA_WIDTH/2{~init}}),
+  .write_datax({write_data_reg[18*15+:18],write_data_reg[18*4+:18]}),
   .write_wen(write_hit|init)
   );
 
