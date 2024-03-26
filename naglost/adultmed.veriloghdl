@@ -1745,22 +1745,22 @@ module smallInstr_decoder(
 	  if (magic[1:0]==2'b01) begin
 	      prA[31]={1'b0,instr[21:18]};
 	      prB[31]=instr[28:24];
-	      prT[31]=instr[23] ? {1'b0,instr[22],instr[31:29]} : {1'b0,instr[21:18]};
+	      prT[31]=~instr[23] ? {1'b0,instr[22],instr[31:29]} : {1'b0,instr[21:18]};
 	      palucond[31]={1'b1,instr[17:14]};
-	      if (~instr[12]) poperation[31][12]=~instr[13];
-              else poperation[31][10]=instr[13];
+	      if (~instr[12]) begin poperation[31][12]=~instr[13]; pflags_write[31]=instr[13]; end
+              else begin poperation[31][10]=instr[13]; pflags_write[31]=1'b0; end
 	      pconstant[31]={{56{instr[31]}},instr[31:24]};
 	  end else if (magic[3:0]==4'b0111) begin
 	      prA[31]=instr[52:48];
 	      prT[31]=instr[52:48];
 	      palucond[31]={1'b1,instr[56:53]};
-	      if (~instr[12]) poperation[31][12]=~instr[13];
-              else poperation[31][10]=instr[13];
+	      if (~instr[12]) begin poperation[31][12]=~instr[13]; pflags_write[31]=instr[13]; end
+              else begin poperation[31][10]=instr[13]; pflags_write[31]=1'b0; end
               perror[31]=0;
 	  end else begin
 	      palucond[31]={1'b1,instr[17:14]};
-	      if (~instr[12]) poperation[31][12]=~instr[13];
-              else poperation[31][10]=instr[13];
+	      if (~instr[12]) begin poperation[31][12]=~instr[13]; pflags_write[31]=instr[13]; end
+              else begin poperation[31][10]=instr[13]; pflags_write[31]=1'b0; end
               prA[31]=instr[22:18];
 	      prT[31]=instr[47:43];
 	  end
