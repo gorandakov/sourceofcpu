@@ -394,7 +394,18 @@ module ccRam_way(
   write_data,
   write_wen,
   invalidate,
-  ErrA,ErrB
+  ErrA,ErrB,
+  write_wen_noins,
+  write_addrE0, write_hitE0,
+  write_addrO0, write_hitO0,
+  write_bankEn0, write_odd0,
+  write_begin0,write_end0,
+  write_bBen0,write_enBen0,
+  write_addrE1, write_hitE1,
+  write_addrO1, write_hitO1,
+  write_bankEn1,write_odd1,
+  write_begin1,write_end1,
+  write_bBen1,write_enBen1
   );
 
   localparam DATA_WIDTH=72*18;
@@ -439,6 +450,27 @@ module ccRam_way(
   input invalidate;
 
   output ErrA,ErrB;
+  input write_wen_noins;
+  input [ADDR_WIDTH-1:0] write_addrE0;
+  input write_hitE0; //+1 cycle
+  input [ADDR_WIDTH-1:0] write_addrO0;
+  input write_hitO0; //+1 cycle
+  input write_bankEn0;
+  input write_odd0;
+  input [4:0] write_begin0;
+  input [4:0] write_end0;
+  input [3:0] write_bBen0;
+  input [3:0] write_enBen0;
+  input [ADDR_WIDTH-1:0] write_addrE1;
+  input write_hitE1; //+1 cycle
+  input [ADDR_WIDTH-1:0] write_addrO1;
+  input write_hitO1; //+1 cycle
+  input write_bankEn1;
+  input write_odd1;
+  input [4:0] write_begin1;
+  input [4:0] write_end1;
+  input [3:0] write_bBen1;
+  input [3:0] write_enBen1;
 
   reg init;
 
@@ -761,7 +793,20 @@ module ccRam_half(
   write_data,
   write_wen,
   invalidate,
-  tagErrA,tagErrB
+  tagErrA,tagErrB,
+  write_wen_noins,
+  write_addrE0, write_hitE0,
+  write_addrO0, write_hitO0,
+  write_bankEn0, write_odd0,
+  write_begin0,write_end0,
+  write_bBen0,write_enBen0,
+  write_data0,
+  write_addrE1, write_hitE1,
+  write_addrO1, write_hitO1,
+  write_bankEn1,write_odd1,
+  write_begin1,write_end1,
+  write_bBen1,write_enBen1
+  write_data1
   );
 
   localparam DATA_WIDTH=72*18;
@@ -794,6 +839,29 @@ module ccRam_half(
   input invalidate;
   output [7:0] tagErrA;
   output [7:0] tagErrB;
+  input write_wen_noins;
+  input [ADDR_WIDTH-1:0] write_addrE0;
+  input write_hitE0; //+1 cycle
+  input [ADDR_WIDTH-1:0] write_addrO0;
+  input write_hitO0; //+1 cycle
+  input write_bankEn0;
+  input write_odd0;
+  input [4:0] write_begin0;
+  input [4:0] write_end0;
+  input [3:0] write_bBen0;
+  input [3:0] write_enBen0;
+  input [ADDR_WIDTH-1:0] write_addrE1;
+  input write_hitE1; //+1 cycle
+  input [ADDR_WIDTH-1:0] write_addrO1;
+  input write_hitO1; //+1 cycle
+  input write_bankEn1;
+  input write_odd1;
+  input [4:0] write_begin1;
+  input [4:0] write_end1;
+  input [3:0] write_bBen1;
+  input [3:0] write_enBen1;
+  input [255:0] write_data0;
+  input [255:0] write_data1;
   
   wire [7:0] chkCL_hit_way;
   wire [7:0] readA_hit_way;
@@ -805,7 +873,21 @@ module ccRam_half(
  
   
   generate
-      genvar k;
+      genvar k,b,q;
+      for(b=0;b<32;b=b+1) begin : banks_gen
+          wire [7:0] wr0;
+          wire [7:0] wr1;
+          for(q=0;q<8;q=q+1) begin
+              assign wr0[q]=((b-q)&5'h1f)==write_begin0 && write_clkEn0 && write_bank0[b];
+              assign wr1[q]=((b-q)&5'h1f)==write_begin1 && write_clkEn1 && write_bank1[b];
+              assign write_new_data[b*32+:32]=wr0[q] ? write_data0[q*32+:32] : 32'BZ;
+              assign write_new_data[b*32+:32]=wr1[q] ? write_data1[q*32+:32] : 32'BZ;
+          end
+          assign  write_new_data[b*32+:32]=(|{wr0,wr1}) ? 32'BZ : 
+            write_data[b*32+:32];
+          assign write_newx_data[b*36+:36]={^write_new_data[b*32+24+:8],write_new_data[b*32+24+:8],^write_new_data[b*32+16+:8],write_new_data[b*32+16+:8],
+              ^write_new_data[b*32+8+:8],write_new_data[b*32+8+:8],^write_new_data[b*32+:8],write_new_data[b*32+:8]};
+      end
       for(k=0;k<9;k=k+1) begin : way_gen
           wire [DATA_WIDTH-1:0] readA_dataP;
           wire [59:0] readA_dataXP;
@@ -822,7 +904,11 @@ module ccRam_half(
           .readA_set_flag(readA_set_flag),
           .readA_data(ways_gen[k].readA_dataP),
           .readA_data_in(ways_gen[k-1].readA_dataP),
+          .readAZ_data(ways_gen[k].readAZ_dataP),
+          .readAZ_data_in(ways_gen[k-1].readAZ_dataP),
           .readA_dataX(ways_gen[k].readA_dataXP),
+          .readAZ_dataX_in(ways_gen[k-1].readAZ_dataXP),
+          .readAZ_dataX(ways_gen[k].readAZ_dataXP),
           .readA_dataX_in(ways_gen[k-1].readA_dataXP),
           .readB_clkEn(readB_clkEn),
           .readB_IP(readB_IP[IP_WIDTH-2:4]),
@@ -830,8 +916,12 @@ module ccRam_half(
           .readB_set_flag(readB_set_flag),
           .readB_data(ways_gen[k].readB_dataP),
           .readB_data_in(ways_gen[k-1].readB_dataP),
+          .readBZ_data(ways_gen[k].readBZ_dataP),
+          .readBZ_data_in(ways_gen[k-1].readBZ_dataP),
           .readB_dataX(ways_gen[k].readB_dataXP),
           .readB_dataX_in(ways_gen[k-1].readB_dataXP),
+          .readBZ_dataX(ways_gen[k].readBZ_dataXP),
+          .readBZ_dataX_in(ways_gen[k-1].readBZ_dataXP),
           .expun_addr(ways_gen[k].expun_addrP),
           .expun_addr_in(ways_gen[k-1].expun_addrP),
           .readA_hit(readA_hit_way[k-1]),
@@ -844,7 +934,7 @@ module ccRam_half(
           .read_NRU_in(read_NRUP[k-1]),
 	  .read_NRU_reg(read_NRU_reg),
           .write_IP(write_IP),
-          .write_data(write_data),
+          .write_data(write_newx_data),
           .write_wen(write_wen),
           .invalidate(invalidate),
           .ErrA(tagErrA[k-1]),
