@@ -429,14 +429,26 @@ module addrcalc(
   assign fault_mlb={mflags0[`mflags_priv+1] & mlb_data[`dmlbData_user] , ~na}; 
   assign fault_mlb_next={mflags0[`mflags_priv+1] & mlb_data_next[`dmlbData_user],  ~na_next}; 
 
-  adder #(15) nextCAddr_mod({1'b0,cmplxAddr[13:0]},15'b10000000,addrNext,1'b0,1'b1,,,,);
+  wire coov,cout_secq1,cout_secq2;
+
+  adder #(15) nextCAddr_mod({1'b0,cmplxAddr[13:0]},15'b10000000,addrNext,1'b0,1'b1,coov,,,);
   
   addrcalcsec_range rng_mod(
   cmplxAddr,
   cin_secq,
   ptrdiff,
-  cout_secq);
+  cout_secq1);
 
+  assign cmplxAddr_overreach[14:0]=addrNext;
+  adder_inc #(30) cmplxAddr_add(cmplxAddr[43:15],cmplxAddr_overreach[43:15],coov,1'b1);
+
+  addrcalcsec_range rng_mod(
+  cmplxAddr_overreach,
+  cin_secq,
+  ptrdiff,
+  cout_secq2);
+
+  assign cout_secq=cout_secq1 || cout_secq2 && mOp_split;
 
   always @*
     begin
