@@ -1664,6 +1664,7 @@ module smallInstr_decoder(
                   if (LARGE_CORE && instr[12]) poperation[19]=`op_sadd_odd;
                   //if instr[13] and there is a spec load then repreat all of the bump combos twice in the second core to get sized iteration
                   if (instr[31]) puseBConst[29]=1'b1;
+                  if (instr[13]) prT_use[29]=H & LARGE_CORE;
               end
               instr[8]=instr[23];
           end else begin
