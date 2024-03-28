@@ -1391,25 +1391,27 @@ module missQ(
   wen|init
   );
 
+  reg low_traffic;
+  reg [4:0] traffic_chain;
   dmisscam ms_mod(
   clk,
   rst,
-  {2{miss0}}&{~mOp0_clHit}&{mOp0_odd_reg[3]|mOp0_split_reg[3],~mOp0_odd_reg[3]|mOp0_split_reg[3]},
+  {2{miss0}}&{~mOp0_clHit}&{mOp0_odd_reg[3]|mOp0_split_reg[3]|low_traffic,~mOp0_odd_reg[3]|mOp0_split_reg[3]|low_traffic},
   mOp0_addrEven_reg[3],mOp0_addrOdd_reg[3],mOp0_st_reg[3],2'b0,mOp0_sz_reg[3],
   mOp0_odd_reg[3],mOp0_ctype_reg[3]==2'b10,mOp0_split_reg[3],mOp0_bank0_reg[3],mOp0_addr_low_reg[3],
-  {2{miss1}}&{~mOp1_clHit}&{mOp1_odd_reg[3]|mOp1_split_reg[3],~mOp1_odd_reg[3]|mOp1_split_reg[3]},
+  {2{miss1}}&{~mOp1_clHit}&{mOp1_odd_reg[3]|mOp1_split_reg[3]|low_traffic,~mOp1_odd_reg[3]|mOp1_split_reg[3]|low_traffic},
   mOp1_addrEven_reg[3],mOp1_addrOdd_reg[3],mOp1_st_reg[3],2'b0,mOp1_sz_reg[3],
   mOp1_odd_reg[3],mOp1_ctype_reg[3]==2'b10,mOp1_split_reg[3],mOp1_bank0_reg[3],mOp1_addr_low_reg[3],
   {2{miss2}}&{~mOp2_clHit}&{mOp2_odd_reg[3]|mOp2_split_reg[3],~mOp2_odd_reg[3]|mOp2_split_reg[3]},
   mOp2_addrEven_reg[3],mOp2_addrOdd_reg[3],mOp2_st_reg[3],2'b0,mOp2_sz_reg[3],
   mOp2_odd_reg[3],mOp2_ctype_reg[3]==2'b10,mOp2_split_reg[3],mOp2_bank0_reg[3],mOp2_addr_low_reg[3],
-  {2{miss3}}&{~mOp3_clHit}&{mOp3_odd_reg[3]|mOp3_split_reg[3],~mOp3_odd_reg[3]|mOp3_split_reg[3]},
+  {2{miss3}}&{~mOp3_clHit}&{mOp3_odd_reg[3]|mOp3_split_reg[3]|low_traffic,~mOp3_odd_reg[3]|mOp3_split_reg[3]|low_traffic},
   mOp3_addrEven_reg[3],mOp3_addrOdd_reg[3],mOp3_st_reg[3],2'b0,mOp3_sz_reg[3],
   mOp3_odd_reg[3],mOp3_ctype_reg[3]==2'b10,mOp3_split_reg[3],mOp3_bank0_reg[3],mOp3_addr_low_reg[3],
-  {2{miss4}}&{~mOp4_clHit}&{mOp4_odd_reg[3]|mOp4_split_reg[3],~mOp4_odd_reg[3]|mOp4_split_reg[3]},
+  {2{miss4}}&{~mOp4_clHit}&{mOp4_odd_reg[3]|mOp4_split_reg[3]|low_traffic,~mOp4_odd_reg[3]|mOp4_split_reg[3]|low_traffic},
   mOp4_addrEven_reg[3],mOp4_addrOdd_reg[3],1'b1,mOp4_dupl,mOp4_sz_reg[3],
   mOp4_odd_reg[3],mOp4_ctype_reg[3]==2'b10,mOp4_split_reg[3],mOp4_bank0_reg[3],mOp4_addr_low_reg[3],
-  {2{miss5}}&{~mOp5_clHit}&{mOp5_odd_reg[3]|mOp5_split_reg[3],~mOp5_odd_reg[3]|mOp5_split_reg[3]},
+  {2{miss5}}&{~mOp5_clHit}&{mOp5_odd_reg[3]|mOp5_split_reg[3]|low_traffic,~mOp5_odd_reg[3]|mOp5_split_reg[3]|low_traffic},
   mOp5_addrEven_reg[3],mOp5_addrOdd_reg[3],1'b1,mOp5_dupl,mOp5_sz_reg[3],
   mOp5_odd_reg[3],mOp5_ctype_reg[3]==2'b10,mOp5_split_reg[3],mOp5_bank0_reg[3],mOp5_addr_low_reg[3],
   mOpR_en,mOpR_addr,mOpR_st,mOpR_req,mOpR_dupl,mOpR_sz,mOpR_odd,mOpR_io,mOpR_split,mOpR_bank0,mOpR_addr_low,
@@ -1477,6 +1479,13 @@ module missQ(
               sticky_begin<=1'b0;
           end
 
+          if (rst) begin
+              low_traffic=1'b1;
+              traffic_chain=4'b0;              
+          end else begin
+              traffic_chain={traffic_chain[3:0],miss0|miss1|miss2|miss3|miss4|miss5};
+              low_traffic=traffic_chain==5'b0;
+          end
 	  if (rst) begin
 	     write_addr_end<=5'b0;
 	     write_addr_end2<=5'b0;
