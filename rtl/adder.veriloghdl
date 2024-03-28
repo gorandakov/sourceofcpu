@@ -745,8 +745,8 @@ endmodule
 
   assign exbits=is_ptr ? ptr[63:44]^{19'b0,pos_flip[cout_sec0]|neg_flip[cout_sec0]} : 20'b0;
 
-  addrcalcsec_shift nih_mod(ptr[`ptr_exp],C[43:12],cout_sec0);
-  addrcalcsec_check_upper3 hin_mod(ptr,unptr,{39'b0,cin},pos_ack,neg_ack,pos_flip,neg_flip,
+  addrcalcsec_shift nih_mod(ptr[`ptr_exp],C[42:11],cout_sec0);
+  addrcalcsec_check_upper3 hin_mod(ptr,unptr[43:4],1'b0},40'b0,pos_ack,neg_ack,pos_flip,neg_flip,
     ndiff);
   
   nand_array #(WIDTH) nG0_mod(xa[63:0],xb,nG0);
