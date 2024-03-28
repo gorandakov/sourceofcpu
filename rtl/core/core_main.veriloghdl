@@ -17,8 +17,81 @@ limitations under the License.
 `include "../../rtl/struct.sv"
 
 
-module heptane_core(
-//most other places use named port list but here it is port declaration
+module heptane_kernel(
+  clk,
+  clkREF,
+  clkREF2,
+  clkREF3,
+  clkREF4,
+  clkREF5,
+  stall_clkREF,
+  rst,
+  IRQ,
+  IRQ_data,
+  IRQ_thr,
+  obusIn_signals,
+  obusIn_src_req,
+  obusIn_dst_req,
+  obusIn_address,
+  obusIn_doStall,
+  obusIn_en,
+  obusOut_signals,
+  obusOut_src_req,
+  obusOut_dst_req,
+  obusOut_address,
+  obusOut_stall,
+  obusOut_en,
+  obusDIn_signals,
+  obusDIn_src_req,
+  obusDIn_dst_req,
+  obusDIn_dataPTR,
+  obusDIn_data,
+  obusDIn_doStall,
+  obusDIn_en,
+  obusDOut_signals,
+  obusDOut_src_req,
+  obusDOut_dst_req,
+  obusDOut_dataPTR,
+  obusDOut_data,
+  obusDOut_stall,
+  obusDOut_en,
+  lsr_wr_ext_data,
+  p_ext_LSQ,
+  dc_ext_wrEn,
+  lsr_wr_out_data,
+  p_out_LSQ,
+  dc_out_wrEn,
+  pfxWQ,
+  pfx_wdata,
+  pfx_wdataU,
+  pfx_pdata,
+  pfx_dataEn,
+  pfyWQ,
+  pfy_wdata,
+  pfy_wdataU,
+  pfy_pdata,
+  pfy_dataEn
+);
+  parameter [2:0] IDX;
+  parameter [5:0] BUS_ID=0;
+  parameter [6:0] BUS_ID2=0;
+  parameter LARGE_CORE=0;
+  parameter H=0;
+
+  localparam PHYS_WIDTH=44;
+  localparam VIRT_WIDTH=64;
+  localparam IP_WIDTH=48;
+  localparam [31:0] INIT_IP=32'h20;
+  localparam BUS_BANK=32;
+  localparam BUS_WIDTH=BUS_BANK*16;
+  localparam DATA_WIDTH=65*4;
+  localparam INSTR_WIDTH=80;
+  localparam IN_REG_WIDTH=6;
+  localparam OPERATION_WIDTH=`operation_width+5;
+  localparam PORT_WIDTH=4;
+  localparam RS_WIDTH=65;
+  localparam REQ_WIDTH=10;
+
   input clk,
   input clkREF,
   input clkREF2,
@@ -72,27 +145,6 @@ module heptane_core(
   output [127:0] pfy_wdataU;
   output [3:0] pfy_pdata;
   output pfy_dataEn;
-);
-  parameter [2:0] IDX;
-  parameter [5:0] BUS_ID=0;
-  parameter [6:0] BUS_ID2=0;
-  parameter LARGE_CORE=0;
-  parameter H=0;
-
-  localparam PHYS_WIDTH=44;
-  localparam VIRT_WIDTH=64;
-  localparam IP_WIDTH=48;
-  localparam [31:0] INIT_IP=32'h20;
-  localparam BUS_BANK=32;
-  localparam BUS_WIDTH=BUS_BANK*16;
-  localparam DATA_WIDTH=65*4;
-  localparam INSTR_WIDTH=80;
-  localparam IN_REG_WIDTH=6;
-  localparam OPERATION_WIDTH=`operation_width+5;
-  localparam PORT_WIDTH=4;
-  localparam RS_WIDTH=65;
-  localparam REQ_WIDTH=10;
-
 
 
   wire [BUS_WIDTH-1:0] bus_data;
