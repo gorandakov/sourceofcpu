@@ -480,7 +480,7 @@ alu(clk,rst,except,except_thread,thread,operation,cond,sub,dataEn,nDataAlt,retDa
           isFlags_reg<=isFlags;
           retOp<=operation;
 
-          carryAdd64_reg<=(carryAdd64) & ~calu[4]|doJmp2;
+          carryAdd64_reg<=(carryAdd64 && valS[0]|(calu[3:0]!=4'he)) & ~calu[4]|doJmp2;
           carryAdd44_reg<=(carryAdd44) & ~calu[4]|doJmp2;
           carryAdd32_reg<=(carryAdd32) & ~calu[4]|doJmp2;
           carryAdd16_reg<=(carryAdd16) & ~calu[4]|doJmp2;
