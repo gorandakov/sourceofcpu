@@ -101,17 +101,17 @@ module addrcalcsec_check_upper3(
     wire [3:0] xneg3;
     for(p=0;p<4;p=p+1) begin : offs
        
-        assign pos0[p]= ~posx[p] ||  ~redor8(O[p*8+:8]);
+        assign pos0[p]= ~posx[p] ||  ~redor8(O[p*8+:8+&p[1:0]);
         assign pos2[p]= ~posx[p] ||  ~redor8(O[p*8+1+:8]);
-        assign neg0[p]= ~posx[p] ||  redand8(X[p*8+:8]);
-        assign neg1[p]= ~posx[p] ||  redand8(And[p*8+:8]);
+        assign neg0[p]= ~posx[p] ||  redand8(X[p*8+:8+&p[1:0]]);
+        assign neg1[p]= ~posx[p] ||  redand8(And[p*8+:8+&p[1:0]]);
         assign neg2[p]= ~posx[p] ||  redand8(X[p*8+1+:8]);
        
         
-        assign xpos0[p]= p!=exp[4:3] ||  ~redor8(O[p*8+:8]&msk);
+        assign xpos0[p]= p!=exp[4:3] ||  ~redor8(O[p*8+:8+&p[1:0]]&msk);
         assign xpos2[p]= p!=exp[4:3] ||  (~redor8(O[p*8+1+:8]&msk)&~redor8(And[p*8+1+:8]&msk));
-        assign xneg0[p]= p!=exp[4:3] ||  redand8(X[p*8+:8]|~msk);
-        assign xneg1[p]= p!=exp[4:3] ||  redand8(And[p*8+:8]|~msk);
+        assign xneg0[p]= p!=exp[4:3] ||  redand8(X[p*8+:8+&p[1:0]]|~msk);
+        assign xneg1[p]= p!=exp[4:3] ||  redand8(And[p*8+:8+&p[1:0]]|~msk);
         assign xneg2[p]= p!=exp[4:3] ||  (redand8(X[p*8+1+:8]|~msk)&~redor8(And[p*8+1+:8]&msk0));
     end
     assign do_pos=redand8({pos0,xpos0});
