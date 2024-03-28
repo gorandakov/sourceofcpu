@@ -746,7 +746,7 @@ endmodule
   assign exbits=is_ptr ? ptr[63:43]^{19'b0,pos_flip[cout_sec0]|neg_flip[cout_sec0],1'b0} : 21'b0;
 
   addrcalcsec_shift nih_mod(ptr[`ptr_exp],C[41:10],cout_sec0);
-  addrcalcsec_check_upper3 hin_mod(ptr,unptr[42:10],1'b0},32'b0,pos_ack,neg_ack,pos_flip,neg_flip,
+  addrcalcsec_check_upper3 hin_mod(ptr,unptr[43:11],1'b0},33'b0,pos_ack,neg_ack,pos_flip,neg_flip,
     ndiff);
   
   nand_array #(WIDTH) nG0_mod(xa[63:0],xb,nG0);
@@ -1330,7 +1330,7 @@ endmodule
   adder_seq #(WIDTH) add_mod(tmp1,tmp2[WIDTH-1:0],~(tmp1|tmp2),~(tmp1&tmp2),out[43:0],c_s,1'b0,en,,,,);
   assign out[63+PTRBIT:44]=en ? ptr[63+PTRBIT:44] : 'z;
   addrcalcsec_shift ssh_mod(ptr[`ptr_exp],c_s[41:10],cout_sec0);
-  addrcalcsec_check_upper3 #(1'b1) chk_mod(ptr,unptr[42:10],b[42:10],{dummy1,pos_ack},{dummy2,neg_ack},ndiff);
+  addrcalcsec_check_upper3 #(1'b1) chk_mod(ptr,unptr[43:11],b[43:11],{dummy1,pos_ack},{dummy2,neg_ack},ndiff);
 endmodule
 
 
