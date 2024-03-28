@@ -18,8 +18,8 @@ limitations under the License.
 
 module addrcalcsec_check_upper3(
   input [63:0] ptr,
-  input [39:0] A,
-  input [39:0] B,
+  input [31:0] A,
+  input [31:0] B,
   output [2:0] pos_ack,
   output [2:0] neg_ack,
   output [1:0] pos_nack,
@@ -62,16 +62,8 @@ module addrcalcsec_check_upper3(
   assign posx[1]=~|exp[4:3];
   assign posx[0]=1'b0;
   
-  assign msk[1]=exp[2:0]==3'b0;
-  assign msk[2]=exp[2:1]==2'b0;
-  assign msk[3]=exp[2:1]==2'b0 || exp[2:0]==3'b010;
-  assign msk[4]=~exp[2];
-  assign msk[5]=exp[2:0]==3'd4 || ~exp[2];
-  assign msk[6]=exp[2:0]==3'd5 || exp[2:0]==3'd4 || ~exp[2];
-  assign msk[7]=~&exp[2:0];
-  assign msk[0]=1'b0; //
+  assign msk=8'hff << exp[2:0];
 
-  assign msk0={1'b0,msk[7:1]}&~msk;
 
   assign pos_ack[1]=((do_pos) && ~on_hi|&ptr[`ptr_hi] && diff|&ptr[`ptr_hi]) || max ; //c==1
   assign pos_ack[0]=do_pos&~(on_hi&~diff) || (do_pos2) & (~on_hi|&ptr[`ptr_hi]) & (diff|&ptr[`ptr_hi]) || max; //c==0
@@ -109,18 +101,18 @@ module addrcalcsec_check_upper3(
     wire [3:0] xneg3;
     for(p=0;p<4;p=p+1) begin : offs
        
-        assign pos0[p]= ~posx[p] ||  ~redor8(O[p*8+8+:8]);
-        assign pos2[p]= ~posx[p] ||  ~redor8(O[p*8+9+:8]);
-        assign neg0[p]= ~posx[p] ||  redand8(X[p*8+8+:8]);
-        assign neg1[p]= ~posx[p] ||  redand8(And[p*8+8+:8]);
-        assign neg2[p]= ~posx[p] ||  redand8(X[p*8+9+:8]);
+        assign pos0[p]= ~posx[p] ||  ~redor8(O[p*8+:8]);
+        assign pos2[p]= ~posx[p] ||  ~redor8(O[p*8+1+:8]);
+        assign neg0[p]= ~posx[p] ||  redand8(X[p*8+:8]);
+        assign neg1[p]= ~posx[p] ||  redand8(And[p*8+:8]);
+        assign neg2[p]= ~posx[p] ||  redand8(X[p*8+1+:8]);
        
         
-        assign xpos0[p]= p!=exp[4:3] ||  ~redor8(O[p*8+8+:8]&msk);
-        assign xpos2[p]= p!=exp[4:3] ||  (~redor8(O[p*8+9+:8]&msk)&~redor8(And[p*8+9+:8]&msk0));
-        assign xneg0[p]= p!=exp[4:3] ||  redand8(X[p*8+8+:8]|~msk);
-        assign xneg1[p]= p!=exp[4:3] ||  redand8(And[p*8+8+:8]|~msk);
-        assign xneg2[p]= p!=exp[4:3] ||  (redand8(X[p*8+9+:8]|~msk)&~redor8(And[p*8+9+:8]&msk0));
+        assign xpos0[p]= p!=exp[4:3] ||  ~redor8(O[p*8+:8]&msk);
+        assign xpos2[p]= p!=exp[4:3] ||  (~redor8(O[p*8+1+:8]&msk)&~redor8(And[p*8+1+:8]&msk));
+        assign xneg0[p]= p!=exp[4:3] ||  redand8(X[p*8+:8]|~msk);
+        assign xneg1[p]= p!=exp[4:3] ||  redand8(And[p*8+:8]|~msk);
+        assign xneg2[p]= p!=exp[4:3] ||  (redand8(X[p*8+1+:8]|~msk)&~redor8(And[p*8+1+:8]&msk0));
     end
     assign do_pos=redand8({pos0,xpos0});
     assign do_pos1=redor8({pos1,xpos1});
