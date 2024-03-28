@@ -1274,6 +1274,8 @@ module smallInstr_decoder(
       if (!isPtrSec && ~(instr[28]) && instr[27]) begin 
           palucond[16]={1'b1,instr[26] ? 4'h7 : 4'he};
           pflags_use[16]=1'b1;
+          poperation[16][7:0]=inst[25] ? `op_add64 : `op_sub64;
+          prmode[16][1]=1'b0;
       end
       pconstant[16]={52'b0,instr[0],instr[30],instr[27:18]};
       prA[16]={instr[17],instr[11:8]};
