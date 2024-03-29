@@ -3071,10 +3071,10 @@ module decoder(
 	      dec_alucond_reg[n]<=dec_alucond[n];
               dec_rA_reg[n]<=ffx(thread,thrmode,1'b0,dec_rA[n]);
               dec_rndmode_reg[n]<=dec_rndmode;
-              dec_rA_use_reg[n]<=dec_rA_use[n]&& dec_rA[n]!=31 && iUsed[n];
+              dec_rA_use_reg[n]<=dec_rA_use[n] && iUsed[n];
               dec_rA_useF_reg[n]<=dec_rA_useF[n] && iUsed[n];
               dec_rB_reg[n]<=ffx(thread,thrmode,1'b0,dec_rB[n]);
-              dec_rB_use_reg[n]<=dec_rB_use[n] && dec_rB[n]!=31 && iUsed[n];
+              dec_rB_use_reg[n]<=dec_rB_use[n] && iUsed[n];
               dec_rB_useF_reg[n]<=dec_rB_useF[n] && iUsed[n];
               dec_useBConst_reg[n]<=dec_useBConst[n] && iUsed[n];
               dec_useAConst_reg[n]<=dec_useBConst[n] && iUsed[n] && dec_IPRel[n] && dec_rA_use[n];
