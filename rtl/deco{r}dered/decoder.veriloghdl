@@ -3074,7 +3074,7 @@ module decoder(
               dec_rA_use_reg[n]<=dec_rA_use[n] && iUsed[n];
               dec_rA_useF_reg[n]<=dec_rA_useF[n] && iUsed[n];
               dec_rB_reg[n]<=ffx(thread,thrmode,1'b0,dec_rB[n]);
-              dec_rB_use_reg[n]<=dec_rB_use[n] && iUsed[n];
+              dec_rB_use_reg[n]<=dec_rB_use[n] && iUsed[n] && !(dec_rB==31 && instrQ[n][-4+`instrQ_magic]);
               dec_rB_useF_reg[n]<=dec_rB_useF[n] && iUsed[n];
               dec_useBConst_reg[n]<=dec_useBConst[n] && iUsed[n];
               dec_useAConst_reg[n]<=dec_useBConst[n] && iUsed[n] && dec_IPRel[n] && dec_rA_use[n];
