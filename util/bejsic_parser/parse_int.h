@@ -31,11 +31,52 @@ AST * parse_int( long *str) {
   while (chr==' ') {
     chr=strcharl(mystr);
   }
+  if (chr=='(' && prefix_level) {
+  }
+  if (chr==')' && !prefix_level) {
+  }
+  if (chr=='~' && prefix_level) {
+  }
+  if (chr=='-' && prefix_level) {
+  }
+  if (chr=='t' && prefix_level) {
+    if (!strcmp(str,"toint")) {
+    }
+    if (!strcmp(str,"tofp")) {
+    }
+    if (!strcmp(str,"tobool")) {
+    }
+  }
+  if (chr=='a' && !prefix_level) {
+    if (!strcmp(str,"and")) {
+    }
+  }
+  if (chr=='o' && !prefix_level) {
+    if (!strcmp(str,"or")) {
+    }
+  }
+  if (chr=='n' && prefix_level) {
+    if (!strcmp(str,"not")) {
+    }
+  }
   if (chr=='*' && !prefix_level) {
+    //conditional stack push
   } 
   if (chr=='/' && !prefix_level) {
+    //conditional stack push
   }
   if (chr=='%' && !prefix_level) {
+    //conditional stack push
+  }
+  if (chr=='+' && !prefix_level) {
+  }
+  if (chr=='-' && !prefix_level) {
+  }
+  if (chr=='&' && !prefix_level) {
+  }
+  if (chr=='|' && !prefix_level) {
+  }
+  if (chr=='^' && !prefix_level) {
   }
   if ((alnum(chr) || chr==',' || chr==';') && !prefix_level) {
     //terminate a paired operator
