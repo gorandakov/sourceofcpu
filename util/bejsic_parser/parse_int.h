@@ -4,7 +4,7 @@ struct AST {
   int flags;
   AST *OP_A;
   AST *OP_B;
-  enum AST_CODE_EXPR { _op_mul, _op_div, _op_rem, _op_tofp, _op_tobool, _op_and, _op_or, _op_xor, _op_add, _op_sub, _op_cmovdrv, _op_cmov, _op_bracketi, _op_bracketf, _op_not, _op_minus, _op_length, _op_heap, _op_alloca, _op_call, _op_lookup };
+  enum AST_CODE_EXPR { _op_mul, _op_div, _op_rem, _op_tofp, _op_tobool, _op_and, _op_or, _op_xor, _op_add, _op_sub, _op_cmovdrv, _op_cmov, _op_bracketi, _op_bracketf, _op_not, _op_minus, _op_length, _op_heap, _op_alloca, _op_call, _op_lookup, _op_toint };
   const int _mask_A_fp=1;
   const int _mask_B_fp=2;
   const int _mask_A_string=4;
