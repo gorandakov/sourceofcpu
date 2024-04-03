@@ -26,7 +26,7 @@ struct AST {
 };
 
 
-AST * parse_int( long *str) {
+AST * parse_int( long *str,int terminator=0) {
   long *mystr=str;
   long chr;
   bool prefix_level=0;
@@ -116,12 +116,51 @@ AST * parse_int( long *str) {
   }
   if (chr=='*' && !prefix_level) {
     //conditional stack push
+    if (opstack_prio[opstack_size-1]>0) {
+      opstack_size+=1;
+      opstack[opstack_size-1]=new AST;
+      opstack[opstack_size-1].A=opstack[opstack_size-2].B;
+      opstack[opstack_size-2].B=opstack+(opstack_size-1);
+      opstack[opstack_size-1].op=_op_mul;
+      //clear and set flag bits for literal and string
+    } else {
+      AST *ast1=new AST;
+      ast1.A=opstack+(opstack_size-1);
+      ast1.op=_op_mul;
+      //clear and set flag bits for literal and string
+    }
   } 
   if (chr=='/' && !prefix_level) {
     //conditional stack push
+    if (opstack_prio[opstack_size-1]>0) {
+      opstack_size+=1;
+      opstack[opstack_size-1]=new AST;
+      opstack[opstack_size-1].A=opstack[opstack_size-2].B;
+      opstack[opstack_size-2].B=opstack+(opstack_size-1);
+      opstack[opstack_size-1].op=_op_div;
+      //clear and set flag bits for literal and string
+    } else {
+      AST *ast1=new AST;
+      ast1.A=opstack+(opstack_size-1);
+      ast1.op=_op_div;
+      //clear and set flag bits for literal and string
+    }
   }
   if (chr=='%' && !prefix_level) {
     //conditional stack push
+    if (opstack_prio[opstack_size-1]>0) {
+      opstack_size+=1;
+      opstack[opstack_size-1]=new AST;
+      opstack[opstack_size-1].A=opstack[opstack_size-2].B;
+      opstack[opstack_size-2].B=opstack+(opstack_size-1);
+      opstack[opstack_size-1].op=_op_rem;
+      //clear and set flag bits for literal and string
+    } else {
+      AST *ast1=new AST;
+      ast1.A=opstack+(opstack_size-1);
+      ast1.op=_op_rem;
+      //clear and set flag bits for literal and string
+    }
   }
   if (chr=='+' && !prefix_level) {
   }
@@ -133,7 +172,11 @@ AST * parse_int( long *str) {
   }
   if (chr=='^' && !prefix_level) {
   }
-  if ((alnum(chr) || chr==',' || chr==';') && !prefix_level) {
+  if ((alnum(chr) || chr==',' || chr==';' || chr==']' || chr=='}') && !prefix_level) {
+    if (terminator && terminator==chr) {
+      if (opstack_size!=1) throw EINVALIDEXPRESSION;
+      return opstack[0];
+    }
     //terminate a paired operator
     //handle exception record
     //handle context
