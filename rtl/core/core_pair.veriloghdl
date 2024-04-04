@@ -58,7 +58,7 @@ module heptane_core_pair(
   wire [3:0] pfy_pdata;
   wire pfy_dataEn;
 
-  heptane_kernel #(IDX,BUS_ID,{BUS_ID,1'b0},1'b1,1'b0) core_A(
+  heptane_core_single #(IDX,BUS_ID,{BUS_ID,1'b0},1'b1,1'b0) core_A(
   clk,
   clkREF,
   clkREF2,
@@ -114,7 +114,7 @@ module heptane_core_pair(
   pfy_dataEn
   );
 
-  heptane_kernel #(IDX,BUS_ID,{BUS_ID,1'b1},1'b1,1'b1) core_B(
+  heptane_core_single #(IDX,BUS_ID,{BUS_ID,1'b1},1'b1,1'b1) core_B(
   clk,
   clkREF,
   clkREF2,

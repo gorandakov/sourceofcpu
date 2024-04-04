@@ -17,7 +17,7 @@ limitations under the License.
 `include "../../rtl/struct.sv"
 
 
-module heptane_kernel(
+module heptane_core_single(
   clk,
   clkREF,
   clkREF2,
