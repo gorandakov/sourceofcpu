@@ -92,17 +92,17 @@ module heptane_kernel(
   localparam RS_WIDTH=65;
   localparam REQ_WIDTH=10;
 
-  input clk,
-  input clkREF,
-  input clkREF2,
-  input clkREF3,
-  input clkREF4,
-  input clkREF5,
-  stall_clkREF,
-  input rst,
-  input IRQ,
-  input [16:0] IRQ_data,
-  input IRQ_thr,
+  input clk;
+  input clkREF;
+  input clkREF2;
+  input clkREF3;
+  input clkREF4;
+  input clkREF5;
+  stall_clkREF;
+  input rst;
+  input IRQ;
+  input [16:0] IRQ_data;
+  input IRQ_thr;
   input [`rbus_width-1:0] obusIn_signals;
   input [9:0] obusIn_src_req;
   input [9:0] obusIn_dst_req;
