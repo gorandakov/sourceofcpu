@@ -204,7 +204,7 @@ module predecoder_class(instr,magic,flag,FMA_mul,prev_FMA_mul,thread,class_,isLN
 
   assign isCallPrep=(opcode_main==8'd199) && magic[0];
 
-  assign isPtrBump_other_domain=opcode_main==8'hf7 && magic[1:0]==2'b01 && (LARGE_CORE&H)|(~LARGE_CORE&thread);
+  assign isPtrBump_other_domain=opcode_main==8'hf7 && magic[1:0]==2'b01;
 
   assign thisSpecLoad=isBaseSpecLoad || isBaseIndexSpecLoad || isBaseSpecStore || isBaseIndexSpecStore || 
       ({instr[11],instr[15:12]}==5'd16 &&  opcode_main[7:0]==8'b10110000) || 
