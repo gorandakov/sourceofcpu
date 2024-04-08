@@ -411,7 +411,7 @@ module smallInstr_decoder(
   //231-232=cloop no sub
   assign isCLeave=opcode_main==8'd235 || opcode_main==8'd236 || opcode_main==8'd238;  
   //237 and 239 unused so far
-  assign isPtrBump_other_domain=opcode_main==8'hf7 && magic[1:0]==2'b01 && LARGE_CORE && H| |instr[14:12];
+  assign isPtrBump_other_domain=opcode_main==8'hf7 && magic[1:0]==2'b01 && LARGE_CORE;
 
   assign isBasicFPUScalarA=opcode_main[7:4]==4'hf && ~&opcode_main[2:0] && instr[13:12]==2'b0;
   assign isBasicFPUScalarB=opcode_main[7:4]==4'hf && ~&opcode_main[2:0] && instr[13:12]==2'b1;
@@ -1646,7 +1646,7 @@ module smallInstr_decoder(
       trien[29]=magic[0] & isBasicAddNoFl || isPtrBump_other_domain;
           //if no magic, it's register-register nxor and carry flag for ptr bit!
       puseBConst[29]=magic[2:0]==3'b011;
-      poperation[29][11:0]=isPtrBump_other_domain ? ((H&~instr[12])?`op_mov64 : `op_add64) : opcode_main==8'd234 ? `op_dec|4096 : magic[1:0]==2'b01 ? `op_nxor64 : opcode_main[0] ? `op_add64 : `op_add32;
+      poperation[29][11:0]=isPtrBump_other_domain ? ((~instr[12])?`op_mov64 : `op_add64) : opcode_main==8'd234 ? `op_dec|4096 : magic[1:0]==2'b01 ? `op_nxor64 : opcode_main[0] ? `op_add64 : `op_add32;
       poperation[29][12]=1'b1;
       pport[29]=opcode_main==8'd234 ? PORT_MUL : PORT_ALU;
       prA_use[29]=1'b1;
@@ -1668,7 +1668,7 @@ module smallInstr_decoder(
                   // instr[14:13]=core id for 4 way vectorisation
                   // for up to 4 times ->Next or +=size access
                   if (instr[31]) puseBConst[29]=1'b1;
-                  if (instr[14:13]==2'b1) prT_use[29]=H & LARGE_CORE;
+                  if (instr[14:13]==2'b1) prT_use[29]=~H & LARGE_CORE;
                   if (instr[14]) prT_use[29]=1'b0; //only two wat vectorisation for now
                   if (instr[15]) prT_use[29]=1'b1; //pre-multiplied index bump
               end
