@@ -65,9 +65,11 @@ module tbuf_ram1(
   read_data,
   write_addr,
   write_data,
-  write_wen
+  write_wen,
+  write_cond
   );
 
+  parameter [15:0] init_lfsr=16'hf134;
   parameter DATA_WIDTH=63;
   parameter ADDR_WIDTH=9;
   parameter ADDR_COUNT=512;
@@ -80,17 +82,34 @@ module tbuf_ram1(
   input [ADDR_WIDTH-1:0] write_addr;
   input [DATA_WIDTH-1:0] write_data;
   input write_wen;
+  input write_cond;
 
   reg [DATA_WIDTH-1:0] ram [ADDR_COUNT-1:0];
   reg [ADDR_WIDTH-1:0] read_addr_reg;
+  reg [ADDR_WIDTH-1:0] write_addr_save;
+  reg [DATA_WIDTH-1:0] write_data_save;
+  reg save;
+  wire [5:0] data_rand;
+  wire match;
   
-  assign read_data=ram[read_addr_reg];
+  assign read_data=save && read_addr_reg==write_addr_save ? write_data_save : ram[read_addr_reg];
+
+  LFSR_16_6 #(init_lfsr) rand_mod(clk,rst,data_rand);
+
+  assign match=!write_cond || data_rand[1] || data_rand[1:0]==2'b0;
 
   always @(posedge clk)
     begin
-      if (write_wen) ram[write_addr]<=write_data;
+      if (write_wen && match) ram[write_addr]<=write_data;
       if (rst) read_addr_reg<={ADDR_WIDTH{1'b0}};
       else if (read_clkEn) read_addr_reg<=read_addr;
+      if (write_wen) begin
+        write_addr_save<=write_addr;
+        write_data_save<=write_data;
+        save<=1'b1;
+      end else if (read_clkEn) begin
+        save<=1'b0;
+      end
     end
 
 endmodule
@@ -142,7 +161,8 @@ module tbuf_ram_block(
   write_addr,
   write_data,
   write_wen,
-  ioen
+  ioen,
+  indiren
   );
 
   parameter DATA_WIDTH=`btb_width;
@@ -158,6 +178,7 @@ module tbuf_ram_block(
   input [DATA_WIDTH-1:0] write_data;
   input write_wen;
   input [3:0] ioen;
+  input [3:0] indiren;
 
   tbuf_ram0 ram0_mod(
   clk,
@@ -178,7 +199,7 @@ module tbuf_ram_block(
   read_data[`btb_tgt_IP0],
   write_addr,
   write_data[`btb_tgt_IP0],
-  write_wen&ioen[0]
+  write_wen&ioen[0],indiren[0]
   );
   tbuf_ram1 ram11_mod(
   clk,
@@ -188,7 +209,7 @@ module tbuf_ram_block(
   read_data[`btb_tgt_IP1],
   write_addr,
   write_data[`btb_tgt_IP1],
-  write_wen&ioen[1]
+  write_wen&ioen[1],indiren[1]
   );
   tbuf_ram1 ram12_mod(
   clk,
@@ -198,7 +219,7 @@ module tbuf_ram_block(
   read_data[`btb_tgt_IP2],
   write_addr,
   write_data[`btb_tgt_IP2],
-  write_wen&ioen[2]
+  write_wen&ioen[2],indiren[2]
   );
   tbuf_ram1 ram13_mod(
   clk,
@@ -208,7 +229,7 @@ module tbuf_ram_block(
   read_data[`btb_tgt_IP3],
   write_addr,
   write_data[`btb_tgt_IP3],
-  write_wen&ioen[3]
+  write_wen&ioen[3],indiren[3]
   );
   
   tbuf_ram2 ram2_mod(
@@ -1072,7 +1093,8 @@ module tbuf_way(
   .write_addr(except_indir_reg ? update_addr_reg[8:0] : write_addr[8:0]),
   .write_data(write_data),
   .write_wen((ram_wen&&write_addr[9]==HALF)|init),
-  .ioen(ioen)
+  .ioen(ioen),
+  .indiren({4{except_indir_reg}}&ioen)
   );
   
   tbufExtra_ram ex0_mod(
