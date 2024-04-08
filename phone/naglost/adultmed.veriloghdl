@@ -1646,7 +1646,7 @@ module smallInstr_decoder(
       trien[29]=magic[0] & isBasicAddNoFl || isPtrBump_other_domain;
           //if no magic, it's register-register nxor and carry flag for ptr bit!
       puseBConst[29]=magic[2:0]==3'b011;
-      poperation[29][11:0]=isPtrBump_other_domain ? ((H&~instr[13])?`op_mov64 : `op_add64) : opcode_main==8'd234 ? `op_dec|4096 : magic[1:0]==2'b01 ? `op_nxor64 : opcode_main[0] ? `op_add64 : `op_add32;
+      poperation[29][11:0]=isPtrBump_other_domain ? ((H&~|instr[14:13])?`op_mov64 : `op_add64) : opcode_main==8'd234 ? `op_dec|4096 : magic[1:0]==2'b01 ? `op_nxor64 : opcode_main[0] ? `op_add64 : `op_add32;
       poperation[29][12]=1'b1;
       pport[29]=opcode_main==8'd234 ? PORT_MUL : PORT_ALU;
       prA_use[29]=1'b1;
@@ -1665,8 +1665,11 @@ module smallInstr_decoder(
                   prT[29]=prA[29];
                   if (LARGE_CORE && instr[12]) poperation[19]=`op_sadd_odd;
                   //if instr[13] and there is a spec load then repreat all of the bump combos twice in the second core to get sized iteration
+                  // instr[14:13]=core id for 4 way vectorisation
+                  // for up to 4 times ->Next or +=size access
                   if (instr[31]) puseBConst[29]=1'b1;
                   if (instr[14:13]==2'b1) prT_use[29]=H & LARGE_CORE;
+                  if (instr[14]) prT_use[29]=1'b0; //only two wat vectorisation for now
               end
               instr[8]=instr[23];
           end else begin
