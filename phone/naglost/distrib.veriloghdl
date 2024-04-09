@@ -268,7 +268,7 @@ module distrib(
               assign store_index[j][k]=store_cntA[k][j+1]&store_cntA[k-1][j] || store_cnt_or_less[j];
           end
           assign wrt0=(store_cntA[k][1] && store_cntA[k-1][0]) ? ldst_cntA[k][6:1] : 6'bz;
-          assign wrt1=(store_cntA[k][{~is_vec,is_vec}] && store_cntA[k-1][~is_vec]) ? ldst_cntA[k][6:1] : 6'bz;
+          assign wrt1=(store_cntA[k][{~is_vec,is_vec}] && store_cntA[k-1][~is_vec]) ? ldst_cntA[k][6:1]<<1 : 6'bz;
           assign wrt2=(store_cntA[k][3] && store_cntA[k-1][2]) ? ldst_cntA[k][6:1] : 6'bz;
           assign lsi_P0=(store_index[0][k] && ~store_index[0][k^1]) ? ldst_cntA[k][6:1] : 6'bz;
           assign lsi_P1=(store_index[~is_vec][k] && ~store_index[~is_vec][k^1]) ? ldst_cntA[k][6:1] : 6'bz;
