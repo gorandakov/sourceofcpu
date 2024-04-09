@@ -268,10 +268,10 @@ module distrib(
               assign store_index[j][k]=store_cntA[k][j+1]&store_cntA[k-1][j] || store_cnt_or_less[j];
           end
           assign wrt0=(store_cntA[k][1] && store_cntA[k-1][0]) ? ldst_cntA[k][6:1] : 6'bz;
-          assign wrt1=(store_cntA[k][2] && store_cntA[k-1][1]) ? ldst_cntA[k][6:1] : 6'bz;
+          assign wrt1=(store_cntA[k][{~is_vec,is_vec}] && store_cntA[k-1][~is_vec]) ? ldst_cntA[k][6:1] : 6'bz;
           assign wrt2=(store_cntA[k][3] && store_cntA[k-1][2]) ? ldst_cntA[k][6:1] : 6'bz;
           assign lsi_P0=(store_index[0][k] && ~store_index[0][k^1]) ? ldst_cntA[k][6:1] : 6'bz;
-          assign lsi_P1=(store_index[1][k] && ~store_index[1][k^1]) ? ldst_cntA[k][6:1] : 6'bz;
+          assign lsi_P1=(store_index[~is_vec][k] && ~store_index[~is_vec][k^1]) ? ldst_cntA[k][6:1] : 6'bz;
           assign lsi_P2=(store_index[2][k] && ~store_index[2][k^1]) ? ldst_cntA[k][6:1] : 6'bz;
           assign lsi_Q0=(load_index[0][k] && ~load_index[0][k^1]) ? ldst_cntA[k][6:1] : 6'bz;
           assign lsi_Q1=(load_index[1][k] && ~load_index[1][k^1]) ? ldst_cntA[k][6:1] : 6'bz;
@@ -289,7 +289,7 @@ module distrib(
   assign ldst_cntA[-1]=11'd1;
 
   assign lsi_P0=store_cnt_or_less[0] ? 6'h3f : 6'bz;
-  assign lsi_P1=store_cnt_or_less[1] ? 6'h3f : 6'bz;
+  assign lsi_P1=store_cnt_or_less[~is_vec] ? 6'h3f : 6'bz;
   assign lsi_P2=store_cnt_or_less[2] ? 6'h3f : 6'bz;
   assign lsi_Q0=load_cnt_or_less[0]  ? 6'h3f : 6'bz;
   assign lsi_Q1=load_cnt_or_less[1]  ? 6'h3f : 6'bz;
@@ -299,7 +299,7 @@ module distrib(
   assign lsi_Q5=load_cnt_or_less[5]  ? 6'h3f : 6'bz;
 
   assign wrt0=store_cnt_or_less[0] ?  6'b111111 : 6'bz;
-  assign wrt1=store_cnt_or_less[1] ?  6'b111111 : 6'bz;
+  assign wrt1=store_cnt_or_less[~is_vec] ?  6'b111111 : 6'bz;
   assign wrt2=store_cnt_or_less[2] ?  6'b111111 : 6'bz;
    
   assign {stol2,stol1,stol0}=(nmul & stol) ? {ldpos[1],ldpos[2],ldpos[0]} : 3'BZ;
@@ -685,26 +685,20 @@ module distrib(
   assign shpos_d=shpos_cnt[1] ? {shpos[0],shpos[2:1]} : 3'bz;
   assign shpos_d=shpos_cnt[3] ? shpos : 3'bz;
   
-  assign lsiA0=store_cnt[3] ? lsi_P0 : 6'bz; 
-  assign lsiA1=store_cnt[3] ? lsi_P1 : 6'bz; 
-  assign lsiA2=store_cnt[3] ? lsi_P2 : 6'bz; 
-  assign lsiA3=store_cnt[3] ? lsi_Q0 : 6'bz; 
-  assign lsiA4=store_cnt[3] ? lsi_Q1 : 6'bz; 
-  assign lsiA5=store_cnt[3] ? lsi_Q2 : 6'bz; 
   
-  assign lsiA0=store_cnt[2] ? lsi_P0 : 6'bz; 
-  assign lsiA1=store_cnt[2] ? lsi_P1 : 6'bz; 
-  assign lsiA2=store_cnt[2] ? lsi_Q0 : 6'bz; 
-  assign lsiA3=store_cnt[2] ? lsi_Q1 : 6'bz; 
-  assign lsiA4=store_cnt[2] ? lsi_Q2 : 6'bz; 
-  assign lsiA5=store_cnt[2] ? lsi_Q3 : 6'bz; 
+  assign lsiA0=store_cnt[{~is_vec,is_vec}] ? lsi_P0 : 6'bz; 
+  assign lsiA1=store_cnt[{~is_vec,is_vec}] ? lsi_P1 : 6'bz; 
+  assign lsiA2=store_cnt[{~is_vec,is_vec}] ? lsi_Q0 : 6'bz; 
+  assign lsiA3=store_cnt[{~is_vec,is_vec}] ? lsi_Q1 : 6'bz; 
+  assign lsiA4=store_cnt[{~is_vec,is_vec}] ? lsi_Q2 : 6'bz; 
+  assign lsiA5=store_cnt[{~is_vec,is_vec}] ? lsi_Q3 : 6'bz; 
   
-  assign lsiA0=store_cnt[1] ? lsi_P0 : 6'bz; 
-  assign lsiA1=store_cnt[1] ? lsi_Q0 : 6'bz; 
-  assign lsiA2=store_cnt[1] ? lsi_Q1 : 6'bz; 
-  assign lsiA3=store_cnt[1] ? lsi_Q2 : 6'bz; 
-  assign lsiA4=store_cnt[1] ? lsi_Q3 : 6'bz; 
-  assign lsiA5=store_cnt[1] ? lsi_Q4 : 6'bz; 
+  assign lsiA0=store_cnt[1]&~is_vec ? lsi_P0 : 6'bz; 
+  assign lsiA1=store_cnt[1]&~is_vec ? lsi_Q0 : 6'bz; 
+  assign lsiA2=store_cnt[1]&~is_vec ? lsi_Q1 : 6'bz; 
+  assign lsiA3=store_cnt[1]&~is_vec ? lsi_Q2 : 6'bz; 
+  assign lsiA4=store_cnt[1]&~is_vec ? lsi_Q3 : 6'bz; 
+  assign lsiA5=store_cnt[1]&~is_vec ? lsi_Q4 : 6'bz; 
 
   assign lsiA0=store_cnt[0] ? lsi_Q0 : 6'bz; 
   assign lsiA1=store_cnt[0] ? lsi_Q1 : 6'bz; 
