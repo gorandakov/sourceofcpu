@@ -22,6 +22,7 @@ module distrib(
   clk,
   rst,
   is_vec,
+  is_vec_other,
   stall,
   alu,
   shift,
@@ -67,6 +68,7 @@ module distrib(
   input clk;
   input rst;
   input is_vec;
+  input [1:0] is_vec_other;
   input stall;
   input [WIDTH-1:0] alu;
   input [WIDTH-1:0] shift;
@@ -269,11 +271,11 @@ module distrib(
               assign shift_index[j][k]=shift_cntA[k][j+1]&shift_cntA[k-1][j] || shift_cnt_or_less[j];
               assign store_index[j][k]=store_cntA[k][j+1]&store_cntA[k-1][j] || store_cnt_or_less[j];
           end
-          assign wrt0=(store_cntA[k][1] && store_cntA[k-1][0]) ? ldst_cntA[k][6:1] : 6'bz;
-          assign wrt1=(store_cntA[k][{~is_vec,is_vec}] && store_cntA[k-1][~is_vec]) ? ldst_cntA[k][6:1]<<is_vec : 6'bz;
+          assign wrt0=(store_cntA[k][1] && store_cntA[k-1][0]) ? ldst_cntA[k][6:1]<<is_vec_other[0] : 6'bz;
+          assign wrt1=(store_cntA[k][{~is_vec,is_vec}] && store_cntA[k-1][~is_vec]) ? ldst_cntA[k][6:1]<<is_vec_other[1] : 6'bz;
           assign wrt2=(store_cntA[k][3] && store_cntA[k-1][2]) ? ldst_cntA[k][6:1] : 6'bz;
-          assign lsi_P0=(store_index[0][k] && ~store_index[0][k^1]) ? ldst_cntA[k][6:1] : 6'bz;
-          assign lsi_P1=(store_index[~is_vec][k] && ~store_index[~is_vec][k^1]) ? ldst_cntA[k][6:1]<<is_vec : 6'bz;
+          assign lsi_P0=(store_index[0][k] && ~store_index[0][k^1]) ? ldst_cntA[k][6:1]<<is_vec_other[0] : 6'bz;
+          assign lsi_P1=(store_index[~is_vec][k] && ~store_index[~is_vec][k^1]) ? ldst_cntA[k][6:1]<<is_vec_other[1] : 6'bz;
           assign lsi_P2=(store_index[2][k] && ~store_index[2][k^1]) ? ldst_cntA[k][6:1] : 6'bz;
           assign lsi_Q0=(load_index[0][k] && ~load_index[0][k^1]) ? ldst_cntA[k][6:1] : 6'bz;
           assign lsi_Q1=(load_index[1][k] && ~load_index[1][k^1]) ? ldst_cntA[k][6:1] : 6'bz;
