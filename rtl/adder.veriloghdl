@@ -264,7 +264,7 @@ endmodule
 endmodule
 
 
-(* align_width="a,b,out" *) module adder(a,b,out,cin,en,cout,cout8,cout16,cout32);
+(* align_width="a,b,out" *) module adder_15_11(a,b,out,cin,en,cout,cout11,cout16,cout32);
   parameter WIDTH=32;
   input [WIDTH-1:0] a;
   input [WIDTH-1:0] b;
@@ -272,7 +272,7 @@ endmodule
   input cin;
   input en;
   output cout;
-  output cout8;
+  output cout11;
   output cout16;
   output cout32;
   
@@ -427,7 +427,7 @@ endmodule
         not_array #(WIDTH-32) nCx_mod(nC[WIDTH-1:32],C[WIDTH-1:32]);
       end
       
-    if (WIDTH>=8) assign cout8=C[7];
+    if (WIDTH>=11) assign cout8=C[10];
     else assign cout8=1'b0;
 
     if (WIDTH>=16) assign cout16=C[15];
@@ -705,17 +705,17 @@ endmodule
 
   wire [39:0] unptr;
   wire [63:0] ptr;
-  wire [2:0] pos_ack;
-  wire [2:0] neg_ack;
-  wire [1:0] pos_flip;
-  wire [1:0] neg_flip;
+  wire [3:0] pos_ack;
+  wire [3:0] neg_ack;
+  wire [2:0] pos_flip;
+  wire [2:0] neg_flip;
   wire cout_sec0;
   wire [20:0] exbits;
   wire is_ptr;
   wire err;
 
-  wire [1:0] pos_flip;
-  wire [1:0] neg_flip;
+  wire [2:0] pos_flip;
+  wire [2:0] neg_flip;
 
   wire exp;
   wire ndiff;
@@ -732,8 +732,8 @@ endmodule
   assign unptr=b[64] && ~sub[1] ? xa[43:4] : xb[43:4];
   
   assign cout_sec[0]=pos_ack[{1'b0,cout_sec0}] | neg_ack[{1'b0,cout_sec0}] && ~err;
-  assign cout_sec[1]=pos_ack[2] & ~err;
-  assign cout_sec[2]=neg_ack[2] & ~err;
+  assign cout_sec[1]=pos_ack[3] & ~err;
+  assign cout_sec[2]=neg_ack[3] & ~err;
 
   assign err=a[64] & b[64] & ~sub[1] || ~a[64] & b[64] & sub[1] || a[64] & ~sub[3] || b[64] & ~sub[0];
 
@@ -743,7 +743,7 @@ endmodule
   assign out[65]=en ? ^out[64:0] : 1'bz;
 //65th bit offset by 4 phases in regfile and alu!
 
-  assign exbits=is_ptr ? ptr[63:43]^{19'b0,pos_flip[cout_sec0]|neg_flip[cout_sec0],1'b0} : 21'b0;
+  assign exbits=is_ptr ? ptr[63:43]^{19'b0,pos_flip[{1'b0,cout_sec0}]|neg_flip[{1'b0,cout_sec0}],1'b0} : 21'b0;
 
   addrcalcsec_shift nih_mod(ptr[`ptr_exp],C[41:10],cout_sec0);
   addrcalcsec_check_upper3 hin_mod(ptr,unptr[43:11],1'b0},33'b0,pos_ack,neg_ack,pos_flip,neg_flip,
@@ -1281,9 +1281,9 @@ endmodule
   wire [WIDTH-1:0] nxorab;
   wire [WIDTH-1:0] andab;
   wire [WIDTH-1:0] orab;
-  wire cout_sec0;
-  wire [1:0] pos_ack;
-  wire [1:0] neg_ack;
+  wire cout_sec0,cout_sec1;
+  wire [3:0] pos_ack;
+  wire [3:0] neg_ack;
   wire err=a[64] ~^ c[64] || c[64] & ~shift[0];
 
   wire [43:0] c_s;
@@ -1301,7 +1301,11 @@ endmodule
   assign c2={c[41:0],2'b0};
   assign c3={c[40:0],3'b0};
   assign tmp2[0]=1'b0;
-  assign cout_sec=pos_ack[cout_sec0] | neg_ack[cout_sec0] && ~err;
+
+  assign cout_sec=~ cout_sec0 & ~ cout_sec1 ? pos_ack[2'b0] | neg_ack[2'b0] && ~err;
+  assign cout_sec=cout_sec0 & ~ cout_sec1 ? pos_ack[2'b1] | neg_ack[2'b1] && ~err;
+  assign cout_sec=cout_sec1 & ~ cout_sec0 ? pos_ack[2'b1] | neg_ack[2'b1] && ~err;
+  assign cout_sec=cout_sec0 &  cout_sec1 ? pos_ack[2'b2] | neg_ack[2'b2] && ~err;
   
   generate
     for(k=0;k<=43;k=k+1)
@@ -1330,7 +1334,8 @@ endmodule
   adder_seq #(WIDTH) add_mod(tmp1,tmp2[WIDTH-1:0],~(tmp1|tmp2),~(tmp1&tmp2),out[43:0],c_s,1'b0,en,,,,);
   assign out[63+PTRBIT:44]=en ? ptr[63+PTRBIT:44] : 'z;
   addrcalcsec_shift ssh_mod(ptr[`ptr_exp],c_s[41:10],cout_sec0);
-  addrcalcsec_check_upper3 #(1'b1) chk_mod(ptr,unptr[43:11],b[43:11],{dummy1,pos_ack},{dummy2,neg_ack},ndiff);
+  addrcalcsec_shift ssh_mod(ptr[`ptr_exp],tmp2[41:10],cout_sec1);
+  addrcalcsec_check_upper3 #(1'b1) chk_mod(ptr,unptr[43:11],b[43:11],pos_ack,neg_ack,,,ndiff);
 endmodule
 
 
