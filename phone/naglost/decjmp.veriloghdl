@@ -32,6 +32,7 @@ module jump_decoder(
   constant,
   cleave,
   cleaveoff,
+  cloopntk,
   
   pushCallStack,
   popCallStack,
@@ -71,6 +72,7 @@ module jump_decoder(
 
   output reg [1:0] cleave;
   output reg [2:0] cleaveoff; 
+  output reg [2:0] cloopntk;
   
   output reg pushCallStack;
   output reg popCallStack;
@@ -156,6 +158,7 @@ module jump_decoder(
       popCallStack=1'b0;
       cleave=2'b0;
       cleaveoff=3'b111;
+      cloopntk=1'b1;
       if (subIsCJ) begin
           constant={{55{instr[15]}},instr[15:8],1'b0};
           jumpType={1'b0,instr[7:6],instr[1:0]};
@@ -204,6 +207,7 @@ module jump_decoder(
       end else if (isShlAddMulLike&&instr[28]) begin 
           jumpType={1'b0,3'h0,instr[8]};
 	  constant={{45{instr[26]}},instr[26:9],1'b0};
+          cloopntk=~instr[8];
       end else if (isBasicSysInstr) begin
           if (instr[30:16]==15'd23 && ~magic[0]) halt=thread;
           if (instr[15:13]==3'b0) begin
