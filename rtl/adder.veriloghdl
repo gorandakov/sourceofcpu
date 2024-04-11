@@ -264,7 +264,7 @@ endmodule
 endmodule
 
 
-(* align_width="a,b,out" *) module adder(a,b,out,cin,en,cout,cout8,cout16,cout32);
+(* align_width="a,b,out" *) module adder_15_11(a,b,out,cin,en,cout,cout11,cout16,cout32);
   parameter WIDTH=32;
   input [WIDTH-1:0] a;
   input [WIDTH-1:0] b;
@@ -272,7 +272,7 @@ endmodule
   input cin;
   input en;
   output cout;
-  output cout8;
+  output cout11;
   output cout16;
   output cout32;
   
@@ -427,7 +427,7 @@ endmodule
         not_array #(WIDTH-32) nCx_mod(nC[WIDTH-1:32],C[WIDTH-1:32]);
       end
       
-    if (WIDTH>=8) assign cout8=C[7];
+    if (WIDTH>=11) assign cout8=C[10];
     else assign cout8=1'b0;
 
     if (WIDTH>=16) assign cout16=C[15];
