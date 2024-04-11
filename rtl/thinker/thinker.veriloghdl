@@ -219,9 +219,9 @@ module pager(
       writeTlb_IP[k][TLB_IP_WIDTH-23:0]=addr_orig[k][43:14];
       writeTlb_low[k]=addr_orig[k][13];
   end
-  assign req_bus[0]=(stageA[0]|{4'b0,stageB[0]})!=0 && ~stageA_running[0] && ~bus_hold;
-  assign req_bus[1]=(stageA[1]|{4'b0,stageB[1]})!=0 && ~stageA_running[1] && ~bus_hold && ~req_bus[0];
-  assign req_bus[2]=(stageA[2]|{4'b0,stageB[2]})!=0 && ~stageA_running[2] && ~bus_hold && ~|req_bus[1:0];
+  assign req_bus[0]=(stageA[0]|{4'b0,stageB[0]})!=0 && ~stageA_running[0] && ~|dly[0] && ~bus_hold;
+  assign req_bus[1]=(stageA[1]|{4'b0,stageB[1]})!=0 && ~stageA_running[1] && ~|dly[1] && ~bus_hold && ~req_bus[0];
+  assign req_bus[2]=(stageA[2]|{4'b0,stageB[2]})!=0 && ~stageA_running[2] && ~|dly[2] && ~bus_hold && ~|req_bus[1:0];
   
   assign mOp_register=|req_bus ? 9'h1fc+{7'b0,req_bus[2],req_bus[1]} : 9'bz;
   assign mOp_LSQ=|req_bus ? 9'h07 : 9'bz; 
@@ -262,6 +262,19 @@ module pager(
         assign addrO[t]=addr[t][42:38];
     end
   endgenerate
+
+  reg [2:0][pdc_width-1:0] read_data_pdbr;
+
+  pdc_ram ram_mod(
+  clk,
+  rst_reg,
+  {new_addr[2][35:25],new_addr[1][35:25],new_addr[0][35:25]},
+  new_en&new_can,
+  read_data_pdbr,
+  ptr[FUreg[1:0]][24:14],//write_addr
+  {ptr[FUreg[1:0]][43:25],1'b1,data_in[56:25]},//fixme: some bits are redundant as not used by bus; but meight be needed in later implementation
+  stageA[y][1] && |data_in[`page_na] && FUHit && &FUreg[8:2]//write_wen
+  );
 
   integer l,y;
   always @(banks,addr,stageA) begin
@@ -351,11 +364,26 @@ module pager(
           addr_orig[y]<=new_addr[y];
           permReq[y]<=new_permReq[y];
           ptrB[y]<=ptr[y];
+          dly[y]<=3'b1;
       end else if (req_bus[y]) begin
           stageA_running[y]<=1'b1;
          // $display("bump");
       end else begin
+          dly[y]<=dly[y]<<1;
           //if (FUHit)  $display("bmup ",FUreg," ",data_in);
+          if (dly[y]==3'b100) begin
+              if (read_data_pdbr[y][`pdc_valid] && read_data_pdbr[y][`pdc_vaddr]==ptr[y][43:25]) begin
+                 ptr[y]<={2'b0,read_data_pdbr[y][`pdc_addr],14'b0};
+                 addr[y]<=addr[y]<<22;
+                 addr_inc[y]<=addr_inc[y]<<22;
+                 if (addr[y][42:33]!=addr_inc[y][42:33]) begin 
+                      stageB_pre[y]<=stageA[y][7:0]<<1;
+                      ptrB[y][47:0]<={read_data_pdbr[y][`pdc_addr],25'b0};
+                      addrB[y]<=addr_inc[y];
+                 end
+                 stageA[y]<=stageA[y]<<2;
+              end
+          end
           if (FUreg==(9'h1fc+y) && stageA_running[y] && FUHit) begin
               if ((stageA[y][1:0]!=0 || stageA[y][2]&premReq[y][`permreq_transl]) && ~data_in[`page_huge] && |data_in[`page_na]) begin
                   addr[y]<={addr[y][37:0],11'b0};
