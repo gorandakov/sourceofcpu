@@ -431,7 +431,7 @@ module addrcalc(
 
   wire coov,cout_secq1,cout_secq2;
 
-  adder #(15) nextCAddr_mod({1'b0,cmplxAddr[13:0]},15'b10000000,addrNext,1'b0,1'b1,coov,,,);
+  adder_15_11 #(15) nextCAddr_mod({1'b0,cmplxAddr[13:0]},15'b10000000,addrNext,1'b0,1'b1,,coov,,);
   
   addrcalcsec_range rng_mod(
   cmplxAddr,
@@ -439,8 +439,8 @@ module addrcalc(
   ptrdiff,
   cout_secq1);
 
-  assign cmplxAddr_overreach[14:0]=addrNext;
-  adder_inc #(30) cmplxAddr_add(cmplxAddr[43:15],cmplxAddr_overreach[43:15],coov,1'b1);
+  assign cmplxAddr_overreach[10:0]=addrNext[10:0];
+  adder_inc #(33) cmplxAddr_add(cmplxAddr[43:11],cmplxAddr_overreach[43:11],coov,1'b1);
 
   addrcalcsec_range rng_mod(
   cmplxAddr_overreach,
