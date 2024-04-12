@@ -59,7 +59,7 @@ module addrcalc_r(
   busC_mlb_data,
   busC_mlb_en,
   msrss_no,msrss_en,msrss_thread,msrss_data,
-  pageFault,
+  pageFault,pageFaultX,
   faultCode,
   faultNo,
   mOp_addrEven,
@@ -160,6 +160,7 @@ module addrcalc_r(
   input [63:0] msrss_data;
 
   output pageFault;
+  output pageFaultX;
   output [7:0] faultCode;
   output [8:0] faultNo;
   output [PADDR_WIDTH-1:8] mOp_addrEven;
@@ -428,7 +429,8 @@ module addrcalc_r(
   assign mOp_addrOdd[43:14]=fault_mlb ? {27'b0,mOp0_addrMain_reg[7:6]} : 30'bz;
   
   assign pageFault_t=(page_carry) ? (fault_mlb | ({2{mOp_split}} & fault_mlb_next)) & {2{mlb_hit}} : fault_mlb & {2{mlb_hit}};
-  assign pageFault=(pageFault_t_reg!=0) | fault_cann_reg | error_reg && mOp_en_reg && ~bus_hold_reg;
+  assign pageFault= fault_cann_reg | error_reg && mOp_en_reg && ~bus_hold_reg;
+  assign pageFaultX=(pageFault_t_reg!=0)&~ fault_cann_reg &~ error_reg && mOp_en_reg && ~bus_hold_reg;
   assign fault_cann=1'b0;
   assign faultNo=fault_cann_reg | (pageFault_t_reg!=0) | error_reg && ~bus_hold_reg ? {error_reg ? 6'd63 : 6'd11,1'b0,2'd1} :
     {6'd0,1'b0,2'd2};
