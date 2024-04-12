@@ -479,7 +479,7 @@ module dcache1_way(
   
   output [5:0] err_tag;
   
-  input recent_in;
+  input [7:0] recent_in;
   output recent_out;
   input [5:0] insert_rand;
 
@@ -720,8 +720,9 @@ module dcache1_way(
         .errH(errH[r]),.errL(errL[r]),
         .write_exclusive(write_insertExclusive),
         .write_rand(insert_rand),
-        .write_recent_out(recent[r]),
-        .write_recent_in(recent_in),
+        .write_recent_out(),
+        .hit_odde(recent[r]),
+        .write_recent_in(|recent_in),
         .write_wen(write_insert),
         .write_hit(ins_hit[r]),
         .wb_addr(),
@@ -743,8 +744,8 @@ module dcache1_way(
         .errH(errH[r]),.errL(errL[r]),
         .write_exclusive(write_insertExclusive),
         .write_rand(insert_rand),
-        .write_recent_out(recent[r]),
-        .write_recent_in(recent_in),
+        .hit_odde(recent[r]),
+        .write_recent_in(|recent_in),
         .write_wen(write_insert),
         .write_hit(ins_hit[r]),
         .wb_addr(wb_addr),
@@ -770,7 +771,7 @@ module dcache1_way(
         .write_exclusive(write_insertExclusive),
         .write_rand(insert_rand),
         .write_recent_out(),
-        .write_recent_in(recent_in),
+        .write_recent_in(|recent_in),
         .write_wen(write_insert),
         .write_hit(ins_hit[w+4]),
         .wb_addr(),
@@ -1169,7 +1170,7 @@ module dcache1(
   wire [3:0][15:0] rxerr7;
   wire [3:0][15:0] rxerr7B;
   wire [3:0][15:0] rxerr;
-  wire recent_in;
+//  wire recent_in;
   wire [7:0] recent_out;
 
   wire [5:0] insert_rand;
@@ -1448,7 +1449,7 @@ module dcache1(
           write_data_ecc,
           write_dataPTR_reg2,
           err_tag[w-1],
-          recent_in,
+          recent_out,
           recent_out[w-1],
           insert_rand,
           insert_hit_way[w-1],
