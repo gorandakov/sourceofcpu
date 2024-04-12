@@ -448,7 +448,7 @@ module addrcalc(
   ptrdiff,
   cout_secq2);
 
-  assign cout_secq=cout_secq1 || cout_secq2 && mOp_split;
+  assign cout_secq=cout_secq1 && (cout_secq2 | ~mOp_split);
 
   always @*
     begin
