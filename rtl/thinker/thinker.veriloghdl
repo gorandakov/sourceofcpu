@@ -385,7 +385,7 @@ module pager(
               end
           end
           if (FUreg==(9'h1fc+y) && stageA_running[y] && FUHit) begin
-              if ((stageA[y][1:0]!=0 || stageA[y][2]&premReq[y][`permreq_transl]) && ~data_in[`page_huge] && |data_in[`page_na]) begin
+              if ((stageA[y][1:0]!=0 || stageA[y][2]&premReq[y][`permreq_transl]) && ~data_in[`page_huge]) begin
                   addr[y]<={addr[y][37:0],11'b0};
                   addr_inc[y]<={addr_inc[y][37:0],11'b0};
                   ptr[y][47:0]<={data_in[y][47:14],9'b0,stageA[y][2]&premReq[y][`permreq_transl],4'b0};
@@ -406,7 +406,7 @@ module pager(
                           finalXtra0<={1'b0,|finalXtra0[`page_na],finalXtra0[`page_sys],finalXtra0[-14+`page_ne-14],data_in[122+callin],data_in[16*callin],finalAddr0[27:14]};
                       end
                   end
-              end else if (stageA[y][2] | data_in[`page_huge] && |data_in[`page_na] && stageA[y][2:1]!=0) begin
+              end else if (stageA[y][2] | data_in[`page_huge] && stageA[y][2:1]!=0) begin
                  // ready[y]<=1'b1;
                   finalAddr0[y]<=data_in[43:14];
                   finalXtra0[y]<={data_in[63:58],data_in[13:0]};
@@ -425,23 +425,23 @@ module pager(
 		      finalAddr1[y][19:9]<=addr_orig[y][32:24];
 	          end
                     //  new_can[y]<=1'b1;
-              end else if (stageB[y][1:0]!=0 && ~data_in[`page_huge] && data_in[`page_na]) begin
-                  addr[y]<={addr[y][37:0],10'b0};
-                  addr_inc[y]<={addr_inc[y][37:0],10'b0};
-                  ptr[47:0][y]<={4'b0,data_in[43:13],13'b0};
+              end else if (stageB[y][1:0]!=0 && ~data_in[`page_huge]) begin
+                  addr[y]<={addr[y][36:0],11'b0};
+                  addr_inc[y]<={addr_inc[y][36:0],11'b0};
+                  ptr[47:0][y]<={4'b0,data_in[43:14],14'b0};
                   stageA_running[y]<=1'b0;
                   stageB[y]<={stageB[y][6:0],1'b0};
-              end else if (stageB[y][2] | data_in[`page_huge] && data_in[`page_na] && stageB[y][2:1]!=0) begin
+              end else if (stageB[y][2] | data_in[`page_huge] && stageB[y][2:1]!=0) begin
                   stageB[y]<=8'b0;
-                  finalAddr2[y]<=data_in[43:13];
-                  finalXtra2[y]<={data_in[10],data_in[11:0]};
+                  finalAddr2[y]<=data_in[43:14];
+                  finalXtra2[y]<={data_in[63:58],data_in[13:0]};
                   finalSub2[y]<=stageB[y][1];
 	          if (stageB[y][1]) begin
 	              addr[y][32:23]<=addr_orig[y][32:23];
 		      finalAddr2[y][19:10]<=addr_orig_inc[y][32:23];
 	          end
                      // new_can[y]<=1'b1;
-	      end else if (stageB[y]!=0 && ~data_in[`page_na]) begin
+	      end else if (stageB[y]!=0 && ~|data_in[`page_na]) begin
                   stageB[y]<=8'b0;
                   finalAddr2[y]<=31'b0;
                   finalXtra2[y]<=13'b0;
