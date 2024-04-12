@@ -1517,9 +1517,13 @@ module dcache1(
 		rxdata4[p]|rxdata5[p]|rxdata6[p]|rxdata7[p];
 	      assign rxerr[p]=rxerr0[p]|rxerr1[p]|rxerr2[p]|rxerr3[p]|
 		rxerr4[p]|rxerr5[p]|rxerr6[p]|rxerr7[p];
-              assign read_dataA[p]=(swpdata[v] ? {rdata1[p][127:64],rdata1[7:0],rdata1[15:8],rdata1[23:16],
-                rdata1[31:24],rdata1[39:32],rdata1[47:40],rdata1[55:48],rdata1[63:56]} : rddata1[p]) & {{8{mskdata1[p][5]}},{48{mskdata1[p][4]}},{16{mskdata1[p][3]}},{32{mskdata1[p][2]}},
-                    {16{mskdata1[p][1]}},{8{mskdata1[p][0]}},8'hff};
+              assign read_dataA[p][135:128]=(swpdata[v] ? rdata1[p][135:128] : ~mskdata1[p][5] ? pwndata[p][135:128] : rddata1[p][135:128]);
+              assign read_dataA[p][127:80]=(swpdata[v] ? rdata1[p][127:80] : ~mskdata1[p][4] ? pwndata[p][127:80] : rddata1[p][127:80]);
+              assign read_dataA[p][79:64]=(swpdata[v] ? rdata1[p][79:64] : ~mskdata1[p][3] ? pwndata[p][79:64] : rddata1[p][79:64]);
+              assign read_dataA[p][63:32]=(swpdata[v] ? {rdata1[p][7:0],rdata1[p][15:8],rdata1[p][23:16],rdata1[p][31:24]} : ~mskdata1[p][2] ? pwndata[p][63:32] : rddata1[p][63:32]);
+              assign read_dataA[p][31:16]=(swpdata[v] ? {rdata1[p][39:32],rddata1[p][47:40]} : ~mskdata1[p][1] ? pwndata[p][31:16] : rddata1[p][31:16]);
+              assign read_dataA[p][15:8]=(swpdata[v] ? rdata1[p][55:48] : ~mskdata1[p][0] ? pwndata[p][15:8] : rddata1[p][15:8]);
+              assign read_dataA[p][7:0]=(swpdata[v] ? rdata1[p][63:56] : rddata1[p][7:0]);
               assign puke_addr[p]=read_odd_reg[p]|read_split_reg[p] && rderr1[p] ? read_addrO_reg[p][6:0] : read_addrE_reg[p][6:0];
               assign puke_en[p]=rderr1[p] | rderr2[p];
     end
