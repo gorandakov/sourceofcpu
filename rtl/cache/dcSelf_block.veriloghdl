@@ -952,7 +952,7 @@ module dcache1(
     read_beginA2,  read_low2, read_sz2,
   read_addrE3, read_addrO3, read_bank3, read_clkEn3, read_hit3, read_hitCl3,   
     read_odd3, read_split3, read_dataA3, read_dataX3, read_pbit3,
-    read_beginA3, read_low3, read_sz3,
+    read_beginA3, read_low3, read_sz3, read_pf3,
   read_bankNoRead,
   read_invalidate,
   write_addrE0,
@@ -1074,6 +1074,7 @@ module dcache1(
   input [4:0] read_beginA3;
   input [1:0] read_low3;
   input [4:0] read_sz3;
+  input       read_pf3;
 
   
   input [BANK_COUNT-1:0] read_bankNoRead;//bits are 1 if other bank reads are 0
@@ -1700,11 +1701,14 @@ module dcache1(
           for(v=0;v<4;v=v+1) begin
               mskdata1[v]<=6'b0;
               read_sz[v]<=5'b0;
+              pwndata[v]<=136'b0;
               read_sz_reg[v]<=5'b0;
               read_beginA[v]<=5'b0;
               read_beginA_reg[v]<=5'b0;
               read_bank[v]<=32'b0;
           end
+          read3_pf<=0;
+          read3_addrMain<=0;
           
       end else begin
           read_invalidate_reg<=read_invalidate; 
@@ -1792,6 +1796,9 @@ module dcache1(
           read_sz[1]<=read_sz1;
           read_sz[2]<=read_sz2;
           read_sz[3]<=read_sz3;
+
+          read3_pf<=read_pf3;
+          read3_addrMain<={read_addrE3,read_addrO3[7:0]};
           
           read_beginA[0]<=read_beginA0;
           read_beginA[1]<=read_beginA1;
@@ -1829,6 +1836,13 @@ module dcache1(
               endcase
        //verilator lint_on CASEINCOMPLETE
               read_beginA_reg[v]<=read_beginA[v];
+              pwndata[v]<=0;
+           end
+           if (read3_pf) begin
+               pwndata[3][43:0]<=read3_addrMain[43:0];
+               pwndata[3][`ptr_exp]<=read_sz[3];
+               pwndata[3][`ptr_low]<=0;
+               pwndata[3][`ptr_hi]<=7'h7f;
            end
 
       end
