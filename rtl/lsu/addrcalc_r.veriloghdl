@@ -364,11 +364,12 @@ module addrcalc_r(
   assign writeTlb_data2[2]=reqmlb_ack ? writeTlb_data20_reg[0] : writeTlb_data20_reg[2];
   assign writeTlb_low=busC_mlb_en ? writeTlb_low0_reg[1] : writeTlb_low0_reg[2];
  
-  assign mOp_addrEven[12:8]=(~mOp0_lsfwd_reg & ~req_bus & addrMain[7]) ? addrNext[12:8] : 5'bz;
-  assign mOp_addrEven[12:8]=(~mOp0_lsfwd_reg & ~req_bus & ~addrMain[7]) ? addrMain[12:8] : 5'bz;
+  assign mOp_addrEven[13:8]=(~mOp0_lsfwd_reg & ~req_bus & addrMain[7]) ? addrNext[13:8] : 6'bz;
+  assign mOp_addrEven[13:8]=(~mOp0_lsfwd_reg & ~req_bus & ~addrMain[7]) ? addrMain[13:8] : 6'bz;
   assign mOp_addrEven=(mOp0_lsfwd_reg & ~req_bus) ? mOp0_addrEven_reg : 36'bz;
-  assign mOp_addrOdd[12:8]=(~mOp0_lsfwd_reg & ~req_bus & ~addrMain[7]) ? addrNext[12:8] : 5'bz;
-  assign mOp_addrOdd[12:8]=(~mOp0_lsfwd_reg & ~req_bus & addrMain[7]) ? addrMain[12:8] : 5'bz;
+  assign mOp_addrOdd[13:8]=(~mOp0_lsfwd_reg & ~req_bus & ~addrMain[7]) ? addrNext[13:8] : 6'bz;
+  assign mOp_addrOdd[13:8]=(~mOp0_lsfwd_reg & ~req_bus & addrMain[7]) ? addrMain[13:8] : 6'bz;
+  assign mOp_addrEven[13:8]=fault_mlb ? mOp0_addrMain_reg[5+8:8] : 6'bz;
   assign mOp_addrOdd=(mOp0_lsfwd_reg & ~req_bus) ? mOp0_addrOdd_reg : 36'bz;
   assign addrNext[6:0]=addrMain[6:0];
   assign addrMain[13:0]=mOp0_addrMain_reg[13:0];
@@ -415,14 +416,16 @@ module addrcalc_r(
   assign na=|(mlb_data[`dmlbData_na]&(4'b1<<addrMain[13:12])) || |(mlb_data[`dmlbData_na]&(1'b1<<(addrMain[13:12]+2'd1))) & addrNext[12] & mOp_split_X;
   assign na_next= |(mlb_data_next[`dmlbData_na]&(1'b1<<(addrMain[13:12]+2'd1))) & addrNext[12] & mOp_split_X;
 
-  assign mOp_addrEven[43:13]=(~mOp0_lsfwd_reg & ~req_bus && ~page_carry | ~addrMain[8]) ? 
-    mlb_data[`dmlbData_phys] : 31'bz;
-  assign mOp_addrEven[43:13]=(~mOp0_lsfwd_reg & ~req_bus && page_carry && addrMain[8]) ?
-    mlb_data_next[`dmlbData_phys] : 31'bz;
-  assign mOp_addrOdd[43:13]=(~mOp0_lsfwd_reg & ~req_bus && ~page_carry | addrMain[8]) ? 
-    mlb_data[`dmlbData_phys] : 31'bz;
-  assign mOp_addrOdd[43:13]=(~mOp0_lsfwd_reg & ~req_bus && page_carry && ~addrMain[8]) ?
-    mlb_data_next[`dmlbData_phys] : 31'bz;
+  assign mOp_addrEven[43:14]=(~mOp0_lsfwd_reg & ~req_bus && ~page_carry | ~addrMain[8]) && ~fault_mlb ? 
+    mlb_data[`dmlbData_phys] : 30'bz;
+  assign mOp_addrEven[43:14]=(~mOp0_lsfwd_reg & ~req_bus && page_carry && addrMain[8]) && ~fault_mlb ?
+    mlb_data_next[`dmlbData_phys] : 30'bz;
+  assign mOp_addrEven[43:14]=fault_mlb ? mOp0_addrMain_reg[35+8:6+8] : 30'bz;
+  assign mOp_addrOdd[43:14]=(~mOp0_lsfwd_reg & ~req_bus && ~page_carry | addrMain[8]) && ~fault_mlb ? 
+    mlb_data[`dmlbData_phys] : 30'bz;
+  assign mOp_addrOdd[43:14]=(~mOp0_lsfwd_reg & ~req_bus && page_carry && ~addrMain[8]) && ~fault_mlb ?
+    mlb_data_next[`dmlbData_phys] : 30'bz;
+  assign mOp_addrOdd[43:14]=fault_mlb ? {27'b0,mOp0_addrMain_reg[7:6]} : 30'bz;
   
   assign pageFault_t=(page_carry) ? (fault_mlb | ({2{mOp_split}} & fault_mlb_next)) & {2{mlb_hit}} : fault_mlb & {2{mlb_hit}};
   assign pageFault=(pageFault_t_reg!=0) | fault_cann_reg | error_reg && mOp_en_reg && ~bus_hold_reg;
@@ -560,6 +563,15 @@ module addrcalc_r(
   end
 
   always @(posedge clk) begin
+      writeTlb_IP0_reg<=writeTlb_IP0;
+      writeTlb_low0_reg<=writeTlb_low0;
+      writeTlb_wen0_reg<=writeTlb_wen0;
+      writeTlb_wenC0_reg<=writeTlb_wenC0;
+      writeTlb_wenHC0_reg<=writeTlb_wenHC0;
+      writeTlb_data00_reg<=writeTlb_data00_reg;
+      writeTlb_data10_reg<=writeTlb_data10_reg;
+      writeTlb_data20_reg<=writeTlb_data20_reg;
+
       if (rst) begin
           mOp0_en_reg<=1'b0;
           mOp0_thread_reg<=1'b0;
@@ -584,13 +596,9 @@ module addrcalc_r(
           mOp0_bread_reg<={1'b0,4'b0};
           mOp0_data_reg<={8'b0,128'b0};
           mOp0_pbit_reg<={2'b0};
-<<<<<<< HEAD:rtl/lsu/addrcalc_r.veriloghdl
-          addrMain_mlb<=65'b0;
-=======
           addrMain_tlb<=65'b0;
           is_kstack_reg<=0;
           is_stack_reg<=0;
->>>>>>> parent of b331a1fa (undid pointer protection code.):rtl/lsu/agu_r.veriloghdl
       end else if (except) begin
           mOp0_en_reg<=1'b0;
           error_reg<=1'b0;
