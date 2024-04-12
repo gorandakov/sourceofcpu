@@ -402,6 +402,8 @@ alu(clk,rst,except,except_thread,thread,operation,cond,sub,dataEn,nDataAlt,retDa
 
   assign thrinh=(thread^~except_thread && except) || (thread^~except_thread_reg && except_reg);
 
+  assign boogy_baboogy=is_ptr && ~|valRes[`ptr_low] && &valRes[`ptr_hi]; //this indicates an elided load
+
   
 `ifndef aluneg
   always @(posedge clk)
@@ -516,10 +518,10 @@ alu(clk,rst,except,except_thread,thread,operation,cond,sub,dataEn,nDataAlt,retDa
           except_reg<=except;
           except_thread_reg<=except_thread;
 
-          if (add_en) cin_seq_reg<=cin_seq[0];
+          if (add_en) cin_seq_reg<=cin_seq[0]&~boogy_baboogy;
           else if (operation[7:0]==`op_and64)
-              cin_seq_reg<=cin_seq[2];
-          else cin_seq_reg<=cin_seq[1]|cmov_en;
+              cin_seq_reg<=cin_seq[2]&~boogy_baboogy;
+          else cin_seq_reg<=cin_seq[1]|cmov_en&&~boogy_baboogy;
 
           is_ptr_reg<=is_ptr;       
           is_ptr_sub<=val1[0][64]&val2[0][64]&is_sub;
