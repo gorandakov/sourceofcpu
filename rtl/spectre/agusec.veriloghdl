@@ -147,5 +147,5 @@ module addrcalcsec_range(
   get_carry #(8) cmpLow_mod(~low,bits,1'b1,cout_low);
   get_carry #(8) cmpHio_mod(high,~bits,1'b1,cout_hio);
   addrcalcsec_shift8  sh_mod(ptr[`ptr_exp],ptr[43:4],bits);
-  assign cout_secq=cin_secq && cout_low|lo_lass && cout_hio|hi_pass;
+  assign cout_secq=cin_secq && cout_low|lo_lass && cout_hio|hi_pass && (|low || ~&high);
 endmodule
