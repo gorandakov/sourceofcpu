@@ -146,7 +146,7 @@ module addrcalc_block(
   p0_adata,p0_banks,p0_LSQ,p0_en,p0_rsEn,p0_secq,p0_ret,p0_repl,p0_lsfwd,p0_skip_LDQ,
   p1_adata,p1_banks,p1_LSQ,p1_en,p1_rsEn,p1_secq,p1_ret,p1_repl,p1_lsfwd,p1_skip_LDQ,
   p2_adata,p2_banks,p2_LSQ,p2_en,p2_rsEn,p2_secq,p2_ret,p2_repl,p2_lsfwd,p2_data,p2_pbit,p2_brdbanks,p2_skip_LDQ,
-  p3_adata,p3_banks,p3_LSQ,p3_en,p3_rsEn,p3_ioEn,p3_io_ack,p3_ret,p3_data,p3_pbit,p3_brdbanks,p3_repl,p3_lsfwd,p3_skip_LDQ,
+  p3_adata,p3_banks,p3_LSQ,p3_en,p3_rsEn,p3_ioEn,p3_io_ack,p3_ret,p3_data,p3_pbit,p3_brdbanks,p3_repl,p3_lsfwd,p3_skip_LDQ,p3_pfx,
   p4_adata,p4_LSQ,p4_en,p4_secq,p4_ret,
   p5_adata,p5_LSQ,p5_en,p5_secq,p5_ret,
   p_bankNone,
@@ -413,6 +413,7 @@ module addrcalc_block(
   output       p3_repl;
   output       p3_lsfwd;
   output       p3_skip_LDQ;
+  output       p3_pfx;
   output [`lsaddr_width-1:0] p4_adata;
   output [8:0] p4_LSQ;
   output       p4_en;
@@ -833,6 +834,7 @@ module addrcalc_block(
   wire p1_pageFault;
   wire p2_pageFault;
   wire p3_pageFault;
+  wire p3_pageFaultX;
   wire p4_pageFault;
   wire p5_pageFault;
 
@@ -2104,6 +2106,7 @@ module addrcalc_block(
   .busC_mlb_en(bus_mlb_en),
   .msrss_no(msrss_addr),.msrss_en(msrss_en),.msrss_thread(msrss_thread),.msrss_data(msrss_data),
   .pageFault(p3_pageFault),
+  .pageFaultX(p3_pageFaultX),
   .faultCode(p3_faultCode),
   .faultNo(p3_faultNo),
   .mOp_addrEven(mOp3_addrEven),
@@ -2662,6 +2665,7 @@ module addrcalc_block(
   assign p3_ret={1'b0,p3_faultCode[3:0],p3_faultNo};
   assign p3_brdbanks=mOpX3_brdread_reg;
   assign p3_skip_LDQ=mOpX3_skip_LDQ_reg;
+  assign p3_pfx=p3_pageFaultX;
 
   assign p_bankNone=~mOpX3_banks_reg & ~mOpX2_banks_reg & ~mOpX1_banks_reg &~mOpX0_banks_reg;
 
