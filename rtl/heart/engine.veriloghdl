@@ -1031,6 +1031,10 @@ module backend(
 */
   wire [67:0] XI_dataS;
 
+  wire p3_pfx;
+  reg p3_pfx_reg;
+  reg p3_pfx_reg2;
+
   wire rsStall;
   wire [3:0] rsDoStall;
 
@@ -5152,7 +5156,7 @@ module backend(
   .p2_adata(lsr_wr_data[2]),.p2_banks(),.p2_LSQ(dc_LSQ[2]),
     .p2_en(dc_rdEn[2]),.p2_rsEn(dc_rsEn[2]),.p2_secq(p2_sec),.p2_ret(p_ret[2]),.p2_repl(p_repl[2]),.p2_lsfwd(p_lsfwd[2]),
     .p2_data(p2_data),.p2_brdbanks(p2_brdbanks),.p2_pbit(p2_pdata),
-  .p3_adata(lsr_wr_data[3]),.p3_banks(),.p3_LSQ(dc_LSQ[3]),.p3_pbit(p3_pdata),
+  .p3_adata(lsr_wr_data[3]),.p3_banks(),.p3_LSQ(dc_LSQ[3]),.p3_pbit(p3_pdata),p3_pfx(p3_pfx),
     .p3_en(dc_rdEn[3]),.p3_rsEn(dc_rsEn[3]),.p3_ioEn(),.p3_io_ack(insBus_io_reg3),.p3_ret(p_ret[3]),.p3_data(p3_data),.p3_brdbanks(p3_brdbanks),.p3_repl(p_repl[3]),.p3_lsfwd(p_lsfwd[3]),
   .p4_adata(lsr_wr_data[4]),.p4_LSQ(p_LSQ[4]),.p4_en(dc_wrEn[0]),.p4_secq(),.p4_ret(),
   .p5_adata(lsr_wr_data[5]),.p5_LSQ(p_LSQ[5]),.p5_en(dc_wrEn[1]),.p5_secq(),.p5_ret(),
@@ -5338,7 +5342,7 @@ addrcalc_block #(BUS_ID) addrcalc_aligned(
   .p2_adata(lsr_wr_data[2]),.p2_banks(),.p2_LSQ(dc_LSQ[2]),
     .p2_en(dc_rdEn[2]),.p2_rsEn(dc_rsEn[2]),.p2_secq(),.p2_ret(p_ret[2]),.p2_repl(p_repl[2]),.p2_lsfwd(p_lsfwd[2]),
     .p2_data(p2_data),.p2_brdbanks(p2_brdbanks),.p2_pbit(p2_pdata),
-  .p3_adata(lsr_wr_data[3]),.p3_banks(),.p3_LSQ(dc_LSQ[3]),.p3_pbit(p3_pdata),
+  .p3_adata(lsr_wr_data[3]),.p3_banks(),.p3_LSQ(dc_LSQ[3]),.p3_pbit(p3_pdata),.p3_pfx(p3_pfx),
     .p3_en(dc_rdEn[3]),.p3_rsEn(dc_rsEn[3]),.p3_ioEn(),.p3_io_ack(insBus_io_reg3),.p3_ret(p_ret[3]),.p3_data(p3_data),.p3_brdbanks(p3_brdbanks),.p3_repl(p_repl[3]),.p3_lsfwd(p_lsfwd[3]),
   .p4_adata(lsr_wr_data[4]),.p4_LSQ(p_LSQ[4]),.p4_en(dc_wrEn[0]),.p4_secq(),.p4_ret(),
   .p5_adata(lsr_wr_data[5]),.p5_LSQ(p_LSQ[5]),.p5_en(dc_wrEn[1]),.p5_secq(),.p5_ret(),
@@ -5756,7 +5760,7 @@ dcache1 L1D_mod(
     .read_hitCl3(dc_rdHitCl[3]),.read_odd3(lsr_wr_data[3][`lsaddr_odd]), 
     .read_split3(lsr_wr_data[3][`lsaddr_split]), .read_dataA3(dc_rdataA[3]), .read_dataX3(dc_rdataA_X[3]),
     .read_beginA3(lsr_wr_data[3][`lsaddr_bank0]), .read_low3(lsr_wr_data[3][`lsaddr_low]), 
-    .read_sz3(lsr_wr_data[3][`lsaddr_sz]),.read_pbit3(dc_pdataA[3]),
+    .read_sz3(lsr_wr_data[3][`lsaddr_sz]),.read_pbit3(dc_pdataA[3]),.read_pf3(p3_pfx),
   .read_bankNoRead(dc_bankNone),
   .read_invalidate(1'b0),
   .expun_addr(dc_expun_addr),
@@ -7854,6 +7858,8 @@ dcache1 L1D_mod(
 	  p2_pdata_reg2<=p2_pdata_reg;
 	  p3_pdata_reg<=p3_pdata;
 	  p3_pdata_reg2<=p3_pdata_reg;
+          p3_pfx_reg<=p3_pfx;
+          p3_pfx_reg2<=p3_pfx_reg;
 	  st0_en_reg<=st0_en;
 	  st0_en_reg2<=st0_en_reg;
 	  st0_en_reg3<=st0_en_reg2;
