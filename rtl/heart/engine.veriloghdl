@@ -6235,6 +6235,9 @@ dcache1 L1D_mod(
   assign dc_pdat[3][1]=lso2_bnkread[2]  && ~lso2_en_reg             ? lso2_pbit_reg[1] : 1'bz;
   assign dc_pdat[3][1]=(~lso2_bnkread2[2] & ~lso2_bnkread[2]) && ~lso2_en_reg ? 1'b0 : 1'bz;
 
+  assign dc_expun_en=MSI_exp_en_reg;
+  assign dc_expun_addr=MSI_exp_addr_reg;
+
 //  assign FU0=dc_rdataA[0][63:0];
 //  assign FU1=dc_rdataA[1][63:0];
 //  assign FU2=dc_rdataA[2][63:0];
