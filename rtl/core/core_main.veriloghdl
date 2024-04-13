@@ -394,6 +394,8 @@ module heptane_core_single(
   wire [3:0] btbl_mask1;
   wire [3:0] btbl_attr0;
   wire [3:0] btbl_attr1;
+  wire       btbl_clp0;
+  wire       btbl_clp1;
   
   wire [IN_REG_WIDTH-1:0] rs1i1_rA;
   wire rs1i1_rA_use;
@@ -1774,7 +1776,9 @@ module heptane_core_single(
   btbl_mask0,
   btbl_mask1,
   btbl_attr0,
-  btbl_attr1
+  btbl_attr1,
+  btbl_clp0,
+  btbl_clp1
   );
 
   backend #(BUS_ID,BUS_ID2,LARGE_CORE&H,LARGE_CORE&!H) bck_mod(
@@ -2101,8 +2105,8 @@ module heptane_core_single(
   instr9_aft_spc,
   instr9_err,
 
-  jump0Type,jump0Pos,jump0Taken,{btbl_IP0,1'b0},btbl_mask0,btbl_attr0,
-  jump1Type,jump1Pos,jump1Taken,{btbl_IP1,1'b0},btbl_mask1,btbl_attr1,
+  jump0Type,jump0Pos,jump0Taken,{btbl_IP0,1'b0},btbl_mask0,btbl_attr0,btbl_clp0,
+  jump1Type,jump1Pos,jump1Taken,{btbl_IP1,1'b0},btbl_mask1,btbl_attr1,btbl_clp1,
   jump0BtbWay,jump0JmpInd,jump0GHT,jump0GHT2,jump0Val,
   jump1BtbWay,jump1JmpInd,jump1GHT,jump1GHT2,jump1Val,
   jump0SC,jump0Miss,jump0TbufOnly,
