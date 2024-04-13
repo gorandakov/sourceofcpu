@@ -5953,6 +5953,9 @@ dcache1 L1D_mod(
     .ret5_data({6'b0,FUS_alu[5],ex_alu[5]}/*h*/),
     .ret5_wen(enS_alu[5]),
   .ret5_IP(FU_reg[9]),.ret5_IP_en(alu_jupdate),
+  .ret6_addr({lsr_wr_data_reg2[3][`lsaddr_II],lsr_wr_data_reg2[3][`lsaddr_II_low]}},
+  .ret6_data({6'b0,p3_excl,5'b0,2'd0,1'b1}),
+  .ret6_wen(lsr_wr_data_reg2[3][`lsaddr_sz][7] && FU3HitP)
   .mem_II_upper(retM_II0),
   .mem_II_upper2(retM_II1),
   .has_stores(retM_has_store),
