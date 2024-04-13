@@ -2215,8 +2215,8 @@ module addrcalc_block(
   rst,
   except,
   1'b0,
-  insert_isData,
-  insBus_req[3:0],
+  insert_isData_reg3,
+  insBus_req_reg3,
   insBus_addr,
  // miss_next,
  // mcam_replay,
@@ -3242,11 +3242,19 @@ module addrcalc_block(
       if (rst) begin
           insert_isData_reg<=1'b0;
           insert_isData_reg2<=1'b0;
+          insert_isData_reg3<=1'b0;
+          insBus_req_reg<=5'b0;
+          insBus_req_reg2<=5'b0;
+          insBus_req_reg3<=5'b0;
 	  insBus_addr_reg<=37'b0;
 	  insBus_addr_reg2<=37'b0;
       end else begin
           insert_isData_reg<=insert_isData;
           insert_isData_reg2<=insert_isData_reg;
+          insert_isData_reg3<=insert_isData_reg2;
+          insBus_req_reg<=insBus_req;
+          insBus_req_reg2<=insBus_req_reg;
+          insBus_req_reg2<=insBus_req_reg2;
 	  insBus_addr_reg<=insBus_addr;
 	  insBus_addr_reg2<=insBus_addr_reg;
       end
