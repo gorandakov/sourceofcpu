@@ -312,7 +312,8 @@ limitations under the License.
 `define instrQExtra_attr 3:0
 `define instrQExtra_IP 66:4
 `define instrQExtra_jmask 70:67
-`define instrQExtra_width 71
+`define instrQExtra_cloop 71
+`define instrQExtra_width 72
 
 
 
