@@ -67,7 +67,8 @@ module dmisscam_buf(
   ins_addr_o,
   filled,
   busy,
-  unlock
+  unlock,
+  pokahontas
   );
     
   localparam PADDR_WIDTH=44;
@@ -124,6 +125,7 @@ module dmisscam_buf(
   output reg filled;
   output reg busy;
   input unlock;
+  input pokahontas;
   
   reg [PADDR_WIDTH-8:0] addr;
   reg store;
@@ -191,6 +193,7 @@ module dmisscam_buf(
               filled<=1'b0;
           end
           if (unlock) busy<=1'b0;
+          if (pokahontas && filled) busy<=1'b0;
       end
   end
     
@@ -373,7 +376,7 @@ module dmisscam(
   input [PADDR_WIDTH-9:0] fill_addrO4;
   input                      fill_st4;
   input [1:0]                fill_en5;
-  input [PADDR_WIDTH-9:0] fill_addrE5;
+  input [PADDR_WIDTH-9:0] fill_addrE5;t
   input [PADDR_WIDTH-9:0] fill_addrO5;
   input                      fill_st5;
   output                     read_en;
@@ -547,6 +550,14 @@ module dmisscam(
   reg [4:0]             fill_bbank5_reg;
   reg [1:0]               fill_low5_reg;
   
+  reg [19:0] waitcnt;
+  wire [19:0] waitcnt_inc;
+
+  adder_inc #(20) wait_mod(waitcnt,waitcnt_inc,|(busy & filled),~&waitcnt & |(busy & filled),,,,);
+  assign waitcnt_inc= ~|(busy & filled) ? 20'b0 : 20'bz;
+  assign waitcnt_inc=|(busy & filled) && &waitcnt ? waitcnt : 20'bz;
+
+  
   reg [19:0] pwned;
   wire read_en0;
   
@@ -678,7 +689,8 @@ module dmisscam(
 	      ins_addr_o,
               filled[k],
               busy[k],
-              unlock
+              unlock,
+              &waitcnt
               );
 
           end else begin
@@ -801,7 +813,8 @@ module dmisscam(
 	      ins_addr_o,
               filled[k],
               busy[k],
-              unlock
+              unlock,
+              &waitcnt
               );
           end
       end
@@ -1083,6 +1096,8 @@ module dmisscam(
   assign found=busy!=16'hffff;
   
   always @(posedge clk) begin
+      if (rst) waitcnt<=0;
+      else waitcnt<=waitcnt_inc; //the increment value is not always an increment
       if (rst) locked<=1'b0;
       else locked<=locked|~found|begin_replay && ~unlock;
       if (rst) started<=1'b0;
