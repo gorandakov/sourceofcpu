@@ -59,6 +59,7 @@ module backend(
 
   dc_expun_addr,
   dc_expun_en,
+  dc_expun_mkshared,
 
   rs0i0_rA,rs0i0_rA_use,rs0i0_rA_useF,rs0i0_rA_isV,rs0i0_rA_isAnyV,
   rs0i0_rB,rs0i0_rB_use,rs0i0_rB_useF,rs0i0_rB_isV,rs0i0_rB_isAnyV,rs0i0_useBConst,
@@ -491,6 +492,8 @@ module backend(
   
   output [36:0] dc_expun_addr;
   output dc_expun_en;
+  ouput dc_expun_mkshared;
+
 
   input [IN_REG_WIDTH-1:0] rs0i0_rA;
   input rs0i0_rA_use;
@@ -1076,6 +1079,7 @@ module backend(
   reg MSI_exp_en_reg;
   reg MSI_swap_want_reg;
   reg MSI_swap_repl_reg;
+  reg MSI_exp_mkshared;
 
   reg [36:0] MSI_exp_addr_save[1:0];
   reg MSI_exp_en_save[1:0];
@@ -6237,6 +6241,7 @@ dcache1 L1D_mod(
 
   assign dc_expun_en=MSI_exp_en_reg;
   assign dc_expun_addr=MSI_exp_addr_reg;
+  assign dc_expun_mkshared=MSI_exp_mkshared;
 
 //  assign FU0=dc_rdataA[0][63:0];
 //  assign FU1=dc_rdataA[1][63:0];
@@ -7766,6 +7771,7 @@ dcache1 L1D_mod(
 	  st1_II_reg3<=10'b0;
           MSI_exp_addr_reg<=37'b0;
           MSI_exp_en_reg<=1'b0;
+          MSI_exp_mkshared<=1'b0;
           MSI_swap_want_reg<=1'b0;
           MSI_swap_repl_reg<=1'b0;
           MSI_exp_addr_save[0]<=37'b0;
@@ -7903,12 +7909,14 @@ dcache1 L1D_mod(
               MSI_exp_en_reg<=MSI_exp_en;
               MSI_swap_want_reg<=MSI_swap_want;
               MSI_swap_repl_reg<=MSI_swap_repl;
+              MSI_exp_mkshared<=1'b0;
           end else if (!MSI_exp_en) begin
               MSI_exp_addr_reg<=MSI_exp_addr_save[~MSI_exp_en_save[0]];
               MSI_exp_en_reg<=MSI_exp_en_save[~MSI_exp_en_save[0]];
               MSI_swap_want_reg<=MSI_swap_want_save[~MSI_exp_en_save[0]];
               MSI_swap_repl_reg<=MSI_swap_repl_save[~MSI_exp_en_save[0]];
               MSI_exp_en_save[~MSI_exp_en_save[0]]<=1'b0;
+              MSI_exp_mkshared<=1'b1;
           end else begin
               if ((MSI_exp_addr!=MSI_lock[0] || ~MSI_lock_en[0])) begin
                   MSI_exp_addr_save[0]<=MSI_exp_addr;
@@ -7922,6 +7930,8 @@ dcache1 L1D_mod(
                   MSI_swap_want_save[1]<=MSI_swap_want;
                   MSI_swap_repl_save[1]<=MSI_swap_repl;
               end
+              MSI_exp_en_reg<=1'b0;
+              MSI_exp_mkshared<=1'b0;
           end
 	  fret_reg[0]<=fret[0];
 	  fret_reg[1]<=fret[1];
