@@ -99,7 +99,9 @@ limitations under the License.
 `define bob_j1GHT2 121:106
 `define bob_j0Val 122
 `define bob_j1Val 123
-`define bob_reserved 129:124
+`define bob_j0cloop 124
+`define bob_j1cloop 125
+`define bob_reserved 129:126
 `define bob_ret0_8 165:130
 `define bob_jump0Type 170:166
 `define bob_jump1Type 175:171
