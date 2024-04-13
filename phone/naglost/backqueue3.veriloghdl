@@ -454,6 +454,7 @@ module frontendSelf(
   wire [3:0][63:0] jdec_const;
   wire [3:0] jdec_is_jmp;
   wire [3:0] jdec_cntk;
+  wire [3:0] jdec_clp;
   reg [63:0] jdec_const_reg[3:0];
   wire [3:0] jdec_bkjump;
   wire [3:0][1:0] jdec_clvcnt;//00=reserved; otherwise cleave cnt
@@ -911,6 +912,7 @@ module frontendSelf(
           .cleave(jdec_clvcnt[k]),
           .cleaveoff(jdec_clvoffnext[k]),
           .cloopntk(jdec_cntk[k]),
+          .cloop_is(jdec_clp[k]),
           .constant(jdec_const[k]),
           
           .pushCallStack(jdec_push[k]),
@@ -1435,10 +1437,10 @@ module frontendSelf(
   .write_thread(1'b0),
   .write_cnt(btbFStall_recover_reg ? iqe_jcnD[4:0] : iqe_jcnt_reg2[4:0]),
   .write_start(startx_reg3),
-  .write_data0({jmp_mask_reg4[0],btbx_tgt0_reg4,btbx_attr0_reg4}),
-  .write_data1({jmp_mask_reg4[1],btbx_tgt1_reg4,btbx_attr1_reg4}),
-  .write_data2({jmp_mask_reg4[2],btbx_tgt2_reg4,btbx_attr2_reg4}),
-  .write_data3({jmp_mask_reg4[3],btbx_tgt3_reg4,btbx_attr3_reg4})
+  .write_data0({jdec_clp[0],jmp_mask_reg4[0],btbx_tgt0_reg4,btbx_attr0_reg4}),
+  .write_data1({jdec_clp[1],jmp_mask_reg4[1],btbx_tgt1_reg4,btbx_attr1_reg4}),
+  .write_data2({jdec_clp[2],jmp_mask_reg4[2],btbx_tgt2_reg4,btbx_attr2_reg4}),
+  .write_data3({jdec_clp[3],jmp_mask_reg4[3],btbx_tgt3_reg4,btbx_attr3_reg4})
   );
     
   adder_inc #(43) seqAdd_mod(cc_read_IP[47:5],cc_read_IP_d[47:5],
