@@ -328,7 +328,7 @@ module saddrcalc(
   assign faultNo=fault_cann_reg | (pageFault_t_reg!=0) | error_reg ? {error_reg ? 6'd63 : 6'd11,1'b0,2'd1} : {6'd0,1'b0,2'd2};
   assign faultCode={3'b0,fault_cann_reg,is_stack_reg,is_kstack_reg,addrMain_reg[2],mflags[thread_reg][-1+`mflags_cpl]};
 
-  assign is_kstack=&addrMain[43:41]; //it is not all stack but we must disallow stealing global map pointers
+  assign is_kstack=&addrMain[43:41] || ~addrMain[43] && ~mflags[thread][`mflags_cpl+1]; //it is not all stack but we must disallow stealing global map pointers
   assign is_stack=~addrMain[43] & &addrMain[42:40]; //reserved area for subsystem and /or stack
 
   assign mOp_addrMain={addrTlb[30:0],addrMain[12:0]};
