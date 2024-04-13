@@ -1077,6 +1077,15 @@ module backend(
   reg MSI_swap_want_reg;
   reg MSI_swap_repl_reg;
 
+  reg [36:0] MSI_exp_addr_save[1:0];
+  reg MSI_exp_en_save[1:0];
+  reg MSI_swap_want_save[1:0];
+  reg MSI_swap_repl_save[1:0];
+
+  reg [36:0] MSI_lock[1:0];
+  reg [14:0] MSI_lock_cnt[1:0];
+  reg  MSI_locked[1:0];
+
   wire [3:0] dc_thr=4'b0;
 
   wire [5:0][13:0] fretA/*verilator public*/;
@@ -7756,6 +7765,14 @@ dcache1 L1D_mod(
           MSI_exp_en_reg<=1'b0;
           MSI_swap_want_reg<=1'b0;
           MSI_swap_repl_reg<=1'b0;
+          MSI_exp_addr_save[0]<=37'b0;
+          MSI_exp_en_save[0]<=1'b0;
+          MSI_swap_want_save[0]<=1'b0;
+          MSI_swap_repl_save[0]<=1'b0;
+          MSI_exp_addr_save[1]<=37'b0;
+          MSI_exp_en_save[1]<=1'b0;
+          MSI_swap_want_save[1]<=1'b0;
+          MSI_swap_repl_save[1]<=1'b0;
 	  fret_reg[0]<=14'b0;
 	  fret_reg[1]<=14'b0;
 	  fret_reg[2]<=14'b0;
@@ -7878,10 +7895,31 @@ dcache1 L1D_mod(
 	  st1_II_reg<=st1_adata[`lsaddr_II];
 	  st1_II_reg2<=st1_II_reg;
 	  st1_II_reg3<=st1_II_reg2;
-          MSI_exp_addr_reg<=MSI_exp_addr;
-          MSI_exp_en_reg<=MSI_exp_en;
-          MSI_swap_want_reg<=MSI_swap_want;
-          MSI_swap_repl_reg<=MSI_swap_repl;
+          if ((MSI_exp_addr!=MSI_lock[0] || ~MSI_lock_en[0]) && (MSI_exp_addr!=MSI_lock[1] || ~MSI_lock_en[1]) && MSI_exp_en) begin 
+              MSI_exp_addr_reg<=MSI_exp_addr;
+              MSI_exp_en_reg<=MSI_exp_en;
+              MSI_swap_want_reg<=MSI_swap_want;
+              MSI_swap_repl_reg<=MSI_swap_repl;
+          end else if (!MSI_exp_en) begin
+              MSI_exp_addr_reg<=MSI_exp_addr_save[~MSI_exp_en_save[0]];
+              MSI_exp_en_reg<=MSI_exp_en_save[~MSI_exp_en_save[0]];
+              MSI_swap_want_reg<=MSI_swap_want_save[~MSI_exp_en_save[0]];
+              MSI_swap_repl_reg<=MSI_swap_repl_save[~MSI_exp_en_save[0]];
+              MSI_exp_en_save[~MSI_exp_en_save[0]]<=1'b0;
+          end else begin
+              if ((MSI_exp_addr!=MSI_lock[0] || ~MSI_lock_en[0])) begin
+                  MSI_exp_addr_save[0]<=MSI_exp_addr;
+                  MSI_exp_en_save[0]<=MSI_exp_en;
+                  MSI_swap_want_save[0]<=MSI_swap_want;
+                  MSI_swap_repl_save[0]<=MSI_swap_repl;
+              end
+              if ((MSI_exp_addr!=MSI_lock[1] || ~MSI_lock_en[1])) begin
+                  MSI_exp_addr_save[1]<=MSI_exp_addr;
+                  MSI_exp_en_save[1]<=MSI_exp_en;
+                  MSI_swap_want_save[1]<=MSI_swap_want;
+                  MSI_swap_repl_save[1]<=MSI_swap_repl;
+              end
+          end
 	  fret_reg[0]<=fret[0];
 	  fret_reg[1]<=fret[1];
 	  fret_reg[2]<=fret[2];
