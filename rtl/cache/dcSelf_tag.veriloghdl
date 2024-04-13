@@ -142,8 +142,7 @@ module dcache1_tag(
   write_hit,
   wb_addr,
   wb_valid,
-  puke_en,puke_addr,
-  hit_odde
+  puke_en,puke_addr
   );
   localparam PADDR_WIDTH=44;
   localparam DATA_WIDTH=`dc1Tag_width;
@@ -174,7 +173,6 @@ module dcache1_tag(
   output wb_valid;
   input [5:0] puke_en;
   input [6:0] puke_addr;
-  output hit_odde;
 
   wire [PADDR_WIDTH-9:0] tagR0_IP;
   wire [PADDR_WIDTH-9:0] tagR1_IP;
@@ -184,8 +182,6 @@ module dcache1_tag(
   wire hit_odd;
   wire hit_even;
   
-  reg hit_odde_reg;
-
   wire [`dc1Tag_width-1:0] tagR0_data;
   wire [`dc1Tag_width-1:0] tagR1_data;
   wire [`dc1Tag_width-1:0] tag_write_data;
@@ -290,7 +286,6 @@ module dcache1_tag(
   assign hit_odd=tagR1_IP==read_addrOdd_reg && tagR1_valid && read_en_reg;
   assign hit_even=tagR0_IP==read_addrEven_reg && tagR0_valid && read_en_reg;
 
-  assign hit_odde=tagR1_IP==read_addrOdd_reg && tagR1_valid && read_odd || tagR0_IP==read_addrEven_reg && tagR0_valid && ~read_odd;
   assign tag_write_data[`dc1Tag_addr_43_14]=read_odd_reg ? read_addrOdd_reg[PADDR_WIDTH-9:6] : read_addrEven_reg[PADDR_WIDTH-9:6];
   assign tag_write_data[`dc1Tag_valid]=1'b1;
   assign tag_write_data[`dc1Tag_recent]=1'b0;
@@ -305,7 +300,7 @@ module dcache1_tag(
   
   assign write_hit=(write_recent_in) ? write_hit2 : write_hit1;
   assign write_hit1=write_rand[2:0]==INDEX && write_wen_reg; 
-  assign write_hit2==hit_odde_reg | hit_evenne_reg && write_wen_reg;
+  assign write_hit2=write_rand[5:3]==INDEX && write_wen_reg; 
   
   assign errH=err_tag0;
   assign errL=err_tag1;
@@ -334,17 +329,14 @@ module dcache1_tag(
           read_odd_reg<=1'b0;
           read_en_reg<=1'b0;
           read_split_reg<=1'b0;
-          read_odde_reg<=1'b0;
       end else if (read_clkEn) begin
           read_addrOdd_reg<=read_addrOdd;
           read_addrEven_reg<=read_addrEven;
           read_odd_reg<=read_odd;
           read_split_reg<=read_split;
           read_en_reg<=read_en;
-          read_odde_reg<=read_odde;
       end else begin
           read_en_reg<=1'b0;
-          read_odde_reg<=read_odde;
       end
       if (rst) begin
           read_invl_reg<=1'b0; 
