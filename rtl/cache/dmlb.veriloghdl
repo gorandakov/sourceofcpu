@@ -122,7 +122,7 @@ module dmlb_way(
   read_clkEn,
   sproc,
   R0_sec_wren,
-  addr,
+  addr,attr,
   read_data0,
   read_data1,
   read_data2,
@@ -160,6 +160,7 @@ module dmlb_way(
   input [20:0] sproc;
   input R0_sec_wren;
   input [5:0][VADDR_WIDTH-16:0]   addr;
+  input [5:0][3:0] attr;
   output [5:0][OUTDATA_WIDTH-1:0] read_data0;
   output [5:0][OUTDATA_WIDTH-1:0] read_data1;
   output [5:0][OUTDATA_WIDTH-1:0] read_data2;
@@ -203,7 +204,7 @@ module dmlb_way(
         assign read_hitL[p]=valid[p] && addr[p][VADDR_WIDTH-18+:3]!=3'b111 && 
           (vaddr[p]==addr[p] || ({sproc,addr[p][29:0]}==vaddr[p] && 
           shared[p]));
-        assign read_hit[p]=read_hitL[p] || addr[p][VADDR_WIDTH-18+:3]==3'b111;
+        assign read_hit[p]=read_hitL[p] || addr[p][VADDR_WIDTH-18+:3]==3'b111 || ~addr[p][VADDR_WIDTH-18] & ~attr[p][`attr_um];
   
         assign read_data0[p]=read_hitL[p] ? read_data_ram[p][`dmlb_data1] : 'z;
         assign read_data1[p]=read_hitL[p] ? read_data_ram[p][`dmlb_data2] : 'z;
@@ -287,6 +288,7 @@ module dmlb(
   read_clkEn,
   sec_wren,
   addr,
+  attr,
   sproc,
   read_data,
   read_data_next,
@@ -316,6 +318,7 @@ module dmlb(
   input read_clkEn;
   input sec_wren;
   input [5:0][VADDR_WIDTH-15:0] addr;
+  input [5:0][3:0] attr;
   input [20:0] sproc;
   output [5:0][OUTDATA_WIDTH-1:0] read_data;
   output [5:0][OUTDATA_WIDTH-1:0] read_data_next;
@@ -373,7 +376,7 @@ module dmlb(
         .rst(rst),
         .read_clkEn(read_clkEn),
 	.R0_sec_wren(sec_wren),
-        .addr(addr0),
+        .addr(addr0),.attr(attr),
         .sproc(sproc[20:0]),
         .read_data0(read_data0),
         .read_data1(read_data1),
@@ -409,9 +412,9 @@ module dmlb(
 	assign hitLru=read_hitL_way[k][0] ? lru_way[k] : 3'bz;
 	assign hitLruW=3'd7;
         if (k<6) begin
-            assign read_data0[k]=~read_hitL[0] ? pmm_data0[k*2+&addr0[46:45]] : 'z;
-            assign read_data1[k]=~read_hitL[k] ? pmm_data1[k*2+&addr0[46:45]] : 'z;
-            assign read_data2[k]=~read_hitL[k] ? pmm_data2[k*2+&addr0[46:45]] : 'z;
+            assign read_data0[k]=~read_hitL[0] ? pmm_data0[k*2+(&addr0[29:26]] : 'z;
+            assign read_data1[k]=~read_hitL[k] ? pmm_data1[k*2+(&addr0[29:26]] : 'z;
+            assign read_data2[k]=~read_hitL[k] ? pmm_data2[k*2+(&addr0[29:26]] : 'z;
             
             assign pmm_data0[k*2+0][`dmlbData_phys]=addr0[k][29:0];
             assign pmm_data0[k*2+1][`dmlbData_phys]=addr0[k][29:0];
