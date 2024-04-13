@@ -1175,8 +1175,10 @@ module smallInstr_decoder(
       if (magic[2:0]==3'b111 && instr[63:60]!=0) perror[13]=1;
       if (opcode_main[0] && opcode_main[5:1]==5'h17) begin
           poperation[13][5:0]=6'h20;
-          pflags_write[13]=1'b1;
+          //pflags_write[13]=1'b1; not needed; handled by set flag bit on the opcode
           poperation[13][7]=1'b1; //says it sets flags!
+          prAlloc[13]=1'b0;
+          prT_use[13]=1'b0;
       end
       if (poperation[13][5:1]==5'h16) begin poperation[13][7:0]=`op_cax; pport[13]=PORT_ALU; end
       if (riscmove) perror[13]=1;
