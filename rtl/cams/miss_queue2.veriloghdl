@@ -435,7 +435,7 @@ module missQ(
   input except;
   input excpt_thread;
   input insert_isData;
-  input [3:0] insBus_req;
+  input [4:0] insBus_req;
   output [36:0] insBus_addr;
   wire read_clkEn;
   wire last_inserted;
@@ -737,7 +737,14 @@ module missQ(
   wire [ADDR_WIDTH:0] countF_d;
   wire wen;
   wire [4:0] write_addr_dec;
-  
+
+  reg insert_isData_reg;
+  reg [4:0] insBus_req_reg;
+  reg [36:0] insBus_addr_reg;
+  reg insert_isData_reg2;
+  reg [4:0] insBus_req_reg2;
+  reg [36:0] insBus_addr_reg2;
+
   wire [MOP_WIDTH-1:0] write_mop[5:0];
   wire [DATA_WIDTH-1:0] write_dataA;
   wire [DATA_WIDTH-1:0] write_dataB;
@@ -1415,9 +1422,9 @@ module missQ(
   mOp5_addrEven_reg[3],mOp5_addrOdd_reg[3],1'b1,mOp5_dupl,mOp5_sz_reg[3],
   mOp5_odd_reg[3],mOp5_ctype_reg[3]==2'b10,mOp5_split_reg[3],mOp5_bank0_reg[3],mOp5_addr_low_reg[3],
   mOpR_en,mOpR_addr,mOpR_st,mOpR_req,mOpR_dupl,mOpR_sz,mOpR_odd,mOpR_io,mOpR_split,mOpR_bank0,mOpR_addr_low,
-  insert_isData,
-  insBus_req[3:0],
-  insBus_addr,
+  insert_isData_reg2,
+  insBus_req_reg2[4:0],
+  insBus_addr_reg2,
   ,//has_free
   locked,
   last_inserted,
@@ -1455,6 +1462,22 @@ module missQ(
   
   always @(posedge clk)
     begin
+          if (rst) begin
+              insert_isData_reg2<=0;
+              insBus_req_reg2<=0;
+              insBus_addr_reg2<=0;
+              insert_isData_reg<=0;
+              insBus_req_reg<=0;
+              insBus_addr_reg<=0;
+          end else begin
+              insert_isData_reg2<=insert_isData_reg;
+              insBus_req_reg2<=insBus_req_reg;
+              insBus_addr_reg2<=insBus_addr_reg;
+              insert_isData_reg<=insert_isData;
+              insBus_req_reg<=insBus_req;
+              insBus_addr_reg<=insBus_addr;
+          end
+ 
 	  if (rst) begin
 	      confl_mask<=6'b111111;
 	  end else if ((flush_end&~alt_bus_hold)|doStep) begin
