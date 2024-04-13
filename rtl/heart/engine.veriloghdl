@@ -1087,8 +1087,12 @@ module backend(
   reg MSI_swap_repl_save[1:0];
 
   reg [36:0] MSI_lock[1:0];
-  reg [14:0] MSI_lock_cnt[1:0];
+  reg [13:0] MSI_lock_cnt[1:0];
   reg  MSI_locked[1:0];
+  wire [13:0] MSI_lock_cnt_inc[1:0];
+
+  adder_inc #(14) MSI_inc0_mod(MSI_lock_cnt[0],MSI_lock_cnt_inc[0],1'b1,1'b1,,,,);
+  adder_inc #(14) MSI_inc1_mod(MSI_lock_cnt[1],MSI_lock_cnt_inc[1],1'b1,1'b1,,,,);
 
   wire [3:0] dc_thr=4'b0;
 
@@ -5782,7 +5786,7 @@ dcache1 L1D_mod(
   .write_addrE0(dc_wrAddrE[0]),
   .write_addrO0(dc_wrAddrO[0]),
   .write_bank0(dc_wrBanks[0]),
-  .write_clkEn0(dc_wrEn[0]),
+  .write_clkEn0(dc_wrEn[0] && ~(dc_wrSz[0][4] & dc_wrSz[0][2])),
   .write_hit0(dc_wrHit[0]),
   .write_hitCl0(dc_wrHitCl[0]),
   .write_dupl0(dc_wrDuplCl[0]),
@@ -5799,7 +5803,7 @@ dcache1 L1D_mod(
   .write_addrE1(dc_wrAddrE[1]),
   .write_addrO1(dc_wrAddrO[1]),
   .write_bank1(dc_wrBanks[1]),
-  .write_clkEn1(dc_wrEn[1]),
+  .write_clkEn1(dc_wrEn[1] && ~(dc_wrSz[1][4] & dc_wrSz[1][2])),
   .write_hit1(dc_wrHit[1]),
   .write_hitCl1(dc_wrHitCl[1]),
   .write_dupl1(dc_wrDuplCl[1]),
@@ -7782,6 +7786,12 @@ dcache1 L1D_mod(
           MSI_exp_en_save[1]<=1'b0;
           MSI_swap_want_save[1]<=1'b0;
           MSI_swap_repl_save[1]<=1'b0;
+          MSI_lock[0]<=37'b0;
+          MSI_lock_cnt[0]<=14'b0;
+          MSI_locked[0]<=1'b0;
+          MSI_lock[1]<=37'b0;
+          MSI_lock_cnt[1]<=14'b0;
+          MSI_locked[1]<=1'b0;
 	  fret_reg[0]<=14'b0;
 	  fret_reg[1]<=14'b0;
 	  fret_reg[2]<=14'b0;
@@ -7933,6 +7943,26 @@ dcache1 L1D_mod(
               MSI_exp_en_reg<=1'b0;
               MSI_exp_mkshared<=1'b0;
           end
+          if (&MSI_lock_cnt[0]) begin
+              MSI_locked[0]=1'b0;
+          end else if (MSI_locked[0]) begin
+              MSI_lock_cnt[0]=MSI_lock_cnt_inc[0];
+          end
+          if (&MSI_lock_cnt[1]) begin
+              MSI_locked[1]=1'b0;
+          end else if (MSI_locked[1]) begin
+              MSI_lock_cnt[1]=MSI_lock_cnt_inc[1];
+          end
+          if (dc_wrEn[0] && dc_wrSz[0][2] && dc_wrSz[0][4]) begin
+              MSI_lock[dc_wrSz[0]]<=dc_wrOdd[0] ? {dc_wrAddrO[0],1'b1} : {dc_wrAddrE[0],1'b0};;
+              MSI_lock_cnt[dc_wrSz[0]]<=0;
+              MSI_locked[dc_wrSz[0]]<=dc_wrSz[0][1];
+          end 
+          if (dc_wrEn[1] && dc_wrSz[1][2] && dc_wrSz[1][4]) begin
+              MSI_lock[dc_wrSz[1]]<=dc_wrOdd[1] ? {dc_wrAddrO[1],1'b1} : {dc_wrAddrE[1],1'b0};;
+              MSI_lock_cnt[dc_wrSz[1]]<=0;
+              MSI_locked[dc_wrSz[1]]<=dc_wrSz[1][1];
+          end 
 	  fret_reg[0]<=fret[0];
 	  fret_reg[1]<=fret[1];
 	  fret_reg[2]<=fret[2];
