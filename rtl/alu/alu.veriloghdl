@@ -479,7 +479,7 @@ alu(clk,rst,except,except_thread,thread,operation,cond,sub,dataEn,nDataAlt,retDa
         begin
           valRes_reg<=valRes[64:0];
 //          retEn<=dataEn & ~except;
-          isFlags_reg<=isFlags;
+          isFlags_reg<=isFlags || {opcode[7:1],1'b0}==`op_cloop_even;
           retOp<=operation;
 
           carryAdd64_reg<=(carryAdd64 && valS[0]|(calu[3:0]!=4'he)) & ~calu[4]|doJmp2;

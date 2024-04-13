@@ -4377,9 +4377,9 @@ module backend(
   .FUV8H(FUVH_reg[8]),.FUV8L(FUVL_reg[8]),.FUF8H(FUFH_reg[8]),.FUF8L(FUFL_reg[8]),
   .FUV9H(FUVH_reg[9]),.FUV9L(FUVL_reg[9]),.FUF9H(FUFH_reg[9]),.FUF9L(FUFL_reg[9]),
 
-  .FUS0(FUS1),.FUSreg0(outRegS[3*0+1]),.FUSwen0(1'b0),
-  .FUS1(FUS2),.FUSreg1(outRegS[3*1+1]),.FUSwen1(1'b0),
-  .FUS2(FUS3),.FUSreg2(outRegS[3*2+1]),.FUSwen2(1'b0),
+  .FUS0(FUS1),.FUSreg0(outRegS_reg5[3*0+1]),.FUSwen0(1'b0),
+  .FUS1(FUS2),.FUSreg1(outRegS_reg5[3*1+1]),.FUSwen1(1'b0),
+  .FUS2(FUS3),.FUSreg2(outRegS_reg5[3*2+1]),.FUSwen2(1'b0),
   .FUS3(FUS4),.FUSreg3(outRegS[3*0+1]),.FUSwen3(outEn[3*0+1][1]&~outOp[3*0+1][12]),
   .FUS4(FUS5),.FUSreg4(outRegS[3*1+1]),.FUSwen4(outEn[3*1+1][1]&~outOp[3*1+1][12]),
   .FUS5(FUS6),.FUSreg5(outRegS[3*2+1]),.FUSwen5(outEn[3*2+1][1]&~outOp[3*2+1][12]),
