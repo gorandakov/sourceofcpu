@@ -74,7 +74,7 @@ module dmisscam_buf(
   localparam OPERATION_WIDTH=`operation_width;
   localparam BANK_COUNT=32;
   localparam INDEX_WIDTH=6;
-  parameter [3:0] REQ=0;
+  parameter [4:0] REQ=0;
 
   input clk;
   input rst;
@@ -119,7 +119,7 @@ module dmisscam_buf(
   output [4:0] read_bbank;
   output [1:0] read_low;
   input ins_en;
-  input [3:0] ins_req;
+  input [4:0] ins_req;
   output [PADDR_WIDTH-8:0] ins_addr_o;
   output reg filled;
   output reg busy;
@@ -388,7 +388,7 @@ module dmisscam(
   output[4:0]             read_bbank;
   output[1:0]               read_low;
   input ins_en;
-  input [3:0] ins_req;
+  input [4:0] ins_req;
   output [PADDR_WIDTH-8:0] ins_addr_o;
   output has_free;
   output reg locked;
