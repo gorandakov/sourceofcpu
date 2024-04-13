@@ -4370,7 +4370,7 @@ module backend(
   .FUS7(FUS8),.FUSreg7(outRegS[3*1+2]),.FUSwen7(outEn[3*1+2][1]&~outOp[3*1+2][12]),
   .FUS8(FUS9),.FUSreg8(outRegS[3*2+2]),.FUSwen8(outEn[3*2+2][1]&~outOp[3*2+2][12]),
 // 1 if buffer is free  
-  .pause0(miss_holds_addrcalc|pause_addrcalc|miss_pause_addrcalc|bus_holds_addrcalc|bus_holds_addrcalc_reg|insBus_io|rsDoStall[m]),
+  .pause0(miss_holds_addrcalc|pause_addrcalc|miss_pause_addrcalc/*|bus_holds_addrcalc*/|bus_holds_addrcalc_reg|insBus_io|rsDoStall[m]),
   .foundAlt1(~(&nDataAlt[m])|(|fxFRT_alten[m])),.foundAlt2(fxFRT_pause[m])
   );
   
