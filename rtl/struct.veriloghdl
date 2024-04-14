@@ -142,6 +142,7 @@ limitations under the License.
 
 `define attr_um 0
 `define attr_vm 1
+`define attr_vec 2
 `define attr_sec 3
 
 `define bobJmp_satCount 1:0
