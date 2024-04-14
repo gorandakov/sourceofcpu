@@ -245,8 +245,8 @@ module cntrl_find_outcome(
   iret_clr,
   ijump0Type,ijump0Off,ijump0IP,ijump0Mask,
   ijump1Type,ijump1Off,ijump1IP,ijump1Mask,
-  ijump0BtbWay,ijump0JmpInd,ijump0GHT,ijump0GHT2,ijump0Val2,
-  ijump1BtbWay,ijump1JmpInd,ijump1GHT,ijump1GHT2,ijump0Val2,
+  ijump0BtbWay,ijump0JmpInd,ijump0GHT,ijump0GHT2,ijump0Val2,ijump0CLP,
+  ijump1BtbWay,ijump1JmpInd,ijump1GHT,ijump1GHT2,ijump0Val2,ijump1CLP,
   ijump0SC,ijump0Miss,ijump0BtbOnly,
   ijump1SC,ijump1Miss,ijump1BtbOnly,
   itk_after,ifsimd,
@@ -464,12 +464,14 @@ module cntrl_find_outcome(
   input [42:0] ijump0IP;
   input [15:0] ijump0GHT2;
   input        ijump0Val;
+  input        ijump0CLP;
   input [3:0] ijump0Mask;
   input [4:0] ijump1Type;
   input [3:0] ijump1Off;
   input [42:0] ijump1IP;
   input [15:0] ijump1GHT2;
   input        ijump1Val;
+  input        ijump1CLP;
   input [3:0] ijump1Mask;
   input       ijump0BtbWay;
   input [1:0] ijump0JmpInd;
@@ -724,6 +726,8 @@ module cntrl_find_outcome(
   wire [3:0] attr;
   wire [3:0] jump0Attr;
   wire [3:0] jump1Attr;
+  wire jump0CLP;
+  wire jump1CLP;
 
   reg [5:0] initcount;
   wire [5:0] initcount_d;
@@ -794,6 +798,7 @@ module cntrl_find_outcome(
     genvar k,j;
     for(k=0;k<10;k=k+1) begin : jumps_gen
       assign flagSet[k]=ret_data[k][`except_setsFlags];
+      assign flagSetY[k]=ret_data[k][`except_setsFlags] && !(k==jump0Ind && jump0CLP) && !(k==jump1Ind && jump1CLP);
       assign pending[k]=ret_data[k][`except_status]==2'd0 && !(mem_match & mem_II_bits_ret[k]);
       assign exceptn[k]=(ret_data[k][`except_status]==2'd1 && ~ret_data[k][14]) || (mem_match & mem_II_bits_except[k]);//|| IRQ;
       assign replay[k]=(ret_data[k][`except_status]==2'd1 && ret_data[k][14]) || (mem_match & mem_II_bits_ldconfl[k]);
@@ -1148,6 +1153,11 @@ module cntrl_find_outcome(
   assign jump0Attr=bob_rdata[`bob_attrJ0];
   assign bob_wdata[`bob_attrJ1]=iJump1Attr;
   assign jump1Attr=bob_rdata[`bob_attrJ1];
+
+  assign bob_wdata[`bob_CLPJ0]=iJump0CLP;
+  assign jump0CLP=bob_rdata[`bob_CLPJ0];
+  assign bob_wdata[`bob_CLPJ1]=iJump1CLP;
+  assign jump1CLP=bob_rdata[`bob_CLPJ1];
   
   assign bob_wdata[`bob_magicO]={instr9_magic,instr8_magic,instr7_magic,instr6_magic,instr5_magic,
 	  instr4_magic,instr3_magic,instr2_magic,instr1_magic,instr0_magic};
