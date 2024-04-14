@@ -615,7 +615,7 @@ module addrcalc_r(
               addrMain_mlb<={proc[20:0],mOp0_addrMain};
               mOp0_sz_reg<=mOp0_sz;
               mOp0_st_reg<=mOp0_st;
-              mOp0_invmlb_reg<=mOp0_invmlb;
+              mOp0_invmlb_reg<=mOp0_invmlb & mOp0_sz[0];
               mOp0_split_reg<=mOp0_split;
               mOp0_bank0_reg<=mOp0_bank0;
               mOp0_regNo_reg<=mOp0_regNo;
