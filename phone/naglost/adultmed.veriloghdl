@@ -1087,7 +1087,7 @@ module smallInstr_decoder(
 
       trien[12]=magic[0] & isBaseLoadStore;
       poperation[12][5:0]=(opcode_main[5:2]==4'b1010) ? 6'h22 : opcode_main[5:0];
-      poperation[12][12:6]=7'b0;
+      poperation[12][12:6]=pcode_main[5:0]==4'b101010;
       prA_use[12]=1'b0;
       prB_use[12]=1'b1;
       prT_use[12]=~opcode_main[0] & opcode_main[5] && opcode_main[5:2]!=4'b1010;
@@ -1117,13 +1117,21 @@ module smallInstr_decoder(
           end
       end
       if (poperation[12][5:1]==5'h16) begin poperation[12][7:0]=`op_cax; poperation[12][9:8]=2'b0; pport[12]=PORT_ALU; end
+      if (opcode_main[0] && opcode_main[5:1]==5'h17) begin
+          poperation[13][5:0]=6'h20;
+          //pflags_write[13]=1'b1; not needed; handled by set flag bit on the opcode
+          poperation[13][7]=1'b1; //says it sets flags!
+          prAlloc[13]=1'b0;
+          prT_use[13]=1'b0;
+      end
 
       trien[13]=magic[0] & isBaseIndexLoadStore;
-      if (opcode_main[7:4]==4'b0111 && opcode_main[3:2]==2'b10)
+      poperation[13][7]=1'b0;
+      if (opcode_main[7:4]==4'b0111 && opcode_main[3:2]==2'b10 && !opcode_main[0])
           poperation[13][5:0]=6'd22;
+          poperation[13][7]=opcode_main[1];
       else
           poperation[13][5:0]=(opcode_main[7:4]==4'b0111) ? {2'b10,opcode_main[3:0]} : {1'b0,opcode_main[4:0]};
-      poperation[13][7]=1'b0;
       poperation[13][6]=~(magic==4'b0111 && instr[57]);
       poperation[13][9:8]=((poperation[13][5:3]==3'h7 && ~poperation[13][0]) ||( poperation[13][5:3]==3'h4 && 
         poperation[13][0])) ? 2'b01 : 
