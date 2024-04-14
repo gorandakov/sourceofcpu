@@ -64,6 +64,8 @@ module frontendSelf(
   btbl_mask1,
   btbl_attr0,
   btbl_attr1,
+  btbl_clp0,
+  btbl_clp1,
   msrss_en,msrss_addr,msrss_data,
   cc_instrEn,
   cc_read_set_flag,
@@ -188,6 +190,8 @@ module frontendSelf(
   output [3:0] btbl_mask1;
   output [3:0] btbl_attr0;
   output [3:0] btbl_attr1;
+  output       btbl_clp0;
+  output       btbl_clp1;
   
   input msrss_en;
   input [15:0] msrss_addr;
@@ -1430,8 +1434,8 @@ module frontendSelf(
   .stall(stall),
   .read_thread(1'b0),
   .read_cnt(btbl_step),
-  .read_data0({btbl_mask0,btbl_IP0,btbl_attr0}),
-  .read_data1({btbl_mask1,btbl_IP1,btbl_attr0}),
+  .read_data0({btbl_clp0,btbl_mask0,btbl_IP0,btbl_attr0}),
+  .read_data1({btbl_clp1,btbl_mask1,btbl_IP1,btbl_attr0}),
   .write_wen(instrFed_reg&~btbFStall&~btbFStall_reg&~btbFStall_reg2&~btbFStall_reg3&
     ~btbFStall_recover_reg2&~jq_fstall&~fmstall),
   .write_thread(1'b0),
