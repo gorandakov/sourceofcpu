@@ -866,7 +866,8 @@ module cntrl_find_outcome(
           //assign rFe[k]=no_tire[k] ? 9'd0 : 9'bz;
       end
 
-      assign excpt_code=break_[k] ? ret_data[k][10:3] : 8'bz;
+      assign excpt_code=break_[k] & ~IRQ_enX_reg ? ret_data[k][10:3] : 8'bz;
+      assign excpt_code=IRQ_enX_reg ? 62 : 8'bz;
       
       cntrl_jump_upto #(k) j0_mod(
       .flagSet(flagSet&((10'b1<<(k+1))-10'b1)),
@@ -950,7 +951,7 @@ module cntrl_find_outcome(
   
   assign breakIP=has_break ? 43'bz : 43'b0;
   assign bbaseIP=has_break ? 20'bz : 20'b0;
-  assign excpt_code=has_break ? 8'bz : 8'b0;
+  assign excpt_code=has_break && ~IRQ_enX_reg ? 8'bz : 8'b0;
   assign lastIP=has_break ? 1'bz : 1'b0;
       
   bit_find_last_bit #(10) lastfl_mod(flagSet,flag_last,flag_has);
