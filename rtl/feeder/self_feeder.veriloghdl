@@ -1144,9 +1144,9 @@ frontendSelf #(1,BUS_ID,BUS_ID2,LARGE_CORE,H) frontB_mod(
   
   iAvailX,
   instrEn[thread],
-  IRQ,
-  IRQ_data,
-  IRQ_thr,
+  GORQ,
+  GORQ_data,
+  GORQ_thr,
   instr0[thread],extra0[thread],
   instr1[thread],extra1[thread],
   instr2[thread],extra2[thread],

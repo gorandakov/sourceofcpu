@@ -222,8 +222,8 @@ module decoder_aux_const(
   reg [1:0][63:0] csr_vmcall;
   reg [1:0][63:0] csr_cpage_mask;
   reg [1:0][63:0] csr_USER3;
-  reg [1:0][63:0] csr_IRQ_send;
-  reg [1:0][63:0] csr_IRQ_recv_vector;
+  reg [1:0][63:0] csr_GORQ_send;
+  reg [1:0][63:0] csr_GORQ_recv_vector;
   reg [1:0][63:0] csr_last_jmp;
   reg [1:0][63:0] csr_last_jmp2;
   reg [1:0][1:0] thrmode0;
@@ -271,7 +271,7 @@ module decoder_aux_const(
 	   csr_mflags[thread][`mflags_vm] && csr_mflags[thread][`mflags_priv]==2'b00;
            aux_can_read=~csr_mflags[thread][`mflags_vm] && csr_mflags[thread][`mflags_priv]==2'b00; aux_can_write=aux_can_read; end
       `csr_USER3: aux_const={1'b1,csr_indir_tbl[thread]}; 
-      `csr_IRQ_recv_vector: aux_const={1'b0,csr_IRQ_recv_vector[thread]};
+      `csr_GORQ_recv_vector: aux_const={1'b0,csr_GORQ_recv_vector[thread]};
       `csr_USER1: aux_const={1'b1,csr_USER1[thread]};
       `csr_USER2: aux_const={1'b1,csr_USER2[thread]};
       `csr_vlen: aux_const={1'b0,64'd32};
@@ -327,8 +327,8 @@ module decoder_aux_const(
           csr_vmcall[1]<=64'b0;
           csr_cpage_mask[1]<=64'b0;
           csr_USER3[1]<=64'b0;
-          csr_IRQ_send[0]<=64'b0;
-          csr_IRQ_send[1]<=64'b0;
+          csr_GORQ_send[0]<=64'b0;
+          csr_GORQ_send[1]<=64'b0;
           csr_USER1[0]<=64'b0;
           csr_USER1[1]<=64'b0;
           csr_USER2[0]<=64'b0;
@@ -353,7 +353,7 @@ module decoder_aux_const(
       `csr_mflags:		csr_mflags[msrss_no[15]]<=msrss_data[63:0];
       `csr_USER1:		csr_USER1[msrss_no[15]]<=msrss_data[63:0];
       `csr_USER2:		csr_USER2[msrss_no[15]]<=msrss_data[63:0];
-      `csr_IRQ_send:		csr_IRQ_send[msrss_no[15]]<=msrss_data[63:0];
+      `csr_GORQ_send:		csr_GORQ_send[msrss_no[15]]<=msrss_data[63:0];
       `csr_FPU:			csr_fpu[msrss_no[15]]<=msrss_data[63:0];
       `csr_excpt_fpu:		csr_fpu[msrss_no[15]][10:0]<=msrss_data[10:0];
       `csr_page:		csr_page[msrss_no[15]]<=msrss_data[63:0];
@@ -375,7 +375,7 @@ module decoder_aux_const(
           if (fpE_en && !msrss_en | (msrss_no!=`csr_FPU)) begin
               csr_fpu[fpE_thr]<=csr_fpu[fpE_thr] | {42'b0,fpE_set,11'b0};
           end
-          if (altEn2) csr_IRQ_recv_vector[altThr2][16:0]<=altEn2_data;
+          if (altEn2) csr_GORQ_recv_vector[altThr2][16:0]<=altEn2_data;
       end
   end
 endmodule
@@ -735,9 +735,9 @@ module decoder(
   
   iAvail,
   iUsed,
-  IRQ,
-  IRQ_data,
-  IRQ_thr,
+  GORQ,
+  GORQ_data,
+  GORQ_thr,
   inst0,instQ0,
   inst1,instQ1,
   inst2,instQ2,
@@ -1099,9 +1099,9 @@ module decoder(
   input [9:0] iAvail;
   output [9:0] iUsed;
 
-  input IRQ;
-  input [16:0] IRQ_data;
-  input IRQ_thr;
+  input GORQ;
+  input [16:0] GORQ_data;
+  input GORQ_thr;
   
   input [INSTR_WIDTH-1:0] inst0;
   input [INSTRQ_WIDTH-1:0] instQ0;
@@ -2526,9 +2526,9 @@ module decoder(
   .fpE_thr(fp_excpt_thr),
   .altEn(msrss_retIP_en_reg!=0),
   .altData(msrss_retIP_data),
-  .altThr2(IRQ_thr),
-  .altEn2(IRQ),
-  .altData2(IRQ_data),
+  .altThr2(GORQ_thr),
+  .altEn2(GORQ),
+  .altData2(GORQ_data),
   .thread(thread),
   .riscmode(riscmode),
   .disstruss(lizztruss),

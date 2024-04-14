@@ -3,9 +3,9 @@ module selftest(
   input clk,
   input rst);
 
-  wire IRQ;
-  wire [16:0] IRQ_data;
-  wire IRQ_thr;
+  wire GORQ;
+  wire [16:0] GORQ_data;
+  wire GORQ_thr;
   wire [67:0] obusIn;
   wire [81:0] obusOut;
   wire obusOut_want;
@@ -174,9 +174,9 @@ module selftest(
   heptane_core core_mod(
   clk,clk,clk,clk,clk,clk,
   rst,
-  IRQ,
-  IRQ_data,
-  IRQ_thr,
+  GORQ,
+  GORQ_data,
+  GORQ_thr,
   obusIn,
   obusOut,
   obusOut_want,

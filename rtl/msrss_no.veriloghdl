@@ -38,8 +38,8 @@ limitations under the License.
 `define csr_subsyscall 21
 `define csr_pinvoke 22
 
-`define csr_IRQ_send 36
-`define csr_IRQ_recv_vector 37
+`define csr_GORQ_send 36
+`define csr_GORQ_recv_vector 37
 `define csr_MAC 2048
 `define csr_excpt_fpu 1036
 `define csr_vlen 38
