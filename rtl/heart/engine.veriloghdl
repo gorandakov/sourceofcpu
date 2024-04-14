@@ -358,8 +358,8 @@ module backend(
   instr9_aft_spc,
   instr9_err,
 
-  jump0Type,jump0Pos,jump0Pred,jump0IP,jump0Mask,jump0Attr,
-  jump1Type,jump1Pos,jump1Pred,jump1IP,jump1Mask,jump1Attr,
+  jump0Type,jump0Pos,jump0Pred,jump0IP,jump0Mask,jump0Attr,jump0CLP,
+  jump1Type,jump1Pos,jump1Pred,jump1IP,jump1Mask,jump1Attr,jump1CLP,
   jump0TbufWay,jump0JmpInd,jump0GHT,jump0GHT2,jump0Val,
   jump1TbufWay,jump1JmpInd,jump1GHT,jump1GHT2,jump1Val,
   jump0SC,jump0Miss,jump0TbufOnly,
@@ -910,12 +910,14 @@ module backend(
   input [63:0] jump0IP;
   input [3:0] jump0Mask;
   input [3:0] jump0Attr;
+  input       jump0CLP;
   input [4:0] jump1Type;
   input [3:0] jump1Pos;
   input jump1Pred;
   input [63:0] jump1IP;
   input [3:0] jump1Mask;
   input [3:0] jump1Attr;
+  input       jump1CLP;
   input jump0TbufWay;
   input [1:0] jump0JmpInd;
   input [7:0] jump0GHT;
@@ -1515,12 +1517,14 @@ module backend(
   reg jump0Pred_reg;
   reg [63:0] jump0IP_reg;
   reg [3:0] jump0Attr_reg;
+  reg       jump0CLP_reg;
   reg [3:0] jump0Mask_reg;
   reg [4:0] jump1Type_reg;
   reg [3:0] jump1Pos_reg;
   reg jump1Pred_reg;
   reg [63:0] jump1IP_reg;
   reg [3:0] jump1Attr_reg;
+  reg       jump1CLP_reg;
   reg [3:0] jump1Mask_reg;
   reg [9:0] instr_fsimd_reg;
   reg [62:0] baseIP_reg;
@@ -1567,12 +1571,14 @@ module backend(
   reg jump0Pred_reg2;
   reg [63:0] jump0IP_reg2;
   reg [3:0] jump0Attr_reg2;
+  reg       jump0CLP_reg2;
   reg [3:0] jump0Mask_reg2;
   reg [4:0] jump1Type_reg2;
   reg [3:0] jump1Pos_reg2;
   reg jump1Pred_reg2;
   reg [63:0] jump1IP_reg2;
   reg [3:0] jump1Attr_reg2;
+  reg       jump1CLP_reg2;
   reg [3:0] jump1Mask_reg2;
   reg [9:0] instr_fsimd_reg2;
 //  reg [46:0] baseIP_reg2;
@@ -5895,9 +5901,9 @@ dcache1 L1D_mod(
   .iret3_rFl(clrRS_reg[3][8:4]),.iret4_rFl(clrRS_reg[4][8:4]),.iret5_rFl(clrRS_reg[5][8:4]),
   .iret6_rFl(clrRS_reg[6][8:4]),.iret7_rFl(clrRS_reg[7][8:4]),.iret8_rFl(clrRS_reg[8][8:4]),
   .iret_clr(clr_reg),
-  .ijump0Type(jump0Type_reg2),.ijump0Off(jump0Pos_reg2),.ijump0Val(jump0Val_reg2),
+  .ijump0Type(jump0Type_reg2),.ijump0Off(jump0Pos_reg2),.ijump0Val(jump0Val_reg2),.ijump0CLP(jump0CLP_reg2),
   .ijump0IP(jump0IP_reg2[43:1]),.ijump0Mask(jump0Mask_reg2),.ijump0GHT2(jump0GHT2_reg2),
-  .ijump1Type(jump1Type_reg2),.ijump1Off(jump1Pos_reg2),.ijump1Val(jump1Val_reg2),
+  .ijump1Type(jump1Type_reg2),.ijump1Off(jump1Pos_reg2),.ijump1Val(jump1Val_reg2),.ijump1CLP(jump1CLP_reg2),
   .ijump1IP(jump1IP_reg2[43:1]),.ijump1Mask(jump1Mask_reg2),.ijump1GHT2(jump1GHT2_reg2),
   .ijump0BtbWay(jump0TbufWay_reg2),.ijump0JmpInd(jump0JmpInd_reg2),.ijump0GHT(jump0GHT_reg2),
   .ijump1BtbWay(jump1TbufWay_reg2),.ijump1JmpInd(jump1JmpInd_reg2),.ijump1GHT(jump1GHT_reg2),
@@ -5953,7 +5959,7 @@ dcache1 L1D_mod(
     .ret5_data({6'b0,FUS_alu[5],ex_alu[5]}/*h*/),
     .ret5_wen(enS_alu[5]),
   .ret5_IP(FU_reg[9]),.ret5_IP_en(alu_jupdate),
-  .ret6_addr({lsr_wr_data_reg2[3][`lsaddr_II],lsr_wr_data_reg2[3][`lsaddr_II_low]}},
+  .ret6_addr({lsr_wr_data_reg2[3][`lsaddr_II],lsr_wr_data_reg2[3][`lsaddr_II_low]+1}},
   .ret6_data({6'b0,p3_excl,5'b0,2'd0,1'b1}),
   .ret6_wen(lsr_wr_data_reg2[3][`lsaddr_sz][7] && FU3HitP)
   .mem_II_upper(retM_II0),
