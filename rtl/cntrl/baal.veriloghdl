@@ -801,7 +801,8 @@ module cntrl_find_outcome(
       assign flagSet[k]=ret_data[k][`except_setsFlags];
       assign flagSetY[k]=ret_data[k][`except_setsFlags] && !(k==jump0Ind && jump0CLP) && !(k==jump1Ind && jump1CLP);
       assign pending[k]=ret_data[k][`except_status]==2'd0 && !(mem_match & mem_II_bits_ret[k]);
-      assign exceptn[k]=(ret_data[k][`except_status]==2'd1 && ~ret_data[k][14]) || (mem_match & mem_II_bits_except[k]) || GORQ_enX_reg;
+      assign exceptn[k]=(ret_data[k][`except_status]==2'd1 && ~ret_data[k][14]) || (mem_match & mem_II_bits_except[k]) || GORQ_enX_reg
+          ||(break_jump0&jump0_attr[`attr_vec]||break_jump1&jump1_attr[`attr_vec]);
       assign replay[k]=(ret_data[k][`except_status]==2'd1 && ret_data[k][14]) || (mem_match & mem_II_bits_ldconfl[k]);
       assign replay_safe[k]=(ret_data[k][`except_status]==2'd1 && ret_data[k][14]) || (mem_match & mem_II_bits_waitconfl[k]);
       assign done[k]=ret_data[k][`except_status]==2'd2 || (mem_match & mem_II_bits_fine[k] & mem_II_bits_ret[k]);
@@ -866,8 +867,9 @@ module cntrl_find_outcome(
           //assign rFe[k]=no_tire[k] ? 9'd0 : 9'bz;
       end
 
-      assign excpt_code=break_[k] & ~GORQ_enX_reg ? ret_data[k][10:3] : 8'bz;
+      assign excpt_code=break_[k]& & ~GORQ_enX_reg|(break_jump0&jump0_attr[`attr_vec]||break_jump1&jump1_attr[`attr_vec]) ? ret_data[k][10:3] : 8'bz;
       assign excpt_code=GORQ_enX_reg ? 62 : 8'bz;
+      assign excpt_code=(break_jump0&jump0_attr[`attr_vec]||break_jump1&jump1_attr[`attr_vec]) ? 61 : 8'bz;
       
       cntrl_jump_upto #(k) j0_mod(
       .flagSet(flagSet&((10'b1<<(k+1))-10'b1)),
@@ -922,8 +924,10 @@ module cntrl_find_outcome(
       assign from_IP=(tk_after[k] & jump0Pred) ? {jump0BND,jump0IP[42:0]} : 63'bz;
       assign from_IP=(tk_after[k] & jump1Pred) ? {jump1BND,jump1IP[42:0]} : 63'bz;
 
-      assign breakIP=break_[k]&~IRQ_enX_reg || IRQ_enX_reg&&k==0 ? nextIP[k][42:0] : 43'bz;
-      assign bbaseIP=break_[k]&~IRQ_enX_reg || IRQ_enX_reg&&k==0 ? nextIP[k][62:43] : 20'bz;
+      assign breakIP=break_[k]||(break_jump0&jump0_attr[`attr_vec]&(k==jump0_ind)||break_jump1&jump1_attr[`attr_vec] & (k==jump1_ind))
+          &~IRQ_enX_reg ? nextIP[k][42:0] : 43'bz;
+      assign bbaseIP=break_[k]||(break_jump0&jump0_attr[`attr_vec]&(k==jump0_ind)||break_jump1&jump1_attr[`attr_vec] & (k==jump1_ind))
+          &~IRQ_enX_reg ? nextIP[k][62:43] : 20'bz;
 
       assign lastIP=break_[k] ? last_instr[k] : 1'bz;
       assign is_after_spec=break_[k] ? rd_after_spec[k] : 1'bz;
@@ -949,8 +953,8 @@ module cntrl_find_outcome(
   assign jupd0_IP=(jump0Pos==4'hf) ? 20'b0 : 20'bz;
   assign jupd1_IP=(jump1Pos==4'hf) ? 20'b0 : 20'bz;
   
-  assign breakIP=has_break && ~IRQ_enX_reg ? 43'bz : 43'b0;
-  assign bbaseIP=has_break && ~IRQ_enX_reg ? 20'bz : 20'b0;
+  assign breakIP=has_break && ~IRQ_enX_reg ? 43'bz : nextIP[0][42:0];
+  assign bbaseIP=has_break && ~IRQ_enX_reg ? 20'bz : nextIP[0][62:43];
   assign excpt_code=has_break && ~GORQ_enX_reg ? 8'bz : 8'b0;
   assign lastIP=has_break ? 1'bz : 1'b0;
       
@@ -1019,66 +1023,66 @@ module cntrl_find_outcome(
   assign ret_prevV[9]=10'b0;
   assign ret_prevF[9]=10'b0;
 //warning: trace not yet handled
-  assign exceptIP_d=(break_jump0 & jump0_taken & ~indir_error) ? {jump0BND,jump0IP} : 63'bz;
-  assign exceptIP_d=(break_jump1 & jump1_taken & ~indir_error) ? {jump1BND,jump1IP} : 63'bz;
-  assign exceptIP_d=(indir_error && (break_jump0 & jump0_taken)
-    || (break_jump1 & jump1_taken)) ? {excpt_handlerIP[62:43],excpt_handlerIP[42:11],6'd18,5'b0} : 63'bz;
-  assign exceptIP_d=(break_jump0 && ~jump0_taken && !(jump0Type[4] && jump0Type[2:0]==3'd1)) ? {bbaseIP[62:43],breakIP} : 63'bz;
-  assign exceptIP_d=(break_jump1 & ~jump1_taken && !(jump1Type[4] && jump1Type[2:0]==3'd1)) ? {bbaseIP[62:43],breakIP} : 63'bz;
-  assign exceptIP_d=(break_jump0 && ~jump0_taken && (jump0Type==5'h11)) ? indir_IP[63:1] : 63'bz;
-  assign exceptIP_d=(break_jump1 & ~jump1_taken && (jump1Type==5'h11)) ? indir_IP[63:1] : 63'bz;
-  assign exceptIP_d=(break_jump0 && ~jump0_taken && (jump0Type==5'h19)) ? 
+  assign exceptIP_d=((break_jump0&~break_exceptn) & jump0_taken & ~indir_error) ? {jump0BND,jump0IP} : 63'bz;
+  assign exceptIP_d=((break_jump1&~break_exceptn) & jump1_taken & ~indir_error) ? {jump1BND,jump1IP} : 63'bz;
+  assign exceptIP_d=(indir_error && ((break_jump0&~break_exceptn) & jump0_taken)
+    || ((break_jump1&~break_exceptn) & jump1_taken)) ? {excpt_handlerIP[62:43],excpt_handlerIP[42:11],6'd18,5'b0} : 63'bz;
+  assign exceptIP_d=((break_jump0&~break_exceptn) && ~jump0_taken && !(jump0Type[4] && jump0Type[2:0]==3'd1)) ? {bbaseIP[62:43],breakIP} : 63'bz;
+  assign exceptIP_d=((break_jump1&~break_exceptn) & ~jump1_taken && !(jump1Type[4] && jump1Type[2:0]==3'd1)) ? {bbaseIP[62:43],breakIP} : 63'bz;
+  assign exceptIP_d=((break_jump0&~break_exceptn) && ~jump0_taken && (jump0Type==5'h11)) ? indir_IP[63:1] : 63'bz;
+  assign exceptIP_d=((break_jump1&~break_exceptn) & ~jump1_taken && (jump1Type==5'h11)) ? indir_IP[63:1] : 63'bz;
+  assign exceptIP_d=((break_jump0&~break_exceptn) && ~jump0_taken && (jump0Type==5'h19)) ? 
     {indir_IP[59:50],2'b0,indir_IP[49:45],2'b0,indir_IP[44],indir_IP[43:5],indir_IP[4:1]^{3'b0,&indir_IP[4:1]}} : 63'bz;
-  assign exceptIP_d=(break_jump1 & ~jump1_taken && (jump1Type==5'h19)) ? 
+  assign exceptIP_d=((break_jump1&~break_exceptn) & ~jump1_taken && (jump1Type==5'h19)) ? 
     {indir_IP[59:50],2'b0,indir_IP[49:45],2'b0,indir_IP[44],indir_IP[43:5],indir_IP[4:1]^{3'b0,&indir_IP[4:1]}} : 63'bz;
   assign exceptIP_d=(break_exceptn) ? {excpt_handlerIP[62:43],excpt_handlerIP[42:11],excpt_code[5:0],5'b0} : 63'bz;
   assign exceptIP_d=(break_replay|break_replayS) ? {bbaseIP[62:43],breakIP} : 63'bz;
   assign exceptIP_d=(break_pending | ~has_break) ? tire_thread_reg : oldbrk : {bbaseIP[62:43],breakIP} : 63'bz;
 
-  assign except_attr_d=(break_jump0 & jump0_taken) ? jump0Attr : 4'bz;
-  assign except_attr_d=(break_jump1 & jump1_taken) ? jump1Attr : 4'bz;
-  assign except_attr_d=(break_jump0 && ~jump0_taken && !(jump0Type[4] && jump0Type[2:0]==3'd1)) ? attr : 4'bz;
-  assign except_attr_d=(break_jump1 & ~jump1_taken && !(jump1Type[4] && jump1Type[2:0]==3'd1)) ? attr : 4'bz;
-  assign except_attr_d=(break_jump0 && ~jump0_taken && (jump0Type==5'h11)) ? attr : 4'bz;
-  assign except_attr_d=(break_jump1 & ~jump1_taken && (jump1Type==5'h11)) ? attr : 4'bz;
-  assign except_attr_d=(break_jump0 && ~jump0_taken && (jump0Type==5'h19)) ? {indir_IP[60],1'b0,indir_IP[62],indir_IP[63]} : 4'bz;
-  assign except_attr_d=(break_jump1 & ~jump1_taken && (jump1Type==5'h19)) ? {indir_IP[60],1'b0,indir_IP[62],indir_IP[63]} : 4'bz;
+  assign except_attr_d=((break_jump0&~break_exceptn) & jump0_taken) ? jump0Attr : 4'bz;
+  assign except_attr_d=((break_jump1&~break_exceptn) & jump1_taken) ? jump1Attr : 4'bz;
+  assign except_attr_d=((break_jump0&~break_exceptn) && ~jump0_taken && !(jump0Type[4] && jump0Type[2:0]==3'd1)) ? attr : 4'bz;
+  assign except_attr_d=((break_jump1&~break_exceptn) & ~jump1_taken && !(jump1Type[4] && jump1Type[2:0]==3'd1)) ? attr : 4'bz;
+  assign except_attr_d=((break_jump0&~break_exceptn) && ~jump0_taken && (jump0Type==5'h11)) ? attr : 4'bz;
+  assign except_attr_d=((break_jump1&~break_exceptn) & ~jump1_taken && (jump1Type==5'h11)) ? attr : 4'bz;
+  assign except_attr_d=((break_jump0&~break_exceptn) && ~jump0_taken && (jump0Type==5'h19)) ? {indir_IP[60],indir_IP[61],indir_IP[62],indir_IP[63]} : 4'bz;
+  assign except_attr_d=((break_jump1&~break_exceptn) & ~jump1_taken && (jump1Type==5'h19)) ? {indir_IP[60],indir_IP[61],indir_IP[62],indir_IP[63]} : 4'bz;
   assign except_attr_d=(break_exceptn) ? {1'b0,1'b0,1'b0,1'b1} : 4'bz;
   assign except_attr_d=(break_replay|break_replayS) ? attr : 4'bz;
   assign except_attr_d=(break_pending | ~has_break) ? attr : 4'bz;//?attr2?
 
-  assign msrss_no_d=(break_jump0 && jump0Type==5'b11001) ? {tire_thread_reg,jump0IP[14:0]} : 16'bz;
-  assign msrss_no_d=(break_jump1 && jump1Type==5'b11001) ? {tire_thread_reg,jump1IP[14:0]} : 16'bz;
-  assign msrss_no_d=(break_jump0 && jump0Type!=5'b11001 && jump0_taken) ||
-    (break_jump1 && jump1Type!=5'b11001 && jump1_taken) ? {tire_thread_reg,15'd`csr_last_jmp} : 16'bz;
+  assign msrss_no_d=((break_jump0&~break_exceptn) && jump0Type==5'b11001) ? {tire_thread_reg,jump0IP[14:0]} : 16'bz;
+  assign msrss_no_d=((break_jump1&~break_exceptn) && jump1Type==5'b11001) ? {tire_thread_reg,jump1IP[14:0]} : 16'bz;
+  assign msrss_no_d=((break_jump0&~break_exceptn) && jump0Type!=5'b11001 && jump0_taken) ||
+    ((break_jump1&~break_exceptn) && jump1Type!=5'b11001 && jump1_taken) ? {tire_thread_reg,15'd`csr_last_jmp} : 16'bz;
   assign msrss_no_d=(break_exceptn) ? {tire_thread_reg,15'd`csr_retIP} : 16'bz;
-  assign msrss_no_d=(~break_jump0 & ~break_jump1 & ~break_exceptn) ? {tire_thread_reg,GORQ_en_reg? 15'd`csr_GORQ_data : 15'd`csr_excpt_fpu} : 16'bz;
+  assign msrss_no_d=(~(break_jump0&~break_exceptn) & ~(break_jump1&~break_exceptn) & ~break_exceptn) ? {tire_thread_reg,GORQ_en_reg? 15'd`csr_GORQ_data : 15'd`csr_excpt_fpu} : 16'bz;
 
-  assign msrss_xdata_d=(break_jump0 && jump0Type==5'b11001) ? {jump0IP[63:40]} : 24'bz;
-  assign msrss_xdata_d=(break_jump1 && jump1Type==5'b11001) ? {jump1IP[63:40]} : 24'bz;
-  assign msrss_xdata_d=(break_jump0 && jump0Type!=5'b11001 && jump0_taken) ||
-    (break_jump1 && jump1Type!=5'b11001 && jump1_taken) ? {tire_thread_reg,23'd`csr_last_jmp} : 24'bz;
+  assign msrss_xdata_d=((break_jump0&~break_exceptn) && jump0Type==5'b11001) ? {jump0IP[63:40]} : 24'bz;
+  assign msrss_xdata_d=((break_jump1&~break_exceptn) && jump1Type==5'b11001) ? {jump1IP[63:40]} : 24'bz;
+  assign msrss_xdata_d=((break_jump0&~break_exceptn) && jump0Type!=5'b11001 && jump0_taken) ||
+    ((break_jump1&~break_exceptn) && jump1Type!=5'b11001 && jump1_taken) ? {tire_thread_reg,23'd`csr_last_jmp} : 24'bz;
   assign msrss_xdata_d=(break_exceptn) ? {tire_thread_reg,23'd`csr_retIP} : 24'bz;
-  assign msrss_xdata_d=(~break_jump0 & ~break_jump1 & ~break_exceptn) ? {tire_thread_reg,23'd`csr_excpt_fpu} : 24'bz;
-  assign msrss_en_d=(break_jump0) ? (jump0Type==5'b11001 || jump0_taken) && has_some && ~mem_II_stall : 1'bz;
-  assign msrss_en_d=(break_jump1) ? (jump1Type==5'b11001 || jump1_taken) && has_some && ~mem_II_stall : 1'bz;
+  assign msrss_xdata_d=(~(break_jump0&~break_exceptn) & ~(break_jump1&~break_exceptn) & ~break_exceptn) ? {tire_thread_reg,23'd`csr_excpt_fpu} : 24'bz;
+  assign msrss_en_d=((break_jump0&~break_exceptn)) ? (jump0Type==5'b11001 || jump0_taken) && has_some && ~mem_II_stall : 1'bz;
+  assign msrss_en_d=((break_jump1&~break_exceptn)) ? (jump1Type==5'b11001 || jump1_taken) && has_some && ~mem_II_stall : 1'bz;
   assign msrss_en_d=(break_exceptn) ? has_some & ~mem_II_stall : 1'bz;
-  assign msrss_en_d=(~break_jump0 & ~break_jump1 & ~break_exceptn) ? 1'b1 : 1'bz;
+  assign msrss_en_d=(~(break_jump0&~break_exceptn) & ~(break_jump1&~break_exceptn) & ~break_exceptn) ? 1'b1 : 1'bz;
   assign msrss_data_d=(break_exceptn) ? {1'b0,attr[0],attr[1],is_after_spec,attr[3],bbaseIP[62:53],bbaseIP[50:46],bbaseIP[43],breakIP,1'b0} : 65'bz;
-  assign msrss_data_d=(~break_exceptn && (break_jump0&jump0_taken || break_jump1&jump1_taken) && has_some) ? 
+  assign msrss_data_d=(~break_exceptn && ((break_jump0&~break_exceptn)&jump0_taken || (break_jump1&~break_exceptn)&jump1_taken) && has_some) ? 
     {1'b0,attr[0],attr[1],is_after_spec,attr[3],bbaseIP[62:53],bbaseIP[50:46],bbaseIP[43],breakIP,1'b0} : 65'bz;
-  assign msrss_data_d=(~break_exceptn & ~(break_jump0&jump0_taken || break_jump1&jump1_taken)) ? {48'b0,GORQ_en_reg ? GORQ_data_reg : {6'b0,excpt_fpu}} : 65'bz;
+  assign msrss_data_d=(~break_exceptn & ~((break_jump0&~break_exceptn)&jump0_taken || (break_jump1&~break_exceptn)&jump1_taken)) ? {48'b0,GORQ_en_reg ? GORQ_data_reg : {6'b0,excpt_fpu}} : 65'bz;
   assign baseIP_d=(jump0_in & jump0_taken &~break_exceptn &~break_replay &~break_replayS) ? {jump0BND,jump0IP} : 6_3'bz;
   assign baseIP_d=(jump1_in & jump1_taken &~break_exceptn &~break_replay &~break_replayS) ? {jump1BND,jump1IP} : 63'bz;
   assign baseIP_d=(break_exceptn) ? {excpt_handlerIP[62:11],excpt_code[5:0],5'b0} : 63'bz;
-  assign baseIP_d=break_replay || ~(jump0_in&jump0_taken) & ~(jump1_in&jump1_taken) & (break_jump0||
-      break_jump1) ? {baseIP[62:43],breakIP} : 63'bz;
+  assign baseIP_d=break_replay || ~(jump0_in&jump0_taken) & ~(jump1_in&jump1_taken) & ((break_jump0&~break_exceptn)||
+      (break_jump1&~break_exceptn)) ? {baseIP[62:43],breakIP} : 63'bz;
   assign baseIP_d=break_prejmp_ntick & ~(jump0_in&jump0_taken) & ~(jump1_in&jump1_taken) 
-      & ~break_jump0 & ~break_jump1 & ~break_exceptn & ~break_replay ? baseIP : 63'bz;
+      & ~(break_jump0&~break_exceptn) & ~(break_jump1&~break_exceptn) & ~break_exceptn & ~break_replay ? baseIP : 63'bz;
   assign baseIP_d[7:0]=break_prejmp_tick & ~(jump0_in&jump0_taken) & ~(jump1_in&jump1_taken)  
-      & ~break_jump0 & ~break_jump1 & ~break_exceptn & ~break_replay & !break_replayS ? baseIP[7:0] : 8'bz;
+      & ~(break_jump0&~break_exceptn) & ~(break_jump1&~break_exceptn) & ~break_exceptn & ~break_replay & !break_replayS ? baseIP[7:0] : 8'bz;
   assign baseIP_d[62:43]=break_prejmp_tick & ~(jump0_in&jump0_taken) & ~(jump1_in&jump1_taken)  
-      & ~break_jump0 & ~break_jump1 & ~break_exceptn & ~break_replay & !break_replayS ? baseIP[62:43] : 20'bz;
+      & ~(break_jump0&~break_exceptn) & ~(break_jump1&~break_exceptn) & ~break_exceptn & ~break_replay & !break_replayS ? baseIP[62:43] : 20'bz;
 
   assign jump0_taken=(jump0Pos==4'hf) ? 1'b0 : 1'bz;
   assign jump0_flags=(jump0Pos==4'hf) ? 6'b0 : 6'bz;
@@ -1086,7 +1090,7 @@ module cntrl_find_outcome(
   assign jump1_flags=(jump1Pos==4'hf) ? 6'b0 : 6'bz;
 
   assign break_pending=(has_break) ? 1'bz : 1'b0;
-  assign break_exceptn=(has_break) ? 1'bz : 1'b0;
+  assign break_exceptn=(has_break) ? 1'bz : IRQ_enX_reg||(break_jump0&jump0_attr[`attr_vec]||break_jump1&jump1_attr[`attr_vec]);
   assign break_replay=(has_break) ? 1'bz : 1'b0;
   assign break_replayS=(has_break) ? 1'bz : 1'b0;
   assign break_jump0=(has_break) ? 1'bz : 1'b0;
@@ -1568,15 +1572,15 @@ module cntrl_find_outcome(
 	  except_attr<=except_attr_d;
 	  //except_both<=except_both_d;
 	  except<=except_d;
-          except_due_jump<=break_jump0|break_jump1 && except_d;
+          except_due_jump<=(break_jump0&~break_exceptn)|(break_jump1&~break_exceptn) && except_d;
           if (dotire_d && jump0_in) except_jump_ght<=jump1_in ? {jump1GHT[6:0],jump1_taken} : {jump0GHT[6:0],jump0_taken};
           if (dotire_d && jump0_in) except_jump_ght2<=jump1_in ? {jump1GHT2[14:0],~jump1Val} : {jump0GHT2[14:0],~jump0Val};
           except_set_instr_flag<=break_replay&!break_replayS;
-          except_jmp_mask_en<=(break_jump0 | break_jump1) && except_d;
-          except_jmp_mask<=break_jump0 ? jump0JMask : jump1JMask;
+          except_jmp_mask_en<=((break_jump0&~break_exceptn) | (break_jump1&~break_exceptn)) && except_d;
+          except_jmp_mask<=(break_jump0&~break_exceptn) ? jump0JMask : jump1JMask;
 
           GORQ_en_reg<=GORQ;
-          GORQ_enX_reg<=GORQ_en_reg && ~bread_jump0 && ~break_jump1 && ~break_exceptn;
+          GORQ_enX_reg<=GORQ_en_reg && ~break_jump0 && ~break_jump1 && ~break_exceptn;
           if (GORQ) GORQ_data_reg<=GORQ_data;
           
           if (!tire_thread_reg) oldbrk<={bbaseIP[62:43],breakIP};
