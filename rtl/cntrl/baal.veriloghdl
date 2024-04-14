@@ -922,8 +922,8 @@ module cntrl_find_outcome(
       assign from_IP=(tk_after[k] & jump0Pred) ? {jump0BND,jump0IP[42:0]} : 63'bz;
       assign from_IP=(tk_after[k] & jump1Pred) ? {jump1BND,jump1IP[42:0]} : 63'bz;
 
-      assign breakIP=break_[k] ? nextIP[k][42:0] : 43'bz;
-      assign bbaseIP=break_[k] ? nextIP[k][62:43] : 20'bz;
+      assign breakIP=break_[k]&~IRQ_enX_reg || IRQ_enX_reg&&k==0 ? nextIP[k][42:0] : 43'bz;
+      assign bbaseIP=break_[k]&~IRQ_enX_reg || IRQ_enX_reg&&k==0 ? nextIP[k][62:43] : 20'bz;
 
       assign lastIP=break_[k] ? last_instr[k] : 1'bz;
       assign is_after_spec=break_[k] ? rd_after_spec[k] : 1'bz;
@@ -949,8 +949,8 @@ module cntrl_find_outcome(
   assign jupd0_IP=(jump0Pos==4'hf) ? 20'b0 : 20'bz;
   assign jupd1_IP=(jump1Pos==4'hf) ? 20'b0 : 20'bz;
   
-  assign breakIP=has_break ? 43'bz : 43'b0;
-  assign bbaseIP=has_break ? 20'bz : 20'b0;
+  assign breakIP=has_break && ~IRQ_enX_reg ? 43'bz : 43'b0;
+  assign bbaseIP=has_break && ~IRQ_enX_reg ? 20'bz : 20'b0;
   assign excpt_code=has_break && ~GORQ_enX_reg ? 8'bz : 8'b0;
   assign lastIP=has_break ? 1'bz : 1'b0;
       
