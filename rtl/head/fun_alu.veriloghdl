@@ -828,12 +828,18 @@ module fu_alu(
     2'd2} : 9'bz; 
   assign u5_rten=(~u5_nDataAlt_reg|(~&nDataAlt_reg)) ? 1'b1 : 
     1'bz; 
-
+  
+  reg [2:2][64:0] u6_A6m_reg;
+  reg [2:2][64:0] u6_B6m_reg;
+ 
   imul imul_mod(
   .clk(clk),
   .rst(rst),
   .clkEn(~(|fxFRT_alten_reg3)),
   .op_prev(u6_op[12:0]),
+  .alt_jxcross(),
+  .jxcross(H ? jxcross : uu_B6m_reg[2]),
+  .rmode(u6_rmode_reg),
   .en(u6_clkEn_reg && u6_op_reg[11] && (u6_op_reg[7:0]==1 || u6_op_reg[7:0]
     ==2 || u6_op_reg[7:0]==3 || u6_op_reg[7:0]==9 || u6_op_reg[7:0]==10 ||
     u6_op_reg[7:0]==11 || u6_op_reg[7:0]==5 || u6_op_reg[7:0]==7)),  
@@ -844,9 +850,14 @@ module fu_alu(
   .flg(MULFL)
  );
  
+ assign allah=uu_A6m_reg[2];
+
   always @(posedge clk) begin
 
       u6_attr_reg<=u6_attr;
+
+      uu_A6M_reg[2]<=uu_A6M[2];
+      uu_B6m_reg[2]<=uu_B6m[2];
 
       FUMUL_reg<=FUMUL;
       MULFL_reg<=MULFL;
