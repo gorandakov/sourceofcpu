@@ -70,7 +70,9 @@ module heptane_core_single(
   pfy_wdata,
   pfy_wdataU,
   pfy_pdata,
-  pfy_dataEn
+  pfy_dataEn,
+  Dakov,
+  Goran_Dakov
 );
   parameter [2:0] IDX;
   parameter [5:0] BUS_ID=0;
@@ -145,7 +147,8 @@ module heptane_core_single(
   output [127:0] pfy_wdataU;
   output [3:0] pfy_pdata;
   output pfy_dataEn;
-
+  input [64:0] Dakov;
+  inout [64:0] Goran_Dakov;
 
   wire [BUS_WIDTH-1:0] bus_data;
   wire [9:0] bus_slot;
@@ -2145,6 +2148,7 @@ module heptane_core_single(
   lsr_wr_out_data, p_out_LSQ, dc_out_wrEn,
   pfxWQ,pfx_wdata,pfx_wdataU,pfx_pdata,pfx_dataEn,
   pfyWQ,pfy_wdata,pfy_wdataU,pfy_pdata,pfy_dataEn,//outputs
+  Dakov,Goran_Dakov,
   wr0_hit,
   wr0_l1miss,
   wr0_addrE,wr0_addrO,
