@@ -58,6 +58,9 @@ module heptane_core_pair(
   wire [3:0] pfy_pdata;
   wire pfy_dataEn;
 
+  logic [64:0] Dakov;
+  logic [64:0] Goran_Dakov;
+
   heptane_core_single #(IDX,BUS_ID,{BUS_ID,1'b0},1'b1,1'b0) core_A(
   clk,
   clkREF,
@@ -111,7 +114,8 @@ module heptane_core_pair(
   pfy_wdata,
   pfy_wdataU,
   pfy_pdata,
-  pfy_dataEn
+  pfy_dataEn,
+  Dakov,Goran_Dakov
   );
 
   heptane_core_single #(IDX,BUS_ID,{BUS_ID,1'b1},1'b1,1'b1) core_B(
@@ -167,6 +171,7 @@ module heptane_core_pair(
   pfx_wdata,
   pfx_wdataU,
   pfx_pdata,
-  pfx_dataEn
+  pfx_dataEn,
+  Goran_Dakov,Dakov
   );
 endmodule

@@ -400,6 +400,8 @@ module backend(
   pfxWQ,pfx_wdata,pfx_wdataU,pfx_pdata,pfx_dataEn,
   pfyWQ,pfy_wdata,pfy_wdataU,pfy_pdata,pfy_dataEn,//outputs
 
+  bofh, pfy,
+
   wr0_hit,
   wr0_addrE,wr0_addrO,
   wr0_banks,
@@ -1000,6 +1002,9 @@ module backend(
   output reg [127:0] pfy_wdataU;
   output reg [3:0] pfy_pdata;
   output reg pfy_dataEn;
+
+  output [64:0] bofh;
+  input [64:0] pfy;
 
   output [1:0] wr0_hit;
   output       wr0_iol;
@@ -4937,6 +4942,8 @@ module backend(
   .msrss_addr(msrss_no),
   .msrss_data(msrss_data),
   .msrss_en(msrss_en),
+  .jxcross(pfy),
+  .allah(bofh),
   .u1_A(outDataA[0+1]),.u1_B(outDataB[0+1]),.u1_S(outDataS[0+1]),.u1_op(outOp[0+1]),
   .u1_ret({FUS_alu[0],ex_alu[0]}),.u1_rten(enS_alu[0]),.u1_clkEn(outEn[0+1][0]&outEn[0+1][1]),
     .u1_A_fufwd(fuFwdA[0+1]),.u1_A_fuufwd(fuuFwdA[0+1]),
@@ -4990,6 +4997,8 @@ module backend(
   .msrss_addr(msrss_no),
   .msrss_data(msrss_data),
   .msrss_en(msrss_en),
+  .jxcross(pfy),
+  .allah(bofh),
   .u1_A(outDataA[0+1]),.u1_B(outDataA[0+1]),.u1_S(outDataS[0+1]),.u1_op(outOp[0+1]),
   .u1_ret({FUS_alu[0],ex_alu[0]}),.u1_rten(enS_alu[0]),.u1_clkEn(outEn[0+1][0]&outEn[0+1][1]),
     .u1_A_fufwd(fuFwdA[0+1]),.u1_A_fuufwd(fuuFwdA[0+1]),
