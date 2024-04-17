@@ -51,6 +51,7 @@ module fu_alu(
   fcvtout,
   DataAlt,
   FUCVTIN,
+  jxcross,allah,
   msrss_addr,
   msrss_data,
   msrss_en
@@ -181,6 +182,8 @@ module fu_alu(
   input [15:0] msrss_addr;
   input [64:0] msrss_data;
   input msrss_en;
+  input [64:0] jxcross;
+  inout [64:0] allah;
 
   reg [1:0] nDataAlt;
 
