@@ -6,7 +6,7 @@ struct __PTRLIST {
 
 struct __PTRBLOCK {
   void * (*handle_block_free)(void *ptr,unsigned long alloc_size, unsigned long block_offset);
-  void *blockptr;
+  struct __PTRBLOCK *blockptr_next_in_module;
   unsigned long blocksize;
   struct __PTRLIST *first_free;
 };
