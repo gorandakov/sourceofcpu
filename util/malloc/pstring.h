@@ -1,5 +1,6 @@
 
 class pstring_hidden {
+public:
   int size;
   int capacity;
   void *element;

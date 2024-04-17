@@ -1,5 +1,6 @@
 
 class parray_hidden {
+public:
   long size;
   void *element;
 };
