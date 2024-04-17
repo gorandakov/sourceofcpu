@@ -155,6 +155,7 @@ module smallInstr_decoder(
 //  wire _splitinsn;
   wire [7:0] opcode_main;
   
+  wire isGA;
 
   reg [31:0] fpu_reor;
 
@@ -412,6 +413,8 @@ module smallInstr_decoder(
   assign isCLeave=opcode_main==8'd235 || opcode_main==8'd236 || opcode_main==8'd238;  
   //237 and 239 unused so far
   assign isPtrBump_other_domain=opcode_main==8'hf7 && magic[1:0]==2'b01 && LARGE_CORE;
+
+  assign isGA=opcode_main==8'd237;
 
   assign isBasicFPUScalarA=opcode_main[7:4]==4'hf && ~&opcode_main[2:0] && instr[13:12]==2'b0;
   assign isBasicFPUScalarB=opcode_main[7:4]==4'hf && ~&opcode_main[2:0] && instr[13:12]==2'b1;
@@ -1745,7 +1748,7 @@ module smallInstr_decoder(
            end
       end
 	  
-      trien[31]=magic[0] & (isJalR|isCexALU);
+      trien[31]=magic[0] & (isJalR|isCexALU|isGA);
       if (isCexALU) begin
           pport[31]=PORT_ALU;
 	  if (instr[10]) pport[31]=PORT_SHIFT;
@@ -1782,6 +1785,23 @@ module smallInstr_decoder(
               prA[31]=instr[22:18];
 	      prT[31]=instr[47:43];
 	  end
+      end else if (isGA) begin
+          pport[31]=PORT_MUL;
+          prA_use[31]=1'b1;
+          prB_use[31]=1'b1;
+          prT_use[31]=1'b1;
+          puseRs[31]=1'b1;
+          prAlloc[31]=1'b1;
+          puseBConst[31]=instr[31];
+          if (magic[1:0])==2'b01) pconstant[31]={{51{instr[30]}},instr[30:18]};
+          prA[31]={instr[17],instr[11:8]};
+          prT[31]={instr[16],instr[15:12]};
+          prB[31]=instr[22:18];
+          pflags_write[31]=1'b0;
+          poperation[31][7:0]=0;
+          poperation[31][12]=1'b1;
+          poperation[31][11]=1'b1;
+          prmdoe[31]=0;
       end else if (opcode_main==8'd213) begin//shladd
           pport[31]=PORT_ALU;
           prA_use[31]=1'b1;
