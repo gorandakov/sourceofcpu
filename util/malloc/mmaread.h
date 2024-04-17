@@ -1,7 +1,7 @@
 
 struct __PTRHDR {
   void *ptr_block;
-  unsigned long trailing_size;
+  unsigned long block_offset;
   unsigned long alloc_size;
   unsigned long permissions_and_cookie;
 };
