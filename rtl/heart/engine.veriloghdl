@@ -3065,6 +3065,7 @@ module backend(
     .read0_oe(~retA[0]|~rs_rA_use[0]),.read0_match(gazumpAG[0]),
   .read1_addr(regA[1]),.read1_data(dataA[1]),
     .read1_oe(~retA[1]|~rs_rA_use[1]),.read1_match(gazumpAG[1]),
+`ifnded embedded
   .read2_addr(regA[2]),.read2_data(dataA[2]),
     .read2_oe(~retA[2]|~rs_rA_use[2]),.read2_match(gazumpAG[2]),
   .read3_addr(regA[3]),.read3_data(dataA[3]),
@@ -3079,66 +3080,84 @@ module backend(
     .read7_oe(~retA[7]|~rs_rA_use[7]),.read7_match(gazumpAG[7]),
   .read8_addr(regA[8]),.read8_data(dataA[8]),
     .read8_oe(~retA[8]|~rs_rA_use[8]),.read8_match(gazumpAG[8]),
-
+`endif
   .read0_addr_rrf(rs0i0_rA_reg),
   .read1_addr_rrf(rs0i1_rA_reg),
   .read2_addr_rrf(rs0i2_rA_reg),
+`ifndef embeddef
   .read3_addr_rrf(rs1i0_rA_reg),
   .read4_addr_rrf(rs1i1_rA_reg),
   .read5_addr_rrf(rs1i2_rA_reg),
   .read6_addr_rrf(rs2i0_rA_reg),
   .read7_addr_rrf(rs2i1_rA_reg),
   .read8_addr_rrf(rs2i2_rA_reg),
+`endif
 
   .read0_constEn(~rs_rA_use[0]),
   .read1_constEn(~rs_rA_use[1]),
   .read2_constEn(~rs_rA_use[2]),
+`ifnded embedded
   .read3_constEn(~rs_rA_use[3]),
   .read4_constEn(~rs_rA_use[4]),
   .read5_constEn(~rs_rA_use[5]),
   .read6_constEn(~rs_rA_use[6]),
   .read7_constEn(~rs_rA_use[7]),
   .read8_constEn(~rs_rA_use[8]),
+`endif
 
   .read0_const(rs_const_new[0]&{65{rs_useAConst[0]}}),
   .read1_const(rs_const[1]&{65{rs_useAConst[1]}}),
   .read2_const(rs_const[2]&{65{rs_useAConst[2]}}),
+`ifndef embedded
   .read3_const(rs_const_new[3]&{65{rs_useAConst[3]}}),
   .read4_const(rs_const[4]&{65{rs_useAConst[4]}}),
   .read5_const(rs_const[5]&{65{rs_useAConst[5]}}),
   .read6_const(rs_const_new[6]&{65{rs_useAConst[6]}}),
   .read7_const(rs_const[7]&{65{rs_useAConst[7]}}),
   .read8_const(rs_const[8]&{65{rs_useAConst[8]}}),
+`endif
 
   .write0_addr_rrf(tire0_rT),.write0_wen_rrf(tire0_enG),
   .write1_addr_rrf(tire1_rT),.write1_wen_rrf(tire1_enG),
   .write2_addr_rrf(tire2_rT),.write2_wen_rrf(tire2_enG),
+`ifndef embedded
   .write3_addr_rrf(tire3_rT),.write3_wen_rrf(tire3_enG),
   .write4_addr_rrf(tire4_rT),.write4_wen_rrf(tire4_enG),
   .write5_addr_rrf(tire5_rT),.write5_wen_rrf(tire5_enG),
   .write6_addr_rrf(tire6_rT),.write6_wen_rrf(tire6_enG),
   .write7_addr_rrf(tire7_rT),.write7_wen_rrf(tire7_enG),
   .write8_addr_rrf(tire8_rT),.write8_wen_rrf(tire8_enG),
+`endif
+
   .tireRead0_addr(tire0_rF),
   .tireRead1_addr(tire1_rF),
   .tireRead2_addr(tire2_rF),
+`ifndef embedded
   .tireRead3_addr(tire3_rF),
   .tireRead4_addr(tire4_rF),
   .tireRead5_addr(tire5_rF),
   .tireRead6_addr(tire6_rF),
   .tireRead7_addr(tire7_rF),
   .tireRead8_addr(tire8_rF),
+`endif
 
   .write0_addr_reg(FUreg_reg[0]),.write0_data_reg(FU_reg[0]),.write0_wen_reg(FUwen_reg[0] & FU0Hit),
+`ifnded embedded
   .write1_addr_reg(FUreg_reg[1]),.write1_data_reg(FU_reg[1]),.write1_wen_reg(FUwen_reg[1] & FU1Hit),
   .write2_addr_reg(FUreg_reg[2]),.write2_data_reg(FU_reg[2]),.write2_wen_reg(FUwen_reg[2] & FU2Hit),
+`endif
   .write3_addr_reg(FUreg_reg[3]),.write3_data_reg(FU_reg[3]),.write3_wen_reg(FUwen_reg[3] & FU3Hit),
   .write4_addr_reg(FUreg_reg[4]),.write4_data_reg(FU_reg[4]),.write4_wen_reg(FUwen_reg[4]),
+`ifndef embedded
   .write5_addr_reg(FUreg_reg[5]),.write5_data_reg(FU_reg[5]),.write5_wen_reg(FUwen_reg[5]),
   .write6_addr_reg(FUreg_reg[6]),.write6_data_reg(FU_reg[6]),.write6_wen_reg(FUwen_reg[6]),
-  .write7_addr_reg(FUreg_reg[7]),.write7_data_reg(FU_reg[7]),.write7_wen_reg(FUwen_reg[7]),
+`endif
+  .write7_addr_reg(FUreg_reg[7]),.write7_data_reg(FU_reg[7]),.write7_wen_reg(FUwen_reg[7])
+`ifnded embedded
+  ,
   .write8_addr_reg(FUreg_reg[8]),.write8_data_reg(FU_reg[8]),.write8_wen_reg(FUwen_reg[8]),
   .write9_addr_reg(FUreg_reg[9]),.write9_data_reg(FU_reg[9]),.write9_wen_reg(FUwen_reg[9])
+`endif
   );
 
 
@@ -3149,23 +3168,32 @@ module backend(
   .read0_addr(regAF[0]),.read0_constEn(~rs_rA_useF[0]),.read0_oe(~retAF[0]|~rs_rA_useF[0]),.read0_match(gazumpAV[0]),
   .read1_addr(regAF[1]),.read1_constEn(~rs_rA_useF[1]),.read1_oe(~retAF[1]|~rs_rA_useF[1]),.read1_match(gazumpAV[1]),
   .read2_addr(regAF[2]),.read2_constEn(~rs_rA_useF[2]),.read2_oe(~retAF[2]|~rs_rA_useF[2]),.read2_match(gazumpAV[2]),
+`ifndef embedded
   .read3_addr(regAF[3]),.read3_constEn(~rs_rA_useF[3]),.read3_oe(~retAF[3]|~rs_rA_useF[3]),.read3_match(gazumpAV[3]),
   .read4_addr(regAF[4]),.read4_constEn(~rs_rA_useF[4]),.read4_oe(~retAF[4]|~rs_rA_useF[4]),.read4_match(gazumpAV[4]),
   .read5_addr(regAF[5]),.read5_constEn(~rs_rA_useF[5]),.read5_oe(~retAF[5]|~rs_rA_useF[5]),.read5_match(gazumpAV[5]),
   .read6_addr(regAF[6]),.read6_constEn(~rs_rA_useF[6]),.read6_oe(~retAF[6]|~rs_rA_useF[6]),.read6_match(gazumpAV[6]),
   .read7_addr(regAF[7]),.read7_constEn(~rs_rA_useF[7]),.read7_oe(~retAF[7]|~rs_rA_useF[7]),.read7_match(gazumpAV[7]),
   .read8_addr(regAF[8]),.read8_constEn(~rs_rA_useF[8]),.read8_oe(~retAF[8]|~rs_rA_useF[8]),.read8_match(gazumpAV[8]),
+`endif
 
   .write0_addr_reg(FUreg_reg[0]),.write0_wen_reg(FUwen_reg[0] & FU0Hit),
+`ifndef embedded
   .write1_addr_reg(FUreg_reg[1]),.write1_wen_reg(FUwen_reg[1] & FU1Hit),
   .write2_addr_reg(FUreg_reg[2]),.write2_wen_reg(FUwen_reg[2] & FU2Hit),
+`endif
   .write3_addr_reg(FUreg_reg[3]),.write3_wen_reg(FUwen_reg[3] & FU3Hit),
   .write4_addr_reg(FUreg_reg2[4]),.write4_wen_reg(FUwen_reg2[4]),
+`ifndef embedded
   .write5_addr_reg(FUreg_reg2[5]),.write5_wen_reg(FUwen_reg2[5]),
   .write6_addr_reg(FUreg_reg2[6]),.write6_wen_reg(FUwen_reg2[6]),
-  .write7_addr_reg(FUreg_reg2[7]),.write7_wen_reg(FUwen_reg2[7]),
+`endif
+  .write7_addr_reg(FUreg_reg2[7]),.write7_wen_reg(FUwen_reg2[7])
+`ifndef embedded
+  ,
   .write8_addr_reg(FUreg_reg2[8]),.write8_wen_reg(FUwen_reg2[8]),
   .write9_addr_reg(FUreg_reg2[9]),.write9_wen_reg(FUwen_reg2[9])
+`endif
   );
   
   regfile_get_gazump GzFA(
@@ -3175,23 +3203,32 @@ module backend(
   .read0_addr(regAF[0]),.read0_constEn(~rs_rA_useF[0]),.read0_oe(~retAF[0]|~rs_rA_useF[0]),.read0_match(gazumpFA[0]),
   .read1_addr(regAF[1]),.read1_constEn(~rs_rA_useF[1]),.read1_oe(~retAF[1]|~rs_rA_useF[1]),.read1_match(gazumpFA[1]),
   .read2_addr(regAF[2]),.read2_constEn(~rs_rA_useF[2]),.read2_oe(~retAF[2]|~rs_rA_useF[2]),.read2_match(gazumpFA[2]),
+`ifndef embedded
   .read3_addr(regAF[3]),.read3_constEn(~rs_rA_useF[3]),.read3_oe(~retAF[3]|~rs_rA_useF[3]),.read3_match(gazumpFA[3]),
   .read4_addr(regAF[4]),.read4_constEn(~rs_rA_useF[4]),.read4_oe(~retAF[4]|~rs_rA_useF[4]),.read4_match(gazumpFA[4]),
   .read5_addr(regAF[5]),.read5_constEn(~rs_rA_useF[5]),.read5_oe(~retAF[5]|~rs_rA_useF[5]),.read5_match(gazumpFA[5]),
   .read6_addr(regAF[6]),.read6_constEn(~rs_rA_useF[6]),.read6_oe(~retAF[6]|~rs_rA_useF[6]),.read6_match(gazumpFA[6]),
   .read7_addr(regAF[7]),.read7_constEn(~rs_rA_useF[7]),.read7_oe(~retAF[7]|~rs_rA_useF[7]),.read7_match(gazumpFA[7]),
   .read8_addr(regAF[8]),.read8_constEn(~rs_rA_useF[8]),.read8_oe(~retAF[8]|~rs_rA_useF[8]),.read8_match(gazumpFA[8]),
+`endif
 
   .write0_addr_reg(FUreg_reg[0]),.write0_wen_reg(FUwen_reg[0] & FU0Hit),
+`ifndef embedded
   .write1_addr_reg(FUreg_reg[1]),.write1_wen_reg(FUwen_reg[1] & FU1Hit),
   .write2_addr_reg(FUreg_reg[2]),.write2_wen_reg(FUwen_reg[2] & FU2Hit),
+`endif
   .write3_addr_reg(FUreg_reg[3]),.write3_wen_reg(FUwen_reg[3] & FU3Hit),
   .write4_addr_reg(FUreg_reg2[4]),.write4_wen_reg(FUwen_reg2[4]),
+`ifndef embedded
   .write5_addr_reg(FUreg_reg2[5]),.write5_wen_reg(FUwen_reg2[5]),
   .write6_addr_reg(FUreg_reg2[6]),.write6_wen_reg(FUwen_reg2[6]),
-  .write7_addr_reg(FUreg_reg3[7]),.write7_wen_reg(FUwen_reg3[7]),
+`endif
+  .write7_addr_reg(FUreg_reg3[7]),.write7_wen_reg(FUwen_reg3[7])
+`ifndef embedded
+  ,
   .write8_addr_reg(FUreg_reg3[8]),.write8_wen_reg(FUwen_reg3[8]),
   .write9_addr_reg(FUreg_reg3[9]),.write9_wen_reg(FUwen_reg3[9])
+`endif
   );
   
 
@@ -3206,6 +3243,7 @@ module backend(
     .read1_oe(~isAF[1] & ~isAV[1]),
   .read2_addr(regA[2]),.read2_data(inflA[2]),
     .read2_oe(~isAF[2] & ~isAV[2]),
+`ifndef embedded
   .read3_addr(regA[3]),.read3_data(inflA[3]),
     .read3_oe(~isAF[3] & ~isAV[3]),
   .read4_addr(regA[4]),.read4_data(inflA[4]),
@@ -3218,37 +3256,48 @@ module backend(
     .read7_oe(~isAF[7] & ~isAV[7]),
   .read8_addr(regA[8]),.read8_data(inflA[8]),
     .read8_oe(~isAF[8] & ~isAV[8]),
+`endif
 
   .read0_constEn(~rs_rA_use[0]&~rs_rA_useF[0]||rs_rA_use[0]&retA[0]||rs_rA_useF[0]&retAF[0]),
   .read1_constEn(~rs_rA_use[1]&~rs_rA_useF[1]||rs_rA_use[1]&retA[1]||rs_rA_useF[1]&retAF[1]),
   .read2_constEn(~rs_rA_use[2]&~rs_rA_useF[2]||rs_rA_use[2]&retA[2]||rs_rA_useF[2]&retAF[2]),
+`ifndef embedded
   .read3_constEn(~rs_rA_use[3]&~rs_rA_useF[3]||rs_rA_use[3]&retA[3]||rs_rA_useF[3]&retAF[3]),
   .read4_constEn(~rs_rA_use[4]&~rs_rA_useF[4]||rs_rA_use[4]&retA[4]||rs_rA_useF[4]&retAF[4]),
   .read5_constEn(~rs_rA_use[5]&~rs_rA_useF[5]||rs_rA_use[5]&retA[5]||rs_rA_useF[5]&retAF[5]),
   .read6_constEn(~rs_rA_use[6]&~rs_rA_useF[6]||rs_rA_use[6]&retA[6]||rs_rA_useF[6]&retAF[6]),
   .read7_constEn(~rs_rA_use[7]&~rs_rA_useF[7]||rs_rA_use[7]&retA[7]||rs_rA_useF[7]&retAF[7]),
   .read8_constEn(~rs_rA_use[8]&~rs_rA_useF[8]||rs_rA_use[8]&retA[8]||rs_rA_useF[8]&retAF[8]),
-
+`endif
 
   .write0_addr_reg(FUreg_reg[0]),.write0_wen_reg(FUwen_reg[0] & FU0Hit),
+`ifndef embedded
   .write1_addr_reg(FUreg_reg[1]),.write1_wen_reg(FUwen_reg[1] & FU1Hit),
   .write2_addr_reg(FUreg_reg[2]),.write2_wen_reg(FUwen_reg[2] & FU2Hit),
+`endif
   .write3_addr_reg(FUreg_reg[3]),.write3_wen_reg(FUwen_reg[3] & FU3Hit),
   .write4_addr_reg(FUreg_reg[4]),.write4_wen_reg(FUwen_reg[4]),
+`ifndef embedded
   .write5_addr_reg(FUreg_reg[5]),.write5_wen_reg(FUwen_reg[5]),
   .write6_addr_reg(FUreg_reg[6]),.write6_wen_reg(FUwen_reg[6]),
+`endif
   .write7_addr_reg(FUreg_reg[7]),.write7_wen_reg(FUwen_reg[7]),
+`ifndef embedded
   .write8_addr_reg(FUreg_reg[8]),.write8_wen_reg(FUwen_reg[8]),
   .write9_addr_reg(FUreg_reg[9]),.write9_wen_reg(FUwen_reg[9]),
+`endif
   .newAddr0(clrR_reg[0][8:4]),.newEn0(clr_reg[0]),
   .newAddr1(clrR_reg[1][8:4]),.newEn1(clr_reg[1]),
-  .newAddr2(clrR_reg[2][8:4]),.newEn2(clr_reg[2]),
+  .newAddr2(clrR_reg[2][8:4]),.newEn2(clr_reg[2])
+`ifndef embedded
+  ,
   .newAddr3(clrR_reg[3][8:4]),.newEn3(clr_reg[3]),
   .newAddr4(clrR_reg[4][8:4]),.newEn4(clr_reg[4]),
   .newAddr5(clrR_reg[5][8:4]),.newEn5(clr_reg[5]),
   .newAddr6(clrR_reg[6][8:4]),.newEn6(clr_reg[6]),
   .newAddr7(clrR_reg[7][8:4]),.newEn7(clr_reg[7]),
   .newAddr8(clrR_reg[8][8:4]),.newEn8(clr_reg[8])
+`endif
   );
 
   reginfl inflVA_mod(
@@ -3262,6 +3311,7 @@ module backend(
     .read1_oe(isAV[1]),
   .read2_addr(regAF[2]),.read2_data(inflA[2]),
     .read2_oe(isAV[2]),
+`ifndef embedded
   .read3_addr(regAF[3]),.read3_data(inflA[3]),
     .read3_oe(isAV[3]),
   .read4_addr(regAF[4]),.read4_data(inflA[4]),
@@ -3274,37 +3324,48 @@ module backend(
     .read7_oe(isAV[7]),
   .read8_addr(regAF[8]),.read8_data(inflA[8]),
     .read8_oe(isAV[8]),
+`endif
 
   .read0_constEn(~rs_rA_useF[0]||retAF[0]),
   .read1_constEn(~rs_rA_useF[1]||retAF[1]),
   .read2_constEn(~rs_rA_useF[2]||retAF[2]),
+`ifndef embedded
   .read3_constEn(~rs_rA_useF[3]||retAF[3]),
   .read4_constEn(~rs_rA_useF[4]||retAF[4]),
   .read5_constEn(~rs_rA_useF[5]||retAF[5]),
   .read6_constEn(~rs_rA_useF[6]||retAF[6]),
   .read7_constEn(~rs_rA_useF[7]||retAF[7]),
   .read8_constEn(~rs_rA_useF[8]||retAF[8]),
-
+`endif
 
   .write0_addr_reg(FUreg_reg[0]),.write0_wen_reg(FUwen_reg[0] & FU0Hit),
+`ifndef embedded
   .write1_addr_reg(FUreg_reg[1]),.write1_wen_reg(FUwen_reg[1] & FU1Hit),
   .write2_addr_reg(FUreg_reg[2]),.write2_wen_reg(FUwen_reg[2] & FU2Hit),
+`endif
   .write3_addr_reg(FUreg_reg[3]),.write3_wen_reg(FUwen_reg[3] & FU3Hit),
   .write4_addr_reg(FUreg_reg2[4]),.write4_wen_reg(FUwen_reg2[4]),
+`ifndef embedded
   .write5_addr_reg(FUreg_reg2[5]),.write5_wen_reg(FUwen_reg2[5]),
   .write6_addr_reg(FUreg_reg2[6]),.write6_wen_reg(FUwen_reg2[6]),
+`endif
   .write7_addr_reg(FUreg_reg2[7]),.write7_wen_reg(FUwen_reg2[7]),
+`ifndef embedded
   .write8_addr_reg(FUreg_reg2[8]),.write8_wen_reg(FUwen_reg2[8]),
   .write9_addr_reg(FUreg_reg2[9]),.write9_wen_reg(FUwen_reg2[9]),
+`endif
   .newAddr0(clrR_reg[0][8:4]),.newEn0(clr_reg[0]),
   .newAddr1(clrR_reg[1][8:4]),.newEn1(clr_reg[1]),
-  .newAddr2(clrR_reg[2][8:4]),.newEn2(clr_reg[2]),
+  .newAddr2(clrR_reg[2][8:4]),.newEn2(clr_reg[2])
+`ifndef embedded
+  ,
   .newAddr3(clrR_reg[3][8:4]),.newEn3(clr_reg[3]),
   .newAddr4(clrR_reg[4][8:4]),.newEn4(clr_reg[4]),
   .newAddr5(clrR_reg[5][8:4]),.newEn5(clr_reg[5]),
   .newAddr6(clrR_reg[6][8:4]),.newEn6(clr_reg[6]),
   .newAddr7(clrR_reg[7][8:4]),.newEn7(clr_reg[7]),
   .newAddr8(clrR_reg[8][8:4]),.newEn8(clr_reg[8])
+`endif
   );
 
   reginfl inflFA_mod(
@@ -3318,6 +3379,7 @@ module backend(
     .read1_oe(isAF[1]),
   .read2_addr(regAF[2]),.read2_data(inflA[2]),
     .read2_oe(isAF[2]),
+`ifndef embedded
   .read3_addr(regAF[3]),.read3_data(inflA[3]),
     .read3_oe(isAF[3]),
   .read4_addr(regAF[4]),.read4_data(inflA[4]),
@@ -3330,351 +3392,49 @@ module backend(
     .read7_oe(isAF[7]),
   .read8_addr(regAF[8]),.read8_data(inflA[8]),
     .read8_oe(isAF[8]),
+`endif
 
   .read0_constEn(~rs_rA_useF[0]||retAF[0]),
   .read1_constEn(~rs_rA_useF[1]||retAF[1]),
   .read2_constEn(~rs_rA_useF[2]||retAF[2]),
+`ifndef embedded
   .read3_constEn(~rs_rA_useF[3]||retAF[3]),
   .read4_constEn(~rs_rA_useF[4]||retAF[4]),
   .read5_constEn(~rs_rA_useF[5]||retAF[5]),
   .read6_constEn(~rs_rA_useF[6]||retAF[6]),
   .read7_constEn(~rs_rA_useF[7]||retAF[7]),
   .read8_constEn(~rs_rA_useF[8]||retAF[8]),
-
-
-  .write0_addr_reg(FUreg_reg[0]),.write0_wen_reg(FUwen_reg[0] & FU0Hit),
-  .write1_addr_reg(FUreg_reg[1]),.write1_wen_reg(FUwen_reg[1] & FU1Hit),
-  .write2_addr_reg(FUreg_reg[2]),.write2_wen_reg(FUwen_reg[2] & FU2Hit),
-  .write3_addr_reg(FUreg_reg[3]),.write3_wen_reg(FUwen_reg[3] & FU3Hit),
-  .write4_addr_reg(FUreg_reg2[4]),.write4_wen_reg(FUwen_reg2[4]),
-  .write5_addr_reg(FUreg_reg2[5]),.write5_wen_reg(FUwen_reg2[5]),
-  .write6_addr_reg(FUreg_reg2[6]),.write6_wen_reg(FUwen_reg2[6]),
-  .write7_addr_reg(FUreg_reg3[7]),.write7_wen_reg(FUwen_reg3[7]),
-  .write8_addr_reg(FUreg_reg3[8]),.write8_wen_reg(FUwen_reg3[8]),
-  .write9_addr_reg(FUreg_reg3[9]),.write9_wen_reg(FUwen_reg3[9]),
-  .newAddr0(clrR_reg[0][8:4]),.newEn0(clr_reg[0]),
-  .newAddr1(clrR_reg[1][8:4]),.newEn1(clr_reg[1]),
-  .newAddr2(clrR_reg[2][8:4]),.newEn2(clr_reg[2]),
-  .newAddr3(clrR_reg[3][8:4]),.newEn3(clr_reg[3]),
-  .newAddr4(clrR_reg[4][8:4]),.newEn4(clr_reg[4]),
-  .newAddr5(clrR_reg[5][8:4]),.newEn5(clr_reg[5]),
-  .newAddr6(clrR_reg[6][8:4]),.newEn6(clr_reg[6]),
-  .newAddr7(clrR_reg[7][8:4]),.newEn7(clr_reg[7]),
-  .newAddr8(clrR_reg[8][8:4]),.newEn8(clr_reg[8])
-  );
-`ifdef simulation
-  regfile #(DATA_WIDTH) regB_mod(
-  .clk(clk),
-  .clkREF(clkREF),
-  .clkREF2(clkREF2),
-  .clkREF3(clkREF3),
-  .clkREF4(clkREF4),
-  .clkREF5(clkREF5),
-  .rst(rst),
-  .read_clkEn(~doStall),
-  .tire_clkEn(1'b1),
-
-  .read0_addr(regB[0]),.read0_data(dataB[0]),
-    .read0_oe(~retB[0]|rs0i0_useBConst_reg|~rs_rB_use[0]),.read0_match(gazumpBG[0]),
-  .read1_addr(regB[1]),.read1_data(dataB[1]),
-    .read1_oe(~retB[1]|rs0i1_useBConst_reg|~rs_rB_use[1]),.read1_match(gazumpBG[1]),
-  .read2_addr(regB[2]),.read2_data(dataB[2]),
-    .read2_oe(~retB[2]|rs0i2_useBConst_reg|~rs_rB_use[2]),.read2_match(gazumpBG[2]),
-  .read3_addr(regB[3]),.read3_data(dataB[3]),
-    .read3_oe(~retB[3]|rs1i0_useBConst_reg|~rs_rB_use[3]),.read3_match(gazumpBG[3]),
-  .read4_addr(regB[4]),.read4_data(dataB[4]),
-    .read4_oe(~retB[4]|rs1i1_useBConst_reg|~rs_rB_use[4]),.read4_match(gazumpBG[4]),
-  .read5_addr(regB[5]),.read5_data(dataB[5]),
-    .read5_oe(~retB[5]|rs1i2_useBConst_reg|~rs_rB_use[5]),.read5_match(gazumpBG[5]),
-  .read6_addr(regB[6]),.read6_data(dataB[6]),
-    .read6_oe(~retB[6]|rs2i0_useBConst_reg|~rs_rB_use[6]),.read6_match(gazumpBG[6]),
-  .read7_addr(regB[7]),.read7_data(dataB[7]),
-    .read7_oe(~retB[7]|rs2i1_useBConst_reg|~rs_rB_use[7]),.read7_match(gazumpBG[7]),
-  .read8_addr(regB[8]),.read8_data(dataB[8]),
-    .read8_oe(~retB[8]|rs2i2_useBConst_reg|~rs_rB_use[8]),.read8_match(gazumpBG[8]),
-
-  .read0_addr_rrf(rs0i0_rB_reg),
-  .read1_addr_rrf(rs0i1_rB_reg),
-  .read2_addr_rrf(rs0i2_rB_reg),
-  .read3_addr_rrf(rs1i0_rB_reg),
-  .read4_addr_rrf(rs1i1_rB_reg),
-  .read5_addr_rrf(rs1i2_rB_reg),
-  .read6_addr_rrf(rs2i0_rB_reg),
-  .read7_addr_rrf(rs2i1_rB_reg),
-  .read8_addr_rrf(rs2i2_rB_reg),
-
-
-  .read0_constEn(rs0i0_useBConst_reg|~rs_rB_use[0]),
-  .read1_constEn(rs0i1_useBConst_reg|~rs_rB_use[1]),
-  .read2_constEn(rs0i2_useBConst_reg|~rs_rB_use[2]),
-  .read3_constEn(rs1i0_useBConst_reg|~rs_rB_use[3]),
-  .read4_constEn(rs1i1_useBConst_reg|~rs_rB_use[4]),
-  .read5_constEn(rs1i2_useBConst_reg|~rs_rB_use[5]),
-  .read6_constEn(rs2i0_useBConst_reg|~rs_rB_use[6]),
-  .read7_constEn(rs2i1_useBConst_reg|~rs_rB_use[7]),
-  .read8_constEn(rs2i2_useBConst_reg|~rs_rB_use[8]),
-
-  .read0_const(rs_const_new[0]&{65{rs_useBConst[0]}}),
-  .read1_const(rs_const_new[1]&{65{rs0i1_useBConst_reg}}),
-  .read2_const(rs_const_new[2]),
-  .read3_const(rs_const_new[3]&{65{rs_useBConst[3]}}),
-  .read4_const(rs_const_new[4]&{65{rs1i1_useBConst_reg}}),
-  .read5_const(rs_const_new[5]),
-  .read6_const(rs_const_new[6]&{65{rs_useBConst[6]}}),
-  .read7_const(rs_const_new[7]&{65{rs2i1_useBConst_reg}}),
-  .read8_const(rs_const_new[8]),
-
-  .write0_addr_rrf(tire0_rT),.write0_wen_rrf(tire0_enG),
-  .write1_addr_rrf(tire1_rT),.write1_wen_rrf(tire1_enG),
-  .write2_addr_rrf(tire2_rT),.write2_wen_rrf(tire2_enG),
-  .write3_addr_rrf(tire3_rT),.write3_wen_rrf(tire3_enG),
-  .write4_addr_rrf(tire4_rT),.write4_wen_rrf(tire4_enG),
-  .write5_addr_rrf(tire5_rT),.write5_wen_rrf(tire5_enG),
-  .write6_addr_rrf(tire6_rT),.write6_wen_rrf(tire6_enG),
-  .write7_addr_rrf(tire7_rT),.write7_wen_rrf(tire7_enG),
-  .write8_addr_rrf(tire8_rT),.write8_wen_rrf(tire8_enG),
-  .tireRead0_addr(tire0_rF),
-  .tireRead1_addr(tire1_rF),
-  .tireRead2_addr(tire2_rF),
-  .tireRead3_addr(tire3_rF),
-  .tireRead4_addr(tire4_rF),
-  .tireRead5_addr(tire5_rF),
-  .tireRead6_addr(tire6_rF),
-  .tireRead7_addr(tire7_rF),
-  .tireRead8_addr(tire8_rF),
-
-  .write0_addr_reg(FUreg_reg[0]),.write0_data_reg(FU_reg[0]),.write0_wen_reg(FUwen_reg[0] & FU0Hit),
-  .write1_addr_reg(FUreg_reg[1]),.write1_data_reg(FU_reg[1]),.write1_wen_reg(FUwen_reg[1] & FU1Hit),
-  .write2_addr_reg(FUreg_reg[2]),.write2_data_reg(FU_reg[2]),.write2_wen_reg(FUwen_reg[2] & FU2Hit),
-  .write3_addr_reg(FUreg_reg[3]),.write3_data_reg(FU_reg[3]),.write3_wen_reg(FUwen_reg[3] & FU3Hit),
-  .write4_addr_reg(FUreg_reg[4]),.write4_data_reg(FU_reg[4]),.write4_wen_reg(FUwen_reg[4]),
-  .write5_addr_reg(FUreg_reg[5]),.write5_data_reg(FU_reg[5]),.write5_wen_reg(FUwen_reg[5]),
-  .write6_addr_reg(FUreg_reg[6]),.write6_data_reg(FU_reg[6]),.write6_wen_reg(FUwen_reg[6]),
-  .write7_addr_reg(FUreg_reg[7]),.write7_data_reg(FU_reg[7]),.write7_wen_reg(FUwen_reg[7]),
-  .write8_addr_reg(FUreg_reg[8]),.write8_data_reg(FU_reg[8]),.write8_wen_reg(FUwen_reg[8]),
-  .write9_addr_reg(FUreg_reg[9]),.write9_data_reg(FU_reg[9]),.write9_wen_reg(FUwen_reg[9])
-  );
-
-
-  regfile_get_gazump GzVB(
-  .clk(clk),.rst(rst),
-  .read_clkEn(~doStall),
-  
-  .read0_addr(regBF[0]),.read0_constEn(~rs_rB_useF[0]),.read0_oe(~retBFW[0]|~rs_rB_useF[0]),.read0_match(gazumpBV[0]),
-  .read1_addr(regBF[1]),.read1_constEn(~rs_rB_useF[1]),.read1_oe(~retBF[1]|~rs_rB_useF[1]),.read1_match(gazumpBV[1]),
-  .read2_addr(regBF[2]),.read2_constEn(~rs_rB_useF[2]),.read2_oe(~retBF[2]|~rs_rB_useF[2]),.read2_match(gazumpBV[2]),
-  .read3_addr(regBF[3]),.read3_constEn(~rs_rB_useF[3]),.read3_oe(~retBF[3]|~rs_rB_useF[3]),.read3_match(gazumpBV[3]),
-  .read4_addr(regBF[4]),.read4_constEn(~rs_rB_useF[4]),.read4_oe(~retBF[4]|~rs_rB_useF[4]),.read4_match(gazumpBV[4]),
-  .read5_addr(regBF[5]),.read5_constEn(~rs_rB_useF[5]),.read5_oe(~retBF[5]|~rs_rB_useF[5]),.read5_match(gazumpBV[5]),
-  .read6_addr(regBF[6]),.read6_constEn(~rs_rB_useF[6]),.read6_oe(~retBF[6]|~rs_rB_useF[6]),.read6_match(gazumpBV[6]),
-  .read7_addr(regBF[7]),.read7_constEn(~rs_rB_useF[7]),.read7_oe(~retBF[7]|~rs_rB_useF[7]),.read7_match(gazumpBV[7]),
-  .read8_addr(regBF[8]),.read8_constEn(~rs_rB_useF[8]),.read8_oe(~retBF[8]|~rs_rB_useF[8]),.read8_match(gazumpBV[8]),
-
-  .write0_addr_reg(FUreg_reg[0]),.write0_wen_reg(FUwen_reg[0] & FU0Hit),
-  .write1_addr_reg(FUreg_reg[1]),.write1_wen_reg(FUwen_reg[1] & FU1Hit),
-  .write2_addr_reg(FUreg_reg[2]),.write2_wen_reg(FUwen_reg[2] & FU2Hit),
-  .write3_addr_reg(FUreg_reg[3]),.write3_wen_reg(FUwen_reg[3] & FU3Hit),
-  .write4_addr_reg(FUreg_reg2[4]),.write4_wen_reg(FUwen_reg2[4]),
-  .write5_addr_reg(FUreg_reg2[5]),.write5_wen_reg(FUwen_reg2[5]),
-  .write6_addr_reg(FUreg_reg2[6]),.write6_wen_reg(FUwen_reg2[6]),
-  .write7_addr_reg(FUreg_reg2[7]),.write7_wen_reg(FUwen_reg2[7]),
-  .write8_addr_reg(FUreg_reg2[8]),.write8_wen_reg(FUwen_reg2[8]),
-  .write9_addr_reg(FUreg_reg2[9]),.write9_wen_reg(FUwen_reg2[9])
-  );
-
-  regfile_get_gazump GzFB(
-  .clk(clk),.rst(rst),
-  .read_clkEn(~doStall),
-  
-  .read0_addr(regBF[0]),.read0_constEn(~rs_rB_useF[0]),.read0_oe(~retBF[0]|~rs_rB_useF[0]),.read0_match(gazumpFB[0]),
-  .read1_addr(regBF[1]),.read1_constEn(~rs_rB_useF[1]),.read1_oe(~retBF[1]|~rs_rB_useF[1]),.read1_match(gazumpFB[1]),
-  .read2_addr(regBF[2]),.read2_constEn(~rs_rB_useF[2]),.read2_oe(~retBF[2]|~rs_rB_useF[2]),.read2_match(gazumpFB[2]),
-  .read3_addr(regBF[3]),.read3_constEn(~rs_rB_useF[3]),.read3_oe(~retBF[3]|~rs_rB_useF[3]),.read3_match(gazumpFB[3]),
-  .read4_addr(regBF[4]),.read4_constEn(~rs_rB_useF[4]),.read4_oe(~retBF[4]|~rs_rB_useF[4]),.read4_match(gazumpFB[4]),
-  .read5_addr(regBF[5]),.read5_constEn(~rs_rB_useF[5]),.read5_oe(~retBF[5]|~rs_rB_useF[5]),.read5_match(gazumpFB[5]),
-  .read6_addr(regBF[6]),.read6_constEn(~rs_rB_useF[6]),.read6_oe(~retBF[6]|~rs_rB_useF[6]),.read6_match(gazumpFB[6]),
-  .read7_addr(regBF[7]),.read7_constEn(~rs_rB_useF[7]),.read7_oe(~retBF[7]|~rs_rB_useF[7]),.read7_match(gazumpFB[7]),
-  .read8_addr(regBF[8]),.read8_constEn(~rs_rB_useF[8]),.read8_oe(~retBF[8]|~rs_rB_useF[8]),.read8_match(gazumpFB[8]),
-
-  .write0_addr_reg(FUreg_reg[0]),.write0_wen_reg(FUwen_reg[0] & FU0Hit),
-  .write1_addr_reg(FUreg_reg[1]),.write1_wen_reg(FUwen_reg[1] & FU1Hit),
-  .write2_addr_reg(FUreg_reg[2]),.write2_wen_reg(FUwen_reg[2] & FU2Hit),
-  .write3_addr_reg(FUreg_reg[3]),.write3_wen_reg(FUwen_reg[3] & FU3Hit),
-  .write4_addr_reg(FUreg_reg2[4]),.write4_wen_reg(FUwen_reg2[4]),
-  .write5_addr_reg(FUreg_reg2[5]),.write5_wen_reg(FUwen_reg2[5]),
-  .write6_addr_reg(FUreg_reg2[6]),.write6_wen_reg(FUwen_reg2[6]),
-  .write7_addr_reg(FUreg_reg3[7]),.write7_wen_reg(FUwen_reg3[7]),
-  .write8_addr_reg(FUreg_reg3[8]),.write8_wen_reg(FUwen_reg3[8]),
-  .write9_addr_reg(FUreg_reg3[9]),.write9_wen_reg(FUwen_reg3[9])
-  );
-
-  reginfl #(1'b1) reginflGVB_mod(
-  .clk(clk),
-  .rst(rst),
-  .read_clkEn(~doStall),
-
-  .read0_addr(regB[0]),.read0_data(inflB[0]),
-    .read0_oe(~isBF[0] & ~isBV[0]),
-  .read1_addr(regB[1]),.read1_data(inflB[1]),
-    .read1_oe(~isBF[1] & ~isBV[1]),
-  .read2_addr(regB[2]),.read2_data(inflB[2]),
-    .read2_oe(~isBF[2] & ~isBV[2]),
-  .read3_addr(regB[3]),.read3_data(inflB[3]),
-    .read3_oe(~isBF[3] & ~isBV[3]),
-  .read4_addr(regB[4]),.read4_data(inflB[4]),
-    .read4_oe(~isBF[4] & ~isBV[4]),
-  .read5_addr(regB[5]),.read5_data(inflB[5]),
-    .read5_oe(~isBF[5] & ~isBV[5]),
-  .read6_addr(regB[6]),.read6_data(inflB[6]),
-    .read6_oe(~isBF[6] & ~isBV[6]),
-  .read7_addr(regB[7]),.read7_data(inflB[7]),
-    .read7_oe(~isBF[7] & ~isBV[7]),
-  .read8_addr(regB[8]),.read8_data(inflB[8]),
-    .read8_oe(~isBF[8] & ~isBV[8]),
-
-  .read0_constEn(rs0i0_useBConst_reg||~rs_rB_use[0]&~rs_rB_useF[0]||rs_rB_use[0]&retB[0]||rs_rB_useF[0]&retBF[0]),
-  .read1_constEn(rs0i1_useBConst_reg||~rs_rB_use[1]&~rs_rB_useF[1]||rs_rB_use[1]&retB[1]||rs_rB_useF[1]&retBF[1]),
-  .read2_constEn(rs0i2_useBConst_reg||~rs_rB_use[2]&~rs_rB_useF[2]||rs_rB_use[2]&retB[2]||rs_rB_useF[2]&retBF[2]),
-  .read3_constEn(rs1i0_useBConst_reg||~rs_rB_use[3]&~rs_rB_useF[3]||rs_rB_use[3]&retB[3]||rs_rB_useF[3]&retBF[3]),
-  .read4_constEn(rs1i1_useBConst_reg||~rs_rB_use[4]&~rs_rB_useF[4]||rs_rB_use[4]&retB[4]||rs_rB_useF[4]&retBF[4]),
-  .read5_constEn(rs1i2_useBConst_reg||~rs_rB_use[5]&~rs_rB_useF[5]||rs_rB_use[5]&retB[5]||rs_rB_useF[5]&retBF[5]),
-  .read6_constEn(rs2i0_useBConst_reg||~rs_rB_use[6]&~rs_rB_useF[6]||rs_rB_use[6]&retB[6]||rs_rB_useF[6]&retBF[6]),
-  .read7_constEn(rs2i1_useBConst_reg||~rs_rB_use[7]&~rs_rB_useF[7]||rs_rB_use[7]&retB[7]||rs_rB_useF[7]&retBF[7]),
-  .read8_constEn(rs2i2_useBConst_reg||~rs_rB_use[8]&~rs_rB_useF[8]||rs_rB_use[8]&retB[8]||rs_rB_useF[8]&retBF[8]),
-
-  .write0_addr_reg(FUreg_reg[0]),.write0_wen_reg(FUwen_reg[0] & FU0Hit),
-  .write1_addr_reg(FUreg_reg[1]),.write1_wen_reg(FUwen_reg[1] & FU1Hit),
-  .write2_addr_reg(FUreg_reg[2]),.write2_wen_reg(FUwen_reg[2] & FU2Hit),
-  .write3_addr_reg(FUreg_reg[3]),.write3_wen_reg(FUwen_reg[3] & FU3Hit),
-  .write4_addr_reg(FUreg_reg[4]),.write4_wen_reg(FUwen_reg[4]),
-  .write5_addr_reg(FUreg_reg[5]),.write5_wen_reg(FUwen_reg[5]),
-  .write6_addr_reg(FUreg_reg[6]),.write6_wen_reg(FUwen_reg[6]),
-  .write7_addr_reg(FUreg_reg[7]),.write7_wen_reg(FUwen_reg[7]),
-  .write8_addr_reg(FUreg_reg[8]),.write8_wen_reg(FUwen_reg[8]),
-  .write9_addr_reg(FUreg_reg[9]),.write9_wen_reg(FUwen_reg[9]),
-  .newAddr0(clrR_reg[0][8:4]),.newEn0(clr_reg[0]),
-  .newAddr1(clrR_reg[1][8:4]),.newEn1(clr_reg[1]),
-  .newAddr2(clrR_reg[2][8:4]),.newEn2(clr_reg[2]),
-  .newAddr3(clrR_reg[3][8:4]),.newEn3(clr_reg[3]),
-  .newAddr4(clrR_reg[4][8:4]),.newEn4(clr_reg[4]),
-  .newAddr5(clrR_reg[5][8:4]),.newEn5(clr_reg[5]),
-  .newAddr6(clrR_reg[6][8:4]),.newEn6(clr_reg[6]),
-  .newAddr7(clrR_reg[7][8:4]),.newEn7(clr_reg[7]),
-  .newAddr8(clrR_reg[8][8:4]),.newEn8(clr_reg[8])
-  );
-
-  reginfl reginflVB_mod(
-  .clk(clk),
-  .rst(rst),
-  .read_clkEn(~doStall),
-
-  .read0_addr(regBF[0]),.read0_data(inflB[0]),
-    .read0_oe(isBV[0]),
-  .read1_addr(regBF[1]),.read1_data(inflB[1]),
-    .read1_oe(isBV[1]),
-  .read2_addr(regBF[2]),.read2_data(inflB[2]),
-    .read2_oe(isBV[2]),
-  .read3_addr(regBF[3]),.read3_data(inflB[3]),
-    .read3_oe(isBV[3]),
-  .read4_addr(regBF[4]),.read4_data(inflB[4]),
-    .read4_oe(isBV[4]),
-  .read5_addr(regBF[5]),.read5_data(inflB[5]),
-    .read5_oe(isBV[5]),
-  .read6_addr(regBF[6]),.read6_data(inflB[6]),
-    .read6_oe(isBV[6]),
-  .read7_addr(regBF[7]),.read7_data(inflB[7]),
-    .read7_oe(isBV[7]),
-  .read8_addr(regBF[8]),.read8_data(inflB[8]),
-    .read8_oe(isBV[8]),
-
-  .read0_constEn(~rs_rB_useF[0]||retBF[0]),
-  .read1_constEn(~rs_rB_useF[1]||retBF[1]),
-  .read2_constEn(~rs_rB_useF[2]||retBF[2]),
-  .read3_constEn(~rs_rB_useF[3]||retBF[3]),
-  .read4_constEn(~rs_rB_useF[4]||retBF[4]),
-  .read5_constEn(~rs_rB_useF[5]||retBF[5]),
-  .read6_constEn(~rs_rB_useF[6]||retBF[6]),
-  .read7_constEn(~rs_rB_useF[7]||retBF[7]),
-  .read8_constEn(~rs_rB_useF[8]||retBF[8]),
-
-  .write0_addr_reg(FUreg_reg[0]),.write0_wen_reg(FUwen_reg[0] & FU0Hit),
-  .write1_addr_reg(FUreg_reg[1]),.write1_wen_reg(FUwen_reg[1] & FU1Hit),
-  .write2_addr_reg(FUreg_reg[2]),.write2_wen_reg(FUwen_reg[2] & FU2Hit),
-  .write3_addr_reg(FUreg_reg[3]),.write3_wen_reg(FUwen_reg[3] & FU3Hit),
-  .write4_addr_reg(FUreg_reg2[4]),.write4_wen_reg(FUwen_reg2[4]),
-  .write5_addr_reg(FUreg_reg2[5]),.write5_wen_reg(FUwen_reg2[5]),
-  .write6_addr_reg(FUreg_reg2[6]),.write6_wen_reg(FUwen_reg2[6]),
-  .write7_addr_reg(FUreg_reg2[7]),.write7_wen_reg(FUwen_reg2[7]),
-  .write8_addr_reg(FUreg_reg2[8]),.write8_wen_reg(FUwen_reg2[8]),
-  .write9_addr_reg(FUreg_reg2[9]),.write9_wen_reg(FUwen_reg2[9]),
-  .newAddr0(clrR_reg[0][8:4]),.newEn0(clr_reg[0]),
-  .newAddr1(clrR_reg[1][8:4]),.newEn1(clr_reg[1]),
-  .newAddr2(clrR_reg[2][8:4]),.newEn2(clr_reg[2]),
-  .newAddr3(clrR_reg[3][8:4]),.newEn3(clr_reg[3]),
-  .newAddr4(clrR_reg[4][8:4]),.newEn4(clr_reg[4]),
-  .newAddr5(clrR_reg[5][8:4]),.newEn5(clr_reg[5]),
-  .newAddr6(clrR_reg[6][8:4]),.newEn6(clr_reg[6]),
-  .newAddr7(clrR_reg[7][8:4]),.newEn7(clr_reg[7]),
-  .newAddr8(clrR_reg[8][8:4]),.newEn8(clr_reg[8])
-  );
-
-  
-  
-  reginfl reginflFB_mod(
-  .clk(clk),
-  .rst(rst),
-  .read_clkEn(~doStall),
-
-  .read0_addr(regBF[0]),.read0_data(inflB[0]),
-    .read0_oe(isBF[0]),
-  .read1_addr(regBF[1]),.read1_data(inflB[1]),
-    .read1_oe(isBF[1]),
-  .read2_addr(regBF[2]),.read2_data(inflB[2]),
-    .read2_oe(isBF[2]),
-  .read3_addr(regBF[3]),.read3_data(inflB[3]),
-    .read3_oe(isBF[3]),
-  .read4_addr(regBF[4]),.read4_data(inflB[4]),
-    .read4_oe(isBF[4]),
-  .read5_addr(regBF[5]),.read5_data(inflB[5]),
-    .read5_oe(isBF[5]),
-  .read6_addr(regBF[6]),.read6_data(inflB[6]),
-    .read6_oe(isBF[6]),
-  .read7_addr(regBF[7]),.read7_data(inflB[7]),
-    .read7_oe(isBF[7]),
-  .read8_addr(regBF[8]),.read8_data(inflB[8]),
-    .read8_oe(isBF[8]),
-
-  .read0_constEn(~rs_rB_useF[0]||retBF[0]),
-  .read1_constEn(~rs_rB_useF[1]||retBF[1]),
-  .read2_constEn(~rs_rB_useF[2]||retBF[2]),
-  .read3_constEn(~rs_rB_useF[3]||retBF[3]),
-  .read4_constEn(~rs_rB_useF[4]||retBF[4]),
-  .read5_constEn(~rs_rB_useF[5]||retBF[5]),
-  .read6_constEn(~rs_rB_useF[6]||retBF[6]),
-  .read7_constEn(~rs_rB_useF[7]||retBF[7]),
-  .read8_constEn(~rs_rB_useF[8]||retBF[8]),
-
-  .write0_addr_reg(FUreg_reg[0]),.write0_wen_reg(FUwen_reg[0] & FU0Hit),
-  .write1_addr_reg(FUreg_reg[1]),.write1_wen_reg(FUwen_reg[1] & FU1Hit),
-  .write2_addr_reg(FUreg_reg[2]),.write2_wen_reg(FUwen_reg[2] & FU2Hit),
-  .write3_addr_reg(FUreg_reg[3]),.write3_wen_reg(FUwen_reg[3] & FU3Hit),
-  .write4_addr_reg(FUreg_reg2[4]),.write4_wen_reg(FUwen_reg2[4]),
-  .write5_addr_reg(FUreg_reg2[5]),.write5_wen_reg(FUwen_reg2[5]),
-  .write6_addr_reg(FUreg_reg2[6]),.write6_wen_reg(FUwen_reg2[6]),
-  .write7_addr_reg(FUreg_reg3[7]),.write7_wen_reg(FUwen_reg3[7]),
-  .write8_addr_reg(FUreg_reg3[8]),.write8_wen_reg(FUwen_reg3[8]),
-  .write9_addr_reg(FUreg_reg3[9]),.write9_wen_reg(FUwen_reg3[9]),
-  .newAddr0(clrR_reg[0][8:4]),.newEn0(clr_reg[0]),
-  .newAddr1(clrR_reg[1][8:4]),.newEn1(clr_reg[1]),
-  .newAddr2(clrR_reg[2][8:4]),.newEn2(clr_reg[2]),
-  .newAddr3(clrR_reg[3][8:4]),.newEn3(clr_reg[3]),
-  .newAddr4(clrR_reg[4][8:4]),.newEn4(clr_reg[4]),
-  .newAddr5(clrR_reg[5][8:4]),.newEn5(clr_reg[5]),
-  .newAddr6(clrR_reg[6][8:4]),.newEn6(clr_reg[6]),
-  .newAddr7(clrR_reg[7][8:4]),.newEn7(clr_reg[7]),
-  .newAddr8(clrR_reg[8][8:4]),.newEn8(clr_reg[8])
-  );
 `endif
+
+  .write0_addr_reg(FUreg_reg[0]),.write0_wen_reg(FUwen_reg[0] & FU0Hit),
+`ifndef embedded
+  .write1_addr_reg(FUreg_reg[1]),.write1_wen_reg(FUwen_reg[1] & FU1Hit),
+  .write2_addr_reg(FUreg_reg[2]),.write2_wen_reg(FUwen_reg[2] & FU2Hit),
+`endif
+  .write3_addr_reg(FUreg_reg[3]),.write3_wen_reg(FUwen_reg[3] & FU3Hit),
+  .write4_addr_reg(FUreg_reg2[4]),.write4_wen_reg(FUwen_reg2[4]),
+`ifndef embedded
+  .write5_addr_reg(FUreg_reg2[5]),.write5_wen_reg(FUwen_reg2[5]),
+  .write6_addr_reg(FUreg_reg2[6]),.write6_wen_reg(FUwen_reg2[6]),
+`endif
+  .write7_addr_reg(FUreg_reg3[7]),.write7_wen_reg(FUwen_reg3[7]),
+`ifndef embedded
+  .write8_addr_reg(FUreg_reg3[8]),.write8_wen_reg(FUwen_reg3[8]),
+  .write9_addr_reg(FUreg_reg3[9]),.write9_wen_reg(FUwen_reg3[9]),
+`endif
+  .newAddr0(clrR_reg[0][8:4]),.newEn0(clr_reg[0]),
+  .newAddr1(clrR_reg[1][8:4]),.newEn1(clr_reg[1]),
+  .newAddr2(clrR_reg[2][8:4]),.newEn2(clr_reg[2])
+`ifndef embedded
+  ,
+  .newAddr3(clrR_reg[3][8:4]),.newEn3(clr_reg[3]),
+  .newAddr4(clrR_reg[4][8:4]),.newEn4(clr_reg[4]),
+  .newAddr5(clrR_reg[5][8:4]),.newEn5(clr_reg[5]),
+  .newAddr6(clrR_reg[6][8:4]),.newEn6(clr_reg[6]),
+  .newAddr7(clrR_reg[7][8:4]),.newEn7(clr_reg[7]),
+  .newAddr8(clrR_reg[8][8:4]),.newEn8(clr_reg[8])
+`endif
+  );
   
   get_clear_reg clr_mod(
   .newR0(newR[0]),.newR1(newR[1]),.newR2(newR[2]),
@@ -3758,7 +3518,11 @@ module backend(
   generate
   
   genvar m,n,u;//,o
+`ifndef embedded
   for (m=0;m<3;m=m+1) begin : main_rs_gen
+`else
+  for (m=0;m<1;m=m+1) begin : main_rs_gen
+`endif
   regfilef #(SIMD_WIDTH,m[1:0]) regAVH_mod(
   .clk(clk),
   .clkREF(clkREF),
@@ -6101,6 +5865,7 @@ dcache1 L1D_mod(
     .newFunitA1(WfunA[1]),.newFunitB1(WfunB[1]),
     .newLSFlag1(rs_ldst_flg[2]),
     .newAttr1(newAttr_reg2),
+`ifndef embedded
   .newDataA2(dataA[6]),.newDataB2(dataB[6]),.newDataC2(rs_const_reg[6][43:0]&{44{~rs_useBConst_reg[6]}}),
     .newRegA2(WregA[2]),.newRegB2(WregB[2]),
     .newANeeded2(WinflA[2]),.newBNeeded2(WinflB[2]),
@@ -6118,6 +5883,7 @@ dcache1 L1D_mod(
     .newFunitA2(WfunA[2]),.newFunitB2(WfunB[2]),
     .newLSFlag2(rs_ldst_flg[4]),
     .newAttr2(newAttr_reg2),
+`endif
 // wires to get values out of buffer
   .outDataA0(WoutDataB[0]),.outDataB0(WoutDataA[0]),.outDataC0(WoutDataC[0]),
     .outOp0(WoutOp[0]),.outInstrIndex0(WoutII[0]),
@@ -6129,6 +5895,7 @@ dcache1 L1D_mod(
     .outFuFwdB1(WDoutFuFwd[0]),.outFuuFwdB1(WDoutFuuFwd[0]),.outLSQ1(WDoutLSQ[0]),
     .outDataEn1(WDoutDataEn[0]),.outThread1(WDoutThread[0]),.outWQ1(WDoutWQ[0]),//data
     .outAttr1(),
+`ifndef embedded
   .outDataA2(WoutDataA[1]),.outDataB2(WoutDataB[1]),.outDataC2(WoutDataC[1]),
     .outOp2(WoutOp[1]),.outInstrIndex2(WoutII[1]),
     .outFuFwdA2(WfuFwdA[1]),.outFuFwdB2(WfuFwdB[1]),.outFuuFwdA2(WfuuFwdA[1]),.outFuuFwdB2(WfuuFwdB[1]),
@@ -6139,6 +5906,7 @@ dcache1 L1D_mod(
     .outFuFwdA3(WDoutFuFwd[1]),.outFuuFwdA3(WDoutFuuFwd[1]),.outLSQ3(WDoutLSQ[1]),
     .outDataEn3(WDoutDataEn[1]),.outThread3(WDoutThread[1]),.outWQ3(WDoutWQ[1]),//data
     .outAttr3(),
+`endif
 // wires from functional units  
   .FU0(FU_reg[0]),.FUreg0(FUreg[0]),.FUwen0(FUwen[0]),
   .FU1(FU_reg[1]),.FUreg1(FUreg[1]),.FUwen1(FUwen[1]),
