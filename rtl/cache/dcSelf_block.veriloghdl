@@ -1834,7 +1834,7 @@ module dcache1(
          5'd16: mskdata1[v]<=6'b00000;
          5'd17: mskdata1[v]<=6'b00001;
          5'd18: mskdata1[v]<=6'b00011;
-         5'd19: begin mskdata1[v]<=6'b00111; if (emsr!=64'b0) mskdata1[v]<=6'b00011; pwndata[v][63:32]<=emsr[63:32]; end
+         5'd19: begin mskdata1[v]<=6'b00111; if (emsr!=64'b0) mskdata1[v]<={4'b000,emsr[0],1'b1}; pwndata[v][63:16]<=emsr[63:16]; end
          5'd23: mskdata1[v]<=begin 6'b00111; swpdata[v]<=1'b1; end
          5'h3:  mskdata1[v]<=6'b01111; //long double
          5'h0,5'h1,5'h2:  mskdata1[v]<=6'b11111; //int, double, single 128 bit (u)
