@@ -411,7 +411,7 @@ module smallInstr_decoder(
   assign isCexALU=opcode_main==8'd222;
   //231-232=cloop no sub
   assign isCLeave=opcode_main==8'd235 || opcode_main==8'd236 || opcode_main==8'd238;  
-  //237 and 239 unused so far
+
   assign isPtrBump_other_domain=opcode_main==8'hf7 && magic[1:0]==2'b01 && LARGE_CORE;
 
   assign isGA=opcode_main==8'd237;
@@ -425,7 +425,7 @@ module smallInstr_decoder(
   //fpu bit[3] is contdition subselect (set to change condition to LT unsigned)
   //fpu bit[2] is conditional (condition LE unsigned)
   //when only bit 3 is set then the condition is overflow
-  assign isBasicSysInstr=opcode_main==8'hff;
+  assign isBasicSysInstr=opcode_main==8'hef;
  //8'hf7==new insn; starting with 48 bit size (no 32 bit)
  
   assign qconstant[1]={1'b0,pconstant[3]};//??
@@ -701,6 +701,14 @@ module smallInstr_decoder(
                   2'b11: palucond[tt]=5'h17;
                   2'b10: palucond[tt]=5'h1c;
               endcase
+              if (&opcode_main[1:0]) begin
+                  case(opcode_main[3:2])
+                      0: pport[tt]=PORT_FADD;
+                      1: pport[tt]=PORT_FMUL;
+                      3: pport[tt]=PORT_FANY;
+                  endcase
+                  palucond[tt]=5'h1d;
+              end
           end
           prmode[tt]=3'h7;
           pconstant[tt]=constantDef;
