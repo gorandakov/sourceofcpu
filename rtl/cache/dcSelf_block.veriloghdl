@@ -999,7 +999,8 @@ module dcache1(
   busIns_data,
   busIns_dataPTR,
   insbus_A,insbus_B,
-  expun_addr,expun_en
+  expun_addr,expun_en,
+  msrss_en,msrss_addr,msrss_data
   );
   localparam ADDR_WIDTH=37;
   localparam DATA_WIDTH=`dcache1_data_width;
@@ -1128,7 +1129,12 @@ module dcache1(
   input insbus_A,insbus_B;
   output [ADDR_WIDTH-1:0] expun_addr;
   output expun_en;
-  
+  input msrss_en;
+  input [15:0] msrss_addr;
+  input [63:0] msrss_data;
+  //embedded segment register
+  reg [63:0] emsr;
+
   wire [1023:0] write_data;
   wire [1023:0] write_dataM;
 //  wire [LINE_WIDTH-1:0] read_data;
@@ -1539,10 +1545,10 @@ module dcache1(
 
   LFSR16_6 rnd_mod(clk,rst,insert_rand);
   
-  assign read_pbit0=read_pbit0P_reg2;
-  assign read_pbit1=read_pbit1P_reg2;
-  assign read_pbit2=read_pbit2P_reg2;
-  assign read_pbit3=read_pbit3P_reg2|{1'b0,read3_pf_reg};
+  assign read_pbit0=read_pbit0P_reg2|{1'b0,|emsr && read_sz_reg[0]==5'd19};
+  assign read_pbit1=read_pbit1P_reg2{1'b0,|emsr && read_sz_reg[1]==5'd19};
+  assign read_pbit2=read_pbit2P_reg2|{1'b0,|emsr && read_sz_reg[2]==5'd19};
+  assign read_pbit3=read_pbit3P_reg2|{1'b0,read3_pf_reg} | {1'b0,|emsr && read_sz_reg[3]==5'd19}};
   
   assign read_hitCl0Q=read_hit0_way[0] | read_hit0_way[1] | read_hit0_way[2] | 
     read_hit0_way[3] | read_hit0_way[4] | read_hit0_way[5] |  
@@ -1713,7 +1719,7 @@ module dcache1(
           read3_pf<=0;
           read3_pf_reg<=0;
           read3_addrMain<=0;
-          
+          emsr<=64'b0;        
       end else begin
           read_invalidate_reg<=read_invalidate; 
 
@@ -1828,7 +1834,7 @@ module dcache1(
          5'd16: mskdata1[v]<=6'b00000;
          5'd17: mskdata1[v]<=6'b00001;
          5'd18: mskdata1[v]<=6'b00011;
-         5'd19: mskdata1[v]<=6'b00111;
+         5'd19: begin mskdata1[v]<=6'b00111; if (emsr!=64'b0) mskdata1[v]<=6'b00011; pwndata[v][63:32]<=emsr[63:32]; end
          5'd23: mskdata1[v]<=begin 6'b00111; swpdata[v]<=1'b1; end
          5'h3:  mskdata1[v]<=6'b01111; //long double
          5'h0,5'h1,5'h2:  mskdata1[v]<=6'b11111; //int, double, single 128 bit (u)
@@ -1849,7 +1855,7 @@ module dcache1(
                pwndata[3][`ptr_hi]<=7'h7f;
            end
            read3_pf_reg<=read3_pf;
-
+           if (msrss_en && msrss_addr[14:0]==`csr_embedded_mode) emsr<=msrss_data;
       end
   end
   
