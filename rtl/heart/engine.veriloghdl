@@ -402,6 +402,10 @@ module backend(
 
   bofh, pfy,
 
+  piff_paff_A,
+  piff_paff_B,
+ // piff,
+
   wr0_hit,
   wr0_addrE,wr0_addrO,
   wr0_banks,
@@ -1005,6 +1009,10 @@ module backend(
 
   output [64:0] bofh;
   input [64:0] pfy;
+
+  output [8*SIMD_WIDTH-1:0] piff_paff_A;
+  input [8*SIMD_WIDTH-1:0] piff_paff_B;
+  wire piff;
 
   output [1:0] wr0_hit;
   output       wr0_iol;
@@ -5594,6 +5602,9 @@ addrcalc_block #(BUS_ID) addrcalc_aligned(
   .fork_in(frkDL_reg),.fork_out(frkDH)
   );
 `undef swapedge
+
+  assign piff=outOp_regn2[11] && outEn_regn2[3] && outOp_regn2[7:0]==8'd0;
+
   fun_fpsu_BOTH fpsuL_mod(
   .clk(clk),
   .rst(rst),
@@ -5670,6 +5681,7 @@ addrcalc_block #(BUS_ID) addrcalc_aligned(
   .fork_in(frkXL_reg),.fork_out(frkXH)
   );
 
+  assign piff_paff_B={frkDH,frkDL};
 
   assign fxFRT_alten[2]={3'b0,sqrDatEn_reg};
   assign fxFRT_alten[0]=4'b0;
@@ -6310,7 +6322,10 @@ dcache1 L1D_mod(
    
 //  assign LSQ_lsqA[8:3]=LSQ_upper;
 //  assign LSQ_lsqB[8:3]=LSQ_upper;
-  
+  always @(negedge clk) begin
+      if (piff) {frkDH_reg,frkDL_reg}<=piff_paff_A;
+      else {frkDH_reg,frkDL_reg}<={frkDH,frkDL};
+  end
   always @(posedge clk) begin
       if (rst) begin
 	  newAttr_reg<=4'b0;
