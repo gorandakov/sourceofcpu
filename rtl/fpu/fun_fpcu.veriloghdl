@@ -46,6 +46,7 @@ module fun_fpu(
   );
   parameter [1:0] INDEX=2'd2;
   parameter [0:0] H=1'b0;
+  parameter [0:0] HIGH=0;
   localparam SIMD_WIDTH=70; //half width
   localparam S={27'b0,~H,4'b0};
   localparam ROUND_TRUNC=0;
@@ -421,7 +422,7 @@ module fun_fpu(
 
   assign FOOSH_out=FOOSH_reg2;
   //verilator lint_off WIDTH
-  assign HH_data=gfDataBFL_reg2[0];
+  assign HH_data=HIGH ? fxDataAFL_reg2[0] :  gfDataBFL_reg2[0];
   //verilator lint_on WIDTH
 
   fpucadd cadd2L_mod(

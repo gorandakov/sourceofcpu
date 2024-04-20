@@ -5499,7 +5499,7 @@ addrcalc_block #(BUS_ID) addrcalc_aligned(
   .rsDoStall(rsDoStall)
   );
 `define swapedge
-  fun_fpu_BOTH fpuL_mod(
+  fun_fpu_BOTH #(H) fpuL_mod(
   .clk(clk),
   .rst(rst),
   .fpcsr(fpcsr[31:0]),
@@ -5550,7 +5550,7 @@ addrcalc_block #(BUS_ID) addrcalc_aligned(
   .fork_in(frkDH_reg),.fork_out(frkDL)
   );
 
-  fun_fpu_BOTH fpuH_mod(
+  fun_fpu_BOTH #(H) fpuH_mod(
   .clk(clk),
   .rst(rst),
   .fpcsr(fpcsr[31:0]),

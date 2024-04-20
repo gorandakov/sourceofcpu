@@ -60,6 +60,7 @@ module fun_fpuH(
   );
   localparam [0:0] H=1'b1;
   localparam SIMD_WIDTH=70; //half width
+  parameter HIGH=0;
   input clk;
   input rst;
   input [31:0] fpcsr;
@@ -166,7 +167,7 @@ module fun_fpuH(
   output [67:0] HI_dataT;
 
 
-  fun_fpu #(0,1) fpu0_mod(
+  fun_fpu #(0,1,HIGH) fpu0_mod(
   clk,
   rst,
   fpcsr,
@@ -189,7 +190,7 @@ module fun_fpuH(
   FOOSH0_out,,
   );
 
-  fun_fpu #(1,1) fpu1_mod(
+  fun_fpu #(1,1,HIGH) fpu1_mod(
   clk,
   rst,
   fpcsr,
@@ -212,7 +213,7 @@ module fun_fpuH(
   FOOSH1_out,,
   );
 
-  fun_fpu #(2,1) fpu2_mod(
+  fun_fpu #(2,1,HIGH) fpu2_mod(
   clk,
   rst,
   fpcsr,

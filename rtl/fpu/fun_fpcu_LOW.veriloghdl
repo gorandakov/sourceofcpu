@@ -63,6 +63,8 @@ module fun_fpuL(
   );
   localparam [0:0] H=1'b0;
   localparam SIMD_WIDTH=70; //half width
+  parameter HIGH=0;
+
   input clk;
   input rst;
   input [31:0] fpcsr;
@@ -178,7 +180,7 @@ module fun_fpuL(
   reg [3:0] u5_en_reg2;
   reg [20:0] u5_op_reg2;
 
-  fun_fpu #(0,0) fpu0_mod(
+  fun_fpu #(0,0,HIGH) fpu0_mod(
   clk,
   rst,
   fpcsr,
@@ -201,7 +203,7 @@ module fun_fpuL(
   FOOSH0_out,,
   );
 
-  fun_fpu #(1,0) fpu1_mod(
+  fun_fpu #(1,0,HIGH) fpu1_mod(
   clk,
   rst,
   fpcsr,
@@ -224,7 +226,7 @@ module fun_fpuL(
   FOOSH1_out,,
   );
 
-  fun_fpu #(2,0) fpu2_mod(
+  fun_fpu #(2,0,HIGH) fpu2_mod(
   clk,
   rst,
   fpcsr,

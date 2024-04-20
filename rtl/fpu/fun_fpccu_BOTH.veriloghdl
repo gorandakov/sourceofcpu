@@ -66,6 +66,7 @@ module fun_fpu_BOTH(
   );
   localparam [0:0] H=1'b1;
   localparam SIMD_WIDTH=70; //half width
+  parameter HIGH=0;
 /*verilator hier_block*/
   input clk;
   input rst;
@@ -258,7 +259,7 @@ module fun_fpu_BOTH(
   assign u5_ret=u5_retL|u5_retH;
   assign u5_ret_en=u5_ret_enL| u5_ret_enH;
 
-  fun_fpuH hf_mod(
+  fun_fpuH #(HIGH) hf_mod(
   clk,
   rst,
   fpcsr,
@@ -299,7 +300,7 @@ module fun_fpu_BOTH(
   fork_out[139:70]
   ); 
 
-  fun_fpuL lfpc_mod(
+  fun_fpuL #(HIGH) lfpc_mod(
   clk,
   rst,
   fpcsr,
