@@ -860,7 +860,12 @@ module smallInstr_decoder(
            end else begin
                poperation[4][7:0]=instr[6] ? `fop_addDH : `fop_addDL;
            end
-           if (class[`iclass_FMA]) poperation[4][10]=1'b1;
+           if (class[`iclass_FMA]) begin
+               poperation[4][10]=1'b1;
+               prB[4]=5'd15;
+               prA[4]=instr[12:8];
+               prT[4]=5'd15;
+           end
        end
        
        trien[5]=~magic[0] & subIsFPUPD;
@@ -891,7 +896,12 @@ module smallInstr_decoder(
            end else begin
                poperation[5][7:0]=poperation[5][12] ? `fop_addsubDP : `fop_addDP;
            end
-           if (class[`iclass_FMA]) poperation[5][10]=1'b1;
+           if (class[`iclass_FMA]) begin
+               poperation[5][10]=1'b1;
+               prB[5]=5'd15;
+               prA[5]=instr[12:8];
+               prT[5]=5'd15;
+           end
        end
        
        trien[6]=~magic[0] & subIsSIMD;
@@ -947,6 +957,11 @@ module smallInstr_decoder(
      3'd5: begin pport[7]=PORT_FADD; poperation[7]=`fop_addSP; poperation[7][10]=class[`iclass_FMA]; end
      3'd6: begin pport[7]=PORT_FADD; poperation[7]=`fop_subSP; poperation[7][10]=class[`iclass_FMA]; end
        endcase
+       if (class[`iclass_FMA]) begin
+               prB[7]=5'd15;
+               prA[7]=instr[12:8];
+               prT[7]=5'd15;
+       end
        //verilator lint_on CASEINCOMPLETE
        trien[8]=~magic[0] & subIsLinkRet;
        if (opcode_sub[1]) begin
