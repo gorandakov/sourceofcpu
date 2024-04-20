@@ -1840,6 +1840,15 @@ module smallInstr_decoder(
           puseRs[31]=1'b1;
           prAlloc[31]=1'b1;
           puseBConst[31]=instr[31];
+          if (!instr[31]) begin
+              prA_use[31]=instr[30];
+              prB_use[31]=instr[30];
+              prT_use[31]=instr[30];
+              prA_useF[31]=~instr[30];
+              prB_useF[31]=~instr[30];
+              prT_useF[31]=~instr[30];
+              pcalu[31]={1'b0,{4{~isntr[30]}}};
+          end
           if (magic[1:0])==2'b01) pconstant[31]={{51{instr[30]}},instr[30:18]};
           prA[31]={instr[17],instr[11:8]};
           prT[31]={instr[16],instr[15:12]};
