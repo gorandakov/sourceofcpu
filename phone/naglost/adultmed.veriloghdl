@@ -38,6 +38,7 @@ module smallInstr_decoder(
   alucond,
   rndmode,
   constant,
+  prevClsFma,instr_prev,
   rT,rT_use,
   port,
   useRs,
@@ -118,6 +119,8 @@ module smallInstr_decoder(
   output [2:0] rndmode;
   output useBConst;
   output [64:0] constant;
+  input prevClsFma;
+  input [15:0] instr_prev;
   output [REG_WIDTH-1:0] rT;
   output rT_use;
   output [3:0] port;
@@ -866,6 +869,12 @@ module smallInstr_decoder(
                prA[4]=instr[12:8]&{{2{~instr[13]}},2'b11};
                ptAE[4]=instr[13];
                prT[4]=5'd15;
+           end else if (prevClsFma) begin
+               prB[4]=5'd15;
+               prA[4]=instr_prev[12:8]&{{2{~instr_prev[13]}},2'b11};
+               ptAE[4]=instr_prev[13];
+               prT[4]=instr[12:8]&{{2{~instr[13]}},2'b11};
+               ptTE[4]=instr[13];
            end
        end
        
@@ -903,6 +912,12 @@ module smallInstr_decoder(
                prA[5]=instr[12:8]&{{2{~instr[13]}},2'b11};
                ptAE[5]=instr[13];
                prT[5]=5'd15;
+           end else if (prevClsFma) begin
+               prB[5]=5'd15;
+               prA[5]=instr_prev[12:8]&{{2{~instr_prev[13]}},2'b11};
+               ptAE[5]=instr_prev[13];
+               prT[5]=instr[12:8]&{{2{~instr[13]}},2'b11};
+               ptTE[5]=instr[13];
            end
        end
        
@@ -964,6 +979,12 @@ module smallInstr_decoder(
                prA[7]=instr[12:8]&{{2{~instr[13]}},2'b11};
                ptAE[7]=instr[13];
                prT[7]=5'd15;
+       end else if (prevClsFma) begin
+               prB[7]=5'd15;
+               prA[7]=instr_prev[12:8]&{{2{~instr_prev[13]}},2'b11};
+               ptAE[7]=instr_prev[13];
+               prT[7]=instr[12:8]&{{2{~instr[13]}},2'b11};
+               ptTE[7]=instr[13];
        end
        //verilator lint_on CASEINCOMPLETE
        trien[8]=~magic[0] & subIsLinkRet;
