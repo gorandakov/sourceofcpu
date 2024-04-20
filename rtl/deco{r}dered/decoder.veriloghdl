@@ -1638,6 +1638,10 @@ module decoder(
   wire [9:0] dec_miss;
   wire [9:0] dec_tbufOnly;
 
+  reg was_FMA_last;
+  reg [15:0] instr_save;
+
+
   wire [9:0][4:0] 		dec_jumpType;
 
   wire [9:0] dec_taken;
@@ -1896,6 +1900,8 @@ module decoder(
           .distrust(lizztruss),
           .instrQ(instQ[k]),
           .instr(inst[k]),
+          .instr_prev(k=0 ? instr_save[15:0] : instr[k-1][15:0]),
+          .prevClsFMA(k=0 ? was_FMA_last : instrQ[k-1][`instrQ_class+`iclass_FMA]),
           .operation(dec_operation[k]),
 	  .can_jump_csr(aux_can_jump),
 	  .can_read_csr(aux_can_read),
@@ -2358,18 +2364,21 @@ module decoder(
           
           if (k<9) begin
               assign dec_lspecR_d=(iUsed[k+:2]==2'b01) ? dec_lspec[k] : 1'bz;
-            //  assign dec_aspecR_d=iUsed[k+:2]==2'b01 ? dec_aspec[k] : 1'bz;
+              assign instr_save_d=(iUsed[k+:2]==2'b01) ? instr[k] : 15'bz;
+              assign was_FMA_last_d=(iUsed[k+:2]==2'b01) ? instrQ[`instrQ_class+`iclass_FMA] : 1'bz;
           end else begin
               assign dec_lspecR_d=iUsed[k] ? dec_lspec[k] : 1'bz;
-            //  assign dec_aspecR_d=iUsed[k] ? dec_aspec[k] : 1'bz;
+              assign instr_save_d=iUsed[k] ? instr[k] : 15'bz;
+              assign was_FMA_last_d=iUsed[k] ? instrQ[`instrQ_class+`iclass_FMA] : 1'bz;
           end
       end
   endgenerate
   
   assign dec_lspec[-1]=dec_lspecR;
- // assign dec_aspec[-1]=dec_aspecR;
   assign dec_lspecR_d=(~iUsed[0]) ? dec_lspecR : 1'bz;
-//  assign dec_aspecR_d=~iUsed[0] ? dec_aspecR : 1'bz;
+  assign was_FMA_last_d=(~iUsed[0]) ? was_FMA_last : 1'bz;
+  assign instr_save_d=(~iUsed[0]) ? instr_save : 15'bz;
+
   assign msrss_retIP_data=msrss_retIP_en_reg==10'b0 ? 64'b0 : 64'bz;
   assign msrss_retIP_data[63:44]=msrss_retIP_en_reg!=10'b0 ? {baseAttr[0],baseAttr[1],1'b0,baseAttr[3],16'b0} : 20'bz; 
   assign msrss_retIP_data[0]=msrss_retIP_en_reg!=10'b0 ? 1'b0 : 1'bz; 
@@ -3015,7 +3024,8 @@ module decoder(
           bundleFeed<=1'b0;
           iAvail_reg<=10'b0;
           dec_lspecR<=1'b0;
-         // dec_aspecR<=1'b0;
+          was_FMA_last<=1'b0;
+          instr_save<=16'b0;
           dec_IPRel_reg<=10'b0;
           iUsed_reg<=10'b0;
           cls_indir_reg<=10'b0;
@@ -3106,7 +3116,13 @@ module decoder(
           bundleFeed<=iUsed[0] & ~except;
           iAvail_reg<=iAvail;
           dec_lspecR<=dec_lspecR_d;
-         // dec_aspecR<=dec_aspecR_d;
+          was_FMA_last<=was_FMA_last_d;
+          instr_save<=instr_save_d;
+          if (except) begin
+              dec_lspecR<=1'b0;
+              was_FMA_last<=1'b0;
+              instr_save<=16'b0;
+          end
           dec_IPRel_reg<=dec_IPRel;
           iUsed_reg<=iUsed;
           cls_indir_reg<=cls_indir;
