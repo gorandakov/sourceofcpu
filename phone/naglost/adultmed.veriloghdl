@@ -842,13 +842,13 @@ module smallInstr_decoder(
        poperation[4][8]=opcode_sub[0];
        poperation[4][9]=opcode_sub[0];
        if (~prevSpecLoad || {1'b0,instr[15:12]}==5'd15) begin
-           prA[4]={1'b0,instr[11:8]};
-           prT[4]={1'b0,instr[11:8]};
-           prB[4]={1'b0,instr[15:12]};
+           prA[4]={instr[7],instr[11:8]};
+           prT[4]={instr[7],instr[11:8]};
+           prB[4]={instr[6],instr[15:12]};
        end else begin
            prB[4]=5'd15; //not a mistake; fpu spec instr is 15 rather than 16
-           prA[4]={1'b0,instr[11:8]};
-           prT[4]={1'b0,instr[15:12]};
+           prA[4]={instr[6],instr[11:8]};
+           prT[4]={instr[7],instr[15:12]};
        end
        prA_useF[4]=1'b1;
        prB_useF[4]=1'b1;
@@ -885,13 +885,13 @@ module smallInstr_decoder(
        poperation[5][8]=opcode_sub[0];
        poperation[5][9]=opcode_main[6];
        if (~prevSpecLoad || {1'b0,instr[15:12]}==5'd15) begin
-           prA[5]={1'b0,instr[11:8]};
-           prT[5]={1'b0,instr[11:8]};
-           prB[5]={1'b0,instr[15:12]};
+           prA[5]={instr[7],instr[11:8]};
+           prT[5]={instr[7],instr[11:8]};
+           prB[5]={instr[7],instr[15:12]};
        end else begin
            prB[5]=5'd15; 
-           prA[5]={1'b0,instr[11:8]};
-           prT[5]={1'b0,instr[15:12]};
+           prA[5]={instr[7],instr[11:8]};
+           prT[5]={instr[7],instr[15:12]};
        end
        prA_useF[5]=1'b1;
        prB_useF[5]=1'b1;
