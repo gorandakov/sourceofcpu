@@ -1167,13 +1167,8 @@ module smallInstr_decoder(
           end
       end
       if (poperation[12][5:1]==5'h16) begin poperation[12][7:0]=`op_cax; poperation[12][9:8]=2'b0; pport[12]=PORT_ALU; end
-      if (opcode_main[0] && opcode_main[5:1]==5'h17) begin
-          poperation[13][5:0]=6'h20;
-          //pflags_write[13]=1'b1; not needed; handled by set flag bit on the opcode
-          poperation[13][7]=1'b1; //says it sets flags!
-          prAlloc[13]=1'b0;
-          prT_use[13]=1'b0;
-      end
+      if (poperation[12][5:1]==5'h17 && poperation[12][0]) perror[19]=1'b1;
+
 
       trien[13]=magic[0] & isBaseIndexLoadStore;
       poperation[13][7]=1'b0;
@@ -1231,14 +1226,8 @@ module smallInstr_decoder(
       if (|poperation[13][9:8] && ~poperation[13][6]) perror[13]=1;
       if (magic[2:0]==3'b111 && instr[59] && ~instr[58]) perror[13]=1;
       if (magic[2:0]==3'b111 && instr[63:60]!=0) perror[13]=1;
-      if (opcode_main[0] && opcode_main[5:1]==5'h17) begin
-          poperation[13][5:0]=6'h20;
-          //pflags_write[13]=1'b1; not needed; handled by set flag bit on the opcode
-          poperation[13][7]=1'b1; //says it sets flags!
-          prAlloc[13]=1'b0;
-          prT_use[13]=1'b0;
-      end
       if (poperation[13][5:1]==5'h16) begin poperation[13][7:0]=`op_cax; pport[13]=PORT_ALU; end
+      if (poperation[13][5:1]==5'h17 && poperation[13][0]) perror[19]=1'b1;
       if (riscmove) perror[13]=1;
       
       trien[14]=magic[0] & isCmov;//
@@ -1372,6 +1361,12 @@ module smallInstr_decoder(
           prB[17]={1'b0,instr[15:12]};
       end
       if (opcode_main[7]|opcode_main[0] && instr[11]) perror[17]=1;          
+      if (isBaseSpecStore && poperation[17][5:1]==5'h17) begin
+          poperation[17][5:0]=6'h20;
+          poperation[17][7]=1'b1; //says it sets flags!
+          prAlloc[17]=1'b0;
+          prT_use[17]=1'b0;
+      end
       
       trien[18]=magic[0] && isBaseIndexSpecLoad | isBaseIndexSpecStore;
           pport[18]=PORT_LOAD;
@@ -1416,6 +1411,12 @@ module smallInstr_decoder(
           prC[18]={1'b1,INDEX[3:0]+4'd1};
           prC_use[18]=prT_use[18];
           prC_useF[18]=prT_useF[18];
+      if (isBaseIndexSpecStore && poperation[18][5:1]==5'h17) begin
+          poperation[18][5:0]=6'h20;
+          poperation[18][7]=1'b1; //says it sets flags!
+          prAlloc[18]=1'b0;
+          prT_use[18]=1'b0;
+      end
 
       
       trien[19]=magic[1:0]==2'b11 && isImmLoadStore;
@@ -1463,8 +1464,13 @@ module smallInstr_decoder(
       if (opcode_main[0] && ((opcode_main[7:1]==7'b1011000 && instr[10])||(opcode_main[7:1]!=7'b1011000) )
           perror[19]=2'b1;
       if (poperation[19][5:1]==5'h16) begin poperation[19][7:0]=`op_cax; poperation[19][9:8]=2'b0; pport[19]=PORT_ALU; if (oddmode[3]) perror[19]=2'b1; end
-      if (poperation[19][5:1]==5'h17 && poperation[19][0]) perror[19]=1'b1;
       if (magic[1:0]==2'b01 && instr[17]) perror[19]=1;
+      if (poperation[18][0] && poperation[17][5:1]==5'h17) begin
+          poperation[17][5:0]=6'h20;
+          poperation[17][7]=1'b1; //says it sets flags!
+          prAlloc[17]=1'b0;
+          prT_use[17]=1'b0;
+      end
       
       trien[20]=magic[0] & isBasicCJump;
       puseBConst[20]=magic[1:0]!=2'b01 && instr[18];

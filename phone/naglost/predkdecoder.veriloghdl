@@ -211,7 +211,7 @@ module predecoder_class(instr,magic,flag,FMA_mul,prev_FMA_mul,thread,class_,isLN
   assign isPtrBump_other_domain=opcode_main==8'hf7 && magic[1:0]==2'b01;
 
   assign thisSpecLoad=isBaseSpecLoad || isBaseIndexSpecLoad || isBaseSpecStore || isBaseIndexSpecStore || 
-      ({instr[11],instr[15:12]}==5'd16 &&  opcode_main[7:0]==8'b10110000) || 
+      ({instr[11],instr[15:12]}==5'd16 &&  opcode_main[7:1]==7'b1011000) || 
       ({instr[1],instr[15:12]}==5'd15 && opcode_main[7:2]==6'd15);
 
   
