@@ -18,7 +18,7 @@ module nvram(
   input clkREF1;
   input clkREF2;
   input rst;
-  output reg [3:0] pos;
+  output reg [1:0] pos;
   input port_en;
   input [8:0] port_read_addr;
   output [342:0] port_read_data; 
@@ -29,7 +29,12 @@ module nvram(
   reg [341:0] data1;
   reg [341:0] data2;
   wire [341:0] data3;
+`ifndef synth_edram
   wire [341:0] data3x;
+`else
+  wire [170:0] data3x;
+
+`endif
 
   block_ecc_decode corr0_mod(
   data1,
@@ -42,8 +47,12 @@ module nvram(
   ,
   data3);
 
-  assign data3x=clkREF1 ? data3 : 'z;
-  assign data3x=clkREF2 ? data3 : 'z;
+`ifdef synth_edram
+  assign data3x=clkREF1 ? data3[170:0] : 'z;
+  assign data3x=clkREF2 ? data3[341:171] : 'z;
+`else
+  assign data3x=data3;
+`endif
 
 generate
   genvar k;
@@ -56,11 +65,11 @@ generate
 
       always @(posedge clk) begin
 `ifndef synth_edram
-          if (port_en && pos==4'd0 && port_addr_reg[8:5]==k) data1<=edram[port_addr_reg[4:0]];
-          else if (port_en && pos!=4'd0) $display("ERROR: misclocked nvram access");
-          else if (port_wen_plus3 && pos==4'd3 && port_write_addr[8:5]==k) edram[port_write_addr[4:0]]<=data3;
+          if (port_en && pos==2'd0 && port_addr_reg[8:5]==k) data1<=edram[port_addr_reg[4:0]];
+          else if (port_en && pos!=2'd0) $display("ERROR: misclocked nvram access");
+          else if (port_wen_plus3 && pos==2'd3 && port_write_addr[8:5]==k) edram[port_write_addr[4:0]]<=data3;
 `else
-          if (port_en && pos==4'd0 && port_addr_reg[8:5]==k) begin
+          if (port_en && pos==2'd0 && port_addr_reg[8:5]==k) begin
                data1[161:0]<=clkREF1 ? edram[port_addr_reg[4:0]] : 'z;
                data1[323:162]<=clkREF2 ? edram[port_addr_reg[4:0]] : 'z;
           end else if (port_wen_plus3 && port_write_addr[8:5]==k) begin
@@ -70,10 +79,11 @@ generate
           if (port_data) data1<=port_write_data;
           xore1_reg<=xore;
           data2<=data1;
+          read_port_data<=data3;
   end
 endgenerate
 
   always @(posedge clk) begin
-     if (rst) pos<=4'h7; else pos<=pos+4'd1;
+     if (rst) pos<=2'h3; else pos<=pos+2'd1;
   end
 endmodule
