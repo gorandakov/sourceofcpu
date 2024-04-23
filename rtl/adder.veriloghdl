@@ -694,6 +694,8 @@ endmodule
 
   wire [WIDTH-1:0] X;
   wire [WIDTH-1:0] nX;
+  wire [WIDTH-1:0] X1;
+  wire [WIDTH-1:0] nX1;
   
   wire [WIDTH-1:0] C1;//carry in
   wire [WIDTH-1:0] nC1;
@@ -724,7 +726,7 @@ endmodule
   
   genvar i;
   
-  assign bitEn={{21{ben[1]&en}},{11{ben[0]&en}},{16{en}},{16{en&~sxtEn}}};
+  assign bitEn={{21{ben[1]&en}},{11{ben[0]&en}},{16{en}},{16{en}}};
   
   
 
@@ -742,6 +744,14 @@ endmodule
   assign out[64]=en ? is_ptr : 1'bz;
   assign out[65]=en ? ^out[64:0] : 1'bz;
 //65th bit offset by 4 phases in regfile and alu!
+  /* magic voodo adder trickery to get sign extend with no extra delay.
+     forwarder does set upper bits A=all0 B=all1 to make it all carry propagate.
+     Then we only need to boost and shift the X and nX values which takes no extra delay.
+     Not completely free- probably one row of cells increase.
+  */
+
+  assign X1=sxtEn ? {{32{X[31]}},X[31:0]} : X;
+  assign nX1=sxtEn ? {{32{nX[31]}},nX[31:0]} : nX;
 
   assign exbits=is_ptr ? ptr[63:43]^{19'b0,pos_flip[{1'b0,cout_sec0}]|neg_flip[{1'b0,cout_sec0}],1'b0} : 21'b0;
 
@@ -774,8 +784,8 @@ endmodule
         
     for (i=0;i<WIDTH;i=i+1)
       begin : out_gen
-        assign out[i]=(X[i] & bitEn[i]) ? ~C1[i] : 1'bz;
-        assign out[i]=(nX[i] & bitEn[i]) ? ~nC1[i] : 1'bz;
+        assign out[i]=(X1[i] & bitEn[i]) ? ~C1[i] : 1'bz;
+        assign out[i]=(nX1[i] & bitEn[i]) ? ~nC1[i] : 1'bz;
       end 
     if (WIDTH>1)
       begin
@@ -873,12 +883,6 @@ endmodule
     if (WIDTH>=4) assign cout4=C[3];
     else assign cout4=1'b0;
 
-/*    if (WIDTH>=8) assign cout8=C[7];
-    else assign cout8=1'b0;
-
-    if (WIDTH>=16) assign cout16=C[15];
-    else assign cout16=1'b0;
-*/
     if (WIDTH>=8) assign cout8LL=C[7];
     else assign cout8LL=1'b0;
     if (WIDTH>=16) assign cout16=C[15];
@@ -892,15 +896,10 @@ endmodule
 	  begin
 	    assign out[63:43]=(en&~ben[1]) ? exbits : 21'bz; 
 	    assign out[42:32]=(en&~ben[0]) ? 11'b0 : 11'bz; 
-            assign out[63:16]=(X[15] & sxtEn) ? {48{~C1[15]}} : 'z;
-            assign out[63:16]=(nX[15] & sxtEn) ? {48{~nC1[15]}} : 'z;
 	  end
     
   endgenerate
   
-  always @(*) begin
-     // $display(en,":",ben[1]," XX ",exbits," YY ",out[63:44]," t ",{a[64],b[64]});
-  end 
      
 endmodule
 
