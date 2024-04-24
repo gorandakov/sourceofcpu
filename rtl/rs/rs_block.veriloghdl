@@ -97,26 +97,16 @@ module rs_write_forward_ALU(
   assign newDataFu_d=(fuFwd[3] && |fuFwd[2:0]) ? FU9 : 'z;  
   assign newDataFuu_d=(fuuFwd[3] && |fuuFwd[2:0]) ? FU9_reg : 'z;  
 
-  /*
-    To correctly implement the alu adder, the 3:1 mux is divided by making this mux 6:1 and making a sub mux of 2:1 together with and / or
-    and one compressor step as the first phase.
-    Note it is possible to extend to 4:1 but isn't.
-    Same is done with LSU adder, but first phase is half adder- 2:1 mux, then half adder-or/and
-    ALU adder can be 6 phase + mux pushback
-    LSU adder is 7 phase + mux pushback
-    THUS if address compute instruction is cut alu can run 2x clock!
-    But only on a in-order core!
-  */
 
-  assign newData_d[31:0]=({fuFwd,fuuFwd}==8'hff) ? oldData[31:0] : 'z;  
-  assign newData_d[31:0]=(fuFwd!=4'hf) ? newDataFu_d[31:0] : 'z;  
-  assign newData_d[31:0]=(fuuFwd!=4'hf) ? newDataFuu_d[31:0] : 'z;  
+  assign newData_d[15:0]=({fuFwd,fuuFwd}==8'hff) ? oldData[15:0] : 'z;  
+  assign newData_d[15:0]=(fuFwd!=4'hf) ? newDataFu_d[15:0] : 'z;  
+  assign newData_d[15:0]=(fuuFwd!=4'hf) ? newDataFuu_d[15:0] : 'z;  
   assign newData_d[64]=({fuFwd,fuuFwd}==8'hff) ? oldData[64] : 1'BZ;  
   assign newData_d[64]=(fuFwd!=4'hf) ? newDataFu_d[64] : 1'BZ;  
   assign newData_d[64]=(fuuFwd!=4'hf) ? newDataFuu_d[64] : 1'BZ;  
-  assign newData_d[63:32]=({fuFwd,fuuFwd}==8'hff && ~sxtEn) ? oldData[63:32] : 'z;  
-  assign newData_d[63:32]=(fuFwd!=4'hf && ~sxtEn) ? newDataFu_d[63:32] : 'z;  
-  assign newData_d[63:32]=(fuuFwd!=4'hf || sxtEn) ? (newDataFuu_d[63:32]|{48{D&sxtEn}})&{48{D|~sxtEn}} : 'z;  
+  assign newData_d[63:16]=({fuFwd,fuuFwd}==8'hff && ~sxtEn) ? oldData[63:16] : 'z;  
+  assign newData_d[63:16]=(fuFwd!=4'hf && ~sxtEn) ? newDataFu_d[63:16] : 'z;  
+  assign newData_d[63:16]=(fuuFwd!=4'hf || sxtEn) ? (newDataFuu_d[63:16]|{48{D&sxtEn}})&{48{D|~sxtEn}} : 'z;  
 
   always @(posedge clk) 
   begin
