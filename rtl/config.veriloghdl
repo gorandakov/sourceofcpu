@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-//comment for 128k cache
-//`define ICACHE_256K
-//comment for 128k cache
-//`define DCACHE_256K
-`define simulation
+//uncomment for goldium_edition
+//note simulator hacks for running on compliant verilog simulator aren't implemented on it!
+//`define goldium_edition 1
+`define goldium_edition 0
+
