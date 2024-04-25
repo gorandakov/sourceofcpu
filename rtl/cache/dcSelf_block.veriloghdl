@@ -55,10 +55,10 @@ module dcache1_ram(
     begin
       if (rst) read_addr_reg<={ADDR_WIDTH{1'b0}};
       else if (!read_nClkEn) read_addr_reg<=read_addr; 
-      if (write_wen & write_ben[0]) ram[write_addr][8:0]<=write_data[8:0]; else (* keep *)  ram[write_addr][8:0]<=ram[write_addr][8:0];
-      if (write_wen & write_ben[1]) ram[write_addr][17:9]<=write_data[17:9]; else (* keep *) ram[write_addr][17:9]<=ram[write_addr][17:9];
-      if (write_wen & write_ben[2]) ram[write_addr][26:18]<=write_data[26:18]; else (* keep *)  ram[write_addr][26:18]<=ram[write_addr][26:18];
-      if (write_wen & write_ben[3]) ram[write_addr][35:27]<=write_data[35:27]; else (* keep *) ram[write_addr][35:27]<=ram[write_addr][35:27];
+      if (write_wen & write_ben[0]) ram[write_addr][8:0]<=write_data[8:0]; else /* keep */  ram[write_addr][8:0]<=ram[write_addr][8:0];
+      if (write_wen & write_ben[1]) ram[write_addr][17:9]<=write_data[17:9]; else /* keep */ ram[write_addr][17:9]<=ram[write_addr][17:9];
+      if (write_wen & write_ben[2]) ram[write_addr][26:18]<=write_data[26:18]; else /* keep */  ram[write_addr][26:18]<=ram[write_addr][26:18];
+      if (write_wen & write_ben[3]) ram[write_addr][35:27]<=write_data[35:27]; else /* keep */ ram[write_addr][35:27]<=ram[write_addr][35:27];
     end
 
 endmodule
