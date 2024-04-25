@@ -20,6 +20,10 @@ limitations under the License.
 module fun_lsq(
   clk,
   rst,
+`if goldium_edition==1
+  clkX0,
+  clkX1,
+`endif
   except,
   bus_holds_addrcalc_reg2,miss_holds_addrcalc_reg2,miss_pause_addrcalc_reg2,insert_isData_reg2,
   pause_addrcalc,WDoRsPause,
@@ -79,6 +83,13 @@ module fun_lsq(
 
   input clk;
   input rst;
+`if goldium_edition==1
+  input clkX0;
+  input clkX1;
+`else
+  wire clkX0=1'b1;
+  wire clkX1=1'b0;
+`endif
   input except;
   input bus_holds_addrcalc_reg2,miss_holds_addrcalc_reg2,miss_pause_addrcalc_reg2,insert_isData_reg2;
   input pause_addrcalc;
