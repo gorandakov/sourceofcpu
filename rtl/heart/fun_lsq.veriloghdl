@@ -644,12 +644,6 @@ module fun_lsq(
   assign st1_bgn_ben=wreq_bben[1];
   assign st1_end_ben=wreq_endben[1];
 
-  /*
-   WARNING: wreq_confl and wreq_xconfl not yet written.
-   wreq_confl has to be false on same 4 byte collision
-   wreq_xconfl has to be false on gold _1_ byte collision, but it doesn't
-   have to be false just because of same in 4 byte collision
-  */
   always @(posedge clk) begin
     st_stall_reg<=st_stall;
     if (rst) begin
@@ -661,7 +655,7 @@ module fun_lsq(
 	dc_pdataP_reg[0]<=0;
 	dc_pdataP_reg[1]<=0;
     end else if (!wreq_stall && !wreq_confl && !wreq_en_reg[3:2]) begin
-        wreq_en_reg<={2'b0,wreq_en&wreq_xconfl};
+        wreq_en_reg<={2'b0,wreq_en};
         wreq_data_reg[0]<=wreq_data[0];
         wreq_data_reg[1]<=wreq_data[1];
         dc_wdataP_reg[0]<=dc_wdataP[0];
@@ -669,12 +663,12 @@ module fun_lsq(
         dc_pdataP_reg[0]<=dc_pdataP[0];
         dc_pdataP_reg[1]<=dc_pdataP[1];
     end else if (!wreq_stall && !wreq_confl && !wreq_en_reg[3]) begin
-        wreq_en_reg<={1'b0,wreq_en&wreq_xconfl,wreq_en_reg[2]};
+        wreq_en_reg<={1'b0,wreq_en,wreq_en_reg[2]};
         wreq_data_reg<={wreq_data[0],wreq_data[1],wreq_data[0],wreq_data_reg[2]};
         dc_wdataP_reg<={dc_wdataP[0],dc_wdataP[1],dc_wdataP[0],dc_wdataP_reg[2]};
         dc_pdataP_reg<={dc_pdataP[0],dc_pdataP[1],dc_pdataP[0],dc_pdataP_reg[2]};
     end else if (!wreq_stall && wreq_confl) begin
-        wreq_en_reg<={wreq_en_reg[2]&~wreq_crossdep_vec,wreq_en[1]&wreq_xconfl[1],wreq_crossdep_vec,wreq_en[0]&wreq_xconfl[0]};
+        wreq_en_reg<={wreq_en_reg[2]&~wreq_crossdep_vec,wreq_en[1],wreq_crossdep_vec,wreq_en[0]};
         wreq_data_reg<={wreq_data_reg[2],wreq_data[1],wreq_data_reg[2],wreq_data[0]};
         dc_wdataP_reg<={dc_wdataP_reg[2],dc_wdataP[1],dc_wdataP_reg[2],dc_wdataP[0]};
         dc_pdataP_reg<={dc_pdataP_reg[2],dc_pdataP[1],dc_pdataP_reg[2],dc_pdataP[0]};
