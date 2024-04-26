@@ -1731,10 +1731,9 @@ module smallInstr_decoder(
                   prA_use[29]=~instr[12];
                   prT[29]=prA[29];
                   if (!IS_GODL) begin
-                      if (instr[15]) poperation[19]=`op_sadd_odd; //pre-multiplied index bump
+                      if (instr[16]) poperation[19]=`op_sadd_odd; //pre-multiplied index bump
                   end else begin
-                      if (instr[15]) begin
-                          poperation[19]=`op_sadd_even; 
+                      if (instr[16]) begin
                           poperation[19][9]=1'b1;
                           prB[29]={instr[17],instr[11:8]};
                           prT[29]=instr[16:12];
@@ -1746,15 +1745,20 @@ module smallInstr_decoder(
                   // for up to 4 times ->Next or +=size access
                   if (instr[31]) puseBConst[29]=1'b1;
                   if (IS_GOLD) begin
-                      if (instr[14:13]==2'b1 && clkX1) prT_use[29]=~H & LARGE_CORE;
-                      if (instr[14:13]==2'b1 && clkX2) prT_use[29]=~H & LARGE_CORE;
-                      if (instr[14:13]==2'b10 && clkX2) prT_use[29]=LARGE_CORE;
-                      if (instr[14:13]==2'b11 && clkX2) prT_use[29]=~H & LARGE_CORE;
+                      if (instr[15:13]==3'b1 && clkX1) pcalu[29]={4'hf,~H & LARGE_CORE};
+                      if (instr[15:13]==3'b1 && clkX2) pcalu[29]={4'hf,~H & LARGE_CORE};
+                      if (instr[15:13]==3'b1 && clkX3) pcalu[29]={4'hf,~H & LARGE_CORE};
+                      if (instr[15:13]==3'b10 && clkX2) pcalu[29]={4'hf,LARGE_CORE};
+                      if (instr[15:13]==3'b10 && clkX3) pcalu[29]={4'hf,LARGE_CORE};
+                      if (instr[15:13]==2'b11 && clkX2) pcalu[29]={4'hf,~H & LARGE_CORE};
+                      if (instr[15:13]==2'b11 && clkX3) pcalu[29]={4'hf,~H & LARGE_CORE};
+                      if (instr[15:13]==3'b100 && clkX3) pcalu[29]={4'hf,LARGE_CORE};
+                      if (instr[15:13]==3'b101 && clkX3) pcalu[29]={4'hf,~H & LARGE_CORE};
                   end else begin
-                      if (instr[14:13]==2'b1) prT_use[29]=~H & LARGE_CORE;
+                      if (instr[15:13]==2'b1) pcalu[29]={4'hf,~H & LARGE_CORE};
                   end
-                  if (instr[14]) prT_use[29]=1'b0; //only two wat vectorisation for now
-                  if (instr[15]) prT_use[29]=1'b1; //pre-multiplied index bump
+                  if (instr[14] && !IS_GODL) pcalu[29]={4'hf,1'b0}; //only two wat vectorisation for now
+                  if (instr[16]) pcalu[29]={4'hf,1'b1}; //pre-multiplied index bump
               end
               instr[8]=instr[23];
           end else begin
