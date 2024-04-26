@@ -96,7 +96,7 @@ module smallInstr_decoder(
   localparam REOR_WIDTH=24; 
   localparam TRICNT_TOP=40;//really 38; 2 redundant
   parameter [5:0] INDEX=0;
-  paremeter [0:0] IS_GOLD;
+  localparam [0:0] IS_GOLD=`goldium_edition;
 
   input clk;
   input rst;
