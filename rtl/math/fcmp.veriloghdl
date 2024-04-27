@@ -189,7 +189,7 @@ module fcmpd(clk,rst,
   assign res_C=res_unord || (A_s && ~B_s && ~A_zero|~B_zero) || (~A_s && ~B_s 
     && ~COA) || (A_s && B_s && ~COB) || (~A_s && ~B_s && COA && COB && ~cmpC) ||
     (A_s && B_s && COA && COB && cmpC|fEQl);
-  assign res_S=~res_unord && (A_s && ~B_s && ~A_zero|~B_zero) | (~A_s && ~B_s 
+  assign res_S=~res_unord & ~afm && (A_s && ~B_s && ~A_zero|~B_zero) | (~A_s && ~B_s 
     && ~COA) | (A_s && B_s && ~COB) | (~A_s && ~B_s && COA && COB && ~cmpC) |
     (A_s && B_s && COA && COB && cmpC|fEQl);
   assign res_Z=~res_unord && (A_zero&B_zero) | (extA==extB&&A_s==B_s&&fEQl|
