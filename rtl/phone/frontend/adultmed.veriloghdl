@@ -992,25 +992,15 @@ module smallInstr_decoder(
        //verilator lint_on CASEINCOMPLETE
        trien[8]=~magic[0] & subIsLinkRet;
        if (opcode_sub[1]) begin
-           //inc dec neg
-           pport[8]=PORT_ALU;
-	   prA[8]=instr[12:8];
-           prB[8]=instr[12:8];
-           prT[8]=instr[12:8];
-           poperation[8][2]=instr[13];
-           poperation[8][0]=instr[14];
-           poperation[8][8]=instr[15];
-           poperation[8][9]=~instr[15];
-           prA_use[8]=~instr[15];
-           prB_use[8]=1'b1;
-           puseBConst[8]=instr[15];
-           pconstant[8]=64'd1;
-           prT_use[8]=1'b1;
-           puseRs[8]=1'b1;
-           prAlloc[8]=1'b1;
-           pflags_use[8]=1'b1;
-           pflags_write[8]=1'b1;
-           if (instr[15:13]==3'h7) perror[8]=2'b1;
+          poperation[8][7:0]=instr[12] ? `op_csetn : `op_cset;
+          poperation[8][10:8]=instr[15:13];
+          poperation[8][12]=1'b1;
+          pport[8]=PORT_ALU;
+          puseRs[8]=1'b1;
+          prAlloc[8]=1'b1;
+          prT_use[8]=1'b1;
+          pflags_use[8]=1'b1;
+          prT[8]={1'b0,instr[11:8]};
        end else begin
            pport[8]=PORT_ALU;
            poperation[8][12]=1'b1;
@@ -1685,7 +1675,7 @@ module smallInstr_decoder(
       end
        
       trien[28]=magic[0] && isLeaIPRel|isCSet;
-      if (isLeaIPRel) begin
+      if (isLeaIPRel&0) begin
           puseBConst[28]=1'b1;
 	  pport[28]=PORT_ALU;
 	  prB_use[28]=1'b1;
@@ -1710,7 +1700,6 @@ module smallInstr_decoder(
           prT_use[28]=1'b1;
           pflags_use[28]=1'b1;
           if (magic[1:0]==2'b01) prT[28]={instr[17],instr[11:8]};
-          //else if (~magic[0]) rT=instr[11:8];
           else perror[28]=1;
       end
       
