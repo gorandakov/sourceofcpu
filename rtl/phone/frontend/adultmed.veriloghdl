@@ -998,7 +998,7 @@ module smallInstr_decoder(
           pport[8]=PORT_ALU;
           puseRs[8]=1'b1;
           prAlloc[8]=1'b1;
-          prT_use[8]=1'b1;
+          prT_use[8]=instr[15:12]!=4'hf; //NOP if it is 4'hf
           pflags_use[8]=1'b1;
           prT[8]={1'b0,instr[11:8]};
        end else begin
@@ -1675,20 +1675,19 @@ module smallInstr_decoder(
       end
        
       trien[28]=magic[0] && isLeaIPRel|isCSet;
-      if (isLeaIPRel&0) begin
+      if (isLeaIPRel) begin //NOP
           puseBConst[28]=1'b1;
 	  pport[28]=PORT_ALU;
 	  prB_use[28]=1'b1;
-	  prT_use[28]=1'b1;
+	  prT_use[28]=1'b0;
 	  puseRs[28]=1'b1;
 	  prAlloc[28]=1'b1;
 	  poperation[28][7:0]=`op_add64;
 	  poperation[28][12]=1'b1;
-	  pisIPRel[28]=1'b1;
 	  prT[28]=instr[12:8];
-	  if (instr[15:13]!=0 || oddmode[3]) perror[28]=1;
           poperation[28][12]=1'b1;
           if (magic==4'b0111) pconstant[28]={20'b0,instr[59:16]};
+          if (magic==4'b1111) perror[28]=1'b0;
           //WARNING: loads IP only; no offset
       end else begin
           poperation[28][7:0]=instr[12] ? `op_csetn : `op_cset;
