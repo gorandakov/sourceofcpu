@@ -21,3 +21,22 @@ public
 next_subcell:tpascell;
 pvalue: pqword;// access value through pvalue only one per group of and-or
 end
+
+pasbit=record
+val:byte;
+end;
+operator and(x,y: pasbit) res:pasbit;
+operator or(x,y: pasbit) res: pasbit;
+operator not(x:pasbit) y:pasbit;
+operator equals(x: array of pasbit) res: pasbit;
+// pair of enable and value or enble ifval elseval; if two entries the eleval is z aka both rails low
+tioarray=class of tcomponent;
+public 
+bits:array of pasbit;
+drv:array[0..5] of array of tpascell;
+driven_gates:array[0..5] of array of Word;
+procedure peek;
+procedure poke;
+kind:(inpt,outpt,inout);
+constructor Create(N: string; o: tcomponent; w:integer);
+end
