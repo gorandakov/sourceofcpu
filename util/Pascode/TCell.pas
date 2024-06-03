@@ -16,6 +16,8 @@ function get_driver_stren: integer; virtual;
 protected
 driven: array[0..5] of tpascell;
 driven_gatez: array[0..5] of Word;
+value: qword;
 public
 next_subcell:tpascell;
+pvalue: pqword;// access value through pvalue only one per group of and-or
 end
