@@ -300,7 +300,7 @@ module fun_fpu_BOTH(
   fork_out[139:70]
   ); 
 
-  fun_fpuL #(HIGH) lfpc_mod(
+  fun_fpuH #(HIGH) lfpc_mod(
   clk,
   rst,
   fpcsr,
