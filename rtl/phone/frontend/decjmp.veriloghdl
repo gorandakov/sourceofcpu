@@ -168,7 +168,10 @@ module jump_decoder(
           if ({instr[7:6],instr[1:0]}==4'hf) jumpType=5'h10; //uc jump intead of nP 
       end else if (isBasicCJump) begin
           jumpType={1'b0,(magic[1:0]==2'b01) ? instr[18] : instr[32],opcode_main[3:2],opcode_main[1]^lizztruss};  
-          if (magic[1:0]==2'b01) constant={{50{instr[31]}},instr[31:19],1'b0};    
+          if (magic[1:0]==2'b01 && &opcode_main[3:1]) begin
+              constant={{56{instr[23]}},instr[23:17],1'b0};
+              jumpType={1'b0,instr[16:13]};
+          end else if (magic[1:0]==2'b01) constant={{50{instr[31]}},instr[31:19],1'b0};    
           else if (magic[2:0]==3'b011) constant={{48{instr[47]}},instr[47:33],1'b0};
           else if (magic[3:0]==4'b0111) begin error=0; constant={{32{instr[63]}},instr[63:33],1'b0}; end
       end else if (isLongCondJump) begin
