@@ -690,43 +690,30 @@ module fun_lsq(
     end
   endfunction
 
-  assign wreq_xconfl[0]=clkX2 ? get_xconf(wrq_dta[0],wrq_dta[1],wrq_bgnb[0],wrq_endb[0],wrq_bgnb[1],wrq_endb[1])[1]
-                              | get_xconf(wrq_dta[0],wrq_dta[2],wrq_bgnb[0],wrq_endb[0],wrq_bgnb[2],wrq_endb[2])[1] : 1'bz;
   assign wreq_xconfl[0]=clkX1 ? get_xconf(wrq_dta[0],wrq_dta[1],wrq_bgnb[0],wrq_endb[0],wrq_bgnb[1],wrq_endb[1])[1] : 1'bz;
   assign wreq_xconfl[0]=clkX0 ? 1'b0 : 1'bz;
 
-  assign wreq_xconfl[1]=clkX2 ? get_xconf(wrq_dta[3],wrq_dta[4],wrq_bgnb[3],wrq_endb[3],wrq_bgnb[4],wrq_endb[4])[1]
-                              | get_xconf(wrq_dta[3],wrq_dta[5],wrq_bgnb[3],wrq_endb[3],wrq_bgnb[5],wrq_endb[5])[1] : 1'bz;
   assign wreq_xconfl[1]=clkX1 ? get_xconf(wrq_dta[3],wrq_dta[4],wrq_bgnb[3],wrq_endb[3],wrq_bgnb[4],wrq_endb[4])[1] : 1'bz;
   assign wreq_xconfl[1]=clkX0 ? 1'b0 : 1'bz;
 
   assign wreq_confl[0]=clkX1 ? get_xconf(wrq_dta[0],wrq_dta[3],wrq_bgnb[0],wrq_endb[0],wrq_bgnb[3],wrq_endb[3])[0] : 1'bz;
   assign wreq_confl[0]=clkX0 ? get_xconf(wrq_dta[0],wrq_dta[4],wrq_bgnb[0],wrq_endb[0],wrq_bgnb[4],wrq_endb[4])[1] : 1'bz;
-  assign wreq_confl[0]=clkX2 ? get_xconf(wrq_dta[0],wrq_dta[5],wrq_bgnb[0],wrq_endb[0],wrq_bgnb[5],wrq_endb[5])[1] : 1'bz;
   assign wreq_confl[1]=clkX1 ? get_xconf(wrq_dta[1],wrq_dta[4],wrq_bgnb[1],wrq_endb[1],wrq_bgnb[4],wrq_endb[4])[0] : 1'bz;
   assign wreq_confl[1]=clkX0 ? get_xconf(wrq_dta[1],wrq_dta[3],wrq_bgnb[1],wrq_endb[1],wrq_bgnb[3],wrq_endb[3])[1] : 1'bz;
-  assign wreq_confl[1]=clkX2 ? get_xconf(wrq_dta[1],wrq_dta[2],wrq_bgnb[1],wrq_endb[1],wrq_bgnb[2],wrq_endb[2])[1] : 1'bz;
 
   always @* begin
       if (clkX0) wrq_dta[0]=wreq_data[0]; else wrq_dta[0]='z;
       if (clkX1) wrq_dta[1]=wreq_data[0]; else wrq_dta[1]='z;
-      if (clkX2) wrq_dta[2]=wreq_data[0]; else wrq_dta[1]='z;
       if (clkX0) wrq_dta[3]=wreq_data[1]; else wrq_dta[2]='z;
       if (clkX1) wrq_dta[4]=wreq_data[1]; else wrq_dta[3]='z;
-      if (clkX2) wrq_dta[5]=wreq_data[1]; else wrq_dta[3]='z;
       if (clkX0) wrq_bgnb[0]=wreq_bgn_ben[0]; else wrq_bgnb[0]='z;
       if (clkX1) wrq_bgnb[1]=wreq_bgn_ben[0]; else wrq_bgnb[1]='z;
-      if (clkX2) wrq_bgnb[2]=wreq_bgn_ben[0]; else wrq_bgnb[1]='z;
       if (clkX0) wrq_bgnb[3]=wreq_bgn_ben[1]; else wrq_bgnb[2]='z;
       if (clkX1) wrq_bgnb[4]=wreq_bgn_ben[1]; else wrq_bgnb[3]='z;
-      if (clkX2) wrq_bgnb[5]=wreq_bgn_ben[1]; else wrq_bgnb[3]='z;
       if (clkX0) wrq_endb[0]=wreq_end_ben[0]; else wrq_endb[0]='z;
       if (clkX1) wrq_endb[1]=wreq_end_ben[0]; else wrq_endb[1]='z;
-      if (clkX2) wrq_endb[2]=wreq_end_ben[0]; else wrq_endb[1]='z;
       if (clkX0) wrq_endb[3]=wreq_end_ben[1]; else wrq_endb[2]='z;
       if (clkX1) wrq_endb[4]=wreq_end_ben[1]; else wrq_endb[3]='z;
-      if (clkX2) wrq_endb[5]=wreq_end_ben[1]; else wrq_endb[3]='z;
-            
   end
 
   always @(posedge clk) begin
