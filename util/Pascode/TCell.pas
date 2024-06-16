@@ -34,9 +34,15 @@ the not operation must not change z into x, it must keep it z
 pasbit=record
 val:byte;
 end;
+pasbit_no_or=pasbit;
+pasbit_no_and=pasbit;
 operator and(x,y: pasbit) res:pasbit;
+operator and(x,y: pasbit_no_and) res:pasbit_no_and;
+operator and(x,y: pasbit_no_and) res;
 operator xor(x,y: pasbit) res:pasbit;
 operator or(x,y: pasbit) res: pasbit;
+operator or(x,y: pasbit_no_or) res: pasbit_no_or;
+operator or(x,y: pasbit_no_or) res: pasbit;
 operator not(x:pasbit) y:pasbit;
 operator assign(x:string) res : array of pasbit;
 operator assign(x:pasbit) res : array of pasbit;
@@ -44,8 +50,8 @@ function drive(x:array of pasbit; y:pasbit) : array of pasbit;
 function drive2(x,y:array of pasbit; z:pasbit) : array of pasbit;
 function zee(num:integer) : array of pasbit;
 function zeroes(num:integer) : array of pasbit;
-function clkref(num:integer) : pasbit;
-function clknref(num:integer) : pasbit;
+function clkref(num:integer) : pasbit_no_or;
+function clknref(num:integer) : pasbit_no_and;
 function redor(x:array of pasbit) : pasbit;
 function redand(x:array of pasbit) : pasbit;
 function redxor(x:array of pasbit) : pasbit;
@@ -75,3 +81,5 @@ function phase_handler(phase:integer) :
 set of (res_OK,res_SIM_MISMATCH,res_ASSERT_FAL); virtual;
 procedure assert_en(en:boolean; warning : string);
 end
+
+
