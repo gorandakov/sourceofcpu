@@ -20,4 +20,13 @@ template <TObject.*void field, class T> class GC_PTR {
     if (from) __assign_owner_new(get_object,*this,from);
     else __free_ptr(get_object,*this);
   }
+  template <TObject.*void field_other> void operator+= 
+(GC_PTR<field_other,T> &from) {
+    __addref_ptr(from->get_object,from,get_object,*this);
+  }
+  PTR_ONE_INST<T> operator() {
+    PTR_ONE_INST<T> res;
+    res.valp=valp;
+    return res;
+  }
 };
