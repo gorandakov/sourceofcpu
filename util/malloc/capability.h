@@ -35,9 +35,9 @@ struct __KIPCCapability;
    as local.
 */
 struct __KCapability_part_B {
-  unsigned long capid[2];
   unsigned long offset;
   unsigned long offset_internal;
+  unsigned long capid[];
 };
 
 struct __KCapability_part_A {
@@ -66,24 +66,24 @@ extern "C" {
         negative value indicates error;
         if capability is not returned, the zero or more value can return a datum on no error;
         first frag is the "integer" parameters if any. The latter is only a convention and is not enforced by kernel.
-        Note the kernel doesn't sanitise the buffers for containing pointers, it is up to the server.
+        Note the kernel doesn't sanitise the buffers for containing pointers, it is up to the server if it could accidentally access them.
 */
-long KSendMsk(void *retcap_and_flags __attribute(allign(16)),void *cap_and_flags, pstring<struct __KBBUF> buffer);
+long KSendMsk(void *retcap_and_flags __attribute(allign(16)),void *cap_and_flags, parray<struct __KBBUF> buffer, unsigned long arb1);
 /*
   KReplyMsk:
       Auto send reply flag; also sends the new values for offset and offset_internal after completing the request.
 */
-long KReplyMsk(void *retcap_and_flags __attribute(allign(16)),void *cap_and_flags, pstring<struct __KBBUF> buffer,
-    long offset, long offset_internal);
+long KReplyMsk(void *retcap_and_flags __attribute(allign(16)),void *cap_and_flags, parray<struct __KBBUF> buffer,
+    long offset, long offset_internal, unsigned long arb1);
 
-long (*__KCallBack)(void *own_retcap_and_flags ,void *cap_and_flags __attribute(allign(16)), pstring<struct __KBBUF> buffer,
-    long offset, long offset_internal);
+long (*__KCallBack)(void *own_retcap_and_flags ,void *cap_and_flags __attribute(allign(16)), parray<struct __KBBUF> buffer,
+    long offset, long offset_internal, unsigned long arb1);
 /* 
   KReplyMsk
   combined send and return; if used for sending then
 */
-long KSendReplyMsk(void *retcap_and_flags __attribute(allign(16)),void *cap_and_flags, pstring<struct __KBBUF> buffer,
-    long offset, long offset_internal);
+long KSendReplyMsk(void *retcap_and_flags __attribute(allign(16)),void *cap_and_flags, parray<struct __KBBUF> buffer,
+    long offset, long offset_internal, unsigned long arb1);
 /*
   free() as in s standard library. note it can handle multiple heap factories.
 */
