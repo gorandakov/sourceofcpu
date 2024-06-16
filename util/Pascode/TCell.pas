@@ -82,4 +82,7 @@ set of (res_OK,res_SIM_MISMATCH,res_ASSERT_FAL); virtual;
 procedure assert_en(en:boolean; warning : string);
 end
 
-
+{$ifdef simonly}
+{$include TCell_impl_simonly.inc}
+{$endif}
+end.
