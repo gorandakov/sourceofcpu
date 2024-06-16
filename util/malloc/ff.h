@@ -1,5 +1,14 @@
 class TObject;
 
+template <class T> class PTR_ONE_INST {
+  public:
+  T *valp_name_0xdeadbeef;
+  T& operator *() {
+      return *valp_name_0xdeadbeef;
+  }
+};
+
+
 template <TObject.*void field, class T> class GC_PTR {
   private:
   T *valp;
@@ -26,7 +35,8 @@ template <TObject.*void field, class T> class GC_PTR {
   }
   PTR_ONE_INST<T> operator() {
     PTR_ONE_INST<T> res;
-    res.valp=valp;
+    res.valp_name_0xdeadbeef=valp;
     return res;
   }
 };
+
