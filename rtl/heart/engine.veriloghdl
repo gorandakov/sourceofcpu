@@ -5554,7 +5554,43 @@ addrcalc_block #(BUS_ID) addrcalc_aligned(
 
   assign piff=outOp_regn2[11] && outEn_regn2[3] && outOp_regn2[7:0]==8'd0;
 
-
+  fun_fpsu_BOTH fpsuL_mod(
+  .clk(clk),
+  .rst(rst),
+  .fpcsr(fpcsr[31:0]),
+  .u1_A0({68{clkREF}}&outDataAVL[0]),.u1_B0({68{clkREF2}}&outDataBVL[0]),
+  .u1_A1({68{clkREF}}&outDataAVH[0]),.u1_B1({68{clkREF2}}&outDataBVH[0]),
+  .u1_en(outEn_reg[1]),.u1_op(outOp_reg[1]),
+  .u1_fufwd_A({4{clkREF}}&fuFwdA_reg[1]),.u1_fuufwd_A({4{clkREF}}&fuuFwdA_reg[1]),
+  .u1_fufwd_B({4{clkREF2}}&fuFwdB_reg[1]),.u1_fuufwd_B({4{clkREF2}}&fuuFwdB_reg[1]),
+  .u1_ret(fsretA[0]),.u1_ret_en(),.u1_XSUB(outXAM_reg[1]),
+  .u3_A0({68{clkREF}}&outDataAVL[2]),.u3_B0({68{clkREF2}}&outDataBVL[2]),
+  .u3_A1({68{clkREF}}&outDataAVH[2]),.u3_B1({68{clkREF2}}&outDataBVH[2]),
+  .u3_en(outEn_reg[4]),.u3_op(outOp_reg[4]),
+  .u3_fufwd_A({4{clkREF}}&fuFwdA_reg[4]),.u3_fuufwd_A({4{clkREF}}&fuuFwdA_reg[4]),
+  .u3_fufwd_B({4{clkREF2}}&fuFwdB_reg[4]),.u3_fuufwd_B({4{clkREF2}}&fuuFwdB_reg[4]),
+  .u3_ret(fsretA[2]),.u3_ret_en(),.u3_XSUB(outXAM_reg[4]),
+  .u5_A0({68{clkREF}}&outDataAVL[4]),.u5_B0({68{clkREF2}}&outDataBVL[4]),
+  .u5_A1({68{clkREF}}&outDataAVH[4]),.u5_B1({68{clkREF2}}&outDataBVH[4]),
+  .u5_en(outEn_reg[7]),.u5_op(outOp_reg[7]),
+  .u5_fufwd_A({4{clkREF}}&fuFwdA_reg[7]),.u5_fuufwd_A({4{clkREF}}&fuuFwdA_reg[7]),
+  .u5_fufwd_B({4{clkREF2}}&fuFwdB_reg[7]),.u5_fuufwd_B({4{clkREF2}}&fuuFwdB_reg[7]),
+  .u5_ret(fsretA[4]),.u5_ret_en(),.u5_XSUB(outXAM_reg[7]),
+  .FUFH0(FUVH[0]),.FUFH1(FUVH[1]),.FUFH2(FUVH[2]),
+  .FUFH3(FUVH[3]),.FUFH4(FUVH[4]),.FUFH5(FUVH[5]),
+  .FUFH6(FUVH[6]),.FUFH7(FUVH[7]),.FUFH8(FUVH[8]),
+  .FUFH9(FUVH[9]),
+  .FUFL0(FUVL[0]),.FUFL1(FUVL[1]),.FUFL2(FUVL[2]),
+  .FUFL3(FUVL[3]),.FUFL4(FUVL[4]),.FUFL5(FUVL[5]),
+  .FUFL6(FUVL[6]),.FUFL7(FUVL[7]),.FUFL8(FUVL[8]),
+  .FUFL9(FUVL[9]),
+  .ALTDATAH0(sqrDatVL_reg[67:0]),.ALTDATAH1({FUTYPE,66'b0}),
+  .ALTDATAL0(sqrDatVL_reg[67:0]),.ALTDATAL1({FUTYPE,FUCVT2[65:0]}),
+  .ALT_INP({dalt[1],sqrDatEn_reg}),
+  .FOOFL0(FOOFL1),.FOOFL1(FOOFL2),.FOOFL2(FOOFL3),
+  .XI_dataS(XI_dataS),
+  .fork_in(frkXH_reg),.fork_out(frkXL)
+  );
 
 
   assign piff_paff_B={frkDH,frkDL};
