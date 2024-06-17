@@ -88,6 +88,13 @@ long KSendReplyMsk(void *retcap_and_flags __attribute(allign(16)),void *cap_and_
   free() as in s standard library. note it can handle multiple heap factories.
 */
 void free(void *);
+
+void *mkcap(unsigned int handle,unsigned int flags,unsigned int syscall) {
+  unsigned long l;
+  l=(flags&0xf)|(handle<<4)|(syscall<<36);
+  return (void *) l;
+}
+
 /*
   global heap factories in each module (global variables filled by linker, pointers to malloc objects):
   client_object_factory,

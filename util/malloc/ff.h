@@ -38,5 +38,8 @@ template <TObject.*void field, class T> class GC_PTR {
     res.valp_name_0xdeadbeef=valp;
     return res;
   }
+  void add_unhinged_owner(PTR_ONE_INST<T> obj) {
+    __addref_dangling(get_object,valp,obj);
+  }
 };
 
