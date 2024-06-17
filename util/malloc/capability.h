@@ -67,8 +67,9 @@ extern "C" {
         if capability is not returned, the zero or more value can return a datum on no error;
         first frag is the "integer" parameters if any. The latter is only a convention and is not enforced by kernel.
         Note the kernel doesn't sanitise the buffers for containing pointers, it is up to the server if it could accidentally access them.
+        syscalls are at most 12 bit unsigned integers
 */
-long KSendMsk(void *retcap_and_flags __attribute(allign(16)),void *cap_and_flags, parray<struct __KBBUF> buffer, unsigned long arb1);
+long KSendMsk(void *retcap_and_flags __attribute(allign(16)),void *cap_and_flags_and_syscall, parray<struct __KBBUF> buffer, unsigned long arb1);
 /*
   KReplyMsk:
       Auto send reply flag; also sends the new values for offset and offset_internal after completing the request.
@@ -76,7 +77,7 @@ long KSendMsk(void *retcap_and_flags __attribute(allign(16)),void *cap_and_flags
 long KReplyMsk(void *retcap_and_flags __attribute(allign(16)),void *cap_and_flags, parray<struct __KBBUF> buffer,
     long offset, long offset_internal, unsigned long arb1);
 
-long (*__KCallBack)(void *own_retcap_and_flags ,void *cap_and_flags __attribute(allign(16)), parray<struct __KBBUF> buffer,
+long (*__KCallBack)(void *ret_cap_and_flags_and_syscall ,void *cap, parray<struct __KBBUF> buffer,
     long offset, long offset_internal, unsigned long arb1);
 /* 
   KReplyMsk
