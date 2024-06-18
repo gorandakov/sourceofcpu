@@ -15,6 +15,15 @@ struct __PTRBLOCK {
 void free(void *ptr) {
   struct __PTRHDR *p1;
   struct __PTRBLOCK *p2;
+  {
+    unsigned long valp2=(unsigned long) ptr;
+    unsigned long mask=0xffffffff800;
+    unsigned int exp=(valp2>>44)&0x1f;
+    valp2&=mask<<exp;
+    unsigned int low=(valp2>>52)&0xff0; 
+    valp2|=low<<exp;
+    ptr=(void *) valp2+32;
+  }
   if (p1=check_if_can_free(ptr,1)) {
       p2=p1->ptr_block;
       p2->handle_block_free(ptrbnd(p1,0x0), p1->alloc_size, p1->block_offset);
@@ -92,3 +101,32 @@ void __add_ref_ptr(void *from_parent_obj,void *from_ptr_obj, void
     }
 }
 
+
+void __add_owner_ptr(void *to_obj, void **to_ptr, void *from_obj) {
+  struct __PTRHDR *p1=((unsigned long)to_obj-32)&0xffffffffffffff80;
+  unsigned long n;
+  if (!p1->owner_cnt) {
+      p1->owner_cnt++;
+      p1->owners=from_obj;
+  } else if (p1->owner_cnt!=1) {
+      for(n=0;n<p1->owner_cnt;n=n+1) {
+          if (!p1->owners[n]) {
+              p1->owners[n]=from_obj;
+              return;
+          }
+      }
+      mreallocz((char *) p1->owners,2*p1->owner_cnt);
+      for(;n<p1->owner_cnt;n=n+1) {
+          if (!p1->owners[n]) {
+              p1->owners[n]=from_obj;
+              return;
+          }
+      }
+  } else {
+      void *old=p1->owners;
+      p1->owners=mallocz(32);
+      p1->owners[0]=old;
+      p1->owners[1]=from_obj;
+      p1->owner_cnt=2;
+  }
+}

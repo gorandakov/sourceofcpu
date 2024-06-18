@@ -9,7 +9,7 @@ template <class T> class PTR_ONE_INST {
 };
 
 
-template <TObject.*void field, class T> class GC_PTR {
+template <class T> class GC_PTR {
   private:
   T *valp;
   public:
@@ -25,15 +25,15 @@ template <TObject.*void field, class T> class GC_PTR {
     valp2|=low<<exp;
     return valp2+32;
   }
-  GC_PTR<field,T>(GC_PTR<field,T> &from) {
+  GC_PTR<T>(GC_PTR<T> &from) {
     
     __move_ptr(from.get_object(),from->get_object(),&valp,get_object(),&this);
   }
-  GC_PTR<field,T>(TObject *from) {
+  GC_PTR<T>(TObject *from) {
     if (from) __add_ref_ptr(get_object(),&valp,from.valp);
     else __free_ptr(get_object(),&valp);
   }
-  template <TObject.*void field_other> void operator+= 
+  void operator+= 
   (GC_PTR<field_other,T> &from) {
     __add_ref_ptr(get_object,&valp,from.valp);
   }
