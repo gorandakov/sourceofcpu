@@ -81,13 +81,13 @@ void __add_ref_ptr(void *from_parent_obj,void *from_ptr_obj, void
     struct __PTRHDR *p1=((unsigned long) from_obj-32)&0xffffffffff80;
     struct __PTRHDR *p2=((unsigned long) to_obj-32)&0xffffffffff80;
     if (p1->owner_cnt==1 && p2->owner_cnt==1) {
-        __append_owner(to_obj,to_ptr,from_ptr_obj);
+        __add_owner_ptr(to_obj,to_ptr,from_ptr_obj);
         *to_ptr=*from_ptr;
     } else if (p2->owner_cnt==1) {
-        __append_owner(to_obj,to_ptr,from_ptr_obj);
+        __add_owner_ptr(to_obj,to_ptr,from_ptr_obj);
         *to_ptr=*from_ptr;
     } else {
-        __append_owner(to_obj,to_ptr,from_ptr_obj);
+        __add_owner_ptr(to_obj,to_ptr,from_ptr_obj);
         *to_ptr=*from_ptr;
     }
 }

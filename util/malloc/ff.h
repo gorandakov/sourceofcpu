@@ -26,15 +26,16 @@ template <TObject.*void field, class T> class GC_PTR {
     return valp2+32;
   }
   GC_PTR<field,T>(GC_PTR<field,T> &from) {
-    __ptr_move(from.get_object,from,get_object,*this);
+    
+    __move_ptr(from.get_object(),from->get_object(),&valp,get_object(),&this);
   }
   GC_PTR<field,T>(TObject *from) {
-    if (from) __assign_owner_new(get_object,*this,from);
-    else __free_ptr(get_object,*this);
+    if (from) __add_ref_ptr(get_object(),&valp,from.valp);
+    else __free_ptr(get_object(),&valp);
   }
   template <TObject.*void field_other> void operator+= 
-(GC_PTR<field_other,T> &from) {
-    __addref_ptr(from->get_object,from,get_object,*this);
+  (GC_PTR<field_other,T> &from) {
+    __add_ref_ptr(get_object,&valp,from.valp);
   }
   PTR_ONE_INST<T> operator() {
     PTR_ONE_INST<T> res;
@@ -42,7 +43,7 @@ template <TObject.*void field, class T> class GC_PTR {
     return res;
   }
   void add_unhinged_owner(PTR_ONE_INST<T> obj) {
-    __addref_dangling(get_object,valp,obj);
+    __add_owner_ptr(get_object,valp,obj);
   }
 };
 
