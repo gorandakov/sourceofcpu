@@ -219,7 +219,7 @@ module predecoder_class(instr,magic,flag,FMA_mul,prev_FMA_mul,thread,class_,isLN
   isBasicCJump,
   isSelfTestCJump,
   isLongCondJump,
-  isCLeave,
+  isCLeave && |instr[31:17],
   isUncondJump,
   isIndirJump,
   isCall,
