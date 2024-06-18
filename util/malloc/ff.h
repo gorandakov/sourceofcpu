@@ -23,7 +23,7 @@ template <TObject.*void field, class T> class GC_PTR {
     valp2&=mask<<exp;
     unsigned int low=(valp2>>52)&0xff0;
     valp2|=low<<exp;
-    return valp2;
+    return valp2+32;
   }
   GC_PTR<field,T>(GC_PTR<field,T> &from) {
     __ptr_move(from.get_object,from,get_object,*this);
