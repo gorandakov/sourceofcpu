@@ -35,6 +35,8 @@ module saddrcalc(
   LSQ_no,
   II_no,
   WQ_no,
+  calu_code,
+  valS,
   thread,
   lsflag,
   cmplxAddr,
@@ -105,6 +107,8 @@ module saddrcalc(
   input [8:0] LSQ_no;
   input [9:0] II_no;
   input [5:0] WQ_no;
+  input [4:0] calu_code;
+  input [5:0] valS;
   input thread;
   input lsflag;
   input [63:0] cmplxAddr;
@@ -236,6 +240,8 @@ module saddrcalc(
   
   reg bus_hold_reg;
   reg bus_hold_reg2;
+
+  reg doJmp;
   
   reg [REG_WIDTH-1:0] regno_reg;
   reg [8:0] LSQ_no_reg;
@@ -245,6 +251,8 @@ module saddrcalc(
   reg lsflag_reg;
 
   wire [1:0] rcn_mask;
+
+  wire doJmp;
 
   reg except_reg;
   reg except_reg2;
@@ -302,6 +310,7 @@ module saddrcalc(
   
   assign all_banks=banks0;
 
+  except_jump_cmp(valS,calu[4] ? 4'hf : calu[3:0],doJmp);
 
 
   assign attr2=mex_en ? mex_attr : attr;  
@@ -349,7 +358,7 @@ module saddrcalc(
   
   assign mOp_sz=op_reg[5:1];
   
-  assign mOp_st=op_reg[0];
+  assign mOp_st=op_reg[0] && doJmp_reg;
   
   assign mOp_register=regno_reg;
 
@@ -452,6 +461,7 @@ module saddrcalc(
     begin
 //	  if (rst) cmplxAddr<={ADDR_WIDTH{1'B0}};
 //	  else cmplxAddr<=mex_en ? mex_addr : cmplxAddr_d;
+          doJmp_reg<=doJmp;
 	  if (|fault_mlb && read_clkEn_reg|mex_en_reg) $display("WfaultTlb");
 	  if (fault_cann && read_clkEn_reg|mex_en_reg) $display("WfaultPtr");
           if (rst) mex_en_reg<=1'b0;
