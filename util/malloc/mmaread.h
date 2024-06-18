@@ -18,31 +18,16 @@ const static char *__UNBOUND_PTR;
 
 
 inline void * check_if_can_free(void *ptr, int mark_as_unfree=0) {
-  unsigned long volatile addr;
+  unsigned long addr=ptr;
   struct __PTRHDR *p1;
-  addr=(unsigned long) ptr;
-  addr=addr>>1;
-  addr=addr<<1;
-  if (((addr>>45)&0x1f)<3)) {
-      unsigned long mask2=0x70<<(addr>>45)&0x1f);
-      addr=addr&~mask2;
-  }
-  p1=(struct __PTRHDR *) (__UNBOUND_PTR+(addr&0xffffffffffff));
+  p1=(struct __PTRHDR *) ((addr-32)&0xffffffffffffff80);
   if (!(p1->permissions_and_cookie&__PTRHDR_CAN_FREE)) {
       return 0;
   }
-  if ((p1->permissions_and_cookie&__PTRHDR_COOKIIE_OF_BOUNDS)!=(addr&__PTRHDR_COOKIE_OF_BOUNDS)) {
-      return 0;
-  }
-  unsigned long mask=(__PTRHDR_COOKIE_MASK_TO_BE_SHIFTED_BY_EXP<<((addr>>45)&0x1f))&__PTRHDR_COOKIE_MASK_TO_BE_SHIFTED_BY_EXP;
-  if ((p1->permissions_and_cookie&mask)!=(addr&mask)) {
-      return 0;
-  }
   if (mark_as_unfree) {
-      if ((p1->permissions_and_cookie&__PTRHDR_6_CHUNKS) {
-          unsigned long off2=(addr>>45)&0x1f)+4;
-          unsigned long off3=(addr>>off2)&0x7;
-          p1->permissions_and_cookie&=~(16ul<<off3);
+      if ((p1->permissions_and_cookie&__PTRHDR_3_CHUNKS) {
+          unsigned long off2=(addr>>5)&0x3;
+          p1->permissions_and_cookie&=~(16ul<<off2);
       } else {
           p1->permissions_and_cookie&=~__PTRHDR_CAN_FREE;
       }
