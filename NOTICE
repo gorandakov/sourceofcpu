@@ -4,7 +4,12 @@ the production of the cpu doesn't count
 the license.
 also you will be expected to use fully paired dynamic 
 logic rather than use e.g. mono rail logic except for rgister files and memories which can be mono rail.
-for most of the ALU and other parts of it to achieve >3.6 GHz frequency.
+for most of the ALU and other parts of it to achieve >6 GHz frequency.
+Please note that the 3x3 encoder decoder logic cannot be done unless the 
+whole of the design is transient which means that it cannot lower its 
+frequency while it is in low power mode.
+Also in prectice you'd 3 way split the alu,fpu,data scheduler on the lower 
+encoder decoder to make them one row but this is not shown in the source.
 Using P&R tools, even after debugging the verilog, will definitely result in error 
 if you don't specify a floorplan!!!
 In order to get a permission to manufacture a derived chip or this chip you need permission from
