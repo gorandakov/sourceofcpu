@@ -1870,7 +1870,7 @@ instr[13:8]==6'd8) begin
 	      prT[31]=instr[47:43];
 	  end
       end else if (isGA) begin
-          pport[31]=PORT_MUL;
+          pport[31]=instr[29] ? PORT_MUL : PORT_ALU;
           prA_use[31]=1'b1;
           prB_use[31]=1'b1;
           prT_use[31]=1'b1;
@@ -1884,17 +1884,18 @@ instr[13:8]==6'd8) begin
               prA_useF[31]=~instr[30];
               prB_useF[31]=~instr[30];
               prT_useF[31]=~instr[30];
-              pcalu[31]={1'b0,{4{~isntr[30]}}};
+              pcalu[31]={1'b0,{4{~instr[30]}}};
           end
-          if (magic[1:0])==2'b01) pconstant[31]={{51{instr[30]}},instr[30:18]};
+          if (magic[1:0])==2'b01) 
+              pconstant[31]={{60{instr[30]}},instr[21:18]};
           prA[31]={instr[17],instr[11:8]};
           prT[31]={instr[16],instr[15:12]};
           prB[31]=instr[22:18];
           pflags_write[31]=1'b0;
-          poperation[31][7:0]=0;
+          poperation[31][7:0]=instr[29] ? `op_gather_hi : `op_gather_low;
           poperation[31][12]=1'b1;
-          poperation[31][11]=1'b1;
-          prmdoe[31]=0;
+          poperation[31][11]=instr[29];
+          prmode[31]=0;
       end else if (opcode_main==8'd213) begin//shladd
           pport[31]=PORT_ALU;
           prA_use[31]=1'b1;
