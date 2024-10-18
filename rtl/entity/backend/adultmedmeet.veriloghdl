@@ -37,6 +37,7 @@ module smallInstr_decoder(
   rA,rA_use,
   rB,rB_use,useBConst,//useBSmall,
   rC,rC_use,useCRet,
+  rstindex,
   alucond,
   rndmode,
   constant,
@@ -122,6 +123,7 @@ module smallInstr_decoder(
   output [REG_WIDTH-1:0] rC;
   output rC_use;
   output useCRet;
+  output reg rstindex;
   output [4:0] alucond;
   output [2:0] rndmode;
   output useBConst;
@@ -699,6 +701,7 @@ instr[13:8]==6'd8) begin
   always @*
   begin
       reor_error=1'b0;
+      rstindex=0;
       for(tt=0;tt<TRICNT_TOP;tt=tt+1) begin 
           poperation[tt]=13'b0;
           puseBConst[tt]=1'b0;
@@ -2119,6 +2122,8 @@ instr[13:8]==6'd8) begin
 	  //pconstant[35]=instr[79:16];
 	  msrss_retIP_en=!(instr[31:16]==`csr_retIP);
           perror[35]={2{~can_jump_csr}};
+      end else begin
+          rstindex=1;
       end
       
       trien[36]=magic[0] & isBasicFPUScalarC;
