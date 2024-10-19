@@ -315,7 +315,7 @@ module tbuf_way(
   except_indir_reg,
   nextIP,
   read_hit,read_hit_other,
-  read_hitLRU,
+  read_hit_LRU,
   read_write_fwd,
   has0,has1,has2,has3,
   sc0,sc1,sc2,sc3,
@@ -366,7 +366,7 @@ module tbuf_way(
   input [IP_WIDTH-1:1] nextIP;
   output read_hit;
   input read_hit_other;
-  input read_hitLRU;
+  input read_hit_LRU;
   input read_write_fwd;
   output has0,has1,has2,has3;
   output [1:0] sc0;
@@ -988,7 +988,7 @@ module tbuf_way(
   assign sc2=oen ? sc2P | {1'b0,~read_cond[2]} : 2'bz;
   assign sc3=oen ? sc3P | {1'b0,~read_cond[3]} : 2'bz;
 
-//  assign read_hitLRU=read_hit ? read_LRU : 1'bz;
+//  assign read_hit_LRU=read_hit ? read_LRU : 1'bz;
   //
 
   assign way=(read_write_fwd & HALF) ? WAY : 1'bz;
@@ -1030,7 +1030,7 @@ module tbuf_way(
   assign sc2=(read_write_fwd & HALF) ? {2{write_cond_rex[2]}} : 2'bz;
   assign sc3=(read_write_fwd & HALF) ? {2{write_cond_rex[3]}} : 2'bz;
 
-//  assign read_hitLRU=read_hit ? read_LRU : 1'bz;
+//  assign read_hit_LRU=read_hit ? read_LRU : 1'bz;
   
   assign ram_wen=write_wen & read_hit || write_insert & (write_way==WAY) || 
     (mStall && ~write_wen && ~write_insert && taken_reg!=0 && ~except_reg) || except_reg & except_indir_reg & 
@@ -1161,7 +1161,7 @@ module tbuf_way(
   get_carry #(4) cj3W_mod(~nextIP_reg[4:1],write_off3_rex,1'b1,j3_afterW); 
  
   
-  lru_single #(1,WAY) lru_mod(read_LRU,write_LRU,read_hitLRU,init,read_hit|read_hit_other);
+  lru_single #(1,WAY) lru_mod(read_LRU,write_LRU,read_hit_LRU,init,read_hit|read_hit_other);
   
   adder_inc #(9) initAdd_mod(init_count,init_next,1'b1,);
 
@@ -1311,7 +1311,7 @@ module tbuf_way_2(
   nextIP,
   read_hit,
   read_hit_other,
-  read_hitLRU,
+  read_hit_LRU,
   read_write_fwd,
   has0,has1,has2,has3,
   sc0,sc1,sc2,sc3,
@@ -1360,7 +1360,7 @@ module tbuf_way_2(
   input [IP_WIDTH-1:1] nextIP;
   output read_hit;
   input read_hit_other;
-  input read_hitLRU;
+  input read_hit_LRU;
   input read_write_fwd;
   output has0,has1,has2,has3;
   output [1:0] sc0;
@@ -1461,7 +1461,7 @@ module tbuf_way_2(
     nextIP,
     read_hit0,
     read_hit_other,
-    read_hitLRU,
+    read_hit_LRU,
     read_write_fwd,
     has0,has1,has2,has3,
     sc0,sc1,sc2,sc3,
@@ -1503,7 +1503,7 @@ module tbuf_way_2(
       except_indir_reg,
       nextIP,
       read_hit1,read_hit_other,
-      read_hitLRU,
+      read_hit_LRU,
       read_write_fwd,
       has0,has1,has2,has3,
       sc0,sc1,sc2,sc3,
@@ -1705,7 +1705,7 @@ module tbuf(
   input [1:0] update_use;
 
   wire [1:0] read_hit_way;
-  wire read_hitLRU;
+  wire read_hit_LRU;
   
   wire has0A,has1A,has2A,has3A;
   wire has0B,has1B,has2B,has3B;
@@ -1809,7 +1809,7 @@ module tbuf(
   wire [3:0] attr2B;
   wire [3:0] attr3B;
   
- // wire [2:0] read_hitLRU;
+ // wire [2:0] read_hit_LRU;
 
   reg [3:0] write_off0_reg;
   reg [3:0] write_off1_reg;
@@ -1893,7 +1893,7 @@ module tbuf(
   nextIP,
   read_hit_way[0],
   read_hit_way[1],
-  read_hitLRU,
+  read_hit_LRU,
   write_read_fwd,
   has0A,has1A,has2A,has3A,
   sc0A,sc1A,sc2A,sc3A,
@@ -1937,7 +1937,7 @@ module tbuf(
   nextIP,
   read_hit_way[1],
   read_hit_way[0],
-  read_hitLRU,
+  read_hit_LRU,
   write_read_fwd,
   has0B,has1B,has2B,has3B,
   sc0B,sc1B,sc2B,sc3B,
@@ -1994,7 +1994,7 @@ module tbuf(
   assign link3= read_hit_A ? linkA3 :  linkB3&{5{read_hit_B}};
   assign lnpos3=read_hit_A ? lnposA3 : lnposB3|{5{~read_hit_B}};
   assign ljpos3=read_hit_A ? ljposA3 : ljposB3|{5{~read_hit_B}};
-  assign read_hitLRU=read_hit_A ? readA_LRU : readB_LRU;
+  assign read_hit_LRU=read_hit_A ? readA_LRU : readB_LRU;
 
   assign read_hit_A=read_hit_way[0];
   assign read_hit_B=read_hit_way[1];
@@ -2015,7 +2015,7 @@ module tbuf(
   assign scupd_taken=update_use_REG[1] ? update_taken_REG[1] : update_taken_REG[0];
   assign scupd_addr=update_use_REG[1] ? update_addr1_REG : update_addr0_REG;
   
-  assign read_hitLRU=read_hit_A ? readA_LRU : readB_LRU;
+  assign read_hit_LRU=read_hit_A ? readA_LRU : readB_LRU;
 
   assign jump_mask0=read_hit_A ? jmp_mask0A : jmp_mask0B;
   assign jump_mask1=read_hit_A ? jmp_mask1A : jmp_mask1B;

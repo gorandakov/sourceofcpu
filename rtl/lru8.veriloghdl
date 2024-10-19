@@ -21,7 +21,7 @@ limitations under the License.
 module lru_single0(
   lru,
   newLRU,
-  hitLRU,
+  hit_LRU,
   init,
   en
   );
@@ -30,7 +30,7 @@ module lru_single0(
   
   input [WIDTH-1:0] lru;
   output [WIDTH-1:0] newLRU;
-  input [WIDTH-1:0] hitLRU;
+  input [WIDTH-1:0] hit_LRU;
   input init;
   input en;
   
@@ -43,7 +43,7 @@ module lru_single0(
   wire hitAfter;
   wire [WIDTH-1:0] lru_next;
   
-  assign hitThis=hitLRU==lru;
+  assign hitThis=hit_LRU==lru;
   assign hitAfter=hitThisOrAfter & ~hitThis;
   assign hitBefore=~hitThisOrAfter;
   
@@ -55,10 +55,10 @@ module lru_single0(
   
   generate
       if (WIDTH>1) begin : adders_gen
-          get_carry #(WIDTH) cmp_mod (lru,~hitLRU,1'b1,hitThisOrAfter);   
+          get_carry #(WIDTH) cmp_mod (lru,~hit_LRU,1'b1,hitThisOrAfter);   
           adder_inc #(WIDTH) inc_mod (lru,lru_next,1'b1,);
       end else begin
-          assign hitThisOrAfter=lru|~hitLRU;
+          assign hitThisOrAfter=lru|~hit_LRU;
           assign lru_next=~lru;
       end
   endgenerate
@@ -69,7 +69,7 @@ module lru_single(
 //save gate delay
   lru,
   newLRU,
-  hitLRU,
+  hit_LRU,
   init,
   en
   );
@@ -79,7 +79,7 @@ module lru_single(
   
   input [WIDTH-1:0] lru;
   output [WIDTH-1:0] newLRU;
-  input [WIDTH-1:0] hitLRU;
+  input [WIDTH-1:0] hit_LRU;
   input init;
   input en;
 
@@ -100,7 +100,7 @@ module lru_single(
         init,
         en
         );	
-        assign newLRU_X= (hitLRU==k && ~init)  ? newLRUa[k] : 'z;		
+        assign newLRU_X= (hit_LRU==k && ~init)  ? newLRUa[k] : 'z;		
 	  end
   endgenerate
   
@@ -113,8 +113,8 @@ endmodule
 module lru_double(
   lru,
   newLRU,
-  hitLRUA,
-  hitLRUB,
+  hit_LRUA,
+  hit_LRUB,
   isDouble,
   init,
   en
@@ -124,8 +124,8 @@ module lru_double(
   
   input [WIDTH-1:0] lru;
   output [WIDTH-1:0] newLRU;
-  input [WIDTH-1:0] hitLRUA;
-  input [WIDTH-1:0] hitLRUB;
+  input [WIDTH-1:0] hit_LRUA;
+  input [WIDTH-1:0] hit_LRUB;
   input isDouble;
   input init;
   input en;
@@ -140,8 +140,8 @@ module lru_double(
   wire [WIDTH-1:0] lru_next;
   wire [WIDTH-1:0] lru_next2;
   
-  assign hitThisA=hitLRUA==lru;
-  assign hitThisB=hitLRUB==lru;
+  assign hitThisA=hit_LRUA==lru;
+  assign hitThisB=hit_LRUB==lru;
   assign hitAfter=hitThisOrAfterA & ~hitThisA && (hitThisOrAfterB & ~hitThisB) | ~isDouble;
   assign hitBefore1=~hitThisOrAfterA ^ (~hitThisOrAfterB & isDouble);
   assign hitBefore2=~hitThisOrAfterA & ~hitThisOrAfterB & isDouble;
@@ -157,8 +157,8 @@ module lru_double(
   
   assign lru_next2[0]=lru[0];
   
-  get_carry #(WIDTH) cmpA_mod (hitLRUA,~lru,1'b1,hitThisOrAfterA);   
-  get_carry #(WIDTH) cmpB_mod (hitLRUB,~lru,1'b1,hitThisOrAfterB);   
+  get_carry #(WIDTH) cmpA_mod (hit_LRUA,~lru,1'b1,hitThisOrAfterA);   
+  get_carry #(WIDTH) cmpB_mod (hit_LRUB,~lru,1'b1,hitThisOrAfterB);   
 
   adder_inc #(WIDTH) incA_mod (lru,lru_next,1'b1,);
   adder_inc #(WIDTH-1) incB_mod (lru[WIDTH-1:1],lru_next2[WIDTH-1:1],1'b1,);

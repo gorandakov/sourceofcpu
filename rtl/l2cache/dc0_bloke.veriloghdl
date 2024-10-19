@@ -1088,7 +1088,7 @@ module dcache2_way(
   lru_single #(5,{3'b0,BIG_ID}*5'h9+ID) lru_mod(
   .lru(read_LRUx_reg2),
   .newLRU(new_LRU),
-  .hitLRU(hit_LRU),
+  .hit_LRU(hit_LRU),
   .init(init),
   .en(~insert_reg5)
   );
