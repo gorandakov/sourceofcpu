@@ -211,7 +211,7 @@ module frontendSelf(
   output [PHYS_WIDTH-1:0] cc_write_IP={write_IP,5'b0};
   output cc_write_wen=bus_match_reg;
   output cc_invalidate=1'b0;
-  output [DATA_WIDTH-1:0] cc_write_data=write_data;
+  output [DATA_WIDTH-1:0] cc_write_data;
   
   input [36:0] MSI_expAddr;
   input MSI_expAddr_en;
@@ -235,6 +235,15 @@ module frontendSelf(
 
   wire do_seq_any,do_seq_miss;
 
+  function [255:0] splice256;
+    (* keep *) input [255:0] in_data;
+    integer k;
+    for(k=0;k<256;k=k+1) begin
+       splice256[k]=in_data[{k[3:0],k[7:4]}];
+    end
+  endfunction
+
+  assign cc_write_data=splice256(write_data);
   wire [63:0] cc_read_IP_d;
 //  wire [63:0] tr_read_IP_d;
   wire do_seq;
@@ -1354,7 +1363,7 @@ module frontendSelf(
     .clk(clk),
     .rst(rst),
     .thread(thread),
-    .bundle({read_data[258:195],read_data[193:130],read_data[128:65],read_data[63:0]}),
+    .bundle(splice256(read_data)),
     .btail(read_data_reg[239:176]),
     .bstop(read_data_reg[254:251]),
     .flag_bits(read_dataX),
