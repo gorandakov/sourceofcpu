@@ -238,7 +238,7 @@ module cmlb(
   
   wire [3:0][2:0] newLRU;
   wire [3:0][2:0] oldLRU;
-  wire [2:0] hit_LRU;
+  wire [2:0] LRU_hit;
   wire [3:0] read_hit_way;
   reg init_pending;
   reg [5:0] init_count;
@@ -256,7 +256,7 @@ module cmlb(
   reg read_clkEn_reg;
 
   assign read_hit=(|read_hit_way || addr[43:40]==4'b1110) & ~init_pending;
-  assign hit_LRU=read_hit ? 3'bz : 3'b00;
+  assign LRU_hit=read_hit ? 3'bz : 3'b00;
   assign read_data=(|read_hit_way) ? 'z : read_data_pmm;
 
   generate
@@ -282,9 +282,9 @@ module cmlb(
         newLRU[k]
         );
         
-        lru_single #(3,k) lru_mod(oldLRU[k],newLRU[k],hit_LRU,init_pending,read_clkEn);
+        lru_single #(3,k) lru_mod(oldLRU[k],newLRU[k],LRU_hit,init_pending,read_clkEn);
         
-        assign hit_LRU=read_hit_way[k] ? oldLRU[k] : 3'bz;
+        assign LRU_hit=read_hit_way[k] ? oldLRU[k] : 3'bz;
         
       end
   endgenerate

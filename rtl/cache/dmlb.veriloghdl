@@ -404,7 +404,7 @@ module dmlb(
 	lru_single #(3,k) lru_mod (
         .lru(write_wen ? lru_wayW[k] : lru_way[k]),
         .newLRU(newLru[k]),
-        .hit_LRU(write_wen ? hitLruW: hitLru),
+        .LRU_hit(write_wen ? hitLruW: hitLru),
         .init(init),
         .en(write_wen)
         );

@@ -249,7 +249,7 @@ module ccTag(
   lru_single #(3,INDEX) NRU_mod(
   .lru(read_NRUr_reg),
   .newLRU(write_NRU),
-  .hit_LRU(hitNRU_reg),
+  .LRU_hit(hitNRU_reg),
   .init(init_reg2),
   .en(read_clkEn_reg2)
   );
