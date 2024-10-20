@@ -203,10 +203,10 @@ jupd0_en,jupdt0_en,jupd0_ght_en,jupd0_ght2_en,jupd0_addr,jupd0_baddr,jupd0_sc,ju
   output [PHYS_WIDTH-1:0] cc_IP_phys=IP_phys_reg;
   input cc_read_hit;
   input cc_read_tagErr;
-  input [DATA_WIDTH/2-1:0] cc_read_data;
-  assign read_data=cc_read_data;
-  input [14:0] cc_read_dataX;
-  assign read_dataX=cc_read_dataX;
+  input [DATA_WIDTH/2+128+8-1:0] cc_read_data;
+  assign read_data=cc_read_data[255:0];
+  input [20:0] cc_read_dataX;
+  assign read_dataX=cc_read_dataX[14:0];
   input cc_err;
   output [PHYS_WIDTH-1:0] cc_write_IP={write_IP,5'b0};
   output cc_write_wen=bus_match_reg;
@@ -1371,6 +1371,8 @@ jupd0_en,jupdt0_en,jupd0_ght_en,jupd0_ght2_en,jupd0_addr,jupd0_baddr,jupd0_sc,ju
     .rst(rst),
     .thread(thread),
     .bundle(splice256(read_data)),
+    .bnext(splice256({128'b0,cc_read_data[383:256]}),
+    .bnext_tail({2'b0,cc_read_data[389:384]}),
     .btail(read_data_reg[239:176]),
     .bstop(read_data_reg[254:251]),
     .flag_bits(read_dataX),
