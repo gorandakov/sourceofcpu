@@ -406,8 +406,8 @@ module predecoder_get(
     input [63:0] btail;
     input [3:0] bstop;
     input bFMA_mul;
-    input [79:0] bnext;
-    input [4:0] bnext_tail;
+    input [127:0] bnext;
+    input [7:0] bnext_tail;
     input has_next;
     input [3:0] startOff;
     output [3:0] startOff_override;
@@ -574,7 +574,7 @@ module predecoder_get(
     
     always @*
       begin
-        instrEnd={5'b0,bnext_tail,bundle[254:240],1'b1};
+        instrEnd={2'b0,bnext_tail,bundle[254:240],1'b1};
         error=cntEnd3[13]&~cntEnd3_15[13] || startOff==15;
         _splitinsn=bundle[255];
         jerror=~lcnt_or_less[4] || ~jcnt_or_less[4]&~jcnt_or_less_15[4];
