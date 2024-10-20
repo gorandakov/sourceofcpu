@@ -31,8 +31,8 @@ module frontendSelf(
   exceptLDConfl,
   except_jmask,
   except_jmask_en,
-  except_indir,
-  jupd0_en,jupdt0_en,jupd0_ght_en,jupd0_ght2_en,jupd0_addr,jupd0_baddr,jupd0_sc,jupd0_val,jupd0_tk,
+  except_indir,  
+jupd0_en,jupdt0_en,jupd0_ght_en,jupd0_ght2_en,jupd0_addr,jupd0_baddr,jupd0_sc,jupd0_val,jupd0_tk,
   jupd1_en,jupdt1_en,jupd1_ght_en,jupd1_ght2_en,jupd1_addr,jupd1_baddr,jupd1_sc,jupd1_val,jupd1_tk,
   bus_data,
   bus_slot,
@@ -242,8 +242,15 @@ module frontendSelf(
        splice256[k]=in_data[{k[3:0],k[7:4]}];
     end
   endfunction
+  function [255:0] splice256w;
+    input [255:0] in_data;
+    integer k;
+    for(k=0;k<256;k=k+1) begin
+       splice256[k]=in_data[{k[3:0],k[7:4]}];
+    end
+  endfunction
 
-  assign cc_write_data=splice256(write_data);
+  assign cc_write_data=splice256w(write_data);
   wire [63:0] cc_read_IP_d;
 //  wire [63:0] tr_read_IP_d;
   wire do_seq;
