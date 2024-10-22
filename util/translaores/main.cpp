@@ -150,6 +150,7 @@ void transl_context::transl_through(int jmptype, int start_off, int has_next) {
     unsigned long long address=start_off;
     unsigned long long target_address;
     unsigned long A,B;
+    transl_regmap regmap;
     bool flag=true,was_addition=starts_with_add,was_fpu_cmp=starts_with_fpu_cmp;
     has_next=has_next ? 4223 :4095;
     do {
@@ -159,6 +160,18 @@ void transl_context::transl_through(int jmptype, int start_off, int has_next) {
         unsigned long sz=size_from_foreign(fr);
         if (is_opcode_flag_set(fr)) jmptype=is_opcode_jmpflag(fr);
         call_pinvoke(fr,A,B,address,jmptype);
+        if (is_loop(address)) {
+            lastloop=address;
+            regmap.clear();
+        }
+        regmap.detect_used(fr);
+        regmap.mark_target(fr);
+        if (end_loop(address)) {
+            if (regmap.has_multi_chain()) {
+                clear_loop(lastloop);
+                clear_endloop(address);
+            }
+        }
         address+=sz;
         if (is_opcode_reg_gen_cmp(fr)) {
             A=((unsigned long *) (((char *) curpage)+address));
