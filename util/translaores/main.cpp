@@ -1,9 +1,11 @@
 
 struct transl_header {
-    unsigned short target_and_class[6];
+    unsigned short target[6];//<16k is invalid/unused; 
     unsigned char source[3]; //nibble per source
-    unsigned char vectorisable; //bit per vectorisable
+    unsigned char is_addition; //bit per jump target/source
 };
+
+typedef transl_header transl_header_section[1024];
 
 struct transl_context {
     void *curpage;
@@ -92,22 +94,55 @@ void transl_context::poke_through(int jmptype, int start_off) {
     unsigned long long target_address;
     unsigned long A,B;
     int jmptype,fl2;
+    unsigned long long bgnloop=0,bgnloop2=-1;
     bool flag=true,was_addition=starts_with_add,was_fpu_cmp=starts_with_fpu_cmp;
     do {
         A=((unsigned long *) (((char *) curpage)+address));
         B=((unsigned long *) (((char *) curpage)+address))+1;
         unsigned long fr=foreign(A,B);
         unsigned long sz=size_from_foreign(fr);
-        if (is_opcode_fixed_jump(fr,target_address)) {
-            poke_target(address,jmptype);
+        if (is_opcode_fixed_jump(fr,target_address,jmptype)) {
+            poke_target(target_address,jmptype);
         }
         if (is_called(address,fl2) && fl2!=jmptype) {
             create_callout(address,fl2,jmptype);
         }
+        if (is_opcode_forward(fr,jmpoff,jmpcond) && jmpoff<16384) {
+            if (if_else_target) {
+               if (jmpcond==16 && (if_else_target==address) || (if_else_target==allign16(address)) || (if_else_target==allign32(address))  ) {//uc 
+                   if (checknop(if_else_target)) {
+                       convert_to_if_else:
+                       if_else_target=0;
+                   }
+               } else {
+                   if (bgnloop2==bgnloop) {
+                       poke_loop(bgnloop);
+                   }
+                   bgnloop=address+sz;
+                   bgnloop2=-1;
+               }
+            } else {
+                if_else_target=jmpoff;
+            }
+        } else if (is_opcode_backward(fr)) {
+            if (jmpoff>=bgnloop && bgnloop>=0) {
+                bgnloop=jmpoff;
+                bgnloop2=jmpoff;
+            }
+            if (address>(24*1024)) {
+                flag=false;
+                if (bgnloop2=bgnloop) poke_loop(bgnloop);
+                insert_jump_to_next_page(address+sz,address);
+            }
+        } else if (if_else_target==address) {
+            if_else_target=0;
+        }
         if (is_opcode_flag_set(fr)) jmptype=is_opcode_jmpflag(fr);
         address+=sz;
-        if (address>4095) flag=false;
+        if (address>32767) flag=false; //up to entire next page can be fetched
     } while (flag);
+    insert_jump_to_next_page(address+sz,address);
+   
 
 }
 
