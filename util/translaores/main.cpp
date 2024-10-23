@@ -94,6 +94,7 @@ void transl_context::poke_through(int jmptype, int start_off) {
     unsigned long long target_address;
     unsigned long A,B;
     int jmptype,fl2;
+    bool flagcheck=false;
     unsigned long long bgnloop=0,bgnloop2=-1;
     bool flag=true,was_addition=starts_with_add,was_fpu_cmp=starts_with_fpu_cmp;
     do {
@@ -120,6 +121,7 @@ void transl_context::poke_through(int jmptype, int start_off) {
                    }
                    bgnloop=address+sz;
                    bgnloop2=-1;
+                   flagcheck=false;
                }
             } else {
                 if_else_target=jmpoff;
@@ -136,6 +138,14 @@ void transl_context::poke_through(int jmptype, int start_off) {
             }
         } else if (if_else_target==address) {
             if_else_target=0;
+        }
+        if (if_else_target && is_opcode_flag_check(fr)) {
+            flagcheck=true;
+        } else if (if_else_target && is_opcode_flag_set(fr)) {
+            if (flagcheck) {
+                bgnloop2=-1;
+                flagcheck=false;
+            }
         }
         if (is_opcode_flag_set(fr)) jmptype=is_opcode_jmpflag(fr);
         address+=sz;
