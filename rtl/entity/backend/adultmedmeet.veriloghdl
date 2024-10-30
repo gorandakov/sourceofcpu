@@ -99,7 +99,7 @@ module smallInstr_decoder(
   localparam REOR_WIDTH=24; 
   localparam TRICNT_TOP=40;//really 38; 2 redundant
   parameter [5:0] INDEX=0;
-  parameter [63:0] H=64'd0;//range 0-7
+  parameter [63:0] H=64'd0;//range 0-15
   parameter [0:0] LARGE_CORE=1;
 
 
@@ -1886,7 +1886,7 @@ opcode_main[0] ? `op_add64 : `op_add32;
               pcalu[31]={1'b0,{4{~instr[30]}}};
           end
           if (magic[1:0])==2'b01) 
-              pconstant[31]={{59{instr[30]}},instr[22:18]};
+              pconstant[31]={{58{instr[30]}},instr[23:18]};
           prA[31]={instr[17],instr[11:8]};
           prT[31]={instr[16],instr[15:12]};
           prB[31]=instr[22:18];
