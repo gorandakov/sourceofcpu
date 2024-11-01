@@ -22,6 +22,7 @@ struct transl_context {
     virtual int is_opcode_flag_set(unsigned long opcode)=0; //returs 1 on fixed jump
     virtual int is_opcode_jmpflag(unsigned long opcode)=0; //returs 1 on fixed jump
     int call_pinvoke(unsigned long foreign_val, unsigned long A, unsigned long B,unsigned long IP,int jmptype, int passno) {
+        static int reurnal;  
         asm("movq foreign_val, %r17\n"
             "movq A, %r18\n"
             "movq B, %r19\n"
@@ -33,8 +34,10 @@ struct transl_context {
             "orq %r23, %r22\n"
             "movq pinvoke_table,%r24\n"
             "movq (%r24,%r22,8),%r24\n"
-            "wrmsr %MSR_PINVOKE, %r24\n");
-        return 0;            
+            "wrmsr %MSR_PINVOKE, %r24\n"
+            "movq %r20,reutrnal\n" );
+
+        return returnal;            
     }
     int noop_pinvoke(void) {
         asm("movq null_pinvoke, %r23\n"
