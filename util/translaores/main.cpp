@@ -21,18 +21,19 @@ struct transl_context {
     virtual int is_opcode_fixed_jump(unsigned long opcode,unsigned long &jmpaddr)=0; //returs 1 on fixed jump
     virtual int is_opcode_flag_set(unsigned long opcode)=0; //returs 1 on fixed jump
     virtual int is_opcode_jmpflag(unsigned long opcode)=0; //returs 1 on fixed jump
-    int call_pinvoke(unsigned long foreign_val, unsigned long A, unsigned long B,unsigned long IP,int jmptype) {
+    int call_pinvoke(unsigned long foreign_val, unsigned long A, unsigned long B,unsigned long IP,int jmptype, int passno) {
         asm("movq foreign_val, %r17\n"
             "movq A, %r18\n"
             "movq B, %r19\n"
             "movq IP, %r20\n"
+            "movq passno, %r23\n"
             "movl jmptype,%r21\n"
             "andl $0xfff,%r17,%r22\n"
-            "shrq $shift_of_0x66_extra-12,%r17,%r23\n"
+            "shrq $shift_of_0x66_extra-12,%r17,%r24\n"
             "orq %r23, %r22\n"
-            "movq pinvoke_table,%r23\n"
-            "movq (%r23,%r22,8),%r23\n"
-            "wrmsr %MSR_PINVOKE, %r23\n");
+            "movq pinvoke_table,%r24\n"
+            "movq (%r24,%r22,8),%r24\n"
+            "wrmsr %MSR_PINVOKE, %r24\n");
         return 0;            
     }
     int noop_pinvoke(void) {
@@ -156,9 +157,10 @@ void transl_context::poke_through(int jmptype, int start_off) {
 
 }
 
-void transl_context::transl_through(int jmptype, int start_off, int has_next) {
+int transl_context::transl_through(int jmptype, int start_off, int has_next) {
     unsigned long long address=start_off;
     unsigned long long target_address;
+    int cntloops=0;
     unsigned long A,B;
     transl_regmap regmap;
     bool flag=true,was_addition=starts_with_add,was_fpu_cmp=starts_with_fpu_cmp;
@@ -169,10 +171,11 @@ void transl_context::transl_through(int jmptype, int start_off, int has_next) {
         unsigned long fr=foreign(A,B);
         unsigned long sz=size_from_foreign(fr);
         if (is_opcode_flag_set(fr)) jmptype=is_opcode_jmpflag(fr);
-        call_pinvoke(fr,A,B,address,jmptype);
+        call_pinvoke(fr,A,B,address,jmptype,2);
         if (is_loop(address)) {
             lastloop=address;
             regmap.clear();
+            cntloops++;
         }
         regmap.detect_used(fr);
         regmap.mark_target(fr);
@@ -180,6 +183,7 @@ void transl_context::transl_through(int jmptype, int start_off, int has_next) {
             if (regmap.has_multi_chain()) {
                 clear_loop(lastloop);
                 clear_endloop(address);
+                cntloops--;
             }
         }
         address+=sz;
@@ -192,5 +196,50 @@ void transl_context::transl_through(int jmptype, int start_off, int has_next) {
         }
         if (address>has_next) flag=false;//some overhang to next page!
     } while (flag);
+
+  returnb cntloops;
+
+}
+int transl_context::transl_through_pass3(int jmptype, int start_off, int has_next) {
+    unsigned long long address=start_off;
+    unsigned long long target_address;
+    int cntloops=0;
+    unsigned long A,B;
+    transl_regmap regmap;
+    bool flag=true,was_addition=starts_with_add,was_fpu_cmp=starts_with_fpu_cmp;
+    has_next=has_next ? 4223 :4095;
+    do {
+        A=((unsigned long *) (((char *) curpage)+address));
+        B=((unsigned long *) (((char *) curpage)+address))+1;
+        unsigned long fr=foreign(A,B);
+        unsigned long sz=size_from_foreign(fr);
+        if (is_opcode_flag_set(fr)) jmptype=is_opcode_jmpflag(fr);
+        call_pinvoke(fr,A,B,address,jmptype,3);
+        if (is_loop(address)) {
+            lastloop=address;
+            regmap.clear();
+            cntloops++;
+        }
+        regmap.detect_used(fr);
+        regmap.mark_target(fr);
+        if (end_loop(address)) {
+            if (regmap.has_multi_chain()) {
+                clear_loop(lastloop);
+                clear_endloop(address);
+                cntloops--;
+            }
+        }
+        address+=sz;
+        if (is_opcode_reg_gen_cmp(fr)) {
+            A=((unsigned long *) (((char *) curpage)+address));
+            B=((unsigned long *) (((char *) curpage)+address))+1;
+            unsigned long fr=foreign(A,B);
+            unsigned long sz=size_from_foreign(fr);
+            if (is_opcode_fixed_jump_byte(fr)) address+=sz;
+        }
+        if (address>has_next) flag=false;//some overhang to next page!
+    } while (flag);
+
+  returnb cntloops;
 
 }
