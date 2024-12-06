@@ -1296,45 +1296,24 @@ endmodule
   assign nxorab=a[43:0]~^b[43:0];
   assign andab=a[43:0]&b[43:0];
   assign orab=a[43:0]|b[43:0];
-  assign c1={c[42:0],1'b0};
-  assign c2={c[41:0],2'b0};
-  assign c3={c[40:0],3'b0};
+  assign c1={c[42:0],3'b0};
+  assign c2={c[41:0],4'b0};
+  assign c3={c[40:0],5'b0};
   assign tmp2[0]=1'b0;
 
   assign cout_sec=~ cout_sec0 & ~ cout_sec1 ? pos_ack[2'b0] | neg_ack[2'b0] && ~err;
   assign cout_sec=cout_sec0 & ~ cout_sec1 ? pos_ack[2'b1] | neg_ack[2'b1] && ~err;
   assign cout_sec=cout_sec1 & ~ cout_sec0 ? pos_ack[2'b1] | neg_ack[2'b1] && ~err;
   assign cout_sec=cout_sec0 &  cout_sec1 ? pos_ack[2'b2] | neg_ack[2'b2] && ~err;
+  adder_CSA #44 csaA(c1,c2,c3,tmp1,tmp2);
+  adder_csa #44 csaB(c4,b,tmp1,tmp3,tmp4);
+  adder_CSA #44 csaC(a,tmp3,tmp4,tmpa,tmpb);
   
-  generate
-    for(k=0;k<=43;k=k+1)
-      begin
-        assign tmp1[k]=(shift[0] & ~c[k]) ? xorab[k] : 1'bz;
-        assign tmp1[k]=(shift[0] & c[k]) ? nxorab[k] : 1'bz;
-        assign tmp2[k+1]=(shift[0] & ~c[k]) ? andab[k] : 1'bz;
-        assign tmp2[k+1]=(shift[0] & c[k]) ? orab[k] : 1'bz;
-
-        assign tmp1[k]=(shift[1] & ~c1[k]) ? xorab[k] : 1'bz;
-        assign tmp1[k]=(shift[1] & c1[k]) ? nxorab[k] : 1'bz;
-        assign tmp2[k+1]=(shift[1] & ~c1[k]) ? andab[k] : 1'bz;
-        assign tmp2[k+1]=(shift[1] & c1[k]) ? orab[k] : 1'bz;
-
-        assign tmp1[k]=(shift[2] & ~c2[k]) ? xorab[k] : 1'bz;
-        assign tmp1[k]=(shift[2] & c2[k]) ? nxorab[k] : 1'bz;
-        assign tmp2[k+1]=(shift[2] & ~c2[k]) ? andab[k] : 1'bz;
-        assign tmp2[k+1]=(shift[2] & c2[k]) ? orab[k] : 1'bz;
-
-        assign tmp1[k]=(shift[3] & ~c3[k]) ? xorab[k] : 1'bz;
-        assign tmp1[k]=(shift[3] & c3[k]) ? nxorab[k] : 1'bz;
-        assign tmp2[k+1]=(shift[3] & ~c3[k]) ? andab[k] : 1'bz;
-        assign tmp2[k+1]=(shift[3] & c3[k]) ? orab[k] : 1'bz;
-      end
-  endgenerate
-  adder_seq #(WIDTH) add_mod(tmp1,tmp2[WIDTH-1:0],~(tmp1|tmp2),~(tmp1&tmp2),out[43:0],c_s,1'b0,en,,,,);
+  adder #(WIDTH) add_mod(tmpa,tmpb[WIDTH-1:0],out[43:0],c_s,1'b0,en,,,,);
   assign out[63+PTRBIT:44]=en ? ptr[63+PTRBIT:44] : 'z;
   addrcalcsec_shift ssh_mod(ptr[`ptr_exp],c_s[41:10],cout_sec0);
-  addrcalcsec_shift ssh_mod(ptr[`ptr_exp],tmp2[41:10],cout_sec1);
-  addrcalcsec_check_upper3 #(1'b1) chk_mod(ptr,unptr[43:11],b[43:11],pos_ack,neg_ack,,,ndiff);
+  addrcalcsec_shift ssh_mod(ptr[`ptr_exp],ptr[41:10],cout_sec1);
+  addrcalcsec_check_upper3 #(1'b1) chk_mod(ptr,tmp3[43:11],tmp4[43:11],pos_ack,neg_ack,,,ndiff);
 endmodule
 
 
