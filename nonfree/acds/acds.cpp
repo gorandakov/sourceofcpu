@@ -4,6 +4,13 @@
 #define driven_off_shift 16
 #define driven_count_mask 0xff00
 #define driven_count_shift 8
+#define pclk_combined 0x16
+#define pclk_1 0x2
+#define pclk_2 0x4
+#define pclk_3 0x10
+#define pclk_12 0xe
+#define pclk_13 0x32
+#define pclk_23 0x64
 
 int global_anchor_x;
 int global_anchor_y;
