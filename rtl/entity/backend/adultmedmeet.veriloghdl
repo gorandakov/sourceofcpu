@@ -894,7 +894,7 @@ instr[13:8]==6'd8) begin
            end else begin
                poperation[4][7:0]=instr[6] ? `fop_addDH : `fop_addDL;
            end
-           if (class[`iclass_FMA]) begin
+           if (class[`iclass_FMA] && prevClsFma) begin
                poperation[4][10]=1'b1;
                prB[4]=5'd15;
                prA[4]=instr[12:8]&{{2{~instr[13]}},2'b11};
@@ -937,7 +937,7 @@ instr[13:8]==6'd8) begin
            end else begin
                poperation[5][7:0]=poperation[5][12] ? `fop_addsubDP : `fop_addDP;
            end
-           if (class[`iclass_FMA]) begin
+           if (class[`iclass_FMA] && prevClsFma) begin
                poperation[5][10]=1'b1;
                prB[5]=5'd15;
                prA[5]=instr[12:8]&{{2{~instr[13]}},2'b11};
@@ -1005,7 +1005,7 @@ instr[13:8]==6'd8) begin
      3'd5: begin pport[7]=PORT_FADD; poperation[7]=`fop_addSP; poperation[7][10]=class[`iclass_FMA]; end
      3'd6: begin pport[7]=PORT_FADD; poperation[7]=`fop_subSP; poperation[7][10]=class[`iclass_FMA]; end
        endcase
-       if (class[`iclass_FMA]) begin
+       if (class[`iclass_FMA] & prevClsFma) begin
                prB[7]=5'd15;
                prA[7]=instr[12:8]&{{2{~instr[13]}},2'b11};
                ptAE[7]=instr[13];
@@ -1394,13 +1394,12 @@ instr[13:8]==6'd8) begin
       trien[18]=magic[0] && isBaseIndexSpecLoad | isBaseIndexSpecStore;
           pport[18]=PORT_LOAD;
           poperation[18][6:0]={~(magic==4'b0111 && instr[57]),opcode_main[7]|~opcode_main[0],isBaseIndexSpecStore ? stsz_in : instr[11:8],1'b0};
-          poperation[18][9:8]=((poperation[18][5:3]==3'h7 && ~poperation[18][0]) ||( poperation[18][5:3]==3'h4 && 
-            poperation[18][0])) ? 2'b01 : magic[2:0]==3'b111 ? instr[53:52] :( magic[1:0]==2'b01 ? 
-            instr[22:21] : instr[24:23]);
+          poperation[18][11:8]=magic[2:0]==3'b111 ? instr[55:52] :( magic[1:0]==2'b01 ? 
+            instr[22:19] : instr[24:21]);
           poof[1]=((poperation[18][5:3]==3'h7 && ~poperation[18][0]) ||( poperation[18][5:3]==3'h4 &&
             poperation[18][0]));
           if (isBaseIndexSpecStore) pcalu[18]={1'b1,instr[11:8]};
-          poperation[18][12:10]=3'b0;
+          poperation[18][12]=1'b0;
           poperation[18][7:6]=2'b0;
           prA_use[18]=~(magic==4'b0111 && instr[57]);
           prT_use[18]=opcode_main[7]|~opcode_main[0];
@@ -1408,28 +1407,27 @@ instr[13:8]==6'd8) begin
           prT_isV[18]=~(opcode_main[7]|~opcode_main[0]) && fop_v({instr[11:8],1'b0});
           puseRs[18]=1'b1;
           prAlloc[18]=1'b0;
-          puseBConst[18]=magic==4'b0111 & instr[58];
+          puseBConst[18]=magic==4'b0111 & instr[56];
           if (magic[2:0]!=3'b111) pconstant[18]=(magic[1:0]==2'b11) ? {{8+32{instr[47]}},instr[47:25],1'b0} : {{22+32{instr[31]}},instr[31:23],1'b0};//shl 1 for unaligned load/store; note this pconstant is used for unaligned; other constant is used for alligned.
           perror[18]=2'b0;
           prT[18]=5'd16;
           pthisSpecLoad[18]=1'b1;
           if (magic==4'b0111) begin 
-              prB[18]={instr[55],instr[15:12]};
-              prA[18]={instr[56],instr[51:48]};
+              prB[18]={1'b0,instr[15:12]};
+              prA[18]={1'b0,instr[51:48]};
               perror[18]=0;
           end else if (magic[0]) begin
-              prB[18]={instr[21]&&magic[1:0]!=2'b01,instr[15:12]};
-              prA[18]={instr[22]&&magic[1:0]!=2'b01,instr[19:16]};
+              prB[18]={1'b0,instr[15:12]};
+              prA[18]={2'b0,instr[18]||magic[1:0]==2'b01,instr[17:16]};
           end else begin
               perror[18]=1;
           end
           if (opcode_main[7]|~opcode_main[0] && instr[11]) perror[18]=1;          
           prA_use[18]=~(magic==4'b0111 && instr[57]);
           prB_use[18]=1'b1;
-          pisIPRel[18]=1'b0;//magic==4'b0111 && instr[59];
-          if (|poperation[18][9:8] && ~poperation[18][6]) perror[18]=1;
-          if (magic[2:0]==3'b111 && instr[59] && ~instr[58]) perror[18]=1;
-          if (magic[2:0]==3'b111 && instr[63:60]!=0) perror[18]=1;
+          pisIPRel[18]=magic==4'b0111 && instr[56];
+          
+          
           if (opcode_main[7]|~opcode_main[0] && instr[11]) perror[18]=1'b1;          
           if (riscmove) perror[18]=1'b1;
           prC[18]={1'b1,INDEX[3:0]+4'd1};
