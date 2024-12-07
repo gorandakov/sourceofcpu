@@ -1296,9 +1296,11 @@ endmodule
   assign nxorab=a[43:0]~^b[43:0];
   assign andab=a[43:0]&b[43:0];
   assign orab=a[43:0]|b[43:0];
-  assign c1={c[42:0],3'b0};
-  assign c2={c[41:0],4'b0};
-  assign c3={c[40:0],5'b0};
+  assign c1={c[42:0],3'b0} & {44{shift[0]}};
+  assign c2={c[41:0],4'b0} & {44{shift[1]}};
+  assign c3={c[40:0],5'b0} & {44{shift[2]}};
+  assign c4={c[39:0],6'b0} & {44{shift[3]}};
+  
   assign tmp2[0]=1'b0;
 
   assign cout_sec=~ cout_sec0 & ~ cout_sec1 ? pos_ack[2'b0] | neg_ack[2'b0] && ~err;
