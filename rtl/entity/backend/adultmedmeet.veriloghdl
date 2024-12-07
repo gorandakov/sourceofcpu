@@ -1697,12 +1697,14 @@ instr[13:8]==6'd8) begin
           puseBConst[28]=1'b1;
 	  pport[28]=PORT_ALU;
 	  prB_use[28]=1'b1;
+          prA_use[28]=1'b1;
 	  prT_use[28]=1'b1;
 	  puseRs[28]=1'b1;
 	  prAlloc[28]=1'b1;
 	  poperation[28][7:0]=`op_add64;
 	  poperation[28][12]=1'b1;
 	  prT[28]={4'h7,instr[8]};
+          prA[28]=5'd15;
           poperation[28][12]=1'b1;
           pconstant[28]={{28{instr[31]}},instr[31:9],14'b0};
           pIPRel[28]=1'b1;
