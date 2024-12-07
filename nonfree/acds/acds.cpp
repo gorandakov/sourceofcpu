@@ -31,26 +31,33 @@ class __acds_cell {
 };
   void __acds_cell::eval() {
       long n,n2;
-      for(n=size;n<(size*12);n++) {
-          io[n]=io[n] | io[n-size];
-          io[n-size]=io[n-size] | io[n];
-          io[n]=io[n] | io[n-size];
-          io[n-size]=io[n-size] | io[n];
-          io[n]=io[n] | io[n-size];
-          io[n-size]=io[n-size] | io[n];
-          io[n]=io[n] | io[n-size];
-          io[n-size]=io[n-size] | io[n];
-          io[n]=io[n] | io[n-size];
-          io[n-size]=io[n-size] | io[n];
-          io[n]=io[n] | io[n-size];
-          io[n-size]=io[n-size] | io[n];
-          io[n]=io[n] | io[n-size];
-          io[n-size]=io[n-size] | io[n];
-          io[n]=io[n] | io[n-size];
-          io[n-size]=io[n-size] | io[n];
-          io[n]=(io[n]&0x3f)|((~io[n]&0x3)<<6);
+      for(n=size;n<(size*16);n++) {
+          if ((n&15)<12) {
+            io[n]=io[n] | io[n-size];
+            io[n-size]=io[n-size] | io[n];
+            io[n]=io[n] | io[n-size];
+            io[n-size]=io[n-size] | io[n];
+            io[n]=io[n] | io[n-size];
+            io[n-size]=io[n-size] | io[n];
+            io[n]=io[n] | io[n-size];
+            io[n-size]=io[n-size] | io[n];
+            io[n]=io[n] | io[n-size];
+            io[n-size]=io[n-size] | io[n];
+            io[n]=io[n] | io[n-size];
+            io[n-size]=io[n-size] | io[n];
+            io[n]=io[n] | io[n-size];
+            io[n-size]=io[n-size] | io[n];
+            io[n]=io[n] | io[n-size];
+            io[n-size]=io[n-size] | io[n];
+          } else {
+            io[n]=io[n] & io[n-size];
+            io[n-size]=io[n-size] & io[n];
+          }
       }
-      for(n=0;n<size;n++) io[n]=(io[n]&0x3f)|((~io[n]&0x3)<<6);
+      for(n=0;n<size;n++) if ((n&15)<12 && (precharge>>(n&15))&1) {
+        io[n&15|12]|=io[n];
+        io[n&15|13]|=io[n];
+      }
   }
   void __acds_cell::antiphase() {
       long n,n2;
