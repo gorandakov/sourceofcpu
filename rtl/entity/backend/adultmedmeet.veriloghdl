@@ -1693,20 +1693,19 @@ instr[13:8]==6'd8) begin
       end
        
       trien[28]=magic[0] && isLeaIPRel|isCSet;
-      if (isLeaIPRel) begin //NOP
+      if (isLeaIPRel) begin 
           puseBConst[28]=1'b1;
 	  pport[28]=PORT_ALU;
 	  prB_use[28]=1'b1;
-	  prT_use[28]=1'b0;
+	  prT_use[28]=1'b1;
 	  puseRs[28]=1'b1;
 	  prAlloc[28]=1'b1;
 	  poperation[28][7:0]=`op_add64;
 	  poperation[28][12]=1'b1;
-	  prT[28]=instr[12:8];
+	  prT[28]={4'h7,instr[8]};
           poperation[28][12]=1'b1;
-          if (magic==4'b0111) pconstant[28]={20'b0,instr[59:16]};
-          if (magic==4'b1111) perror[28]=1'b0;
-          //WARNING: loads IP only; no offset
+          pconstant[28]={{28{instr[31]}},instr[31:9],14'b0};
+
       end else begin
           poperation[28][7:0]=instr[12] ? `op_csetn : `op_cset;
           poperation[28][10:8]=instr[15:13];
