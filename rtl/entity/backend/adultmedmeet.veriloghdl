@@ -1705,7 +1705,7 @@ instr[13:8]==6'd8) begin
 	  prT[28]={4'h7,instr[8]};
           poperation[28][12]=1'b1;
           pconstant[28]={{28{instr[31]}},instr[31:9],14'b0};
-
+          pIPRel[28]=1'b1;
       end else begin
           poperation[28][7:0]=instr[12] ? `op_csetn : `op_cset;
           poperation[28][10:8]=instr[15:13];
