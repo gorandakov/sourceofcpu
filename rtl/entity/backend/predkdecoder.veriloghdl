@@ -548,12 +548,11 @@ module predecoder_get(
     
     assign last_is_FMAmul=|(FMAmulI[11:0] & (instrEn[11:0]&~(instrEn[11:0]>>1));
     //verilator lint_off WIDTH
-    assign bundleF=bundle0;//boogy_baboogy(bstop[3:0],0,{bundle0[255+48:0],btail[63:48]},{bundle0[255+32:0],btail[63:32]},
-      //  {bundle0[255+16:0],btail[63:16]},{bundle0[255:0],btail[63:0]},bundle0);
+    assign bundleF=boogy_baboogy(bstop[3:0],bundle[255] && startOff==0,{bundle0[255+48:0],btail[63:48]},{bundle0[255+32:0],btail[63:32]}, {bundle0[255+16:0],btail[63:16]},{bundle0[255:0],btail[63:0]},bundle0);
 
-    assign instrEndF=instrEnd;//boogy_baboogy(bstop[3:0],bundle0[255] && startOff==0,{instrEnd[16:0],bstop[3:1],instrEnd[-1]},
-      //  {instrEnd[17:0],bstop[3:2],instrEnd[-1]},{instrEnd[18:0],bstop[3],instrEnd[-1]},
-      //  {instrEnd[15:0],bstop[3:0],instrEnd[-1]},instrEnd);
+    assign instrEndF=boogy_baboogy(bstop[3:0],bundle0[255] && startOff==0,{instrEnd[16:0],bstop[3:1],instrEnd[-1]},
+     {instrEnd[17:0],bstop[3:2],instrEnd[-1]},{instrEnd[18:0],bstop[3],instrEnd[-1]},
+      {instrEnd[15:0],bstop[3:0],instrEnd[-1]},instrEnd);
     //veritlator lint_on WIDTH
 
     assign bundle0={bnext,bundle};
@@ -574,9 +573,9 @@ module predecoder_get(
     
     always @*
       begin
-        instrEnd={10'haa,16'haaaa,1'b1};
+        instrEnd={2'b0,bnext_stop,bundle[254:240],1'b1};
         error=cntEnd3[13]&~cntEnd3_15[13] || startOff==15;
-        _splitinsn=1'b0;
+        _splitinsn=bundle[255];
         jerror=~lcnt_or_less[4] || ~jcnt_or_less[4]&~jcnt_or_less_15[4];
         flag_bits0=20'b0;
         startOff_override=has_brk & ~brk[3] ? brk  : 0;
