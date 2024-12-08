@@ -11,6 +11,7 @@
 #define pclk_12 0xe
 #define pclk_13 0x32
 #define pclk_23 0x64
+#define pclk_ppower 0xff
 
 int global_anchor_x;
 int global_anchor_y;
@@ -30,6 +31,7 @@ class __acds_cell {
   std::vector<void *> driven_obj;
   std::vector<long> driven_off_pos;
   unsigned short precharge_mask;
+  unsigned short outp;
   unsigned char io[];
   public:
   void eval();
@@ -68,10 +70,32 @@ class __acds_cell {
   }
   void __acds_cell::antiphase() {
       long n,n2;
-      for(n=0;n<(size*12);n++) {
-          if (precharge_mask&(1<<(n%(12*size)))) io[n]=0;
-          io[n]=(io[n]&0x3f)|((~io[n]&0x3)<<6);
+     for(n=size;n<(size*16);n++) {
+          if ((n&15)<12) {
+            io[n]=io[n] | io[n-size];
+            io[n-size]=io[n-size] | io[n];
+            io[n]=io[n] | io[n-size];
+            io[n-size]=io[n-size] | io[n];
+            io[n]=io[n] | io[n-size];
+            io[n-size]=io[n-size] | io[n];
+            io[n]=io[n] | io[n-size];
+            io[n-size]=io[n-size] | io[n];
+            io[n]=io[n] | io[n-size];
+            io[n-size]=io[n-size] | io[n];
+            io[n]=io[n] | io[n-size];
+            io[n-size]=io[n-size] | io[n];
+            io[n]=io[n] | io[n-size];
+            io[n-size]=io[n-size] | io[n];
+            io[n]=io[n] | io[n-size];
+            io[n-size]=io[n-size] | io[n];
+          } else {
+            io[n]=io[n] & io[n-size];
+            io[n-size]=io[n-size] & io[n];
+          }
       }
+      for(n=0;n<size;n++) if ((n&15)<12 && (precharge>>(n&15))&1) {
+        io[n]&=io[n&15|12];
+      } 
   }
   void __acds_cell::drive() {
     std::vector<void *>::iterator obj;
@@ -83,12 +107,14 @@ class __acds_cell {
       off=(field&driven_off_mask)>>driven_off_shift;
       cnt=(field&driven_count_mask)>>driven_count_shift;
       othersz=((__acds_cell *) obj)->size;
-      for(n=0;n<cnt;n=n+1) {
-        ((__acds_cell *) obj)->io[n+othersz*(pos&0xf)]|=
-          io[n+othersz*((pos&0xf0)>>4)+off];
-        ((__acds_cell *) obj)->io[n+othersz*(pos&0xf)]&=0x3f;
-        ((__acds_cell *) obj)->io[n+othersz*(pos&0xf)]|=
-          ((__acds_cell *) obj)->io[n+othersz*(pos&0xf)]<<6;
+      if (pos<12) for(n=0;n<cnt;n=n+1) {
+        ((__acds_cell *) obj)->io[n*16+pos]|=
+          io[n*16+outp+off];
+      }
+      if (pos<12) for(n=0;n<cnt;n=n+1) {
+        ((__acds_cell *) obj)->io[n*16+pos]&=
+          io[n*16+outp+off];
+      }
     }
   }
 template <long size,long precharge_mask> class acds_cell {
