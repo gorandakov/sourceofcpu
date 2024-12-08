@@ -117,7 +117,7 @@ class __acds_cell {
       }
     }
   }
-template <long size,long precharge_mask> class acds_cell {
+template <long size,long precharge_mask,long outp> class acds_cell {
   int phase;
   int size;
   short anchor_x;
@@ -130,6 +130,7 @@ template <long size,long precharge_mask> class acds_cell {
   std::vector<void *> driven_obj;
   std::vector<long> driven_off_pos;
   unsigned short precharge_mask;
+  unsigned short outp;
   unsigned char io[12][size];
   public:
   acds_cell<size> {
