@@ -1430,57 +1430,15 @@ instr[13:8]==6'd8) begin
 
       
       trien[19]=magic[1:0]==2'b11 && isImmLoadStore;
-      pport[19]=opcode_main[0] ? PORT_STORE : PORT_LOAD;
-      if (opcode_main[7:1]==7'b1011000 && instr[10:9]==2'b10)
-          poperation[19][5:0]=6'd22;
-      else
-          poperation[19][5:0]=( opcode_main[7:1]==7'b1011000) ? 
-          {2'b10,instr[10:8],opcode_main[0]} : {1'b0,instr[11:8],opcode_main[0]};
-      if (magic==4'b0111) begin
-          pconstant[19]={20'b0,instr[59:16]};
-          if (oddmode[3]) perror[19]=2'b1;
-      end
-      if (oddmode[3] && opcode_main[0]) perror[19]=2'b1;
-      poperation[19][12:6]=7'b0;
-      pisIPRel[19]=1'b1;
-      prA_use[19]=1'b0;
+      pport[19]=PORT_ALU;
+      prT_use[19]=1'b1;;
       prB_use[19]=1'b1;
-      prT_use[19]=~opcode_main[0] && opcode_main[7:1]==7'b1011000 && instr[10:9]!=2'b10;
-      prC_use[19]=opcode_main[0] && opcode_main[7:1]==7'b1011000;
-      prT_useF[19]=~opcode_main[0] && opcode_main[7:1]!=7'b1011000;
-      prC_useF[19]=opcode_main[0] && opcode_main[7:1]!=7'b1011000;
-      prT_isV[19]=~opcode_main[0] && opcode_main[7:1]!=7'b1011000 && fop_v({instr[11:8],1'b0});
       puseRs[19]=1'b1;
-      prAlloc[19]=~opcode_main[0] && !(opcode_main[7:1]==7'b1011000 && instr[10:9]==2'b10);
+      prAlloc[19]=1'b1;
       puseBConst[19]=1'b1;
-      //if (magic[3]) perror[19]=2'b0;
-      if (opcode_main[0]) begin
-          if (magic[1:0]==2'b01) prC[19]=instr[16:12];
-          else prC[19]={opcode_main[7:1]==7'b1011000 ? instr[11] : instr[1],instr[15:12]};
-       //   if (prevSpecAlu) rC=6'd16;
-      end 
-      if (magic[1:0]==2'b01) prT[19]=instr[16:12];
-      else prT[19]={opcode_main[7:1]==7'b1011000 ? instr[11] : instr[1],instr[15:12]};
-       if (prT[19]==5'd16 && opcode_main[7:0]==8'b10110000) begin
-          prT[19]=5'd16;
-          pthisSpecLoad[19]=1'b1;
-          prAlloc[19]=1'b0;
-      end
-      if (prT[19]==5'd15 && opcode_main[7:0]!=8'b10110000) begin
-           prT[19]=5'd15;
-           pthisSpecLoad[19]=1'b1;
-           prAlloc[19]=1'b0;
-      end
-      if (opcode_main[0] && ((opcode_main[7:1]==7'b1011000 && instr[10])||(opcode_main[7:1]!=7'b1011000) )
-          perror[19]=2'b1;
-      if (poperation[19][5:1]==5'h16) begin poperation[19][7:0]=`op_cax; poperation[19][9:8]=2'b0; pport[19]=PORT_ALU; if (oddmode[3]) perror[19]=2'b1; end
-      if (magic[1:0]==2'b01 && instr[17]) perror[19]=1;
-      if (poperation[18][0] && poperation[17][5:1]==5'h17) begin
-          poperation[17][5:0]=6'h20;
-          poperation[17][7]=1'b1; //says it sets flags!
-          prAlloc[17]=1'b0;
-          prT_use[17]=1'b0;
-      end
+      pconstant[19]={{40{instr[31]}},instr[31:8]};
+      prT[19]={2'b0,~instr[2],instr[1:0]};
+      
       
       trien[20]=magic[0] & isBasicCJump;
       puseBConst[20]=magic[1:0]!=2'b01 && instr[18] || magic[1:0]==2'b01 
