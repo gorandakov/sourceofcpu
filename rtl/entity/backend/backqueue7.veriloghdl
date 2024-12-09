@@ -1405,7 +1405,7 @@ jupd0_en,jupdt0_en,jupd0_ght_en,jupd0_ght2_en,jupd0_addr,jupd0_baddr,jupd0_sc,ju
     .lnkLink3(lnk_link3),.lnkOff3(lnk_off3),.lnkMagic3(lnk_magic3),.lnkRet3(lnk_isRet3),.lnkJumps3(lnk_jpos3)
     );
     
-  instrQ instrQ_mod(
+  suggestions suggstQ_mod(
   .clk(clk),
   .rst(rst),
   .write_instrEn(pre_instrEn_reg[11:0]&pre_jbefore),
