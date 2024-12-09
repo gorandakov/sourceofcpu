@@ -17,7 +17,7 @@ limitations under the License.
 
 `include "../struct.sv"
 
-module instrQ_buf(
+module suggstQ_buf(
   clk,
   rst,
   write_instrEn,
@@ -237,7 +237,7 @@ endmodule
 
 
 
-module instrQ_box(
+module suggstQ_box(
   clk,
   rst,
   write_instrEn,
@@ -370,7 +370,7 @@ module instrQ_box(
           wire [9:0][OTHER-1:0] read_otherm;
           
           for (l=0;l<8;l=l+1) begin : buf_gen
-              instrQ_buf #(l+m*8,l==0) buf_mod(
+              suggstQ_buf #(l+m*8,l==0) buf_mod(
               clk,
               rst,
               write_instrEn,
@@ -484,7 +484,7 @@ endmodule
 
 
 
-module instrQ(
+module suggestions(
   clk,
   rst,
   write_instrEn,
@@ -672,7 +672,7 @@ module instrQ(
   assign read_other8=read_otherZ8 & {OTHER{~init}};
   assign read_other9=read_otherZ9 & {OTHER{~init}};
   
-  instrQ_box box_mod(
+  suggstQ_box box_mod(
   clk,
   rst,
   (write_instrEn|{11'b0,init})&{12{write_wen}},
