@@ -331,9 +331,9 @@ module fu_alu(
 
   rs_write_forward_ALU #(0,66) u1_A_fwd(
   clk,rst,
-  ~u1_clkEn || !(u1_op[7:3]==5'b0 || u1_op[7:1]==7'd30) || ~clkREF,
-  ~u1_clkEn || (u1_op[7:3]==5'b0 || u1_op[7:1]==7'd30 || u1_op[7:3]==3 || u1_op[7:2]==5) || ~clkREF,
-  ~u1_clkEn || !(u1_op[7:3]==3 || u1_op[7:2]==5 || u1_op[7:0]==`op_cax) || ~clkREF,  
+  !(u1_op[7:3]==5'b0 || u1_op[7:1]==7'd30) || ~clkREF,
+  (u1_op[7:3]==5'b0 || u1_op[7:1]==7'd30 || u1_op[7:3]==3 || u1_op[7:2]==5) || ~clkREF,
+  !(u1_op[7:3]==3 || u1_op[7:2]==5 || u1_op[7:0]==`op_cax) || ~clkREF,  
   (u1_op[7:0]==`op_add64 || u1_op[7:0]==`op_sub64) && u1_op[8],
   u1_A,uu_A1,
   u1_A_fufwd,u1_A_fuufwd,
@@ -351,9 +351,9 @@ module fu_alu(
   
   rs_write_forward_ALU #(1,66) u1_B_fwd(
   clk,rst,
-  ~u1_clkEn || !(u1_op[7:3]==5'b0 || u1_op[7:1]==7'd30) || ~clkREF2,
-  ~u1_clkEn || (u1_op[7:3]==5'b0 || u1_op[7:1]==7'd30 || u1_op[7:3]==3 || u1_op[7:2]==5 || u1_op[11]) || ~clkREF2,
-  ~u1_clkEn || !(u1_op[7:3]==3 || u1_op[7:2]==5 || u1_op[11] || u1_op[7:0]==`op_cax) || ~clkREF2,  
+  !(u1_op[7:3]==5'b0 || u1_op[7:1]==7'd30) || ~clkREF2,
+  (u1_op[7:3]==5'b0 || u1_op[7:1]==7'd30 || u1_op[7:3]==3 || u1_op[7:2]==5 || u1_op[11]) || ~clkREF2,
+  !(u1_op[7:3]==3 || u1_op[7:2]==5 || u1_op[11] || u1_op[7:0]==`op_cax) || ~clkREF2,  
   (u1_op[7:0]==`op_add64 || u1_op[7:0]==`op_sub64) && u1_op[8],
   u1_B,uu_B1,
   u1_B_fufwd,u1_B_fuufwd,
@@ -372,9 +372,9 @@ module fu_alu(
   
   rs_write_forward_ALU #(0,66) u2_A_fwd(
   clk,rst,
-  ~u2_clkEn || !(u2_op[7:3]==5'b0 || u2_op[7:1]==7'd30) || ~clkREF,
-  ~u2_clkEn || (u2_op[7:3]==5'b0 || u2_op[7:1]==7'd30 || u2_op[7:3]==3 || u2_op[7:2]==5 || u2_op[11]) || ~clkREF,
-  ~u2_clkEn || !(u2_op[7:3]==3 || u2_op[7:2]==5 || u2_op[11]) || ~clkREF,  
+  !(u2_op[7:3]==5'b0 || u2_op[7:1]==7'd30) || ~clkREF,
+  (u2_op[7:3]==5'b0 || u2_op[7:1]==7'd30 || u2_op[7:3]==3 || u2_op[7:2]==5 || u2_op[11]) || ~clkREF,
+  !(u2_op[7:3]==3 || u2_op[7:2]==5 || u2_op[11]) || ~clkREF,  
   (u2_op[7:0]==`op_add64 || u2_op[7:0]==`op_sub64) && u2_op[8],
   u2_A,uu_A2,
   u2_A_fufwd,u2_A_fuufwd,
@@ -392,9 +392,9 @@ module fu_alu(
   
   rs_write_forward_ALU #(1,66) u2_B_fwd(
   clk,rst,
-  ~u2_clkEn || !(u2_op[7:3]==5'b0 || u2_op[7:1]==7'd30) || ~clkREF2,
-  ~u2_clkEn || (u2_op[7:3]==5'b0 || u2_op[7:1]==7'd30 || u2_op[7:3]==3 || u2_op[7:2]==5 || u2_op[11]) || ~clkREF2,
-  ~u2_clkEn || !(u2_op[7:3]==3 || u2_op[7:2]==5 || u2_op[11]) || ~clkREF2,  
+  !(u2_op[7:3]==5'b0 || u2_op[7:1]==7'd30) || ~clkREF2,
+  (u2_op[7:3]==5'b0 || u2_op[7:1]==7'd30 || u2_op[7:3]==3 || u2_op[7:2]==5 || u2_op[11]) || ~clkREF2,
+  !(u2_op[7:3]==3 || u2_op[7:2]==5 || u2_op[11]) || ~clkREF2,  
   (u2_op[7:0]==`op_add64 || u2_op[7:0]==`op_sub64) && u2_op[8],
   u2_B,uu_B2,
   u2_B_fufwd,u2_B_fuufwd,
@@ -413,9 +413,9 @@ module fu_alu(
   
   rs_write_forward_ALU #(0,66) u3_A_fwd(
   clk,rst,
-  ~u3_clkEn || !(u3_op[7:3]==5'b0 || u3_op[7:1]==7'd30) || ~clkREF,
-  ~u3_clkEn || (u3_op[7:3]==5'b0 || u3_op[7:1]==7'd30 || u3_op[7:3]==3 || u3_op[7:2]==5 || u3_op[11]) || ~clkREF,
-  ~u3_clkEn || !(u3_op[7:3]==3 || u3_op[7:2]==5 || u3_op[11] || u3_op[7:0]==`op_cax) || ~clkREF,  
+  !(u3_op[7:3]==5'b0 || u3_op[7:1]==7'd30) || ~clkREF,
+  (u3_op[7:3]==5'b0 || u3_op[7:1]==7'd30 || u3_op[7:3]==3 || u3_op[7:2]==5 || u3_op[11]) || ~clkREF,
+  !(u3_op[7:3]==3 || u3_op[7:2]==5 || u3_op[11] || u3_op[7:0]==`op_cax) || ~clkREF,  
   (u3_op[7:0]==`op_add64 || u3_op[7:0]==`op_sub64) && u3_op[8],
   u3_A,uu_A3,
   u3_A_fufwd,u3_A_fuufwd,
@@ -433,9 +433,9 @@ module fu_alu(
   
   rs_write_forward_ALU #(1,66) u3_B_fwd(
   clk,rst,
-  ~u3_clkEn || !(u3_op[7:3]==5'b0 || u3_op[7:1]==7'd30) || ~clkREF2,
-  ~u3_clkEn || (u3_op[7:3]==5'b0 || u3_op[7:1]==7'd30 || u3_op[7:3]==3 || u3_op[7:2]==5 || u3_op[11]) || ~clkREF2,
-  ~u3_clkEn || !(u3_op[7:3]==3 || u3_op[7:2]==5 || u3_op[11] || u3_op[7:0]==`op_cax) || ~clkREF2,  
+  !(u3_op[7:3]==5'b0 || u3_op[7:1]==7'd30) || ~clkREF2,
+  (u3_op[7:3]==5'b0 || u3_op[7:1]==7'd30 || u3_op[7:3]==3 || u3_op[7:2]==5 || u3_op[11]) || ~clkREF2,
+  !(u3_op[7:3]==3 || u3_op[7:2]==5 || u3_op[11] || u3_op[7:0]==`op_cax) || ~clkREF2,  
   (u3_op[7:0]==`op_add64 || u3_op[7:0]==`op_sub64) && u3_op[8],
   u3_B,uu_B3,
   u3_B_fufwd,u3_B_fuufwd,
@@ -454,9 +454,9 @@ module fu_alu(
   
   rs_write_forward_ALU #(0,66) u4_A_fwd(
   clk,rst,
-  ~u4_clkEn || !(u4_op[7:3]==5'b0 || u4_op[7:1]==7'd30) || ~clkREF,
-  ~u4_clkEn || (u4_op[7:3]==5'b0 || u4_op[7:1]==7'd30 || u4_op[7:3]==3 || u4_op[7:2]==5 || u4_op[11]) || ~clkREF,
-  ~u4_clkEn || !(u4_op[7:3]==3 || u4_op[7:2]==5 || u4_op[11]) || ~clkREF,  
+  !(u4_op[7:3]==5'b0 || u4_op[7:1]==7'd30) || ~clkREF,
+  (u4_op[7:3]==5'b0 || u4_op[7:1]==7'd30 || u4_op[7:3]==3 || u4_op[7:2]==5 || u4_op[11]) || ~clkREF,
+  !(u4_op[7:3]==3 || u4_op[7:2]==5 || u4_op[11]) || ~clkREF,  
   (u4_op[7:0]==`op_add64 || u4_op[7:0]==`op_sub64) && u4_op[8],
   u4_A,uu_A4,
   u4_A_fufwd,u4_A_fuufwd,
@@ -474,9 +474,9 @@ module fu_alu(
   
   rs_write_forward_ALU #(1,66) u4_B_fwd(
   clk,rst,
-  ~u4_clkEn || !(u4_op[7:3]==5'b0 || u4_op[7:1]==7'd30) || ~clkREF2,
-  ~u4_clkEn || (u4_op[7:3]==5'b0 || u4_op[7:1]==7'd30 || u4_op[7:3]==3 || u4_op[7:2]==5 || u4_op[11]) || ~clkREF2,
-  ~u4_clkEn || !(u4_op[7:3]==3 || u4_op[7:2]==5 || u4_op[11]) || ~clkREF2,  
+  !(u4_op[7:3]==5'b0 || u4_op[7:1]==7'd30) || ~clkREF2,
+  (u4_op[7:3]==5'b0 || u4_op[7:1]==7'd30 || u4_op[7:3]==3 || u4_op[7:2]==5 || u4_op[11]) || ~clkREF2,
+  !(u4_op[7:3]==3 || u4_op[7:2]==5 || u4_op[11]) || ~clkREF2,  
   (u4_op[7:0]==`op_add64 || u4_op[7:0]==`op_sub64) && u4_op[8],
   u4_B,uu_B4,
   u4_B_fufwd,u4_B_fuufwd,
@@ -495,9 +495,9 @@ module fu_alu(
   
   rs_write_forward_ALU #(0,66) u5_A_fwd(
   clk,rst,
-  ~u5_clkEn || !(u5_op[7:3]==5'b0 || u5_op[7:1]==7'd30) || ~clkREF,
-  ~u5_clkEn || (u5_op[7:3]==5'b0 || u5_op[7:1]==7'd30 || u5_op[7:3]==3 || u5_op[7:2]==5 || u5_op[11]) || ~clkREF,
-  ~u5_clkEn || !(u5_op[7:3]==3 || u5_op[7:2]==5 || u5_op[11] || u5_op[7:0]==`op_cax) || ~clkREF,  
+  !(u5_op[7:3]==5'b0 || u5_op[7:1]==7'd30) || ~clkREF,
+  (u5_op[7:3]==5'b0 || u5_op[7:1]==7'd30 || u5_op[7:3]==3 || u5_op[7:2]==5 || u5_op[11]) || ~clkREF,
+  !(u5_op[7:3]==3 || u5_op[7:2]==5 || u5_op[11] || u5_op[7:0]==`op_cax) || ~clkREF,  
   (u5_op[7:0]==`op_add64 || u5_op[7:0]==`op_sub64) && u5_op[8],
   u5_A,uu_A5,
   u5_A_fufwd,u5_A_fuufwd,
@@ -515,9 +515,9 @@ module fu_alu(
   
   rs_write_forward_ALU #(1,66) u5_B_fwd(
   clk,rst,
-  ~u5_clkEn || !(u5_op[7:3]==5'b0 || u5_op[7:1]==7'd30) || ~clkREF2,
-  ~u5_clkEn || (u5_op[7:3]==5'b0 || u5_op[7:1]==7'd30 || u5_op[7:3]==3 || u5_op[7:2]==5 || u5_op[11]) || ~clkREF2,
-  ~u5_clkEn || !(u5_op[7:3]==3 || u5_op[7:2]==5 || u5_op[11] || u5_op[7:0]==`op_cax) || ~clkREF2,  
+  !(u5_op[7:3]==5'b0 || u5_op[7:1]==7'd30) || ~clkREF2,
+  (u5_op[7:3]==5'b0 || u5_op[7:1]==7'd30 || u5_op[7:3]==3 || u5_op[7:2]==5 || u5_op[11]) || ~clkREF2,
+  !(u5_op[7:3]==3 || u5_op[7:2]==5 || u5_op[11] || u5_op[7:0]==`op_cax) || ~clkREF2,  
   (u5_op[7:0]==`op_add64 || u5_op[7:0]==`op_sub64) && u5_op[8],
   u5_B,uu_B5,
   u5_B_fufwd,u5_B_fuufwd,
@@ -536,9 +536,9 @@ module fu_alu(
   
   rs_write_forward_ALU #(0,66) u6_A_fwd(
   clk,rst,
-  ~u6_clkEn || !(u6_op[7:3]==5'b0 || u6_op[7:1]==7'd30) || ~clkREF,
-  ~u6_clkEn || (u6_op[7:3]==5'b0 || u6_op[7:1]==7'd30 || u6_op[7:3]==3 || u6_op[7:2]==5 || u6_op[11]) || ~clkREF,
-  ~u6_clkEn || !(u6_op[7:3]==3 || u6_op[7:2]==5 || u6_op[11]) || ~clkREF,  
+  !(u6_op[7:3]==5'b0 || u6_op[7:1]==7'd30) || ~clkREF,
+  (u6_op[7:3]==5'b0 || u6_op[7:1]==7'd30 || u6_op[7:3]==3 || u6_op[7:2]==5 || u6_op[11]) || ~clkREF,
+  !(u6_op[7:3]==3 || u6_op[7:2]==5 || u6_op[11]) || ~clkREF,  
   (u6_op[7:0]==`op_add64 || u6_op[7:0]==`op_sub64) && u6_op[8],
   u6_A,uu_A6,
   u6_A_fufwd,u6_A_fuufwd,
@@ -556,9 +556,9 @@ module fu_alu(
   
   rs_write_forward_ALU #(1,66) u6_B_fwd(
   clk,rst,
-  ~u6_clkEn || !(u6_op[7:3]==5'b0 || u6_op[7:1]==7'd30) || ~clkREF2,
-  ~u6_clkEn || (u6_op[7:3]==5'b0 || u6_op[7:1]==7'd30 || u6_op[7:3]==3 || u6_op[7:2]==5 || u6_op[11]) || ~clkREF2,
-  ~u6_clkEn || !(u6_op[7:3]==3 || u6_op[7:2]==5 || u6_op[11]) || ~clkREF2,  
+  !(u6_op[7:3]==5'b0 || u6_op[7:1]==7'd30) || ~clkREF2,
+  (u6_op[7:3]==5'b0 || u6_op[7:1]==7'd30 || u6_op[7:3]==3 || u6_op[7:2]==5 || u6_op[11]) || ~clkREF2,
+  !(u6_op[7:3]==3 || u6_op[7:2]==5 || u6_op[11]) || ~clkREF2,  
   (u6_op[7:0]==`op_add64 || u6_op[7:0]==`op_sub64) && u6_op[8],
   u6_B,uu_B6,
   u6_B_fufwd,u6_B_fuufwd,
@@ -576,9 +576,9 @@ module fu_alu(
 
   rs_write_forward_ALU #(0,66) u6_Am_fwd(
   clk,rst,
-  ~u6_clkEn || !(u6_op[7:3]==5'b0 || u6_op[7:1]==7'd30) || ~clkREF,
-  ~u6_clkEn || (u6_op[7:3]==5'b0 || u6_op[7:1]==7'd30 || u6_op[7:3]==3 || u6_op[7:2]==5 || u6_op[11]) || ~clkREF,
-  ~u6_clkEn || !(u6_op[11]) || ~clkREF,  
+  !(u6_op[7:3]==5'b0 || u6_op[7:1]==7'd30) || ~clkREF,
+  (u6_op[7:3]==5'b0 || u6_op[7:1]==7'd30 || u6_op[7:3]==3 || u6_op[7:2]==5 || u6_op[11]) || ~clkREF,
+  !(u6_op[11]) || ~clkREF,  
   (u6_op[7:0]==`op_add64 || u6_op[7:0]==`op_sub64) && u6_op[8],
   u6_A,uu_A6m,
   u6_A_fufwd,u6_A_fuufwd,
@@ -596,9 +596,9 @@ module fu_alu(
   
   rs_write_forward_ALU #(1,66) u6_B_fwd(
   clk,rst,
-  ~u6_clkEn || !(u6_op[7:3]==5'b0 || u6_op[7:1]==7'd30) || ~clkREF1,
-  ~u6_clkEn || (u6_op[7:3]==5'b0 || u6_op[7:1]==7'd30 || u6_op[7:3]==3 || u6_op[7:2]==5 || u6_op[11]) || ~clkREF2,
-  ~u6_clkEn || !(u6_op[11]) || ~clkREF2,  
+  !(u6_op[7:3]==5'b0 || u6_op[7:1]==7'd30) || ~clkREF1,
+  (u6_op[7:3]==5'b0 || u6_op[7:1]==7'd30 || u6_op[7:3]==3 || u6_op[7:2]==5 || u6_op[11]) || ~clkREF2,
+  !(u6_op[11]) || ~clkREF2,  
   (u6_op[7:0]==`op_add64 || u6_op[7:0]==`op_sub64) && u6_op[8],
   u6_B,uu_B6m,
   u6_B_fufwd,u6_B_fuufwd,
@@ -616,7 +616,7 @@ module fu_alu(
   
   rs_writeiS_forward #(6) u1_S_fwd(
   clk,rst,
-  ~u1_clkEn,
+  0,
   u1_S,uu_S1,
   u1_S_fufwd_reg,u1_S_fuufwd_reg,
   FUS1,FUS1_reg,
@@ -633,7 +633,7 @@ module fu_alu(
 
   rs_writeiS_forward #(6) u2_S_fwd(
   clk,rst,
-  ~u2_clkEn,
+  0,
   u2_S,uu_S2,
   u2_S_fufwd_reg,u2_S_fuufwd_reg,
   FUS1,FUS1_reg,
@@ -651,7 +651,7 @@ module fu_alu(
 
   rs_writeiS_forward #(6) u3_S_fwd(
   clk,rst,
-  ~u3_clkEn,
+  0,
   u3_S,uu_S3,
   u3_S_fufwd_reg,u3_S_fuufwd_reg,
   FUS1,FUS1_reg,
@@ -669,7 +669,7 @@ module fu_alu(
 
   rs_writeiS_forward #(6) u4_S_fwd(
   clk,rst,
-  ~u4_clkEn,
+  0,
   u4_S,uu_S4,
   u4_S_fufwd_reg,u4_S_fuufwd_reg,
   FUS1,FUS1_reg,
@@ -687,7 +687,7 @@ module fu_alu(
 
   rs_writeiS_forward #(6) u5_S_fwd(
   clk,rst,
-  ~u5_clkEn,
+  0,
   u5_S,uu_S5,
   u5_S_fufwd_reg,u5_S_fuufwd_reg,
   FUS1,FUS1_reg,
@@ -705,7 +705,7 @@ module fu_alu(
 
   rs_writeiS_forward #(6) u6_S_fwd(
   clk,rst,
-  ~u6_clkEn,
+  0,
   u6_S,uu_S6,
   u6_S_fufwd_reg,u6_S_fuufwd_reg,
   FUS1,FUS1_reg,
@@ -740,11 +740,11 @@ module fu_alu(
   alu #(1'b0)  alu5(clk,rst,except,1'b0,1'b0,u6_op_reg[12:0],u6_op_reg[17:13],u6_isSub_reg,u6_clkEn_reg,1'b1,
     u6_ret,u6_rten,uu_A6,uu_B6,uu_S6,FU9,1'b1,u6_error_reg,u6_rmode_reg);
 
-  add_addrcalc #(44,1) aadd1(uu_B1[2],u1_const_reg,uu_A1[2],FU4,p0_sec_in,
+  shf_deposit #(44,1) aadd1(uu_B1[2],u1_const_reg,uu_A1[2],FU4,p0_sec_in,
     ,u1_eaen_reg,u1_sh_reg,u1_sh2_reg);
-  add_addrcalc #(44,1) aadd3(uu_B3[2],u3_const_reg,uu_A3[2],FU5,p1_sec_in,
+  shf_deposit #(44,1) aadd3(uu_B3[2],u3_const_reg,uu_A3[2],FU5,p1_sec_in,
     ,u3_eaen_reg,u3_sh_reg,u3_sh2_reg);
-  add_addrcalc #(44,1) aadd5(uu_B5[2],u5_const_reg,uu_A5[2],FU6,p2_sec_in,
+  shf_deposit #(44,1) aadd5(uu_B5[2],u5_const_reg,uu_A5[2],FU6,p2_sec_in,
     ,u5_eaen_reg,u5_sh_reg,u5_sh2_reg);
   
   alu_shift sh2_alu(
