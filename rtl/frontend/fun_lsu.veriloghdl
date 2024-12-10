@@ -1381,7 +1381,7 @@ module addrcalc_block(
  
   rs_write_forward #(65) nxtBase1(
   clk,rst,
-  ~u1_clkEn|(rsStall[0]&~now_flushing&~alt_bus_hold_reg)|~clkREF2,
+  (rsStall[0]&~now_flushing&~alt_bus_hold_reg)|~clkREF2,
   u1_base[64:0],uu_base1,
   u1_base_fufwd,u1_base_fuufwd,
   FU0,FU0_reg,
@@ -1398,7 +1398,7 @@ module addrcalc_block(
   
   rs_write_forward #(65) nxtIndex1(
   clk,rst,
-  ~u1_clkEn|(rsStall[0]&~now_flushing&~alt_bus_hold_reg)|~clkREF,
+  (rsStall[0]&~now_flushing&~alt_bus_hold_reg)|~clkREF,
   u1_index[64:0],uu_index1,
   u1_index_fufwd,u1_index_fuufwd,
   FU0,FU0_reg,
@@ -1415,7 +1415,7 @@ module addrcalc_block(
   
   rs_write_forward #(65) nxtBase2(
   clk,rst,
-  ~u2_clkEn|(rsStall[1]&~now_flushing&~alt_bus_hold_reg)|~clkREF2,
+  (rsStall[1]&~now_flushing&~alt_bus_hold_reg)|~clkREF2,
   u2_base[64:0],uu_base2,
   u2_base_fufwd,u2_base_fuufwd,
   FU0,FU0_reg,
@@ -1432,7 +1432,7 @@ module addrcalc_block(
   
   rs_write_forward #(65) nxtIndex2(
   clk,rst,
-  ~u2_clkEn|(rsStall[1]&~now_flushing&~alt_bus_hold_reg)|~clkREF,
+  (rsStall[1]&~now_flushing&~alt_bus_hold_reg)|~clkREF,
   u2_index[64:0],uu_index2,
   u2_index_fufwd,u2_index_fuufwd,
   FU0,FU0_reg,
@@ -1450,7 +1450,7 @@ module addrcalc_block(
   
   rs_write_forward #(65) nxtBase3(
   clk,rst,
-  ~u3_clkEn|(rsStall[2]&~now_flushing&~alt_bus_hold_reg)|~clkREF2,
+  (rsStall[2]&~now_flushing&~alt_bus_hold_reg)|~clkREF2,
   u3_base[64:0],uu_base3,
   u3_base_fufwd,u3_base_fuufwd,
   FU0,FU0_reg,
@@ -1467,7 +1467,7 @@ module addrcalc_block(
   
   rs_write_forward #(65) nxtIndex3(
   clk,rst,
-  ~u3_clkEn|(rsStall[2]&~now_flushing&~alt_bus_hold_reg)|~clkREF,
+  (rsStall[2]&~now_flushing&~alt_bus_hold_reg)|~clkREF,
   u3_index[64:0],uu_index3,
   u3_index_fufwd,u3_index_fuufwd,
   FU0,FU0_reg,
@@ -1485,7 +1485,7 @@ module addrcalc_block(
   
   rs_write_forward #(65) nxtBase4(
   clk,rst,
-  ~u4_clkEn|~clkREF2,
+  ~clkREF2,
   u4_base[64:0],uu_base4,
   u4_base_fufwd,u4_base_fuufwd,
   FU0,FU0_reg,
@@ -1502,7 +1502,7 @@ module addrcalc_block(
   
   rs_write_forward #(65) nxtIndex4(
   clk,rst,
-  ~u4_clkEn|~clkREF,
+  ~clkREF,
   u4_index[64:0],uu_index4,
   u4_index_fufwd,u4_index_fuufwd,
   FU0,FU0_reg,
@@ -1520,7 +1520,7 @@ module addrcalc_block(
   
   rs_write_forward #(65) nxtBase5(
   clk,rst,
-  ~u5_clkEn|~clkREF2,
+  ~clkREF2,
   u5_base[64:0],uu_base5,
   u5_base_fufwd,u5_base_fuufwd,
   FU0,FU0_reg,
@@ -1537,7 +1537,7 @@ module addrcalc_block(
   
   rs_write_forward #(65) nxtIndex5(
   clk,rst,
-  ~u5_clkEn|~clkREF,
+  ~clkREF,
   u5_index[64:0],uu_index5,
   u5_index_fufwd,u5_index_fuufwd,
   FU0,FU0_reg,
