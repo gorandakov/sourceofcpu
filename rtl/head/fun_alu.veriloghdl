@@ -740,13 +740,24 @@ module fu_alu(
   alu #(1'b0)  alu5(clk,rst,except,1'b0,1'b0,u6_op_reg[12:0],u6_op_reg[17:13],u6_isSub_reg,u6_clkEn_reg,1'b1,
     u6_ret,u6_rten,uu_A6,uu_B6,uu_S6,FU9,1'b1,u6_error_reg,u6_rmode_reg);
 
-  shf_deposit #(44,1) aadd1(uu_B1[2],u1_const_reg,uu_A1[2],FU4,p0_sec_in,
-    ,u1_eaen_reg,u1_sh_reg,u1_sh2_reg);
-  shf_deposit #(44,1) aadd3(uu_B3[2],u3_const_reg,uu_A3[2],FU5,p1_sec_in,
-    ,u3_eaen_reg,u3_sh_reg,u3_sh2_reg);
-  shf_deposit #(44,1) aadd5(uu_B5[2],u5_const_reg,uu_A5[2],FU6,p2_sec_in,
-    ,u5_eaen_reg,u5_sh_reg,u5_sh2_reg);
-  
+ alu_shift sh1_alu(
+  clk,
+  rst,
+  except,
+  1'b0,
+  u1_op_reg[12:0],u1_op_reg[17:13],
+  u1_sz,{1'b0,u1_sz[3],1'b1,1'b0},u1_arith,u1_dir,
+  u1_clkEn_reg,
+  1'b1,
+  u1_ret,
+  uu_S1,
+  uu_A1[2],
+  uu_B1[2],
+  FU6,
+  u1_error_reg,
+  u1_rmode_reg
+  );
+
   alu_shift sh2_alu(
   clk,
   rst,
@@ -764,7 +775,24 @@ module fu_alu(
   u2_error_reg,
   u2_rmode_reg
   );
-  
+  alu_shift sh3_alu(
+  clk,
+  rst,
+  except,
+  1'b0,
+  u3_op_reg[12:0],u3_op_reg[17:13],
+  u3_sz,{1'b0,u3_sz[3],1'b1,1'b0},u3_arith,u3_dir,
+  u3_clkEn_reg,
+  1'b1,
+  u3_ret,
+  uu_S3,
+  uu_A3[2],
+  uu_B3[2],
+  FU7,
+  u3_error_reg,
+  u3_rmode_reg
+  );
+
   alu_shift sh4_alu(
   clk,
   rst,
@@ -782,7 +810,23 @@ module fu_alu(
   u4_error_reg,
   u4_rmode_reg
   );
-
+alu_shift sh5_alu(
+  clk,
+  rst,
+  except,
+  1'b0,
+  u5_op_reg[12:0],u5_op_reg[17:13],
+  u5_sz,{1'b0,u5_sz[3],1'b1,1'b0},u5_arith,u5_dir,
+  u5_clkEn_reg,
+  1'b1,
+  u5_ret,
+  uu_S5,
+  uu_A5[2],
+  uu_B5[2],
+  FU8,
+  u5_error_reg,
+  u5_rmode_reg//u4_rmode_reg
+  );
   alu_shift sh6_alu(
   clk,
   rst,
@@ -820,8 +864,12 @@ module fu_alu(
   assign fcvtout={FUCVT2_0[81:66],FUTYPE_0,FUCVT2_0[65:0]};
   
   
-  assign FU6=(~&nDataAlt) ? FUMUL_reg : 65'bz;
-  assign FU6=(~u5_nDataAlt) ? {1'b0,FUCVTIN} : 65'bz;
+  assign FU6=(~&nDataAlt) ? FUMUL1_reg : 65'bz;
+  assign FU6=(~u5_nDataAlt) ? {1'b0,FUCVTIN1} : 65'bz;
+  assign FU7=(~&nDataAlt) ? FUMUL2_reg : 65'bz;
+  assign FU7=(~u5_nDataAlt) ? {1'b0,FUCVTIN2} : 65'bz;
+  assign FU8=(~&nDataAlt) ? FUMUL3_reg : 65'bz;
+  assign FU8=(~u5_nDataAlt) ? {1'b0,FUCVTIN3} : 65'bz;
 
  
   
@@ -852,7 +900,41 @@ module fu_alu(
   .Res(FUMUL),
   .flg(MULFL)
  );
- 
+imul imul2_mod(
+  .clk(clk),
+  .rst(rst),
+  .clkEn(~(|fxFRT_alten2_reg3)),
+  .op_prev(u5_op[12:0]),
+  .alt_jxcross(),
+  .jxcross(H ? jxcross2 : uu_B5m_reg[2]),
+  .rmode(u5_rmode_reg),
+  .en(u5_clkEn_reg && u5_op_reg[11] && (u5_op_reg[7:0]==1 || u5_op_reg[7:0]
+    ==2 || u5_op_reg[7:0]==3 || u5_op_reg[7:0]==9 || u5_op_reg[7:0]==10 ||
+    u5_op_reg[7:0]==11 || u5_op_reg[7:0]==5 || u5_op_reg[7:0]==7)),  
+  .R(uu_A5m[2]),.C(uu_B5m[2]),
+  .attr(u5_attr_reg),
+  .alt(DataAlt2[0]),
+  .Res(FUMUL2),
+  .flg(MULFL2)
+ );
+imul imul3_mod(
+  .clk(clk),
+  .rst(rst),
+  .clkEn(~(|fxFRT3_alten_reg3)),
+  .op_prev(u4_op[12:0]),
+  .alt_jxcross(),
+  .jxcross(H ? jxcross3 : uu_B4m_reg[2]),
+  .rmode(u4_rmode_reg),
+  .en(u4_clkEn_reg && u4_op_reg[11] && (u4_op_reg[7:0]==1 || u4_op_reg[7:0]
+    ==2 || u4_op_reg[7:0]==3 || u4_op_reg[7:0]==9 || u4_op_reg[7:0]==10 ||
+    u4_op_reg[7:0]==11 || u4_op_reg[7:0]==5 || u4_op_reg[7:0]==7)),  
+  .R(uu_A4m[2]),.C(uu_B4m[2]),
+  .attr(u4_attr_reg),
+  .alt(DataAlt3[0]),
+  .Res(FUMUL3),
+  .flg(MULFL3)
+ );
+   
  assign allah=uu_A6m_reg[2];
 
   always @(posedge clk) begin
