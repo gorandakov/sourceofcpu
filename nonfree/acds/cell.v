@@ -1,6 +1,7 @@
 
 module cellA(
   clkPHASE,
+  precharge_signal,
   io);
   parameter WIDTH=1;
   parameter ANHOR_X=0;
@@ -10,6 +11,7 @@ module cellA(
   parameter X_mod=1000000;
   parameter Y_mod=1000000;
   parameter [11:0] PRECHARHE;
+  parameter [11:0] INP;
   input logic clkPHASE;
   inout logic [11:0][WIDTH-1:0][7:0] io;
 
@@ -20,7 +22,8 @@ module cellA(
   always @(posedge clkPHASE or negedge clkPHASE) begin
       if (clkPHASE==0) for(a=0;a<WIDTH;a=a+1) begin
           for(b=0;b<12;b=b+1) begin
-              if (PRECHARHE[b]) io[b][a]=8'bzz;
+            if (INP[b]) io[b][a]=8'bzz;
+            else if (PRECHARHE[b]) io[b][a]=precharge_signal;
           end
       end
       if (clkPHASE==1) begin
