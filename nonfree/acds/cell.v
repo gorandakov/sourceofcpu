@@ -20,7 +20,7 @@ module cellA(
   always @(posedge clkPHASE or negedge clkPHASE) begin
       if (clkPHASE==0) for(a=0;a<WIDTH;a=a+1) begin
           for(b=0;b<12;b=b+1) begin
-              if (PRECHARHE[b]) io[b][a]=8'b11zzzzzz;
+              if (PRECHARHE[b]) io[b][a]=8'bzz;
           end
       end
       if (clkPHASE==1) begin
@@ -33,9 +33,6 @@ module cellA(
                 (io<<(WIDTH*8*7))|(io>>(WIDTH*8*7))|
                 (io<<(WIDTH*8*8))|(io>>(WIDTH*8*8))|
                 (io<<(WIDTH*8*9))|(io>>(WIDTH*8*9));
-          for(b=0;b<12;b=b+1) begin
-              for(a=0;a<WIDTH;a=a+1) io[b][a]={~iow[b][a][1:0],iow[b][a][5:0]};
-          end
       end
   end
 endmodule
