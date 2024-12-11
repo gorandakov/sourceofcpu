@@ -19,7 +19,7 @@ module cellA(
 
   logic [11:0] [WIDTH-1:0] [7:0] iow;
 
-  always @(posedge clkPHASE or negedge clkPHASE) begin
+  always @* begin
       if (clkPHASE==0) for(a=0;a<WIDTH;a=a+1) begin
           for(b=0;b<12;b=b+1) begin
             if (INP[b]) io[b][a]=8'bzz;
