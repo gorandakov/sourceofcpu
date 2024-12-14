@@ -1,7 +1,5 @@
 NOTICE
-the production of the cpu doesn't count
- as distribution and thus is not covered by
-the license.
+
 also you will be expected to use fully paired dynamic 
 logic rather than use e.g. mono rail logic except for rgister files and memories which can be mono rail.
 for most of the ALU and other parts of it to achieve >6 GHz frequency.
