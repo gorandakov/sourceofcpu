@@ -317,6 +317,7 @@ module dcache1_way(
   read_begin1,read_low1,
   read_begin2,read_low2,
   read_begin3,read_low3,
+  read_hitEi,read_hitOi,
   write_addrE0,
   write_addrO0,
   write_bank0,
@@ -421,6 +422,9 @@ module dcache1_way(
   input [1:0] read_low2;
   input [1:0] read_low3;
 
+  inout [7:0] read_hitEi;
+  inout [7:0] read_hitOi;
+
   input [59:0][ADDR_WIDTH-2:0] write_addrE0;
   input [59:0][ADDR_WIDTH-2:0] write_addrO0;
   input [59:0][BANK_COUNT-1:0] write_bank0;
@@ -438,10 +442,12 @@ module dcache1_way(
   input [59:0]write_odd0;
   output [59:0] write0_err;
   
+  input write_insert_early;
+  input [36:0] write_addr;
   input write_insert;    
   input write_insertExclusive;
   input write_insertDirty;
-  input [LINE_WIDTH-1:0] write_data;
+  input [3:0][59:0][35:0] write_data;
   input [15:0] write_dataPTR;
   
 
@@ -649,6 +655,29 @@ module dcache1_way(
 /* verilator lint_on WIDTH */
        end
     end
+        dcache1_tag #(INDEX) tagRA_mod(
+        .clk(clk),
+        .rst(rst),
+        .read_clkEn(write_insert_early),
+        .read_en(write_insert_early),
+        .read_addrOdd(insert_addr[36:1]),.read_addrEven(insert_addr[36:1]),
+        .read_odd(insert_addr[0]), .read_split(1'b0), .read_invl(1'b0), 
+        .read_hitL_odd(read_hitOLi),.read_hitL_even(read_hitELi),
+        .read_hitH_odd(read_hitOHi),.read_hitH_even(read_hitEHi),
+        .read_hit_odd(read_hitOi[INDEX]),.read_hit_even(read_hitEi[INDEX]),
+        .read_exclOut0(),.read_exclOut1(),//.read_excl(),
+        .errH(errHi),.errL(errLi),
+        .write_exclusive(write_insertExclusive),
+        .write_rand(insert_rand),
+        .write_recent_out(),
+        .write_recent_in(recent_in),
+        .write_wen(write_insert),
+        .write_hit(ins_hit[r]),
+        .wb_addr(),
+        .wb_valid(),
+        .puke_en(puke_en),.puke_addr(puke_addr)
+        );  
+
     for (r=0;r<4;r=r+1) begin : tagR_gen
         if (r>0)
         dcache1_tag #(INDEX) tagR_mod(
@@ -690,7 +719,7 @@ module dcache1_way(
         .write_rand(insert_rand),
         .write_recent_out(recent[r]),
         .write_recent_in(recent_in),
-        .write_wen(write_insert),
+        .write_wen(write_insert&~|read_hitOi&~|read_hitEi),
         .write_hit(ins_hit[r]),
         .wb_addr(wb_addr),
         .wb_valid(wb_valid),
