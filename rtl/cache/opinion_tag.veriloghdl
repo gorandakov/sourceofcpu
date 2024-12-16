@@ -29,8 +29,8 @@ module ccTag_ram(
   );
 
   localparam DATA_WIDTH=`cc1Tag_width;
-  localparam ADDR_WIDTH=7;
-  localparam ADDR_COUNT=128;
+  localparam ADDR_WIDTH=6;
+  localparam ADDR_COUNT=64;
 
   input clk;
   input rst;
@@ -71,8 +71,8 @@ module ccTag_lram(
   );
 
   localparam DATA_WIDTH=3;
-  localparam ADDR_WIDTH=7;
-  localparam ADDR_COUNT=128;
+  localparam ADDR_WIDTH=6;
+  localparam ADDR_COUNT=64;
 
   input clk;
   input rst;
@@ -114,10 +114,11 @@ module ccTag(
   write_hit,
   write_expun_addr,
   write_exp_en,
+  EI,
   init
   );
 
-  parameter [2:0] INDEX=0;
+  parameter [1:0] INDEX=0;
   parameter [0:0] EXT=1'b0;
   localparam DATA_WIDTH=`cc1Tag_width;
   localparam ADDR_WIDTH=7;
@@ -143,6 +144,7 @@ module ccTag(
   output write_hit;
   output [36:0] write_expun_addr;
   output write_exp_en;
+  inout [7:0] EI;
   input init;
 
   wire [59:0][PHYS_BITS-8:0] tag_paddr;
@@ -186,7 +188,7 @@ module ccTag(
           tag_valid[p]=read_data[p][`cc1Tag_valid];
           read_err[p]=^read_data[p];
           read_hit[p]=tag_valid[p] && tag_paddr[p]==read_phys_addr_reg[p] && ~init && read_clkEn_reg[p];
-          read_phys_addr0[p]=read_phys_addr[p];
+          read_phys_addr0[p]=read_phys_addr[p][5:0];
       end
   end
 
@@ -210,14 +212,17 @@ module ccTag(
 
   LFSR16_6 #(16'hfead) pp_mod(clk,rst,POOG);
 
-  assign write_hit=(write_wen_reg && read_NRUw==POOG[2:0]) || (invalidate_reg && read_dataW[59][`cc1Tag_paddr]==write_phys_addr_reg && read_dataW[59][`cc1Tag_valid]);
+  assign EI[index]=write_wen && read_dataW[59][`cc1Tag_paddr]==write_phys_addr_reg && read_dataW[59][`cc1Tag_valid];
+
+  assign write_hit=(write_wen_reg && read_NRUw==POOG[2:0]) && ~|EI;
+
   ccTag_ram ram_mod(
   .clk(clk),
   .rst(rst),
   .read_clkEn(read_clkEn),
   .read_addr(read_phys_addr0),
   .read_data(read_data),
-  .write_addr(write_phys_addr_reg[6:0]),
+  .write_addr(write_phys_addr_reg[5:0]),
   .write_data(write_data_way),
   .write_wen(write_hit|init_reg)
   );
@@ -228,7 +233,7 @@ module ccTag(
   .read_clkEn(read_clkEn),
   .read_addr(write_phys_addr[6:0]),
   .read_data(read_dataW),
-  .write_addr(write_phys_addr_reg[6:0]),
+  .write_addr(write_phys_addr_reg[5:0]),
   .write_data(write_data_way),
   .write_wen(write_hit|init_reg)
   );
@@ -239,7 +244,7 @@ module ccTag(
   .read_clkEn(read_clkEn),
   .read_addr(read_phys_addr[6:0]),
   .read_data(read_NRUr),
-  .write_addr(read_phys_addr_reg2[59][6:0]),
+  .write_addr(read_phys_addr_reg2[59][5:0]),
   .write_data(write_NRU),
   .write_wen(EXT ? init_reg2 : read_clkEn_reg2[59]|init_reg2)
   );
@@ -248,9 +253,9 @@ module ccTag(
   .clk(clk),
   .rst(rst),
   .read_clkEn(write_wen),
-  .read_addr(write_phys_addr[6:0]),
+  .read_addr(write_phys_addr[5:0]),
   .read_data(read_NRUw),
-  .write_addr(read_phys_addr_reg2[59][6:0]),
+  .write_addr(read_phys_addr_reg2[59][5:0]),
   .write_data(write_NRU),
   .write_wen(EXT ? init_reg2 : read_clkEn_reg2[59]|init_reg2)
   );
@@ -271,15 +276,15 @@ module ccTag(
       if (rst) read_clkEn_reg2<=1'b0;
       else read_clkEn_reg2<=read_clkEn_reg;
       if (rst) begin
-          read_phys_addr_reg<=37'b0;
-          write_phys_addr_reg<=37'b0;
-          write_wen_reg<=1'b0;
+          read_phys_addr_reg<=0;
+          write_phys_addr_reg<=0;
+          write_wen_reg<=0;
           read_NRUr_reg<=3'b0;
           invalidate_reg<=1'b0;
-          read_phys_addr_reg2<=37'b0;
+          read_phys_addr_reg2<=0;
           init_reg<=1'b0;
           init_reg2<=1'b0;
-	  read_hit_reg<=1'b0;
+	  read_hit_reg<=0;
       end
       else begin
           read_phys_addr_reg<=read_phys_addr;
