@@ -48,12 +48,8 @@ jupd0_en,jupdt0_en,jupd0_ght_en,jupd0_ght2_en,jupd0_addr,jupd0_baddr,jupd0_sc,ju
   miss_now,
   mlbMiss_now,
   miss_now_in,
-  instr0,instr1,instr2,instr3,
-  instr4,instr5,instr6,instr7,
-  instr8,instr9,
-  extra0,extra1,extra2,extra3,
-  extra4,extra5,extra6,extra7,
-  extra8,extra9,
+  instr0,
+  extra0,
   instrEat,
   iAvail,
   stall,
@@ -156,27 +152,9 @@ jupd0_en,jupdt0_en,jupd0_ght_en,jupd0_ght2_en,jupd0_addr,jupd0_baddr,jupd0_sc,ju
   output mlbMiss_now;
   input miss_now_in;
 
-  output [INSTR_WIDTH-1:0] instr0;
-  output [INSTR_WIDTH-1:0] instr1;
-  output [INSTR_WIDTH-1:0] instr2;
-  output [INSTR_WIDTH-1:0] instr3;
-  output [INSTR_WIDTH-1:0] instr4;
-  output [INSTR_WIDTH-1:0] instr5;
-  output [INSTR_WIDTH-1:0] instr6;
-  output [INSTR_WIDTH-1:0] instr7;
-  output [INSTR_WIDTH-1:0] instr8;
-  output [INSTR_WIDTH-1:0] instr9;
+  output [9:0][INSTR_WIDTH-1:0] instr0;
 
-  output [`instrQ_width-1:0] extra0;
-  output [`instrQ_width-1:0] extra1;
-  output [`instrQ_width-1:0] extra2;
-  output [`instrQ_width-1:0] extra3;
-  output [`instrQ_width-1:0] extra4;
-  output [`instrQ_width-1:0] extra5;
-  output [`instrQ_width-1:0] extra6;
-  output [`instrQ_width-1:0] extra7;
-  output [`instrQ_width-1:0] extra8;
-  output [`instrQ_width-1:0] extra9;
+  output [9:0][`instrQ_width-1:0] extra0;
 
 
   input [9:0] instrEat;
@@ -374,46 +352,24 @@ jupd0_en,jupdt0_en,jupd0_ght_en,jupd0_ght2_en,jupd0_addr,jupd0_baddr,jupd0_sc,ju
   reg bus_match0_reg3;
   reg bus_match0_reg4;
   
-  wire [11:0] pre_instrEn;
-  wire [INSTR_WIDTH-1:0] pre_instr0;
-  wire [INSTR_WIDTH-1:0] pre_instr1;
-  wire [INSTR_WIDTH-1:0] pre_instr2;
-  wire [INSTR_WIDTH-1:0] pre_instr3;
-  wire [INSTR_WIDTH-1:0] pre_instr4;
-  wire [INSTR_WIDTH-1:0] pre_instr5;
-  wire [INSTR_WIDTH-1:0] pre_instr6;
-  wire [INSTR_WIDTH-1:0] pre_instr7;
-  wire [INSTR_WIDTH-1:0] pre_instr8;
-  wire [INSTR_WIDTH-1:0] pre_instr9;
-  wire [INSTR_WIDTH-1:0] pre_instr10;
-  wire [INSTR_WIDTH-1:0] pre_instr11;
+  wire [15:0] pre_instrEn;
+  wire [15:0][INSTR_WIDTH-1:0] pre_instr0;
 
-  reg [12:0] pre_instrEn_reg/*verilator public*/;
-  reg [INSTR_WIDTH-1:0] pre_instr0_reg/*verilator public*/;
-  reg [INSTR_WIDTH-1:0] pre_instr1_reg/*verilator public*/;
-  reg [INSTR_WIDTH-1:0] pre_instr2_reg/*verilator public*/;
-  reg [INSTR_WIDTH-1:0] pre_instr3_reg/*verilator public*/;
-  reg [INSTR_WIDTH-1:0] pre_instr4_reg/*verilator public*/;
-  reg [INSTR_WIDTH-1:0] pre_instr5_reg/*verilator public*/;
-  reg [INSTR_WIDTH-1:0] pre_instr6_reg/*verilator public*/;
-  reg [INSTR_WIDTH-1:0] pre_instr7_reg/*verilator public*/;
-  reg [INSTR_WIDTH-1:0] pre_instr8_reg/*verilator public*/;
-  reg [INSTR_WIDTH-1:0] pre_instr9_reg/*verilator public*/;
-  reg [INSTR_WIDTH-1:0] pre_instr10_reg/*verilator public*/;
-  reg [INSTR_WIDTH-1:0] pre_instr11_reg/*verilator public*/;
+  reg [15:0] pre_instrEn_reg/*verilator public*/;
+  reg [15:0][INSTR_WIDTH-1:0] pre_instr0_reg/*verilator public*/;
 
-  wire [11:0][3:0] pre_off/*verilator public*/;
-  reg [3:0] pre_off_reg[11:0]/*verilator public*/;
+  wire [15:0][3:0] pre_off/*verilator public*/;
+  reg [3:0] pre_off_reg[15:0]/*verilator public*/;
   
-  wire [11:0][3:0] pre_magic/*verilator public*/;
-  reg  [3:0] pre_magic_reg[11:0]/*verilator public*/;
-  wire [11:0][`instrQ_width-1:0] pre_other/*verilator public*/;
+  wire [15:0][3:0] pre_magic/*verilator public*/;
+  reg  [3:0] pre_magic_reg[15:0]/*verilator public*/;
+  wire [15:0][`instrQ_width-1:0] pre_other/*verilator public*/;
 //  reg [`instrQ_width-1:0] pre_other_reg[11:0];
   
   wire pre__splitinsn;
   reg pre__splitinsn_reg;
   reg cc_err_reg;
-  wire [11:0][CLS_WIDTH-1:0] pre_class;
+  wire [15:0][CLS_WIDTH-1:0] pre_class;
   reg [CLS_WIDTH-1:0] pre_class_reg[11:0]/*verilator public*/;
   wire pre_has_jumps;
  // wire [3:0] jFirst;
@@ -1044,7 +1000,6 @@ jupd0_en,jupdt0_en,jupd0_ght_en,jupd0_ght2_en,jupd0_addr,jupd0_baddr,jupd0_sc,ju
   assign cc_base_IP_d=(|tbuf_error_reg) ? cc_base_IP_reg : 64'bz;
  // assign {cc_base_tick,cc_base_off}=(~do_seq_reg  && ~(miss_recover && proturberan)) ? 5'b0 : 5'bz;
   
-  assign cc_read_IP_d[4:0]=(~init & do_seq_any & ~jumpTK_en & ~fmstall & ~(do_seq&miss_recover) & ~|tbuf_error_reg) ? 5'b0 : 5'bz;
   assign cc_read_IP_d=(~init & btb_hasTK|(p_invoke&thread) & ~miss_recover & ~miss_now & ~jumpTK_en & ~(ixcept|uxcept) & ~fmstall & ~|tbuf_error_reg) ?
      btbx_tgt : 64'bz;
   assign cc_read_IP_d=(~init & miss_recover & ~jumpTK_en & ~(ixcept|uxcept) & ~fmstall & ~|tbuf_error_reg) ? miss_IP : 64'bz;
@@ -1377,18 +1332,10 @@ jupd0_en,jupdt0_en,jupd0_ght_en,jupd0_ght2_en,jupd0_addr,jupd0_baddr,jupd0_sc,ju
     .bstop(read_data_reg[254:251]),
     .flag_bits(read_dataX),
     .startOff(was_cleave_reg ? clvoff_reg : cc_read_IP_reg2[4:1]),
-    .instr0(pre_instr0),.instr1(pre_instr1),.instr2(pre_instr2),.instr3(pre_instr3),
-    .instr4(pre_instr4),.instr5(pre_instr5),.instr6(pre_instr6),.instr7(pre_instr7),
-    .instr8(pre_instr8),.instr9(pre_instr9),.instr10(pre_instr10),.instr11(pre_instr11),
-    .magic0(pre_magic[0]),.magic1(pre_magic[1]),.magic2(pre_magic[2]),.magic3(pre_magic[3]),
-    .magic4(pre_magic[4]),.magic5(pre_magic[5]),.magic6(pre_magic[6]),.magic7(pre_magic[7]),
-    .magic8(pre_magic[8]),.magic9(pre_magic[9]),.magic10(pre_magic[10]),.magic11(pre_magic[11]),
-    .off0(pre_off[0]),.off1(pre_off[1]),.off2(pre_off[2]),.off3(pre_off[3]),
-    .off4(pre_off[4]),.off5(pre_off[5]),.off6(pre_off[6]),.off7(pre_off[7]),
-    .off8(pre_off[8]),.off9(pre_off[9]),.off10(pre_off[10]),.off11(pre_off[11]),
-    .class0(pre_class[0]),.class1(pre_class[1]),.class2(pre_class[2]),.class3(pre_class[3]),
-    .class4(pre_class[4]),.class5(pre_class[5]),.class6(pre_class[6]),.class7(pre_class[7]),
-    .class8(pre_class[8]),.class9(pre_class[9]),.class10(pre_class[10]),.class11(pre_class[11]),
+    .instr0(pre_instr),
+    .magic0(pre_magic),
+    .off0(pre_off),
+    .class0(pre_class),
     .instrEn(pre_instrEn),
     ._splitinsn(pre__splitinsn),
     .hasJumps(pre_has_jumps),
@@ -1414,32 +1361,12 @@ jupd0_en,jupdt0_en,jupd0_ght_en,jupd0_ght2_en,jupd0_addr,jupd0_baddr,jupd0_sc,ju
   .doFStall(iq_fstall),
   .except(uxcept|ixcept|except),
   .except_thread(1'b0),
-  .write_instr0(pre_instr0_reg),.write_other0(pre_other[0]),
-  .write_instr1(pre_instr1_reg),.write_other1(pre_other[1]),
-  .write_instr2(pre_instr2_reg),.write_other2(pre_other[2]),
-  .write_instr3(pre_instr3_reg),.write_other3(pre_other[3]),
-  .write_instr4(pre_instr4_reg),.write_other4(pre_other[4]),
-  .write_instr5(pre_instr5_reg),.write_other5(pre_other[5]),
-  .write_instr6(pre_instr6_reg),.write_other6(pre_other[6]),
-  .write_instr7(pre_instr7_reg),.write_other7(pre_other[7]),
-  .write_instr8(pre_instr8_reg),.write_other8(pre_other[8]),
-  .write_instr9(pre_instr9_reg),.write_other9(pre_other[9]),
-  .write_instr10(pre_instr10_reg),.write_other10(pre_other[10]),
-  .write_instr11(pre_instr11_reg),.write_other11(pre_other[11]),
+  .write_instr0(pre_instr0_reg),.write_other0(pre_other),
   .read_thread(1'b0),
   .read_clkEn(~stall),
   .read_instrEn(instrEat),
   .read_avail(iAvail),
-  .read_instr0(instr0),.read_other0(extra0),
-  .read_instr1(instr1),.read_other1(extra1),
-  .read_instr2(instr2),.read_other2(extra2),
-  .read_instr3(instr3),.read_other3(extra3),
-  .read_instr4(instr4),.read_other4(extra4),
-  .read_instr5(instr5),.read_other5(extra5),
-  .read_instr6(instr6),.read_other6(extra6),
-  .read_instr7(instr7),.read_other7(extra7),
-  .read_instr8(instr8),.read_other8(extra8),
-  .read_instr9(instr9),.read_other9(extra9)
+  .read_instr0(instr0),.read_other0(extra0)
   );
 
   instrQextra jmp_queue_mod(
@@ -1465,9 +1392,9 @@ jupd0_en,jupdt0_en,jupd0_ght_en,jupd0_ght2_en,jupd0_addr,jupd0_baddr,jupd0_sc,ju
   .write_data3({jdec_clp[3],jmp_mask_reg4[3],btbx_tgt3_reg4,btbx_attr3_reg4})
   );
     
-  adder_inc #(43) seqAdd_mod(cc_read_IP[47:5],cc_read_IP_d[47:5],
+  adder #(44) seqAdd_mod(cc_read_IP[43:0],48'd22,cc_read_IP_d[43:0],
     do_seq &~init & ~jumpTK_en & ~fmstall &~miss_recover & ~|tbuf_error_reg,);
-  adder #(43) seqM_Add_mod(cc_read_IP[47:5],43'd2,cc_read_IP_d[47:5],
+  adder #(38) seqM_Add_mod(cc_read_IP[43:5],43'd2,cc_read_IP_d[43:5],
     1'b0,do_seq_miss &~init & ~jumpTK_en & ~fmstall & ~|tbuf_error_reg,,,,);
   adder_inc #(5) misCntAdd_mod(miss_cnt,miss_cnt_next,1'b1,);
   adder_inc #(3) misSlotAdd_mod(miss_slot,miss_slot_next,1'b1,);
@@ -2012,18 +1939,7 @@ jupd0_en,jupdt0_en,jupd0_ght_en,jupd0_ght2_en,jupd0_addr,jupd0_baddr,jupd0_sc,ju
           bus_match0_reg3<=1'b0;
           bus_match0_reg4<=1'b0;
           pre_instrEn_reg<=13'b0;
-          pre_instr0_reg<={INSTR_WIDTH{1'B0}};
-          pre_instr1_reg<={INSTR_WIDTH{1'B0}};
-          pre_instr2_reg<={INSTR_WIDTH{1'B0}};
-          pre_instr3_reg<={INSTR_WIDTH{1'B0}};
-          pre_instr4_reg<={INSTR_WIDTH{1'B0}};
-          pre_instr5_reg<={INSTR_WIDTH{1'B0}};
-          pre_instr6_reg<={INSTR_WIDTH{1'B0}};
-          pre_instr7_reg<={INSTR_WIDTH{1'B0}};
-          pre_instr8_reg<={INSTR_WIDTH{1'B0}};
-          pre_instr9_reg<={INSTR_WIDTH{1'B0}};
-          pre_instr10_reg<={INSTR_WIDTH{1'B0}};
-          pre_instr11_reg<={INSTR_WIDTH{1'B0}};
+          pre_instr0_reg<={16*INSTR_WIDTH{1'B0}};
 	  pre__splitinsn_reg<=1'b0;
           for (n=0;n<12;n=n+1) begin
               pre_off_reg[n]<=4'b0;
@@ -2387,17 +2303,6 @@ jupd0_en,jupdt0_en,jupd0_ght_en,jupd0_ght2_en,jupd0_addr,jupd0_baddr,jupd0_sc,ju
           end
           pre_instrEn_reg<={1'b0,pre_instrEn};
           pre_instr0_reg<=pre_instr0;
-          pre_instr1_reg<=pre_instr1;
-          pre_instr2_reg<=pre_instr2;
-          pre_instr3_reg<=pre_instr3;
-          pre_instr4_reg<=pre_instr4;
-          pre_instr5_reg<=pre_instr5;
-          pre_instr6_reg<=pre_instr6;
-          pre_instr7_reg<=pre_instr7;
-          pre_instr8_reg<=pre_instr8;
-          pre_instr9_reg<=pre_instr9;
-          pre_instr10_reg<=pre_instr10;
-          pre_instr11_reg<=pre_instr11;
 	  pre__splitinsn_reg<=pre__splitinsn;
           for (n=0;n<12;n=n+1) begin
               pre_off_reg[n]<=pre_off[n];
@@ -2546,17 +2451,6 @@ jupd0_en,jupdt0_en,jupd0_ght_en,jupd0_ght2_en,jupd0_addr,jupd0_baddr,jupd0_sc,ju
       end else if (btbFStall_recover && ~iq_fstall && ~jq_fstall && ~fmstall) begin
           pre_instrEn_reg<={1'b0,pre_instrEn};
           pre_instr0_reg<=pre_instr0;
-          pre_instr1_reg<=pre_instr1;
-          pre_instr2_reg<=pre_instr2;
-          pre_instr3_reg<=pre_instr3;
-          pre_instr4_reg<=pre_instr4;
-          pre_instr5_reg<=pre_instr5;
-          pre_instr6_reg<=pre_instr6;
-          pre_instr7_reg<=pre_instr7;
-          pre_instr8_reg<=pre_instr8;
-          pre_instr9_reg<=pre_instr9;
-          pre_instr10_reg<=pre_instr10;
-          pre_instr11_reg<=pre_instr11;
           read_data_reg<=read_data;
           cc_err_reg<=cc_err;
 	  pre__splitinsn_reg<=pre__splitinsn;

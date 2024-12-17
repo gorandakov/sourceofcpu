@@ -411,11 +411,11 @@ module predecoder_get(
     input has_next;
     input [3:0] startOff;
     output [3:0] startOff_override;
-    output [11:0][79:0] instr0;
-    output [11:0][3:0] magic0;
-    output [11:0][3:0] off0;
-    output [11:0][12:0] class0;
-    output [11:0] instrEn;
+    output [15:0][79:0] instr0;
+    output [15:0][3:0] magic0;
+    output [15:0][3:0] off0;
+    output [15:0][12:0] class0;
+    output [15:0] instrEn;
     output reg _splitinsn;
     output hasJumps;
     output last_is_FMAMul;
@@ -521,7 +521,7 @@ module predecoder_get(
                 assign {lnkLink0[subloop_jump],lnkOff0[subloop_jump],lnkMagic0[subloop_jump],lnkRet0[subloop_jump]}=lcnt_or_less[subloop_jump] ? 15'b1110_10000_0001_0 : 15'bz; //note - overhang cannot contain link instructions
                 assign lnkJumps0[subloop_jump]=lcnt_or_less[subloop_jump] ?  5'd1 : 5'bz;
             end
-            for(subloop_insn=0;subloop_insn<12;subloop_insn=subloop_insn+1) begin : insn_gen
+            for(subloop_insn=0;subloop_insn<16;subloop_insn=subloop_insn+1) begin : insn_gen
                 if (k==0) assign {FMAmulI[0],class0[0],magic0[0],instr0[0],off0[0]}=(mask[k] & ~mask[k-1]) ?
                     {FMAmulI[k],class_[k],instrEnd[k+:4],bundle[k*16+:80],kk[4:0]} : 102'bz;
                 else assign {FMAmulI[subloop_insn],class0[subloop_insn],magic0[subloop_insn],instr0[subloop_insn],off0[subloop_insn]}=mask[k] & 
