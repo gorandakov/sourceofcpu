@@ -1392,7 +1392,7 @@ jupd0_en,jupdt0_en,jupd0_ght_en,jupd0_ght2_en,jupd0_addr,jupd0_baddr,jupd0_sc,ju
   .write_data3({jdec_clp[3],jmp_mask_reg4[3],btbx_tgt3_reg4,btbx_attr3_reg4})
   );
     
-  adder #(44) seqAdd_mod(cc_read_IP[43:0],48'd22,cc_read_IP_d[43:0],
+  adder #(44) seqAdd_mod(cc_read_IP[43:0],48'd48,cc_read_IP_d[43:0],
     do_seq &~init & ~jumpTK_en & ~fmstall &~miss_recover & ~|tbuf_error_reg,);
   adder #(38) seqM_Add_mod(cc_read_IP[43:5],43'd2,cc_read_IP_d[43:5],
     1'b0,do_seq_miss &~init & ~jumpTK_en & ~fmstall & ~|tbuf_error_reg,,,,);
