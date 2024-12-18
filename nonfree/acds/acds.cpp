@@ -1,18 +1,19 @@
 
+
 #define driven_phase_mask 0xff
 #define driven_off_mask 0xffff0000
 #define driven_off_shift 16
 #define driven_count_mask 0xff00
 #define driven_count_shift 8
-#define pclk_combined 0x16
-#define pclk_1 0x2
-#define pclk_2 0x4
-#define pclk_3 0x10
-#define pclk_12 0xe
-#define pclk_13 0x32
-#define pclk_23 0x64
+#define pclk_1 0x1
+#define pclk_2 0x2
+#define pclk_3 0x4
+#define pclk_12 0x8
+#define pclk_13 0x10
+#define pclk_23 0x20
 #define pclk_ppower 0xff
-
+/* Please note that the library suggest N-only dynamic, but a P-only dynamic 
+  would have identical circuit which is more optimal. */
 int global_anchor_x;
 int global_anchor_y;
 int global_bus_X_off;
@@ -108,12 +109,14 @@ class __acds_cell {
       cnt=(field&driven_count_mask)>>driven_count_shift;
       othersz=((__acds_cell *) obj)->size;
       if (pos<12) for(n=0;n<cnt;n=n+1) {
-        ((__acds_cell *) obj)->io[n*16+pos]|=
-          io[n*16+outp+off];
+        ((__acds_cell *) obj)->io[n*16+pos]|=(
+          (io[n*16+outp+off]|(io[n*16+outp+off]<<3)|(io[n*16+outp+off]<<4)|
+            ((io[n*16+outp+off]&0x4)<<1))|(io[n*16+outp+off]>>3)|(io[n*16+outp+off]>>4))&((__acds_cell *) obj)->io[n*16+12];
       }
-      if (pos<12) for(n=0;n<cnt;n=n+1) {
+      if (pos>=12) for(n=0;n<cnt;n=n+1) {
         ((__acds_cell *) obj)->io[n*16+pos]&=
-          io[n*16+outp+off];
+          (io[n*16+outp+off]|(io[n*16+outp+off]<<3)|(io[n*16+outp+off]<<4)|
+            ((io[n*16+outp+off]&0x4)<<1))|(io[n*16+outp+off]>>3)|(io[n*16+outp+off]>>4));
       }
     }
   }
