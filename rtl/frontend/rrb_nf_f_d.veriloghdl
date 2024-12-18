@@ -42,9 +42,9 @@ module rrf(
   input [9:0][ADDR_WIDTH-1:0] read0_addr;
   output [9:0][DATA_WIDTH-1:0] read0_data;
   input [9:0] read0_oe;
-  input [9:0][ADDR_WIDTH-1:0] read1_addr;
-  output [9:0][DATA_WIDTH-1:0] read1_data;
-  input [9:0]read1_oe;
+  input [10:0][ADDR_WIDTH-1:0] read1_addr;
+  output [10:0][DATA_WIDTH-1:0] read1_data;
+  input [10:0]read1_oe;
 
   
   input [9:0][ADDR_WIDTH-1:0] write0_addr;
@@ -55,14 +55,14 @@ module rrf(
   input write_thread;
 
   reg [9:0][ADDR_WIDTH-1:0] read0_addr_reg;
-  reg [9:0][ADDR_WIDTH-1:0] read1_addr_reg;
+  reg [10:0][ADDR_WIDTH-1:0] read1_addr_reg;
   
   reg read_thread_reg;
 
   integer xnp;
 
   reg [9:0]read0_oe_reg;
-  reg [9:0]read1_oe_reg;
+  reg [10:0]read1_oe_reg;
   reg [DATA_WIDTH-1:0] ram[ADDR_COUNT-1:0];
   
   always @(posedge clk)
@@ -73,7 +73,7 @@ module rrf(
 	  if (rst)
 	    begin
 		  read0_addr_reg<={10*ADDR_WIDTH{1'B0}};
-		  read1_addr_reg<={10*ADDR_WIDTH{1'B0}};
+		  read1_addr_reg<={11*ADDR_WIDTH{1'B0}};
 
 		  read_thread_reg<=1'b0;
 		  
@@ -94,8 +94,8 @@ module rrf(
 
   generate
     genvar x1;
-    for(x1=0;x1<10;x1=x1+1) begin
-        assign read0_data[x1]=read0_oe_reg[x1] ? ram[read0_addr_reg[x1]] : 'z;
+    for(x1=0;x1<11;x1=x1+1) begin
+        if (x1!=10) assign read0_data[x1]=read0_oe_reg[x1] ? ram[read0_addr_reg[x1]] : 'z;
         assign read1_data[x1]=read1_oe_reg[x1] ? ram[read1_addr_reg[x1]] : 'z;
     end
   endgenerate	
