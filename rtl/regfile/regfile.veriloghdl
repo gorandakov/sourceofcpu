@@ -339,16 +339,7 @@ module regfile_ram_block(
 
   retireRead0_addr,retireRead0_data,
 
-  write0_addr,write0_data,write0_wen,
-  write1_addr,write1_data,write1_wen,
-  write2_addr,write2_data,write2_wen,
-  write3_addr,write3_data,write3_wen,
-  write4_addr,write4_data,write4_wen,
-  write5_addr,write5_data,write5_wen,
-  write6_addr,write6_data,write6_wen,
-  write7_addr,write7_data,write7_wen,
-  write8_addr,write8_data,write8_wen,
-  write9_addr,write9_data,write9_wen
+  write0_addr,write0_data,write0_wen
   );
 
   parameter DATA_WIDTH=`alu_width;
@@ -378,45 +369,9 @@ module regfile_ram_block(
   output [9:0] [DATA_WIDTH-1:0] retireRead0_data;
 
 
-  input [ADDR_WIDTH-1:0] write0_addr;
-  input [DATA_WIDTH-1:0] write0_data;
-  input write0_wen;
-
-  input [ADDR_WIDTH-1:0] write1_addr;
-  input [DATA_WIDTH-1:0] write1_data;
-  input write1_wen;
-
-  input [ADDR_WIDTH-1:0] write2_addr;
-  input [DATA_WIDTH-1:0] write2_data;
-  input write2_wen;
-
-  input [ADDR_WIDTH-1:0] write3_addr;
-  input [DATA_WIDTH-1:0] write3_data;
-  input write3_wen;
-
-  input [ADDR_WIDTH-1:0] write4_addr;
-  input [DATA_WIDTH-1:0] write4_data;
-  input write4_wen;
-
-  input [ADDR_WIDTH-1:0] write5_addr;
-  input [DATA_WIDTH-1:0] write5_data;
-  input write5_wen;
-
-  input [ADDR_WIDTH-1:0] write6_addr;
-  input [DATA_WIDTH-1:0] write6_data;
-  input write6_wen;
-
-  input [ADDR_WIDTH-1:0] write7_addr;
-  input [DATA_WIDTH-1:0] write7_data;
-  input write7_wen;
-
-  input [ADDR_WIDTH-1:0] write8_addr;
-  input [DATA_WIDTH-1:0] write8_data;
-  input write8_wen;
-
-  input [ADDR_WIDTH-1:0] write9_addr;
-  input [DATA_WIDTH-1:0] write9_data;
-  input write9_wen;
+  input [9:0][ADDR_WIDTH-1:0] write0_addr;
+  input [9:0][DATA_WIDTH-1:0] write0_data;
+  input [9:0] write0_wen;
 
  
 
@@ -456,41 +411,41 @@ module regfile_ram_block(
   genvar x;
 
   
-  assign write0_addr_ram[0]=doInit ? initRegCount : write0_addr;
-  assign write0_data_ram[0]=doInit ? {DATA_WIDTH{1'b0}} : write0_data;
-  assign write0_wen_ram[0]=write0_wen | doInit;
+  assign write0_addr_ram[0]=doInit ? initRegCount : write0_addr[0];
+  assign write0_data_ram[0]=doInit ? {DATA_WIDTH{1'b0}} : write0_data[0];
+  assign write0_wen_ram[0]=write0_wen[0] | doInit;
 
-  assign write0_addr_ram[1]=doInit ? initRegCount : write1_addr;
-  assign write0_data_ram[1]=doInit ? {DATA_WIDTH{1'b0}} : write1_data;
-  assign write0_wen_ram[1]=write1_wen | doInit;
+  assign write0_addr_ram[1]=doInit ? initRegCount : write0_addr[1];
+  assign write0_data_ram[1]=doInit ? {DATA_WIDTH{1'b0}} : write0_data[1];
+  assign write0_wen_ram[1]=write0_wen[1] | doInit;
   
-  assign write0_addr_ram[2]=doInit ? initRegCount : write2_addr;
-  assign write0_data_ram[2]=doInit ? {DATA_WIDTH{1'b0}} : write2_data;
-  assign write0_wen_ram[2]=write2_wen | doInit;
+  assign write0_addr_ram[2]=doInit ? initRegCount : write0_addr[2];
+  assign write0_data_ram[2]=doInit ? {DATA_WIDTH{1'b0}} : write0_data[2];
+  assign write0_wen_ram[2]=write0_wen[2] | doInit;
 
-  assign write1_addr_ram[0]=write4_addr;
-  assign write1_data_ram[0]=write4_data;
-  assign write1_wen_ram[0]=write4_wen;
+  assign write1_addr_ram[0]=write0_addr[4];
+  assign write1_data_ram[0]=write0_data[4];
+  assign write1_wen_ram[0]=write0_wen[4];
 
-  assign write2_addr_ram[0]=write7_addr;
-  assign write2_data_ram[0]=write7_data;
-  assign write2_wen_ram[0]=write7_wen;
+  assign write2_addr_ram[0]=write0_addr[7];
+  assign write2_data_ram[0]=write0_data[7];
+  assign write2_wen_ram[0]=write0_wen[7];
 
-  assign write1_addr_ram[1]=write5_addr;
-  assign write1_data_ram[1]=write5_data;
-  assign write1_wen_ram[1]=write5_wen;
+  assign write1_addr_ram[1]=write0_addr[5];
+  assign write1_data_ram[1]=write0_data[5];
+  assign write1_wen_ram[1]=write0_wen[5];
 
-  assign write2_addr_ram[1]=write8_addr;
-  assign write2_data_ram[1]=write8_data;
-  assign write2_wen_ram[1]=write8_wen;
+  assign write2_addr_ram[1]=write0_addr[8];
+  assign write2_data_ram[1]=write0_data[8];
+  assign write2_wen_ram[1]=write0_wen[8];
   
-  assign write1_addr_ram[2]=write6_addr;
-  assign write1_data_ram[2]=write6_data;
-  assign write1_wen_ram[2]=write6_wen;
+  assign write1_addr_ram[2]=write0_addr[6];
+  assign write1_data_ram[2]=write0_data[6];
+  assign write1_wen_ram[2]=write0_wen[6];
 
-  assign write2_addr_ram[2]=write9_addr;
-  assign write2_data_ram[2]=write9_data;
-  assign write2_wen_ram[2]=write9_wen;
+  assign write2_addr_ram[2]=write0_addr[9];
+  assign write2_data_ram[2]=write0_data[9];
+  assign write2_wen_ram[2]=write0_wen[9];
 
   generate   
     genvar t;
@@ -523,7 +478,7 @@ module regfile_ram_block(
           write0_addr_ram[x%4],write0_data_ram[x%4],write0_wen_ram[x%4],
           write1_addr_ram[x%4],write1_data_ram[x%4],write1_wen_ram[x%4],
           write2_addr_ram[x%4],write2_data_ram[x%4],write2_wen_ram[x%4],
-          write3_addr,write3_data,write3_wen
+          write0_addr[3],write0_data[3],write0_wen[3]
         );
       end
   endgenerate
@@ -586,35 +541,8 @@ module regfile_zero_cycle_write(
   read_constEn,read_oe,
   match_w,
   write0_addr_reg,write0_wen_reg,
-  write1_addr_reg,write1_wen_reg,
-  write2_addr_reg,write2_wen_reg,
-  write3_addr_reg,write3_wen_reg,
-  write4_addr_reg,write4_wen_reg,
-  write5_addr_reg,write5_wen_reg,
-  write6_addr_reg,write6_wen_reg,
-  write7_addr_reg,write7_wen_reg,
-  write8_addr_reg,write8_wen_reg,
-  write9_addr_reg,write9_wen_reg,
   write0_addr_reg2,write0_wen_reg2,
-  write1_addr_reg2,write1_wen_reg2,
-  write2_addr_reg2,write2_wen_reg2,
-  write3_addr_reg2,write3_wen_reg2,
-  write4_addr_reg2,write4_wen_reg2,
-  write5_addr_reg2,write5_wen_reg2,
-  write6_addr_reg2,write6_wen_reg2,
-  write7_addr_reg2,write7_wen_reg2,
-  write8_addr_reg2,write8_wen_reg2,
-  write9_addr_reg2,write9_wen_reg2,
-  write0_data_reg,
-  write1_data_reg,
-  write2_data_reg,
-  write3_data_reg,
-  write4_data_reg,
-  write5_data_reg,
-  write6_data_reg,
-  write7_data_reg,
-  write8_data_reg,
-  write9_data_reg
+  write0_data_reg
   );
   parameter DATA_WIDTH=`alu_width;
   localparam ADDR_WIDTH=`reg_addr_width;
@@ -633,88 +561,17 @@ module regfile_zero_cycle_write(
   
   output [10:0] match_w;
   
-  input [ADDR_WIDTH-1:0] write0_addr_reg;
-  input write0_wen_reg;
-
-  input [ADDR_WIDTH-1:0] write1_addr_reg;
-  input write1_wen_reg;
-
-  input [ADDR_WIDTH-1:0] write2_addr_reg;
-  input write2_wen_reg;
-
-  input [ADDR_WIDTH-1:0] write3_addr_reg;
-  input write3_wen_reg;
-
-  input [ADDR_WIDTH-1:0] write4_addr_reg;
-  input write4_wen_reg;
-
-  input [ADDR_WIDTH-1:0] write5_addr_reg;
-  input write5_wen_reg;
-
-  input [ADDR_WIDTH-1:0] write6_addr_reg;
-  input write6_wen_reg;
-
-  input [ADDR_WIDTH-1:0] write7_addr_reg;
-  input write7_wen_reg;
-
-  input [ADDR_WIDTH-1:0] write8_addr_reg;
-  input write8_wen_reg;
-
-  input [ADDR_WIDTH-1:0] write9_addr_reg;
-  input write9_wen_reg;
-
-  input [ADDR_WIDTH-1:0] write0_addr_reg2;
-  input write0_wen_reg2;
-
-  input [ADDR_WIDTH-1:0] write1_addr_reg2;
-  input write1_wen_reg2;
-
-  input [ADDR_WIDTH-1:0] write2_addr_reg2;
-  input write2_wen_reg2;
-
-  input [ADDR_WIDTH-1:0] write3_addr_reg2;
-  input write3_wen_reg2;
-
-  input [ADDR_WIDTH-1:0] write4_addr_reg2;
-  input write4_wen_reg2;
-
-  input [ADDR_WIDTH-1:0] write5_addr_reg2;
-  input write5_wen_reg2;
-
-  input [ADDR_WIDTH-1:0] write6_addr_reg2;
-  input write6_wen_reg2;
-
-  input [ADDR_WIDTH-1:0] write7_addr_reg2;
-  input write7_wen_reg2;
-
-  input [ADDR_WIDTH-1:0] write8_addr_reg2;
-  input write8_wen_reg2;
-
-  input [ADDR_WIDTH-1:0] write9_addr_reg2;
-  input write9_wen_reg2;
+  input [9:0][ADDR_WIDTH-1:0] write0_addr_reg;
+  input [9:0]write0_wen_reg;
 
 
-  input [DATA_WIDTH-1:0] write0_data_reg;
-  input [DATA_WIDTH-1:0] write1_data_reg;
-  input [DATA_WIDTH-1:0] write2_data_reg;
-  input [DATA_WIDTH-1:0] write3_data_reg;
-  input [DATA_WIDTH-1:0] write4_data_reg;
-  input [DATA_WIDTH-1:0] write5_data_reg;
-  input [DATA_WIDTH-1:0] write6_data_reg;
-  input [DATA_WIDTH-1:0] write7_data_reg;
-  input [DATA_WIDTH-1:0] write8_data_reg;
-  input [DATA_WIDTH-1:0] write9_data_reg;
+  input [9:0][ADDR_WIDTH-1:0] write0_addr_reg2;
+  input [9:0]write0_wen_reg2;
+
+
+  input [9:0][DATA_WIDTH-1:0] write0_data_reg;
   
-  wire match_r0;
-  wire match_r1;
-  wire match_r2;
-  wire match_r3;
-  wire match_r4;
-  wire match_r5;
-  wire match_r6;
-  wire match_r7;
-  wire match_r8;
-  wire match_r9;
+  wire [9:0]match_r0;
 
   wire match;
 
@@ -724,65 +581,23 @@ module regfile_zero_cycle_write(
   reg [ADDR_WIDTH-1:0] read_addr_reg;
 
 
-  assign match=|{match_r0,match_r1,match_r2,match_r3,match_r4,match_r5,match_r6,match_r7,match_r8,match_r9};
-
-  assign read_data_new=(match_r0 & read_oe_reg) ? write0_data_reg : 'z;
-  assign read_data_new=(match_r1 & read_oe_reg) ? write1_data_reg : 'z;
-  assign read_data_new=(match_r2 & read_oe_reg) ? write2_data_reg : 'z;
-  assign read_data_new=(match_r3 & read_oe_reg) ? write3_data_reg : 'z;
-  assign read_data_new=(match_r4 & read_oe_reg) ? write4_data_reg : 'z;
-  assign read_data_new=(match_r5 & read_oe_reg) ? write5_data_reg : 'z;
-  assign read_data_new=(match_r6 & read_oe_reg) ? write6_data_reg : 'z;
-  assign read_data_new=(match_r7 & read_oe_reg) ? write7_data_reg : 'z;
-  assign read_data_new=(match_r8 & read_oe_reg) ? write8_data_reg : 'z;
-  assign read_data_new=(match_r9 & read_oe_reg) ? write9_data_reg : 'z;
-
-  assign read_data_new=(match | ~read_oe_reg) ? 'z : read_data_ram;
+  assign match=|match_r0;
   
-  assign match_w[0]=read_addr_reg==write0_addr_reg && write0_wen_reg &&
-     ~read_constEn_reg && read_oe_reg;
-  assign match_w[1]=read_addr_reg==write1_addr_reg && write1_wen_reg &&
-     ~read_constEn_reg  && read_oe_reg;
-  assign match_w[2]=read_addr_reg==write2_addr_reg && write2_wen_reg &&
-     ~read_constEn_reg && read_oe_reg;
-  assign match_w[3]=read_addr_reg==write3_addr_reg && write3_wen_reg &&
-     ~read_constEn_reg && read_oe_reg;
-  assign match_w[4]=read_addr_reg==write4_addr_reg && write4_wen_reg &&
-     ~read_constEn_reg && read_oe_reg;
-  assign match_w[5]=read_addr_reg==write5_addr_reg && write5_wen_reg &&
-     ~read_constEn_reg && read_oe_reg;
-  assign match_w[6]=read_addr_reg==write6_addr_reg && write6_wen_reg &&
-     ~read_constEn_reg && read_oe_reg;
-  assign match_w[7]=read_addr_reg==write7_addr_reg && write7_wen_reg &&
-     ~read_constEn_reg && read_oe_reg;
-  assign match_w[8]=read_addr_reg==write8_addr_reg && write8_wen_reg &&
-     ~read_constEn_reg && read_oe_reg;
-  assign match_w[9]=read_addr_reg==write9_addr_reg && write9_wen_reg &&
-     ~read_constEn_reg && read_oe_reg;
-  
-  assign match_w[10]=~(|{match_w[0],match_w[1],match_w[2],match_w[3],match_w[4],match_w[5],
-    match_w[6],match_w[7],match_w[8],match_w[9]});
+  generate
+    genvar t;
+    for(t=0;t<10;t=t+1) begin
 
- assign match_r0=read_addr_reg==write0_addr_reg2 && write0_wen_reg2 &&
-     ~read_constEn_reg && read_oe_reg;
-  assign match_r1=read_addr_reg==write1_addr_reg2 && write1_wen_reg2 &&
-     ~read_constEn_reg  && read_oe_reg;
-  assign match_r2=read_addr_reg==write2_addr_reg2 && write2_wen_reg2 &&
-     ~read_constEn_reg && read_oe_reg;
-  assign match_r3=read_addr_reg==write3_addr_reg2 && write3_wen_reg2 &&
-     ~read_constEn_reg && read_oe_reg;
-  assign match_r4=read_addr_reg==write4_addr_reg2 && write4_wen_reg2 &&
-     ~read_constEn_reg && read_oe_reg;
-  assign match_r5=read_addr_reg==write5_addr_reg2 && write5_wen_reg2 &&
-     ~read_constEn_reg && read_oe_reg;
-  assign match_r6=read_addr_reg==write6_addr_reg2 && write6_wen_reg2 &&
-     ~read_constEn_reg && read_oe_reg;
-  assign match_r7=read_addr_reg==write7_addr_reg2 && write7_wen_reg2 &&
-     ~read_constEn_reg && read_oe_reg;
-  assign match_r8=read_addr_reg==write8_addr_reg2 && write8_wen_reg2 &&
-     ~read_constEn_reg && read_oe_reg;
-  assign match_r9=read_addr_reg==write9_addr_reg2 && write9_wen_reg2 &&
-     ~read_constEn_reg && read_oe_reg;
+        assign read_data_new=(match_r0[t] & read_oe_reg[t]) ? write0_data_reg[t] : 'z;
+
+        assign read_data_new=(match | ~read_oe_reg) ? 'z : read_data_ram;
+  
+        assign match_w[t]=read_addr_reg==write0_addr_reg[t] && write0_wen_reg[t] &&
+          ~read_constEn_reg && read_oe_reg;
+  
+       assign match_w[10]=~(|match_w[9:0]);
+
+       assign match_r0[t]=read_addr_reg==write0_addr_reg2[t] && write0_wen_reg2[t] &&
+         ~read_constEn_reg && read_oe_reg;
 
   always @(posedge clk)
     begin
@@ -821,35 +636,10 @@ module regfile(
   read1_const,
 
   write0_addr_rrf,write0_wen_rrf,
-  write1_addr_rrf,write1_wen_rrf,
-  write2_addr_rrf,write2_wen_rrf,
-  write3_addr_rrf,write3_wen_rrf,
-  write4_addr_rrf,write4_wen_rrf,
-  write5_addr_rrf,write5_wen_rrf,
-  write6_addr_rrf,write6_wen_rrf,
-  write7_addr_rrf,write7_wen_rrf,
-  write8_addr_rrf,write8_wen_rrf,
 
   retireRead0_addr,
-  retireRead1_addr,
-  retireRead2_addr,
-  retireRead3_addr,
-  retireRead4_addr,
-  retireRead5_addr,
-  retireRead6_addr,
-  retireRead7_addr,
-  retireRead8_addr,
 
-  write0_addr_reg,write0_data_reg,write0_wen_reg,
-  write1_addr_reg,write1_data_reg,write1_wen_reg,
-  write2_addr_reg,write2_data_reg,write2_wen_reg,
-  write3_addr_reg,write3_data_reg,write3_wen_reg,
-  write4_addr_reg,write4_data_reg,write4_wen_reg,
-  write5_addr_reg,write5_data_reg,write5_wen_reg,
-  write6_addr_reg,write6_data_reg,write6_wen_reg,
-  write7_addr_reg,write7_data_reg,write7_wen_reg,
-  write8_addr_reg,write8_data_reg,write8_wen_reg,
-  write9_addr_reg,write9_data_reg,write9_wen_reg
+  write0_addr_reg,write0_data_reg,write0_wen_reg
   );
   parameter DATA_WIDTH=`alu_width;
   localparam ADDR_WIDTH=`reg_addr_width;
@@ -886,47 +676,11 @@ module regfile(
   input [9:0]      write1_wen_rrf;  
 
   input [9:0][8:0] retireRead0_addr;
-  input [9:0][8:0] retireRead1_addr;
 
-  input [ADDR_WIDTH-1:0] write0_addr_reg;
-  input [DATA_WIDTH-1:0] write0_data_reg;
-  input write0_wen_reg;
+  input [9:0][ADDR_WIDTH-1:0] write0_addr_reg;
+  input [9:0][DATA_WIDTH-1:0] write0_data_reg;
+  input [9:0]write0_wen_reg;
 
-  input [ADDR_WIDTH-1:0] write1_addr_reg;
-  input [DATA_WIDTH-1:0] write1_data_reg;
-  input write1_wen_reg;
-
-  input [ADDR_WIDTH-1:0] write2_addr_reg;
-  input [DATA_WIDTH-1:0] write2_data_reg;
-  input write2_wen_reg;
-
-  input [ADDR_WIDTH-1:0] write3_addr_reg;
-  input [DATA_WIDTH-1:0] write3_data_reg;
-  input write3_wen_reg;
-
-  input [ADDR_WIDTH-1:0] write4_addr_reg;
-  input [DATA_WIDTH-1:0] write4_data_reg;
-  input write4_wen_reg;
-
-  input [ADDR_WIDTH-1:0] write5_addr_reg;
-  input [DATA_WIDTH-1:0] write5_data_reg;
-  input write5_wen_reg;
-
-  input [ADDR_WIDTH-1:0] write6_addr_reg;
-  input [DATA_WIDTH-1:0] write6_data_reg;
-  input write6_wen_reg;
-
-  input [ADDR_WIDTH-1:0] write7_addr_reg;
-  input [DATA_WIDTH-1:0] write7_data_reg;
-  input write7_wen_reg;
-
-  input [ADDR_WIDTH-1:0] write8_addr_reg;
-  input [DATA_WIDTH-1:0] write8_data_reg;
-  input write8_wen_reg;
-
-  input [ADDR_WIDTH-1:0] write9_addr_reg;
-  input [DATA_WIDTH-1:0] write9_data_reg;
-  input write9_wen_reg;
 
   wire [9:0][DATA_WIDTH-1:0] ram_read_data;
   wire [9:0][DATA_WIDTH-1:0] read_data;
@@ -944,37 +698,9 @@ module regfile(
   wire read_constEn[9:0];
   wire read_oe[9:0];
 
-  reg [ADDR_WIDTH-1:0] write0_addr_reg2;
-  reg write0_wen_reg2;
+  reg [9:0][ADDR_WIDTH-1:0] write0_addr_reg2;
+  reg [9:0]write0_wen_reg2;
 
-  reg [ADDR_WIDTH-1:0] write1_addr_reg2;
-  reg write1_wen_reg2;
-
-  reg [ADDR_WIDTH-1:0] write2_addr_reg2;
-  reg write2_wen_reg2;
-
-  reg [ADDR_WIDTH-1:0] write3_addr_reg2;
-  reg write3_wen_reg2;
-
-  reg [ADDR_WIDTH-1:0] write4_addr_reg2;
-  reg write4_wen_reg2;
-
-  reg [ADDR_WIDTH-1:0] write5_addr_reg2;
-  reg write5_wen_reg2;
-
-  reg [ADDR_WIDTH-1:0] write6_addr_reg2;
-  reg write6_wen_reg2;
-
-  reg [ADDR_WIDTH-1:0] write7_addr_reg2;
-  reg write7_wen_reg2;
-
-  reg [ADDR_WIDTH-1:0] write8_addr_reg2;
-  reg write8_wen_reg2;
-
-  reg [ADDR_WIDTH-1:0] write9_addr_reg2;
-  reg write9_wen_reg2;
-  
-  wire [10:0] read_match[8:0];
   
   genvar b;
 
@@ -997,17 +723,7 @@ module regfile(
   retireRead0_addr,ram_retireRead_data0,
   retireRead1_addr,ram_retireRead_data1,
 
-  write0_addr_reg2,write0_data_reg,write0_wen_reg2,
-  write1_addr_reg2,write1_data_reg,write1_wen_reg2,
-  write2_addr_reg2,write2_data_reg,write2_wen_reg2,
-  write3_addr_reg2,write3_data_reg,write3_wen_reg2,
-
-  write4_addr_reg2,write4_data_reg,write4_wen_reg2,
-  write5_addr_reg2,write5_data_reg,write5_wen_reg2,
-  write6_addr_reg2,write6_data_reg,write6_wen_reg2,
-  write7_addr_reg2,write7_data_reg,write7_wen_reg2,
-  write8_addr_reg2,write8_data_reg,write8_wen_reg2,
-  write9_addr_reg2,write9_data_reg,write9_wen_reg2
+  write0_addr_reg2,write0_data_reg,write0_wen_reg2
  );
 
   rrf #(DATA_WIDTH) rrf_m(
@@ -1041,35 +757,8 @@ module regfile(
       read0_constEn[b],read0_oe[b], read0_match[b],
       
       write0_addr_reg,write0_wen_reg,
-      write1_addr_reg,write1_wen_reg,
-      write2_addr_reg,write2_wen_reg,
-      write3_addr_reg,write3_wen_reg,
-      write4_addr_reg,write4_wen_reg,
-      write5_addr_reg,write5_wen_reg,
-      write6_addr_reg,write6_wen_reg,
-      write7_addr_reg,write7_wen_reg,
-      write8_addr_reg,write8_wen_reg,
-      write9_addr_reg,write9_wen_reg,
       write0_addr_reg2,write0_wen_reg2,
-      write1_addr_reg2,write1_wen_reg2,
-      write2_addr_reg2,write2_wen_reg2,
-      write3_addr_reg2,write3_wen_reg2,
-      write4_addr_reg2,write4_wen_reg2,
-      write5_addr_reg2,write5_wen_reg2,
-      write6_addr_reg2,write6_wen_reg2,
-      write7_addr_reg2,write7_wen_reg2,
-      write8_addr_reg2,write8_wen_reg2,
-      write9_addr_reg2,write9_wen_reg2,
-      write0_data_reg,
-      write1_data_reg,
-      write2_data_reg,
-      write3_data_reg,
-      write4_data_reg,
-      write5_data_reg,
-      write6_data_reg,
-      write7_data_reg,
-      write8_data_reg,
-      write9_data_reg
+      write0_data_reg
       );
       
 
@@ -1081,35 +770,8 @@ module regfile(
       read1_constEn[b],read1_oe[b], read1_match[b],
       
       write0_addr_reg,write0_wen_reg,
-      write1_addr_reg,write1_wen_reg,
-      write2_addr_reg,write2_wen_reg,
-      write3_addr_reg,write3_wen_reg,
-      write4_addr_reg,write4_wen_reg,
-      write5_addr_reg,write5_wen_reg,
-      write6_addr_reg,write6_wen_reg,
-      write7_addr_reg,write7_wen_reg,
-      write8_addr_reg,write8_wen_reg,
-      write9_addr_reg,write9_wen_reg,
       write0_addr_reg2,write0_wen_reg2,
-      write1_addr_reg2,write1_wen_reg2,
-      write2_addr_reg2,write2_wen_reg2,
-      write3_addr_reg2,write3_wen_reg2,
-      write4_addr_reg2,write4_wen_reg2,
-      write5_addr_reg2,write5_wen_reg2,
-      write6_addr_reg2,write6_wen_reg2,
-      write7_addr_reg2,write7_wen_reg2,
-      write8_addr_reg2,write8_wen_reg2,
-      write9_addr_reg2,write9_wen_reg2,
-      write0_data_reg,
-      write1_data_reg,
-      write2_data_reg,
-      write3_data_reg,
-      write4_data_reg,
-      write5_data_reg,
-      write6_data_reg,
-      write7_data_reg,
-      write8_data_reg,
-      write9_data_reg
+      write0_data_reg
       );
       
 
@@ -1121,35 +783,8 @@ module regfile(
       1'b0,1'b1,,
       
       write0_addr_reg,write0_wen_reg,
-      write1_addr_reg,write1_wen_reg,
-      write2_addr_reg,write2_wen_reg,
-      write3_addr_reg,write3_wen_reg,
-      write4_addr_reg,write4_wen_reg,
-      write5_addr_reg,write5_wen_reg,
-      write6_addr_reg,write6_wen_reg,
-      write7_addr_reg,write7_wen_reg,
-      write8_addr_reg,write8_wen_reg,
-      write9_addr_reg,write9_wen_reg,
       write0_addr_reg2,write0_wen_reg2,
-      write1_addr_reg2,write1_wen_reg2,
-      write2_addr_reg2,write2_wen_reg2,
-      write3_addr_reg2,write3_wen_reg2,
-      write4_addr_reg2,write4_wen_reg2,
-      write5_addr_reg2,write5_wen_reg2,
-      write6_addr_reg2,write6_wen_reg2,
-      write7_addr_reg2,write7_wen_reg2,
-      write8_addr_reg2,write8_wen_reg2,
-      write9_addr_reg2,write9_wen_reg2,
-      write0_data_reg,
-      write1_data_reg,
-      write2_data_reg,
-      write3_data_reg,
-      write4_data_reg,
-      write5_data_reg,
-      write6_data_reg,
-      write7_data_reg,
-      write8_data_reg,
-      write9_data_reg
+      write0_data_reg
       );
 
       regfile_zero_cycle_write #(DATA_WIDTH) zcwiR_mod(
@@ -1160,35 +795,8 @@ module regfile(
       1'b0,1'b1,,
       
       write0_addr_reg,write0_wen_reg,
-      write1_addr_reg,write1_wen_reg,
-      write2_addr_reg,write2_wen_reg,
-      write3_addr_reg,write3_wen_reg,
-      write4_addr_reg,write4_wen_reg,
-      write5_addr_reg,write5_wen_reg,
-      write6_addr_reg,write6_wen_reg,
-      write7_addr_reg,write7_wen_reg,
-      write8_addr_reg,write8_wen_reg,
-      write9_addr_reg,write9_wen_reg,
       write0_addr_reg2,write0_wen_reg2,
-      write1_addr_reg2,write1_wen_reg2,
-      write2_addr_reg2,write2_wen_reg2,
-      write3_addr_reg2,write3_wen_reg2,
-      write4_addr_reg2,write4_wen_reg2,
-      write5_addr_reg2,write5_wen_reg2,
-      write6_addr_reg2,write6_wen_reg2,
-      write7_addr_reg2,write7_wen_reg2,
-      write8_addr_reg2,write8_wen_reg2,
-      write9_addr_reg2,write9_wen_reg2,
-      write0_data_reg,
-      write1_data_reg,
-      write2_data_reg,
-      write3_data_reg,
-      write4_data_reg,
-      write5_data_reg,
-      write6_data_reg,
-      write7_data_reg,
-      write8_data_reg,
-      write9_data_reg
+      write0_data_reg
       );
 
     end
@@ -1196,51 +804,17 @@ module regfile(
 
   always @(posedge clk) begin
       if (rst) begin
-          write0_addr_reg2<={ADDR_WIDTH{1'B0}};
-          write1_addr_reg2<={ADDR_WIDTH{1'B0}};
-          write2_addr_reg2<={ADDR_WIDTH{1'B0}};
-          write3_addr_reg2<={ADDR_WIDTH{1'B0}};
-          write4_addr_reg2<={ADDR_WIDTH{1'B0}};
-          write5_addr_reg2<={ADDR_WIDTH{1'B0}};
-          write6_addr_reg2<={ADDR_WIDTH{1'B0}};
-          write7_addr_reg2<={ADDR_WIDTH{1'B0}};
-          write8_addr_reg2<={ADDR_WIDTH{1'B0}};
-          write9_addr_reg2<={ADDR_WIDTH{1'B0}};
+          write0_addr_reg2<={10*ADDR_WIDTH{1'B0}};
           
           
-          write0_wen_reg2<=1'b0;
-          write1_wen_reg2<=1'b0;
-          write2_wen_reg2<=1'b0;
-          write3_wen_reg2<=1'b0;
-          write4_wen_reg2<=1'b0;
-          write5_wen_reg2<=1'b0;
-          write6_wen_reg2<=1'b0;
-          write7_wen_reg2<=1'b0;
-          write8_wen_reg2<=1'b0;
-          write9_wen_reg2<=1'b0;
+          write0_wen_reg2<=10'b0;
       end else begin
-          if (write0_wen_reg) write0_addr_reg2<=write0_addr_reg;
-          if (write1_wen_reg) write1_addr_reg2<=write1_addr_reg;
-          if (write2_wen_reg) write2_addr_reg2<=write2_addr_reg;
-          if (write3_wen_reg) write3_addr_reg2<=write3_addr_reg;
-          if (write4_wen_reg) write4_addr_reg2<=write4_addr_reg;
-          if (write5_wen_reg) write5_addr_reg2<=write5_addr_reg;
-          if (write6_wen_reg) write6_addr_reg2<=write6_addr_reg;
-          if (write7_wen_reg) write7_addr_reg2<=write7_addr_reg;
-          if (write8_wen_reg) write8_addr_reg2<=write8_addr_reg;
-          if (write9_wen_reg) write9_addr_reg2<=write9_addr_reg;
+          for(x11=0;x11<10;x11=x11+1) begin
+              if (write0_wen_reg[x11]) write0_addr_reg2[x11]<=write0_addr_reg[x11];
+          end
           
           
           write0_wen_reg2<=write0_wen_reg;
-          write1_wen_reg2<=write1_wen_reg;
-          write2_wen_reg2<=write2_wen_reg;
-          write3_wen_reg2<=write3_wen_reg;
-          write4_wen_reg2<=write4_wen_reg;
-          write5_wen_reg2<=write5_wen_reg;
-          write6_wen_reg2<=write6_wen_reg;
-          write7_wen_reg2<=write7_wen_reg;
-          write8_wen_reg2<=write8_wen_reg;
-          write9_wen_reg2<=write9_wen_reg;
       end
   end
 endmodule
