@@ -34,34 +34,43 @@ module dcache1_ram(
   );
   localparam ADDR_WIDTH=6;
   localparam ADDR_COUNT=64;
-  localparam DATA_WIDTH=`dcache1_data_width;
+  localparam DATA_WIDTH=77;
   
   input clk;
   input rst;
-  input read_nClkEn;
-  input [ADDR_WIDTH-1:0] read_addr;
-  output [DATA_WIDTH-1:0] read_data;
+  input [3:0] read_nClkEn;
+  input [3:0] [ADDR_WIDTH-1:0] read_addr;
+  output [3:0] [DATA_WIDTH-1:0] read_data;
   input [59:0][ADDR_WIDTH-1:0] write_addr;
   input [59:0][DATA_WIDTH-1:0] write_data;
   input [59:0] write_wen;
-  input [59:0][3:0] write_ben;
+  input [59:0][8:0] write_ben;
 
   reg [DATA_WIDTH-1:0] ram [ADDR_COUNT-1:0];
-  reg [ADDR_WIDTH-1:0] read_addr_reg;
+  reg [3:0][ADDR_WIDTH-1:0] read_addr_reg;
   
   integer wpl;
 
-  assign read_data=ram[read_addr_reg];
-
+  always @* begin
+    for(rr=0;rr<4;rr=rr+1) begin
+        read_data[rr]=read_nClkEn ? 'z : ram[read_addr_reg[rr]];
+    end
+  end
   always @(negedge clk)
     begin
-      if (rst) read_addr_reg<={ADDR_WIDTH{1'b0}};
+      if (rst) read_addr_reg<={4*ADDR_WIDTH{1'b0}};
       else if (!read_nClkEn) read_addr_reg<=read_addr; 
+      read_nClkEn_reg<=read_nClkEn;
       for (wpl=0;wpl<60;wpl=wpl+1) begin
           if (write_wen[wpl] & write_ben[wpl][0]) ram[write_addr[wpl]][8:0]<=write_data[8:0]; 
           if (write_wen[wpl] & write_ben[wpl][1]) ram[write_addr[wpl]][17:9]<=write_data[17:9];
           if (write_wen[wpl] & write_ben[wpl][2]) ram[write_addr[wpl]][26:18]<=write_data[26:18]; 
           if (write_wen[wpl] & write_ben[wpl][3]) ram[write_addr[wpl]][35:27]<=write_data[35:27]; 
+          if (write_wen[wpl] & write_ben[wpl][4]) ram[write_addr[wpl]][44:36]<=write_data[44:36]; 
+          if (write_wen[wpl] & write_ben[wpl][5]) ram[write_addr[wpl]][53:45]<=write_data[53:45]; 
+          if (write_wen[wpl] & write_ben[wpl][6]) ram[write_addr[wpl]][62:54]<=write_data[62:54]; 
+          if (write_wen[wpl] & write_ben[wpl][7]) ram[write_addr[wpl]][71:63]<=write_data[71:63]; 
+          if (write_wen[wpl] & write_ben[wpl][8]) ram[write_addr[wpl]][76:72]<=write_data[76:72]; 
       end
     end
 
@@ -74,17 +83,6 @@ module dcache1_bank(
   read_addrE0, read_hitE0, 
   read_addrO0, read_hitO0, 
   read_bankEn0,read_odd0,
-  read_addrE1, read_hitE1, 
-  read_addrO1, read_hitO1, 
-  read_bankEn1,read_odd1,
-  read_addrE2, read_hitE2, 
-  read_addrO2, read_hitO2, 
-  read_bankEn2,read_odd2,
-  read_addrE3, read_hitE3, 
-  read_addrO3, read_hitO3, 
-  read_bankEn3,read_odd3,
-  none_bankEn,
-  bank_hit,
   read_data,
   read_data_in,
   read_err,
@@ -104,34 +102,14 @@ module dcache1_bank(
   parameter [0:0] TOP=0;
   input clk;
   input rst;
-  input [ADDR_WIDTH-1:0] read_addrE0;
-  input read_hitE0; //+1 cycle
-  input [ADDR_WIDTH-1:0] read_addrO0;
-  input read_hitO0; //+1 cycle
-  input read_bankEn0;
-  input read_odd0;
-  input [ADDR_WIDTH-1:0] read_addrE1;
-  input read_hitE1; //+1 cycle
-  input [ADDR_WIDTH-1:0] read_addrO1;
-  input read_hitO1; //+1 cycle
-  input read_bankEn1;
-  input read_odd1;
-  input [ADDR_WIDTH-1:0] read_addrE2;
-  input read_hitE2; //+1 cycle
-  input [ADDR_WIDTH-1:0] read_addrO2;
-  input read_hitO2; //+1 cycle
-  input read_bankEn2;
-  input read_odd2;
-  input [ADDR_WIDTH-1:0] read_addrE3;
-  input read_hitE3; //+1 cycle
-  input [ADDR_WIDTH-1:0] read_addrO3;
-  input read_hitO3; //+1 cycle
-  input read_bankEn3;
-  input read_odd3;
-  input none_bankEn;
-  output bank_hit;
-  output [DATA_WIDTH-1:0] read_data;
-  input [DATA_WIDTH-1:0] read_data_in;
+  input [3:0][ADDR_WIDTH-1:0] read_addrE0;
+  input [3:0] read_hitE0; //+1 cycle
+  input [3:0] [ADDR_WIDTH-1:0] read_addrO0;
+  input [3:0] read_hitO0; //+1 cycle
+  input [3:0] read_bankEn0;
+  input [3:0] read_odd0;
+  output [3:0][1:0][76:0] read_data;
+  input [3:0][1:0][76:0][DATA_WIDTH-1:0] read_data_in;
   output read_err;
   input read_err_in;
 
@@ -148,59 +126,31 @@ module dcache1_bank(
   input ins_hit;
   input init;
   
-  wire [1:0][ADDR_WIDTH-1:0] read_addr;
-  wire [1:0][DATA_WIDTH-1:0] read_data_ram;
-  wire enE,enO;
-  wire onE,onO;
-  wire [DATA_WIDTH-1:0] read_dataP;
+  wire [3:0][1:0][ADDR_WIDTH-1:0] read_addr;
+  wire [3:0][1:0][DATA_WIDTH-1:0] read_data_ram;
+  wire [3:0]enE,enO;
+  wire [3:0]onE,onO;
+  wire [3:0][1:0][DATA_WIDTH-1:0] read_dataP;
 
-  reg read_bankEn0_reg;
-  reg read_bankEn1_reg;
-  reg read_bankEn2_reg;
-  reg read_bankEn3_reg;
+  reg [3:0] read_bankEn0_reg;
 
-  reg read_odd0_reg;
-  reg read_odd1_reg;
-  reg read_odd2_reg;
-  reg read_odd3_reg;
+  reg [3:0] read_odd0_reg;
 
-  wire [ADDR_WIDTH-1:0] write_addrO;
-  wire [ADDR_WIDTH-1:0] write_addrE;
-  wire write_bankEn;
-  wire [3:0] write_ben;
-  wire [1:0] error;
   
   
-  assign enE=read_hitE0 & read_bankEn0_reg || read_hitE1 & read_bankEn1_reg || read_hitE2 & read_bankEn2_reg || read_hitE3 & read_bankEn3_reg;
-  assign enO=read_hitO0 & read_bankEn0_reg || read_hitO1 & read_bankEn1_reg || read_hitO2 & read_bankEn2_reg || read_hitO3 & read_bankEn3_reg;
+  assign enE=read_hitE0 & read_bankEn0_reg | read_hitE1 & read_bankEn1_reg | read_hitE2 & read_bankEn2_reg | read_hitE3 & read_bankEn3_reg;
+  assign enO=read_hitO0 & read_bankEn0_reg | read_hitO1 & read_bankEn1_reg | read_hitO2 & read_bankEn2_reg | read_hitO3 & read_bankEn3_reg;
 
-//  assign onE=~read_odd0_reg & read_bankEn0_reg || ~read_odd1_reg & read_bankEn1_reg || ~read_odd2_reg & read_bankEn2_reg || ~read_odd3_reg & read_bankEn3_reg;
-//  assign onO=read_odd0_reg & read_bankEn0_reg || read_odd1_reg & read_bankEn1_reg || read_odd2_reg & read_bankEn2_reg || read_odd3_reg & read_bankEn3_reg;
 
-  assign read_addr[0]=read_bankEn0 ? read_addrE0 : 'z;
-  assign read_addr[0]=read_bankEn1 ? read_addrE1 : 'z;
-  assign read_addr[0]=read_bankEn2 ? read_addrE2 : 'z;
-  assign read_addr[0]=read_bankEn3 ? read_addrE3 : 'z;
-  assign read_addr[0]=none_bankEn ? {ADDR_WIDTH{1'b0}} : 'z;
-
-  assign read_addr[1]=read_bankEn0 ? read_addrO0 : 'z;
-  assign read_addr[1]=read_bankEn1 ? read_addrO1 : 'z;
-  assign read_addr[1]=read_bankEn2 ? read_addrO2 : 'z;
-  assign read_addr[1]=read_bankEn3 ? read_addrO3 : 'z;
-  assign read_addr[1]=none_bankEn ? {ADDR_WIDTH{1'b0}} : 'z;
-
-  assign write_addrE=write_bankEn0 ? write_addrE0 : write_addrE1;
-  assign write_addrO=write_bankEn0 ? write_addrO0 : write_addrO1;
-  assign write_bankEn=write_bankEn0 | write_bankEn1;
  
-  assign write_ben=(write_bankEn0 && write_begin0==INDEX && ~init) ? write_bBen0 : 4'bz;
-  assign write_ben=(write_bankEn0 && write_end0==INDEX && ~init) ?   write_enBen0 : 4'bz;
-  assign write_ben=((write_bankEn0 && write_begin0!=INDEX && write_end0!=INDEX) || init) ? 4'b1111 : 4'bz;
-  assign write_ben=(write_bankEn1 && write_begin1==INDEX && ~init) ? write_bBen1 : 4'bz;
-  assign write_ben=(write_bankEn1 && write_end1==INDEX && ~init) ?   write_enBen1 : 4'bz;
-  assign write_ben=(write_bankEn1 && write_begin1!=INDEX && write_end1!=INDEX && ~init) ? 4'b1111 : 4'bz;
-  assign write_ben=(~write_bankEn1 && ~write_bankEn0 && ~init) ? 4'b0 : 4'bz;
-  
+  generate
+    for(p=0;p<4;p=p+1) begin
+        assign write_ben[p]=(write_bankEn0[p] && write_begin0==INDEX && ~init) ? write_bBen0[p] : 4'bz;
+        assign write_ben[p]=(write_bankEn0[p] && write_end0[p]==INDEX && ~init) ?   write_enBen0[p] : 4'bz;
+        assign write_ben[p]=((write_bankEn0[p] && write_begin0[p]!=INDEX && write_end0[p]!=INDEX) || init) ? 4'b1111 : 4'bz;
+        assign write_ben[p]=(~write_bankEn0[p] && ~init) ? 4'b0 : 4'bz;
+    end
+  endgenerate
   assign bank_hit=enE | enO;
 
   assign error[0]=^read_data_ram[0][8:0]|^read_data_ram[0][17:9]|^read_data_ram[0][26:18]|^read_data_ram[0][35:27];
@@ -212,14 +162,17 @@ module dcache1_bank(
     for(k=0;k<60;k=k+1) begin
         write_data0[k]=write_data[write_begin0[k]][k];
     end
+    for(k=0;k<4;k=k+1) begin
+        none_bankEn[k]=read_addr0[k][9:3]!=read_begin0[k] && read_addr0[k][9:3]!=read_end0[k];
+    end
   end
   
   dcache1_ram ramE_mod(
   .clk(clk),
   .rst(rst),
   .read_nClkEn(none_bankEn),
-  .read_addr(read_addr[0]),
-  .read_data(read_data_ram[0]),
+  .read_addr(read_addrE0),
+  .read_data(read_data_ram),
   .write_addr(write_addrE),
   .write_data(write_data0),
   .write_wen((write_bankEn && write_hitE0|write_hitE1)|init|(ins_hit&~read_odd0_reg)),
@@ -230,62 +183,47 @@ module dcache1_bank(
   .clk(clk),
   .rst(rst),
   .read_nClkEn(none_bankEn),
-  .read_addr(read_addr[1]),
-  .read_data(read_data_ram[1]),
+  .read_addr(read_addrO0),
+  .read_data(read_data_ram),
   .write_addr(write_addrO),
   .write_data(write_data0),
   .write_wen((write_bankEn && write_hitO0|write_hitO1)|init|(ins_hit&read_odd0_reg)),
   .write_ben(write_ben)
   );
   
-  generate
-    if (~TOP) begin
-        assign read_dataP=(enE & ~ins_hit) ? read_data_ram[0] : 'z;
-        assign read_dataP=(enO & ~ins_hit) ? read_data_ram[1] : 'z;
-        assign read_dataP=(~bank_hit | ins_hit) ? {DATA_WIDTH{1'B0}} : 'z;
 
+
+  generate
+    for(xx=0;xx<4;xx=xx+1) begin
+        assign read_data[xx][0]=(read_addr0[xx][9:3]==read_begin0[xx]) ? ram_read_data[xx] : 'z;
+        assign read_data[xx][1]=(read_addr0[xx][9:3]==read_end0[xx]) ? ram_read_data[xx] : 'z;
+    end
+    if (~TOP) begin
         assign read_errX=(enE & ~ins_hit) ? error[0] : 'z;
         assign read_errX=(enO & ~ins_hit) ? error[1] : 'z;
         assign read_errX=(~bank_hit | ins_hit) ? 1'b0 : 'z;
   
-        assign read_data=~(read_dataP|read_data_in);  
         assign read_err=~(read_errX|read_err_in);  
     end else begin
-        assign read_dataP=(enE & ~ins_hit) ? ~read_data_ram[0] : 'z;
-        assign read_dataP=(enO & ~ins_hit) ? ~read_data_ram[1] : 'z;
-        assign read_dataP=(~bank_hit | ins_hit) ? {DATA_WIDTH{1'B1}} : 'z;
 
         assign read_errX=(enE & ~ins_hit) ? ~error[0] : 'z;
         assign read_errX=(enO & ~ins_hit) ? ~error[1] : 'z;
         assign read_errX=(~bank_hit | ins_hit) ? 1'B1 : 'z;
   
-        assign read_data=~(read_dataP&read_data_in);  
         assign read_err=~(read_errX&read_err_in);  
     end
   endgenerate
-  always @(negedge clk)
+  always @(posedge clk)
     begin
       if (rst)
         begin
-          read_bankEn0_reg<=1'b0;
-          read_bankEn1_reg<=1'b0;
-          read_bankEn2_reg<=1'b0;
-          read_bankEn3_reg<=1'b0;
-          read_odd0_reg<=1'b0;
-          read_odd1_reg<=1'b0;
-          read_odd2_reg<=1'b0;
-          read_odd3_reg<=1'b0;
+          read_bankEn0_reg<=4'b0;
+          read_odd0_reg<=4'b0;
         end
       else
         begin
           read_bankEn0_reg<=read_bankEn0;
-          read_bankEn1_reg<=read_bankEn1;
-          read_bankEn2_reg<=read_bankEn2;
-          read_bankEn3_reg<=read_bankEn3;
           read_odd0_reg<=read_odd0;
-          read_odd1_reg<=read_odd1;
-          read_odd2_reg<=read_odd2;
-          read_odd3_reg<=read_odd3;
         end
     end
   
