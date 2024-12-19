@@ -673,9 +673,9 @@ module decoder_reorder_mux(
   shmuph_decr #(1) useBConst_mod(sel,dec0_useBConst&avail,useBConst);  
   shmuph_decr #(1) useRs_mod(sel,(dec0_useRs&avail&{10{~isMul5}})|{10{&sel[1:0] & storeL}},useRs);
   shmuph_decr #(1) afterTaken_mod(sel,dec_afterTaken&avail,afterTaken);    
-  shmuph_decr #(1) alloc_mod(sel|({10{isMul5_twinreg}}&10'h200),dec_alloc&avail,alloc);    
-  shmuph_decr #(1) allocF_mod(sel|({10{isMul5_twinreg}}&10'h200),dec_allocF&avail,allocF);    
-  shmuph_decr #(1) rAlloc_mod(sel|({10{isMul5_twinreg}}&10'h200),dec_rAlloc&avail,rAlloc);    
+  shmuph_decr #(1) alloc_mod(sel|({10{isMul5_twinreg}}&(1<<INDEX<<3)),dec_alloc&avail,alloc);    
+  shmuph_decr #(1) allocF_mod(sel|({10{isMul5_twinreg}}&(1<<INDEX<<3)),dec_allocF&avail,allocF);    
+  shmuph_decr #(1) rAlloc_mod(sel|({10{isMul5_twinreg}}&(1<<INDEX<<3)),dec_rAlloc&avail,rAlloc);    
   shmuph_decr #(1) lastFl_mod(sel,dec_lastFl&avail,lastFl);    
   shmuph_decr #(1) flWr_mod(sel,dec_flWr&avail,flWr);    
 
