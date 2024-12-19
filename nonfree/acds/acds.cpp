@@ -63,37 +63,37 @@ class __acds_cell {
             io[1][n]=io[1][n] | io[1][n-size] & io[0][n-size];
             io[1][n-size]=io[1][n-size] | io[1][n] & io[0][n];
           } else {
-            io[1][n]=io[1][n] & (io[1][n-size])|io[0][n-size]);
+            io[1][n]=io[1][n] & (io[1][n-size]|io[0][n-size]);
             io[1][n-size]=io[1][n-size] & (io[1][n]|io[0][n]);
           }
       }
       for(n=0;n<size;n++) if (((n/size)&15)<12 && (precharge_mask>>((n/size)&15))&1) {
-        io[1][n]&=io[n&0xfffffff0|12];
+        io[1][n]&=io[1][n&0xfffffff0|12];
       } 
   }
   void __acds_cell::drive() {
     std::vector<void *>::iterator obj;
     std::vector<long>::iterator field;
-    for(obj=driven_obj.iterator(),field=driven_off_pos.iterator(); 
-      obj,field;obj++,field++) {
+    for(obj=driven_obj.begin(),field=driven_off_pos.begin(); 
+      obj!=driven_obj.end() && field!=driven_off_pos.end();obj++,field++) {
       long n,pos,cnt,off,othersz;
-      pos=(field&driven_phase_mask);      
-      off=(field&driven_off_mask)>>driven_off_shift;
-      cnt=(field&driven_count_mask)>>driven_count_shift;
-      othersz=((__acds_cell *) obj)->size;
+      pos=(*field&driven_phase_mask);      
+      off=(*field&driven_off_mask)>>driven_off_shift;
+      cnt=(*field&driven_count_mask)>>driven_count_shift;
+      othersz=((__acds_cell *)*obj)->size;
       if (pos<12) for(n=0;n<cnt;n=n+1) {
-        ((__acds_cell *) obj)->io[0][n*16+pos]|=(
+        ((__acds_cell *) *obj)->io[0][n*16+pos]|=(
           (io[1][n*16+outp+off]|(io[1][n*16+outp+off]<<3)|(io[1][n*16+outp+off]<<4)|
-            ((io[1][n*16+outp+off]&0x4)<<1))|(io[1][n*16+outp+off]>>3)|(io[1][n*16+outp+off]>>4))&((__acds_cell *) obj)->io[1][n*16+12];
+            ((io[1][n*16+outp+off]&0x4)<<1))|(io[1][n*16+outp+off]>>3)|(io[1][n*16+outp+off]>>4))&((__acds_cell *) *obj)->io[1][n*16+12];
       }
       if (pos>=12) for(n=0;n<cnt;n=n+1) {
-        ((__acds_cell *) obj)->io[0][n*16+pos]&=
+        ((__acds_cell *) *obj)->io[0][n*16+pos]&=
           (io[1][n*16+outp+off]|(io[1][n*16+outp+off]<<3)|(io[1][n*16+outp+off]<<4)|
-            ((io[1][n*16+outp+off]&0x4)<<1))|(io[1][n*16+outp+off]>>3)|(io[1][n*16+outp+off]>>4));
+            (((io[1][n*16+outp+off]&0x4)<<1))|(io[1][n*16+outp+off]>>3)|(io[1][n*16+outp+off]>>4));
       }
     }
   }
-template <long size,long precharge_mask,long outp,long INP> class acds_cell {
+template <long _size,long _precharge_mask,long _outp,long _INP> class acds_cell {
   int phase;
   int size;
   short anchor_x;
@@ -108,9 +108,9 @@ template <long size,long precharge_mask,long outp,long INP> class acds_cell {
   unsigned short precharge_mask;
   unsigned short outp;
   unsigned short INP;
-  unsigned char io[2][16][size];
+  unsigned char io[2][16][_size];
   public:
-  acds_cell<size,long precharge_mask,long outp,long INP> {
+  acds_cell<_size,_precharge_mask,_outp,_INP> () {
       anchor_x=global_anchor_x;
       anchor_y=global_anchor_y;
       x_off=global_bus_X_off;
@@ -118,17 +118,29 @@ template <long size,long precharge_mask,long outp,long INP> class acds_cell {
       x_mod=16000;
       y_mod=16000;
       long n;
+      size=_size;
+      precharge_mask=_precharge_mask;
+      outp=_outp;
+      INP=_INP;
       for(n=0;n<(size*16);n=n+1) {
           if ((1<<((n/size)&15))&INP) io[1][n%16][n/16]=0xff;
       }
   }
-  acds_cell<size,long precharge_mask,long outp,long INP> (int x,int y) {
+  acds_cell<_size,_precharge_mask,_outp,_INP> (int x,int y) {
       anchor_x=global_anchor_x+x;
       anchor_y=global_anchor_y+y;
       x_off=global_bus_X_off;
       y_off=global_bus_Y_off;
       x_mod=16000;
       y_mod=16000;
+      size=_size;
+      precharge_mask=_precharge_mask;
+      outp=_outp;
+      INP=_INP;
+      long n;
+      for(n=0;n<(size*16);n=n+1) {
+          if ((1<<((n/size)&15))&INP) io[1][n%16][n/16]=0xff;
+      }
   }
   int add_input(void * from, int off, int pos, int count) {
     __acds_cell *f=(__acds_cell *) from;
