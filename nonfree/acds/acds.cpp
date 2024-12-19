@@ -1,4 +1,4 @@
-
+#include <vector>
 
 #define driven_phase_mask 0xff
 #define driven_off_mask 0xffff0000
@@ -33,7 +33,8 @@ class __acds_cell {
   std::vector<long> driven_off_pos;
   unsigned short precharge_mask;
   unsigned short outp;
-  struct { unsigned char gate; unsigned char cond; } io[];
+  unsigned short INP;
+  unsigned char io[2][16];
   public:
   void eval();
   void antiphase();
@@ -43,31 +44,31 @@ class __acds_cell {
       long n,n2;
       for(n=size;n<(size*16);n++) {
           if ((n&15)<12) {
-            io.cond[n]=io.cond[n] | io.cond[n-size] & io.gate[n-size];
-            io.cond[n-size]=io.cond[n-size] | io.cond[n] & io.gate[n];
+            io[1][n]=io[1][n] | io[1][n-size] & io[0][n-size];
+            io[1][n-size]=io[1][n-size] | io[1][n] & io[0][n];
           } else {
-            io.cond[n]=io.cond[n] & (io.cond[n-size])|io.gate[n-size]);
-            io.cond[n-size]=io.cond[n-size] & (io.cond[n]|io.gate[n]);
+            io[1][n]=io[1][n] & (io[1][n-size]|io[0][n-size]);
+            io[1][n-size]=io[1][n-size] & (io[1][n]|io[0][n]);
           }
       }
-      for(n=0;n<size;n++) if (((n/size)&15)<12 && (precharge>>((n/size)&15))&1) {
-        io.cond[n&0xfffffff0|12]|=io.cond[n];
-        io.cond[n&0xfffffff0|13]|=io.cond[n];
+      for(n=0;n<size;n++) if (((n/size)&15)<12 && (precharge_mask>>((n/size)&15))&1) {
+        io[1][n&0xfffffff0|12]|=io[1][n];
+        io[1][n&0xfffffff0|13]|=io[1][n];
       }
   }
   void __acds_cell::antiphase() {
       long n,n2;
      for(n=size;n<(size*16);n++) {
           if ((n&15)<12) {
-            io.cond[n]=io.cond[n] | io.cond[n-size] & io.gate[n-size];
-            io.cond[n-size]=io.cond[n-size] | io.cond[n] & io.gate[n];
+            io[1][n]=io[1][n] | io[1][n-size] & io[0][n-size];
+            io[1][n-size]=io[1][n-size] | io[1][n] & io[0][n];
           } else {
-            io.cond[n]=io.cond[n] & (io.cond[n-size])|io.gate[n-size]);
-            io.cond[n-size]=io.cond[n-size] & (io.cond[n]|io.gate[n]);
+            io[1][n]=io[1][n] & (io[1][n-size])|io[0][n-size]);
+            io[1][n-size]=io[1][n-size] & (io[1][n]|io[0][n]);
           }
       }
-      for(n=0;n<size;n++) if (((n/size)&15)<12 && (precharge>>((n/size)&15))&1) {
-        io.cond[n]&=io[n&0xfffffff0|12];
+      for(n=0;n<size;n++) if (((n/size)&15)<12 && (precharge_mask>>((n/size)&15))&1) {
+        io[1][n]&=io[n&0xfffffff0|12];
       } 
   }
   void __acds_cell::drive() {
@@ -81,18 +82,18 @@ class __acds_cell {
       cnt=(field&driven_count_mask)>>driven_count_shift;
       othersz=((__acds_cell *) obj)->size;
       if (pos<12) for(n=0;n<cnt;n=n+1) {
-        ((__acds_cell *) obj)->io.gate[n*16+pos]|=(
-          (io.cond[n*16+outp+off]|(io.cond[n*16+outp+off]<<3)|(io.cond[n*16+outp+off]<<4)|
-            ((io.cond[n*16+outp+off]&0x4)<<1))|(io.cond[n*16+outp+off]>>3)|(io.cond[n*16+outp+off]>>4))&((__acds_cell *) obj)->io.cond[n*16+12];
+        ((__acds_cell *) obj)->io[0][n*16+pos]|=(
+          (io[1][n*16+outp+off]|(io[1][n*16+outp+off]<<3)|(io[1][n*16+outp+off]<<4)|
+            ((io[1][n*16+outp+off]&0x4)<<1))|(io[1][n*16+outp+off]>>3)|(io[1][n*16+outp+off]>>4))&((__acds_cell *) obj)->io[1][n*16+12];
       }
       if (pos>=12) for(n=0;n<cnt;n=n+1) {
-        ((__acds_cell *) obj)->io.gate[n*16+pos]&=
-          (io.cond[n*16+outp+off]|(io.cond[n*16+outp+off]<<3)|(io.cond[n*16+outp+off]<<4)|
-            ((io.cond[n*16+outp+off]&0x4)<<1))|(io.cond[n*16+outp+off]>>3)|(io.cond[n*16+outp+off]>>4));
+        ((__acds_cell *) obj)->io[0][n*16+pos]&=
+          (io[1][n*16+outp+off]|(io[1][n*16+outp+off]<<3)|(io[1][n*16+outp+off]<<4)|
+            ((io[1][n*16+outp+off]&0x4)<<1))|(io[1][n*16+outp+off]>>3)|(io[1][n*16+outp+off]>>4));
       }
     }
   }
-template <long size,long precharge_mask,long outp> class acds_cell {
+template <long size,long precharge_mask,long outp,long INP> class acds_cell {
   int phase;
   int size;
   short anchor_x;
@@ -106,7 +107,8 @@ template <long size,long precharge_mask,long outp> class acds_cell {
   std::vector<long> driven_off_pos;
   unsigned short precharge_mask;
   unsigned short outp;
-  struct { unsigned char gate; unsigned char cond; } io[16][size];
+  unsigned short INP;
+  unsigned char io[2][16][size];
   public:
   acds_cell<size> {
       anchor_x=global_anchor_x;
