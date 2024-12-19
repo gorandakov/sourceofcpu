@@ -22,7 +22,7 @@ template <long size,long precharge_mask> class acds_cell {
   std::vector<void *> driven_obj;
   std::vector<long> driven_off_pos;
   unsigned short precharge_mask;
-  unsigned char io[12][size];
+  struct { unsigned char gate; unsigned char cond; } io[16][size];
   public:
   acds_cell<size> {
       anchor_x=global_anchor_x;
