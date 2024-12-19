@@ -110,15 +110,19 @@ template <long size,long precharge_mask,long outp,long INP> class acds_cell {
   unsigned short INP;
   unsigned char io[2][16][size];
   public:
-  acds_cell<size> {
+  acds_cell<size,long precharge_mask,long outp,long INP> {
       anchor_x=global_anchor_x;
       anchor_y=global_anchor_y;
       x_off=global_bus_X_off;
       y_off=global_bus_Y_off;
       x_mod=16000;
       y_mod=16000;
+      long n;
+      for(n=0;n<(size*16);n=n+1) {
+          if ((1<<((n/size)&15))&INP) io[1][n%16][n/16]=0xff;
+      }
   }
-  acds_cell<size> (int x,int y) {
+  acds_cell<size,long precharge_mask,long outp,long INP> (int x,int y) {
       anchor_x=global_anchor_x+x;
       anchor_y=global_anchor_y+y;
       x_off=global_bus_X_off;
