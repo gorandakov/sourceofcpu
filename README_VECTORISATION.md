@@ -11,4 +11,6 @@ Inraloka level chips can be made without super conductor by making the silicon c
 DDR6 12500 speed possible for external interface at current radiation limits.
 600 vector cpu possible without super conductor but might use too much power.
 This if done will cut off from the computer the lowest level of reality out of 3.
-
+The 8-16 core 5.25 GHz 600 vector computer will consume about 8kW which means that to own one you need to murder, in effect, a person.
+At least if it is used full time for a server for example.
+For every such server PC one baby less in terms of energy budget.
