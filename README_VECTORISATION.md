@@ -10,3 +10,5 @@ It would need to use iron for the gate conductor, gate and all layers of wire ex
 Inraloka level chips can be made without super conductor by making the silicon conductive gate partial matter, and all of the metal stack, but an extra layer of metal undeneath the silicon, which would serve as the output/input and poke through to the other side of the chip.
 DDR6 12500 speed possible for external interface at current radiation limits.
 600 vector cpu possible without super conductor but might use too much power.
+This will cut off from the computer the lowest level of reality out of 3.
+
