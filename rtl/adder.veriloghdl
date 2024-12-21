@@ -645,7 +645,7 @@ endmodule
 
 
 
-(* align_width="a,b,out" *) module addsub_alu(a,b,out,sub,cin,en,sxtEn,ben,cout,cout4,cout8LL,cout16,cout32,cout_sec,ndiff,cout44);
+(* align_width="a,b,out" *) module addsub_alu(a,b,out,sub,cin,en,sxtEn,pooh,ben,cout,cout4,cout8LL,cout16,cout32,cout_sec,ndiff,cout44);
   parameter WIDTH=64;
   input [64:0] a;
   input [64:0] b;
@@ -654,6 +654,7 @@ endmodule
   input cin;
   input en;
   input sxtEn;
+  input pooh;
   input [1:0] ben;
   output cout;
   output cout4;
@@ -712,7 +713,7 @@ endmodule
   wire [2:0] pos_flip;
   wire [2:0] neg_flip;
   wire cout_sec0;
-  wire [20:0] exbits;
+  wire [19:0] exbits;
   wire is_ptr;
   wire err;
 
@@ -726,7 +727,7 @@ endmodule
   
   genvar i;
   
-  assign bitEn={{21{ben[1]&en}},{11{ben[0]&en}},{16{en}},{16{en}}};
+  assign bitEn={{20{(ben[1]|pooh)&en}},{12{ben[0]&en}},{16{en}},{16{en}}};
   
   
 
@@ -753,7 +754,7 @@ endmodule
   assign X1=sxtEn ? {{32{X[31]}},X[31:0]} : X;
   assign nX1=sxtEn ? {{32{nX[31]}},nX[31:0]} : nX;
 
-  assign exbits=is_ptr ? ptr[63:43]^{19'b0,pos_flip[{1'b0,cout_sec0}]|neg_flip[{1'b0,cout_sec0}],1'b0} : 21'b0;
+  assign exbits=is_ptr ? ptr[63:44]: 20'b0;
 
   addrcalcsec_shift nih_mod(ptr[`ptr_exp],C[41:10],cout_sec0);
   addrcalcsec_check_upper3 hin_mod(ptr,unptr[43:11],1'b0},33'b0,pos_ack,neg_ack,pos_flip,neg_flip,
@@ -894,8 +895,8 @@ endmodule
 	
 	if (1)
 	  begin
-	    assign out[63:43]=(en&~ben[1]) ? exbits : 21'bz; 
-	    assign out[42:32]=(en&~ben[0]) ? 11'b0 : 11'bz; 
+	    assign out[63:44]=(en&~ben[1]&!pooh) ? exbits : 21'bz; 
+	    assign out[42:32]=(en&~ben[0]) ? 12'b0 : 12'bz; 
 	  end
     
   endgenerate
