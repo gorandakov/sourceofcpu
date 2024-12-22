@@ -727,7 +727,7 @@ endmodule
   
   genvar i;
   
-  assign bitEn={{20{(ben[1]|pooh)&en}},{12{ben[0]&en}},{16{en}},{16{en}}};
+  assign bitEn={{21{ben[1]&en}},{11{ben[0]&en}},{16{en}},{8{ben[-1]&en}},{8{ben[-2]&en}}};
   
   
 

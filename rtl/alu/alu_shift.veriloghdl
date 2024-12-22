@@ -90,7 +90,7 @@ module alu_shift(
   bit_en,
   {4'h8},
   dir|val2[12],
-  arith,
+  arith|val2[13],
   val1[2][63:0],
   val2[2][5:0],
   valres0,
