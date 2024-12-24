@@ -1791,9 +1791,9 @@ opcode_main[0] ? `op_add64 : `op_add32;
 	  poperation[31][7:0]={3'b0,instr[10:8],1'b0,instr[11]};
           poperation[31][9]=instr[12];
 	  if (magic[1:0]==2'b01) begin
-	      prA[31]={1'b0,instr[21:18]};
+	      prA[31]={1'b0,instr[21] & ~instr[23],instr[20:18]};
 	      prB[31]=instr[28:24];
-	      prT[31]=~instr[23] ? {1'b0,instr[22],instr[31:29]} : {1'b0,instr[3:0]};
+	      prT[31]=~instr[23] ? {1'b0,instr[22],instr[31:29]} : {2'b0,instr[21],instr[1:0]};
 	      palucond[31]={1'b1,instr[17:14]};
 	      if (~instr[12]) begin poperation[31][12]=~instr[13]; pflags_write[31]=instr[13]; end
               else begin poperation[31][10]=instr[13]; pflags_write[31]=1'b0; end
