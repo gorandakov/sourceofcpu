@@ -111,7 +111,7 @@ limitations under the License.
   assign valres[63:32]=bit_en[2] ? 32'bz : 32'b0;
 
   assign fill_bit=(sz[2] & arith) ? val0[31] : 1'bz;
-  assign fill_bit=(sz[3] & arith) ? val0[63] : 1'bz;
+  assign fill_bit=(sz[3] & arith) ? val0[63]|~dir : 1'bz;
   assign fill_bit=(~arith) ? 1'b0 : 1'bz;
 
 endmodule
