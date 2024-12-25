@@ -1809,12 +1809,14 @@ opcode_main[0] ? `op_add64 : `op_add32;
 	      if (~instr[12]) begin poperation[31][12]=~instr[13]; pflags_write[31]=instr[13]; end
               else begin poperation[31][10]=instr[13]; pflags_write[31]=1'b0; end
               perror[31]=0;
+              prndmode[31]=3'b1<<instr[1:0];
 	  end else begin
 	      palucond[31]={1'b1,instr[17:14]};
 	      if (~instr[12]) begin poperation[31][12]=~instr[13]; pflags_write[31]=instr[13]; end
               else begin poperation[31][10]=instr[13]; pflags_write[31]=1'b0; end
               prA[31]=instr[22:18];
 	      prT[31]=instr[47:43];
+               prndmode[31]=3'b1<<instr[1:0];
 	  end
       end else if (isGA) begin
           pport[31]=instr[29] ? PORT_MUL : PORT_ALU;
