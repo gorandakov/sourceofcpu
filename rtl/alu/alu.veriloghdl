@@ -211,13 +211,13 @@ alu(clk,rst,except,except_thread,thread,operation,cond,sub,dataEn,nDataAlt,retDa
   assign valRes8=(sahf_en) ? 8'bz : 8'b0;
   assign valRes8=sahf_en ? {2'b0,valS} : 8'bz;
 
-  assign logic_en=(operation[7:3]==5'd1 || operation[7:2]==6'b100) && ~operation[1];
-  assign spec1_en=(operation[7:3]==5'b100 && operation[7:0]!=8'd38) || operation[7:2]==6'b1010;
+  assign logic_en=(operation[7:3]==5'd1 || operation[7:2]==6'b100);
+  assign spec1_en=operation[7:2]==6'b1010;
   assign spec2_en=(operation[7:3]==5'b110 && operation[7:0]!=8'd56) || operation[7:1]==7'd29;
   
   assign valRes1=(operation[11] || ~nDataAlt || (~logic_en && ~spec1_en && ~spec2_en)) ? 
     64'b0: 64'bz;
-  assign add_en=(~(|operation[7:3])|(operation[7:1]==7'd30) && ~operation[11]) && nDataAlt;
+  assign add_en=(~(|operation[7:3])|(operation[7:1]==7'd30)|(operation[7:1]==7'd23) && ~operation[11]) && nDataAlt;
   assign add8_en=1'b0;
   assign sahf_en=~operation[11] && operation[7:0]==`op_sahf && nDataAlt;
   assign shift_en=(operation[7:2]==6'd5 || operation[7:2]==6'd6 || operation[7:2]==6'd7) && nDataAlt && ~operation[11];
