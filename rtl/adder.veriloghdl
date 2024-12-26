@@ -897,6 +897,8 @@ endmodule
 	  begin
 	    assign out[63:44]=(en&~ben[1]&!pooh) ? exbits : 21'bz; 
 	    assign out[42:32]=(en&~ben[0]) ? 12'b0 : 12'bz; 
+            assign out[31:16]=(en&~ben[-1]) ? a[31:16] : 16'bz;
+            assign out[15:8]=(en&~ben[-2]) ? a[15:8] : 8'bz;
 	  end
     
   endgenerate
