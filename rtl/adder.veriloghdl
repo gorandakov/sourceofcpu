@@ -714,6 +714,7 @@ endmodule
   wire [2:0] neg_flip;
   wire cout_sec0;
   wire [19:0] exbits;
+  wire [11:0] exbits2;
   wire is_ptr;
   wire err;
 
@@ -754,7 +755,9 @@ endmodule
   assign X1=sxtEn ? {{32{X[31]}},X[31:0]} : X;
   assign nX1=sxtEn ? {{32{nX[31]}},nX[31:0]} : nX;
 
-  assign exbits=is_ptr ? ptr[63:44]: 20'b0;
+  assign exbits=is_ptr ? ptr[63:44]: ~&ben[-1:-2] ? a[63:44] : 20'b0;
+
+  assign exbits2=~&ben[-1:2] ? a[43:32] : 12'b0;;
 
   addrcalcsec_shift nih_mod(ptr[`ptr_exp],C[41:10],cout_sec0);
   addrcalcsec_check_upper3 hin_mod(ptr,unptr[43:11],1'b0},33'b0,pos_ack,neg_ack,pos_flip,neg_flip,
@@ -896,7 +899,7 @@ endmodule
 	if (1)
 	  begin
 	    assign out[63:44]=(en&~ben[1]&!pooh) ? exbits : 21'bz; 
-	    assign out[42:32]=(en&~ben[0]) ? 12'b0 : 12'bz; 
+	    assign out[42:32]=(en&~ben[0]) ? exbits2 : 12'bz; 
             assign out[31:16]=(en&~ben[-1]) ? a[31:16] : 16'bz;
             assign out[15:8]=(en&~ben[-2]) ? a[15:8] : 8'bz;
 	  end
